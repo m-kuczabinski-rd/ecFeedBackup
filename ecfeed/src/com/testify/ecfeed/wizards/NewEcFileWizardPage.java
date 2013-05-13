@@ -20,10 +20,11 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.dialogs.ContainerSelectionDialog;
 
+import com.testify.ecfeed.constants.Constants;
 /**
  * The "New" wizard page allows setting the container for the new file as well
  * as the file name. The page will only accept file name without the extension
- * OR with the extension that matches the expected one (mpe).
+ * OR with the extension that matches the expected one ({@link Constants.DEFAULT_FILE_EXTENSION}).
  */
 
 public class NewEcFileWizardPage extends WizardPage {
@@ -39,9 +40,9 @@ public class NewEcFileWizardPage extends WizardPage {
 	 * @param pageName
 	 */
 	public NewEcFileWizardPage(ISelection selection) {
-		super("wizardPage");
-		setTitle("Multi-page Editor File");
-		setDescription("This wizard creates a new file with *.mpe extension that can be opened by a multi-page editor.");
+		super("new ect file page");
+		setTitle("New Equivalence Class model");
+		setDescription("Create new file with equivalence class model.");
 		this.selection = selection;
 	}
 
@@ -109,7 +110,7 @@ public class NewEcFileWizardPage extends WizardPage {
 				containerText.setText(container.getFullPath().toString());
 			}
 		}
-		fileText.setText("newECT.mpe");
+		fileText.setText(Constants.DEFAULT_NEW_FILE_NAME + "." + Constants.DEFAULT_FILE_EXTENSION);
 	}
 
 	/**
@@ -162,8 +163,8 @@ public class NewEcFileWizardPage extends WizardPage {
 		int dotLoc = fileName.lastIndexOf('.');
 		if (dotLoc != -1) {
 			String ext = fileName.substring(dotLoc + 1);
-			if (ext.equalsIgnoreCase("mpe") == false) {
-				updateStatus("File extension must be \"mpe\"");
+			if (ext.equalsIgnoreCase(Constants.DEFAULT_FILE_EXTENSION) == false) {
+				updateStatus("File extension must be \"" + Constants.DEFAULT_FILE_EXTENSION + "\"");
 				return;
 			}
 		}
