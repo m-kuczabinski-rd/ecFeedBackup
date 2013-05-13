@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+
+   <extension
+         point="org.eclipse.ui.newWizards">
+      <category
+            name="Ec Wizards"
+            id="com.testify.ecfeed">
+      </category>
+      <wizard
+            name="New Equivalence Class Tree file"
+            icon="icons/sample.gif"
+            category="com.testify.ecfeed"
+            class="com.testify.ecfeed.wizards.NewEcFileWizard"
+            id="com.testify.ecfeed.wizards.NewEcFileWizard">
+      </wizard>
+   </extension>
+
+</plugin>
