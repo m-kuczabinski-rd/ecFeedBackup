@@ -19,5 +19,9 @@ public class XmlPartitionScanner extends RuleBasedPartitionScanner {
 
 		setPredicateRules(rules);
 	}
+	
+	public String[] getContentTypes(){
+		return new String[]{XML_COMMENT, XML_TAG};
+	}
 
 }
