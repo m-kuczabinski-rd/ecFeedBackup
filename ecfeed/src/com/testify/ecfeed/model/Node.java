@@ -14,4 +14,9 @@ public class Node {
 	public void setName(String name) {
 		this.fName = name;
 	}
+	
+	@Override
+	public String toString(){
+		return "Node " + getName();
+	}
 }

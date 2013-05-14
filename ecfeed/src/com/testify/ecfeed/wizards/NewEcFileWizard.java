@@ -5,17 +5,18 @@ import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.core.runtime.*;
-import org.eclipse.jface.operation.*;
-import java.lang.reflect.InvocationTargetException;
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.core.resources.*;
 import org.eclipse.core.runtime.CoreException;
 import java.io.*;
-import org.eclipse.ui.*;
-import org.eclipse.ui.ide.IDE;
+
+import com.testify.ecfeed.constants.Constants;
+import com.testify.ecfeed.model.Root;
+import com.testify.ecfeed.parsers.EctWriter;
 
 public class NewEcFileWizard extends Wizard implements INewWizard {
+	//TODO New File Wizard - get default container from selection
+	
 	private NewEcFileWizardPage page;
 	private ISelection selection;
 
@@ -32,71 +33,31 @@ public class NewEcFileWizard extends Wizard implements INewWizard {
 	public boolean performFinish() {
 		final String containerName = page.getContainerName();
 		final String fileName = page.getFileName();
-		IRunnableWithProgress op = new IRunnableWithProgress() {
-			public void run(IProgressMonitor monitor) throws InvocationTargetException {
-				try {
-					doFinish(containerName, fileName, monitor);
-				} catch (CoreException e) {
-					throw new InvocationTargetException(e);
-				} finally {
-					monitor.done();
-				}
-			}
-		};
-		try {
-			getContainer().run(true, false, op);
-		} catch (InterruptedException e) {
-			return false;
-		} catch (InvocationTargetException e) {
-			Throwable realException = e.getTargetException();
-			MessageDialog.openError(getShell(), "Error", realException.getMessage());
-			return false;
-		}
-		return true;
-	}
-	
-	private void doFinish(
-		String containerName,
-		String fileName,
-		IProgressMonitor monitor)
-		throws CoreException {
-		// create a sample file
-		monitor.beginTask("Creating " + fileName, 2);
+		String modelName = fileName.substring(0, fileName.lastIndexOf("." + Constants.EQUIVALENCE_CLASS_FILE_EXTENSION));
+		Root modelRoot = new Root(modelName);
 		IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
 		IResource resource = root.findMember(new Path(containerName));
+		try {
 		if (!resource.exists() || !(resource instanceof IContainer)) {
 			throwCoreException("Container \"" + containerName + "\" does not exist.");
 		}
 		IContainer container = (IContainer) resource;
+		
 		final IFile file = container.getFile(new Path(fileName));
-		try {
-			InputStream stream = openContentStream();
+			ByteArrayOutputStream out = new ByteArrayOutputStream();
+			EctWriter writer = new EctWriter();
+			writer.getStartDocumentStream(out);
+			writer.getXmlStream(modelRoot, out);
+			InputStream stream = new ByteArrayInputStream(out.toByteArray());
 			if (file.exists()) {
-				file.setContents(stream, true, true, monitor);
+				file.setContents(stream, true, true, null);
 			} else {
-				file.create(stream, true, monitor);
+				file.create(stream, true, null);
 			}
 			stream.close();
-		} catch (IOException e) {
+		} catch (IOException|CoreException e) {
 		}
-		monitor.worked(1);
-		monitor.setTaskName("Opening file for editing...");
-		getShell().getDisplay().asyncExec(new Runnable() {
-			public void run() {
-				IWorkbenchPage page =
-					PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-				try {
-					IDE.openEditor(page, file, true);
-				} catch (PartInitException e) {
-				}
-			}
-		});
-		monitor.worked(1);
-	}
-	
-	private InputStream openContentStream() {
-		String contents = "";
-		return new ByteArrayInputStream(contents.getBytes());
+		return true;
 	}
 
 	private void throwCoreException(String message) throws CoreException {

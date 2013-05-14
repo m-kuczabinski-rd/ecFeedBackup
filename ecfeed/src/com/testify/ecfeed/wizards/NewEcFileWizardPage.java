@@ -110,7 +110,7 @@ public class NewEcFileWizardPage extends WizardPage {
 				containerText.setText(container.getFullPath().toString());
 			}
 		}
-		fileText.setText(Constants.DEFAULT_NEW_FILE_NAME + "." + Constants.DEFAULT_FILE_EXTENSION);
+		fileText.setText(Constants.DEFAULT_NEW_FILE_NAME + "." + Constants.EQUIVALENCE_CLASS_FILE_EXTENSION);
 	}
 
 	/**
@@ -163,8 +163,8 @@ public class NewEcFileWizardPage extends WizardPage {
 		int dotLoc = fileName.lastIndexOf('.');
 		if (dotLoc != -1) {
 			String ext = fileName.substring(dotLoc + 1);
-			if (ext.equalsIgnoreCase(Constants.DEFAULT_FILE_EXTENSION) == false) {
-				updateStatus("File extension must be \"" + Constants.DEFAULT_FILE_EXTENSION + "\"");
+			if (ext.equalsIgnoreCase(Constants.EQUIVALENCE_CLASS_FILE_EXTENSION) == false) {
+				updateStatus("File extension must be \"" + Constants.EQUIVALENCE_CLASS_FILE_EXTENSION + "\"");
 				return;
 			}
 		}
