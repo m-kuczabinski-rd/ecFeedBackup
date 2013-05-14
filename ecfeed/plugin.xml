@@ -16,5 +16,16 @@
             id="com.testify.ecfeed.wizards.NewEcFileWizard">
       </wizard>
    </extension>
+   <extension
+         point="org.eclipse.ui.editors">
+      <editor
+            class="com.testify.ecfeed.editors.EcEditor"
+            default="true"
+            extensions="ect"
+            icon="icons/sample.gif"
+            id="com.testify.ecfeed.editors.eceditor"
+            name="Equivalence Class Editor">
+      </editor>
+   </extension>
 
 </plugin>

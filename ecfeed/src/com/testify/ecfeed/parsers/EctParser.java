@@ -43,7 +43,7 @@ public class EctParser {
 		return modelRoot;
 	}
 
-	public Node parseElement(StartElement startElement,
+	private Node parseElement(StartElement startElement,
 			XMLEventReader eventReader) {
 		
 		switch (startElement.getName().getLocalPart()){
