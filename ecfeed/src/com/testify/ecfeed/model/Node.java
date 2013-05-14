@@ -19,4 +19,20 @@ public class Node {
 	public String toString(){
 		return "Node " + getName();
 	}
+	
+	@Override
+	public boolean equals(Object obj){
+		if(obj == null){
+			return false;
+		}
+		if(obj instanceof Node){
+			boolean result = true;
+			Node node = (Node) obj;
+			result &= node.getName().equals(this.getName()); 
+			return result;
+		}
+		else{
+			return false;
+		}
+	}
 }
