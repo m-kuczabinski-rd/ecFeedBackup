@@ -8,9 +8,9 @@ import java.io.IOException;
 
 import org.junit.Test;
 
-import com.testify.ecfeed.model.Root;
+import com.testify.ecfeed.model.RootNode;
 
-public class EctParserTest extends EctParser {
+public class EctParserTest extends EcParser {
 
 	@Test
 	public void testParseEctFile() {
@@ -23,10 +23,10 @@ public class EctParserTest extends EctParser {
 					"\n" +
 					"<Model name=\"model\">\n</Model>"
 					).getBytes());
-		EctParser parser = new EctParser();
+		EcParser parser = new EcParser();
 		
-		Root parsedModel = parser.parseEctFile(new ByteArrayInputStream(ostream.toByteArray()));
-		Root expectedModel = new Root("model");
+		RootNode parsedModel = parser.parseEctFile(new ByteArrayInputStream(ostream.toByteArray()));
+		RootNode expectedModel = new RootNode("model");
 		assertEquals(expectedModel, parsedModel);
 		} catch (IOException e) {
 			fail("Unexpected exception: " + e.getMessage());

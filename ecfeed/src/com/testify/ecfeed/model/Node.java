@@ -19,12 +19,25 @@ public class Node {
 		this.fName = name;
 	}
 	
+	public void addChild(Node child){
+		child.setParent(this);
+		fChildren.add(child);
+	}
+	
+	//Available only inside the package 
+	void setParent(Node node) {
+		fParent = node;
+	}
+
 	public Vector<Node> getChildren() {
 		return fChildren;
 	}
 	
 	public boolean hasChildren(){
-		return (fChildren.size() > 0);
+		if(fChildren != null){
+			return (fChildren.size() > 0);
+		}
+		return false;
 	}
 	
 	public Node getParent(){
@@ -33,7 +46,7 @@ public class Node {
 
 	@Override
 	public String toString(){
-		return "Node " + getName();
+		return getName();
 	}
 	
 	@Override

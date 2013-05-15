@@ -12,11 +12,11 @@ import javax.xml.stream.events.Attribute;
 
 import com.testify.ecfeed.constants.Constants;
 import com.testify.ecfeed.model.Node;
-import com.testify.ecfeed.model.Root;
+import com.testify.ecfeed.model.RootNode;
 
-public class EctParser {
-	public Root parseEctFile(InputStream istream){
-		Root modelRoot = null;
+public class EcParser {
+	public RootNode parseEctFile(InputStream istream){
+		RootNode modelRoot = null;
 		
 		try{
 			XMLInputFactory inputFactory = XMLInputFactory.newInstance();
@@ -30,8 +30,8 @@ public class EctParser {
 				else if(event.isStartElement()){
 					StartElement startElement = event.asStartElement();
 					Node node = parseElement(startElement, eventReader);
-					if(node instanceof Root){
-						modelRoot = (Root)node;
+					if(node instanceof RootNode){
+						modelRoot = (RootNode)node;
 					}
 				}
 			}
@@ -68,7 +68,7 @@ public class EctParser {
 			}
 		}
 		
-		return new Root(name);
+		return new RootNode(name);
 	}
 
 

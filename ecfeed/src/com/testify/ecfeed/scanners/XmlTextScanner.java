@@ -1,10 +1,14 @@
-package com.testify.ecfeed.editors;
+package com.testify.ecfeed.scanners;
 
 import org.eclipse.jface.text.TextAttribute;
 import org.eclipse.jface.text.rules.IRule;
 import org.eclipse.jface.text.rules.IToken;
 import org.eclipse.jface.text.rules.RuleBasedScanner;
 import org.eclipse.jface.text.rules.Token;
+
+import com.testify.ecfeed.editors.ColorManager;
+import com.testify.ecfeed.editors.IXmlColorConstants;
+import com.testify.ecfeed.rules.CDataRule;
 
 public class XmlTextScanner extends RuleBasedScanner {
 

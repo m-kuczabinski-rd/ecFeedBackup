@@ -1,5 +1,6 @@
 package com.testify.ecfeed.editors;
 
+import org.eclipse.jface.text.IDocument;
 import org.eclipse.ui.editors.text.TextEditor;
 
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
@@ -9,7 +10,7 @@ import com.testify.ecfeed.outline.EcContentOutlinePage;
 public class EcEditor extends TextEditor{
 	
 	private ColorManager fColorManager;
-	private IContentOutlinePage fContentOutline;
+	private EcContentOutlinePage fContentOutline;
 	
 	public EcEditor(){
 		super();
@@ -24,6 +25,7 @@ public class EcEditor extends TextEditor{
 		if(IContentOutlinePage.class.equals(required)){
 			if(fContentOutline == null){
 				fContentOutline = new EcContentOutlinePage(this);
+				fContentOutline.setTextEditor(this);
 			}
 			return fContentOutline;
 		}
@@ -33,5 +35,9 @@ public class EcEditor extends TextEditor{
 	public void dispose() {
 		fColorManager.dispose();
 		super.dispose();
+	}
+	
+	public IDocument getDocument(){
+		return getSourceViewer().getDocument();
 	}
 }

@@ -14,9 +14,9 @@ import javax.xml.stream.events.XMLEvent;
 
 import com.testify.ecfeed.constants.Constants;
 import com.testify.ecfeed.model.Node;
-import com.testify.ecfeed.model.Root;
+import com.testify.ecfeed.model.RootNode;
 
-public class EctWriter {
+public class EcWriter {
 	private XMLOutputFactory fOutputFactory;
 	private XMLEventFactory fEventFactory;
 
@@ -25,7 +25,7 @@ public class EctWriter {
 	private final String fDummyPrefix = "";
 	private final String fDummyNamespaceUri = "";
 
-	public EctWriter(){
+	public EcWriter(){
 		fOutputFactory = XMLOutputFactory.newInstance();
 		fEventFactory = XMLEventFactory.newInstance();
 		
@@ -49,14 +49,14 @@ public class EctWriter {
 		try {
 			XMLEventWriter writer = fOutputFactory.createXMLEventWriter(out);
 
-			if (node instanceof Root){
-				getXmlRootStream((Root) node, writer);
+			if (node instanceof RootNode){
+				getXmlRootStream((RootNode) node, writer);
 			}
 		} catch (XMLStreamException e) {
 		}
 	}
 
-	private void getXmlRootStream(Root node, XMLEventWriter writer) {
+	private void getXmlRootStream(RootNode node, XMLEventWriter writer) {
 		String localName = Constants.ROOT_NODE_NAME;
 		
 		StartElement startElement = fEventFactory.createStartElement(fDummyPrefix, fDummyNamespaceUri, localName);

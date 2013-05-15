@@ -7,6 +7,8 @@ import org.eclipse.jface.text.rules.FastPartitioner;
 import org.eclipse.jface.text.rules.IPartitionTokenScanner;
 import org.eclipse.ui.editors.text.FileDocumentProvider;
 
+import com.testify.ecfeed.scanners.XmlPartitionScanner;
+
 public class EcDocumentProvider extends FileDocumentProvider{
 	@Override
 	protected IDocument createDocument(Object element) throws CoreException{

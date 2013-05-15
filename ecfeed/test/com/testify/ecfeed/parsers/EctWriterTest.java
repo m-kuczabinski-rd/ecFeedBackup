@@ -6,15 +6,15 @@ import java.io.ByteArrayOutputStream;
 
 import org.junit.Test;
 
-import com.testify.ecfeed.model.Root;
+import com.testify.ecfeed.model.RootNode;
 
-public class EctWriterTest extends EctWriter {
+public class EctWriterTest extends EcWriter {
 
 	@Test
 	public void testGetStartDocumentStream() {
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
-		EctWriter writer = new EctWriter();
-		Root root = new Root("root");
+		EcWriter writer = new EcWriter();
+		RootNode root = new RootNode("root");
 		
 		writer.getStartDocumentStream(out);
 		assertEquals("<?xml version=\"1.0\"?>\n\n", out.toString());

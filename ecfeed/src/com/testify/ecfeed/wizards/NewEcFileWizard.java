@@ -11,8 +11,8 @@ import org.eclipse.core.runtime.CoreException;
 import java.io.*;
 
 import com.testify.ecfeed.constants.Constants;
-import com.testify.ecfeed.model.Root;
-import com.testify.ecfeed.parsers.EctWriter;
+import com.testify.ecfeed.model.RootNode;
+import com.testify.ecfeed.parsers.EcWriter;
 
 public class NewEcFileWizard extends Wizard implements INewWizard {
 	//TODO New File Wizard - get default container from selection
@@ -34,7 +34,7 @@ public class NewEcFileWizard extends Wizard implements INewWizard {
 		final String containerName = page.getContainerName();
 		final String fileName = page.getFileName();
 		String modelName = fileName.substring(0, fileName.lastIndexOf("." + Constants.EQUIVALENCE_CLASS_FILE_EXTENSION));
-		Root modelRoot = new Root(modelName);
+		RootNode modelRoot = new RootNode(modelName);
 		IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
 		IResource resource = root.findMember(new Path(containerName));
 		try {
@@ -45,7 +45,7 @@ public class NewEcFileWizard extends Wizard implements INewWizard {
 		
 		final IFile file = container.getFile(new Path(fileName));
 			ByteArrayOutputStream out = new ByteArrayOutputStream();
-			EctWriter writer = new EctWriter();
+			EcWriter writer = new EcWriter();
 			writer.getStartDocumentStream(out);
 			writer.getXmlStream(modelRoot, out);
 			InputStream stream = new ByteArrayInputStream(out.toByteArray());

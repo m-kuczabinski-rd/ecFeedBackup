@@ -1,6 +1,10 @@
-package com.testify.ecfeed.editors;
+package com.testify.ecfeed.scanners;
 
 import org.eclipse.jface.text.rules.*;
+
+import com.testify.ecfeed.rules.NonMatchingRule;
+import com.testify.ecfeed.rules.StartTagRule;
+import com.testify.ecfeed.rules.XmlTextPredicateRule;
 
 public class XmlPartitionScanner extends RuleBasedPartitionScanner {
 	public final static String XML_START_TAG = "__xml_start_tag";
@@ -26,7 +30,7 @@ public class XmlPartitionScanner extends RuleBasedPartitionScanner {
 	    rules[1] = new MultiLineRule("<!--", "-->", xmlComment);
 	    rules[2] = new MultiLineRule("<?", "?>", xmlPi);
 	    rules[3] = new MultiLineRule("</", ">", endTag);
-	    rules[4] = new MultiLineRule("<", ">", startTag);
+	    rules[4] = new StartTagRule(startTag);
 	    rules[5] = new MultiLineRule("<!DOCTYPE", ">", docType);
 	    rules[6] = new XmlTextPredicateRule(text);
 

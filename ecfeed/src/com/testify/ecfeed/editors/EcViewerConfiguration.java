@@ -10,6 +10,12 @@ import org.eclipse.jface.text.rules.Token;
 import org.eclipse.jface.text.source.ISourceViewer;
 import org.eclipse.jface.text.source.SourceViewerConfiguration;
 
+import com.testify.ecfeed.scanners.CDataScanner;
+import com.testify.ecfeed.scanners.XmlPartitionScanner;
+import com.testify.ecfeed.scanners.XmlScanner;
+import com.testify.ecfeed.scanners.XmlTagScanner;
+import com.testify.ecfeed.scanners.XmlTextScanner;
+
 public class EcViewerConfiguration extends SourceViewerConfiguration {
 	
 	private ColorManager fColorManager;
