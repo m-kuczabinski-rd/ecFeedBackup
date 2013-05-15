@@ -14,9 +14,17 @@ public class EcDocumentProvider extends FileDocumentProvider{
 		if(document != null){
 			
 			IPartitionTokenScanner scanner = new XmlPartitionScanner();
-			String[] legalContentTypes = new String[]{
-					XmlPartitionScanner.XML_TAG,
-					XmlPartitionScanner.XML_COMMENT };
+			String[] legalContentTypes = new String[]
+			{
+					XmlPartitionScanner.XML_START_TAG,
+					XmlPartitionScanner.XML_PI,
+					XmlPartitionScanner.XML_DOCTYPE,
+					XmlPartitionScanner.XML_END_TAG,
+					XmlPartitionScanner.XML_TEXT,
+					XmlPartitionScanner.XML_CDATA,
+					XmlPartitionScanner.XML_COMMENT
+			};
+			
 			IDocumentPartitioner partitioner = new FastPartitioner(scanner , legalContentTypes);
 //			IDocumentPartitioner partitioner = new EcPartitioner(scanner , legalContentTypes);
 			partitioner.connect(document);

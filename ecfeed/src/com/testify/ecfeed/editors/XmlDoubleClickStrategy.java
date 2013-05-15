@@ -5,7 +5,7 @@ import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.ITextDoubleClickStrategy;
 import org.eclipse.jface.text.ITextViewer;
 
-public class EcDoubleClickStrategy implements ITextDoubleClickStrategy {
+public class XmlDoubleClickStrategy implements ITextDoubleClickStrategy {
 	protected ITextViewer fText;
 
 	public void doubleClicked(ITextViewer part) {
