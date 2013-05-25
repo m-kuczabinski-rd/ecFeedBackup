@@ -17,22 +17,22 @@ import com.testify.ecfeed.parsers.EcWriter;
 public class NewEcFileWizard extends Wizard implements INewWizard {
 	//TODO New File Wizard - get default container from selection
 	
-	private NewEcFileWizardPage page;
-	private ISelection selection;
+	private NewEcFileWizardPage fPage;
+	private ISelection fSelection;
 
 	public NewEcFileWizard() {
 		super();
-		setNeedsProgressMonitor(true);
+		setNeedsProgressMonitor(false);
 	}
 	
 	public void addPages() {
-		page = new NewEcFileWizardPage(selection);
-		addPage(page);
+		fPage = new NewEcFileWizardPage(fSelection);
+		addPage(fPage);
 	}
 
 	public boolean performFinish() {
-		final String containerName = page.getContainerName();
-		final String fileName = page.getFileName();
+		final String containerName = fPage.getContainerName();
+		final String fileName = fPage.getFileName();
 		String modelName = fileName.substring(0, fileName.lastIndexOf("." + Constants.EQUIVALENCE_CLASS_FILE_EXTENSION));
 		RootNode modelRoot = new RootNode(modelName);
 		IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
@@ -44,11 +44,10 @@ public class NewEcFileWizard extends Wizard implements INewWizard {
 		IContainer container = (IContainer) resource;
 		
 		final IFile file = container.getFile(new Path(fileName));
-			ByteArrayOutputStream out = new ByteArrayOutputStream();
-			EcWriter writer = new EcWriter();
-			writer.getStartDocumentStream(out);
-			writer.getXmlStream(modelRoot, out);
-			InputStream stream = new ByteArrayInputStream(out.toByteArray());
+			ByteArrayOutputStream ostream = new ByteArrayOutputStream();
+			EcWriter writer = new EcWriter(ostream);
+			writer.writeXmlDocument(modelRoot);
+			InputStream stream = new ByteArrayInputStream(ostream.toByteArray());
 			if (file.exists()) {
 				file.setContents(stream, true, true, null);
 			} else {
@@ -67,6 +66,6 @@ public class NewEcFileWizard extends Wizard implements INewWizard {
 	}
 
 	public void init(IWorkbench workbench, IStructuredSelection selection) {
-		this.selection = selection;
+		this.fSelection = selection;
 	}
 }

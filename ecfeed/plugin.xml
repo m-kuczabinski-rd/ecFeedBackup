@@ -27,5 +27,83 @@
             name="Equivalence Class Editor">
       </editor>
    </extension>
+   <extension
+         point="org.eclipse.ui.commands">
+      <category
+            name="ecFeed commands"
+            id="com.testify.ecfeed.commands.ecFeedCommands">
+      </category>
+      <command
+            name="addClass"
+            categoryId="com.testify.ecfeed.commands.ecFeedCommands"
+            id="com.testify.ecfeed.commands.addClass">
+      </command>
+   </extension>
+
+   <extension
+         point="org.eclipse.ui.commands">
+      <category
+            name="outline context menu commands"
+            id="com.testify.ecfeed.commands.ecModelEditCommands">
+      </category>
+      <command
+            name="edit partition"
+            categoryId="com.testify.ecfeed.commands.ecModelEditCommands"
+            id="com.testify.ecfeed.commands.editPartition">
+      </command>
+   </extension>
+   <extension
+         point="org.eclipse.ui.handlers">
+      <handler
+            commandId="com.testify.ecfeed.commands.editPartition"
+            class="com.testify.ecfeed.handlers.EditPartitionHandler">
+      </handler>
+   </extension>
+
+   <extension
+         point="org.eclipse.ui.handlers">
+      <handler
+            commandId="com.testify.ecfeed.commands.addClass"
+            class="com.testify.ecfeed.handlers.AddClassHandler">
+      </handler>
+   </extension>
+   
+   <extension
+         point="org.eclipse.ui.bindings">
+      <key
+            commandId="com.testify.ecfeed.commands.addClass"
+            contextId="org.eclipse.ui.contexts.window"
+            sequence="M1+6"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration">
+      </key>
+   </extension>
+   
+   <extension
+         point="org.eclipse.ui.menus">
+	<menuContribution
+	        locationURI="popup:org.eclipse.ui.popup.any">
+	     <command
+	           commandId="com.testify.ecfeed.commands.addClass"
+	           id="com.testify.ecfeed.menus.ecpopup"
+	           label="Add to Equivalence Class model"
+	           style="push">
+	        <visibleWhen
+	              checkEnabled="false">
+	           <iterate
+	                 ifEmpty="false"
+	                 operator="and">
+	              <or>
+<!--                   <instanceof
+                         value="org.eclipse.jdt.core.IMethod">
+                   </instanceof>-->
+                   <instanceof
+                         value="org.eclipse.jdt.core.IType">
+                   </instanceof>
+	              </or>
+	           </iterate>
+	        </visibleWhen> -->
+	     </command>
+	  </menuContribution>
+	</extension> 
 
 </plugin>

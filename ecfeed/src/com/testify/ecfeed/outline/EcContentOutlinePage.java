@@ -2,9 +2,7 @@ package com.testify.ecfeed.outline;
 
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
-import org.eclipse.ui.IEditorInput;
-import org.eclipse.ui.texteditor.ITextEditor;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.views.contentoutline.ContentOutlinePage;
 
 import com.testify.ecfeed.editors.EcEditor;
@@ -12,7 +10,7 @@ import com.testify.ecfeed.editors.EcEditor;
 public class EcContentOutlinePage extends ContentOutlinePage {
 	
 	private TreeViewer fTreeViewer;
-	private ITextEditor fEditor; 
+	private EcEditor fEditor; 
 
 	public EcContentOutlinePage(EcEditor editor) {
 		super();
@@ -30,19 +28,16 @@ public class EcContentOutlinePage extends ContentOutlinePage {
 		fTreeViewer.setInput(fEditor);
 	}
 
-	public void setTextEditor(ITextEditor editor){
+	public void setEditor(EcEditor editor){
 		fEditor = editor;
 	}
 
-//	private void update() {
-//		if(fTreeViewer != null){
-//			Control control = fTreeViewer.getControl();
-//			if((control != null) && !(control.isDisposed())){
-//				control.setRedraw(false);
-//				fTreeViewer.setInput(fEditorInput);
-//				fTreeViewer.expandAll();
-//				control.setRedraw(true);
-//			}			
-//		}
-//	}
+	public void refreshTree() {
+    	Display.getDefault().asyncExec(new Runnable() {
+
+			public void run() {
+		    	fTreeViewer.refresh();
+			}
+    	});
+	}
 }

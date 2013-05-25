@@ -8,7 +8,7 @@ import org.junit.runner.RunWith;
 import org.databene.feed4junit.Feeder;
 
 @RunWith(Feeder.class)
-public class NodeTest extends Node {
+public class NodeTest extends GenericNode {
 
 	public NodeTest() {
 		super("dummy");
@@ -16,7 +16,7 @@ public class NodeTest extends Node {
 
 	@Test
 	public void test(String newName) {
-		Node node = new Node("node");
+		GenericNode node = new GenericNode("node");
 		
 		assertEquals("node", node.getName());
 		

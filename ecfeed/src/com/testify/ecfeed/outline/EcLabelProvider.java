@@ -10,12 +10,12 @@ import org.eclipse.swt.graphics.Image;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.FrameworkUtil;
 
-import com.testify.ecfeed.model.Node;
+import com.testify.ecfeed.model.GenericNode;
 
 public class EcLabelProvider extends LabelProvider {
 
 	public String getText(Object element){
-		if(element instanceof Node){
+		if(element instanceof GenericNode){
 			return element.toString();
 		}
 		return null;

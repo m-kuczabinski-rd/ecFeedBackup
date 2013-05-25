@@ -2,13 +2,14 @@ package com.testify.ecfeed.model;
 
 import java.util.Vector;
 
-public class Node {
+public class GenericNode {
 	private String fName;
-	private Vector<Node> fChildren;
-	private Node fParent;
+	private Vector<GenericNode> fChildren;
+	private GenericNode fParent;
 
-	public Node(String name){
+	public GenericNode(String name){
 		this.fName = name;
+		this.fChildren = new Vector<GenericNode>();
 	}
 	
 	public String getName() {
@@ -19,17 +20,17 @@ public class Node {
 		this.fName = name;
 	}
 	
-	public void addChild(Node child){
+	protected void addChild(GenericNode child){
 		child.setParent(this);
 		fChildren.add(child);
 	}
 	
 	//Available only inside the package 
-	void setParent(Node node) {
+	void setParent(GenericNode node) {
 		fParent = node;
 	}
 
-	public Vector<Node> getChildren() {
+	public Vector<GenericNode> getChildren() {
 		return fChildren;
 	}
 	
@@ -40,10 +41,19 @@ public class Node {
 		return false;
 	}
 	
-	public Node getParent(){
+	public GenericNode getParent(){
 		return fParent;
 	}
 
+	public int getChildIndex(GenericNode child){
+		for(int i = 0; i < fChildren.size(); i++){
+			if(fChildren.elementAt(i).equals(child)){
+				return i;
+			}
+		}
+		return -1;
+	}
+	
 	@Override
 	public String toString(){
 		return getName();
@@ -51,17 +61,6 @@ public class Node {
 	
 	@Override
 	public boolean equals(Object obj){
-		if(obj == null){
-			return false;
-		}
-		if(obj instanceof Node){
-			boolean result = true;
-			Node node = (Node) obj;
-			result &= node.getName().equals(this.getName()); 
-			return result;
-		}
-		else{
-			return false;
-		}
+		return super.equals(obj);
 	}
 }
