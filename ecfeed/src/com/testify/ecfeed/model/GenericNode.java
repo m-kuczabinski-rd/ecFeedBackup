@@ -44,6 +44,13 @@ public class GenericNode {
 	public GenericNode getParent(){
 		return fParent;
 	}
+	
+	public GenericNode getRoot(){
+		if(getParent() == null){
+			return this;
+		}
+		return getParent().getRoot();
+	}
 
 	public int getChildIndex(GenericNode child){
 		for(int i = 0; i < fChildren.size(); i++){

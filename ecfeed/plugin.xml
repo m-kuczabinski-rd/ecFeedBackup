@@ -27,6 +27,7 @@
             name="Equivalence Class Editor">
       </editor>
    </extension>
+   
    <extension
          point="org.eclipse.ui.commands">
       <category
@@ -38,45 +39,25 @@
             categoryId="com.testify.ecfeed.commands.ecFeedCommands"
             id="com.testify.ecfeed.commands.addClass">
       </command>
-   </extension>
-
-   <extension
-         point="org.eclipse.ui.commands">
-      <category
-            name="outline context menu commands"
-            id="com.testify.ecfeed.commands.ecModelEditCommands">
-      </category>
       <command
-            name="edit partition"
-            categoryId="com.testify.ecfeed.commands.ecModelEditCommands"
-            id="com.testify.ecfeed.commands.editPartition">
+            categoryId="com.testify.ecfeed.commands.ecFeedCommands"
+            id="com.testify.ecfeed.model.commands.editPartition"
+            name="editPartition">
       </command>
    </extension>
-   <extension
-         point="org.eclipse.ui.handlers">
-      <handler
-            commandId="com.testify.ecfeed.commands.editPartition"
-            class="com.testify.ecfeed.handlers.EditPartitionHandler">
-      </handler>
-   </extension>
-
+   
    <extension
          point="org.eclipse.ui.handlers">
       <handler
             commandId="com.testify.ecfeed.commands.addClass"
             class="com.testify.ecfeed.handlers.AddClassHandler">
       </handler>
+      <handler
+            class="com.testify.ecfeed.handlers.EditPartitionHandler"
+            commandId="com.testify.ecfeed.model.commands.editPartition">
+      </handler>
    </extension>
    
-   <extension
-         point="org.eclipse.ui.bindings">
-      <key
-            commandId="com.testify.ecfeed.commands.addClass"
-            contextId="org.eclipse.ui.contexts.window"
-            sequence="M1+6"
-            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration">
-      </key>
-   </extension>
    
    <extension
          point="org.eclipse.ui.menus">
@@ -92,18 +73,37 @@
 	           <iterate
 	                 ifEmpty="false"
 	                 operator="and">
-	              <or>
-<!--                   <instanceof
-                         value="org.eclipse.jdt.core.IMethod">
-                   </instanceof>-->
                    <instanceof
                          value="org.eclipse.jdt.core.IType">
                    </instanceof>
-	              </or>
 	           </iterate>
-	        </visibleWhen> -->
+	        </visibleWhen>
 	     </command>
 	  </menuContribution>
+ <menuContribution
+       locationURI="popup:org.eclipse.ui.popup.any">
+    <command
+          commandId="com.testify.ecfeed.model.commands.editPartition"
+          id="com.testify.ecfeed.menus.modelContextMenu"
+          label="edit..."
+          style="push">
+       <visibleWhen
+             checkEnabled="false">
+          <iterate
+                operator="or">
+             <instanceof
+                   value="com.testify.ecfeed.model.PartitionNode">
+             </instanceof>
+          </iterate>
+<!--          <iterate
+                operator="and">
+             <instanceof
+                   value="com.testify.ecfeed.model.PartitionNode">
+             </instanceof>
+          </iterate>-->
+       </visibleWhen>
+    </command>
+ </menuContribution>
 	</extension> 
 
 </plugin>

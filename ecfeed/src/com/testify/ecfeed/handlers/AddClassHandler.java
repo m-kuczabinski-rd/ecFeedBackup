@@ -77,7 +77,6 @@ public class AddClassHandler implements IHandler {
 		try {
 			FileEditorInput inputFile = new FileEditorInput(selectedFile);
 			EcEditor editor = (EcEditor)page.openEditor(inputFile, "com.testify.ecfeed.editors.eceditor");
-			IDocument document = editor.getDocument();
 			RootNode model = editor.getModel(); 
 			if(model == null){
 				throw new ExecutionException("Cannot get document model");
@@ -89,10 +88,6 @@ public class AddClassHandler implements IHandler {
 			}
 			model.addClass(classNode);
 			editor.updateModel(model);
-			ByteArrayOutputStream ostream = new ByteArrayOutputStream();
-			EcWriter writer = new EcWriter(ostream);
-			writer.writeXmlDocument(editor.getModel());
-			document.set(ostream.toString());
 		} catch (CoreException e) {
 			System.out.println("Exception: " + e.getMessage());
 		}

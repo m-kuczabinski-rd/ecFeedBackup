@@ -1,5 +1,6 @@
 package com.testify.ecfeed.editors;
 
+import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 
 import org.eclipse.core.resources.IFile;
@@ -14,6 +15,7 @@ import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.outline.EcContentOutlinePage;
 import com.testify.ecfeed.parsers.EcParser;
+import com.testify.ecfeed.parsers.EcWriter;
 
 public class EcEditor extends TextEditor{
 	
@@ -67,7 +69,6 @@ public class EcEditor extends TextEditor{
 				EcParser parser = new EcParser();
 				iStream = file.getContents();
 				root = parser.parseEctFile(iStream);
-				System.out.println("fModel: " + root);
 			} catch (CoreException e) {
 				System.out.println("Exception: " + e.getMessage());
 			}
@@ -77,7 +78,11 @@ public class EcEditor extends TextEditor{
 
 	public void updateModel(RootNode model) {
 		fModel = model;
-//		fContentOutline = (EcContentOutlinePage) getAdapter(IContentOutlinePage.class);
 		fContentOutline.refreshTree();
+		ByteArrayOutputStream ostream = new ByteArrayOutputStream();
+		EcWriter writer = new EcWriter(ostream);
+		writer.writeXmlDocument(getModel());
+		getDocument().set(ostream.toString());
 	}
+
 }
