@@ -1,6 +1,5 @@
 package com.testify.ecfeed.handlers;
 
-import java.io.ByteArrayOutputStream;
 import java.util.Vector;
 
 import org.eclipse.core.commands.ExecutionEvent;
@@ -18,7 +17,6 @@ import org.eclipse.jdt.core.IMethod;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.core.Signature;
-import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IWorkbenchPage;
@@ -37,8 +35,6 @@ import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.RootNode;
-import com.testify.ecfeed.parsers.EcWriter;
-
 
 public class AddClassHandler implements IHandler {
 
@@ -143,34 +139,59 @@ public class AddClassHandler implements IHandler {
 	}
 
 	private CategoryNode generateCategoryModel(ILocalVariable parameter) {
-		String typeSignature = parameter.getTypeSignature();
-		CategoryNode category = new CategoryNode(parameter.getElementName(), typeSignature);
-		Vector<PartitionNode> defaultPartitions = generateDefaultPartitions(parameter.getTypeSignature());
+		String type = getTypeName(parameter.getTypeSignature());
+		CategoryNode category = new CategoryNode(parameter.getElementName(), type);
+		Vector<PartitionNode> defaultPartitions = generateDefaultPartitions(type);
 		for(PartitionNode partition : defaultPartitions){
 			category.addPartition(partition);
 		}
 		return category;
 	}
 
-	private Vector<PartitionNode> generateDefaultPartitions(String typeSignature) {
+	private String getTypeName(String typeSignature) {
 		switch(typeSignature){
 		case Signature.SIG_BOOLEAN:
-			return defaultBooleanPartitions();
+			return "bool";
 		case Signature.SIG_BYTE:
-			return defaultBytePartitions();
+			return "byte";
 		case Signature.SIG_CHAR:
-			return defaultCharacterPartitions();
+			return "char";
 		case Signature.SIG_DOUBLE:
-			return defaultDoublePartitions();
+			return "double";
 		case Signature.SIG_FLOAT:
-			return defaultFloatPartitions();
+			return "float";
 		case Signature.SIG_INT:
-			return defaultIntegerPartitions();
+			return "int";
 		case Signature.SIG_LONG:
-			return defaultLongPartitions();
+			return "long";
 		case Signature.SIG_SHORT:
-			return defaultShortPartitions();
+			return "short";
 		case "QString;":
+			return "String";
+		default:
+			return "unsupported";
+		}
+	}
+
+	private Vector<PartitionNode> generateDefaultPartitions(String typeSignature) {
+		switch(typeSignature){
+		case "boolean":
+			return defaultBooleanPartitions();
+		case "byte":
+			return defaultBytePartitions();
+		case "char":
+			return defaultCharacterPartitions();
+		case "double":
+			return defaultDoublePartitions();
+		case "float":
+			return defaultFloatPartitions();
+		case "int":
+			return defaultIntegerPartitions();
+		case "long":
+			return defaultLongPartitions();
+		case "short":
+			return defaultShortPartitions();
+		case "String":
 			return defaultStringPartitions();
 		default:
 			return new Vector<PartitionNode>();

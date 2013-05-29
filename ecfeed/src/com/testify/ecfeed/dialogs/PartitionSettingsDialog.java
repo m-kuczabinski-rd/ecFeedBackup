@@ -4,6 +4,8 @@ import org.eclipse.jface.dialogs.IMessageProvider;
 import org.eclipse.jface.dialogs.TitleAreaDialog;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
@@ -15,6 +17,8 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
+import com.testify.ecfeed.constants.Constants;
+import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.PartitionNode;
 
 public class PartitionSettingsDialog extends TitleAreaDialog {
@@ -24,13 +28,17 @@ public class PartitionSettingsDialog extends TitleAreaDialog {
 	private Text fPartitionNameText;
 	private Text fPartitionValueText;
 	private String fPartitionName;
-	private String fPartitionValueString;
+	private Object fPartitionValue;
+	private String fType;
+	private Button fOkButton;
+	private String fErrorMessage;
 
 
-	public PartitionSettingsDialog(Shell parentShell, PartitionNode partition) {
+	public PartitionSettingsDialog(Shell parentShell, PartitionNode partition, String type) {
 		super(parentShell);
 		fPartition = partition;
 		fNewPartition = (partition == null);
+		fType = type;
 	}
 
 	@Override
@@ -41,19 +49,25 @@ public class PartitionSettingsDialog extends TitleAreaDialog {
 	}	
 
 	@Override
-		protected void createButtonsForButtonBar(Composite parent) {
-			GridData gridData = new GridData();
-			gridData.verticalAlignment = GridData.FILL;
-			gridData.horizontalSpan = 3;
-			gridData.grabExcessHorizontalSpace = true;
-			gridData.grabExcessVerticalSpace = true;
-			gridData.horizontalAlignment = SWT.CENTER;
-	
-			parent.setLayoutData(gridData);
-			
-			createOkButton(parent, OK, "Ok", true);
-			createCancelButton(parent, CANCEL, "Cancel", false);
+	protected void createButtonsForButtonBar(Composite parent) {
+		GridData gridData = new GridData();
+		gridData.verticalAlignment = GridData.FILL;
+		gridData.horizontalSpan = 3;
+		gridData.grabExcessHorizontalSpace = true;
+		gridData.grabExcessVerticalSpace = true;
+		gridData.horizontalAlignment = SWT.CENTER;
+
+		parent.setLayoutData(gridData);
+
+		fOkButton = createOkButton(parent, OK, "Ok", true);
+		createCancelButton(parent, CANCEL, "Cancel", false);
+
+		verifyInput();
+		if(fNewPartition){
+			setErrorMessage(null);
 		}
+
+	}
 
 	@Override
 	protected Control createDialogArea(Composite parent) {
@@ -69,7 +83,7 @@ public class PartitionSettingsDialog extends TitleAreaDialog {
 		Label partitionValueLabel = new Label(parent, SWT.NONE);
 		partitionValueLabel.setText("Partition Value");
 		createPartitionValueText(parent);
-
+		
 		return parent;
 	}
 
@@ -84,16 +98,32 @@ public class PartitionSettingsDialog extends TitleAreaDialog {
 		super.okPressed();
 	}
 
+	public String getPartitionName() {
+		return fPartitionName;
+	}
+
+	public Object getPartitionValue() {
+		return fPartitionValue;
+	}
+
 	private void createPartitionNameText(Composite parent) {
 		GridData gridData = new GridData();
 		gridData.grabExcessHorizontalSpace = true;
 		gridData.horizontalAlignment = GridData.FILL;
-
+	
 		fPartitionNameText = new Text(parent, SWT.BORDER);
 		fPartitionNameText.setLayoutData(gridData);
 		if(!fNewPartition){
-			fPartitionNameText.setText(fPartition.getName());
+			fPartitionName = fPartition.getName();
+			fPartitionNameText.setText(fPartitionName);
 		}
+		fPartitionNameText.addModifyListener(new ModifyListener() {
+			
+			@Override
+			public void modifyText(ModifyEvent e) {
+				verifyInput();
+			}
+		});
 	}
 
 	private void createPartitionValueText(Composite parent) {
@@ -104,11 +134,59 @@ public class PartitionSettingsDialog extends TitleAreaDialog {
 		fPartitionValueText = new Text(parent, SWT.BORDER);
 		fPartitionValueText.setLayoutData(gridData);
 		if(!fNewPartition){
-			fPartitionValueText.setText(fPartition.getValue().toString());
+			if(fPartition.getValue() == null){
+				fPartitionValueText.setText(Constants.NULL_VALUE_STRING_REPRESENTATION);
+			}
+			else{
+				fPartitionValueText.setText(fPartition.getValue().toString());
+			}
 		}
+		fPartitionValueText.addModifyListener(new ModifyListener() {
+			
+			@Override
+			public void modifyText(ModifyEvent e) {
+				verifyInput();
+			}
+		});
 	}
 
-	protected void createOkButton(Composite parent, int id, 
+	private boolean verifyInput() {
+		boolean inputValid = true;
+		
+		inputValid &= verifyName();
+		inputValid &= verifyValue();
+		
+		if(!inputValid){
+			fOkButton.setEnabled(false);
+			setErrorMessage(fErrorMessage);
+		}
+		else{
+			fOkButton.setEnabled(true);
+			setErrorMessage(null);
+		}
+		
+		return inputValid;
+	}
+
+	private boolean verifyValue() {
+		boolean inputValid = true;
+		if(!CategoryNode.isStringValueValid(fPartitionValueText.getText(), fType)){
+			fErrorMessage = "Invalid value";
+			inputValid = false;
+		}
+		return inputValid;
+	}
+
+	private boolean verifyName() {
+		boolean inputValid = true;
+		if(fPartitionNameText.getText().length() < 1){
+			fErrorMessage = "Partition name cannot be empty";
+			inputValid = false;
+		}
+		return inputValid;
+	}
+
+	protected Button createOkButton(Composite parent, int id, 
 			String label, boolean defaultButton) {
 		
 	    ((GridLayout) parent.getLayout()).numColumns++;
@@ -129,6 +207,7 @@ public class PartitionSettingsDialog extends TitleAreaDialog {
 	        }
 	      }
 	    setButtonLayoutData(okButton);
+	    return okButton;
 	}
 
 	protected void createCancelButton(Composite parent, int cancel,
@@ -145,15 +224,7 @@ public class PartitionSettingsDialog extends TitleAreaDialog {
 
 	private void saveInput() {
 		fPartitionName = fPartitionNameText.getText();
-		fPartitionValueString = fPartitionValueText.getText();
-	}
-
-	public String getPartitionName() {
-		return fPartitionName;
-	}
-
-	public String getPartitionValueString() {
-		return fPartitionValueString;
+		fPartitionValue = CategoryNode.getValueFromString(fPartitionValueText.getText(), fType);
 	}
 
 }

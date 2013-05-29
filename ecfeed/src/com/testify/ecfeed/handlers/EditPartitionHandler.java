@@ -36,16 +36,14 @@ public class EditPartitionHandler implements IHandler {
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		IStructuredSelection selection = (IStructuredSelection) HandlerUtil.getCurrentSelection(event);
 		PartitionNode partition = (PartitionNode)selection.getFirstElement();
-		PartitionSettingsDialog dialog = new PartitionSettingsDialog(Display.getDefault().getActiveShell(), partition);
+		String type = ((CategoryNode)partition.getParent()).getType();
+		PartitionSettingsDialog dialog = new PartitionSettingsDialog(Display.getDefault().getActiveShell(), partition, type);
 		dialog.create();
 		if (dialog.open() == Window.OK) {
 			String name = dialog.getPartitionName();
-			String valueString = dialog.getPartitionValueString();
-			CategoryNode parent = (CategoryNode)partition.getParent();
+			Object value = dialog.getPartitionValue();
 			partition.setName(name);
-			if(parent.isStringValueValid(valueString)){
-				partition.setValue(parent.getValueFromString(valueString));
-			}
+			partition.setValue(value);
 			
 			IWorkbenchPart part = HandlerUtil.getActivePart(event);
 			IPage page = ((ContentOutline)part).getCurrentPage();

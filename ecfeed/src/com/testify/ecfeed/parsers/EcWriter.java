@@ -44,8 +44,8 @@ public class EcWriter {
 			element = createMethodElement(name);
 		}
 		else if (node instanceof CategoryNode){
-			String typeSignature = ((CategoryNode)node).getTypeSignature();
-			element = createCategoryElement(name, typeSignature);
+			String type = ((CategoryNode)node).getType();
+			element = createCategoryElement(name, type);
 		}
 		else if (node instanceof PartitionNode){
 			Object value = ((PartitionNode)node).getValue();
@@ -59,20 +59,22 @@ public class EcWriter {
 	}
 
 	private Element createPartitionElement(String name, Object value) {
+		String valueString = 
+				(value == null)?Constants.NULL_VALUE_STRING_REPRESENTATION:String.valueOf(value);
 		Element partitionElement = new Element(Constants.PARTITION_NODE_NAME);
 		Attribute nameAttribute = new Attribute(Constants.NODE_NAME_ATTRIBUTE, name);
-		Attribute valueAttribute = new Attribute(Constants.VALUE_ATTRIBUTE, String.valueOf(value));
+		Attribute valueAttribute = new Attribute(Constants.VALUE_ATTRIBUTE, valueString);
 		partitionElement.addAttribute(nameAttribute);
 		partitionElement.addAttribute(valueAttribute);
 		return partitionElement;
 	}
 
-	private Element createCategoryElement(String name, String typeSignature) {
+	private Element createCategoryElement(String name, String type) {
 		Element categoryElement = new Element(Constants.CATEGORY_NODE_NAME);
 		Attribute nameAttribute = new Attribute(Constants.NODE_NAME_ATTRIBUTE, name);
-		Attribute typeSignatureAttribute = new Attribute(Constants.TYPE_SIGNATURE_ATTRIBUTE, typeSignature);
+		Attribute typeNameAttribute = new Attribute(Constants.TYPE_NAME_ATTRIBUTE, type);
 		categoryElement.addAttribute(nameAttribute);
-		categoryElement.addAttribute(typeSignatureAttribute);
+		categoryElement.addAttribute(typeNameAttribute);
 		return categoryElement;
 	}
 

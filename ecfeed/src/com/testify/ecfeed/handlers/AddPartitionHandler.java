@@ -37,12 +37,13 @@ public class AddPartitionHandler implements IHandler {
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		IStructuredSelection selection = (IStructuredSelection) HandlerUtil.getCurrentSelection(event);
 		CategoryNode category = (CategoryNode)selection.getFirstElement();
-		PartitionSettingsDialog dialog = new PartitionSettingsDialog(Display.getDefault().getActiveShell(), null);
+		PartitionSettingsDialog dialog = 
+				new PartitionSettingsDialog(Display.getDefault().getActiveShell(), 
+						null, category.getType());
 		dialog.create();
 		if (dialog.open() == Window.OK) {
 			String name = dialog.getPartitionName();
-			String valueString = dialog.getPartitionValueString();
-			Object value = category.getValueFromString(valueString);
+			Object value = dialog.getPartitionValue();
 			category.addPartition(new PartitionNode(name, value));
 			
 			IWorkbenchPart part = HandlerUtil.getActivePart(event);

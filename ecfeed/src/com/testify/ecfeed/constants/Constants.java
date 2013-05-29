@@ -13,6 +13,7 @@ public class Constants {
 	
 	public static final String NODE_NAME_ATTRIBUTE = "name";
 	public static final String QUALIFIED_NAME_ATTRIBUTE = "qualifiedName";
-	public static final String TYPE_SIGNATURE_ATTRIBUTE = "signature";
+	public static final String TYPE_NAME_ATTRIBUTE = "type";
 	public static final String VALUE_ATTRIBUTE = "value";
+	public static final String NULL_VALUE_STRING_REPRESENTATION = "/null";
 }

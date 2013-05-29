@@ -4,8 +4,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Vector;
 
-import org.eclipse.jdt.core.Signature;
-
 import nu.xom.*;
 
 import com.testify.ecfeed.constants.Constants;
@@ -79,15 +77,15 @@ public class EcParser {
 	
 	private CategoryNode parseCategoryElement(Element element) {
 		String name = element.getAttributeValue(Constants.NODE_NAME_ATTRIBUTE);
-		String typeSignature = element.getAttributeValue(Constants.TYPE_SIGNATURE_ATTRIBUTE);
-		if (name == null | typeSignature == null){
+		String type = element.getAttributeValue(Constants.TYPE_NAME_ATTRIBUTE);
+		if (name == null | type == null){
 			return null;
 		}
 		
-		CategoryNode categoryNode = new CategoryNode(name, typeSignature);
+		CategoryNode categoryNode = new CategoryNode(name, type);
 		for(Element child : getIterableElements(element.getChildElements())){
 			if(child.getLocalName() == Constants.PARTITION_NODE_NAME){
-				categoryNode.addPartition(parsePartitionElement(child, typeSignature));
+				categoryNode.addPartition(parsePartitionElement(child, type));
 			}
 		}
 		
@@ -104,29 +102,28 @@ public class EcParser {
 		return new PartitionNode(name, value);
 	}
 
-	private Object parseValue(String valueString, String typeSignature) {
-		switch(typeSignature){
-		case Signature.SIG_BOOLEAN:
+	private Object parseValue(String valueString, String type) {
+		switch(type){
+		case "boolean":
 			return Boolean.parseBoolean(valueString);
-		case Signature.SIG_BYTE:
+		case "byte":
 			return Byte.parseByte(valueString);
-		case Signature.SIG_CHAR:
+		case "char":
 			if (valueString.length() >= 0)
 				return valueString.charAt(0);
 			return null;
-		case Signature.SIG_DOUBLE:
+		case "double":
 			return Double.parseDouble(valueString);
-		case Signature.SIG_FLOAT:
+		case "float":
 			return Float.parseFloat(valueString);
-		case Signature.SIG_INT:
+		case "int":
 			return Integer.parseInt(valueString);
-		case Signature.SIG_LONG:
+		case "long":
 			return Long.parseLong(valueString);
-		case Signature.SIG_SHORT:
+		case "short":
 			return Short.parseShort(valueString);
-		case "QString;":
-			return valueString.equals("null")?null:valueString;
-//			return valueString.equals(String.valueOf(null))?null:valueString;
+		case "String":
+			return valueString.equals(Constants.NULL_VALUE_STRING_REPRESENTATION)?null:valueString;
 		default:
 			return null;
 		}		

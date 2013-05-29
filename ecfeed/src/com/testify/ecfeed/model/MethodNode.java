@@ -26,7 +26,7 @@ public class MethodNode extends GenericNode {
 		Vector<String> types = new Vector<String>();
 		for(GenericNode child : getChildren()){
 			if (child instanceof CategoryNode){
-				types.add(((CategoryNode)child).getTypeName());
+				types.add(((CategoryNode)child).getType());
 			}
 		}
 		return types;
