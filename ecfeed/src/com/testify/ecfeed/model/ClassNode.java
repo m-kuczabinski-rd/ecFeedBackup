@@ -23,5 +23,7 @@ public class ClassNode extends GenericNode {
 		return (lastDotIndex == -1)?qualifiedName: qualifiedName.substring(lastDotIndex + 1);
 	}
 	
-	
+	public String toString(){
+		return getLocalName();
+	}
 }

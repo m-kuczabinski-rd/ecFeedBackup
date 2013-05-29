@@ -1,25 +1,24 @@
 package com.testify.ecfeed.handlers;
 
+import java.util.Iterator;
+
+import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.commands.IHandler;
 import org.eclipse.core.commands.IHandlerListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.window.Window;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.handlers.HandlerUtil;
 import org.eclipse.ui.part.IPage;
 import org.eclipse.ui.views.contentoutline.ContentOutline;
 
-import com.testify.ecfeed.dialogs.PartitionSettingsDialog;
 import com.testify.ecfeed.editors.EcEditor;
-import com.testify.ecfeed.model.CategoryNode;
-import com.testify.ecfeed.model.PartitionNode;
+import com.testify.ecfeed.model.GenericNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.outline.EcContentOutlinePage;
 
-public class EditPartitionHandler implements IHandler {
+public class RemoveNodeHandler extends AbstractHandler implements IHandler {
 
 	@Override
 	public void addHandlerListener(IHandlerListener handlerListener) {
@@ -30,30 +29,28 @@ public class EditPartitionHandler implements IHandler {
 	@Override
 	public void dispose() {
 		// TODO Auto-generated method stub
+
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		IStructuredSelection selection = (IStructuredSelection) HandlerUtil.getCurrentSelection(event);
-		PartitionNode partition = (PartitionNode)selection.getFirstElement();
-		PartitionSettingsDialog dialog = new PartitionSettingsDialog(Display.getDefault().getActiveShell(), partition);
-		dialog.create();
-		if (dialog.open() == Window.OK) {
-			String name = dialog.getPartitionName();
-			String valueString = dialog.getPartitionValueString();
-			CategoryNode parent = (CategoryNode)partition.getParent();
-			partition.setName(name);
-			if(parent.isStringValueValid(valueString)){
-				partition.setValue(parent.getValueFromString(valueString));
-			}
-			
-			IWorkbenchPart part = HandlerUtil.getActivePart(event);
-			IPage page = ((ContentOutline)part).getCurrentPage();
-			EcEditor editor = ((EcContentOutlinePage)page).getEditor();
-			if(partition.getRoot() instanceof RootNode){
-				editor.updateModel((RootNode)partition.getRoot());
+		RootNode root = (RootNode)((GenericNode)selection.getFirstElement()).getRoot();
+		
+		Iterator iterator = selection.iterator();
+		while(iterator.hasNext()){
+			GenericNode node = (GenericNode)iterator.next();
+			if(node != null && node.getParent() != null){
+				node.getParent().removeChild(node);
 			}
 		}
+		
+		IWorkbenchPart part = HandlerUtil.getActivePart(event);
+		IPage page = ((ContentOutline)part).getCurrentPage();
+		EcEditor editor = ((EcContentOutlinePage)page).getEditor();
+
+		editor.updateModel(root);
 		return null;
 	}
 

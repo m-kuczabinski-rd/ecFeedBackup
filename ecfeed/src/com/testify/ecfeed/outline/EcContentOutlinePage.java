@@ -37,7 +37,7 @@ public class EcContentOutlinePage extends ContentOutlinePage {
 		menuManager.setRemoveAllWhenShown(true);
 		Menu menu = menuManager.createContextMenu(treeViewer.getControl());
 		treeViewer.getControl().setMenu(menu);
-		getSite().registerContextMenu("com.testify.ecfeed.outline.contextMenu", menuManager, treeViewer);
+		getSite().registerContextMenu("com.testify.ecfeed.outline.menu.context", menuManager, treeViewer);
 	}
 
 	public void setEditor(EcEditor editor){

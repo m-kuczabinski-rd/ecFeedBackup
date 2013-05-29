@@ -52,15 +52,6 @@ public class GenericNode {
 		return getParent().getRoot();
 	}
 
-	public int getChildIndex(GenericNode child){
-		for(int i = 0; i < fChildren.size(); i++){
-			if(fChildren.elementAt(i).equals(child)){
-				return i;
-			}
-		}
-		return -1;
-	}
-	
 	@Override
 	public String toString(){
 		return getName();
@@ -69,5 +60,9 @@ public class GenericNode {
 	@Override
 	public boolean equals(Object obj){
 		return super.equals(obj);
+	}
+
+	public boolean removeChild(GenericNode child) {
+		return fChildren.remove(child); 
 	}
 }

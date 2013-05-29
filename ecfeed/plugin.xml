@@ -16,6 +16,7 @@
             id="com.testify.ecfeed.wizards.NewEcFileWizard">
       </wizard>
    </extension>
+   
    <extension
          point="org.eclipse.ui.editors">
       <editor
@@ -44,6 +45,16 @@
             id="com.testify.ecfeed.model.commands.editPartition"
             name="editPartition">
       </command>
+      <command
+            categoryId="com.testify.ecfeed.commands.ecFeedCommands"
+            id="com.testify.ecfeed.model.commands.addPartition"
+            name="addPartition">
+      </command>
+      <command
+            categoryId="com.testify.ecfeed.commands.ecFeedCommands"
+            id="com.testify.ecfeed.model.commands.remove"
+            name="remove">
+      </command>
    </extension>
    
    <extension
@@ -55,9 +66,32 @@
       <handler
             class="com.testify.ecfeed.handlers.EditPartitionHandler"
             commandId="com.testify.ecfeed.model.commands.editPartition">
+         <enabledWhen>
+            <iterate
+                  operator="and">
+               <instanceof
+                     value="com.testify.ecfeed.model.PartitionNode">
+               </instanceof>
+            </iterate>
+         </enabledWhen>
+      </handler>
+      <handler
+            class="com.testify.ecfeed.handlers.AddPartitionHandler"
+            commandId="com.testify.ecfeed.model.commands.addPartition">
+         <activeWhen>
+            <iterate
+                  operator="and">
+               <instanceof
+                     value="com.testify.ecfeed.model.CategoryNode">
+               </instanceof>
+            </iterate>
+         </activeWhen>
+      </handler>
+      <handler
+            class="com.testify.ecfeed.handlers.RemoveNodeHandler"
+            commandId="com.testify.ecfeed.model.commands.remove">
       </handler>
    </extension>
-   
    
    <extension
          point="org.eclipse.ui.menus">
@@ -80,30 +114,59 @@
 	        </visibleWhen>
 	     </command>
 	  </menuContribution>
- <menuContribution
-       locationURI="popup:org.eclipse.ui.popup.any">
-    <command
-          commandId="com.testify.ecfeed.model.commands.editPartition"
-          id="com.testify.ecfeed.menus.modelContextMenu"
-          label="edit..."
-          style="push">
-       <visibleWhen
-             checkEnabled="false">
-          <iterate
-                operator="or">
-             <instanceof
-                   value="com.testify.ecfeed.model.PartitionNode">
-             </instanceof>
-          </iterate>
-<!--          <iterate
-                operator="and">
-             <instanceof
-                   value="com.testify.ecfeed.model.PartitionNode">
-             </instanceof>
-          </iterate>-->
-       </visibleWhen>
-    </command>
- </menuContribution>
-	</extension> 
+      <menuContribution
+            locationURI="popup:com.testify.ecfeed.outline.menu.context">
+         <command
+               commandId="com.testify.ecfeed.model.commands.editPartition"
+               id="com.testify.ecfeed.outline.menu.context.edit"
+               label="edit..."
+               style="push">
+            <visibleWhen
+                  checkEnabled="false">
+               <iterate
+                     operator="and">
+                  <instanceof
+                        value="com.testify.ecfeed.model.PartitionNode">
+                  </instanceof>
+               </iterate>
+            </visibleWhen>
+         </command>
+         <command
+               commandId="com.testify.ecfeed.model.commands.addPartition"
+               id="com.testify.ecfeed.outline.menu.context.addPartition"
+               label="add partition..."
+               style="push">
+            <visibleWhen
+                  checkEnabled="false">
+               <iterate
+                     operator="and">
+                  <instanceof
+                        value="com.testify.ecfeed.model.CategoryNode">
+                  </instanceof>
+               </iterate>
+            </visibleWhen>
+         </command>
+         <command
+               commandId="com.testify.ecfeed.model.commands.remove"
+               id="com.testify.ecfeed.outline.menu.context.remove"
+               label="remove"
+               style="push">
+            <visibleWhen
+                  checkEnabled="false">
+               <or>
+                  <iterate>
+                     <instanceof
+                           value="com.testify.ecfeed.model.ClassNode">
+                     </instanceof></iterate>
+                  <iterate>
+                     <instanceof
+                           value="com.testify.ecfeed.model.PartitionNode">
+                     </instanceof>
+                  </iterate>
+               </or>
+            </visibleWhen>
+         </command>
+      </menuContribution>
+  </extension> 
 
 </plugin>

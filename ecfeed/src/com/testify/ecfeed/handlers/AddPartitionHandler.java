@@ -19,7 +19,7 @@ import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.outline.EcContentOutlinePage;
 
-public class EditPartitionHandler implements IHandler {
+public class AddPartitionHandler implements IHandler {
 
 	@Override
 	public void addHandlerListener(IHandlerListener handlerListener) {
@@ -30,28 +30,26 @@ public class EditPartitionHandler implements IHandler {
 	@Override
 	public void dispose() {
 		// TODO Auto-generated method stub
+
 	}
 
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		IStructuredSelection selection = (IStructuredSelection) HandlerUtil.getCurrentSelection(event);
-		PartitionNode partition = (PartitionNode)selection.getFirstElement();
-		PartitionSettingsDialog dialog = new PartitionSettingsDialog(Display.getDefault().getActiveShell(), partition);
+		CategoryNode category = (CategoryNode)selection.getFirstElement();
+		PartitionSettingsDialog dialog = new PartitionSettingsDialog(Display.getDefault().getActiveShell(), null);
 		dialog.create();
 		if (dialog.open() == Window.OK) {
 			String name = dialog.getPartitionName();
 			String valueString = dialog.getPartitionValueString();
-			CategoryNode parent = (CategoryNode)partition.getParent();
-			partition.setName(name);
-			if(parent.isStringValueValid(valueString)){
-				partition.setValue(parent.getValueFromString(valueString));
-			}
+			Object value = category.getValueFromString(valueString);
+			category.addPartition(new PartitionNode(name, value));
 			
 			IWorkbenchPart part = HandlerUtil.getActivePart(event);
 			IPage page = ((ContentOutline)part).getCurrentPage();
 			EcEditor editor = ((EcContentOutlinePage)page).getEditor();
-			if(partition.getRoot() instanceof RootNode){
-				editor.updateModel((RootNode)partition.getRoot());
+			if(category.getRoot() instanceof RootNode){
+				editor.updateModel((RootNode)category.getRoot());
 			}
 		}
 		return null;

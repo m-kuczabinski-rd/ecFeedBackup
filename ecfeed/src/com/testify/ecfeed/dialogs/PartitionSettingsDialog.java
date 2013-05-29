@@ -30,13 +30,13 @@ public class PartitionSettingsDialog extends TitleAreaDialog {
 	public PartitionSettingsDialog(Shell parentShell, PartitionNode partition) {
 		super(parentShell);
 		fPartition = partition;
-		fNewPartition = (partition != null);
+		fNewPartition = (partition == null);
 	}
 
 	@Override
 	public void create() {
 		super.create();
-		setTitle(fNewPartition?"Edit Partition":"New Partition");
+		setTitle(fNewPartition?"New Partition":"Edit Partition");
 		setMessage("Set partition name and value", IMessageProvider.NONE);
 	}	
 
