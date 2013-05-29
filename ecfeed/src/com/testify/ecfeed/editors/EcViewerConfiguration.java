@@ -84,7 +84,7 @@ public class EcViewerConfiguration extends SourceViewerConfiguration {
 	    reconciler.setDamager(dr, XmlPartitionScanner.XML_CDATA);
 	    reconciler.setRepairer(dr, XmlPartitionScanner.XML_CDATA);
 	
-	    TextAttribute textAttribute = new TextAttribute(fColorManager.getColor(IXmlColorConstants.XML_COMMENT));
+	    TextAttribute textAttribute = new TextAttribute(fColorManager.getColor(XmlColorConstants.XML_COMMENT));
 	    NonRuleBasedDamagerRepairer ndr = new NonRuleBasedDamagerRepairer(textAttribute);
 	    reconciler.setDamager(ndr, XmlPartitionScanner.XML_COMMENT);
 	    reconciler.setRepairer(ndr, XmlPartitionScanner.XML_COMMENT);
@@ -96,7 +96,7 @@ public class EcViewerConfiguration extends SourceViewerConfiguration {
 		if (fXmlScanner == null) {
 			fXmlScanner = new XmlScanner(fColorManager);
 			fXmlScanner.setDefaultReturnToken(
-					new Token(new TextAttribute(fColorManager.getColor(IXmlColorConstants.DEFAULT))));
+					new Token(new TextAttribute(fColorManager.getColor(XmlColorConstants.DEFAULT))));
 		}
 		return fXmlScanner;
 	}
@@ -105,7 +105,7 @@ public class EcViewerConfiguration extends SourceViewerConfiguration {
 		if (fXmlTagScanner == null) {
 			fXmlTagScanner = new XmlTagScanner(fColorManager);
 			fXmlTagScanner.setDefaultReturnToken(
-					new Token(new TextAttribute(fColorManager.getColor(IXmlColorConstants.TAG))));
+					new Token(new TextAttribute(fColorManager.getColor(XmlColorConstants.TAG))));
 		}
 		return fXmlTagScanner;
 	}
@@ -115,7 +115,7 @@ public class EcViewerConfiguration extends SourceViewerConfiguration {
 	    {
 	        fTextScanner = new XmlTextScanner(fColorManager);
 	        fTextScanner.setDefaultReturnToken(new Token(new TextAttribute(fColorManager
-	                .getColor(IXmlColorConstants.DEFAULT))));
+	                .getColor(XmlColorConstants.DEFAULT))));
 	    }
 	    return fTextScanner;
 	}
@@ -125,7 +125,7 @@ public class EcViewerConfiguration extends SourceViewerConfiguration {
 	    {
 	        fCdataScanner = new CDataScanner(fColorManager);
 	        fCdataScanner.setDefaultReturnToken(new Token(new TextAttribute(fColorManager
-	                .getColor(IXmlColorConstants.CDATA_TEXT))));
+	                .getColor(XmlColorConstants.CDATA_TEXT))));
 	    }
 	    return fCdataScanner;
 	}

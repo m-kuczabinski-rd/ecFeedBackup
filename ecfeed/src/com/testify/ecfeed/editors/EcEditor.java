@@ -85,4 +85,8 @@ public class EcEditor extends TextEditor{
 		getDocument().set(ostream.toString());
 	}
 
+	@Override
+	public boolean isEditable(){
+		return false;
+	}
 }
