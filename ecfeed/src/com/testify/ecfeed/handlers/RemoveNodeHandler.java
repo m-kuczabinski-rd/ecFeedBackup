@@ -13,10 +13,10 @@ import org.eclipse.ui.handlers.HandlerUtil;
 import org.eclipse.ui.part.IPage;
 import org.eclipse.ui.views.contentoutline.ContentOutline;
 
-import com.testify.ecfeed.editors.EcEditor;
+import com.testify.ecfeed.editor.EcEditor;
+import com.testify.ecfeed.editor.outline.EcContentOutlinePage;
 import com.testify.ecfeed.model.GenericNode;
 import com.testify.ecfeed.model.RootNode;
-import com.testify.ecfeed.outline.EcContentOutlinePage;
 
 public class RemoveNodeHandler extends AbstractHandler implements IHandler {
 

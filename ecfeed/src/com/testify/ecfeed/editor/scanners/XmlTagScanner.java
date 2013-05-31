@@ -1,4 +1,4 @@
-package com.testify.ecfeed.scanners;
+package com.testify.ecfeed.editor.scanners;
 
 import org.eclipse.jface.text.TextAttribute;
 import org.eclipse.jface.text.rules.IRule;
@@ -8,9 +8,9 @@ import org.eclipse.jface.text.rules.SingleLineRule;
 import org.eclipse.jface.text.rules.Token;
 import org.eclipse.jface.text.rules.WhitespaceRule;
 
-import com.testify.ecfeed.editors.ColorManager;
-import com.testify.ecfeed.editors.XmlColorConstants;
-import com.testify.ecfeed.editors.XmlWhitespaceDetector;
+import com.testify.ecfeed.editor.ColorManager;
+import com.testify.ecfeed.editor.XmlColorConstants;
+import com.testify.ecfeed.editor.XmlWhitespaceDetector;
 
 public class XmlTagScanner extends RuleBasedScanner {
 

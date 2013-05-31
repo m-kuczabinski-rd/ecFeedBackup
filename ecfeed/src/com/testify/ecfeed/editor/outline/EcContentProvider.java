@@ -1,9 +1,9 @@
-package com.testify.ecfeed.outline;
+package com.testify.ecfeed.editor.outline;
 
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 
-import com.testify.ecfeed.editors.EcEditor;
+import com.testify.ecfeed.editor.EcEditor;
 import com.testify.ecfeed.model.GenericNode;
 import com.testify.ecfeed.model.RootNode;
 

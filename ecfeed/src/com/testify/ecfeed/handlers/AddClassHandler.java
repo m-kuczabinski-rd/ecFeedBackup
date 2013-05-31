@@ -29,7 +29,7 @@ import org.eclipse.ui.model.WorkbenchLabelProvider;
 import org.eclipse.ui.part.FileEditorInput;
 
 import com.testify.ecfeed.constants.Constants;
-import com.testify.ecfeed.editors.EcEditor;
+import com.testify.ecfeed.editor.EcEditor;
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.MethodNode;

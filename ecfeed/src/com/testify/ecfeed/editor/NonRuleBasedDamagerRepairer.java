@@ -1,4 +1,4 @@
-package com.testify.ecfeed.editors;
+package com.testify.ecfeed.editor;
 
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.jface.text.BadLocationException;

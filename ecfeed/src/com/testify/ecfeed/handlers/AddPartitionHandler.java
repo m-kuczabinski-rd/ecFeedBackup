@@ -13,11 +13,11 @@ import org.eclipse.ui.part.IPage;
 import org.eclipse.ui.views.contentoutline.ContentOutline;
 
 import com.testify.ecfeed.dialogs.PartitionSettingsDialog;
-import com.testify.ecfeed.editors.EcEditor;
+import com.testify.ecfeed.editor.EcEditor;
+import com.testify.ecfeed.editor.outline.EcContentOutlinePage;
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.RootNode;
-import com.testify.ecfeed.outline.EcContentOutlinePage;
 
 public class AddPartitionHandler implements IHandler {
 

@@ -1,4 +1,4 @@
-package com.testify.ecfeed.editors;
+package com.testify.ecfeed.editor;
 
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
@@ -12,8 +12,8 @@ import org.eclipse.ui.editors.text.TextEditor;
 import org.eclipse.ui.part.FileEditorInput;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 
+import com.testify.ecfeed.editor.outline.EcContentOutlinePage;
 import com.testify.ecfeed.model.RootNode;
-import com.testify.ecfeed.outline.EcContentOutlinePage;
 import com.testify.ecfeed.parsers.EcParser;
 import com.testify.ecfeed.parsers.EcWriter;
 

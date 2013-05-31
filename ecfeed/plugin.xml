@@ -20,7 +20,7 @@
    <extension
          point="org.eclipse.ui.editors">
       <editor
-            class="com.testify.ecfeed.editors.EcEditor"
+            class="com.testify.ecfeed.editor.EcEditor"
             default="true"
             extensions="ect"
             icon="icons/sample.gif"

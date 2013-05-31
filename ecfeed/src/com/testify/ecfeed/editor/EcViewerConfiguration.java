@@ -1,4 +1,4 @@
-package com.testify.ecfeed.editors;
+package com.testify.ecfeed.editor;
 
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.ITextDoubleClickStrategy;
@@ -10,11 +10,11 @@ import org.eclipse.jface.text.rules.Token;
 import org.eclipse.jface.text.source.ISourceViewer;
 import org.eclipse.jface.text.source.SourceViewerConfiguration;
 
-import com.testify.ecfeed.scanners.CDataScanner;
-import com.testify.ecfeed.scanners.XmlPartitionScanner;
-import com.testify.ecfeed.scanners.XmlScanner;
-import com.testify.ecfeed.scanners.XmlTagScanner;
-import com.testify.ecfeed.scanners.XmlTextScanner;
+import com.testify.ecfeed.editor.scanners.CDataScanner;
+import com.testify.ecfeed.editor.scanners.XmlPartitionScanner;
+import com.testify.ecfeed.editor.scanners.XmlScanner;
+import com.testify.ecfeed.editor.scanners.XmlTagScanner;
+import com.testify.ecfeed.editor.scanners.XmlTextScanner;
 
 public class EcViewerConfiguration extends SourceViewerConfiguration {
 	

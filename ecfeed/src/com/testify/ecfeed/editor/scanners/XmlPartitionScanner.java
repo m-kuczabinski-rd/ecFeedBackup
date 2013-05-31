@@ -1,10 +1,10 @@
-package com.testify.ecfeed.scanners;
+package com.testify.ecfeed.editor.scanners;
 
 import org.eclipse.jface.text.rules.*;
 
-import com.testify.ecfeed.rules.NonMatchingRule;
-import com.testify.ecfeed.rules.StartTagRule;
-import com.testify.ecfeed.rules.XmlTextPredicateRule;
+import com.testify.ecfeed.editor.rules.NonMatchingRule;
+import com.testify.ecfeed.editor.rules.StartTagRule;
+import com.testify.ecfeed.editor.rules.XmlTextPredicateRule;
 
 public class XmlPartitionScanner extends RuleBasedPartitionScanner {
 	public final static String XML_START_TAG = "__xml_start_tag";

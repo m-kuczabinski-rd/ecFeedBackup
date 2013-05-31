@@ -1,4 +1,4 @@
-package com.testify.ecfeed.editors;
+package com.testify.ecfeed.editor;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.text.IDocument;
@@ -7,7 +7,7 @@ import org.eclipse.jface.text.rules.FastPartitioner;
 import org.eclipse.jface.text.rules.IPartitionTokenScanner;
 import org.eclipse.ui.editors.text.FileDocumentProvider;
 
-import com.testify.ecfeed.scanners.XmlPartitionScanner;
+import com.testify.ecfeed.editor.scanners.XmlPartitionScanner;
 
 public class EcDocumentProvider extends FileDocumentProvider{
 	@Override

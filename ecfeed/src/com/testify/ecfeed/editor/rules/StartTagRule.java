@@ -1,4 +1,4 @@
-package com.testify.ecfeed.rules;
+package com.testify.ecfeed.editor.rules;
 
 import org.eclipse.jface.text.rules.ICharacterScanner;
 import org.eclipse.jface.text.rules.IToken;

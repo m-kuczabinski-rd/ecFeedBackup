@@ -1,4 +1,4 @@
-package com.testify.ecfeed.outline;
+package com.testify.ecfeed.editor.outline;
 
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.viewers.TreeViewer;
@@ -7,7 +7,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.views.contentoutline.ContentOutlinePage;
 
-import com.testify.ecfeed.editors.EcEditor;
+import com.testify.ecfeed.editor.EcEditor;
 
 public class EcContentOutlinePage extends ContentOutlinePage {
 	
