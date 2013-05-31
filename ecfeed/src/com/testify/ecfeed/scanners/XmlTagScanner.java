@@ -9,13 +9,13 @@ import org.eclipse.jface.text.rules.Token;
 import org.eclipse.jface.text.rules.WhitespaceRule;
 
 import com.testify.ecfeed.editors.ColorManager;
-import com.testify.ecfeed.editors.IXmlColorConstants;
+import com.testify.ecfeed.editors.XmlColorConstants;
 import com.testify.ecfeed.editors.XmlWhitespaceDetector;
 
 public class XmlTagScanner extends RuleBasedScanner {
 
 	public XmlTagScanner(ColorManager manager) {
-		IToken string =	new Token(new TextAttribute(manager.getColor(IXmlColorConstants.STRING)));
+		IToken string =	new Token(new TextAttribute(manager.getColor(XmlColorConstants.STRING)));
 
 		IRule[] rules = new IRule[3];
 

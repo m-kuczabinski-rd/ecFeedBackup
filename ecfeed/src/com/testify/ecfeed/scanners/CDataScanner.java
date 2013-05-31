@@ -7,7 +7,7 @@ import org.eclipse.jface.text.rules.RuleBasedScanner;
 import org.eclipse.jface.text.rules.Token;
 
 import com.testify.ecfeed.editors.ColorManager;
-import com.testify.ecfeed.editors.IXmlColorConstants;
+import com.testify.ecfeed.editors.XmlColorConstants;
 import com.testify.ecfeed.rules.CDataRule;
 
 public class CDataScanner extends RuleBasedScanner {
@@ -17,7 +17,7 @@ public class CDataScanner extends RuleBasedScanner {
 	public CDataScanner(ColorManager colorManager)
 	{
 		
-		CDATA = new Token(new TextAttribute(colorManager.getColor(IXmlColorConstants.CDATA)));
+		CDATA = new Token(new TextAttribute(colorManager.getColor(XmlColorConstants.CDATA)));
 
 		IRule[] rules = new IRule[2];
 
