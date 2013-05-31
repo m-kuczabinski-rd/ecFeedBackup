@@ -8,9 +8,9 @@ import org.junit.runner.RunWith;
 import org.databene.feed4junit.Feeder;
 
 @RunWith(Feeder.class)
-public class NodeTest extends GenericNode {
+public class GenericNodeTest extends GenericNode {
 
-	public NodeTest() {
+	public GenericNodeTest() {
 		super("dummy");
 	}
 
