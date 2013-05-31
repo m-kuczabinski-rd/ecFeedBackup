@@ -151,7 +151,7 @@ public class AddClassHandler implements IHandler {
 	private String getTypeName(String typeSignature) {
 		switch(typeSignature){
 		case Signature.SIG_BOOLEAN:
-			return "bool";
+			return "boolean";
 		case Signature.SIG_BYTE:
 			return "byte";
 		case Signature.SIG_CHAR:
