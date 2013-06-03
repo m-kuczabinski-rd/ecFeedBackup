@@ -31,4 +31,19 @@ public class ClassNodeTest extends ClassNode {
 		assertEquals("", testNode3.getLocalName());
 		assertEquals(".", testNode3.getQualifiedName());
 	}
+	
+	@Test
+	public void addMethod(){
+		ClassNode classNode = new ClassNode("com.testify.ecfeed.model.TestClassNode");
+		MethodNode method = new MethodNode("testMethod");
+		assertEquals(false, classNode.hasChildren());
+		assertEquals(0, classNode.getChildren().size());
+		assertEquals(null, method.getParent());
+
+		classNode.addMethod(method);
+		assertEquals(true, classNode.hasChildren());
+		assertEquals(1, classNode.getChildren().size());
+		assertEquals(classNode, method.getParent());
+		assertEquals(method, classNode.getChildren().elementAt(0));
+	}
 }

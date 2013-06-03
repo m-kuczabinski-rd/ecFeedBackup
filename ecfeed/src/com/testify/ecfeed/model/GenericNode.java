@@ -21,13 +21,18 @@ public class GenericNode {
 	}
 	
 	protected void addChild(GenericNode child){
-		child.setParent(this);
-		fChildren.add(child);
+		if(!isParent(child)){
+			fChildren.add(child);
+			child.setParent(this);
+		}
 	}
 	
-	//Available only inside the package 
-	void setParent(GenericNode node) {
-		fParent = node;
+	//Should not be used 
+	void setParent(GenericNode newParent) {
+		fParent = newParent;
+		if(newParent != null){
+			newParent.addChild(this);
+		}
 	}
 
 	public Vector<GenericNode> getChildren() {
@@ -63,6 +68,19 @@ public class GenericNode {
 	}
 
 	public boolean removeChild(GenericNode child) {
-		return fChildren.remove(child); 
+		boolean result = fChildren.remove(child);
+		if(result){
+			child.setParent(null);
+		}
+		return result;
+	}
+	
+	private boolean isParent(GenericNode potentialChild){
+		for(GenericNode child : getChildren()){
+			if(child == potentialChild){
+				return true;
+			}
+		}
+		return false;
 	}
 }

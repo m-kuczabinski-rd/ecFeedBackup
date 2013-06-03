@@ -29,16 +29,22 @@ public class PartitionSettingsDialog extends TitleAreaDialog {
 	private Text fPartitionValueText;
 	private String fPartitionName;
 	private Object fPartitionValue;
-	private String fType;
 	private Button fOkButton;
 	private String fErrorMessage;
+	private CategoryNode fParent;
 
 
 	public PartitionSettingsDialog(Shell parentShell, PartitionNode partition, String type) {
 		super(parentShell);
 		fPartition = partition;
 		fNewPartition = (partition == null);
-		fType = type;
+		if(!fNewPartition){
+			fParent = (CategoryNode) partition.getParent();
+		}
+		else{
+			fParent = new CategoryNode("dummy", type);
+		}
+			
 	}
 
 	@Override
@@ -170,7 +176,7 @@ public class PartitionSettingsDialog extends TitleAreaDialog {
 
 	private boolean verifyValue() {
 		boolean inputValid = true;
-		if(!CategoryNode.isStringValueValid(fPartitionValueText.getText(), fType)){
+		if(!fParent.isStringValueValid(fPartitionValueText.getText())){
 			fErrorMessage = "Invalid value";
 			inputValid = false;
 		}
@@ -224,7 +230,7 @@ public class PartitionSettingsDialog extends TitleAreaDialog {
 
 	private void saveInput() {
 		fPartitionName = fPartitionNameText.getText();
-		fPartitionValue = CategoryNode.getValueFromString(fPartitionValueText.getText(), fType);
+		fPartitionValue = fParent.getValueFromString(fPartitionValueText.getText());
 	}
 
 }
