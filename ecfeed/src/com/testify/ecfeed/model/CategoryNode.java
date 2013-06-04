@@ -64,4 +64,16 @@ public class CategoryNode extends GenericNode {
 	public boolean removeChild(PartitionNode partition) {
 		return super.removeChild(partition);
 	}
+
+	@Override 
+	public boolean equals(Object obj){
+		if(obj instanceof CategoryNode != true){
+			return false;
+		}
+		CategoryNode category = (CategoryNode)obj;
+		if(!fType.equals(category.getType())){
+			return false;
+		}
+		return super.equals(category);
+	}
 }

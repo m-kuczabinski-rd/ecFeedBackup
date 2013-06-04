@@ -64,7 +64,29 @@ public class GenericNode {
 	
 	@Override
 	public boolean equals(Object obj){
-		return super.equals(obj);
+		if(obj instanceof GenericNode == false){
+			return false;
+		}
+		GenericNode node = (GenericNode)obj;
+		if (!fName.equals(node.getName())){
+			return false;
+		}
+		int childrenCount = fChildren.size();
+		int nodeChildrenCount = node.getChildren().size();
+		if(childrenCount != nodeChildrenCount){
+			return false;
+		}
+		
+		Vector<GenericNode> nodeChildren = node.getChildren();
+		for(int i = 0; i < childrenCount; i++){
+			GenericNode thisChild = fChildren.elementAt(i);
+			GenericNode nodeChild = nodeChildren.elementAt(i);
+			if(!thisChild.equals(nodeChild)){
+//				if(!fChildren.elementAt(i).equals(nodeChildren.elementAt(i))){
+				return false;
+			}
+		}
+		return true;
 	}
 
 	public boolean removeChild(GenericNode child) {

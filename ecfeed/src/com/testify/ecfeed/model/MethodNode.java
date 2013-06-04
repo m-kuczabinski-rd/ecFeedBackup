@@ -31,4 +31,13 @@ public class MethodNode extends GenericNode {
 		}
 		return types;
 	}
+	
+	@Override 
+	public boolean equals(Object obj){
+		if(obj instanceof MethodNode != true){
+			return false;
+		}
+		return super.equals((MethodNode)obj);
+	}
+
 }

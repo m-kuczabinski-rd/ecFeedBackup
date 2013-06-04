@@ -26,4 +26,12 @@ public class ClassNode extends GenericNode {
 	public String toString(){
 		return getLocalName();
 	}
+
+	@Override 
+	public boolean equals(Object obj){
+		if(obj instanceof ClassNode != true){
+			return false;
+		}
+		return super.equals((ClassNode)obj);
+	}
 }

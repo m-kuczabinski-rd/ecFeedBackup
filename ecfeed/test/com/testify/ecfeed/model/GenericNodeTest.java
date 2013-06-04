@@ -74,7 +74,43 @@ public class GenericNodeTest extends GenericNode {
 		child.addChild(grandchild);
 		
 		assertEquals(parent, grandchild.getRoot());
+	}
+	
+	@Test
+	public void testEquals(){
+		GenericNode parent_1 = new GenericNode("parent");
+		GenericNode child_1_1 = new GenericNode("child_1");
+		GenericNode grandchild_1_1_1 = new GenericNode("grandchild_1_1");
+		GenericNode grandchild_1_1_2 = new GenericNode("grandchild_1_2");
+		GenericNode child_1_2 = new GenericNode("child_2");
+		GenericNode grandchild_1_2_1 = new GenericNode("grandchild_2_1");
+		GenericNode grandchild_1_2_2 = new GenericNode("grandchild_2_2");
 		
+		parent_1.addChild(child_1_1);
+		child_1_1.addChild(grandchild_1_1_1);
+		child_1_1.addChild(grandchild_1_1_2);
+		parent_1.addChild(child_1_2);
+		child_1_1.addChild(grandchild_1_2_1);
+		child_1_1.addChild(grandchild_1_2_2);
 		
+		GenericNode parent_1_copy = new GenericNode("parent");
+		GenericNode child_1_1_copy = new GenericNode("child_1");
+		GenericNode grandchild_1_1_1_copy = new GenericNode("grandchild_1_1");
+		GenericNode grandchild_1_1_2_copy = new GenericNode("grandchild_1_2");
+		GenericNode child_1_2_copy = new GenericNode("child_2");
+		GenericNode grandchild_1_2_1_copy = new GenericNode("grandchild_2_1");
+		GenericNode grandchild_1_2_2_copy = new GenericNode("grandchild_2_2");
+		
+		parent_1_copy.addChild(child_1_1_copy);
+		child_1_1_copy.addChild(grandchild_1_1_1_copy);
+		child_1_1_copy.addChild(grandchild_1_1_2_copy);
+		parent_1_copy.addChild(child_1_2_copy);
+		child_1_1_copy.addChild(grandchild_1_2_1_copy);
+		child_1_1_copy.addChild(grandchild_1_2_2_copy);
+		
+		assertTrue(parent_1.equals(parent_1_copy));
+		
+		grandchild_1_2_2_copy.setName("grandchild_2_2_changed");
+		assertFalse(parent_1.equals(parent_1_copy));
 	}
 }

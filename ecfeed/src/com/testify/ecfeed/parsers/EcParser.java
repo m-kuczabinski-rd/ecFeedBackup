@@ -109,9 +109,11 @@ public class EcParser {
 		case "byte":
 			return Byte.parseByte(valueString);
 		case "char":
-			if (valueString.length() >= 0)
-				return valueString.charAt(0);
-			return null;
+			if (valueString.length() <= 0){
+				return null;
+			}
+			int intValue = Integer.parseInt(valueString);
+			return (char)intValue;
 		case "double":
 			return Double.parseDouble(valueString);
 		case "float":

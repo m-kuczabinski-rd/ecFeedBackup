@@ -18,6 +18,29 @@ public class PartitionNode extends GenericNode {
 	}
 	
 	public String toString(){
-		return new String(getName() + ": " + fValue);
+		if(fValue instanceof Character){
+			return new String(getName() + ": " + (int)((char)fValue));
+		}
+		return new String(getName() + ": " + String.valueOf(fValue));
+	}
+	
+	@Override 
+	public boolean equals(Object obj){
+		if(obj instanceof PartitionNode != true){
+			return false;
+		}
+		PartitionNode partition = (PartitionNode)obj;
+		Object partitionValue = partition.getValue();
+		if(fValue != null){
+			if(!fValue.equals(partitionValue)){
+				return false;
+			}
+		}
+		else{
+			if(partitionValue != null){
+				return false;
+			}
+		}
+		return super.equals(partition);
 	}
 }

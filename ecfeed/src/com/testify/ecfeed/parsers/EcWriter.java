@@ -61,6 +61,16 @@ public class EcWriter {
 	private Element createPartitionElement(String name, Object value) {
 		String valueString = 
 				(value == null)?Constants.NULL_VALUE_STRING_REPRESENTATION:String.valueOf(value);
+		if(value == null){
+			valueString = Constants.NULL_VALUE_STRING_REPRESENTATION;
+		}
+		else if(value instanceof Character){
+			valueString = String.valueOf((int)((char)value));
+		}
+		else{
+			valueString = String.valueOf(value);
+		}
+		
 		Element partitionElement = new Element(Constants.PARTITION_NODE_NAME);
 		Attribute nameAttribute = new Attribute(Constants.NODE_NAME_ATTRIBUTE, name);
 		Attribute valueAttribute = new Attribute(Constants.VALUE_ATTRIBUTE, valueString);
