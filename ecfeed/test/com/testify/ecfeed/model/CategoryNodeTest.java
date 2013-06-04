@@ -246,4 +246,22 @@ public class CategoryNodeTest extends CategoryNode {
 
 		assertEquals(null, category.getValueFromString("string"));
 	}
+	
+	@Test 
+	public void testEquals(){
+		CategoryNode cat = new CategoryNode("cat", "boolean");
+		cat.addPartition(new PartitionNode("true", 	true));
+		cat.addPartition(new PartitionNode("false", false));
+
+		CategoryNode catCopy = new CategoryNode("cat", "boolean");
+		PartitionNode part1 = new PartitionNode("true", true);
+		PartitionNode part2 = new PartitionNode("false", false);
+		catCopy.addPartition(part1);
+		catCopy.addPartition(part2);
+		
+		assertTrue(cat.equals(catCopy));
+		part2.setValue(true);
+		assertFalse(cat.equals(catCopy));
+		
+	}
 }

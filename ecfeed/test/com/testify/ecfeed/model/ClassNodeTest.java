@@ -46,4 +46,23 @@ public class ClassNodeTest extends ClassNode {
 		assertEquals(classNode, method.getParent());
 		assertEquals(method, classNode.getChildren().elementAt(0));
 	}
+	
+	@Test
+	public void testEquals(){
+		ClassNode classNode = new ClassNode("com.test.classNode");
+		MethodNode method1 = new MethodNode("method1");
+		MethodNode method2 = new MethodNode("method2");
+		classNode.addMethod(method1);
+		classNode.addMethod(method2);
+
+		ClassNode classNodeCopy = new ClassNode("com.test.classNode");
+		MethodNode method1Copy = new MethodNode("method1");
+		MethodNode method2Copy = new MethodNode("method2");
+		classNodeCopy.addMethod(method1Copy);
+		classNodeCopy.addMethod(method2Copy);
+		
+		assertTrue(classNode.equals(classNodeCopy));
+		method2Copy.setName("name");
+		assertFalse(classNode.equals(classNodeCopy));
+	}
 }
