@@ -19,19 +19,17 @@ import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.TestCaseNode;
 
-public class AddTestCaseHandler extends AbstractHandler implements IHandler {
+public class EditTestCaseHandler extends AbstractHandler implements IHandler {
 
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		IStructuredSelection selection = (IStructuredSelection) HandlerUtil.getCurrentSelection(event);
-		MethodNode method = (MethodNode)selection.getFirstElement();
+		TestCaseNode testCase = (TestCaseNode)selection.getFirstElement();
+		MethodNode method = (MethodNode)testCase.getParent();
 		TestCaseSettingsDialog dialog = 
-				new TestCaseSettingsDialog(Display.getDefault().getActiveShell(), method, null);
+				new TestCaseSettingsDialog(Display.getDefault().getActiveShell(), method, testCase);
 		dialog.create();
 		if (dialog.open() == Window.OK) {
-			TestCaseNode testCase = dialog.getTestCase();
-			method.addTestCase(testCase);
-
 			IWorkbenchPart part = HandlerUtil.getActivePart(event);
 			IPage page = ((ContentOutline)part).getCurrentPage();
 			EcEditor editor = ((EcContentOutlinePage)page).getEditor();
@@ -41,4 +39,5 @@ public class AddTestCaseHandler extends AbstractHandler implements IHandler {
 		}
 		return null;
 	}
+
 }

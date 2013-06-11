@@ -2,6 +2,7 @@ package com.testify.ecfeed.handlers;
 
 import java.util.Vector;
 
+import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.commands.IHandler;
@@ -36,7 +37,7 @@ import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.RootNode;
 
-public class AddClassHandler implements IHandler {
+public class AddClassHandler extends AbstractHandler implements IHandler {
 
     private static final IStatus OK = new Status(IStatus.OK, "com.testify.ecfeed", "");
     private static final IStatus ERROR = new Status(IStatus.ERROR, "com.testify.ecfeed", "Select file with .ect extension");
@@ -53,18 +54,18 @@ public class AddClassHandler implements IHandler {
     };
 
 	
-	@Override
-	public void addHandlerListener(IHandlerListener handlerListener) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void dispose() {
-		// TODO Auto-generated method stub
-
-	}
-
+//	@Override
+//	public void addHandlerListener(IHandlerListener handlerListener) {
+//		// TODO Auto-generated method stub
+//
+//	}
+//
+//	@Override
+//	public void dispose() {
+//		// TODO Auto-generated method stub
+//
+//	}
+//
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		IStructuredSelection selection = (IStructuredSelection) HandlerUtil.getCurrentSelection(event);
 		IFile selectedFile = selectTargetFile(selection);
@@ -99,24 +100,24 @@ public class AddClassHandler implements IHandler {
 		}
 		return false;
 	}
-
-	@Override
-	public boolean isEnabled() {
-		// TODO Auto-generated method stub
-		return true;
-	}
-
-	@Override
-	public boolean isHandled() {
-		// TODO Auto-generated method stub
-		return true;
-	}
-
-	@Override
-	public void removeHandlerListener(IHandlerListener handlerListener) {
-		// TODO Auto-generated method stub
-
-	}
+//
+//	@Override
+//	public boolean isEnabled() {
+//		// TODO Auto-generated method stub
+//		return true;
+//	}
+//
+//	@Override
+//	public boolean isHandled() {
+//		// TODO Auto-generated method stub
+//		return true;
+//	}
+//
+//	@Override
+//	public void removeHandlerListener(IHandlerListener handlerListener) {
+//		// TODO Auto-generated method stub
+//
+//	}
 
 	private ClassNode generateClassModel(IType type) throws JavaModelException {
 		ClassNode classNode = new ClassNode(type.getFullyQualifiedName());

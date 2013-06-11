@@ -9,9 +9,12 @@ import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
@@ -26,20 +29,25 @@ import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.TestCaseNode;
 import org.eclipse.swt.widgets.Combo;
 
-public class EditTestCaseDialog extends TitleAreaDialog {
+public class TestCaseSettingsDialog extends TitleAreaDialog {
 
 	private TestCaseNode fTestCase;
 	private MethodNode fParentMethod;
 	private TableViewer fViewer;
+	private boolean fNewTestCase;
+	private Button fOkButton;
+	private String fErrorMessage;
+	private Combo fTestSuiteNameCombo;
 	
 	/**
 	 * Create the dialog.
 	 * @param parentShell
 	 */
-	public EditTestCaseDialog(Shell parentShell, MethodNode parentMethod, TestCaseNode testCase) {
+	public TestCaseSettingsDialog(Shell parentShell, MethodNode parentMethod, TestCaseNode testCase) {
 		super(parentShell);
 		fTestCase = testCase;
-		if(fTestCase == null){
+		fNewTestCase = (fTestCase == null);
+		if(fNewTestCase){
 			Vector<PartitionNode> testParameters = new Vector<PartitionNode>();
 			Vector<CategoryNode> categories = parentMethod.getCategories();
 			for(CategoryNode category : categories){
@@ -50,6 +58,13 @@ public class EditTestCaseDialog extends TitleAreaDialog {
 		fParentMethod = parentMethod;
 	}
 
+	@Override
+	public void create(){
+		super.create();
+		setTitle(fNewTestCase?"New test case":"Edit test case");
+		setMessage("Set test suite name and edit test data");
+	}
+	
 	@Override
 	public Control createDialogArea(Composite parent){
 		Composite composite = new Composite(parent, SWT.NONE);
@@ -63,32 +78,93 @@ public class EditTestCaseDialog extends TitleAreaDialog {
 		composite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 		composite.setFont(parent.getFont());
 
+		createTitleBarSeparator(composite);
+		
+		createLabel(composite, "Test suite: ");
+		createSuiteNameCombo(composite);
+		createTitleBarSeparator(composite);
+		createTestDataViewer(composite);
+
+		return composite;
+	}
+
+	public TestCaseNode getTestCase() {
+		return fTestCase;
+	}
+
+	/**
+	 * Create contents of the button bar.
+	 * @param parent
+	 */
+	@Override
+	protected void createButtonsForButtonBar(Composite parent) {
+		fOkButton = createButton(parent, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL,
+				true);
+		createButton(parent, IDialogConstants.CANCEL_ID,
+				IDialogConstants.CANCEL_LABEL, false);
+	}
+
+	/**
+	 * Return the initial size of the dialog.
+	 */
+	@Override
+	protected Point getInitialSize() {
+		return new Point(450, 300);
+	}
+
+	private void createSuiteNameCombo(Composite composite) {
+		fTestSuiteNameCombo = new Combo(composite, SWT.NONE);
+		fTestSuiteNameCombo.setItems(fParentMethod.getTestSuiteNames().toArray(new String[0]));
+		fTestSuiteNameCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		fTestSuiteNameCombo.setText(fTestCase.getName());
+		fTestSuiteNameCombo.addModifyListener(new ModifyListener() {
+			@Override
+			public void modifyText(ModifyEvent e) {
+				boolean inputValid = verifyInput();
+				if(inputValid){
+					fTestCase.setName(fTestSuiteNameCombo.getText());
+					setErrorMessage(null);
+				}
+			}
+		});
+	}
+
+	private boolean verifyInput(){
+		boolean result = true;
+		result &= verifyTestSuiteName();
+		if(result){
+			fOkButton.setEnabled(true);
+		}
+		else{
+			setErrorMessage(fErrorMessage);
+			fOkButton.setEnabled(false);
+		}
+		return result;
+	}
+	
+	private boolean verifyTestSuiteName() {
+		String testSuiteName = fTestSuiteNameCombo.getText();
+		if(testSuiteName.length() == 0){
+			fErrorMessage = "Test suite name cannot be empty";
+			return false;
+		}
+		return true;
+	}
+
+	private void createLabel(Composite composite, String labelText) {
+		Label label = new Label(composite, SWT.NONE);
+		GridData gdLabel = new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1);
+		gdLabel.widthHint = 97;
+		label.setLayoutData(gdLabel);
+		label.setText(labelText);
+	}
+
+	private void createTitleBarSeparator(Composite composite) {
 		Label titleBarSeparator = new Label(composite, SWT.HORIZONTAL
 				| SWT.SEPARATOR);
 		GridData gd_titleBarSeparator = new GridData(GridData.FILL_HORIZONTAL);
 		gd_titleBarSeparator.horizontalSpan = 2;
 		titleBarSeparator.setLayoutData(gd_titleBarSeparator);
-		
-		Label testSuiteLabel = new Label(composite, SWT.NONE);
-		GridData gd_testSuiteLabel = new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1);
-		gd_testSuiteLabel.widthHint = 97;
-		testSuiteLabel.setLayoutData(gd_testSuiteLabel);
-		testSuiteLabel.setText("Test suite: ");
-		
-		Combo testSuiteNameCombo = new Combo(composite, SWT.NONE);
-		testSuiteNameCombo.setItems(fParentMethod.getTestSuiteNames().toArray(new String[0]));
-		testSuiteNameCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
-		testSuiteNameCombo.setText(fTestCase.getName());
-				
-		Label titleBarSeparator2 = new Label(composite, SWT.HORIZONTAL
-				| SWT.SEPARATOR);
-		GridData gd_titleBarSeparator2 = new GridData(GridData.FILL_HORIZONTAL);
-		gd_titleBarSeparator2.horizontalSpan = 2;
-		titleBarSeparator2.setLayoutData(gd_titleBarSeparator2);
-		
-		createTestDataViewer(composite);
-
-		return composite;
 	}
 
 	private void createTestDataViewer(Composite composite) {
@@ -138,29 +214,5 @@ public class EditTestCaseDialog extends TitleAreaDialog {
 		column.setMoveable(true);
 		
 		return viewerColumn;
-	}
-
-	/**
-	 * Create contents of the button bar.
-	 * @param parent
-	 */
-	@Override
-	protected void createButtonsForButtonBar(Composite parent) {
-		createButton(parent, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL,
-				true);
-		createButton(parent, IDialogConstants.CANCEL_ID,
-				IDialogConstants.CANCEL_LABEL, false);
-	}
-
-	/**
-	 * Return the initial size of the dialog.
-	 */
-	@Override
-	protected Point getInitialSize() {
-		return new Point(450, 300);
-	}
-
-	public TestCaseNode getTestCase() {
-		return fTestCase;
 	}
 }

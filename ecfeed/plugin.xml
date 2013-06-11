@@ -42,11 +42,6 @@
       </command>
       <command
             categoryId="com.testify.ecfeed.commands.ecFeedCommands"
-            id="com.testify.ecfeed.model.commands.editPartition"
-            name="editPartition">
-      </command>
-      <command
-            categoryId="com.testify.ecfeed.commands.ecFeedCommands"
             id="com.testify.ecfeed.model.commands.addPartition"
             name="addPartition">
       </command>
@@ -60,6 +55,11 @@
             id="com.testify.ecfeed.model.commands.addTestCase"
             name="addTestCase">
       </command>
+      <command
+            categoryId="com.testify.ecfeed.commands.ecFeedCommands"
+            id="com.testify.ecfeed.model.commands.edit"
+            name="edit...">
+      </command>
    </extension>
    
    <extension
@@ -70,14 +70,46 @@
       </handler>
       <handler
             class="com.testify.ecfeed.handlers.EditPartitionHandler"
-            commandId="com.testify.ecfeed.model.commands.editPartition">
+            commandId="com.testify.ecfeed.model.commands.edit">
          <enabledWhen>
-            <iterate
-                  operator="and">
-               <instanceof
-                     value="com.testify.ecfeed.model.PartitionNode">
-               </instanceof>
-            </iterate>
+            <with
+                  variable="selection">
+               <iterate
+                     ifEmpty="false"
+                     operator="and">
+                  <instanceof
+                        value="com.testify.ecfeed.model.PartitionNode">
+                  </instanceof>
+               </iterate>
+            </with>
+         </enabledWhen>
+         <activeWhen>
+            <with
+                  variable="selection">
+               <iterate
+                     ifEmpty="false"
+                     operator="and">
+                  <instanceof
+                        value="com.testify.ecfeed.model.PartitionNode">
+                  </instanceof>
+               </iterate>
+            </with>
+         </activeWhen>
+      </handler>
+      <handler
+            class="com.testify.ecfeed.handlers.EditTestCaseHandler"
+            commandId="com.testify.ecfeed.model.commands.edit">
+         <enabledWhen>
+            <with
+                  variable="selection">
+               <iterate
+                     ifEmpty="false"
+                     operator="and">
+                  <instanceof
+                        value="com.testify.ecfeed.model.TestCaseNode">
+                  </instanceof>
+               </iterate>
+            </with>
          </enabledWhen>
       </handler>
       <handler
@@ -133,18 +165,24 @@
       <menuContribution
             locationURI="popup:com.testify.ecfeed.outline.menu.context">
          <command
-               commandId="com.testify.ecfeed.model.commands.editPartition"
+               commandId="com.testify.ecfeed.model.commands.edit"
                id="com.testify.ecfeed.outline.menu.context.edit"
                label="edit..."
                style="push">
             <visibleWhen
                   checkEnabled="false">
-               <iterate
-                     operator="and">
-                  <instanceof
-                        value="com.testify.ecfeed.model.PartitionNode">
-                  </instanceof>
-               </iterate>
+               <or>
+                  <iterate>
+                     <instanceof
+                           value="com.testify.ecfeed.model.PartitionNode">
+                     </instanceof>
+                  </iterate>
+                  <iterate>
+                     <instanceof
+                           value="com.testify.ecfeed.model.TestCaseNode">
+                     </instanceof>
+                  </iterate>
+               </or>
             </visibleWhen>
          </command>
          <command
