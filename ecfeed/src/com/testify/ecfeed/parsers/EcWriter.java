@@ -2,6 +2,7 @@ package com.testify.ecfeed.parsers;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.Vector;
 
 import com.testify.ecfeed.constants.Constants;
 import com.testify.ecfeed.model.CategoryNode;
@@ -10,6 +11,8 @@ import com.testify.ecfeed.model.GenericNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.RootNode;
+import com.testify.ecfeed.model.TestCaseNode;
+
 import nu.xom.*;
 
 public class EcWriter {
@@ -51,11 +54,32 @@ public class EcWriter {
 			Object value = ((PartitionNode)node).getValue();
 			element = createPartitionElement(name, value);
 		}
+		else if (node instanceof TestCaseNode){
+			Vector<PartitionNode> testData = ((TestCaseNode)node).getTestData();
+			element = createTestDataElement(name, testData);
+		}
 		
 		for(GenericNode child : node.getChildren()){
 			element.appendChild(createElement(child));
 		}
 		return element;
+	}
+
+	//TODO Unit tests
+	private Element createTestDataElement(String name, Vector<PartitionNode> testData) {
+		Element testCaseElement = new Element(Constants.TEST_CASE_NODE_NAME);
+
+		Attribute testSuiteNameAttribute = new Attribute(Constants.TEST_SUITE_NAME_ATTRIBUTE, name);
+		testCaseElement.addAttribute(testSuiteNameAttribute);
+		
+		for(PartitionNode parameter : testData){
+			Element testParameterElement = new Element(Constants.TEST_PARAMETER_NODE_NAME);
+			Attribute partitionNameAttribute = new Attribute(Constants.PARTITION_ATTRIBUTE_NAME, parameter.getName());
+			testParameterElement.addAttribute(partitionNameAttribute);
+			testCaseElement.appendChild(testParameterElement);
+		}
+		
+		return testCaseElement;
 	}
 
 	private Element createPartitionElement(String name, Object value) {

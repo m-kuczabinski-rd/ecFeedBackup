@@ -40,8 +40,8 @@ public class GenericNode {
 	}
 	
 	public boolean hasChildren(){
-		if(fChildren != null){
-			return (fChildren.size() > 0);
+		if(getChildren() != null){
+			return (getChildren().size() > 0);
 		}
 		return false;
 	}
@@ -71,7 +71,7 @@ public class GenericNode {
 		if (!fName.equals(node.getName())){
 			return false;
 		}
-		int childrenCount = fChildren.size();
+		int childrenCount = getChildren().size();
 		int nodeChildrenCount = node.getChildren().size();
 		if(childrenCount != nodeChildrenCount){
 			return false;
@@ -79,10 +79,9 @@ public class GenericNode {
 		
 		Vector<GenericNode> nodeChildren = node.getChildren();
 		for(int i = 0; i < childrenCount; i++){
-			GenericNode thisChild = fChildren.elementAt(i);
+			GenericNode thisChild = getChildren().elementAt(i);
 			GenericNode nodeChild = nodeChildren.elementAt(i);
 			if(!thisChild.equals(nodeChild)){
-//				if(!fChildren.elementAt(i).equals(nodeChildren.elementAt(i))){
 				return false;
 			}
 		}
@@ -90,19 +89,29 @@ public class GenericNode {
 	}
 
 	public boolean removeChild(GenericNode child) {
-		boolean result = fChildren.remove(child);
+		boolean result = getChildren().remove(child);
 		if(result){
 			child.setParent(null);
 		}
 		return result;
 	}
 	
-	private boolean isParent(GenericNode potentialChild){
+	protected boolean isParent(GenericNode potentialChild){
 		for(GenericNode child : getChildren()){
 			if(child == potentialChild){
 				return true;
 			}
 		}
 		return false;
+	}
+
+	//TODO unit tests
+	public GenericNode getChild(String name) {
+		for(GenericNode child : getChildren()){
+			if (name.equals(child.getName())){
+				return child;
+			}
+		}
+		return null;
 	}
 }

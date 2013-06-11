@@ -229,25 +229,21 @@ public class AddClassHandler implements IHandler {
 
 	private Vector<PartitionNode> defaultDoublePartitions() {
 		Vector<PartitionNode> partitions = new Vector<PartitionNode>();
-		partitions.add(new PartitionNode("-INF", Double.NEGATIVE_INFINITY));
 		partitions.add(new PartitionNode("min", Double.MIN_VALUE));
 		partitions.add(new PartitionNode("negative", (double)-1));	
 		partitions.add(new PartitionNode("zero", (double)0));
 		partitions.add(new PartitionNode("positive", (double)1));	
 		partitions.add(new PartitionNode("max", Double.MAX_VALUE));
-		partitions.add(new PartitionNode("+INF", Double.POSITIVE_INFINITY));
 		return partitions;
 	}
 
 	private Vector<PartitionNode> defaultFloatPartitions() {
 		Vector<PartitionNode> partitions = new Vector<PartitionNode>();
-		partitions.add(new PartitionNode("-INF", Float.NEGATIVE_INFINITY));
+		partitions.add(new PartitionNode("min", Float.MIN_VALUE));
 		partitions.add(new PartitionNode("negative", (float)-1));	
 		partitions.add(new PartitionNode("zero", (float)0));
-		partitions.add(new PartitionNode("min", Float.MIN_VALUE));
 		partitions.add(new PartitionNode("positive", (float)1));	
 		partitions.add(new PartitionNode("max", Float.MAX_VALUE));
-		partitions.add(new PartitionNode("+INF", Float.POSITIVE_INFINITY));
 		return partitions;
 	}
 

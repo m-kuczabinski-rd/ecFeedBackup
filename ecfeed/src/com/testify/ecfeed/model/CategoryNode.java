@@ -1,5 +1,7 @@
 package com.testify.ecfeed.model;
 
+import java.util.Vector;
+
 public class CategoryNode extends GenericNode {
 	
 	private final String fType;	
@@ -13,8 +15,16 @@ public class CategoryNode extends GenericNode {
 		return fType;
 	}
 
+	//TODO unit tests
 	public void addPartition(PartitionNode partition) {
-		super.addChild(partition);
+		if(getPartition(partition.getName()) == null){
+			super.addChild(partition);
+		}
+	}
+	
+	//TODO unit tests
+	public PartitionNode getPartition(String name){
+		return (PartitionNode) super.getChild(name);
 	}
 
 	public Object getValueFromString(String valueString){
@@ -75,5 +85,16 @@ public class CategoryNode extends GenericNode {
 			return false;
 		}
 		return super.equals(category);
+	}
+
+	//TODO unit tests
+	public Vector<PartitionNode> getPartitions() {
+		Vector<PartitionNode> partitions = new Vector<PartitionNode>();
+		for(GenericNode child : getChildren()){
+			if(child instanceof PartitionNode){
+				partitions.add((PartitionNode)child);
+			}
+		}
+		return partitions;
 	}
 }

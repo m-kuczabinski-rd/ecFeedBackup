@@ -12,6 +12,7 @@ import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.MethodNode;
+import com.testify.ecfeed.model.TestCaseNode;
 
 public class EcParser {
 	
@@ -60,6 +61,7 @@ public class EcParser {
 		return classNode;
 	}
 
+	//TODO unit tests
 	private MethodNode parseMethodElement(Element element) {
 		String name = element.getAttributeValue(Constants.NODE_NAME_ATTRIBUTE);
 		if (name == null){
@@ -71,10 +73,35 @@ public class EcParser {
 			if(child.getLocalName() == Constants.CATEGORY_NODE_NAME){
 				methodNode.addCategory(parseCategoryElement(child));
 			}
+			if(child.getLocalName() == Constants.TEST_CASE_NODE_NAME){
+				methodNode.addTestCase(parseTestCaseElement(child, methodNode.getCategories()));
+			}
 		}
 		return methodNode;
 	}
 	
+	//TODO unit tests
+	private TestCaseNode parseTestCaseElement(Element element, Vector<CategoryNode> categories) {
+		String testSuiteName = element.getAttributeValue(Constants.TEST_SUITE_NAME_ATTRIBUTE);
+		Vector<PartitionNode> testData = new Vector<PartitionNode>();
+		Vector<Element> parameterElements = getIterableElements(element.getChildElements());
+		
+		if(categories.size() != parameterElements.size()){
+			return null;
+		}
+
+		for(int i = 0; i < parameterElements.size(); i++){
+			Element testParameterElement = parameterElements.elementAt(i);
+			
+			if(testParameterElement.getLocalName().equals(Constants.TEST_PARAMETER_NODE_NAME)){
+				String partitionName = testParameterElement.getAttributeValue(Constants.PARTITION_ATTRIBUTE_NAME);
+				PartitionNode partition = categories.elementAt(i).getPartition(partitionName);
+				testData.add(partition);
+			}
+		}
+		return new TestCaseNode(testSuiteName, testData);
+	}
+
 	private CategoryNode parseCategoryElement(Element element) {
 		String name = element.getAttributeValue(Constants.NODE_NAME_ATTRIBUTE);
 		String type = element.getAttributeValue(Constants.TYPE_NAME_ATTRIBUTE);

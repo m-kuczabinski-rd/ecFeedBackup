@@ -55,6 +55,11 @@
             id="com.testify.ecfeed.model.commands.remove"
             name="remove">
       </command>
+      <command
+            categoryId="com.testify.ecfeed.commands.ecFeedCommands"
+            id="com.testify.ecfeed.model.commands.addTestCase"
+            name="addTestCase">
+      </command>
    </extension>
    
    <extension
@@ -90,6 +95,17 @@
       <handler
             class="com.testify.ecfeed.handlers.RemoveNodeHandler"
             commandId="com.testify.ecfeed.model.commands.remove">
+      </handler>
+      <handler
+            class="com.testify.ecfeed.handlers.AddTestCaseHandler"
+            commandId="com.testify.ecfeed.model.commands.addTestCase">
+         <activeWhen>
+            <iterate
+                  operator="and">
+               <instanceof
+                     value="com.testify.ecfeed.model.MethodNode">
+               </instanceof>
+            </iterate></activeWhen>
       </handler>
    </extension>
    
@@ -164,6 +180,21 @@
                      </instanceof>
                   </iterate>
                </or>
+            </visibleWhen>
+         </command>
+         <command
+               commandId="com.testify.ecfeed.model.commands.addTestCase"
+               id="com.testify.ecfeed.outline.menu.context.addTestCase"
+               label="add test case..."
+               style="push">
+            <visibleWhen
+                  checkEnabled="false">
+               <iterate
+                     operator="and">
+                  <instanceof
+                        value="com.testify.ecfeed.model.MethodNode">
+                  </instanceof>
+               </iterate>
             </visibleWhen>
          </command>
       </menuContribution>
