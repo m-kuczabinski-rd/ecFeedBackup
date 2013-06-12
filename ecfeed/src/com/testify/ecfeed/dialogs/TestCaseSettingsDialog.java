@@ -45,6 +45,7 @@ public class TestCaseSettingsDialog extends TitleAreaDialog {
 	 */
 	public TestCaseSettingsDialog(Shell parentShell, MethodNode parentMethod, TestCaseNode testCase) {
 		super(parentShell);
+		setHelpAvailable(false);
 		fTestCase = testCase;
 		fNewTestCase = (fTestCase == null);
 		if(fNewTestCase){
@@ -84,6 +85,7 @@ public class TestCaseSettingsDialog extends TitleAreaDialog {
 		createSuiteNameCombo(composite);
 		createTitleBarSeparator(composite);
 		createTestDataViewer(composite);
+		new Label(composite, SWT.NONE);
 
 		return composite;
 	}
@@ -109,7 +111,7 @@ public class TestCaseSettingsDialog extends TitleAreaDialog {
 	 */
 	@Override
 	protected Point getInitialSize() {
-		return new Point(450, 300);
+		return new Point(491, 374);
 	}
 
 	private void createSuiteNameCombo(Composite composite) {
@@ -168,7 +170,7 @@ public class TestCaseSettingsDialog extends TitleAreaDialog {
 	}
 
 	private void createTestDataViewer(Composite composite) {
-		fViewer = new TableViewer(composite, SWT.SINGLE|SWT.H_SCROLL|SWT.V_SCROLL|SWT.FULL_SELECTION|SWT.BORDER);
+		fViewer = new TableViewer(composite, SWT.SINGLE|SWT.H_SCROLL|SWT.V_SCROLL|SWT.FULL_SELECTION|SWT.BORDER|SWT.FULL_SELECTION);
 		createColumns(composite, fViewer);
 		final Table table = fViewer.getTable();
 		table.setHeaderVisible(true);
@@ -203,6 +205,18 @@ public class TestCaseSettingsDialog extends TitleAreaDialog {
 			}
 		});
 		col.setEditingSupport(new TestCasePartitionEditingSupport(fViewer, fTestCase.getTestData()));
+
+		col = createTableViewerColumn("Value", 150, 0);
+		col.setLabelProvider(new ColumnLabelProvider(){
+			@Override
+			public String getText(Object element){
+				Object value = ((PartitionNode)element).getValue();
+				if(value == null){
+					return "null";
+				}
+				return value.toString();
+			}
+		});
 	}
 
 	private TableViewerColumn createTableViewerColumn(String title, int width, final int columnNumber) {
