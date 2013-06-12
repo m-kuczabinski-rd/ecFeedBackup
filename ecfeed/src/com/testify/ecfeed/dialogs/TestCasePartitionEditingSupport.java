@@ -58,6 +58,7 @@ public class TestCasePartitionEditingSupport extends EditingSupport {
 	protected void setValue(Object element, Object value) {
 		CategoryNode parent = (CategoryNode) ((PartitionNode)element).getParent();
 		
+		
 		PartitionNode chosenPartition = (PartitionNode) parent.getPartitions().elementAt((int)value);
 		for(int i = 0; i < fTestData.size(); i++){
 			if(fTestData.elementAt(i).getParent() == chosenPartition.getParent()){
