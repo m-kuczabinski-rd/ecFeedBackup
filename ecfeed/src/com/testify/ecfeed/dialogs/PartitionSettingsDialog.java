@@ -36,6 +36,7 @@ public class PartitionSettingsDialog extends TitleAreaDialog {
 
 	public PartitionSettingsDialog(Shell parentShell, PartitionNode partition, CategoryNode parent) {
 		super(parentShell);
+		setHelpAvailable(false);
 		fPartition = partition;
 		fNewPartition = (partition == null);
 		fParent = parent;
@@ -44,7 +45,7 @@ public class PartitionSettingsDialog extends TitleAreaDialog {
 	@Override
 	public void create() {
 		super.create();
-		setTitle(fNewPartition?"New Partition":"Edit Partition");
+		setTitle(fNewPartition?"New Partition":"Edit Partition" + " (" + fParent.getType() + ")");
 		setMessage("Set partition name and value", IMessageProvider.NONE);
 	}	
 
@@ -170,7 +171,8 @@ public class PartitionSettingsDialog extends TitleAreaDialog {
 
 	private boolean verifyValue() {
 		boolean inputValid = true;
-		if(!fParent.isStringValueValid(fPartitionValueText.getText())){
+		String valueText = fPartitionValueText.getText();
+		if(!fParent.isStringValueValid(valueText)){
 			fErrorMessage = "Invalid value";
 			inputValid = false;
 		}

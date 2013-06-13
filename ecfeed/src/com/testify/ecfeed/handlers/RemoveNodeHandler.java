@@ -14,8 +14,12 @@ import org.eclipse.ui.views.contentoutline.ContentOutline;
 
 import com.testify.ecfeed.editor.EcEditor;
 import com.testify.ecfeed.editor.outline.EcContentOutlinePage;
+import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.GenericNode;
+import com.testify.ecfeed.model.MethodNode;
+import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.RootNode;
+import com.testify.ecfeed.model.TestCaseNode;
 
 public class RemoveNodeHandler extends AbstractHandler implements IHandler {
 
@@ -29,7 +33,12 @@ public class RemoveNodeHandler extends AbstractHandler implements IHandler {
 		while(iterator.hasNext()){
 			GenericNode node = (GenericNode)iterator.next();
 			if(node != null && node.getParent() != null){
-				node.getParent().removeChild(node);
+				if(node instanceof PartitionNode && node.getParent().getChildren().size() > 1){
+					removePartitionNode((PartitionNode) node);
+				}
+				else{
+					node.getParent().removeChild(node);
+				}
 			}
 		}
 		
@@ -39,5 +48,21 @@ public class RemoveNodeHandler extends AbstractHandler implements IHandler {
 
 		editor.updateModel(root);
 		return null;
+	}
+
+	private void removePartitionNode(PartitionNode partition) {
+		CategoryNode category = (CategoryNode)partition.getParent();
+		partition.getParent().removeChild(partition);
+		
+		//change references to removed partition in all test cases
+		PartitionNode substitutePartition = category.getPartitions().elementAt(0); 
+		MethodNode method = (MethodNode) category.getParent();
+		int categoryIndex = method.getCategories().indexOf(category);
+		
+		for(TestCaseNode testCase : method.getTestCases()){
+			if(testCase.getTestData().elementAt(categoryIndex) == partition){
+				testCase.getTestData().setElementAt(substitutePartition, categoryIndex);
+			}
+		}
 	}
 }
