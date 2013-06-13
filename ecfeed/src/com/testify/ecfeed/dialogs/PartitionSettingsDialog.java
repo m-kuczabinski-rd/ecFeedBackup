@@ -34,17 +34,11 @@ public class PartitionSettingsDialog extends TitleAreaDialog {
 	private CategoryNode fParent;
 
 
-	public PartitionSettingsDialog(Shell parentShell, PartitionNode partition, String type) {
+	public PartitionSettingsDialog(Shell parentShell, PartitionNode partition, CategoryNode parent) {
 		super(parentShell);
 		fPartition = partition;
 		fNewPartition = (partition == null);
-		if(!fNewPartition){
-			fParent = (CategoryNode) partition.getParent();
-		}
-		else{
-			fParent = new CategoryNode("dummy", type);
-		}
-			
+		fParent = parent;
 	}
 
 	@Override
@@ -182,11 +176,20 @@ public class PartitionSettingsDialog extends TitleAreaDialog {
 		}
 		return inputValid;
 	}
-
+	
+//	TODO unit tests
 	private boolean verifyName() {
 		boolean inputValid = true;
-		if(fPartitionNameText.getText().length() < 1){
+		String name = fPartitionNameText.getText();
+		//Check if name is not empty
+		if(name.length() < 1){
 			fErrorMessage = "Partition name cannot be empty";
+			inputValid = false;
+		}
+		//Check if the name is unique
+		PartitionNode p = fParent.getPartition(name);
+		if(p != null && p != fPartition){
+			fErrorMessage = "Partition name must be unique within a category";
 			inputValid = false;
 		}
 		return inputValid;

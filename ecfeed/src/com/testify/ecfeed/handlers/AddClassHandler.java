@@ -52,20 +52,7 @@ public class AddClassHandler extends AbstractHandler implements IHandler {
 		}
     };
 
-	
-//	@Override
-//	public void addHandlerListener(IHandlerListener handlerListener) {
-//		// TODO Auto-generated method stub
-//
-//	}
-//
-//	@Override
-//	public void dispose() {
-//		// TODO Auto-generated method stub
-//
-//	}
-//
-	public Object execute(ExecutionEvent event) throws ExecutionException {
+    public Object execute(ExecutionEvent event) throws ExecutionException {
 		IStructuredSelection selection = (IStructuredSelection) HandlerUtil.getCurrentSelection(event);
 		IFile selectedFile = selectTargetFile(selection);
 		IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
@@ -99,24 +86,6 @@ public class AddClassHandler extends AbstractHandler implements IHandler {
 		}
 		return false;
 	}
-//
-//	@Override
-//	public boolean isEnabled() {
-//		// TODO Auto-generated method stub
-//		return true;
-//	}
-//
-//	@Override
-//	public boolean isHandled() {
-//		// TODO Auto-generated method stub
-//		return true;
-//	}
-//
-//	@Override
-//	public void removeHandlerListener(IHandlerListener handlerListener) {
-//		// TODO Auto-generated method stub
-//
-//	}
 
 	private ClassNode generateClassModel(IType type) throws JavaModelException {
 		ClassNode classNode = new ClassNode(type.getFullyQualifiedName());
