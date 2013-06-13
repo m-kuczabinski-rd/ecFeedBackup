@@ -1,27 +1,16 @@
 package com.testify.ecfeed.editor.outline;
 
 import org.eclipse.jface.viewers.ITreeContentProvider;
-import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.jface.viewers.TreeNodeContentProvider;
 
 import com.testify.ecfeed.editor.EcEditor;
 import com.testify.ecfeed.model.GenericNode;
 import com.testify.ecfeed.model.RootNode;
 
-public class EcContentProvider implements ITreeContentProvider {
+public class EcContentProvider extends TreeNodeContentProvider implements ITreeContentProvider {
 
 	public static final Object[] EMPTY_ARRAY = new Object[]{};
 	
-	@Override
-	public void dispose() {
-		// TODO Auto-generated method stub
-	}
-
-	@Override
-	public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
-		// TODO Auto-generated method stub
-
-	}
-
 	@Override
 	public Object[] getElements(Object inputElement) {
 		if(inputElement instanceof EcEditor){
@@ -57,5 +46,4 @@ public class EcContentProvider implements ITreeContentProvider {
 		}
 		return false;
 	}
-
 }
