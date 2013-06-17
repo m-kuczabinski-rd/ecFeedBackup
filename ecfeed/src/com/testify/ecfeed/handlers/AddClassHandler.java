@@ -90,9 +90,12 @@ public class AddClassHandler extends AbstractHandler implements IHandler {
 	private ClassNode generateClassModel(IType type) throws JavaModelException {
 		ClassNode classNode = new ClassNode(type.getFullyQualifiedName());
 		for(IMethod method : type.getMethods()){
-			IAnnotation annotation = method.getAnnotation("Test");
-			if(annotation.getElementName().equals("Test")){
-				classNode.addMethod(generateMethodModel(method));
+			IAnnotation[] annotations = method.getAnnotations();
+			for(IAnnotation annotation : annotations){
+				if(annotation.getElementName().equals("Test")){
+					classNode.addMethod(generateMethodModel(method));
+					break;
+				}
 			}
 		}
 		
