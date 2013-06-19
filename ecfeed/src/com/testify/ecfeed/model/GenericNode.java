@@ -20,14 +20,12 @@ public class GenericNode {
 		this.fName = name;
 	}
 	
+	//TODO unit tests
 	protected void addChild(GenericNode child){
-		if(!isParent(child)){
-			fChildren.add(child);
-			child.setParent(this);
-		}
+		addChild(fChildren.size(), child);
 	}
 	
-	//Should not be used 
+	//Should not be used explicitly
 	void setParent(GenericNode newParent) {
 		fParent = newParent;
 		if(newParent != null){
@@ -113,5 +111,13 @@ public class GenericNode {
 			}
 		}
 		return null;
+	}
+
+	//TODO Unit tests
+	public void addChild(int index, GenericNode child) {
+		if(!isParent(child)){
+			fChildren.add(index, child);
+			child.setParent(this);
+		}
 	}
 }

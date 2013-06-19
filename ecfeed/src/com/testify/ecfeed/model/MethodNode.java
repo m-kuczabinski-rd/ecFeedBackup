@@ -1,57 +1,47 @@
 package com.testify.ecfeed.model;
 
-import java.util.HashSet;
+import java.util.Collection;
 import java.util.Set;
 import java.util.Vector;
 
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.Multimap;
+
 public class MethodNode extends GenericNode {
 	private Vector<CategoryNode> fCategories;
-	private Vector<TestCaseNode> fTestCases;
+	private Multimap<String, TestCaseNode> fTestCases;
 	
 	public MethodNode(String name){
 		super(name);
 		fCategories = new Vector<CategoryNode>();
-		fTestCases = new Vector<TestCaseNode>();
+		fTestCases = HashMultimap.create();
 	}
 	
+	//TODO Unit tests 
 	public void addCategory(CategoryNode category){
-		if(!isParent(category)){
-			fCategories.add(category);
-			category.setParent(this);
-		}
+		fCategories.add(category);
+		super.addChild(fCategories.size() - 1, category);
 	}
-	
+
+	//TODO unit tests 
 	public void addTestCase(TestCaseNode testCase){
-		if(!isParent(testCase)){
-			fTestCases.add(testCase);
-			testCase.setParent(this);
-		}
+		fTestCases.put(testCase.getName(), testCase);
+		super.addChild(testCase);
 	}
 	
 	public Vector<CategoryNode> getCategories(){
 		return fCategories;
 	}
-	
-	public Vector<TestCaseNode> getTestCases(){
+
+	public Multimap<String, TestCaseNode> getTestCases(){
 		return fTestCases;
 	}
-	
-	public Set<String> getTestSuiteNames(){
-		Set<String> testSuiteNames = new HashSet<String>();
-		for(TestCaseNode testCase : fTestCases){
-			testSuiteNames.add(testCase.getName());
-		}
-		return testSuiteNames;
-	}
-	
-	@Override
-	public Vector<GenericNode> getChildren(){
-		Vector<GenericNode> children = new Vector<GenericNode>();
-		children.addAll(fCategories);
-		children.addAll(fTestCases);
-		return children;
-	}
 
+	//TODO unit tests
+	public Set<String> getTestSuiteNames(){
+		return fTestCases.keySet();
+	}
+	
 	@Override
 	public String toString(){
 		String result = new String(getName()) + "(";
@@ -72,13 +62,16 @@ public class MethodNode extends GenericNode {
 		return super.equals((MethodNode)obj);
 	}
 
-	@Override
-	public boolean removeChild(GenericNode child) {
-		boolean result = fTestCases.remove(child) || fCategories.remove(child) ;
-		if(result){
-			child.setParent(null);
-		}
-		return result;
+	//TODO unit tests
+	public boolean removeChild(TestCaseNode testCase){
+		fTestCases.remove(testCase.getName(), testCase);
+		return super.removeChild(testCase);
+	}
+	
+	//TODO unit tests
+	public boolean removeChild(CategoryNode category){
+		fCategories.remove(category);
+		return super.removeChild(category);
 	}
 	
 	private Vector<String> getParameterTypes() {
@@ -87,6 +80,11 @@ public class MethodNode extends GenericNode {
 			types.add(category.getType());
 		}
 		return types;
+	}
+
+	//TODO unit tests
+	public Collection<TestCaseNode> getTestCases(String testSuite) {
+		return fTestCases.get(testSuite);
 	}
 	
 }

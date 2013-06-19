@@ -59,7 +59,7 @@ public class RemoveNodeHandler extends AbstractHandler implements IHandler {
 		MethodNode method = (MethodNode) category.getParent();
 		int categoryIndex = method.getCategories().indexOf(category);
 		
-		for(TestCaseNode testCase : method.getTestCases()){
+		for(TestCaseNode testCase : method.getTestCases().values()){
 			if(testCase.getTestData().elementAt(categoryIndex) == partition){
 				testCase.getTestData().setElementAt(substitutePartition, categoryIndex);
 			}
