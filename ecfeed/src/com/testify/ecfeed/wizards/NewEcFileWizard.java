@@ -38,12 +38,12 @@ public class NewEcFileWizard extends Wizard implements INewWizard {
 		IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
 		IResource resource = root.findMember(new Path(containerName));
 		try {
-		if (!resource.exists() || !(resource instanceof IContainer)) {
-			throwCoreException("Container \"" + containerName + "\" does not exist.");
-		}
-		IContainer container = (IContainer) resource;
-		
-		final IFile file = container.getFile(new Path(fileName));
+			if (!resource.exists() || !(resource instanceof IContainer)) {
+				throwCoreException("Container \"" + containerName + "\" does not exist.");
+			}
+			IContainer container = (IContainer) resource;
+
+			final IFile file = container.getFile(new Path(fileName));
 			ByteArrayOutputStream ostream = new ByteArrayOutputStream();
 			EcWriter writer = new EcWriter(ostream);
 			writer.writeXmlDocument(modelRoot);
