@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Model name="newEct">
+    <Class name="com.testify.ecfeed.runner.EcFeederTest">
+        <Method name="exampleTestFunction">
+            <Category name="intParameter" type="int">
+                <Partition name="min" value="-2147483648"/>
+                <Partition name="negative" value="-1"/>
+                <Partition name="zero" value="0"/>
+                <Partition name="positive" value="1"/>
+                <Partition name="max" value="2147483647"/>
+            </Category>
+            <Category name="stringParameter" type="String">
+                <Partition name="null" value="/null"/>
+                <Partition name="empty" value=""/>
+                <Partition name="lower case" value="a"/>
+                <Partition name="upper case" value="A"/>
+                <Partition name="mixed cases" value="aA"/>
+                <Partition name="all latin" value="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"/>
+                <Partition name="dupa" value="dupa"/>
+                <Partition name="dupa1" value="cycki"/>
+            </Category>
+            <TestCase testSuite="default suite">
+                <TestParameter partition="min"/>
+                <TestParameter partition="mixed cases"/>
+            </TestCase>
+            <TestCase testSuite="default suite">
+                <TestParameter partition="zero"/>
+                <TestParameter partition="dupa"/>
+            </TestCase>
+            <TestCase testSuite="dupa">
+                <TestParameter partition="negative"/>
+                <TestParameter partition="upper case"/>
+            </TestCase>
+        </Method>
+    </Class>
+</Model>
