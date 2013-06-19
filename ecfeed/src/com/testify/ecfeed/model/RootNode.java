@@ -29,4 +29,14 @@ public class RootNode extends GenericNode {
 		}
 		return super.equals((RootNode)obj);
 	}
+
+	//TODO unit tests
+	public ClassNode getClassModel(String name) {
+		for(ClassNode childClass : getClasses()){
+			if(childClass.getQualifiedName().equals(name)){
+				return childClass;
+			}
+		}
+		return null;
+	}
 }
