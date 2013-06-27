@@ -60,6 +60,11 @@
             id="com.testify.ecfeed.model.commands.edit"
             name="edit...">
       </command>
+      <command
+            categoryId="com.testify.ecfeed.commands.ecFeedCommands"
+            id="com.testify.ecfeed.model.commands.addTestClass"
+            name="add test class...">
+      </command>
    </extension>
    
    <extension
@@ -138,6 +143,10 @@
                      value="com.testify.ecfeed.model.MethodNode">
                </instanceof>
             </iterate></activeWhen>
+      </handler>
+      <handler
+            class="com.testify.ecfeed.handlers.AddTestClassHandler"
+            commandId="com.testify.ecfeed.model.commands.addTestClass">
       </handler>
    </extension>
    
@@ -231,6 +240,21 @@
                      operator="and">
                   <instanceof
                         value="com.testify.ecfeed.model.MethodNode">
+                  </instanceof>
+               </iterate>
+            </visibleWhen>
+         </command>
+         <command
+               commandId="com.testify.ecfeed.model.commands.addTestClass"
+               id="com.testify.ecfeed.outline.menu.context.addTestClass"
+               label="add test class..."
+               style="push">
+            <visibleWhen
+                  checkEnabled="false">
+               <iterate
+                     operator="and">
+                  <instanceof
+                        value="com.testify.ecfeed.model.RootNode">
                   </instanceof>
                </iterate>
             </visibleWhen>
