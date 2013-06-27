@@ -19,7 +19,7 @@ public class PartitionNode extends GenericNode {
 	
 	public String toString(){
 		if(fValue instanceof Character){
-			return new String(getName() + ": " + (int)((char)fValue));
+			return new String(getName() + ": '\\" + (int)((char)fValue ) + "'");
 		}
 		return new String(getName() + ": " + String.valueOf(fValue));
 	}
