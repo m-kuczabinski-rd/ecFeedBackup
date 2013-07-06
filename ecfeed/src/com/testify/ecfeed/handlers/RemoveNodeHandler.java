@@ -12,8 +12,8 @@ import org.eclipse.ui.handlers.HandlerUtil;
 import org.eclipse.ui.part.IPage;
 import org.eclipse.ui.views.contentoutline.ContentOutline;
 
-import com.testify.ecfeed.editor.EcEditor;
 import com.testify.ecfeed.editor.outline.EcContentOutlinePage;
+import com.testify.ecfeed.editors.EcMultiPageEditor;
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.GenericNode;
 import com.testify.ecfeed.model.MethodNode;
@@ -44,7 +44,7 @@ public class RemoveNodeHandler extends AbstractHandler implements IHandler {
 		
 		IWorkbenchPart part = HandlerUtil.getActivePart(event);
 		IPage page = ((ContentOutline)part).getCurrentPage();
-		EcEditor editor = ((EcContentOutlinePage)page).getEditor();
+		EcMultiPageEditor editor = ((EcContentOutlinePage)page).getEditor();
 
 		editor.updateModel(root);
 		return null;

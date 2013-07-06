@@ -3,7 +3,7 @@ package com.testify.ecfeed.editor.outline;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.TreeNodeContentProvider;
 
-import com.testify.ecfeed.editor.EcEditor;
+import com.testify.ecfeed.editors.EcMultiPageEditor;
 import com.testify.ecfeed.model.GenericNode;
 import com.testify.ecfeed.model.RootNode;
 
@@ -13,8 +13,8 @@ public class EcContentProvider extends TreeNodeContentProvider implements ITreeC
 	
 	@Override
 	public Object[] getElements(Object inputElement) {
-		if(inputElement instanceof EcEditor){
-			RootNode root = ((EcEditor)inputElement).getModel(); 
+		if(inputElement instanceof EcMultiPageEditor){
+			RootNode root = ((EcMultiPageEditor)inputElement).getModel(); 
 			return new Object[]{root};
 		}
 		else if(inputElement instanceof GenericNode){

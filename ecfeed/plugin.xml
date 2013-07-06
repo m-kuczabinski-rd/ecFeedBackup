@@ -19,13 +19,20 @@
    
    <extension
          point="org.eclipse.ui.editors">
-      <editor
+<!--      <editor
             class="com.testify.ecfeed.editor.EcEditor"
             default="true"
             extensions="ect"
             icon="icons/sample.gif"
             id="com.testify.ecfeed.editors.eceditor"
             name="Equivalence Class Editor">
+      </editor>-->
+      <editor
+            class="com.testify.ecfeed.editors.EcMultiPageEditor"
+            extensions="ect"
+            icon="icons/sample.gif"
+            id="com.testify.ecfeed.editors.EcMultiPageEditor"
+            name="ecmodel">
       </editor>
    </extension>
    
@@ -260,6 +267,12 @@
             </visibleWhen>
          </command>
       </menuContribution>
-  </extension> 
+  </extension>
+   <extension
+         point="org.eclipse.core.resources.modelProviders">
+      <modelProvider
+            class="ecfeed.EcModelProvider">
+      </modelProvider>
+   </extension> 
 
 </plugin>

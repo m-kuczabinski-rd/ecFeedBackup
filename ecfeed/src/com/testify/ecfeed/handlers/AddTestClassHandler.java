@@ -23,8 +23,9 @@ import org.eclipse.ui.model.WorkbenchLabelProvider;
 import org.eclipse.ui.part.IPage;
 import org.eclipse.ui.views.contentoutline.ContentOutline;
 
-import com.testify.ecfeed.editor.EcEditor;
+import com.testify.ecfeed.dialogs.TestClassSelectionDialog;
 import com.testify.ecfeed.editor.outline.EcContentOutlinePage;
+import com.testify.ecfeed.editors.EcMultiPageEditor;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.utils.EcModelUtils;
@@ -76,19 +77,21 @@ public class AddTestClassHandler extends AbstractHandler implements IHandler {
 
 		IWorkbenchPart part = HandlerUtil.getActivePart(event);
 		IPage page = ((ContentOutline)part).getCurrentPage();
-		EcEditor editor = ((EcContentOutlinePage)page).getEditor();
+		EcMultiPageEditor editor = ((EcContentOutlinePage)page).getEditor();
 		editor.updateModel(model);
 
 		return null;
 	}
 
 	private IType selectClass(IStructuredSelection selection) {
-		ElementTreeSelectionDialog dialog = new ElementTreeSelectionDialog(Display.getDefault().getActiveShell(),
-				new WorkbenchLabelProvider(), new BaseWorkbenchContentProvider());
-		dialog.setTitle("Test class selection");
-		dialog.setMessage("Select test class to add to the model");
-		dialog.setInput(JavaCore.create(ResourcesPlugin.getWorkspace().getRoot()));
-		dialog.setValidator(fClassSelectionValidator);
+		
+		TestClassSelectionDialog dialog = new TestClassSelectionDialog(Display.getDefault().getActiveShell());
+//		ElementTreeSelectionDialog dialog = new ElementTreeSelectionDialog(Display.getDefault().getActiveShell(),
+//				new WorkbenchLabelProvider(), new BaseWorkbenchContentProvider());
+//		dialog.setTitle("Test class selection");
+//		dialog.setMessage("Select test class to add to the model");
+//		dialog.setInput(JavaCore.create(ResourcesPlugin.getWorkspace().getRoot()));
+//		dialog.setValidator(fClassSelectionValidator);
 		dialog.open();
 		
 		Object selectedType = dialog.getFirstResult();

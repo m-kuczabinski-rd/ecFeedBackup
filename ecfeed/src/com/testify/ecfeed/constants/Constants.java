@@ -22,4 +22,6 @@ public class Constants {
 	public static final String PARTITION_ATTRIBUTE_NAME = "partition";
 	
 	public static final String DEFAULT_TEST_SUITE_NAME = "default suite";
+	
+	public static final String DEFAULT_ECT_EDITOR_ID = "com.testify.ecfeed.editors.EcMultiPageEditor";
 }

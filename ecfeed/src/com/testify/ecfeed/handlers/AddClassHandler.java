@@ -22,7 +22,7 @@ import org.eclipse.ui.model.WorkbenchLabelProvider;
 import org.eclipse.ui.part.FileEditorInput;
 
 import com.testify.ecfeed.constants.Constants;
-import com.testify.ecfeed.editor.EcEditor;
+import com.testify.ecfeed.editors.EcMultiPageEditor;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.utils.EcModelUtils;
@@ -50,7 +50,7 @@ public class AddClassHandler extends AbstractHandler implements IHandler {
 
 		try {
 			FileEditorInput inputFile = new FileEditorInput(selectedFile);
-			EcEditor editor = (EcEditor)page.openEditor(inputFile, "com.testify.ecfeed.editors.eceditor");
+			EcMultiPageEditor editor = (EcMultiPageEditor)page.openEditor(inputFile, Constants.DEFAULT_ECT_EDITOR_ID);
 			RootNode model = editor.getModel(); 
 			if(model == null){
 				throw new ExecutionException("Cannot get document model");

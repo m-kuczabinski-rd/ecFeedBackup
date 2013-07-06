@@ -13,8 +13,8 @@ import org.eclipse.ui.part.IPage;
 import org.eclipse.ui.views.contentoutline.ContentOutline;
 
 import com.testify.ecfeed.dialogs.TestCaseSettingsDialog;
-import com.testify.ecfeed.editor.EcEditor;
 import com.testify.ecfeed.editor.outline.EcContentOutlinePage;
+import com.testify.ecfeed.editors.EcMultiPageEditor;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.TestCaseNode;
@@ -32,7 +32,7 @@ public class EditTestCaseHandler extends AbstractHandler implements IHandler {
 		if (dialog.open() == Window.OK) {
 			IWorkbenchPart part = HandlerUtil.getActivePart(event);
 			IPage page = ((ContentOutline)part).getCurrentPage();
-			EcEditor editor = ((EcContentOutlinePage)page).getEditor();
+			EcMultiPageEditor editor = ((EcContentOutlinePage)page).getEditor();
 			if(method.getRoot() instanceof RootNode){
 				editor.updateModel((RootNode)method.getRoot());
 			}
