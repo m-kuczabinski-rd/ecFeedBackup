@@ -2,7 +2,8 @@ package com.testify.ecfeed.editors;
 
 
 import java.io.InputStream;
-import java.util.Vector;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
@@ -26,7 +27,7 @@ public class EcMultiPageEditor extends FormEditor{
 	private EcSourceViewer fSourceViewer;
 	private EcContentOutlinePage fContentOutline;
 	private RootNode fModel;
-	private Vector<IModelUpdateListener> fModelUpdateListeners;
+	private Set<IModelUpdateListener> fModelUpdateListeners;
 
 	public void registerModelUpdateListener(IModelUpdateListener listener){
 		fModelUpdateListeners.add(listener);
@@ -69,7 +70,7 @@ public class EcMultiPageEditor extends FormEditor{
 
 	public EcMultiPageEditor() {
 		super();
-		fModelUpdateListeners = new Vector<IModelUpdateListener>();
+		fModelUpdateListeners = new HashSet<IModelUpdateListener>();
 	}
 	
 	@SuppressWarnings("rawtypes")

@@ -27,9 +27,17 @@ public class ModelPage extends FormPage {
 		super(editor, ID, TITLE);
 		fModel = model;
 		fEditor = editor;
-		fBlock = new ModelMasterDetailsBlock(fEditor, fModel);
+		fBlock = new ModelMasterDetailsBlock(editor, model);
 	}
 
+	public RootNode getModel(){
+		return fModel;
+	}
+	
+	public EcMultiPageEditor getEditor(){
+		return fEditor;
+	}
+	
 	@Override
 	protected void createFormContent(IManagedForm managedForm) {
 		FormToolkit toolkit = managedForm.getToolkit();

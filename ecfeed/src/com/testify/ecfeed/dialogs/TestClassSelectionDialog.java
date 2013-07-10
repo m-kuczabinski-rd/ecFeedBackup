@@ -1,5 +1,7 @@
 package com.testify.ecfeed.dialogs;
 
+import java.util.Vector;
+
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -8,6 +10,7 @@ import org.eclipse.jdt.core.IMethod;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
+import org.eclipse.jdt.ui.StandardJavaElementContentProvider;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.dialogs.ElementTreeSelectionDialog;
 import org.eclipse.ui.dialogs.ISelectionStatusValidator;
@@ -20,7 +23,21 @@ public class TestClassSelectionDialog extends ElementTreeSelectionDialog {
     		"Select class with methods annotated with @Test");
     
 	public TestClassSelectionDialog(Shell parent) {
-		super(parent, new WorkbenchLabelProvider(), new ClassSelectionContentProvider());
+		super(parent, new WorkbenchLabelProvider(), new StandardJavaElementContentProvider(true){
+			@Override
+			public Object[] getChildren(Object element){
+				Vector<Object> children = new Vector<Object>();
+				
+				//Filter unwanted elements
+				for(Object child : super.getChildren(element)){
+					if((child instanceof IType == false) && (hasChildren(child) == false)){
+						continue;
+					}
+					children.add(child);
+				}
+				return children.toArray();
+			}
+		});
 		setTitle("Test class selection");
 		setMessage("Select test class to add to the model");
 		setInput(JavaCore.create(ResourcesPlugin.getWorkspace().getRoot()));
