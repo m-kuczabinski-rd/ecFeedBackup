@@ -62,7 +62,7 @@ public class ClassNode extends GenericNode {
 	}
 
 	//TODO unit tests
-	private Vector<MethodNode> getMethods() {
+	public Vector<MethodNode> getMethods() {
 		return fMethods;
 	}
 }

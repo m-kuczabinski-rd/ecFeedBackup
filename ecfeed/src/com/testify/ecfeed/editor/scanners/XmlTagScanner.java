@@ -8,14 +8,14 @@ import org.eclipse.jface.text.rules.SingleLineRule;
 import org.eclipse.jface.text.rules.Token;
 import org.eclipse.jface.text.rules.WhitespaceRule;
 
-import com.testify.ecfeed.editor.ColorManager;
-import com.testify.ecfeed.editor.XmlColorConstants;
 import com.testify.ecfeed.editor.XmlWhitespaceDetector;
+import com.testify.ecfeed.editors.ColorManager;
+import com.testify.ecfeed.editors.ColorConstants;
 
 public class XmlTagScanner extends RuleBasedScanner {
 
 	public XmlTagScanner(ColorManager manager) {
-		IToken string =	new Token(new TextAttribute(manager.getColor(XmlColorConstants.STRING)));
+		IToken string =	new Token(new TextAttribute(manager.getColor(ColorConstants.STRING)));
 
 		IRule[] rules = new IRule[3];
 

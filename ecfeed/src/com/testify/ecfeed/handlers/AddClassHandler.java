@@ -57,7 +57,7 @@ public class AddClassHandler extends AbstractHandler implements IHandler {
 			}
 			
 			ClassNode classNode = EcModelUtils.generateClassModel((IType) selection.getFirstElement());
-			if(EcModelUtils.classExists(model, classNode)){
+			if(EcModelUtils.classExists(model, classNode.getQualifiedName())){
 				return null;
 			}
 			model.addClass(classNode);

@@ -11,41 +11,35 @@ import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
-import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.ui.forms.IDetailsPage;
 import org.eclipse.ui.forms.IFormPart;
-import org.eclipse.ui.forms.IManagedForm;
-import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Section;
 
+import com.testify.ecfeed.constants.Strings;
 import com.testify.ecfeed.dialogs.TestClassSelectionDialog;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.utils.EcModelUtils;
 
+import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.jface.viewers.CheckboxTableViewer;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.layout.GridData;
 
-public class RootNodeDetailsPage implements IDetailsPage, IModelUpdateListener{
+public class RootNodeDetailsPage extends GenericNodeDetailsPage{
 
-	private IManagedForm fManagedForm;
 	private RootNode fSelectedNode;
 	private CheckboxTableViewer fClassesViewer;
 	private Text fNodeNameText;
-	private EcMultiPageEditor fEditor;
-	private FormToolkit fToolkit;
-	private ModelMasterDetailsBlock fParentBlock;
+	private Section fMainSection;
 
 	private class AddTestClassButtonSelectionAdapter extends SelectionAdapter {
 
@@ -55,9 +49,9 @@ public class RootNodeDetailsPage implements IDetailsPage, IModelUpdateListener{
 
 			if(selectedClass != null){
 				ClassNode classNode = EcModelUtils.generateClassModel(selectedClass);
-				if(!EcModelUtils.classExists(fSelectedNode, classNode)){
+				if(!EcModelUtils.classExists(fSelectedNode, classNode.getQualifiedName())){
 					fSelectedNode.addClass(classNode);
-					fEditor.updateModel(fSelectedNode);
+					updateModel(fSelectedNode);
 				}
 				else{
 					MessageDialog infoDialog = new MessageDialog(Display.getDefault().getActiveShell(), 
@@ -94,9 +88,8 @@ public class RootNodeDetailsPage implements IDetailsPage, IModelUpdateListener{
 		public void widgetSelected(SelectionEvent e) {
 			MessageDialog infoDialog = new MessageDialog(Display.getDefault().getActiveShell(), 
 					"Class exists", Display.getDefault().getSystemImage(SWT.ICON_WARNING), 
-					"This operation will remove selected test classes from the model. " +
-					"All generated test cases will be permanently deleted", 
-					MessageDialog.WARNING, new String[] {"OK", "Cancel"}, 0);
+					Strings.DIALOG_REMOVE_CLASS_MESSAGE, 
+					MessageDialog.QUESTION_WITH_CANCEL, new String[] {"OK", "Cancel"}, 0);
 			if(infoDialog.open() == 0){
 				removeClasses(fClassesViewer.getCheckedElements());
 			}
@@ -108,7 +101,7 @@ public class RootNodeDetailsPage implements IDetailsPage, IModelUpdateListener{
 					fSelectedNode.removeChild((ClassNode)element);
 				}
 			}
-			fEditor.updateModel(fSelectedNode);
+			updateModel(fSelectedNode);
 		}
 	}
 
@@ -117,32 +110,21 @@ public class RootNodeDetailsPage implements IDetailsPage, IModelUpdateListener{
 	 * @wbp.parser.constructor
 	 */
 	public RootNodeDetailsPage(EcMultiPageEditor editor, ModelMasterDetailsBlock parentBlock){
-		fEditor = editor;
-		fEditor.registerModelUpdateListener(this);
-		fParentBlock = parentBlock;
+		super(editor, parentBlock);
 	}
 	
-	/**
-	 * Initialize the details page.
-	 * @param form
-	 */
-	public void initialize(IManagedForm form) {
-		fManagedForm = form;
-	}
-
 	/**
 	 * Create contents of the details page.
 	 * @param parent
 	 */
 	public void createContents(Composite parent) {
-		fToolkit = fManagedForm.getToolkit();
 		parent.setLayout(new FillLayout());
-		Section section = fToolkit.createSection(parent,
-				Section.TITLE_BAR);
-		section.setText("Model tree root node");
-		Composite composite = fToolkit.createComposite(section, SWT.NONE);
+		fMainSection = fToolkit.createSection(parent, Section.TITLE_BAR);
+		fMainSection.setText("Model tree root node");
+
+		Composite composite = fToolkit.createComposite(fMainSection, SWT.NONE);
 		fToolkit.paintBordersFor(composite);
-		section.setClient(composite);
+		fMainSection.setClient(composite);
 		composite.setLayout(new GridLayout(1, true));
 		
 		createNodeNameComposite(composite);
@@ -156,7 +138,7 @@ public class RootNodeDetailsPage implements IDetailsPage, IModelUpdateListener{
 
 		fClassesViewer = CheckboxTableViewer.newCheckList(composite, SWT.BORDER | SWT.FULL_SELECTION |SWT.FILL);
 		fClassesViewer.setContentProvider(new ArrayContentProvider());
-		fClassesViewer.addDoubleClickListener(new ModelDetailsPageDoubleClickListener(fParentBlock));
+		fClassesViewer.addDoubleClickListener(new ChildrenViewerDoubleClickListener());
 		
 		Table table = fClassesViewer.getTable();
 		table.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
@@ -184,17 +166,6 @@ public class RootNodeDetailsPage implements IDetailsPage, IModelUpdateListener{
 			}
 		});
 		
-	}
-
-	private TableViewerColumn createTableViewerColumn(TableViewer viewer, String title, int width, final int columnNumber) {
-		final TableViewerColumn viewerColumn = new TableViewerColumn(viewer, SWT.NONE);
-		final TableColumn column = viewerColumn.getColumn();
-		column.setText(title);
-		column.setWidth(width);
-		column.setResizable(true);
-		column.setMoveable(true);
-		
-		return viewerColumn;
 	}
 
 	private void createBottomButtons(Composite composite) {
@@ -236,24 +207,13 @@ public class RootNodeDetailsPage implements IDetailsPage, IModelUpdateListener{
 
 	private void renameModel(String name) {
 		fSelectedNode.setName(name);
-		fEditor.updateModel(fSelectedNode);
+		updateModel(fSelectedNode);
 	}
 
-	public void dispose() {
-		// Dispose
-	}
-
-	public void setFocus() {
-		// Set focus
-	}
-
-	private void updateDetailsPage() {
+	@Override
+	public void refresh() {
 		fNodeNameText.setText(fSelectedNode.getName());
 		fClassesViewer.setInput(fSelectedNode.getClasses());
-	}
-
-	public boolean setFormInput(Object input) {
-		return false;
 	}
 
 	public void selectionChanged(IFormPart part, ISelection selection) {
@@ -261,29 +221,13 @@ public class RootNodeDetailsPage implements IDetailsPage, IModelUpdateListener{
 		if(structuredSelection.getFirstElement() instanceof RootNode){
 			fSelectedNode = (RootNode)structuredSelection.getFirstElement();
 		}
-		updateDetailsPage();
-	}
-
-	public void commit(boolean onSave) {
-		// Commit
-	}
-
-	public boolean isDirty() {
-		return false;
-	}
-
-	public boolean isStale() {
-		return false;
-	}
-
-	public void refresh() {
-		updateDetailsPage();
+		refresh();
 	}
 
 	@Override
 	public void modelUpdated(RootNode model) {
 		fSelectedNode = model;
-		updateDetailsPage();
+		refresh();
 	}
 
 }

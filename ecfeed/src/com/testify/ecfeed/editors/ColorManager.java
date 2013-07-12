@@ -1,4 +1,4 @@
-package com.testify.ecfeed.editor;
+package com.testify.ecfeed.editors;
 
 import java.util.HashMap;
 import java.util.Iterator;

@@ -28,7 +28,7 @@ public class AddTestClassHandler extends AbstractHandler implements IHandler {
 		IType selectedClass = selectClass(selection);
 
 		ClassNode classNode = EcModelUtils.generateClassModel(selectedClass);
-		if(EcModelUtils.classExists(model, classNode)){
+		if(EcModelUtils.classExists(model, classNode.getQualifiedName())){
 			return null;
 		}
 		model.addClass(classNode);

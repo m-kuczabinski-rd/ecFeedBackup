@@ -6,9 +6,9 @@ import org.eclipse.jface.text.rules.IToken;
 import org.eclipse.jface.text.rules.RuleBasedScanner;
 import org.eclipse.jface.text.rules.Token;
 
-import com.testify.ecfeed.editor.ColorManager;
-import com.testify.ecfeed.editor.XmlColorConstants;
 import com.testify.ecfeed.editor.rules.CDataRule;
+import com.testify.ecfeed.editors.ColorManager;
+import com.testify.ecfeed.editors.ColorConstants;
 
 public class CDataScanner extends RuleBasedScanner {
 	public IToken ESCAPED_CHAR;
@@ -17,7 +17,7 @@ public class CDataScanner extends RuleBasedScanner {
 	public CDataScanner(ColorManager colorManager)
 	{
 		
-		CDATA = new Token(new TextAttribute(colorManager.getColor(XmlColorConstants.CDATA)));
+		CDATA = new Token(new TextAttribute(colorManager.getColor(ColorConstants.CDATA)));
 
 		IRule[] rules = new IRule[2];
 

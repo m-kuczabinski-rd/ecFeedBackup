@@ -6,9 +6,9 @@ import org.eclipse.jface.text.rules.IToken;
 import org.eclipse.jface.text.rules.RuleBasedScanner;
 import org.eclipse.jface.text.rules.Token;
 
-import com.testify.ecfeed.editor.ColorManager;
-import com.testify.ecfeed.editor.XmlColorConstants;
 import com.testify.ecfeed.editor.rules.CDataRule;
+import com.testify.ecfeed.editors.ColorManager;
+import com.testify.ecfeed.editors.ColorConstants;
 
 public class XmlTextScanner extends RuleBasedScanner {
 
@@ -22,10 +22,10 @@ public class XmlTextScanner extends RuleBasedScanner {
 	public XmlTextScanner(ColorManager colorManager)
 	{
 
-		ESCAPED_CHAR = new Token(new TextAttribute(colorManager.getColor(XmlColorConstants.ESCAPED_CHAR)));
-		CDATA_START = new Token(new TextAttribute(colorManager.getColor(XmlColorConstants.CDATA)));
-		CDATA_END = new Token(new TextAttribute(colorManager.getColor(XmlColorConstants.CDATA)));
-		CDATA_TEXT = new Token(new TextAttribute(colorManager.getColor(XmlColorConstants.CDATA_TEXT)));
+		ESCAPED_CHAR = new Token(new TextAttribute(colorManager.getColor(ColorConstants.ESCAPED_CHAR)));
+		CDATA_START = new Token(new TextAttribute(colorManager.getColor(ColorConstants.CDATA)));
+		CDATA_END = new Token(new TextAttribute(colorManager.getColor(ColorConstants.CDATA)));
+		CDATA_TEXT = new Token(new TextAttribute(colorManager.getColor(ColorConstants.CDATA_TEXT)));
 		IRule[] rules = new IRule[2];
 
 		// Add rule to pick up escaped chars

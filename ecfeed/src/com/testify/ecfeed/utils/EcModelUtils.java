@@ -1,11 +1,16 @@
 package com.testify.ecfeed.utils;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Vector;
 
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.jdt.core.IAnnotation;
+import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.ILocalVariable;
 import org.eclipse.jdt.core.IMethod;
 import org.eclipse.jdt.core.IType;
+import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.core.Signature;
 
@@ -17,9 +22,9 @@ import com.testify.ecfeed.model.RootNode;
 
 public class EcModelUtils {
 
-	public static boolean classExists(RootNode model, ClassNode classNode) {
+	public static boolean classExists(RootNode model, String qualifiedName) {
 		for(ClassNode node : model.getClasses()){
-			if (node.getQualifiedName().equals(classNode.getQualifiedName())){
+			if (node.getQualifiedName().equals(qualifiedName)){
 				return true;
 			}
 		}
@@ -45,6 +50,93 @@ public class EcModelUtils {
 		return classNode;
 	}
 
+	public static boolean isClassModelUpToDate(ClassNode classNode) throws JavaModelException{
+		return(getObsoleteMethods(classNode, classNode.getQualifiedName()).size() == 0 && 
+			   getNotContainedMethods(classNode, classNode.getQualifiedName()).size() == 0);
+	}
+	
+	//TODO Unit tests
+	/**
+	 * Returns list of MethodNode elements in the provided class model that are not existing in the
+	 * type with qualifiedTypeName;
+	 * @throws JavaModelException 
+	 */
+	public static Vector<MethodNode> getObsoleteMethods(ClassNode classNode, String qualifiedTypeName){
+		Vector<MethodNode> empty = new Vector<MethodNode>();
+		if(classNode == null){
+			return empty;
+		}
+		IType type;
+		try {
+			type = getTypeObject(qualifiedTypeName);
+		} catch (JavaModelException e) {
+			return classNode.getMethods();
+		}
+		if(type == null){
+			return classNode.getMethods();
+		}
+
+		return diff(classNode.getMethods(), generateClassModel(type).getMethods());
+	}
+
+	/**
+	 * Returns list generated models of test method that are not contained in the provided class model;
+	 * @throws JavaModelException 
+	 */
+	public static Vector<MethodNode> getNotContainedMethods(ClassNode classNode, String qualifiedTypeName){
+		Vector<MethodNode> empty = new Vector<MethodNode>();
+		IType type;
+		
+		//if we cannot generate model from type, return empty vector, i.e. no new methods are in the second class
+		try {
+			type = getTypeObject(qualifiedTypeName);
+		} catch (JavaModelException e) {
+			return empty;
+		}
+		if(type == null){
+			return empty;
+		}
+
+		ClassNode model = generateClassModel(type);
+		if(classNode == null){
+			return model.getMethods();
+		}
+		
+		return diff(model.getMethods(), classNode.getMethods());
+	}
+	
+	/**
+	 * Returns elements in v1 that are not mentioned in v2 by checking toString() value; 
+	 */
+	private static Vector<MethodNode> diff(Vector<MethodNode> v1, Vector<MethodNode> v2){
+		Vector<MethodNode> diff = new Vector<MethodNode>();
+		
+		for(MethodNode method1 : v1){
+			boolean nodeMentioned = false;
+			for(MethodNode method2 : v2){
+				if(method1.toString().equals(method2.toString())){
+					nodeMentioned = true;
+					break;
+				}
+			}
+			if(nodeMentioned == false){
+				diff.add(method1);
+			}
+		}				
+		return diff;
+	}
+	
+	private static IType getTypeObject(String qualifiedName) throws JavaModelException{
+		IJavaProject[] projects = JavaCore.create(ResourcesPlugin.getWorkspace().getRoot()).getJavaProjects();
+		for(IJavaProject project : projects){
+			IType type = project.findType(qualifiedName);
+			if(type != null){
+				return type; 
+			}
+		}
+		return null;
+	}
+	
 	private static MethodNode generateMethodModel(IMethod method) throws JavaModelException {
 		MethodNode methodNode = new MethodNode(method.getElementName());
 		for(ILocalVariable parameter : method.getParameters()){

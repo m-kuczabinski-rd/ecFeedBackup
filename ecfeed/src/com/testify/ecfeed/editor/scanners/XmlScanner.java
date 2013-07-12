@@ -8,15 +8,15 @@ import org.eclipse.jface.text.rules.SingleLineRule;
 import org.eclipse.jface.text.rules.Token;
 import org.eclipse.jface.text.rules.WhitespaceRule;
 
-import com.testify.ecfeed.editor.ColorManager;
-import com.testify.ecfeed.editor.XmlColorConstants;
 import com.testify.ecfeed.editor.XmlWhitespaceDetector;
+import com.testify.ecfeed.editors.ColorManager;
+import com.testify.ecfeed.editors.ColorConstants;
 
 public class XmlScanner extends RuleBasedScanner {
 
 	public XmlScanner(ColorManager manager) {
 		IToken procInstr =
-			new Token(new TextAttribute(manager.getColor(XmlColorConstants.PROC_INSTR)));
+			new Token(new TextAttribute(manager.getColor(ColorConstants.PROC_INSTR)));
 
 		IRule[] rules = new IRule[2];
 		//Add rule for processing instructions
