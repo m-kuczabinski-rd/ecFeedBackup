@@ -1,7 +1,5 @@
 package com.testify.ecfeed.utils;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Vector;
 
 import org.eclipse.core.resources.ResourcesPlugin;
