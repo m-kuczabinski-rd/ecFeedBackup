@@ -212,6 +212,9 @@ public class RootNodeDetailsPage extends GenericNodeDetailsPage{
 
 	@Override
 	public void refresh() {
+		if(fSelectedNode == null){
+			return;
+		}
 		fNodeNameText.setText(fSelectedNode.getName());
 		fClassesViewer.setInput(fSelectedNode.getClasses());
 	}

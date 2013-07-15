@@ -23,6 +23,7 @@ import com.testify.ecfeed.editor.outline.EcContentProvider;
 import com.testify.ecfeed.editor.outline.EcLabelProvider;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.GenericNode;
+import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.RootNode;
 
 import org.eclipse.swt.layout.GridData;
@@ -35,6 +36,7 @@ public class ModelMasterDetailsBlock extends MasterDetailsBlock implements IMode
 	private SectionPart fMasterSectionPart;
 	private Section fMasterSection;
 	private TreeViewer fTreeViewer;
+	private Composite fMainComposite;
 	
 	/**
 	 * Create the master details block.
@@ -59,21 +61,27 @@ public class ModelMasterDetailsBlock extends MasterDetailsBlock implements IMode
 		fMasterSectionPart = new SectionPart(fMasterSection, fToolkit, 0);
 		fMasterSection.setText("Structure");
 		
+		GridData masterSectionGridData = new GridData(SWT.RIGHT, SWT.FILL, false, true);
+		masterSectionGridData.widthHint = 250;
+		fMasterSection.setLayoutData(masterSectionGridData);
+
+		
 		createTreeEditorBlock();
 	}
 
 	private void createTreeEditorBlock() {
-		Composite composite = new Composite(fMasterSection, SWT.RIGHT);
-		fToolkit.adapt(composite);
-		fToolkit.paintBordersFor(composite);
-		fMasterSection.setClient(composite);
-		composite.setLayout(new GridLayout(1, false));
+		fMainComposite = new Composite(fMasterSection, SWT.RIGHT);
+		fToolkit.adapt(fMainComposite);
+		fToolkit.paintBordersFor(fMainComposite);
+		fMasterSection.setClient(fMainComposite);
 		
-		createTreeViewer(composite);
+		createTreeViewer(fMainComposite);
 	}
 
 	private void createTreeViewer(Composite composite) {
+		fMainComposite.setLayout(new GridLayout(1, false));
 		FilteredTree filteredTree = new FilteredTree(composite, SWT.BORDER, new PatternFilter(), true);
+		filteredTree.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 		fTreeViewer = filteredTree.getViewer();
 		fTreeViewer.setAutoExpandLevel(2);
 		fTreeViewer.setContentProvider(new EcContentProvider());
@@ -86,7 +94,6 @@ public class ModelMasterDetailsBlock extends MasterDetailsBlock implements IMode
 				detailsPart.selectionChanged(fMasterSectionPart, event.getSelection());
 			}
 		});
-
 		
 		Tree tree = fTreeViewer.getTree();
 		tree.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
@@ -101,6 +108,7 @@ public class ModelMasterDetailsBlock extends MasterDetailsBlock implements IMode
 	protected void registerPages(DetailsPart part) {
 		part.registerPage(RootNode.class, new RootNodeDetailsPage(fEditor, this));
 		part.registerPage(ClassNode.class, new ClassNodeDetailsPage(fEditor, this));
+		part.registerPage(MethodNode.class, new MethodNodeDetailsPage(fEditor, this));
 
 		selectNode(fModel);
 	}

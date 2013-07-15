@@ -106,6 +106,7 @@ public class GenericNodeDetailsPage implements IDetailsPage, IModelUpdateListene
 	}
 
 	public void selectionChanged(IFormPart part, ISelection selection){
+		System.out.println("[" + this + "] selection changed: " + part + ", " + selection);
 	}
 
 	public void commit(boolean onSave) {

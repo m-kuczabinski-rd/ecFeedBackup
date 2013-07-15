@@ -116,7 +116,7 @@ public class ClassNodeDetailsPage extends GenericNodeDetailsPage{
 	public void createContents(Composite parent) {
 		parent.setLayout(new FillLayout(SWT.HORIZONTAL));
 		
-		fMainSection = getToolkit().createSection(parent, Section.TWISTIE | Section.TITLE_BAR);
+		fMainSection = getToolkit().createSection(parent, Section.TITLE_BAR);
 		getToolkit().paintBordersFor(fMainSection);
 		fMainSection.setText("New Section");
 		fMainSection.setExpanded(true);
@@ -287,6 +287,9 @@ public class ClassNodeDetailsPage extends GenericNodeDetailsPage{
 	}
 	
 	public void refresh(){
+		if(fSelectedNode == null){
+			return;
+		}
 		fObsoleteMethods = EcModelUtils.getObsoleteMethods(fSelectedNode, fSelectedNode.getQualifiedName());
 		fNotContainedMethods = EcModelUtils.getNotContainedMethods(fSelectedNode, fSelectedNode.getQualifiedName());
 		if(fNotContainedMethods.size() == 0){
