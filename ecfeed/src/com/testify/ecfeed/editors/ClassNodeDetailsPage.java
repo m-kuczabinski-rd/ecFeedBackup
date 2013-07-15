@@ -26,7 +26,7 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.ui.forms.IFormPart;
 import org.eclipse.ui.forms.widgets.Section;
 
-import com.testify.ecfeed.constants.Strings;
+import com.testify.ecfeed.constants.DialogStrings;
 import com.testify.ecfeed.dialogs.TestClassSelectionDialog;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.MethodNode;
@@ -85,9 +85,9 @@ public class ClassNodeDetailsPage extends GenericNodeDetailsPage{
 		@Override
 		public void widgetSelected(SelectionEvent e) {
 			MessageDialog infoDialog = new MessageDialog(Display.getDefault().getActiveShell(), 
-					Strings.DIALOG_REMOVE_METHODS_TITLE, 
+					DialogStrings.DIALOG_REMOVE_METHODS_TITLE, 
 					Display.getDefault().getSystemImage(SWT.ICON_QUESTION), 
-					Strings.DIALOG_REMOVE_METHODS_MESSAGE,
+					DialogStrings.DIALOG_REMOVE_METHODS_MESSAGE,
 					MessageDialog.QUESTION_WITH_CANCEL, new String[] {"OK", "Cancel"}, 0);
 			if(infoDialog.open() == 0){
 				removeMethods(fMethodsViewer.getCheckedElements());
@@ -141,8 +141,8 @@ public class ClassNodeDetailsPage extends GenericNodeDetailsPage{
 			@Override
 			public void widgetSelected(SelectionEvent e){
 				MessageDialog infoDialog = new MessageDialog(Display.getDefault().getActiveShell(), 
-						Strings.DIALOG_REMOVE_CLASS_TITLE, Display.getDefault().getSystemImage(SWT.ICON_WARNING), 
-						Strings.DIALOG_REMOVE_CLASS_MESSAGE,
+						DialogStrings.DIALOG_REMOVE_CLASS_TITLE, Display.getDefault().getSystemImage(SWT.ICON_WARNING), 
+						DialogStrings.DIALOG_REMOVE_CLASS_MESSAGE,
 						MessageDialog.QUESTION_WITH_CANCEL, new String[] {"OK", "Cancel"}, 0);
 				if(infoDialog.open() == 0){
 					RootNode root = (RootNode)fSelectedNode.getParent(); 

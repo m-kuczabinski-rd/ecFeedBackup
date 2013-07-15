@@ -19,7 +19,7 @@ import org.eclipse.jface.viewers.CheckboxTableViewer;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.TableViewerColumn;
 
-import com.testify.ecfeed.constants.Strings;
+import com.testify.ecfeed.constants.DialogStrings;
 
 public class RemoveTestSuiteDialog extends TitleAreaDialog {
 	private Table testSuitesTable;
@@ -43,14 +43,14 @@ public class RemoveTestSuiteDialog extends TitleAreaDialog {
 	 */
 	@Override
 	protected Control createDialogArea(Composite parent) {
-		setTitle(Strings.DIALOG_REMOVE_TEST_SUITES_TITLE);
+		setTitle(DialogStrings.DIALOG_REMOVE_TEST_SUITES_TITLE);
 		Composite area = (Composite) super.createDialogArea(parent);
 		Composite container = new Composite(area, SWT.NONE);
 		container.setLayout(new GridLayout(1, false));
 		container.setLayoutData(new GridData(GridData.FILL_BOTH));
 		
 		Label lblSelectTestSuites = new Label(container, SWT.NONE);
-		lblSelectTestSuites.setText(Strings.DIALOG_REMOVE_TEST_SUITES_MESSAGE);
+		lblSelectTestSuites.setText(DialogStrings.DIALOG_REMOVE_TEST_SUITES_MESSAGE);
 		
 		fTestSuitesViewer = CheckboxTableViewer.newCheckList(container, SWT.BORDER | SWT.FULL_SELECTION);
 		testSuitesTable = fTestSuitesViewer.getTable();

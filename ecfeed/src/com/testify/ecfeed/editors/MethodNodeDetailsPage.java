@@ -26,7 +26,7 @@ import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.jface.viewers.TableViewerColumn;
 
-import com.testify.ecfeed.constants.Strings;
+import com.testify.ecfeed.constants.DialogStrings;
 import com.testify.ecfeed.dialogs.RemoveTestSuiteDialog;
 import com.testify.ecfeed.dialogs.RenameTestSuiteDialog;
 import com.testify.ecfeed.dialogs.TestCaseSettingsDialog;
@@ -70,7 +70,6 @@ public class MethodNodeDetailsPage extends GenericNodeDetailsPage{
 		createMethodameComposite(mainComposite);
 		
 		createParametersSection(mainComposite);
-		System.out.println("Old key set: " + fSelectedNode.getTestCases().keySet());
 
 		createTestCasesSection(mainComposite);
 	}
@@ -284,8 +283,8 @@ public class MethodNodeDetailsPage extends GenericNodeDetailsPage{
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				MessageDialog infoDialog = new MessageDialog(Display.getDefault().getActiveShell(), 
-						Strings.DIALOG_REMOVE_TEST_CASES_TITLE, Display.getDefault().getSystemImage(SWT.ICON_QUESTION), 
-						Strings.DIALOG_REMOVE_TEST_CASES_MESSAGE,
+						DialogStrings.DIALOG_REMOVE_TEST_CASES_TITLE, Display.getDefault().getSystemImage(SWT.ICON_QUESTION), 
+						DialogStrings.DIALOG_REMOVE_TEST_CASES_MESSAGE,
 						MessageDialog.QUESTION_WITH_CANCEL, new String[] {"OK", "Cancel"}, 0);
 				if(infoDialog.open() == 0){
 					removeTestCases(fTestCasesViewer.getCheckedElements());

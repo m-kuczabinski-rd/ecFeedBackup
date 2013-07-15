@@ -21,7 +21,7 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.IFormPart;
 import org.eclipse.ui.forms.widgets.Section;
 
-import com.testify.ecfeed.constants.Strings;
+import com.testify.ecfeed.constants.DialogStrings;
 import com.testify.ecfeed.dialogs.TestClassSelectionDialog;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.ClassNode;
@@ -88,7 +88,7 @@ public class RootNodeDetailsPage extends GenericNodeDetailsPage{
 		public void widgetSelected(SelectionEvent e) {
 			MessageDialog infoDialog = new MessageDialog(Display.getDefault().getActiveShell(), 
 					"Class exists", Display.getDefault().getSystemImage(SWT.ICON_WARNING), 
-					Strings.DIALOG_REMOVE_CLASS_MESSAGE, 
+					DialogStrings.DIALOG_REMOVE_CLASS_MESSAGE, 
 					MessageDialog.QUESTION_WITH_CANCEL, new String[] {"OK", "Cancel"}, 0);
 			if(infoDialog.open() == 0){
 				removeClasses(fClassesViewer.getCheckedElements());

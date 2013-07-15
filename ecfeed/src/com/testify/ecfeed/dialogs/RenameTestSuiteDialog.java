@@ -18,7 +18,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Text;
 
-import com.testify.ecfeed.constants.Strings;
+import com.testify.ecfeed.constants.DialogStrings;
 
 public class RenameTestSuiteDialog extends TitleAreaDialog {
 	private Text fNewNameText;
@@ -77,7 +77,7 @@ public class RenameTestSuiteDialog extends TitleAreaDialog {
 
 	private void verifyInput() {
 		if (fNewNameText.getText().length() == 0 || fNewNameText.getText().length() > 64){
-			setErrorMessage(Strings.DIALOG_TEST_SUITE_NAME_ERROR_MESSAGE);
+			setErrorMessage(DialogStrings.DIALOG_TEST_SUITE_NAME_ERROR_MESSAGE);
 			fOkButton.setEnabled(false);
 		}
 		else{
