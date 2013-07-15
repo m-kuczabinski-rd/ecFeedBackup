@@ -1,5 +1,6 @@
 package com.testify.ecfeed.model;
 
+import java.util.Collection;
 import java.util.Vector;
 
 public class GenericNode {
@@ -92,6 +93,10 @@ public class GenericNode {
 			child.setParent(null);
 		}
 		return result;
+	}
+	
+	public boolean removeChildren(Collection<? extends GenericNode> children){
+		return fChildren.removeAll(children);
 	}
 	
 	protected boolean isParent(GenericNode potentialChild){

@@ -86,5 +86,12 @@ public class MethodNode extends GenericNode {
 	public Collection<TestCaseNode> getTestCases(String testSuite) {
 		return fTestCases.get(testSuite);
 	}
+
+	//TODO unit tests
+	public Collection<TestCaseNode> removeTestSuite(String oldName) {
+		Collection<TestCaseNode> testCases = fTestCases.removeAll(oldName);
+		super.removeChildren(testCases);
+		return testCases;
+	}
 	
 }

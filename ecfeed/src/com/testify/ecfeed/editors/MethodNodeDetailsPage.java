@@ -1,5 +1,6 @@
 package com.testify.ecfeed.editors;
 
+import java.util.Collection;
 import java.util.Vector;
 
 import org.eclipse.swt.widgets.Composite;
@@ -39,7 +40,6 @@ import com.testify.ecfeed.model.TestCaseNode;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.wb.swt.TableViewerColumnSorter;
 import org.eclipse.jface.window.Window;
-import org.eclipse.jface.viewers.Viewer;
 
 public class MethodNodeDetailsPage extends GenericNodeDetailsPage{
 	private Label fMethodNameLabel;
@@ -70,6 +70,7 @@ public class MethodNodeDetailsPage extends GenericNodeDetailsPage{
 		createMethodameComposite(mainComposite);
 		
 		createParametersSection(mainComposite);
+		System.out.println("Old key set: " + fSelectedNode.getTestCases().keySet());
 
 		createTestCasesSection(mainComposite);
 	}
@@ -155,7 +156,7 @@ public class MethodNodeDetailsPage extends GenericNodeDetailsPage{
 		
 		createTestCasesViewer(testCasesComposite);
 		
-		createTestCaseButtons(testCasesComposite);
+		createTestCasesSectionButtons(testCasesComposite);
 
 	}
 	private void createTestCasesViewer(Composite composite) {
@@ -207,7 +208,7 @@ public class MethodNodeDetailsPage extends GenericNodeDetailsPage{
 		
 	}
 	
-	private void createTestCaseButtons(Composite testCasesComposite) {
+	private void createTestCasesSectionButtons(Composite testCasesComposite) {
 		Composite testCasesButonsComposite = new Composite(testCasesComposite, SWT.NONE);
 		testCasesButonsComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true, 1, 1));
 		getToolkit().adapt(testCasesButonsComposite);
@@ -255,8 +256,10 @@ public class MethodNodeDetailsPage extends GenericNodeDetailsPage{
 				if (dialog.open() == Window.OK) {
 					String oldName = dialog.getRenamedTestSuite();
 					String newName = dialog.getNewName();
-					for(TestCaseNode testCase : fSelectedNode.getTestCases(oldName)){
+					Collection<TestCaseNode> testSuite = fSelectedNode.removeTestSuite(oldName);
+					for(TestCaseNode testCase : testSuite){
 						testCase.setName(newName);
+						fSelectedNode.addTestCase(testCase);
 					}
 					updateModel((RootNode)fSelectedNode.getRoot());
 				}
@@ -316,7 +319,7 @@ public class MethodNodeDetailsPage extends GenericNodeDetailsPage{
 
 			private void removeTestSuites(Object[] suites) {
 				for(Object suite : suites){
-					fSelectedNode.getTestCases().removeAll((String)suite);
+					fSelectedNode.removeTestSuite((String)suite);
 				}
 				
 			}

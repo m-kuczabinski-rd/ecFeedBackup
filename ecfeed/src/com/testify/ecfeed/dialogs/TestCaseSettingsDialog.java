@@ -23,6 +23,7 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 
 import com.testify.ecfeed.constants.Constants;
+import com.testify.ecfeed.constants.Strings;
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
@@ -146,8 +147,8 @@ public class TestCaseSettingsDialog extends TitleAreaDialog {
 	
 	private boolean verifyTestSuiteName() {
 		String testSuiteName = fTestSuiteNameCombo.getText();
-		if(testSuiteName.length() == 0){
-			fErrorMessage = "Test suite name cannot be empty";
+		if(testSuiteName.length() == 0 || testSuiteName.length() > 64){
+			fErrorMessage = Strings.DIALOG_TEST_SUITE_NAME_ERROR_MESSAGE;
 			return false;
 		}
 		return true;
