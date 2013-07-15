@@ -85,18 +85,19 @@ public class ClassNodeDetailsPage extends GenericNodeDetailsPage{
 		@Override
 		public void widgetSelected(SelectionEvent e) {
 			MessageDialog infoDialog = new MessageDialog(Display.getDefault().getActiveShell(), 
-					"Remove methods", Display.getDefault().getSystemImage(SWT.ICON_QUESTION), 
-					"Remove selected methods from the model?\nAll generated test cases will be lost.",
+					Strings.DIALOG_REMOVE_METHODS_TITLE, 
+					Display.getDefault().getSystemImage(SWT.ICON_QUESTION), 
+					Strings.DIALOG_REMOVE_METHODS_MESSAGE,
 					MessageDialog.QUESTION_WITH_CANCEL, new String[] {"OK", "Cancel"}, 0);
 			if(infoDialog.open() == 0){
 				removeMethods(fMethodsViewer.getCheckedElements());
+				updateModel((RootNode)fSelectedNode.getRoot());
 			}
 		}
 
 		private void removeMethods(Object[] checkedElements) {
 			for(Object method : checkedElements){
 				fSelectedNode.removeChild((MethodNode)method);
-				updateModel((RootNode)fSelectedNode.getRoot());
 			}
 		}
 	}

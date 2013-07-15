@@ -38,7 +38,7 @@ public class MethodNode extends GenericNode {
 	}
 
 	//TODO unit tests
-	public Set<String> getTestSuiteNames(){
+	public Set<String> getTestSuites(){
 		return fTestCases.keySet();
 	}
 	

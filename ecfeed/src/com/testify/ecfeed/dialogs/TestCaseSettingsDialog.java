@@ -116,7 +116,7 @@ public class TestCaseSettingsDialog extends TitleAreaDialog {
 
 	private void createSuiteNameCombo(Composite composite) {
 		fTestSuiteNameCombo = new Combo(composite, SWT.NONE);
-		fTestSuiteNameCombo.setItems(fParentMethod.getTestSuiteNames().toArray(new String[0]));
+		fTestSuiteNameCombo.setItems(fParentMethod.getTestSuites().toArray(new String[0]));
 		fTestSuiteNameCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		fTestSuiteNameCombo.setText(fTestCase.getName());
 		fTestSuiteNameCombo.addModifyListener(new ModifyListener() {

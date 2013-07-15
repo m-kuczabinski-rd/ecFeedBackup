@@ -15,6 +15,9 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Table;
+import org.eclipse.jface.dialogs.IDialogConstants;
+import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.viewers.CheckboxTableViewer;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -22,6 +25,9 @@ import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.jface.viewers.TableViewerColumn;
 
+import com.testify.ecfeed.constants.Strings;
+import com.testify.ecfeed.dialogs.RemoveTestSuiteDialog;
+import com.testify.ecfeed.dialogs.RenameTestSuiteDialog;
 import com.testify.ecfeed.dialogs.TestCaseSettingsDialog;
 import com.testify.ecfeed.model.CategoryNode;
 
@@ -33,11 +39,12 @@ import com.testify.ecfeed.model.TestCaseNode;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.wb.swt.TableViewerColumnSorter;
 import org.eclipse.jface.window.Window;
+import org.eclipse.jface.viewers.Viewer;
 
 public class MethodNodeDetailsPage extends GenericNodeDetailsPage{
 	private Label fMethodNameLabel;
 	private MethodNode fSelectedNode;
-	private TableViewer fTestCasesViewer;
+	private CheckboxTableViewer fTestCasesViewer;
 	private TableViewer fParametersViewer;
 	private Section fMainSection;
 
@@ -152,7 +159,7 @@ public class MethodNodeDetailsPage extends GenericNodeDetailsPage{
 
 	}
 	private void createTestCasesViewer(Composite composite) {
-		fTestCasesViewer = new TableViewer(composite, SWT.BORDER | SWT.FULL_SELECTION);
+		fTestCasesViewer = CheckboxTableViewer.newCheckList(composite, SWT.BORDER | SWT.FULL_SELECTION);
 		fTestCasesViewer.setContentProvider(new ArrayContentProvider());
 		fTestCasesViewer.addDoubleClickListener(new ChildrenViewerDoubleClickListener());
 		Table testCasesTable = fTestCasesViewer.getTable();
@@ -162,7 +169,6 @@ public class MethodNodeDetailsPage extends GenericNodeDetailsPage{
 		
 		TableViewerColumn testSuiteViewerColumn = new TableViewerColumn(fTestCasesViewer, SWT.NONE);
 		new TableViewerColumnSorter(testSuiteViewerColumn) {
-			@Override
 			protected Object getValue(Object o) {
 				return ((TestCaseNode)o).getName();
 			}
@@ -174,7 +180,7 @@ public class MethodNodeDetailsPage extends GenericNodeDetailsPage{
 			}
 		});
 		TableColumn testSuiteColumn = testSuiteViewerColumn.getColumn();
-		testSuiteColumn.setWidth(100);
+		testSuiteColumn.setWidth(130);
 		testSuiteColumn.setText("Test Suite");
 		
 		TableViewerColumn valuesViewerColumn = new TableViewerColumn(fTestCasesViewer, SWT.NONE);
@@ -209,12 +215,14 @@ public class MethodNodeDetailsPage extends GenericNodeDetailsPage{
 		testCasesButonsComposite.setLayout(new GridLayout(1, false));
 		
 		createAddTestCaseButton(testCasesButonsComposite);
+
+		createRenameSuiteButton(testCasesButonsComposite);
 		
 		createGenerateTestSuiteButton(testCasesButonsComposite);
 		
 		createRemoveSelectedButton(testCasesButonsComposite);
 		
-		createRemoveTestSuiteButton(testCasesButonsComposite);
+		createRemoveTestSuitesButton(testCasesButonsComposite);
 	}
 	
 	private void createAddTestCaseButton(Composite testCasesButonsComposite) {
@@ -235,6 +243,27 @@ public class MethodNodeDetailsPage extends GenericNodeDetailsPage{
 		});
 	}
 	
+	private void createRenameSuiteButton(Composite testCasesButonsComposite) {
+		Button renameSuiteButton = getToolkit().createButton(testCasesButonsComposite, "Rename suite...", SWT.NONE);
+		renameSuiteButton.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
+		renameSuiteButton.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e){
+				RenameTestSuiteDialog dialog = 
+						new RenameTestSuiteDialog(Display.getDefault().getActiveShell(), fSelectedNode.getTestSuites());
+				dialog.create();
+				if (dialog.open() == Window.OK) {
+					String oldName = dialog.getRenamedTestSuite();
+					String newName = dialog.getNewName();
+					for(TestCaseNode testCase : fSelectedNode.getTestCases(oldName)){
+						testCase.setName(newName);
+					}
+					updateModel((RootNode)fSelectedNode.getRoot());
+				}
+			}
+		});
+	}
+	
 	private void createGenerateTestSuiteButton(
 			Composite testCasesButonsComposite) {
 		Button generateTestSuiteButton = new Button(testCasesButonsComposite, SWT.NONE);
@@ -248,13 +277,50 @@ public class MethodNodeDetailsPage extends GenericNodeDetailsPage{
 		removeSelectedButton.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
 		getToolkit().adapt(removeSelectedButton, true, true);
 		removeSelectedButton.setText("Remove Selected");
+		removeSelectedButton.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				MessageDialog infoDialog = new MessageDialog(Display.getDefault().getActiveShell(), 
+						Strings.DIALOG_REMOVE_TEST_CASES_TITLE, Display.getDefault().getSystemImage(SWT.ICON_QUESTION), 
+						Strings.DIALOG_REMOVE_TEST_CASES_MESSAGE,
+						MessageDialog.QUESTION_WITH_CANCEL, new String[] {"OK", "Cancel"}, 0);
+				if(infoDialog.open() == 0){
+					removeTestCases(fTestCasesViewer.getCheckedElements());
+					updateModel((RootNode)fSelectedNode.getRoot());
+				}
+			}
+
+			private void removeTestCases(Object[] checkedElements) {
+				for(Object testCase : checkedElements){
+					fSelectedNode.removeChild((TestCaseNode)testCase);
+				}
+			}
+		});
+
 	}
 	
-	private void createRemoveTestSuiteButton(Composite testCasesButonsComposite) {
+	private void createRemoveTestSuitesButton(Composite testCasesButonsComposite) {
 		Button removeTestSuiteButton = new Button(testCasesButonsComposite, SWT.NONE);
 		removeTestSuiteButton.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
 		getToolkit().adapt(removeTestSuiteButton, true, true);
-		removeTestSuiteButton.setText("Remove Test Suite");
+		removeTestSuiteButton.setText("Remove Suites...");
+		removeTestSuiteButton.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				RemoveTestSuiteDialog dialog = new RemoveTestSuiteDialog(Display.getDefault().getActiveShell(), fSelectedNode.getTestSuites());
+				if(dialog.open() == IDialogConstants.OK_ID){
+					removeTestSuites(dialog.getCheckedElements());
+					updateModel((RootNode)fSelectedNode.getRoot());
+				}
+			}
+
+			private void removeTestSuites(Object[] suites) {
+				for(Object suite : suites){
+					fSelectedNode.getTestCases().removeAll((String)suite);
+				}
+				
+			}
+		});
 	}
 	
 	public void selectionChanged(IFormPart part, ISelection selection) {
