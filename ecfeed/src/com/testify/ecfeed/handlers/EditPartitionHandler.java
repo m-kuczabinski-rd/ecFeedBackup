@@ -27,7 +27,7 @@ public class EditPartitionHandler extends AbstractHandler implements IHandler {
 		IStructuredSelection selection = (IStructuredSelection) HandlerUtil.getCurrentSelection(event);
 		PartitionNode partition = (PartitionNode)selection.getFirstElement();
 		CategoryNode parent = (CategoryNode)partition.getParent();
-		PartitionSettingsDialog dialog = new PartitionSettingsDialog(Display.getDefault().getActiveShell(), partition, parent);
+		PartitionSettingsDialog dialog = new PartitionSettingsDialog(Display.getDefault().getActiveShell(), parent, partition);
 		dialog.create();
 		if (dialog.open() == Window.OK) {
 			String name = dialog.getPartitionName();

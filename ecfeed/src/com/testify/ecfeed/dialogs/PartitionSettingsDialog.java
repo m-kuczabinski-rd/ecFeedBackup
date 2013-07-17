@@ -1,101 +1,157 @@
 package com.testify.ecfeed.dialogs;
 
-import org.eclipse.jface.dialogs.IMessageProvider;
+import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.TitleAreaDialog;
-import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
-import com.testify.ecfeed.constants.Constants;
+import com.testify.ecfeed.constants.DialogStrings;
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.PartitionNode;
+import com.testify.ecfeed.utils.EcModelUtils;
+import org.eclipse.wb.swt.SWTResourceManager;
 
 public class PartitionSettingsDialog extends TitleAreaDialog {
-	
-	private boolean fNewPartition;
+	private CategoryNode fParent;
 	private PartitionNode fPartition;
-	private Text fPartitionNameText;
-	private Text fPartitionValueText;
+	private Text fNameText;
+	private Text fValueText;
 	private String fPartitionName;
 	private Object fPartitionValue;
 	private Button fOkButton;
-	private String fErrorMessage;
-	private CategoryNode fParent;
+	private Composite fMainContainer;
+	private Text fErrorMessage;
 
-
-	public PartitionSettingsDialog(Shell parentShell, PartitionNode partition, CategoryNode parent) {
+	/**
+	 * Create dialog
+	 * @param parentShell parent shell
+	 * @param parent Category parent for configured partition
+	 * @param partition Configured partition, if null, new partition will be created
+	 */
+	public PartitionSettingsDialog(Shell parentShell, CategoryNode parent, PartitionNode partition) {
 		super(parentShell);
-		setHelpAvailable(false);
-		fPartition = partition;
-		fNewPartition = (partition == null);
 		fParent = parent;
+		fPartition = partition;
+		setHelpAvailable(false);
 	}
 
-	@Override
-	public void create() {
-		super.create();
-		setTitle(fNewPartition?"New Partition":"Edit Partition" + " (" + fParent.getType() + ")");
-		setMessage("Set partition name and value", IMessageProvider.NONE);
-	}	
-
-	@Override
-	protected void createButtonsForButtonBar(Composite parent) {
-		GridData gridData = new GridData();
-		gridData.verticalAlignment = GridData.FILL;
-		gridData.horizontalSpan = 3;
-		gridData.grabExcessHorizontalSpace = true;
-		gridData.grabExcessVerticalSpace = true;
-		gridData.horizontalAlignment = SWT.CENTER;
-
-		parent.setLayoutData(gridData);
-
-		fOkButton = createOkButton(parent, OK, "Ok", true);
-		createCancelButton(parent, CANCEL, "Cancel", false);
-
-		verifyInput();
-		if(fNewPartition){
-			setErrorMessage(null);
-		}
-
-	}
-
+	/**
+	 * Create contents of the dialog.
+	 * @param parent
+	 */
 	@Override
 	protected Control createDialogArea(Composite parent) {
-		GridLayout layout = new GridLayout();
-		layout.numColumns = 2;
-		parent.setLayout(layout);
-
-		// The text fields will grow with the size of the dialog
-		Label partitionNameLabel = new Label(parent, SWT.NONE);
-		partitionNameLabel.setText("Partition Name");
-		createPartitionNameText(parent);
-
-		Label partitionValueLabel = new Label(parent, SWT.NONE);
-		partitionValueLabel.setText("Partition Value");
-		createPartitionValueText(parent);
+		setTitle(DialogStrings.DIALOG_PARTITION_SETTINGS_DIALOG_TITLE);
+		setMessage(DialogStrings.DIALOG_PARTITION_SETTINGS_DIALOG_MESSAGE);
+		Composite area = (Composite) super.createDialogArea(parent);
+		fMainContainer = new Composite(area, SWT.NONE);
+		fMainContainer.setLayout(new GridLayout(2, false));
+		fMainContainer.setLayoutData(new GridData(GridData.FILL_BOTH));
 		
-		return parent;
+		Label lblPartitionName = new Label(fMainContainer, SWT.NONE);
+		lblPartitionName.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
+		lblPartitionName.setText("Partition name");
+		
+		fNameText = new Text(fMainContainer, SWT.BORDER);
+		fNameText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		fNameText.addModifyListener(new ModifyListener() {
+			@Override
+			public void modifyText(ModifyEvent e) {
+				verifyInput();
+			}
+		});
+		
+		Label lblPartitionValue = new Label(fMainContainer, SWT.NONE);
+		lblPartitionValue.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
+		lblPartitionValue.setText("Partition value");
+		
+		fValueText = new Text(fMainContainer, SWT.BORDER);
+		fValueText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		
+		Label separator = new Label(fMainContainer, SWT.SEPARATOR | SWT.HORIZONTAL);
+		separator.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 2, 1));
+		
+		fErrorMessage = new Text(fMainContainer, SWT.READ_ONLY | SWT.WRAP);
+		fErrorMessage.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
+		GridData errorMessageGridData = new GridData(SWT.FILL, SWT.FILL, true, true, 2, 2);
+		errorMessageGridData.heightHint = 100;
+		fErrorMessage.setLayoutData(errorMessageGridData);
+		fErrorMessage.setText(DialogStrings.DIALOG_PARTITION_NAME_PROBLEM_MESSAGE + 
+				"\n\n" + DialogStrings.DIALOG_PARTITION_VALUE_PROBLEM_MESSAGE);
+		fValueText.addModifyListener(new ModifyListener() {
+			@Override
+			public void modifyText(ModifyEvent e) {
+				verifyInput();
+			}
+		});
+
+		if(fPartition != null){
+			fNameText.setText(fPartition.getName());
+			fValueText.setText(fPartition.getValueString());
+		}
+
+		return area;
 	}
 
+	private void verifyInput(){
+		boolean inputValid = true;
+		String errorTitle = "";
+		String errorMessage = "";
+		if(!EcModelUtils.validatePartitionStringValue(fValueText.getText(), fParent)){
+			inputValid = false;
+			errorTitle = DialogStrings.DIALOG_PARTITION_VALUE_PROBLEM_TITLE;
+			errorMessage = DialogStrings.DIALOG_PARTITION_VALUE_PROBLEM_MESSAGE;
+		}
+		if(!EcModelUtils.validatePartitionName(fNameText.getText(), fParent, fPartition)){
+			inputValid = false;
+			errorTitle = DialogStrings.DIALOG_PARTITION_NAME_PROBLEM_TITLE;
+			errorMessage = DialogStrings.DIALOG_PARTITION_NAME_PROBLEM_MESSAGE;
+		}
+
+		if(inputValid){
+			fOkButton.setEnabled(true);
+			fErrorMessage.setText("");
+		}
+		else{
+			fOkButton.setEnabled(false);
+			fErrorMessage.setText(errorTitle + "\n\n" + errorMessage);
+		}
+	}
+	/**
+	 * Create contents of the button bar.
+	 * @param parent
+	 */
 	@Override
-	protected boolean isResizable() {
-		return true;
+	protected void createButtonsForButtonBar(Composite parent) {
+		fOkButton = createButton(parent, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL,
+				true);
+		createButton(parent, IDialogConstants.CANCEL_ID,
+				IDialogConstants.CANCEL_LABEL, false);
+		fOkButton.setEnabled(false);
+	}
+
+	/**
+	 * Return the initial size of the dialog.
+	 */
+	@Override
+	protected Point getInitialSize() {
+		return new Point(484, 350);
 	}
 
 	@Override
 	protected void okPressed() {
-		saveInput();
+		fPartitionName = fNameText.getText();
+		fPartitionValue = EcModelUtils.getPartitionValueFromString(fValueText.getText(), fParent.getType());
 		super.okPressed();
 	}
 
@@ -105,137 +161,6 @@ public class PartitionSettingsDialog extends TitleAreaDialog {
 
 	public Object getPartitionValue() {
 		return fPartitionValue;
-	}
-
-	private void createPartitionNameText(Composite parent) {
-		GridData gridData = new GridData();
-		gridData.grabExcessHorizontalSpace = true;
-		gridData.horizontalAlignment = GridData.FILL;
-	
-		fPartitionNameText = new Text(parent, SWT.BORDER);
-		fPartitionNameText.setLayoutData(gridData);
-		if(!fNewPartition){
-			fPartitionName = fPartition.getName();
-			fPartitionNameText.setText(fPartitionName);
-		}
-		fPartitionNameText.addModifyListener(new ModifyListener() {
-			
-			@Override
-			public void modifyText(ModifyEvent e) {
-				verifyInput();
-			}
-		});
-	}
-
-	private void createPartitionValueText(Composite parent) {
-		GridData gridData = new GridData();
-		gridData.grabExcessHorizontalSpace = true;
-		gridData.horizontalAlignment = GridData.FILL;
-		
-		fPartitionValueText = new Text(parent, SWT.BORDER);
-		fPartitionValueText.setLayoutData(gridData);
-		if(!fNewPartition){
-			if(fPartition.getValue() == null){
-				fPartitionValueText.setText(Constants.NULL_VALUE_STRING_REPRESENTATION);
-			}
-			else{
-				fPartitionValueText.setText(fPartition.getValue().toString());
-			}
-		}
-		fPartitionValueText.addModifyListener(new ModifyListener() {
-			
-			@Override
-			public void modifyText(ModifyEvent e) {
-				verifyInput();
-			}
-		});
-	}
-
-	private boolean verifyInput() {
-		boolean inputValid = true;
-		
-		inputValid &= verifyName();
-		inputValid &= verifyValue();
-		
-		if(!inputValid){
-			fOkButton.setEnabled(false);
-			setErrorMessage(fErrorMessage);
-		}
-		else{
-			fOkButton.setEnabled(true);
-			setErrorMessage(null);
-		}
-		
-		return inputValid;
-	}
-
-	private boolean verifyValue() {
-		boolean inputValid = true;
-		String valueText = fPartitionValueText.getText();
-		if(!fParent.isStringValueValid(valueText)){
-			fErrorMessage = "Invalid value";
-			inputValid = false;
-		}
-		return inputValid;
-	}
-	
-//	TODO unit tests
-	private boolean verifyName() {
-		boolean inputValid = true;
-		String name = fPartitionNameText.getText();
-		//Check if name is not empty
-		if(name.length() < 1){
-			fErrorMessage = "Partition name cannot be empty";
-			inputValid = false;
-		}
-		//Check if the name is unique
-		PartitionNode p = fParent.getPartition(name);
-		if(p != null && p != fPartition){
-			fErrorMessage = "Partition name must be unique within a category";
-			inputValid = false;
-		}
-		return inputValid;
-	}
-
-	protected Button createOkButton(Composite parent, int id, 
-			String label, boolean defaultButton) {
-		
-	    ((GridLayout) parent.getLayout()).numColumns++;
-	    Button okButton = new Button(parent, SWT.PUSH);
-	    okButton.setText(label);
-	    okButton.setFont(JFaceResources.getDialogFont());
-	    okButton.setData(new Integer(id));
-
-		okButton.addSelectionListener(new SelectionAdapter() {
-			public void widgetSelected(SelectionEvent e) {
-				okPressed();
-			}
-		});
-	    if (defaultButton) {
-	        Shell shell = parent.getShell();
-	        if (shell != null) {
-	          shell.setDefaultButton(okButton);
-	        }
-	      }
-	    setButtonLayoutData(okButton);
-	    return okButton;
-	}
-
-	protected void createCancelButton(Composite parent, int cancel,
-			String string, boolean b) {
-
-		Button cancelButton = createButton(parent, CANCEL, "Cancel", false);
-		cancelButton.addSelectionListener(new SelectionAdapter() {
-			public void widgetSelected(SelectionEvent e) {
-				setReturnCode(CANCEL);
-				close();
-			}
-		});
-	}
-
-	private void saveInput() {
-		fPartitionName = fPartitionNameText.getText();
-		fPartitionValue = fParent.getValueFromString(fPartitionValueText.getText());
 	}
 
 }

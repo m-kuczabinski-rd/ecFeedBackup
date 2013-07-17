@@ -24,5 +24,17 @@ public class Constants {
 	public static final String DEFAULT_TEST_SUITE_NAME = "default suite";
 	
 	public static final String DEFAULT_ECT_EDITOR_ID = "com.testify.ecfeed.editors.EcMultiPageEditor";
+
+	public static final int MAX_PARTITION_NAME_LENGTH = 64;
+	
+	public static final String BOOLEAN_TYPE_NAME = "boolean";
+	public static final String BYTE_TYPE_NAME = "byte";
+	public static final String CHAR_TYPE_NAME = "char";
+	public static final String DOUBLE_TYPE_NAME = "double";
+	public static final String FLOAT_TYPE_NAME = "float";
+	public static final String INT_TYPE_NAME = "int";
+	public static final String LONG_TYPE_NAME = "long";
+	public static final String SHORT_TYPE_NAME = "short";
+	public static final String STRING_TYPE_NAME = "String";
 	
 }

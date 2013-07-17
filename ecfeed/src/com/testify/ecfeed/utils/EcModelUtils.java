@@ -1,5 +1,8 @@
 package com.testify.ecfeed.utils;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.Vector;
 
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -12,13 +15,99 @@ import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.core.Signature;
 
+import com.testify.ecfeed.constants.Constants;
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.ClassNode;
+import com.testify.ecfeed.model.GenericNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.RootNode;
+import com.testify.ecfeed.model.TestCaseNode;
 
 public class EcModelUtils {
+	/**
+	 * Checks if certain name is valid for given partition in given category
+	 * @param name Name to validate
+	 * @param parent Parent for which the name is validated
+	 * @param partition Partition for which the name is validated. May be null
+	 * @return
+	 */
+	public static boolean validatePartitionName(String name, CategoryNode parent, PartitionNode partition){
+		if (name == null) return false;
+		if(name.length() == 0) return false;
+		if(name.length() >= Constants.MAX_PARTITION_NAME_LENGTH) return false;
+		if(name.matches("[ ]+")) return false;
+
+		PartitionNode sibling = parent.getPartition(name);
+		if(sibling != null && sibling != partition) return false;
+		
+		return true;
+	}
+	
+	public static boolean validatePartitionStringValue(String valueString, CategoryNode parent){
+		String type = parent.getType(); 
+		if(type.equals(Constants.STRING_TYPE_NAME)) return true;
+		return (getPartitionValueFromString(valueString, type) != null);
+	}
+
+	public static Object getPartitionValueFromString(String valueString, String type){
+		try{
+			switch(type){
+			case Constants.BOOLEAN_TYPE_NAME:
+				return Boolean.valueOf(valueString).booleanValue();
+			case Constants.BYTE_TYPE_NAME:
+				return Byte.valueOf(valueString).byteValue();
+			case Constants.CHAR_TYPE_NAME:
+				if(valueString.charAt(0) != '\\' || valueString.length() == 1) return(valueString.charAt(0));
+				return Character.toChars(Integer.parseInt(valueString.substring(1)));
+			case Constants.DOUBLE_TYPE_NAME:
+				return Double.valueOf(valueString).doubleValue();
+			case Constants.FLOAT_TYPE_NAME:
+				return Float.valueOf(valueString).floatValue();
+			case Constants.INT_TYPE_NAME:
+				return Integer.valueOf(valueString).intValue();
+			case Constants.LONG_TYPE_NAME:
+				return Long.valueOf(valueString).longValue();
+			case Constants.SHORT_TYPE_NAME:
+				return Short.valueOf(valueString).shortValue();
+			case Constants.STRING_TYPE_NAME:
+				return valueString;
+			default:
+				return null;
+			}
+		}catch(NumberFormatException|IndexOutOfBoundsException e){
+			return null;
+		}
+	}
+	
+	/**
+	 * Removes all test cases from the tree that have references to the provided partition
+	 * @param partition Partition to remove
+	 */
+	public static void removeReferences(PartitionNode partition){
+		MethodNode method = getMethodAncestor(partition);
+		Collection<TestCaseNode> testCases = method.getTestCases().values();
+		ArrayList<TestCaseNode> toRemove = new ArrayList<TestCaseNode>();
+		for(TestCaseNode testCase : testCases){
+			for(PartitionNode testValue : testCase.getTestData()){
+				if(testValue == partition){
+					toRemove.add(testCase);
+					break;
+				}
+			}
+		}
+		for(TestCaseNode testCase : toRemove){
+			method.removeChild(testCase);
+		}
+	}
+	
+	public static MethodNode getMethodAncestor(GenericNode node){
+		if(node == null) return null;
+		GenericNode parent = node.getParent();
+		if(parent == null) return null;
+		if(parent instanceof MethodNode) return (MethodNode)parent;
+		return getMethodAncestor(parent);
+	}
 
 	public static boolean classExists(RootNode model, String qualifiedName) {
 		for(ClassNode node : model.getClasses()){

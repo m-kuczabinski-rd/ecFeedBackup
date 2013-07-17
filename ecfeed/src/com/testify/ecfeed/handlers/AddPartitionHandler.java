@@ -25,8 +25,7 @@ public class AddPartitionHandler extends AbstractHandler implements IHandler {
 		IStructuredSelection selection = (IStructuredSelection) HandlerUtil.getCurrentSelection(event);
 		CategoryNode category = (CategoryNode)selection.getFirstElement();
 		PartitionSettingsDialog dialog = 
-				new PartitionSettingsDialog(Display.getDefault().getActiveShell(), 
-						null, category);
+				new PartitionSettingsDialog(Display.getDefault().getActiveShell(), category, null);
 		dialog.create();
 		if (dialog.open() == Window.OK) {
 			String name = dialog.getPartitionName();

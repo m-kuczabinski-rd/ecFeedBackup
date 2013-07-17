@@ -1,5 +1,7 @@
 package com.testify.ecfeed.model;
 
+import com.testify.ecfeed.constants.Constants;
+
 public class PartitionNode extends GenericNode {
 
 	private Object fValue;
@@ -17,11 +19,17 @@ public class PartitionNode extends GenericNode {
 		this.fValue = value;
 	}
 	
-	public String toString(){
+	public String getValueString(){
+		if(fValue == null) return Constants.NULL_VALUE_STRING_REPRESENTATION;
 		if(fValue instanceof Character){
-			return new String(getName() + ": '\\" + (int)((char)fValue ) + "'");
+			if((Character)fValue != 0) return " \\" + (int)((char)fValue ) + " ['" + fValue + "']";
+			return "\\0";
 		}
-		return new String(getName() + ": " + String.valueOf(fValue));
+		return String.valueOf(fValue);
+	}
+	
+	public String toString(){
+		return getName() + ": " + getValueString();
 	}
 	
 	@Override 

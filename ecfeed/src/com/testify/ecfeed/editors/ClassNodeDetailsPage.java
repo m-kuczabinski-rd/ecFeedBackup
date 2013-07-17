@@ -120,7 +120,8 @@ public class ClassNodeDetailsPage extends GenericNodeDetailsPage{
 		fMainSection = getToolkit().createSection(parent, Section.TITLE_BAR);
 		getToolkit().paintBordersFor(fMainSection);
 		fMainSection.setText("New Section");
-		fMainSection.setExpanded(true);
+		fMainSection.setExpanded(true);		// Create the details page
+
 
 		Composite textComposite = new Composite(fMainSection, SWT.NONE);
 		getToolkit().adapt(textComposite);
@@ -181,7 +182,8 @@ public class ClassNodeDetailsPage extends GenericNodeDetailsPage{
 		changeButton.setText("Change");
 		changeButton.addSelectionListener(new ChangeNameButtonSelectionAdapter());
 	}
-	
+	// Create the details page
+
 	private void createMethodsSection(Composite composite) {
 		Section methodsSection = getToolkit().createSection(composite, Section.TITLE_BAR);
 		methodsSection.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
