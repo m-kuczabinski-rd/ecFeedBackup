@@ -46,12 +46,12 @@ public class GenericNodeDetailsPage implements IDetailsPage, IModelUpdateListene
 	/**
 	 * Create the details page.
 	 */
-	public GenericNodeDetailsPage(EcMultiPageEditor editor, ModelMasterDetailsBlock parentBlock) {
-		fEditor = editor;
+	public GenericNodeDetailsPage(ModelMasterDetailsBlock parentBlock) {
+		fParentBlock = parentBlock;
+		fEditor = parentBlock.getEditor();;
 		if(fEditor != null){
 			fEditor.registerModelUpdateListener(this);
 		}
-		fParentBlock = parentBlock;
 	}
 
 	/**
