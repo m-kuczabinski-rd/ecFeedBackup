@@ -340,6 +340,6 @@ public class MethodNodeDetailsPage extends GenericNodeDetailsPage{
 		fMainSection.setText(fSelectedNode.toString());
 		fMethodNameLabel.setText("Method name: " + fSelectedNode.toString());
 		fParametersViewer.setInput(fSelectedNode.getCategories());
-		fTestCasesViewer.setInput(fSelectedNode.getTestCases().values());
+		fTestCasesViewer.setInput(fSelectedNode.getTestCases());
 	}
 }

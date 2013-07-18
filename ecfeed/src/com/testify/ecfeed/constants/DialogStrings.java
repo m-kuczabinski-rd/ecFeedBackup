@@ -23,5 +23,8 @@ public class DialogStrings {
 			"referencing those partitions. Are you sure that you want to proceed?";
 	public static final String DIALOG_PARTITION_SETTINGS_DIALOG_TITLE = "Partition settings";
 	public static final String DIALOG_PARTITION_SETTINGS_DIALOG_MESSAGE = "Enter partition name and value";
+	public static final String DIALOG_TEST_SUITE_NAME_PROBLEM_TITLE = "Wrong test suite name";
+	public static final String DIALOG_TEST_SUITE_NAME_PROBLEM_MESSAGE = "Test suite name mus contain between 1 and 64 characters " +
+			"and may not contain only white characters";
 
 }

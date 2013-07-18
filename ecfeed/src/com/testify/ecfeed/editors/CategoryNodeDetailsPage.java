@@ -69,16 +69,7 @@ public class CategoryNodeDetailsPage extends GenericNodeDetailsPage implements I
 
 		@Override
 		protected void setValue(Object element, Object value) {
-			PartitionNode siblingNode = fSelectedNode.getPartition((String)value);
-			if(((String)value).length() == 0 || ((String)value).matches("[ ]+")){
-				MessageDialog dialog = new MessageDialog(Display.getDefault().getActiveShell(), 
-						DialogStrings.DIALOG_PARTITION_NAME_PROBLEM_TITLE, 
-						Display.getDefault().getSystemImage(SWT.ICON_ERROR), 
-						DialogStrings.DIALOG_PARTITION_NAME_PROBLEM_MESSAGE,
-						MessageDialog.ERROR, new String[] {"OK"}, 0);
-				dialog.open();
-			}
-			else if(siblingNode != null && siblingNode != element){
+			if(EcModelUtils.validatePartitionName((String)value, fSelectedNode, (PartitionNode)element)){
 				MessageDialog dialog = new MessageDialog(Display.getDefault().getActiveShell(), 
 						DialogStrings.DIALOG_PARTITION_NAME_PROBLEM_TITLE, 
 						Display.getDefault().getSystemImage(SWT.ICON_ERROR), 
@@ -252,6 +243,9 @@ public class CategoryNodeDetailsPage extends GenericNodeDetailsPage implements I
 	}
 	
 	public void refresh() {
+		if(fSelectedNode == null){
+			return;
+		}
 		fMainSection.setText(fSelectedNode.toString());
 		fPartitionsViewer.setInput(fSelectedNode.getPartitions());
 	}

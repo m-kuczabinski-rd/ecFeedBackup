@@ -2,7 +2,6 @@ package com.testify.ecfeed.utils;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.Vector;
 
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -36,7 +35,7 @@ public class EcModelUtils {
 		if (name == null) return false;
 		if(name.length() == 0) return false;
 		if(name.length() >= Constants.MAX_PARTITION_NAME_LENGTH) return false;
-		if(name.matches("[ ]+")) return false;
+		if(name.matches("[ ]+.*")) return false;
 
 		PartitionNode sibling = parent.getPartition(name);
 		if(sibling != null && sibling != partition) return false;
@@ -79,14 +78,14 @@ public class EcModelUtils {
 			return null;
 		}
 	}
-	
+
 	/**
 	 * Removes all test cases from the tree that have references to the provided partition
 	 * @param partition Partition to remove
 	 */
 	public static void removeReferences(PartitionNode partition){
 		MethodNode method = getMethodAncestor(partition);
-		Collection<TestCaseNode> testCases = method.getTestCases().values();
+		Collection<TestCaseNode> testCases = method.getTestCases();
 		ArrayList<TestCaseNode> toRemove = new ArrayList<TestCaseNode>();
 		for(TestCaseNode testCase : testCases){
 			for(PartitionNode testValue : testCase.getTestData()){
@@ -100,13 +99,19 @@ public class EcModelUtils {
 			method.removeChild(testCase);
 		}
 	}
-	
+
 	public static MethodNode getMethodAncestor(GenericNode node){
 		if(node == null) return null;
 		GenericNode parent = node.getParent();
 		if(parent == null) return null;
 		if(parent instanceof MethodNode) return (MethodNode)parent;
 		return getMethodAncestor(parent);
+	}
+
+	public static boolean validateTestSuiteName(String newName) {
+		if(newName.length() < 1 || newName.length() > 64) return false;
+		if(newName.matches("[ ]+.*")) return false;
+		return true;
 	}
 
 	public static boolean classExists(RootNode model, String qualifiedName) {

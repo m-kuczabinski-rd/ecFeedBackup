@@ -16,14 +16,23 @@ public class TestCaseNode extends GenericNode {
 	
 	//TODO unit tests
 	public String toString(){
-		String result = getName() + ": (";
-		for(int i = 0; i < fTestData.size(); i++){
-			result += fTestData.elementAt(i).getName();
-			if(i < fTestData.size() - 1){
-				result += ", ";
-			}
+		String methodName = null;
+		if (getParent() != null){
+			methodName = getParent().getName();
 		}
-		result += ")";
+		String result = "[" + getName() + "]";
+				
+		if(methodName != null){
+			result += ": " + methodName + "(";
+			for(int i = 0; i < fTestData.size(); i++){
+				result += fTestData.elementAt(i).getName();
+				if(i < fTestData.size() - 1){
+					result += ", ";
+				}
+			}
+			result += ")";
+		}
+		
 		return result;
 	}
 }

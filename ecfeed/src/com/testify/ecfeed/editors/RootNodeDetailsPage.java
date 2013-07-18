@@ -132,6 +132,30 @@ public class RootNodeDetailsPage extends GenericNodeDetailsPage{
 		createBottomButtons(composite);
 	}
 
+	private void createNodeNameComposite(Composite composite) {
+		Composite nodeNameComposite = fToolkit.createComposite(composite, SWT.FILL);
+		nodeNameComposite.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
+		nodeNameComposite.setLayout(new GridLayout(3, false));
+		Label nodeNameLabel = new Label(nodeNameComposite, SWT.BOLD);
+		nodeNameLabel.setText("Model name: ");
+		fNodeNameText = new Text(nodeNameComposite, SWT.FILL | SWT.BORDER);
+		GridData nodeNameTextGridData = new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1);
+		nodeNameTextGridData.widthHint = SWT.MAX;
+		fNodeNameText.setLayoutData(nodeNameTextGridData);
+		fNodeNameText.addListener(SWT.KeyDown, new Listener() {
+			@Override
+			public void handleEvent(Event event) {
+				if(event.keyCode == SWT.CR || event.keyCode == SWT.KEYPAD_CR){
+					renameModel(fNodeNameText.getText());
+				}
+			}
+		});
+	
+		Button renameButton = new Button(nodeNameComposite, SWT.NONE);
+		renameButton.addSelectionListener(new RenameModelButtonSelectionAdapter());
+		renameButton.setText("Rename");
+	}
+
 	private void createClassListViewer(Composite composite) {
 		Label classesLabel = new Label(composite, SWT.BOLD);
 		classesLabel.setText("Test classes");
@@ -179,30 +203,6 @@ public class RootNodeDetailsPage extends GenericNodeDetailsPage{
 		Button removeClassesButton = new Button(bottomButtonsComposite, SWT.NONE);
 		removeClassesButton.setText("Remove selected classes");
 		removeClassesButton.addSelectionListener(new RemoveClassesButtonSelectionAdapter());
-	}
-
-	private void createNodeNameComposite(Composite composite) {
-		Composite nodeNameComposite = fToolkit.createComposite(composite, SWT.FILL);
-		nodeNameComposite.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
-		nodeNameComposite.setLayout(new GridLayout(3, false));
-		Label nodeNameLabel = new Label(nodeNameComposite, SWT.BOLD);
-		nodeNameLabel.setText("Model name: ");
-		fNodeNameText = new Text(nodeNameComposite, SWT.FILL | SWT.BORDER);
-		GridData nodeNameTextGridData = new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1);
-		nodeNameTextGridData.widthHint = SWT.MAX;
-		fNodeNameText.setLayoutData(nodeNameTextGridData);
-		fNodeNameText.addListener(SWT.KeyDown, new Listener() {
-			@Override
-			public void handleEvent(Event event) {
-				if(event.keyCode == SWT.CR || event.keyCode == SWT.KEYPAD_CR){
-					renameModel(fNodeNameText.getText());
-				}
-			}
-		});
-
-		Button renameButton = new Button(nodeNameComposite, SWT.NONE);
-		renameButton.addSelectionListener(new RenameModelButtonSelectionAdapter());
-		renameButton.setText("Rename");
 	}
 
 	private void renameModel(String name) {

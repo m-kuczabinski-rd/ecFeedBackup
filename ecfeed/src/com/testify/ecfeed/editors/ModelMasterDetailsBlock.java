@@ -26,6 +26,7 @@ import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.GenericNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.RootNode;
+import com.testify.ecfeed.model.TestCaseNode;
 
 import org.eclipse.swt.layout.GridData;
 
@@ -111,6 +112,7 @@ public class ModelMasterDetailsBlock extends MasterDetailsBlock implements IMode
 		part.registerPage(ClassNode.class, new ClassNodeDetailsPage(fEditor, this));
 		part.registerPage(MethodNode.class, new MethodNodeDetailsPage(fEditor, this));
 		part.registerPage(CategoryNode.class, new CategoryNodeDetailsPage(fEditor, this));
+		part.registerPage(TestCaseNode.class, new TestCaseNodeDetailsPage(fEditor, this));
 
 		selectNode(fModel);
 	}

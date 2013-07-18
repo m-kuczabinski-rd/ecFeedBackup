@@ -31,16 +31,10 @@ public class TestCasePartitionEditingSupport extends EditingSupport {
 
 	@Override
 	protected CellEditor getCellEditor(Object element) {
-		Vector<String> items = new Vector<String>();
-		if(((PartitionNode)element).getParent() != null){
-			Vector<GenericNode> partitions = ((PartitionNode)element).getParent().getChildren();
-			for(GenericNode node : partitions){
-				if(node instanceof PartitionNode){
-					items.add(node.getName());
-				}
-			}
-			fCellEditor.setInput(items);
-		}
+		PartitionNode partition = (PartitionNode)element;
+		CategoryNode parent = (CategoryNode)partition.getParent();
+		fCellEditor.setInput(parent.getPartitions());
+		fCellEditor.setValue(partition.getName());
 		return fCellEditor;
 	}
 
@@ -51,27 +45,12 @@ public class TestCasePartitionEditingSupport extends EditingSupport {
 
 	@Override
 	protected Object getValue(Object element) {
-		return ((PartitionNode)element).getName();
+		return ((PartitionNode)element).toString();
 	}
 
 	@Override
 	protected void setValue(Object element, Object value) {
-		if(value == null){
-			value = ((CCombo)fCellEditor.getControl()).getText();
-		}
-		CategoryNode parent = (CategoryNode) ((PartitionNode)element).getParent();
-		PartitionNode chosenPartition = (PartitionNode) parent.getPartition((String)value);
-		if(chosenPartition == null){
-			chosenPartition = (PartitionNode)element;
-		}
-		
-//		PartitionNode chosenPartition = (PartitionNode) parent.getPartitions().elementAt((int)value);
-		for(int i = 0; i < fTestData.size(); i++){
-			if(fTestData.elementAt(i).getParent() == parent){
-				fTestData.setElementAt(chosenPartition, i);
-				break;
-			}
-		}
-		fViewer.refresh();
+		int index = fTestData.indexOf(element);
+		fTestData.setElementAt((PartitionNode)value, index);
 	}
 }

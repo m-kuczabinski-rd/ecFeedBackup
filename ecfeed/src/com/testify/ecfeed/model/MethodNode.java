@@ -1,20 +1,25 @@
 package com.testify.ecfeed.model;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.Vector;
+
+import junit.framework.TestCase;
 
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 
 public class MethodNode extends GenericNode {
 	private Vector<CategoryNode> fCategories;
-	private Multimap<String, TestCaseNode> fTestCases;
+	private Vector<TestCaseNode> fTestCases;
+//	private Multimap<String, TestCaseNode> fTestCases;
 	
 	public MethodNode(String name){
 		super(name);
 		fCategories = new Vector<CategoryNode>();
-		fTestCases = HashMultimap.create();
+		fTestCases = new Vector<TestCaseNode>();
+//		fTestCases = HashMultimap.create();
 	}
 	
 	//TODO Unit tests 
@@ -25,7 +30,8 @@ public class MethodNode extends GenericNode {
 
 	//TODO unit tests 
 	public void addTestCase(TestCaseNode testCase){
-		fTestCases.put(testCase.getName(), testCase);
+//		fTestCases.put(testCase.getName(), testCase);
+		fTestCases.add(testCase);
 		super.addChild(testCase);
 	}
 	
@@ -33,13 +39,21 @@ public class MethodNode extends GenericNode {
 		return fCategories;
 	}
 
-	public Multimap<String, TestCaseNode> getTestCases(){
+//	public Multimap<String, TestCaseNode> getTestCases(){
+//		return fTestCases;
+//	}
+	public Vector<TestCaseNode> getTestCases(){
 		return fTestCases;
 	}
 
 	//TODO unit tests
 	public Set<String> getTestSuites(){
-		return fTestCases.keySet();
+//		return fTestCases.keySet();
+		Set<String> testSuites = new HashSet<String>();
+		for(TestCaseNode testCase : fTestCases){
+			testSuites.add(testCase.getName());
+		}
+		return testSuites;
 	}
 	
 	@Override
@@ -64,7 +78,8 @@ public class MethodNode extends GenericNode {
 
 	//TODO unit tests
 	public boolean removeChild(TestCaseNode testCase){
-		fTestCases.remove(testCase.getName(), testCase);
+//		fTestCases.remove(testCase.getName(), testCase);
+		fTestCases.remove(testCase);
 		return super.removeChild(testCase);
 	}
 	
@@ -84,12 +99,20 @@ public class MethodNode extends GenericNode {
 
 	//TODO unit tests
 	public Collection<TestCaseNode> getTestCases(String testSuite) {
-		return fTestCases.get(testSuite);
+		Vector<TestCaseNode> testCases = new Vector<TestCaseNode>();
+		for(TestCaseNode testCase : fTestCases){
+			if(testSuite.equals(testCase.getName())){
+				testCases.add(testCase);
+			}
+		}
+		return testCases;
+//		return fTestCases.get(testSuite);
 	}
 
 	//TODO unit tests
-	public Collection<TestCaseNode> removeTestSuite(String oldName) {
-		Collection<TestCaseNode> testCases = fTestCases.removeAll(oldName);
+	public Collection<TestCaseNode> removeTestSuite(String suiteName) {
+		Collection<TestCaseNode> testCases = getTestCases(suiteName);
+		fTestCases.removeAll(testCases);
 		super.removeChildren(testCases);
 		return testCases;
 	}
