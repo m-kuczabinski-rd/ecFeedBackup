@@ -41,8 +41,6 @@ public class ClassNodeDetailsPage extends GenericNodeDetailsPage{
 	private Vector<MethodNode> fObsoleteMethods;
 	private Vector<MethodNode> fNotContainedMethods;
 	private ColorManager fColorManager;
-	private Table methodsTable;
-	private Table otherMathodsTable;
 	private CheckboxTableViewer fOtherMethodsViewer;
 	private CheckboxTableViewer fMethodsViewer;
 	private Section fOtherMethodsSection;
@@ -148,7 +146,9 @@ public class ClassNodeDetailsPage extends GenericNodeDetailsPage{
 				if(infoDialog.open() == 0){
 					RootNode root = (RootNode)fSelectedNode.getParent(); 
 					root.removeChild(fSelectedNode);
+					fSelectedNode = null;
 					getParentBlock().selectNode(root);
+					updateModel(root);
 				}
 			}
 		});
@@ -200,7 +200,7 @@ public class ClassNodeDetailsPage extends GenericNodeDetailsPage{
 		fMethodsViewer.setContentProvider(new ArrayContentProvider());
 		fMethodsViewer.addDoubleClickListener(new ChildrenViewerDoubleClickListener());
 		
-		methodsTable = fMethodsViewer.getTable();
+		Table methodsTable = fMethodsViewer.getTable();
 		methodsTable.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 		getToolkit().paintBordersFor(methodsTable);
 		
@@ -247,7 +247,7 @@ public class ClassNodeDetailsPage extends GenericNodeDetailsPage{
 		
 		fOtherMethodsViewer = CheckboxTableViewer.newCheckList(otherMathodsComposite, SWT.BORDER | SWT.FULL_SELECTION);
 		fOtherMethodsViewer.setContentProvider(new ArrayContentProvider());
-		otherMathodsTable = fOtherMethodsViewer.getTable();
+		Table otherMathodsTable = fOtherMethodsViewer.getTable();
 		otherMathodsTable.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 		getToolkit().paintBordersFor(otherMathodsTable);
 		
