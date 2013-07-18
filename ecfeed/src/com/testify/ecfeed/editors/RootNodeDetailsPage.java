@@ -14,10 +14,7 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Listener;
-import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.IFormPart;
 import org.eclipse.ui.forms.widgets.Section;
 
@@ -38,7 +35,6 @@ public class RootNodeDetailsPage extends GenericNodeDetailsPage{
 
 	private RootNode fSelectedNode;
 	private CheckboxTableViewer fClassesViewer;
-	private Text fNodeNameText;
 	private Section fMainSection;
 
 	private class AddTestClassButtonSelectionAdapter extends SelectionAdapter {
@@ -73,16 +69,6 @@ public class RootNodeDetailsPage extends GenericNodeDetailsPage{
 		}
 	}
 
-	private class RenameModelButtonSelectionAdapter extends SelectionAdapter{
-		@Override
-		public void widgetSelected(SelectionEvent e) {
-			String name = fNodeNameText.getText();
-			if(!name.equals(fSelectedNode.getName())){
-				renameModel(name);
-			}
-		}
-	}
-
 	private class RemoveClassesButtonSelectionAdapter extends SelectionAdapter{
 		@Override
 		public void widgetSelected(SelectionEvent e) {
@@ -109,8 +95,8 @@ public class RootNodeDetailsPage extends GenericNodeDetailsPage{
 	/**
 	 * @wbp.parser.constructor
 	 */
-	public RootNodeDetailsPage(EcMultiPageEditor editor, ModelMasterDetailsBlock parentBlock){
-		super(editor, parentBlock);
+	public RootNodeDetailsPage(ModelMasterDetailsBlock parentBlock){
+		super(parentBlock);
 	}
 	
 	/**
@@ -120,40 +106,14 @@ public class RootNodeDetailsPage extends GenericNodeDetailsPage{
 	public void createContents(Composite parent) {
 		parent.setLayout(new FillLayout());
 		fMainSection = fToolkit.createSection(parent, Section.TITLE_BAR);
-		fMainSection.setText("Model tree root node");
 
 		Composite composite = fToolkit.createComposite(fMainSection, SWT.NONE);
 		fToolkit.paintBordersFor(composite);
 		fMainSection.setClient(composite);
 		composite.setLayout(new GridLayout(1, true));
 		
-		createNodeNameComposite(composite);
 		createClassListViewer(composite);
 		createBottomButtons(composite);
-	}
-
-	private void createNodeNameComposite(Composite composite) {
-		Composite nodeNameComposite = fToolkit.createComposite(composite, SWT.FILL);
-		nodeNameComposite.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
-		nodeNameComposite.setLayout(new GridLayout(3, false));
-		Label nodeNameLabel = new Label(nodeNameComposite, SWT.BOLD);
-		nodeNameLabel.setText("Model name: ");
-		fNodeNameText = new Text(nodeNameComposite, SWT.FILL | SWT.BORDER);
-		GridData nodeNameTextGridData = new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1);
-		nodeNameTextGridData.widthHint = SWT.MAX;
-		fNodeNameText.setLayoutData(nodeNameTextGridData);
-		fNodeNameText.addListener(SWT.KeyDown, new Listener() {
-			@Override
-			public void handleEvent(Event event) {
-				if(event.keyCode == SWT.CR || event.keyCode == SWT.KEYPAD_CR){
-					renameModel(fNodeNameText.getText());
-				}
-			}
-		});
-	
-		Button renameButton = new Button(nodeNameComposite, SWT.NONE);
-		renameButton.addSelectionListener(new RenameModelButtonSelectionAdapter());
-		renameButton.setText("Rename");
 	}
 
 	private void createClassListViewer(Composite composite) {
@@ -205,18 +165,13 @@ public class RootNodeDetailsPage extends GenericNodeDetailsPage{
 		removeClassesButton.addSelectionListener(new RemoveClassesButtonSelectionAdapter());
 	}
 
-	private void renameModel(String name) {
-		fSelectedNode.setName(name);
-		updateModel(fSelectedNode);
-	}
-
 	@Override
 	public void refresh() {
 		if(fSelectedNode == null){
 			return;
 		}
-		fNodeNameText.setText(fSelectedNode.getName());
 		fClassesViewer.setInput(fSelectedNode.getClasses());
+		fMainSection.setText(fSelectedNode.toString());
 	}
 
 	public void selectionChanged(IFormPart part, ISelection selection) {
