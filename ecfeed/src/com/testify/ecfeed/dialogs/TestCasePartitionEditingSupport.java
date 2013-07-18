@@ -9,10 +9,8 @@ import org.eclipse.jface.viewers.EditingSupport;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.CCombo;
 
 import com.testify.ecfeed.model.CategoryNode;
-import com.testify.ecfeed.model.GenericNode;
 import com.testify.ecfeed.model.PartitionNode;
 
 public class TestCasePartitionEditingSupport extends EditingSupport {
