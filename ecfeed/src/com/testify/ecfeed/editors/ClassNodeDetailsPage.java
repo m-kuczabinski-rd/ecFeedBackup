@@ -103,8 +103,8 @@ public class ClassNodeDetailsPage extends GenericNodeDetailsPage{
 	/**
 	 * Create the details page.
 	 */
-	public ClassNodeDetailsPage(EcMultiPageEditor editor, ModelMasterDetailsBlock parentBlock) {
-		super(editor, parentBlock);
+	public ClassNodeDetailsPage(ModelMasterDetailsBlock parentBlock) {
+		super(parentBlock);
 		fColorManager = new ColorManager();
 	}
 

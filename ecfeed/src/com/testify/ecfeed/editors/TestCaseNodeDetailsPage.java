@@ -95,8 +95,8 @@ public class TestCaseNodeDetailsPage extends GenericNodeDetailsPage{
 	/**
 	 * Create the details page.
 	 */
-	public TestCaseNodeDetailsPage(EcMultiPageEditor editor, ModelMasterDetailsBlock parentBlock) {
-		super(editor, parentBlock);
+	public TestCaseNodeDetailsPage(ModelMasterDetailsBlock parentBlock) {
+		super(parentBlock);
 	}
 
 	/**

@@ -25,6 +25,7 @@ import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.GenericNode;
 import com.testify.ecfeed.model.MethodNode;
+import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.TestCaseNode;
 
@@ -108,11 +109,12 @@ public class ModelMasterDetailsBlock extends MasterDetailsBlock implements IMode
 	 */
 	@Override
 	protected void registerPages(DetailsPart part) {
-		part.registerPage(RootNode.class, new RootNodeDetailsPage(fEditor, this));
-		part.registerPage(ClassNode.class, new ClassNodeDetailsPage(fEditor, this));
-		part.registerPage(MethodNode.class, new MethodNodeDetailsPage(fEditor, this));
-		part.registerPage(CategoryNode.class, new CategoryNodeDetailsPage(fEditor, this));
-		part.registerPage(TestCaseNode.class, new TestCaseNodeDetailsPage(fEditor, this));
+		part.registerPage(RootNode.class, new RootNodeDetailsPage(this));
+		part.registerPage(ClassNode.class, new ClassNodeDetailsPage(this));
+		part.registerPage(MethodNode.class, new MethodNodeDetailsPage(this));
+		part.registerPage(CategoryNode.class, new CategoryNodeDetailsPage(this));
+		part.registerPage(TestCaseNode.class, new TestCaseNodeDetailsPage(this));
+		part.registerPage(PartitionNode.class, new PartitionNodeDetailsPage(this));
 
 		selectNode(fModel);
 	}
@@ -133,5 +135,9 @@ public class ModelMasterDetailsBlock extends MasterDetailsBlock implements IMode
 	
 	void selectNode(GenericNode node){
 		fTreeViewer.setSelection(new StructuredSelection(node), true);
+	}
+
+	public EcMultiPageEditor getEditor() {
+		return fEditor;
 	}
 }

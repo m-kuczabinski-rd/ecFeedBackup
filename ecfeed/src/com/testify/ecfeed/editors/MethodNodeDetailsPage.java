@@ -48,8 +48,8 @@ public class MethodNodeDetailsPage extends GenericNodeDetailsPage{
 	private TableViewer fParametersViewer;
 	private Section fMainSection;
 
-	public MethodNodeDetailsPage(EcMultiPageEditor editor, ModelMasterDetailsBlock parentBlock){
-		super(editor, parentBlock);
+	public MethodNodeDetailsPage(ModelMasterDetailsBlock parentBlock){
+		super(parentBlock);
 	}
 	/**
 	 * Create contents of the details page.

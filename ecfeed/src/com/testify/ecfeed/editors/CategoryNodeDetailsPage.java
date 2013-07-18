@@ -129,8 +129,8 @@ public class CategoryNodeDetailsPage extends GenericNodeDetailsPage implements I
 	/**
 	 * Create the details page.
 	 */
-	public CategoryNodeDetailsPage(EcMultiPageEditor editor, ModelMasterDetailsBlock parentBlock) {
-		super(editor, parentBlock);
+	public CategoryNodeDetailsPage(ModelMasterDetailsBlock parentBlock) {
+		super(parentBlock);
 	}
 
 	/**
