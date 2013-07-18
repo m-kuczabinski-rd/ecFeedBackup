@@ -5,21 +5,14 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.Vector;
 
-import junit.framework.TestCase;
-
-import com.google.common.collect.HashMultimap;
-import com.google.common.collect.Multimap;
-
 public class MethodNode extends GenericNode {
 	private Vector<CategoryNode> fCategories;
 	private Vector<TestCaseNode> fTestCases;
-//	private Multimap<String, TestCaseNode> fTestCases;
 	
 	public MethodNode(String name){
 		super(name);
 		fCategories = new Vector<CategoryNode>();
 		fTestCases = new Vector<TestCaseNode>();
-//		fTestCases = HashMultimap.create();
 	}
 	
 	//TODO Unit tests 
@@ -30,7 +23,6 @@ public class MethodNode extends GenericNode {
 
 	//TODO unit tests 
 	public void addTestCase(TestCaseNode testCase){
-//		fTestCases.put(testCase.getName(), testCase);
 		fTestCases.add(testCase);
 		super.addChild(testCase);
 	}
@@ -39,16 +31,12 @@ public class MethodNode extends GenericNode {
 		return fCategories;
 	}
 
-//	public Multimap<String, TestCaseNode> getTestCases(){
-//		return fTestCases;
-//	}
 	public Vector<TestCaseNode> getTestCases(){
 		return fTestCases;
 	}
 
 	//TODO unit tests
 	public Set<String> getTestSuites(){
-//		return fTestCases.keySet();
 		Set<String> testSuites = new HashSet<String>();
 		for(TestCaseNode testCase : fTestCases){
 			testSuites.add(testCase.getName());
@@ -78,7 +66,6 @@ public class MethodNode extends GenericNode {
 
 	//TODO unit tests
 	public boolean removeChild(TestCaseNode testCase){
-//		fTestCases.remove(testCase.getName(), testCase);
 		fTestCases.remove(testCase);
 		return super.removeChild(testCase);
 	}
@@ -106,7 +93,6 @@ public class MethodNode extends GenericNode {
 			}
 		}
 		return testCases;
-//		return fTestCases.get(testSuite);
 	}
 
 	//TODO unit tests

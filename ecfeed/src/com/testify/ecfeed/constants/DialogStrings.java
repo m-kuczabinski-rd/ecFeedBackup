@@ -1,8 +1,11 @@
 package com.testify.ecfeed.constants;
 
 public class DialogStrings {
-	public static final String DIALOG_REMOVE_CLASS_TITLE = "Remove class"; 
-	public static final String DIALOG_REMOVE_CLASS_MESSAGE = "This operation will remove selected test classes " +
+	public static final String DIALOG_REMOVE_CLASSES_TITLE = "Remove classes"; 
+	public static final String DIALOG_REMOVE_CLASSES_MESSAGE = "This operation will remove selected test classes " +
+			"from the model. All generated test cases will be permanently deleted";
+	public static final String DIALOG_REMOVE_CLASS_TITLE = "Remove classes"; 
+	public static final String DIALOG_REMOVE_CLASS_MESSAGE = "This operation will remove this test class " +
 			"from the model. All generated test cases will be permanently deleted";
 	public static final String DIALOG_REMOVE_TEST_CASES_TITLE = "Remove test cases";
 	public static final String DIALOG_REMOVE_TEST_CASES_MESSAGE = "Delete selected test cases?";
@@ -26,5 +29,10 @@ public class DialogStrings {
 	public static final String DIALOG_TEST_SUITE_NAME_PROBLEM_TITLE = "Wrong test suite name";
 	public static final String DIALOG_TEST_SUITE_NAME_PROBLEM_MESSAGE = "Test suite name mus contain between 1 and 64 characters " +
 			"and may not contain only white characters";
+	public static final String DIALOG_CLASS_EXISTS_TITLE = "Class exists";
+	public static final String DIALOG_CLASS_EXISTS_MESSAGE = "Selected class is already contained in the model";
+	public static final String DIALOG_RENAME_MODEL_TITLE = "Rename model";
+	public static final String DIALOG_RENAME_MODEL_MESSAGE = "Enter new name for the model. This name has only aesthetic purposes, " +
+			"so feel free to provide any name you want.";
 
 }

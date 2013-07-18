@@ -9,7 +9,6 @@ import org.eclipse.jface.viewers.CheckboxTableViewer;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -204,8 +203,7 @@ public class ClassNodeDetailsPage extends GenericNodeDetailsPage{
 		methodsTable.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 		getToolkit().paintBordersFor(methodsTable);
 		
-		TableViewerColumn methodColumn = createTableViewerColumn(fMethodsViewer, "Method", 150, 0); 
-		methodColumn.setLabelProvider(new ColumnLabelProvider(){
+		createTableViewerColumn(fMethodsViewer, "Method", 150, new ColumnLabelProvider(){
 			@Override
 			public String getText(Object element){
 				MethodNode method = (MethodNode)element;

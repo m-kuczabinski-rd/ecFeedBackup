@@ -14,6 +14,8 @@ import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.ui.forms.IDetailsPage;
 import org.eclipse.ui.forms.IFormPart;
@@ -78,17 +80,9 @@ public class GenericNodeDetailsPage implements IDetailsPage, IModelUpdateListene
 
 	}
 	
-	protected TableViewerColumn createTableViewerColumn(TableViewer viewer, String title, int width, final int columnNumber) {
-		final TableViewerColumn viewerColumn = new TableViewerColumn(viewer, SWT.NONE);
-		final TableColumn column = viewerColumn.getColumn();
-		column.setText(title);
-		column.setWidth(width);
-		column.setResizable(true);
-		column.setMoveable(true);
-		
-		return viewerColumn;
+	protected Shell getActiveShell(){
+		return Display.getDefault().getActiveShell();
 	}
-
 	
 	protected Composite createMainComposite(Section section){
 		Composite composite = fToolkit.createComposite(section, SWT.NONE);
@@ -161,6 +155,8 @@ public class GenericNodeDetailsPage implements IDetailsPage, IModelUpdateListene
 		TableColumn column = viewerColumn.getColumn();
 		column.setWidth(width);
 		column.setText(name);
+		column.setResizable(true);
+		column.setMoveable(true);
 		viewerColumn.setLabelProvider(labelProvider);
 		return viewerColumn;
 	}

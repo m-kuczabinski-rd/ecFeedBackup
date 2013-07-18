@@ -1,24 +1,25 @@
 package com.testify.ecfeed.editors;
 
 import org.eclipse.jdt.core.IType;
+import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.forms.IFormPart;
 import org.eclipse.ui.forms.widgets.Section;
+import org.eclipse.wb.swt.TableViewerColumnSorter;
 
 import com.testify.ecfeed.constants.DialogStrings;
+import com.testify.ecfeed.dialogs.RenameModelDialog;
 import com.testify.ecfeed.dialogs.TestClassSelectionDialog;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.ClassNode;
@@ -50,19 +51,19 @@ public class RootNodeDetailsPage extends GenericNodeDetailsPage{
 					updateModel(fSelectedNode);
 				}
 				else{
-					MessageDialog infoDialog = new MessageDialog(Display.getDefault().getActiveShell(), 
-							"Class exists", Display.getDefault().getSystemImage(SWT.ICON_INFORMATION), 
-							"Selected class is already contained in the model", MessageDialog.INFORMATION
-							, new String[] {"OK"}, 0);
+					MessageDialog infoDialog = new MessageDialog(getActiveShell(), 
+							DialogStrings.DIALOG_CLASS_EXISTS_TITLE, Display.getDefault().getSystemImage(SWT.ICON_INFORMATION), 
+							DialogStrings.DIALOG_CLASS_EXISTS_MESSAGE, MessageDialog.INFORMATION, 
+							new String[] {IDialogConstants.OK_LABEL}, 0);
 					infoDialog.open();
 				}
 			}
 		}
 
 		private IType selectClass() {
-			TestClassSelectionDialog dialog = new TestClassSelectionDialog(Display.getDefault().getActiveShell());
+			TestClassSelectionDialog dialog = new TestClassSelectionDialog(getActiveShell());
 			
-			if (dialog.open() == Window.OK) {
+			if (dialog.open() == IDialogConstants.OK_ID) {
 				return (IType)dialog.getFirstResult();
 			}
 			return null;
@@ -72,10 +73,13 @@ public class RootNodeDetailsPage extends GenericNodeDetailsPage{
 	private class RemoveClassesButtonSelectionAdapter extends SelectionAdapter{
 		@Override
 		public void widgetSelected(SelectionEvent e) {
-			MessageDialog infoDialog = new MessageDialog(Display.getDefault().getActiveShell(), 
-					"Class exists", Display.getDefault().getSystemImage(SWT.ICON_WARNING), 
-					DialogStrings.DIALOG_REMOVE_CLASS_MESSAGE, 
-					MessageDialog.QUESTION_WITH_CANCEL, new String[] {"OK", "Cancel"}, 0);
+			MessageDialog infoDialog = new MessageDialog(getActiveShell(), 
+					DialogStrings.DIALOG_REMOVE_CLASSES_TITLE, 
+					Display.getDefault().getSystemImage(SWT.ICON_WARNING), 
+					DialogStrings.DIALOG_REMOVE_CLASSES_MESSAGE, 
+					MessageDialog.QUESTION_WITH_CANCEL, 
+					new String[] {IDialogConstants.OK_LABEL, IDialogConstants.CANCEL_LABEL}, 
+					IDialogConstants.OK_ID);
 			if(infoDialog.open() == 0){
 				removeClasses(fClassesViewer.getCheckedElements());
 			}
@@ -92,9 +96,6 @@ public class RootNodeDetailsPage extends GenericNodeDetailsPage{
 	}
 
 
-	/**
-	 * @wbp.parser.constructor
-	 */
 	public RootNodeDetailsPage(ModelMasterDetailsBlock parentBlock){
 		super(parentBlock);
 	}
@@ -107,13 +108,14 @@ public class RootNodeDetailsPage extends GenericNodeDetailsPage{
 		parent.setLayout(new FillLayout());
 		fMainSection = fToolkit.createSection(parent, Section.TITLE_BAR);
 
-		Composite composite = fToolkit.createComposite(fMainSection, SWT.NONE);
-		fToolkit.paintBordersFor(composite);
-		fMainSection.setClient(composite);
-		composite.setLayout(new GridLayout(1, true));
+		Composite mainComposite = fToolkit.createComposite(fMainSection, SWT.NONE);
+		fToolkit.paintBordersFor(mainComposite);
+		fMainSection.setClient(mainComposite);
+		mainComposite.setLayout(new GridLayout(1, true));
 		
-		createClassListViewer(composite);
-		createBottomButtons(composite);
+		createClassListViewer(mainComposite);
+		createBottomButtons(mainComposite);
+		createTextClientComposite(fMainSection);
 	}
 
 	private void createClassListViewer(Composite composite) {
@@ -130,39 +132,56 @@ public class RootNodeDetailsPage extends GenericNodeDetailsPage{
 		table.setLinesVisible(true);
 		fToolkit.paintBordersFor(table);
 
-		createClassListTableColumns(composite, fClassesViewer);
-	}
-
-	private void createClassListTableColumns(Composite composite, TableViewer viewer) {
-		TableViewerColumn column = createTableViewerColumn(viewer, "Class", 150, 0);
-		column.setLabelProvider(new ColumnLabelProvider(){
+		TableViewerColumn classViewerColumn = 
+				createTableViewerColumn(fClassesViewer, "Class", 150, new ColumnLabelProvider(){
 			@Override
 			public String getText(Object element){
 				return ((ClassNode)element).getLocalName();
 			}
 		});
-		
-		column = createTableViewerColumn(viewer, "Qualified name", 150, 0);
-		column.setLabelProvider(new ColumnLabelProvider(){
+		new TableViewerColumnSorter(classViewerColumn) {
+			protected Object getValue(Object o) {
+				return ((ClassNode)o).getLocalName();
+			}
+		};
+
+		TableViewerColumn qualifiedNameViewerColumn = 
+				createTableViewerColumn(fClassesViewer, "Qualified name", 150, new ColumnLabelProvider(){
 			@Override
 			public String getText(Object element){
 				return ((ClassNode)element).getQualifiedName();
 			}
 		});
-		
+		new TableViewerColumnSorter(qualifiedNameViewerColumn) {
+			protected Object getValue(Object o) {
+				return ((ClassNode)o).getLocalName();
+			}
+		};
 	}
 
 	private void createBottomButtons(Composite composite) {
 		Composite bottomButtonsComposite = fToolkit.createComposite(composite, SWT.FILL);
-		bottomButtonsComposite.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1));
 		bottomButtonsComposite.setLayout(new GridLayout(2, false));
+		bottomButtonsComposite.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1));
 		
-		Button addTestClassButton = new Button(bottomButtonsComposite, SWT.NONE);
-		addTestClassButton.setText("Add Test Class...");
-		addTestClassButton.addSelectionListener(new AddTestClassButtonSelectionAdapter());
-		Button removeClassesButton = new Button(bottomButtonsComposite, SWT.NONE);
-		removeClassesButton.setText("Remove selected classes");
-		removeClassesButton.addSelectionListener(new RemoveClassesButtonSelectionAdapter());
+		createButton(bottomButtonsComposite, "Add Test Class...", new AddTestClassButtonSelectionAdapter());
+		createButton(bottomButtonsComposite, "Remove selected classes", new RemoveClassesButtonSelectionAdapter());
+	}
+
+	private void createTextClientComposite(Section parentSection) {
+		Composite textClient = new Composite(parentSection, SWT.NONE);
+		textClient.setLayout(new FillLayout());
+		createButton(textClient, "Rename...", new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e){
+				RenameModelDialog dialog = new RenameModelDialog(Display.getDefault().getActiveShell(), fSelectedNode);
+				if(dialog.open() == IDialogConstants.OK_ID){
+					fSelectedNode.setName(dialog.getNewName());
+					updateModel(fSelectedNode);
+				}
+			}
+		});
+		parentSection.setTextClient(textClient);
 	}
 
 	@Override

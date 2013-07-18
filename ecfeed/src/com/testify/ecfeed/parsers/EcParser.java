@@ -26,6 +26,7 @@ public class EcParser {
 			}
 		} catch (IOException|ParsingException e) {
 			System.out.println("Exception: " + e.getMessage());
+			return null;
 		} 
 		return root;
 	}
@@ -131,27 +132,27 @@ public class EcParser {
 
 	private Object parseValue(String valueString, String type) {
 		switch(type){
-		case "boolean":
+		case Constants.BOOLEAN_TYPE_NAME:
 			return Boolean.parseBoolean(valueString);
-		case "byte":
+		case Constants.BYTE_TYPE_NAME:
 			return Byte.parseByte(valueString);
-		case "char":
+		case Constants.CHAR_TYPE_NAME:
 			if (valueString.length() <= 0){
 				return null;
 			}
 			int intValue = Integer.parseInt(valueString);
 			return (char)intValue;
-		case "double":
+		case Constants.DOUBLE_TYPE_NAME:
 			return Double.parseDouble(valueString);
-		case "float":
+		case Constants.FLOAT_TYPE_NAME:
 			return Float.parseFloat(valueString);
-		case "int":
+		case Constants.INT_TYPE_NAME:
 			return Integer.parseInt(valueString);
-		case "long":
+		case Constants.LONG_TYPE_NAME:
 			return Long.parseLong(valueString);
-		case "short":
+		case Constants.SHORT_TYPE_NAME:
 			return Short.parseShort(valueString);
-		case "String":
+		case Constants.STRING_TYPE_NAME:
 			return valueString.equals(Constants.NULL_VALUE_STRING_REPRESENTATION)?null:valueString;
 		default:
 			return null;
