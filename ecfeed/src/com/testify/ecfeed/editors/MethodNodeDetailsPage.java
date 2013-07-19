@@ -30,6 +30,7 @@ import com.testify.ecfeed.constants.DialogStrings;
 import com.testify.ecfeed.dialogs.RemoveTestSuiteDialog;
 import com.testify.ecfeed.dialogs.RenameTestSuiteDialog;
 import com.testify.ecfeed.dialogs.TestCaseSettingsDialog;
+import com.testify.ecfeed.dialogs.TestMethodRenameDialog;
 import com.testify.ecfeed.model.CategoryNode;
 
 import com.testify.ecfeed.model.MethodNode;
@@ -51,10 +52,7 @@ public class MethodNodeDetailsPage extends GenericNodeDetailsPage{
 	public MethodNodeDetailsPage(ModelMasterDetailsBlock parentBlock){
 		super(parentBlock);
 	}
-	/**
-	 * Create contents of the details page.
-	 * @param parent
-	 */
+
 	public void createContents(Composite parent) {
 		parent.setLayout(new FillLayout(SWT.HORIZONTAL));
 		fMainSection = getToolkit().createSection(parent, Section.TITLE_BAR);
@@ -67,13 +65,14 @@ public class MethodNodeDetailsPage extends GenericNodeDetailsPage{
 		fMainSection.setClient(mainComposite);
 		mainComposite.setLayout(new GridLayout(1, false));
 		
-		createMethodameComposite(mainComposite);
+		createMethodNameComposite(mainComposite);
 		
 		createParametersSection(mainComposite);
 
 		createTestCasesSection(mainComposite);
 	}
-	private void createMethodameComposite(Composite composite) {
+
+	private void createMethodNameComposite(Composite composite) {
 		Composite methodNameComposite = new Composite(composite, SWT.NONE);
 		methodNameComposite.setLayout(new GridLayout(2, false));
 		methodNameComposite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
@@ -84,8 +83,22 @@ public class MethodNodeDetailsPage extends GenericNodeDetailsPage{
 		fMethodNameLabel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		getToolkit().adapt(fMethodNameLabel, true, true);
 		
-		Button changeButton = getToolkit().createButton(methodNameComposite, "Change", SWT.NONE);
-		changeButton.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
+		createButton(methodNameComposite, "Change", new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e){
+				TestMethodRenameDialog dialog = new TestMethodRenameDialog(getActiveShell(), fSelectedNode);
+				if(dialog.open() == IDialogConstants.OK_ID){
+					MethodNode selectedMethod = dialog.getSelectedMethod();
+					fSelectedNode.setName(selectedMethod.getName());
+					Vector<CategoryNode> parameters = fSelectedNode.getCategories();
+					Vector<CategoryNode> newParameters = selectedMethod.getCategories();
+					for(int i = 0; i < parameters.size(); i++){
+						parameters.elementAt(i).setName(newParameters.elementAt(i).getName());
+					}
+					updateModel(fSelectedNode);
+				}
+			}
+		});
 	}
 
 	private void createParametersSection(Composite composite) {
@@ -118,22 +131,13 @@ public class MethodNodeDetailsPage extends GenericNodeDetailsPage{
 	}
 	
 	private void createParametersColumns() {
-		TableViewerColumn parameterNameViewerColumn = new TableViewerColumn(fParametersViewer, SWT.NONE);
-		TableColumn parameterNameColumn = parameterNameViewerColumn.getColumn();
-		parameterNameColumn.setWidth(100);
-		parameterNameColumn.setText("Name");
-		parameterNameViewerColumn.setLabelProvider(new ColumnLabelProvider(){
+		createTableViewerColumn(fParametersViewer, "Name", 100, new ColumnLabelProvider(){
 			@Override
 			public String getText(Object element){
 				return ((CategoryNode)element).getName();
 			}
 		});
-		
-		TableViewerColumn parameterTypeViewerColumn = new TableViewerColumn(fParametersViewer, SWT.NONE);
-		TableColumn parameterTypeColumn = parameterTypeViewerColumn.getColumn();
-		parameterTypeColumn.setWidth(100);
-		parameterTypeColumn.setText("Type");
-		parameterTypeViewerColumn.setLabelProvider(new ColumnLabelProvider(){
+		createTableViewerColumn(fParametersViewer, "Type", 100, new ColumnLabelProvider(){
 			@Override
 			public String getText(Object element){
 				return ((CategoryNode)element).getType();
@@ -167,24 +171,21 @@ public class MethodNodeDetailsPage extends GenericNodeDetailsPage{
 		testCasesTable.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 		getToolkit().paintBordersFor(testCasesTable);
 		
-		TableViewerColumn testSuiteViewerColumn = new TableViewerColumn(fTestCasesViewer, SWT.NONE);
-		new TableViewerColumnSorter(testSuiteViewerColumn) {
-			protected Object getValue(Object o) {
-				return ((TestCaseNode)o).getName();
-			}
-		};
-		testSuiteViewerColumn.setLabelProvider(new ColumnLabelProvider(){
+		TableViewerColumn testSuiteViewerColumn = createTableViewerColumn(fTestCasesViewer, "Test Suite", 
+				130, new ColumnLabelProvider(){
 			@Override
 			public String getText(Object element){
 				return ((TestCaseNode)element).getName();
 			}
 		});
-		TableColumn testSuiteColumn = testSuiteViewerColumn.getColumn();
-		testSuiteColumn.setWidth(130);
-		testSuiteColumn.setText("Test Suite");
 		
-		TableViewerColumn valuesViewerColumn = new TableViewerColumn(fTestCasesViewer, SWT.NONE);
-		valuesViewerColumn.setLabelProvider(new ColumnLabelProvider(){
+		new TableViewerColumnSorter(testSuiteViewerColumn) {
+			protected Object getValue(Object o) {
+				return ((TestCaseNode)o).getName();
+			}
+		};
+
+		createTableViewerColumn(fTestCasesViewer, "Parameter Values", 100, new ColumnLabelProvider(){
 			@Override
 			public String getText(Object element){
 				String result = "[";
@@ -200,11 +201,6 @@ public class MethodNodeDetailsPage extends GenericNodeDetailsPage{
 				return result;
 			}
 		});
-		TableColumn valuesColumn = valuesViewerColumn.getColumn();
-		valuesColumn.setWidth(100);
-		valuesColumn.setText("Parameter Values");
-		
-		
 	}
 	
 	private void createTestCasesSectionButtons(Composite testCasesComposite) {
@@ -226,9 +222,7 @@ public class MethodNodeDetailsPage extends GenericNodeDetailsPage{
 	}
 	
 	private void createAddTestCaseButton(Composite testCasesButonsComposite) {
-		Button addTestCaseButton = getToolkit().createButton(testCasesButonsComposite, "Add Test Case", SWT.NONE);
-		addTestCaseButton.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
-		addTestCaseButton.addSelectionListener(new SelectionAdapter() {
+		Button button = createButton(testCasesButonsComposite, "Add Test Case", new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e){
 				TestCaseSettingsDialog dialog = 
@@ -241,12 +235,11 @@ public class MethodNodeDetailsPage extends GenericNodeDetailsPage{
 				}
 			}
 		});
+		button.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
 	}
 	
 	private void createRenameSuiteButton(Composite testCasesButonsComposite) {
-		Button renameSuiteButton = getToolkit().createButton(testCasesButonsComposite, "Rename suite...", SWT.NONE);
-		renameSuiteButton.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
-		renameSuiteButton.addSelectionListener(new SelectionAdapter() {
+		Button button = createButton(testCasesButonsComposite, "Rename Suite...", new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e){
 				RenameTestSuiteDialog dialog = 
@@ -264,65 +257,50 @@ public class MethodNodeDetailsPage extends GenericNodeDetailsPage{
 				}
 			}
 		});
+		button.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
 	}
 	
-	private void createGenerateTestSuiteButton(
-			Composite testCasesButonsComposite) {
-		Button generateTestSuiteButton = new Button(testCasesButonsComposite, SWT.NONE);
-		generateTestSuiteButton.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
-		getToolkit().adapt(generateTestSuiteButton, true, true);
-		generateTestSuiteButton.setText("Generate Test Suite");
+	private void createGenerateTestSuiteButton(Composite testCasesButonsComposite) {
+		Button button = createButton(testCasesButonsComposite, "Generate Test Suite", new SelectionAdapter() {
+		});
+		button.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
 	}
 	
 	private void createRemoveSelectedButton(Composite testCasesButonsComposite) {
-		Button removeSelectedButton = new Button(testCasesButonsComposite, SWT.NONE);
-		removeSelectedButton.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
-		getToolkit().adapt(removeSelectedButton, true, true);
-		removeSelectedButton.setText("Remove Selected");
-		removeSelectedButton.addSelectionListener(new SelectionAdapter() {
+		Button button = createButton(testCasesButonsComposite, "Remove Selected", new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				MessageDialog infoDialog = new MessageDialog(Display.getDefault().getActiveShell(), 
 						DialogStrings.DIALOG_REMOVE_TEST_CASES_TITLE, Display.getDefault().getSystemImage(SWT.ICON_QUESTION), 
 						DialogStrings.DIALOG_REMOVE_TEST_CASES_MESSAGE,
-						MessageDialog.QUESTION_WITH_CANCEL, new String[] {"OK", "Cancel"}, 0);
-				if(infoDialog.open() == 0){
-					removeTestCases(fTestCasesViewer.getCheckedElements());
+						MessageDialog.QUESTION_WITH_CANCEL, 
+						new String[] {IDialogConstants.OK_LABEL, IDialogConstants.CANCEL_LABEL}, IDialogConstants.OK_ID);
+				if(infoDialog.open() == IDialogConstants.OK_ID){
+					for(Object testCase : fTestCasesViewer.getCheckedElements()){
+						fSelectedNode.removeChild((TestCaseNode)testCase);
+						fTestCasesViewer.setAllChecked(false);
+					}
 					updateModel((RootNode)fSelectedNode.getRoot());
 				}
 			}
-
-			private void removeTestCases(Object[] checkedElements) {
-				for(Object testCase : checkedElements){
-					fSelectedNode.removeChild((TestCaseNode)testCase);
-				}
-			}
 		});
-
+		button.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
 	}
 	
 	private void createRemoveTestSuitesButton(Composite testCasesButonsComposite) {
-		Button removeTestSuiteButton = new Button(testCasesButonsComposite, SWT.NONE);
-		removeTestSuiteButton.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
-		getToolkit().adapt(removeTestSuiteButton, true, true);
-		removeTestSuiteButton.setText("Remove Suites...");
-		removeTestSuiteButton.addSelectionListener(new SelectionAdapter() {
+		Button button = createButton(testCasesButonsComposite, "Remove Suites...", new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				RemoveTestSuiteDialog dialog = new RemoveTestSuiteDialog(Display.getDefault().getActiveShell(), fSelectedNode.getTestSuites());
 				if(dialog.open() == IDialogConstants.OK_ID){
-					removeTestSuites(dialog.getCheckedElements());
+					for(Object suite : dialog.getCheckedElements()){
+						fSelectedNode.removeTestSuite((String)suite);
+					}
 					updateModel((RootNode)fSelectedNode.getRoot());
 				}
 			}
-
-			private void removeTestSuites(Object[] suites) {
-				for(Object suite : suites){
-					fSelectedNode.removeTestSuite((String)suite);
-				}
-				
-			}
 		});
+		button.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
 	}
 	
 	public void selectionChanged(IFormPart part, ISelection selection) {

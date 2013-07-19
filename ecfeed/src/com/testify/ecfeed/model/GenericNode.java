@@ -25,7 +25,15 @@ public class GenericNode {
 	protected void addChild(GenericNode child){
 		addChild(fChildren.size(), child);
 	}
-	
+
+	//TODO Unit tests
+	public void addChild(int index, GenericNode child) {
+		if(!isParent(child)){
+			fChildren.add(index, child);
+			child.setParent(this);
+		}
+	}
+
 	//Should not be used explicitly
 	void setParent(GenericNode newParent) {
 		fParent = newParent;
@@ -88,7 +96,7 @@ public class GenericNode {
 	}
 
 	public boolean removeChild(GenericNode child) {
-		boolean result = getChildren().remove(child);
+		boolean result = fChildren.remove(child);
 		if(result){
 			child.setParent(null);
 		}
@@ -100,7 +108,7 @@ public class GenericNode {
 	}
 	
 	protected boolean isParent(GenericNode potentialChild){
-		for(GenericNode child : getChildren()){
+		for(GenericNode child : fChildren){
 			if(child == potentialChild){
 				return true;
 			}
@@ -110,19 +118,11 @@ public class GenericNode {
 
 	//TODO unit tests
 	public GenericNode getChild(String name) {
-		for(GenericNode child : getChildren()){
+		for(GenericNode child : fChildren){
 			if (name.equals(child.getName())){
 				return child;
 			}
 		}
 		return null;
-	}
-
-	//TODO Unit tests
-	public void addChild(int index, GenericNode child) {
-		if(!isParent(child)){
-			fChildren.add(index, child);
-			child.setParent(this);
-		}
 	}
 }

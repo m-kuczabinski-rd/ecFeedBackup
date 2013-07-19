@@ -35,4 +35,12 @@ public class TestCaseNode extends GenericNode {
 		
 		return result;
 	}
+	
+	@Override
+	public boolean equals(Object obj){
+		if(obj instanceof TestCaseNode == false) return false;
+		TestCaseNode testCase = (TestCaseNode)obj;
+		if (getTestData().equals(testCase.getTestData()) == false) return false;
+		return super.equals(obj);
+	}
 }

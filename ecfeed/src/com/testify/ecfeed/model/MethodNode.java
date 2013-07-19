@@ -18,7 +18,7 @@ public class MethodNode extends GenericNode {
 	//TODO Unit tests 
 	public void addCategory(CategoryNode category){
 		fCategories.add(category);
-		super.addChild(fCategories.size() - 1, category);
+		super.addChild(category);
 	}
 
 	//TODO unit tests 
@@ -34,11 +34,11 @@ public class MethodNode extends GenericNode {
 	public Vector<TestCaseNode> getTestCases(){
 		return fTestCases;
 	}
-
+	
 	//TODO unit tests
 	public Set<String> getTestSuites(){
 		Set<String> testSuites = new HashSet<String>();
-		for(TestCaseNode testCase : fTestCases){
+		for(TestCaseNode testCase : getTestCases()){
 			testSuites.add(testCase.getName());
 		}
 		return testSuites;
@@ -48,8 +48,11 @@ public class MethodNode extends GenericNode {
 	public String toString(){
 		String result = new String(getName()) + "(";
 		Vector<String> types = getParameterTypes();
+		Vector<String> names = getParameterNames();
 		for(int i = 0; i < types.size(); i++){
 			result += types.elementAt(i);
+			result += " ";
+			result += names.elementAt(i);
 			if(i < types.size() - 1) result += ", ";
 		}
 		result += ")";
@@ -64,6 +67,14 @@ public class MethodNode extends GenericNode {
 		return super.equals((MethodNode)obj);
 	}
 
+	@Override
+	public Vector<GenericNode> getChildren(){
+		Vector<GenericNode> children = new Vector<GenericNode>();
+		children.addAll(fCategories);
+		children.addAll(fTestCases);
+		return children;
+	}
+	
 	//TODO unit tests
 	public boolean removeChild(TestCaseNode testCase){
 		fTestCases.remove(testCase);
@@ -75,8 +86,8 @@ public class MethodNode extends GenericNode {
 		fCategories.remove(category);
 		return super.removeChild(category);
 	}
-	
-	private Vector<String> getParameterTypes() {
+
+	public Vector<String> getParameterTypes() {
 		Vector<String> types = new Vector<String>();
 		for(CategoryNode category : getCategories()){
 			types.add(category.getType());
@@ -84,10 +95,18 @@ public class MethodNode extends GenericNode {
 		return types;
 	}
 
+	public Vector<String> getParameterNames() {
+		Vector<String> types = new Vector<String>();
+		for(CategoryNode category : getCategories()){
+			types.add(category.getName());
+		}
+		return types;
+	}
+
 	//TODO unit tests
 	public Collection<TestCaseNode> getTestCases(String testSuite) {
 		Vector<TestCaseNode> testCases = new Vector<TestCaseNode>();
-		for(TestCaseNode testCase : fTestCases){
+		for(TestCaseNode testCase : getTestCases()){
 			if(testSuite.equals(testCase.getName())){
 				testCases.add(testCase);
 			}
@@ -101,6 +120,5 @@ public class MethodNode extends GenericNode {
 		fTestCases.removeAll(testCases);
 		super.removeChildren(testCases);
 		return testCases;
-	}
-	
+	}	
 }

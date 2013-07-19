@@ -16,6 +16,8 @@ import org.eclipse.ui.dialogs.ElementTreeSelectionDialog;
 import org.eclipse.ui.dialogs.ISelectionStatusValidator;
 import org.eclipse.ui.model.WorkbenchLabelProvider;
 
+import com.testify.ecfeed.constants.DialogStrings;
+
 public class TestClassSelectionDialog extends ElementTreeSelectionDialog {
 
     private static final IStatus OK = new Status(IStatus.OK, "com.testify.ecfeed", "");
@@ -38,8 +40,8 @@ public class TestClassSelectionDialog extends ElementTreeSelectionDialog {
 				return children.toArray();
 			}
 		});
-		setTitle("Test class selection");
-		setMessage("Select test class to add to the model");
+		setTitle(DialogStrings.DIALOG_TEST_CLASS_SELECTION_TITLE);
+		setMessage(DialogStrings.DIALOG_TEST_CLASS_SELECTION_MESSAGE);
 		setInput(JavaCore.create(ResourcesPlugin.getWorkspace().getRoot()));
 		
 		setValidator(fTestClassSelectionValidator);

@@ -65,7 +65,6 @@ public class RemoveTestSuiteDialog extends TitleAreaDialog {
 		testSuiteColumn.setText("Test suite");
 		
 		fTestSuitesViewer.setInput(fTestSuites);
-		System.out.println(fTestSuites);
 
 		return area;
 	}

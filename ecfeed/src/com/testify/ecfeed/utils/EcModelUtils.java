@@ -30,7 +30,7 @@ public class EcModelUtils {
 	 * @param parent Parent for which the name is validated
 	 * @param partition Partition for which the name is validated. May be null
 	 * @return
-	 */
+	 */ 
 	public static boolean validatePartitionName(String name, CategoryNode parent, PartitionNode partition){
 		if (name == null) return false;
 		if(name.length() == 0) return false;
@@ -197,6 +197,23 @@ public class EcModelUtils {
 		return diff(model.getMethods(), classNode.getMethods());
 	}
 	
+	/**
+	 * Returns method not contained in the parent class node that have the same set of parameter types
+	 * @param method MethodNode for which the compatible sibling methods are searched for
+	 * @return
+	 */
+	public static Vector<MethodNode> getCompatibleMethods(MethodNode method) {
+		ClassNode parent = (ClassNode)method.getParent();
+		Vector<MethodNode> potentialMatches = getNotContainedMethods(parent, parent.getQualifiedName());
+		Vector<MethodNode> matches = new Vector<MethodNode>();
+		for(MethodNode potentialMatch : potentialMatches){
+			if (potentialMatch.getParameterTypes().equals(method.getParameterTypes())){
+				matches.add(potentialMatch);
+			}
+		}
+		return matches;
+	}
+
 	/**
 	 * Returns elements in v1 that are not mentioned in v2 by checking toString() value; 
 	 */
@@ -386,6 +403,4 @@ public class EcModelUtils {
 		partitions.add(new PartitionNode("all latin", "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"));
 		return partitions;
 	}
-
-
 }

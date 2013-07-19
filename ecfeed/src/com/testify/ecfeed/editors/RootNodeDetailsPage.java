@@ -29,7 +29,6 @@ import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.jface.viewers.CheckboxTableViewer;
-import org.eclipse.jface.window.Window;
 import org.eclipse.swt.layout.GridData;
 
 public class RootNodeDetailsPage extends GenericNodeDetailsPage{
