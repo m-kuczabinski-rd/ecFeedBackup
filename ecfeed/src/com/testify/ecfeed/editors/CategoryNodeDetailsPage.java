@@ -1,5 +1,6 @@
 package com.testify.ecfeed.editors;
 
+import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.CellEditor;
@@ -20,14 +21,11 @@ import org.eclipse.ui.forms.widgets.ExpandableComposite;
 import org.eclipse.ui.forms.widgets.Section;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.layout.RowLayout;
-import org.eclipse.swt.widgets.Button;
 
 import com.testify.ecfeed.constants.Constants;
 import com.testify.ecfeed.constants.DialogStrings;
@@ -69,12 +67,13 @@ public class CategoryNodeDetailsPage extends GenericNodeDetailsPage implements I
 
 		@Override
 		protected void setValue(Object element, Object value) {
-			if(EcModelUtils.validatePartitionName((String)value, fSelectedNode, (PartitionNode)element)){
-				MessageDialog dialog = new MessageDialog(Display.getDefault().getActiveShell(), 
+			if(!EcModelUtils.validatePartitionName((String)value, fSelectedNode, (PartitionNode)element)){
+				MessageDialog dialog = new MessageDialog(getActiveShell(), 
 						DialogStrings.DIALOG_PARTITION_NAME_PROBLEM_TITLE, 
 						Display.getDefault().getSystemImage(SWT.ICON_ERROR), 
 						DialogStrings.DIALOG_PARTITION_NAME_PROBLEM_MESSAGE,
-						MessageDialog.ERROR, new String[] {"OK"}, 0);
+						MessageDialog.ERROR, 
+						new String[] {IDialogConstants.OK_LABEL}, IDialogConstants.OK_ID);
 				dialog.open();
 			}
 			else{
@@ -111,11 +110,12 @@ public class CategoryNodeDetailsPage extends GenericNodeDetailsPage implements I
 		protected void setValue(Object element, Object value) {
 			String valueString = (String)value;
 			if(!EcModelUtils.validatePartitionStringValue(valueString, fSelectedNode)){
-				MessageDialog dialog = new MessageDialog(Display.getDefault().getActiveShell(), 
+				MessageDialog dialog = new MessageDialog(getActiveShell(), 
 						DialogStrings.DIALOG_PARTITION_VALUE_PROBLEM_TITLE, 
 						Display.getDefault().getSystemImage(SWT.ICON_ERROR), 
 						DialogStrings.DIALOG_PARTITION_VALUE_PROBLEM_MESSAGE,
-						MessageDialog.ERROR, new String[] {"OK"}, 0);
+						MessageDialog.ERROR, 
+						new String[] {IDialogConstants.OK_LABEL}, IDialogConstants.OK_ID);
 				dialog.open();
 			}
 			else{
@@ -143,15 +143,20 @@ public class CategoryNodeDetailsPage extends GenericNodeDetailsPage implements I
 				ExpandableComposite.EXPANDED | ExpandableComposite.TITLE_BAR);
 		fMainSection.setText("Empty Section");
 		//
-		Composite composite = fToolkit.createComposite(fMainSection, SWT.NONE);
-		fToolkit.paintBordersFor(composite);
-		fMainSection.setClient(composite);
-		composite.setLayout(new GridLayout(1, false));
+		Composite mainComposite = fToolkit.createComposite(fMainSection, SWT.NONE);
+		fToolkit.paintBordersFor(mainComposite);
+		fMainSection.setClient(mainComposite);
+		mainComposite.setLayout(new GridLayout(1, false));
+
+		fToolkit.createLabel(mainComposite, "Partitions");
 		
-		Label lblPartitons = new Label(composite, SWT.NONE);
-		fToolkit.adapt(lblPartitons, true, true);
-		lblPartitons.setText("Partitons");
+		createPartitionViewer(mainComposite);
 		
+		createBottomButtons(mainComposite);
+
+	}
+
+	private void createPartitionViewer(Composite composite) {
 		fPartitionsViewer = CheckboxTableViewer.newCheckList(composite, SWT.BORDER | SWT.FULL_SELECTION);
 		fPartitionsViewer.setContentProvider(new ArrayContentProvider());
 		fPartitionsViewer.addDoubleClickListener(new ChildrenViewerDoubleClickListener());
@@ -161,11 +166,8 @@ public class CategoryNodeDetailsPage extends GenericNodeDetailsPage implements I
 		fPartitionsTable.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 		fToolkit.paintBordersFor(fPartitionsTable);
 		
-		TableViewerColumn nameViewerColumn = new TableViewerColumn(fPartitionsViewer, SWT.NONE);
-		TableColumn partitionNameColumn = nameViewerColumn.getColumn();
-		partitionNameColumn.setWidth(190);
-		partitionNameColumn.setText("Partition name");
-		nameViewerColumn.setLabelProvider(new ColumnLabelProvider(){
+		TableViewerColumn nameViewerColumn = createTableViewerColumn(fPartitionsViewer, "Partition name", 
+				190, new ColumnLabelProvider(){
 			@Override
 			public String getText(Object element){
 				return ((PartitionNode)element).getName();
@@ -173,11 +175,8 @@ public class CategoryNodeDetailsPage extends GenericNodeDetailsPage implements I
 		});
 		nameViewerColumn.setEditingSupport(new PartitionNameEditingSupport(fPartitionsViewer));
 		
-		TableViewerColumn valueViewerColumn = new TableViewerColumn(fPartitionsViewer, SWT.NONE);
-		TableColumn valueColumn = valueViewerColumn.getColumn();
-		valueColumn.setWidth(100);
-		valueColumn.setText("Value");
-		valueViewerColumn.setLabelProvider(new ColumnLabelProvider(){
+		TableViewerColumn valueViewerColumn = createTableViewerColumn(fPartitionsViewer, "Value", 
+				100, new ColumnLabelProvider(){
 			@Override
 			public String getText(Object element){
 				Object partitionValue = ((PartitionNode)element).getValueString();
@@ -188,19 +187,18 @@ public class CategoryNodeDetailsPage extends GenericNodeDetailsPage implements I
 			}
 		});
 		valueViewerColumn.setEditingSupport(new PartitionValueEditingSupport(fPartitionsViewer));
-		
+	}
+
+	private void createBottomButtons(Composite composite) {
 		Composite buttonsComposite = new Composite(composite, SWT.NONE);
 		fToolkit.adapt(buttonsComposite);
 		fToolkit.paintBordersFor(buttonsComposite);
 		buttonsComposite.setLayout(new RowLayout(SWT.HORIZONTAL));
-
-		Button addPartitionButton = new Button(buttonsComposite, SWT.NONE);
-		fToolkit.adapt(addPartitionButton, true, true);
-		addPartitionButton.setText("Add Partition...");
-		addPartitionButton.addSelectionListener(new SelectionAdapter() {
+	
+		createButton(buttonsComposite, "Add Partition...", new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e){
-				PartitionSettingsDialog dialog = new PartitionSettingsDialog(Display.getDefault().getActiveShell(), 
+				PartitionSettingsDialog dialog = new PartitionSettingsDialog(getActiveShell(), 
 						fSelectedNode, null);
 				if(dialog.open() == Window.OK){
 					String partitionName = dialog.getPartitionName();
@@ -210,14 +208,11 @@ public class CategoryNodeDetailsPage extends GenericNodeDetailsPage implements I
 				}
 			}
 		});
-
-		Button removeSelectedButton = new Button(buttonsComposite, SWT.NONE);
-		fToolkit.adapt(removeSelectedButton, true, true);
-		removeSelectedButton.setText("Remove Selected");
-		removeSelectedButton.addSelectionListener(new SelectionAdapter() {
+	
+		createButton(buttonsComposite, "Remove Selected", new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e){
-				MessageDialog dialog = new MessageDialog(Display.getDefault().getActiveShell(), 
+				MessageDialog dialog = new MessageDialog(getActiveShell(), 
 						DialogStrings.DIALOG_REMOVE_PARTITIONS_TITLE, 
 						Display.getDefault().getSystemImage(SWT.ICON_WARNING), 
 						DialogStrings.DIALOG_REMOVE_PARTITIONS_MESSAGE,
@@ -231,7 +226,6 @@ public class CategoryNodeDetailsPage extends GenericNodeDetailsPage implements I
 				}
 			}
 		});
-
 	}
 
 	public void selectionChanged(IFormPart part, ISelection selection) {
