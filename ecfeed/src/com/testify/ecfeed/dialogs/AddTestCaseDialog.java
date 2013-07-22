@@ -68,27 +68,14 @@ public class AddTestCaseDialog extends TitleAreaDialog implements ISetValueListe
 		container.setLayout(new GridLayout(1, false));
 		container.setLayoutData(new GridData(GridData.FILL_BOTH));
 		
-		Composite composite = new Composite(container, SWT.NONE);
-		composite.setLayout(new GridLayout(2, false));
-		composite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		createTestSuiteComposite(container);
 		
-		Label testSuiteLabel = new Label(composite, SWT.NONE);
-		testSuiteLabel.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
-		testSuiteLabel.setText("Test suite");
-		
-		ComboViewer testSuiteViewer = new ComboViewer(composite, SWT.NONE);
-		fTestSuiteCombo = testSuiteViewer.getCombo();
-		fTestSuiteCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
-		fTestSuiteCombo.setItems(fMethod.getTestSuites().toArray(new String[]{}));
-		fTestSuiteCombo.addModifyListener(new ModifyListener() {
-			@Override
-			public void modifyText(ModifyEvent e) {
-				validateTestSuiteName();
-			}
-		});
-		fTestSuiteCombo.setText(Constants.DEFAULT_TEST_SUITE_NAME);
+		createTestDataViewer(container);
 
-		
+		return area;
+	}
+
+	private void createTestDataViewer(Composite container) {
 		fTestDataViewer = new TableViewer(container, SWT.BORDER | SWT.FULL_SELECTION);
 		Table table = fTestDataViewer.getTable();
 		table.setLinesVisible(true);
@@ -131,8 +118,28 @@ public class AddTestCaseDialog extends TitleAreaDialog implements ISetValueListe
 
 		fTestDataViewer.setContentProvider(new ArrayContentProvider());
 		fTestDataViewer.setInput(fTestData);
+	}
 
-		return area;
+	private void createTestSuiteComposite(Composite container) {
+		Composite composite = new Composite(container, SWT.NONE);
+		composite.setLayout(new GridLayout(2, false));
+		composite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		
+		Label testSuiteLabel = new Label(composite, SWT.NONE);
+		testSuiteLabel.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
+		testSuiteLabel.setText("Test suite");
+		
+		ComboViewer testSuiteViewer = new ComboViewer(composite, SWT.NONE);
+		fTestSuiteCombo = testSuiteViewer.getCombo();
+		fTestSuiteCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		fTestSuiteCombo.setItems(fMethod.getTestSuites().toArray(new String[]{}));
+		fTestSuiteCombo.addModifyListener(new ModifyListener() {
+			@Override
+			public void modifyText(ModifyEvent e) {
+				validateTestSuiteName();
+			}
+		});
+		fTestSuiteCombo.setText(Constants.DEFAULT_TEST_SUITE_NAME);
 	}
 
 	/**
