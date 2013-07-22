@@ -13,8 +13,8 @@ import org.eclipse.ui.part.IPage;
 import org.eclipse.ui.views.contentoutline.ContentOutline;
 
 import com.testify.ecfeed.dialogs.PartitionSettingsDialog;
+import com.testify.ecfeed.editor.EcMultiPageEditor;
 import com.testify.ecfeed.editor.outline.EcContentOutlinePage;
-import com.testify.ecfeed.editors.EcMultiPageEditor;
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.RootNode;

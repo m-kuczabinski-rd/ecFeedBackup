@@ -7,8 +7,8 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.views.contentoutline.ContentOutlinePage;
 
-import com.testify.ecfeed.editors.EcMultiPageEditor;
-import com.testify.ecfeed.editors.IModelUpdateListener;
+import com.testify.ecfeed.editor.EcMultiPageEditor;
+import com.testify.ecfeed.editor.IModelUpdateListener;
 import com.testify.ecfeed.model.RootNode;
 
 public class EcContentOutlinePage extends ContentOutlinePage implements IModelUpdateListener{

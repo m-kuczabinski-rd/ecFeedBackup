@@ -1,4 +1,4 @@
-package com.testify.ecfeed.editors;
+package com.testify.ecfeed.editor.modeleditor;
 
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
@@ -19,6 +19,8 @@ import org.eclipse.ui.forms.widgets.Section;
 
 import org.eclipse.swt.layout.GridLayout;
 
+import com.testify.ecfeed.editor.EcMultiPageEditor;
+import com.testify.ecfeed.editor.IModelUpdateListener;
 import com.testify.ecfeed.editor.outline.EcContentProvider;
 import com.testify.ecfeed.editor.outline.EcLabelProvider;
 import com.testify.ecfeed.model.CategoryNode;

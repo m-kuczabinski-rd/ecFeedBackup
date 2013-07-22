@@ -3,7 +3,7 @@ package com.testify.ecfeed.editor.outline;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.TreeNodeContentProvider;
 
-import com.testify.ecfeed.editors.EcMultiPageEditor;
+import com.testify.ecfeed.editor.EcMultiPageEditor;
 import com.testify.ecfeed.model.GenericNode;
 import com.testify.ecfeed.model.RootNode;
 

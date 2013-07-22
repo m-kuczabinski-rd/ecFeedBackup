@@ -22,7 +22,7 @@ import org.eclipse.ui.model.WorkbenchLabelProvider;
 import org.eclipse.ui.part.FileEditorInput;
 
 import com.testify.ecfeed.constants.Constants;
-import com.testify.ecfeed.editors.EcMultiPageEditor;
+import com.testify.ecfeed.editor.EcMultiPageEditor;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.utils.EcModelUtils;

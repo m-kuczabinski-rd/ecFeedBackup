@@ -1,4 +1,4 @@
-package com.testify.ecfeed.editors;
+package com.testify.ecfeed.editor.modeleditor;
 
 import java.util.Vector;
 
@@ -27,6 +27,8 @@ import org.eclipse.ui.forms.widgets.Section;
 
 import com.testify.ecfeed.constants.DialogStrings;
 import com.testify.ecfeed.dialogs.TestClassSelectionDialog;
+import com.testify.ecfeed.editor.ColorConstants;
+import com.testify.ecfeed.editor.ColorManager;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.RootNode;
@@ -297,7 +299,7 @@ public class ClassNodeDetailsPage extends GenericNodeDetailsPage{
 		}
 		fObsoleteMethods = EcModelUtils.getObsoleteMethods(fSelectedNode, fSelectedNode.getQualifiedName());
 		fNotContainedMethods = EcModelUtils.getNotContainedMethods(fSelectedNode, fSelectedNode.getQualifiedName());
-		if(fNotContainedMethods.size() == 0){
+		if(fNotContainedMethods.size() == 0 && fOtherMethodsSectionCreated){
 			fOtherMethodsSection.dispose();
 			fOtherMethodsSectionCreated = false;
 		}

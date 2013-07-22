@@ -1,4 +1,4 @@
-package com.testify.ecfeed.editors;
+package com.testify.ecfeed.editor;
 
 
 import java.io.InputStream;
@@ -17,14 +17,15 @@ import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.part.FileEditorInput;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 
-import com.testify.ecfeed.editor.EcSourceViewer;
+import com.testify.ecfeed.editor.modeleditor.ModelPage;
 import com.testify.ecfeed.editor.outline.EcContentOutlinePage;
+import com.testify.ecfeed.editor.sourceviewer.SourceViewer;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.parsers.EcParser;
 
 public class EcMultiPageEditor extends FormEditor{
 
-	private EcSourceViewer fSourceViewer;
+	private SourceViewer fSourceViewer;
 	private EcContentOutlinePage fContentOutline;
 	private RootNode fModel;
 	private Set<IModelUpdateListener> fModelUpdateListeners;
@@ -89,7 +90,7 @@ public class EcMultiPageEditor extends FormEditor{
 	protected void addPages() {
 		int index;
 		try {
-			fSourceViewer = new EcSourceViewer(this);
+			fSourceViewer = new SourceViewer(this);
 			fSourceViewer.init(getEditorSite(), getEditorInput());
 
 			setPartName(getEditorInput().getName());
@@ -134,7 +135,7 @@ public class EcMultiPageEditor extends FormEditor{
 		return true;
 	}
 
-	public EcSourceViewer getSourceViewer() {
+	public SourceViewer getSourceViewer() {
 		return fSourceViewer;
 	}
 }
