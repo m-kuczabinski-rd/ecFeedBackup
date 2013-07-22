@@ -1,4 +1,4 @@
-package com.testify.ecfeed.editor.outline;
+package com.testify.ecfeed.editor.modeleditor;
 
 import java.net.URL;
 

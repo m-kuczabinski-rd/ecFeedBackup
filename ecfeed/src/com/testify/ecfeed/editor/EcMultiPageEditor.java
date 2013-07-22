@@ -18,7 +18,7 @@ import org.eclipse.ui.part.FileEditorInput;
 import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 
 import com.testify.ecfeed.editor.modeleditor.ModelPage;
-import com.testify.ecfeed.editor.outline.EcContentOutlinePage;
+//import com.testify.ecfeed.editor.outline.EcContentOutlinePage;
 import com.testify.ecfeed.editor.sourceviewer.SourceViewer;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.parsers.EcParser;
@@ -26,7 +26,7 @@ import com.testify.ecfeed.parsers.EcParser;
 public class EcMultiPageEditor extends FormEditor{
 
 	private SourceViewer fSourceViewer;
-	private EcContentOutlinePage fContentOutline;
+//	private EcContentOutlinePage fContentOutline;
 	private RootNode fModel;
 	private Set<IModelUpdateListener> fModelUpdateListeners;
 
@@ -74,18 +74,18 @@ public class EcMultiPageEditor extends FormEditor{
 		fModelUpdateListeners = new HashSet<IModelUpdateListener>();
 	}
 	
-	@SuppressWarnings("rawtypes")
-	@Override
-	public Object getAdapter(Class required){
-		if(IContentOutlinePage.class.equals(required)){
-			if(fContentOutline == null){
-				fContentOutline = new EcContentOutlinePage(this);
-			}
-			return fContentOutline;
-		}
-		return super.getAdapter(required);
-	}
-
+//	@SuppressWarnings("rawtypes")
+//	@Override
+//	public Object getAdapter(Class required){
+//		if(IContentOutlinePage.class.equals(required)){
+//			if(fContentOutline == null){
+//				fContentOutline = new EcContentOutlinePage(this);
+//			}
+//			return fContentOutline;
+//		}
+//		return super.getAdapter(required);
+//	}
+//
 	@Override
 	protected void addPages() {
 		int index;

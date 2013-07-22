@@ -21,8 +21,6 @@ import org.eclipse.swt.layout.GridLayout;
 
 import com.testify.ecfeed.editor.EcMultiPageEditor;
 import com.testify.ecfeed.editor.IModelUpdateListener;
-import com.testify.ecfeed.editor.outline.EcContentProvider;
-import com.testify.ecfeed.editor.outline.EcLabelProvider;
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.GenericNode;

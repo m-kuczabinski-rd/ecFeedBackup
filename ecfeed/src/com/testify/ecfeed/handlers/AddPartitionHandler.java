@@ -14,7 +14,7 @@ import org.eclipse.ui.views.contentoutline.ContentOutline;
 
 import com.testify.ecfeed.dialogs.PartitionSettingsDialog;
 import com.testify.ecfeed.editor.EcMultiPageEditor;
-import com.testify.ecfeed.editor.outline.EcContentOutlinePage;
+//import com.testify.ecfeed.editor.outline.EcContentOutlinePage;
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.RootNode;
@@ -34,10 +34,10 @@ public class AddPartitionHandler extends AbstractHandler implements IHandler {
 			
 			IWorkbenchPart part = HandlerUtil.getActivePart(event);
 			IPage page = ((ContentOutline)part).getCurrentPage();
-			EcMultiPageEditor editor = ((EcContentOutlinePage)page).getEditor();
-			if(category.getRoot() instanceof RootNode){
-				editor.updateModel((RootNode)category.getRoot());
-			}
+//			EcMultiPageEditor editor = ((EcContentOutlinePage)page).getEditor();
+//			if(category.getRoot() instanceof RootNode){
+//				editor.updateModel((RootNode)category.getRoot());
+//			}
 		}
 		return null;
 	}

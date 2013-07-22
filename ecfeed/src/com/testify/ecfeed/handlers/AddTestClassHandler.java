@@ -14,7 +14,7 @@ import org.eclipse.ui.views.contentoutline.ContentOutline;
 
 import com.testify.ecfeed.dialogs.TestClassSelectionDialog;
 import com.testify.ecfeed.editor.EcMultiPageEditor;
-import com.testify.ecfeed.editor.outline.EcContentOutlinePage;
+//import com.testify.ecfeed.editor.outline.EcContentOutlinePage;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.utils.EcModelUtils;
@@ -33,10 +33,10 @@ public class AddTestClassHandler extends AbstractHandler implements IHandler {
 		}
 		model.addClass(classNode);
 
-		IWorkbenchPart part = HandlerUtil.getActivePart(event);
-		IPage page = ((ContentOutline)part).getCurrentPage();
-		EcMultiPageEditor editor = ((EcContentOutlinePage)page).getEditor();
-		editor.updateModel(model);
+//		IWorkbenchPart part = HandlerUtil.getActivePart(event);
+//		IPage page = ((ContentOutline)part).getCurrentPage();
+//		EcMultiPageEditor editor = ((EcContentOutlinePage)page).getEditor();
+//		editor.updateModel(model);
 
 		return null;
 	}
