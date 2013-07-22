@@ -216,11 +216,25 @@ public class CategoryNodeDetailsPage extends GenericNodeDetailsPage implements I
 						DialogStrings.DIALOG_REMOVE_PARTITIONS_TITLE, 
 						Display.getDefault().getSystemImage(SWT.ICON_WARNING), 
 						DialogStrings.DIALOG_REMOVE_PARTITIONS_MESSAGE,
-						MessageDialog.QUESTION_WITH_CANCEL, new String[] {"OK", "Cancel"}, 0);
+						MessageDialog.QUESTION_WITH_CANCEL, 
+						new String[] {IDialogConstants.OK_LABEL, IDialogConstants.CANCEL_LABEL},
+						IDialogConstants.OK_ID);
 				if (dialog.open() == Window.OK) {
 					for(Object partition : fPartitionsViewer.getCheckedElements()){
-						EcModelUtils.removeReferences((PartitionNode)partition);
-						fSelectedNode.removeChild((PartitionNode)partition);
+						if(fSelectedNode.getPartitions().size() > 1){
+							EcModelUtils.removeReferences((PartitionNode)partition);
+							fSelectedNode.removeChild((PartitionNode)partition);
+						}
+						else{
+							MessageDialog dlg = new MessageDialog(getActiveShell(), 
+									DialogStrings.DIALOG_REMOVE_LAST_PARTITION_TITLE, 
+									Display.getDefault().getSystemImage(SWT.ICON_INFORMATION), 
+									DialogStrings.DIALOG_REMOVE_LAST_PARTITION_MESSAGE,
+									MessageDialog.INFORMATION, 
+									new String[] {IDialogConstants.OK_LABEL},
+									IDialogConstants.OK_ID);
+							dlg.open();
+						}
 						updateModel((RootNode)fSelectedNode.getRoot());
 					}
 				}
