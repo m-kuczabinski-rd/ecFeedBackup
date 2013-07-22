@@ -11,20 +11,25 @@ import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
 
 import com.testify.ecfeed.model.CategoryNode;
+import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
 
 public class TestCasePartitionEditingSupport extends EditingSupport {
 	private final TableViewer fViewer;
 	private Vector<PartitionNode> fTestData;
 	private ComboBoxViewerCellEditor fCellEditor;
+	private ISetValueListener fSetValueListener;
 
-	public TestCasePartitionEditingSupport(TableViewer viewer, Vector<PartitionNode> testData) {
+	public TestCasePartitionEditingSupport(TableViewer viewer, Vector<PartitionNode> testData, ISetValueListener setValueListener) {
 		super(viewer);
 		fViewer = viewer;
 		fTestData = testData;
+		fSetValueListener = setValueListener;
 		fCellEditor = new ComboBoxViewerCellEditor(fViewer.getTable(), SWT.TRAIL);
 		fCellEditor.setLabelProvider(new LabelProvider());
 		fCellEditor.setContentProvider(new ArrayContentProvider());
+		fCellEditor.setActivationStyle(ComboBoxViewerCellEditor.DROP_DOWN_ON_KEY_ACTIVATION | 
+				ComboBoxViewerCellEditor.DROP_DOWN_ON_MOUSE_ACTIVATION);
 	}
 
 	@Override
@@ -48,7 +53,12 @@ public class TestCasePartitionEditingSupport extends EditingSupport {
 
 	@Override
 	protected void setValue(Object element, Object value) {
-		int index = fTestData.indexOf(element);
-		fTestData.setElementAt((PartitionNode)value, index);
+		CategoryNode parent = (CategoryNode)((PartitionNode)element).getParent();
+		MethodNode method = (MethodNode)parent.getParent();
+		int parentIndex = method.getCategories().indexOf(parent);
+		if(parentIndex >= 0 && parentIndex <= fTestData.size()){
+			fTestData.setElementAt((PartitionNode)value, parentIndex);
+		}
+		fSetValueListener.setValue(fTestData);
 	}
 }

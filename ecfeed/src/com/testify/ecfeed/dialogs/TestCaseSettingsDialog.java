@@ -30,7 +30,7 @@ import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.TestCaseNode;
 import org.eclipse.swt.widgets.Combo;
 
-public class TestCaseSettingsDialog extends TitleAreaDialog {
+public class TestCaseSettingsDialog extends TitleAreaDialog implements ISetValueListener {
 
 	private TestCaseNode fTestCase;
 	private MethodNode fParentMethod;
@@ -205,7 +205,7 @@ public class TestCaseSettingsDialog extends TitleAreaDialog {
 				return ((PartitionNode)element).getName();
 			}
 		});
-		col.setEditingSupport(new TestCasePartitionEditingSupport(fViewer, fTestCase.getTestData()));
+		col.setEditingSupport(new TestCasePartitionEditingSupport(fViewer, fTestCase.getTestData(), this));
 
 		col = createTableViewerColumn("Value", 150, 0);
 		col.setLabelProvider(new ColumnLabelProvider(){
@@ -229,5 +229,9 @@ public class TestCaseSettingsDialog extends TitleAreaDialog {
 		column.setMoveable(true);
 		
 		return viewerColumn;
+	}
+
+	@Override
+	public void setValue(Vector<PartitionNode> testData) {
 	}
 }

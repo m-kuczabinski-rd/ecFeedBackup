@@ -26,9 +26,9 @@ import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
 
 import com.testify.ecfeed.constants.DialogStrings;
+import com.testify.ecfeed.dialogs.AddTestCaseDialog;
 import com.testify.ecfeed.dialogs.RemoveTestSuiteDialog;
 import com.testify.ecfeed.dialogs.RenameTestSuiteDialog;
-import com.testify.ecfeed.dialogs.TestCaseSettingsDialog;
 import com.testify.ecfeed.dialogs.TestMethodRenameDialog;
 import com.testify.ecfeed.model.CategoryNode;
 
@@ -224,13 +224,13 @@ public class MethodNodeDetailsPage extends GenericNodeDetailsPage{
 		Button button = createButton(testCasesButonsComposite, "Add Test Case", new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e){
-				TestCaseSettingsDialog dialog = 
-						new TestCaseSettingsDialog(Display.getDefault().getActiveShell(), fSelectedNode, null);
+				AddTestCaseDialog dialog = new AddTestCaseDialog(getActiveShell(), fSelectedNode);
 				dialog.create();
-				if (dialog.open() == Window.OK) {
-					TestCaseNode testCase = dialog.getTestCase();
-					fSelectedNode.addTestCase(testCase);
-					updateModel((RootNode)fSelectedNode.getRoot());
+				if (dialog.open() == IDialogConstants.OK_ID) {
+					String testSuite = dialog.getTestSuite();
+					Vector<PartitionNode> testData = dialog.getTestData();
+					fSelectedNode.addTestCase(new TestCaseNode(testSuite, testData));
+					updateModel(fSelectedNode);
 				}
 			}
 		});

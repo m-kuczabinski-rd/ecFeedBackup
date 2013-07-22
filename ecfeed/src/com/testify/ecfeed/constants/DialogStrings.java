@@ -41,5 +41,10 @@ public class DialogStrings {
 			"as the original method.";
 	public static final String DIALOG_RENAME_METHOD_TITLE = "Rename method";
 	public static final String DIALOG_RENAME_METHOD_MESSAGE = "Select compatible method from the list.";
+	public static final String DIALOG_ADD_TEST_CASE_TITLE = "New test case";
+	public static final String DIALOG_ADD_TEST_CASE_MESSAGE = "Set test suite name and edit test data.";
+	public static final String DIALOG_REMOVE_LAST_PARTITION_TITLE = "Cannot remove partition";
+	public static final String DIALOG_REMOVE_LAST_PARTITION_MESSAGE = "A category must have at least one partition.";
+;
 
 }

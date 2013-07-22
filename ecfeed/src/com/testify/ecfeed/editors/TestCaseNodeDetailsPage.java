@@ -4,13 +4,10 @@ import java.util.Vector;
 
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ArrayContentProvider;
-import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
-import org.eclipse.jface.viewers.ComboBoxViewerCellEditor;
 import org.eclipse.jface.viewers.EditingSupport;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -20,6 +17,8 @@ import org.eclipse.ui.forms.IFormPart;
 import org.eclipse.ui.forms.widgets.Section;
 
 import com.testify.ecfeed.constants.DialogStrings;
+import com.testify.ecfeed.dialogs.ISetValueListener;
+import com.testify.ecfeed.dialogs.TestCasePartitionEditingSupport;
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
@@ -39,7 +38,7 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.swt.layout.RowLayout;
 
-public class TestCaseNodeDetailsPage extends GenericNodeDetailsPage{
+public class TestCaseNodeDetailsPage extends GenericNodeDetailsPage implements ISetValueListener{
 	private TestCaseNode fSelectedNode;
 	private Section fMainSection;
 	private MethodNode fParent;
@@ -47,51 +46,6 @@ public class TestCaseNodeDetailsPage extends GenericNodeDetailsPage{
 	private TableViewer fTestDataViewer;
 	private TableViewerColumn fPartitionViewerColumn;
 
-	public class TestCasePartitionEditingSupport extends EditingSupport {
-		private final TableViewer fViewer;
-		private Vector<PartitionNode> fTestData;
-		private ComboBoxViewerCellEditor fCellEditor;
-
-		public TestCasePartitionEditingSupport(TableViewer viewer, Vector<PartitionNode> testData) {
-			super(viewer);
-			fViewer = viewer;
-			fTestData = testData;
-			fCellEditor = new ComboBoxViewerCellEditor(fViewer.getTable(), SWT.TRAIL);
-			fCellEditor.setLabelProvider(new LabelProvider());
-			fCellEditor.setContentProvider(new ArrayContentProvider());
-			fCellEditor.setActivationStyle(ComboBoxViewerCellEditor.DROP_DOWN_ON_KEY_ACTIVATION | 
-					ComboBoxViewerCellEditor.DROP_DOWN_ON_MOUSE_ACTIVATION);
-		}
-
-		@Override
-		protected CellEditor getCellEditor(Object element) {
-			PartitionNode partition = (PartitionNode)element;
-			CategoryNode parent = (CategoryNode)partition.getParent();
-			fCellEditor.setInput(parent.getPartitions());
-			return fCellEditor;
-		}
-
-		@Override
-		protected boolean canEdit(Object element) {
-			return true;
-		}
-
-		@Override
-		protected Object getValue(Object element) {
-			return ((PartitionNode)element).toString();
-		}
-
-		@Override
-		protected void setValue(Object element, Object value) {
-			if(value != null){
-				int index = fTestData.indexOf(element);
-				fTestData.setElementAt((PartitionNode)value, index);
-				updateModel(fSelectedNode);
-			}
-		}
-	}
-
-	
 	/**
 	 * Create the details page.
 	 */
@@ -239,7 +193,7 @@ public class TestCaseNodeDetailsPage extends GenericNodeDetailsPage{
 		fTestSuiteNameCombo.setItems(fParent.getTestSuites().toArray(new String[]{}));
 		fTestSuiteNameCombo.setText(fSelectedNode.getName());
 		fTestDataViewer.setInput(fSelectedNode.getTestData());
-		EditingSupport editingSupport = new TestCasePartitionEditingSupport(fTestDataViewer, fSelectedNode.getTestData());
+		EditingSupport editingSupport = new TestCasePartitionEditingSupport(fTestDataViewer, fSelectedNode.getTestData(), this);
 		fPartitionViewerColumn.setEditingSupport(editingSupport);
 	}
 
@@ -258,6 +212,11 @@ public class TestCaseNodeDetailsPage extends GenericNodeDetailsPage{
 			dialog.open();
 			fTestSuiteNameCombo.setText(fSelectedNode.getName());
 		}
+	}
+
+	@Override
+	public void setValue(Vector<PartitionNode> testData) {
+		updateModel(fSelectedNode);
 	}
 
 }
