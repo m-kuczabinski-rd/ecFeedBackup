@@ -12,7 +12,7 @@ import org.eclipse.ui.handlers.HandlerUtil;
 import org.eclipse.ui.part.IPage;
 import org.eclipse.ui.views.contentoutline.ContentOutline;
 
-import com.testify.ecfeed.dialogs.TestCaseSettingsDialog;
+import com.testify.ecfeed.dialogs.AddTestCaseDialog;
 import com.testify.ecfeed.editor.outline.EcContentOutlinePage;
 import com.testify.ecfeed.editors.EcMultiPageEditor;
 import com.testify.ecfeed.model.MethodNode;
@@ -25,11 +25,12 @@ public class AddTestCaseHandler extends AbstractHandler implements IHandler {
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		IStructuredSelection selection = (IStructuredSelection) HandlerUtil.getCurrentSelection(event);
 		MethodNode method = (MethodNode)selection.getFirstElement();
-		TestCaseSettingsDialog dialog = 
-				new TestCaseSettingsDialog(Display.getDefault().getActiveShell(), method, null);
+		AddTestCaseDialog dialog = 
+				new AddTestCaseDialog(Display.getDefault().getActiveShell(), method);
+//				new TestCaseSettingsDialog(Display.getDefault().getActiveShell(), method, null);
 		dialog.create();
 		if (dialog.open() == Window.OK) {
-			TestCaseNode testCase = dialog.getTestCase();
+			TestCaseNode testCase = new TestCaseNode(dialog.getTestSuite(), dialog.getTestData());
 			method.addTestCase(testCase);
 
 			IWorkbenchPart part = HandlerUtil.getActivePart(event);
