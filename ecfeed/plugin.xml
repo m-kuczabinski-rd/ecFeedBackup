@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.4"?>
 <plugin>
-
    <extension
          point="org.eclipse.ui.newWizards">
       <category
@@ -19,14 +18,6 @@
    
    <extension
          point="org.eclipse.ui.editors">
-<!--      <editor
-            class="com.testify.ecfeed.editor.EcEditor"
-            default="true"
-            extensions="ect"
-            icon="icons/sample.gif"
-            id="com.testify.ecfeed.editors.eceditor"
-            name="Equivalence Class Editor">
-      </editor>-->
       <editor
             class="com.testify.ecfeed.editor.EcMultiPageEditor"
             extensions="ect"
@@ -35,8 +26,4 @@
             name="ecmodel">
       </editor>
    </extension>
-   
-   
-   
-
 </plugin>
