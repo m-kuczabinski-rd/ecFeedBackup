@@ -23,6 +23,7 @@ public class NewEcFileWizard extends Wizard implements INewWizard {
 	public NewEcFileWizard() {
 		super();
 		setNeedsProgressMonitor(false);
+		setHelpAvailable(false);
 	}
 	
 	public void addPages() {
@@ -55,6 +56,7 @@ public class NewEcFileWizard extends Wizard implements INewWizard {
 			}
 			stream.close();
 		} catch (IOException|CoreException e) {
+			e.printStackTrace();
 		}
 		return true;
 	}

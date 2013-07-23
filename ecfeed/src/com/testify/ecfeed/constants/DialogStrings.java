@@ -45,6 +45,14 @@ public class DialogStrings {
 	public static final String DIALOG_ADD_TEST_CASE_MESSAGE = "Set test suite name and edit test data.";
 	public static final String DIALOG_REMOVE_LAST_PARTITION_TITLE = "Cannot remove partition";
 	public static final String DIALOG_REMOVE_LAST_PARTITION_MESSAGE = "A category must have at least one partition.";
-;
+	public static final String DIALOG_SELECT_CONTAINER_FOR_NEW_ECT_FILE_TITLE = "Select container for the new file";
 
+	public static final String WIZARD_NEW_ECT_FILE_TITLE = "New Equivalence Class Model";
+	public static final String WIZARD_NEW_ECT_FILE_MESSAGE = "Create new file with equivalence class model";
+	public static final String WIZARD_UNSPECIFIED_CONTAINER_MESAGE = "File container must be specified.";
+	public static final String WIZARD_CONTAINER_DOES_NOT_EXIST_MESAGE = "Specified container does not exist.";
+	public static final String WIZARD_CONTAINER_NOT_ACCESSIBLE = "The specified container is not writeable.";
+	public static final String WIZARD_FILE_NAME_NOT_SPECIFIED = "Please enter name of the new ect file.";
+	public static final String WIZARD_WRONG_ECT_FILE_NAME = "File name is not valid.";
+	public static final String WIZARD_WRONG_ECT_FILE_EXTENSION = "File extension must be \"" + Constants.EQUIVALENCE_CLASS_FILE_EXTENSION + "\"";
 }
