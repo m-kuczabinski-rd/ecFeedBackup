@@ -26,6 +26,4 @@ Import-Package: org.eclipse.jdt.core,
  org.eclipse.ui.texteditor,
  org.eclipse.ui.views.contentoutline
 Bundle-ClassPath: lib/xom-1.2.9.jar,
- lib/guava-14.0.1.jar,
- .,
- swing2swt.jar
+ .
