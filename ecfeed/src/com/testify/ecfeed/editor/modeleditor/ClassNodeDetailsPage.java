@@ -299,16 +299,20 @@ public class ClassNodeDetailsPage extends GenericNodeDetailsPage{
 		}
 		fObsoleteMethods = EcModelUtils.getObsoleteMethods(fSelectedNode, fSelectedNode.getQualifiedName());
 		fNotContainedMethods = EcModelUtils.getNotContainedMethods(fSelectedNode, fSelectedNode.getQualifiedName());
-		if(fNotContainedMethods.size() == 0 && fOtherMethodsSectionCreated){
-			fOtherMethodsSection.dispose();
-			fOtherMethodsSectionCreated = false;
+		if(fNotContainedMethods.size() == 0){
+			if(fOtherMethodsSectionCreated){
+				fOtherMethodsSection.dispose();
+				fOtherMethodsSectionCreated = false;
+			}
 		}
 		else {
-			if(!fOtherMethodsSectionCreated){
-				createOtherMethodsSection(fMainComposite);
+			if(fNotContainedMethods.size() > 0){
+				if(!fOtherMethodsSectionCreated){
+					createOtherMethodsSection(fMainComposite);
+				}
+				fOtherMethodsSection.setText("Other test methods in " + fSelectedNode.getLocalName());
+				fOtherMethodsViewer.setInput(fNotContainedMethods);
 			}
-			fOtherMethodsSection.setText("Other test methods in " + fSelectedNode.getLocalName());
-			fOtherMethodsViewer.setInput(fNotContainedMethods);
 		}
 		fMainSection.setText("Class " + fSelectedNode.getLocalName());
 		fQualifiedNameLabel.setText("Qualified name: " + fSelectedNode.getName());
