@@ -1,4 +1,4 @@
-package com.testify.ecfeed.parsers;
+package com.testify.ecfeed.test.parsers;
 
 import static org.junit.Assert.*;
 
@@ -13,6 +13,8 @@ import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.RootNode;
+import com.testify.ecfeed.parsers.EcParser;
+import com.testify.ecfeed.parsers.EcWriter;
 
 public class EctParserTest {
 

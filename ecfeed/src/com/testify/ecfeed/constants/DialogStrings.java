@@ -55,4 +55,7 @@ public class DialogStrings {
 	public static final String WIZARD_FILE_NAME_NOT_SPECIFIED = "Please enter name of the new ect file.";
 	public static final String WIZARD_WRONG_ECT_FILE_NAME = "File name is not valid.";
 	public static final String WIZARD_WRONG_ECT_FILE_EXTENSION = "File extension must be \"" + Constants.EQUIVALENCE_CLASS_FILE_EXTENSION + "\"";
+	public static final String WIZARD_FILE_EXISTS_TITLE = "File exists";
+	public static final String WIZARD_FILE_EXISTS_MESSAGE = "File with specified name already exists in this container. "
+			+ "Do you want to overwrite it?";
 }

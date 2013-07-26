@@ -1,8 +1,11 @@
-package com.testify.ecfeed.model;
+package com.testify.ecfeed.test.model;
 
 import static org.junit.Assert.*;
 
 import org.junit.Test;
+
+import com.testify.ecfeed.model.ClassNode;
+import com.testify.ecfeed.model.RootNode;
 
 public class RootNodeTest extends RootNode {
 

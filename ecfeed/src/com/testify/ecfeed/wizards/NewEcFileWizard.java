@@ -1,16 +1,22 @@
 package com.testify.ecfeed.wizards;
 
+import org.eclipse.jface.dialogs.IDialogConstants;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.core.runtime.*;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.core.resources.*;
 import org.eclipse.core.runtime.CoreException;
+
 import java.io.*;
 
 import com.testify.ecfeed.constants.Constants;
+import com.testify.ecfeed.constants.DialogStrings;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.parsers.EcWriter;
 
@@ -50,7 +56,16 @@ public class NewEcFileWizard extends Wizard implements INewWizard {
 			writer.writeXmlDocument(modelRoot);
 			InputStream stream = new ByteArrayInputStream(ostream.toByteArray());
 			if (file.exists()) {
-				file.setContents(stream, true, true, null);
+				MessageDialog dialog = new MessageDialog(getShell(), 
+						DialogStrings.WIZARD_FILE_EXISTS_TITLE, 
+						Display.getDefault().getSystemImage(SWT.ICON_QUESTION), 
+						DialogStrings.WIZARD_FILE_EXISTS_MESSAGE,
+						MessageDialog.QUESTION_WITH_CANCEL, 
+						new String[] {IDialogConstants.OK_LABEL, IDialogConstants.CANCEL_LABEL}, 
+						IDialogConstants.OK_ID);
+				if(dialog.open() == IDialogConstants.OK_ID){
+					file.setContents(stream, true, true, null);
+				}
 			} else {
 				file.create(stream, true, null);
 			}

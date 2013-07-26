@@ -1,8 +1,9 @@
-package com.testify.ecfeed.runner;
+package com.testify.ecfeed.test.runner;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import com.testify.ecfeed.runner.EcFeeder;
 import com.testify.ecfeed.runner.annotations.EcModel;
 import com.testify.ecfeed.runner.annotations.TestSuites;
 

@@ -114,7 +114,7 @@ public class NewEcFileWizardPage extends WizardPage {
 		if(fInitialContainer != null){
 			fContainerText.setText(fInitialContainer.getFullPath().toString());
 		}
-		fFileNameText.setText(Constants.DEFAULT_NEW_FILE_NAME + "." + Constants.EQUIVALENCE_CLASS_FILE_EXTENSION);
+		fFileNameText.setText(Constants.DEFAULT_NEW_ECT_MODEL_NAME + "." + Constants.EQUIVALENCE_CLASS_FILE_EXTENSION);
 	}
 
 	/**
@@ -172,6 +172,10 @@ public class NewEcFileWizardPage extends WizardPage {
 				updateStatus(DialogStrings.WIZARD_WRONG_ECT_FILE_EXTENSION);
 				return;
 			}
+		}
+		else{
+			updateStatus(DialogStrings.WIZARD_WRONG_ECT_FILE_EXTENSION);
+			return;
 		}
 		updateStatus(null);
 	}

@@ -1,11 +1,12 @@
-package com.testify.ecfeed.model;
+package com.testify.ecfeed.test.model;
 
 import static org.junit.Assert.*;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
 import org.databene.feed4junit.Feeder;
+
+import com.testify.ecfeed.model.GenericNode;
 
 @RunWith(Feeder.class)
 public class GenericNodeTest extends GenericNode {

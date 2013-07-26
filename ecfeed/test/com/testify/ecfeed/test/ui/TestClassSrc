@@ -1,0 +1,45 @@
+package com.testify.ecfeed.uitest;
+
+import org.junit.Test;
+import org.junit.runner.RunWith;
+
+import com.testify.ecfeed.runner.EcFeeder;
+import com.testify.ecfeed.runner.annotations.EcModel;
+import com.testify.ecfeed.runner.annotations.TestSuites;
+
+@RunWith(EcFeeder.class)
+public class SomeTestClass {
+
+	public SomeTestClass(){
+	}
+	
+	@EcModel
+	public static String[] getModel(){
+		return new String[]{"src/com/example/test/ecModel.ect"};
+	}
+	
+	@TestSuites
+	public static String[] getSuites(){
+		return new String[]{"default suite"};
+	}
+	
+	@Test
+	public void testFunction(int intArg, String stringArg, int dupa){
+		System.out.println("testFuntion(" + intArg + ", " + stringArg + ");");
+	}
+
+	@Test
+	public void renamedTestFunction(int intArg, String stringArg){
+		System.out.println("testFuntion(" + intArg + ", " + stringArg + ");");
+	}
+
+	@Test
+	public void otherTestFunction(int renamedIntArg, String renamedStringArg){
+		System.out.println("testFuntion(" + renamedIntArg + ", " + renamedStringArg + ");");
+	}
+
+	@Test
+	public void yetAnotherTestFunction(short shortArg, double doubleArg){
+		System.out.println("testFuntion(" + shortArg + ", " + doubleArg + ");");
+	}
+}

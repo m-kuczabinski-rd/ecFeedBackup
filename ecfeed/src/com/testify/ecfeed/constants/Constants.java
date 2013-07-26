@@ -2,7 +2,8 @@ package com.testify.ecfeed.constants;
 
 public class Constants {
 	public static final String EQUIVALENCE_CLASS_FILE_EXTENSION = "ect";
-	public static final String DEFAULT_NEW_FILE_NAME = "newEct";
+	public static final String DEFAULT_NEW_ECT_MODEL_NAME = "newEct";
+	public static final String DEFAULT_NEW_ECT_FILE_NAME = DEFAULT_NEW_ECT_MODEL_NAME + "." + EQUIVALENCE_CLASS_FILE_EXTENSION;
 	
 	public static final String ROOT_NODE_NAME = "Model";
 	public static final String CLASS_NODE_NAME = "Class";

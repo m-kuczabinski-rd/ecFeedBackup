@@ -22,7 +22,7 @@ public class GenericNode {
 	}
 	
 	//TODO unit tests
-	protected void addChild(GenericNode child){
+	public void addChild(GenericNode child){
 		addChild(fChildren.size(), child);
 	}
 
@@ -35,7 +35,7 @@ public class GenericNode {
 	}
 
 	//Should not be used explicitly
-	void setParent(GenericNode newParent) {
+	public void setParent(GenericNode newParent) {
 		fParent = newParent;
 		if(newParent != null){
 			newParent.addChild(this);
