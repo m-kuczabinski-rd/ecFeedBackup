@@ -24,6 +24,16 @@ import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.TestCaseNode;
 
 public class EcModelUtils {
+	public static boolean validateModelName(String name){
+		if (name == null) return false;
+		if(name.length() == 0) return false;
+		if(name.length() >= Constants.MAX_MODEL_NAME_LENGTH) return false;
+		if(name.matches("[ ]+.*")) return false;
+		
+		return true;
+	}
+
+	
 	/**
 	 * Checks if certain name is valid for given partition in given category
 	 * @param name Name to validate
