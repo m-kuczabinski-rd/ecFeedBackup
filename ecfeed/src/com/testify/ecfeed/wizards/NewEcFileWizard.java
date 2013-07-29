@@ -1,5 +1,9 @@
 package com.testify.ecfeed.wizards;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -8,23 +12,24 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
+import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.dialogs.WizardNewFileCreationPage;
+import org.eclipse.ui.part.FileEditorInput;
 import org.eclipse.core.runtime.*;
-import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.core.resources.*;
 import org.eclipse.core.runtime.CoreException;
 
-import java.io.*;
-
 import com.testify.ecfeed.constants.Constants;
 import com.testify.ecfeed.constants.DialogStrings;
+import com.testify.ecfeed.editor.EcMultiPageEditor;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.parsers.EcWriter;
 
 public class NewEcFileWizard extends Wizard implements INewWizard {
-	//TODO New File Wizard - get default container from selection
 	
-	private NewEcFileWizardPage fPage;
-	private ISelection fSelection;
+	private WizardNewFileCreationPage fPage;
+	private IStructuredSelection fSelection;
 
 	public NewEcFileWizard() {
 		super();
@@ -33,29 +38,20 @@ public class NewEcFileWizard extends Wizard implements INewWizard {
 	}
 	
 	public void addPages() {
-		fPage = new NewEcFileWizardPage(fSelection);
+		fPage = new WizardNewFileCreationPage(DialogStrings.WIZARD_NEW_ECT_FILE_TITLE, fSelection);
+		fPage.setFileName(Constants.DEFAULT_NEW_ECT_FILE_NAME);
+		fPage.setAllowExistingResources(true);
+		fPage.setMessage(DialogStrings.WIZARD_NEW_ECT_FILE_MESSAGE);
+		fPage.setFileExtension(Constants.EQUIVALENCE_CLASS_FILE_EXTENSION);
+
 		addPage(fPage);
 	}
 
-	public boolean performFinish() {
-		final String containerName = fPage.getContainerName();
-		final String fileName = fPage.getFileName();
-		String modelName = fileName.substring(0, fileName.lastIndexOf("." + Constants.EQUIVALENCE_CLASS_FILE_EXTENSION));
-		RootNode modelRoot = new RootNode(modelName);
-		IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
-		IResource resource = root.findMember(new Path(containerName));
+	public boolean performFinish(){
+		IFile file = fPage.createNewFile();
 		try {
-			if (!resource.exists() || !(resource instanceof IContainer)) {
-				throwCoreException("Container \"" + containerName + "\" does not exist.");
-			}
-			IContainer container = (IContainer) resource;
 
-			final IFile file = container.getFile(new Path(fileName));
-			ByteArrayOutputStream ostream = new ByteArrayOutputStream();
-			EcWriter writer = new EcWriter(ostream);
-			writer.writeXmlDocument(modelRoot);
-			InputStream stream = new ByteArrayInputStream(ostream.toByteArray());
-			if (file.exists()) {
+			if(file.getContents().read() != -1){
 				MessageDialog dialog = new MessageDialog(getShell(), 
 						DialogStrings.WIZARD_FILE_EXISTS_TITLE, 
 						Display.getDefault().getSystemImage(SWT.ICON_QUESTION), 
@@ -63,23 +59,30 @@ public class NewEcFileWizard extends Wizard implements INewWizard {
 						MessageDialog.QUESTION_WITH_CANCEL, 
 						new String[] {IDialogConstants.OK_LABEL, IDialogConstants.CANCEL_LABEL}, 
 						IDialogConstants.OK_ID);
-				if(dialog.open() == IDialogConstants.OK_ID){
-					file.setContents(stream, true, true, null);
+				if(dialog.open() != IDialogConstants.OK_ID){
+					return false;
 				}
-			} else {
-				file.create(stream, true, null);
 			}
-			stream.close();
-		} catch (IOException|CoreException e) {
+
+
+			final IPath newFileFullPath = fPage.getContainerFullPath().append(fPage.getFileName()); 
+			String modelName = newFileFullPath.removeFileExtension().lastSegment();
+			RootNode model = new RootNode(modelName != null ? modelName : Constants.DEFAULT_NEW_ECT_MODEL_NAME);
+			ByteArrayOutputStream ostream = new ByteArrayOutputStream();
+			EcWriter writer = new EcWriter(ostream);
+			writer.writeXmlDocument(model);
+			ByteArrayInputStream istream = new ByteArrayInputStream(ostream.toByteArray());
+			file.setContents(istream, true, true, null);
+
+			//open new file in an ect editor
+			IWorkbenchPage page =  PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+
+			page.openEditor(new FileEditorInput(file), EcMultiPageEditor.ID);
+		} catch (CoreException | IOException e) {
 			e.printStackTrace();
 		}
+		
 		return true;
-	}
-
-	private void throwCoreException(String message) throws CoreException {
-		IStatus status =
-			new Status(IStatus.ERROR, "com.testify.ecfeed", IStatus.OK, message, null);
-		throw new CoreException(status);
 	}
 
 	public void init(IWorkbench workbench, IStructuredSelection selection) {
