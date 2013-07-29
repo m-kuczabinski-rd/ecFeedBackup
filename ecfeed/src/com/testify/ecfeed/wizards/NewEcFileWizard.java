@@ -41,8 +41,9 @@ public class NewEcFileWizard extends Wizard implements INewWizard {
 		fPage = new WizardNewFileCreationPage(DialogStrings.WIZARD_NEW_ECT_FILE_TITLE, fSelection);
 		fPage.setFileName(Constants.DEFAULT_NEW_ECT_FILE_NAME);
 		fPage.setAllowExistingResources(true);
-		fPage.setMessage(DialogStrings.WIZARD_NEW_ECT_FILE_MESSAGE);
 		fPage.setFileExtension(Constants.EQUIVALENCE_CLASS_FILE_EXTENSION);
+		fPage.setTitle(DialogStrings.WIZARD_NEW_ECT_FILE_TITLE);
+		fPage.setDescription(DialogStrings.WIZARD_NEW_ECT_FILE_MESSAGE);
 
 		addPage(fPage);
 	}
