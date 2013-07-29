@@ -27,6 +27,7 @@ public class Constants {
 	public static final String DEFAULT_ECT_EDITOR_ID = "com.testify.ecfeed.editors.EcMultiPageEditor";
 
 	public static final int MAX_PARTITION_NAME_LENGTH = 64;
+	public static final int MAX_MODEL_NAME_LENGTH = 64;
 	
 	public static final String BOOLEAN_TYPE_NAME = "boolean";
 	public static final String BYTE_TYPE_NAME = "byte";

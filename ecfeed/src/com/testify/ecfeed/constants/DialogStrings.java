@@ -33,7 +33,9 @@ public class DialogStrings {
 	public static final String DIALOG_CLASS_EXISTS_MESSAGE = "Selected class is already contained in the model.";
 	public static final String DIALOG_RENAME_MODEL_TITLE = "Rename model";
 	public static final String DIALOG_RENAME_MODEL_MESSAGE = "Enter new name for the model. This name has only aesthetic purposes, " +
-			"so feel free to provide any name you want.";
+			"so feel free to provide any name you want. "
+			+ "\nTo have some minimal tidiness however, keep the name between 1 and 64 characters long and let it not "
+			+ "contain white characters only.";
 	public static final String DIALOG_TEST_CLASS_SELECTION_TITLE = "Test class selection";
 	public static final String DIALOG_TEST_CLASS_SELECTION_MESSAGE = "Select a class with at lease one method annotated with @Test.";
 	public static final String DIALOG_TEST_METHOD_SELECTION_TITLE = "Test method selection";

@@ -3,8 +3,11 @@ package com.testify.ecfeed.dialogs;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.TitleAreaDialog;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
@@ -14,11 +17,13 @@ import org.eclipse.wb.swt.SWTResourceManager;
 
 import com.testify.ecfeed.constants.DialogStrings;
 import com.testify.ecfeed.model.RootNode;
+import com.testify.ecfeed.utils.EcModelUtils;
 
 public class RenameModelDialog extends TitleAreaDialog {
 	private Text fNameText;
 	private String fNewName;
 	private RootNode fModel;
+	private Button fOkButton;
 
 	/**
 	 * Create the dialog.
@@ -53,8 +58,24 @@ public class RenameModelDialog extends TitleAreaDialog {
 		fNameText.setFocus();
 		fNameText.setMessage(DialogStrings.DIALOG_RENAME_MODEL_MESSAGE);
 		fNameText.setSelection(0,fModel.getName().length());
+		fNameText.addModifyListener(new ModifyListener() {
+			@Override
+			public void modifyText(ModifyEvent e) {
+				verifyName();
+			}
+		});
 
 		return area;
+	}
+
+	private void verifyName() {
+		if (EcModelUtils.validateModelName(fNameText.getText()) == false){
+			fOkButton.setEnabled(false);
+		}
+		else{
+			fOkButton.setEnabled(true);
+		}
+		
 	}
 
 	/**
@@ -63,7 +84,7 @@ public class RenameModelDialog extends TitleAreaDialog {
 	 */
 	@Override
 	protected void createButtonsForButtonBar(Composite parent) {
-		createButton(parent, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL,
+		fOkButton = createButton(parent, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL,
 				true);
 		createButton(parent, IDialogConstants.CANCEL_ID,
 				IDialogConstants.CANCEL_LABEL, false);
