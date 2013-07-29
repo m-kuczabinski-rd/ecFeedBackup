@@ -185,7 +185,7 @@ public class TestCaseNodeDetailsPage extends GenericNodeDetailsPage implements I
 	}
 
 	public void refresh() {
-		if(fSelectedNode == null){
+		if(fSelectedNode == null || fSelectedNode.getParent() == null){
 			return;
 		}
 		fParent = (MethodNode)fSelectedNode.getParent();
