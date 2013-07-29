@@ -22,6 +22,8 @@ import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.parsers.EcParser;
 
 public class EcMultiPageEditor extends FormEditor{
+	
+	public static String ID = "com.testify.ecfeed.editors.EcMultiPageEditor";
 
 	private SourceViewer fSourceViewer;
 	private RootNode fModel;
