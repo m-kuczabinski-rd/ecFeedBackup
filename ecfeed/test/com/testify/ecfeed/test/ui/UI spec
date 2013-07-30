@@ -2,22 +2,13 @@ UI test cases
 
 New file wizard:
 - The wizard is accessible by menu File->New->Other and then ecFeed->New Equivalence Class Tree file
-- It consists of a Container field and file name field
+- It consists of a Container field, container selection tree viewer and file name field
 - The container field is initially filled according to current selection if possible
-- The container path may be entered manually or selected by clicking "Browse..." button
-- The file name must have .ect extension
+- if the file name does not have "ect" extension it is added (as soon as focus leaves file name text)
 - If the file already exists, user is asked for confirmation of overwritting the file
 - The default file name is newEct.ect
-/**
-- test if wizard appears
-- test if wizard reacts of valid and not valid container selection
-- test "Browse..." dialog
-- test if wizard recognizes valid and not valid file name
-- test "file exists" scenario.
-- test initial container value
-- test default file name
-- test if appropriate file is created (location, name and initial content)
-**/
+- The model name is the same as the file name with removed extension
+- The finish button is disabled when any of the entries is not valid
 
 Model details page
 - Model name initially is the same as the file name (without 'ect' extension)
