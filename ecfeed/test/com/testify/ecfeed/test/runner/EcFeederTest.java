@@ -15,12 +15,12 @@ public class EcFeederTest{
 	
 	@EcModel
 	public static String[] getModel(){
-		return new String[]{"test/com/testify/ecfeed/runner/ecModel.ect"};
+		return new String[]{"test/com/testify/ecfeed/test/runner/ecModel.ect"};
 	}
 	
 	@TestSuites
 	public static String[] testSuites(){
-		return new String[]{"dupa", "default suite"};
+		return new String[]{"default suite"};
 	}
 	
 	@Test
