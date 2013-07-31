@@ -168,6 +168,8 @@ The test runner is responsible for running tests defined in a test class. The ru
 
 - To run tests defined in a ect file, the test class must be annotated with @RunWith(EcFeeder.class).
 - The model that is used for running test cases is defined by @EcModel("path/to/model.ect") annotation to the test class
-  - the path may be either absolute (eg. ("/home/user/workspace/project/test/package/model.ect") 
+- The path may be either absolute (eg. ("/home/user/workspace/project/test/package/model.ect") 
     or local (e.g. "test/package/model.ect")
-    
+- Test suites that are run in test may be defined by function annotated with @TestSuite. This function must return 
+  an array of names of test suites that will be run.
+- If @TestSuites function is not defined, all test cases will be run   
