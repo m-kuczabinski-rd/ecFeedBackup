@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <feature url="features/com.testify.ecfeed.feature_1.0.0.qualifier.jar" id="com.testify.ecfeed.feature" version="1.0.0.qualifier">
+      <category name="ecfeed"/>
+   </feature>
+   <category-def name="ecfeed" label="EcFeed test data generator"/>
+</site>
