@@ -8,16 +8,9 @@ import com.testify.ecfeed.runner.annotations.EcModel;
 import com.testify.ecfeed.runner.annotations.TestSuites;
 
 @RunWith(EcFeeder.class)
+@EcModel("test/com/testify/ecfeed/test/runner/ecModel.ect")
 public class EcFeederTest{
 
-	public EcFeederTest() throws Throwable {
-	}
-	
-	@EcModel
-	public static String[] getModel(){
-		return new String[]{"test/com/testify/ecfeed/test/runner/ecModel.ect"};
-	}
-	
 	@TestSuites
 	public static String[] testSuites(){
 		return new String[]{"default suite"};
