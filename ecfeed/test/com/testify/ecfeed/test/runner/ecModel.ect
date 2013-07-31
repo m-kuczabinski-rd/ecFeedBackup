@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Model name="newEct">
-    <Class name="com.testify.ecfeed.runner.EcFeederTest">
+    <Class name="com.testify.ecfeed.test.runner.EcFeederTest">
         <Method name="exampleTestFunction">
             <Category name="intParameter" type="int">
                 <Partition name="min" value="-2147483648"/>
@@ -16,20 +16,18 @@
                 <Partition name="upper case" value="A"/>
                 <Partition name="mixed cases" value="aA"/>
                 <Partition name="all latin" value="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"/>
-                <Partition name="dupa" value="dupa"/>
-                <Partition name="dupa1" value="cycki"/>
             </Category>
+            <TestCase testSuite="default suite">
+                <TestParameter partition="min"/>
+                <TestParameter partition="null"/>
+            </TestCase>
             <TestCase testSuite="default suite">
                 <TestParameter partition="min"/>
                 <TestParameter partition="mixed cases"/>
             </TestCase>
             <TestCase testSuite="default suite">
-                <TestParameter partition="zero"/>
-                <TestParameter partition="dupa"/>
-            </TestCase>
-            <TestCase testSuite="dupa">
                 <TestParameter partition="negative"/>
-                <TestParameter partition="upper case"/>
+                <TestParameter partition="all latin"/>
             </TestCase>
         </Method>
     </Class>
