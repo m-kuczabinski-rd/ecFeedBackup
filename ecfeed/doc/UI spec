@@ -1,4 +1,4 @@
-UI test cases
+UI Spec
 
 New file wizard:
 - The wizard is accessible by menu File->New->Other and then ecFeed->New Equivalence Class Tree file
@@ -162,3 +162,9 @@ Partition details page
 - new values (for name and value) are accepted either by pressing Enter or by clicking "Change" button
 
   
+Test Runner spec
+
+The test runner is responsible for running tests defined in a test class. The runner is defined in EcFeeder class.
+
+- To run tests defined in a ect file, the test class must be annotated with @RunWith(EcFeeder.class).
+- The model that is used     
