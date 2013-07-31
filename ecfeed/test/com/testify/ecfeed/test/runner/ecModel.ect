@@ -16,18 +16,29 @@
                 <Partition name="upper case" value="A"/>
                 <Partition name="mixed cases" value="aA"/>
                 <Partition name="all latin" value="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"/>
+                <Partition name="default suite" value="default suite"/>
+                <Partition name="suite" value="suite"/>
+                <Partition name="other suite" value="other suite"/>
             </Category>
             <TestCase testSuite="default suite">
                 <TestParameter partition="min"/>
-                <TestParameter partition="null"/>
+                <TestParameter partition="default suite"/>
             </TestCase>
             <TestCase testSuite="default suite">
                 <TestParameter partition="min"/>
-                <TestParameter partition="mixed cases"/>
+                <TestParameter partition="default suite"/>
             </TestCase>
             <TestCase testSuite="default suite">
                 <TestParameter partition="negative"/>
-                <TestParameter partition="all latin"/>
+                <TestParameter partition="default suite"/>
+            </TestCase>
+            <TestCase testSuite="suite">
+                <TestParameter partition="min"/>
+                <TestParameter partition="suite"/>
+            </TestCase>
+            <TestCase testSuite="other suite">
+                <TestParameter partition="min"/>
+                <TestParameter partition="other suite"/>
             </TestCase>
         </Method>
     </Class>
