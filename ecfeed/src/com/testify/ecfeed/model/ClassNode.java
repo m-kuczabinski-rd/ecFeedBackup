@@ -1,5 +1,7 @@
 package com.testify.ecfeed.model;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.Vector;
 
 public class ClassNode extends GenericNode {
@@ -64,5 +66,14 @@ public class ClassNode extends GenericNode {
 	//TODO unit tests
 	public Vector<MethodNode> getMethods() {
 		return fMethods;
+	}
+	
+	//TODO uni tests
+	public Set<String> getTestSuites(){
+		Set<String> suites = new HashSet<String>();
+		for(MethodNode method : getMethods()){
+			suites.addAll(method.getTestSuites());
+		}
+		return suites;
 	}
 }

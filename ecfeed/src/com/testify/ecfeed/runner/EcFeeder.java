@@ -90,12 +90,16 @@ public class EcFeeder extends BlockJUnit4ClassRunner {
 
 	protected Set<String> getTestSuites() throws Throwable {
 		Set<String> testSuites = new HashSet<String>();
-		Set<FrameworkMethod> testSuiteMethods = getTestSuiteMethods(getTestClass());
-		if(testSuiteMethods == null){
-			fTestSuites.add("*");
+		FrameworkMethod testSuiteMethod = getTestSuiteMethod(getTestClass());
+		if(testSuiteMethod == null){
+			ClassNode classModel = fEcModel.getClassModel(getTestClass().getName());
+			if(classModel == null){
+				throw new Throwable("The test class is not contained in the provided model");
+			}
+			return classModel.getTestSuites();
 		}
-		for(FrameworkMethod method : testSuiteMethods){
-			String[] suites = (String[]) method.invokeExplosively(null);
+		else{
+			String[] suites = (String[]) testSuiteMethod.invokeExplosively(null);
 			testSuites.addAll(Arrays.asList(suites));
 		}
 		return testSuites;
@@ -138,20 +142,19 @@ public class EcFeeder extends BlockJUnit4ClassRunner {
 		return parameter.getSimpleName();
 	}
 
-	private Set<FrameworkMethod> getTestSuiteMethods(TestClass testClass) throws Exception{
-		Set<FrameworkMethod> methods = new HashSet<FrameworkMethod>();
+	private FrameworkMethod getTestSuiteMethod(TestClass testClass) throws Throwable{
 		List<FrameworkMethod> annotatedMethods = getTestClass().getAnnotatedMethods(TestSuites.class);
-		for(FrameworkMethod method : annotatedMethods){
-			if(isValidTestSuitesMethod(method)){
-				methods.add(method);
-			}
-		}
-		if(methods.size() > 0){
-			return methods;
-		}
-		else{
+		if(annotatedMethods.size() == 0){
 			return null;
 		}
+		if(annotatedMethods.size() > 1){
+			throw new Throwable("There may be at most one method annotated with @TestSuites in the class.");
+		}
+		if(!isValidTestSuitesMethod(annotatedMethods.get(0))){
+			throw new Throwable("@TestSuites method must be static, public and return String array.");
+		}
+		
+		return annotatedMethods.get(0);
 	}
 
 	private boolean isValidTestSuitesMethod(FrameworkMethod method) throws Exception {
@@ -172,7 +175,7 @@ public class EcFeeder extends BlockJUnit4ClassRunner {
 				return ((EcModel)annotation).value();
 			}
 		}
-		return null;
+		throw new Throwable("Cannot locate model path. Make sure that the test class is annotated with EcModel annotation with right path");
 	}
 	
 	private boolean validateMethod(Method method, int requiredModifiers, Class<?> requiredReturnType, int numOfParameters){
