@@ -167,4 +167,7 @@ Test Runner spec
 The test runner is responsible for running tests defined in a test class. The runner is defined in EcFeeder class.
 
 - To run tests defined in a ect file, the test class must be annotated with @RunWith(EcFeeder.class).
-- The model that is used     
+- The model that is used for running test cases is defined by @EcModel("path/to/model.ect") annotation to the test class
+  - the path may be either absolute (eg. ("/home/user/workspace/project/test/package/model.ect") 
+    or local (e.g. "test/package/model.ect")
+    

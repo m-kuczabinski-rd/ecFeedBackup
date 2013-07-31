@@ -8,7 +8,7 @@ import com.testify.ecfeed.runner.annotations.EcModel;
 import com.testify.ecfeed.runner.annotations.TestSuites;
 
 @RunWith(EcFeeder.class)
-@EcModel("test/com/testify/ecfeed/test/runner/ecModel.ect")
+//@EcModel("test/com/testify/ecfeed/test/runner/ecModel.ect")
 public class EcFeederTest{
 
 	@TestSuites

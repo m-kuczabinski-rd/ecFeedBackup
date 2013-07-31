@@ -31,7 +31,7 @@ import org.junit.Test;
 
 public class EcFeeder extends BlockJUnit4ClassRunner {
 
-	private Vector<RootNode> fEcModels;
+	private RootNode fEcModel;
 	private Set<String> fTestSuites;
 	List<FrameworkMethod> fTestMethods;
 	
@@ -49,7 +49,7 @@ public class EcFeeder extends BlockJUnit4ClassRunner {
 	
 	protected List<FrameworkMethod> generateTestMethods(){
 		try {
-			fEcModels = createEquivalenceClassModels();
+			fEcModel = createEquivalenceClassModel();
 			fTestSuites = getTestSuites();
 		} catch (Throwable e) {
 			System.out.println("Exception: " + e.getMessage());
@@ -64,19 +64,18 @@ public class EcFeeder extends BlockJUnit4ClassRunner {
 				continue;
 			} else{
 				//parameterized test case: get requested test cases from models
-				if(fEcModels == null){
+				if(fEcModel == null){
 					break;
 				}
-				for(RootNode rootNode : fEcModels){
-					MethodNode methodModel = getMethodModel(rootNode, method);
-					if(methodModel == null){
-						continue;
-					}
-					for(String testSuite : fTestSuites){
-						Collection<TestCaseNode> testCases = methodModel.getTestCases(testSuite);
-						for(TestCaseNode testCase : testCases){
-							testMethods.add(createTestMethod(method, testCase));
-						}
+
+				MethodNode methodModel = getMethodModel(fEcModel, method);
+				if(methodModel == null){
+					continue;
+				}
+				for(String testSuite : fTestSuites){
+					Collection<TestCaseNode> testCases = methodModel.getTestCases(testSuite);
+					for(TestCaseNode testCase : testCases){
+						testMethods.add(createTestMethod(method, testCase));
 					}
 				}
 			}
@@ -102,17 +101,14 @@ public class EcFeeder extends BlockJUnit4ClassRunner {
 		return testSuites;
 	}
 
-	protected Vector<RootNode> createEquivalenceClassModels() throws Throwable {
-		Vector<RootNode> models = new Vector<RootNode>();
+	protected RootNode createEquivalenceClassModel() throws Throwable {
 		EcParser parser = new EcParser();
-		for(String ectPath : getEctFilesPaths(getTestClass())){
-			models.add(parseEctModel(ectPath, parser));
-		}
-		return models;
+		String ectFilePath = getEctFilePath(getTestClass());
+		return parseEctModel(ectFilePath, parser);
 	}
 
-	protected Vector<RootNode> getModelsVector(){
-		return fEcModels;
+	protected RootNode getModelsVector(){
+		return fEcModel;
 	}
 
 	private ParameterizedFrameworkMethod createTestMethod(FrameworkMethod method, TestCaseNode testCase) {
@@ -170,30 +166,15 @@ public class EcFeeder extends BlockJUnit4ClassRunner {
 		}
 	}
 
-	private String[] getEctFilesPaths(TestClass testClass) throws Throwable {
-		List<FrameworkMethod> annotatedMethods = testClass.getAnnotatedMethods(EcModel.class);
-		if(annotatedMethods.size() == 0){
-			throw new Exception("No EcModel method found");
+	private String getEctFilePath(TestClass testClass) throws Throwable {
+		for(Annotation annotation : testClass.getAnnotations()){
+			if(annotation.annotationType().equals(EcModel.class)){
+				return ((EcModel)annotation).value();
+			}
 		}
-		FrameworkMethod method = annotatedMethods.get(0);
-		if(!isValidEcModelMethod(method)){
-			throw new Exception(annotatedMethods.get(0).getName() + "is not valid EcModel method.");
-		}
-		return (String[])method.invokeExplosively(null);
+		return null;
 	}
 	
-	private boolean isValidEcModelMethod(FrameworkMethod method) throws Throwable {
-		boolean result = validateMethod(method.getMethod(), Modifier.STATIC | Modifier.PUBLIC, String[].class, 0);
-		if(result){
-			return true;
-		}
-		else{
-			throw new Exception("Method " + method.getName() + " is not valid EcModel method. "
-					+ "Valid method should be static and public and return String array with "
-					+ "paths to .ect files");
-		}
-	}
-
 	private boolean validateMethod(Method method, int requiredModifiers, Class<?> requiredReturnType, int numOfParameters){
 		boolean result = true;
 		result &= (method.getModifiers() == requiredModifiers);
