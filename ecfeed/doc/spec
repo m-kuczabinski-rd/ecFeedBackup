@@ -26,7 +26,7 @@ Model details page
 - "Remove Selected Classes" button removes from the model all selected classes in the viewer 
   
 Class details page
-- open the page
+- opening the page
   - if class model contains methods not contained in the class, they are marked with 
     "obsolete" and displayed red
   - if the class contains test methods annotated with @Test that are not in the model, 
@@ -73,7 +73,7 @@ Class details page
   -check double click on a method
   
 Method details page
-- check section layout
+- section layout
   - the page title is the function name with parameters
   - the Parameters section is initially folded
 - Change button
