@@ -9,7 +9,7 @@
       </category>
       <wizard
             name="New Equivalence Class Tree file"
-            icon="icons/sample.gif"
+            icon="icons/root_node.gif"
             category="com.testify.ecfeed"
             class="com.testify.ecfeed.wizards.NewEcFileWizard"
             id="com.testify.ecfeed.wizards.NewEcFileWizard">
