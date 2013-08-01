@@ -21,7 +21,7 @@
       <editor
             class="com.testify.ecfeed.editor.EcMultiPageEditor"
             extensions="ect"
-            icon="icons/sample.gif"
+            icon="icons/root_node.gif"
             id="com.testify.ecfeed.editors.EcMultiPageEditor"
             name="ecmodel">
       </editor>
