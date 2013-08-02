@@ -23,6 +23,6 @@ Import-Package: org.eclipse.jdt.core,
  org.eclipse.jface.text.source,
  org.eclipse.ui.editors.text,
  org.eclipse.ui.forms
-Bundle-ClassPath: ecfeed.jar, runner.jar,
- lib/xom-1.2.9.jar
+Bundle-ClassPath: lib/xom-1.2.10.jar,
+ ecfeed.jar
 Export-Package: com.testify.ecfeed.runner
