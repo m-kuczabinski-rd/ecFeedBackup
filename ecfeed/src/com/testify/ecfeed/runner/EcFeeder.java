@@ -62,36 +62,37 @@ public class EcFeeder extends BlockJUnit4ClassRunner {
 		try {
 			fEcModel = createEquivalenceClassModel();
 			fTestSuites = getTestSuites();
-		} catch (Throwable e) {
-			System.out.println("Exception: " + e.getMessage());
-		}
-		
-		List<FrameworkMethod> testMethods = new LinkedList<FrameworkMethod>();
-		TestClass testClass = getTestClass();
-		for(FrameworkMethod method : testClass.getAnnotatedMethods(Test.class)){
-			if(method.getMethod().getParameterTypes().length == 0){
-				//standard jUnit test
-				testMethods.add(method);
-				continue;
-			} else{
-				//parameterized test case: get requested test cases from models
-				if(fEcModel == null){
-					break;
-				}
-
-				MethodNode methodModel = getMethodModel(fEcModel, method);
-				if(methodModel == null){
+			List<FrameworkMethod> testMethods = new LinkedList<FrameworkMethod>();
+			TestClass testClass = getTestClass();
+			for(FrameworkMethod method : testClass.getAnnotatedMethods(Test.class)){
+				if(method.getMethod().getParameterTypes().length == 0){
+					//standard jUnit test
+					testMethods.add(method);
 					continue;
-				}
-				for(String testSuite : fTestSuites){
-					Collection<TestCaseNode> testCases = methodModel.getTestCases(testSuite);
-					for(TestCaseNode testCase : testCases){
-						testMethods.add(createTestMethod(method, testCase));
+				} else{
+					//parameterized test case: get requested test cases from models
+					if(fEcModel == null){
+						break;
+					}
+
+					MethodNode methodModel = getMethodModel(fEcModel, method);
+					if(methodModel == null){
+						continue;
+					}
+					for(String testSuite : fTestSuites){
+						Collection<TestCaseNode> testCases = methodModel.getTestCases(testSuite);
+						for(TestCaseNode testCase : testCases){
+							testMethods.add(createTestMethod(method, testCase));
+						}
 					}
 				}
 			}
+			return testMethods;
+		} catch (Throwable e) {
+			System.out.println("Exception: " + e.getMessage());
+			return null;
 		}
-		return testMethods;
+
 	}
 
 	@Override
@@ -134,10 +135,13 @@ public class EcFeeder extends BlockJUnit4ClassRunner {
 		return new ParameterizedFrameworkMethod(method.getMethod(), testParameters);
 	}
 
-	private MethodNode getMethodModel(RootNode rootNode, FrameworkMethod method) {
+	private MethodNode getMethodModel(RootNode rootNode, FrameworkMethod method) throws Throwable {
 		String methodName = method.getName();
 		String parentClassName = method.getMethod().getDeclaringClass().getName();
 		ClassNode classModel = rootNode.getClassModel(parentClassName);
+		if(classModel == null){
+			throw new Throwable("Cannot find model of " + parentClassName + " in the model");
+		}
 		return classModel.getMethod(methodName, getParameterTypes(method.getMethod().getParameterTypes()));
 	}
 
