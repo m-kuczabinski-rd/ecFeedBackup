@@ -151,7 +151,10 @@ public class EcModelUtils {
 				IAnnotation[] annotations = method.getAnnotations();
 				for(IAnnotation annotation : annotations){
 					if(annotation.getElementName().equals("Test")){
-						classNode.addMethod(generateMethodModel(method));
+						MethodNode methodModel = generateMethodModel(method);
+						if(methodModel != null){
+							classNode.addMethod(methodModel);
+						}
 						break;
 					}
 				}
@@ -270,13 +273,20 @@ public class EcModelUtils {
 	private static MethodNode generateMethodModel(IMethod method) throws JavaModelException {
 		MethodNode methodNode = new MethodNode(method.getElementName());
 		for(ILocalVariable parameter : method.getParameters()){
-			methodNode.addCategory(generateCategoryModel(parameter));
+			CategoryNode parameterModel = generateCategoryModel(parameter);
+			if(parameterModel == null){
+				return null;
+			}
+			methodNode.addCategory(parameterModel);
 		}
 		return methodNode;
 	}
 
 	private static CategoryNode generateCategoryModel(ILocalVariable parameter) {
 		String type = getTypeName(parameter.getTypeSignature());
+		if(type.equals(Constants.UNSUPPORTED_TYPE_NAME)){
+			return null;
+		}
 		CategoryNode category = new CategoryNode(parameter.getElementName(), type);
 		Vector<PartitionNode> defaultPartitions = generateDefaultPartitions(type);
 		for(PartitionNode partition : defaultPartitions){
@@ -288,25 +298,25 @@ public class EcModelUtils {
 	private static String getTypeName(String typeSignature) {
 		switch(typeSignature){
 		case Signature.SIG_BOOLEAN:
-			return "boolean";
+			return Constants.BOOLEAN_TYPE_NAME;
 		case Signature.SIG_BYTE:
-			return "byte";
+			return Constants.BYTE_TYPE_NAME;
 		case Signature.SIG_CHAR:
-			return "char";
+			return Constants.CHAR_TYPE_NAME;
 		case Signature.SIG_DOUBLE:
-			return "double";
+			return Constants.DOUBLE_TYPE_NAME;
 		case Signature.SIG_FLOAT:
-			return "float";
+			return Constants.FLOAT_TYPE_NAME;
 		case Signature.SIG_INT:
-			return "int";
+			return Constants.INT_TYPE_NAME;
 		case Signature.SIG_LONG:
-			return "long";
+			return Constants.LONG_TYPE_NAME;
 		case Signature.SIG_SHORT:
-			return "short";
+			return Constants.SHORT_TYPE_NAME;
 		case "QString;":
-			return "String";
+			return Constants.STRING_TYPE_NAME;
 		default:
-			return "unsupported";
+			return Constants.UNSUPPORTED_TYPE_NAME;
 		}
 	}
 

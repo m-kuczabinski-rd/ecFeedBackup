@@ -49,5 +49,6 @@ public class Constants {
 	public static final String LONG_TYPE_NAME = "long";
 	public static final String SHORT_TYPE_NAME = "short";
 	public static final String STRING_TYPE_NAME = "String";
+	public static final String UNSUPPORTED_TYPE_NAME = "unsupported";
 	
 }
