@@ -38,11 +38,11 @@ import org.eclipse.jface.viewers.TableViewerColumn;
 
 import com.testify.ecfeed.constants.DialogStrings;
 import com.testify.ecfeed.dialogs.AddTestCaseDialog;
+import com.testify.ecfeed.dialogs.GenerateTestSuiteDialog;
 import com.testify.ecfeed.dialogs.RemoveTestSuiteDialog;
 import com.testify.ecfeed.dialogs.RenameTestSuiteDialog;
 import com.testify.ecfeed.dialogs.TestMethodRenameDialog;
 import com.testify.ecfeed.model.CategoryNode;
-
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.RootNode;
@@ -272,6 +272,13 @@ public class MethodNodeDetailsPage extends GenericNodeDetailsPage{
 	
 	private void createGenerateTestSuiteButton(Composite testCasesButonsComposite) {
 		Button button = createButton(testCasesButonsComposite, "Generate Test Suite", new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e){
+				GenerateTestSuiteDialog dialog = new GenerateTestSuiteDialog(getActiveShell(), fSelectedNode);
+				if(dialog.open() == IDialogConstants.OK_ID){
+					System.out.println("OK");
+				}
+			}
 		});
 		button.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
 	}
