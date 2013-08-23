@@ -51,4 +51,8 @@ public class Constants {
 	public static final String STRING_TYPE_NAME = "String";
 	public static final String UNSUPPORTED_TYPE_NAME = "unsupported";
 	
+	public static final String TEST_GEN_ALGORITHM_EXTENSION_POINT_ID = "com.testify.ecfeed.algorithm";
+	public static final String TEST_GEN_ALGORITHM_IMPLEMENTATION_ATTRIBUTE = "implementation";
+	public static final String ALGORITHM_NAME_ATTRIBUTE = "name";
+	
 }

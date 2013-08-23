@@ -73,4 +73,8 @@ public class DialogStrings {
 			+ "Do you want to overwrite it?";
 	public static final String DIALOG_GENERATE_TEST_SUITE_TITLE = "Generate test suite";
 	public static final String DIALOG_GENERATE_TEST_SUITE_MESSAGE = "Select test suite name and algorithm for test suite generation";
+	public static final String DIALOG_EMPTY_TEST_SUITE_GENERATED_TITLE = "No test data generated";
+	public static final String DIALOG_EMPTY_TEST_SUITE_GENERATED_MESSAGE = "The algorithm generated empty test data set for this method";
+	public static final String DIALOG_SELECT_TEST_CASES_TITLE = "Select test cases";
+	public static final String DIALOG_SELECT_TEST_CASES_MESSAGE = "Select which generated test cases should be added to the model";
 }

@@ -36,6 +36,7 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
 
+import com.testify.ecfeed.api.ITestGenAlgorithm;
 import com.testify.ecfeed.constants.DialogStrings;
 import com.testify.ecfeed.dialogs.AddTestCaseDialog;
 import com.testify.ecfeed.dialogs.GenerateTestSuiteDialog;
@@ -272,14 +273,47 @@ public class MethodNodeDetailsPage extends GenericNodeDetailsPage{
 	
 	private void createGenerateTestSuiteButton(Composite testCasesButonsComposite) {
 		Button button = createButton(testCasesButonsComposite, "Generate Test Suite", new SelectionAdapter() {
+			@SuppressWarnings({"rawtypes", "unchecked"})
 			@Override
 			public void widgetSelected(SelectionEvent e){
 				GenerateTestSuiteDialog dialog = new GenerateTestSuiteDialog(getActiveShell(), fSelectedNode);
 				if(dialog.open() == IDialogConstants.OK_ID){
-					System.out.println("OK");
+					ITestGenAlgorithm selectedAlgorithm = dialog.getSelectedAlgorithm();
+					
+					Vector[] generatedData = selectedAlgorithm.generate(getAlgorithmInput(fSelectedNode));
+					if((generatedData != null) && (generatedData.length > 0)){
+						for(Vector testCase : generatedData){
+							Vector<PartitionNode> testData = (Vector<PartitionNode>)testCase;
+							TestCaseNode testCaseNode = new TestCaseNode(dialog.getTestSuiteName(), testData);
+							fSelectedNode.addTestCase(testCaseNode);
+						}
+						updateModel(fSelectedNode);
+					}
+					else{
+						new MessageDialog(Display.getDefault().getActiveShell(), 
+								DialogStrings.DIALOG_EMPTY_TEST_SUITE_GENERATED_TITLE, 
+								Display.getDefault().getSystemImage(SWT.ICON_INFORMATION), 
+								DialogStrings.DIALOG_EMPTY_TEST_SUITE_GENERATED_MESSAGE,
+								MessageDialog.INFORMATION, 
+								new String[] {IDialogConstants.OK_LABEL}, IDialogConstants.OK_ID).open();
+
+					}
+					
 				}
 			}
+
+			@SuppressWarnings("rawtypes")
+			private Vector[] getAlgorithmInput(MethodNode method) {
+				Vector<CategoryNode> categories = method.getCategories();
+				Vector[] result = new Vector[categories.size()];
+				
+				for(int i = 0; i < categories.size(); i++){
+					result[i] = categories.elementAt(i).getPartitions();
+				}
+				return result;
+			}
 		});
+		
 		button.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
 	}
 	

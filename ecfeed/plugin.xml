@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="4.2?>
 <plugin>
+   <extension-point id="com.testify.ecfeed.algorithm" name="Test Suite Generation Algorithm" schema="schema/com.testify.ecfeed.algorithm.exsd"/>
    <extension
          point="org.eclipse.ui.newWizards">
       <category

@@ -25,4 +25,4 @@ Import-Package: org.eclipse.jdt.core,
  org.eclipse.ui.forms
 Bundle-ClassPath: lib/xom-1.2.10.jar,
  ecfeed.jar
-Export-Package: com.testify.ecfeed.runner
+Export-Package: com.testify.ecfeed.api
