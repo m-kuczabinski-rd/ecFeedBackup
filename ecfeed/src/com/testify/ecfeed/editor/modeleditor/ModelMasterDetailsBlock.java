@@ -12,10 +12,12 @@
 package com.testify.ecfeed.editor.modeleditor;
 
 import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.ui.dialogs.FilteredTree;
@@ -27,7 +29,9 @@ import org.eclipse.ui.forms.SectionPart;
 import org.eclipse.ui.forms.widgets.ExpandableComposite;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Section;
-
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridLayout;
 
 import com.testify.ecfeed.editor.EcMultiPageEditor;
@@ -51,6 +55,9 @@ public class ModelMasterDetailsBlock extends MasterDetailsBlock implements IMode
 	private Section fMasterSection;
 	private TreeViewer fTreeViewer;
 	private Composite fMainComposite;
+	private Button fMoveUpButton;
+	private Button fMoveDownButton;
+	private GenericNode fSelectedNode;
 	
 	/**
 	 * Create the master details block.
@@ -85,15 +92,45 @@ public class ModelMasterDetailsBlock extends MasterDetailsBlock implements IMode
 
 	private void createTreeEditorBlock() {
 		fMainComposite = new Composite(fMasterSection, SWT.RIGHT);
+		fMainComposite.setLayout(new GridLayout(1, false));
 		fToolkit.adapt(fMainComposite);
 		fToolkit.paintBordersFor(fMainComposite);
 		fMasterSection.setClient(fMainComposite);
 		
 		createTreeViewer(fMainComposite);
+		createSortButtons(fMainComposite);
+	}
+
+	private void createSortButtons(Composite composite) {
+		Composite sortButtonsComposite = fToolkit.createComposite(composite);
+		sortButtonsComposite.setLayout(new FillLayout());
+		fMoveUpButton = fToolkit.createButton(sortButtonsComposite, "Move Up", SWT.NONE);
+		fMoveDownButton = fToolkit.createButton(sortButtonsComposite, "Move Down", SWT.NONE);
+		fMoveUpButton.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e){
+				moveSelectedItem(true);
+				fEditor.updateModel(fModel);
+			}
+		});
+		fMoveDownButton.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e){
+				moveSelectedItem(false);
+				fEditor.updateModel(fModel);
+			}
+		});
+		
+	}
+
+	private void moveSelectedItem(boolean moveUp) {
+		GenericNode parent = fSelectedNode.getParent(); 
+		if(parent != null){
+			parent.moveChild(fSelectedNode, moveUp);
+		}
 	}
 
 	private void createTreeViewer(Composite composite) {
-		fMainComposite.setLayout(new GridLayout(1, false));
 		FilteredTree filteredTree = new FilteredTree(composite, SWT.BORDER, new PatternFilter(), true);
 		filteredTree.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 		fTreeViewer = filteredTree.getViewer();
@@ -103,8 +140,20 @@ public class ModelMasterDetailsBlock extends MasterDetailsBlock implements IMode
 		fTreeViewer.setInput(fEditor);
 
 		fTreeViewer.addSelectionChangedListener(new ISelectionChangedListener() {
+
 			@Override
 			public void selectionChanged(SelectionChangedEvent event) {
+				fSelectedNode = (GenericNode)((IStructuredSelection)event.getSelection()).getFirstElement();
+				if((((IStructuredSelection)event.getSelection()).getFirstElement() instanceof RootNode) ||
+				   (((IStructuredSelection)event.getSelection()).getFirstElement() instanceof CategoryNode))
+				{
+					fMoveUpButton.setEnabled(false);
+					fMoveDownButton.setEnabled(false);
+				}
+				else{
+					fMoveUpButton.setEnabled(true);
+					fMoveDownButton.setEnabled(true);
+				}
 				detailsPart.selectionChanged(fMasterSectionPart, event.getSelection());
 			}
 		});

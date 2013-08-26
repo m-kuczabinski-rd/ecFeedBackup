@@ -12,6 +12,7 @@
 package com.testify.ecfeed.model;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Vector;
 
 public class GenericNode {
@@ -135,5 +136,16 @@ public class GenericNode {
 			}
 		}
 		return null;
+	}
+
+	//TODO unit tests
+	public void moveChild(GenericNode child, boolean moveUp) {
+		int childIndex = fChildren.indexOf(child);
+		if(moveUp && childIndex > 0){
+			Collections.swap(fChildren, childIndex, childIndex - 1);
+		}
+		if(!moveUp && childIndex < fChildren.size() - 1){
+			Collections.swap(fChildren, childIndex, childIndex + 1);
+		}
 	}
 }

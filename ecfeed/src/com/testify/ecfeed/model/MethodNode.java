@@ -12,6 +12,7 @@
 package com.testify.ecfeed.model;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.Vector;
@@ -132,4 +133,27 @@ public class MethodNode extends GenericNode {
 		super.removeChildren(testCases);
 		return testCases;
 	}	
+	
+	//TODO unit tests
+	@SuppressWarnings("rawtypes")
+	public void moveChild(GenericNode child, boolean moveUp){
+		Vector childrenArray = null;
+		if(child instanceof CategoryNode){
+			childrenArray = fCategories;
+		}
+		if(child instanceof TestCaseNode){
+			childrenArray = fTestCases;
+		}
+		if(childrenArray == null){
+			return;
+		}
+		
+		int childIndex = childrenArray.indexOf(child);
+		if(moveUp && childIndex > 0){
+			Collections.swap(childrenArray, childIndex, childIndex - 1);
+		}
+		if(!moveUp && childIndex < childrenArray.size() - 1){
+			Collections.swap(childrenArray, childIndex, childIndex + 1);
+		}
+	}
 }
