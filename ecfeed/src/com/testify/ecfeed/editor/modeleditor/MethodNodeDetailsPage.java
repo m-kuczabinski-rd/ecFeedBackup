@@ -54,7 +54,6 @@ import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.model.constraint.BasicStatement;
 import com.testify.ecfeed.model.constraint.Constraint;
-import com.testify.ecfeed.model.constraint.IStatement;
 import com.testify.ecfeed.model.constraint.StaticStatement;
 
 import org.eclipse.jface.viewers.ArrayContentProvider;
@@ -387,18 +386,14 @@ public class MethodNodeDetailsPage extends GenericNodeDetailsPage{
 					Vector[] algorithmInput = dialog.getAlgorithmInput();
 					IConstraint[] constraints = dialog.getConstraints();
 					
-					long startTime = System.currentTimeMillis();
 					Vector[] generatedData = selectedAlgorithm.generate(algorithmInput, constraints);
-					System.out.println("Data generated in " + (System.currentTimeMillis() - startTime) + "ms");
 					if((generatedData != null) && (generatedData.length > 0)){
 						for(Vector testCase : generatedData){
 							Vector<PartitionNode> testData = (Vector<PartitionNode>)testCase;
 							TestCaseNode testCaseNode = new TestCaseNode(dialog.getTestSuiteName(), testData);
 							fSelectedNode.addTestCase(testCaseNode);
 						}
-						startTime = System.currentTimeMillis();
 						updateModel(fSelectedNode);
-						System.out.println("Model updated in " + (System.currentTimeMillis() - startTime) + "ms");
 					}
 					else{
 						new MessageDialog(Display.getDefault().getActiveShell(), 
@@ -409,19 +404,7 @@ public class MethodNodeDetailsPage extends GenericNodeDetailsPage{
 								new String[] {IDialogConstants.OK_LABEL}, IDialogConstants.OK_ID).open();
 
 					}
-					
 				}
-			}
-
-			@SuppressWarnings("rawtypes")
-			private Vector[] getAlgorithmInput(MethodNode method) {
-				Vector<CategoryNode> categories = method.getCategories();
-				Vector[] result = new Vector[categories.size()];
-				
-				for(int i = 0; i < categories.size(); i++){
-					result[i] = categories.elementAt(i).getPartitions();
-				}
-				return result;
 			}
 		});
 		
