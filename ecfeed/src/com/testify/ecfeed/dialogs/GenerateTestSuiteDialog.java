@@ -436,9 +436,8 @@ public class GenerateTestSuiteDialog extends TitleAreaDialog {
 		Object[] checkedObjects = fConstraintsViewer.getCheckedElements();
 		ArrayList<IConstraint> constraints = new ArrayList<IConstraint>();
 		for(Object o : checkedObjects){
-			if(o instanceof String){
-				String name = (String)o;
-				constraints.addAll(fMethod.getConstraints(name));
+			if(o instanceof ConstraintNode){
+				constraints.add((ConstraintNode)o);
 			}
 		}
 		
