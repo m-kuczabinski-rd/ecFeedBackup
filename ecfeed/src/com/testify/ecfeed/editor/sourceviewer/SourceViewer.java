@@ -14,6 +14,7 @@ package com.testify.ecfeed.editor.sourceviewer;
 import java.io.ByteArrayOutputStream;
 
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.IDocumentPartitioner;
 import org.eclipse.jface.text.rules.FastPartitioner;
@@ -30,6 +31,8 @@ import com.testify.ecfeed.parsers.EcWriter;
 public class SourceViewer extends TextEditor implements IModelUpdateListener{
 	
 	private ColorManager fColorManager;
+	private EcMultiPageEditor fEditor;
+	private boolean fNeedRefresh;
 	
 	public class DocumentProvider extends FileDocumentProvider{
 		@Override
@@ -57,6 +60,7 @@ public class SourceViewer extends TextEditor implements IModelUpdateListener{
 	public SourceViewer(EcMultiPageEditor editor){
 		super();
 		fColorManager = new ColorManager();
+		fEditor = editor;
 		setSourceViewerConfiguration(new ViewerConfiguration(fColorManager));
 		setDocumentProvider(new DocumentProvider());
 		if(editor != null){
@@ -64,6 +68,19 @@ public class SourceViewer extends TextEditor implements IModelUpdateListener{
 		}
 	}
 	
+	@Override
+	public void doSave(IProgressMonitor progressMonitor){
+		refresh();
+		super.doSave(progressMonitor);
+	}
+	
+	@Override
+	public void doSaveAs(){
+		refresh();
+		super.doSaveAs();
+	}
+	
+	@Override
 	public void dispose() {
 		fColorManager.dispose();
 		super.dispose();
@@ -80,9 +97,21 @@ public class SourceViewer extends TextEditor implements IModelUpdateListener{
 
 	@Override
 	public void modelUpdated(RootNode model) {
+		fNeedRefresh = true;
+	}
+	
+	private void refreshSourceText(){
+		RootNode model = fEditor.getModel();
 		ByteArrayOutputStream ostream = new ByteArrayOutputStream();
 		EcWriter writer = new EcWriter(ostream);
 		writer.writeXmlDocument(model);
 		getDocument().set(ostream.toString());
+	}
+
+	public void refresh() {
+		if(fNeedRefresh){
+			refreshSourceText();
+		}
+		fNeedRefresh = false;
 	}
 }
