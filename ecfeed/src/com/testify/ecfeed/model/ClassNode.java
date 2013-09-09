@@ -52,14 +52,6 @@ public class ClassNode extends GenericNode {
 		return getLocalName();
 	}
 
-	@Override 
-	public boolean equals(Object obj){
-		if(obj instanceof ClassNode != true){
-			return false;
-		}
-		return super.equals((ClassNode)obj);
-	}
-
 	//TODO unit tests
 	public MethodNode getMethod(String name, Vector<String> argTypes) {
 		for(MethodNode methodNode : getMethods()){

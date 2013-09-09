@@ -46,18 +46,6 @@ public class CategoryNode extends GenericNode {
 		return super.removeChild(partition);
 	}
 
-	@Override 
-	public boolean equals(Object obj){
-		if(obj instanceof CategoryNode != true){
-			return false;
-		}
-		CategoryNode category = (CategoryNode)obj;
-		if(!fType.equals(category.getType())){
-			return false;
-		}
-		return super.equals(category);
-	}
-
 	//TODO unit tests
 	public Vector<PartitionNode> getPartitions() {
 		Vector<PartitionNode> partitions = new Vector<PartitionNode>();

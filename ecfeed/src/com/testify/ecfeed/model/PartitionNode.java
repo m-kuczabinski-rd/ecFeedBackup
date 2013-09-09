@@ -43,26 +43,6 @@ public class PartitionNode extends GenericNode {
 		return getName() + ": " + getValueString();
 	}
 	
-	@Override 
-	public boolean equals(Object obj){
-		if(obj instanceof PartitionNode != true){
-			return false;
-		}
-		PartitionNode partition = (PartitionNode)obj;
-		Object partitionValue = partition.getValue();
-		if(fValue != null){
-			if(!fValue.equals(partitionValue)){
-				return false;
-			}
-		}
-		else{
-			if(partitionValue != null){
-				return false;
-			}
-		}
-		return super.equals(partition);
-	}
-
 	public CategoryNode getCategory() {
 		return (CategoryNode)getParent();
 	}

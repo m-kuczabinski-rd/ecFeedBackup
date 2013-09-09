@@ -85,14 +85,6 @@ public class MethodNode extends GenericNode {
 		return result;
 	}
 
-	@Override 
-	public boolean equals(Object obj){
-		if(obj instanceof MethodNode != true){
-			return false;
-		}
-		return super.equals((MethodNode)obj);
-	}
-
 	@Override
 	public Vector<GenericNode> getChildren(){
 		Vector<GenericNode> children = new Vector<GenericNode>();

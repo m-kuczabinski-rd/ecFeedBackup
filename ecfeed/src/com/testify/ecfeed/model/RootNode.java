@@ -33,14 +33,6 @@ public class RootNode extends GenericNode {
 		return classes;
 	}
 
-	@Override 
-	public boolean equals(Object obj){
-		if(obj instanceof RootNode != true){
-			return false;
-		}
-		return super.equals((RootNode)obj);
-	}
-
 	//TODO unit tests
 	public ClassNode getClassModel(String name) {
 		for(ClassNode childClass : getClasses()){

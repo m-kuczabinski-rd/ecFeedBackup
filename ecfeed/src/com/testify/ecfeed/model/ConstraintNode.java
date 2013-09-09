@@ -23,14 +23,6 @@ public class ConstraintNode extends GenericNode implements IConstraint{
 		return getName() + ": " + getConstraint().toString();
 	}
 	
-	@Override
-	public boolean equals(Object obj){
-		if(obj instanceof ConstraintNode == false) return false;
-		ConstraintNode constraint = (ConstraintNode)obj;
-		if (getConstraint().equals(constraint.getConstraint()) == false) return false;
-		return super.equals(obj);
-	}
-
 	public MethodNode getMethod() {
 		if(getParent() != null && getParent() instanceof MethodNode){
 			return (MethodNode)getParent();
