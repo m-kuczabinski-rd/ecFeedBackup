@@ -19,6 +19,15 @@ import nu.xom.*;
 
 import com.testify.ecfeed.constants.Constants;
 import com.testify.ecfeed.model.CategoryNode;
+import com.testify.ecfeed.model.constraint.BasicStatement;
+import com.testify.ecfeed.model.constraint.Constraint;
+import com.testify.ecfeed.model.constraint.IStatement;
+import com.testify.ecfeed.model.constraint.Operator;
+import com.testify.ecfeed.model.constraint.Relation;
+import com.testify.ecfeed.model.constraint.Statement;
+import com.testify.ecfeed.model.constraint.StatementArray;
+import com.testify.ecfeed.model.constraint.StaticStatement;
+import com.testify.ecfeed.model.ConstraintNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.ClassNode;
@@ -88,10 +97,114 @@ public class EcParser {
 			if(child.getLocalName() == Constants.TEST_CASE_NODE_NAME){
 				methodNode.addTestCase(parseTestCaseElement(child, methodNode.getCategories()));
 			}
+			if(child.getLocalName() == Constants.CONSTRAINT_NODE_NAME){
+				methodNode.addConstraint(parseConstraintElement(child, methodNode));
+			}
 		}
 		return methodNode;
 	}
 	
+	private ConstraintNode parseConstraintElement(Element constraintElement, MethodNode method) {
+		String name = constraintElement.getAttributeValue(Constants.NODE_NAME_ATTRIBUTE);
+		BasicStatement premise = null;
+		BasicStatement consequence = null;
+		for(Element child : getIterableElements(constraintElement.getChildElements())){
+			if(child.getLocalName().equals(Constants.CONSTRAINT_PREMISE_NODE_NAME)){
+				if(child.getChildCount() > 0){
+					//there is only one statement per premise or consequence that is either
+					//a single statement or statement array
+					premise = parseStatement(child.getChildElements().get(0), method);
+				}
+			}
+			else if(child.getLocalName().equals(Constants.CONSTRAINT_CONSEQUENCE_NODE_NAME)){
+				if(child.getChildCount() > 0){
+					consequence = parseStatement(child.getChildElements().get(0), method);
+				}
+			}
+		}
+		return new ConstraintNode(name, new Constraint(premise, consequence));
+	}
+
+	private BasicStatement parseStatement(Element element, MethodNode method) {
+		switch(element.getLocalName()){
+		case Constants.CONSTRAINT_STATEMENT_NODE_NAME:
+			return parseSigleStatement(element, method);
+		case Constants.CONSTRAINT_STATEMENT_ARRAY_NODE_NAME:
+			return parseStatementArray(element, method);
+		case Constants.CONSTRAINT_STATIC_STATEMENT_NODE_NAME:
+			return parseStaticStatement(element);
+		default: return null;
+		}
+	}
+
+	private BasicStatement parseStatementArray(Element element, MethodNode method) {
+		StatementArray statementArray = null;
+		String operatorValue = element.getAttributeValue(Constants.STATEMENT_OPERATOR_ATTRIBUTE_NAME);
+		switch(operatorValue){
+		case Constants.STATEMENT_OPERATOR_OR_ATTRIBUTE_VALUE:
+			statementArray = new StatementArray(Operator.OR);
+			break;
+		case Constants.STATEMENT_OPERATOR_AND_ATTRIBUTE_VALUE:
+			statementArray = new StatementArray(Operator.AND);
+			break;
+		default: return null;
+		}
+		for(Element child : getIterableElements(element.getChildElements())){
+			BasicStatement childStatement = parseStatement(child, method);
+			if(childStatement != null){
+				statementArray.addStatement(childStatement);
+			}
+		}
+		return statementArray;
+	}
+
+	private BasicStatement parseStaticStatement(Element element) {
+		String valueString = element.getAttributeValue(Constants.STATIC_VALUE_ATTRIBUTE_NAME);
+		switch(valueString){
+		case Constants.STATIC_STATEMENT_TRUE_VALUE:
+			return new StaticStatement(true);
+		case Constants.STATIC_STATEMENT_FALSE_VALUE:
+			return new StaticStatement(false);
+		default: return null;
+		}
+	}
+
+	private BasicStatement parseSigleStatement(Element element, MethodNode method) {
+		
+		String categoryName = element.getAttributeValue(Constants.STATEMENT_CATEGORY_ATTRIBUTE_NAME);
+		CategoryNode category = method.getCategory(categoryName);
+		String partitionName = element.getAttributeValue(Constants.STATEMENT_PARTITION_ATTRIBUTE_NAME);
+		PartitionNode partition = category.getPartition(partitionName);
+
+		String relationName = element.getAttributeValue(Constants.STATEMENT_RELATION_ATTRIBUTE_NAME);
+		Relation relation = null;
+		switch(relationName){
+		case Constants.RELATION_LESS:
+			relation = Relation.LESS;
+			break;
+		case Constants.RELATION_LESS_EQUAL:
+			relation = Relation.LESS_EQUAL;
+			break;
+		case Constants.RELATION_EQUAL:
+			relation = Relation.EQUAL;
+			break;
+		case Constants.RELATION_GREATER_EQUAL:
+			relation = Relation.GREATER_EQUAL;
+			break;
+		case Constants.RELATION_GREATER:
+			relation = Relation.GREATER;
+			break;
+		case Constants.RELATION_NOT:
+			relation = Relation.NOT;
+			break;
+		default:
+			relation = Relation.EQUAL;
+			break;
+		}
+		
+		return new Statement(partition, relation);
+	}
+
 	//TODO unit tests
 	private TestCaseNode parseTestCaseElement(Element element, Vector<CategoryNode> categories) {
 		String testSuiteName = element.getAttributeValue(Constants.TEST_SUITE_NAME_ATTRIBUTE);

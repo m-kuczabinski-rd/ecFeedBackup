@@ -20,6 +20,10 @@ public class DialogStrings {
 			"from the model. All generated test cases will be permanently deleted.";
 	public static final String DIALOG_REMOVE_TEST_CASES_TITLE = "Remove test cases";
 	public static final String DIALOG_REMOVE_TEST_CASES_MESSAGE = "Delete selected test cases?";
+
+	public static final String DIALOG_REMOVE_CONSTRAINTS_TITLE = "Remove constraints";
+	public static final String DIALOG_REMOVE_CONSTRAINTS_MESSAGE = "Remove selected constraints from model?";
+
 	public static final String DIALOG_REMOVE_METHODS_TITLE = "Remove methods";
 	public static final String DIALOG_REMOVE_METHODS_MESSAGE = "Remove selected methods from the model?\n" +
 			"All generated test cases will be lost.";
@@ -75,6 +79,12 @@ public class DialogStrings {
 	public static final String DIALOG_GENERATE_TEST_SUITE_MESSAGE = "Select test suite name and algorithm for test suite generation";
 	public static final String DIALOG_EMPTY_TEST_SUITE_GENERATED_TITLE = "No test data generated";
 	public static final String DIALOG_EMPTY_TEST_SUITE_GENERATED_MESSAGE = "The algorithm generated empty test data set for this method";
-	public static final String DIALOG_SELECT_TEST_CASES_TITLE = "Select test cases";
-	public static final String DIALOG_SELECT_TEST_CASES_MESSAGE = "Select which generated test cases should be added to the model";
+	public static final String DIALOG_ADD_CONSTRAINT_TITLE = "Add constraint";
+	public static final String DIALOG_ADD_CONSTRAINT_MESSAGE = "Enter constraint's name and define its premise and consequence";
+	public static final String DIALOG_CONSTRAINT_NAME_PROBLEM_TITLE = "Wrong constraint name.";
+	public static final String DIALOG_CONSTRAINT_NAME_PROBLEM_MESSAGE = "Name of a constrant must be between 1 and 64 characters long.";
+	public static final String DIALOG_GENERATE_TEST_SUITES_SELECT_CONSTRAINTS_LABEL = "Select constraints considered when generating test suite";
+	public static final String DIALOG_GENERATE_TEST_SUITES_SELECT_PARTITIONS_LABEL = "Select which partitions will be considered for generating test suite. "
+			+ "Each category must be represented by at least one partition.";
+
 }

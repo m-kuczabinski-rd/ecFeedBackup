@@ -19,10 +19,17 @@ public class GenericNode {
 	private String fName;
 	private Vector<GenericNode> fChildren;
 	private GenericNode fParent;
+	private final int fId;
+	private static int fLastId = 0;
 
 	public GenericNode(String name){
+		fId = ++fLastId;
 		this.fName = name;
 		this.fChildren = new Vector<GenericNode>();
+	}
+	
+	public int getId(){
+		return fId;
 	}
 	
 	public String getName() {
@@ -87,6 +94,9 @@ public class GenericNode {
 			return false;
 		}
 		GenericNode node = (GenericNode)obj;
+		if(fId != node.getId()){
+			return false;
+		}
 		if (!fName.equals(node.getName())){
 			return false;
 		}

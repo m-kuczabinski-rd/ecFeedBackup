@@ -23,13 +23,14 @@ import org.osgi.framework.FrameworkUtil;
 
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.ClassNode;
+import com.testify.ecfeed.model.ConstraintNode;
 import com.testify.ecfeed.model.GenericNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.TestCaseNode;
 
-public class EcLabelProvider extends LabelProvider {
+public class ModelLabelProvider extends LabelProvider {
 
 	public String getText(Object element){
 		if(element instanceof GenericNode){
@@ -54,6 +55,9 @@ public class EcLabelProvider extends LabelProvider {
 		if(element instanceof CategoryNode){
 			return getImage("category_node.gif");
 		}
+		if(element instanceof ConstraintNode){
+			return getImage("constraint_node.gif");
+		}
 		if(element instanceof PartitionNode){
 			return getImage("partition_node.gif");
 		}
@@ -61,7 +65,7 @@ public class EcLabelProvider extends LabelProvider {
 	}
 	
 	private static Image getImage(String file) {
-	    Bundle bundle = FrameworkUtil.getBundle(EcLabelProvider.class);
+	    Bundle bundle = FrameworkUtil.getBundle(ModelLabelProvider.class);
 	    URL url = FileLocator.find(bundle, new Path("icons/" + file), null);
 	    ImageDescriptor image = ImageDescriptor.createFromURL(url);
 	    return image.createImage();

@@ -18,6 +18,12 @@ import java.util.Vector;
 import com.testify.ecfeed.constants.Constants;
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.ClassNode;
+import com.testify.ecfeed.model.constraint.Constraint;
+import com.testify.ecfeed.model.constraint.IStatement;
+import com.testify.ecfeed.model.constraint.Statement;
+import com.testify.ecfeed.model.constraint.StatementArray;
+import com.testify.ecfeed.model.constraint.StaticStatement;
+import com.testify.ecfeed.model.ConstraintNode;
 import com.testify.ecfeed.model.GenericNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
@@ -68,6 +74,9 @@ public class EcWriter {
 		else if (node instanceof TestCaseNode){
 			Vector<PartitionNode> testData = ((TestCaseNode)node).getTestData();
 			element = createTestDataElement(name, testData);
+		}
+		else if (node instanceof ConstraintNode){
+			element = createConstraintElement(name, (Constraint)((ConstraintNode)node).getConstraint());
 		}
 		
 		for(GenericNode child : node.getChildren()){
@@ -144,4 +153,71 @@ public class EcWriter {
 		return rootElement;
 	}
 
+	private Element createConstraintElement(String name, Constraint constraint){
+		Element constraintElement = new Element(Constants.CONSTRAINT_NODE_NAME);
+		Attribute nameAttribute = new Attribute(Constants.NODE_NAME_ATTRIBUTE, name);
+		constraintElement.addAttribute(nameAttribute);
+		Element premiseElement = new Element(Constants.CONSTRAINT_PREMISE_NODE_NAME);
+		appendStatement(premiseElement, constraint.getPremise());
+		constraintElement.appendChild(premiseElement);
+		Element consequenceElement = new Element(Constants.CONSTRAINT_CONSEQUENCE_NODE_NAME);
+		appendStatement(consequenceElement, constraint.getConsequence());
+		constraintElement.appendChild(consequenceElement);
+		return constraintElement;
+	}
+	
+	private void appendStatement(Element element, IStatement istatement){
+		if(istatement instanceof StatementArray){
+			appentStatementArray(element, istatement);
+		}
+		else if(istatement instanceof StaticStatement){
+			StaticStatement statement = (StaticStatement)istatement;
+			Element statementElement = new Element(Constants.CONSTRAINT_STATIC_STATEMENT_NODE_NAME);
+			String attrName = Constants.STATEMENT_STATIC_VALUE_ATTRIBUTE_NAME;
+			String attrValue = statement.getValue()?Constants.STATIC_STATEMENT_TRUE_VALUE:
+								Constants.STATIC_STATEMENT_FALSE_VALUE;
+			statementElement.addAttribute(new Attribute(attrName, attrValue));
+			
+			element.appendChild(statementElement);
+		}
+		else if(istatement instanceof Statement){
+			Statement statement = (Statement)istatement;
+			Element statementElement = new Element(Constants.CONSTRAINT_STATEMENT_NODE_NAME);
+			PartitionNode condition = statement.getCondition();
+			String categoryName = condition.getParent().getName();
+			Attribute categoryAttribute = 
+					new Attribute(Constants.STATEMENT_CATEGORY_ATTRIBUTE_NAME, categoryName);
+			Attribute partitionAttribute = 
+					new Attribute(Constants.STATEMENT_PARTITION_ATTRIBUTE_NAME, condition.getName());
+			Attribute relationAttribute = 
+					new Attribute(Constants.STATEMENT_RELATION_ATTRIBUTE_NAME, statement.getRelation().toString());
+			statementElement.addAttribute(categoryAttribute);
+			statementElement.addAttribute(partitionAttribute);
+			statementElement.addAttribute(relationAttribute);
+
+			element.appendChild(statementElement);
+		}
+	}
+
+	private void appentStatementArray(Element element, IStatement statement) {
+		StatementArray statementArray = (StatementArray)statement;
+		Element statementArrayElement = new Element(Constants.CONSTRAINT_STATEMENT_ARRAY_NODE_NAME);
+		Attribute operatorAttribute = null;
+		switch(statementArray.getOperator()){
+		case AND:
+			operatorAttribute = new Attribute(Constants.STATEMENT_OPERATOR_ATTRIBUTE_NAME, 
+					Constants.STATEMENT_OPERATOR_AND_ATTRIBUTE_VALUE);
+			break;
+		case OR:
+			operatorAttribute = new Attribute(Constants.STATEMENT_OPERATOR_ATTRIBUTE_NAME, 
+					Constants.STATEMENT_OPERATOR_OR_ATTRIBUTE_VALUE);
+			break;
+		}
+		statementArrayElement.addAttribute(operatorAttribute);
+		for(IStatement child : statementArray.getChildren()){
+			appendStatement(statementArrayElement, child);
+		}
+		element.appendChild(statementArrayElement);
+	}
+	
 }

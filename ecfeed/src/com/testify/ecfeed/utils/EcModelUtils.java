@@ -28,6 +28,7 @@ import org.eclipse.jdt.core.Signature;
 import com.testify.ecfeed.constants.Constants;
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.ClassNode;
+import com.testify.ecfeed.model.ConstraintNode;
 import com.testify.ecfeed.model.GenericNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
@@ -107,17 +108,25 @@ public class EcModelUtils {
 	public static void removeReferences(PartitionNode partition){
 		MethodNode method = getMethodAncestor(partition);
 		Collection<TestCaseNode> testCases = method.getTestCases();
-		ArrayList<TestCaseNode> toRemove = new ArrayList<TestCaseNode>();
+		ArrayList<TestCaseNode> testCasesToRemove = new ArrayList<TestCaseNode>();
 		for(TestCaseNode testCase : testCases){
-			for(PartitionNode testValue : testCase.getTestData()){
-				if(testValue == partition){
-					toRemove.add(testCase);
-					break;
-				}
+			if(testCase.mentions(partition)){
+				testCasesToRemove.add(testCase);
 			}
 		}
-		for(TestCaseNode testCase : toRemove){
-			method.removeChild(testCase);
+		for(TestCaseNode node : testCasesToRemove){
+			method.removeChild(node);
+		}
+
+		ArrayList<ConstraintNode> constraintsToRemove = new ArrayList<ConstraintNode>();
+		Collection<ConstraintNode> constraints = method.getConstraints();
+		for(ConstraintNode constraint : constraints){
+			if(constraint.mentions(partition)){
+				constraintsToRemove.add(constraint);
+			}
+		}
+		for(ConstraintNode node : constraintsToRemove){
+			method.removeChild(node);
 		}
 	}
 
@@ -433,5 +442,12 @@ public class EcModelUtils {
 		partitions.add(new PartitionNode("mixed cases", "aA"));
 		partitions.add(new PartitionNode("all latin", "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"));
 		return partitions;
+	}
+
+
+	public static boolean validateConstraintName(String name) {
+		if(name.length() < 1 || name.length() > 64) return false;
+		if(name.matches("[ ]+.*")) return false;
+		return true;
 	}
 }

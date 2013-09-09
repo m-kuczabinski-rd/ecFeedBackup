@@ -20,6 +20,7 @@ import org.eclipse.ui.forms.widgets.Section;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.FillLayout;
+import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Label;
@@ -36,7 +37,9 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
 
+import com.testify.ecfeed.api.IConstraint;
 import com.testify.ecfeed.api.ITestGenAlgorithm;
+import com.testify.ecfeed.constants.Constants;
 import com.testify.ecfeed.constants.DialogStrings;
 import com.testify.ecfeed.dialogs.AddTestCaseDialog;
 import com.testify.ecfeed.dialogs.GenerateTestSuiteDialog;
@@ -44,10 +47,15 @@ import com.testify.ecfeed.dialogs.RemoveTestSuiteDialog;
 import com.testify.ecfeed.dialogs.RenameTestSuiteDialog;
 import com.testify.ecfeed.dialogs.TestMethodRenameDialog;
 import com.testify.ecfeed.model.CategoryNode;
+import com.testify.ecfeed.model.ConstraintNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.TestCaseNode;
+import com.testify.ecfeed.model.constraint.BasicStatement;
+import com.testify.ecfeed.model.constraint.Constraint;
+import com.testify.ecfeed.model.constraint.IStatement;
+import com.testify.ecfeed.model.constraint.StaticStatement;
 
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.wb.swt.TableViewerColumnSorter;
@@ -57,6 +65,7 @@ public class MethodNodeDetailsPage extends GenericNodeDetailsPage{
 	private Label fMethodNameLabel;
 	private MethodNode fSelectedNode;
 	private CheckboxTableViewer fTestCasesViewer;
+	private CheckboxTableViewer fConstraintsViewer;
 	private TableViewer fParametersViewer;
 	private Section fMainSection;
 
@@ -79,6 +88,8 @@ public class MethodNodeDetailsPage extends GenericNodeDetailsPage{
 		createMethodNameComposite(mainComposite);
 		
 		createParametersSection(mainComposite);
+		
+		createConstraintsSection(mainComposite);
 
 		createTestCasesSection(mainComposite);
 	}
@@ -156,6 +167,100 @@ public class MethodNodeDetailsPage extends GenericNodeDetailsPage{
 		});
 	}
 	
+	private void createConstraintsSection(Composite composite) {
+		Section constraintsSection = getToolkit().createSection(composite, Section.EXPANDED | Section.TWISTIE | Section.TITLE_BAR);
+		constraintsSection.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1));
+		getToolkit().paintBordersFor(constraintsSection);
+		constraintsSection.setText("Constraints");
+		constraintsSection.setExpanded(false);
+		
+		Composite constraintsComposite = new Composite(constraintsSection, SWT.NONE);
+		getToolkit().adapt(constraintsComposite);
+		getToolkit().paintBordersFor(constraintsComposite);
+		constraintsSection.setClient(constraintsComposite);
+		constraintsComposite.setLayout(new GridLayout(1, false));
+		constraintsComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+		
+		createConstraintsViewer(constraintsComposite);
+		
+		createConstraintsButtons(constraintsComposite);
+
+	}
+	
+
+	
+	private void createConstraintsViewer(Composite composite) {
+		fConstraintsViewer = CheckboxTableViewer.newCheckList(composite, SWT.BORDER | SWT.FULL_SELECTION);
+		fConstraintsViewer.setContentProvider(new ArrayContentProvider());
+		fConstraintsViewer.addDoubleClickListener(new ChildrenViewerDoubleClickListener());
+		Table constraintsTable = fConstraintsViewer.getTable();
+		constraintsTable.setHeaderVisible(true);
+		constraintsTable.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1));
+		getToolkit().paintBordersFor(constraintsTable);
+		
+		TableViewerColumn constraintNameViewerColumn = createTableViewerColumn(fConstraintsViewer, "Name", 
+				130, new ColumnLabelProvider(){
+			@Override
+			public String getText(Object element){
+				return ((ConstraintNode)element).getName();
+			}
+		});
+		
+		new TableViewerColumnSorter(constraintNameViewerColumn) {
+			protected Object getValue(Object o) {
+				return ((ConstraintNode)o).getName();
+			}
+		};
+
+		createTableViewerColumn(fConstraintsViewer, "Definition", 100, new ColumnLabelProvider(){
+			@Override
+			public String getText(Object element){
+				return ((ConstraintNode)element).getConstraint().toString();
+			}
+		});
+	}
+
+	private void createConstraintsButtons(Composite composite) {
+		Composite constraintsButtonsComposite = new Composite(composite, SWT.NONE);
+		constraintsButtonsComposite.setLayout(new RowLayout());
+
+		createAddConstraintButton(constraintsButtonsComposite);
+		createRemoveSelectedConstraintsButton(constraintsButtonsComposite);
+	}
+
+	private void createAddConstraintButton(Composite composite) {
+		createButton(composite, "Add Constraint", new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e){
+				String name = Constants.DEFAULT_CONSTRAINT_NAME;
+				BasicStatement premise = new StaticStatement(true);
+				BasicStatement consequence = new StaticStatement(true);
+				fSelectedNode.addConstraint(new ConstraintNode(name, new Constraint(premise, consequence)));
+				updateModel(fSelectedNode);
+			}
+		});
+	}
+	private void createRemoveSelectedConstraintsButton(Composite composite) {
+		createButton(composite, "Remove Selected", new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e){
+				MessageDialog infoDialog = new MessageDialog(Display.getDefault().getActiveShell(), 
+						DialogStrings.DIALOG_REMOVE_CONSTRAINTS_TITLE, 
+						Display.getDefault().getSystemImage(SWT.ICON_QUESTION), 
+						DialogStrings.DIALOG_REMOVE_CONSTRAINTS_MESSAGE,
+						MessageDialog.QUESTION_WITH_CANCEL, 
+						new String[] {IDialogConstants.OK_LABEL, IDialogConstants.CANCEL_LABEL}, IDialogConstants.OK_ID);
+				if(infoDialog.open() == IDialogConstants.OK_ID){
+					for(Object constraint : fConstraintsViewer.getCheckedElements()){
+						fSelectedNode.removeConstraint((ConstraintNode)constraint);
+					}
+					fTestCasesViewer.setAllChecked(false);
+					updateModel((RootNode)fSelectedNode.getRoot());
+				}
+			}
+		});
+	}
+
 	private void createTestCasesSection(Composite mainComposite) {
 		Section testCasesSection = getToolkit().createSection(mainComposite, Section.TITLE_BAR);
 		testCasesSection.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
@@ -279,15 +384,21 @@ public class MethodNodeDetailsPage extends GenericNodeDetailsPage{
 				GenerateTestSuiteDialog dialog = new GenerateTestSuiteDialog(getActiveShell(), fSelectedNode);
 				if(dialog.open() == IDialogConstants.OK_ID){
 					ITestGenAlgorithm selectedAlgorithm = dialog.getSelectedAlgorithm();
+					Vector[] algorithmInput = dialog.getAlgorithmInput();
+					IConstraint[] constraints = dialog.getConstraints();
 					
-					Vector[] generatedData = selectedAlgorithm.generate(getAlgorithmInput(fSelectedNode));
+					long startTime = System.currentTimeMillis();
+					Vector[] generatedData = selectedAlgorithm.generate(algorithmInput, constraints);
+					System.out.println("Data generated in " + (System.currentTimeMillis() - startTime) + "ms");
 					if((generatedData != null) && (generatedData.length > 0)){
 						for(Vector testCase : generatedData){
 							Vector<PartitionNode> testData = (Vector<PartitionNode>)testCase;
 							TestCaseNode testCaseNode = new TestCaseNode(dialog.getTestSuiteName(), testData);
 							fSelectedNode.addTestCase(testCaseNode);
 						}
+						startTime = System.currentTimeMillis();
 						updateModel(fSelectedNode);
+						System.out.println("Model updated in " + (System.currentTimeMillis() - startTime) + "ms");
 					}
 					else{
 						new MessageDialog(Display.getDefault().getActiveShell(), 
@@ -369,6 +480,7 @@ public class MethodNodeDetailsPage extends GenericNodeDetailsPage{
 		fMainSection.setText(fSelectedNode.toString());
 		fMethodNameLabel.setText("Method name: " + fSelectedNode.toString());
 		fParametersViewer.setInput(fSelectedNode.getCategories());
+		fConstraintsViewer.setInput(fSelectedNode.getConstraints());
 		fTestCasesViewer.setInput(fSelectedNode.getTestCases());
 	}
 }

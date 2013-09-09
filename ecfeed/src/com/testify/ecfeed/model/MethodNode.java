@@ -17,26 +17,36 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.Vector;
 
+import com.testify.ecfeed.api.IConstraint;
+
 public class MethodNode extends GenericNode {
 	private Vector<CategoryNode> fCategories;
 	private Vector<TestCaseNode> fTestCases;
+	private Vector<ConstraintNode> fConstraints;
 	
 	public MethodNode(String name){
 		super(name);
 		fCategories = new Vector<CategoryNode>();
 		fTestCases = new Vector<TestCaseNode>();
+		fConstraints = new Vector<ConstraintNode>();
 	}
 	
 	//TODO Unit tests 
 	public void addCategory(CategoryNode category){
+		super.addChild(fCategories.size(), category);
 		fCategories.add(category);
-		super.addChild(category);
 	}
 
 	//TODO unit tests 
+	public void addConstraint(ConstraintNode constraint) {
+		super.addChild(fCategories.size() + fConstraints.size(), constraint);
+		fConstraints.add(constraint);
+	}
+	
+	//TODO unit tests 
 	public void addTestCase(TestCaseNode testCase){
+		super.addChild(fCategories.size() + fConstraints.size() + fTestCases.size(), testCase);
 		fTestCases.add(testCase);
-		super.addChild(testCase);
 	}
 	
 	public Vector<CategoryNode> getCategories(){
@@ -45,6 +55,10 @@ public class MethodNode extends GenericNode {
 
 	public Vector<TestCaseNode> getTestCases(){
 		return fTestCases;
+	}
+	
+	public Vector<ConstraintNode> getConstraints(){
+		return fConstraints;
 	}
 	
 	//TODO unit tests
@@ -83,6 +97,7 @@ public class MethodNode extends GenericNode {
 	public Vector<GenericNode> getChildren(){
 		Vector<GenericNode> children = new Vector<GenericNode>();
 		children.addAll(fCategories);
+		children.addAll(fConstraints);
 		children.addAll(fTestCases);
 		return children;
 	}
@@ -97,6 +112,12 @@ public class MethodNode extends GenericNode {
 	public boolean removeChild(CategoryNode category){
 		fCategories.remove(category);
 		return super.removeChild(category);
+	}
+	
+	//TODO unit tests
+	public boolean removeChild(ConstraintNode constraint){
+		fConstraints.remove(constraint);
+		return super.removeChild(constraint);
 	}
 
 	public Vector<String> getParameterTypes() {
@@ -155,5 +176,44 @@ public class MethodNode extends GenericNode {
 		if(!moveUp && childIndex < childrenArray.size() - 1){
 			Collections.swap(childrenArray, childIndex, childIndex + 1);
 		}
+	}
+
+	public CategoryNode getCategory(String categoryName) {
+		for(CategoryNode category : getCategories()){
+			if(category.getName().equals(categoryName)){
+				return category;
+			}
+		}
+		return null;
+	}
+
+	public void removeConstraint(ConstraintNode constraint) {
+		fConstraints.remove(constraint);
+	}
+
+	public Set<String> getConstraintsNames() {
+		Set<String> names = new HashSet<String>();
+		for(ConstraintNode constraint : fConstraints){
+			names.add(constraint.getName());
+		}
+		return names;
+	}
+
+	public Vector<String> getCategoriesNames() {
+		Vector<String> names = new Vector<String>();
+		for(CategoryNode category : getCategories()){
+			names.add(category.getName());
+		}
+		return names;
+	}
+
+	public Vector<IConstraint> getConstraints(String name) {
+		Vector<IConstraint> constraints = new Vector<IConstraint>();
+		for(ConstraintNode node : fConstraints){
+			if(node.getName().equals(name)){
+				constraints.add(node);
+			}
+		}
+		return constraints;
 	}
 }

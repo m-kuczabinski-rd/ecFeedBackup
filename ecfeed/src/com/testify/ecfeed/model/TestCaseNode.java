@@ -54,4 +54,13 @@ public class TestCaseNode extends GenericNode {
 		if (getTestData().equals(testCase.getTestData()) == false) return false;
 		return super.equals(obj);
 	}
+
+	public boolean mentions(PartitionNode partition) {
+		for(PartitionNode p : fTestData){
+			if(p == partition){
+				return true;
+			}
+		}
+		return false;
+	}
 }

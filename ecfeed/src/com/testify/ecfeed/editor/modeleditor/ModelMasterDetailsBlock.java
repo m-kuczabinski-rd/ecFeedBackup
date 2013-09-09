@@ -38,6 +38,7 @@ import com.testify.ecfeed.editor.EcMultiPageEditor;
 import com.testify.ecfeed.editor.IModelUpdateListener;
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.ClassNode;
+import com.testify.ecfeed.model.ConstraintNode;
 import com.testify.ecfeed.model.GenericNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
@@ -135,8 +136,8 @@ public class ModelMasterDetailsBlock extends MasterDetailsBlock implements IMode
 		filteredTree.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 		fTreeViewer = filteredTree.getViewer();
 		fTreeViewer.setAutoExpandLevel(2);
-		fTreeViewer.setContentProvider(new EcContentProvider());
-		fTreeViewer.setLabelProvider(new EcLabelProvider());
+		fTreeViewer.setContentProvider(new ModelContentProvider());
+		fTreeViewer.setLabelProvider(new ModelLabelProvider());
 		fTreeViewer.setInput(fEditor);
 
 		fTreeViewer.addSelectionChangedListener(new ISelectionChangedListener() {
@@ -174,6 +175,7 @@ public class ModelMasterDetailsBlock extends MasterDetailsBlock implements IMode
 		part.registerPage(MethodNode.class, new MethodNodeDetailsPage(this));
 		part.registerPage(CategoryNode.class, new CategoryNodeDetailsPage(this));
 		part.registerPage(TestCaseNode.class, new TestCaseNodeDetailsPage(this));
+		part.registerPage(ConstraintNode.class, new ConstraintsNodeDetailsPage(this));
 		part.registerPage(PartitionNode.class, new PartitionNodeDetailsPage(this));
 
 		selectNode(fModel);

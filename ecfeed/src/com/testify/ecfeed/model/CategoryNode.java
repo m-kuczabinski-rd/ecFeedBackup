@@ -68,4 +68,12 @@ public class CategoryNode extends GenericNode {
 		}
 		return partitions;
 	}
+
+	public Vector<String> getPartitionNames() {
+		Vector<String> names = new Vector<String>();
+		for(PartitionNode partition : getPartitions()){
+			names.add(partition.getName());
+		}
+		return names;
+	}
 }

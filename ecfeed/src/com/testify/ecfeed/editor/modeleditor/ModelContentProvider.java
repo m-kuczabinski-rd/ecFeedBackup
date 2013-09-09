@@ -18,7 +18,7 @@ import com.testify.ecfeed.editor.EcMultiPageEditor;
 import com.testify.ecfeed.model.GenericNode;
 import com.testify.ecfeed.model.RootNode;
 
-public class EcContentProvider extends TreeNodeContentProvider implements ITreeContentProvider {
+public class ModelContentProvider extends TreeNodeContentProvider implements ITreeContentProvider {
 
 	public static final Object[] EMPTY_ARRAY = new Object[]{};
 	

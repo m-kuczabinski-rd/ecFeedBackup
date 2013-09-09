@@ -62,4 +62,8 @@ public class PartitionNode extends GenericNode {
 		}
 		return super.equals(partition);
 	}
+
+	public CategoryNode getCategory() {
+		return (CategoryNode)getParent();
+	}
 }
