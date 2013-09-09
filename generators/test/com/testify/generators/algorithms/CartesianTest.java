@@ -7,19 +7,23 @@ import java.util.Vector;
 
 import org.junit.Test;
 
+import com.testify.ecfeed.api.IConstraint;
+
 public class CartesianTest {
 
 	Cartesian fGenerator;
+	private IConstraint[] fConstraints;
 	
 	public CartesianTest() {
 		fGenerator = new Cartesian();
+		fConstraints = new IConstraint[]{};
 	}
 
 	@SuppressWarnings("rawtypes")
 	@Test
 	public void testEmptyInput(){
 		Vector[] input = new Vector[]{};
-		assertArrayEquals(new Vector[]{}, fGenerator.generate(input));
+		assertArrayEquals(new Vector[]{}, fGenerator.generate(input, null));
 	}
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
@@ -36,7 +40,7 @@ public class CartesianTest {
 		expectedResult[1].add("b");
 		expectedResult[2].add("c");
 		
-		Vector[] result = fGenerator.generate(input);
+		Vector[] result = fGenerator.generate(input, fConstraints);
 		assertArrayEquals(expectedResult, result);
 	}
 	
@@ -93,7 +97,7 @@ public class CartesianTest {
 				new Vector(Arrays.asList(new String[]{"a3", "b3", "c3"})),
 				};
 		
-		assertArrayEquals(expectedResult, fGenerator.generate(input));
+		assertArrayEquals(expectedResult, fGenerator.generate(input, fConstraints));
 	}
 
 }

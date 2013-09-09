@@ -7,10 +7,6 @@
             implementation="com.testify.generators.algorithms.Cartesian"
             name="Cartesian">
       </algorithm>
-      <algorithm
-            implementation="com.testify.generators.algorithms.BoundValues"
-            name="Bound values">
-      </algorithm>
    </extension>
 
 </plugin>
