@@ -21,7 +21,6 @@ import com.testify.ecfeed.constants.Constants;
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.constraint.BasicStatement;
 import com.testify.ecfeed.model.constraint.Constraint;
-import com.testify.ecfeed.model.constraint.IStatement;
 import com.testify.ecfeed.model.constraint.Operator;
 import com.testify.ecfeed.model.constraint.Relation;
 import com.testify.ecfeed.model.constraint.Statement;
