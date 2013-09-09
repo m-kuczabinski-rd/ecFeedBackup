@@ -33,6 +33,7 @@ public class SourceViewer extends TextEditor implements IModelUpdateListener{
 	private ColorManager fColorManager;
 	private EcMultiPageEditor fEditor;
 	private boolean fNeedRefresh;
+	private boolean fDirty;
 	
 	public class DocumentProvider extends FileDocumentProvider{
 		@Override
@@ -72,12 +73,7 @@ public class SourceViewer extends TextEditor implements IModelUpdateListener{
 	public void doSave(IProgressMonitor progressMonitor){
 		refresh();
 		super.doSave(progressMonitor);
-	}
-	
-	@Override
-	public void doSaveAs(){
-		refresh();
-		super.doSaveAs();
+		fDirty = false;
 	}
 	
 	@Override
@@ -96,8 +92,14 @@ public class SourceViewer extends TextEditor implements IModelUpdateListener{
 	}
 
 	@Override
+	public boolean isDirty(){
+		return fDirty;
+	}
+	
+	@Override
 	public void modelUpdated(RootNode model) {
 		fNeedRefresh = true;
+		fDirty = true;
 	}
 	
 	private void refreshSourceText(){

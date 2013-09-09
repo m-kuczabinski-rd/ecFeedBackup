@@ -22,6 +22,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.ui.IEditorInput;
+import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.ide.IDE;
@@ -73,6 +74,7 @@ public class EcMultiPageEditor extends FormEditor{
 	public void updateModel(RootNode model){
 		fModel = model;
 		updateListeners(model);
+		firePropertyChange(IEditorPart.PROP_DIRTY);
 	}
 
 	private void updateListeners(RootNode model) {
@@ -112,6 +114,7 @@ public class EcMultiPageEditor extends FormEditor{
 	@Override
 	public void doSave(IProgressMonitor monitor) {
 		fSourceViewer.doSave(monitor);
+		firePropertyChange(IEditorPart.PROP_DIRTY);
 	}
 	
 	@Override
@@ -144,5 +147,10 @@ public class EcMultiPageEditor extends FormEditor{
 			fSourceViewer.refresh();
 		}
 		super.pageChange(newPageIndex);
+	}
+	
+	@Override
+	public boolean isDirty(){
+		return fSourceViewer.isDirty();
 	}
 }
