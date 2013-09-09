@@ -33,86 +33,36 @@ public class MethodNode extends GenericNode {
 	
 	//TODO Unit tests 
 	public void addCategory(CategoryNode category){
-		super.addChild(fCategories.size(), category);
 		fCategories.add(category);
+		category.setParent(this);
 	}
 
 	//TODO unit tests 
 	public void addConstraint(ConstraintNode constraint) {
-		super.addChild(fCategories.size() + fConstraints.size(), constraint);
 		fConstraints.add(constraint);
+		constraint.setParent(this);
 	}
 	
 	//TODO unit tests 
 	public void addTestCase(TestCaseNode testCase){
-		super.addChild(fCategories.size() + fConstraints.size() + fTestCases.size(), testCase);
 		fTestCases.add(testCase);
+		testCase.setParent(this);
 	}
 	
 	public Vector<CategoryNode> getCategories(){
 		return fCategories;
 	}
 
-	public Vector<TestCaseNode> getTestCases(){
-		return fTestCases;
-	}
-	
-	public Vector<ConstraintNode> getConstraints(){
-		return fConstraints;
-	}
-	
-	//TODO unit tests
-	public Set<String> getTestSuites(){
-		Set<String> testSuites = new HashSet<String>();
-		for(TestCaseNode testCase : getTestCases()){
-			testSuites.add(testCase.getName());
+	public CategoryNode getCategory(String categoryName) {
+		for(CategoryNode category : getCategories()){
+			if(category.getName().equals(categoryName)){
+				return category;
+			}
 		}
-		return testSuites;
-	}
-	
-	@Override
-	public String toString(){
-		String result = new String(getName()) + "(";
-		Vector<String> types = getParameterTypes();
-		Vector<String> names = getParameterNames();
-		for(int i = 0; i < types.size(); i++){
-			result += types.elementAt(i);
-			result += " ";
-			result += names.elementAt(i);
-			if(i < types.size() - 1) result += ", ";
-		}
-		result += ")";
-		return result;
+		return null;
 	}
 
-	@Override
-	public Vector<GenericNode> getChildren(){
-		Vector<GenericNode> children = new Vector<GenericNode>();
-		children.addAll(fCategories);
-		children.addAll(fConstraints);
-		children.addAll(fTestCases);
-		return children;
-	}
-	
-	//TODO unit tests
-	public boolean removeChild(TestCaseNode testCase){
-		fTestCases.remove(testCase);
-		return super.removeChild(testCase);
-	}
-	
-	//TODO unit tests
-	public boolean removeChild(CategoryNode category){
-		fCategories.remove(category);
-		return super.removeChild(category);
-	}
-	
-	//TODO unit tests
-	public boolean removeChild(ConstraintNode constraint){
-		fConstraints.remove(constraint);
-		return super.removeChild(constraint);
-	}
-
-	public Vector<String> getParameterTypes() {
+	public Vector<String> getCategoriesTypes() {
 		Vector<String> types = new Vector<String>();
 		for(CategoryNode category : getCategories()){
 			types.add(category.getType());
@@ -120,14 +70,40 @@ public class MethodNode extends GenericNode {
 		return types;
 	}
 
-	public Vector<String> getParameterNames() {
-		Vector<String> types = new Vector<String>();
+	public Vector<String> getCategoriesNames() {
+		Vector<String> names = new Vector<String>();
 		for(CategoryNode category : getCategories()){
-			types.add(category.getName());
+			names.add(category.getName());
 		}
-		return types;
+		return names;
 	}
 
+	public Vector<ConstraintNode> getConstraints(){
+		return fConstraints;
+	}
+
+	public Vector<IConstraint> getConstraints(String name) {
+		Vector<IConstraint> constraints = new Vector<IConstraint>();
+		for(ConstraintNode node : fConstraints){
+			if(node.getName().equals(name)){
+				constraints.add(node);
+			}
+		}
+		return constraints;
+	}
+
+	public Set<String> getConstraintsNames() {
+		Set<String> names = new HashSet<String>();
+		for(ConstraintNode constraint : fConstraints){
+			names.add(constraint.getName());
+		}
+		return names;
+	}
+
+	public Vector<TestCaseNode> getTestCases(){
+		return fTestCases;
+	}
+	
 	//TODO unit tests
 	public Collection<TestCaseNode> getTestCases(String testSuite) {
 		Vector<TestCaseNode> testCases = new Vector<TestCaseNode>();
@@ -140,19 +116,83 @@ public class MethodNode extends GenericNode {
 	}
 
 	//TODO unit tests
+	public Set<String> getTestSuites(){
+		Set<String> testSuites = new HashSet<String>();
+		for(TestCaseNode testCase : getTestCases()){
+			testSuites.add(testCase.getName());
+		}
+		return testSuites;
+	}
+
+	@Override
+	public Vector<? extends IGenericNode> getChildren(){
+		Vector<IGenericNode> children = new Vector<IGenericNode>();
+		children.addAll(fCategories);
+		children.addAll(fConstraints);
+		children.addAll(fTestCases);
+		
+		return children;
+	}
+	
+	@Override
+	public boolean hasChildren(){
+		return(fCategories.size() != 0 || fConstraints.size() != 0 || fTestCases.size() != 0);
+	}
+	
+	@Override
+	public String toString(){
+		String result = new String(getName()) + "(";
+		Vector<String> types = getCategoriesTypes();
+		Vector<String> names = getCategoriesNames();
+		for(int i = 0; i < types.size(); i++){
+			result += types.elementAt(i);
+			result += " ";
+			result += names.elementAt(i);
+			if(i < types.size() - 1) result += ", ";
+		}
+		result += ")";
+		return result;
+	}
+
+	//TODO unit tests
+	public boolean removeChild(TestCaseNode testCase){
+		testCase.setParent(null);
+		return fTestCases.remove(testCase);
+	}
+	
+	//TODO unit tests
+	public boolean removeChild(CategoryNode category){
+		category.setParent(null);
+		return fCategories.remove(category);
+	}
+	
+	//TODO unit tests
+	public boolean removeChild(ConstraintNode constraint){
+		constraint.setParent(null);
+		return fConstraints.remove(constraint);
+	}
+
+	public void removeConstraint(ConstraintNode constraint) {
+		fConstraints.remove(constraint);
+	}
+
+	//TODO unit tests
 	public Collection<TestCaseNode> removeTestSuite(String suiteName) {
 		Collection<TestCaseNode> testCases = getTestCases(suiteName);
 		fTestCases.removeAll(testCases);
-		super.removeChildren(testCases);
 		return testCases;
-	}	
-	
+	}
+
 	//TODO unit tests
 	@SuppressWarnings("rawtypes")
-	public void moveChild(GenericNode child, boolean moveUp){
+	@Override
+	public void moveChild(IGenericNode child, boolean moveUp){
 		Vector childrenArray = null;
 		if(child instanceof CategoryNode){
 			childrenArray = fCategories;
+		}
+		if(child instanceof ConstraintNode){
+			childrenArray = fConstraints;
 		}
 		if(child instanceof TestCaseNode){
 			childrenArray = fTestCases;
@@ -168,44 +208,5 @@ public class MethodNode extends GenericNode {
 		if(!moveUp && childIndex < childrenArray.size() - 1){
 			Collections.swap(childrenArray, childIndex, childIndex + 1);
 		}
-	}
-
-	public CategoryNode getCategory(String categoryName) {
-		for(CategoryNode category : getCategories()){
-			if(category.getName().equals(categoryName)){
-				return category;
-			}
-		}
-		return null;
-	}
-
-	public void removeConstraint(ConstraintNode constraint) {
-		fConstraints.remove(constraint);
-	}
-
-	public Set<String> getConstraintsNames() {
-		Set<String> names = new HashSet<String>();
-		for(ConstraintNode constraint : fConstraints){
-			names.add(constraint.getName());
-		}
-		return names;
-	}
-
-	public Vector<String> getCategoriesNames() {
-		Vector<String> names = new Vector<String>();
-		for(CategoryNode category : getCategories()){
-			names.add(category.getName());
-		}
-		return names;
-	}
-
-	public Vector<IConstraint> getConstraints(String name) {
-		Vector<IConstraint> constraints = new Vector<IConstraint>();
-		for(ConstraintNode node : fConstraints){
-			if(node.getName().equals(name)){
-				constraints.add(node);
-			}
-		}
-		return constraints;
 	}
 }

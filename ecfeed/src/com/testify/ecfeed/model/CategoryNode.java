@@ -15,22 +15,27 @@ import java.util.Vector;
 
 public class CategoryNode extends GenericNode {
 	
-	private final String fType;	
+	private final String fType;
+	private final Vector<PartitionNode> fPartitions;
 	
 	public CategoryNode(String name, String type) {
 		super(name);
 		fType = type;
+		fPartitions = new Vector<PartitionNode>();
 	}
 
 	public String getType() {
 		return fType;
 	}
 
+	public Vector<? extends IGenericNode> getChildren(){
+		return fPartitions;
+	}
+	
 	//TODO unit tests
 	public void addPartition(PartitionNode partition) {
-		if(getPartition(partition.getName()) == null){
-			super.addChild(partition);
-		}
+		fPartitions.add(partition);
+		partition.setParent(this);
 	}
 	
 	//TODO unit tests
@@ -42,19 +47,9 @@ public class CategoryNode extends GenericNode {
 		return new String(getName() + ": " + getType());
 	}
 
-	public boolean removeChild(PartitionNode partition) {
-		return super.removeChild(partition);
-	}
-
 	//TODO unit tests
 	public Vector<PartitionNode> getPartitions() {
-		Vector<PartitionNode> partitions = new Vector<PartitionNode>();
-		for(GenericNode child : getChildren()){
-			if(child instanceof PartitionNode){
-				partitions.add((PartitionNode)child);
-			}
-		}
-		return partitions;
+		return fPartitions;
 	}
 
 	public Vector<String> getPartitionNames() {

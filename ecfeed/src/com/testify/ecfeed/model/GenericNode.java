@@ -15,56 +15,43 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Vector;
 
-public class GenericNode {
+public class GenericNode implements IGenericNode{
 	private String fName;
-	private Vector<GenericNode> fChildren;
-	private GenericNode fParent;
+	private IGenericNode fParent;
 	private final int fId;
 	private static int fLastId = 0;
+	private final Vector<IGenericNode> EMPTY_CHILDREN_ARRAY = new Vector<IGenericNode>();
 
 	public GenericNode(String name){
 		fId = ++fLastId;
 		this.fName = name;
-		this.fChildren = new Vector<GenericNode>();
 	}
 	
 	public int getId(){
 		return fId;
 	}
 	
+	@Override
 	public String getName() {
 		return fName;
 	}
 
+	@Override
 	public void setName(String name) {
 		this.fName = name;
 	}
 	
-	//TODO unit tests
-	public void addChild(GenericNode child){
-		addChild(fChildren.size(), child);
-	}
-
-	//TODO Unit tests
-	public void addChild(int index, GenericNode child) {
-		if(!isParent(child)){
-			fChildren.add(index, child);
-			child.setParent(this);
-		}
-	}
-
-	//Should not be used explicitly
-	public void setParent(GenericNode newParent) {
+	@Override
+	public void setParent(IGenericNode newParent) {
 		fParent = newParent;
-		if(newParent != null){
-			newParent.addChild(this);
-		}
 	}
 
-	public Vector<GenericNode> getChildren() {
-		return fChildren;
+	@Override
+	public Vector<? extends IGenericNode> getChildren() {
+		return EMPTY_CHILDREN_ARRAY;
 	}
 	
+	@Override
 	public boolean hasChildren(){
 		if(getChildren() != null){
 			return (getChildren().size() > 0);
@@ -72,11 +59,13 @@ public class GenericNode {
 		return false;
 	}
 	
-	public GenericNode getParent(){
+	@Override
+	public IGenericNode getParent(){
 		return fParent;
 	}
 	
-	public GenericNode getRoot(){
+	@Override
+	public IGenericNode getRoot(){
 		if(getParent() == null){
 			return this;
 		}
@@ -96,30 +85,29 @@ public class GenericNode {
 		return false;
 	}
 
-	public boolean removeChild(GenericNode child) {
-		boolean result = fChildren.remove(child);
+	@Override
+	public boolean removeChild(IGenericNode child) {
+		boolean result = getChildren().remove(child);
 		if(result){
 			child.setParent(null);
 		}
 		return result;
 	}
 	
-	public boolean removeChildren(Collection<? extends GenericNode> children){
-		return fChildren.removeAll(children);
+	@Override
+	public boolean removeChildren(Collection<IGenericNode> children){
+		return getChildren().removeAll(children);
 	}
 	
-	protected boolean isParent(GenericNode potentialChild){
-		for(GenericNode child : fChildren){
-			if(child == potentialChild){
-				return true;
-			}
-		}
-		return false;
+	@Override
+	public boolean isParent(IGenericNode potentialChild){
+		return getChildren().contains(potentialChild);
 	}
 
 	//TODO unit tests
-	public GenericNode getChild(String name) {
-		for(GenericNode child : fChildren){
+	@Override
+	public IGenericNode getChild(String name) {
+		for(IGenericNode child : getChildren()){
 			if (name.equals(child.getName())){
 				return child;
 			}
@@ -128,13 +116,14 @@ public class GenericNode {
 	}
 
 	//TODO unit tests
-	public void moveChild(GenericNode child, boolean moveUp) {
-		int childIndex = fChildren.indexOf(child);
+	@Override
+	public void moveChild(IGenericNode child, boolean moveUp) {
+		int childIndex = getChildren().indexOf(child);
 		if(moveUp && childIndex > 0){
-			Collections.swap(fChildren, childIndex, childIndex - 1);
+			Collections.swap(getChildren(), childIndex, childIndex - 1);
 		}
-		if(!moveUp && childIndex < fChildren.size() - 1){
-			Collections.swap(fChildren, childIndex, childIndex + 1);
+		if(!moveUp && childIndex < getChildren().size() - 1){
+			Collections.swap(getChildren(), childIndex, childIndex + 1);
 		}
 	}
 }

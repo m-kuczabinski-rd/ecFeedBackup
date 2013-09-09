@@ -25,6 +25,7 @@ import com.testify.ecfeed.model.constraint.StatementArray;
 import com.testify.ecfeed.model.constraint.StaticStatement;
 import com.testify.ecfeed.model.ConstraintNode;
 import com.testify.ecfeed.model.GenericNode;
+import com.testify.ecfeed.model.IGenericNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.RootNode;
@@ -51,7 +52,7 @@ public class EcWriter {
 		}
 	}
 
-	private Element createElement(GenericNode node) {
+	private Element createElement(IGenericNode node) {
 		String name = node.getName();
 		Element element = null;
 		if(node instanceof RootNode){
@@ -79,7 +80,7 @@ public class EcWriter {
 			element = createConstraintElement(name, (Constraint)((ConstraintNode)node).getConstraint());
 		}
 		
-		for(GenericNode child : node.getChildren()){
+		for(IGenericNode child : node.getChildren()){
 			element.appendChild(createElement(child));
 		}
 		return element;

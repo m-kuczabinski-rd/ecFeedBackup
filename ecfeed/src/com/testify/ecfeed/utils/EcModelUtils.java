@@ -29,7 +29,7 @@ import com.testify.ecfeed.constants.Constants;
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.ConstraintNode;
-import com.testify.ecfeed.model.GenericNode;
+import com.testify.ecfeed.model.IGenericNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.RootNode;
@@ -130,9 +130,9 @@ public class EcModelUtils {
 		}
 	}
 
-	public static MethodNode getMethodAncestor(GenericNode node){
+	public static MethodNode getMethodAncestor(IGenericNode node){
 		if(node == null) return null;
-		GenericNode parent = node.getParent();
+		IGenericNode parent = node.getParent();
 		if(parent == null) return null;
 		if(parent instanceof MethodNode) return (MethodNode)parent;
 		return getMethodAncestor(parent);
@@ -240,7 +240,7 @@ public class EcModelUtils {
 		Vector<MethodNode> potentialMatches = getNotContainedMethods(parent, parent.getQualifiedName());
 		Vector<MethodNode> matches = new Vector<MethodNode>();
 		for(MethodNode potentialMatch : potentialMatches){
-			if (potentialMatch.getParameterTypes().equals(method.getParameterTypes())){
+			if (potentialMatch.getCategoriesTypes().equals(method.getCategoriesTypes())){
 				matches.add(potentialMatch);
 			}
 		}

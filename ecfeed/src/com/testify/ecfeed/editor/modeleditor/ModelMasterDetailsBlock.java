@@ -40,6 +40,7 @@ import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.ConstraintNode;
 import com.testify.ecfeed.model.GenericNode;
+import com.testify.ecfeed.model.IGenericNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.RootNode;
@@ -125,7 +126,7 @@ public class ModelMasterDetailsBlock extends MasterDetailsBlock implements IMode
 	}
 
 	private void moveSelectedItem(boolean moveUp) {
-		GenericNode parent = fSelectedNode.getParent(); 
+		IGenericNode parent = fSelectedNode.getParent(); 
 		if(parent != null){
 			parent.moveChild(fSelectedNode, moveUp);
 		}

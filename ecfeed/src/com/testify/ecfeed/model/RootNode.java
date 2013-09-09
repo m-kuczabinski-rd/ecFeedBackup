@@ -14,23 +14,24 @@ package com.testify.ecfeed.model;
 import java.util.Vector;
 
 public class RootNode extends GenericNode {
+	public Vector<ClassNode> fClasses;
 
 	public RootNode(String name) {
 		super(name);
+		fClasses = new Vector<ClassNode>();
 	}
 	
 	public void addClass(ClassNode node){
-		addChild(node);
+		fClasses.add(node);
+		node.setParent(this);
 	}
 
+	public Vector<? extends IGenericNode> getChildren(){
+		return fClasses;
+	}
+	
 	public Vector<ClassNode> getClasses() {
-		Vector<ClassNode> classes = new Vector<ClassNode>();
-		for(GenericNode child : getChildren()){
-			if(child instanceof ClassNode){
-				classes.add((ClassNode)child);
-			}
-		}
-		return classes;
+		return fClasses;
 	}
 
 	//TODO unit tests

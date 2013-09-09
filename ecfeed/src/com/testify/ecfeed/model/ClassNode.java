@@ -23,6 +23,11 @@ public class ClassNode extends GenericNode {
 		fMethods = new Vector<MethodNode>();
 	}
 
+	@Override
+	public Vector<? extends IGenericNode> getChildren(){
+		return fMethods;
+	}
+	
 	public String getQualifiedName() {
 		return super.getName();
 	}
@@ -33,14 +38,8 @@ public class ClassNode extends GenericNode {
 
 	//TODO unit tests
 	public void addMethod(MethodNode method) {
-		super.addChild(method);
 		fMethods.add(method);
-	}
-	
-	//TODO unit tests
-	public boolean removeChild(MethodNode method){
-		fMethods.remove(method);
-		return super.removeChild(method);
+		method.setParent(this);
 	}
 	
 	private String getLocalName(String qualifiedName){
@@ -48,6 +47,7 @@ public class ClassNode extends GenericNode {
 		return (lastDotIndex == -1)?qualifiedName: qualifiedName.substring(lastDotIndex + 1);
 	}
 	
+	@Override
 	public String toString(){
 		return getLocalName();
 	}
@@ -71,7 +71,7 @@ public class ClassNode extends GenericNode {
 		return fMethods;
 	}
 	
-	//TODO uni tests
+	//TODO unit tests
 	public Set<String> getTestSuites(){
 		Set<String> suites = new HashSet<String>();
 		for(MethodNode method : getMethods()){
