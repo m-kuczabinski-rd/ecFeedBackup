@@ -12,7 +12,6 @@ import org.osgi.framework.FrameworkUtil;
 
 import com.testify.ecfeed.model.constraint.BasicStatement;
 import com.testify.ecfeed.model.constraint.Constraint;
-import com.testify.ecfeed.model.constraint.IStatement;
 import com.testify.ecfeed.model.constraint.StatementArray;
 
 
