@@ -20,7 +20,6 @@ import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.ColumnViewer;
 import org.eclipse.jface.viewers.EditingSupport;
 import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -49,7 +48,7 @@ import com.testify.ecfeed.utils.EcModelUtils;
 
 public class CategoryNodeDetailsPage extends GenericNodeDetailsPage implements IModelUpdateListener{
 
-	private CategoryNode fSelectedNode;
+	private CategoryNode fSelectedCategory;
 	private Section fMainSection;
 	private CheckboxTableViewer fPartitionsViewer;
 	private Table fPartitionsTable;
@@ -79,7 +78,7 @@ public class CategoryNodeDetailsPage extends GenericNodeDetailsPage implements I
 
 		@Override
 		protected void setValue(Object element, Object value) {
-			if(!EcModelUtils.validatePartitionName((String)value, fSelectedNode, (PartitionNode)element)){
+			if(!EcModelUtils.validatePartitionName((String)value, fSelectedCategory, (PartitionNode)element)){
 				MessageDialog dialog = new MessageDialog(getActiveShell(), 
 						DialogStrings.DIALOG_PARTITION_NAME_PROBLEM_TITLE, 
 						Display.getDefault().getSystemImage(SWT.ICON_ERROR), 
@@ -121,7 +120,7 @@ public class CategoryNodeDetailsPage extends GenericNodeDetailsPage implements I
 		@Override
 		protected void setValue(Object element, Object value) {
 			String valueString = (String)value;
-			if(!EcModelUtils.validatePartitionStringValue(valueString, fSelectedNode)){
+			if(!EcModelUtils.validatePartitionStringValue(valueString, fSelectedCategory)){
 				MessageDialog dialog = new MessageDialog(getActiveShell(), 
 						DialogStrings.DIALOG_PARTITION_VALUE_PROBLEM_TITLE, 
 						Display.getDefault().getSystemImage(SWT.ICON_ERROR), 
@@ -131,9 +130,9 @@ public class CategoryNodeDetailsPage extends GenericNodeDetailsPage implements I
 				dialog.open();
 			}
 			else{
-				Object newValue = EcModelUtils.getPartitionValueFromString(valueString, fSelectedNode.getType());
+				Object newValue = EcModelUtils.getPartitionValueFromString(valueString, fSelectedCategory.getType());
 				((PartitionNode)element).setValue(newValue);
-				updateModel((RootNode)fSelectedNode.getRoot());
+				updateModel((RootNode)fSelectedCategory.getRoot());
 			}
 		}
 	}
@@ -211,12 +210,12 @@ public class CategoryNodeDetailsPage extends GenericNodeDetailsPage implements I
 			@Override
 			public void widgetSelected(SelectionEvent e){
 				PartitionSettingsDialog dialog = new PartitionSettingsDialog(getActiveShell(), 
-						fSelectedNode, null);
+						fSelectedCategory, null);
 				if(dialog.open() == Window.OK){
 					String partitionName = dialog.getPartitionName();
 					Object partitionValue = dialog.getPartitionValue();
-					fSelectedNode.addPartition(new PartitionNode(partitionName, partitionValue));
-					updateModel((RootNode)fSelectedNode.getRoot());
+					fSelectedCategory.addPartition(new PartitionNode(partitionName, partitionValue));
+					updateModel((RootNode)fSelectedCategory.getRoot());
 				}
 			}
 		});
@@ -233,9 +232,9 @@ public class CategoryNodeDetailsPage extends GenericNodeDetailsPage implements I
 						IDialogConstants.OK_ID);
 				if (dialog.open() == Window.OK) {
 					for(Object partition : fPartitionsViewer.getCheckedElements()){
-						if(fSelectedNode.getPartitions().size() > 1){
+						if(fSelectedCategory.getPartitions().size() > 1){
 							EcModelUtils.removeReferences((PartitionNode)partition);
-							fSelectedNode.removeChild((PartitionNode)partition);
+							fSelectedCategory.removeChild((PartitionNode)partition);
 						}
 						else{
 							MessageDialog dlg = new MessageDialog(getActiveShell(), 
@@ -247,7 +246,7 @@ public class CategoryNodeDetailsPage extends GenericNodeDetailsPage implements I
 									IDialogConstants.OK_ID);
 							dlg.open();
 						}
-						updateModel((RootNode)fSelectedNode.getRoot());
+						updateModel((RootNode)fSelectedCategory.getRoot());
 					}
 				}
 			}
@@ -255,18 +254,16 @@ public class CategoryNodeDetailsPage extends GenericNodeDetailsPage implements I
 	}
 
 	public void selectionChanged(IFormPart part, ISelection selection) {
-		IStructuredSelection structuredSelection = (IStructuredSelection) selection;
-		if(structuredSelection.getFirstElement() instanceof CategoryNode){
-			fSelectedNode = (CategoryNode)structuredSelection.getFirstElement();
-			refresh();
-		}
+		super.selectionChanged(part, selection);
+		fSelectedCategory = (CategoryNode)fSelectedNode;
+		refresh();
 	}
 	
 	public void refresh() {
-		if(fSelectedNode == null){
+		if(fSelectedCategory == null){
 			return;
 		}
-		fMainSection.setText(fSelectedNode.toString());
-		fPartitionsViewer.setInput(fSelectedNode.getPartitions());
+		fMainSection.setText(fSelectedCategory.toString());
+		fPartitionsViewer.setInput(fSelectedCategory.getPartitions());
 	}
 }

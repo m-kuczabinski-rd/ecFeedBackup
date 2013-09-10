@@ -7,7 +7,6 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
-import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TreeViewer;
@@ -53,7 +52,7 @@ public class ConstraintsNodeDetailsPage extends GenericNodeDetailsPage {
 	
 	
 	private Section fMainSection;
-	private ConstraintNode fSelectedNode;
+	private ConstraintNode fSelectedConstraint;
 	private Combo fConstraintNameCombo;
 	private Constraint fConstraint;
 	private TreeViewer fConstraintViewer;
@@ -129,8 +128,8 @@ public class ConstraintsNodeDetailsPage extends GenericNodeDetailsPage {
 	private void renameConstraint() {
 		String newName = fConstraintNameCombo.getText();
 		if(EcModelUtils.validateConstraintName(newName)){
-			fSelectedNode.setName(newName);
-			updateModel(fSelectedNode);
+			fSelectedConstraint.setName(newName);
+			updateModel(fSelectedConstraint);
 		}
 		else{
 			MessageDialog dialog = new MessageDialog(Display.getDefault().getActiveShell(), 
@@ -139,7 +138,7 @@ public class ConstraintsNodeDetailsPage extends GenericNodeDetailsPage {
 					DialogStrings.DIALOG_CONSTRAINT_NAME_PROBLEM_MESSAGE,
 					MessageDialog.ERROR, new String[] {"OK"}, 0);
 			dialog.open();
-			fConstraintNameCombo.setText(fSelectedNode.getName());
+			fConstraintNameCombo.setText(fSelectedConstraint.getName());
 		}
 	}
 
@@ -191,7 +190,7 @@ public class ConstraintsNodeDetailsPage extends GenericNodeDetailsPage {
 					BasicStatement newStatement = new StaticStatement(true); 
 					statementArray.addStatement(newStatement);
 					fConstraintViewer.expandToLevel(fSelectedStatement, 1);
-					updateModel(fSelectedNode);
+					updateModel(fSelectedConstraint);
 					fConstraintViewer.setSelection(new StructuredSelection(newStatement));
 				}
 			}
@@ -205,7 +204,7 @@ public class ConstraintsNodeDetailsPage extends GenericNodeDetailsPage {
 				if(parentStatement != null){
 					parentStatement.removeChild(fSelectedStatement);
 					fConstraintViewer.setSelection(new StructuredSelection(parentStatement));
-					updateModel(fSelectedNode);
+					updateModel(fSelectedConstraint);
 				}
 			}
 		});
@@ -237,7 +236,7 @@ public class ConstraintsNodeDetailsPage extends GenericNodeDetailsPage {
 				STATEMENT_OR,
 				STATEMENT_TRUE,
 				STATEMENT_FALSE}));
-		Vector<String> categories = fSelectedNode.getMethod().getCategoriesNames();
+		Vector<String> categories = fSelectedConstraint.getMethod().getCategoriesNames();
 		items.addAll(categories);
 		fStatementEditCombo.setItems(items.toArray(new String[]{}));
 		String comboText = getStatementComboText(editedStatement);
@@ -286,7 +285,7 @@ public class ConstraintsNodeDetailsPage extends GenericNodeDetailsPage {
 			public void modifyText(ModifyEvent e) {
 				if(fSelectedStatement instanceof Statement){
 					((Statement)fSelectedStatement).setRelation(Relation.getRelation(fRelationCombo.getText()));
-					updateModel(fSelectedNode);
+					updateModel(fSelectedConstraint);
 				}
 			}
 		});
@@ -308,9 +307,9 @@ public class ConstraintsNodeDetailsPage extends GenericNodeDetailsPage {
 			@Override
 			public void modifyText(ModifyEvent e) {
 				if(fSelectedStatement instanceof Statement){
-					CategoryNode category = fSelectedNode.getMethod().getCategory(fStatementEditCombo.getText());
+					CategoryNode category = fSelectedConstraint.getMethod().getCategory(fStatementEditCombo.getText());
 					((Statement)fSelectedStatement).setCondition(category.getPartition(fConditionCombo.getText()));
-					updateModel(fSelectedNode);
+					updateModel(fSelectedConstraint);
 				}
 			}
 		});
@@ -321,13 +320,13 @@ public class ConstraintsNodeDetailsPage extends GenericNodeDetailsPage {
 				(newValue.equals(STATEMENT_AND) || newValue.equals(STATEMENT_OR))){
 			Operator operator = newValue.equals(STATEMENT_AND)?Operator.AND:Operator.OR;
 			((StatementArray)fSelectedStatement).setOperator(operator);
-			updateModel(fSelectedNode);
+			updateModel(fSelectedConstraint);
 		}
 		else if(fSelectedStatement instanceof StaticStatement &&
 				(newValue.equals(STATEMENT_FALSE) || newValue.equals(STATEMENT_TRUE))){
 			boolean value = newValue.equals(STATEMENT_TRUE); 
 			((StaticStatement)fSelectedStatement).setValue(value);
-			updateModel(fSelectedNode);
+			updateModel(fSelectedConstraint);
 		}
 		
 		else{
@@ -341,7 +340,7 @@ public class ConstraintsNodeDetailsPage extends GenericNodeDetailsPage {
 			else if(fSelectedStatement.getParent() != null){
 				fSelectedStatement.getParent().replaceChild(fSelectedStatement, newStatement);
 			}
-			updateModel(fSelectedNode);
+			updateModel(fSelectedConstraint);
 			fConstraintViewer.setSelection(new StructuredSelection(newStatement));
 		}
 	}
@@ -360,7 +359,7 @@ public class ConstraintsNodeDetailsPage extends GenericNodeDetailsPage {
 			return new StatementArray(Operator.OR);
 		}
 		else{
-			CategoryNode category = fSelectedNode.getMethod().getCategory(newValue);
+			CategoryNode category = fSelectedConstraint.getMethod().getCategory(newValue);
 			if(category != null){
 				return new Statement(category.getPartitions().elementAt(0), Relation.EQUAL);
 			}
@@ -370,26 +369,24 @@ public class ConstraintsNodeDetailsPage extends GenericNodeDetailsPage {
 
 	@Override
 	public void selectionChanged(IFormPart part, ISelection selection) {
-		IStructuredSelection structuredSelection = (IStructuredSelection) selection;
-		if(structuredSelection.getFirstElement() instanceof ConstraintNode){
-			fSelectedNode = (ConstraintNode)structuredSelection.getFirstElement();
-			fConstraint = fSelectedNode.getConstraint();
-			fConstraintViewer.setLabelProvider(new StatementViewerLabelProvider(fConstraint));
-			fConstraintViewer.setInput(fConstraint);
-			fConstraintViewer.expandAll();
-			refresh();
-		}
+		super.selectionChanged(part, selection);
+		fSelectedConstraint = (ConstraintNode)fSelectedNode;
+		fConstraintViewer.setLabelProvider(new StatementViewerLabelProvider(fConstraint));
+		fConstraintViewer.setInput(fConstraint);
+		fConstraintViewer.expandAll();
+		refresh();
 	}
 	
 	@Override
 	public void refresh(){
-		if(fSelectedNode == null || fSelectedNode.getParent() == null){
+		if(fSelectedConstraint == null || fSelectedConstraint.getParent() == null){
 			return;
 		}
-		fMainSection.setText(fSelectedNode.toString());
-		fConstraintViewer.refresh();
-		fConstraintNameCombo.setItems(fSelectedNode.getMethod().
+		fConstraint = fSelectedConstraint.getConstraint();
+		fMainSection.setText(fSelectedConstraint.toString());
+		fConstraintNameCombo.setItems(fSelectedConstraint.getMethod().
 				getConstraintsNames().toArray(new String[]{}));
-		fConstraintNameCombo.setText(fSelectedNode.getName());
+		fConstraintNameCombo.setText(fSelectedConstraint.getName());
+		fConstraintViewer.refresh();
 	}
 }

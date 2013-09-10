@@ -36,7 +36,7 @@ import org.eclipse.ui.forms.widgets.Section;
 
 import com.testify.ecfeed.editor.EcMultiPageEditor;
 import com.testify.ecfeed.editor.IModelUpdateListener;
-import com.testify.ecfeed.model.GenericNode;
+import com.testify.ecfeed.model.IGenericNode;
 import com.testify.ecfeed.model.RootNode;
 
 public class GenericNodeDetailsPage implements IDetailsPage, IModelUpdateListener {
@@ -45,6 +45,7 @@ public class GenericNodeDetailsPage implements IDetailsPage, IModelUpdateListene
 	private EcMultiPageEditor fEditor;
 	private ModelMasterDetailsBlock fParentBlock;
 	protected FormToolkit fToolkit;
+	protected IGenericNode fSelectedNode;
 
 	public class ChildrenViewerDoubleClickListener implements
 	IDoubleClickListener {
@@ -53,7 +54,10 @@ public class GenericNodeDetailsPage implements IDetailsPage, IModelUpdateListene
 			if(event.getSource() instanceof StructuredViewer){
 				StructuredViewer sourceViewer = (StructuredViewer)event.getSource();
 				IStructuredSelection selection = (IStructuredSelection) sourceViewer.getSelection();
-				fParentBlock.selectNode((GenericNode)selection.getFirstElement());
+				Object selectedElement = selection.getFirstElement();
+				if(selectedElement instanceof IGenericNode){
+					fParentBlock.selectNode((IGenericNode)selection.getFirstElement());
+				}
 			}
 		}
 	}
@@ -116,6 +120,10 @@ public class GenericNodeDetailsPage implements IDetailsPage, IModelUpdateListene
 	}
 
 	public void selectionChanged(IFormPart part, ISelection selection){
+		IStructuredSelection structuredSelection = (IStructuredSelection) selection;
+		if(structuredSelection.getFirstElement() instanceof IGenericNode){
+			fSelectedNode = (IGenericNode)structuredSelection.getFirstElement();
+		}
 	}
 
 	public void commit(boolean onSave) {
@@ -134,7 +142,9 @@ public class GenericNodeDetailsPage implements IDetailsPage, IModelUpdateListene
 
 	@Override
 	public void modelUpdated(RootNode model) {
-		refresh();
+		if(getParentBlock().getSelectedNode() == fSelectedNode){
+			refresh();
+		}
 	}
 
 	public IManagedForm getManagedForm() {
@@ -153,11 +163,7 @@ public class GenericNodeDetailsPage implements IDetailsPage, IModelUpdateListene
 		return fToolkit;
 	}
 	
-	protected void updateModel(RootNode newModel){
-		getEditor().updateModel(newModel);
-	}
-	
-	protected void updateModel(GenericNode node){
+	protected void updateModel(IGenericNode node){
 		getEditor().updateModel((RootNode)node.getRoot());
 	}
 	

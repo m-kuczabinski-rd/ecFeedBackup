@@ -20,7 +20,6 @@ import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.CheckboxTableViewer;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -47,7 +46,7 @@ import com.testify.ecfeed.utils.EcModelUtils;
 
 public class ClassNodeDetailsPage extends GenericNodeDetailsPage{
 	
-	private ClassNode fSelectedNode;
+	private ClassNode fSelectedClass;
 	private Section fMainSection;
 	private Label fQualifiedNameLabel;
 	private Vector<MethodNode> fObsoleteMethods;
@@ -67,9 +66,9 @@ public class ClassNodeDetailsPage extends GenericNodeDetailsPage{
 
 			if(selectedClass != null){
 				String qualifiedName = selectedClass.getFullyQualifiedName();
-				if(!EcModelUtils.classExists((RootNode)fSelectedNode.getRoot(), qualifiedName)){
-					fSelectedNode.setName(qualifiedName);
-					updateModel((RootNode)fSelectedNode.getRoot());
+				if(!EcModelUtils.classExists((RootNode)fSelectedClass.getRoot(), qualifiedName)){
+					fSelectedClass.setName(qualifiedName);
+					updateModel((RootNode)fSelectedClass.getRoot());
 				}
 				else{
 					MessageDialog infoDialog = new MessageDialog(getActiveShell(), 
@@ -106,13 +105,13 @@ public class ClassNodeDetailsPage extends GenericNodeDetailsPage{
 					IDialogConstants.OK_ID);
 			if(infoDialog.open() == 0){
 				removeMethods(fMethodsViewer.getCheckedElements());
-				updateModel((RootNode)fSelectedNode.getRoot());
+				updateModel((RootNode)fSelectedClass.getRoot());
 			}
 		}
 
 		private void removeMethods(Object[] checkedElements) {
 			for(Object method : checkedElements){
-				fSelectedNode.removeChild((MethodNode)method);
+				fSelectedClass.removeChild((MethodNode)method);
 			}
 		}
 	}
@@ -170,9 +169,9 @@ public class ClassNodeDetailsPage extends GenericNodeDetailsPage{
 						DialogStrings.DIALOG_REMOVE_CLASS_MESSAGE,
 						MessageDialog.QUESTION_WITH_CANCEL, new String[] {"OK", "Cancel"}, 0);
 				if(infoDialog.open() == 0){
-					RootNode root = (RootNode)fSelectedNode.getParent(); 
-					root.removeChild(fSelectedNode);
-					fSelectedNode = null;
+					RootNode root = (RootNode)fSelectedClass.getParent(); 
+					root.removeChild(fSelectedClass);
+					fSelectedClass = null;
 					getParentBlock().selectNode(root);
 					updateModel(root);
 				}
@@ -272,8 +271,8 @@ public class ClassNodeDetailsPage extends GenericNodeDetailsPage{
 			@Override
 			public void widgetSelected(SelectionEvent e){
 				for(Object method : fOtherMethodsViewer.getCheckedElements()){
-					fSelectedNode.addMethod((MethodNode)method);
-					updateModel((RootNode)fSelectedNode.getRoot());
+					fSelectedClass.addMethod((MethodNode)method);
+					updateModel((RootNode)fSelectedClass.getRoot());
 				}
 			}
 		});
@@ -297,19 +296,17 @@ public class ClassNodeDetailsPage extends GenericNodeDetailsPage{
 	}
 	
 	public void selectionChanged(IFormPart part, ISelection selection) {
-		IStructuredSelection structuredSelection = (IStructuredSelection) selection;
-		if(structuredSelection.getFirstElement() instanceof ClassNode){
-			fSelectedNode = (ClassNode)structuredSelection.getFirstElement();
-			refresh();
-		}
+		super.selectionChanged(part, selection);
+		fSelectedClass = (ClassNode)fSelectedNode;
+		refresh();
 	}
 	
 	public void refresh(){
-		if(fSelectedNode == null){
+		if(fSelectedClass == null){
 			return;
 		}
-		fObsoleteMethods = EcModelUtils.getObsoleteMethods(fSelectedNode, fSelectedNode.getQualifiedName());
-		fNotContainedMethods = EcModelUtils.getNotContainedMethods(fSelectedNode, fSelectedNode.getQualifiedName());
+		fObsoleteMethods = EcModelUtils.getObsoleteMethods(fSelectedClass, fSelectedClass.getQualifiedName());
+		fNotContainedMethods = EcModelUtils.getNotContainedMethods(fSelectedClass, fSelectedClass.getQualifiedName());
 		if(fNotContainedMethods.size() == 0){
 			if(fOtherMethodsSectionCreated){
 				fOtherMethodsSection.dispose();
@@ -321,12 +318,12 @@ public class ClassNodeDetailsPage extends GenericNodeDetailsPage{
 				if(!fOtherMethodsSectionCreated){
 					createOtherMethodsSection(fMainComposite);
 				}
-				fOtherMethodsSection.setText("Other test methods in " + fSelectedNode.getLocalName());
+				fOtherMethodsSection.setText("Other test methods in " + fSelectedClass.getLocalName());
 				fOtherMethodsViewer.setInput(fNotContainedMethods);
 			}
 		}
-		fMainSection.setText("Class " + fSelectedNode.getLocalName());
-		fQualifiedNameLabel.setText("Qualified name: " + fSelectedNode.getName());
-		fMethodsViewer.setInput(fSelectedNode.getMethods());
+		fMainSection.setText("Class " + fSelectedClass.getLocalName());
+		fQualifiedNameLabel.setText("Qualified name: " + fSelectedClass.getName());
+		fMethodsViewer.setInput(fSelectedClass.getMethods());
 	}
 }

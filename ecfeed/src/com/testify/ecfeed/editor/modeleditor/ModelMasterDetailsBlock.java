@@ -39,7 +39,6 @@ import com.testify.ecfeed.editor.IModelUpdateListener;
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.ConstraintNode;
-import com.testify.ecfeed.model.GenericNode;
 import com.testify.ecfeed.model.IGenericNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
@@ -59,7 +58,7 @@ public class ModelMasterDetailsBlock extends MasterDetailsBlock implements IMode
 	private Composite fMainComposite;
 	private Button fMoveUpButton;
 	private Button fMoveDownButton;
-	private GenericNode fSelectedNode;
+	private IGenericNode fSelectedNode;
 	
 	/**
 	 * Create the master details block.
@@ -145,7 +144,7 @@ public class ModelMasterDetailsBlock extends MasterDetailsBlock implements IMode
 
 			@Override
 			public void selectionChanged(SelectionChangedEvent event) {
-				fSelectedNode = (GenericNode)((IStructuredSelection)event.getSelection()).getFirstElement();
+				fSelectedNode = (IGenericNode)((IStructuredSelection)event.getSelection()).getFirstElement();
 				if((((IStructuredSelection)event.getSelection()).getFirstElement() instanceof RootNode) ||
 				   (((IStructuredSelection)event.getSelection()).getFirstElement() instanceof CategoryNode))
 				{
@@ -196,11 +195,16 @@ public class ModelMasterDetailsBlock extends MasterDetailsBlock implements IMode
 		fTreeViewer.refresh();
 	}
 	
-	void selectNode(GenericNode node){
+	void selectNode(IGenericNode node){
 		fTreeViewer.setSelection(new StructuredSelection(node), true);
+		fSelectedNode = node;
 	}
 
 	public EcMultiPageEditor getEditor() {
 		return fEditor;
+	}
+	
+	public IGenericNode getSelectedNode(){
+		return fSelectedNode;
 	}
 }

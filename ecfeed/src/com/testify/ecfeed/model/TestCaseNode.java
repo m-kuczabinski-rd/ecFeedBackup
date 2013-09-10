@@ -35,15 +35,22 @@ public class TestCaseNode extends GenericNode {
 				
 		if(methodName != null){
 			result += ": " + methodName + "(";
-			for(int i = 0; i < fTestData.size(); i++){
-				result += fTestData.elementAt(i).getName();
-				if(i < fTestData.size() - 1){
-					result += ", ";
-				}
-			}
+			result += testDataString();
 			result += ")";
 		}
 		
+		return result;
+	}
+	
+	public String testDataString(){
+		String result = new String();
+		
+		for(int i = 0; i < fTestData.size(); i++){
+			result += fTestData.elementAt(i).getName();
+			if(i < fTestData.size() - 1){
+				result += ", ";
+			}
+		}
 		return result;
 	}
 	

@@ -18,7 +18,6 @@ import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.EditingSupport;
 import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -50,7 +49,7 @@ import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.swt.layout.RowLayout;
 
 public class TestCaseNodeDetailsPage extends GenericNodeDetailsPage implements ISetValueListener{
-	private TestCaseNode fSelectedNode;
+	private TestCaseNode fSelectedTestCase;
 	private Section fMainSection;
 	private MethodNode fParent;
 	private Combo fTestSuiteNameCombo;
@@ -179,40 +178,38 @@ public class TestCaseNodeDetailsPage extends GenericNodeDetailsPage implements I
 		createButton(textClientComposite, "Remove", new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e){
-				fParent.removeChild(fSelectedNode);
+				fParent.removeChild(fSelectedTestCase);
 				getParentBlock().selectNode(fParent);
-				fSelectedNode = null;
+				fSelectedTestCase = null;
 				updateModel(fParent);
 			}
 		});
 	}
 
 	public void selectionChanged(IFormPart part, ISelection selection) {
-		IStructuredSelection structuredSelection = (IStructuredSelection) selection;
-		if(structuredSelection.getFirstElement() instanceof TestCaseNode){
-			fSelectedNode = (TestCaseNode)structuredSelection.getFirstElement();
-			refresh();
-		}
+		super.selectionChanged(part, selection);
+		fSelectedTestCase = (TestCaseNode)fSelectedNode;
+		refresh();
 	}
 
 	public void refresh() {
-		if(fSelectedNode == null || fSelectedNode.getParent() == null){
+		if(fSelectedTestCase == null || fSelectedTestCase.getParent() == null){
 			return;
 		}
-		fParent = (MethodNode)fSelectedNode.getParent();
-		fMainSection.setText(fSelectedNode.toString());
+		fParent = (MethodNode)fSelectedTestCase.getParent();
+		fMainSection.setText(fSelectedTestCase.toString());
 		fTestSuiteNameCombo.setItems(fParent.getTestSuites().toArray(new String[]{}));
-		fTestSuiteNameCombo.setText(fSelectedNode.getName());
-		fTestDataViewer.setInput(fSelectedNode.getTestData());
-		EditingSupport editingSupport = new TestCasePartitionEditingSupport(fTestDataViewer, fSelectedNode.getTestData(), this);
+		fTestSuiteNameCombo.setText(fSelectedTestCase.getName());
+		fTestDataViewer.setInput(fSelectedTestCase.getTestData());
+		EditingSupport editingSupport = new TestCasePartitionEditingSupport(fTestDataViewer, fSelectedTestCase.getTestData(), this);
 		fPartitionViewerColumn.setEditingSupport(editingSupport);
 	}
 
 	private void renameTestCase() {
 		String newName = fTestSuiteNameCombo.getText();
 		if(EcModelUtils.validateTestSuiteName(newName)){
-			fSelectedNode.setName(newName);
-			updateModel(fSelectedNode);
+			fSelectedTestCase.setName(newName);
+			updateModel(fSelectedTestCase);
 		}
 		else{
 			MessageDialog dialog = new MessageDialog(Display.getDefault().getActiveShell(), 
@@ -221,13 +218,13 @@ public class TestCaseNodeDetailsPage extends GenericNodeDetailsPage implements I
 					DialogStrings.DIALOG_TEST_SUITE_NAME_PROBLEM_MESSAGE,
 					MessageDialog.ERROR, new String[] {"OK"}, 0);
 			dialog.open();
-			fTestSuiteNameCombo.setText(fSelectedNode.getName());
+			fTestSuiteNameCombo.setText(fSelectedTestCase.getName());
 		}
 	}
 
 	@Override
 	public void setValue(Vector<PartitionNode> testData) {
-		updateModel(fSelectedNode);
+		updateModel(fSelectedTestCase);
 	}
 
 }

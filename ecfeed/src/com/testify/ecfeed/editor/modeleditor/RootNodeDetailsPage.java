@@ -17,7 +17,6 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -44,7 +43,7 @@ import org.eclipse.swt.layout.GridData;
 
 public class RootNodeDetailsPage extends GenericNodeDetailsPage{
 
-	private RootNode fSelectedNode;
+	private RootNode fSelectedRoot;
 	private CheckboxTableViewer fClassesViewer;
 	private Section fMainSection;
 
@@ -56,9 +55,9 @@ public class RootNodeDetailsPage extends GenericNodeDetailsPage{
 
 			if(selectedClass != null){
 				ClassNode classNode = EcModelUtils.generateClassModel(selectedClass);
-				if(!EcModelUtils.classExists(fSelectedNode, classNode.getQualifiedName())){
-					fSelectedNode.addClass(classNode);
-					updateModel(fSelectedNode);
+				if(!EcModelUtils.classExists(fSelectedRoot, classNode.getQualifiedName())){
+					fSelectedRoot.addClass(classNode);
+					updateModel(fSelectedRoot);
 				}
 				else{
 					MessageDialog infoDialog = new MessageDialog(getActiveShell(), 
@@ -98,10 +97,10 @@ public class RootNodeDetailsPage extends GenericNodeDetailsPage{
 		private void removeClasses(Object[] checkedElements) {
 			for(Object element : checkedElements){
 				if(element instanceof ClassNode){
-					fSelectedNode.removeChild((ClassNode)element);
+					fSelectedRoot.removeChild((ClassNode)element);
 				}
 			}
-			updateModel(fSelectedNode);
+			updateModel(fSelectedRoot);
 		}
 	}
 
@@ -184,10 +183,10 @@ public class RootNodeDetailsPage extends GenericNodeDetailsPage{
 		createButton(textClient, "Rename...", new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e){
-				RenameModelDialog dialog = new RenameModelDialog(Display.getDefault().getActiveShell(), fSelectedNode);
+				RenameModelDialog dialog = new RenameModelDialog(Display.getDefault().getActiveShell(), fSelectedRoot);
 				if(dialog.open() == IDialogConstants.OK_ID){
-					fSelectedNode.setName(dialog.getNewName());
-					updateModel(fSelectedNode);
+					fSelectedRoot.setName(dialog.getNewName());
+					updateModel(fSelectedRoot);
 				}
 			}
 		});
@@ -196,24 +195,22 @@ public class RootNodeDetailsPage extends GenericNodeDetailsPage{
 
 	@Override
 	public void refresh() {
-		if(fSelectedNode == null){
+		if(fSelectedRoot == null){
 			return;
 		}
-		fClassesViewer.setInput(fSelectedNode.getClasses());
-		fMainSection.setText(fSelectedNode.toString());
+		fClassesViewer.setInput(fSelectedRoot.getClasses());
+		fMainSection.setText(fSelectedRoot.toString());
 	}
 
 	public void selectionChanged(IFormPart part, ISelection selection) {
-		IStructuredSelection structuredSelection = (IStructuredSelection) selection;
-		if(structuredSelection.getFirstElement() instanceof RootNode){
-			fSelectedNode = (RootNode)structuredSelection.getFirstElement();
-		}
+		super.selectionChanged(part, selection);
+		fSelectedRoot = (RootNode)fSelectedNode;
 		refresh();
 	}
 
 	@Override
 	public void modelUpdated(RootNode model) {
-		fSelectedNode = model;
+		fSelectedRoot = model;
 		refresh();
 	}
 

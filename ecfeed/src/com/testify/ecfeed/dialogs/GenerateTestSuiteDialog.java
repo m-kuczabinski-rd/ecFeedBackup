@@ -60,55 +60,6 @@ public class GenerateTestSuiteDialog extends TitleAreaDialog {
 	private Vector[] fAlgorithmInput;
 	private IConstraint[] fConstraints;
 
-	private class TreeCheckStateListener implements ICheckStateListener{
-		TreeNodeContentProvider fContentProvider;
-		CheckboxTreeViewer fViewer;
-		
-		TreeCheckStateListener(CheckboxTreeViewer treeViewer){
-			fViewer = treeViewer;
-			fContentProvider = (TreeNodeContentProvider)treeViewer.getContentProvider();
-		}
-		
-		@Override
-		public void checkStateChanged(CheckStateChangedEvent event) {
-			Object element = event.getElement();
-			boolean checked = event.getChecked();
-			
-			setChildrenCheck(element, checked);
-			setParentGreyed(element);
-		}
-		
-		private void setChildrenCheck(Object element, boolean checked) {
-			for(Object child : fContentProvider.getChildren(element)){
-				fViewer.setChecked(child, checked);
-				setChildrenCheck(child, checked);
-			}
-		}
-
-		private void setParentGreyed(Object element) {
-			Object parent = fContentProvider.getParent(element);
-			if(parent == null) return;
-			Object[] children = fContentProvider.getChildren(parent);
-			int checkedChildrenCount = 0;
-			for(int i = 0; i < children.length; i++){
-				if(fViewer.getChecked(children[i])){
-					checkedChildrenCount++;
-				}
-			}
-			if(checkedChildrenCount == 0){
-				fViewer.setGrayChecked(parent, false);
-			}
-			else if(checkedChildrenCount < children.length){
-				fViewer.setGrayChecked(parent, true);
-			}
-			else{
-				fViewer.setGrayed(parent, false);
-				fViewer.setChecked(parent, true);
-			}
-			setParentGreyed(parent);
-		}
-	}
-	
 	private class CategoriesContentProvider extends TreeNodeContentProvider implements ITreeContentProvider{
 		private final Object[] EMPTY_ARRAY = new Object[]{};
 		

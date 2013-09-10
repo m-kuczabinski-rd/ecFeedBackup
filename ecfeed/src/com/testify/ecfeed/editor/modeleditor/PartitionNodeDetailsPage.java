@@ -13,7 +13,6 @@ package com.testify.ecfeed.editor.modeleditor;
 
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -37,7 +36,7 @@ import org.eclipse.swt.widgets.Text;
 
 public class PartitionNodeDetailsPage extends GenericNodeDetailsPage{
 
-	private PartitionNode fSelectedNode;
+	private PartitionNode fSelectedPartition;
 	private Section fMainSection;
 	private Text fPartitionNameText;
 	private Text fPartitionValueText;
@@ -101,26 +100,24 @@ public class PartitionNodeDetailsPage extends GenericNodeDetailsPage{
 	}
 
 	public void selectionChanged(IFormPart part, ISelection selection) {
-		IStructuredSelection structuredSelection = (IStructuredSelection) selection;
-		if(structuredSelection.getFirstElement() instanceof PartitionNode){
-			fSelectedNode = (PartitionNode)structuredSelection.getFirstElement();
-			refresh();
-		}
+		super.selectionChanged(part, selection);
+		fSelectedPartition = (PartitionNode)fSelectedNode;
+		refresh();
 	}
 	public void refresh() {
-		if(fSelectedNode == null){
+		if(fSelectedPartition == null){
 			return;
 		}
-		fMainSection.setText(fSelectedNode.toString());
-		fPartitionNameText.setText(fSelectedNode.getName());
-		fPartitionValueText.setText(fSelectedNode.getValueString());
+		fMainSection.setText(fSelectedPartition.toString());
+		fPartitionNameText.setText(fSelectedPartition.getName());
+		fPartitionValueText.setText(fSelectedPartition.getValueString());
 	}
 
 	private void renamePartition(String name) {
-		CategoryNode parent = (CategoryNode)fSelectedNode.getParent();
-		if(EcModelUtils.validatePartitionName(name, parent, fSelectedNode)){
-			fSelectedNode.setName(name);
-			updateModel(fSelectedNode);
+		CategoryNode parent = (CategoryNode)fSelectedPartition.getParent();
+		if(EcModelUtils.validatePartitionName(name, parent, fSelectedPartition)){
+			fSelectedPartition.setName(name);
+			updateModel(fSelectedPartition);
 		}
 		else{
 			MessageDialog dialog = new MessageDialog(Display.getDefault().getActiveShell(), 
@@ -129,15 +126,15 @@ public class PartitionNodeDetailsPage extends GenericNodeDetailsPage{
 					DialogStrings.DIALOG_PARTITION_NAME_PROBLEM_MESSAGE,
 					MessageDialog.ERROR, new String[] {"OK"}, 0);
 			dialog.open();
-			fPartitionNameText.setText(fSelectedNode.getName());
+			fPartitionNameText.setText(fSelectedPartition.getName());
 		}
 	}
 
 	private void changePartitionValue(String valueString) {
-		CategoryNode parent = (CategoryNode)fSelectedNode.getParent();
+		CategoryNode parent = (CategoryNode)fSelectedPartition.getParent();
 		if(EcModelUtils.validatePartitionStringValue(valueString, parent)){
-			fSelectedNode.setValue(EcModelUtils.getPartitionValueFromString(valueString, parent.getType()));
-			updateModel(fSelectedNode);
+			fSelectedPartition.setValue(EcModelUtils.getPartitionValueFromString(valueString, parent.getType()));
+			updateModel(fSelectedPartition);
 		}
 		else{
 			MessageDialog dialog = new MessageDialog(Display.getDefault().getActiveShell(), 
@@ -146,7 +143,7 @@ public class PartitionNodeDetailsPage extends GenericNodeDetailsPage{
 					DialogStrings.DIALOG_PARTITION_VALUE_PROBLEM_MESSAGE,
 					MessageDialog.ERROR, new String[] {"OK"}, 0);
 			dialog.open();
-			fPartitionValueText.setText(fSelectedNode.getValueString());
+			fPartitionValueText.setText(fSelectedPartition.getValueString());
 		}
 	}
 }

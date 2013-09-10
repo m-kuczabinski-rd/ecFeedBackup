@@ -31,11 +31,14 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.CheckboxTableViewer;
+import org.eclipse.jface.viewers.CheckboxTreeViewer;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.ITreeContentProvider;
+import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
+import org.eclipse.jface.viewers.TreeNodeContentProvider;
 
 import com.testify.ecfeed.api.IConstraint;
 import com.testify.ecfeed.api.ITestGenAlgorithm;
@@ -43,9 +46,9 @@ import com.testify.ecfeed.constants.Constants;
 import com.testify.ecfeed.constants.DialogStrings;
 import com.testify.ecfeed.dialogs.AddTestCaseDialog;
 import com.testify.ecfeed.dialogs.GenerateTestSuiteDialog;
-import com.testify.ecfeed.dialogs.RemoveTestSuiteDialog;
 import com.testify.ecfeed.dialogs.RenameTestSuiteDialog;
 import com.testify.ecfeed.dialogs.TestMethodRenameDialog;
+import com.testify.ecfeed.dialogs.TreeCheckStateListener;
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.ConstraintNode;
 import com.testify.ecfeed.model.MethodNode;
@@ -62,12 +65,51 @@ import org.eclipse.jface.window.Window;
 
 public class MethodNodeDetailsPage extends GenericNodeDetailsPage{
 	private Label fMethodNameLabel;
-	private MethodNode fSelectedNode;
-	private CheckboxTableViewer fTestCasesViewer;
+	private MethodNode fSelectedMethod;
+	private CheckboxTreeViewer fTestCasesViewer;
 	private CheckboxTableViewer fConstraintsViewer;
 	private TableViewer fParametersViewer;
 	private Section fMainSection;
 
+	public static final Object[] EMPTY_ARRAY = new Object[]{};
+
+	private class TestCaseViewerContentProvider extends TreeNodeContentProvider implements ITreeContentProvider{
+
+		@Override
+		public Object[] getElements(Object inputElement) {
+			if(inputElement instanceof MethodNode){
+				return ((MethodNode)inputElement).getTestSuites().toArray();
+			}
+			return null;
+		}
+
+		@Override
+		public Object[] getChildren(Object parentElement) {
+			if(parentElement instanceof String){
+				return fSelectedMethod.getTestCases((String)parentElement).toArray();
+			}
+			return EMPTY_ARRAY;
+		}
+
+		@Override
+		public Object getParent(Object element) {
+			if(element instanceof TestCaseNode){
+				return ((TestCaseNode)element).getName();
+			}
+			return null;
+		}
+
+		@Override
+		public boolean hasChildren(Object element) {
+			//optimization - getChildren for test suite name lasts too long
+			if(element instanceof String){
+				return true;
+			}
+			return false;
+		}
+		
+	}
+	
 	public MethodNodeDetailsPage(ModelMasterDetailsBlock parentBlock){
 		super(parentBlock);
 	}
@@ -107,16 +149,16 @@ public class MethodNodeDetailsPage extends GenericNodeDetailsPage{
 		createButton(methodNameComposite, "Change", new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e){
-				TestMethodRenameDialog dialog = new TestMethodRenameDialog(getActiveShell(), fSelectedNode);
+				TestMethodRenameDialog dialog = new TestMethodRenameDialog(getActiveShell(), fSelectedMethod);
 				if(dialog.open() == IDialogConstants.OK_ID){
 					MethodNode selectedMethod = dialog.getSelectedMethod();
-					fSelectedNode.setName(selectedMethod.getName());
-					Vector<CategoryNode> parameters = fSelectedNode.getCategories();
+					fSelectedMethod.setName(selectedMethod.getName());
+					Vector<CategoryNode> parameters = fSelectedMethod.getCategories();
 					Vector<CategoryNode> newParameters = selectedMethod.getCategories();
 					for(int i = 0; i < parameters.size(); i++){
 						parameters.elementAt(i).setName(newParameters.elementAt(i).getName());
 					}
-					updateModel(fSelectedNode);
+					updateModel(fSelectedMethod);
 				}
 			}
 		});
@@ -234,8 +276,8 @@ public class MethodNodeDetailsPage extends GenericNodeDetailsPage{
 				String name = Constants.DEFAULT_CONSTRAINT_NAME;
 				BasicStatement premise = new StaticStatement(true);
 				BasicStatement consequence = new StaticStatement(true);
-				fSelectedNode.addConstraint(new ConstraintNode(name, new Constraint(premise, consequence)));
-				updateModel(fSelectedNode);
+				fSelectedMethod.addConstraint(new ConstraintNode(name, new Constraint(premise, consequence)));
+				updateModel(fSelectedMethod);
 			}
 		});
 	}
@@ -251,10 +293,9 @@ public class MethodNodeDetailsPage extends GenericNodeDetailsPage{
 						new String[] {IDialogConstants.OK_LABEL, IDialogConstants.CANCEL_LABEL}, IDialogConstants.OK_ID);
 				if(infoDialog.open() == IDialogConstants.OK_ID){
 					for(Object constraint : fConstraintsViewer.getCheckedElements()){
-						fSelectedNode.removeConstraint((ConstraintNode)constraint);
+						fSelectedMethod.removeConstraint((ConstraintNode)constraint);
 					}
-					fTestCasesViewer.setAllChecked(false);
-					updateModel((RootNode)fSelectedNode.getRoot());
+					updateModel((RootNode)fSelectedMethod.getRoot());
 				}
 			}
 		});
@@ -278,44 +319,25 @@ public class MethodNodeDetailsPage extends GenericNodeDetailsPage{
 
 	}
 	private void createTestCasesViewer(Composite composite) {
-		fTestCasesViewer = CheckboxTableViewer.newCheckList(composite, SWT.BORDER | SWT.FULL_SELECTION);
-		fTestCasesViewer.setContentProvider(new ArrayContentProvider());
-		fTestCasesViewer.addDoubleClickListener(new ChildrenViewerDoubleClickListener());
-		Table testCasesTable = fTestCasesViewer.getTable();
-		testCasesTable.setHeaderVisible(true);
-		testCasesTable.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
-		getToolkit().paintBordersFor(testCasesTable);
-		
-		TableViewerColumn testSuiteViewerColumn = createTableViewerColumn(fTestCasesViewer, "Test Suite", 
-				130, new ColumnLabelProvider(){
+		fTestCasesViewer = new CheckboxTreeViewer(composite);
+		fTestCasesViewer.setContentProvider(new TestCaseViewerContentProvider());
+		fTestCasesViewer.setLabelProvider(new LabelProvider(){
 			@Override
 			public String getText(Object element){
-				return ((TestCaseNode)element).getName();
-			}
-		});
-		
-		new TableViewerColumnSorter(testSuiteViewerColumn) {
-			protected Object getValue(Object o) {
-				return ((TestCaseNode)o).getName();
-			}
-		};
-
-		createTableViewerColumn(fTestCasesViewer, "Parameter Values", 100, new ColumnLabelProvider(){
-			@Override
-			public String getText(Object element){
-				String result = "[";
-				TestCaseNode testCase = (TestCaseNode)element;
-				Vector<PartitionNode> testData = testCase.getTestData();
-				for(int i = 0; i < testData.size(); i++){
-					result += testData.elementAt(i).getName();
-					if(i < testData.size() - 1){
-						result += ", ";
-					}
+				if(element instanceof String){
+					int testCasesCount = fSelectedMethod.getTestCases((String)element).size();
+					return (String)element + " [" +  testCasesCount + " test case" + 
+							(testCasesCount == 1?"":"s") + "]";
 				}
-				result += "]";
-				return result;
+				else if(element instanceof TestCaseNode){
+					return fSelectedMethod.getName() + "(" + ((TestCaseNode)element).testDataString() + ")";
+				}
+				return null;
 			}
 		});
+		fTestCasesViewer.addDoubleClickListener(new ChildrenViewerDoubleClickListener());
+		fTestCasesViewer.addCheckStateListener(new TreeCheckStateListener(fTestCasesViewer));
+		fTestCasesViewer.getTree().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 	}
 	
 	private void createTestCasesSectionButtons(Composite testCasesComposite) {
@@ -332,21 +354,19 @@ public class MethodNodeDetailsPage extends GenericNodeDetailsPage{
 		createGenerateTestSuiteButton(testCasesButonsComposite);
 		
 		createRemoveSelectedButton(testCasesButonsComposite);
-		
-		createRemoveTestSuitesButton(testCasesButonsComposite);
 	}
 	
 	private void createAddTestCaseButton(Composite testCasesButonsComposite) {
 		Button button = createButton(testCasesButonsComposite, "Add Test Case", new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e){
-				AddTestCaseDialog dialog = new AddTestCaseDialog(getActiveShell(), fSelectedNode);
+				AddTestCaseDialog dialog = new AddTestCaseDialog(getActiveShell(), fSelectedMethod);
 				dialog.create();
 				if (dialog.open() == IDialogConstants.OK_ID) {
 					String testSuite = dialog.getTestSuite();
 					Vector<PartitionNode> testData = dialog.getTestData();
-					fSelectedNode.addTestCase(new TestCaseNode(testSuite, testData));
-					updateModel(fSelectedNode);
+					fSelectedMethod.addTestCase(new TestCaseNode(testSuite, testData));
+					updateModel(fSelectedMethod);
 				}
 			}
 		});
@@ -358,17 +378,17 @@ public class MethodNodeDetailsPage extends GenericNodeDetailsPage{
 			@Override
 			public void widgetSelected(SelectionEvent e){
 				RenameTestSuiteDialog dialog = 
-						new RenameTestSuiteDialog(Display.getDefault().getActiveShell(), fSelectedNode.getTestSuites());
+						new RenameTestSuiteDialog(Display.getDefault().getActiveShell(), fSelectedMethod.getTestSuites());
 				dialog.create();
 				if (dialog.open() == Window.OK) {
 					String oldName = dialog.getRenamedTestSuite();
 					String newName = dialog.getNewName();
-					Collection<TestCaseNode> testSuite = fSelectedNode.removeTestSuite(oldName);
+					Collection<TestCaseNode> testSuite = fSelectedMethod.removeTestSuite(oldName);
 					for(TestCaseNode testCase : testSuite){
 						testCase.setName(newName);
-						fSelectedNode.addTestCase(testCase);
+						fSelectedMethod.addTestCase(testCase);
 					}
-					updateModel((RootNode)fSelectedNode.getRoot());
+					updateModel((RootNode)fSelectedMethod.getRoot());
 				}
 			}
 		});
@@ -380,7 +400,7 @@ public class MethodNodeDetailsPage extends GenericNodeDetailsPage{
 			@SuppressWarnings({"rawtypes", "unchecked"})
 			@Override
 			public void widgetSelected(SelectionEvent e){
-				GenerateTestSuiteDialog dialog = new GenerateTestSuiteDialog(getActiveShell(), fSelectedNode);
+				GenerateTestSuiteDialog dialog = new GenerateTestSuiteDialog(getActiveShell(), fSelectedMethod);
 				if(dialog.open() == IDialogConstants.OK_ID){
 					ITestGenAlgorithm selectedAlgorithm = dialog.getSelectedAlgorithm();
 					Vector[] algorithmInput = dialog.getAlgorithmInput();
@@ -391,9 +411,9 @@ public class MethodNodeDetailsPage extends GenericNodeDetailsPage{
 						for(Vector testCase : generatedData){
 							Vector<PartitionNode> testData = (Vector<PartitionNode>)testCase;
 							TestCaseNode testCaseNode = new TestCaseNode(dialog.getTestSuiteName(), testData);
-							fSelectedNode.addTestCase(testCaseNode);
+							fSelectedMethod.addTestCase(testCaseNode);
 						}
-						updateModel(fSelectedNode);
+						updateModel(fSelectedMethod);
 					}
 					else{
 						new MessageDialog(Display.getDefault().getActiveShell(), 
@@ -421,27 +441,15 @@ public class MethodNodeDetailsPage extends GenericNodeDetailsPage{
 						MessageDialog.QUESTION_WITH_CANCEL, 
 						new String[] {IDialogConstants.OK_LABEL, IDialogConstants.CANCEL_LABEL}, IDialogConstants.OK_ID);
 				if(infoDialog.open() == IDialogConstants.OK_ID){
-					for(Object testCase : fTestCasesViewer.getCheckedElements()){
-						fSelectedNode.removeChild((TestCaseNode)testCase);
-						fTestCasesViewer.setAllChecked(false);
+					for(Object element : fTestCasesViewer.getCheckedElements()){
+						if(element instanceof TestCaseNode){
+							fSelectedMethod.removeChild((TestCaseNode)element);
+						}
 					}
-					updateModel((RootNode)fSelectedNode.getRoot());
-				}
-			}
-		});
-		button.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
-	}
-	
-	private void createRemoveTestSuitesButton(Composite testCasesButonsComposite) {
-		Button button = createButton(testCasesButonsComposite, "Remove Suites...", new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				RemoveTestSuiteDialog dialog = new RemoveTestSuiteDialog(Display.getDefault().getActiveShell(), fSelectedNode.getTestSuites());
-				if(dialog.open() == IDialogConstants.OK_ID){
-					for(Object suite : dialog.getCheckedElements()){
-						fSelectedNode.removeTestSuite((String)suite);
+					for(String testSuite : fSelectedMethod.getTestSuites()){
+						fTestCasesViewer.setGrayChecked(testSuite, false);
 					}
-					updateModel((RootNode)fSelectedNode.getRoot());
+					updateModel((RootNode)fSelectedMethod.getRoot());
 				}
 			}
 		});
@@ -449,21 +457,19 @@ public class MethodNodeDetailsPage extends GenericNodeDetailsPage{
 	}
 	
 	public void selectionChanged(IFormPart part, ISelection selection) {
-		IStructuredSelection structuredSelection = (IStructuredSelection) selection;
-		if(structuredSelection.getFirstElement() instanceof MethodNode){
-			fSelectedNode = (MethodNode)structuredSelection.getFirstElement();
-		}
+		super.selectionChanged(part, selection);
+		fSelectedMethod = (MethodNode)fSelectedNode;
 		refresh();
 	}
 
 	public void refresh() {
-		if(fSelectedNode == null){
+		if(fSelectedMethod == null){
 			return;
 		}
-		fMainSection.setText(fSelectedNode.toString());
-		fMethodNameLabel.setText("Method name: " + fSelectedNode.toString());
-		fParametersViewer.setInput(fSelectedNode.getCategories());
-		fConstraintsViewer.setInput(fSelectedNode.getConstraints());
-		fTestCasesViewer.setInput(fSelectedNode.getTestCases());
+		fMainSection.setText(fSelectedMethod.toString());
+		fMethodNameLabel.setText("Method name: " + fSelectedMethod.toString());
+		fParametersViewer.setInput(fSelectedMethod.getCategories());
+		fConstraintsViewer.setInput(fSelectedMethod.getConstraints());
+		fTestCasesViewer.setInput(fSelectedMethod);
 	}
 }
