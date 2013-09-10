@@ -49,7 +49,6 @@ public class ClassNodeDetailsPage extends GenericNodeDetailsPage{
 	private ClassNode fSelectedClass;
 	private Section fMainSection;
 	private Label fQualifiedNameLabel;
-	private Vector<MethodNode> fObsoleteMethods;
 	private Vector<MethodNode> fNotContainedMethods;
 	private ColorManager fColorManager;
 	private CheckboxTableViewer fOtherMethodsViewer;
@@ -287,12 +286,17 @@ public class ClassNodeDetailsPage extends GenericNodeDetailsPage{
 	}
 
 	private boolean methodObsolete(MethodNode method) {
-		for(MethodNode obsoleteMethod : fObsoleteMethods){
+		Vector<MethodNode> obsoleteMethods = getObsoleteMethods();
+		for(MethodNode obsoleteMethod : obsoleteMethods){
 			if(obsoleteMethod.toString().equals(method.toString())){
 				return true;
 			}
 		}
 		return false;
+	}
+	
+	private Vector<MethodNode> getObsoleteMethods(){
+		return EcModelUtils.getObsoleteMethods(fSelectedClass, fSelectedClass.getQualifiedName());
 	}
 	
 	public void selectionChanged(IFormPart part, ISelection selection) {
@@ -305,21 +309,20 @@ public class ClassNodeDetailsPage extends GenericNodeDetailsPage{
 		if(fSelectedClass == null){
 			return;
 		}
-		fObsoleteMethods = EcModelUtils.getObsoleteMethods(fSelectedClass, fSelectedClass.getQualifiedName());
-		fNotContainedMethods = EcModelUtils.getNotContainedMethods(fSelectedClass, fSelectedClass.getQualifiedName());
-		if(fNotContainedMethods.size() == 0){
+		Vector<MethodNode> notContainedMethods = EcModelUtils.getNotContainedMethods(fSelectedClass, fSelectedClass.getQualifiedName());
+		if(notContainedMethods.size() == 0){
 			if(fOtherMethodsSectionCreated){
 				fOtherMethodsSection.dispose();
 				fOtherMethodsSectionCreated = false;
 			}
 		}
 		else {
-			if(fNotContainedMethods.size() > 0){
+			if(notContainedMethods.size() > 0){
 				if(!fOtherMethodsSectionCreated){
 					createOtherMethodsSection(fMainComposite);
 				}
 				fOtherMethodsSection.setText("Other test methods in " + fSelectedClass.getLocalName());
-				fOtherMethodsViewer.setInput(fNotContainedMethods);
+				fOtherMethodsViewer.setInput(notContainedMethods);
 			}
 		}
 		fMainSection.setText("Class " + fSelectedClass.getLocalName());

@@ -459,6 +459,9 @@ public class MethodNodeDetailsPage extends GenericNodeDetailsPage{
 	public void selectionChanged(IFormPart part, ISelection selection) {
 		super.selectionChanged(part, selection);
 		fSelectedMethod = (MethodNode)fSelectedNode;
+		fParametersViewer.setInput(fSelectedMethod.getCategories());
+		fConstraintsViewer.setInput(fSelectedMethod.getConstraints());
+		fTestCasesViewer.setInput(fSelectedMethod);
 		refresh();
 	}
 
@@ -468,8 +471,8 @@ public class MethodNodeDetailsPage extends GenericNodeDetailsPage{
 		}
 		fMainSection.setText(fSelectedMethod.toString());
 		fMethodNameLabel.setText("Method name: " + fSelectedMethod.toString());
-		fParametersViewer.setInput(fSelectedMethod.getCategories());
-		fConstraintsViewer.setInput(fSelectedMethod.getConstraints());
-		fTestCasesViewer.setInput(fSelectedMethod);
+		fParametersViewer.refresh();;
+		fConstraintsViewer.refresh();;
+		fTestCasesViewer.refresh();
 	}
 }

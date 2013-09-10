@@ -371,9 +371,6 @@ public class ConstraintsNodeDetailsPage extends GenericNodeDetailsPage {
 	public void selectionChanged(IFormPart part, ISelection selection) {
 		super.selectionChanged(part, selection);
 		fSelectedConstraint = (ConstraintNode)fSelectedNode;
-		fConstraintViewer.setLabelProvider(new StatementViewerLabelProvider(fConstraint));
-		fConstraintViewer.setInput(fConstraint);
-		fConstraintViewer.expandAll();
 		refresh();
 	}
 	
@@ -387,6 +384,8 @@ public class ConstraintsNodeDetailsPage extends GenericNodeDetailsPage {
 		fConstraintNameCombo.setItems(fSelectedConstraint.getMethod().
 				getConstraintsNames().toArray(new String[]{}));
 		fConstraintNameCombo.setText(fSelectedConstraint.getName());
-		fConstraintViewer.refresh();
+		fConstraintViewer.setLabelProvider(new StatementViewerLabelProvider(fConstraint));
+		fConstraintViewer.setInput(fConstraint);
+		fConstraintViewer.expandAll();
 	}
 }

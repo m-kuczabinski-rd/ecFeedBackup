@@ -45,7 +45,7 @@ public class TreeCheckStateListener implements ICheckStateListener{
 	private int getCheckedChildrenCount(Object parent) {
 		int checkedChildrenCount = 0;
 		for(Object element : fViewer.getCheckedElements()){
-			if(fContentProvider.getParent(element) == parent){
+			if(parent.equals(fContentProvider.getParent(element))){
 				checkedChildrenCount++;
 			}
 		}
