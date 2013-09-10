@@ -49,7 +49,6 @@ public class ClassNodeDetailsPage extends GenericNodeDetailsPage{
 	private ClassNode fSelectedClass;
 	private Section fMainSection;
 	private Label fQualifiedNameLabel;
-	private Vector<MethodNode> fNotContainedMethods;
 	private ColorManager fColorManager;
 	private CheckboxTableViewer fOtherMethodsViewer;
 	private CheckboxTableViewer fMethodsViewer;
