@@ -99,20 +99,6 @@ public class PartitionNodeDetailsPage extends GenericNodeDetailsPage{
 		});
 	}
 
-	public void selectionChanged(IFormPart part, ISelection selection) {
-		super.selectionChanged(part, selection);
-		fSelectedPartition = (PartitionNode)fSelectedNode;
-		refresh();
-	}
-	public void refresh() {
-		if(fSelectedPartition == null){
-			return;
-		}
-		fMainSection.setText(fSelectedPartition.toString());
-		fPartitionNameText.setText(fSelectedPartition.getName());
-		fPartitionValueText.setText(fSelectedPartition.getValueString());
-	}
-
 	private void renamePartition(String name) {
 		CategoryNode parent = (CategoryNode)fSelectedPartition.getParent();
 		if(EcModelUtils.validatePartitionName(name, parent, fSelectedPartition)){
@@ -146,4 +132,20 @@ public class PartitionNodeDetailsPage extends GenericNodeDetailsPage{
 			fPartitionValueText.setText(fSelectedPartition.getValueString());
 		}
 	}
+
+	public void selectionChanged(IFormPart part, ISelection selection) {
+		super.selectionChanged(part, selection);
+		fSelectedPartition = (PartitionNode)fSelectedNode;
+		refresh();
+	}
+	
+	public void refresh() {
+		if(fSelectedPartition == null){
+			return;
+		}
+		fMainSection.setText(fSelectedPartition.toString());
+		fPartitionNameText.setText(fSelectedPartition.getName());
+		fPartitionValueText.setText(fSelectedPartition.getValueString());
+	}
+
 }

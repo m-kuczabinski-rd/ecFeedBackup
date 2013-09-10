@@ -256,7 +256,6 @@ public class CategoryNodeDetailsPage extends GenericNodeDetailsPage implements I
 	public void selectionChanged(IFormPart part, ISelection selection) {
 		super.selectionChanged(part, selection);
 		fSelectedCategory = (CategoryNode)fSelectedNode;
-		fPartitionsViewer.setInput(fSelectedCategory.getPartitions());
 		refresh();
 	}
 	
@@ -265,6 +264,6 @@ public class CategoryNodeDetailsPage extends GenericNodeDetailsPage implements I
 			return;
 		}
 		fMainSection.setText(fSelectedCategory.toString());
-		fPartitionsViewer.refresh();
+		fPartitionsViewer.setInput(fSelectedCategory.getPartitions());
 	}
 }
