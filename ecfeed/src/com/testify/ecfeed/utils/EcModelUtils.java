@@ -408,11 +408,6 @@ public class EcModelUtils {
 		partitions.add(new PartitionNode("min", Integer.MIN_VALUE));
 		partitions.add(new PartitionNode("negative", (int)-1));	
 		partitions.add(new PartitionNode("zero", (int)0));
-		partitions.add(new PartitionNode("one", (int)0));
-		partitions.add(new PartitionNode("two", (int)0));
-		partitions.add(new PartitionNode("three", (int)0));
-		partitions.add(new PartitionNode("four", (int)0));
-		partitions.add(new PartitionNode("five", (int)0));
 		partitions.add(new PartitionNode("positive", (int)1));	
 		partitions.add(new PartitionNode("max", Integer.MAX_VALUE));
 		return partitions;
