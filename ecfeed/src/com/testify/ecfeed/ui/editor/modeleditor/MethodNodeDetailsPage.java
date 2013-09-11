@@ -70,6 +70,7 @@ public class MethodNodeDetailsPage extends GenericNodeDetailsPage{
 	private CheckboxTableViewer fConstraintsViewer;
 	private TableViewer fParametersViewer;
 	private Section fMainSection;
+	private Section fConstraintsSection;
 
 	private class TestCaseViewerContentProvider extends TreeNodeContentProvider implements ITreeContentProvider{
 		public final Object[] EMPTY_ARRAY = new Object[]{};
@@ -207,16 +208,16 @@ public class MethodNodeDetailsPage extends GenericNodeDetailsPage{
 	}
 	
 	private void createConstraintsSection(Composite composite) {
-		Section constraintsSection = getToolkit().createSection(composite, Section.EXPANDED | Section.TWISTIE | Section.TITLE_BAR);
-		constraintsSection.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1));
-		getToolkit().paintBordersFor(constraintsSection);
-		constraintsSection.setText("Constraints");
-		constraintsSection.setExpanded(false);
+		fConstraintsSection = getToolkit().createSection(composite, Section.EXPANDED | Section.TWISTIE | Section.TITLE_BAR);
+		fConstraintsSection.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1));
+		getToolkit().paintBordersFor(fConstraintsSection);
+		fConstraintsSection.setText("Constraints");
+		fConstraintsSection.setExpanded(false);
 		
-		Composite constraintsComposite = new Composite(constraintsSection, SWT.NONE);
+		Composite constraintsComposite = new Composite(fConstraintsSection, SWT.NONE);
 		getToolkit().adapt(constraintsComposite);
 		getToolkit().paintBordersFor(constraintsComposite);
-		constraintsSection.setClient(constraintsComposite);
+		fConstraintsSection.setClient(constraintsComposite);
 		constraintsComposite.setLayout(new GridLayout(1, false));
 		constraintsComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 		
@@ -276,9 +277,12 @@ public class MethodNodeDetailsPage extends GenericNodeDetailsPage{
 				BasicStatement consequence = new StaticStatement(true);
 				fSelectedMethod.addConstraint(new ConstraintNode(name, new Constraint(premise, consequence)));
 				updateModel(fSelectedMethod);
+				fConstraintsSection.layout();
+				fMainSection.layout();
 			}
 		});
 	}
+	
 	private void createRemoveSelectedConstraintsButton(Composite composite) {
 		createButton(composite, "Remove Selected", new SelectionAdapter() {
 			@Override
@@ -505,5 +509,7 @@ public class MethodNodeDetailsPage extends GenericNodeDetailsPage{
 		fParametersViewer.refresh();
 		fConstraintsViewer.refresh();
 		fTestCasesViewer.refresh();
+		fConstraintsSection.layout();
+		fMainSection.layout();
 	}
 }

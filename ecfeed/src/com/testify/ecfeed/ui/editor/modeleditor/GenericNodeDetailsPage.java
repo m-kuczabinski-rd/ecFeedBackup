@@ -47,7 +47,7 @@ public class GenericNodeDetailsPage implements IDetailsPage, IModelUpdateListene
 	protected FormToolkit fToolkit;
 	protected IGenericNode fSelectedNode;
 
-	public class ChildrenViewerDoubleClickListener implements
+	protected class ChildrenViewerDoubleClickListener implements
 	IDoubleClickListener {
 		@Override
 		public void doubleClick(DoubleClickEvent event) {
