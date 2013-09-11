@@ -11,24 +11,24 @@
 
 package com.testify.ecfeed.model;
 
-import java.util.Vector;
+import java.util.ArrayList;
 
 public class CategoryNode extends GenericNode {
 	
 	private final String fType;
-	private final Vector<PartitionNode> fPartitions;
+	private final ArrayList<PartitionNode> fPartitions;
 	
 	public CategoryNode(String name, String type) {
 		super(name);
 		fType = type;
-		fPartitions = new Vector<PartitionNode>();
+		fPartitions = new ArrayList<PartitionNode>();
 	}
 
 	public String getType() {
 		return fType;
 	}
 
-	public Vector<? extends IGenericNode> getChildren(){
+	public ArrayList<? extends IGenericNode> getChildren(){
 		return fPartitions;
 	}
 	
@@ -48,12 +48,12 @@ public class CategoryNode extends GenericNode {
 	}
 
 	//TODO unit tests
-	public Vector<PartitionNode> getPartitions() {
+	public ArrayList<PartitionNode> getPartitions() {
 		return fPartitions;
 	}
 
-	public Vector<String> getPartitionNames() {
-		Vector<String> names = new Vector<String>();
+	public ArrayList<String> getPartitionNames() {
+		ArrayList<String> names = new ArrayList<String>();
 		for(PartitionNode partition : getPartitions()){
 			names.add(partition.getName());
 		}

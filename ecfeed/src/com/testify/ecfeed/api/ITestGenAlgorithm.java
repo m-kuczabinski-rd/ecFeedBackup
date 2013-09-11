@@ -1,8 +1,8 @@
 package com.testify.ecfeed.api;
 
-import java.util.Vector;
+import java.util.ArrayList;
 
 public interface ITestGenAlgorithm {
 	@SuppressWarnings("rawtypes")
-	public Vector[] generate(Vector[] input, IConstraint[] constraints);
+	public ArrayList[] generate(ArrayList[] input, IConstraint[] constraints);
 }

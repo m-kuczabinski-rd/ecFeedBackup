@@ -23,7 +23,7 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
-import java.util.Vector;
+import java.util.ArrayList;
 
 import org.junit.runners.BlockJUnit4ClassRunner;
 import org.junit.runners.model.FrameworkMethod;
@@ -128,7 +128,7 @@ public class EcFeeder extends BlockJUnit4ClassRunner {
 	}
 
 	private ParameterizedFrameworkMethod createTestMethod(FrameworkMethod method, TestCaseNode testCase) {
-		Vector<Object> testParameters = new Vector<Object>(); 
+		ArrayList<Object> testParameters = new ArrayList<Object>(); 
 		for(PartitionNode partition : testCase.getTestData()){
 			testParameters.add(partition.getValue());
 		}
@@ -145,8 +145,8 @@ public class EcFeeder extends BlockJUnit4ClassRunner {
 		return classModel.getMethod(methodName, getParameterTypes(method.getMethod().getParameterTypes()));
 	}
 
-	private Vector<String> getParameterTypes(Class<?>[] parameterTypes) {
-		Vector<String> result = new Vector<String>();
+	private ArrayList<String> getParameterTypes(Class<?>[] parameterTypes) {
+		ArrayList<String> result = new ArrayList<String>();
 		for(Class<?> parameter : parameterTypes){
 			result.add(getParameterType(parameter));
 		}

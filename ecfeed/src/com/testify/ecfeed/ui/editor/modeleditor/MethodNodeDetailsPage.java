@@ -12,7 +12,7 @@
 package com.testify.ecfeed.ui.editor.modeleditor;
 
 import java.util.Collection;
-import java.util.Vector;
+import java.util.ArrayList;
 
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.forms.IFormPart;
@@ -151,10 +151,10 @@ public class MethodNodeDetailsPage extends GenericNodeDetailsPage{
 				if(dialog.open() == IDialogConstants.OK_ID){
 					MethodNode selectedMethod = dialog.getSelectedMethod();
 					fSelectedMethod.setName(selectedMethod.getName());
-					Vector<CategoryNode> parameters = fSelectedMethod.getCategories();
-					Vector<CategoryNode> newParameters = selectedMethod.getCategories();
+					ArrayList<CategoryNode> parameters = fSelectedMethod.getCategories();
+					ArrayList<CategoryNode> newParameters = selectedMethod.getCategories();
 					for(int i = 0; i < parameters.size(); i++){
-						parameters.elementAt(i).setName(newParameters.elementAt(i).getName());
+						parameters.get(i).setName(newParameters.get(i).getName());
 					}
 					updateModel(fSelectedMethod);
 				}
@@ -362,7 +362,7 @@ public class MethodNodeDetailsPage extends GenericNodeDetailsPage{
 				dialog.create();
 				if (dialog.open() == IDialogConstants.OK_ID) {
 					String testSuite = dialog.getTestSuite();
-					Vector<PartitionNode> testData = dialog.getTestData();
+					ArrayList<PartitionNode> testData = dialog.getTestData();
 					fSelectedMethod.addTestCase(new TestCaseNode(testSuite, testData));
 					updateModel(fSelectedMethod);
 				}
@@ -400,10 +400,10 @@ public class MethodNodeDetailsPage extends GenericNodeDetailsPage{
 				GenerateTestSuiteDialog dialog = new GenerateTestSuiteDialog(getActiveShell(), fSelectedMethod);
 				if(dialog.open() == IDialogConstants.OK_ID){
 					ITestGenAlgorithm selectedAlgorithm = dialog.getSelectedAlgorithm();
-					Vector[] algorithmInput = dialog.getAlgorithmInput();
+					ArrayList[] algorithmInput = dialog.getAlgorithmInput();
 					IConstraint[] constraints = dialog.getConstraints();
 					
-					Vector[] generatedData = selectedAlgorithm.generate(algorithmInput, constraints);
+					ArrayList[] generatedData = selectedAlgorithm.generate(algorithmInput, constraints);
 					if(generatedData == null){
 						return;
 					}
@@ -434,9 +434,9 @@ public class MethodNodeDetailsPage extends GenericNodeDetailsPage{
 
 			@SuppressWarnings({ "rawtypes", "unchecked" })
 			private void addTestSuiteToModel(GenerateTestSuiteDialog dialog,
-					Vector[] generatedData) {
-				for(Vector testCase : generatedData){
-					Vector<PartitionNode> testData = (Vector<PartitionNode>)testCase;
+					ArrayList[] generatedData) {
+				for(ArrayList testCase : generatedData){
+					ArrayList<PartitionNode> testData = (ArrayList<PartitionNode>)testCase;
 					TestCaseNode testCaseNode = new TestCaseNode(dialog.getTestSuiteName(), testData);
 					fSelectedMethod.addTestCase(testCaseNode);
 				}

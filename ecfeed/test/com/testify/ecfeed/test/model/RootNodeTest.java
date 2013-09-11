@@ -38,7 +38,7 @@ public class RootNodeTest extends RootNode {
 		assertEquals(1, root.getChildren().size());
 		assertEquals(1, root.getClasses().size());
 		assertEquals(root, klass.getParent());
-		assertEquals(klass, root.getChildren().elementAt(0));
+		assertEquals(klass, root.getChildren().get(0));
 	}
 	
 	@Test

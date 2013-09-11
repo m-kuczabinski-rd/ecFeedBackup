@@ -1,15 +1,15 @@
 package com.testify.ecfeed.model.constraint;
 
-import java.util.Vector;
+import java.util.ArrayList;
 
 import com.testify.ecfeed.model.PartitionNode;
 
 public class StatementArray extends BasicStatement{
 	private Operator fOperator;
-	private Vector<BasicStatement> fStatements;
+	private ArrayList<BasicStatement> fStatements;
 	
 	public StatementArray(Operator operator){
-		fStatements = new Vector<BasicStatement>();
+		fStatements = new ArrayList<BasicStatement>();
 		fOperator = operator;
 	}
 
@@ -23,12 +23,12 @@ public class StatementArray extends BasicStatement{
 	}
 	
 	@Override
-	public Vector<BasicStatement> getChildren(){
+	public ArrayList<BasicStatement> getChildren(){
 		return fStatements;
 	}
 	
 	@Override
-	public boolean evaluate(Vector<PartitionNode> values) {
+	public boolean evaluate(ArrayList<PartitionNode> values) {
 		if(fStatements.size() == 0){
 			return false;
 		}
@@ -55,7 +55,7 @@ public class StatementArray extends BasicStatement{
 	public String toString(){
 		String result = new String("(");
 		for(int i = 0; i < fStatements.size(); i++){
-			result += fStatements.elementAt(i).toString();
+			result += fStatements.get(i).toString();
 			if(i < fStatements.size() - 1){
 				switch(fOperator){
 				case AND:
@@ -70,25 +70,6 @@ public class StatementArray extends BasicStatement{
 		return result + ")";
 	}
 	
-	@Override
-	public boolean equals(Object obj){
-		if(obj == null){
-			return false;
-		}
-
-		if(obj instanceof StatementArray == false){
-			return false;
-		}
-		StatementArray array = (StatementArray)obj;
-		if(fOperator != array.getOperator()){
-			return false;
-		}
-		if(getChildren().equals(array.getChildren()) == false){
-			return false;
-		}
-		return super.equals(obj);
-	}
-
 	public void setOperator(Operator operator) {
 		fOperator = operator;
 	}

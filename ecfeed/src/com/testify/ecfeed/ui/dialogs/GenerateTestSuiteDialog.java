@@ -3,7 +3,6 @@ package com.testify.ecfeed.ui.dialogs;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Vector;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
@@ -58,7 +57,7 @@ public class GenerateTestSuiteDialog extends TitleAreaDialog {
 	private CheckboxTreeViewer fCategoriesViewer;
 	private CheckboxTreeViewer fConstraintsViewer;
 	@SuppressWarnings("rawtypes")
-	private Vector[] fAlgorithmInput;
+	private ArrayList[] fAlgorithmInput;
 	private IConstraint[] fConstraints;
 
 	private class CategoriesContentProvider extends TreeNodeContentProvider implements ITreeContentProvider{
@@ -397,11 +396,11 @@ public class GenerateTestSuiteDialog extends TitleAreaDialog {
 	}
 
 	private void saveAlgorithmInput() {
-		Vector<CategoryNode> categories = fMethod.getCategories();
-		fAlgorithmInput = new Vector[categories.size()];
+		ArrayList<CategoryNode> categories = fMethod.getCategories();
+		fAlgorithmInput = new ArrayList[categories.size()];
 		for(int i = 0; i < categories.size(); i++){
-			Vector<PartitionNode> partitions = new Vector<PartitionNode>();
-			for(PartitionNode partition : categories.elementAt(i).getPartitions()){
+			ArrayList<PartitionNode> partitions = new ArrayList<PartitionNode>();
+			for(PartitionNode partition : categories.get(i).getPartitions()){
 				if(fCategoriesViewer.getChecked(partition)){
 					partitions.add(partition);
 				}
@@ -411,7 +410,7 @@ public class GenerateTestSuiteDialog extends TitleAreaDialog {
 	}
 
 	@SuppressWarnings("rawtypes")
-	public Vector[] getAlgorithmInput(){
+	public ArrayList[] getAlgorithmInput(){
 		return fAlgorithmInput;
 	}
 	

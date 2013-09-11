@@ -12,7 +12,7 @@
 package com.testify.ecfeed.ui.editor.modeleditor;
 
 import java.util.Collection;
-import java.util.Vector;
+import java.util.ArrayList;
 
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.TreeNodeContentProvider;
@@ -39,9 +39,11 @@ public class ModelContentProvider extends TreeNodeContentProvider implements ITr
 
 	@Override
 	public Object[] getChildren(Object parentElement) {
+		//Because of potentially large amount of children, MethodNode is special case
+		//We filter out test suites with too many test cases
 		if(parentElement instanceof MethodNode){
 			MethodNode method = (MethodNode)parentElement;
-			Vector<Object> children = new Vector<Object>();
+			ArrayList<Object> children = new ArrayList<Object>();
 			children.addAll(method.getCategories());
 			children.addAll(method.getConstraints());
 			for(String testSuite : method.getTestSuites()){

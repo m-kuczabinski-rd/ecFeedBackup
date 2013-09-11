@@ -1,6 +1,6 @@
 package com.testify.ecfeed.model.constraint;
 
-import java.util.Vector;
+import java.util.ArrayList;
 
 import com.testify.ecfeed.model.PartitionNode;
 
@@ -14,7 +14,7 @@ public class BasicStatement implements IStatement {
 	}
 	
 	@Override
-	public boolean evaluate(Vector<PartitionNode> values) {
+	public boolean evaluate(ArrayList<PartitionNode> values) {
 		return false;
 	}
 
@@ -30,24 +30,24 @@ public class BasicStatement implements IStatement {
 		fParent = parent;
 	}
 
-	public Vector<BasicStatement> getChildren(){
+	public ArrayList<BasicStatement> getChildren(){
 		return null;
 	}
 
 	public void replaceChild(BasicStatement oldStatement, 
 			BasicStatement newStatement) {
-		Vector<BasicStatement> children = getChildren();
+		ArrayList<BasicStatement> children = getChildren();
 		if(children != null){
 			int index = children.indexOf(oldStatement);
 			if(index != -1){
 				newStatement.setParent(this);
-				children.setElementAt(newStatement, index);
+				children.set(index, newStatement);
 			}
 		}
 	}
 
 	public void removeChild(BasicStatement child) {
-		Vector<BasicStatement> children = getChildren();
+		ArrayList<BasicStatement> children = getChildren();
 		if(children != null){
 			children.remove(child);
 		}

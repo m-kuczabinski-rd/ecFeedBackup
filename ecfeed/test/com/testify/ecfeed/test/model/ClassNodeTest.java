@@ -58,7 +58,7 @@ public class ClassNodeTest extends ClassNode {
 		assertEquals(true, classNode.hasChildren());
 		assertEquals(1, classNode.getChildren().size());
 		assertEquals(classNode, method.getParent());
-		assertEquals(method, classNode.getChildren().elementAt(0));
+		assertEquals(method, classNode.getChildren().get(0));
 	}
 	
 	@Test

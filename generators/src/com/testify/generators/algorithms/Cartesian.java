@@ -1,7 +1,7 @@
 package com.testify.generators.algorithms;
 
 import java.util.Iterator;
-import java.util.Vector;
+import java.util.ArrayList;
 
 import com.testify.ecfeed.api.IConstraint;
 import com.testify.ecfeed.api.ITestGenAlgorithm;
@@ -10,15 +10,15 @@ public class Cartesian implements ITestGenAlgorithm {
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
-	public Vector[] generate(Vector[] input, IConstraint[] constraints) {
+	public ArrayList[] generate(ArrayList[] input, IConstraint[] constraints) {
 		
 		if(input.length == 0){
 			return input; 
 		}
 		
-		Vector<Vector> product = new Vector<Vector>();
+		ArrayList<ArrayList> product = new ArrayList<ArrayList>();
 		for(Object element : input[0]){
-			Vector v = new Vector();
+			ArrayList v = new ArrayList();
 			v.add(element);
 			product.add(v);
 		}
@@ -28,22 +28,22 @@ public class Cartesian implements ITestGenAlgorithm {
 		}
 
 		for(IConstraint constraint : constraints){
-			for(Iterator<Vector> it = product.iterator(); it.hasNext();){
+			for(Iterator<ArrayList> it = product.iterator(); it.hasNext();){
 				if(constraint.evaluate(it.next()) == false){
 					it.remove();
 				}
 			}
 		}
 		
-		return product.toArray(new Vector[]{});
+		return product.toArray(new ArrayList[]{});
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	private Vector<Vector> cartesian(Vector<Vector> product, Vector input) {
-		Vector<Vector> newProduct = new Vector<Vector>();
-		for(Vector vector : product){
+	private ArrayList<ArrayList> cartesian(ArrayList<ArrayList> product, ArrayList input) {
+		ArrayList<ArrayList> newProduct = new ArrayList<ArrayList>();
+		for(ArrayList vector : product){
 			for(Object element : input){
-				Vector newElement = ((Vector)vector.clone());
+				ArrayList newElement = ((ArrayList)vector.clone());
 				newElement.add(element);
 				newProduct.add(newElement);
 			}

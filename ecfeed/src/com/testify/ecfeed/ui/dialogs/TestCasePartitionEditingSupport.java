@@ -11,7 +11,7 @@
 
 package com.testify.ecfeed.ui.dialogs;
 
-import java.util.Vector;
+import java.util.ArrayList;
 
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.CellEditor;
@@ -27,11 +27,11 @@ import com.testify.ecfeed.model.PartitionNode;
 
 public class TestCasePartitionEditingSupport extends EditingSupport {
 	private final TableViewer fViewer;
-	private Vector<PartitionNode> fTestData;
+	private ArrayList<PartitionNode> fTestData;
 	private ComboBoxViewerCellEditor fCellEditor;
 	private ISetValueListener fSetValueListener;
 
-	public TestCasePartitionEditingSupport(TableViewer viewer, Vector<PartitionNode> testData, ISetValueListener setValueListener) {
+	public TestCasePartitionEditingSupport(TableViewer viewer, ArrayList<PartitionNode> testData, ISetValueListener setValueListener) {
 		super(viewer);
 		fViewer = viewer;
 		fTestData = testData;
@@ -68,7 +68,7 @@ public class TestCasePartitionEditingSupport extends EditingSupport {
 		MethodNode method = (MethodNode)parent.getParent();
 		int parentIndex = method.getCategories().indexOf(parent);
 		if(parentIndex >= 0 && parentIndex <= fTestData.size()){
-			fTestData.setElementAt((PartitionNode)value, parentIndex);
+			fTestData.set(parentIndex, (PartitionNode)value);
 		}
 		fSetValueListener.setValue(fTestData);
 	}

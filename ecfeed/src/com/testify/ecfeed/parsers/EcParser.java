@@ -13,7 +13,7 @@ package com.testify.ecfeed.parsers;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Vector;
+import java.util.ArrayList;
 
 import nu.xom.*;
 
@@ -205,21 +205,21 @@ public class EcParser {
 	}
 
 	//TODO unit tests
-	private TestCaseNode parseTestCaseElement(Element element, Vector<CategoryNode> categories) {
+	private TestCaseNode parseTestCaseElement(Element element, ArrayList<CategoryNode> categories) {
 		String testSuiteName = element.getAttributeValue(Constants.TEST_SUITE_NAME_ATTRIBUTE);
-		Vector<PartitionNode> testData = new Vector<PartitionNode>();
-		Vector<Element> parameterElements = getIterableElements(element.getChildElements());
+		ArrayList<PartitionNode> testData = new ArrayList<PartitionNode>();
+		ArrayList<Element> parameterElements = getIterableElements(element.getChildElements());
 		
 		if(categories.size() != parameterElements.size()){
 			return null;
 		}
 
 		for(int i = 0; i < parameterElements.size(); i++){
-			Element testParameterElement = parameterElements.elementAt(i);
+			Element testParameterElement = parameterElements.get(i);
 			
 			if(testParameterElement.getLocalName().equals(Constants.TEST_PARAMETER_NODE_NAME)){
 				String partitionName = testParameterElement.getAttributeValue(Constants.PARTITION_ATTRIBUTE_NAME);
-				PartitionNode partition = categories.elementAt(i).getPartition(partitionName);
+				PartitionNode partition = categories.get(i).getPartition(partitionName);
 				testData.add(partition);
 			}
 		}
@@ -282,8 +282,8 @@ public class EcParser {
 		}		
 	}
 
-	private Vector<Element> getIterableElements(Elements elements){
-		Vector<Element> v = new Vector<Element>();
+	private ArrayList<Element> getIterableElements(Elements elements){
+		ArrayList<Element> v = new ArrayList<Element>();
 		for(int i = 0; i < elements.size(); i++){
 			Node node = elements.get(i);
 			if(node instanceof Element){

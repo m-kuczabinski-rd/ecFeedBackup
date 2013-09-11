@@ -13,7 +13,6 @@ package com.testify.ecfeed.utils;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Vector;
 
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.jdt.core.IAnnotation;
@@ -186,8 +185,8 @@ public class EcModelUtils {
 	 * type with qualifiedTypeName;
 	 * @throws JavaModelException 
 	 */
-	public static Vector<MethodNode> getObsoleteMethods(ClassNode classNode, String qualifiedTypeName){
-		Vector<MethodNode> empty = new Vector<MethodNode>();
+	public static ArrayList<MethodNode> getObsoleteMethods(ClassNode classNode, String qualifiedTypeName){
+		ArrayList<MethodNode> empty = new ArrayList<MethodNode>();
 		if(classNode == null){
 			return empty;
 		}
@@ -208,8 +207,8 @@ public class EcModelUtils {
 	 * Returns list generated models of test method that are not contained in the provided class model;
 	 * @throws JavaModelException 
 	 */
-	public static Vector<MethodNode> getNotContainedMethods(ClassNode classNode, String qualifiedTypeName){
-		Vector<MethodNode> empty = new Vector<MethodNode>();
+	public static ArrayList<MethodNode> getNotContainedMethods(ClassNode classNode, String qualifiedTypeName){
+		ArrayList<MethodNode> empty = new ArrayList<MethodNode>();
 		IType type;
 		
 		//if we cannot generate model from type, return empty vector, i.e. no new methods are in the second class
@@ -235,10 +234,10 @@ public class EcModelUtils {
 	 * @param method MethodNode for which the compatible sibling methods are searched for
 	 * @return
 	 */
-	public static Vector<MethodNode> getCompatibleMethods(MethodNode method) {
+	public static ArrayList<MethodNode> getCompatibleMethods(MethodNode method) {
 		ClassNode parent = (ClassNode)method.getParent();
-		Vector<MethodNode> potentialMatches = getNotContainedMethods(parent, parent.getQualifiedName());
-		Vector<MethodNode> matches = new Vector<MethodNode>();
+		ArrayList<MethodNode> potentialMatches = getNotContainedMethods(parent, parent.getQualifiedName());
+		ArrayList<MethodNode> matches = new ArrayList<MethodNode>();
 		for(MethodNode potentialMatch : potentialMatches){
 			if (potentialMatch.getCategoriesTypes().equals(method.getCategoriesTypes())){
 				matches.add(potentialMatch);
@@ -250,8 +249,8 @@ public class EcModelUtils {
 	/**
 	 * Returns elements in v1 that are not mentioned in v2 by checking toString() value; 
 	 */
-	private static Vector<MethodNode> diff(Vector<MethodNode> v1, Vector<MethodNode> v2){
-		Vector<MethodNode> diff = new Vector<MethodNode>();
+	private static ArrayList<MethodNode> diff(ArrayList<MethodNode> v1, ArrayList<MethodNode> v2){
+		ArrayList<MethodNode> diff = new ArrayList<MethodNode>();
 		
 		for(MethodNode method1 : v1){
 			boolean nodeMentioned = false;
@@ -297,7 +296,7 @@ public class EcModelUtils {
 			return null;
 		}
 		CategoryNode category = new CategoryNode(parameter.getElementName(), type);
-		Vector<PartitionNode> defaultPartitions = generateDefaultPartitions(type);
+		ArrayList<PartitionNode> defaultPartitions = generateDefaultPartitions(type);
 		for(PartitionNode partition : defaultPartitions){
 			category.addPartition(partition);
 		}
@@ -329,7 +328,7 @@ public class EcModelUtils {
 		}
 	}
 
-	private static Vector<PartitionNode> generateDefaultPartitions(String typeSignature) {
+	private static ArrayList<PartitionNode> generateDefaultPartitions(String typeSignature) {
 		switch(typeSignature){
 		case "boolean":
 			return defaultBooleanPartitions();
@@ -350,19 +349,19 @@ public class EcModelUtils {
 		case "String":
 			return defaultStringPartitions();
 		default:
-			return new Vector<PartitionNode>();
+			return new ArrayList<PartitionNode>();
 		}
 	}
 
-	private static Vector<PartitionNode> defaultBooleanPartitions() {
-		Vector<PartitionNode> partitions = new Vector<PartitionNode>();
+	private static ArrayList<PartitionNode> defaultBooleanPartitions() {
+		ArrayList<PartitionNode> partitions = new ArrayList<PartitionNode>();
 		partitions.add(new PartitionNode("true", true));
 		partitions.add(new PartitionNode("false", false));	
 		return partitions;
 	}
 
-	private static Vector<PartitionNode> defaultBytePartitions() {
-		Vector<PartitionNode> partitions = new Vector<PartitionNode>();
+	private static ArrayList<PartitionNode> defaultBytePartitions() {
+		ArrayList<PartitionNode> partitions = new ArrayList<PartitionNode>();
 		partitions.add(new PartitionNode("min", Byte.MIN_VALUE));
 		partitions.add(new PartitionNode("negative", (byte)-1));	
 		partitions.add(new PartitionNode("zero", (byte)0));
@@ -371,8 +370,8 @@ public class EcModelUtils {
 		return partitions;
 	}
 
-	private static Vector<PartitionNode> defaultCharacterPartitions() {
-		Vector<PartitionNode> partitions = new Vector<PartitionNode>();
+	private static ArrayList<PartitionNode> defaultCharacterPartitions() {
+		ArrayList<PartitionNode> partitions = new ArrayList<PartitionNode>();
 		partitions.add(new PartitionNode("zero", '\u0000'));
 		partitions.add(new PartitionNode("a", 'a'));
 		partitions.add(new PartitionNode("z", 'z'));
@@ -383,8 +382,8 @@ public class EcModelUtils {
 		return partitions;
 	}
 
-	private static Vector<PartitionNode> defaultDoublePartitions() {
-		Vector<PartitionNode> partitions = new Vector<PartitionNode>();
+	private static ArrayList<PartitionNode> defaultDoublePartitions() {
+		ArrayList<PartitionNode> partitions = new ArrayList<PartitionNode>();
 		partitions.add(new PartitionNode("min", Double.MIN_VALUE));
 		partitions.add(new PartitionNode("negative", (double)-1));	
 		partitions.add(new PartitionNode("zero", (double)0));
@@ -393,8 +392,8 @@ public class EcModelUtils {
 		return partitions;
 	}
 
-	private static Vector<PartitionNode> defaultFloatPartitions() {
-		Vector<PartitionNode> partitions = new Vector<PartitionNode>();
+	private static ArrayList<PartitionNode> defaultFloatPartitions() {
+		ArrayList<PartitionNode> partitions = new ArrayList<PartitionNode>();
 		partitions.add(new PartitionNode("min", Float.MIN_VALUE));
 		partitions.add(new PartitionNode("negative", (float)-1));	
 		partitions.add(new PartitionNode("zero", (float)0));
@@ -403,8 +402,8 @@ public class EcModelUtils {
 		return partitions;
 	}
 
-	private static Vector<PartitionNode> defaultIntegerPartitions() {
-		Vector<PartitionNode> partitions = new Vector<PartitionNode>();
+	private static ArrayList<PartitionNode> defaultIntegerPartitions() {
+		ArrayList<PartitionNode> partitions = new ArrayList<PartitionNode>();
 		partitions.add(new PartitionNode("min", Integer.MIN_VALUE));
 		partitions.add(new PartitionNode("negative", (int)-1));	
 		partitions.add(new PartitionNode("zero", (int)0));
@@ -413,8 +412,8 @@ public class EcModelUtils {
 		return partitions;
 	}
 
-	private static Vector<PartitionNode> defaultLongPartitions() {
-		Vector<PartitionNode> partitions = new Vector<PartitionNode>();
+	private static ArrayList<PartitionNode> defaultLongPartitions() {
+		ArrayList<PartitionNode> partitions = new ArrayList<PartitionNode>();
 		partitions.add(new PartitionNode("min", Long.MIN_VALUE));
 		partitions.add(new PartitionNode("negative", (long)-1));	
 		partitions.add(new PartitionNode("zero", (long)0));
@@ -423,8 +422,8 @@ public class EcModelUtils {
 		return partitions;
 	}
 
-	private static Vector<PartitionNode> defaultShortPartitions() {
-		Vector<PartitionNode> partitions = new Vector<PartitionNode>();
+	private static ArrayList<PartitionNode> defaultShortPartitions() {
+		ArrayList<PartitionNode> partitions = new ArrayList<PartitionNode>();
 		partitions.add(new PartitionNode("min", Short.MIN_VALUE));
 		partitions.add(new PartitionNode("negative", (short)-1));	
 		partitions.add(new PartitionNode("zero", (short)0));
@@ -433,8 +432,8 @@ public class EcModelUtils {
 		return partitions;
 	}
 
-	private static Vector<PartitionNode> defaultStringPartitions() {
-		Vector<PartitionNode> partitions = new Vector<PartitionNode>();
+	private static ArrayList<PartitionNode> defaultStringPartitions() {
+		ArrayList<PartitionNode> partitions = new ArrayList<PartitionNode>();
 		partitions.add(new PartitionNode("null", null));
 		partitions.add(new PartitionNode("empty", ""));
 		partitions.add(new PartitionNode("lower case", "a"));

@@ -11,7 +11,7 @@
 
 package com.testify.ecfeed.ui.editor.modeleditor;
 
-import java.util.Vector;
+import java.util.ArrayList;
 
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jface.dialogs.IDialogConstants;
@@ -285,7 +285,7 @@ public class ClassNodeDetailsPage extends GenericNodeDetailsPage{
 	}
 
 	private boolean methodObsolete(MethodNode method) {
-		Vector<MethodNode> obsoleteMethods = getObsoleteMethods();
+		ArrayList<MethodNode> obsoleteMethods = getObsoleteMethods();
 		for(MethodNode obsoleteMethod : obsoleteMethods){
 			if(obsoleteMethod.toString().equals(method.toString())){
 				return true;
@@ -294,7 +294,7 @@ public class ClassNodeDetailsPage extends GenericNodeDetailsPage{
 		return false;
 	}
 	
-	private Vector<MethodNode> getObsoleteMethods(){
+	private ArrayList<MethodNode> getObsoleteMethods(){
 		return EcModelUtils.getObsoleteMethods(fSelectedClass, fSelectedClass.getQualifiedName());
 	}
 	
@@ -308,7 +308,7 @@ public class ClassNodeDetailsPage extends GenericNodeDetailsPage{
 		if(fSelectedClass == null){
 			return;
 		}
-		Vector<MethodNode> notContainedMethods = EcModelUtils.getNotContainedMethods(fSelectedClass, fSelectedClass.getQualifiedName());
+		ArrayList<MethodNode> notContainedMethods = EcModelUtils.getNotContainedMethods(fSelectedClass, fSelectedClass.getQualifiedName());
 		if(notContainedMethods.size() == 0){
 			if(fOtherMethodsSectionCreated){
 				fOtherMethodsSection.dispose();

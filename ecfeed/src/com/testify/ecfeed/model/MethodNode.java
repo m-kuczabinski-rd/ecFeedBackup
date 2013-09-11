@@ -16,20 +16,20 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
-import java.util.Vector;
+import java.util.ArrayList;
 
 import com.testify.ecfeed.api.IConstraint;
 
 public class MethodNode extends GenericNode {
-	private Vector<CategoryNode> fCategories;
-	private Vector<TestCaseNode> fTestCases;
-	private Vector<ConstraintNode> fConstraints;
+	private ArrayList<CategoryNode> fCategories;
+	private ArrayList<TestCaseNode> fTestCases;
+	private ArrayList<ConstraintNode> fConstraints;
 	
 	public MethodNode(String name){
 		super(name);
-		fCategories = new Vector<CategoryNode>();
-		fTestCases = new Vector<TestCaseNode>();
-		fConstraints = new Vector<ConstraintNode>();
+		fCategories = new ArrayList<CategoryNode>();
+		fTestCases = new ArrayList<TestCaseNode>();
+		fConstraints = new ArrayList<ConstraintNode>();
 	}
 	
 	//TODO Unit tests 
@@ -50,7 +50,7 @@ public class MethodNode extends GenericNode {
 		testCase.setParent(this);
 	}
 	
-	public Vector<CategoryNode> getCategories(){
+	public ArrayList<CategoryNode> getCategories(){
 		return fCategories;
 	}
 
@@ -63,28 +63,28 @@ public class MethodNode extends GenericNode {
 		return null;
 	}
 
-	public Vector<String> getCategoriesTypes() {
-		Vector<String> types = new Vector<String>();
+	public ArrayList<String> getCategoriesTypes() {
+		ArrayList<String> types = new ArrayList<String>();
 		for(CategoryNode category : getCategories()){
 			types.add(category.getType());
 		}
 		return types;
 	}
 
-	public Vector<String> getCategoriesNames() {
-		Vector<String> names = new Vector<String>();
+	public ArrayList<String> getCategoriesNames() {
+		ArrayList<String> names = new ArrayList<String>();
 		for(CategoryNode category : getCategories()){
 			names.add(category.getName());
 		}
 		return names;
 	}
 
-	public Vector<ConstraintNode> getConstraints(){
+	public ArrayList<ConstraintNode> getConstraints(){
 		return fConstraints;
 	}
 
-	public Vector<IConstraint> getConstraints(String name) {
-		Vector<IConstraint> constraints = new Vector<IConstraint>();
+	public ArrayList<IConstraint> getConstraints(String name) {
+		ArrayList<IConstraint> constraints = new ArrayList<IConstraint>();
 		for(ConstraintNode node : fConstraints){
 			if(node.getName().equals(name)){
 				constraints.add(node);
@@ -101,13 +101,13 @@ public class MethodNode extends GenericNode {
 		return names;
 	}
 
-	public Vector<TestCaseNode> getTestCases(){
+	public ArrayList<TestCaseNode> getTestCases(){
 		return fTestCases;
 	}
 	
 	//TODO unit tests
 	public Collection<TestCaseNode> getTestCases(String testSuite) {
-		Vector<TestCaseNode> testCases = new Vector<TestCaseNode>();
+		ArrayList<TestCaseNode> testCases = new ArrayList<TestCaseNode>();
 		for(TestCaseNode testCase : getTestCases()){
 			if(testSuite.equals(testCase.getName())){
 				testCases.add(testCase);
@@ -126,8 +126,8 @@ public class MethodNode extends GenericNode {
 	}
 
 	@Override
-	public Vector<? extends IGenericNode> getChildren(){
-		Vector<IGenericNode> children = new Vector<IGenericNode>();
+	public ArrayList<? extends IGenericNode> getChildren(){
+		ArrayList<IGenericNode> children = new ArrayList<IGenericNode>();
 		children.addAll(fCategories);
 		children.addAll(fConstraints);
 		children.addAll(fTestCases);
@@ -143,12 +143,12 @@ public class MethodNode extends GenericNode {
 	@Override
 	public String toString(){
 		String result = new String(getName()) + "(";
-		Vector<String> types = getCategoriesTypes();
-		Vector<String> names = getCategoriesNames();
+		ArrayList<String> types = getCategoriesTypes();
+		ArrayList<String> names = getCategoriesNames();
 		for(int i = 0; i < types.size(); i++){
-			result += types.elementAt(i);
+			result += types.get(i);
 			result += " ";
-			result += names.elementAt(i);
+			result += names.get(i);
 			if(i < types.size() - 1) result += ", ";
 		}
 		result += ")";
@@ -192,7 +192,7 @@ public class MethodNode extends GenericNode {
 	@SuppressWarnings("rawtypes")
 	@Override
 	public void moveChild(IGenericNode child, boolean moveUp){
-		Vector childrenArray = null;
+		ArrayList childrenArray = null;
 		if(child instanceof CategoryNode){
 			childrenArray = fCategories;
 		}

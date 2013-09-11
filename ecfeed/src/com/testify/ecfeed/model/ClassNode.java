@@ -13,18 +13,18 @@ package com.testify.ecfeed.model;
 
 import java.util.HashSet;
 import java.util.Set;
-import java.util.Vector;
+import java.util.ArrayList;
 
 public class ClassNode extends GenericNode {
-	private Vector<MethodNode> fMethods;
+	private ArrayList<MethodNode> fMethods;
 
 	public ClassNode(String qualifiedName) {
 		super(qualifiedName);
-		fMethods = new Vector<MethodNode>();
+		fMethods = new ArrayList<MethodNode>();
 	}
 
 	@Override
-	public Vector<? extends IGenericNode> getChildren(){
+	public ArrayList<? extends IGenericNode> getChildren(){
 		return fMethods;
 	}
 	
@@ -53,9 +53,9 @@ public class ClassNode extends GenericNode {
 	}
 
 	//TODO unit tests
-	public MethodNode getMethod(String name, Vector<String> argTypes) {
+	public MethodNode getMethod(String name, ArrayList<String> argTypes) {
 		for(MethodNode methodNode : getMethods()){
-			Vector<String> args = new Vector<String>();
+			ArrayList<String> args = new ArrayList<String>();
 			for(CategoryNode arg : methodNode.getCategories()){
 				args.add(arg.getType());
 			}
@@ -67,7 +67,7 @@ public class ClassNode extends GenericNode {
 	}
 
 	//TODO unit tests
-	public Vector<MethodNode> getMethods() {
+	public ArrayList<MethodNode> getMethods() {
 		return fMethods;
 	}
 	

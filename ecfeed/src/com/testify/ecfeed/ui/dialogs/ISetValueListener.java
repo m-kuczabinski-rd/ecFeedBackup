@@ -11,10 +11,10 @@
 
 package com.testify.ecfeed.ui.dialogs;
 
-import java.util.Vector;
+import java.util.ArrayList;
 
 import com.testify.ecfeed.model.PartitionNode;
 
 public interface ISetValueListener {
-	public void setValue(Vector<PartitionNode>testData);
+	public void setValue(ArrayList<PartitionNode>testData);
 }

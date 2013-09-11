@@ -1,6 +1,6 @@
 package com.testify.ecfeed.ui.editor.modeleditor;
 
-import java.util.Vector;
+import java.util.ArrayList;
 
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.TreeNodeContentProvider;
@@ -41,7 +41,7 @@ public class StatementViewerContentProvider extends TreeNodeContentProvider impl
 	public boolean hasChildren(Object element) {
 		if(element instanceof StatementArray){
 			StatementArray statementArray = (StatementArray)element;
-			Vector<BasicStatement> children = statementArray.getChildren();
+			ArrayList<BasicStatement> children = statementArray.getChildren();
 			return (children.size() > 0);
 		}
 		return false;

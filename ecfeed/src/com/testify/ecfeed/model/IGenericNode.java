@@ -1,11 +1,11 @@
 package com.testify.ecfeed.model;
 
 import java.util.Collection;
-import java.util.Vector;
+import java.util.ArrayList;
 
 public interface IGenericNode {
 	public boolean hasChildren();
-	public Vector<? extends IGenericNode> getChildren();
+	public ArrayList<? extends IGenericNode> getChildren();
 	public IGenericNode getChild(String name);
 	public boolean removeChild(IGenericNode child);
 	public boolean removeChildren(Collection<IGenericNode> children);

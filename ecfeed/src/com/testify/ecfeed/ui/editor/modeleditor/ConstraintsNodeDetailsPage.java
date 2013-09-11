@@ -1,7 +1,7 @@
 package com.testify.ecfeed.ui.editor.modeleditor;
 
 import java.util.Arrays;
-import java.util.Vector;
+import java.util.ArrayList;
 
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ComboViewer;
@@ -231,12 +231,12 @@ public class ConstraintsNodeDetailsPage extends GenericNodeDetailsPage {
 		fToolkit.paintBordersFor(fStatementEditCombo);
 		fToolkit.adapt(fStatementEditCombo, true, true);
 
-		Vector<String> items = new Vector<String>(Arrays.asList(new String[]{
+		ArrayList<String> items = new ArrayList<String>(Arrays.asList(new String[]{
 				STATEMENT_AND, 
 				STATEMENT_OR,
 				STATEMENT_TRUE,
 				STATEMENT_FALSE}));
-		Vector<String> categories = fSelectedConstraint.getMethod().getCategoriesNames();
+		ArrayList<String> categories = fSelectedConstraint.getMethod().getCategoriesNames();
 		items.addAll(categories);
 		fStatementEditCombo.setItems(items.toArray(new String[]{}));
 		String comboText = getStatementComboText(editedStatement);
@@ -361,7 +361,7 @@ public class ConstraintsNodeDetailsPage extends GenericNodeDetailsPage {
 		else{
 			CategoryNode category = fSelectedConstraint.getMethod().getCategory(newValue);
 			if(category != null){
-				return new Statement(category.getPartitions().elementAt(0), Relation.EQUAL);
+				return new Statement(category.getPartitions().get(0), Relation.EQUAL);
 			}
 		}
 		return null;

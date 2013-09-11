@@ -11,14 +11,14 @@
 
 package com.testify.ecfeed.model;
 
-import java.util.Vector;
+import java.util.ArrayList;
 
 public class RootNode extends GenericNode {
-	public Vector<ClassNode> fClasses;
+	public ArrayList<ClassNode> fClasses;
 
 	public RootNode(String name) {
 		super(name);
-		fClasses = new Vector<ClassNode>();
+		fClasses = new ArrayList<ClassNode>();
 	}
 	
 	public void addClass(ClassNode node){
@@ -26,11 +26,11 @@ public class RootNode extends GenericNode {
 		node.setParent(this);
 	}
 
-	public Vector<? extends IGenericNode> getChildren(){
+	public ArrayList<? extends IGenericNode> getChildren(){
 		return fClasses;
 	}
 	
-	public Vector<ClassNode> getClasses() {
+	public ArrayList<ClassNode> getClasses() {
 		return fClasses;
 	}
 

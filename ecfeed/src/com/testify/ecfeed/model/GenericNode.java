@@ -11,16 +11,16 @@
 
 package com.testify.ecfeed.model;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Vector;
 
 public class GenericNode implements IGenericNode{
 	private String fName;
 	private IGenericNode fParent;
 	private final int fId;
 	private static int fLastId = 0;
-	private final Vector<IGenericNode> EMPTY_CHILDREN_ARRAY = new Vector<IGenericNode>();
+	private final ArrayList<IGenericNode> EMPTY_CHILDREN_ARRAY = new ArrayList<IGenericNode>();
 
 	public GenericNode(String name){
 		fId = ++fLastId;
@@ -47,7 +47,7 @@ public class GenericNode implements IGenericNode{
 	}
 
 	@Override
-	public Vector<? extends IGenericNode> getChildren() {
+	public ArrayList<? extends IGenericNode> getChildren() {
 		return EMPTY_CHILDREN_ARRAY;
 	}
 	

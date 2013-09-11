@@ -11,7 +11,7 @@
 
 package com.testify.ecfeed.ui.dialogs;
 
-import java.util.Vector;
+import java.util.ArrayList;
 
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IStatus;
@@ -39,7 +39,7 @@ public class TestClassSelectionDialog extends ElementTreeSelectionDialog {
 		super(parent, new WorkbenchLabelProvider(), new StandardJavaElementContentProvider(true){
 			@Override
 			public Object[] getChildren(Object element){
-				Vector<Object> children = new Vector<Object>();
+				ArrayList<Object> children = new ArrayList<Object>();
 				
 				//Filter unwanted elements
 				for(Object child : super.getChildren(element)){

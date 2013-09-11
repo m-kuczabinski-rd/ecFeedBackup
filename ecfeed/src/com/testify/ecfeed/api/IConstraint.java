@@ -1,8 +1,8 @@
 package com.testify.ecfeed.api;
 
-import java.util.Vector;
+import java.util.ArrayList;
 
 public interface IConstraint {
 	@SuppressWarnings("rawtypes")
-	public boolean evaluate(Vector values);
+	public boolean evaluate(ArrayList values);
 }

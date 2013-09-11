@@ -11,17 +11,17 @@
 
 package com.testify.ecfeed.model;
 
-import java.util.Vector;
+import java.util.ArrayList;
 
 public class TestCaseNode extends GenericNode {
-	Vector<PartitionNode> fTestData;
+	ArrayList<PartitionNode> fTestData;
 	
-	public TestCaseNode(String name, Vector<PartitionNode> testData) {
+	public TestCaseNode(String name, ArrayList<PartitionNode> testData) {
 		super(name);
 		fTestData = testData;
 	}
 
-	public Vector<PartitionNode> getTestData(){
+	public ArrayList<PartitionNode> getTestData(){
 		return fTestData;
 	}
 	
@@ -46,7 +46,7 @@ public class TestCaseNode extends GenericNode {
 		String result = new String();
 		
 		for(int i = 0; i < fTestData.size(); i++){
-			result += fTestData.elementAt(i).getName();
+			result += fTestData.get(i).getName();
 			if(i < fTestData.size() - 1){
 				result += ", ";
 			}

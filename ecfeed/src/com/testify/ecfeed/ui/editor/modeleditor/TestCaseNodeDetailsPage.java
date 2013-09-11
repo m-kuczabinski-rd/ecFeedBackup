@@ -11,7 +11,7 @@
 
 package com.testify.ecfeed.ui.editor.modeleditor;
 
-import java.util.Vector;
+import java.util.ArrayList;
 
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ArrayContentProvider;
@@ -223,7 +223,7 @@ public class TestCaseNodeDetailsPage extends GenericNodeDetailsPage implements I
 	}
 
 	@Override
-	public void setValue(Vector<PartitionNode> testData) {
+	public void setValue(ArrayList<PartitionNode> testData) {
 		updateModel(fSelectedTestCase);
 	}
 

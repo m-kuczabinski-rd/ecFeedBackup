@@ -1,6 +1,6 @@
 package com.testify.ecfeed.model.constraint;
 
-import java.util.Vector;
+import java.util.ArrayList;
 
 import com.testify.ecfeed.api.IConstraint;
 import com.testify.ecfeed.model.PartitionNode;
@@ -33,7 +33,7 @@ public class Constraint implements IConstraint {
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
-	public boolean evaluate(Vector values) {
+	public boolean evaluate(ArrayList values) {
 		for(Object value : values){
 			if(value instanceof PartitionNode == false){
 				return false;

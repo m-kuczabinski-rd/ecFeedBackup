@@ -11,7 +11,7 @@
 
 package com.testify.ecfeed.ui.dialogs;
 
-import java.util.Vector;
+import java.util.ArrayList;
 
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.TitleAreaDialog;
@@ -44,7 +44,7 @@ import com.testify.ecfeed.utils.EcModelUtils;
 public class AddTestCaseDialog extends TitleAreaDialog implements ISetValueListener {
 
 	private MethodNode fMethod;
-	private Vector<PartitionNode> fTestData;
+	private ArrayList<PartitionNode> fTestData;
 	private String fTestSuiteName;
 	private Combo fTestSuiteCombo;
 	private Button fOkButton;
@@ -58,10 +58,10 @@ public class AddTestCaseDialog extends TitleAreaDialog implements ISetValueListe
 		super(parentShell);
 		setHelpAvailable(false);
 		setShellStyle(SWT.BORDER | SWT.RESIZE | SWT.TITLE);
-		fTestData = new Vector<PartitionNode>();
-		Vector<CategoryNode> categories = method.getCategories();
+		fTestData = new ArrayList<PartitionNode>();
+		ArrayList<CategoryNode> categories = method.getCategories();
 		for(CategoryNode category : categories){
-			fTestData.add((PartitionNode)category.getChildren().elementAt(0));
+			fTestData.add((PartitionNode)category.getChildren().get(0));
 		}
 		fMethod = method;
 	}
@@ -189,7 +189,7 @@ public class AddTestCaseDialog extends TitleAreaDialog implements ISetValueListe
 	}
 
 	@Override
-	public void setValue(Vector<PartitionNode> testData) {
+	public void setValue(ArrayList<PartitionNode> testData) {
 		fTestDataViewer.refresh();
 	}
 	
@@ -197,7 +197,7 @@ public class AddTestCaseDialog extends TitleAreaDialog implements ISetValueListe
 		return fTestSuiteName;
 	}
 	
-	public Vector<PartitionNode> getTestData(){
+	public ArrayList<PartitionNode> getTestData(){
 		return fTestData;
 	}
 }

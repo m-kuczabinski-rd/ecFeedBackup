@@ -1,6 +1,6 @@
 package com.testify.ecfeed.model.constraint;
 
-import java.util.Vector;
+import java.util.ArrayList;
 
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.MethodNode;
@@ -24,7 +24,7 @@ public class Statement extends BasicStatement{
 	}
 
 	@Override
-	public boolean evaluate(Vector<PartitionNode> values) {
+	public boolean evaluate(ArrayList<PartitionNode> values) {
 		CategoryNode parentCategory = (CategoryNode)fCondition.getParent();
 		MethodNode methodAncestor = ((MethodNode)parentCategory.getParent());
 		int categoryIndex = methodAncestor.getCategories().indexOf(parentCategory);
@@ -33,8 +33,8 @@ public class Statement extends BasicStatement{
 			return false;
 		}
 		
-		PartitionNode partition = values.elementAt(categoryIndex);
-		Vector<PartitionNode> siblings = parentCategory.getPartitions();
+		PartitionNode partition = values.get(categoryIndex);
+		ArrayList<PartitionNode> siblings = parentCategory.getPartitions();
 		int conditionIndex = siblings.indexOf(fCondition);
 		int partitionIndex = siblings.indexOf(partition);
 		
@@ -65,25 +65,6 @@ public class Statement extends BasicStatement{
 		return fCondition.getParent().getName() + " " + fRelation + " " + fCondition.getName();
 	}
 	
-	@Override
-	public boolean equals(Object obj){
-		if(obj == null){
-			return false;
-		}
-		
-		if(obj instanceof Statement == false){
-			return false;
-		}
-		Statement statement = (Statement)obj;
-		if(fRelation.equals(statement.getRelation()) == false){
-			return false;
-		}
-		if(fCondition.equals(statement.getCondition()) == false){
-			return false;
-		}
-		return super.equals(obj);
-	}
-
 	public void setRelation(Relation relation) {
 		fRelation = relation;
 	}
