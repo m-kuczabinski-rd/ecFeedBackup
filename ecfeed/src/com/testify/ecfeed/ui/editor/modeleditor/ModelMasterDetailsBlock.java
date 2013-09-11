@@ -55,6 +55,7 @@ public class ModelMasterDetailsBlock extends MasterDetailsBlock implements IMode
 	private SectionPart fMasterSectionPart;
 	private Section fMasterSection;
 	private TreeViewer fTreeViewer;
+	private ModelContentProvider fContentProvider;
 	private Composite fMainComposite;
 	private Button fMoveUpButton;
 	private Button fMoveDownButton;
@@ -67,6 +68,7 @@ public class ModelMasterDetailsBlock extends MasterDetailsBlock implements IMode
 		fEditor = editor;
 		fModel = model;
 		fEditor.registerModelUpdateListener(this);
+		fContentProvider = new ModelContentProvider();
 	}
 
 	/**
@@ -136,7 +138,7 @@ public class ModelMasterDetailsBlock extends MasterDetailsBlock implements IMode
 		filteredTree.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 		fTreeViewer = filteredTree.getViewer();
 		fTreeViewer.setAutoExpandLevel(2);
-		fTreeViewer.setContentProvider(new ModelContentProvider());
+		fTreeViewer.setContentProvider(fContentProvider);
 		fTreeViewer.setLabelProvider(new ModelLabelProvider());
 		fTreeViewer.setInput(fEditor);
 
@@ -144,9 +146,9 @@ public class ModelMasterDetailsBlock extends MasterDetailsBlock implements IMode
 
 			@Override
 			public void selectionChanged(SelectionChangedEvent event) {
-				fSelectedNode = (IGenericNode)((IStructuredSelection)event.getSelection()).getFirstElement();
-				if((((IStructuredSelection)event.getSelection()).getFirstElement() instanceof RootNode) ||
-				   (((IStructuredSelection)event.getSelection()).getFirstElement() instanceof CategoryNode))
+				Object selectedElement = ((IStructuredSelection)event.getSelection()).getFirstElement();
+				fSelectedNode = (IGenericNode)selectedElement;
+				if((selectedElement instanceof RootNode) || (selectedElement instanceof CategoryNode))
 				{
 					fMoveUpButton.setEnabled(false);
 					fMoveDownButton.setEnabled(false);

@@ -14,6 +14,7 @@ package com.testify.ecfeed.model;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 import java.util.Vector;
 
@@ -177,10 +178,14 @@ public class MethodNode extends GenericNode {
 	}
 
 	//TODO unit tests
-	public Collection<TestCaseNode> removeTestSuite(String suiteName) {
-		Collection<TestCaseNode> testCases = getTestCases(suiteName);
-		fTestCases.removeAll(testCases);
-		return testCases;
+	public void removeTestSuite(String suiteName) {
+		Iterator<TestCaseNode> iterator = getTestCases().iterator();
+		while(iterator.hasNext()){
+			TestCaseNode testCase = iterator.next();
+			if(testCase.getName().equals(suiteName)){
+				iterator.remove();
+			}
+		}
 	}
 
 	//TODO unit tests

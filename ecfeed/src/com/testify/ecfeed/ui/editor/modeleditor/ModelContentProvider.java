@@ -11,11 +11,17 @@
 
 package com.testify.ecfeed.ui.editor.modeleditor;
 
+import java.util.Collection;
+import java.util.Vector;
+
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.TreeNodeContentProvider;
 
-import com.testify.ecfeed.model.GenericNode;
+import com.testify.ecfeed.constants.Constants;
+import com.testify.ecfeed.model.IGenericNode;
+import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.RootNode;
+import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.ui.editor.EcMultiPageEditor;
 
 public class ModelContentProvider extends TreeNodeContentProvider implements ITreeContentProvider {
@@ -28,33 +34,43 @@ public class ModelContentProvider extends TreeNodeContentProvider implements ITr
 			RootNode root = ((EcMultiPageEditor)inputElement).getModel(); 
 			return new Object[]{root};
 		}
-		else if(inputElement instanceof GenericNode){
-			return ((GenericNode)inputElement).getChildren().toArray();
-		}
-		return EMPTY_ARRAY;
+		return getChildren(inputElement);
 	}
 
 	@Override
 	public Object[] getChildren(Object parentElement) {
-		if(parentElement instanceof GenericNode){
-			return ((GenericNode)parentElement).getChildren().toArray();
+		if(parentElement instanceof MethodNode){
+			MethodNode method = (MethodNode)parentElement;
+			Vector<Object> children = new Vector<Object>();
+			children.addAll(method.getCategories());
+			children.addAll(method.getConstraints());
+			for(String testSuite : method.getTestSuites()){
+				Collection<TestCaseNode> testCases = method.getTestCases(testSuite);
+				if(testCases.size() < Constants.MAX_DISPLAYED_TEST_CASES_PER_SUITE){
+					children.addAll(testCases);
+				}
+			}
+			return children.toArray();
+		}
+		if(parentElement instanceof IGenericNode){
+			IGenericNode node = (IGenericNode)parentElement;
+			if(node.getChildren().size() < Constants.MAX_DISPLAYED_CHILDREN_PER_NODE){
+				return node.getChildren().toArray();
+			}
 		}
 		return EMPTY_ARRAY;
 	}
 
 	@Override
 	public Object getParent(Object element) {
-		if(element instanceof GenericNode){
-			return ((GenericNode)element).getParent();
+		if(element instanceof IGenericNode){
+			return ((IGenericNode)element).getParent();
 		}
 		return null;
 	}
 
 	@Override
 	public boolean hasChildren(Object element) {
-		if(element instanceof GenericNode){
-			return ((GenericNode)element).hasChildren();
-		}
-		return false;
+		return getChildren(element).length > 0;
 	}
 }

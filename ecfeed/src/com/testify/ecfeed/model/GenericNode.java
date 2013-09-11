@@ -126,4 +126,13 @@ public class GenericNode implements IGenericNode{
 			Collections.swap(getChildren(), childIndex, childIndex + 1);
 		}
 	}
+	
+	@Override
+	public int subtreeSize(){
+		int size = 1;
+		for(IGenericNode child : getChildren()){
+			size += child.subtreeSize();
+		}
+		return size;
+	}
 }

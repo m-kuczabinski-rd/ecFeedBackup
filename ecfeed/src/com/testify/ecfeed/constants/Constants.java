@@ -11,6 +11,10 @@
 
 package com.testify.ecfeed.constants;
 
+/**
+ * @author patryk
+ *
+ */
 public class Constants {
 	public static final String EQUIVALENCE_CLASS_FILE_EXTENSION = "ect";
 	public static final String DEFAULT_NEW_ECT_MODEL_NAME = "newEct";
@@ -77,6 +81,15 @@ public class Constants {
 	public static final String TEST_GEN_ALGORITHM_EXTENSION_POINT_ID = "com.testify.ecfeed.algorithm";
 	public static final String TEST_GEN_ALGORITHM_IMPLEMENTATION_ATTRIBUTE = "implementation";
 	public static final String ALGORITHM_NAME_ATTRIBUTE = "name";
+	
+	
+	/**
+	 * Size of a model subtree, after which elements are collapsed after each operation. 
+	 * This constant is introduced for performance gain.
+	 */
+	public static final int MAX_DISPLAYED_CHILDREN_PER_NODE = 1000;
+	public static final int MAX_DISPLAYED_TEST_CASES_PER_SUITE = 500;
+	public static final int TEST_SUITE_SIZE_WARNING_LIMIT = 20000;
 	
 
 }
