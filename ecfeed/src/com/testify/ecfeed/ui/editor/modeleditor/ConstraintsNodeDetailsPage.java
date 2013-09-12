@@ -11,6 +11,8 @@ import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.FocusEvent;
+import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -107,6 +109,15 @@ public class ConstraintsNodeDetailsPage extends GenericNodeDetailsPage {
 		fConstraintNameCombo = comboViewer.getCombo();
 		fConstraintNameCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		getToolkit().paintBordersFor(fConstraintNameCombo);
+		fConstraintNameCombo.addFocusListener(new FocusListener() {
+			@Override
+			public void focusLost(FocusEvent e) {
+				renameConstraint();
+			}
+			@Override
+			public void focusGained(FocusEvent e) {
+			}
+		});
 		fConstraintNameCombo.addListener(SWT.KeyDown, new Listener() {
 			@Override
 			public void handleEvent(Event event) {
@@ -162,7 +173,9 @@ public class ConstraintsNodeDetailsPage extends GenericNodeDetailsPage {
 				Object selectedElement = ((StructuredSelection)event.getSelection()).getFirstElement();
 				if(selectedElement instanceof BasicStatement){
 					fSelectedStatement = (BasicStatement)selectedElement;
-					boolean enableAddStatementButton = (fSelectedStatement instanceof StatementArray);
+//					boolean enableAddStatementButton = (fSelectedStatement.getParent() != null);
+					boolean enableAddStatementButton = (fSelectedStatement instanceof StatementArray 
+							|| fSelectedStatement.getParent() != null);
 					boolean enableRemoveStatementButton = (fSelectedStatement.getParent() != null);
 
 					fAddStatementButton.setEnabled(enableAddStatementButton);
@@ -185,14 +198,11 @@ public class ConstraintsNodeDetailsPage extends GenericNodeDetailsPage {
 		fAddStatementButton = createButton(buttonsComposite, "Add Statement", new SelectionAdapter(){
 			@Override
 			public void widgetSelected(SelectionEvent e){
-				if(fSelectedStatement instanceof StatementArray){
-					StatementArray statementArray = (StatementArray)fSelectedStatement;
-					BasicStatement newStatement = new StaticStatement(true); 
-					statementArray.addStatement(newStatement);
-					fConstraintViewer.expandToLevel(fSelectedStatement, 1);
-					updateModel(fSelectedConstraint);
-					fConstraintViewer.setSelection(new StructuredSelection(newStatement));
-				}
+				BasicStatement newStatement = new StaticStatement(true); 
+				fSelectedStatement.addStatement(newStatement);
+				fConstraintViewer.expandToLevel(newStatement, 1);
+				updateModel(fSelectedConstraint);
+				fConstraintViewer.setSelection(new StructuredSelection(newStatement));
 			}
 		});
 		fAddStatementButton.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));

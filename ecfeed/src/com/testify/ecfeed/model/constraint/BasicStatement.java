@@ -64,4 +64,10 @@ public class BasicStatement implements IStatement {
 	public boolean mentions(PartitionNode partition) {
 		return false;
 	}
+	
+	public void addStatement(BasicStatement statement){
+		if(getParent() != null){
+			getParent().addStatement(statement);
+		}
+	}
 }
