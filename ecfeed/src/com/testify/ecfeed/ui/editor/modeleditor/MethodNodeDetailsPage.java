@@ -473,7 +473,7 @@ public class MethodNodeDetailsPage extends GenericNodeDetailsPage{
 
 			private void removeCheckedTestSuites() {
 				for(String testSuite : fSelectedMethod.getTestSuites()){
-					if(fTestCasesViewer.getChecked(testSuite)){
+					if(fTestCasesViewer.getChecked(testSuite) && !fTestCasesViewer.getGrayed(testSuite)){
 						fSelectedMethod.removeTestSuite(testSuite);
 					}
 				}
