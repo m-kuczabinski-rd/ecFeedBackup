@@ -66,31 +66,31 @@ public class EcModelUtils {
 	
 	public static boolean validatePartitionStringValue(String valueString, CategoryNode parent){
 		String type = parent.getType(); 
-		if(type.equals(Constants.STRING_TYPE_NAME)) return true;
+		if(type.equals(Constants.TYPE_NAME_STRING)) return true;
 		return (getPartitionValueFromString(valueString, type) != null);
 	}
 
 	public static Object getPartitionValueFromString(String valueString, String type){
 		try{
 			switch(type){
-			case Constants.BOOLEAN_TYPE_NAME:
+			case Constants.TYPE_NAME_BOOLEAN:
 				return Boolean.valueOf(valueString).booleanValue();
-			case Constants.BYTE_TYPE_NAME:
+			case Constants.TYPE_NAME_BYTE:
 				return Byte.valueOf(valueString).byteValue();
-			case Constants.CHAR_TYPE_NAME:
+			case Constants.TYPE_NAME_CHAR:
 				if(valueString.charAt(0) != '\\' || valueString.length() == 1) return(valueString.charAt(0));
 				return Character.toChars(Integer.parseInt(valueString.substring(1)));
-			case Constants.DOUBLE_TYPE_NAME:
+			case Constants.TYPE_NAME_DOUBLE:
 				return Double.valueOf(valueString).doubleValue();
-			case Constants.FLOAT_TYPE_NAME:
+			case Constants.TYPE_NAME_FLOAT:
 				return Float.valueOf(valueString).floatValue();
-			case Constants.INT_TYPE_NAME:
+			case Constants.TYPE_NAME_INT:
 				return Integer.valueOf(valueString).intValue();
-			case Constants.LONG_TYPE_NAME:
+			case Constants.TYPE_NAME_LONG:
 				return Long.valueOf(valueString).longValue();
-			case Constants.SHORT_TYPE_NAME:
+			case Constants.TYPE_NAME_SHORT:
 				return Short.valueOf(valueString).shortValue();
-			case Constants.STRING_TYPE_NAME:
+			case Constants.TYPE_NAME_STRING:
 				return valueString;
 			default:
 				return null;
@@ -292,39 +292,83 @@ public class EcModelUtils {
 
 	private static CategoryNode generateCategoryModel(ILocalVariable parameter) {
 		String type = getTypeName(parameter.getTypeSignature());
-		if(type.equals(Constants.UNSUPPORTED_TYPE_NAME)){
+		boolean expected = false;
+		if(type.equals(Constants.TYPE_NAME_UNSUPPORTED)){
 			return null;
 		}
-		CategoryNode category = new CategoryNode(parameter.getElementName(), type);
-		ArrayList<PartitionNode> defaultPartitions = generateDefaultPartitions(type);
-		for(PartitionNode partition : defaultPartitions){
-			category.addPartition(partition);
+		IAnnotation[] annotations;
+		try {
+			annotations = parameter.getAnnotations();
+			for(IAnnotation annotation : annotations){
+				if(annotation.getElementName().equals("expected")){
+					expected = true;
+				}
+			}
+
+			CategoryNode category = new CategoryNode(parameter.getElementName(), type, expected);
+			if(!expected){
+				ArrayList<PartitionNode> defaultPartitions = generateDefaultPartitions(type);
+				for(PartitionNode partition : defaultPartitions){
+					category.addPartition(partition);
+				}
+			}
+			else{
+				category.addPartition(new PartitionNode(Constants.EXPECTED_VALUE_PARTITION_NAME, getDefaultExpectedValue(type)));
+			}
+			return category;
+		} catch (JavaModelException e) {
+			e.printStackTrace();
+			return null;
 		}
-		return category;
 	}
+
+	private static Object getDefaultExpectedValue(String type) {
+		switch(type){
+		case Constants.TYPE_NAME_BYTE:
+			return Constants.DEFAULT_EXPECTED_BYTE_VALUE;
+		case Constants.TYPE_NAME_BOOLEAN:
+			return Constants.DEFAULT_EXPECTED_BOOLEAN_VALUE;
+		case Constants.TYPE_NAME_CHAR:
+			return Constants.DEFAULT_EXPECTED_CHAR_VALUE;
+		case Constants.TYPE_NAME_DOUBLE:
+			return Constants.DEFAULT_EXPECTED_DOUBLE_VALUE;
+		case Constants.TYPE_NAME_FLOAT:
+			return Constants.DEFAULT_EXPECTED_FLOAT_VALUE;
+		case Constants.TYPE_NAME_INT:
+			return Constants.DEFAULT_EXPECTED_INT_VALUE;
+		case Constants.TYPE_NAME_LONG:
+			return Constants.DEFAULT_EXPECTED_LONG_VALUE;
+		case Constants.TYPE_NAME_SHORT:
+			return Constants.DEFAULT_EXPECTED_SHORT_VALUE;
+		case Constants.TYPE_NAME_STRING:
+			return Constants.DEFAULT_EXPECTED_STRING_VALUE;
+		}
+		return null;
+	}
+
 
 	private static String getTypeName(String typeSignature) {
 		switch(typeSignature){
 		case Signature.SIG_BOOLEAN:
-			return Constants.BOOLEAN_TYPE_NAME;
+			return Constants.TYPE_NAME_BOOLEAN;
 		case Signature.SIG_BYTE:
-			return Constants.BYTE_TYPE_NAME;
+			return Constants.TYPE_NAME_BYTE;
 		case Signature.SIG_CHAR:
-			return Constants.CHAR_TYPE_NAME;
+			return Constants.TYPE_NAME_CHAR;
 		case Signature.SIG_DOUBLE:
-			return Constants.DOUBLE_TYPE_NAME;
+			return Constants.TYPE_NAME_DOUBLE;
 		case Signature.SIG_FLOAT:
-			return Constants.FLOAT_TYPE_NAME;
+			return Constants.TYPE_NAME_FLOAT;
 		case Signature.SIG_INT:
-			return Constants.INT_TYPE_NAME;
+			return Constants.TYPE_NAME_INT;
 		case Signature.SIG_LONG:
-			return Constants.LONG_TYPE_NAME;
+			return Constants.TYPE_NAME_LONG;
 		case Signature.SIG_SHORT:
-			return Constants.SHORT_TYPE_NAME;
+			return Constants.TYPE_NAME_SHORT;
 		case "QString;":
-			return Constants.STRING_TYPE_NAME;
+			return Constants.TYPE_NAME_STRING;
 		default:
-			return Constants.UNSUPPORTED_TYPE_NAME;
+			return Constants.TYPE_NAME_UNSUPPORTED;
 		}
 	}
 

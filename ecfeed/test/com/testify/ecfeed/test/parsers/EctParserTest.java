@@ -37,18 +37,18 @@ public class EctParserTest {
 		RootNode root = new RootNode("Root");
 		ClassNode classNode1 = new ClassNode("com.testify.ecfeed.Class1");
 		MethodNode method1_1 = new MethodNode("testMethod1");
-		CategoryNode cat_1_1_1 = new CategoryNode("cat1", "int");
+		CategoryNode cat_1_1_1 = new CategoryNode("cat1", "int", false);
 		cat_1_1_1.addPartition(new PartitionNode("MIN", Integer.MIN_VALUE));
 		cat_1_1_1.addPartition(new PartitionNode("negative", (int)-1));
 		cat_1_1_1.addPartition(new PartitionNode("zero",     (int) 0));
 		cat_1_1_1.addPartition(new PartitionNode("positive", (int) 1));
 		cat_1_1_1.addPartition(new PartitionNode("MAX", Integer.MAX_VALUE));
 		method1_1.addCategory(cat_1_1_1);
-		CategoryNode cat_1_1_2 = new CategoryNode("cat2", "boolean");
+		CategoryNode cat_1_1_2 = new CategoryNode("cat2", "boolean", false);
 		cat_1_1_2.addPartition(new PartitionNode("true", true));
 		cat_1_1_2.addPartition(new PartitionNode("false", false));
 		method1_1.addCategory(cat_1_1_2);
-		CategoryNode cat_1_1_3 = new CategoryNode("cat3", "double");
+		CategoryNode cat_1_1_3 = new CategoryNode("cat3", "double", false);
 		cat_1_1_3.addPartition(new PartitionNode("-INF", Double.NEGATIVE_INFINITY));
 		cat_1_1_3.addPartition(new PartitionNode("-MAX", -Double.MAX_VALUE));
 		cat_1_1_3.addPartition(new PartitionNode("-1", (double)-1.0));
@@ -63,21 +63,21 @@ public class EctParserTest {
 		
 		
 		MethodNode method1_2 = new MethodNode("testMethod2");
-		CategoryNode cat_1_2_1 = new CategoryNode("cat1", "byte");
+		CategoryNode cat_1_2_1 = new CategoryNode("cat1", "byte", false);
 		cat_1_2_1.addPartition(new PartitionNode("MIN", Byte.MIN_VALUE));
 		cat_1_2_1.addPartition(new PartitionNode("negative", (byte)-1));
 		cat_1_2_1.addPartition(new PartitionNode("zero",     (byte) 0));
 		cat_1_2_1.addPartition(new PartitionNode("positive", (byte) 1));
 		cat_1_2_1.addPartition(new PartitionNode("MAX", Byte.MAX_VALUE));
 		method1_2.addCategory(cat_1_2_1);
-		CategoryNode cat_1_2_2 = new CategoryNode("cat1", "long");
+		CategoryNode cat_1_2_2 = new CategoryNode("cat1", "long", false);
 		cat_1_2_2.addPartition(new PartitionNode("MIN", Long.MIN_VALUE));
 		cat_1_2_2.addPartition(new PartitionNode("negative", (long)-1));
 		cat_1_2_2.addPartition(new PartitionNode("zero",     (long) 0));
 		cat_1_2_2.addPartition(new PartitionNode("positive", (long) 1));
 		cat_1_2_2.addPartition(new PartitionNode("MAX", Long.MAX_VALUE));
 		method1_2.addCategory(cat_1_2_2);
-		CategoryNode cat_1_2_3 = new CategoryNode("cat2", "float");
+		CategoryNode cat_1_2_3 = new CategoryNode("cat2", "float", false);
 		cat_1_2_3.addPartition(new PartitionNode("-INF",  Float.NEGATIVE_INFINITY));
 		cat_1_2_3.addPartition(new PartitionNode("-MAX", -Float.MAX_VALUE));
 		cat_1_2_3.addPartition(new PartitionNode("-1",   (float)-1.0));
@@ -88,7 +88,7 @@ public class EctParserTest {
 		cat_1_2_3.addPartition(new PartitionNode("MAX",   Float.MAX_VALUE));
 		cat_1_2_3.addPartition(new PartitionNode("INF",   Float.POSITIVE_INFINITY));
 		method1_2.addCategory(cat_1_2_3);
-		CategoryNode cat_1_2_4 = new CategoryNode("cat3", "String");
+		CategoryNode cat_1_2_4 = new CategoryNode("cat3", "String", false);
 		cat_1_2_4.addPartition(new PartitionNode("null",  null));
 		cat_1_2_4.addPartition(new PartitionNode("character",  "a"));
 		cat_1_2_4.addPartition(new PartitionNode("characters",  "aA"));
@@ -101,7 +101,7 @@ public class EctParserTest {
 
 		ClassNode classNode2 = new ClassNode("com.testify.ecfeed.Class2");
 		MethodNode method_2_1 = new MethodNode("testMethod1");
-		CategoryNode cat_2_1_1 = new CategoryNode("cat1", "char");
+		CategoryNode cat_2_1_1 = new CategoryNode("cat1", "char", false);
 		cat_2_1_1.addPartition(new PartitionNode("zero", '\u0000'));
 		cat_2_1_1.addPartition(new PartitionNode("one",  '\u0001'));
 		cat_2_1_1.addPartition(new PartitionNode("a", 'a'));
@@ -112,7 +112,7 @@ public class EctParserTest {
 		cat_2_1_1.addPartition(new PartitionNode("max", '\uffff'));
 		method_2_1.addCategory(cat_2_1_1);
 
-		CategoryNode cat_2_1_2 = new CategoryNode("cat2", "short");
+		CategoryNode cat_2_1_2 = new CategoryNode("cat2", "short", false);
 		cat_2_1_2.addPartition(new PartitionNode("MIN", Short.MIN_VALUE));
 		cat_2_1_2.addPartition(new PartitionNode("negative", (short)-1));
 		cat_2_1_2.addPartition(new PartitionNode("zero",     (short) 0));

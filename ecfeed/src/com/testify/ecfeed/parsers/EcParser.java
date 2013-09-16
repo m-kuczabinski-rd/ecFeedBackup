@@ -229,11 +229,15 @@ public class EcParser {
 	private CategoryNode parseCategoryElement(Element element) {
 		String name = element.getAttributeValue(Constants.NODE_NAME_ATTRIBUTE);
 		String type = element.getAttributeValue(Constants.TYPE_NAME_ATTRIBUTE);
+		boolean expected = false;
+		if(element.getAttribute(Constants.EXPECTED_VALUE_ATTRIBUTE) != null){
+			expected = element.getAttributeValue(Constants.EXPECTED_VALUE_ATTRIBUTE).equals(Boolean.toString(true));
+		}
 		if (name == null | type == null){
 			return null;
 		}
 		
-		CategoryNode categoryNode = new CategoryNode(name, type);
+		CategoryNode categoryNode = new CategoryNode(name, type, expected);
 		for(Element child : getIterableElements(element.getChildElements())){
 			if(child.getLocalName() == Constants.PARTITION_NODE_NAME){
 				categoryNode.addPartition(parsePartitionElement(child, type));
@@ -255,27 +259,27 @@ public class EcParser {
 
 	private Object parseValue(String valueString, String type) {
 		switch(type){
-		case Constants.BOOLEAN_TYPE_NAME:
+		case Constants.TYPE_NAME_BOOLEAN:
 			return Boolean.parseBoolean(valueString);
-		case Constants.BYTE_TYPE_NAME:
+		case Constants.TYPE_NAME_BYTE:
 			return Byte.parseByte(valueString);
-		case Constants.CHAR_TYPE_NAME:
+		case Constants.TYPE_NAME_CHAR:
 			if (valueString.length() <= 0){
 				return null;
 			}
 			int intValue = Integer.parseInt(valueString);
 			return (char)intValue;
-		case Constants.DOUBLE_TYPE_NAME:
+		case Constants.TYPE_NAME_DOUBLE:
 			return Double.parseDouble(valueString);
-		case Constants.FLOAT_TYPE_NAME:
+		case Constants.TYPE_NAME_FLOAT:
 			return Float.parseFloat(valueString);
-		case Constants.INT_TYPE_NAME:
+		case Constants.TYPE_NAME_INT:
 			return Integer.parseInt(valueString);
-		case Constants.LONG_TYPE_NAME:
+		case Constants.TYPE_NAME_LONG:
 			return Long.parseLong(valueString);
-		case Constants.SHORT_TYPE_NAME:
+		case Constants.TYPE_NAME_SHORT:
 			return Short.parseShort(valueString);
-		case Constants.STRING_TYPE_NAME:
+		case Constants.TYPE_NAME_STRING:
 			return valueString.equals(Constants.NULL_VALUE_STRING_REPRESENTATION)?null:valueString;
 		default:
 			return null;

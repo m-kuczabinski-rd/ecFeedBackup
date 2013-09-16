@@ -65,7 +65,8 @@ public class EcWriter {
 		}
 		else if (node instanceof CategoryNode){
 			String type = ((CategoryNode)node).getType();
-			element = createCategoryElement(name, type);
+			boolean expected = ((CategoryNode)node).isExpected();
+			element = createCategoryElement(name, type, expected);
 		}
 		else if (node instanceof PartitionNode){
 			Object value = ((PartitionNode)node).getValue();
@@ -123,12 +124,14 @@ public class EcWriter {
 		return partitionElement;
 	}
 
-	private Element createCategoryElement(String name, String type) {
+	private Element createCategoryElement(String name, String type, boolean expected) {
 		Element categoryElement = new Element(Constants.CATEGORY_NODE_NAME);
 		Attribute nameAttribute = new Attribute(Constants.NODE_NAME_ATTRIBUTE, name);
 		Attribute typeNameAttribute = new Attribute(Constants.TYPE_NAME_ATTRIBUTE, type);
+		Attribute expectedAttribute = new Attribute(Constants.EXPECTED_VALUE_ATTRIBUTE, Boolean.toString(expected));
 		categoryElement.addAttribute(nameAttribute);
 		categoryElement.addAttribute(typeNameAttribute);
+		categoryElement.addAttribute(expectedAttribute);
 		return categoryElement;
 	}
 

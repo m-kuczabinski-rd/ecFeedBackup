@@ -38,6 +38,7 @@ public class Constants {
 	public static final String NODE_NAME_ATTRIBUTE = "name";
 	public static final String QUALIFIED_NAME_ATTRIBUTE = "qualifiedName";
 	public static final String TYPE_NAME_ATTRIBUTE = "type";
+	public static final String EXPECTED_VALUE_ATTRIBUTE = "expected";
 	public static final String VALUE_ATTRIBUTE = "value";
 	public static final String NULL_VALUE_STRING_REPRESENTATION = "/null";
 	public static final String TEST_SUITE_NAME_ATTRIBUTE = "testSuite";
@@ -67,17 +68,28 @@ public class Constants {
 	public static final int MAX_PARTITION_NAME_LENGTH = 64;
 	public static final int MAX_MODEL_NAME_LENGTH = 64;
 	
-	public static final String BOOLEAN_TYPE_NAME = "boolean";
-	public static final String BYTE_TYPE_NAME = "byte";
-	public static final String CHAR_TYPE_NAME = "char";
-	public static final String DOUBLE_TYPE_NAME = "double";
-	public static final String FLOAT_TYPE_NAME = "float";
-	public static final String INT_TYPE_NAME = "int";
-	public static final String LONG_TYPE_NAME = "long";
-	public static final String SHORT_TYPE_NAME = "short";
-	public static final String STRING_TYPE_NAME = "String";
-	public static final String UNSUPPORTED_TYPE_NAME = "unsupported";
-	
+	public static final String TYPE_NAME_BOOLEAN = "boolean";
+	public static final String TYPE_NAME_BYTE = "byte";
+	public static final String TYPE_NAME_CHAR = "char";
+	public static final String TYPE_NAME_DOUBLE = "double";
+	public static final String TYPE_NAME_FLOAT = "float";
+	public static final String TYPE_NAME_INT = "int";
+	public static final String TYPE_NAME_LONG = "long";
+	public static final String TYPE_NAME_SHORT = "short";
+	public static final String TYPE_NAME_STRING = "String";
+	public static final String TYPE_NAME_UNSUPPORTED = "unsupported";
+
+	public static final String EXPECTED_VALUE_PARTITION_NAME = "default value";
+	public static final boolean DEFAULT_EXPECTED_BOOLEAN_VALUE = false;
+	public static final byte DEFAULT_EXPECTED_BYTE_VALUE = 0;
+	public static final char DEFAULT_EXPECTED_CHAR_VALUE = '\0';
+	public static final double DEFAULT_EXPECTED_DOUBLE_VALUE = 0.0;
+	public static final float DEFAULT_EXPECTED_FLOAT_VALUE = 0;
+	public static final int DEFAULT_EXPECTED_INT_VALUE = 0;
+	public static final long DEFAULT_EXPECTED_LONG_VALUE = 0;
+	public static final short DEFAULT_EXPECTED_SHORT_VALUE = 0;
+	public static final String DEFAULT_EXPECTED_STRING_VALUE = "";
+
 	public static final String TEST_GEN_ALGORITHM_EXTENSION_POINT_ID = "com.testify.ecfeed.algorithm";
 	public static final String TEST_GEN_ALGORITHM_IMPLEMENTATION_ATTRIBUTE = "implementation";
 	public static final String ALGORITHM_NAME_ATTRIBUTE = "name";
@@ -90,6 +102,7 @@ public class Constants {
 	public static final int MAX_DISPLAYED_CHILDREN_PER_NODE = 1000;
 	public static final int MAX_DISPLAYED_TEST_CASES_PER_SUITE = 500;
 	public static final int TEST_SUITE_SIZE_WARNING_LIMIT = 20000;
+	
 	
 
 }
