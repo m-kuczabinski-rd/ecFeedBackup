@@ -37,6 +37,7 @@ import org.eclipse.swt.layout.GridLayout;
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.ConstraintNode;
+import com.testify.ecfeed.model.ExpectedValueCategoryNode;
 import com.testify.ecfeed.model.IGenericNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
@@ -176,6 +177,7 @@ public class ModelMasterDetailsBlock extends MasterDetailsBlock implements IMode
 		part.registerPage(ClassNode.class, new ClassNodeDetailsPage(this));
 		part.registerPage(MethodNode.class, new MethodNodeDetailsPage(this));
 		part.registerPage(CategoryNode.class, new CategoryNodeDetailsPage(this));
+		part.registerPage(ExpectedValueCategoryNode.class, new ExpectedValueDetailsPage(this));
 		part.registerPage(TestCaseNode.class, new TestCaseNodeDetailsPage(this));
 		part.registerPage(ConstraintNode.class, new ConstraintsNodeDetailsPage(this));
 		part.registerPage(PartitionNode.class, new PartitionNodeDetailsPage(this));
