@@ -21,7 +21,7 @@ import com.testify.ecfeed.model.PartitionNode;
 public class CategoryNodeTest extends CategoryNode {
 
 	public CategoryNodeTest() {
-		super("CategoryNode", "dummy", false);
+		super("CategoryNode", "dummy");
 	}
 
 //	@Test
@@ -263,11 +263,11 @@ public class CategoryNodeTest extends CategoryNode {
 //	
 	@Test 
 	public void testEquals(){
-		CategoryNode cat = new CategoryNode("cat", "boolean", false);
+		CategoryNode cat = new CategoryNode("cat", "boolean");
 		cat.addPartition(new PartitionNode("true", 	true));
 		cat.addPartition(new PartitionNode("false", false));
 
-		CategoryNode catCopy = new CategoryNode("cat", "boolean", false);
+		CategoryNode catCopy = new CategoryNode("cat", "boolean");
 		PartitionNode part1 = new PartitionNode("true", true);
 		PartitionNode part2 = new PartitionNode("false", false);
 		catCopy.addPartition(part1);

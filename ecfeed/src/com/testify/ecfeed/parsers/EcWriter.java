@@ -24,6 +24,7 @@ import com.testify.ecfeed.model.constraint.Statement;
 import com.testify.ecfeed.model.constraint.StatementArray;
 import com.testify.ecfeed.model.constraint.StaticStatement;
 import com.testify.ecfeed.model.ConstraintNode;
+import com.testify.ecfeed.model.ExpectedValueCategoryNode;
 import com.testify.ecfeed.model.IGenericNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
@@ -65,8 +66,13 @@ public class EcWriter {
 		}
 		else if (node instanceof CategoryNode){
 			String type = ((CategoryNode)node).getType();
-			boolean expected = ((CategoryNode)node).isExpected();
-			element = createCategoryElement(name, type, expected);
+			if (node instanceof ExpectedValueCategoryNode){
+				Object value = ((ExpectedValueCategoryNode)node).getDefaultValue();
+				element = createExpectedValueCategoryElement(name, type, value);
+			}
+			else{
+				element = createCategoryElement(name, type);
+			}
 		}
 		else if (node instanceof PartitionNode){
 			Object value = ((PartitionNode)node).getValue();
@@ -124,14 +130,24 @@ public class EcWriter {
 		return partitionElement;
 	}
 
-	private Element createCategoryElement(String name, String type, boolean expected) {
+	private Element createExpectedValueCategoryElement(String name, String type, Object value) {
+		Element element = new Element(Constants.EXPECTED_VALUE_CATEGORY_NODE_NAME);
+		Attribute nameAttribute = new Attribute(Constants.NODE_NAME_ATTRIBUTE, name);
+		Attribute typeNameAttribute = new Attribute(Constants.TYPE_NAME_ATTRIBUTE, type);
+		Attribute expectedAttribute = new Attribute(Constants.DEFAULT_EXPECTED_VALUE_ATTRIBUTE, value.toString());
+		element.addAttribute(nameAttribute);
+		element.addAttribute(typeNameAttribute);
+		element.addAttribute(expectedAttribute);
+		return element;
+	}
+
+	private Element createCategoryElement(String name, String type) {
+		
 		Element categoryElement = new Element(Constants.CATEGORY_NODE_NAME);
 		Attribute nameAttribute = new Attribute(Constants.NODE_NAME_ATTRIBUTE, name);
 		Attribute typeNameAttribute = new Attribute(Constants.TYPE_NAME_ATTRIBUTE, type);
-		Attribute expectedAttribute = new Attribute(Constants.EXPECTED_VALUE_ATTRIBUTE, Boolean.toString(expected));
 		categoryElement.addAttribute(nameAttribute);
 		categoryElement.addAttribute(typeNameAttribute);
-		categoryElement.addAttribute(expectedAttribute);
 		return categoryElement;
 	}
 

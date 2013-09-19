@@ -24,6 +24,7 @@ public class Constants {
 	public static final String CLASS_NODE_NAME = "Class";
 	public static final String METHOD_NODE_NAME = "Method";
 	public static final String CATEGORY_NODE_NAME = "Category";
+	public static final String EXPECTED_VALUE_CATEGORY_NODE_NAME = "ExpectedValueCategory";
 	public static final String PARTITION_NODE_NAME = "Partition";
 	public static final String TEST_CASE_NODE_NAME = "TestCase";
 	public static final String TEST_PARAMETER_NODE_NAME = "TestParameter";
@@ -38,7 +39,7 @@ public class Constants {
 	public static final String NODE_NAME_ATTRIBUTE = "name";
 	public static final String QUALIFIED_NAME_ATTRIBUTE = "qualifiedName";
 	public static final String TYPE_NAME_ATTRIBUTE = "type";
-	public static final String EXPECTED_VALUE_ATTRIBUTE = "expected";
+	public static final String DEFAULT_EXPECTED_VALUE_ATTRIBUTE = "expected";
 	public static final String VALUE_ATTRIBUTE = "value";
 	public static final String NULL_VALUE_STRING_REPRESENTATION = "/null";
 	public static final String TEST_SUITE_NAME_ATTRIBUTE = "testSuite";
@@ -102,7 +103,4 @@ public class Constants {
 	public static final int MAX_DISPLAYED_CHILDREN_PER_NODE = 1000;
 	public static final int MAX_DISPLAYED_TEST_CASES_PER_SUITE = 500;
 	public static final int TEST_SUITE_SIZE_WARNING_LIMIT = 20000;
-	
-	
-
 }

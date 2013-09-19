@@ -28,6 +28,7 @@ import com.testify.ecfeed.constants.Constants;
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.ConstraintNode;
+import com.testify.ecfeed.model.ExpectedValueCategoryNode;
 import com.testify.ecfeed.model.IGenericNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
@@ -304,16 +305,17 @@ public class EcModelUtils {
 					expected = true;
 				}
 			}
-
-			CategoryNode category = new CategoryNode(parameter.getElementName(), type, expected);
+			
+			CategoryNode category;
 			if(!expected){
+				category = new CategoryNode(parameter.getElementName(), type);
 				ArrayList<PartitionNode> defaultPartitions = generateDefaultPartitions(type);
 				for(PartitionNode partition : defaultPartitions){
 					category.addPartition(partition);
 				}
 			}
 			else{
-				category.addPartition(new PartitionNode(Constants.EXPECTED_VALUE_PARTITION_NAME, getDefaultExpectedValue(type)));
+				category = new ExpectedValueCategoryNode(parameter.getElementName(), type, getDefaultExpectedValue(type));
 			}
 			return category;
 		} catch (JavaModelException e) {
@@ -322,7 +324,7 @@ public class EcModelUtils {
 		}
 	}
 
-	private static Object getDefaultExpectedValue(String type) {
+	public static Object getDefaultExpectedValue(String type) {
 		switch(type){
 		case Constants.TYPE_NAME_BYTE:
 			return Constants.DEFAULT_EXPECTED_BYTE_VALUE;

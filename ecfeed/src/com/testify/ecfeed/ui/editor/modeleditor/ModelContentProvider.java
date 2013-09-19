@@ -54,7 +54,7 @@ public class ModelContentProvider extends TreeNodeContentProvider implements ITr
 			}
 			return children.toArray();
 		}
-		if(parentElement instanceof IGenericNode){
+		else if(parentElement instanceof IGenericNode){
 			IGenericNode node = (IGenericNode)parentElement;
 			if(node.getChildren().size() < Constants.MAX_DISPLAYED_CHILDREN_PER_NODE){
 				return node.getChildren().toArray();

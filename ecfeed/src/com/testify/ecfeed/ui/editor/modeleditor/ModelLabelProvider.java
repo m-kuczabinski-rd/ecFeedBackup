@@ -24,6 +24,7 @@ import org.osgi.framework.FrameworkUtil;
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.ConstraintNode;
+import com.testify.ecfeed.model.ExpectedValueCategoryNode;
 import com.testify.ecfeed.model.GenericNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
@@ -51,6 +52,9 @@ public class ModelLabelProvider extends LabelProvider {
 		}
 		if(element instanceof TestCaseNode){
 			return getImage("test_case_node.gif");
+		}
+		if(element instanceof ExpectedValueCategoryNode){
+			return getImage("expected_value_category_node.gif");
 		}
 		if(element instanceof CategoryNode){
 			return getImage("category_node.gif");

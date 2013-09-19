@@ -27,11 +27,13 @@ import com.testify.ecfeed.model.constraint.Statement;
 import com.testify.ecfeed.model.constraint.StatementArray;
 import com.testify.ecfeed.model.constraint.StaticStatement;
 import com.testify.ecfeed.model.ConstraintNode;
+import com.testify.ecfeed.model.ExpectedValueCategoryNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.TestCaseNode;
+import com.testify.ecfeed.utils.EcModelUtils;
 
 public class EcParser {
 	
@@ -90,6 +92,9 @@ public class EcParser {
 		
 		MethodNode methodNode = new MethodNode(name);
 		for(Element child : getIterableElements(element.getChildElements())){
+			if(child.getLocalName() == Constants.EXPECTED_VALUE_CATEGORY_NODE_NAME){
+				methodNode.addCategory(parseExpectedValueCategoryElement(child));
+			}
 			if(child.getLocalName() == Constants.CATEGORY_NODE_NAME){
 				methodNode.addCategory(parseCategoryElement(child));
 			}
@@ -226,18 +231,22 @@ public class EcParser {
 		return new TestCaseNode(testSuiteName, testData);
 	}
 
+	private ExpectedValueCategoryNode parseExpectedValueCategoryElement(Element element) {
+		String name = element.getAttributeValue(Constants.NODE_NAME_ATTRIBUTE);
+		String type = element.getAttributeValue(Constants.TYPE_NAME_ATTRIBUTE);
+		String defaultValueString = element.getAttributeValue(Constants.DEFAULT_EXPECTED_VALUE_ATTRIBUTE);
+		Object defaultValue = EcModelUtils.getPartitionValueFromString(defaultValueString, type);
+		return new ExpectedValueCategoryNode(name, type, defaultValue);
+	}
+	
 	private CategoryNode parseCategoryElement(Element element) {
 		String name = element.getAttributeValue(Constants.NODE_NAME_ATTRIBUTE);
 		String type = element.getAttributeValue(Constants.TYPE_NAME_ATTRIBUTE);
-		boolean expected = false;
-		if(element.getAttribute(Constants.EXPECTED_VALUE_ATTRIBUTE) != null){
-			expected = element.getAttributeValue(Constants.EXPECTED_VALUE_ATTRIBUTE).equals(Boolean.toString(true));
-		}
 		if (name == null | type == null){
 			return null;
 		}
 		
-		CategoryNode categoryNode = new CategoryNode(name, type, expected);
+		CategoryNode categoryNode = new CategoryNode(name, type);
 		for(Element child : getIterableElements(element.getChildElements())){
 			if(child.getLocalName() == Constants.PARTITION_NODE_NAME){
 				categoryNode.addPartition(parsePartitionElement(child, type));

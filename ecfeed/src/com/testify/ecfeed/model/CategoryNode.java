@@ -17,13 +17,11 @@ public class CategoryNode extends GenericNode {
 	
 	private final String fType;
 	private final ArrayList<PartitionNode> fPartitions;
-	private final boolean fExpected;
 	
-	public CategoryNode(String name, String type, boolean expected) {
+	public CategoryNode(String name, String type) {
 		super(name);
 		fType = type;
 		fPartitions = new ArrayList<PartitionNode>();
-		fExpected = expected;
 	}
 
 	public String getType() {
@@ -52,10 +50,6 @@ public class CategoryNode extends GenericNode {
 	//TODO unit tests
 	public ArrayList<PartitionNode> getPartitions() {
 		return fPartitions;
-	}
-	
-	public boolean isExpected(){
-		return fExpected;
 	}
 
 	public ArrayList<String> getPartitionNames() {
