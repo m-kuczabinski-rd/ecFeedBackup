@@ -233,6 +233,7 @@ public class EcParser {
 				if(EcModelUtils.validatePartitionStringValue(valueString, category)){
 					Object value = EcModelUtils.getPartitionValueFromString(valueString, category.getType());
 					testValue = new PartitionNode(Constants.EXPECTED_VALUE_PARTITION_NAME, value);
+					testValue.setParent(category);
 				}
 				else{
 					return null;
