@@ -40,6 +40,7 @@ import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.ExpectedValueCategoryNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
+import com.testify.ecfeed.ui.common.TestCasePartitionEditingSupport;
 import com.testify.ecfeed.utils.EcModelUtils;
 
 public class AddTestCaseDialog extends TitleAreaDialog implements ISetValueListener {

@@ -31,8 +31,8 @@ import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.TestCaseNode;
+import com.testify.ecfeed.ui.common.TestCasePartitionEditingSupport;
 import com.testify.ecfeed.ui.dialogs.ISetValueListener;
-import com.testify.ecfeed.ui.dialogs.TestCasePartitionEditingSupport;
 import com.testify.ecfeed.utils.EcModelUtils;
 
 import org.eclipse.swt.layout.GridLayout;

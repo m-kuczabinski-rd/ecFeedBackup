@@ -9,7 +9,7 @@
  *     Patryk Chamuczynski (p.chamuczynski(at)gmail.com) - initial implementation
  ******************************************************************************/
 
-package com.testify.ecfeed.ui.dialogs;
+package com.testify.ecfeed.ui.common;
 
 import java.util.ArrayList;
 
@@ -22,8 +22,10 @@ import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
 
 import com.testify.ecfeed.model.CategoryNode;
+import com.testify.ecfeed.model.ExpectedValueCategoryNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
+import com.testify.ecfeed.ui.dialogs.ISetValueListener;
 
 public class TestCasePartitionEditingSupport extends EditingSupport {
 	private final TableViewer fViewer;
@@ -54,7 +56,13 @@ public class TestCasePartitionEditingSupport extends EditingSupport {
 
 	@Override
 	protected boolean canEdit(Object element) {
-		return true;
+		if(element instanceof PartitionNode){
+			PartitionNode partition = (PartitionNode) element;
+			CategoryNode parent = partition.getCategory();
+			boolean canEdit = !(parent instanceof ExpectedValueCategoryNode); 
+			return canEdit;
+		}
+		return false;
 	}
 
 	@Override
