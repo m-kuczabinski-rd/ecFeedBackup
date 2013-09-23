@@ -46,7 +46,13 @@ public class TestCaseNode extends GenericNode {
 		String result = new String();
 		
 		for(int i = 0; i < fTestData.size(); i++){
-			result += fTestData.get(i).getName();
+			PartitionNode partition = fTestData.get(i);
+			if(partition.getCategory() instanceof ExpectedValueCategoryNode){
+				result += "[e]" + partition.getValueString();
+			}
+			else{
+				result += partition.getName();
+			}
 			if(i < fTestData.size() - 1){
 				result += ", ";
 			}
