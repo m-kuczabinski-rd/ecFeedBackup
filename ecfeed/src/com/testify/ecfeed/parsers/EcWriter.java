@@ -100,13 +100,31 @@ public class EcWriter {
 		testCaseElement.addAttribute(testSuiteNameAttribute);
 		
 		for(PartitionNode parameter : testData){
-			Element testParameterElement = new Element(Constants.TEST_PARAMETER_NODE_NAME);
-			Attribute partitionNameAttribute = new Attribute(Constants.PARTITION_ATTRIBUTE_NAME, parameter.getName());
-			testParameterElement.addAttribute(partitionNameAttribute);
-			testCaseElement.appendChild(testParameterElement);
+			if(parameter.getCategory() instanceof ExpectedValueCategoryNode){
+				createExpectedValueElement(testCaseElement, parameter);
+			}
+			else{
+				createTestParameterElement(testCaseElement, parameter);
+			}
 		}
 		
 		return testCaseElement;
+	}
+
+	private void createExpectedValueElement(Element testCaseElement,
+			PartitionNode parameter) {
+		Element testParameterElement = new Element(Constants.EXPECTED_PARAMETER_NODE_NAME);
+		Attribute partitionNameAttribute = new Attribute(Constants.VALUE_ATTRIBUTE_NAME, parameter.getValueString());
+		testParameterElement.addAttribute(partitionNameAttribute);
+		testCaseElement.appendChild(testParameterElement);
+	}
+
+	private void createTestParameterElement(Element testCaseElement,
+			PartitionNode parameter) {
+		Element testParameterElement = new Element(Constants.TEST_PARAMETER_NODE_NAME);
+		Attribute partitionNameAttribute = new Attribute(Constants.PARTITION_ATTRIBUTE_NAME, parameter.getName());
+		testParameterElement.addAttribute(partitionNameAttribute);
+		testCaseElement.appendChild(testParameterElement);
 	}
 
 	private Element createPartitionElement(String name, Object value) {

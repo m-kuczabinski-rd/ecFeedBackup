@@ -37,6 +37,7 @@ import org.eclipse.jface.viewers.TableViewerColumn;
 import com.testify.ecfeed.constants.Constants;
 import com.testify.ecfeed.constants.DialogStrings;
 import com.testify.ecfeed.model.CategoryNode;
+import com.testify.ecfeed.model.ExpectedValueCategoryNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.utils.EcModelUtils;
@@ -61,9 +62,21 @@ public class AddTestCaseDialog extends TitleAreaDialog implements ISetValueListe
 		fTestData = new ArrayList<PartitionNode>();
 		ArrayList<CategoryNode> categories = method.getCategories();
 		for(CategoryNode category : categories){
-			fTestData.add((PartitionNode)category.getChildren().get(0));
+			if(category instanceof ExpectedValueCategoryNode){
+				ExpectedValueCategoryNode expValCat = (ExpectedValueCategoryNode)category;
+				fTestData.add(createAnonymuousPartition(expValCat));
+			}
+			else{
+				fTestData.add((PartitionNode)category.getChildren().get(0));
+			}
 		}
 		fMethod = method;
+	}
+
+	private PartitionNode createAnonymuousPartition(ExpectedValueCategoryNode parent) {
+		PartitionNode partition = new PartitionNode("@expected", parent.getDefaultValue()); 
+		partition.setParent(parent);
+		return partition;
 	}
 
 	/**

@@ -28,6 +28,7 @@ public class Constants {
 	public static final String PARTITION_NODE_NAME = "Partition";
 	public static final String TEST_CASE_NODE_NAME = "TestCase";
 	public static final String TEST_PARAMETER_NODE_NAME = "TestParameter";
+	public static final String EXPECTED_PARAMETER_NODE_NAME = "ExpectedValue";
 	public static final String CONSTRAINT_NODE_NAME = "Constraint";
 	public static final String CONSTRAINT_PREMISE_NODE_NAME = "Premise";
 	public static final String CONSTRAINT_CONSEQUENCE_NODE_NAME = "Consequence";
@@ -44,6 +45,7 @@ public class Constants {
 	public static final String NULL_VALUE_STRING_REPRESENTATION = "/null";
 	public static final String TEST_SUITE_NAME_ATTRIBUTE = "testSuite";
 	public static final String PARTITION_ATTRIBUTE_NAME = "partition";
+	public static final String VALUE_ATTRIBUTE_NAME = "value";
 	public static final String STATIC_VALUE_ATTRIBUTE_NAME = "value";
 	public static final String STATEMENT_CATEGORY_ATTRIBUTE_NAME = "category";
 	public static final String STATEMENT_PARTITION_ATTRIBUTE_NAME = "partition";
@@ -80,7 +82,8 @@ public class Constants {
 	public static final String TYPE_NAME_STRING = "String";
 	public static final String TYPE_NAME_UNSUPPORTED = "unsupported";
 
-	public static final String EXPECTED_VALUE_PARTITION_NAME = "default value";
+	public static final String EXPECTED_VALUE_PARTITION_NAME = "@expected";
+	public static final String DEFAULT_EXPECTED_VALUE_PARTITION_NAME = "default value";
 	public static final boolean DEFAULT_EXPECTED_BOOLEAN_VALUE = false;
 	public static final byte DEFAULT_EXPECTED_BYTE_VALUE = 0;
 	public static final char DEFAULT_EXPECTED_CHAR_VALUE = '\0';

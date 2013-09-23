@@ -221,12 +221,24 @@ public class EcParser {
 
 		for(int i = 0; i < parameterElements.size(); i++){
 			Element testParameterElement = parameterElements.get(i);
+			CategoryNode category = categories.get(i);
 			
+			PartitionNode testValue = null;
 			if(testParameterElement.getLocalName().equals(Constants.TEST_PARAMETER_NODE_NAME)){
 				String partitionName = testParameterElement.getAttributeValue(Constants.PARTITION_ATTRIBUTE_NAME);
-				PartitionNode partition = categories.get(i).getPartition(partitionName);
-				testData.add(partition);
+				testValue = category.getPartition(partitionName);
 			}
+			else if(testParameterElement.getLocalName().equals(Constants.EXPECTED_PARAMETER_NODE_NAME)){
+				String valueString = testParameterElement.getAttributeValue(Constants.VALUE_ATTRIBUTE_NAME);
+				if(EcModelUtils.validatePartitionStringValue(valueString, category)){
+					Object value = EcModelUtils.getPartitionValueFromString(valueString, category.getType());
+					testValue = new PartitionNode(Constants.EXPECTED_VALUE_PARTITION_NAME, value);
+				}
+				else{
+					return null;
+				}
+			}
+			testData.add(testValue);
 		}
 		return new TestCaseNode(testSuiteName, testData);
 	}
