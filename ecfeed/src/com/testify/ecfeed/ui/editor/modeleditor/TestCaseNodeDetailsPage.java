@@ -20,6 +20,7 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.forms.IFormPart;
@@ -27,12 +28,15 @@ import org.eclipse.ui.forms.widgets.Section;
 
 import com.testify.ecfeed.constants.DialogStrings;
 import com.testify.ecfeed.model.CategoryNode;
+import com.testify.ecfeed.model.ExpectedValueCategoryNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.ui.common.IInputChangedListener;
 import com.testify.ecfeed.ui.common.TestCasePartitionEditingSupport;
 import com.testify.ecfeed.ui.common.TestCaseValueEditingSupport;
+import com.testify.ecfeed.ui.editor.ColorConstants;
+import com.testify.ecfeed.ui.editor.ColorManager;
 import com.testify.ecfeed.utils.EcModelUtils;
 
 import org.eclipse.swt.layout.GridLayout;
@@ -56,12 +60,14 @@ public class TestCaseNodeDetailsPage extends GenericNodeDetailsPage implements I
 	private TableViewer fTestDataViewer;
 	private TableViewerColumn fPartitionViewerColumn;
 	private TableViewerColumn fValuesViewerColumn;
+	private ColorManager fColorManager;
 
 	/**
 	 * Create the details page.
 	 */
 	public TestCaseNodeDetailsPage(ModelMasterDetailsBlock parentBlock) {
 		super(parentBlock);
+		fColorManager = new ColorManager();
 	}
 
 	/**
@@ -150,6 +156,10 @@ public class TestCaseNodeDetailsPage extends GenericNodeDetailsPage implements I
 				CategoryNode parent = (CategoryNode)testValue.getParent();
 				return parent.toString();
 			}
+			@Override
+			public Color getForeground(Object element){
+				return getColor(element);
+			}
 		});
 		
 		fPartitionViewerColumn = createTableViewerColumn(fTestDataViewer, "Partition", 110, new ColumnLabelProvider(){
@@ -157,6 +167,10 @@ public class TestCaseNodeDetailsPage extends GenericNodeDetailsPage implements I
 			public String getText(Object element){
 				PartitionNode testValue = (PartitionNode)element;
 				return testValue.getName();
+			}
+			@Override
+			public Color getForeground(Object element){
+				return getColor(element);
 			}
 		}); 
 				
@@ -166,9 +180,21 @@ public class TestCaseNodeDetailsPage extends GenericNodeDetailsPage implements I
 				PartitionNode testValue = (PartitionNode)element;
 				return testValue.getValueString();
 			}
+			@Override
+			public Color getForeground(Object element){
+				return getColor(element);
+			}
 		});
 	}
 
+	private Color getColor(Object element){
+		PartitionNode partition = (PartitionNode)element;
+		if(partition.getCategory() instanceof ExpectedValueCategoryNode){
+			return fColorManager.getColor(ColorConstants.EXPECTED_VALUE_CATEGORY);
+		}
+		return null;
+	}
+	
 	private void createTextClientComposite() {
 		Composite textClientComposite = new Composite(fMainSection, SWT.NONE);
 		getToolkit().adapt(textClientComposite);
