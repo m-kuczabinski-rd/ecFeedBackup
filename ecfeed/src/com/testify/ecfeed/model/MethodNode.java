@@ -24,6 +24,7 @@ public class MethodNode extends GenericNode {
 	private ArrayList<CategoryNode> fCategories;
 	private ArrayList<TestCaseNode> fTestCases;
 	private ArrayList<ConstraintNode> fConstraints;
+	private Set<ExpectedValueCategoryNode> fExpectedValueCategories;
 	
 	public MethodNode(String name){
 		super(name);
@@ -36,6 +37,12 @@ public class MethodNode extends GenericNode {
 	public void addCategory(CategoryNode category){
 		fCategories.add(category);
 		category.setParent(this);
+	}
+
+	//TODO Unit tests 
+	public void addCategory(ExpectedValueCategoryNode category){
+		fExpectedValueCategories.add(category);
+		addCategory((CategoryNode)category);
 	}
 
 	//TODO unit tests 
@@ -82,7 +89,7 @@ public class MethodNode extends GenericNode {
 	public ArrayList<String> getExpectedCategoriesNames() {
 		ArrayList<String> names = new ArrayList<String>();
 		for(CategoryNode category : getCategories()){
-			if(category instanceof ExpectedValueCategoryNode){
+			if(isExpectedValueCategory(category)){
 				names.add(category.getName());
 			}
 		}
@@ -157,6 +164,10 @@ public class MethodNode extends GenericNode {
 		return(fCategories.size() != 0 || fConstraints.size() != 0 || fTestCases.size() != 0);
 	}
 	
+	public boolean isExpectedValueCategory(CategoryNode category){
+		return fExpectedValueCategories.contains(category);
+	}
+	
 	@Override
 	public String toString(){
 		String result = new String(getName()) + "(";
@@ -185,6 +196,12 @@ public class MethodNode extends GenericNode {
 	public boolean removeChild(CategoryNode category){
 		category.setParent(null);
 		return fCategories.remove(category);
+	}
+	
+	//TODO unit tests
+	public boolean removeChild(ExpectedValueCategoryNode category){
+		fExpectedValueCategories.remove(category);
+		return removeChild((CategoryNode)category);
 	}
 	
 	//TODO unit tests

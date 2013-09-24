@@ -506,7 +506,7 @@ public class MethodNodeDetailsPage extends GenericNodeDetailsPage implements IIn
 						ArrayList<PartitionNode> testData = testCase.getTestData();
 						for(int i = 0; i < testData.size(); i++){
 							CategoryNode category = testData.get(i).getCategory();
-							if(category instanceof ExpectedValueCategoryNode){
+							if(fSelectedMethod.isExpectedValueCategory(category)){
 								PartitionNode anonymousPartition = new PartitionNode(Constants.EXPECTED_VALUE_PARTITION_NAME, testData.get(i).getValue());
 								anonymousPartition.setParent(category);
 								testData.set(i, anonymousPartition);
