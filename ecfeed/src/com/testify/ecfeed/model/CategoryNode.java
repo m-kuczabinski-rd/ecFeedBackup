@@ -59,4 +59,8 @@ public class CategoryNode extends GenericNode {
 		}
 		return names;
 	}
+
+	public MethodNode getMethod() {
+		return (MethodNode)getParent();
+	}
 }
