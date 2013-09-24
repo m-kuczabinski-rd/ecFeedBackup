@@ -41,6 +41,7 @@ import com.testify.ecfeed.model.ExpectedValueCategoryNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.ui.common.TestCasePartitionEditingSupport;
+import com.testify.ecfeed.ui.common.TestCaseValueEditingSupport;
 import com.testify.ecfeed.utils.EcModelUtils;
 
 public class AddTestCaseDialog extends TitleAreaDialog implements ISetValueListener {
@@ -140,6 +141,7 @@ public class AddTestCaseDialog extends TitleAreaDialog implements ISetValueListe
 				return ((PartitionNode)element).getValueString();
 			}
 		});
+		valueViewerColumn.setEditingSupport(new TestCaseValueEditingSupport(fTestDataViewer, fTestData, this));
 
 		fTestDataViewer.setContentProvider(new ArrayContentProvider());
 		fTestDataViewer.setInput(fTestData);
