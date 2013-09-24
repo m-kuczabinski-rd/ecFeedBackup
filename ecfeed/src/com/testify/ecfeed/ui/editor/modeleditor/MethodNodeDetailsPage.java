@@ -569,7 +569,7 @@ public class MethodNodeDetailsPage extends GenericNodeDetailsPage implements IIn
 	}
 
 	@Override
-	public void setValue() {
+	public void inputChanged() {
 		updateModel(fSelectedMethod);
 	}
 }

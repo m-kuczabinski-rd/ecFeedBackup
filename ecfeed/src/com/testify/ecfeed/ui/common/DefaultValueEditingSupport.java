@@ -42,7 +42,7 @@ public class DefaultValueEditingSupport extends EditingSupport {
 		ExpectedValueCategoryNode category = (ExpectedValueCategoryNode)element;
 		Object newValue = EcModelUtils.getPartitionValueFromString((String)value, category.getType());
 		category.setDefaultValue(newValue);
-		fSetValueListener.setValue();
+		fSetValueListener.inputChanged();
 	}
 
 }

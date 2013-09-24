@@ -77,6 +77,6 @@ public class TestCasePartitionEditingSupport extends EditingSupport {
 		if(parentIndex >= 0 && parentIndex <= fTestData.size()){
 			fTestData.set(parentIndex, (PartitionNode)value);
 		}
-		fSetValueListener.setValue();
+		fSetValueListener.inputChanged();
 	}
 }

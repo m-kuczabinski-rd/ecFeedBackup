@@ -225,7 +225,7 @@ public class TestCaseNodeDetailsPage extends GenericNodeDetailsPage implements I
 	}
 
 	@Override
-	public void setValue() {
+	public void inputChanged() {
 		updateModel(fSelectedTestCase);
 	}
 

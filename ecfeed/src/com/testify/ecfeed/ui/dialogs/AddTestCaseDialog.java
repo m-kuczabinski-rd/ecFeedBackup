@@ -206,7 +206,7 @@ public class AddTestCaseDialog extends TitleAreaDialog implements IInputChangedL
 	}
 
 	@Override
-	public void setValue() {
+	public void inputChanged() {
 		fTestDataViewer.refresh();
 	}
 	

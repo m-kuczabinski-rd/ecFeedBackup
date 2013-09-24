@@ -54,7 +54,7 @@ public class TestCaseValueEditingSupport extends EditingSupport {
 		if(EcModelUtils.validatePartitionStringValue(valueString, partition.getCategory())){
 			partition.setValue(EcModelUtils.getPartitionValueFromString((String)value, partition.getCategory().getType()));
 		}
-		fSetValueListener.setValue();
+		fSetValueListener.inputChanged();
 	}
 
 }

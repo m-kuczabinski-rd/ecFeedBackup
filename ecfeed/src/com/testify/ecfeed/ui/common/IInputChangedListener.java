@@ -12,5 +12,5 @@
 package com.testify.ecfeed.ui.common;
 
 public interface IInputChangedListener {
-	public void setValue();
+	public void inputChanged();
 }
