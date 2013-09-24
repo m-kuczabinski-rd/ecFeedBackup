@@ -246,7 +246,7 @@ public class ConstraintsNodeDetailsPage extends GenericNodeDetailsPage {
 				STATEMENT_OR,
 				STATEMENT_TRUE,
 				STATEMENT_FALSE}));
-		ArrayList<String> categories = fSelectedConstraint.getMethod().getCategoriesNames();
+		ArrayList<String> categories = fSelectedConstraint.getMethod().getOrdinaryCategoriesNames();
 		items.addAll(categories);
 		fStatementEditCombo.setItems(items.toArray(new String[]{}));
 		String comboText = getStatementComboText(editedStatement);
