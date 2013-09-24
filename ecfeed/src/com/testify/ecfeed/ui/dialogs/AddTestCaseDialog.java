@@ -117,7 +117,7 @@ public class AddTestCaseDialog extends TitleAreaDialog implements IInputChangedL
 		TableViewerColumn categoryViewerColumn = new TableViewerColumn(fTestDataViewer, SWT.NONE);
 		TableColumn categoryColumn = categoryViewerColumn.getColumn();
 		categoryColumn.setWidth(200);
-		categoryColumn.setText("Category");
+		categoryColumn.setText("Parameter");
 		categoryViewerColumn.setLabelProvider(new ColumnLabelProvider(){
 			@Override 
 			public String getText(Object element){
