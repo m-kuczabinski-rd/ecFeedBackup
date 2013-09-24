@@ -16,7 +16,6 @@ import java.util.ArrayList;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
-import org.eclipse.jface.viewers.EditingSupport;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -32,6 +31,7 @@ import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.ui.common.TestCasePartitionEditingSupport;
+import com.testify.ecfeed.ui.common.TestCaseValueEditingSupport;
 import com.testify.ecfeed.ui.dialogs.ISetValueListener;
 import com.testify.ecfeed.utils.EcModelUtils;
 
@@ -55,6 +55,7 @@ public class TestCaseNodeDetailsPage extends GenericNodeDetailsPage implements I
 	private Combo fTestSuiteNameCombo;
 	private TableViewer fTestDataViewer;
 	private TableViewerColumn fPartitionViewerColumn;
+	private TableViewerColumn fValuesViewerColumn;
 
 	/**
 	 * Create the details page.
@@ -159,7 +160,7 @@ public class TestCaseNodeDetailsPage extends GenericNodeDetailsPage implements I
 			}
 		}); 
 				
-		createTableViewerColumn(fTestDataViewer, "Represented value", 100, new ColumnLabelProvider(){
+		fValuesViewerColumn = createTableViewerColumn(fTestDataViewer, "Value", 100, new ColumnLabelProvider(){
 			@Override
 			public String getText(Object element){
 				PartitionNode testValue = (PartitionNode)element;
@@ -200,9 +201,10 @@ public class TestCaseNodeDetailsPage extends GenericNodeDetailsPage implements I
 		fMainSection.setText(fSelectedTestCase.toString());
 		fTestSuiteNameCombo.setItems(fParent.getTestSuites().toArray(new String[]{}));
 		fTestSuiteNameCombo.setText(fSelectedTestCase.getName());
-		fTestDataViewer.setInput(fSelectedTestCase.getTestData());
-		EditingSupport editingSupport = new TestCasePartitionEditingSupport(fTestDataViewer, fSelectedTestCase.getTestData(), this);
-		fPartitionViewerColumn.setEditingSupport(editingSupport);
+		ArrayList<PartitionNode> testData = fSelectedTestCase.getTestData();
+		fTestDataViewer.setInput(testData);
+		fPartitionViewerColumn.setEditingSupport(new TestCasePartitionEditingSupport(fTestDataViewer, testData, this));
+		fValuesViewerColumn.setEditingSupport(new TestCaseValueEditingSupport(fTestDataViewer, testData, this));
 	}
 
 	private void renameTestCase() {
