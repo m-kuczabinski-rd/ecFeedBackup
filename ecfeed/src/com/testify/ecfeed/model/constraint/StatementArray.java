@@ -2,6 +2,7 @@ package com.testify.ecfeed.model.constraint;
 
 import java.util.ArrayList;
 
+import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.PartitionNode;
 
 public class StatementArray extends BasicStatement{
@@ -78,6 +79,16 @@ public class StatementArray extends BasicStatement{
 	public boolean mentions(PartitionNode partition){
 		for(BasicStatement child : fStatements){
 			if(child.mentions(partition)){
+				return true;
+			}
+		}
+		return false;
+	}
+
+	@Override
+	public boolean mentions(CategoryNode category){
+		for(BasicStatement child : fStatements){
+			if(child.mentions(category)){
 				return true;
 			}
 		}
