@@ -9,12 +9,8 @@
  *     Patryk Chamuczynski (p.chamuczynski(at)gmail.com) - initial implementation
  ******************************************************************************/
 
-package com.testify.ecfeed.ui.dialogs;
+package com.testify.ecfeed.ui.common;
 
-import java.util.ArrayList;
-
-import com.testify.ecfeed.model.PartitionNode;
-
-public interface ISetValueListener {
-	public void setValue(ArrayList<PartitionNode>testData);
+public interface IInputChangedListener {
+	public void setValue();
 }

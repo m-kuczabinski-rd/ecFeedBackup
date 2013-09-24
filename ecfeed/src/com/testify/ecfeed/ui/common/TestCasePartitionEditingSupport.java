@@ -25,15 +25,14 @@ import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.ExpectedValueCategoryNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
-import com.testify.ecfeed.ui.dialogs.ISetValueListener;
 
 public class TestCasePartitionEditingSupport extends EditingSupport {
 	private final TableViewer fViewer;
 	private ArrayList<PartitionNode> fTestData;
 	private ComboBoxViewerCellEditor fCellEditor;
-	private ISetValueListener fSetValueListener;
+	private IInputChangedListener fSetValueListener;
 
-	public TestCasePartitionEditingSupport(TableViewer viewer, ArrayList<PartitionNode> testData, ISetValueListener setValueListener) {
+	public TestCasePartitionEditingSupport(TableViewer viewer, ArrayList<PartitionNode> testData, IInputChangedListener setValueListener) {
 		super(viewer);
 		fViewer = viewer;
 		fTestData = testData;
@@ -78,6 +77,6 @@ public class TestCasePartitionEditingSupport extends EditingSupport {
 		if(parentIndex >= 0 && parentIndex <= fTestData.size()){
 			fTestData.set(parentIndex, (PartitionNode)value);
 		}
-		fSetValueListener.setValue(fTestData);
+		fSetValueListener.setValue();
 	}
 }

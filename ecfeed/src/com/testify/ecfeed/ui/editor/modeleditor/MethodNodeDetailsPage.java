@@ -55,6 +55,8 @@ import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.model.constraint.BasicStatement;
 import com.testify.ecfeed.model.constraint.Constraint;
 import com.testify.ecfeed.model.constraint.StaticStatement;
+import com.testify.ecfeed.ui.common.DefaultValueEditingSupport;
+import com.testify.ecfeed.ui.common.IInputChangedListener;
 import com.testify.ecfeed.ui.common.TreeCheckStateListener;
 import com.testify.ecfeed.ui.dialogs.AddTestCaseDialog;
 import com.testify.ecfeed.ui.dialogs.GenerateTestSuiteDialog;
@@ -67,7 +69,7 @@ import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.wb.swt.TableViewerColumnSorter;
 import org.eclipse.jface.window.Window;
 
-public class MethodNodeDetailsPage extends GenericNodeDetailsPage{
+public class MethodNodeDetailsPage extends GenericNodeDetailsPage implements IInputChangedListener{
 	private Label fMethodNameLabel;
 	private MethodNode fSelectedMethod;
 	private CheckboxTreeViewer fTestCasesViewer;
@@ -234,7 +236,8 @@ public class MethodNodeDetailsPage extends GenericNodeDetailsPage{
 			}
 		});
 		if(fSelectedMethod.getExpectedCategoriesNames().size() > 0){
-			createTableViewerColumn(fParametersViewer, "Default value", 100, new ColumnLabelProvider(){
+			TableViewerColumn defaultValueColumn = 
+					createTableViewerColumn(fParametersViewer, "Default value", 100, new ColumnLabelProvider(){
 				@Override
 				public String getText(Object element){
 					if(element instanceof ExpectedValueCategoryNode){
@@ -248,6 +251,7 @@ public class MethodNodeDetailsPage extends GenericNodeDetailsPage{
 					return getColor(element);
 				}
 			});
+			defaultValueColumn.setEditingSupport(new DefaultValueEditingSupport(fParametersViewer, this));
 		}
 	}
 	
@@ -562,5 +566,10 @@ public class MethodNodeDetailsPage extends GenericNodeDetailsPage{
 		fTestCasesViewer.refresh();
 		fConstraintsSection.layout();
 		fMainSection.layout();
+	}
+
+	@Override
+	public void setValue() {
+		updateModel(fSelectedMethod);
 	}
 }

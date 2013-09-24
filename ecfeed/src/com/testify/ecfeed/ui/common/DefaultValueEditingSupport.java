@@ -1,7 +1,5 @@
 package com.testify.ecfeed.ui.common;
 
-import java.util.ArrayList;
-
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.EditingSupport;
 import org.eclipse.jface.viewers.TableViewer;
@@ -9,51 +7,41 @@ import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.swt.SWT;
 
 import com.testify.ecfeed.model.ExpectedValueCategoryNode;
-import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.utils.EcModelUtils;
 
-public class TestCaseValueEditingSupport extends EditingSupport {
+public class DefaultValueEditingSupport extends EditingSupport {
 	private final TableViewer fViewer;
-	ArrayList<PartitionNode> fTestData;
 	private IInputChangedListener fSetValueListener;
-	
 
-	public TestCaseValueEditingSupport(TableViewer viewer, ArrayList<PartitionNode> testData, IInputChangedListener setValueListener) {
+	public DefaultValueEditingSupport(TableViewer viewer, IInputChangedListener setValueListener) {
 		super(viewer);
 		fViewer = viewer;
-		fTestData = testData;
 		fSetValueListener = setValueListener;
 	}
 
 	@Override
 	protected CellEditor getCellEditor(Object element) {
 		TextCellEditor editor = new TextCellEditor(fViewer.getTable(), SWT.LEFT);
-		String valueString = ((PartitionNode)element).getValueString();
+		String valueString = ((ExpectedValueCategoryNode)element).getDefaultValuePartition().getValueString();
 		editor.setValue(valueString);
 		return editor;
 	}
 
 	@Override
 	protected boolean canEdit(Object element) {
-		if(element instanceof PartitionNode){
-			PartitionNode partiton = (PartitionNode)element;
-			return partiton.getCategory() instanceof ExpectedValueCategoryNode;
-		}
-		return false;
+		return element instanceof ExpectedValueCategoryNode;
 	}
 
 	@Override
 	protected Object getValue(Object element) {
-		return ((PartitionNode)element).getValueString();
+		return ((ExpectedValueCategoryNode)element).getDefaultValuePartition().getValueString();
 	}
 
 	@Override
 	protected void setValue(Object element, Object value) {
-		PartitionNode partition = (PartitionNode) element;
-		String valueString = (String)value;
-		if(EcModelUtils.validatePartitionStringValue(valueString, partition.getCategory())){
-			partition.setValue(EcModelUtils.getPartitionValueFromString((String)value, partition.getCategory().getType()));
-		}
+		ExpectedValueCategoryNode category = (ExpectedValueCategoryNode)element;
+		Object newValue = EcModelUtils.getPartitionValueFromString((String)value, category.getType());
+		category.setDefaultValue(newValue);
 		fSetValueListener.setValue();
 	}
 

@@ -40,11 +40,12 @@ import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.ExpectedValueCategoryNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
+import com.testify.ecfeed.ui.common.IInputChangedListener;
 import com.testify.ecfeed.ui.common.TestCasePartitionEditingSupport;
 import com.testify.ecfeed.ui.common.TestCaseValueEditingSupport;
 import com.testify.ecfeed.utils.EcModelUtils;
 
-public class AddTestCaseDialog extends TitleAreaDialog implements ISetValueListener {
+public class AddTestCaseDialog extends TitleAreaDialog implements IInputChangedListener {
 
 	private MethodNode fMethod;
 	private ArrayList<PartitionNode> fTestData;
@@ -205,7 +206,7 @@ public class AddTestCaseDialog extends TitleAreaDialog implements ISetValueListe
 	}
 
 	@Override
-	public void setValue(ArrayList<PartitionNode> testData) {
+	public void setValue() {
 		fTestDataViewer.refresh();
 	}
 	

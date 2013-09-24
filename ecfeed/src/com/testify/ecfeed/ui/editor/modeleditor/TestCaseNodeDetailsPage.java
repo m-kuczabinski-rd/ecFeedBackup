@@ -30,9 +30,9 @@ import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.TestCaseNode;
+import com.testify.ecfeed.ui.common.IInputChangedListener;
 import com.testify.ecfeed.ui.common.TestCasePartitionEditingSupport;
 import com.testify.ecfeed.ui.common.TestCaseValueEditingSupport;
-import com.testify.ecfeed.ui.dialogs.ISetValueListener;
 import com.testify.ecfeed.utils.EcModelUtils;
 
 import org.eclipse.swt.layout.GridLayout;
@@ -48,7 +48,7 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.swt.layout.RowLayout;
 
-public class TestCaseNodeDetailsPage extends GenericNodeDetailsPage implements ISetValueListener{
+public class TestCaseNodeDetailsPage extends GenericNodeDetailsPage implements IInputChangedListener{
 	private TestCaseNode fSelectedTestCase;
 	private Section fMainSection;
 	private MethodNode fParent;
@@ -225,7 +225,7 @@ public class TestCaseNodeDetailsPage extends GenericNodeDetailsPage implements I
 	}
 
 	@Override
-	public void setValue(ArrayList<PartitionNode> testData) {
+	public void setValue() {
 		updateModel(fSelectedTestCase);
 	}
 
