@@ -7,6 +7,7 @@ public class ExpectedValueCategoryNode extends CategoryNode implements
 	public ExpectedValueCategoryNode(String name, String type, Object defaultValue) {
 		super(name, type);
 		fDefaultValue = new PartitionNode("default value" , defaultValue);
+		fDefaultValue.setParent(this);
 	}
 
 	public PartitionNode getDefaultValuePartition(){
