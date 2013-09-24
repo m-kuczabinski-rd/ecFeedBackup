@@ -102,5 +102,4 @@ public class ExpectedValueDetailsPage extends GenericNodeDetailsPage {
 		fMainSection.setText(fSelectedCategory.toString());
 		fDefaultValueText.setText(fSelectedCategory.getDefaultValue().toString());
 	}
-
 }
