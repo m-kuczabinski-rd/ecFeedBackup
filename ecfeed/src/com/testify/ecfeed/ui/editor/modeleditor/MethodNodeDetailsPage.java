@@ -494,10 +494,28 @@ public class MethodNodeDetailsPage extends GenericNodeDetailsPage implements IIn
 			@SuppressWarnings({ "rawtypes", "unchecked" })
 			private void addTestSuiteToModel(GenerateTestSuiteDialog dialog,
 					ArrayList[] generatedData) {
+				ArrayList<TestCaseNode> testSuite = new ArrayList<TestCaseNode>();
 				for(ArrayList testCase : generatedData){
 					ArrayList<PartitionNode> testData = (ArrayList<PartitionNode>)testCase;
 					TestCaseNode testCaseNode = new TestCaseNode(dialog.getTestSuiteName(), testData);
-					fSelectedMethod.addTestCase(testCaseNode);
+					testSuite.add(testCaseNode);
+				}
+				if(fSelectedMethod.getExpectedCategoriesNames().size() > 0){
+					//replace expected values partitions with anonymous ones
+					for(TestCaseNode testCase : testSuite){
+						ArrayList<PartitionNode> testData = testCase.getTestData();
+						for(int i = 0; i < testData.size(); i++){
+							CategoryNode category = testData.get(i).getCategory();
+							if(category instanceof ExpectedValueCategoryNode){
+								PartitionNode anonymousPartition = new PartitionNode(Constants.EXPECTED_VALUE_PARTITION_NAME, testData.get(i).getValue());
+								anonymousPartition.setParent(category);
+								testData.set(i, anonymousPartition);
+							}
+						}
+					}
+				}
+				for(TestCaseNode testCase : testSuite){
+					fSelectedMethod.addTestCase(testCase);
 				}
 				updateModel(fSelectedMethod);
 			}
