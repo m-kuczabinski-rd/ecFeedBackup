@@ -31,6 +31,7 @@ public class MethodNode extends GenericNode {
 		fCategories = new ArrayList<CategoryNode>();
 		fTestCases = new ArrayList<TestCaseNode>();
 		fConstraints = new ArrayList<ConstraintNode>();
+		fExpectedValueCategories = new HashSet<ExpectedValueCategoryNode>();
 	}
 	
 	//TODO Unit tests 
