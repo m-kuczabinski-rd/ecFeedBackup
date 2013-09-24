@@ -163,6 +163,9 @@ public class MethodNode extends GenericNode {
 		ArrayList<String> types = getCategoriesTypes();
 		ArrayList<String> names = getCategoriesNames();
 		for(int i = 0; i < types.size(); i++){
+			if(getCategories().get(i) instanceof ExpectedValueCategoryNode){
+				result += "[e]";
+			}
 			result += types.get(i);
 			result += " ";
 			result += names.get(i);
