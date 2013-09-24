@@ -19,6 +19,7 @@ import org.eclipse.ui.forms.IFormPart;
 import org.eclipse.ui.forms.widgets.Section;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.SWT;
@@ -46,6 +47,7 @@ import com.testify.ecfeed.constants.Constants;
 import com.testify.ecfeed.constants.DialogStrings;
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.ConstraintNode;
+import com.testify.ecfeed.model.ExpectedValueCategoryNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.RootNode;
@@ -58,6 +60,8 @@ import com.testify.ecfeed.ui.dialogs.AddTestCaseDialog;
 import com.testify.ecfeed.ui.dialogs.GenerateTestSuiteDialog;
 import com.testify.ecfeed.ui.dialogs.RenameTestSuiteDialog;
 import com.testify.ecfeed.ui.dialogs.TestMethodRenameDialog;
+import com.testify.ecfeed.ui.editor.ColorConstants;
+import com.testify.ecfeed.ui.editor.ColorManager;
 
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.wb.swt.TableViewerColumnSorter;
@@ -71,6 +75,10 @@ public class MethodNodeDetailsPage extends GenericNodeDetailsPage{
 	private TableViewer fParametersViewer;
 	private Section fMainSection;
 	private Section fConstraintsSection;
+	private ColorManager fColorManager;
+	private Composite fParametersComposite;
+	private String EMPTY_STRING = "";
+	private Section fParametersSection;
 
 	private class TestCaseViewerContentProvider extends TreeNodeContentProvider implements ITreeContentProvider{
 		public final Object[] EMPTY_ARRAY = new Object[]{};
@@ -111,6 +119,7 @@ public class MethodNodeDetailsPage extends GenericNodeDetailsPage{
 	
 	public MethodNodeDetailsPage(ModelMasterDetailsBlock parentBlock){
 		super(parentBlock);
+		fColorManager = new ColorManager();
 	}
 
 	public void createContents(Composite parent) {
@@ -164,23 +173,29 @@ public class MethodNodeDetailsPage extends GenericNodeDetailsPage{
 	}
 
 	private void createParametersSection(Composite composite) {
-		Section parametersSection = getToolkit().createSection(composite, Section.EXPANDED | Section.TWISTIE | Section.TITLE_BAR);
-		parametersSection.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1));
-		getToolkit().paintBordersFor(parametersSection);
-		parametersSection.setText("Parameters");
-		parametersSection.setExpanded(false);
-		
-		Composite parametersComposite = new Composite(parametersSection, SWT.NONE);
-		getToolkit().adapt(parametersComposite);
-		getToolkit().paintBordersFor(parametersComposite);
-		parametersSection.setClient(parametersComposite);
-		
-		createParametersViewer(parametersComposite);
+		fParametersSection = getToolkit().createSection(composite, Section.EXPANDED | Section.TWISTIE | Section.TITLE_BAR);
+		fParametersSection.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1));
+		getToolkit().paintBordersFor(fParametersSection);
+		fParametersSection.setText("Parameters");
+		fParametersSection.setExpanded(false);
+	}
+
+	private void redrawParametersComposite(Section section, ArrayList<CategoryNode> input) {
+		if(fParametersComposite != null && !fParametersComposite.isDisposed()){
+			fParametersComposite.dispose();
+		}
+		fParametersComposite = new Composite(section, SWT.NONE);
+		getToolkit().adapt(fParametersComposite);
+		getToolkit().paintBordersFor(fParametersComposite);
+		section.setClient(fParametersComposite);
+		fParametersComposite.setLayout(new GridLayout(1, false));
+		fParametersComposite.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, true, 1, 1));
+		createParametersViewer(fParametersComposite);
+		fParametersViewer.setInput(input);
+		fParametersSection.layout();
 	}
 	
 	private void createParametersViewer(Composite composite) {
-		composite.setLayout(new GridLayout(1, false));
-		composite.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, true, 1, 1));
 		fParametersViewer = new TableViewer(composite, SWT.BORDER | SWT.FULL_SELECTION);
 		fParametersViewer.setContentProvider(new ArrayContentProvider());
 		fParametersViewer.addDoubleClickListener(new ChildrenViewerDoubleClickListener());
@@ -196,7 +211,16 @@ public class MethodNodeDetailsPage extends GenericNodeDetailsPage{
 		createTableViewerColumn(fParametersViewer, "Name", 100, new ColumnLabelProvider(){
 			@Override
 			public String getText(Object element){
-				return ((CategoryNode)element).getName();
+				String result = new String();
+				if(element instanceof ExpectedValueCategoryNode){
+					result += "[e]";
+				}
+				result += ((CategoryNode)element).getName();
+				return result;
+			}
+			@Override
+			public Color getForeground(Object element){
+				return getColor(element);
 			}
 		});
 		createTableViewerColumn(fParametersViewer, "Type", 100, new ColumnLabelProvider(){
@@ -204,7 +228,34 @@ public class MethodNodeDetailsPage extends GenericNodeDetailsPage{
 			public String getText(Object element){
 				return ((CategoryNode)element).getType();
 			}
+			@Override
+			public Color getForeground(Object element){
+				return getColor(element);
+			}
 		});
+		if(fSelectedMethod.getExpectedCategoriesNames().size() > 0){
+			createTableViewerColumn(fParametersViewer, "Default value", 100, new ColumnLabelProvider(){
+				@Override
+				public String getText(Object element){
+					if(element instanceof ExpectedValueCategoryNode){
+						ExpectedValueCategoryNode category = (ExpectedValueCategoryNode)element;
+						return category.getDefaultValuePartition().getValueString();
+					}
+					return EMPTY_STRING ;
+				}
+				@Override
+				public Color getForeground(Object element){
+					return getColor(element);
+				}
+			});
+		}
+	}
+	
+	private Color getColor(Object element){
+		if(element instanceof ExpectedValueCategoryNode){
+			return fColorManager.getColor(ColorConstants.EXPECTED_VALUE_CATEGORY);
+		}
+		return null;
 	}
 	
 	private void createConstraintsSection(Composite composite) {
@@ -494,7 +545,7 @@ public class MethodNodeDetailsPage extends GenericNodeDetailsPage{
 	public void selectionChanged(IFormPart part, ISelection selection) {
 		super.selectionChanged(part, selection);
 		fSelectedMethod = (MethodNode)fSelectedNode;
-		fParametersViewer.setInput(fSelectedMethod.getCategories());
+		redrawParametersComposite(fParametersSection, fSelectedMethod.getCategories());
 		fConstraintsViewer.setInput(fSelectedMethod.getConstraints());
 		fTestCasesViewer.setInput(fSelectedMethod);
 		refresh();
