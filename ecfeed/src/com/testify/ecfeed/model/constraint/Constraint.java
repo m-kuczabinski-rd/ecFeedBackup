@@ -3,6 +3,7 @@ package com.testify.ecfeed.model.constraint;
 import java.util.ArrayList;
 
 import com.testify.ecfeed.api.IConstraint;
+import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.PartitionNode;
 
 public class Constraint implements IConstraint {
@@ -77,5 +78,13 @@ public class Constraint implements IConstraint {
 		}
 		
 		return result;
+	}
+
+	public boolean mentions(CategoryNode category) {
+		return fPremise.mentions(category) || fConsequence.mentions(category);
+	}
+
+	public boolean mentions(PartitionNode partition) {
+		return fPremise.mentions(partition) || fConsequence.mentions(partition);
 	}
 }

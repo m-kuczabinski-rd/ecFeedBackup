@@ -77,4 +77,9 @@ public class Statement extends BasicStatement{
 	public boolean mentions(PartitionNode partition){
 		return fCondition == partition;
 	}
+
+	@Override
+	public boolean mentions(CategoryNode category){
+		return fCondition.getCategory() == category;
+	}
 }

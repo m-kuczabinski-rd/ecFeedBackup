@@ -40,10 +40,16 @@ public class ConstraintNode extends GenericNode implements IConstraint{
 	}
 
 	public boolean mentions(PartitionNode partition) {
-		if(fConstraint.getPremise().mentions(partition) || fConstraint.getConsequence().mentions(partition)){
+		if(fConstraint.mentions(partition)){
 			return true;
 		}
 		return false;
 	}
 
+	public boolean mentions(CategoryNode category) {
+		if(fConstraint.mentions(category)){
+			return true;
+		}
+		return false;
+	}
 }

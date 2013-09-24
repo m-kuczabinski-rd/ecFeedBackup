@@ -2,6 +2,7 @@ package com.testify.ecfeed.model.constraint;
 
 import java.util.ArrayList;
 
+import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.PartitionNode;
 
 public class BasicStatement implements IStatement {
@@ -69,5 +70,9 @@ public class BasicStatement implements IStatement {
 		if(getParent() != null){
 			getParent().addStatement(statement);
 		}
+	}
+
+	public boolean mentions(CategoryNode category) {
+		return false;
 	}
 }
