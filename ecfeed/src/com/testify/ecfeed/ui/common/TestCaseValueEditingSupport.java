@@ -51,14 +51,10 @@ public class TestCaseValueEditingSupport extends EditingSupport {
 	@Override
 	protected void setValue(Object element, Object value) {
 		PartitionNode partition = (PartitionNode) element;
-		partition.setValue(EcModelUtils.getPartitionValueFromString((String)value, partition.getCategory().getType()));
-//		CategoryNode parent = ((PartitionNode)element).getCategory();
-//		Object newValue = EcModelUtils.getPartitionValueFromString((String)value, parent.getType());
-//		MethodNode method = parent.getMethod();
-//		int parentIndex = method.getCategories().indexOf(parent);
-//		if(parentIndex >= 0 && parentIndex <= fTestData.size()){
-//			fTestData.get(parentIndex).setValue(value);;
-//		}
+		String valueString = (String)value;
+		if(EcModelUtils.validatePartitionStringValue(valueString, partition.getCategory())){
+			partition.setValue(EcModelUtils.getPartitionValueFromString((String)value, partition.getCategory().getType()));
+		}
 		fSetValueListener.setValue(fTestData);
 	}
 
