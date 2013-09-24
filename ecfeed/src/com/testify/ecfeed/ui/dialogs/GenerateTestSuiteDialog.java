@@ -40,6 +40,7 @@ import com.testify.ecfeed.constants.Constants;
 import com.testify.ecfeed.constants.DialogStrings;
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.ConstraintNode;
+import com.testify.ecfeed.model.ExpectedValueCategoryNode;
 import com.testify.ecfeed.model.GenericNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
@@ -400,9 +401,15 @@ public class GenerateTestSuiteDialog extends TitleAreaDialog {
 		fAlgorithmInput = new ArrayList[categories.size()];
 		for(int i = 0; i < categories.size(); i++){
 			ArrayList<PartitionNode> partitions = new ArrayList<PartitionNode>();
-			for(PartitionNode partition : categories.get(i).getPartitions()){
-				if(fCategoriesViewer.getChecked(partition)){
-					partitions.add(partition);
+			if(categories.get(i) instanceof ExpectedValueCategoryNode){
+				ExpectedValueCategoryNode category = (ExpectedValueCategoryNode)categories.get(i);
+				partitions.add(category.getDefaultValuePartition());
+			}
+			else{
+				for(PartitionNode partition : categories.get(i).getPartitions()){
+					if(fCategoriesViewer.getChecked(partition)){
+						partitions.add(partition);
+					}
 				}
 			}
 			fAlgorithmInput[i] = partitions;
