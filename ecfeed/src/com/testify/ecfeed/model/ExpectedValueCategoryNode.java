@@ -9,6 +9,10 @@ public class ExpectedValueCategoryNode extends CategoryNode implements
 		fDefaultValue = new PartitionNode("default value" , defaultValue);
 	}
 
+	public PartitionNode getDefaultValuePartition(){
+		return fDefaultValue;
+	}
+	
 	public Object getDefaultValue() {
 		return fDefaultValue.getValue();
 	}
