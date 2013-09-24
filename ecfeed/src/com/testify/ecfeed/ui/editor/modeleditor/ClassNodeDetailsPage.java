@@ -39,9 +39,9 @@ import com.testify.ecfeed.constants.DialogStrings;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.RootNode;
+import com.testify.ecfeed.ui.common.ColorConstants;
+import com.testify.ecfeed.ui.common.ColorManager;
 import com.testify.ecfeed.ui.dialogs.TestClassSelectionDialog;
-import com.testify.ecfeed.ui.editor.ColorConstants;
-import com.testify.ecfeed.ui.editor.ColorManager;
 import com.testify.ecfeed.utils.EcModelUtils;
 
 public class ClassNodeDetailsPage extends GenericNodeDetailsPage{

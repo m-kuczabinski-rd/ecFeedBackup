@@ -24,7 +24,7 @@ import org.eclipse.ui.editors.text.TextEditor;
 
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.parsers.EcWriter;
-import com.testify.ecfeed.ui.editor.ColorManager;
+import com.testify.ecfeed.ui.common.ColorManager;
 import com.testify.ecfeed.ui.editor.EcMultiPageEditor;
 import com.testify.ecfeed.ui.editor.IModelUpdateListener;
 

@@ -18,6 +18,7 @@ import org.eclipse.jface.dialogs.TitleAreaDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
@@ -40,6 +41,8 @@ import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.ExpectedValueCategoryNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
+import com.testify.ecfeed.ui.common.ColorConstants;
+import com.testify.ecfeed.ui.common.ColorManager;
 import com.testify.ecfeed.ui.common.IInputChangedListener;
 import com.testify.ecfeed.ui.common.TestCasePartitionEditingSupport;
 import com.testify.ecfeed.ui.common.TestCaseValueEditingSupport;
@@ -53,6 +56,7 @@ public class AddTestCaseDialog extends TitleAreaDialog implements IInputChangedL
 	private Combo fTestSuiteCombo;
 	private Button fOkButton;
 	private TableViewer fTestDataViewer;
+	private ColorManager fColorManager;
 
 	/**
 	 * Create the dialog.
@@ -74,6 +78,7 @@ public class AddTestCaseDialog extends TitleAreaDialog implements IInputChangedL
 			}
 		}
 		fMethod = method;
+		fColorManager = new ColorManager();
 	}
 
 	private PartitionNode createAnonymuousPartition(ExpectedValueCategoryNode parent) {
@@ -118,6 +123,10 @@ public class AddTestCaseDialog extends TitleAreaDialog implements IInputChangedL
 			public String getText(Object element){
 				return ((PartitionNode)element).getParent().toString();
 			}
+			@Override 
+			public Color getForeground(Object element){
+				return getColor(element);
+			}
 		});
 		
 		TableViewerColumn partitionViewerColumn = new TableViewerColumn(fTestDataViewer, SWT.NONE);
@@ -128,6 +137,10 @@ public class AddTestCaseDialog extends TitleAreaDialog implements IInputChangedL
 			@Override 
 			public String getText(Object element){
 				return ((PartitionNode)element).getName();
+			}
+			@Override 
+			public Color getForeground(Object element){
+				return getColor(element);
 			}
 		});
 		partitionViewerColumn.setEditingSupport(new TestCasePartitionEditingSupport(fTestDataViewer, fTestData, this));
@@ -141,6 +154,11 @@ public class AddTestCaseDialog extends TitleAreaDialog implements IInputChangedL
 			public String getText(Object element){
 				return ((PartitionNode)element).getValueString();
 			}
+			
+			@Override 
+			public Color getForeground(Object element){
+				return getColor(element);
+			}
 		});
 		valueViewerColumn.setEditingSupport(new TestCaseValueEditingSupport(fTestDataViewer, fTestData, this));
 
@@ -148,6 +166,13 @@ public class AddTestCaseDialog extends TitleAreaDialog implements IInputChangedL
 		fTestDataViewer.setInput(fTestData);
 	}
 
+	private Color getColor(Object element){
+		PartitionNode partition = (PartitionNode)element;
+		if(fMethod.isExpectedValueCategory(partition.getCategory())){
+			return fColorManager.getColor(ColorConstants.EXPECTED_VALUE_CATEGORY);
+		}
+		return null;
+	}
 	private void createTestSuiteComposite(Composite container) {
 		Composite composite = new Composite(container, SWT.NONE);
 		composite.setLayout(new GridLayout(2, false));

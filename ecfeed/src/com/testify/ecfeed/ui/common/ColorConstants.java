@@ -9,7 +9,7 @@
  *     Patryk Chamuczynski (p.chamuczynski(at)gmail.com) - initial implementation
  ******************************************************************************/
 
-package com.testify.ecfeed.ui.editor;
+package com.testify.ecfeed.ui.common;
 
 import org.eclipse.swt.graphics.RGB;
 

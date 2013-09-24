@@ -24,8 +24,8 @@ import org.eclipse.jface.text.rules.Token;
 import org.eclipse.jface.text.source.ISourceViewer;
 import org.eclipse.jface.text.source.SourceViewerConfiguration;
 
-import com.testify.ecfeed.ui.editor.ColorConstants;
-import com.testify.ecfeed.ui.editor.ColorManager;
+import com.testify.ecfeed.ui.common.ColorConstants;
+import com.testify.ecfeed.ui.common.ColorManager;
 
 public class ViewerConfiguration extends SourceViewerConfiguration {
 	
