@@ -46,4 +46,10 @@ public class PartitionNode extends GenericNode {
 	public CategoryNode getCategory() {
 		return (CategoryNode)getParent();
 	}
+
+	public PartitionNode getCopy() {
+		PartitionNode copy = new PartitionNode(getName(), fValue);
+		copy.setParent(getParent());
+		return copy;
+	}
 }
