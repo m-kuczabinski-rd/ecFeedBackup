@@ -63,4 +63,8 @@ public class CategoryNode extends GenericNode {
 	public MethodNode getMethod() {
 		return (MethodNode)getParent();
 	}
+
+	public boolean isExpected() {
+		return false;
+	}
 }

@@ -25,4 +25,9 @@ public class ExpectedValueCategoryNode extends CategoryNode implements
 	public String toString(){
 		return super.toString() + "(" + getDefaultValue() + ")";
 	}
+
+	@Override
+	public boolean isExpected(){
+		return true;
+	}
 }
