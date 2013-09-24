@@ -79,6 +79,23 @@ public class MethodNode extends GenericNode {
 		return names;
 	}
 
+	public ArrayList<String> getExpectedCategoriesNames() {
+		ArrayList<String> names = new ArrayList<String>();
+		for(CategoryNode category : getCategories()){
+			if(category instanceof ExpectedValueCategoryNode){
+				names.add(category.getName());
+			}
+		}
+		return names;
+	}
+
+	public ArrayList<String> getOrdinaryCategoriesNames() {
+		ArrayList<String> allNames = getCategoriesNames();
+		ArrayList<String> expectedNames = getExpectedCategoriesNames();
+		allNames.removeAll(expectedNames);
+		return allNames;
+	}
+
 	public ArrayList<ConstraintNode> getConstraints(){
 		return fConstraints;
 	}
