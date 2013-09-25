@@ -168,7 +168,7 @@ public class AddTestCaseDialog extends TitleAreaDialog implements IInputChangedL
 
 	private Color getColor(Object element){
 		PartitionNode partition = (PartitionNode)element;
-		if(fMethod.isExpectedValueCategory(partition.getCategory())){
+		if(partition.getCategory().isExpected()){
 			return fColorManager.getColor(ColorConstants.EXPECTED_VALUE_CATEGORY);
 		}
 		return null;

@@ -401,7 +401,7 @@ public class GenerateTestSuiteDialog extends TitleAreaDialog {
 		fAlgorithmInput = new ArrayList[categories.size()];
 		for(int i = 0; i < categories.size(); i++){
 			ArrayList<PartitionNode> partitions = new ArrayList<PartitionNode>();
-			if(fMethod.isExpectedValueCategory(categories.get(i))){
+			if(categories.get(i).isExpected()){
 				ExpectedValueCategoryNode category = (ExpectedValueCategoryNode)categories.get(i);
 				partitions.add(category.getDefaultValuePartition());
 			}

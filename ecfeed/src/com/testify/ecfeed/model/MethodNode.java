@@ -19,20 +19,17 @@ import java.util.Set;
 import java.util.ArrayList;
 
 import com.testify.ecfeed.api.IConstraint;
-import com.testify.ecfeed.model.constraint.Constraint;
 
 public class MethodNode extends GenericNode {
 	private ArrayList<CategoryNode> fCategories;
 	private ArrayList<TestCaseNode> fTestCases;
 	private ArrayList<ConstraintNode> fConstraints;
-	private Set<ExpectedValueCategoryNode> fExpectedValueCategories;
 	
 	public MethodNode(String name){
 		super(name);
 		fCategories = new ArrayList<CategoryNode>();
 		fTestCases = new ArrayList<TestCaseNode>();
 		fConstraints = new ArrayList<ConstraintNode>();
-		fExpectedValueCategories = new HashSet<ExpectedValueCategoryNode>();
 	}
 	
 	//TODO Unit tests 
@@ -43,7 +40,6 @@ public class MethodNode extends GenericNode {
 
 	//TODO Unit tests 
 	public void addCategory(ExpectedValueCategoryNode category){
-		fExpectedValueCategories.add(category);
 		addCategory((CategoryNode)category);
 	}
 
@@ -166,10 +162,6 @@ public class MethodNode extends GenericNode {
 		return(fCategories.size() != 0 || fConstraints.size() != 0 || fTestCases.size() != 0);
 	}
 	
-	public boolean isExpectedValueCategory(CategoryNode category){
-		return fExpectedValueCategories.contains(category);
-	}
-	
 	//TODO unit tests
 	@SuppressWarnings("rawtypes")
 	@Override
@@ -211,7 +203,6 @@ public class MethodNode extends GenericNode {
 	
 	//TODO unit tests
 	public boolean removeChild(ExpectedValueCategoryNode category){
-		fExpectedValueCategories.remove(category);
 		return removeChild((CategoryNode)category);
 	}
 	
@@ -278,20 +269,5 @@ public class MethodNode extends GenericNode {
 		}
 		result += ")";
 		return result;
-	}
-
-	private void removeMentioningConstraints(CategoryNode category) {
-		for(ConstraintNode constraintNode : fConstraints){
-			Constraint constraint = constraintNode.getConstraint();
-			if(constraint.mentions(category)){
-				removeChild(constraintNode);
-			}
-		}
-	}
-
-	private void replaceTestParameters(int index, PartitionNode partition) {
-		for(TestCaseNode testCase : fTestCases){
-			testCase.getTestData().set(index, partition.getCopy());
-		}
 	}
 }
