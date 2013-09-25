@@ -36,7 +36,6 @@ import com.testify.ecfeed.ui.common.ColorConstants;
 import com.testify.ecfeed.ui.common.ColorManager;
 import com.testify.ecfeed.ui.common.IInputChangedListener;
 import com.testify.ecfeed.ui.common.TestCasePartitionEditingSupport;
-import com.testify.ecfeed.ui.common.TestCaseValueEditingSupport;
 import com.testify.ecfeed.utils.EcModelUtils;
 
 import org.eclipse.swt.layout.GridLayout;
@@ -59,7 +58,6 @@ public class TestCaseNodeDetailsPage extends GenericNodeDetailsPage implements I
 	private Combo fTestSuiteNameCombo;
 	private TableViewer fTestDataViewer;
 	private TableViewerColumn fPartitionViewerColumn;
-	private TableViewerColumn fValuesViewerColumn;
 	private ColorManager fColorManager;
 
 	/**
@@ -162,11 +160,15 @@ public class TestCaseNodeDetailsPage extends GenericNodeDetailsPage implements I
 			}
 		});
 		
-		fPartitionViewerColumn = createTableViewerColumn(fTestDataViewer, "Partition", 110, new ColumnLabelProvider(){
+		fPartitionViewerColumn = createTableViewerColumn(fTestDataViewer, "Value", 110, new ColumnLabelProvider(){
 			@Override
 			public String getText(Object element){
 				PartitionNode testValue = (PartitionNode)element;
-				return testValue.getName();
+				if(testValue.getCategory().isExpected()){
+					return testValue.getValueString();
+				}
+				return testValue.toString();
+//				return testValue.getName();
 			}
 			@Override
 			public Color getForeground(Object element){
@@ -174,17 +176,17 @@ public class TestCaseNodeDetailsPage extends GenericNodeDetailsPage implements I
 			}
 		}); 
 				
-		fValuesViewerColumn = createTableViewerColumn(fTestDataViewer, "Value", 100, new ColumnLabelProvider(){
-			@Override
-			public String getText(Object element){
-				PartitionNode testValue = (PartitionNode)element;
-				return testValue.getValueString();
-			}
-			@Override
-			public Color getForeground(Object element){
-				return getColor(element);
-			}
-		});
+//		fValuesViewerColumn = createTableViewerColumn(fTestDataViewer, "Value", 100, new ColumnLabelProvider(){
+//			@Override
+//			public String getText(Object element){
+//				PartitionNode testValue = (PartitionNode)element;
+//				return testValue.getValueString();
+//			}
+//			@Override
+//			public Color getForeground(Object element){
+//				return getColor(element);
+//			}
+//		});
 	}
 
 	private Color getColor(Object element){
@@ -230,7 +232,7 @@ public class TestCaseNodeDetailsPage extends GenericNodeDetailsPage implements I
 		ArrayList<PartitionNode> testData = fSelectedTestCase.getTestData();
 		fTestDataViewer.setInput(testData);
 		fPartitionViewerColumn.setEditingSupport(new TestCasePartitionEditingSupport(fTestDataViewer, testData, this));
-		fValuesViewerColumn.setEditingSupport(new TestCaseValueEditingSupport(fTestDataViewer, testData, this));
+//		fValuesViewerColumn.setEditingSupport(new TestCaseValueEditingSupport(fTestDataViewer, testData, this));
 	}
 
 	private void renameTestCase() {

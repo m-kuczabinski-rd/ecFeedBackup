@@ -45,7 +45,6 @@ import com.testify.ecfeed.ui.common.ColorConstants;
 import com.testify.ecfeed.ui.common.ColorManager;
 import com.testify.ecfeed.ui.common.IInputChangedListener;
 import com.testify.ecfeed.ui.common.TestCasePartitionEditingSupport;
-import com.testify.ecfeed.ui.common.TestCaseValueEditingSupport;
 import com.testify.ecfeed.utils.EcModelUtils;
 
 public class AddTestCaseDialog extends TitleAreaDialog implements IInputChangedListener {
@@ -134,33 +133,20 @@ public class AddTestCaseDialog extends TitleAreaDialog implements IInputChangedL
 		partitionColumn.setWidth(150);
 		partitionColumn.setText("Partition");
 		partitionViewerColumn.setLabelProvider(new ColumnLabelProvider(){
-			@Override 
+			@Override
 			public String getText(Object element){
-				return ((PartitionNode)element).getName();
+				PartitionNode testValue = (PartitionNode)element;
+				if(testValue.getCategory().isExpected()){
+					return testValue.getValueString();
+				}
+				return testValue.toString();
 			}
-			@Override 
+			@Override
 			public Color getForeground(Object element){
 				return getColor(element);
 			}
 		});
 		partitionViewerColumn.setEditingSupport(new TestCasePartitionEditingSupport(fTestDataViewer, fTestData, this));
-
-		TableViewerColumn valueViewerColumn = new TableViewerColumn(fTestDataViewer, SWT.NONE);
-		TableColumn valueColumn = valueViewerColumn.getColumn();
-		valueColumn.setWidth(150);
-		valueColumn.setText("Value");
-		valueViewerColumn.setLabelProvider(new ColumnLabelProvider(){
-			@Override 
-			public String getText(Object element){
-				return ((PartitionNode)element).getValueString();
-			}
-			
-			@Override 
-			public Color getForeground(Object element){
-				return getColor(element);
-			}
-		});
-		valueViewerColumn.setEditingSupport(new TestCaseValueEditingSupport(fTestDataViewer, fTestData, this));
 
 		fTestDataViewer.setContentProvider(new ArrayContentProvider());
 		fTestDataViewer.setInput(fTestData);
@@ -173,6 +159,7 @@ public class AddTestCaseDialog extends TitleAreaDialog implements IInputChangedL
 		}
 		return null;
 	}
+	
 	private void createTestSuiteComposite(Composite container) {
 		Composite composite = new Composite(container, SWT.NONE);
 		composite.setLayout(new GridLayout(2, false));
