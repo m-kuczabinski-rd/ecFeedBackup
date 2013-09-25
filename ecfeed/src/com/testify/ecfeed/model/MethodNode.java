@@ -91,7 +91,7 @@ public class MethodNode extends GenericNode {
 	public ArrayList<String> getExpectedCategoriesNames() {
 		ArrayList<String> names = new ArrayList<String>();
 		for(CategoryNode category : getCategories()){
-			if(isExpectedValueCategory(category)){
+			if(category.isExpected()){
 				names.add(category.getName());
 			}
 		}
