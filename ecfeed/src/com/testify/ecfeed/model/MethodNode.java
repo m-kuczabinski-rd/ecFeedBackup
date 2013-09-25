@@ -19,6 +19,7 @@ import java.util.Set;
 import java.util.ArrayList;
 
 import com.testify.ecfeed.api.IConstraint;
+import com.testify.ecfeed.model.constraint.Constraint;
 
 public class MethodNode extends GenericNode {
 	private ArrayList<CategoryNode> fCategories;
@@ -169,22 +170,31 @@ public class MethodNode extends GenericNode {
 		return fExpectedValueCategories.contains(category);
 	}
 	
+	//TODO unit tests
+	@SuppressWarnings("rawtypes")
 	@Override
-	public String toString(){
-		String result = new String(getName()) + "(";
-		ArrayList<String> types = getCategoriesTypes();
-		ArrayList<String> names = getCategoriesNames();
-		for(int i = 0; i < types.size(); i++){
-			if(getCategories().get(i) instanceof ExpectedValueCategoryNode){
-				result += "[e]";
-			}
-			result += types.get(i);
-			result += " ";
-			result += names.get(i);
-			if(i < types.size() - 1) result += ", ";
+	public void moveChild(IGenericNode child, boolean moveUp){
+		ArrayList childrenArray = null;
+		if(child instanceof CategoryNode){
+			childrenArray = fCategories;
 		}
-		result += ")";
-		return result;
+		if(child instanceof ConstraintNode){
+			childrenArray = fConstraints;
+		}
+		if(child instanceof TestCaseNode){
+			childrenArray = fTestCases;
+		}
+		if(childrenArray == null){
+			return;
+		}
+		
+		int childIndex = childrenArray.indexOf(child);
+		if(moveUp && childIndex > 0){
+			Collections.swap(childrenArray, childIndex, childIndex - 1);
+		}
+		if(!moveUp && childIndex < childrenArray.size() - 1){
+			Collections.swap(childrenArray, childIndex, childIndex + 1);
+		}
 	}
 
 	//TODO unit tests
@@ -226,30 +236,62 @@ public class MethodNode extends GenericNode {
 		}
 	}
 
-	//TODO unit tests
-	@SuppressWarnings("rawtypes")
+	public void replaceCategory(int index, CategoryNode newCategory){
+		newCategory.setParent(this);
+		CategoryNode originalCategory = fCategories.get(index);
+		fCategories.set(index, newCategory);
+
+		if(newCategory instanceof ExpectedValueCategoryNode){
+			if (!originalCategory.isExpected()){
+				ExpectedValueCategoryNode expectedCategory = (ExpectedValueCategoryNode)newCategory;
+				for(TestCaseNode testCase : fTestCases){
+					testCase.replaceValue(index, expectedCategory.getDefaultValuePartition().getCopy());
+				}
+				Iterator<ConstraintNode> iterator = fConstraints.iterator();
+				while(iterator.hasNext()){
+					if(iterator.next().mentions(originalCategory)){
+						iterator.remove();
+					}
+				}
+			}
+		}
+		else{
+			if(originalCategory.isExpected()){
+				fTestCases.clear();
+			}
+		}
+	}
+
 	@Override
-	public void moveChild(IGenericNode child, boolean moveUp){
-		ArrayList childrenArray = null;
-		if(child instanceof CategoryNode){
-			childrenArray = fCategories;
+	public String toString(){
+		String result = new String(getName()) + "(";
+		ArrayList<String> types = getCategoriesTypes();
+		ArrayList<String> names = getCategoriesNames();
+		for(int i = 0; i < types.size(); i++){
+			if(getCategories().get(i).isExpected()){
+				result += "[e]";
+			}
+			result += types.get(i);
+			result += " ";
+			result += names.get(i);
+			if(i < types.size() - 1) result += ", ";
 		}
-		if(child instanceof ConstraintNode){
-			childrenArray = fConstraints;
+		result += ")";
+		return result;
+	}
+
+	private void removeMentioningConstraints(CategoryNode category) {
+		for(ConstraintNode constraintNode : fConstraints){
+			Constraint constraint = constraintNode.getConstraint();
+			if(constraint.mentions(category)){
+				removeChild(constraintNode);
+			}
 		}
-		if(child instanceof TestCaseNode){
-			childrenArray = fTestCases;
-		}
-		if(childrenArray == null){
-			return;
-		}
-		
-		int childIndex = childrenArray.indexOf(child);
-		if(moveUp && childIndex > 0){
-			Collections.swap(childrenArray, childIndex, childIndex - 1);
-		}
-		if(!moveUp && childIndex < childrenArray.size() - 1){
-			Collections.swap(childrenArray, childIndex, childIndex + 1);
+	}
+
+	private void replaceTestParameters(int index, PartitionNode partition) {
+		for(TestCaseNode testCase : fTestCases){
+			testCase.getTestData().set(index, partition.getCopy());
 		}
 	}
 }

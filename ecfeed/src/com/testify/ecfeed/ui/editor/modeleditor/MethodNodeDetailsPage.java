@@ -163,15 +163,29 @@ public class MethodNodeDetailsPage extends GenericNodeDetailsPage implements IIn
 				if(dialog.open() == IDialogConstants.OK_ID){
 					MethodNode selectedMethod = dialog.getSelectedMethod();
 					fSelectedMethod.setName(selectedMethod.getName());
-					ArrayList<CategoryNode> parameters = fSelectedMethod.getCategories();
-					ArrayList<CategoryNode> newParameters = selectedMethod.getCategories();
-					for(int i = 0; i < parameters.size(); i++){
-						parameters.get(i).setName(newParameters.get(i).getName());
-					}
+					updateParemeters(selectedMethod);
 					updateModel(fSelectedMethod);
 				}
 			}
+
+			private void updateParemeters(MethodNode newMethod) {
+				ArrayList<CategoryNode> srcParameters = newMethod.getCategories();
+				for(int i = 0; i < srcParameters.size(); i++){
+					updateParameter(i, srcParameters.get(i));
+				}
+			}
 		});
+	}
+	
+	private void updateParameter(int index, CategoryNode newCategory){
+		boolean isOriginalCategoryExpected = fSelectedMethod.getCategories().get(index).isExpected();
+		boolean isNewCategoryExpected = newCategory instanceof ExpectedValueCategoryNode;
+		if(isOriginalCategoryExpected == isNewCategoryExpected){
+			fSelectedMethod.getCategories().get(index).setName(newCategory.getName());
+		}
+		else{
+			fSelectedMethod.replaceCategory(index, newCategory);
+		}
 	}
 
 	private void createParametersSection(Composite composite) {

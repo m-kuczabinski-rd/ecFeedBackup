@@ -68,4 +68,8 @@ public class TestCaseNode extends GenericNode {
 		}
 		return false;
 	}
+
+	public void replaceValue(int index, PartitionNode newValue) {
+		fTestData.set(index, newValue);
+	}
 }
