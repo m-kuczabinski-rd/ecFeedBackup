@@ -40,8 +40,11 @@ public class DefaultValueEditingSupport extends EditingSupport {
 	@Override
 	protected void setValue(Object element, Object value) {
 		ExpectedValueCategoryNode category = (ExpectedValueCategoryNode)element;
-		Object newValue = EcModelUtils.getPartitionValueFromString((String)value, category.getType());
-		category.setDefaultValue(newValue);
+		String valueString = (String)value;
+		if(EcModelUtils.validatePartitionStringValue(valueString, category)){
+			Object newValue = EcModelUtils.getPartitionValueFromString(valueString, category.getType());
+			category.setDefaultValue(newValue);
+		}
 		fSetValueListener.inputChanged();
 	}
 
