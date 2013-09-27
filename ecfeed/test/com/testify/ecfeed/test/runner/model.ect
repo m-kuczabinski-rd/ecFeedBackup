@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Model name="model">
+    <Class name="com.testify.ecfeed.test.runner.SomeClass">
+        <Method name="testDivisorCheck">
+            <ExpectedValueCategory name="expectedResult" type="boolean" expected="false"/>
+            <Category name="number" type="int">
+                <Partition name="one" value="1"/>
+                <Partition name="hundred" value="100"/>
+                <Partition name="twelve" value="12"/>
+            </Category>
+            <Category name="potentialDivisor" type="int">
+                <Partition name="one" value="1"/>
+                <Partition name="two" value="2"/>
+                <Partition name="three" value="3"/>
+            </Category>
+            <TestCase testSuite="default suite">
+                <ExpectedValue value="true"/>
+                <TestParameter partition="one"/>
+                <TestParameter partition="one"/>
+            </TestCase>
+            <TestCase testSuite="default suite">
+                <ExpectedValue value="false"/>
+                <TestParameter partition="one"/>
+                <TestParameter partition="two"/>
+            </TestCase>
+            <TestCase testSuite="default suite">
+                <ExpectedValue value="false"/>
+                <TestParameter partition="one"/>
+                <TestParameter partition="three"/>
+            </TestCase>
+            <TestCase testSuite="default suite">
+                <ExpectedValue value="true"/>
+                <TestParameter partition="hundred"/>
+                <TestParameter partition="one"/>
+            </TestCase>
+            <TestCase testSuite="default suite">
+                <ExpectedValue value="true"/>
+                <TestParameter partition="hundred"/>
+                <TestParameter partition="two"/>
+            </TestCase>
+            <TestCase testSuite="default suite">
+                <ExpectedValue value="false"/>
+                <TestParameter partition="hundred"/>
+                <TestParameter partition="three"/>
+            </TestCase>
+            <TestCase testSuite="default suite">
+                <ExpectedValue value="true"/>
+                <TestParameter partition="twelve"/>
+                <TestParameter partition="one"/>
+            </TestCase>
+            <TestCase testSuite="default suite">
+                <ExpectedValue value="true"/>
+                <TestParameter partition="twelve"/>
+                <TestParameter partition="two"/>
+            </TestCase>
+            <TestCase testSuite="default suite">
+                <ExpectedValue value="true"/>
+                <TestParameter partition="twelve"/>
+                <TestParameter partition="three"/>
+            </TestCase>
+        </Method>
+    </Class>
+</Model>
