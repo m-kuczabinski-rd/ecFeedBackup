@@ -27,10 +27,12 @@ public class Cartesian implements ITestGenAlgorithm {
 			product = cartesian(product, input[i]);
 		}
 
-		for(IConstraint constraint : constraints){
-			for(Iterator<ArrayList> it = product.iterator(); it.hasNext();){
-				if(constraint.evaluate(it.next()) == false){
-					it.remove();
+		if(constraints != null){
+			for(IConstraint constraint : constraints){
+				for(Iterator<ArrayList> it = product.iterator(); it.hasNext();){
+					if(constraint.evaluate(it.next()) == false){
+						it.remove();
+					}
 				}
 			}
 		}
