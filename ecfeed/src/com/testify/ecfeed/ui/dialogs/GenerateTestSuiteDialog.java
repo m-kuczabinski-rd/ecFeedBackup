@@ -362,6 +362,16 @@ public class GenerateTestSuiteDialog extends TitleAreaDialog {
 			@Override
 			public void modifyText(ModifyEvent e) {
 				fSelectedAlgorithm = fSelectedGenerator.getAlgorithm(fAlgorithmCombo.getText());
+				fTestSuiteCombo.setText(createTestSuiteNameText());
+			}
+
+			private String createTestSuiteNameText() {
+				String algorithmName = fAlgorithmCombo.getText();
+				int i = 1;
+				while(fMethod.getTestSuites().contains(algorithmName)){
+					algorithmName = fAlgorithmCombo.getText() + "(" + i++ + ")";
+				}
+				return algorithmName;
 			}
 		});
 	}
