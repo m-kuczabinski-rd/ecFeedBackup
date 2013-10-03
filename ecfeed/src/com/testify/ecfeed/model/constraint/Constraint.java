@@ -6,7 +6,7 @@ import com.testify.ecfeed.api.IConstraint;
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.PartitionNode;
 
-public class Constraint<E> implements IConstraint<E> {
+public class Constraint implements IConstraint<PartitionNode> {
 	
 	private final int ID;
 	private static int fLastId = 0;
@@ -41,7 +41,7 @@ public class Constraint<E> implements IConstraint<E> {
 	}
 	
 	@Override
-	public boolean evaluate(List<E> values) {
+	public boolean evaluate(List<PartitionNode> values) {
 		if(fPremise == null) return true;
 		if(fPremise.evaluate(values) == true){
 			if(fConsequence == null) return false;
@@ -59,10 +59,10 @@ public class Constraint<E> implements IConstraint<E> {
 	
 	@Override
 	public boolean equals(Object obj){
-		if(obj instanceof Constraint<?> == false){
+		if(obj instanceof Constraint == false){
 			return false;
 		}
-		return(ID == ((Constraint<?>)obj).getId());
+		return(ID == ((Constraint)obj).getId());
 	}
 
 	public boolean mentions(CategoryNode category) {

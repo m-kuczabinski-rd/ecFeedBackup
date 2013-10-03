@@ -2,10 +2,9 @@ package com.testify.ecfeed.model;
 
 import java.util.List;
 
-import com.testify.ecfeed.api.IConstraint;
 import com.testify.ecfeed.model.constraint.Constraint;
 
-public class ConstraintNode extends GenericNode implements IConstraint{
+public class ConstraintNode extends GenericNode{
 
 	private Constraint fConstraint;
 
@@ -30,8 +29,7 @@ public class ConstraintNode extends GenericNode implements IConstraint{
 		return null;
 	}
 
-	@Override
-	public boolean evaluate(List<? extends Object> values) {
+	public boolean evaluate(List<PartitionNode> values) {
 		if(fConstraint != null){
 			return fConstraint.evaluate(values);
 		}

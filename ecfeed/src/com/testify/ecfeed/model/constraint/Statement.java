@@ -1,6 +1,6 @@
 package com.testify.ecfeed.model.constraint;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.MethodNode;
@@ -24,9 +24,9 @@ public class Statement extends BasicStatement{
 	}
 
 	@Override
-	public boolean evaluate(ArrayList<PartitionNode> values) {
-		CategoryNode parentCategory = (CategoryNode)fCondition.getParent();
-		MethodNode methodAncestor = ((MethodNode)parentCategory.getParent());
+	public boolean evaluate(List<PartitionNode> values) {
+		CategoryNode parentCategory = fCondition.getCategory();
+		MethodNode methodAncestor = parentCategory.getMethod();
 		int categoryIndex = methodAncestor.getCategories().indexOf(parentCategory);
 
 		if(values.size() < categoryIndex + 1){
@@ -34,7 +34,13 @@ public class Statement extends BasicStatement{
 		}
 		
 		PartitionNode partition = values.get(categoryIndex);
-		ArrayList<PartitionNode> siblings = parentCategory.getPartitions();
+//		Object element = values.get(categoryIndex);
+//		if(element instanceof PartitionNode == false){
+//			return false;
+//		}
+//		
+//		PartitionNode partition = (PartitionNode)element;
+		List<PartitionNode> siblings = parentCategory.getPartitions();
 		int conditionIndex = siblings.indexOf(fCondition);
 		int partitionIndex = siblings.indexOf(partition);
 		

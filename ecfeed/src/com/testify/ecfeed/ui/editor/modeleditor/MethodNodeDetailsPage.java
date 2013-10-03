@@ -91,7 +91,7 @@ public class MethodNodeDetailsPage extends GenericNodeDetailsPage implements IIn
 			if(dialog.open() == IDialogConstants.OK_ID){
 				IAlgorithm<PartitionNode> selectedAlgorithm = dialog.getSelectedAlgorithm();
 				List<List<PartitionNode>> algorithmInput = dialog.getAlgorithmInput();
-				Collection<IConstraint> constraints = dialog.getConstraints();
+				Collection<IConstraint<PartitionNode>> constraints = dialog.getConstraints();
 				String testSuiteName = dialog.getTestSuiteName();
 				
 				Set<List<PartitionNode>> generatedData = generateTestData(selectedAlgorithm, algorithmInput, constraints);
@@ -104,7 +104,7 @@ public class MethodNodeDetailsPage extends GenericNodeDetailsPage implements IIn
 		}
 
 		private Set<List<PartitionNode>> generateTestData(IAlgorithm<PartitionNode> algorithm, List<List<PartitionNode>> algorithmInput,
-				Collection<IConstraint> constraints) {
+				Collection<IConstraint<PartitionNode>> constraints) {
 			Set<List<PartitionNode>> generatedData;
 
 			generatedData = algorithm.generate(algorithmInput, constraints);

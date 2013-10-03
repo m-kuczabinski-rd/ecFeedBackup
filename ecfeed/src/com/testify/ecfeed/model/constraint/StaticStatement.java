@@ -1,6 +1,6 @@
 package com.testify.ecfeed.model.constraint;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import com.testify.ecfeed.constants.Constants;
 import com.testify.ecfeed.model.PartitionNode;
@@ -18,7 +18,7 @@ public class StaticStatement extends BasicStatement {
 	}
 	
 	@Override
-	public boolean evaluate(ArrayList<PartitionNode> values) {
+	public boolean evaluate(List<PartitionNode> values) {
 		return fValue;
 	}
 

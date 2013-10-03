@@ -1,8 +1,7 @@
 package com.testify.ecfeed.api;
 
-import java.util.ArrayList;
+import java.util.List;
 
-public interface IConstraint {
-	@SuppressWarnings("rawtypes")
-	public boolean evaluate(ArrayList values);
+public interface IConstraint<E> {
+	public boolean evaluate(List<E> values);
 }

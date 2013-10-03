@@ -21,7 +21,7 @@ public class GenericNWiseAlgorithm<E> implements IAlgorithm<E> {
 	
 	@Override
 	public Set<List<E>> generate(List<List<E>> input,
-			Collection<IConstraint> constraints){
+			Collection<IConstraint<E>> constraints){
 
 		TupleGenerator<E> tupleGenerator = new TupleGenerator<E>();
 		Set<List<E>> nTuples = tupleGenerator.getNTuples(input, N);
@@ -32,9 +32,9 @@ public class GenericNWiseAlgorithm<E> implements IAlgorithm<E> {
 		return result;
 	}
 
-	private Set<List<E>> applyConstraints(Set<List<E>> input, Collection<IConstraint> constraints) {
+	private Set<List<E>> applyConstraints(Set<List<E>> input, Collection<IConstraint<E>> constraints) {
 		Set<List<E>> result = new HashSet<List<E>>(input);
-		for(IConstraint constraint : constraints){
+		for(IConstraint<E> constraint : constraints){
 			Iterator<List<E>> it = result.iterator();
 			while(it.hasNext()){
 				if(constraint.evaluate(it.next()) == false){

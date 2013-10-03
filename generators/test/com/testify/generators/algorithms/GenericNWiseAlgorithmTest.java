@@ -50,7 +50,7 @@ public class GenericNWiseAlgorithmTest {
 		GenericNWiseAlgorithm<String> threeWiseAlgorithm = new GenericNWiseAlgorithm<>(3);
 		GenericNWiseAlgorithm<String> fourWiseAlgorithm = new GenericNWiseAlgorithm<>(4);
 		
-		Collection<IConstraint> constraints = new HashSet<IConstraint>();
+		Collection<IConstraint<String>> constraints = new HashSet<IConstraint<String>>();
 		
 		Set<List<String>> oneWiseSet = oneWiseAlgorithm.generate(input, constraints);
 		Set<List<String>> twoWiseSet = twoWiseAlgorithm.generate(input, constraints);

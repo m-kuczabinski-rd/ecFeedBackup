@@ -62,7 +62,7 @@ public class GenerateTestSuiteDialog extends TitleAreaDialog {
 	private CheckboxTreeViewer fCategoriesViewer;
 	private CheckboxTreeViewer fConstraintsViewer;
 	private List<List<PartitionNode>> fAlgorithmInput;
-	private Collection<IConstraint> fConstraints;
+	private Collection<IConstraint<PartitionNode>> fConstraints;
 	private IGenerator<PartitionNode> fSelectedGenerator;
 	private List<List<PartitionNode>> fInputDoimain;
 
@@ -438,10 +438,10 @@ public class GenerateTestSuiteDialog extends TitleAreaDialog {
 	
 	private void saveConstraints() {
 		Object[] checkedObjects = fConstraintsViewer.getCheckedElements();
-		ArrayList<IConstraint> constraints = new ArrayList<IConstraint>();
+		List<IConstraint<PartitionNode>> constraints = new ArrayList<IConstraint<PartitionNode>>();
 		for(Object o : checkedObjects){
 			if(o instanceof ConstraintNode){
-				constraints.add((ConstraintNode)o);
+				constraints.add(((ConstraintNode)o).getConstraint());
 			}
 		}
 		
@@ -472,7 +472,7 @@ public class GenerateTestSuiteDialog extends TitleAreaDialog {
 		return fAlgorithmInput;
 	}
 	
-	public Collection<IConstraint> getConstraints(){
+	public Collection<IConstraint<PartitionNode>> getConstraints(){
 		return fConstraints;
 	}
 }

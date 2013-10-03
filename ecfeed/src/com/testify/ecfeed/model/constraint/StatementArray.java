@@ -1,13 +1,14 @@
 package com.testify.ecfeed.model.constraint;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.PartitionNode;
 
 public class StatementArray extends BasicStatement{
 	private Operator fOperator;
-	private ArrayList<BasicStatement> fStatements;
+	private List<BasicStatement> fStatements;
 	
 	public StatementArray(Operator operator){
 		fStatements = new ArrayList<BasicStatement>();
@@ -24,12 +25,12 @@ public class StatementArray extends BasicStatement{
 	}
 	
 	@Override
-	public ArrayList<BasicStatement> getChildren(){
+	public List<BasicStatement> getChildren(){
 		return fStatements;
 	}
 	
 	@Override
-	public boolean evaluate(ArrayList<PartitionNode> values) {
+	public boolean evaluate(List<PartitionNode> values) {
 		if(fStatements.size() == 0){
 			return false;
 		}

@@ -6,6 +6,6 @@ import java.util.Set;
 
 public interface IAlgorithm<E> {
 	Set<List<E>> 
-	generate(List<List<E>> input, Collection<IConstraint> constraints);
+	generate(List<List<E>> input, Collection<IConstraint<E>> constraints);
 
 }
