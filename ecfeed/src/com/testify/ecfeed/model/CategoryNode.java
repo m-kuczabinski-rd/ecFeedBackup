@@ -12,11 +12,12 @@
 package com.testify.ecfeed.model;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class CategoryNode extends GenericNode {
 	
 	private final String fType;
-	private final ArrayList<PartitionNode> fPartitions;
+	private final List<PartitionNode> fPartitions;
 	
 	public CategoryNode(String name, String type) {
 		super(name);
@@ -28,7 +29,7 @@ public class CategoryNode extends GenericNode {
 		return fType;
 	}
 
-	public ArrayList<? extends IGenericNode> getChildren(){
+	public List<? extends IGenericNode> getChildren(){
 		return fPartitions;
 	}
 	
@@ -48,7 +49,7 @@ public class CategoryNode extends GenericNode {
 	}
 
 	//TODO unit tests
-	public ArrayList<PartitionNode> getPartitions() {
+	public List<PartitionNode> getPartitions() {
 		return fPartitions;
 	}
 

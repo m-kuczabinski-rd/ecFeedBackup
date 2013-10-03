@@ -22,9 +22,9 @@ import java.util.ArrayList;
 import com.testify.ecfeed.api.IConstraint;
 
 public class MethodNode extends GenericNode {
-	private ArrayList<CategoryNode> fCategories;
-	private ArrayList<TestCaseNode> fTestCases;
-	private ArrayList<ConstraintNode> fConstraints;
+	private List<CategoryNode> fCategories;
+	private List<TestCaseNode> fTestCases;
+	private List<ConstraintNode> fConstraints;
 	
 	public MethodNode(String name){
 		super(name);
@@ -56,7 +56,7 @@ public class MethodNode extends GenericNode {
 		testCase.setParent(this);
 	}
 	
-	public ArrayList<CategoryNode> getCategories(){
+	public List<CategoryNode> getCategories(){
 		return fCategories;
 	}
 
@@ -102,7 +102,7 @@ public class MethodNode extends GenericNode {
 		return allNames;
 	}
 
-	public ArrayList<ConstraintNode> getConstraints(){
+	public List<ConstraintNode> getConstraints(){
 		return fConstraints;
 	}
 
@@ -124,7 +124,7 @@ public class MethodNode extends GenericNode {
 		return names;
 	}
 
-	public ArrayList<TestCaseNode> getTestCases(){
+	public List<TestCaseNode> getTestCases(){
 		return fTestCases;
 	}
 	
@@ -167,7 +167,7 @@ public class MethodNode extends GenericNode {
 	@SuppressWarnings("rawtypes")
 	@Override
 	public void moveChild(IGenericNode child, boolean moveUp){
-		ArrayList childrenArray = null;
+		List childrenArray = null;
 		if(child instanceof CategoryNode){
 			childrenArray = fCategories;
 		}

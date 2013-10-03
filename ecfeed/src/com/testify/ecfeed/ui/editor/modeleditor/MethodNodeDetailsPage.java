@@ -258,7 +258,7 @@ public class MethodNodeDetailsPage extends GenericNodeDetailsPage implements IIn
 			}
 
 			private void updateParemeters(MethodNode newMethod) {
-				ArrayList<CategoryNode> srcParameters = newMethod.getCategories();
+				List<CategoryNode> srcParameters = newMethod.getCategories();
 				for(int i = 0; i < srcParameters.size(); i++){
 					updateParameter(i, srcParameters.get(i));
 				}
@@ -285,7 +285,7 @@ public class MethodNodeDetailsPage extends GenericNodeDetailsPage implements IIn
 		fParametersSection.setExpanded(false);
 	}
 
-	private void redrawParametersComposite(Section section, ArrayList<CategoryNode> input) {
+	private void redrawParametersComposite(Section section, List<CategoryNode> input) {
 		if(fParametersComposite != null && !fParametersComposite.isDisposed()){
 			fParametersComposite.dispose();
 		}

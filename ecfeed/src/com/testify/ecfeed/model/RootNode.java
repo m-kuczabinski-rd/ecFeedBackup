@@ -12,9 +12,10 @@
 package com.testify.ecfeed.model;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class RootNode extends GenericNode {
-	public ArrayList<ClassNode> fClasses;
+	public List<ClassNode> fClasses;
 
 	public RootNode(String name) {
 		super(name);
@@ -26,11 +27,11 @@ public class RootNode extends GenericNode {
 		node.setParent(this);
 	}
 
-	public ArrayList<? extends IGenericNode> getChildren(){
+	public List<? extends IGenericNode> getChildren(){
 		return fClasses;
 	}
 	
-	public ArrayList<ClassNode> getClasses() {
+	public List<ClassNode> getClasses() {
 		return fClasses;
 	}
 

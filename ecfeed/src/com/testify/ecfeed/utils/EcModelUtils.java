@@ -13,6 +13,7 @@ package com.testify.ecfeed.utils;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.jdt.core.IAnnotation;
@@ -186,8 +187,8 @@ public class EcModelUtils {
 	 * type with qualifiedTypeName;
 	 * @throws JavaModelException 
 	 */
-	public static ArrayList<MethodNode> getObsoleteMethods(ClassNode classNode, String qualifiedTypeName){
-		ArrayList<MethodNode> empty = new ArrayList<MethodNode>();
+	public static List<MethodNode> getObsoleteMethods(ClassNode classNode, String qualifiedTypeName){
+		List<MethodNode> empty = new ArrayList<MethodNode>();
 		if(classNode == null){
 			return empty;
 		}
@@ -208,7 +209,7 @@ public class EcModelUtils {
 	 * Returns list generated models of test method that are not contained in the provided class model;
 	 * @throws JavaModelException 
 	 */
-	public static ArrayList<MethodNode> getNotContainedMethods(ClassNode classNode, String qualifiedTypeName){
+	public static List<MethodNode> getNotContainedMethods(ClassNode classNode, String qualifiedTypeName){
 		ArrayList<MethodNode> empty = new ArrayList<MethodNode>();
 		IType type;
 		
@@ -235,10 +236,10 @@ public class EcModelUtils {
 	 * @param method MethodNode for which the compatible sibling methods are searched for
 	 * @return
 	 */
-	public static ArrayList<MethodNode> getCompatibleMethods(MethodNode method) {
+	public static List<MethodNode> getCompatibleMethods(MethodNode method) {
 		ClassNode parent = (ClassNode)method.getParent();
-		ArrayList<MethodNode> potentialMatches = getNotContainedMethods(parent, parent.getQualifiedName());
-		ArrayList<MethodNode> matches = new ArrayList<MethodNode>();
+		List<MethodNode> potentialMatches = getNotContainedMethods(parent, parent.getQualifiedName());
+		List<MethodNode> matches = new ArrayList<MethodNode>();
 		for(MethodNode potentialMatch : potentialMatches){
 			if (potentialMatch.getCategoriesTypes().equals(method.getCategoriesTypes())){
 				matches.add(potentialMatch);
@@ -250,7 +251,7 @@ public class EcModelUtils {
 	/**
 	 * Returns elements in v1 that are not mentioned in v2 by checking toString() value; 
 	 */
-	private static ArrayList<MethodNode> diff(ArrayList<MethodNode> v1, ArrayList<MethodNode> v2){
+	private static List<MethodNode> diff(List<MethodNode> v1, List<MethodNode> v2){
 		ArrayList<MethodNode> diff = new ArrayList<MethodNode>();
 		
 		for(MethodNode method1 : v1){

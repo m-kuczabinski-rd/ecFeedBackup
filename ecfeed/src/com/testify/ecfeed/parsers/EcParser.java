@@ -14,6 +14,7 @@ package com.testify.ecfeed.parsers;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.List;
 
 import nu.xom.*;
 
@@ -210,7 +211,7 @@ public class EcParser {
 	}
 
 	//TODO unit tests
-	private TestCaseNode parseTestCaseElement(Element element, ArrayList<CategoryNode> categories) {
+	private TestCaseNode parseTestCaseElement(Element element, List<CategoryNode> categories) {
 		String testSuiteName = element.getAttributeValue(Constants.TEST_SUITE_NAME_ATTRIBUTE);
 		ArrayList<PartitionNode> testData = new ArrayList<PartitionNode>();
 		ArrayList<Element> parameterElements = getIterableElements(element.getChildElements());

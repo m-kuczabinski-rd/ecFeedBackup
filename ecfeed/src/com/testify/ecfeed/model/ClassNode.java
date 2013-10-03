@@ -12,11 +12,12 @@
 package com.testify.ecfeed.model;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.ArrayList;
 
 public class ClassNode extends GenericNode {
-	private ArrayList<MethodNode> fMethods;
+	private List<MethodNode> fMethods;
 
 	public ClassNode(String qualifiedName) {
 		super(qualifiedName);
@@ -24,7 +25,7 @@ public class ClassNode extends GenericNode {
 	}
 
 	@Override
-	public ArrayList<? extends IGenericNode> getChildren(){
+	public List<? extends IGenericNode> getChildren(){
 		return fMethods;
 	}
 	
@@ -67,7 +68,7 @@ public class ClassNode extends GenericNode {
 	}
 
 	//TODO unit tests
-	public ArrayList<MethodNode> getMethods() {
+	public List<MethodNode> getMethods() {
 		return fMethods;
 	}
 	

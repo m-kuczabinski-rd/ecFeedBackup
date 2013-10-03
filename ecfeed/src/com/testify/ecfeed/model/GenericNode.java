@@ -14,6 +14,7 @@ package com.testify.ecfeed.model;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 
 public class GenericNode implements IGenericNode{
 	private String fName;
@@ -47,7 +48,7 @@ public class GenericNode implements IGenericNode{
 	}
 
 	@Override
-	public ArrayList<? extends IGenericNode> getChildren() {
+	public List<? extends IGenericNode> getChildren() {
 		return EMPTY_CHILDREN_ARRAY;
 	}
 	

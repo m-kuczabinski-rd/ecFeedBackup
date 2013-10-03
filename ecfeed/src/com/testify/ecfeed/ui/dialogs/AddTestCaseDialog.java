@@ -12,6 +12,7 @@
 package com.testify.ecfeed.ui.dialogs;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.TitleAreaDialog;
@@ -66,7 +67,7 @@ public class AddTestCaseDialog extends TitleAreaDialog implements IInputChangedL
 		setHelpAvailable(false);
 		setShellStyle(SWT.BORDER | SWT.RESIZE | SWT.TITLE);
 		fTestData = new ArrayList<PartitionNode>();
-		ArrayList<CategoryNode> categories = method.getCategories();
+		List<CategoryNode> categories = method.getCategories();
 		for(CategoryNode category : categories){
 			if(category instanceof ExpectedValueCategoryNode){
 				ExpectedValueCategoryNode expValCat = (ExpectedValueCategoryNode)category;
