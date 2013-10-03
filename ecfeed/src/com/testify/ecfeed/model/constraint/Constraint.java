@@ -1,19 +1,27 @@
 package com.testify.ecfeed.model.constraint;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import com.testify.ecfeed.api.IConstraint;
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.PartitionNode;
 
-public class Constraint implements IConstraint {
+public class Constraint<E> implements IConstraint<E> {
+	
+	private final int ID;
+	private static int fLastId = 0;
 
 	private BasicStatement fPremise;
 	private BasicStatement fConsequence; 
 
 	public Constraint(BasicStatement premise, BasicStatement consequence){
+		ID = fLastId++;
 		fPremise = premise;
 		fConsequence = consequence;
+	}
+	
+	public int getId(){
+		return ID;
 	}
 	
 	public BasicStatement getPremise(){
@@ -32,14 +40,8 @@ public class Constraint implements IConstraint {
 		fConsequence = consequence;
 	}
 	
-	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
-	public boolean evaluate(ArrayList values) {
-		for(Object value : values){
-			if(value instanceof PartitionNode == false){
-				return false;
-			}
-		}
+	public boolean evaluate(List<E> values) {
 		if(fPremise == null) return true;
 		if(fPremise.evaluate(values) == true){
 			if(fConsequence == null) return false;
@@ -57,27 +59,10 @@ public class Constraint implements IConstraint {
 	
 	@Override
 	public boolean equals(Object obj){
-		if(obj instanceof Constraint == false){
+		if(obj instanceof Constraint<?> == false){
 			return false;
 		}
-
-		Constraint constraint = (Constraint)obj;
-		boolean result = true;
-		if(fPremise == null){
-			result &= (constraint.getPremise() == null);
-		}
-		else{
-			result &= fPremise.equals(constraint.getPremise());
-		}
-
-		if(fConsequence == null){
-			result &= (constraint.getConsequence() == null);
-		}
-		else{
-			fConsequence.equals(constraint.getConsequence());
-		}
-		
-		return result;
+		return(ID == ((Constraint<?>)obj).getId());
 	}
 
 	public boolean mentions(CategoryNode category) {
