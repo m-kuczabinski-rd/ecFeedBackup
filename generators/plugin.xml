@@ -2,11 +2,14 @@
 <?eclipse version="3.4"?>
 <plugin>
    <extension
-         point="com.testify.ecfeed.algorithm">
-      <algorithm
-            implementation="com.testify.generators.algorithms.Cartesian"
-            name="Cartesian">
-      </algorithm>
+         id="com.testify.ecfeed.generator.nwise"
+         name="Generic n-wise test data generator"
+         point="com.testify.ecfeed.generator">
+      <generator
+            id="com.testify.generators.nwise"
+            implementation="com.testify.generators.NWiseGenerator"
+            name="n-wise test data generator">
+      </generator>
    </extension>
 
 </plugin>
