@@ -24,10 +24,12 @@ public class GenericNWiseAlgorithm<E> implements IAlgorithm<E> {
 			Collection<IConstraint<E>> constraints){
 
 		TupleGenerator<E> tupleGenerator = new TupleGenerator<E>();
-		Set<List<E>> nTuples = tupleGenerator.getNTuples(input, N);
 		Set<List<E>> result = cartesianProduct(input);
 		result = applyConstraints(result, constraints);
-		result = selectTuplesRepresentation(nTuples, result);
+		if(N < input.size()){
+			Set<List<E>> nTuples = tupleGenerator.getNTuples(input, N);
+			result = selectTuplesRepresentation(nTuples, result);
+		}
 		
 		return result;
 	}
