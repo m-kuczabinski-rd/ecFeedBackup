@@ -11,17 +11,17 @@
 
 package com.testify.ecfeed.model;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class TestCaseNode extends GenericNode {
-	ArrayList<PartitionNode> fTestData;
+	List<PartitionNode> fTestData;
 	
-	public TestCaseNode(String name, ArrayList<PartitionNode> testData) {
+	public TestCaseNode(String name, List<PartitionNode> testData) {
 		super(name);
 		fTestData = testData;
 	}
 
-	public ArrayList<PartitionNode> getTestData(){
+	public List<PartitionNode> getTestData(){
 		return fTestData;
 	}
 	

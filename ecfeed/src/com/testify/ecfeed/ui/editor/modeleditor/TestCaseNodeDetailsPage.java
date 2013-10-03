@@ -11,7 +11,7 @@
 
 package com.testify.ecfeed.ui.editor.modeleditor;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ArrayContentProvider;
@@ -229,7 +229,7 @@ public class TestCaseNodeDetailsPage extends GenericNodeDetailsPage implements I
 		fMainSection.setText(fSelectedTestCase.toString());
 		fTestSuiteNameCombo.setItems(fParent.getTestSuites().toArray(new String[]{}));
 		fTestSuiteNameCombo.setText(fSelectedTestCase.getName());
-		ArrayList<PartitionNode> testData = fSelectedTestCase.getTestData();
+		List<PartitionNode> testData = fSelectedTestCase.getTestData();
 		fTestDataViewer.setInput(testData);
 		fPartitionViewerColumn.setEditingSupport(new TestCasePartitionEditingSupport(fTestDataViewer, testData, this));
 //		fValuesViewerColumn.setEditingSupport(new TestCaseValueEditingSupport(fTestDataViewer, testData, this));

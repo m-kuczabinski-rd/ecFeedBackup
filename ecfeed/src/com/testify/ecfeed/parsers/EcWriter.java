@@ -13,7 +13,7 @@ package com.testify.ecfeed.parsers;
 
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.ArrayList;
+import java.util.List;
 
 import com.testify.ecfeed.constants.Constants;
 import com.testify.ecfeed.model.CategoryNode;
@@ -79,7 +79,7 @@ public class EcWriter {
 			element = createPartitionElement(name, value);
 		}
 		else if (node instanceof TestCaseNode){
-			ArrayList<PartitionNode> testData = ((TestCaseNode)node).getTestData();
+			List<PartitionNode> testData = ((TestCaseNode)node).getTestData();
 			element = createTestDataElement(name, testData);
 		}
 		else if (node instanceof ConstraintNode){
@@ -93,7 +93,7 @@ public class EcWriter {
 	}
 
 	//TODO Unit tests
-	private Element createTestDataElement(String name, ArrayList<PartitionNode> testData) {
+	private Element createTestDataElement(String name, List<PartitionNode> testData) {
 		Element testCaseElement = new Element(Constants.TEST_CASE_NODE_NAME);
 
 		Attribute testSuiteNameAttribute = new Attribute(Constants.TEST_SUITE_NAME_ATTRIBUTE, name);

@@ -1,6 +1,6 @@
 package com.testify.ecfeed.model;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import com.testify.ecfeed.api.IConstraint;
 import com.testify.ecfeed.model.constraint.Constraint;
@@ -30,9 +30,8 @@ public class ConstraintNode extends GenericNode implements IConstraint{
 		return null;
 	}
 
-	@SuppressWarnings("rawtypes")
 	@Override
-	public boolean evaluate(ArrayList values) {
+	public boolean evaluate(List<? extends Object> values) {
 		if(fConstraint != null){
 			return fConstraint.evaluate(values);
 		}

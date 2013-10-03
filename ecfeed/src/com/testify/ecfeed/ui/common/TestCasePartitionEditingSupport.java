@@ -11,7 +11,7 @@
 
 package com.testify.ecfeed.ui.common;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.CellEditor;
@@ -28,12 +28,12 @@ import com.testify.ecfeed.utils.EcModelUtils;
 
 public class TestCasePartitionEditingSupport extends EditingSupport {
 	private final TableViewer fViewer;
-	private ArrayList<PartitionNode> fTestData;
+	private List<PartitionNode> fTestData;
 	private ComboBoxViewerCellEditor fComboCellEditor = null;
 	private TextCellEditor fTextCellEditor;
 	private IInputChangedListener fSetValueListener;
 
-	public TestCasePartitionEditingSupport(TableViewer viewer, ArrayList<PartitionNode> testData, IInputChangedListener setValueListener) {
+	public TestCasePartitionEditingSupport(TableViewer viewer, List<PartitionNode> testData, IInputChangedListener setValueListener) {
 		super(viewer);
 		fViewer = viewer;
 		fTestData = testData;

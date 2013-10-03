@@ -13,6 +13,8 @@ package com.testify.ecfeed.ui.editor.modeleditor;
 
 import java.util.Collection;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.forms.IFormPart;
@@ -41,8 +43,8 @@ import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.viewers.TreeNodeContentProvider;
 
+import com.testify.ecfeed.api.IAlgorithm;
 import com.testify.ecfeed.api.IConstraint;
-import com.testify.ecfeed.api.ITestGenAlgorithm;
 import com.testify.ecfeed.constants.Constants;
 import com.testify.ecfeed.constants.DialogStrings;
 import com.testify.ecfeed.model.CategoryNode;
@@ -82,6 +84,93 @@ public class MethodNodeDetailsPage extends GenericNodeDetailsPage implements IIn
 	private String EMPTY_STRING = "";
 	private Section fParametersSection;
 
+	private class GenerateTestSuiteButtonSelectionAdapter extends SelectionAdapter{
+		@Override
+		public void widgetSelected(SelectionEvent e){
+			GenerateTestSuiteDialog dialog = new GenerateTestSuiteDialog(getActiveShell(), fSelectedMethod);
+			if(dialog.open() == IDialogConstants.OK_ID){
+				IAlgorithm<PartitionNode> selectedAlgorithm = dialog.getSelectedAlgorithm();
+				List<List<PartitionNode>> algorithmInput = dialog.getAlgorithmInput();
+				Collection<IConstraint> constraints = dialog.getConstraints();
+				String testSuiteName = dialog.getTestSuiteName();
+				
+				Set<List<PartitionNode>> generatedData = generateTestData(selectedAlgorithm, algorithmInput, constraints);
+				if(generatedData == null){
+					return;
+				}
+
+				addGeneratedDataToModel(testSuiteName, generatedData);
+			}
+		}
+
+		private Set<List<PartitionNode>> generateTestData(IAlgorithm<PartitionNode> algorithm, List<List<PartitionNode>> algorithmInput,
+				Collection<IConstraint> constraints) {
+			Set<List<PartitionNode>> generatedData;
+
+			generatedData = algorithm.generate(algorithmInput, constraints);
+			return generatedData;
+		}
+
+		private void addGeneratedDataToModel(String testSuiteName, Set<List<PartitionNode>> generatedData) {
+			int dataLength = generatedData.size();
+			if(dataLength > 0){
+				if(generatedData.size() > Constants.TEST_SUITE_SIZE_WARNING_LIMIT){
+					MessageDialog warningDialog = new MessageDialog(Display.getDefault().getActiveShell(), 
+							DialogStrings.DIALOG_LARGE_TEST_SUITE_GENERATED_TITLE, 
+							Display.getDefault().getSystemImage(SWT.ICON_WARNING), 
+							DialogStrings.DIALOG_LARGE_TEST_SUITE_GENERATED_MESSAGE(dataLength),
+							MessageDialog.WARNING, 
+							new String[] {IDialogConstants.OK_LABEL, IDialogConstants.CANCEL_LABEL}, IDialogConstants.OK_ID);
+					if(warningDialog.open() == IDialogConstants.CANCEL_ID){
+						return;
+					}
+				}
+				addTestSuiteToModel(testSuiteName, generatedData);
+			}
+			else{
+				new MessageDialog(Display.getDefault().getActiveShell(), 
+						DialogStrings.DIALOG_EMPTY_TEST_SUITE_GENERATED_TITLE, 
+						Display.getDefault().getSystemImage(SWT.ICON_INFORMATION), 
+						DialogStrings.DIALOG_EMPTY_TEST_SUITE_GENERATED_MESSAGE,
+						MessageDialog.INFORMATION, 
+						new String[] {IDialogConstants.OK_LABEL}, IDialogConstants.OK_ID).open();
+			}
+		}
+
+		@SuppressWarnings({ "unchecked" })
+		private void addTestSuiteToModel(String testSuiteName, Set<List<PartitionNode>> generatedData) {
+			List<TestCaseNode> testSuite = new ArrayList<TestCaseNode>();
+			for(List<?> testCase : generatedData){
+				List<PartitionNode> testData = (List<PartitionNode>)testCase;
+				TestCaseNode testCaseNode = new TestCaseNode(testSuiteName, testData);
+				testSuite.add(testCaseNode);
+			}
+			replaceExpectedValues(testSuite);
+			for(TestCaseNode testCase : testSuite){
+				fSelectedMethod.addTestCase(testCase);
+			}
+			updateModel(fSelectedMethod);
+		}
+
+		private void replaceExpectedValues(List<TestCaseNode> testSuite) {
+			if(fSelectedMethod.getExpectedCategoriesNames().size() == 0){
+				return;
+			}
+			//replace expected values partitions with anonymous ones
+			for(TestCaseNode testCase : testSuite){
+				List<PartitionNode> testData = testCase.getTestData();
+				for(int i = 0; i < testData.size(); i++){
+					CategoryNode category = testData.get(i).getCategory();
+					if(category.isExpected()){
+						PartitionNode anonymousPartition = new PartitionNode(Constants.EXPECTED_VALUE_PARTITION_NAME, testData.get(i).getValue());
+						anonymousPartition.setParent(category);
+						testData.set(i, anonymousPartition);
+					}
+				}
+			}
+		}
+	}
+	
 	private class TestCaseViewerContentProvider extends TreeNodeContentProvider implements ITreeContentProvider{
 		public final Object[] EMPTY_ARRAY = new Object[]{};
 
@@ -296,8 +385,6 @@ public class MethodNodeDetailsPage extends GenericNodeDetailsPage implements IIn
 
 	}
 	
-
-	
 	private void createConstraintsViewer(Composite composite) {
 		fConstraintsViewer = CheckboxTableViewer.newCheckList(composite, SWT.BORDER | SWT.FULL_SELECTION);
 		fConstraintsViewer.setContentProvider(new ArrayContentProvider());
@@ -466,75 +553,7 @@ public class MethodNodeDetailsPage extends GenericNodeDetailsPage implements IIn
 	}
 	
 	private void createGenerateTestSuiteButton(Composite testCasesButonsComposite) {
-		Button button = createButton(testCasesButonsComposite, "Generate Test Suite", new SelectionAdapter() {
-			@SuppressWarnings({"rawtypes"})
-			@Override
-			public void widgetSelected(SelectionEvent e){
-				GenerateTestSuiteDialog dialog = new GenerateTestSuiteDialog(getActiveShell(), fSelectedMethod);
-				if(dialog.open() == IDialogConstants.OK_ID){
-					ITestGenAlgorithm selectedAlgorithm = dialog.getSelectedAlgorithm();
-					ArrayList[] algorithmInput = dialog.getAlgorithmInput();
-					IConstraint[] constraints = dialog.getConstraints();
-					
-					ArrayList[] generatedData = selectedAlgorithm.generate(algorithmInput, constraints);
-					if(generatedData == null){
-						return;
-					}
-					if(generatedData.length > 0){
-						if(generatedData.length > Constants.TEST_SUITE_SIZE_WARNING_LIMIT){
-							MessageDialog warningDialog = new MessageDialog(Display.getDefault().getActiveShell(), 
-									DialogStrings.DIALOG_LARGE_TEST_SUITE_GENERATED_TITLE, 
-									Display.getDefault().getSystemImage(SWT.ICON_WARNING), 
-									DialogStrings.DIALOG_LARGE_TEST_SUITE_GENERATED_MESSAGE(generatedData.length),
-									MessageDialog.WARNING, 
-									new String[] {IDialogConstants.OK_LABEL, IDialogConstants.CANCEL_LABEL}, IDialogConstants.OK_ID);
-							if(warningDialog.open() == IDialogConstants.CANCEL_ID){
-								return;
-							}
-						}
-						addTestSuiteToModel(dialog, generatedData);
-					}
-					else{
-						new MessageDialog(Display.getDefault().getActiveShell(), 
-								DialogStrings.DIALOG_EMPTY_TEST_SUITE_GENERATED_TITLE, 
-								Display.getDefault().getSystemImage(SWT.ICON_INFORMATION), 
-								DialogStrings.DIALOG_EMPTY_TEST_SUITE_GENERATED_MESSAGE,
-								MessageDialog.INFORMATION, 
-								new String[] {IDialogConstants.OK_LABEL}, IDialogConstants.OK_ID).open();
-					}
-				}
-			}
-
-			@SuppressWarnings({ "rawtypes", "unchecked" })
-			private void addTestSuiteToModel(GenerateTestSuiteDialog dialog,
-					ArrayList[] generatedData) {
-				ArrayList<TestCaseNode> testSuite = new ArrayList<TestCaseNode>();
-				for(ArrayList testCase : generatedData){
-					ArrayList<PartitionNode> testData = (ArrayList<PartitionNode>)testCase;
-					TestCaseNode testCaseNode = new TestCaseNode(dialog.getTestSuiteName(), testData);
-					testSuite.add(testCaseNode);
-				}
-				if(fSelectedMethod.getExpectedCategoriesNames().size() > 0){
-					//replace expected values partitions with anonymous ones
-					for(TestCaseNode testCase : testSuite){
-						ArrayList<PartitionNode> testData = testCase.getTestData();
-						for(int i = 0; i < testData.size(); i++){
-							CategoryNode category = testData.get(i).getCategory();
-							if(category.isExpected()){
-								PartitionNode anonymousPartition = new PartitionNode(Constants.EXPECTED_VALUE_PARTITION_NAME, testData.get(i).getValue());
-								anonymousPartition.setParent(category);
-								testData.set(i, anonymousPartition);
-							}
-						}
-					}
-				}
-				for(TestCaseNode testCase : testSuite){
-					fSelectedMethod.addTestCase(testCase);
-				}
-				updateModel(fSelectedMethod);
-			}
-		});
-		
+		Button button = createButton(testCasesButonsComposite, "Generate Test Suite", new GenerateTestSuiteButtonSelectionAdapter());
 		button.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
 	}
 	
