@@ -1,6 +1,8 @@
 package com.testify.ecfeed.ui.dialogs;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -34,8 +36,9 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Tree;
 
+import com.testify.ecfeed.api.IAlgorithm;
 import com.testify.ecfeed.api.IConstraint;
-import com.testify.ecfeed.api.ITestGenAlgorithm;
+import com.testify.ecfeed.api.IGenerator;
 import com.testify.ecfeed.constants.Constants;
 import com.testify.ecfeed.constants.DialogStrings;
 import com.testify.ecfeed.model.CategoryNode;
@@ -49,17 +52,19 @@ import com.testify.ecfeed.utils.EcModelUtils;
 
 public class GenerateTestSuiteDialog extends TitleAreaDialog {
 	private Combo fTestSuiteCombo;
+	private Combo fGeneratorCombo;
 	private Combo fAlgorithmCombo;
 	private Button fOkButton;
-	private ITestGenAlgorithm fSelectedAlgorithm;
-	private Map<String, ITestGenAlgorithm> fAvaliableAlgorithms;
+	private IAlgorithm<PartitionNode> fSelectedAlgorithm;
+	private Map<String, IGenerator<PartitionNode>> fAvaliableGenerators;
 	private MethodNode fMethod;
 	private String fTestSuiteName;
 	private CheckboxTreeViewer fCategoriesViewer;
 	private CheckboxTreeViewer fConstraintsViewer;
-	@SuppressWarnings("rawtypes")
-	private ArrayList[] fAlgorithmInput;
-	private IConstraint[] fConstraints;
+	private List<List<PartitionNode>> fAlgorithmInput;
+	private Collection<IConstraint> fConstraints;
+	private IGenerator<PartitionNode> fSelectedGenerator;
+	private List<List<PartitionNode>> fInputDoimain;
 
 	private class CategoriesContentProvider extends TreeNodeContentProvider implements ITreeContentProvider{
 		private final Object[] EMPTY_ARRAY = new Object[]{};
@@ -130,10 +135,27 @@ public class GenerateTestSuiteDialog extends TitleAreaDialog {
 		setHelpAvailable(false);
 		setShellStyle(SWT.BORDER | SWT.RESIZE | SWT.TITLE);
 		fMethod = method;
-		fAvaliableAlgorithms = getAvailableAlgorithms();
+		fInputDoimain = getInputDomain(fMethod);
+		fAvaliableGenerators = getAvailableGenerators(fInputDoimain);
 	}
 	
-	public ITestGenAlgorithm getSelectedAlgorithm() {
+	private List<List<PartitionNode>> getInputDomain(MethodNode method) {
+		List<List<PartitionNode>> inputDomain = new ArrayList<List<PartitionNode>>();
+		for(CategoryNode category : fMethod.getCategories()){
+			List<PartitionNode> partitions = new ArrayList<PartitionNode>();
+			if(category.isExpected()){
+				partitions.add(((ExpectedValueCategoryNode)category).getDefaultValuePartition());
+			}
+			else{
+				partitions.addAll(category.getPartitions());
+			}
+			inputDomain.add(partitions);
+		}
+		
+		return inputDomain;
+	}
+
+	public IAlgorithm<PartitionNode> getSelectedAlgorithm() {
 		return fSelectedAlgorithm;
 	}
 
@@ -313,43 +335,73 @@ public class GenerateTestSuiteDialog extends TitleAreaDialog {
 		composite.setLayout(new GridLayout(2, false));
 		composite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		
-		Label testSuiteLabel = new Label(composite, SWT.NONE);
-		testSuiteLabel.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
-		testSuiteLabel.setText("Algorithm");
+		Label generatorLabel = new Label(composite, SWT.NONE);
+		generatorLabel.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
+		generatorLabel.setText("Generator");
 		
+		createGeneratorViewer(composite);
+
+		Label algorithmLabel = new Label(composite, SWT.NONE);
+		algorithmLabel.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
+		algorithmLabel.setText("Algorithm");
+		
+		createAlgorithmViewer(composite);
+
+		if(fAvaliableGenerators.size() > 0){
+			String[] generatorNames = fAvaliableGenerators.keySet().toArray(new String[]{}); 
+			fGeneratorCombo.setItems(generatorNames);
+			fGeneratorCombo.setText(generatorNames[0]);
+		}
+	}
+
+	private void createAlgorithmViewer(Composite composite) {
 		ComboViewer algorithmViewer = new ComboViewer(composite, SWT.READ_ONLY);
-		String[] algorithmsNames = fAvaliableAlgorithms.keySet().toArray(new String[]{}); 
 		fAlgorithmCombo = algorithmViewer.getCombo();
 		fAlgorithmCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
-		fAlgorithmCombo.setItems(algorithmsNames);
-		if(fAvaliableAlgorithms.size() != 0){
-			fAlgorithmCombo.setText(algorithmsNames[0]);
-			fSelectedAlgorithm = fAvaliableAlgorithms.get(algorithmsNames[0]);
-			setOkButton(true);
-		}
-		else{
-			setOkButton(false);
-		}
 		fAlgorithmCombo.addModifyListener(new ModifyListener() {
 			@Override
 			public void modifyText(ModifyEvent e) {
-				fSelectedAlgorithm = fAvaliableAlgorithms.get(fAlgorithmCombo.getText());
+				fSelectedAlgorithm = fSelectedGenerator.getAlgorithm(fAlgorithmCombo.getText());
 			}
 		});
 	}
 
-	private Map<String, ITestGenAlgorithm> getAvailableAlgorithms() {
-		Map<String, ITestGenAlgorithm> result = new HashMap<String, ITestGenAlgorithm>();
+	private void createGeneratorViewer(Composite composite) {
+		ComboViewer generatorViewer = new ComboViewer(composite, SWT.READ_ONLY);
+		fGeneratorCombo = generatorViewer.getCombo();
+		fGeneratorCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		fGeneratorCombo.addModifyListener(new ModifyListener() {
+			@Override
+			public void modifyText(ModifyEvent e) {
+				fSelectedGenerator = fAvaliableGenerators.get(fGeneratorCombo.getText());
+				String[] availableAlgorithms = fSelectedGenerator.getAlgorithms();
+				fAlgorithmCombo.setItems(availableAlgorithms);
+				if(availableAlgorithms.length > 0){
+					fAlgorithmCombo.setText(availableAlgorithms[0]);
+					setOkButton(true);
+				}
+				else{
+					setOkButton(false);
+				}
+			}
+		});
+		setOkButton(false);
+	}
+
+	@SuppressWarnings("unchecked")
+	private Map<String, IGenerator<PartitionNode>> getAvailableGenerators(List<List<PartitionNode>> inputDomain) {
+		Map<String, IGenerator<PartitionNode>> result = new HashMap<String, IGenerator<PartitionNode>>();
 		
 		IExtensionRegistry reg = Platform.getExtensionRegistry();
 		IConfigurationElement[] extensions = 
-				reg.getConfigurationElementsFor(Constants.TEST_GEN_ALGORITHM_EXTENSION_POINT_ID);
+				reg.getConfigurationElementsFor(Constants.TEST_GENERATOR_EXTENSION_POINT_ID);
 		for(IConfigurationElement element : extensions){
 			try {
-				String algorithmName = element.getAttribute(Constants.ALGORITHM_NAME_ATTRIBUTE);
-				ITestGenAlgorithm implementation = (ITestGenAlgorithm)element.createExecutableExtension(Constants.TEST_GEN_ALGORITHM_IMPLEMENTATION_ATTRIBUTE);
-				if(algorithmName != null && implementation != null){
-					result.put(algorithmName, implementation);
+				String generatorName = element.getAttribute(Constants.GENERATOR_NAME_ATTRIBUTE);
+				IGenerator<PartitionNode> implementation = (IGenerator<PartitionNode>)element.createExecutableExtension(Constants.TEST_GENERATOR_IMPLEMENTATION_ATTRIBUTE);
+				implementation.initialize(inputDomain);
+				if(generatorName != null && implementation != null){
+					result.put(generatorName, implementation);
 				}
 			} catch (CoreException e) {
 				System.out.println("Exception: " + e.getMessage());
@@ -393,14 +445,14 @@ public class GenerateTestSuiteDialog extends TitleAreaDialog {
 			}
 		}
 		
-		fConstraints = constraints.toArray(new IConstraint[]{});
+		fConstraints = constraints;
 	}
 
 	private void saveAlgorithmInput() {
-		ArrayList<CategoryNode> categories = fMethod.getCategories();
-		fAlgorithmInput = new ArrayList[categories.size()];
+		List<CategoryNode> categories = fMethod.getCategories();
+		fAlgorithmInput = new ArrayList<List<PartitionNode>>();
 		for(int i = 0; i < categories.size(); i++){
-			ArrayList<PartitionNode> partitions = new ArrayList<PartitionNode>();
+			List<PartitionNode> partitions = new ArrayList<PartitionNode>();
 			if(categories.get(i).isExpected()){
 				ExpectedValueCategoryNode category = (ExpectedValueCategoryNode)categories.get(i);
 				partitions.add(category.getDefaultValuePartition());
@@ -412,16 +464,15 @@ public class GenerateTestSuiteDialog extends TitleAreaDialog {
 					}
 				}
 			}
-			fAlgorithmInput[i] = partitions;
+			fAlgorithmInput.add(partitions);
 		}
 	}
 
-	@SuppressWarnings("rawtypes")
-	public ArrayList[] getAlgorithmInput(){
+	public List<List<PartitionNode>> getAlgorithmInput(){
 		return fAlgorithmInput;
 	}
 	
-	public IConstraint[] getConstraints(){
+	public Collection<IConstraint> getConstraints(){
 		return fConstraints;
 	}
 }
