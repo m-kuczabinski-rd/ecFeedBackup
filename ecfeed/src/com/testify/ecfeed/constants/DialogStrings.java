@@ -87,6 +87,7 @@ public class DialogStrings {
 	public static final String DIALOG_GENERATE_TEST_SUITES_SELECT_PARTITIONS_LABEL = "Select which partitions will be considered for generating test suite. "
 			+ "Each category must be represented by at least one partition.";
 	public static final String DIALOG_LARGE_TEST_SUITE_GENERATED_TITLE = "Large size of generated data";
+	public static final String DIALOG_TEST_GENERATOR_EXCEPTION_TITLE = "Test generator issue";
 	public static String DIALOG_LARGE_TEST_SUITE_GENERATED_MESSAGE(int length) {
 		return "The algortithm generated " + length + " test cases. Adding this amount of data to the model may heavily affect tool's performance"
 				+ " and cause loss of data. Do you want to continue?";
