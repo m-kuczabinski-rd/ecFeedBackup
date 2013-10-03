@@ -1,46 +1,45 @@
 package com.testify.generators.algorithms;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
 import com.google.common.collect.Sets;
 
-public class TupleGenerator {
+public class TupleGenerator<E> {
 	
-	@SuppressWarnings({ "rawtypes" })
-	public Set<List> getNTuples(Collection[] input, int n){
-
-		Set<Collection> hashedInput = new HashSet<Collection>(Arrays.asList(input));
-		Set<Set<Collection>> powerSet = Sets.powerSet(hashedInput);
-		Set<Set<Collection>> kPremutation = new HashSet<Set<Collection>>();
+	public Set<List<E>> getNTuples(List<List<E>> input, int n){
 		
-		for(Set<Collection> permutation : powerSet){
+		Set<Collection<E>> powerSetInput = new LinkedHashSet<Collection<E>>(input);
+		
+		Set<Set<Collection<E>>> powerSet = Sets.powerSet(powerSetInput);
+		Set<Set<Collection<E>>> kPremutation = new HashSet<Set<Collection<E>>>();
+		
+		for(Set<Collection<E>> permutation : powerSet){
 			if(permutation.size() == n){
 				kPremutation.add(permutation);
 			}
 		}
 
-		Set<List> result = new HashSet<List>();
-		for(Set<Collection> axes : kPremutation){
+		Set<List<E>> result = new HashSet<List<E>>();
+		for(Set<Collection<E>> axes : kPremutation){
 			result.addAll(cartesianProduct(axes));
 		}
 		
 		return result;
 	}
 	
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	private Set<List<Object>> cartesianProduct(Set<Collection> axes) {
-		List<Set<Object>> input = new ArrayList<Set<Object>>();
+	private Set<List<E>> cartesianProduct(Set<Collection<E>> axes) {
+		List<Set<E>> input = new ArrayList<Set<E>>();
 		
-		for(Collection axis : axes){
-			input.add(new HashSet(axis));
+		for(Collection<E> axis : axes){
+			input.add(new HashSet<E>(axis));
 		}
 		
-		Set<List<Object>> product = Sets.cartesianProduct(input);
+		Set<List<E>> product = Sets.cartesianProduct(input);
 		return product;
 	}
 }
