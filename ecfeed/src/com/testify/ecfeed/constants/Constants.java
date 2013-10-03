@@ -94,9 +94,9 @@ public class Constants {
 	public static final short DEFAULT_EXPECTED_SHORT_VALUE = 0;
 	public static final String DEFAULT_EXPECTED_STRING_VALUE = "";
 
-	public static final String TEST_GEN_ALGORITHM_EXTENSION_POINT_ID = "com.testify.ecfeed.algorithm";
-	public static final String TEST_GEN_ALGORITHM_IMPLEMENTATION_ATTRIBUTE = "implementation";
-	public static final String ALGORITHM_NAME_ATTRIBUTE = "name";
+	public static final String TEST_GENERATOR_EXTENSION_POINT_ID = "com.testify.ecfeed.generator";
+	public static final String TEST_GENERATOR_IMPLEMENTATION_ATTRIBUTE = "implementation";
+	public static final String GENERATOR_NAME_ATTRIBUTE = "name";
 	
 	
 	/**
