@@ -15,6 +15,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 import java.util.ArrayList;
 
@@ -105,11 +106,11 @@ public class MethodNode extends GenericNode {
 		return fConstraints;
 	}
 
-	public ArrayList<IConstraint> getConstraints(String name) {
-		ArrayList<IConstraint> constraints = new ArrayList<IConstraint>();
+	public List<IConstraint<PartitionNode>> getConstraints(String name) {
+		List<IConstraint<PartitionNode>> constraints = new ArrayList<IConstraint<PartitionNode>>();
 		for(ConstraintNode node : fConstraints){
 			if(node.getName().equals(name)){
-				constraints.add(node);
+				constraints.add(node.getConstraint());
 			}
 		}
 		return constraints;
