@@ -2,12 +2,12 @@ package com.testify.generators.algorithms;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.HashSet;
 
+import com.google.common.base.Predicate;
 import com.google.common.collect.Sets;
 import com.testify.ecfeed.api.IAlgorithm;
 import com.testify.ecfeed.api.IConstraint;
@@ -15,6 +15,20 @@ import com.testify.ecfeed.api.IConstraint;
 public class GenericNWiseAlgorithm<E> implements IAlgorithm<E> {
 	private int N;
 
+	private class Constraint implements Predicate<List<E>>{
+		IConstraint<E> fConstraint;
+		
+		Constraint(IConstraint<E> constraint){
+			fConstraint = constraint;
+		}
+		
+		@Override
+		public boolean apply(List<E> arg) {
+			return fConstraint.evaluate(arg);
+		}
+
+	}
+	
 	public GenericNWiseAlgorithm(int n) {
 		N = n;
 	}
@@ -24,26 +38,12 @@ public class GenericNWiseAlgorithm<E> implements IAlgorithm<E> {
 			Collection<IConstraint<E>> constraints){
 
 		TupleGenerator<E> tupleGenerator = new TupleGenerator<E>();
+		Set<List<E>> nTuples = tupleGenerator.getNTuples(input, N);
 		Set<List<E>> result = cartesianProduct(input);
 		result = applyConstraints(result, constraints);
-		if(N < input.size()){
-			Set<List<E>> nTuples = tupleGenerator.getNTuples(input, N);
-			result = selectTuplesRepresentation(nTuples, result);
-		}
+		result = selectTuplesRepresentation(nTuples, result);
+		result = convertToModifiable(result);
 		
-		return result;
-	}
-
-	private Set<List<E>> applyConstraints(Set<List<E>> input, Collection<IConstraint<E>> constraints) {
-		Set<List<E>> result = new HashSet<List<E>>(input);
-		for(IConstraint<E> constraint : constraints){
-			Iterator<List<E>> it = result.iterator();
-			while(it.hasNext()){
-				if(constraint.evaluate(it.next()) == false){
-					it.remove();
-				}
-			}
-		}
 		return result;
 	}
 
@@ -52,7 +52,26 @@ public class GenericNWiseAlgorithm<E> implements IAlgorithm<E> {
 		for(List<E> axis : input){
 			cartesianProductInput.add(new LinkedHashSet<E>(axis));
 		}
-		return Sets.cartesianProduct(cartesianProductInput);
+		return new HashSet<List<E>>(Sets.cartesianProduct(cartesianProductInput));
+	}
+
+	private Set<List<E>> applyConstraints(Set<List<E>> input, Collection<IConstraint<E>> constraints) {
+	
+		Set<Constraint> predicates = wrapConstraints(constraints);
+		Set<List<E>> result = input;
+		for(Predicate<List<E>> predicate : predicates){
+			result = Sets.filter(result, predicate);
+		}
+		return result;
+	}
+
+	private Set<Constraint> wrapConstraints(
+			Collection<IConstraint<E>> constraints) {
+		Set<Constraint> result = new HashSet<Constraint>();
+		for(IConstraint<E> constraint : constraints){
+			result.add(new Constraint(constraint));
+		}
+		return result;
 	}
 
 	private Set<List<E>> selectTuplesRepresentation(Set<List<E>> nTuples,
@@ -72,6 +91,14 @@ public class GenericNWiseAlgorithm<E> implements IAlgorithm<E> {
 		return result;
 	}
 
+	private int elementSize(Set<List<E>> input) {
+		//return size of first element; if list is empty, return 0
+		for(List<E> element : input){ 
+			return element.size();
+		}
+		return 0;
+	}
+
 	private int combinations(int n, int k) {
 		//return n!/(k!*(n-k)!);
 		int coefficient = 1;
@@ -84,13 +111,6 @@ public class GenericNWiseAlgorithm<E> implements IAlgorithm<E> {
 		return coefficient;
 	}
 
-	private int elementSize(Set<List<E>> input) {
-		for(List<E> element : input){
-			return element.size();
-		}
-		return 0;
-	}
-
 	private Set<List<E>> getUsedTuples(List<E> vector, Set<List<E>> tuples) {
 		Set<List<E>> usedTuples = new HashSet<List<E>>();
 		for(List<E> tuple : tuples){
@@ -99,5 +119,13 @@ public class GenericNWiseAlgorithm<E> implements IAlgorithm<E> {
 			}
 		}
 		return usedTuples;
+	}
+
+	private Set<List<E>> convertToModifiable(Set<List<E>> result) {
+		LinkedHashSet<List<E>> modifiable = new LinkedHashSet<List<E>>();
+		for(List<E> entry : result){
+			modifiable.add(new ArrayList<E>(entry));
+		}
+		return modifiable;
 	}
 }
