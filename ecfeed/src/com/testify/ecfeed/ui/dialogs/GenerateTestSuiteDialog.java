@@ -47,6 +47,7 @@ import com.testify.ecfeed.model.ExpectedValueCategoryNode;
 import com.testify.ecfeed.model.GenericNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
+import com.testify.ecfeed.model.constraint.Constraint;
 import com.testify.ecfeed.ui.common.TreeCheckStateListener;
 import com.testify.ecfeed.utils.EcModelUtils;
 
@@ -111,7 +112,8 @@ public class GenerateTestSuiteDialog extends TitleAreaDialog {
 		
 		public Object[] getChildren(Object element){
 			if(element instanceof String){
-				return fMethod.getConstraints((String)element).toArray();
+				Object[] result = fMethod.getConstraints((String)element).toArray(); 
+				return result;
 			}
 			return EMPTY_ARRAY;
 		}
@@ -207,8 +209,8 @@ public class GenerateTestSuiteDialog extends TitleAreaDialog {
 				if(element instanceof String){
 					return (String)element;
 				}
-				if(element instanceof ConstraintNode){
-					return ((ConstraintNode)element).getConstraint().toString();
+				if(element instanceof Constraint){
+					return ((Constraint)element).toString();
 				}
 				return null;
 			}
@@ -449,9 +451,9 @@ public class GenerateTestSuiteDialog extends TitleAreaDialog {
 	private void saveConstraints() {
 		Object[] checkedObjects = fConstraintsViewer.getCheckedElements();
 		List<IConstraint<PartitionNode>> constraints = new ArrayList<IConstraint<PartitionNode>>();
-		for(Object o : checkedObjects){
-			if(o instanceof ConstraintNode){
-				constraints.add(((ConstraintNode)o).getConstraint());
+		for(Object obj : checkedObjects){
+			if(obj instanceof Constraint){
+				constraints.add((Constraint)obj);
 			}
 		}
 		
