@@ -33,6 +33,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.viewers.CheckboxTableViewer;
 import org.eclipse.jface.viewers.CheckboxTreeViewer;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
@@ -107,7 +108,11 @@ public class MethodNodeDetailsPage extends GenericNodeDetailsPage implements IIn
 				Collection<IConstraint<PartitionNode>> constraints) {
 			Set<List<PartitionNode>> generatedData;
 
-			generatedData = algorithm.generate(algorithmInput, constraints);
+			ProgressMonitorDialog progressMonitor = new ProgressMonitorDialog(getActiveShell());
+			progressMonitor.open();
+			
+			generatedData = algorithm.generate(algorithmInput, constraints, progressMonitor.getProgressMonitor());
+			progressMonitor.close();
 			return generatedData;
 		}
 

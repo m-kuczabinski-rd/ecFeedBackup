@@ -10,11 +10,47 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.junit.Test;
 
 import com.testify.ecfeed.api.IConstraint;
 
 public class GenericNWiseAlgorithmTest {
+	private class DummyProgressMonitor implements IProgressMonitor{
+
+		@Override
+		public void beginTask(String name, int totalWork) {
+		}
+
+		@Override
+		public void done() {
+		}
+
+		@Override
+		public void internalWorked(double work) {
+		}
+
+		@Override
+		public boolean isCanceled() {
+			return false;
+		}
+
+		@Override
+		public void setCanceled(boolean value) {
+		}
+
+		@Override
+		public void setTaskName(String name) {
+		}
+
+		@Override
+		public void subTask(String name) {
+		}
+
+		@Override
+		public void worked(int work) {
+		}
+	}
 
 	@Test
 	public void testGeneratorNoConstraints() {
@@ -51,11 +87,12 @@ public class GenericNWiseAlgorithmTest {
 		GenericNWiseAlgorithm<String> fourWiseAlgorithm = new GenericNWiseAlgorithm<>(4);
 		
 		Collection<IConstraint<String>> constraints = new HashSet<IConstraint<String>>();
+		DummyProgressMonitor monitor = new DummyProgressMonitor(); 
 		
-		Set<List<String>> oneWiseSet = oneWiseAlgorithm.generate(input, constraints);
-		Set<List<String>> twoWiseSet = twoWiseAlgorithm.generate(input, constraints);
-		Set<List<String>> threeWiseSet = threeWiseAlgorithm.generate(input, constraints);
-		Set<List<String>> fourWiseSet = fourWiseAlgorithm.generate(input, constraints);
+		Set<List<String>> oneWiseSet = oneWiseAlgorithm.generate(input, constraints, monitor);
+		Set<List<String>> twoWiseSet = twoWiseAlgorithm.generate(input, constraints, monitor);
+		Set<List<String>> threeWiseSet = threeWiseAlgorithm.generate(input, constraints, monitor);
+		Set<List<String>> fourWiseSet = fourWiseAlgorithm.generate(input, constraints, monitor);
 
 		System.out.println("1-wise: " + oneWiseSet.toString());
 		System.out.println("2-wise: " + twoWiseSet.toString());
