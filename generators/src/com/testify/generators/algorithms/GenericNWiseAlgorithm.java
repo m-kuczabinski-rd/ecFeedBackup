@@ -166,7 +166,8 @@ public class GenericNWiseAlgorithm<E> implements IAlgorithm<E> {
 	}
 
 	/**
-	 * Returns value of binomial coefficient of n choose k
+	 * Returns value of binomial coefficient of n choose k, Works for relatively small n and k 
+	 * (does not handle overflow) 
 	 * @param n
 	 * @param k
 	 * @return
