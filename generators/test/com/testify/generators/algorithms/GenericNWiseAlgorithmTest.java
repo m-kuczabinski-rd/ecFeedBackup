@@ -12,46 +12,56 @@ import java.util.Set;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import com.testify.ecfeed.api.IConstraint;
+import com.testify.ecfeed.runner.EcFeeder;
+import com.testify.ecfeed.runner.annotations.EcModel;
+import com.testify.ecfeed.runner.annotations.expected;
 
-public class GenericNWiseAlgorithmTest {
-	private class DummyProgressMonitor implements IProgressMonitor{
+@RunWith(EcFeeder.class)
+@EcModel("test/algorithms.ect")
+public class GenericNWiseAlgorithmTest extends GenericNWiseAlgorithm<String>{
+	public GenericNWiseAlgorithmTest() {
+		super(0);
+	}
 
+	private static class DummyProgressMonitor implements IProgressMonitor{
 		@Override
 		public void beginTask(String name, int totalWork) {
 		}
-
 		@Override
 		public void done() {
 		}
-
 		@Override
 		public void internalWorked(double work) {
 		}
-
 		@Override
 		public boolean isCanceled() {
 			return false;
 		}
-
 		@Override
 		public void setCanceled(boolean value) {
 		}
-
 		@Override
 		public void setTaskName(String name) {
 		}
-
 		@Override
 		public void subTask(String name) {
 		}
-
 		@Override
 		public void worked(int work) {
 		}
 	}
 
+	@Test
+	public void testCombinations(@expected int result, int n, int k){
+		if(combinations(n, k) != result){
+			System.out.println("combinations(" + n + ", " + k + ") = " + combinations(n, k) + " != " + result);
+		}
+		assertEquals(result, combinations(n, k));
+	}
+	
 	@Test
 	public void testGeneratorNoConstraints() {
 		String x1 = "x1";
@@ -94,51 +104,51 @@ public class GenericNWiseAlgorithmTest {
 		Set<List<String>> threeWiseSet = threeWiseAlgorithm.generate(input, constraints, monitor);
 		Set<List<String>> fourWiseSet = fourWiseAlgorithm.generate(input, constraints, monitor);
 
-		System.out.println("1-wise: " + oneWiseSet.toString());
-		System.out.println("2-wise: " + twoWiseSet.toString());
-		System.out.println("3-wise: " + threeWiseSet.toString());
-		System.out.println("4-wise: " + fourWiseSet.toString());
-
+//		System.out.println("1-wise: " + oneWiseSet.toString());
+//		System.out.println("2-wise: " + twoWiseSet.toString());
+//		System.out.println("3-wise: " + threeWiseSet.toString());
+//		System.out.println("4-wise: " + fourWiseSet.toString());
+//
 		TupleGenerator<String> tupleGenerator = new TupleGenerator<String>();
 		Set<List<String>> oneTuples = tupleGenerator.getNTuples(input, 1);
 		Set<List<String>> twoTuples = tupleGenerator.getNTuples(input, 2);
 		Set<List<String>> threeTuples = tupleGenerator.getNTuples(input, 3);
 		Set<List<String>> fourTuples = tupleGenerator.getNTuples(input, 4);
 		
-		System.out.println("Checking 1-wise");
-		System.out.println("Possible " + oneTuples.size() + " tuples: " + oneTuples.toString());
+//		System.out.println("Checking 1-wise");
+//		System.out.println("Possible " + oneTuples.size() + " tuples: " + oneTuples.toString());
 		assertTrue(containsAllTuples(oneWiseSet, oneTuples));
-		System.out.println("Generated " + oneWiseSet.size() + " combinations\n");
-
-		System.out.println("Checking 2-wise");
-		System.out.println("Possible " + twoTuples.size() + " tuples: " + twoTuples.toString());
+//		System.out.println("Generated " + oneWiseSet.size() + " combinations\n");
+//
+//		System.out.println("Checking 2-wise");
+//		System.out.println("Possible " + twoTuples.size() + " tuples: " + twoTuples.toString());
 		assertTrue(containsAllTuples(twoWiseSet, twoTuples));
-		System.out.println("Generated " + twoWiseSet.size() + " combinations\n");
-
-		System.out.println("Checking 3-wise");
-		System.out.println("Possible " + threeTuples.size() + " tuples: " + threeTuples.toString());
+//		System.out.println("Generated " + twoWiseSet.size() + " combinations\n");
+//
+//		System.out.println("Checking 3-wise");
+//		System.out.println("Possible " + threeTuples.size() + " tuples: " + threeTuples.toString());
 		assertTrue(containsAllTuples(threeWiseSet, threeTuples));
-		System.out.println("Generated " + threeWiseSet.size() + " combinations\n");
-
-		System.out.println("Checking 4-wise");
-		System.out.println("Possible " + fourTuples.size() + " tuples: " + fourTuples.toString());
+//		System.out.println("Generated " + threeWiseSet.size() + " combinations\n");
+//
+//		System.out.println("Checking 4-wise");
+//		System.out.println("Possible " + fourTuples.size() + " tuples: " + fourTuples.toString());
 		assertTrue(containsAllTuples(fourWiseSet, fourTuples));
-		System.out.println("Generated " + fourWiseSet.size() + " combinations\n");
+//		System.out.println("Generated " + fourWiseSet.size() + " combinations\n");
 
 	}
-
+	
 	private boolean containsAllTuples(Set<List<String>> set, Set<List<String>> tuples) {
 		for(List<String> vector : set){
-			String message = "Vector " + vector.toString() + " contains: ";
+//			String message = "Vector " + vector.toString() + " contains: ";
 			Iterator<List<String>> it = tuples.iterator();
 			while(it.hasNext()){
 				List<String> tuple = it.next();
 				if(vector.containsAll(tuple)){
-					message += tuple.toString() + " ";
+//					message += tuple.toString() + " ";
 					it.remove();
 				}
 			}
-			System.out.println(message);
+//			System.out.println(message);
 		}
 		return tuples.size() == 0;
 	}
