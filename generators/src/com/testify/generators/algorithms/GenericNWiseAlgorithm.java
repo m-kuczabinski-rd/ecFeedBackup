@@ -70,7 +70,6 @@ public class GenericNWiseAlgorithm<E> implements IAlgorithm<E> {
 		result = selectTuplesRepresentation(result, nTuples, progressMonitor);
 		result = convertToModifiable(result);
 		
-		progressMonitor.done();
 		return result;
 	}
 
