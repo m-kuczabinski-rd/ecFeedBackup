@@ -197,6 +197,7 @@ public class ModelMasterDetailsBlock extends MasterDetailsBlock implements IMode
 	public void modelUpdated(RootNode model) {
 		fMasterSection.setText(model.getName());
 		fTreeViewer.refresh();
+		fMasterSection.layout();
 	}
 	
 	void selectNode(IGenericNode node){

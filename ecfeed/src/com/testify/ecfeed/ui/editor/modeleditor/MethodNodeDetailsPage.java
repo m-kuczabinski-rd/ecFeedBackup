@@ -87,6 +87,7 @@ public class MethodNodeDetailsPage extends GenericNodeDetailsPage implements IIn
 	private Composite fParametersComposite;
 	private String EMPTY_STRING = "";
 	private Section fParametersSection;
+	private Section fTestCasesSection;
 
 	private class GenerateTestSuiteButtonSelectionAdapter extends SelectionAdapter{
 		
@@ -526,15 +527,15 @@ public class MethodNodeDetailsPage extends GenericNodeDetailsPage implements IIn
 	}
 
 	private void createTestCasesSection(Composite mainComposite) {
-		Section testCasesSection = getToolkit().createSection(mainComposite, Section.TITLE_BAR);
-		testCasesSection.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
-		getToolkit().paintBordersFor(testCasesSection);
-		testCasesSection.setText("Test Cases");
+		fTestCasesSection = getToolkit().createSection(mainComposite, Section.TITLE_BAR);
+		fTestCasesSection.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+		getToolkit().paintBordersFor(fTestCasesSection);
+		fTestCasesSection.setText("Test Cases");
 		
-		Composite testCasesComposite = new Composite(testCasesSection, SWT.NONE);
+		Composite testCasesComposite = new Composite(fTestCasesSection, SWT.NONE);
 		getToolkit().adapt(testCasesComposite);
 		getToolkit().paintBordersFor(testCasesComposite);
-		testCasesSection.setClient(testCasesComposite);
+		fTestCasesSection.setClient(testCasesComposite);
 		testCasesComposite.setLayout(new GridLayout(2, false));
 		
 		createTestCasesViewer(testCasesComposite);
@@ -683,6 +684,7 @@ public class MethodNodeDetailsPage extends GenericNodeDetailsPage implements IIn
 		fConstraintsViewer.refresh();
 		fTestCasesViewer.refresh();
 		fConstraintsSection.layout();
+		fTestCasesSection.layout();
 		fMainSection.layout();
 	}
 
