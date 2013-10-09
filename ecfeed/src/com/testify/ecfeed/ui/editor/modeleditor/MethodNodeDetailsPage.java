@@ -11,6 +11,7 @@
 
 package com.testify.ecfeed.ui.editor.modeleditor;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,9 +32,11 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Table;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
+import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.CheckboxTableViewer;
 import org.eclipse.jface.viewers.CheckboxTreeViewer;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
@@ -86,6 +89,61 @@ public class MethodNodeDetailsPage extends GenericNodeDetailsPage implements IIn
 	private Section fParametersSection;
 
 	private class GenerateTestSuiteButtonSelectionAdapter extends SelectionAdapter{
+		
+		public class AlgorithmContext{
+			private IAlgorithm<PartitionNode> fAlgorithm;
+			private List<List<PartitionNode>> fAlgorithmInput;
+			private Collection<IConstraint<PartitionNode>> fConstraints;
+
+			public AlgorithmContext(IAlgorithm<PartitionNode> algorithm, 
+					List<List<PartitionNode>> algorithmInput,
+					Collection<IConstraint<PartitionNode>> constraints){
+
+				fAlgorithm = algorithm;
+				fAlgorithmInput = algorithmInput;
+				fConstraints = constraints;
+			}
+			
+			public IAlgorithm<PartitionNode> getAlgorithm(){
+				return fAlgorithm;
+			}
+
+			public List<List<PartitionNode>> getAlgorithmInput(){
+				return fAlgorithmInput;
+			}
+
+			public Collection<IConstraint<PartitionNode>> getConstraints(){
+				return fConstraints;
+			}
+
+		}
+		
+		private class AlgorithmRunnable implements IRunnableWithProgress{
+			private IAlgorithm<PartitionNode> fAlgorithm;
+			private List<List<PartitionNode>> fAlgorithmInput;
+			private Collection<IConstraint<PartitionNode>> fConstraints;
+			private IProgressMonitor fProgressMonitor;
+			private Set<List<PartitionNode>> fGeneratedData;
+			
+			public AlgorithmRunnable(AlgorithmContext context,
+					IProgressMonitor progressMonitor) {
+				fAlgorithm = context.getAlgorithm();
+				fAlgorithmInput = context.getAlgorithmInput();
+				fConstraints = context.getConstraints();
+				fProgressMonitor = progressMonitor;
+			}
+			
+			@Override
+			public void run(IProgressMonitor monitor)
+					throws InvocationTargetException, InterruptedException {
+				fGeneratedData = fAlgorithm.generate(fAlgorithmInput, fConstraints, fProgressMonitor);
+			}
+		
+			public Set<List<PartitionNode>> getGeneratedData(){
+				return fGeneratedData;
+			}
+		}
+		
 		@Override
 		public void widgetSelected(SelectionEvent e){
 			GenerateTestSuiteDialog dialog = new GenerateTestSuiteDialog(getActiveShell(), fSelectedMethod);
@@ -106,14 +164,17 @@ public class MethodNodeDetailsPage extends GenericNodeDetailsPage implements IIn
 
 		private Set<List<PartitionNode>> generateTestData(IAlgorithm<PartitionNode> algorithm, List<List<PartitionNode>> algorithmInput,
 				Collection<IConstraint<PartitionNode>> constraints) {
-			Set<List<PartitionNode>> generatedData;
-
-			ProgressMonitorDialog progressMonitor = new ProgressMonitorDialog(getActiveShell());
-			progressMonitor.open();
-			
-			generatedData = algorithm.generate(algorithmInput, constraints, progressMonitor.getProgressMonitor());
-			progressMonitor.close();
-			return generatedData;
+			ProgressMonitorDialog progressDialog = new ProgressMonitorDialog(getActiveShell());
+			AlgorithmContext algorithmContext = new AlgorithmContext(algorithm, algorithmInput, constraints);
+			AlgorithmRunnable algorithmRunnable = new AlgorithmRunnable(algorithmContext, progressDialog.getProgressMonitor());
+			try {
+				progressDialog.run(false, true, algorithmRunnable);
+			} catch (InvocationTargetException e) {
+				e.printStackTrace();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			return algorithmRunnable.getGeneratedData();
 		}
 
 		private void addGeneratedDataToModel(String testSuiteName, Set<List<PartitionNode>> generatedData) {
@@ -558,7 +619,8 @@ public class MethodNodeDetailsPage extends GenericNodeDetailsPage implements IIn
 	}
 	
 	private void createGenerateTestSuiteButton(Composite testCasesButonsComposite) {
-		Button button = createButton(testCasesButonsComposite, "Generate Test Suite", new GenerateTestSuiteButtonSelectionAdapter());
+		Button button = createButton(testCasesButonsComposite, "Generate Test Suite", 
+				new GenerateTestSuiteButtonSelectionAdapter());
 		button.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
 	}
 	
