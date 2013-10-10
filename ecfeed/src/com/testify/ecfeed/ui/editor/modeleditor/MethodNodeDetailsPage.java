@@ -91,57 +91,118 @@ public class MethodNodeDetailsPage extends GenericNodeDetailsPage implements IIn
 
 	private class GenerateTestSuiteButtonSelectionAdapter extends SelectionAdapter{
 		
+		public class AlgorithmProgressMonitor implements IProgressMonitor{
+			private Display fDisplay = Display.getDefault();
+			private IProgressMonitor fMonitor;
+			
+			public AlgorithmProgressMonitor(ProgressMonitorDialog dialog) {
+				fMonitor = dialog.getProgressMonitor();
+			}
+
+			@Override
+			public void beginTask(final String name, final int totalWork) {
+				fDisplay.syncExec(new Runnable() {
+					@Override
+					public void run() {
+						fMonitor.beginTask(name, totalWork);
+					}
+				});
+			}
+
+			@Override
+			public void done() {
+				fDisplay.syncExec(new Runnable() {
+					@Override
+					public void run() {
+						fMonitor.done();
+					}
+				});
+			}
+
+			@Override
+			public void internalWorked(final double work) {
+				fDisplay.syncExec(new Runnable() {
+					@Override
+					public void run() {
+						fMonitor.internalWorked(work);
+					}
+				});
+			}
+
+			@Override
+			public boolean isCanceled() {
+				return fMonitor.isCanceled();
+			}
+
+			@Override
+			public void setCanceled(boolean value) {
+				fMonitor.setCanceled(value);
+			}
+
+			@Override
+			public void setTaskName(final String name) {
+				fDisplay.syncExec(new Runnable() {
+					@Override
+					public void run() {
+						fMonitor.setTaskName(name);
+					}
+				});
+			}
+
+			@Override
+			public void subTask(final String name) {
+				fDisplay.syncExec(new Runnable() {
+					@Override
+					public void run() {
+						fMonitor.subTask(name);
+					}
+				});
+			}
+
+			@Override
+			public void worked(final int work) {
+				fDisplay.syncExec(new Runnable() {
+					@Override
+					public void run() {
+						fMonitor.worked(work);
+					}
+				});
+			}
+		}
+		
 		public class AlgorithmContext{
-			private IAlgorithm<PartitionNode> fAlgorithm;
-			private List<List<PartitionNode>> fAlgorithmInput;
-			private Collection<IConstraint<PartitionNode>> fConstraints;
+			public IAlgorithm<PartitionNode> algorithm;
+			public List<List<PartitionNode>> algorithmInput;
+			public Collection<IConstraint<PartitionNode>> constraints;
 
 			public AlgorithmContext(IAlgorithm<PartitionNode> algorithm, 
 					List<List<PartitionNode>> algorithmInput,
 					Collection<IConstraint<PartitionNode>> constraints){
-
-				fAlgorithm = algorithm;
-				fAlgorithmInput = algorithmInput;
-				fConstraints = constraints;
+				this.algorithm = algorithm;
+				this.algorithmInput = algorithmInput;
+				this.constraints = constraints;
 			}
-			
-			public IAlgorithm<PartitionNode> getAlgorithm(){
-				return fAlgorithm;
-			}
-
-			public List<List<PartitionNode>> getAlgorithmInput(){
-				return fAlgorithmInput;
-			}
-
-			public Collection<IConstraint<PartitionNode>> getConstraints(){
-				return fConstraints;
-			}
-
 		}
 		
 		private class AlgorithmRunnable implements IRunnableWithProgress{
-			private IAlgorithm<PartitionNode> fAlgorithm;
-			private List<List<PartitionNode>> fAlgorithmInput;
-			private Collection<IConstraint<PartitionNode>> fConstraints;
-			private IProgressMonitor fProgressMonitor;
-			private Set<List<PartitionNode>> fGeneratedData;
+			AlgorithmContext context;
+			private IProgressMonitor progressMonitor;
+			private Set<List<PartitionNode>> generatedData;
 			
 			public AlgorithmRunnable(AlgorithmContext context,
 					IProgressMonitor progressMonitor) {
-				fAlgorithm = context.getAlgorithm();
-				fAlgorithmInput = context.getAlgorithmInput();
-				fConstraints = context.getConstraints();
-				fProgressMonitor = progressMonitor;
+				this.context = context;
+				this.progressMonitor = progressMonitor;
 			}
 			
 			@Override
 			public void run(IProgressMonitor monitor)
 					throws InvocationTargetException, InterruptedException {
-				fGeneratedData = fAlgorithm.generate(fAlgorithmInput, fConstraints, fProgressMonitor);
+				generatedData = context.algorithm.generate(context.algorithmInput, context.constraints, progressMonitor);
 			}
 		
 			public Set<List<PartitionNode>> getGeneratedData(){
-				return fGeneratedData;
+				return generatedData;
 			}
 		}
 		
@@ -152,9 +213,10 @@ public class MethodNodeDetailsPage extends GenericNodeDetailsPage implements IIn
 				IAlgorithm<PartitionNode> selectedAlgorithm = dialog.getSelectedAlgorithm();
 				List<List<PartitionNode>> algorithmInput = dialog.getAlgorithmInput();
 				Collection<IConstraint<PartitionNode>> constraints = dialog.getConstraints();
+				AlgorithmContext context = new AlgorithmContext(selectedAlgorithm, algorithmInput, constraints);
 				String testSuiteName = dialog.getTestSuiteName();
 				
-				Set<List<PartitionNode>> generatedData = generateTestData(selectedAlgorithm, algorithmInput, constraints);
+				Set<List<PartitionNode>> generatedData = generateTestData(context);
 				if(generatedData == null){
 					return;
 				}
@@ -163,16 +225,12 @@ public class MethodNodeDetailsPage extends GenericNodeDetailsPage implements IIn
 			}
 		}
 
-		private Set<List<PartitionNode>> generateTestData(IAlgorithm<PartitionNode> algorithm, List<List<PartitionNode>> algorithmInput,
-				Collection<IConstraint<PartitionNode>> constraints) {
+		private Set<List<PartitionNode>> generateTestData(final AlgorithmContext context) {
 			ProgressMonitorDialog progressDialog = new ProgressMonitorDialog(getActiveShell());
-			AlgorithmContext algorithmContext = new AlgorithmContext(algorithm, algorithmInput, constraints);
-			AlgorithmRunnable algorithmRunnable = new AlgorithmRunnable(algorithmContext, progressDialog.getProgressMonitor());
+			AlgorithmRunnable algorithmRunnable = new AlgorithmRunnable(context, new AlgorithmProgressMonitor(progressDialog));
 			try {
-				progressDialog.run(false, true, algorithmRunnable);
-			} catch (InvocationTargetException e) {
-				e.printStackTrace();
-			} catch (InterruptedException e) {
+				progressDialog.run(true, true, algorithmRunnable);
+			} catch (InvocationTargetException | InterruptedException e) {
 				e.printStackTrace();
 			}
 			return algorithmRunnable.getGeneratedData();
@@ -204,10 +262,9 @@ public class MethodNodeDetailsPage extends GenericNodeDetailsPage implements IIn
 			}
 		}
 
-		@SuppressWarnings({ "unchecked" })
 		private void addTestSuiteToModel(String testSuiteName, Set<List<PartitionNode>> generatedData) {
 			List<TestCaseNode> testSuite = new ArrayList<TestCaseNode>();
-			for(List<?> testCase : generatedData){
+			for(List<PartitionNode> testCase : generatedData){
 				List<PartitionNode> testData = (List<PartitionNode>)testCase;
 				TestCaseNode testCaseNode = new TestCaseNode(testSuiteName, testData);
 				testSuite.add(testCaseNode);
