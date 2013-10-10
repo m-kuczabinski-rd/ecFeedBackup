@@ -11,11 +11,9 @@
 
 package com.testify.ecfeed.ui.editor.modeleditor;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.forms.IFormPart;
@@ -32,11 +30,8 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Table;
-import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.jface.dialogs.ProgressMonitorDialog;
-import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.CheckboxTableViewer;
 import org.eclipse.jface.viewers.CheckboxTreeViewer;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
@@ -47,8 +42,6 @@ import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.viewers.TreeNodeContentProvider;
 
-import com.testify.ecfeed.api.IAlgorithm;
-import com.testify.ecfeed.api.IConstraint;
 import com.testify.ecfeed.constants.Constants;
 import com.testify.ecfeed.constants.DialogStrings;
 import com.testify.ecfeed.model.CategoryNode;
@@ -67,7 +60,6 @@ import com.testify.ecfeed.ui.common.DefaultValueEditingSupport;
 import com.testify.ecfeed.ui.common.IInputChangedListener;
 import com.testify.ecfeed.ui.common.TreeCheckStateListener;
 import com.testify.ecfeed.ui.dialogs.AddTestCaseDialog;
-import com.testify.ecfeed.ui.dialogs.GenerateTestSuiteDialog;
 import com.testify.ecfeed.ui.dialogs.RenameTestSuiteDialog;
 import com.testify.ecfeed.ui.dialogs.TestMethodRenameDialog;
 
@@ -89,212 +81,6 @@ public class MethodNodeDetailsPage extends GenericNodeDetailsPage implements IIn
 	private Section fParametersSection;
 	private Section fTestCasesSection;
 
-	private class GenerateTestSuiteButtonSelectionAdapter extends SelectionAdapter{
-		
-		public class AlgorithmProgressMonitor implements IProgressMonitor{
-			private Display fDisplay = Display.getDefault();
-			private IProgressMonitor fMonitor;
-			
-			public AlgorithmProgressMonitor(ProgressMonitorDialog dialog) {
-				fMonitor = dialog.getProgressMonitor();
-			}
-
-			@Override
-			public void beginTask(final String name, final int totalWork) {
-				fDisplay.syncExec(new Runnable() {
-					@Override
-					public void run() {
-						fMonitor.beginTask(name, totalWork);
-					}
-				});
-			}
-
-			@Override
-			public void done() {
-				fDisplay.syncExec(new Runnable() {
-					@Override
-					public void run() {
-						fMonitor.done();
-					}
-				});
-			}
-
-			@Override
-			public void internalWorked(final double work) {
-				fDisplay.syncExec(new Runnable() {
-					@Override
-					public void run() {
-						fMonitor.internalWorked(work);
-					}
-				});
-			}
-
-			@Override
-			public boolean isCanceled() {
-				return fMonitor.isCanceled();
-			}
-
-			@Override
-			public void setCanceled(boolean value) {
-				fMonitor.setCanceled(value);
-			}
-
-			@Override
-			public void setTaskName(final String name) {
-				fDisplay.syncExec(new Runnable() {
-					@Override
-					public void run() {
-						fMonitor.setTaskName(name);
-					}
-				});
-			}
-
-			@Override
-			public void subTask(final String name) {
-				fDisplay.syncExec(new Runnable() {
-					@Override
-					public void run() {
-						fMonitor.subTask(name);
-					}
-				});
-			}
-
-			@Override
-			public void worked(final int work) {
-				fDisplay.syncExec(new Runnable() {
-					@Override
-					public void run() {
-						fMonitor.worked(work);
-					}
-				});
-			}
-		}
-		
-		public class AlgorithmContext{
-			public IAlgorithm<PartitionNode> algorithm;
-			public List<List<PartitionNode>> algorithmInput;
-			public Collection<IConstraint<PartitionNode>> constraints;
-
-			public AlgorithmContext(IAlgorithm<PartitionNode> algorithm, 
-					List<List<PartitionNode>> algorithmInput,
-					Collection<IConstraint<PartitionNode>> constraints){
-				this.algorithm = algorithm;
-				this.algorithmInput = algorithmInput;
-				this.constraints = constraints;
-			}
-		}
-		
-		private class AlgorithmRunnable implements IRunnableWithProgress{
-			AlgorithmContext context;
-			private IProgressMonitor progressMonitor;
-			private Set<List<PartitionNode>> generatedData;
-			
-			public AlgorithmRunnable(AlgorithmContext context,
-					IProgressMonitor progressMonitor) {
-				this.context = context;
-				this.progressMonitor = progressMonitor;
-			}
-			
-			@Override
-			public void run(IProgressMonitor monitor)
-					throws InvocationTargetException, InterruptedException {
-				generatedData = context.algorithm.generate(context.algorithmInput, context.constraints, progressMonitor);
-			}
-		
-			public Set<List<PartitionNode>> getGeneratedData(){
-				return generatedData;
-			}
-		}
-		
-		@Override
-		public void widgetSelected(SelectionEvent e){
-			GenerateTestSuiteDialog dialog = new GenerateTestSuiteDialog(getActiveShell(), fSelectedMethod);
-			if(dialog.open() == IDialogConstants.OK_ID){
-				IAlgorithm<PartitionNode> selectedAlgorithm = dialog.getSelectedAlgorithm();
-				List<List<PartitionNode>> algorithmInput = dialog.getAlgorithmInput();
-				Collection<IConstraint<PartitionNode>> constraints = dialog.getConstraints();
-				AlgorithmContext context = new AlgorithmContext(selectedAlgorithm, algorithmInput, constraints);
-				String testSuiteName = dialog.getTestSuiteName();
-				
-				Set<List<PartitionNode>> generatedData = generateTestData(context);
-				if(generatedData == null){
-					return;
-				}
-
-				addGeneratedDataToModel(testSuiteName, generatedData);
-			}
-		}
-
-		private Set<List<PartitionNode>> generateTestData(final AlgorithmContext context) {
-			ProgressMonitorDialog progressDialog = new ProgressMonitorDialog(getActiveShell());
-			AlgorithmRunnable algorithmRunnable = new AlgorithmRunnable(context, new AlgorithmProgressMonitor(progressDialog));
-			try {
-				progressDialog.run(true, true, algorithmRunnable);
-			} catch (InvocationTargetException | InterruptedException e) {
-				e.printStackTrace();
-			}
-			return algorithmRunnable.getGeneratedData();
-		}
-
-		private void addGeneratedDataToModel(String testSuiteName, Set<List<PartitionNode>> generatedData) {
-			int dataLength = generatedData.size();
-			if(dataLength > 0){
-				if(generatedData.size() > Constants.TEST_SUITE_SIZE_WARNING_LIMIT){
-					MessageDialog warningDialog = new MessageDialog(Display.getDefault().getActiveShell(), 
-							DialogStrings.DIALOG_LARGE_TEST_SUITE_GENERATED_TITLE, 
-							Display.getDefault().getSystemImage(SWT.ICON_WARNING), 
-							DialogStrings.DIALOG_LARGE_TEST_SUITE_GENERATED_MESSAGE(dataLength),
-							MessageDialog.WARNING, 
-							new String[] {IDialogConstants.OK_LABEL, IDialogConstants.CANCEL_LABEL}, IDialogConstants.OK_ID);
-					if(warningDialog.open() == IDialogConstants.CANCEL_ID){
-						return;
-					}
-				}
-				addTestSuiteToModel(testSuiteName, generatedData);
-			}
-			else{
-				new MessageDialog(Display.getDefault().getActiveShell(), 
-						DialogStrings.DIALOG_EMPTY_TEST_SUITE_GENERATED_TITLE, 
-						Display.getDefault().getSystemImage(SWT.ICON_INFORMATION), 
-						DialogStrings.DIALOG_EMPTY_TEST_SUITE_GENERATED_MESSAGE,
-						MessageDialog.INFORMATION, 
-						new String[] {IDialogConstants.OK_LABEL}, IDialogConstants.OK_ID).open();
-			}
-		}
-
-		private void addTestSuiteToModel(String testSuiteName, Set<List<PartitionNode>> generatedData) {
-			List<TestCaseNode> testSuite = new ArrayList<TestCaseNode>();
-			for(List<PartitionNode> testCase : generatedData){
-				List<PartitionNode> testData = (List<PartitionNode>)testCase;
-				TestCaseNode testCaseNode = new TestCaseNode(testSuiteName, testData);
-				testSuite.add(testCaseNode);
-			}
-			replaceExpectedValues(testSuite);
-			for(TestCaseNode testCase : testSuite){
-				fSelectedMethod.addTestCase(testCase);
-			}
-			updateModel(fSelectedMethod);
-		}
-
-		private void replaceExpectedValues(List<TestCaseNode> testSuite) {
-			if(fSelectedMethod.getExpectedCategoriesNames().size() == 0){
-				return;
-			}
-			//replace expected values partitions with anonymous ones
-			for(TestCaseNode testCase : testSuite){
-				List<PartitionNode> testData = testCase.getTestData();
-				for(int i = 0; i < testData.size(); i++){
-					CategoryNode category = testData.get(i).getCategory();
-					if(category.isExpected()){
-						PartitionNode anonymousPartition = new PartitionNode(Constants.EXPECTED_VALUE_PARTITION_NAME, testData.get(i).getValue());
-						anonymousPartition.setParent(category);
-						testData.set(i, anonymousPartition);
-					}
-				}
-			}
-		}
-	}
-	
 	private class TestCaseViewerContentProvider extends TreeNodeContentProvider implements ITreeContentProvider{
 		public final Object[] EMPTY_ARRAY = new Object[]{};
 
@@ -678,7 +464,7 @@ public class MethodNodeDetailsPage extends GenericNodeDetailsPage implements IIn
 	
 	private void createGenerateTestSuiteButton(Composite testCasesButonsComposite) {
 		Button button = createButton(testCasesButonsComposite, "Generate Test Suite", 
-				new GenerateTestSuiteButtonSelectionAdapter());
+				new GenerateTestSuiteAdapter(this));
 		button.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
 	}
 	
@@ -748,5 +534,9 @@ public class MethodNodeDetailsPage extends GenericNodeDetailsPage implements IIn
 	@Override
 	public void inputChanged() {
 		updateModel(fSelectedMethod);
+	}
+	
+	public MethodNode getSelectedMethod(){
+		return fSelectedMethod;
 	}
 }
