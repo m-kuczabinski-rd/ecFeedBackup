@@ -159,13 +159,15 @@ public class EcModelUtils {
 		try{
 			for(IMethod method : type.getMethods()){
 				IAnnotation[] annotations = method.getAnnotations();
-				for(IAnnotation annotation : annotations){
-					if(annotation.getElementName().equals("Test")){
-						MethodNode methodModel = generateMethodModel(method);
-						if(methodModel != null){
-							classNode.addMethod(methodModel);
+				if(method.getParameters().length > 0){
+					for(IAnnotation annotation : annotations){
+						if(annotation.getElementName().equals("Test")){
+							MethodNode methodModel = generateMethodModel(method);
+							if(methodModel != null){
+								classNode.addMethod(methodModel);
+							}
+							break;
 						}
-						break;
 					}
 				}
 			}
