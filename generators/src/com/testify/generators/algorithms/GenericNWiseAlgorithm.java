@@ -120,6 +120,7 @@ public class GenericNWiseAlgorithm<E> implements IAlgorithm<E> {
 	 */
 	protected Set<List<E>> selectTuplesRepresentation(Set<List<E>> input, 
 			Set<List<E>> nTuples, IProgressMonitor progressMonitor) {
+		if(progressMonitor == null) progressMonitor = new ConsoleProgressMonitor();
 		//for guava algorithms we need ordered sets 
 		Set<LinkedHashSet<E>> convertedInput = new HashSet<LinkedHashSet<E>>();  
 		Set<LinkedHashSet<E>> convertedTuples = new HashSet<LinkedHashSet<E>>();
@@ -133,26 +134,29 @@ public class GenericNWiseAlgorithm<E> implements IAlgorithm<E> {
 		Set<List<E>> result = new HashSet<List<E>>();
 		int elementSize = elementSize(input);
 		int totalSize = nTuples.size();
-		if(progressMonitor != null) progressMonitor.beginTask("Generating test data", nTuples.size());
+		progressMonitor.beginTask("Generating test data", nTuples.size());
 		int maxTuples = combinations(elementSize, N);
 		int generatedTuples = 0;
 		for(int t = maxTuples; t > 0; t--){
 			Iterator<LinkedHashSet<E>> it = convertedInput.iterator();
-			while(it.hasNext()){
+			while(it.hasNext() && !progressMonitor.isCanceled()){
 				LinkedHashSet<E> vector = it.next();						
 				Set<LinkedHashSet<E>> usedTuples = new HashSet<LinkedHashSet<E>>(getUsedTuples(vector, convertedTuples));
 				if(usedTuples.size() == t){
 					convertedTuples.removeAll(usedTuples);
 					result.add(new ArrayList<E>(vector));
 					it.remove();
-					if(progressMonitor != null) progressMonitor.worked(usedTuples.size());
+					progressMonitor.worked(usedTuples.size());
 					generatedTuples += usedTuples.size();
-					if(progressMonitor != null) progressMonitor.subTask("Generated " + result.size() + " test cases with " 
+					progressMonitor.subTask("Generated " + result.size() + " test cases with " 
 							+ generatedTuples + "/" + totalSize + " " + N + "-tuples\n");
 				}
 			}
+			if(progressMonitor.isCanceled()){
+				result.clear();
+			}
 		}
-		if(progressMonitor != null) progressMonitor.done();
+		progressMonitor.done();
 		return result;
 	}
 
