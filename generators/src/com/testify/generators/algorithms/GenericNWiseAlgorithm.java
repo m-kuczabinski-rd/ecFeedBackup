@@ -34,7 +34,6 @@ import com.testify.ecfeed.api.IConstraint;
  */
 public class GenericNWiseAlgorithm<E> implements IAlgorithm<E> {
 	private int N;
-	private SizePredicate fPredicate;
 
 	protected class Constraint implements Predicate<List<E>>{
 		IConstraint<E> fConstraint;
@@ -50,22 +49,8 @@ public class GenericNWiseAlgorithm<E> implements IAlgorithm<E> {
 
 	}
 	
-	protected class SizePredicate implements Predicate<Collection<E>>{
-		int fSize;
-		
-		public SizePredicate(int size) {
-			fSize = size;
-		}
-		
-		@Override
-		public boolean apply(Collection<E> vector) {
-			return vector.size() == fSize;
-		}
-	}
-	
 	public GenericNWiseAlgorithm(int n) {
 		N = n;
-		fPredicate = new SizePredicate(n);
 	}
 	
 	@Override
@@ -78,7 +63,9 @@ public class GenericNWiseAlgorithm<E> implements IAlgorithm<E> {
 		Set<List<E>> result = cartesianProduct(input);
 		result = applyConstraints(result, constraints);
 
-		result = selectTuplesRepresentation(result, nTuples, progressMonitor);
+		if(N != input.size()){
+			result = selectTuplesRepresentation(result, nTuples, progressMonitor);
+		}
 		result = convertToModifiable(result);
 		
 		return result;
@@ -206,8 +193,7 @@ public class GenericNWiseAlgorithm<E> implements IAlgorithm<E> {
 	 * @return
 	 */
 	protected Set<LinkedHashSet<E>> getUsedTuples(LinkedHashSet<E> vector, Set<LinkedHashSet<E>> tuples) {
-		Set<Set<E>> allTuplesSet = nCombinations(vector);
-		return Sets.intersection(tuples, allTuplesSet);
+		return Sets.intersection(tuples, Sets.powerSet(vector));
 	}
 
 	/**
@@ -222,15 +208,5 @@ public class GenericNWiseAlgorithm<E> implements IAlgorithm<E> {
 			modifiable.add(new ArrayList<E>(entry));
 		}
 		return modifiable;
-	}
-	
-	/**
-	 * Return all n-elements combinations of input element
-	 * @param input
-	 * @return
-	 */
-	protected Set<Set<E>> nCombinations(Set<E> input){
-		Set<Set<E>> powerSet = Sets.powerSet(input);
-		return Sets.filter(powerSet, fPredicate);
 	}
 }
