@@ -2,7 +2,7 @@
 <feature
       id="com.testify.ecfeed.feature"
       label="ecFeed"
-      version="1.0.0.qualifier"
+      version="1.2.0.qualifier"
       provider-name="TESTIFY">
 
    <description>
