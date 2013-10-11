@@ -90,6 +90,7 @@ public class EcFeeder extends BlockJUnit4ClassRunner {
 			return testMethods;
 		} catch (Throwable e) {
 			System.out.println("Exception: " + e.getMessage());
+			e.printStackTrace();
 			return null;
 		}
 
