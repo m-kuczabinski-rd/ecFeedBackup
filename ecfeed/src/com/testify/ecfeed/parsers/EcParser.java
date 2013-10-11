@@ -34,7 +34,6 @@ import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.TestCaseNode;
-import com.testify.ecfeed.utils.EcModelUtils;
 
 public class EcParser {
 	
@@ -231,14 +230,9 @@ public class EcParser {
 			}
 			else if(testParameterElement.getLocalName().equals(Constants.EXPECTED_PARAMETER_NODE_NAME)){
 				String valueString = testParameterElement.getAttributeValue(Constants.VALUE_ATTRIBUTE_NAME);
-				if(EcModelUtils.validatePartitionStringValue(valueString, category)){
-					Object value = EcModelUtils.getPartitionValueFromString(valueString, category.getType());
-					testValue = new PartitionNode(Constants.EXPECTED_VALUE_PARTITION_NAME, value);
-					testValue.setParent(category);
-				}
-				else{
-					return null;
-				}
+				Object value = parseValue(valueString, category.getType());
+				testValue = new PartitionNode(Constants.EXPECTED_VALUE_PARTITION_NAME, value);
+				testValue.setParent(category);
 			}
 			testData.add(testValue);
 		}
@@ -249,7 +243,7 @@ public class EcParser {
 		String name = element.getAttributeValue(Constants.NODE_NAME_ATTRIBUTE);
 		String type = element.getAttributeValue(Constants.TYPE_NAME_ATTRIBUTE);
 		String defaultValueString = element.getAttributeValue(Constants.DEFAULT_EXPECTED_VALUE_ATTRIBUTE);
-		Object defaultValue = EcModelUtils.getPartitionValueFromString(defaultValueString, type);
+		Object defaultValue = parseValue(defaultValueString, type);
 		return new ExpectedValueCategoryNode(name, type, defaultValue);
 	}
 	
