@@ -11,23 +11,21 @@
 
 package com.testify.ecfeed.test.model;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.databene.feed4junit.Feeder;
 
 import com.testify.ecfeed.model.GenericNode;
 //import com.testify.ecfeed.model.IGenericNode;
 
-@RunWith(Feeder.class)
+//@RunWith(Feeder.class)
 public class GenericNodeTest extends GenericNode {
 
 	public GenericNodeTest() {
 		super("dummy");
 	}
 
-	@Test
+//	@Test
 	public void testName(String name, String newName) {
 		GenericNode node = new GenericNode(name);
 		
