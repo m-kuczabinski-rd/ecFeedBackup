@@ -28,6 +28,7 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Display;
 
 import com.testify.ecfeed.api.IAlgorithm;
+import com.testify.ecfeed.api.IAlgorithmInput;
 import com.testify.ecfeed.api.IConstraint;
 import com.testify.ecfeed.constants.Constants;
 import com.testify.ecfeed.constants.DialogStrings;
@@ -126,27 +127,40 @@ class GenerateTestSuiteAdapter extends SelectionAdapter{
 		}
 	}
 	
-	private class AlgorithmContext{
-		public IAlgorithm<PartitionNode> algorithm;
+	private class AlgorithmInput implements IAlgorithmInput<PartitionNode>{
+//		public IAlgorithm<PartitionNode> algorithm;
 		public List<List<PartitionNode>> algorithmInput;
 		public Collection<IConstraint<PartitionNode>> constraints;
 
-		public AlgorithmContext(IAlgorithm<PartitionNode> algorithm, 
+		public AlgorithmInput(//IAlgorithm<PartitionNode> algorithm, 
 				List<List<PartitionNode>> algorithmInput,
 				Collection<IConstraint<PartitionNode>> constraints){
-			this.algorithm = algorithm;
+//			this.algorithm = algorithm;
 			this.algorithmInput = algorithmInput;
 			this.constraints = constraints;
+		}
+
+		@Override
+		public List<List<PartitionNode>> getInput() {
+			return algorithmInput;
+		}
+
+		@Override
+		public Collection<IConstraint<PartitionNode>> getConstraints() {
+			return constraints;
 		}
 	}
 	
 	private class AlgorithmRunnable implements IRunnableWithProgress{
-		AlgorithmContext context;
+		private IAlgorithm<PartitionNode> algorithm;
+		private AlgorithmInput context;
 		private IProgressMonitor progressMonitor;
 		private Set<List<PartitionNode>> generatedData;
 		
-		public AlgorithmRunnable(AlgorithmContext context,
+		public AlgorithmRunnable(IAlgorithm<PartitionNode> algorithm,
+				AlgorithmInput context,
 				IProgressMonitor progressMonitor) {
+			this.algorithm = algorithm;
 			this.context = context;
 			this.progressMonitor = progressMonitor;
 		}
@@ -154,8 +168,7 @@ class GenerateTestSuiteAdapter extends SelectionAdapter{
 		@Override
 		public void run(IProgressMonitor monitor)
 				throws InvocationTargetException, InterruptedException {
-			generatedData = context.algorithm.generate(context.algorithmInput, 
-					context.constraints, progressMonitor);
+			generatedData = algorithm.generate(context, progressMonitor);
 		}
 	
 		public Set<List<PartitionNode>> getGeneratedData(){
@@ -172,11 +185,11 @@ class GenerateTestSuiteAdapter extends SelectionAdapter{
 			IAlgorithm<PartitionNode> selectedAlgorithm = dialog.getSelectedAlgorithm();
 			List<List<PartitionNode>> algorithmInput = dialog.getAlgorithmInput();
 			Collection<IConstraint<PartitionNode>> constraints = dialog.getConstraints();
-			AlgorithmContext context = 
-					new AlgorithmContext(selectedAlgorithm, algorithmInput, constraints);
+			AlgorithmInput context = 
+					new AlgorithmInput(algorithmInput, constraints);
 			String testSuiteName = dialog.getTestSuiteName();
 			
-			Set<List<PartitionNode>> generatedData = generateTestData(context);
+			Set<List<PartitionNode>> generatedData = generateTestData(selectedAlgorithm, context);
 			if(generatedData == null){
 				return;
 			}
@@ -185,13 +198,14 @@ class GenerateTestSuiteAdapter extends SelectionAdapter{
 		}
 	}
 
-	private Set<List<PartitionNode>> generateTestData(final AlgorithmContext context) {
+	private Set<List<PartitionNode>> generateTestData(final IAlgorithm<PartitionNode> algorithm, 
+			final AlgorithmInput context) {
 		ProgressMonitorDialog progressDialog = 
 				new ProgressMonitorDialog(fPage.getActiveShell());
 		AlgorithmProgressMonitor progressMonitor = 
 				new AlgorithmProgressMonitor(progressDialog);
 		AlgorithmRunnable algorithmRunnable = 
-				new AlgorithmRunnable(context, progressMonitor);
+				new AlgorithmRunnable(algorithm, context, progressMonitor);
 		try {
 			progressDialog.run(true, true, algorithmRunnable);
 		} catch (InvocationTargetException | InterruptedException e) {

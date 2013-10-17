@@ -24,6 +24,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Sets;
 import com.testify.ecfeed.api.IAlgorithm;
+import com.testify.ecfeed.api.IAlgorithmInput;
 import com.testify.ecfeed.api.IConstraint;
 
 /**
@@ -54,16 +55,15 @@ public class GenericNWiseAlgorithm<E> implements IAlgorithm<E> {
 	}
 	
 	@Override
-	public Set<List<E>> generate(List<List<E>> input,
-			Collection<IConstraint<E>> constraints,
+	public Set<List<E>> generate(IAlgorithmInput<E> input,
 			IProgressMonitor progressMonitor){
 		
 		TupleGenerator<E> tupleGenerator = new TupleGenerator<E>();
-		Set<List<E>> nTuples = tupleGenerator.getNTuples(input, N);
-		Set<List<E>> result = cartesianProduct(input);
-		result = applyConstraints(result, constraints);
+		Set<List<E>> nTuples = tupleGenerator.getNTuples(input.getInput(), N);
+		Set<List<E>> result = cartesianProduct(input.getInput());
+		result = applyConstraints(result, input.getConstraints());
 
-		if(N != input.size()){
+		if(N != input.getInput().size()){
 			result = selectTuplesRepresentation(result, nTuples, progressMonitor);
 		}
 		result = convertToModifiable(result);
