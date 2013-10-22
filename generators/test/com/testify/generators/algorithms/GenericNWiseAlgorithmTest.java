@@ -25,6 +25,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import com.testify.ecfeed.api.IAlgorithmInput;
 import com.testify.ecfeed.api.IConstraint;
 import com.testify.ecfeed.runner.EcFeeder;
 import com.testify.ecfeed.runner.annotations.EcModel;
@@ -96,7 +97,7 @@ public class GenericNWiseAlgorithmTest extends GenericNWiseAlgorithm<String>{
 		ArrayList<String> z = new ArrayList<String>(Arrays.asList(new String[]{z1, z2, z3}));
 		ArrayList<String> u = new ArrayList<String>(Arrays.asList(new String[]{u1, u2, u3}));
 		
-		List<List<String>> input = new ArrayList<List<String>>();
+		final List<List<String>> input = new ArrayList<List<String>>();
 		input.add(x);
 		input.add(y);
 		input.add(z);
@@ -107,59 +108,52 @@ public class GenericNWiseAlgorithmTest extends GenericNWiseAlgorithm<String>{
 		GenericNWiseAlgorithm<String> threeWiseAlgorithm = new GenericNWiseAlgorithm<>(3);
 		GenericNWiseAlgorithm<String> fourWiseAlgorithm = new GenericNWiseAlgorithm<>(4);
 		
-		Collection<IConstraint<String>> constraints = new HashSet<IConstraint<String>>();
+		final Collection<IConstraint<String>> constraints = new HashSet<IConstraint<String>>();
 		DummyProgressMonitor monitor = new DummyProgressMonitor(); 
 		
-		Set<List<String>> oneWiseSet = oneWiseAlgorithm.generate(input, constraints, monitor);
-		Set<List<String>> twoWiseSet = twoWiseAlgorithm.generate(input, constraints, monitor);
-		Set<List<String>> threeWiseSet = threeWiseAlgorithm.generate(input, constraints, monitor);
-		Set<List<String>> fourWiseSet = fourWiseAlgorithm.generate(input, constraints, monitor);
+		IAlgorithmInput<String> algInput = new IAlgorithmInput<String>() {
 
-//		System.out.println("1-wise: " + oneWiseSet.toString());
-//		System.out.println("2-wise: " + twoWiseSet.toString());
-//		System.out.println("3-wise: " + threeWiseSet.toString());
-//		System.out.println("4-wise: " + fourWiseSet.toString());
-//
+			@Override
+			public List<List<String>> getInput() {
+				return input;
+			}
+
+			@Override
+			public Collection<IConstraint<String>> getConstraints() {
+				return constraints;
+			}
+		};
+		
+		Set<List<String>> oneWiseSet = oneWiseAlgorithm.generate(algInput, monitor);
+		Set<List<String>> twoWiseSet = twoWiseAlgorithm.generate(algInput, monitor);
+		Set<List<String>> threeWiseSet = threeWiseAlgorithm.generate(algInput, monitor);
+		Set<List<String>> fourWiseSet = fourWiseAlgorithm.generate(algInput, monitor);
+
 		TupleGenerator<String> tupleGenerator = new TupleGenerator<String>();
 		Set<List<String>> oneTuples = tupleGenerator.getNTuples(input, 1);
 		Set<List<String>> twoTuples = tupleGenerator.getNTuples(input, 2);
 		Set<List<String>> threeTuples = tupleGenerator.getNTuples(input, 3);
 		Set<List<String>> fourTuples = tupleGenerator.getNTuples(input, 4);
-		
-//		System.out.println("Checking 1-wise");
-//		System.out.println("Possible " + oneTuples.size() + " tuples: " + oneTuples.toString());
+
 		assertTrue(containsAllTuples(oneWiseSet, oneTuples));
-//		System.out.println("Generated " + oneWiseSet.size() + " combinations\n");
-//
-//		System.out.println("Checking 2-wise");
-//		System.out.println("Possible " + twoTuples.size() + " tuples: " + twoTuples.toString());
+
 		assertTrue(containsAllTuples(twoWiseSet, twoTuples));
-//		System.out.println("Generated " + twoWiseSet.size() + " combinations\n");
-//
-//		System.out.println("Checking 3-wise");
-//		System.out.println("Possible " + threeTuples.size() + " tuples: " + threeTuples.toString());
+
 		assertTrue(containsAllTuples(threeWiseSet, threeTuples));
-//		System.out.println("Generated " + threeWiseSet.size() + " combinations\n");
-//
-//		System.out.println("Checking 4-wise");
-//		System.out.println("Possible " + fourTuples.size() + " tuples: " + fourTuples.toString());
+
 		assertTrue(containsAllTuples(fourWiseSet, fourTuples));
-//		System.out.println("Generated " + fourWiseSet.size() + " combinations\n");
 
 	}
 	
 	private boolean containsAllTuples(Set<List<String>> set, Set<List<String>> tuples) {
 		for(List<String> vector : set){
-//			String message = "Vector " + vector.toString() + " contains: ";
 			Iterator<List<String>> it = tuples.iterator();
 			while(it.hasNext()){
 				List<String> tuple = it.next();
 				if(vector.containsAll(tuple)){
-//					message += tuple.toString() + " ";
 					it.remove();
 				}
 			}
-//			System.out.println(message);
 		}
 		return tuples.size() == 0;
 	}
