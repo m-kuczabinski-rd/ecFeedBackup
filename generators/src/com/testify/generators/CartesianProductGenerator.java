@@ -20,6 +20,26 @@ public class CartesianProductGenerator<E> implements IGenerator<E> {
 	private IProgressMonitor fProgressMonitor;
 	private boolean fDone = true;
 
+	protected List<List<E>> getInput(){
+		return fInput;
+	}
+	
+	protected Collection<? extends IConstraint<E>> getConstraints(){
+		return fConstraints;
+	}
+	
+	protected List<E> lastGenerated(){
+		return fLastGenerated;
+	}
+	
+	protected IProgressMonitor progressMonitor(){
+		return fProgressMonitor;
+	}
+	
+	protected boolean isDone(){
+		return fDone;
+	}
+	
 	@Override
 	public List<IGeneratorParameter> requiredParameters() {
 		return new ArrayList<IGeneratorParameter>();
@@ -84,7 +104,7 @@ public class CartesianProductGenerator<E> implements IGenerator<E> {
 			
 			if(elementIndex == category.size() - 1){
 				if(i == 0){
-//					//all elements have been iterated
+					//all elements have been iterated
 					fProgressMonitor.done();
 					fDone = true;
 				}
