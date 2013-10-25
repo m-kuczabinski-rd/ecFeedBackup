@@ -38,7 +38,7 @@ public interface IGenerator<E> {
 	 * Should be called prior to first call of getNext()
 	 */
 	public void initialize(List<List<E>> inputDomain, 
-			Collection<IConstraint<E>> constraints,
+			Collection<? extends IConstraint<E>> constraints,
 			IProgressMonitor progressMonitor) throws GeneratorException;
 	
 	/*
@@ -47,4 +47,9 @@ public interface IGenerator<E> {
 	 *  parameter. Blocking method, implementation should make be cancelable using progressMonitor.
 	 */
 	public List<E> getNext() throws GeneratorException;
+	
+	/*
+	 * Resets generator to its initial state.
+	 */
+	public void reset() throws GeneratorException;
 }
