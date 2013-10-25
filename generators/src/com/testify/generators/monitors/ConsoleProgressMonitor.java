@@ -9,15 +9,13 @@
  *     Patryk Chamuczynski (p.chamuczynski(at)gmail.com) - initial implementation
  ******************************************************************************/
 
-package com.testify.generators.algorithms;
+package com.testify.generators.monitors;
 
 import java.io.PrintStream;
 
-import org.eclipse.core.runtime.IProgressMonitor;
-
-public class ConsoleProgressMonitor implements IProgressMonitor {
-	private boolean fCanceled = false;
+public class ConsoleProgressMonitor extends SilentProgressMonitor {
 	private int fTotalWork;
+	private int fWorkCompleted;
 	private PrintStream fOutput;
 
 	public ConsoleProgressMonitor() {
@@ -30,29 +28,25 @@ public class ConsoleProgressMonitor implements IProgressMonitor {
 	
 	@Override
 	public void beginTask(String name, int totalWork) {
-		fOutput.println(name + ", " + totalWork + " steps to complete");
+		fOutput.print(name + ":\n" );
 		fTotalWork = totalWork;
+		fWorkCompleted = 0;
 	}
 
 	@Override
 	public void done() {
-		fOutput.println("Work done");
+		fOutput.println("\nWork done");
 	}
 
 	@Override
 	public void internalWorked(double work) {
-		fOutput.println("Internal progress " + work);
-	}
-
-	@Override
-	public boolean isCanceled() {
-		return fCanceled;
+		fOutput.println("Internal worked " + work);
 	}
 
 	@Override
 	public void setCanceled(boolean value) {
+		super.setCanceled(value);
 		fOutput.println("Processing canceled set to " + value);
-		fCanceled = value;
 	}
 
 	@Override
@@ -67,6 +61,12 @@ public class ConsoleProgressMonitor implements IProgressMonitor {
 
 	@Override
 	public void worked(int work) {
-		fOutput.println(work + "/" + fTotalWork + " steps completed");
+		final int DOTS_TO_PRINT = 50;
+		int completedBefore = fWorkCompleted;
+		fWorkCompleted += work;
+		int dotsToPrint = DOTS_TO_PRINT*fWorkCompleted/fTotalWork - DOTS_TO_PRINT*completedBefore/fTotalWork;
+		for(int i = 0; i < dotsToPrint; i++){
+			System.out.print(".");
+		}
 	}
 }
