@@ -13,6 +13,7 @@ package com.testify.ecfeed.api;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 
@@ -20,25 +21,13 @@ public interface IGenerator<E> {
 	/*
 	 * returns list of parameters used by this generator.
 	 */
-	
-	public List<IGeneratorParameter> requiredParameters();
-	/*
-	 * returns list of parameters used by this generator. The returned parameter list should not 
-	 * differ from the same function without parameters, but might be more detailed regarding 
-	 * allowed set of values for parameter. 
-	 */
-	public List<IGeneratorParameter> requiredParameters(List<List<E>> inputDomain);
-	
-	/*
-	 * Sets value of generator's parameter.
-	 */
-	public void setParameter(String name, Object value) throws GeneratorException;
-
+	public List<IGeneratorParameter> parameters();
 	/*
 	 * Should be called prior to first call of getNext()
 	 */
-	public void initialize(List<List<E>> inputDomain, 
+	public void initialize(List<? extends List<E>> inputDomain, 
 			Collection<? extends IConstraint<E>> constraints,
+			Map<String, Object> parameters,
 			IProgressMonitor progressMonitor) throws GeneratorException;
 	
 	/*
@@ -51,5 +40,5 @@ public interface IGenerator<E> {
 	/*
 	 * Resets generator to its initial state.
 	 */
-	public void reset() throws GeneratorException;
+	public void reset();
 }
