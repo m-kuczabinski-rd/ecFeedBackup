@@ -31,9 +31,9 @@ public interface IGenerator<E> {
 			IProgressMonitor progressMonitor) throws GeneratorException;
 	
 	/*
-	 * Returns null if no more data can be generated, e.g. due to lack of initialization or 
-	 *  if the test generation should end according to the used algorithm or provided
-	 *  parameter. Blocking method, implementation should make be cancelable using progressMonitor.
+	 * Returns null if no more data can be generated, e.g.if the test generation should end 
+	 * all data according to the used algorithm or provided parameter has been generated. 
+	 * Blocking method, implementation should make be cancelable using progressMonitor.
 	 */
 	public List<E> getNext() throws GeneratorException;
 	
