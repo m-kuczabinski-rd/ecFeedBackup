@@ -35,7 +35,7 @@ public interface IGenerator<E> {
 	 * all data according to the used algorithm or provided parameter has been generated. 
 	 * Blocking method, implementation should make be cancelable using progressMonitor.
 	 */
-	public List<E> getNext() throws GeneratorException;
+	public List<E> next() throws GeneratorException;
 	
 	/*
 	 * Resets generator to its initial state.
