@@ -35,7 +35,7 @@ public class ConsoleProgressMonitor extends SilentProgressMonitor {
 
 	@Override
 	public void done() {
-		fOutput.println("\nWork done");
+		fOutput.println("\nDone");
 	}
 
 	@Override
