@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Model name="newEct">
+    <Class name="com.testify.onlinerunnerTest.EcFeederTest">
+        <Method name="exampleTestFunction">
+            <Category name="intParameter" type="int">
+                <Partition name="min" value="-2147483648"/>
+                <Partition name="negative" value="-1"/>
+                <Partition name="zero" value="0"/>
+                <Partition name="positive" value="1"/>
+                <Partition name="max" value="2147483647"/>
+            </Category>
+            <TestCase testSuite="default suite">
+                <TestParameter partition="min"/>
+            </TestCase>
+            <TestCase testSuite="default suite">
+                <TestParameter partition="max"/>
+            </TestCase>
+            <TestCase testSuite="default suite">
+                <TestParameter partition="zero"/>
+            </TestCase>
+        </Method>
+    </Class>
+</Model>
