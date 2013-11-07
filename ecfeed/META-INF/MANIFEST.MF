@@ -26,5 +26,8 @@ Import-Package: org.eclipse.jdt.core,
 Bundle-ClassPath: lib/xom-1.2.10.jar,
  ecfeed.jar
 Export-Package: com.testify.ecfeed.api,
+ com.testify.ecfeed.model,
+ com.testify.ecfeed.model.constraint,
+ com.testify.ecfeed.parsers,
  com.testify.ecfeed.runner,
  com.testify.ecfeed.runner.annotations
