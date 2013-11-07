@@ -22,6 +22,7 @@ import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.dialogs.IDialogConstants;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.TitleAreaDialog;
 import org.eclipse.jface.viewers.CheckStateChangedEvent;
 import org.eclipse.jface.viewers.CheckboxTreeViewer;
@@ -45,11 +46,13 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Tree;
 
-import com.testify.ecfeed.api.IAlgorithm;
 import com.testify.ecfeed.api.IConstraint;
 import com.testify.ecfeed.api.IGenerator;
+import com.testify.ecfeed.api.IGeneratorParameter;
+import com.testify.ecfeed.api.IGeneratorParameter.TYPE;
 import com.testify.ecfeed.constants.Constants;
 import com.testify.ecfeed.constants.DialogStrings;
 import com.testify.ecfeed.model.CategoryNode;
@@ -62,12 +65,12 @@ import com.testify.ecfeed.model.constraint.Constraint;
 import com.testify.ecfeed.ui.common.TreeCheckStateListener;
 import com.testify.ecfeed.utils.EcModelUtils;
 
+import org.eclipse.swt.widgets.Spinner;
+
 public class GenerateTestSuiteDialog extends TitleAreaDialog {
 	private Combo fTestSuiteCombo;
 	private Combo fGeneratorCombo;
-	private Combo fAlgorithmCombo;
 	private Button fOkButton;
-	private IAlgorithm<PartitionNode> fSelectedAlgorithm;
 	private Map<String, IGenerator<PartitionNode>> fAvaliableGenerators;
 	private MethodNode fMethod;
 	private String fTestSuiteName;
@@ -76,7 +79,9 @@ public class GenerateTestSuiteDialog extends TitleAreaDialog {
 	private List<List<PartitionNode>> fAlgorithmInput;
 	private Collection<IConstraint<PartitionNode>> fConstraints;
 	private IGenerator<PartitionNode> fSelectedGenerator;
-	private List<List<PartitionNode>> fInputDoimain;
+	private Map<String, Object> fParameters;
+	private Composite fParametersComposite;
+	private Composite fMainContainer;
 
 	private class CategoriesContentProvider extends TreeNodeContentProvider implements ITreeContentProvider{
 		private final Object[] EMPTY_ARRAY = new Object[]{};
@@ -148,32 +153,51 @@ public class GenerateTestSuiteDialog extends TitleAreaDialog {
 		setHelpAvailable(false);
 		setShellStyle(SWT.BORDER | SWT.RESIZE | SWT.TITLE);
 		fMethod = method;
-		fInputDoimain = getInputDomain(fMethod);
-		fAvaliableGenerators = getAvailableGenerators(fInputDoimain);
+		fAvaliableGenerators = getAvailableGenerators();
 	}
 	
-	private List<List<PartitionNode>> getInputDomain(MethodNode method) {
-		List<List<PartitionNode>> inputDomain = new ArrayList<List<PartitionNode>>();
-		for(CategoryNode category : fMethod.getCategories()){
-			List<PartitionNode> partitions = new ArrayList<PartitionNode>();
-			if(category.isExpected()){
-				partitions.add(((ExpectedValueCategoryNode)category).getDefaultValuePartition());
-			}
-			else{
-				partitions.addAll(category.getPartitions());
-			}
-			inputDomain.add(partitions);
-		}
-		
-		return inputDomain;
+	public List<List<PartitionNode>> getAlgorithmInput(){
+		return fAlgorithmInput;
 	}
 
-	public IAlgorithm<PartitionNode> getSelectedAlgorithm() {
-		return fSelectedAlgorithm;
+	public Collection<IConstraint<PartitionNode>> getConstraints(){
+		return fConstraints;
 	}
 
 	public String getTestSuiteName(){
 		return fTestSuiteName;
+	}
+
+	public IGenerator<PartitionNode> getSelectedGenerator() {
+		return fSelectedGenerator;
+	}
+
+	public Map<String, Object> getGeneratorParameters() {
+		return fParameters;
+	}
+
+	@Override
+	public Point getInitialSize(){
+		return new Point(600, 800);
+	}
+
+	@Override
+	public void okPressed(){
+		saveAlgorithmInput();
+		saveConstraints();
+		super.okPressed();
+	}
+
+	/**
+	 * Create contents of the button bar.
+	 * @param parent
+	 */
+	@Override
+	protected void createButtonsForButtonBar(Composite parent) {
+		fOkButton = createButton(parent, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL,
+				true);
+		createButton(parent, IDialogConstants.CANCEL_ID,
+				IDialogConstants.CANCEL_LABEL, false);
 	}
 
 	@Override
@@ -181,17 +205,17 @@ public class GenerateTestSuiteDialog extends TitleAreaDialog {
 		setTitle(DialogStrings.DIALOG_GENERATE_TEST_SUITE_TITLE);
 		setMessage(DialogStrings.DIALOG_GENERATE_TEST_SUITE_MESSAGE);
 		Composite area = (Composite) super.createDialogArea(parent);
-		Composite container = new Composite(area, SWT.NONE);
-		container.setLayout(new GridLayout(1, false));
-		container.setLayoutData(new GridData(GridData.FILL_BOTH));
+		fMainContainer = new Composite(area, SWT.NONE);
+		fMainContainer.setLayout(new GridLayout(1, false));
+		fMainContainer.setLayoutData(new GridData(GridData.FILL_BOTH));
 		
-		createConstraintsComposite(container);
+		createConstraintsComposite(fMainContainer);
 		
-		createPartitionsComposite(container);
+		createPartitionsComposite(fMainContainer);
 		
-		createTestSuiteComposite(container);
+		createTestSuiteComposite(fMainContainer);
 		
-		createAlgorithmSelectionComposite(container);
+		createGeneratorSelectionComposite(fMainContainer);
 		
 		return area;
 	}
@@ -343,76 +367,175 @@ public class GenerateTestSuiteDialog extends TitleAreaDialog {
 		}
 	}
 
-	private void createAlgorithmSelectionComposite(Composite container) {
-		Composite composite = new Composite(container, SWT.NONE);
-		composite.setLayout(new GridLayout(2, false));
-		composite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+	private void createGeneratorSelectionComposite(Composite container) {
+		Composite generatorComposite = new Composite(container, SWT.NONE);
+		generatorComposite.setLayout(new GridLayout(2, false));
+		generatorComposite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		
-		Label generatorLabel = new Label(composite, SWT.NONE);
+		Label generatorLabel = new Label(generatorComposite, SWT.NONE);
 		generatorLabel.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 		generatorLabel.setText("Generator");
 		
-		createGeneratorViewer(composite);
-
-		Label algorithmLabel = new Label(composite, SWT.NONE);
-		algorithmLabel.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
-		algorithmLabel.setText("Algorithm");
-		
-		createAlgorithmViewer(composite);
-
-		if(fAvaliableGenerators.size() > 0){
-			String[] generatorNames = fAvaliableGenerators.keySet().toArray(new String[]{}); 
-			fGeneratorCombo.setItems(generatorNames);
-			fGeneratorCombo.setText(generatorNames[0]);
-		}
+		createGeneratorViewer(generatorComposite);
 	}
 
-	private void createAlgorithmViewer(Composite composite) {
-		ComboViewer algorithmViewer = new ComboViewer(composite, SWT.READ_ONLY);
-		fAlgorithmCombo = algorithmViewer.getCombo();
-		fAlgorithmCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
-		fAlgorithmCombo.addModifyListener(new ModifyListener() {
-			@Override
-			public void modifyText(ModifyEvent e) {
-				fSelectedAlgorithm = fSelectedGenerator.getAlgorithm(fAlgorithmCombo.getText());
-				fTestSuiteCombo.setText(createTestSuiteNameText());
-			}
-
-			private String createTestSuiteNameText() {
-				String algorithmName = fAlgorithmCombo.getText();
-				int i = 1;
-				while(fMethod.getTestSuites().contains(algorithmName)){
-					algorithmName = fAlgorithmCombo.getText() + "(" + i++ + ")";
-				}
-				return algorithmName;
-			}
-		});
-	}
-
-	private void createGeneratorViewer(Composite composite) {
-		ComboViewer generatorViewer = new ComboViewer(composite, SWT.READ_ONLY);
+	private void createGeneratorViewer(final Composite parent) {
+		ComboViewer generatorViewer = new ComboViewer(parent, SWT.READ_ONLY);
 		fGeneratorCombo = generatorViewer.getCombo();
 		fGeneratorCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		fGeneratorCombo.addModifyListener(new ModifyListener() {
 			@Override
 			public void modifyText(ModifyEvent e) {
 				fSelectedGenerator = fAvaliableGenerators.get(fGeneratorCombo.getText());
-				String[] availableAlgorithms = fSelectedGenerator.getAlgorithms();
-				fAlgorithmCombo.setItems(availableAlgorithms);
-				if(availableAlgorithms.length > 0){
-					fAlgorithmCombo.setText(availableAlgorithms[0]);
-					setOkButton(true);
-				}
-				else{
-					setOkButton(false);
-				}
+				createParametersComposite(parent, fSelectedGenerator.parameters());
 			}
 		});
-		setOkButton(false);
+		if(fAvaliableGenerators.size() > 0){
+			String[] generatorNames = fAvaliableGenerators.keySet().toArray(new String[]{}); 
+			fGeneratorCombo.setItems(generatorNames);
+			fGeneratorCombo.setText(generatorNames[0]);
+			setOkButton(true);
+		}
+	}
+
+	private void createParametersComposite(Composite parent, List<IGeneratorParameter> parameters) {
+		fParameters = new HashMap<String, Object>();
+		if(fParametersComposite != null && !fParametersComposite.isDisposed()){
+			fParametersComposite.dispose();
+		}
+		fParametersComposite = new Composite(parent, SWT.NONE);
+		fParametersComposite.setLayout(new GridLayout(2, false));
+		fParametersComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 2, 1));
+		for(IGeneratorParameter parameter : parameters){
+			createParameterEdit(fParametersComposite, parameter);
+		}
+		parent.layout();
+	}
+
+	private void createParameterEdit(Composite parent, IGeneratorParameter definition) {
+		fParameters.put(definition.getName(), definition.defaultValue());
+		if(definition.getType() == TYPE.BOOLEAN){
+			createBooleanParameterEdit(parent, definition);
+		}
+		else{
+			new Label(parent, SWT.LEFT).setText(definition.getName());
+			if(definition.allowedValues() != null){
+				createComboParameterEdit(parent, definition);
+			}
+			else{
+				switch(definition.getType()){
+				case INTEGER:
+					createIntegerParameterEdit(parent, definition);
+					break;
+				case FLOAT:
+					createFloatParameterEdit(parent, definition);
+					break;
+				case STRING:
+					createStringParameterEdit(parent, definition);
+					break;
+				default:
+					break;
+				}
+			}
+		}
+	}
+
+	private void createBooleanParameterEdit(Composite parent,
+			final IGeneratorParameter definition) {
+		final Button checkButton = new Button(parent, SWT.CHECK);
+		checkButton.setLayoutData(new GridData(SWT.LEFT, SWT.TOP, false, false, 2, 1));
+		checkButton.setText(definition.getName());
+		checkButton.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e){
+				fParameters.put(definition.getName(), checkButton.getSelection());
+			}
+		});
+		checkButton.pack();
+	}
+
+	private void createComboParameterEdit(Composite parent,
+			final IGeneratorParameter definition){
+		final Combo combo = new Combo(parent, SWT.CENTER|SWT.READ_ONLY);
+		ModifyListener listener = new ModifyListener() {
+			@Override
+			public void modifyText(ModifyEvent e) {
+				switch(definition.getType()){
+				case INTEGER:
+					fParameters.put(definition.getName(), Integer.parseInt(combo.getText()));
+					break;
+				case FLOAT:
+					fParameters.put(definition.getName(), Float.parseFloat(combo.getText()));
+					break;
+				case STRING:
+					fParameters.put(definition.getName(), combo.getText());
+					break;
+				default:
+					break;
+				}
+			}
+		};
+		combo.addModifyListener(listener);
+		combo.setItems(allowedValuesItems(definition));
+		combo.setText(definition.defaultValue().toString());
+	}
+	
+	private String[] allowedValuesItems(IGeneratorParameter definition) {
+		List<String> values = new ArrayList<String>();
+		for(Object value : definition.allowedValues()){
+			values.add(value.toString());
+		}
+		return values.toArray(new String[]{});
+	}
+
+	private void createIntegerParameterEdit(Composite parent,
+			final IGeneratorParameter definition) {
+		final Spinner spinner = new Spinner(parent, SWT.BORDER|SWT.RIGHT);
+		spinner.addModifyListener(new ModifyListener() {
+			@Override
+			public void modifyText(ModifyEvent e) {
+				fParameters.put(definition.getName(), Integer.parseInt(spinner.getText()));
+			}
+		});
+		spinner.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
+
+		spinner.setValues((int)definition.defaultValue(), (int)definition.minValue(), (int)definition.maxValue(), 0, 1, 1);
+	}
+
+	private void createFloatParameterEdit(Composite parent,
+			final IGeneratorParameter definition) {
+		final Spinner spinner = new Spinner(parent, SWT.BORDER);
+		final int FLOAT_DECIMAL_PLACES = 3;
+		spinner.addModifyListener(new ModifyListener() {
+			@Override
+			public void modifyText(ModifyEvent e) {
+				int selection = spinner.getSelection();
+				int digits = spinner.getDigits();
+				fParameters.put(definition.getName(), selection/(Math.pow(10, digits)));
+			}
+		});
+		spinner.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
+		int factor = (int) Math.pow(10, FLOAT_DECIMAL_PLACES);
+		int defaultValue = (int)Math.round((double)definition.defaultValue() * factor);
+		int minValue = (int)Math.round((double)definition.minValue() * factor);
+		int maxValue = (int)Math.round((double)definition.maxValue());
+		spinner.setValues(defaultValue, minValue, maxValue, FLOAT_DECIMAL_PLACES, 1, 100);
+	}
+
+	private void createStringParameterEdit(Composite parent,
+			final IGeneratorParameter definition) {
+		final Text text = new Text(parent, SWT.NONE);
+		text.addModifyListener(new ModifyListener() {
+			@Override
+			public void modifyText(ModifyEvent e) {
+				fParameters.put(definition.getName(), text.getText());
+			}
+		});
+		text.setText((String)definition.defaultValue());
 	}
 
 	@SuppressWarnings("unchecked")
-	private Map<String, IGenerator<PartitionNode>> getAvailableGenerators(List<List<PartitionNode>> inputDomain) {
+	private Map<String, IGenerator<PartitionNode>> getAvailableGenerators() {
 		Map<String, IGenerator<PartitionNode>> result = new HashMap<String, IGenerator<PartitionNode>>();
 		
 		IExtensionRegistry reg = Platform.getExtensionRegistry();
@@ -422,41 +545,15 @@ public class GenerateTestSuiteDialog extends TitleAreaDialog {
 			try {
 				String generatorName = element.getAttribute(Constants.GENERATOR_NAME_ATTRIBUTE);
 				IGenerator<PartitionNode> implementation = (IGenerator<PartitionNode>)element.createExecutableExtension(Constants.TEST_GENERATOR_IMPLEMENTATION_ATTRIBUTE);
-				implementation.initialize(inputDomain);
 				if(generatorName != null && implementation != null){
 					result.put(generatorName, implementation);
 				}
 			} catch (CoreException e) {
-				System.out.println("Exception: " + e.getMessage());
+				MessageDialog.openError(getParentShell(), "Exception", e.getMessage());
 				continue;
 			}
 		}
 		return result;
-	}
-
-	
-	@Override
-	public Point getInitialSize(){
-		return new Point(600, 800);
-	}
-
-	/**
-	 * Create contents of the button bar.
-	 * @param parent
-	 */
-	@Override
-	protected void createButtonsForButtonBar(Composite parent) {
-		fOkButton = createButton(parent, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL,
-				true);
-		createButton(parent, IDialogConstants.CANCEL_ID,
-				IDialogConstants.CANCEL_LABEL, false);
-	}
-	
-	@Override
-	public void okPressed(){
-		saveAlgorithmInput();
-		saveConstraints();
-		super.okPressed();
 	}
 	
 	private void saveConstraints() {
@@ -489,13 +586,5 @@ public class GenerateTestSuiteDialog extends TitleAreaDialog {
 			}
 			fAlgorithmInput.add(partitions);
 		}
-	}
-
-	public List<List<PartitionNode>> getAlgorithmInput(){
-		return fAlgorithmInput;
-	}
-	
-	public Collection<IConstraint<PartitionNode>> getConstraints(){
-		return fConstraints;
 	}
 }

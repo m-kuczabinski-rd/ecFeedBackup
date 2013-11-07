@@ -2,7 +2,7 @@ package com.testify.ecfeed.api;
 
 public interface IGeneratorParameter {
 	public enum TYPE{
-		BOOLEAN, NUMERIC, STRING
+		BOOLEAN, INTEGER, FLOAT, STRING
 	}
 
 	/*
