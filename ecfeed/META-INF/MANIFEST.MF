@@ -15,7 +15,9 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.ui.forms
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Bundle-ActivationPolicy: lazy
-Import-Package: org.eclipse.jdt.core,
+Import-Package: 
+ com.testify.generators,
+ org.eclipse.jdt.core,
  org.eclipse.jdt.ui,
  org.eclipse.jface.text,
  org.eclipse.jface.text.presentation,
@@ -26,5 +28,6 @@ Import-Package: org.eclipse.jdt.core,
 Bundle-ClassPath: lib/xom-1.2.10.jar,
  ecfeed.jar
 Export-Package: com.testify.ecfeed.api,
+ com.testify.ecfeed.model,
  com.testify.ecfeed.runner,
  com.testify.ecfeed.runner.annotations
