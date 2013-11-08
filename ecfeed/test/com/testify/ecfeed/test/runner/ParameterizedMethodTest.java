@@ -14,6 +14,7 @@ import org.junit.Test;
 import org.junit.runners.model.FrameworkMethod;
 
 import com.testify.ecfeed.model.PartitionNode;
+import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.runner.ParameterizedMethod;
 
 public class ParameterizedMethodTest {
@@ -39,7 +40,7 @@ public class ParameterizedMethodTest {
 		try {
 			fExecuted = new HashSet<List<Integer>>();
 			Method methodUnterTest = this.getClass().getMethod("functionUnderTest", int.class, int.class);
-			Collection<? extends List<PartitionNode>> testSuite = generateTestSuite(testSuiteSize, 2);
+			Collection<TestCaseNode> testSuite = generateTestSuite(testSuiteSize, 2);
 			Set<List<Integer>> referenceResult = generateReferenceResult(testSuite);
 			
 			FrameworkMethod m = new ParameterizedMethod(methodUnterTest, testSuite);
@@ -54,25 +55,25 @@ public class ParameterizedMethodTest {
 		}
 	}
 
-	private Collection<? extends List<PartitionNode>> generateTestSuite(int size, int parameters) {
+	private Collection<TestCaseNode> generateTestSuite(int size, int parameters) {
 		Random random = new Random();
-		Collection<List<PartitionNode>> suite = new HashSet<List<PartitionNode>>();
+		Collection<TestCaseNode> suite = new HashSet<TestCaseNode>();
 		for(int i = 0; i < size; i++){
-			List<PartitionNode> testCase = new ArrayList<PartitionNode>();
+			List<PartitionNode> testData = new ArrayList<PartitionNode>();
 			for(int j = 0; j < parameters; j++){
-				testCase.add(new PartitionNode("dummy", random.nextInt()));
+				testData.add(new PartitionNode("dummy", random.nextInt()));
 			}
-			suite.add(testCase);
+			suite.add(new TestCaseNode("dummy", testData));
 		}
 		return suite;
 	}
 
 	private Set<List<Integer>> generateReferenceResult(
-			Collection<? extends List<PartitionNode>> testSuite) {
+			Collection<TestCaseNode> testSuite) {
 		Set<List<Integer>> result = new HashSet<List<Integer>>();
-		for(List<PartitionNode> testCase : testSuite){
+		for(TestCaseNode testCase : testSuite){
 			List<Integer> parameters = new ArrayList<Integer>();
-			for(PartitionNode parameter : testCase){
+			for(PartitionNode parameter : testCase.getTestData()){
 				parameters.add((int)parameter.getValue());
 			}
 			result.add(parameters);
