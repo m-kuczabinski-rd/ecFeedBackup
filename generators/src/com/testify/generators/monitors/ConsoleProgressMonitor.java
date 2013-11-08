@@ -35,7 +35,7 @@ public class ConsoleProgressMonitor extends SilentProgressMonitor {
 
 	@Override
 	public void done() {
-		fOutput.println("\nDone");
+		fOutput.println("\nDone\n");
 	}
 
 	@Override
@@ -64,7 +64,7 @@ public class ConsoleProgressMonitor extends SilentProgressMonitor {
 		final int DOTS_TO_PRINT = 50;
 		int completedBefore = fWorkCompleted;
 		fWorkCompleted += work;
-		int dotsToPrint = DOTS_TO_PRINT*fWorkCompleted/fTotalWork - DOTS_TO_PRINT*completedBefore/fTotalWork;
+		int dotsToPrint = (fTotalWork == 0)?0:DOTS_TO_PRINT*fWorkCompleted/fTotalWork - DOTS_TO_PRINT*completedBefore/fTotalWork;
 		for(int i = 0; i < dotsToPrint; i++){
 			System.out.print(".");
 		}
