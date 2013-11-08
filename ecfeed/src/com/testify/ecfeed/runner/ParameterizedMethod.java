@@ -3,20 +3,25 @@ package com.testify.ecfeed.runner;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.junit.runners.model.FrameworkMethod;
 
 import com.testify.ecfeed.model.PartitionNode;
+import com.testify.ecfeed.model.TestCaseNode;
 
 public class ParameterizedMethod extends FrameworkMethod {
 	
 
-	private Collection<? extends List<PartitionNode>> fTestData;
+	private Collection<List<PartitionNode>> fTestData;
 
-	public ParameterizedMethod(Method method, Collection<? extends List<PartitionNode>> testData) {
+	public ParameterizedMethod(Method method, Collection<TestCaseNode> testCases) {
 		super(method);
-		fTestData = testData;
+		fTestData = new LinkedList<List<PartitionNode>>();
+		for(TestCaseNode testCase : testCases){
+			fTestData.add(testCase.getTestData());
+		}
 	}
 
 	@Override
