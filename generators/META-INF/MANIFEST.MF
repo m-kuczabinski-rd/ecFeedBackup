@@ -12,4 +12,4 @@ Bundle-ActivationPolicy: lazy
 Bundle-Vendor: Testify
 Bundle-ClassPath: lib/guava-15.0.jar,
  .
-Export-Package: com.testify.generators.test.utils
+Export-Package: com.testify.generators
