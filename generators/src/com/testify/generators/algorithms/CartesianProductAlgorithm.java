@@ -16,7 +16,7 @@ public class CartesianProductAlgorithm<E> implements IAlgorithm<E>{
 	private List<? extends List<E>> fInput;
 	private Collection<? extends IConstraint<E>> fConstraints;
 	private IProgressMonitor fProgressMonitor;
-	private List<Integer> fLastGenerated;
+	protected List<E> fLastGenerated;
 
 	@Override
 	public void initialize(
@@ -37,28 +37,46 @@ public class CartesianProductAlgorithm<E> implements IAlgorithm<E>{
 		if(fInitialized == false){
 			throw new GeneratorException("Generator not initialized");
 		}
-		List<Integer> nextElement;
-		while((nextElement = incrementVector(fLastGenerated)) != null){
+		return (fLastGenerated = getNext(fLastGenerated));
+	}
+	
+	public void reset(){
+		fLastGenerated = null;
+		fProgressMonitor.beginTask("Generating cartesian product", totalWork());
+	}
+
+	protected List<E> getNext(List<E> last) throws GeneratorException{
+		List<Integer> nextElement = representation(last);
+		while((nextElement = incrementVector(nextElement)) != null){
 			fProgressMonitor.worked(1);
 			List<E> instance = instance(nextElement);
 			if(checkConstraints(instance)){
-				fLastGenerated = nextElement;
-				return instance; 
+				return instance;
 			}
 		}
 		fProgressMonitor.done();
 		return null;
 	}
 	
-	private List<E> instance(List<Integer> vector) {
+	protected List<E> instance(List<Integer> vector) {
 		List<E> instance = new ArrayList<E>();
 		for(int i = 0; i < vector.size(); i++){
 			instance.add(fInput.get(i).get(vector.get(i)));
 		}
 		return instance;
 	}
+	
+	protected List<Integer> representation(List<E> vector){
+		if(vector == null) return null;
+		List<Integer> representation = new ArrayList<Integer>();
+		for(int i = 0; i < vector.size(); i++){
+			E element = vector.get(i);
+			representation.add(fInput.get(i).indexOf(element));
+		}
+		return representation;
+	}
 
-	private boolean checkConstraints(List<E> vector) {
+	protected boolean checkConstraints(List<E> vector) {
 			if (vector == null) return true;
 			for(IConstraint<E> constraint : fConstraints){
 				if(constraint.evaluate(vector) == false){
@@ -68,10 +86,9 @@ public class CartesianProductAlgorithm<E> implements IAlgorithm<E>{
 			return true;
 	}
 
-	private List<Integer> incrementVector(List<Integer> vector) {
+	protected List<Integer> incrementVector(List<Integer> vector) {
 		if(vector == null){
-			fLastGenerated = firstVector();
-			return fLastGenerated;
+			return firstVector();
 		}
 		for(int i = vector.size() - 1; i >= 0; i--){
 			if(vector.get(i) < fInput.get(i).size() - 1){
@@ -79,15 +96,13 @@ public class CartesianProductAlgorithm<E> implements IAlgorithm<E>{
 				for(++i; i < vector.size(); i++){
 					vector.set(i, 0);
 				}
-				fLastGenerated = vector;
-				return fLastGenerated;
+				return vector;
 			}
 		}
-		fLastGenerated = null;
-		return fLastGenerated;
+		return null;
 	}
 
-	private List<Integer> firstVector() {
+	protected List<Integer> firstVector() {
 		List<Integer> firstVector = new ArrayList<Integer>(fInput.size());
 		for(int i = 0; i < fInput.size(); i++){
 			firstVector.add(0);
@@ -95,11 +110,6 @@ public class CartesianProductAlgorithm<E> implements IAlgorithm<E>{
 		return firstVector;
 	}
 
-	public void reset(){
-		fLastGenerated = null;
-		fProgressMonitor.beginTask("Generating cartesian product", totalWork());
-	}
-	
 	protected int totalWork(){
 		int totalWork = 1;
 		for(List<E> vector : fInput){
