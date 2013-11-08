@@ -13,6 +13,4 @@ public interface INWiseAlgorithm<E> extends IAlgorithm<E>{
 			List<? extends List<E>> input, 
 			Collection<? extends IConstraint<E>> constraints,
 			IProgressMonitor progressMonitor) throws GeneratorException;
-//	public List<E> getNext() throws GeneratorException;
-//	public void reset() throws GeneratorException;
 }
