@@ -19,6 +19,7 @@ public class ExpectedValueCategoryNode extends CategoryNode implements
 		super(name, type);
 		fDefaultValue = new PartitionNode("default value" , defaultValue);
 		fDefaultValue.setParent(this);
+		fPartitions.add(fDefaultValue);
 	}
 
 	public PartitionNode getDefaultValuePartition(){
