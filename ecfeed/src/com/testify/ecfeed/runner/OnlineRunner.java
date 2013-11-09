@@ -1,6 +1,7 @@
 package com.testify.ecfeed.runner;
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -18,6 +19,7 @@ import com.testify.ecfeed.api.GeneratorException;
 import com.testify.ecfeed.api.IConstraint;
 import com.testify.ecfeed.api.IGenerator;
 import com.testify.ecfeed.api.IGeneratorParameter;
+import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.runner.annotations.Constraints;
@@ -132,8 +134,11 @@ public class OnlineRunner extends StaticRunner {
 	}
 
 	protected List<List<PartitionNode>> getInput(MethodNode methodModel) {
-		// TODO Auto-generated method stub
-		return null;
+		List<List<PartitionNode>> result = new ArrayList<List<PartitionNode>>();
+		for(CategoryNode category : methodModel.getCategories()){
+			result.add(category.getPartitions());
+		}
+		return result;
 	}
 
 	protected IGenerator<PartitionNode> getGenerator(FrameworkMethod method) throws RunnerException {
@@ -147,14 +152,17 @@ public class OnlineRunner extends StaticRunner {
 		return generator;
 	}
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private IGenerator<PartitionNode> getGenerator(Annotation[] annotations) throws RunnerException{
 		IGenerator<PartitionNode> generator = null;
 		for(Annotation annotation : annotations){
 			if(annotation instanceof Generator){
 				try {
-					Class<IGenerator<PartitionNode>> generatorClass = ((Generator)annotation).value();  
-					generator = generatorClass.newInstance();
-				} catch (InstantiationException | IllegalAccessException e) {
+					Class<? extends IGenerator> generatorClass = ((Generator)annotation).value();  
+					generatorClass.getTypeParameters();
+					Constructor<? extends IGenerator> constructor = generatorClass.getConstructor(new Class<?>[]{});
+					generator = (IGenerator<PartitionNode>)(constructor.newInstance(new Object[]{}));
+				} catch (Exception e) {
 					throw new RunnerException("Cannot instantiate generator: " + e.getMessage());
 				}
 			}
