@@ -95,7 +95,7 @@ public class RandomAlgorithm<E> extends CartesianProductAlgorithm<E> {
 		if(result != null){
 			++fGeneratedCount;
 			fProgressMonitor.worked(1);
-			if(fDuplicates){
+			if(!fDuplicates){
 				fBlackList.add(result);
 			}
 		}
