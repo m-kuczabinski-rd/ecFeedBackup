@@ -25,6 +25,8 @@ import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.runner.annotations.Constraints;
 import com.testify.ecfeed.runner.annotations.Generator;
 import com.testify.ecfeed.runner.annotations.GeneratorParameter;
+import com.testify.ecfeed.runner.annotations.GeneratorParameterNames;
+import com.testify.ecfeed.runner.annotations.GeneratorParameterValues;
 
 public class OnlineRunner extends StaticRunner {
 
@@ -63,8 +65,13 @@ public class OnlineRunner extends StaticRunner {
 			IGenerator<PartitionNode> generator, FrameworkMethod method) throws RunnerException {
 		List<IGeneratorParameter> parameters = generator.parameters();
 		Map<String, Object> result = new HashMap<String, Object>();
+		Map<String, String>	parsedParameters = parseParameters(method.getAnnotations());{
+			if(parsedParameters == null){
+				parsedParameters = parseParameters(getTestClass().getAnnotations());
+			}
+		}
 		for(IGeneratorParameter parameter : parameters){
-			Object value = getParameterValue(parameter, method);
+			Object value = getParameterValue(parameter, parsedParameters);
 			if(value == null && parameter.isRequired()){
 				throw new RunnerException(Messages.MISSING_REQUIRED_PARAMETER(parameter.getName()));
 			}
@@ -75,39 +82,54 @@ public class OnlineRunner extends StaticRunner {
 		return result;
 	}
 
-	private Object getParameterValue(IGeneratorParameter parameter,
-			FrameworkMethod method) throws RunnerException {
-		String rawValue = getParameterValue(parameter.getName(), method.getAnnotations());
-		if(rawValue == null){
-			rawValue = getParameterValue(parameter.getName(), getTestClass().getAnnotations());
+	private Map<String, String> parseParameters(Annotation[] annotations) throws RunnerException {
+		Map<String, String> result = new HashMap<String, String>();
+		String[] parameterNames = null;
+		String[] parameterValues = null;
+		for(Annotation annotation : annotations){
+			if(annotation instanceof GeneratorParameter){
+				GeneratorParameter parameter = (GeneratorParameter)annotation;
+				result.put(parameter.name(), parameter.value());
+			}
+			else if(annotation instanceof GeneratorParameterNames){
+				parameterNames = ((GeneratorParameterNames)annotation).value();
+			}
+			else if(annotation instanceof GeneratorParameterValues){
+				parameterValues = ((GeneratorParameterValues)annotation).value();
+			}
 		}
-		if(rawValue != null){
+		if(parameterNames != null && parameterValues != null){
+			if(parameterNames.length != parameterValues.length){
+				throw new RunnerException("GeneratorParameterNames and GeneratorParameterValues must be of the same length");
+			}
+			for(int i = 0; i < parameterNames.length; i++){
+				result.put(parameterNames[i], parameterValues[i]);
+			}
+		} 
+		else if(parameterNames != null || parameterValues != null){
+			throw new RunnerException("GeneratorParameterNames and GeneratorParameterValues may be used only together");
+		}
+		return result;
+	}
+
+	private Object getParameterValue(IGeneratorParameter parameter,
+			Map<String, String> parsedParameters) throws RunnerException {
+		String valueString = parsedParameters.get(parameter.getName());
+		if(valueString != null){
 			try{
 				switch (parameter.getType()) {
 				case BOOLEAN:
-					return Boolean.parseBoolean(rawValue);
+					return Boolean.parseBoolean(valueString);
 				case FLOAT:
-					return Double.parseDouble(rawValue);
+					return Double.parseDouble(valueString);
 				case INTEGER:
-					return Integer.parseInt(rawValue);
+					return Integer.parseInt(valueString);
 				case STRING:
-					return (String)rawValue;
+					return (String)valueString;
 				}
 			}
 			catch(Throwable e){
 				throw new RunnerException(Messages.WRONG_PARAMETER_TYPE(parameter.getName(), e.getMessage()));
-			}
-		}
-		return null;
-	}
-
-	private String getParameterValue(String name, Annotation[] annotations) {
-		for(Annotation annotation : annotations){
-			if(annotation instanceof GeneratorParameter){
-				GeneratorParameter parameterAnnotation = (GeneratorParameter)annotation;
-				if(parameterAnnotation.name().equals(name)){
-					return parameterAnnotation.value();
-				}
 			}
 		}
 		return null;

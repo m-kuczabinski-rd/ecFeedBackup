@@ -29,4 +29,5 @@ Bundle-ClassPath: lib/xom-1.2.10.jar,
  ecfeed.jar
 Export-Package: com.testify.ecfeed.api,
  com.testify.ecfeed.runner,
- com.testify.ecfeed.runner.annotations
+ com.testify.ecfeed.runner.annotations,
+ com.testify.generators

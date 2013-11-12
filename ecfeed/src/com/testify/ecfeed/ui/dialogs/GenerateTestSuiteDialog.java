@@ -17,12 +17,7 @@ import java.util.List;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IConfigurationElement;
-import org.eclipse.core.runtime.IExtensionRegistry;
-import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.dialogs.IDialogConstants;
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.TitleAreaDialog;
 import org.eclipse.jface.viewers.CheckStateChangedEvent;
 import org.eclipse.jface.viewers.CheckboxTreeViewer;
@@ -49,6 +44,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Tree;
 
+import com.testify.ecfeed.api.GeneratorException;
 import com.testify.ecfeed.api.IConstraint;
 import com.testify.ecfeed.api.IGenerator;
 import com.testify.ecfeed.api.IGeneratorParameter;
@@ -64,6 +60,7 @@ import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.constraint.Constraint;
 import com.testify.ecfeed.ui.common.TreeCheckStateListener;
 import com.testify.ecfeed.utils.EcModelUtils;
+import com.testify.generators.GeneratorFactory;
 
 import org.eclipse.swt.widgets.Spinner;
 
@@ -71,7 +68,6 @@ public class GenerateTestSuiteDialog extends TitleAreaDialog {
 	private Combo fTestSuiteCombo;
 	private Combo fGeneratorCombo;
 	private Button fOkButton;
-	private Map<String, IGenerator<PartitionNode>> fAvaliableGenerators;
 	private MethodNode fMethod;
 	private String fTestSuiteName;
 	private CheckboxTreeViewer fCategoriesViewer;
@@ -82,6 +78,7 @@ public class GenerateTestSuiteDialog extends TitleAreaDialog {
 	private Map<String, Object> fParameters;
 	private Composite fParametersComposite;
 	private Composite fMainContainer;
+	private GeneratorFactory<PartitionNode> fGeneratorFactory; 
 
 	private class CategoriesContentProvider extends TreeNodeContentProvider implements ITreeContentProvider{
 		private final Object[] EMPTY_ARRAY = new Object[]{};
@@ -153,7 +150,8 @@ public class GenerateTestSuiteDialog extends TitleAreaDialog {
 		setHelpAvailable(false);
 		setShellStyle(SWT.BORDER | SWT.RESIZE | SWT.TITLE);
 		fMethod = method;
-		fAvaliableGenerators = getAvailableGenerators();
+		fGeneratorFactory = new GeneratorFactory<PartitionNode>();
+//		fAvaliableGenerators = getAvailableGenerators();
 	}
 	
 	public List<List<PartitionNode>> getAlgorithmInput(){
@@ -386,16 +384,28 @@ public class GenerateTestSuiteDialog extends TitleAreaDialog {
 		fGeneratorCombo.addModifyListener(new ModifyListener() {
 			@Override
 			public void modifyText(ModifyEvent e) {
-				fSelectedGenerator = fAvaliableGenerators.get(fGeneratorCombo.getText());
-				createParametersComposite(parent, fSelectedGenerator.parameters());
+//				fSelectedGenerator = fAvaliableGenerators.get(fGeneratorCombo.getText());
+				try {
+					fSelectedGenerator = fGeneratorFactory.getGenerator(fGeneratorCombo.getText());
+					createParametersComposite(parent, fSelectedGenerator.parameters());
+				} catch (GeneratorException exception) {
+					exception.printStackTrace();
+					fGeneratorCombo.setText("");
+				}
 			}
 		});
-		if(fAvaliableGenerators.size() > 0){
-			String[] generatorNames = fAvaliableGenerators.keySet().toArray(new String[]{}); 
-			fGeneratorCombo.setItems(generatorNames);
-			fGeneratorCombo.setText(generatorNames[0]);
+		if(fGeneratorFactory.availableGenerators().size() > 0){
+			String[] availableGenerators = fGeneratorFactory.availableGenerators().toArray(new String[]{}); 
+			fGeneratorCombo.setItems(availableGenerators);
+			fGeneratorCombo.setText(availableGenerators[0]);
 			setOkButton(true);
 		}
+//		if(fAvaliableGenerators.size() > 0){
+//			String[] generatorNames = fAvaliableGenerators.keySet().toArray(new String[]{}); 
+//			fGeneratorCombo.setItems(generatorNames);
+//			fGeneratorCombo.setText(generatorNames[0]);
+//			setOkButton(true);
+//		}
 	}
 
 	private void createParametersComposite(Composite parent, List<IGeneratorParameter> parameters) {
@@ -534,28 +544,28 @@ public class GenerateTestSuiteDialog extends TitleAreaDialog {
 		text.setText((String)definition.defaultValue());
 	}
 
-	@SuppressWarnings("unchecked")
-	private Map<String, IGenerator<PartitionNode>> getAvailableGenerators() {
-		Map<String, IGenerator<PartitionNode>> result = new HashMap<String, IGenerator<PartitionNode>>();
-		
-		IExtensionRegistry reg = Platform.getExtensionRegistry();
-		IConfigurationElement[] extensions = 
-				reg.getConfigurationElementsFor(Constants.TEST_GENERATOR_EXTENSION_POINT_ID);
-		for(IConfigurationElement element : extensions){
-			try {
-				String generatorName = element.getAttribute(Constants.GENERATOR_NAME_ATTRIBUTE);
-				IGenerator<PartitionNode> implementation = (IGenerator<PartitionNode>)element.createExecutableExtension(Constants.TEST_GENERATOR_IMPLEMENTATION_ATTRIBUTE);
-				if(generatorName != null && implementation != null){
-					result.put(generatorName, implementation);
-				}
-			} catch (CoreException e) {
-				MessageDialog.openError(getParentShell(), "Exception", e.getMessage());
-				continue;
-			}
-		}
-		return result;
-	}
-	
+//	@SuppressWarnings("unchecked")
+//	private Map<String, IGenerator<PartitionNode>> getAvailableGenerators() {
+//		Map<String, IGenerator<PartitionNode>> result = new HashMap<String, IGenerator<PartitionNode>>();
+//		
+//		IExtensionRegistry reg = Platform.getExtensionRegistry();
+//		IConfigurationElement[] extensions = 
+//				reg.getConfigurationElementsFor(Constants.TEST_GENERATOR_EXTENSION_POINT_ID);
+//		for(IConfigurationElement element : extensions){
+//			try {
+//				String generatorName = element.getAttribute(Constants.GENERATOR_NAME_ATTRIBUTE);
+//				IGenerator<PartitionNode> implementation = (IGenerator<PartitionNode>)element.createExecutableExtension(Constants.TEST_GENERATOR_IMPLEMENTATION_ATTRIBUTE);
+//				if(generatorName != null && implementation != null){
+//					result.put(generatorName, implementation);
+//				}
+//			} catch (CoreException e) {
+//				MessageDialog.openError(getParentShell(), "Exception", e.getMessage());
+//				continue;
+//			}
+//		}
+//		return result;
+//	}
+//	
 	private void saveConstraints() {
 		Object[] checkedObjects = fConstraintsViewer.getCheckedElements();
 		List<IConstraint<PartitionNode>> constraints = new ArrayList<IConstraint<PartitionNode>>();
