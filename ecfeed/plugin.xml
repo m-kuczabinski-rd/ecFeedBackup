@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="4.2?>
 <plugin>
-   <extension-point id="com.testify.ecfeed.generator" name="Test Data Generator" schema="schema/com.testify.ecfeed.generator.exsd"/>
    <extension
          point="org.eclipse.ui.newWizards">
       <category
