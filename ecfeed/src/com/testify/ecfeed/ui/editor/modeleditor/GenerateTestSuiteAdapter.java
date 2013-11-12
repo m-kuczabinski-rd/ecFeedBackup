@@ -14,7 +14,9 @@ package com.testify.ecfeed.ui.editor.modeleditor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -27,8 +29,9 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Display;
 
-import com.testify.ecfeed.api.IAlgorithm;
+import com.testify.ecfeed.api.GeneratorException;
 import com.testify.ecfeed.api.IConstraint;
+import com.testify.ecfeed.api.IGenerator;
 import com.testify.ecfeed.constants.Constants;
 import com.testify.ecfeed.constants.DialogStrings;
 import com.testify.ecfeed.model.CategoryNode;
@@ -38,167 +41,98 @@ import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.ui.dialogs.GenerateTestSuiteDialog;
 
 class GenerateTestSuiteAdapter extends SelectionAdapter{
-	
+
 	private final MethodNodeDetailsPage fPage;
 	private boolean fCanceled;
 
-	GenerateTestSuiteAdapter(
-			MethodNodeDetailsPage methodNodeDetailsPage) {
-		this.fPage = methodNodeDetailsPage;
-	}
+	private class GeneratorRunnable implements IRunnableWithProgress{
 
-	private class AlgorithmProgressMonitor implements IProgressMonitor{
-		private Display fDisplay = Display.getDefault();
-		private IProgressMonitor fMonitor;
-		
-		public AlgorithmProgressMonitor(ProgressMonitorDialog dialog) {
-			fMonitor = dialog.getProgressMonitor();
-		}
+		private IGenerator<PartitionNode> fGenerator;
+		private Set<List<PartitionNode>> fGeneratedData;
+		private List<List<PartitionNode>> fInput;
+		private Collection<IConstraint<PartitionNode>> fConstraints;
+		private Map<String, Object> fParameters;
 
-		@Override
-		public void beginTask(final String name, final int totalWork) {
-			fDisplay.syncExec(new Runnable() {
-				@Override
-				public void run() {
-					fMonitor.beginTask(name, totalWork);
-				}
-			});
-		}
-
-		@Override
-		public void done() {
-			fDisplay.syncExec(new Runnable() {
-				@Override
-				public void run() {
-					fMonitor.done();
-				}
-			});
-		}
-
-		@Override
-		public void internalWorked(final double work) {
-			fDisplay.syncExec(new Runnable() {
-				@Override
-				public void run() {
-					fMonitor.internalWorked(work);
-				}
-			});
-		}
-
-		@Override
-		public boolean isCanceled() {
-			return fMonitor.isCanceled();
-		}
-
-		@Override
-		public void setCanceled(boolean value) {
-			fMonitor.setCanceled(value);
-		}
-
-		@Override
-		public void setTaskName(final String name) {
-			fDisplay.syncExec(new Runnable() {
-				@Override
-				public void run() {
-					fMonitor.setTaskName(name);
-				}
-			});
-		}
-
-		@Override
-		public void subTask(final String name) {
-			fDisplay.syncExec(new Runnable() {
-				@Override
-				public void run() {
-					fMonitor.subTask(name);
-				}
-			});
-		}
-
-		@Override
-		public void worked(final int work) {
-			fDisplay.syncExec(new Runnable() {
-				@Override
-				public void run() {
-					fMonitor.worked(work);
-				}
-			});
-		}
-	}
-	
-	private class AlgorithmContext{
-		public IAlgorithm<PartitionNode> algorithm;
-		public List<List<PartitionNode>> algorithmInput;
-		public Collection<IConstraint<PartitionNode>> constraints;
-
-		public AlgorithmContext(IAlgorithm<PartitionNode> algorithm, 
-				List<List<PartitionNode>> algorithmInput,
-				Collection<IConstraint<PartitionNode>> constraints){
-			this.algorithm = algorithm;
-			this.algorithmInput = algorithmInput;
-			this.constraints = constraints;
-		}
-	}
-	
-	private class AlgorithmRunnable implements IRunnableWithProgress{
-		AlgorithmContext context;
-		private IProgressMonitor progressMonitor;
-		private Set<List<PartitionNode>> generatedData;
-		
-		public AlgorithmRunnable(AlgorithmContext context,
-				IProgressMonitor progressMonitor) {
-			this.context = context;
-			this.progressMonitor = progressMonitor;
+		GeneratorRunnable(IGenerator<PartitionNode> generator, 
+				List<List<PartitionNode>> input, 
+				Collection<IConstraint<PartitionNode>> constraints, 
+				Map<String, Object> parameters, 
+				Set<List<PartitionNode>> generated){
+			fGenerator = generator;
+			fInput = input;
+			fConstraints = constraints;
+			fParameters = parameters;
+			fGeneratedData = generated;
 		}
 		
 		@Override
 		public void run(IProgressMonitor monitor)
 				throws InvocationTargetException, InterruptedException {
-			generatedData = context.algorithm.generate(context.algorithmInput, 
-					context.constraints, progressMonitor);
+			List<PartitionNode> next;
+			try {
+				fGenerator.initialize(fInput, fConstraints, fParameters, monitor);
+				while((next = fGenerator.next()) != null && monitor.isCanceled() == false){
+					fGeneratedData.add(next);
+				}
+			} catch (GeneratorException e) {
+				throw new InvocationTargetException(e, e.getMessage());
+			}
 		}
-	
-		public Set<List<PartitionNode>> getGeneratedData(){
-			return generatedData;
-		}
+		
 	}
 	
+	GenerateTestSuiteAdapter(
+			MethodNodeDetailsPage methodNodeDetailsPage) {
+		this.fPage = methodNodeDetailsPage;
+	}
+
 	@Override
 	public void widgetSelected(SelectionEvent e){
 		GenerateTestSuiteDialog dialog = 
 				new GenerateTestSuiteDialog(fPage.getActiveShell(), 
 						fPage.getSelectedMethod());
 		if(dialog.open() == IDialogConstants.OK_ID){
-			IAlgorithm<PartitionNode> selectedAlgorithm = dialog.getSelectedAlgorithm();
+			IGenerator<PartitionNode> selectedGenerator = dialog.getSelectedGenerator();
 			List<List<PartitionNode>> algorithmInput = dialog.getAlgorithmInput();
 			Collection<IConstraint<PartitionNode>> constraints = dialog.getConstraints();
-			AlgorithmContext context = 
-					new AlgorithmContext(selectedAlgorithm, algorithmInput, constraints);
 			String testSuiteName = dialog.getTestSuiteName();
+			Map<String, Object> parameters = dialog.getGeneratorParameters();
 			
-			Set<List<PartitionNode>> generatedData = generateTestData(context);
-			if(generatedData == null){
-				return;
-			}
-
+			Set<List<PartitionNode>> generatedData = generateTestData(selectedGenerator, algorithmInput, constraints, parameters);
 			addGeneratedDataToModel(testSuiteName, generatedData);
 		}
 	}
 
-	private Set<List<PartitionNode>> generateTestData(final AlgorithmContext context) {
+	private Set<List<PartitionNode>> generateTestData(final IGenerator<PartitionNode> generator, 
+			final List<List<PartitionNode>> input, 
+			final Collection<IConstraint<PartitionNode>> constraints,
+			final Map<String, Object> parameters) {
+
 		ProgressMonitorDialog progressDialog = 
 				new ProgressMonitorDialog(fPage.getActiveShell());
-		AlgorithmProgressMonitor progressMonitor = 
-				new AlgorithmProgressMonitor(progressDialog);
-		AlgorithmRunnable algorithmRunnable = 
-				new AlgorithmRunnable(context, progressMonitor);
+		Set<List<PartitionNode>> generated = new HashSet<List<PartitionNode>>();
+		fCanceled = false;
 		try {
-			progressDialog.run(true, true, algorithmRunnable);
-		} catch (InvocationTargetException | InterruptedException e) {
+			GeneratorRunnable runnable = new GeneratorRunnable(generator, input, constraints, parameters, generated);
+			progressDialog.open();
+			progressDialog.run(true, true, runnable);
+		} catch (InvocationTargetException e) {
+			MessageDialog.openError(Display.getDefault().getActiveShell(), "Exception", e.getMessage());
+			fCanceled = true;
+		}catch (InterruptedException e) {
+			fCanceled = true;
+			MessageDialog.openError(Display.getDefault().getActiveShell(), "Exception", e.getMessage());
 			e.printStackTrace();
 		}
-		fCanceled = progressMonitor.isCanceled();
-		return algorithmRunnable.getGeneratedData();
+		fCanceled |= progressDialog.getProgressMonitor().isCanceled();
+		if(!fCanceled){
+			return generated;
+		}
+		else{
+			//return empty set if the operation was canceled
+			//TODO add a decision dialog where user may choose whether to add generated data
+			return new HashSet<List<PartitionNode>>();
+		}
 	}
 
 	private void addGeneratedDataToModel(String testSuiteName, 

@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Model name="OnlineRunnerTest">
+    <Class name="com.testify.ecfeed.runner.OnlineRunnerTest$GlobalGeneratorTestClass">
+        <Method name="testWithGlobalGenerator">
+            <Category name="arg1" type="String">
+                <Partition name="a" value="a"/>
+                <Partition name="b" value="b"/>
+                <Partition name="c" value="c"/>
+                <Partition name="d" value="d"/>
+                <Partition name="e" value="e"/>
+                <Partition name="f" value="f"/>
+            </Category>
+            <Category name="arg2" type="String">
+                <Partition name="a" value="a"/>
+                <Partition name="b" value="b"/>
+                <Partition name="c" value="c"/>
+                <Partition name="d" value="d"/>
+                <Partition name="e" value="e"/>
+                <Partition name="f" value="f"/>
+            </Category>
+            <Category name="arg3" type="String">
+                <Partition name="a" value="a"/>
+                <Partition name="b" value="b"/>
+                <Partition name="c" value="c"/>
+                <Partition name="d" value="d"/>
+                <Partition name="e" value="e"/>
+                <Partition name="f" value="f"/>
+            </Category>
+            <Category name="arg4" type="String">
+                <Partition name="a" value="a"/>
+                <Partition name="b" value="b"/>
+                <Partition name="c" value="c"/>
+                <Partition name="d" value="d"/>
+                <Partition name="e" value="e"/>
+                <Partition name="f" value="f"/>
+            </Category>
+        </Method>
+    </Class>
+    <Class name="com.testify.ecfeed.runner.OnlineRunnerTest$OverridenGeneratorParameterTestClass">
+        <Method name="testWithLocalGeneratorParameter">
+            <Category name="arg1" type="String">
+                <Partition name="a" value="a"/>
+                <Partition name="b" value="b"/>
+                <Partition name="c" value="c"/>
+            </Category>
+            <Category name="arg2" type="String">
+                <Partition name="a" value="a"/>
+                <Partition name="b" value="b"/>
+                <Partition name="c" value="c"/>
+            </Category>
+            <Category name="arg3" type="String">
+                <Partition name="a" value="a"/>
+                <Partition name="b" value="b"/>
+                <Partition name="c" value="c"/>
+            </Category>
+            <Category name="arg4" type="String">
+                <Partition name="a" value="a"/>
+                <Partition name="b" value="b"/>
+                <Partition name="c" value="c"/>
+            </Category>
+        </Method>
+    </Class>
+    <Class name="com.testify.ecfeed.runner.OnlineRunnerTest$GlobalConstraintsTestClass">
+        <Method name="testWithConstraints">
+            <Category name="arg1" type="String">
+                <Partition name="a" value="a"/>
+                <Partition name="b" value="b"/>
+                <Partition name="c" value="c"/>
+            </Category>
+            <Category name="arg2" type="String">
+                <Partition name="a" value="a"/>
+                <Partition name="b" value="b"/>
+                <Partition name="c" value="c"/>
+            </Category>
+            <Category name="arg3" type="String">
+                <Partition name="a" value="a"/>
+                <Partition name="b" value="b"/>
+                <Partition name="c" value="c"/>
+            </Category>
+            <Category name="arg4" type="String">
+                <Partition name="a" value="a"/>
+                <Partition name="b" value="b"/>
+                <Partition name="c" value="c"/>
+            </Category>
+            <Constraint name="global constraint">
+                <Premise>
+                    <StatementArray operator="and">
+                        <Statement category="arg1" partition="a" relation="="/>
+                        <Statement category="arg2" partition="a" relation="="/>
+                        <Statement category="arg3" partition="a" relation="="/>
+                        <Statement category="arg4" partition="a" relation="="/>
+                    </StatementArray>
+                </Premise>
+                <Consequence>
+                    <StaticStatement value="false"/>
+                </Consequence>
+            </Constraint>
+            <Constraint name="another global constraint">
+                <Premise>
+                    <StatementArray operator="or">
+                        <StatementArray operator="and">
+                            <Statement category="arg1" partition="a" relation="="/>
+                            <Statement category="arg2" partition="a" relation="="/>
+                            <Statement category="arg3" partition="a" relation="="/>
+                            <Statement category="arg4" partition="a" relation="="/>
+                        </StatementArray>
+                        <StatementArray operator="and">
+                            <Statement category="arg1" partition="b" relation="="/>
+                            <Statement category="arg2" partition="b" relation="="/>
+                            <Statement category="arg3" partition="b" relation="="/>
+                            <Statement category="arg4" partition="b" relation="="/>
+                        </StatementArray>
+                        <StatementArray operator="and">
+                            <Statement category="arg1" partition="c" relation="="/>
+                            <Statement category="arg2" partition="c" relation="="/>
+                            <Statement category="arg3" partition="c" relation="="/>
+                            <Statement category="arg4" partition="c" relation="="/>
+                        </StatementArray>
+                    </StatementArray>
+                </Premise>
+                <Consequence>
+                    <StaticStatement value="true"/>
+                </Consequence>
+            </Constraint>
+        </Method>
+    </Class>
+    <Class name="com.testify.ecfeed.runner.OnlineRunnerTest$OverridenConstraintsTestClass">
+        <Method name="testWithConstraints">
+            <Category name="arg1" type="String">
+                <Partition name="a" value="a"/>
+                <Partition name="b" value="b"/>
+                <Partition name="c" value="c"/>
+            </Category>
+            <Category name="arg2" type="String">
+                <Partition name="a" value="a"/>
+                <Partition name="b" value="b"/>
+                <Partition name="c" value="c"/>
+            </Category>
+            <Category name="arg3" type="String">
+                <Partition name="a" value="a"/>
+                <Partition name="b" value="b"/>
+                <Partition name="c" value="c"/>
+            </Category>
+            <Category name="arg4" type="String">
+                <Partition name="a" value="a"/>
+                <Partition name="b" value="b"/>
+                <Partition name="c" value="c"/>
+            </Category>
+            <Constraint name="constraint">
+                <Premise>
+                    <StaticStatement value="true"/>
+                </Premise>
+                <Consequence>
+                    <Statement category="arg1" partition="a" relation="="/>
+                </Consequence>
+            </Constraint>
+            <Constraint name="another constraint">
+                <Premise>
+                    <Statement category="arg2" partition="b" relation="="/>
+                </Premise>
+                <Consequence>
+                    <StaticStatement value="false"/>
+                </Consequence>
+            </Constraint>
+        </Method>
+    </Class>
+</Model>

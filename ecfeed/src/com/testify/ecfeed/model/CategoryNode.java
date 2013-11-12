@@ -17,7 +17,7 @@ import java.util.List;
 public class CategoryNode extends GenericNode {
 	
 	private final String fType;
-	private final List<PartitionNode> fPartitions;
+	protected final List<PartitionNode> fPartitions;
 	
 	public CategoryNode(String name, String type) {
 		super(name);
