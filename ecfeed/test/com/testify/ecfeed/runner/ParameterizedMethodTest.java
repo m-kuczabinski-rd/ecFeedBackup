@@ -1,4 +1,4 @@
-package com.testify.ecfeed.test.runner;
+package com.testify.ecfeed.runner;
 
 import static org.junit.Assert.*;
 

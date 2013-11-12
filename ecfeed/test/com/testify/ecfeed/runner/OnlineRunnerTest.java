@@ -1,4 +1,4 @@
-package com.testify.ecfeed.test.runner;
+package com.testify.ecfeed.runner;
 
 import static org.junit.Assert.*;
 
@@ -17,7 +17,9 @@ import org.junit.runners.model.InitializationError;
 
 import com.testify.ecfeed.api.GeneratorException;
 import com.testify.ecfeed.api.IConstraint;
+import com.testify.ecfeed.api.IGenerator;
 import com.testify.ecfeed.model.CategoryNode;
+import com.testify.ecfeed.model.ConstraintNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.RootNode;
@@ -27,6 +29,7 @@ import com.testify.ecfeed.runner.annotations.Constraints;
 import com.testify.ecfeed.runner.annotations.EcModel;
 import com.testify.ecfeed.runner.annotations.Generator;
 import com.testify.ecfeed.runner.annotations.GeneratorParameter;
+import com.testify.generators.CartesianProductGenerator;
 import com.testify.generators.NWiseGenerator;
 
 public class OnlineRunnerTest extends StaticRunnerTest{
@@ -36,7 +39,9 @@ public class OnlineRunnerTest extends StaticRunnerTest{
 		fExecuted = new HashSet<List<String>>();
 	}
 
-	protected final static String MODEL_PATH = "test/com/testify/ecfeed/test/runner/OnlineRunnerTest.ect";
+	protected final static String MODEL_PATH = "test/com/testify/ecfeed/runner/OnlineRunnerTest.ect";
+
+	protected final static String OVERRIDING_CONSTRAINT_NAME = "constraint";
 
 	private static Set<List<String>> fExecuted;
 
@@ -74,8 +79,7 @@ public class OnlineRunnerTest extends StaticRunnerTest{
 		}
 	}
 	
-	@Generator(NWiseGenerator.class)
-	@GeneratorParameter(name = "N", value = "2")
+	@Generator(CartesianProductGenerator.class)
 	@EcModel(MODEL_PATH)
 	@Constraints(Constraints.ALL)
 	public static class GlobalConstraintsTestClass{
@@ -85,10 +89,9 @@ public class OnlineRunnerTest extends StaticRunnerTest{
 		}
 	}
 	
-	@Generator(NWiseGenerator.class)
-	@GeneratorParameter(name = "N", value = "2")
+	@Generator(CartesianProductGenerator.class)
 	@EcModel(MODEL_PATH)
-	@Constraints(Constraints.NONE)
+	@Constraints(Constraints.ALL)
 	public static class OverridenConstraintsTestClass{
 		@Test
 		@Constraints("constraint")
@@ -134,11 +137,63 @@ public class OnlineRunnerTest extends StaticRunnerTest{
 		catch(Throwable e){
 			fail("Unexpected exception: " + e.getMessage());
 		}
+	}
 
+	@Test
+	public void testGlobalConstraints(){
+		try{
+			Class<GlobalConstraintsTestClass> testClass = GlobalConstraintsTestClass.class;
+			OnlineRunner runner = new OnlineRunner(testClass);
+			for(FrameworkMethod method : runner.computeTestMethods()){
+				List<List<PartitionNode>> input = referenceInput(runner.getModel(), method);
+				Collection<? extends IConstraint<PartitionNode>> constraints = getConstraints(runner.getModel(), method);
+				Set<List<String>> referenceResult = computeReferenceResult(referenceCartesianGenerator(input, constraints));
+				method.invokeExplosively(testClass.newInstance(), (Object[])null);
+				assertEquals(referenceResult, fExecuted);
+			}
+		}
+		catch(Throwable e){
+			fail("Unexpected exception: " + e.getMessage());
+		}
+	}
+
+	@Test
+	public void testOverridenConstraints(){
+		try{
+			Class<OverridenConstraintsTestClass> testClass = OverridenConstraintsTestClass.class;
+			OnlineRunner runner = new OnlineRunner(testClass);
+			for(FrameworkMethod method : runner.computeTestMethods()){
+				List<List<PartitionNode>> input = referenceInput(runner.getModel(), method);
+				Collection<? extends IConstraint<PartitionNode>> constraints = getConstraints(runner.getModel(), method, 
+						OVERRIDING_CONSTRAINT_NAME);
+				Set<List<String>> referenceResult = computeReferenceResult(referenceCartesianGenerator(input, constraints));
+				method.invokeExplosively(testClass.newInstance(), (Object[])null);
+				assertEquals(referenceResult, fExecuted);
+			}
+		}
+		catch(Throwable e){
+			fail("Unexpected exception: " + e.getMessage());
+		}
+	}
+	
+	private Collection<IConstraint<PartitionNode>> getConstraints(
+			RootNode model, FrameworkMethod method,
+			String name) throws RunnerException {
+		return getMethodModel(model, method).getConstraints(name);
+	}
+
+	protected Collection<IConstraint<PartitionNode>> getConstraints(
+			RootNode model, FrameworkMethod method) throws RunnerException {
+		Collection<IConstraint<PartitionNode>> result = new ArrayList<IConstraint<PartitionNode>>();
+		MethodNode methodModel = getMethodModel(model, method);
+		for(ConstraintNode node : methodModel.getConstraints()){
+			result.add(node.getConstraint());
+		}
+		return result;
 	}
 
 	protected Set<List<String>> computeReferenceResult(
-			NWiseGenerator<PartitionNode> initializedGenerator) throws GeneratorException {
+			IGenerator<PartitionNode> initializedGenerator) throws GeneratorException {
 		Set<List<String>> result = new HashSet<List<String>>();
 		List<PartitionNode> next;
 		while((next = initializedGenerator.next()) != null){
@@ -149,6 +204,14 @@ public class OnlineRunnerTest extends StaticRunnerTest{
 			result.add(sample);
 		}
 		return result;
+	}
+
+	private IGenerator<PartitionNode> referenceCartesianGenerator(
+			List<List<PartitionNode>> input,
+			Collection<? extends IConstraint<PartitionNode>> constraints) throws GeneratorException {
+		IGenerator<PartitionNode> generator = new CartesianProductGenerator<PartitionNode>();
+		generator.initialize(input, constraints, null, null);
+		return generator;
 	}
 
 	private NWiseGenerator<PartitionNode> referenceNWiseGenerator(
