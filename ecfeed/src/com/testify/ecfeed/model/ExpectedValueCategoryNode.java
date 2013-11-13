@@ -11,6 +11,8 @@
 
 package com.testify.ecfeed.model;
 
+import java.util.List;
+
 public class ExpectedValueCategoryNode extends CategoryNode implements
 		IGenericNode {
 	private PartitionNode fDefaultValue;
@@ -32,6 +34,11 @@ public class ExpectedValueCategoryNode extends CategoryNode implements
 
 	public void setDefaultValue(Object value) {
 		fDefaultValue.setValue(value);
+	}
+	
+	@Override
+	public List<? extends IGenericNode> getChildren() {
+		return EMPTY_CHILDREN_ARRAY;
 	}
 
 	public String toString(){

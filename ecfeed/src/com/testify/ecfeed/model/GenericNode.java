@@ -21,7 +21,7 @@ public class GenericNode implements IGenericNode{
 	private IGenericNode fParent;
 	private final int fId;
 	private static int fLastId = 0;
-	private final ArrayList<IGenericNode> EMPTY_CHILDREN_ARRAY = new ArrayList<IGenericNode>();
+	protected final ArrayList<IGenericNode> EMPTY_CHILDREN_ARRAY = new ArrayList<IGenericNode>();
 
 	public GenericNode(String name){
 		fId = ++fLastId;
