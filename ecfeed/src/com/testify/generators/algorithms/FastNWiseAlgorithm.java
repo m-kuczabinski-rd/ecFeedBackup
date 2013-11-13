@@ -7,6 +7,11 @@ import java.util.Set;
 import com.testify.ecfeed.api.GeneratorException;
 
 public class FastNWiseAlgorithm<E> extends AbstractNWiseAlgorithm<E> {
+
+	public FastNWiseAlgorithm(int n) {
+		super(n);
+	}
+
 	private Set<List<E>> fCoveredTuples;
 	
 	@Override
@@ -16,7 +21,7 @@ public class FastNWiseAlgorithm<E> extends AbstractNWiseAlgorithm<E> {
 			Set<List<E>> originalTuples = originalTuples(next);
 			if(originalTuples.size() > 0){
 				fCoveredTuples.addAll(originalTuples);
-				progressMonitor().worked(originalTuples.size());
+				progress(originalTuples.size());
 				return next;
 			}
 		}

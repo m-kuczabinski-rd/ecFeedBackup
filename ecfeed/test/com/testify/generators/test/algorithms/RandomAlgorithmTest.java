@@ -6,20 +6,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.core.runtime.IProgressMonitor;
 import org.junit.Test;
 
 import com.testify.ecfeed.api.GeneratorException;
 import com.testify.generators.algorithms.IAlgorithm;
 import com.testify.generators.algorithms.RandomAlgorithm;
-import com.testify.generators.monitors.ConsoleProgressMonitor;
 import com.testify.generators.test.utils.TestUtils;
 
 public class RandomAlgorithmTest {
 	final int MAX_VARIABLES = 5;
 	final int MAX_PARTITIONS_PER_VARIABLE = 5;
 	final int SAMPLE_SIZE = (int) (1000 * Math.pow(MAX_VARIABLES, MAX_PARTITIONS_PER_VARIABLE));
-	final IProgressMonitor PROGRESS_MONITOR = new ConsoleProgressMonitor();
 
 	protected final TestUtils utils = new TestUtils(); 
 
@@ -38,7 +35,7 @@ public class RandomAlgorithmTest {
 		IAlgorithm<String> algorithm = new RandomAlgorithm<String>
 		((int)(SAMPLE_SIZE), true);
 		try {
-			algorithm.initialize(input, null, PROGRESS_MONITOR);
+			algorithm.initialize(input, null);
 			List<String> next;
 			while((next = algorithm.getNext()) != null){
 				if(histogram.containsKey(next)){

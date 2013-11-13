@@ -13,7 +13,7 @@ import org.junit.Test;
 import com.google.common.collect.Sets;
 import com.testify.ecfeed.api.GeneratorException;
 import com.testify.ecfeed.api.IConstraint;
-import com.testify.generators.algorithms.INWiseAlgorithm;
+import com.testify.generators.algorithms.IAlgorithm;
 import com.testify.generators.algorithms.OptimalNWiseAlgorithm;
 import com.testify.generators.algorithms.Tuples;
 import com.testify.generators.monitors.SilentProgressMonitor;
@@ -26,12 +26,12 @@ public class OptimalNWiseTest extends NWiseAlgorithmTest{
 	
 	@Test
 	public void testCorrectness() {
-		testCorrectness(new OptimalNWiseAlgorithm<String>(), MAX_VARIABLES, MAX_PARTITIONS_PER_VARIABLE, PROGRESS_MONITOR);
+		testCorrectness(OptimalNWiseAlgorithm.class, MAX_VARIABLES, MAX_PARTITIONS_PER_VARIABLE);
 	}
 	
 	@Test
 	public void testConstraints() {
-		testConstraints(new OptimalNWiseAlgorithm<String>(), MAX_VARIABLES, MAX_PARTITIONS_PER_VARIABLE, PROGRESS_MONITOR);
+		testConstraints(OptimalNWiseAlgorithm.class, MAX_VARIABLES, MAX_PARTITIONS_PER_VARIABLE);
 	}
 	
 	@Test
@@ -40,16 +40,14 @@ public class OptimalNWiseTest extends NWiseAlgorithmTest{
 		for(int variables = 1; variables <= MAX_VARIABLES; variables++){
 			for(int partitions = 1; partitions <= MAX_PARTITIONS_PER_VARIABLE; partitions++){
 				for(int n = 1; n <= variables; n++){
-					utils.trace(PROGRESS_MONITOR, "Variables: " + variables + ", partitions: " + partitions + ", n: " + n);
 					List<List<String>>input = utils.prepareInput(variables, partitions);
 					Collection<IConstraint<String>> constraints = null;
-					INWiseAlgorithm<String> algorithm = new OptimalNWiseAlgorithm<String>();
+					IAlgorithm<String> algorithm = new OptimalNWiseAlgorithm<String>(n);
 
-					algorithm.initialize(n, input, constraints, PROGRESS_MONITOR);
-					int generatedDataSize = utils.algorithmResult(algorithm, PROGRESS_MONITOR).size();
+					algorithm.initialize(input, constraints);
+					int generatedDataSize = utils.algorithmResult(algorithm).size();
 					int referenceDataSize = referenceResult(input, n).size();
 					assertTrue(Math.abs(generatedDataSize - referenceDataSize) <= referenceDataSize / 30);
-					utils.trace(PROGRESS_MONITOR, "Generated size: " + generatedDataSize + ", reference size: " + referenceDataSize);
 				}
 			}
 		}

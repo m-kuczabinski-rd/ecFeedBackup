@@ -68,10 +68,13 @@ class GenerateTestSuiteAdapter extends SelectionAdapter{
 				throws InvocationTargetException, InterruptedException {
 			List<PartitionNode> next;
 			try {
-				fGenerator.initialize(fInput, fConstraints, fParameters, monitor);
+				fGenerator.initialize(fInput, fConstraints, fParameters);
+				monitor.beginTask("Generating test data", fGenerator.totalWork());
 				while((next = fGenerator.next()) != null && monitor.isCanceled() == false){
 					fGeneratedData.add(next);
+					monitor.worked(fGenerator.workProgress());
 				}
+				monitor.done();
 			} catch (GeneratorException e) {
 				throw new InvocationTargetException(e, e.getMessage());
 			}

@@ -12,7 +12,7 @@ import org.junit.Test;
 import com.testify.ecfeed.api.GeneratorException;
 import com.testify.ecfeed.api.IConstraint;
 import com.testify.generators.algorithms.FastNWiseAlgorithm;
-import com.testify.generators.algorithms.INWiseAlgorithm;
+import com.testify.generators.algorithms.IAlgorithm;
 import com.testify.generators.algorithms.OptimalNWiseAlgorithm;
 import com.testify.generators.monitors.SilentProgressMonitor;
 
@@ -23,12 +23,12 @@ public class FastNWiseAlgorithmTest extends NWiseAlgorithmTest {
 	
 	@Test
 	public void testCorrectness() {
-		testCorrectness(new FastNWiseAlgorithm<String>(), MAX_VARIABLES, MAX_PARTITIONS_PER_VARIABLE, PROGRESS_MONITOR);
+		testCorrectness(FastNWiseAlgorithm.class, MAX_VARIABLES, MAX_PARTITIONS_PER_VARIABLE);
 	}
 
 	@Test
 	public void testConstraints() {
-		testCorrectness(new OptimalNWiseAlgorithm<String>(), MAX_VARIABLES, MAX_PARTITIONS_PER_VARIABLE, PROGRESS_MONITOR);
+		testCorrectness(FastNWiseAlgorithm.class, MAX_VARIABLES, MAX_PARTITIONS_PER_VARIABLE);
 	}
 	
 
@@ -46,19 +46,19 @@ public class FastNWiseAlgorithmTest extends NWiseAlgorithmTest {
 
 	private void testSpeed(List<List<String>> input, int n) {
 		try{
-			INWiseAlgorithm<String> fastAlgorithm = new FastNWiseAlgorithm<String>();
-			INWiseAlgorithm<String> referenceAlgorithm = new OptimalNWiseAlgorithm<String>();
+			IAlgorithm<String> fastAlgorithm = new FastNWiseAlgorithm<String>(n);
+			IAlgorithm<String> referenceAlgorithm = new OptimalNWiseAlgorithm<String>(n);
 			Collection<IConstraint<String>> constraints = utils.generateRandomConstraints(input);
-			fastAlgorithm.initialize(n, input, constraints, PROGRESS_MONITOR);
-			referenceAlgorithm.initialize(n, input, constraints, PROGRESS_MONITOR);
+			fastAlgorithm.initialize(input, constraints);
+			referenceAlgorithm.initialize(input, constraints);
 
 			long timestampStart = new Date().getTime();
-			utils.algorithmResult(fastAlgorithm, PROGRESS_MONITOR);
+			utils.algorithmResult(fastAlgorithm);
 			long timestampEnd = new Date().getTime();
 			long duration = timestampEnd - timestampStart;
 
 			timestampStart = new Date().getTime();
-			utils.algorithmResult(referenceAlgorithm, PROGRESS_MONITOR);
+			utils.algorithmResult(referenceAlgorithm);
 			timestampEnd = new Date().getTime();
 			long referenceDuration = timestampEnd - timestampStart;
 

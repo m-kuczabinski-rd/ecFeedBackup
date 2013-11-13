@@ -5,44 +5,33 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.eclipse.core.runtime.IProgressMonitor;
-
 import com.testify.ecfeed.api.GeneratorException;
 import com.testify.ecfeed.api.IConstraint;
 import com.testify.generators.CartesianProductGenerator;
-import com.testify.generators.monitors.SilentProgressMonitor;
 
-public class AbstractNWiseAlgorithm<E> implements INWiseAlgorithm<E> {
+public class AbstractNWiseAlgorithm<E> extends AbstractAlgorithm<E> implements IAlgorithm<E> {
 
 	private CartesianProductGenerator<E> fCartesianGenerator;
 	private List<? extends List<E>> fInput;
 	private Collection<? extends IConstraint<E>> fConstraints;
 	protected int N  = -1;
-	private IProgressMonitor fProgressMonitor;
-	private long fTuplesToGenerate;
+	private int fTuplesToGenerate;
+	protected int fProgress;
 	
-	public void initialize(int n,
-			List<? extends List<E>> input, 
-			Collection<? extends IConstraint<E>> constraints,
-			IProgressMonitor progressMonitor) throws GeneratorException {
+	public AbstractNWiseAlgorithm(int n){
+		N = n;
+	}
+	
+	public void initialize(List<? extends List<E>> input, 
+			Collection<? extends IConstraint<E>> constraints) throws GeneratorException {
 
-		if(n < 1 || n > input.size()){
+		if(N < 1 || N > input.size()){
 			throw new GeneratorException("Value of N for this input must be between 1 and " + input.size());
 		}
-		N = n;
-		initialize(input, constraints, progressMonitor);
-	}
-
-	public void initialize(List<? extends List<E>> input, 
-			Collection<? extends IConstraint<E>> constraints,
-			IProgressMonitor progressMonitor) throws GeneratorException {
-
-		if(N == -1) throw new GeneratorException("Parameter N not initialized");
 		fCartesianGenerator = new CartesianProductGenerator<E>();
-		fCartesianGenerator.initialize(input, constraints, null, null);
+		fCartesianGenerator.initialize(input, constraints, null);
 		fInput = input;
 		fConstraints = constraints;
-		fProgressMonitor = (progressMonitor != null)?progressMonitor:new SilentProgressMonitor();
 		reset();
 	}
 	
@@ -54,12 +43,13 @@ public class AbstractNWiseAlgorithm<E> implements INWiseAlgorithm<E> {
 	@Override
 	public void reset(){
 		fCartesianGenerator.reset();
-		fTuplesToGenerate = totalWork();
-		progressMonitor().beginTask("Generating " + N + "-tuples", (int)fTuplesToGenerate);
+		fTuplesToGenerate = calculateTotalTuples();
+		setTotalWork(fTuplesToGenerate);
+		super.reset();
 	}
 	
-	protected long totalWork(){
-		long totalWork = 0;
+	private int calculateTotalTuples(){
+		int totalWork = 0;
 		Tuples<List<E>> tuples = new Tuples<>(fInput, N);
 		while(tuples.hasNext()){
 			long combinations = 1;
@@ -72,10 +62,6 @@ public class AbstractNWiseAlgorithm<E> implements INWiseAlgorithm<E> {
 		return totalWork;
 	}
 
-	protected IProgressMonitor progressMonitor(){
-		return fProgressMonitor;
-	}
-	
 	protected List<E> cartesianNext() throws GeneratorException{
 		return fCartesianGenerator.next();
 	}
@@ -102,7 +88,7 @@ public class AbstractNWiseAlgorithm<E> implements INWiseAlgorithm<E> {
 		while(categoryTuples.hasNext()){
 			List<List<E>> next = categoryTuples.next();
 			CartesianProductGenerator<E> generator = new CartesianProductGenerator<E>();
-			generator.initialize(next, null, null, null);
+			generator.initialize(next, null, null);
 			List<E> tuple;
 			while((tuple = generator.next()) != null){
 				result.add(tuple);

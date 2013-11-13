@@ -37,19 +37,19 @@ public class CartesianGeneratorTest extends CartesianProductGenerator<String>{
 		Collection<IConstraint<String>> constraints = utils.generateRandomConstraints(input);
 		Map<String, Object> parameters = new HashMap<String, Object>();
 		try {
-			fGeneratorUnderTest.initialize(input, constraints, null, PROGRESS_MONITOR);
+			fGeneratorUnderTest.initialize(input, constraints, null);
 		} catch (GeneratorException e) {
 			fail("Unexpected generator exception");
 		}
 		try {
-			fGeneratorUnderTest.initialize(input, constraints, parameters, PROGRESS_MONITOR);
+			fGeneratorUnderTest.initialize(input, constraints, parameters);
 		} catch (GeneratorException e) {
 			fail("Unexpected generator exception");
 		}
 		parameters.put("DUMMY_PARAMETER", 0);
 		boolean exceptionCaught = false;
 		try {
-			fGeneratorUnderTest.initialize(input, constraints, parameters, PROGRESS_MONITOR);
+			fGeneratorUnderTest.initialize(input, constraints, parameters);
 		} catch (GeneratorException e) {
 			exceptionCaught = true;
 		}
@@ -64,9 +64,9 @@ public class CartesianGeneratorTest extends CartesianProductGenerator<String>{
 			for(int partitions = 1; partitions <= MAX_PARTITIONS; partitions++){
 				List<List<String>> input = utils.prepareInput(variables, partitions);
 				try {
-					fGeneratorUnderTest.initialize(input, null, null, PROGRESS_MONITOR);
+					fGeneratorUnderTest.initialize(input, null, null);
 					Set<List<String>> referenceResult = Sets.cartesianProduct(utils.referenceInput(input));
-					assertEquals(referenceResult.size(), utils.generatorResult(fGeneratorUnderTest, PROGRESS_MONITOR).size());
+					assertEquals(referenceResult.size(), utils.generatorResult(fGeneratorUnderTest).size());
 				} catch (GeneratorException e) {
 					fail("Unexpected generator exception");
 				}
@@ -78,8 +78,8 @@ public class CartesianGeneratorTest extends CartesianProductGenerator<String>{
 	public void testReset(){
 		List<List<String>> input = utils.prepareInput(5, 5);
 		try {
-			fGeneratorUnderTest.initialize(input, null, null, PROGRESS_MONITOR);
-			Set<List<String>> referenceResult = utils.generatorResult(fGeneratorUnderTest, PROGRESS_MONITOR);
+			fGeneratorUnderTest.initialize(input, null, null);
+			Set<List<String>> referenceResult = utils.generatorResult(fGeneratorUnderTest);
 			for(int i = 0; i < 100; i++){
 				//generate some data
 				fGeneratorUnderTest.next();

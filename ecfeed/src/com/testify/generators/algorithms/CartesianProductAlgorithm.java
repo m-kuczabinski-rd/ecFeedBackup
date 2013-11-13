@@ -5,30 +5,25 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 
-import org.eclipse.core.runtime.IProgressMonitor;
-
 import com.testify.ecfeed.api.GeneratorException;
 import com.testify.ecfeed.api.IConstraint;
-import com.testify.generators.monitors.SilentProgressMonitor;
 
-public class CartesianProductAlgorithm<E> implements IAlgorithm<E>{
+public class CartesianProductAlgorithm<E> extends AbstractAlgorithm<E> implements IAlgorithm<E>{
 	private boolean fInitialized;
 	private List<? extends List<E>> fInput;
 	private Collection<? extends IConstraint<E>> fConstraints;
-	private IProgressMonitor fProgressMonitor;
 	protected List<E> fLastGenerated;
 
 	@Override
 	public void initialize(
 			List<? extends List<E>> input, 
-			Collection<? extends IConstraint<E>> constraints,
-			IProgressMonitor progressMonitor) throws GeneratorException{
+			Collection<? extends IConstraint<E>> constraints) throws GeneratorException{
 		
 		if(input == null) throw new GeneratorException("Input of algorithm cannot be null");
 		fInitialized = true;
 		fInput = input;
 		fConstraints = (constraints == null)?new HashSet<IConstraint<E>>():constraints;
-		fProgressMonitor = (progressMonitor == null)?new SilentProgressMonitor():progressMonitor;
+		setTotalWork(calculateProductSize(input));
 		reset();
 	}
 	
@@ -42,19 +37,17 @@ public class CartesianProductAlgorithm<E> implements IAlgorithm<E>{
 	
 	public void reset(){
 		fLastGenerated = null;
-		fProgressMonitor.beginTask("Generating cartesian product", totalWork());
 	}
 
 	protected List<E> getNext(List<E> last) throws GeneratorException{
 		List<Integer> nextElement = representation(last);
 		while((nextElement = incrementVector(nextElement)) != null){
-			fProgressMonitor.worked(1);
 			List<E> instance = instance(nextElement);
 			if(checkConstraints(instance)){
+				progress(1);
 				return instance;
 			}
 		}
-		fProgressMonitor.done();
 		return null;
 	}
 	
@@ -110,11 +103,11 @@ public class CartesianProductAlgorithm<E> implements IAlgorithm<E>{
 		return firstVector;
 	}
 
-	protected int totalWork(){
-		int totalWork = 1;
-		for(List<E> vector : fInput){
-			totalWork *= vector.size();
+	protected int calculateProductSize(List<? extends List<E>> input) {
+		int result = 1;
+		for(List<E> vector : input){
+			result *= vector.size();
 		}
-		return totalWork;
+		return result;
 	}
 }

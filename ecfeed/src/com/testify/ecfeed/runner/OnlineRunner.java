@@ -51,7 +51,7 @@ public class OnlineRunner extends StaticRunner {
 				Collection<IConstraint<PartitionNode>> constraints = getConstraints(method, methodModel);
 				Map<String, Object> parameters = getGeneratorParameters(generator, method);
 				try {
-					generator.initialize(input, constraints, parameters, null);
+					generator.initialize(input, constraints, parameters);
 				} catch (GeneratorException e) {
 					throw new RunnerException("Generator initializetion problem: " + e.getMessage());
 				}

@@ -5,8 +5,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.core.runtime.IProgressMonitor;
-
 import com.testify.ecfeed.api.GeneratorException;
 import com.testify.ecfeed.api.IConstraint;
 import com.testify.ecfeed.api.IGenerator;
@@ -26,9 +24,8 @@ public class AbstractGenerator<E> implements IGenerator<E> {
 	@Override
 	public void initialize(List<? extends List<E>> inputDomain,
 			Collection<? extends IConstraint<E>> constraints,
-			Map<String, Object> parameters, IProgressMonitor progressMonitor)
-			throws GeneratorException {
-		fAlgorithm.initialize(inputDomain, constraints, progressMonitor);
+			Map<String, Object> parameters) throws GeneratorException {
+		fAlgorithm.initialize(inputDomain, constraints);
 	}
 
 	@Override
@@ -47,5 +44,20 @@ public class AbstractGenerator<E> implements IGenerator<E> {
 
 	protected IAlgorithm<E> getAlgorithm(){
 		return fAlgorithm;
+	}
+
+	@Override
+	public int totalWork() {
+		return fAlgorithm.totalWork();
+	}
+
+	@Override
+	public int workProgress() {
+		return fAlgorithm.workProgress();
+	}
+
+	@Override
+	public int totalProgress() {
+		return fAlgorithm.totalProgress();
 	}
 }

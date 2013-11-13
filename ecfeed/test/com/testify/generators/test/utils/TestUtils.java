@@ -4,14 +4,11 @@ import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
-
-import org.eclipse.core.runtime.IProgressMonitor;
 
 import com.testify.ecfeed.api.GeneratorException;
 import com.testify.ecfeed.api.IConstraint;
@@ -66,9 +63,7 @@ public class TestUtils{
 		return referenceInput;
 	}
 	
-	public Set<List<String>> algorithmResult(IAlgorithm<String> initializedAlgorithm, IProgressMonitor progressMonitor) {
-		long timeStart = new Date().getTime();
-
+	public Set<List<String>> algorithmResult(IAlgorithm<String> initializedAlgorithm) {
 		Set<List<String>> result = new HashSet<List<String>>();
 		try {
 			List<String> next;
@@ -79,14 +74,10 @@ public class TestUtils{
 			fail("Unexpected algorithm exception: " + e.getMessage());
 			e.printStackTrace();
 		}
-		long timeStop = new Date().getTime();
-		long durationSeconds = (timeStop - timeStart)/1000;
-		long durationMiliseconds = (timeStop - timeStart)%1000;
-		trace(progressMonitor, "Generated in " + durationSeconds + "." + durationMiliseconds + " seconds");
 		return result;
 	}
 
-	public Set<List<String>> generatorResult(IGenerator<String> initializedGenerator, IProgressMonitor progressMonitor) {
+	public Set<List<String>> generatorResult(IGenerator<String> initializedGenerator) {
 		Set<List<String>> result = new HashSet<List<String>>();
 		try {
 			List<String> next;
@@ -115,10 +106,6 @@ public class TestUtils{
 			restrictedValues.add(constrainedCategory.get(random.nextInt(constrainedCategory.size())));
 		}
 		return new Constraint(restrictedValues);
-	}
-
-	public void trace(IProgressMonitor progressMonitor, String message){
-		progressMonitor.subTask(message);
 	}
 }
 

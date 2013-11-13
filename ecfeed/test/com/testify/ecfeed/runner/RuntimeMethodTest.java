@@ -40,7 +40,7 @@ public class RuntimeMethodTest {
 		IGenerator<PartitionNode> generator = new CartesianProductGenerator<PartitionNode>();
 		try {
 			Method methodUnterTest = this.getClass().getMethod("functionUnderTest", int.class, int.class);
-			generator.initialize(input, null, null, null);
+			generator.initialize(input, null, null);
 			RuntimeMethod testedMethod = new RuntimeMethod(methodUnterTest, generator);
 			fExecuted = new HashSet<List<Integer>>();
 			testedMethod.invokeExplosively(this, (Object[])null);
@@ -54,7 +54,7 @@ public class RuntimeMethodTest {
 		Set<List<Integer>> result = new HashSet<List<Integer>>();
 		CartesianProductGenerator<PartitionNode> referenceGenerator = new CartesianProductGenerator<PartitionNode>();
 		try {
-			referenceGenerator.initialize(input, null, null, null);
+			referenceGenerator.initialize(input, null, null);
 			List<PartitionNode> next;
 			while((next = referenceGenerator.next()) != null){
 				List<Integer> testCase = new ArrayList<Integer>();

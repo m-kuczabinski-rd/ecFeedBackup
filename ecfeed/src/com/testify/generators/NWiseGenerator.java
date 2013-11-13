@@ -16,21 +16,18 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.core.runtime.IProgressMonitor;
-
 import com.testify.ecfeed.api.GeneratorException;
 import com.testify.ecfeed.api.IConstraint;
 import com.testify.ecfeed.api.IGeneratorParameter;
 import com.testify.ecfeed.api.IGeneratorParameter.TYPE;
 import com.testify.generators.algorithms.FastNWiseAlgorithm;
-import com.testify.generators.algorithms.INWiseAlgorithm;
+import com.testify.generators.algorithms.IAlgorithm;
 import com.testify.generators.algorithms.OptimalNWiseAlgorithm;
 
 public class NWiseGenerator<E> extends AbstractGenerator<E>{
 	protected final static String N_PARAMETER_NAME = "N";
 	protected final static String ALGORITHM_PARAMETER_NAME = "Algorithm";
 	
-	protected final INWiseAlgorithm<E> DEFAULT_ALGORITHM = new OptimalNWiseAlgorithm<E>();
 	protected final static String[] SUPPORTED_ALGORITHMS = {"FAST", "COMPACT"};
 	
 	private List<IGeneratorParameter> fParameters;
@@ -39,9 +36,6 @@ public class NWiseGenerator<E> extends AbstractGenerator<E>{
 		fParameters = new ArrayList<IGeneratorParameter>();
 		fParameters.add(new AbstractParameter(N_PARAMETER_NAME, TYPE.INTEGER, 
 				true, 2, null));
-		
-//			fParameters.add(new AbstractParameter(ALGORITHM_PARAMETER_NAME, TYPE.STRING, 
-//					false, "COMPACT", SUPPORTED_ALGORITHMS));
 	}
 	
 	@Override
@@ -52,15 +46,12 @@ public class NWiseGenerator<E> extends AbstractGenerator<E>{
 	@Override
 	public void initialize(List<? extends List<E>> inputDomain,
 			Collection<? extends IConstraint<E>> constraints,
-			Map<String, Object> parameters,
-			IProgressMonitor progressMonitor) throws GeneratorException{
-
-//		INWiseAlgorithm<E> algorithm = getAlgorithm(parameters);
-		INWiseAlgorithm<E> algorithm = DEFAULT_ALGORITHM;
+			Map<String, Object> parameters) throws GeneratorException{
 		int N = getN(parameters);
-		algorithm.initialize(N, inputDomain, constraints, progressMonitor);
+		IAlgorithm<E> algorithm = new OptimalNWiseAlgorithm<E>(N);
+		algorithm.initialize(inputDomain, constraints);
 		setAlgorithm(algorithm);
-		super.initialize(inputDomain, constraints, parameters, progressMonitor);
+		super.initialize(inputDomain, constraints, parameters);
 	}
 
 	private int getN(Map<String, Object> parameters) throws GeneratorException {
@@ -75,8 +66,10 @@ public class NWiseGenerator<E> extends AbstractGenerator<E>{
 	}
 
 	@SuppressWarnings("unused")
-	private INWiseAlgorithm<E> getAlgorithm(Map<String, Object> parameters) throws GeneratorException {
-		INWiseAlgorithm<E> algorithm;
+	private IAlgorithm<E> getAlgorithm(Map<String, Object> parameters) throws GeneratorException {
+		IAlgorithm<E> algorithm;
+		int n = getN(parameters);
+		final IAlgorithm<E> DEFAULT_ALGORITHM = new OptimalNWiseAlgorithm<E>(n);
 		if(parameters != null && parameters.containsKey(ALGORITHM_PARAMETER_NAME)){
 			String algorithmName = (String) parameters.get(ALGORITHM_PARAMETER_NAME);
 			if(algorithmName instanceof String == false){
@@ -84,10 +77,10 @@ public class NWiseGenerator<E> extends AbstractGenerator<E>{
 			}
 			switch(algorithmName){
 			case "COMPACT":
-				algorithm = new OptimalNWiseAlgorithm<E>();
+				algorithm = new OptimalNWiseAlgorithm<E>(n);
 				break;
 			case "FAST":
-				algorithm = new FastNWiseAlgorithm<E>();
+				algorithm = new FastNWiseAlgorithm<E>(n);
 				break;
 			default:
 				throw new GeneratorException("Algorithm " + algorithmName + " is not supported");	

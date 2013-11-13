@@ -7,11 +7,8 @@ import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
-import org.eclipse.core.runtime.IProgressMonitor;
-
 import com.testify.ecfeed.api.GeneratorException;
 import com.testify.ecfeed.api.IConstraint;
-import com.testify.generators.monitors.SilentProgressMonitor;
 
 public class RandomAlgorithm<E> extends CartesianProductAlgorithm<E> {
 	
@@ -21,7 +18,6 @@ public class RandomAlgorithm<E> extends CartesianProductAlgorithm<E> {
 	private List<? extends List<E>> fInput;
 	private int fGeneratedCount;
 	private BlackList fBlackList;
-	private IProgressMonitor fProgressMonitor;
 
 	protected class BlackList implements IConstraint<E>{
 
@@ -55,25 +51,11 @@ public class RandomAlgorithm<E> extends CartesianProductAlgorithm<E> {
 		fDuplicates = duplicates;
 	}
 
-	public RandomAlgorithm(boolean duplicates) {
-		fLength = Integer.MAX_VALUE;
-		fDuplicates = duplicates;
-	}
-
-	public RandomAlgorithm() {
-		fLength = Integer.MAX_VALUE;
-		fDuplicates = false;
-	}
-
-
 	@Override
 	public void initialize(List<? extends List<E>> input,
-			Collection<? extends IConstraint<E>> constraints,
-			IProgressMonitor progressMonitor) throws GeneratorException {
+			Collection<? extends IConstraint<E>> constraints) throws GeneratorException {
 		fInput = input;
 		fBlackList = new BlackList();
-		fProgressMonitor = progressMonitor != null?progressMonitor:new SilentProgressMonitor();
-		fProgressMonitor.beginTask("\nGenerating " + fLength + " random combinations", fLength);
 		if(constraints == null){
 			constraints = new HashSet<IConstraint<E>>();
 		}
@@ -81,7 +63,8 @@ public class RandomAlgorithm<E> extends CartesianProductAlgorithm<E> {
 		if(!fDuplicates){
 			newConstraints.add(fBlackList);
 		}
-		super.initialize(input, newConstraints, null);
+		super.initialize(input, newConstraints);
+		setTotalWork(fLength);
 	}
 
 	@Override
@@ -94,13 +77,10 @@ public class RandomAlgorithm<E> extends CartesianProductAlgorithm<E> {
 		};
 		if(result != null){
 			++fGeneratedCount;
-			fProgressMonitor.worked(1);
 			if(!fDuplicates){
 				fBlackList.add(result);
 			}
-		}
-		else{
-			fProgressMonitor.done();
+			progress(1);
 		}
 		return result;
 	}
@@ -116,12 +96,8 @@ public class RandomAlgorithm<E> extends CartesianProductAlgorithm<E> {
 
 	@Override
 	public void reset() {
+		super.reset();
 		fGeneratedCount = 0;
 		fBlackList.clear();
-	}
-
-	@Override
-	protected int totalWork(){
-		return fLength;
 	}
 }

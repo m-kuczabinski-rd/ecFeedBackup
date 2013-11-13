@@ -15,8 +15,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.core.runtime.IProgressMonitor;
-
 public interface IGenerator<E> {
 	/*
 	 * returns list of parameters used by this generator.
@@ -27,8 +25,7 @@ public interface IGenerator<E> {
 	 */
 	public void initialize(List<? extends List<E>> inputDomain, 
 			Collection<? extends IConstraint<E>> constraints,
-			Map<String, Object> parameters,
-			IProgressMonitor progressMonitor) throws GeneratorException;
+			Map<String, Object> parameters) throws GeneratorException;
 	
 	/*
 	 * Returns null if no more data can be generated, e.g.if the test generation should end 
@@ -41,4 +38,10 @@ public interface IGenerator<E> {
 	 * Resets generator to its initial state.
 	 */
 	public void reset();
+	
+	public int totalWork();
+	
+	public int workProgress();
+	
+	public int totalProgress();
 }

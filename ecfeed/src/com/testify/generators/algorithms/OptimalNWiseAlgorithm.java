@@ -13,6 +13,10 @@ public class OptimalNWiseAlgorithm<E> extends AbstractNWiseAlgorithm<E>{
 	private int K;
 	private Set<List<E>> fGeneratedTuples;
 	
+	public OptimalNWiseAlgorithm(int n) {
+		super(n);
+	}
+	
 	@Override
 	public List<E> getNext() throws GeneratorException{
 		while(K != 0 && fGeneratedTuples.size() < tuplesToGenerate()){
@@ -25,11 +29,10 @@ public class OptimalNWiseAlgorithm<E> extends AbstractNWiseAlgorithm<E>{
 			Set<List<E>> originalTuples = originalTuples(next); 
 			if(originalTuples.size() == K){
 				fGeneratedTuples.addAll(originalTuples);
-				progressMonitor().worked(originalTuples.size());
+				progress(originalTuples.size());
 				return next;
 			}
 		}
-		progressMonitor().done();
 		return null;
 	}
 

@@ -31,13 +31,11 @@ public class CartesianProductTest{
 		try{
 			for(int noOfVariables = 1; noOfVariables <= MAX_VARIABLES; noOfVariables++){
 				for(int partitionsPerVariable = 1; partitionsPerVariable <= MAX_PARTITIONS_PER_VARIABLE; partitionsPerVariable++){
-					utils.trace(PROGRESS_MONITOR, "Generating cartesian product from " + noOfVariables + " with " 
-				+ partitionsPerVariable + " partitions each");
 					List<List<String>> input = utils.prepareInput(noOfVariables, partitionsPerVariable);
 					Collection<IConstraint<String>> constraints = null;
 					Set<List<String>> referenceSet = referenceSet(input);
-					ALGORITHM.initialize(input, constraints, PROGRESS_MONITOR);
-					Set<List<String>> algorithmResult = utils.algorithmResult(ALGORITHM, PROGRESS_MONITOR);
+					ALGORITHM.initialize(input, constraints);
+					Set<List<String>> algorithmResult = utils.algorithmResult(ALGORITHM);
 					assertEquals(referenceSet.size(), algorithmResult.size());
 					for(List<String> element : referenceSet){
 						assertTrue(algorithmResult.contains(element));
@@ -58,8 +56,8 @@ public class CartesianProductTest{
 					Collection<IConstraint<String>> constraints = utils.generateRandomConstraints(input);
 					Set<List<String>> referenceSet = referenceSet(input);
 					referenceSet = filter(referenceSet, constraints);
-					ALGORITHM.initialize(input, constraints, PROGRESS_MONITOR);
-					Set<List<String>> algorithmResult = utils.algorithmResult(ALGORITHM, PROGRESS_MONITOR);
+					ALGORITHM.initialize(input, constraints);
+					Set<List<String>> algorithmResult = utils.algorithmResult(ALGORITHM);
 					assertEquals(referenceSet.size(), algorithmResult.size());
 					for(List<String> element : referenceSet){
 						assertTrue(algorithmResult.contains(element));

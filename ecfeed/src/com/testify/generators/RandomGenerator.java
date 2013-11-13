@@ -5,8 +5,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.core.runtime.IProgressMonitor;
-
 import com.testify.ecfeed.api.GeneratorException;
 import com.testify.ecfeed.api.IConstraint;
 import com.testify.ecfeed.api.IGenerator;
@@ -35,11 +33,10 @@ public class RandomGenerator<E> extends AbstractGenerator<E> implements
 	@Override
 	public void initialize(List<? extends List<E>> inputDomain,
 			Collection<? extends IConstraint<E>> constraints,
-			Map<String, Object> parameters,
-			IProgressMonitor progressMonitor) throws GeneratorException{
+			Map<String, Object> parameters) throws GeneratorException{
 
 		setAlgorithm(new RandomAlgorithm<E>(getLength(parameters), getDuplicates(parameters)));
-		super.initialize(inputDomain, constraints, parameters, progressMonitor);
+		super.initialize(inputDomain, constraints, parameters);
 	}
 
 	private boolean getDuplicates(Map<String, Object> parameters) throws GeneratorException {

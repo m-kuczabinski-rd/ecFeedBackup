@@ -39,7 +39,7 @@ public class NWiseGeneratorTest extends NWiseGenerator<String>{
 		Collection<IConstraint<String>> constraints = utils.generateRandomConstraints(input);
 		boolean exceptionCaught = false;
 		try {
-			super.initialize(input, constraints, null, null);
+			super.initialize(input, constraints, null);
 		} catch (GeneratorException e) {
 			exceptionCaught = true;
 		}
@@ -47,7 +47,7 @@ public class NWiseGeneratorTest extends NWiseGenerator<String>{
 
 		try {
 			exceptionCaught = false;
-			super.initialize(input, constraints, parameters, null);
+			super.initialize(input, constraints, parameters);
 		} catch (GeneratorException e) {
 			exceptionCaught = true;
 		}
@@ -56,7 +56,7 @@ public class NWiseGeneratorTest extends NWiseGenerator<String>{
 		try {
 			exceptionCaught = false;
 			parameters.put("N", -1);
-			super.initialize(input, constraints, parameters, null);
+			super.initialize(input, constraints, parameters);
 		} catch (GeneratorException e) {
 			exceptionCaught = true;
 		}
@@ -65,7 +65,7 @@ public class NWiseGeneratorTest extends NWiseGenerator<String>{
 		try {
 			exceptionCaught = false;
 			parameters.put("N", 7);
-			super.initialize(input, constraints, parameters, null);
+			super.initialize(input, constraints, parameters);
 		} catch (GeneratorException e) {
 			exceptionCaught = true;
 		}
@@ -74,7 +74,7 @@ public class NWiseGeneratorTest extends NWiseGenerator<String>{
 		try {
 			exceptionCaught = false;
 			parameters.put("N", 3);
-			super.initialize(input, constraints, parameters, null);
+			super.initialize(input, constraints, parameters);
 		} catch (GeneratorException e) {
 			fail("Unexpected exception: " + e.getMessage());
 			exceptionCaught = true;
@@ -90,7 +90,7 @@ public class NWiseGeneratorTest extends NWiseGenerator<String>{
 		parameters.put("N", 3);
 		
 		try {
-			super.initialize(input, constraints, parameters, null);
+			super.initialize(input, constraints, parameters);
 			assertTrue(super.getAlgorithm() instanceof OptimalNWiseAlgorithm);
 		} catch (GeneratorException e) {
 			fail("Unexpected exception: " + e.getMessage());
@@ -98,7 +98,7 @@ public class NWiseGeneratorTest extends NWiseGenerator<String>{
 
 		try {
 			parameters.put(ALGORITHM_PARAMETER_NAME, "FAST");
-			super.initialize(input, constraints, parameters, null);
+			super.initialize(input, constraints, parameters);
 			assertTrue(super.getAlgorithm() instanceof FastNWiseAlgorithm);
 		} catch (GeneratorException e) {
 			fail("Unexpected exception: " + e.getMessage());
@@ -107,7 +107,7 @@ public class NWiseGeneratorTest extends NWiseGenerator<String>{
 		boolean exceptionCaught = false;
 		try {
 			parameters.put(ALGORITHM_PARAMETER_NAME, "UNSUPPORTED_ALGORITHM");
-			super.initialize(input, constraints, parameters, null);
+			super.initialize(input, constraints, parameters);
 		} catch (GeneratorException e) {
 			exceptionCaught = true;
 		}
@@ -122,11 +122,9 @@ public class NWiseGeneratorTest extends NWiseGenerator<String>{
 		parameters.put("N", 2);
 		try {
 			IGenerator<String> compactGenerator = new NWiseGenerator<String>();
-//			IGenerator<String> fastGenerator = new NWiseGenerator<String>();
 			Set<List<String>> compactResult = new HashSet<List<String>>();
-//			Set<List<String>> fastResult = new HashSet<List<String>>();
 			parameters.put(ALGORITHM_PARAMETER_NAME, "COMPACT");
-			compactGenerator.initialize(input, constraints, parameters, null);
+			compactGenerator.initialize(input, constraints, parameters);
 			List<String> next;
 			while((next = compactGenerator.next()) != null){
 				compactResult.add(next);	

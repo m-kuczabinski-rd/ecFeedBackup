@@ -210,7 +210,7 @@ public class OnlineRunnerTest extends StaticRunnerTest{
 			List<List<PartitionNode>> input,
 			Collection<? extends IConstraint<PartitionNode>> constraints) throws GeneratorException {
 		IGenerator<PartitionNode> generator = new CartesianProductGenerator<PartitionNode>();
-		generator.initialize(input, constraints, null, null);
+		generator.initialize(input, constraints, null);
 		return generator;
 	}
 
@@ -221,7 +221,7 @@ public class OnlineRunnerTest extends StaticRunnerTest{
 		NWiseGenerator<PartitionNode> result = new NWiseGenerator<PartitionNode>();
 		Map<String, Object> parameters = new HashMap<String, Object>();
 		parameters.put("N", n);
-		result.initialize(input, null, parameters, null);
+		result.initialize(input, null, parameters);
 		return result;
 	}
 
