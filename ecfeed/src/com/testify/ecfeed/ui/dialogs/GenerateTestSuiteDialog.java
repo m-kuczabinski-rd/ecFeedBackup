@@ -388,6 +388,7 @@ public class GenerateTestSuiteDialog extends TitleAreaDialog {
 				try {
 					fSelectedGenerator = fGeneratorFactory.getGenerator(fGeneratorCombo.getText());
 					createParametersComposite(parent, fSelectedGenerator.parameters());
+					fMainContainer.layout();
 				} catch (GeneratorException exception) {
 					exception.printStackTrace();
 					fGeneratorCombo.setText("");
