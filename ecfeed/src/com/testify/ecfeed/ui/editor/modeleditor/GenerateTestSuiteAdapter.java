@@ -14,10 +14,8 @@ package com.testify.ecfeed.ui.editor.modeleditor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.dialogs.IDialogConstants;
@@ -48,7 +46,7 @@ class GenerateTestSuiteAdapter extends SelectionAdapter{
 	private class GeneratorRunnable implements IRunnableWithProgress{
 
 		private IGenerator<PartitionNode> fGenerator;
-		private Set<List<PartitionNode>> fGeneratedData;
+		private List<List<PartitionNode>> fGeneratedData;
 		private List<List<PartitionNode>> fInput;
 		private Collection<IConstraint<PartitionNode>> fConstraints;
 		private Map<String, Object> fParameters;
@@ -57,7 +55,7 @@ class GenerateTestSuiteAdapter extends SelectionAdapter{
 				List<List<PartitionNode>> input, 
 				Collection<IConstraint<PartitionNode>> constraints, 
 				Map<String, Object> parameters, 
-				Set<List<PartitionNode>> generated){
+				List<List<PartitionNode>> generated){
 			fGenerator = generator;
 			fInput = input;
 			fConstraints = constraints;
@@ -98,19 +96,19 @@ class GenerateTestSuiteAdapter extends SelectionAdapter{
 			String testSuiteName = dialog.getTestSuiteName();
 			Map<String, Object> parameters = dialog.getGeneratorParameters();
 			
-			Set<List<PartitionNode>> generatedData = generateTestData(selectedGenerator, algorithmInput, constraints, parameters);
+			List<List<PartitionNode>> generatedData = generateTestData(selectedGenerator, algorithmInput, constraints, parameters);
 			addGeneratedDataToModel(testSuiteName, generatedData);
 		}
 	}
 
-	private Set<List<PartitionNode>> generateTestData(final IGenerator<PartitionNode> generator, 
+	private List<List<PartitionNode>> generateTestData(final IGenerator<PartitionNode> generator, 
 			final List<List<PartitionNode>> input, 
 			final Collection<IConstraint<PartitionNode>> constraints,
 			final Map<String, Object> parameters) {
 
 		ProgressMonitorDialog progressDialog = 
 				new ProgressMonitorDialog(fPage.getActiveShell());
-		Set<List<PartitionNode>> generated = new HashSet<List<PartitionNode>>();
+		List<List<PartitionNode>> generated = new ArrayList<List<PartitionNode>>();
 		fCanceled = false;
 		try {
 			GeneratorRunnable runnable = new GeneratorRunnable(generator, input, constraints, parameters, generated);
@@ -131,12 +129,12 @@ class GenerateTestSuiteAdapter extends SelectionAdapter{
 		else{
 			//return empty set if the operation was canceled
 			//TODO add a decision dialog where user may choose whether to add generated data
-			return new HashSet<List<PartitionNode>>();
+			return new ArrayList<List<PartitionNode>>();
 		}
 	}
 
 	private void addGeneratedDataToModel(String testSuiteName, 
-			Set<List<PartitionNode>> generatedData) {
+			List<List<PartitionNode>> generatedData) {
 		int dataLength = generatedData.size();
 		if(dataLength > 0){
 			if(generatedData.size() > Constants.TEST_SUITE_SIZE_WARNING_LIMIT){
@@ -164,7 +162,7 @@ class GenerateTestSuiteAdapter extends SelectionAdapter{
 		}
 	}
 
-	private void addTestSuiteToModel(String testSuiteName, Set<List<PartitionNode>> generatedData) {
+	private void addTestSuiteToModel(String testSuiteName, List<List<PartitionNode>> generatedData) {
 		List<TestCaseNode> testSuite = new ArrayList<TestCaseNode>();
 		MethodNode selectedMethod = fPage.getSelectedMethod();
 		for(List<PartitionNode> testCase : generatedData){
