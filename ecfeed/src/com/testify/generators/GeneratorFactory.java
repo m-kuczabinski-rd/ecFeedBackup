@@ -1,6 +1,6 @@
 package com.testify.generators;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -13,10 +13,10 @@ public class GeneratorFactory<E> {
 	
 	@SuppressWarnings("unchecked")
 	public GeneratorFactory(){
-		fAvailableGenerators = new HashMap<String, Class<? extends IGenerator<E>>>();
+		fAvailableGenerators = new LinkedHashMap<String, Class<? extends IGenerator<E>>>();
+		registerGenerator("N-wise generator", (Class<? extends IGenerator<E>>) NWiseGenerator.class);
 		registerGenerator("Cartesian Product generator", (Class<? extends IGenerator<E>>) CartesianProductGenerator.class);
 		registerGenerator("Random generator", (Class<? extends IGenerator<E>>) RandomGenerator.class);
-		registerGenerator("N-wise generator", (Class<? extends IGenerator<E>>) NWiseGenerator.class);
 	}
 
 	public Set<String> availableGenerators(){
