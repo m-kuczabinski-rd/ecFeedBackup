@@ -42,7 +42,7 @@ public class StaticRunner extends BlockJUnit4ClassRunner {
 			try {
 				fTestMethods = generateTestMethods();
 			} catch (RunnerException e) {
-				System.out.println("Runner exception: " + e.getMessage());
+				System.out.println(Messages.RUNNER_EXCEPTION(e.getMessage()));
 				e.printStackTrace();
 			}
 		}

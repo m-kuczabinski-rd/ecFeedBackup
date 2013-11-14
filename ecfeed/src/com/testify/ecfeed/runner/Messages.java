@@ -23,5 +23,8 @@ public class Messages {
 	public static String GENERATOR_INITIALIZATION_PROBLEM(String message) {
 		{return "Generator initialization problem: " + message;}
 	}
+	public static String RUNNER_EXCEPTION(String message) {
+		{return "Runner exception: " + message;}
+	}
 
 }
