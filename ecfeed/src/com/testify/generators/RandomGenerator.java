@@ -15,14 +15,16 @@ import com.testify.generators.algorithms.RandomAlgorithm;
 public class RandomGenerator<E> extends AbstractGenerator<E> implements
 		IGenerator<E> {
 
-	private final String LENGTH_PARAMETER_NAME = "Test suite size"; 
+	private final String LENGTH_PARAMETER_NAME = "Test suite size";
+	private final int DEFAULT_LENGTH = 1;
 	private final String DUPLICATES_PARAMETER_NAME = "Duplicates"; 
+	private final boolean DEFAULT_DUPLICATES = false;
 	private List<IGeneratorParameter> fParameters;
 	
 	public RandomGenerator(){
 		fParameters = new ArrayList<IGeneratorParameter>();
-		fParameters.add(new AbstractParameter(LENGTH_PARAMETER_NAME, TYPE.INTEGER, true, 1, null));
-		fParameters.add(new AbstractParameter(DUPLICATES_PARAMETER_NAME, TYPE.BOOLEAN, false, false, null));
+		fParameters.add(new AbstractParameter(LENGTH_PARAMETER_NAME, TYPE.INTEGER, true, DEFAULT_LENGTH, null));
+		fParameters.add(new AbstractParameter(DUPLICATES_PARAMETER_NAME, TYPE.BOOLEAN, false, DEFAULT_DUPLICATES, null));
 	}
 	
 	@Override
@@ -41,7 +43,7 @@ public class RandomGenerator<E> extends AbstractGenerator<E> implements
 
 	private boolean getDuplicates(Map<String, Object> parameters) throws GeneratorException {
 		if(!parameters.containsKey(DUPLICATES_PARAMETER_NAME)){
-			throw new GeneratorException(DUPLICATES_PARAMETER_NAME + " parameter must be defined");
+			return DEFAULT_DUPLICATES;
 		}
 		Object duplicatesObject = parameters.get(DUPLICATES_PARAMETER_NAME);
 		if(duplicatesObject instanceof Boolean == false){
