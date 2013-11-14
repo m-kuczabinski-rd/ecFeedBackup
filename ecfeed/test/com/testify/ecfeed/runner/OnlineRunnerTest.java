@@ -186,7 +186,7 @@ public class OnlineRunnerTest extends StaticRunnerTest{
 			RootNode model, FrameworkMethod method) throws RunnerException {
 		Collection<IConstraint<PartitionNode>> result = new ArrayList<IConstraint<PartitionNode>>();
 		MethodNode methodModel = getMethodModel(model, method);
-		for(ConstraintNode node : methodModel.getConstraints()){
+		for(ConstraintNode node : methodModel.getConstraintNodes()){
 			result.add(node.getConstraint());
 		}
 		return result;
