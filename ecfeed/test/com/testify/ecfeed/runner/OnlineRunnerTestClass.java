@@ -3,6 +3,7 @@ package com.testify.ecfeed.runner;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import com.testify.ecfeed.runner.annotations.Constraints;
 import com.testify.ecfeed.runner.annotations.EcModel;
 import com.testify.ecfeed.runner.annotations.Generator;
 import com.testify.ecfeed.runner.annotations.GeneratorParameter;
@@ -14,6 +15,7 @@ import com.testify.generators.RandomGenerator;
 
 @RunWith(OnlineRunner.class)
 @Generator(CartesianProductGenerator.class)
+@Constraints("constraint")
 @EcModel("test/com/testify/ecfeed/runner/OnlineRunnerTest.ect")
 public class OnlineRunnerTestClass {
 
@@ -26,7 +28,7 @@ public class OnlineRunnerTestClass {
 
 	@Test
 	@Generator(CartesianProductGenerator.class)
-	@GeneratorParameter(name = "N", value = "2")
+	@Constraints("other constraint")
 	public void cartesianTest(int a, int b, int c, int d) {
 		System.out.println("test(" + a + ", " + b + ", " + c + ", " + d + ")");
 	}

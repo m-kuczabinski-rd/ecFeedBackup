@@ -224,6 +224,22 @@
                 <Partition name="positive" value="1"/>
                 <Partition name="max" value="2147483647"/>
             </Category>
+            <Constraint name="constraint">
+                <Premise>
+                    <Statement category="a" partition="zero" relation="≠"/>
+                </Premise>
+                <Consequence>
+                    <StaticStatement value="false"/>
+                </Consequence>
+            </Constraint>
+            <Constraint name="other constraint">
+                <Premise>
+                    <Statement category="b" partition="zero" relation="≠"/>
+                </Premise>
+                <Consequence>
+                    <StaticStatement value="false"/>
+                </Consequence>
+            </Constraint>
         </Method>
         <Method name="randomTest">
             <Category name="a" type="int">
