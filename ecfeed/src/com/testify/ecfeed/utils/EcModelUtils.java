@@ -120,7 +120,7 @@ public class EcModelUtils {
 		}
 
 		ArrayList<ConstraintNode> constraintsToRemove = new ArrayList<ConstraintNode>();
-		Collection<ConstraintNode> constraints = method.getConstraints();
+		Collection<ConstraintNode> constraints = method.getConstraintNodes();
 		for(ConstraintNode constraint : constraints){
 			if(constraint.mentions(partition)){
 				constraintsToRemove.add(constraint);

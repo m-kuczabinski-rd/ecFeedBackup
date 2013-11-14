@@ -102,8 +102,16 @@ public class MethodNode extends GenericNode {
 		return allNames;
 	}
 
-	public List<ConstraintNode> getConstraints(){
+	public List<ConstraintNode> getConstraintNodes(){
 		return fConstraints;
+	}
+
+	public List<IConstraint<PartitionNode>> getAllConstraints(){
+		List<IConstraint<PartitionNode>> constraints = new ArrayList<IConstraint<PartitionNode>>();
+		for(ConstraintNode node : fConstraints){
+			constraints.add(node.getConstraint());
+		}
+		return constraints;
 	}
 
 	public List<IConstraint<PartitionNode>> getConstraints(String name) {

@@ -512,7 +512,7 @@ public class MethodNodeDetailsPage extends GenericNodeDetailsPage implements IIn
 		super.selectionChanged(part, selection);
 		fSelectedMethod = (MethodNode)fSelectedNode;
 		redrawParametersComposite(fParametersSection, fSelectedMethod.getCategories());
-		fConstraintsViewer.setInput(fSelectedMethod.getConstraints());
+		fConstraintsViewer.setInput(fSelectedMethod.getConstraintNodes());
 		fTestCasesViewer.setInput(fSelectedMethod);
 		refresh();
 	}
