@@ -143,7 +143,7 @@ public class OnlineRunner extends StaticRunner {
 			FrameworkMethod method, MethodNode methodModel) {
 		Collection<String> constraintsNames = constraintsNames(method);
 		if(constraintsNames == null){
-			return null;
+			return methodModel.getAllConstraints();
 		}
 		if(constraintsNames.contains(Constraints.ALL)){
 			constraintsNames = methodModel.getConstraintsNames();
