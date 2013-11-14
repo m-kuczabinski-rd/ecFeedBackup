@@ -83,11 +83,12 @@ public class OnlineRunner extends StaticRunner {
 	}
 
 	private Map<String, String> parseParameters(Annotation[] annotations) throws RunnerException {
-		Map<String, String> result = new HashMap<String, String>();
+		Map<String, String> result = null;
 		String[] parameterNames = null;
 		String[] parameterValues = null;
 		for(Annotation annotation : annotations){
 			if(annotation instanceof GeneratorParameter){
+				result = new HashMap<String, String>();
 				GeneratorParameter parameter = (GeneratorParameter)annotation;
 				result.put(parameter.name(), parameter.value());
 			}
@@ -101,6 +102,9 @@ public class OnlineRunner extends StaticRunner {
 		if(parameterNames != null && parameterValues != null){
 			if(parameterNames.length != parameterValues.length){
 				throw new RunnerException("GeneratorParameterNames and GeneratorParameterValues must be of the same length");
+			}
+			if(result == null){
+				result = new HashMap<String, String>();
 			}
 			for(int i = 0; i < parameterNames.length; i++){
 				result.put(parameterNames[i], parameterValues[i]);
