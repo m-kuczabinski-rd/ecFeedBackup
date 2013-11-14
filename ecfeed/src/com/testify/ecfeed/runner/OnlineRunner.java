@@ -53,7 +53,7 @@ public class OnlineRunner extends StaticRunner {
 				try {
 					generator.initialize(input, constraints, parameters);
 				} catch (GeneratorException e) {
-					throw new RunnerException("Generator initializetion problem: " + e.getMessage());
+					throw new RunnerException(Messages.GENERATOR_INITIALIZATION_PROBLEM(e.getMessage()));
 				}
 				methods.add(new RuntimeMethod(method.getMethod(), generator));
 			}
@@ -101,7 +101,7 @@ public class OnlineRunner extends StaticRunner {
 		}
 		if(parameterNames != null && parameterValues != null){
 			if(parameterNames.length != parameterValues.length){
-				throw new RunnerException("GeneratorParameterNames and GeneratorParameterValues must be of the same length");
+				throw new RunnerException(Messages.PARAMETERS_ANNOTATION_LENGTH_ERROR);
 			}
 			if(result == null){
 				result = new HashMap<String, String>();
@@ -111,7 +111,7 @@ public class OnlineRunner extends StaticRunner {
 			}
 		} 
 		else if(parameterNames != null || parameterValues != null){
-			throw new RunnerException("GeneratorParameterNames and GeneratorParameterValues may be used only together");
+			throw new RunnerException(Messages.MISSING_PARAMETERS_ANNOTATION);
 		}
 		return result;
 	}
@@ -189,7 +189,7 @@ public class OnlineRunner extends StaticRunner {
 					Constructor<? extends IGenerator> constructor = generatorClass.getConstructor(new Class<?>[]{});
 					generator = (IGenerator<PartitionNode>)(constructor.newInstance(new Object[]{}));
 				} catch (Exception e) {
-					throw new RunnerException("Cannot instantiate generator: " + e.getMessage());
+					throw new RunnerException(Messages.CANNOT_INSTANTIATE_GENERATOR(e.getMessage()));
 				}
 			}
 		}
