@@ -24,7 +24,8 @@ public class AbstractGenerator<E> implements IGenerator<E> {
 	@Override
 	public void initialize(List<? extends List<E>> inputDomain,
 			Collection<? extends IConstraint<E>> constraints,
-			Map<String, Object> parameters) throws GeneratorException {
+			Map<String, Object> parameters)
+			throws GeneratorException {
 		fAlgorithm.initialize(inputDomain, constraints);
 	}
 
@@ -48,16 +49,16 @@ public class AbstractGenerator<E> implements IGenerator<E> {
 
 	@Override
 	public int totalWork() {
-		return fAlgorithm.totalWork();
+		return 0;
 	}
 
 	@Override
 	public int workProgress() {
-		return fAlgorithm.workProgress();
+		return 0;
 	}
 
 	@Override
 	public int totalProgress() {
-		return fAlgorithm.totalProgress();
+		return 0;
 	}
 }

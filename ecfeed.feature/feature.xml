@@ -2,7 +2,11 @@
 <feature
       id="com.testify.ecfeed.feature"
       label="ecFeed"
+<<<<<<< HEAD
       version="1.3.1.qualifier"
+=======
+      version="1.3.0.qualifier"
+>>>>>>> refs/remotes/origin/dev-temp_restructuring
       provider-name="TESTIFY">
 
    <description>
