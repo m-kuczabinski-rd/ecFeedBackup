@@ -19,6 +19,8 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredViewer;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
+import org.eclipse.jface.viewers.TreeViewer;
+import org.eclipse.jface.viewers.TreeViewerColumn;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.layout.FillLayout;
@@ -28,6 +30,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.TableColumn;
+import org.eclipse.swt.widgets.TreeColumn;
 import org.eclipse.ui.forms.IDetailsPage;
 import org.eclipse.ui.forms.IFormPart;
 import org.eclipse.ui.forms.IManagedForm;
@@ -171,6 +174,18 @@ public class GenericNodeDetailsPage implements IDetailsPage, IModelUpdateListene
 			String name, int width, ColumnLabelProvider labelProvider){
 		TableViewerColumn viewerColumn = new TableViewerColumn(viewer, SWT.NONE);
 		TableColumn column = viewerColumn.getColumn();
+		column.setWidth(width);
+		column.setText(name);
+		column.setResizable(true);
+		column.setMoveable(true);
+		viewerColumn.setLabelProvider(labelProvider);
+		return viewerColumn;
+	}
+	
+	protected TreeViewerColumn createTreeViewerColumn(TreeViewer viewer, 
+			String name, int width, ColumnLabelProvider labelProvider){
+		TreeViewerColumn viewerColumn = new TreeViewerColumn(viewer, SWT.NONE);
+		TreeColumn column = viewerColumn.getColumn();
 		column.setWidth(width);
 		column.setText(name);
 		column.setResizable(true);
