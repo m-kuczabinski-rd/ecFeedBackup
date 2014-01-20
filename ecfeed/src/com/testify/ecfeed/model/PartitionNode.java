@@ -11,6 +11,7 @@
 
 package com.testify.ecfeed.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.testify.ecfeed.constants.Constants;
@@ -23,6 +24,7 @@ public class PartitionNode extends GenericNode {
 	public PartitionNode(String name, Object value) {
 		super(name);
 		fValue = value;
+		fPartitions = new ArrayList<PartitionNode>();
 	}
 
 	public Object getValue() {
@@ -47,7 +49,12 @@ public class PartitionNode extends GenericNode {
 	}
 	
 	public CategoryNode getCategory() {
-		return (CategoryNode)getParent();
+		if(getParent() instanceof CategoryNode){
+			return (CategoryNode)getParent();
+		}
+		else{
+			return ((PartitionNode)getParent()).getCategory();
+		}
 	}
 
 	public PartitionNode getCopy() {
@@ -90,5 +97,28 @@ public class PartitionNode extends GenericNode {
 			}
 		}
 		return false;
+	}
+	
+	/*
+	 * Returns name of this partition and names of all parent partitions
+	 */
+	public List<String> getAllNames(){
+		List<String> names = new ArrayList<String>();
+		names.add(getName());
+		if(getParent() instanceof PartitionNode){
+			names.addAll(((PartitionNode)getParent()).getAllNames());
+		}
+		return names;
+	}
+	
+	public boolean isAbstract(){
+		return fPartitions.size() != 0;
+	}
+	
+	public int level(){
+		if(getParent() instanceof CategoryNode){
+			return 0;
+		}
+		return ((PartitionNode)getParent()).level() + 1;
 	}
 }

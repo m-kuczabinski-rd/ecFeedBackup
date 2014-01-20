@@ -56,11 +56,11 @@ public class Constants {
 	public static final String STATEMENT_OPERATOR_OR_ATTRIBUTE_VALUE = "or";
 	public static final String STATIC_STATEMENT_TRUE_VALUE = "true";
 	public static final String STATIC_STATEMENT_FALSE_VALUE = "false";
-	public static final String RELATION_LESS = "<";
-	public static final String RELATION_LESS_EQUAL = "\u2264";
+//	public static final String RELATION_LESS = "<";
+//	public static final String RELATION_LESS_EQUAL = "\u2264";
 	public static final String RELATION_EQUAL = "=";
-	public static final String RELATION_GREATER_EQUAL = "\u2265";
-	public static final String RELATION_GREATER = ">";
+//	public static final String RELATION_GREATER_EQUAL = "\u2265";
+//	public static final String RELATION_GREATER = ">";
 	public static final String RELATION_NOT = "\u2260";
 	
 	public static final String DEFAULT_TEST_SUITE_NAME = "default suite";

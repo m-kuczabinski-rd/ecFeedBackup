@@ -183,21 +183,21 @@ public class EcParser {
 		String relationName = element.getAttributeValue(Constants.STATEMENT_RELATION_ATTRIBUTE_NAME);
 		Relation relation = null;
 		switch(relationName){
-		case Constants.RELATION_LESS:
-			relation = Relation.LESS;
-			break;
-		case Constants.RELATION_LESS_EQUAL:
-			relation = Relation.LESS_EQUAL;
-			break;
+//		case Constants.RELATION_LESS:
+//			relation = Relation.LESS;
+//			break;
+//		case Constants.RELATION_LESS_EQUAL:
+//			relation = Relation.LESS_EQUAL;
+//			break;
 		case Constants.RELATION_EQUAL:
 			relation = Relation.EQUAL;
 			break;
-		case Constants.RELATION_GREATER_EQUAL:
-			relation = Relation.GREATER_EQUAL;
-			break;
-		case Constants.RELATION_GREATER:
-			relation = Relation.GREATER;
-			break;
+//		case Constants.RELATION_GREATER_EQUAL:
+//			relation = Relation.GREATER_EQUAL;
+//			break;
+//		case Constants.RELATION_GREATER:
+//			relation = Relation.GREATER;
+//			break;
 		case Constants.RELATION_NOT:
 			relation = Relation.NOT;
 			break;
