@@ -11,11 +11,14 @@
 
 package com.testify.ecfeed.model;
 
+import java.util.List;
+
 import com.testify.ecfeed.constants.Constants;
 
 public class PartitionNode extends GenericNode {
 
 	private Object fValue;
+	private List<PartitionNode> fPartitions;
 
 	public PartitionNode(String name, Object value) {
 		super(name);
@@ -51,5 +54,41 @@ public class PartitionNode extends GenericNode {
 		PartitionNode copy = new PartitionNode(getName(), fValue);
 		copy.setParent(getParent());
 		return copy;
+	}
+	
+	@Override
+	public List<? extends IGenericNode> getChildren(){
+		return getPartitions();
+	}
+	
+	public List<PartitionNode> getPartitions(){
+		return fPartitions;
+	}
+	
+	public void addPartition(PartitionNode partition){
+		fPartitions.add(partition);
+		partition.setParent(this);
+	}
+	
+	public PartitionNode getPartition(String name){
+		for(PartitionNode partition : fPartitions){
+			if(partition.getName().equals(name)){
+				return partition;
+			}
+		}
+		return null;
+	}
+	
+	public boolean removePartition(PartitionNode partition){
+		return fPartitions.remove(partition);
+	}
+	
+	public boolean removePartition(String name){
+		for(PartitionNode partition : fPartitions){
+			if(partition.getName().equals(name)){
+				return fPartitions.remove(partition);
+			}
+		}
+		return false;
 	}
 }
