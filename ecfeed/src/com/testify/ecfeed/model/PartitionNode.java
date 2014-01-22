@@ -45,7 +45,7 @@ public class PartitionNode extends GenericNode {
 	}
 	
 	public String toString(){
-		return getName() + ": " + getValueString();
+		return getQualifiedName() + ": " + getValueString();
 	}
 	
 	public CategoryNode getCategory() {
@@ -152,5 +152,12 @@ public class PartitionNode extends GenericNode {
 			}
 		}
 		return leafs;
+	}
+	
+	public String getQualifiedName(){
+		if(getParent() instanceof PartitionNode){
+			return ((PartitionNode)getParent()).getQualifiedName() + ":" + getName();
+		}
+		return super.getName();
 	}
 }
