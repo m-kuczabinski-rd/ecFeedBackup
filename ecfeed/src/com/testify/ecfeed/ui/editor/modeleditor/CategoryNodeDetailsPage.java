@@ -24,6 +24,7 @@ import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.forms.IFormPart;
@@ -42,6 +43,8 @@ import com.testify.ecfeed.constants.DialogStrings;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.PartitionNode;
+import com.testify.ecfeed.ui.common.ColorConstants;
+import com.testify.ecfeed.ui.common.ColorManager;
 import com.testify.ecfeed.ui.dialogs.PartitionSettingsDialog;
 import com.testify.ecfeed.ui.editor.IModelUpdateListener;
 import com.testify.ecfeed.utils.EcModelUtils;
@@ -52,6 +55,8 @@ public class CategoryNodeDetailsPage extends GenericNodeDetailsPage implements I
 	private Section fMainSection;
 	private CheckboxTableViewer fPartitionsViewer;
 	private Table fPartitionsTable;
+	private ColorManager fColorManager;
+//	private Tree fPartitionsTree;
 	
 	public class PartitionNameEditingSupport extends EditingSupport{
 		private TextCellEditor fNameCellEditor;
@@ -109,7 +114,7 @@ public class CategoryNodeDetailsPage extends GenericNodeDetailsPage implements I
 
 		@Override
 		protected boolean canEdit(Object element) {
-			return true;
+			return !((PartitionNode)element).isAbstract();
 		}
 
 		@Override
@@ -142,6 +147,7 @@ public class CategoryNodeDetailsPage extends GenericNodeDetailsPage implements I
 	 */
 	public CategoryNodeDetailsPage(ModelMasterDetailsBlock parentBlock) {
 		super(parentBlock);
+		fColorManager = new ColorManager();
 	}
 
 	/**
@@ -183,6 +189,12 @@ public class CategoryNodeDetailsPage extends GenericNodeDetailsPage implements I
 			public String getText(Object element){
 				return ((PartitionNode)element).getName();
 			}
+			
+			@Override
+			public Color getForeground(Object element){
+				return getColor(element);
+			}
+
 		});
 		nameViewerColumn.setEditingSupport(new PartitionNameEditingSupport(fPartitionsViewer));
 		
@@ -190,14 +202,33 @@ public class CategoryNodeDetailsPage extends GenericNodeDetailsPage implements I
 				100, new ColumnLabelProvider(){
 			@Override
 			public String getText(Object element){
-				Object partitionValue = ((PartitionNode)element).getValueString();
+				PartitionNode partition = (PartitionNode)element;
+				if(partition.isAbstract()){
+					return "ABSTRACT";
+				}
+				Object partitionValue = partition.getValueString();
 				if(partitionValue != null){
 					return partitionValue.toString();
 				}
 				return Constants.NULL_VALUE_STRING_REPRESENTATION;
 			}
+			
+			@Override
+			public Color getForeground(Object element){
+				return getColor(element);
+			}
 		});
 		valueViewerColumn.setEditingSupport(new PartitionValueEditingSupport(fPartitionsViewer));
+	}
+
+	private Color getColor(Object element){
+		if(element instanceof PartitionNode){
+			PartitionNode partition = (PartitionNode)element;
+			if(partition.isAbstract()){
+				return fColorManager.getColor(ColorConstants.ABSTRACT_PARTITION);
+			}
+		}
+		return null;
 	}
 
 	private void createBottomButtons(Composite composite) {

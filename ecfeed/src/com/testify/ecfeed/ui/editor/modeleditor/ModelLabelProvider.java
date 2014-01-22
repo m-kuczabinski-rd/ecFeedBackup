@@ -63,6 +63,9 @@ public class ModelLabelProvider extends LabelProvider {
 			return getImage("constraint_node.gif");
 		}
 		if(element instanceof PartitionNode){
+			if(((PartitionNode)element).isAbstract()){
+				return getImage("abstract_partition_node.gif");
+			}
 			return getImage("partition_node.gif");
 		}
 		return getImage("sample.gif");
