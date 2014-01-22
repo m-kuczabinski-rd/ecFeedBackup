@@ -177,4 +177,15 @@ public class PartitionNodeTest{
 		assertFalse(p.getLeafs().contains(p3));
 		assertFalse(p.getLeafs().contains(p32));
 	}
+	
+	@Test
+	public void getQualifiedNameTest(){
+		PartitionNode p = new PartitionNode("p", 0);
+		PartitionNode q = new PartitionNode("q", 0);
+		
+		p.addPartition(q);
+		
+		assertEquals(p.getName() + ":" + q.getName(), q.getQualifiedName());
+	}
+	
 }

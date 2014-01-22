@@ -59,7 +59,7 @@ public class TestCasePartitionEditingSupport extends EditingSupport {
 			fComboCellEditor.setActivationStyle(ComboBoxViewerCellEditor.DROP_DOWN_ON_KEY_ACTIVATION | 
 					ComboBoxViewerCellEditor.DROP_DOWN_ON_MOUSE_ACTIVATION);
 		}
-		fComboCellEditor.setInput(partition.getCategory().getPartitions());
+		fComboCellEditor.setInput(partition.getCategory().getLeafPartitions());
 		fComboCellEditor.setValue(partition);
 		return fComboCellEditor;
 	}
@@ -84,7 +84,8 @@ public class TestCasePartitionEditingSupport extends EditingSupport {
 		if(partition.getCategory().isExpected()){
 			return partition.getValueString();
 		}
-		return partition.toString();
+//		return partition.toString();
+		return partition.getQualifiedName();
 	}
 
 	@Override

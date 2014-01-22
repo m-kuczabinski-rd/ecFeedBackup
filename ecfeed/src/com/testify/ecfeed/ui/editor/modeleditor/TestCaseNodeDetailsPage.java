@@ -151,7 +151,7 @@ public class TestCaseNodeDetailsPage extends GenericNodeDetailsPage implements I
 			@Override
 			public String getText(Object element){
 				PartitionNode testValue = (PartitionNode)element;
-				CategoryNode parent = (CategoryNode)testValue.getParent();
+				CategoryNode parent = (CategoryNode)testValue.getCategory();
 				return parent.toString();
 			}
 			@Override
@@ -168,25 +168,12 @@ public class TestCaseNodeDetailsPage extends GenericNodeDetailsPage implements I
 					return testValue.getValueString();
 				}
 				return testValue.toString();
-//				return testValue.getName();
 			}
 			@Override
 			public Color getForeground(Object element){
 				return getColor(element);
 			}
 		}); 
-				
-//		fValuesViewerColumn = createTableViewerColumn(fTestDataViewer, "Value", 100, new ColumnLabelProvider(){
-//			@Override
-//			public String getText(Object element){
-//				PartitionNode testValue = (PartitionNode)element;
-//				return testValue.getValueString();
-//			}
-//			@Override
-//			public Color getForeground(Object element){
-//				return getColor(element);
-//			}
-//		});
 	}
 
 	private Color getColor(Object element){
