@@ -121,4 +121,36 @@ public class PartitionNode extends GenericNode {
 		}
 		return ((PartitionNode)getParent()).level() + 1;
 	}
+
+	public boolean isAncestor(PartitionNode partition) {
+		for(PartitionNode child : fPartitions){
+			if(child == partition || child.isAncestor(partition)){
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public boolean isDescendant(PartitionNode partition){
+		if(getParent() instanceof PartitionNode){
+			PartitionNode parent = (PartitionNode)getParent();
+			if(parent == partition || parent.isDescendant(partition)){
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public List<PartitionNode> getLeafs() {
+		List<PartitionNode> leafs = new ArrayList<PartitionNode>();
+		if(fPartitions.size() == 0){
+			leafs.add(this);
+		}
+		else{
+			for(PartitionNode child : fPartitions){
+				leafs.addAll(child.getLeafs());
+			}
+		}
+		return leafs;
+	}
 }

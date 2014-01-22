@@ -62,7 +62,7 @@ public class TestCaseNode extends GenericNode {
 	
 	public boolean mentions(PartitionNode partition) {
 		for(PartitionNode p : fTestData){
-			if(p == partition){
+			if(p == partition || p.isDescendant(partition)){
 				return true;
 			}
 		}
