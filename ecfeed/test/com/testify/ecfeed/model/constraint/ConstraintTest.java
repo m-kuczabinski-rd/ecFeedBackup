@@ -1,12 +1,18 @@
 package com.testify.ecfeed.model.constraint;
 
+import static org.junit.Assert.*;
+
+import java.util.Arrays;
+
 import org.junit.Before;
 import org.junit.Test;
 
 import com.testify.ecfeed.model.CategoryNode;
+import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
 
 public class ConstraintTest {
+	private MethodNode fMethod = new MethodNode("method");
 	private CategoryNode fCategory = new CategoryNode("category", "type");
 
 	private PartitionNode fP1 = new PartitionNode("p1", 0);
@@ -30,7 +36,7 @@ public class ConstraintTest {
 	private PartitionNode fP33 = new PartitionNode("p33", 0);
 
 	@Before
-	private void prepareStructure(){
+	public void prepareStructure(){
 		fP1.addPartition(fP11);
 		fP1.addPartition(fP12);
 		fP1.addPartition(fP13);
@@ -50,8 +56,37 @@ public class ConstraintTest {
 		fCategory.addPartition(fP1);
 		fCategory.addPartition(fP2);
 		fCategory.addPartition(fP3);
+		
+		fMethod.addCategory(fCategory);
 	}
 
+	@Test
+	public void equalsTest(){
+		Statement statement = new Statement(fP22, Relation.EQUAL);
+		
+		assertTrue(statement.evaluate(Arrays.asList(new PartitionNode[]{fP221})));
+		assertTrue(statement.evaluate(Arrays.asList(new PartitionNode[]{fP222})));
+		assertTrue(statement.evaluate(Arrays.asList(new PartitionNode[]{fP22})));
 
+		assertFalse(statement.evaluate(Arrays.asList(new PartitionNode[]{fP2})));
+		assertFalse(statement.evaluate(Arrays.asList(new PartitionNode[]{fP1})));
+		assertFalse(statement.evaluate(Arrays.asList(new PartitionNode[]{fP3})));
+		assertFalse(statement.evaluate(Arrays.asList(new PartitionNode[]{fP13})));
+		assertFalse(statement.evaluate(Arrays.asList(new PartitionNode[]{fP33})));
+	}
 
+	@Test 
+	public void notEqualsTest(){
+		Statement statement = new Statement(fP22, Relation.NOT);
+		
+		assertFalse(statement.evaluate(Arrays.asList(new PartitionNode[]{fP221})));
+		assertFalse(statement.evaluate(Arrays.asList(new PartitionNode[]{fP222})));
+		assertFalse(statement.evaluate(Arrays.asList(new PartitionNode[]{fP22})));
+
+		assertTrue(statement.evaluate(Arrays.asList(new PartitionNode[]{fP2})));
+		assertTrue(statement.evaluate(Arrays.asList(new PartitionNode[]{fP1})));
+		assertTrue(statement.evaluate(Arrays.asList(new PartitionNode[]{fP3})));
+		assertTrue(statement.evaluate(Arrays.asList(new PartitionNode[]{fP13})));
+		assertTrue(statement.evaluate(Arrays.asList(new PartitionNode[]{fP33})));
+	}
 }
