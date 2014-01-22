@@ -16,6 +16,7 @@ import org.eclipse.swt.graphics.RGB;
 public interface ColorConstants {
 	RGB OBSOLETE_METHOD = new RGB(128, 0, 0);
 	RGB EXPECTED_VALUE_CATEGORY = new RGB(0, 0, 128);
+	RGB ABSTRACT_PARTITION = new RGB(0, 128, 128);
 	
 	RGB XML_COMMENT = new RGB(128, 0, 0);
 	RGB PROC_INSTR = new RGB(128, 128, 128);
