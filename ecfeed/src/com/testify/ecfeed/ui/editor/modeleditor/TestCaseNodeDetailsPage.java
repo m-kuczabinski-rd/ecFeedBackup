@@ -26,17 +26,16 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.forms.IFormPart;
 import org.eclipse.ui.forms.widgets.Section;
 
-import com.testify.ecfeed.constants.DialogStrings;
+import com.testify.ecfeed.ui.common.Messages;
+import com.testify.ecfeed.ui.common.ColorConstants;
+import com.testify.ecfeed.ui.common.ColorManager;
+import com.testify.ecfeed.ui.common.InputChangedListener;
+import com.testify.ecfeed.ui.common.TestCasePartitionEditingSupport;
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.ExpectedValueCategoryNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.TestCaseNode;
-import com.testify.ecfeed.ui.common.ColorConstants;
-import com.testify.ecfeed.ui.common.ColorManager;
-import com.testify.ecfeed.ui.common.IInputChangedListener;
-import com.testify.ecfeed.ui.common.TestCasePartitionEditingSupport;
-import com.testify.ecfeed.utils.EcModelUtils;
 
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Label;
@@ -51,7 +50,7 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.swt.layout.RowLayout;
 
-public class TestCaseNodeDetailsPage extends GenericNodeDetailsPage implements IInputChangedListener{
+public class TestCaseNodeDetailsPage extends GenericNodeDetailsPage implements InputChangedListener{
 	private TestCaseNode fSelectedTestCase;
 	private Section fMainSection;
 	private MethodNode fParent;
@@ -151,7 +150,7 @@ public class TestCaseNodeDetailsPage extends GenericNodeDetailsPage implements I
 			@Override
 			public String getText(Object element){
 				PartitionNode testValue = (PartitionNode)element;
-				CategoryNode parent = (CategoryNode)testValue.getCategory();
+				CategoryNode parent = (CategoryNode)testValue.getParent();
 				return parent.toString();
 			}
 			@Override
@@ -224,15 +223,15 @@ public class TestCaseNodeDetailsPage extends GenericNodeDetailsPage implements I
 
 	private void renameTestCase() {
 		String newName = fTestSuiteNameCombo.getText();
-		if(EcModelUtils.validateTestSuiteName(newName)){
+		if(TestCaseNode.validateTestSuiteName(newName)){
 			fSelectedTestCase.setName(newName);
 			updateModel(fSelectedTestCase);
 		}
 		else{
 			MessageDialog dialog = new MessageDialog(Display.getDefault().getActiveShell(), 
-					DialogStrings.DIALOG_TEST_SUITE_NAME_PROBLEM_TITLE, 
+					Messages.DIALOG_TEST_SUITE_NAME_PROBLEM_TITLE, 
 					Display.getDefault().getSystemImage(SWT.ICON_ERROR), 
-					DialogStrings.DIALOG_TEST_SUITE_NAME_PROBLEM_MESSAGE,
+					Messages.DIALOG_TEST_SUITE_NAME_PROBLEM_MESSAGE,
 					MessageDialog.ERROR, new String[] {"OK"}, 0);
 			dialog.open();
 			fTestSuiteNameCombo.setText(fSelectedTestCase.getName());

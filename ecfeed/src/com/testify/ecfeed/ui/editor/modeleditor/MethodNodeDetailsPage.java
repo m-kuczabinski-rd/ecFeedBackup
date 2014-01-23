@@ -42,8 +42,13 @@ import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.viewers.TreeNodeContentProvider;
 
-import com.testify.ecfeed.constants.Constants;
-import com.testify.ecfeed.constants.DialogStrings;
+import com.testify.ecfeed.ui.common.Constants;
+import com.testify.ecfeed.ui.common.Messages;
+import com.testify.ecfeed.ui.common.ColorConstants;
+import com.testify.ecfeed.ui.common.ColorManager;
+import com.testify.ecfeed.ui.common.DefaultValueEditingSupport;
+import com.testify.ecfeed.ui.common.InputChangedListener;
+import com.testify.ecfeed.ui.common.TreeCheckStateListener;
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.ConstraintNode;
 import com.testify.ecfeed.model.ExpectedValueCategoryNode;
@@ -54,11 +59,6 @@ import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.model.constraint.BasicStatement;
 import com.testify.ecfeed.model.constraint.Constraint;
 import com.testify.ecfeed.model.constraint.StaticStatement;
-import com.testify.ecfeed.ui.common.ColorConstants;
-import com.testify.ecfeed.ui.common.ColorManager;
-import com.testify.ecfeed.ui.common.DefaultValueEditingSupport;
-import com.testify.ecfeed.ui.common.IInputChangedListener;
-import com.testify.ecfeed.ui.common.TreeCheckStateListener;
 import com.testify.ecfeed.ui.dialogs.AddTestCaseDialog;
 import com.testify.ecfeed.ui.dialogs.RenameTestSuiteDialog;
 import com.testify.ecfeed.ui.dialogs.TestMethodRenameDialog;
@@ -67,7 +67,7 @@ import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.wb.swt.TableViewerColumnSorter;
 import org.eclipse.jface.window.Window;
 
-public class MethodNodeDetailsPage extends GenericNodeDetailsPage implements IInputChangedListener{
+public class MethodNodeDetailsPage extends GenericNodeDetailsPage implements InputChangedListener{
 	private Label fMethodNameLabel;
 	private MethodNode fSelectedMethod;
 	private CheckboxTreeViewer fTestCasesViewer;
@@ -177,8 +177,8 @@ public class MethodNodeDetailsPage extends GenericNodeDetailsPage implements IIn
 	}
 	
 	private void updateParameter(int index, CategoryNode newCategory){
-		boolean isOriginalCategoryExpected = 
-				fSelectedMethod.getCategories().get(index) instanceof ExpectedValueCategoryNode;
+		boolean isOriginalCategoryExpected = fSelectedMethod.getCategories().get(index) 
+				instanceof ExpectedValueCategoryNode;
 		boolean isNewCategoryExpected = newCategory instanceof ExpectedValueCategoryNode;
 		if(isOriginalCategoryExpected == isNewCategoryExpected){
 			fSelectedMethod.getCategories().get(index).setName(newCategory.getName());
@@ -355,9 +355,9 @@ public class MethodNodeDetailsPage extends GenericNodeDetailsPage implements IIn
 			@Override
 			public void widgetSelected(SelectionEvent e){
 				MessageDialog infoDialog = new MessageDialog(Display.getDefault().getActiveShell(), 
-						DialogStrings.DIALOG_REMOVE_CONSTRAINTS_TITLE, 
+						Messages.DIALOG_REMOVE_CONSTRAINTS_TITLE, 
 						Display.getDefault().getSystemImage(SWT.ICON_QUESTION), 
-						DialogStrings.DIALOG_REMOVE_CONSTRAINTS_MESSAGE,
+						Messages.DIALOG_REMOVE_CONSTRAINTS_MESSAGE,
 						MessageDialog.QUESTION_WITH_CANCEL, 
 						new String[] {IDialogConstants.OK_LABEL, IDialogConstants.CANCEL_LABEL}, IDialogConstants.OK_ID);
 				if(infoDialog.open() == IDialogConstants.OK_ID){
@@ -474,8 +474,8 @@ public class MethodNodeDetailsPage extends GenericNodeDetailsPage implements IIn
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				MessageDialog infoDialog = new MessageDialog(Display.getDefault().getActiveShell(), 
-						DialogStrings.DIALOG_REMOVE_TEST_CASES_TITLE, Display.getDefault().getSystemImage(SWT.ICON_QUESTION), 
-						DialogStrings.DIALOG_REMOVE_TEST_CASES_MESSAGE,
+						Messages.DIALOG_REMOVE_TEST_CASES_TITLE, Display.getDefault().getSystemImage(SWT.ICON_QUESTION), 
+						Messages.DIALOG_REMOVE_TEST_CASES_MESSAGE,
 						MessageDialog.QUESTION_WITH_CANCEL, 
 						new String[] {IDialogConstants.OK_LABEL, IDialogConstants.CANCEL_LABEL}, IDialogConstants.OK_ID);
 				if(infoDialog.open() == IDialogConstants.OK_ID){

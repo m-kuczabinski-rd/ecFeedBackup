@@ -35,14 +35,14 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.ui.forms.IFormPart;
 import org.eclipse.ui.forms.widgets.Section;
 
-import com.testify.ecfeed.constants.DialogStrings;
+import com.testify.ecfeed.ui.common.Messages;
+import com.testify.ecfeed.ui.common.ColorConstants;
+import com.testify.ecfeed.ui.common.ColorManager;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.RootNode;
-import com.testify.ecfeed.ui.common.ColorConstants;
-import com.testify.ecfeed.ui.common.ColorManager;
 import com.testify.ecfeed.ui.dialogs.TestClassSelectionDialog;
-import com.testify.ecfeed.utils.EcModelUtils;
+import com.testify.ecfeed.ui.common.ModelUtils;
 
 public class ClassNodeDetailsPage extends GenericNodeDetailsPage{
 	
@@ -64,15 +64,15 @@ public class ClassNodeDetailsPage extends GenericNodeDetailsPage{
 
 			if(selectedClass != null){
 				String qualifiedName = selectedClass.getFullyQualifiedName();
-				if(!EcModelUtils.classExists((RootNode)fSelectedClass.getRoot(), qualifiedName)){
+				if(fSelectedClass.getRoot().getClassModel(qualifiedName) == null){
 					fSelectedClass.setName(qualifiedName);
 					updateModel((RootNode)fSelectedClass.getRoot());
 				}
 				else{
 					MessageDialog infoDialog = new MessageDialog(getActiveShell(), 
-							DialogStrings.DIALOG_CLASS_EXISTS_TITLE, 
+							Messages.DIALOG_CLASS_EXISTS_TITLE, 
 							Display.getDefault().getSystemImage(SWT.ICON_INFORMATION), 
-							DialogStrings.DIALOG_CLASS_EXISTS_MESSAGE, 
+							Messages.DIALOG_CLASS_EXISTS_MESSAGE, 
 							MessageDialog.INFORMATION, 
 							new String[] {IDialogConstants.OK_LABEL}, 
 							IDialogConstants.OK_ID);
@@ -95,9 +95,9 @@ public class ClassNodeDetailsPage extends GenericNodeDetailsPage{
 		@Override
 		public void widgetSelected(SelectionEvent e) {
 			MessageDialog infoDialog = new MessageDialog(Display.getDefault().getActiveShell(), 
-					DialogStrings.DIALOG_REMOVE_METHODS_TITLE, 
+					Messages.DIALOG_REMOVE_METHODS_TITLE, 
 					Display.getDefault().getSystemImage(SWT.ICON_QUESTION), 
-					DialogStrings.DIALOG_REMOVE_METHODS_MESSAGE,
+					Messages.DIALOG_REMOVE_METHODS_MESSAGE,
 					MessageDialog.QUESTION_WITH_CANCEL, 
 					new String[] {IDialogConstants.OK_LABEL, IDialogConstants.CANCEL_LABEL}, 
 					IDialogConstants.OK_ID);
@@ -163,8 +163,8 @@ public class ClassNodeDetailsPage extends GenericNodeDetailsPage{
 			@Override
 			public void widgetSelected(SelectionEvent e){
 				MessageDialog infoDialog = new MessageDialog(Display.getDefault().getActiveShell(), 
-						DialogStrings.DIALOG_REMOVE_CLASS_TITLE, Display.getDefault().getSystemImage(SWT.ICON_WARNING), 
-						DialogStrings.DIALOG_REMOVE_CLASS_MESSAGE,
+						Messages.DIALOG_REMOVE_CLASS_TITLE, Display.getDefault().getSystemImage(SWT.ICON_WARNING), 
+						Messages.DIALOG_REMOVE_CLASS_MESSAGE,
 						MessageDialog.QUESTION_WITH_CANCEL, new String[] {"OK", "Cancel"}, 0);
 				if(infoDialog.open() == 0){
 					RootNode root = (RootNode)fSelectedClass.getParent(); 
@@ -295,7 +295,7 @@ public class ClassNodeDetailsPage extends GenericNodeDetailsPage{
 	}
 	
 	private List<MethodNode> getObsoleteMethods(){
-		return EcModelUtils.getObsoleteMethods(fSelectedClass, fSelectedClass.getQualifiedName());
+		return ModelUtils.getObsoleteMethods(fSelectedClass, fSelectedClass.getQualifiedName());
 	}
 	
 	public void selectionChanged(IFormPart part, ISelection selection) {
@@ -308,7 +308,7 @@ public class ClassNodeDetailsPage extends GenericNodeDetailsPage{
 		if(fSelectedClass == null){
 			return;
 		}
-		List<MethodNode> notContainedMethods = EcModelUtils.getNotContainedMethods(fSelectedClass, fSelectedClass.getQualifiedName());
+		List<MethodNode> notContainedMethods = ModelUtils.getNotContainedMethods(fSelectedClass, fSelectedClass.getQualifiedName());
 		if(notContainedMethods.size() == 0){
 			if(fOtherMethodsSectionCreated){
 				fOtherMethodsSection.dispose();

@@ -27,17 +27,17 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Display;
 
-import com.testify.ecfeed.constants.Constants;
-import com.testify.ecfeed.constants.DialogStrings;
-import com.testify.ecfeed.generators.api.GeneratorException;
-import com.testify.ecfeed.generators.api.IConstraint;
-import com.testify.ecfeed.generators.api.IGenerator;
+import com.testify.ecfeed.ui.common.Constants;
+import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.ExpectedValueCategoryNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.ui.dialogs.GenerateTestSuiteDialog;
+import com.testify.ecfeed.generators.api.GeneratorException;
+import com.testify.ecfeed.generators.api.IConstraint;
+import com.testify.ecfeed.generators.api.IGenerator;
 
 class GenerateTestSuiteAdapter extends SelectionAdapter{
 
@@ -144,9 +144,9 @@ class GenerateTestSuiteAdapter extends SelectionAdapter{
 			if(generatedData.size() > Constants.TEST_SUITE_SIZE_WARNING_LIMIT){
 				MessageDialog warningDialog = 
 						new MessageDialog(Display.getDefault().getActiveShell(), 
-								DialogStrings.DIALOG_LARGE_TEST_SUITE_GENERATED_TITLE, 
+								Messages.DIALOG_LARGE_TEST_SUITE_GENERATED_TITLE, 
 								Display.getDefault().getSystemImage(SWT.ICON_WARNING), 
-								DialogStrings.DIALOG_LARGE_TEST_SUITE_GENERATED_MESSAGE(dataLength),
+								Messages.DIALOG_LARGE_TEST_SUITE_GENERATED_MESSAGE(dataLength),
 								MessageDialog.WARNING, 
 								new String[] {IDialogConstants.OK_LABEL, IDialogConstants.CANCEL_LABEL}, 
 								IDialogConstants.OK_ID);
@@ -158,9 +158,9 @@ class GenerateTestSuiteAdapter extends SelectionAdapter{
 		}
 		else if (!fCanceled){
 			new MessageDialog(Display.getDefault().getActiveShell(), 
-					DialogStrings.DIALOG_EMPTY_TEST_SUITE_GENERATED_TITLE, 
+					Messages.DIALOG_EMPTY_TEST_SUITE_GENERATED_TITLE, 
 					Display.getDefault().getSystemImage(SWT.ICON_INFORMATION), 
-					DialogStrings.DIALOG_EMPTY_TEST_SUITE_GENERATED_MESSAGE,
+					Messages.DIALOG_EMPTY_TEST_SUITE_GENERATED_MESSAGE,
 					MessageDialog.INFORMATION, 
 					new String[] {IDialogConstants.OK_LABEL}, IDialogConstants.OK_ID).open();
 		}

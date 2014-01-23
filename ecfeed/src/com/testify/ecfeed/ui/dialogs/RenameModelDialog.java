@@ -26,9 +26,8 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.wb.swt.SWTResourceManager;
 
-import com.testify.ecfeed.constants.DialogStrings;
+import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.model.RootNode;
-import com.testify.ecfeed.utils.EcModelUtils;
 
 public class RenameModelDialog extends TitleAreaDialog {
 	private Text fNameText;
@@ -52,14 +51,14 @@ public class RenameModelDialog extends TitleAreaDialog {
 	 */
 	@Override
 	protected Control createDialogArea(Composite parent) {
-		setTitle(DialogStrings.DIALOG_RENAME_MODEL_TITLE);
+		setTitle(Messages.DIALOG_RENAME_MODEL_TITLE);
 		Composite area = (Composite) super.createDialogArea(parent);
 		Composite container = new Composite(area, SWT.NONE);
 		container.setLayout(new GridLayout(1, false));
 		container.setLayoutData(new GridData(GridData.FILL_BOTH));
 		
 		Text instructionText = new Text(container, SWT.READ_ONLY | SWT.WRAP | SWT.MULTI);
-		instructionText.setText(DialogStrings.DIALOG_RENAME_MODEL_MESSAGE);
+		instructionText.setText(Messages.DIALOG_RENAME_MODEL_MESSAGE);
 		instructionText.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
 		instructionText.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 		
@@ -67,7 +66,7 @@ public class RenameModelDialog extends TitleAreaDialog {
 		fNameText.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false, 1, 1));
 		fNameText.setText(fModel.getName());
 		fNameText.setFocus();
-		fNameText.setMessage(DialogStrings.DIALOG_RENAME_MODEL_MESSAGE);
+		fNameText.setMessage(Messages.DIALOG_RENAME_MODEL_MESSAGE);
 		fNameText.setSelection(0,fModel.getName().length());
 		fNameText.addModifyListener(new ModifyListener() {
 			@Override
@@ -80,7 +79,7 @@ public class RenameModelDialog extends TitleAreaDialog {
 	}
 
 	private void verifyName() {
-		if (EcModelUtils.validateModelName(fNameText.getText()) == false){
+		if (RootNode.validateModelName(fNameText.getText()) == false){
 			fOkButton.setEnabled(false);
 		}
 		else{

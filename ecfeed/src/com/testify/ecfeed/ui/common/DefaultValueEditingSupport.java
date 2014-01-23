@@ -18,13 +18,12 @@ import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.swt.SWT;
 
 import com.testify.ecfeed.model.ExpectedValueCategoryNode;
-import com.testify.ecfeed.utils.EcModelUtils;
 
 public class DefaultValueEditingSupport extends EditingSupport {
 	private final TableViewer fViewer;
-	private IInputChangedListener fSetValueListener;
+	private InputChangedListener fSetValueListener;
 
-	public DefaultValueEditingSupport(TableViewer viewer, IInputChangedListener setValueListener) {
+	public DefaultValueEditingSupport(TableViewer viewer, InputChangedListener setValueListener) {
 		super(viewer);
 		fViewer = viewer;
 		fSetValueListener = setValueListener;
@@ -52,8 +51,8 @@ public class DefaultValueEditingSupport extends EditingSupport {
 	protected void setValue(Object element, Object value) {
 		ExpectedValueCategoryNode category = (ExpectedValueCategoryNode)element;
 		String valueString = (String)value;
-		if(EcModelUtils.validatePartitionStringValue(valueString, category)){
-			Object newValue = EcModelUtils.getPartitionValueFromString(valueString, category.getType());
+		if(category.validatePartitionStringValue(valueString)){
+			Object newValue = category.getPartitionValueFromString(valueString);
 			category.setDefaultValue(newValue);
 		}
 		fSetValueListener.inputChanged();

@@ -30,7 +30,6 @@ import org.eclipse.ui.forms.IFormPart;
 import org.eclipse.ui.forms.widgets.Section;
 
 import com.testify.ecfeed.model.ExpectedValueCategoryNode;
-import com.testify.ecfeed.utils.EcModelUtils;
 
 public class ExpectedValueDetailsPage extends GenericNodeDetailsPage {
 
@@ -96,9 +95,8 @@ public class ExpectedValueDetailsPage extends GenericNodeDetailsPage {
 
 	private void changeDefaultExpectedValue() {
 		String valueString = fDefaultValueText.getText();
-		if(EcModelUtils.validatePartitionStringValue(valueString, fSelectedCategory)){
-			fSelectedCategory.setDefaultValue(EcModelUtils.getPartitionValueFromString(valueString, 
-					fSelectedCategory.getType()));
+		if(fSelectedCategory.validatePartitionStringValue(valueString)){
+			fSelectedCategory.setDefaultValue(fSelectedCategory.getPartitionValueFromString(valueString));
 		}
 		updateModel(fSelectedCategory);
 	}

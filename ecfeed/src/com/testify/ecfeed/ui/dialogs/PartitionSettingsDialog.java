@@ -26,10 +26,10 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
-import com.testify.ecfeed.constants.DialogStrings;
+import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.PartitionNode;
-import com.testify.ecfeed.utils.EcModelUtils;
+
 import org.eclipse.wb.swt.SWTResourceManager;
 
 public class PartitionSettingsDialog extends TitleAreaDialog {
@@ -62,8 +62,8 @@ public class PartitionSettingsDialog extends TitleAreaDialog {
 	 */
 	@Override
 	protected Control createDialogArea(Composite parent) {
-		setTitle(DialogStrings.DIALOG_PARTITION_SETTINGS_DIALOG_TITLE);
-		setMessage(DialogStrings.DIALOG_PARTITION_SETTINGS_DIALOG_MESSAGE);
+		setTitle(Messages.DIALOG_PARTITION_SETTINGS_DIALOG_TITLE);
+		setMessage(Messages.DIALOG_PARTITION_SETTINGS_DIALOG_MESSAGE);
 		Composite area = (Composite) super.createDialogArea(parent);
 		fMainContainer = new Composite(area, SWT.NONE);
 		fMainContainer.setLayout(new GridLayout(2, false));
@@ -97,8 +97,8 @@ public class PartitionSettingsDialog extends TitleAreaDialog {
 		GridData errorMessageGridData = new GridData(SWT.FILL, SWT.FILL, true, true, 2, 2);
 		errorMessageGridData.heightHint = 100;
 		fErrorMessage.setLayoutData(errorMessageGridData);
-		fErrorMessage.setText(DialogStrings.DIALOG_PARTITION_NAME_PROBLEM_MESSAGE + 
-				"\n\n" + DialogStrings.DIALOG_PARTITION_VALUE_PROBLEM_MESSAGE);
+		fErrorMessage.setText(Messages.DIALOG_PARTITION_NAME_PROBLEM_MESSAGE + 
+				"\n\n" + Messages.DIALOG_PARTITION_VALUE_PROBLEM_MESSAGE);
 		fValueText.addModifyListener(new ModifyListener() {
 			@Override
 			public void modifyText(ModifyEvent e) {
@@ -118,15 +118,15 @@ public class PartitionSettingsDialog extends TitleAreaDialog {
 		boolean inputValid = true;
 		String errorTitle = "";
 		String errorMessage = "";
-		if(!EcModelUtils.validatePartitionStringValue(fValueText.getText(), fParent)){
+		if(!fParent.validatePartitionStringValue(fValueText.getText())){
 			inputValid = false;
-			errorTitle = DialogStrings.DIALOG_PARTITION_VALUE_PROBLEM_TITLE;
-			errorMessage = DialogStrings.DIALOG_PARTITION_VALUE_PROBLEM_MESSAGE;
+			errorTitle = Messages.DIALOG_PARTITION_VALUE_PROBLEM_TITLE;
+			errorMessage = Messages.DIALOG_PARTITION_VALUE_PROBLEM_MESSAGE;
 		}
-		if(!EcModelUtils.validatePartitionName(fNameText.getText(), fParent, fPartition)){
+		if(!fParent.validatePartitionName(fNameText.getText())){
 			inputValid = false;
-			errorTitle = DialogStrings.DIALOG_PARTITION_NAME_PROBLEM_TITLE;
-			errorMessage = DialogStrings.DIALOG_PARTITION_NAME_PROBLEM_MESSAGE;
+			errorTitle = Messages.DIALOG_PARTITION_NAME_PROBLEM_TITLE;
+			errorMessage = Messages.DIALOG_PARTITION_NAME_PROBLEM_MESSAGE;
 		}
 
 		if(inputValid){
@@ -162,7 +162,7 @@ public class PartitionSettingsDialog extends TitleAreaDialog {
 	@Override
 	protected void okPressed() {
 		fPartitionName = fNameText.getText();
-		fPartitionValue = EcModelUtils.getPartitionValueFromString(fValueText.getText(), fParent.getType());
+		fPartitionValue = fParent.getPartitionValueFromString(fValueText.getText());
 		super.okPressed();
 	}
 

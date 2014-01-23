@@ -44,23 +44,23 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Tree;
 
-import com.testify.ecfeed.constants.Constants;
-import com.testify.ecfeed.constants.DialogStrings;
-import com.testify.ecfeed.generators.GeneratorFactory;
-import com.testify.ecfeed.generators.api.GeneratorException;
-import com.testify.ecfeed.generators.api.IConstraint;
-import com.testify.ecfeed.generators.api.IGenerator;
-import com.testify.ecfeed.generators.api.IGeneratorParameter;
-import com.testify.ecfeed.generators.api.IGeneratorParameter.TYPE;
+import com.testify.ecfeed.ui.common.Constants;
+import com.testify.ecfeed.ui.common.Messages;
+import com.testify.ecfeed.ui.common.TreeCheckStateListener;
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.ConstraintNode;
 import com.testify.ecfeed.model.ExpectedValueCategoryNode;
 import com.testify.ecfeed.model.GenericNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
+import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.model.constraint.Constraint;
-import com.testify.ecfeed.ui.common.TreeCheckStateListener;
-import com.testify.ecfeed.utils.EcModelUtils;
+import com.testify.ecfeed.generators.GeneratorFactory;
+import com.testify.ecfeed.generators.api.GeneratorException;
+import com.testify.ecfeed.generators.api.IConstraint;
+import com.testify.ecfeed.generators.api.IGenerator;
+import com.testify.ecfeed.generators.api.IGeneratorParameter;
+import com.testify.ecfeed.generators.api.IGeneratorParameter.TYPE;
 
 import org.eclipse.swt.widgets.Spinner;
 
@@ -200,8 +200,8 @@ public class GenerateTestSuiteDialog extends TitleAreaDialog {
 
 	@Override
 	protected Control createDialogArea(Composite parent) {
-		setTitle(DialogStrings.DIALOG_GENERATE_TEST_SUITE_TITLE);
-		setMessage(DialogStrings.DIALOG_GENERATE_TEST_SUITE_MESSAGE);
+		setTitle(Messages.DIALOG_GENERATE_TEST_SUITE_TITLE);
+		setMessage(Messages.DIALOG_GENERATE_TEST_SUITE_MESSAGE);
 		Composite area = (Composite) super.createDialogArea(parent);
 		fMainContainer = new Composite(area, SWT.NONE);
 		fMainContainer.setLayout(new GridLayout(1, false));
@@ -224,7 +224,7 @@ public class GenerateTestSuiteDialog extends TitleAreaDialog {
 		composite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 		
 		Label selectConstraintsLabel = new Label(composite, SWT.NONE);
-		selectConstraintsLabel.setText(DialogStrings.DIALOG_GENERATE_TEST_SUITES_SELECT_CONSTRAINTS_LABEL);
+		selectConstraintsLabel.setText(Messages.DIALOG_GENERATE_TEST_SUITES_SELECT_CONSTRAINTS_LABEL);
 		
 		createConstraintsViewer(composite);
 		
@@ -286,7 +286,7 @@ public class GenerateTestSuiteDialog extends TitleAreaDialog {
 		
 		Label selectPartitionsLabel = new Label(composite, SWT.WRAP);
 		selectPartitionsLabel.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
-		selectPartitionsLabel.setText(DialogStrings.DIALOG_GENERATE_TEST_SUITES_SELECT_PARTITIONS_LABEL);
+		selectPartitionsLabel.setText(Messages.DIALOG_GENERATE_TEST_SUITES_SELECT_PARTITIONS_LABEL + "cycki");
 		
 		createPartitionsViewer(composite);
 	}
@@ -348,8 +348,8 @@ public class GenerateTestSuiteDialog extends TitleAreaDialog {
 	}
 
 	private void validateTestSuiteName() {
-		if(!EcModelUtils.validateTestSuiteName(fTestSuiteCombo.getText())){
-			setErrorMessage(DialogStrings.DIALOG_TEST_SUITE_NAME_PROBLEM_MESSAGE);
+		if(!TestCaseNode.validateTestSuiteName(fTestSuiteCombo.getText())){
+			setErrorMessage(Messages.DIALOG_TEST_SUITE_NAME_PROBLEM_MESSAGE);
 			setOkButton(false);
 		}
 		else{
@@ -505,7 +505,8 @@ public class GenerateTestSuiteDialog extends TitleAreaDialog {
 		spinner.addModifyListener(new ModifyListener() {
 			@Override
 			public void modifyText(ModifyEvent e) {
-				fParameters.put(definition.getName(), Integer.parseInt(spinner.getText()));
+//				fParameters.put(definition.getName(), Integer.parseInt(spinner.getText()));
+				fParameters.put(definition.getName(), spinner.getSelection());
 			}
 		});
 		spinner.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));

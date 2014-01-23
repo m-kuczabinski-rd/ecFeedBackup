@@ -21,9 +21,9 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.layout.GridLayout;
 
-import com.testify.ecfeed.constants.DialogStrings;
+import com.testify.ecfeed.ui.common.ModelUtils;
+import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.model.MethodNode;
-import com.testify.ecfeed.utils.EcModelUtils;
 
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.jface.viewers.TableViewer;
@@ -65,14 +65,14 @@ public class TestMethodRenameDialog extends TitleAreaDialog {
 	 */
 	@Override
 	protected Control createDialogArea(Composite parent) {
-		setTitle(DialogStrings.DIALOG_RENAME_METHOD_TITLE);
+		setTitle(Messages.DIALOG_RENAME_METHOD_TITLE);
 		Composite area = (Composite) super.createDialogArea(parent);
 		Composite container = new Composite(area, SWT.NONE);
 		container.setLayout(new GridLayout(1, false));
 		container.setLayoutData(new GridData(GridData.FILL_BOTH));
 		
 		Text infoText = new Text(container, SWT.READ_ONLY | SWT.WRAP);
-		infoText.setText(DialogStrings.DIALOG_RENAME_METHOD_MESSAGE);
+		infoText.setText(Messages.DIALOG_RENAME_METHOD_MESSAGE);
 		infoText.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
 		infoText.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false, 1, 1));
 		
@@ -97,7 +97,7 @@ public class TestMethodRenameDialog extends TitleAreaDialog {
 				return ((MethodNode)element).toString();
 			}
 		});
-		fMethodViewer.setInput(EcModelUtils.getCompatibleMethods(fRenamedMethod));
+		fMethodViewer.setInput(ModelUtils.getCompatibleMethods(fRenamedMethod));
 		fMethodViewer.addSelectionChangedListener(new ISelectionChangedListener() {
 			@Override
 			public void selectionChanged(SelectionChangedEvent event) {

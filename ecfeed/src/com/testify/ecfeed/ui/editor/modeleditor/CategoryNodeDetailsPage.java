@@ -45,9 +45,9 @@ import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.ui.common.ColorConstants;
 import com.testify.ecfeed.ui.common.ColorManager;
+import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.dialogs.PartitionSettingsDialog;
 import com.testify.ecfeed.ui.editor.IModelUpdateListener;
-import com.testify.ecfeed.utils.EcModelUtils;
 
 public class CategoryNodeDetailsPage extends GenericNodeDetailsPage implements IModelUpdateListener{
 
@@ -56,7 +56,6 @@ public class CategoryNodeDetailsPage extends GenericNodeDetailsPage implements I
 	private CheckboxTableViewer fPartitionsViewer;
 	private Table fPartitionsTable;
 	private ColorManager fColorManager;
-//	private Tree fPartitionsTree;
 	
 	public class PartitionNameEditingSupport extends EditingSupport{
 		private TextCellEditor fNameCellEditor;
@@ -83,11 +82,11 @@ public class CategoryNodeDetailsPage extends GenericNodeDetailsPage implements I
 
 		@Override
 		protected void setValue(Object element, Object value) {
-			if(!EcModelUtils.validatePartitionName((String)value, fSelectedCategory, (PartitionNode)element)){
+			if(!fSelectedCategory.validatePartitionName((String)value)){
 				MessageDialog dialog = new MessageDialog(getActiveShell(), 
-						DialogStrings.DIALOG_PARTITION_NAME_PROBLEM_TITLE, 
+						Messages.DIALOG_PARTITION_NAME_PROBLEM_TITLE, 
 						Display.getDefault().getSystemImage(SWT.ICON_ERROR), 
-						DialogStrings.DIALOG_PARTITION_NAME_PROBLEM_MESSAGE,
+						Messages.DIALOG_PARTITION_NAME_PROBLEM_MESSAGE,
 						MessageDialog.ERROR, 
 						new String[] {IDialogConstants.OK_LABEL}, IDialogConstants.OK_ID);
 				dialog.open();
@@ -98,7 +97,7 @@ public class CategoryNodeDetailsPage extends GenericNodeDetailsPage implements I
 			}
 		}
 	}
-	
+
 	public class PartitionValueEditingSupport extends EditingSupport{
 		private TextCellEditor fValueCellEditor;
 		
@@ -114,7 +113,7 @@ public class CategoryNodeDetailsPage extends GenericNodeDetailsPage implements I
 
 		@Override
 		protected boolean canEdit(Object element) {
-			return !((PartitionNode)element).isAbstract();
+			return true;
 		}
 
 		@Override
@@ -125,17 +124,17 @@ public class CategoryNodeDetailsPage extends GenericNodeDetailsPage implements I
 		@Override
 		protected void setValue(Object element, Object value) {
 			String valueString = (String)value;
-			if(!EcModelUtils.validatePartitionStringValue(valueString, fSelectedCategory)){
+			if(!fSelectedCategory.validatePartitionStringValue(valueString)){
 				MessageDialog dialog = new MessageDialog(getActiveShell(), 
-						DialogStrings.DIALOG_PARTITION_VALUE_PROBLEM_TITLE, 
+						Messages.DIALOG_PARTITION_VALUE_PROBLEM_TITLE, 
 						Display.getDefault().getSystemImage(SWT.ICON_ERROR), 
-						DialogStrings.DIALOG_PARTITION_VALUE_PROBLEM_MESSAGE,
+						Messages.DIALOG_PARTITION_VALUE_PROBLEM_MESSAGE,
 						MessageDialog.ERROR, 
 						new String[] {IDialogConstants.OK_LABEL}, IDialogConstants.OK_ID);
 				dialog.open();
 			}
 			else{
-				Object newValue = EcModelUtils.getPartitionValueFromString(valueString, fSelectedCategory.getType());
+				Object newValue = fSelectedCategory.getPartitionValueFromString(valueString);
 				((PartitionNode)element).setValue(newValue);
 				updateModel((RootNode)fSelectedCategory.getRoot());
 			}
@@ -159,7 +158,6 @@ public class CategoryNodeDetailsPage extends GenericNodeDetailsPage implements I
 		fMainSection = fToolkit.createSection(parent,
 				ExpandableComposite.EXPANDED | ExpandableComposite.TITLE_BAR);
 		fMainSection.setText("Empty Section");
-		//
 		Composite mainComposite = fToolkit.createComposite(fMainSection, SWT.NONE);
 		fToolkit.paintBordersFor(mainComposite);
 		fMainSection.setClient(mainComposite);
@@ -246,7 +244,7 @@ public class CategoryNodeDetailsPage extends GenericNodeDetailsPage implements I
 					String partitionName = dialog.getPartitionName();
 					Object partitionValue = dialog.getPartitionValue();
 					fSelectedCategory.addPartition(new PartitionNode(partitionName, partitionValue));
-					updateModel((RootNode)fSelectedCategory.getRoot());
+					updateModel(fSelectedCategory);
 				}
 			}
 		});
@@ -264,7 +262,6 @@ public class CategoryNodeDetailsPage extends GenericNodeDetailsPage implements I
 				if (dialog.open() == Window.OK) {
 					for(Object partition : fPartitionsViewer.getCheckedElements()){
 						if(fSelectedCategory.getPartitions().size() > 1){
-							EcModelUtils.removeReferences((PartitionNode)partition);
 							fSelectedCategory.removePartition((PartitionNode)partition);
 						}
 						else{

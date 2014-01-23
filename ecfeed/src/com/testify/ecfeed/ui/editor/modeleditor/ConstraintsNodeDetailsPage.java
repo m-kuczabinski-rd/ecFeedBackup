@@ -53,7 +53,7 @@ import com.testify.ecfeed.model.constraint.Relation;
 import com.testify.ecfeed.model.constraint.Statement;
 import com.testify.ecfeed.model.constraint.StatementArray;
 import com.testify.ecfeed.model.constraint.StaticStatement;
-import com.testify.ecfeed.utils.EcModelUtils;
+import com.testify.ecfeed.ui.common.ModelUtils;
 
 public class ConstraintsNodeDetailsPage extends GenericNodeDetailsPage {
 
@@ -149,7 +149,7 @@ public class ConstraintsNodeDetailsPage extends GenericNodeDetailsPage {
 
 	private void renameConstraint() {
 		String newName = fConstraintNameCombo.getText();
-		if(EcModelUtils.validateConstraintName(newName)){
+		if(ModelUtils.validateConstraintName(newName)){
 			fSelectedConstraint.setName(newName);
 			updateModel(fSelectedConstraint);
 		}

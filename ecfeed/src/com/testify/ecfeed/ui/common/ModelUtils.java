@@ -9,10 +9,9 @@
  *     Patryk Chamuczynski (p.chamuczynski(at)gmail.com) - initial implementation
  ******************************************************************************/
 
-package com.testify.ecfeed.utils;
+package com.testify.ecfeed.ui.common;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -25,135 +24,13 @@ import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.core.Signature;
 
-import com.testify.ecfeed.constants.Constants;
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.ClassNode;
-import com.testify.ecfeed.model.ConstraintNode;
 import com.testify.ecfeed.model.ExpectedValueCategoryNode;
-import com.testify.ecfeed.model.IGenericNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
-import com.testify.ecfeed.model.RootNode;
-import com.testify.ecfeed.model.TestCaseNode;
 
-public class EcModelUtils {
-	public static boolean validateModelName(String name){
-		if (name == null) return false;
-		if(name.length() == 0) return false;
-		if(name.length() >= Constants.MAX_MODEL_NAME_LENGTH) return false;
-		if(name.matches("[ ]+.*")) return false;
-		
-		return true;
-	}
-
-	
-	/**
-	 * Checks if certain name is valid for given partition in given category
-	 * @param name Name to validate
-	 * @param parent Parent for which the name is validated
-	 * @param partition Partition for which the name is validated. May be null
-	 * @return
-	 */ 
-	public static boolean validatePartitionName(String name, CategoryNode parent, PartitionNode partition){
-		if (name == null) return false;
-		if(name.length() == 0) return false;
-		if(name.length() >= Constants.MAX_PARTITION_NAME_LENGTH) return false;
-		if(name.matches("[ ]+.*")) return false;
-
-		PartitionNode sibling = parent.getPartition(name);
-		if(sibling != null && sibling != partition) return false;
-		
-		return true;
-	}
-	
-	public static boolean validatePartitionStringValue(String valueString, CategoryNode parent){
-		String type = parent.getType(); 
-		if(type.equals(Constants.TYPE_NAME_STRING)) return true;
-		return (getPartitionValueFromString(valueString, type) != null);
-	}
-
-	public static Object getPartitionValueFromString(String valueString, String type){
-		try{
-			switch(type){
-			case Constants.TYPE_NAME_BOOLEAN:
-				return Boolean.valueOf(valueString).booleanValue();
-			case Constants.TYPE_NAME_BYTE:
-				return Byte.valueOf(valueString).byteValue();
-			case Constants.TYPE_NAME_CHAR:
-				if(valueString.charAt(0) != '\\' || valueString.length() == 1) return(valueString.charAt(0));
-				return Character.toChars(Integer.parseInt(valueString.substring(1)));
-			case Constants.TYPE_NAME_DOUBLE:
-				return Double.valueOf(valueString).doubleValue();
-			case Constants.TYPE_NAME_FLOAT:
-				return Float.valueOf(valueString).floatValue();
-			case Constants.TYPE_NAME_INT:
-				return Integer.valueOf(valueString).intValue();
-			case Constants.TYPE_NAME_LONG:
-				return Long.valueOf(valueString).longValue();
-			case Constants.TYPE_NAME_SHORT:
-				return Short.valueOf(valueString).shortValue();
-			case Constants.TYPE_NAME_STRING:
-				return valueString;
-			default:
-				return null;
-			}
-		}catch(NumberFormatException|IndexOutOfBoundsException e){
-			return null;
-		}
-	}
-
-	/**
-	 * Removes all test cases from the tree that have references to the provided partition
-	 * @param partition Partition to remove
-	 */
-	public static void removeReferences(PartitionNode partition){
-		MethodNode method = getMethodAncestor(partition);
-		Collection<TestCaseNode> testCases = method.getTestCases();
-		ArrayList<TestCaseNode> testCasesToRemove = new ArrayList<TestCaseNode>();
-		for(TestCaseNode testCase : testCases){
-			if(testCase.mentions(partition)){
-				testCasesToRemove.add(testCase);
-			}
-		}
-		for(TestCaseNode node : testCasesToRemove){
-			method.removeTestCase(node);
-		}
-
-		ArrayList<ConstraintNode> constraintsToRemove = new ArrayList<ConstraintNode>();
-		Collection<ConstraintNode> constraints = method.getConstraintNodes();
-		for(ConstraintNode constraint : constraints){
-			if(constraint.mentions(partition)){
-				constraintsToRemove.add(constraint);
-			}
-		}
-		for(ConstraintNode node : constraintsToRemove){
-			method.removeConstraint(node);
-		}
-	}
-
-	public static MethodNode getMethodAncestor(IGenericNode node){
-		if(node == null) return null;
-		IGenericNode parent = node.getParent();
-		if(parent == null) return null;
-		if(parent instanceof MethodNode) return (MethodNode)parent;
-		return getMethodAncestor(parent);
-	}
-
-	public static boolean validateTestSuiteName(String newName) {
-		if(newName.length() < 1 || newName.length() > 64) return false;
-		if(newName.matches("[ ]+.*")) return false;
-		return true;
-	}
-
-	public static boolean classExists(RootNode model, String qualifiedName) {
-		for(ClassNode node : model.getClasses()){
-			if (node.getQualifiedName().equals(qualifiedName)){
-				return true;
-			}
-		}
-		return false;
-	}
-
+public class ModelUtils {
 	public static ClassNode generateClassModel(IType type){
 		ClassNode classNode = new ClassNode(type.getFullyQualifiedName());
 		try{
@@ -297,9 +174,9 @@ public class EcModelUtils {
 	private static CategoryNode generateCategoryModel(ILocalVariable parameter) {
 		String type = getTypeName(parameter.getTypeSignature());
 		boolean expected = false;
-		if(type.equals(Constants.TYPE_NAME_UNSUPPORTED)){
-			return null;
-		}
+//		if(type.equals(Constants.TYPE_NAME_UNSUPPORTED)){
+//			return null;
+//		}
 		IAnnotation[] annotations;
 		try {
 			annotations = parameter.getAnnotations();
@@ -329,23 +206,23 @@ public class EcModelUtils {
 
 	public static Object getDefaultExpectedValue(String type) {
 		switch(type){
-		case Constants.TYPE_NAME_BYTE:
+		case com.testify.ecfeed.model.Constants.TYPE_NAME_BYTE:
 			return Constants.DEFAULT_EXPECTED_BYTE_VALUE;
-		case Constants.TYPE_NAME_BOOLEAN:
+		case com.testify.ecfeed.model.Constants.TYPE_NAME_BOOLEAN:
 			return Constants.DEFAULT_EXPECTED_BOOLEAN_VALUE;
-		case Constants.TYPE_NAME_CHAR:
+		case com.testify.ecfeed.model.Constants.TYPE_NAME_CHAR:
 			return Constants.DEFAULT_EXPECTED_CHAR_VALUE;
-		case Constants.TYPE_NAME_DOUBLE:
+		case com.testify.ecfeed.model.Constants.TYPE_NAME_DOUBLE:
 			return Constants.DEFAULT_EXPECTED_DOUBLE_VALUE;
-		case Constants.TYPE_NAME_FLOAT:
+		case com.testify.ecfeed.model.Constants.TYPE_NAME_FLOAT:
 			return Constants.DEFAULT_EXPECTED_FLOAT_VALUE;
-		case Constants.TYPE_NAME_INT:
+		case com.testify.ecfeed.model.Constants.TYPE_NAME_INT:
 			return Constants.DEFAULT_EXPECTED_INT_VALUE;
-		case Constants.TYPE_NAME_LONG:
+		case com.testify.ecfeed.model.Constants.TYPE_NAME_LONG:
 			return Constants.DEFAULT_EXPECTED_LONG_VALUE;
-		case Constants.TYPE_NAME_SHORT:
+		case com.testify.ecfeed.model.Constants.TYPE_NAME_SHORT:
 			return Constants.DEFAULT_EXPECTED_SHORT_VALUE;
-		case Constants.TYPE_NAME_STRING:
+		case com.testify.ecfeed.model.Constants.TYPE_NAME_STRING:
 			return Constants.DEFAULT_EXPECTED_STRING_VALUE;
 		}
 		return null;
@@ -355,25 +232,25 @@ public class EcModelUtils {
 	private static String getTypeName(String typeSignature) {
 		switch(typeSignature){
 		case Signature.SIG_BOOLEAN:
-			return Constants.TYPE_NAME_BOOLEAN;
+			return com.testify.ecfeed.model.Constants.TYPE_NAME_BOOLEAN;
 		case Signature.SIG_BYTE:
-			return Constants.TYPE_NAME_BYTE;
+			return com.testify.ecfeed.model.Constants.TYPE_NAME_BYTE;
 		case Signature.SIG_CHAR:
-			return Constants.TYPE_NAME_CHAR;
+			return com.testify.ecfeed.model.Constants.TYPE_NAME_CHAR;
 		case Signature.SIG_DOUBLE:
-			return Constants.TYPE_NAME_DOUBLE;
+			return com.testify.ecfeed.model.Constants.TYPE_NAME_DOUBLE;
 		case Signature.SIG_FLOAT:
-			return Constants.TYPE_NAME_FLOAT;
+			return com.testify.ecfeed.model.Constants.TYPE_NAME_FLOAT;
 		case Signature.SIG_INT:
-			return Constants.TYPE_NAME_INT;
+			return com.testify.ecfeed.model.Constants.TYPE_NAME_INT;
 		case Signature.SIG_LONG:
-			return Constants.TYPE_NAME_LONG;
+			return com.testify.ecfeed.model.Constants.TYPE_NAME_LONG;
 		case Signature.SIG_SHORT:
-			return Constants.TYPE_NAME_SHORT;
+			return com.testify.ecfeed.model.Constants.TYPE_NAME_SHORT;
 		case "QString;":
-			return Constants.TYPE_NAME_STRING;
+			return com.testify.ecfeed.model.Constants.TYPE_NAME_STRING;
 		default:
-			return Constants.TYPE_NAME_UNSUPPORTED;
+			return com.testify.ecfeed.model.Constants.TYPE_NAME_UNSUPPORTED;
 		}
 	}
 

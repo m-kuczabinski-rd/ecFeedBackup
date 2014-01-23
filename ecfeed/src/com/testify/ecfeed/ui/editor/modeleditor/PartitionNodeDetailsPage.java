@@ -40,17 +40,15 @@ import org.eclipse.ui.forms.IFormPart;
 import org.eclipse.ui.forms.widgets.ExpandableComposite;
 import org.eclipse.ui.forms.widgets.Section;
 
-import com.testify.ecfeed.constants.Constants;
-import com.testify.ecfeed.constants.DialogStrings;
+import com.testify.ecfeed.ui.common.ColorConstants;
+import com.testify.ecfeed.ui.common.ColorManager;
+import com.testify.ecfeed.ui.common.Messages;
+import com.testify.ecfeed.ui.dialogs.PartitionSettingsDialog;
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
-import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.TestCaseNode;
-import com.testify.ecfeed.ui.common.ColorConstants;
-import com.testify.ecfeed.ui.common.ColorManager;
-import com.testify.ecfeed.ui.dialogs.PartitionSettingsDialog;
-import com.testify.ecfeed.utils.EcModelUtils;
+import com.testify.ecfeed.parsers.Constants;
 
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Text;
@@ -92,18 +90,18 @@ public class PartitionNodeDetailsPage extends GenericNodeDetailsPage{
 
 		@Override
 		protected void setValue(Object element, Object value) {
-			if(!EcModelUtils.validatePartitionName((String)value, fSelectedPartition.getCategory(), (PartitionNode)element)){
+			if(!fSelectedPartition.getCategory().validatePartitionName((String)value)){
 				MessageDialog dialog = new MessageDialog(getActiveShell(), 
-						DialogStrings.DIALOG_PARTITION_NAME_PROBLEM_TITLE, 
+						Messages.DIALOG_PARTITION_NAME_PROBLEM_TITLE, 
 						Display.getDefault().getSystemImage(SWT.ICON_ERROR), 
-						DialogStrings.DIALOG_PARTITION_NAME_PROBLEM_MESSAGE,
+						Messages.DIALOG_PARTITION_NAME_PROBLEM_MESSAGE,
 						MessageDialog.ERROR, 
 						new String[] {IDialogConstants.OK_LABEL}, IDialogConstants.OK_ID);
 				dialog.open();
 			}
 			else{
 				((PartitionNode)element).setName((String)value);
-				updateModel((RootNode)((PartitionNode)element).getRoot());
+				updateModel((PartitionNode)element);
 			}
 		}
 	}
@@ -134,17 +132,17 @@ public class PartitionNodeDetailsPage extends GenericNodeDetailsPage{
 		@Override
 		protected void setValue(Object element, Object value) {
 			String valueString = (String)value;
-			if(!EcModelUtils.validatePartitionStringValue(valueString, fSelectedPartition.getCategory())){
+			if(!fSelectedPartition.getCategory().validatePartitionStringValue(valueString)){
 				MessageDialog dialog = new MessageDialog(getActiveShell(), 
-						DialogStrings.DIALOG_PARTITION_VALUE_PROBLEM_TITLE, 
+						Messages.DIALOG_PARTITION_VALUE_PROBLEM_TITLE, 
 						Display.getDefault().getSystemImage(SWT.ICON_ERROR), 
-						DialogStrings.DIALOG_PARTITION_VALUE_PROBLEM_MESSAGE,
+						Messages.DIALOG_PARTITION_VALUE_PROBLEM_MESSAGE,
 						MessageDialog.ERROR, 
 						new String[] {IDialogConstants.OK_LABEL}, IDialogConstants.OK_ID);
 				dialog.open();
 			}
 			else{
-				Object newValue = EcModelUtils.getPartitionValueFromString(valueString, fSelectedPartition.getCategory().getType());
+				Object newValue = fSelectedPartition.getCategory().getPartitionValueFromString(valueString);
 				((PartitionNode)element).setValue(newValue);
 				updateModel(fSelectedPartition);
 			}
@@ -156,7 +154,6 @@ public class PartitionNodeDetailsPage extends GenericNodeDetailsPage{
 	 */
 	public PartitionNodeDetailsPage(ModelMasterDetailsBlock parentBlock) {
 		super(parentBlock);
-		fColorManager = new ColorManager();
 	}
 
 	/**
@@ -332,16 +329,16 @@ public class PartitionNodeDetailsPage extends GenericNodeDetailsPage{
 			@Override
 			public void widgetSelected(SelectionEvent e){
 				MessageDialog dialog = new MessageDialog(getActiveShell(), 
-						DialogStrings.DIALOG_REMOVE_PARTITIONS_TITLE, 
+						Messages.DIALOG_REMOVE_PARTITIONS_TITLE, 
 						Display.getDefault().getSystemImage(SWT.ICON_WARNING), 
-						DialogStrings.DIALOG_REMOVE_PARTITIONS_MESSAGE,
+						Messages.DIALOG_REMOVE_PARTITIONS_MESSAGE,
 						MessageDialog.QUESTION_WITH_CANCEL, 
 						new String[] {IDialogConstants.OK_LABEL, IDialogConstants.CANCEL_LABEL},
 						IDialogConstants.OK_ID);
 				if (dialog.open() == Window.OK) {
-					for(Object partition : fPartitionsViewer.getCheckedElements()){
-						EcModelUtils.removeReferences((PartitionNode)partition);
-						fSelectedPartition.removePartition((PartitionNode)partition);
+					for(Object element : fPartitionsViewer.getCheckedElements()){
+						PartitionNode partition = (PartitionNode)element;
+						fSelectedPartition.removePartition(partition);
 						updateModel(fSelectedPartition);
 					}
 				}
@@ -352,15 +349,15 @@ public class PartitionNodeDetailsPage extends GenericNodeDetailsPage{
 
 	private void renamePartition(String name) {
 		CategoryNode parent = (CategoryNode)fSelectedPartition.getParent();
-		if(EcModelUtils.validatePartitionName(name, parent, fSelectedPartition)){
+		if(parent.validatePartitionName(name)){
 			fSelectedPartition.setName(name);
 			updateModel(fSelectedPartition);
 		}
 		else{
 			MessageDialog dialog = new MessageDialog(Display.getDefault().getActiveShell(), 
-					DialogStrings.DIALOG_PARTITION_NAME_PROBLEM_TITLE, 
+					Messages.DIALOG_PARTITION_NAME_PROBLEM_TITLE, 
 					Display.getDefault().getSystemImage(SWT.ICON_ERROR), 
-					DialogStrings.DIALOG_PARTITION_NAME_PROBLEM_MESSAGE,
+					Messages.DIALOG_PARTITION_NAME_PROBLEM_MESSAGE,
 					MessageDialog.ERROR, new String[] {"OK"}, 0);
 			dialog.open();
 			fPartitionNameText.setText(fSelectedPartition.getName());
@@ -369,15 +366,15 @@ public class PartitionNodeDetailsPage extends GenericNodeDetailsPage{
 
 	private void changePartitionValue(String valueString) {
 		CategoryNode parent = (CategoryNode)fSelectedPartition.getParent();
-		if(EcModelUtils.validatePartitionStringValue(valueString, parent)){
-			fSelectedPartition.setValue(EcModelUtils.getPartitionValueFromString(valueString, parent.getType()));
+		if(parent.validatePartitionStringValue(valueString)){
+			fSelectedPartition.setValue(parent.getPartitionValueFromString(valueString));
 			updateModel(fSelectedPartition);
 		}
 		else{
 			MessageDialog dialog = new MessageDialog(Display.getDefault().getActiveShell(), 
-					DialogStrings.DIALOG_PARTITION_VALUE_PROBLEM_TITLE, 
+					Messages.DIALOG_PARTITION_VALUE_PROBLEM_TITLE, 
 					Display.getDefault().getSystemImage(SWT.ICON_ERROR), 
-					DialogStrings.DIALOG_PARTITION_VALUE_PROBLEM_MESSAGE,
+					Messages.DIALOG_PARTITION_VALUE_PROBLEM_MESSAGE,
 					MessageDialog.ERROR, new String[] {"OK"}, 0);
 			dialog.open();
 			fPartitionValueText.setText(fSelectedPartition.getValueString());
@@ -411,5 +408,4 @@ public class PartitionNodeDetailsPage extends GenericNodeDetailsPage{
 		}
 		fPartitionsViewer.setInput(fSelectedPartition.getPartitions());
 	}
-
 }

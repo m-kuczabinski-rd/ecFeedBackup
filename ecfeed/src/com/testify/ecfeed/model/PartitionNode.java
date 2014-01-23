@@ -90,6 +90,9 @@ public class PartitionNode extends GenericNode {
 	}
 	
 	public boolean removePartition(PartitionNode partition){
+		if(getCategory() != null){
+			getCategory().partitionRemoved(partition);
+		}
 		return fPartitions.remove(partition);
 	}
 	

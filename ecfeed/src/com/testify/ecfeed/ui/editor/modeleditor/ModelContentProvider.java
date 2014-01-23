@@ -17,12 +17,12 @@ import java.util.ArrayList;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.TreeNodeContentProvider;
 
-import com.testify.ecfeed.constants.Constants;
+import com.testify.ecfeed.ui.common.Constants;
+import com.testify.ecfeed.ui.editor.EcMultiPageEditor;
 import com.testify.ecfeed.model.IGenericNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.TestCaseNode;
-import com.testify.ecfeed.ui.editor.EcMultiPageEditor;
 
 public class ModelContentProvider extends TreeNodeContentProvider implements ITreeContentProvider {
 

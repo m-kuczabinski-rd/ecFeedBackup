@@ -28,12 +28,12 @@ import org.eclipse.ui.forms.IFormPart;
 import org.eclipse.ui.forms.widgets.Section;
 import org.eclipse.wb.swt.TableViewerColumnSorter;
 
-import com.testify.ecfeed.constants.DialogStrings;
+import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.ui.dialogs.RenameModelDialog;
 import com.testify.ecfeed.ui.dialogs.TestClassSelectionDialog;
-import com.testify.ecfeed.utils.EcModelUtils;
+import com.testify.ecfeed.ui.common.ModelUtils;
 
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridLayout;
@@ -54,15 +54,15 @@ public class RootNodeDetailsPage extends GenericNodeDetailsPage{
 			IType selectedClass = selectClass();
 
 			if(selectedClass != null){
-				ClassNode classNode = EcModelUtils.generateClassModel(selectedClass);
-				if(!EcModelUtils.classExists(fSelectedRoot, classNode.getQualifiedName())){
+				ClassNode classNode = ModelUtils.generateClassModel(selectedClass);
+				if(fSelectedRoot.getClassModel(classNode.getQualifiedName()) == null){
 					fSelectedRoot.addClass(classNode);
 					updateModel(fSelectedRoot);
 				}
 				else{
 					MessageDialog infoDialog = new MessageDialog(getActiveShell(), 
-							DialogStrings.DIALOG_CLASS_EXISTS_TITLE, Display.getDefault().getSystemImage(SWT.ICON_INFORMATION), 
-							DialogStrings.DIALOG_CLASS_EXISTS_MESSAGE, MessageDialog.INFORMATION, 
+							Messages.DIALOG_CLASS_EXISTS_TITLE, Display.getDefault().getSystemImage(SWT.ICON_INFORMATION), 
+							Messages.DIALOG_CLASS_EXISTS_MESSAGE, MessageDialog.INFORMATION, 
 							new String[] {IDialogConstants.OK_LABEL}, 0);
 					infoDialog.open();
 				}
@@ -83,9 +83,9 @@ public class RootNodeDetailsPage extends GenericNodeDetailsPage{
 		@Override
 		public void widgetSelected(SelectionEvent e) {
 			MessageDialog infoDialog = new MessageDialog(getActiveShell(), 
-					DialogStrings.DIALOG_REMOVE_CLASSES_TITLE, 
+					Messages.DIALOG_REMOVE_CLASSES_TITLE, 
 					Display.getDefault().getSystemImage(SWT.ICON_WARNING), 
-					DialogStrings.DIALOG_REMOVE_CLASSES_MESSAGE, 
+					Messages.DIALOG_REMOVE_CLASSES_MESSAGE, 
 					MessageDialog.QUESTION_WITH_CANCEL, 
 					new String[] {IDialogConstants.OK_LABEL, IDialogConstants.CANCEL_LABEL}, 
 					IDialogConstants.OK_ID);

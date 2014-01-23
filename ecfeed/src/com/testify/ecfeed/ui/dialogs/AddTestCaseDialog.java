@@ -36,19 +36,19 @@ import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.jface.viewers.TableViewerColumn;
 
-import com.testify.ecfeed.constants.Constants;
-import com.testify.ecfeed.constants.DialogStrings;
+import com.testify.ecfeed.ui.common.Constants;
+import com.testify.ecfeed.ui.common.Messages;
+import com.testify.ecfeed.ui.common.ColorConstants;
+import com.testify.ecfeed.ui.common.ColorManager;
+import com.testify.ecfeed.ui.common.InputChangedListener;
+import com.testify.ecfeed.ui.common.TestCasePartitionEditingSupport;
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.ExpectedValueCategoryNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
-import com.testify.ecfeed.ui.common.ColorConstants;
-import com.testify.ecfeed.ui.common.ColorManager;
-import com.testify.ecfeed.ui.common.IInputChangedListener;
-import com.testify.ecfeed.ui.common.TestCasePartitionEditingSupport;
-import com.testify.ecfeed.utils.EcModelUtils;
+import com.testify.ecfeed.model.TestCaseNode;
 
-public class AddTestCaseDialog extends TitleAreaDialog implements IInputChangedListener {
+public class AddTestCaseDialog extends TitleAreaDialog implements InputChangedListener {
 
 	private MethodNode fMethod;
 	private ArrayList<PartitionNode> fTestData;
@@ -93,8 +93,8 @@ public class AddTestCaseDialog extends TitleAreaDialog implements IInputChangedL
 	 */
 	@Override
 	protected Control createDialogArea(Composite parent) {
-		setTitle(DialogStrings.DIALOG_ADD_TEST_CASE_TITLE);
-		setMessage(DialogStrings.DIALOG_ADD_TEST_CASE_MESSAGE);
+		setTitle(Messages.DIALOG_ADD_TEST_CASE_TITLE);
+		setMessage(Messages.DIALOG_ADD_TEST_CASE_MESSAGE);
 		Composite area = (Composite) super.createDialogArea(parent);
 		Composite container = new Composite(area, SWT.NONE);
 		container.setLayout(new GridLayout(1, false));
@@ -137,7 +137,7 @@ public class AddTestCaseDialog extends TitleAreaDialog implements IInputChangedL
 			@Override
 			public String getText(Object element){
 				PartitionNode testValue = (PartitionNode)element;
-				if(testValue.getCategory() instanceof ExpectedValueCategoryNode){
+				if(testValue.getCategory()  instanceof ExpectedValueCategoryNode){
 					return testValue.getValueString();
 				}
 				return testValue.toString();
@@ -202,8 +202,8 @@ public class AddTestCaseDialog extends TitleAreaDialog implements IInputChangedL
 	}
 	
 	private void validateTestSuiteName() {
-		if(!EcModelUtils.validateTestSuiteName(fTestSuiteCombo.getText())){
-			setErrorMessage(DialogStrings.DIALOG_TEST_SUITE_NAME_PROBLEM_MESSAGE);
+		if(!TestCaseNode.validateTestSuiteName(fTestSuiteCombo.getText())){
+			setErrorMessage(Messages.DIALOG_TEST_SUITE_NAME_PROBLEM_MESSAGE);
 			setOkButton(false);
 		}
 		else{

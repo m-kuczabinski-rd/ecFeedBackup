@@ -25,16 +25,15 @@ import org.eclipse.swt.SWT;
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.ExpectedValueCategoryNode;
 import com.testify.ecfeed.model.PartitionNode;
-import com.testify.ecfeed.utils.EcModelUtils;
 
 public class TestCasePartitionEditingSupport extends EditingSupport {
 	private final TableViewer fViewer;
 	private List<PartitionNode> fTestData;
 	private ComboBoxViewerCellEditor fComboCellEditor = null;
 	private TextCellEditor fTextCellEditor;
-	private IInputChangedListener fSetValueListener;
+	private InputChangedListener fSetValueListener;
 
-	public TestCasePartitionEditingSupport(TableViewer viewer, List<PartitionNode> testData, IInputChangedListener setValueListener) {
+	public TestCasePartitionEditingSupport(TableViewer viewer, List<PartitionNode> testData, InputChangedListener setValueListener) {
 		super(viewer);
 		fViewer = viewer;
 		fTestData = testData;
@@ -60,7 +59,7 @@ public class TestCasePartitionEditingSupport extends EditingSupport {
 			fComboCellEditor.setActivationStyle(ComboBoxViewerCellEditor.DROP_DOWN_ON_KEY_ACTIVATION | 
 					ComboBoxViewerCellEditor.DROP_DOWN_ON_MOUSE_ACTIVATION);
 		}
-		fComboCellEditor.setInput(partition.getCategory().getLeafPartitions());
+		fComboCellEditor.setInput(partition.getCategory().getPartitions());
 		fComboCellEditor.setValue(partition);
 		return fComboCellEditor;
 	}
@@ -85,17 +84,16 @@ public class TestCasePartitionEditingSupport extends EditingSupport {
 		if(partition.getCategory() instanceof ExpectedValueCategoryNode){
 			return partition.getValueString();
 		}
-//		return partition.toString();
-		return partition.getQualifiedName();
+		return partition.toString();
 	}
 
 	@Override
 	protected void setValue(Object element, Object value) {
-		CategoryNode parent = ((PartitionNode)element).getCategory();
+		CategoryNode parent = (CategoryNode)((PartitionNode)element).getParent();
 		if(value instanceof String && parent instanceof ExpectedValueCategoryNode){
 			String valueString = (String)value;
-			if(EcModelUtils.validatePartitionStringValue(valueString, parent)){
-				Object newValue = EcModelUtils.getPartitionValueFromString(valueString, parent.getType());
+			if(parent.validatePartitionStringValue(valueString)){
+				Object newValue = parent.getPartitionValueFromString(valueString);
 				((PartitionNode)element).setValue(newValue);
 			}
 		}

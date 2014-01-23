@@ -145,4 +145,10 @@ public class CategoryNode extends GenericNode {
 	public boolean isExpected() {
 		return false;
 	}
+
+	public void partitionRemoved(PartitionNode partition) {
+		if(getMethod() != null){
+			getMethod().partitionRemoved(partition);
+		}
+	}
 }
