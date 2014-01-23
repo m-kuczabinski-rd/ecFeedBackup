@@ -139,4 +139,51 @@ public class GenericNodeTest{
 		assertEquals(2, category.subtreeSize());
 		assertEquals(1, partition.subtreeSize());
 	}
+	
+	@Test
+	public void getChildTest(){
+		RootNode root = new RootNode("root");
+		ClassNode classNode = new ClassNode("class");
+		MethodNode method = new MethodNode("method");
+		CategoryNode category = new CategoryNode("category", "type");
+		ExpectedValueCategoryNode expCat = new ExpectedValueCategoryNode("expCat", "type", 0);
+		ConstraintNode constraint = new ConstraintNode("constraint", new Constraint(new StaticStatement(true), new StaticStatement(false)));
+		TestCaseNode testCase = new TestCaseNode("testCase", new ArrayList<PartitionNode>());
+		PartitionNode p = new PartitionNode("p", 0);
+		PartitionNode p1 = new PartitionNode("p1", 0);
+
+		p.addPartition(p1);
+		category.addPartition(p);
+		method.addCategory(category);
+		method.addCategory(expCat);
+		method.addConstraint(constraint);
+		method.addTestCase(testCase);
+		classNode.addMethod(method);
+		root.addClass(classNode);
+		
+		assertEquals(classNode, root.getChild("class"));
+		assertEquals(method, root.getChild("class:method"));
+		assertEquals(method, classNode.getChild("method"));
+		assertEquals(category, root.getChild("class:method:category"));
+		assertEquals(category, classNode.getChild("method:category"));
+		assertEquals(category, method.getChild("category"));
+		assertEquals(expCat, root.getChild("class:method:expCat"));
+		assertEquals(expCat, classNode.getChild("method:expCat"));
+		assertEquals(expCat, method.getChild("expCat"));
+		assertEquals(constraint, root.getChild("class:method:constraint"));
+		assertEquals(constraint, classNode.getChild("method:constraint"));
+		assertEquals(constraint, method.getChild("constraint"));
+		assertEquals(testCase, root.getChild("class:method:testCase"));
+		assertEquals(testCase, classNode.getChild("method:testCase"));
+		assertEquals(testCase, method.getChild("testCase"));
+		assertEquals(p, root.getChild("class:method:category:p"));
+		assertEquals(p, classNode.getChild("method:category:p"));
+		assertEquals(p, method.getChild("category:p"));
+		assertEquals(p, category.getChild("p"));
+		assertEquals(p1, root.getChild("class:method:category:p:p1"));
+		assertEquals(p1, classNode.getChild("method:category:p:p1"));
+		assertEquals(p1, method.getChild("category:p:p1"));
+		assertEquals(p1, category.getChild("p:p1"));
+		assertEquals(p1, p.getChild("p1"));
+	}
 }

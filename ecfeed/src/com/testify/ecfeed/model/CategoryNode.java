@@ -36,13 +36,8 @@ public class CategoryNode extends GenericNode {
 	}
 	
 	//TODO unit tests
-	public PartitionNode getPartition(String name){
-		for(PartitionNode partition : fPartitions){
-			if(partition.getName().equals(name)){
-				return partition;
-			}
-		}
-		return null;
+	public PartitionNode getPartition(String qualifiedName){
+		return (PartitionNode)getChild(qualifiedName);
 	}
 	
 	public List<PartitionNode> getPartitions() {
@@ -93,7 +88,7 @@ public class CategoryNode extends GenericNode {
 		if(name.length() >= Constants.MAX_PARTITION_NAME_LENGTH) return false;
 		if(name.matches("[ ]+.*")) return false;
 
-		if(getPartition(name) == null) return false;
+		if(getPartition(name) != null) return false;
 		
 		return true;
 	}

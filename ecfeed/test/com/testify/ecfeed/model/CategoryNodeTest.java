@@ -39,10 +39,19 @@ public class CategoryNodeTest{
 	@Test
 	public void getPartitionTest(){
 		CategoryNode category = new CategoryNode("category", "type");
-		PartitionNode partition = new PartitionNode("partition", 0); 
-		category.addPartition(partition);
+		PartitionNode p = new PartitionNode("p", 0);
+		PartitionNode p1 = new PartitionNode("p1", 0);
+		PartitionNode p11 = new PartitionNode("p11", 0);
+		category.addPartition(p);
+		p.addPartition(p1);
+		p1.addPartition(p11);
 		
-		assertEquals(partition, category.getPartition("partition"));
+		assertEquals(p, category.getPartition("p"));
+		assertEquals(p1, category.getPartition("p:p1"));
+		assertEquals(p11, category.getPartition("p:p1:p11"));
+		assertEquals(null, category.getPartition("p1"));
+		assertEquals(null, category.getPartition("p11"));
+		assertEquals(null, category.getPartition("something"));
 	}
 
 	@Test
@@ -141,5 +150,6 @@ public class CategoryNodeTest{
 		assertFalse(category.getLeafPartitions().contains(p2));
 		assertFalse(category.getLeafPartitions().contains(p3));
 		assertFalse(category.getLeafPartitions().contains(p32));
-}
+	}
+	
 }
