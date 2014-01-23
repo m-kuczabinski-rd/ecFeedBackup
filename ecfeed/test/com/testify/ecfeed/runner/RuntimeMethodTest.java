@@ -10,11 +10,11 @@ import java.util.Set;
 
 import org.junit.Test;
 
-import com.testify.ecfeed.api.GeneratorException;
-import com.testify.ecfeed.api.IGenerator;
+import com.testify.ecfeed.generators.CartesianProductGenerator;
+import com.testify.ecfeed.generators.api.GeneratorException;
+import com.testify.ecfeed.generators.api.IGenerator;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.runner.RuntimeMethod;
-import com.testify.generators.CartesianProductGenerator;
 
 public class RuntimeMethodTest {
 

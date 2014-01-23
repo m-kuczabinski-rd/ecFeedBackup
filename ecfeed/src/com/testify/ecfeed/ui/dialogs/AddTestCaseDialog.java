@@ -137,7 +137,7 @@ public class AddTestCaseDialog extends TitleAreaDialog implements IInputChangedL
 			@Override
 			public String getText(Object element){
 				PartitionNode testValue = (PartitionNode)element;
-				if(testValue.getCategory().isExpected()){
+				if(testValue.getCategory() instanceof ExpectedValueCategoryNode){
 					return testValue.getValueString();
 				}
 				return testValue.toString();
@@ -155,7 +155,7 @@ public class AddTestCaseDialog extends TitleAreaDialog implements IInputChangedL
 
 	private Color getColor(Object element){
 		PartitionNode partition = (PartitionNode)element;
-		if(partition.getCategory().isExpected()){
+		if(partition.getCategory() instanceof ExpectedValueCategoryNode){
 			return fColorManager.getColor(ColorConstants.EXPECTED_VALUE_CATEGORY);
 		}
 		return null;

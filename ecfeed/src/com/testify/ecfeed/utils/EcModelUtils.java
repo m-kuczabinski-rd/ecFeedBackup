@@ -116,7 +116,7 @@ public class EcModelUtils {
 			}
 		}
 		for(TestCaseNode node : testCasesToRemove){
-			method.removeChild(node);
+			method.removeTestCase(node);
 		}
 
 		ArrayList<ConstraintNode> constraintsToRemove = new ArrayList<ConstraintNode>();
@@ -127,7 +127,7 @@ public class EcModelUtils {
 			}
 		}
 		for(ConstraintNode node : constraintsToRemove){
-			method.removeChild(node);
+			method.removeConstraint(node);
 		}
 	}
 

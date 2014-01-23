@@ -23,7 +23,9 @@ import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.TestCaseNode;
-import com.testify.ecfeed.parsers.EcParser;
+import com.testify.ecfeed.parsers.IModelParser;
+import com.testify.ecfeed.parsers.ParserException;
+import com.testify.ecfeed.parsers.xml.XmlModelParser;
 import com.testify.ecfeed.runner.annotations.EcModel;
 import com.testify.ecfeed.runner.annotations.TestSuites;
 
@@ -141,14 +143,16 @@ public class StaticRunner extends BlockJUnit4ClassRunner {
 	}
 
 	private RootNode createModel() throws RunnerException {
-		EcParser parser = new EcParser();
+		IModelParser parser = new XmlModelParser();
 		String ectFilePath = getEctFilePath();
 		InputStream istream;
 		try {
 			istream = new FileInputStream(new File(ectFilePath));
+			return parser.parseModel(istream);
 		} catch (FileNotFoundException e) {
 			throw new RunnerException(Messages.CANNOT_FIND_MODEL);
+		} catch (ParserException e) {
+			throw new RunnerException(Messages.CANNOT_PARSE_MODEL(e.getMessage()));
 		}
-		return parser.parseEctFile(istream);
 	}
 }

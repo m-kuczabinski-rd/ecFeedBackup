@@ -25,11 +25,6 @@ public class BasicStatement implements IStatement {
 		fId = fLastId++;
 	}
 	
-	@Override
-	public boolean evaluate(List<PartitionNode> values) {
-		return false;
-	}
-
 	public int getId(){
 		return fId;
 	}
@@ -65,25 +60,30 @@ public class BasicStatement implements IStatement {
 		}
 	}
 	
-	@Override
-	public boolean equals(Object obj){
-		if(obj instanceof BasicStatement == false){
-			return false;
-		}
-		return fId == ((BasicStatement)obj).getId();
-	}
-
-	public boolean mentions(PartitionNode partition) {
-		return false;
-	}
-	
 	public void addStatement(BasicStatement statement){
 		if(getParent() != null){
 			getParent().addStatement(statement);
 		}
 	}
 
+	public boolean mentions(PartitionNode partition) {
+		return false;
+	}
+
 	public boolean mentions(CategoryNode category) {
 		return false;
+	}
+
+	@Override
+	public boolean evaluate(List<PartitionNode> values) {
+		return false;
+	}
+
+	@Override
+	public boolean equals(Object obj){
+		if(obj instanceof BasicStatement == false){
+			return false;
+		}
+		return fId == ((BasicStatement)obj).getId();
 	}
 }

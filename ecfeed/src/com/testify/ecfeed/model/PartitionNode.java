@@ -27,6 +27,13 @@ public class PartitionNode extends GenericNode {
 		fPartitions = new ArrayList<PartitionNode>();
 	}
 
+	public String getQualifiedName(){
+		if(getParent() instanceof PartitionNode){
+			return ((PartitionNode)getParent()).getQualifiedName() + ":" + getName();
+		}
+		return super.getName();
+	}
+
 	public Object getValue() {
 		return fValue;
 	}
@@ -42,10 +49,6 @@ public class PartitionNode extends GenericNode {
 			return "\\0";
 		}
 		return String.valueOf(fValue);
-	}
-	
-	public String toString(){
-		return getQualifiedName() + ": " + getValueString();
 	}
 	
 	public CategoryNode getCategory() {
@@ -115,13 +118,6 @@ public class PartitionNode extends GenericNode {
 		return fPartitions.size() != 0;
 	}
 	
-	public int level(){
-		if(getParent() instanceof CategoryNode){
-			return 0;
-		}
-		return ((PartitionNode)getParent()).level() + 1;
-	}
-
 	public boolean isAncestor(PartitionNode partition) {
 		for(PartitionNode child : fPartitions){
 			if(child == partition || child.isAncestor(partition)){
@@ -130,7 +126,7 @@ public class PartitionNode extends GenericNode {
 		}
 		return false;
 	}
-	
+
 	public boolean isDescendant(PartitionNode partition){
 		if(getParent() instanceof PartitionNode){
 			PartitionNode parent = (PartitionNode)getParent();
@@ -139,6 +135,13 @@ public class PartitionNode extends GenericNode {
 			}
 		}
 		return false;
+	}
+
+	public int level(){
+		if(getParent() instanceof CategoryNode){
+			return 0;
+		}
+		return ((PartitionNode)getParent()).level() + 1;
 	}
 
 	public List<PartitionNode> getLeafs() {
@@ -154,10 +157,7 @@ public class PartitionNode extends GenericNode {
 		return leafs;
 	}
 	
-	public String getQualifiedName(){
-		if(getParent() instanceof PartitionNode){
-			return ((PartitionNode)getParent()).getQualifiedName() + ":" + getName();
-		}
-		return super.getName();
+	public String toString(){
+		return getQualifiedName() + ": " + getValueString();
 	}
 }

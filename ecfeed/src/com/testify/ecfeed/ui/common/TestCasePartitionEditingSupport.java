@@ -23,6 +23,7 @@ import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.swt.SWT;
 
 import com.testify.ecfeed.model.CategoryNode;
+import com.testify.ecfeed.model.ExpectedValueCategoryNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.utils.EcModelUtils;
 
@@ -43,7 +44,7 @@ public class TestCasePartitionEditingSupport extends EditingSupport {
 	@Override
 	protected CellEditor getCellEditor(Object element) {
 		PartitionNode partition = (PartitionNode)element;
-		if(partition.getCategory().isExpected()){
+		if(partition.getCategory() instanceof ExpectedValueCategoryNode){
 			return getTextCellEditor(partition);
 		}
 		else{
@@ -81,7 +82,7 @@ public class TestCasePartitionEditingSupport extends EditingSupport {
 	@Override
 	protected Object getValue(Object element) {
 		PartitionNode partition = (PartitionNode)element;
-		if(partition.getCategory().isExpected()){
+		if(partition.getCategory() instanceof ExpectedValueCategoryNode){
 			return partition.getValueString();
 		}
 //		return partition.toString();
@@ -90,8 +91,8 @@ public class TestCasePartitionEditingSupport extends EditingSupport {
 
 	@Override
 	protected void setValue(Object element, Object value) {
-		CategoryNode parent = (CategoryNode)((PartitionNode)element).getParent();
-		if(value instanceof String && parent.isExpected()){
+		CategoryNode parent = ((PartitionNode)element).getCategory();
+		if(value instanceof String && parent instanceof ExpectedValueCategoryNode){
 			String valueString = (String)value;
 			if(EcModelUtils.validatePartitionStringValue(valueString, parent)){
 				Object newValue = EcModelUtils.getPartitionValueFromString(valueString, parent.getType());

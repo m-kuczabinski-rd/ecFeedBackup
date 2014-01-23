@@ -12,6 +12,7 @@
 package com.testify.ecfeed.ui.editor.sourceviewer;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -23,7 +24,7 @@ import org.eclipse.ui.editors.text.FileDocumentProvider;
 import org.eclipse.ui.editors.text.TextEditor;
 
 import com.testify.ecfeed.model.RootNode;
-import com.testify.ecfeed.parsers.EcWriter;
+import com.testify.ecfeed.parsers.xml.XmlModelSerializer;
 import com.testify.ecfeed.ui.common.ColorManager;
 import com.testify.ecfeed.ui.editor.EcMultiPageEditor;
 import com.testify.ecfeed.ui.editor.IModelUpdateListener;
@@ -103,11 +104,15 @@ public class SourceViewer extends TextEditor implements IModelUpdateListener{
 	}
 	
 	private void refreshSourceText(){
-		RootNode model = fEditor.getModel();
-		ByteArrayOutputStream ostream = new ByteArrayOutputStream();
-		EcWriter writer = new EcWriter(ostream);
-		writer.writeXmlDocument(model);
-		getDocument().set(ostream.toString());
+		try {
+			RootNode model = fEditor.getModel();
+			ByteArrayOutputStream ostream = new ByteArrayOutputStream();
+			XmlModelSerializer writer = new XmlModelSerializer(ostream);
+			writer.writeXmlDocument(model);
+			getDocument().set(ostream.toString());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public void refresh() {

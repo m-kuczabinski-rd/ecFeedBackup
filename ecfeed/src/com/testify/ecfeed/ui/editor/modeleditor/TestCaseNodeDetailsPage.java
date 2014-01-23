@@ -164,7 +164,7 @@ public class TestCaseNodeDetailsPage extends GenericNodeDetailsPage implements I
 			@Override
 			public String getText(Object element){
 				PartitionNode testValue = (PartitionNode)element;
-				if(testValue.getCategory().isExpected()){
+				if(testValue.getCategory() instanceof ExpectedValueCategoryNode){
 					return testValue.getValueString();
 				}
 				return testValue.toString();
@@ -194,7 +194,7 @@ public class TestCaseNodeDetailsPage extends GenericNodeDetailsPage implements I
 		createButton(textClientComposite, "Remove", new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e){
-				fParent.removeChild(fSelectedTestCase);
+				fParent.removeTestCase(fSelectedTestCase);
 				getParentBlock().selectNode(fParent);
 				fSelectedTestCase = null;
 				updateModel(fParent);

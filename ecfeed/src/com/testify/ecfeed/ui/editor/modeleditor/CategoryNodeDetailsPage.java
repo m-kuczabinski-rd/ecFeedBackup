@@ -265,7 +265,7 @@ public class CategoryNodeDetailsPage extends GenericNodeDetailsPage implements I
 					for(Object partition : fPartitionsViewer.getCheckedElements()){
 						if(fSelectedCategory.getPartitions().size() > 1){
 							EcModelUtils.removeReferences((PartitionNode)partition);
-							fSelectedCategory.removeChild((PartitionNode)partition);
+							fSelectedCategory.removePartition((PartitionNode)partition);
 						}
 						else{
 							MessageDialog dlg = new MessageDialog(getActiveShell(), 

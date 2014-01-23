@@ -12,12 +12,15 @@ import java.util.Set;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.InitializationError;
 
-import com.testify.ecfeed.api.GeneratorException;
-import com.testify.ecfeed.api.IConstraint;
-import com.testify.ecfeed.api.IGenerator;
+import com.testify.ecfeed.generators.CartesianProductGenerator;
+import com.testify.ecfeed.generators.NWiseGenerator;
+import com.testify.ecfeed.generators.api.GeneratorException;
+import com.testify.ecfeed.generators.api.IConstraint;
+import com.testify.ecfeed.generators.api.IGenerator;
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.ConstraintNode;
 import com.testify.ecfeed.model.MethodNode;
@@ -29,8 +32,6 @@ import com.testify.ecfeed.runner.annotations.Constraints;
 import com.testify.ecfeed.runner.annotations.EcModel;
 import com.testify.ecfeed.runner.annotations.Generator;
 import com.testify.ecfeed.runner.annotations.GeneratorParameter;
-import com.testify.generators.CartesianProductGenerator;
-import com.testify.generators.NWiseGenerator;
 
 public class OnlineRunnerTest extends StaticRunnerTest{
 
@@ -56,7 +57,7 @@ public class OnlineRunnerTest extends StaticRunnerTest{
 		}
 	}
 
-	
+	@RunWith(OnlineRunner.class)
 	@Generator(NWiseGenerator.class)
 	@GeneratorParameter(name = "N", value = "2")
 	@EcModel(MODEL_PATH)
@@ -67,6 +68,7 @@ public class OnlineRunnerTest extends StaticRunnerTest{
 		}
 	}
 	
+	@RunWith(OnlineRunner.class)
 	@Generator(NWiseGenerator.class)
 	@GeneratorParameter(name = "N", value = "2")
 	@EcModel(MODEL_PATH)
@@ -79,6 +81,7 @@ public class OnlineRunnerTest extends StaticRunnerTest{
 		}
 	}
 	
+	@RunWith(OnlineRunner.class)
 	@Generator(CartesianProductGenerator.class)
 	@EcModel(MODEL_PATH)
 	@Constraints(Constraints.ALL)
@@ -89,6 +92,7 @@ public class OnlineRunnerTest extends StaticRunnerTest{
 		}
 	}
 	
+	@RunWith(OnlineRunner.class)
 	@Generator(CartesianProductGenerator.class)
 	@EcModel(MODEL_PATH)
 	@Constraints(Constraints.ALL)

@@ -26,13 +26,17 @@ public class StatementArray extends BasicStatement{
 		fOperator = operator;
 	}
 
+	public Operator getOperator(){
+		return fOperator;
+	}
+
+	public void setOperator(Operator operator) {
+		fOperator = operator;
+	}
+
 	public void addStatement(BasicStatement statement){
 		fStatements.add(statement);
 		statement.setParent(this);
-	}
-	
-	public Operator getOperator(){
-		return fOperator;
 	}
 	
 	@Override
@@ -40,6 +44,26 @@ public class StatementArray extends BasicStatement{
 		return fStatements;
 	}
 	
+	@Override
+	public boolean mentions(PartitionNode partition){
+		for(BasicStatement child : fStatements){
+			if(child.mentions(partition)){
+				return true;
+			}
+		}
+		return false;
+	}
+
+	@Override
+	public boolean mentions(CategoryNode category){
+		for(BasicStatement child : fStatements){
+			if(child.mentions(category)){
+				return true;
+			}
+		}
+		return false;
+	}
+
 	@Override
 	public boolean evaluate(List<PartitionNode> values) {
 		if(fStatements.size() == 0){
@@ -81,29 +105,5 @@ public class StatementArray extends BasicStatement{
 			}
 		}
 		return result + ")";
-	}
-	
-	public void setOperator(Operator operator) {
-		fOperator = operator;
-	}
-	
-	@Override
-	public boolean mentions(PartitionNode partition){
-		for(BasicStatement child : fStatements){
-			if(child.mentions(partition)){
-				return true;
-			}
-		}
-		return false;
-	}
-
-	@Override
-	public boolean mentions(CategoryNode category){
-		for(BasicStatement child : fStatements){
-			if(child.mentions(category)){
-				return true;
-			}
-		}
-		return false;
 	}
 }

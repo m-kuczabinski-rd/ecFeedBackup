@@ -27,15 +27,14 @@ public class RootNode extends GenericNode {
 		node.setParent(this);
 	}
 
-	public List<? extends IGenericNode> getChildren(){
-		return fClasses;
-	}
-	
 	public List<ClassNode> getClasses() {
 		return fClasses;
 	}
+	
+	public boolean removeClass(ClassNode classNode){
+		return fClasses.remove(classNode);
+	}
 
-	//TODO unit tests
 	public ClassNode getClassModel(String name) {
 		for(ClassNode childClass : getClasses()){
 			if(childClass.getQualifiedName().equals(name)){
@@ -43,5 +42,18 @@ public class RootNode extends GenericNode {
 			}
 		}
 		return null;
+	}
+
+	public static boolean validateModelName(String name){
+		if (name == null) return false;
+		if(name.length() == 0) return false;
+		if(name.length() >= Constants.MAX_MODEL_NAME_LENGTH) return false;
+		if(name.matches("[ ]+.*")) return false;
+		
+		return true;
+	}
+
+	public List<? extends IGenericNode> getChildren(){
+		return fClasses;
 	}
 }

@@ -9,6 +9,8 @@ public class Messages {
 		"GeneratorParameterNames and GeneratorParameterValues must be of the same length";
 	public static final String MISSING_PARAMETERS_ANNOTATION = 
 		"GeneratorParameterNames and GeneratorParameterValues may be used only together";
+	public static final String CANNOT_PARSE_MODEL(String message)
+		{return "Model could not be parsed: " + message;}
 	public static final String NO_VALID_GENERATOR(String name)
 		{return "No valid generator was defined for the method" + name;}
 	public static final String CLASS_NOT_FOUND_IN_THE_MODEL(String name)

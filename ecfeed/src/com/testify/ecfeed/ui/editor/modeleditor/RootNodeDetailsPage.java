@@ -97,7 +97,7 @@ public class RootNodeDetailsPage extends GenericNodeDetailsPage{
 		private void removeClasses(Object[] checkedElements) {
 			for(Object element : checkedElements){
 				if(element instanceof ClassNode){
-					fSelectedRoot.removeChild((ClassNode)element);
+					fSelectedRoot.removeClass((ClassNode)element);
 				}
 			}
 			updateModel(fSelectedRoot);

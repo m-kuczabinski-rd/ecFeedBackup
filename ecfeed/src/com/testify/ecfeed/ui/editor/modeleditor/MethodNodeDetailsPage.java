@@ -177,7 +177,8 @@ public class MethodNodeDetailsPage extends GenericNodeDetailsPage implements IIn
 	}
 	
 	private void updateParameter(int index, CategoryNode newCategory){
-		boolean isOriginalCategoryExpected = fSelectedMethod.getCategories().get(index).isExpected();
+		boolean isOriginalCategoryExpected = 
+				fSelectedMethod.getCategories().get(index) instanceof ExpectedValueCategoryNode;
 		boolean isNewCategoryExpected = newCategory instanceof ExpectedValueCategoryNode;
 		if(isOriginalCategoryExpected == isNewCategoryExpected){
 			fSelectedMethod.getCategories().get(index).setName(newCategory.getName());
@@ -499,7 +500,7 @@ public class MethodNodeDetailsPage extends GenericNodeDetailsPage implements IIn
 			private void removeCheckedTestCases() {
 				for(Object element : fTestCasesViewer.getCheckedElements()){
 					if(element instanceof TestCaseNode){
-						fSelectedMethod.removeChild((TestCaseNode)element);
+						fSelectedMethod.removeTestCase((TestCaseNode)element);
 					}
 				}
 			}

@@ -25,7 +25,43 @@ public class TestCaseNode extends GenericNode {
 		return fTestData;
 	}
 	
-	//TODO unit tests
+	public void replaceValue(int index, PartitionNode newValue) {
+		fTestData.set(index, newValue);
+	}
+
+	public boolean mentions(PartitionNode partition) {
+		for(PartitionNode p : fTestData){
+			if(p == partition || p.isDescendant(partition)){
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public String testDataString(){
+		String result = new String();
+		
+		for(int i = 0; i < fTestData.size(); i++){
+			PartitionNode partition = fTestData.get(i);
+			if(partition.getCategory() instanceof ExpectedValueCategoryNode){
+				result += "[e]" + partition.getValueString();
+			}
+			else{
+				result += partition.getQualifiedName();
+			}
+			if(i < fTestData.size() - 1){
+				result += ", ";
+			}
+		}
+		return result;
+	}
+	
+	public static boolean validateTestSuiteName(String newName) {
+		if(newName.length() < 1 || newName.length() > 64) return false;
+		if(newName.matches("[ ]+.*")) return false;
+		return true;
+	}
+
 	public String toString(){
 		String methodName = null;
 		if (getParent() != null){
@@ -40,36 +76,5 @@ public class TestCaseNode extends GenericNode {
 		}
 		
 		return result;
-	}
-	
-	public String testDataString(){
-		String result = new String();
-		
-		for(int i = 0; i < fTestData.size(); i++){
-			PartitionNode partition = fTestData.get(i);
-			if(partition.getCategory() instanceof ExpectedValueCategoryNode){
-				result += "[e]" + partition.getValueString();
-			}
-			else{
-				result += partition.getName();
-			}
-			if(i < fTestData.size() - 1){
-				result += ", ";
-			}
-		}
-		return result;
-	}
-	
-	public boolean mentions(PartitionNode partition) {
-		for(PartitionNode p : fTestData){
-			if(p == partition || p.isDescendant(partition)){
-				return true;
-			}
-		}
-		return false;
-	}
-
-	public void replaceValue(int index, PartitionNode newValue) {
-		fTestData.set(index, newValue);
 	}
 }

@@ -29,7 +29,8 @@ import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.part.FileEditorInput;
 
 import com.testify.ecfeed.model.RootNode;
-import com.testify.ecfeed.parsers.EcParser;
+import com.testify.ecfeed.parsers.ParserException;
+import com.testify.ecfeed.parsers.xml.XmlModelParser;
 import com.testify.ecfeed.ui.editor.modeleditor.ModelPage;
 import com.testify.ecfeed.ui.editor.sourceviewer.SourceViewer;
 
@@ -61,11 +62,12 @@ public class EcMultiPageEditor extends FormEditor{
 			IFile file = ((FileEditorInput)input).getFile();
 			InputStream iStream;
 			try {
-				EcParser parser = new EcParser();
+				XmlModelParser parser = new XmlModelParser();
 				iStream = file.getContents();
-				root = parser.parseEctFile(iStream);
-			} catch (CoreException e) {
+				root = parser.parseModel(iStream);
+			} catch (CoreException | ParserException e) {
 				System.out.println("Exception: " + e.getMessage());
+				e.printStackTrace();
 			}
 		}
 		return root;

@@ -44,13 +44,14 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Tree;
 
-import com.testify.ecfeed.api.GeneratorException;
-import com.testify.ecfeed.api.IConstraint;
-import com.testify.ecfeed.api.IGenerator;
-import com.testify.ecfeed.api.IGeneratorParameter;
-import com.testify.ecfeed.api.IGeneratorParameter.TYPE;
 import com.testify.ecfeed.constants.Constants;
 import com.testify.ecfeed.constants.DialogStrings;
+import com.testify.ecfeed.generators.GeneratorFactory;
+import com.testify.ecfeed.generators.api.GeneratorException;
+import com.testify.ecfeed.generators.api.IConstraint;
+import com.testify.ecfeed.generators.api.IGenerator;
+import com.testify.ecfeed.generators.api.IGeneratorParameter;
+import com.testify.ecfeed.generators.api.IGeneratorParameter.TYPE;
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.ConstraintNode;
 import com.testify.ecfeed.model.ExpectedValueCategoryNode;
@@ -60,7 +61,6 @@ import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.constraint.Constraint;
 import com.testify.ecfeed.ui.common.TreeCheckStateListener;
 import com.testify.ecfeed.utils.EcModelUtils;
-import com.testify.generators.GeneratorFactory;
 
 import org.eclipse.swt.widgets.Spinner;
 
@@ -584,7 +584,7 @@ public class GenerateTestSuiteDialog extends TitleAreaDialog {
 		fAlgorithmInput = new ArrayList<List<PartitionNode>>();
 		for(int i = 0; i < categories.size(); i++){
 			List<PartitionNode> partitions = new ArrayList<PartitionNode>();
-			if(categories.get(i).isExpected()){
+			if(categories.get(i) instanceof ExpectedValueCategoryNode){
 				ExpectedValueCategoryNode category = (ExpectedValueCategoryNode)categories.get(i);
 				partitions.add(category.getDefaultValuePartition());
 			}

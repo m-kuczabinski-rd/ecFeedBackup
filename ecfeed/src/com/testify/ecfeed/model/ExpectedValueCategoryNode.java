@@ -46,6 +46,7 @@ public class ExpectedValueCategoryNode extends CategoryNode implements
 	}
 
 	@Override
+	@Deprecated
 	public boolean isExpected(){
 		return true;
 	}

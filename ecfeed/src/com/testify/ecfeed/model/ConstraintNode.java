@@ -28,11 +28,6 @@ public class ConstraintNode extends GenericNode{
 		return fConstraint;
 	}
 	
-	@Override
-	public String toString(){
-		return getName() + ": " + getConstraint().toString();
-	}
-	
 	public MethodNode getMethod() {
 		if(getParent() != null && getParent() instanceof MethodNode){
 			return (MethodNode)getParent();
@@ -59,5 +54,10 @@ public class ConstraintNode extends GenericNode{
 			return true;
 		}
 		return false;
+	}
+
+	@Override
+	public String toString(){
+		return getName() + ": " + getConstraint().toString();
 	}
 }

@@ -31,8 +31,26 @@ public class Statement extends BasicStatement{
 		return fCondition;
 	}
 	
+	public void setCondition(PartitionNode condition) {
+		fCondition = condition;
+	}
+
 	public Relation getRelation(){
 		return fRelation;
+	}
+
+	public void setRelation(Relation relation) {
+		fRelation = relation;
+	}
+
+	@Override
+	public boolean mentions(PartitionNode partition){
+		return fCondition == partition;
+	}
+
+	@Override
+	public boolean mentions(CategoryNode category){
+		return fCondition.getCategory() == category;
 	}
 
 	@Override
@@ -65,62 +83,10 @@ public class Statement extends BasicStatement{
 		default:
 			return false;
 		}
-
-//		CategoryNode parentCategory = fCondition.getCategory();
-//		MethodNode methodAncestor = parentCategory.getMethod();
-//		int categoryIndex = methodAncestor.getCategories().indexOf(parentCategory);
-//
-//		if(values.size() < categoryIndex + 1){
-//			return false;
-//		}
-//		
-//		PartitionNode partition = values.get(categoryIndex);
-//		List<PartitionNode> siblings = parentCategory.getPartitions();
-//		int conditionIndex = siblings.indexOf(fCondition);
-//		int partitionIndex = siblings.indexOf(partition);
-//		
-//		if(partition.getCategory() != parentCategory){
-//			return false;
-//		}
-//		
-//		switch (fRelation){
-//		case EQUAL:
-//			return partition == fCondition;
-////		case GREATER:
-////			return partitionIndex > conditionIndex;
-////		case GREATER_EQUAL:
-////			return partitionIndex >= conditionIndex;
-////		case LESS:
-////			return partitionIndex < conditionIndex;
-////		case LESS_EQUAL:
-////			return partitionIndex <= conditionIndex;
-//		case NOT:
-//			return partition != fCondition;
-//		default:
-//			return false;
-//		}
 	}
 	
 	@Override
 	public String toString(){
 		return fCondition.getParent().getName() + " " + fRelation + " " + fCondition.getName();
-	}
-	
-	public void setRelation(Relation relation) {
-		fRelation = relation;
-	}
-
-	public void setCondition(PartitionNode condition) {
-		fCondition = condition;
-	}
-	
-	@Override
-	public boolean mentions(PartitionNode partition){
-		return fCondition == partition;
-	}
-
-	@Override
-	public boolean mentions(CategoryNode category){
-		return fCondition.getCategory() == category;
 	}
 }

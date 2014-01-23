@@ -27,12 +27,13 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Display;
 
-import com.testify.ecfeed.api.GeneratorException;
-import com.testify.ecfeed.api.IConstraint;
-import com.testify.ecfeed.api.IGenerator;
 import com.testify.ecfeed.constants.Constants;
 import com.testify.ecfeed.constants.DialogStrings;
+import com.testify.ecfeed.generators.api.GeneratorException;
+import com.testify.ecfeed.generators.api.IConstraint;
+import com.testify.ecfeed.generators.api.IGenerator;
 import com.testify.ecfeed.model.CategoryNode;
+import com.testify.ecfeed.model.ExpectedValueCategoryNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.TestCaseNode;
@@ -189,7 +190,7 @@ class GenerateTestSuiteAdapter extends SelectionAdapter{
 			List<PartitionNode> testData = testCase.getTestData();
 			for(int i = 0; i < testData.size(); i++){
 				CategoryNode category = testData.get(i).getCategory();
-				if(category.isExpected()){
+				if(category instanceof ExpectedValueCategoryNode){
 					PartitionNode anonymousPartition = 
 							new PartitionNode(Constants.EXPECTED_VALUE_PARTITION_NAME, 
 									testData.get(i).getValue());

@@ -109,7 +109,7 @@ public class ClassNodeDetailsPage extends GenericNodeDetailsPage{
 
 		private void removeMethods(Object[] checkedElements) {
 			for(Object method : checkedElements){
-				fSelectedClass.removeChild((MethodNode)method);
+				fSelectedClass.removeMethod((MethodNode)method);
 			}
 		}
 	}
@@ -168,7 +168,7 @@ public class ClassNodeDetailsPage extends GenericNodeDetailsPage{
 						MessageDialog.QUESTION_WITH_CANCEL, new String[] {"OK", "Cancel"}, 0);
 				if(infoDialog.open() == 0){
 					RootNode root = (RootNode)fSelectedClass.getParent(); 
-					root.removeChild(fSelectedClass);
+					root.removeClass(fSelectedClass);
 					fSelectedClass = null;
 					getParentBlock().selectNode(root);
 					updateModel(root);
