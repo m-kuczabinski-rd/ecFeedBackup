@@ -43,12 +43,12 @@ import org.eclipse.ui.forms.widgets.Section;
 import com.testify.ecfeed.ui.common.ColorConstants;
 import com.testify.ecfeed.ui.common.ColorManager;
 import com.testify.ecfeed.ui.common.Messages;
-import com.testify.ecfeed.ui.dialogs.PartitionSettingsDialog;
+import com.testify.ecfeed.ui.common.ModelUtils;
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.TestCaseNode;
-import com.testify.ecfeed.parsers.Constants;
+import com.testify.ecfeed.ui.common.Constants;
 
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Text;
@@ -274,7 +274,7 @@ public class PartitionNodeDetailsPage extends GenericNodeDetailsPage{
 				if(partitionValue != null){
 					return partitionValue.toString();
 				}
-				return Constants.NULL_VALUE_STRING_REPRESENTATION;
+				return com.testify.ecfeed.parsers.Constants.NULL_VALUE_STRING_REPRESENTATION;
 			}
 			
 			@Override
@@ -303,25 +303,28 @@ public class PartitionNodeDetailsPage extends GenericNodeDetailsPage{
 		createButton(buttonsComposite, "Add Partition...", new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e){
-				PartitionSettingsDialog dialog = new PartitionSettingsDialog(getActiveShell(), 
-						fSelectedPartition.getCategory(), null);
-				if(dialog.open() == Window.OK){
-					String partitionName = dialog.getPartitionName();
-					Object partitionValue = dialog.getPartitionValue();
-					PartitionNode newPartition = new PartitionNode(partitionName, partitionValue);
-					fSelectedPartition.addPartition(newPartition);
-					CategoryNode category = fSelectedPartition.getCategory(); 
-					MethodNode method = category.getMethod();
-					int categoryIndex = method.getCategories().indexOf(category);
-					//replace the current partition (that is abstract now) by newly created partition
-					for(TestCaseNode testCase : method.getTestCases()){
-						if(testCase.getTestData().get(categoryIndex) == fSelectedPartition){
-							testCase.getTestData().set(categoryIndex, newPartition);
-						}
-					}
-					
-					updateModel(fSelectedPartition);
+				String newPartitionName = Constants.DEFAULT_NEW_PARTITION_NAME;
+				int i = 1;
+				while(fSelectedPartition.getPartition(newPartitionName) != null){
+					newPartitionName = Constants.DEFAULT_NEW_PARTITION_NAME + "(" + i + ")";
+					i++;
 				}
+				Object value = ModelUtils.getDefaultExpectedValue(fSelectedPartition.getCategory().getType());
+				PartitionNode newPartition = new PartitionNode(newPartitionName, value);
+				fSelectedPartition.addPartition(newPartition);
+				updateModel(fSelectedPartition);
+				fPartitionsTable.setSelection(fSelectedPartition.getPartitions().size() - 1);
+				CategoryNode category = fSelectedPartition.getCategory(); 
+				MethodNode method = category.getMethod();
+				int categoryIndex = method.getCategories().indexOf(category);
+				//replace the current partition (that is abstract now) by newly created partition
+				for(TestCaseNode testCase : method.getTestCases()){
+					if(testCase.getTestData().get(categoryIndex) == fSelectedPartition){
+						testCase.getTestData().set(categoryIndex, newPartition);
+					}
+				}
+
+				updateModel(fSelectedPartition);
 			}
 		});
 
@@ -348,8 +351,7 @@ public class PartitionNodeDetailsPage extends GenericNodeDetailsPage{
 	}
 
 	private void renamePartition(String name) {
-		CategoryNode parent = (CategoryNode)fSelectedPartition.getParent();
-		if(parent.validatePartitionName(name)){
+		if(fSelectedPartition.getCategory().validatePartitionName(name) && fSelectedPartition.getSibling(name) == null){
 			fSelectedPartition.setName(name);
 			updateModel(fSelectedPartition);
 		}
@@ -395,13 +397,11 @@ public class PartitionNodeDetailsPage extends GenericNodeDetailsPage{
 		fPartitionNameText.setText(fSelectedPartition.getName());
 		fPartitionValueText.setText(fSelectedPartition.getValueString());
 		if(fSelectedPartition.isAbstract()){
-			fPartitionNameText.setEnabled(false);
 			fChangeNameButton.setEnabled(false);
 			fPartitionValueText.setEnabled(false);
 			fChangeValueButton.setEnabled(false);
 		}
 		else{
-			fPartitionNameText.setEnabled(true);
 			fChangeNameButton.setEnabled(true);
 			fPartitionValueText.setEnabled(true);
 			fChangeValueButton.setEnabled(true);

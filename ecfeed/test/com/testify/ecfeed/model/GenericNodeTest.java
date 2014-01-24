@@ -186,4 +186,22 @@ public class GenericNodeTest{
 		assertEquals(p1, category.getChild("p:p1"));
 		assertEquals(p1, p.getChild("p1"));
 	}
+	
+	@Test
+	public void getSiblingTest(){
+		CategoryNode cat = new CategoryNode("cat", "type");
+		PartitionNode p1 = new PartitionNode("p1", 0);
+		PartitionNode p2 = new PartitionNode("p2", 0);
+		
+		cat.addPartition(p1);
+		cat.addPartition(p2);
+		
+		assertTrue(p1.hasSibling("p2"));
+		assertFalse(p1.hasSibling("p1"));
+		
+		assertEquals(p2, p1.getSibling("p2"));
+		assertEquals(null, p1.getSibling("p1"));
+		assertEquals(null, p1.getSibling("some string"));
+		
+	}
 }

@@ -65,7 +65,7 @@ public class Constants {
 	
 	public static final String DEFAULT_TEST_SUITE_NAME = "default suite";
 	public static final String DEFAULT_CONSTRAINT_NAME = "constraint";
-	
+
 	public static final String DEFAULT_ECT_EDITOR_ID = "com.testify.ecfeed.editors.EcMultiPageEditor";
 
 	public static final int MAX_PARTITION_NAME_LENGTH = 64;

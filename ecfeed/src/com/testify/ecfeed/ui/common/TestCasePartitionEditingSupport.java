@@ -59,7 +59,7 @@ public class TestCasePartitionEditingSupport extends EditingSupport {
 			fComboCellEditor.setActivationStyle(ComboBoxViewerCellEditor.DROP_DOWN_ON_KEY_ACTIVATION | 
 					ComboBoxViewerCellEditor.DROP_DOWN_ON_MOUSE_ACTIVATION);
 		}
-		fComboCellEditor.setInput(partition.getCategory().getPartitions());
+		fComboCellEditor.setInput(partition.getCategory().getLeafPartitions());
 		fComboCellEditor.setValue(partition);
 		return fComboCellEditor;
 	}
@@ -89,7 +89,7 @@ public class TestCasePartitionEditingSupport extends EditingSupport {
 
 	@Override
 	protected void setValue(Object element, Object value) {
-		CategoryNode parent = (CategoryNode)((PartitionNode)element).getParent();
+		CategoryNode parent = ((PartitionNode)element).getCategory();
 		if(value instanceof String && parent instanceof ExpectedValueCategoryNode){
 			String valueString = (String)value;
 			if(parent.validatePartitionStringValue(valueString)){

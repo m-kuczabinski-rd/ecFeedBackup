@@ -19,6 +19,18 @@ public interface IGenericNode {
 	public boolean hasChildren();
 	public List<? extends IGenericNode> getChildren();
 	public IGenericNode getChild(String name);
+	
+	/*
+	 * Returns a sibling node with the provided name. If the node is the only one 
+	 * with the name, returns null
+	 */
+	public IGenericNode getSibling(String name);
+	
+	/*
+	 * Returns true if there is a sibling node with provided name 
+	 */
+	public boolean hasSibling(String name);
+	
 	public boolean removeChild(IGenericNode child);
 	public boolean removeChildren(Collection<IGenericNode> children);
 	public void moveChild(IGenericNode child, boolean moveUp);

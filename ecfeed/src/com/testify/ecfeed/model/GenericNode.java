@@ -120,6 +120,22 @@ public class GenericNode implements IGenericNode{
 	}
 
 	@Override
+	public IGenericNode getSibling(String name){
+		if(getParent() == null) return null;
+		for(IGenericNode sibling : getParent().getChildren()){
+			if(sibling.getName().equals(name) && sibling != this){
+				return sibling;
+			}
+		}
+		return null;
+	}
+	
+	@Override
+	public boolean hasSibling(String name){
+		return getSibling(name) != null;
+	}
+	
+	@Override
 	public void moveChild(IGenericNode child, boolean moveUp) {
 		int childIndex = getChildren().indexOf(child);
 		if(moveUp && childIndex > 0){

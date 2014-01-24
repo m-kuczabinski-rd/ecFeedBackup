@@ -22,7 +22,8 @@ public class Constants {
 	
 	public static final String DEFAULT_TEST_SUITE_NAME = "default suite";
 	public static final String DEFAULT_CONSTRAINT_NAME = "constraint";
-	
+	public static final String DEFAULT_NEW_PARTITION_NAME = "new partition";
+
 	public static final String DEFAULT_ECT_EDITOR_ID = "com.testify.ecfeed.editors.EcMultiPageEditor";
 	public static final String EXPECTED_VALUE_PARTITION_NAME = "@expected";
 	public static final boolean DEFAULT_EXPECTED_BOOLEAN_VALUE = false;

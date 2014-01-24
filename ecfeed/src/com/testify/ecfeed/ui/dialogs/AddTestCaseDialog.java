@@ -74,7 +74,11 @@ public class AddTestCaseDialog extends TitleAreaDialog implements InputChangedLi
 				fTestData.add(createAnonymuousPartition(expValCat));
 			}
 			else{
-				fTestData.add((PartitionNode)category.getChildren().get(0));
+				PartitionNode testValue = category.getPartitions().get(0);
+				while(testValue.isAbstract()){
+					testValue = testValue.getPartitions().get(0);
+				}
+				fTestData.add(testValue);
 			}
 		}
 		fMethod = method;

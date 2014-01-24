@@ -4,7 +4,7 @@ public class Constants {
 
 	public static final int MAX_MODEL_NAME_LENGTH = 64;
 	public static final int MAX_PARTITION_NAME_LENGTH = 64;
-
+	
 	public static final String TYPE_NAME_BOOLEAN = "boolean";
 	public static final String TYPE_NAME_BYTE = "byte";
 	public static final String TYPE_NAME_CHAR = "char";

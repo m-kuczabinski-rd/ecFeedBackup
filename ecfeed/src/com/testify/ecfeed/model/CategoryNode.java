@@ -87,8 +87,6 @@ public class CategoryNode extends GenericNode {
 		if(name.length() == 0) return false;
 		if(name.length() >= Constants.MAX_PARTITION_NAME_LENGTH) return false;
 		if(name.matches("[ ]+.*")) return false;
-
-		if(getPartition(name) != null) return false;
 		
 		return true;
 	}

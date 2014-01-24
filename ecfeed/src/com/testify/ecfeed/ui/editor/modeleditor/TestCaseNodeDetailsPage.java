@@ -150,7 +150,7 @@ public class TestCaseNodeDetailsPage extends GenericNodeDetailsPage implements I
 			@Override
 			public String getText(Object element){
 				PartitionNode testValue = (PartitionNode)element;
-				CategoryNode parent = (CategoryNode)testValue.getParent();
+				CategoryNode parent = testValue.getCategory();
 				return parent.toString();
 			}
 			@Override

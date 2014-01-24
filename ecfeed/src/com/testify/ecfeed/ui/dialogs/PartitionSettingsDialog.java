@@ -33,7 +33,7 @@ import com.testify.ecfeed.model.PartitionNode;
 import org.eclipse.wb.swt.SWTResourceManager;
 
 public class PartitionSettingsDialog extends TitleAreaDialog {
-	private CategoryNode fParent;
+	private CategoryNode fCategory;
 	private PartitionNode fPartition;
 	private Text fNameText;
 	private Text fValueText;
@@ -51,7 +51,7 @@ public class PartitionSettingsDialog extends TitleAreaDialog {
 	 */
 	public PartitionSettingsDialog(Shell parentShell, CategoryNode parent, PartitionNode partition) {
 		super(parentShell);
-		fParent = parent;
+		fCategory = parent;
 		fPartition = partition;
 		setHelpAvailable(false);
 	}
@@ -118,12 +118,12 @@ public class PartitionSettingsDialog extends TitleAreaDialog {
 		boolean inputValid = true;
 		String errorTitle = "";
 		String errorMessage = "";
-		if(!fParent.validatePartitionStringValue(fValueText.getText())){
+		if(!fCategory.validatePartitionStringValue(fValueText.getText())){
 			inputValid = false;
 			errorTitle = Messages.DIALOG_PARTITION_VALUE_PROBLEM_TITLE;
 			errorMessage = Messages.DIALOG_PARTITION_VALUE_PROBLEM_MESSAGE;
 		}
-		if(!fParent.validatePartitionName(fNameText.getText())){
+		if(!fCategory.validatePartitionName(fNameText.getText())){
 			inputValid = false;
 			errorTitle = Messages.DIALOG_PARTITION_NAME_PROBLEM_TITLE;
 			errorMessage = Messages.DIALOG_PARTITION_NAME_PROBLEM_MESSAGE;
@@ -162,7 +162,7 @@ public class PartitionSettingsDialog extends TitleAreaDialog {
 	@Override
 	protected void okPressed() {
 		fPartitionName = fNameText.getText();
-		fPartitionValue = fParent.getPartitionValueFromString(fValueText.getText());
+		fPartitionValue = fCategory.getPartitionValueFromString(fValueText.getText());
 		super.okPressed();
 	}
 

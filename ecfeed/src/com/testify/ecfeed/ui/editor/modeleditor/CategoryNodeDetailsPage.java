@@ -38,15 +38,15 @@ import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.layout.RowLayout;
 
-import com.testify.ecfeed.constants.Constants;
 import com.testify.ecfeed.constants.DialogStrings;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.PartitionNode;
+import com.testify.ecfeed.ui.common.Constants;
 import com.testify.ecfeed.ui.common.ColorConstants;
 import com.testify.ecfeed.ui.common.ColorManager;
 import com.testify.ecfeed.ui.common.Messages;
-import com.testify.ecfeed.ui.dialogs.PartitionSettingsDialog;
+import com.testify.ecfeed.ui.common.ModelUtils;
 import com.testify.ecfeed.ui.editor.IModelUpdateListener;
 
 public class CategoryNodeDetailsPage extends GenericNodeDetailsPage implements IModelUpdateListener{
@@ -82,7 +82,10 @@ public class CategoryNodeDetailsPage extends GenericNodeDetailsPage implements I
 
 		@Override
 		protected void setValue(Object element, Object value) {
-			if(!fSelectedCategory.validatePartitionName((String)value)){
+			String newName = (String)value;
+			PartitionNode partition = (PartitionNode)element;
+			if(!fSelectedCategory.validatePartitionName(newName) || 
+					partition.hasSibling(newName)){
 				MessageDialog dialog = new MessageDialog(getActiveShell(), 
 						Messages.DIALOG_PARTITION_NAME_PROBLEM_TITLE, 
 						Display.getDefault().getSystemImage(SWT.ICON_ERROR), 
@@ -208,7 +211,7 @@ public class CategoryNodeDetailsPage extends GenericNodeDetailsPage implements I
 				if(partitionValue != null){
 					return partitionValue.toString();
 				}
-				return Constants.NULL_VALUE_STRING_REPRESENTATION;
+				return com.testify.ecfeed.parsers.Constants.NULL_VALUE_STRING_REPRESENTATION;
 			}
 			
 			@Override
@@ -238,14 +241,17 @@ public class CategoryNodeDetailsPage extends GenericNodeDetailsPage implements I
 		createButton(buttonsComposite, "Add Partition...", new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e){
-				PartitionSettingsDialog dialog = new PartitionSettingsDialog(getActiveShell(), 
-						fSelectedCategory, null);
-				if(dialog.open() == Window.OK){
-					String partitionName = dialog.getPartitionName();
-					Object partitionValue = dialog.getPartitionValue();
-					fSelectedCategory.addPartition(new PartitionNode(partitionName, partitionValue));
-					updateModel(fSelectedCategory);
+				String newPartitionName = Constants.DEFAULT_NEW_PARTITION_NAME;
+				int i = 1;
+				while(fSelectedCategory.getPartition(newPartitionName) != null){
+					newPartitionName = Constants.DEFAULT_NEW_PARTITION_NAME + "(" + i + ")";
+					i++;
 				}
+				Object value = ModelUtils.getDefaultExpectedValue(fSelectedCategory.getType());
+				PartitionNode newPartition = new PartitionNode(newPartitionName, value);
+				fSelectedCategory.addPartition(newPartition);
+				updateModel(fSelectedCategory);
+				fPartitionsTable.setSelection(fSelectedCategory.getPartitions().size() - 1);
 			}
 		});
 	
