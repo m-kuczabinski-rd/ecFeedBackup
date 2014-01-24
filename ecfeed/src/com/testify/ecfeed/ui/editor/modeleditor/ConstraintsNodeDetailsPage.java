@@ -316,7 +316,7 @@ public class ConstraintsNodeDetailsPage extends GenericNodeDetailsPage {
 		if(fSelectedStatement instanceof Statement){
 			PartitionNode condition = ((Statement)fSelectedStatement).getCondition();
 			CategoryNode parentCategory = condition.getCategory();
-			fConditionCombo.setItems(parentCategory.getLeafPartitionNames().toArray(new String[]{}));
+			fConditionCombo.setItems(parentCategory.getAllPartitionNames().toArray(new String[]{}));
 			fConditionCombo.setText(condition.getName());
 		}
 		fConditionCombo.addModifyListener(new ModifyListener() {
