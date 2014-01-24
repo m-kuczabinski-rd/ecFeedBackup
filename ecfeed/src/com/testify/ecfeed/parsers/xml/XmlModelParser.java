@@ -274,7 +274,13 @@ public class XmlModelParser implements IModelParser{
 		String name = getElementName(element);
 		String valueString = getAttributeValue(element, Constants.VALUE_ATTRIBUTE);
 		Object value = parseValue(valueString, typeSignature);
-		return new PartitionNode(name, value);
+		PartitionNode partition = new PartitionNode(name, value);
+		for(Element child : getIterableElements(element.getChildElements())){
+			if(child.getLocalName() == Constants.PARTITION_NODE_NAME){
+				partition.addPartition(parsePartitionElement(child, typeSignature));
+			}
+		}
+		return partition;
 	}
 
 	protected Object parseValue(String valueString, String type) {
