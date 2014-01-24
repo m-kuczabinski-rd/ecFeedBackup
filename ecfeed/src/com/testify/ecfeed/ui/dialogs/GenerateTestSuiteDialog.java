@@ -95,6 +95,9 @@ public class GenerateTestSuiteDialog extends TitleAreaDialog {
 			if(element instanceof CategoryNode){
 				return ((CategoryNode)element).getPartitions().toArray();
 			}
+			if(element instanceof PartitionNode){
+				return ((PartitionNode)element).getPartitions().toArray();
+			}
 			return EMPTY_ARRAY;
 		}
 		
@@ -151,7 +154,6 @@ public class GenerateTestSuiteDialog extends TitleAreaDialog {
 		setShellStyle(SWT.BORDER | SWT.RESIZE | SWT.TITLE);
 		fMethod = method;
 		fGeneratorFactory = new GeneratorFactory<PartitionNode>();
-//		fAvaliableGenerators = getAvailableGenerators();
 	}
 	
 	public List<List<PartitionNode>> getAlgorithmInput(){
@@ -384,7 +386,6 @@ public class GenerateTestSuiteDialog extends TitleAreaDialog {
 		fGeneratorCombo.addModifyListener(new ModifyListener() {
 			@Override
 			public void modifyText(ModifyEvent e) {
-//				fSelectedGenerator = fAvaliableGenerators.get(fGeneratorCombo.getText());
 				try {
 					fSelectedGenerator = fGeneratorFactory.getGenerator(fGeneratorCombo.getText());
 					createParametersComposite(parent, fSelectedGenerator.parameters());
@@ -401,12 +402,6 @@ public class GenerateTestSuiteDialog extends TitleAreaDialog {
 			fGeneratorCombo.setText(availableGenerators[0]);
 			setOkButton(true);
 		}
-//		if(fAvaliableGenerators.size() > 0){
-//			String[] generatorNames = fAvaliableGenerators.keySet().toArray(new String[]{}); 
-//			fGeneratorCombo.setItems(generatorNames);
-//			fGeneratorCombo.setText(generatorNames[0]);
-//			setOkButton(true);
-//		}
 	}
 
 	private void createParametersComposite(Composite parent, List<IGeneratorParameter> parameters) {
@@ -505,7 +500,6 @@ public class GenerateTestSuiteDialog extends TitleAreaDialog {
 		spinner.addModifyListener(new ModifyListener() {
 			@Override
 			public void modifyText(ModifyEvent e) {
-//				fParameters.put(definition.getName(), Integer.parseInt(spinner.getText()));
 				fParameters.put(definition.getName(), spinner.getSelection());
 			}
 		});
@@ -590,7 +584,7 @@ public class GenerateTestSuiteDialog extends TitleAreaDialog {
 				partitions.add(category.getDefaultValuePartition());
 			}
 			else{
-				for(PartitionNode partition : categories.get(i).getPartitions()){
+				for(PartitionNode partition : categories.get(i).getLeafPartitions()){
 					if(fCategoriesViewer.getChecked(partition)){
 						partitions.add(partition);
 					}
