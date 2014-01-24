@@ -306,7 +306,7 @@ public class PartitionNodeDetailsPage extends GenericNodeDetailsPage{
 				String newPartitionName = Constants.DEFAULT_NEW_PARTITION_NAME;
 				int i = 1;
 				while(fSelectedPartition.getPartition(newPartitionName) != null){
-					newPartitionName = Constants.DEFAULT_NEW_PARTITION_NAME + "(" + i + ")";
+					newPartitionName = Constants.DEFAULT_NEW_PARTITION_NAME + "_" + i;
 					i++;
 				}
 				Object value = ModelUtils.getDefaultExpectedValue(fSelectedPartition.getCategory().getType());

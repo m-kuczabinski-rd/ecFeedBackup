@@ -244,7 +244,7 @@ public class CategoryNodeDetailsPage extends GenericNodeDetailsPage implements I
 				String newPartitionName = Constants.DEFAULT_NEW_PARTITION_NAME;
 				int i = 1;
 				while(fSelectedCategory.getPartition(newPartitionName) != null){
-					newPartitionName = Constants.DEFAULT_NEW_PARTITION_NAME + "(" + i + ")";
+					newPartitionName = Constants.DEFAULT_NEW_PARTITION_NAME + "_" + i;
 					i++;
 				}
 				Object value = ModelUtils.getDefaultExpectedValue(fSelectedCategory.getType());
