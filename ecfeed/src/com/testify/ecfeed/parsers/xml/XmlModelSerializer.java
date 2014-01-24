@@ -211,11 +211,11 @@ public class XmlModelSerializer {
 			Statement statement = (Statement)istatement;
 			Element statementElement = new Element(Constants.CONSTRAINT_STATEMENT_NODE_NAME);
 			PartitionNode condition = statement.getCondition();
-			String categoryName = condition.getParent().getName();
+			String categoryName = condition.getCategory().getName();
 			Attribute categoryAttribute = 
 					new Attribute(Constants.STATEMENT_CATEGORY_ATTRIBUTE_NAME, categoryName);
 			Attribute partitionAttribute = 
-					new Attribute(Constants.STATEMENT_PARTITION_ATTRIBUTE_NAME, condition.getName());
+					new Attribute(Constants.STATEMENT_PARTITION_ATTRIBUTE_NAME, condition.getQualifiedName());
 			Attribute relationAttribute = 
 					new Attribute(Constants.STATEMENT_RELATION_ATTRIBUTE_NAME, statement.getRelation().toString());
 			statementElement.addAttribute(categoryAttribute);
