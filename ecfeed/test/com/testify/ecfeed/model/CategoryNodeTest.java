@@ -96,6 +96,25 @@ public class CategoryNodeTest{
 	}
 
 	@Test
+	public void getLeafPartitionNamesTest() {
+		CategoryNode category = new CategoryNode("category", "type");
+		PartitionNode p1 = new PartitionNode("p1", 0); 
+		PartitionNode p11 = new PartitionNode("p11", 0); 
+		PartitionNode p12 = new PartitionNode("p12", 0); 
+		PartitionNode p2 = new PartitionNode("p2", 0);
+		p1.addPartition(p11);
+		p1.addPartition(p12);
+		category.addPartition(p1);
+		category.addPartition(p2);
+		
+		List<String> leafNames = category.getLeafPartitionNames();
+		assertTrue(leafNames.contains("p1:p11"));
+		assertTrue(leafNames.contains("p1:p12"));
+		assertTrue(leafNames.contains("p2"));
+		assertFalse(leafNames.contains("p1"));
+	}
+
+	@Test
 	public void getMethodTest() {
 		MethodNode method = new MethodNode("method");
 		CategoryNode category = new CategoryNode("category", "type");
