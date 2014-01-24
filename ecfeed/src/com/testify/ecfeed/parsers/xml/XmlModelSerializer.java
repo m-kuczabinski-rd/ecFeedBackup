@@ -120,7 +120,7 @@ public class XmlModelSerializer {
 	protected void createTestParameterElement(Element testCaseElement,
 			PartitionNode parameter) {
 		Element testParameterElement = new Element(Constants.TEST_PARAMETER_NODE_NAME);
-		Attribute partitionNameAttribute = new Attribute(Constants.PARTITION_ATTRIBUTE_NAME, parameter.getName());
+		Attribute partitionNameAttribute = new Attribute(Constants.PARTITION_ATTRIBUTE_NAME, parameter.getQualifiedName());
 		testParameterElement.addAttribute(partitionNameAttribute);
 		testCaseElement.appendChild(testParameterElement);
 	}
