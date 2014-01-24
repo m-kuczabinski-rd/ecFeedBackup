@@ -293,10 +293,6 @@ public class ConstraintsNodeDetailsPage extends GenericNodeDetailsPage {
 		fRelationCombo.setItems(new String[]{
 				Relation.EQUAL.toString(),
 				Relation.NOT.toString(),
-//				Relation.GREATER_EQUAL.toString(),
-//				Relation.GREATER.toString(),
-//				Relation.LESS_EQUAL.toString(),
-//				Relation.LESS.toString()
 		});
 		if(fSelectedStatement instanceof Statement){
 			fRelationCombo.setText(((Statement)fSelectedStatement).getRelation().toString());
