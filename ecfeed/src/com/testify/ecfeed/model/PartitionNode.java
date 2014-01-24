@@ -75,6 +75,27 @@ public class PartitionNode extends GenericNode {
 		return fPartitions;
 	}
 	
+	public List<String> getAllDescendantsNames() {
+		List<String> names = new ArrayList<String>();
+		for(PartitionNode child : fPartitions){
+			names.add(child.getQualifiedName());
+			names.addAll(child.getAllDescendantsNames());
+		}
+		return names;
+	}
+
+	/*
+	 * Returns name of this partition and names of all parent partitions
+	 */
+	public List<String> getAllAncestorsNames(){
+		List<String> names = new ArrayList<String>();
+		names.add(getName());
+		if(getParent() instanceof PartitionNode){
+			names.addAll(((PartitionNode)getParent()).getAllAncestorsNames());
+		}
+		return names;
+	}
+
 	public void addPartition(PartitionNode partition){
 		fPartitions.add(partition);
 		partition.setParent(this);
@@ -103,18 +124,6 @@ public class PartitionNode extends GenericNode {
 			}
 		}
 		return false;
-	}
-	
-	/*
-	 * Returns name of this partition and names of all parent partitions
-	 */
-	public List<String> getAllNames(){
-		List<String> names = new ArrayList<String>();
-		names.add(getName());
-		if(getParent() instanceof PartitionNode){
-			names.addAll(((PartitionNode)getParent()).getAllNames());
-		}
-		return names;
 	}
 	
 	public boolean isAbstract(){

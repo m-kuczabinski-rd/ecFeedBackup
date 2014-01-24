@@ -13,6 +13,8 @@ package com.testify.ecfeed.model;
 
 import static org.junit.Assert.*;
 
+import java.util.List;
+
 import org.junit.Test;
 
 import com.testify.ecfeed.model.CategoryNode;
@@ -194,6 +196,33 @@ public class PartitionNodeTest{
 		p.addPartition(q);
 		
 		assertEquals(p.getName() + ":" + q.getName(), q.getQualifiedName());
+	}
+	
+	@Test
+	public void getAllDescendantsTest(){
+		PartitionNode p = new PartitionNode("p", 0);
+		PartitionNode p1 = new PartitionNode("p1", 0);
+		PartitionNode p11 = new PartitionNode("p11", 0);
+		PartitionNode p12 = new PartitionNode("p12", 0);
+		PartitionNode p111 = new PartitionNode("p111", 0);
+		PartitionNode p112 = new PartitionNode("p112", 0);
+		PartitionNode p2 = new PartitionNode("p2", 0);
+		
+		p.addPartition(p1);
+		p.addPartition(p2);
+		p1.addPartition(p11);
+		p1.addPartition(p12);
+		p11.addPartition(p111);
+		p11.addPartition(p112);
+		
+		List<String> names = p.getAllDescendantsNames();
+		assertTrue(names.contains("p:p1"));
+		assertTrue(names.contains("p:p1:p11"));
+		assertTrue(names.contains("p:p1:p12"));
+		assertTrue(names.contains("p:p1:p11:p111"));
+		assertTrue(names.contains("p:p1:p11:p112"));
+		assertTrue(names.contains("p:p2"));
+		
 	}
 	
 }

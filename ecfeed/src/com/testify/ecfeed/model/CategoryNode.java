@@ -61,6 +61,15 @@ public class CategoryNode extends GenericNode {
 		return names;
 	}
 
+	public List<String> getAllPartitionNames(){
+		List<String> names = new ArrayList<String>();
+		for(PartitionNode child : getPartitions()){
+			names.add(child.getQualifiedName());
+			names.addAll(child.getAllDescendantsNames());
+		}
+		return names;
+	}
+	
 	public List<String> getLeafPartitionNames(){
 		List<PartitionNode> leafPartitions = getLeafPartitions();
 		List<String> names = new ArrayList<String>();

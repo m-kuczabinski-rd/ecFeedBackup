@@ -115,6 +115,27 @@ public class CategoryNodeTest{
 	}
 
 	@Test
+	public void getAllPartitionNamesTest(){
+		CategoryNode category = new CategoryNode("category", "type");
+		PartitionNode p1 = new PartitionNode("p1", 0); 
+		PartitionNode p11 = new PartitionNode("p11", 0); 
+		PartitionNode p12 = new PartitionNode("p12", 0); 
+		PartitionNode p2 = new PartitionNode("p2", 0);
+		p1.addPartition(p11);
+		p1.addPartition(p12);
+		category.addPartition(p1);
+		category.addPartition(p2);
+		
+		List<String> names = category.getAllPartitionNames();
+		
+		assertTrue(names.contains("p1"));
+		assertTrue(names.contains("p1:p11"));
+		assertTrue(names.contains("p1:p12"));
+		assertTrue(names.contains("p2"));
+	}
+	
+	
+	@Test
 	public void getMethodTest() {
 		MethodNode method = new MethodNode("method");
 		CategoryNode category = new CategoryNode("category", "type");
