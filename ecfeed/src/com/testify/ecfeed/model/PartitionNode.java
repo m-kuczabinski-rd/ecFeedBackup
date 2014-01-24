@@ -161,6 +161,6 @@ public class PartitionNode extends GenericNode {
 	}
 	
 	public String toString(){
-		return getQualifiedName() + ": " + getValueString();
+		return getQualifiedName() + " [" + getValueString() + "]";
 	}
 }
