@@ -154,6 +154,7 @@ public class PartitionNodeDetailsPage extends GenericNodeDetailsPage{
 	 */
 	public PartitionNodeDetailsPage(ModelMasterDetailsBlock parentBlock) {
 		super(parentBlock);
+		fColorManager = new ColorManager();
 	}
 
 	/**
