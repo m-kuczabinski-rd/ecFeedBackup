@@ -53,7 +53,7 @@ public class CategoryNode extends GenericNode {
 		return leafs;
 	}
 	
-	public ArrayList<String> getPartitionNames() {
+	public List<String> getPartitionNames() {
 		ArrayList<String> names = new ArrayList<String>();
 		for(PartitionNode partition : getPartitions()){
 			names.add(partition.getName());
@@ -61,6 +61,15 @@ public class CategoryNode extends GenericNode {
 		return names;
 	}
 
+	public List<String> getLeafPartitionNames(){
+		List<PartitionNode> leafPartitions = getLeafPartitions();
+		List<String> names = new ArrayList<String>();
+		for(PartitionNode leaf : leafPartitions){
+			names.add(leaf.getQualifiedName());
+		}
+		return names;
+	}
+	
 	public boolean removePartition(PartitionNode partition){
 		if(fPartitions.contains(partition) && fPartitions.remove(partition)){
 			MethodNode parent = getMethod();
