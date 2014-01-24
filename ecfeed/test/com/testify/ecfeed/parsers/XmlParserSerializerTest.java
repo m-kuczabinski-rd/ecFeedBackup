@@ -56,7 +56,7 @@ public class XmlParserSerializerTest {
 			Constants.TYPE_NAME_LONG, Constants.TYPE_NAME_SHORT, Constants.TYPE_NAME_STRING
 	};
 
-//	@Test
+	@Test
 	public void test() {
 		try {
 		for(int i = 0; i < TEST_RUNS; ++i){
@@ -285,11 +285,11 @@ public class XmlParserSerializerTest {
 			fail("basicCategories.size() == 0");
 		}
 		CategoryNode category = basicCategories.get(rand.nextInt(basicCategories.size()));
-		PartitionNode partition = category.getPartitions().get(rand.nextInt(category.getPartitions().size()));
+		PartitionNode partition = category.getLeafPartitions().get(rand.nextInt(category.getPartitions().size()));
 		Relation relation;
-		switch(rand.nextInt(6)){
+		switch(rand.nextInt(2)){
 		case 0: relation = Relation.EQUAL;
-		case 3: relation = Relation.NOT;
+		case 1: relation = Relation.NOT;
 		default: relation = Relation.EQUAL;
 		}
 		return new Statement(partition, relation);
