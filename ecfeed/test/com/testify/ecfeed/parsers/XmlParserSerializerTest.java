@@ -43,6 +43,7 @@ public class XmlParserSerializerTest {
 	private final int MAX_CATEGORIES = 5;
 	private final int MAX_EXPECTED_CATEGORIES = 3;
 	private final int MAX_PARTITIONS = 10;
+	private final int MAX_PARTITION_LEVELS = 5;
 	private final int MAX_CONSTRAINTS = 5;
 	private final int MAX_TEST_CASES = 50;
 	
@@ -55,7 +56,7 @@ public class XmlParserSerializerTest {
 			Constants.TYPE_NAME_LONG, Constants.TYPE_NAME_SHORT, Constants.TYPE_NAME_STRING
 	};
 
-	@Test
+//	@Test
 	public void test() {
 		try {
 		for(int i = 0; i < TEST_RUNS; ++i){
@@ -76,6 +77,39 @@ public class XmlParserSerializerTest {
 		}
 	}
 
+	@Test
+	public void parsePartitionTest(){
+		try{
+			RootNode root = new RootNode("root");
+			ClassNode classNode = new ClassNode("classNode");
+			MethodNode method = new MethodNode("method");
+			CategoryNode category = new CategoryNode("category", com.testify.ecfeed.model.Constants.TYPE_NAME_STRING);
+			PartitionNode partition = new PartitionNode("partition", "A                 B");
+			List<PartitionNode> testData = new ArrayList<PartitionNode>();
+			testData.add(partition);
+			TestCaseNode testCase = new TestCaseNode("test", testData);
+
+			root.addClass(classNode);
+			classNode.addMethod(method);
+			method.addCategory(category);
+			category.addPartition(partition);
+			method.addTestCase(testCase);
+
+			ByteArrayOutputStream ostream = new ByteArrayOutputStream();
+			XmlModelSerializer serializer = new XmlModelSerializer(ostream);
+			XmlModelParser parser = new XmlModelParser();
+			serializer.writeXmlDocument(root);
+			ByteArrayInputStream istream = new ByteArrayInputStream(ostream.toByteArray());
+			RootNode parsedModel = parser.parseModel(istream);
+			compareModels(root, parsedModel);
+		}
+		catch (IOException e) {
+			fail("Unexpected exception");
+		} catch (ParserException e) {
+			fail("Unexpected exception: " + e.getMessage());
+		}
+	}
+	
 	protected RootNode createRootNode(int classes) {
 		RootNode root = new RootNode(randomName());
 		for(int i = 0; i < classes; ++i){
@@ -145,7 +179,7 @@ public class XmlParserSerializerTest {
 	private CategoryNode createCategory(String type, int numOfPartitions) {
 		CategoryNode category = new CategoryNode(randomName(), type);
 		for(int i = 0; i < numOfPartitions; i++){
-			category.addPartition(createPartition(type));
+			category.addPartition(createPartition(type, 1));
 		}
 		return category;
 	}
@@ -205,9 +239,17 @@ public class XmlParserSerializerTest {
 		return result;
 	}
 
-	private PartitionNode createPartition(String type) {
+	private PartitionNode createPartition(String type, int level) {
 		Object value = createRandomValue(type);
-		return new PartitionNode(randomName(), value);
+		PartitionNode partition = new PartitionNode(randomName(), value); 
+		boolean createChildren = rand.nextBoolean();
+		int numOfChildren = rand.nextInt(MAX_PARTITIONS);
+		if(createChildren && level <= MAX_PARTITION_LEVELS){
+			for(int i = 0; i < numOfChildren; i++){
+				partition.addPartition(createPartition(type, level + 1));
+			}
+		}
+		return partition;
 	}
 
 
@@ -306,7 +348,7 @@ public class XmlParserSerializerTest {
 			List<? extends CategoryNode> categories) {
 		List<List<PartitionNode>> result = new ArrayList<List<PartitionNode>>();
 		for(CategoryNode category : categories){
-			result.add(category.getPartitions());
+			result.add(category.getLeafPartitions());
 		}
 		return result;
 	}

@@ -44,7 +44,9 @@ public class XmlModelSerializer {
 		Element rootElement = createElement(root);
 		Document document = new Document(rootElement);
 		Serializer serializer = new Serializer(fOutputStream);
-		serializer.setIndent(4);
+		// Uncomment for pretty formatting. This however will affect 
+		// whitespaces in the document's ... infoset
+		//serializer.setIndent(4);
 		serializer.write(document);
 	}
 
@@ -74,6 +76,7 @@ public class XmlModelSerializer {
 			Object value = ((PartitionNode)node).getValue();
 			String type = ((PartitionNode)node).getCategory().getType();
 			element = createPartitionElement(type, name, value);
+			
 		}
 		else if (node instanceof TestCaseNode){
 			List<PartitionNode> testData = ((TestCaseNode)node).getTestData();
