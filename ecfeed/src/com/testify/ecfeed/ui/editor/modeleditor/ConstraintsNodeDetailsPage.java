@@ -184,7 +184,6 @@ public class ConstraintsNodeDetailsPage extends GenericNodeDetailsPage {
 				Object selectedElement = ((StructuredSelection)event.getSelection()).getFirstElement();
 				if(selectedElement instanceof BasicStatement){
 					fSelectedStatement = (BasicStatement)selectedElement;
-//					boolean enableAddStatementButton = (fSelectedStatement.getParent() != null);
 					boolean enableAddStatementButton = (fSelectedStatement instanceof StatementArray 
 							|| fSelectedStatement.getParent() != null);
 					boolean enableRemoveStatementButton = (fSelectedStatement.getParent() != null);
