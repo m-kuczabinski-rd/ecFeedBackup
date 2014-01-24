@@ -87,6 +87,6 @@ public class Statement extends BasicStatement{
 	
 	@Override
 	public String toString(){
-		return fCondition.getParent().getName() + " " + fRelation + " " + fCondition.getName();
+		return fCondition.getParent().getName() + " " + fRelation + " " + fCondition.getQualifiedName();
 	}
 }
