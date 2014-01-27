@@ -38,7 +38,6 @@ import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.layout.RowLayout;
 
-import com.testify.ecfeed.constants.DialogStrings;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.PartitionNode;
@@ -259,9 +258,9 @@ public class CategoryNodeDetailsPage extends GenericNodeDetailsPage implements I
 			@Override
 			public void widgetSelected(SelectionEvent e){
 				MessageDialog dialog = new MessageDialog(getActiveShell(), 
-						DialogStrings.DIALOG_REMOVE_PARTITIONS_TITLE, 
+						Messages.DIALOG_REMOVE_PARTITIONS_TITLE, 
 						Display.getDefault().getSystemImage(SWT.ICON_WARNING), 
-						DialogStrings.DIALOG_REMOVE_PARTITIONS_MESSAGE,
+						Messages.DIALOG_REMOVE_PARTITIONS_MESSAGE,
 						MessageDialog.QUESTION_WITH_CANCEL, 
 						new String[] {IDialogConstants.OK_LABEL, IDialogConstants.CANCEL_LABEL},
 						IDialogConstants.OK_ID);
@@ -272,9 +271,9 @@ public class CategoryNodeDetailsPage extends GenericNodeDetailsPage implements I
 						}
 						else{
 							MessageDialog dlg = new MessageDialog(getActiveShell(), 
-									DialogStrings.DIALOG_REMOVE_LAST_PARTITION_TITLE, 
+									Messages.DIALOG_REMOVE_LAST_PARTITION_TITLE, 
 									Display.getDefault().getSystemImage(SWT.ICON_INFORMATION), 
-									DialogStrings.DIALOG_REMOVE_LAST_PARTITION_MESSAGE,
+									Messages.DIALOG_REMOVE_LAST_PARTITION_MESSAGE,
 									MessageDialog.INFORMATION, 
 									new String[] {IDialogConstants.OK_LABEL},
 									IDialogConstants.OK_ID);

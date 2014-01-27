@@ -42,7 +42,6 @@ import org.eclipse.ui.forms.IFormPart;
 import org.eclipse.ui.forms.widgets.ExpandableComposite;
 import org.eclipse.ui.forms.widgets.Section;
 
-import com.testify.ecfeed.constants.DialogStrings;
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.ConstraintNode;
 import com.testify.ecfeed.model.PartitionNode;
@@ -53,6 +52,7 @@ import com.testify.ecfeed.model.constraint.Relation;
 import com.testify.ecfeed.model.constraint.Statement;
 import com.testify.ecfeed.model.constraint.StatementArray;
 import com.testify.ecfeed.model.constraint.StaticStatement;
+import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.common.ModelUtils;
 
 public class ConstraintsNodeDetailsPage extends GenericNodeDetailsPage {
@@ -155,9 +155,9 @@ public class ConstraintsNodeDetailsPage extends GenericNodeDetailsPage {
 		}
 		else{
 			MessageDialog dialog = new MessageDialog(Display.getDefault().getActiveShell(), 
-					DialogStrings.DIALOG_CONSTRAINT_NAME_PROBLEM_TITLE, 
+					Messages.DIALOG_CONSTRAINT_NAME_PROBLEM_TITLE, 
 					Display.getDefault().getSystemImage(SWT.ICON_ERROR), 
-					DialogStrings.DIALOG_CONSTRAINT_NAME_PROBLEM_MESSAGE,
+					Messages.DIALOG_CONSTRAINT_NAME_PROBLEM_MESSAGE,
 					MessageDialog.ERROR, new String[] {"OK"}, 0);
 			dialog.open();
 			fConstraintNameCombo.setText(fSelectedConstraint.getName());

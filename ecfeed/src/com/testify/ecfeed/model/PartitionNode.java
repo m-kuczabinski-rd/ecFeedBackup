@@ -14,7 +14,7 @@ package com.testify.ecfeed.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.testify.ecfeed.constants.Constants;
+import com.testify.ecfeed.model.Constants;
 
 public class PartitionNode extends GenericNode {
 

@@ -31,10 +31,10 @@ import org.eclipse.core.runtime.*;
 import org.eclipse.core.resources.*;
 import org.eclipse.core.runtime.CoreException;
 
-import com.testify.ecfeed.constants.Constants;
-import com.testify.ecfeed.constants.DialogStrings;
+import com.testify.ecfeed.ui.common.Constants;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.parsers.xml.XmlModelSerializer;
+import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.editor.EcMultiPageEditor;
 
 public class NewEcFileWizard extends Wizard implements INewWizard {
@@ -49,12 +49,12 @@ public class NewEcFileWizard extends Wizard implements INewWizard {
 	}
 	
 	public void addPages() {
-		fPage = new WizardNewFileCreationPage(DialogStrings.WIZARD_NEW_ECT_FILE_TITLE, fSelection);
+		fPage = new WizardNewFileCreationPage(Messages.WIZARD_NEW_ECT_FILE_TITLE, fSelection);
 		fPage.setFileName(Constants.DEFAULT_NEW_ECT_FILE_NAME);
 		fPage.setAllowExistingResources(true);
 		fPage.setFileExtension(Constants.EQUIVALENCE_CLASS_FILE_EXTENSION);
-		fPage.setTitle(DialogStrings.WIZARD_NEW_ECT_FILE_TITLE);
-		fPage.setDescription(DialogStrings.WIZARD_NEW_ECT_FILE_MESSAGE);
+		fPage.setTitle(Messages.WIZARD_NEW_ECT_FILE_TITLE);
+		fPage.setDescription(Messages.WIZARD_NEW_ECT_FILE_MESSAGE);
 
 		addPage(fPage);
 	}
@@ -65,9 +65,9 @@ public class NewEcFileWizard extends Wizard implements INewWizard {
 
 			if(file.getContents().read() != -1){
 				MessageDialog dialog = new MessageDialog(getShell(), 
-						DialogStrings.WIZARD_FILE_EXISTS_TITLE, 
+						Messages.WIZARD_FILE_EXISTS_TITLE, 
 						Display.getDefault().getSystemImage(SWT.ICON_QUESTION), 
-						DialogStrings.WIZARD_FILE_EXISTS_MESSAGE,
+						Messages.WIZARD_FILE_EXISTS_MESSAGE,
 						MessageDialog.QUESTION_WITH_CANCEL, 
 						new String[] {IDialogConstants.OK_LABEL, IDialogConstants.CANCEL_LABEL}, 
 						IDialogConstants.OK_ID);
