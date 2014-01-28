@@ -63,4 +63,11 @@ public class DoubleParameter extends AbstractParameter {
 		return (intValue >= fMinValue && intValue <= fMaxValue);
 	}
 
+	public double getMin(){
+		return fMinValue;
+	}
+
+	public double getMax(){
+		return fMaxValue;
+	}
 }

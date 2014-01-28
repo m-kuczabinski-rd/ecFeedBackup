@@ -55,7 +55,9 @@ import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.model.constraint.Constraint;
+import com.testify.ecfeed.generators.DoubleParameter;
 import com.testify.ecfeed.generators.GeneratorFactory;
+import com.testify.ecfeed.generators.IntegerParameter;
 import com.testify.ecfeed.generators.api.GeneratorException;
 import com.testify.ecfeed.generators.api.IConstraint;
 import com.testify.ecfeed.generators.api.IGenerator;
@@ -431,10 +433,10 @@ public class GenerateTestSuiteDialog extends TitleAreaDialog {
 			else{
 				switch(definition.getType()){
 				case INTEGER:
-					createIntegerParameterEdit(parent, definition);
+					createIntegerParameterEdit(parent, (IntegerParameter)definition);
 					break;
-				case FLOAT:
-					createFloatParameterEdit(parent, definition);
+				case DOUBLE:
+					createDoubleParameterEdit(parent, (DoubleParameter)definition);
 					break;
 				case STRING:
 					createStringParameterEdit(parent, definition);
@@ -470,8 +472,8 @@ public class GenerateTestSuiteDialog extends TitleAreaDialog {
 				case INTEGER:
 					fParameters.put(definition.getName(), Integer.parseInt(combo.getText()));
 					break;
-				case FLOAT:
-					fParameters.put(definition.getName(), Float.parseFloat(combo.getText()));
+				case DOUBLE:
+					fParameters.put(definition.getName(), Double.parseDouble(combo.getText()));
 					break;
 				case STRING:
 					fParameters.put(definition.getName(), combo.getText());
@@ -495,7 +497,7 @@ public class GenerateTestSuiteDialog extends TitleAreaDialog {
 	}
 
 	private void createIntegerParameterEdit(Composite parent,
-			final IGeneratorParameter definition) {
+			final IntegerParameter definition) {
 		final Spinner spinner = new Spinner(parent, SWT.BORDER|SWT.RIGHT);
 		spinner.addModifyListener(new ModifyListener() {
 			@Override
@@ -505,11 +507,11 @@ public class GenerateTestSuiteDialog extends TitleAreaDialog {
 		});
 		spinner.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
 
-		spinner.setValues((int)definition.defaultValue(), (int)definition.minValue(), (int)definition.maxValue(), 0, 1, 1);
+		spinner.setValues((int)definition.defaultValue(), definition.getMin(), definition.getMax(), 0, 1, 1);
 	}
 
-	private void createFloatParameterEdit(Composite parent,
-			final IGeneratorParameter definition) {
+	private void createDoubleParameterEdit(Composite parent,
+			final DoubleParameter definition) {
 		final Spinner spinner = new Spinner(parent, SWT.BORDER);
 		final int FLOAT_DECIMAL_PLACES = 3;
 		spinner.addModifyListener(new ModifyListener() {
@@ -523,8 +525,8 @@ public class GenerateTestSuiteDialog extends TitleAreaDialog {
 		spinner.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
 		int factor = (int) Math.pow(10, FLOAT_DECIMAL_PLACES);
 		int defaultValue = (int)Math.round((double)definition.defaultValue() * factor);
-		int minValue = (int)Math.round((double)definition.minValue() * factor);
-		int maxValue = (int)Math.round((double)definition.maxValue());
+		int minValue = (int)Math.round((double)definition.getMin() * factor);
+		int maxValue = (int)Math.round((double)definition.getMax());
 		spinner.setValues(defaultValue, minValue, maxValue, FLOAT_DECIMAL_PLACES, 1, 100);
 	}
 

@@ -326,13 +326,13 @@ public class XmlParserSerializerTest {
 	private List<TestCaseNode> createTestCases(
 			List<? extends CategoryNode> categories, int numOfTestCases) {
 		List<TestCaseNode> result = new ArrayList<TestCaseNode>();
-		RandomGenerator<PartitionNode> generator = new RandomGenerator<PartitionNode>();
-		List<? extends List<PartitionNode>> input = getGeneratorInput(categories);
-		Map<String, Object> parameters = new HashMap<String, Object>();
-		parameters.put("Test suite size", numOfTestCases);
-		parameters.put("Duplicates", true);
-		
 		try {
+			RandomGenerator<PartitionNode> generator = new RandomGenerator<PartitionNode>();
+			List<? extends List<PartitionNode>> input = getGeneratorInput(categories);
+			Map<String, Object> parameters = new HashMap<String, Object>();
+			parameters.put("Test suite size", numOfTestCases);
+			parameters.put("Duplicates", true);
+
 			generator.initialize(input, null, parameters);
 			List<PartitionNode> next;
 			while((next = generator.next()) != null){

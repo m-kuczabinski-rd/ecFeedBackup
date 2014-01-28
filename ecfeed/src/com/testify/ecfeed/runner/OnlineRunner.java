@@ -124,7 +124,7 @@ public class OnlineRunner extends StaticRunner {
 				switch (parameter.getType()) {
 				case BOOLEAN:
 					return Boolean.parseBoolean(valueString);
-				case FLOAT:
+				case DOUBLE:
 					return Double.parseDouble(valueString);
 				case INTEGER:
 					return Integer.parseInt(valueString);
