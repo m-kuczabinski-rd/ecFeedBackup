@@ -63,4 +63,11 @@ public class IntegerParameter extends AbstractParameter {
 		return (intValue >= fMinValue && intValue <= fMaxValue);
 	}
 
+	public int getMin(){
+		return fMinValue;
+	}
+	
+	public int getMax(){
+		return fMaxValue;
+	}
 }
