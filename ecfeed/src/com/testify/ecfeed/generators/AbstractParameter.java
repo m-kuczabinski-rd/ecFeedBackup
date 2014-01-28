@@ -7,20 +7,11 @@ public class AbstractParameter implements IGeneratorParameter {
 	private String fName;
 	private TYPE fType;
 	private boolean fRequired;
-	private Object fDefault;
-	private Object[] fAllowedValues;
-	private long fMinValue;
-	private long fMaxValue;
 
-	public AbstractParameter(String name, TYPE type, boolean required,
-			Object defaultValue, Object[] allowedValues, int minValue, int maxValue){
+	public AbstractParameter(String name, TYPE type, boolean required){
 		fName = name;
 		fType = type;
 		fRequired = required;
-		fDefault = defaultValue;
-		fAllowedValues = allowedValues;
-		fMinValue = minValue;
-		fMaxValue = maxValue;
 	}
 	
 	public AbstractParameter(String name, TYPE type, boolean required,
@@ -28,10 +19,6 @@ public class AbstractParameter implements IGeneratorParameter {
 		fName = name;
 		fType = type;
 		fRequired = required;
-		fDefault = defaultValue;
-		fAllowedValues = allowedValues;
-		fMinValue = 0;
-		fMaxValue = Integer.MAX_VALUE;
 	}
 
 	@Override
@@ -51,22 +38,16 @@ public class AbstractParameter implements IGeneratorParameter {
 
 	@Override
 	public Object defaultValue() {
-		return fDefault;
+		return null;
 	}
 
 	@Override
 	public Object[] allowedValues() {
-		return fAllowedValues;
+		return null;
 	}
 
 	@Override
-	public long minValue() {
-		return fMinValue;
+	public boolean test(Object value){
+		return false;
 	}
-
-	@Override
-	public long maxValue() {
-		return fMaxValue;
-	}
-
 }

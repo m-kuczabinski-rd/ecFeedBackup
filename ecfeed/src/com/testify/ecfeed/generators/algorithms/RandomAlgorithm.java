@@ -100,4 +100,12 @@ public class RandomAlgorithm<E> extends CartesianProductAlgorithm<E> {
 		fGeneratedCount = 0;
 		fBlackList.clear();
 	}
+	
+	public boolean getDuplicates(){
+		return fDuplicates;
+	}
+	
+	public int getLength(){
+		return fLength;
+	}
 }

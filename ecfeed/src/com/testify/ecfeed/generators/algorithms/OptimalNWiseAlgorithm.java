@@ -49,5 +49,4 @@ public class OptimalNWiseAlgorithm<E> extends AbstractNWiseAlgorithm<E>{
 		originalTuples.removeAll(fGeneratedTuples);
 		return originalTuples;
 	}
-
 }

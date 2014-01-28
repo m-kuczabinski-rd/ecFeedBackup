@@ -48,6 +48,10 @@ public class AbstractNWiseAlgorithm<E> extends AbstractAlgorithm<E> implements I
 		super.reset();
 	}
 	
+	public int getN(){
+		return N;
+	}
+	
 	private int calculateTotalTuples(){
 		int totalWork = 0;
 		Tuples<List<E>> tuples = new Tuples<>(fInput, N);

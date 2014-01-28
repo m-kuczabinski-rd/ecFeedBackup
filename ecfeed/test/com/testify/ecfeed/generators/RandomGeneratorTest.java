@@ -1,6 +1,8 @@
 package com.testify.ecfeed.generators;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -10,45 +12,39 @@ import java.util.Map;
 
 import org.junit.Test;
 
-import com.testify.ecfeed.generators.NWiseGenerator;
 import com.testify.ecfeed.generators.algorithms.IAlgorithm;
-import com.testify.ecfeed.generators.algorithms.OptimalNWiseAlgorithm;
+import com.testify.ecfeed.generators.algorithms.RandomAlgorithm;
 import com.testify.ecfeed.generators.api.GeneratorException;
 import com.testify.ecfeed.generators.api.IConstraint;
 import com.testify.ecfeed.generators.utils.GeneratorTestUtils;
 
-public class NWiseGeneratorTest{
-	
+public class RandomGeneratorTest {
 	@Test
 	public void initializeTest(){
 		try {
-			
 			GeneratorTestUtils utils = new GeneratorTestUtils();
-			NWiseGenerator<String> generator = new NWiseGenerator<String>();
+			RandomGenerator<String> generator = new RandomGenerator<String>();
 			List<List<String>> inputDomain = utils.prepareInput(3, 3);
 			Collection<IConstraint<String>> constraints = new ArrayList<IConstraint<String>>();
 			Map<String, Object> parameters = new HashMap<String, Object>();
-			parameters.put("N", 2);
+			parameters.put("Test suite size", 100);
 
 			generator.initialize(inputDomain, constraints, parameters);
 			IAlgorithm<String> algorithm = generator.getAlgorithm(); 
-			assertTrue(algorithm instanceof OptimalNWiseAlgorithm);
-			assertEquals(2, ((OptimalNWiseAlgorithm<String>)algorithm).getN());
+			assertTrue(algorithm instanceof RandomAlgorithm);
+			assertEquals(false, ((RandomAlgorithm<String>)algorithm).getDuplicates());
+			assertEquals(100, ((RandomAlgorithm<String>)algorithm).getLength());
 			
 			try{
-				parameters.put("N", 5);
+				parameters.put("Duplicates", true);
 				generator.initialize(inputDomain, constraints, parameters);
-				fail("GeneratorException expected");
+				assertEquals(false, ((RandomAlgorithm<String>)algorithm).getDuplicates());
 			}catch(GeneratorException e) {
-			}
-			try{
-				parameters.put("N", -1);
-				generator.initialize(inputDomain, constraints, parameters);
-				fail("GeneratorException expected");
-			}catch(GeneratorException e) {
+				fail("Unexpected GeneratorException: " + e.getMessage());
 			}
 		} catch (GeneratorException e) {
 			fail("Unexpected GeneratorException: " + e.getMessage());
 		}
 	}
+
 }

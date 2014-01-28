@@ -2,7 +2,7 @@ package com.testify.ecfeed.generators.api;
 
 public interface IGeneratorParameter {
 	public enum TYPE{
-		BOOLEAN, INTEGER, FLOAT, STRING
+		BOOLEAN, INTEGER, DOUBLE, STRING
 	}
 
 	/*
@@ -32,13 +32,9 @@ public interface IGeneratorParameter {
 	public Object[] allowedValues();
 	
 	/*
-	 * Minimal value of numeric parameters.
+	 * Checks if provided value is valid for this parameter
 	 */
-	public long minValue();
+	public boolean test(Object value);
 	
-	/*
-	 * Maximum value of numeric parameters
-	 */
-	public long maxValue();
 }
 
