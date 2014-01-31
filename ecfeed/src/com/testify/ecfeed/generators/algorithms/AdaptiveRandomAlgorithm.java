@@ -44,6 +44,7 @@ public class AdaptiveRandomAlgorithm<E> extends AbstractAlgorithm<E> implements 
 	
 	public AdaptiveRandomAlgorithm(int depth, int candidatesSize, 
 			int length, boolean duplicates) {
+		if(depth == -1) depth = Integer.MAX_VALUE;
 		fDepth = depth;
 		fCandidatesSize = candidatesSize;
 		fLength = length;
@@ -72,7 +73,7 @@ public class AdaptiveRandomAlgorithm<E> extends AbstractAlgorithm<E> implements 
 		}
 		List<List<E>> candidates = getCandidates();
 		List<E> optimalCandidate = getOptimalCandidate(candidates, 
-				fHistory.subList(fHistory.size() - fDepth, fHistory.size()));
+				fHistory.subList(Math.max(fHistory.size() - fDepth, 0), fHistory.size()));
 		fHistory.add(optimalCandidate);
 		progress(1);
 		return optimalCandidate;
