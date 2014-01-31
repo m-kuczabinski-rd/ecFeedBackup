@@ -22,7 +22,7 @@ public class AdaptiveRandomGenerator<E> extends AbstractGenerator<E> {
 		addParameterDefinition(new IntegerParameter(HISTORY_DEPTH_PARAMETER_NAME, 
 				false, DEFAULT_HISTORY_DEPTH_VALUE, -1, Integer.MAX_VALUE));
 		addParameterDefinition(new IntegerParameter(CANDIDATE_SET_SIZE_PARAMETER_NAME, 
-				true, DEFAULT_CANDIDATE_SET_SIZE_PARAMETER_VALUE, 0, Integer.MAX_VALUE));
+				false, DEFAULT_CANDIDATE_SET_SIZE_PARAMETER_VALUE, 0, Integer.MAX_VALUE));
 		addParameterDefinition(new IntegerParameter(TEST_SUITE_SIZE_PARAMETER_NAME, 
 				true, DEFAULT_TEST_SUITE_SIZE_PARAMETER_VALUE, 0, Integer.MAX_VALUE));
 		addParameterDefinition(new BooleanParameter(DUPLICATES_PARAMETER_NAME, 
