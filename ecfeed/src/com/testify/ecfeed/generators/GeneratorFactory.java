@@ -16,6 +16,7 @@ public class GeneratorFactory<E> {
 		fAvailableGenerators = new LinkedHashMap<String, Class<? extends IGenerator<E>>>();
 		registerGenerator("N-wise generator", (Class<? extends IGenerator<E>>) NWiseGenerator.class);
 		registerGenerator("Cartesian Product generator", (Class<? extends IGenerator<E>>) CartesianProductGenerator.class);
+		registerGenerator("Adaptive random generator", (Class<? extends IGenerator<E>>) AdaptiveRandomGenerator.class);
 		registerGenerator("Random generator", (Class<? extends IGenerator<E>>) RandomGenerator.class);
 	}
 
