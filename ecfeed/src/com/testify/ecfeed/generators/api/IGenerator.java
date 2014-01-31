@@ -23,9 +23,15 @@ public interface IGenerator<E> {
 	/*
 	 * Should be called prior to first call of getNext()
 	 */
-	public void initialize(List<? extends List<E>> inputDomain, 
-			Collection<? extends IConstraint<E>> constraints,
+	public void initialize(List<List<E>> inputDomain, 
+			Collection<IConstraint<E>> constraints,
 			Map<String, Object> parameters) throws GeneratorException;
+	
+	public void addConstraint(IConstraint<E> constraint);
+
+	public void removeConstraint(IConstraint<E> constraint);
+	
+	public Collection<? extends IConstraint<E>> getConstraints();
 	
 	/*
 	 * Returns null if no more data can be generated, e.g.if the test generation should end 

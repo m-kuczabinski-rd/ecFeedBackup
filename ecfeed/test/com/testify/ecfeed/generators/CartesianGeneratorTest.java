@@ -20,9 +20,8 @@ public class CartesianGeneratorTest{
 	@Test
 	public void initializeTest(){
 		CartesianProductGenerator<String> generator = new CartesianProductGenerator<String>();
-		GeneratorTestUtils utils = new GeneratorTestUtils();
 		
-		List<List<String>> inputDomain = utils.prepareInput(3, 3);
+		List<List<String>> inputDomain = GeneratorTestUtils.prepareInput(3, 3);
 		Collection<IConstraint<String>> constraints = new ArrayList<IConstraint<String>>();
 
 		try {

@@ -13,31 +13,30 @@ import com.testify.ecfeed.generators.algorithms.IAlgorithm;
 import com.testify.ecfeed.generators.algorithms.OptimalNWiseAlgorithm;
 import com.testify.ecfeed.generators.api.GeneratorException;
 import com.testify.ecfeed.generators.api.IConstraint;
+import com.testify.ecfeed.generators.utils.GeneratorTestUtils;
 
 public class FastNWiseAlgorithmTest extends NWiseAlgorithmTest {
-	final int MAX_VARIABLES = 5;
-	final int MAX_PARTITIONS_PER_VARIABLE = 5;
-	
+
 	@Test
 	public void testCorrectness() {
-		testCorrectness(FastNWiseAlgorithm.class, MAX_VARIABLES, MAX_PARTITIONS_PER_VARIABLE);
+		testCorrectness(FastNWiseAlgorithm.class);
 	}
 
 	@Test
 	public void testConstraints() {
-		testCorrectness(FastNWiseAlgorithm.class, MAX_VARIABLES, MAX_PARTITIONS_PER_VARIABLE);
+		testCorrectness(FastNWiseAlgorithm.class);
 	}
 	
 
 	@Test
 	public void testSpeed(){
-		for(int variables = 1; variables <= MAX_VARIABLES; variables++){
-			for(int partitions = 1; partitions <= MAX_PARTITIONS_PER_VARIABLE; partitions++){
-				List<List<String>> input = utils.prepareInput(variables, partitions);
-				for(int n = 1; n <= variables; n++){
-					testSpeed(input, n);
-				}
+		for(int variables : new int[]{1, 2, 5}){
+		for(int partitions : new int[]{1, 2, 5}){
+			List<List<String>> input = GeneratorTestUtils.prepareInput(variables, partitions);
+			for(int n = 1; n <= variables; n++){
+				testSpeed(input, n);
 			}
+		}
 		}
 	}
 
@@ -45,17 +44,17 @@ public class FastNWiseAlgorithmTest extends NWiseAlgorithmTest {
 		try{
 			IAlgorithm<String> fastAlgorithm = new FastNWiseAlgorithm<String>(n);
 			IAlgorithm<String> referenceAlgorithm = new OptimalNWiseAlgorithm<String>(n);
-			Collection<IConstraint<String>> constraints = utils.generateRandomConstraints(input);
+			Collection<IConstraint<String>> constraints = GeneratorTestUtils.generateRandomConstraints(input);
 			fastAlgorithm.initialize(input, constraints);
 			referenceAlgorithm.initialize(input, constraints);
 
 			long timestampStart = new Date().getTime();
-			utils.algorithmResult(fastAlgorithm);
+			GeneratorTestUtils.algorithmResult(fastAlgorithm);
 			long timestampEnd = new Date().getTime();
 			long duration = timestampEnd - timestampStart;
 
 			timestampStart = new Date().getTime();
-			utils.algorithmResult(referenceAlgorithm);
+			GeneratorTestUtils.algorithmResult(referenceAlgorithm);
 			timestampEnd = new Date().getTime();
 			long referenceDuration = timestampEnd - timestampStart;
 

@@ -2,6 +2,7 @@ package com.testify.ecfeed.generators.algorithms;
 
 import static org.junit.Assert.*;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -12,19 +13,22 @@ import org.junit.Test;
 import com.testify.ecfeed.generators.algorithms.IAlgorithm;
 import com.testify.ecfeed.generators.algorithms.RandomAlgorithm;
 import com.testify.ecfeed.generators.api.GeneratorException;
+import com.testify.ecfeed.generators.api.IConstraint;
 import com.testify.ecfeed.generators.utils.GeneratorTestUtils;
 
 public class RandomAlgorithmTest {
 	final int MAX_VARIABLES = 5;
 	final int MAX_PARTITIONS_PER_VARIABLE = 5;
 	final int SAMPLE_SIZE = (int) (10 * Math.pow(MAX_PARTITIONS_PER_VARIABLE, MAX_VARIABLES));
+	
+	Collection<IConstraint<String>> EMPTY_CONSTRAINTS(){return new ArrayList<IConstraint<String>>();}
 
 	protected GeneratorTestUtils utils = new GeneratorTestUtils(); 
 	
 	@Test
 	public void uniformityTest(){
 		for(int variables = 1; variables <= MAX_VARIABLES; variables++){
-			for(int partitions = 2; partitions <= MAX_PARTITIONS_PER_VARIABLE; partitions++){
+			for(int partitions = 1; partitions <= MAX_PARTITIONS_PER_VARIABLE; partitions++){
 				uniformityTest(variables, partitions);
 			}
 		}
@@ -32,10 +36,10 @@ public class RandomAlgorithmTest {
 	
 	protected void uniformityTest(int variables, int partitions) {
 		Map<List<String>, Long> histogram = new HashMap<List<String>, Long>();
-		List<List<String>> input = utils.prepareInput(variables, partitions);
+		List<List<String>> input = GeneratorTestUtils.prepareInput(variables, partitions);
 		IAlgorithm<String> algorithm = new RandomAlgorithm<String>((int)(SAMPLE_SIZE), true);
 		try {
-			algorithm.initialize(input, null);
+			algorithm.initialize(input, EMPTY_CONSTRAINTS());
 			List<String> next;
 			while((next = algorithm.getNext()) != null){
 				if(histogram.containsKey(next)){
@@ -65,19 +69,19 @@ public class RandomAlgorithmTest {
 
 	@Test
 	public void duplicatesTest(){
-		for(int variables = 1; variables <= MAX_VARIABLES; variables++){
-			for(int partitions = 2; partitions <= MAX_PARTITIONS_PER_VARIABLE; partitions++){
+		for(int variables : new int[]{1, 2, 5}){
+		for(int partitions : new int[]{1, 2, 5}){
 				duplicatesTest(variables, partitions);
-			}
+		}
 		}
 	}
 
 	private void duplicatesTest(int variables, int partitions) {
 		Map<List<String>, Long> histogram = new HashMap<List<String>, Long>();
-		List<List<String>> input = utils.prepareInput(variables, partitions);
-		IAlgorithm<String> algorithm = new RandomAlgorithm<String>((int)(SAMPLE_SIZE), false);
+		List<List<String>> input = GeneratorTestUtils.prepareInput(variables, partitions);
+		RandomAlgorithm<String> algorithm = new RandomAlgorithm<String>(SAMPLE_SIZE, false);
 		try {
-			algorithm.initialize(input, null);
+			algorithm.initialize(input, EMPTY_CONSTRAINTS());
 			List<String> next;
 			while((next = algorithm.getNext()) != null){
 				if(histogram.containsKey(next)){

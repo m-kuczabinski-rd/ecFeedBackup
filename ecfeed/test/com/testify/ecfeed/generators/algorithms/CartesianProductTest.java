@@ -21,26 +21,25 @@ public class CartesianProductTest{
 	final int MAX_VARIABLES = 6;
 	final int MAX_PARTITIONS_PER_VARIABLE = 5;
 	final IAlgorithm<String> ALGORITHM = new CartesianProductAlgorithm<String>();
-	final GeneratorTestUtils utils = new GeneratorTestUtils();
+	private final Collection<IConstraint<String>> EMPTY_CONSTRAINTS = new HashSet<IConstraint<String>>();
 	
 	@Test
 	public void testCorrectness(){
-		try{
-			for(int noOfVariables = 1; noOfVariables <= MAX_VARIABLES; noOfVariables++){
-				for(int partitionsPerVariable = 1; partitionsPerVariable <= MAX_PARTITIONS_PER_VARIABLE; partitionsPerVariable++){
-					List<List<String>> input = utils.prepareInput(noOfVariables, partitionsPerVariable);
-					Collection<IConstraint<String>> constraints = null;
-					Set<List<String>> referenceSet = referenceSet(input);
-					ALGORITHM.initialize(input, constraints);
-					Set<List<String>> algorithmResult = utils.algorithmResult(ALGORITHM);
-					assertEquals(referenceSet.size(), algorithmResult.size());
-					for(List<String> element : referenceSet){
-						assertTrue(algorithmResult.contains(element));
-					}
+		for(int variables : new int[]{1, 2, 5}){
+		for(int partitions : new int[]{1, 2, 5}){
+			try{
+				List<List<String>> input = GeneratorTestUtils.prepareInput(variables, partitions);
+				Set<List<String>> referenceSet = referenceSet(input);
+				ALGORITHM.initialize(input, EMPTY_CONSTRAINTS);
+				Set<List<String>> algorithmResult = GeneratorTestUtils.algorithmResult(ALGORITHM);
+				assertEquals(referenceSet.size(), algorithmResult.size());
+				for(List<String> element : referenceSet){
+					assertTrue(algorithmResult.contains(element));
 				}
+			}catch (GeneratorException e) {
+				fail("Unexpected generator exception: " + e.getMessage());
 			}
-		}catch (GeneratorException e) {
-			fail("Unexpected generator exception: " + e.getMessage());
+		}
 		}
 	}
 	
@@ -49,12 +48,12 @@ public class CartesianProductTest{
 		try{
 			for(int noOfVariables = 1; noOfVariables <= MAX_VARIABLES; noOfVariables++){
 				for(int partitionsPerVariable = 1; partitionsPerVariable <= MAX_PARTITIONS_PER_VARIABLE; partitionsPerVariable++){
-					List<List<String>> input = utils.prepareInput(noOfVariables, partitionsPerVariable);
-					Collection<IConstraint<String>> constraints = utils.generateRandomConstraints(input);
+					List<List<String>> input = GeneratorTestUtils.prepareInput(noOfVariables, partitionsPerVariable);
+					Collection<IConstraint<String>> constraints = GeneratorTestUtils.generateRandomConstraints(input);
 					Set<List<String>> referenceSet = referenceSet(input);
 					referenceSet = filter(referenceSet, constraints);
 					ALGORITHM.initialize(input, constraints);
-					Set<List<String>> algorithmResult = utils.algorithmResult(ALGORITHM);
+					Set<List<String>> algorithmResult = GeneratorTestUtils.algorithmResult(ALGORITHM);
 					assertEquals(referenceSet.size(), algorithmResult.size());
 					for(List<String> element : referenceSet){
 						assertTrue(algorithmResult.contains(element));
@@ -84,7 +83,7 @@ public class CartesianProductTest{
 	}
 
 	private Set<List<String>> referenceSet(List<List<String>> input) {
-		List<Set<String>> referenceInput = utils.referenceInput(input);
+		List<Set<String>> referenceInput = GeneratorTestUtils.referenceInput(input);
 		return Sets.cartesianProduct(referenceInput);
 	}
 

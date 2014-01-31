@@ -45,6 +45,9 @@ public class OnlineRunnerTest extends StaticRunnerTest{
 	protected final static String OVERRIDING_CONSTRAINT_NAME = "constraint";
 
 	private static Set<List<String>> fExecuted;
+	
+	private final Collection<IConstraint<PartitionNode>> EMPTY_CONSTRAINTS = 
+			new ArrayList<IConstraint<PartitionNode>>();
 
 	public static void executeTest(String arg1, String arg2, String arg3, String arg4){
 		if(fExecuted != null){
@@ -116,7 +119,7 @@ public class OnlineRunnerTest extends StaticRunnerTest{
 			OnlineRunner runner = new OnlineRunner(testClass);
 			for(FrameworkMethod method : runner.computeTestMethods()){
 				List<List<PartitionNode>> input = referenceInput(getModel(MODEL_PATH), method);
-				Set<List<String>> referenceResult = computeReferenceResult(referenceNWiseGenerator(input, null, 2));
+				Set<List<String>> referenceResult = computeReferenceResult(referenceNWiseGenerator(input, EMPTY_CONSTRAINTS, 2));
 				method.invokeExplosively(testClass.newInstance(), (Object[])null);
 				assertEquals(referenceResult, fExecuted);
 			}
@@ -133,7 +136,7 @@ public class OnlineRunnerTest extends StaticRunnerTest{
 			OnlineRunner runner = new OnlineRunner(testClass);
 			for(FrameworkMethod method : runner.computeTestMethods()){
 				List<List<PartitionNode>> input = referenceInput(getModel(MODEL_PATH), method);
-				Set<List<String>> referenceResult = computeReferenceResult(referenceNWiseGenerator(input, null, 3));
+				Set<List<String>> referenceResult = computeReferenceResult(referenceNWiseGenerator(input, EMPTY_CONSTRAINTS, 3));
 				method.invokeExplosively(testClass.newInstance(), (Object[])null);
 				assertEquals(referenceResult, fExecuted);
 			}
@@ -150,7 +153,7 @@ public class OnlineRunnerTest extends StaticRunnerTest{
 			OnlineRunner runner = new OnlineRunner(testClass);
 			for(FrameworkMethod method : runner.computeTestMethods()){
 				List<List<PartitionNode>> input = referenceInput(runner.getModel(), method);
-				Collection<? extends IConstraint<PartitionNode>> constraints = getConstraints(runner.getModel(), method);
+				Collection<IConstraint<PartitionNode>> constraints = getConstraints(runner.getModel(), method);
 				Set<List<String>> referenceResult = computeReferenceResult(referenceCartesianGenerator(input, constraints));
 				method.invokeExplosively(testClass.newInstance(), (Object[])null);
 				assertEquals(referenceResult, fExecuted);
@@ -168,7 +171,7 @@ public class OnlineRunnerTest extends StaticRunnerTest{
 			OnlineRunner runner = new OnlineRunner(testClass);
 			for(FrameworkMethod method : runner.computeTestMethods()){
 				List<List<PartitionNode>> input = referenceInput(runner.getModel(), method);
-				Collection<? extends IConstraint<PartitionNode>> constraints = getConstraints(runner.getModel(), method, 
+				Collection<IConstraint<PartitionNode>> constraints = getConstraints(runner.getModel(), method, 
 						OVERRIDING_CONSTRAINT_NAME);
 				Set<List<String>> referenceResult = computeReferenceResult(referenceCartesianGenerator(input, constraints));
 				method.invokeExplosively(testClass.newInstance(), (Object[])null);
@@ -212,7 +215,7 @@ public class OnlineRunnerTest extends StaticRunnerTest{
 
 	private IGenerator<PartitionNode> referenceCartesianGenerator(
 			List<List<PartitionNode>> input,
-			Collection<? extends IConstraint<PartitionNode>> constraints) throws GeneratorException {
+			Collection<IConstraint<PartitionNode>> constraints) throws GeneratorException {
 		IGenerator<PartitionNode> generator = new CartesianProductGenerator<PartitionNode>();
 		generator.initialize(input, constraints, null);
 		return generator;
@@ -220,12 +223,12 @@ public class OnlineRunnerTest extends StaticRunnerTest{
 
 	private NWiseGenerator<PartitionNode> referenceNWiseGenerator(
 			List<List<PartitionNode>> input, 
-			Collection<? extends IConstraint<PartitionNode>> constraints, 
+			Collection<IConstraint<PartitionNode>> constraints, 
 			int n) throws GeneratorException {
 		NWiseGenerator<PartitionNode> result = new NWiseGenerator<PartitionNode>();
 		Map<String, Object> parameters = new HashMap<String, Object>();
 		parameters.put("N", n);
-		result.initialize(input, null, parameters);
+		result.initialize(input, constraints, parameters);
 		return result;
 	}
 

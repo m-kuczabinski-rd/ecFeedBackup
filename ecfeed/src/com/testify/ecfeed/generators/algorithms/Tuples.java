@@ -18,11 +18,11 @@ import java.util.List;
 import java.util.Set;
 
 public class Tuples<E> {
-	private List<? extends E> fInput;
+	private List<E> fInput;
 	private int N;
 	private List<E> fLast;
 
-	public Tuples(List<? extends E> input, int n){
+	public Tuples(List<E> input, int n){
 		fLast = null;
 		fInput = input;
 		N = n;

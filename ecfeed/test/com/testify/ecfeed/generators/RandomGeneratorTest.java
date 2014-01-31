@@ -22,9 +22,8 @@ public class RandomGeneratorTest {
 	@Test
 	public void initializeTest(){
 		try {
-			GeneratorTestUtils utils = new GeneratorTestUtils();
 			RandomGenerator<String> generator = new RandomGenerator<String>();
-			List<List<String>> inputDomain = utils.prepareInput(3, 3);
+			List<List<String>> inputDomain = GeneratorTestUtils.prepareInput(3, 3);
 			Collection<IConstraint<String>> constraints = new ArrayList<IConstraint<String>>();
 			Map<String, Object> parameters = new HashMap<String, Object>();
 			parameters.put("Test suite size", 100);

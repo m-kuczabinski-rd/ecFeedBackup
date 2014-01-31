@@ -20,15 +20,15 @@ import com.testify.ecfeed.generators.api.GeneratorException;
 import com.testify.ecfeed.generators.api.IConstraint;
 
 public class NWiseGenerator<E> extends AbstractGenerator<E>{
-	protected final static String N_PARAMETER_NAME = "N";
+	public final static String N_PARAMETER_NAME = "N";
 	
 	public NWiseGenerator() throws GeneratorException{
 		addParameterDefinition(new IntegerParameter(N_PARAMETER_NAME, true, 2, 1, Integer.MAX_VALUE));
 	}
 	
 	@Override
-	public void initialize(List<? extends List<E>> inputDomain,
-			Collection<? extends IConstraint<E>> constraints,
+	public void initialize(List<List<E>> inputDomain,
+			Collection<IConstraint<E>> constraints,
 			Map<String, Object> parameters) throws GeneratorException{
 		super.initialize(inputDomain, constraints, parameters);
 		int N = getIntParameter(N_PARAMETER_NAME);

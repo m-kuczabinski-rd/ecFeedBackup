@@ -53,8 +53,8 @@ public class AbstractGeneratorTest {
 	public void initializeWithNoConstraintsOnParametersTest() {
 		AbstractGenerator<String> generator = new AbstractGenerator<String>();
 
-		List<? extends List<String>> inputDomain = new ArrayList<List<String>>();
-		Collection<? extends IConstraint<String>> constraints = new ArrayList<IConstraint<String>>(); 
+		List<List<String>> inputDomain = new ArrayList<List<String>>();
+		Collection<IConstraint<String>> constraints = new ArrayList<IConstraint<String>>(); 
 		
 		generator.addParameterDefinition(new IntegerParameter(INT_PARAMETER_NAME, true, fDefaultIntParameterValue));
 		generator.addParameterDefinition(new BooleanParameter(BOOLEAN_PARAMETER_NAME, true, fDefaultBooleanParameterValue));
@@ -85,8 +85,8 @@ public class AbstractGeneratorTest {
 	public void initializeWithBoundsTest() {
 		AbstractGenerator<String> generator = new AbstractGenerator<String>();
 
-		List<? extends List<String>> inputDomain = new ArrayList<List<String>>();
-		Collection<? extends IConstraint<String>> constraints = new ArrayList<IConstraint<String>>(); 
+		List<List<String>> inputDomain = new ArrayList<List<String>>();
+		Collection<IConstraint<String>> constraints = new ArrayList<IConstraint<String>>(); 
 		try{
 			generator.addParameterDefinition(new IntegerParameter(INT_PARAMETER_NAME, true, 0, -1, 1));
 			generator.addParameterDefinition(new DoubleParameter(DOUBLE_PARAMETER_NAME, true, 0.0, -1.0, 1.0));
@@ -111,8 +111,8 @@ public class AbstractGeneratorTest {
 	@Test
 	public void initializeWithAllowedValuesTest() {
 		AbstractGenerator<String> generator = new AbstractGenerator<String>();
-		List<? extends List<String>> inputDomain = new ArrayList<List<String>>();
-		Collection<? extends IConstraint<String>> constraints = new ArrayList<IConstraint<String>>(); 
+		List<List<String>> inputDomain = new ArrayList<List<String>>();
+		Collection<IConstraint<String>> constraints = new ArrayList<IConstraint<String>>(); 
 		try{
 			generator.addParameterDefinition(new IntegerParameter(INT_PARAMETER_NAME, true, 0, new Integer[]{-1, 0, 1}));
 			generator.addParameterDefinition(new DoubleParameter(DOUBLE_PARAMETER_NAME, true, 0.0, new Double[]{-1.0, 0.0, 1.0}));
@@ -137,8 +137,8 @@ public class AbstractGeneratorTest {
 	@Test
 	public void initializeWithMissingRequiredParameterTest(){
 		AbstractGenerator<String> generator = new AbstractGenerator<String>();
-		List<? extends List<String>> inputDomain = new ArrayList<List<String>>();
-		Collection<? extends IConstraint<String>> constraints = new ArrayList<IConstraint<String>>(); 
+		List<List<String>> inputDomain = new ArrayList<List<String>>();
+		Collection<IConstraint<String>> constraints = new ArrayList<IConstraint<String>>(); 
 		
 		generator.addParameterDefinition(new IntegerParameter(INT_PARAMETER_NAME, true, 0));
 		generator.addParameterDefinition(new DoubleParameter(DOUBLE_PARAMETER_NAME, true, 0.0));
@@ -163,8 +163,8 @@ public class AbstractGeneratorTest {
 	@Test
 	public void initializeWithMissingOptionalParameterTest(){
 		AbstractGenerator<String> generator = new AbstractGenerator<String>();
-		List<? extends List<String>> inputDomain = new ArrayList<List<String>>();
-		Collection<? extends IConstraint<String>> constraints = new ArrayList<IConstraint<String>>(); 
+		List<List<String>> inputDomain = new ArrayList<List<String>>();
+		Collection<IConstraint<String>> constraints = new ArrayList<IConstraint<String>>(); 
 		
 		generator.addParameterDefinition(new IntegerParameter(INT_PARAMETER_NAME, false, 0));
 		generator.addParameterDefinition(new DoubleParameter(DOUBLE_PARAMETER_NAME, false, 0.0));
@@ -194,8 +194,8 @@ public class AbstractGeneratorTest {
 	@Test
 	public void initializeWithAdditionalParameterTest(){
 		AbstractGenerator<String> generator = new AbstractGenerator<String>();
-		List<? extends List<String>> inputDomain = new ArrayList<List<String>>();
-		Collection<? extends IConstraint<String>> constraints = new ArrayList<IConstraint<String>>(); 
+		List<List<String>> inputDomain = new ArrayList<List<String>>();
+		Collection<IConstraint<String>> constraints = new ArrayList<IConstraint<String>>(); 
 		
 		generator.addParameterDefinition(new IntegerParameter(INT_PARAMETER_NAME, true, 0));
 
@@ -219,8 +219,8 @@ public class AbstractGeneratorTest {
 	@Test
 	public void getRequiredParameterTest(){
 		AbstractGenerator<String> generator = new AbstractGenerator<String>();
-		List<? extends List<String>> inputDomain = new ArrayList<List<String>>();
-		Collection<? extends IConstraint<String>> constraints = new ArrayList<IConstraint<String>>(); 
+		List<List<String>> inputDomain = new ArrayList<List<String>>();
+		Collection<IConstraint<String>> constraints = new ArrayList<IConstraint<String>>(); 
 
 		generator.addParameterDefinition(new IntegerParameter(INT_PARAMETER_NAME, true, fDefaultIntParameterValue));
 		generator.addParameterDefinition(new DoubleParameter(DOUBLE_PARAMETER_NAME, true, fDefaultDoubleParameterValue));
@@ -253,8 +253,8 @@ public class AbstractGeneratorTest {
 	@Test
 	public void getOptionalParameterTest(){
 		AbstractGenerator<String> generator = new AbstractGenerator<String>();
-		List<? extends List<String>> inputDomain = new ArrayList<List<String>>();
-		Collection<? extends IConstraint<String>> constraints = new ArrayList<IConstraint<String>>(); 
+		List<List<String>> inputDomain = new ArrayList<List<String>>();
+		Collection<IConstraint<String>> constraints = new ArrayList<IConstraint<String>>(); 
 
 		generator.addParameterDefinition(new IntegerParameter(INT_PARAMETER_NAME, false, fDefaultIntParameterValue));
 		generator.addParameterDefinition(new DoubleParameter(DOUBLE_PARAMETER_NAME, false, fDefaultDoubleParameterValue));
@@ -306,7 +306,7 @@ public class AbstractGeneratorTest {
 		AbstractGenerator<String> generator = new AbstractGenerator<String>();
 		List<List<String>> inputDomain = new ArrayList<List<String>>();
 		inputDomain.add(new ArrayList<String>());
-		Collection<? extends IConstraint<String>> constraints = new ArrayList<IConstraint<String>>(); 
+		Collection<IConstraint<String>> constraints = new ArrayList<IConstraint<String>>(); 
 
 		try{
 			generator.initialize(inputDomain, constraints, null);

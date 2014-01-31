@@ -16,7 +16,7 @@ import com.testify.ecfeed.generators.api.IConstraint;
 import com.testify.ecfeed.generators.api.IGenerator;
 
 public class GeneratorTestUtils{
-	private class Constraint implements IConstraint<String>{
+	private static class Constraint implements IConstraint<String>{
 		private Set<String> fRestrictedValues;
 
 		public Constraint(Set<String> restrictedValues){
@@ -39,10 +39,10 @@ public class GeneratorTestUtils{
 		
 	}
 	
-	private final String[] VARIABLE_NAMES = {"a", "b", "c", "d", "e", "f", "g", "h", "i", "j", 
+	private static final String[] VARIABLE_NAMES = {"a", "b", "c", "d", "e", "f", "g", "h", "i", "j", 
 			"k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"};
 	
-	public List<List<String>> prepareInput(int variables, int partitions){
+	public static List<List<String>> prepareInput(int variables, int partitions){
 		List<List<String>> input = new ArrayList<List<String>>();
 		for(int i = 0; i < variables; i++){
 			String variableName = VARIABLE_NAMES[i];
@@ -55,7 +55,7 @@ public class GeneratorTestUtils{
 		return input;
 	}
 	
-	public List<Set<String>> referenceInput(List<List<String>> input){
+	public static List<Set<String>> referenceInput(List<List<String>> input){
 		List<Set<String>> referenceInput = new ArrayList<Set<String>>();
 		for(List<String> category : input){
 			referenceInput.add(new LinkedHashSet<String>(category));
@@ -63,7 +63,7 @@ public class GeneratorTestUtils{
 		return referenceInput;
 	}
 	
-	public Set<List<String>> algorithmResult(IAlgorithm<String> initializedAlgorithm) {
+	public static Set<List<String>> algorithmResult(IAlgorithm<String> initializedAlgorithm) {
 		Set<List<String>> result = new HashSet<List<String>>();
 		try {
 			List<String> next;
@@ -90,15 +90,25 @@ public class GeneratorTestUtils{
 		return result;
 	}
 
-	public Collection<IConstraint<String>> generateRandomConstraints(List<List<String>> inputDomain) {
+	public static Collection<IConstraint<String>> generateRandomConstraints(List<List<String>> inputDomain) {
 		Set<IConstraint<String>> result = new HashSet<IConstraint<String>>();
 		for(int i = 2; i < inputDomain.size() - 1; i++){
 			result.add(generateConstraint(inputDomain, i));
 		}
 		return result;
 	}
+	
+	public static String randomString(int length){
+		Random rand = new Random();
+		String validCharacters = "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM1234567890 ";
+		String result = new String();
+		for(int i = 0; i < length; i++){
+			result += validCharacters.charAt(rand.nextInt(validCharacters.length())); 
+		}
+		return result;
+	}
 
-	private IConstraint<String> generateConstraint(List<List<String>> inputDomain, int restricted) {
+	private static IConstraint<String> generateConstraint(List<List<String>> inputDomain, int restricted) {
 		Random random = new Random();
 		Set<String> restrictedValues = new HashSet<String>();
 		for(int i = 0; i < restricted; i++){

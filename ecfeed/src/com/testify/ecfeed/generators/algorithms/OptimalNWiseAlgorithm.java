@@ -38,9 +38,9 @@ public class OptimalNWiseAlgorithm<E> extends AbstractNWiseAlgorithm<E>{
 
 	@Override
 	public void reset(){
-		super.reset();
 		K = maxTuples(getInput(), N);
 		fGeneratedTuples = new HashSet<List<E>>();
+		super.reset();
 	}
 	
 

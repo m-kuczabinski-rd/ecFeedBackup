@@ -7,10 +7,13 @@ import com.testify.ecfeed.generators.api.GeneratorException;
 import com.testify.ecfeed.generators.api.IConstraint;
 
 public interface IAlgorithm<E> {
-	public void initialize(List<? extends List<E>> input, 
-			Collection<? extends IConstraint<E>> constraints) throws GeneratorException;
+	public void initialize(List<List<E>> input, 
+			Collection<IConstraint<E>> constraints) throws GeneratorException;
 	public List<E> getNext() throws GeneratorException;
 	public void reset();
+	public void addConstraint(IConstraint<E> constraint);
+	public void removeConstraint(IConstraint<E> constraint);
+	public Collection<? extends IConstraint<E>> getConstraints();
 	public int totalWork();
 	public int totalProgress();
 	public int workProgress();

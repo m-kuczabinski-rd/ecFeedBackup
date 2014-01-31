@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -12,6 +13,7 @@ import org.junit.Test;
 
 import com.testify.ecfeed.generators.CartesianProductGenerator;
 import com.testify.ecfeed.generators.api.GeneratorException;
+import com.testify.ecfeed.generators.api.IConstraint;
 import com.testify.ecfeed.generators.api.IGenerator;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.runner.RuntimeMethod;
@@ -20,6 +22,9 @@ public class RuntimeMethodTest {
 
 	private Set<List<Integer>> fExecuted;
 	private final int MAX_PARTITIONS = 10;
+	
+	private final Collection<IConstraint<PartitionNode>> EMPTY_CONSTRAINTS = 
+			new ArrayList<IConstraint<PartitionNode>>();
 	
 	public void functionUnderTest(int arg1, int arg2){
 		List<Integer> parameters = new ArrayList<Integer>();
@@ -40,7 +45,7 @@ public class RuntimeMethodTest {
 		IGenerator<PartitionNode> generator = new CartesianProductGenerator<PartitionNode>();
 		try {
 			Method methodUnterTest = this.getClass().getMethod("functionUnderTest", int.class, int.class);
-			generator.initialize(input, null, null);
+			generator.initialize(input, EMPTY_CONSTRAINTS, null);
 			RuntimeMethod testedMethod = new RuntimeMethod(methodUnterTest, generator);
 			fExecuted = new HashSet<List<Integer>>();
 			testedMethod.invokeExplosively(this, (Object[])null);
@@ -54,7 +59,7 @@ public class RuntimeMethodTest {
 		Set<List<Integer>> result = new HashSet<List<Integer>>();
 		CartesianProductGenerator<PartitionNode> referenceGenerator = new CartesianProductGenerator<PartitionNode>();
 		try {
-			referenceGenerator.initialize(input, null, null);
+			referenceGenerator.initialize(input, EMPTY_CONSTRAINTS, null);
 			List<PartitionNode> next;
 			while((next = referenceGenerator.next()) != null){
 				List<Integer> testCase = new ArrayList<Integer>();

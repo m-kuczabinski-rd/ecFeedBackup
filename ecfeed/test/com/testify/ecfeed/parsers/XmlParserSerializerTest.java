@@ -17,6 +17,7 @@ import org.junit.Test;
 
 import com.testify.ecfeed.generators.RandomGenerator;
 import com.testify.ecfeed.generators.api.GeneratorException;
+import com.testify.ecfeed.generators.api.IConstraint;
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.ConstraintNode;
@@ -136,7 +137,7 @@ public class XmlParserSerializerTest {
 	protected MethodNode createMethodNode(int numOfCategories,
 			int numOfExpCategories, int numOfConstraints, int numOfTestCases) {
 		MethodNode method = new MethodNode(randomName());
-		List<? extends CategoryNode> categories = createCategories(numOfCategories, numOfExpCategories);
+		List<CategoryNode> categories = createCategories(numOfCategories, numOfExpCategories);
 		List<ConstraintNode> constraints = createConstraints(categories, numOfConstraints);
 		List<TestCaseNode> testCases = createTestCases(categories, numOfTestCases);
 		
@@ -324,28 +325,29 @@ public class XmlParserSerializerTest {
 	}
 
 	private List<TestCaseNode> createTestCases(
-			List<? extends CategoryNode> categories, int numOfTestCases) {
+			List<CategoryNode> categories, int numOfTestCases) {
 		List<TestCaseNode> result = new ArrayList<TestCaseNode>();
 		try {
+			List<IConstraint<PartitionNode>> constraints = new ArrayList<IConstraint<PartitionNode>>();
 			RandomGenerator<PartitionNode> generator = new RandomGenerator<PartitionNode>();
-			List<? extends List<PartitionNode>> input = getGeneratorInput(categories);
+			List<List<PartitionNode>> input = getGeneratorInput(categories);
 			Map<String, Object> parameters = new HashMap<String, Object>();
 			parameters.put("Test suite size", numOfTestCases);
 			parameters.put("Duplicates", true);
 
-			generator.initialize(input, null, parameters);
+			generator.initialize(input, constraints, parameters);
 			List<PartitionNode> next;
 			while((next = generator.next()) != null){
 				result.add(new TestCaseNode(randomName(), next));
 			}
 		} catch (GeneratorException e) {
-			fail("Unexpected generator exception");
+			fail("Unexpected generator exception: " + e.getMessage());
 		}
 		return result;
 	}
 
-	private List<? extends List<PartitionNode>> getGeneratorInput(
-			List<? extends CategoryNode> categories) {
+	private List<List<PartitionNode>> getGeneratorInput(
+			List<CategoryNode> categories) {
 		List<List<PartitionNode>> result = new ArrayList<List<PartitionNode>>();
 		for(CategoryNode category : categories){
 			result.add(category.getLeafPartitions());

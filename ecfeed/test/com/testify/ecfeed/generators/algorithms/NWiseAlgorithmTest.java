@@ -16,53 +16,50 @@ import com.testify.ecfeed.generators.api.IConstraint;
 import com.testify.ecfeed.generators.utils.GeneratorTestUtils;
 
 public class NWiseAlgorithmTest{
-	protected final GeneratorTestUtils utils = new GeneratorTestUtils(); 
+	private final Collection<IConstraint<String>> EMPTY_CONSTRAINTS = new HashSet<IConstraint<String>>();
 	
 	@SuppressWarnings("rawtypes")
-	protected void testCorrectness(Class<? extends IAlgorithm> algorithmUnderTestClass, 
-			int maxVariables, int maxPartitionsPerVariable) {
-		for(int numOfVariables = 1; numOfVariables <= maxVariables; numOfVariables++){
-			for(int partitionsPerVariable = 1; partitionsPerVariable <= maxPartitionsPerVariable; partitionsPerVariable++){
-				for(int n = 1; n <= numOfVariables; n++){
-					List<List<String>> input = utils.prepareInput(numOfVariables, partitionsPerVariable);
-					Collection<IConstraint<String>> constraints = null;
-					try{
-						IAlgorithm<String> algorithmUnderTest = getAlgorithm(algorithmUnderTestClass, n);
-						algorithmUnderTest.initialize(input, constraints);
-						Set<List<String>> algorithmResult = utils.algorithmResult(algorithmUnderTest);
-						assertTrue(containsAllTuples(algorithmResult, input, n));
-					} catch (Exception e) {
-						fail("Unexpected algorithm exception: " + e.getMessage());
-						e.printStackTrace();
-					}
+	protected void testCorrectness(Class<? extends IAlgorithm> algorithmUnderTestClass) {
+		for(int numOfVariables : new int[]{1, 2, 5}){
+		for(int partitionsPerVariable : new int[]{1, 2, 5}){
+			for(int n = 1; n <= numOfVariables; n++){
+				List<List<String>> input = GeneratorTestUtils.prepareInput(numOfVariables, partitionsPerVariable);
+				try{
+					IAlgorithm<String> algorithmUnderTest = getAlgorithm(algorithmUnderTestClass, n);
+					algorithmUnderTest.initialize(input, EMPTY_CONSTRAINTS);
+					Set<List<String>> algorithmResult = GeneratorTestUtils.algorithmResult(algorithmUnderTest);
+					assertTrue(containsAllTuples(algorithmResult, input, n));
+				} catch (Exception e) {
+					fail("Unexpected algorithm exception: " + e.getMessage());
+					e.printStackTrace();
 				}
 			}
+		}
 		}
 	}
 	
 	@SuppressWarnings("rawtypes")
-	protected void testConstraints(Class<? extends IAlgorithm> algorithmUnderTestClass, 
-			int maxVariables, int maxPartitionsPerVariable){
-		for(int numOfVariables = 1; numOfVariables <= maxVariables; numOfVariables++){
-			for(int partitionsPerVariable = 1; partitionsPerVariable <= maxPartitionsPerVariable; partitionsPerVariable++){
-				for(int n = 1; n <= numOfVariables; n++){
-					List<List<String>> input = utils.prepareInput(numOfVariables, partitionsPerVariable);
-					Collection<IConstraint<String>> constraints = utils.generateRandomConstraints(input);
-					try {
-						IAlgorithm<String> algorithmUnderTest = getAlgorithm(algorithmUnderTestClass, n);
-						algorithmUnderTest.initialize(input, constraints);
-						Set<List<String>> algorithmResult = utils.algorithmResult(algorithmUnderTest);
-						for(List<String> vector : algorithmResult){
-							for(IConstraint<String> constraint : constraints){
-								assertTrue(constraint.evaluate(vector));
-							}
+	protected void testConstraints(Class<? extends IAlgorithm> algorithmUnderTestClass){
+		for(int numOfVariables : new int[]{1, 2, 5}){
+		for(int partitionsPerVariable : new int[]{1, 2, 5}){
+			for(int n = 1; n <= numOfVariables; n++){
+				List<List<String>> input = GeneratorTestUtils.prepareInput(numOfVariables, partitionsPerVariable);
+				Collection<IConstraint<String>> constraints = GeneratorTestUtils.generateRandomConstraints(input);
+				try {
+					IAlgorithm<String> algorithmUnderTest = getAlgorithm(algorithmUnderTestClass, n);
+					algorithmUnderTest.initialize(input, constraints);
+					Set<List<String>> algorithmResult = GeneratorTestUtils.algorithmResult(algorithmUnderTest);
+					for(List<String> vector : algorithmResult){
+						for(IConstraint<String> constraint : constraints){
+							assertTrue(constraint.evaluate(vector));
 						}
-					} catch (GeneratorException e) {
-						fail("Unexpected algorithm exception: " + e.getMessage());
-						e.printStackTrace();
 					}
+				} catch (GeneratorException e) {
+					fail("Unexpected algorithm exception: " + e.getMessage());
+					e.printStackTrace();
 				}
 			}
+		}
 		}
 	}
 	
@@ -95,7 +92,7 @@ public class NWiseAlgorithmTest{
 			while(categoryTuples.hasNext()){
 				List<List<String>> next = categoryTuples.next();
 				CartesianProductGenerator<String> generator = new CartesianProductGenerator<String>();
-				generator.initialize(next, null, null);
+				generator.initialize(next, EMPTY_CONSTRAINTS, null);
 				List<String> tuple;
 				while((tuple = generator.next()) != null){
 					result.add(tuple);

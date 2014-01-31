@@ -16,8 +16,8 @@ public class AbstractGenerator<E> implements IGenerator<E> {
 	private List<IGeneratorParameter> fParameterDefinitions = new ArrayList<IGeneratorParameter>();
 	private Map<String, Object> fParameterValues = null;
 	private IAlgorithm<E> fAlgorithm = null;
-	private List<? extends List<E>> fInputDomain;
-	private Collection<? extends IConstraint<E>> fConstraints;
+	private List<List<E>> fInput;
+	private Collection<IConstraint<E>> fConstraints;
 	private boolean fInitialized = false;
 	
 	@Override
@@ -26,20 +26,20 @@ public class AbstractGenerator<E> implements IGenerator<E> {
 	}
 
 	@Override
-	public void initialize(List<? extends List<E>> inputDomain,
-			Collection<? extends IConstraint<E>> constraints,
+	public void initialize(List<List<E>> inputDomain,
+			Collection<IConstraint<E>> constraints,
 			Map<String, Object> parameters)
 			throws GeneratorException {
 		validateInput(inputDomain);
 		validateParameters(parameters);
 		fParameterValues = parameters;
-		fInputDomain = inputDomain;
+		fInput = inputDomain;
 		fConstraints = constraints;
 
 		if(fAlgorithm != null){
 			fAlgorithm.initialize(inputDomain, constraints);
 		}
-		fInitialized = true;
+		fInitialized = true; 
 	}
 
 	private void validateInput(List<? extends List<E>> inputDomain) throws GeneratorException {
@@ -94,7 +94,7 @@ public class AbstractGenerator<E> implements IGenerator<E> {
 	
 	protected void setAlgorithm(IAlgorithm<E> algorithm) throws GeneratorException{
 		fAlgorithm = algorithm;
-		fAlgorithm.initialize(fInputDomain, fConstraints);
+		fAlgorithm.initialize(fInput, fConstraints);
 	}
 
 	protected IAlgorithm<E> getAlgorithm(){
@@ -204,6 +204,21 @@ public class AbstractGenerator<E> implements IGenerator<E> {
 			}
 		}
 		return value;
+	}
+
+	@Override
+	public void addConstraint(IConstraint<E> constraint) {
+		fAlgorithm.addConstraint(constraint);
+	}
+
+	@Override
+	public void removeConstraint(IConstraint<E> constraint) {
+		fAlgorithm.removeConstraint(constraint);
+	}
+
+	@Override
+	public Collection<? extends IConstraint<E>> getConstraints() {
+		return fAlgorithm.getConstraints();
 	}
 
 

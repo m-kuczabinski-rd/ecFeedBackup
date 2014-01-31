@@ -10,8 +10,8 @@ import com.testify.ecfeed.generators.api.IConstraint;
 
 public class CartesianProductGenerator<E> extends AbstractGenerator<E> {
 	@Override
-	public void initialize(List<? extends List<E>> inputDomain,
-			Collection<? extends IConstraint<E>> constraints,
+	public void initialize(List<List<E>> inputDomain,
+			Collection<IConstraint<E>> constraints,
 			Map<String, Object> parameters) throws GeneratorException {
 		
 		super.initialize(inputDomain, constraints, parameters);

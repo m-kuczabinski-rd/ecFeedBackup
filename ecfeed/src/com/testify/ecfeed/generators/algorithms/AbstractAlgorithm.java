@@ -1,11 +1,21 @@
 package com.testify.ecfeed.generators.algorithms;
 
-public abstract class AbstractAlgorithm<E> implements IAlgorithm<E> {
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
+import com.testify.ecfeed.generators.api.GeneratorException;
+import com.testify.ecfeed.generators.api.IConstraint;
+
+public class AbstractAlgorithm<E> implements IAlgorithm<E> {
 
 	private int fTotalWork;
 	private int fProgress;
 	private int fTotalProgress;
 
+	private List<List<E>> fInput;
+	private Collection<IConstraint<E>> fConstraints;
+	
 	@Override
 	public int totalWork() {
 		return fTotalWork;
@@ -36,4 +46,69 @@ public abstract class AbstractAlgorithm<E> implements IAlgorithm<E> {
 	public void reset(){
 		fProgress = 0;
 	}
+	
+	protected List<E> instance(List<Integer> vector) {
+		List<E> instance = new ArrayList<E>();
+		for(int i = 0; i < vector.size(); i++){
+			instance.add(fInput.get(i).get(vector.get(i)));
+		}
+		return instance;
+	}
+	
+	protected List<Integer> representation(List<E> vector){
+		if(vector == null) return null;
+		List<Integer> representation = new ArrayList<Integer>();
+		for(int i = 0; i < vector.size(); i++){
+			E element = vector.get(i);
+			representation.add(fInput.get(i).indexOf(element));
+		}
+		return representation;
+	}
+
+	protected boolean checkConstraints(List<E> vector) {
+			if (vector == null) return true;
+			for(IConstraint<E> constraint : fConstraints){
+				if(constraint.evaluate(vector) == false){
+					return false;
+				}
+			}
+			return true;
+	}
+
+	@Override
+	public void initialize(List<List<E>> input,
+			Collection<IConstraint<E>> constraints)
+			throws GeneratorException {
+		if(input == null || constraints == null){
+			throw new GeneratorException("input or constraints of algorithm cannot be null");
+		}
+		fInput = input;
+		fConstraints = constraints;
+		reset();
+	}
+
+	@Override
+	public List<E> getNext() throws GeneratorException {
+		return null;
+	}
+	
+	public List<List<E>> getInput(){
+		return fInput;
+	}
+
+	@Override
+	public void addConstraint(IConstraint<E> constraint) {
+		fConstraints.add(constraint);
+	}
+
+	@Override
+	public void removeConstraint(IConstraint<E> constraint) {
+		fConstraints.remove(constraint);
+	}
+
+	@Override
+	public Collection<? extends IConstraint<E>> getConstraints() {
+		return fConstraints;
+	}
+
 }

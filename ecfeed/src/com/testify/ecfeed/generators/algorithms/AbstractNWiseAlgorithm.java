@@ -12,8 +12,6 @@ import com.testify.ecfeed.generators.api.IConstraint;
 public class AbstractNWiseAlgorithm<E> extends AbstractAlgorithm<E> implements IAlgorithm<E> {
 
 	private CartesianProductGenerator<E> fCartesianGenerator;
-	private List<? extends List<E>> fInput;
-	private Collection<? extends IConstraint<E>> fConstraints;
 	protected int N  = -1;
 	private int fTuplesToGenerate;
 	protected int fProgress;
@@ -22,17 +20,15 @@ public class AbstractNWiseAlgorithm<E> extends AbstractAlgorithm<E> implements I
 		N = n;
 	}
 	
-	public void initialize(List<? extends List<E>> input, 
-			Collection<? extends IConstraint<E>> constraints) throws GeneratorException {
+	public void initialize(List<List<E>> input, 
+			Collection<IConstraint<E>> constraints) throws GeneratorException {
 
 		if(N < 1 || N > input.size()){
 			throw new GeneratorException("Value of N for this input must be between 1 and " + input.size());
 		}
 		fCartesianGenerator = new CartesianProductGenerator<E>();
 		fCartesianGenerator.initialize(input, constraints, null);
-		fInput = input;
-		fConstraints = constraints;
-		reset();
+		super.initialize(input, constraints);
 	}
 	
 	@Override
@@ -54,7 +50,7 @@ public class AbstractNWiseAlgorithm<E> extends AbstractAlgorithm<E> implements I
 	
 	private int calculateTotalTuples(){
 		int totalWork = 0;
-		Tuples<List<E>> tuples = new Tuples<>(fInput, N);
+		Tuples<List<E>> tuples = new Tuples<List<E>>(getInput(), N);
 		while(tuples.hasNext()){
 			long combinations = 1;
 			List<List<E>> tuple = tuples.next();
@@ -70,15 +66,7 @@ public class AbstractNWiseAlgorithm<E> extends AbstractAlgorithm<E> implements I
 		return fCartesianGenerator.next();
 	}
 
-	protected List<? extends List<E>>getInput(){
-		return fInput;
-	}
-
-	protected Collection<? extends IConstraint<E>>getConstraints(){
-		return fConstraints;
-	}
-	
-	protected int maxTuples(List<? extends List<E>> input, int n){
+	protected int maxTuples(List<List<E>> input, int n){
 		return (new Tuples<List<E>>(input, n)).getAll().size();
 	}
 	
@@ -86,7 +74,7 @@ public class AbstractNWiseAlgorithm<E> extends AbstractAlgorithm<E> implements I
 		return (new Tuples<E>(vector, N)).getAll();
 	}
 
-	protected Set<List<E>> getAllTuples(List<? extends List<E>> inputDomain, int n) throws GeneratorException {
+	protected Set<List<E>> getAllTuples(List<List<E>> inputDomain, int n) throws GeneratorException {
 		Set<List<E>> result  = new HashSet<List<E>>();
 		Tuples<List<E>> categoryTuples = new Tuples<List<E>>(inputDomain, n);
 		while(categoryTuples.hasNext()){

@@ -23,9 +23,8 @@ public class NWiseGeneratorTest{
 	public void initializeTest(){
 		try {
 			
-			GeneratorTestUtils utils = new GeneratorTestUtils();
 			NWiseGenerator<String> generator = new NWiseGenerator<String>();
-			List<List<String>> inputDomain = utils.prepareInput(3, 3);
+			List<List<String>> inputDomain = GeneratorTestUtils.prepareInput(3, 3);
 			Collection<IConstraint<String>> constraints = new ArrayList<IConstraint<String>>();
 			Map<String, Object> parameters = new HashMap<String, Object>();
 			parameters.put("N", 2);

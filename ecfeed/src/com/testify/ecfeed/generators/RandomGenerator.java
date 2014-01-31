@@ -12,10 +12,10 @@ import com.testify.ecfeed.generators.api.IGenerator;
 public class RandomGenerator<E> extends AbstractGenerator<E> implements
 		IGenerator<E> {
 
-	private final String LENGTH_PARAMETER_NAME = "Test suite size";
-	private final int DEFAULT_LENGTH = 1;
-	private final String DUPLICATES_PARAMETER_NAME = "Duplicates"; 
-	private final boolean DEFAULT_DUPLICATES = false;
+	public final String LENGTH_PARAMETER_NAME = "Test suite size";
+	public final int DEFAULT_LENGTH = 1;
+	public final String DUPLICATES_PARAMETER_NAME = "Duplicates"; 
+	public final boolean DEFAULT_DUPLICATES = false;
 	
 	public RandomGenerator() throws GeneratorException{
 		addParameterDefinition(new IntegerParameter(LENGTH_PARAMETER_NAME, true, DEFAULT_LENGTH, 0, Integer.MAX_VALUE));
@@ -23,8 +23,8 @@ public class RandomGenerator<E> extends AbstractGenerator<E> implements
 	}
 	
 	@Override
-	public void initialize(List<? extends List<E>> inputDomain,
-			Collection<? extends IConstraint<E>> constraints,
+	public void initialize(List<List<E>> inputDomain,
+			Collection<IConstraint<E>> constraints,
 			Map<String, Object> parameters) throws GeneratorException{
 
 		super.initialize(inputDomain, constraints, parameters);
