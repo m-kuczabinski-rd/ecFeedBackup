@@ -103,17 +103,17 @@ public class AbstractGenerator<E> implements IGenerator<E> {
 
 	@Override
 	public int totalWork() {
-		return 0;
+		return fAlgorithm.totalWork();
 	}
 
 	@Override
 	public int workProgress() {
-		return 0;
+		return fAlgorithm.workProgress();
 	}
 
 	@Override
 	public int totalProgress() {
-		return 0;
+		return fAlgorithm.totalProgress();
 	}
 	
 	protected void addParameterDefinition(IGeneratorParameter definition){
