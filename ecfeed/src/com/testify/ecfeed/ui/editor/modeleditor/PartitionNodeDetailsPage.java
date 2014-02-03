@@ -368,7 +368,7 @@ public class PartitionNodeDetailsPage extends GenericNodeDetailsPage{
 	}
 
 	private void changePartitionValue(String valueString) {
-		CategoryNode parent = (CategoryNode)fSelectedPartition.getParent();
+		CategoryNode parent = fSelectedPartition.getCategory();
 		if(parent.validatePartitionStringValue(valueString)){
 			fSelectedPartition.setValue(parent.getPartitionValueFromString(valueString));
 			updateModel(fSelectedPartition);

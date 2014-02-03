@@ -170,6 +170,9 @@ public class PartitionNode extends GenericNode {
 	}
 	
 	public String toString(){
+		if(isAbstract()){
+			return getQualifiedName() + "[ABSTRACT]";
+		}
 		return getQualifiedName() + " [" + getValueString() + "]";
 	}
 }
