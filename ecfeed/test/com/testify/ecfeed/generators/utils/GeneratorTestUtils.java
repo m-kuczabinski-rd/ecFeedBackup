@@ -40,7 +40,8 @@ public class GeneratorTestUtils{
 	}
 	
 	private static final String[] VARIABLE_NAMES = {"a", "b", "c", "d", "e", "f", "g", "h", "i", "j", 
-			"k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"};
+			"k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "aa", "ab", 
+			"ac", "ad", "ae", "af", "ag", "ah", "ai", "aj", "ak", "al", "am", "an", "ao", "ap", "aq"};
 	
 	public static List<List<String>> prepareInput(int variables, int partitions){
 		List<List<String>> input = new ArrayList<List<String>>();
