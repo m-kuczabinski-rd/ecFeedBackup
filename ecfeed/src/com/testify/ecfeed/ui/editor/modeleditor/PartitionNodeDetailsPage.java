@@ -121,7 +121,7 @@ public class PartitionNodeDetailsPage extends GenericNodeDetailsPage{
 
 		@Override
 		protected boolean canEdit(Object element) {
-			return ((PartitionNode)element).isAbstract();
+			return !((PartitionNode)element).isAbstract();
 		}
 
 		@Override
