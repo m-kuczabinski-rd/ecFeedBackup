@@ -1,0 +1,25 @@
+Version 1.4.0
+ - Adaptive random generator
+ - hierarchical model 
+
+Version 1.3.1
+Critical bugfixes
+
+Version 1.3.0
+ - Random test generator
+ - Online test generation and execution
+
+Version 1.2.1
+ - N-Wise test generator
+ - Expected values
+ - handling constraints by generators
+
+Version 1.1.0
+ - Automatic test generation by Cartesian Product generator
+
+
+Version 1.0.0
+ - creating a model from source code
+ - editing the model
+ - manual creation of test cases
+ - Executing test cases defined in the model
