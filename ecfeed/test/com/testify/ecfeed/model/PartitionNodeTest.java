@@ -251,12 +251,17 @@ public class PartitionNodeTest{
 		
 		assertFalse(p.addLabel("pLabel.0"));
 		assertFalse(p12.addLabel("pLabel.0"));
+
 		
+		assertTrue(p12.getLabels().contains("p12Label.0"));
+		assertTrue(p12.getLabels().contains("p12Label.1"));
+		assertFalse(p12.getLabels().contains("p1Label.0"));
+		assertFalse(p12.getLabels().contains("p1Label.1"));
+
 		assertTrue(p12.getAllLabels().contains("p12Label.0"));
 		assertTrue(p12.getAllLabels().contains("p12Label.1"));
 		assertTrue(p12.getAllLabels().contains("p1Label.0"));
-		assertTrue(p12.getAllLabels().contains("p12Label.0"));
-		assertTrue(p12.getAllLabels().contains("p12Label.1"));
+		assertTrue(p12.getAllLabels().contains("p1Label.1"));
 		assertTrue(p12.getAllLabels().contains("pLabel.0"));
 		assertTrue(p12.getAllLabels().contains("pLabel.1"));
 		
@@ -264,6 +269,15 @@ public class PartitionNodeTest{
 		assertFalse(p12.getAllLabels().contains("p11Label.1"));
 		assertFalse(p12.getAllLabels().contains("p2Label.0"));
 		assertFalse(p12.getAllLabels().contains("p2Label.1"));
+		
+		assertFalse(p12.getInheritedLabels().contains("p12Label.0"));
+		assertFalse(p12.getInheritedLabels().contains("p12Label.1"));
+		assertTrue(p12.getInheritedLabels().contains("p1Label.0"));
+		assertTrue(p12.getInheritedLabels().contains("p1Label.1"));
+		assertTrue(p12.getInheritedLabels().contains("pLabel.0"));
+		assertTrue(p12.getInheritedLabels().contains("pLabel.1"));
+		
+		
 	}
 	
 }

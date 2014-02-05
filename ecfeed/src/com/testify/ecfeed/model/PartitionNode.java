@@ -137,6 +137,13 @@ public class PartitionNode extends GenericNode {
 		return allLabels;
 	}
 	
+	public Set<String> getInheritedLabels(){
+		if(getParent() instanceof PartitionNode){
+			return ((PartitionNode)getParent()).getAllLabels();
+		}
+		return new HashSet<String>();
+	}
+	
 	public boolean removePartition(PartitionNode partition){
 		if(getCategory() != null){
 			getCategory().partitionRemoved(partition);
