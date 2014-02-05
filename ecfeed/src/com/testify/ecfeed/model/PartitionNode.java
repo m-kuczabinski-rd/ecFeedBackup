@@ -22,13 +22,13 @@ public class PartitionNode extends GenericNode {
 
 	private Object fValue;
 	private List<PartitionNode> fPartitions;
-	private Set<String> fLabels;
+	private List<String> fLabels;
 
 	public PartitionNode(String name, Object value) {
 		super(name);
 		fValue = value;
 		fPartitions = new ArrayList<PartitionNode>();
-		fLabels = new HashSet<String>();
+		fLabels = new ArrayList<String>();
 	}
 
 	public String getQualifiedName(){
@@ -125,23 +125,24 @@ public class PartitionNode extends GenericNode {
 		return fLabels.remove(label);
 	}
 	
-	public Set<String> getLabels(){
+	public List<String> getLabels(){
 		return fLabels;
 	}
 	
-	public Set<String> getAllLabels(){
-		Set<String> allLabels = new HashSet<String>(fLabels);
+	public List<String> getAllLabels(){
+		List<String> allLabels = new ArrayList<String>();
 		if(getParent() instanceof PartitionNode){
 			allLabels.addAll(((PartitionNode)getParent()).getAllLabels());
 		}
+		allLabels.addAll(fLabels);
 		return allLabels;
 	}
 	
-	public Set<String> getInheritedLabels(){
+	public List<String> getInheritedLabels(){
 		if(getParent() instanceof PartitionNode){
 			return ((PartitionNode)getParent()).getAllLabels();
 		}
-		return new HashSet<String>();
+		return new ArrayList<String>();
 	}
 	
 	public boolean removePartition(PartitionNode partition){
