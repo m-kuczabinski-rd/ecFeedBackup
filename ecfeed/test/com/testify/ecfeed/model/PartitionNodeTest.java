@@ -225,4 +225,45 @@ public class PartitionNodeTest{
 		
 	}
 	
+	@Test 
+	public void labelTest(){
+		PartitionNode p = new PartitionNode("p", 0);
+		PartitionNode p1 = new PartitionNode("p1", 0);
+		PartitionNode p2 = new PartitionNode("p2", 0);
+		PartitionNode p12 = new PartitionNode("p12", 0);
+		PartitionNode p11 = new PartitionNode("p11", 0);
+		
+		p.addPartition(p1);
+		p.addPartition(p2);
+		p1.addPartition(p11);
+		p1.addPartition(p12);
+		
+		assertTrue(p.addLabel("pLabel.0"));
+		assertTrue(p.addLabel("pLabel.1"));
+		assertTrue(p1.addLabel("p1Label.0"));
+		assertTrue(p1.addLabel("p1Label.1"));
+		assertTrue(p2.addLabel("p2Label.0"));
+		assertTrue(p2.addLabel("p2Label.1"));
+		assertTrue(p11.addLabel("p11Label.0"));
+		assertTrue(p11.addLabel("p11Label.1"));
+		assertTrue(p12.addLabel("p12Label.0"));
+		assertTrue(p12.addLabel("p12Label.1"));
+		
+		assertFalse(p.addLabel("pLabel.0"));
+		assertFalse(p12.addLabel("pLabel.0"));
+		
+		assertTrue(p12.getAllLabels().contains("p12Label.0"));
+		assertTrue(p12.getAllLabels().contains("p12Label.1"));
+		assertTrue(p12.getAllLabels().contains("p1Label.0"));
+		assertTrue(p12.getAllLabels().contains("p12Label.0"));
+		assertTrue(p12.getAllLabels().contains("p12Label.1"));
+		assertTrue(p12.getAllLabels().contains("pLabel.0"));
+		assertTrue(p12.getAllLabels().contains("pLabel.1"));
+		
+		assertFalse(p12.getAllLabels().contains("p11Label.0"));
+		assertFalse(p12.getAllLabels().contains("p11Label.1"));
+		assertFalse(p12.getAllLabels().contains("p2Label.0"));
+		assertFalse(p12.getAllLabels().contains("p2Label.1"));
+	}
+	
 }
