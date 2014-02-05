@@ -115,7 +115,10 @@ public class PartitionNode extends GenericNode {
 	}
 	
 	public boolean addLabel(String label){
-		return fLabels.add(label);
+		if(getAllLabels().contains(label) == false){
+			return fLabels.add(label);
+		}
+		return false;
 	}
 	
 	public boolean removeLabel(String label){
