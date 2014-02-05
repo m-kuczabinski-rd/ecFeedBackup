@@ -88,7 +88,11 @@ public class Messages {
 			+ "Each category must be represented by at least one partition.";
 	public static final String DIALOG_LARGE_TEST_SUITE_GENERATED_TITLE = "Large size of generated data";
 	public static final String DIALOG_TEST_GENERATOR_EXCEPTION_TITLE = "Test generator issue";
-	public static String DIALOG_LARGE_TEST_SUITE_GENERATED_MESSAGE(int length) {
+	public static final String DIALOG_CANNOT_ADD_LABEL_TITLE = "Cannot add label for partition";
+	public static final String DIALOG_CANNOT_ADD_LABEL_MESSAGE = "New label could not be added to the partition";
+	public static final String DIALOG_CANNOT_REMOVE_LABEL_TITLE = "Could not remove label";
+	public static final String DIALOG_CANNOT_REMOVE_LABEL_MESSAGE(String label){return "The label " + label + " coud not be removed";}
+	public static final String DIALOG_LARGE_TEST_SUITE_GENERATED_MESSAGE(int length) {
 		return "The algortithm generated " + length + " test cases. Adding this amount of data to the model may heavily affect tool's performance"
 				+ " and cause loss of data. Do you want to continue?";
 	}

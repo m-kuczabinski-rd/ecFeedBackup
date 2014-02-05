@@ -15,10 +15,12 @@ import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.CellEditor;
+import org.eclipse.jface.viewers.CheckStateChangedEvent;
 import org.eclipse.jface.viewers.CheckboxTableViewer;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.ColumnViewer;
 import org.eclipse.jface.viewers.EditingSupport;
+import org.eclipse.jface.viewers.ICheckStateListener;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.viewers.TextCellEditor;
@@ -57,6 +59,7 @@ public class PartitionNodeDetailsPage extends GenericNodeDetailsPage{
 
 	private PartitionNode fSelectedPartition;
 	private Section fMainSection;
+	private Section fChildrenSection;
 	private Text fPartitionNameText;
 	private Text fPartitionValueText;
 	private Button fChangeValueButton;
@@ -64,6 +67,9 @@ public class PartitionNodeDetailsPage extends GenericNodeDetailsPage{
 	private CheckboxTableViewer fPartitionsViewer;
 	private Table fPartitionsTable;
 	private ColorManager fColorManager;
+	private Section fLabelsSection;
+	private CheckboxTableViewer fLabelsViewer;
+	private Table fLabelsTable;
 	
 	public class PartitionNameEditingSupport extends EditingSupport{
 		private TextCellEditor fNameCellEditor;
@@ -149,6 +155,41 @@ public class PartitionNodeDetailsPage extends GenericNodeDetailsPage{
 		}
 	}
 
+	public class LabelEditingSupport extends EditingSupport{
+		private TextCellEditor fLabelCellEditor;
+		
+		public LabelEditingSupport(ColumnViewer viewer) {
+			super(viewer);
+			fLabelCellEditor = new TextCellEditor(fLabelsTable);
+		}
+
+		@Override
+		protected CellEditor getCellEditor(Object element) {
+			return fLabelCellEditor;
+		}
+
+		@Override
+		protected boolean canEdit(Object element) {
+			return !fSelectedPartition.getInheritedLabels().contains((String)element);
+		}
+
+		@Override
+		protected Object getValue(Object element) {
+			return (String)element;
+		}
+
+		@Override
+		protected void setValue(Object element, Object value) {
+			String oldLabel = (String)element;
+			String newLabel = (String)value;
+			if(fSelectedPartition.getAllLabels().contains(newLabel) == false){
+				fSelectedPartition.removeLabel(oldLabel);
+				fSelectedPartition.addLabel(newLabel);
+				updateModel(fSelectedPartition);
+			}
+		}
+	}
+
 	/**
 	 * Create the details page.
 	 */
@@ -174,7 +215,145 @@ public class PartitionNodeDetailsPage extends GenericNodeDetailsPage{
 
 		createNameValueComposite(mainComposite);
 		
-		createChildrenComposite(mainComposite);
+		createChildrenSection(mainComposite);
+		
+		createLabelsSection(mainComposite);
+		
+	}
+
+	private void createLabelsSection(Composite mainComposite) {
+		fLabelsSection = fToolkit.createSection(mainComposite, Section.TITLE_BAR);
+		fLabelsSection.setLayout(new GridLayout(1, false));
+		fLabelsSection.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+		getToolkit().paintBordersFor(fChildrenSection);
+		fLabelsSection.setText("Labels");
+		fLabelsSection.setExpanded(true);
+		Composite labelsComposite = createLabelsComposite(fLabelsSection);
+		fLabelsSection.setClient(labelsComposite);
+
+	}
+
+	private Composite createLabelsComposite(Composite parent) {
+		Composite labelsComposite = fToolkit.createComposite(parent, SWT.NONE);
+		labelsComposite.setLayout(new GridLayout(1, false));
+		labelsComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+		
+		createLabelsViewer(labelsComposite);
+		createLabelsViewerButtons(labelsComposite);
+		return labelsComposite;
+	}
+
+	private void createLabelsViewer(Composite parent) {
+		fLabelsViewer = CheckboxTableViewer.newCheckList(parent, SWT.BORDER | SWT.FULL_SELECTION);
+		fLabelsViewer.setContentProvider(new ArrayContentProvider());
+		fLabelsTable = fLabelsViewer.getTable();
+		fLabelsTable.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+		fLabelsTable.setLinesVisible(true);
+		fLabelsTable.setHeaderVisible(true);
+		fToolkit.paintBordersFor(fLabelsTable);
+		fLabelsViewer.addCheckStateListener(new ICheckStateListener() {
+			@Override
+			public void checkStateChanged(CheckStateChangedEvent event) {
+				String label = (String)event.getElement();
+				if(fSelectedPartition.getInheritedLabels().contains(label)){
+					fLabelsViewer.setChecked(label, false);
+				}
+			}
+		});
+		
+		TableViewerColumn labelColumn = createTableViewerColumn(fLabelsViewer, "Label", 
+				190, new ColumnLabelProvider(){
+			@Override
+			public String getText(Object element){
+				String label = (String)element;
+				String text = label;
+				if(fSelectedPartition.getInheritedLabels().contains(label)){
+					text = "[i]" + text;
+				}
+				return text;
+			}
+			
+			@Override
+			public Color getForeground(Object element){
+				if(element instanceof String){
+					String label = (String)element;
+					if(fSelectedPartition.getInheritedLabels().contains(label)){
+						return fColorManager.getColor(ColorConstants.INHERITED_LABEL_FOREGROUND);
+					}
+				}
+				return null;
+			}
+
+			@Override
+			public Color getBackground(Object element){
+				if(element instanceof String){
+					String label = (String)element;
+					if(fSelectedPartition.getInheritedLabels().contains(label)){
+						return fColorManager.getColor(ColorConstants.INHERITED_LABEL_BACKGROUND);
+					}
+				}
+				return null;
+			}
+		});
+		labelColumn.setEditingSupport(new LabelEditingSupport(fLabelsViewer));
+	}
+
+	private void createLabelsViewerButtons(Composite parent) {
+		Composite buttonsComposite = fToolkit.createComposite(parent, SWT.NONE);
+		buttonsComposite.setLayout(new RowLayout());
+		buttonsComposite.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
+		
+		createButton(buttonsComposite, "Add Label...", new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e){
+				String newLabel = Constants.DEFAULT_LABEL;
+				int i = 1;
+				while(fSelectedPartition.getAllLabels().contains(newLabel)){
+					newLabel = Constants.DEFAULT_LABEL + "(" + i + ")";
+					i++;
+				}
+				if(fSelectedPartition.addLabel(newLabel) == false){
+					new MessageDialog(getActiveShell(), 
+							Messages.DIALOG_CANNOT_ADD_LABEL_TITLE, 
+							Display.getDefault().getSystemImage(SWT.ICON_WARNING), 
+							Messages.DIALOG_CANNOT_ADD_LABEL_MESSAGE,
+							MessageDialog.ERROR, 
+							new String[] {IDialogConstants.OK_LABEL},
+							IDialogConstants.OK_ID).open();
+				};
+				updateModel(fSelectedPartition);
+			}
+		});
+
+		createButton(buttonsComposite, "Remove Selected", new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e){
+				for(Object element : fLabelsViewer.getCheckedElements()){
+					String label = (String)element;
+					if(fSelectedPartition.removeLabel(label) == false){
+						new MessageDialog(getActiveShell(), 
+								Messages.DIALOG_CANNOT_REMOVE_LABEL_TITLE, 
+								Display.getDefault().getSystemImage(SWT.ICON_WARNING), 
+								Messages.DIALOG_CANNOT_REMOVE_LABEL_MESSAGE(label),
+								MessageDialog.ERROR, 
+								new String[] {IDialogConstants.OK_LABEL},
+								IDialogConstants.OK_ID).open();
+					}
+					updateModel(fSelectedPartition);
+				}
+			}
+		});
+
+	}
+
+	private void createChildrenSection(Composite mainComposite) {
+		fChildrenSection = fToolkit.createSection(mainComposite, Section.TITLE_BAR);
+		fChildrenSection.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+		getToolkit().paintBordersFor(fChildrenSection);
+		fChildrenSection.setText("Children");
+		fChildrenSection.setExpanded(true);
+		Composite childrenComposite = createChildrenComposite(fChildrenSection);
+		fChildrenSection.setClient(childrenComposite);
 	}
 
 	private void createNameValueComposite(Composite parent) {
@@ -228,14 +407,14 @@ public class PartitionNodeDetailsPage extends GenericNodeDetailsPage{
 		});
 	}
 
-	private void createChildrenComposite(Composite parent) {
+	private Composite createChildrenComposite(Composite parent) {
 		Composite childrenComposite = fToolkit.createComposite(parent, SWT.NONE);
 		childrenComposite.setLayout(new GridLayout(1, false));
 		childrenComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
-		fToolkit.createLabel(childrenComposite, "Children");
 		
 		createChildrenViewer(childrenComposite);
 		createChildrenViewerButtons(childrenComposite);
+		return childrenComposite;
 	}
 
 	private void createChildrenViewer(Composite parent) {
@@ -257,7 +436,7 @@ public class PartitionNodeDetailsPage extends GenericNodeDetailsPage{
 			
 			@Override
 			public Color getForeground(Object element){
-				return getColor(element);
+				return getPartitionColor(element);
 			}
 
 		});
@@ -280,13 +459,13 @@ public class PartitionNodeDetailsPage extends GenericNodeDetailsPage{
 			
 			@Override
 			public Color getForeground(Object element){
-				return getColor(element);
+				return getPartitionColor(element);
 			}
 		});
 		valueViewerColumn.setEditingSupport(new PartitionValueEditingSupport(fPartitionsViewer));
 	}
 
-	private Color getColor(Object element){
+	private Color getPartitionColor(Object element){
 		if(element instanceof PartitionNode){
 			PartitionNode partition = (PartitionNode)element;
 			if(partition.isAbstract()){
@@ -408,5 +587,6 @@ public class PartitionNodeDetailsPage extends GenericNodeDetailsPage{
 			fChangeValueButton.setEnabled(true);
 		}
 		fPartitionsViewer.setInput(fSelectedPartition.getPartitions());
+		fLabelsViewer.setInput(fSelectedPartition.getAllLabels());
 	}
 }

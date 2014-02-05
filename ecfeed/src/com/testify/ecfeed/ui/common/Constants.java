@@ -43,4 +43,5 @@ public class Constants {
 	public static final int MAX_DISPLAYED_CHILDREN_PER_NODE = 1000;
 	public static final int MAX_DISPLAYED_TEST_CASES_PER_SUITE = 500;
 	public static final int TEST_SUITE_SIZE_WARNING_LIMIT = 20000;
+	public static final String DEFAULT_LABEL = "newLabel";
 }
