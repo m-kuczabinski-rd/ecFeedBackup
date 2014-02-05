@@ -12,7 +12,9 @@
 package com.testify.ecfeed.model;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import com.testify.ecfeed.model.Constants;
 
@@ -20,11 +22,13 @@ public class PartitionNode extends GenericNode {
 
 	private Object fValue;
 	private List<PartitionNode> fPartitions;
+	private Set<String> fLabels;
 
 	public PartitionNode(String name, Object value) {
 		super(name);
 		fValue = value;
 		fPartitions = new ArrayList<PartitionNode>();
+		fLabels = new HashSet<String>();
 	}
 
 	public String getQualifiedName(){
@@ -108,6 +112,26 @@ public class PartitionNode extends GenericNode {
 			}
 		}
 		return null;
+	}
+	
+	public boolean addLabel(String label){
+		return fLabels.add(label);
+	}
+	
+	public boolean removeLabel(String label){
+		return fLabels.remove(label);
+	}
+	
+	public Set<String> getLabels(){
+		return fLabels;
+	}
+	
+	public Set<String> getAllLabels(){
+		Set<String> allLabels = new HashSet<String>(fLabels);
+		if(getParent() instanceof PartitionNode){
+			allLabels.addAll(((PartitionNode)getParent()).getAllLabels());
+		}
+		return allLabels;
 	}
 	
 	public boolean removePartition(PartitionNode partition){
