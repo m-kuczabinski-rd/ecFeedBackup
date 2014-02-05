@@ -12,7 +12,7 @@
 package com.testify.ecfeed.model;
 
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -22,13 +22,13 @@ public class PartitionNode extends GenericNode {
 
 	private Object fValue;
 	private List<PartitionNode> fPartitions;
-	private List<String> fLabels;
+	private Set<String> fLabels;
 
 	public PartitionNode(String name, Object value) {
 		super(name);
 		fValue = value;
 		fPartitions = new ArrayList<PartitionNode>();
-		fLabels = new ArrayList<String>();
+		fLabels = new LinkedHashSet<String>();
 	}
 
 	public String getQualifiedName(){
@@ -116,21 +116,29 @@ public class PartitionNode extends GenericNode {
 	
 	public boolean addLabel(String label){
 		if(getAllLabels().contains(label) == false){
+			for(PartitionNode child : fPartitions){
+				//in case when a child already was labeled with new label,
+				//the parent (this) takes the label (non-reversible operation)
+				child.removeLabel(label);
+			}
 			return fLabels.add(label);
 		}
 		return false;
 	}
 	
 	public boolean removeLabel(String label){
+		for(PartitionNode child : fPartitions){
+			child.removeLabel(label);
+		}
 		return fLabels.remove(label);
 	}
 	
-	public List<String> getLabels(){
+	public Set<String> getLabels(){
 		return fLabels;
 	}
 	
-	public List<String> getAllLabels(){
-		List<String> allLabels = new ArrayList<String>();
+	public Set<String> getAllLabels(){
+		Set<String> allLabels = new LinkedHashSet<String>();
 		if(getParent() instanceof PartitionNode){
 			allLabels.addAll(((PartitionNode)getParent()).getAllLabels());
 		}
@@ -138,11 +146,11 @@ public class PartitionNode extends GenericNode {
 		return allLabels;
 	}
 	
-	public List<String> getInheritedLabels(){
+	public Set<String> getInheritedLabels(){
 		if(getParent() instanceof PartitionNode){
 			return ((PartitionNode)getParent()).getAllLabels();
 		}
-		return new ArrayList<String>();
+		return new LinkedHashSet<String>();
 	}
 	
 	public boolean removePartition(PartitionNode partition){
