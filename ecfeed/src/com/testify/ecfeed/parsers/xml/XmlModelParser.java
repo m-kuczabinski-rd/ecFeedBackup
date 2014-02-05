@@ -279,6 +279,9 @@ public class XmlModelParser implements IModelParser{
 			if(child.getLocalName() == Constants.PARTITION_NODE_NAME){
 				partition.addPartition(parsePartitionElement(child, typeSignature));
 			}
+			if(child.getLocalName() == Constants.LABEL_NODE_NAME){
+				partition.addLabel(child.getAttributeValue(Constants.LABEL_ATTRIBUTE_NAME));
+			}
 		}
 		return partition;
 	}

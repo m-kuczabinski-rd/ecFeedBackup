@@ -14,6 +14,7 @@ package com.testify.ecfeed.parsers.xml;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.List;
+import java.util.Set;
 
 import com.testify.ecfeed.model.IGenericNode;
 import com.testify.ecfeed.model.RootNode;
@@ -75,7 +76,7 @@ public class XmlModelSerializer {
 		else if (node instanceof PartitionNode){
 			Object value = ((PartitionNode)node).getValue();
 			String type = ((PartitionNode)node).getCategory().getType();
-			element = createPartitionElement(type, name, value);
+			element = createPartitionElement(type, name, value, ((PartitionNode)node).getLabels());
 			
 		}
 		else if (node instanceof TestCaseNode){
@@ -128,13 +129,18 @@ public class XmlModelSerializer {
 		testCaseElement.appendChild(testParameterElement);
 	}
 
-	protected Element createPartitionElement(String type, String name, Object value) {
+	protected Element createPartitionElement(String type, String name, Object value, Set<String> labels) {
 		String valueString = getValueString(type, value);
 		Element partitionElement = new Element(Constants.PARTITION_NODE_NAME);
 		Attribute nameAttribute = new Attribute(Constants.NODE_NAME_ATTRIBUTE, name);
 		Attribute valueAttribute = new Attribute(Constants.VALUE_ATTRIBUTE, valueString);
 		partitionElement.addAttribute(nameAttribute);
 		partitionElement.addAttribute(valueAttribute);
+		for(String label : labels){
+			Element labelElement = new Element(Constants.LABEL_NODE_NAME);
+			labelElement.addAttribute(new Attribute(Constants.LABEL_ATTRIBUTE_NAME, label));
+			partitionElement.appendChild(labelElement);
+		}
 		return partitionElement;
 	}
 

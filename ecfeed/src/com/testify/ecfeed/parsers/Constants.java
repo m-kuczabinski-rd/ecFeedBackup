@@ -7,6 +7,7 @@ public class Constants {
 	public static final String CATEGORY_NODE_NAME = "Category";
 	public static final String EXPECTED_VALUE_CATEGORY_NODE_NAME = "ExpectedValueCategory";
 	public static final String PARTITION_NODE_NAME = "Partition";
+	public static final String LABEL_NODE_NAME = "Label";
 	public static final String TEST_CASE_NODE_NAME = "TestCase";
 	public static final String TEST_PARAMETER_NODE_NAME = "TestParameter";
 	public static final String EXPECTED_PARAMETER_NODE_NAME = "ExpectedValue";
@@ -25,6 +26,7 @@ public class Constants {
 	public static final String NULL_VALUE_STRING_REPRESENTATION = "/null";
 	public static final String TEST_SUITE_NAME_ATTRIBUTE = "testSuite";
 	public static final String PARTITION_ATTRIBUTE_NAME = "partition";
+	public static final String LABEL_ATTRIBUTE_NAME = "label";
 	public static final String VALUE_ATTRIBUTE_NAME = "value";
 	public static final String STATIC_VALUE_ATTRIBUTE_NAME = "value";
 	public static final String STATEMENT_CATEGORY_ATTRIBUTE_NAME = "category";

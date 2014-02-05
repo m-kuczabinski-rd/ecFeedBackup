@@ -45,6 +45,7 @@ public class XmlParserSerializerTest {
 	private final int MAX_EXPECTED_CATEGORIES = 3;
 	private final int MAX_PARTITIONS = 10;
 	private final int MAX_PARTITION_LEVELS = 5;
+	private final int MAX_PARTITION_LABELS = 5;
 	private final int MAX_CONSTRAINTS = 5;
 	private final int MAX_TEST_CASES = 50;
 	
@@ -230,7 +231,7 @@ public class XmlParserSerializerTest {
 		}
 	}
 
-	private Object generateRandomString(int length) {
+	String generateRandomString(int length) {
 		String allowedChars = " 1234567890qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM";
 		String result = new String();
 		for(int i = 0; i < length; i++){
@@ -242,7 +243,10 @@ public class XmlParserSerializerTest {
 
 	private PartitionNode createPartition(String type, int level) {
 		Object value = createRandomValue(type);
-		PartitionNode partition = new PartitionNode(randomName(), value); 
+		PartitionNode partition = new PartitionNode(randomName(), value);
+		for(int i = 0; i < rand.nextInt(MAX_PARTITION_LABELS); i++){
+			partition.addLabel(generateRandomString(10));
+		}
 		boolean createChildren = rand.nextBoolean();
 		int numOfChildren = rand.nextInt(MAX_PARTITIONS);
 		if(createChildren && level <= MAX_PARTITION_LEVELS){
