@@ -49,7 +49,7 @@ import com.testify.ecfeed.model.constraint.BasicStatement;
 import com.testify.ecfeed.model.constraint.Constraint;
 import com.testify.ecfeed.model.constraint.Operator;
 import com.testify.ecfeed.model.constraint.Relation;
-import com.testify.ecfeed.model.constraint.Statement;
+import com.testify.ecfeed.model.constraint.PartitionStatement;
 import com.testify.ecfeed.model.constraint.StatementArray;
 import com.testify.ecfeed.model.constraint.StaticStatement;
 import com.testify.ecfeed.ui.common.Messages;
@@ -237,7 +237,7 @@ public class ConstraintsNodeDetailsPage extends GenericNodeDetailsPage {
 		fStatementEditComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
 		
 		createStatementCombo(fStatementEditComposite, editedStatement);
-		if(editedStatement instanceof Statement){
+		if(editedStatement instanceof PartitionStatement){
 			createRelationCombo(fStatementEditComposite);
 			createConditionCombo(fStatementEditComposite);
 		}
@@ -276,8 +276,8 @@ public class ConstraintsNodeDetailsPage extends GenericNodeDetailsPage {
 				return STATEMENT_OR;
 			}
 		}
-		else if(statement instanceof Statement){
-			PartitionNode condition = ((Statement)statement).getCondition();
+		else if(statement instanceof PartitionStatement){
+			PartitionNode condition = ((PartitionStatement)statement).getCondition();
 			CategoryNode category = condition.getCategory();
 			return category.getName();
 		}
@@ -293,14 +293,14 @@ public class ConstraintsNodeDetailsPage extends GenericNodeDetailsPage {
 				Relation.EQUAL.toString(),
 				Relation.NOT.toString(),
 		});
-		if(fSelectedStatement instanceof Statement){
-			fRelationCombo.setText(((Statement)fSelectedStatement).getRelation().toString());
+		if(fSelectedStatement instanceof PartitionStatement){
+			fRelationCombo.setText(((PartitionStatement)fSelectedStatement).getRelation().toString());
 		}
 		fRelationCombo.addModifyListener(new ModifyListener() {
 			@Override
 			public void modifyText(ModifyEvent e) {
-				if(fSelectedStatement instanceof Statement){
-					((Statement)fSelectedStatement).setRelation(Relation.getRelation(fRelationCombo.getText()));
+				if(fSelectedStatement instanceof PartitionStatement){
+					((PartitionStatement)fSelectedStatement).setRelation(Relation.getRelation(fRelationCombo.getText()));
 					updateModel(fSelectedConstraint);
 				}
 			}
@@ -313,8 +313,8 @@ public class ConstraintsNodeDetailsPage extends GenericNodeDetailsPage {
 		fToolkit.paintBordersFor(fConditionCombo);
 		fToolkit.adapt(fConditionCombo, true, true);
 
-		if(fSelectedStatement instanceof Statement){
-			PartitionNode condition = ((Statement)fSelectedStatement).getCondition();
+		if(fSelectedStatement instanceof PartitionStatement){
+			PartitionNode condition = ((PartitionStatement)fSelectedStatement).getCondition();
 			CategoryNode parentCategory = condition.getCategory();
 			fConditionCombo.setItems(parentCategory.getAllPartitionNames().toArray(new String[]{}));
 			fConditionCombo.setText(condition.getName());
@@ -322,9 +322,9 @@ public class ConstraintsNodeDetailsPage extends GenericNodeDetailsPage {
 		fConditionCombo.addModifyListener(new ModifyListener() {
 			@Override
 			public void modifyText(ModifyEvent e) {
-				if(fSelectedStatement instanceof Statement){
+				if(fSelectedStatement instanceof PartitionStatement){
 					CategoryNode category = fSelectedConstraint.getMethod().getCategory(fStatementEditCombo.getText());
-					((Statement)fSelectedStatement).setCondition(category.getPartition(fConditionCombo.getText()));
+					((PartitionStatement)fSelectedStatement).setCondition(category.getPartition(fConditionCombo.getText()));
 					updateModel(fSelectedConstraint);
 				}
 			}
@@ -377,7 +377,7 @@ public class ConstraintsNodeDetailsPage extends GenericNodeDetailsPage {
 		else{
 			CategoryNode category = fSelectedConstraint.getMethod().getCategory(newValue);
 			if(category != null){
-				return new Statement(category.getPartitions().get(0), Relation.EQUAL);
+				return new PartitionStatement(category.getPartitions().get(0), Relation.EQUAL);
 			}
 		}
 		return null;

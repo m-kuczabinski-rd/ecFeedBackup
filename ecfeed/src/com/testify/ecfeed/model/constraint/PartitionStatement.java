@@ -18,11 +18,11 @@ import com.testify.ecfeed.model.IGenericNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
 
-public class Statement extends BasicStatement{
+public class PartitionStatement extends BasicStatement{
 	private PartitionNode fCondition = null;
 	private Relation fRelation;
 
-	public Statement(PartitionNode condition, Relation relation){
+	public PartitionStatement(PartitionNode condition, Relation relation){
 		fCondition = condition;
 		fRelation = relation;
 	}

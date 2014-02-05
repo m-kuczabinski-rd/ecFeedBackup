@@ -30,7 +30,7 @@ import com.testify.ecfeed.model.constraint.BasicStatement;
 import com.testify.ecfeed.model.constraint.Constraint;
 import com.testify.ecfeed.model.constraint.Operator;
 import com.testify.ecfeed.model.constraint.Relation;
-import com.testify.ecfeed.model.constraint.Statement;
+import com.testify.ecfeed.model.constraint.PartitionStatement;
 import com.testify.ecfeed.model.constraint.StatementArray;
 import com.testify.ecfeed.model.constraint.StaticStatement;
 import com.testify.ecfeed.parsers.xml.XmlModelParser;
@@ -297,7 +297,7 @@ public class XmlParserSerializerTest {
 		case 1: relation = Relation.NOT;
 		default: relation = Relation.EQUAL;
 		}
-		return new Statement(partition, relation);
+		return new PartitionStatement(partition, relation);
 	}
 
 	private List<CategoryNode> getNotExpectedCategories(List<? extends CategoryNode> categories) {
@@ -444,8 +444,8 @@ public class XmlParserSerializerTest {
 		if(statement1 instanceof StaticStatement && statement2 instanceof StaticStatement){
 			compareStaticStatements((StaticStatement)statement1, (StaticStatement)statement2);
 		}
-		else if(statement1 instanceof Statement && statement2 instanceof Statement){
-			compareStatements((Statement)statement1, (Statement)statement2);
+		else if(statement1 instanceof PartitionStatement && statement2 instanceof PartitionStatement){
+			compareStatements((PartitionStatement)statement1, (PartitionStatement)statement2);
 		}
 		else if(statement1 instanceof StatementArray && statement2 instanceof StatementArray){
 			compareStatementArrays((StatementArray)statement1, (StatementArray)statement2);
@@ -465,7 +465,7 @@ public class XmlParserSerializerTest {
 		}
 	}
 
-	private void compareStatements(Statement statement1, Statement statement2) {
+	private void compareStatements(PartitionStatement statement1, PartitionStatement statement2) {
 		comparePartitions(statement1.getCondition(), statement2.getCondition());
 		if(statement1.getRelation() != statement2.getRelation()){
 			fail("Relations in compared statements differ");

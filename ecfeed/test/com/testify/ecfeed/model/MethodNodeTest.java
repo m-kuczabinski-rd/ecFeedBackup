@@ -26,7 +26,7 @@ import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.model.constraint.Constraint;
 import com.testify.ecfeed.model.constraint.Relation;
-import com.testify.ecfeed.model.constraint.Statement;
+import com.testify.ecfeed.model.constraint.PartitionStatement;
 import com.testify.ecfeed.model.constraint.StaticStatement;
 
 public class MethodNodeTest {
@@ -259,7 +259,7 @@ public class MethodNodeTest {
 		MethodNode method = new MethodNode("method");
 		CategoryNode category = new CategoryNode("category", "type");
 		PartitionNode partition = new PartitionNode("partition", 0);
-		Constraint mentioningConstraint = new Constraint(new Statement(partition, Relation.EQUAL), new StaticStatement(false));
+		Constraint mentioningConstraint = new Constraint(new PartitionStatement(partition, Relation.EQUAL), new StaticStatement(false));
 		Constraint notMentioningConstraint = new Constraint(new StaticStatement(false), new StaticStatement(false));
 		ConstraintNode mentioningConstraintNode = new ConstraintNode("constraint", mentioningConstraint);
 		ConstraintNode notMentioningConstraintNode = new ConstraintNode("constraint", notMentioningConstraint);
@@ -314,7 +314,7 @@ public class MethodNodeTest {
 		MethodNode method = new MethodNode("method");
 		CategoryNode category = new CategoryNode("category", "type");
 		PartitionNode partition = new PartitionNode("partition", "value");
-		Constraint mentioningConstraint = new Constraint(new Statement(partition, Relation.EQUAL), new StaticStatement(false));
+		Constraint mentioningConstraint = new Constraint(new PartitionStatement(partition, Relation.EQUAL), new StaticStatement(false));
 		Constraint notMentioningConstraint = new Constraint(new StaticStatement(false), new StaticStatement(false));
 		ConstraintNode mentioningConstraintNode = new ConstraintNode("constraint", mentioningConstraint);
 		ConstraintNode notMentioningConstraintNode = new ConstraintNode("constraint", notMentioningConstraint);
@@ -344,7 +344,7 @@ public class MethodNodeTest {
 		MethodNode method = new MethodNode("method");
 		CategoryNode category = new CategoryNode("category", "type");
 		PartitionNode partition = new PartitionNode("partition", "value");
-		Constraint mentioningConstraint = new Constraint(new Statement(partition, Relation.EQUAL), new StaticStatement(false));
+		Constraint mentioningConstraint = new Constraint(new PartitionStatement(partition, Relation.EQUAL), new StaticStatement(false));
 		Constraint notMentioningConstraint = new Constraint(new StaticStatement(false), new StaticStatement(false));
 		ConstraintNode mentioningConstraintNode = new ConstraintNode("constraint", mentioningConstraint);
 		ConstraintNode notMentioningConstraintNode = new ConstraintNode("constraint", notMentioningConstraint);
@@ -373,7 +373,7 @@ public class MethodNodeTest {
 		MethodNode method = new MethodNode("method");
 		CategoryNode category = new CategoryNode("category", "type");
 		PartitionNode partition = new PartitionNode("partition", "value");
-		Constraint mentioningConstraint = new Constraint(new Statement(partition, Relation.EQUAL), new StaticStatement(false));
+		Constraint mentioningConstraint = new Constraint(new PartitionStatement(partition, Relation.EQUAL), new StaticStatement(false));
 		Constraint notMentioningConstraint = new Constraint(new StaticStatement(false), new StaticStatement(false));
 		ConstraintNode mentioningConstraintNode = new ConstraintNode("constraint", mentioningConstraint);
 		ConstraintNode notMentioningConstraintNode = new ConstraintNode("constraint", notMentioningConstraint);

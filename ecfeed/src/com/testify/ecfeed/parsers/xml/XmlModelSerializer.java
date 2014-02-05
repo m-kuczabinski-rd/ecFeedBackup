@@ -27,7 +27,7 @@ import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.model.ConstraintNode;
 import com.testify.ecfeed.model.constraint.Constraint;
 import com.testify.ecfeed.model.constraint.IStatement;
-import com.testify.ecfeed.model.constraint.Statement;
+import com.testify.ecfeed.model.constraint.PartitionStatement;
 import com.testify.ecfeed.model.constraint.StatementArray;
 import com.testify.ecfeed.model.constraint.StaticStatement;
 import com.testify.ecfeed.parsers.Constants;
@@ -213,8 +213,8 @@ public class XmlModelSerializer {
 			
 			element.appendChild(statementElement);
 		}
-		else if(istatement instanceof Statement){
-			Statement statement = (Statement)istatement;
+		else if(istatement instanceof PartitionStatement){
+			PartitionStatement statement = (PartitionStatement)istatement;
 			Element statementElement = new Element(Constants.CONSTRAINT_STATEMENT_NODE_NAME);
 			PartitionNode condition = statement.getCondition();
 			String categoryName = condition.getCategory().getName();

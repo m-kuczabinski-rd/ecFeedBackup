@@ -23,7 +23,7 @@ import com.testify.ecfeed.model.constraint.BasicStatement;
 import com.testify.ecfeed.model.constraint.Constraint;
 import com.testify.ecfeed.model.constraint.Operator;
 import com.testify.ecfeed.model.constraint.Relation;
-import com.testify.ecfeed.model.constraint.Statement;
+import com.testify.ecfeed.model.constraint.PartitionStatement;
 import com.testify.ecfeed.model.constraint.StatementArray;
 import com.testify.ecfeed.model.constraint.StaticStatement;
 import com.testify.ecfeed.model.ConstraintNode;
@@ -214,7 +214,7 @@ public class XmlModelParser implements IModelParser{
 			throw new ParserException(Messages.WRONG_OR_MISSING_RELATION_FORMAT(method.getName(), relationName));
 		}
 		
-		return new Statement(partition, relation);
+		return new PartitionStatement(partition, relation);
 	}
 
 	protected TestCaseNode parseTestCaseElement(Element element, List<CategoryNode> categories) throws ParserException {

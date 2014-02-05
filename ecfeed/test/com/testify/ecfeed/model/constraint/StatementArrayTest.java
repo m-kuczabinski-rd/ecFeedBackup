@@ -50,8 +50,8 @@ public class StatementArrayTest {
 	public void testEvaluate() {
 		StatementArray arrayOr = new StatementArray(Operator.OR);
 		StatementArray arrayAnd = new StatementArray(Operator.AND);
-		Statement statement1 = new Statement(fPartition11, Relation.EQUAL);
-		Statement statement2 = new Statement(fPartition21, Relation.EQUAL);
+		PartitionStatement statement1 = new PartitionStatement(fPartition11, Relation.EQUAL);
+		PartitionStatement statement2 = new PartitionStatement(fPartition21, Relation.EQUAL);
 		arrayOr.addStatement(statement1);
 		arrayOr.addStatement(statement2);
 		arrayAnd.addStatement(statement1);
@@ -79,9 +79,9 @@ public class StatementArrayTest {
 	@Test
 	public void testGetChildren() {
 		StatementArray array = new StatementArray(Operator.OR);
-		Statement statement1 = new Statement(fPartition11, Relation.EQUAL);
-		Statement statement2 = new Statement(fPartition21, Relation.EQUAL);
-		Statement statement3 = new Statement(fPartition21, Relation.EQUAL);
+		PartitionStatement statement1 = new PartitionStatement(fPartition11, Relation.EQUAL);
+		PartitionStatement statement2 = new PartitionStatement(fPartition21, Relation.EQUAL);
+		PartitionStatement statement3 = new PartitionStatement(fPartition21, Relation.EQUAL);
 		array.addStatement(statement1);
 		array.addStatement(statement2);
 		
@@ -94,8 +94,8 @@ public class StatementArrayTest {
 	@Test
 	public void testMentionsPartitionNode() {
 		StatementArray array = new StatementArray(Operator.OR);
-		Statement statement1 = new Statement(fPartition11, Relation.EQUAL);
-		Statement statement2 = new Statement(fPartition21, Relation.EQUAL);
+		PartitionStatement statement1 = new PartitionStatement(fPartition11, Relation.EQUAL);
+		PartitionStatement statement2 = new PartitionStatement(fPartition21, Relation.EQUAL);
 		array.addStatement(statement1);
 		array.addStatement(statement2);
 		assertTrue(array.mentions(fPartition11));
@@ -105,7 +105,7 @@ public class StatementArrayTest {
 	@Test
 	public void testMentionsCategoryNode() {
 		StatementArray array = new StatementArray(Operator.OR);
-		Statement statement1 = new Statement(fPartition11, Relation.EQUAL);
+		PartitionStatement statement1 = new PartitionStatement(fPartition11, Relation.EQUAL);
 		array.addStatement(statement1);
 		assertTrue(array.mentions(fPartition11.getCategory()));
 		assertFalse(array.mentions(fPartition21.getCategory()));
@@ -114,8 +114,8 @@ public class StatementArrayTest {
 	@Test
 	public void testSetOperator() {
 		StatementArray array = new StatementArray(Operator.OR);
-		Statement statement1 = new Statement(fPartition11, Relation.EQUAL);
-		Statement statement2 = new Statement(fPartition21, Relation.EQUAL);
+		PartitionStatement statement1 = new PartitionStatement(fPartition11, Relation.EQUAL);
+		PartitionStatement statement2 = new PartitionStatement(fPartition21, Relation.EQUAL);
 		array.addStatement(statement1);
 		array.addStatement(statement2);
 		assertEquals(Operator.OR, array.getOperator());
@@ -130,9 +130,9 @@ public class StatementArrayTest {
 	@Test
 	public void testReplaceChild() {
 		StatementArray array = new StatementArray(Operator.OR);
-		Statement statement1 = new Statement(fPartition11, Relation.EQUAL);
-		Statement statement2 = new Statement(fPartition12, Relation.EQUAL);
-		Statement statement3 = new Statement(fPartition13, Relation.EQUAL);
+		PartitionStatement statement1 = new PartitionStatement(fPartition11, Relation.EQUAL);
+		PartitionStatement statement2 = new PartitionStatement(fPartition12, Relation.EQUAL);
+		PartitionStatement statement3 = new PartitionStatement(fPartition13, Relation.EQUAL);
 		array.addStatement(statement1);
 		array.addStatement(statement2);
 		assertEquals(2, array.getChildren().size());
@@ -150,8 +150,8 @@ public class StatementArrayTest {
 	@Test
 	public void testRemoveChild() {
 		StatementArray array = new StatementArray(Operator.OR);
-		Statement statement1 = new Statement(fPartition11, Relation.EQUAL);
-		Statement statement2 = new Statement(fPartition12, Relation.EQUAL);
+		PartitionStatement statement1 = new PartitionStatement(fPartition11, Relation.EQUAL);
+		PartitionStatement statement2 = new PartitionStatement(fPartition12, Relation.EQUAL);
 		array.addStatement(statement1);
 		array.addStatement(statement2);
 		assertEquals(2, array.getChildren().size());

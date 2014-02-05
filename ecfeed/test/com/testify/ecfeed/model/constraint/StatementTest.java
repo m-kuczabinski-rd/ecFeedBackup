@@ -72,7 +72,7 @@ public class StatementTest {
 
 	@Test
 	public void equalsTest(){
-		Statement statement = new Statement(fP22, Relation.EQUAL);
+		PartitionStatement statement = new PartitionStatement(fP22, Relation.EQUAL);
 		
 		assertTrue(statement.evaluate(Arrays.asList(new PartitionNode[]{fP221})));
 		assertTrue(statement.evaluate(Arrays.asList(new PartitionNode[]{fP222})));
@@ -87,7 +87,7 @@ public class StatementTest {
 
 	@Test 
 	public void notEqualsTest(){
-		Statement statement = new Statement(fP22, Relation.NOT);
+		PartitionStatement statement = new PartitionStatement(fP22, Relation.NOT);
 		
 		assertFalse(statement.evaluate(Arrays.asList(new PartitionNode[]{fP221})));
 		assertFalse(statement.evaluate(Arrays.asList(new PartitionNode[]{fP222})));
@@ -124,12 +124,12 @@ public class StatementTest {
 	@Test
 	public void testEvaluate() {
 
-		Statement statement1 = new Statement(fPartition2, Relation.EQUAL);
+		PartitionStatement statement1 = new PartitionStatement(fPartition2, Relation.EQUAL);
 		assertFalse(statement1.evaluate(fList1));
 		assertTrue(statement1.evaluate(fList2));
 		assertFalse(statement1.evaluate(fList3));
 
-		Statement statement4 = new Statement(fPartition2, Relation.NOT);
+		PartitionStatement statement4 = new PartitionStatement(fPartition2, Relation.NOT);
 		assertTrue(statement4.evaluate(fList1));
 		assertFalse(statement4.evaluate(fList2));
 		assertTrue(statement4.evaluate(fList3));
@@ -137,14 +137,14 @@ public class StatementTest {
 
 	@Test
 	public void testMentionsPartitionNode() {
-		Statement statement = new Statement(fPartition2, Relation.EQUAL);
+		PartitionStatement statement = new PartitionStatement(fPartition2, Relation.EQUAL);
 		assertTrue(statement.mentions(fPartition2));
 		assertFalse(statement.mentions(fPartition1));
 	}
 
 	@Test
 	public void testMentionsCategoryNode() {
-		Statement statement = new Statement(fPartition2, Relation.EQUAL);
+		PartitionStatement statement = new PartitionStatement(fPartition2, Relation.EQUAL);
 		CategoryNode category = new CategoryNode("name", "type");
 		assertTrue(statement.mentions(fCategory));
 		assertFalse(statement.mentions(category));
@@ -152,13 +152,13 @@ public class StatementTest {
 
 	@Test
 	public void testGetCondition() {
-		Statement statement = new Statement(fPartition2, Relation.EQUAL);
+		PartitionStatement statement = new PartitionStatement(fPartition2, Relation.EQUAL);
 		assertEquals(fPartition2, statement.getCondition());
 	}
 
 	@Test
 	public void testGetRelation() {
-		Statement statement = new Statement(fPartition2, Relation.EQUAL);
+		PartitionStatement statement = new PartitionStatement(fPartition2, Relation.EQUAL);
 		assertEquals(Relation.EQUAL, statement.getRelation());
 	}
 
