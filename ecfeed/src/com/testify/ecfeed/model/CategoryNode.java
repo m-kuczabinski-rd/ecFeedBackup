@@ -12,7 +12,9 @@
 package com.testify.ecfeed.model;
 
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 public class CategoryNode extends GenericNode {
 	
@@ -77,6 +79,14 @@ public class CategoryNode extends GenericNode {
 			names.add(leaf.getQualifiedName());
 		}
 		return names;
+	}
+	
+	public Set<String> getAllPartitionLabels(){
+		Set<String> labels = new LinkedHashSet<String>();
+		for(PartitionNode p : getPartitions()){
+			labels.addAll(p.getDescendingLabels());
+		}
+		return labels;
 	}
 	
 	public boolean removePartition(PartitionNode partition){

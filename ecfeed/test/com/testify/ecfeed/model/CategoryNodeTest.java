@@ -14,6 +14,7 @@ package com.testify.ecfeed.model;
 import static org.junit.Assert.*;
 
 import java.util.List;
+import java.util.Set;
 
 import org.junit.Test;
 
@@ -192,4 +193,50 @@ public class CategoryNodeTest{
 		assertFalse(category.getLeafPartitions().contains(p32));
 	}
 	
+	@Test
+	public void getAllLabelsTest(){
+		PartitionNode p1 = new PartitionNode("p1", 0);
+		p1.addLabel("l11");
+		p1.addLabel("l12");
+		PartitionNode p2 = new PartitionNode("p2", 0);
+		p2.addLabel("l21");
+		p2.addLabel("l22");
+		PartitionNode p11 = new PartitionNode("p11", 0);
+		p11.addLabel("l111");
+		p11.addLabel("l112");
+		PartitionNode p12 = new PartitionNode("p12", 0);
+		p12.addLabel("l121");
+		p12.addLabel("l122");
+		PartitionNode p21 = new PartitionNode("p21", 0);
+		p21.addLabel("l211");
+		p21.addLabel("l212");
+		PartitionNode p22 = new PartitionNode("p22", 0);
+		p22.addLabel("l221");
+		p22.addLabel("l222");
+
+		p1.addPartition(p11);
+		p1.addPartition(p12);
+		p2.addPartition(p21);
+		p2.addPartition(p22);
+		
+		CategoryNode c = new CategoryNode("c", "type");
+		c.addPartition(p1);
+		c.addPartition(p2);
+		
+		Set<String> labels = c.getAllPartitionLabels();
+		
+		assertTrue(labels.contains("l11"));
+		assertTrue(labels.contains("l12"));
+		assertTrue(labels.contains("l21"));
+		assertTrue(labels.contains("l21"));
+		assertTrue(labels.contains("l111"));
+		assertTrue(labels.contains("l112"));
+		assertTrue(labels.contains("l121"));
+		assertTrue(labels.contains("l121"));
+		assertTrue(labels.contains("l211"));
+		assertTrue(labels.contains("l211"));
+		assertTrue(labels.contains("l221"));
+		assertTrue(labels.contains("l221"));
+		
+	}
 }
