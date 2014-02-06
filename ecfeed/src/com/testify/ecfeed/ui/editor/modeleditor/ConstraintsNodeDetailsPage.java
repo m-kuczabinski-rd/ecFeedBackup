@@ -14,7 +14,6 @@ package com.testify.ecfeed.ui.editor.modeleditor;
 import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
-import java.util.List;
 import java.util.Set;
 
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -318,11 +317,13 @@ public class ConstraintsNodeDetailsPage extends GenericNodeDetailsPage {
 		fToolkit.adapt(fConditionCombo, true, true);
 
 		CategoryNode parentCategory = statement.getCategory();
-		fConditionCombo.setText(statement.getConditionName());
-		
 		Set<String> items = new LinkedHashSet<String>(parentCategory.getAllPartitionNames());
 		items.addAll(parentCategory.getAllPartitionLabels());
 		fConditionCombo.setItems(items.toArray(new String[]{}));
+
+		String text = statement.getConditionName();
+		fConditionCombo.setText(text);
+		
 		fConditionCombo.addModifyListener(new ModifyListener() {
 			@Override
 			public void modifyText(ModifyEvent e) {
@@ -372,7 +373,6 @@ public class ConstraintsNodeDetailsPage extends GenericNodeDetailsPage {
 			BasicStatement newStatement = createNewStatement(newValue);
 			replaceSelectedStatement(newStatement);
 			updateModel(fSelectedConstraint);
-			fConstraintViewer.setSelection(new StructuredSelection(newStatement));
 		}
 	}
 
@@ -385,7 +385,9 @@ public class ConstraintsNodeDetailsPage extends GenericNodeDetailsPage {
 		}
 		else if(fSelectedStatement.getParent() != null){
 			fSelectedStatement.getParent().replaceChild(fSelectedStatement, newStatement);
+			fSelectedStatement = newStatement;
 		}
+		fConstraintViewer.setSelection(new StructuredSelection(newStatement));
 	}
 	
 	private BasicStatement createNewStatement(String newValue) {
