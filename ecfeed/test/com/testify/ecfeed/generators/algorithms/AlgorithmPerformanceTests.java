@@ -17,6 +17,10 @@ import com.testify.ecfeed.generators.utils.GeneratorTestUtils;
 public class AlgorithmPerformanceTests {
 	private final Collection<IConstraint<String>> EMPTY_CONSTRAINTS = new ArrayList<IConstraint<String>>();
 
+	@Test
+	public void dummyTest(){
+	}
+	
 //	@Test
 	public void totalDistanceTest(){
 		try{
