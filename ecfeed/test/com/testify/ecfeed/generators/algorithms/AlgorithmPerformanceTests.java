@@ -17,13 +17,13 @@ import com.testify.ecfeed.generators.utils.GeneratorTestUtils;
 public class AlgorithmPerformanceTests {
 	private final Collection<IConstraint<String>> EMPTY_CONSTRAINTS = new ArrayList<IConstraint<String>>();
 
-	@Test
+//	@Test
 	public void totalDistanceTest(){
 		try{
 		for(int n = 2; n < 4; n++){
 		System.out.println("N: " + n);
 					
-		List<List<String>> input = GeneratorTestUtils.prepareInput(5, 10);
+		List<List<String>> input = GeneratorTestUtils.prepareInput(5, 6);
 		long totalTuples = calculateTotalTuples(input, n);
 		
 		AdaptiveRandomAlgorithm<String> adRandom = new AdaptiveRandomAlgorithm<String>(-1, 1000, 1000, false);
@@ -85,7 +85,7 @@ public class AlgorithmPerformanceTests {
 		}
 	}
 
-	@Test
+//	@Test
 	public void randomVsAdaptiveTest(){
 		List<List<String>> input = GeneratorTestUtils.prepareInput(30, 2);
 		for(int length : new int[]{5, 10, 50, 100}){
