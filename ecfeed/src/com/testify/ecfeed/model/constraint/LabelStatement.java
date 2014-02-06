@@ -5,55 +5,37 @@ import java.util.List;
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.PartitionNode;
 
-public class LabelStatement extends BasicStatement {
-	private Relation fRelation;
-	private String fConditionLabel;
-	private CategoryNode fCategory;
-
-	public LabelStatement(CategoryNode category, String conditionLabel, Relation relation){
-		fCategory = category;
-		fConditionLabel = conditionLabel;
-		fRelation = relation;
+public class LabelStatement extends CategoryConditionStatement {
+	public LabelStatement(CategoryNode category, Relation relation, String conditionLabel){
+		super(category, relation, conditionLabel);
 	}
 	
-	public String getCondition(){
-		return fConditionLabel;
+	public String getStringCondition(){
+		return (String)getCondition();
 	}
 	
 	public void setCondition(String condition) {
-		fConditionLabel = condition;
-	}
-
-	public Relation getRelation(){
-		return fRelation;
-	}
-
-	public void setRelation(Relation relation) {
-		fRelation = relation;
+		super.setCondition(condition);
 	}
 	
-	public void setCategory(CategoryNode category){
-		fCategory = category;
-	}
-
-	public CategoryNode getCategory(){
-		return fCategory;
+	public String getLabelCondition(){
+		return (String)getCondition();
 	}
 	
 	@Override
-	public boolean mentions(CategoryNode category){
-		return category == fCategory;
+	public String getConditionName(){
+		return getLabelCondition();
 	}
-
+	
 	@Override
 	public boolean evaluate(List<PartitionNode> values) {
-		if(fCategory.getMethod() == null){
+		if(getCategory().getMethod() == null){
 			return false;
 		}
-		int index = fCategory.getMethod().getCategories().indexOf(fCategory);
-		boolean containsLabel = values.get(index).getAllLabels().contains(fConditionLabel); 
+		int index = getCategory().getMethod().getCategories().indexOf(getCategory());
+		boolean containsLabel = values.get(index).getAllLabels().contains(getCondition()); 
 		
-		switch (fRelation){
+		switch (getRelation()){
 		case EQUAL:
 			return containsLabel;
 		case NOT:
@@ -65,6 +47,6 @@ public class LabelStatement extends BasicStatement {
 	
 	@Override
 	public String toString(){
-		return fCategory.getName() + fRelation + fConditionLabel;
+		return getCategory().getName() + getRelation() + getCondition();
 	}
 }

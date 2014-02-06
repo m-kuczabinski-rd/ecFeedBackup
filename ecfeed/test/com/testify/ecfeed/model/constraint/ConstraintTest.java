@@ -53,7 +53,7 @@ public class ConstraintTest {
 		CategoryNode category = new CategoryNode("category", "type");
 		category.addPartition(partition);
 
-		BasicStatement mentioningStatement = new PartitionStatement(partition, Relation.EQUAL);
+		BasicStatement mentioningStatement = new PartitionStatement(category, Relation.EQUAL, partition);
 		BasicStatement notMentioningStatement = new StaticStatement(false);
 		
 		assertTrue(new Constraint(mentioningStatement, notMentioningStatement).mentions(category));

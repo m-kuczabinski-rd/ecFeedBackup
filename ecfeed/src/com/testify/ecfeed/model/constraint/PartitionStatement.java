@@ -18,44 +18,33 @@ import com.testify.ecfeed.model.IGenericNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
 
-public class PartitionStatement extends BasicStatement{
-	private PartitionNode fCondition = null;
-	private Relation fRelation;
+public class PartitionStatement extends CategoryConditionStatement{
 
-	public PartitionStatement(PartitionNode condition, Relation relation){
-		fCondition = condition;
-		fRelation = relation;
+	public PartitionStatement(CategoryNode category, Relation relation, PartitionNode condition){
+		super(category, relation, condition);
 	}
 	
-	public PartitionNode getCondition(){
-		return fCondition;
+	public void setCondition(PartitionNode condition){
+		super.setCondition(condition);
 	}
 	
-	public void setCondition(PartitionNode condition) {
-		fCondition = condition;
+	public PartitionNode getPartitionCondition(){
+		return (PartitionNode)getCondition();
 	}
-
-	public Relation getRelation(){
-		return fRelation;
-	}
-
-	public void setRelation(Relation relation) {
-		fRelation = relation;
-	}
-
+	
 	@Override
 	public boolean mentions(PartitionNode partition){
-		return fCondition == partition;
+		return getCondition() == partition;
 	}
 
 	@Override
-	public boolean mentions(CategoryNode category){
-		return fCondition.getCategory() == category;
+	public String getConditionName(){
+		return getPartitionCondition().getQualifiedName();
 	}
 
 	@Override
 	public boolean evaluate(List<PartitionNode> values) {
-		CategoryNode parentCategory = fCondition.getCategory();
+		CategoryNode parentCategory = getPartitionCondition().getCategory();
 		MethodNode methodAncestor = parentCategory.getMethod();
 		int categoryIndex = methodAncestor.getCategories().indexOf(parentCategory);
 
@@ -68,14 +57,14 @@ public class PartitionStatement extends BasicStatement{
 
 		while(node instanceof PartitionNode){
 			PartitionNode partition = (PartitionNode)node;
-			if(partition == fCondition){
+			if(partition == getPartitionCondition()){
 				isCondition = true;
 				break;
 			}
 			node = node.getParent();
 		}
 
-		switch (fRelation){
+		switch (getRelation()){
 		case EQUAL:
 			return isCondition;
 		case NOT:
@@ -87,6 +76,6 @@ public class PartitionStatement extends BasicStatement{
 	
 	@Override
 	public String toString(){
-		return fCondition.getCategory().getName() + fRelation + fCondition.getQualifiedName();
+		return getCategory().getName() + getRelation() + getPartitionCondition().getQualifiedName();
 	}
 }

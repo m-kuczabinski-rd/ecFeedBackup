@@ -206,7 +206,7 @@ public class XmlModelParser implements IModelParser{
 		String relationName = getAttributeValue(element, Constants.STATEMENT_RELATION_ATTRIBUTE_NAME);
 		Relation relation = getRalation(relationName);
 		
-		return new PartitionStatement(partition, relation);
+		return new PartitionStatement(category, relation, partition);
 	}
 	
 	protected BasicStatement parseLabelStatement(Element element, MethodNode method) throws ParserException {
@@ -220,7 +220,7 @@ public class XmlModelParser implements IModelParser{
 		}
 		Relation relation = getRalation(relationName);
 		
-		return new LabelStatement(category, label, relation);
+		return new LabelStatement(category, relation, label);
 	}
 
 	protected Relation getRalation(String relationName) throws ParserException{

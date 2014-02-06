@@ -307,7 +307,7 @@ public class XmlParserSerializerTest {
 			category.getPartitions().get(0).addLabel(label);
 		}
 		Relation relation = pickRelation();
-		return new LabelStatement(category, label, relation);
+		return new LabelStatement(category, relation, label);
 	}
 
 	private BasicStatement createPartitionStatement(List<? extends CategoryNode> categories) {
@@ -318,7 +318,7 @@ public class XmlParserSerializerTest {
 		CategoryNode category = basicCategories.get(rand.nextInt(basicCategories.size()));
 		PartitionNode partition = category.getLeafPartitions().get(rand.nextInt(category.getPartitions().size()));
 		Relation relation = pickRelation();
-		return new PartitionStatement(partition, relation);
+		return new PartitionStatement(category, relation, partition);
 	}
 
 	private Relation pickRelation() {
@@ -445,6 +445,18 @@ public class XmlParserSerializerTest {
 	private void comparePartitions(PartitionNode partition1, PartitionNode partition2) {
 		compareNames(partition1.getName(), partition2.getName());
 		compareValues(partition1.getValue(),partition2.getValue());
+		compareLabels(partition1.getLabels(), partition2.getLabels());
+		assertEquals(partition1.getPartitions().size(), partition2.getPartitions().size());
+		for(int i = 0; i < partition1.getPartitions().size(); i++){
+			comparePartitions(partition1.getPartitions().get(i), partition2.getPartitions().get(i));
+		}
+	}
+
+	private void compareLabels(Set<String> labels, Set<String> labels2) {
+		assertTrue(labels.size() == labels2.size());
+		for(String label : labels){
+			assertTrue(labels2.contains(label));
+		}
 	}
 
 	private void compareValues(Object value1, Object value2) {
@@ -512,7 +524,7 @@ public class XmlParserSerializerTest {
 	}
 
 	private void compareStatements(PartitionStatement statement1, PartitionStatement statement2) {
-		comparePartitions(statement1.getCondition(), statement2.getCondition());
+		comparePartitions(statement1.getPartitionCondition(), statement2.getPartitionCondition());
 		if(statement1.getRelation() != statement2.getRelation()){
 			fail("Relations in compared statements differ");
 		}

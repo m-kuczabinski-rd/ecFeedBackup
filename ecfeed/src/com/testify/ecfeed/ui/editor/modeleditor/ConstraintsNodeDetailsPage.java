@@ -13,6 +13,9 @@ package com.testify.ecfeed.ui.editor.modeleditor;
 
 import java.util.Arrays;
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Set;
 
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ComboViewer;
@@ -46,7 +49,9 @@ import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.ConstraintNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.constraint.BasicStatement;
+import com.testify.ecfeed.model.constraint.CategoryConditionStatement;
 import com.testify.ecfeed.model.constraint.Constraint;
+import com.testify.ecfeed.model.constraint.LabelStatement;
 import com.testify.ecfeed.model.constraint.Operator;
 import com.testify.ecfeed.model.constraint.Relation;
 import com.testify.ecfeed.model.constraint.PartitionStatement;
@@ -237,9 +242,10 @@ public class ConstraintsNodeDetailsPage extends GenericNodeDetailsPage {
 		fStatementEditComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
 		
 		createStatementCombo(fStatementEditComposite, editedStatement);
-		if(editedStatement instanceof PartitionStatement){
-			createRelationCombo(fStatementEditComposite);
-			createConditionCombo(fStatementEditComposite);
+		if(editedStatement instanceof CategoryConditionStatement){
+			CategoryConditionStatement conditionStatement = (CategoryConditionStatement)editedStatement;
+			createRelationCombo(fStatementEditComposite, conditionStatement);
+			createConditionCombo(fStatementEditComposite, conditionStatement);
 		}
 		fMainComposite.layout();
 	}
@@ -276,15 +282,14 @@ public class ConstraintsNodeDetailsPage extends GenericNodeDetailsPage {
 				return STATEMENT_OR;
 			}
 		}
-		else if(statement instanceof PartitionStatement){
-			PartitionNode condition = ((PartitionStatement)statement).getCondition();
-			CategoryNode category = condition.getCategory();
-			return category.getName();
+		else if(statement instanceof CategoryConditionStatement){
+			CategoryConditionStatement conditionStatement = (CategoryConditionStatement)statement;
+			return conditionStatement.getCategory().getName();
 		}
 		return STATEMENT_EMPTY;
 	}
 
-	private void createRelationCombo(Composite parent) {
+	private void createRelationCombo(Composite parent, CategoryConditionStatement statement) {
 		fRelationCombo = new ComboViewer(parent, SWT.READ_ONLY).getCombo();
 		fRelationCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		fToolkit.paintBordersFor(fRelationCombo);
@@ -293,40 +298,58 @@ public class ConstraintsNodeDetailsPage extends GenericNodeDetailsPage {
 				Relation.EQUAL.toString(),
 				Relation.NOT.toString(),
 		});
-		if(fSelectedStatement instanceof PartitionStatement){
-			fRelationCombo.setText(((PartitionStatement)fSelectedStatement).getRelation().toString());
-		}
+		fRelationCombo.setText(statement.getRelation().toString());
 		fRelationCombo.addModifyListener(new ModifyListener() {
 			@Override
 			public void modifyText(ModifyEvent e) {
-				if(fSelectedStatement instanceof PartitionStatement){
-					((PartitionStatement)fSelectedStatement).setRelation(Relation.getRelation(fRelationCombo.getText()));
+				if(fSelectedStatement instanceof CategoryConditionStatement){
+					CategoryConditionStatement statement = (CategoryConditionStatement)fSelectedStatement;
+					statement.setRelation(Relation.getRelation(fRelationCombo.getText()));
 					updateModel(fSelectedConstraint);
 				}
 			}
 		});
 	}
 
-	private void createConditionCombo(Composite parent) {
+	private void createConditionCombo(Composite parent, CategoryConditionStatement statement) {
 		fConditionCombo = new ComboViewer(parent, SWT.READ_ONLY).getCombo();
 		fConditionCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		fToolkit.paintBordersFor(fConditionCombo);
 		fToolkit.adapt(fConditionCombo, true, true);
 
-		if(fSelectedStatement instanceof PartitionStatement){
-			PartitionNode condition = ((PartitionStatement)fSelectedStatement).getCondition();
-			CategoryNode parentCategory = condition.getCategory();
-			fConditionCombo.setItems(parentCategory.getAllPartitionNames().toArray(new String[]{}));
-			fConditionCombo.setText(condition.getName());
-		}
+		CategoryNode parentCategory = statement.getCategory();
+		fConditionCombo.setText(statement.getConditionName());
+		
+		Set<String> items = new LinkedHashSet<String>(parentCategory.getAllPartitionNames());
+		items.addAll(parentCategory.getAllPartitionLabels());
+		fConditionCombo.setItems(items.toArray(new String[]{}));
 		fConditionCombo.addModifyListener(new ModifyListener() {
 			@Override
 			public void modifyText(ModifyEvent e) {
-				if(fSelectedStatement instanceof PartitionStatement){
-					CategoryNode category = fSelectedConstraint.getMethod().getCategory(fStatementEditCombo.getText());
-					((PartitionStatement)fSelectedStatement).setCondition(category.getPartition(fConditionCombo.getText()));
-					updateModel(fSelectedConstraint);
+				CategoryConditionStatement conditionStatement = (CategoryConditionStatement)fSelectedStatement;
+				String newText = fConditionCombo.getText();
+				CategoryNode category = conditionStatement.getCategory();
+				Relation relation = conditionStatement.getRelation();
+				Object condition = getNewCondition(category, newText);
+				CategoryConditionStatement newStatement = null;
+				if(condition instanceof String){
+					newStatement = new LabelStatement(category, relation, (String)condition);
 				}
+				else if(condition instanceof PartitionNode){
+					newStatement = new PartitionStatement(category, relation, (PartitionNode)condition);
+				}
+				
+				replaceSelectedStatement(newStatement);
+				updateModel(fSelectedConstraint);
+			}
+
+			private Object getNewCondition(CategoryNode category, String newText) {
+				if(category.getAllPartitionNames().contains(newText)){
+					if(category.getAllPartitionLabels().contains(newText) == false){
+						return category.getPartition(newText);
+					}
+				}
+				return newText;
 			}
 		});
 	}
@@ -347,17 +370,21 @@ public class ConstraintsNodeDetailsPage extends GenericNodeDetailsPage {
 		
 		else{
 			BasicStatement newStatement = createNewStatement(newValue);
-			if(fSelectedStatement == fConstraint.getPremise()){
-				fConstraint.setPremise(newStatement);
-			}
-			else if(fSelectedStatement == fConstraint.getConsequence()){
-				fConstraint.setConsequence(newStatement);
-			}
-			else if(fSelectedStatement.getParent() != null){
-				fSelectedStatement.getParent().replaceChild(fSelectedStatement, newStatement);
-			}
+			replaceSelectedStatement(newStatement);
 			updateModel(fSelectedConstraint);
 			fConstraintViewer.setSelection(new StructuredSelection(newStatement));
+		}
+	}
+
+	private void replaceSelectedStatement(BasicStatement newStatement) {
+		if(fSelectedStatement == fConstraint.getPremise()){
+			fConstraint.setPremise(newStatement);
+		}
+		else if(fSelectedStatement == fConstraint.getConsequence()){
+			fConstraint.setConsequence(newStatement);
+		}
+		else if(fSelectedStatement.getParent() != null){
+			fSelectedStatement.getParent().replaceChild(fSelectedStatement, newStatement);
 		}
 	}
 	
@@ -377,7 +404,7 @@ public class ConstraintsNodeDetailsPage extends GenericNodeDetailsPage {
 		else{
 			CategoryNode category = fSelectedConstraint.getMethod().getCategory(newValue);
 			if(category != null){
-				return new PartitionStatement(category.getPartitions().get(0), Relation.EQUAL);
+				return new PartitionStatement(category, Relation.EQUAL, category.getPartitions().get(0));
 			}
 		}
 		return null;

@@ -217,7 +217,7 @@ public class XmlModelSerializer {
 		else if(istatement instanceof PartitionStatement){
 			PartitionStatement statement = (PartitionStatement)istatement;
 			Element statementElement = new Element(Constants.CONSTRAINT_PARTITION_STATEMENT_NODE_NAME);
-			PartitionNode condition = statement.getCondition();
+			PartitionNode condition = statement.getPartitionCondition();
 			String categoryName = condition.getCategory().getName();
 			Attribute categoryAttribute = 
 					new Attribute(Constants.STATEMENT_CATEGORY_ATTRIBUTE_NAME, categoryName);
@@ -234,7 +234,7 @@ public class XmlModelSerializer {
 		else if(istatement instanceof LabelStatement){
 			LabelStatement statement = (LabelStatement)istatement;
 			Element statementElement = new Element(Constants.CONSTRAINT_LABEL_STATEMENT_NODE_NAME);
-			String label = statement.getCondition();
+			String label = statement.getLabelCondition();
 			String categoryName = statement.getCategory().getName();
 			Attribute categoryAttribute = 
 					new Attribute(Constants.STATEMENT_CATEGORY_ATTRIBUTE_NAME, categoryName);

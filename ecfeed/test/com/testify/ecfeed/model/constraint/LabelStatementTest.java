@@ -64,14 +64,14 @@ public class LabelStatementTest {
 		List<PartitionNode> p21q = new ArrayList<PartitionNode>();
 		p21q.add(p21); p21q.add(q);
 		
-		LabelStatement pEqual = new LabelStatement(c1, "p", Relation.EQUAL);
-		LabelStatement pNotEqual = new LabelStatement(c1, "p", Relation.NOT);
+		LabelStatement pEqual = new LabelStatement(c1, Relation.EQUAL, "p");
+		LabelStatement pNotEqual = new LabelStatement(c1, Relation.NOT, "p");
 		
-		LabelStatement p1Equal = new LabelStatement(c1, "p1", Relation.EQUAL);
-		LabelStatement p1NotEqual = new LabelStatement(c1, "p1", Relation.NOT);
+		LabelStatement p1Equal = new LabelStatement(c1, Relation.EQUAL, "p1");
+		LabelStatement p1NotEqual = new LabelStatement(c1, Relation.NOT, "p1");
 		
-		LabelStatement p11Equal = new LabelStatement(c1, "p11", Relation.EQUAL);
-		LabelStatement p11NotEqual = new LabelStatement(c1, "p11", Relation.NOT);
+		LabelStatement p11Equal = new LabelStatement(c1, Relation.EQUAL, "p11");
+		LabelStatement p11NotEqual = new LabelStatement(c1, Relation.NOT, "p11");
 		
 		//Check that all pEqual statements evaluates to true for all vectors
 		assertTrue(pEqual.evaluate(pq));
