@@ -253,11 +253,13 @@ public class PartitionNodeTest{
 		assertFalse(p12.addLabel("pLabel.0"));
 
 		
+		//getLabels
 		assertTrue(p12.getLabels().contains("p12Label.0"));
 		assertTrue(p12.getLabels().contains("p12Label.1"));
 		assertFalse(p12.getLabels().contains("p1Label.0"));
 		assertFalse(p12.getLabels().contains("p1Label.1"));
 
+		//getAllLabels
 		assertTrue(p12.getAllLabels().contains("p12Label.0"));
 		assertTrue(p12.getAllLabels().contains("p12Label.1"));
 		assertTrue(p12.getAllLabels().contains("p1Label.0"));
@@ -270,6 +272,7 @@ public class PartitionNodeTest{
 		assertFalse(p12.getAllLabels().contains("p2Label.0"));
 		assertFalse(p12.getAllLabels().contains("p2Label.1"));
 		
+		//getInheritedLabels test
 		assertFalse(p12.getInheritedLabels().contains("p12Label.0"));
 		assertFalse(p12.getInheritedLabels().contains("p12Label.1"));
 		assertTrue(p12.getInheritedLabels().contains("p1Label.0"));
@@ -277,6 +280,28 @@ public class PartitionNodeTest{
 		assertTrue(p12.getInheritedLabels().contains("pLabel.0"));
 		assertTrue(p12.getInheritedLabels().contains("pLabel.1"));
 		
+		//getDescendingLabels test
+		assertTrue(p.getDescendingLabels().contains("pLabel.0"));
+		assertTrue(p.getDescendingLabels().contains("pLabel.1"));
+		assertTrue(p.getDescendingLabels().contains("p1Label.0"));
+		assertTrue(p.getDescendingLabels().contains("p1Label.1"));
+		assertTrue(p.getDescendingLabels().contains("p2Label.0"));
+		assertTrue(p.getDescendingLabels().contains("p2Label.1"));
+		assertTrue(p.getDescendingLabels().contains("p11Label.0"));
+		assertTrue(p.getDescendingLabels().contains("p11Label.1"));
+		assertTrue(p.getDescendingLabels().contains("p12Label.0"));
+		assertTrue(p.getDescendingLabels().contains("p12Label.1"));
+
+		assertFalse(p1.getDescendingLabels().contains("pLabel.0"));
+		assertFalse(p1.getDescendingLabels().contains("pLabel.1"));
+		assertTrue(p1.getDescendingLabels().contains("p1Label.0"));
+		assertTrue(p1.getDescendingLabels().contains("p1Label.1"));
+		assertFalse(p1.getDescendingLabels().contains("p2Label.0"));
+		assertFalse(p1.getDescendingLabels().contains("p2Label.1"));
+		assertTrue(p1.getDescendingLabels().contains("p11Label.0"));
+		assertTrue(p1.getDescendingLabels().contains("p11Label.1"));
+		assertTrue(p1.getDescendingLabels().contains("p12Label.0"));
+		assertTrue(p1.getDescendingLabels().contains("p12Label.1"));
 		
 	}
 	

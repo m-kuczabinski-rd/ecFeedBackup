@@ -153,6 +153,14 @@ public class PartitionNode extends GenericNode {
 		return new LinkedHashSet<String>();
 	}
 	
+	public Set<String> getDescendingLabels() {
+		Set<String> labels = getLabels();
+		for(PartitionNode p : fPartitions){
+			labels.addAll(p.getDescendingLabels());
+		}
+		return labels;
+	}
+
 	public boolean removePartition(PartitionNode partition){
 		if(getCategory() != null){
 			getCategory().partitionRemoved(partition);
