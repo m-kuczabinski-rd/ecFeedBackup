@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.Set;
 
 import org.junit.Test;
 
@@ -28,6 +29,7 @@ import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.model.constraint.BasicStatement;
 import com.testify.ecfeed.model.constraint.Constraint;
+import com.testify.ecfeed.model.constraint.LabelStatement;
 import com.testify.ecfeed.model.constraint.Operator;
 import com.testify.ecfeed.model.constraint.Relation;
 import com.testify.ecfeed.model.constraint.PartitionStatement;
@@ -277,27 +279,56 @@ public class XmlParserSerializerTest {
 		switch(rand.nextInt(3)){
 		case 0: return new StaticStatement(rand.nextBoolean());
 		case 1: if(getNotExpectedCategories(categories).size() > 0){
-			return createStatement(categories);
+			switch(rand.nextInt(2)){
+			case 0:
+				return createPartitionStatement(categories);
+			case 1:
+				return createLabelStatement(categories);
+			}
 		}
 		case 2: return createStatementArray(rand.nextInt(3), categories);
 		}
 		return null;
 	}
 
-	private BasicStatement createStatement(List<? extends CategoryNode> categories) {
+	private BasicStatement createLabelStatement(List<? extends CategoryNode> categories) {
+		List<CategoryNode> basicCategories = getNotExpectedCategories(categories);
+		if(basicCategories.size() == 0){
+			fail("basicCategories.size() == 0");
+		}
+		CategoryNode category = basicCategories.get(rand.nextInt(basicCategories.size()));
+		Set<String> labels = category.getAllPartitionLabels();
+		String label;
+		if(labels.size() > 0){
+			label = new ArrayList<String>(labels).get(rand.nextInt(labels.size()));
+		}
+		else{
+			label = "SomeLabel";
+			category.getPartitions().get(0).addLabel(label);
+		}
+		Relation relation = pickRelation();
+		return new LabelStatement(category, label, relation);
+	}
+
+	private BasicStatement createPartitionStatement(List<? extends CategoryNode> categories) {
 		List<CategoryNode> basicCategories = getNotExpectedCategories(categories);
 		if(basicCategories.size() == 0){
 			fail("basicCategories.size() == 0");
 		}
 		CategoryNode category = basicCategories.get(rand.nextInt(basicCategories.size()));
 		PartitionNode partition = category.getLeafPartitions().get(rand.nextInt(category.getPartitions().size()));
+		Relation relation = pickRelation();
+		return new PartitionStatement(partition, relation);
+	}
+
+	private Relation pickRelation() {
 		Relation relation;
 		switch(rand.nextInt(2)){
 		case 0: relation = Relation.EQUAL;
 		case 1: relation = Relation.NOT;
 		default: relation = Relation.EQUAL;
 		}
-		return new PartitionStatement(partition, relation);
+		return relation;
 	}
 
 	private List<CategoryNode> getNotExpectedCategories(List<? extends CategoryNode> categories) {
@@ -318,7 +349,7 @@ public class XmlParserSerializerTest {
 			}
 			else{
 				if(rand.nextBoolean() && getNotExpectedCategories(categories).size() > 0){
-					array.addStatement(createStatement(categories));
+					array.addStatement(createPartitionStatement(categories));
 				}
 				else{
 					array.addStatement(new StaticStatement(rand.nextBoolean()));
@@ -447,11 +478,26 @@ public class XmlParserSerializerTest {
 		else if(statement1 instanceof PartitionStatement && statement2 instanceof PartitionStatement){
 			compareStatements((PartitionStatement)statement1, (PartitionStatement)statement2);
 		}
+		else if(statement1 instanceof LabelStatement && statement2 instanceof LabelStatement){
+			compareLabelStatements((LabelStatement)statement1, (LabelStatement)statement2);
+		}
 		else if(statement1 instanceof StatementArray && statement2 instanceof StatementArray){
 			compareStatementArrays((StatementArray)statement1, (StatementArray)statement2);
 		}
 		else{
 			fail("Unknown type of statement or compared statements are of didderent types");
+		}
+	}
+
+	private void compareLabelStatements(LabelStatement statement1, LabelStatement statement2) {
+		compareCategories(statement1.getCategory(), statement2.getCategory());
+		if((statement1.getRelation() != statement2.getRelation())){
+			fail("Compared statements have different relations: " + 
+					statement1.getRelation() + " and " + statement2.getRelation());
+		}
+		if(statement1.getCondition().equals(statement2.getCondition()) == false){
+			fail("Compared statements have different label conditions" + 
+					statement1.getCondition() + " and " + statement2.getCondition());
 		}
 	}
 

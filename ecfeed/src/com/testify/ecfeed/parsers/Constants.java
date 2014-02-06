@@ -14,7 +14,8 @@ public class Constants {
 	public static final String CONSTRAINT_NODE_NAME = "Constraint";
 	public static final String CONSTRAINT_PREMISE_NODE_NAME = "Premise";
 	public static final String CONSTRAINT_CONSEQUENCE_NODE_NAME = "Consequence";
-	public static final String CONSTRAINT_STATEMENT_NODE_NAME = "Statement";
+	public static final String CONSTRAINT_PARTITION_STATEMENT_NODE_NAME = "Statement";
+	public static final String CONSTRAINT_LABEL_STATEMENT_NODE_NAME = "LabelStatement";
 	public static final String CONSTRAINT_STATIC_STATEMENT_NODE_NAME = "StaticStatement";
 	public static final String CONSTRAINT_STATEMENT_ARRAY_NODE_NAME = "StatementArray";
 
@@ -31,6 +32,7 @@ public class Constants {
 	public static final String STATIC_VALUE_ATTRIBUTE_NAME = "value";
 	public static final String STATEMENT_CATEGORY_ATTRIBUTE_NAME = "category";
 	public static final String STATEMENT_PARTITION_ATTRIBUTE_NAME = "partition";
+	public static final String STATEMENT_LABEL_ATTRIBUTE_NAME = "label";
 	public static final String STATEMENT_RELATION_ATTRIBUTE_NAME = "relation";
 	public static final String STATEMENT_OPERATOR_ATTRIBUTE_NAME = "operator";
 	public static final String STATEMENT_STATIC_VALUE_ATTRIBUTE_NAME = "value";

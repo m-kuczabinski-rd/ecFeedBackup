@@ -21,6 +21,7 @@ import nu.xom.*;
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.constraint.BasicStatement;
 import com.testify.ecfeed.model.constraint.Constraint;
+import com.testify.ecfeed.model.constraint.LabelStatement;
 import com.testify.ecfeed.model.constraint.Operator;
 import com.testify.ecfeed.model.constraint.Relation;
 import com.testify.ecfeed.model.constraint.PartitionStatement;
@@ -144,8 +145,10 @@ public class XmlModelParser implements IModelParser{
 
 	protected BasicStatement parseStatement(Element element, MethodNode method) throws ParserException {
 		switch(element.getLocalName()){
-		case Constants.CONSTRAINT_STATEMENT_NODE_NAME:
-			return parseSigleStatement(element, method);
+		case Constants.CONSTRAINT_PARTITION_STATEMENT_NODE_NAME:
+			return parsePartitionStatement(element, method);
+		case Constants.CONSTRAINT_LABEL_STATEMENT_NODE_NAME:
+			return parseLabelStatement(element, method);
 		case Constants.CONSTRAINT_STATEMENT_ARRAY_NODE_NAME:
 			return parseStatementArray(element, method);
 		case Constants.CONSTRAINT_STATIC_STATEMENT_NODE_NAME:
@@ -188,7 +191,7 @@ public class XmlModelParser implements IModelParser{
 		}
 	}
 
-	protected BasicStatement parseSigleStatement(Element element, MethodNode method) throws ParserException {
+	protected BasicStatement parsePartitionStatement(Element element, MethodNode method) throws ParserException {
 		String categoryName = getAttributeValue(element, Constants.STATEMENT_CATEGORY_ATTRIBUTE_NAME);
 		CategoryNode category = method.getCategory(categoryName);
 		if(category == null){
@@ -201,6 +204,26 @@ public class XmlModelParser implements IModelParser{
 		}
 
 		String relationName = getAttributeValue(element, Constants.STATEMENT_RELATION_ATTRIBUTE_NAME);
+		Relation relation = getRalation(relationName);
+		
+		return new PartitionStatement(partition, relation);
+	}
+	
+	protected BasicStatement parseLabelStatement(Element element, MethodNode method) throws ParserException {
+		String categoryName = getAttributeValue(element, Constants.STATEMENT_CATEGORY_ATTRIBUTE_NAME);
+		String label = getAttributeValue(element, Constants.STATEMENT_LABEL_ATTRIBUTE_NAME);
+		String relationName = getAttributeValue(element, Constants.STATEMENT_RELATION_ATTRIBUTE_NAME);
+		
+		CategoryNode category = method.getCategory(categoryName);
+		if(category == null){
+			throw new ParserException(Messages.WRONG_CATEGORY_NAME(categoryName, method.getName()));
+		}
+		Relation relation = getRalation(relationName);
+		
+		return new LabelStatement(category, label, relation);
+	}
+
+	protected Relation getRalation(String relationName) throws ParserException{
 		Relation relation = null;
 		switch(relationName){
 		case Constants.RELATION_EQUAL:
@@ -211,10 +234,9 @@ public class XmlModelParser implements IModelParser{
 			relation = Relation.NOT;
 			break;
 		default:
-			throw new ParserException(Messages.WRONG_OR_MISSING_RELATION_FORMAT(method.getName(), relationName));
+			throw new ParserException(Messages.WRONG_OR_MISSING_RELATION_FORMAT(relationName));
 		}
-		
-		return new PartitionStatement(partition, relation);
+		return relation;
 	}
 
 	protected TestCaseNode parseTestCaseElement(Element element, List<CategoryNode> categories) throws ParserException {

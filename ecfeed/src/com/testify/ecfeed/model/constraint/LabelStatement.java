@@ -31,7 +31,15 @@ public class LabelStatement extends BasicStatement {
 	public void setRelation(Relation relation) {
 		fRelation = relation;
 	}
+	
+	public void setCategory(CategoryNode category){
+		fCategory = category;
+	}
 
+	public CategoryNode getCategory(){
+		return fCategory;
+	}
+	
 	@Override
 	public boolean mentions(CategoryNode category){
 		return category == fCategory;

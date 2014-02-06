@@ -42,8 +42,8 @@ public class Messages {
 		return "Forbidden value of static statement: " + value;
 	}
 
-	public static String WRONG_OR_MISSING_RELATION_FORMAT(String methodName, String relation) {
-		return "Forbidden relation value in statement for method " + methodName + ": " + relation;
+	public static String WRONG_OR_MISSING_RELATION_FORMAT(String relation) {
+		return "Forbidden relation value in statement: " + relation;
 	}
 
 	public static String WRONG_CATEGORY_NAME(String categoryName, String methodName) {
