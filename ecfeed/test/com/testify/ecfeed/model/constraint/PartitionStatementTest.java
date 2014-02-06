@@ -14,7 +14,7 @@ import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
 
-public class StatementTest {
+public class PartitionStatementTest {
 
 	private static MethodNode fMethod;
 	private static CategoryNode fCategory;
