@@ -31,7 +31,6 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Table;
 import org.eclipse.ui.forms.IFormPart;
 import org.eclipse.ui.forms.widgets.Section;
 
@@ -212,9 +211,7 @@ public class ClassNodeDetailsPage extends GenericNodeDetailsPage{
 		fMethodsViewer.setContentProvider(new ArrayContentProvider());
 		fMethodsViewer.addDoubleClickListener(new ChildrenViewerDoubleClickListener());
 		
-		Table methodsTable = fMethodsViewer.getTable();
-		methodsTable.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
-		getToolkit().paintBordersFor(methodsTable);
+		fMethodsViewer.getTable().setLayoutData(VIEWERS_GRID_DATA);
 		
 		createTableViewerColumn(fMethodsViewer, "Method", 150, new ColumnLabelProvider(){
 			@Override
@@ -258,9 +255,7 @@ public class ClassNodeDetailsPage extends GenericNodeDetailsPage{
 		
 		fOtherMethodsViewer = CheckboxTableViewer.newCheckList(otherMathodsComposite, SWT.BORDER | SWT.FULL_SELECTION);
 		fOtherMethodsViewer.setContentProvider(new ArrayContentProvider());
-		Table otherMathodsTable = fOtherMethodsViewer.getTable();
-		otherMathodsTable.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
-		getToolkit().paintBordersFor(otherMathodsTable);
+		fOtherMethodsViewer.getTable().setLayoutData(VIEWERS_GRID_DATA);
 		
 		Button addSelectedButton = new Button(otherMathodsComposite, SWT.NONE);
 		getToolkit().adapt(addSelectedButton, true, true);

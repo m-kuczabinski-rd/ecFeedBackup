@@ -29,7 +29,6 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Table;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.CheckboxTableViewer;
@@ -215,10 +214,8 @@ public class MethodNodeDetailsPage extends GenericNodeDetailsPage implements Inp
 		fParametersViewer = new TableViewer(composite, SWT.BORDER | SWT.FULL_SELECTION);
 		fParametersViewer.setContentProvider(new ArrayContentProvider());
 		fParametersViewer.addDoubleClickListener(new ChildrenViewerDoubleClickListener());
-		Table parametersTable = fParametersViewer.getTable();
-		parametersTable.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
-		parametersTable.setHeaderVisible(true);
-		getToolkit().paintBordersFor(parametersTable);
+		fParametersViewer.getTable().setLayoutData(VIEWERS_GRID_DATA);
+		fParametersViewer.getTable().setHeaderVisible(true);
 		
 		createParametersColumns();
 	}
@@ -300,10 +297,8 @@ public class MethodNodeDetailsPage extends GenericNodeDetailsPage implements Inp
 		fConstraintsViewer = CheckboxTableViewer.newCheckList(composite, SWT.BORDER | SWT.FULL_SELECTION);
 		fConstraintsViewer.setContentProvider(new ArrayContentProvider());
 		fConstraintsViewer.addDoubleClickListener(new ChildrenViewerDoubleClickListener());
-		Table constraintsTable = fConstraintsViewer.getTable();
-		constraintsTable.setHeaderVisible(true);
-		constraintsTable.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1));
-		getToolkit().paintBordersFor(constraintsTable);
+		fConstraintsViewer.getTable().setHeaderVisible(true);
+		fConstraintsViewer.getTable().setLayoutData(VIEWERS_GRID_DATA);
 		
 		TableViewerColumn constraintNameViewerColumn = createTableViewerColumn(fConstraintsViewer, "Name", 
 				130, new ColumnLabelProvider(){
@@ -406,7 +401,7 @@ public class MethodNodeDetailsPage extends GenericNodeDetailsPage implements Inp
 		});
 		fTestCasesViewer.addDoubleClickListener(new ChildrenViewerDoubleClickListener());
 		fTestCasesViewer.addCheckStateListener(new TreeCheckStateListener(fTestCasesViewer));
-		fTestCasesViewer.getTree().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+		fTestCasesViewer.getTree().setLayoutData(VIEWERS_GRID_DATA);
 	}
 	
 	private void createTestCasesSectionButtons(Composite testCasesComposite) {

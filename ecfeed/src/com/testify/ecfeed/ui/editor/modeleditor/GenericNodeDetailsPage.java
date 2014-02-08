@@ -22,6 +22,7 @@ import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.layout.FillLayout;
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
@@ -46,6 +47,7 @@ public class GenericNodeDetailsPage implements IDetailsPage, IModelUpdateListene
 	private ModelMasterDetailsBlock fParentBlock;
 	protected FormToolkit fToolkit;
 	protected IGenericNode fSelectedNode;
+	protected final GridData VIEWERS_GRID_DATA;
 
 	protected class ChildrenViewerDoubleClickListener implements
 	IDoubleClickListener {
@@ -71,6 +73,9 @@ public class GenericNodeDetailsPage implements IDetailsPage, IModelUpdateListene
 		if(fEditor != null){
 			fEditor.registerModelUpdateListener(this);
 		}
+		VIEWERS_GRID_DATA = new GridData(SWT.FILL, SWT.FILL, true, true);
+		VIEWERS_GRID_DATA.heightHint = 100;
+		VIEWERS_GRID_DATA.widthHint = 100;
 	}
 
 	/**

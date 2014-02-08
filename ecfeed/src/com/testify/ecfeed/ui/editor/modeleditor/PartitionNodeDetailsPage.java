@@ -305,8 +305,7 @@ public class PartitionNodeDetailsPage extends GenericNodeDetailsPage{
 		fPartitionsTable = fPartitionsViewer.getTable();
 		fPartitionsTable.setLinesVisible(true);
 		fPartitionsTable.setHeaderVisible(true);
-		fPartitionsTable.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
-		fToolkit.paintBordersFor(fPartitionsTable);
+		fPartitionsTable.setLayoutData(VIEWERS_GRID_DATA);
 		
 		TableViewerColumn nameViewerColumn = createTableViewerColumn(fPartitionsViewer, "Partition name", 
 				190, new ColumnLabelProvider(){
@@ -427,10 +426,9 @@ public class PartitionNodeDetailsPage extends GenericNodeDetailsPage{
 		fLabelsViewer = CheckboxTableViewer.newCheckList(parent, SWT.BORDER | SWT.FULL_SELECTION);
 		fLabelsViewer.setContentProvider(new ArrayContentProvider());
 		fLabelsTable = fLabelsViewer.getTable();
-		fLabelsTable.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+		fLabelsTable.setLayoutData(VIEWERS_GRID_DATA);
 		fLabelsTable.setLinesVisible(true);
 		fLabelsTable.setHeaderVisible(true);
-		fToolkit.paintBordersFor(fLabelsTable);
 		fLabelsViewer.addCheckStateListener(new ICheckStateListener() {
 			@Override
 			public void checkStateChanged(CheckStateChangedEvent event) {

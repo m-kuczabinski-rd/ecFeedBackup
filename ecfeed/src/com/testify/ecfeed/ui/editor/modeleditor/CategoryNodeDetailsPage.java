@@ -33,7 +33,6 @@ import org.eclipse.ui.forms.widgets.Section;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Table;
-import org.eclipse.swt.layout.GridData;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.layout.RowLayout;
@@ -180,8 +179,7 @@ public class CategoryNodeDetailsPage extends GenericNodeDetailsPage implements I
 		fPartitionsTable = fPartitionsViewer.getTable();
 		fPartitionsTable.setLinesVisible(true);
 		fPartitionsTable.setHeaderVisible(true);
-		fPartitionsTable.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
-		fToolkit.paintBordersFor(fPartitionsTable);
+		fPartitionsTable.setLayoutData(VIEWERS_GRID_DATA);
 		
 		TableViewerColumn nameViewerColumn = createTableViewerColumn(fPartitionsViewer, "Partition name", 
 				190, new ColumnLabelProvider(){

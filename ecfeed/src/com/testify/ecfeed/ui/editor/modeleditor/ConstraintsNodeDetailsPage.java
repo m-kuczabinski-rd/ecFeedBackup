@@ -180,7 +180,7 @@ public class ConstraintsNodeDetailsPage extends GenericNodeDetailsPage {
 	private void createStatementViewer(Composite parent) {
 		fSelectedStatement = null;
 		fConstraintViewer = new TreeViewer(parent, SWT.BORDER);
-		fConstraintViewer.getTree().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+		fConstraintViewer.getTree().setLayoutData(VIEWERS_GRID_DATA);
 		fConstraintViewer.setContentProvider(new StatementViewerContentProvider());
 		fConstraintViewer.addSelectionChangedListener(new ISelectionChangedListener() {
 			@Override

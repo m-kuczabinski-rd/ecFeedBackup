@@ -43,7 +43,6 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
-import org.eclipse.swt.widgets.Table;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.swt.widgets.Combo;
@@ -141,10 +140,8 @@ public class TestCaseNodeDetailsPage extends GenericNodeDetailsPage implements I
 		
 		fTestDataViewer = new TableViewer(testDataComposite, SWT.BORDER | SWT.FULL_SELECTION);
 		fTestDataViewer.setContentProvider(new ArrayContentProvider());
-		Table testDataTable = fTestDataViewer.getTable();
-		testDataTable.setHeaderVisible(true);
-		testDataTable.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
-		getToolkit().paintBordersFor(testDataTable);
+		fTestDataViewer.getTable().setHeaderVisible(true);
+		fTestDataViewer.getTable().setLayoutData(VIEWERS_GRID_DATA);
 		
 		createTableViewerColumn(fTestDataViewer, "Parameter", 155, new ColumnLabelProvider(){
 			@Override

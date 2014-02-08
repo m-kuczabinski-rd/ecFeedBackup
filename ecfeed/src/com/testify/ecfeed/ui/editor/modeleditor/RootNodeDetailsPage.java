@@ -37,7 +37,6 @@ import com.testify.ecfeed.ui.common.ModelUtils;
 
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Table;
 import org.eclipse.jface.viewers.CheckboxTableViewer;
 import org.eclipse.swt.layout.GridData;
 
@@ -135,11 +134,9 @@ public class RootNodeDetailsPage extends GenericNodeDetailsPage{
 		fClassesViewer.setContentProvider(new ArrayContentProvider());
 		fClassesViewer.addDoubleClickListener(new ChildrenViewerDoubleClickListener());
 		
-		Table table = fClassesViewer.getTable();
-		table.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
-		table.setHeaderVisible(true);
-		table.setLinesVisible(true);
-		fToolkit.paintBordersFor(table);
+		fClassesViewer.getTable().setHeaderVisible(true);
+		fClassesViewer.getTable().setLinesVisible(true);
+		fClassesViewer.getTable().setLayoutData(VIEWERS_GRID_DATA);
 
 		TableViewerColumn classViewerColumn = 
 				createTableViewerColumn(fClassesViewer, "Class", 150, new ColumnLabelProvider(){

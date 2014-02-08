@@ -19,7 +19,6 @@ import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Tree;
 import org.eclipse.ui.dialogs.FilteredTree;
 import org.eclipse.ui.dialogs.PatternFilter;
 import org.eclipse.ui.forms.DetailsPart;
@@ -89,7 +88,6 @@ public class ModelMasterDetailsBlock extends MasterDetailsBlock implements IMode
 		GridData masterSectionGridData = new GridData(SWT.RIGHT, SWT.FILL, false, true);
 		masterSectionGridData.widthHint = 250;
 		fMasterSection.setLayoutData(masterSectionGridData);
-
 		
 		createTreeEditorBlock();
 	}
@@ -136,11 +134,16 @@ public class ModelMasterDetailsBlock extends MasterDetailsBlock implements IMode
 
 	private void createTreeViewer(Composite composite) {
 		FilteredTree filteredTree = new FilteredTree(composite, SWT.BORDER, new PatternFilter(), true);
-		filteredTree.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 		fTreeViewer = filteredTree.getViewer();
 		fTreeViewer.setAutoExpandLevel(2);
 		fTreeViewer.setContentProvider(fContentProvider);
 		fTreeViewer.setLabelProvider(new ModelLabelProvider());
+
+		GridData gd = new GridData(SWT.FILL, SWT.FILL, true, true);
+		gd.widthHint = 100;
+		gd.heightHint = 100;
+		fTreeViewer.getTree().setLayoutData(gd);
+		
 		fTreeViewer.setInput(fEditor);
 
 		fTreeViewer.addSelectionChangedListener(new ISelectionChangedListener() {
@@ -161,10 +164,6 @@ public class ModelMasterDetailsBlock extends MasterDetailsBlock implements IMode
 				detailsPart.selectionChanged(fMasterSectionPart, event.getSelection());
 			}
 		});
-		
-		Tree tree = fTreeViewer.getTree();
-		tree.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
-		fToolkit.paintBordersFor(tree);
 	}
 
 	/**
