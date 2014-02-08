@@ -29,6 +29,9 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.Device;
+import org.eclipse.swt.graphics.Font;
+import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.RowLayout;
@@ -443,12 +446,7 @@ public class PartitionNodeDetailsPage extends GenericNodeDetailsPage{
 				190, new ColumnLabelProvider(){
 			@Override
 			public String getText(Object element){
-				String label = (String)element;
-				String text = label;
-				if(fSelectedPartition.getInheritedLabels().contains(label)){
-					text = "[i]" + text;
-				}
-				return text;
+				return (String)element;
 			}
 			
 			@Override
@@ -463,11 +461,17 @@ public class PartitionNodeDetailsPage extends GenericNodeDetailsPage{
 			}
 	
 			@Override
-			public Color getBackground(Object element){
+			public Font getFont(Object element){
 				if(element instanceof String){
 					String label = (String)element;
 					if(fSelectedPartition.getInheritedLabels().contains(label)){
-						return fColorManager.getColor(ColorConstants.INHERITED_LABEL_BACKGROUND);
+						Font font = fLabelsTable.getFont();
+						FontData currentFontData = font.getFontData()[0];
+						FontData fd = new FontData();
+						fd.setHeight(currentFontData.getHeight());
+						fd.style = SWT.ITALIC;
+						Device device = font.getDevice();
+						return new Font(device, fd);
 					}
 				}
 				return null;
