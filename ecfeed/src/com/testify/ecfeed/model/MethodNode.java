@@ -323,4 +323,8 @@ public class MethodNode extends GenericNode {
 	public boolean removeChild(ConstraintNode constraint){
 		return removeConstraint(constraint);
 	}
+
+	public ClassNode getParentClass() {
+		return (ClassNode)getParent();
+	}
 }
