@@ -469,7 +469,7 @@ public class PartitionNodeDetailsPage extends GenericNodeDetailsPage{
 						FontData currentFontData = font.getFontData()[0];
 						FontData fd = new FontData();
 						fd.setHeight(currentFontData.getHeight());
-						fd.style = SWT.ITALIC;
+						fd.setStyle(fd.getStyle() | SWT.ITALIC);
 						Device device = font.getDevice();
 						return new Font(device, fd);
 					}
