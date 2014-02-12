@@ -110,4 +110,6 @@ public class Messages {
 	public static String DIALOG_TEST_METHOD_EXECUTION_STOPPED_MESSAGE(String function, String exceptionMessage) {
 		return "Execution of test function " + function + " stopped:\n\n" + exceptionMessage;
 	}
+	public static final String DIALOG_EXECUTE_ONLINE_TITLE = "Execute online test";
+	public static final String DIALOG_EXECUTE_ONLINE_MESSAGE = "Setup the test data generator and select which constraints and partitions shall be considered for generating test cases";
 }

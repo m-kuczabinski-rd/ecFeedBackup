@@ -18,7 +18,7 @@ import com.testify.ecfeed.generators.api.IGenerator;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.runner.ParameterizedMethod;
-import com.testify.ecfeed.ui.dialogs.GenerateTestSuiteDialog;
+import com.testify.ecfeed.ui.dialogs.ExecuteOnlineSetupDialog;
 
 public class ExecuteOnlineTestAdapter extends ExecuteTestAdapter {
 	private class ExecuteRunnable implements IRunnableWithProgress{
@@ -68,7 +68,7 @@ public class ExecuteOnlineTestAdapter extends ExecuteTestAdapter {
 
 	@Override
 	public void widgetSelected(SelectionEvent e){
-		GenerateTestSuiteDialog dialog = new GenerateTestSuiteDialog(getPage().getActiveShell(), 
+		ExecuteOnlineSetupDialog dialog = new ExecuteOnlineSetupDialog(getPage().getActiveShell(), 
 				getPage().getSelectedMethod());
 		if(dialog.open() == IDialogConstants.OK_ID){
 			IGenerator<PartitionNode> selectedGenerator = dialog.getSelectedGenerator();
