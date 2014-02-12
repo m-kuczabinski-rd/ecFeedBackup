@@ -552,10 +552,6 @@ public class MethodNodeDetailsPage extends GenericNodeDetailsPage implements Inp
 		return fSelectedMethod;
 	}
 
-	public MethodNode getMethodNode() {
-		return fSelectedMethod;
-	}
-
 	public CheckboxTreeViewer getTestCaseViewer() {
 		return fTestCasesViewer;
 	}

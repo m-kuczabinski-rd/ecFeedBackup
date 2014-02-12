@@ -24,12 +24,12 @@ public class ExecuteStaticTestAdapter extends ExecuteTestAdapter {
 	@Override
 	public void widgetSelected(SelectionEvent event){
 		Class testClass = loadTestClass();
-		Method testMethod = getTestMethod(testClass, getPage().getMethodNode());
+		Method testMethod = getTestMethod(testClass, getPage().getSelectedMethod());
 		if(testMethod == null){
 			new MessageDialog(Display.getDefault().getActiveShell(), 
 					Messages.DIALOG_COULDNT_LOAD_TEST_METHOD_TITLE, 
 					Display.getDefault().getSystemImage(SWT.ICON_ERROR), 
-					Messages.DIALOG_COULDNT_LOAD_TEST_METHOD_MESSAGE(getPage().getMethodNode().toString()),
+					Messages.DIALOG_COULDNT_LOAD_TEST_METHOD_MESSAGE(getPage().getSelectedMethod().toString()),
 					MessageDialog.ERROR, 
 					new String[] {IDialogConstants.OK_LABEL}, IDialogConstants.OK_ID).open();
 		}
@@ -41,7 +41,7 @@ public class ExecuteStaticTestAdapter extends ExecuteTestAdapter {
 			new MessageDialog(Display.getDefault().getActiveShell(), 
 					Messages.DIALOG_TEST_METHOD_EXECUTION_STOPPED_TITLE, 
 					Display.getDefault().getSystemImage(SWT.ICON_ERROR), 
-					Messages.DIALOG_TEST_METHOD_EXECUTION_STOPPED_MESSAGE(getPage().getMethodNode().toString(), e.getMessage()),
+					Messages.DIALOG_TEST_METHOD_EXECUTION_STOPPED_MESSAGE(getPage().getSelectedMethod().toString(), e.getMessage()),
 					MessageDialog.ERROR, 
 					new String[] {IDialogConstants.OK_LABEL}, IDialogConstants.OK_ID).open();
 		} 

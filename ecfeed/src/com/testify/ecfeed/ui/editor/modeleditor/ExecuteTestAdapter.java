@@ -41,7 +41,7 @@ public class ExecuteTestAdapter extends SelectionAdapter {
 	protected Class<?> loadTestClass() {
 		Class<?> testClass = null;
 		ClassLoader parentLoader = this.getClass().getClassLoader();
-		ClassNode classNode = fPage.getMethodNode().getClassNode();
+		ClassNode classNode = fPage.getSelectedMethod().getClassNode();
 		String className = classNode.getQualifiedName();
 		IProject[] projects = ResourcesPlugin.getWorkspace().getRoot().getProjects();
 		for(IProject project : projects){
@@ -85,7 +85,7 @@ public class ExecuteTestAdapter extends SelectionAdapter {
 	protected boolean isModel(Method method, MethodNode methodModel) {
 		String methodName = method.getName();
 		List<String> argTypes = getArgTypes(method);
-		return fPage.getMethodNode().getClassNode().getMethod(methodName, argTypes) == methodModel;
+		return fPage.getSelectedMethod().getClassNode().getMethod(methodName, argTypes) == methodModel;
 	}
 
 	protected MethodNodeDetailsPage getPage(){
