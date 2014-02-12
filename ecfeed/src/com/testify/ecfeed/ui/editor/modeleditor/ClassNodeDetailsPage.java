@@ -157,23 +157,6 @@ public class ClassNodeDetailsPage extends GenericNodeDetailsPage{
 				refresh();
 			}
 		});
-		
-		createButton(textComposite, "Remove", new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e){
-				MessageDialog infoDialog = new MessageDialog(Display.getDefault().getActiveShell(), 
-						Messages.DIALOG_REMOVE_CLASS_TITLE, Display.getDefault().getSystemImage(SWT.ICON_WARNING), 
-						Messages.DIALOG_REMOVE_CLASS_MESSAGE,
-						MessageDialog.QUESTION_WITH_CANCEL, new String[] {"OK", "Cancel"}, 0);
-				if(infoDialog.open() == 0){
-					RootNode root = (RootNode)fSelectedClass.getParent(); 
-					root.removeClass(fSelectedClass);
-					fSelectedClass = null;
-					getParentBlock().selectNode(root);
-					updateModel(root);
-				}
-			}
-		});
 	}
 
 	private void createQualifiedNameComposite(Composite mainComposite) {
