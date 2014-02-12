@@ -418,8 +418,16 @@ public class MethodNodeDetailsPage extends GenericNodeDetailsPage implements Inp
 		createGenerateTestSuiteButton(testCasesButonsComposite);
 		
 		createRemoveSelectedButton(testCasesButonsComposite);
+
+		createExecuteSelectedButton(testCasesButonsComposite);
 	}
 	
+	private void createExecuteSelectedButton(Composite testCasesButonsComposite) {
+		Button button = createButton(testCasesButonsComposite, "Execute selected", 
+				new ExecuteTestAdapter(this));
+		button.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
+	}
+
 	private void createAddTestCaseButton(Composite testCasesButonsComposite) {
 		Button button = createButton(testCasesButonsComposite, "Add Test Case", new SelectionAdapter() {
 			@Override
@@ -534,5 +542,13 @@ public class MethodNodeDetailsPage extends GenericNodeDetailsPage implements Inp
 	
 	public MethodNode getSelectedMethod(){
 		return fSelectedMethod;
+	}
+
+	public MethodNode getMethodNode() {
+		return fSelectedMethod;
+	}
+
+	public CheckboxTreeViewer getTestCaseViewer() {
+		return fTestCasesViewer;
 	}
 }

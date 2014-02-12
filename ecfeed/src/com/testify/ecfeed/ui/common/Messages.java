@@ -91,9 +91,23 @@ public class Messages {
 	public static final String DIALOG_CANNOT_ADD_LABEL_TITLE = "Cannot add label for partition";
 	public static final String DIALOG_CANNOT_ADD_LABEL_MESSAGE = "New label could not be added to the partition";
 	public static final String DIALOG_CANNOT_REMOVE_LABEL_TITLE = "Could not remove label";
+	public static final String DIALOG_COULDNT_LOAD_TEST_CLASS_TITLE = "Could not load test class";
+	public static String DIALOG_COULDNT_LOAD_TEST_CLASS_MESSAGE(String className) {
+		return "The test class " + className + " could not be loaded. Make sure that the class is compiled and the "
+				+ ".class file is the output folder. Try to enable 'Build automatically' option in Projet menu.";
+	}
+	public static final String DIALOG_COULDNT_LOAD_TEST_METHOD_TITLE = "Could not find test method";
+	public static String DIALOG_COULDNT_LOAD_TEST_METHOD_MESSAGE(String method) {
+		return "The test method " + method + " could not be found in the loaded test class. Make sure that such a method " + 
+				"is defined in the class and that there is only one such class defined in the workspace.";
+	}
 	public static final String DIALOG_CANNOT_REMOVE_LABEL_MESSAGE(String label){return "The label " + label + " coud not be removed";}
 	public static final String DIALOG_LARGE_TEST_SUITE_GENERATED_MESSAGE(int length) {
 		return "The algortithm generated " + length + " test cases. Adding this amount of data to the model may heavily affect tool's performance"
 				+ " and cause loss of data. Do you want to continue?";
 	}
+	public static final String DIALOG_TEST_METHOD_EXECUTION_STOPPED_TITLE = "Unexpected test function execution exit";
+	public static String DIALOG_TEST_METHOD_EXECUTION_STOPPED_MESSAGE(String function, String exceptionMessage) {
+		return "Execution of test function " + function + " stopped:\n\n" + exceptionMessage;
 	}
+}
