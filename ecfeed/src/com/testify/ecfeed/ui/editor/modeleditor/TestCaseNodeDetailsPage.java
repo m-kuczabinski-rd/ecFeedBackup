@@ -40,7 +40,6 @@ import com.testify.ecfeed.model.TestCaseNode;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.jface.viewers.TableViewer;
