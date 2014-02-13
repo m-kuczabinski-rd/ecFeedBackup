@@ -2,10 +2,10 @@ package com.testify.ecfeed.runner;
 
 import static org.junit.Assert.*;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
-
-import com.testify.ecfeed.runner.annotations.EcModel;
+//import org.junit.Test;
+//import org.junit.runner.RunWith;
+//
+//import com.testify.ecfeed.runner.annotations.EcModel;
 
 //@RunWith(StaticRunner.class)
 //@EcModel("test/com/testify/ecfeed/runner/testModel.ect")
