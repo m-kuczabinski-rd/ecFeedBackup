@@ -11,19 +11,27 @@
 
 package com.testify.ecfeed.ui.editor;
 
-
+import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.util.HashSet;
 import java.util.Set;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IWorkspace;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.dialogs.ErrorDialog;
+import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.window.Window;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.dialogs.SaveAsDialog;
 import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.part.FileEditorInput;
@@ -31,18 +39,19 @@ import org.eclipse.ui.part.FileEditorInput;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.parsers.ParserException;
 import com.testify.ecfeed.parsers.xml.XmlModelParser;
+import com.testify.ecfeed.parsers.xml.XmlModelSerializer;
 import com.testify.ecfeed.ui.editor.modeleditor.ModelPage;
-import com.testify.ecfeed.ui.editor.sourceviewer.SourceViewer;
 
 public class EcMultiPageEditor extends FormEditor{
 	
 	public static String ID = "com.testify.ecfeed.ui.editors.EcMultiPageEditor";
 
-	private SourceViewer fSourceViewer;
 	private RootNode fModel;
 	private Set<IModelUpdateListener> fModelUpdateListeners;
 
-//	private int fSourceViewerIndex;
+	private ModelPage fTreeEditorPage;
+
+	private boolean fDirty;
 
 	public void registerModelUpdateListener(IModelUpdateListener listener){
 		fModelUpdateListeners.add(listener);
@@ -65,8 +74,9 @@ public class EcMultiPageEditor extends FormEditor{
 				XmlModelParser parser = new XmlModelParser();
 				iStream = file.getContents();
 				root = parser.parseModel(iStream);
+				fDirty = false;
 			} catch (CoreException | ParserException e) {
-				System.out.println("Exception: " + e.getMessage());
+				MessageDialog.openError(Display.getCurrent().getActiveShell(), "Error", "Exception: " + e.getMessage());
 				e.printStackTrace();
 			}
 		}
@@ -76,7 +86,14 @@ public class EcMultiPageEditor extends FormEditor{
 	public void updateModel(RootNode model){
 		fModel = model;
 		updateListeners(model);
-		firePropertyChange(IEditorPart.PROP_DIRTY);
+		setDirty(true);
+	}
+
+	private void setDirty(boolean dirty) {
+		if(fDirty != dirty){
+			fDirty = dirty;
+			firePropertyChange(IEditorPart.PROP_DIRTY);
+		}
 	}
 
 	private void updateListeners(RootNode model) {
@@ -93,37 +110,61 @@ public class EcMultiPageEditor extends FormEditor{
 	@Override
 	protected void addPages() {
 		try {
-			fSourceViewer = new SourceViewer(this);
-			fSourceViewer.init(getEditorSite(), getEditorInput());
-
 			setPartName(getEditorInput().getName());
-			
-			ModelPage treeEditorPage = new ModelPage(this, getModel());
-			addPage(treeEditorPage);
+			fTreeEditorPage = new ModelPage(this, getModel());
+			addPage(fTreeEditorPage);
 
-//			fSourceViewerIndex = addPage(fSourceViewer, getEditorInput());
-//			setPageText(fSourceViewerIndex, "source");
-			
 		} catch (PartInitException e) {
-			ErrorDialog.openError(
-					getSite().getShell(),
+			ErrorDialog.openError(getSite().getShell(),
 					"Error creating nested text editor",
-					null,
-					e.getStatus());
+					null, e.getStatus());
 		}
 	}
 	
 	@Override
 	public void doSave(IProgressMonitor monitor) {
-		fSourceViewer.doSave(monitor);
-		firePropertyChange(IEditorPart.PROP_DIRTY);
+		IFile file = ((FileEditorInput)getEditorInput()).getFile();
+		saveEditor(file, monitor);
 	}
 	
 	@Override
 	public void doSaveAs() {
-		fSourceViewer.doSaveAs();
+		SaveAsDialog dialog = new SaveAsDialog(Display.getDefault().getActiveShell());
+
+		IFile original = ((FileEditorInput)getEditorInput()).getFile();
+		dialog.setOriginalFile(original);
+		dialog.create();
+
+		if (dialog.open() != Window.CANCEL) {
+			IPath path = dialog.getResult();
+			IWorkspace workspace= ResourcesPlugin.getWorkspace();
+			IFile file = workspace.getRoot().getFile(path);
+			saveEditor(file, null);
+			setInput(new FileEditorInput(file));
+			setPartName(file.getName());
+		}
 	}
 	
+	private void saveEditor(IFile file, IProgressMonitor monitor){
+		try{
+			FileOutputStream fout = new FileOutputStream(file.getLocation().toOSString());
+			XmlModelSerializer writer = new XmlModelSerializer(fout);
+			writer.writeXmlDocument(fModel);
+			setDirty(false);
+			refreshWorkspace(monitor);
+		}
+		catch(Exception e){
+			MessageDialog.openError(Display.getCurrent().getActiveShell(), 
+					"Error", "Couldn't write the file:" + e.getMessage());
+		}
+	}
+	
+	private void refreshWorkspace(IProgressMonitor monitor) throws CoreException {
+		for(IResource resource : ResourcesPlugin.getWorkspace().getRoot().getProjects()){
+			resource.refreshLocal(IResource.DEPTH_INFINITE, monitor);
+		}
+	}
+
 	/* (non-Javadoc)
 	 * Method declared on IEditorPart
 	 */
@@ -138,21 +179,14 @@ public class EcMultiPageEditor extends FormEditor{
 	public boolean isSaveAsAllowed() {
 		return true;
 	}
-
-	public SourceViewer getSourceViewer() {
-		return fSourceViewer;
-	}
 	
 	@Override
 	protected void pageChange(int newPageIndex) {
-//		if(newPageIndex == fSourceViewerIndex){
-//			fSourceViewer.refresh();
-//		}
 		super.pageChange(newPageIndex);
 	}
 	
 	@Override
 	public boolean isDirty(){
-		return fSourceViewer.isDirty();
+		return fDirty;
 	}
 }
