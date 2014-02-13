@@ -11,7 +11,6 @@
 
 package com.testify.ecfeed.ui.editor.modeleditor;
 
-import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.CellEditor;
@@ -31,10 +30,8 @@ import org.eclipse.ui.forms.IFormPart;
 import org.eclipse.ui.forms.widgets.ExpandableComposite;
 import org.eclipse.ui.forms.widgets.Section;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.jface.viewers.TableViewerColumn;
-import org.eclipse.jface.window.Window;
 import org.eclipse.swt.layout.RowLayout;
 
 import com.testify.ecfeed.model.RootNode;
@@ -84,13 +81,9 @@ public class CategoryNodeDetailsPage extends GenericNodeDetailsPage implements I
 			PartitionNode partition = (PartitionNode)element;
 			if(!fSelectedCategory.validatePartitionName(newName) || 
 					partition.hasSibling(newName)){
-				MessageDialog dialog = new MessageDialog(getActiveShell(), 
+				MessageDialog.openError(getActiveShell(), 
 						Messages.DIALOG_PARTITION_NAME_PROBLEM_TITLE, 
-						Display.getDefault().getSystemImage(SWT.ICON_ERROR), 
-						Messages.DIALOG_PARTITION_NAME_PROBLEM_MESSAGE,
-						MessageDialog.ERROR, 
-						new String[] {IDialogConstants.OK_LABEL}, IDialogConstants.OK_ID);
-				dialog.open();
+						Messages.DIALOG_PARTITION_NAME_PROBLEM_MESSAGE);
 			}
 			else{
 				((PartitionNode)element).setName((String)value);
@@ -126,13 +119,9 @@ public class CategoryNodeDetailsPage extends GenericNodeDetailsPage implements I
 		protected void setValue(Object element, Object value) {
 			String valueString = (String)value;
 			if(!fSelectedCategory.validatePartitionStringValue(valueString)){
-				MessageDialog dialog = new MessageDialog(getActiveShell(), 
+				MessageDialog.openError(getActiveShell(), 
 						Messages.DIALOG_PARTITION_VALUE_PROBLEM_TITLE, 
-						Display.getDefault().getSystemImage(SWT.ICON_ERROR), 
-						Messages.DIALOG_PARTITION_VALUE_PROBLEM_MESSAGE,
-						MessageDialog.ERROR, 
-						new String[] {IDialogConstants.OK_LABEL}, IDialogConstants.OK_ID);
-				dialog.open();
+						Messages.DIALOG_PARTITION_VALUE_PROBLEM_MESSAGE);
 			}
 			else{
 				Object newValue = fSelectedCategory.getPartitionValueFromString(valueString);
@@ -255,27 +244,17 @@ public class CategoryNodeDetailsPage extends GenericNodeDetailsPage implements I
 		createButton(buttonsComposite, "Remove Selected", new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e){
-				MessageDialog dialog = new MessageDialog(getActiveShell(), 
+				if (MessageDialog.openConfirm(getActiveShell(), 
 						Messages.DIALOG_REMOVE_PARTITIONS_TITLE, 
-						Display.getDefault().getSystemImage(SWT.ICON_WARNING), 
-						Messages.DIALOG_REMOVE_PARTITIONS_MESSAGE,
-						MessageDialog.QUESTION_WITH_CANCEL, 
-						new String[] {IDialogConstants.OK_LABEL, IDialogConstants.CANCEL_LABEL},
-						IDialogConstants.OK_ID);
-				if (dialog.open() == Window.OK) {
+						Messages.DIALOG_REMOVE_PARTITIONS_MESSAGE)) {
 					for(Object partition : fPartitionsViewer.getCheckedElements()){
 						if(fSelectedCategory.getPartitions().size() > 1){
 							fSelectedCategory.removePartition((PartitionNode)partition);
 						}
 						else{
-							MessageDialog dlg = new MessageDialog(getActiveShell(), 
+							MessageDialog.openInformation(getActiveShell(), 
 									Messages.DIALOG_REMOVE_LAST_PARTITION_TITLE, 
-									Display.getDefault().getSystemImage(SWT.ICON_INFORMATION), 
-									Messages.DIALOG_REMOVE_LAST_PARTITION_MESSAGE,
-									MessageDialog.INFORMATION, 
-									new String[] {IDialogConstants.OK_LABEL},
-									IDialogConstants.OK_ID);
-							dlg.open();
+									Messages.DIALOG_REMOVE_LAST_PARTITION_MESSAGE);
 						}
 						updateModel((RootNode)fSelectedCategory.getRoot());
 					}
