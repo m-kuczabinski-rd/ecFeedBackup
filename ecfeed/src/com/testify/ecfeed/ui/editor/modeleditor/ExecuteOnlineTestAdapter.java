@@ -9,9 +9,11 @@ import java.util.Map;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.dialogs.IDialogConstants;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.widgets.Display;
 
 import com.testify.ecfeed.generators.api.IConstraint;
 import com.testify.ecfeed.generators.api.IGenerator;
@@ -91,7 +93,7 @@ public class ExecuteOnlineTestAdapter extends ExecuteTestAdapter {
 		try {
 			progressDialog.run(true,  true, runnable);
 		} catch (InvocationTargetException | InterruptedException e) {
-			e.printStackTrace();
+			MessageDialog.openError(Display.getDefault().getActiveShell(), "Exception:\n", e.getMessage());
 		}
 	}
 }
