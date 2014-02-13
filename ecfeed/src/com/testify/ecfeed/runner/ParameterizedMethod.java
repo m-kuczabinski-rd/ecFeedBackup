@@ -27,7 +27,13 @@ public class ParameterizedMethod extends FrameworkMethod {
 	@Override
 	public Object invokeExplosively(Object target, Object... parameters) throws Throwable{
 		for(List<PartitionNode> testCase : fTestData){
-			super.invokeExplosively(target, getParameters(testCase));
+			Object[] arguments = getParameters(testCase);
+			try{
+				super.invokeExplosively(target, arguments);
+			}catch (Throwable e){
+				String message = getName() + "(" + testCase + "): " + e.getMessage();
+				throw new Exception(message, e);
+			}
 		}
 		return null;
 	}
