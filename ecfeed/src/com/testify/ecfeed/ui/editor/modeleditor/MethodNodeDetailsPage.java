@@ -420,14 +420,10 @@ public class MethodNodeDetailsPage extends GenericNodeDetailsPage implements Inp
 		createRemoveSelectedButton(testCasesButonsComposite);
 
 		createExecuteSelectedButton(testCasesButonsComposite);
+
+		createExecuteOnlineButton(testCasesButonsComposite);
 	}
 	
-	private void createExecuteSelectedButton(Composite testCasesButonsComposite) {
-		Button button = createButton(testCasesButonsComposite, "Execute selected", 
-				new ExecuteTestAdapter(this));
-		button.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
-	}
-
 	private void createAddTestCaseButton(Composite testCasesButonsComposite) {
 		Button button = createButton(testCasesButonsComposite, "Add Test Case", new SelectionAdapter() {
 			@Override
@@ -512,6 +508,18 @@ public class MethodNodeDetailsPage extends GenericNodeDetailsPage implements Inp
 		button.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
 	}
 	
+	private void createExecuteSelectedButton(Composite testCasesButonsComposite) {
+		Button button = createButton(testCasesButonsComposite, "Execute selected", 
+				new ExecuteStaticTestAdapter(this));
+		button.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
+	}
+
+	private void createExecuteOnlineButton(Composite testCasesButonsComposite) {
+		Button button = createButton(testCasesButonsComposite, "Execute online", 
+				new ExecuteOnlineTestAdapter(this));
+		button.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
+	}
+
 	public void selectionChanged(IFormPart part, ISelection selection) {
 		super.selectionChanged(part, selection);
 		fSelectedMethod = (MethodNode)fSelectedNode;
@@ -541,10 +549,6 @@ public class MethodNodeDetailsPage extends GenericNodeDetailsPage implements Inp
 	}
 	
 	public MethodNode getSelectedMethod(){
-		return fSelectedMethod;
-	}
-
-	public MethodNode getMethodNode() {
 		return fSelectedMethod;
 	}
 
