@@ -59,7 +59,7 @@ public class ExecuteOnlineTestAdapter extends ExecuteTestAdapter {
 			List<PartitionNode> next;
 			try {
 				fGenerator.initialize(fInput, fConstraints, fParameters);
-				monitor.beginTask("Generating test data", fGenerator.totalWork());
+				monitor.beginTask("Executing test function with generated parameters", fGenerator.totalWork());
 				while((next = fGenerator.next()) != null && monitor.isCanceled() == false){
 					List<TestCaseNode> testCases = new ArrayList<TestCaseNode>();
 					testCases.add(new TestCaseNode("", next));
