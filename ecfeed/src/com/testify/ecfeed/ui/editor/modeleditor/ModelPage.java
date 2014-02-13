@@ -27,7 +27,6 @@ public class ModelPage extends FormPage{
 	
 	private ModelMasterDetailsBlock fBlock;
 	private RootNode fModel;
-	private EcMultiPageEditor fEditor;
 	
 	/**
 	 * Create the form page.
@@ -38,16 +37,11 @@ public class ModelPage extends FormPage{
 	public ModelPage(EcMultiPageEditor editor, RootNode model) {
 		super(editor, ID, TITLE);
 		fModel = model;
-		fEditor = editor;
 		fBlock = new ModelMasterDetailsBlock(editor, model);
 	}
 
 	public RootNode getModel(){
 		return fModel;
-	}
-	
-	public EcMultiPageEditor getEditor(){
-		return fEditor;
 	}
 	
 	@Override
