@@ -23,9 +23,7 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
-import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.widgets.Display;
 import org.junit.Test;
@@ -66,12 +64,9 @@ public class ExecuteTestAdapter extends SelectionAdapter {
 			}
 		}
 		if(testClass == null){
-			new MessageDialog(Display.getDefault().getActiveShell(), 
+			MessageDialog.openError(Display.getDefault().getActiveShell(), 
 					Messages.DIALOG_COULDNT_LOAD_TEST_CLASS_TITLE, 
-					Display.getDefault().getSystemImage(SWT.ICON_ERROR), 
-					Messages.DIALOG_COULDNT_LOAD_TEST_CLASS_MESSAGE(className),
-					MessageDialog.ERROR, 
-					new String[] {IDialogConstants.OK_LABEL}, IDialogConstants.OK_ID).open();
+					Messages.DIALOG_COULDNT_LOAD_TEST_CLASS_MESSAGE(className));
 		}
 		return testClass;
 	}

@@ -68,14 +68,9 @@ public class ClassNodeDetailsPage extends GenericNodeDetailsPage{
 					updateModel((RootNode)fSelectedClass.getRoot());
 				}
 				else{
-					MessageDialog infoDialog = new MessageDialog(getActiveShell(), 
+					MessageDialog.openInformation(getActiveShell(), 
 							Messages.DIALOG_CLASS_EXISTS_TITLE, 
-							Display.getDefault().getSystemImage(SWT.ICON_INFORMATION), 
-							Messages.DIALOG_CLASS_EXISTS_MESSAGE, 
-							MessageDialog.INFORMATION, 
-							new String[] {IDialogConstants.OK_LABEL}, 
-							IDialogConstants.OK_ID);
-					infoDialog.open();
+							Messages.DIALOG_CLASS_EXISTS_MESSAGE);
 				}
 			}
 		}
@@ -93,14 +88,9 @@ public class ClassNodeDetailsPage extends GenericNodeDetailsPage{
 	private class RemoveMethodsButtonSelectionAdapter extends SelectionAdapter{
 		@Override
 		public void widgetSelected(SelectionEvent e) {
-			MessageDialog infoDialog = new MessageDialog(Display.getDefault().getActiveShell(), 
+			if(MessageDialog.openConfirm(getActiveShell(), 
 					Messages.DIALOG_REMOVE_METHODS_TITLE, 
-					Display.getDefault().getSystemImage(SWT.ICON_QUESTION), 
-					Messages.DIALOG_REMOVE_METHODS_MESSAGE,
-					MessageDialog.QUESTION_WITH_CANCEL, 
-					new String[] {IDialogConstants.OK_LABEL, IDialogConstants.CANCEL_LABEL}, 
-					IDialogConstants.OK_ID);
-			if(infoDialog.open() == 0){
+					Messages.DIALOG_REMOVE_METHODS_MESSAGE)){
 				removeMethods(fMethodsViewer.getCheckedElements());
 				updateModel((RootNode)fSelectedClass.getRoot());
 			}

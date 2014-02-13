@@ -36,7 +36,6 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
@@ -158,12 +157,9 @@ public class ConstraintsNodeDetailsPage extends GenericNodeDetailsPage {
 			updateModel(fSelectedConstraint);
 		}
 		else{
-			MessageDialog dialog = new MessageDialog(Display.getDefault().getActiveShell(), 
+			MessageDialog.openError(getActiveShell(), 
 					Messages.DIALOG_CONSTRAINT_NAME_PROBLEM_TITLE, 
-					Display.getDefault().getSystemImage(SWT.ICON_ERROR), 
-					Messages.DIALOG_CONSTRAINT_NAME_PROBLEM_MESSAGE,
-					MessageDialog.ERROR, new String[] {"OK"}, 0);
-			dialog.open();
+					Messages.DIALOG_CONSTRAINT_NAME_PROBLEM_MESSAGE);
 			fConstraintNameCombo.setText(fSelectedConstraint.getName());
 		}
 	}

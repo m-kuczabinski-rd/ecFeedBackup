@@ -22,7 +22,6 @@ import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
-import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Display;
@@ -142,27 +141,18 @@ class GenerateTestSuiteAdapter extends SelectionAdapter{
 		int dataLength = generatedData.size();
 		if(dataLength > 0){
 			if(generatedData.size() > Constants.TEST_SUITE_SIZE_WARNING_LIMIT){
-				MessageDialog warningDialog = 
-						new MessageDialog(Display.getDefault().getActiveShell(), 
-								Messages.DIALOG_LARGE_TEST_SUITE_GENERATED_TITLE, 
-								Display.getDefault().getSystemImage(SWT.ICON_WARNING), 
-								Messages.DIALOG_LARGE_TEST_SUITE_GENERATED_MESSAGE(dataLength),
-								MessageDialog.WARNING, 
-								new String[] {IDialogConstants.OK_LABEL, IDialogConstants.CANCEL_LABEL}, 
-								IDialogConstants.OK_ID);
-				if(warningDialog.open() == IDialogConstants.CANCEL_ID){
+				if(MessageDialog.openConfirm(Display.getDefault().getActiveShell(),
+						Messages.DIALOG_LARGE_TEST_SUITE_GENERATED_TITLE,
+						Messages.DIALOG_LARGE_TEST_SUITE_GENERATED_MESSAGE(dataLength)) == false){
 					return;
 				}
 			}
 			addTestSuiteToModel(testSuiteName, generatedData);
 		}
 		else if (!fCanceled){
-			new MessageDialog(Display.getDefault().getActiveShell(), 
-					Messages.DIALOG_EMPTY_TEST_SUITE_GENERATED_TITLE, 
-					Display.getDefault().getSystemImage(SWT.ICON_INFORMATION), 
-					Messages.DIALOG_EMPTY_TEST_SUITE_GENERATED_MESSAGE,
-					MessageDialog.INFORMATION, 
-					new String[] {IDialogConstants.OK_LABEL}, IDialogConstants.OK_ID).open();
+			MessageDialog.openInformation(Display.getDefault().getActiveShell(),
+					Messages.DIALOG_EMPTY_TEST_SUITE_GENERATED_TITLE,
+					Messages.DIALOG_EMPTY_TEST_SUITE_GENERATED_MESSAGE);
 		}
 	}
 

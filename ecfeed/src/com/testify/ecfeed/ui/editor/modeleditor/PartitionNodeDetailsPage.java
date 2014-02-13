@@ -99,13 +99,9 @@ public class PartitionNodeDetailsPage extends GenericNodeDetailsPage{
 		@Override
 		protected void setValue(Object element, Object value) {
 			if(!fSelectedPartition.getCategory().validatePartitionName((String)value)){
-				MessageDialog dialog = new MessageDialog(getActiveShell(), 
-						Messages.DIALOG_PARTITION_NAME_PROBLEM_TITLE, 
-						Display.getDefault().getSystemImage(SWT.ICON_ERROR), 
-						Messages.DIALOG_PARTITION_NAME_PROBLEM_MESSAGE,
-						MessageDialog.ERROR, 
-						new String[] {IDialogConstants.OK_LABEL}, IDialogConstants.OK_ID);
-				dialog.open();
+				MessageDialog.openError(getActiveShell(), 
+						Messages.DIALOG_PARTITION_NAME_PROBLEM_TITLE,
+						Messages.DIALOG_PARTITION_NAME_PROBLEM_MESSAGE);
 			}
 			else{
 				((PartitionNode)element).setName((String)value);

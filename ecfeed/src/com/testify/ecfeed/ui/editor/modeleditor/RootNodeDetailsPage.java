@@ -59,11 +59,9 @@ public class RootNodeDetailsPage extends GenericNodeDetailsPage{
 					updateModel(fSelectedRoot);
 				}
 				else{
-					MessageDialog infoDialog = new MessageDialog(getActiveShell(), 
-							Messages.DIALOG_CLASS_EXISTS_TITLE, Display.getDefault().getSystemImage(SWT.ICON_INFORMATION), 
-							Messages.DIALOG_CLASS_EXISTS_MESSAGE, MessageDialog.INFORMATION, 
-							new String[] {IDialogConstants.OK_LABEL}, 0);
-					infoDialog.open();
+					MessageDialog.openError(getActiveShell(), 
+							Messages.DIALOG_CLASS_EXISTS_TITLE,
+							Messages.DIALOG_CLASS_EXISTS_MESSAGE);
 				}
 			}
 		}
@@ -81,14 +79,9 @@ public class RootNodeDetailsPage extends GenericNodeDetailsPage{
 	private class RemoveClassesButtonSelectionAdapter extends SelectionAdapter{
 		@Override
 		public void widgetSelected(SelectionEvent e) {
-			MessageDialog infoDialog = new MessageDialog(getActiveShell(), 
+			if(MessageDialog.openConfirm(getActiveShell(), 
 					Messages.DIALOG_REMOVE_CLASSES_TITLE, 
-					Display.getDefault().getSystemImage(SWT.ICON_WARNING), 
-					Messages.DIALOG_REMOVE_CLASSES_MESSAGE, 
-					MessageDialog.QUESTION_WITH_CANCEL, 
-					new String[] {IDialogConstants.OK_LABEL, IDialogConstants.CANCEL_LABEL}, 
-					IDialogConstants.OK_ID);
-			if(infoDialog.open() == 0){
+					Messages.DIALOG_REMOVE_CLASSES_MESSAGE)){
 				removeClasses(fClassesViewer.getCheckedElements());
 			}
 		}

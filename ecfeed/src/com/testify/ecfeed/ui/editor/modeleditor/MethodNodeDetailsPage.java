@@ -349,13 +349,9 @@ public class MethodNodeDetailsPage extends GenericNodeDetailsPage implements Inp
 		createButton(composite, "Remove Selected", new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e){
-				MessageDialog infoDialog = new MessageDialog(Display.getDefault().getActiveShell(), 
+				if(MessageDialog.openConfirm(getActiveShell(), 
 						Messages.DIALOG_REMOVE_CONSTRAINTS_TITLE, 
-						Display.getDefault().getSystemImage(SWT.ICON_QUESTION), 
-						Messages.DIALOG_REMOVE_CONSTRAINTS_MESSAGE,
-						MessageDialog.QUESTION_WITH_CANCEL, 
-						new String[] {IDialogConstants.OK_LABEL, IDialogConstants.CANCEL_LABEL}, IDialogConstants.OK_ID);
-				if(infoDialog.open() == IDialogConstants.OK_ID){
+						Messages.DIALOG_REMOVE_CONSTRAINTS_MESSAGE)){
 					for(Object constraint : fConstraintsViewer.getCheckedElements()){
 						fSelectedMethod.removeConstraint((ConstraintNode)constraint);
 					}
@@ -472,12 +468,9 @@ public class MethodNodeDetailsPage extends GenericNodeDetailsPage implements Inp
 		Button button = createButton(testCasesButonsComposite, "Remove Selected", new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				MessageDialog infoDialog = new MessageDialog(Display.getDefault().getActiveShell(), 
-						Messages.DIALOG_REMOVE_TEST_CASES_TITLE, Display.getDefault().getSystemImage(SWT.ICON_QUESTION), 
-						Messages.DIALOG_REMOVE_TEST_CASES_MESSAGE,
-						MessageDialog.QUESTION_WITH_CANCEL, 
-						new String[] {IDialogConstants.OK_LABEL, IDialogConstants.CANCEL_LABEL}, IDialogConstants.OK_ID);
-				if(infoDialog.open() == IDialogConstants.OK_ID){
+				if(MessageDialog.openConfirm(getActiveShell(), 
+						Messages.DIALOG_REMOVE_TEST_CASES_TITLE,
+						Messages.DIALOG_REMOVE_TEST_CASES_MESSAGE)){
 					removeCheckedTestSuites();
 					removeCheckedTestCases();
 					

@@ -215,7 +215,6 @@ public class TestCaseNodeDetailsPage extends GenericNodeDetailsPage implements I
 		List<PartitionNode> testData = fSelectedTestCase.getTestData();
 		fTestDataViewer.setInput(testData);
 		fPartitionViewerColumn.setEditingSupport(new TestCasePartitionEditingSupport(fTestDataViewer, testData, this));
-//		fValuesViewerColumn.setEditingSupport(new TestCaseValueEditingSupport(fTestDataViewer, testData, this));
 	}
 
 	private void renameTestCase() {
@@ -225,12 +224,9 @@ public class TestCaseNodeDetailsPage extends GenericNodeDetailsPage implements I
 			updateModel(fSelectedTestCase);
 		}
 		else{
-			MessageDialog dialog = new MessageDialog(Display.getDefault().getActiveShell(), 
+			MessageDialog.openError(getActiveShell(), 
 					Messages.DIALOG_TEST_SUITE_NAME_PROBLEM_TITLE, 
-					Display.getDefault().getSystemImage(SWT.ICON_ERROR), 
-					Messages.DIALOG_TEST_SUITE_NAME_PROBLEM_MESSAGE,
-					MessageDialog.ERROR, new String[] {"OK"}, 0);
-			dialog.open();
+					Messages.DIALOG_TEST_SUITE_NAME_PROBLEM_MESSAGE);
 			fTestSuiteNameCombo.setText(fSelectedTestCase.getName());
 		}
 	}
@@ -239,5 +235,4 @@ public class TestCaseNodeDetailsPage extends GenericNodeDetailsPage implements I
 	public void inputChanged() {
 		updateModel(fSelectedTestCase);
 	}
-
 }
