@@ -21,10 +21,11 @@ public class RuntimeMethod extends FrameworkMethod{
 	
 	@Override
 	public Object invokeExplosively(Object target, Object... p) throws Throwable{
+		List<PartitionNode> next;
+		List<Object> parameters = new ArrayList<Object>();
 		try {
-			List<PartitionNode> next;
 			while((next = fGenerator.next()) !=null){
-				List<Object> parameters = new ArrayList<Object>();
+				parameters = new ArrayList<Object>();
 				for (PartitionNode partitionNode : next) {
 					parameters.add(partitionNode.getValue());
 				}
@@ -32,6 +33,9 @@ public class RuntimeMethod extends FrameworkMethod{
 			}
 		} catch (GeneratorException e) {
 			throw new RunnerException("Generator execution fault: " + e.getMessage());
+		} catch (Throwable e){
+			String message = getName() + "(" + parameters + "): " + e.getMessage();
+			throw new Exception(message, e);
 		}
 		return null;
 	}

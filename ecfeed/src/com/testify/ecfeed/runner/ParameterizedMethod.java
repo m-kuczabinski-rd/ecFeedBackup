@@ -32,7 +32,7 @@ public class ParameterizedMethod extends FrameworkMethod {
 				super.invokeExplosively(target, arguments);
 			}catch (Throwable e){
 				String message = getName() + "(" + testCase + "): " + e.getMessage();
-				throw new Throwable(message);
+				throw new Exception(message, e);
 			}
 		}
 		return null;
