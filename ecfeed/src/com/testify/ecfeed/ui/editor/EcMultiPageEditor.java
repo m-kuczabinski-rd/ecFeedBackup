@@ -42,7 +42,7 @@ public class EcMultiPageEditor extends FormEditor{
 	private RootNode fModel;
 	private Set<IModelUpdateListener> fModelUpdateListeners;
 
-	private int fSourceViewerIndex;
+//	private int fSourceViewerIndex;
 
 	public void registerModelUpdateListener(IModelUpdateListener listener){
 		fModelUpdateListeners.add(listener);
@@ -101,8 +101,8 @@ public class EcMultiPageEditor extends FormEditor{
 			ModelPage treeEditorPage = new ModelPage(this, getModel());
 			addPage(treeEditorPage);
 
-			fSourceViewerIndex = addPage(fSourceViewer, getEditorInput());
-			setPageText(fSourceViewerIndex, "source");
+//			fSourceViewerIndex = addPage(fSourceViewer, getEditorInput());
+//			setPageText(fSourceViewerIndex, "source");
 			
 		} catch (PartInitException e) {
 			ErrorDialog.openError(
@@ -145,9 +145,9 @@ public class EcMultiPageEditor extends FormEditor{
 	
 	@Override
 	protected void pageChange(int newPageIndex) {
-		if(newPageIndex == fSourceViewerIndex){
-			fSourceViewer.refresh();
-		}
+//		if(newPageIndex == fSourceViewerIndex){
+//			fSourceViewer.refresh();
+//		}
 		super.pageChange(newPageIndex);
 	}
 	
