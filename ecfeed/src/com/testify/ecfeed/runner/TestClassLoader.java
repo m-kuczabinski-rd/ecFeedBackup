@@ -33,10 +33,14 @@ public class TestClassLoader extends ClassLoader{
 			return super.loadClass(name);
 		}
 		catch(ClassNotFoundException e){};
+		return loadClassFromFile(name);
+	}
+
+	protected Class<?> loadClassFromFile(String name) throws ClassNotFoundException {
 		String path = getClassFilePath(name);
 		try {
 			byte[] classData = getClassData(path);
-			Class loadedClass = defineClass(name, classData, 0, classData.length);
+			Class<?> loadedClass = defineClass(name, classData, 0, classData.length);
 			resolveClass(loadedClass);
 			return loadedClass;
 		} catch (FileNotFoundException e) {
