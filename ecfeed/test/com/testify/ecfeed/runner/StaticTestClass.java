@@ -24,7 +24,7 @@ public class StaticTestClass {
 
 //	@Test
 	public void testFunction1(int arg1, int arg2){
-		fail("dupa");
+		fail("fail");
 	}
 	
 //	@Test
