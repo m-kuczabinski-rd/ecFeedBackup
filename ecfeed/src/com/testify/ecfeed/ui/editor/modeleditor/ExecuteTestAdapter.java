@@ -12,7 +12,6 @@
 package com.testify.ecfeed.ui.editor.modeleditor;
 
 import java.io.IOException;
-import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.MalformedURLException;
@@ -31,7 +30,6 @@ import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.widgets.Display;
-import org.junit.Test;
 
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.MethodNode;
