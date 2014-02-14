@@ -80,9 +80,9 @@ public class ExecuteTestAdapter extends SelectionAdapter {
 		String localPath = className;
 		localPath = localPath.replaceAll("\\.", "/");
 		localPath = localPath.substring(0, localPath.lastIndexOf('/'));
-		String urlString = "file://" + path.toOSString() + "/";
+		String urlString = path.toOSString() + "/";
 		try {
-			URL url = new URL(urlString);
+			URL url = new URL("file", "", urlString);
 			return url;
 		} catch (MalformedURLException e) {
 			return null;
