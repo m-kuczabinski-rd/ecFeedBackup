@@ -80,14 +80,40 @@ public class ModelMasterDetailsBlock extends MasterDetailsBlock implements IMode
 
 		fMasterSection = fToolkit.createSection(parent,
 				ExpandableComposite.EXPANDED | ExpandableComposite.TITLE_BAR);
-		fMasterSectionPart = new SectionPart(fMasterSection, fToolkit, 0);
 		fMasterSection.setText("Structure");
+		fMasterSectionPart = new SectionPart(fMasterSection, fToolkit, 0);
 		
 		GridData masterSectionGridData = new GridData(SWT.RIGHT, SWT.FILL, false, true);
 		masterSectionGridData.widthHint = 250;
 		fMasterSection.setLayoutData(masterSectionGridData);
 		
 		createTreeEditorBlock();
+	}
+
+	/**
+	 * Register the pages.
+	 * @param part
+	 */
+	@Override
+	protected void registerPages(DetailsPart part) {
+		part.registerPage(RootNode.class, new RootNodeDetailsPage(this));
+		part.registerPage(ClassNode.class, new ClassNodeDetailsPage(this));
+		part.registerPage(MethodNode.class, new MethodNodeDetailsPage(this));
+		part.registerPage(CategoryNode.class, new CategoryNodeDetailsPage(this));
+		part.registerPage(ExpectedValueCategoryNode.class, new ExpectedValueDetailsPage(this));
+		part.registerPage(TestCaseNode.class, new TestCaseNodeDetailsPage(this));
+		part.registerPage(ConstraintNode.class, new ConstraintsNodeDetailsPage(this));
+		part.registerPage(PartitionNode.class, new PartitionNodeDetailsPage(this));
+	
+		selectNode(fModel);
+	}
+
+	/**
+	 * Create the toolbar actions.
+	 * @param managedForm
+	 */
+	@Override
+	protected void createToolBarActions(IManagedForm managedForm) {
 	}
 
 	private void createTreeEditorBlock() {
@@ -162,32 +188,6 @@ public class ModelMasterDetailsBlock extends MasterDetailsBlock implements IMode
 				detailsPart.selectionChanged(fMasterSectionPart, event.getSelection());
 			}
 		});
-	}
-
-	/**
-	 * Register the pages.
-	 * @param part
-	 */
-	@Override
-	protected void registerPages(DetailsPart part) {
-		part.registerPage(RootNode.class, new RootNodeDetailsPage(this));
-		part.registerPage(ClassNode.class, new ClassNodeDetailsPage(this));
-		part.registerPage(MethodNode.class, new MethodNodeDetailsPage(this));
-		part.registerPage(CategoryNode.class, new CategoryNodeDetailsPage(this));
-		part.registerPage(ExpectedValueCategoryNode.class, new ExpectedValueDetailsPage(this));
-		part.registerPage(TestCaseNode.class, new TestCaseNodeDetailsPage(this));
-		part.registerPage(ConstraintNode.class, new ConstraintsNodeDetailsPage(this));
-		part.registerPage(PartitionNode.class, new PartitionNodeDetailsPage(this));
-
-		selectNode(fModel);
-	}
-
-	/**
-	 * Create the toolbar actions.
-	 * @param managedForm
-	 */
-	@Override
-	protected void createToolBarActions(IManagedForm managedForm) {
 	}
 
 	@Override
