@@ -55,7 +55,6 @@ public class ModelMasterDetailsBlock extends MasterDetailsBlock implements IMode
 	private SectionPart fMasterSectionPart;
 	private Section fMasterSection;
 	private TreeViewer fTreeViewer;
-	private ModelContentProvider fContentProvider;
 	private Composite fMainComposite;
 	private Button fMoveUpButton;
 	private Button fMoveDownButton;
@@ -68,7 +67,6 @@ public class ModelMasterDetailsBlock extends MasterDetailsBlock implements IMode
 		fEditor = editor;
 		fModel = model;
 		fEditor.registerModelUpdateListener(this);
-		fContentProvider = new ModelContentProvider();
 	}
 
 	/**
@@ -136,7 +134,7 @@ public class ModelMasterDetailsBlock extends MasterDetailsBlock implements IMode
 		FilteredTree filteredTree = new FilteredTree(composite, SWT.BORDER, new PatternFilter(), true);
 		fTreeViewer = filteredTree.getViewer();
 		fTreeViewer.setAutoExpandLevel(2);
-		fTreeViewer.setContentProvider(fContentProvider);
+		fTreeViewer.setContentProvider(new ModelContentProvider());
 		fTreeViewer.setLabelProvider(new ModelLabelProvider());
 
 		GridData gd = new GridData(SWT.FILL, SWT.FILL, true, true);
