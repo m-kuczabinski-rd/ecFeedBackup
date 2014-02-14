@@ -12,6 +12,7 @@
 package com.testify.ecfeed.ui.editor.modeleditor;
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
@@ -71,13 +72,13 @@ public class ExecuteTestAdapter extends SelectionAdapter {
 		return testClass;
 	}
 
-	protected Method getTestMethod(Class<?> testClass, MethodNode methodModel) {
+	protected Method getTestMethod(Class<?> testClass, MethodNode methodModel) throws InvocationTargetException {
 		for(Method method : testClass.getMethods()){
 			if(isModel(method, methodModel) && hasTestAnnotation(method)){
 				return method;
 			}
 		}
-		return null;
+		throw new InvocationTargetException(null, "Method " + methodModel.toString() + " does not exist in loaded test class");
 	}
 
 	protected List<String> getArgTypes(Method method) {

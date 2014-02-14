@@ -12,12 +12,10 @@
 package com.testify.ecfeed.ui.editor.modeleditor;
 
 import java.lang.reflect.Method;
-import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 
-import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Display;
 
@@ -34,35 +32,32 @@ public class ExecuteStaticTestAdapter extends ExecuteTestAdapter {
 	@SuppressWarnings("rawtypes")
 	@Override
 	public void widgetSelected(SelectionEvent event){
-		Class testClass = loadTestClass();
-		Method testMethod = getTestMethod(testClass, getPage().getSelectedMethod());
-		if(testMethod == null){
-			new MessageDialog(Display.getDefault().getActiveShell(), 
-					Messages.DIALOG_COULDNT_LOAD_TEST_METHOD_TITLE, 
-					Display.getDefault().getSystemImage(SWT.ICON_ERROR), 
-					Messages.DIALOG_COULDNT_LOAD_TEST_METHOD_MESSAGE(getPage().getSelectedMethod().toString()),
-					MessageDialog.ERROR, 
-					new String[] {IDialogConstants.OK_LABEL}, IDialogConstants.OK_ID).open();
-		}
-		Collection<TestCaseNode> selectedTestCases = getSelectedTestCases();
-		ParameterizedMethod frameworkMethod = new ParameterizedMethod(testMethod, selectedTestCases);
 		try {
+			Class testClass = loadTestClass();
+			Method testMethod = getTestMethod(testClass, getPage().getSelectedMethod());
+			if(testMethod == null){
+				MessageDialog.openError(Display.getDefault().getActiveShell(), 
+					Messages.DIALOG_COULDNT_LOAD_TEST_METHOD_TITLE, 
+					Messages.DIALOG_COULDNT_LOAD_TEST_METHOD_MESSAGE(getPage().getSelectedMethod().toString()));
+			}
+			Collection<TestCaseNode> selectedTestCases = getSelectedTestCases();
+			ParameterizedMethod frameworkMethod = new ParameterizedMethod(testMethod, selectedTestCases);
 			frameworkMethod.invokeExplosively(testClass.newInstance(), new Object[]{});
 		} catch (Throwable e) {
-			new MessageDialog(Display.getDefault().getActiveShell(), 
-					Messages.DIALOG_TEST_METHOD_EXECUTION_STOPPED_TITLE, 
-					Display.getDefault().getSystemImage(SWT.ICON_ERROR), 
-					Messages.DIALOG_TEST_METHOD_EXECUTION_STOPPED_MESSAGE(getPage().getSelectedMethod().toString(), e.getMessage()),
-					MessageDialog.ERROR, 
-					new String[] {IDialogConstants.OK_LABEL}, IDialogConstants.OK_ID).open();
+			MessageDialog.openError(Display.getDefault().getActiveShell(), 
+				Messages.DIALOG_TEST_METHOD_EXECUTION_STOPPED_TITLE, 
+				Messages.DIALOG_TEST_METHOD_EXECUTION_STOPPED_MESSAGE(getPage().getSelectedMethod().toString(), e.getMessage()));
 		} 
 	}
 
 	protected Collection<TestCaseNode> getSelectedTestCases() {
-		Collection<TestCaseNode> testCases = new ArrayList<TestCaseNode>();
+		Collection<TestCaseNode> testCases = new HashSet<TestCaseNode>();
 		for(Object element : getPage().getTestCaseViewer().getCheckedElements()){
 			if(element instanceof TestCaseNode){
 				testCases.add((TestCaseNode)element);
+			}
+			else if(element instanceof String){
+				testCases.addAll(getPage().getSelectedMethod().getTestCases((String)element));
 			}
 		}
 		return testCases;
