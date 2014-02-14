@@ -11,9 +11,13 @@
 
 package com.testify.ecfeed.ui.editor.modeleditor;
 
+import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,7 +35,6 @@ import org.junit.Test;
 
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.MethodNode;
-import com.testify.ecfeed.runner.TestClassLoader;
 import com.testify.ecfeed.ui.common.Messages;
 
 public class ExecuteTestAdapter extends SelectionAdapter {
@@ -50,20 +53,23 @@ public class ExecuteTestAdapter extends SelectionAdapter {
 
 	protected Class<?> loadTestClass() {
 		Class<?> testClass = null;
-		ClassLoader parentLoader = this.getClass().getClassLoader();
 		ClassNode classNode = fPage.getSelectedMethod().getClassNode();
 		String className = classNode.getQualifiedName();
 		IProject[] projects = ResourcesPlugin.getWorkspace().getRoot().getProjects();
-		for(IProject project : projects){
+		List<URL> urls = new ArrayList<URL>();
 			try {
-				if(project.isOpen() && project.hasNature(JavaCore.NATURE_ID)){
-					IPath path = getOuptutPath(project);
-					TestClassLoader loader = new TestClassLoader(parentLoader, path.toString());
-					testClass = loader.loadClass(className.toString());
+				for(IProject project : projects){
+					if(project.isOpen() && project.hasNature(JavaCore.NATURE_ID)){
+						IPath path = getOuptutPath(project);
+						URL classUrl = getClassUrl(path, className);
+						urls.add(classUrl);
+					}
 				}
-			}catch (ClassNotFoundException | CoreException e) {
+				URLClassLoader loader = new URLClassLoader(urls.toArray(new URL[]{}));
+				testClass = loader.loadClass(className.toString());
+				loader.close();
+			}catch (ClassNotFoundException | CoreException | IOException e) {
 			}
-		}
 		if(testClass == null){
 			MessageDialog.openError(Display.getDefault().getActiveShell(), 
 					Messages.DIALOG_COULDNT_LOAD_TEST_CLASS_TITLE, 
@@ -72,9 +78,22 @@ public class ExecuteTestAdapter extends SelectionAdapter {
 		return testClass;
 	}
 
+	private URL getClassUrl(IPath path, String className) {
+		String localPath = className;
+		localPath = localPath.replaceAll("\\.", "/");
+		localPath = localPath.substring(0, localPath.lastIndexOf('/'));
+		String urlString = "file://" + path.toOSString() + "/";
+		try {
+			URL url = new URL(urlString);
+			return url;
+		} catch (MalformedURLException e) {
+			return null;
+		}
+	}
+
 	protected Method getTestMethod(Class<?> testClass, MethodNode methodModel) throws InvocationTargetException {
 		for(Method method : testClass.getMethods()){
-			if(isModel(method, methodModel) && hasTestAnnotation(method)){
+			if(isModel(method, methodModel)){
 				return method;
 			}
 		}
@@ -92,19 +111,11 @@ public class ExecuteTestAdapter extends SelectionAdapter {
 	protected boolean isModel(Method method, MethodNode methodModel) {
 		String methodName = method.getName();
 		List<String> argTypes = getArgTypes(method);
-		return fPage.getSelectedMethod().getClassNode().getMethod(methodName, argTypes) == methodModel;
+		boolean result = fPage.getSelectedMethod().getClassNode().getMethod(methodName, argTypes) == methodModel; 
+		return result;
 	}
 
 	protected MethodNodeDetailsPage getPage(){
 		return fPage;
-	}
-	
-	private boolean hasTestAnnotation(Method method) {
-		for(Annotation annotation : method.getAnnotations()){
-			if(annotation instanceof Test){
-				return true;
-			}
-		}
-		return false;
 	}
 }
