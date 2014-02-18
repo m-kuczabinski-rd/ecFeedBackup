@@ -41,6 +41,7 @@ import com.testify.ecfeed.parsers.ParserException;
 import com.testify.ecfeed.parsers.xml.XmlModelParser;
 import com.testify.ecfeed.parsers.xml.XmlModelSerializer;
 import com.testify.ecfeed.ui.editor.modeleditor.ModelPage;
+import com.testify.ecfeed.ui.editor.modeleditor.rework.RModelPage;
 
 public class EcMultiPageEditor extends FormEditor{
 	
@@ -88,6 +89,11 @@ public class EcMultiPageEditor extends FormEditor{
 		updateListeners(model);
 		setDirty(true);
 	}
+	
+	public void updateModel(){
+		updateListeners(fModel);
+		setDirty(true);
+	}
 
 	private void setDirty(boolean dirty) {
 		if(fDirty != dirty){
@@ -113,6 +119,7 @@ public class EcMultiPageEditor extends FormEditor{
 			setPartName(getEditorInput().getName());
 			fTreeEditorPage = new ModelPage(this, getModel());
 			addPage(fTreeEditorPage);
+			addPage(new RModelPage(this, getModel()));
 
 		} catch (PartInitException e) {
 			ErrorDialog.openError(getSite().getShell(),
