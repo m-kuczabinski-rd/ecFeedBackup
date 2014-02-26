@@ -7,6 +7,7 @@ import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.MasterDetailsBlock;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
+import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.IGenericNode;
 import com.testify.ecfeed.model.RootNode;
 
@@ -35,6 +36,7 @@ public class RModelMasterDetailsBlock extends MasterDetailsBlock implements IMod
 	@Override
 	protected void registerPages(DetailsPart detailsPart) {
 		detailsPart.registerPage(RootNode.class, new ModelDetailsPage(fMasterSection));
+		detailsPart.registerPage(ClassNode.class, new ClassDetailsPage(fMasterSection));
 
 		selectNode(getModel());
 	}

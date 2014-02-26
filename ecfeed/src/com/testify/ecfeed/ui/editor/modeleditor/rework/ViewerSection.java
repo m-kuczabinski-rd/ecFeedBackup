@@ -26,6 +26,7 @@ public abstract class ViewerSection extends BasicSection {
 
 	private Composite fButtonsComposite;
 	private StructuredViewer fViewer;
+	private Composite fViewerComposite;
 	
 	public ViewerSection(Composite parent, FormToolkit toolkit, 
 			int style, int buttonsPosition) {
@@ -53,11 +54,11 @@ public abstract class ViewerSection extends BasicSection {
 	}
 
 	protected Composite createViewerComposite(Composite parent) {
-		Composite viewerComposite = getToolkit().createComposite(parent);
-		viewerComposite.setLayout(new GridLayout(1, false));
-		viewerComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
-		createViewerLabel(viewerComposite);
-		fViewer = createViewer(viewerComposite, SWT.BORDER);
+		fViewerComposite = getToolkit().createComposite(parent);
+		fViewerComposite.setLayout(new GridLayout(1, false));
+		fViewerComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+		createViewerLabel(fViewerComposite);
+		fViewer = createViewer(fViewerComposite, SWT.BORDER);
 		fViewer.setContentProvider(viewerContentProvider());
 		fViewer.setLabelProvider(viewerLabelProvider());
 		createViewerColumns();
@@ -69,7 +70,7 @@ public abstract class ViewerSection extends BasicSection {
 			}
 		});
 
-		return viewerComposite;
+		return fViewerComposite;
 	}
 
 	protected void createViewerLabel(Composite viewerComposite) {
@@ -100,6 +101,7 @@ public abstract class ViewerSection extends BasicSection {
 		return fViewer;
 	}
 
+	@Override
 	public void refresh(){
 		super.refresh();
 		fViewer.refresh();
@@ -122,10 +124,15 @@ public abstract class ViewerSection extends BasicSection {
 
 	public void setInput(Object input){
 		fViewer.setInput(input);
+		refresh();
 	}
 	
 	public Object getInput(){
 		return fViewer.getInput();
+	}
+	
+	protected Composite getViewerComposite(){
+		return fViewerComposite;
 	}
 	
 	protected abstract void createViewerColumns();

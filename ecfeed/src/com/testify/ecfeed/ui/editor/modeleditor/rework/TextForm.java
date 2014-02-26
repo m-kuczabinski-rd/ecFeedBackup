@@ -21,6 +21,10 @@ public abstract class TextForm extends EntryForm {
 
 	@Override
 	protected Control createEntry(Composite parent, int style, GridData gridData) {
+		return createText(parent, style, gridData);
+	}
+	
+	protected Text createText(Composite parent, int style, GridData gridData) {
 		fText = getToolkit().createText(parent, null);
 		fText.setLayoutData(gridData);
 		fText.addListener(SWT.KeyDown, new Listener() {
@@ -32,8 +36,9 @@ public abstract class TextForm extends EntryForm {
 		});
 		return fText;
 	}
-	
-	protected abstract void newText(String text);
+
+	protected void newText(String text){
+	}
 
 	protected void buttonSelected(SelectionEvent e){
 		newText(fText.getText());

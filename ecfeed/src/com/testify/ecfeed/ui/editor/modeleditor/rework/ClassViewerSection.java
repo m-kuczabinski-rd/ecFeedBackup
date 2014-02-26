@@ -20,7 +20,7 @@ public class ClassViewerSection extends CheckboxTableViewerSection {
 	private static final int STYLE = Section.EXPANDED | Section.TITLE_BAR;
 
 	private RootNode fModel;
-	private BasicDetailsPage fPage;
+	private BasicDetailsPage fParentPage;
 
 	private class AddClassAdapter extends SelectionAdapter {
 
@@ -37,7 +37,7 @@ public class ClassViewerSection extends CheckboxTableViewerSection {
 			ClassNode classNode = ModelUtils.generateClassModel(selectedClass);
 			if(model.getClassModel(classNode.getQualifiedName()) == null){
 				model.addClass(classNode);
-				fPage.modelUpdated(ClassViewerSection.this);
+				fParentPage.modelUpdated(ClassViewerSection.this);
 			}
 			else{
 				MessageDialog.openError(getActiveShell(), 
@@ -73,24 +73,21 @@ public class ClassViewerSection extends CheckboxTableViewerSection {
 						fModel.removeClass((ClassNode)element);
 					}
 				}
-				fPage.modelUpdated(ClassViewerSection.this);
+				fParentPage.modelUpdated(ClassViewerSection.this);
 			}
 		}
 	}
 
-	public ClassViewerSection(Composite parent, FormToolkit toolkit, BasicDetailsPage page) {
+	public ClassViewerSection(Composite parent, FormToolkit toolkit, BasicDetailsPage parentPage) {
 		super(parent, toolkit, STYLE, ViewerSection.BUTTONS_BELOW);
-		fPage = page;
+		fParentPage = parentPage;
 		
 		setText("Classes");
-
-		getTable().setHeaderVisible(true);
-		getTable().setLinesVisible(true);
 
 		addButton("Add test class..", new AddClassAdapter());
 		addButton("Remove selected", new RemoveSelectedAdapter());
 		
-		addDoubleClickListener(new SelectNodeDoubleClickListener(page.getMasterSection()));
+		addDoubleClickListener(new SelectNodeDoubleClickListener(parentPage.getMasterSection()));
 	}
 	
 	@Override
@@ -110,10 +107,8 @@ public class ClassViewerSection extends CheckboxTableViewerSection {
 	}
 	
 	public void setInput(RootNode model){
-		fModel = model;
 		super.setInput(model.getClasses());
-		
-		refresh();
+		fModel = model;
 	}
 	
 	@Override
@@ -122,5 +117,15 @@ public class ClassViewerSection extends CheckboxTableViewerSection {
 			return fModel.getClasses().equals(getInput());
 		}
 		return false;
+	}
+
+	@Override
+	protected boolean tableLinesVisible() {
+		return true;
+	}
+
+	@Override
+	protected boolean tableHeaderVisible() {
+		return true;
 	}
 }

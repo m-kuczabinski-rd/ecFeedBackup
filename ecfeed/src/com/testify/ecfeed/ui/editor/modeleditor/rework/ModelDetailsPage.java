@@ -3,7 +3,6 @@ package com.testify.ecfeed.ui.editor.modeleditor.rework;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.forms.IFormPart;
-import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import com.testify.ecfeed.model.RootNode;
@@ -49,11 +48,6 @@ public class ModelDetailsPage extends BasicDetailsPage {
 		super(masterSection);
 	}
 
-	@Override
-	public void initialize(IManagedForm managedForm){
-		super.initialize(managedForm);
-	}
-	
 	@Override
 	public void createContents(Composite parent){
 		super.createContents(parent);

@@ -8,6 +8,8 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.forms.AbstractFormPart;
 import org.eclipse.ui.forms.IDetailsPage;
 import org.eclipse.ui.forms.IFormPart;
@@ -138,9 +140,13 @@ public abstract class BasicDetailsPage implements IDetailsPage{
 		return false;
 	}
 
-	protected void modelUpdated(AbstractFormPart form){
-		form.markDirty();
+	protected void modelUpdated(AbstractFormPart source){
+		source.markDirty();
 		refresh();
 		getMasterSection().refresh();
+	}
+	
+	protected Shell getActiveShell(){
+		return Display.getCurrent().getActiveShell();
 	}
 }

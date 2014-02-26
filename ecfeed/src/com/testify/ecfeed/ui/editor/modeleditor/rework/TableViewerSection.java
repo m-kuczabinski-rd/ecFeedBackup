@@ -26,6 +26,7 @@ public abstract class TableViewerSection extends ViewerSection {
 		Table table = createTable(parent, style);
 		table.setLayoutData(viewerLayoutData());
 		TableViewer tableViewer = new TableViewer(table);
+		
 		return tableViewer;
 	}
 	
@@ -57,14 +58,15 @@ public abstract class TableViewerSection extends ViewerSection {
 		getViewer().setSelection(new StructuredSelection(element), true);
 	}
 
-	protected void addColumn(String name, int width, ColumnLabelProvider labelProvider){
-			TableViewerColumn viewerColumn = new TableViewerColumn(getTableViewer(), SWT.NONE);
-			TableColumn column = viewerColumn.getColumn();
-			column.setWidth(width);
-			column.setText(name);
-			column.setResizable(true);
-			column.setMoveable(true);
-			viewerColumn.setLabelProvider(labelProvider);
+	protected TableViewerColumn addColumn(String name, int width, ColumnLabelProvider labelProvider){
+		TableViewerColumn viewerColumn = new TableViewerColumn(getTableViewer(), SWT.NONE);
+		TableColumn column = viewerColumn.getColumn();
+		column.setWidth(width);
+		column.setText(name);
+		column.setResizable(true);
+		column.setMoveable(true);
+		viewerColumn.setLabelProvider(labelProvider);
+		return viewerColumn;
 	}
 	
 	@Override
@@ -75,7 +77,14 @@ public abstract class TableViewerSection extends ViewerSection {
 	@Override
 	protected void createViewerColumns(){
 		createTableColumns();
+		
+		getTable().setHeaderVisible(tableHeaderVisible());
+		getTable().setLinesVisible(tableLinesVisible());
 	}
 	
+	protected abstract boolean tableLinesVisible();
+
+	protected abstract boolean tableHeaderVisible();
+
 	protected abstract void createTableColumns();
 }
