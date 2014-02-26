@@ -6,44 +6,44 @@ import org.eclipse.ui.forms.DetailsPart;
 import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.MasterDetailsBlock;
 import org.eclipse.ui.forms.widgets.FormToolkit;
-import org.eclipse.ui.forms.widgets.Section;
 
 import com.testify.ecfeed.model.IGenericNode;
 import com.testify.ecfeed.model.RootNode;
-import com.testify.ecfeed.ui.editor.EcMultiPageEditor;
 
 public class RModelMasterDetailsBlock extends MasterDetailsBlock implements IModelSelectionListener{
 
-	private static final int MASTER_SECTION_STYLE = Section.EXPANDED | Section.TITLE_BAR;
-
-	private EcMultiPageEditor fEditor;
 	private ModelMasterSection fMasterSection;
+	private RModelPage fPage;
 
-	public RModelMasterDetailsBlock(EcMultiPageEditor editor) {
-		fEditor = editor;
+	public RModelMasterDetailsBlock(RModelPage modelPage) {
+		fPage = modelPage;
 	}
 
 	@Override
 	protected void createMasterPart(IManagedForm managedForm, Composite parent) {
 		FormToolkit toolkit = managedForm.getToolkit();
-		fMasterSection = new ModelMasterSection(parent, toolkit, fEditor, MASTER_SECTION_STYLE);
+		fMasterSection = new ModelMasterSection(parent, toolkit);
+		fMasterSection.initialize(managedForm);
 		fMasterSection.addModelSelectionChangedListener(this);
-		fMasterSection.setInput(fEditor);
+		fMasterSection.setModel(getModel());
+	}
+
+	private RootNode getModel() {
+		return fPage.getModel();
 	}
 
 	@Override
 	protected void registerPages(DetailsPart detailsPart) {
 		detailsPart.registerPage(RootNode.class, new ModelDetailsPage(fMasterSection));
-//		detailsPart.registerPage(RootNode.class, new RootNodeDetailsPage(new ModelMasterDetailsBlock(fEditor, fEditor.getModel())));
-		
-		selectNode(fEditor.getModel());
+
+		selectNode(getModel());
 	}
 
 	@Override
 	protected void createToolBarActions(IManagedForm managedForm) {
 	}
 	
-	void selectNode(IGenericNode node){
+	public void selectNode(IGenericNode node){
 		fMasterSection.selectElement(node);
 	}
 
@@ -52,4 +52,7 @@ public class RModelMasterDetailsBlock extends MasterDetailsBlock implements IMod
 		detailsPart.selectionChanged(fMasterSection, newSelection);
 	}
 
+	public ModelMasterSection getMasterSection(){
+		return fMasterSection;
+	}
 }

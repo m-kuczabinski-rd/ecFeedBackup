@@ -136,14 +136,14 @@ public class ModelMasterDetailsBlock extends MasterDetailsBlock implements IMode
 			@Override
 			public void widgetSelected(SelectionEvent e){
 				moveSelectedItem(true);
-				fEditor.updateModel(fModel);
+//				fEditor.updateModel();
 			}
 		});
 		fMoveDownButton.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e){
 				moveSelectedItem(false);
-				fEditor.updateModel(fModel);
+//				fEditor.updateModel();
 			}
 		});
 		
@@ -191,8 +191,8 @@ public class ModelMasterDetailsBlock extends MasterDetailsBlock implements IMode
 	}
 
 	@Override
-	public void modelUpdated(RootNode model) {
-		fMasterSection.setText(model.getName());
+	public void modelUpdated() {
+		fMasterSection.setText(fSelectedNode.getRoot().getName());
 		fTreeViewer.refresh();
 		fMasterSection.layout();
 	}

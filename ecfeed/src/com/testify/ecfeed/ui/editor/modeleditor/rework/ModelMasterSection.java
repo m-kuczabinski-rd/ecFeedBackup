@@ -3,6 +3,8 @@ package com.testify.ecfeed.ui.editor.modeleditor.rework;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.jface.viewers.IBaseLabelProvider;
+import org.eclipse.jface.viewers.IContentProvider;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -12,22 +14,23 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.forms.widgets.FormToolkit;
+import org.eclipse.ui.forms.widgets.Section;
 
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.IGenericNode;
+import com.testify.ecfeed.model.IModelWrapper;
 import com.testify.ecfeed.model.RootNode;
-import com.testify.ecfeed.ui.editor.EcMultiPageEditor;
 import com.testify.ecfeed.ui.editor.modeleditor.ModelContentProvider;
 import com.testify.ecfeed.ui.editor.modeleditor.ModelLabelProvider;
 
-public class ModelMasterSection extends TreeViewerSection {
+public class ModelMasterSection extends TreeViewerSection{
+	private static final int STYLE = Section.EXPANDED | Section.TITLE_BAR;
 	private static final int AUTO_EXPAND_LEVEL = 3;
 
 	private List<IModelSelectionListener> fModelSelectionListeners;
 	private Button fMoveUpButton;
 	private Button fMoveDownButton;
-	
-	private EcMultiPageEditor fEditor;
+	private RootNode fModel;
 
 	private class MoveUpAdapter extends SelectionAdapter{
 		@Override
@@ -62,10 +65,9 @@ public class ModelMasterSection extends TreeViewerSection {
 		}
 	}
 
-	public ModelMasterSection(Composite parent, FormToolkit toolkit, EcMultiPageEditor editor, int style) {
-		super(parent, toolkit, style, ViewerSection.BUTTONS_BELOW);
+	public ModelMasterSection(Composite parent, FormToolkit toolkit) {
+		super(parent, toolkit, STYLE, ViewerSection.BUTTONS_BELOW);
 		fModelSelectionListeners = new ArrayList<IModelSelectionListener>();
-		fEditor = editor;
 	}
 	
 	public void addModelSelectionChangedListener(IModelSelectionListener listener){
@@ -78,8 +80,6 @@ public class ModelMasterSection extends TreeViewerSection {
 		getSection().setText("Structure");
 		fMoveUpButton = addButton("Move Up", new MoveUpAdapter());
 		fMoveDownButton = addButton("Move Down", new MoveDownAdapter());
-		getTreeViewer().setLabelProvider(new ModelLabelProvider());
-		getTreeViewer().setContentProvider(new ModelContentProvider());
 		getTreeViewer().setAutoExpandLevel(AUTO_EXPAND_LEVEL);
 		addSelectionChangedListener(new ModelSelectionListener());
 	}
@@ -91,9 +91,11 @@ public class ModelMasterSection extends TreeViewerSection {
 	}
 
 	private void moveSelectedItem(boolean moveUp) {
-		if(selectedNode() == null || selectedNode().getParent() == null) return;
-
-		selectedNode().getParent().moveChild(selectedNode(), moveUp);
+		if(selectedNode() != null && selectedNode().getParent() != null){
+			selectedNode().getParent().moveChild(selectedNode(), moveUp);
+			markDirty();
+			refresh();
+		}
 	}
 
 	private IGenericNode selectedNode() {
@@ -104,11 +106,31 @@ public class ModelMasterSection extends TreeViewerSection {
 		return null;
 	}
 	
-	public void updateModel(){
-		fEditor.updateModel();
+	public void setInput(IModelWrapper wrapper){
+		super.setInput(wrapper);
+	}
+	
+	public void setModel(RootNode model){
+		fModel = model;
+		setInput(new IModelWrapper() {
+			@Override
+			public RootNode getModel() {
+				return fModel;
+			}
+		});
 	}
 	
 	public RootNode getModel(){
-		return fEditor.getModel();
+		return fModel;
+	}
+
+	@Override
+	protected IContentProvider viewerContentProvider() {
+		return new ModelContentProvider();
+	}
+	
+	@Override 
+	protected IBaseLabelProvider viewerLabelProvider(){
+		return new ModelLabelProvider();
 	}
 }

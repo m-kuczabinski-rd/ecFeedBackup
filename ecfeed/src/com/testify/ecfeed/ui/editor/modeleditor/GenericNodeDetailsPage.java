@@ -36,7 +36,6 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Section;
 
 import com.testify.ecfeed.model.IGenericNode;
-import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.ui.editor.EcMultiPageEditor;
 import com.testify.ecfeed.ui.editor.IModelUpdateListener;
 
@@ -146,7 +145,7 @@ public class GenericNodeDetailsPage implements IDetailsPage, IModelUpdateListene
 	}
 
 	@Override
-	public void modelUpdated(RootNode model) {
+	public void modelUpdated() {
 		if(getParentBlock().getSelectedNode() == fSelectedNode){
 			refresh();
 		}
@@ -169,7 +168,7 @@ public class GenericNodeDetailsPage implements IDetailsPage, IModelUpdateListene
 	}
 	
 	protected void updateModel(IGenericNode node){
-		getEditor().updateModel((RootNode)node.getRoot());
+//		getEditor().updateModel();
 	}
 	
 	protected TableViewerColumn createTableViewerColumn(TableViewer viewer, 

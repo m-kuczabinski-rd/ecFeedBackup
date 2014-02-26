@@ -29,13 +29,13 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorInput;
-import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.dialogs.SaveAsDialog;
 import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.part.FileEditorInput;
 
+import com.testify.ecfeed.model.IModelWrapper;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.parsers.ParserException;
 import com.testify.ecfeed.parsers.xml.XmlModelParser;
@@ -43,16 +43,14 @@ import com.testify.ecfeed.parsers.xml.XmlModelSerializer;
 import com.testify.ecfeed.ui.editor.modeleditor.ModelPage;
 import com.testify.ecfeed.ui.editor.modeleditor.rework.RModelPage;
 
-public class EcMultiPageEditor extends FormEditor{
+public class EcMultiPageEditor extends FormEditor implements IModelWrapper{
 	
 	public static String ID = "com.testify.ecfeed.ui.editors.EcMultiPageEditor";
 
 	private RootNode fModel;
 	private Set<IModelUpdateListener> fModelUpdateListeners;
 
-	private ModelPage fTreeEditorPage;
-
-	private boolean fDirty;
+	private RModelPage fModelPage;
 
 	public void registerModelUpdateListener(IModelUpdateListener listener){
 		fModelUpdateListeners.add(listener);
@@ -75,37 +73,12 @@ public class EcMultiPageEditor extends FormEditor{
 				XmlModelParser parser = new XmlModelParser();
 				iStream = file.getContents();
 				root = parser.parseModel(iStream);
-				fDirty = false;
 			} catch (CoreException | ParserException e) {
 				MessageDialog.openError(Display.getCurrent().getActiveShell(), "Error", "Exception: " + e.getMessage());
 				e.printStackTrace();
 			}
 		}
 		return root;
-	}
-
-	public void updateModel(RootNode model){
-		fModel = model;
-		updateListeners(model);
-		setDirty(true);
-	}
-	
-	public void updateModel(){
-		updateListeners(fModel);
-		setDirty(true);
-	}
-
-	private void setDirty(boolean dirty) {
-		if(fDirty != dirty){
-			fDirty = dirty;
-			firePropertyChange(IEditorPart.PROP_DIRTY);
-		}
-	}
-
-	private void updateListeners(RootNode model) {
-		for(IModelUpdateListener listener : fModelUpdateListeners){
-			listener.modelUpdated(model);
-		}
 	}
 
 	public EcMultiPageEditor() {
@@ -117,9 +90,8 @@ public class EcMultiPageEditor extends FormEditor{
 	protected void addPages() {
 		try {
 			setPartName(getEditorInput().getName());
-			fTreeEditorPage = new ModelPage(this, getModel());
-			addPage(fTreeEditorPage);
-			addPage(new RModelPage(this, getModel()));
+			addPage(fModelPage = new RModelPage(this));
+			addPage(new ModelPage(this, getModel()));
 
 		} catch (PartInitException e) {
 			ErrorDialog.openError(getSite().getShell(),
@@ -157,8 +129,9 @@ public class EcMultiPageEditor extends FormEditor{
 			FileOutputStream fout = new FileOutputStream(file.getLocation().toOSString());
 			XmlModelSerializer writer = new XmlModelSerializer(fout);
 			writer.writeXmlDocument(fModel);
-			setDirty(false);
 			refreshWorkspace(monitor);
+			commitPages(true);
+			firePropertyChange(PROP_DIRTY);
 		}
 		catch(Exception e){
 			MessageDialog.openError(Display.getCurrent().getActiveShell(), 
@@ -172,28 +145,19 @@ public class EcMultiPageEditor extends FormEditor{
 		}
 	}
 
-	/* (non-Javadoc)
-	 * Method declared on IEditorPart
-	 */
 	public void gotoMarker(IMarker marker) {
 		setActivePage(0);
 		IDE.gotoMarker(getEditor(0), marker);
 	}
 	
-	/* (non-Javadoc)
-	 * Method declared on IEditorPart.
-	 */
+	@Override
 	public boolean isSaveAsAllowed() {
 		return true;
 	}
 	
 	@Override
-	protected void pageChange(int newPageIndex) {
-		super.pageChange(newPageIndex);
-	}
-	
-	@Override
-	public boolean isDirty(){
-		return fDirty;
+	public void commitPages(boolean onSave){
+		super.commitPages(onSave);
+		fModelPage.commitMasterPart(onSave);
 	}
 }

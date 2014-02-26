@@ -1,7 +1,11 @@
 package com.testify.ecfeed.ui.editor.modeleditor.rework;
 
+import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
+import org.eclipse.jface.viewers.IBaseLabelProvider;
+import org.eclipse.jface.viewers.IContentProvider;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.StructuredViewer;
 import org.eclipse.jface.viewers.TableViewer;
@@ -25,6 +29,14 @@ public abstract class TableViewerSection extends ViewerSection {
 		return tableViewer;
 	}
 	
+	protected IContentProvider viewerContentProvider(){
+		return new ArrayContentProvider();
+	}
+
+	protected IBaseLabelProvider viewerLabelProvider(){
+		return new LabelProvider();
+	}
+
 	protected Table createTable(Composite parent, int style) {
 		return new Table(parent, style);
 	}

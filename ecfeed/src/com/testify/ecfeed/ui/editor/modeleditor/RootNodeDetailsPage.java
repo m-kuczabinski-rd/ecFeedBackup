@@ -199,8 +199,7 @@ public class RootNodeDetailsPage extends GenericNodeDetailsPage{
 	}
 
 	@Override
-	public void modelUpdated(RootNode model) {
-		fSelectedRoot = model;
+	public void modelUpdated() {
 		refresh();
 	}
 

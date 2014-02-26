@@ -1,5 +1,8 @@
 package com.testify.ecfeed.ui.editor.modeleditor.rework;
 
+import org.eclipse.jface.viewers.IBaseLabelProvider;
+import org.eclipse.jface.viewers.IContentProvider;
+import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
@@ -24,7 +27,8 @@ public abstract class ViewerSection extends BasicSection {
 	private Composite fButtonsComposite;
 	private StructuredViewer fViewer;
 	
-	public ViewerSection(Composite parent, FormToolkit toolkit, int style, int buttonsPosition) {
+	public ViewerSection(Composite parent, FormToolkit toolkit, 
+			int style, int buttonsPosition) {
 		super(parent, toolkit, style);
 		fButtonsPosition = buttonsPosition;
 	}	
@@ -54,6 +58,8 @@ public abstract class ViewerSection extends BasicSection {
 		viewerComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 		createViewerLabel(viewerComposite);
 		fViewer = createViewer(viewerComposite, SWT.BORDER);
+		fViewer.setContentProvider(viewerContentProvider());
+		fViewer.setLabelProvider(viewerLabelProvider());
 		createViewerColumns();
 
 		fViewer.addSelectionChangedListener(new ISelectionChangedListener() {
@@ -65,8 +71,6 @@ public abstract class ViewerSection extends BasicSection {
 
 		return viewerComposite;
 	}
-
-	protected abstract void createViewerColumns();
 
 	protected void createViewerLabel(Composite viewerComposite) {
 	}
@@ -88,11 +92,16 @@ public abstract class ViewerSection extends BasicSection {
 		return button;
 	}
 	
+	protected void addDoubleClickListener(IDoubleClickListener listener){
+		getViewer().addDoubleClickListener(listener);
+	}
+	
 	protected StructuredViewer getViewer(){
 		return fViewer;
 	}
 
 	public void refresh(){
+		super.refresh();
 		fViewer.refresh();
 	}
 	
@@ -115,5 +124,14 @@ public abstract class ViewerSection extends BasicSection {
 		fViewer.setInput(input);
 	}
 	
+	public Object getInput(){
+		return fViewer.getInput();
+	}
+	
+	protected abstract void createViewerColumns();
 	protected abstract StructuredViewer createViewer(Composite viewerComposite, int style);
+	protected abstract IContentProvider viewerContentProvider();
+	protected abstract IBaseLabelProvider viewerLabelProvider();
+
+
 }

@@ -1,37 +1,76 @@
 package com.testify.ecfeed.ui.editor.modeleditor.rework;
 
-import org.eclipse.jface.viewers.ArrayContentProvider;
+import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.ui.forms.widgets.Section;
+import org.eclipse.ui.forms.IFormPart;
+import org.eclipse.ui.forms.IManagedForm;
+import org.eclipse.ui.forms.widgets.FormToolkit;
+
+import com.testify.ecfeed.model.RootNode;
 
 public class ModelDetailsPage extends BasicDetailsPage {
 
+	RootNode fModel;
+	private ClassViewerSection fClassesSection;
+	private ModelNameForm fNameForm;
+	
+	private class ModelNameForm extends TextForm {
+
+		public ModelNameForm(Composite parent, FormToolkit toolkit) {
+			super(parent, toolkit, "Model name:", "Change");
+		}
+
+		@Override
+		protected void newText(String text) {
+			renameModel(text);
+		}
+		
+		@Override
+		public void refresh(){
+			super.refresh();
+			if(fModel != null){
+				setText(fModel.getName());
+			}
+		}
+
+		private void renameModel(String text) {
+			if(RootNode.validateModelName(text) && !fModel.getName().equals(text)){
+				fModel.setName(text);
+				modelUpdated(this);
+			}
+			else{
+				setText(fModel.getName());
+			}
+		}
+
+	}
+	
 	public ModelDetailsPage(ModelMasterSection masterSection) {
 		super(masterSection);
 	}
 
-	private static final int STYLE = Section.EXPANDED | Section.TITLE_BAR;
+	@Override
+	public void initialize(IManagedForm managedForm){
+		super.initialize(managedForm);
+	}
+	
+	@Override
+	public void createContents(Composite parent){
+		super.createContents(parent);
+		getMainSection().setText("Model details");
+		
+		addForm(fNameForm = new ModelNameForm(getMainComposite(), getToolkit()));
+		addForm(fClassesSection = new ClassViewerSection(getMainComposite(), getToolkit(), this));
+
+		getToolkit().paintBordersFor(getMainComposite());
+	}
+
 
 	@Override
-	protected BasicSection createMainSection(Composite parent) {
-		ClassViewerSection classesSection = new ClassViewerSection(parent, getToolkit(), STYLE);
-		classesSection.getViewer().setContentProvider(new ArrayContentProvider());
-		return classesSection;
-	}
-	
-	@Override
-	public void createContents(Composite parent) {
-		super.createContents(parent);
-		getClassesSection().setInput(getModel().getClasses());
-	}
-	
-	@Override
-	public void refresh(){
-		super.refresh();
-		getMainSection().setText(getModel().getName());
-	}
-	
-	protected ClassViewerSection getClassesSection(){
-		return (ClassViewerSection)getMainSection();
+	public void selectionChanged(IFormPart part, ISelection selection) {
+		super.selectionChanged(part, selection);
+		fModel = (RootNode)getSelectedElement();
+		fNameForm.setText(fModel.getName());
+		fClassesSection.setInput(fModel);
 	}
 }

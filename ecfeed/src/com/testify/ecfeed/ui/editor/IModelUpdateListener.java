@@ -11,8 +11,6 @@
 
 package com.testify.ecfeed.ui.editor;
 
-import com.testify.ecfeed.model.RootNode;
-
 public interface IModelUpdateListener {
-	public void modelUpdated(RootNode model);
+	public void modelUpdated();
 }

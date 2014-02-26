@@ -11,18 +11,18 @@
 
 package com.testify.ecfeed.ui.editor.modeleditor;
 
-import java.util.Collection;
 import java.util.ArrayList;
+import java.util.Collection;
 
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.TreeNodeContentProvider;
 
-import com.testify.ecfeed.ui.common.Constants;
-import com.testify.ecfeed.ui.editor.EcMultiPageEditor;
 import com.testify.ecfeed.model.IGenericNode;
+import com.testify.ecfeed.model.IModelWrapper;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.TestCaseNode;
+import com.testify.ecfeed.ui.common.Constants;
 
 public class ModelContentProvider extends TreeNodeContentProvider implements ITreeContentProvider {
 
@@ -30,8 +30,8 @@ public class ModelContentProvider extends TreeNodeContentProvider implements ITr
 	
 	@Override
 	public Object[] getElements(Object inputElement) {
-		if(inputElement instanceof EcMultiPageEditor){
-			RootNode root = ((EcMultiPageEditor)inputElement).getModel(); 
+		if(inputElement instanceof IModelWrapper){
+			RootNode root = ((IModelWrapper)inputElement).getModel(); 
 			return new Object[]{root};
 		}
 		return getChildren(inputElement);
