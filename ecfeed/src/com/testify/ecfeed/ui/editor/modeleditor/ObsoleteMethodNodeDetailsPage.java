@@ -66,7 +66,7 @@ import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.wb.swt.TableViewerColumnSorter;
 import org.eclipse.jface.window.Window;
 
-public class MethodNodeDetailsPage extends GenericNodeDetailsPage implements InputChangedListener{
+public class ObsoleteMethodNodeDetailsPage extends ObsoleteGenericNodeDetailsPage implements InputChangedListener{
 	private Label fMethodNameLabel;
 	private MethodNode fSelectedMethod;
 	private CheckboxTreeViewer fTestCasesViewer;
@@ -117,7 +117,7 @@ public class MethodNodeDetailsPage extends GenericNodeDetailsPage implements Inp
 		
 	}
 	
-	public MethodNodeDetailsPage(ModelMasterDetailsBlock parentBlock){
+	public ObsoleteMethodNodeDetailsPage(ObsoleteModelMasterDetailsBlock parentBlock){
 		super(parentBlock);
 		fColorManager = new ColorManager();
 	}
@@ -460,7 +460,7 @@ public class MethodNodeDetailsPage extends GenericNodeDetailsPage implements Inp
 	
 	private void createGenerateTestSuiteButton(Composite testCasesButonsComposite) {
 		Button button = createButton(testCasesButonsComposite, "Generate Test Suite", 
-				new GenerateTestSuiteAdapter(this));
+				new ObsoleteGenerateTestSuiteAdapter(this));
 		button.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
 	}
 	
@@ -503,13 +503,13 @@ public class MethodNodeDetailsPage extends GenericNodeDetailsPage implements Inp
 	
 	private void createExecuteSelectedButton(Composite testCasesButonsComposite) {
 		Button button = createButton(testCasesButonsComposite, "Execute selected", 
-				new ExecuteStaticTestAdapter(this));
+				new ObsoleteExecuteStaticTestAdapter(this));
 		button.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
 	}
 
 	private void createExecuteOnlineButton(Composite testCasesButonsComposite) {
 		Button button = createButton(testCasesButonsComposite, "Execute online", 
-				new ExecuteOnlineTestAdapter(this));
+				new ObsoleteExecuteOnlineTestAdapter(this));
 		button.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
 	}
 

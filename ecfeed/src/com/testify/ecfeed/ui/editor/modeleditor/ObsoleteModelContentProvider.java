@@ -24,7 +24,7 @@ import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.ui.common.Constants;
 
-public class ModelContentProvider extends TreeNodeContentProvider implements ITreeContentProvider {
+public class ObsoleteModelContentProvider extends TreeNodeContentProvider implements ITreeContentProvider {
 
 	public static final Object[] EMPTY_ARRAY = new Object[]{};
 	

@@ -10,7 +10,7 @@ import com.testify.ecfeed.model.RootNode;
 public class ModelDetailsPage extends BasicDetailsPage {
 
 	RootNode fModel;
-	private ClassViewerSection fClassesSection;
+	private ClassViewer fClassesSection;
 	private ModelNameForm fNameForm;
 	
 	private class ModelNameForm extends TextForm {
@@ -54,7 +54,7 @@ public class ModelDetailsPage extends BasicDetailsPage {
 		getMainSection().setText("Model details");
 		
 		addForm(fNameForm = new ModelNameForm(getMainComposite(), getToolkit()));
-		addForm(fClassesSection = new ClassViewerSection(getMainComposite(), getToolkit(), this));
+		addForm(fClassesSection = new ClassViewer(this, getToolkit()));
 
 		getToolkit().paintBordersFor(getMainComposite());
 	}

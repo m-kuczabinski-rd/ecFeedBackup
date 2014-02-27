@@ -42,9 +42,8 @@ import com.testify.ecfeed.ui.common.ColorConstants;
 import com.testify.ecfeed.ui.common.ColorManager;
 import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.common.ModelUtils;
-import com.testify.ecfeed.ui.editor.IModelUpdateListener;
 
-public class CategoryNodeDetailsPage extends GenericNodeDetailsPage implements IModelUpdateListener{
+public class ObsoleteCategoryNodeDetailsPage extends ObsoleteGenericNodeDetailsPage implements ObsoleteIModelUpdateListener{
 
 	private CategoryNode fSelectedCategory;
 	private Section fMainSection;
@@ -134,7 +133,7 @@ public class CategoryNodeDetailsPage extends GenericNodeDetailsPage implements I
 	/**
 	 * Create the details page.
 	 */
-	public CategoryNodeDetailsPage(ModelMasterDetailsBlock parentBlock) {
+	public ObsoleteCategoryNodeDetailsPage(ObsoleteModelMasterDetailsBlock parentBlock) {
 		super(parentBlock);
 		fColorManager = new ColorManager();
 	}

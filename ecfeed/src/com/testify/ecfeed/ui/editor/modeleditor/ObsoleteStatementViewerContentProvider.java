@@ -20,7 +20,7 @@ import com.testify.ecfeed.model.constraint.BasicStatement;
 import com.testify.ecfeed.model.constraint.Constraint;
 import com.testify.ecfeed.model.constraint.StatementArray;
 
-public class StatementViewerContentProvider extends TreeNodeContentProvider implements ITreeContentProvider {
+public class ObsoleteStatementViewerContentProvider extends TreeNodeContentProvider implements ITreeContentProvider {
 	public static final Object[] EMPTY_ARRAY = new Object[]{};
 
 	@Override

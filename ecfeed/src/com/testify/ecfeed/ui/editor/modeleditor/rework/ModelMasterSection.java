@@ -20,8 +20,8 @@ import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.IGenericNode;
 import com.testify.ecfeed.model.IModelWrapper;
 import com.testify.ecfeed.model.RootNode;
-import com.testify.ecfeed.ui.editor.modeleditor.ModelContentProvider;
-import com.testify.ecfeed.ui.editor.modeleditor.ModelLabelProvider;
+import com.testify.ecfeed.ui.editor.modeleditor.ObsoleteModelContentProvider;
+import com.testify.ecfeed.ui.editor.modeleditor.ObsoleteModelLabelProvider;
 
 public class ModelMasterSection extends TreeViewerSection{
 	private static final int STYLE = Section.EXPANDED | Section.TITLE_BAR;
@@ -66,7 +66,7 @@ public class ModelMasterSection extends TreeViewerSection{
 	}
 
 	public ModelMasterSection(Composite parent, FormToolkit toolkit) {
-		super(parent, toolkit, STYLE, ViewerSection.BUTTONS_BELOW);
+		super(null, toolkit, STYLE);
 		fModelSelectionListeners = new ArrayList<IModelSelectionListener>();
 	}
 	
@@ -126,11 +126,11 @@ public class ModelMasterSection extends TreeViewerSection{
 
 	@Override
 	protected IContentProvider viewerContentProvider() {
-		return new ModelContentProvider();
+		return new ObsoleteModelContentProvider();
 	}
 	
 	@Override 
 	protected IBaseLabelProvider viewerLabelProvider(){
-		return new ModelLabelProvider();
+		return new ObsoleteModelLabelProvider();
 	}
 }

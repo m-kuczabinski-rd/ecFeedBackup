@@ -26,11 +26,11 @@ import com.testify.ecfeed.model.constraint.Constraint;
 import com.testify.ecfeed.model.constraint.StatementArray;
 
 
-public class StatementViewerLabelProvider extends LabelProvider {
+public class ObsoleteStatementViewerLabelProvider extends LabelProvider {
 	
 	private Constraint fConstraint;
 
-	public StatementViewerLabelProvider(Constraint constraint){
+	public ObsoleteStatementViewerLabelProvider(Constraint constraint){
 		fConstraint = constraint;
 	}
 	
@@ -55,7 +55,7 @@ public class StatementViewerLabelProvider extends LabelProvider {
 	}
 	
 	private static Image getImage(String file) {
-	    Bundle bundle = FrameworkUtil.getBundle(ModelLabelProvider.class);
+	    Bundle bundle = FrameworkUtil.getBundle(ObsoleteModelLabelProvider.class);
 	    URL url = FileLocator.find(bundle, new Path("icons/" + file), null);
 	    ImageDescriptor image = ImageDescriptor.createFromURL(url);
 	    return image.createImage();

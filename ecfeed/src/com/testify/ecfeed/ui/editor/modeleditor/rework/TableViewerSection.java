@@ -6,7 +6,6 @@ import org.eclipse.jface.viewers.IBaseLabelProvider;
 import org.eclipse.jface.viewers.IContentProvider;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.LabelProvider;
-import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.StructuredViewer;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
@@ -18,8 +17,31 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 
 public abstract class TableViewerSection extends ViewerSection {
 
-	public TableViewerSection(Composite parent, FormToolkit toolkit, int style, int buttonsPosition) {
-		super(parent, toolkit, style, buttonsPosition);
+	public TableViewerSection(BasicDetailsPage parent, FormToolkit toolkit, int style) {
+		super(parent, toolkit, style);
+	}
+
+	@Override
+	protected IContentProvider viewerContentProvider(){
+		return new ArrayContentProvider();
+	}
+
+	@Override
+	protected IBaseLabelProvider viewerLabelProvider(){
+		return new LabelProvider();
+	}
+
+	@Override
+	protected StructuredViewer createViewer(Composite parent, int style) {
+		return createTableViewer(parent, style);
+	}
+
+	@Override
+	protected void createViewerColumns(){
+		createTableColumns();
+		
+		getTable().setHeaderVisible(tableHeaderVisible());
+		getTable().setLinesVisible(tableLinesVisible());
 	}
 
 	protected TableViewer createTableViewer(Composite parent, int style){
@@ -30,14 +52,6 @@ public abstract class TableViewerSection extends ViewerSection {
 		return tableViewer;
 	}
 	
-	protected IContentProvider viewerContentProvider(){
-		return new ArrayContentProvider();
-	}
-
-	protected IBaseLabelProvider viewerLabelProvider(){
-		return new LabelProvider();
-	}
-
 	protected Table createTable(Composite parent, int style) {
 		return new Table(parent, style);
 	}
@@ -54,10 +68,6 @@ public abstract class TableViewerSection extends ViewerSection {
 		return (TableViewer)getViewer();
 	}
 	
-	public void selectElement(Object element){
-		getViewer().setSelection(new StructuredSelection(element), true);
-	}
-
 	protected TableViewerColumn addColumn(String name, int width, ColumnLabelProvider labelProvider){
 		TableViewerColumn viewerColumn = new TableViewerColumn(getTableViewer(), SWT.NONE);
 		TableColumn column = viewerColumn.getColumn();
@@ -69,22 +79,16 @@ public abstract class TableViewerSection extends ViewerSection {
 		return viewerColumn;
 	}
 	
-	@Override
-	protected StructuredViewer createViewer(Composite parent, int style) {
-		return createTableViewer(parent, style);
+	protected boolean tableLinesVisible(){
+		return true;
 	}
 
-	@Override
-	protected void createViewerColumns(){
-		createTableColumns();
-		
-		getTable().setHeaderVisible(tableHeaderVisible());
-		getTable().setLinesVisible(tableLinesVisible());
+	protected boolean tableHeaderVisible(){
+		if(getTable().getColumns().length > 0){
+			return true;
+		}
+		return false;
 	}
-	
-	protected abstract boolean tableLinesVisible();
-
-	protected abstract boolean tableHeaderVisible();
 
 	protected abstract void createTableColumns();
 }

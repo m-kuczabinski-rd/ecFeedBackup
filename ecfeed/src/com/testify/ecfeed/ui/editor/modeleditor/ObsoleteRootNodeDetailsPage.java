@@ -40,7 +40,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.jface.viewers.CheckboxTableViewer;
 import org.eclipse.swt.layout.GridData;
 
-public class RootNodeDetailsPage extends GenericNodeDetailsPage{
+public class ObsoleteRootNodeDetailsPage extends ObsoleteGenericNodeDetailsPage{
 
 	private RootNode fSelectedRoot;
 	private CheckboxTableViewer fClassesViewer;
@@ -97,7 +97,7 @@ public class RootNodeDetailsPage extends GenericNodeDetailsPage{
 	}
 
 
-	public RootNodeDetailsPage(ModelMasterDetailsBlock parentBlock){
+	public ObsoleteRootNodeDetailsPage(ObsoleteModelMasterDetailsBlock parentBlock){
 		super(parentBlock);
 	}
 	

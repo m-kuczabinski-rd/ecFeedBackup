@@ -43,7 +43,7 @@ import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.ui.dialogs.TestClassSelectionDialog;
 import com.testify.ecfeed.ui.common.ModelUtils;
 
-public class ClassNodeDetailsPage extends GenericNodeDetailsPage{
+public class ObsoleteClassNodeDetailsPage extends ObsoleteGenericNodeDetailsPage{
 	
 	private ClassNode fSelectedClass;
 	private Section fMainSection;
@@ -106,7 +106,7 @@ public class ClassNodeDetailsPage extends GenericNodeDetailsPage{
 	/**
 	 * Create the details page.
 	 */
-	public ClassNodeDetailsPage(ModelMasterDetailsBlock parentBlock) {
+	public ObsoleteClassNodeDetailsPage(ObsoleteModelMasterDetailsBlock parentBlock) {
 		super(parentBlock);
 		fColorManager = new ColorManager();
 	}

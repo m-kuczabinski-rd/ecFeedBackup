@@ -9,14 +9,15 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.IGenericNode;
+import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.RootNode;
 
-public class RModelMasterDetailsBlock extends MasterDetailsBlock implements IModelSelectionListener{
+public class ModelMasterDetailsBlock extends MasterDetailsBlock implements IModelSelectionListener{
 
 	private ModelMasterSection fMasterSection;
-	private RModelPage fPage;
+	private ModelPage fPage;
 
-	public RModelMasterDetailsBlock(RModelPage modelPage) {
+	public ModelMasterDetailsBlock(ModelPage modelPage) {
 		fPage = modelPage;
 	}
 
@@ -37,6 +38,7 @@ public class RModelMasterDetailsBlock extends MasterDetailsBlock implements IMod
 	protected void registerPages(DetailsPart detailsPart) {
 		detailsPart.registerPage(RootNode.class, new ModelDetailsPage(fMasterSection));
 		detailsPart.registerPage(ClassNode.class, new ClassDetailsPage(fMasterSection));
+		detailsPart.registerPage(MethodNode.class, new MethodDetailsPage(fMasterSection));
 
 		selectNode(getModel());
 	}

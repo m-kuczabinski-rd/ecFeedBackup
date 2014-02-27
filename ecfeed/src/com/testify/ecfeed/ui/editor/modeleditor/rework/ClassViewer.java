@@ -6,7 +6,6 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Section;
 
@@ -16,7 +15,7 @@ import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.common.ModelUtils;
 import com.testify.ecfeed.ui.dialogs.TestClassSelectionDialog;
 
-public class ClassViewerSection extends CheckboxTableViewerSection {
+public class ClassViewer extends CheckboxTableViewerSection {
 	private static final int STYLE = Section.EXPANDED | Section.TITLE_BAR;
 
 	private RootNode fModel;
@@ -37,7 +36,7 @@ public class ClassViewerSection extends CheckboxTableViewerSection {
 			ClassNode classNode = ModelUtils.generateClassModel(selectedClass);
 			if(model.getClassModel(classNode.getQualifiedName()) == null){
 				model.addClass(classNode);
-				fParentPage.modelUpdated(ClassViewerSection.this);
+				fParentPage.modelUpdated(ClassViewer.this);
 			}
 			else{
 				MessageDialog.openError(getActiveShell(), 
@@ -73,21 +72,21 @@ public class ClassViewerSection extends CheckboxTableViewerSection {
 						fModel.removeClass((ClassNode)element);
 					}
 				}
-				fParentPage.modelUpdated(ClassViewerSection.this);
+				fParentPage.modelUpdated(ClassViewer.this);
 			}
 		}
 	}
 
-	public ClassViewerSection(Composite parent, FormToolkit toolkit, BasicDetailsPage parentPage) {
-		super(parent, toolkit, STYLE, ViewerSection.BUTTONS_BELOW);
-		fParentPage = parentPage;
+	public ClassViewer(BasicDetailsPage parent, FormToolkit toolkit) {
+		super(parent, toolkit, STYLE);
+		fParentPage = parent;
 		
 		setText("Classes");
 
 		addButton("Add test class..", new AddClassAdapter());
 		addButton("Remove selected", new RemoveSelectedAdapter());
 		
-		addDoubleClickListener(new SelectNodeDoubleClickListener(parentPage.getMasterSection()));
+		addDoubleClickListener(new SelectNodeDoubleClickListener(parent.getMasterSection()));
 	}
 	
 	@Override

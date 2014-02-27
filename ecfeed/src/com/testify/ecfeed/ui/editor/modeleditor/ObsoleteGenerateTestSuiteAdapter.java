@@ -38,9 +38,9 @@ import com.testify.ecfeed.generators.api.GeneratorException;
 import com.testify.ecfeed.generators.api.IConstraint;
 import com.testify.ecfeed.generators.api.IGenerator;
 
-class GenerateTestSuiteAdapter extends SelectionAdapter{
+class ObsoleteGenerateTestSuiteAdapter extends SelectionAdapter{
 
-	private final MethodNodeDetailsPage fPage;
+	private final ObsoleteMethodNodeDetailsPage fPage;
 	private boolean fCanceled;
 
 	private class GeneratorRunnable implements IRunnableWithProgress{
@@ -82,8 +82,8 @@ class GenerateTestSuiteAdapter extends SelectionAdapter{
 		
 	}
 	
-	GenerateTestSuiteAdapter(
-			MethodNodeDetailsPage methodNodeDetailsPage) {
+	ObsoleteGenerateTestSuiteAdapter(
+			ObsoleteMethodNodeDetailsPage methodNodeDetailsPage) {
 		this.fPage = methodNodeDetailsPage;
 	}
 

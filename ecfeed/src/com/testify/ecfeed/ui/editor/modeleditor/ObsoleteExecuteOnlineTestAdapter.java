@@ -33,7 +33,7 @@ import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.runner.ParameterizedMethod;
 import com.testify.ecfeed.ui.dialogs.ExecuteOnlineSetupDialog;
 
-public class ExecuteOnlineTestAdapter extends ExecuteTestAdapter {
+public class ObsoleteExecuteOnlineTestAdapter extends ObsoleteExecuteTestAdapter {
 	private class ExecuteRunnable implements IRunnableWithProgress{
 
 		private IGenerator<PartitionNode> fGenerator;
@@ -75,7 +75,7 @@ public class ExecuteOnlineTestAdapter extends ExecuteTestAdapter {
 		
 	}
 
-	public ExecuteOnlineTestAdapter(MethodNodeDetailsPage page) {
+	public ObsoleteExecuteOnlineTestAdapter(ObsoleteMethodNodeDetailsPage page) {
 		super(page);
 	}
 

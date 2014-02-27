@@ -37,13 +37,12 @@ import org.eclipse.ui.forms.widgets.Section;
 
 import com.testify.ecfeed.model.IGenericNode;
 import com.testify.ecfeed.ui.editor.EcMultiPageEditor;
-import com.testify.ecfeed.ui.editor.IModelUpdateListener;
 
-public class GenericNodeDetailsPage implements IDetailsPage, IModelUpdateListener {
+public class ObsoleteGenericNodeDetailsPage implements IDetailsPage, ObsoleteIModelUpdateListener {
 
 	private IManagedForm fManagedForm;
 	private EcMultiPageEditor fEditor;
-	private ModelMasterDetailsBlock fParentBlock;
+	private ObsoleteModelMasterDetailsBlock fParentBlock;
 	protected FormToolkit fToolkit;
 	protected IGenericNode fSelectedNode;
 	protected final GridData VIEWERS_GRID_DATA;
@@ -66,7 +65,7 @@ public class GenericNodeDetailsPage implements IDetailsPage, IModelUpdateListene
 	/**
 	 * Create the details page.
 	 */
-	public GenericNodeDetailsPage(ModelMasterDetailsBlock parentBlock) {
+	public ObsoleteGenericNodeDetailsPage(ObsoleteModelMasterDetailsBlock parentBlock) {
 		fParentBlock = parentBlock;
 		fEditor = parentBlock.getEditor();;
 		if(fEditor != null){
@@ -159,7 +158,7 @@ public class GenericNodeDetailsPage implements IDetailsPage, IModelUpdateListene
 		return fEditor;
 	}
 	
-	public ModelMasterDetailsBlock getParentBlock(){
+	public ObsoleteModelMasterDetailsBlock getParentBlock(){
 		return fParentBlock;
 	}
 	

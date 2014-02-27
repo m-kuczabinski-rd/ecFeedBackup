@@ -15,49 +15,72 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Layout;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
 public abstract class ViewerSection extends BasicSection {
 	public static final int BUTTONS_ASIDE = 1;
 	public static final int BUTTONS_BELOW = 2;
 	
-	private final int fButtonsPosition;
 	private Object fSelectedElement;
 
 	private Composite fButtonsComposite;
 	private StructuredViewer fViewer;
 	private Composite fViewerComposite;
 	
-	public ViewerSection(Composite parent, FormToolkit toolkit, 
-			int style, int buttonsPosition) {
+	public ViewerSection(BasicDetailsPage parent, FormToolkit toolkit, int style) {
 		super(parent, toolkit, style);
-		fButtonsPosition = buttonsPosition;
 	}	
 	
 	@Override
+	public void refresh(){
+		super.refresh();
+		fViewer.refresh();
+	}
+
+	@Override
 	protected Composite createClientComposite() {
 		Composite client = super.createClientComposite();
-		int columns = 1;
-		if(fButtonsPosition == BUTTONS_ASIDE){
-			columns = 2;
-		}
-		else if(fButtonsPosition == BUTTONS_BELOW){
-			columns = 1;
-		}
-		
-		client.setLayout(new GridLayout(columns, false));
-		client.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
-		
 		createViewerComposite(client); 
 		fButtonsComposite = createButtonsComposite(client); 
 		return client;
+	}
+	
+	@Override 
+	protected Layout clientLayout() {
+		GridLayout layout = new GridLayout(buttonsBelow()?1:2, false);
+		return layout;
+	}
+
+	public Object getSelectedElement(){
+		return fSelectedElement;
+	}
+
+	public void selectElement(Object element){
+		getViewer().setSelection(new StructuredSelection(element), true);
+	}
+
+	public void setInput(Object input){
+		fViewer.setInput(input);
+		refresh();
+	}
+
+	public Object getInput(){
+		return fViewer.getInput();
+	}
+
+	/*
+	 * Indicates whether optional buttons are located below (default)
+	 * or on the left side of the viewer
+	 */
+	protected boolean buttonsBelow() {
+		return true;
 	}
 
 	protected Composite createViewerComposite(Composite parent) {
 		fViewerComposite = getToolkit().createComposite(parent);
 		fViewerComposite.setLayout(new GridLayout(1, false));
 		fViewerComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
-		createViewerLabel(fViewerComposite);
 		fViewer = createViewer(fViewerComposite, SWT.BORDER);
 		fViewer.setContentProvider(viewerContentProvider());
 		fViewer.setLabelProvider(viewerLabelProvider());
@@ -73,26 +96,39 @@ public abstract class ViewerSection extends BasicSection {
 		return fViewerComposite;
 	}
 
-	protected void createViewerLabel(Composite viewerComposite) {
-	}
-
 	protected Composite createButtonsComposite(Composite parent) {
 		Composite buttonsComposite = getToolkit().createComposite(parent);
-		RowLayout rl = new RowLayout();
-		rl.pack = false;
-		if(fButtonsPosition == BUTTONS_ASIDE){
-			rl.type = SWT.VERTICAL;
-		}
-		buttonsComposite.setLayout(rl);
+		buttonsComposite.setLayout(buttonsCompositeLayout());
 		return buttonsComposite;
 	}
 	
+	protected Layout buttonsCompositeLayout() {
+		if(buttonsBelow()){
+			RowLayout rl = new RowLayout();
+			rl.pack = false;
+			return rl;
+		}
+		else{
+			return new GridLayout(1, false);
+		}
+	}
+
 	protected Button addButton(String text, SelectionAdapter adapter){
-		Button button = getToolkit().createButton(fButtonsComposite, text, SWT.None);
+		Button button = getToolkit().createButton(fButtonsComposite, text, SWT.NONE);
 		button.addSelectionListener(adapter);
+		if(buttonLayoutData() != null){
+			button.setLayoutData(buttonLayoutData());
+		}
 		return button;
 	}
 	
+	protected Object buttonLayoutData() {
+		if(buttonsBelow() == false){
+			return new GridData(SWT.FILL,  SWT.TOP, true, false);
+		}
+		return null;
+	}
+
 	protected void addDoubleClickListener(IDoubleClickListener listener){
 		getViewer().addDoubleClickListener(listener);
 	}
@@ -101,34 +137,11 @@ public abstract class ViewerSection extends BasicSection {
 		return fViewer;
 	}
 
-	@Override
-	public void refresh(){
-		super.refresh();
-		fViewer.refresh();
-	}
-	
-	public Object getSelectedElement(){
-		return fSelectedElement;
-	}
-	
 	protected GridData viewerLayoutData(){
 		GridData gd = new GridData(SWT.FILL, SWT.FILL, true, true);
 		gd.widthHint = 100;
 		gd.heightHint = 100;
 		return gd;
-	}
-	
-	public void selectElement(Object element){
-		getViewer().setSelection(new StructuredSelection(element), true);
-	}
-
-	public void setInput(Object input){
-		fViewer.setInput(input);
-		refresh();
-	}
-	
-	public Object getInput(){
-		return fViewer.getInput();
 	}
 	
 	protected Composite getViewerComposite(){

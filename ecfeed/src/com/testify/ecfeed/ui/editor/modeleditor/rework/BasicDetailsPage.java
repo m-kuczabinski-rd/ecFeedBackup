@@ -47,47 +47,13 @@ public abstract class BasicDetailsPage implements IDetailsPage{
 	public void createContents(Composite parent) {
 		parent.setLayout(new FillLayout());
 		fMainSection = getToolkit().createSection(parent, MAIN_SECTION_STYLE);
-		
+
 		getToolkit().adapt(getMainSection());
 		
 		fMainComposite = getToolkit().createComposite(getMainSection(), SWT.NONE);
 		fMainComposite.setLayout(new GridLayout(1, false));
 		getToolkit().adapt(fMainComposite);
 		getMainSection().setClient(fMainComposite);
-		
-	}
-	
-	protected void addForm(IFormPart form){
-		fForms.add(form);
-		form.initialize(getManagedForm());
-	}
-	
-	public FormToolkit getToolkit(){
-		return fManagedForm.getToolkit();
-	}
-
-	public Section getMainSection(){
-		return fMainSection;
-	}
-	
-	public ModelMasterSection getMasterSection(){
-		return fMasterSection;
-	}
-	
-	public RootNode getModel(){
-		return getMasterSection().getModel();
-	}
-	
-	protected Object getSelectedElement(){
-		return fMasterSection.getSelectedElement();
-	}
-	
-	protected IManagedForm getManagedForm(){
-		return fManagedForm;
-	}
-
-	protected Composite getMainComposite(){
-		return fMainComposite;
 	}
 	
 	@Override
@@ -96,7 +62,7 @@ public abstract class BasicDetailsPage implements IDetailsPage{
 			form.refresh();
 		}
 	}
-	
+
 	@Override
 	public void dispose() {
 		for(IFormPart form : fForms){
@@ -140,10 +106,47 @@ public abstract class BasicDetailsPage implements IDetailsPage{
 		return false;
 	}
 
+	public RootNode getModel(){
+		return getMasterSection().getModel();
+	}
+
+	public FormToolkit getToolkit(){
+		return fManagedForm.getToolkit();
+	}
+
+	protected Section getMainSection(){
+		return fMainSection;
+	}
+
+	protected ModelMasterSection getMasterSection(){
+		return fMasterSection;
+	}
+
+	protected void addForm(IFormPart form){
+		fForms.add(form);
+		form.initialize(getManagedForm());
+	}
+	
+	protected Object getSelectedElement(){
+		return fMasterSection.getSelectedElement();
+	}
+	
+	protected IManagedForm getManagedForm(){
+		return fManagedForm;
+	}
+
+	protected Composite getMainComposite(){
+		return fMainComposite;
+	}
+	
 	protected void modelUpdated(AbstractFormPart source){
-		source.markDirty();
+		if(source != null){
+			source.markDirty();
+		}
+		if(getMasterSection() != null){
+			getMasterSection().refresh();
+		}
 		refresh();
-		getMasterSection().refresh();
 	}
 	
 	protected Shell getActiveShell(){

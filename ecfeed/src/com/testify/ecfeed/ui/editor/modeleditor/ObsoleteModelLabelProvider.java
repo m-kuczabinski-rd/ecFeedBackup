@@ -31,7 +31,7 @@ import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.TestCaseNode;
 
-public class ModelLabelProvider extends LabelProvider {
+public class ObsoleteModelLabelProvider extends LabelProvider {
 
 	public String getText(Object element){
 		if(element instanceof GenericNode){
@@ -72,7 +72,7 @@ public class ModelLabelProvider extends LabelProvider {
 	}
 	
 	private static Image getImage(String file) {
-	    Bundle bundle = FrameworkUtil.getBundle(ModelLabelProvider.class);
+	    Bundle bundle = FrameworkUtil.getBundle(ObsoleteModelLabelProvider.class);
 	    URL url = FileLocator.find(bundle, new Path("icons/" + file), null);
 	    ImageDescriptor image = ImageDescriptor.createFromURL(url);
 	    return image.createImage();

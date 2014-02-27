@@ -4,8 +4,12 @@ import org.eclipse.jdt.core.IType;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.RowLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
@@ -72,14 +76,28 @@ public class ClassDetailsPage extends BasicDetailsPage {
 	@Override
 	public void createContents(Composite parent){
 		super.createContents(parent);
+
+		Composite textClientComposite = getToolkit().createComposite(getMainSection());
+		textClientComposite.setLayout(new RowLayout());
+		
+		Button refreshButton = getToolkit().createButton(textClientComposite, "Refresh", SWT.NONE);
+		refreshButton.addSelectionListener(new SelectionAdapter(){
+			@Override
+			public void widgetSelected(SelectionEvent e){
+				refresh();
+			}
+		});
+		getMainSection().setTextClient(textClientComposite);
 		
 		addForm(fQualifiedNameForm = new QualifiedNameForm(getMainComposite(), getToolkit()));
-		addForm(fMethodsSection = new MethodsViewerSection(getMainComposite(), getToolkit(), this));
-		addForm(fOtherMethodsSection = new OtherMethodsSection(getMainComposite(), getToolkit(), this));
+		addForm(fMethodsSection = new MethodsViewerSection(this, getToolkit()));
+		addForm(fOtherMethodsSection = new OtherMethodsSection(this, getToolkit()));
 		
 		getToolkit().paintBordersFor(getMainComposite());
 	}
 
+	
+	
 	@Override
 	public void selectionChanged(IFormPart part, ISelection selection) {
 		super.selectionChanged(part, selection);

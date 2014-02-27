@@ -35,10 +35,10 @@ import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.ui.common.Messages;
 
-public class ExecuteTestAdapter extends SelectionAdapter {
-	private MethodNodeDetailsPage fPage;
+public class ObsoleteExecuteTestAdapter extends SelectionAdapter {
+	private ObsoleteMethodNodeDetailsPage fPage;
 	
-	public ExecuteTestAdapter(MethodNodeDetailsPage page) {
+	public ObsoleteExecuteTestAdapter(ObsoleteMethodNodeDetailsPage page) {
 		fPage = page;
 	}
 
@@ -113,7 +113,7 @@ public class ExecuteTestAdapter extends SelectionAdapter {
 		return result;
 	}
 
-	protected MethodNodeDetailsPage getPage(){
+	protected ObsoleteMethodNodeDetailsPage getPage(){
 		return fPage;
 	}
 }

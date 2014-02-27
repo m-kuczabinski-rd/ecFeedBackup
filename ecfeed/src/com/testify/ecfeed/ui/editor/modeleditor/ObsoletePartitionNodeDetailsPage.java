@@ -58,7 +58,7 @@ import com.testify.ecfeed.ui.common.Constants;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Text;
 
-public class PartitionNodeDetailsPage extends GenericNodeDetailsPage{
+public class ObsoletePartitionNodeDetailsPage extends ObsoleteGenericNodeDetailsPage{
 
 	private PartitionNode fSelectedPartition;
 	private Section fMainSection;
@@ -191,7 +191,7 @@ public class PartitionNodeDetailsPage extends GenericNodeDetailsPage{
 	/**
 	 * Create the details page.
 	 */
-	public PartitionNodeDetailsPage(ModelMasterDetailsBlock parentBlock) {
+	public ObsoletePartitionNodeDetailsPage(ObsoleteModelMasterDetailsBlock parentBlock) {
 		super(parentBlock);
 		fColorManager = new ColorManager();
 	}

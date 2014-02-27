@@ -58,7 +58,7 @@ import com.testify.ecfeed.model.constraint.StaticStatement;
 import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.common.ModelUtils;
 
-public class ConstraintsNodeDetailsPage extends GenericNodeDetailsPage {
+public class ObsoleteConstraintsNodeDetailsPage extends ObsoleteGenericNodeDetailsPage {
 
 	private static final String STATEMENT_FALSE = "FALSE";
 	private static final String STATEMENT_TRUE = "TRUE";
@@ -87,7 +87,7 @@ public class ConstraintsNodeDetailsPage extends GenericNodeDetailsPage {
 	private Composite fStatementEditComposite;
 	private Composite fMainComposite;
 	
-	public ConstraintsNodeDetailsPage(ModelMasterDetailsBlock parentBlock) {
+	public ObsoleteConstraintsNodeDetailsPage(ObsoleteModelMasterDetailsBlock parentBlock) {
 		super(parentBlock);
 	}
 
@@ -177,7 +177,7 @@ public class ConstraintsNodeDetailsPage extends GenericNodeDetailsPage {
 		fSelectedStatement = null;
 		fConstraintViewer = new TreeViewer(parent, SWT.BORDER);
 		fConstraintViewer.getTree().setLayoutData(VIEWERS_GRID_DATA);
-		fConstraintViewer.setContentProvider(new StatementViewerContentProvider());
+		fConstraintViewer.setContentProvider(new ObsoleteStatementViewerContentProvider());
 		fConstraintViewer.addSelectionChangedListener(new ISelectionChangedListener() {
 			@Override
 			public void selectionChanged(SelectionChangedEvent event) {
@@ -425,7 +425,7 @@ public class ConstraintsNodeDetailsPage extends GenericNodeDetailsPage {
 		fConstraintNameCombo.setItems(fSelectedConstraint.getMethod().
 				getConstraintsNames().toArray(new String[]{}));
 		fConstraintNameCombo.setText(fSelectedConstraint.getName());
-		fConstraintViewer.setLabelProvider(new StatementViewerLabelProvider(fConstraint));
+		fConstraintViewer.setLabelProvider(new ObsoleteStatementViewerLabelProvider(fConstraint));
 		fConstraintViewer.setInput(fConstraint);
 		fConstraintViewer.expandAll();
 	}

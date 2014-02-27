@@ -43,11 +43,10 @@ import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.ui.editor.EcMultiPageEditor;
-import com.testify.ecfeed.ui.editor.IModelUpdateListener;
 
 import org.eclipse.swt.layout.GridData;
 
-public class ModelMasterDetailsBlock extends MasterDetailsBlock implements IModelUpdateListener{
+public class ObsoleteModelMasterDetailsBlock extends MasterDetailsBlock implements ObsoleteIModelUpdateListener{
 
 	private FormToolkit fToolkit;
 	private RootNode fModel;
@@ -63,7 +62,7 @@ public class ModelMasterDetailsBlock extends MasterDetailsBlock implements IMode
 	/**
 	 * Create the master details block.
 	 */
-	public ModelMasterDetailsBlock(EcMultiPageEditor editor, RootNode model) {
+	public ObsoleteModelMasterDetailsBlock(EcMultiPageEditor editor, RootNode model) {
 		fEditor = editor;
 		fModel = model;
 		fEditor.registerModelUpdateListener(this);
@@ -96,14 +95,14 @@ public class ModelMasterDetailsBlock extends MasterDetailsBlock implements IMode
 	 */
 	@Override
 	protected void registerPages(DetailsPart part) {
-		part.registerPage(RootNode.class, new RootNodeDetailsPage(this));
-		part.registerPage(ClassNode.class, new ClassNodeDetailsPage(this));
-		part.registerPage(MethodNode.class, new MethodNodeDetailsPage(this));
-		part.registerPage(CategoryNode.class, new CategoryNodeDetailsPage(this));
-		part.registerPage(ExpectedValueCategoryNode.class, new ExpectedValueDetailsPage(this));
-		part.registerPage(TestCaseNode.class, new TestCaseNodeDetailsPage(this));
-		part.registerPage(ConstraintNode.class, new ConstraintsNodeDetailsPage(this));
-		part.registerPage(PartitionNode.class, new PartitionNodeDetailsPage(this));
+		part.registerPage(RootNode.class, new ObsoleteRootNodeDetailsPage(this));
+		part.registerPage(ClassNode.class, new ObsoleteClassNodeDetailsPage(this));
+		part.registerPage(MethodNode.class, new ObsoleteMethodNodeDetailsPage(this));
+		part.registerPage(CategoryNode.class, new ObsoleteCategoryNodeDetailsPage(this));
+		part.registerPage(ExpectedValueCategoryNode.class, new ObsoleteExpectedValueDetailsPage(this));
+		part.registerPage(TestCaseNode.class, new ObsoleteTestCaseNodeDetailsPage(this));
+		part.registerPage(ConstraintNode.class, new ObsoleteConstraintsNodeDetailsPage(this));
+		part.registerPage(PartitionNode.class, new ObsoletePartitionNodeDetailsPage(this));
 	
 		selectNode(fModel);
 	}
@@ -160,8 +159,8 @@ public class ModelMasterDetailsBlock extends MasterDetailsBlock implements IMode
 		FilteredTree filteredTree = new FilteredTree(composite, SWT.BORDER, new PatternFilter(), true);
 		fTreeViewer = filteredTree.getViewer();
 		fTreeViewer.setAutoExpandLevel(2);
-		fTreeViewer.setContentProvider(new ModelContentProvider());
-		fTreeViewer.setLabelProvider(new ModelLabelProvider());
+		fTreeViewer.setContentProvider(new ObsoleteModelContentProvider());
+		fTreeViewer.setLabelProvider(new ObsoleteModelLabelProvider());
 
 		GridData gd = new GridData(SWT.FILL, SWT.FILL, true, true);
 		gd.widthHint = 100;

@@ -31,7 +31,7 @@ import org.eclipse.ui.forms.widgets.Section;
 
 import com.testify.ecfeed.model.ExpectedValueCategoryNode;
 
-public class ExpectedValueDetailsPage extends GenericNodeDetailsPage {
+public class ObsoleteExpectedValueDetailsPage extends ObsoleteGenericNodeDetailsPage {
 
 	private Section fMainSection;
 	private Composite fMainComposite;
@@ -39,7 +39,7 @@ public class ExpectedValueDetailsPage extends GenericNodeDetailsPage {
 	private Composite fDefaultValueComposite;
 	private Text fDefaultValueText;
 
-	public ExpectedValueDetailsPage(ModelMasterDetailsBlock parentBlock) {
+	public ObsoleteExpectedValueDetailsPage(ObsoleteModelMasterDetailsBlock parentBlock) {
 		super(parentBlock);
 	}
 

@@ -8,27 +8,40 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Layout;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.forms.AbstractFormPart;
 import org.eclipse.ui.forms.SectionPart;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
 public class BasicSection extends SectionPart{
 	private Composite fClientComposite;
 	private FormToolkit fToolkit;
-	
+	BasicDetailsPage fParentPage;
 	private Control fTextClient;
 
-	public BasicSection(Composite parent, FormToolkit toolkit, int style) {
-		super(parent, toolkit, style);
+	@Override
+	public void refresh(){
+		if(fTextClient != null){
+			updateTextClient();
+		}
+	}
+
+	public BasicSection(BasicDetailsPage parent, FormToolkit toolkit, int style) {
+		super(parent.getMainComposite(), toolkit, style);
+		fParentPage = parent;
 		fToolkit = toolkit;
 		createContent();
 	}
 
-	protected Composite getClientComposite(){
-		return fClientComposite;
-	}
-	
 	public FormToolkit getToolkit(){
 		return fToolkit;
+	}
+
+	public void setText(String title){
+		getSection().setText(title);
+	}
+
+	protected Composite getClientComposite(){
+		return fClientComposite;
 	}
 	
 	protected void createContent(){
@@ -65,17 +78,15 @@ public class BasicSection extends SectionPart{
 	protected void updateTextClient() {
 	}
 	
-	public void refresh(){
-		if(fTextClient != null){
-			updateTextClient();
-		}
-	}
-	
-	public void setText(String title){
-		getSection().setText(title);
-	}
-
 	protected Shell getActiveShell(){
 		return Display.getCurrent().getActiveShell();
+	}
+	
+	protected BasicDetailsPage getParentPage(){
+		return fParentPage;
+	}
+	
+	protected void modelUpdated(AbstractFormPart source){
+		fParentPage.modelUpdated(source);
 	}
 }

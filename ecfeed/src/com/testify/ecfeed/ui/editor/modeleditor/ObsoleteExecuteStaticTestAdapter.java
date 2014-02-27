@@ -23,9 +23,9 @@ import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.runner.ParameterizedMethod;
 import com.testify.ecfeed.ui.common.Messages;
 
-public class ExecuteStaticTestAdapter extends ExecuteTestAdapter {
+public class ObsoleteExecuteStaticTestAdapter extends ObsoleteExecuteTestAdapter {
 
-	public ExecuteStaticTestAdapter(MethodNodeDetailsPage page) {
+	public ObsoleteExecuteStaticTestAdapter(ObsoleteMethodNodeDetailsPage page) {
 		super(page);
 	}
 

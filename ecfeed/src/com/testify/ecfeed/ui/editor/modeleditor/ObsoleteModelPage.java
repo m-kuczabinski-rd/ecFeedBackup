@@ -20,12 +20,12 @@ import org.eclipse.ui.forms.widgets.ScrolledForm;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.ui.editor.EcMultiPageEditor;
 
-public class ModelPage extends FormPage{
+public class ObsoleteModelPage extends FormPage{
 	
 	private final static String ID = "com.testify.ecfeed.ui.editor.modeleditor";
 	private final static String TITLE = "model";
 	
-	private ModelMasterDetailsBlock fBlock;
+	private ObsoleteModelMasterDetailsBlock fBlock;
 	private RootNode fModel;
 	
 	/**
@@ -34,10 +34,10 @@ public class ModelPage extends FormPage{
 	 * @param id
 	 * @param title
 	 */
-	public ModelPage(EcMultiPageEditor editor, RootNode model) {
+	public ObsoleteModelPage(EcMultiPageEditor editor, RootNode model) {
 		super(editor, ID, TITLE);
 		fModel = model;
-		fBlock = new ModelMasterDetailsBlock(editor, model);
+		fBlock = new ObsoleteModelMasterDetailsBlock(editor, model);
 	}
 
 	public RootNode getModel(){

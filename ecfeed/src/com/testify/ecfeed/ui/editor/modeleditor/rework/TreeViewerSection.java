@@ -9,14 +9,17 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 
 public abstract class TreeViewerSection extends ViewerSection {
 
-	public TreeViewerSection(Composite parent, FormToolkit toolkit,
-			int style, int buttonsPosition) {
-		super(parent, toolkit, style, buttonsPosition);
+	public TreeViewerSection(BasicDetailsPage parent, FormToolkit toolkit, int style) {
+		super(parent, toolkit, style);
 	}
 
 	@Override
 	protected StructuredViewer createViewer(Composite viewerComposite, int style) {
 		return createTreeViewer(viewerComposite, style);
+	}
+
+	@Override
+	protected void createViewerColumns(){
 	}
 
 	protected TreeViewer createTreeViewer(Composite parent, int style) {
@@ -36,8 +39,5 @@ public abstract class TreeViewerSection extends ViewerSection {
 	
 	protected TreeViewer getTreeViewer(){
 		return (TreeViewer)getViewer();
-	}
-	
-	protected void createViewerColumns(){
 	}
 }

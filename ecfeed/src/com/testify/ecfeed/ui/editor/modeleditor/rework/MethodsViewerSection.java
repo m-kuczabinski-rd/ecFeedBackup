@@ -8,7 +8,6 @@ import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Section;
 
@@ -21,7 +20,7 @@ import com.testify.ecfeed.ui.common.ModelUtils;
 
 public class MethodsViewerSection extends CheckboxTableViewerSection {
 
-	private static final int SECTION_STYLE = Section.EXPANDED | Section.TITLE_BAR;
+	private static final int STYLE = Section.EXPANDED | Section.TITLE_BAR;
 	private ColorManager fColorManager;
 	private ClassNode fSelectedClass;
 	private BasicDetailsPage fParentPage;
@@ -88,13 +87,13 @@ public class MethodsViewerSection extends CheckboxTableViewerSection {
 		}
 	}
 	
-	public MethodsViewerSection(Composite parent, FormToolkit toolkit, BasicDetailsPage parentPage) {
-		super(parent, toolkit, SECTION_STYLE, ViewerSection.BUTTONS_BELOW);
-		fParentPage = parentPage;
+	public MethodsViewerSection(BasicDetailsPage parent, FormToolkit toolkit) {
+		super(parent, toolkit, STYLE);
+		fParentPage = parent;
 
 		setText("Methods");
 		addButton("Remove selected", new RemoveSelectedMethodsAdapter());
-		addDoubleClickListener(new SelectNodeDoubleClickListener(parentPage.getMasterSection()));
+		addDoubleClickListener(new SelectNodeDoubleClickListener(parent.getMasterSection()));
 	}
 
 	@Override

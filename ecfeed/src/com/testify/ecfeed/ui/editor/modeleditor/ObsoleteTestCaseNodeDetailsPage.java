@@ -48,7 +48,7 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.swt.layout.RowLayout;
 
-public class TestCaseNodeDetailsPage extends GenericNodeDetailsPage implements InputChangedListener{
+public class ObsoleteTestCaseNodeDetailsPage extends ObsoleteGenericNodeDetailsPage implements InputChangedListener{
 	private TestCaseNode fSelectedTestCase;
 	private Section fMainSection;
 	private MethodNode fParent;
@@ -60,7 +60,7 @@ public class TestCaseNodeDetailsPage extends GenericNodeDetailsPage implements I
 	/**
 	 * Create the details page.
 	 */
-	public TestCaseNodeDetailsPage(ModelMasterDetailsBlock parentBlock) {
+	public ObsoleteTestCaseNodeDetailsPage(ObsoleteModelMasterDetailsBlock parentBlock) {
 		super(parentBlock);
 		fColorManager = new ColorManager();
 	}

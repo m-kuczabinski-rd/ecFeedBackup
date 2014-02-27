@@ -6,17 +6,17 @@ import org.eclipse.ui.forms.editor.FormPage;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.ui.editor.EcMultiPageEditor;
 
-public class RModelPage extends FormPage {
+public class ModelPage extends FormPage {
 	private static final String ID = "com.testify.ecfeed.pages.refactored";
 	private static final String TITLE = "refactored";
 
-	private RModelMasterDetailsBlock fBlock;
+	private ModelMasterDetailsBlock fBlock;
 	private EcMultiPageEditor fEditor;
 
-	public RModelPage(EcMultiPageEditor editor) {
+	public ModelPage(EcMultiPageEditor editor) {
 		super(editor, ID, TITLE);
 		fEditor = editor;
-		fBlock = new RModelMasterDetailsBlock(this);
+		fBlock = new ModelMasterDetailsBlock(this);
 	}
 
 	public void commitMasterPart(boolean onSave){
