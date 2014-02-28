@@ -69,9 +69,7 @@ public class MethodDetailsPage extends BasicDetailsPage {
 	public void createContents(Composite parent){
 		super.createContents(parent);
 
-		getMainSection().setText("Method details");
 		createTextClient();
-		
 		addForm(fParemetersSection = new ParametersViewer(this, getToolkit()));
 		addForm(fConstraintsSection = new ConstraintsViewer(this, getToolkit()));
 		addForm(fTestCasesSection = new TestCasesViewer(this, getToolkit()));
@@ -110,5 +108,4 @@ public class MethodDetailsPage extends BasicDetailsPage {
 		}
 		super.refresh();
 	}
-
 }
