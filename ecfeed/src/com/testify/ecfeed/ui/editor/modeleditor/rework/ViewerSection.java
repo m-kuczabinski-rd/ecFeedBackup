@@ -28,8 +28,8 @@ public abstract class ViewerSection extends BasicSection {
 	private StructuredViewer fViewer;
 	private Composite fViewerComposite;
 	
-	public ViewerSection(BasicDetailsPage parent, FormToolkit toolkit, int style) {
-		super(parent, toolkit, style);
+	public ViewerSection(Composite parent, FormToolkit toolkit, int style, IModelUpdateListener updateListener) {
+		super(parent, toolkit, style, updateListener);
 	}	
 	
 	@Override
@@ -99,6 +99,9 @@ public abstract class ViewerSection extends BasicSection {
 	protected Composite createButtonsComposite(Composite parent) {
 		Composite buttonsComposite = getToolkit().createComposite(parent);
 		buttonsComposite.setLayout(buttonsCompositeLayout());
+		if(buttonsCompositeLayoutData() != null){
+			buttonsComposite.setLayoutData(buttonsCompositeLayoutData());
+		}
 		return buttonsComposite;
 	}
 	
@@ -110,6 +113,15 @@ public abstract class ViewerSection extends BasicSection {
 		}
 		else{
 			return new GridLayout(1, false);
+		}
+	}
+
+	protected Object buttonsCompositeLayoutData() {
+		if(buttonsBelow()){
+			return null;
+		}
+		else{
+			return new GridData(SWT.FILL, SWT.TOP, false, true);
 		}
 	}
 

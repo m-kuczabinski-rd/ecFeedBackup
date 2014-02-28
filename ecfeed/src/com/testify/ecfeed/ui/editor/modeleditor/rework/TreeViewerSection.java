@@ -9,8 +9,8 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 
 public abstract class TreeViewerSection extends ViewerSection {
 
-	public TreeViewerSection(BasicDetailsPage parent, FormToolkit toolkit, int style) {
-		super(parent, toolkit, style);
+	public TreeViewerSection(Composite parent, FormToolkit toolkit, int style, IModelUpdateListener updateListener) {
+		super(parent, toolkit, style, updateListener);
 	}
 
 	@Override

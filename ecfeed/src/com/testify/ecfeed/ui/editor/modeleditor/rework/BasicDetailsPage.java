@@ -19,7 +19,7 @@ import org.eclipse.ui.forms.widgets.Section;
 
 import com.testify.ecfeed.model.RootNode;
 
-public abstract class BasicDetailsPage implements IDetailsPage{
+public abstract class BasicDetailsPage implements IDetailsPage, IModelUpdateListener{
 
 	private ModelMasterSection fMasterSection;
 	private Section fMainSection;
@@ -139,9 +139,12 @@ public abstract class BasicDetailsPage implements IDetailsPage{
 		return fMainComposite;
 	}
 	
-	protected void modelUpdated(AbstractFormPart source){
+	public void modelUpdated(AbstractFormPart source){
 		if(source != null){
 			source.markDirty();
+		}
+		else if(getMasterSection() != null){
+			getMasterSection().markDirty();
 		}
 		if(getMasterSection() != null){
 			getMasterSection().refresh();

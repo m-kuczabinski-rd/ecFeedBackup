@@ -9,8 +9,8 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 
 public abstract class CheckboxTableViewerSection extends TableViewerSection {
 
-	public CheckboxTableViewerSection(BasicDetailsPage parent, FormToolkit toolkit, int style) {
-		super(parent, toolkit, style);
+	public CheckboxTableViewerSection(Composite parent, FormToolkit toolkit, int style, IModelUpdateListener updateListener) {
+		super(parent, toolkit, style, updateListener);
 	}
 
 	@Override
@@ -28,4 +28,9 @@ public abstract class CheckboxTableViewerSection extends TableViewerSection {
 	protected CheckboxTableViewer getCheckboxViewer(){
 		return (CheckboxTableViewer)getViewer();
 	}
+
+	public Object[] getCheckedElements(){
+		return getCheckboxViewer().getCheckedElements();
+	}
+
 }

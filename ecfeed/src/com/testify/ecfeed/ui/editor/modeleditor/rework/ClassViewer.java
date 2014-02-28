@@ -19,24 +19,23 @@ public class ClassViewer extends CheckboxTableViewerSection {
 	private static final int STYLE = Section.EXPANDED | Section.TITLE_BAR;
 
 	private RootNode fModel;
-	private BasicDetailsPage fParentPage;
 
 	private class AddClassAdapter extends SelectionAdapter {
 
 		@Override
 		public void widgetSelected(SelectionEvent e) {
 			IType selectedClass = selectClass();
-			
+
 			if(fModel != null){
 				addClass(selectedClass, fModel);
 			}
 		}
-		
+
 		private void addClass(IType selectedClass, RootNode model){
 			ClassNode classNode = ModelUtils.generateClassModel(selectedClass);
 			if(model.getClassModel(classNode.getQualifiedName()) == null){
 				model.addClass(classNode);
-				fParentPage.modelUpdated(ClassViewer.this);
+				modelUpdated();
 			}
 			else{
 				MessageDialog.openError(getActiveShell(), 
@@ -47,24 +46,25 @@ public class ClassViewer extends CheckboxTableViewerSection {
 
 		private IType selectClass() {
 			TestClassSelectionDialog dialog = new TestClassSelectionDialog(getActiveShell());
-			
+
 			if (dialog.open() == IDialogConstants.OK_ID) {
 				return (IType)dialog.getFirstResult();
 			}
 			return null;
 		}
 	}
+	
+	private class RemoveClassesAdapter extends SelectionAdapter {
 
-	private class RemoveSelectedAdapter extends SelectionAdapter{
 		@Override
 		public void widgetSelected(SelectionEvent e) {
 			if(MessageDialog.openConfirm(getActiveShell(), 
 					Messages.DIALOG_REMOVE_CLASSES_TITLE, 
 					Messages.DIALOG_REMOVE_CLASSES_MESSAGE)){
-				removeClasses(getCheckboxViewer().getCheckedElements());
+				removeClasses(getCheckedElements());
 			}
 		}
-
+		
 		private void removeClasses(Object[] checkedElements) {
 			if(fModel != null){
 				for(Object element : checkedElements){
@@ -72,20 +72,17 @@ public class ClassViewer extends CheckboxTableViewerSection {
 						fModel.removeClass((ClassNode)element);
 					}
 				}
-				fParentPage.modelUpdated(ClassViewer.this);
+				modelUpdated();
 			}
 		}
 	}
 
 	public ClassViewer(BasicDetailsPage parent, FormToolkit toolkit) {
-		super(parent, toolkit, STYLE);
-		fParentPage = parent;
+		super(parent.getMainComposite(), toolkit, STYLE, parent);
 		
 		setText("Classes");
-
 		addButton("Add test class..", new AddClassAdapter());
-		addButton("Remove selected", new RemoveSelectedAdapter());
-		
+		addButton("Remove selected", new RemoveClassesAdapter());
 		addDoubleClickListener(new SelectNodeDoubleClickListener(parent.getMasterSection()));
 	}
 	
@@ -110,21 +107,4 @@ public class ClassViewer extends CheckboxTableViewerSection {
 		fModel = model;
 	}
 	
-	@Override
-	public boolean isStale(){
-		if(fModel != null){
-			return fModel.getClasses().equals(getInput());
-		}
-		return false;
-	}
-
-	@Override
-	protected boolean tableLinesVisible() {
-		return true;
-	}
-
-	@Override
-	protected boolean tableHeaderVisible() {
-		return true;
-	}
 }

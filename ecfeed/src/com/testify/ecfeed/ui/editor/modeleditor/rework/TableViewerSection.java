@@ -17,8 +17,8 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 
 public abstract class TableViewerSection extends ViewerSection {
 
-	public TableViewerSection(BasicDetailsPage parent, FormToolkit toolkit, int style) {
-		super(parent, toolkit, style);
+	public TableViewerSection(Composite parent, FormToolkit toolkit, int style, IModelUpdateListener updateListener) {
+		super(parent, toolkit, style, updateListener);
 	}
 
 	@Override

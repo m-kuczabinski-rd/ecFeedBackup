@@ -40,19 +40,20 @@ import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.parsers.ParserException;
 import com.testify.ecfeed.parsers.xml.XmlModelParser;
 import com.testify.ecfeed.parsers.xml.XmlModelSerializer;
-import com.testify.ecfeed.ui.editor.modeleditor.ModelPage;
-import com.testify.ecfeed.ui.editor.modeleditor.rework.RModelPage;
+import com.testify.ecfeed.ui.editor.modeleditor.ObsoleteIModelUpdateListener;
+import com.testify.ecfeed.ui.editor.modeleditor.ObsoleteModelPage;
+import com.testify.ecfeed.ui.editor.modeleditor.rework.ModelPage;
 
 public class EcMultiPageEditor extends FormEditor implements IModelWrapper{
 	
 	public static String ID = "com.testify.ecfeed.ui.editors.EcMultiPageEditor";
 
 	private RootNode fModel;
-	private Set<IModelUpdateListener> fModelUpdateListeners;
+	private Set<ObsoleteIModelUpdateListener> fModelUpdateListeners;
 
-	private RModelPage fModelPage;
+	private ModelPage fModelPage;
 
-	public void registerModelUpdateListener(IModelUpdateListener listener){
+	public void registerModelUpdateListener(ObsoleteIModelUpdateListener listener){
 		fModelUpdateListeners.add(listener);
 	}
 	
@@ -83,15 +84,15 @@ public class EcMultiPageEditor extends FormEditor implements IModelWrapper{
 
 	public EcMultiPageEditor() {
 		super();
-		fModelUpdateListeners = new HashSet<IModelUpdateListener>();
+		fModelUpdateListeners = new HashSet<ObsoleteIModelUpdateListener>();
 	}
 	
 	@Override
 	protected void addPages() {
 		try {
 			setPartName(getEditorInput().getName());
-			addPage(fModelPage = new RModelPage(this));
-			addPage(new ModelPage(this, getModel()));
+			addPage(fModelPage = new ModelPage(this));
+			addPage(new ObsoleteModelPage(this, getModel()));
 
 		} catch (PartInitException e) {
 			ErrorDialog.openError(getSite().getShell(),

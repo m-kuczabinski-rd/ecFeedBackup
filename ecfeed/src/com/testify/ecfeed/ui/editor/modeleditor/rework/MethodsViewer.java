@@ -18,12 +18,11 @@ import com.testify.ecfeed.ui.common.ColorManager;
 import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.common.ModelUtils;
 
-public class MethodsViewerSection extends CheckboxTableViewerSection {
+public class MethodsViewer extends CheckboxTableViewerSection {
 
 	private static final int STYLE = Section.EXPANDED | Section.TITLE_BAR;
 	private ColorManager fColorManager;
 	private ClassNode fSelectedClass;
-	private BasicDetailsPage fParentPage;
 	
 	private class RemoveSelectedMethodsAdapter extends SelectionAdapter{
 		@Override
@@ -41,7 +40,7 @@ public class MethodsViewerSection extends CheckboxTableViewerSection {
 					fSelectedClass.removeMethod((MethodNode)object);
 				}
 			}
-			fParentPage.modelUpdated(MethodsViewerSection.this);
+			modelUpdated();
 		}
 	}
 	
@@ -87,9 +86,8 @@ public class MethodsViewerSection extends CheckboxTableViewerSection {
 		}
 	}
 	
-	public MethodsViewerSection(BasicDetailsPage parent, FormToolkit toolkit) {
-		super(parent, toolkit, STYLE);
-		fParentPage = parent;
+	public MethodsViewer(BasicDetailsPage parent, FormToolkit toolkit) {
+		super(parent.getMainComposite(), toolkit, STYLE, parent);
 
 		setText("Methods");
 		addButton("Remove selected", new RemoveSelectedMethodsAdapter());

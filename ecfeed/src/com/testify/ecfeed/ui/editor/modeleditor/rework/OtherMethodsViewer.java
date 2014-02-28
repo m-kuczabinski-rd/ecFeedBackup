@@ -12,11 +12,10 @@ import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.ui.common.ModelUtils;
 
-public class OtherMethodsSection extends CheckboxTableViewerSection {
+public class OtherMethodsViewer extends CheckboxTableViewerSection {
 	
 	public final static int STYLE = Section.TITLE_BAR | Section.EXPANDED;
 	private ClassNode fSelectedClass;
-	private BasicDetailsPage fParentPage;
 
 	private class AddSelectedAdapter extends SelectionAdapter{
 		@Override
@@ -26,13 +25,12 @@ public class OtherMethodsSection extends CheckboxTableViewerSection {
 					fSelectedClass.addMethod((MethodNode)object);
 				}
 			}
-			fParentPage.modelUpdated(OtherMethodsSection.this);
+			modelUpdated();
 		}
 	}
 	
-	public OtherMethodsSection(BasicDetailsPage parent, FormToolkit toolkit) {
-		super(parent, toolkit, STYLE);
-		fParentPage = parent;
+	public OtherMethodsViewer(BasicDetailsPage parent, FormToolkit toolkit) {
+		super(parent.getMainComposite(), toolkit, STYLE, parent);
 		
 		addButton("Add selected", new AddSelectedAdapter());
 	}

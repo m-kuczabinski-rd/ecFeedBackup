@@ -25,8 +25,8 @@ public class ClassDetailsPage extends BasicDetailsPage {
 
 	private ClassNode fSelectedClass;
 	private QualifiedNameForm fQualifiedNameForm;
-	private MethodsViewerSection fMethodsSection;
-	private OtherMethodsSection fOtherMethodsSection;
+	private MethodsViewer fMethodsSection;
+	private OtherMethodsViewer fOtherMethodsSection;
 	
 	private class QualifiedNameForm extends TextForm{
 
@@ -90,8 +90,8 @@ public class ClassDetailsPage extends BasicDetailsPage {
 		getMainSection().setTextClient(textClientComposite);
 		
 		addForm(fQualifiedNameForm = new QualifiedNameForm(getMainComposite(), getToolkit()));
-		addForm(fMethodsSection = new MethodsViewerSection(this, getToolkit()));
-		addForm(fOtherMethodsSection = new OtherMethodsSection(this, getToolkit()));
+		addForm(fMethodsSection = new MethodsViewer(this, getToolkit()));
+		addForm(fOtherMethodsSection = new OtherMethodsViewer(this, getToolkit()));
 		
 		getToolkit().paintBordersFor(getMainComposite());
 	}

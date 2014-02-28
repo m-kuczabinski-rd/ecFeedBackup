@@ -13,6 +13,7 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.forms.AbstractFormPart;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Section;
 
@@ -31,6 +32,12 @@ public class ModelMasterSection extends TreeViewerSection{
 	private Button fMoveUpButton;
 	private Button fMoveDownButton;
 	private RootNode fModel;
+	
+	private static class DummyUpdateListener implements IModelUpdateListener{
+		@Override
+		public void modelUpdated(AbstractFormPart source) {
+		}
+	}
 
 	private class MoveUpAdapter extends SelectionAdapter{
 		@Override
@@ -66,7 +73,7 @@ public class ModelMasterSection extends TreeViewerSection{
 	}
 
 	public ModelMasterSection(Composite parent, FormToolkit toolkit) {
-		super(null, toolkit, STYLE);
+		super(parent, toolkit, STYLE, new DummyUpdateListener());
 		fModelSelectionListeners = new ArrayList<IModelSelectionListener>();
 	}
 	
@@ -133,4 +140,5 @@ public class ModelMasterSection extends TreeViewerSection{
 	protected IBaseLabelProvider viewerLabelProvider(){
 		return new ObsoleteModelLabelProvider();
 	}
+
 }

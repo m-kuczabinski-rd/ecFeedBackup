@@ -52,8 +52,8 @@ import com.testify.ecfeed.parsers.xml.XmlModelSerializer;
 public class XmlParserSerializerTest {
 	private final int TEST_RUNS = 10;
 	
-	private final int MAX_CLASSES = 10;
-	private final int MAX_METHODS = 10;
+	private final int MAX_CLASSES = 5;
+	private final int MAX_METHODS = 5;
 	private final int MAX_CATEGORIES = 5;
 	private final int MAX_EXPECTED_CATEGORIES = 3;
 	private final int MAX_PARTITIONS = 10;

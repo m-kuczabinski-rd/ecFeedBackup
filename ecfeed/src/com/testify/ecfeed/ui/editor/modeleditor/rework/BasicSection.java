@@ -1,5 +1,8 @@
 package com.testify.ecfeed.ui.editor.modeleditor.rework;
 
+import org.eclipse.jface.viewers.DoubleClickEvent;
+import org.eclipse.jface.viewers.IDoubleClickListener;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -8,15 +11,35 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Layout;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.ui.forms.AbstractFormPart;
 import org.eclipse.ui.forms.SectionPart;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
-public class BasicSection extends SectionPart{
+import com.testify.ecfeed.model.IGenericNode;
+
+public abstract class BasicSection extends SectionPart{
 	private Composite fClientComposite;
 	private FormToolkit fToolkit;
-	BasicDetailsPage fParentPage;
 	private Control fTextClient;
+	private IModelUpdateListener fModelUpdateListener;
+
+	protected class SelectNodeDoubleClickListener implements IDoubleClickListener {
+
+		private ModelMasterSection fMasterSection;
+
+		public SelectNodeDoubleClickListener(ModelMasterSection masterSection){
+			fMasterSection = masterSection;
+		}
+		
+		@Override
+		public void doubleClick(DoubleClickEvent event) {
+			if(event.getSelection() instanceof IStructuredSelection){
+				IStructuredSelection selection = (IStructuredSelection)event.getSelection();
+				if(selection.getFirstElement() instanceof IGenericNode){
+					fMasterSection.selectElement(selection.getFirstElement());
+				}
+			}
+		}
+	}
 
 	@Override
 	public void refresh(){
@@ -25,9 +48,9 @@ public class BasicSection extends SectionPart{
 		}
 	}
 
-	public BasicSection(BasicDetailsPage parent, FormToolkit toolkit, int style) {
-		super(parent.getMainComposite(), toolkit, style);
-		fParentPage = parent;
+	public BasicSection(Composite parent, FormToolkit toolkit, int style, IModelUpdateListener updateListener) {
+		super(parent, toolkit, style);
+		fModelUpdateListener = updateListener;
 		fToolkit = toolkit;
 		createContent();
 	}
@@ -38,6 +61,10 @@ public class BasicSection extends SectionPart{
 
 	public void setText(String title){
 		getSection().setText(title);
+	}
+
+	public IModelUpdateListener getUpdateListener(){
+		return fModelUpdateListener;
 	}
 
 	protected Composite getClientComposite(){
@@ -82,11 +109,7 @@ public class BasicSection extends SectionPart{
 		return Display.getCurrent().getActiveShell();
 	}
 	
-	protected BasicDetailsPage getParentPage(){
-		return fParentPage;
-	}
-	
-	protected void modelUpdated(AbstractFormPart source){
-		fParentPage.modelUpdated(source);
+	protected void modelUpdated(){
+		getUpdateListener().modelUpdated(this);
 	}
 }
