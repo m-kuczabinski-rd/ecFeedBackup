@@ -127,7 +127,9 @@ public abstract class ViewerSection extends BasicSection {
 
 	protected Button addButton(String text, SelectionAdapter adapter){
 		Button button = getToolkit().createButton(fButtonsComposite, text, SWT.NONE);
-		button.addSelectionListener(adapter);
+		if(adapter != null){
+			button.addSelectionListener(adapter);
+		}
 		if(buttonLayoutData() != null){
 			button.setLayoutData(buttonLayoutData());
 		}

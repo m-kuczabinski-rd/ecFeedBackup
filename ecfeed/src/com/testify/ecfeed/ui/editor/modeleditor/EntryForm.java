@@ -19,8 +19,11 @@ public abstract class EntryForm extends AbstractFormPart {
 	Button fButton;
 	FormToolkit fToolkit;
 
-	public EntryForm(Composite parent, FormToolkit toolkit, String label, String buttonLabel){
+	private IModelUpdateListener fUpdateListener;
+
+	public EntryForm(Composite parent, FormToolkit toolkit, IModelUpdateListener updateListener, String label, String buttonLabel){
 		fToolkit = toolkit;
+		fUpdateListener = updateListener;
 		
 		Composite composite = toolkit.createComposite(parent);
 		composite.setLayout(new GridLayout(3, false));
@@ -55,5 +58,13 @@ public abstract class EntryForm extends AbstractFormPart {
 	
 	protected FormToolkit getToolkit(){
 		return fToolkit;
+	}
+	
+	public Button getButton(){
+		return fButton;
+	}
+	
+	public void modelUpdated(){
+		fUpdateListener.modelUpdated(this);
 	}
 }

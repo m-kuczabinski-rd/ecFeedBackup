@@ -14,9 +14,9 @@ public abstract class TextForm extends EntryForm {
 
 	Text fText;
 	
-	public TextForm(Composite parent, FormToolkit toolkit, String label,
+	public TextForm(Composite parent, FormToolkit toolkit, IModelUpdateListener updateListener, String label,
 			String buttonLabel) {
-		super(parent, toolkit, label, buttonLabel);
+		super(parent, toolkit, updateListener, label, buttonLabel);
 	}
 
 	@Override
@@ -50,6 +50,15 @@ public abstract class TextForm extends EntryForm {
 	
 	public String getText(){
 		return fText.getText();
+	}
+
+	public Text getTextControl(){
+		return fText;
+	}
+	
+	public void setEnabled(boolean enabled) {
+		fText.setEnabled(enabled);
+		getButton().setEnabled(enabled);
 	}
 
 }

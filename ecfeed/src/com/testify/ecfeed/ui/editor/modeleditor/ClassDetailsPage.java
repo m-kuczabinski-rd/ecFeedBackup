@@ -8,14 +8,13 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Text;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.forms.IFormPart;
-import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.ui.common.Messages;
@@ -24,32 +23,20 @@ import com.testify.ecfeed.ui.dialogs.TestClassSelectionDialog;
 public class ClassDetailsPage extends BasicDetailsPage {
 
 	private ClassNode fSelectedClass;
-	private QualifiedNameForm fQualifiedNameForm;
 	private MethodsViewer fMethodsSection;
 	private OtherMethodsViewer fOtherMethodsSection;
+	private Label fQualifiedNameLabel;
 	
-	private class QualifiedNameForm extends TextForm{
-
-		public QualifiedNameForm(Composite parent, FormToolkit toolkit) {
-			super(parent, toolkit, "Qualified name: ", "Reassign");
-		}
-
+	private class ReassignClassSelectionAdapter extends SelectionAdapter{
 		@Override
-		protected Control createEntry(Composite parent, int style, GridData gridData) {
-			Text text = super.createText(parent, style, gridData);
-			text.setEditable(false);
-			return text;
-		}
-
-		@Override
-		public void buttonSelected(SelectionEvent e){
+		public void widgetSelected(SelectionEvent e){
 			IType selectedClass = selectClass();
 
 			if(selectedClass != null){
 				String qualifiedName = selectedClass.getFullyQualifiedName();
 				if(fSelectedClass.getRoot().getClassModel(qualifiedName) == null){
 					fSelectedClass.setName(qualifiedName);
-					modelUpdated(this);
+					modelUpdated(null);
 				}
 				else{
 					MessageDialog.openInformation(getActiveShell(), 
@@ -68,7 +55,7 @@ public class ClassDetailsPage extends BasicDetailsPage {
 			return null;
 		}
 	}
-
+	
 	public ClassDetailsPage(ModelMasterSection masterSection) {
 		super(masterSection);
 	}
@@ -88,8 +75,8 @@ public class ClassDetailsPage extends BasicDetailsPage {
 			}
 		});
 		getMainSection().setTextClient(textClientComposite);
-		
-		addForm(fQualifiedNameForm = new QualifiedNameForm(getMainComposite(), getToolkit()));
+
+		createQualifiedNameComposite(getMainComposite());
 		addForm(fMethodsSection = new MethodsViewer(this, getToolkit()));
 		addForm(fOtherMethodsSection = new OtherMethodsViewer(this, getToolkit()));
 		
@@ -98,6 +85,17 @@ public class ClassDetailsPage extends BasicDetailsPage {
 
 	
 	
+	private void createQualifiedNameComposite(Composite parent) {
+		Composite composite = getToolkit().createComposite(parent);
+		composite.setLayout(new GridLayout(3, false));
+		composite.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
+		getToolkit().createLabel(composite, "Qualified name: ");
+		fQualifiedNameLabel = getToolkit().createLabel(composite, "");
+		fQualifiedNameLabel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
+		Button button = getToolkit().createButton(composite, "Reassign", SWT.NONE);
+		button.addSelectionListener(new ReassignClassSelectionAdapter());
+	}
+
 	@Override
 	public void selectionChanged(IFormPart part, ISelection selection) {
 		super.selectionChanged(part, selection);
@@ -112,7 +110,7 @@ public class ClassDetailsPage extends BasicDetailsPage {
 		super.refresh();
 		if(fSelectedClass != null){
 			getMainSection().setText(fSelectedClass.getLocalName());
-			fQualifiedNameForm.setText(fSelectedClass.getQualifiedName());
+			fQualifiedNameLabel.setText(fSelectedClass.getQualifiedName());
 			fMethodsSection.setInput(fSelectedClass);
 			fOtherMethodsSection.setInput(fSelectedClass);
 			getMainSection().layout();

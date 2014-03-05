@@ -11,6 +11,7 @@ import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.IGenericNode;
 import com.testify.ecfeed.model.MethodNode;
+import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.RootNode;
 
 public class ModelMasterDetailsBlock extends MasterDetailsBlock implements IModelSelectionListener{
@@ -41,6 +42,7 @@ public class ModelMasterDetailsBlock extends MasterDetailsBlock implements IMode
 		detailsPart.registerPage(ClassNode.class, new ClassDetailsPage(fMasterSection));
 		detailsPart.registerPage(MethodNode.class, new MethodDetailsPage(fMasterSection));
 		detailsPart.registerPage(CategoryNode.class, new CategoryDetailsPage(fMasterSection));
+		detailsPart.registerPage(PartitionNode.class, new PartitionDetailsPage(fMasterSection));
 
 		selectNode(getModel());
 	}

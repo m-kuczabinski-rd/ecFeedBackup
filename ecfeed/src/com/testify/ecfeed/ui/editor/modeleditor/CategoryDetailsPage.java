@@ -9,7 +9,7 @@ import com.testify.ecfeed.model.CategoryNode;
 public class CategoryDetailsPage extends BasicDetailsPage {
 
 	private CategoryNode fSelectedCategory;
-	private PartitionsViewer fPartitionsViewer;
+	private CategoryChildrenViewer fPartitionsViewer;
 
 	public CategoryDetailsPage(ModelMasterSection masterSection) {
 		super(masterSection);
@@ -19,7 +19,7 @@ public class CategoryDetailsPage extends BasicDetailsPage {
 	public void createContents(Composite parent){
 		super.createContents(parent);
 
-		addForm(fPartitionsViewer = new PartitionsViewer(this, getToolkit()));
+		addForm(fPartitionsViewer = new CategoryChildrenViewer(this, getToolkit()));
 		
 		getToolkit().paintBordersFor(getMainComposite());
 	}

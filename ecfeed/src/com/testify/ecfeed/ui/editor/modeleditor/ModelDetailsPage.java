@@ -1,9 +1,17 @@
 package com.testify.ecfeed.ui.editor.modeleditor;
 
 import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Listener;
+import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.IFormPart;
-import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import com.testify.ecfeed.model.RootNode;
 
@@ -11,38 +19,7 @@ public class ModelDetailsPage extends BasicDetailsPage {
 
 	RootNode fModel;
 	private ClassViewer fClassesSection;
-	private ModelNameForm fNameForm;
-	
-	private class ModelNameForm extends TextForm {
-
-		public ModelNameForm(Composite parent, FormToolkit toolkit) {
-			super(parent, toolkit, "Model name:", "Change");
-		}
-
-		@Override
-		protected void newText(String text) {
-			renameModel(text);
-		}
-		
-		@Override
-		public void refresh(){
-			super.refresh();
-			if(fModel != null){
-				setText(fModel.getName());
-			}
-		}
-
-		private void renameModel(String text) {
-			if(RootNode.validateModelName(text) && !fModel.getName().equals(text)){
-				fModel.setName(text);
-				modelUpdated(this);
-			}
-			else{
-				setText(fModel.getName());
-			}
-		}
-
-	}
+	private Text fModelNameText;
 	
 	public ModelDetailsPage(ModelMasterSection masterSection) {
 		super(masterSection);
@@ -52,19 +29,54 @@ public class ModelDetailsPage extends BasicDetailsPage {
 	public void createContents(Composite parent){
 		super.createContents(parent);
 		getMainSection().setText("Model details");
-		
-		addForm(fNameForm = new ModelNameForm(getMainComposite(), getToolkit()));
+
+		createModelNameEdit(getMainComposite());
 		addForm(fClassesSection = new ClassViewer(this, getToolkit()));
 
 		getToolkit().paintBordersFor(getMainComposite());
 	}
 
 
+	private void createModelNameEdit(Composite parent) {
+		Composite composite = getToolkit().createComposite(parent);
+		composite.setLayout(new GridLayout(3, false));
+		composite.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
+		getToolkit().createLabel(composite, "Model name", SWT.NONE);
+		fModelNameText = getToolkit().createText(composite, null, SWT.NONE);
+		fModelNameText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
+		fModelNameText.addListener(SWT.KeyDown, new Listener() {
+			public void handleEvent(Event event) {
+				if(event.keyCode == SWT.CR || event.keyCode == SWT.KEYPAD_CR){
+					renameModel(fModelNameText.getText());
+				}
+			}
+		});
+		Button button = getToolkit().createButton(composite, "Change", SWT.NONE);
+		button.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e){
+				renameModel(fModelNameText.getText());
+			}
+		});
+		getToolkit().paintBordersFor(composite);
+	}
+
 	@Override
 	public void selectionChanged(IFormPart part, ISelection selection) {
 		super.selectionChanged(part, selection);
 		fModel = (RootNode)getSelectedElement();
-		fNameForm.setText(fModel.getName());
+		fModelNameText.setText(fModel.getName());
 		fClassesSection.setInput(fModel);
 	}
+	
+	private void renameModel(String text) {
+		if(RootNode.validateModelName(text) && !fModel.getName().equals(text)){
+			fModel.setName(text);
+			modelUpdated(null);
+		}
+		else{
+			fModelNameText.setText(fModel.getName());
+		}
+	}
+
 }

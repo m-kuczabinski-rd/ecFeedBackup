@@ -84,7 +84,7 @@ public abstract class TableViewerSection extends ViewerSection {
 	}
 
 	protected boolean tableHeaderVisible(){
-		if(getTable().getColumns().length > 0){
+		if(getTable().getColumns().length > 1){
 			return true;
 		}
 		return false;
