@@ -17,6 +17,69 @@ import com.testify.ecfeed.model.PartitionNode;
 
 public class PartitionDetailsPage extends BasicDetailsPage {
 
+	private class PartitionNameTextListener extends ApplyChangesSelectionAdapter implements Listener{
+		@Override
+		public void handleEvent(Event event) {
+			if(event.keyCode == SWT.CR || event.keyCode == SWT.KEYPAD_CR){
+				if(applyNewPartitionName(fSelectedPartition, fPartitionNameText)){
+					modelUpdated(null);
+				}
+			}
+		}
+	}
+	
+	private class PartitionValueTextListener extends ApplyChangesSelectionAdapter implements Listener{
+		@Override
+		public void handleEvent(Event event) {
+			if(event.keyCode == SWT.CR || event.keyCode == SWT.KEYPAD_CR){
+				if(applyNewPartitionValue(fSelectedPartition, fPartitionValueText)){
+					modelUpdated(null);
+				}
+			}
+		}
+	}
+	
+	private class ApplyChangesSelectionAdapter extends SelectionAdapter{
+		@Override
+		public void widgetSelected(SelectionEvent e){
+			boolean updated = false;
+			updated |= applyNewPartitionName(fSelectedPartition, fPartitionNameText);
+			updated |= applyNewPartitionValue(fSelectedPartition, fPartitionValueText);
+			if(updated){
+				modelUpdated(null);
+			}
+		}
+		
+		protected boolean applyNewPartitionName(PartitionNode partition, Text nameText) {
+			String newName = nameText.getText(); 
+			if(newName.equals(partition.getName()) == false){
+				if(partition.getCategory().validatePartitionName(newName)){
+					partition.setName(newName);
+					return true;
+				}
+				else{
+					nameText.setText(partition.getName());
+				}
+			}
+			return false;
+		}
+
+		protected boolean applyNewPartitionValue(PartitionNode partition, Text valueText) {
+			String newValue = valueText.getText(); 
+			if(newValue.equals(partition.getValueString()) == false){
+				if(partition.getCategory().validatePartitionStringValue(newValue)){
+					Object value = partition.getCategory().getPartitionValueFromString(newValue);
+					partition.setValue(value);
+					return true;
+				}
+				else{
+					valueText.setText(partition.getValueString());
+				}
+			}
+			return false;
+		}
+	}
+	
 	private PartitionNode fSelectedPartition;
 	private PartitionChildrenViewer fPartitionChildren;
 	private PartitionLabelsViewer fLabelsViewer;
@@ -50,77 +113,22 @@ public class PartitionDetailsPage extends BasicDetailsPage {
 		getToolkit().createLabel(parent, "Name");
 		fPartitionNameText = getToolkit().createText(parent, "", SWT.NONE);
 		fPartitionNameText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
-		fPartitionNameText.addListener(SWT.KeyDown, new Listener() {
-			public void handleEvent(Event event) {
-				if(event.keyCode == SWT.CR || event.keyCode == SWT.KEYPAD_CR){
-					if(applyNewPartitionName()){
-						modelUpdated(null);
-					}
-				}
-			}
-		});
+		fPartitionNameText.addListener(SWT.KeyDown, new PartitionNameTextListener());
 		Composite buttonComposite = getToolkit().createComposite(parent);
 		buttonComposite.setLayout(new GridLayout(1, false));
 		buttonComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true, 1, 2));
 		Button applyButton = getToolkit().createButton(buttonComposite, "Change", SWT.CENTER);
-		applyButton.addSelectionListener(new SelectionAdapter(){
-			@Override
-			public void widgetSelected(SelectionEvent e){
-				boolean updated = false;
-				updated |= applyNewPartitionName();
-				updated |= applyNewPartitionValue();
-				if(updated){
-					modelUpdated(null);
-				}
-			}
-		});
+		applyButton.addSelectionListener(new ApplyChangesSelectionAdapter());
 		getToolkit().paintBordersFor(parent);
 
-	}
-
-	private boolean applyNewPartitionName() {
-		String newName = fPartitionNameText.getText(); 
-		if(newName.equals(fSelectedPartition.getName()) == false){
-			if(fSelectedPartition.getCategory().validatePartitionName(newName)){
-				fSelectedPartition.setName(newName);
-				return true;
-			}
-			else{
-				fPartitionNameText.setText(fSelectedPartition.getName());
-			}
-		}
-		return false;
 	}
 
 	private void createValueEdit(Composite parent) {
 		getToolkit().createLabel(parent, "Value");
 		fPartitionValueText = getToolkit().createText(parent, "", SWT.NONE);
 		fPartitionValueText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
-		fPartitionValueText.addListener(SWT.KeyDown, new Listener() {
-			public void handleEvent(Event event) {
-				if(event.keyCode == SWT.CR || event.keyCode == SWT.KEYPAD_CR){
-					if(applyNewPartitionValue()){
-						modelUpdated(null);
-					}
-				}
-			}
-		});
+		fPartitionValueText.addListener(SWT.KeyDown, new PartitionValueTextListener());
 		getToolkit().paintBordersFor(parent);
-	}
-
-	private boolean applyNewPartitionValue() {
-		String newValue = fPartitionValueText.getText(); 
-		if(newValue.equals(fSelectedPartition.getValueString()) == false){
-			if(fSelectedPartition.getCategory().validatePartitionStringValue(newValue)){
-				Object value = fSelectedPartition.getCategory().getPartitionValueFromString(newValue);
-				fSelectedPartition.setValue(value);
-				return true;
-			}
-			else{
-				fPartitionValueText.setText(fSelectedPartition.getValueString());
-			}
-		}
-		return false;
 	}
 
 	@Override
