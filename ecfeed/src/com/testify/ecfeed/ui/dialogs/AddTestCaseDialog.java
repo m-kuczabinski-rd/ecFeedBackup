@@ -40,15 +40,15 @@ import com.testify.ecfeed.ui.common.Constants;
 import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.common.ColorConstants;
 import com.testify.ecfeed.ui.common.ColorManager;
-import com.testify.ecfeed.ui.common.InputChangedListener;
-import com.testify.ecfeed.ui.common.TestCasePartitionEditingSupport;
+import com.testify.ecfeed.ui.common.TestDataEditorListener;
+import com.testify.ecfeed.ui.common.TestDataValueEditingSupport;
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.ExpectedValueCategoryNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.TestCaseNode;
 
-public class AddTestCaseDialog extends TitleAreaDialog implements InputChangedListener {
+public class AddTestCaseDialog extends TitleAreaDialog implements TestDataEditorListener {
 
 	private MethodNode fMethod;
 	private ArrayList<PartitionNode> fTestData;
@@ -151,7 +151,7 @@ public class AddTestCaseDialog extends TitleAreaDialog implements InputChangedLi
 				return getColor(element);
 			}
 		});
-		partitionViewerColumn.setEditingSupport(new TestCasePartitionEditingSupport(fTestDataViewer, fTestData, this));
+		partitionViewerColumn.setEditingSupport(new TestDataValueEditingSupport(fTestDataViewer, fTestData, this));
 
 		fTestDataViewer.setContentProvider(new ArrayContentProvider());
 		fTestDataViewer.setInput(fTestData);
@@ -223,7 +223,7 @@ public class AddTestCaseDialog extends TitleAreaDialog implements InputChangedLi
 	}
 
 	@Override
-	public void inputChanged() {
+	public void testDataChanged() {
 		fTestDataViewer.refresh();
 	}
 	

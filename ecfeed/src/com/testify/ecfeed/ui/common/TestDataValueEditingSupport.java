@@ -26,14 +26,14 @@ import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.ExpectedValueCategoryNode;
 import com.testify.ecfeed.model.PartitionNode;
 
-public class TestCasePartitionEditingSupport extends EditingSupport {
+public class TestDataValueEditingSupport extends EditingSupport {
 	private final TableViewer fViewer;
 	private List<PartitionNode> fTestData;
 	private ComboBoxViewerCellEditor fComboCellEditor = null;
 	private TextCellEditor fTextCellEditor;
-	private InputChangedListener fSetValueListener;
+	private TestDataEditorListener fSetValueListener;
 
-	public TestCasePartitionEditingSupport(TableViewer viewer, List<PartitionNode> testData, InputChangedListener setValueListener) {
+	public TestDataValueEditingSupport(TableViewer viewer, List<PartitionNode> testData, TestDataEditorListener setValueListener) {
 		super(viewer);
 		fViewer = viewer;
 		fTestData = testData;
@@ -89,22 +89,25 @@ public class TestCasePartitionEditingSupport extends EditingSupport {
 
 	@Override
 	protected void setValue(Object element, Object value) {
-		CategoryNode parent = ((PartitionNode)element).getCategory();
-		if(value instanceof String && parent instanceof ExpectedValueCategoryNode){
+		PartitionNode partitionElement = (PartitionNode)element;
+		CategoryNode category = partitionElement.getCategory();
+		if(value instanceof String && category instanceof ExpectedValueCategoryNode){
 			String valueString = (String)value;
-			if(parent.validatePartitionStringValue(valueString)){
-				Object newValue = parent.getPartitionValueFromString(valueString);
-				((PartitionNode)element).setValue(newValue);
+			if(category.validatePartitionStringValue(valueString)){
+				Object newValue = category.getPartitionValueFromString(valueString);
+				if(newValue.equals(partitionElement.getValue()) == false){
+					((PartitionNode)element).setValue(newValue);
+					fSetValueListener.testDataChanged();
+				}
 			}
 		}
 		else if(value instanceof PartitionNode){
-			PartitionNode partition = (PartitionNode)value;
-			int parentIndex = parent.getMethod().getCategories().indexOf(parent);
+			PartitionNode partitionValue = (PartitionNode)value;
+			int parentIndex = category.getMethod().getCategories().indexOf(category);
 			if(parentIndex >= 0 && parentIndex <= fTestData.size()){
-				fTestData.set(parentIndex, partition);
+				fTestData.set(parentIndex, partitionValue);
+				fSetValueListener.testDataChanged();
 			}
 		}
-		
-		fSetValueListener.inputChanged();
 	}
 }

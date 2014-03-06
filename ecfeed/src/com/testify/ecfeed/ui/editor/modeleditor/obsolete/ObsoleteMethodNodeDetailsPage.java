@@ -46,7 +46,7 @@ import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.common.ColorConstants;
 import com.testify.ecfeed.ui.common.ColorManager;
 import com.testify.ecfeed.ui.common.DefaultValueEditingSupport;
-import com.testify.ecfeed.ui.common.InputChangedListener;
+import com.testify.ecfeed.ui.common.TestDataEditorListener;
 import com.testify.ecfeed.ui.common.TreeCheckStateListener;
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.ConstraintNode;
@@ -66,7 +66,7 @@ import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.wb.swt.TableViewerColumnSorter;
 import org.eclipse.jface.window.Window;
 
-public class ObsoleteMethodNodeDetailsPage extends ObsoleteGenericNodeDetailsPage implements InputChangedListener{
+public class ObsoleteMethodNodeDetailsPage extends ObsoleteGenericNodeDetailsPage implements TestDataEditorListener{
 	private Label fMethodNameLabel;
 	private MethodNode fSelectedMethod;
 	private CheckboxTreeViewer fTestCasesViewer;
@@ -537,7 +537,7 @@ public class ObsoleteMethodNodeDetailsPage extends ObsoleteGenericNodeDetailsPag
 	}
 
 	@Override
-	public void inputChanged() {
+	public void testDataChanged() {
 		updateModel(fSelectedMethod);
 	}
 	

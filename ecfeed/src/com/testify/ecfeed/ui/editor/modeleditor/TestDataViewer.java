@@ -1,6 +1,9 @@
 package com.testify.ecfeed.ui.editor.modeleditor;
 
+import java.util.List;
+
 import org.eclipse.jface.viewers.ColumnLabelProvider;
+import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Section;
@@ -11,11 +14,14 @@ import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.ui.common.ColorConstants;
 import com.testify.ecfeed.ui.common.ColorManager;
+import com.testify.ecfeed.ui.common.TestDataEditorListener;
+import com.testify.ecfeed.ui.common.TestDataValueEditingSupport;
 
-public class TestDataViewer extends TableViewerSection {
+public class TestDataViewer extends TableViewerSection implements TestDataEditorListener{
 
 	private static final int STYLE = Section.EXPANDED | Section.TITLE_BAR;
-	private ColorManager fColorManager; 
+	private ColorManager fColorManager;
+	private TableViewerColumn fValueColumn; 
 	
 	public TestDataViewer(BasicDetailsPage page, FormToolkit toolkit) {
 		super(page.getMainComposite(), toolkit, STYLE, page);
@@ -38,7 +44,7 @@ public class TestDataViewer extends TableViewerSection {
 			}
 		});
 		
-		addColumn("Definition", 150, new ColumnLabelProvider(){
+		fValueColumn = addColumn("Value", 150, new ColumnLabelProvider(){
 			@Override
 			public String getText(Object element){
 				PartitionNode testValue = (PartitionNode)element;
@@ -63,7 +69,14 @@ public class TestDataViewer extends TableViewerSection {
 	}
 
 	public void setInput(TestCaseNode testCase){
-		super.setInput(testCase.getTestData());
+		List<PartitionNode> testData = testCase.getTestData();
+		super.setInput(testData);
+		fValueColumn.setEditingSupport(new TestDataValueEditingSupport(getTableViewer(), testData, this));
+	}
+
+	@Override
+	public void testDataChanged() {
+		modelUpdated();
 	}
 	
 }

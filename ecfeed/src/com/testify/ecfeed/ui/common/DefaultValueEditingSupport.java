@@ -21,9 +21,9 @@ import com.testify.ecfeed.model.ExpectedValueCategoryNode;
 
 public class DefaultValueEditingSupport extends EditingSupport {
 	private final TableViewer fViewer;
-	private InputChangedListener fSetValueListener;
+	private TestDataEditorListener fSetValueListener;
 
-	public DefaultValueEditingSupport(TableViewer viewer, InputChangedListener setValueListener) {
+	public DefaultValueEditingSupport(TableViewer viewer, TestDataEditorListener setValueListener) {
 		super(viewer);
 		fViewer = viewer;
 		fSetValueListener = setValueListener;
@@ -55,7 +55,7 @@ public class DefaultValueEditingSupport extends EditingSupport {
 			Object newValue = category.getPartitionValueFromString(valueString);
 			category.setDefaultValue(newValue);
 		}
-		fSetValueListener.inputChanged();
+		fSetValueListener.testDataChanged();
 	}
 
 }

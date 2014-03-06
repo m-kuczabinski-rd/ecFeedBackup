@@ -11,6 +11,6 @@
 
 package com.testify.ecfeed.ui.common;
 
-public interface InputChangedListener {
-	public void inputChanged();
+public interface TestDataEditorListener {
+	public void testDataChanged();
 }

@@ -29,8 +29,8 @@ import org.eclipse.ui.forms.widgets.Section;
 import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.common.ColorConstants;
 import com.testify.ecfeed.ui.common.ColorManager;
-import com.testify.ecfeed.ui.common.InputChangedListener;
-import com.testify.ecfeed.ui.common.TestCasePartitionEditingSupport;
+import com.testify.ecfeed.ui.common.TestDataEditorListener;
+import com.testify.ecfeed.ui.common.TestDataValueEditingSupport;
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.ExpectedValueCategoryNode;
 import com.testify.ecfeed.model.MethodNode;
@@ -48,7 +48,7 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.swt.layout.RowLayout;
 
-public class ObsoleteTestCaseNodeDetailsPage extends ObsoleteGenericNodeDetailsPage implements InputChangedListener{
+public class ObsoleteTestCaseNodeDetailsPage extends ObsoleteGenericNodeDetailsPage implements TestDataEditorListener{
 	private TestCaseNode fSelectedTestCase;
 	private Section fMainSection;
 	private MethodNode fParent;
@@ -213,7 +213,7 @@ public class ObsoleteTestCaseNodeDetailsPage extends ObsoleteGenericNodeDetailsP
 		fTestSuiteNameCombo.setText(fSelectedTestCase.getName());
 		List<PartitionNode> testData = fSelectedTestCase.getTestData();
 		fTestDataViewer.setInput(testData);
-		fPartitionViewerColumn.setEditingSupport(new TestCasePartitionEditingSupport(fTestDataViewer, testData, this));
+		fPartitionViewerColumn.setEditingSupport(new TestDataValueEditingSupport(fTestDataViewer, testData, this));
 	}
 
 	private void renameTestCase() {
@@ -231,7 +231,7 @@ public class ObsoleteTestCaseNodeDetailsPage extends ObsoleteGenericNodeDetailsP
 	}
 
 	@Override
-	public void inputChanged() {
+	public void testDataChanged() {
 		updateModel(fSelectedTestCase);
 	}
 }
