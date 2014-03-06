@@ -21,6 +21,10 @@ public class TestCaseNode extends GenericNode {
 		fTestData = testData;
 	}
 
+	public MethodNode getMethod() {
+		return (MethodNode)getParent();
+	}
+
 	public List<PartitionNode> getTestData(){
 		return fTestData;
 	}

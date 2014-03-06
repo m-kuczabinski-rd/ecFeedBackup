@@ -40,7 +40,6 @@ public class ExpectedValueDetailsPage extends BasicDetailsPage {
 	}
 	
 	private class DefaultValueKeydownListener extends ApplyButtonAdapter implements Listener{
-
 		@Override
 		public void handleEvent(Event event) {
 			if(event.keyCode == SWT.CR || event.keyCode == SWT.KEYPAD_CR){
@@ -49,7 +48,6 @@ public class ExpectedValueDetailsPage extends BasicDetailsPage {
 				}
 			}
 		}
-		
 	}
 	
 	public ExpectedValueDetailsPage(ModelMasterSection masterSection) {
@@ -90,6 +88,4 @@ public class ExpectedValueDetailsPage extends BasicDetailsPage {
 		getMainSection().setText(fSelectedCategory.toString());
 		fDefaultValueText.setText(fSelectedCategory.getDefaultValuePartition().getValueString());
 	}
-
-
 }
