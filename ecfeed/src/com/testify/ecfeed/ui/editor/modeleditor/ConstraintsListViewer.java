@@ -17,7 +17,7 @@ import com.testify.ecfeed.model.constraint.StaticStatement;
 import com.testify.ecfeed.ui.common.Constants;
 import com.testify.ecfeed.ui.common.Messages;
 
-public class ConstraintsViewer extends CheckboxTableViewerSection {
+public class ConstraintsListViewer extends CheckboxTableViewerSection {
 	
 	private final static int STYLE = Section.TITLE_BAR | Section.EXPANDED;
 
@@ -48,7 +48,7 @@ public class ConstraintsViewer extends CheckboxTableViewerSection {
 		}
 	}
 
-	public ConstraintsViewer(BasicDetailsPage parent, FormToolkit toolkit) {
+	public ConstraintsListViewer(BasicDetailsPage parent, FormToolkit toolkit) {
 		super(parent.getMainComposite(), toolkit, STYLE, parent);
 		GridData gd = new GridData(SWT.FILL, SWT.FILL, true, true);
 		gd.minimumHeight = 250;

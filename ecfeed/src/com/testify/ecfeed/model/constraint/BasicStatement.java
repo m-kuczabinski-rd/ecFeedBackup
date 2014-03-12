@@ -16,7 +16,7 @@ import java.util.List;
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.PartitionNode;
 
-public class BasicStatement implements IStatement {
+public abstract class BasicStatement implements IStatement {
 	BasicStatement fParent = null;
 	private static int fLastId = 0;
 	private final int fId;
@@ -28,6 +28,8 @@ public class BasicStatement implements IStatement {
 	public int getId(){
 		return fId;
 	}
+
+	public abstract String getLeftHandName();
 	
 	public BasicStatement getParent() {
 		return fParent;
@@ -86,4 +88,5 @@ public class BasicStatement implements IStatement {
 		}
 		return fId == ((BasicStatement)obj).getId();
 	}
+	
 }

@@ -21,7 +21,7 @@ public class MethodDetailsPage extends BasicDetailsPage {
 
 	private MethodNode fSelectedMethod;
 	private ParametersViewer fParemetersSection;
-	private ConstraintsViewer fConstraintsSection;
+	private ConstraintsListViewer fConstraintsSection;
 	private TestCasesViewer fTestCasesSection;
 	
 	private class ReassignAdapter extends SelectionAdapter{
@@ -71,7 +71,7 @@ public class MethodDetailsPage extends BasicDetailsPage {
 
 		createTextClient();
 		addForm(fParemetersSection = new ParametersViewer(this, getToolkit()));
-		addForm(fConstraintsSection = new ConstraintsViewer(this, getToolkit()));
+		addForm(fConstraintsSection = new ConstraintsListViewer(this, getToolkit()));
 		addForm(fTestCasesSection = new TestCasesViewer(this, getToolkit()));
 		
 		getToolkit().paintBordersFor(getMainComposite());

@@ -25,6 +25,10 @@ public class CategoryConditionStatement extends BasicStatement {
 		fCondition = condition;
 	}
 	
+	public String getLeftHandName(){
+		return fCategory.getName();
+	}
+	
 	public void setCategory(CategoryNode category){
 		fCategory= category;
 	}

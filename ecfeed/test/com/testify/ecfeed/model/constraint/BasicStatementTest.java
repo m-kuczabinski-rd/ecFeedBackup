@@ -19,10 +19,17 @@ import org.junit.Test;
 
 public class BasicStatementTest {
 
+	private class StatementImplementation extends BasicStatement{
+		@Override
+		public String getLeftHandName() {
+			return null;
+		}
+	}
+	
 	@Test
 	public void testParent() {
-		BasicStatement statement1 = new BasicStatement();
-		BasicStatement statement2 = new BasicStatement();
+		BasicStatement statement1 = new StatementImplementation();
+		BasicStatement statement2 = new StatementImplementation();
 		
 		statement2.setParent(statement1);
 		assertEquals(statement1, statement2.getParent());
@@ -31,8 +38,8 @@ public class BasicStatementTest {
 	@Test
 	public void testGetChildren() {
 		StatementArray array = new StatementArray(Operator.AND);
-		BasicStatement statement2 = new BasicStatement();
-		BasicStatement statement3 = new BasicStatement();
+		BasicStatement statement2 = new StatementImplementation();
+		BasicStatement statement3 = new StatementImplementation();
 
 		array.addStatement(statement2);
 		array.addStatement(statement3);
@@ -46,8 +53,8 @@ public class BasicStatementTest {
 	@Test
 	public void testReplaceChild() {
 		StatementArray array = new StatementArray(Operator.AND);
-		BasicStatement statement2 = new BasicStatement();
-		BasicStatement statement3 = new BasicStatement();
+		BasicStatement statement2 = new StatementImplementation();
+		BasicStatement statement3 = new StatementImplementation();
 
 		array.addStatement(statement2);
 		List<BasicStatement> children = array.getChildren();
@@ -63,8 +70,8 @@ public class BasicStatementTest {
 	@Test
 	public void testRemoveChild() {
 		StatementArray array = new StatementArray(Operator.AND);
-		BasicStatement statement2 = new BasicStatement();
-		BasicStatement statement3 = new BasicStatement();
+		BasicStatement statement2 = new StatementImplementation();
+		BasicStatement statement3 = new StatementImplementation();
 
 		array.addStatement(statement2);
 		array.addStatement(statement3);

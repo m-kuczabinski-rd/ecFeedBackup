@@ -111,12 +111,7 @@ public class CategoryNode extends GenericNode {
 	 * @return
 	 */ 
 	public boolean validatePartitionName(String name){
-		if (name == null) return false;
-		if(name.length() == 0) return false;
-		if(name.length() >= Constants.MAX_PARTITION_NAME_LENGTH) return false;
-		if(name.matches("[ ]+.*")) return false;
-		
-		return true;
+		return validateNodeName(name);
 	}
 
 	public boolean validatePartitionStringValue(String valueString){

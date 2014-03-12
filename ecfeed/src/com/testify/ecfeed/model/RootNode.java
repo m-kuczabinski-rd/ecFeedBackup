@@ -45,12 +45,7 @@ public class RootNode extends GenericNode {
 	}
 
 	public static boolean validateModelName(String name){
-		if (name == null) return false;
-		if(name.length() == 0) return false;
-		if(name.length() >= Constants.MAX_MODEL_NAME_LENGTH) return false;
-		if(name.matches("[ ]+.*")) return false;
-		
-		return true;
+		return new GenericNode("").validateNodeName(name);
 	}
 
 	public List<? extends IGenericNode> getChildren(){

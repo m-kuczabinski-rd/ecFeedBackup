@@ -327,4 +327,8 @@ public class MethodNode extends GenericNode {
 	public ClassNode getParentClass() {
 		return (ClassNode)getParent();
 	}
+
+	public boolean validateConstraintName(String name) {
+		return super.validateNodeName(name);
+	}
 }

@@ -30,7 +30,10 @@ public class StatementViewerLabelProvider extends LabelProvider {
 	
 	private Constraint fConstraint;
 
-	public StatementViewerLabelProvider(Constraint constraint){
+	public StatementViewerLabelProvider(){
+	}
+	
+	public void setConstraint(Constraint constraint){
 		fConstraint = constraint;
 	}
 	
@@ -45,11 +48,13 @@ public class StatementViewerLabelProvider extends LabelProvider {
 	}
 	
 	public Image getImage(Object element){
-		if(element == fConstraint.getPremise()){
-			return getImage("premise_statement.gif");
-		}
-		else if(element == fConstraint.getConsequence()){
-			return getImage("consequence_statement.gif");
+		if(fConstraint != null){
+			if(element == fConstraint.getPremise()){
+				return getImage("premise_statement.gif");
+			}
+			else if(element == fConstraint.getConsequence()){
+				return getImage("consequence_statement.gif");
+			}
 		}
 		return null;
 	}

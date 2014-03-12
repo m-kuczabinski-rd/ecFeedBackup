@@ -26,6 +26,10 @@ public class StatementArray extends BasicStatement{
 		fOperator = operator;
 	}
 
+	public String getLeftHandName(){
+		return fOperator == Operator.AND?Operator.AND.toString():Operator.OR.toString();
+	}
+
 	public Operator getOperator(){
 		return fOperator;
 	}

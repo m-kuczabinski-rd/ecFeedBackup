@@ -9,6 +9,7 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.ClassNode;
+import com.testify.ecfeed.model.ConstraintNode;
 import com.testify.ecfeed.model.ExpectedValueCategoryNode;
 import com.testify.ecfeed.model.IGenericNode;
 import com.testify.ecfeed.model.MethodNode;
@@ -46,6 +47,7 @@ public class ModelMasterDetailsBlock extends MasterDetailsBlock implements IMode
 		detailsPart.registerPage(CategoryNode.class, new CategoryDetailsPage(fMasterSection));
 		detailsPart.registerPage(ExpectedValueCategoryNode.class, new ExpectedValueDetailsPage(fMasterSection));
 		detailsPart.registerPage(TestCaseNode.class, new TestCaseDetailsPage(fMasterSection));
+		detailsPart.registerPage(ConstraintNode.class, new ConstraintDetailsPage(fMasterSection));
 		detailsPart.registerPage(PartitionNode.class, new PartitionDetailsPage(fMasterSection));
 
 		selectNode(getModel());
