@@ -181,6 +181,10 @@ public class PartitionNode extends GenericNode {
 		return fPartitions.size() != 0;
 	}
 	
+	public boolean is(PartitionNode partition){
+		return this.isDescendant(partition) || this == (partition);
+	}
+	
 	public boolean isAncestor(PartitionNode partition) {
 		for(PartitionNode child : fPartitions){
 			if(child == partition || child.isAncestor(partition)){

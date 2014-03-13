@@ -16,27 +16,31 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import nu.xom.*;
+import nu.xom.Builder;
+import nu.xom.Document;
+import nu.xom.Element;
+import nu.xom.Elements;
+import nu.xom.Node;
+import nu.xom.ParsingException;
 
 import com.testify.ecfeed.model.CategoryNode;
-import com.testify.ecfeed.model.constraint.BasicStatement;
-import com.testify.ecfeed.model.constraint.Constraint;
-import com.testify.ecfeed.model.constraint.LabelStatement;
-import com.testify.ecfeed.model.constraint.Operator;
-import com.testify.ecfeed.model.constraint.Relation;
-import com.testify.ecfeed.model.constraint.PartitionStatement;
-import com.testify.ecfeed.model.constraint.StatementArray;
-import com.testify.ecfeed.model.constraint.StaticStatement;
+import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.ConstraintNode;
 import com.testify.ecfeed.model.ExpectedValueCategoryNode;
+import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.RootNode;
-import com.testify.ecfeed.model.ClassNode;
-import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.TestCaseNode;
+import com.testify.ecfeed.model.constraint.BasicStatement;
+import com.testify.ecfeed.model.constraint.ConditionStatement;
+import com.testify.ecfeed.model.constraint.Constraint;
+import com.testify.ecfeed.model.constraint.Operator;
+import com.testify.ecfeed.model.constraint.Relation;
+import com.testify.ecfeed.model.constraint.StatementArray;
+import com.testify.ecfeed.model.constraint.StaticStatement;
+import com.testify.ecfeed.parsers.Constants;
 import com.testify.ecfeed.parsers.IModelParser;
 import com.testify.ecfeed.parsers.ParserException;
-import com.testify.ecfeed.parsers.Constants;
 
 public class XmlModelParser implements IModelParser{
 	
@@ -206,7 +210,7 @@ public class XmlModelParser implements IModelParser{
 		String relationName = getAttributeValue(element, Constants.STATEMENT_RELATION_ATTRIBUTE_NAME);
 		Relation relation = getRalation(relationName);
 		
-		return new PartitionStatement(category, relation, partition);
+		return new ConditionStatement(category, relation, partition); 
 	}
 	
 	protected BasicStatement parseLabelStatement(Element element, MethodNode method) throws ParserException {
@@ -220,7 +224,7 @@ public class XmlModelParser implements IModelParser{
 		}
 		Relation relation = getRalation(relationName);
 		
-		return new LabelStatement(category, relation, label);
+		return new ConditionStatement(category, relation, label);
 	}
 
 	protected Relation getRalation(String relationName) throws ParserException{

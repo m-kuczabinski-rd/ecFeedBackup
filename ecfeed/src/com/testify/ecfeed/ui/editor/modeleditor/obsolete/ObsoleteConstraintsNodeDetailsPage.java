@@ -47,12 +47,10 @@ import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.ConstraintNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.constraint.BasicStatement;
-import com.testify.ecfeed.model.constraint.CategoryConditionStatement;
+import com.testify.ecfeed.model.constraint.ConditionStatement;
 import com.testify.ecfeed.model.constraint.Constraint;
-import com.testify.ecfeed.model.constraint.LabelStatement;
 import com.testify.ecfeed.model.constraint.Operator;
 import com.testify.ecfeed.model.constraint.Relation;
-import com.testify.ecfeed.model.constraint.PartitionStatement;
 import com.testify.ecfeed.model.constraint.StatementArray;
 import com.testify.ecfeed.model.constraint.StaticStatement;
 import com.testify.ecfeed.ui.common.Messages;
@@ -237,8 +235,8 @@ public class ObsoleteConstraintsNodeDetailsPage extends ObsoleteGenericNodeDetai
 		fStatementEditComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
 		
 		createStatementCombo(fStatementEditComposite, editedStatement);
-		if(editedStatement instanceof CategoryConditionStatement){
-			CategoryConditionStatement conditionStatement = (CategoryConditionStatement)editedStatement;
+		if(editedStatement instanceof ConditionStatement){
+			ConditionStatement conditionStatement = (ConditionStatement)editedStatement;
 			createRelationCombo(fStatementEditComposite, conditionStatement);
 			createConditionCombo(fStatementEditComposite, conditionStatement);
 		}
@@ -277,14 +275,14 @@ public class ObsoleteConstraintsNodeDetailsPage extends ObsoleteGenericNodeDetai
 				return STATEMENT_OR;
 			}
 		}
-		else if(statement instanceof CategoryConditionStatement){
-			CategoryConditionStatement conditionStatement = (CategoryConditionStatement)statement;
+		else if(statement instanceof ConditionStatement){
+			ConditionStatement conditionStatement = (ConditionStatement)statement;
 			return conditionStatement.getCategory().getName();
 		}
 		return STATEMENT_EMPTY;
 	}
 
-	private void createRelationCombo(Composite parent, CategoryConditionStatement statement) {
+	private void createRelationCombo(Composite parent, ConditionStatement statement) {
 		fRelationCombo = new ComboViewer(parent, SWT.READ_ONLY).getCombo();
 		fRelationCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		fToolkit.paintBordersFor(fRelationCombo);
@@ -297,8 +295,8 @@ public class ObsoleteConstraintsNodeDetailsPage extends ObsoleteGenericNodeDetai
 		fRelationCombo.addModifyListener(new ModifyListener() {
 			@Override
 			public void modifyText(ModifyEvent e) {
-				if(fSelectedStatement instanceof CategoryConditionStatement){
-					CategoryConditionStatement statement = (CategoryConditionStatement)fSelectedStatement;
+				if(fSelectedStatement instanceof ConditionStatement){
+					ConditionStatement statement = (ConditionStatement)fSelectedStatement;
 					statement.setRelation(Relation.getRelation(fRelationCombo.getText()));
 					updateModel(fSelectedConstraint);
 				}
@@ -306,7 +304,7 @@ public class ObsoleteConstraintsNodeDetailsPage extends ObsoleteGenericNodeDetai
 		});
 	}
 
-	private void createConditionCombo(Composite parent, CategoryConditionStatement statement) {
+	private void createConditionCombo(Composite parent, ConditionStatement statement) {
 		fConditionCombo = new ComboViewer(parent, SWT.READ_ONLY).getCombo();
 		fConditionCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		fToolkit.paintBordersFor(fConditionCombo);
@@ -323,17 +321,17 @@ public class ObsoleteConstraintsNodeDetailsPage extends ObsoleteGenericNodeDetai
 		fConditionCombo.addModifyListener(new ModifyListener() {
 			@Override
 			public void modifyText(ModifyEvent e) {
-				CategoryConditionStatement conditionStatement = (CategoryConditionStatement)fSelectedStatement;
+				ConditionStatement conditionStatement = (ConditionStatement)fSelectedStatement;
 				String newText = fConditionCombo.getText();
 				CategoryNode category = conditionStatement.getCategory();
 				Relation relation = conditionStatement.getRelation();
 				Object condition = getNewCondition(category, newText);
-				CategoryConditionStatement newStatement = null;
+				ConditionStatement newStatement = null;
 				if(condition instanceof String){
-					newStatement = new LabelStatement(category, relation, (String)condition);
+					newStatement = new ConditionStatement(category, relation, (String)condition);
 				}
 				else if(condition instanceof PartitionNode){
-					newStatement = new PartitionStatement(category, relation, (PartitionNode)condition);
+					newStatement = new ConditionStatement(category, relation, (PartitionNode)condition);
 				}
 				
 				replaceSelectedStatement(newStatement);
@@ -402,7 +400,7 @@ public class ObsoleteConstraintsNodeDetailsPage extends ObsoleteGenericNodeDetai
 		else{
 			CategoryNode category = fSelectedConstraint.getMethod().getCategory(newValue);
 			if(category != null){
-				return new PartitionStatement(category, Relation.EQUAL, category.getPartitions().get(0));
+				return new ConditionStatement(category, Relation.EQUAL, category.getPartitions().get(0));
 			}
 		}
 		return null;

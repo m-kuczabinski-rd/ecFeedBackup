@@ -11,22 +11,18 @@
 
 package com.testify.ecfeed.model;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Test;
 
-import com.testify.ecfeed.model.CategoryNode;
-import com.testify.ecfeed.model.ConstraintNode;
-import com.testify.ecfeed.model.ExpectedValueCategoryNode;
-import com.testify.ecfeed.model.MethodNode;
-import com.testify.ecfeed.model.PartitionNode;
-import com.testify.ecfeed.model.TestCaseNode;
+import com.testify.ecfeed.model.constraint.ConditionStatement;
 import com.testify.ecfeed.model.constraint.Constraint;
 import com.testify.ecfeed.model.constraint.Relation;
-import com.testify.ecfeed.model.constraint.PartitionStatement;
 import com.testify.ecfeed.model.constraint.StaticStatement;
 
 public class MethodNodeTest {
@@ -259,7 +255,7 @@ public class MethodNodeTest {
 		MethodNode method = new MethodNode("method");
 		CategoryNode category = new CategoryNode("category", "type");
 		PartitionNode partition = new PartitionNode("partition", 0);
-		Constraint mentioningConstraint = new Constraint(new PartitionStatement(category, Relation.EQUAL, partition), new StaticStatement(false));
+		Constraint mentioningConstraint = new Constraint(new ConditionStatement(category, Relation.EQUAL, partition), new StaticStatement(false));
 		Constraint notMentioningConstraint = new Constraint(new StaticStatement(false), new StaticStatement(false));
 		ConstraintNode mentioningConstraintNode = new ConstraintNode("constraint", mentioningConstraint);
 		ConstraintNode notMentioningConstraintNode = new ConstraintNode("constraint", notMentioningConstraint);
@@ -314,7 +310,7 @@ public class MethodNodeTest {
 		MethodNode method = new MethodNode("method");
 		CategoryNode category = new CategoryNode("category", "type");
 		PartitionNode partition = new PartitionNode("partition", "value");
-		Constraint mentioningConstraint = new Constraint(new PartitionStatement(category, Relation.EQUAL, partition), new StaticStatement(false));
+		Constraint mentioningConstraint = new Constraint(new ConditionStatement(category, Relation.EQUAL, partition), new StaticStatement(false));
 		Constraint notMentioningConstraint = new Constraint(new StaticStatement(false), new StaticStatement(false));
 		ConstraintNode mentioningConstraintNode = new ConstraintNode("constraint", mentioningConstraint);
 		ConstraintNode notMentioningConstraintNode = new ConstraintNode("constraint", notMentioningConstraint);
@@ -344,7 +340,7 @@ public class MethodNodeTest {
 		MethodNode method = new MethodNode("method");
 		CategoryNode category = new CategoryNode("category", "type");
 		PartitionNode partition = new PartitionNode("partition", "value");
-		Constraint mentioningConstraint = new Constraint(new PartitionStatement(category, Relation.EQUAL, partition), new StaticStatement(false));
+		Constraint mentioningConstraint = new Constraint(new ConditionStatement(category, Relation.EQUAL, partition), new StaticStatement(false));
 		Constraint notMentioningConstraint = new Constraint(new StaticStatement(false), new StaticStatement(false));
 		ConstraintNode mentioningConstraintNode = new ConstraintNode("constraint", mentioningConstraint);
 		ConstraintNode notMentioningConstraintNode = new ConstraintNode("constraint", notMentioningConstraint);
@@ -373,7 +369,7 @@ public class MethodNodeTest {
 		MethodNode method = new MethodNode("method");
 		CategoryNode category = new CategoryNode("category", "type");
 		PartitionNode partition = new PartitionNode("partition", "value");
-		Constraint mentioningConstraint = new Constraint(new PartitionStatement(category, Relation.EQUAL, partition), new StaticStatement(false));
+		Constraint mentioningConstraint = new Constraint(new ConditionStatement(category, Relation.EQUAL, partition), new StaticStatement(false));
 		Constraint notMentioningConstraint = new Constraint(new StaticStatement(false), new StaticStatement(false));
 		ConstraintNode mentioningConstraintNode = new ConstraintNode("constraint", mentioningConstraint);
 		ConstraintNode notMentioningConstraintNode = new ConstraintNode("constraint", notMentioningConstraint);

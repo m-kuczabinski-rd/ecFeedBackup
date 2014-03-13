@@ -28,11 +28,9 @@ import com.testify.ecfeed.model.ConstraintNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.constraint.BasicStatement;
-import com.testify.ecfeed.model.constraint.CategoryConditionStatement;
+import com.testify.ecfeed.model.constraint.ConditionStatement;
 import com.testify.ecfeed.model.constraint.Constraint;
-import com.testify.ecfeed.model.constraint.LabelStatement;
 import com.testify.ecfeed.model.constraint.Operator;
-import com.testify.ecfeed.model.constraint.PartitionStatement;
 import com.testify.ecfeed.model.constraint.Relation;
 import com.testify.ecfeed.model.constraint.StatementArray;
 import com.testify.ecfeed.model.constraint.StaticStatement;
@@ -41,8 +39,8 @@ public class ConstraintViewer extends TreeViewerSection {
 
 	private final static int STYLE = Section.TITLE_BAR | Section.EXPANDED;
 	
-	private final String STATEMENT_FALSE = new StaticStatement(true).getLeftHandName();
-	private final String STATEMENT_TRUE = new StaticStatement(false).getLeftHandName();;
+	private final String STATEMENT_FALSE = new StaticStatement(false).getLeftHandName();
+	private final String STATEMENT_TRUE = new StaticStatement(true).getLeftHandName();;
 	private final String STATEMENT_AND = new StatementArray(Operator.AND).getLeftHandName();
 	private final String STATEMENT_OR = new StatementArray(Operator.OR).getLeftHandName();
 	
@@ -59,29 +57,44 @@ public class ConstraintViewer extends TreeViewerSection {
 	
 	private Button fAddStatementButton;
 	private Button fRemoveStatementButton;
+	
+	private boolean fStatementEditListenersEnabled;
 
 	private Composite fStatementEditComposite;
 
 	private class AddStatementAdapter extends SelectionAdapter{
 		@Override 
 		public void widgetSelected(SelectionEvent e){
-			
+			BasicStatement newStatement = new StaticStatement(true); 
+			fSelectedStatement.addStatement(newStatement);
+			modelUpdated();
+			//modelUpdated must be called before to refresh viewer before selecting the newly added statement
+			getTreeViewer().expandToLevel(newStatement, 1);
+			getTreeViewer().setSelection(new StructuredSelection(newStatement));
 		}
 	}
 	
 	private class RemoveStatementAdapter extends SelectionAdapter{
 		@Override 
 		public void widgetSelected(SelectionEvent e){
-			
+			BasicStatement parentStatement = fSelectedStatement.getParent();
+			if(parentStatement != null){
+				parentStatement.removeChild(fSelectedStatement);
+				getViewer().setSelection(new StructuredSelection(parentStatement));
+				modelUpdated();
+			}
 		}
 	}
 	
 	private class ModifyRelationListener implements ModifyListener{
 		@Override
 		public void modifyText(ModifyEvent e) {
-			CategoryConditionStatement catStatement = (CategoryConditionStatement)fSelectedStatement;
-			if(catStatement.getRelation().toString().equals(fRelationCombo.getText()) == false){
-				catStatement.setRelation(Relation.getRelation(fRelationCombo.getText()));
+			if(fStatementEditListenersEnabled == false){
+				return;
+			}
+			ConditionStatement statement = (ConditionStatement)fSelectedStatement;
+			if(statement.getRelation().toString().equals(fRelationCombo.getText()) == false){
+				statement.setRelation(Relation.getRelation(fRelationCombo.getText()));
 				modelUpdated();
 			}
 		}
@@ -90,9 +103,20 @@ public class ConstraintViewer extends TreeViewerSection {
 	private class ModifyConditionListener implements ModifyListener{
 		@Override
 		public void modifyText(ModifyEvent e) {
-			CategoryConditionStatement catStatement = (CategoryConditionStatement)fSelectedStatement;
-			if(catStatement.getConditionName().equals(fConditionCombo.getText()) == false){
-				replaceSelectedStatement(createStatementFromCombo());
+			if(fStatementEditListenersEnabled == false){
+				return;
+			}
+			ConditionStatement statement = (ConditionStatement)fSelectedStatement;
+			if(statement.getConditionName().equals(fConditionCombo.getText()) == false){
+				String conditionText = fConditionCombo.getText();
+				PartitionNode partition = statement.getCategory().getPartition(conditionText);
+				if(partition != null){//text in the combo is a partition name
+					statement.setCondition(partition);
+				}
+				else{//text in the combo is a label
+					statement.setCondition(conditionText);
+				}
+				modelUpdated();
 			}
 		}
 	}
@@ -100,9 +124,36 @@ public class ConstraintViewer extends TreeViewerSection {
 	private class StatementModifyListener implements ModifyListener{
 		@Override
 		public void modifyText(ModifyEvent e) {
+			if(fStatementEditListenersEnabled == false){
+				return;
+			}
 			if(fSelectedStatement.getLeftHandName().equals(fStatementCombo.getText()) == false){
 				replaceSelectedStatement(createStatementFromCombo());
 			} 	
+		}
+
+		private BasicStatement createStatementFromCombo() {
+			BasicStatement statement;
+			if(fStatementCombo.getText().equals(STATEMENT_TRUE)){
+				statement = new StaticStatement(true);
+			}
+			else if(fStatementCombo.getText().equals(STATEMENT_FALSE)){
+				statement = new StaticStatement(false);
+			}
+			else if (fStatementCombo.getText().equals(STATEMENT_AND)){
+				statement = new StatementArray(Operator.AND);
+			}
+			else if(fStatementCombo.getText().equals(STATEMENT_OR)){
+				statement = new StatementArray(Operator.OR);
+			}
+			else{
+				MethodNode method = fSelectedConstraint.getMethod();
+				CategoryNode category = method.getCategory(fStatementCombo.getText());
+				Relation relation = Relation.EQUAL; 
+				PartitionNode condition = category.getPartitions().get(0);
+				statement = new ConditionStatement(category, relation, condition);
+			}
+			return statement;
 		}
 	}
 	
@@ -127,59 +178,35 @@ public class ConstraintViewer extends TreeViewerSection {
 		}
 
 		private void refreshStatementEditPart(BasicStatement statement) {
+			fStatementEditListenersEnabled = false;
 			refreshStatementCombo(statement);
-			if(statement instanceof CategoryConditionStatement){
-				refreshRelationCombo((CategoryConditionStatement)statement);
-				refreshConditionCombo((CategoryConditionStatement)statement);
+			if(statement instanceof ConditionStatement){
+				refreshRelationCombo((ConditionStatement)statement);
+				refreshConditionCombo((ConditionStatement)statement);
 			}
 			else{
 				fRelationCombo.setVisible(false);
 				fConditionCombo.setVisible(false);
 			}
+			fStatementEditListenersEnabled = true;
 		}
 
 		private void refreshStatementCombo(BasicStatement statement) {
-			List<String> items = new ArrayList<String>();
-			items.addAll(Arrays.asList(FIXED_STATEMENTS));
-			String text = "";
-			if(statement instanceof CategoryConditionStatement){
-				CategoryConditionStatement catStatement = (CategoryConditionStatement)statement;
-				items.addAll(catStatement.getCategory().getMethod().getCategoriesNames());
-				text = catStatement.getCategory().getName();
-			}
-			if(statement instanceof StaticStatement){
-				text = ((StaticStatement)statement).getValue()?STATEMENT_TRUE:STATEMENT_FALSE;
-			}
-			if(statement instanceof StatementArray){
-				Operator operator = ((StatementArray)statement).getOperator();
-				if(operator == Operator.AND){
-					text = STATEMENT_AND;
-				}
-				else{
-					text = STATEMENT_OR;
-				}
-			}
-			fStatementCombo.setItems(items.toArray(new String[]{}));
-			fStatementCombo.setText(text);
+			fStatementCombo.setText(statement.getLeftHandName());
 		}
 
-		private void refreshRelationCombo(CategoryConditionStatement statement) {
+		private void refreshRelationCombo(ConditionStatement statement) {
 			fRelationCombo.setVisible(true);
 			fRelationCombo.setText(statement.getRelation().toString());
 		}
 
-		private void refreshConditionCombo(CategoryConditionStatement statement) {
+		private void refreshConditionCombo(ConditionStatement statement) {
 			fConditionCombo.setVisible(true);
-			fConditionCombo.setText(statement.getCondition().toString());
-			if(statement.getCondition() instanceof String){//LABEL
-				fConditionCombo.setItems(statement.getCategory().getAllPartitionLabels().toArray(new String[]{}));
-				fConditionCombo.setText(statement.getCondition().toString());
-			}
-			else if(statement.getCondition() instanceof PartitionNode){
-				fConditionCombo.setItems(statement.getCategory().getAllPartitionNames().toArray(new String[]{}));
-				PartitionNode condition = (PartitionNode)statement.getCondition();
-				fConditionCombo.setText(condition.getQualifiedName());
-			}
+			List<String> items = new ArrayList<String>();
+			items.addAll(statement.getCategory().getAllPartitionNames());
+			items.addAll(statement.getCategory().getAllPartitionLabels());
+			fConditionCombo.setItems(items.toArray(new String[]{}));
+			fConditionCombo.setText(statement.getConditionName());
 		}
 	}
 	
@@ -210,8 +237,8 @@ public class ConstraintViewer extends TreeViewerSection {
 	}
 
 	private void createRelationCombo() {
-		fRelationCombo = new ComboViewer(fStatementEditComposite, SWT.CENTER|SWT.READ_ONLY).getCombo();
-		fRelationCombo.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
+		fRelationCombo = new ComboViewer(fStatementEditComposite, SWT.READ_ONLY).getCombo();
+		fRelationCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false));
 		fRelationCombo.setItems(new String[]{Relation.EQUAL.toString(), Relation.NOT.toString()});
 		fRelationCombo.addModifyListener(new ModifyRelationListener());
 	}
@@ -238,29 +265,6 @@ public class ConstraintViewer extends TreeViewerSection {
 		getViewer().setSelection(new StructuredSelection(newStatement));
 	}
 
-	private BasicStatement createStatementFromCombo() {
-		if(fStatementCombo.getText().equals(STATEMENT_TRUE)){
-			return new StaticStatement(true);
-		}
-		else if(fStatementCombo.getText().equals(STATEMENT_FALSE)){
-			return new StaticStatement(false);
-		}
-		else if (fStatementCombo.getText().equals(STATEMENT_AND)){
-			return new StatementArray(Operator.AND);
-		}
-		else if(fStatementCombo.getText().equals(STATEMENT_OR)){
-			return new StatementArray(Operator.OR);
-		}
-		MethodNode method = fSelectedConstraint.getMethod();
-		CategoryNode category = method.getCategory(fStatementCombo.getText());
-		Relation relation = Relation.getRelation(fRelationCombo.getText());
-		Object condition = category.getPartition(fConditionCombo.getText());
-		if(condition != null){
-			return new PartitionStatement(category, relation, (PartitionNode)condition);
-		}
-		return new LabelStatement(category, relation, fConditionCombo.getText());
-	}
-
 	@Override
 	protected boolean buttonsBelow(){
 		return false;
@@ -271,7 +275,6 @@ public class ConstraintViewer extends TreeViewerSection {
 	protected IContentProvider viewerContentProvider() {
 		return new StatementViewerContentProvider();
 	}
-
 
 	@Override
 	protected IBaseLabelProvider viewerLabelProvider() {
@@ -284,7 +287,17 @@ public class ConstraintViewer extends TreeViewerSection {
 	public void setInput(ConstraintNode constraintNode){
 		super.setInput(constraintNode.getConstraint());
 		fSelectedConstraint = constraintNode;
+		
 		fStatementLabelProvider.setConstraint(constraintNode.getConstraint());
+
+		fStatementEditListenersEnabled = false;
+		List<String> items = new ArrayList<String>();
+		items.addAll(Arrays.asList(FIXED_STATEMENTS));
+		items.addAll(fSelectedConstraint.getMethod().getCategoriesNames());
+		fStatementCombo.setItems(items.toArray(new String[]{}));
+		fStatementEditListenersEnabled = true;
+
+		getTreeViewer().expandAll();
 		getViewer().setSelection(new StructuredSelection(fSelectedConstraint.getConstraint().getPremise()));
 	}
 }

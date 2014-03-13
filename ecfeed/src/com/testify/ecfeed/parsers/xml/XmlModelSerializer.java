@@ -16,24 +16,26 @@ import java.io.OutputStream;
 import java.util.List;
 import java.util.Set;
 
-import com.testify.ecfeed.model.IGenericNode;
-import com.testify.ecfeed.model.RootNode;
-import com.testify.ecfeed.model.ClassNode;
-import com.testify.ecfeed.model.MethodNode;
+import nu.xom.Attribute;
+import nu.xom.Document;
+import nu.xom.Element;
+import nu.xom.Serializer;
+
 import com.testify.ecfeed.model.CategoryNode;
-import com.testify.ecfeed.model.PartitionNode;
-import com.testify.ecfeed.model.ExpectedValueCategoryNode;
-import com.testify.ecfeed.model.TestCaseNode;
+import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.ConstraintNode;
+import com.testify.ecfeed.model.ExpectedValueCategoryNode;
+import com.testify.ecfeed.model.IGenericNode;
+import com.testify.ecfeed.model.MethodNode;
+import com.testify.ecfeed.model.PartitionNode;
+import com.testify.ecfeed.model.RootNode;
+import com.testify.ecfeed.model.TestCaseNode;
+import com.testify.ecfeed.model.constraint.ConditionStatement;
 import com.testify.ecfeed.model.constraint.Constraint;
 import com.testify.ecfeed.model.constraint.IStatement;
-import com.testify.ecfeed.model.constraint.LabelStatement;
-import com.testify.ecfeed.model.constraint.PartitionStatement;
 import com.testify.ecfeed.model.constraint.StatementArray;
 import com.testify.ecfeed.model.constraint.StaticStatement;
 import com.testify.ecfeed.parsers.Constants;
-
-import nu.xom.*;
 
 public class XmlModelSerializer {
 	private OutputStream fOutputStream;
@@ -214,38 +216,32 @@ public class XmlModelSerializer {
 			
 			element.appendChild(statementElement);
 		}
-		else if(istatement instanceof PartitionStatement){
-			PartitionStatement statement = (PartitionStatement)istatement;
-			Element statementElement = new Element(Constants.CONSTRAINT_PARTITION_STATEMENT_NODE_NAME);
-			PartitionNode condition = statement.getPartitionCondition();
-			String categoryName = condition.getCategory().getName();
-			Attribute categoryAttribute = 
-					new Attribute(Constants.STATEMENT_CATEGORY_ATTRIBUTE_NAME, categoryName);
-			Attribute partitionAttribute = 
-					new Attribute(Constants.STATEMENT_PARTITION_ATTRIBUTE_NAME, condition.getQualifiedName());
-			Attribute relationAttribute = 
-					new Attribute(Constants.STATEMENT_RELATION_ATTRIBUTE_NAME, statement.getRelation().toString());
-			statementElement.addAttribute(categoryAttribute);
-			statementElement.addAttribute(partitionAttribute);
-			statementElement.addAttribute(relationAttribute);
-
-			element.appendChild(statementElement);
-		}
-		else if(istatement instanceof LabelStatement){
-			LabelStatement statement = (LabelStatement)istatement;
-			Element statementElement = new Element(Constants.CONSTRAINT_LABEL_STATEMENT_NODE_NAME);
-			String label = statement.getLabelCondition();
+		else if(istatement instanceof ConditionStatement){
+			ConditionStatement statement = (ConditionStatement)istatement;
 			String categoryName = statement.getCategory().getName();
 			Attribute categoryAttribute = 
 					new Attribute(Constants.STATEMENT_CATEGORY_ATTRIBUTE_NAME, categoryName);
-			Attribute partitionAttribute = 
-					new Attribute(Constants.STATEMENT_LABEL_ATTRIBUTE_NAME, label);
 			Attribute relationAttribute = 
 					new Attribute(Constants.STATEMENT_RELATION_ATTRIBUTE_NAME, statement.getRelation().toString());
+			Object condition = statement.getConditionValue();
+			Element statementElement = null;
+			if(condition instanceof String){
+				String label = (String)condition;
+				statementElement = new Element(Constants.CONSTRAINT_LABEL_STATEMENT_NODE_NAME);
+				statementElement.addAttribute(new Attribute(Constants.STATEMENT_LABEL_ATTRIBUTE_NAME, label));
+			}
+			else if(condition instanceof PartitionNode){
+				PartitionNode partition = (PartitionNode)condition;
+				statementElement = new Element(Constants.CONSTRAINT_PARTITION_STATEMENT_NODE_NAME);
+				statementElement.addAttribute(new Attribute(Constants.STATEMENT_PARTITION_ATTRIBUTE_NAME, partition.getQualifiedName()));
+			}
+//TODO implement exceptions for unsupported types			
+//			else{
+//				throw new ParserException("Unknown statement condition type");
+//			}
 			statementElement.addAttribute(categoryAttribute);
-			statementElement.addAttribute(partitionAttribute);
 			statementElement.addAttribute(relationAttribute);
-
+			
 			element.appendChild(statementElement);
 		}
 	}

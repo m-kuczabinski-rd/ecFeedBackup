@@ -11,7 +11,9 @@
 
 package com.testify.ecfeed.parsers;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -39,11 +41,10 @@ import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.model.constraint.BasicStatement;
+import com.testify.ecfeed.model.constraint.ConditionStatement;
 import com.testify.ecfeed.model.constraint.Constraint;
-import com.testify.ecfeed.model.constraint.LabelStatement;
 import com.testify.ecfeed.model.constraint.Operator;
 import com.testify.ecfeed.model.constraint.Relation;
-import com.testify.ecfeed.model.constraint.PartitionStatement;
 import com.testify.ecfeed.model.constraint.StatementArray;
 import com.testify.ecfeed.model.constraint.StaticStatement;
 import com.testify.ecfeed.parsers.xml.XmlModelParser;
@@ -114,6 +115,48 @@ public class XmlParserSerializerTest {
 			XmlModelSerializer serializer = new XmlModelSerializer(ostream);
 			XmlModelParser parser = new XmlModelParser();
 			serializer.writeXmlDocument(root);
+			ByteArrayInputStream istream = new ByteArrayInputStream(ostream.toByteArray());
+			RootNode parsedModel = parser.parseModel(istream);
+			compareModels(root, parsedModel);
+		}
+		catch (IOException e) {
+			fail("Unexpected exception");
+		} catch (ParserException e) {
+			fail("Unexpected exception: " + e.getMessage());
+		}
+	}
+	
+	@Test
+	public void parseConditionStatementTest(){
+		try{
+			RootNode root = new RootNode("root");
+			ClassNode classNode = new ClassNode("classNode");
+			MethodNode method = new MethodNode("method");
+			CategoryNode category = new CategoryNode("category", com.testify.ecfeed.model.Constants.TYPE_NAME_STRING);
+			PartitionNode partition = new PartitionNode("partition", "p");
+			List<PartitionNode> testData = new ArrayList<PartitionNode>();
+			testData.add(partition);
+			TestCaseNode testCase = new TestCaseNode("test", testData);
+			Constraint partitionConstraint = new Constraint(new StaticStatement(true), 
+					new ConditionStatement(category, Relation.EQUAL, partition));
+			Constraint labelConstraint = new Constraint(new StaticStatement(true), 
+					new ConditionStatement(category, Relation.EQUAL, "label"));
+			ConstraintNode partitionConstraintNode = new ConstraintNode("partition constraint", partitionConstraint);
+			ConstraintNode labelConstraintNode = new ConstraintNode("label constraint", labelConstraint);
+
+			root.addClass(classNode);
+			classNode.addMethod(method);
+			method.addCategory(category);
+			category.addPartition(partition);
+			method.addTestCase(testCase);
+			method.addConstraint(labelConstraintNode);
+			method.addConstraint(partitionConstraintNode);
+
+			ByteArrayOutputStream ostream = new ByteArrayOutputStream();
+			XmlModelSerializer serializer = new XmlModelSerializer(ostream);
+			XmlModelParser parser = new XmlModelParser();
+			serializer.writeXmlDocument(root);
+//			System.out.println(ostream.toString());
 			ByteArrayInputStream istream = new ByteArrayInputStream(ostream.toByteArray());
 			RootNode parsedModel = parser.parseModel(istream);
 			compareModels(root, parsedModel);
@@ -318,7 +361,7 @@ public class XmlParserSerializerTest {
 			category.getPartitions().get(0).addLabel(label);
 		}
 		Relation relation = pickRelation();
-		return new LabelStatement(category, relation, label);
+		return new ConditionStatement(category, relation, label);
 	}
 
 	private BasicStatement createPartitionStatement(List<? extends CategoryNode> categories) {
@@ -329,7 +372,7 @@ public class XmlParserSerializerTest {
 		CategoryNode category = basicCategories.get(rand.nextInt(basicCategories.size()));
 		PartitionNode partition = category.getLeafPartitions().get(rand.nextInt(category.getPartitions().size()));
 		Relation relation = pickRelation();
-		return new PartitionStatement(category, relation, partition);
+		return new ConditionStatement(category, relation, partition);
 	}
 
 	private Relation pickRelation() {
@@ -498,11 +541,8 @@ public class XmlParserSerializerTest {
 		if(statement1 instanceof StaticStatement && statement2 instanceof StaticStatement){
 			compareStaticStatements((StaticStatement)statement1, (StaticStatement)statement2);
 		}
-		else if(statement1 instanceof PartitionStatement && statement2 instanceof PartitionStatement){
-			compareStatements((PartitionStatement)statement1, (PartitionStatement)statement2);
-		}
-		else if(statement1 instanceof LabelStatement && statement2 instanceof LabelStatement){
-			compareLabelStatements((LabelStatement)statement1, (LabelStatement)statement2);
+		else if(statement1 instanceof ConditionStatement && statement2 instanceof ConditionStatement){
+			compareRelationStatements((ConditionStatement)statement1, (ConditionStatement)statement2);
 		}
 		else if(statement1 instanceof StatementArray && statement2 instanceof StatementArray){
 			compareStatementArrays((StatementArray)statement1, (StatementArray)statement2);
@@ -512,15 +552,26 @@ public class XmlParserSerializerTest {
 		}
 	}
 
-	private void compareLabelStatements(LabelStatement statement1, LabelStatement statement2) {
+	private void compareRelationStatements(ConditionStatement statement1, ConditionStatement statement2) {
 		compareCategories(statement1.getCategory(), statement2.getCategory());
 		if((statement1.getRelation() != statement2.getRelation())){
 			fail("Compared statements have different relations: " + 
 					statement1.getRelation() + " and " + statement2.getRelation());
 		}
-		if(statement1.getCondition().equals(statement2.getCondition()) == false){
-			fail("Compared statements have different label conditions" + 
-					statement1.getCondition() + " and " + statement2.getCondition());
+		compareConditions(statement1.getConditionValue(), statement2.getConditionValue());
+	}
+
+	private void compareConditions(Object condition, Object condition2) {
+		if(condition instanceof String && condition2 instanceof String){
+			if(condition.equals(condition2) == false){
+				fail("Compared labels are different: " + condition + "!=" + condition2);
+			}
+		}
+		else if(condition instanceof PartitionNode && condition2 instanceof PartitionNode){
+			comparePartitions((PartitionNode)condition, (PartitionNode)condition2);
+		}
+		else{
+			fail("Unknown or not same types of compared conditions");
 		}
 	}
 
@@ -531,13 +582,6 @@ public class XmlParserSerializerTest {
 		compareSizes(array1.getChildren(), array2.getChildren());
 		for(int i = 0; i < array1.getChildren().size(); ++i){
 			compareBasicStatements(array1.getChildren().get(i), array2.getChildren().get(i));
-		}
-	}
-
-	private void compareStatements(PartitionStatement statement1, PartitionStatement statement2) {
-		comparePartitions(statement1.getPartitionCondition(), statement2.getPartitionCondition());
-		if(statement1.getRelation() != statement2.getRelation()){
-			fail("Relations in compared statements differ");
 		}
 	}
 
