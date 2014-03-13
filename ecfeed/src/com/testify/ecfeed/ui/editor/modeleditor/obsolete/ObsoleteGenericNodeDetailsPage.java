@@ -36,12 +36,12 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Section;
 
 import com.testify.ecfeed.model.IGenericNode;
-import com.testify.ecfeed.ui.editor.EcMultiPageEditor;
+import com.testify.ecfeed.ui.editor.ModelEditor;
 
 public class ObsoleteGenericNodeDetailsPage implements IDetailsPage, ObsoleteIModelUpdateListener {
 
 	private IManagedForm fManagedForm;
-	private EcMultiPageEditor fEditor;
+	private ModelEditor fEditor;
 	private ObsoleteModelMasterDetailsBlock fParentBlock;
 	protected FormToolkit fToolkit;
 	protected IGenericNode fSelectedNode;
@@ -154,7 +154,7 @@ public class ObsoleteGenericNodeDetailsPage implements IDetailsPage, ObsoleteIMo
 		return fManagedForm;
 	}
 	
-	public EcMultiPageEditor getEditor(){
+	public ModelEditor getEditor(){
 		return fEditor;
 	}
 	

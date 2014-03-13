@@ -40,11 +40,10 @@ import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.parsers.ParserException;
 import com.testify.ecfeed.parsers.xml.XmlModelParser;
 import com.testify.ecfeed.parsers.xml.XmlModelSerializer;
-import com.testify.ecfeed.ui.editor.modeleditor.ModelPage;
 import com.testify.ecfeed.ui.editor.modeleditor.obsolete.ObsoleteIModelUpdateListener;
 import com.testify.ecfeed.ui.editor.modeleditor.obsolete.ObsoleteModelPage;
 
-public class EcMultiPageEditor extends FormEditor implements IModelWrapper{
+public class ModelEditor extends FormEditor implements IModelWrapper{
 	
 	public static String ID = "com.testify.ecfeed.ui.editors.EcMultiPageEditor";
 
@@ -82,7 +81,7 @@ public class EcMultiPageEditor extends FormEditor implements IModelWrapper{
 		return root;
 	}
 
-	public EcMultiPageEditor() {
+	public ModelEditor() {
 		super();
 		fModelUpdateListeners = new HashSet<ObsoleteIModelUpdateListener>();
 	}

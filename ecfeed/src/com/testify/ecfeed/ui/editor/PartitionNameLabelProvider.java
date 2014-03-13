@@ -1,4 +1,4 @@
-package com.testify.ecfeed.ui.editor.modeleditor;
+package com.testify.ecfeed.ui.editor;
 
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.swt.graphics.Color;

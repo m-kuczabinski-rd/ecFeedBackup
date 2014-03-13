@@ -1,4 +1,4 @@
-package com.testify.ecfeed.ui.editor.modeleditor;
+package com.testify.ecfeed.ui.editor;
 
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jface.dialogs.IDialogConstants;

@@ -9,7 +9,7 @@
  *     Patryk Chamuczynski (p.chamuczynski(at)radytek.com) - initial implementation
  ******************************************************************************/
 
-package com.testify.ecfeed.ui.editor.modeleditor;
+package com.testify.ecfeed.ui.editor;
 
 import java.util.ArrayList;
 import java.util.Collection;

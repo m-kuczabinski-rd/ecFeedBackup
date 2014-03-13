@@ -1,4 +1,4 @@
-package com.testify.ecfeed.ui.editor.modeleditor;
+package com.testify.ecfeed.ui.editor;
 
 import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.jface.viewers.ISelection;

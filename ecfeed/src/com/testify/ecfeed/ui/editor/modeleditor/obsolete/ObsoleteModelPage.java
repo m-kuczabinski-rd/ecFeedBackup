@@ -18,7 +18,7 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
 
 import com.testify.ecfeed.model.RootNode;
-import com.testify.ecfeed.ui.editor.EcMultiPageEditor;
+import com.testify.ecfeed.ui.editor.ModelEditor;
 
 public class ObsoleteModelPage extends FormPage{
 	
@@ -34,7 +34,7 @@ public class ObsoleteModelPage extends FormPage{
 	 * @param id
 	 * @param title
 	 */
-	public ObsoleteModelPage(EcMultiPageEditor editor, RootNode model) {
+	public ObsoleteModelPage(ModelEditor editor, RootNode model) {
 		super(editor, ID, TITLE);
 		fModel = model;
 		fBlock = new ObsoleteModelMasterDetailsBlock(editor, model);

@@ -42,7 +42,7 @@ import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.TestCaseNode;
-import com.testify.ecfeed.ui.editor.EcMultiPageEditor;
+import com.testify.ecfeed.ui.editor.ModelEditor;
 
 import org.eclipse.swt.layout.GridData;
 
@@ -50,7 +50,7 @@ public class ObsoleteModelMasterDetailsBlock extends MasterDetailsBlock implemen
 
 	private FormToolkit fToolkit;
 	private RootNode fModel;
-	private EcMultiPageEditor fEditor;
+	private ModelEditor fEditor;
 	private SectionPart fMasterSectionPart;
 	private Section fMasterSection;
 	private TreeViewer fTreeViewer;
@@ -62,7 +62,7 @@ public class ObsoleteModelMasterDetailsBlock extends MasterDetailsBlock implemen
 	/**
 	 * Create the master details block.
 	 */
-	public ObsoleteModelMasterDetailsBlock(EcMultiPageEditor editor, RootNode model) {
+	public ObsoleteModelMasterDetailsBlock(ModelEditor editor, RootNode model) {
 		fEditor = editor;
 		fModel = model;
 		fEditor.registerModelUpdateListener(this);
@@ -201,7 +201,7 @@ public class ObsoleteModelMasterDetailsBlock extends MasterDetailsBlock implemen
 		fSelectedNode = node;
 	}
 
-	public EcMultiPageEditor getEditor() {
+	public ModelEditor getEditor() {
 		return fEditor;
 	}
 	

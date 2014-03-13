@@ -1,19 +1,18 @@
-package com.testify.ecfeed.ui.editor.modeleditor;
+package com.testify.ecfeed.ui.editor;
 
 import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.editor.FormPage;
 
 import com.testify.ecfeed.model.RootNode;
-import com.testify.ecfeed.ui.editor.EcMultiPageEditor;
 
 public class ModelPage extends FormPage {
 	private static final String ID = "com.testify.ecfeed.pages.refactored";
 	private static final String TITLE = "refactored";
 
 	private ModelMasterDetailsBlock fBlock;
-	private EcMultiPageEditor fEditor;
+	private ModelEditor fEditor;
 
-	public ModelPage(EcMultiPageEditor editor) {
+	public ModelPage(ModelEditor editor) {
 		super(editor, ID, TITLE);
 		fEditor = editor;
 		fBlock = new ModelMasterDetailsBlock(this);

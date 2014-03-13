@@ -35,7 +35,7 @@ import com.testify.ecfeed.ui.common.Constants;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.parsers.xml.XmlModelSerializer;
 import com.testify.ecfeed.ui.common.Messages;
-import com.testify.ecfeed.ui.editor.EcMultiPageEditor;
+import com.testify.ecfeed.ui.editor.ModelEditor;
 
 public class NewEcFileWizard extends Wizard implements INewWizard {
 	
@@ -89,7 +89,7 @@ public class NewEcFileWizard extends Wizard implements INewWizard {
 			//open new file in an ect editor
 			IWorkbenchPage page =  PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
 
-			page.openEditor(new FileEditorInput(file), EcMultiPageEditor.ID);
+			page.openEditor(new FileEditorInput(file), ModelEditor.ID);
 		} catch (CoreException | IOException e) {
 			e.printStackTrace();
 		}

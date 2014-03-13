@@ -1,4 +1,4 @@
-package com.testify.ecfeed.ui.editor.modeleditor;
+package com.testify.ecfeed.ui.editor;
 
 import java.lang.reflect.Method;
 import java.util.Collection;

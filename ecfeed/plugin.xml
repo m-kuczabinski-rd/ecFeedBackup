@@ -19,7 +19,7 @@
    <extension
          point="org.eclipse.ui.editors">
       <editor
-            class="com.testify.ecfeed.ui.editor.EcMultiPageEditor"
+            class="com.testify.ecfeed.ui.editor.ModelEditor"
             extensions="ect"
             icon="icons/root_node.gif"
             id="com.testify.ecfeed.ui.editors.EcMultiPageEditor"
