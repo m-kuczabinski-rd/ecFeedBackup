@@ -80,7 +80,6 @@ public class ModelEditor extends FormEditor implements IModelWrapper{
 		try {
 			setPartName(getEditorInput().getName());
 			addPage(fModelPage = new ModelPage(this));
-//			addPage(new ObsoleteModelPage(this, getModel()));
 
 		} catch (PartInitException e) {
 			ErrorDialog.openError(getSite().getShell(),
