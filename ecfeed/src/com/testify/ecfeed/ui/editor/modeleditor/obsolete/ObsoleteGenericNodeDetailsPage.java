@@ -69,7 +69,7 @@ public class ObsoleteGenericNodeDetailsPage implements IDetailsPage, ObsoleteIMo
 		fParentBlock = parentBlock;
 		fEditor = parentBlock.getEditor();;
 		if(fEditor != null){
-			fEditor.registerModelUpdateListener(this);
+//			fEditor.registerModelUpdateListener(this);
 		}
 		VIEWERS_GRID_DATA = new GridData(SWT.FILL, SWT.FILL, true, true);
 		VIEWERS_GRID_DATA.heightHint = 100;

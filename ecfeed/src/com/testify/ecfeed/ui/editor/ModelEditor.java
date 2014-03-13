@@ -13,8 +13,6 @@ package com.testify.ecfeed.ui.editor;
 
 import java.io.FileOutputStream;
 import java.io.InputStream;
-import java.util.HashSet;
-import java.util.Set;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
@@ -40,22 +38,14 @@ import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.parsers.ParserException;
 import com.testify.ecfeed.parsers.xml.XmlModelParser;
 import com.testify.ecfeed.parsers.xml.XmlModelSerializer;
-import com.testify.ecfeed.ui.editor.modeleditor.obsolete.ObsoleteIModelUpdateListener;
-import com.testify.ecfeed.ui.editor.modeleditor.obsolete.ObsoleteModelPage;
 
 public class ModelEditor extends FormEditor implements IModelWrapper{
 	
 	public static String ID = "com.testify.ecfeed.ui.editors.EcMultiPageEditor";
 
 	private RootNode fModel;
-	private Set<ObsoleteIModelUpdateListener> fModelUpdateListeners;
-
 	private ModelPage fModelPage;
 
-	public void registerModelUpdateListener(ObsoleteIModelUpdateListener listener){
-		fModelUpdateListeners.add(listener);
-	}
-	
 	public RootNode getModel(){
 		if (fModel == null){
 			fModel = createModel();
@@ -83,7 +73,6 @@ public class ModelEditor extends FormEditor implements IModelWrapper{
 
 	public ModelEditor() {
 		super();
-		fModelUpdateListeners = new HashSet<ObsoleteIModelUpdateListener>();
 	}
 	
 	@Override

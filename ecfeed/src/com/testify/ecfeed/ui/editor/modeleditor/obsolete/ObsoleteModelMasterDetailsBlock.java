@@ -65,7 +65,7 @@ public class ObsoleteModelMasterDetailsBlock extends MasterDetailsBlock implemen
 	public ObsoleteModelMasterDetailsBlock(ModelEditor editor, RootNode model) {
 		fEditor = editor;
 		fModel = model;
-		fEditor.registerModelUpdateListener(this);
+//		fEditor.registerModelUpdateListener(this);
 	}
 
 	/**
