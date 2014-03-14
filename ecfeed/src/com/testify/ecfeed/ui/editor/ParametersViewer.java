@@ -13,8 +13,10 @@ import com.testify.ecfeed.model.ExpectedValueCategoryNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.ui.common.ColorConstants;
 import com.testify.ecfeed.ui.common.ColorManager;
+import com.testify.ecfeed.ui.common.DefaultValueEditingSupport;
+import com.testify.ecfeed.ui.common.TestDataEditorListener;
 
-public class ParametersViewer extends TableViewerSection{
+public class ParametersViewer extends TableViewerSection implements TestDataEditorListener{
 
 	private final static int STYLE = Section.TWISTIE | Section.TITLE_BAR;
 	private final String EMPTY_STRING = "";
@@ -74,6 +76,7 @@ public class ParametersViewer extends TableViewerSection{
 				return getColor(element);
 			}
 		});
+		fDefaultValueColumn.setEditingSupport(new DefaultValueEditingSupport(getTableViewer(), this));
 	}
 		
 	public void setInput(MethodNode method){
@@ -98,6 +101,11 @@ public class ParametersViewer extends TableViewerSection{
 			fDefaultValueColumn.getColumn().setWidth(150);
 			fDefaultValueColumn.getColumn().setResizable(true);
 		}
+	}
+
+	@Override
+	public void testDataChanged() {
+		modelUpdated();
 	}
 
 }
