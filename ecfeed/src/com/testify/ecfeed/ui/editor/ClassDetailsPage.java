@@ -3,7 +3,6 @@ package com.testify.ecfeed.ui.editor;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -14,7 +13,6 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.ui.forms.IFormPart;
 
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.ui.common.Messages;
@@ -97,17 +95,10 @@ public class ClassDetailsPage extends BasicDetailsPage {
 	}
 
 	@Override
-	public void selectionChanged(IFormPart part, ISelection selection) {
-		super.selectionChanged(part, selection);
+	public void refresh(){
 		if(getSelectedElement() instanceof ClassNode){
 			fSelectedClass = (ClassNode)getSelectedElement();
 		}
-		refresh();
-	}
-	
-	@Override
-	public void refresh(){
-		super.refresh();
 		if(fSelectedClass != null){
 			getMainSection().setText(fSelectedClass.getLocalName());
 			fQualifiedNameLabel.setText(fSelectedClass.getQualifiedName());

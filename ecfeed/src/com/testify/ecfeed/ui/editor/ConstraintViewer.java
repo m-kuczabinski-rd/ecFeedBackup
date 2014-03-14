@@ -128,12 +128,15 @@ public class ConstraintViewer extends TreeViewerSection {
 				return;
 			}
 			if(fSelectedStatement.getLeftHandName().equals(fStatementCombo.getText()) == false){
-				replaceSelectedStatement(createStatementFromCombo());
+				BasicStatement statement = createStatementFromCombo();
+				if(statement != null){
+					replaceSelectedStatement(statement);
+				}
 			} 	
 		}
 
 		private BasicStatement createStatementFromCombo() {
-			BasicStatement statement;
+			BasicStatement statement = null;
 			if(fStatementCombo.getText().equals(STATEMENT_TRUE)){
 				statement = new StaticStatement(true);
 			}
@@ -150,8 +153,10 @@ public class ConstraintViewer extends TreeViewerSection {
 				MethodNode method = fSelectedConstraint.getMethod();
 				CategoryNode category = method.getCategory(fStatementCombo.getText());
 				Relation relation = Relation.EQUAL; 
-				PartitionNode condition = category.getPartitions().get(0);
-				statement = new ConditionStatement(category, relation, condition);
+				if(category != null){
+					PartitionNode condition = category.getPartitions().get(0);
+					statement = new ConditionStatement(category, relation, condition);
+				}
 			}
 			return statement;
 		}
@@ -295,9 +300,14 @@ public class ConstraintViewer extends TreeViewerSection {
 		items.addAll(Arrays.asList(FIXED_STATEMENTS));
 		items.addAll(fSelectedConstraint.getMethod().getCategoriesNames());
 		fStatementCombo.setItems(items.toArray(new String[]{}));
+		if(fSelectedStatement != null){
+			fStatementCombo.setText(fSelectedStatement.getLeftHandName());
+		}
 		fStatementEditListenersEnabled = true;
 
 		getTreeViewer().expandAll();
-		getViewer().setSelection(new StructuredSelection(fSelectedConstraint.getConstraint().getPremise()));
+		if(getSelectedElement() == null){
+			getViewer().setSelection(new StructuredSelection(fSelectedConstraint.getConstraint().getPremise()));
+		}
 	}
 }

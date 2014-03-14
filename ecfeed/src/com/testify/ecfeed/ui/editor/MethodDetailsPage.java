@@ -3,14 +3,12 @@ package com.testify.ecfeed.ui.editor;
 import java.util.List;
 
 import org.eclipse.jface.dialogs.IDialogConstants;
-import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.ui.forms.IFormPart;
 
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.ExpectedValueCategoryNode;
@@ -90,22 +88,15 @@ public class MethodDetailsPage extends BasicDetailsPage {
 	}
 
 	@Override
-	public void selectionChanged(IFormPart part, ISelection selection) {
-		super.selectionChanged(part, selection);
+	public void refresh(){
 		if(getSelectedElement() instanceof MethodNode){
 			fSelectedMethod = (MethodNode)getSelectedElement();
 		}
-		refresh();
-	}
-	
-	@Override
-	public void refresh(){
 		if(fSelectedMethod != null){
 			getMainSection().setText(fSelectedMethod.toString());
 			fParemetersSection.setInput(fSelectedMethod);
 			fConstraintsSection.setInput(fSelectedMethod);
 			fTestCasesSection.setInput(fSelectedMethod);
 		}
-		super.refresh();
 	}
 }

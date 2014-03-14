@@ -1,6 +1,5 @@
 package com.testify.ecfeed.ui.editor;
 
-import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -11,7 +10,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.ui.forms.IFormPart;
 
 import com.testify.ecfeed.model.RootNode;
 
@@ -61,14 +59,6 @@ public class ModelDetailsPage extends BasicDetailsPage {
 		getToolkit().paintBordersFor(composite);
 	}
 
-	@Override
-	public void selectionChanged(IFormPart part, ISelection selection) {
-		super.selectionChanged(part, selection);
-		fModel = (RootNode)getSelectedElement();
-		fModelNameText.setText(fModel.getName());
-		fClassesSection.setInput(fModel);
-	}
-	
 	private void renameModel(String text) {
 		if(RootNode.validateModelName(text) && !fModel.getName().equals(text)){
 			fModel.setName(text);
@@ -78,5 +68,17 @@ public class ModelDetailsPage extends BasicDetailsPage {
 			fModelNameText.setText(fModel.getName());
 		}
 	}
+
+	@Override
+	public void refresh() {
+		if(getSelectedElement() instanceof RootNode){
+			fModel = (RootNode)getSelectedElement();
+		}
+		if(fModel != null){
+			fModelNameText.setText(fModel.getName());
+			fClassesSection.setInput(fModel);
+		}
+	}
+	
 
 }

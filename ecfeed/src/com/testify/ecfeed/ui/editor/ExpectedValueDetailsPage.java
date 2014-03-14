@@ -1,6 +1,5 @@
 package com.testify.ecfeed.ui.editor;
 
-import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -11,7 +10,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.ui.forms.IFormPart;
 
 import com.testify.ecfeed.model.ExpectedValueCategoryNode;
 
@@ -72,19 +70,12 @@ public class ExpectedValueDetailsPage extends BasicDetailsPage {
 		getToolkit().paintBordersFor(composite);
 		applyButton.addSelectionListener(new ApplyButtonAdapter());
 	}
-
-	@Override
-	public void selectionChanged(IFormPart part, ISelection selection) {
-		super.selectionChanged(part, selection);
-		if(getSelectedElement() instanceof ExpectedValueCategoryNode){
-			fSelectedCategory = (ExpectedValueCategoryNode)getSelectedElement();
-		}
-		refresh();
-	}
 	
 	@Override
 	public void refresh(){
-		super.refresh();
+		if(getSelectedElement() instanceof ExpectedValueCategoryNode){
+			fSelectedCategory = (ExpectedValueCategoryNode)getSelectedElement();
+		}
 		getMainSection().setText(fSelectedCategory.toString());
 		fDefaultValueText.setText(fSelectedCategory.getDefaultValuePartition().getValueString());
 	}

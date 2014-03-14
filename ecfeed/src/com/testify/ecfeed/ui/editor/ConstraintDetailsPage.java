@@ -1,7 +1,6 @@
 package com.testify.ecfeed.ui.editor;
 
 import org.eclipse.jface.viewers.ComboViewer;
-import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -12,7 +11,6 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
-import org.eclipse.ui.forms.IFormPart;
 
 import com.testify.ecfeed.model.ConstraintNode;
 
@@ -76,23 +74,16 @@ public class ConstraintDetailsPage extends BasicDetailsPage {
 	}
 
 	@Override
-	public void selectionChanged(IFormPart part, ISelection selection) {
-		super.selectionChanged(part, selection);
+	public void refresh(){
 		if(getSelectedElement() instanceof ConstraintNode){
 			fSelectedConstraint = (ConstraintNode)getSelectedElement();
-			fConstraintViewer.setInput(fSelectedConstraint);
 		}
-		refresh();
-	}
-
-	@Override
-	public void refresh(){
 		if(fSelectedConstraint != null){
 			getMainSection().setText(fSelectedConstraint.toString());
 			fNameCombo.setItems(fSelectedConstraint.getMethod().getConstraintsNames().toArray(new String[]{}));
 			fNameCombo.setText(fSelectedConstraint.getName());
+			fConstraintViewer.setInput(fSelectedConstraint);
 		}
-		super.refresh();
 	}
 
 

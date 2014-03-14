@@ -1,6 +1,5 @@
 package com.testify.ecfeed.ui.editor;
 
-import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -11,7 +10,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.ui.forms.IFormPart;
 
 import com.testify.ecfeed.model.PartitionNode;
 
@@ -132,17 +130,10 @@ public class PartitionDetailsPage extends BasicDetailsPage {
 	}
 
 	@Override
-	public void selectionChanged(IFormPart part, ISelection selection) {
-		super.selectionChanged(part, selection);
+	public void refresh(){
 		if(getSelectedElement() instanceof PartitionNode){
 			fSelectedPartition = (PartitionNode)getSelectedElement();
 		}
-		refresh();
-	}
-	
-	@Override
-	public void refresh(){
-		super.refresh();
 		if(fSelectedPartition != null){
 			getMainSection().setText(fSelectedPartition.toString());
 			fPartitionChildren.setInput(fSelectedPartition);
@@ -158,5 +149,4 @@ public class PartitionDetailsPage extends BasicDetailsPage {
 			}
 		}
 	}
-
 }

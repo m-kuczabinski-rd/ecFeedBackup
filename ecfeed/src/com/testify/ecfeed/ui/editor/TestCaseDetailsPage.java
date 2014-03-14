@@ -2,7 +2,6 @@ package com.testify.ecfeed.ui.editor;
 
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ComboViewer;
-import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -13,7 +12,6 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
-import org.eclipse.ui.forms.IFormPart;
 
 import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.ui.common.Messages;
@@ -83,22 +81,15 @@ public class TestCaseDetailsPage extends BasicDetailsPage {
 	}
 
 	@Override
-	public void selectionChanged(IFormPart part, ISelection selection) {
-		super.selectionChanged(part, selection);
+	public void refresh(){
 		if(getSelectedElement() instanceof TestCaseNode){
 			fSelectedTestCase = (TestCaseNode)getSelectedElement();
-			refresh();
 		}
-	}
-	
-	@Override
-	public void refresh(){
 		if(fSelectedTestCase != null){
 			getMainSection().setText(fSelectedTestCase.toString());
 			fTestSuiteNameCombo.setItems(fSelectedTestCase.getMethod().getTestSuites().toArray(new String[]{}));
 			fTestSuiteNameCombo.setText(fSelectedTestCase.getName());
 			fTestDataSection.setInput(fSelectedTestCase);
 		}
-		super.refresh();
 	}
 }
