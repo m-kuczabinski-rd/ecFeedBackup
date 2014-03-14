@@ -166,7 +166,12 @@ public class ModelUtils {
 			if(parameterModel == null){
 				return null;
 			}
-			methodNode.addCategory(parameterModel);
+			if(parameterModel instanceof ExpectedValueCategoryNode){
+				methodNode.addCategory((ExpectedValueCategoryNode)parameterModel);
+			}
+			else{
+				methodNode.addCategory(parameterModel);
+			}
 		}
 		return methodNode;
 	}
