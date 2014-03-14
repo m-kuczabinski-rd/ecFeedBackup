@@ -169,8 +169,8 @@ public class TestCasesViewer extends CheckboxTreeViewerSection {
 	
 	@Override
 	//Put buttons next to the viewer instead below
-	protected boolean buttonsBelow(){
-		return false;
+	protected int buttonsPosition(){
+		return BUTTONS_ASIDE;
 	}
 	
 	@Override

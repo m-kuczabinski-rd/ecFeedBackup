@@ -271,8 +271,8 @@ public class ConstraintViewer extends TreeViewerSection {
 	}
 
 	@Override
-	protected boolean buttonsBelow(){
-		return false;
+	protected int buttonsPosition(){
+		return BUTTONS_ASIDE;
 	}
 
 

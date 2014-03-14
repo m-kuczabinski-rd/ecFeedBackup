@@ -48,7 +48,7 @@ public abstract class ViewerSection extends BasicSection {
 	
 	@Override 
 	protected Layout clientLayout() {
-		GridLayout layout = new GridLayout(buttonsBelow()?1:2, false);
+		GridLayout layout = new GridLayout(buttonsPosition() == BUTTONS_BELOW?1:2, false);
 		return layout;
 	}
 
@@ -73,8 +73,8 @@ public abstract class ViewerSection extends BasicSection {
 	 * Indicates whether optional buttons are located below (default)
 	 * or on the left side of the viewer
 	 */
-	protected boolean buttonsBelow() {
-		return true;
+	protected int buttonsPosition() {
+		return BUTTONS_BELOW;
 	}
 
 	protected Composite createViewerComposite(Composite parent) {
@@ -106,7 +106,7 @@ public abstract class ViewerSection extends BasicSection {
 	}
 	
 	protected Layout buttonsCompositeLayout() {
-		if(buttonsBelow()){
+		if(buttonsPosition() == BUTTONS_BELOW){
 			RowLayout rl = new RowLayout();
 			rl.pack = false;
 			return rl;
@@ -117,7 +117,7 @@ public abstract class ViewerSection extends BasicSection {
 	}
 
 	protected Object buttonsCompositeLayoutData() {
-		if(buttonsBelow()){
+		if(buttonsPosition() == BUTTONS_BELOW){
 			return null;
 		}
 		else{
@@ -137,7 +137,7 @@ public abstract class ViewerSection extends BasicSection {
 	}
 	
 	protected Object buttonLayoutData() {
-		if(buttonsBelow() == false){
+		if(buttonsPosition() == BUTTONS_ASIDE){
 			return new GridData(SWT.FILL,  SWT.TOP, true, false);
 		}
 		return null;
