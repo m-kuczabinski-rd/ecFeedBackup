@@ -18,7 +18,7 @@ import com.testify.ecfeed.model.RootNode;
 
 public class ModelPage extends FormPage {
 	private static final String ID = "com.testify.ecfeed.pages.refactored";
-	private static final String TITLE = "refactored";
+	private static final String TITLE = "model";
 
 	private ModelMasterDetailsBlock fBlock;
 	private ModelEditor fEditor;
