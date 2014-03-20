@@ -14,6 +14,7 @@ package com.testify.ecfeed.model.constraint;
 import java.util.List;
 
 import com.testify.ecfeed.model.CategoryNode;
+import com.testify.ecfeed.model.ExpectedValueCategoryNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
 
@@ -102,6 +103,37 @@ public class ConditionStatement extends BasicStatement {
 		}
 	}
 	
+	private class ExpectedValueCondition implements ICondition{
+		Object fExpectedValue;
+
+		public ExpectedValueCondition(Object condition){
+			fExpectedValue = condition;
+		}
+
+		@Override
+		public Object getCondition() {
+			return fExpectedValue;
+		}
+
+		@Override
+		public boolean evaluate(List<PartitionNode> values) {
+			MethodNode methodAncestor = fCategory.getMethod();
+			int categoryIndex = methodAncestor.getCategories().indexOf(fCategory);
+
+			if(values.size() < categoryIndex + 1){
+				return false;
+			}
+			PartitionNode partition = values.get(categoryIndex);
+			return fExpectedValue.equals(partition.getValue());
+		}
+		
+		@Override
+		public String toString(){
+			return fExpectedValue.toString();
+		}
+	}
+
+	
 	public ConditionStatement(CategoryNode category, Relation relation, String labelCondition){
 		fCategory = category;
 		fRelation = relation;
@@ -114,8 +146,14 @@ public class ConditionStatement extends BasicStatement {
 		fCondition = new PartitionCondition(partitionCondition);
 	}
 	
+	public ConditionStatement(ExpectedValueCategoryNode category, Relation relation, Object condition){
+		fCategory = category;
+		fRelation = relation;
+		fCondition = new ExpectedValueCondition(condition); 
+	}
+	
 	public void setCategory(CategoryNode category){
-		fCategory= category;
+		fCategory = category;
 	}
 	
 	public CategoryNode getCategory(){
@@ -136,6 +174,10 @@ public class ConditionStatement extends BasicStatement {
 	
 	public void setCondition(PartitionNode partition){
 		fCondition = new PartitionCondition(partition);
+	}
+	
+	public void setCondition(Object condition){
+		fCondition = new ExpectedValueCondition(condition);
 	}
 	
 	public Object getConditionValue(){
