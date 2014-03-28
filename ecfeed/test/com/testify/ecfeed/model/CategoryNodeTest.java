@@ -11,23 +11,20 @@
 
 package com.testify.ecfeed.model;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 import java.util.Set;
 
 import org.junit.Test;
 
-import com.testify.ecfeed.model.CategoryNode;
-import com.testify.ecfeed.model.IGenericNode;
-import com.testify.ecfeed.model.MethodNode;
-import com.testify.ecfeed.model.PartitionNode;
-
 public class CategoryNodeTest{
 	
 	@Test
 	public void addPartitionTest() {
-		CategoryNode category = new CategoryNode("category", "type");
+		PartitionedCategoryNode category = new PartitionedCategoryNode("category", "type");
 		
 		assertEquals(0, category.getPartitions().size());
 		
@@ -39,7 +36,7 @@ public class CategoryNodeTest{
 	
 	@Test
 	public void getPartitionTest(){
-		CategoryNode category = new CategoryNode("category", "type");
+		PartitionedCategoryNode category = new PartitionedCategoryNode("category", "type");
 		PartitionNode p = new PartitionNode("p", 0);
 		PartitionNode p1 = new PartitionNode("p1", 0);
 		PartitionNode p11 = new PartitionNode("p11", 0);
@@ -57,7 +54,7 @@ public class CategoryNodeTest{
 
 	@Test
 	public void getPartitionsTest() {
-		CategoryNode category = new CategoryNode("category", "type");
+		PartitionedCategoryNode category = new PartitionedCategoryNode("category", "type");
 		PartitionNode partition1 = new PartitionNode("partition1", 0); 
 		PartitionNode partition2 = new PartitionNode("partition2", 0); 
 		category.addPartition(partition1);
@@ -71,7 +68,7 @@ public class CategoryNodeTest{
 	
 	@Test
 	public void getChildrenTest() {
-		CategoryNode category = new CategoryNode("category", "type");
+		PartitionedCategoryNode category = new PartitionedCategoryNode("category", "type");
 		PartitionNode partition1 = new PartitionNode("partition1", 0); 
 		PartitionNode partition2 = new PartitionNode("partition2", 0); 
 		category.addPartition(partition1);
@@ -85,7 +82,7 @@ public class CategoryNodeTest{
 
 	@Test
 	public void getPartitionNames() {
-		CategoryNode category = new CategoryNode("category", "type");
+		PartitionedCategoryNode category = new PartitionedCategoryNode("category", "type");
 		PartitionNode partition1 = new PartitionNode("partition1", 0); 
 		PartitionNode partition2 = new PartitionNode("partition2", 0); 
 		category.addPartition(partition1);
@@ -98,7 +95,7 @@ public class CategoryNodeTest{
 
 	@Test
 	public void getLeafPartitionNamesTest() {
-		CategoryNode category = new CategoryNode("category", "type");
+		PartitionedCategoryNode category = new PartitionedCategoryNode("category", "type");
 		PartitionNode p1 = new PartitionNode("p1", 0); 
 		PartitionNode p11 = new PartitionNode("p11", 0); 
 		PartitionNode p12 = new PartitionNode("p12", 0); 
@@ -117,7 +114,7 @@ public class CategoryNodeTest{
 
 	@Test
 	public void getAllPartitionNamesTest(){
-		CategoryNode category = new CategoryNode("category", "type");
+		PartitionedCategoryNode category = new PartitionedCategoryNode("category", "type");
 		PartitionNode p1 = new PartitionNode("p1", 0); 
 		PartitionNode p11 = new PartitionNode("p11", 0); 
 		PartitionNode p12 = new PartitionNode("p12", 0); 
@@ -139,7 +136,7 @@ public class CategoryNodeTest{
 	@Test
 	public void getMethodTest() {
 		MethodNode method = new MethodNode("method");
-		CategoryNode category = new CategoryNode("category", "type");
+		PartitionedCategoryNode category = new PartitionedCategoryNode("category", "type");
 		method.addCategory(category);
 		
 		assertEquals(method, category.getMethod());
@@ -147,7 +144,7 @@ public class CategoryNodeTest{
 
 	@Test
 	public void getLeafPartitionsTest(){
-		CategoryNode category = new CategoryNode("category", "type");
+		PartitionedCategoryNode category = new PartitionedCategoryNode("category", "type");
 		
 		PartitionNode p1 = new PartitionNode("p1", 0);
 		PartitionNode p2 = new PartitionNode("p1", 0);
@@ -219,7 +216,7 @@ public class CategoryNodeTest{
 		p2.addPartition(p21);
 		p2.addPartition(p22);
 		
-		CategoryNode c = new CategoryNode("c", "type");
+		PartitionedCategoryNode c = new PartitionedCategoryNode("c", "type");
 		c.addPartition(p1);
 		c.addPartition(p2);
 		

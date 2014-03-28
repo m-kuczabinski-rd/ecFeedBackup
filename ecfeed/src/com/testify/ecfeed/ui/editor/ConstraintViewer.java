@@ -38,15 +38,18 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Section;
 
-import com.testify.ecfeed.model.CategoryNode;
+import com.testify.ecfeed.model.AbstractCategoryNode;
 import com.testify.ecfeed.model.ConstraintNode;
-import com.testify.ecfeed.model.ExpectedValueCategoryNode;
+import com.testify.ecfeed.model.ExpectedCategoryNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
+import com.testify.ecfeed.model.PartitionedCategoryNode;
 import com.testify.ecfeed.model.constraint.BasicStatement;
-import com.testify.ecfeed.model.constraint.ConditionStatement;
 import com.testify.ecfeed.model.constraint.Constraint;
+import com.testify.ecfeed.model.constraint.ExpectedValueStatement;
+import com.testify.ecfeed.model.constraint.IRelationalStatement;
 import com.testify.ecfeed.model.constraint.Operator;
+import com.testify.ecfeed.model.constraint.PartitionedCategoryStatement;
 import com.testify.ecfeed.model.constraint.Relation;
 import com.testify.ecfeed.model.constraint.StatementArray;
 import com.testify.ecfeed.model.constraint.StaticStatement;
@@ -111,7 +114,7 @@ public class ConstraintViewer extends TreeViewerSection {
 			if(fStatementEditListenersEnabled == false){
 				return;
 			}
-			ConditionStatement statement = (ConditionStatement)fSelectedStatement;
+			IRelationalStatement statement = (IRelationalStatement)fSelectedStatement;
 			if(statement.getRelation().toString().equals(fRelationCombo.getText()) == false){
 				statement.setRelation(Relation.getRelation(fRelationCombo.getText()));
 				modelUpdated();
@@ -125,7 +128,7 @@ public class ConstraintViewer extends TreeViewerSection {
 			if(fStatementEditListenersEnabled == false){
 				return;
 			}
-			ConditionStatement statement = (ConditionStatement)fSelectedStatement;
+			PartitionedCategoryStatement statement = (PartitionedCategoryStatement)fSelectedStatement;
 			if(statement.getConditionName().equals(fConditionCombo.getText()) == false){
 				String conditionText = fConditionCombo.getText();
 				PartitionNode partition = statement.getCategory().getPartition(conditionText);
@@ -170,18 +173,19 @@ public class ConstraintViewer extends TreeViewerSection {
 			}
 			else{
 				MethodNode method = fSelectedConstraint.getMethod();
-				CategoryNode category = method.getCategory(fStatementCombo.getText());
 				Relation relation = Relation.EQUAL; 
-				if(category != null){
-					PartitionNode condition;
-					if(category instanceof ExpectedValueCategoryNode){
-						ExpectedValueCategoryNode expCat = (ExpectedValueCategoryNode)category;
-						condition = new PartitionNode("expected", expCat.getDefaultValue());
-					}
-					else{
-						condition = category.getPartitions().get(0);
-					}
-					statement = new ConditionStatement(category, relation, condition);
+				String categoryName = fStatementCombo.getText();
+
+				PartitionedCategoryNode partitionedCategory = method.getPartitionedCategory(categoryName);
+				ExpectedCategoryNode expectedCategory = method.getExpectedCategory(categoryName);
+				if(partitionedCategory != null){
+					PartitionNode condition = partitionedCategory.getPartitions().get(0);
+					statement = new PartitionedCategoryStatement(partitionedCategory, relation, condition);
+				}
+				else if(expectedCategory != null){
+					PartitionNode condition = new PartitionNode("expected", expectedCategory.getDefaultValue());
+					condition.setParent(expectedCategory);
+					statement = new ExpectedValueStatement(expectedCategory, condition);
 				}
 			}
 			return statement;
@@ -211,9 +215,14 @@ public class ConstraintViewer extends TreeViewerSection {
 		private void refreshStatementEditPart(BasicStatement statement) {
 			fStatementEditListenersEnabled = false;
 			refreshStatementCombo(statement);
-			if(statement instanceof ConditionStatement){
-				refreshRelationCombo((ConditionStatement)statement);
-				refreshConditionComposite((ConditionStatement)statement);
+			if(statement instanceof IRelationalStatement){
+				refreshRelationCombo((IRelationalStatement)statement);
+				if(statement instanceof PartitionedCategoryStatement){
+					refreshConditionComposite((PartitionedCategoryStatement)statement);
+				}
+				else if(statement instanceof ExpectedValueStatement){
+					refreshConditionComposite((ExpectedValueStatement)statement);
+				}
 			}
 			else{
 				fRelationCombo.setVisible(false);
@@ -237,35 +246,34 @@ public class ConstraintViewer extends TreeViewerSection {
 			fStatementCombo.setText(statement.getLeftHandName());
 		}
 
-		private void refreshRelationCombo(ConditionStatement statement) {
+		private void refreshRelationCombo(IRelationalStatement statement) {
 			fRelationCombo.setVisible(true);
-			if(statement.getCategory() instanceof ExpectedValueCategoryNode){
-				fRelationCombo.setItems(new String[]{Relation.EQUAL.toString()});
+			List<String> items = new ArrayList<String>();
+			for(Relation relation : statement.getAvailableRelations()){
+				items.add(relation.toString());
 			}
-			else{
-				fRelationCombo.setItems(new String[]{Relation.EQUAL.toString(), Relation.NOT.toString()});
-			}
+			fRelationCombo.setItems(items.toArray(new String[]{}));
 			fRelationCombo.setText(statement.getRelation().toString());
 		}
 
-		private void refreshConditionComposite(ConditionStatement statement) {
+		private void refreshConditionComposite(PartitionedCategoryStatement statement) {
 			List<String> items = new ArrayList<String>();
 			items.addAll(statement.getCategory().getAllPartitionNames());
 			items.addAll(statement.getCategory().getAllPartitionLabels());
-			if(statement.getCategory() instanceof ExpectedValueCategoryNode){
-				ExpectedValueCategoryNode category = (ExpectedValueCategoryNode)statement.getCategory();
-				fConditionLayout.topControl = fConditionText;
-				fConditionCombo.setVisible(false);
-				fConditionText.setVisible(true);
-				fConditionText.setText(category.getDefaultValuePartition().getValueString());
-			}
-			else{
-				fConditionLayout.topControl = fConditionCombo;
-				fConditionCombo.setVisible(true);
-				fConditionText.setVisible(false);
-				fConditionCombo.setItems(items.toArray(new String[]{}));
-				fConditionCombo.setText(statement.getConditionName());
-			}
+
+			fConditionLayout.topControl = fConditionCombo;
+			fConditionCombo.setVisible(true);
+			fConditionText.setVisible(false);
+			fConditionCombo.setItems(items.toArray(new String[]{}));
+			fConditionCombo.setText(statement.getConditionName());
+		}
+
+		private void refreshConditionComposite(ExpectedValueStatement statement) {
+			ExpectedCategoryNode category = statement.getCategory();
+			fConditionLayout.topControl = fConditionText;
+			fConditionCombo.setVisible(false);
+			fConditionText.setVisible(true);
+			fConditionText.setText(category.getDefaultValuePartition().getValueString());
 		}
 	}
 	
@@ -316,9 +324,10 @@ public class ConstraintViewer extends TreeViewerSection {
 		fConditionText.addListener(SWT.KeyDown, new Listener() {
 			public void handleEvent(Event event) {
 				if(event.keyCode == SWT.CR || event.keyCode == SWT.KEYPAD_CR){
-					CategoryNode category = ((ConditionStatement)fSelectedStatement).getCategory();
-					PartitionNode condition = new PartitionNode("expected", category.getPartitionValueFromString(fConditionText.getText()));
-					((ConditionStatement)fSelectedStatement).setCondition(condition);
+					ExpectedValueStatement statement = (ExpectedValueStatement)fSelectedStatement;
+					AbstractCategoryNode category = statement.getCategory();
+					Object newValue = category.getPartitionValueFromString(fConditionText.getText());
+					statement.getCondition().setValue(newValue);;
 					modelUpdated();
 				}
 			}

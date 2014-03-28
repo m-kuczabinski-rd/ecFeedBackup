@@ -17,10 +17,10 @@ import java.util.Map;
 
 import org.eclipse.swt.widgets.Shell;
 
-import com.testify.ecfeed.generators.api.IConstraint;
 import com.testify.ecfeed.generators.api.IGenerator;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
+import com.testify.ecfeed.model.constraint.Constraint;
 import com.testify.ecfeed.ui.common.Messages;
 
 public class GenerateTestSuiteDialog extends GeneratorSetupDialog {
@@ -41,7 +41,7 @@ public class GenerateTestSuiteDialog extends GeneratorSetupDialog {
 		return super.algorithmInput();
 	}
 
-	public Collection<IConstraint<PartitionNode>> getConstraints() {
+	public Collection<Constraint> getConstraints() {
 		return super.constraints();
 	}
 

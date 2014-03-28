@@ -18,10 +18,10 @@ import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.MasterDetailsBlock;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
-import com.testify.ecfeed.model.CategoryNode;
+import com.testify.ecfeed.model.AbstractCategoryNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.ConstraintNode;
-import com.testify.ecfeed.model.ExpectedValueCategoryNode;
+import com.testify.ecfeed.model.ExpectedCategoryNode;
 import com.testify.ecfeed.model.IGenericNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
@@ -55,8 +55,8 @@ public class ModelMasterDetailsBlock extends MasterDetailsBlock implements IMode
 		detailsPart.registerPage(RootNode.class, new ModelDetailsPage(fMasterSection));
 		detailsPart.registerPage(ClassNode.class, new ClassDetailsPage(fMasterSection));
 		detailsPart.registerPage(MethodNode.class, new MethodDetailsPage(fMasterSection));
-		detailsPart.registerPage(CategoryNode.class, new CategoryDetailsPage(fMasterSection));
-		detailsPart.registerPage(ExpectedValueCategoryNode.class, new ExpectedValueDetailsPage(fMasterSection));
+		detailsPart.registerPage(AbstractCategoryNode.class, new CategoryDetailsPage(fMasterSection));
+		detailsPart.registerPage(ExpectedCategoryNode.class, new ExpectedValueDetailsPage(fMasterSection));
 		detailsPart.registerPage(TestCaseNode.class, new TestCaseDetailsPage(fMasterSection));
 		detailsPart.registerPage(ConstraintNode.class, new ConstraintDetailsPage(fMasterSection));
 		detailsPart.registerPage(PartitionNode.class, new PartitionDetailsPage(fMasterSection));

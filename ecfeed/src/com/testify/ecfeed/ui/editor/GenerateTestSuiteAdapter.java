@@ -30,11 +30,14 @@ import org.eclipse.swt.widgets.Shell;
 import com.testify.ecfeed.generators.api.GeneratorException;
 import com.testify.ecfeed.generators.api.IConstraint;
 import com.testify.ecfeed.generators.api.IGenerator;
-import com.testify.ecfeed.model.CategoryNode;
-import com.testify.ecfeed.model.ExpectedValueCategoryNode;
+import com.testify.ecfeed.model.AbstractCategoryNode;
+import com.testify.ecfeed.model.ExpectedCategoryNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.TestCaseNode;
+import com.testify.ecfeed.model.constraint.BasicStatement;
+import com.testify.ecfeed.model.constraint.Constraint;
+import com.testify.ecfeed.model.constraint.ExpectedValueStatement;
 import com.testify.ecfeed.ui.common.Constants;
 import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.dialogs.GenerateTestSuiteDialog;
@@ -43,6 +46,7 @@ class GenerateTestSuiteAdapter extends SelectionAdapter{
 
 	private boolean fCanceled;
 	private TestCasesViewer fViewerSection;
+	private Collection<Constraint> fSelectedConstraints;
 
 	private class GeneratorRunnable implements IRunnableWithProgress{
 
@@ -98,7 +102,13 @@ class GenerateTestSuiteAdapter extends SelectionAdapter{
 		if(dialog.open() == IDialogConstants.OK_ID){
 			IGenerator<PartitionNode> selectedGenerator = dialog.getSelectedGenerator();
 			List<List<PartitionNode>> algorithmInput = dialog.getAlgorithmInput();
-			Collection<IConstraint<PartitionNode>> constraints = dialog.getConstraints();
+			fSelectedConstraints = dialog.getConstraints();
+
+			List<IConstraint<PartitionNode>> constraints = new ArrayList<IConstraint<PartitionNode>>();
+			for(Constraint constraint : fSelectedConstraints){
+				constraints.add(constraint);
+			}
+			
 			String testSuiteName = dialog.getTestSuiteName();
 			Map<String, Object> parameters = dialog.getGeneratorParameters();
 			
@@ -171,10 +181,27 @@ class GenerateTestSuiteAdapter extends SelectionAdapter{
 			testSuite.add(testCaseNode);
 		}
 		replaceExpectedValues(testSuite);
+		adaptExpectedValues(testSuite, fSelectedConstraints);
 		for(TestCaseNode testCase : testSuite){
 			getSelectedMethod().addTestCase(testCase);
 		}
 		fViewerSection.modelUpdated();
+	}
+
+	private void adaptExpectedValues(List<TestCaseNode> testSuite,
+			Collection<Constraint> constraints) {
+		for(Constraint constraint : constraints){
+			BasicStatement consequence = constraint.getConsequence();
+			if(consequence instanceof ExpectedValueStatement){
+				ExpectedValueStatement adaptor = (ExpectedValueStatement)consequence;
+				BasicStatement premise = constraint.getPremise();
+				for(TestCaseNode testCase : testSuite){
+					if(premise.evaluate(testCase.getTestData())){
+						adaptor.adapt(testCase.getTestData());
+					}
+				}
+			}
+		}
 	}
 
 	private void replaceExpectedValues(List<TestCaseNode> testSuite) {
@@ -185,8 +212,8 @@ class GenerateTestSuiteAdapter extends SelectionAdapter{
 		for(TestCaseNode testCase : testSuite){
 			List<PartitionNode> testData = testCase.getTestData();
 			for(int i = 0; i < testData.size(); i++){
-				CategoryNode category = testData.get(i).getCategory();
-				if(category instanceof ExpectedValueCategoryNode){
+				AbstractCategoryNode category = testData.get(i).getCategory();
+				if(category instanceof ExpectedCategoryNode){
 					PartitionNode anonymousPartition = 
 							new PartitionNode(Constants.EXPECTED_VALUE_PARTITION_NAME, 
 									testData.get(i).getValue());

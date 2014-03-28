@@ -31,6 +31,7 @@ import com.testify.ecfeed.generators.api.IGenerator;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.TestCaseNode;
+import com.testify.ecfeed.model.constraint.Constraint;
 import com.testify.ecfeed.runner.ParameterizedMethod;
 import com.testify.ecfeed.ui.dialogs.ExecuteOnlineSetupDialog;
 
@@ -90,10 +91,15 @@ public class ExecuteOnlineTestAdapter extends ExecuteTestAdapter {
 		if(dialog.open() == IDialogConstants.OK_ID){
 			IGenerator<PartitionNode> selectedGenerator = dialog.getSelectedGenerator();
 			List<List<PartitionNode>> algorithmInput = dialog.getAlgorithmInput();
-			Collection<IConstraint<PartitionNode>> constraints = dialog.getConstraints();
-			Map<String, Object> parameters = dialog.getGeneratorParameters();
+			Collection<Constraint> constraints = dialog.getConstraints();
 			
-			executeTest(selectedGenerator, algorithmInput, constraints, parameters);
+			Collection<IConstraint<PartitionNode>> constraintList = new ArrayList<IConstraint<PartitionNode>>();
+			for(Constraint constraint : constraints){
+				constraintList.add(constraint);
+			}
+			
+			Map<String, Object> parameters = dialog.getGeneratorParameters();
+			executeTest(selectedGenerator, algorithmInput, constraintList, parameters);
 		}
 	}
 	

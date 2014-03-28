@@ -61,7 +61,8 @@ public class AbstractAlgorithm<E> implements IAlgorithm<E> {
 	protected List<E> instance(List<Integer> vector) {
 		List<E> instance = new ArrayList<E>();
 		for(int i = 0; i < vector.size(); i++){
-			instance.add(fInput.get(i).get(vector.get(i)));
+			E element = fInput.get(i).get(vector.get(i));
+			instance.add(element);
 		}
 		return instance;
 	}
@@ -71,7 +72,11 @@ public class AbstractAlgorithm<E> implements IAlgorithm<E> {
 		List<Integer> representation = new ArrayList<Integer>();
 		for(int i = 0; i < vector.size(); i++){
 			E element = vector.get(i);
-			representation.add(fInput.get(i).indexOf(element));
+			int index = fInput.get(i).indexOf(element);
+			if(index < 0){
+				index = 0;
+			}
+			representation.add(index);
 		}
 		return representation;
 	}

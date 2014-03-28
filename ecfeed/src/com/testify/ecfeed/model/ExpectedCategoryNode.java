@@ -11,17 +11,17 @@
 
 package com.testify.ecfeed.model;
 
+import java.util.Arrays;
 import java.util.List;
 
-public class ExpectedValueCategoryNode extends CategoryNode implements
-		IGenericNode {
+public class ExpectedCategoryNode extends AbstractCategoryNode{
+	
 	private PartitionNode fDefaultValue;
 
-	public ExpectedValueCategoryNode(String name, String type, Object defaultValue) {
+	public ExpectedCategoryNode(String name, String type, Object defaultValue) {
 		super(name, type);
 		fDefaultValue = new PartitionNode("default value" , defaultValue);
 		fDefaultValue.setParent(this);
-		fPartitions.add(fDefaultValue);
 	}
 
 	public PartitionNode getDefaultValuePartition(){
@@ -41,13 +41,46 @@ public class ExpectedValueCategoryNode extends CategoryNode implements
 		return EMPTY_CHILDREN_ARRAY;
 	}
 
-	public String toString(){
-		return super.toString() + "(" + getDefaultValue() + ")";
+	@Override
+	public AbstractCategoryNode getCategory() {
+		return this;
 	}
 
 	@Override
-	@Deprecated
-	public boolean isExpected(){
-		return true;
+	public List<PartitionNode> getPartitions() {
+		return Arrays.asList(new PartitionNode[]{fDefaultValue});
+	}
+
+	@Override
+	public void addPartition(PartitionNode partition) {
+	}
+
+	@Override
+	public PartitionNode getPartition(String name) {
+		return null;
+	}
+
+	@Override
+	public boolean removePartition(PartitionNode partition) {
+		return false;
+	}
+
+	@Override
+	public boolean removePartition(String name) {
+		return false;
+	}
+
+	@Override
+	public List<PartitionNode> getLeafPartitions() {
+		return getPartitions();
+	}
+
+	@Override
+	public List<String> getAllPartitionNames() {
+		return Arrays.asList(new String[]{fDefaultValue.getName()});
+	}
+
+	public String toString(){
+		return super.toString() + "(" + getDefaultValue() + ")";
 	}
 }

@@ -21,10 +21,10 @@ import org.eclipse.swt.graphics.Image;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.FrameworkUtil;
 
-import com.testify.ecfeed.model.CategoryNode;
+import com.testify.ecfeed.model.AbstractCategoryNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.ConstraintNode;
-import com.testify.ecfeed.model.ExpectedValueCategoryNode;
+import com.testify.ecfeed.model.ExpectedCategoryNode;
 import com.testify.ecfeed.model.GenericNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
@@ -53,10 +53,10 @@ public class ModelLabelProvider extends LabelProvider {
 		if(element instanceof TestCaseNode){
 			return getImage("test_case_node.gif");
 		}
-		if(element instanceof ExpectedValueCategoryNode){
+		if(element instanceof ExpectedCategoryNode){
 			return getImage("expected_value_category_node.gif");
 		}
-		if(element instanceof CategoryNode){
+		if(element instanceof AbstractCategoryNode){
 			return getImage("category_node.gif");
 		}
 		if(element instanceof ConstraintNode){

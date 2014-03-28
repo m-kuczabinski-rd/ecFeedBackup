@@ -22,26 +22,33 @@ import java.util.ArrayList;
 import com.testify.ecfeed.generators.api.IConstraint;
 
 public class MethodNode extends GenericNode {
-	private List<CategoryNode> fCategories;
-	private List<ExpectedValueCategoryNode> fExpectedValueCategories;
+	private List<AbstractCategoryNode> fCategories;
+	private List<ExpectedCategoryNode> fExpectedValueCategories;
+	private List<PartitionedCategoryNode> fPartitionedCategories;
 	private List<TestCaseNode> fTestCases;
 	private List<ConstraintNode> fConstraints;
 	
 	public MethodNode(String name){
 		super(name);
-		fCategories = new ArrayList<CategoryNode>();
-		fExpectedValueCategories = new ArrayList<ExpectedValueCategoryNode>();
+		fCategories = new ArrayList<AbstractCategoryNode>();
+		fExpectedValueCategories = new ArrayList<ExpectedCategoryNode>();
+		fPartitionedCategories = new ArrayList<PartitionedCategoryNode>();
 		fTestCases = new ArrayList<TestCaseNode>();
 		fConstraints = new ArrayList<ConstraintNode>();
 	}
 	
-	public void addCategory(CategoryNode category){
+	protected void addCategory(AbstractCategoryNode category){
 		fCategories.add(category);
 		category.setParent(this);
 	}
 
-	public void addCategory(ExpectedValueCategoryNode category){
-		addCategory((CategoryNode)category);
+	public void addCategory(PartitionedCategoryNode category){
+		addCategory((AbstractCategoryNode)category);
+		fPartitionedCategories.add(category);
+	}
+
+	public void addCategory(ExpectedCategoryNode category){
+		addCategory((AbstractCategoryNode)category);
 		fExpectedValueCategories.add(category);
 	}
 
@@ -59,12 +66,12 @@ public class MethodNode extends GenericNode {
 		return (ClassNode)getParent();
 	}
 
-	public List<CategoryNode> getCategories(){
+	public List<AbstractCategoryNode> getCategories(){
 		return fCategories;
 	}
 
-	public CategoryNode getCategory(String categoryName) {
-		for(CategoryNode category : getCategories()){
+	public AbstractCategoryNode getCategory(String categoryName) {
+		for(AbstractCategoryNode category : getCategories()){
 			if(category.getName().equals(categoryName)){
 				return category;
 			}
@@ -72,9 +79,35 @@ public class MethodNode extends GenericNode {
 		return null;
 	}
 
+	public ExpectedCategoryNode getExpectedCategory(String categoryName) {
+		for(ExpectedCategoryNode category : getExpectedCategories()){
+			if(category.getName().equals(categoryName)){
+				return category;
+			}
+		}
+		return null;
+	}
+
+	public PartitionedCategoryNode getPartitionedCategory(String categoryName) {
+		for(PartitionedCategoryNode category : getPartitionedCategories()){
+			if(category.getName().equals(categoryName)){
+				return category;
+			}
+		}
+		return null;
+	}
+
+	public List<ExpectedCategoryNode> getExpectedCategories() {
+		return fExpectedValueCategories;
+	}
+
+	public List<PartitionedCategoryNode> getPartitionedCategories() {
+		return fPartitionedCategories;
+	}
+
 	public ArrayList<String> getCategoriesTypes() {
 		ArrayList<String> types = new ArrayList<String>();
-		for(CategoryNode category : getCategories()){
+		for(AbstractCategoryNode category : getCategories()){
 			types.add(category.getType());
 		}
 		return types;
@@ -82,7 +115,7 @@ public class MethodNode extends GenericNode {
 
 	public ArrayList<String> getCategoriesNames() {
 		ArrayList<String> names = new ArrayList<String>();
-		for(CategoryNode category : getCategories()){
+		for(AbstractCategoryNode category : getCategories()){
 			names.add(category.getName());
 		}
 		return names;
@@ -90,7 +123,7 @@ public class MethodNode extends GenericNode {
 
 	public ArrayList<String> getExpectedCategoriesNames() {
 		ArrayList<String> names = new ArrayList<String>();
-		for(ExpectedValueCategoryNode category : fExpectedValueCategories){
+		for(ExpectedCategoryNode category : fExpectedValueCategories){
 				names.add(category.getName());
 		}
 		return names;
@@ -155,7 +188,7 @@ public class MethodNode extends GenericNode {
 		return testSuites;
 	}
 
-	public boolean removeCategory(CategoryNode category){
+	public boolean removeCategory(AbstractCategoryNode category){
 		category.setParent(null);
 		if(fCategories.remove(category)){
 			fTestCases.clear();
@@ -171,8 +204,8 @@ public class MethodNode extends GenericNode {
 		return false;
 	}
 	
-	public boolean removeCategory(ExpectedValueCategoryNode category){
-		if(removeCategory((CategoryNode)category)){
+	public boolean removeCategory(ExpectedCategoryNode category){
+		if(removeCategory((AbstractCategoryNode)category)){
 			return fExpectedValueCategories.remove(category);
 		}
 		return false;
@@ -198,21 +231,21 @@ public class MethodNode extends GenericNode {
 		}
 	}
 
-	public void replaceCategory(int index, CategoryNode newCategory){
+	public void replaceCategory(int index, AbstractCategoryNode newCategory){
 		replace(index, newCategory);
 		fTestCases.clear();
 	}
 	
-	public void replaceCategory(int index, ExpectedValueCategoryNode newCategory){
+	public void replaceCategory(int index, ExpectedCategoryNode newCategory){
 		replace(index, newCategory);
 		for(TestCaseNode testCase : fTestCases){
 			testCase.replaceValue(index, newCategory.getDefaultValuePartition().getCopy());
 		}
 	}
 
-	protected void replace(int index, CategoryNode newCategory){
+	protected void replace(int index, AbstractCategoryNode newCategory){
 		newCategory.setParent(this);
-		CategoryNode originalCategory = fCategories.get(index);
+		AbstractCategoryNode originalCategory = fCategories.get(index);
 		fCategories.set(index, newCategory);
 		Iterator<ConstraintNode> iterator = fConstraints.iterator();
 		while(iterator.hasNext()){
@@ -251,7 +284,7 @@ public class MethodNode extends GenericNode {
 		ArrayList<String> types = getCategoriesTypes();
 		ArrayList<String> names = getCategoriesNames();
 		for(int i = 0; i < types.size(); i++){
-			if(getCategories().get(i) instanceof ExpectedValueCategoryNode){
+			if(getCategories().get(i) instanceof ExpectedCategoryNode){
 				result += "[e]";
 			}
 			result += types.get(i);
@@ -282,7 +315,7 @@ public class MethodNode extends GenericNode {
 	@Override
 	public void moveChild(IGenericNode child, boolean moveUp){
 		List childrenArray = null;
-		if(child instanceof CategoryNode){
+		if(child instanceof AbstractCategoryNode){
 			childrenArray = fCategories;
 		}
 		if(child instanceof ConstraintNode){
@@ -310,12 +343,12 @@ public class MethodNode extends GenericNode {
 	}
 
 	@Deprecated
-	public boolean removeChild(CategoryNode category){
+	public boolean removeChild(AbstractCategoryNode category){
 		return removeCategory(category);
 	}
 
 	@Deprecated
-	public boolean removeChild(ExpectedValueCategoryNode category){
+	public boolean removeChild(ExpectedCategoryNode category){
 		return removeCategory(category);
 	}
 

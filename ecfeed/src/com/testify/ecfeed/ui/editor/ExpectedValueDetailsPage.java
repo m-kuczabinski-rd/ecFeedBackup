@@ -22,12 +22,12 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
 
-import com.testify.ecfeed.model.ExpectedValueCategoryNode;
+import com.testify.ecfeed.model.ExpectedCategoryNode;
 
 public class ExpectedValueDetailsPage extends BasicDetailsPage {
 
 	private Text fDefaultValueText;
-	private ExpectedValueCategoryNode fSelectedCategory;
+	private ExpectedCategoryNode fSelectedCategory;
 
 	private class ApplyButtonAdapter extends SelectionAdapter{
 		@Override
@@ -37,7 +37,7 @@ public class ExpectedValueDetailsPage extends BasicDetailsPage {
 			}
 		}
 
-		protected boolean applyNewDefaultValue(ExpectedValueCategoryNode category, Text valueText) {
+		protected boolean applyNewDefaultValue(ExpectedCategoryNode category, Text valueText) {
 			String newValue = valueText.getText();
 			if(category.validatePartitionStringValue(newValue)){
 				category.setDefaultValue(category.getPartitionValueFromString(newValue));
@@ -84,8 +84,8 @@ public class ExpectedValueDetailsPage extends BasicDetailsPage {
 	
 	@Override
 	public void refresh(){
-		if(getSelectedElement() instanceof ExpectedValueCategoryNode){
-			fSelectedCategory = (ExpectedValueCategoryNode)getSelectedElement();
+		if(getSelectedElement() instanceof ExpectedCategoryNode){
+			fSelectedCategory = (ExpectedCategoryNode)getSelectedElement();
 		}
 		getMainSection().setText(fSelectedCategory.toString());
 		fDefaultValueText.setText(fSelectedCategory.getDefaultValuePartition().getValueString());

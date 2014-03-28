@@ -13,20 +13,20 @@ package com.testify.ecfeed.model.constraint;
 
 import java.util.List;
 
-import com.testify.ecfeed.model.CategoryNode;
-import com.testify.ecfeed.model.ExpectedValueCategoryNode;
-import com.testify.ecfeed.model.MethodNode;
+import com.testify.ecfeed.model.AbstractCategoryNode;
 import com.testify.ecfeed.model.PartitionNode;
+import com.testify.ecfeed.model.PartitionedCategoryNode;
 
-public class ConditionStatement extends BasicStatement {
+public class PartitionedCategoryStatement extends BasicStatement implements IRelationalStatement{
 
-	private CategoryNode fCategory;
+	private PartitionedCategoryNode fCategory;
 	private Relation fRelation;
 	private ICondition fCondition;
 	
 	private interface ICondition{
 		public Object getCondition();
 		public boolean evaluate(List<PartitionNode> values);
+		public boolean adapt(List<PartitionNode> values);
 	}
 	
 	private class LabelCondition implements ICondition{
@@ -61,6 +61,11 @@ public class ConditionStatement extends BasicStatement {
 		public String toString(){
 			return fLabel;
 		}
+
+		@Override
+		public boolean adapt(List<PartitionNode> values) {
+			return false;
+		}
 	}
 	
 	private class PartitionCondition implements ICondition{
@@ -75,15 +80,16 @@ public class ConditionStatement extends BasicStatement {
 		}
 		
 		public boolean evaluate(List<PartitionNode> values){
-			CategoryNode parentCategory = fPartition.getCategory();
-			MethodNode methodAncestor = parentCategory.getMethod();
-			int categoryIndex = methodAncestor.getCategories().indexOf(parentCategory);
+			if(getCategory().getMethod() == null){
+				return false;
+			}
+			int index = getCategory().getMethod().getCategories().indexOf(getCategory());
 
-			if(values.size() < categoryIndex + 1){
+			if(values.size() < index + 1){
 				return false;
 			}
 			
-			PartitionNode partition = values.get(categoryIndex);
+			PartitionNode partition = values.get(index);
 
 			boolean isCondition = partition.is(fPartition);
 			
@@ -101,62 +107,26 @@ public class ConditionStatement extends BasicStatement {
 		public String toString(){
 			return fPartition.getQualifiedName();
 		}
+
+		@Override
+		public boolean adapt(List<PartitionNode> values) {
+			return false;
+		}
 	}
 	
-	private class ExpectedValueCondition implements ICondition{
-		Object fExpectedValue;
-
-		public ExpectedValueCondition(Object condition){
-			fExpectedValue = condition;
-		}
-
-		@Override
-		public Object getCondition() {
-			return fExpectedValue;
-		}
-
-		@Override
-		public boolean evaluate(List<PartitionNode> values) {
-			MethodNode methodAncestor = fCategory.getMethod();
-			int categoryIndex = methodAncestor.getCategories().indexOf(fCategory);
-
-			if(values.size() < categoryIndex + 1){
-				return false;
-			}
-			PartitionNode partition = values.get(categoryIndex);
-			return fExpectedValue.equals(partition.getValue());
-		}
-		
-		@Override
-		public String toString(){
-			return fExpectedValue.toString();
-		}
-	}
-
-	
-	public ConditionStatement(CategoryNode category, Relation relation, String labelCondition){
+	public PartitionedCategoryStatement(PartitionedCategoryNode category, Relation relation, String labelCondition){
 		fCategory = category;
 		fRelation = relation;
 		fCondition = new LabelCondition(labelCondition);
 	}
 	
-	public ConditionStatement(CategoryNode category, Relation relation, PartitionNode partitionCondition){
+	public PartitionedCategoryStatement(PartitionedCategoryNode category, Relation relation, PartitionNode partitionCondition){
 		fCategory = category;
 		fRelation = relation;
 		fCondition = new PartitionCondition(partitionCondition);
 	}
 	
-	public ConditionStatement(ExpectedValueCategoryNode category, Relation relation, Object condition){
-		fCategory = category;
-		fRelation = relation;
-		fCondition = new ExpectedValueCondition(condition); 
-	}
-	
-	public void setCategory(CategoryNode category){
-		fCategory = category;
-	}
-	
-	public CategoryNode getCategory(){
+	public PartitionedCategoryNode getCategory(){
 		return fCategory;
 	}
 	
@@ -176,8 +146,8 @@ public class ConditionStatement extends BasicStatement {
 		fCondition = new PartitionCondition(partition);
 	}
 	
-	public void setCondition(Object condition){
-		fCondition = new ExpectedValueCondition(condition);
+	public void setCondition(PartitionedCategoryNode category, PartitionNode partition){
+		fCondition = new PartitionCondition(partition);
 	}
 	
 	public Object getConditionValue(){
@@ -189,7 +159,7 @@ public class ConditionStatement extends BasicStatement {
 	}
 
 	@Override
-	public boolean mentions(CategoryNode category){
+	public boolean mentions(AbstractCategoryNode category){
 		return getCategory() == category;
 	}
 
@@ -211,5 +181,11 @@ public class ConditionStatement extends BasicStatement {
 	public String toString(){
 		return getLeftHandName() + getRelation() + fCondition.toString();
 	}
+	
+	@Override
+	public Relation[] getAvailableRelations() {
+		return new Relation[]{Relation.EQUAL, Relation.NOT};
+	}
+
 }
 

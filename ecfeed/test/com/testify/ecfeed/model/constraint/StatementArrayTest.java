@@ -11,7 +11,9 @@
 
 package com.testify.ecfeed.model.constraint;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,18 +21,18 @@ import java.util.List;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
+import com.testify.ecfeed.model.PartitionedCategoryNode;
 
 public class StatementArrayTest {
 
 	private static MethodNode fMethod;
-	private static CategoryNode fCategory1;
+	private static PartitionedCategoryNode fCategory1;
 	private static PartitionNode fPartition11;
 	private static PartitionNode fPartition12;
 	private static PartitionNode fPartition13;
-	private static CategoryNode fCategory2;
+	private static PartitionedCategoryNode fCategory2;
 	private static PartitionNode fPartition21;
 	private static PartitionNode fPartition22;
 	private static PartitionNode fPartition23;
@@ -38,14 +40,14 @@ public class StatementArrayTest {
 	@BeforeClass
 	public static void prepareModel(){
 		fMethod = new MethodNode("method");
-		fCategory1 = new CategoryNode("category", "type");
+		fCategory1 = new PartitionedCategoryNode("category", "type");
 		fPartition11 = new PartitionNode("partition11", null);
 		fPartition12 = new PartitionNode("partition12", null);
 		fPartition13 = new PartitionNode("partition13", null);
 		fCategory1.addPartition(fPartition11);
 		fCategory1.addPartition(fPartition12);
 		fCategory1.addPartition(fPartition13);
-		fCategory2 = new CategoryNode("category", "type");
+		fCategory2 = new PartitionedCategoryNode("category", "type");
 		fPartition21 = new PartitionNode("partition21", null);
 		fPartition22 = new PartitionNode("partition22", null);
 		fPartition23 = new PartitionNode("partition23", null);
@@ -61,8 +63,8 @@ public class StatementArrayTest {
 	public void testEvaluate() {
 		StatementArray arrayOr = new StatementArray(Operator.OR);
 		StatementArray arrayAnd = new StatementArray(Operator.AND);
-		ConditionStatement statement1 = new ConditionStatement(fCategory1, Relation.EQUAL, fPartition11);
-		ConditionStatement statement2 = new ConditionStatement(fCategory2, Relation.EQUAL, fPartition21);
+		PartitionedCategoryStatement statement1 = new PartitionedCategoryStatement(fCategory1, Relation.EQUAL, fPartition11);
+		PartitionedCategoryStatement statement2 = new PartitionedCategoryStatement(fCategory2, Relation.EQUAL, fPartition21);
 		arrayOr.addStatement(statement1);
 		arrayOr.addStatement(statement2);
 		arrayAnd.addStatement(statement1);
@@ -90,9 +92,9 @@ public class StatementArrayTest {
 	@Test
 	public void testGetChildren() {
 		StatementArray array = new StatementArray(Operator.OR);
-		ConditionStatement statement1 = new ConditionStatement(fCategory1, Relation.EQUAL, fPartition11);
-		ConditionStatement statement2 = new ConditionStatement(fCategory2, Relation.EQUAL, fPartition21);
-		ConditionStatement statement3 = new ConditionStatement(fCategory2, Relation.EQUAL, fPartition21);
+		PartitionedCategoryStatement statement1 = new PartitionedCategoryStatement(fCategory1, Relation.EQUAL, fPartition11);
+		PartitionedCategoryStatement statement2 = new PartitionedCategoryStatement(fCategory2, Relation.EQUAL, fPartition21);
+		PartitionedCategoryStatement statement3 = new PartitionedCategoryStatement(fCategory2, Relation.EQUAL, fPartition21);
 		array.addStatement(statement1);
 		array.addStatement(statement2);
 		
@@ -105,8 +107,8 @@ public class StatementArrayTest {
 	@Test
 	public void testMentionsPartitionNode() {
 		StatementArray array = new StatementArray(Operator.OR);
-		ConditionStatement statement1 = new ConditionStatement(fCategory1, Relation.EQUAL, fPartition11);
-		ConditionStatement statement2 = new ConditionStatement(fCategory2, Relation.EQUAL, fPartition21);
+		PartitionedCategoryStatement statement1 = new PartitionedCategoryStatement(fCategory1, Relation.EQUAL, fPartition11);
+		PartitionedCategoryStatement statement2 = new PartitionedCategoryStatement(fCategory2, Relation.EQUAL, fPartition21);
 		array.addStatement(statement1);
 		array.addStatement(statement2);
 		assertTrue(array.mentions(fPartition11));
@@ -116,7 +118,7 @@ public class StatementArrayTest {
 	@Test
 	public void testMentionsCategoryNode() {
 		StatementArray array = new StatementArray(Operator.OR);
-		ConditionStatement statement1 = new ConditionStatement(fCategory1, Relation.EQUAL, fPartition11);
+		PartitionedCategoryStatement statement1 = new PartitionedCategoryStatement(fCategory1, Relation.EQUAL, fPartition11);
 		array.addStatement(statement1);
 		assertTrue(array.mentions(fPartition11.getCategory()));
 		assertFalse(array.mentions(fPartition21.getCategory()));
@@ -125,8 +127,8 @@ public class StatementArrayTest {
 	@Test
 	public void testSetOperator() {
 		StatementArray array = new StatementArray(Operator.OR);
-		ConditionStatement statement1 = new ConditionStatement(fCategory1, Relation.EQUAL, fPartition11);
-		ConditionStatement statement2 = new ConditionStatement(fCategory2, Relation.EQUAL, fPartition21);
+		PartitionedCategoryStatement statement1 = new PartitionedCategoryStatement(fCategory1, Relation.EQUAL, fPartition11);
+		PartitionedCategoryStatement statement2 = new PartitionedCategoryStatement(fCategory2, Relation.EQUAL, fPartition21);
 		array.addStatement(statement1);
 		array.addStatement(statement2);
 		assertEquals(Operator.OR, array.getOperator());
@@ -141,9 +143,9 @@ public class StatementArrayTest {
 	@Test
 	public void testReplaceChild() {
 		StatementArray array = new StatementArray(Operator.OR);
-		ConditionStatement statement1 = new ConditionStatement(fCategory1, Relation.EQUAL, fPartition11);
-		ConditionStatement statement2 = new ConditionStatement(fCategory1, Relation.EQUAL, fPartition12);
-		ConditionStatement statement3 = new ConditionStatement(fCategory1, Relation.EQUAL, fPartition13);
+		PartitionedCategoryStatement statement1 = new PartitionedCategoryStatement(fCategory1, Relation.EQUAL, fPartition11);
+		PartitionedCategoryStatement statement2 = new PartitionedCategoryStatement(fCategory1, Relation.EQUAL, fPartition12);
+		PartitionedCategoryStatement statement3 = new PartitionedCategoryStatement(fCategory1, Relation.EQUAL, fPartition13);
 		array.addStatement(statement1);
 		array.addStatement(statement2);
 		assertEquals(2, array.getChildren().size());
@@ -161,8 +163,8 @@ public class StatementArrayTest {
 	@Test
 	public void testRemoveChild() {
 		StatementArray array = new StatementArray(Operator.OR);
-		ConditionStatement statement1 = new ConditionStatement(fCategory1, Relation.EQUAL, fPartition11);
-		ConditionStatement statement2 = new ConditionStatement(fCategory1, Relation.EQUAL, fPartition12);
+		PartitionedCategoryStatement statement1 = new PartitionedCategoryStatement(fCategory1, Relation.EQUAL, fPartition11);
+		PartitionedCategoryStatement statement2 = new PartitionedCategoryStatement(fCategory1, Relation.EQUAL, fPartition12);
 		array.addStatement(statement1);
 		array.addStatement(statement2);
 		assertEquals(2, array.getChildren().size());

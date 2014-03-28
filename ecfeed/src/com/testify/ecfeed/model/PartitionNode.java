@@ -12,18 +12,20 @@
 package com.testify.ecfeed.model;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
-import com.testify.ecfeed.model.Constants;
+public class PartitionNode extends GenericNode implements IPartitionedNode{
 
-public class PartitionNode extends GenericNode {
-
+	private IPartitionedNode fPartitionedParent;
+	private PartitionNode fParentPartition;
+	
 	private Object fValue;
 	private List<PartitionNode> fPartitions;
 	private Set<String> fLabels;
-
+	
 	public PartitionNode(String name, Object value) {
 		super(name);
 		fValue = value;
@@ -32,10 +34,10 @@ public class PartitionNode extends GenericNode {
 	}
 
 	public String getQualifiedName(){
-		if(getParent() instanceof PartitionNode){
-			return ((PartitionNode)getParent()).getQualifiedName() + ":" + getName();
+		if(fParentPartition != null){
+			return fParentPartition.getQualifiedName() + ":" + getName();
 		}
-		return super.getName();
+		return getName();
 	}
 
 	public Object getValue() {
@@ -44,6 +46,19 @@ public class PartitionNode extends GenericNode {
 
 	public void setValue(Object value) {
 		this.fValue = value;
+	}
+	
+	public void setParent(IPartitionedNode parent){
+		fPartitionedParent = parent;
+	}
+	
+	public void setParent(PartitionNode parentPartition){
+		fPartitionedParent = fParentPartition = parentPartition;
+	}
+	
+	@Override
+	public IPartitionedNode getParent(){
+		return fPartitionedParent;
 	}
 	
 	public String getValueString(){
@@ -55,18 +70,13 @@ public class PartitionNode extends GenericNode {
 		return String.valueOf(fValue);
 	}
 	
-	public CategoryNode getCategory() {
-		if(getParent() instanceof CategoryNode){
-			return (CategoryNode)getParent();
-		}
-		else{
-			return ((PartitionNode)getParent()).getCategory();
-		}
+	public AbstractCategoryNode getCategory() {
+		return fPartitionedParent.getCategory();
 	}
 
 	public PartitionNode getCopy() {
 		PartitionNode copy = new PartitionNode(getName(), fValue);
-		copy.setParent(getParent());
+		copy.setParent(fPartitionedParent);
 		return copy;
 	}
 	
@@ -79,11 +89,12 @@ public class PartitionNode extends GenericNode {
 		return fPartitions;
 	}
 	
-	public List<String> getAllDescendantsNames() {
+	@Override
+	public List<String> getAllPartitionNames() {
 		List<String> names = new ArrayList<String>();
 		for(PartitionNode child : fPartitions){
 			names.add(child.getQualifiedName());
-			names.addAll(child.getAllDescendantsNames());
+			names.addAll(child.getAllPartitionNames());
 		}
 		return names;
 	}
@@ -92,11 +103,14 @@ public class PartitionNode extends GenericNode {
 	 * Returns name of this partition and names of all parent partitions
 	 */
 	public List<String> getAllAncestorsNames(){
-		List<String> names = new ArrayList<String>();
-		names.add(getName());
-		if(getParent() instanceof PartitionNode){
-			names.addAll(((PartitionNode)getParent()).getAllAncestorsNames());
+		List<String> names;
+		if(fParentPartition != null){
+			names = fParentPartition.getAllAncestorsNames();
 		}
+		else{
+			names = new ArrayList<String>();
+		}
+		names.add(getName());
 		return names;
 	}
 
@@ -138,34 +152,32 @@ public class PartitionNode extends GenericNode {
 	}
 	
 	public Set<String> getAllLabels(){
-		Set<String> allLabels = new LinkedHashSet<String>();
-		if(getParent() instanceof PartitionNode){
-			allLabels.addAll(((PartitionNode)getParent()).getAllLabels());
-		}
+		Set<String> allLabels = getInheritedLabels();
 		allLabels.addAll(fLabels);
 		return allLabels;
 	}
 	
 	public Set<String> getInheritedLabels(){
-		if(getParent() instanceof PartitionNode){
-			return ((PartitionNode)getParent()).getAllLabels();
+		if(fParentPartition != null){
+			return fParentPartition.getAllLabels();
 		}
-		return new LinkedHashSet<String>();
+		return new HashSet<String>();
 	}
 	
-	public Set<String> getDescendingLabels() {
+	public Set<String> getAllDescendingLabels() {
 		Set<String> labels = getLabels();
 		for(PartitionNode p : fPartitions){
-			labels.addAll(p.getDescendingLabels());
+			labels.addAll(p.getAllDescendingLabels());
 		}
 		return labels;
 	}
 
 	public boolean removePartition(PartitionNode partition){
-		if(getCategory() != null){
+		boolean result = fPartitions.remove(partition); 
+		if(result && getCategory() != null){
 			getCategory().partitionRemoved(partition);
 		}
-		return fPartitions.remove(partition);
+		return result;
 	}
 	
 	public boolean removePartition(String name){
@@ -195,30 +207,27 @@ public class PartitionNode extends GenericNode {
 	}
 
 	public boolean isDescendant(PartitionNode partition){
-		if(getParent() instanceof PartitionNode){
-			PartitionNode parent = (PartitionNode)getParent();
-			if(parent == partition || parent.isDescendant(partition)){
-				return true;
-			}
+		if(fParentPartition != null){
+			return fParentPartition == partition || fParentPartition.isDescendant(partition);
 		}
 		return false;
 	}
 
 	public int level(){
-		if(getParent() instanceof CategoryNode){
+		if(fParentPartition == null){
 			return 0;
 		}
-		return ((PartitionNode)getParent()).level() + 1;
+		return fParentPartition.level() + 1;
 	}
 
-	public List<PartitionNode> getLeafs() {
+	public List<PartitionNode> getLeafPartitions() {
 		List<PartitionNode> leafs = new ArrayList<PartitionNode>();
 		if(fPartitions.size() == 0){
 			leafs.add(this);
 		}
 		else{
 			for(PartitionNode child : fPartitions){
-				leafs.addAll(child.getLeafs());
+				leafs.addAll(child.getLeafPartitions());
 			}
 		}
 		return leafs;
@@ -229,5 +238,10 @@ public class PartitionNode extends GenericNode {
 			return getQualifiedName() + "[ABSTRACT]";
 		}
 		return getQualifiedName() + " [" + getValueString() + "]";
+	}
+
+	@Override
+	public void partitionRemoved(PartitionNode partition) {
+		getParent().partitionRemoved(partition);
 	}
 }
