@@ -20,7 +20,7 @@ import com.testify.ecfeed.generators.CartesianProductGenerator;
 import com.testify.ecfeed.generators.api.GeneratorException;
 import com.testify.ecfeed.generators.api.IConstraint;
 
-public class AbstractNWiseAlgorithm<E> extends AbstractAlgorithm<E> implements IAlgorithm<E> {
+public abstract class AbstractNWiseAlgorithm<E> extends AbstractAlgorithm<E> implements IAlgorithm<E> {
 
 	private CartesianProductGenerator<E> fCartesianGenerator;
 	protected int N  = -1;
@@ -43,11 +43,6 @@ public class AbstractNWiseAlgorithm<E> extends AbstractAlgorithm<E> implements I
 	}
 	
 	@Override
-	public List<E> getNext() throws GeneratorException {
-		return null;
-	}
-
-	@Override
 	public void reset(){
 		fCartesianGenerator.reset();
 		fTuplesToGenerate = calculateTotalTuples();
@@ -59,20 +54,6 @@ public class AbstractNWiseAlgorithm<E> extends AbstractAlgorithm<E> implements I
 		return N;
 	}
 	
-	private int calculateTotalTuples(){
-		int totalWork = 0;
-		Tuples<List<E>> tuples = new Tuples<List<E>>(getInput(), N);
-		while(tuples.hasNext()){
-			long combinations = 1;
-			List<List<E>> tuple = tuples.next();
-			for(List<E> category : tuple){
-				combinations *= category.size();
-			}
-			totalWork += combinations;
-		}
-		return totalWork;
-	}
-
 	protected List<E> cartesianNext() throws GeneratorException{
 		return fCartesianGenerator.next();
 	}
@@ -106,5 +87,19 @@ public class AbstractNWiseAlgorithm<E> extends AbstractAlgorithm<E> implements I
 	
 	protected void cartesianReset(){
 		fCartesianGenerator.reset();
+	}
+
+	private int calculateTotalTuples(){
+		int totalWork = 0;
+		Tuples<List<E>> tuples = new Tuples<List<E>>(getInput(), N);
+		while(tuples.hasNext()){
+			long combinations = 1;
+			List<List<E>> tuple = tuples.next();
+			for(List<E> category : tuple){
+				combinations *= category.size();
+			}
+			totalWork += combinations;
+		}
+		return totalWork;
 	}
 }
