@@ -44,6 +44,11 @@ public class AdaptiveRandomAlgorithm<E> extends AbstractAlgorithm<E> implements 
 			return !fBlackList.contains(values);
 		}
 		
+		@Override
+		public boolean adapt(List<E> values) {
+			return false;
+		}
+		
 		public void setBlackList(Collection<List<E>> newBlackList){
 			fBlackList = newBlackList;
 		}
@@ -88,6 +93,32 @@ public class AdaptiveRandomAlgorithm<E> extends AbstractAlgorithm<E> implements 
 		fHistory.add(optimalCandidate);
 		progress(1);
 		return optimalCandidate;
+	}
+
+	@Override
+	public void reset(){
+		fHistory.clear();
+		super.reset();
+	}
+
+	public int getLength(){
+		return fLength;
+	}
+
+	public boolean getDuplicates(){
+		return fDuplicates;
+	}
+
+	public int getHistorySize(){
+		return fDepth;
+	}
+
+	public int getCandidatesSize(){
+		return fCandidatesSize;
+	}
+
+	public List<List<E>> getHistory(){
+		return fHistory;
 	}
 
 	protected List<List<E>> getCandidates() throws GeneratorException {
@@ -146,12 +177,6 @@ public class AdaptiveRandomAlgorithm<E> extends AbstractAlgorithm<E> implements 
 		return distance;
 	}
 
-	@Override
-	public void reset(){
-		fHistory.clear();
-		super.reset();
-	}
-
 	protected List<Integer> randomVector(List<? extends List<E>> input) {
 		List<Integer> result = new ArrayList<Integer>();
 		Random random = new Random();
@@ -159,25 +184,5 @@ public class AdaptiveRandomAlgorithm<E> extends AbstractAlgorithm<E> implements 
 			result.add(random.nextInt(input.get(i).size()));
 		}
 		return result;
-	}
-
-	public int getLength(){
-		return fLength;
-	}
-
-	public boolean getDuplicates(){
-		return fDuplicates;
-	}
-	
-	public int getHistorySize(){
-		return fDepth;
-	}
-	
-	public int getCandidatesSize(){
-		return fCandidatesSize;
-	}
-	
-	public List<List<E>> getHistory(){
-		return fHistory;
 	}
 }
