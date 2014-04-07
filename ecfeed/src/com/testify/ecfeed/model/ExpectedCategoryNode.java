@@ -24,18 +24,6 @@ public class ExpectedCategoryNode extends AbstractCategoryNode{
 		fDefaultValue.setParent(this);
 	}
 
-	public PartitionNode getDefaultValuePartition(){
-		return fDefaultValue;
-	}
-	
-	public Object getDefaultValue() {
-		return fDefaultValue.getValue();
-	}
-
-	public void setDefaultValue(Object value) {
-		fDefaultValue.setValue(value);
-	}
-	
 	@Override
 	public List<? extends IGenericNode> getChildren() {
 		return EMPTY_CHILDREN_ARRAY;
@@ -82,5 +70,17 @@ public class ExpectedCategoryNode extends AbstractCategoryNode{
 
 	public String toString(){
 		return super.toString() + "(" + getDefaultValue() + ")";
+	}
+
+	public PartitionNode getDefaultValuePartition(){
+		return fDefaultValue;
+	}
+
+	public Object getDefaultValue() {
+		return fDefaultValue.getValue();
+	}
+
+	public void setDefaultValue(Object value) {
+		fDefaultValue.setValue(value);
 	}
 }
