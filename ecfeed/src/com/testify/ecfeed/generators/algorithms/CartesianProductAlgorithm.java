@@ -20,7 +20,7 @@ import com.testify.ecfeed.generators.api.IConstraint;
 
 public class CartesianProductAlgorithm<E> extends AbstractAlgorithm<E> implements IAlgorithm<E>{
 	private boolean fInitialized;
-	protected List<E> fLastGenerated;
+	protected List<Integer> fLastGenerated;
 
 	@Override
 	public void initialize(
@@ -37,7 +37,9 @@ public class CartesianProductAlgorithm<E> extends AbstractAlgorithm<E> implement
 		if(fInitialized == false){
 			throw new GeneratorException("Generator not initialized");
 		}
-		return (fLastGenerated = getNext(fLastGenerated));
+		List<E> next = getNext(instance(fLastGenerated));
+		fLastGenerated = representation(next);
+		return next;
 	}
 	
 	public void reset(){
