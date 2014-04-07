@@ -18,7 +18,7 @@ import java.util.List;
 import com.testify.ecfeed.generators.api.GeneratorException;
 import com.testify.ecfeed.generators.api.IConstraint;
 
-public class AbstractAlgorithm<E> implements IAlgorithm<E> {
+public abstract class AbstractAlgorithm<E> implements IAlgorithm<E> {
 
 	private int fTotalWork;
 	private int fProgress;
@@ -27,6 +27,18 @@ public class AbstractAlgorithm<E> implements IAlgorithm<E> {
 	private List<List<E>> fInput;
 	private Collection<IConstraint<E>> fConstraints;
 	
+	@Override
+	public void initialize(List<List<E>> input,
+			Collection<IConstraint<E>> constraints)
+			throws GeneratorException {
+		if(input == null || constraints == null){
+			throw new GeneratorException("input or constraints of algorithm cannot be null");
+		}
+		fInput = input;
+		fConstraints = constraints;
+		reset();
+	}
+
 	@Override
 	public int totalWork() {
 		return fTotalWork;
@@ -45,6 +57,29 @@ public class AbstractAlgorithm<E> implements IAlgorithm<E> {
 	}
 
 	
+	public void reset(){
+		fProgress = 0;
+	}
+
+	@Override
+	public void addConstraint(IConstraint<E> constraint) {
+		fConstraints.add(constraint);
+	}
+
+	@Override
+	public void removeConstraint(IConstraint<E> constraint) {
+		fConstraints.remove(constraint);
+	}
+
+	@Override
+	public Collection<? extends IConstraint<E>> getConstraints() {
+		return fConstraints;
+	}
+
+	public List<List<E>> getInput(){
+		return fInput;
+	}
+
 	protected void progress(int progress){
 		fProgress += progress;
 		fTotalProgress += progress;
@@ -54,11 +89,8 @@ public class AbstractAlgorithm<E> implements IAlgorithm<E> {
 		fTotalWork = totalWork;
 	}
 	
-	public void reset(){
-		fProgress = 0;
-	}
-	
 	protected List<E> instance(List<Integer> vector) {
+		if (vector == null) return null;
 		List<E> instance = new ArrayList<E>();
 		for(int i = 0; i < vector.size(); i++){
 			E element = fInput.get(i).get(vector.get(i));
@@ -89,42 +121,6 @@ public class AbstractAlgorithm<E> implements IAlgorithm<E> {
 				}
 			}
 			return true;
-	}
-
-	@Override
-	public void initialize(List<List<E>> input,
-			Collection<IConstraint<E>> constraints)
-			throws GeneratorException {
-		if(input == null || constraints == null){
-			throw new GeneratorException("input or constraints of algorithm cannot be null");
-		}
-		fInput = input;
-		fConstraints = constraints;
-		reset();
-	}
-
-	@Override
-	public List<E> getNext() throws GeneratorException {
-		return null;
-	}
-	
-	public List<List<E>> getInput(){
-		return fInput;
-	}
-
-	@Override
-	public void addConstraint(IConstraint<E> constraint) {
-		fConstraints.add(constraint);
-	}
-
-	@Override
-	public void removeConstraint(IConstraint<E> constraint) {
-		fConstraints.remove(constraint);
-	}
-
-	@Override
-	public Collection<? extends IConstraint<E>> getConstraints() {
-		return fConstraints;
 	}
 
 }
