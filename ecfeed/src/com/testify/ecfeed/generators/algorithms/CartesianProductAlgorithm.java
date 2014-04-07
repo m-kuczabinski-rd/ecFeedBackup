@@ -23,16 +23,6 @@ public class CartesianProductAlgorithm<E> extends AbstractAlgorithm<E> implement
 	protected List<Integer> fLastGenerated;
 
 	@Override
-	public void initialize(
-			List<List<E>> input, 
-			Collection<IConstraint<E>> constraints) throws GeneratorException{
-		
-		fInitialized = true;
-		setTotalWork(calculateProductSize(input));
-		super.initialize(input, constraints);
-	}
-	
-	@Override
 	public List<E> getNext() throws GeneratorException{
 		if(fInitialized == false){
 			throw new GeneratorException("Generator not initialized");
@@ -40,6 +30,16 @@ public class CartesianProductAlgorithm<E> extends AbstractAlgorithm<E> implement
 		List<E> next = getNext(instance(fLastGenerated));
 		fLastGenerated = representation(next);
 		return next;
+	}
+
+	@Override
+	public void initialize(
+			List<List<E>> input, 
+			Collection<IConstraint<E>> constraints) throws GeneratorException{
+		
+		fInitialized = true;
+		setTotalWork(calculateProductSize(input));
+		super.initialize(input, constraints);
 	}
 	
 	public void reset(){
