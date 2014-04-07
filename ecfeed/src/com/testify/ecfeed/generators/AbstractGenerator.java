@@ -32,11 +32,6 @@ public class AbstractGenerator<E> implements IGenerator<E> {
 	private boolean fInitialized = false;
 	
 	@Override
-	public List<IGeneratorParameter> parameters() {
-		return fParameterDefinitions;
-	}
-
-	@Override
 	public void initialize(List<List<E>> inputDomain,
 			Collection<IConstraint<E>> constraints,
 			Map<String, Object> parameters)
@@ -46,19 +41,68 @@ public class AbstractGenerator<E> implements IGenerator<E> {
 		fParameterValues = parameters;
 		fInput = inputDomain;
 		fConstraints = constraints;
-
+	
 		if(fAlgorithm != null){
 			fAlgorithm.initialize(inputDomain, constraints);
 		}
 		fInitialized = true; 
 	}
 
-	private void validateInput(List<? extends List<E>> inputDomain) throws GeneratorException {
-		for(List<E> category : inputDomain){
-			if(category.size() == 0){
-				throw new GeneratorException("Generator input domain cannot contain empty vectors");
-			}
+	@Override
+	public List<E> next() throws GeneratorException {
+		List<E> next = fAlgorithm.getNext();
+		if(next != null){
+			/*
+			 * It's necessary to perform adapt operation on the copy.
+			 * Otherwise we would affect algorithm internal state (e.g.
+			 * if it keeps a history of generated vectors).
+			 */
+			List<E> copy = new ArrayList<E>(next);
+			return adapt(copy);
 		}
+		else{
+			return null;
+		}
+	}
+
+	@Override
+	public void reset(){
+		fAlgorithm.reset();
+	}
+
+	@Override
+	public List<IGeneratorParameter> parameters() {
+		return fParameterDefinitions;
+	}
+
+	@Override
+	public int totalWork() {
+		return fAlgorithm.totalWork();
+	}
+
+	@Override
+	public int workProgress() {
+		return fAlgorithm.workProgress();
+	}
+
+	@Override
+	public int totalProgress() {
+		return fAlgorithm.totalProgress();
+	}
+
+	@Override
+	public void addConstraint(IConstraint<E> constraint) {
+		fAlgorithm.addConstraint(constraint);
+	}
+
+	@Override
+	public void removeConstraint(IConstraint<E> constraint) {
+		fAlgorithm.removeConstraint(constraint);
+	}
+
+	@Override
+	public Collection<? extends IConstraint<E>> getConstraints() {
+		return fAlgorithm.getConstraints();
 	}
 
 	protected void validateParameters(Map<String, Object> parameters) throws GeneratorException {
@@ -93,16 +137,6 @@ public class AbstractGenerator<E> implements IGenerator<E> {
 		}
 	}
 	
-	@Override
-	public List<E> next() throws GeneratorException {
-		return fAlgorithm.getNext();
-	}
-
-	@Override
-	public void reset(){
-		fAlgorithm.reset();
-	}
-	
 	protected void setAlgorithm(IAlgorithm<E> algorithm) throws GeneratorException{
 		fAlgorithm = algorithm;
 		fAlgorithm.initialize(fInput, fConstraints);
@@ -112,21 +146,6 @@ public class AbstractGenerator<E> implements IGenerator<E> {
 		return fAlgorithm;
 	}
 
-	@Override
-	public int totalWork() {
-		return fAlgorithm.totalWork();
-	}
-
-	@Override
-	public int workProgress() {
-		return fAlgorithm.workProgress();
-	}
-
-	@Override
-	public int totalProgress() {
-		return fAlgorithm.totalProgress();
-	}
-	
 	protected void addParameterDefinition(IGeneratorParameter definition){
 		for(int i = 0; i < fParameterDefinitions.size(); i++){
 			if(fParameterDefinitions.get(i).getName().equals(definition.getName())){
@@ -182,6 +201,23 @@ public class AbstractGenerator<E> implements IGenerator<E> {
 	}
 
 
+	protected List<E> adapt(List<E> values){
+		if(values != null){
+			for(IConstraint<E> constraint : getConstraints()){
+				constraint.adapt(values);
+			}
+		}
+		return values;
+	}
+
+	private void validateInput(List<? extends List<E>> inputDomain) throws GeneratorException {
+		for(List<E> category : inputDomain){
+			if(category.size() == 0){
+				throw new GeneratorException("Generator input domain cannot contain empty vectors");
+			}
+		}
+	}
+
 	private Object getParameterValue(String name, Map<String, Object> values) throws GeneratorException {
 		IGeneratorParameter definition = null;
 		for(IGeneratorParameter def : fParameterDefinitions){
@@ -216,21 +252,4 @@ public class AbstractGenerator<E> implements IGenerator<E> {
 		}
 		return value;
 	}
-
-	@Override
-	public void addConstraint(IConstraint<E> constraint) {
-		fAlgorithm.addConstraint(constraint);
-	}
-
-	@Override
-	public void removeConstraint(IConstraint<E> constraint) {
-		fAlgorithm.removeConstraint(constraint);
-	}
-
-	@Override
-	public Collection<? extends IConstraint<E>> getConstraints() {
-		return fAlgorithm.getConstraints();
-	}
-
-
 }
