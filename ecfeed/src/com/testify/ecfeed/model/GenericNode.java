@@ -13,7 +13,6 @@ package com.testify.ecfeed.model;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -72,28 +71,6 @@ public class GenericNode implements IGenericNode{
 			return this;
 		}
 		return getParent().getRoot();
-	}
-
-	@Override
-	@Deprecated
-	public boolean removeChild(IGenericNode child) {
-		boolean result = getChildren().remove(child);
-		if(result){
-			child.setParent(null);
-		}
-		return result;
-	}
-	
-	@Override
-	@Deprecated
-	public boolean removeChildren(Collection<IGenericNode> children){
-		return getChildren().removeAll(children);
-	}
-	
-	@Override
-	@Deprecated
-	public boolean isParent(IGenericNode potentialChild){
-		return getChildren().contains(potentialChild);
 	}
 
 	@Override
