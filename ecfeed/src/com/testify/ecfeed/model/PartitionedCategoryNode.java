@@ -18,6 +18,11 @@ public class PartitionedCategoryNode extends AbstractCategoryNode{
 		partition.setParent(this);
 	}
 	
+	@Override
+	public PartitionedCategoryNode getCategory() {
+		return this;
+	}
+
 	public PartitionNode getPartition(String qualifiedName){
 		return (PartitionNode)getChild(qualifiedName);
 	}
@@ -35,14 +40,6 @@ public class PartitionedCategoryNode extends AbstractCategoryNode{
 		return leafs;
 	}
 	
-	public List<String> getPartitionNames() {
-		ArrayList<String> names = new ArrayList<String>();
-		for(PartitionNode partition : getPartitions()){
-			names.add(partition.getName());
-		}
-		return names;
-	}
-
 	public List<String> getAllPartitionNames(){
 		List<String> names = new ArrayList<String>();
 		for(PartitionNode child : getPartitions()){
@@ -51,7 +48,34 @@ public class PartitionedCategoryNode extends AbstractCategoryNode{
 		}
 		return names;
 	}
-	
+
+	public boolean removePartition(PartitionNode partition){
+		if(fPartitions.contains(partition) && fPartitions.remove(partition)){
+			MethodNode parentMethod = getMethod();
+			if(parentMethod != null){
+				parentMethod.partitionRemoved(partition);
+			}
+		}
+		return false;
+	}
+
+	@Override
+	public boolean removePartition(String qualifiedName) {
+		return removePartition(getPartition(qualifiedName));
+	}
+
+	public List<? extends IGenericNode> getChildren(){
+		return fPartitions;
+	}
+
+	public List<String> getPartitionNames() {
+		ArrayList<String> names = new ArrayList<String>();
+		for(PartitionNode partition : getPartitions()){
+			names.add(partition.getName());
+		}
+		return names;
+	}
+
 	public List<String> getLeafPartitionNames(){
 		List<PartitionNode> leafPartitions = getLeafPartitions();
 		List<String> names = new ArrayList<String>();
@@ -67,29 +91,5 @@ public class PartitionedCategoryNode extends AbstractCategoryNode{
 			labels.addAll(p.getAllDescendingLabels());
 		}
 		return labels;
-	}
-	
-	public boolean removePartition(PartitionNode partition){
-		if(fPartitions.contains(partition) && fPartitions.remove(partition)){
-			MethodNode parentMethod = getMethod();
-			if(parentMethod != null){
-				parentMethod.partitionRemoved(partition);
-			}
-		}
-		return false;
-	}
-
-	public List<? extends IGenericNode> getChildren(){
-		return fPartitions;
-	}
-	
-	@Override
-	public PartitionedCategoryNode getCategory() {
-		return this;
-	}
-
-	@Override
-	public boolean removePartition(String qualifiedName) {
-		return removePartition(getPartition(qualifiedName));
 	}
 }
