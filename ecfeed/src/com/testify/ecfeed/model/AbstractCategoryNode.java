@@ -85,9 +85,4 @@ public abstract class AbstractCategoryNode extends GenericNode implements IParti
 	public String toString(){
 		return new String(getName() + ": " + getType());
 	}
-
-	@Deprecated
-	public boolean isExpected() {
-		return false;
-	}
 }
