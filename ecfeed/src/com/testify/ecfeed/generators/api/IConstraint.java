@@ -13,6 +13,17 @@ package com.testify.ecfeed.generators.api;
 
 import java.util.List;
 
+
+/*
+ * Constraints can be adapting or evaluating. The adapting constraints
+ * should change the content of 'values' vector, so the constraint is 
+ * fulfilled after adaption. The evaluate function should always return 
+ * true in this case.
+ * 
+ * The evaluating constraints should not modify the values (adapt function 
+ * should do nothing). The evaluate function shall return information
+ * if the vector fulfills the constraint condition.
+ */
 public interface IConstraint<E> {
 	public boolean evaluate(List<E> values);
 	public boolean adapt(List<E> values);
