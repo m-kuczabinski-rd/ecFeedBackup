@@ -89,4 +89,8 @@ public abstract class BasicStatement implements IStatement {
 		return fId == ((BasicStatement)obj).getId();
 	}
 	
+	@Override
+	public boolean adapt(List<PartitionNode> values){
+		return false;
+	}
 }

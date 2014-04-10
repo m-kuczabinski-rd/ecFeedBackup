@@ -31,6 +31,40 @@ public class Constraint implements IConstraint<PartitionNode> {
 		fConsequence = consequence;
 	}
 	
+	@Override
+	public boolean evaluate(List<PartitionNode> values) {
+		if(fPremise == null) return true;
+		if(fPremise.evaluate(values) == true){
+			if(fConsequence == null) return false;
+			return fConsequence.evaluate(values);
+		}
+		return true;
+	}
+
+	@Override
+	public boolean adapt(List<PartitionNode> values){
+		if(fPremise == null) return true;
+		if(fPremise.evaluate(values) == true){
+			return fConsequence.adapt(values);
+		}		
+		return true;
+	}
+
+	@Override
+	public String toString(){
+		String premiseString = (fPremise != null)?fPremise.toString():"EMPTY";
+		String consequenceString = (fConsequence != null)?fConsequence.toString():"EMPTY";
+		return premiseString + " \u21d2 " + consequenceString;
+	}
+
+	@Override
+	public boolean equals(Object obj){
+		if(obj instanceof Constraint == false){
+			return false;
+		}
+		return(ID == ((Constraint)obj).getId());
+	}
+
 	public int getId(){
 		return ID;
 	}
@@ -39,12 +73,12 @@ public class Constraint implements IConstraint<PartitionNode> {
 		return fPremise;
 	}
 	
-	public void setPremise(BasicStatement statement){
-		fPremise = statement;
-	}
-	
 	public BasicStatement getConsequence(){
 		return fConsequence;
+	}
+
+	public void setPremise(BasicStatement statement){
+		fPremise = statement;
 	}
 	
 	public void setConsequence(BasicStatement consequence){
@@ -57,30 +91,5 @@ public class Constraint implements IConstraint<PartitionNode> {
 
 	public boolean mentions(PartitionNode partition) {
 		return fPremise.mentions(partition) || fConsequence.mentions(partition);
-	}
-
-	@Override
-	public boolean evaluate(List<PartitionNode> values) {
-		if(fPremise == null) return true;
-		if(fPremise.evaluate(values) == true){
-			if(fConsequence == null) return false;
-			return fConsequence.evaluate(values);
-		}
-		return true;
-	}
-
-	@Override
-	public String toString(){
-		String premiseString = (fPremise != null)?fPremise.toString():"EMPTY";
-		String consequenceString = (fConsequence != null)?fConsequence.toString():"EMPTY";
-		return premiseString + " \u21d2 " + consequenceString;
-	}
-	
-	@Override
-	public boolean equals(Object obj){
-		if(obj instanceof Constraint == false){
-			return false;
-		}
-		return(ID == ((Constraint)obj).getId());
 	}
 }

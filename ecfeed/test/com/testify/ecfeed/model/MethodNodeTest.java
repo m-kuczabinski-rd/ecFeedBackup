@@ -157,9 +157,9 @@ public class MethodNodeTest {
 	public void moveChildTest(){
 		MethodNode method = new MethodNode("name");
 		
-		AbstractCategoryNode category1 = new PartitionedCategoryNode("name", "type");
-		AbstractCategoryNode category2 = new PartitionedCategoryNode("name", "type");
-		AbstractCategoryNode category3 = new PartitionedCategoryNode("name", "type");
+		PartitionedCategoryNode category1 = new PartitionedCategoryNode("name", "type");
+		PartitionedCategoryNode category2 = new PartitionedCategoryNode("name", "type");
+		PartitionedCategoryNode category3 = new PartitionedCategoryNode("name", "type");
 		
 		TestCaseNode testCase1 = new TestCaseNode("test case", new ArrayList<PartitionNode>());
 		TestCaseNode testCase2 = new TestCaseNode("test case", new ArrayList<PartitionNode>());

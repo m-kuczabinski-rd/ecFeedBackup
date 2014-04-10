@@ -83,6 +83,11 @@ public class PartitionedCategoryStatement extends BasicStatement implements IRel
 			if(getCategory().getMethod() == null){
 				return false;
 			}
+			
+			if(values == null){
+				return true;
+			}
+			
 			int index = getCategory().getMethod().getCategories().indexOf(getCategory());
 
 			if(values.size() < index + 1){

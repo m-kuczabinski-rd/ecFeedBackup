@@ -35,11 +35,14 @@ public class ExpectedValueStatement extends BasicStatement implements IRelationa
 		return true;
 	}
 
-	public void adapt(List<PartitionNode> values){
+	@Override
+	public boolean adapt(List<PartitionNode> values){
+		if(values == null) return true;
 		if(fCategory.getMethod() != null){
 			int index = fCategory.getMethod().getCategories().indexOf(fCategory);
 			values.set(index, fCondition.getCopy());
 		}
+		return true;
 	}
 
 	@Override
