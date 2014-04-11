@@ -307,7 +307,7 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 		
 		Label selectPartitionsLabel = new Label(composite, SWT.WRAP);
 		selectPartitionsLabel.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
-		selectPartitionsLabel.setText(Messages.DIALOG_GENERATE_TEST_SUITES_SELECT_PARTITIONS_LABEL + "cycki");
+		selectPartitionsLabel.setText(Messages.DIALOG_GENERATE_TEST_SUITES_SELECT_PARTITIONS_LABEL);
 		
 		createPartitionsViewer(composite);
 	}
@@ -416,9 +416,11 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 			}
 		});
 		if(fGeneratorFactory.availableGenerators().size() > 0){
-			String[] availableGenerators = fGeneratorFactory.availableGenerators().toArray(new String[]{}); 
-			fGeneratorCombo.setItems(availableGenerators);
-			fGeneratorCombo.setText(availableGenerators[0]);
+			String[] availableGenerators = fGeneratorFactory.availableGenerators().toArray(new String[] {});
+			for(String generator : availableGenerators){
+				fGeneratorCombo.add(generator);
+				}
+			fGeneratorCombo.select(0);
 			setOkButton(true);
 		}
 	}
@@ -500,9 +502,9 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 				}
 			}
 		};
-		combo.addModifyListener(listener);
 		combo.setItems(allowedValuesItems(definition));
 		combo.setText(definition.defaultValue().toString());
+		combo.addModifyListener(listener);
 	}
 	
 	private String[] allowedValuesItems(IGeneratorParameter definition) {

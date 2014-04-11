@@ -11,17 +11,21 @@
 
 package com.testify.ecfeed.generators.algorithms;
 
-import static org.junit.Assert.*;
+import static com.testify.ecfeed.generators.algorithms.utils.AlgorithmTestUtils.calculateCoveredTuples;
+import static com.testify.ecfeed.generators.algorithms.utils.AlgorithmTestUtils.calculateTotalTuples;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.lang.reflect.Constructor;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.junit.Test;
+
 import com.testify.ecfeed.generators.CartesianProductGenerator;
-import com.testify.ecfeed.generators.algorithms.IAlgorithm;
-import com.testify.ecfeed.generators.algorithms.Tuples;
 import com.testify.ecfeed.generators.api.GeneratorException;
 import com.testify.ecfeed.generators.api.IConstraint;
 import com.testify.ecfeed.generators.utils.GeneratorTestUtils;
@@ -94,6 +98,42 @@ public class NWiseAlgorithmTest{
 			notCoveredTuples.removeAll((new Tuples<String>(vector, n)).getAll());
 		}
 		return notCoveredTuples.isEmpty();
+	}
+	
+	@Test
+	public void nwisePercentageCovered() {
+
+		try {
+			for (int n = 2; n < 4; n++) {
+				System.out.println("N: " + n);
+				List<List<String>> input = GeneratorTestUtils
+						.prepareInput(5, 6);
+				long totalTuples = calculateTotalTuples(input, n);
+				for (int p = 0; p <= 100; p+=10) {
+
+					OptimalNWiseAlgorithm<String> nwise = new OptimalNWiseAlgorithm<String>(
+							n, p);
+
+					nwise.initialize(input, EMPTY_CONSTRAINTS);
+
+					List<List<String>> nwiseSuite = new ArrayList<List<String>>();
+
+					List<String> next = null;
+
+					while ((next = nwise.getNext()) != null) {
+						nwiseSuite.add(next);
+					}
+
+					int nwiseTuplesCovered = calculateCoveredTuples(nwiseSuite,
+							input, n);			
+					int leastTuplesExpected = (int)Math.ceil(((double) (p * totalTuples)) / 100);
+
+					assertTrue( nwiseTuplesCovered>= leastTuplesExpected);
+				}
+			}
+		} catch (GeneratorException e) {
+			fail("Unexpected GeneratorException: " + e.getMessage());
+		}
 	}
 
 

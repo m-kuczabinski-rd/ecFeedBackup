@@ -145,7 +145,12 @@ public class AbstractGenerator<E> implements IGenerator<E> {
 	protected IAlgorithm<E> getAlgorithm(){
 		return fAlgorithm;
 	}
-
+	
+	@Override
+	public void cancel(){
+		fAlgorithm.cancel();
+	}
+	
 	protected void addParameterDefinition(IGeneratorParameter definition){
 		for(int i = 0; i < fParameterDefinitions.size(); i++){
 			if(fParameterDefinitions.get(i).getName().equals(definition.getName())){

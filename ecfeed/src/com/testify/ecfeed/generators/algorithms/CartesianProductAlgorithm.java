@@ -27,6 +27,9 @@ public class CartesianProductAlgorithm<E> extends AbstractAlgorithm<E> implement
 		if(fInitialized == false){
 			throw new GeneratorException("Generator not initialized");
 		}
+		if(fCancel){
+			return null;
+		}
 		List<E> next = getNext(instance(fLastGenerated));
 		fLastGenerated = representation(next);
 		return next;

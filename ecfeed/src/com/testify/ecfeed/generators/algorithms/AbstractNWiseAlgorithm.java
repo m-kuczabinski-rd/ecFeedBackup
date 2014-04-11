@@ -12,7 +12,6 @@
 package com.testify.ecfeed.generators.algorithms;
 
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -26,8 +25,10 @@ public abstract class AbstractNWiseAlgorithm<E> extends AbstractAlgorithm<E> imp
 	protected int N  = -1;
 	private int fTuplesToGenerate;
 	protected int fProgress;
-	
-	public AbstractNWiseAlgorithm(int n){
+	protected int fCoverage;
+
+	public AbstractNWiseAlgorithm(int n, int coverage) {
+		fCoverage = coverage;
 		N = n;
 	}
 	
@@ -36,6 +37,9 @@ public abstract class AbstractNWiseAlgorithm<E> extends AbstractAlgorithm<E> imp
 
 		if(N < 1 || N > input.size()){
 			throw new GeneratorException("Value of N for this input must be between 1 and " + input.size());
+		}
+		if (fCoverage > 100 || fCoverage < 0) {
+			throw new GeneratorException("Coverage must be between 1 and 100");
 		}
 		fCartesianGenerator = new CartesianProductGenerator<E>();
 		fCartesianGenerator.initialize(input, constraints, null);
@@ -66,22 +70,7 @@ public abstract class AbstractNWiseAlgorithm<E> extends AbstractAlgorithm<E> imp
 		return (new Tuples<E>(vector, N)).getAll();
 	}
 
-	protected Set<List<E>> getAllTuples(List<List<E>> inputDomain, int n) throws GeneratorException {
-		Set<List<E>> result  = new HashSet<List<E>>();
-		Tuples<List<E>> categoryTuples = new Tuples<List<E>>(inputDomain, n);
-		while(categoryTuples.hasNext()){
-			List<List<E>> next = categoryTuples.next();
-			CartesianProductGenerator<E> generator = new CartesianProductGenerator<E>();
-			generator.initialize(next, null, null);
-			List<E> tuple;
-			while((tuple = generator.next()) != null){
-				result.add(tuple);
-			}
-		}
-		return result;
-	}
-	
-	protected long tuplesToGenerate(){
+	protected long tuplesToGenerate() {
 		return fTuplesToGenerate;
 	}
 	
@@ -100,6 +89,21 @@ public abstract class AbstractNWiseAlgorithm<E> extends AbstractAlgorithm<E> imp
 			}
 			totalWork += combinations;
 		}
-		return totalWork;
+		return (int) Math.ceil(((double) (fCoverage * totalWork)) / 100);
+	}
+	
+
+	
+	@Override
+	public void cancel() {
+		fCartesianGenerator.cancel();
+	}
+
+	public int getCoverage() {
+		return fCoverage;
+	}
+
+	public void setCoverage(int fCoverage) {
+		this.fCoverage = fCoverage;
 	}
 }

@@ -63,6 +63,9 @@ public class Messages {
 	public static final String DIALOG_REMOVE_LAST_PARTITION_TITLE = "Cannot remove partition";
 	public static final String DIALOG_REMOVE_LAST_PARTITION_MESSAGE = "A category must have at least one partition.";
 	public static final String DIALOG_SELECT_CONTAINER_FOR_NEW_ECT_FILE_TITLE = "Select container for the new file";
+	
+	public static final String DIALOG_CALCULATE_COVERAGE_TITLE = "Calculate n-wise coverage";
+	public static final String DIALOG_CALCULATE_COVERAGE_MESSAGE = "Select test cases to include in evaluation.";
 
 	public static final String WIZARD_NEW_ECT_FILE_TITLE = "New Equivalence Class Model";
 	public static final String WIZARD_NEW_ECT_FILE_MESSAGE = "Create new file with equivalence class model";

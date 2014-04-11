@@ -50,4 +50,7 @@ public interface IGenerator<E> {
 	public int workProgress();
 	
 	public int totalProgress();
+	
+	public void cancel();
+	
 }

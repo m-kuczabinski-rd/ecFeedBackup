@@ -35,7 +35,9 @@ import com.testify.ecfeed.model.ExpectedCategoryNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.TestCaseNode;
+import com.testify.ecfeed.model.constraint.BasicStatement;
 import com.testify.ecfeed.model.constraint.Constraint;
+import com.testify.ecfeed.model.constraint.ExpectedValueStatement;
 import com.testify.ecfeed.ui.common.Constants;
 import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.dialogs.GenerateTestSuiteDialog;
@@ -73,7 +75,7 @@ class GenerateTestSuiteAdapter extends SelectionAdapter{
 			try {
 				fGenerator.initialize(fInput, fConstraints, fParameters);
 				monitor.beginTask("Generating test data", fGenerator.totalWork());
-				while((next = fGenerator.next()) != null && monitor.isCanceled() == false){
+				while((monitor.isCanceled() == false) && (next = fGenerator.next()) != null){
 					fGeneratedData.add(next);
 					monitor.worked(fGenerator.workProgress());
 				}
@@ -179,10 +181,27 @@ class GenerateTestSuiteAdapter extends SelectionAdapter{
 			testSuite.add(testCaseNode);
 		}
 		replaceExpectedValues(testSuite);
+		adaptExpectedValues(testSuite, fSelectedConstraints);
 		for(TestCaseNode testCase : testSuite){
 			getSelectedMethod().addTestCase(testCase);
 		}
 		fViewerSection.modelUpdated();
+	}
+
+	private void adaptExpectedValues(List<TestCaseNode> testSuite,
+			Collection<Constraint> constraints) {
+		for(Constraint constraint : constraints){
+			BasicStatement consequence = constraint.getConsequence();
+			if(consequence instanceof ExpectedValueStatement){
+				ExpectedValueStatement adaptor = (ExpectedValueStatement)consequence;
+				BasicStatement premise = constraint.getPremise();
+				for(TestCaseNode testCase : testSuite){
+					if(premise.evaluate(testCase.getTestData())){
+						adaptor.adapt(testCase.getTestData());
+					}
+				}
+			}
+		}
 	}
 
 	private void replaceExpectedValues(List<TestCaseNode> testSuite) {
@@ -195,7 +214,9 @@ class GenerateTestSuiteAdapter extends SelectionAdapter{
 			for(int i = 0; i < testData.size(); i++){
 				AbstractCategoryNode category = testData.get(i).getCategory();
 				if(category instanceof ExpectedCategoryNode){
-					PartitionNode anonymousPartition = testData.get(i).getCopy();
+					PartitionNode anonymousPartition = 
+							new PartitionNode(Constants.EXPECTED_VALUE_PARTITION_NAME, 
+									testData.get(i).getValue());
 					anonymousPartition.setParent(category);
 					testData.set(i, anonymousPartition);
 				}

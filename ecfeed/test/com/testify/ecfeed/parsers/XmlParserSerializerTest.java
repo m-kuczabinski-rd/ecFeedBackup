@@ -146,10 +146,10 @@ public class XmlParserSerializerTest {
 			PartitionedCategoryNode partitionedCategory = 
 					new PartitionedCategoryNode("partitionedCategory", com.testify.ecfeed.model.Constants.TYPE_NAME_STRING);
 			ExpectedCategoryNode expectedCategory = 
-					new ExpectedCategoryNode("expectedCategory", com.testify.ecfeed.model.Constants.TYPE_NAME_CHAR, 'ę');
+					new ExpectedCategoryNode("expectedCategory", com.testify.ecfeed.model.Constants.TYPE_NAME_CHAR, 'd');
 			PartitionNode partition1 = new PartitionNode("partition", "p");
 			partition1.setParent(partitionedCategory);
-			PartitionNode partition2 = new PartitionNode("expected", 'ó');
+			PartitionNode partition2 = new PartitionNode("expected", 's');
 			partition2.setParent(expectedCategory);
 			
 			List<PartitionNode> testData = new ArrayList<PartitionNode>();
@@ -161,7 +161,7 @@ public class XmlParserSerializerTest {
 			Constraint labelConstraint = new Constraint(new StaticStatement(true), 
 					new PartitionedCategoryStatement(partitionedCategory, Relation.EQUAL, "label"));
 			Constraint expectedConstraint = new Constraint(new StaticStatement(true), 
-					new ExpectedValueStatement(expectedCategory, new PartitionNode("expected", '¡')));
+					new ExpectedValueStatement(expectedCategory, new PartitionNode("expected", 'n')));
 			ConstraintNode partitionConstraintNode = new ConstraintNode("partition constraint", partitionConstraint);
 			ConstraintNode labelConstraintNode = new ConstraintNode("label constraint", labelConstraint);
 			ConstraintNode expectedConstraintNode = new ConstraintNode("expected constraint", expectedConstraint);

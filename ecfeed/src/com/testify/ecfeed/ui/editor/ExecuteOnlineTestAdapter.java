@@ -21,7 +21,6 @@ import java.util.Map;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Display;
@@ -34,6 +33,7 @@ import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.model.constraint.Constraint;
 import com.testify.ecfeed.runner.ParameterizedMethod;
 import com.testify.ecfeed.ui.dialogs.ExecuteOnlineSetupDialog;
+import com.testify.ecfeed.ui.dialogs.GeneratorProgressMonitorDialog;
 
 public class ExecuteOnlineTestAdapter extends ExecuteTestAdapter {
 
@@ -113,7 +113,7 @@ public class ExecuteOnlineTestAdapter extends ExecuteTestAdapter {
 			Collection<IConstraint<PartitionNode>> constraints,
 			Map<String, Object> parameters) {
 
-		ProgressMonitorDialog progressDialog = new ProgressMonitorDialog(fPage.getActiveShell());
+		GeneratorProgressMonitorDialog progressDialog = new GeneratorProgressMonitorDialog(fPage.getActiveShell(), generator);
 		ExecuteRunnable runnable = new ExecuteRunnable(generator, input, constraints, parameters);
 		progressDialog.open();
 		try {

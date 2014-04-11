@@ -172,6 +172,7 @@ public class TestCasesViewer extends CheckboxTreeViewerSection {
 		addButton("Add test case", new AddTestCaseAdapter());
 		addButton("Rename suite", new RenameSuiteAdapter());
 		addButton("Generate test suite", new GenerateTestSuiteAdapter(this));
+		addButton("Calculate coverage", new CalculateCoverageAdapter(this));
 		addButton("Remove selected", new RemoveSelectedAdapter());
 		addButton("Execute selected", new ExecuteStaticTestAdapter(this));
 

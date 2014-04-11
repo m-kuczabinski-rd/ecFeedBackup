@@ -23,6 +23,7 @@ public abstract class AbstractAlgorithm<E> implements IAlgorithm<E> {
 	private int fTotalWork;
 	private int fProgress;
 	private int fTotalProgress;
+	protected boolean fCancel;
 
 	private List<List<E>> fInput;
 	private Collection<IConstraint<E>> fConstraints;
@@ -121,6 +122,11 @@ public abstract class AbstractAlgorithm<E> implements IAlgorithm<E> {
 				}
 			}
 			return true;
+	}
+	
+	@Override
+	public void cancel() {
+		fCancel = true;
 	}
 
 }
