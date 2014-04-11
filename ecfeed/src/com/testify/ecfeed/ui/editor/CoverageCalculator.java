@@ -3,13 +3,8 @@ package com.testify.ecfeed.ui.editor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -32,7 +27,6 @@ public class CoverageCalculator {
 	private int[] fTotalWork;
 	private Map<Integer, PartitionNode> fExpectedPartitions;
 	private double[] fResults;
-	Set<ChangeListener> fListeners;
 
 	private List<List<PartitionNode>> fInput;
 	// The main map of covered tuples
@@ -56,7 +50,6 @@ public class CoverageCalculator {
 		fResults = new double[N];
 		fCurrentChangedCases = new ArrayList<>();
 
-		fListeners = new HashSet<>();
 		fTuples = new ArrayList<Map<List<PartitionNode>, Integer>>();
 		fExpectedPartitions = prepareExpectedPartitions();
 
@@ -130,7 +123,6 @@ public class CoverageCalculator {
 			// set results to zero
 			resetResults();
 			fCurrentChangedCases = new ArrayList<>();
-			notifyChangeListeners();
 			return true;
 		} else {
 			ProgressMonitorDialog progressDialog = new ProgressMonitorDialog(Display.getDefault().getActiveShell());
@@ -142,7 +134,6 @@ public class CoverageCalculator {
 					return false;
 				} else {
 					fCurrentChangedCases.clear();
-					notifyChangeListeners();
 					return true;
 				}
 
@@ -257,17 +248,6 @@ public class CoverageCalculator {
 		}
 
 		return (int) Math.ceil(((double) (coverage * totalWork)) / 100);
-	}
-
-	// notify GUI to update.
-	public void notifyChangeListeners() {
-		for (ChangeListener listener : fListeners) {
-			listener.stateChanged(new ChangeEvent(fResults));
-		}
-	}
-
-	public void addResultChangeListener(ChangeListener listener) {
-		fListeners.add(listener);
 	}
 
 	// Getters & Setters

@@ -33,8 +33,7 @@ public abstract class AbstractNWiseAlgorithm<E> extends AbstractAlgorithm<E> imp
 	}
 	
 	public void initialize(List<List<E>> input, 
-			Collection<IConstraint<E>> constraints) throws GeneratorException {
-
+			Collection<IConstraint<E>> constraints) throws GeneratorException {	
 		if(N < 1 || N > input.size()){
 			throw new GeneratorException("Value of N for this input must be between 1 and " + input.size());
 		}
@@ -103,7 +102,4 @@ public abstract class AbstractNWiseAlgorithm<E> extends AbstractAlgorithm<E> imp
 		return fCoverage;
 	}
 
-	public void setCoverage(int fCoverage) {
-		this.fCoverage = fCoverage;
-	}
 }

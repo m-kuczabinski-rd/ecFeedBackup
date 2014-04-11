@@ -33,7 +33,10 @@ public class NWiseGeneratorTest {
 	@Test
 	public void initializeNTest() {
 		try {
-
+			/*
+			 *	Should I change the way algorithms are initialized? I guess So. There is no real situation in which we alter parameters
+			 *	once initialized, though. Awaiting approval.
+			 */
 			NWiseGenerator<String> generator = new NWiseGenerator<String>();
 			List<List<String>> inputDomain = GeneratorTestUtils.prepareInput(3,
 					3);
@@ -59,10 +62,6 @@ public class NWiseGeneratorTest {
 			} catch (GeneratorException e) {
 			}
 			try {
-				/*
-				 *	How the hell is it working? Why would it throw exception, but only when we test with 5 earier?
-				 *	If we swap test order, then -1 doesn't disrupt anything, just exceeding upper border...
-				 */
 				parameters.put("N", 2);
 				generator.initialize(inputDomain, constraints, parameters);
 			} catch (GeneratorException e) {
@@ -84,7 +83,7 @@ public class NWiseGeneratorTest {
 			Collection<IConstraint<String>> constraints = new ArrayList<IConstraint<String>>();
 			Map<String, Object> parameters = new HashMap<String, Object>();
 			parameters.put("N", 2);
-			parameters.put("Test area coverage (%)", 100);
+			parameters.put("coverage", 100);
 
 			generator.initialize(inputDomain, constraints, parameters);
 			IAlgorithm<String> algorithm = generator.getAlgorithm();
@@ -93,19 +92,19 @@ public class NWiseGeneratorTest {
 					((OptimalNWiseAlgorithm<String>) algorithm).getCoverage());
 
 			try {
-				parameters.put("Test area coverage (%)", 101);
+				parameters.put("coverage", 101);
 				generator.initialize(inputDomain, constraints, parameters);
 				fail("GeneratorException expected");
 			} catch (GeneratorException e) {
 			}
 			try {
-				parameters.put("Test area coverage (%)", -1);
+				parameters.put("coverage", -1);
 				generator.initialize(inputDomain, constraints, parameters);
 				fail("GeneratorException expected");
 			} catch (GeneratorException e) {
 			}
 			try {
-				parameters.put("Test area coverage (%)", 50);
+				parameters.put("coverage", 50);
 				generator.initialize(inputDomain, constraints, parameters);
 			} catch (GeneratorException e) {
 				fail("Unexpected GeneratorException");

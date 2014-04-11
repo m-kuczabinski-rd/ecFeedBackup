@@ -8,17 +8,17 @@ package com.testify.ecfeed.ui.dialogs;
  * http://www.eclipse.org/legal/epl-v10.html                                     
  *                                                                               
  * Contributors:                                                                 
- *     Patryk Chamuczynski (p.chamuczynski(at)radytek.com) - initial implementation
+ *     Michal Gluszko (m.gluszko(at)radytek.com) - initial implementation
  ******************************************************************************/
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.Collection;
-
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
+import java.util.List;
 
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.TitleAreaDialog;
+import org.eclipse.jface.viewers.CheckStateChangedEvent;
 import org.eclipse.jface.viewers.CheckboxTreeViewer;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.LabelProvider;
@@ -51,16 +51,16 @@ import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.ui.common.Constants;
 import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.common.TreeCheckStateListener;
+import com.testify.ecfeed.ui.editor.CoverageCalculator;
 
-public class CalculateCoverageDialog extends TitleAreaDialog implements ChangeListener {
+public class CalculateCoverageDialog extends TitleAreaDialog {
 	private Button fOkButton;
 	private CheckboxTreeViewer fTestCasesTreeViewer;
 
 	private Composite fMainContainer;
 
-	private int N;
-	private double[] fResults;
 	private Canvas[] fCanvasSet;
+	private CoverageCalculator fCalculator;
 
 	private final String fTitle = Messages.DIALOG_CALCULATE_COVERAGE_TITLE;
 	private final String fMessage = Messages.DIALOG_CALCULATE_COVERAGE_MESSAGE;
@@ -71,10 +71,7 @@ public class CalculateCoverageDialog extends TitleAreaDialog implements ChangeLi
 		setHelpAvailable(false);
 		setShellStyle(SWT.BORDER | SWT.RESIZE | SWT.TITLE);
 		fMethod = method;
-
-		N = fMethod.getCategories().size();
-		fResults = new double[N];
-
+		fCalculator = new CoverageCalculator(fMethod);
 	}
 
 	private class TestCaseViewerContentProvider extends TreeNodeContentProvider implements ITreeContentProvider {
@@ -185,6 +182,9 @@ public class CalculateCoverageDialog extends TitleAreaDialog implements ChangeLi
 		fTestCasesTreeViewer.setLabelProvider(new TestCasesLabelProvider());
 		fTestCasesTreeViewer.getTree().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 		fTestCasesTreeViewer.setInput(fMethod);
+		
+		//Add tree state listener preparing data for calculator and reverting tree changes if operation gets cancelled.
+		fTestCasesTreeViewer.addCheckStateListener(new CoverageTreeViewerListener(fCalculator, fTestCasesTreeViewer));
 	}
 
 	private void createCoverageGraphComposite(Composite parent) {
@@ -217,8 +217,8 @@ public class CalculateCoverageDialog extends TitleAreaDialog implements ChangeLi
 	}
 
 	private void createCoverageGraphViewer(Composite parent) {
-		fCanvasSet = new Canvas[N];
-		for (int n = 0; n < N; n++) {
+		fCanvasSet = new Canvas[fCalculator.getN()];
+		for (int n = 0; n < fCalculator.getN(); n++) {
 			fCanvasSet[n] = new Canvas(parent, SWT.FILL);
 			fCanvasSet[n].setSize(getInitialSize().x, 40);
 			GridData griddata = new GridData(SWT.FILL, SWT.FILL, true, false);
@@ -235,8 +235,8 @@ public class CalculateCoverageDialog extends TitleAreaDialog implements ChangeLi
 	}
 
 	private void drawBarGraph() {
-		if (N != 0 && fResults.length > 0) {
-			for (int n = 0; n < N; n++) {
+		if (fCalculator.getN() != 0 && fCalculator.getN() > 0) {
+			for (int n = 0; n < fCalculator.getN(); n++) {
 				Display display = Display.getCurrent();
 				Canvas fCanvas = fCanvasSet[n];
 				fCanvas.setSize(fCanvas.getParent().getSize().x, 40);
@@ -269,7 +269,7 @@ public class CalculateCoverageDialog extends TitleAreaDialog implements ChangeLi
 				topbarborder = topborder + fontspacing;
 				bottomborder = height - spacing;
 
-				gc.fillRectangle(0, topbarborder, (int) (fResults[n] * widthunit), bottomborder - topbarborder);
+				gc.fillRectangle(0, topbarborder, (int) (fCalculator.getResults()[n] * widthunit), bottomborder - topbarborder);
 				gc.setLineWidth(linewidth);
 				gc.drawLine(linewidth, bottomborder, (int) width - linewidth, bottomborder);
 				gc.drawLine(linewidth / 2, topbarborder, linewidth / 2, bottomborder);
@@ -277,7 +277,7 @@ public class CalculateCoverageDialog extends TitleAreaDialog implements ChangeLi
 
 				DecimalFormat df = new DecimalFormat("#.00");
 				String nlabel = "N= " + (n + 1);
-				String percentvalue = df.format(fResults[n]) + "%";
+				String percentvalue = df.format(fCalculator.getResults()[n]) + "%";
 				gc.drawString(nlabel, 10, topborder, true);
 				gc.drawString(percentvalue, (width / 2) - fontspacing, (int) (topbarborder), true);
 				font.dispose();
@@ -287,27 +287,115 @@ public class CalculateCoverageDialog extends TitleAreaDialog implements ChangeLi
 		}
 	}
 
-	private void updateCoverage() {
-		for (int n = 1; n <= N; n++) {
-			drawBarGraph();
-		}
-	}
-
-	@Override
-	public void stateChanged(ChangeEvent e) {
-
-		if (e.getSource() instanceof double[]) {
-			fResults = (double[]) e.getSource();
-			updateCoverage();
-		}
-	}
-
-	public void addTreeStateListener(TreeCheckStateListener listener) {
-		fTestCasesTreeViewer.addCheckStateListener(listener);
-	}
-
-	public CheckboxTreeViewer getCheckboxTreeViewer() {
+	public CheckboxTreeViewer getCheckboxTreeViewer(){
 		return fTestCasesTreeViewer;
+	}
+	
+	public class CoverageTreeViewerListener extends TreeCheckStateListener {
+		private CheckboxTreeViewer fViewer;
+		CoverageCalculator fCalculator;
+		List<TestCaseNode> fTestCases;
+		String fTestSuiteName;
+		boolean fIsSelection;
+		// saved tree state
+		Object fTreeState[];
+
+		public CoverageTreeViewerListener(CoverageCalculator calculator, CheckboxTreeViewer treeViewer) {
+			super(treeViewer);
+			this.fCalculator = calculator;
+			fViewer = treeViewer;
+			fTestCases = new ArrayList<>();
+			fTreeState = fViewer.getCheckedElements();
+		}
+
+		public void revertLastTreeChange() {
+			fViewer.setCheckedElements(fTreeState);
+		}
+
+		@Override
+		public void checkStateChanged(CheckStateChangedEvent event) {
+			Object element = event.getElement();
+			fIsSelection = event.getChecked();
+			// if action is selection
+			if (fIsSelection) {
+				// TestSuite
+				if (element instanceof String) {
+					fTestCases.clear();
+					fTestSuiteName = (String) element;
+					fTestCases.addAll(getMethod().getTestCases(fTestSuiteName));
+				}
+				// TestCaseNode
+				else {
+					fTreeState = null;
+					fTestCases.clear();
+					fTestSuiteName = null;
+					fTestCases.add((TestCaseNode) element);
+				}
+			}
+			// if action is deselection
+			else {
+				// TestSuite
+				if (element instanceof String) {
+					fTestCases.clear();
+					fTestSuiteName = (String) element;
+
+					// if parent is grayed
+					for (Object tcase : fTreeState) {
+						if (fTestSuiteName.equals(fContentProvider.getParent(tcase))) {
+							fTestCases.add((TestCaseNode) tcase);
+						}
+					}
+					// if parent has no children shown in the tree, but they all
+					// are implicitly selected
+					if (fTestCases.isEmpty()) {
+						fTestCases.addAll(getMethod().getTestCases(fTestSuiteName));
+					}
+				}
+				// TestCaseNode
+				else {
+					fTreeState = null;
+					fTestCases.clear();
+					fTestSuiteName = null;
+					fTestCases.add((TestCaseNode) element);
+				}
+			}
+
+			fViewer.setSubtreeChecked(element, fIsSelection);
+			setParentGreyed(element);
+			if (fViewer.getCheckedElements().length == 0) {
+				fCalculator.setCurrentChangedCases(null, fIsSelection);
+			} else {
+				fCalculator.setCurrentChangedCases(fTestCases, fIsSelection);
+			}
+
+			// Execute core calculator function
+			if (fCalculator.calculateCoverage()) {
+				// if succeed - save changes to the tree
+				fTreeState = fViewer.getCheckedElements();
+				drawBarGraph();
+			} else {
+				revertLastTreeChange();
+			}
+		}
+
+		/*
+		 * @return the cases selected or deselected in the last operation;
+		 */
+		public List<TestCaseNode> getTestCases() {
+			return fTestCases;
+		}
+
+		/*
+		 * @return if last action was selection (false if it was deselection);
+		 */
+		public boolean getLastAction() {
+			return fIsSelection;
+		}
+
+	}
+	
+	public MethodNode getMethod(){
+		return fMethod;
 	}
 
 }
