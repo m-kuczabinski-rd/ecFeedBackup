@@ -42,9 +42,6 @@ public class AbstractGenerator<E> implements IGenerator<E> {
 		fInput = inputDomain;
 		fConstraints = constraints;
 	
-		if(fAlgorithm != null){
-			fAlgorithm.initialize(inputDomain, constraints);
-		}
 		fInitialized = true; 
 	}
 
