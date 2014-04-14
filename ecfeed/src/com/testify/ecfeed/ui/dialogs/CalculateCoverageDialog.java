@@ -1,7 +1,7 @@
 package com.testify.ecfeed.ui.dialogs;
 
 /*******************************************************************************
- * Copyright (c) 2013 Testify AS.                                                
+ * Copyright (c) 2014 Testify AS.                                                
  * All rights reserved. This program and the accompanying materials              
  * are made available under the terms of the Eclipse Public License v1.0         
  * which accompanies this distribution, and is available at                      
@@ -13,16 +13,12 @@ package com.testify.ecfeed.ui.dialogs;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.TitleAreaDialog;
 import org.eclipse.jface.viewers.CheckStateChangedEvent;
 import org.eclipse.jface.viewers.CheckboxTreeViewer;
-import org.eclipse.jface.viewers.ITreeContentProvider;
-import org.eclipse.jface.viewers.LabelProvider;
-import org.eclipse.jface.viewers.TreeNodeContentProvider;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -48,15 +44,15 @@ import org.eclipse.swt.widgets.Tree;
 
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.TestCaseNode;
-import com.testify.ecfeed.ui.common.Constants;
 import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.common.TreeCheckStateListener;
 import com.testify.ecfeed.ui.editor.CoverageCalculator;
+import com.testify.ecfeed.ui.editor.TestCaseViewerContentProvider;
+import com.testify.ecfeed.ui.editor.TestCasesLabelProvider;
 
 public class CalculateCoverageDialog extends TitleAreaDialog {
 	private Button fOkButton;
 	private CheckboxTreeViewer fTestCasesTreeViewer;
-
 	private Composite fMainContainer;
 
 	private Canvas[] fCanvasSet;
@@ -71,56 +67,7 @@ public class CalculateCoverageDialog extends TitleAreaDialog {
 		setHelpAvailable(false);
 		setShellStyle(SWT.BORDER | SWT.RESIZE | SWT.TITLE);
 		fMethod = method;
-		fCalculator = new CoverageCalculator(fMethod);
-	}
-
-	private class TestCaseViewerContentProvider extends TreeNodeContentProvider implements ITreeContentProvider {
-		public final Object[] EMPTY_ARRAY = new Object[] {};
-
-		@Override
-		public Object[] getElements(Object inputElement) {
-			if (inputElement instanceof MethodNode) {
-				return ((MethodNode) inputElement).getTestSuites().toArray();
-			}
-			return null;
-		}
-
-		@Override
-		public Object[] getChildren(Object parentElement) {
-			if (parentElement instanceof String) {
-				Collection<TestCaseNode> testCases = fMethod.getTestCases((String) parentElement);
-				if (testCases.size() < Constants.MAX_DISPLAYED_TEST_CASES_PER_SUITE) {
-					return testCases.toArray();
-				}
-			}
-			return EMPTY_ARRAY;
-		}
-
-		@Override
-		public Object getParent(Object element) {
-			if (element instanceof TestCaseNode) {
-				return ((TestCaseNode) element).getName();
-			}
-			return null;
-		}
-
-		@Override
-		public boolean hasChildren(Object element) {
-			return getChildren(element).length > 0;
-		}
-	}
-
-	private class TestCasesLabelProvider extends LabelProvider {
-		@Override
-		public String getText(Object element) {
-			if (element instanceof String) {
-				int testCasesCount = fMethod.getTestCases((String) element).size();
-				return (String) element + " [" + testCasesCount + " test case" + (testCasesCount == 1 ? "" : "s") + "]";
-			} else if (element instanceof TestCaseNode) {
-				return fMethod.getName() + "(" + ((TestCaseNode) element).testDataString() + ")";
-			}
-			return null;
-		}
+		fCalculator = new CoverageCalculator(fMethod.getCategories());
 	}
 
 	@Override
@@ -128,16 +75,6 @@ public class CalculateCoverageDialog extends TitleAreaDialog {
 		return new Point(600, 800);
 	}
 
-	@Override
-	public void okPressed() {
-		super.okPressed();
-	}
-
-	/**
-	 * Create contents of the button bar.
-	 * 
-	 * @param parent
-	 */
 	@Override
 	protected void createButtonsForButtonBar(Composite parent) {
 		fOkButton = createButton(parent, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL, false);
@@ -178,8 +115,8 @@ public class CalculateCoverageDialog extends TitleAreaDialog {
 		Tree tree = new Tree(parent, SWT.CHECK | SWT.BORDER);
 		tree.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, true, 1, 1));
 		fTestCasesTreeViewer = new CheckboxTreeViewer(tree);
-		fTestCasesTreeViewer.setContentProvider(new TestCaseViewerContentProvider());
-		fTestCasesTreeViewer.setLabelProvider(new TestCasesLabelProvider());
+		fTestCasesTreeViewer.setContentProvider(new TestCaseViewerContentProvider(fMethod));
+		fTestCasesTreeViewer.setLabelProvider(new TestCasesLabelProvider(fMethod));
 		fTestCasesTreeViewer.getTree().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 		fTestCasesTreeViewer.setInput(fMethod);
 		
@@ -234,62 +171,6 @@ public class CalculateCoverageDialog extends TitleAreaDialog {
 		});
 	}
 
-	private void drawBarGraph() {
-		if (fCalculator.getN() != 0 && fCalculator.getN() > 0) {
-			for (int n = 0; n < fCalculator.getN(); n++) {
-				Display display = Display.getCurrent();
-				Canvas fCanvas = fCanvasSet[n];
-				fCanvas.setSize(fCanvas.getParent().getSize().x, 40);
-
-				GC gc = new GC(fCanvas);
-				gc.setBackground(display.getSystemColor(SWT.COLOR_WIDGET_BACKGROUND));
-				gc.fillRectangle(0, 0, fCanvas.getSize().x, fCanvas.getSize().y);
-
-				int spacing = 5;
-				int width = fCanvas.getSize().x - spacing * 8;
-				int height = fCanvas.getSize().y;
-
-				// Clear the canvas
-				Color outworldTeal = new Color(display, 16, 224, 224);
-				gc.setBackground(outworldTeal);
-				gc.setForeground(display.getSystemColor(SWT.COLOR_BLACK));
-
-				double widthunit = (double) width / 100;
-				int fontsize = (int) (height / 4);
-				Font font = new Font(display, display.getSystemFont().getFontData()[0].getName(), fontsize, 1);
-				gc.setFont(font);
-
-				int linewidth = 2;
-				int topborder;
-				int topbarborder;
-				int bottomborder = 0;
-				int fontspacing = (fontsize * 8) / 5;
-
-				topborder = 0;
-				topbarborder = topborder + fontspacing;
-				bottomborder = height - spacing;
-
-				gc.fillRectangle(0, topbarborder, (int) (fCalculator.getResults()[n] * widthunit), bottomborder - topbarborder);
-				gc.setLineWidth(linewidth);
-				gc.drawLine(linewidth, bottomborder, (int) width - linewidth, bottomborder);
-				gc.drawLine(linewidth / 2, topbarborder, linewidth / 2, bottomborder);
-				gc.drawLine((int) (width) - linewidth / 2, topbarborder, (int) (width) - linewidth / 2, bottomborder);
-
-				DecimalFormat df = new DecimalFormat("#.00");
-				String nlabel = "N= " + (n + 1);
-				String percentvalue = df.format(fCalculator.getResults()[n]) + "%";
-				gc.drawString(nlabel, 10, topborder, true);
-				gc.drawString(percentvalue, (width / 2) - fontspacing, (int) (topbarborder), true);
-				font.dispose();
-				outworldTeal.dispose();
-				gc.dispose();
-			}
-		}
-	}
-
-	public CheckboxTreeViewer getCheckboxTreeViewer(){
-		return fTestCasesTreeViewer;
-	}
 	
 	public class CoverageTreeViewerListener extends TreeCheckStateListener {
 		private CheckboxTreeViewer fViewer;
@@ -378,23 +259,62 @@ public class CalculateCoverageDialog extends TitleAreaDialog {
 			}
 		}
 
-		/*
-		 * @return the cases selected or deselected in the last operation;
-		 */
-		public List<TestCaseNode> getTestCases() {
-			return fTestCases;
-		}
-
-		/*
-		 * @return if last action was selection (false if it was deselection);
-		 */
-		public boolean getLastAction() {
-			return fIsSelection;
-		}
-
 	}
 	
-	public MethodNode getMethod(){
+	private void drawBarGraph() {
+		if (fCalculator.getN() != 0 && fCalculator.getN() > 0) {
+			for (int n = 0; n < fCalculator.getN(); n++) {
+				Display display = Display.getCurrent();
+				Canvas fCanvas = fCanvasSet[n];
+				fCanvas.setSize(fCanvas.getParent().getSize().x, 40);
+
+				GC gc = new GC(fCanvas);
+				gc.setBackground(display.getSystemColor(SWT.COLOR_WIDGET_BACKGROUND));
+				gc.fillRectangle(0, 0, fCanvas.getSize().x, fCanvas.getSize().y);
+
+				int spacing = 5;
+				int width = fCanvas.getSize().x - spacing * 8;
+				int height = fCanvas.getSize().y;
+
+				// Clear the canvas
+				Color outworldTeal = new Color(display, 16, 224, 224);
+				gc.setBackground(outworldTeal);
+				gc.setForeground(display.getSystemColor(SWT.COLOR_BLACK));
+
+				double widthunit = (double) width / 100;
+				int fontsize = (int) (height / 4);
+				Font font = new Font(display, display.getSystemFont().getFontData()[0].getName(), fontsize, 1);
+				gc.setFont(font);
+
+				int linewidth = 2;
+				int topborder;
+				int topbarborder;
+				int bottomborder = 0;
+				int fontspacing = (fontsize * 8) / 5;
+
+				topborder = 0;
+				topbarborder = topborder + fontspacing;
+				bottomborder = height - spacing;
+
+				gc.fillRectangle(0, topbarborder, (int) (fCalculator.getResults()[n] * widthunit), bottomborder - topbarborder);
+				gc.setLineWidth(linewidth);
+				gc.drawLine(linewidth, bottomborder, (int) width - linewidth, bottomborder);
+				gc.drawLine(linewidth / 2, topbarborder, linewidth / 2, bottomborder);
+				gc.drawLine((int) (width) - linewidth / 2, topbarborder, (int) (width) - linewidth / 2, bottomborder);
+
+				DecimalFormat df = new DecimalFormat("#.00");
+				String nlabel = "N= " + (n + 1);
+				String percentvalue = df.format(fCalculator.getResults()[n]) + "%";
+				gc.drawString(nlabel, 10, topborder, true);
+				gc.drawString(percentvalue, (width / 2) - fontspacing, (int) (topbarborder), true);
+				font.dispose();
+				outworldTeal.dispose();
+				gc.dispose();
+			}
+		}
+	}
+	
+	private MethodNode getMethod(){
 		return fMethod;
 	}
 

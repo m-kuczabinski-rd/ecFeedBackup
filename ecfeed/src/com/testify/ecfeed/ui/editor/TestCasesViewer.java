@@ -18,9 +18,6 @@ import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.IBaseLabelProvider;
 import org.eclipse.jface.viewers.IContentProvider;
-import org.eclipse.jface.viewers.ITreeContentProvider;
-import org.eclipse.jface.viewers.LabelProvider;
-import org.eclipse.jface.viewers.TreeNodeContentProvider;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -33,67 +30,18 @@ import org.eclipse.ui.forms.widgets.Section;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.TestCaseNode;
-import com.testify.ecfeed.ui.common.Constants;
 import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.common.TreeCheckStateListener;
 import com.testify.ecfeed.ui.dialogs.AddTestCaseDialog;
+import com.testify.ecfeed.ui.dialogs.CalculateCoverageDialog;
 import com.testify.ecfeed.ui.dialogs.RenameTestSuiteDialog;
 
 public class TestCasesViewer extends CheckboxTreeViewerSection {
 
 	private final static int STYLE = Section.EXPANDED | Section.TITLE_BAR;
 	private MethodNode fSelectedMethod;
-
-	private class TestCaseViewerContentProvider extends TreeNodeContentProvider implements ITreeContentProvider{
-		public final Object[] EMPTY_ARRAY = new Object[]{};
-
-		@Override
-		public Object[] getElements(Object inputElement) {
-			if(inputElement instanceof MethodNode){
-				return ((MethodNode)inputElement).getTestSuites().toArray();
-			}
-			return null;
-		}
-
-		@Override
-		public Object[] getChildren(Object parentElement) {
-			if(parentElement instanceof String){
-				Collection<TestCaseNode> testCases = fSelectedMethod.getTestCases((String)parentElement);
-				if(testCases.size() < Constants.MAX_DISPLAYED_TEST_CASES_PER_SUITE){
-					return testCases.toArray();
-				}
-			}
-			return EMPTY_ARRAY;
-		}
-
-		@Override
-		public Object getParent(Object element) {
-			if(element instanceof TestCaseNode){
-				return ((TestCaseNode)element).getName();
-			}
-			return null;
-		}
-
-		@Override
-		public boolean hasChildren(Object element) {
-			return getChildren(element).length > 0;
-		}
-	}
-	
-	private class TestCasesLabelProvider extends LabelProvider{
-		@Override
-		public String getText(Object element){
-			if(element instanceof String){
-				int testCasesCount = fSelectedMethod.getTestCases((String)element).size();
-				return (String)element + " [" +  testCasesCount + " test case" + 
-						(testCasesCount == 1?"":"s") + "]";
-			}
-			else if(element instanceof TestCaseNode){
-				return fSelectedMethod.getName() + "(" + ((TestCaseNode)element).testDataString() + ")";
-			}
-			return null;
-		}
-	}
+	private TestCasesLabelProvider fLabelProvider;
+	private TestCaseViewerContentProvider fContentProvider;
 	
 	private class AddTestCaseAdapter extends SelectionAdapter{
 		public void widgetSelected(SelectionEvent e){
@@ -159,6 +107,16 @@ public class TestCasesViewer extends CheckboxTreeViewerSection {
 		}
 	}
 	
+	private class CalculateCoverageAdapter extends SelectionAdapter {
+		
+		@Override
+		public void widgetSelected(SelectionEvent e) {
+			CalculateCoverageDialog dialog = new CalculateCoverageDialog(getActiveShell(), fSelectedMethod);
+			dialog.open();
+		}
+
+	}
+	
 	public TestCasesViewer(BasicDetailsPage parent, FormToolkit toolkit) {
 		super(parent.getMainComposite(), toolkit, STYLE, parent);
 		GridData gd = new GridData(SWT.FILL, SWT.FILL, true, true);
@@ -172,7 +130,7 @@ public class TestCasesViewer extends CheckboxTreeViewerSection {
 		addButton("Add test case", new AddTestCaseAdapter());
 		addButton("Rename suite", new RenameSuiteAdapter());
 		addButton("Generate test suite", new GenerateTestSuiteAdapter(this));
-		addButton("Calculate coverage", new CalculateCoverageAdapter(this));
+		addButton("Calculate coverage", new CalculateCoverageAdapter());
 		addButton("Remove selected", new RemoveSelectedAdapter());
 		addButton("Execute selected", new ExecuteStaticTestAdapter(this));
 
@@ -187,16 +145,24 @@ public class TestCasesViewer extends CheckboxTreeViewerSection {
 	
 	@Override
 	protected IContentProvider viewerContentProvider() {
-		return new TestCaseViewerContentProvider();
+		if(fContentProvider == null){
+			fContentProvider = new TestCaseViewerContentProvider(fSelectedMethod);	
+		}
+		return fContentProvider;
 	}
 
 	@Override
 	protected IBaseLabelProvider viewerLabelProvider() {
-		return new TestCasesLabelProvider();
+		if(fLabelProvider == null){
+			fLabelProvider = new TestCasesLabelProvider(fSelectedMethod);
+		}
+		return fLabelProvider;
 	}
 
 	public void setInput(MethodNode method){
 		fSelectedMethod = method;
+		fContentProvider.setMethod(method);
+		fLabelProvider.setMethod(method);
 		super.setInput(method);
 	}
 	

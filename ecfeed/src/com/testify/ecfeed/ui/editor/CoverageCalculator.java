@@ -15,30 +15,29 @@ import org.eclipse.swt.widgets.Display;
 import com.testify.ecfeed.generators.algorithms.Tuples;
 import com.testify.ecfeed.model.AbstractCategoryNode;
 import com.testify.ecfeed.model.ExpectedCategoryNode;
-import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.TestCaseNode;
 
 public class CoverageCalculator {
 
-	private final MethodNode fMethod;
 	private int N;
 	private int[] fTuplesCovered;
 	private int[] fTotalWork;
-	private Map<Integer, PartitionNode> fExpectedPartitions;
 	private double[] fResults;
+	private List<AbstractCategoryNode> fCategories;
 
 	private List<List<PartitionNode>> fInput;
+	// The map of expected categories default values. Said values are used to replace unique values in algorithm.
+	private Map<Integer, PartitionNode> fExpectedPartitions;
 	// The main map of covered tuples
 	private List<Map<List<PartitionNode>, Integer>> fTuples;
 	// Test cases and suites (de)selected recently;
-	private List<List<PartitionNode>> fCurrentChangedCases;
+	private List<List<PartitionNode>> fCurrentlyChangedCases;
 	// If user added test cases = true; else we are substracting tuples;
 	private boolean fAddingFlag;
 
-	public CoverageCalculator(MethodNode method) {
-		this.fMethod = method;
-
+	public CoverageCalculator(List<AbstractCategoryNode> categories) {
+		fCategories = categories;
 		initialize();
 	}
 
@@ -48,7 +47,7 @@ public class CoverageCalculator {
 		fTuplesCovered = new int[N];
 		fTotalWork = new int[N];
 		fResults = new double[N];
-		fCurrentChangedCases = new ArrayList<>();
+		fCurrentlyChangedCases = new ArrayList<>();
 
 		fTuples = new ArrayList<Map<List<PartitionNode>, Integer>>();
 		fExpectedPartitions = prepareExpectedPartitions();
@@ -59,6 +58,7 @@ public class CoverageCalculator {
 		}
 	}
 
+	
 	private class CalculatorRunnable implements IRunnableWithProgress {
 		private List<List<PartitionNode>> fTestCases;
 		private CoverageCalculator fCalculator;
@@ -114,15 +114,17 @@ public class CoverageCalculator {
 
 		}
 	}
+	
 
 	public boolean calculateCoverage() {
-		if (fCurrentChangedCases == null) {
+		// CurrentlyChangedCases are null if deselection left no test cases selected, hence we can just clear tuple map and set results to 0
+		if (fCurrentlyChangedCases == null) {
 			for (Map<List<PartitionNode>, Integer> tupleMap : fTuples) {
 				tupleMap.clear();
 			}
 			// set results to zero
 			resetResults();
-			fCurrentChangedCases = new ArrayList<>();
+			fCurrentlyChangedCases = new ArrayList<>();
 			return true;
 		} else {
 			ProgressMonitorDialog progressDialog = new ProgressMonitorDialog(Display.getDefault().getActiveShell());
@@ -133,7 +135,7 @@ public class CoverageCalculator {
 				if (runnable.isCanceled) {
 					return false;
 				} else {
-					fCurrentChangedCases.clear();
+					fCurrentlyChangedCases.clear();
 					return true;
 				}
 
@@ -148,59 +150,7 @@ public class CoverageCalculator {
 		}
 
 	}
-
-	private List<List<PartitionNode>> prepareInput() {
-		List<List<PartitionNode>> input = new ArrayList<List<PartitionNode>>();
-		for (AbstractCategoryNode cnode : fMethod.getCategories()) {
-			List<PartitionNode> category = new ArrayList<PartitionNode>();
-			for (PartitionNode pnode : cnode.getLeafPartitions()) {
-				category.add(pnode);
-			}
-			input.add(category);
-		}
-		return input;
-	}
-
-	private List<List<PartitionNode>> prepareCasesToAdd(List<TestCaseNode> TestCases) {
-		List<List<PartitionNode>> cases = new ArrayList<>();
-		if (fExpectedPartitions.isEmpty()) {
-			for (TestCaseNode tcnode : TestCases) {
-				List<PartitionNode> partitions = new ArrayList<>();
-				for (PartitionNode pnode : tcnode.getTestData()) {
-					partitions.add(pnode);
-				}
-				cases.add(partitions);
-			}
-		} else {
-			for (TestCaseNode tcnode : TestCases) {
-				List<PartitionNode> partitions = new ArrayList<>();
-				int n = 0;
-				for (PartitionNode pnode : tcnode.getTestData()) {
-					if (fExpectedPartitions.containsKey(n)) {
-						partitions.add(fExpectedPartitions.get(n));
-					} else {
-						partitions.add(pnode);
-					}
-					n++;
-				}
-				cases.add(partitions);
-			}
-		}
-		return cases;
-	}
-
-	private Map<Integer, PartitionNode> prepareExpectedPartitions() {
-		int n = 0;
-		Map<Integer, PartitionNode> expected = new HashMap<>();
-		for (AbstractCategoryNode cnode : fMethod.getCategories()) {
-			if (cnode instanceof ExpectedCategoryNode) {
-				expected.put(n, ((ExpectedCategoryNode) cnode).getDefaultValuePartition());
-			}
-			n++;
-		}
-		return expected;
-	}
-
+	
 	private static void addTuplesToMap(Map<List<PartitionNode>, Integer> map, List<PartitionNode> tuple) {
 		if (!map.containsKey(tuple)) {
 			map.put(tuple, 1);
@@ -234,6 +184,58 @@ public class CoverageCalculator {
 		}
 	}
 
+	private List<List<PartitionNode>> prepareInput() {
+		List<List<PartitionNode>> input = new ArrayList<List<PartitionNode>>();
+		for (AbstractCategoryNode cnode : fCategories) {
+			List<PartitionNode> category = new ArrayList<PartitionNode>();
+			for (PartitionNode pnode : cnode.getLeafPartitions()) {
+				category.add(pnode);
+			}
+			input.add(category);
+		}
+		return input;
+	}
+	
+	private Map<Integer, PartitionNode> prepareExpectedPartitions() {
+		int n = 0;
+		Map<Integer, PartitionNode> expected = new HashMap<>();
+		for (AbstractCategoryNode cnode : fCategories) {
+			if (cnode instanceof ExpectedCategoryNode) {
+				expected.put(n, ((ExpectedCategoryNode) cnode).getDefaultValuePartition());
+			}
+			n++;
+		}
+		return expected;
+	}
+
+	private List<List<PartitionNode>> prepareCasesToAdd(List<TestCaseNode> TestCases) {
+		List<List<PartitionNode>> cases = new ArrayList<>();
+		if (fExpectedPartitions.isEmpty()) {
+			for (TestCaseNode tcnode : TestCases) {
+				List<PartitionNode> partitions = new ArrayList<>();
+				for (PartitionNode pnode : tcnode.getTestData()) {
+					partitions.add(pnode);
+				}
+				cases.add(partitions);
+			}
+		} else {
+			for (TestCaseNode tcnode : TestCases) {
+				List<PartitionNode> partitions = new ArrayList<>();
+				int n = 0;
+				for (PartitionNode pnode : tcnode.getTestData()) {
+					if (fExpectedPartitions.containsKey(n)) {
+						partitions.add(fExpectedPartitions.get(n));
+					} else {
+						partitions.add(pnode);
+					}
+					n++;
+				}
+				cases.add(partitions);
+			}
+		}
+		return cases;
+	}
+
 	private int calculateTotalTuples(List<List<PartitionNode>> input, int n, int coverage) {
 		int totalWork = 0;
 
@@ -251,6 +253,19 @@ public class CoverageCalculator {
 	}
 
 	// Getters & Setters
+	public void resetResults() {
+		for (int i = 0; i < fResults.length; i++) {
+			fResults[i] = 0;
+		}
+	}
+	
+	public void setCurrentChangedCases(List<TestCaseNode> testCases, boolean isAdding) {
+		fAddingFlag = isAdding;
+		if (testCases == null)
+			fCurrentlyChangedCases = null;
+		else
+			fCurrentlyChangedCases = prepareCasesToAdd(testCases);
+	}
 
 	public int getN() {
 		return N;
@@ -258,12 +273,6 @@ public class CoverageCalculator {
 
 	public double[] getResults() {
 		return fResults;
-	}
-
-	public void resetResults() {
-		for (int i = 0; i < fResults.length; i++) {
-			fResults[i] = 0;
-		}
 	}
 
 	public int[] getTuplesCovered() {
@@ -274,40 +283,16 @@ public class CoverageCalculator {
 		return fTotalWork;
 	}
 
-	public List<List<PartitionNode>> getInput() {
-		return fInput;
-	}
-
-	public MethodNode getMethod() {
-		return fMethod;
-	}
-
 	public Map<Integer, PartitionNode> getExpectedPartitions() {
 		return fExpectedPartitions;
-	}
-
-	public List<Map<List<PartitionNode>, Integer>> getTuples() {
-		return fTuples;
 	}
 
 	public boolean isAddingNow() {
 		return fAddingFlag;
 	}
 
-	public void setAddingNow(boolean isAdding) {
-		fAddingFlag = isAdding;
-	}
-
 	public List<List<PartitionNode>> getCurrentChangedCases() {
-		return fCurrentChangedCases;
-	}
-
-	public void setCurrentChangedCases(List<TestCaseNode> testCases, boolean isAdding) {
-		fAddingFlag = isAdding;
-		if (testCases == null)
-			fCurrentChangedCases = null;
-		else
-			fCurrentChangedCases = prepareCasesToAdd(testCases);
+		return fCurrentlyChangedCases;
 	}
 
 	public List<Map<List<PartitionNode>, Integer>> getCoveredTuplesMap() {
