@@ -175,8 +175,6 @@ public class CalculateCoverageDialog extends TitleAreaDialog {
 	public class CoverageTreeViewerListener extends TreeCheckStateListener {
 		private CheckboxTreeViewer fViewer;
 		CoverageCalculator fCalculator;
-		List<TestCaseNode> fTestCases;
-		String fTestSuiteName;
 		boolean fIsSelection;
 		// saved tree state
 		Object fTreeState[];
@@ -185,7 +183,6 @@ public class CalculateCoverageDialog extends TitleAreaDialog {
 			super(treeViewer);
 			this.fCalculator = calculator;
 			fViewer = treeViewer;
-			fTestCases = new ArrayList<>();
 			fTreeState = fViewer.getCheckedElements();
 		}
 
@@ -195,6 +192,8 @@ public class CalculateCoverageDialog extends TitleAreaDialog {
 
 		@Override
 		public void checkStateChanged(CheckStateChangedEvent event) {
+			List<TestCaseNode> fTestCases = new ArrayList<>();
+			String fTestSuiteName = null;
 			Object element = event.getElement();
 			fIsSelection = event.getChecked();
 			// if action is selection
