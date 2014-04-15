@@ -60,33 +60,22 @@ public class CoverageCalculator {
 
 	
 	private class CalculatorRunnable implements IRunnableWithProgress {
-		private List<List<PartitionNode>> fTestCases;
-		private CoverageCalculator fCalculator;
-		private int N;
 		private boolean isCanceled;
 		// if true - add occurences, else substract them
-		private boolean fIsAdding;
-
-		CalculatorRunnable(CoverageCalculator calculator) {
-			fCalculator = calculator;
-			fIsAdding = fCalculator.isAddingNow();
-			fTestCases = fCalculator.getCurrentChangedCases();
-			N = calculator.getN();
-			fIsAdding = fCalculator.isAddingNow();
-		}
 
 		@Override
 		public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 			int n = 0;
 			List<Map<List<PartitionNode>, Integer>> coveredTuples = new ArrayList<>();
 
-			monitor.beginTask("Calculating Coverage", fTestCases.size() * N);
+			monitor.beginTask("Calculating Coverage", fCurrentlyChangedCases.size() * N);
 
 			while (!monitor.isCanceled() && n < N) {
 				Map<List<PartitionNode>, Integer> mapForN = new HashMap<>();
-				for (List<PartitionNode> tcase : fTestCases) {
-					if (monitor.isCanceled())
+				for (List<PartitionNode> tcase : fCurrentlyChangedCases) {
+					if (monitor.isCanceled()){
 						break;
+					}
 					Tuples<PartitionNode> tuples = new Tuples<PartitionNode>(tcase, n + 1);
 					for (List<PartitionNode> pnode : tuples.getAll()) {
 						addTuplesToMap(mapForN, pnode);
@@ -102,22 +91,22 @@ public class CoverageCalculator {
 			n = 0;
 			if (!monitor.isCanceled()) {
 				for (Map<List<PartitionNode>, Integer> map : coveredTuples) {
-					mergeOccurrenceMaps(fCalculator.getCoveredTuplesMap().get(n), map, fIsAdding);
-					fCalculator.getTuplesCovered()[n] = fCalculator.getCoveredTuplesMap().get(n).size();
-					fCalculator.getResults()[n] = (((double) getTuplesCovered()[n]) / ((double) fCalculator.getTotalWork()[n])) * 100;
+					mergeOccurrenceMaps(fTuples.get(n), map, fAddingFlag);
+					fTuplesCovered[n] = fTuples.get(n).size();
+					fResults[n] = (((double) fTuplesCovered[n]) / ((double) fTotalWork[n])) * 100;
 					n++;
 				}
 			} else {
 				isCanceled = true;
 			}
 			monitor.done();
-
 		}
 	}
 	
 
 	public boolean calculateCoverage() {
-		// CurrentlyChangedCases are null if deselection left no test cases selected, hence we can just clear tuple map and set results to 0
+		// CurrentlyChangedCases are null if deselection left no test cases selected, 
+		// hence we can just clear tuple map and set results to 0
 		if (fCurrentlyChangedCases == null) {
 			for (Map<List<PartitionNode>, Integer> tupleMap : fTuples) {
 				tupleMap.clear();
@@ -129,7 +118,7 @@ public class CoverageCalculator {
 		} else {
 			ProgressMonitorDialog progressDialog = new ProgressMonitorDialog(Display.getDefault().getActiveShell());
 			try {
-				CalculatorRunnable runnable = new CalculatorRunnable(this);
+				CalculatorRunnable runnable = new CalculatorRunnable();
 				progressDialog.open();
 				progressDialog.run(true, true, runnable);
 				if (runnable.isCanceled) {
@@ -259,43 +248,15 @@ public class CoverageCalculator {
 		}
 	}
 	
+	public double[] getResults(){
+		return fResults;
+	}
+	
 	public void setCurrentChangedCases(List<TestCaseNode> testCases, boolean isAdding) {
 		fAddingFlag = isAdding;
 		if (testCases == null)
 			fCurrentlyChangedCases = null;
 		else
 			fCurrentlyChangedCases = prepareCasesToAdd(testCases);
-	}
-
-	public int getN() {
-		return N;
-	}
-
-	public double[] getResults() {
-		return fResults;
-	}
-
-	public int[] getTuplesCovered() {
-		return fTuplesCovered;
-	}
-
-	public int[] getTotalWork() {
-		return fTotalWork;
-	}
-
-	public Map<Integer, PartitionNode> getExpectedPartitions() {
-		return fExpectedPartitions;
-	}
-
-	public boolean isAddingNow() {
-		return fAddingFlag;
-	}
-
-	public List<List<PartitionNode>> getCurrentChangedCases() {
-		return fCurrentlyChangedCases;
-	}
-
-	public List<Map<List<PartitionNode>, Integer>> getCoveredTuplesMap() {
-		return fTuples;
 	}
 }
