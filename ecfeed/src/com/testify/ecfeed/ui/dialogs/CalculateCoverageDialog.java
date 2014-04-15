@@ -14,6 +14,8 @@ package com.testify.ecfeed.ui.dialogs;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.TitleAreaDialog;
@@ -167,12 +169,18 @@ public class CalculateCoverageDialog extends TitleAreaDialog {
 		createTestCaseComposite(mainContainer);
 		createCoverageGraphComposite(mainContainer);
 		
-		//Draw bar graph. Possible change for a timer with slight delay if tests prove current solution insufficient in some cases.
-		Display.getDefault().asyncExec(new Runnable() {
-		    public void run() {
-		    	drawBarGraph();
-		    }
-		});
+		//Draw bar graph.
+		Timer timer = new Timer();
+		timer.schedule(new TimerTask() {
+			  @Override
+			  public void run() {
+					Display.getDefault().asyncExec(new Runnable() {
+					    public void run() {
+					    	drawBarGraph();
+					    }
+					});
+			  }
+		}, 100);
 
 		return area;
 	}
@@ -269,7 +277,7 @@ public class CalculateCoverageDialog extends TitleAreaDialog {
 				// Clear the canvas
 				Color outworldTeal = new Color(display, 16, 224, 224);
 				gc.setBackground(outworldTeal);
-				gc.setForeground(display.getSystemColor(SWT.COLOR_BLACK));
+				Color lightBlue = new Color(display, 96, 128, 255);
 
 				double widthunit = (double) width / 100;
 				int fontsize = (int) (height / 4);
@@ -286,8 +294,10 @@ public class CalculateCoverageDialog extends TitleAreaDialog {
 				topbarborder = topborder + fontspacing;
 				bottomborder = height - spacing;
 
-				gc.fillRectangle(0, topbarborder, (int) (fCalculator.getResults()[n] * widthunit), bottomborder - topbarborder);
+				gc.setForeground(lightBlue);
+				gc.fillGradientRectangle(0, topbarborder, (int) (fCalculator.getResults()[n] * widthunit), bottomborder - topbarborder, false);
 				gc.setLineWidth(linewidth);
+				gc.setForeground(display.getSystemColor(SWT.COLOR_BLACK));
 				gc.drawLine(linewidth, bottomborder, (int) width - linewidth, bottomborder);
 				gc.drawLine(linewidth / 2, topbarborder, linewidth / 2, bottomborder);
 				gc.drawLine((int) (width) - linewidth / 2, topbarborder, (int) (width) - linewidth / 2, bottomborder);
