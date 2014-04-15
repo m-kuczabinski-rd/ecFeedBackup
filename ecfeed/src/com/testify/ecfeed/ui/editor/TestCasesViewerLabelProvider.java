@@ -15,10 +15,10 @@ import org.eclipse.jface.viewers.LabelProvider;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.TestCaseNode;
 
-public class TestCasesLabelProvider extends LabelProvider {
+public class TestCasesViewerLabelProvider extends LabelProvider {
 	MethodNode fMethod;
 	
-	public TestCasesLabelProvider(MethodNode method){
+	public TestCasesViewerLabelProvider(MethodNode method){
 		fMethod = method;
 	}
 	
