@@ -92,6 +92,13 @@ public class CalculateCoverageDialog extends TitleAreaDialog {
 
 		createTestCaseComposite(fMainContainer);
 		createCoverageGraphComposite(fMainContainer);
+		
+		//Draw bar graph. Possible change for a timer with slight delay if tests prove current solution insufficient in some cases.
+		Display.getDefault().asyncExec(new Runnable() {
+		    public void run() {
+		    	drawBarGraph();
+		    }
+		});
 
 		return area;
 	}

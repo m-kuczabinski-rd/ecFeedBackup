@@ -228,6 +228,7 @@ public class ConstraintViewer extends TreeViewerSection {
 				fRelationCombo.setVisible(false);
 				fConditionCombo.setVisible(false);
 				fConditionText.setVisible(false);
+				fConditionLayout.topControl = null;
 			}
 			fStatementEditListenersEnabled = true;
 		}
@@ -269,11 +270,10 @@ public class ConstraintViewer extends TreeViewerSection {
 		}
 
 		private void refreshConditionComposite(ExpectedValueStatement statement) {
-			ExpectedCategoryNode category = statement.getCategory();
 			fConditionLayout.topControl = fConditionText;
 			fConditionCombo.setVisible(false);
 			fConditionText.setVisible(true);
-			fConditionText.setText(category.getDefaultValuePartition().getValueString());
+			fConditionText.setText(statement.getCondition().getValueString());
 		}
 	}
 	
@@ -327,7 +327,12 @@ public class ConstraintViewer extends TreeViewerSection {
 					ExpectedValueStatement statement = (ExpectedValueStatement)fSelectedStatement;
 					AbstractCategoryNode category = statement.getCategory();
 					Object newValue = category.getPartitionValueFromString(fConditionText.getText());
-					statement.getCondition().setValue(newValue);;
+					if(newValue == null){
+						fConditionText.setText(statement.getCondition().getValueString());
+					}
+					else{
+						statement.getCondition().setValue(newValue);
+					}
 					modelUpdated();
 				}
 			}
