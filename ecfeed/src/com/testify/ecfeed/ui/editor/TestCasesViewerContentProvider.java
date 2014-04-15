@@ -19,11 +19,11 @@ import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.ui.common.Constants;
 
-public class TestCaseViewerContentProvider extends TreeNodeContentProvider implements ITreeContentProvider{
+public class TestCasesViewerContentProvider extends TreeNodeContentProvider implements ITreeContentProvider{
 	public final Object[] EMPTY_ARRAY = new Object[] {};
 	MethodNode fMethod;
 
-	public TestCaseViewerContentProvider(MethodNode method){
+	public TestCasesViewerContentProvider(MethodNode method){
 		fMethod = method;
 	}
 	

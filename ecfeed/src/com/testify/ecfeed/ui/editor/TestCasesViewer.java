@@ -40,8 +40,8 @@ public class TestCasesViewer extends CheckboxTreeViewerSection {
 
 	private final static int STYLE = Section.EXPANDED | Section.TITLE_BAR;
 	private MethodNode fSelectedMethod;
-	private TestCasesLabelProvider fLabelProvider;
-	private TestCaseViewerContentProvider fContentProvider;
+	private TestCasesViewerLabelProvider fLabelProvider;
+	private TestCasesViewerContentProvider fContentProvider;
 	
 	private class AddTestCaseAdapter extends SelectionAdapter{
 		public void widgetSelected(SelectionEvent e){
@@ -111,7 +111,8 @@ public class TestCasesViewer extends CheckboxTreeViewerSection {
 		
 		@Override
 		public void widgetSelected(SelectionEvent e) {
-			CalculateCoverageDialog dialog = new CalculateCoverageDialog(getActiveShell(), fSelectedMethod);
+			CalculateCoverageDialog dialog = new CalculateCoverageDialog(getActiveShell(), 
+					fSelectedMethod, getCheckedElements());
 			dialog.open();
 		}
 
@@ -146,7 +147,7 @@ public class TestCasesViewer extends CheckboxTreeViewerSection {
 	@Override
 	protected IContentProvider viewerContentProvider() {
 		if(fContentProvider == null){
-			fContentProvider = new TestCaseViewerContentProvider(fSelectedMethod);	
+			fContentProvider = new TestCasesViewerContentProvider(fSelectedMethod);	
 		}
 		return fContentProvider;
 	}
@@ -154,7 +155,7 @@ public class TestCasesViewer extends CheckboxTreeViewerSection {
 	@Override
 	protected IBaseLabelProvider viewerLabelProvider() {
 		if(fLabelProvider == null){
-			fLabelProvider = new TestCasesLabelProvider(fSelectedMethod);
+			fLabelProvider = new TestCasesViewerLabelProvider(fSelectedMethod);
 		}
 		return fLabelProvider;
 	}

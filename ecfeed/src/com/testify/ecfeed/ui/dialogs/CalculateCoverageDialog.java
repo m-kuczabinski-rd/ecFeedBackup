@@ -47,27 +47,101 @@ import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.common.TreeCheckStateListener;
 import com.testify.ecfeed.ui.editor.CoverageCalculator;
-import com.testify.ecfeed.ui.editor.TestCaseViewerContentProvider;
-import com.testify.ecfeed.ui.editor.TestCasesLabelProvider;
+import com.testify.ecfeed.ui.editor.TestCasesViewerContentProvider;
+import com.testify.ecfeed.ui.editor.TestCasesViewerLabelProvider;
 
 public class CalculateCoverageDialog extends TitleAreaDialog {
-	private Button fOkButton;
-	private CheckboxTreeViewer fTestCasesTreeViewer;
-	private Composite fMainContainer;
-
 	private Canvas[] fCanvasSet;
 	private CoverageCalculator fCalculator;
-
-	private final String fTitle = Messages.DIALOG_CALCULATE_COVERAGE_TITLE;
-	private final String fMessage = Messages.DIALOG_CALCULATE_COVERAGE_MESSAGE;
 	private MethodNode fMethod;
+	private Object[] fInitialSelection;
 
-	public CalculateCoverageDialog(Shell parentShell, MethodNode method) {
+	private class CoverageTreeViewerListener extends TreeCheckStateListener {
+		private CheckboxTreeViewer fViewer;
+		CoverageCalculator fCalculator;
+		// saved tree state
+		Object fTreeState[];
+	
+		public CoverageTreeViewerListener(CoverageCalculator calculator, CheckboxTreeViewer treeViewer) {
+			super(treeViewer);
+			fCalculator = calculator;
+			fViewer = treeViewer;
+		}
+	
+		public void revertLastTreeChange() {
+			fViewer.setCheckedElements(fTreeState);
+		}
+	
+		@Override
+		public void checkStateChanged(CheckStateChangedEvent event) {
+			List<TestCaseNode> testCases = new ArrayList<>();
+			Object element = event.getElement();
+			boolean isSelection = event.getChecked();
+			// if action is selection
+			if (isSelection) {
+				// TestSuite
+				if (element instanceof String) {
+					String testSuiteName = (String) element;
+					testCases.addAll(fMethod.getTestCases(testSuiteName));
+				}
+				// TestCaseNode
+				else {
+					fTreeState = null;
+					testCases.add((TestCaseNode) element);
+				}
+			}
+			// if action is deselection
+			else {
+				// TestSuite
+				if (element instanceof String) {
+					String testSuiteName = (String) element;
+	
+					// if parent is grayed
+					for (Object tcase : fTreeState) {
+						if (testSuiteName.equals(fContentProvider.getParent(tcase))) {
+							testCases.add((TestCaseNode) tcase);
+						}
+					}
+					// if parent has no children shown in the tree, but they all
+					// are implicitly selected
+					if (testCases.isEmpty()) {
+						testCases.addAll(fMethod.getTestCases(testSuiteName));
+					}
+				}
+				// TestCaseNode
+				else {
+					fTreeState = null;
+					testCases.add((TestCaseNode) element);
+				}
+			}
+	
+			fViewer.setSubtreeChecked(element, isSelection);
+			setParentGreyed(element);
+			if (fViewer.getCheckedElements().length == 0) {
+				fCalculator.setCurrentChangedCases(null, isSelection);
+			} else {
+				fCalculator.setCurrentChangedCases(testCases, isSelection);
+			}
+	
+			// Execute core calculator function
+			if (fCalculator.calculateCoverage()) {
+				// if succeed - save changes to the tree
+				fTreeState = fViewer.getCheckedElements();
+				drawBarGraph();
+			} else {
+				revertLastTreeChange();
+			}
+		}
+	
+	}
+
+	public CalculateCoverageDialog(Shell parentShell, MethodNode method, Object[] initialSelection) {
 		super(parentShell);
 		setHelpAvailable(false);
 		setShellStyle(SWT.BORDER | SWT.RESIZE | SWT.TITLE);
 		fMethod = method;
 		fCalculator = new CoverageCalculator(fMethod.getCategories());
+		fInitialSelection = initialSelection;
 	}
 
 	@Override
@@ -77,21 +151,21 @@ public class CalculateCoverageDialog extends TitleAreaDialog {
 
 	@Override
 	protected void createButtonsForButtonBar(Composite parent) {
-		fOkButton = createButton(parent, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL, false);
-		fOkButton.setEnabled(true);
+		Button okButton = createButton(parent, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL, false);
+		okButton.setEnabled(true);
 	}
 
 	@Override
 	protected Control createDialogArea(Composite parent) {
-		setTitle(fTitle);
-		setMessage(fMessage);
+		setTitle(Messages.DIALOG_CALCULATE_COVERAGE_TITLE);
+		setMessage(Messages.DIALOG_CALCULATE_COVERAGE_MESSAGE);
 		Composite area = (Composite) super.createDialogArea(parent);
-		fMainContainer = new Composite(area, SWT.NONE);
-		fMainContainer.setLayout(new GridLayout(1, false));
-		fMainContainer.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+		Composite mainContainer = new Composite(area, SWT.NONE);
+		mainContainer.setLayout(new GridLayout(1, false));
+		mainContainer.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
-		createTestCaseComposite(fMainContainer);
-		createCoverageGraphComposite(fMainContainer);
+		createTestCaseComposite(mainContainer);
+		createCoverageGraphComposite(mainContainer);
 		
 		//Draw bar graph. Possible change for a timer with slight delay if tests prove current solution insufficient in some cases.
 		Display.getDefault().asyncExec(new Runnable() {
@@ -108,7 +182,6 @@ public class CalculateCoverageDialog extends TitleAreaDialog {
 		composite.setLayout(new GridLayout(1, false));
 		GridData griddata = new GridData(SWT.FILL, SWT.FILL, true, false);
 		griddata.minimumHeight = 250;
-		griddata.grabExcessVerticalSpace = true;
 		composite.setLayoutData(griddata);
 
 		Label selectTestCasesLabel = new Label(composite, SWT.WRAP);
@@ -121,14 +194,15 @@ public class CalculateCoverageDialog extends TitleAreaDialog {
 	private void createTestCaseViewer(Composite parent) {
 		Tree tree = new Tree(parent, SWT.CHECK | SWT.BORDER);
 		tree.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, true, 1, 1));
-		fTestCasesTreeViewer = new CheckboxTreeViewer(tree);
-		fTestCasesTreeViewer.setContentProvider(new TestCaseViewerContentProvider(fMethod));
-		fTestCasesTreeViewer.setLabelProvider(new TestCasesLabelProvider(fMethod));
-		fTestCasesTreeViewer.getTree().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
-		fTestCasesTreeViewer.setInput(fMethod);
+		CheckboxTreeViewer testCasesViewer = new CheckboxTreeViewer(tree);
+		testCasesViewer.setContentProvider(new TestCasesViewerContentProvider(fMethod));
+		testCasesViewer.setLabelProvider(new TestCasesViewerLabelProvider(fMethod));
+		testCasesViewer.getTree().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+		testCasesViewer.setInput(fMethod);
 		
 		//Add tree state listener preparing data for calculator and reverting tree changes if operation gets cancelled.
-		fTestCasesTreeViewer.addCheckStateListener(new CoverageTreeViewerListener(fCalculator, fTestCasesTreeViewer));
+		testCasesViewer.addCheckStateListener(new CoverageTreeViewerListener(fCalculator, testCasesViewer));
+		testCasesViewer.setCheckedElements(fInitialSelection);
 	}
 
 	private void createCoverageGraphComposite(Composite parent) {
@@ -145,7 +219,6 @@ public class CalculateCoverageDialog extends TitleAreaDialog {
 		composite.setLayout(new GridLayout(1, false));
 		GridData griddata = new GridData(SWT.FILL, SWT.FILL, true, true);
 		griddata.minimumHeight = 100;
-		griddata.grabExcessVerticalSpace = true;
 		composite.setLayoutData(griddata);
 		createCoverageGraphViewer(composite);
 
@@ -161,13 +234,12 @@ public class CalculateCoverageDialog extends TitleAreaDialog {
 	}
 
 	private void createCoverageGraphViewer(Composite parent) {
-		fCanvasSet = new Canvas[fCalculator.getN()];
-		for (int n = 0; n < fCalculator.getN(); n++) {
+		fCanvasSet = new Canvas[getN()];
+		for (int n = 0; n < getN(); n++) {
 			fCanvasSet[n] = new Canvas(parent, SWT.FILL);
 			fCanvasSet[n].setSize(getInitialSize().x, 40);
 			GridData griddata = new GridData(SWT.FILL, SWT.FILL, true, false);
 			griddata.minimumHeight = 40;
-			griddata.grabExcessVerticalSpace = true;
 			fCanvasSet[n].setLayoutData(griddata);
 		}
 
@@ -179,97 +251,9 @@ public class CalculateCoverageDialog extends TitleAreaDialog {
 	}
 
 	
-	public class CoverageTreeViewerListener extends TreeCheckStateListener {
-		private CheckboxTreeViewer fViewer;
-		CoverageCalculator fCalculator;
-		boolean fIsSelection;
-		// saved tree state
-		Object fTreeState[];
-
-		public CoverageTreeViewerListener(CoverageCalculator calculator, CheckboxTreeViewer treeViewer) {
-			super(treeViewer);
-			this.fCalculator = calculator;
-			fViewer = treeViewer;
-			fTreeState = fViewer.getCheckedElements();
-		}
-
-		public void revertLastTreeChange() {
-			fViewer.setCheckedElements(fTreeState);
-		}
-
-		@Override
-		public void checkStateChanged(CheckStateChangedEvent event) {
-			List<TestCaseNode> fTestCases = new ArrayList<>();
-			String fTestSuiteName = null;
-			Object element = event.getElement();
-			fIsSelection = event.getChecked();
-			// if action is selection
-			if (fIsSelection) {
-				// TestSuite
-				if (element instanceof String) {
-					fTestCases.clear();
-					fTestSuiteName = (String) element;
-					fTestCases.addAll(getMethod().getTestCases(fTestSuiteName));
-				}
-				// TestCaseNode
-				else {
-					fTreeState = null;
-					fTestCases.clear();
-					fTestSuiteName = null;
-					fTestCases.add((TestCaseNode) element);
-				}
-			}
-			// if action is deselection
-			else {
-				// TestSuite
-				if (element instanceof String) {
-					fTestCases.clear();
-					fTestSuiteName = (String) element;
-
-					// if parent is grayed
-					for (Object tcase : fTreeState) {
-						if (fTestSuiteName.equals(fContentProvider.getParent(tcase))) {
-							fTestCases.add((TestCaseNode) tcase);
-						}
-					}
-					// if parent has no children shown in the tree, but they all
-					// are implicitly selected
-					if (fTestCases.isEmpty()) {
-						fTestCases.addAll(getMethod().getTestCases(fTestSuiteName));
-					}
-				}
-				// TestCaseNode
-				else {
-					fTreeState = null;
-					fTestCases.clear();
-					fTestSuiteName = null;
-					fTestCases.add((TestCaseNode) element);
-				}
-			}
-
-			fViewer.setSubtreeChecked(element, fIsSelection);
-			setParentGreyed(element);
-			if (fViewer.getCheckedElements().length == 0) {
-				fCalculator.setCurrentChangedCases(null, fIsSelection);
-			} else {
-				fCalculator.setCurrentChangedCases(fTestCases, fIsSelection);
-			}
-
-			// Execute core calculator function
-			if (fCalculator.calculateCoverage()) {
-				// if succeed - save changes to the tree
-				fTreeState = fViewer.getCheckedElements();
-				drawBarGraph();
-			} else {
-				revertLastTreeChange();
-			}
-		}
-
-	}
-	
 	private void drawBarGraph() {
-		if (fCalculator.getN() != 0 && fCalculator.getN() > 0) {
-			for (int n = 0; n < fCalculator.getN(); n++) {
+		if (getN() != 0 && getN() > 0) {
+			for (int n = 0; n < getN(); n++) {
 				Display display = Display.getCurrent();
 				Canvas fCanvas = fCanvasSet[n];
 				fCanvas.setSize(fCanvas.getParent().getSize().x, 40);
@@ -320,8 +304,7 @@ public class CalculateCoverageDialog extends TitleAreaDialog {
 		}
 	}
 	
-	private MethodNode getMethod(){
-		return fMethod;
+	private int getN(){
+		return fMethod.getCategories().size();
 	}
-
 }

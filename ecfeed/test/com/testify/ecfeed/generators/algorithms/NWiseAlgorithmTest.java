@@ -82,8 +82,8 @@ public class NWiseAlgorithmTest{
 	private IAlgorithm<String> getAlgorithm(Class<? extends IAlgorithm> algorithmUnderTestClass, int n) {
 		Constructor<? extends IAlgorithm> algorithmUnderTestConstructor;
 		try {
-			algorithmUnderTestConstructor = algorithmUnderTestClass.getConstructor(int.class);
-			IAlgorithm<String> algorithm = algorithmUnderTestConstructor.newInstance(n);
+			algorithmUnderTestConstructor = algorithmUnderTestClass.getConstructor(int.class, int.class);
+			IAlgorithm<String> algorithm = algorithmUnderTestConstructor.newInstance(n, 100);
 			return algorithm;
 		} catch (Exception e) {
 			fail("Unexpected algorithm exception: " + e.getMessage());
