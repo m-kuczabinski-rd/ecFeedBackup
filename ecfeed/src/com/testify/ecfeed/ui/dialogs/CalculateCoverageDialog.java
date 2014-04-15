@@ -54,6 +54,7 @@ public class CalculateCoverageDialog extends TitleAreaDialog {
 	private Canvas[] fCanvasSet;
 	private CoverageCalculator fCalculator;
 	private MethodNode fMethod;
+	private Object[] fInitialSelection;
 
 	private class CoverageTreeViewerListener extends TreeCheckStateListener {
 		private CheckboxTreeViewer fViewer;
@@ -134,12 +135,13 @@ public class CalculateCoverageDialog extends TitleAreaDialog {
 	
 	}
 
-	public CalculateCoverageDialog(Shell parentShell, MethodNode method) {
+	public CalculateCoverageDialog(Shell parentShell, MethodNode method, Object[] initialSelection) {
 		super(parentShell);
 		setHelpAvailable(false);
 		setShellStyle(SWT.BORDER | SWT.RESIZE | SWT.TITLE);
 		fMethod = method;
 		fCalculator = new CoverageCalculator(fMethod.getCategories());
+		fInitialSelection = initialSelection;
 	}
 
 	@Override
@@ -173,7 +175,6 @@ public class CalculateCoverageDialog extends TitleAreaDialog {
 		composite.setLayout(new GridLayout(1, false));
 		GridData griddata = new GridData(SWT.FILL, SWT.FILL, true, false);
 		griddata.minimumHeight = 250;
-		griddata.grabExcessVerticalSpace = true;
 		composite.setLayoutData(griddata);
 
 		Label selectTestCasesLabel = new Label(composite, SWT.WRAP);
@@ -194,6 +195,7 @@ public class CalculateCoverageDialog extends TitleAreaDialog {
 		
 		//Add tree state listener preparing data for calculator and reverting tree changes if operation gets cancelled.
 		testCasesViewer.addCheckStateListener(new CoverageTreeViewerListener(fCalculator, testCasesViewer));
+		testCasesViewer.setCheckedElements(fInitialSelection);
 	}
 
 	private void createCoverageGraphComposite(Composite parent) {
