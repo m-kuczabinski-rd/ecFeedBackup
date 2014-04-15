@@ -180,7 +180,7 @@ public class CalculateCoverageDialog extends TitleAreaDialog {
 	private void createTestCaseComposite(Composite parent) {
 		Composite composite = new Composite(parent, SWT.NONE);
 		composite.setLayout(new GridLayout(1, false));
-		GridData griddata = new GridData(SWT.FILL, SWT.FILL, true, false);
+		GridData griddata = new GridData(SWT.FILL, SWT.FILL, true, true);
 		griddata.minimumHeight = 250;
 		composite.setLayoutData(griddata);
 
@@ -209,7 +209,7 @@ public class CalculateCoverageDialog extends TitleAreaDialog {
 		ScrolledComposite scrolled = new ScrolledComposite(parent, SWT.BORDER | SWT.FILL | SWT.V_SCROLL);
 		GridData scrolledgriddata = new GridData(SWT.FILL, SWT.FILL, true, true);
 		scrolledgriddata.minimumWidth = 100;
-		scrolledgriddata.minimumHeight = 100;
+		scrolledgriddata.minimumHeight = 150;
 		scrolled.setLayout(new GridLayout(1, false));
 		scrolled.setLayoutData(scrolledgriddata);
 		scrolled.setExpandHorizontal(true);
