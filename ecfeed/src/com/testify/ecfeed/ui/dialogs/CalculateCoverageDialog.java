@@ -65,7 +65,6 @@ public class CalculateCoverageDialog extends TitleAreaDialog {
 			super(treeViewer);
 			fCalculator = calculator;
 			fViewer = treeViewer;
-//			fTreeState = fViewer.getCheckedElements();
 		}
 	
 		public void revertLastTreeChange() {
