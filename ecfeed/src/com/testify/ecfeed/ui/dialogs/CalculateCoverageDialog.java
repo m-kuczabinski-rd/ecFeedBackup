@@ -171,7 +171,7 @@ public class CalculateCoverageDialog extends TitleAreaDialog {
 			fCanvasSet[n].setLayoutData(griddata);
 		}
 
-		parent.addListener(SWT.Resize, new Listener() {
+		parent.getParent().addListener(SWT.Resize, new Listener() {
 			public void handleEvent(Event e) {
 				drawBarGraph();
 			}
