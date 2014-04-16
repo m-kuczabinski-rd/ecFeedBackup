@@ -166,27 +166,40 @@ public class ConstraintViewer extends TreeViewerSection {
 				statement = new StaticStatement(false);
 			}
 			else if (fStatementCombo.getText().equals(STATEMENT_AND)){
+				if(fSelectedStatement instanceof StatementArray && fSelectedStatement.getLeftHandName() == STATEMENT_OR){
+					StatementArray statementArray = (StatementArray) fSelectedStatement;
+					statementArray.setOperator(Operator.AND);	
+					statement = fSelectedStatement;
+				} else
 				statement = new StatementArray(Operator.AND);
 			}
 			else if(fStatementCombo.getText().equals(STATEMENT_OR)){
+				if(fSelectedStatement instanceof StatementArray && fSelectedStatement.getLeftHandName() == STATEMENT_AND){
+					StatementArray statementArray = (StatementArray) fSelectedStatement;
+					statementArray.setOperator(Operator.OR);	
+					statement = fSelectedStatement;
+				} else
 				statement = new StatementArray(Operator.OR);
 			}
-			else{
-				MethodNode method = fSelectedConstraint.getMethod();
-				Relation relation = Relation.EQUAL; 
-				String categoryName = fStatementCombo.getText();
-
-				PartitionedCategoryNode partitionedCategory = method.getPartitionedCategory(categoryName);
-				ExpectedCategoryNode expectedCategory = method.getExpectedCategory(categoryName);
-				if(partitionedCategory != null){
-					PartitionNode condition = partitionedCategory.getPartitions().get(0);
-					statement = new PartitionedCategoryStatement(partitionedCategory, relation, condition);
-				}
-				else if(expectedCategory != null){
-					PartitionNode condition = new PartitionNode("expected", expectedCategory.getDefaultValue());
-					condition.setParent(expectedCategory);
-					statement = new ExpectedValueStatement(expectedCategory, condition);
-				}
+			else{			
+			    int endIndex = fStatementCombo.getText().lastIndexOf("(arg)");
+			    if (endIndex != -1){
+					MethodNode method = fSelectedConstraint.getMethod();
+					Relation relation = Relation.EQUAL; 	
+				    String categoryName = fStatementCombo.getText().substring(0, endIndex);
+	
+					PartitionedCategoryNode partitionedCategory = method.getPartitionedCategory(categoryName);
+					ExpectedCategoryNode expectedCategory = method.getExpectedCategory(categoryName);
+					if(partitionedCategory != null){
+						PartitionNode condition = partitionedCategory.getPartitions().get(0);
+						statement = new PartitionedCategoryStatement(partitionedCategory, relation, condition);
+					}
+					else if(expectedCategory != null){
+						PartitionNode condition = new PartitionNode("expected", expectedCategory.getDefaultValue());
+						condition.setParent(expectedCategory);
+						statement = new ExpectedValueStatement(expectedCategory, condition);
+					}
+			    }
 			}
 			return statement;
 		}
@@ -237,10 +250,14 @@ public class ConstraintViewer extends TreeViewerSection {
 			List<String> items = new ArrayList<String>();
 			items.addAll(Arrays.asList(FIXED_STATEMENTS));
 			if(fSelectedStatement == fSelectedConstraint.getConstraint().getConsequence()){
-				items.addAll(fSelectedConstraint.getMethod().getCategoriesNames());
+				for(String categoryName: fSelectedConstraint.getMethod().getCategoriesNames()){
+					items.add(categoryName+ "(arg)");
+				}
 			}
 			else{
-				items.addAll(fSelectedConstraint.getMethod().getOrdinaryCategoriesNames());
+				for(String categoryName: fSelectedConstraint.getMethod().getOrdinaryCategoriesNames()){
+					items.add(categoryName+ "(arg)");
+				}
 			}
 			fStatementCombo.setItems(items.toArray(new String[]{}));
 
