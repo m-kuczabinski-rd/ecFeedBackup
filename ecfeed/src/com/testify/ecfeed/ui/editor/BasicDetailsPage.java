@@ -155,7 +155,7 @@ public abstract class BasicDetailsPage implements IDetailsPage, IModelUpdateList
 		if(source != null){
 			source.markDirty();
 		}
-		else if(getMasterSection() != null){
+		if(getMasterSection() != null){
 			getMasterSection().markDirty();
 		}
 		if(getMasterSection() != null){

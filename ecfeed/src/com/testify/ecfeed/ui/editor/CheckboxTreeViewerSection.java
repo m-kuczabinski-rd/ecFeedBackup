@@ -39,4 +39,8 @@ public abstract class CheckboxTreeViewerSection extends TreeViewerSection {
 	public Object[] getCheckedElements(){
 		return getCheckboxViewer().getCheckedElements();
 	}
+
+	public Object[] getGrayedElements(){
+		return getCheckboxViewer().getGrayedElements();
+	}
 }

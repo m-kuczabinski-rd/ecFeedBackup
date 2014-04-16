@@ -181,25 +181,22 @@ public class ConstraintViewer extends TreeViewerSection {
 				} else
 				statement = new StatementArray(Operator.OR);
 			}
-			else{			
-			    int endIndex = fStatementCombo.getText().lastIndexOf("(arg)");
-			    if (endIndex != -1){
-					MethodNode method = fSelectedConstraint.getMethod();
-					Relation relation = Relation.EQUAL; 	
-				    String categoryName = fStatementCombo.getText().substring(0, endIndex);
-	
-					PartitionedCategoryNode partitionedCategory = method.getPartitionedCategory(categoryName);
-					ExpectedCategoryNode expectedCategory = method.getExpectedCategory(categoryName);
-					if(partitionedCategory != null){
-						PartitionNode condition = partitionedCategory.getPartitions().get(0);
-						statement = new PartitionedCategoryStatement(partitionedCategory, relation, condition);
-					}
-					else if(expectedCategory != null){
-						PartitionNode condition = new PartitionNode("expected", expectedCategory.getDefaultValue());
-						condition.setParent(expectedCategory);
-						statement = new ExpectedValueStatement(expectedCategory, condition);
-					}
-			    }
+			else{
+				MethodNode method = fSelectedConstraint.getMethod();
+				Relation relation = Relation.EQUAL; 
+				String categoryName = fStatementCombo.getText();
+
+				PartitionedCategoryNode partitionedCategory = method.getPartitionedCategory(categoryName);
+				ExpectedCategoryNode expectedCategory = method.getExpectedCategory(categoryName);
+				if(partitionedCategory != null){
+					PartitionNode condition = partitionedCategory.getPartitions().get(0);
+					statement = new PartitionedCategoryStatement(partitionedCategory, relation, condition);
+				}
+				else if(expectedCategory != null){
+					PartitionNode condition = new PartitionNode("expected", expectedCategory.getDefaultValue());
+					condition.setParent(expectedCategory);
+					statement = new ExpectedValueStatement(expectedCategory, condition);
+				}
 			}
 			return statement;
 		}
@@ -250,14 +247,10 @@ public class ConstraintViewer extends TreeViewerSection {
 			List<String> items = new ArrayList<String>();
 			items.addAll(Arrays.asList(FIXED_STATEMENTS));
 			if(fSelectedStatement == fSelectedConstraint.getConstraint().getConsequence()){
-				for(String categoryName: fSelectedConstraint.getMethod().getCategoriesNames()){
-					items.add(categoryName+ "(arg)");
-				}
+				items.addAll(fSelectedConstraint.getMethod().getCategoriesNames());
 			}
 			else{
-				for(String categoryName: fSelectedConstraint.getMethod().getOrdinaryCategoriesNames()){
-					items.add(categoryName+ "(arg)");
-				}
+				items.addAll(fSelectedConstraint.getMethod().getOrdinaryCategoriesNames());
 			}
 			fStatementCombo.setItems(items.toArray(new String[]{}));
 

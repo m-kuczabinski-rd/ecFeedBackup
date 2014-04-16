@@ -112,7 +112,7 @@ public class TestCasesViewer extends CheckboxTreeViewerSection {
 		@Override
 		public void widgetSelected(SelectionEvent e) {
 			CalculateCoverageDialog dialog = new CalculateCoverageDialog(getActiveShell(), 
-					fSelectedMethod, getCheckedElements());
+					fSelectedMethod, getCheckedElements(), getGrayedElements());
 			dialog.open();
 		}
 
