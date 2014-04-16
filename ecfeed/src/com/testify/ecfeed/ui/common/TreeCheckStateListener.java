@@ -17,8 +17,8 @@ import org.eclipse.jface.viewers.ICheckStateListener;
 import org.eclipse.jface.viewers.TreeNodeContentProvider;
 
 public class TreeCheckStateListener implements ICheckStateListener{
-	protected TreeNodeContentProvider fContentProvider;
-	protected CheckboxTreeViewer fViewer;
+	private TreeNodeContentProvider fContentProvider;
+	private CheckboxTreeViewer fViewer;
 	
 	public TreeCheckStateListener(CheckboxTreeViewer treeViewer){
 		fViewer = treeViewer;
@@ -32,6 +32,14 @@ public class TreeCheckStateListener implements ICheckStateListener{
 		
 		fViewer.setSubtreeChecked(element, checked);
 		setParentGreyed(element);
+	}
+	
+	protected CheckboxTreeViewer getViewer(){
+		return fViewer;
+	}
+	
+	protected TreeNodeContentProvider getContentProvider(){
+		return fContentProvider;
 	}
 	
 	protected void setParentGreyed(Object element) {

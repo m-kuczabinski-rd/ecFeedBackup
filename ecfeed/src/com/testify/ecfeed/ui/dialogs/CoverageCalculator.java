@@ -2,6 +2,7 @@ package com.testify.ecfeed.ui.dialogs;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -197,7 +198,7 @@ public class CoverageCalculator {
 		return expected;
 	}
 
-	private List<List<PartitionNode>> prepareCasesToAdd(List<TestCaseNode> TestCases) {
+	private List<List<PartitionNode>> prepareCasesToAdd(Collection<TestCaseNode> TestCases) {
 		List<List<PartitionNode>> cases = new ArrayList<>();
 		if (fExpectedPartitions.isEmpty()) {
 			for (TestCaseNode tcnode : TestCases) {
@@ -248,11 +249,11 @@ public class CoverageCalculator {
 		}
 	}
 	
-	public double[] getResults(){
+	public double[] getCoverage(){
 		return fResults;
 	}
 	
-	public void setCurrentChangedCases(List<TestCaseNode> testCases, boolean isAdding) {
+	public void setCurrentChangedCases(Collection<TestCaseNode> testCases, boolean isAdding) {
 		fAddingFlag = isAdding;
 		if (testCases == null)
 			fCurrentlyChangedCases = null;
