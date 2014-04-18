@@ -24,6 +24,7 @@ import org.eclipse.swt.widgets.Composite;
 import com.testify.ecfeed.model.AbstractCategoryNode;
 import com.testify.ecfeed.model.ExpectedCategoryNode;
 import com.testify.ecfeed.model.MethodNode;
+import com.testify.ecfeed.model.PartitionedCategoryNode;
 import com.testify.ecfeed.ui.dialogs.TestMethodRenameDialog;
 
 public class MethodDetailsPage extends BasicDetailsPage {
@@ -61,7 +62,10 @@ public class MethodDetailsPage extends BasicDetailsPage {
 				fSelectedMethod.getCategories().get(index).setName(newCategory.getName());
 			}
 			else{
-				fSelectedMethod.replaceCategory(index, newCategory);
+				if(newCategory instanceof ExpectedCategoryNode)
+					fSelectedMethod.replaceCategory(index, (ExpectedCategoryNode)newCategory);
+				else if(newCategory instanceof PartitionedCategoryNode)
+					fSelectedMethod.replaceCategory(index, (PartitionedCategoryNode)newCategory);					
 			}
 		}
 	}

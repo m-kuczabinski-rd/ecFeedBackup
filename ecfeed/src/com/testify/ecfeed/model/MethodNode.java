@@ -107,8 +107,8 @@ public class MethodNode extends GenericNode {
 	}
 
 	public void addConstraint(ConstraintNode constraint) {
-		fConstraints.add(constraint);
 		constraint.setParent(this);
+		fConstraints.add(constraint);
 	}
 	
 	public void addTestCase(TestCaseNode testCase){
@@ -242,10 +242,9 @@ public class MethodNode extends GenericNode {
 		return testSuites;
 	}
 
-	public boolean removeCategory(AbstractCategoryNode category){
+	protected boolean removeCategory(AbstractCategoryNode category){
 		category.setParent(null);
 		if(fCategories.remove(category)){
-			fTestCases.clear();
 			Iterator<ConstraintNode> it = fConstraints.iterator();
 			while(it.hasNext()){
 				ConstraintNode constraint = it.next();
@@ -253,13 +252,20 @@ public class MethodNode extends GenericNode {
 					it.remove();
 				}
 			}
-			return true;
+			
+		}
+		return false;
+	}
+
+	public boolean removeCategory(PartitionedCategoryNode category){
+		if(removeCategory((AbstractCategoryNode) category)){
+			return fPartitionedCategories.remove(category);
 		}
 		return false;
 	}
 	
 	public boolean removeCategory(ExpectedCategoryNode category){
-		if(removeCategory((AbstractCategoryNode)category)){
+		if(removeCategory((AbstractCategoryNode) category)){
 			return fExpectedValueCategories.remove(category);
 		}
 		return false;
@@ -284,16 +290,33 @@ public class MethodNode extends GenericNode {
 			}
 		}
 	}
-
-	public void replaceCategory(int index, AbstractCategoryNode newCategory){
-		replace(index, newCategory);
-		fTestCases.clear();
+	
+	public void replaceCategory(int index, ExpectedCategoryNode newCategory){		
+		if(fCategories.get(index) instanceof ExpectedCategoryNode){
+			ExpectedCategoryNode oldCategory = (ExpectedCategoryNode)fCategories.get(index);
+		
+			if(removeCategory(oldCategory)){
+				newCategory.setParent(this);
+				fCategories.add(index, newCategory);
+				fExpectedValueCategories.add(newCategory);		
+				for(TestCaseNode testCase : fTestCases){
+					testCase.replaceValue(index, newCategory.getDefaultValuePartition().getCopy());
+				}
+			}
+		}
 	}
 	
-	public void replaceCategory(int index, ExpectedCategoryNode newCategory){
-		replace(index, newCategory);
-		for(TestCaseNode testCase : fTestCases){
-			testCase.replaceValue(index, newCategory.getDefaultValuePartition().getCopy());
+	public void replaceCategory(int index, PartitionedCategoryNode newCategory){
+		if(fCategories.get(index) instanceof PartitionedCategoryNode){
+			PartitionedCategoryNode oldCategory = (PartitionedCategoryNode)fCategories.get(index);
+			
+			System.out.print("que");
+			if(removeCategory(oldCategory)){
+				newCategory.setParent(this);
+				fCategories.add(index, newCategory);
+				fPartitionedCategories.add(newCategory);		
+				fTestCases.clear();
+			}
 		}
 	}
 
@@ -304,18 +327,6 @@ public class MethodNode extends GenericNode {
 
 	public boolean validateConstraintName(String name) {
 		return super.validateNodeName(name);
-	}
-
-	protected void replace(int index, AbstractCategoryNode newCategory){
-		newCategory.setParent(this);
-		AbstractCategoryNode originalCategory = fCategories.get(index);
-		fCategories.set(index, newCategory);
-		Iterator<ConstraintNode> iterator = fConstraints.iterator();
-		while(iterator.hasNext()){
-			if(iterator.next().mentions(originalCategory)){
-				iterator.remove();
-			}
-		}
 	}
 
 	protected void removeMentioningConstraints(PartitionNode partition) {

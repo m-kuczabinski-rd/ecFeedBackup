@@ -388,7 +388,7 @@ public class ConstraintViewer extends TreeViewerSection {
 	public void setInput(ConstraintNode constraintNode){
 		super.setInput(constraintNode.getConstraint());
 		fSelectedConstraint = constraintNode;
-		
+
 		fStatementLabelProvider.setConstraint(constraintNode.getConstraint());
 
 		getTreeViewer().expandAll();
