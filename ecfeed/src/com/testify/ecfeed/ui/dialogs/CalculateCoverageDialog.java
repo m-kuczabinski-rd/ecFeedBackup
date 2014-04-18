@@ -68,6 +68,7 @@ public class CalculateCoverageDialog extends TitleAreaDialog {
 	
 		public CoverageTreeViewerListener(CheckboxTreeViewer treeViewer) {
 			super(treeViewer);
+			fTreeState = new Object[0];
 		}
 	
 		@Override
@@ -76,10 +77,21 @@ public class CalculateCoverageDialog extends TitleAreaDialog {
 
 			Object element = event.getElement();
 			boolean checked = event.getChecked();
+			Set<TestCaseNode> checkedTestCases;
 			
-			Set<TestCaseNode> checkedTestCases = getCheckedTestCases(element, checked);
-			
-			if(applyCheckedTestCases(checkedTestCases, checked)){
+			if(fTestCasesViewer.getCheckedElements().length == 0){
+				checkedTestCases = null;
+			} else {
+				checkedTestCases = getCheckedTestCases(element, checked);
+			}
+
+			applyCheckedTestCases(checkedTestCases, checked);
+		}
+		
+		public void applyCheckedTestCases(Collection<TestCaseNode> checkedTestCases,
+				boolean checked){
+			fCalculator.setCurrentChangedCases(checkedTestCases, checked);
+			if(fCalculator.calculateCoverage()){
 				fTreeState = getViewer().getCheckedElements();
 				drawBarGraph();
 			}
@@ -88,12 +100,6 @@ public class CalculateCoverageDialog extends TitleAreaDialog {
 			}
 		}
 		
-		public boolean applyCheckedTestCases(Collection<TestCaseNode> checkedTestCases,
-				boolean checked) {
-			fCalculator.setCurrentChangedCases(checkedTestCases, checked);
-			return fCalculator.calculateCoverage();
-		}
-
 		private Set<TestCaseNode> getCheckedTestCases(Object element, boolean checked){
 			Set<TestCaseNode> testCases = new HashSet<>();
 			
@@ -301,7 +307,7 @@ public class CalculateCoverageDialog extends TitleAreaDialog {
 				// Clear the canvas
 				Color outworldTeal = new Color(display, 16, 224, 224);
 				gc.setBackground(outworldTeal);
-				gc.setForeground(display.getSystemColor(SWT.COLOR_BLACK));
+				Color lightBlue = new Color(display, 96, 128, 255);
 
 				double widthunit = (double) width / 100;
 				int fontsize = (int) (height / 4);
@@ -318,8 +324,10 @@ public class CalculateCoverageDialog extends TitleAreaDialog {
 				topbarborder = topborder + fontspacing;
 				bottomborder = height - spacing;
 
-				gc.fillRectangle(0, topbarborder, (int) (coverage[n] * widthunit), bottomborder - topbarborder);
+				gc.setForeground(lightBlue);
+				gc.fillGradientRectangle(0, topbarborder, (int) (coverage[n] * widthunit), bottomborder - topbarborder, false);
 				gc.setLineWidth(linewidth);
+				gc.setForeground(display.getSystemColor(SWT.COLOR_BLACK));
 				gc.drawLine(linewidth, bottomborder, (int) width - linewidth, bottomborder);
 				gc.drawLine(linewidth / 2, topbarborder, linewidth / 2, bottomborder);
 				gc.drawLine((int) (width) - linewidth / 2, topbarborder, (int) (width) - linewidth / 2, bottomborder);
