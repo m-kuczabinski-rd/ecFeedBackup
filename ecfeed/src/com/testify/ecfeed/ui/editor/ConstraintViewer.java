@@ -337,13 +337,12 @@ public class ConstraintViewer extends TreeViewerSection {
 					ExpectedValueStatement statement = (ExpectedValueStatement)fSelectedStatement;
 					AbstractCategoryNode category = statement.getCategory();
 					Object newValue = category.getPartitionValueFromString(fConditionText.getText());
-					if(newValue == null){
-						fConditionText.setText(statement.getCondition().getValueString());
-					}
-					else{
+					if(newValue != null && !newValue.equals(statement.getCondition().getValue())){
 						statement.getCondition().setValue(newValue);
+						modelUpdated();
 					}
-					modelUpdated();
+					fConditionText.setText(statement.getCondition().getValueString());
+
 				}
 			}
 		});
