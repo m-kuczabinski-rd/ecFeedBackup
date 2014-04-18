@@ -105,7 +105,6 @@ public class NWiseAlgorithmTest{
 
 		try {
 			for (int n = 2; n < 4; n++) {
-				System.out.println("N: " + n);
 				List<List<String>> input = GeneratorTestUtils
 						.prepareInput(5, 6);
 				long totalTuples = calculateTotalTuples(input, n);
