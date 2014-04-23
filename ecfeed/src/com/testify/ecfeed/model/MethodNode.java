@@ -252,7 +252,7 @@ public class MethodNode extends GenericNode {
 					it.remove();
 				}
 			}
-			
+			return true;
 		}
 		return false;
 	}
@@ -292,31 +292,26 @@ public class MethodNode extends GenericNode {
 	}
 	
 	public void replaceCategory(int index, ExpectedCategoryNode newCategory){		
-		if(fCategories.get(index) instanceof ExpectedCategoryNode){
-			ExpectedCategoryNode oldCategory = (ExpectedCategoryNode)fCategories.get(index);
-		
-			if(removeCategory(oldCategory)){
-				newCategory.setParent(this);
-				fCategories.add(index, newCategory);
-				fExpectedValueCategories.add(newCategory);		
-				for(TestCaseNode testCase : fTestCases){
-					testCase.replaceValue(index, newCategory.getDefaultValuePartition().getCopy());
-				}
+		PartitionedCategoryNode oldCategory = (PartitionedCategoryNode)fCategories.get(index);
+
+		if(removeCategory(oldCategory)){
+			newCategory.setParent(this);
+			fCategories.add(index, newCategory);
+			fExpectedValueCategories.add(newCategory);
+			for(TestCaseNode testCase : fTestCases){
+				testCase.replaceValue(index, newCategory.getDefaultValuePartition().getCopy());
 			}
 		}
 	}
 	
 	public void replaceCategory(int index, PartitionedCategoryNode newCategory){
-		if(fCategories.get(index) instanceof PartitionedCategoryNode){
-			PartitionedCategoryNode oldCategory = (PartitionedCategoryNode)fCategories.get(index);
-			
-			System.out.print("que");
-			if(removeCategory(oldCategory)){
-				newCategory.setParent(this);
-				fCategories.add(index, newCategory);
-				fPartitionedCategories.add(newCategory);		
-				fTestCases.clear();
-			}
+		ExpectedCategoryNode oldCategory = (ExpectedCategoryNode)fCategories.get(index);
+
+		if(removeCategory(oldCategory)){
+			newCategory.setParent(this);
+			fCategories.add(index, newCategory);
+			fPartitionedCategories.add(newCategory);
+			fTestCases.clear();
 		}
 	}
 
