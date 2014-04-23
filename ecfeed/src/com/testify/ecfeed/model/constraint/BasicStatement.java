@@ -13,7 +13,7 @@ package com.testify.ecfeed.model.constraint;
 
 import java.util.List;
 
-import com.testify.ecfeed.model.CategoryNode;
+import com.testify.ecfeed.model.AbstractCategoryNode;
 import com.testify.ecfeed.model.PartitionNode;
 
 public abstract class BasicStatement implements IStatement {
@@ -72,7 +72,7 @@ public abstract class BasicStatement implements IStatement {
 		return false;
 	}
 
-	public boolean mentions(CategoryNode category) {
+	public boolean mentions(AbstractCategoryNode category) {
 		return false;
 	}
 
@@ -89,4 +89,8 @@ public abstract class BasicStatement implements IStatement {
 		return fId == ((BasicStatement)obj).getId();
 	}
 	
+	@Override
+	public boolean adapt(List<PartitionNode> values){
+		return false;
+	}
 }

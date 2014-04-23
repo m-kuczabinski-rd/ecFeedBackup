@@ -24,11 +24,11 @@ import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.core.Signature;
 
-import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.ClassNode;
-import com.testify.ecfeed.model.ExpectedValueCategoryNode;
+import com.testify.ecfeed.model.ExpectedCategoryNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
+import com.testify.ecfeed.model.PartitionedCategoryNode;
 
 public class ModelUtils {
 	public static ClassNode generateClassModel(IType type){
@@ -162,51 +162,39 @@ public class ModelUtils {
 	private static MethodNode generateMethodModel(IMethod method) throws JavaModelException {
 		MethodNode methodNode = new MethodNode(method.getElementName());
 		for(ILocalVariable parameter : method.getParameters()){
-			CategoryNode parameterModel = generateCategoryModel(parameter);
-			if(parameterModel == null){
-				return null;
-			}
-			if(parameterModel instanceof ExpectedValueCategoryNode){
-				methodNode.addCategory((ExpectedValueCategoryNode)parameterModel);
+			if(isExpected(parameter)){
+				methodNode.addCategory(generateExpectedCategoryModel(parameter));
 			}
 			else{
-				methodNode.addCategory(parameterModel);
+				methodNode.addCategory(generatePartitionedCategoryModel(parameter));
 			}
 		}
 		return methodNode;
 	}
 
-	private static CategoryNode generateCategoryModel(ILocalVariable parameter) {
+	private static ExpectedCategoryNode generateExpectedCategoryModel(ILocalVariable parameter) {
 		String type = getTypeName(parameter.getTypeSignature());
-		boolean expected = false;
-//		if(type.equals(Constants.TYPE_NAME_UNSUPPORTED)){
-//			return null;
-//		}
-		IAnnotation[] annotations;
-		try {
-			annotations = parameter.getAnnotations();
-			for(IAnnotation annotation : annotations){
-				if(annotation.getElementName().equals("expected")){
-					expected = true;
-				}
-			}
-			
-			CategoryNode category;
-			if(!expected){
-				category = new CategoryNode(parameter.getElementName(), type);
-				ArrayList<PartitionNode> defaultPartitions = generateDefaultPartitions(type);
-				for(PartitionNode partition : defaultPartitions){
-					category.addPartition(partition);
-				}
-			}
-			else{
-				category = new ExpectedValueCategoryNode(parameter.getElementName(), type, getDefaultExpectedValue(type));
-			}
-			return category;
-		} catch (JavaModelException e) {
-			e.printStackTrace();
-			return null;
+		return new ExpectedCategoryNode(parameter.getElementName(), type, getDefaultExpectedValue(type));
+	}
+
+	private static PartitionedCategoryNode generatePartitionedCategoryModel(ILocalVariable parameter) {
+		String type = getTypeName(parameter.getTypeSignature());
+		PartitionedCategoryNode category = new PartitionedCategoryNode(parameter.getElementName(), type);
+		ArrayList<PartitionNode> defaultPartitions = generateDefaultPartitions(type);
+		for(PartitionNode partition : defaultPartitions){
+			category.addPartition(partition);
 		}
+		return category;
+	}
+
+	private static boolean isExpected(ILocalVariable parameter) throws JavaModelException {
+		IAnnotation[] annotations = parameter.getAnnotations();
+		for(IAnnotation annotation : annotations){
+			if(annotation.getElementName().equals("expected")){
+				return true;
+			}
+		}
+		return false;
 	}
 
 	public static Object getDefaultExpectedValue(String type) {

@@ -28,12 +28,10 @@ import org.eclipse.ui.forms.AbstractFormPart;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Section;
 
-import com.testify.ecfeed.model.CategoryNode;
+import com.testify.ecfeed.model.AbstractCategoryNode;
 import com.testify.ecfeed.model.IGenericNode;
 import com.testify.ecfeed.model.IModelWrapper;
 import com.testify.ecfeed.model.RootNode;
-import com.testify.ecfeed.ui.editor.modeleditor.obsolete.ObsoleteModelContentProvider;
-import com.testify.ecfeed.ui.editor.modeleditor.obsolete.ObsoleteModelLabelProvider;
 
 public class ModelMasterSection extends TreeViewerSection{
 	private static final int STYLE = Section.EXPANDED | Section.TITLE_BAR;
@@ -75,7 +73,7 @@ public class ModelMasterSection extends TreeViewerSection{
 
 		private void enableSortButtons(IGenericNode selectedElement) {
 			boolean enabled = true;
-			if((selectedElement instanceof RootNode) || (selectedElement instanceof CategoryNode)){
+			if((selectedElement instanceof RootNode) || (selectedElement instanceof AbstractCategoryNode)){
 				enabled = false;
 			}
 			fMoveUpButton.setEnabled(enabled);
@@ -144,12 +142,12 @@ public class ModelMasterSection extends TreeViewerSection{
 
 	@Override
 	protected IContentProvider viewerContentProvider() {
-		return new ObsoleteModelContentProvider();
+		return new ModelContentProvider();
 	}
 	
 	@Override 
 	protected IBaseLabelProvider viewerLabelProvider(){
-		return new ObsoleteModelLabelProvider();
+		return new ModelLabelProvider();
 	}
 
 }

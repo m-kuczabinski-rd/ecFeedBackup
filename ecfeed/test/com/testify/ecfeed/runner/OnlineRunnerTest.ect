@@ -64,23 +64,15 @@
         <Method name="testWithConstraints">
             <Category name="arg1" type="String">
                 <Partition name="a" value="a"/>
-                <Partition name="b" value="b"/>
-                <Partition name="c" value="c"/>
             </Category>
             <Category name="arg2" type="String">
                 <Partition name="a" value="a"/>
-                <Partition name="b" value="b"/>
-                <Partition name="c" value="c"/>
             </Category>
             <Category name="arg3" type="String">
                 <Partition name="a" value="a"/>
-                <Partition name="b" value="b"/>
-                <Partition name="c" value="c"/>
             </Category>
             <Category name="arg4" type="String">
                 <Partition name="a" value="a"/>
-                <Partition name="b" value="b"/>
-                <Partition name="c" value="c"/>
             </Category>
             <Constraint name="global constraint">
                 <Premise>
@@ -93,33 +85,6 @@
                 </Premise>
                 <Consequence>
                     <StaticStatement value="false"/>
-                </Consequence>
-            </Constraint>
-            <Constraint name="another global constraint">
-                <Premise>
-                    <StatementArray operator="or">
-                        <StatementArray operator="and">
-                            <Statement category="arg1" partition="a" relation="="/>
-                            <Statement category="arg2" partition="a" relation="="/>
-                            <Statement category="arg3" partition="a" relation="="/>
-                            <Statement category="arg4" partition="a" relation="="/>
-                        </StatementArray>
-                        <StatementArray operator="and">
-                            <Statement category="arg1" partition="b" relation="="/>
-                            <Statement category="arg2" partition="b" relation="="/>
-                            <Statement category="arg3" partition="b" relation="="/>
-                            <Statement category="arg4" partition="b" relation="="/>
-                        </StatementArray>
-                        <StatementArray operator="and">
-                            <Statement category="arg1" partition="c" relation="="/>
-                            <Statement category="arg2" partition="c" relation="="/>
-                            <Statement category="arg3" partition="c" relation="="/>
-                            <Statement category="arg4" partition="c" relation="="/>
-                        </StatementArray>
-                    </StatementArray>
-                </Premise>
-                <Consequence>
-                    <StaticStatement value="true"/>
                 </Consequence>
             </Constraint>
         </Method>

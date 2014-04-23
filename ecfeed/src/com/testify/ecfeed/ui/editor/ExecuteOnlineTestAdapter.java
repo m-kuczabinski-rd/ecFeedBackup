@@ -21,7 +21,6 @@ import java.util.Map;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Display;
@@ -31,8 +30,10 @@ import com.testify.ecfeed.generators.api.IGenerator;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.TestCaseNode;
+import com.testify.ecfeed.model.constraint.Constraint;
 import com.testify.ecfeed.runner.ParameterizedMethod;
 import com.testify.ecfeed.ui.dialogs.ExecuteOnlineSetupDialog;
+import com.testify.ecfeed.ui.dialogs.GeneratorProgressMonitorDialog;
 
 public class ExecuteOnlineTestAdapter extends ExecuteTestAdapter {
 
@@ -90,10 +91,15 @@ public class ExecuteOnlineTestAdapter extends ExecuteTestAdapter {
 		if(dialog.open() == IDialogConstants.OK_ID){
 			IGenerator<PartitionNode> selectedGenerator = dialog.getSelectedGenerator();
 			List<List<PartitionNode>> algorithmInput = dialog.getAlgorithmInput();
-			Collection<IConstraint<PartitionNode>> constraints = dialog.getConstraints();
-			Map<String, Object> parameters = dialog.getGeneratorParameters();
+			Collection<Constraint> constraints = dialog.getConstraints();
 			
-			executeTest(selectedGenerator, algorithmInput, constraints, parameters);
+			Collection<IConstraint<PartitionNode>> constraintList = new ArrayList<IConstraint<PartitionNode>>();
+			for(Constraint constraint : constraints){
+				constraintList.add(constraint);
+			}
+			
+			Map<String, Object> parameters = dialog.getGeneratorParameters();
+			executeTest(selectedGenerator, algorithmInput, constraintList, parameters);
 		}
 	}
 	
@@ -107,7 +113,7 @@ public class ExecuteOnlineTestAdapter extends ExecuteTestAdapter {
 			Collection<IConstraint<PartitionNode>> constraints,
 			Map<String, Object> parameters) {
 
-		ProgressMonitorDialog progressDialog = new ProgressMonitorDialog(fPage.getActiveShell());
+		GeneratorProgressMonitorDialog progressDialog = new GeneratorProgressMonitorDialog(fPage.getActiveShell(), generator);
 		ExecuteRunnable runnable = new ExecuteRunnable(generator, input, constraints, parameters);
 		progressDialog.open();
 		try {

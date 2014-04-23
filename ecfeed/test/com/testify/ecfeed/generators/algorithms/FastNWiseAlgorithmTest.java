@@ -53,8 +53,8 @@ public class FastNWiseAlgorithmTest extends NWiseAlgorithmTest {
 
 	private void testSpeed(List<List<String>> input, int n) {
 		try{
-			IAlgorithm<String> fastAlgorithm = new FastNWiseAlgorithm<String>(n);
-			IAlgorithm<String> referenceAlgorithm = new OptimalNWiseAlgorithm<String>(n);
+			IAlgorithm<String> fastAlgorithm = new FastNWiseAlgorithm<String>(n, 100);
+			IAlgorithm<String> referenceAlgorithm = new OptimalNWiseAlgorithm<String>(n, 100);
 			Collection<IConstraint<String>> constraints = GeneratorTestUtils.generateRandomConstraints(input);
 			fastAlgorithm.initialize(input, constraints);
 			referenceAlgorithm.initialize(input, constraints);

@@ -28,54 +28,54 @@ import com.testify.ecfeed.generators.api.GeneratorException;
 import com.testify.ecfeed.generators.api.IConstraint;
 import com.testify.ecfeed.generators.utils.GeneratorTestUtils;
 
-public class OptimalNWiseTest extends NWiseAlgorithmTest{
+public class OptimalNWiseTest extends NWiseAlgorithmTest {
 
 	final int MAX_VARIABLES = 5;
 	final int MAX_PARTITIONS_PER_VARIABLE = 5;
 	private final Collection<IConstraint<String>> EMPTY_CONSTRAINTS = new HashSet<IConstraint<String>>();
-	
+
 	@Test
 	public void testCorrectness() {
 		testCorrectness(OptimalNWiseAlgorithm.class);
 	}
-	
+
 	@Test
 	public void testConstraints() {
 		testConstraints(OptimalNWiseAlgorithm.class);
 	}
-	
-	@Test
-	public void testSize(){
-		try{
-		for(int variables : new int[]{1, 2, 5}){
-		for(int partitions : new int[]{1, 2, 5}){
-			for(int n = 1; n <= variables; n++){
-				List<List<String>>input = GeneratorTestUtils.prepareInput(variables, partitions);
-				Collection<IConstraint<String>> constraints = EMPTY_CONSTRAINTS;
-				IAlgorithm<String> algorithm = new OptimalNWiseAlgorithm<String>(n);
 
-				algorithm.initialize(input, constraints);
-				int generatedDataSize = GeneratorTestUtils.algorithmResult(algorithm).size();
-				int referenceDataSize = referenceResult(input, n).size();
-				assertTrue(Math.abs(generatedDataSize - referenceDataSize) <= referenceDataSize / 30);
+	@Test
+	public void testSize() {
+		try {
+			for (int variables : new int[] { 1, 2, 5 }) {
+				for (int partitions : new int[] { 1, 2, 5 }) {
+					for (int n = 1; n <= variables; n++) {
+						List<List<String>> input = GeneratorTestUtils.prepareInput(variables, partitions);
+						Collection<IConstraint<String>> constraints = EMPTY_CONSTRAINTS;
+						IAlgorithm<String> algorithm = new OptimalNWiseAlgorithm<String>(n, 100);
+
+						algorithm.initialize(input, constraints);
+						int generatedDataSize = GeneratorTestUtils.algorithmResult(algorithm).size();
+						int referenceDataSize = referenceResult(input, n).size();
+						assertTrue(Math.abs(generatedDataSize - referenceDataSize) <= referenceDataSize / 30);
+					}
+				}
 			}
-		}
-		}
-		}catch(GeneratorException e){
+		} catch (GeneratorException e) {
 			fail("Unexpected generator exception: " + e.getMessage());
 		}
 	}
 
 	private Set<List<String>> referenceResult(List<List<String>> input, int n) throws GeneratorException {
-		List<Set<String>> referenceInput = GeneratorTestUtils.referenceInput(input); 
+		List<Set<String>> referenceInput = GeneratorTestUtils.referenceInput(input);
 		Set<List<String>> cartesianProduct = Sets.cartesianProduct(referenceInput);
 		Set<List<String>> referenceResult = new HashSet<List<String>>();
 		Set<List<String>> remainingTuples = getAllTuples(input, n);
-		for(int k = maxTuples(input, n); k > 0; k--){
-			for(List<String> vector : cartesianProduct){
+		for (int k = maxTuples(input, n); k > 0; k--) {
+			for (List<String> vector : cartesianProduct) {
 				Set<List<String>> originalTuples = getTuples(vector, n);
 				originalTuples.retainAll(remainingTuples);
-				if(originalTuples.size() == k){
+				if (originalTuples.size() == k) {
 					referenceResult.add(vector);
 					remainingTuples.removeAll(originalTuples);
 				}
@@ -83,12 +83,12 @@ public class OptimalNWiseTest extends NWiseAlgorithmTest{
 		}
 		return referenceResult;
 	}
-	
-	protected int maxTuples(List<List<String>> input, int n){
+
+	protected int maxTuples(List<List<String>> input, int n) {
 		return (new Tuples<List<String>>(input, n)).getAll().size();
 	}
 
-	protected Set<List<String>> getTuples(List<String> vector, int n){
+	protected Set<List<String>> getTuples(List<String> vector, int n) {
 		return (new Tuples<String>(vector, n)).getAll();
 	}
 

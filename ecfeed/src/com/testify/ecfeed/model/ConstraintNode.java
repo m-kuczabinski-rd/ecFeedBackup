@@ -49,11 +49,8 @@ public class ConstraintNode extends GenericNode{
 		return false;
 	}
 
-	public boolean mentions(CategoryNode category) {
-		if(fConstraint.mentions(category)){
-			return true;
-		}
-		return false;
+	public boolean mentions(AbstractCategoryNode category) {
+		return fConstraint.mentions(category);
 	}
 
 	@Override

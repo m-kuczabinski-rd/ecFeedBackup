@@ -22,6 +22,10 @@ public class RootNode extends GenericNode {
 		fClasses = new ArrayList<ClassNode>();
 	}
 	
+	public List<? extends IGenericNode> getChildren(){
+		return fClasses;
+	}
+
 	public void addClass(ClassNode node){
 		fClasses.add(node);
 		node.setParent(this);
@@ -31,10 +35,6 @@ public class RootNode extends GenericNode {
 		return fClasses;
 	}
 	
-	public boolean removeClass(ClassNode classNode){
-		return fClasses.remove(classNode);
-	}
-
 	public ClassNode getClassModel(String name) {
 		for(ClassNode childClass : getClasses()){
 			if(childClass.getQualifiedName().equals(name)){
@@ -44,11 +44,11 @@ public class RootNode extends GenericNode {
 		return null;
 	}
 
-	public static boolean validateModelName(String name){
-		return new GenericNode("").validateNodeName(name);
+	public boolean removeClass(ClassNode classNode){
+		return fClasses.remove(classNode);
 	}
 
-	public List<? extends IGenericNode> getChildren(){
-		return fClasses;
+	public static boolean validateModelName(String name){
+		return new GenericNode("").validateNodeName(name);
 	}
 }

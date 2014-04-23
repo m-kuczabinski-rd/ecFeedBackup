@@ -60,8 +60,8 @@ public class GenericNodeTest{
 		RootNode root = new RootNode("root");
 		ClassNode classNode = new ClassNode("class");
 		MethodNode method = new MethodNode("method");
-		CategoryNode category = new CategoryNode("name", "type");
-		ExpectedValueCategoryNode expCat = new ExpectedValueCategoryNode("name", "type", 0);
+		PartitionedCategoryNode category = new PartitionedCategoryNode("name", "type");
+		ExpectedCategoryNode expCat = new ExpectedCategoryNode("name", "type", 0);
 		ConstraintNode constraint = new ConstraintNode("name", new Constraint(new StaticStatement(true), new StaticStatement(false)));
 		TestCaseNode testCase = new TestCaseNode("name", new ArrayList<PartitionNode>());
 		PartitionNode partition = new PartitionNode("name", 0);
@@ -116,8 +116,8 @@ public class GenericNodeTest{
 		RootNode root = new RootNode("root");
 		ClassNode classNode = new ClassNode("class");
 		MethodNode method = new MethodNode("method");
-		CategoryNode category = new CategoryNode("name", "type");
-		ExpectedValueCategoryNode expCat = new ExpectedValueCategoryNode("name", "type", 0);
+		PartitionedCategoryNode category = new PartitionedCategoryNode("name", "type");
+		ExpectedCategoryNode expCat = new ExpectedCategoryNode("name", "type", 0);
 		ConstraintNode constraint = new ConstraintNode("name", new Constraint(new StaticStatement(true), new StaticStatement(false)));
 		TestCaseNode testCase = new TestCaseNode("name", new ArrayList<PartitionNode>());
 		PartitionNode partition = new PartitionNode("name", 0);
@@ -145,8 +145,8 @@ public class GenericNodeTest{
 		RootNode root = new RootNode("root");
 		ClassNode classNode = new ClassNode("class");
 		MethodNode method = new MethodNode("method");
-		CategoryNode category = new CategoryNode("category", "type");
-		ExpectedValueCategoryNode expCat = new ExpectedValueCategoryNode("expCat", "type", 0);
+		PartitionedCategoryNode category = new PartitionedCategoryNode("category", "type");
+		ExpectedCategoryNode expCat = new ExpectedCategoryNode("expCat", "type", 0);
 		ConstraintNode constraint = new ConstraintNode("constraint", new Constraint(new StaticStatement(true), new StaticStatement(false)));
 		TestCaseNode testCase = new TestCaseNode("testCase", new ArrayList<PartitionNode>());
 		PartitionNode p = new PartitionNode("p", 0);
@@ -189,7 +189,7 @@ public class GenericNodeTest{
 	
 	@Test
 	public void getSiblingTest(){
-		CategoryNode cat = new CategoryNode("cat", "type");
+		PartitionedCategoryNode cat = new PartitionedCategoryNode("cat", "type");
 		PartitionNode p1 = new PartitionNode("p1", 0);
 		PartitionNode p2 = new PartitionNode("p2", 0);
 		

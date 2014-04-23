@@ -47,6 +47,11 @@ public class GeneratorTestUtils{
 		@Override public String toString(){
 			return fRestrictedValues.toString();
 		}
+
+		@Override
+		public boolean adapt(List<String> values) {
+			return false;
+		}
 		
 	}
 	

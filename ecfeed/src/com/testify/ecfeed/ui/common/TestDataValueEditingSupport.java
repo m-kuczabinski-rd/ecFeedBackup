@@ -22,8 +22,8 @@ import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.swt.SWT;
 
-import com.testify.ecfeed.model.CategoryNode;
-import com.testify.ecfeed.model.ExpectedValueCategoryNode;
+import com.testify.ecfeed.model.AbstractCategoryNode;
+import com.testify.ecfeed.model.ExpectedCategoryNode;
 import com.testify.ecfeed.model.PartitionNode;
 
 public class TestDataValueEditingSupport extends EditingSupport {
@@ -43,7 +43,7 @@ public class TestDataValueEditingSupport extends EditingSupport {
 	@Override
 	protected CellEditor getCellEditor(Object element) {
 		PartitionNode partition = (PartitionNode)element;
-		if(partition.getCategory() instanceof ExpectedValueCategoryNode){
+		if(partition.getCategory() instanceof ExpectedCategoryNode){
 			return getTextCellEditor(partition);
 		}
 		else{
@@ -81,7 +81,7 @@ public class TestDataValueEditingSupport extends EditingSupport {
 	@Override
 	protected Object getValue(Object element) {
 		PartitionNode partition = (PartitionNode)element;
-		if(partition.getCategory() instanceof ExpectedValueCategoryNode){
+		if(partition.getCategory() instanceof ExpectedCategoryNode){
 			return partition.getValueString();
 		}
 		return partition.toString();
@@ -90,8 +90,8 @@ public class TestDataValueEditingSupport extends EditingSupport {
 	@Override
 	protected void setValue(Object element, Object value) {
 		PartitionNode partitionElement = (PartitionNode)element;
-		CategoryNode category = partitionElement.getCategory();
-		if(value instanceof String && category instanceof ExpectedValueCategoryNode){
+		AbstractCategoryNode category = partitionElement.getCategory();
+		if(value instanceof String && category instanceof ExpectedCategoryNode){
 			String valueString = (String)value;
 			if(category.validatePartitionStringValue(valueString)){
 				Object newValue = category.getPartitionValueFromString(valueString);
