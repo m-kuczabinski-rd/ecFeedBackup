@@ -11,22 +11,12 @@
 
 package com.testify.ecfeed.ui.editor;
 
-import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IPath;
-import org.eclipse.jdt.core.IJavaProject;
-import org.eclipse.jdt.core.JavaCore;
-import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.widgets.Display;
@@ -34,54 +24,33 @@ import org.eclipse.swt.widgets.Display;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.ui.common.Messages;
+import com.testify.ecfeed.utils.ModelUtils;
 
 public abstract class ExecuteTestAdapter extends SelectionAdapter {
-	
-	protected IPath getOuptutPath(IProject project) throws JavaModelException {
-		IJavaProject javaProject = JavaCore.create(project);
-		IPath path = project.getWorkspace().getRoot().getLocation();
-		path = path.append(javaProject.getOutputLocation());
-		return path;
-	}
 
 	protected Class<?> loadTestClass() {
 		Class<?> testClass = null;
 		ClassNode classNode = getMethodModel().getClassNode();
 		String className = classNode.getQualifiedName();
-		IProject[] projects = ResourcesPlugin.getWorkspace().getRoot().getProjects();
-		List<URL> urls = new ArrayList<URL>();
-			try {
-				for(IProject project : projects){
-					if(project.isOpen() && project.hasNature(JavaCore.NATURE_ID)){
-						IPath path = getOuptutPath(project);
-						URL classUrl = getClassUrl(path, className);
-						urls.add(classUrl);
+		URLClassLoader loader;
+		try {
+			loader = ModelUtils.getClassLoader(true);
+			testClass = loader.loadClass(className.toString());
+			Method[] methods = testClass.getMethods();
+			for (Method method : methods){
+				Class<?>[] parameters = method.getParameterTypes();
+				for (Class<?> parameter : parameters){
+					if (parameter.isEnum()){
+						loader.loadClass(parameter.getName());
 					}
 				}
-				URLClassLoader loader = new URLClassLoader(urls.toArray(new URL[]{}));
-				testClass = loader.loadClass(className.toString());
-				loader.close();
-			}catch (ClassNotFoundException | CoreException | IOException e) {
 			}
-		if(testClass == null){
+		} catch (Throwable e) {
 			MessageDialog.openError(Display.getDefault().getActiveShell(), 
-					Messages.DIALOG_COULDNT_LOAD_TEST_CLASS_TITLE, 
+					Messages.DIALOG_COULDNT_LOAD_TEST_CLASS_TITLE,
 					Messages.DIALOG_COULDNT_LOAD_TEST_CLASS_MESSAGE(className));
 		}
 		return testClass;
-	}
-
-	private URL getClassUrl(IPath path, String className) {
-		String localPath = className;
-		localPath = localPath.replaceAll("\\.", "/");
-		localPath = localPath.substring(0, localPath.lastIndexOf('/'));
-		String urlString = path.toOSString() + "/";
-		try {
-			URL url = new URL("file", "", urlString);
-			return url;
-		} catch (MalformedURLException e) {
-			return null;
-		}
 	}
 
 	protected Method getTestMethod(Class<?> testClass, MethodNode methodModel) throws InvocationTargetException {
