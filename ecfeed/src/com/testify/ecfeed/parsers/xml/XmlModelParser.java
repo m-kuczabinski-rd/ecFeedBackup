@@ -41,6 +41,7 @@ import com.testify.ecfeed.model.constraint.StaticStatement;
 import com.testify.ecfeed.parsers.Constants;
 import com.testify.ecfeed.parsers.IModelParser;
 import com.testify.ecfeed.parsers.ParserException;
+import com.testify.ecfeed.utils.ModelUtils;
 
 public class XmlModelParser implements IModelParser{
 	
@@ -337,7 +338,7 @@ public class XmlModelParser implements IModelParser{
 		case Constants.TYPE_NAME_STRING:
 			return valueString.equals(Constants.NULL_VALUE_STRING_REPRESENTATION)?null:valueString;
 		default:
-			return null;
+			return ModelUtils.parseEnumValue(valueString, type);
 		}		
 	}
 
