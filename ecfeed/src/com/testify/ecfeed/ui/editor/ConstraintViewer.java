@@ -57,6 +57,8 @@ import com.testify.ecfeed.model.constraint.StaticStatement;
 public class ConstraintViewer extends TreeViewerSection {
 
 	private final static int STYLE = Section.TITLE_BAR | Section.EXPANDED;
+	private final static String ARGUMENT_MARKER = " (arg)";
+	private final static String LABEL_MARKER = " (label)";
 	
 	private final String STATEMENT_FALSE = new StaticStatement(false).getLeftHandName();
 	private final String STATEMENT_TRUE = new StaticStatement(true).getLeftHandName();;
@@ -122,6 +124,7 @@ public class ConstraintViewer extends TreeViewerSection {
 		}
 	}
 	
+	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	private class ModifyConditionComboListener implements ModifyListener{
 		@Override
 		public void modifyText(ModifyEvent e) {
@@ -136,7 +139,9 @@ public class ConstraintViewer extends TreeViewerSection {
 					statement.setCondition(partition);
 				}
 				else{//text in the combo is a label
-					statement.setCondition(conditionText);
+				    int endIndex = conditionText.lastIndexOf(LABEL_MARKER);
+				    if (endIndex == -1) endIndex = conditionText.length();
+					statement.setCondition(conditionText.substring(0, endIndex));
 				}
 				modelUpdated();
 			}
@@ -149,14 +154,29 @@ public class ConstraintViewer extends TreeViewerSection {
 			if(fStatementEditListenersEnabled == false){
 				return;
 			}
-			if(fSelectedStatement.getLeftHandName().equals(fStatementCombo.getText()) == false){
-				BasicStatement statement = createStatementFromCombo();
-				if(statement != null){
-					replaceSelectedStatement(statement);
+			
+			if(fSelectedStatement.getLeftHandName().equals(fStatementCombo.getText())){
+				if((fSelectedStatement instanceof PartitionedCategoryStatement) || (fSelectedStatement instanceof ExpectedValueStatement)){
+					// new statement must be StatementArray
+				} else {
+					return;
+				}	
+			}
+			else{
+				if((fSelectedStatement.getLeftHandName() + ARGUMENT_MARKER).equals(fStatementCombo.getText())){
+					if((fSelectedStatement instanceof PartitionedCategoryStatement) || (fSelectedStatement instanceof ExpectedValueStatement)){
+						return;
+					}
 				}
 			} 	
+			
+			BasicStatement statement = createStatementFromCombo();
+			if(statement != null){
+				replaceSelectedStatement(statement);
+			}
 		}
 
+		//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 		private BasicStatement createStatementFromCombo() {
 			BasicStatement statement = null;
 			if(fStatementCombo.getText().equals(STATEMENT_TRUE)){
@@ -181,18 +201,19 @@ public class ConstraintViewer extends TreeViewerSection {
 				} else
 				statement = new StatementArray(Operator.OR);
 			}
-			else{
+			else{			
+			    int endIndex = fStatementCombo.getText().lastIndexOf(ARGUMENT_MARKER);
+			    if (endIndex == -1) endIndex = fStatementCombo.getText().length();
 				MethodNode method = fSelectedConstraint.getMethod();
-				Relation relation = Relation.EQUAL; 
-				String categoryName = fStatementCombo.getText();
+				Relation relation = Relation.EQUAL;
+				String categoryName = fStatementCombo.getText().substring(0, endIndex);
 
 				PartitionedCategoryNode partitionedCategory = method.getPartitionedCategory(categoryName);
 				ExpectedCategoryNode expectedCategory = method.getExpectedCategory(categoryName);
 				if(partitionedCategory != null){
 					PartitionNode condition = partitionedCategory.getPartitions().get(0);
 					statement = new PartitionedCategoryStatement(partitionedCategory, relation, condition);
-				}
-				else if(expectedCategory != null){
+				} else if(expectedCategory != null){
 					PartitionNode condition = new PartitionNode("expected", expectedCategory.getDefaultValue());
 					condition.setParent(expectedCategory);
 					statement = new ExpectedValueStatement(expectedCategory, condition);
@@ -242,19 +263,41 @@ public class ConstraintViewer extends TreeViewerSection {
 			}
 			fStatementEditListenersEnabled = true;
 		}
-
+		
+		//##########################################################################################################
 		private void refreshStatementCombo(BasicStatement statement) {
 			List<String> items = new ArrayList<String>();
-			items.addAll(Arrays.asList(FIXED_STATEMENTS));
+			items.addAll(Arrays.asList(FIXED_STATEMENTS));	
+			String comboText = null;
+			
 			if(fSelectedStatement == fSelectedConstraint.getConstraint().getConsequence()){
-				items.addAll(fSelectedConstraint.getMethod().getCategoriesNames());
+				for(String categoryName: fSelectedConstraint.getMethod().getCategoriesNames()){
+					if(items.contains(categoryName)){
+						items.add(categoryName + ARGUMENT_MARKER);
+						if(statement.getLeftHandName().equals(categoryName)){
+							comboText = categoryName + ARGUMENT_MARKER;
+						}
+					}
+					else items.add(categoryName);
+				}
 			}
 			else{
-				items.addAll(fSelectedConstraint.getMethod().getOrdinaryCategoriesNames());
+				for(String categoryName: fSelectedConstraint.getMethod().getOrdinaryCategoriesNames()){
+					if(items.contains(categoryName)){
+						items.add(categoryName + ARGUMENT_MARKER);
+						if(statement.getLeftHandName().equals(categoryName)){
+							comboText = categoryName + ARGUMENT_MARKER;
+						}
+					}
+					else items.add(categoryName);
+				}
 			}
 			fStatementCombo.setItems(items.toArray(new String[]{}));
-
-			fStatementCombo.setText(statement.getLeftHandName());
+			
+			if(comboText != null && ((fSelectedStatement instanceof PartitionedCategoryStatement) || (fSelectedStatement instanceof ExpectedValueStatement))){
+				fStatementCombo.setText(comboText);
+			} else			
+				fStatementCombo.setText(statement.getLeftHandName());
 		}
 
 		private void refreshRelationCombo(IRelationalStatement statement) {
@@ -270,7 +313,12 @@ public class ConstraintViewer extends TreeViewerSection {
 		private void refreshConditionComposite(PartitionedCategoryStatement statement) {
 			List<String> items = new ArrayList<String>();
 			items.addAll(statement.getCategory().getAllPartitionNames());
-			items.addAll(statement.getCategory().getAllPartitionLabels());
+			for(String label: statement.getCategory().getAllPartitionLabels()){
+				if(items.contains(label)){
+					items.add(label + LABEL_MARKER);
+				}
+				else items.add(label);		
+			}
 
 			fConditionLayout.topControl = fConditionCombo;
 			fConditionCombo.setVisible(true);

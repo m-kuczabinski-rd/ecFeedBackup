@@ -34,6 +34,7 @@ public class PartitionValueEditingSupport extends EditingSupport {
 	public PartitionValueEditingSupport(PartitionChildrenViewer viewer) {
 		super(viewer.getTableViewer());
 		fValueCellEditor = new TextCellEditor(viewer.getTable());
+		fSection = viewer;
 	}
 	
 	@Override

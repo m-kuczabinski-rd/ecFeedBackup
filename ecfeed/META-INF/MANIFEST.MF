@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: EcFeed
+Bundle-Name: ecFeed
 Bundle-SymbolicName: com.testify.ecfeed; singleton:=true
 Bundle-Version: 1.5.0.qualifier
 Bundle-Activator: com.testify.ecfeed.Activator
