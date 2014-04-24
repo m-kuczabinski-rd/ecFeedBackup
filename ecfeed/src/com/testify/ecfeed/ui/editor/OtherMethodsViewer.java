@@ -21,7 +21,7 @@ import org.eclipse.ui.forms.widgets.Section;
 
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.MethodNode;
-import com.testify.ecfeed.ui.common.ModelUtils;
+import com.testify.ecfeed.utils.ModelUtils;
 
 public class OtherMethodsViewer extends CheckboxTableViewerSection {
 	

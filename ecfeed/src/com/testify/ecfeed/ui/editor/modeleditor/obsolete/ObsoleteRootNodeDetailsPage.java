@@ -33,7 +33,7 @@ import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.ui.dialogs.RenameModelDialog;
 import com.testify.ecfeed.ui.dialogs.TestClassSelectionDialog;
-import com.testify.ecfeed.ui.common.ModelUtils;
+import com.testify.ecfeed.utils.ModelUtils;
 
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridLayout;

@@ -1,3 +1,5 @@
+package com.testify.ecfeed.utils;
+
 /*******************************************************************************
  * Copyright (c) 2013 Testify AS.                                                
  * All rights reserved. This program and the accompanying materials              
@@ -9,16 +11,19 @@
  *     Patryk Chamuczynski (p.chamuczynski(at)radytek.com) - initial implementation
  ******************************************************************************/
 
-package com.testify.ecfeed.ui.common;
-
+import java.net.URL;
+import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.jdt.core.IAnnotation;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.ILocalVariable;
 import org.eclipse.jdt.core.IMethod;
+import org.eclipse.jdt.core.IPackageFragment;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
@@ -29,8 +34,12 @@ import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.ExpectedValueCategoryNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
+import com.testify.ecfeed.utils.Constants;
 
 public class ModelUtils {
+	
+	private static URLClassLoader classLoader;
+	
 	public static ClassNode generateClassModel(IType type){
 		ClassNode classNode = new ClassNode(type.getFullyQualifiedName());
 		try{
@@ -229,10 +238,10 @@ public class ModelUtils {
 			return Constants.DEFAULT_EXPECTED_SHORT_VALUE;
 		case com.testify.ecfeed.model.Constants.TYPE_NAME_STRING:
 			return Constants.DEFAULT_EXPECTED_STRING_VALUE;
+		default:
+			return defaultEnumExpectedValue(type);
 		}
-		return null;
 	}
-
 
 	private static String getTypeName(String typeSignature) {
 		switch(typeSignature){
@@ -255,6 +264,9 @@ public class ModelUtils {
 		case "QString;":
 			return com.testify.ecfeed.model.Constants.TYPE_NAME_STRING;
 		default:
+			if (typeSignature.startsWith("Q") && typeSignature.endsWith(";")){
+				return typeSignature.substring(1, typeSignature.lastIndexOf(";"));
+			}
 			return com.testify.ecfeed.model.Constants.TYPE_NAME_UNSUPPORTED;
 		}
 	}
@@ -280,7 +292,7 @@ public class ModelUtils {
 		case "String":
 			return defaultStringPartitions();
 		default:
-			return new ArrayList<PartitionNode>();
+			return defaultEnumPartitions(typeSignature);
 		}
 	}
 
@@ -346,7 +358,7 @@ public class ModelUtils {
 	private static ArrayList<PartitionNode> defaultLongPartitions() {
 		ArrayList<PartitionNode> partitions = new ArrayList<PartitionNode>();
 		partitions.add(new PartitionNode("min", Long.MIN_VALUE));
-		partitions.add(new PartitionNode("negative", (long)-1));	
+		partitions.add(new PartitionNode("negative", (long)-1));
 		partitions.add(new PartitionNode("zero", (long)0));
 		partitions.add(new PartitionNode("positive", (long)1));	
 		partitions.add(new PartitionNode("max", Long.MAX_VALUE));
@@ -374,10 +386,143 @@ public class ModelUtils {
 		return partitions;
 	}
 
-
 	public static boolean validateConstraintName(String name) {
 		if(name.length() < 1 || name.length() > 64) return false;
 		if(name.matches("[ ]+.*")) return false;
 		return true;
+	}
+
+	public static URLClassLoader getClassLoader(boolean create) throws Throwable {
+		if ((classLoader == null) || create){
+			IProject[] projects = ResourcesPlugin.getWorkspace().getRoot().getProjects();
+			List<URL> urls = new ArrayList<URL>();
+			for (IProject project : projects){
+				if (project.isOpen() && project.hasNature(JavaCore.NATURE_ID)){
+					IJavaProject javaProject = JavaCore.create(project);
+					IPath path = project.getWorkspace().getRoot().getLocation();
+					path = path.append(javaProject.getOutputLocation());
+					urls.add(new URL("file", null, path.toOSString() + "/"));
+				}
+				classLoader = new URLClassLoader(urls.toArray(new URL[]{}));
+			}
+		}
+		return classLoader;
+	}
+
+	private static Class<?> getClass(String typeName, boolean createLoader) throws Throwable {
+		Class<?> typeClass = null;
+		URLClassLoader loader = getClassLoader(createLoader);
+		IProject[] projects = ResourcesPlugin.getWorkspace().getRoot().getProjects();
+		
+		try {
+			typeClass = loader.loadClass(typeName);
+		} catch (Throwable e) {
+		}
+		
+		if (typeClass == null) {
+			for (IProject project : projects){
+				if (project.isOpen() && project.hasNature(JavaCore.NATURE_ID)){
+					IJavaProject javaProject = JavaCore.create(project);
+					IPackageFragment fragments[] = javaProject.getPackageFragments();
+					for (IPackageFragment fragment : fragments){
+						try{
+							typeClass = loader.loadClass(fragment.getElementName() + "." + typeName);
+							break;
+						} catch (Throwable e) {
+						}
+					}
+				}
+			}
+		}
+		
+		return typeClass;
+	}
+
+	private static ArrayList<PartitionNode> defaultEnumPartitions(String typeName) {
+		ArrayList<PartitionNode> partitions = new ArrayList<PartitionNode>();
+		try {
+			Class<?> typeClass = getClass(typeName, true);
+			if (typeClass != null) {
+				for (Object object: typeClass.getEnumConstants()) {
+					partitions.add(new PartitionNode(object.toString(), object));
+				}	
+			}
+		} catch (Throwable e) {
+			e.printStackTrace();
+		}
+		return partitions;
+	}
+
+	private static Object defaultEnumExpectedValue(String typeName) {
+		Object value = null;
+		try {
+			Class<?> typeClass = getClass(typeName, true);
+			if (typeClass != null) {
+				for (Object object: typeClass.getEnumConstants()) {
+					value = object;
+					break;
+				}	
+			}
+		} catch (Throwable e) {
+			e.printStackTrace();
+		}			
+		return value;
+	}
+
+	public static Object enumPartitionValue(String valueString, String typeName, boolean createLoader) {
+		Object value = null;
+		try {
+			Class<?> typeClass = getClass(typeName, createLoader);
+			if (typeClass != null) {
+				for (Object object: typeClass.getEnumConstants()) {
+					if ((((Enum<?>)object).name()).equals(valueString)) {
+						value = object;
+						break;
+					}
+				}
+			}
+		} catch (Throwable e) {
+			e.printStackTrace();
+		}
+		return value;
+	}
+
+	public static Object parseEnumValue(String valueString, String typeName) {
+		return enumPartitionValue(valueString, typeName, true);
+	}
+	
+	public static boolean validatePartitionStringValue(String valueString, String type){
+		if(type.equals(com.testify.ecfeed.model.Constants.TYPE_NAME_STRING)) return true;
+		return (getPartitionValueFromString(valueString, type) != null);
+	}
+
+	public static Object getPartitionValueFromString(String valueString, String type){
+		try{
+			switch(type){
+			case com.testify.ecfeed.model.Constants.TYPE_NAME_BOOLEAN:
+				return Boolean.valueOf(valueString).booleanValue();
+			case com.testify.ecfeed.model.Constants.TYPE_NAME_BYTE:
+				return Byte.valueOf(valueString).byteValue();
+			case com.testify.ecfeed.model.Constants.TYPE_NAME_CHAR:
+				if(valueString.charAt(0) != '\\' || valueString.length() == 1) return(valueString.charAt(0));
+				return Character.toChars(Integer.parseInt(valueString.substring(1)));
+			case com.testify.ecfeed.model.Constants.TYPE_NAME_DOUBLE:
+				return Double.valueOf(valueString).doubleValue();
+			case com.testify.ecfeed.model.Constants.TYPE_NAME_FLOAT:
+				return Float.valueOf(valueString).floatValue();
+			case com.testify.ecfeed.model.Constants.TYPE_NAME_INT:
+				return Integer.valueOf(valueString).intValue();
+			case com.testify.ecfeed.model.Constants.TYPE_NAME_LONG:
+				return Long.valueOf(valueString).longValue();
+			case com.testify.ecfeed.model.Constants.TYPE_NAME_SHORT:
+				return Short.valueOf(valueString).shortValue();
+			case com.testify.ecfeed.model.Constants.TYPE_NAME_STRING:
+				return valueString;
+			default:
+				return enumPartitionValue(valueString, type, true);
+			}
+		}catch(NumberFormatException|IndexOutOfBoundsException e){
+			return null;
+		}
 	}
 }

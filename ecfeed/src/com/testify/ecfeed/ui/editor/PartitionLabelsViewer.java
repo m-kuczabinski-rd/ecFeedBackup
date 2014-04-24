@@ -33,8 +33,8 @@ import org.eclipse.ui.forms.widgets.Section;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.ui.common.ColorConstants;
 import com.testify.ecfeed.ui.common.ColorManager;
-import com.testify.ecfeed.ui.common.Constants;
 import com.testify.ecfeed.ui.common.Messages;
+import com.testify.ecfeed.utils.Constants;
 
 public class PartitionLabelsViewer extends CheckboxTableViewerSection {
 	

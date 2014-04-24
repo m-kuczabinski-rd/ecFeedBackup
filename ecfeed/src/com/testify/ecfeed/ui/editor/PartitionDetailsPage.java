@@ -23,6 +23,7 @@ import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
 
 import com.testify.ecfeed.model.PartitionNode;
+import com.testify.ecfeed.utils.ModelUtils;
 
 public class PartitionDetailsPage extends BasicDetailsPage {
 
@@ -76,8 +77,8 @@ public class PartitionDetailsPage extends BasicDetailsPage {
 		protected boolean applyNewPartitionValue(PartitionNode partition, Text valueText) {
 			String newValue = valueText.getText(); 
 			if(newValue.equals(partition.getValueString()) == false){
-				if(partition.getCategory().validatePartitionStringValue(newValue)){
-					Object value = partition.getCategory().getPartitionValueFromString(newValue);
+				if(ModelUtils.validatePartitionStringValue(newValue, partition.getCategory().getType())){
+					Object value = ModelUtils.getPartitionValueFromString(newValue, partition.getCategory().getType());
 					partition.setValue(value);
 					return true;
 				}

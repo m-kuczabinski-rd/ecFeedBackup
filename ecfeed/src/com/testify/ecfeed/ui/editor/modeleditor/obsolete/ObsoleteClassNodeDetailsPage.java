@@ -41,7 +41,7 @@ import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.ui.dialogs.TestClassSelectionDialog;
-import com.testify.ecfeed.ui.common.ModelUtils;
+import com.testify.ecfeed.utils.ModelUtils;
 
 public class ObsoleteClassNodeDetailsPage extends ObsoleteGenericNodeDetailsPage{
 	

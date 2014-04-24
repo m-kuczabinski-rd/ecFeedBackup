@@ -27,7 +27,7 @@ import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.ui.common.ColorConstants;
 import com.testify.ecfeed.ui.common.ColorManager;
 import com.testify.ecfeed.ui.common.Messages;
-import com.testify.ecfeed.ui.common.ModelUtils;
+import com.testify.ecfeed.utils.ModelUtils;
 
 public class MethodsViewer extends CheckboxTableViewerSection {
 

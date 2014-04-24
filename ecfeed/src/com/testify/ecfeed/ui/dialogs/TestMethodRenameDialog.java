@@ -21,9 +21,9 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.layout.GridLayout;
 
-import com.testify.ecfeed.ui.common.ModelUtils;
 import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.model.MethodNode;
+import com.testify.ecfeed.utils.ModelUtils;
 
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.jface.viewers.TableViewer;

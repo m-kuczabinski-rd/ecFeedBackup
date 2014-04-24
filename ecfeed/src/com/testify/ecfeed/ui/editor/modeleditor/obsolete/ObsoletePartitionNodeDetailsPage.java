@@ -48,12 +48,12 @@ import org.eclipse.ui.forms.widgets.Section;
 import com.testify.ecfeed.ui.common.ColorConstants;
 import com.testify.ecfeed.ui.common.ColorManager;
 import com.testify.ecfeed.ui.common.Messages;
-import com.testify.ecfeed.ui.common.ModelUtils;
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.TestCaseNode;
-import com.testify.ecfeed.ui.common.Constants;
+import com.testify.ecfeed.utils.Constants;
+import com.testify.ecfeed.utils.ModelUtils;
 
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Text;
@@ -136,7 +136,7 @@ public class ObsoletePartitionNodeDetailsPage extends ObsoleteGenericNodeDetails
 		@Override
 		protected void setValue(Object element, Object value) {
 			String valueString = (String)value;
-			if(!fSelectedPartition.getCategory().validatePartitionStringValue(valueString)){
+			if(!ModelUtils.validatePartitionStringValue(valueString, fSelectedPartition.getCategory().getType())){
 				MessageDialog dialog = new MessageDialog(getActiveShell(), 
 						Messages.DIALOG_PARTITION_VALUE_PROBLEM_TITLE, 
 						Display.getDefault().getSystemImage(SWT.ICON_ERROR), 
@@ -146,7 +146,7 @@ public class ObsoletePartitionNodeDetailsPage extends ObsoleteGenericNodeDetails
 				dialog.open();
 			}
 			else{
-				Object newValue = fSelectedPartition.getCategory().getPartitionValueFromString(valueString);
+				Object newValue = ModelUtils.getPartitionValueFromString(valueString, fSelectedPartition.getCategory().getType());
 				((PartitionNode)element).setValue(newValue);
 				updateModel(fSelectedPartition);
 			}
@@ -552,8 +552,8 @@ public class ObsoletePartitionNodeDetailsPage extends ObsoleteGenericNodeDetails
 
 	private void changePartitionValue(String valueString) {
 		CategoryNode parent = fSelectedPartition.getCategory();
-		if(parent.validatePartitionStringValue(valueString)){
-			fSelectedPartition.setValue(parent.getPartitionValueFromString(valueString));
+		if(ModelUtils.validatePartitionStringValue(valueString, parent.getType())){
+			fSelectedPartition.setValue(ModelUtils.getPartitionValueFromString(valueString, parent.getType()));
 			updateModel(fSelectedPartition);
 		}
 		else{

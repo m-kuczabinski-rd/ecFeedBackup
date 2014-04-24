@@ -114,41 +114,6 @@ public class CategoryNode extends GenericNode {
 		return validateNodeName(name);
 	}
 
-	public boolean validatePartitionStringValue(String valueString){
-		if(fType.equals(Constants.TYPE_NAME_STRING)) return true;
-		return (getPartitionValueFromString(valueString) != null);
-	}
-
-	public Object getPartitionValueFromString(String valueString){
-		try{
-			switch(fType){
-			case Constants.TYPE_NAME_BOOLEAN:
-				return Boolean.valueOf(valueString).booleanValue();
-			case Constants.TYPE_NAME_BYTE:
-				return Byte.valueOf(valueString).byteValue();
-			case Constants.TYPE_NAME_CHAR:
-				if(valueString.charAt(0) != '\\' || valueString.length() == 1) return(valueString.charAt(0));
-				return Character.toChars(Integer.parseInt(valueString.substring(1)));
-			case Constants.TYPE_NAME_DOUBLE:
-				return Double.valueOf(valueString).doubleValue();
-			case Constants.TYPE_NAME_FLOAT:
-				return Float.valueOf(valueString).floatValue();
-			case Constants.TYPE_NAME_INT:
-				return Integer.valueOf(valueString).intValue();
-			case Constants.TYPE_NAME_LONG:
-				return Long.valueOf(valueString).longValue();
-			case Constants.TYPE_NAME_SHORT:
-				return Short.valueOf(valueString).shortValue();
-			case Constants.TYPE_NAME_STRING:
-				return valueString;
-			default:
-				return null;
-			}
-		}catch(NumberFormatException|IndexOutOfBoundsException e){
-			return null;
-		}
-	}
-
 	public List<? extends IGenericNode> getChildren(){
 		return fPartitions;
 	}

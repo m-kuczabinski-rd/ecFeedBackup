@@ -54,7 +54,7 @@ import com.testify.ecfeed.model.constraint.Relation;
 import com.testify.ecfeed.model.constraint.StatementArray;
 import com.testify.ecfeed.model.constraint.StaticStatement;
 import com.testify.ecfeed.ui.common.Messages;
-import com.testify.ecfeed.ui.common.ModelUtils;
+import com.testify.ecfeed.utils.ModelUtils;
 
 public class ObsoleteConstraintsNodeDetailsPage extends ObsoleteGenericNodeDetailsPage {
 

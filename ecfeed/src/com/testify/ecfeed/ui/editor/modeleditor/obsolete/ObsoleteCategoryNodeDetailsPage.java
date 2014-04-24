@@ -37,11 +37,11 @@ import org.eclipse.swt.layout.RowLayout;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.PartitionNode;
-import com.testify.ecfeed.ui.common.Constants;
 import com.testify.ecfeed.ui.common.ColorConstants;
 import com.testify.ecfeed.ui.common.ColorManager;
 import com.testify.ecfeed.ui.common.Messages;
-import com.testify.ecfeed.ui.common.ModelUtils;
+import com.testify.ecfeed.utils.Constants;
+import com.testify.ecfeed.utils.ModelUtils;
 
 public class ObsoleteCategoryNodeDetailsPage extends ObsoleteGenericNodeDetailsPage implements ObsoleteIModelUpdateListener{
 
@@ -117,13 +117,13 @@ public class ObsoleteCategoryNodeDetailsPage extends ObsoleteGenericNodeDetailsP
 		@Override
 		protected void setValue(Object element, Object value) {
 			String valueString = (String)value;
-			if(!fSelectedCategory.validatePartitionStringValue(valueString)){
+			if(!ModelUtils.validatePartitionStringValue(valueString, fSelectedCategory.getType())){
 				MessageDialog.openError(getActiveShell(), 
 						Messages.DIALOG_PARTITION_VALUE_PROBLEM_TITLE, 
 						Messages.DIALOG_PARTITION_VALUE_PROBLEM_MESSAGE);
 			}
 			else{
-				Object newValue = fSelectedCategory.getPartitionValueFromString(valueString);
+				Object newValue = ModelUtils.getPartitionValueFromString(valueString, fSelectedCategory.getType());
 				((PartitionNode)element).setValue(newValue);
 				updateModel((RootNode)fSelectedCategory.getRoot());
 			}

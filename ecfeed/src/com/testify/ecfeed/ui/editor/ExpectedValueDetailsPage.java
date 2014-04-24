@@ -23,6 +23,7 @@ import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
 
 import com.testify.ecfeed.model.ExpectedValueCategoryNode;
+import com.testify.ecfeed.utils.ModelUtils;;
 
 public class ExpectedValueDetailsPage extends BasicDetailsPage {
 
@@ -39,8 +40,8 @@ public class ExpectedValueDetailsPage extends BasicDetailsPage {
 
 		protected boolean applyNewDefaultValue(ExpectedValueCategoryNode category, Text valueText) {
 			String newValue = valueText.getText();
-			if(category.validatePartitionStringValue(newValue)){
-				category.setDefaultValue(category.getPartitionValueFromString(newValue));
+			if(ModelUtils.validatePartitionStringValue(newValue, category.getType())){
+				category.setDefaultValue(ModelUtils.getPartitionValueFromString(newValue, category.getType()));
 				return true;
 			}
 			valueText.setText(category.getDefaultValuePartition().getValueString());

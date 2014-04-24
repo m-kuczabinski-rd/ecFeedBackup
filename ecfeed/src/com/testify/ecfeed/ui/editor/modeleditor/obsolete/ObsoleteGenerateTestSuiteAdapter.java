@@ -26,7 +26,7 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Display;
 
-import com.testify.ecfeed.ui.common.Constants;
+import com.testify.ecfeed.utils.Constants;
 import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.ExpectedValueCategoryNode;

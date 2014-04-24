@@ -20,6 +20,7 @@ import org.eclipse.swt.widgets.Display;
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.ui.common.Messages;
+import com.testify.ecfeed.utils.ModelUtils;
 
 public class PartitionValueEditingSupport extends EditingSupport {
 	private TextCellEditor fValueCellEditor;
@@ -54,13 +55,13 @@ public class PartitionValueEditingSupport extends EditingSupport {
 	@Override
 	protected void setValue(Object element, Object value) {
 		String valueString = (String)value;
-		if(!getCategory().validatePartitionStringValue(valueString)){
+		if(!ModelUtils.validatePartitionStringValue(valueString, getCategory().getType())){
 			MessageDialog.openError(Display.getCurrent().getActiveShell(), 
 					Messages.DIALOG_PARTITION_VALUE_PROBLEM_TITLE, 
 					Messages.DIALOG_PARTITION_VALUE_PROBLEM_MESSAGE);
 		}
 		else{
-			Object newValue = getCategory().getPartitionValueFromString(valueString);
+			Object newValue = ModelUtils.getPartitionValueFromString(valueString, getCategory().getType());
 			PartitionNode partition = (PartitionNode)element;
 			if(newValue.equals(partition.getValue()) == false){
 				((PartitionNode)element).setValue(newValue);

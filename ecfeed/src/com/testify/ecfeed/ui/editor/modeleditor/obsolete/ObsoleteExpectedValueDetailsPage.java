@@ -30,6 +30,7 @@ import org.eclipse.ui.forms.IFormPart;
 import org.eclipse.ui.forms.widgets.Section;
 
 import com.testify.ecfeed.model.ExpectedValueCategoryNode;
+import com.testify.ecfeed.utils.ModelUtils;
 
 public class ObsoleteExpectedValueDetailsPage extends ObsoleteGenericNodeDetailsPage {
 
@@ -95,8 +96,8 @@ public class ObsoleteExpectedValueDetailsPage extends ObsoleteGenericNodeDetails
 
 	private void changeDefaultExpectedValue() {
 		String valueString = fDefaultValueText.getText();
-		if(fSelectedCategory.validatePartitionStringValue(valueString)){
-			fSelectedCategory.setDefaultValue(fSelectedCategory.getPartitionValueFromString(valueString));
+		if(ModelUtils.validatePartitionStringValue(valueString, fSelectedCategory.getType())){
+			fSelectedCategory.setDefaultValue(ModelUtils.getPartitionValueFromString(valueString, fSelectedCategory.getType()));
 		}
 		updateModel(fSelectedCategory);
 	}

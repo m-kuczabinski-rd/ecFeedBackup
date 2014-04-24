@@ -25,7 +25,7 @@ import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.constraint.BasicStatement;
 import com.testify.ecfeed.model.constraint.Constraint;
 import com.testify.ecfeed.model.constraint.StaticStatement;
-import com.testify.ecfeed.ui.common.Constants;
+import com.testify.ecfeed.utils.Constants;
 import com.testify.ecfeed.ui.common.Messages;
 
 public class ConstraintsListViewer extends CheckboxTableViewerSection {

@@ -20,9 +20,9 @@ import org.eclipse.ui.forms.widgets.Section;
 
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.PartitionNode;
-import com.testify.ecfeed.ui.common.Constants;
 import com.testify.ecfeed.ui.common.Messages;
-import com.testify.ecfeed.ui.common.ModelUtils;
+import com.testify.ecfeed.utils.Constants;
+import com.testify.ecfeed.utils.ModelUtils;
 
 public class CategoryChildrenViewer extends CheckboxTableViewerSection {
 
