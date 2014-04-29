@@ -338,7 +338,7 @@ public class XmlModelParser implements IModelParser{
 		case Constants.TYPE_NAME_STRING:
 			return valueString.equals(Constants.NULL_VALUE_STRING_REPRESENTATION)?null:valueString;
 		default:
-			return ModelUtils.parseEnumValue(valueString, type);
+			return ModelUtils.parseEnumValue(valueString, type, ModelUtils.getClassLoader(true, getClass().getClassLoader()));
 		}		
 	}
 

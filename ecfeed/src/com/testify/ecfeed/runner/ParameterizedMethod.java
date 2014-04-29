@@ -55,7 +55,8 @@ public class ParameterizedMethod extends FrameworkMethod {
 		for(PartitionNode parameter : testCase){
 			Object value = parameter.getValue();
 			if ((value != null) && value.getClass().isEnum()) {
-				parameters.add(ModelUtils.enumPartitionValue(((Enum<?>)value).name(), value.getClass().getName(), false));
+				ClassLoader loader = ModelUtils.getClassLoader(false, null);
+				parameters.add(ModelUtils.enumPartitionValue(((Enum<?>)value).name(), value.getClass().getName(), loader));
 			} else {
 				parameters.add(value);
 			}

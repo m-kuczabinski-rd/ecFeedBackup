@@ -126,15 +126,14 @@ public class StaticRunner extends BlockJUnit4ClassRunner {
 	private ArrayList<String> getParameterTypes(Class<?>[] parameterTypes) {
 		ArrayList<String> result = new ArrayList<String>();
 		for(Class<?> parameter : parameterTypes){
-			result.add(getParameterType(parameter));
+			if (parameter.isEnum()) {
+				result.add(parameter.getCanonicalName());	
+			} else {
+				result.add(parameter.getSimpleName());
+			}
 		}
 		return result;
 	}
-
-	private String getParameterType(Class<?> parameter) {
-		return parameter.getSimpleName();
-	}
-
 
 	private String getEctFilePath() throws RunnerException {
 		TestClass testClass = getTestClass();

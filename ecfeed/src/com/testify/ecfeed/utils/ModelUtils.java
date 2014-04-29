@@ -11,6 +11,7 @@ package com.testify.ecfeed.utils;
  *     Patryk Chamuczynski (p.chamuczynski(at)radytek.com) - initial implementation
  ******************************************************************************/
 
+import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
@@ -23,7 +24,6 @@ import org.eclipse.jdt.core.IAnnotation;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.ILocalVariable;
 import org.eclipse.jdt.core.IMethod;
-import org.eclipse.jdt.core.IPackageFragment;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
@@ -40,15 +40,16 @@ public class ModelUtils {
 	
 	private static URLClassLoader classLoader;
 	
-	public static ClassNode generateClassModel(IType type){
+	public static ClassNode generateClassModel(IType type){ 
 		ClassNode classNode = new ClassNode(type.getFullyQualifiedName());
 		try{
+			Class<?> testClass = getClassLoader(true, null).loadClass(type.getFullyQualifiedName());
 			for(IMethod method : type.getMethods()){
 				IAnnotation[] annotations = method.getAnnotations();
 				if(method.getParameters().length > 0){
 					for(IAnnotation annotation : annotations){
 						if(annotation.getElementName().equals("Test")){
-							MethodNode methodModel = generateMethodModel(method);
+							MethodNode methodModel = generateMethodModel(method, testClass);
 							if(methodModel != null){
 								classNode.addMethod(methodModel);
 							}
@@ -58,7 +59,7 @@ public class ModelUtils {
 				}
 			}
 		}
-		catch(JavaModelException e){
+		catch(Throwable e){
 			System.out.println("Unexpected error");
 		}
 		return classNode;
@@ -168,10 +169,10 @@ public class ModelUtils {
 		return null;
 	}
 	
-	private static MethodNode generateMethodModel(IMethod method) throws JavaModelException {
+	private static MethodNode generateMethodModel(IMethod method, Class<?> testClass) throws JavaModelException {
 		MethodNode methodNode = new MethodNode(method.getElementName());
 		for(ILocalVariable parameter : method.getParameters()){
-			CategoryNode parameterModel = generateCategoryModel(parameter);
+			CategoryNode parameterModel = generateCategoryModel(parameter, method, testClass);
 			if(parameterModel == null){
 				return null;
 			}
@@ -185,8 +186,8 @@ public class ModelUtils {
 		return methodNode;
 	}
 
-	private static CategoryNode generateCategoryModel(ILocalVariable parameter) {
-		String type = getTypeName(parameter.getTypeSignature());
+	private static CategoryNode generateCategoryModel(ILocalVariable parameter, IMethod method, Class<?> testClass) {
+		String type = getTypeName(parameter, method, testClass);
 		boolean expected = false;
 //		if(type.equals(Constants.TYPE_NAME_UNSUPPORTED)){
 //			return null;
@@ -243,7 +244,8 @@ public class ModelUtils {
 		}
 	}
 
-	private static String getTypeName(String typeSignature) {
+	private static String getTypeName(ILocalVariable parameter, IMethod method, Class<?> testClass) {
+		String typeSignature = parameter.getTypeSignature();
 		switch(typeSignature){
 		case Signature.SIG_BOOLEAN:
 			return com.testify.ecfeed.model.Constants.TYPE_NAME_BOOLEAN;
@@ -265,7 +267,15 @@ public class ModelUtils {
 			return com.testify.ecfeed.model.Constants.TYPE_NAME_STRING;
 		default:
 			if (typeSignature.startsWith("Q") && typeSignature.endsWith(";")){
-				return typeSignature.substring(1, typeSignature.lastIndexOf(";"));
+				for (Method reflection : testClass.getMethods()) {
+					if (method.getElementName().equals(reflection.getName())) {
+						for (Class<?> type : reflection.getParameterTypes()) {
+							if (type.getSimpleName().equals(typeSignature.substring(1, typeSignature.lastIndexOf(";")))) {
+								return type.getCanonicalName();
+							}
+						}
+					}
+				}
 			}
 			return com.testify.ecfeed.model.Constants.TYPE_NAME_UNSUPPORTED;
 		}
@@ -392,56 +402,30 @@ public class ModelUtils {
 		return true;
 	}
 
-	public static URLClassLoader getClassLoader(boolean create) throws Throwable {
+	public static URLClassLoader getClassLoader(boolean create, ClassLoader parentLoader) {
 		if ((classLoader == null) || create){
-			IProject[] projects = ResourcesPlugin.getWorkspace().getRoot().getProjects();
 			List<URL> urls = new ArrayList<URL>();
-			for (IProject project : projects){
-				if (project.isOpen() && project.hasNature(JavaCore.NATURE_ID)){
-					IJavaProject javaProject = JavaCore.create(project);
-					IPath path = project.getWorkspace().getRoot().getLocation();
-					path = path.append(javaProject.getOutputLocation());
-					urls.add(new URL("file", null, path.toOSString() + "/"));
-				}
-				classLoader = new URLClassLoader(urls.toArray(new URL[]{}));
-			}
-		}
-		return classLoader;
-	}
-
-	private static Class<?> getClass(String typeName, boolean createLoader) throws Throwable {
-		Class<?> typeClass = null;
-		URLClassLoader loader = getClassLoader(createLoader);
-		IProject[] projects = ResourcesPlugin.getWorkspace().getRoot().getProjects();
-		
-		try {
-			typeClass = loader.loadClass(typeName);
-		} catch (Throwable e) {
-		}
-		
-		if (typeClass == null) {
-			for (IProject project : projects){
-				if (project.isOpen() && project.hasNature(JavaCore.NATURE_ID)){
-					IJavaProject javaProject = JavaCore.create(project);
-					IPackageFragment fragments[] = javaProject.getPackageFragments();
-					for (IPackageFragment fragment : fragments){
-						try{
-							typeClass = loader.loadClass(fragment.getElementName() + "." + typeName);
-							break;
-						} catch (Throwable e) {
-						}
+			try {
+				IProject[] projects = ResourcesPlugin.getWorkspace().getRoot().getProjects();
+				for (IProject project : projects){
+					if (project.isOpen() && project.hasNature(JavaCore.NATURE_ID)){
+						IJavaProject javaProject = JavaCore.create(project);
+						IPath path = project.getWorkspace().getRoot().getLocation();
+						path = path.append(javaProject.getOutputLocation());
+						urls.add(new URL("file", null, path.toOSString() + "/"));
 					}
 				}
+			} catch (Throwable e) {
 			}
+			classLoader = new URLClassLoader(urls.toArray(new URL[]{}), parentLoader);
 		}
-		
-		return typeClass;
+		return classLoader;
 	}
 
 	private static ArrayList<PartitionNode> defaultEnumPartitions(String typeName) {
 		ArrayList<PartitionNode> partitions = new ArrayList<PartitionNode>();
 		try {
-			Class<?> typeClass = getClass(typeName, true);
+			Class<?> typeClass = getClassLoader(true, null).loadClass(typeName);
 			if (typeClass != null) {
 				for (Object object: typeClass.getEnumConstants()) {
 					partitions.add(new PartitionNode(object.toString(), object));
@@ -456,7 +440,7 @@ public class ModelUtils {
 	private static Object defaultEnumExpectedValue(String typeName) {
 		Object value = null;
 		try {
-			Class<?> typeClass = getClass(typeName, true);
+			Class<?> typeClass = getClassLoader(true, null).loadClass(typeName);
 			if (typeClass != null) {
 				for (Object object: typeClass.getEnumConstants()) {
 					value = object;
@@ -469,10 +453,10 @@ public class ModelUtils {
 		return value;
 	}
 
-	public static Object enumPartitionValue(String valueString, String typeName, boolean createLoader) {
+	public static Object enumPartitionValue(String valueString, String typeName, ClassLoader loader) {
 		Object value = null;
 		try {
-			Class<?> typeClass = getClass(typeName, createLoader);
+			Class<?> typeClass = loader.loadClass(typeName);
 			if (typeClass != null) {
 				for (Object object: typeClass.getEnumConstants()) {
 					if ((((Enum<?>)object).name()).equals(valueString)) {
@@ -487,8 +471,8 @@ public class ModelUtils {
 		return value;
 	}
 
-	public static Object parseEnumValue(String valueString, String typeName) {
-		return enumPartitionValue(valueString, typeName, true);
+	public static Object parseEnumValue(String valueString, String typeName, ClassLoader loader) {
+		return enumPartitionValue(valueString, typeName, loader);
 	}
 	
 	public static boolean validatePartitionStringValue(String valueString, String type){
@@ -519,7 +503,7 @@ public class ModelUtils {
 			case com.testify.ecfeed.model.Constants.TYPE_NAME_STRING:
 				return valueString;
 			default:
-				return enumPartitionValue(valueString, type, true);
+				return enumPartitionValue(valueString, type, getClassLoader(true, null));
 			}
 		}catch(NumberFormatException|IndexOutOfBoundsException e){
 			return null;

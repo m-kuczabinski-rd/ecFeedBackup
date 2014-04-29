@@ -34,7 +34,7 @@ public abstract class ExecuteTestAdapter extends SelectionAdapter {
 		String className = classNode.getQualifiedName();
 		URLClassLoader loader;
 		try {
-			loader = ModelUtils.getClassLoader(true);
+			loader = ModelUtils.getClassLoader(true, null);
 			testClass = loader.loadClass(className.toString());
 			Method[] methods = testClass.getMethods();
 			for (Method method : methods){
@@ -65,7 +65,11 @@ public abstract class ExecuteTestAdapter extends SelectionAdapter {
 	protected List<String> getArgTypes(Method method) {
 		List<String> argTypes = new ArrayList<String>();
 		for(Class<?> arg : method.getParameterTypes()){
-			argTypes.add(arg.getSimpleName());
+			if (arg.isEnum()) {
+				argTypes.add(arg.getCanonicalName());				
+			} else {
+				argTypes.add(arg.getSimpleName());	
+			}
 		}
 		return argTypes;
 	}
