@@ -160,7 +160,7 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 	public GeneratorSetupDialog(Shell parentShell, MethodNode method, int content, String title, String message) {
 		super(parentShell);
 		setHelpAvailable(false);
-		setShellStyle(SWT.BORDER | SWT.RESIZE | SWT.TITLE);
+		setShellStyle(SWT.BORDER | SWT.RESIZE | SWT.TITLE | SWT.APPLICATION_MODAL);
 		fMethod = method;
 		fGeneratorFactory = new GeneratorFactory<PartitionNode>();
 		fContent = content;
