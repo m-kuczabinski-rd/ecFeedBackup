@@ -50,13 +50,19 @@ public class ParameterizedMethod extends FrameworkMethod {
 		return null;
 	}
 
-	protected Object[] getParameters(List<PartitionNode> testCase) {
+	protected Object[] getParameters(List<PartitionNode> testCase) throws Exception {
 		List<Object> parameters = new ArrayList<Object>();
 		for(PartitionNode parameter : testCase){
 			Object value = parameter.getValue();
 			if ((value != null) && value.getClass().isEnum()) {
 				ClassLoader loader = ModelUtils.getClassLoader(false, null);
-				parameters.add(ModelUtils.enumPartitionValue(((Enum<?>)value).name(), value.getClass().getName(), loader));
+				Object enumValue = ModelUtils.enumPartitionValue(((Enum<?>)value).name(), value.getClass().getName(), loader);
+				if (enumValue != null) {
+					parameters.add(enumValue);	
+				} else {
+					throw new Exception("Enum constant " + ((Enum<?>)value).name() + " not found in " + value.getClass().getName() + " enum definition.");
+				}
+				
 			} else {
 				parameters.add(value);
 			}
