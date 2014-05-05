@@ -415,6 +415,9 @@ public class ModelUtils {
 						urls.add(new URL("file", null, path.toOSString() + "/"));
 					}
 				}
+				if (classLoader != null) {
+					classLoader.close();
+				}
 			} catch (Throwable e) {
 			}
 			classLoader = new URLClassLoader(urls.toArray(new URL[]{}), parentLoader);
