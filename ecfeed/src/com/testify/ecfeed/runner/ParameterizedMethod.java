@@ -21,7 +21,7 @@ import org.junit.runners.model.FrameworkMethod;
 
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.TestCaseNode;
-import com.testify.ecfeed.utils.ModelUtils;
+import com.testify.ecfeed.utils.ClassUtils;
 
 public class ParameterizedMethod extends FrameworkMethod {
 	
@@ -55,8 +55,8 @@ public class ParameterizedMethod extends FrameworkMethod {
 		for(PartitionNode parameter : testCase){
 			Object value = parameter.getValue();
 			if ((value != null) && value.getClass().isEnum()) {
-				ClassLoader loader = ModelUtils.getClassLoader(false, null);
-				Object enumValue = ModelUtils.enumPartitionValue(((Enum<?>)value).name(), value.getClass().getName(), loader);
+				ClassLoader loader = ClassUtils.getClassLoader(false, null);
+				Object enumValue = ClassUtils.enumPartitionValue(((Enum<?>)value).name(), value.getClass().getName(), loader);
 				if (enumValue != null) {
 					parameters.add(enumValue);	
 				} else {

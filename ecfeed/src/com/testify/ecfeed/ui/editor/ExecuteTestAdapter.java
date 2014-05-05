@@ -24,7 +24,7 @@ import org.eclipse.swt.widgets.Display;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.ui.common.Messages;
-import com.testify.ecfeed.utils.ModelUtils;
+import com.testify.ecfeed.utils.ClassUtils;
 
 public abstract class ExecuteTestAdapter extends SelectionAdapter {
 
@@ -34,7 +34,7 @@ public abstract class ExecuteTestAdapter extends SelectionAdapter {
 		String className = classNode.getQualifiedName();
 		URLClassLoader loader;
 		try {
-			loader = ModelUtils.getClassLoader(true, null);
+			loader = ClassUtils.getClassLoader(true, null);
 			testClass = loader.loadClass(className.toString());
 			Method[] methods = testClass.getMethods();
 			for (Method method : methods){

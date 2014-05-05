@@ -12,14 +12,10 @@ package com.testify.ecfeed.utils;
  ******************************************************************************/
 
 import java.lang.reflect.Method;
-import java.net.URL;
-import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.core.resources.IProject;
-import org.eclipse.core.runtime.IPath;
 import org.eclipse.jdt.core.IAnnotation;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.ILocalVariable;
@@ -34,16 +30,13 @@ import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.ExpectedValueCategoryNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
-import com.testify.ecfeed.utils.Constants;
 
 public class ModelUtils {
-	
-	private static URLClassLoader classLoader;
 	
 	public static ClassNode generateClassModel(IType type){ 
 		ClassNode classNode = new ClassNode(type.getFullyQualifiedName());
 		try{
-			Class<?> testClass = getClassLoader(true, null).loadClass(type.getFullyQualifiedName());
+			Class<?> testClass = ClassUtils.getClassLoader(true, null).loadClass(type.getFullyQualifiedName());
 			for(IMethod method : type.getMethods()){
 				IAnnotation[] annotations = method.getAnnotations();
 				if(method.getParameters().length > 0){
@@ -240,7 +233,7 @@ public class ModelUtils {
 		case com.testify.ecfeed.model.Constants.TYPE_NAME_STRING:
 			return Constants.DEFAULT_EXPECTED_STRING_VALUE;
 		default:
-			return defaultEnumExpectedValue(type);
+			return ClassUtils.defaultEnumExpectedValue(type);
 		}
 	}
 
@@ -302,7 +295,7 @@ public class ModelUtils {
 		case "String":
 			return defaultStringPartitions();
 		default:
-			return defaultEnumPartitions(typeSignature);
+			return ClassUtils.defaultEnumPartitions(typeSignature);
 		}
 	}
 
@@ -401,82 +394,6 @@ public class ModelUtils {
 		if(name.matches("[ ]+.*")) return false;
 		return true;
 	}
-
-	public static URLClassLoader getClassLoader(boolean create, ClassLoader parentLoader) {
-		if ((classLoader == null) || create){
-			List<URL> urls = new ArrayList<URL>();
-			try {
-				IProject[] projects = ResourcesPlugin.getWorkspace().getRoot().getProjects();
-				for (IProject project : projects){
-					if (project.isOpen() && project.hasNature(JavaCore.NATURE_ID)){
-						IJavaProject javaProject = JavaCore.create(project);
-						IPath path = project.getWorkspace().getRoot().getLocation();
-						path = path.append(javaProject.getOutputLocation());
-						urls.add(new URL("file", null, path.toOSString() + "/"));
-					}
-				}
-				if (classLoader != null) {
-					classLoader.close();
-				}
-			} catch (Throwable e) {
-			}
-			classLoader = new URLClassLoader(urls.toArray(new URL[]{}), parentLoader);
-		}
-		return classLoader;
-	}
-
-	private static ArrayList<PartitionNode> defaultEnumPartitions(String typeName) {
-		ArrayList<PartitionNode> partitions = new ArrayList<PartitionNode>();
-		try {
-			Class<?> typeClass = getClassLoader(true, null).loadClass(typeName);
-			if (typeClass != null) {
-				for (Object object: typeClass.getEnumConstants()) {
-					partitions.add(new PartitionNode(object.toString(), object));
-				}	
-			}
-		} catch (Throwable e) {
-			e.printStackTrace();
-		}
-		return partitions;
-	}
-
-	private static Object defaultEnumExpectedValue(String typeName) {
-		Object value = null;
-		try {
-			Class<?> typeClass = getClassLoader(true, null).loadClass(typeName);
-			if (typeClass != null) {
-				for (Object object: typeClass.getEnumConstants()) {
-					value = object;
-					break;
-				}	
-			}
-		} catch (Throwable e) {
-			e.printStackTrace();
-		}			
-		return value;
-	}
-
-	public static Object enumPartitionValue(String valueString, String typeName, ClassLoader loader) {
-		Object value = null;
-		try {
-			Class<?> typeClass = loader.loadClass(typeName);
-			if (typeClass != null) {
-				for (Object object: typeClass.getEnumConstants()) {
-					if ((((Enum<?>)object).name()).equals(valueString)) {
-						value = object;
-						break;
-					}
-				}
-			}
-		} catch (Throwable e) {
-			e.printStackTrace();
-		}
-		return value;
-	}
-
-	public static Object parseEnumValue(String valueString, String typeName, ClassLoader loader) {
-		return enumPartitionValue(valueString, typeName, loader);
-	}
 	
 	public static boolean validatePartitionStringValue(String valueString, String type){
 		if(type.equals(com.testify.ecfeed.model.Constants.TYPE_NAME_STRING)) return true;
@@ -506,7 +423,7 @@ public class ModelUtils {
 			case com.testify.ecfeed.model.Constants.TYPE_NAME_STRING:
 				return valueString;
 			default:
-				return enumPartitionValue(valueString, type, getClassLoader(true, null));
+				return ClassUtils.enumPartitionValue(valueString, type, ClassUtils.getClassLoader(true, null));
 			}
 		}catch(NumberFormatException|IndexOutOfBoundsException e){
 			return null;
