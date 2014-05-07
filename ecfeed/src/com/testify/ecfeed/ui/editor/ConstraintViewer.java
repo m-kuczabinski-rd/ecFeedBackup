@@ -372,8 +372,8 @@ public class ConstraintViewer extends TreeViewerSection {
 		fConditionBoolMenuListener = new ControlMenuListener(conditionComposite, fConditionButton){
 			{
 				ArrayList<String> boolList = new ArrayList<>();
-				boolList.add("true");
-				boolList.add("false");
+				boolList.add(STATEMENT_TRUE);
+				boolList.add(STATEMENT_FALSE);
 				addData(boolList, "");
 				createMenu();
 			}
