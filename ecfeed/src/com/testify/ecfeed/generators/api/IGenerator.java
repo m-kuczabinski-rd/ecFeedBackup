@@ -21,7 +21,7 @@ public interface IGenerator<E> {
 	 */
 	public List<IGeneratorParameter> parameters();
 	/*
-	 * Should be called prior to first call of getNext()
+	 * Should be called prior to first call of next()
 	 */
 	public void initialize(List<List<E>> inputDomain, 
 			Collection<IConstraint<E>> constraints,
@@ -50,4 +50,7 @@ public interface IGenerator<E> {
 	public int workProgress();
 	
 	public int totalProgress();
+	
+	public void cancel();
+	
 }

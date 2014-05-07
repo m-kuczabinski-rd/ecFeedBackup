@@ -17,7 +17,7 @@ import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.swt.SWT;
 
-import com.testify.ecfeed.model.ExpectedValueCategoryNode;
+import com.testify.ecfeed.model.ExpectedCategoryNode;
 import com.testify.ecfeed.utils.ModelUtils;
 
 public class DefaultValueEditingSupport extends EditingSupport {
@@ -33,24 +33,24 @@ public class DefaultValueEditingSupport extends EditingSupport {
 	@Override
 	protected CellEditor getCellEditor(Object element) {
 		TextCellEditor editor = new TextCellEditor(fViewer.getTable(), SWT.LEFT);
-		String valueString = ((ExpectedValueCategoryNode)element).getDefaultValuePartition().getValueString();
+		String valueString = ((ExpectedCategoryNode)element).getDefaultValuePartition().getValueString();
 		editor.setValue(valueString);
 		return editor;
 	}
 
 	@Override
 	protected boolean canEdit(Object element) {
-		return element instanceof ExpectedValueCategoryNode;
+		return element instanceof ExpectedCategoryNode;
 	}
 
 	@Override
 	protected Object getValue(Object element) {
-		return ((ExpectedValueCategoryNode)element).getDefaultValuePartition().getValueString();
+		return ((ExpectedCategoryNode)element).getDefaultValuePartition().getValueString();
 	}
 
 	@Override
 	protected void setValue(Object element, Object value) {
-		ExpectedValueCategoryNode category = (ExpectedValueCategoryNode)element;
+		ExpectedCategoryNode category = (ExpectedCategoryNode)element;
 		String valueString = (String)value;
 		if(ModelUtils.validatePartitionStringValue(valueString, category.getType())){
 			Object newValue = ModelUtils.getPartitionValueFromString(valueString, category.getType());

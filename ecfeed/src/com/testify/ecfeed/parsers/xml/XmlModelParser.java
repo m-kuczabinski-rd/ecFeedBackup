@@ -23,16 +23,18 @@ import nu.xom.Elements;
 import nu.xom.Node;
 import nu.xom.ParsingException;
 
-import com.testify.ecfeed.model.CategoryNode;
+import com.testify.ecfeed.model.AbstractCategoryNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.ConstraintNode;
-import com.testify.ecfeed.model.ExpectedValueCategoryNode;
+import com.testify.ecfeed.model.ExpectedCategoryNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
+import com.testify.ecfeed.model.PartitionedCategoryNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.model.constraint.BasicStatement;
-import com.testify.ecfeed.model.constraint.ConditionStatement;
+import com.testify.ecfeed.model.constraint.ExpectedValueStatement;
+import com.testify.ecfeed.model.constraint.PartitionedCategoryStatement;
 import com.testify.ecfeed.model.constraint.Constraint;
 import com.testify.ecfeed.model.constraint.Operator;
 import com.testify.ecfeed.model.constraint.Relation;
@@ -132,7 +134,8 @@ public class XmlModelParser implements IModelParser{
 			else if(child.getLocalName().equals(Constants.CONSTRAINT_CONSEQUENCE_NODE_NAME)){
 				if(getIterableElements(child.getChildElements()).size() == 1){
 //					if(child.getChildCount() == 0){
-					consequence = parseStatement(child.getChildElements().get(0), method);
+					Element childElement = child.getChildElements().get(0);
+					consequence = parseStatement(childElement, method);
 				}
 				else{
 					throw new ParserException(Messages.MALFORMED_CONSTRAINT_NODE_DEFINITION(method.getName(), name));
@@ -158,6 +161,8 @@ public class XmlModelParser implements IModelParser{
 			return parseStatementArray(element, method);
 		case Constants.CONSTRAINT_STATIC_STATEMENT_NODE_NAME:
 			return parseStaticStatement(element);
+		case Constants.CONSTRAINT_EXPECTED_STATEMENT_NODE_NAME:
+			return parseExpectedValueStatement(element, method);
 		default: return null;
 		}
 	}
@@ -198,7 +203,7 @@ public class XmlModelParser implements IModelParser{
 
 	protected BasicStatement parsePartitionStatement(Element element, MethodNode method) throws ParserException {
 		String categoryName = getAttributeValue(element, Constants.STATEMENT_CATEGORY_ATTRIBUTE_NAME);
-		CategoryNode category = method.getCategory(categoryName);
+		PartitionedCategoryNode category = method.getPartitionedCategory(categoryName);
 		if(category == null){
 			throw new ParserException(Messages.WRONG_CATEGORY_NAME(categoryName, method.getName()));
 		}
@@ -211,7 +216,7 @@ public class XmlModelParser implements IModelParser{
 		String relationName = getAttributeValue(element, Constants.STATEMENT_RELATION_ATTRIBUTE_NAME);
 		Relation relation = getRalation(relationName);
 		
-		return new ConditionStatement(category, relation, partition); 
+		return new PartitionedCategoryStatement(category, relation, partition); 
 	}
 	
 	protected BasicStatement parseLabelStatement(Element element, MethodNode method) throws ParserException {
@@ -219,15 +224,29 @@ public class XmlModelParser implements IModelParser{
 		String label = getAttributeValue(element, Constants.STATEMENT_LABEL_ATTRIBUTE_NAME);
 		String relationName = getAttributeValue(element, Constants.STATEMENT_RELATION_ATTRIBUTE_NAME);
 		
-		CategoryNode category = method.getCategory(categoryName);
+		PartitionedCategoryNode category = method.getPartitionedCategory(categoryName);
 		if(category == null){
 			throw new ParserException(Messages.WRONG_CATEGORY_NAME(categoryName, method.getName()));
 		}
 		Relation relation = getRalation(relationName);
 		
-		return new ConditionStatement(category, relation, label);
+		return new PartitionedCategoryStatement(category, relation, label);
 	}
 
+	protected BasicStatement parseExpectedValueStatement(Element element, MethodNode method) throws ParserException {
+		String categoryName = getAttributeValue(element, Constants.STATEMENT_CATEGORY_ATTRIBUTE_NAME);
+		String valueString = getAttributeValue(element, Constants.STATEMENT_EXPECTED_VALUE_ATTRIBUTE_NAME);
+		ExpectedCategoryNode category = method.getExpectedCategory(categoryName);
+		if(category == null){
+			throw new ParserException(Messages.WRONG_CATEGORY_NAME(categoryName, method.getName()));
+		}
+		Object conditionValue = parseValue(valueString, category.getType());
+		PartitionNode condition = new PartitionNode("expected", conditionValue);
+		condition.setParent(category);
+		
+		return new ExpectedValueStatement(category, condition);
+	}
+	
 	protected Relation getRalation(String relationName) throws ParserException{
 		Relation relation = null;
 		switch(relationName){
@@ -244,7 +263,7 @@ public class XmlModelParser implements IModelParser{
 		return relation;
 	}
 
-	protected TestCaseNode parseTestCaseElement(Element element, List<CategoryNode> categories) throws ParserException {
+	protected TestCaseNode parseTestCaseElement(Element element, List<AbstractCategoryNode> categories) throws ParserException {
 		String testSuiteName = getAttributeValue(element, Constants.TEST_SUITE_NAME_ATTRIBUTE);
 		ArrayList<PartitionNode> testData = new ArrayList<PartitionNode>();
 		List<Element> parameterElements = getIterableElements(element.getChildElements());
@@ -255,7 +274,7 @@ public class XmlModelParser implements IModelParser{
 
 		for(int i = 0; i < parameterElements.size(); i++){
 			Element testParameterElement = parameterElements.get(i);
-			CategoryNode category = categories.get(i);
+			AbstractCategoryNode category = categories.get(i);
 			
 			PartitionNode testValue = null;
 			if(testParameterElement.getLocalName().equals(Constants.TEST_PARAMETER_NODE_NAME)){
@@ -276,19 +295,19 @@ public class XmlModelParser implements IModelParser{
 		return new TestCaseNode(testSuiteName, testData);
 	}
 
-	protected ExpectedValueCategoryNode parseExpectedValueCategoryElement(Element element) throws ParserException {
+	protected ExpectedCategoryNode parseExpectedValueCategoryElement(Element element) throws ParserException {
 		String name = getElementName(element);
 		String type = getAttributeValue(element, Constants.TYPE_NAME_ATTRIBUTE);
 		String defaultValueString = getAttributeValue(element, Constants.DEFAULT_EXPECTED_VALUE_ATTRIBUTE);
 		Object defaultValue = parseValue(defaultValueString, type);
-		return new ExpectedValueCategoryNode(name, type, defaultValue);
+		return new ExpectedCategoryNode(name, type, defaultValue);
 	}
 	
-	protected CategoryNode parseCategoryElement(Element element) throws ParserException {
+	protected PartitionedCategoryNode parseCategoryElement(Element element) throws ParserException {
 		String name = getElementName(element);
 		String type = getAttributeValue(element, Constants.TYPE_NAME_ATTRIBUTE);
 
-		CategoryNode categoryNode = new CategoryNode(name, type);
+		PartitionedCategoryNode categoryNode = new PartitionedCategoryNode(name, type);
 		for(Element child : getIterableElements(element.getChildElements())){
 			if(child.getLocalName() == Constants.PARTITION_NODE_NAME){
 				categoryNode.addPartition(parsePartitionElement(child, type));

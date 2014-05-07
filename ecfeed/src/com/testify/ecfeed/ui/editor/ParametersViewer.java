@@ -19,8 +19,8 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Section;
 
-import com.testify.ecfeed.model.CategoryNode;
-import com.testify.ecfeed.model.ExpectedValueCategoryNode;
+import com.testify.ecfeed.model.AbstractCategoryNode;
+import com.testify.ecfeed.model.ExpectedCategoryNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.ui.common.ColorConstants;
 import com.testify.ecfeed.ui.common.ColorManager;
@@ -49,10 +49,10 @@ public class ParametersViewer extends TableViewerSection implements TestDataEdit
 			@Override
 			public String getText(Object element){
 				String result = new String();
-				if(element instanceof ExpectedValueCategoryNode){
+				if(element instanceof ExpectedCategoryNode){
 					result += "[e]";
 				}
-				result += ((CategoryNode)element).getName();
+				result += ((AbstractCategoryNode)element).getName();
 				return result;
 			}
 
@@ -65,7 +65,7 @@ public class ParametersViewer extends TableViewerSection implements TestDataEdit
 		addColumn("Type", 150, new ColumnLabelProvider(){
 			@Override
 			public String getText(Object element){
-				return ((CategoryNode)element).getType();
+				return ((AbstractCategoryNode)element).getType();
 			}
 			@Override
 			public Color getForeground(Object element){
@@ -76,8 +76,8 @@ public class ParametersViewer extends TableViewerSection implements TestDataEdit
 		fDefaultValueColumn = addColumn("Default value", 150, new ColumnLabelProvider(){
 			@Override
 			public String getText(Object element){
-				if(element instanceof ExpectedValueCategoryNode){
-					ExpectedValueCategoryNode category = (ExpectedValueCategoryNode)element;
+				if(element instanceof ExpectedCategoryNode){
+					ExpectedCategoryNode category = (ExpectedCategoryNode)element;
 					return category.getDefaultValuePartition().getValueString();
 				}
 				return EMPTY_STRING ;
@@ -97,7 +97,7 @@ public class ParametersViewer extends TableViewerSection implements TestDataEdit
 	}
 
 	private Color getColor(Object element){
-		if(element instanceof ExpectedValueCategoryNode){
+		if(element instanceof ExpectedCategoryNode){
 			return fColorManager.getColor(ColorConstants.EXPECTED_VALUE_CATEGORY);
 		}
 		return null;

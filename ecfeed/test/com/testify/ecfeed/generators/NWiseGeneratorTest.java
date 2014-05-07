@@ -28,34 +28,86 @@ import com.testify.ecfeed.generators.api.GeneratorException;
 import com.testify.ecfeed.generators.api.IConstraint;
 import com.testify.ecfeed.generators.utils.GeneratorTestUtils;
 
-public class NWiseGeneratorTest{
-	
+public class NWiseGeneratorTest {
+
 	@Test
-	public void initializeTest(){
+	public void initializeNTest() {
 		try {
-			
+			/*
+			 *	Should I change the way algorithms are initialized? I guess So. There is no real situation in which we alter parameters
+			 *	once initialized, though. Awaiting approval.
+			 */
 			NWiseGenerator<String> generator = new NWiseGenerator<String>();
-			List<List<String>> inputDomain = GeneratorTestUtils.prepareInput(3, 3);
+			List<List<String>> inputDomain = GeneratorTestUtils.prepareInput(3,
+					3);
 			Collection<IConstraint<String>> constraints = new ArrayList<IConstraint<String>>();
 			Map<String, Object> parameters = new HashMap<String, Object>();
 			parameters.put("N", 2);
 
 			generator.initialize(inputDomain, constraints, parameters);
-			IAlgorithm<String> algorithm = generator.getAlgorithm(); 
+			IAlgorithm<String> algorithm = generator.getAlgorithm();
 			assertTrue(algorithm instanceof OptimalNWiseAlgorithm);
-			assertEquals(2, ((OptimalNWiseAlgorithm<String>)algorithm).getN());
-			
-			try{
+			assertEquals(2, ((OptimalNWiseAlgorithm<String>) algorithm).getN());
+
+			try {
 				parameters.put("N", 5);
 				generator.initialize(inputDomain, constraints, parameters);
 				fail("GeneratorException expected");
-			}catch(GeneratorException e) {
+			} catch (GeneratorException e) {
 			}
-			try{
+			try {
 				parameters.put("N", -1);
 				generator.initialize(inputDomain, constraints, parameters);
 				fail("GeneratorException expected");
-			}catch(GeneratorException e) {
+			} catch (GeneratorException e) {
+			}
+			try {
+				parameters.put("N", 2);
+				generator.initialize(inputDomain, constraints, parameters);
+			} catch (GeneratorException e) {
+				fail("Unexpected GeneratorException");
+			}
+
+		} catch (GeneratorException e) {
+			fail("Unexpected GeneratorException: " + e.getMessage());
+		}
+	}
+	
+	@Test
+	public void initializeCoverageTest() {
+		try {
+
+			NWiseGenerator<String> generator = new NWiseGenerator<String>();
+			List<List<String>> inputDomain = GeneratorTestUtils.prepareInput(3,
+					3);
+			Collection<IConstraint<String>> constraints = new ArrayList<IConstraint<String>>();
+			Map<String, Object> parameters = new HashMap<String, Object>();
+			parameters.put("N", 2);
+			parameters.put("coverage", 100);
+
+			generator.initialize(inputDomain, constraints, parameters);
+			IAlgorithm<String> algorithm = generator.getAlgorithm();
+			assertTrue(algorithm instanceof OptimalNWiseAlgorithm);
+			assertEquals(100,
+					((OptimalNWiseAlgorithm<String>) algorithm).getCoverage());
+
+			try {
+				parameters.put("coverage", 101);
+				generator.initialize(inputDomain, constraints, parameters);
+				fail("GeneratorException expected");
+			} catch (GeneratorException e) {
+			}
+			try {
+				parameters.put("coverage", -1);
+				generator.initialize(inputDomain, constraints, parameters);
+				fail("GeneratorException expected");
+			} catch (GeneratorException e) {
+			}
+			try {
+				parameters.put("coverage", 50);
+				generator.initialize(inputDomain, constraints, parameters);
+			} catch (GeneratorException e) {
+				fail("Unexpected GeneratorException");
 			}
 		} catch (GeneratorException e) {
 			fail("Unexpected GeneratorException: " + e.getMessage());

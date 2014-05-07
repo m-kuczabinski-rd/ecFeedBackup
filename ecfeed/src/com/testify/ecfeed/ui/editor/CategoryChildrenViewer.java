@@ -18,7 +18,7 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Section;
 
-import com.testify.ecfeed.model.CategoryNode;
+import com.testify.ecfeed.model.AbstractCategoryNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.utils.Constants;
@@ -28,7 +28,7 @@ public class CategoryChildrenViewer extends CheckboxTableViewerSection {
 
 	private final static int STYLE = Section.EXPANDED | Section.TITLE_BAR;
 	
-	private CategoryNode fSelectedCategory;
+	private AbstractCategoryNode fSelectedCategory;
 
 	private class AddPartitionAdapter extends SelectionAdapter{
 		
@@ -88,11 +88,11 @@ public class CategoryChildrenViewer extends CheckboxTableViewerSection {
 
 	}
 
-	public CategoryNode getSelectedCategory(){
+	public AbstractCategoryNode getSelectedCategory(){
 		return fSelectedCategory;
 	}
 
-	public void setInput(CategoryNode category){
+	public void setInput(AbstractCategoryNode category){
 		fSelectedCategory = category;
 		super.setInput(category.getPartitions());
 	}

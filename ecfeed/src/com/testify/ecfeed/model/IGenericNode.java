@@ -11,7 +11,6 @@
 
 package com.testify.ecfeed.model;
 
-import java.util.Collection;
 import java.util.List;
 
 public interface IGenericNode {
@@ -31,8 +30,6 @@ public interface IGenericNode {
 	 */
 	public boolean hasSibling(String name);
 	
-	public boolean removeChild(IGenericNode child);
-	public boolean removeChildren(Collection<IGenericNode> children);
 	public void moveChild(IGenericNode child, boolean moveUp);
 	public IGenericNode getRoot();
 	public IGenericNode getParent();
@@ -40,6 +37,4 @@ public interface IGenericNode {
 	public String getName();
 	public void setName(String newName);
 	public int subtreeSize();
-	@Deprecated
-	public boolean isParent(IGenericNode potentialChild);
 }

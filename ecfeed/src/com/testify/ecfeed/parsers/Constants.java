@@ -29,6 +29,7 @@ public class Constants {
 	public static final String CONSTRAINT_LABEL_STATEMENT_NODE_NAME = "LabelStatement";
 	public static final String CONSTRAINT_STATIC_STATEMENT_NODE_NAME = "StaticStatement";
 	public static final String CONSTRAINT_STATEMENT_ARRAY_NODE_NAME = "StatementArray";
+	public static final String CONSTRAINT_EXPECTED_STATEMENT_NODE_NAME = "ExpectedValueStatement";
 
 	public static final String NODE_NAME_ATTRIBUTE = "name";
 	public static final String QUALIFIED_NAME_ATTRIBUTE = "qualifiedName";
@@ -49,6 +50,7 @@ public class Constants {
 	public static final String STATEMENT_STATIC_VALUE_ATTRIBUTE_NAME = "value";
 	public static final String STATEMENT_OPERATOR_AND_ATTRIBUTE_VALUE = "and";
 	public static final String STATEMENT_OPERATOR_OR_ATTRIBUTE_VALUE = "or";
+	public static final String STATEMENT_EXPECTED_VALUE_ATTRIBUTE_NAME = "value";
 
 	public static final String STATIC_STATEMENT_TRUE_VALUE = "true";
 	public static final String STATIC_STATEMENT_FALSE_VALUE = "false";

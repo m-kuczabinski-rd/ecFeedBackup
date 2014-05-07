@@ -19,14 +19,14 @@ public class ExpectedValueCategoryNodeTest {
 
 	@Test
 	public void testGetChildren(){
-		ExpectedValueCategoryNode category = new ExpectedValueCategoryNode("name", "type", 0);
+		ExpectedCategoryNode category = new ExpectedCategoryNode("name", "type", 0);
 		assertEquals(0, category.getChildren().size());
 		assertFalse(category.hasChildren());
 	}
 	
 	@Test
 	public void testGetDefaultValue() {
-		ExpectedValueCategoryNode category = new ExpectedValueCategoryNode("name", "type", 0);
+		ExpectedCategoryNode category = new ExpectedCategoryNode("name", "type", 0);
 		assertEquals(0, category.getDefaultValue());
 		
 		category.setDefaultValue(1);
@@ -35,7 +35,7 @@ public class ExpectedValueCategoryNodeTest {
 	
 	@Test
 	public void testGetDefaultValuePartition() {
-		ExpectedValueCategoryNode category = new ExpectedValueCategoryNode("name", "type", "value");
+		ExpectedCategoryNode category = new ExpectedCategoryNode("name", "type", "value");
 		assertEquals("value", category.getDefaultValuePartition().getValue());
 	}
 }

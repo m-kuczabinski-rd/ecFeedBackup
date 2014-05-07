@@ -26,7 +26,7 @@ import org.junit.Test;
 import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.InitializationError;
 
-import com.testify.ecfeed.model.CategoryNode;
+import com.testify.ecfeed.model.AbstractCategoryNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.runner.annotations.Constraints;
@@ -72,6 +72,53 @@ public class OnlineRunner extends StaticRunner {
 		return methods;
 	}
 
+	protected Collection<IConstraint<PartitionNode>> getConstraints(
+			FrameworkMethod method, MethodNode methodModel) {
+		Collection<String> constraintsNames = constraintsNames(method);
+		if(constraintsNames == null){
+			return methodModel.getAllConstraints();
+		}
+		if(constraintsNames.contains(Constraints.ALL)){
+			constraintsNames = methodModel.getConstraintsNames();
+		}
+		else if(constraintsNames.contains(Constraints.NONE)){
+			constraintsNames.clear();
+		}
+		
+		Collection<IConstraint<PartitionNode>> constraints = new HashSet<IConstraint<PartitionNode>>();
+		for(String name : constraintsNames){
+			constraints.addAll(methodModel.getConstraints(name));
+		}
+		return constraints;
+	}
+
+	protected List<List<PartitionNode>> getInput(MethodNode methodModel) {
+		List<List<PartitionNode>> result = new ArrayList<List<PartitionNode>>();
+		for(AbstractCategoryNode category : methodModel.getCategories()){
+			result.add(category.getPartitions());
+		}
+		return result;
+	}
+
+	protected IGenerator<PartitionNode> getGenerator(FrameworkMethod method) throws RunnerException {
+		IGenerator<PartitionNode> generator = getGenerator(method.getAnnotations());
+		if(generator == null){
+			generator = getGenerator(getTestClass().getAnnotations());
+		}
+		if(generator == null){
+			throw new RunnerException(Messages.NO_VALID_GENERATOR(method.getName()));
+		}
+		return generator;
+	}
+
+	protected Set<String> constraintsNames(FrameworkMethod method) {
+		Set<String> names = constraintsNames(method.getAnnotations());
+		if(names == null){
+			names = constraintsNames(getTestClass().getAnnotations());
+		}
+		return names;
+	}
+
 	private Map<String, Object> getGeneratorParameters(
 			IGenerator<PartitionNode> generator, FrameworkMethod method) throws RunnerException {
 		List<IGeneratorParameter> parameters = generator.parameters();
@@ -91,6 +138,47 @@ public class OnlineRunner extends StaticRunner {
 			}
 		}
 		return result;
+	}
+
+	private Object getParameterValue(IGeneratorParameter parameter,
+			Map<String, String> parsedParameters) throws RunnerException {
+		String valueString = parsedParameters.get(parameter.getName());
+		if(valueString != null){
+			try{
+				switch (parameter.getType()) {
+				case BOOLEAN:
+					return Boolean.parseBoolean(valueString);
+				case DOUBLE:
+					return Double.parseDouble(valueString);
+				case INTEGER:
+					return Integer.parseInt(valueString);
+				case STRING:
+					return (String)valueString;
+				}
+			}
+			catch(Throwable e){
+				throw new RunnerException(Messages.WRONG_PARAMETER_TYPE(parameter.getName(), e.getMessage()));
+			}
+		}
+		return null;
+	}
+
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	private IGenerator<PartitionNode> getGenerator(Annotation[] annotations) throws RunnerException{
+		IGenerator<PartitionNode> generator = null;
+		for(Annotation annotation : annotations){
+			if(annotation instanceof Generator){
+				try {
+					Class<? extends IGenerator> generatorClass = ((Generator)annotation).value();  
+					generatorClass.getTypeParameters();
+					Constructor<? extends IGenerator> constructor = generatorClass.getConstructor(new Class<?>[]{});
+					generator = (IGenerator<PartitionNode>)(constructor.newInstance(new Object[]{}));
+				} catch (Exception e) {
+					throw new RunnerException(Messages.CANNOT_INSTANTIATE_GENERATOR(e.getMessage()));
+				}
+			}
+		}
+		return generator;
 	}
 
 	private Map<String, String> parseParameters(Annotation[] annotations) throws RunnerException {
@@ -125,94 +213,6 @@ public class OnlineRunner extends StaticRunner {
 			throw new RunnerException(Messages.MISSING_PARAMETERS_ANNOTATION);
 		}
 		return result;
-	}
-
-	private Object getParameterValue(IGeneratorParameter parameter,
-			Map<String, String> parsedParameters) throws RunnerException {
-		String valueString = parsedParameters.get(parameter.getName());
-		if(valueString != null){
-			try{
-				switch (parameter.getType()) {
-				case BOOLEAN:
-					return Boolean.parseBoolean(valueString);
-				case DOUBLE:
-					return Double.parseDouble(valueString);
-				case INTEGER:
-					return Integer.parseInt(valueString);
-				case STRING:
-					return (String)valueString;
-				}
-			}
-			catch(Throwable e){
-				throw new RunnerException(Messages.WRONG_PARAMETER_TYPE(parameter.getName(), e.getMessage()));
-			}
-		}
-		return null;
-	}
-
-	protected Collection<IConstraint<PartitionNode>> getConstraints(
-			FrameworkMethod method, MethodNode methodModel) {
-		Collection<String> constraintsNames = constraintsNames(method);
-		if(constraintsNames == null){
-			return methodModel.getAllConstraints();
-		}
-		if(constraintsNames.contains(Constraints.ALL)){
-			constraintsNames = methodModel.getConstraintsNames();
-		}
-		else if(constraintsNames.contains(Constraints.NONE)){
-			constraintsNames.clear();
-		}
-		
-		Collection<IConstraint<PartitionNode>> constraints = new HashSet<IConstraint<PartitionNode>>();
-		for(String name : constraintsNames){
-			constraints.addAll(methodModel.getConstraints(name));
-		}
-		return constraints;
-	}
-
-	protected List<List<PartitionNode>> getInput(MethodNode methodModel) {
-		List<List<PartitionNode>> result = new ArrayList<List<PartitionNode>>();
-		for(CategoryNode category : methodModel.getCategories()){
-			result.add(category.getPartitions());
-		}
-		return result;
-	}
-
-	protected IGenerator<PartitionNode> getGenerator(FrameworkMethod method) throws RunnerException {
-		IGenerator<PartitionNode> generator = getGenerator(method.getAnnotations());
-		if(generator == null){
-			generator = getGenerator(getTestClass().getAnnotations());
-		}
-		if(generator == null){
-			throw new RunnerException(Messages.NO_VALID_GENERATOR(method.getName()));
-		}
-		return generator;
-	}
-
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	private IGenerator<PartitionNode> getGenerator(Annotation[] annotations) throws RunnerException{
-		IGenerator<PartitionNode> generator = null;
-		for(Annotation annotation : annotations){
-			if(annotation instanceof Generator){
-				try {
-					Class<? extends IGenerator> generatorClass = ((Generator)annotation).value();  
-					generatorClass.getTypeParameters();
-					Constructor<? extends IGenerator> constructor = generatorClass.getConstructor(new Class<?>[]{});
-					generator = (IGenerator<PartitionNode>)(constructor.newInstance(new Object[]{}));
-				} catch (Exception e) {
-					throw new RunnerException(Messages.CANNOT_INSTANTIATE_GENERATOR(e.getMessage()));
-				}
-			}
-		}
-		return generator;
-	}
-
-	protected Set<String> constraintsNames(FrameworkMethod method) {
-		Set<String> names = constraintsNames(method.getAnnotations());
-		if(names == null){
-			names = constraintsNames(getTestClass().getAnnotations());
-		}
-		return names;
 	}
 
 	private Set<String> constraintsNames(Annotation[] annotations) {

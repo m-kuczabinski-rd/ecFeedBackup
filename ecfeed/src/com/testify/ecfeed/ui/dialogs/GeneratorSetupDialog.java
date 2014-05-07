@@ -49,13 +49,12 @@ import com.testify.ecfeed.generators.DoubleParameter;
 import com.testify.ecfeed.generators.GeneratorFactory;
 import com.testify.ecfeed.generators.IntegerParameter;
 import com.testify.ecfeed.generators.api.GeneratorException;
-import com.testify.ecfeed.generators.api.IConstraint;
 import com.testify.ecfeed.generators.api.IGenerator;
 import com.testify.ecfeed.generators.api.IGeneratorParameter;
 import com.testify.ecfeed.generators.api.IGeneratorParameter.TYPE;
-import com.testify.ecfeed.model.CategoryNode;
+import com.testify.ecfeed.model.AbstractCategoryNode;
 import com.testify.ecfeed.model.ConstraintNode;
-import com.testify.ecfeed.model.ExpectedValueCategoryNode;
+import com.testify.ecfeed.model.ExpectedCategoryNode;
 import com.testify.ecfeed.model.GenericNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
@@ -74,7 +73,7 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 	private CheckboxTreeViewer fCategoriesViewer;
 	private CheckboxTreeViewer fConstraintsViewer;
 	private List<List<PartitionNode>> fAlgorithmInput;
-	private Collection<IConstraint<PartitionNode>> fConstraints;
+	private Collection<Constraint> fConstraints;
 	private IGenerator<PartitionNode> fSelectedGenerator;
 	private Map<String, Object> fParameters;
 	private Composite fParametersComposite;
@@ -102,8 +101,8 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 		}
 		
 		public Object[] getChildren(Object element){
-			if(element instanceof CategoryNode){
-				return ((CategoryNode)element).getPartitions().toArray();
+			if(element instanceof AbstractCategoryNode){
+				return ((AbstractCategoryNode)element).getPartitions().toArray();
 			}
 			if(element instanceof PartitionNode){
 				return ((PartitionNode)element).getPartitions().toArray();
@@ -173,7 +172,7 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 		return fAlgorithmInput;
 	}
 
-	protected  Collection<IConstraint<PartitionNode>> constraints(){
+	protected  Collection<Constraint> constraints(){
 		return fConstraints;
 	}
 
@@ -329,14 +328,14 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 		});
 		fCategoriesViewer.getTree().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 		fCategoriesViewer.setInput(fMethod);
-		for(CategoryNode category : fMethod.getCategories()){
+		for(AbstractCategoryNode category : fMethod.getCategories()){
 			fCategoriesViewer.setSubtreeChecked(category, true);
 		}
 		fCategoriesViewer.addCheckStateListener(new TreeCheckStateListener(fCategoriesViewer));
 		fCategoriesViewer.addCheckStateListener(new ICheckStateListener() {
 			@Override
 			public void checkStateChanged(CheckStateChangedEvent event) {
-				for(CategoryNode category : fMethod.getCategories()){
+				for(AbstractCategoryNode category : fMethod.getCategories()){
 					if(fCategoriesViewer.getChecked(category) == false){
 						setOkButton(false);
 						return;
@@ -417,9 +416,11 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 			}
 		});
 		if(fGeneratorFactory.availableGenerators().size() > 0){
-			String[] availableGenerators = fGeneratorFactory.availableGenerators().toArray(new String[]{}); 
-			fGeneratorCombo.setItems(availableGenerators);
-			fGeneratorCombo.setText(availableGenerators[0]);
+			String[] availableGenerators = fGeneratorFactory.availableGenerators().toArray(new String[] {});
+			for(String generator : availableGenerators){
+				fGeneratorCombo.add(generator);
+				}
+			fGeneratorCombo.select(0);
 			setOkButton(true);
 		}
 	}
@@ -501,9 +502,9 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 				}
 			}
 		};
-		combo.addModifyListener(listener);
 		combo.setItems(allowedValuesItems(definition));
 		combo.setText(definition.defaultValue().toString());
+		combo.addModifyListener(listener);
 	}
 	
 	private String[] allowedValuesItems(IGeneratorParameter definition) {
@@ -562,7 +563,7 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 
 	private void saveConstraints() {
 		Object[] checkedObjects = fConstraintsViewer.getCheckedElements();
-		List<IConstraint<PartitionNode>> constraints = new ArrayList<IConstraint<PartitionNode>>();
+		List<Constraint> constraints = new ArrayList<Constraint>();
 		for(Object obj : checkedObjects){
 			if(obj instanceof Constraint){
 				constraints.add((Constraint)obj);
@@ -573,12 +574,12 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 	}
 
 	private void saveAlgorithmInput() {
-		List<CategoryNode> categories = fMethod.getCategories();
+		List<AbstractCategoryNode> categories = fMethod.getCategories();
 		fAlgorithmInput = new ArrayList<List<PartitionNode>>();
 		for(int i = 0; i < categories.size(); i++){
 			List<PartitionNode> partitions = new ArrayList<PartitionNode>();
-			if(categories.get(i) instanceof ExpectedValueCategoryNode){
-				ExpectedValueCategoryNode category = (ExpectedValueCategoryNode)categories.get(i);
+			if(categories.get(i) instanceof ExpectedCategoryNode){
+				ExpectedCategoryNode category = (ExpectedCategoryNode)categories.get(i);
 				partitions.add(category.getDefaultValuePartition());
 			}
 			else{

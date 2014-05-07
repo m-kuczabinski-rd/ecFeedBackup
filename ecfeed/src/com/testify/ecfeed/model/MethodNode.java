@@ -22,32 +22,93 @@ import java.util.ArrayList;
 import com.testify.ecfeed.generators.api.IConstraint;
 
 public class MethodNode extends GenericNode {
-	private List<CategoryNode> fCategories;
-	private List<ExpectedValueCategoryNode> fExpectedValueCategories;
+	private List<AbstractCategoryNode> fCategories;
+	private List<ExpectedCategoryNode> fExpectedValueCategories;
+	private List<PartitionedCategoryNode> fPartitionedCategories;
 	private List<TestCaseNode> fTestCases;
 	private List<ConstraintNode> fConstraints;
 	
 	public MethodNode(String name){
 		super(name);
-		fCategories = new ArrayList<CategoryNode>();
-		fExpectedValueCategories = new ArrayList<ExpectedValueCategoryNode>();
+		fCategories = new ArrayList<AbstractCategoryNode>();
+		fExpectedValueCategories = new ArrayList<ExpectedCategoryNode>();
+		fPartitionedCategories = new ArrayList<PartitionedCategoryNode>();
 		fTestCases = new ArrayList<TestCaseNode>();
 		fConstraints = new ArrayList<ConstraintNode>();
 	}
 	
-	public void addCategory(CategoryNode category){
-		fCategories.add(category);
-		category.setParent(this);
+	@Override
+	public String toString(){
+		String result = new String(getName()) + "(";
+		ArrayList<String> types = getCategoriesTypes();
+		ArrayList<String> names = getCategoriesNames();
+		for(int i = 0; i < types.size(); i++){
+			if(getCategories().get(i) instanceof ExpectedCategoryNode){
+				result += "[e]";
+			}
+			result += types.get(i);
+			result += " ";
+			result += names.get(i);
+			if(i < types.size() - 1) result += ", ";
+		}
+		result += ")";
+		return result;
 	}
 
-	public void addCategory(ExpectedValueCategoryNode category){
-		addCategory((CategoryNode)category);
+	@Override
+	public ArrayList<? extends IGenericNode> getChildren(){
+		ArrayList<IGenericNode> children = new ArrayList<IGenericNode>();
+		children.addAll(fCategories);
+		children.addAll(fConstraints);
+		children.addAll(fTestCases);
+		
+		return children;
+	}
+
+	@Override
+	public boolean hasChildren(){
+		return(fCategories.size() != 0 || fConstraints.size() != 0 || fTestCases.size() != 0);
+	}
+
+	@SuppressWarnings("rawtypes")
+	@Override
+	public void moveChild(IGenericNode child, boolean moveUp){
+		List childrenArray = null;
+		if(child instanceof AbstractCategoryNode){
+			childrenArray = fCategories;
+		}
+		if(child instanceof ConstraintNode){
+			childrenArray = fConstraints;
+		}
+		if(child instanceof TestCaseNode){
+			childrenArray = fTestCases;
+		}
+		if(childrenArray == null){
+			return;
+		}
+		
+		int childIndex = childrenArray.indexOf(child);
+		if(moveUp && childIndex > 0){
+			Collections.swap(childrenArray, childIndex, childIndex - 1);
+		}
+		if(!moveUp && childIndex < childrenArray.size() - 1){
+			Collections.swap(childrenArray, childIndex, childIndex + 1);
+		}
+	}
+
+	public void addCategory(PartitionedCategoryNode category){
+		addAbstractCategory(category);
+		fPartitionedCategories.add(category);
+	}
+
+	public void addCategory(ExpectedCategoryNode category){
+		addAbstractCategory(category);
 		fExpectedValueCategories.add(category);
 	}
 
 	public void addConstraint(ConstraintNode constraint) {
-		fConstraints.add(constraint);
 		constraint.setParent(this);
+		fConstraints.add(constraint);
 	}
 	
 	public void addTestCase(TestCaseNode testCase){
@@ -59,12 +120,12 @@ public class MethodNode extends GenericNode {
 		return (ClassNode)getParent();
 	}
 
-	public List<CategoryNode> getCategories(){
+	public List<AbstractCategoryNode> getCategories(){
 		return fCategories;
 	}
 
-	public CategoryNode getCategory(String categoryName) {
-		for(CategoryNode category : getCategories()){
+	public AbstractCategoryNode getCategory(String categoryName) {
+		for(AbstractCategoryNode category : getCategories()){
 			if(category.getName().equals(categoryName)){
 				return category;
 			}
@@ -72,9 +133,35 @@ public class MethodNode extends GenericNode {
 		return null;
 	}
 
+	public ExpectedCategoryNode getExpectedCategory(String categoryName) {
+		for(ExpectedCategoryNode category : getExpectedCategories()){
+			if(category.getName().equals(categoryName)){
+				return category;
+			}
+		}
+		return null;
+	}
+
+	public PartitionedCategoryNode getPartitionedCategory(String categoryName) {
+		for(PartitionedCategoryNode category : getPartitionedCategories()){
+			if(category.getName().equals(categoryName)){
+				return category;
+			}
+		}
+		return null;
+	}
+
+	public List<ExpectedCategoryNode> getExpectedCategories() {
+		return fExpectedValueCategories;
+	}
+
+	public List<PartitionedCategoryNode> getPartitionedCategories() {
+		return fPartitionedCategories;
+	}
+
 	public ArrayList<String> getCategoriesTypes() {
 		ArrayList<String> types = new ArrayList<String>();
-		for(CategoryNode category : getCategories()){
+		for(AbstractCategoryNode category : getCategories()){
 			types.add(category.getType());
 		}
 		return types;
@@ -82,7 +169,7 @@ public class MethodNode extends GenericNode {
 
 	public ArrayList<String> getCategoriesNames() {
 		ArrayList<String> names = new ArrayList<String>();
-		for(CategoryNode category : getCategories()){
+		for(AbstractCategoryNode category : getCategories()){
 			names.add(category.getName());
 		}
 		return names;
@@ -90,7 +177,7 @@ public class MethodNode extends GenericNode {
 
 	public ArrayList<String> getExpectedCategoriesNames() {
 		ArrayList<String> names = new ArrayList<String>();
-		for(ExpectedValueCategoryNode category : fExpectedValueCategories){
+		for(ExpectedCategoryNode category : fExpectedValueCategories){
 				names.add(category.getName());
 		}
 		return names;
@@ -155,10 +242,9 @@ public class MethodNode extends GenericNode {
 		return testSuites;
 	}
 
-	public boolean removeCategory(CategoryNode category){
+	protected boolean removeCategory(AbstractCategoryNode category){
 		category.setParent(null);
 		if(fCategories.remove(category)){
-			fTestCases.clear();
 			Iterator<ConstraintNode> it = fConstraints.iterator();
 			while(it.hasNext()){
 				ConstraintNode constraint = it.next();
@@ -170,9 +256,16 @@ public class MethodNode extends GenericNode {
 		}
 		return false;
 	}
+
+	public boolean removeCategory(PartitionedCategoryNode category){
+		if(removeCategory((AbstractCategoryNode) category)){
+			return fPartitionedCategories.remove(category);
+		}
+		return false;
+	}
 	
-	public boolean removeCategory(ExpectedValueCategoryNode category){
-		if(removeCategory((CategoryNode)category)){
+	public boolean removeCategory(ExpectedCategoryNode category){
+		if(removeCategory((AbstractCategoryNode) category)){
 			return fExpectedValueCategories.remove(category);
 		}
 		return false;
@@ -197,34 +290,38 @@ public class MethodNode extends GenericNode {
 			}
 		}
 	}
-
-	public void replaceCategory(int index, CategoryNode newCategory){
-		replace(index, newCategory);
-		fTestCases.clear();
-	}
 	
-	public void replaceCategory(int index, ExpectedValueCategoryNode newCategory){
-		replace(index, newCategory);
-		for(TestCaseNode testCase : fTestCases){
-			testCase.replaceValue(index, newCategory.getDefaultValuePartition().getCopy());
-		}
-	}
+	public void replaceCategory(int index, ExpectedCategoryNode newCategory){		
+		PartitionedCategoryNode oldCategory = (PartitionedCategoryNode)fCategories.get(index);
 
-	protected void replace(int index, CategoryNode newCategory){
-		newCategory.setParent(this);
-		CategoryNode originalCategory = fCategories.get(index);
-		fCategories.set(index, newCategory);
-		Iterator<ConstraintNode> iterator = fConstraints.iterator();
-		while(iterator.hasNext()){
-			if(iterator.next().mentions(originalCategory)){
-				iterator.remove();
+		if(removeCategory(oldCategory)){
+			newCategory.setParent(this);
+			fCategories.add(index, newCategory);
+			fExpectedValueCategories.add(newCategory);
+			for(TestCaseNode testCase : fTestCases){
+				testCase.replaceValue(index, newCategory.getDefaultValuePartition().getCopy());
 			}
 		}
 	}
 	
+	public void replaceCategory(int index, PartitionedCategoryNode newCategory){
+		ExpectedCategoryNode oldCategory = (ExpectedCategoryNode)fCategories.get(index);
+
+		if(removeCategory(oldCategory)){
+			newCategory.setParent(this);
+			fCategories.add(index, newCategory);
+			fPartitionedCategories.add(newCategory);
+			fTestCases.clear();
+		}
+	}
+
 	public void partitionRemoved(PartitionNode partition){
 		removeMentioningConstraints(partition);
 		removeMentioningTestCases(partition);
+	}
+
+	public boolean validateConstraintName(String name) {
+		return super.validateNodeName(name);
 	}
 
 	protected void removeMentioningConstraints(PartitionNode partition) {
@@ -245,90 +342,8 @@ public class MethodNode extends GenericNode {
 		}
 	}
 
-	@Override
-	public String toString(){
-		String result = new String(getName()) + "(";
-		ArrayList<String> types = getCategoriesTypes();
-		ArrayList<String> names = getCategoriesNames();
-		for(int i = 0; i < types.size(); i++){
-			if(getCategories().get(i) instanceof ExpectedValueCategoryNode){
-				result += "[e]";
-			}
-			result += types.get(i);
-			result += " ";
-			result += names.get(i);
-			if(i < types.size() - 1) result += ", ";
-		}
-		result += ")";
-		return result;
-	}
-
-	@Override
-	public ArrayList<? extends IGenericNode> getChildren(){
-		ArrayList<IGenericNode> children = new ArrayList<IGenericNode>();
-		children.addAll(fCategories);
-		children.addAll(fConstraints);
-		children.addAll(fTestCases);
-		
-		return children;
-	}
-
-	@Override
-	public boolean hasChildren(){
-		return(fCategories.size() != 0 || fConstraints.size() != 0 || fTestCases.size() != 0);
-	}
-
-	@SuppressWarnings("rawtypes")
-	@Override
-	public void moveChild(IGenericNode child, boolean moveUp){
-		List childrenArray = null;
-		if(child instanceof CategoryNode){
-			childrenArray = fCategories;
-		}
-		if(child instanceof ConstraintNode){
-			childrenArray = fConstraints;
-		}
-		if(child instanceof TestCaseNode){
-			childrenArray = fTestCases;
-		}
-		if(childrenArray == null){
-			return;
-		}
-		
-		int childIndex = childrenArray.indexOf(child);
-		if(moveUp && childIndex > 0){
-			Collections.swap(childrenArray, childIndex, childIndex - 1);
-		}
-		if(!moveUp && childIndex < childrenArray.size() - 1){
-			Collections.swap(childrenArray, childIndex, childIndex + 1);
-		}
-	}
-
-	@Deprecated
-	public boolean removeChild(TestCaseNode testCase){
-		return removeTestCase(testCase);
-	}
-
-	@Deprecated
-	public boolean removeChild(CategoryNode category){
-		return removeCategory(category);
-	}
-
-	@Deprecated
-	public boolean removeChild(ExpectedValueCategoryNode category){
-		return removeCategory(category);
-	}
-
-	@Deprecated
-	public boolean removeChild(ConstraintNode constraint){
-		return removeConstraint(constraint);
-	}
-
-	public ClassNode getParentClass() {
-		return (ClassNode)getParent();
-	}
-
-	public boolean validateConstraintName(String name) {
-		return super.validateNodeName(name);
+	protected void addAbstractCategory(AbstractCategoryNode category){
+		fCategories.add(category);
+		category.setParent(this);
 	}
 }

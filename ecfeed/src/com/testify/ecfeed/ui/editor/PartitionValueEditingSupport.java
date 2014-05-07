@@ -17,7 +17,7 @@ import org.eclipse.jface.viewers.EditingSupport;
 import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.swt.widgets.Display;
 
-import com.testify.ecfeed.model.CategoryNode;
+import com.testify.ecfeed.model.AbstractCategoryNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.utils.ModelUtils;
@@ -70,7 +70,7 @@ public class PartitionValueEditingSupport extends EditingSupport {
 		}
 	}
 	
-	private CategoryNode getCategory(){
+	private AbstractCategoryNode getCategory(){
 		if(fSection instanceof CategoryChildrenViewer){
 			return ((CategoryChildrenViewer)fSection).getSelectedCategory();
 		}
