@@ -332,18 +332,6 @@ public class ConstraintViewer extends TreeViewerSection {
 		fStatementButton = new Button(fStatementEditComposite, SWT.PUSH);
 		fStatementButton.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
 		fStatementSelectionListener = new ControlMenuListener(fStatementEditComposite, fStatementButton){
-//			@Override
-//			protected MenuItemListener prepareMenuItemListener(int itemCount){
-//				return new MenuItemListener(itemCount){		
-//					@Override
-//					public void widgetSelected(SelectionEvent e){
-//						setLastSelected(getIndex());
-//						MenuItem item = (MenuItem)e.getSource();
-//						fStatementButton.setText(item.getText());
-//						statementButtonModified(item.getText(), getIndex());
-//					}
-//				};
-//			}
 			@Override
 			public void menuItemSelected(int index, SelectionEvent e){
 				MenuItem item = (MenuItem)e.getSource();
@@ -370,18 +358,6 @@ public class ConstraintViewer extends TreeViewerSection {
 		fConditionButton = new Button(conditionComposite, SWT.PUSH);
 		fConditionButton.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
 		fConditionSelectionListener = new ControlMenuListener(conditionComposite, fConditionButton){
-//			@Override
-//			protected MenuItemListener prepareMenuItemListener(int itemCount){
-//				return new MenuItemListener(itemCount){		
-//					@Override
-//					public void widgetSelected(SelectionEvent e){
-//						setLastSelected(getIndex());
-//						MenuItem item = (MenuItem)e.getSource();
-//						fConditionButton.setText(item.getText());
-//						conditionButtonModified(item.getText(), getIndex());
-//					}
-//				};
-//			}
 			@Override
 			public void menuItemSelected(int index, SelectionEvent e){
 				MenuItem item = (MenuItem)e.getSource();
@@ -401,21 +377,6 @@ public class ConstraintViewer extends TreeViewerSection {
 				addData(boolList, "");
 				createMenu();
 			}
-//			@Override
-//			protected MenuItemListener prepareMenuItemListener(int itemCount){
-//				return new MenuItemListener(itemCount){	
-//					@Override
-//					public void widgetSelected(SelectionEvent e){
-//						ExpectedValueStatement statement = (ExpectedValueStatement)fSelectedStatement;
-//						MenuItem item = (MenuItem)e.getSource();
-//						if(!fConditionText.getText().equals(item.getText())){
-//							fConditionText.setText(item.getText());
-//							statement.getCondition().setValue(item.getText());
-//							modelUpdated();
-//						}
-//					}
-//				};
-//			}
 			@Override
 			public void menuItemSelected(int index, SelectionEvent e){
 				ExpectedValueStatement statement = (ExpectedValueStatement)fSelectedStatement;
