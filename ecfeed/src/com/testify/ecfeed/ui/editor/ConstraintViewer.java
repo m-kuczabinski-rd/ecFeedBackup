@@ -72,11 +72,12 @@ public class ConstraintViewer extends TreeViewerSection {
 	private BasicStatement fSelectedStatement;
 	private ConstraintNode fSelectedConstraint;
 
-	private ControlMenuListener fStatementSelectionListener;
 	private Button fStatementButton;
+	private ControlMenuListener fStatementSelectionListener;
+
 	private Combo fRelationCombo;
-	private ControlMenuListener fConditionSelectionListener;
 	private Button fConditionButton;
+	private ControlMenuListener fConditionSelectionListener;
 	private Text fConditionText;
 	private ControlMenuListener fConditionBoolMenuListener;
 	
@@ -178,8 +179,8 @@ public class ConstraintViewer extends TreeViewerSection {
 			else{
 				items.addAll(fSelectedConstraint.getMethod().getOrdinaryCategoriesNames());
 			}
-			fStatementSelectionListener.addData(items, "Arguments:");
-			fStatementSelectionListener.setMenu();
+			fStatementSelectionListener.addData(items, "---ARGUMENTS---");
+			fStatementSelectionListener.createMenu();
 			fStatementButton.setText(statement.getLeftHandName());
 		}
 
@@ -199,9 +200,9 @@ public class ConstraintViewer extends TreeViewerSection {
 			
 			fConditionSelectionListener.clearData();
 			fConditionSelectionListener.addData(statement.getCategory().getAllPartitionNames(), "");
-			fConditionSelectionListener.addData(statement.getCategory().getAllPartitionLabels(), "Labels:");
+			fConditionSelectionListener.addData(statement.getCategory().getAllPartitionLabels(), "---LABELS---");
 			fConditionButton.setText(statement.getConditionName());
-			fConditionSelectionListener.setMenu();
+			fConditionSelectionListener.createMenu();
 
 			fConditionText.setVisible(false);
 		}
@@ -210,7 +211,7 @@ public class ConstraintViewer extends TreeViewerSection {
 			fConditionLayout.topControl = fConditionText;
 			fConditionButton.setVisible(false);
 			fConditionText.setVisible(true);
-			fConditionBoolMenuListener.setDisabled(!statement.getCategory().getType().equals(Constants.TYPE_NAME_BOOLEAN));
+			fConditionBoolMenuListener.setEnabled(statement.getCategory().getType().equals(Constants.TYPE_NAME_BOOLEAN));
 			fConditionText.setEditable(!statement.getCategory().getType().equals(Constants.TYPE_NAME_BOOLEAN));		
 			fConditionText.setText(statement.getCondition().getValueString());
 		}
@@ -277,7 +278,7 @@ public class ConstraintViewer extends TreeViewerSection {
 
 	private BasicStatement createStatementFromCombo(){
 		BasicStatement statement = null;
-		if(fStatementSelectionListener.getLastSelected() < FIXED_STATEMENTS.length){
+		if(fStatementSelectionListener.getSelectedItemIndex() < FIXED_STATEMENTS.length){
 			if(fStatementButton.getText().equals(STATEMENT_TRUE)){
 				statement = new StaticStatement(true);
 			} else if(fStatementButton.getText().equals(STATEMENT_FALSE)){
@@ -331,18 +332,25 @@ public class ConstraintViewer extends TreeViewerSection {
 		fStatementButton = new Button(fStatementEditComposite, SWT.PUSH);
 		fStatementButton.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
 		fStatementSelectionListener = new ControlMenuListener(fStatementEditComposite, fStatementButton){
+//			@Override
+//			protected MenuItemListener prepareMenuItemListener(int itemCount){
+//				return new MenuItemListener(itemCount){		
+//					@Override
+//					public void widgetSelected(SelectionEvent e){
+//						setLastSelected(getIndex());
+//						MenuItem item = (MenuItem)e.getSource();
+//						fStatementButton.setText(item.getText());
+//						statementButtonModified(item.getText(), getIndex());
+//					}
+//				};
+//			}
 			@Override
-			protected MenuItemListener prepareMenuItemListener(int itemCount){
-				return new MenuItemListener(itemCount){		
-					@Override
-					public void widgetSelected(SelectionEvent e){
-						setLastSelected(getIndex());
-						MenuItem item = (MenuItem)e.getSource();
-						fStatementButton.setText(item.getText());
-						statementButtonModified(item.getText(), getIndex());
-					}
-				};
+			public void menuItemSelected(int index, SelectionEvent e){
+				MenuItem item = (MenuItem)e.getSource();
+				fStatementButton.setText(item.getText());
+				statementButtonModified(item.getText(), index);
 			}
+
 		};
 		fStatementButton.addListener(SWT.Selection, fStatementSelectionListener);
 	}
@@ -362,18 +370,25 @@ public class ConstraintViewer extends TreeViewerSection {
 		fConditionButton = new Button(conditionComposite, SWT.PUSH);
 		fConditionButton.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
 		fConditionSelectionListener = new ControlMenuListener(conditionComposite, fConditionButton){
+//			@Override
+//			protected MenuItemListener prepareMenuItemListener(int itemCount){
+//				return new MenuItemListener(itemCount){		
+//					@Override
+//					public void widgetSelected(SelectionEvent e){
+//						setLastSelected(getIndex());
+//						MenuItem item = (MenuItem)e.getSource();
+//						fConditionButton.setText(item.getText());
+//						conditionButtonModified(item.getText(), getIndex());
+//					}
+//				};
+//			}
 			@Override
-			protected MenuItemListener prepareMenuItemListener(int itemCount){
-				return new MenuItemListener(itemCount){		
-					@Override
-					public void widgetSelected(SelectionEvent e){
-						setLastSelected(getIndex());
-						MenuItem item = (MenuItem)e.getSource();
-						fConditionButton.setText(item.getText());
-						conditionButtonModified(item.getText(), getIndex());
-					}
-				};
+			public void menuItemSelected(int index, SelectionEvent e){
+				MenuItem item = (MenuItem)e.getSource();
+				fConditionButton.setText(item.getText());
+				conditionButtonModified(item.getText(), index);
 			}
+
 		};
 		fConditionButton.addListener(SWT.Selection, fConditionSelectionListener);
 		
@@ -384,23 +399,34 @@ public class ConstraintViewer extends TreeViewerSection {
 				boolList.add("true");
 				boolList.add("false");
 				addData(boolList, "");
-				setMenu();
+				createMenu();
 			}
+//			@Override
+//			protected MenuItemListener prepareMenuItemListener(int itemCount){
+//				return new MenuItemListener(itemCount){	
+//					@Override
+//					public void widgetSelected(SelectionEvent e){
+//						ExpectedValueStatement statement = (ExpectedValueStatement)fSelectedStatement;
+//						MenuItem item = (MenuItem)e.getSource();
+//						if(!fConditionText.getText().equals(item.getText())){
+//							fConditionText.setText(item.getText());
+//							statement.getCondition().setValue(item.getText());
+//							modelUpdated();
+//						}
+//					}
+//				};
+//			}
 			@Override
-			protected MenuItemListener prepareMenuItemListener(int itemCount){
-				return new MenuItemListener(itemCount){	
-					@Override
-					public void widgetSelected(SelectionEvent e){
-						ExpectedValueStatement statement = (ExpectedValueStatement)fSelectedStatement;
-						MenuItem item = (MenuItem)e.getSource();
-						if(!fConditionText.getText().equals(item.getText())){
-							fConditionText.setText(item.getText());
-							statement.getCondition().setValue(item.getText());
-							modelUpdated();
-						}
-					}
-				};
+			public void menuItemSelected(int index, SelectionEvent e){
+				ExpectedValueStatement statement = (ExpectedValueStatement)fSelectedStatement;
+				MenuItem item = (MenuItem)e.getSource();
+				if(!fConditionText.getText().equals(item.getText())){
+					fConditionText.setText(item.getText());
+					statement.getCondition().setValue(item.getText());
+					modelUpdated();
+				}
 			}
+
 		};
 		fConditionText.addListener(SWT.MouseDown, fConditionBoolMenuListener);
 		fConditionText.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));

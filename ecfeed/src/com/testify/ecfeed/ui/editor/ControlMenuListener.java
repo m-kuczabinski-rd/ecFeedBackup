@@ -17,57 +17,55 @@ import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 
 public abstract class ControlMenuListener implements Listener{
-	boolean fDisabled;
-	Composite fParent;
-	Control fControl;
-	Menu fMenu;
-	int fLastIndexSelected;
-	List<List<String>> fDataLists;
-	List<String> fListLabels;
+	private boolean fEnabled;
+	private Composite fParent;
+	private Control fControl;
+	private Menu fMenu;
+	private int fLastIndexSelected;
+	private List<List<String>> fDataLists;
+	private List<String> fListLabels;
 	
-	public abstract class MenuItemListener extends SelectionAdapter{
-		protected int mIndex;
+	private class MenuItemListener extends SelectionAdapter{
+		private int fIndex;
 
 		public MenuItemListener(int index){
-			mIndex = index;
-		}
-
-		public int getIndex(){
-			return mIndex;
+			fIndex = index;
 		}
 
 		@Override
 		public void widgetSelected(SelectionEvent e){
-
+			fLastIndexSelected = fIndex;
+			menuItemSelected(fIndex, e);
 		}
 	}
 	
-	protected abstract MenuItemListener prepareMenuItemListener(int itemCount);
-
 	public ControlMenuListener(Composite parent, Control control){
-		this.fParent = parent;
-		this.fControl = control;
-		this.fMenu = new Menu(parent);
-		this.fDataLists = new ArrayList<List<String>>();
-		this.fListLabels = new ArrayList<String>();
+		fParent = parent;
+		fControl = control;
+		fMenu = new Menu(parent);
+		fDataLists = new ArrayList<List<String>>();
+		fListLabels = new ArrayList<String>();
+		fEnabled = true;
 	}
 	
+	protected abstract void menuItemSelected(int index, SelectionEvent e);
+
 	@Override
 	public void handleEvent(Event e){
-		if(fDisabled)
-			return;
-		Point loc = fControl.getLocation();
-		Rectangle rect = fControl.getBounds();
-		Point mLoc = new Point(loc.x - 1, loc.y + rect.height);
-		fMenu.setLocation(fParent.getDisplay().map(fControl.getParent(), null, mLoc));
-		fMenu.setVisible(true);
+		if(fEnabled){
+			Point loc = fControl.getLocation();
+			Rectangle rect = fControl.getBounds();
+			Point mLoc = new Point(loc.x - 1, loc.y + rect.height);
+			fMenu.setLocation(fParent.getDisplay().map(fControl.getParent(), null, mLoc));
+			fMenu.setVisible(true);
+		}
 	}
 
 	public void addData(Collection<String> datalist, String listlabel){
 		ArrayList<String> data = new ArrayList<>();
 		data.addAll(datalist);
-		this.fDataLists.add(data);
-		this.fListLabels.add(listlabel);
+		fDataLists.add(data);
+		fListLabels.add(listlabel);
 	}
 
 	public void clearData(){
@@ -75,7 +73,7 @@ public abstract class ControlMenuListener implements Listener{
 		fListLabels.clear();
 	}
 
-	public void setMenu(){
+	public void createMenu(){
 		fMenu = new Menu(fParent);
 		MenuItem item;
 		int itemCount = 0;
@@ -98,22 +96,17 @@ public abstract class ControlMenuListener implements Listener{
 			for(String data : datalist){
 				item = new MenuItem(fMenu, SWT.PUSH);
 				item.setText(data);
-				item.addSelectionListener(prepareMenuItemListener(itemCount));
+				item.addSelectionListener(new MenuItemListener(itemCount));
 				itemCount++;
 			}
 		}
 	}
 	
-	public void setDisabled(boolean disabled){
-		fDisabled = disabled;
+	public void setEnabled(boolean enabled){
+		fEnabled = enabled;
 	}
 
-	public void setLastSelected(int index){
-		if((index > -1) && (index < fMenu.getItemCount()))
-			fLastIndexSelected = index;
-	}
-	
-	public int getLastSelected(){
+	public int getSelectedItemIndex(){
 		return fLastIndexSelected;
 	}
 }
