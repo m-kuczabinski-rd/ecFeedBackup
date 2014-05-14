@@ -92,4 +92,21 @@ public class ClassUtils {
 	public static Object parseEnumValue(String valueString, String typeName, ClassLoader loader) {
 		return enumPartitionValue(valueString, typeName, loader);
 	}
+	
+	public static boolean isClassImplemented(String className) {
+		boolean implemented = false;
+		try {
+			Class<?> typeClass = getClassLoader(true, null).loadClass(className);
+			if (typeClass != null) {
+				implemented = true;
+			}
+		} catch (Throwable e) {
+			e.printStackTrace();
+		}
+		return implemented;
+	}
+	
+	public static boolean isEnumImplemented(String valueString, String typeName) {
+		return (enumPartitionValue(valueString, typeName, getClassLoader(true, null)) != null);
+	}
 }

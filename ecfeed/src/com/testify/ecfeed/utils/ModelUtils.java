@@ -30,6 +30,7 @@ import com.testify.ecfeed.model.ExpectedCategoryNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.PartitionedCategoryNode;
+import com.testify.ecfeed.model.TestCaseNode;
 
 public class ModelUtils {
 	
@@ -414,5 +415,107 @@ public class ModelUtils {
 		}catch(NumberFormatException|IndexOutOfBoundsException e){
 			return null;
 		}
+	}
+	
+	public static boolean isClassImplemented(ClassNode node) {
+		return ClassUtils.isClassImplemented(node.getQualifiedName());
+	}
+	
+	public static boolean isPartitionImplemented(PartitionNode node) {
+		boolean implemented = true;
+		
+		Object value = node.getValue();
+		if (value != null) {
+			if (value.getClass().isEnum()) {
+				if (!ClassUtils.isEnumImplemented(((Enum<?>)value).name(), value.getClass().getName())) {
+					implemented = false;
+				}
+			}
+		}
+		
+		return implemented;
+	}
+	
+	public static boolean isTestCaseImplemented(TestCaseNode node) {
+		return allPartitionsImplemented(node.getTestData());
+	}
+	
+	public static boolean isTestCasePartiallyImplemented(TestCaseNode node) {
+		return anyPartitionImplemented(node.getTestData());
+	}
+	
+	private static boolean allPartitionsImplemented(List<PartitionNode> partitions) {
+		boolean implemented = false;
+		
+		if (partitions.size() > 0) {
+			implemented = true;
+		}
+		
+		for (PartitionNode partition : partitions) {
+			implemented = isPartitionImplemented(partition);
+			if (implemented == false) {
+				break;
+			}
+		}
+		
+		return implemented;		
+	}
+	
+	private static boolean anyPartitionImplemented(List<PartitionNode> partitions) {
+		boolean implemented = false;
+		
+		for (PartitionNode partition : partitions) {
+			implemented = isPartitionImplemented(partition);
+			if (implemented == true) {
+				break;
+			}
+		}
+		
+		return implemented;		
+	}
+	
+	public static boolean isExpectedCategoryImplemented(ExpectedCategoryNode node) {
+		return ModelUtils.isPartitionImplemented(node.getDefaultValuePartition());
+	}
+	
+	public static boolean isPartitionedCategoryImplemented(PartitionedCategoryNode node) {
+		return allPartitionsImplemented(node.getPartitions());
+	}
+	
+	public static boolean isPartitionedCategoryPartiallyImplemented(PartitionedCategoryNode node) {
+		return anyPartitionImplemented(node.getPartitions());
+	}
+	
+	public static boolean isMethodImplemented(MethodNode methodModel) {
+		boolean implemented = false;
+		
+		try {
+			Class<?> testClass = ClassUtils.getClassLoader(true, null).loadClass(methodModel.getClassNode().getQualifiedName());
+			for (Method method : testClass.getMethods()){
+				List<String> argTypes = getArgTypes(method);
+				implemented = (methodModel.getClassNode().getMethod(method.getName(), argTypes) == methodModel);
+				if (implemented == true) {
+					break;
+				}
+			}
+		} catch (Throwable e) {
+			e.printStackTrace();
+		}
+		
+		return implemented;
+	}
+
+	private static List<String> getArgTypes(Method method) {
+		List<String> argTypes = new ArrayList<String>();
+		
+		for (Class<?> arg : method.getParameterTypes()){
+			if (arg.isEnum()) {
+				argTypes.add(arg.getCanonicalName());				
+			} else {
+				argTypes.add(arg.getSimpleName());	
+			}
+		}
+		
+		return argTypes;
 	}
 }
