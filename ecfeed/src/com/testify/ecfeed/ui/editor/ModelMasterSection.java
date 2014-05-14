@@ -28,7 +28,6 @@ import org.eclipse.ui.forms.AbstractFormPart;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Section;
 
-import com.testify.ecfeed.model.AbstractCategoryNode;
 import com.testify.ecfeed.model.IGenericNode;
 import com.testify.ecfeed.model.IModelWrapper;
 import com.testify.ecfeed.model.RootNode;
@@ -73,7 +72,7 @@ public class ModelMasterSection extends TreeViewerSection{
 
 		private void enableSortButtons(IGenericNode selectedElement) {
 			boolean enabled = true;
-			if((selectedElement instanceof RootNode) || (selectedElement instanceof AbstractCategoryNode)){
+			if (selectedElement instanceof RootNode) {
 				enabled = false;
 			}
 			fMoveUpButton.setEnabled(enabled);
