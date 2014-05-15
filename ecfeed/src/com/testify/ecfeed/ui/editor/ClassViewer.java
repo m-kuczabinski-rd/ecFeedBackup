@@ -91,7 +91,7 @@ public class ClassViewer extends CheckboxTableViewerSection {
 		super(parent.getMainComposite(), toolkit, STYLE, parent);
 		
 		setText("Classes");
-		addButton("Add test class..", new AddClassAdapter());
+		addButton("Add implemented class", new AddClassAdapter());
 		addButton("Remove selected", new RemoveClassesAdapter());
 		addDoubleClickListener(new SelectNodeDoubleClickListener(parent.getMasterSection()));
 	}
