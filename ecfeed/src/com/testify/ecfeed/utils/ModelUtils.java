@@ -25,6 +25,7 @@ import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.core.Signature;
 
+import com.testify.ecfeed.model.AbstractCategoryNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.ExpectedCategoryNode;
 import com.testify.ecfeed.model.MethodNode;
@@ -418,7 +419,16 @@ public class ModelUtils {
 	}
 	
 	public static boolean isClassImplemented(ClassNode node) {
-		return ClassUtils.isClassImplemented(node.getQualifiedName());
+		boolean implemented = false;
+		try {
+			Class<?> typeClass = ClassUtils.getClassLoader(true, null).loadClass(node.getQualifiedName());
+			if (typeClass != null) {
+				implemented = true;
+			}
+		} catch (Throwable e) {
+			e.printStackTrace();
+		}
+		return implemented;
 	}
 	
 	public static boolean isPartitionImplemented(PartitionNode node) {
@@ -427,7 +437,8 @@ public class ModelUtils {
 		Object value = node.getValue();
 		if (value != null) {
 			if (value.getClass().isEnum()) {
-				if (!ClassUtils.isEnumImplemented(((Enum<?>)value).name(), value.getClass().getName())) {
+				ClassLoader loader = ClassUtils.getClassLoader(true, null);
+				if (ClassUtils.enumPartitionValue(((Enum<?>)value).name(), value.getClass().getName(), loader) == null) {
 					implemented = false;
 				}
 			}
@@ -490,12 +501,31 @@ public class ModelUtils {
 		boolean implemented = false;
 		
 		try {
+			IType type = getTypeObject(methodModel.getClassNode().getQualifiedName());
 			Class<?> testClass = ClassUtils.getClassLoader(true, null).loadClass(methodModel.getClassNode().getQualifiedName());
-			for (Method method : testClass.getMethods()){
-				List<String> argTypes = getArgTypes(method);
-				implemented = (methodModel.getClassNode().getMethod(method.getName(), argTypes) == methodModel);
-				if (implemented == true) {
-					break;
+			if ((type != null) && (testClass != null)) {
+				for (IMethod method : type.getMethods()){
+					if (method.getElementName().equals(methodModel.getName())) {
+						List<String> argTypes = getArgTypes(method, testClass);
+						List<String> paramNames = getParamNames(method);
+						if (methodModel.getCategoriesTypes().equals(argTypes) &&
+								methodModel.getCategoriesNames().equals(paramNames)) {
+							implemented = true;
+							
+							List<AbstractCategoryNode> categories = methodModel.getCategories();
+							for (int i = 0; i < categories.size(); ++i) {
+								if (categories.get(i) instanceof ExpectedCategoryNode) {
+									ILocalVariable parameter = method.getParameters()[i];
+									IAnnotation[] annotations = parameter.getAnnotations();
+									if ((annotations.length < 1) || !annotations[0].getElementName().equals("expected")) {
+										implemented = false;
+										break;
+									}
+								}
+							}
+							break;
+						}
+					}
 				}
 			}
 		} catch (Throwable e) {
@@ -505,15 +535,29 @@ public class ModelUtils {
 		return implemented;
 	}
 
-	private static List<String> getArgTypes(Method method) {
+	private static List<String> getArgTypes(IMethod method, Class<?> testClass) {
 		List<String> argTypes = new ArrayList<String>();
 		
-		for (Class<?> arg : method.getParameterTypes()){
-			if (arg.isEnum()) {
-				argTypes.add(arg.getCanonicalName());				
-			} else {
-				argTypes.add(arg.getSimpleName());	
+		try {
+			for (ILocalVariable arg : method.getParameters()){
+				argTypes.add(getTypeName(arg, method, testClass));
 			}
+		} catch (Throwable e) {
+			e.printStackTrace();
+		}
+		
+		return argTypes;
+	}
+	
+	private static List<String> getParamNames(IMethod method) {
+		List<String> argTypes = new ArrayList<String>();
+		
+		try {
+			for (ILocalVariable arg : method.getParameters()){
+				argTypes.add(arg.getElementName());
+			}
+		} catch (Throwable e) {
+			e.printStackTrace();
 		}
 		
 		return argTypes;
