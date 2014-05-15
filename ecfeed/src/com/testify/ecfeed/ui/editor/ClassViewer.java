@@ -23,6 +23,7 @@ import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.utils.ModelUtils;
+import com.testify.ecfeed.ui.dialogs.NewTestClassDialog;
 import com.testify.ecfeed.ui.dialogs.TestClassSelectionDialog;
 
 public class ClassViewer extends CheckboxTableViewerSection {
@@ -30,7 +31,7 @@ public class ClassViewer extends CheckboxTableViewerSection {
 
 	private RootNode fModel;
 
-	private class AddClassAdapter extends SelectionAdapter {
+	private class AddImplementedClassAdapter extends SelectionAdapter {
 
 		@Override
 		public void widgetSelected(SelectionEvent e) {
@@ -86,12 +87,47 @@ public class ClassViewer extends CheckboxTableViewerSection {
 			}
 		}
 	}
+	
+	private class AddNewClassAdapter extends SelectionAdapter {
+
+		@Override
+		public void widgetSelected(SelectionEvent e) {
+			String className = getClassName();
+
+			if ((fModel != null) && (className != null)) {
+				addClass(className, fModel);
+			}
+		}
+
+		private void addClass(String className, RootNode model){
+			if (model.getClassModel(className) == null){
+				ClassNode classNode = new ClassNode(className);
+				model.addClass(classNode);
+				modelUpdated();
+			} else {
+				MessageDialog.openError(getActiveShell(), 
+						Messages.DIALOG_CLASS_EXISTS_TITLE,
+						Messages.DIALOG_CLASS_EXISTS_MESSAGE);
+			}
+		}
+
+		private String getClassName() {
+			NewTestClassDialog dialog = new NewTestClassDialog(getActiveShell());
+
+			if (dialog.open() == IDialogConstants.OK_ID) {
+				return dialog.getNewClassName();
+			}
+			
+			return null;
+		}
+	}
 
 	public ClassViewer(BasicDetailsPage parent, FormToolkit toolkit) {
 		super(parent.getMainComposite(), toolkit, STYLE, parent);
 		
 		setText("Classes");
-		addButton("Add implemented class", new AddClassAdapter());
+		addButton("Add implemented class", new AddImplementedClassAdapter());
+		addButton("New test class", new AddNewClassAdapter());
 		addButton("Remove selected", new RemoveClassesAdapter());
 		addDoubleClickListener(new SelectNodeDoubleClickListener(parent.getMasterSection()));
 	}
