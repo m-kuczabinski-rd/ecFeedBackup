@@ -117,4 +117,5 @@ public class Messages {
 	}
 	public static final String DIALOG_EXECUTE_ONLINE_TITLE = "Execute online test";
 	public static final String DIALOG_EXECUTE_ONLINE_MESSAGE = "Setup the test data generator and select which constraints and partitions shall be considered for generating test cases";
+	public static final String DIALOG_TEST_CLASS_NAME_ERROR_MESSAGE = "Name of a test class must be between 1 and 64 characters long.";
 }
