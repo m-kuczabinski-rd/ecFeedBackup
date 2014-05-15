@@ -14,7 +14,6 @@ package com.testify.ecfeed.ui.editor;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.ui.forms.widgets.FormToolkit;
@@ -99,13 +98,13 @@ public class ClassViewer extends CheckboxTableViewerSection {
 	
 	@Override
 	protected void createTableColumns(){
-		addColumn("Class", 150, new ColumnLabelProvider(){
+		addColumn("Class", 150, new ClassViewerColumnLabelProvider(){
 			@Override
 			public String getText(Object element){
 				return ((ClassNode)element).getLocalName();
 			}
 		});
-		addColumn("Qualified name", 150, new ColumnLabelProvider(){
+		addColumn("Qualified name", 150, new ClassViewerColumnLabelProvider(){
 			@Override
 			public String getText(Object element){
 				return ((ClassNode)element).getQualifiedName();
