@@ -30,4 +30,6 @@ public interface ColorConstants {
 	RGB ESCAPED_CHAR = new RGB(128, 128, 0);
 	RGB CDATA = new RGB(0, 128, 128);
 	RGB CDATA_TEXT = new RGB(255, 0, 0);
+	
+	RGB CLASS_IMPLEMENTED = new RGB(0, 100, 0);
 }
