@@ -16,7 +16,7 @@ public class ClassViewerColumnLabelProvider extends ColumnLabelProvider {
 	public Color getForeground(Object element) {
 		if (element instanceof ClassNode) {
 			if (ModelUtils.isClassImplemented((ClassNode)element)) {
-				return fColorManager.getColor(ColorConstants.CLASS_IMPLEMENTED);
+				return fColorManager.getColor(ColorConstants.ITEM_IMPLEMENTED);
 			}
 		}
 		return null;

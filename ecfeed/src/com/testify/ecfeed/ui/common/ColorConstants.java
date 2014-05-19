@@ -31,5 +31,5 @@ public interface ColorConstants {
 	RGB CDATA = new RGB(0, 128, 128);
 	RGB CDATA_TEXT = new RGB(255, 0, 0);
 	
-	RGB CLASS_IMPLEMENTED = new RGB(0, 100, 0);
+	RGB ITEM_IMPLEMENTED = new RGB(0, 100, 0);
 }
