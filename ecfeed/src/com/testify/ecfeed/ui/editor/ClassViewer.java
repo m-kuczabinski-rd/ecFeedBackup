@@ -24,7 +24,7 @@ import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.utils.ModelUtils;
-import com.testify.ecfeed.ui.dialogs.NewTestClassDialog;
+import com.testify.ecfeed.ui.dialogs.EditTestItemDialog;
 import com.testify.ecfeed.ui.dialogs.TestClassSelectionDialog;
 
 public class ClassViewer extends CheckboxTableViewerSection {
@@ -113,7 +113,8 @@ public class ClassViewer extends CheckboxTableViewerSection {
 		}
 
 		private String getClassName() {
-			NewTestClassDialog dialog = new NewTestClassDialog(getActiveShell());
+			EditTestItemDialog dialog = new EditTestItemDialog(getActiveShell());
+			dialog.setTitle("New test class");
 
 			if (dialog.open() == IDialogConstants.OK_ID) {
 				return dialog.getNewClassName();

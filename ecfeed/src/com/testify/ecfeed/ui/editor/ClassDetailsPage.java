@@ -22,14 +22,12 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Shell;
 
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.ui.common.Messages;
-import com.testify.ecfeed.ui.dialogs.NewTestClassDialog;
+import com.testify.ecfeed.ui.dialogs.EditTestItemDialog;
 import com.testify.ecfeed.ui.dialogs.TestClassSelectionDialog;
 import com.testify.ecfeed.utils.ModelUtils;
 
@@ -86,21 +84,10 @@ public class ClassDetailsPage extends BasicDetailsPage {
 			}
 		}
 		
-		private class ChangeTestClassDialog extends NewTestClassDialog {
-			public ChangeTestClassDialog(Shell parentShell) {
-				super(parentShell);
-			}
-			@Override
-			protected Control createDialogArea(Composite parent) {
-				Control area = super.createDialogArea(parent);
-				setTitle("Change test class");
-				return area;
-			}
-		}
-		
 		private String selectClass() {	
-			ChangeTestClassDialog dialog = new ChangeTestClassDialog(Display.getDefault().getActiveShell());
+			EditTestItemDialog dialog = new EditTestItemDialog(Display.getDefault().getActiveShell());
 			dialog.setInputText(fSelectedClass.getQualifiedName());
+			dialog.setTitle("Change test class");
 			
 			if (dialog.open() == IDialogConstants.OK_ID) {
 				return dialog.getNewClassName();

@@ -1,12 +1,12 @@
 /*******************************************************************************
- * Copyright (c) 2013 Testify AS.                                                
+ * Copyright (c) 2014 Testify AS.                                                
  * All rights reserved. This program and the accompanying materials              
  * are made available under the terms of the Eclipse Public License v1.0         
  * which accompanies this distribution, and is available at                      
  * http://www.eclipse.org/legal/epl-v10.html                                     
  *                                                                               
  * Contributors:                                                                 
- *     Patryk Chamuczynski (p.chamuczynski(at)radytek.com) - initial implementation
+ *     Mariusz Strozynski (m.strozynski(at)radytek.com) - initial implementation
  ******************************************************************************/
 
 package com.testify.ecfeed.ui.dialogs;
@@ -28,16 +28,17 @@ import org.eclipse.swt.widgets.Text;
 
 import com.testify.ecfeed.ui.common.Messages;
 
-public class NewTestClassDialog extends TitleAreaDialog {
+public class EditTestItemDialog extends TitleAreaDialog {
 	private Text fNewClassNameText;
 	private String fNewClassName;
 	private Button fOkButton;
+	private String fTitle;
 
 	/**
 	 * Create the dialog.
 	 * @param parentShell
 	 */
-	public NewTestClassDialog(Shell parentShell) {
+	public EditTestItemDialog(Shell parentShell) {
 		super(parentShell);
 		setHelpAvailable(false);
 	}
@@ -48,7 +49,9 @@ public class NewTestClassDialog extends TitleAreaDialog {
 	 */
 	@Override
 	protected Control createDialogArea(Composite parent) {
-		setTitle("New test class");
+		if (fTitle != null) {
+			super.setTitle(fTitle);
+		}
 		Composite area = (Composite) super.createDialogArea(parent);
 		Composite container = new Composite(area, SWT.NONE);
 		container.setLayout(new GridLayout(1, false));
@@ -116,5 +119,9 @@ public class NewTestClassDialog extends TitleAreaDialog {
 	
 	public void setInputText(String text) {
 		fNewClassName = text;
+	}
+	
+	public void setTitle(String text) {
+		fTitle = text;
 	}
 }
