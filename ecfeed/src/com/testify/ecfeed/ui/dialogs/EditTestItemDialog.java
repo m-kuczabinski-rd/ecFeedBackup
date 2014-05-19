@@ -29,8 +29,8 @@ import org.eclipse.swt.widgets.Text;
 import com.testify.ecfeed.ui.common.Messages;
 
 public class EditTestItemDialog extends TitleAreaDialog {
-	private Text fNewClassNameText;
-	private String fNewClassName;
+	private Text fNewNameText;
+	private String fNewName;
 	private Button fOkButton;
 	private String fEditorTitle;
 	private String fTitle;
@@ -63,14 +63,14 @@ public class EditTestItemDialog extends TitleAreaDialog {
 			lblEnterNewClassName.setText(fEditorTitle);
 		}
 		
-		fNewClassNameText = new Text(container, SWT.BORDER);
-		fNewClassNameText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		fNewNameText = new Text(container, SWT.BORDER);
+		fNewNameText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		
-		if (fNewClassName != null) {
-			fNewClassNameText.setText(fNewClassName);
+		if (fNewName != null) {
+			fNewNameText.setText(fNewName);
 		}
 		
-		fNewClassNameText.addModifyListener(new ModifyListener() {
+		fNewNameText.addModifyListener(new ModifyListener() {
 			@Override
 			public void modifyText(ModifyEvent e) {
 				verifyInput();
@@ -81,7 +81,7 @@ public class EditTestItemDialog extends TitleAreaDialog {
 	}
 
 	private void verifyInput() {
-		if ((fNewClassNameText.getText().length() == 0) || fNewClassNameText.getText().length() > 64){
+		if ((fNewNameText.getText().length() == 0) || fNewNameText.getText().length() > 64){
 			setErrorMessage(Messages.DIALOG_TEST_CLASS_NAME_ERROR_MESSAGE);
 			fOkButton.setEnabled(false);
 		}
@@ -104,7 +104,7 @@ public class EditTestItemDialog extends TitleAreaDialog {
 
 	@Override
 	public void okPressed(){
-		fNewClassName = fNewClassNameText.getText();
+		fNewName = fNewNameText.getText();
 		super.okPressed();
 	}
 	
@@ -116,12 +116,12 @@ public class EditTestItemDialog extends TitleAreaDialog {
 		return new Point(450, 250);
 	}
 	
-	public String getNewClassName(){
-		return fNewClassName;
+	public String getNewName(){
+		return fNewName;
 	}
 	
 	public void setInputText(String text) {
-		fNewClassName = text;
+		fNewName = text;
 	}
 	
 	public void setTitle(String text) {

@@ -118,7 +118,7 @@ public class ClassViewer extends CheckboxTableViewerSection {
 			dialog.setEditorTitle("Enter new test class qualified name");
 
 			if (dialog.open() == IDialogConstants.OK_ID) {
-				return dialog.getNewClassName();
+				return dialog.getNewName();
 			}
 			
 			return null;

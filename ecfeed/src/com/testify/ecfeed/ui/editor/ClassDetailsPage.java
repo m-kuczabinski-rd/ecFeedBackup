@@ -91,7 +91,7 @@ public class ClassDetailsPage extends BasicDetailsPage {
 			dialog.setEditorTitle("Enter test class qualified name");
 			
 			if (dialog.open() == IDialogConstants.OK_ID) {
-				return dialog.getNewClassName();
+				return dialog.getNewName();
 			}
 			
 			return null;
