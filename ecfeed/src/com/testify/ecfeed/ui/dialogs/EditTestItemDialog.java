@@ -32,6 +32,7 @@ public class EditTestItemDialog extends TitleAreaDialog {
 	private Text fNewClassNameText;
 	private String fNewClassName;
 	private Button fOkButton;
+	private String fEditorTitle;
 	private String fTitle;
 
 	/**
@@ -58,7 +59,9 @@ public class EditTestItemDialog extends TitleAreaDialog {
 		container.setLayoutData(new GridData(GridData.FILL_BOTH));
 		
 		Label lblEnterNewClassName = new Label(container, SWT.NONE);
-		lblEnterNewClassName.setText("Enter new test class qualified name");
+		if (fEditorTitle != null) {
+			lblEnterNewClassName.setText(fEditorTitle);
+		}
 		
 		fNewClassNameText = new Text(container, SWT.BORDER);
 		fNewClassNameText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
@@ -123,5 +126,9 @@ public class EditTestItemDialog extends TitleAreaDialog {
 	
 	public void setTitle(String text) {
 		fTitle = text;
+	}
+	
+	public void setEditorTitle(String text) {
+		fEditorTitle = text;
 	}
 }

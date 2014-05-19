@@ -88,6 +88,7 @@ public class ClassDetailsPage extends BasicDetailsPage {
 			EditTestItemDialog dialog = new EditTestItemDialog(Display.getDefault().getActiveShell());
 			dialog.setInputText(fSelectedClass.getQualifiedName());
 			dialog.setTitle("Change test class");
+			dialog.setEditorTitle("Enter test class qualified name");
 			
 			if (dialog.open() == IDialogConstants.OK_ID) {
 				return dialog.getNewClassName();
