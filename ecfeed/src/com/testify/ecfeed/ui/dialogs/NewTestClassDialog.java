@@ -59,13 +59,18 @@ public class NewTestClassDialog extends TitleAreaDialog {
 		
 		fNewClassNameText = new Text(container, SWT.BORDER);
 		fNewClassNameText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		
+		if (fNewClassName != null) {
+			fNewClassNameText.setText(fNewClassName);
+		}
+		
 		fNewClassNameText.addModifyListener(new ModifyListener() {
 			@Override
 			public void modifyText(ModifyEvent e) {
 				verifyInput();
 			}
 		});
-
+		
 		return area;
 	}
 
@@ -107,5 +112,9 @@ public class NewTestClassDialog extends TitleAreaDialog {
 	
 	public String getNewClassName(){
 		return fNewClassName;
+	}
+	
+	public void setInputText(String text) {
+		fNewClassName = text;
 	}
 }
