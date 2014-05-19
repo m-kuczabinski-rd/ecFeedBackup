@@ -73,8 +73,10 @@ public class MethodsViewer extends CheckboxTableViewerSection {
 		@Override
 		public Color getForeground(Object element){
 			MethodNode method = (MethodNode)element;
-			if(methodObsolete(method)){
+			if (methodObsolete(method)) {
 				return fColorManager.getColor(ColorConstants.OBSOLETE_METHOD);
+			} else if (ModelUtils.isMethodImplemented(method)) {
+				return fColorManager.getColor(ColorConstants.ITEM_IMPLEMENTED);
 			}
 			return null;
 		}
