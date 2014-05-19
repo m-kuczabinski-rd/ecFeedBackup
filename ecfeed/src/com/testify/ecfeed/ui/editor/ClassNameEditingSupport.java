@@ -65,19 +65,21 @@ public class ClassNameEditingSupport extends EditingSupport{
 		String newQualifiedName = newName;
 		ClassNode classNode = (ClassNode)element;
 		
-		if (!qualifiedName) {
-			int lastDotIndex = classNode.getName().lastIndexOf('.');
-			newQualifiedName = (lastDotIndex == -1) ? newName : classNode.getName().substring(0, lastDotIndex + 1) + newName;
-		}
-		
-		if (!classNode.getName().equals(newQualifiedName)) {
-			if (classNode.getRoot().getClassModel(newQualifiedName) == null) {
-				classNode.setName(newQualifiedName);
-				fSection.modelUpdated();
-			} else {
-				MessageDialog.openError(Display.getCurrent().getActiveShell(), 
-						Messages.DIALOG_CLASS_EXISTS_TITLE,
-						Messages.DIALOG_CLASS_EXISTS_MESSAGE);
+		if (newName.length() > 0) {
+			if (!qualifiedName) {
+				int lastDotIndex = classNode.getName().lastIndexOf('.');
+				newQualifiedName = (lastDotIndex == -1) ? newName : classNode.getName().substring(0, lastDotIndex + 1) + newName;
+			}
+			
+			if (!classNode.getName().equals(newQualifiedName)) {
+				if (classNode.getRoot().getClassModel(newQualifiedName) == null) {
+					classNode.setName(newQualifiedName);
+					fSection.modelUpdated();
+				} else {
+					MessageDialog.openError(Display.getCurrent().getActiveShell(), 
+							Messages.DIALOG_CLASS_EXISTS_TITLE,
+							Messages.DIALOG_CLASS_EXISTS_MESSAGE);
+				}
 			}
 		}
 	}
