@@ -22,11 +22,14 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Shell;
 
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.ui.common.Messages;
+import com.testify.ecfeed.ui.dialogs.NewTestClassDialog;
 import com.testify.ecfeed.ui.dialogs.TestClassSelectionDialog;
 import com.testify.ecfeed.utils.ModelUtils;
 
@@ -66,6 +69,47 @@ public class ClassDetailsPage extends BasicDetailsPage {
 		}
 	}
 	
+	private class ChangeClassSelectionAdapter extends SelectionAdapter{
+		@Override
+		public void widgetSelected(SelectionEvent e){
+			String className = selectClass();
+
+			if (className != null){
+				if (fSelectedClass.getRoot().getClassModel(className) == null){
+					fSelectedClass.setName(className);
+					modelUpdated(null);
+				} else {
+					MessageDialog.openInformation(getActiveShell(), 
+						Messages.DIALOG_CLASS_EXISTS_TITLE, 
+						Messages.DIALOG_CLASS_EXISTS_MESSAGE);
+				}
+			}
+		}
+		
+		private class ChangeTestClassDialog extends NewTestClassDialog {
+			public ChangeTestClassDialog(Shell parentShell) {
+				super(parentShell);
+			}
+			@Override
+			protected Control createDialogArea(Composite parent) {
+				Control area = super.createDialogArea(parent);
+				setTitle("Change test class");
+				return area;
+			}
+		}
+		
+		private String selectClass() {	
+			ChangeTestClassDialog dialog = new ChangeTestClassDialog(Display.getDefault().getActiveShell());
+			dialog.setInputText(fSelectedClass.getQualifiedName());
+			
+			if (dialog.open() == IDialogConstants.OK_ID) {
+				return dialog.getNewClassName();
+			}
+			
+			return null;
+		}
+	}
+	
 	public ClassDetailsPage(ModelMasterSection masterSection) {
 		super(masterSection);
 	}
@@ -97,11 +141,13 @@ public class ClassDetailsPage extends BasicDetailsPage {
 	
 	private void createQualifiedNameComposite(Composite parent) {
 		Composite composite = getToolkit().createComposite(parent);
-		composite.setLayout(new GridLayout(3, false));
+		composite.setLayout(new GridLayout(4, false));
 		composite.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
-		getToolkit().createLabel(composite, "Qualified name: ");
+		getToolkit().createLabel(composite, "Class path: ");
 		fQualifiedNameLabel = getToolkit().createLabel(composite, "");
 		fQualifiedNameLabel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
+		Button changeButton = getToolkit().createButton(composite, "Change", SWT.NONE);
+		changeButton.addSelectionListener(new ChangeClassSelectionAdapter());
 		Button button = getToolkit().createButton(composite, "Reassign", SWT.NONE);
 		button.addSelectionListener(new ReassignClassSelectionAdapter());
 	}
