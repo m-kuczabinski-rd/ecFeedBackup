@@ -28,6 +28,7 @@ import org.eclipse.swt.widgets.Label;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.dialogs.TestClassSelectionDialog;
+import com.testify.ecfeed.utils.ModelUtils;
 
 public class ClassDetailsPage extends BasicDetailsPage {
 
@@ -111,7 +112,11 @@ public class ClassDetailsPage extends BasicDetailsPage {
 			fSelectedClass = (ClassNode)getSelectedElement();
 		}
 		if(fSelectedClass != null){
-			getMainSection().setText(fSelectedClass.getLocalName());
+			String title = fSelectedClass.getLocalName();
+			if (ModelUtils.isClassImplemented(fSelectedClass)) {
+				title += " [implemented]";
+			}
+			getMainSection().setText(title);
 			fQualifiedNameLabel.setText(fSelectedClass.getQualifiedName());
 			fMethodsSection.setInput(fSelectedClass);
 			fOtherMethodsSection.setInput(fSelectedClass);
