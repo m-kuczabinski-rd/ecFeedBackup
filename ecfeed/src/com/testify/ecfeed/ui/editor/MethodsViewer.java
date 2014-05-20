@@ -71,15 +71,9 @@ public class MethodsViewer extends CheckboxTableViewerSection {
 
 		private void addMethod(String methodName, ClassNode classNode){
 			if (Pattern.matches("\\w+", methodName)) {
-				if (getMethod(methodName, classNode) == null){
-					MethodNode methodNode = new MethodNode(methodName);
-					classNode.addMethod(methodNode);
-					modelUpdated();
-				} else {
-					MessageDialog.openError(getActiveShell(),
-							Messages.DIALOG_METHOD_EXISTS_TITLE,
-							Messages.DIALOG_METHOD_EXISTS_MESSAGE);
-				}
+				MethodNode methodNode = new MethodNode(methodName);
+				classNode.addMethod(methodNode);
+				modelUpdated();
 			} else {
 				MessageDialog.openError(getActiveShell(),
 						Messages.DIALOG_METHOD_INVALID_NAME_TITLE,
