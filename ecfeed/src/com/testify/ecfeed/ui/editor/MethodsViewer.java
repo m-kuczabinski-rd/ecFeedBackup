@@ -92,15 +92,6 @@ public class MethodsViewer extends CheckboxTableViewerSection {
 
 			return null;
 		}
-
-		private MethodNode getMethod(String methodName, ClassNode classNode) {
-			for (MethodNode method : classNode.getMethods()) {
-				if (method.getName().equals(methodName)) {
-					return method;
-				}
-			}
-			return null;
-		}
 	}
 
 	private class MethodsLabelProvider extends ColumnLabelProvider{
