@@ -119,4 +119,8 @@ public class Messages {
 	public static final String DIALOG_EXECUTE_ONLINE_MESSAGE = "Setup the test data generator and select which constraints and partitions shall be considered for generating test cases";
 	public static final String DIALOG_TEST_CLASS_NAME_ERROR_MESSAGE = "Name of a test class must be between 1 and 64 characters long.";
 	public static final String DIALOG_RENAME_IMPLEMENTED_CLASS_MESSAGE = "You are about to rename implemented class. Continue?";
+	public static final String DIALOG_METHOD_EXISTS_TITLE = "Method exists";
+	public static final String DIALOG_METHOD_EXISTS_MESSAGE = "Entered method is already contained in the class.";
+	public static final String DIALOG_METHOD_INVALID_NAME_TITLE = "Invalid method name";
+	public static final String DIALOG_METHOD_INVALID_NAME_MESSAGE = "Entered method name is not valid.";
 }

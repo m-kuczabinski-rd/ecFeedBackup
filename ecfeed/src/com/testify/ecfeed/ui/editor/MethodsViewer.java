@@ -13,7 +13,9 @@ package com.testify.ecfeed.ui.editor;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
+import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -27,6 +29,7 @@ import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.ui.common.ColorConstants;
 import com.testify.ecfeed.ui.common.ColorManager;
 import com.testify.ecfeed.ui.common.Messages;
+import com.testify.ecfeed.ui.dialogs.EditTestItemDialog;
 import com.testify.ecfeed.utils.ModelUtils;
 
 public class MethodsViewer extends CheckboxTableViewerSection {
@@ -55,6 +58,57 @@ public class MethodsViewer extends CheckboxTableViewerSection {
 		}
 	}
 	
+	private class AddNewMethodAdapter extends SelectionAdapter {
+
+		@Override
+		public void widgetSelected(SelectionEvent e) {
+			String newName = getMethodName();
+
+			if ((newName != null) && (fSelectedClass != null)) {
+				addMethod(newName, fSelectedClass);
+			}
+		}
+
+		private void addMethod(String methodName, ClassNode classNode){
+			if (Pattern.matches("\\w+", methodName)) {
+				if (getMethod(methodName, classNode) == null){
+					MethodNode methodNode = new MethodNode(methodName);
+					classNode.addMethod(methodNode);
+					modelUpdated();
+				} else {
+					MessageDialog.openError(getActiveShell(),
+							Messages.DIALOG_METHOD_EXISTS_TITLE,
+							Messages.DIALOG_METHOD_EXISTS_MESSAGE);
+				}
+			} else {
+				MessageDialog.openError(getActiveShell(),
+						Messages.DIALOG_METHOD_INVALID_NAME_TITLE,
+						Messages.DIALOG_METHOD_INVALID_NAME_MESSAGE);
+			}
+		}
+
+		private String getMethodName() {
+			EditTestItemDialog dialog = new EditTestItemDialog(getActiveShell());
+			dialog.setTitle("Add new method");
+			dialog.setEditorTitle("Enter new parameterized method name");
+
+			if (dialog.open() == IDialogConstants.OK_ID) {
+				return dialog.getNewName();
+			}
+
+			return null;
+		}
+
+		private MethodNode getMethod(String methodName, ClassNode classNode) {
+			for (MethodNode method : classNode.getMethods()) {
+				if (method.getName().equals(methodName)) {
+					return method;
+				}
+			}
+			return null;
+		}
+	}
+
 	private class MethodsLabelProvider extends ColumnLabelProvider{
 		public MethodsLabelProvider() {
 			fColorManager = new ColorManager();
@@ -103,6 +157,7 @@ public class MethodsViewer extends CheckboxTableViewerSection {
 		super(parent.getMainComposite(), toolkit, STYLE, parent);
 
 		setText("Methods");
+		addButton("Add new method", new AddNewMethodAdapter());
 		addButton("Remove selected", new RemoveSelectedMethodsAdapter());
 		addDoubleClickListener(new SelectNodeDoubleClickListener(parent.getMasterSection()));
 	}
