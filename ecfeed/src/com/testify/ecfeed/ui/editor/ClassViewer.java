@@ -11,8 +11,6 @@
 
 package com.testify.ecfeed.ui.editor;
 
-import java.util.ArrayList;
-
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -23,11 +21,9 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Section;
 
 import com.testify.ecfeed.model.ClassNode;
-import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.utils.ModelUtils;
-import com.testify.ecfeed.ui.dialogs.EditTestItemDialog;
 import com.testify.ecfeed.ui.dialogs.TestClassSelectionDialog;
 
 public class ClassViewer extends CheckboxTableViewerSection {
