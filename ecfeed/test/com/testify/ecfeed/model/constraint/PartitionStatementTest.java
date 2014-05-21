@@ -23,15 +23,14 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.testify.ecfeed.model.AbstractCategoryNode;
+import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
-import com.testify.ecfeed.model.PartitionedCategoryNode;
 
 public class PartitionStatementTest {
 
 	private static MethodNode fMethod;
-	private static PartitionedCategoryNode fCategory;
+	private static CategoryNode fCategory;
 	private static PartitionNode fPartition1;
 	private static PartitionNode fPartition2;
 	private static PartitionNode fPartition3;
@@ -117,7 +116,7 @@ public class PartitionStatementTest {
 	@BeforeClass
 	public static void prepareModel(){
 		fMethod = new MethodNode("method");
-		fCategory = new PartitionedCategoryNode("category", "type");
+		fCategory = new CategoryNode("category", "type", false);
 		fPartition1 = new PartitionNode("partition1", null);
 		fPartition2 = new PartitionNode("partition2", null);
 		fPartition3 = new PartitionNode("partition3", null);
@@ -159,7 +158,7 @@ public class PartitionStatementTest {
 	@Test
 	public void testMentionsCategoryNode() {
 		PartitionedCategoryStatement statement = new PartitionedCategoryStatement(fCategory, Relation.EQUAL, fPartition2);
-		AbstractCategoryNode category = new PartitionedCategoryNode("name", "type");
+		CategoryNode category = new CategoryNode("name", "type", false);
 		assertTrue(statement.mentions(fCategory));
 		assertFalse(statement.mentions(category));
 	}

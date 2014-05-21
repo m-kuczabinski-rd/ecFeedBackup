@@ -25,12 +25,10 @@ import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.core.Signature;
 
-import com.testify.ecfeed.model.AbstractCategoryNode;
+import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.ClassNode;
-import com.testify.ecfeed.model.ExpectedCategoryNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
-import com.testify.ecfeed.model.PartitionedCategoryNode;
 import com.testify.ecfeed.model.TestCaseNode;
 
 public class ModelUtils {
@@ -167,27 +165,23 @@ public class ModelUtils {
 	private static MethodNode generateMethodModel(IMethod method, Class<?> testClass) throws JavaModelException {
 		MethodNode methodNode = new MethodNode(method.getElementName());
 		for(ILocalVariable parameter : method.getParameters()){
-			if(isExpected(parameter)){
-				methodNode.addCategory(generateExpectedCategoryModel(parameter, getTypeName(parameter, method, testClass)));
-			}
-			else{
-				methodNode.addCategory(generatePartitionedCategoryModel(parameter, getTypeName(parameter, method, testClass)));
-			}
+			methodNode.addCategory(generateCategoryModel(parameter, getTypeName(parameter, method, testClass), isExpected(parameter)));
 		}
 		return methodNode;
 	}
-
-	private static ExpectedCategoryNode generateExpectedCategoryModel(ILocalVariable parameter, String type) {
-		return new ExpectedCategoryNode(parameter.getElementName(), type, getDefaultExpectedValue(type));
-	}
-
-	private static PartitionedCategoryNode generatePartitionedCategoryModel(ILocalVariable parameter, String type) {
-		PartitionedCategoryNode category = new PartitionedCategoryNode(parameter.getElementName(), type);
-		ArrayList<PartitionNode> defaultPartitions = generateDefaultPartitions(type);
-		for(PartitionNode partition : defaultPartitions){
-			category.addPartition(partition);
+	
+	private static CategoryNode generateCategoryModel(ILocalVariable parameter, String type, boolean expected){
+		CategoryNode category = new CategoryNode(parameter.getElementName(), type, expected);
+		if(expected){
+			category.setDefaultValue(getDefaultExpectedValue(type));
+			return category;
+		} else{
+			ArrayList<PartitionNode> defaultPartitions = generateDefaultPartitions(type);
+			for(PartitionNode partition : defaultPartitions){
+				category.addPartition(partition);
+			}
+			return category;
 		}
-		return category;
 	}
 
 	private static boolean isExpected(ILocalVariable parameter) throws JavaModelException {
@@ -484,15 +478,16 @@ public class ModelUtils {
 		return implemented;		
 	}
 	
-	public static boolean isExpectedCategoryImplemented(ExpectedCategoryNode node) {
-		return ModelUtils.isPartitionImplemented(node.getDefaultValuePartition());
+	public static boolean isCategoryImplemented(CategoryNode node) {
+		if(node.isExpected()){
+			return ModelUtils.isPartitionImplemented(node.getDefaultValuePartition());
+		}
+		else{
+			return allPartitionsImplemented(node.getPartitions());
+		}
 	}
 	
-	public static boolean isPartitionedCategoryImplemented(PartitionedCategoryNode node) {
-		return allPartitionsImplemented(node.getPartitions());
-	}
-	
-	public static boolean isPartitionedCategoryPartiallyImplemented(PartitionedCategoryNode node) {
+	public static boolean isCategoryPartiallyImplemented(CategoryNode node) {
 		return anyPartitionImplemented(node.getPartitions());
 	}
 	
@@ -511,9 +506,9 @@ public class ModelUtils {
 								methodModel.getCategoriesNames().equals(paramNames)) {
 							implemented = true;
 							
-							List<AbstractCategoryNode> categories = methodModel.getCategories();
+							List<CategoryNode> categories = methodModel.getCategories();
 							for (int i = 0; i < categories.size(); ++i) {
-								if (categories.get(i) instanceof ExpectedCategoryNode) {
+								if (categories.get(i).isExpected()) {
 									ILocalVariable parameter = method.getParameters()[i];
 									IAnnotation[] annotations = parameter.getAnnotations();
 									if ((annotations.length < 1) || !annotations[0].getElementName().equals("expected")) {

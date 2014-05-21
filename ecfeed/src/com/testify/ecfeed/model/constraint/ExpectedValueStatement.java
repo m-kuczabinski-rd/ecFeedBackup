@@ -2,16 +2,15 @@ package com.testify.ecfeed.model.constraint;
 
 import java.util.List;
 
-import com.testify.ecfeed.model.AbstractCategoryNode;
-import com.testify.ecfeed.model.ExpectedCategoryNode;
+import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.PartitionNode;
 
 public class ExpectedValueStatement extends BasicStatement implements IRelationalStatement{
 
-	ExpectedCategoryNode fCategory;
+	CategoryNode fCategory;
 	PartitionNode fCondition;
 	
-	public ExpectedValueStatement(ExpectedCategoryNode category, PartitionNode condition) {
+	public ExpectedValueStatement(CategoryNode category, PartitionNode condition) {
 		fCategory = category;
 		fCondition = condition.getCopy();
 	}
@@ -21,7 +20,7 @@ public class ExpectedValueStatement extends BasicStatement implements IRelationa
 		return fCategory.getName();
 	}
 	
-	public boolean mentions(AbstractCategoryNode category) {
+	public boolean mentions(CategoryNode category) {
 		return category == fCategory;
 	}
 	
@@ -59,7 +58,7 @@ public class ExpectedValueStatement extends BasicStatement implements IRelationa
 	public void setRelation(Relation relation) {
 	}
 	
-	public ExpectedCategoryNode getCategory(){
+	public CategoryNode getCategory(){
 		return fCategory;
 	}
 	

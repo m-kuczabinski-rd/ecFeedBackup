@@ -38,12 +38,10 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Section;
 
-import com.testify.ecfeed.model.AbstractCategoryNode;
+import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.ConstraintNode;
-import com.testify.ecfeed.model.ExpectedCategoryNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
-import com.testify.ecfeed.model.PartitionedCategoryNode;
 import com.testify.ecfeed.model.constraint.BasicStatement;
 import com.testify.ecfeed.model.constraint.Constraint;
 import com.testify.ecfeed.model.constraint.ExpectedValueStatement;
@@ -187,8 +185,8 @@ public class ConstraintViewer extends TreeViewerSection {
 				Relation relation = Relation.EQUAL; 
 				String categoryName = fStatementCombo.getText();
 
-				PartitionedCategoryNode partitionedCategory = method.getPartitionedCategory(categoryName);
-				ExpectedCategoryNode expectedCategory = method.getExpectedCategory(categoryName);
+				CategoryNode partitionedCategory = method.getPartitionedCategory(categoryName);
+				CategoryNode expectedCategory = method.getExpectedCategory(categoryName);
 				if(partitionedCategory != null){
 					PartitionNode condition = partitionedCategory.getPartitions().get(0);
 					statement = new PartitionedCategoryStatement(partitionedCategory, relation, condition);
@@ -251,7 +249,7 @@ public class ConstraintViewer extends TreeViewerSection {
 				items.addAll(fSelectedConstraint.getMethod().getCategoriesNames());
 			}
 			else{
-				items.addAll(fSelectedConstraint.getMethod().getOrdinaryCategoriesNames());
+				items.addAll(fSelectedConstraint.getMethod().getCategoriesNames(false));
 			}
 			fStatementCombo.setItems(items.toArray(new String[]{}));
 
@@ -336,7 +334,7 @@ public class ConstraintViewer extends TreeViewerSection {
 			public void handleEvent(Event event) {
 				if(event.keyCode == SWT.CR || event.keyCode == SWT.KEYPAD_CR){
 					ExpectedValueStatement statement = (ExpectedValueStatement)fSelectedStatement;
-					AbstractCategoryNode category = statement.getCategory();
+					CategoryNode category = statement.getCategory();
 					Object newValue = ModelUtils.getPartitionValueFromString(fConditionText.getText(), category.getType());
 					if(newValue != null && !newValue.equals(statement.getCondition().getValue())){
 						statement.getCondition().setValue(newValue);

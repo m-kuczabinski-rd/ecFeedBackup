@@ -40,7 +40,7 @@ public class ClassNode extends GenericNode {
 	public MethodNode getMethod(String name, List<String> argTypes) {
 		for(MethodNode methodNode : getMethods()){
 			List<String> args = new ArrayList<String>();
-			for(AbstractCategoryNode arg : methodNode.getCategories()){
+			for(CategoryNode arg : methodNode.getCategories()){
 				args.add(arg.getType());
 			}
 			if(methodNode.getName().equals(name) && args.equals(argTypes)){

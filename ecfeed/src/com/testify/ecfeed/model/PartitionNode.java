@@ -38,7 +38,7 @@ public class PartitionNode extends GenericNode implements IPartitionedNode{
 		partition.setParent(this);
 	}
 
-	public AbstractCategoryNode getCategory() {
+	public CategoryNode getCategory() {
 		return fPartitionedParent.getCategory();
 	}
 

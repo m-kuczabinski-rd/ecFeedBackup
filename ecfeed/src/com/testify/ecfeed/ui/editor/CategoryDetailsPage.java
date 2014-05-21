@@ -13,11 +13,11 @@ package com.testify.ecfeed.ui.editor;
 
 import org.eclipse.swt.widgets.Composite;
 
-import com.testify.ecfeed.model.AbstractCategoryNode;
+import com.testify.ecfeed.model.CategoryNode;
 
 public class CategoryDetailsPage extends BasicDetailsPage {
 
-	private AbstractCategoryNode fSelectedCategory;
+	private CategoryNode fSelectedCategory;
 	private CategoryChildrenViewer fPartitionsViewer;
 
 	public CategoryDetailsPage(ModelMasterSection masterSection) {
@@ -35,8 +35,8 @@ public class CategoryDetailsPage extends BasicDetailsPage {
 	
 	@Override
 	public void refresh(){
-		if(getSelectedElement() instanceof AbstractCategoryNode){
-			fSelectedCategory = (AbstractCategoryNode)getSelectedElement();
+		if(getSelectedElement() instanceof CategoryNode){
+			fSelectedCategory = (CategoryNode)getSelectedElement();
 		}
 		if(fSelectedCategory != null){
 			getMainSection().setText(fSelectedCategory.toString());
