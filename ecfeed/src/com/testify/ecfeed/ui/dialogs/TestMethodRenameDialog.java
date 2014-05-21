@@ -54,7 +54,7 @@ public class TestMethodRenameDialog extends TitleAreaDialog {
 	 */
 	public TestMethodRenameDialog(Shell parentShell, MethodNode method) {
 		super(parentShell);
-		setShellStyle(SWT.BORDER | SWT.RESIZE | SWT.TITLE);
+		setShellStyle(SWT.BORDER | SWT.RESIZE | SWT.TITLE | SWT.APPLICATION_MODAL);
 		setHelpAvailable(false);
 		fRenamedMethod = method;
 	}

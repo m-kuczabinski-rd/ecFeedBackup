@@ -63,7 +63,7 @@ public class PartitionDetailsPage extends BasicDetailsPage {
 		protected boolean applyNewPartitionName(PartitionNode partition, Text nameText) {
 			String newName = nameText.getText(); 
 			if(newName.equals(partition.getName()) == false){
-				if(partition.getCategory().validatePartitionName(newName)){
+				if(partition.getCategory().validatePartitionName(newName) && !partition.hasSibling(newName)){
 					partition.setName(newName);
 					return true;
 				}

@@ -151,7 +151,7 @@ public class CalculateCoverageDialog extends TitleAreaDialog {
 			Object[] checked, Object[] grayed) {
 		super(parentShell);
 		setHelpAvailable(false);
-		setShellStyle(SWT.BORDER | SWT.RESIZE | SWT.TITLE);
+		setShellStyle(SWT.BORDER | SWT.RESIZE | SWT.TITLE | SWT.APPLICATION_MODAL);
 		fMethod = method;
 		fCalculator = new CoverageCalculator(fMethod.getCategories());
 		

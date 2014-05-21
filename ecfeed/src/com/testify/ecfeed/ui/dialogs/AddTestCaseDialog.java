@@ -65,7 +65,7 @@ public class AddTestCaseDialog extends TitleAreaDialog implements TestDataEditor
 	public AddTestCaseDialog(Shell parentShell, MethodNode method) {
 		super(parentShell);
 		setHelpAvailable(false);
-		setShellStyle(SWT.BORDER | SWT.RESIZE | SWT.TITLE);
+		setShellStyle(SWT.BORDER | SWT.RESIZE | SWT.TITLE | SWT.APPLICATION_MODAL);
 		fTestData = new ArrayList<PartitionNode>();
 		List<AbstractCategoryNode> categories = method.getCategories();
 		for(AbstractCategoryNode category : categories){

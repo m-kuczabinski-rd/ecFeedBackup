@@ -34,11 +34,13 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
+import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Section;
 
 import com.testify.ecfeed.model.AbstractCategoryNode;
+import com.testify.ecfeed.model.Constants;
 import com.testify.ecfeed.model.ConstraintNode;
 import com.testify.ecfeed.model.ExpectedCategoryNode;
 import com.testify.ecfeed.model.MethodNode;
@@ -71,10 +73,14 @@ public class ConstraintViewer extends TreeViewerSection {
 	private BasicStatement fSelectedStatement;
 	private ConstraintNode fSelectedConstraint;
 
-	private Combo fStatementCombo;
+	private Button fStatementButton;
+	private ControlMenuListener fStatementSelectionListener;
+
 	private Combo fRelationCombo;
-	private Combo fConditionCombo;
+	private Button fConditionButton;
+	private ControlMenuListener fConditionSelectionListener;
 	private Text fConditionText;
+	private ControlMenuListener fConditionBoolMenuListener;
 	
 	private Button fAddStatementButton;
 	private Button fRemoveStatementButton;
@@ -123,86 +129,6 @@ public class ConstraintViewer extends TreeViewerSection {
 		}
 	}
 	
-	private class ModifyConditionComboListener implements ModifyListener{
-		@Override
-		public void modifyText(ModifyEvent e) {
-			if(fStatementEditListenersEnabled == false){
-				return;
-			}
-			PartitionedCategoryStatement statement = (PartitionedCategoryStatement)fSelectedStatement;
-			if(statement.getConditionName().equals(fConditionCombo.getText()) == false){
-				String conditionText = fConditionCombo.getText();
-				PartitionNode partition = statement.getCategory().getPartition(conditionText);
-				if(partition != null){//text in the combo is a partition name
-					statement.setCondition(partition);
-				}
-				else{//text in the combo is a label
-					statement.setCondition(conditionText);
-				}
-				modelUpdated();
-			}
-		}
-	}
-	
-	private class StatementModifyListener implements ModifyListener{
-		@Override
-		public void modifyText(ModifyEvent e) {
-			if(fStatementEditListenersEnabled == false){
-				return;
-			}
-			if(fSelectedStatement.getLeftHandName().equals(fStatementCombo.getText()) == false){
-				BasicStatement statement = createStatementFromCombo();
-				if(statement != null){
-					replaceSelectedStatement(statement);
-				}
-			} 	
-		}
-
-		private BasicStatement createStatementFromCombo() {
-			BasicStatement statement = null;
-			if(fStatementCombo.getText().equals(STATEMENT_TRUE)){
-				statement = new StaticStatement(true);
-			}
-			else if(fStatementCombo.getText().equals(STATEMENT_FALSE)){
-				statement = new StaticStatement(false);
-			}
-			else if (fStatementCombo.getText().equals(STATEMENT_AND)){
-				if(fSelectedStatement instanceof StatementArray && fSelectedStatement.getLeftHandName() == STATEMENT_OR){
-					StatementArray statementArray = (StatementArray) fSelectedStatement;
-					statementArray.setOperator(Operator.AND);	
-					statement = fSelectedStatement;
-				} else
-				statement = new StatementArray(Operator.AND);
-			}
-			else if(fStatementCombo.getText().equals(STATEMENT_OR)){
-				if(fSelectedStatement instanceof StatementArray && fSelectedStatement.getLeftHandName() == STATEMENT_AND){
-					StatementArray statementArray = (StatementArray) fSelectedStatement;
-					statementArray.setOperator(Operator.OR);	
-					statement = fSelectedStatement;
-				} else
-				statement = new StatementArray(Operator.OR);
-			}
-			else{
-				MethodNode method = fSelectedConstraint.getMethod();
-				Relation relation = Relation.EQUAL; 
-				String categoryName = fStatementCombo.getText();
-
-				PartitionedCategoryNode partitionedCategory = method.getPartitionedCategory(categoryName);
-				ExpectedCategoryNode expectedCategory = method.getExpectedCategory(categoryName);
-				if(partitionedCategory != null){
-					PartitionNode condition = partitionedCategory.getPartitions().get(0);
-					statement = new PartitionedCategoryStatement(partitionedCategory, relation, condition);
-				}
-				else if(expectedCategory != null){
-					PartitionNode condition = new PartitionNode("expected", expectedCategory.getDefaultValue());
-					condition.setParent(expectedCategory);
-					statement = new ExpectedValueStatement(expectedCategory, condition);
-				}
-			}
-			return statement;
-		}
-	}
-	
 	private class StatementSelectionListener implements ISelectionChangedListener{
 		@Override
 		public void selectionChanged(SelectionChangedEvent event) {
@@ -225,7 +151,7 @@ public class ConstraintViewer extends TreeViewerSection {
 
 		private void refreshStatementEditPart(BasicStatement statement) {
 			fStatementEditListenersEnabled = false;
-			refreshStatementCombo(statement);
+			refreshStatementMenu(statement);
 			if(statement instanceof IRelationalStatement){
 				refreshRelationCombo((IRelationalStatement)statement);
 				if(statement instanceof PartitionedCategoryStatement){
@@ -237,25 +163,26 @@ public class ConstraintViewer extends TreeViewerSection {
 			}
 			else{
 				fRelationCombo.setVisible(false);
-				fConditionCombo.setVisible(false);
+				fConditionButton.setVisible(false);
 				fConditionText.setVisible(false);
 				fConditionLayout.topControl = null;
 			}
 			fStatementEditListenersEnabled = true;
 		}
 
-		private void refreshStatementCombo(BasicStatement statement) {
-			List<String> items = new ArrayList<String>();
-			items.addAll(Arrays.asList(FIXED_STATEMENTS));
+		private void refreshStatementMenu(BasicStatement statement) {
+			List<String> items = new ArrayList<String>();			
+			fStatementSelectionListener.clearData();
+			fStatementSelectionListener.addData(Arrays.asList(FIXED_STATEMENTS), "");
 			if(fSelectedStatement == fSelectedConstraint.getConstraint().getConsequence()){
 				items.addAll(fSelectedConstraint.getMethod().getCategoriesNames());
 			}
 			else{
 				items.addAll(fSelectedConstraint.getMethod().getOrdinaryCategoriesNames());
 			}
-			fStatementCombo.setItems(items.toArray(new String[]{}));
-
-			fStatementCombo.setText(statement.getLeftHandName());
+			fStatementSelectionListener.addData(items, "---ARGUMENTS---");
+			fStatementSelectionListener.createMenu();
+			fStatementButton.setText(statement.getLeftHandName());
 		}
 
 		private void refreshRelationCombo(IRelationalStatement statement) {
@@ -269,21 +196,24 @@ public class ConstraintViewer extends TreeViewerSection {
 		}
 
 		private void refreshConditionComposite(PartitionedCategoryStatement statement) {
-			List<String> items = new ArrayList<String>();
-			items.addAll(statement.getCategory().getAllPartitionNames());
-			items.addAll(statement.getCategory().getAllPartitionLabels());
+			fConditionLayout.topControl = fConditionButton;
+			fConditionButton.setVisible(true);
+			
+			fConditionSelectionListener.clearData();
+			fConditionSelectionListener.addData(statement.getCategory().getAllPartitionNames(), "");
+			fConditionSelectionListener.addData(statement.getCategory().getAllPartitionLabels(), "---LABELS---");
+			fConditionButton.setText(statement.getConditionName());
+			fConditionSelectionListener.createMenu();
 
-			fConditionLayout.topControl = fConditionCombo;
-			fConditionCombo.setVisible(true);
 			fConditionText.setVisible(false);
-			fConditionCombo.setItems(items.toArray(new String[]{}));
-			fConditionCombo.setText(statement.getConditionName());
 		}
 
 		private void refreshConditionComposite(ExpectedValueStatement statement) {
 			fConditionLayout.topControl = fConditionText;
-			fConditionCombo.setVisible(false);
+			fConditionButton.setVisible(false);
 			fConditionText.setVisible(true);
+			fConditionBoolMenuListener.setEnabled(statement.getCategory().getType().equals(Constants.TYPE_NAME_BOOLEAN));
+			fConditionText.setEditable(!statement.getCategory().getType().equals(Constants.TYPE_NAME_BOOLEAN));		
 			fConditionText.setText(statement.getCondition().getValueString());
 		}
 	}
@@ -297,21 +227,121 @@ public class ConstraintViewer extends TreeViewerSection {
 		getViewer().addSelectionChangedListener(new StatementSelectionListener());
 	}
 
+	public void conditionButtonModified(String value, int index){
+		if(fStatementEditListenersEnabled == false){
+			return;
+		}
+		PartitionedCategoryStatement statement = (PartitionedCategoryStatement)fSelectedStatement;
+		String conditionText = fConditionButton.getText();
+		if(statement.getConditionName().equals(fConditionButton.getText()) == false){
+			PartitionNode partition = statement.getCategory().getPartition(conditionText);
+			if(partition != null){// text in the combo is a partition name
+				statement.setCondition(partition);
+			} else{// text in the combo is a label
+				statement.setCondition(conditionText);
+			}
+		} else{
+			if((index > statement.getCategory().getAllPartitionNames().size()) && statement.getConditionValue() instanceof PartitionNode){
+				// text in the combo is a label
+				statement.setCondition(conditionText);
+			} else if((index < statement.getCategory().getAllPartitionNames().size()) && statement.getConditionValue() instanceof String){
+
+			} else
+				return;
+		}
+		modelUpdated();
+	}
+
+	public void statementButtonModified(String value, int index){
+		if(fStatementEditListenersEnabled == false){
+			return;
+		}
+		String buttonText = fStatementButton.getText();
+		if(fSelectedStatement.getLeftHandName().equals(buttonText) == false){
+			BasicStatement statement = createStatementFromCombo();
+			if(statement != null){
+				replaceSelectedStatement(statement);
+			}
+		} else{
+			if(index < FIXED_STATEMENTS.length){
+				if(fSelectedStatement instanceof StatementArray) return;
+			}
+			if(index >= FIXED_STATEMENTS.length){
+				if(fSelectedStatement instanceof PartitionedCategoryStatement) return;
+			}		
+			
+			BasicStatement statement = createStatementFromCombo();
+			if(statement != null){
+				replaceSelectedStatement(statement);
+			}
+		}
+	}
+
+	private BasicStatement createStatementFromCombo(){
+		BasicStatement statement = null;
+		if(fStatementSelectionListener.getSelectedItemIndex() < FIXED_STATEMENTS.length){
+			if(fStatementButton.getText().equals(STATEMENT_TRUE)){
+				statement = new StaticStatement(true);
+			} else if(fStatementButton.getText().equals(STATEMENT_FALSE)){
+				statement = new StaticStatement(false);
+			} else if(fStatementButton.getText().equals(STATEMENT_AND)){
+				if(fSelectedStatement instanceof StatementArray && fSelectedStatement.getLeftHandName() == STATEMENT_OR){
+					StatementArray statementArray = (StatementArray)fSelectedStatement;
+					statementArray.setOperator(Operator.AND);
+					statement = fSelectedStatement;
+				} else
+					statement = new StatementArray(Operator.AND);
+			} else if(fStatementButton.getText().equals(STATEMENT_OR)){
+				if(fSelectedStatement instanceof StatementArray && fSelectedStatement.getLeftHandName() == STATEMENT_AND){
+					StatementArray statementArray = (StatementArray)fSelectedStatement;
+					statementArray.setOperator(Operator.OR);
+					statement = fSelectedStatement;
+				} else
+					statement = new StatementArray(Operator.OR);
+			}
+			if(statement != null) return statement;
+		} else {	
+			MethodNode method = fSelectedConstraint.getMethod();
+			Relation relation = Relation.EQUAL;
+			String categoryName = fStatementButton.getText();
+	
+			PartitionedCategoryNode partitionedCategory = method.getPartitionedCategory(categoryName);
+			ExpectedCategoryNode expectedCategory = method.getExpectedCategory(categoryName);
+			if(partitionedCategory != null){
+				PartitionNode condition = partitionedCategory.getPartitions().get(0);
+				statement = new PartitionedCategoryStatement(partitionedCategory, relation, condition);
+			} else if(expectedCategory != null){
+				PartitionNode condition = new PartitionNode("expected", expectedCategory.getDefaultValue());
+				condition.setParent(expectedCategory);
+				statement = new ExpectedValueStatement(expectedCategory, condition);
+			}
+		}
+		return statement;
+	}
+
 	private void createStatementEditComposite(){
 		fStatementEditComposite = getToolkit().createComposite(getClientComposite());
 		fStatementEditComposite.setLayout(new GridLayout(3, false));
 		fStatementEditComposite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 2, 1));
 		
-		createStatementCombo();
+		createStatementButton();
 		createRelationCombo();
 		createConditionComposite();
 	}
 
+	private void createStatementButton() {
+		fStatementButton = new Button(fStatementEditComposite, SWT.PUSH);
+		fStatementButton.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
+		fStatementSelectionListener = new ControlMenuListener(fStatementEditComposite, fStatementButton){
+			@Override
+			public void menuItemSelected(int index, SelectionEvent e){
+				MenuItem item = (MenuItem)e.getSource();
+				fStatementButton.setText(item.getText());
+				statementButtonModified(item.getText(), index);
+			}
 
-	private void createStatementCombo() {
-		fStatementCombo = new ComboViewer(fStatementEditComposite).getCombo();
-		fStatementCombo.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
-		fStatementCombo.addModifyListener(new StatementModifyListener());
+		};
+		fStatementButton.addListener(SWT.Selection, fStatementSelectionListener);
 	}
 
 	private void createRelationCombo() {
@@ -326,11 +356,41 @@ public class ConstraintViewer extends TreeViewerSection {
 		conditionComposite.setLayout(fConditionLayout);
 		conditionComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
 		
-		fConditionCombo = new ComboViewer(conditionComposite).getCombo();
-		fConditionCombo.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
-		fConditionCombo.addModifyListener(new ModifyConditionComboListener());
+		fConditionButton = new Button(conditionComposite, SWT.PUSH);
+		fConditionButton.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
+		fConditionSelectionListener = new ControlMenuListener(conditionComposite, fConditionButton){
+			@Override
+			public void menuItemSelected(int index, SelectionEvent e){
+				MenuItem item = (MenuItem)e.getSource();
+				fConditionButton.setText(item.getText());
+				conditionButtonModified(item.getText(), index);
+			}
+
+		};
+		fConditionButton.addListener(SWT.Selection, fConditionSelectionListener);
 		
 		fConditionText = getToolkit().createText(conditionComposite, "", SWT.BORDER);
+		fConditionBoolMenuListener = new ControlMenuListener(conditionComposite, fConditionButton){
+			{
+				ArrayList<String> boolList = new ArrayList<>();
+				boolList.add(STATEMENT_TRUE);
+				boolList.add(STATEMENT_FALSE);
+				addData(boolList, "");
+				createMenu();
+			}
+			@Override
+			public void menuItemSelected(int index, SelectionEvent e){
+				ExpectedValueStatement statement = (ExpectedValueStatement)fSelectedStatement;
+				MenuItem item = (MenuItem)e.getSource();
+				if(!fConditionText.getText().equals(item.getText())){
+					fConditionText.setText(item.getText());
+					statement.getCondition().setValue(item.getText());
+					modelUpdated();
+				}
+			}
+
+		};
+		fConditionText.addListener(SWT.MouseDown, fConditionBoolMenuListener);
 		fConditionText.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
 		fConditionText.addListener(SWT.KeyDown, new Listener() {
 			public void handleEvent(Event event) {
@@ -340,10 +400,9 @@ public class ConstraintViewer extends TreeViewerSection {
 					Object newValue = ModelUtils.getPartitionValueFromString(fConditionText.getText(), category.getType());
 					if(newValue != null && !newValue.equals(statement.getCondition().getValue())){
 						statement.getCondition().setValue(newValue);
+						fConditionText.setText(statement.getCondition().getValueString());
 						modelUpdated();
 					}
-					fConditionText.setText(statement.getCondition().getValueString());
-
 				}
 			}
 		});
@@ -389,7 +448,7 @@ public class ConstraintViewer extends TreeViewerSection {
 	public void setInput(ConstraintNode constraintNode){
 		super.setInput(constraintNode.getConstraint());
 		fSelectedConstraint = constraintNode;
-
+		
 		fStatementLabelProvider.setConstraint(constraintNode.getConstraint());
 
 		getTreeViewer().expandAll();
