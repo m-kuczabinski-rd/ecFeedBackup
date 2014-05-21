@@ -11,6 +11,8 @@
 
 package com.testify.ecfeed.ui.editor;
 
+import java.util.ArrayList;
+
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.TableViewerColumn;
@@ -32,6 +34,7 @@ public class MethodsViewer extends CheckboxTableViewerSection {
 	private static final int STYLE = Section.EXPANDED | Section.TITLE_BAR;
 	private ColorManager fColorManager;
 	private ClassNode fSelectedClass;
+	private TableViewerColumn methods;
 	
 	private class RemoveSelectedMethodsAdapter extends SelectionAdapter{
 		@Override
@@ -57,10 +60,23 @@ public class MethodsViewer extends CheckboxTableViewerSection {
 
 		@Override
 		public void widgetSelected(SelectionEvent e) {
-			MethodNode methodNode = new MethodNode("NewMethod");
+			String startName = "NewMethod";
+			String name = startName;
+			int i = 1;
+
+			while (true) {
+				if (fSelectedClass.getMethod(name, new ArrayList<String>()) == null) {
+					break;
+				}
+				name = startName + i;
+				++i;
+			}
+
+			MethodNode methodNode = new MethodNode(name);
 			fSelectedClass.addMethod(methodNode);
 			modelUpdated();
 			selectElement(methodNode);
+			methods.getViewer().editElement(methodNode, 0);
 		}
 	}
 
@@ -112,7 +128,7 @@ public class MethodsViewer extends CheckboxTableViewerSection {
 
 	@Override
 	protected void createTableColumns() {
-		TableViewerColumn methods = addColumn("Methods", 150, new MethodsNameLabelProvider());
+		methods = addColumn("Methods", 150, new MethodsNameLabelProvider());
 		methods.setEditingSupport(new MethodNameEditingSupport(this));
 		addColumn("Arguments", 450, new MethodsArgsLabelProvider());
 	}
