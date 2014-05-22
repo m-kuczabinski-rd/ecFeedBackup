@@ -14,18 +14,25 @@ package com.testify.ecfeed.ui.editor;
 import java.util.List;
 
 import org.eclipse.jface.dialogs.IDialogConstants;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.layout.RowLayout;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Listener;
+import org.eclipse.swt.widgets.Text;
 
 import com.testify.ecfeed.model.AbstractCategoryNode;
 import com.testify.ecfeed.model.ExpectedCategoryNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionedCategoryNode;
+import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.dialogs.TestMethodRenameDialog;
+import com.testify.ecfeed.utils.ModelUtils;
 
 public class MethodDetailsPage extends BasicDetailsPage {
 
@@ -33,6 +40,7 @@ public class MethodDetailsPage extends BasicDetailsPage {
 	private ParametersViewer fParemetersSection;
 	private ConstraintsListViewer fConstraintsSection;
 	private TestCasesViewer fTestCasesSection;
+	private Text fMethodNameText;
 	
 	private class ReassignAdapter extends SelectionAdapter{
 
@@ -91,15 +99,52 @@ public class MethodDetailsPage extends BasicDetailsPage {
 	}
 
 	private void createTextClient() {
-		Composite buttonsComposite = getToolkit().createComposite(getMainSection());
-		RowLayout rl = new RowLayout();
-		rl.fill = true;
-		buttonsComposite.setLayout(rl);
-		getMainSection().setTextClient(buttonsComposite);
-		Button reassignButton = getToolkit().createButton(buttonsComposite, "Reassign", SWT.NONE);
+		Composite composite = getToolkit().createComposite(getMainComposite());
+		composite.setLayout(new GridLayout(5, false));
+		composite.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
+		getToolkit().createLabel(composite, "Method name", SWT.NONE);
+		fMethodNameText = getToolkit().createText(composite, null, SWT.NONE);
+		fMethodNameText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
+		fMethodNameText.addListener(SWT.KeyDown, new Listener() {
+			public void handleEvent(Event event) {
+				if(event.keyCode == SWT.CR || event.keyCode == SWT.KEYPAD_CR){
+					changeName();
+				}
+			}
+		});
+
+		if (getSelectedElement() instanceof MethodNode) {
+			fSelectedMethod = (MethodNode)getSelectedElement();
+			fMethodNameText.setText(fSelectedMethod.getName());
+		}
+
+		Button changeButton = getToolkit().createButton(composite, "Change", SWT.NONE);
+		changeButton.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e){
+				changeName();
+			}
+		});
+		Button reassignButton = getToolkit().createButton(composite, "Reassign", SWT.NONE);
 		reassignButton.addSelectionListener(new ReassignAdapter());
-		Button testOnlineButton = getToolkit().createButton(buttonsComposite, "Test online", SWT.NONE);
+		Button testOnlineButton = getToolkit().createButton(composite, "Test online", SWT.NONE);
 		testOnlineButton.addSelectionListener(new ExecuteOnlineTestAdapter(this));
+
+		getToolkit().paintBordersFor(composite);
+	}
+
+	private void changeName() {
+		String name = fMethodNameText.getText();
+		if ((name != null) && (!fSelectedMethod.getName().equals(name))) {
+			if (fSelectedMethod.getClassNode().getMethod(name, fSelectedMethod.getCategoriesTypes()) == null){
+				fSelectedMethod.setName(name);
+				modelUpdated(null);
+			} else {
+				MessageDialog.openInformation(getActiveShell(),
+					Messages.DIALOG_METHOD_EXISTS_TITLE,
+					Messages.DIALOG_METHOD_EXISTS_MESSAGE);
+			}
+		}
 	}
 
 	@Override
@@ -108,10 +153,15 @@ public class MethodDetailsPage extends BasicDetailsPage {
 			fSelectedMethod = (MethodNode)getSelectedElement();
 		}
 		if(fSelectedMethod != null){
-			getMainSection().setText(fSelectedMethod.toString());
+			String title = fSelectedMethod.getName();
+			if (ModelUtils.isMethodImplemented(fSelectedMethod)) {
+				title += " [implemented]";
+			}
+			getMainSection().setText(title);
 			fParemetersSection.setInput(fSelectedMethod);
 			fConstraintsSection.setInput(fSelectedMethod);
 			fTestCasesSection.setInput(fSelectedMethod);
+			fMethodNameText.setText(fSelectedMethod.getName());
 		}
 	}
 }
