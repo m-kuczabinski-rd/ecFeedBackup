@@ -11,9 +11,12 @@
 
 package com.testify.ecfeed.ui.editor;
 
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.ui.forms.widgets.FormToolkit;
@@ -22,14 +25,16 @@ import org.eclipse.ui.forms.widgets.Section;
 import com.testify.ecfeed.model.AbstractCategoryNode;
 import com.testify.ecfeed.model.ExpectedCategoryNode;
 import com.testify.ecfeed.model.MethodNode;
+import com.testify.ecfeed.model.PartitionedCategoryNode;
 import com.testify.ecfeed.ui.common.ColorConstants;
 import com.testify.ecfeed.ui.common.ColorManager;
 import com.testify.ecfeed.ui.common.DefaultValueEditingSupport;
+import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.common.TestDataEditorListener;
 
-public class ParametersViewer extends TableViewerSection implements TestDataEditorListener{
+public class ParametersViewer extends CheckboxTableViewerSection implements TestDataEditorListener{
 
-	private final static int STYLE = Section.TWISTIE | Section.TITLE_BAR;
+	private final static int STYLE = Section.EXPANDED | Section.TITLE_BAR;
 	private final String EMPTY_STRING = "";
 	private ColorManager fColorManager;
 	private TableViewerColumn fDefaultValueColumn;
@@ -40,7 +45,30 @@ public class ParametersViewer extends TableViewerSection implements TestDataEdit
 		getSection().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
 		fColorManager = new ColorManager();
 		getSection().setText("Parameters");
+		addButton("Remove selected", new RemoveParameterAdapter());
 		addDoubleClickListener(new SelectNodeDoubleClickListener(parent.getMasterSection()));
+	}
+
+	private class RemoveParameterAdapter extends SelectionAdapter {
+		@Override
+		public void widgetSelected(SelectionEvent e) {
+			if (MessageDialog.openConfirm(getActiveShell(),
+					Messages.DIALOG_REMOVE_PARAMETERS_TITLE,
+					Messages.DIALOG_REMOVE_PARAMETERS_MESSAGE)) {
+				removeParameters(getCheckedElements());
+			}
+		}
+
+		private void removeParameters(Object[] checkedElements) {
+			for(Object element : checkedElements){
+				if (element instanceof ExpectedCategoryNode){
+					fSelectedMethod.removeCategory((ExpectedCategoryNode)element);
+				} else if (element instanceof PartitionedCategoryNode){
+					fSelectedMethod.removeCategory((PartitionedCategoryNode)element);
+				}
+			}
+			modelUpdated();
+		}
 	}
 
 	@Override

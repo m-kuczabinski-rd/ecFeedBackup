@@ -123,4 +123,6 @@ public class Messages {
 	public static final String DIALOG_METHOD_EXISTS_MESSAGE = "Entered method is already contained in the class.";
 	public static final String DIALOG_METHOD_INVALID_NAME_TITLE = "Invalid method name";
 	public static final String DIALOG_METHOD_INVALID_NAME_MESSAGE = "Entered method name is not valid.";
+	public static final String DIALOG_REMOVE_PARAMETERS_TITLE = "Remove parameters";
+	public static final String DIALOG_REMOVE_PARAMETERS_MESSAGE = "This operation will remove selected parameters from the method.";
 }
