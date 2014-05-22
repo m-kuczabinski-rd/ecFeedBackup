@@ -14,7 +14,7 @@ package com.testify.ecfeed.model.constraint;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.testify.ecfeed.model.AbstractCategoryNode;
+import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.PartitionNode;
 
 public class StatementArray extends BasicStatement{
@@ -59,7 +59,7 @@ public class StatementArray extends BasicStatement{
 	}
 
 	@Override
-	public boolean mentions(AbstractCategoryNode category){
+	public boolean mentions(CategoryNode category){
 		for(BasicStatement child : fStatements){
 			if(child.mentions(category)){
 				return true;

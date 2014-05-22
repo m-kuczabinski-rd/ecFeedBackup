@@ -21,14 +21,12 @@ import org.eclipse.swt.graphics.Image;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.FrameworkUtil;
 
-import com.testify.ecfeed.model.AbstractCategoryNode;
+import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.ConstraintNode;
-import com.testify.ecfeed.model.ExpectedCategoryNode;
 import com.testify.ecfeed.model.GenericNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
-import com.testify.ecfeed.model.PartitionedCategoryNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.utils.ModelUtils;
@@ -51,11 +49,9 @@ public class ModelLabelProvider extends LabelProvider {
 			return getMethodImage((MethodNode)element);
 		} else if(element instanceof TestCaseNode){
 			return getTestCaseImage((TestCaseNode)element);
-		} else if (element instanceof ExpectedCategoryNode){
-			return getExpectedCategoryImage((ExpectedCategoryNode)element);
-		} else if (element instanceof PartitionedCategoryNode){
-			return getPartitionedCategoryImage((PartitionedCategoryNode)element);
-		} else if (element instanceof AbstractCategoryNode){
+		} else if (element instanceof CategoryNode){
+			return getCategoryImage((CategoryNode)element);
+		} else if (element instanceof CategoryNode){
 			return getImage("category_node.gif");
 		} else if (element instanceof ConstraintNode){
 			return getImage("constraint_node.gif");
@@ -103,24 +99,24 @@ public class ModelLabelProvider extends LabelProvider {
 		}
 	}
 	
-	private static Image getExpectedCategoryImage(ExpectedCategoryNode node) {
-		if (ModelUtils.isExpectedCategoryImplemented(node)) {
-			return getImage("expected_value_category_node.gif");
-		} else {
-			// TODO change icon to NOT implemented
-			return getImage("sample.gif");
-		}
-	}
-	
-	private static Image getPartitionedCategoryImage(PartitionedCategoryNode node) {
-		if (ModelUtils.isPartitionedCategoryImplemented(node)) {
-			return getImage("category_node.gif");
-		} else if (ModelUtils.isPartitionedCategoryPartiallyImplemented(node)) {
-			// TODO change icon to PARTIALLY implemented
-			return getImage("sample.gif");
-		} else {
-			// TODO change icon to NOT implemented
-			return getImage("sample.gif");
+	private static Image getCategoryImage(CategoryNode node){
+		if(node.isExpected()){
+			if(ModelUtils.isCategoryImplemented(node)){
+				return getImage("expected_value_category_node.gif");
+			} else{
+				// TODO change icon to NOT implemented
+				return getImage("sample.gif");
+			}
+		} else{
+			if(ModelUtils.isCategoryImplemented(node)){
+				return getImage("category_node.gif");
+			} else if(ModelUtils.isCategoryPartiallyImplemented(node)){
+				// TODO change icon to PARTIALLY implemented
+				return getImage("sample.gif");
+			} else{
+				// TODO change icon to NOT implemented
+				return getImage("sample.gif");
+			}
 		}
 	}
 	

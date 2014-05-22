@@ -22,10 +22,8 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Section;
 
-import com.testify.ecfeed.model.AbstractCategoryNode;
-import com.testify.ecfeed.model.ExpectedCategoryNode;
+import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.MethodNode;
-import com.testify.ecfeed.model.PartitionedCategoryNode;
 import com.testify.ecfeed.ui.common.ColorConstants;
 import com.testify.ecfeed.ui.common.ColorManager;
 import com.testify.ecfeed.ui.common.DefaultValueEditingSupport;
@@ -61,10 +59,8 @@ public class ParametersViewer extends CheckboxTableViewerSection implements Test
 
 		private void removeParameters(Object[] checkedElements) {
 			for(Object element : checkedElements){
-				if (element instanceof ExpectedCategoryNode){
-					fSelectedMethod.removeCategory((ExpectedCategoryNode)element);
-				} else if (element instanceof PartitionedCategoryNode){
-					fSelectedMethod.removeCategory((PartitionedCategoryNode)element);
+				if (element instanceof CategoryNode){
+					fSelectedMethod.removeCategory((CategoryNode)element);
 				}
 			}
 			modelUpdated();
@@ -77,10 +73,10 @@ public class ParametersViewer extends CheckboxTableViewerSection implements Test
 			@Override
 			public String getText(Object element){
 				String result = new String();
-				if(element instanceof ExpectedCategoryNode){
+				if(element instanceof CategoryNode && ((CategoryNode)element).isExpected()){
 					result += "[e]";
 				}
-				result += ((AbstractCategoryNode)element).getName();
+				result += ((CategoryNode)element).getName();
 				return result;
 			}
 
@@ -93,7 +89,7 @@ public class ParametersViewer extends CheckboxTableViewerSection implements Test
 		addColumn("Type", 150, new ColumnLabelProvider(){
 			@Override
 			public String getText(Object element){
-				return ((AbstractCategoryNode)element).getType();
+				return ((CategoryNode)element).getType();
 			}
 			@Override
 			public Color getForeground(Object element){
@@ -104,8 +100,8 @@ public class ParametersViewer extends CheckboxTableViewerSection implements Test
 		fDefaultValueColumn = addColumn("Default value", 150, new ColumnLabelProvider(){
 			@Override
 			public String getText(Object element){
-				if(element instanceof ExpectedCategoryNode){
-					ExpectedCategoryNode category = (ExpectedCategoryNode)element;
+				if(element instanceof CategoryNode && ((CategoryNode)element).isExpected()){
+					CategoryNode category = (CategoryNode)element;
 					return category.getDefaultValuePartition().getValueString();
 				}
 				return EMPTY_STRING ;
@@ -120,12 +116,12 @@ public class ParametersViewer extends CheckboxTableViewerSection implements Test
 		
 	public void setInput(MethodNode method){
 		fSelectedMethod = method;
-		showDefaultValueColumn(fSelectedMethod.getExpectedCategoriesNames().size() == 0);
+		showDefaultValueColumn(fSelectedMethod.getCategoriesNames(true).size() == 0);
 		super.setInput(method.getCategories());
 	}
 
 	private Color getColor(Object element){
-		if(element instanceof ExpectedCategoryNode){
+		if(element instanceof CategoryNode && ((CategoryNode)element).isExpected()){
 			return fColorManager.getColor(ColorConstants.EXPECTED_VALUE_CATEGORY);
 		}
 		return null;

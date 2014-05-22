@@ -52,9 +52,8 @@ import com.testify.ecfeed.generators.api.GeneratorException;
 import com.testify.ecfeed.generators.api.IGenerator;
 import com.testify.ecfeed.generators.api.IGeneratorParameter;
 import com.testify.ecfeed.generators.api.IGeneratorParameter.TYPE;
-import com.testify.ecfeed.model.AbstractCategoryNode;
+import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.ConstraintNode;
-import com.testify.ecfeed.model.ExpectedCategoryNode;
 import com.testify.ecfeed.model.GenericNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
@@ -101,8 +100,8 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 		}
 		
 		public Object[] getChildren(Object element){
-			if(element instanceof AbstractCategoryNode){
-				return ((AbstractCategoryNode)element).getPartitions().toArray();
+			if(element instanceof CategoryNode){
+				return ((CategoryNode)element).getPartitions().toArray();
 			}
 			if(element instanceof PartitionNode){
 				return ((PartitionNode)element).getPartitions().toArray();
@@ -328,14 +327,14 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 		});
 		fCategoriesViewer.getTree().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 		fCategoriesViewer.setInput(fMethod);
-		for(AbstractCategoryNode category : fMethod.getCategories()){
+		for(CategoryNode category : fMethod.getCategories()){
 			fCategoriesViewer.setSubtreeChecked(category, true);
 		}
 		fCategoriesViewer.addCheckStateListener(new TreeCheckStateListener(fCategoriesViewer));
 		fCategoriesViewer.addCheckStateListener(new ICheckStateListener() {
 			@Override
 			public void checkStateChanged(CheckStateChangedEvent event) {
-				for(AbstractCategoryNode category : fMethod.getCategories()){
+				for(CategoryNode category : fMethod.getCategories()){
 					if(fCategoriesViewer.getChecked(category) == false){
 						setOkButton(false);
 						return;
@@ -574,13 +573,12 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 	}
 
 	private void saveAlgorithmInput() {
-		List<AbstractCategoryNode> categories = fMethod.getCategories();
+		List<CategoryNode> categories = fMethod.getCategories();
 		fAlgorithmInput = new ArrayList<List<PartitionNode>>();
 		for(int i = 0; i < categories.size(); i++){
 			List<PartitionNode> partitions = new ArrayList<PartitionNode>();
-			if(categories.get(i) instanceof ExpectedCategoryNode){
-				ExpectedCategoryNode category = (ExpectedCategoryNode)categories.get(i);
-				partitions.add(category.getDefaultValuePartition());
+			if(categories.get(i).isExpected()){
+				partitions.add(categories.get(i).getDefaultValuePartition());
 			}
 			else{
 				for(PartitionNode partition : categories.get(i).getLeafPartitions()){

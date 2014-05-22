@@ -26,7 +26,11 @@ import org.junit.Test;
 import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.InitializationError;
 
-import com.testify.ecfeed.model.AbstractCategoryNode;
+import com.testify.ecfeed.generators.api.GeneratorException;
+import com.testify.ecfeed.generators.api.IConstraint;
+import com.testify.ecfeed.generators.api.IGenerator;
+import com.testify.ecfeed.generators.api.IGeneratorParameter;
+import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.runner.annotations.Constraints;
@@ -34,10 +38,6 @@ import com.testify.ecfeed.runner.annotations.Generator;
 import com.testify.ecfeed.runner.annotations.GeneratorParameter;
 import com.testify.ecfeed.runner.annotations.GeneratorParameterNames;
 import com.testify.ecfeed.runner.annotations.GeneratorParameterValues;
-import com.testify.ecfeed.generators.api.GeneratorException;
-import com.testify.ecfeed.generators.api.IConstraint;
-import com.testify.ecfeed.generators.api.IGenerator;
-import com.testify.ecfeed.generators.api.IGeneratorParameter;
 
 public class OnlineRunner extends StaticRunner {
 
@@ -94,7 +94,7 @@ public class OnlineRunner extends StaticRunner {
 
 	protected List<List<PartitionNode>> getInput(MethodNode methodModel) {
 		List<List<PartitionNode>> result = new ArrayList<List<PartitionNode>>();
-		for(AbstractCategoryNode category : methodModel.getCategories()){
+		for(CategoryNode category : methodModel.getCategories()){
 			result.add(category.getPartitions());
 		}
 		return result;

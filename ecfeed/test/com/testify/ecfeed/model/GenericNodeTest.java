@@ -11,13 +11,15 @@
 
 package com.testify.ecfeed.model;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 
 import org.junit.Test;
 
-import com.testify.ecfeed.model.GenericNode;
 import com.testify.ecfeed.model.constraint.Constraint;
 import com.testify.ecfeed.model.constraint.StaticStatement;
 
@@ -60,8 +62,9 @@ public class GenericNodeTest{
 		RootNode root = new RootNode("root");
 		ClassNode classNode = new ClassNode("class");
 		MethodNode method = new MethodNode("method");
-		PartitionedCategoryNode category = new PartitionedCategoryNode("name", "type");
-		ExpectedCategoryNode expCat = new ExpectedCategoryNode("name", "type", 0);
+		CategoryNode category = new CategoryNode("name", "type", false);
+		CategoryNode expCat = new CategoryNode("name", "type", true);
+		expCat.setDefaultValue(0);
 		ConstraintNode constraint = new ConstraintNode("name", new Constraint(new StaticStatement(true), new StaticStatement(false)));
 		TestCaseNode testCase = new TestCaseNode("name", new ArrayList<PartitionNode>());
 		PartitionNode partition = new PartitionNode("name", 0);
@@ -116,8 +119,9 @@ public class GenericNodeTest{
 		RootNode root = new RootNode("root");
 		ClassNode classNode = new ClassNode("class");
 		MethodNode method = new MethodNode("method");
-		PartitionedCategoryNode category = new PartitionedCategoryNode("name", "type");
-		ExpectedCategoryNode expCat = new ExpectedCategoryNode("name", "type", 0);
+		CategoryNode category = new CategoryNode("name", "type", false);
+		CategoryNode expCat = new CategoryNode("name", "type", true);
+		expCat.setDefaultValue(0);
 		ConstraintNode constraint = new ConstraintNode("name", new Constraint(new StaticStatement(true), new StaticStatement(false)));
 		TestCaseNode testCase = new TestCaseNode("name", new ArrayList<PartitionNode>());
 		PartitionNode partition = new PartitionNode("name", 0);
@@ -145,8 +149,9 @@ public class GenericNodeTest{
 		RootNode root = new RootNode("root");
 		ClassNode classNode = new ClassNode("class");
 		MethodNode method = new MethodNode("method");
-		PartitionedCategoryNode category = new PartitionedCategoryNode("category", "type");
-		ExpectedCategoryNode expCat = new ExpectedCategoryNode("expCat", "type", 0);
+		CategoryNode category = new CategoryNode("category", "type", false);
+		CategoryNode expCat = new CategoryNode("expCat", "type", true);
+		expCat.setDefaultValue(0);
 		ConstraintNode constraint = new ConstraintNode("constraint", new Constraint(new StaticStatement(true), new StaticStatement(false)));
 		TestCaseNode testCase = new TestCaseNode("testCase", new ArrayList<PartitionNode>());
 		PartitionNode p = new PartitionNode("p", 0);
@@ -189,7 +194,7 @@ public class GenericNodeTest{
 	
 	@Test
 	public void getSiblingTest(){
-		PartitionedCategoryNode cat = new PartitionedCategoryNode("cat", "type");
+		CategoryNode cat = new CategoryNode("cat", "type", false);
 		PartitionNode p1 = new PartitionNode("p1", 0);
 		PartitionNode p2 = new PartitionNode("p2", 0);
 		

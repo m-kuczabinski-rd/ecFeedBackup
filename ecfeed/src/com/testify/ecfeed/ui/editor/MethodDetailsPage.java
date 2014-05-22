@@ -26,10 +26,8 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
 
-import com.testify.ecfeed.model.AbstractCategoryNode;
-import com.testify.ecfeed.model.ExpectedCategoryNode;
+import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.MethodNode;
-import com.testify.ecfeed.model.PartitionedCategoryNode;
 import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.dialogs.TestMethodRenameDialog;
 import com.testify.ecfeed.utils.ModelUtils;
@@ -56,24 +54,19 @@ public class MethodDetailsPage extends BasicDetailsPage {
 		}
 
 		private void updateParemeters(MethodNode newMethod) {
-			List<AbstractCategoryNode> srcParameters = newMethod.getCategories();
+			List<CategoryNode> srcParameters = newMethod.getCategories();
 			for(int i = 0; i < srcParameters.size(); i++){
 				updateParameter(i, srcParameters.get(i));
 			}
 		}
 		
-		private void updateParameter(int index, AbstractCategoryNode newCategory){
-			boolean isOriginalCategoryExpected = fSelectedMethod.getCategories().get(index) 
-					instanceof ExpectedCategoryNode;
-			boolean isNewCategoryExpected = newCategory instanceof ExpectedCategoryNode;
+		private void updateParameter(int index, CategoryNode newCategory){
+			boolean isOriginalCategoryExpected = fSelectedMethod.getCategories().get(index).isExpected();
+			boolean isNewCategoryExpected = newCategory.isExpected();
 			if(isOriginalCategoryExpected == isNewCategoryExpected){
 				fSelectedMethod.getCategories().get(index).setName(newCategory.getName());
-			}
-			else{
-				if(newCategory instanceof ExpectedCategoryNode)
-					fSelectedMethod.replaceCategory(index, (ExpectedCategoryNode)newCategory);
-				else if(newCategory instanceof PartitionedCategoryNode)
-					fSelectedMethod.replaceCategory(index, (PartitionedCategoryNode)newCategory);					
+			} else{
+				fSelectedMethod.replaceCategory(index, newCategory);
 			}
 		}
 	}

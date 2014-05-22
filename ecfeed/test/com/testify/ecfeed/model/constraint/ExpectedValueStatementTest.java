@@ -10,25 +10,24 @@
  ******************************************************************************/
 package com.testify.ecfeed.model.constraint;
 
+import static org.junit.Assert.assertTrue;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.testify.ecfeed.model.ExpectedCategoryNode;
+import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
-import com.testify.ecfeed.model.PartitionedCategoryNode;
-
-import static org.junit.Assert.*;
 
 public class ExpectedValueStatementTest{
 	
 	private static MethodNode fMethod;
-	private static ExpectedCategoryNode fExpCategory1;
-	private static PartitionedCategoryNode fPartCategory1;
-	private static PartitionedCategoryNode fPartCategory2;
+	private static CategoryNode fExpCategory1;
+	private static CategoryNode fPartCategory1;
+	private static CategoryNode fPartCategory2;
 	private static String fExpectedValue1;
 
 	
@@ -37,9 +36,10 @@ public class ExpectedValueStatementTest{
 		fMethod = new MethodNode("method");
 		fExpectedValue1 = "value1";
 
-		fExpCategory1 = new ExpectedCategoryNode("category", "type", fExpectedValue1);
-		fPartCategory1 = new PartitionedCategoryNode("category", "type");
-		fPartCategory2 = new PartitionedCategoryNode("category", "type");
+		fExpCategory1 = new CategoryNode("category", "type", true);
+		fExpCategory1.setDefaultValue(fExpectedValue1);
+		fPartCategory1 = new CategoryNode("category", "type", false);
+		fPartCategory2 = new CategoryNode("category", "type", false);
 
 		fMethod.addCategory(fPartCategory1);
 		fMethod.addCategory(fExpCategory1);

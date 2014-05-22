@@ -32,7 +32,7 @@ import com.testify.ecfeed.generators.NWiseGenerator;
 import com.testify.ecfeed.generators.api.GeneratorException;
 import com.testify.ecfeed.generators.api.IConstraint;
 import com.testify.ecfeed.generators.api.IGenerator;
-import com.testify.ecfeed.model.AbstractCategoryNode;
+import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.ConstraintNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
@@ -246,7 +246,7 @@ public class OnlineRunnerTest extends StaticRunnerTest{
 	private List<List<PartitionNode>> referenceInput(RootNode model, FrameworkMethod method) throws RunnerException {
 		List<List<PartitionNode>> result = new ArrayList<List<PartitionNode>>();
 		MethodNode methodModel = getMethodModel(model, method);
-		for(AbstractCategoryNode category : methodModel.getCategories()){
+		for(CategoryNode category : methodModel.getCategories()){
 			result.add(category.getPartitions());
 		}
 		return result;

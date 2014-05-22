@@ -49,7 +49,7 @@ public class ConstraintNode extends GenericNode{
 		return false;
 	}
 
-	public boolean mentions(AbstractCategoryNode category) {
+	public boolean mentions(CategoryNode category) {
 		return fConstraint.mentions(category);
 	}
 
