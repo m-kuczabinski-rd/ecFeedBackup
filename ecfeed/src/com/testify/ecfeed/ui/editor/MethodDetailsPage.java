@@ -113,11 +113,6 @@ public class MethodDetailsPage extends BasicDetailsPage {
 			}
 		});
 
-		if (getSelectedElement() instanceof MethodNode) {
-			fSelectedMethod = (MethodNode)getSelectedElement();
-			fMethodNameText.setText(fSelectedMethod.getName());
-		}
-
 		Button changeButton = getToolkit().createButton(composite, "Change", SWT.NONE);
 		changeButton.addSelectionListener(new SelectionAdapter() {
 			@Override
