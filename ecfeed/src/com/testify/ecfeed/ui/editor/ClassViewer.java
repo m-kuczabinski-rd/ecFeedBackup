@@ -24,13 +24,13 @@ import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.utils.ModelUtils;
-import com.testify.ecfeed.ui.dialogs.EditTestItemDialog;
 import com.testify.ecfeed.ui.dialogs.TestClassSelectionDialog;
 
 public class ClassViewer extends CheckboxTableViewerSection {
 	private static final int STYLE = Section.EXPANDED | Section.TITLE_BAR;
 
 	private RootNode fModel;
+	private TableViewerColumn nameColumn;
 
 	private class AddImplementedClassAdapter extends SelectionAdapter {
 
@@ -90,38 +90,25 @@ public class ClassViewer extends CheckboxTableViewerSection {
 	}
 	
 	private class AddNewClassAdapter extends SelectionAdapter {
-
 		@Override
 		public void widgetSelected(SelectionEvent e) {
-			String className = getClassName();
+			String startName = "NewPackage.NewClass";
+			String name = startName;
+			int i = 1;
 
-			if ((fModel != null) && (className != null)) {
-				addClass(className, fModel);
+			while (true) {
+				if (fModel.getClassModel(name) == null) {
+					break;
+				}
+				name = startName + i;
+				++i;
 			}
-		}
 
-		private void addClass(String className, RootNode model){
-			if (model.getClassModel(className) == null){
-				ClassNode classNode = new ClassNode(className);
-				model.addClass(classNode);
-				modelUpdated();
-			} else {
-				MessageDialog.openError(getActiveShell(), 
-						Messages.DIALOG_CLASS_EXISTS_TITLE,
-						Messages.DIALOG_CLASS_EXISTS_MESSAGE);
-			}
-		}
-
-		private String getClassName() {
-			EditTestItemDialog dialog = new EditTestItemDialog(getActiveShell());
-			dialog.setTitle("New test class");
-			dialog.setEditorTitle("Enter new test class qualified name");
-
-			if (dialog.open() == IDialogConstants.OK_ID) {
-				return dialog.getNewName();
-			}
-			
-			return null;
+			ClassNode classNode = new ClassNode(name);
+			fModel.addClass(classNode);
+			modelUpdated();
+			selectElement(classNode);
+			nameColumn.getViewer().editElement(classNode, 0);
 		}
 	}
 
@@ -137,7 +124,7 @@ public class ClassViewer extends CheckboxTableViewerSection {
 	
 	@Override
 	protected void createTableColumns(){
-		TableViewerColumn nameColumn = addColumn("Class", 150, new ClassViewerColumnLabelProvider(){
+		nameColumn = addColumn("Class", 150, new ClassViewerColumnLabelProvider(){
 			@Override
 			public String getText(Object element){
 				return ((ClassNode)element).getLocalName();
