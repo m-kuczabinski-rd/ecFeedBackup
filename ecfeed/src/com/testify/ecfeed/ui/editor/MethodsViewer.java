@@ -88,8 +88,7 @@ public class MethodsViewer extends CheckboxTableViewerSection {
 		@Override
 		public String getText(Object element){
 			MethodNode method = (MethodNode)element;
-			String name = method.toString();
-			String result = name.substring(0, name.indexOf('('));
+			String result = method.getName();
 			return result;
 		}
 
