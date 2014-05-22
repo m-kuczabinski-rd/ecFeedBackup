@@ -98,9 +98,6 @@ public class XmlModelParser implements IModelParser{
 			if(child.getLocalName() == Constants.EXPECTED_VALUE_CATEGORY_NODE_NAME){
 				methodNode.addCategory(parseExpectedValueCategoryElement(child));
 			}
-			else if(child.getLocalName() == Constants.PARTITIONED_CATEGORY_NODE_NAME){
-				methodNode.addCategory(parsePartitionedCategoryElement(child));
-			}
 			else if(child.getLocalName() == Constants.CATEGORY_NODE_NAME){
 				methodNode.addCategory(parseCategoryElement(child));
 			}
@@ -299,35 +296,28 @@ public class XmlModelParser implements IModelParser{
 	protected CategoryNode parseExpectedValueCategoryElement(Element element) throws ParserException {
 		String name = getElementName(element);
 		String type = getAttributeValue(element, Constants.TYPE_NAME_ATTRIBUTE);
-		String defaultValueString = getAttributeValue(element, Constants.DEFAULT_EXPECTED_VALUE_ATTRIBUTE);
+		String defaultValueString = getAttributeValue(element, Constants.DEFAULT_EXPECTED_VALUE_ATTRIBUTE_NAME);
 		Object defaultValue = parseValue(defaultValueString, type);
 		CategoryNode category = new CategoryNode(name, type, true);
 		category.setDefaultValue(defaultValue);
 		return category;
 	}
 	
-	protected CategoryNode parsePartitionedCategoryElement(Element element) throws ParserException {
-		String name = getElementName(element);
-		String type = getAttributeValue(element, Constants.TYPE_NAME_ATTRIBUTE);
-
-		CategoryNode categoryNode = new CategoryNode(name, type, false);
-		for(Element child : getIterableElements(element.getChildElements())){
-			if(child.getLocalName() == Constants.PARTITION_NODE_NAME){
-				categoryNode.addPartition(parsePartitionElement(child, type));
-			}
-		}
-		return categoryNode;
-	}
-	
 	protected CategoryNode parseCategoryElement(Element element) throws ParserException {
 		String name = getElementName(element);
 		String type = getAttributeValue(element, Constants.TYPE_NAME_ATTRIBUTE);
-		boolean expected = Boolean.parseBoolean(getAttributeValue(element, Constants.CATEGORY_IS_EXPECTED_ATTRIBUTE));
+		
+		boolean expected;
+		if(element.getAttribute(Constants.CATEGORY_IS_EXPECTED_ATTRIBUTE_NAME) == null){
+			expected = false;
+		} else{
+			expected = Boolean.parseBoolean(getAttributeValue(element, Constants.CATEGORY_IS_EXPECTED_ATTRIBUTE_NAME));
+		}
 	
 		CategoryNode categoryNode = new CategoryNode(name, type, expected);
 		
 		if(expected){
-			String defaultValueString = getAttributeValue(element, Constants.DEFAULT_EXPECTED_VALUE_ATTRIBUTE);
+			String defaultValueString = getAttributeValue(element, Constants.DEFAULT_EXPECTED_VALUE_ATTRIBUTE_NAME);
 			Object defaultValue = parseValue(defaultValueString, type);
 			categoryNode.setDefaultValue(defaultValue);
 		}

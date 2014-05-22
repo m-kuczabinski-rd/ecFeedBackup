@@ -148,12 +148,12 @@ public class XmlModelSerializer {
 		Attribute typeNameAttribute = new Attribute(Constants.TYPE_NAME_ATTRIBUTE, type);
 		Attribute expectedAttribute;
 		if(expected){
-			expectedAttribute = new Attribute(Constants.DEFAULT_EXPECTED_VALUE_ATTRIBUTE, getValueString(type, value));
+			expectedAttribute = new Attribute(Constants.DEFAULT_EXPECTED_VALUE_ATTRIBUTE_NAME, getValueString(type, value));
 		} else {
-			expectedAttribute = new Attribute(Constants.DEFAULT_EXPECTED_VALUE_ATTRIBUTE, "");
+			expectedAttribute = new Attribute(Constants.DEFAULT_EXPECTED_VALUE_ATTRIBUTE_NAME, "");
 		}
 		categoryElement.addAttribute(expectedAttribute);
-		Attribute isExpectedAttribute = new Attribute(Constants.CATEGORY_IS_EXPECTED_ATTRIBUTE, Boolean.toString(expected));
+		Attribute isExpectedAttribute = new Attribute(Constants.CATEGORY_IS_EXPECTED_ATTRIBUTE_NAME, Boolean.toString(expected));
 		categoryElement.addAttribute(nameAttribute);
 		categoryElement.addAttribute(typeNameAttribute);
 		categoryElement.addAttribute(isExpectedAttribute);
