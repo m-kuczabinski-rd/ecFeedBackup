@@ -51,7 +51,10 @@ public class ExpectedValueEditingSupport extends EditingSupport {
 	protected void setValue(Object element, Object value) {
 		CategoryNode node = (CategoryNode)element;
 		boolean expected = ((int)value == 0) ? true : false;
-		node.setExpected(expected);
-		fSection.modelUpdated();
+		if (node.isExpected() != expected) {
+			node.setExpected(expected);
+			fSection.modelUpdated();
+		}
+		fCellEditor.setFocus();
 	}
 }
