@@ -402,6 +402,61 @@ public class MethodNodeTest {
 		assertEquals(0, method.getTestCases().size());
 	}
 	
+	@Test
+	public void testChangeCategoryTypeToExpected(){
+		MethodNode method = new MethodNode("method");
+		CategoryNode category = new CategoryNode("category", "type", false);
+		PartitionNode partition = new PartitionNode("partition", "value");
+		Constraint mentioningConstraint = new Constraint(new PartitionedCategoryStatement(category, Relation.EQUAL, partition), new StaticStatement(false));
+		Constraint notMentioningConstraint = new Constraint(new StaticStatement(false), new StaticStatement(false));
+		ConstraintNode mentioningConstraintNode = new ConstraintNode("constraint", mentioningConstraint);
+		ConstraintNode notMentioningConstraintNode = new ConstraintNode("constraint", notMentioningConstraint);
+		List<PartitionNode> testData = new ArrayList<PartitionNode>();
+		testData.add(partition);
+		TestCaseNode testCaseNode = new TestCaseNode("name", testData);
+
+		category.addPartition(partition);
+		method.addCategory(category);
+		method.addConstraint(notMentioningConstraintNode);
+		method.addConstraint(mentioningConstraintNode);
+		method.addTestCase(testCaseNode);
+		
+		category.setExpected(true);
+		
+		assertTrue(method.getCategories().contains(category));
+		assertTrue(method.getConstraintNodes().contains(notMentioningConstraintNode));
+		assertFalse(method.getConstraintNodes().contains(mentioningConstraintNode));
+		assertTrue(method.getTestCases().contains(testCaseNode));
+		assertEquals("value", testCaseNode.getTestData().get(0).getValue());
+	}
+	
+	@Test
+	public void testChangeCategoryTypeToPartitioned(){
+		MethodNode method = new MethodNode("method");
+		CategoryNode category = new CategoryNode("category", "type", true);
+		PartitionNode partition = new PartitionNode("partition", "value");
+		Constraint mentioningConstraint = new Constraint(new ExpectedValueStatement(category, partition), new StaticStatement(false));
+		Constraint notMentioningConstraint = new Constraint(new StaticStatement(false), new StaticStatement(false));
+		ConstraintNode mentioningConstraintNode = new ConstraintNode("constraint", mentioningConstraint);
+		ConstraintNode notMentioningConstraintNode = new ConstraintNode("constraint", notMentioningConstraint);
+		List<PartitionNode> testData = new ArrayList<PartitionNode>();
+		testData.add(partition);
+		TestCaseNode testCaseNode = new TestCaseNode("name", testData);
+		
+		category.addPartition(partition);
+		method.addCategory(category);
+		method.addConstraint(notMentioningConstraintNode);
+		method.addConstraint(mentioningConstraintNode);
+		method.addTestCase(testCaseNode);
+
+		category.setExpected(false);
+		
+		assertTrue(method.getCategories().contains(category));
+		assertTrue(method.getConstraintNodes().contains(notMentioningConstraintNode));
+		assertFalse(method.getConstraintNodes().contains(mentioningConstraintNode));
+		assertEquals(0, method.getTestCases().size());
+	}
+	
 	@Test 
 	public void testPartitionRemoved(){
 		MethodNode method = new MethodNode("method");

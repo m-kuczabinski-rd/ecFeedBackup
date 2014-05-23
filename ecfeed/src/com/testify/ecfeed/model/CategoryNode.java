@@ -175,4 +175,11 @@ public class CategoryNode extends GenericNode implements IPartitionedNode{
 	public boolean isExpected(){
 		return fExpected;
 	}
+	
+	public void setExpected(boolean isexpected){
+		if(fExpected != isexpected){
+			getMethod().changeCategoryExpectedStatus(this);
+			fExpected = isexpected;
+		}
+	}
 }

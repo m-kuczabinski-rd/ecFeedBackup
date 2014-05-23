@@ -377,6 +377,25 @@ public class ModelUtils {
 		return true;
 	}
 	
+	public static boolean validateCategoryName(String name){
+		if(name.length() < 1) return false;
+		if(!name.matches("(^[a-zA-Z][a-zA-Z0-9_$]*)|(^[_][a-zA-Z0-9_$]+))")) return false;
+		return validateNonKeywordName(name);
+	}
+	
+	public static boolean validateNonKeywordName(String name){
+		String[] javaKeywords =
+				{ "abstract", "continue", "for", "new", "switch", "assert", "default", "goto", "package", "synchronized", "boolean", "do",
+						"if", "private", "this", "break", "double", "implements", "protected", "throw", "byte", "else", "import", "public",
+						"throws", "case", "enum", "instanceof", "return", "transient", "catch", "extends", "int", "short", "try", "char",
+						"final", "interface", "static", "void", "class", "finally", "long", "strictfp", "volatile", "const", "float",
+						"native", "super", "while", "null", "true", "false" };
+		for(String keyword : javaKeywords){
+			if(name.equals(keyword)) return false;
+		}
+		return true;
+	}
+	
 	public static boolean validatePartitionStringValue(String valueString, String type){
 		if(type.equals(com.testify.ecfeed.model.Constants.TYPE_NAME_STRING)) return true;
 		return (getPartitionValueFromString(valueString, type) != null);
