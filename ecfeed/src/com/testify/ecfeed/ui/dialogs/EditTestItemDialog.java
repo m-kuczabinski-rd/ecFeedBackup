@@ -68,6 +68,7 @@ public class EditTestItemDialog extends TitleAreaDialog {
 		
 		if (fNewName != null) {
 			fNewNameText.setText(fNewName);
+			fNewNameText.setSelection(fNewName.length());
 		}
 		
 		fNewNameText.addModifyListener(new ModifyListener() {
