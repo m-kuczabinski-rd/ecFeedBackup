@@ -104,7 +104,7 @@ public class ParametersViewer extends CheckboxTableViewerSection implements Test
 				return (node.isExpected() ? "Yes" : "No");
 			}
 		});
-		expectedColumn.setEditingSupport(new ComboBoxCellEditingSupport(this));
+		expectedColumn.setEditingSupport(new ExpectedValueEditingSupport(this));
 
 		fDefaultValueColumn = addColumn("Default value", 150, new ColumnLabelProvider(){
 			@Override

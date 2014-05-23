@@ -18,12 +18,12 @@ import org.eclipse.swt.SWT;
 
 import com.testify.ecfeed.model.CategoryNode;
 
-public class ComboBoxCellEditingSupport extends EditingSupport {
+public class ExpectedValueEditingSupport extends EditingSupport {
 
 	private ComboBoxCellEditor fCellEditor;
 	BasicSection fSection;
 
-	public ComboBoxCellEditingSupport(ParametersViewer viewer) {
+	public ExpectedValueEditingSupport(ParametersViewer viewer) {
 		super(viewer.getTableViewer());
 		fSection = viewer;
 		String[] items = {"Yes", "No"};
