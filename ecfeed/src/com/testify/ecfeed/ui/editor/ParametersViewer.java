@@ -11,6 +11,8 @@
 
 package com.testify.ecfeed.ui.editor;
 
+import java.util.ArrayList;
+
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.TableViewerColumn;
@@ -24,11 +26,13 @@ import org.eclipse.ui.forms.widgets.Section;
 
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.MethodNode;
+import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.ui.common.ColorConstants;
 import com.testify.ecfeed.ui.common.ColorManager;
 import com.testify.ecfeed.ui.common.DefaultValueEditingSupport;
 import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.common.TestDataEditorListener;
+import com.testify.ecfeed.utils.ModelUtils;
 
 public class ParametersViewer extends CheckboxTableViewerSection implements TestDataEditorListener{
 
@@ -80,7 +84,14 @@ public class ParametersViewer extends CheckboxTableViewerSection implements Test
 				++i;
 			}
 
-			CategoryNode categoryNode = new CategoryNode(name, "int", false);
+			String type = "int";
+			CategoryNode categoryNode = new CategoryNode(name, type, false);
+			categoryNode.setDefaultValue(ModelUtils.getDefaultExpectedValue(type));
+			ArrayList<PartitionNode> defaultPartitions = ModelUtils.generateDefaultPartitions(type);
+			for (PartitionNode partition : defaultPartitions) {
+				categoryNode.addPartition(partition);
+			}
+
 			fSelectedMethod.addCategory(categoryNode);
 			modelUpdated();
 			selectElement(categoryNode);
