@@ -37,14 +37,55 @@ public class ParametersViewer extends CheckboxTableViewerSection implements Test
 	private ColorManager fColorManager;
 	private TableViewerColumn fDefaultValueColumn;
 	private MethodNode fSelectedMethod;
+	private TableViewerColumn nameColumn;
 	
 	public ParametersViewer(BasicDetailsPage parent, FormToolkit toolkit) {
 		super(parent.getMainComposite(), toolkit, STYLE, parent);
 		getSection().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
 		fColorManager = new ColorManager();
 		getSection().setText("Parameters");
+		addButton("New parameter", new AddNewParameterAdapter());
 		addButton("Remove selected", new RemoveParameterAdapter());
+		addButton("Move Up", new MoveUpAdapter());
+		addButton("Move Down", new MoveDownAdapter());
 		addDoubleClickListener(new SelectNodeDoubleClickListener(parent.getMasterSection()));
+	}
+
+	private class MoveUpAdapter extends SelectionAdapter{
+		@Override
+		public void widgetSelected(SelectionEvent e){
+			moveSelectedItem(true);
+		}
+	}
+
+	private class MoveDownAdapter extends SelectionAdapter{
+		@Override
+		public void widgetSelected(SelectionEvent e){
+			moveSelectedItem(false);
+		}
+	}
+
+	private class AddNewParameterAdapter extends SelectionAdapter {
+		@Override
+		public void widgetSelected(SelectionEvent e) {
+			String startName = "NewCategory";
+			String name = startName;
+			int i = 1;
+
+			while (true) {
+				if (fSelectedMethod.getCategory(name) == null) {
+					break;
+				}
+				name = startName + i;
+				++i;
+			}
+
+			CategoryNode categoryNode = new CategoryNode(name, "int", false);
+			fSelectedMethod.addCategory(categoryNode);
+			modelUpdated();
+			selectElement(categoryNode);
+			nameColumn.getViewer().editElement(categoryNode, 0);
+		}
 	}
 
 	private class RemoveParameterAdapter extends SelectionAdapter {
@@ -67,9 +108,17 @@ public class ParametersViewer extends CheckboxTableViewerSection implements Test
 		}
 	}
 
+	private void moveSelectedItem(boolean moveUp) {
+		if (getSelectedElement() != null) {
+			CategoryNode categoryNode = (CategoryNode)getSelectedElement();
+			categoryNode.getParent().moveChild(categoryNode, moveUp);
+			modelUpdated();
+		}
+	}
+
 	@Override
 	protected void createTableColumns() {
-		addColumn("Name", 150, new ColumnLabelProvider(){
+		nameColumn = addColumn("Name", 150, new ColumnLabelProvider(){
 			@Override
 			public String getText(Object element){
 				String result = new String();
@@ -85,8 +134,9 @@ public class ParametersViewer extends CheckboxTableViewerSection implements Test
 				return getColor(element);
 			}
 		});
+		nameColumn.setEditingSupport(new CategoryNameEditingSupport(this));
 		
-		addColumn("Type", 150, new ColumnLabelProvider(){
+		TableViewerColumn typeColumn = addColumn("Type", 150, new ColumnLabelProvider(){
 			@Override
 			public String getText(Object element){
 				return ((CategoryNode)element).getType();
@@ -96,6 +146,7 @@ public class ParametersViewer extends CheckboxTableViewerSection implements Test
 				return getColor(element);
 			}
 		});
+		typeColumn.setEditingSupport(new CategoryTypeEditingSupport(this));
 		
 		TableViewerColumn expectedColumn = addColumn("Expected", 150, new ColumnLabelProvider(){
 			@Override
