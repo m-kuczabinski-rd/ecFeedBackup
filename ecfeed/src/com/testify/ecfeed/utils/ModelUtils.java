@@ -380,10 +380,10 @@ public class ModelUtils {
 	public static boolean validateCategoryName(String name){
 		if(name.length() < 1) return false;
 		if(!name.matches("(^[a-zA-Z][a-zA-Z0-9_$]*)|(^[_][a-zA-Z0-9_$]+))")) return false;
-		return validateNonKeywordName(name);
+		return assertNotKeyword(name);
 	}
 	
-	public static boolean validateNonKeywordName(String name){
+	public static boolean assertNotKeyword(String name){
 		String[] javaKeywords =
 				{ "abstract", "continue", "for", "new", "switch", "assert", "default", "goto", "package", "synchronized", "boolean", "do",
 						"if", "private", "this", "break", "double", "implements", "protected", "throw", "byte", "else", "import", "public",
