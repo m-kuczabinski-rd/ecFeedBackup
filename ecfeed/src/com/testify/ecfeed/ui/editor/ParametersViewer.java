@@ -97,6 +97,15 @@ public class ParametersViewer extends CheckboxTableViewerSection implements Test
 			}
 		});
 		
+		TableViewerColumn expectedColumn = addColumn("Expected", 150, new ColumnLabelProvider(){
+			@Override
+			public String getText(Object element) {
+				CategoryNode node = (CategoryNode)element;
+				return (node.isExpected() ? "Yes" : "No");
+			}
+		});
+		expectedColumn.setEditingSupport(new ComboBoxCellEditingSupport(this));
+
 		fDefaultValueColumn = addColumn("Default value", 150, new ColumnLabelProvider(){
 			@Override
 			public String getText(Object element){
