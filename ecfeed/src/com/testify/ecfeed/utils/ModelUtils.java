@@ -256,7 +256,7 @@ public class ModelUtils {
 		}
 	}
 
-	private static ArrayList<PartitionNode> generateDefaultPartitions(String typeSignature) {
+	public static ArrayList<PartitionNode> generateDefaultPartitions(String typeSignature) {
 		switch(typeSignature){
 		case "boolean":
 			return defaultBooleanPartitions();
