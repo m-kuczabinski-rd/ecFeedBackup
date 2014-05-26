@@ -26,6 +26,10 @@ public class CategoryNode extends GenericNode implements IPartitionedNode{
 		return fType;
 	}
 
+	public void setType(String type) {
+		fType = type;
+	}
+
 	public MethodNode getMethod() {
 		return (MethodNode)getParent();
 	}
@@ -182,8 +186,5 @@ public class CategoryNode extends GenericNode implements IPartitionedNode{
 			fExpected = isexpected;
 		}
 	}
-	
-	public void setType(String type){
-		fType = type;
-	}
+
 }

@@ -11,6 +11,8 @@
 
 package com.testify.ecfeed.ui.editor;
 
+import java.util.ArrayList;
+
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.TableViewerColumn;
@@ -24,11 +26,13 @@ import org.eclipse.ui.forms.widgets.Section;
 
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.MethodNode;
+import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.ui.common.ColorConstants;
 import com.testify.ecfeed.ui.common.ColorManager;
 import com.testify.ecfeed.ui.common.DefaultValueEditingSupport;
 import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.common.TestDataEditorListener;
+import com.testify.ecfeed.utils.ModelUtils;
 
 public class ParametersViewer extends CheckboxTableViewerSection implements TestDataEditorListener{
 
@@ -37,14 +41,62 @@ public class ParametersViewer extends CheckboxTableViewerSection implements Test
 	private ColorManager fColorManager;
 	private TableViewerColumn fDefaultValueColumn;
 	private MethodNode fSelectedMethod;
+	private TableViewerColumn nameColumn;
 	
 	public ParametersViewer(BasicDetailsPage parent, FormToolkit toolkit) {
 		super(parent.getMainComposite(), toolkit, STYLE, parent);
 		getSection().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
 		fColorManager = new ColorManager();
 		getSection().setText("Parameters");
+		addButton("New parameter", new AddNewParameterAdapter());
 		addButton("Remove selected", new RemoveParameterAdapter());
+		addButton("Move Up", new MoveUpAdapter());
+		addButton("Move Down", new MoveDownAdapter());
 		addDoubleClickListener(new SelectNodeDoubleClickListener(parent.getMasterSection()));
+	}
+
+	private class MoveUpAdapter extends SelectionAdapter{
+		@Override
+		public void widgetSelected(SelectionEvent e){
+			moveSelectedItem(true);
+		}
+	}
+
+	private class MoveDownAdapter extends SelectionAdapter{
+		@Override
+		public void widgetSelected(SelectionEvent e){
+			moveSelectedItem(false);
+		}
+	}
+
+	private class AddNewParameterAdapter extends SelectionAdapter {
+		@Override
+		public void widgetSelected(SelectionEvent e) {
+			String startName = "NewCategory";
+			String name = startName;
+			int i = 1;
+
+			while (true) {
+				if (fSelectedMethod.getCategory(name) == null) {
+					break;
+				}
+				name = startName + i;
+				++i;
+			}
+
+			String type = "int";
+			CategoryNode categoryNode = new CategoryNode(name, type, false);
+			categoryNode.setDefaultValue(ModelUtils.getDefaultExpectedValue(type));
+			ArrayList<PartitionNode> defaultPartitions = ModelUtils.generateDefaultPartitions(type);
+			for (PartitionNode partition : defaultPartitions) {
+				categoryNode.addPartition(partition);
+			}
+
+			fSelectedMethod.addCategory(categoryNode);
+			modelUpdated();
+			selectElement(categoryNode);
+			nameColumn.getViewer().editElement(categoryNode, 0);
+		}
 	}
 
 	private class RemoveParameterAdapter extends SelectionAdapter {
@@ -67,9 +119,17 @@ public class ParametersViewer extends CheckboxTableViewerSection implements Test
 		}
 	}
 
+	private void moveSelectedItem(boolean moveUp) {
+		if (getSelectedElement() != null) {
+			CategoryNode categoryNode = (CategoryNode)getSelectedElement();
+			categoryNode.getParent().moveChild(categoryNode, moveUp);
+			modelUpdated();
+		}
+	}
+
 	@Override
 	protected void createTableColumns() {
-		addColumn("Name", 150, new ColumnLabelProvider(){
+		nameColumn = addColumn("Name", 150, new ColumnLabelProvider(){
 			@Override
 			public String getText(Object element){
 				String result = new String();
@@ -85,8 +145,9 @@ public class ParametersViewer extends CheckboxTableViewerSection implements Test
 				return getColor(element);
 			}
 		});
+		nameColumn.setEditingSupport(new CategoryNameEditingSupport(this));
 		
-		addColumn("Type", 150, new ColumnLabelProvider(){
+		TableViewerColumn typeColumn = addColumn("Type", 150, new ColumnLabelProvider(){
 			@Override
 			public String getText(Object element){
 				return ((CategoryNode)element).getType();
@@ -96,7 +157,17 @@ public class ParametersViewer extends CheckboxTableViewerSection implements Test
 				return getColor(element);
 			}
 		});
+		typeColumn.setEditingSupport(new CategoryTypeEditingSupport(this));
 		
+		TableViewerColumn expectedColumn = addColumn("Expected", 150, new ColumnLabelProvider(){
+			@Override
+			public String getText(Object element) {
+				CategoryNode node = (CategoryNode)element;
+				return (node.isExpected() ? "Yes" : "No");
+			}
+		});
+		expectedColumn.setEditingSupport(new ExpectedValueEditingSupport(this));
+
 		fDefaultValueColumn = addColumn("Default value", 150, new ColumnLabelProvider(){
 			@Override
 			public String getText(Object element){
