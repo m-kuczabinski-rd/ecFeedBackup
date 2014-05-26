@@ -13,6 +13,7 @@ package com.testify.ecfeed.utils;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -447,14 +448,24 @@ public class ModelUtils {
 	public static boolean isTestCasePartiallyImplemented(TestCaseNode node) {
 		return anyPartitionImplemented(node.getTestData());
 	}
-	
-	private static boolean allPartitionsImplemented(List<PartitionNode> partitions) {
-		boolean implemented = false;
-		
-		if (partitions.size() > 0) {
-			implemented = true;
+
+	public static boolean isTestSuiteImplemented(MethodNode methodNode, String suiteName) {
+		Collection<TestCaseNode> testSuite = methodNode.getTestCases(suiteName);
+		boolean implemented = (testSuite.size() > 0) ? true : false;
+
+		for (TestCaseNode testCase : testSuite) {
+			implemented = ModelUtils.isTestCaseImplemented(testCase);
+			if (implemented == false) {
+				break;
+			}
 		}
-		
+
+		return implemented;
+	}
+
+	private static boolean allPartitionsImplemented(List<PartitionNode> partitions) {
+		boolean implemented = (partitions.size() > 0) ? true : false;
+
 		for (PartitionNode partition : partitions) {
 			implemented = isPartitionImplemented(partition);
 			if (implemented == false) {
