@@ -11,26 +11,31 @@
 
 package com.testify.ecfeed.ui.editor;
 
+import java.util.ArrayList;
+
 import org.eclipse.jface.viewers.CellEditor;
+import org.eclipse.jface.viewers.ComboBoxCellEditor;
 import org.eclipse.jface.viewers.EditingSupport;
-import org.eclipse.jface.viewers.TextCellEditor;
+import org.eclipse.swt.custom.CCombo;
 
 import com.testify.ecfeed.model.CategoryNode;
 
 public class CategoryTypeEditingSupport extends EditingSupport {
 
-	private TextCellEditor fNameCellEditor;
-	BasicSection fSection;
+	private ComboBoxCellEditor fCellEditor;
+	private BasicSection fSection;
 
 	public CategoryTypeEditingSupport(ParametersViewer viewer) {
 		super(viewer.getTableViewer());
 		fSection = viewer;
-		fNameCellEditor = new TextCellEditor(viewer.getTable());
+		String[] items = {"boolean", "byte", "char", "short", "int", "long", "float", "double", "String"};
+		fCellEditor = new ComboBoxCellEditor(viewer.getTable(), items);
+		fCellEditor.setActivationStyle(ComboBoxCellEditor.DROP_DOWN_ON_MOUSE_ACTIVATION);
 	}
 
 	@Override
 	protected CellEditor getCellEditor(Object element) {
-		return fNameCellEditor;
+		return fCellEditor;
 	}
 
 	@Override
@@ -40,17 +45,39 @@ public class CategoryTypeEditingSupport extends EditingSupport {
 
 	@Override
 	protected Object getValue(Object element) {
-		return ((CategoryNode)element).getType();
+		CategoryNode node = (CategoryNode)element;
+		String [] items = fCellEditor.getItems();
+		ArrayList<String> newItems = new ArrayList<String>();
+
+		for (int i = 0; i < items.length; ++i) {
+			newItems.add(items[i]);
+			if (items[i].equals(node.getType())) {
+				return i;
+			}
+		}
+
+		newItems.add(node.getType());
+		fCellEditor.setItems(newItems.toArray(items));
+		return (newItems.size() - 1);
 	}
 
 	@Override
 	protected void setValue(Object element, Object value) {
-		String newType = (String)value;
-		CategoryNode categoryNode = (CategoryNode)element;
-		
-		if ((newType.length() > 0) && !categoryNode.getType().equals(newType)) {
-			categoryNode.setType(newType);
+		CategoryNode node = (CategoryNode)element;
+		String newType = null;
+		int index = (int)value;
+
+		if (index >= 0) {
+			newType = fCellEditor.getItems()[index];
+		} else {
+			newType = ((CCombo)fCellEditor.getControl()).getText();
+		}
+
+		if ((newType != null) && (newType.length() > 0) && !node.getType().equals(newType)) {
+			node.setType(newType);
 			fSection.modelUpdated();
 		}
+
+		fCellEditor.setFocus();
 	}
 }
