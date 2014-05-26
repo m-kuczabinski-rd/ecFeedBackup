@@ -18,12 +18,18 @@ import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.IBaseLabelProvider;
 import org.eclipse.jface.viewers.IContentProvider;
+import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Listener;
+import org.eclipse.swt.widgets.Tree;
+import org.eclipse.swt.widgets.TreeItem;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Section;
 
@@ -35,6 +41,7 @@ import com.testify.ecfeed.ui.common.TreeCheckStateListener;
 import com.testify.ecfeed.ui.dialogs.AddTestCaseDialog;
 import com.testify.ecfeed.ui.dialogs.CalculateCoverageDialog;
 import com.testify.ecfeed.ui.dialogs.RenameTestSuiteDialog;
+import com.testify.ecfeed.utils.ModelUtils;
 
 public class TestCasesViewer extends CheckboxTreeViewerSection {
 
@@ -42,7 +49,35 @@ public class TestCasesViewer extends CheckboxTreeViewerSection {
 	private MethodNode fSelectedMethod;
 	private TestCasesViewerLabelProvider fLabelProvider;
 	private TestCasesViewerContentProvider fContentProvider;
-	
+
+	@Override
+	protected TreeViewer createTreeViewer(Composite parent, int style) {
+		TreeViewer treeViewer = super.createTreeViewer(parent, style);
+		final Tree tree = treeViewer.getTree();
+		tree.addListener(SWT.Selection, new Listener() {
+			public void handleEvent(Event event) {
+				if (event.detail == SWT.CHECK) {
+					tree.setRedraw(false);
+					TreeItem item = (TreeItem)event.item;
+					if (item.getData() instanceof TestCaseNode) {
+						if (!ModelUtils.isTestCaseImplemented((TestCaseNode)item.getData())) {
+							item.setChecked(false);
+						}
+					} else if (item.getData() instanceof String) {
+						for(int i = 0; i < item.getItemCount(); ++i) {
+							TreeItem subItem = item.getItem(i);
+							if (!ModelUtils.isTestCaseImplemented((TestCaseNode)subItem.getData())) {
+								subItem.setChecked(false);
+							}
+						}
+					}
+					tree.setRedraw(true);
+				}
+			}
+		});
+		return treeViewer;
+	}
+
 	private class AddTestCaseAdapter extends SelectionAdapter{
 		public void widgetSelected(SelectionEvent e){
 			AddTestCaseDialog dialog = new AddTestCaseDialog(getActiveShell(), fSelectedMethod);
