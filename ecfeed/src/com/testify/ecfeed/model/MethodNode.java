@@ -259,7 +259,7 @@ public class MethodNode extends GenericNode {
 		}
 	}
 	
-	public void replaceCategory(int index, CategoryNode newCategory){		
+	public void replaceCategoryOfSameType(int index, CategoryNode newCategory){		
 		CategoryNode oldCategory = fCategories.get(index);
 		if(removeCategory(oldCategory)){
 			newCategory.setParent(this);
@@ -311,7 +311,7 @@ public class MethodNode extends GenericNode {
 		}
 	}
 	
-	protected void removeMentioningConstraints(CategoryNode category){
+	public void removeMentioningConstraints(CategoryNode category){
 		Iterator<ConstraintNode> it = fConstraints.iterator();
 		while(it.hasNext()){
 			ConstraintNode constraint = it.next();

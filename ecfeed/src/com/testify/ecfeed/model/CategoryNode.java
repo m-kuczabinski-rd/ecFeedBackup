@@ -8,7 +8,7 @@ import java.util.Set;
 
 public class CategoryNode extends GenericNode implements IPartitionedNode{
 	
-	private final String fType;
+	private String fType;
 	protected final List<PartitionNode> fPartitions;
 	private boolean fExpected;
 	private PartitionNode fDefaultValue;
@@ -181,5 +181,9 @@ public class CategoryNode extends GenericNode implements IPartitionedNode{
 			getMethod().changeCategoryExpectedStatus(this);
 			fExpected = isexpected;
 		}
+	}
+	
+	public void setType(String type){
+		fType = type;
 	}
 }
