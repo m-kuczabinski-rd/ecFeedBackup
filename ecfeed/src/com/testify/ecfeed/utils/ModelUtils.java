@@ -13,6 +13,7 @@ package com.testify.ecfeed.utils;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -377,7 +378,7 @@ public class ModelUtils {
 		return true;
 	}
 	
-	public static boolean validateCategoryName(String name){
+	public static boolean validateNodeName(String name){
 		if(name.length() < 1) return false;
 		if(!name.matches("(^[a-zA-Z][a-zA-Z0-9_$]*)|(^[_][a-zA-Z0-9_$]+)")) return false;
 		return assertNotKeyword(name);
@@ -395,7 +396,18 @@ public class ModelUtils {
 		}
 		return true;
 	}
-	
+
+	public static boolean isClassQualifiedNameValid(String qualifiedName) {
+		int lastDotIndex = qualifiedName.lastIndexOf('.');
+		boolean valid = (lastDotIndex != -1) ? true : false;
+		if (valid) {
+			String packageName = qualifiedName.substring(0, lastDotIndex);
+			String className = qualifiedName.substring(lastDotIndex + 1, qualifiedName.length());
+			valid = ModelUtils.validateNodeName(packageName) && ModelUtils.validateNodeName(className);
+		}
+		return valid;
+	}
+
 	public static boolean validatePartitionStringValue(String valueString, String type){
 		if(type.equals(com.testify.ecfeed.model.Constants.TYPE_NAME_STRING)) return true;
 		return (getPartitionValueFromString(valueString, type) != null);
@@ -466,14 +478,24 @@ public class ModelUtils {
 	public static boolean isTestCasePartiallyImplemented(TestCaseNode node) {
 		return anyPartitionImplemented(node.getTestData());
 	}
-	
-	private static boolean allPartitionsImplemented(List<PartitionNode> partitions) {
-		boolean implemented = false;
-		
-		if (partitions.size() > 0) {
-			implemented = true;
+
+	public static boolean isTestSuiteImplemented(MethodNode methodNode, String suiteName) {
+		Collection<TestCaseNode> testSuite = methodNode.getTestCases(suiteName);
+		boolean implemented = (testSuite.size() > 0) ? true : false;
+
+		for (TestCaseNode testCase : testSuite) {
+			implemented = ModelUtils.isTestCaseImplemented(testCase);
+			if (implemented == false) {
+				break;
+			}
 		}
-		
+
+		return implemented;
+	}
+
+	private static boolean allPartitionsImplemented(List<PartitionNode> partitions) {
+		boolean implemented = (partitions.size() > 0) ? true : false;
+
 		for (PartitionNode partition : partitions) {
 			implemented = isPartitionImplemented(partition);
 			if (implemented == false) {

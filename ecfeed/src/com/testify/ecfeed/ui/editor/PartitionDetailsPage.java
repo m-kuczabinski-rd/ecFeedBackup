@@ -147,7 +147,12 @@ public class PartitionDetailsPage extends BasicDetailsPage {
 			fSelectedPartition = (PartitionNode)getSelectedElement();
 		}
 		if(fSelectedPartition != null){
-			getMainSection().setText(fSelectedPartition.toString());
+			String title = fSelectedPartition.toString();
+			boolean implemented = ModelUtils.isPartitionImplemented(fSelectedPartition);
+			if (implemented) {
+				title += " [implemented]";
+			}
+			getMainSection().setText(title);
 			fPartitionChildren.setInput(fSelectedPartition);
 			fLabelsViewer.setInput(fSelectedPartition);
 			fPartitionNameText.setText(fSelectedPartition.getName());

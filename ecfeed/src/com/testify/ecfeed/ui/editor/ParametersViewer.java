@@ -165,6 +165,10 @@ public class ParametersViewer extends CheckboxTableViewerSection implements Test
 				CategoryNode node = (CategoryNode)element;
 				return (node.isExpected() ? "Yes" : "No");
 			}
+			@Override
+			public Color getForeground(Object element){
+				return getColor(element);
+			}
 		});
 		expectedColumn.setEditingSupport(new ExpectedValueEditingSupport(this));
 

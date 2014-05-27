@@ -167,7 +167,7 @@ public class CategoryDetailsPage extends BasicDetailsPage {
 		if(newValue.equals(fSelectedCategory.getName()) || fSelectedCategory.getSibling(newValue) != null){
 			return false;
 		}
-		if(ModelUtils.validateCategoryName(newValue)){
+		if(ModelUtils.validateNodeName(newValue)){
 			category.setName(newValue);
 			return true;
 		}
