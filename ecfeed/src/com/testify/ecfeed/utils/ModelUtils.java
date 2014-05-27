@@ -397,7 +397,18 @@ public class ModelUtils {
 		}
 		return true;
 	}
-	
+
+	public static boolean isClassQualifiedNameValid(String qualifiedName) {
+		int lastDotIndex = qualifiedName.lastIndexOf('.');
+		boolean valid = (lastDotIndex != -1) ? true : false;
+		if (valid) {
+			String packageName = qualifiedName.substring(0, lastDotIndex);
+			String className = qualifiedName.substring(lastDotIndex + 1, qualifiedName.length());
+			valid = ModelUtils.validateNodeName(packageName) && ModelUtils.validateNodeName(className);
+		}
+		return valid;
+	}
+
 	public static boolean validatePartitionStringValue(String valueString, String type){
 		if(type.equals(com.testify.ecfeed.model.Constants.TYPE_NAME_STRING)) return true;
 		return (getPartitionValueFromString(valueString, type) != null);
