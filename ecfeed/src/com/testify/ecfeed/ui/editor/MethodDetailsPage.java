@@ -39,6 +39,7 @@ public class MethodDetailsPage extends BasicDetailsPage {
 	private ConstraintsListViewer fConstraintsSection;
 	private TestCasesViewer fTestCasesSection;
 	private Text fMethodNameText;
+	private Button fTestOnlineButton;
 	
 	private class ReassignAdapter extends SelectionAdapter{
 
@@ -115,8 +116,8 @@ public class MethodDetailsPage extends BasicDetailsPage {
 		});
 		Button reassignButton = getToolkit().createButton(composite, "Reassign", SWT.NONE);
 		reassignButton.addSelectionListener(new ReassignAdapter());
-		Button testOnlineButton = getToolkit().createButton(composite, "Test online", SWT.NONE);
-		testOnlineButton.addSelectionListener(new ExecuteOnlineTestAdapter(this));
+		fTestOnlineButton = getToolkit().createButton(composite, "Test online", SWT.NONE);
+		fTestOnlineButton.addSelectionListener(new ExecuteOnlineTestAdapter(this));
 
 		getToolkit().paintBordersFor(composite);
 	}
@@ -142,9 +143,11 @@ public class MethodDetailsPage extends BasicDetailsPage {
 		}
 		if(fSelectedMethod != null){
 			String title = fSelectedMethod.getName();
-			if (ModelUtils.isMethodImplemented(fSelectedMethod)) {
+			boolean implemented = ModelUtils.isMethodImplemented(fSelectedMethod);
+			if (implemented) {
 				title += " [implemented]";
 			}
+			fTestOnlineButton.setEnabled(implemented);
 			getMainSection().setText(title);
 			fParemetersSection.setInput(fSelectedMethod);
 			fConstraintsSection.setInput(fSelectedMethod);
