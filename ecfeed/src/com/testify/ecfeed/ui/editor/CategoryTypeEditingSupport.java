@@ -19,6 +19,7 @@ import org.eclipse.jface.viewers.EditingSupport;
 import org.eclipse.swt.custom.CCombo;
 
 import com.testify.ecfeed.model.CategoryNode;
+import com.testify.ecfeed.utils.ModelUtils;
 
 public class CategoryTypeEditingSupport extends EditingSupport {
 
@@ -74,7 +75,7 @@ public class CategoryTypeEditingSupport extends EditingSupport {
 		}
 
 		if ((newType != null) && (newType.length() > 0) && !node.getType().equals(newType)) {
-			node.setType(newType);
+			ModelUtils.changeCategoryType(node, newType);
 			fSection.modelUpdated();
 		}
 
