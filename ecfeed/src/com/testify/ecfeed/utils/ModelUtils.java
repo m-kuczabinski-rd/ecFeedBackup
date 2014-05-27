@@ -381,7 +381,7 @@ public class ModelUtils {
 	
 	public static boolean validateNodeName(String name){
 		if(name.length() < 1) return false;
-		if(!name.matches("(^[a-zA-Z][a-zA-Z0-9_$]*)|(^[_][a-zA-Z0-9_$]+))")) return false;
+		if(!name.matches("(^[a-zA-Z][a-zA-Z0-9_$]*)|(^[_][a-zA-Z0-9_$]+)")) return false;
 		return assertNotKeyword(name);
 	}
 	
