@@ -96,4 +96,8 @@ public class CategoryChildrenViewer extends CheckboxTableViewerSection {
 		fSelectedCategory = category;
 		super.setInput(category.getPartitions());
 	}
+	
+	public void setVisible(boolean visible){
+		this.getSection().setVisible(visible);
+	}
 }

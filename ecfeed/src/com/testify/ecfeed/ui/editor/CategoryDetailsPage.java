@@ -11,12 +11,26 @@
 
 package com.testify.ecfeed.ui.editor;
 
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Listener;
+import org.eclipse.swt.widgets.Text;
+import com.testify.ecfeed.utils.AdaptTypeSupport;
+import com.testify.ecfeed.utils.ModelUtils;
 import org.eclipse.swt.widgets.Composite;
-
 import com.testify.ecfeed.model.CategoryNode;
 
 public class CategoryDetailsPage extends BasicDetailsPage {
 
+	private Text fDefaultValueText;
+	private Text fNameText;
+	private Text fTypeText;
+	private Button fExpectedCheckbox;
 	private CategoryNode fSelectedCategory;
 	private CategoryChildrenViewer fPartitionsViewer;
 
@@ -27,20 +41,145 @@ public class CategoryDetailsPage extends BasicDetailsPage {
 	@Override
 	public void createContents(Composite parent){
 		super.createContents(parent);
-
-		addForm(fPartitionsViewer = new CategoryChildrenViewer(this, getToolkit()));
 		
+		createCommonParametersEdit();
+		createDefaultValueEdit();
+		addForm(fPartitionsViewer = new CategoryChildrenViewer(this, getToolkit()));
+
 		getToolkit().paintBordersFor(getMainComposite());
+	}
+	
+	public void createCommonParametersEdit(){
+		Composite composite = getToolkit().createComposite(getMainComposite());
+		composite.setLayout(new GridLayout(1, false));
+		composite.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
+		getToolkit().createLabel(composite, "Category name: ", SWT.NONE);
+		fNameText = getToolkit().createText(composite, "",SWT.NONE);
+		fNameText.setLayoutData(new GridData(SWT.FILL,  SWT.CENTER, true, false));
+		fNameText.addListener(SWT.KeyDown, new Listener(){
+			@Override
+			public void handleEvent(Event event){
+				if(event.keyCode == SWT.CR || event.keyCode == SWT.KEYPAD_CR){
+					if(applyNewCategoryName(fSelectedCategory, fNameText)){
+						modelUpdated(null);
+					}
+				}
+			}
+		});
+		getToolkit().createLabel(composite, "Category type: ", SWT.NONE);
+		fTypeText = getToolkit().createText(composite, "",SWT.NONE);
+		fTypeText.setLayoutData(new GridData(SWT.FILL,  SWT.CENTER, true, false));
+		fTypeText.addListener(SWT.KeyDown, new Listener(){
+			@Override
+			public void handleEvent(Event event){
+				if(event.keyCode == SWT.CR || event.keyCode == SWT.KEYPAD_CR){
+					if(applyNewCategoryType(fSelectedCategory, fTypeText)){
+						modelUpdated(null);
+					}
+				}
+			}
+		});
+		getToolkit().paintBordersFor(composite);
+	}
+	
+	public void createDefaultValueEdit(){
+		Composite composite = getToolkit().createComposite(getMainComposite());
+		composite.setLayout(new GridLayout(1, false));
+		composite.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
+		getToolkit().createLabel(composite, "Default value: ", SWT.NONE);
+		fDefaultValueText = getToolkit().createText(composite, "",SWT.NONE);
+		fDefaultValueText.setLayoutData(new GridData(SWT.FILL,  SWT.CENTER, true, false));
+		fDefaultValueText.addListener(SWT.KeyDown, new Listener(){
+			@Override
+			public void handleEvent(Event event){
+				if(event.keyCode == SWT.CR || event.keyCode == SWT.KEYPAD_CR){
+					if(applyNewDefaultValue(fSelectedCategory, fDefaultValueText)){
+						modelUpdated(null);
+					}
+				}
+			}
+		});
+		fExpectedCheckbox = getToolkit().createButton(composite, "Expected", SWT.CHECK);
+		fExpectedCheckbox.setLayoutData(new GridData(SWT.FILL,  SWT.CENTER, false, false));
+		fExpectedCheckbox.addSelectionListener(new SelectionAdapter(){
+			@Override
+			public void widgetSelected(SelectionEvent e){
+				super.widgetSelected(e);
+				fSelectedCategory.setExpected(fExpectedCheckbox.getSelection());
+				modelUpdated(null);
+			}
+		});
+		
+		getToolkit().paintBordersFor(composite);
 	}
 	
 	@Override
 	public void refresh(){
 		if(getSelectedElement() instanceof CategoryNode){
 			fSelectedCategory = (CategoryNode)getSelectedElement();
-		}
-		if(fSelectedCategory != null){
 			getMainSection().setText(fSelectedCategory.toString());
 			fPartitionsViewer.setInput(fSelectedCategory);
+			
+			fNameText.setText(fSelectedCategory.getName());
+			fNameText.setEnabled(true);
+			fTypeText.setText(fSelectedCategory.getType());
+			fTypeText.setEnabled(true);
+			
+			fExpectedCheckbox.setEnabled(true);
+			fExpectedCheckbox.setSelection(fSelectedCategory.isExpected());
+			
+			if(fSelectedCategory.isExpected()){
+				fDefaultValueText.setText(fSelectedCategory.getDefaultValue().toString());
+				fDefaultValueText.setEnabled(true);
+				fPartitionsViewer.setVisible(false);
+
+			} else{
+				fDefaultValueText.setText("");
+				fDefaultValueText.setEnabled(false);
+				fPartitionsViewer.setVisible(true);
+			}
+
+		} else{
+			fExpectedCheckbox.setEnabled(false);
+			fDefaultValueText.setText("");
+			fDefaultValueText.setEnabled(false);
+			fNameText.setText("");
+			fNameText.setEnabled(false);
+			fTypeText.setText("");
+			fTypeText.setEnabled(false);
+			fPartitionsViewer.setVisible(false);
 		}
+	}
+	
+	protected boolean applyNewDefaultValue(CategoryNode category, Text valueText) {
+		String newValue = valueText.getText();
+		if(newValue.equals(fSelectedCategory.getDefaultValue().toString())) return false;
+		if(ModelUtils.validatePartitionStringValue(newValue, category.getType())){
+			category.setDefaultValue(ModelUtils.getPartitionValueFromString(newValue, category.getType()));
+			return true;
+		}
+		valueText.setText(category.getDefaultValuePartition().getValueString());
+		return false;
+	}
+	
+	protected boolean applyNewCategoryName(CategoryNode category, Text valueText) {
+		String newValue = valueText.getText();
+		if(newValue.equals(fSelectedCategory.getName()) || fSelectedCategory.getSibling(newValue) != null){
+			return false;
+		}
+		if(ModelUtils.validateCategoryName(newValue)){
+			category.setName(newValue);
+			return true;
+		}
+		valueText.setText(category.getName());
+		return false;
+	}
+	
+	protected boolean applyNewCategoryType(CategoryNode category, Text valueText) {
+		String newValue = valueText.getText();
+		if(newValue.equals(fSelectedCategory.getType())){
+			return false;
+		}
+		return AdaptTypeSupport.changeCategoryType(category, newValue);
 	}
 }
