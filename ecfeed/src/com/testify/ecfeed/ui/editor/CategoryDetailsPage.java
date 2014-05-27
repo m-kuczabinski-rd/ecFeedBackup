@@ -81,6 +81,14 @@ public class CategoryDetailsPage extends BasicDetailsPage {
 				}
 			}
 		});
+		fTypeText.addSelectionListener(new SelectionAdapter(){
+			@Override
+			public void widgetSelected(SelectionEvent e){
+				if(applyNewCategoryType(fSelectedCategory, fTypeText)){
+					modelUpdated(null);
+				}
+			}
+		});
 		getToolkit().paintBordersFor(composite);
 	}
 	
@@ -106,7 +114,6 @@ public class CategoryDetailsPage extends BasicDetailsPage {
 		fExpectedCheckbox.addSelectionListener(new SelectionAdapter(){
 			@Override
 			public void widgetSelected(SelectionEvent e){
-				super.widgetSelected(e);
 				fSelectedCategory.setExpected(fExpectedCheckbox.getSelection());
 				modelUpdated(null);
 			}
@@ -124,15 +131,19 @@ public class CategoryDetailsPage extends BasicDetailsPage {
 			
 			fNameText.setText(fSelectedCategory.getName());
 			fNameText.setEnabled(true);
-			fTypeText.setText(fSelectedCategory.getType());
 			fTypeText.setEnabled(true);
 			fTypeText.setItems(AdaptTypeSupport.getSupportedTypes());
+			fTypeText.setText(fSelectedCategory.getType());
 			
 			fExpectedCheckbox.setEnabled(true);
 			fExpectedCheckbox.setSelection(fSelectedCategory.isExpected());
 			
 			if(fSelectedCategory.isExpected()){
-				fDefaultValueText.setText(fSelectedCategory.getDefaultValue().toString());
+				if(fSelectedCategory.getDefaultValue() == null){
+					fDefaultValueText.setText("null");
+				} else {
+					fDefaultValueText.setText(fSelectedCategory.getDefaultValue().toString());
+				}
 				fDefaultValueText.setEnabled(true);
 				fPartitionsViewer.setVisible(false);
 
@@ -180,9 +191,6 @@ public class CategoryDetailsPage extends BasicDetailsPage {
 	
 	protected boolean applyNewCategoryType(CategoryNode category, Combo valueText) {
 		String newValue = valueText.getText();
-		if(newValue.equals(fSelectedCategory.getType())){
-			return false;
-		}
 		return AdaptTypeSupport.changeCategoryType(category, newValue);
 	}
 }
