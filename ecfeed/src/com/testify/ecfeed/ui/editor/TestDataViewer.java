@@ -26,6 +26,7 @@ import com.testify.ecfeed.ui.common.ColorConstants;
 import com.testify.ecfeed.ui.common.ColorManager;
 import com.testify.ecfeed.ui.common.TestDataEditorListener;
 import com.testify.ecfeed.ui.common.TestDataValueEditingSupport;
+import com.testify.ecfeed.utils.ModelUtils;
 
 public class TestDataViewer extends TableViewerSection implements TestDataEditorListener{
 
@@ -72,8 +73,8 @@ public class TestDataViewer extends TableViewerSection implements TestDataEditor
 	
 	private Color getColor(Object element){
 		PartitionNode partition = (PartitionNode)element;
-		if(partition.getCategory().isExpected()){
-			fColorManager.getColor(ColorConstants.EXPECTED_VALUE_CATEGORY);
+		if (ModelUtils.isPartitionImplemented(partition)) {
+			return fColorManager.getColor(ColorConstants.ITEM_IMPLEMENTED);
 		}
 		return null;
 	}
