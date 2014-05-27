@@ -19,6 +19,7 @@ import org.eclipse.swt.widgets.Display;
 
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.ui.common.Messages;
+import com.testify.ecfeed.utils.ModelUtils;
 
 public class MethodNameEditingSupport extends EditingSupport{
 
@@ -51,8 +52,13 @@ public class MethodNameEditingSupport extends EditingSupport{
 	protected void setValue(Object element, Object value) {
 		String newName = (String)value;
 		MethodNode methodNode = (MethodNode)element;
-		
-		if ((newName.length() > 0) && !methodNode.getName().equals(newName)) {
+		boolean validName = ModelUtils.validateNodeName(newName);
+		if (!validName) {
+			MessageDialog.openError(Display.getCurrent().getActiveShell(),
+					Messages.DIALOG_METHOD_NAME_PROBLEM_TITLE,
+					Messages.DIALOG_METHOD_NAME_PROBLEM_MESSAGE);
+		}
+		if (validName && !methodNode.getName().equals(newName)) {
 			if (methodNode.getClassNode().getMethod(newName, methodNode.getCategoriesTypes()) == null) {
 				methodNode.setName(newName);
 				fSection.modelUpdated();

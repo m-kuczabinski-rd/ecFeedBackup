@@ -22,6 +22,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
@@ -124,7 +125,16 @@ public class MethodDetailsPage extends BasicDetailsPage {
 
 	private void changeName() {
 		String name = fMethodNameText.getText();
-		if ((name != null) && (!fSelectedMethod.getName().equals(name))) {
+		boolean validName = ModelUtils.validateNodeName(name);
+
+		if (!validName) {
+			MessageDialog.openError(Display.getCurrent().getActiveShell(),
+					Messages.DIALOG_METHOD_NAME_PROBLEM_TITLE,
+					Messages.DIALOG_METHOD_NAME_PROBLEM_MESSAGE);
+			fMethodNameText.setText(fSelectedMethod.getName());
+			fMethodNameText.setSelection(fSelectedMethod.getName().length());
+		}
+		if (validName && (!fSelectedMethod.getName().equals(name))) {
 			if (fSelectedMethod.getClassNode().getMethod(name, fSelectedMethod.getCategoriesTypes()) == null){
 				fSelectedMethod.setName(name);
 				modelUpdated(null);
