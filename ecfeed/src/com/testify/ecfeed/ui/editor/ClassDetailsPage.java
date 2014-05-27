@@ -127,7 +127,17 @@ public class ClassDetailsPage extends BasicDetailsPage {
 
 	private void changeName() {
 		String name = fClassNameText.getText();
-		if ((name != null) && (!fSelectedClass.getName().equals(name))) {
+		boolean validName = ModelUtils.isClassQualifiedNameValid(name);
+
+		if (!validName) {
+			MessageDialog.openError(Display.getCurrent().getActiveShell(),
+					Messages.DIALOG_CLASS_NAME_PROBLEM_TITLE,
+					Messages.DIALOG_CLASS_NAME_PROBLEM_MESSAGE);
+			fClassNameText.setText(fSelectedClass.getQualifiedName());
+			fClassNameText.setSelection(fSelectedClass.getQualifiedName().length());
+		}
+
+		if (validName && (!fSelectedClass.getName().equals(name))) {
 			if (fSelectedClass.getRoot().getClassModel(name) == null) {
 				fSelectedClass.setName(name);
 				modelUpdated(null);

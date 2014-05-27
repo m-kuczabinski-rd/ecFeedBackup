@@ -127,4 +127,7 @@ public class Messages {
 	public static final String DIALOG_REMOVE_PARAMETERS_MESSAGE = "This operation will remove selected parameters from the method.";
 	public static final String DIALOG_CATEGORY_EXISTS_TITLE = "Category exists";
 	public static final String DIALOG_CATEGORY_EXISTS_MESSAGE = "Entered category is already contained in the method.";
+	public static final String DIALOG_CLASS_NAME_PROBLEM_TITLE = "Wrong class qualified name";
+	public static final String DIALOG_CLASS_NAME_PROBLEM_MESSAGE = "Class qualified name must contain between 1 and 64 characters " +
+			"may not contain only white characters and must contain package name, followed by \".\", followed by class name.";
 }
