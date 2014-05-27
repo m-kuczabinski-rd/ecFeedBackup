@@ -24,6 +24,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
@@ -49,6 +50,7 @@ public class TestCasesViewer extends CheckboxTreeViewerSection {
 	private MethodNode fSelectedMethod;
 	private TestCasesViewerLabelProvider fLabelProvider;
 	private TestCasesViewerContentProvider fContentProvider;
+	private Button fExecuteSeletedButton;
 
 	@Override
 	protected TreeViewer createTreeViewer(Composite parent, int style) {
@@ -168,7 +170,7 @@ public class TestCasesViewer extends CheckboxTreeViewerSection {
 		addButton("Generate test suite", new GenerateTestSuiteAdapter(this));
 		addButton("Calculate coverage", new CalculateCoverageAdapter());
 		addButton("Remove selected", new RemoveSelectedAdapter());
-		addButton("Execute selected", new ExecuteStaticTestAdapter(this));
+		fExecuteSeletedButton = addButton("Execute selected", new ExecuteStaticTestAdapter(this));
 
 		addDoubleClickListener(new SelectNodeDoubleClickListener(parent.getMasterSection()));
 	}
@@ -204,5 +206,11 @@ public class TestCasesViewer extends CheckboxTreeViewerSection {
 	
 	public MethodNode getSelectedMethod(){
 		return fSelectedMethod;
+	}
+
+	@Override
+	public void refresh() {
+		super.refresh();
+		fExecuteSeletedButton.setEnabled(ModelUtils.isMethodImplemented(fSelectedMethod));
 	}
 }
