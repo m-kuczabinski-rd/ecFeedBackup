@@ -10,6 +10,20 @@ import com.testify.ecfeed.model.TestCaseNode;
 import static com.testify.ecfeed.utils.ModelUtils.getDefaultExpectedValue;
 
 public class AdaptTypeSupport{
+	
+	public static String[] getSupportedTypes(){
+		return new String[]{
+		 com.testify.ecfeed.model.Constants.TYPE_NAME_STRING,
+		 com.testify.ecfeed.model.Constants.TYPE_NAME_INT,
+		 com.testify.ecfeed.model.Constants.TYPE_NAME_BOOLEAN,
+		 com.testify.ecfeed.model.Constants.TYPE_NAME_DOUBLE,
+		 com.testify.ecfeed.model.Constants.TYPE_NAME_BYTE,
+		 com.testify.ecfeed.model.Constants.TYPE_NAME_CHAR,
+		 com.testify.ecfeed.model.Constants.TYPE_NAME_FLOAT,
+		 com.testify.ecfeed.model.Constants.TYPE_NAME_LONG,
+		 com.testify.ecfeed.model.Constants.TYPE_NAME_SHORT
+		};
+	}
 
 	// returns true if model has changed in any way
 	public static boolean changeCategoryType(CategoryNode category, String type){

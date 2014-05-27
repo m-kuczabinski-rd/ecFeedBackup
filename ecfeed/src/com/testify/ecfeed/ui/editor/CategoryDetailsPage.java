@@ -17,19 +17,21 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Combo;
+import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
+
+import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.utils.AdaptTypeSupport;
 import com.testify.ecfeed.utils.ModelUtils;
-import org.eclipse.swt.widgets.Composite;
-import com.testify.ecfeed.model.CategoryNode;
 
 public class CategoryDetailsPage extends BasicDetailsPage {
 
 	private Text fDefaultValueText;
 	private Text fNameText;
-	private Text fTypeText;
+	private Combo fTypeText;
 	private Button fExpectedCheckbox;
 	private CategoryNode fSelectedCategory;
 	private CategoryChildrenViewer fPartitionsViewer;
@@ -67,8 +69,8 @@ public class CategoryDetailsPage extends BasicDetailsPage {
 			}
 		});
 		getToolkit().createLabel(composite, "Category type: ", SWT.NONE);
-		fTypeText = getToolkit().createText(composite, "",SWT.NONE);
-		fTypeText.setLayoutData(new GridData(SWT.FILL,  SWT.CENTER, true, false));
+		fTypeText = new Combo(composite,SWT.DROP_DOWN);
+		fTypeText.setLayoutData(new GridData(SWT.FILL,  SWT.CENTER, false, false));
 		fTypeText.addListener(SWT.KeyDown, new Listener(){
 			@Override
 			public void handleEvent(Event event){
@@ -124,6 +126,7 @@ public class CategoryDetailsPage extends BasicDetailsPage {
 			fNameText.setEnabled(true);
 			fTypeText.setText(fSelectedCategory.getType());
 			fTypeText.setEnabled(true);
+			fTypeText.setItems(AdaptTypeSupport.getSupportedTypes());
 			
 			fExpectedCheckbox.setEnabled(true);
 			fExpectedCheckbox.setSelection(fSelectedCategory.isExpected());
@@ -175,7 +178,7 @@ public class CategoryDetailsPage extends BasicDetailsPage {
 		return false;
 	}
 	
-	protected boolean applyNewCategoryType(CategoryNode category, Text valueText) {
+	protected boolean applyNewCategoryType(CategoryNode category, Combo valueText) {
 		String newValue = valueText.getText();
 		if(newValue.equals(fSelectedCategory.getType())){
 			return false;
