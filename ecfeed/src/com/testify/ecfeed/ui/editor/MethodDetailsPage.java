@@ -66,7 +66,7 @@ public class MethodDetailsPage extends BasicDetailsPage {
 			if(isOriginalCategoryExpected == isNewCategoryExpected){
 				fSelectedMethod.getCategories().get(index).setName(newCategory.getName());
 			} else{
-				fSelectedMethod.replaceCategory(index, newCategory);
+				fSelectedMethod.replaceCategoryOfSameType(index, newCategory);
 			}
 		}
 	}

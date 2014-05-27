@@ -14,6 +14,7 @@ package com.testify.ecfeed.utils;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -378,6 +379,25 @@ public class ModelUtils {
 		return true;
 	}
 	
+	public static boolean validateCategoryName(String name){
+		if(name.length() < 1) return false;
+		if(!name.matches("(^[a-zA-Z][a-zA-Z0-9_$]*)|(^[_][a-zA-Z0-9_$]+))")) return false;
+		return assertNotKeyword(name);
+	}
+	
+	public static boolean assertNotKeyword(String name){
+		String[] javaKeywords =
+				{ "abstract", "continue", "for", "new", "switch", "assert", "default", "goto", "package", "synchronized", "boolean", "do",
+						"if", "private", "this", "break", "double", "implements", "protected", "throw", "byte", "else", "import", "public",
+						"throws", "case", "enum", "instanceof", "return", "transient", "catch", "extends", "int", "short", "try", "char",
+						"final", "interface", "static", "void", "class", "finally", "long", "strictfp", "volatile", "const", "float",
+						"native", "super", "while", "null", "true", "false" };
+		for(String keyword : javaKeywords){
+			if(name.equals(keyword)) return false;
+		}
+		return true;
+	}
+	
 	public static boolean validatePartitionStringValue(String valueString, String type){
 		if(type.equals(com.testify.ecfeed.model.Constants.TYPE_NAME_STRING)) return true;
 		return (getPartitionValueFromString(valueString, type) != null);
@@ -565,5 +585,557 @@ public class ModelUtils {
 		}
 		
 		return argTypes;
+	}
+	
+	
+	public static void changeCategoryType(CategoryNode category, String type){
+		String oldtype = category.getType();
+		int compatibility = areTypesCompatible(oldtype, type);
+
+		// the same type, no changes
+		if(compatibility == 0){
+		}
+		else{
+			MethodNode method = category.getMethod();
+			int index = method.getCategories().indexOf(category);
+
+			// types cannot be converted, remove everything connected
+			if(compatibility == 2){
+				// remove category and any mentioning constraints
+				method.removeCategory(category);
+				// Clear test cases
+				method.getTestCases().clear();
+				// add new category in place of removed one
+				CategoryNode newcategory = new CategoryNode(category.getName(), type, category.isExpected());
+				newcategory.setDefaultValue(getDefaultExpectedValue(type));
+				newcategory.setParent(method);
+				method.getCategories().add(index, newcategory);
+			}
+			// types can be converted
+			else{
+				category.setType(type);
+				// Expected Category
+				if(category.isExpected()){
+					Object newvalue = adaptValueToType(category.getDefaultValue(), type);
+					if(newvalue != null){
+						category.setDefaultValue(newvalue);
+					} else{
+						category.setDefaultValue(getDefaultExpectedValue(type));
+					}
+					// adapt test cases
+					Iterator<TestCaseNode> iterator = method.getTestCases().iterator();
+					while(iterator.hasNext()){
+						TestCaseNode testCase = iterator.next();
+						Object tcvalue = adaptValueToType(testCase.getTestData().get(index).getValue(), type);
+						if(tcvalue == null){
+							iterator.remove();
+						} else{
+							testCase.getTestData().get(index).setValue(tcvalue);
+						}
+					}
+					// adapting constraints of expected category would be really messy. Might add it at later date if need occurs.
+					method.removeMentioningConstraints(category);
+				} 
+				// Partitioned Category
+				else {
+					// Try to adapt partitions; If it fails - remove partition. Mentioning test cases and constraints are handled in model.
+					for(PartitionNode partition : category.getPartitions()){
+						adaptOrRemovePartitions(partition, type);
+					}
+					category.setDefaultValue(getDefaultExpectedValue(type));
+				}
+			}
+		}
+	}
+	
+	private static void adaptOrRemovePartitions(PartitionNode partition, String type){
+		List<PartitionNode> partitions = partition.getLeafPartitions();
+		if(partitions.isEmpty()){
+			Object newvalue = adaptValueToType(partition, type);
+			if(newvalue != null){
+				partition.setValue(newvalue);
+			} else{
+				partition.getParent().removePartition(partition);
+			}
+		} else{
+			for(PartitionNode childpart : partitions){
+				adaptOrRemovePartitions(childpart, type);
+			}
+		}	
+	}
+	
+	public static Object adaptValueToBoolean(Object value){
+		if(value instanceof Boolean){
+			return value;
+		}else if(value instanceof Byte){
+			if((Byte)value != 0)
+				return true;
+		} else if(value instanceof Short){
+			if((Short)value != 0)
+				return true;
+		} else if(value instanceof Integer){
+			if((Integer)value != 0)
+				return true;
+		} else if(value instanceof Long){
+			if((Long)value != 0)
+				return true;
+		} else if(value instanceof String){
+			return Boolean.parseBoolean((String)value);
+		}
+		return null;
+	}
+	
+	public static Object adaptValueToByte(Object value){
+		try{
+			if(value instanceof Byte){
+				return value;
+			}else if(value instanceof Boolean){
+				if((Boolean)value)
+					return 1;
+				else
+					return 0;
+			} else if(value instanceof Short){
+				return (Byte)value;
+			} else if(value instanceof Integer){
+				return (Byte)value;
+			} else if(value instanceof Long){
+				return (Byte)value;
+			} else if(value instanceof Character){
+				return (byte)((char)value);
+			} else if(value instanceof String){
+				return Byte.parseByte((String)value);
+			} else if(value instanceof Float){
+				return (Byte)value;
+			} else if(value instanceof Double){
+				return (Byte)value;
+			}
+		} catch(NumberFormatException e){
+		}
+		return null;
+	}
+	
+	public static Object adaptValueToCharacter(Object value){
+		if(value instanceof Character){
+			return value;
+		} else if(value instanceof Byte){
+			return (char)((byte)value);
+		} else if(value instanceof Short){
+			return (char)((short)value);
+		} else if(value instanceof String){
+			if(((String)value).length() == 1)
+				return ((String)value).charAt(0);
+			if(((String)value).length() == 0)
+				return '\0';
+		}
+		return null;
+	}
+
+	public static Object adaptValueToDouble(Object value){
+		try{
+			if(value instanceof Double){
+				return value;
+			}else if(value instanceof Byte){
+				return (Double)value;
+			} else if(value instanceof Short){
+				return (Double)value;
+			} else if(value instanceof Integer){
+				return (Double)value;
+			} else if(value instanceof Long){
+				return (Double)value;
+			} else if(value instanceof String){
+				return Double.parseDouble((String)value);
+			} else if(value instanceof Float){
+				return (Double)value;
+			}
+		} catch(NumberFormatException e){
+		}
+		return null;
+	}
+	
+	public static Object adaptValueToFloat(Object value){
+		try{
+			if(value instanceof Float){
+				return value;
+			}else if(value instanceof Byte){
+				return (Float)value;
+			} else if(value instanceof Short){
+				return (Float)value;
+			} else if(value instanceof Long){
+				return (Float)value;
+			}  else if(value instanceof Integer){
+				return (Double)value;
+			} else if(value instanceof String){
+				return Float.parseFloat((String)value);
+			} else if(value instanceof Double){
+				return (Float)value;
+			}
+		} catch(NumberFormatException e){
+		}
+		return null;
+	}
+	
+	public static Object adaptValueToShort(Object value){
+		try{
+			if(value instanceof Short){
+				return value;
+			}else if(value instanceof Boolean){
+				if((Boolean)value)
+					return 1;
+				else
+					return 0;
+			} else if(value instanceof Byte){
+				return (Short)value;
+			} else if(value instanceof Integer){
+				return (Short)value;
+			} else if(value instanceof Long){
+				return (Short)value;
+			} else if(value instanceof Character){
+				return (short)((char)value);
+			} else if(value instanceof String){
+				return Short.parseShort((String)value);
+			} else if(value instanceof Float){
+				return (Short)value;
+			} else if(value instanceof Double){
+				return (Short)value;
+			}
+		} catch(NumberFormatException e){
+		}
+		return null;
+	}
+
+	public static Object adaptValueToInteger(Object value){
+		try{
+			if(value instanceof Integer){
+				return value;
+			}else if(value instanceof Boolean){
+				if((Boolean)value)
+					return 1;
+				else
+					return 0;
+			} else if(value instanceof Byte){
+				return (Integer)value;
+			} else if(value instanceof Short){
+				return (Integer)value;
+			} else if(value instanceof Long){
+				return (Integer)value;
+			} else if(value instanceof Character){
+			} else if(value instanceof String){
+				return Integer.parseInt((String)value);
+			} else if(value instanceof Float){
+				return (Integer)value;
+			} else if(value instanceof Double){
+				return (Integer)value;
+			}
+		} catch(NumberFormatException e){
+		}
+		return null;
+	}
+
+	public static Object adaptValueToLong(Object value){
+		try{
+			if(value instanceof Long){
+				return value;
+			}else if(value instanceof Boolean){
+				if((Boolean)value)
+					return 1;
+				else
+					return 0;
+			} else if(value instanceof Byte){
+				return (Long)value;
+			} else if(value instanceof Short){
+				return (Long)value;
+			} else if(value instanceof Long){
+				return (Long)value;
+			} else if(value instanceof Character){
+			} else if(value instanceof String){
+				return Long.parseLong((String)value);
+			} else if(value instanceof Float){
+				return (Long)value;
+			} else if(value instanceof Double){
+				return (Long)value;
+			}
+		} catch(NumberFormatException e){
+		}
+		return null;
+	}
+	
+	public static Object adaptValueToString(Object value){
+		try{
+			if(value instanceof Boolean){
+				return Boolean.toString((boolean)value);
+			} else if(value instanceof Byte){
+				return ((Byte)value).toString();
+			} else if(value instanceof Short){
+				return ((Short)value).toString();
+			}  else if(value instanceof Integer){
+				return ((Integer)value).toString();
+			} else if(value instanceof Long){
+				return ((Long)value).toString();
+			} else if(value instanceof Character){
+				return ((Character)value).toString();
+			} else if(value instanceof String){
+				return value;
+			} else if(value instanceof Float){
+				return ((Float)value).toString();
+			} else if(value instanceof Double){
+				return ((Double)value).toString();
+			} else if(value != null && value instanceof Enum<?>){
+				Enum<?> e = (Enum<?>)value;
+				return e.name();
+			}
+		} catch(NumberFormatException e){
+		}
+		return null;
+	}
+	
+	public static Object adaptValueToType(Object value, String type){
+		switch(type){
+		case com.testify.ecfeed.model.Constants.TYPE_NAME_BOOLEAN:
+			return adaptValueToBoolean(value);
+		case com.testify.ecfeed.model.Constants.TYPE_NAME_BYTE:
+			return adaptValueToByte(value);
+		case com.testify.ecfeed.model.Constants.TYPE_NAME_CHAR:
+			return adaptValueToCharacter(value);
+		case com.testify.ecfeed.model.Constants.TYPE_NAME_DOUBLE:
+			return adaptValueToDouble(value);
+		case com.testify.ecfeed.model.Constants.TYPE_NAME_FLOAT:
+			return adaptValueToFloat(value);
+		case com.testify.ecfeed.model.Constants.TYPE_NAME_INT:
+			return adaptValueToInteger(value);
+		case com.testify.ecfeed.model.Constants.TYPE_NAME_LONG:
+			return adaptValueToLong(value);
+		case com.testify.ecfeed.model.Constants.TYPE_NAME_SHORT:
+			return adaptValueToShort(value);
+		case com.testify.ecfeed.model.Constants.TYPE_NAME_STRING:
+			return adaptValueToString(value);
+		default:
+		}
+		return null;
+	}
+	
+	/*	Returns 0 if types are equal, 1 if types can be converted and 2 if types cannot be converted.
+	*	(probably should remove equal cases from switch; left them in case enums would require some special treatment,
+	*	i.e. we assume they differ in any case;
+	*/
+	public static int areTypesCompatible(String oldtype, String newtype){
+		if(oldtype.equals(newtype)) return 0;
+		
+		switch(oldtype){
+		case com.testify.ecfeed.model.Constants.TYPE_NAME_BOOLEAN:
+			switch(newtype){
+			case com.testify.ecfeed.model.Constants.TYPE_NAME_BOOLEAN:
+				return 0;
+			case com.testify.ecfeed.model.Constants.TYPE_NAME_BYTE:
+				return 1;
+			case com.testify.ecfeed.model.Constants.TYPE_NAME_CHAR:
+				return 2;
+			case com.testify.ecfeed.model.Constants.TYPE_NAME_DOUBLE:
+				return 2;
+			case com.testify.ecfeed.model.Constants.TYPE_NAME_FLOAT:
+				return 2;
+			case com.testify.ecfeed.model.Constants.TYPE_NAME_INT:
+				return 1;
+			case com.testify.ecfeed.model.Constants.TYPE_NAME_LONG:
+				return 1;
+			case com.testify.ecfeed.model.Constants.TYPE_NAME_SHORT:
+				return 1;
+			case com.testify.ecfeed.model.Constants.TYPE_NAME_STRING:
+				return 1;
+			default:
+				return 2;
+			}
+		case com.testify.ecfeed.model.Constants.TYPE_NAME_BYTE:
+			switch(newtype){
+			case com.testify.ecfeed.model.Constants.TYPE_NAME_BOOLEAN:
+				return 1;
+			case com.testify.ecfeed.model.Constants.TYPE_NAME_BYTE:
+				return 0;
+			case com.testify.ecfeed.model.Constants.TYPE_NAME_CHAR:
+				return 1;
+			case com.testify.ecfeed.model.Constants.TYPE_NAME_DOUBLE:
+				return 1;
+			case com.testify.ecfeed.model.Constants.TYPE_NAME_FLOAT:
+				return 1;
+			case com.testify.ecfeed.model.Constants.TYPE_NAME_INT:
+				return 1;
+			case com.testify.ecfeed.model.Constants.TYPE_NAME_LONG:
+				return 1;
+			case com.testify.ecfeed.model.Constants.TYPE_NAME_SHORT:
+				return 1;
+			case com.testify.ecfeed.model.Constants.TYPE_NAME_STRING:
+				return 1;
+			default:
+				return 2;
+			}
+		case com.testify.ecfeed.model.Constants.TYPE_NAME_CHAR:
+			switch(newtype){
+			case com.testify.ecfeed.model.Constants.TYPE_NAME_BOOLEAN:
+				return 2;
+			case com.testify.ecfeed.model.Constants.TYPE_NAME_BYTE:
+				return 1;
+			case com.testify.ecfeed.model.Constants.TYPE_NAME_CHAR:
+				return 0;
+			case com.testify.ecfeed.model.Constants.TYPE_NAME_DOUBLE:
+				return 2;
+			case com.testify.ecfeed.model.Constants.TYPE_NAME_FLOAT:
+				return 2;
+			case com.testify.ecfeed.model.Constants.TYPE_NAME_INT:
+				return 2;
+			case com.testify.ecfeed.model.Constants.TYPE_NAME_LONG:
+				return 2;
+			case com.testify.ecfeed.model.Constants.TYPE_NAME_SHORT:
+				return 1;
+			case com.testify.ecfeed.model.Constants.TYPE_NAME_STRING:
+				return 1;
+			default:
+				return 2;
+			}
+		case com.testify.ecfeed.model.Constants.TYPE_NAME_DOUBLE:
+			switch(newtype){
+			case com.testify.ecfeed.model.Constants.TYPE_NAME_BOOLEAN:
+				return 2;
+			case com.testify.ecfeed.model.Constants.TYPE_NAME_BYTE:
+				return 1;
+			case com.testify.ecfeed.model.Constants.TYPE_NAME_CHAR:
+				return 2;
+			case com.testify.ecfeed.model.Constants.TYPE_NAME_DOUBLE:
+				return 0;
+			case com.testify.ecfeed.model.Constants.TYPE_NAME_FLOAT:
+				return 1;
+			case com.testify.ecfeed.model.Constants.TYPE_NAME_INT:
+				return 1;
+			case com.testify.ecfeed.model.Constants.TYPE_NAME_LONG:
+				return 1;
+			case com.testify.ecfeed.model.Constants.TYPE_NAME_SHORT:
+				return 1;
+			case com.testify.ecfeed.model.Constants.TYPE_NAME_STRING:
+				return 1;
+			default:
+				return 2;
+			}
+		case com.testify.ecfeed.model.Constants.TYPE_NAME_FLOAT:
+			switch(newtype){
+			case com.testify.ecfeed.model.Constants.TYPE_NAME_BOOLEAN:
+				return 2;
+			case com.testify.ecfeed.model.Constants.TYPE_NAME_BYTE:
+				return 1;
+			case com.testify.ecfeed.model.Constants.TYPE_NAME_CHAR:
+				return 2;
+			case com.testify.ecfeed.model.Constants.TYPE_NAME_DOUBLE:
+				return 1;
+			case com.testify.ecfeed.model.Constants.TYPE_NAME_FLOAT:
+				return 0;
+			case com.testify.ecfeed.model.Constants.TYPE_NAME_INT:
+				return 1;
+			case com.testify.ecfeed.model.Constants.TYPE_NAME_LONG:
+				return 1;
+			case com.testify.ecfeed.model.Constants.TYPE_NAME_SHORT:
+				return 1;
+			case com.testify.ecfeed.model.Constants.TYPE_NAME_STRING:
+				return 1;
+			default:
+				return 2;
+			}
+		case com.testify.ecfeed.model.Constants.TYPE_NAME_INT:
+			switch(newtype){
+			case com.testify.ecfeed.model.Constants.TYPE_NAME_BOOLEAN:
+				return 1;
+			case com.testify.ecfeed.model.Constants.TYPE_NAME_BYTE:
+				return 1;
+			case com.testify.ecfeed.model.Constants.TYPE_NAME_CHAR:
+				return 2;
+			case com.testify.ecfeed.model.Constants.TYPE_NAME_DOUBLE:
+				return 1;
+			case com.testify.ecfeed.model.Constants.TYPE_NAME_FLOAT:
+				return 1;
+			case com.testify.ecfeed.model.Constants.TYPE_NAME_INT:
+				return 0;
+			case com.testify.ecfeed.model.Constants.TYPE_NAME_LONG:
+				return 1;
+			case com.testify.ecfeed.model.Constants.TYPE_NAME_SHORT:
+				return 1;
+			case com.testify.ecfeed.model.Constants.TYPE_NAME_STRING:
+				return 1;
+			default:
+				return 2;
+			}
+		case com.testify.ecfeed.model.Constants.TYPE_NAME_LONG:
+			switch(newtype){
+			case com.testify.ecfeed.model.Constants.TYPE_NAME_BOOLEAN:
+				return 1;
+			case com.testify.ecfeed.model.Constants.TYPE_NAME_BYTE:
+				return 1;
+			case com.testify.ecfeed.model.Constants.TYPE_NAME_CHAR:
+				return 2;
+			case com.testify.ecfeed.model.Constants.TYPE_NAME_DOUBLE:
+				return 1;
+			case com.testify.ecfeed.model.Constants.TYPE_NAME_FLOAT:
+				return 1;
+			case com.testify.ecfeed.model.Constants.TYPE_NAME_INT:
+				return 1;
+			case com.testify.ecfeed.model.Constants.TYPE_NAME_LONG:
+				return 0;
+			case com.testify.ecfeed.model.Constants.TYPE_NAME_SHORT:
+				return 1;
+			case com.testify.ecfeed.model.Constants.TYPE_NAME_STRING:
+				return 1;
+			default:
+				return 2;
+			}
+		case com.testify.ecfeed.model.Constants.TYPE_NAME_SHORT:
+			switch(newtype){
+			case com.testify.ecfeed.model.Constants.TYPE_NAME_BOOLEAN:
+				return 1;
+			case com.testify.ecfeed.model.Constants.TYPE_NAME_BYTE:
+				return 1;
+			case com.testify.ecfeed.model.Constants.TYPE_NAME_CHAR:
+				return 1;
+			case com.testify.ecfeed.model.Constants.TYPE_NAME_DOUBLE:
+				return 1;
+			case com.testify.ecfeed.model.Constants.TYPE_NAME_FLOAT:
+				return 1;
+			case com.testify.ecfeed.model.Constants.TYPE_NAME_INT:
+				return 1;
+			case com.testify.ecfeed.model.Constants.TYPE_NAME_LONG:
+				return 1;
+			case com.testify.ecfeed.model.Constants.TYPE_NAME_SHORT:
+				return 0;
+			case com.testify.ecfeed.model.Constants.TYPE_NAME_STRING:
+				return 1;
+			default:
+				return 2;
+			}
+		case com.testify.ecfeed.model.Constants.TYPE_NAME_STRING:
+			switch(newtype){
+			case com.testify.ecfeed.model.Constants.TYPE_NAME_BOOLEAN:
+				return 1;
+			case com.testify.ecfeed.model.Constants.TYPE_NAME_BYTE:
+				return 1;
+			case com.testify.ecfeed.model.Constants.TYPE_NAME_CHAR:
+				return 1;
+			case com.testify.ecfeed.model.Constants.TYPE_NAME_DOUBLE:
+				return 1;
+			case com.testify.ecfeed.model.Constants.TYPE_NAME_FLOAT:
+				return 1;
+			case com.testify.ecfeed.model.Constants.TYPE_NAME_INT:
+				return 1;
+			case com.testify.ecfeed.model.Constants.TYPE_NAME_LONG:
+				return 1;
+			case com.testify.ecfeed.model.Constants.TYPE_NAME_SHORT:
+				return 1;
+			case com.testify.ecfeed.model.Constants.TYPE_NAME_STRING:
+				return 0;
+			default:
+				return 2;
+			}
+			// User-defined convert to string and to another user defined directly (
+		default:
+			switch(newtype){
+				case  com.testify.ecfeed.model.Constants.TYPE_NAME_STRING:
+					return 1;
+				default:
+					return 2;
+			}
+		}
 	}
 }
