@@ -61,10 +61,8 @@ public class CategoryNode extends GenericNode implements IPartitionedNode{
 	
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~PARTITIONED~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	public void addPartition(PartitionNode partition) {
-		if(!fExpected){
 			fPartitions.add(partition);
 			partition.setParent(this);
-		}
 	}
 	
 	@Override
@@ -85,7 +83,10 @@ public class CategoryNode extends GenericNode implements IPartitionedNode{
 		}
 		return fPartitions;
 	}
-
+	
+	public List<PartitionNode> getOrdinaryPartitions(){
+		return fPartitions;
+	}
 
 	public List<PartitionNode> getLeafPartitions(){
 		if(fExpected){
@@ -182,7 +183,9 @@ public class CategoryNode extends GenericNode implements IPartitionedNode{
 	
 	public void setExpected(boolean isexpected){
 		if(fExpected != isexpected){
-			getMethod().changeCategoryExpectedStatus(this);
+			if(getMethod() != null){
+				getMethod().changeCategoryExpectedStatus(this);
+			}
 			fExpected = isexpected;
 		}
 	}
