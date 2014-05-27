@@ -39,11 +39,14 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Spinner;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Tree;
+import org.eclipse.swt.widgets.TreeItem;
 
 import com.testify.ecfeed.generators.DoubleParameter;
 import com.testify.ecfeed.generators.GeneratorFactory;
@@ -62,6 +65,7 @@ import com.testify.ecfeed.model.constraint.Constraint;
 import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.common.TreeCheckStateListener;
 import com.testify.ecfeed.utils.Constants;
+import com.testify.ecfeed.utils.ModelUtils;
 
 public class GeneratorSetupDialog extends TitleAreaDialog {
 	private Combo fTestSuiteCombo;
@@ -312,7 +316,7 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 	}
 
 	private void createPartitionsViewer(Composite parent) {
-		Tree tree = new Tree(parent, SWT.CHECK|SWT.BORDER);
+		final Tree tree = new Tree(parent, SWT.CHECK|SWT.BORDER);
 		tree.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, true, 1, 1));
 		fCategoriesViewer = new CheckboxTreeViewer(tree);
 		fCategoriesViewer.setContentProvider(new CategoriesContentProvider());
@@ -327,8 +331,36 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 		});
 		fCategoriesViewer.getTree().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 		fCategoriesViewer.setInput(fMethod);
+		tree.addListener(SWT.Selection, new Listener() {
+			public void handleEvent(Event event) {
+				if (event.detail == SWT.CHECK) {
+					tree.setRedraw(false);
+					TreeItem item = (TreeItem)event.item;
+					if (item.getData() instanceof PartitionNode) {
+						if (!ModelUtils.isPartitionImplemented((PartitionNode)item.getData())) {
+							item.setChecked(false);
+						}
+					} else if (item.getData() instanceof CategoryNode) {
+						for(int i = 0; i < item.getItemCount(); ++i) {
+							TreeItem subItem = item.getItem(i);
+							if (!ModelUtils.isPartitionImplemented((PartitionNode)subItem.getData())) {
+								subItem.setChecked(false);
+							}
+						}
+					}
+					tree.setRedraw(true);
+				}
+			}
+		});
 		for(CategoryNode category : fMethod.getCategories()){
 			fCategoriesViewer.setSubtreeChecked(category, true);
+			for (Object item : fCategoriesViewer.getCheckedElements()) {
+				if (item instanceof PartitionNode) {
+					if (!ModelUtils.isPartitionImplemented((PartitionNode)item)) {
+						fCategoriesViewer.setChecked(item, false);
+					}
+				}
+			}
 		}
 		fCategoriesViewer.addCheckStateListener(new TreeCheckStateListener(fCategoriesViewer));
 		fCategoriesViewer.addCheckStateListener(new ICheckStateListener() {
