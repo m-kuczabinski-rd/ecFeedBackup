@@ -114,7 +114,7 @@ public class CategoryDetailsPage extends BasicDetailsPage {
 		fExpectedCheckbox.addSelectionListener(new SelectionAdapter(){
 			@Override
 			public void widgetSelected(SelectionEvent e){
-				fSelectedCategory.setExpected(fExpectedCheckbox.getSelection());
+				fSelectedCategory.getMethod().changeCategoryExpectedStatus(fSelectedCategory, fExpectedCheckbox.getSelection());
 				modelUpdated(null);
 			}
 		});
@@ -140,7 +140,7 @@ public class CategoryDetailsPage extends BasicDetailsPage {
 			
 			if(fSelectedCategory.isExpected()){
 				if(fSelectedCategory.getDefaultValue() == null){
-					fDefaultValueText.setText("null");
+					fDefaultValueText.setText("/null");
 				} else {
 					fDefaultValueText.setText(fSelectedCategory.getDefaultValue().toString());
 				}
@@ -167,7 +167,8 @@ public class CategoryDetailsPage extends BasicDetailsPage {
 	
 	protected boolean applyNewDefaultValue(CategoryNode category, Text valueText) {
 		String newValue = valueText.getText();
-		if(newValue.equals(fSelectedCategory.getDefaultValue().toString())) return false;
+		if(fSelectedCategory.getDefaultValue() != null
+				&& newValue.equals(fSelectedCategory.getDefaultValue().toString())) return false;
 		if(ModelUtils.validatePartitionStringValue(newValue, category.getType())){
 			category.setDefaultValue(ModelUtils.getPartitionValueFromString(newValue, category.getType()));
 			return true;

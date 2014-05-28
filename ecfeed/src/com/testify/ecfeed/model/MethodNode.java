@@ -259,42 +259,48 @@ public class MethodNode extends GenericNode {
 		}
 	}
 	
-	public void replaceCategoryOfSameType(int index, CategoryNode newCategory){		
+	public void replaceCategoryOfSameType(int index, CategoryNode newCategory){
 		CategoryNode oldCategory = fCategories.get(index);
 		if(removeCategory(oldCategory)){
 			newCategory.setParent(this);
 			fCategories.add(index, newCategory);
-			if(!oldCategory.isExpected()){
+			if(!oldCategory.isExpected() && newCategory.getDefaultValuePartition() != null){
 				for(TestCaseNode testCase : fTestCases){
 					testCase.replaceValue(index, newCategory.getDefaultValuePartition().getCopy());
-				}			
-			}
-			else fTestCases.clear();
+				}
+			} else
+				fTestCases.clear();
 		}
 	}
 	
-	public void changeCategoryExpectedStatus(CategoryNode category){
-		int index = fCategories.indexOf(category);
-		if(index < 0) return;
+	public void changeCategoryExpectedStatus(CategoryNode category, boolean expected){
+		if(category.isExpected() == expected) return;
 		else{
-			// from expected to partitioned
-			if(category.isExpected()){
-				fTestCases.clear();
-				removeMentioningConstraints(category);
-				if(category.getOrdinaryPartitions().isEmpty()){
-					category.addPartition(category.getDefaultValuePartition());
-				}
-			}
-			// from partitioned to expected
+			int index = fCategories.indexOf(category);
+			if(index < 0)
+				return;
 			else{
-				if(category.getDefaultValue() == null)
-					category.setDefaultValue(category.getPartitions().get(0).getValue());
-				for(TestCaseNode testCase : fTestCases){
-					testCase.replaceValue(index, category.getDefaultValuePartition().getCopy());
+				// from expected to partitioned
+				if(!expected){
+					fTestCases.clear();
+					removeMentioningConstraints(category);
 				}
-				for(PartitionNode partition : category.getPartitions()){
-					removeMentioningConstraints(partition);
+				// from partitioned to expected
+				else{
+					if(category.getDefaultValue() == null && !category.getOrdinaryPartitions().isEmpty()){
+						category.setDefaultValue(category.getPartitions().get(0).getValue());
+					}
+					if(category.getDefaultValue() != null){
+						for(TestCaseNode testCase : fTestCases){
+							testCase.replaceValue(index, category.getDefaultValuePartition().getCopy());
+						}
+					} else
+						fTestCases.clear();
+					for(PartitionNode partition : category.getPartitions()){
+						removeMentioningConstraints(partition);
+					}
 				}
+				category.setExpected(expected);
 			}
 		}
 	}

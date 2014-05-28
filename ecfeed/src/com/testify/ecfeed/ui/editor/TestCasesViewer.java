@@ -34,6 +34,7 @@ import org.eclipse.swt.widgets.TreeItem;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Section;
 
+import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.TestCaseNode;
@@ -82,6 +83,14 @@ public class TestCasesViewer extends CheckboxTreeViewerSection {
 
 	private class AddTestCaseAdapter extends SelectionAdapter{
 		public void widgetSelected(SelectionEvent e){
+			
+			for(CategoryNode category : fSelectedMethod.getCategories()){
+				if(category.getOrdinaryPartitions().isEmpty()){
+					MessageDialog.openError(Display.getDefault().getActiveShell(), "Warning", "Imput partitions cannot be null");
+					return;
+				}
+			}
+			
 			AddTestCaseDialog dialog = new AddTestCaseDialog(getActiveShell(), fSelectedMethod);
 			dialog.create();
 			if (dialog.open() == IDialogConstants.OK_ID) {

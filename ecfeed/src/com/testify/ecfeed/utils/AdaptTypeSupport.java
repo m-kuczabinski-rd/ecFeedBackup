@@ -1,5 +1,6 @@
 package com.testify.ecfeed.utils;
 
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
@@ -7,29 +8,41 @@ import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.TestCaseNode;
+
 import static com.testify.ecfeed.utils.ModelUtils.getDefaultExpectedValue;
 
 public class AdaptTypeSupport{
-	
+
 	public static String[] getSupportedTypes(){
-		return new String[]{
-		 com.testify.ecfeed.model.Constants.TYPE_NAME_STRING,
-		 com.testify.ecfeed.model.Constants.TYPE_NAME_INT,
-		 com.testify.ecfeed.model.Constants.TYPE_NAME_BOOLEAN,
-		 com.testify.ecfeed.model.Constants.TYPE_NAME_DOUBLE,
-		 com.testify.ecfeed.model.Constants.TYPE_NAME_BYTE,
-		 com.testify.ecfeed.model.Constants.TYPE_NAME_CHAR,
-		 com.testify.ecfeed.model.Constants.TYPE_NAME_FLOAT,
-		 com.testify.ecfeed.model.Constants.TYPE_NAME_LONG,
-		 com.testify.ecfeed.model.Constants.TYPE_NAME_SHORT
-		};
+		return new String[] { com.testify.ecfeed.model.Constants.TYPE_NAME_STRING, com.testify.ecfeed.model.Constants.TYPE_NAME_INT,
+				com.testify.ecfeed.model.Constants.TYPE_NAME_BOOLEAN, com.testify.ecfeed.model.Constants.TYPE_NAME_DOUBLE,
+				com.testify.ecfeed.model.Constants.TYPE_NAME_BYTE, com.testify.ecfeed.model.Constants.TYPE_NAME_CHAR,
+				com.testify.ecfeed.model.Constants.TYPE_NAME_FLOAT, com.testify.ecfeed.model.Constants.TYPE_NAME_LONG,
+				com.testify.ecfeed.model.Constants.TYPE_NAME_SHORT };
+	}
+
+	private static boolean assignDefaultValue(CategoryNode category, String type){
+		if(Arrays.asList(getSupportedTypes()).contains(type)){
+			Object expvalue = getDefaultExpectedValue(type);
+			if(expvalue != null){
+				category.setDefaultValue(expvalue);
+				return true;
+			}
+		}
+		return false;
 	}
 
 	// returns true if model has changed in any way
 	public static boolean changeCategoryType(CategoryNode category, String type){
 		String oldtype = category.getType();
+		// If type is exactly the same or null or whatever else might happen
+		if(oldtype == null)
+			oldtype = "";
+		if(type == null || oldtype.equals(type))
+			return false;
+
 		int compatibility = areTypesCompatible(oldtype, type);
-		// the same type, no changes
+		// Implicit conversion, no changes needed
 		if(compatibility == 0){
 			return false;
 		} else{
@@ -38,41 +51,57 @@ public class AdaptTypeSupport{
 			// models
 			if(method == null){
 				category.setType(type);
-				category.setDefaultValue(getDefaultExpectedValue(type));
 				if(compatibility == 2){
 					category.setType(type);
-					category.getPartitions().clear();
+					category.getOrdinaryPartitions().clear();
+					category.setDefaultValue(null);
 				} else{
+					if(category.isExpected()){
+						if(category.getDefaultValue() != null && adaptValueToType(category.getDefaultValue(), oldtype) != null)
+							category.setDefaultValue(adaptValueToType(category.getDefaultValue(), oldtype));
+						category.getOrdinaryPartitions().clear();
+					}
 					for(PartitionNode partition : category.getPartitions()){
 						adaptOrRemovePartitions(partition, type);
 					}
+				}
+				// if no conversion was possible, try to assign predefined
+				// default value
+				if(category.getDefaultValue() == null && Arrays.asList(getSupportedTypes()).contains(type)){
+					assignDefaultValue(category, type);
 				}
 			} else{
 				int index = method.getCategories().indexOf(category);
 				// types cannot be converted, remove everything connected
 				if(compatibility == 2){
-					// remove category and any mentioning constraints
-					method.removeCategory(category);
+					// remove any mentioning constraints
+					method.removeMentioningConstraints(category);
+					category.getOrdinaryPartitions().clear();
 					// Clear test cases
 					method.getTestCases().clear();
 					// add new category in place of removed one
-					CategoryNode newcategory = new CategoryNode(category.getName(), type, category.isExpected());
-					newcategory.setDefaultValue(getDefaultExpectedValue(type));
-					newcategory.setParent(method);
-					method.getCategories().add(index, newcategory);
+					category.setType(type);
+
+					if(!assignDefaultValue(category, type))
+						category.setDefaultValue(null);
 				}
 				// types can be converted
 				else{
 					category.setType(type);
 					// Expected Category
 					if(category.isExpected()){
-						Object newvalue = adaptValueToType(category.getDefaultValue(), type);
-						if(newvalue != null){
-							category.setDefaultValue(newvalue);
-						} else{
-							category.setDefaultValue(getDefaultExpectedValue(type));
+						// try to adapt or assign new default value
+						if(category.getDefaultValue() != null){
+							Object newvalue = adaptValueToType(category.getDefaultValue(), type);
+							if(newvalue != null){
+								category.setDefaultValue(newvalue);
+							} else{
+								assignDefaultValue(category, type);
+							}
 						}
-						// adapt test cases
+						// remove regular partitions in case there were any
+						category.getOrdinaryPartitions().clear();
+						// adapt or remove test cases
 						Iterator<TestCaseNode> iterator = method.getTestCases().iterator();
 						while(iterator.hasNext()){
 							TestCaseNode testCase = iterator.next();
@@ -99,7 +128,8 @@ public class AdaptTypeSupport{
 							if(!adaptOrRemovePartitions(partition, type))
 								itr.remove();
 						}
-						category.setDefaultValue(getDefaultExpectedValue(type));
+						if(!assignDefaultValue(category, type))
+							category.setDefaultValue(null);
 					}
 				}
 			}
@@ -124,6 +154,7 @@ public class AdaptTypeSupport{
 				PartitionNode childpart = itr.next();
 				if(!adaptOrRemovePartitions(childpart, type))
 					itr.remove();
+				partition.partitionRemoved(partition);
 			}
 		}
 		return true;
@@ -222,7 +253,7 @@ public class AdaptTypeSupport{
 		} else if(value instanceof String){
 			if(((String)value).length() == 1)
 				return ((String)value).charAt(0);
-			if(((String)value).length() == 0)
+			else if(((String)value).length() == 0)
 				return '\0';
 		}
 		return null;
@@ -368,6 +399,8 @@ public class AdaptTypeSupport{
 			} else if(value instanceof Long){
 				return ((Long)value).toString();
 			} else if(value instanceof Character){
+				if((char)value == '\0')
+					return "";
 				return ((Character)value).toString();
 			} else if(value instanceof String){
 				return value;

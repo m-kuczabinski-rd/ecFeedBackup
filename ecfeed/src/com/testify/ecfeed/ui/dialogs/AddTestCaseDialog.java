@@ -72,12 +72,14 @@ public class AddTestCaseDialog extends TitleAreaDialog implements TestDataEditor
 				fTestData.add(createAnonymuousPartition(category));
 			}
 			else{
+
 				PartitionNode testValue = category.getPartitions().get(0);
 				while(testValue.isAbstract()){
 					testValue = testValue.getPartitions().get(0);
 				}
 				fTestData.add(testValue);
 			}
+			
 		}
 		fMethod = method;
 		fColorManager = new ColorManager();

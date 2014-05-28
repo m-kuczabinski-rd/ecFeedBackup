@@ -52,7 +52,7 @@ public class ExpectedValueEditingSupport extends EditingSupport {
 		CategoryNode node = (CategoryNode)element;
 		boolean expected = ((int)value == 0) ? true : false;
 		if (node.isExpected() != expected) {
-			node.setExpected(expected);
+			node.getMethod().changeCategoryExpectedStatus(node, expected);
 			fSection.modelUpdated();
 		}
 		fCellEditor.setFocus();

@@ -421,7 +421,7 @@ public class MethodNodeTest {
 		method.addConstraint(mentioningConstraintNode);
 		method.addTestCase(testCaseNode);
 		
-		category.setExpected(true);
+		category.getMethod().changeCategoryExpectedStatus(category,true);
 		
 		assertTrue(method.getCategories().contains(category));
 		assertTrue(method.getConstraintNodes().contains(notMentioningConstraintNode));
@@ -449,7 +449,7 @@ public class MethodNodeTest {
 		method.addConstraint(mentioningConstraintNode);
 		method.addTestCase(testCaseNode);
 
-		category.setExpected(false);
+		category.getMethod().changeCategoryExpectedStatus(category,false);
 		
 		assertTrue(method.getCategories().contains(category));
 		assertTrue(method.getConstraintNodes().contains(notMentioningConstraintNode));

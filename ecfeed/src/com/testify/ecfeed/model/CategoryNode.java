@@ -182,12 +182,7 @@ public class CategoryNode extends GenericNode implements IPartitionedNode{
 	}
 	
 	public void setExpected(boolean isexpected){
-		if(fExpected != isexpected){
-			if(getMethod() != null){
-				getMethod().changeCategoryExpectedStatus(this);
-			}
-			fExpected = isexpected;
-		}
+		fExpected = isexpected;
 	}
 
 }
