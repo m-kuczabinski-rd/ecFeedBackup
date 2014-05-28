@@ -133,4 +133,10 @@ public class Messages {
 	public static final String DIALOG_METHOD_NAME_PROBLEM_TITLE = "Wrong method name";
 	public static final String DIALOG_METHOD_NAME_PROBLEM_MESSAGE = "Method name must contain between 1 and 64 characters " +
 			"and may not contain only white characters.";
+	public static final String DIALOG_PARAMETER_NAME_PROBLEM_TITLE = "Wrong parameter name";
+	public static final String DIALOG_PARAMETER_NAME_PROBLEM_MESSAGE = "Parameter name must contain between 1 and 64 characters " +
+			"and may not contain only white characters.";
+	public static final String DIALOG_PARAMETER_TYPE_PROBLEM_TITLE = "Wrong parameter type name";
+	public static final String DIALOG_PARAMETER_TYPE_PROBLEM_MESSAGE = "Parameter type name must contain between 1 and 64 characters " +
+			"and may not contain only white characters.";
 }
