@@ -19,6 +19,7 @@ import org.eclipse.swt.widgets.Display;
 
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.ui.common.Messages;
+import com.testify.ecfeed.utils.ModelUtils;
 
 public class CategoryNameEditingSupport extends EditingSupport {
 
@@ -50,8 +51,15 @@ public class CategoryNameEditingSupport extends EditingSupport {
 	protected void setValue(Object element, Object value) {
 		String newName = (String)value;
 		CategoryNode categoryNode = (CategoryNode)element;
-		
-		if ((newName.length() > 0) && !categoryNode.getName().equals(newName)) {
+		boolean validName = ModelUtils.validateNodeName(newName);
+
+		if (!validName) {
+			MessageDialog.openError(Display.getCurrent().getActiveShell(),
+					Messages.DIALOG_PARAMETER_NAME_PROBLEM_TITLE,
+					Messages.DIALOG_PARAMETER_NAME_PROBLEM_MESSAGE);
+		}
+
+		if (validName && !categoryNode.getName().equals(newName)) {
 			if (categoryNode.getMethod().getCategory(newName) == null) {
 				categoryNode.setName(newName);
 				fSection.modelUpdated();

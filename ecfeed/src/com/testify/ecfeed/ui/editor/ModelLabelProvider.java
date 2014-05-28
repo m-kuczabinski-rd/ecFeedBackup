@@ -72,6 +72,9 @@ public class ModelLabelProvider extends LabelProvider {
 	private static Image getClassImage(ClassNode node) {
 		if (ModelUtils.isClassImplemented(node)) {
 			return getImage("class_node.gif");
+		} else if (ModelUtils.isClassPartiallyImplemented(node)) {
+			// TODO change icon to PARTIALLY implemented
+			return getImage("sample.gif");
 		} else {
 			// TODO change icon to NOT implemented
 			return getImage("sample.gif");
@@ -81,6 +84,9 @@ public class ModelLabelProvider extends LabelProvider {
 	private static Image getMethodImage(MethodNode node) {
 		if (ModelUtils.isMethodImplemented(node)) {
 			return getImage("method_node.gif");	
+		} else if (ModelUtils.isMethodPartiallyImplemented(node)) {
+			// TODO change icon to PARTIALLY implemented
+			return getImage("sample.gif");
 		} else {
 			// TODO change icon to NOT implemented
 			return getImage("sample.gif");

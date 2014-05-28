@@ -13,13 +13,17 @@ package com.testify.ecfeed.ui.editor;
 
 import java.util.ArrayList;
 
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ComboBoxCellEditor;
 import org.eclipse.jface.viewers.EditingSupport;
 import org.eclipse.swt.custom.CCombo;
+import org.eclipse.swt.widgets.Display;
 
 import com.testify.ecfeed.model.CategoryNode;
-import com.testify.ecfeed.utils.AdaptTypeSupport;;
+import com.testify.ecfeed.ui.common.Messages;
+import com.testify.ecfeed.utils.AdaptTypeSupport;
+import com.testify.ecfeed.utils.ModelUtils;
 
 public class CategoryTypeEditingSupport extends EditingSupport {
 
@@ -67,14 +71,22 @@ public class CategoryTypeEditingSupport extends EditingSupport {
 		CategoryNode node = (CategoryNode)element;
 		String newType = null;
 		int index = (int)value;
+		boolean validName = true;
 
 		if (index >= 0) {
 			newType = fCellEditor.getItems()[index];
 		} else {
 			newType = ((CCombo)fCellEditor.getControl()).getText();
+			validName = ModelUtils.isClassQualifiedNameValid(newType);
 		}
 
-		if ((newType != null) && (newType.length() > 0) && !node.getType().equals(newType)) {
+		if (!validName) {
+			MessageDialog.openError(Display.getCurrent().getActiveShell(),
+					Messages.DIALOG_PARAMETER_TYPE_PROBLEM_TITLE,
+					Messages.DIALOG_PARAMETER_TYPE_PROBLEM_MESSAGE);
+		}
+
+		if (validName && !node.getType().equals(newType)) {
 			AdaptTypeSupport.changeCategoryType(node, newType);
 			fSection.modelUpdated();
 		}

@@ -442,8 +442,8 @@ public class ModelUtils {
 			return null;
 		}
 	}
-	
-	public static boolean isClassImplemented(ClassNode node) {
+
+	public static boolean classDefinitionImplemented(ClassNode node) {
 		boolean implemented = false;
 		try {
 			Class<?> typeClass = ClassUtils.getClassLoader(true, null).loadClass(node.getQualifiedName());
@@ -454,7 +454,28 @@ public class ModelUtils {
 		}
 		return implemented;
 	}
-	
+
+	public static boolean classMethodsImplemented(ClassNode node) {
+		boolean implemented = true;
+
+		for (MethodNode method : node.getMethods()) {
+			if (!isMethodImplemented(method)) {
+				implemented = false;
+				break;
+			}
+		}
+
+		return implemented;
+	}
+
+	public static boolean isClassImplemented(ClassNode node) {
+		return classDefinitionImplemented(node) && classMethodsImplemented(node);
+	}
+
+	public static boolean isClassPartiallyImplemented(ClassNode node) {
+		return classDefinitionImplemented(node) && !classMethodsImplemented(node);
+	}
+
 	public static boolean isPartitionImplemented(PartitionNode node) {
 		boolean implemented = true;
 		
@@ -466,8 +487,10 @@ public class ModelUtils {
 					implemented = false;
 				}
 			}
+		} else if (!node.getCategory().getType().equals("String")) {
+			implemented = false;
 		}
-		
+
 		return implemented;
 	}
 	
@@ -531,8 +554,8 @@ public class ModelUtils {
 	public static boolean isCategoryPartiallyImplemented(CategoryNode node) {
 		return anyPartitionImplemented(node.getPartitions());
 	}
-	
-	public static boolean isMethodImplemented(MethodNode methodModel) {
+
+	public static boolean methodDefinitionImplemented(MethodNode methodModel) {
 		boolean implemented = false;
 		
 		try {
@@ -567,6 +590,27 @@ public class ModelUtils {
 		}
 		
 		return implemented;
+	}
+
+	public static boolean methodCategoriesImplemented(MethodNode methodModel) {
+		boolean implemented = true;
+
+		for (CategoryNode category : methodModel.getCategories()) {
+			if (!isCategoryImplemented(category)) {
+				implemented = false;
+				break;
+			}
+		}
+
+		return implemented;
+	}
+
+	public static boolean isMethodImplemented(MethodNode methodModel) {
+		return methodDefinitionImplemented(methodModel) && methodCategoriesImplemented(methodModel);
+	}
+
+	public static boolean isMethodPartiallyImplemented(MethodNode methodModel) {
+		return methodDefinitionImplemented(methodModel) && !methodCategoriesImplemented(methodModel);
 	}
 
 	private static List<String> getArgTypes(IMethod method, Class<?> testClass) {
