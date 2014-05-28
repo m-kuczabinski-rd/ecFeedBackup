@@ -85,7 +85,7 @@ public class TestCasesViewer extends CheckboxTreeViewerSection {
 		public void widgetSelected(SelectionEvent e){
 			
 			for(CategoryNode category : fSelectedMethod.getCategories()){
-				if(category.getOrdinaryPartitions().isEmpty()){
+				if(!category.isExpected() && category.getOrdinaryPartitions().isEmpty()){
 					MessageDialog.openError(Display.getDefault().getActiveShell(), "Warning", "Imput partitions cannot be null");
 					return;
 				}
