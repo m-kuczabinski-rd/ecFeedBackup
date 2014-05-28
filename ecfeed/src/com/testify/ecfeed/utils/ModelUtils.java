@@ -442,8 +442,8 @@ public class ModelUtils {
 			return null;
 		}
 	}
-	
-	public static boolean isClassImplemented(ClassNode node) {
+
+	public static boolean classDefinitionImplemented(ClassNode node) {
 		boolean implemented = false;
 		try {
 			Class<?> typeClass = ClassUtils.getClassLoader(true, null).loadClass(node.getQualifiedName());
@@ -454,7 +454,28 @@ public class ModelUtils {
 		}
 		return implemented;
 	}
-	
+
+	public static boolean classMethodsImplemented(ClassNode node) {
+		boolean implemented = true;
+
+		for (MethodNode method : node.getMethods()) {
+			if (!isMethodImplemented(method)) {
+				implemented = false;
+				break;
+			}
+		}
+
+		return implemented;
+	}
+
+	public static boolean isClassImplemented(ClassNode node) {
+		return classDefinitionImplemented(node) && classMethodsImplemented(node);
+	}
+
+	public static boolean isClassPartiallyImplemented(ClassNode node) {
+		return classDefinitionImplemented(node) && !classMethodsImplemented(node);
+	}
+
 	public static boolean isPartitionImplemented(PartitionNode node) {
 		boolean implemented = true;
 		
