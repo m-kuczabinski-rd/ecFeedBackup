@@ -487,8 +487,10 @@ public class ModelUtils {
 					implemented = false;
 				}
 			}
+		} else if (!node.getCategory().getType().equals("String")) {
+			implemented = false;
 		}
-		
+
 		return implemented;
 	}
 	
