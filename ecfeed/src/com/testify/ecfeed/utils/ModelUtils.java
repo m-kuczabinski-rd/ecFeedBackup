@@ -531,8 +531,8 @@ public class ModelUtils {
 	public static boolean isCategoryPartiallyImplemented(CategoryNode node) {
 		return anyPartitionImplemented(node.getPartitions());
 	}
-	
-	public static boolean isMethodImplemented(MethodNode methodModel) {
+
+	public static boolean methodDefinitionImplemented(MethodNode methodModel) {
 		boolean implemented = false;
 		
 		try {
@@ -567,6 +567,27 @@ public class ModelUtils {
 		}
 		
 		return implemented;
+	}
+
+	public static boolean methodCategoriesImplemented(MethodNode methodModel) {
+		boolean implemented = true;
+
+		for (CategoryNode category : methodModel.getCategories()) {
+			if (!isCategoryImplemented(category)) {
+				implemented = false;
+				break;
+			}
+		}
+
+		return implemented;
+	}
+
+	public static boolean isMethodImplemented(MethodNode methodModel) {
+		return methodDefinitionImplemented(methodModel) && methodCategoriesImplemented(methodModel);
+	}
+
+	public static boolean isMethodPartiallyImplemented(MethodNode methodModel) {
+		return methodDefinitionImplemented(methodModel) && !methodCategoriesImplemented(methodModel);
 	}
 
 	private static List<String> getArgTypes(IMethod method, Class<?> testClass) {
