@@ -77,7 +77,7 @@ public class CategoryTypeEditingSupport extends EditingSupport {
 			newType = fCellEditor.getItems()[index];
 		} else {
 			newType = ((CCombo)fCellEditor.getControl()).getText();
-			validName = ModelUtils.validateNodeName(newType);
+			validName = ModelUtils.isClassQualifiedNameValid(newType);
 		}
 
 		if (!validName) {
