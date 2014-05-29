@@ -54,6 +54,25 @@ public class RootNode extends GenericNode {
 		return name.matches(ROOT_NODE_NAME_REGEX);
 	}
 	
+	public boolean compare(IGenericNode node){
+		if(node instanceof RootNode == false){
+			return false;
+		}
+
+		RootNode root = (RootNode)node;
+		if(getClasses().size() != root.getClasses().size()){
+			return false;
+		}
+		
+		for(int i = 0; i < getClasses().size(); i++){
+			if(getClasses().get(i).compare(root.getClasses().get(i)) == false){
+				return false;
+			}
+		}
+		
+		return super.compare(root);
+	}
+	
 	public Object convert(IConverter converter){
 		return converter.convert(this);
 	}
