@@ -93,7 +93,16 @@ public class ClassNode extends GenericNode {
 		if(node instanceof ClassNode == false){
 			return false;
 		}
+		ClassNode _class = (ClassNode)node;
+		if(getMethods().size() != _class.getMethods().size()){
+			return false;
+		}
 		
+		for(int i = 0; i < getMethods().size(); i++){
+			if(getMethods().get(i).compare(_class.getMethods().get(i)) == false){
+				return false;
+			}
+		}
 		return super.compare(node);
 	}
 }
