@@ -31,5 +31,6 @@ public class Constants {
 	public static final String RELATION_NOT = "\u2260";
 
 	public static final String ROOT_NODE_NAME_REGEX = "[A-Za-z][A-Za-z0-9 ]{1,64}";
+	public static final String CLASS_NODE_NAME_REGEX = "([A-Za-z]{1}[A-Za-z0-9]{1,16}){1}(\\.[A-Za-z]{1}[A-Za-z0-9]{1,16})*";
 	
 }
