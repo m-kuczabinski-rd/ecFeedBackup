@@ -26,14 +26,14 @@ public class Constants {
 
 	public static final String DEFAULT_ECT_EDITOR_ID = "com.testify.ecfeed.editors.EcMultiPageEditor";
 	public static final String EXPECTED_VALUE_PARTITION_NAME = "@expected";
-	public static final boolean DEFAULT_EXPECTED_BOOLEAN_VALUE = false;
-	public static final byte DEFAULT_EXPECTED_BYTE_VALUE = 0;
-	public static final char DEFAULT_EXPECTED_CHAR_VALUE = '\0';
-	public static final double DEFAULT_EXPECTED_DOUBLE_VALUE = 0.0;
-	public static final float DEFAULT_EXPECTED_FLOAT_VALUE = 0;
-	public static final int DEFAULT_EXPECTED_INT_VALUE = 0;
-	public static final long DEFAULT_EXPECTED_LONG_VALUE = 0;
-	public static final short DEFAULT_EXPECTED_SHORT_VALUE = 0;
+	public static final String DEFAULT_EXPECTED_BOOLEAN_VALUE = "false";
+	public static final String DEFAULT_EXPECTED_BYTE_VALUE = "0";
+	public static final String DEFAULT_EXPECTED_CHAR_VALUE = "0";
+	public static final String DEFAULT_EXPECTED_DOUBLE_VALUE = "0.0";
+	public static final String DEFAULT_EXPECTED_FLOAT_VALUE = "0";
+	public static final String DEFAULT_EXPECTED_INT_VALUE = "0";
+	public static final String DEFAULT_EXPECTED_LONG_VALUE = "0";
+	public static final String DEFAULT_EXPECTED_SHORT_VALUE = "0";
 	public static final String DEFAULT_EXPECTED_STRING_VALUE = "";
 
 	/**

@@ -9,7 +9,7 @@ import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.TestCaseNode;
 
-import static com.testify.ecfeed.utils.ModelUtils.getDefaultExpectedValue;
+import static com.testify.ecfeed.utils.ModelUtils.getDefaultExpectedValueString;
 
 public class AdaptTypeSupport{
 
@@ -22,19 +22,21 @@ public class AdaptTypeSupport{
 	}
 
 	private static boolean assignDefaultValue(CategoryNode category, String type){
-		if(Arrays.asList(getSupportedTypes()).contains(type)){
+		// TODO
+		/*if(Arrays.asList(getSupportedTypes()).contains(type)){
 			Object expvalue = getDefaultExpectedValue(type);
 			if(expvalue != null){
 				category.setDefaultValue(expvalue);
 				return true;
 			}
-		}
+		}*/
 		return false;
 	}
 
 	// returns true if model has changed in any way
 	public static boolean changeCategoryType(CategoryNode category, String type){
-		String oldtype = category.getType();
+		// TODO
+		/*String oldtype = category.getType();
 		// If type is exactly the same or null or whatever else might happen
 		if(oldtype == null)
 			oldtype = "";
@@ -133,13 +135,14 @@ public class AdaptTypeSupport{
 					}
 				}
 			}
-		}
+		}*/
 		return true;
 	}
 
 	// returns true if adapted successfully, false if destined for removal.
 	private static boolean adaptOrRemovePartitions(PartitionNode partition, String type){
-		List<PartitionNode> partitions = partition.getLeafPartitions();
+		// TODO
+		/*List<PartitionNode> partitions = partition.getLeafPartitions();
 		if(partitions.size() == 1 && partitions.contains(partition)){
 			Object newvalue = adaptValueToType(partition.getValue(), type);
 			if(newvalue != null){
@@ -156,7 +159,7 @@ public class AdaptTypeSupport{
 					itr.remove();
 				partition.partitionRemoved(partition);
 			}
-		}
+		}*/
 		return true;
 	}
 

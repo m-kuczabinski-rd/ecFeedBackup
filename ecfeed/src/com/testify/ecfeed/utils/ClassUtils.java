@@ -46,7 +46,7 @@ public class ClassUtils {
 			Class<?> typeClass = getClassLoader(true, null).loadClass(typeName);
 			if (typeClass != null) {
 				for (Object object: typeClass.getEnumConstants()) {
-					partitions.add(new PartitionNode(object.toString(), object));
+					partitions.add(new PartitionNode(object.toString(), ((Enum<?>)object).name()));
 				}	
 			}
 		} catch (Throwable e) {
@@ -55,13 +55,13 @@ public class ClassUtils {
 		return partitions;
 	}
 
-	public static Object defaultEnumExpectedValue(String typeName) {
-		Object value = null;
+	public static String defaultEnumExpectedValueString(String typeName) {
+		String value = "";
 		try {
 			Class<?> typeClass = getClassLoader(true, null).loadClass(typeName);
 			if (typeClass != null) {
 				for (Object object: typeClass.getEnumConstants()) {
-					value = object;
+					value = ((Enum<?>)object).name();
 					break;
 				}	
 			}

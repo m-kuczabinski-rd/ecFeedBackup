@@ -174,7 +174,7 @@ public class ModelUtils {
 	private static CategoryNode generateCategoryModel(ILocalVariable parameter, String type, boolean expected){
 		CategoryNode category = new CategoryNode(parameter.getElementName(), type, expected);
 		if(expected){
-			category.setDefaultValue(getDefaultExpectedValue(type));
+			category.setDefaultValueString(getDefaultExpectedValueString(type));
 			return category;
 		} else{
 			ArrayList<PartitionNode> defaultPartitions = generateDefaultPartitions(type);
@@ -195,7 +195,7 @@ public class ModelUtils {
 		return false;
 	}
 
-	public static Object getDefaultExpectedValue(String type) {
+	public static String getDefaultExpectedValueString(String type) {
 		switch(type){
 		case com.testify.ecfeed.model.Constants.TYPE_NAME_BYTE:
 			return Constants.DEFAULT_EXPECTED_BYTE_VALUE;
@@ -216,7 +216,7 @@ public class ModelUtils {
 		case com.testify.ecfeed.model.Constants.TYPE_NAME_STRING:
 			return Constants.DEFAULT_EXPECTED_STRING_VALUE;
 		default:
-			return ClassUtils.defaultEnumExpectedValue(type);
+			return ClassUtils.defaultEnumExpectedValueString(type);
 		}
 	}
 
@@ -284,80 +284,79 @@ public class ModelUtils {
 
 	private static ArrayList<PartitionNode> defaultBooleanPartitions() {
 		ArrayList<PartitionNode> partitions = new ArrayList<PartitionNode>();
-		partitions.add(new PartitionNode("true", true));
-		partitions.add(new PartitionNode("false", false));	
+		partitions.add(new PartitionNode("true", "true"));
+		partitions.add(new PartitionNode("false", "false"));	
 		return partitions;
 	}
 
 	private static ArrayList<PartitionNode> defaultBytePartitions() {
 		ArrayList<PartitionNode> partitions = new ArrayList<PartitionNode>();
-		partitions.add(new PartitionNode("min", Byte.MIN_VALUE));
-		partitions.add(new PartitionNode("negative", (byte)-1));	
-		partitions.add(new PartitionNode("zero", (byte)0));
-		partitions.add(new PartitionNode("positive", (byte)1));	
-		partitions.add(new PartitionNode("max", Byte.MAX_VALUE));
+		partitions.add(new PartitionNode("min", "MIN_VALUE"));
+		partitions.add(new PartitionNode("negative", "-1"));	
+		partitions.add(new PartitionNode("zero", "0"));
+		partitions.add(new PartitionNode("positive", "1"));	
+		partitions.add(new PartitionNode("max", "MAX_VALUE"));
 		return partitions;
 	}
 
 	private static ArrayList<PartitionNode> defaultCharacterPartitions() {
 		ArrayList<PartitionNode> partitions = new ArrayList<PartitionNode>();
-		partitions.add(new PartitionNode("zero", '\u0000'));
-		partitions.add(new PartitionNode("a", 'a'));
-		partitions.add(new PartitionNode("z", 'z'));
-		partitions.add(new PartitionNode("A", 'A'));
-		partitions.add(new PartitionNode("Z", 'Z'));
-		partitions.add(new PartitionNode("non ASCII", '\u00A7'));
-		partitions.add(new PartitionNode("max", '\uffff'));
+		partitions.add(new PartitionNode("zero", "0"));
+		partitions.add(new PartitionNode("a", "a"));
+		partitions.add(new PartitionNode("z", "z"));
+		partitions.add(new PartitionNode("A", "A"));
+		partitions.add(new PartitionNode("Z", "Z"));
+		partitions.add(new PartitionNode("max", "MAX_VALUE"));
 		return partitions;
 	}
 
 	private static ArrayList<PartitionNode> defaultDoublePartitions() {
 		ArrayList<PartitionNode> partitions = new ArrayList<PartitionNode>();
-		partitions.add(new PartitionNode("min", Double.MIN_VALUE));
-		partitions.add(new PartitionNode("negative", (double)-1));	
-		partitions.add(new PartitionNode("zero", (double)0));
-		partitions.add(new PartitionNode("positive", (double)1));	
-		partitions.add(new PartitionNode("max", Double.MAX_VALUE));
+		partitions.add(new PartitionNode("min", "MIN_VALUE"));
+		partitions.add(new PartitionNode("negative", "-1"));	
+		partitions.add(new PartitionNode("zero", "0"));
+		partitions.add(new PartitionNode("positive", "1"));	
+		partitions.add(new PartitionNode("max", "MAX_VALUE"));
 		return partitions;
 	}
 
 	private static ArrayList<PartitionNode> defaultFloatPartitions() {
 		ArrayList<PartitionNode> partitions = new ArrayList<PartitionNode>();
-		partitions.add(new PartitionNode("min", Float.MIN_VALUE));
-		partitions.add(new PartitionNode("negative", (float)-1));	
-		partitions.add(new PartitionNode("zero", (float)0));
-		partitions.add(new PartitionNode("positive", (float)1));	
-		partitions.add(new PartitionNode("max", Float.MAX_VALUE));
+		partitions.add(new PartitionNode("min", "MIN_VALUE"));
+		partitions.add(new PartitionNode("negative", "-1"));	
+		partitions.add(new PartitionNode("zero", "0"));
+		partitions.add(new PartitionNode("positive", "1"));	
+		partitions.add(new PartitionNode("max", "MAX_VALUE"));
 		return partitions;
 	}
 
 	private static ArrayList<PartitionNode> defaultIntegerPartitions() {
 		ArrayList<PartitionNode> partitions = new ArrayList<PartitionNode>();
-		partitions.add(new PartitionNode("min", Integer.MIN_VALUE));
-		partitions.add(new PartitionNode("negative", (int)-1));	
-		partitions.add(new PartitionNode("zero", (int)0));
-		partitions.add(new PartitionNode("positive", (int)1));	
-		partitions.add(new PartitionNode("max", Integer.MAX_VALUE));
+		partitions.add(new PartitionNode("min", "MIN_VALUE"));
+		partitions.add(new PartitionNode("negative", "-1"));	
+		partitions.add(new PartitionNode("zero", "0"));
+		partitions.add(new PartitionNode("positive", "1"));	
+		partitions.add(new PartitionNode("max", "MAX_VALUE"));
 		return partitions;
 	}
 
 	private static ArrayList<PartitionNode> defaultLongPartitions() {
 		ArrayList<PartitionNode> partitions = new ArrayList<PartitionNode>();
-		partitions.add(new PartitionNode("min", Long.MIN_VALUE));
-		partitions.add(new PartitionNode("negative", (long)-1));
-		partitions.add(new PartitionNode("zero", (long)0));
-		partitions.add(new PartitionNode("positive", (long)1));	
-		partitions.add(new PartitionNode("max", Long.MAX_VALUE));
+		partitions.add(new PartitionNode("min", "MIN_VALUE"));
+		partitions.add(new PartitionNode("negative", "-1"));	
+		partitions.add(new PartitionNode("zero", "0"));
+		partitions.add(new PartitionNode("positive", "1"));	
+		partitions.add(new PartitionNode("max", "MAX_VALUE"));
 		return partitions;
 	}
 
 	private static ArrayList<PartitionNode> defaultShortPartitions() {
 		ArrayList<PartitionNode> partitions = new ArrayList<PartitionNode>();
-		partitions.add(new PartitionNode("min", Short.MIN_VALUE));
-		partitions.add(new PartitionNode("negative", (short)-1));	
-		partitions.add(new PartitionNode("zero", (short)0));
-		partitions.add(new PartitionNode("positive", (short)1));	
-		partitions.add(new PartitionNode("max", Short.MAX_VALUE));
+		partitions.add(new PartitionNode("min", "MIN_VALUE"));
+		partitions.add(new PartitionNode("negative", "-1"));	
+		partitions.add(new PartitionNode("zero", "0"));
+		partitions.add(new PartitionNode("positive", "1"));	
+		partitions.add(new PartitionNode("max", "MAX_VALUE"));
 		return partitions;
 	}
 
@@ -436,7 +435,7 @@ public class ModelUtils {
 			case com.testify.ecfeed.model.Constants.TYPE_NAME_STRING:
 				return valueString;
 			default:
-				return ClassUtils.enumPartitionValue(valueString, type, ClassUtils.getClassLoader(true, null));
+				return ClassUtils.enumPartitionValue(valueString, type, ClassUtils.getClassLoader(false, null));
 			}
 		}catch(NumberFormatException|IndexOutOfBoundsException e){
 			return null;
@@ -477,23 +476,9 @@ public class ModelUtils {
 	}
 
 	public static boolean isPartitionImplemented(PartitionNode node) {
-		boolean implemented = true;
-		
-		Object value = node.getValue();
-		if (value != null) {
-			if (value.getClass().isEnum()) {
-				ClassLoader loader = ClassUtils.getClassLoader(true, null);
-				if (ClassUtils.enumPartitionValue(((Enum<?>)value).name(), value.getClass().getName(), loader) == null) {
-					implemented = false;
-				}
-			}
-		} else if (!node.getCategory().getType().equals("String")) {
-			implemented = false;
-		}
-
-		return implemented;
+		return (getPartitionValueFromString(node.getValueString(), node.getCategory().getType()) != null);
 	}
-	
+
 	public static boolean isTestCaseImplemented(TestCaseNode node) {
 		return allPartitionsImplemented(node.getTestData());
 	}
