@@ -13,8 +13,8 @@ public class RandomModelGenerator {
 	
 	private Random rand = new Random();
 	
-	public int MAX_CLASSES = 5;
-	public int MAX_METHODS = 5;
+	public int MAX_CLASSES = 10;
+	public int MAX_METHODS = 10;
 	
 	public RootNode generateModel(){
 		String name = generateString(ROOT_NODE_NAME_REGEX);
