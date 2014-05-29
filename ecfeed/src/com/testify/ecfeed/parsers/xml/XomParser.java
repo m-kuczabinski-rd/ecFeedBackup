@@ -34,6 +34,10 @@ public class XomParser {
 		
 		ClassNode _class = new ClassNode(name);
 		
+		for(Element child : getIterableChildren(element)){
+			_class.addMethod(parseMethod(child));
+		}
+		
 		return _class;
 	}
 
