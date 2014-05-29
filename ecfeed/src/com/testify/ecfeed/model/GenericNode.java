@@ -153,4 +153,8 @@ public class GenericNode implements IGenericNode{
 		
 		return true;
 	}
+	
+	public boolean compare(IGenericNode node){
+		return getName().equals(node.getName());
+	}
 }
