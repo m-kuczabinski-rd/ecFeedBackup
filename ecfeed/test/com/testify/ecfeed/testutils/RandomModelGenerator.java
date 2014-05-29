@@ -7,6 +7,7 @@ import java.util.Random;
 import nl.flotsam.xeger.Xeger;
 
 import com.testify.ecfeed.model.ClassNode;
+import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.RootNode;
 
 public class RandomModelGenerator {
@@ -20,10 +21,8 @@ public class RandomModelGenerator {
 		String name = generateString(ROOT_NODE_NAME_REGEX);
 		
 		RootNode root = new RootNode(name);
-		int classCount = rand.nextInt(MAX_CLASSES); 
 		
-		
-		for(int i = 0; i < classCount; i++){
+		for(int i = 0; i < rand.nextInt(MAX_CLASSES) + 1; i++){
 			root.addClass(generateClass());
 		}
 		
@@ -35,10 +34,23 @@ public class RandomModelGenerator {
 	public ClassNode generateClass() {
 		String name = generateString(CLASS_NODE_NAME_REGEX);
 
-		return new ClassNode(name);
+		ClassNode _class = new ClassNode(name);
+		
+		for(int i = 0; i < rand.nextInt(MAX_METHODS) + 1; i++){
+			_class.addMethod(generateMethod());
+		}
+
+		return _class;
 	}
 
-
+	public MethodNode generateMethod(){
+		String name = generateString(METHOD_NODE_NAME_REGEX);
+		
+		MethodNode method = new MethodNode(name);
+		
+		return method;
+	}
+	
 
 	private String generateString(String regex){
 		Xeger generator = new Xeger(regex);
