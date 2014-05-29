@@ -20,6 +20,7 @@ import org.junit.runners.model.FrameworkMethod;
 import com.testify.ecfeed.generators.api.GeneratorException;
 import com.testify.ecfeed.generators.api.IGenerator;
 import com.testify.ecfeed.model.PartitionNode;
+import com.testify.ecfeed.utils.ModelUtils;
 
 public class RuntimeMethod extends FrameworkMethod{
 
@@ -38,7 +39,7 @@ public class RuntimeMethod extends FrameworkMethod{
 			while((next = fGenerator.next()) !=null){
 				parameters = new ArrayList<Object>();
 				for (PartitionNode partitionNode : next) {
-					parameters.add(partitionNode.getValue());
+					parameters.add(ModelUtils.getPartitionValueFromString(partitionNode.getValueString(), partitionNode.getCategory().getType()));
 				}
 				super.invokeExplosively(target, parameters.toArray());
 			}
