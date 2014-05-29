@@ -1,6 +1,6 @@
 package com.testify.ecfeed.testutils;
 
-import static com.testify.ecfeed.model.Constants.ROOT_NODE_NAME_REGEX;
+import static com.testify.ecfeed.model.Constants.*;
 
 import java.util.Random;
 
@@ -13,8 +13,8 @@ public class RandomModelGenerator {
 	
 	private Random rand = new Random();
 	
-	public int MAX_CLASSES = 0;
-	public int MAX_METHODS = 0;
+	public int MAX_CLASSES = 5;
+	public int MAX_METHODS = 5;
 	
 	public RootNode generateModel(){
 		String name = generateString(ROOT_NODE_NAME_REGEX);
@@ -33,7 +33,9 @@ public class RandomModelGenerator {
 	
 	
 	public ClassNode generateClass() {
-		return new ClassNode("package.name.ClassName");
+		String name = generateString(CLASS_NODE_NAME_REGEX);
+
+		return new ClassNode(name);
 	}
 
 
