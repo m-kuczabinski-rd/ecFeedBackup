@@ -37,7 +37,7 @@ public class ExpectedValueStatementTest{
 		fExpectedValue1 = "value1";
 
 		fExpCategory1 = new CategoryNode("category", "type", true);
-		fExpCategory1.setDefaultValue(fExpectedValue1);
+		fExpCategory1.setDefaultValueString(fExpectedValue1);
 		fPartCategory1 = new CategoryNode("category", "type", false);
 		fPartCategory2 = new CategoryNode("category", "type", false);
 
@@ -60,6 +60,6 @@ public class ExpectedValueStatementTest{
 		
 		testStatement.adapt(testData);
 		
-		assertTrue(testData.get(1).getValue().equals(statementPartition.getValue()));
+		assertTrue(testData.get(1).getValueString().equals(statementPartition.getValueString()));
 	}
 }

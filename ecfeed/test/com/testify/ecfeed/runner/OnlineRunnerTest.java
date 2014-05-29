@@ -217,7 +217,7 @@ public class OnlineRunnerTest extends StaticRunnerTest{
 		while((next = initializedGenerator.next()) != null){
 			List<String> sample = new ArrayList<String>();
 			for(PartitionNode partition : next){
-				sample.add((String)partition.getValue());
+				sample.add((String)partition.getValueString());
 			}
 			result.add(sample);
 		}

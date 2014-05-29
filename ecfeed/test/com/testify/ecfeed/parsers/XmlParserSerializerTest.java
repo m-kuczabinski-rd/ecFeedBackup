@@ -145,10 +145,10 @@ public class XmlParserSerializerTest {
 					new CategoryNode("partitionedCategory", com.testify.ecfeed.model.Constants.TYPE_NAME_STRING, false);
 			CategoryNode expectedCategory = 
 					new CategoryNode("expectedCategory", com.testify.ecfeed.model.Constants.TYPE_NAME_CHAR, true);
-			expectedCategory.setDefaultValue('d');
+			expectedCategory.setDefaultValueString("d");
 			PartitionNode partition1 = new PartitionNode("partition", "p");
 			partition1.setParent(partitionedCategory);
-			PartitionNode partition2 = new PartitionNode("expected", 's');
+			PartitionNode partition2 = new PartitionNode("expected", "s");
 			partition2.setParent(expectedCategory);
 			
 			List<PartitionNode> testData = new ArrayList<PartitionNode>();
@@ -160,7 +160,7 @@ public class XmlParserSerializerTest {
 			Constraint labelConstraint = new Constraint(new StaticStatement(true), 
 					new PartitionedCategoryStatement(partitionedCategory, Relation.EQUAL, "label"));
 			Constraint expectedConstraint = new Constraint(new StaticStatement(true), 
-					new ExpectedValueStatement(expectedCategory, new PartitionNode("expected", 'n')));
+					new ExpectedValueStatement(expectedCategory, new PartitionNode("expected", "n")));
 			ConstraintNode partitionConstraintNode = new ConstraintNode("partition constraint", partitionConstraint);
 			ConstraintNode labelConstraintNode = new ConstraintNode("label constraint", labelConstraint);
 			ConstraintNode expectedConstraintNode = new ConstraintNode("expected constraint", expectedConstraint);
@@ -269,30 +269,30 @@ public class XmlParserSerializerTest {
 	}
 
 	private CategoryNode createExpectedValueCategory(String type) {
-		Object defaultValue = createRandomValue(type);
+		String defaultValue = createRandomValue(type);
 		CategoryNode category = new CategoryNode(randomName(), type, true);
-		category.setDefaultValue(defaultValue);
+		category.setDefaultValueString(defaultValue);
 		return category;
 	}
 
-	private Object createRandomValue(String type) {
+	private String createRandomValue(String type) {
 		switch(type){
 		case Constants.TYPE_NAME_BOOLEAN:
-			return rand.nextBoolean();
+			return Boolean.toString(rand.nextBoolean());
 		case Constants.TYPE_NAME_BYTE:
-			return (byte)rand.nextInt();
+			return Byte.toString((byte)rand.nextInt());
 		case Constants.TYPE_NAME_CHAR:
-			return (char)rand.nextInt(255);
+			return Character.toString((char)rand.nextInt(255));
 		case Constants.TYPE_NAME_DOUBLE:
-			return rand.nextDouble();
+			return Double.toString(rand.nextDouble());
 		case Constants.TYPE_NAME_FLOAT:
-			return rand.nextFloat();
+			return Float.toString(rand.nextFloat());
 		case Constants.TYPE_NAME_INT:
-			return rand.nextInt();
+			return Integer.toString(rand.nextInt());
 		case Constants.TYPE_NAME_LONG:
-			return rand.nextLong();
+			return Long.toString(rand.nextLong());
 		case Constants.TYPE_NAME_SHORT:
-			return (short)rand.nextInt();
+			return Short.toString((short)rand.nextInt());
 		case Constants.TYPE_NAME_STRING:
 			if(rand.nextInt(5) == 0){
 				return null;
@@ -317,7 +317,7 @@ public class XmlParserSerializerTest {
 	}
 
 	private PartitionNode createPartition(String type, int level) {
-		Object value = createRandomValue(type);
+		String value = createRandomValue(type);
 		PartitionNode partition = new PartitionNode(randomName(), value);
 		for(int i = 0; i < rand.nextInt(MAX_PARTITION_LABELS); i++){
 			partition.addLabel(generateRandomString(10));
@@ -527,7 +527,7 @@ public class XmlParserSerializerTest {
 
 	private void comparePartitions(PartitionNode partition1, PartitionNode partition2) {
 		compareNames(partition1.getName(), partition2.getName());
-		compareValues(partition1.getValue(),partition2.getValue());
+		compareValues(partition1.getValueString(),partition2.getValueString());
 		compareLabels(partition1.getLabels(), partition2.getLabels());
 		assertEquals(partition1.getPartitions().size(), partition2.getPartitions().size());
 		for(int i = 0; i < partition1.getPartitions().size(); i++){
@@ -587,7 +587,7 @@ public class XmlParserSerializerTest {
 	private void compareExpectedValueStatements(
 			ExpectedValueStatement statement1, ExpectedValueStatement statement2) {
 		compareCategories(statement1.getCategory(), statement2.getCategory());
-		assertEquals(statement1.getCondition().getValue(), statement2.getCondition().getValue());
+		assertEquals(statement1.getCondition().getValueString(), statement2.getCondition().getValueString());
 	}
 
 	private void compareRelationStatements(PartitionedCategoryStatement statement1, PartitionedCategoryStatement statement2) {
@@ -637,7 +637,7 @@ public class XmlParserSerializerTest {
 			PartitionNode testValue2 = testCase2.getTestData().get(i);
 			
 			if(testValue1.getCategory() instanceof CategoryNode){
-				compareValues(testValue1.getValue(), testValue2.getValue());
+				compareValues(testValue1.getValueString(), testValue2.getValueString());
 			}
 			else{
 				comparePartitions(testCase1.getTestData().get(i),testCase2.getTestData().get(i));

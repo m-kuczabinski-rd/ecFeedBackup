@@ -72,7 +72,7 @@ public class ParameterizedMethodTest {
 		for(int i = 0; i < size; i++){
 			List<PartitionNode> testData = new ArrayList<PartitionNode>();
 			for(int j = 0; j < parameters; j++){
-				testData.add(new PartitionNode("dummy", random.nextInt()));
+				testData.add(new PartitionNode("dummy", Integer.toString(random.nextInt())));
 			}
 			suite.add(new TestCaseNode("dummy", testData));
 		}
@@ -85,7 +85,7 @@ public class ParameterizedMethodTest {
 		for(TestCaseNode testCase : testSuite){
 			List<Integer> parameters = new ArrayList<Integer>();
 			for(PartitionNode parameter : testCase.getTestData()){
-				parameters.add((int)parameter.getValue());
+				parameters.add(Integer.valueOf(parameter.getValueString()));
 			}
 			result.add(parameters);
 		}

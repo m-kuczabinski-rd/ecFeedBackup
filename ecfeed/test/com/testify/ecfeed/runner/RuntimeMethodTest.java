@@ -75,7 +75,7 @@ public class RuntimeMethodTest {
 			while((next = referenceGenerator.next()) != null){
 				List<Integer> testCase = new ArrayList<Integer>();
 				for(PartitionNode parameter : next){
-					testCase.add((int)parameter.getValue());
+					testCase.add(Integer.valueOf(parameter.getValueString()));
 				}
 				result.add(testCase);
 			}
@@ -97,7 +97,7 @@ public class RuntimeMethodTest {
 	private List<PartitionNode> generateCategory(int partitions) {
 		List<PartitionNode> category = new ArrayList<PartitionNode>();
 		for(int i = 0; i < partitions; i++){
-			category.add(new PartitionNode(String.valueOf(i), i));
+			category.add(new PartitionNode(String.valueOf(i), String.valueOf(i)));
 		}
 		return category;
 	}

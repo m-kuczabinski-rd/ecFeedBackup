@@ -64,10 +64,10 @@ public class GenericNodeTest{
 		MethodNode method = new MethodNode("method");
 		CategoryNode category = new CategoryNode("name", "type", false);
 		CategoryNode expCat = new CategoryNode("name", "type", true);
-		expCat.setDefaultValue(0);
+		expCat.setDefaultValueString("0");
 		ConstraintNode constraint = new ConstraintNode("name", new Constraint(new StaticStatement(true), new StaticStatement(false)));
 		TestCaseNode testCase = new TestCaseNode("name", new ArrayList<PartitionNode>());
-		PartitionNode partition = new PartitionNode("name", 0);
+		PartitionNode partition = new PartitionNode("name", "0");
 		
 		category.addPartition(partition);
 		method.addCategory(category);
@@ -121,10 +121,10 @@ public class GenericNodeTest{
 		MethodNode method = new MethodNode("method");
 		CategoryNode category = new CategoryNode("name", "type", false);
 		CategoryNode expCat = new CategoryNode("name", "type", true);
-		expCat.setDefaultValue(0);
+		expCat.setDefaultValueString("0");
 		ConstraintNode constraint = new ConstraintNode("name", new Constraint(new StaticStatement(true), new StaticStatement(false)));
 		TestCaseNode testCase = new TestCaseNode("name", new ArrayList<PartitionNode>());
-		PartitionNode partition = new PartitionNode("name", 0);
+		PartitionNode partition = new PartitionNode("name", "0");
 		
 		category.addPartition(partition);
 		method.addCategory(category);
@@ -151,11 +151,11 @@ public class GenericNodeTest{
 		MethodNode method = new MethodNode("method");
 		CategoryNode category = new CategoryNode("category", "type", false);
 		CategoryNode expCat = new CategoryNode("expCat", "type", true);
-		expCat.setDefaultValue(0);
+		expCat.setDefaultValueString("0");
 		ConstraintNode constraint = new ConstraintNode("constraint", new Constraint(new StaticStatement(true), new StaticStatement(false)));
 		TestCaseNode testCase = new TestCaseNode("testCase", new ArrayList<PartitionNode>());
-		PartitionNode p = new PartitionNode("p", 0);
-		PartitionNode p1 = new PartitionNode("p1", 0);
+		PartitionNode p = new PartitionNode("p", "0");
+		PartitionNode p1 = new PartitionNode("p1", "0");
 
 		p.addPartition(p1);
 		category.addPartition(p);
@@ -195,8 +195,8 @@ public class GenericNodeTest{
 	@Test
 	public void getSiblingTest(){
 		CategoryNode cat = new CategoryNode("cat", "type", false);
-		PartitionNode p1 = new PartitionNode("p1", 0);
-		PartitionNode p2 = new PartitionNode("p2", 0);
+		PartitionNode p1 = new PartitionNode("p1", "0");
+		PartitionNode p2 = new PartitionNode("p2", "0");
 		
 		cat.addPartition(p1);
 		cat.addPartition(p2);

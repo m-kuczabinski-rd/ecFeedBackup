@@ -27,17 +27,17 @@ public class ExpectedValueCategoryNodeTest {
 	@Test
 	public void testGetDefaultValue() {
 		CategoryNode category = new CategoryNode("name", "type", true);
-		category.setDefaultValue(0);
-		assertEquals(0, category.getDefaultValue());
+		category.setDefaultValueString("0");
+		assertEquals("0", category.getDefaultValueString());
 		
-		category.setDefaultValue(1);
-		assertEquals(1, category.getDefaultValue());
+		category.setDefaultValueString("1");
+		assertEquals("1", category.getDefaultValueString());
 	}
 	
 	@Test
 	public void testGetDefaultValuePartition() {
 		CategoryNode category = new CategoryNode("name", "type", true);
-		category.setDefaultValue("value");
-		assertEquals("value", category.getDefaultValuePartition().getValue());
+		category.setDefaultValueString("value");
+		assertEquals("value", category.getDefaultValuePartition().getValueString());
 	}
 }

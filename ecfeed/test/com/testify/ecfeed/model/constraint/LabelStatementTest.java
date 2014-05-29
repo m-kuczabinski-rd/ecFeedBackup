@@ -27,15 +27,15 @@ public class LabelStatementTest {
 	
 	@Test
 	public void evaluateTest(){
-		PartitionNode q = new PartitionNode("q", 0);
+		PartitionNode q = new PartitionNode("q", "0");
 		
-		PartitionNode p = new PartitionNode("p", 0);
-		PartitionNode p1 = new PartitionNode("p1", 0);
-		PartitionNode p2 = new PartitionNode("p2", 0);
-		PartitionNode p11 = new PartitionNode("p11", 0);
-		PartitionNode p12 = new PartitionNode("p12", 0);
-		PartitionNode p21 = new PartitionNode("p21", 0);
-		PartitionNode p22 = new PartitionNode("p22", 0);
+		PartitionNode p = new PartitionNode("p", "0");
+		PartitionNode p1 = new PartitionNode("p1", "0");
+		PartitionNode p2 = new PartitionNode("p2", "0");
+		PartitionNode p11 = new PartitionNode("p11", "0");
+		PartitionNode p12 = new PartitionNode("p12", "0");
+		PartitionNode p21 = new PartitionNode("p21", "0");
+		PartitionNode p22 = new PartitionNode("p22", "0");
 		
 		p.addPartition(p1);
 		p.addPartition(p2);
