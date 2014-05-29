@@ -1,6 +1,7 @@
 package com.testify.ecfeed.parsers;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -12,6 +13,7 @@ import nu.xom.Serializer;
 
 import org.junit.Test;
 
+import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.parsers.xml.XomConverter;
 import com.testify.ecfeed.parsers.xml.XomParser;
@@ -43,6 +45,24 @@ public class XomParserTest {
 			fail("Unexpected exception: " + e.getMessage());
 		}
 	}
+	
+	@Test
+	public void parseClassTest(){
+		ClassNode _class = fModelGenerator.generateClass();
+
+		Element classElement = (Element)_class.convert(new XomConverter());
+		
+		TRACE(classElement);
+		
+		try {
+			ClassNode parsedRoot = fParser.parseClass(classElement);
+			
+			assertTrue(parsedRoot.compare(_class));
+
+		} catch (ParserException e) {
+			fail("Unexpected exception: " + e.getMessage());
+		}
+}
 	
 	private void TRACE(Element element){
 		if(!DEBUG) return;
