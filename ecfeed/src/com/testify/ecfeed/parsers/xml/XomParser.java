@@ -9,6 +9,7 @@ import nu.xom.Node;
 import static com.testify.ecfeed.parsers.Constants.*;
 
 import com.testify.ecfeed.model.ClassNode;
+import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.parsers.Constants;
 import com.testify.ecfeed.parsers.ParserException;
@@ -36,6 +37,14 @@ public class XomParser {
 		return _class;
 	}
 
+	public MethodNode parseMethod(Element element) throws ParserException{
+		assertNodeTag(element.getQualifiedName(), METHOD_NODE_NAME);
+		String name = getElementName(element);
+		
+		MethodNode method = new MethodNode(name);
+		
+		return method;
+	}
 
 
 	private void assertNodeTag(String qualifiedName, String expectedName) throws ParserException {
