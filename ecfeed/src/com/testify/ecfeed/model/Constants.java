@@ -32,5 +32,5 @@ public class Constants {
 
 	public static final String ROOT_NODE_NAME_REGEX = "[A-Za-z][A-Za-z0-9 _]{1,64}";
 	public static final String CLASS_NODE_NAME_REGEX = "([A-Za-z]{1}[A-Za-z0-9]{1,16}){1}(\\.[A-Za-z_]{1}[A-Za-z0-9_]{1,16})*";
-	
+	public static final String METHOD_NODE_NAME_REGEX = "[_A-Za-z][A-Za-z0-9_]{1,64}";
 }
