@@ -22,13 +22,13 @@ public class PartitionNode extends GenericNode implements IPartitionedNode{
 	private IPartitionedNode fPartitionedParent;
 	private PartitionNode fParentPartition;
 	
-	private Object fValue;
+	private String fValueString;
 	private List<PartitionNode> fPartitions;
 	private Set<String> fLabels;
 	
-	public PartitionNode(String name, Object value) {
+	public PartitionNode(String name, String value) {
 		super(name);
-		fValue = value;
+		fValueString = value;
 		fPartitions = new ArrayList<PartitionNode>();
 		fLabels = new LinkedHashSet<String>();
 	}
@@ -124,14 +124,6 @@ public class PartitionNode extends GenericNode implements IPartitionedNode{
 		return getName();
 	}
 
-	public Object getValue() {
-		return fValue;
-	}
-
-	public void setValue(Object value) {
-		this.fValue = value;
-	}
-	
 	public void setParent(IPartitionedNode parent){
 		fPartitionedParent = parent;
 	}
@@ -140,17 +132,22 @@ public class PartitionNode extends GenericNode implements IPartitionedNode{
 		fPartitionedParent = fParentPartition = parentPartition;
 	}
 	
-	public String getValueString(){
-		if(fValue == null) return Constants.NULL_VALUE_STRING_REPRESENTATION;
-		if(fValue instanceof Character){
-			if((Character)fValue != 0) return " \\" + (int)((char)fValue ) + " ['" + fValue + "']";
+	public String getValueString() {
+		// TODO
+		/*if (fValue == null) return Constants.NULL_VALUE_STRING_REPRESENTATION;
+		if (fValue instanceof Character) {
+			if ((Character)fValue != 0) return " \\" + (int)((char)fValue ) + " ['" + fValue + "']";
 			return "\\0";
-		}
-		return String.valueOf(fValue);
+		}*/
+		return fValueString;
 	}
-	
+
+	public void setValueString(String value) {
+		fValueString = value;
+	}
+
 	public PartitionNode getCopy() {
-		PartitionNode copy = new PartitionNode(getName(), fValue);
+		PartitionNode copy = new PartitionNode(getName(), fValueString);
 		copy.setParent(fPartitionedParent);
 		return copy;
 	}

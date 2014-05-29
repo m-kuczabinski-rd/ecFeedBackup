@@ -287,15 +287,12 @@ public class MethodNode extends GenericNode {
 				}
 				// from partitioned to expected
 				else{
-					if(category.getDefaultValue() == null && !category.getOrdinaryPartitions().isEmpty()){
-						category.setDefaultValue(category.getPartitions().get(0).getValue());
+					if (!category.getOrdinaryPartitions().isEmpty()){
+						category.setDefaultValueString(category.getPartitions().get(0).getValueString());
 					}
-					if(category.getDefaultValue() != null){
-						for(TestCaseNode testCase : fTestCases){
-							testCase.replaceValue(index, category.getDefaultValuePartition().getCopy());
-						}
-					} else
-						fTestCases.clear();
+					for(TestCaseNode testCase : fTestCases){
+						testCase.replaceValue(index, category.getDefaultValuePartition().getCopy());
+					}
 					for(PartitionNode partition : category.getPartitions()){
 						removeMentioningConstraints(partition);
 					}

@@ -53,7 +53,7 @@ public class CategoryNode extends GenericNode implements IPartitionedNode{
 
 	public String toString(){
 		if(fExpected){
-			return super.toString() + "(" + getDefaultValue() + ")";
+			return super.toString() + "(" + getDefaultValueString() + ")";
 		}
 		return new String(getName() + ": " + getType());
 	}
@@ -169,12 +169,12 @@ public class CategoryNode extends GenericNode implements IPartitionedNode{
 		return fDefaultValue;
 	}
 
-	public Object getDefaultValue() {
-		return fDefaultValue.getValue();
+	public String getDefaultValueString() {
+		return fDefaultValue.getValueString();
 	}
 
-	public void setDefaultValue(Object value) {
-		fDefaultValue.setValue(value);
+	public void setDefaultValueString(String value) {
+		fDefaultValue.setValueString(value);
 	}
 	
 	public boolean isExpected(){
