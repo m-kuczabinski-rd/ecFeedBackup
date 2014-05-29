@@ -120,5 +120,28 @@ public class ClassNodeTest extends ClassNode {
 		assertTrue(classNode.getTestSuites().contains("suite 3"));
 		assertTrue(classNode.getTestSuites().contains("suite 4"));
 		assertFalse(classNode.getTestSuites().contains("unused test suite"));
-}
+	}
+	
+	@Test
+	public void compareTest(){
+		ClassNode c1 = new ClassNode("c1");
+		ClassNode c2 = new ClassNode("c2");
+		
+		assertFalse(c1.compare(c2));
+		
+		c2.setName("c1");
+		assertTrue(c1.compare(c2));
+		
+		MethodNode m1 = new MethodNode("m1");
+		MethodNode m2 = new MethodNode("m2");
+		
+		c1.addMethod(m1);
+		assertFalse(c1.compare(c2));
+		
+		c2.addMethod(m2);
+		assertFalse(c1.compare(c2));
+
+		m2.setName("m1");
+		assertTrue(c1.compare(c2));
+	}
 }
