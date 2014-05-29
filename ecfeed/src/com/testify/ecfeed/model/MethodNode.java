@@ -350,4 +350,12 @@ public class MethodNode extends GenericNode {
 	public Object convert(IConverter converter){
 		return converter.convert(this);
 	}
+	
+	public boolean compare(IGenericNode node){
+		if(node instanceof MethodNode == false){
+			return false;
+		}
+		
+		return super.compare(node);
+	}
 }
