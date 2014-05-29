@@ -53,4 +53,8 @@ public class RootNode extends GenericNode {
 	public static boolean validateModelName(String name){
 		return name.matches(ROOT_NODE_NAME_REGEX);
 	}
+	
+	public Object convert(IConverter converter){
+		return converter.convert(this);
+	}
 }

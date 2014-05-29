@@ -79,6 +79,10 @@ public class ClassNode extends GenericNode {
 	public String toString(){
 		return getLocalName();
 	}
+	
+	public Object convert(IConverter converter){
+		return converter.convert(this);
+	}
 
 	private String getLocalName(String qualifiedName){
 		int lastDotIndex = qualifiedName.lastIndexOf('.');
