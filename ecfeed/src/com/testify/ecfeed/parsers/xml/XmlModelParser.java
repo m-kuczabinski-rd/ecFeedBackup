@@ -238,8 +238,7 @@ public class XmlModelParser implements IModelParser{
 		if(category == null){
 			throw new ParserException(Messages.WRONG_CATEGORY_NAME(categoryName, method.getName()));
 		}
-		Object conditionValue = parseValue(valueString, category.getType());
-		PartitionNode condition = new PartitionNode("expected", conditionValue);
+		PartitionNode condition = new PartitionNode("expected", valueString);
 		condition.setParent(category);
 		
 		return new ExpectedValueStatement(category, condition);
@@ -284,8 +283,7 @@ public class XmlModelParser implements IModelParser{
 			}
 			else if(testParameterElement.getLocalName().equals(Constants.EXPECTED_PARAMETER_NODE_NAME)){
 				String valueString = getAttributeValue(testParameterElement, Constants.VALUE_ATTRIBUTE_NAME);
-				Object value = parseValue(valueString, category.getType());
-				testValue = new PartitionNode(Constants.EXPECTED_VALUE_PARTITION_NAME, value);
+				testValue = new PartitionNode(Constants.EXPECTED_VALUE_PARTITION_NAME, valueString);
 				testValue.setParent(category);
 			}
 			testData.add(testValue);
@@ -297,9 +295,8 @@ public class XmlModelParser implements IModelParser{
 		String name = getElementName(element);
 		String type = getAttributeValue(element, Constants.TYPE_NAME_ATTRIBUTE);
 		String defaultValueString = getAttributeValue(element, Constants.DEFAULT_EXPECTED_VALUE_ATTRIBUTE_NAME);
-		Object defaultValue = parseValue(defaultValueString, type);
 		CategoryNode category = new CategoryNode(name, type, true);
-		category.setDefaultValue(defaultValue);
+		category.setDefaultValueString(defaultValueString);
 		return category;
 	}
 	
@@ -318,8 +315,7 @@ public class XmlModelParser implements IModelParser{
 		
 		if(expected){
 			String defaultValueString = getAttributeValue(element, Constants.DEFAULT_EXPECTED_VALUE_ATTRIBUTE_NAME);
-			Object defaultValue = parseValue(defaultValueString, type);
-			categoryNode.setDefaultValue(defaultValue);
+			categoryNode.setDefaultValueString(defaultValueString);
 		}
 
 		for(Element child : getIterableElements(element.getChildElements())){
@@ -334,8 +330,7 @@ public class XmlModelParser implements IModelParser{
 	protected PartitionNode parsePartitionElement(Element element, String typeSignature) throws ParserException {
 		String name = getElementName(element);
 		String valueString = getAttributeValue(element, Constants.VALUE_ATTRIBUTE);
-		Object value = parseValue(valueString, typeSignature);
-		PartitionNode partition = new PartitionNode(name, value);
+		PartitionNode partition = new PartitionNode(name, valueString);
 		for(Element child : getIterableElements(element.getChildElements())){
 			if(child.getLocalName() == Constants.PARTITION_NODE_NAME){
 				partition.addPartition(parsePartitionElement(child, typeSignature));
@@ -346,7 +341,7 @@ public class XmlModelParser implements IModelParser{
 		}
 		return partition;
 	}
-
+	// TODO
 	protected Object parseValue(String valueString, String type) {
 		switch(type){
 		case Constants.TYPE_NAME_BOOLEAN:

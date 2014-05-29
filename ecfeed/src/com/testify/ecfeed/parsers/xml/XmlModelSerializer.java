@@ -68,11 +68,11 @@ public class XmlModelSerializer {
 		}
 		else if (node instanceof CategoryNode){
 			String type = ((CategoryNode)node).getType();
-			Object value = ((CategoryNode)node).getDefaultValue();
+			String value = ((CategoryNode)node).getDefaultValueString();
 			element = createCategoryElement(name, type, ((CategoryNode)node).isExpected(), value);
 		}
 		else if (node instanceof PartitionNode){
-			Object value = ((PartitionNode)node).getValue();
+			String value = ((PartitionNode)node).getValueString();
 			String type = ((PartitionNode)node).getCategory().getType();
 			element = createPartitionElement(type, name, value, ((PartitionNode)node).getLabels());
 			
@@ -113,8 +113,7 @@ public class XmlModelSerializer {
 	protected void createExpectedValueElement(Element testCaseElement,
 			PartitionNode parameter) {
 		Element testParameterElement = new Element(Constants.EXPECTED_PARAMETER_NODE_NAME);
-		String valueString = getValueString(parameter.getCategory().getType(), parameter.getValue());
-		Attribute partitionNameAttribute = new Attribute(Constants.VALUE_ATTRIBUTE_NAME, valueString);
+		Attribute partitionNameAttribute = new Attribute(Constants.VALUE_ATTRIBUTE_NAME, parameter.getValueString());
 		testParameterElement.addAttribute(partitionNameAttribute);
 		testCaseElement.appendChild(testParameterElement);
 	}
@@ -127,11 +126,10 @@ public class XmlModelSerializer {
 		testCaseElement.appendChild(testParameterElement);
 	}
 
-	protected Element createPartitionElement(String type, String name, Object value, Set<String> labels) {
-		String valueString = getValueString(type, value);
+	protected Element createPartitionElement(String type, String name, String value, Set<String> labels) {
 		Element partitionElement = new Element(Constants.PARTITION_NODE_NAME);
 		Attribute nameAttribute = new Attribute(Constants.NODE_NAME_ATTRIBUTE, name);
-		Attribute valueAttribute = new Attribute(Constants.VALUE_ATTRIBUTE, valueString);
+		Attribute valueAttribute = new Attribute(Constants.VALUE_ATTRIBUTE, value);
 		partitionElement.addAttribute(nameAttribute);
 		partitionElement.addAttribute(valueAttribute);
 		for(String label : labels){
@@ -142,13 +140,13 @@ public class XmlModelSerializer {
 		return partitionElement;
 	}
 
-	protected Element createCategoryElement(String name, String type, boolean expected, Object value) {
+	protected Element createCategoryElement(String name, String type, boolean expected, String value) {
 		Element categoryElement = new Element(Constants.CATEGORY_NODE_NAME);
 		Attribute nameAttribute = new Attribute(Constants.NODE_NAME_ATTRIBUTE, name);
 		Attribute typeNameAttribute = new Attribute(Constants.TYPE_NAME_ATTRIBUTE, type);
 		Attribute expectedAttribute;
 		if(expected){
-			expectedAttribute = new Attribute(Constants.DEFAULT_EXPECTED_VALUE_ATTRIBUTE_NAME, getValueString(type, value));
+			expectedAttribute = new Attribute(Constants.DEFAULT_EXPECTED_VALUE_ATTRIBUTE_NAME, value);
 		} else {
 			expectedAttribute = new Attribute(Constants.DEFAULT_EXPECTED_VALUE_ATTRIBUTE_NAME, "");
 		}
@@ -244,8 +242,7 @@ public class XmlModelSerializer {
 			Attribute categoryAttribute = 
 					new Attribute(Constants.STATEMENT_CATEGORY_ATTRIBUTE_NAME, categoryName);
 			Attribute valueAttribute = 
-					new Attribute(Constants.STATEMENT_EXPECTED_VALUE_ATTRIBUTE_NAME, 
-							getValueString(category.getType(), condition.getValue()));
+					new Attribute(Constants.STATEMENT_EXPECTED_VALUE_ATTRIBUTE_NAME, condition.getValueString());
 			
 			Element statementElement = new Element(Constants.CONSTRAINT_EXPECTED_STATEMENT_NODE_NAME);
 			statementElement.addAttribute(categoryAttribute);
@@ -275,7 +272,7 @@ public class XmlModelSerializer {
 		}
 		element.appendChild(statementArrayElement);
 	}
-
+	// TODO
 	private String getValueString(String type, Object value) {
 		String valueString;
 		switch(type){
