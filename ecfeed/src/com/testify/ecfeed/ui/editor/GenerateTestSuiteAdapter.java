@@ -215,7 +215,7 @@ class GenerateTestSuiteAdapter extends SelectionAdapter{
 				if(category.isExpected()){
 					PartitionNode anonymousPartition = 
 							new PartitionNode(Constants.EXPECTED_VALUE_PARTITION_NAME, 
-									testData.get(i).getValue());
+									testData.get(i).getValueString());
 					anonymousPartition.setParent(category);
 					testData.set(i, anonymousPartition);
 				}

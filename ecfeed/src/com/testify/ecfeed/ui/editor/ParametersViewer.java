@@ -86,7 +86,7 @@ public class ParametersViewer extends CheckboxTableViewerSection implements Test
 
 			String type = "int";
 			CategoryNode categoryNode = new CategoryNode(name, type, false);
-			categoryNode.setDefaultValue(ModelUtils.getDefaultExpectedValue(type));
+			categoryNode.setDefaultValueString(ModelUtils.getDefaultExpectedValueString(type));
 			ArrayList<PartitionNode> defaultPartitions = ModelUtils.generateDefaultPartitions(type);
 			for (PartitionNode partition : defaultPartitions) {
 				categoryNode.addPartition(partition);

@@ -62,10 +62,9 @@ public class PartitionValueEditingSupport extends EditingSupport {
 					Messages.DIALOG_PARTITION_VALUE_PROBLEM_MESSAGE);
 		}
 		else{
-			Object newValue = ModelUtils.getPartitionValueFromString(valueString, getCategory().getType());
 			PartitionNode partition = (PartitionNode)element;
-			if(newValue.equals(partition.getValue()) == false){
-				((PartitionNode)element).setValue(newValue);
+			if(valueString.equals(partition.getValueString()) == false){
+				((PartitionNode)element).setValueString(valueString);
 				fSection.modelUpdated();
 			}
 		}

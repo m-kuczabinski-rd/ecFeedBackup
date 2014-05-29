@@ -86,7 +86,7 @@ public class AddTestCaseDialog extends TitleAreaDialog implements TestDataEditor
 	}
 
 	private PartitionNode createAnonymuousPartition(CategoryNode parent) {
-		PartitionNode partition = new PartitionNode("@expected", parent.getDefaultValue()); 
+		PartitionNode partition = new PartitionNode("@expected", parent.getDefaultValueString()); 
 		partition.setParent(parent);
 		return partition;
 	}

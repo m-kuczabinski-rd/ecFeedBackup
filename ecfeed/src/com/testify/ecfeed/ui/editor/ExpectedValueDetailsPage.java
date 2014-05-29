@@ -41,7 +41,7 @@ public class ExpectedValueDetailsPage extends BasicDetailsPage {
 		protected boolean applyNewDefaultValue(CategoryNode category, Text valueText) {
 			String newValue = valueText.getText();
 			if(ModelUtils.validatePartitionStringValue(newValue, category.getType())){
-				category.setDefaultValue(ModelUtils.getPartitionValueFromString(newValue, category.getType()));
+				category.setDefaultValueString(newValue);
 				return true;
 			}
 			valueText.setText(category.getDefaultValuePartition().getValueString());

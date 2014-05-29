@@ -192,7 +192,7 @@ public class ConstraintViewer extends TreeViewerSection {
 					statement = new PartitionedCategoryStatement(partitionedCategory, relation, condition);
 				}
 				else if(expectedCategory != null){
-					PartitionNode condition = new PartitionNode("expected", expectedCategory.getDefaultValue());
+					PartitionNode condition = new PartitionNode("expected", expectedCategory.getDefaultValueString());
 					condition.setParent(expectedCategory);
 					statement = new ExpectedValueStatement(expectedCategory, condition);
 				}
@@ -334,10 +334,8 @@ public class ConstraintViewer extends TreeViewerSection {
 			public void handleEvent(Event event) {
 				if(event.keyCode == SWT.CR || event.keyCode == SWT.KEYPAD_CR){
 					ExpectedValueStatement statement = (ExpectedValueStatement)fSelectedStatement;
-					CategoryNode category = statement.getCategory();
-					Object newValue = ModelUtils.getPartitionValueFromString(fConditionText.getText(), category.getType());
-					if(newValue != null && !newValue.equals(statement.getCondition().getValue())){
-						statement.getCondition().setValue(newValue);
+					if(!fConditionText.getText().equals(statement.getCondition().getValueString())){
+						statement.getCondition().setValueString(fConditionText.getText());
 						modelUpdated();
 					}
 					fConditionText.setText(statement.getCondition().getValueString());

@@ -139,14 +139,9 @@ public class CategoryDetailsPage extends BasicDetailsPage {
 			fExpectedCheckbox.setSelection(fSelectedCategory.isExpected());
 			
 			if(fSelectedCategory.isExpected()){
-				if(fSelectedCategory.getDefaultValue() == null){
-					fDefaultValueText.setText("/null");
-				} else {
-					fDefaultValueText.setText(fSelectedCategory.getDefaultValue().toString());
-				}
+				fDefaultValueText.setText(fSelectedCategory.getDefaultValueString());
 				fDefaultValueText.setEnabled(true);
 				fPartitionsViewer.setVisible(false);
-
 			} else{
 				fDefaultValueText.setText("");
 				fDefaultValueText.setEnabled(false);
@@ -167,10 +162,9 @@ public class CategoryDetailsPage extends BasicDetailsPage {
 	
 	protected boolean applyNewDefaultValue(CategoryNode category, Text valueText) {
 		String newValue = valueText.getText();
-		if(fSelectedCategory.getDefaultValue() != null
-				&& newValue.equals(fSelectedCategory.getDefaultValue().toString())) return false;
+		if(newValue.equals(fSelectedCategory.getDefaultValueString())) return false;
 		if(ModelUtils.validatePartitionStringValue(newValue, category.getType())){
-			category.setDefaultValue(ModelUtils.getPartitionValueFromString(newValue, category.getType()));
+			category.setDefaultValueString(newValue);
 			return true;
 		}
 		valueText.setText(category.getDefaultValuePartition().getValueString());

@@ -94,9 +94,8 @@ public class TestDataValueEditingSupport extends EditingSupport {
 		if(value instanceof String && category.isExpected()){
 			String valueString = (String)value;
 			if(ModelUtils.validatePartitionStringValue(valueString, category.getType())){
-				Object newValue = ModelUtils.getPartitionValueFromString(valueString, category.getType());
-				if(newValue.equals(partitionElement.getValue()) == false){
-					((PartitionNode)element).setValue(newValue);
+				if(valueString.equals(partitionElement.getValueString()) == false){
+					((PartitionNode)element).setValueString(valueString);
 					fSetValueListener.testDataChanged();
 				}
 			}

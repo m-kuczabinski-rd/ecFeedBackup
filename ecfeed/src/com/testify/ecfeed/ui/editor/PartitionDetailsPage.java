@@ -78,8 +78,7 @@ public class PartitionDetailsPage extends BasicDetailsPage {
 			String newValue = valueText.getText(); 
 			if(newValue.equals(partition.getValueString()) == false){
 				if(ModelUtils.validatePartitionStringValue(newValue, partition.getCategory().getType())){
-					Object value = ModelUtils.getPartitionValueFromString(newValue, partition.getCategory().getType());
-					partition.setValue(value);
+					partition.setValueString(newValue);
 					return true;
 				}
 				else{

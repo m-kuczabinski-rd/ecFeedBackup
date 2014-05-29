@@ -53,8 +53,7 @@ public class DefaultValueEditingSupport extends EditingSupport {
 		CategoryNode category = (CategoryNode)element;
 		String valueString = (String)value;
 		if(ModelUtils.validatePartitionStringValue(valueString, category.getType())){
-			Object newValue = ModelUtils.getPartitionValueFromString(valueString, category.getType());
-			category.setDefaultValue(newValue);
+			category.setDefaultValueString(valueString);
 		}
 		fSetValueListener.testDataChanged();
 	}

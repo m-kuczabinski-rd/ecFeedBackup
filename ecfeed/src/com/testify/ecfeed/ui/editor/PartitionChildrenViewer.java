@@ -41,7 +41,7 @@ public class PartitionChildrenViewer extends CheckboxTableViewerSection {
 				newPartitionName = Constants.DEFAULT_NEW_PARTITION_NAME + "_" + i;
 				i++;
 			}
-			Object value = ModelUtils.getDefaultExpectedValue(fSelectedPartition.getCategory().getType());
+			String value = ModelUtils.getDefaultExpectedValueString(fSelectedPartition.getCategory().getType());
 			PartitionNode newPartition = new PartitionNode(newPartitionName, value);
 			fSelectedPartition.addPartition(newPartition);
 			getTable().setSelection(fSelectedPartition.getPartitions().size() - 1);
