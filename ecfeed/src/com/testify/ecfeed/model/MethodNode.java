@@ -346,4 +346,8 @@ public class MethodNode extends GenericNode {
 		fCategories.add(category);
 		category.setParent(this);
 	}
+	
+	public Object convert(IConverter converter){
+		return converter.convert(this);
+	}
 }
