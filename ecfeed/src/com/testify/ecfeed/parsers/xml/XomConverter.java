@@ -7,6 +7,7 @@ import nu.xom.Element;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.IConverter;
 import com.testify.ecfeed.model.IGenericNode;
+import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.RootNode;
 
 public class XomConverter implements IConverter {
@@ -22,8 +23,21 @@ public class XomConverter implements IConverter {
 		return element;
 	}
 
+	@Override
 	public Object convert(ClassNode node) {
-		return createNamedElement(CLASS_NODE_NAME, node);
+		Element element = createNamedElement(CLASS_NODE_NAME, node);
+		
+		for(MethodNode method : node.getMethods()){
+			element.appendChild((Element)convert(method));
+		}
+		return element;
+	}
+
+	@Override
+	public Object convert(MethodNode node) {
+		Element element = createNamedElement(METHOD_NODE_NAME, node);
+		
+		return element;
 	}
 
 	private Element createNamedElement(String nodeTag, IGenericNode node){
