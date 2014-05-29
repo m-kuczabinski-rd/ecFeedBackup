@@ -88,4 +88,12 @@ public class ClassNode extends GenericNode {
 		int lastDotIndex = qualifiedName.lastIndexOf('.');
 		return (lastDotIndex == -1)?qualifiedName: qualifiedName.substring(lastDotIndex + 1);
 	}
+	
+	public boolean compare(IGenericNode node){
+		if(node instanceof ClassNode == false){
+			return false;
+		}
+		
+		return super.compare(node);
+	}
 }
