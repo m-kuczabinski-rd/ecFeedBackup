@@ -433,6 +433,9 @@ public class ModelUtils {
 			case com.testify.ecfeed.model.Constants.TYPE_NAME_SHORT:
 				return Short.valueOf(valueString).shortValue();
 			case com.testify.ecfeed.model.Constants.TYPE_NAME_STRING:
+				if (valueString.equals(com.testify.ecfeed.model.Constants.NULL_VALUE_STRING_REPRESENTATION)) {
+					return null;
+				}
 				return valueString;
 			default:
 				return ClassUtils.enumPartitionValue(valueString, type, ClassUtils.getClassLoader(false, null));
@@ -476,7 +479,11 @@ public class ModelUtils {
 	}
 
 	public static boolean isPartitionImplemented(PartitionNode node) {
-		return (getPartitionValueFromString(node.getValueString(), node.getCategory().getType()) != null);
+		boolean implemented = (getPartitionValueFromString(node.getValueString(), node.getCategory().getType()) != null);
+		if (!implemented && node.getCategory().getType().equals(com.testify.ecfeed.model.Constants.TYPE_NAME_STRING)) {
+			implemented = true;
+		}
+		return implemented;
 	}
 
 	public static boolean isTestCaseImplemented(TestCaseNode node) {
