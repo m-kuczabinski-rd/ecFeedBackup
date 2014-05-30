@@ -237,7 +237,6 @@ public class XmlModelSerializer {
 		else if(istatement instanceof ExpectedValueStatement){
 			ExpectedValueStatement statement = (ExpectedValueStatement)istatement;
 			String categoryName = statement.getLeftHandName();
-			CategoryNode category = statement.getCategory();
 			PartitionNode condition = statement.getCondition();
 			Attribute categoryAttribute = 
 					new Attribute(Constants.STATEMENT_CATEGORY_ATTRIBUTE_NAME, categoryName);
@@ -271,32 +270,5 @@ public class XmlModelSerializer {
 			appendStatement(statementArrayElement, child);
 		}
 		element.appendChild(statementArrayElement);
-	}
-	// TODO
-	private String getValueString(String type, Object value) {
-		String valueString;
-		switch(type){
-		case Constants.TYPE_NAME_STRING:
-			if(value == null){
-				valueString = Constants.NULL_VALUE_STRING_REPRESENTATION;
-			}
-			else{
-				valueString = String.valueOf(value);
-			}
-			break;
-		case Constants.TYPE_NAME_CHAR:
-			Character character = (Character)value;
-			int representation = (int)character;
-			valueString = String.valueOf(representation);
-			break;
-		default:
-			if (value.getClass().isEnum()) {
-				valueString = ((Enum<?>) value).name();
-			} else {
-				valueString = value.toString();	
-			}
-			break;
-		}
-		return valueString;
 	}
 }

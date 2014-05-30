@@ -133,12 +133,6 @@ public class PartitionNode extends GenericNode implements IPartitionedNode{
 	}
 	
 	public String getValueString() {
-		// TODO
-		/*if (fValue == null) return Constants.NULL_VALUE_STRING_REPRESENTATION;
-		if (fValue instanceof Character) {
-			if ((Character)fValue != 0) return " \\" + (int)((char)fValue ) + " ['" + fValue + "']";
-			return "\\0";
-		}*/
 		return fValueString;
 	}
 
