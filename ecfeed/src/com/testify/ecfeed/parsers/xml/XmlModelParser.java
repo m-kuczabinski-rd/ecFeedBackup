@@ -41,7 +41,6 @@ import com.testify.ecfeed.model.constraint.StaticStatement;
 import com.testify.ecfeed.parsers.Constants;
 import com.testify.ecfeed.parsers.IModelParser;
 import com.testify.ecfeed.parsers.ParserException;
-import com.testify.ecfeed.utils.ClassUtils;
 
 public class XmlModelParser implements IModelParser{
 	
@@ -340,35 +339,6 @@ public class XmlModelParser implements IModelParser{
 			}
 		}
 		return partition;
-	}
-	// TODO
-	protected Object parseValue(String valueString, String type) {
-		switch(type){
-		case Constants.TYPE_NAME_BOOLEAN:
-			return Boolean.parseBoolean(valueString);
-		case Constants.TYPE_NAME_BYTE:
-			return Byte.parseByte(valueString);
-		case Constants.TYPE_NAME_CHAR:
-			if (valueString.length() <= 0){
-				return null;
-			}
-			int intValue = Integer.parseInt(valueString);
-			return (char)intValue;
-		case Constants.TYPE_NAME_DOUBLE:
-			return Double.parseDouble(valueString);
-		case Constants.TYPE_NAME_FLOAT:
-			return Float.parseFloat(valueString);
-		case Constants.TYPE_NAME_INT:
-			return Integer.parseInt(valueString);
-		case Constants.TYPE_NAME_LONG:
-			return Long.parseLong(valueString);
-		case Constants.TYPE_NAME_SHORT:
-			return Short.parseShort(valueString);
-		case Constants.TYPE_NAME_STRING:
-			return valueString.equals(Constants.NULL_VALUE_STRING_REPRESENTATION)?null:valueString;
-		default:
-			return ClassUtils.parseEnumValue(valueString, type, ClassUtils.getClassLoader(true, getClass().getClassLoader()));
-		}		
 	}
 
 	protected List<Element> getIterableElements(Elements elements){

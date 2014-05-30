@@ -26,7 +26,6 @@ public class Constants {
 	public static final String TYPE_NAME_STRING = "String";
 	public static final String TYPE_NAME_UNSUPPORTED = "unsupported";
 
-	public static final String NULL_VALUE_STRING_REPRESENTATION = "/null";
 	public static final String RELATION_EQUAL = "=";
 	public static final String RELATION_NOT = "\u2260";
 
