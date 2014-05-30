@@ -14,6 +14,7 @@ package com.testify.ecfeed.utils;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -259,23 +260,23 @@ public class ModelUtils {
 
 	public static ArrayList<PartitionNode> generateDefaultPartitions(String typeSignature) {
 		switch(typeSignature){
-		case "boolean":
+		case com.testify.ecfeed.model.Constants.TYPE_NAME_BOOLEAN:
 			return defaultBooleanPartitions();
-		case "byte":
-			return defaultBytePartitions();
-		case "char":
-			return defaultCharacterPartitions();
-		case "double":
-			return defaultDoublePartitions();
-		case "float":
-			return defaultFloatPartitions();
-		case "int":
+		case com.testify.ecfeed.model.Constants.TYPE_NAME_BYTE:
 			return defaultIntegerPartitions();
-		case "long":
-			return defaultLongPartitions();
-		case "short":
-			return defaultShortPartitions();
-		case "String":
+		case com.testify.ecfeed.model.Constants.TYPE_NAME_CHAR:
+			return defaultIntegerPartitions();
+		case com.testify.ecfeed.model.Constants.TYPE_NAME_DOUBLE:
+			return defaultFloatPartitions();
+		case com.testify.ecfeed.model.Constants.TYPE_NAME_FLOAT:
+			return defaultFloatPartitions();
+		case com.testify.ecfeed.model.Constants.TYPE_NAME_INT:
+			return defaultIntegerPartitions();
+		case com.testify.ecfeed.model.Constants.TYPE_NAME_LONG:
+			return defaultIntegerPartitions();
+		case com.testify.ecfeed.model.Constants.TYPE_NAME_SHORT:
+			return defaultIntegerPartitions();
+		case com.testify.ecfeed.model.Constants.TYPE_NAME_STRING:
 			return defaultStringPartitions();
 		default:
 			return ClassUtils.defaultEnumPartitions(typeSignature);
@@ -284,91 +285,65 @@ public class ModelUtils {
 
 	private static ArrayList<PartitionNode> defaultBooleanPartitions() {
 		ArrayList<PartitionNode> partitions = new ArrayList<PartitionNode>();
-		partitions.add(new PartitionNode("true", "true"));
-		partitions.add(new PartitionNode("false", "false"));	
+		HashMap<String, String> values = defaultBooleanValues();
+		for (String key : values.keySet()) {
+			partitions.add(new PartitionNode(key, values.get(key)));
+		}
 		return partitions;
 	}
 
-	private static ArrayList<PartitionNode> defaultBytePartitions() {
-		ArrayList<PartitionNode> partitions = new ArrayList<PartitionNode>();
-		partitions.add(new PartitionNode("min", "MIN_VALUE"));
-		partitions.add(new PartitionNode("negative", "-1"));	
-		partitions.add(new PartitionNode("zero", "0"));
-		partitions.add(new PartitionNode("positive", "1"));	
-		partitions.add(new PartitionNode("max", "MAX_VALUE"));
-		return partitions;
-	}
-
-	private static ArrayList<PartitionNode> defaultCharacterPartitions() {
-		ArrayList<PartitionNode> partitions = new ArrayList<PartitionNode>();
-		partitions.add(new PartitionNode("zero", "0"));
-		partitions.add(new PartitionNode("a", "a"));
-		partitions.add(new PartitionNode("z", "z"));
-		partitions.add(new PartitionNode("A", "A"));
-		partitions.add(new PartitionNode("Z", "Z"));
-		partitions.add(new PartitionNode("max", "MAX_VALUE"));
-		return partitions;
-	}
-
-	private static ArrayList<PartitionNode> defaultDoublePartitions() {
-		ArrayList<PartitionNode> partitions = new ArrayList<PartitionNode>();
-		partitions.add(new PartitionNode("min", "MIN_VALUE"));
-		partitions.add(new PartitionNode("negative", "-1"));	
-		partitions.add(new PartitionNode("zero", "0"));
-		partitions.add(new PartitionNode("positive", "1"));	
-		partitions.add(new PartitionNode("max", "MAX_VALUE"));
-		return partitions;
-	}
-
-	private static ArrayList<PartitionNode> defaultFloatPartitions() {
-		ArrayList<PartitionNode> partitions = new ArrayList<PartitionNode>();
-		partitions.add(new PartitionNode("min", "MIN_VALUE"));
-		partitions.add(new PartitionNode("negative", "-1"));	
-		partitions.add(new PartitionNode("zero", "0"));
-		partitions.add(new PartitionNode("positive", "1"));	
-		partitions.add(new PartitionNode("max", "MAX_VALUE"));
-		return partitions;
+	private static HashMap<String, String> defaultBooleanValues() {
+		HashMap<String, String> values = new HashMap<String, String>();
+		values.put("true", Constants.BOOLEAN_TRUE_STRING_REPRESENTATION);
+		values.put("false", Constants.BOOLEAN_FALSE_STRING_REPRESENTATION);
+		return values;
 	}
 
 	private static ArrayList<PartitionNode> defaultIntegerPartitions() {
 		ArrayList<PartitionNode> partitions = new ArrayList<PartitionNode>();
-		partitions.add(new PartitionNode("min", "MIN_VALUE"));
-		partitions.add(new PartitionNode("negative", "-1"));	
-		partitions.add(new PartitionNode("zero", "0"));
-		partitions.add(new PartitionNode("positive", "1"));	
-		partitions.add(new PartitionNode("max", "MAX_VALUE"));
+		HashMap<String, String> values = defaultIntegerValues();
+		for (String key : values.keySet()) {
+			partitions.add(new PartitionNode(key, values.get(key)));
+		}
 		return partitions;
 	}
 
-	private static ArrayList<PartitionNode> defaultLongPartitions() {
+	private static HashMap<String, String> defaultIntegerValues() {
+		HashMap<String, String> values = new HashMap<String, String>();
+		values.put("min", Constants.MIN_VALUE_STRING_REPRESENTATION);
+		values.put("max", Constants.MAX_VALUE_STRING_REPRESENTATION);
+		return values;
+	}
+
+	private static ArrayList<PartitionNode> defaultFloatPartitions() {
 		ArrayList<PartitionNode> partitions = new ArrayList<PartitionNode>();
-		partitions.add(new PartitionNode("min", "MIN_VALUE"));
-		partitions.add(new PartitionNode("negative", "-1"));	
-		partitions.add(new PartitionNode("zero", "0"));
-		partitions.add(new PartitionNode("positive", "1"));	
-		partitions.add(new PartitionNode("max", "MAX_VALUE"));
+		HashMap<String, String> values = defaultFloatValues();
+		for (String key : values.keySet()) {
+			partitions.add(new PartitionNode(key, values.get(key)));
+		}
 		return partitions;
 	}
 
-	private static ArrayList<PartitionNode> defaultShortPartitions() {
-		ArrayList<PartitionNode> partitions = new ArrayList<PartitionNode>();
-		partitions.add(new PartitionNode("min", "MIN_VALUE"));
-		partitions.add(new PartitionNode("negative", "-1"));	
-		partitions.add(new PartitionNode("zero", "0"));
-		partitions.add(new PartitionNode("positive", "1"));	
-		partitions.add(new PartitionNode("max", "MAX_VALUE"));
-		return partitions;
+	private static HashMap<String, String> defaultFloatValues() {
+		HashMap<String, String> values = new HashMap<String, String>();
+		values.put("min", Constants.MIN_VALUE_STRING_REPRESENTATION);
+		values.put("max", Constants.MAX_VALUE_STRING_REPRESENTATION);
+		values.put("min", Constants.POSITIVE_INFINITY_STRING_REPRESENTATION);
+		values.put("max", Constants.NEGATIVE_INFINITY_STRING_REPRESENTATION);
+		return values;
 	}
 
 	private static ArrayList<PartitionNode> defaultStringPartitions() {
 		ArrayList<PartitionNode> partitions = new ArrayList<PartitionNode>();
-		partitions.add(new PartitionNode("null", null));
-		partitions.add(new PartitionNode("empty", ""));
-		partitions.add(new PartitionNode("lower case", "a"));
-		partitions.add(new PartitionNode("upper case", "A"));
-		partitions.add(new PartitionNode("mixed cases", "aA"));
-		partitions.add(new PartitionNode("all latin", "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"));
+		ArrayList<String> values = defaultStringValues();
+		partitions.add(new PartitionNode("null", values.get(0)));
 		return partitions;
+	}
+
+	private static ArrayList<String> defaultStringValues() {
+		ArrayList<String> values = new ArrayList<String>();
+		values.add(Constants.NULL_VALUE_STRING_REPRESENTATION);
+		return values;
 	}
 
 	public static boolean validateConstraintName(String name) {
@@ -412,36 +387,154 @@ public class ModelUtils {
 		return (getPartitionValueFromString(valueString, type) != null);
 	}
 
-	public static Object getPartitionValueFromString(String valueString, String type){
-		try{
-			switch(type){
-			case com.testify.ecfeed.model.Constants.TYPE_NAME_BOOLEAN:
-				return Boolean.valueOf(valueString).booleanValue();
-			case com.testify.ecfeed.model.Constants.TYPE_NAME_BYTE:
-				return Byte.valueOf(valueString).byteValue();
-			case com.testify.ecfeed.model.Constants.TYPE_NAME_CHAR:
-				if(valueString.charAt(0) != '\\' || valueString.length() == 1) return(valueString.charAt(0));
-				return Character.toChars(Integer.parseInt(valueString.substring(1)));
-			case com.testify.ecfeed.model.Constants.TYPE_NAME_DOUBLE:
-				return Double.valueOf(valueString).doubleValue();
-			case com.testify.ecfeed.model.Constants.TYPE_NAME_FLOAT:
-				return Float.valueOf(valueString).floatValue();
-			case com.testify.ecfeed.model.Constants.TYPE_NAME_INT:
-				return Integer.valueOf(valueString).intValue();
-			case com.testify.ecfeed.model.Constants.TYPE_NAME_LONG:
-				return Long.valueOf(valueString).longValue();
-			case com.testify.ecfeed.model.Constants.TYPE_NAME_SHORT:
-				return Short.valueOf(valueString).shortValue();
-			case com.testify.ecfeed.model.Constants.TYPE_NAME_STRING:
-				if (valueString.equals(com.testify.ecfeed.model.Constants.NULL_VALUE_STRING_REPRESENTATION)) {
-					return null;
-				}
-				return valueString;
-			default:
-				return ClassUtils.enumPartitionValue(valueString, type, ClassUtils.getClassLoader(false, null));
+	private static boolean isPredefinedValueString(String valueString) {
+		return valueString.equals(Constants.NULL_VALUE_STRING_REPRESENTATION) ||
+				valueString.equals(Constants.BOOLEAN_FALSE_STRING_REPRESENTATION) ||
+				valueString.equals(Constants.BOOLEAN_TRUE_STRING_REPRESENTATION) ||
+				valueString.equals(Constants.MIN_VALUE_STRING_REPRESENTATION) ||
+				valueString.equals(Constants.MAX_VALUE_STRING_REPRESENTATION) ||
+				valueString.equals(Constants.POSITIVE_INFINITY_STRING_REPRESENTATION) ||
+				valueString.equals(Constants.NEGATIVE_INFINITY_STRING_REPRESENTATION);
+	}
+
+	public static Object getBooleanPredefinedValueFromString(String valueString) {
+		if (valueString.equals(Constants.BOOLEAN_FALSE_STRING_REPRESENTATION)) {
+			return Boolean.FALSE;
+		} else if (valueString.equals(Constants.BOOLEAN_FALSE_STRING_REPRESENTATION)) {
+			return Boolean.TRUE;
+		}
+		return null;
+	}
+
+	public static Object getBytePredefinedValueFromString(String valueString) {
+		if (valueString.equals(Constants.MIN_VALUE_STRING_REPRESENTATION)) {
+			return Byte.MIN_VALUE;
+		} else if (valueString.equals(Constants.MAX_VALUE_STRING_REPRESENTATION)) {
+			return Byte.MAX_VALUE;
+		}
+		return null;
+	}
+
+	public static Object getCharPredefinedValueFromString(String valueString) {
+		if (valueString.equals(Constants.MIN_VALUE_STRING_REPRESENTATION)) {
+			return Character.MIN_VALUE;
+		} else if (valueString.equals(Constants.MAX_VALUE_STRING_REPRESENTATION)) {
+			return Character.MAX_VALUE;
+		}
+		return null;
+	}
+
+	public static Object getIntegerPredefinedValueFromString(String valueString) {
+		if (valueString.equals(Constants.MIN_VALUE_STRING_REPRESENTATION)) {
+			return Integer.MIN_VALUE;
+		} else if (valueString.equals(Constants.MAX_VALUE_STRING_REPRESENTATION)) {
+			return Integer.MAX_VALUE;
+		}
+		return null;
+	}
+
+	public static Object getLongPredefinedValueFromString(String valueString) {
+		if (valueString.equals(Constants.MIN_VALUE_STRING_REPRESENTATION)) {
+			return Long.MIN_VALUE;
+		} else if (valueString.equals(Constants.MAX_VALUE_STRING_REPRESENTATION)) {
+			return Long.MAX_VALUE;
+		}
+		return null;
+	}
+
+	public static Object getShortPredefinedValueFromString(String valueString) {
+		if (valueString.equals(Constants.MIN_VALUE_STRING_REPRESENTATION)) {
+			return Short.MIN_VALUE;
+		} else if (valueString.equals(Constants.MAX_VALUE_STRING_REPRESENTATION)) {
+			return Short.MAX_VALUE;
+		}
+		return null;
+	}
+
+	public static Object getDoublePredefinedValueFromString(String valueString) {
+		if (valueString.equals(Constants.MIN_VALUE_STRING_REPRESENTATION)) {
+			return Double.MIN_VALUE;
+		} else if (valueString.equals(Constants.MAX_VALUE_STRING_REPRESENTATION)) {
+			return Double.MAX_VALUE;
+		} else if (valueString.equals(Constants.POSITIVE_INFINITY_STRING_REPRESENTATION)) {
+			return Double.POSITIVE_INFINITY;
+		} else if (valueString.equals(Constants.NEGATIVE_INFINITY_STRING_REPRESENTATION)) {
+			return Double.NEGATIVE_INFINITY;
+		}
+		return null;
+	}
+
+	public static Object getFloatPredefinedValueFromString(String valueString) {
+		if (valueString.equals(Constants.MIN_VALUE_STRING_REPRESENTATION)) {
+			return Float.MIN_VALUE;
+		} else if (valueString.equals(Constants.MAX_VALUE_STRING_REPRESENTATION)) {
+			return Float.MAX_VALUE;
+		} else if (valueString.equals(Constants.POSITIVE_INFINITY_STRING_REPRESENTATION)) {
+			return Float.POSITIVE_INFINITY;
+		} else if (valueString.equals(Constants.NEGATIVE_INFINITY_STRING_REPRESENTATION)) {
+			return Float.NEGATIVE_INFINITY;
+		}
+		return null;
+	}
+
+	public static Object getPredefinedValueFromString(String valueString, String type){
+		switch (type) {
+		case com.testify.ecfeed.model.Constants.TYPE_NAME_BOOLEAN:
+			return getBooleanPredefinedValueFromString(valueString);
+		case com.testify.ecfeed.model.Constants.TYPE_NAME_BYTE:
+			return getBytePredefinedValueFromString(valueString);
+		case com.testify.ecfeed.model.Constants.TYPE_NAME_CHAR:
+			return getCharPredefinedValueFromString(valueString);
+		case com.testify.ecfeed.model.Constants.TYPE_NAME_DOUBLE:
+			return getDoublePredefinedValueFromString(valueString);
+		case com.testify.ecfeed.model.Constants.TYPE_NAME_FLOAT:
+			return getFloatPredefinedValueFromString(valueString);
+		case com.testify.ecfeed.model.Constants.TYPE_NAME_INT:
+			return getIntegerPredefinedValueFromString(valueString);
+		case com.testify.ecfeed.model.Constants.TYPE_NAME_LONG:
+			return getLongPredefinedValueFromString(valueString);
+		case com.testify.ecfeed.model.Constants.TYPE_NAME_SHORT:
+			return getShortPredefinedValueFromString(valueString);
+		case com.testify.ecfeed.model.Constants.TYPE_NAME_STRING:
+			if (valueString.equals(Constants.NULL_VALUE_STRING_REPRESENTATION)) {
+				return null;
 			}
-		}catch(NumberFormatException|IndexOutOfBoundsException e){
+		default:
 			return null;
+		}
+	}
+
+	public static Object getPartitionValueFromString(String valueString, String type) {
+		if (isPredefinedValueString(valueString)) {
+			return getPredefinedValueFromString(valueString, type);
+		} else {
+			try{
+				switch(type){
+				case com.testify.ecfeed.model.Constants.TYPE_NAME_BOOLEAN:
+					return Boolean.valueOf(valueString).booleanValue();
+				case com.testify.ecfeed.model.Constants.TYPE_NAME_BYTE:
+					return Byte.valueOf(valueString).byteValue();
+				case com.testify.ecfeed.model.Constants.TYPE_NAME_CHAR:
+					if(valueString.charAt(0) != '\\' || valueString.length() == 1) return(valueString.charAt(0));
+					return Character.toChars(Integer.parseInt(valueString.substring(1)));
+				case com.testify.ecfeed.model.Constants.TYPE_NAME_DOUBLE:
+					return Double.valueOf(valueString).doubleValue();
+				case com.testify.ecfeed.model.Constants.TYPE_NAME_FLOAT:
+					return Float.valueOf(valueString).floatValue();
+				case com.testify.ecfeed.model.Constants.TYPE_NAME_INT:
+					return Integer.valueOf(valueString).intValue();
+				case com.testify.ecfeed.model.Constants.TYPE_NAME_LONG:
+					return Long.valueOf(valueString).longValue();
+				case com.testify.ecfeed.model.Constants.TYPE_NAME_SHORT:
+					return Short.valueOf(valueString).shortValue();
+				case com.testify.ecfeed.model.Constants.TYPE_NAME_STRING:
+					return valueString;
+				default:
+					return ClassUtils.enumPartitionValue(valueString, type, ClassUtils.getClassLoader(false, null));
+				}
+			} catch (NumberFormatException|IndexOutOfBoundsException e) {
+				return null;
+			}
 		}
 	}
 

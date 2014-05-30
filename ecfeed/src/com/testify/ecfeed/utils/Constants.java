@@ -44,4 +44,12 @@ public class Constants {
 	public static final int MAX_DISPLAYED_TEST_CASES_PER_SUITE = 500;
 	public static final int TEST_SUITE_SIZE_WARNING_LIMIT = 20000;
 	public static final String DEFAULT_LABEL = "newLabel";
+
+	public static final String NULL_VALUE_STRING_REPRESENTATION = "/null";
+	public static final String MAX_VALUE_STRING_REPRESENTATION = "MAX_VALUE";
+	public static final String MIN_VALUE_STRING_REPRESENTATION = "MIN_VALUE";
+	public static final String BOOLEAN_TRUE_STRING_REPRESENTATION = "true";
+	public static final String BOOLEAN_FALSE_STRING_REPRESENTATION = "false";
+	public static final String POSITIVE_INFINITY_STRING_REPRESENTATION = "POSITIVE_INFINITY";
+	public static final String NEGATIVE_INFINITY_STRING_REPRESENTATION = "NEGATIVE_INFINITY";
 }
