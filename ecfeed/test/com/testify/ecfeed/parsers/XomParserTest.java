@@ -21,7 +21,7 @@ import com.testify.ecfeed.testutils.RandomModelGenerator;
 
 public class XomParserTest {
 	
-	private final boolean DEBUG = true;
+	private final boolean DEBUG = false;
 	
 	RandomModelGenerator fModelGenerator = new RandomModelGenerator();
 	XomParser fParser = new XomParser();
@@ -62,7 +62,40 @@ public class XomParserTest {
 		} catch (ParserException e) {
 			fail("Unexpected exception: " + e.getMessage());
 		}
-}
+	}
+	
+	@Test
+	public void assertTypeTest(){
+		RootNode root = fModelGenerator.generateModel();
+		ClassNode _class = fModelGenerator.generateClass();
+		
+		Element rootElement = (Element)root.convert(new XomConverter());
+		Element classElement = (Element)_class.convert(new XomConverter());
+		
+		try {
+			fParser.parseRoot(rootElement);
+		} catch (ParserException e) {
+			fail("Unexpected exception: " + e.getMessage());
+		}
+
+		try {
+			fParser.parseClass(classElement);
+		} catch (ParserException e) {
+			fail("Unexpected exception: " + e.getMessage());
+		}
+
+		try {
+			fParser.parseClass(rootElement);
+			fail("exception expected");
+		} catch (ParserException e) {
+		}
+	
+		try {
+			fParser.parseRoot(classElement);
+			fail("exception expected");
+		} catch (ParserException e) {
+		}
+	}
 	
 	private void TRACE(Element element){
 		if(!DEBUG) return;
