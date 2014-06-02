@@ -542,14 +542,22 @@ public class ModelUtils {
 				case com.testify.ecfeed.model.Constants.TYPE_NAME_BYTE:
 					return Byte.valueOf(valueString).byteValue();
 				case com.testify.ecfeed.model.Constants.TYPE_NAME_CHAR:
-					if(valueString.charAt(0) != '\\' || valueString.length() == 1) return(valueString.charAt(0));
-					return Character.toChars(Integer.parseInt(valueString.substring(1)));
+					if (valueString.charAt(0) == '\\') {
+						int index = valueString.indexOf(" ");
+						if (index != -1 ) {
+							return Character.toChars(Integer.parseInt(valueString.substring(1, index)));
+						} else {
+							return Character.toChars(Integer.parseInt(valueString.substring(1)));
+						}
+					} else if (valueString.length() == 1) {
+						return (valueString.charAt(0));
+					}
 				case com.testify.ecfeed.model.Constants.TYPE_NAME_DOUBLE:
 					return Double.valueOf(valueString).doubleValue();
 				case com.testify.ecfeed.model.Constants.TYPE_NAME_FLOAT:
 					return Float.valueOf(valueString).floatValue();
 				case com.testify.ecfeed.model.Constants.TYPE_NAME_INT:
-					return Integer.valueOf(valueString).intValue();
+					return Integer.decode(valueString);
 				case com.testify.ecfeed.model.Constants.TYPE_NAME_LONG:
 					return Long.valueOf(valueString).longValue();
 				case com.testify.ecfeed.model.Constants.TYPE_NAME_SHORT:
