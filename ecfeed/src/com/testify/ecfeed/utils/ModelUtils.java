@@ -283,16 +283,41 @@ public class ModelUtils {
 		}
 	}
 
+	public static HashMap<String, String> generatePredefinedValues(String type) {
+		switch(type){
+		case com.testify.ecfeed.model.Constants.TYPE_NAME_BOOLEAN:
+			return predefinedBooleanValues();
+		case com.testify.ecfeed.model.Constants.TYPE_NAME_BYTE:
+			return predefinedIntegerValues();
+		case com.testify.ecfeed.model.Constants.TYPE_NAME_CHAR:
+			return predefinedIntegerValues();
+		case com.testify.ecfeed.model.Constants.TYPE_NAME_DOUBLE:
+			return predefinedFloatValues();
+		case com.testify.ecfeed.model.Constants.TYPE_NAME_FLOAT:
+			return predefinedFloatValues();
+		case com.testify.ecfeed.model.Constants.TYPE_NAME_INT:
+			return predefinedIntegerValues();
+		case com.testify.ecfeed.model.Constants.TYPE_NAME_LONG:
+			return predefinedIntegerValues();
+		case com.testify.ecfeed.model.Constants.TYPE_NAME_SHORT:
+			return predefinedIntegerValues();
+		case com.testify.ecfeed.model.Constants.TYPE_NAME_STRING:
+			return predefinedStringValues();
+		default:
+			return ClassUtils.defaultEnumValues(type);
+		}
+	}
+
 	private static ArrayList<PartitionNode> defaultBooleanPartitions() {
 		ArrayList<PartitionNode> partitions = new ArrayList<PartitionNode>();
-		HashMap<String, String> values = defaultBooleanValues();
+		HashMap<String, String> values = predefinedBooleanValues();
 		for (String key : values.keySet()) {
 			partitions.add(new PartitionNode(key, values.get(key)));
 		}
 		return partitions;
 	}
 
-	private static HashMap<String, String> defaultBooleanValues() {
+	private static HashMap<String, String> predefinedBooleanValues() {
 		HashMap<String, String> values = new HashMap<String, String>();
 		values.put("true", Constants.BOOLEAN_TRUE_STRING_REPRESENTATION);
 		values.put("false", Constants.BOOLEAN_FALSE_STRING_REPRESENTATION);
@@ -301,14 +326,14 @@ public class ModelUtils {
 
 	private static ArrayList<PartitionNode> defaultIntegerPartitions() {
 		ArrayList<PartitionNode> partitions = new ArrayList<PartitionNode>();
-		HashMap<String, String> values = defaultIntegerValues();
+		HashMap<String, String> values = predefinedIntegerValues();
 		for (String key : values.keySet()) {
 			partitions.add(new PartitionNode(key, values.get(key)));
 		}
 		return partitions;
 	}
 
-	private static HashMap<String, String> defaultIntegerValues() {
+	private static HashMap<String, String> predefinedIntegerValues() {
 		HashMap<String, String> values = new HashMap<String, String>();
 		values.put("min", Constants.MIN_VALUE_STRING_REPRESENTATION);
 		values.put("max", Constants.MAX_VALUE_STRING_REPRESENTATION);
@@ -317,32 +342,34 @@ public class ModelUtils {
 
 	private static ArrayList<PartitionNode> defaultFloatPartitions() {
 		ArrayList<PartitionNode> partitions = new ArrayList<PartitionNode>();
-		HashMap<String, String> values = defaultFloatValues();
+		HashMap<String, String> values = predefinedFloatValues();
 		for (String key : values.keySet()) {
 			partitions.add(new PartitionNode(key, values.get(key)));
 		}
 		return partitions;
 	}
 
-	private static HashMap<String, String> defaultFloatValues() {
+	private static HashMap<String, String> predefinedFloatValues() {
 		HashMap<String, String> values = new HashMap<String, String>();
 		values.put("min", Constants.MIN_VALUE_STRING_REPRESENTATION);
 		values.put("max", Constants.MAX_VALUE_STRING_REPRESENTATION);
-		values.put("min", Constants.POSITIVE_INFINITY_STRING_REPRESENTATION);
-		values.put("max", Constants.NEGATIVE_INFINITY_STRING_REPRESENTATION);
+		values.put("positive infinity", Constants.POSITIVE_INFINITY_STRING_REPRESENTATION);
+		values.put("negative infinity", Constants.NEGATIVE_INFINITY_STRING_REPRESENTATION);
 		return values;
 	}
 
 	private static ArrayList<PartitionNode> defaultStringPartitions() {
 		ArrayList<PartitionNode> partitions = new ArrayList<PartitionNode>();
-		ArrayList<String> values = defaultStringValues();
-		partitions.add(new PartitionNode("null", values.get(0)));
+		HashMap<String, String> values = predefinedStringValues();
+		for (String key : values.keySet()) {
+			partitions.add(new PartitionNode(key, values.get(key)));
+		}
 		return partitions;
 	}
 
-	private static ArrayList<String> defaultStringValues() {
-		ArrayList<String> values = new ArrayList<String>();
-		values.add(Constants.NULL_VALUE_STRING_REPRESENTATION);
+	private static HashMap<String, String> predefinedStringValues() {
+		HashMap<String, String> values = new HashMap<String, String>();
+		values.put("null", Constants.NULL_VALUE_STRING_REPRESENTATION);
 		return values;
 	}
 
