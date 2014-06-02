@@ -1,5 +1,7 @@
 package com.testify.ecfeed.utils;
 
+import java.text.NumberFormat;
+import java.text.ParseException;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
@@ -21,22 +23,20 @@ public class AdaptTypeSupport{
 				com.testify.ecfeed.model.Constants.TYPE_NAME_SHORT };
 	}
 
-	private static boolean assignDefaultValue(CategoryNode category, String type){
-		// TODO
-		/*if(Arrays.asList(getSupportedTypes()).contains(type)){
-			Object expvalue = getDefaultExpectedValue(type);
+	private static boolean assignDefaultValueString(CategoryNode category, String type){
+		if(Arrays.asList(getSupportedTypes()).contains(type)){
+			String expvalue = getDefaultExpectedValueString(type);
 			if(expvalue != null){
-				category.setDefaultValue(expvalue);
+				category.setDefaultValueString(expvalue);
 				return true;
 			}
-		}*/
+		}
 		return false;
 	}
 
 	// returns true if model has changed in any way
 	public static boolean changeCategoryType(CategoryNode category, String type){
-		// TODO
-		/*String oldtype = category.getType();
+		String oldtype = category.getType();
 		// If type is exactly the same or null or whatever else might happen
 		if(oldtype == null)
 			oldtype = "";
@@ -56,11 +56,11 @@ public class AdaptTypeSupport{
 				if(compatibility == 2){
 					category.setType(type);
 					category.getOrdinaryPartitions().clear();
-					category.setDefaultValue(null);
+					category.setDefaultValueString(null);
 				} else{
 					if(category.isExpected()){
-						if(category.getDefaultValue() != null && adaptValueToType(category.getDefaultValue(), oldtype) != null)
-							category.setDefaultValue(adaptValueToType(category.getDefaultValue(), oldtype));
+						if(category.getDefaultValueString() != null && adaptValueToType(category.getDefaultValueString(), oldtype) != null)
+							category.setDefaultValueString(adaptValueToType(category.getDefaultValueString(), oldtype));
 						category.getOrdinaryPartitions().clear();
 					}
 					for(PartitionNode partition : category.getPartitions()){
@@ -69,8 +69,8 @@ public class AdaptTypeSupport{
 				}
 				// if no conversion was possible, try to assign predefined
 				// default value
-				if(category.getDefaultValue() == null && Arrays.asList(getSupportedTypes()).contains(type)){
-					assignDefaultValue(category, type);
+				if(category.getDefaultValueString() == null && Arrays.asList(getSupportedTypes()).contains(type)){
+					assignDefaultValueString(category, type);
 				}
 			} else{
 				int index = method.getCategories().indexOf(category);
@@ -84,8 +84,8 @@ public class AdaptTypeSupport{
 					// add new category in place of removed one
 					category.setType(type);
 
-					if(!assignDefaultValue(category, type))
-						category.setDefaultValue(null);
+					if(!assignDefaultValueString(category, type))
+						category.setDefaultValueString(null);
 				}
 				// types can be converted
 				else{
@@ -93,12 +93,12 @@ public class AdaptTypeSupport{
 					// Expected Category
 					if(category.isExpected()){
 						// try to adapt or assign new default value
-						if(category.getDefaultValue() != null){
-							Object newvalue = adaptValueToType(category.getDefaultValue(), type);
+						if(category.getDefaultValueString() != null){
+							String newvalue = adaptValueToType(category.getDefaultValueString(), type);
 							if(newvalue != null){
-								category.setDefaultValue(newvalue);
+								category.setDefaultValueString(newvalue);
 							} else{
-								assignDefaultValue(category, type);
+								assignDefaultValueString(category, type);
 							}
 						}
 						// remove regular partitions in case there were any
@@ -107,11 +107,11 @@ public class AdaptTypeSupport{
 						Iterator<TestCaseNode> iterator = method.getTestCases().iterator();
 						while(iterator.hasNext()){
 							TestCaseNode testCase = iterator.next();
-							Object tcvalue = adaptValueToType(testCase.getTestData().get(index).getValue(), type);
+							String tcvalue = adaptValueToType(testCase.getTestData().get(index).getValueString(), type);
 							if(tcvalue == null){
 								iterator.remove();
 							} else{
-								testCase.getTestData().get(index).setValue(tcvalue);
+								testCase.getTestData().get(index).setValueString(tcvalue);
 							}
 						}
 						// adapting constraints of expected category would be
@@ -130,23 +130,22 @@ public class AdaptTypeSupport{
 							if(!adaptOrRemovePartitions(partition, type))
 								itr.remove();
 						}
-						if(!assignDefaultValue(category, type))
-							category.setDefaultValue(null);
+						if(!assignDefaultValueString(category, type))
+							category.setDefaultValueString(null);
 					}
 				}
 			}
-		}*/
+		}
 		return true;
 	}
 
 	// returns true if adapted successfully, false if destined for removal.
 	private static boolean adaptOrRemovePartitions(PartitionNode partition, String type){
-		// TODO
-		/*List<PartitionNode> partitions = partition.getLeafPartitions();
+		List<PartitionNode> partitions = partition.getLeafPartitions();
 		if(partitions.size() == 1 && partitions.contains(partition)){
-			Object newvalue = adaptValueToType(partition.getValue(), type);
+			String newvalue = adaptValueToType(partition.getValueString(), type);
 			if(newvalue != null){
-				partition.setValue(newvalue);
+				partition.setValueString(newvalue);
 			} else{
 				return false;
 				// partition.getParent().removePartition(partition);
@@ -159,11 +158,11 @@ public class AdaptTypeSupport{
 					itr.remove();
 				partition.partitionRemoved(partition);
 			}
-		}*/
+		}
 		return true;
 	}
 
-	public static Object adaptValueToType(Object value, String type){
+	public static String adaptValueToType(String value, String type){
 		switch(type){
 		case com.testify.ecfeed.model.Constants.TYPE_NAME_BOOLEAN:
 			return adaptValueToBoolean(value);
@@ -188,236 +187,92 @@ public class AdaptTypeSupport{
 		return null;
 	}
 
-	private static Object adaptValueToBoolean(Object value){
-		if(value instanceof Boolean){
+	private static String adaptValueToBoolean(String value){
+			return (Boolean.valueOf(value)).toString();
+	}
+
+	private static String adaptValueToByte(String value){
+		// char to byte... Needed? If so, 2nd argument with type is needed. Or just make one method for all this stuff.
+		try{
+			NumberFormat formatter = NumberFormat.getInstance();
+			formatter.setParseIntegerOnly(true);
+			Byte numvalue = formatter.parse(value).byteValue();
+			return numvalue.toString();
+		} catch(ParseException e){
+		}
+		return null;
+	}
+
+	private static String adaptValueToCharacter(String value){		
+		if(value.length() == 1){
 			return value;
-		} else if(value instanceof Byte){
-			if((Byte)value != 0)
-				return true;
-			else
-				return false;
-		} else if(value instanceof Short){
-			if((Short)value != 0)
-				return true;
-			else
-				return false;
-		} else if(value instanceof Integer){
-			if((Integer)value != 0)
-				return true;
-			else
-				return false;
-		} else if(value instanceof Long){
-			if((Long)value != 0)
-				return true;
-			else
-				return false;
-		} else if(value instanceof String){
-			return Boolean.parseBoolean((String)value);
 		}
-		return null;
-	}
-
-	private static Object adaptValueToByte(Object value){
-		try{
-			if(value instanceof Byte){
-				return value;
-			} else if(value instanceof Boolean){
-				if((Boolean)value)
-					return (byte)1;
-				else
-					return (byte)0;
-			} else if(value instanceof Short){
-				return (byte)((short)value);
-			} else if(value instanceof Integer){
-				return (byte)((int)value);
-			} else if(value instanceof Long){
-				return (byte)((long)value);
-			} else if(value instanceof Character){
-				return (byte)((char)value);
-			} else if(value instanceof String){
-				return Byte.parseByte((String)value);
-			} else if(value instanceof Float){
-				return (byte)((float)value);
-			} else if(value instanceof Double){
-				return (byte)((double)value);
-			}
+		else if(value.length() == 0){
+			return "//0";
+		}
+		else try{
+			byte numvalue = Byte.parseByte(value);
+			return Character.toString((char)numvalue);
 		} catch(NumberFormatException e){
 		}
 		return null;
 	}
 
-	private static Object adaptValueToCharacter(Object value){
-		if(value instanceof Character){
-			return value;
-		} else if(value instanceof Byte){
-			return (char)((byte)value);
-		} else if(value instanceof Short){
-			return (char)((short)value);
-		} else if(value instanceof String){
-			if(((String)value).length() == 1)
-				return ((String)value).charAt(0);
-			else if(((String)value).length() == 0)
-				return '\0';
+	private static String adaptValueToDouble(String value){
+		try{
+			NumberFormat formatter = NumberFormat.getInstance();
+			Double numvalue = formatter.parse(value).doubleValue();
+			return numvalue.toString();
+		} catch(ParseException e){
 		}
 		return null;
 	}
 
-	private static Object adaptValueToDouble(Object value){
+	private static String adaptValueToFloat(String value){
 		try{
-			if(value instanceof Double){
-				return value;
-			} else if(value instanceof Byte){
-				return (double)(byte)value;
-			} else if(value instanceof Short){
-				return (double)(short)value;
-			} else if(value instanceof Integer){
-				return (double)(int)value;
-			} else if(value instanceof Long){
-				return (double)(long)value;
-			} else if(value instanceof String){
-				return Double.parseDouble((String)value);
-			} else if(value instanceof Float){
-				return (double)(float)value;
-			}
-		} catch(NumberFormatException e){
+			NumberFormat formatter = NumberFormat.getInstance();
+			Float numvalue = formatter.parse(value).floatValue();
+			return numvalue.toString();
+		} catch(ParseException e){
 		}
 		return null;
 	}
 
-	private static Object adaptValueToFloat(Object value){
+	private static String adaptValueToShort(String value){
 		try{
-			if(value instanceof Float){
-				return value;
-			} else if(value instanceof Byte){
-				return (float)(byte)value;
-			} else if(value instanceof Short){
-				return (float)(short)value;
-			} else if(value instanceof Long){
-				return (float)(long)value;
-			} else if(value instanceof Integer){
-				return (float)(int)value;
-			} else if(value instanceof String){
-				return Float.parseFloat((String)value);
-			} else if(value instanceof Double){
-				return (float)(double)value;
-			}
-		} catch(NumberFormatException e){
+			NumberFormat formatter = NumberFormat.getInstance();
+			formatter.setParseIntegerOnly(true);
+			Short numvalue = formatter.parse(value).shortValue();
+			return numvalue.toString();
+		} catch(ParseException e){
 		}
 		return null;
 	}
 
-	private static Object adaptValueToShort(Object value){
+	private static String adaptValueToInteger(String value){
 		try{
-			if(value instanceof Short){
-				return value;
-			} else if(value instanceof Boolean){
-				if((Boolean)value)
-					return (short)1;
-				else
-					return (short)0;
-			} else if(value instanceof Byte){
-				return (short)(byte)value;
-			} else if(value instanceof Integer){
-				return (short)(int)value;
-			} else if(value instanceof Long){
-				return (short)(long)value;
-			} else if(value instanceof Character){
-				return (short)((char)value);
-			} else if(value instanceof String){
-				return Short.parseShort((String)value);
-			} else if(value instanceof Float){
-				return (short)(float)value;
-			} else if(value instanceof Double){
-				return (short)(double)value;
-			}
-		} catch(NumberFormatException e){
+			NumberFormat formatter = NumberFormat.getInstance();
+			formatter.setParseIntegerOnly(true);
+			Integer numvalue = formatter.parse(value).intValue();
+			return numvalue.toString();
+		} catch(ParseException e){
 		}
 		return null;
 	}
 
-	private static Object adaptValueToInteger(Object value){
+	private static String adaptValueToLong(String value){
 		try{
-			if(value instanceof Integer){
-				return value;
-			} else if(value instanceof Boolean){
-				if((Boolean)value)
-					return 1;
-				else
-					return 0;
-			} else if(value instanceof Byte){
-				return (int)(byte)value;
-			} else if(value instanceof Short){
-				return (int)(short)value;
-			} else if(value instanceof Long){
-				return (int)(long)value;
-			} else if(value instanceof String){
-				return Integer.parseInt((String)value);
-			} else if(value instanceof Float){
-				return (int)(float)value;
-			} else if(value instanceof Double){
-				return (int)(double)value;
-			}
-		} catch(NumberFormatException e){
+			NumberFormat formatter = NumberFormat.getInstance();
+			formatter.setParseIntegerOnly(true);
+			Long numvalue = formatter.parse(value).longValue();
+			return numvalue.toString();
+		} catch(ParseException e){
 		}
 		return null;
 	}
 
-	private static Object adaptValueToLong(Object value){
-		try{
-			if(value instanceof Long){
-				return value;
-			} else if(value instanceof Boolean){
-				if((Boolean)value)
-					return (long)1;
-				else
-					return (long)0;
-			} else if(value instanceof Byte){
-				return (long)(byte)value;
-			} else if(value instanceof Short){
-				return (long)(short)value;
-			} else if(value instanceof Integer){
-				return (long)(int)value;
-			} else if(value instanceof String){
-				return Long.parseLong((String)value);
-			} else if(value instanceof Float){
-				return (long)(float)value;
-			} else if(value instanceof Double){
-				return (long)(double)value;
-			}
-		} catch(NumberFormatException e){
-		}
-		return null;
-	}
-
-	private static Object adaptValueToString(Object value){
-		try{
-			if(value instanceof Boolean){
-				return Boolean.toString((boolean)value);
-			} else if(value instanceof Byte){
-				return ((Byte)value).toString();
-			} else if(value instanceof Short){
-				return ((Short)value).toString();
-			} else if(value instanceof Integer){
-				return ((Integer)value).toString();
-			} else if(value instanceof Long){
-				return ((Long)value).toString();
-			} else if(value instanceof Character){
-				if((char)value == '\0')
-					return "";
-				return ((Character)value).toString();
-			} else if(value instanceof String){
-				return value;
-			} else if(value instanceof Float){
-				return ((Float)value).toString();
-			} else if(value instanceof Double){
-				return ((Double)value).toString();
-			} else if(value != null && value instanceof Enum<?>){
-				Enum<?> e = (Enum<?>)value;
-				return e.name();
-			}
-		} catch(NumberFormatException e){
-		}
-		return null;
+	private static String adaptValueToString(String value){
+		return value;
 	}
 
 	/*
@@ -434,7 +289,7 @@ public class AdaptTypeSupport{
 			case com.testify.ecfeed.model.Constants.TYPE_NAME_BOOLEAN:
 				return 0;
 			case com.testify.ecfeed.model.Constants.TYPE_NAME_BYTE:
-				return 1;
+				return 2;
 			case com.testify.ecfeed.model.Constants.TYPE_NAME_CHAR:
 				return 2;
 			case com.testify.ecfeed.model.Constants.TYPE_NAME_DOUBLE:
@@ -442,11 +297,11 @@ public class AdaptTypeSupport{
 			case com.testify.ecfeed.model.Constants.TYPE_NAME_FLOAT:
 				return 2;
 			case com.testify.ecfeed.model.Constants.TYPE_NAME_INT:
-				return 1;
+				return 2;
 			case com.testify.ecfeed.model.Constants.TYPE_NAME_LONG:
-				return 1;
+				return 2;
 			case com.testify.ecfeed.model.Constants.TYPE_NAME_SHORT:
-				return 1;
+				return 2;
 			case com.testify.ecfeed.model.Constants.TYPE_NAME_STRING:
 				return 1;
 			default:
@@ -455,7 +310,7 @@ public class AdaptTypeSupport{
 		case com.testify.ecfeed.model.Constants.TYPE_NAME_BYTE:
 			switch(newtype){
 			case com.testify.ecfeed.model.Constants.TYPE_NAME_BOOLEAN:
-				return 1;
+				return 2;
 			case com.testify.ecfeed.model.Constants.TYPE_NAME_BYTE:
 				return 0;
 			case com.testify.ecfeed.model.Constants.TYPE_NAME_CHAR:
@@ -480,7 +335,7 @@ public class AdaptTypeSupport{
 			case com.testify.ecfeed.model.Constants.TYPE_NAME_BOOLEAN:
 				return 2;
 			case com.testify.ecfeed.model.Constants.TYPE_NAME_BYTE:
-				return 1;
+				return 2;
 			case com.testify.ecfeed.model.Constants.TYPE_NAME_CHAR:
 				return 0;
 			case com.testify.ecfeed.model.Constants.TYPE_NAME_DOUBLE:
@@ -492,7 +347,7 @@ public class AdaptTypeSupport{
 			case com.testify.ecfeed.model.Constants.TYPE_NAME_LONG:
 				return 2;
 			case com.testify.ecfeed.model.Constants.TYPE_NAME_SHORT:
-				return 1;
+				return 2;
 			case com.testify.ecfeed.model.Constants.TYPE_NAME_STRING:
 				return 1;
 			default:
@@ -547,7 +402,7 @@ public class AdaptTypeSupport{
 		case com.testify.ecfeed.model.Constants.TYPE_NAME_INT:
 			switch(newtype){
 			case com.testify.ecfeed.model.Constants.TYPE_NAME_BOOLEAN:
-				return 1;
+				return 2;
 			case com.testify.ecfeed.model.Constants.TYPE_NAME_BYTE:
 				return 1;
 			case com.testify.ecfeed.model.Constants.TYPE_NAME_CHAR:
@@ -570,7 +425,7 @@ public class AdaptTypeSupport{
 		case com.testify.ecfeed.model.Constants.TYPE_NAME_LONG:
 			switch(newtype){
 			case com.testify.ecfeed.model.Constants.TYPE_NAME_BOOLEAN:
-				return 1;
+				return 2;
 			case com.testify.ecfeed.model.Constants.TYPE_NAME_BYTE:
 				return 1;
 			case com.testify.ecfeed.model.Constants.TYPE_NAME_CHAR:
@@ -593,11 +448,11 @@ public class AdaptTypeSupport{
 		case com.testify.ecfeed.model.Constants.TYPE_NAME_SHORT:
 			switch(newtype){
 			case com.testify.ecfeed.model.Constants.TYPE_NAME_BOOLEAN:
-				return 1;
+				return 2;
 			case com.testify.ecfeed.model.Constants.TYPE_NAME_BYTE:
 				return 1;
 			case com.testify.ecfeed.model.Constants.TYPE_NAME_CHAR:
-				return 1;
+				return 2;
 			case com.testify.ecfeed.model.Constants.TYPE_NAME_DOUBLE:
 				return 1;
 			case com.testify.ecfeed.model.Constants.TYPE_NAME_FLOAT:
@@ -634,7 +489,7 @@ public class AdaptTypeSupport{
 			case com.testify.ecfeed.model.Constants.TYPE_NAME_STRING:
 				return 0;
 			default:
-				return 2;
+				return 1;
 			}
 			// User-defined convert to string only.
 		default:
