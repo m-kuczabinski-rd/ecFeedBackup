@@ -164,7 +164,6 @@ public class CategoryNode extends GenericNode implements IPartitionedNode{
 		return labels;
 	}
 	
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~EXPECTED~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	public PartitionNode getDefaultValuePartition(){
 		return fDefaultValue;
 	}
@@ -183,6 +182,19 @@ public class CategoryNode extends GenericNode implements IPartitionedNode{
 	
 	public void setExpected(boolean isexpected){
 		fExpected = isexpected;
+	}
+	
+	public CategoryNode getCopy(){
+		CategoryNode category = new CategoryNode(getName(), getType(), isExpected());
+		category.setParent(this.getParent());
+		if(getDefaultValueString() != null)
+			category.setDefaultValueString(getDefaultValueString());
+		for(PartitionNode partition : fPartitions){
+			category.addPartition(partition.getCopy());
+		}
+		category.setParent(getParent());
+		return category;
+
 	}
 
 }

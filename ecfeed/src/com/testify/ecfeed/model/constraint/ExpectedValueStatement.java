@@ -1,8 +1,9 @@
-package com.testify.ecfeed.model.constraint;
+ package com.testify.ecfeed.model.constraint;
 
 import java.util.List;
 
 import com.testify.ecfeed.model.CategoryNode;
+import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
 
 public class ExpectedValueStatement extends BasicStatement implements IRelationalStatement{
@@ -12,7 +13,7 @@ public class ExpectedValueStatement extends BasicStatement implements IRelationa
 	
 	public ExpectedValueStatement(CategoryNode category, PartitionNode condition) {
 		fCategory = category;
-		fCondition = condition.getCopy();
+		fCondition = condition.getIndependentCopy();
 	}
 	
 	@Override
@@ -39,7 +40,7 @@ public class ExpectedValueStatement extends BasicStatement implements IRelationa
 		if(values == null) return true;
 		if(fCategory.getMethod() != null){
 			int index = fCategory.getMethod().getCategories().indexOf(fCategory);
-			values.set(index, fCondition.getCopy());
+			values.set(index, fCondition.getIndependentCopy());
 		}
 		return true;
 	}
@@ -68,5 +69,21 @@ public class ExpectedValueStatement extends BasicStatement implements IRelationa
 	
 	public String toString(){
 		return getCategory().getName() + getRelation().toString() + fCondition.getValueString();
+	}
+	
+	@Override
+	public ExpectedValueStatement getCopy(){
+		return new ExpectedValueStatement(fCategory, fCondition.getCopy());
+	}
+	
+	@Override
+	public boolean updateReferences(MethodNode method){
+		CategoryNode category = method.getCategory(fCategory.getName());
+		if(category != null && category.isExpected()){
+			fCategory = category;
+			fCondition.setParent(category);
+			return true;
+		}
+		return false;
 	}
 }

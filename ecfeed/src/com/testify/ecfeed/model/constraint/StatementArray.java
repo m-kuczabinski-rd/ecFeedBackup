@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.testify.ecfeed.model.CategoryNode;
+import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
 
 public class StatementArray extends BasicStatement{
@@ -109,5 +110,22 @@ public class StatementArray extends BasicStatement{
 			}
 		}
 		return result + ")";
+	}
+	
+	@Override
+	public StatementArray getCopy(){
+		StatementArray copy = new StatementArray(fOperator);
+		for(BasicStatement statement: fStatements){
+			copy.addStatement(statement.getCopy());
+		}
+		return copy;
+	}
+	
+	@Override
+	public boolean updateReferences(MethodNode method){
+		for(BasicStatement statement: fStatements){
+			if(!statement.updateReferences(method)) return false;
+		}
+		return true;
 	}
 }

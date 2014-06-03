@@ -234,6 +234,7 @@ public class MethodNode extends GenericNode {
 		category.setParent(null);
 		if(fCategories.remove(category)){
 			removeMentioningConstraints(category);
+			fTestCases.clear();
 			return true;
 		}
 		return false;
@@ -261,12 +262,13 @@ public class MethodNode extends GenericNode {
 	
 	public void replaceCategoryOfSameType(int index, CategoryNode newCategory){
 		CategoryNode oldCategory = fCategories.get(index);
-		if(removeCategory(oldCategory)){
+		if(fCategories.remove(oldCategory)){
+			removeMentioningConstraints(oldCategory);
 			newCategory.setParent(this);
 			fCategories.add(index, newCategory);
 			if(!oldCategory.isExpected() && newCategory.getDefaultValuePartition() != null){
 				for(TestCaseNode testCase : fTestCases){
-					testCase.replaceValue(index, newCategory.getDefaultValuePartition().getCopy());
+					testCase.replaceValue(index, newCategory.getDefaultValuePartition().getIndependentCopy());
 				}
 			} else
 				fTestCases.clear();
@@ -291,7 +293,7 @@ public class MethodNode extends GenericNode {
 						category.setDefaultValueString(category.getPartitions().get(0).getValueString());
 					}
 					for(TestCaseNode testCase : fTestCases){
-						testCase.replaceValue(index, category.getDefaultValuePartition().getCopy());
+						testCase.replaceValue(index, category.getDefaultValuePartition().getIndependentCopy());
 					}
 					for(PartitionNode partition : category.getPartitions()){
 						removeMentioningConstraints(partition);
@@ -337,5 +339,16 @@ public class MethodNode extends GenericNode {
 				iterator.remove();
 			}
 		}
+	}
+	@Override
+	public MethodNode getCopy(){
+		MethodNode copy = new MethodNode(this.getName());
+
+		for(CategoryNode category : fCategories){
+				copy.addCategory(category.getCopy());
+			}
+		copy.setParent(getParent());
+
+		return copy;
 	}
 }

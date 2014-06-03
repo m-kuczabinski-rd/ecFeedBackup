@@ -51,4 +51,15 @@ public class RootNode extends GenericNode {
 	public static boolean validateModelName(String name){
 		return new GenericNode("").validateNodeName(name);
 	}
+	
+	@Override
+	public RootNode getCopy(){
+		RootNode copy = new RootNode(this.getName());
+
+		for(ClassNode classnode : fClasses){
+			copy.addClass(classnode.getCopy());
+		}
+		copy.setParent(this.getParent());
+		return copy;
+	}
 }

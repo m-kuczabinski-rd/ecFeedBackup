@@ -20,10 +20,16 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.MenuAdapter;
+import org.eclipse.swt.events.MenuEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Menu;
+import org.eclipse.swt.widgets.MenuItem;
+import org.eclipse.swt.widgets.Tree;
 import org.eclipse.ui.forms.AbstractFormPart;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Section;
@@ -40,6 +46,23 @@ public class ModelMasterSection extends TreeViewerSection{
 	private Button fMoveUpButton;
 	private Button fMoveDownButton;
 	private RootNode fModel;
+	private MenuOperationManager fMenuManager;
+	private Menu fMenu;
+	
+	protected class MenuSelectionAdapter extends SelectionAdapter{
+		MenuOperation fOperation;
+		
+		public MenuSelectionAdapter(MenuOperation operation,IGenericNode target){
+			super();
+			fOperation = operation;			
+		}
+		
+		@Override
+		public void widgetSelected(SelectionEvent e){
+			//should mark as dirty only when altering model, I.E. not when copying...
+			fOperation.operate();
+		}
+	}
 	
 	private static class DummyUpdateListener implements IModelUpdateListener{
 		@Override
@@ -83,6 +106,7 @@ public class ModelMasterSection extends TreeViewerSection{
 	public ModelMasterSection(Composite parent, FormToolkit toolkit) {
 		super(parent, toolkit, STYLE, new DummyUpdateListener());
 		fModelSelectionListeners = new ArrayList<IModelSelectionListener>();
+		fMenuManager = new MenuOperationManager(this);
 	}
 	
 	public void addModelSelectionChangedListener(IModelSelectionListener listener){
@@ -97,6 +121,7 @@ public class ModelMasterSection extends TreeViewerSection{
 		fMoveDownButton = addButton("Move Down", new MoveDownAdapter());
 		getTreeViewer().setAutoExpandLevel(AUTO_EXPAND_LEVEL);
 		addSelectionChangedListener(new ModelSelectionListener());
+		createMenu();
 	}
 
 	private void notifyModelSelectionListeners(ISelection newSelection) {
@@ -148,5 +173,35 @@ public class ModelMasterSection extends TreeViewerSection{
 	protected IBaseLabelProvider viewerLabelProvider(){
 		return new ModelLabelProvider();
 	}
+	
+	protected void createMenu(){
+		fMenu = new Menu(getTreeViewer().getTree());
+		Tree tree = getTreeViewer().getTree();
+		tree.setMenu(fMenu);
+
+		fMenu.addMenuListener(new MenuAdapter(){
+			@Override
+			public void menuShown(MenuEvent e){
+				Tree tree = getTreeViewer().getTree();
+				Menu menu = (Menu)e.getSource();
+				MenuItem[] items = menu.getItems();
+				for(int i = 0; i < items.length; i++){
+					items[i].dispose();
+				}
+
+				if(tree.getSelection()[0].getData() instanceof IGenericNode){
+					IGenericNode target = (IGenericNode)tree.getSelection()[0].getData();
+					for(MenuOperation operation : fMenuManager.getOperations(target)){
+						MenuItem item = new MenuItem(fMenu, SWT.NONE);
+						item.setText(operation.getOperationName());
+						item.addSelectionListener(new MenuSelectionAdapter(operation, target));
+						item.setEnabled(operation.isEnabled());
+					}
+				}
+			}
+		});
+	}
+	
+
 
 }

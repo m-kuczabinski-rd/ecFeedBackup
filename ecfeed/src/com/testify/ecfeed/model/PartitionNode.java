@@ -162,12 +162,6 @@ public class PartitionNode extends GenericNode implements IPartitionedNode{
 	public void setValueString(String value) {
 		fValueString = value;
 	}
-
-	public PartitionNode getCopy() {
-		PartitionNode copy = new PartitionNode(getName(), fValueString);
-		copy.setParent(fPartitionedParent);
-		return copy;
-	}
 	
 	/*
 	 * Returns name of this partition and names of all parent partitions
@@ -221,7 +215,7 @@ public class PartitionNode extends GenericNode implements IPartitionedNode{
 	}
 	
 	public Set<String> getAllDescendingLabels() {
-		Set<String> labels = getLabels();
+		Set<String> labels = new LinkedHashSet<>(getLabels());
 		for(PartitionNode p : fPartitions){
 			labels.addAll(p.getAllDescendingLabels());
 		}
@@ -258,4 +252,23 @@ public class PartitionNode extends GenericNode implements IPartitionedNode{
 		}
 		return fParentPartition.level() + 1;
 	}
+	
+	public PartitionNode getIndependentCopy() {
+		PartitionNode copy = new PartitionNode(getName(), fValueString);
+		copy.setParent(fPartitionedParent);
+		return copy;
+	}
+	
+	@Override
+	public PartitionNode getCopy(){
+		PartitionNode copy = getIndependentCopy();
+		for(PartitionNode partition : fPartitions){
+			copy.addPartition(partition.getCopy());
+		}
+		for(String label : fLabels){
+			copy.addLabel(label);
+		}
+		return copy;
+	}
+
 }
