@@ -131,13 +131,14 @@ public class ClassViewer extends CheckboxTableViewerSection {
 			}
 		});
 		nameColumn.setEditingSupport(new ClassNameEditingSupport(this, false));
-		TableViewerColumn qualifiedNameColumn = addColumn("Qualified name", 150, new ClassViewerColumnLabelProvider(){
+		TableViewerColumn packageNameColumn = addColumn("Package", 150, new ClassViewerColumnLabelProvider(){
 			@Override
 			public String getText(Object element){
-				return ((ClassNode)element).getQualifiedName();
+				String qualifiedName = ((ClassNode)element).getQualifiedName();
+				return qualifiedName.substring(0, qualifiedName.indexOf("."));
 			}
 		});
-		qualifiedNameColumn.setEditingSupport(new ClassNameEditingSupport(this, true));
+		packageNameColumn.setEditingSupport(new ClassNameEditingSupport(this, true));
 	}
 	
 	public void setInput(RootNode model){
