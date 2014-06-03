@@ -25,12 +25,12 @@ public class ClassNameEditingSupport extends EditingSupport{
 
 	private TextCellEditor fNameCellEditor;
 	BasicSection fSection;
-	boolean qualifiedName;
+	boolean fPackageName;
 
-	public ClassNameEditingSupport(ClassViewer viewer, boolean qualified) {
+	public ClassNameEditingSupport(ClassViewer viewer, boolean packageName) {
 		super(viewer.getTableViewer());
 		fSection = viewer;
-		qualifiedName = qualified;
+		fPackageName = packageName;
 		fNameCellEditor = new TextCellEditor(viewer.getTable());
 	}
 
@@ -52,8 +52,9 @@ public class ClassNameEditingSupport extends EditingSupport{
 
 	@Override
 	protected Object getValue(Object element) {
-		if (qualifiedName) {
-			return ((ClassNode)element).getQualifiedName();
+		if (fPackageName) {
+			String qualifiedName = ((ClassNode)element).getQualifiedName();
+			return qualifiedName.substring(0, qualifiedName.indexOf("."));
 		} else {
 			return ((ClassNode)element).getLocalName();
 		}
@@ -62,12 +63,12 @@ public class ClassNameEditingSupport extends EditingSupport{
 	@Override
 	protected void setValue(Object element, Object value) {
 		String newName = (String)value;
-		String newQualifiedName = newName;
 		ClassNode classNode = (ClassNode)element;
+		int lastDotIndex = classNode.getQualifiedName().lastIndexOf('.');
+		String newQualifiedName = classNode.getQualifiedName().substring(0, lastDotIndex + 1) + newName;
 		
-		if (!qualifiedName) {
-			int lastDotIndex = classNode.getName().lastIndexOf('.');
-			newQualifiedName = (lastDotIndex == -1) ? newName : classNode.getName().substring(0, lastDotIndex + 1) + newName;
+		if (fPackageName) {
+			newQualifiedName = newName + classNode.getQualifiedName().substring(lastDotIndex);
 		}
 
 		boolean validName = ModelUtils.isClassQualifiedNameValid(newQualifiedName);
