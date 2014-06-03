@@ -685,18 +685,6 @@ public class ModelUtils {
 						if (methodModel.getCategoriesTypes().equals(argTypes) &&
 								methodModel.getCategoriesNames().equals(paramNames)) {
 							implemented = true;
-							
-							List<CategoryNode> categories = methodModel.getCategories();
-							for (int i = 0; i < categories.size(); ++i) {
-								if (categories.get(i).isExpected()) {
-									ILocalVariable parameter = method.getParameters()[i];
-									IAnnotation[] annotations = parameter.getAnnotations();
-									if ((annotations.length < 1) || !annotations[0].getElementName().equals("expected")) {
-										implemented = false;
-										break;
-									}
-								}
-							}
 							break;
 						}
 					}
