@@ -152,6 +152,10 @@ public class PartitionNode extends GenericNode implements IPartitionedNode{
 		return fValueString;
 	}
 
+	public String getSimpleValueString() {
+		return fValueString;
+	}
+
 	public void setValueString(String value) {
 		fValueString = value;
 	}
