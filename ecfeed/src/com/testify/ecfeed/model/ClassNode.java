@@ -79,6 +79,16 @@ public class ClassNode extends GenericNode {
 	public String toString(){
 		return getLocalName();
 	}
+	
+	@Override
+	public ClassNode getCopy(){
+		ClassNode copy = new ClassNode(getQualifiedName());
+		for(MethodNode method : fMethods){
+			copy.addMethod(method.getCopy());
+		}
+		copy.setParent(getParent());
+		return copy;
+	}
 
 	private String getLocalName(String qualifiedName){
 		int lastDotIndex = qualifiedName.lastIndexOf('.');

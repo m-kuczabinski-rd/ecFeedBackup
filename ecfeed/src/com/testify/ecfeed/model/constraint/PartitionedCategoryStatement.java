@@ -14,6 +14,7 @@ package com.testify.ecfeed.model.constraint;
 import java.util.List;
 
 import com.testify.ecfeed.model.CategoryNode;
+import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
 
 public class PartitionedCategoryStatement extends BasicStatement implements IRelationalStatement{
@@ -26,6 +27,8 @@ public class PartitionedCategoryStatement extends BasicStatement implements IRel
 		public Object getCondition();
 		public boolean evaluate(List<PartitionNode> values);
 		public boolean adapt(List<PartitionNode> values);
+		public ICondition getCopy();
+		public boolean updateReferences(CategoryNode category);
 	}
 	
 	private class LabelCondition implements ICondition{
@@ -64,6 +67,16 @@ public class PartitionedCategoryStatement extends BasicStatement implements IRel
 		@Override
 		public boolean adapt(List<PartitionNode> values) {
 			return false;
+		}
+		
+		@Override
+		public LabelCondition getCopy(){
+			return new LabelCondition(fLabel);
+		}
+		
+		@Override
+		public boolean updateReferences(CategoryNode category){
+			return true;
 		}
 	}
 	
@@ -116,6 +129,21 @@ public class PartitionedCategoryStatement extends BasicStatement implements IRel
 		public boolean adapt(List<PartitionNode> values) {
 			return false;
 		}
+		
+		@Override
+		public PartitionCondition getCopy(){
+			return new PartitionCondition(fPartition.getCopy());
+		}
+		
+		@Override
+		public boolean updateReferences(CategoryNode category){
+			PartitionNode condition = category.getPartition(fPartition.getQualifiedName());
+			if(condition != null){
+				fPartition = condition;
+			}
+			return true;
+		}
+		
 	}
 	
 	public PartitionedCategoryStatement(CategoryNode category, Relation relation, String labelCondition){
@@ -128,6 +156,12 @@ public class PartitionedCategoryStatement extends BasicStatement implements IRel
 		fCategory = category;
 		fRelation = relation;
 		fCondition = new PartitionCondition(partitionCondition);
+	}
+	
+	private PartitionedCategoryStatement(CategoryNode category, Relation relation, ICondition condition){
+		fCategory = category;
+		fRelation = relation;
+		fCondition = condition;
 	}
 	
 	public CategoryNode getCategory(){
@@ -189,6 +223,23 @@ public class PartitionedCategoryStatement extends BasicStatement implements IRel
 	@Override
 	public Relation[] getAvailableRelations() {
 		return new Relation[]{Relation.EQUAL, Relation.NOT};
+	}
+	
+	@Override
+	public PartitionedCategoryStatement getCopy(){
+		return new PartitionedCategoryStatement(fCategory, fRelation, fCondition.getCopy());
+	}
+	
+	@Override
+	public boolean updateReferences(MethodNode method){
+		CategoryNode category = method.getCategory(fCategory.getName());
+		if(category != null && !category.isExpected()){
+			if(fCondition.updateReferences(category)){
+				fCategory = category;
+				return true;
+			}
+		}
+		return false;
 	}
 
 }

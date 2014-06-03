@@ -34,6 +34,10 @@ public class ConstraintNode extends GenericNode{
 		}
 		return null;
 	}
+	
+	public void setMethod(MethodNode method){
+		setParent(method);
+	}
 
 	public boolean evaluate(List<PartitionNode> values) {
 		if(fConstraint != null){
@@ -57,4 +61,18 @@ public class ConstraintNode extends GenericNode{
 	public String toString(){
 		return getName() + ": " + getConstraint().toString();
 	}
+	
+	@Override
+	public ConstraintNode getCopy(){
+		return new ConstraintNode(getName(), fConstraint.getCopy());	
+	}
+	
+	public boolean updateReferences(MethodNode method){
+		if(fConstraint.updateRefrences(method)){
+			setParent(method);
+			return true;
+		}
+		return false;
+	}
+	
 }

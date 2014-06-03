@@ -11,7 +11,9 @@
 
 package com.testify.ecfeed.model;
 
+import java.util.ArrayList;
 import java.util.List;
+
 
 public class TestCaseNode extends GenericNode {
 	List<PartitionNode> fTestData;
@@ -80,5 +82,43 @@ public class TestCaseNode extends GenericNode {
 		}
 		
 		return result;
+	}
+	
+	@Override
+	public TestCaseNode getCopy(){
+		List<PartitionNode> testdata = new ArrayList<>();
+		for(PartitionNode partition : fTestData){
+			testdata.add(partition);
+		}
+		return new TestCaseNode(this.getName(), testdata);
+	}
+
+	public TestCaseNode getCopy(MethodNode method){
+		TestCaseNode tcase = getCopy();
+		if(tcase.updateReferences(method))
+			return tcase;
+		else
+			return null;
+	}
+
+	public boolean updateReferences(MethodNode method){
+		List<CategoryNode> categories = method.getCategories();
+		if(categories.size() != getTestData().size())
+			return false;
+
+		for(int i = 0; i < categories.size(); i++){
+			CategoryNode category = categories.get(i);
+			if(category.isExpected()){
+
+			} else{
+				PartitionNode original = getTestData().get(i);
+				PartitionNode newReference = category.getPartition(original.getQualifiedName());
+				if(newReference == null){
+					return false;
+				}
+				getTestData().set(i, newReference);
+			}
+		}
+		return true;
 	}
 }

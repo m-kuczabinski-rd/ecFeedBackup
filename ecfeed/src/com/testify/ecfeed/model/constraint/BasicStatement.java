@@ -14,6 +14,7 @@ package com.testify.ecfeed.model.constraint;
 import java.util.List;
 
 import com.testify.ecfeed.model.CategoryNode;
+import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
 
 public abstract class BasicStatement implements IStatement {
@@ -92,5 +93,11 @@ public abstract class BasicStatement implements IStatement {
 	@Override
 	public boolean adapt(List<PartitionNode> values){
 		return false;
+	}
+	
+	public abstract BasicStatement getCopy();
+	
+	public boolean updateReferences(MethodNode method){
+		return true;
 	}
 }

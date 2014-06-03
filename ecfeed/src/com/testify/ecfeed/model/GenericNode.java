@@ -153,4 +153,14 @@ public class GenericNode implements IGenericNode{
 		
 		return true;
 	}
+	
+	@Override
+	public GenericNode getCopy(){
+		return new GenericNode(getName());
+	}
+	
+	@Override
+	public boolean paste(IGenericNode element){
+		return false;
+	}
 }
