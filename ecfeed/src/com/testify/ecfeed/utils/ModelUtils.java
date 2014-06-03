@@ -543,7 +543,7 @@ public class ModelUtils {
 					return Byte.decode(valueString);
 				case com.testify.ecfeed.model.Constants.TYPE_NAME_CHAR:
 					if (valueString.charAt(0) == '\\') {
-						return Character.toChars(Integer.parseInt(valueString.substring(1)));
+						return new Character((char)Integer.parseInt(valueString.substring(1)));
 					} else if (valueString.length() == 1) {
 						return valueString.charAt(0);
 					}
