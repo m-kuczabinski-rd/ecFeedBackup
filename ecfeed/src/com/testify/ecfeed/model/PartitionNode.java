@@ -131,8 +131,31 @@ public class PartitionNode extends GenericNode implements IPartitionedNode{
 	public void setParent(PartitionNode parentPartition){
 		fPartitionedParent = fParentPartition = parentPartition;
 	}
-	
+
 	public String getValueString() {
+		// FIXME remove category dependency
+		try {
+			String type = getCategory().getType();
+			if ((fValueString.length()) > 1) {
+				if (type.equals("char") && (fValueString.charAt(0) == '\\')) {
+					String value = fValueString.substring(1);
+					return "\\" + Integer.parseInt(value) + " ['" + Character.valueOf((char)Integer.parseInt(value)) + "']";
+				} else if (type.equals("byte")) {
+					return Byte.decode(fValueString).toString();
+				} else if (type.equals("int")) {
+					return Integer.decode(fValueString).toString();
+				} else if (type.equals("long")) {
+					return Long.decode(fValueString).toString();
+				} else if (type.equals("short")) {
+					return Short.decode(fValueString).toString();
+				}
+			}
+		} catch (Throwable e) {
+		}
+		return fValueString;
+	}
+
+	public String getSimpleValueString() {
 		return fValueString;
 	}
 

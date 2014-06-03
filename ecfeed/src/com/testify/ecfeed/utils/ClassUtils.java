@@ -3,6 +3,7 @@ package com.testify.ecfeed.utils;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -53,6 +54,21 @@ public class ClassUtils {
 			e.printStackTrace();
 		}
 		return partitions;
+	}
+
+	public static HashMap<String, String> defaultEnumValues(String typeName) {
+		HashMap<String, String> values = new HashMap<String, String>();
+		try {
+			Class<?> typeClass = getClassLoader(true, null).loadClass(typeName);
+			if (typeClass != null) {
+				for (Object object: typeClass.getEnumConstants()) {
+					values.put(((Enum<?>)object).name(), ((Enum<?>)object).name());
+				}
+			}
+		} catch (Throwable e) {
+			e.printStackTrace();
+		}
+		return values;
 	}
 
 	public static String defaultEnumExpectedValueString(String typeName) {

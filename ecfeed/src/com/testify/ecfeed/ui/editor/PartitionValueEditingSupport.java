@@ -11,10 +11,14 @@
 
 package com.testify.ecfeed.ui.editor;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.CellEditor;
+import org.eclipse.jface.viewers.ComboBoxCellEditor;
 import org.eclipse.jface.viewers.EditingSupport;
-import org.eclipse.jface.viewers.TextCellEditor;
+import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.widgets.Display;
 
 import com.testify.ecfeed.model.CategoryNode;
@@ -23,24 +27,28 @@ import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.utils.ModelUtils;
 
 public class PartitionValueEditingSupport extends EditingSupport {
-	private TextCellEditor fValueCellEditor;
+	private ComboBoxCellEditor fCellEditor;
 	private BasicSection fSection;
 	
 	public PartitionValueEditingSupport(CategoryChildrenViewer viewer) {
 		super(viewer.getTableViewer());
-		fValueCellEditor = new TextCellEditor(viewer.getTable());
+		String[] items = {""};
+		fCellEditor = new ComboBoxCellEditor(viewer.getTable(), items);
+		fCellEditor.setActivationStyle(ComboBoxCellEditor.DROP_DOWN_ON_MOUSE_ACTIVATION);
 		fSection = viewer;
 	}
 
 	public PartitionValueEditingSupport(PartitionChildrenViewer viewer) {
 		super(viewer.getTableViewer());
-		fValueCellEditor = new TextCellEditor(viewer.getTable());
+		String[] items = {""};
+		fCellEditor = new ComboBoxCellEditor(viewer.getTable(), items);
+		fCellEditor.setActivationStyle(ComboBoxCellEditor.DROP_DOWN_ON_MOUSE_ACTIVATION);
 		fSection = viewer;
 	}
 	
 	@Override
 	protected CellEditor getCellEditor(Object element) {
-		return fValueCellEditor;
+		return fCellEditor;
 	}
 
 	@Override
@@ -50,26 +58,61 @@ public class PartitionValueEditingSupport extends EditingSupport {
 
 	@Override
 	protected Object getValue(Object element) {
-		return ((PartitionNode)element).getValueString();
+		PartitionNode node = (PartitionNode)element;
+		HashMap<String, String> values = ModelUtils.generatePredefinedValues(node.getCategory().getType());
+		String [] items = new String[values.size()];
+		items = values.values().toArray(items);
+		ArrayList<String> newItems = new ArrayList<String>();
+
+		fCellEditor.setItems(items);
+		for (int i = 0; i < items.length; ++i) {
+			newItems.add(items[i]);
+			if (items[i].equals(node.getValueString())) {
+				return i;
+			}
+		}
+
+		newItems.add(node.getValueString());
+		fCellEditor.setItems(newItems.toArray(items));
+		return (newItems.size() - 1);
 	}
 
 	@Override
 	protected void setValue(Object element, Object value) {
-		String valueString = (String)value;
-		if(!ModelUtils.validatePartitionStringValue(valueString, getCategory().getType())){
+		String valueString = null;
+		int index = (int)value;
+
+		if (index >= 0) {
+			valueString = fCellEditor.getItems()[index];
+		} else {
+			valueString = ((CCombo)fCellEditor.getControl()).getText();
+		}
+
+		if(!ModelUtils.validatePartitionStringValue(valueString, getCategory().getType()) && !isUserType(getCategory().getType())) {
 			MessageDialog.openError(Display.getCurrent().getActiveShell(), 
 					Messages.DIALOG_PARTITION_VALUE_PROBLEM_TITLE, 
 					Messages.DIALOG_PARTITION_VALUE_PROBLEM_MESSAGE);
-		}
-		else{
+		} else {
 			PartitionNode partition = (PartitionNode)element;
-			if(valueString.equals(partition.getValueString()) == false){
+			if (valueString.equals(partition.getValueString()) == false) {
 				((PartitionNode)element).setValueString(valueString);
 				fSection.modelUpdated();
 			}
 		}
 	}
-	
+
+	private static boolean isUserType(String type) {
+		return !(type.equals(com.testify.ecfeed.model.Constants.TYPE_NAME_STRING) ||
+				type.equals(com.testify.ecfeed.model.Constants.TYPE_NAME_INT) ||
+				type.equals(com.testify.ecfeed.model.Constants.TYPE_NAME_BOOLEAN) ||
+				type.equals(com.testify.ecfeed.model.Constants.TYPE_NAME_DOUBLE) ||
+				type.equals(com.testify.ecfeed.model.Constants.TYPE_NAME_BYTE) ||
+				type.equals(com.testify.ecfeed.model.Constants.TYPE_NAME_CHAR) ||
+				type.equals(com.testify.ecfeed.model.Constants.TYPE_NAME_FLOAT) ||
+				type.equals(com.testify.ecfeed.model.Constants.TYPE_NAME_LONG) ||
+				type.equals(com.testify.ecfeed.model.Constants.TYPE_NAME_SHORT));
+	}
+
 	private CategoryNode getCategory(){
 		if(fSection instanceof CategoryChildrenViewer){
 			return ((CategoryChildrenViewer)fSection).getSelectedCategory();

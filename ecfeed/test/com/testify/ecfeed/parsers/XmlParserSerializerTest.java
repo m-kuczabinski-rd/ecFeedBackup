@@ -282,7 +282,11 @@ public class XmlParserSerializerTest {
 		case Constants.TYPE_NAME_BYTE:
 			return Byte.toString((byte)rand.nextInt());
 		case Constants.TYPE_NAME_CHAR:
-			return Character.toString((char)rand.nextInt(255));
+			int random = rand.nextInt(255);
+			if (random >= 32) {
+				return new String ("\\" + String.valueOf(random));
+			}
+			return new String ("\\");
 		case Constants.TYPE_NAME_DOUBLE:
 			return Double.toString(rand.nextDouble());
 		case Constants.TYPE_NAME_FLOAT:
@@ -295,7 +299,7 @@ public class XmlParserSerializerTest {
 			return Short.toString((short)rand.nextInt());
 		case Constants.TYPE_NAME_STRING:
 			if(rand.nextInt(5) == 0){
-				return null;
+				return com.testify.ecfeed.utils.Constants.NULL_VALUE_STRING_REPRESENTATION;
 			}
 			else{
 				return generateRandomString(rand.nextInt(10));
@@ -587,7 +591,7 @@ public class XmlParserSerializerTest {
 	private void compareExpectedValueStatements(
 			ExpectedValueStatement statement1, ExpectedValueStatement statement2) {
 		compareCategories(statement1.getCategory(), statement2.getCategory());
-		assertEquals(statement1.getCondition().getValueString(), statement2.getCondition().getValueString());
+		assertEquals(statement1.getCondition().getSimpleValueString(), statement2.getCondition().getSimpleValueString());
 	}
 
 	private void compareRelationStatements(PartitionedCategoryStatement statement1, PartitionedCategoryStatement statement2) {
