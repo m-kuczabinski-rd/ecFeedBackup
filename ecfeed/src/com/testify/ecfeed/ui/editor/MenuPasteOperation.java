@@ -28,7 +28,7 @@ public class MenuPasteOperation extends MenuOperation{
 	}
 
 	@Override
-	public void operate(){
+	public void execute(){
 		if(!paste()){
 			MessageDialog.openInformation(Display.getCurrent().getActiveShell(), DIALOG_OPERATION_FAILED_TITLE,
 					DIALOG_OPERATION_FAILED_MESSAGE);

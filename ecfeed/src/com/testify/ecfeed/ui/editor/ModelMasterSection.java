@@ -52,16 +52,17 @@ public class ModelMasterSection extends TreeViewerSection{
 	protected class MenuSelectionAdapter extends SelectionAdapter{
 		MenuOperation fOperation;
 		
+		@Override
+		public void widgetSelected(SelectionEvent e){
+			//should mark as dirty only when altering model, I.E. not when copying...
+			fOperation.execute();
+		}
+		
 		public MenuSelectionAdapter(MenuOperation operation,IGenericNode target){
 			super();
 			fOperation = operation;			
 		}
 		
-		@Override
-		public void widgetSelected(SelectionEvent e){
-			//should mark as dirty only when altering model, I.E. not when copying...
-			fOperation.operate();
-		}
 	}
 	
 	private static class DummyUpdateListener implements IModelUpdateListener{
@@ -112,40 +113,7 @@ public class ModelMasterSection extends TreeViewerSection{
 	public void addModelSelectionChangedListener(IModelSelectionListener listener){
 		fModelSelectionListeners.add(listener);
 	}
-	
-	@Override
-	protected void createContent(){
-		super.createContent();
-		getSection().setText("Structure");
-		fMoveUpButton = addButton("Move Up", new MoveUpAdapter());
-		fMoveDownButton = addButton("Move Down", new MoveDownAdapter());
-		getTreeViewer().setAutoExpandLevel(AUTO_EXPAND_LEVEL);
-		addSelectionChangedListener(new ModelSelectionListener());
-		createMenu();
-	}
-
-	private void notifyModelSelectionListeners(ISelection newSelection) {
-		for(IModelSelectionListener listener : fModelSelectionListeners){
-			listener.modelSelectionChanged(newSelection);
-		}
-	}
-
-	private void moveSelectedItem(boolean moveUp) {
-		if(selectedNode() != null && selectedNode().getParent() != null){
-			selectedNode().getParent().moveChild(selectedNode(), moveUp);
-			markDirty();
-			refresh();
-		}
-	}
-
-	private IGenericNode selectedNode() {
-		Object selectedElement = getSelectedElement();
-		if(selectedElement instanceof IGenericNode){
-			return (IGenericNode)selectedElement;
-		}
-		return null;
-	}
-	
+		
 	public void setInput(IModelWrapper wrapper){
 		super.setInput(wrapper);
 	}
@@ -162,6 +130,17 @@ public class ModelMasterSection extends TreeViewerSection{
 	
 	public RootNode getModel(){
 		return fModel;
+	}
+	
+	@Override
+	protected void createContent(){
+		super.createContent();
+		getSection().setText("Structure");
+		fMoveUpButton = addButton("Move Up", new MoveUpAdapter());
+		fMoveDownButton = addButton("Move Down", new MoveDownAdapter());
+		getTreeViewer().setAutoExpandLevel(AUTO_EXPAND_LEVEL);
+		addSelectionChangedListener(new ModelSelectionListener());
+		createMenu();
 	}
 
 	@Override
@@ -201,7 +180,26 @@ public class ModelMasterSection extends TreeViewerSection{
 			}
 		});
 	}
-	
+	private void notifyModelSelectionListeners(ISelection newSelection) {
+		for(IModelSelectionListener listener : fModelSelectionListeners){
+			listener.modelSelectionChanged(newSelection);
+		}
+	}
 
+	private void moveSelectedItem(boolean moveUp) {
+		if(selectedNode() != null && selectedNode().getParent() != null){
+			selectedNode().getParent().moveChild(selectedNode(), moveUp);
+			markDirty();
+			refresh();
+		}
+	}
+
+	private IGenericNode selectedNode() {
+		Object selectedElement = getSelectedElement();
+		if(selectedElement instanceof IGenericNode){
+			return (IGenericNode)selectedElement;
+		}
+		return null;
+	}
 
 }

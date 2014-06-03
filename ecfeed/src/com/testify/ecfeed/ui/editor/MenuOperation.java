@@ -2,7 +2,7 @@ package com.testify.ecfeed.ui.editor;
 public abstract class MenuOperation{
 protected String operationName;
 
-public abstract void operate();
+public abstract void execute();
 
 public MenuOperation(String opname){
 operationName = opname;

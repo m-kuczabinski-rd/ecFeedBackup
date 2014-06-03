@@ -14,7 +14,7 @@ public class MenuCopyOperation extends MenuOperation{
 	}
 
 	@Override
-	public void operate(){
+	public void execute(){
 		fSource.setClipboardNode(fTarget);
 	}
 

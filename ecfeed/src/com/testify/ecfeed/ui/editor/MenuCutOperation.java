@@ -22,7 +22,7 @@ public class MenuCutOperation extends MenuOperation{
 	}
 
 	@Override
-	public void operate(){
+	public void execute(){
 		if(fTarget != null){
 			fSource.setClipboardNode(fTarget);
 			cut();
