@@ -543,15 +543,11 @@ public class ModelUtils {
 					return Byte.valueOf(valueString).byteValue();
 				case com.testify.ecfeed.model.Constants.TYPE_NAME_CHAR:
 					if (valueString.charAt(0) == '\\') {
-						int index = valueString.indexOf(" ");
-						if (index != -1 ) {
-							return Character.toChars(Integer.parseInt(valueString.substring(1, index)));
-						} else {
-							return Character.toChars(Integer.parseInt(valueString.substring(1)));
-						}
+						return Character.toChars(Integer.parseInt(valueString.substring(1)));
 					} else if (valueString.length() == 1) {
-						return (valueString.charAt(0));
+						return valueString.charAt(0);
 					}
+					return null;
 				case com.testify.ecfeed.model.Constants.TYPE_NAME_DOUBLE:
 					return Double.valueOf(valueString).doubleValue();
 				case com.testify.ecfeed.model.Constants.TYPE_NAME_FLOAT:
@@ -567,7 +563,7 @@ public class ModelUtils {
 				default:
 					return ClassUtils.enumPartitionValue(valueString, type, ClassUtils.getClassLoader(false, null));
 				}
-			} catch (NumberFormatException|IndexOutOfBoundsException e) {
+			} catch (Throwable e) {
 				return null;
 			}
 		}
@@ -607,7 +603,7 @@ public class ModelUtils {
 	}
 
 	public static boolean isPartitionImplemented(PartitionNode node) {
-		boolean implemented = (getPartitionValueFromString(node.getValueString(), node.getCategory().getType()) != null);
+		boolean implemented = (getPartitionValueFromString(node.getSimpleValueString(), node.getCategory().getType()) != null);
 		if (!implemented && node.getCategory().getType().equals(com.testify.ecfeed.model.Constants.TYPE_NAME_STRING)) {
 			implemented = true;
 		}
