@@ -53,7 +53,7 @@ public class ParameterizedMethod extends FrameworkMethod {
 	protected Object[] getParameters(List<PartitionNode> testCase) throws Exception {
 		List<Object> parameters = new ArrayList<Object>();
 		for(PartitionNode parameter : testCase){
-			Object value = ModelUtils.getPartitionValueFromString(parameter.getValueString(), parameter.getCategory().getType());
+			Object value = ModelUtils.getPartitionValueFromString(parameter.getSimpleValueString(), parameter.getCategory().getType());
 			if ((value != null) || (parameter.getCategory().getType().equals(com.testify.ecfeed.model.Constants.TYPE_NAME_STRING))) {
 				parameters.add(value);
 			} else {

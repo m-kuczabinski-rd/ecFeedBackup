@@ -39,7 +39,7 @@ public class RuntimeMethod extends FrameworkMethod{
 			while((next = fGenerator.next()) !=null){
 				parameters = new ArrayList<Object>();
 				for (PartitionNode partitionNode : next) {
-					parameters.add(ModelUtils.getPartitionValueFromString(partitionNode.getValueString(), partitionNode.getCategory().getType()));
+					parameters.add(ModelUtils.getPartitionValueFromString(partitionNode.getSimpleValueString(), partitionNode.getCategory().getType()));
 				}
 				super.invokeExplosively(target, parameters.toArray());
 			}
