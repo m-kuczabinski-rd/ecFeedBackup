@@ -540,7 +540,7 @@ public class ModelUtils {
 				case com.testify.ecfeed.model.Constants.TYPE_NAME_BOOLEAN:
 					return Boolean.valueOf(valueString).booleanValue();
 				case com.testify.ecfeed.model.Constants.TYPE_NAME_BYTE:
-					return Byte.valueOf(valueString).byteValue();
+					return Byte.decode(valueString);
 				case com.testify.ecfeed.model.Constants.TYPE_NAME_CHAR:
 					if (valueString.charAt(0) == '\\') {
 						return Character.toChars(Integer.parseInt(valueString.substring(1)));
@@ -555,9 +555,9 @@ public class ModelUtils {
 				case com.testify.ecfeed.model.Constants.TYPE_NAME_INT:
 					return Integer.decode(valueString);
 				case com.testify.ecfeed.model.Constants.TYPE_NAME_LONG:
-					return Long.valueOf(valueString).longValue();
+					return Long.decode(valueString);
 				case com.testify.ecfeed.model.Constants.TYPE_NAME_SHORT:
-					return Short.valueOf(valueString).shortValue();
+					return Short.decode(valueString);
 				case com.testify.ecfeed.model.Constants.TYPE_NAME_STRING:
 					return valueString;
 				default:
