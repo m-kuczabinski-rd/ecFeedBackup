@@ -149,11 +149,6 @@ public class GenericNode implements IGenericNode{
 	public GenericNode getCopy(){
 		return new GenericNode(getName());
 	}
-	
-	@Override
-	public boolean paste(IGenericNode element){
-		return false;
-	}
 
 	protected boolean validateNodeName(String name) {
 		if (name == null) return false;

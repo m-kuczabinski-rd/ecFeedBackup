@@ -75,4 +75,12 @@ public class ConstraintNode extends GenericNode{
 		return false;
 	}
 	
+	public ConstraintNode getCopy(MethodNode method){
+		ConstraintNode copy = getCopy();
+		if(copy.updateReferences(method))
+			return copy;
+		else
+			return null;
+	}
+	
 }

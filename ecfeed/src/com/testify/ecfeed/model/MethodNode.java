@@ -97,10 +97,22 @@ public class MethodNode extends GenericNode {
 		MethodNode copy = new MethodNode(this.getName());
 
 		for(CategoryNode category : fCategories){
-				copy.addCategory(category.getCopy());
-			}
-		copy.setParent(getParent());
+			copy.addCategory(category.getCopy());
+		}
 
+		for(TestCaseNode testcase : fTestCases){
+			TestCaseNode tcase = testcase.getCopy(copy);
+			if(tcase != null)
+				copy.addTestCase(tcase);
+		}
+
+		for(ConstraintNode constraint : fConstraints){
+			constraint = constraint.getCopy(copy);
+			if(constraint != null)
+				copy.addConstraint(constraint);
+		}
+
+		copy.setParent(getParent());
 		return copy;
 	}
 
