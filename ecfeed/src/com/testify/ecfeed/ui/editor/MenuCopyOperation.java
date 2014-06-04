@@ -7,12 +7,6 @@ public class MenuCopyOperation extends MenuOperation{
 	private NodeClipboard fSource;
 	private IGenericNode fTarget;
 
-	public MenuCopyOperation(IGenericNode target, NodeClipboard source){
-		super("Copy");
-		fTarget = target;
-		fSource = source;
-	}
-
 	@Override
 	public void execute(){
 		fSource.setClipboardNode(fTarget);
@@ -22,4 +16,11 @@ public class MenuCopyOperation extends MenuOperation{
 	public boolean isEnabled(){
 		return (fTarget != null);
 	}
+	
+	public MenuCopyOperation(IGenericNode target, NodeClipboard source){
+		super("Copy");
+		fTarget = target;
+		fSource = source;
+	}
+
 }

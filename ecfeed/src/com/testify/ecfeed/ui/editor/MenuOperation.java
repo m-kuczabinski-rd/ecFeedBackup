@@ -1,16 +1,18 @@
 package com.testify.ecfeed.ui.editor;
+
 public abstract class MenuOperation{
-protected String operationName;
+	protected String operationName;
 
-public abstract void execute();
+	public abstract void execute();
 
-public MenuOperation(String opname){
-operationName = opname;
-}
+	public abstract boolean isEnabled();
 
-public String getOperationName(){
-return operationName;
-}
+	public MenuOperation(String opname){
+		operationName = opname;
+	}
 
-public abstract boolean isEnabled();
+	public String getOperationName(){
+		return operationName;
+	}
+
 }

@@ -132,11 +132,25 @@ public class CategoryNode extends GenericNode implements IPartitionedNode{
 		return removePartition(getPartition(qualifiedName));
 	}
 
+	@Override
 	public List<? extends IGenericNode> getChildren(){
 		if(fExpected){
 			return EMPTY_CHILDREN_ARRAY;
 		}
 		return fPartitions;
+	}
+	
+	@Override
+	public CategoryNode getCopy(){
+		CategoryNode category = new CategoryNode(getName(), getType(), isExpected());
+		category.setParent(this.getParent());
+		if(getDefaultValueString() != null)
+			category.setDefaultValueString(getDefaultValueString());
+		for(PartitionNode partition : fPartitions){
+			category.addPartition(partition.getCopy());
+		}
+		category.setParent(getParent());
+		return category;
 	}
 
 	public List<String> getPartitionNames() {
@@ -182,19 +196,6 @@ public class CategoryNode extends GenericNode implements IPartitionedNode{
 	
 	public void setExpected(boolean isexpected){
 		fExpected = isexpected;
-	}
-	
-	public CategoryNode getCopy(){
-		CategoryNode category = new CategoryNode(getName(), getType(), isExpected());
-		category.setParent(this.getParent());
-		if(getDefaultValueString() != null)
-			category.setDefaultValueString(getDefaultValueString());
-		for(PartitionNode partition : fPartitions){
-			category.addPartition(partition.getCopy());
-		}
-		category.setParent(getParent());
-		return category;
-
 	}
 
 }

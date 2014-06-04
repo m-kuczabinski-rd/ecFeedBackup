@@ -33,15 +33,18 @@ public class PartitionNode extends GenericNode implements IPartitionedNode{
 		fLabels = new LinkedHashSet<String>();
 	}
 
+	@Override
 	public void addPartition(PartitionNode partition){
 		fPartitions.add(partition);
 		partition.setParent(this);
 	}
 
+	@Override
 	public CategoryNode getCategory() {
 		return fPartitionedParent.getCategory();
 	}
 
+	@Override
 	public PartitionNode getPartition(String name){
 		for(PartitionNode partition : fPartitions){
 			if(partition.getName().equals(name)){
@@ -51,6 +54,7 @@ public class PartitionNode extends GenericNode implements IPartitionedNode{
 		return null;
 	}
 
+	@Override
 	public List<PartitionNode> getPartitions(){
 		return fPartitions;
 	}
@@ -65,6 +69,7 @@ public class PartitionNode extends GenericNode implements IPartitionedNode{
 		return names;
 	}
 
+	@Override
 	public List<PartitionNode> getLeafPartitions() {
 		List<PartitionNode> leafs = new ArrayList<PartitionNode>();
 		if(fPartitions.size() == 0){
@@ -83,6 +88,7 @@ public class PartitionNode extends GenericNode implements IPartitionedNode{
 		getParent().partitionRemoved(partition);
 	}
 
+	@Override
 	public boolean removePartition(PartitionNode partition){
 		boolean result = fPartitions.remove(partition); 
 		if(result && getCategory() != null){
@@ -91,6 +97,7 @@ public class PartitionNode extends GenericNode implements IPartitionedNode{
 		return result;
 	}
 
+	@Override
 	public boolean removePartition(String name){
 		for(PartitionNode partition : fPartitions){
 			if(partition.getName().equals(name)){
@@ -110,11 +117,24 @@ public class PartitionNode extends GenericNode implements IPartitionedNode{
 		return getPartitions();
 	}
 
+	@Override
 	public String toString(){
 		if(isAbstract()){
 			return getQualifiedName() + "[ABSTRACT]";
 		}
 		return getQualifiedName() + " [" + getValueString() + "]";
+	}
+	
+	@Override
+	public PartitionNode getCopy(){
+		PartitionNode copy = getIndependentCopy();
+		for(PartitionNode partition : fPartitions){
+			copy.addPartition(partition.getCopy());
+		}
+		for(String label : fLabels){
+			copy.addLabel(label);
+		}
+		return copy;
 	}
 
 	public String getQualifiedName(){
@@ -256,18 +276,6 @@ public class PartitionNode extends GenericNode implements IPartitionedNode{
 	public PartitionNode getIndependentCopy() {
 		PartitionNode copy = new PartitionNode(getName(), fValueString);
 		copy.setParent(fPartitionedParent);
-		return copy;
-	}
-	
-	@Override
-	public PartitionNode getCopy(){
-		PartitionNode copy = getIndependentCopy();
-		for(PartitionNode partition : fPartitions){
-			copy.addPartition(partition.getCopy());
-		}
-		for(String label : fLabels){
-			copy.addLabel(label);
-		}
 		return copy;
 	}
 

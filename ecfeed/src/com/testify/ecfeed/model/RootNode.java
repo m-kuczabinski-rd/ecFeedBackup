@@ -17,13 +17,25 @@ import java.util.List;
 public class RootNode extends GenericNode {
 	public List<ClassNode> fClasses;
 
+	@Override
+	public List<? extends IGenericNode> getChildren(){
+		return fClasses;
+	}
+	
+	@Override
+	public RootNode getCopy(){
+		RootNode copy = new RootNode(this.getName());
+
+		for(ClassNode classnode : fClasses){
+			copy.addClass(classnode.getCopy());
+		}
+		copy.setParent(this.getParent());
+		return copy;
+	}
+	
 	public RootNode(String name) {
 		super(name);
 		fClasses = new ArrayList<ClassNode>();
-	}
-	
-	public List<? extends IGenericNode> getChildren(){
-		return fClasses;
 	}
 
 	public void addClass(ClassNode node){
@@ -52,14 +64,4 @@ public class RootNode extends GenericNode {
 		return new GenericNode("").validateNodeName(name);
 	}
 	
-	@Override
-	public RootNode getCopy(){
-		RootNode copy = new RootNode(this.getName());
-
-		for(ClassNode classnode : fClasses){
-			copy.addClass(classnode.getCopy());
-		}
-		copy.setParent(this.getParent());
-		return copy;
-	}
 }

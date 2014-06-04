@@ -18,6 +18,16 @@ import com.testify.ecfeed.model.constraint.Constraint;
 public class ConstraintNode extends GenericNode{
 
 	private Constraint fConstraint;
+	
+	@Override
+	public String toString(){
+		return getName() + ": " + getConstraint().toString();
+	}
+	
+	@Override
+	public ConstraintNode getCopy(){
+		return new ConstraintNode(getName(), fConstraint.getCopy());	
+	}
 
 	public ConstraintNode(String name, Constraint constraint) {
 		super(name);
@@ -55,16 +65,6 @@ public class ConstraintNode extends GenericNode{
 
 	public boolean mentions(CategoryNode category) {
 		return fConstraint.mentions(category);
-	}
-
-	@Override
-	public String toString(){
-		return getName() + ": " + getConstraint().toString();
-	}
-	
-	@Override
-	public ConstraintNode getCopy(){
-		return new ConstraintNode(getName(), fConstraint.getCopy());	
 	}
 	
 	public boolean updateReferences(MethodNode method){

@@ -43,17 +43,6 @@ public class MenuPasteOperation extends MenuOperation{
 		fModel = model;
 	}
 
-
-
-	public void createUniqueName(GenericNode source, GenericNode target){
-		String namesuffix = "";
-		int i = 2;
-		while(target.getChild(source.getName() + namesuffix) != null){
-			namesuffix = "_" + i;
-		}
-		source.setName(source.getName() + namesuffix);
-	}
-
 	public boolean paste(){
 		if(fSource != null && fTarget != null){
 			if(fTarget instanceof PartitionNode){
@@ -61,7 +50,7 @@ public class MenuPasteOperation extends MenuOperation{
 				if(fSource instanceof PartitionNode){
 					PartitionNode source = (PartitionNode)fSource;
 					if(target.getCategory().getType().equals(source.getCategory().getType())){
-						createUniqueName(source, target);
+						setUniqueName(source, target);
 						target.addPartition(source);
 						return true;
 					}
@@ -72,7 +61,7 @@ public class MenuPasteOperation extends MenuOperation{
 					if(fSource instanceof PartitionNode){
 						PartitionNode source = (PartitionNode)fSource;
 						if(target.getType().equals(source.getCategory().getType())){
-							createUniqueName(source, target);
+							setUniqueName(source, target);
 							target.addPartition(source);
 							return true;
 						}
@@ -82,7 +71,7 @@ public class MenuPasteOperation extends MenuOperation{
 				MethodNode target = (MethodNode)fTarget;
 				if(fSource instanceof CategoryNode){
 					CategoryNode source = (CategoryNode)fSource;
-					createUniqueName(source, target);
+					setUniqueName(source, target);
 					target.addCategory(source);
 					target.clearTestCases();
 					return true;
@@ -103,7 +92,7 @@ public class MenuPasteOperation extends MenuOperation{
 				ClassNode target = (ClassNode)fTarget;
 				if(fSource instanceof MethodNode){
 					MethodNode source = (MethodNode)fSource;
-					createUniqueName(source, target);
+					setUniqueName(source, target);
 					target.addMethod(source);
 					return true;
 				}
@@ -111,13 +100,22 @@ public class MenuPasteOperation extends MenuOperation{
 				RootNode target = (RootNode)fTarget;
 				if(fSource instanceof ClassNode){
 					ClassNode source = (ClassNode)fSource;
-					createUniqueName(source, target);
+					setUniqueName(source, target);
 					target.addClass(source);
 					return true;
 				}
 			}
 		}
 		return false;
+	}
+	
+	private void setUniqueName(GenericNode source, GenericNode target){
+		String namesuffix = "";
+		int i = 2;
+		while(target.getChild(source.getName() + namesuffix) != null){
+			namesuffix = "_" + i;
+		}
+		source.setName(source.getName() + namesuffix);
 	}
 
 }

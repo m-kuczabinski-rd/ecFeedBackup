@@ -144,15 +144,6 @@ public class GenericNode implements IGenericNode{
 		}
 		return false;
 	}
-
-	protected boolean validateNodeName(String name) {
-		if (name == null) return false;
-		if(name.length() == 0) return false;
-		if(name.length() >= Constants.MAX_NODE_NAME_LENGTH) return false;
-		if(name.matches("[ ]+.*")) return false;
-		
-		return true;
-	}
 	
 	@Override
 	public GenericNode getCopy(){
@@ -162,5 +153,14 @@ public class GenericNode implements IGenericNode{
 	@Override
 	public boolean paste(IGenericNode element){
 		return false;
+	}
+
+	protected boolean validateNodeName(String name) {
+		if (name == null) return false;
+		if(name.length() == 0) return false;
+		if(name.length() >= Constants.MAX_NODE_NAME_LENGTH) return false;
+		if(name.matches("[ ]+.*")) return false;
+		
+		return true;
 	}
 }

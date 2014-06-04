@@ -14,11 +14,11 @@ public class MenuCutOperation extends MenuOperation{
 	private IGenericNode fTarget;
 	private ModelMasterSection fModel;
 
-	public MenuCutOperation(IGenericNode target, NodeClipboard source, ModelMasterSection model){
-		super("Cut");
-		fTarget = target;
-		fSource = source;
-		fModel = model;
+	@Override
+	public boolean isEnabled(){
+		if(fTarget == null || (fTarget instanceof RootNode) || (fTarget instanceof CategoryNode && ((CategoryNode)fTarget).isExpected()))
+			return false;
+		return true;
 	}
 
 	@Override
@@ -29,6 +29,13 @@ public class MenuCutOperation extends MenuOperation{
 			fModel.markDirty();
 			fModel.refresh();
 		}
+	}
+	
+	public MenuCutOperation(IGenericNode target, NodeClipboard source, ModelMasterSection model){
+		super("Cut");
+		fTarget = target;
+		fSource = source;
+		fModel = model;
 	}
 
 	public void cut(){
@@ -66,10 +73,4 @@ public class MenuCutOperation extends MenuOperation{
 		}
 	}
 
-	@Override
-	public boolean isEnabled(){
-		if(fTarget == null || (fTarget instanceof RootNode) || (fTarget instanceof CategoryNode && ((CategoryNode)fTarget).isExpected()))
-			return false;
-		return true;
-	}
 }

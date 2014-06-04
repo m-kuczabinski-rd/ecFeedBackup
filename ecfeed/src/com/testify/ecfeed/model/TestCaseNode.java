@@ -18,6 +18,32 @@ import java.util.List;
 public class TestCaseNode extends GenericNode {
 	List<PartitionNode> fTestData;
 	
+	@Override
+	public String toString(){
+		String methodName = null;
+		if (getParent() != null){
+			methodName = getParent().getName();
+		}
+		String result = "[" + getName() + "]";
+				
+		if(methodName != null){
+			result += ": " + methodName + "(";
+			result += testDataString();
+			result += ")";
+		}
+		
+		return result;
+	}
+	
+	@Override
+	public TestCaseNode getCopy(){
+		List<PartitionNode> testdata = new ArrayList<>();
+		for(PartitionNode partition : fTestData){
+			testdata.add(partition);
+		}
+		return new TestCaseNode(this.getName(), testdata);
+	}
+	
 	public TestCaseNode(String name, List<PartitionNode> testData) {
 		super(name);
 		fTestData = testData;
@@ -66,31 +92,6 @@ public class TestCaseNode extends GenericNode {
 		if(newName.length() < 1 || newName.length() > 64) return false;
 		if(newName.matches("[ ]+.*")) return false;
 		return true;
-	}
-
-	public String toString(){
-		String methodName = null;
-		if (getParent() != null){
-			methodName = getParent().getName();
-		}
-		String result = "[" + getName() + "]";
-				
-		if(methodName != null){
-			result += ": " + methodName + "(";
-			result += testDataString();
-			result += ")";
-		}
-		
-		return result;
-	}
-	
-	@Override
-	public TestCaseNode getCopy(){
-		List<PartitionNode> testdata = new ArrayList<>();
-		for(PartitionNode partition : fTestData){
-			testdata.add(partition);
-		}
-		return new TestCaseNode(this.getName(), testdata);
 	}
 
 	public TestCaseNode getCopy(MethodNode method){
