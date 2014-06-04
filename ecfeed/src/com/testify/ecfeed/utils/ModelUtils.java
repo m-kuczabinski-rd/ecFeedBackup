@@ -30,6 +30,7 @@ import org.eclipse.jdt.core.Signature;
 
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.ClassNode;
+import com.testify.ecfeed.model.GenericNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.TestCaseNode;
@@ -64,6 +65,16 @@ public class ModelUtils {
 	public static boolean isClassModelUpToDate(ClassNode classNode) throws JavaModelException{
 		return(getObsoleteMethods(classNode, classNode.getQualifiedName()).size() == 0 && 
 			   getNotContainedMethods(classNode, classNode.getQualifiedName()).size() == 0);
+	}
+	
+	public static void setUniqueNodeName(GenericNode children, GenericNode desiredParent){
+		String namesuffix = "";
+		int i = 2;
+		while(desiredParent.getChild(children.getName() + namesuffix) != null){
+			namesuffix = "_" + i;
+			i++;
+		}
+		children.setName(children.getName() + namesuffix);
 	}
 	
 	//TODO Unit tests

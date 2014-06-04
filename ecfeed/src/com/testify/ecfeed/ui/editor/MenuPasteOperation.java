@@ -6,12 +6,12 @@ import org.eclipse.swt.widgets.Display;
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.ConstraintNode;
-import com.testify.ecfeed.model.GenericNode;
 import com.testify.ecfeed.model.IGenericNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.TestCaseNode;
+import static com.testify.ecfeed.utils.ModelUtils.setUniqueNodeName;
 
 public class MenuPasteOperation extends MenuOperation{
 	protected IGenericNode fSource;
@@ -50,7 +50,7 @@ public class MenuPasteOperation extends MenuOperation{
 				if(fSource instanceof PartitionNode){
 					PartitionNode source = (PartitionNode)fSource;
 					if(target.getCategory().getType().equals(source.getCategory().getType())){
-						setUniqueName(source, target);
+						setUniqueNodeName(source, target);
 						target.addPartition(source);
 						return true;
 					}
@@ -61,7 +61,7 @@ public class MenuPasteOperation extends MenuOperation{
 					if(fSource instanceof PartitionNode){
 						PartitionNode source = (PartitionNode)fSource;
 						if(target.getType().equals(source.getCategory().getType())){
-							setUniqueName(source, target);
+							setUniqueNodeName(source, target);
 							target.addPartition(source);
 							return true;
 						}
@@ -71,7 +71,7 @@ public class MenuPasteOperation extends MenuOperation{
 				MethodNode target = (MethodNode)fTarget;
 				if(fSource instanceof CategoryNode){
 					CategoryNode source = (CategoryNode)fSource;
-					setUniqueName(source, target);
+					setUniqueNodeName(source, target);
 					target.addCategory(source);
 					target.clearTestCases();
 					return true;
@@ -92,7 +92,7 @@ public class MenuPasteOperation extends MenuOperation{
 				ClassNode target = (ClassNode)fTarget;
 				if(fSource instanceof MethodNode){
 					MethodNode source = (MethodNode)fSource;
-					setUniqueName(source, target);
+					setUniqueNodeName(source, target);
 					target.addMethod(source);
 					return true;
 				}
@@ -100,7 +100,7 @@ public class MenuPasteOperation extends MenuOperation{
 				RootNode target = (RootNode)fTarget;
 				if(fSource instanceof ClassNode){
 					ClassNode source = (ClassNode)fSource;
-					setUniqueName(source, target);
+					setUniqueNodeName(source, target);
 					target.addClass(source);
 					return true;
 				}
@@ -108,15 +108,6 @@ public class MenuPasteOperation extends MenuOperation{
 		}
 		return false;
 	}
-	
-	private void setUniqueName(GenericNode source, GenericNode target){
-		String namesuffix = "";
-		int i = 2;
-		while(target.getChild(source.getName() + namesuffix) != null){
-			namesuffix = "_" + i;
-			i++;
-		}
-		source.setName(source.getName() + namesuffix);
-	}
+
 
 }
