@@ -114,6 +114,7 @@ public class MenuPasteOperation extends MenuOperation{
 		int i = 2;
 		while(target.getChild(source.getName() + namesuffix) != null){
 			namesuffix = "_" + i;
+			i++;
 		}
 		source.setName(source.getName() + namesuffix);
 	}
