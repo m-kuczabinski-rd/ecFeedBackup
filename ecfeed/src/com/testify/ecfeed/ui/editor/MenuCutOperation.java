@@ -46,9 +46,10 @@ public class MenuCutOperation extends MenuOperation{
 			}
 		} else if(fTarget instanceof CategoryNode){
 			CategoryNode target = (CategoryNode)fTarget;
+			MethodNode method = target.getMethod();
 			if(target.getMethod() != null){
-				if(target.getMethod().removeCategory(target))
-					target.getMethod().clearTestCases();
+				if(method.removeCategory(target))
+					method.clearTestCases();
 			}
 		} else if(fTarget instanceof MethodNode){
 			MethodNode target = (MethodNode)fTarget;
