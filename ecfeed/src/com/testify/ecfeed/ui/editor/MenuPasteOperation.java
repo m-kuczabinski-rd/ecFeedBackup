@@ -40,12 +40,25 @@ public class MenuPasteOperation extends MenuOperation{
 			fModel.refresh();
 		}
 	}
-	
+
 	@Override
 	public boolean isEnabled(){
-		return (fSource != null);
+		if(fSource != null && fTarget != null){
+			if(fTarget instanceof PartitionNode && fSource instanceof PartitionNode)
+				return true;
+			if(fTarget instanceof CategoryNode && fSource instanceof PartitionNode)
+				return true;
+			if(fTarget instanceof MethodNode && 
+					(fSource instanceof CategoryNode || fSource instanceof TestCaseNode || fSource instanceof ConstraintNode))
+				return true;
+			if(fTarget instanceof ClassNode && fSource instanceof MethodNode)
+				return true;
+			if(fTarget instanceof RootNode && fSource instanceof ClassNode)
+				return true;
+		}
+		return false;
 	}
-	
+
 	public MenuPasteOperation(IGenericNode target, IGenericNode source, ModelMasterSection model){
 		super("Paste");
 		fSource = source;
@@ -118,6 +131,5 @@ public class MenuPasteOperation extends MenuOperation{
 		}
 		return false;
 	}
-
 
 }
