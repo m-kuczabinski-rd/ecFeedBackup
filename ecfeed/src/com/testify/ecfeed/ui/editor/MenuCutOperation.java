@@ -12,9 +12,9 @@ import com.testify.ecfeed.model.TestCaseNode;
 public class MenuCutOperation extends MenuOperation{
 	private NodeClipboard fSource;
 	private IGenericNode fTarget;
-	private  ModelMasterSection fModel;
+	private ModelMasterSection fModel;
 
-	public MenuCutOperation(IGenericNode target, NodeClipboard source,  ModelMasterSection model){
+	public MenuCutOperation(IGenericNode target, NodeClipboard source, ModelMasterSection model){
 		super("Cut");
 		fTarget = target;
 		fSource = source;
@@ -40,7 +40,8 @@ public class MenuCutOperation extends MenuOperation{
 		} else if(fTarget instanceof CategoryNode){
 			CategoryNode target = (CategoryNode)fTarget;
 			if(target.getMethod() != null){
-				target.getMethod().removeCategory(target);
+				if(target.getMethod().removeCategory(target))
+					target.getMethod().clearTestCases();
 			}
 		} else if(fTarget instanceof MethodNode){
 			MethodNode target = (MethodNode)fTarget;

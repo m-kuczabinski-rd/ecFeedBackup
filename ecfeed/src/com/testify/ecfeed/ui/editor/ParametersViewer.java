@@ -93,6 +93,7 @@ public class ParametersViewer extends CheckboxTableViewerSection implements Test
 			}
 
 			fSelectedMethod.addCategory(categoryNode);
+			fSelectedMethod.clearTestCases();
 			modelUpdated();
 			selectElement(categoryNode);
 			nameColumn.getViewer().editElement(categoryNode, 0);
@@ -112,7 +113,10 @@ public class ParametersViewer extends CheckboxTableViewerSection implements Test
 		private void removeParameters(Object[] checkedElements) {
 			for(Object element : checkedElements){
 				if (element instanceof CategoryNode){
-					fSelectedMethod.removeCategory((CategoryNode)element);
+					if(fSelectedMethod.removeCategory((CategoryNode)element)){
+						fSelectedMethod.clearTestCases();
+					};
+					
 				}
 			}
 			modelUpdated();

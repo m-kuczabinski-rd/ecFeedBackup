@@ -91,6 +91,18 @@ public class MethodNode extends GenericNode {
 			Collections.swap(childrenArray, childIndex, childIndex + 1);
 		}
 	}
+	
+	@Override
+	public MethodNode getCopy(){
+		MethodNode copy = new MethodNode(this.getName());
+
+		for(CategoryNode category : fCategories){
+				copy.addCategory(category.getCopy());
+			}
+		copy.setParent(getParent());
+
+		return copy;
+	}
 
 	public void addCategory(CategoryNode category){
 		fCategories.add(category);
@@ -234,7 +246,6 @@ public class MethodNode extends GenericNode {
 		category.setParent(null);
 		if(fCategories.remove(category)){
 			removeMentioningConstraints(category);
-			fTestCases.clear();
 			return true;
 		}
 		return false;
@@ -312,15 +323,6 @@ public class MethodNode extends GenericNode {
 	public boolean validateConstraintName(String name) {
 		return super.validateNodeName(name);
 	}
-
-	protected void removeMentioningConstraints(PartitionNode partition) {
-		Iterator<ConstraintNode> iterator = fConstraints.iterator();
-		while(iterator.hasNext()){
-			if(iterator.next().mentions(partition)){
-				iterator.remove();
-			}
-		}
-	}
 	
 	public void removeMentioningConstraints(CategoryNode category){
 		Iterator<ConstraintNode> it = fConstraints.iterator();
@@ -328,6 +330,19 @@ public class MethodNode extends GenericNode {
 			ConstraintNode constraint = it.next();
 			if(constraint.mentions(category)){
 				it.remove();
+			}
+		}
+	}
+	
+	public void clearTestCases(){
+		fTestCases.clear();
+	}
+
+	protected void removeMentioningConstraints(PartitionNode partition) {
+		Iterator<ConstraintNode> iterator = fConstraints.iterator();
+		while(iterator.hasNext()){
+			if(iterator.next().mentions(partition)){
+				iterator.remove();
 			}
 		}
 	}
@@ -339,16 +354,5 @@ public class MethodNode extends GenericNode {
 				iterator.remove();
 			}
 		}
-	}
-	@Override
-	public MethodNode getCopy(){
-		MethodNode copy = new MethodNode(this.getName());
-
-		for(CategoryNode category : fCategories){
-				copy.addCategory(category.getCopy());
-			}
-		copy.setParent(getParent());
-
-		return copy;
 	}
 }

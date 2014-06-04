@@ -20,13 +20,6 @@ public class MenuPasteOperation extends MenuOperation{
 	protected final String DIALOG_OPERATION_FAILED_TITLE = "Paste failed";
 	protected final String DIALOG_OPERATION_FAILED_MESSAGE = "Clipboard content doesn't match here.";
 
-	public MenuPasteOperation(IGenericNode target, IGenericNode source, ModelMasterSection model){
-		super("Paste");
-		fSource = source;
-		fTarget = target;
-		fModel = model;
-	}
-
 	@Override
 	public void execute(){
 		if(!paste()){
@@ -37,39 +30,28 @@ public class MenuPasteOperation extends MenuOperation{
 			fModel.refresh();
 		}
 	}
+	
+	@Override
+	public boolean isEnabled(){
+		return (fSource != null);
+	}
+	
+	public MenuPasteOperation(IGenericNode target, IGenericNode source, ModelMasterSection model){
+		super("Paste");
+		fSource = source;
+		fTarget = target;
+		fModel = model;
+	}
+
+
 
 	public void createUniqueName(GenericNode source, GenericNode target){
-		/*
-		 * TODO change for one generic approach. If I recall correctly getChildren search only through first level descendants.
-		 */
-//		if(target instanceof IPartitionedNode && source instanceof IPartitionedNode){
-//			IPartitionedNode partitionedTarget = (IPartitionedNode)target;
-//			while(partitionedTarget.getPartition(source.getName()) != null){
-//				source.setName(source.getName() + "1");
-//			}
-//		} else if(target instanceof MethodNode && source instanceof CategoryNode){
-//			MethodNode method = (MethodNode)target;
-//			while(method.getCategory(source.getName()) != null){
-//				source.setName(source.getName() + "1");
-//			}
-//		} else if(target instanceof ClassNode && source instanceof MethodNode){
-//			ClassNode clazz = (ClassNode)target;
-//			MethodNode method = (MethodNode)source;
-//			while(clazz.getMethod(method.getName(), method.getCategoriesTypes()) != null){
-//				source.setName(source.getName() + "1");
-//			}
-//		} else if(target instanceof RootNode && source instanceof ClassNode){
-//			RootNode root = (RootNode)target;
-//			ClassNode clazz = (ClassNode)source;
-//			while(root.getClassModel(clazz.getName()) != null){
-//				source.setName(source.getName() + "1");
-//			}
-//		}
-		String name = source.getName();
-		while(target.getChild(name) != null){
-			name += "1";
+		String namesuffix = "";
+		int i = 2;
+		while(target.getChild(source.getName() + namesuffix) != null){
+			namesuffix = "_" + i;
 		}
-		source.setName(name);
+		source.setName(source.getName() + namesuffix);
 	}
 
 	public boolean paste(){
@@ -102,9 +84,7 @@ public class MenuPasteOperation extends MenuOperation{
 					CategoryNode source = (CategoryNode)fSource;
 					createUniqueName(source, target);
 					target.addCategory(source);
-					/*
-					 * TODO should we remove test cases upon adding new category?
-					 */
+					target.clearTestCases();
 					return true;
 				} else if(fSource instanceof ConstraintNode){
 					ConstraintNode source = (ConstraintNode)fSource;
@@ -140,8 +120,4 @@ public class MenuPasteOperation extends MenuOperation{
 		return false;
 	}
 
-	@Override
-	public boolean isEnabled(){
-		return (fSource != null);
-	}
 }
