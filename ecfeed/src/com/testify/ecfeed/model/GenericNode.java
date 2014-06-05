@@ -113,14 +113,17 @@ public class GenericNode implements IGenericNode{
 	}
 	
 	@Override
-	public void moveChild(IGenericNode child, boolean moveUp) {
+	public boolean moveChild(IGenericNode child, boolean moveUp) {
 		int childIndex = getChildren().indexOf(child);
 		if(moveUp && childIndex > 0){
 			Collections.swap(getChildren(), childIndex, childIndex - 1);
+			return true;
 		}
 		if(!moveUp && childIndex < getChildren().size() - 1){
 			Collections.swap(getChildren(), childIndex, childIndex + 1);
+			return true;
 		}
+		return false;
 	}
 	
 	@Override

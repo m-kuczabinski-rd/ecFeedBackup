@@ -126,8 +126,10 @@ public class ParametersViewer extends CheckboxTableViewerSection implements Test
 	private void moveSelectedItem(boolean moveUp) {
 		if (getSelectedElement() != null) {
 			CategoryNode categoryNode = (CategoryNode)getSelectedElement();
-			categoryNode.getParent().moveChild(categoryNode, moveUp);
-			modelUpdated();
+			if(categoryNode.getParent().moveChild(categoryNode, moveUp)){
+				fSelectedMethod.clearTestCases();
+				modelUpdated();
+			}
 		}
 	}
 

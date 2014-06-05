@@ -34,8 +34,10 @@ import org.eclipse.ui.forms.AbstractFormPart;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Section;
 
+import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.IGenericNode;
 import com.testify.ecfeed.model.IModelWrapper;
+import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.RootNode;
 
 public class ModelMasterSection extends TreeViewerSection{
@@ -188,9 +190,14 @@ public class ModelMasterSection extends TreeViewerSection{
 
 	private void moveSelectedItem(boolean moveUp) {
 		if(selectedNode() != null && selectedNode().getParent() != null){
-			selectedNode().getParent().moveChild(selectedNode(), moveUp);
-			markDirty();
-			refresh();
+			if(selectedNode().getParent().moveChild(selectedNode(), moveUp)){
+				if(selectedNode() instanceof CategoryNode){
+					MethodNode method = ((CategoryNode)selectedNode()).getMethod();
+					if(method != null) method.clearTestCases();			
+				}
+				markDirty();
+				refresh();
+			}
 		}
 	}
 

@@ -30,7 +30,7 @@ public interface IGenericNode {
 	 */
 	public boolean hasSibling(String name);
 	
-	public void moveChild(IGenericNode child, boolean moveUp);
+	public boolean moveChild(IGenericNode child, boolean moveUp);
 	public IGenericNode getRoot();
 	public IGenericNode getParent();
 	public void setParent(IGenericNode parent);

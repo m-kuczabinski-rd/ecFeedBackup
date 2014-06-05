@@ -68,7 +68,7 @@ public class MethodNode extends GenericNode {
 
 	@SuppressWarnings("rawtypes")
 	@Override
-	public void moveChild(IGenericNode child, boolean moveUp){
+	public boolean moveChild(IGenericNode child, boolean moveUp){
 		List childrenArray = null;
 		if(child instanceof CategoryNode){
 			childrenArray = fCategories;
@@ -80,16 +80,19 @@ public class MethodNode extends GenericNode {
 			childrenArray = fTestCases;
 		}
 		if(childrenArray == null){
-			return;
+			return false;
 		}
-		
+
 		int childIndex = childrenArray.indexOf(child);
 		if(moveUp && childIndex > 0){
 			Collections.swap(childrenArray, childIndex, childIndex - 1);
+			return true;
 		}
 		if(!moveUp && childIndex < childrenArray.size() - 1){
 			Collections.swap(childrenArray, childIndex, childIndex + 1);
+			return true;
 		}
+		return false;
 	}
 	
 	@Override
