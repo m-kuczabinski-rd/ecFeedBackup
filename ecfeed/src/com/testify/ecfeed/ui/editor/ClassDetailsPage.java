@@ -79,13 +79,6 @@ public class ClassDetailsPage extends BasicDetailsPage {
 		Composite textClientComposite = getToolkit().createComposite(getMainSection());
 		textClientComposite.setLayout(new RowLayout());
 		
-		Button refreshButton = getToolkit().createButton(textClientComposite, "Refresh", SWT.NONE);
-		refreshButton.addSelectionListener(new SelectionAdapter(){
-			@Override
-			public void widgetSelected(SelectionEvent e){
-				refresh();
-			}
-		});
 		getMainSection().setTextClient(textClientComposite);
 
 		createQualifiedNameComposite(getMainComposite());
