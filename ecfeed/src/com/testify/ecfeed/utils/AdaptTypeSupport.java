@@ -151,7 +151,7 @@ public class AdaptTypeSupport{
 		category.setType(newtype);
 
 		if(!assignDefaultValueString(category, newtype))
-			category.setDefaultValueString(null);
+			category.setDefaultValueString("");
 	}
 
 	private static void possibleCategoryTypeChange(CategoryNode category, String oldtype, String newtype){
