@@ -49,4 +49,8 @@ public class ModelPage extends FormPage {
 	public RootNode getModel(){
 		return fEditor.getModel();
 	}
+
+	public ModelMasterDetailsBlock getMasterBlock() {
+		return fBlock;
+	}
 }

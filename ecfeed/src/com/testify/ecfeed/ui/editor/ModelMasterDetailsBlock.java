@@ -14,6 +14,7 @@ package com.testify.ecfeed.ui.editor;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.forms.DetailsPart;
+import org.eclipse.ui.forms.IDetailsPage;
 import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.MasterDetailsBlock;
 import org.eclipse.ui.forms.widgets.FormToolkit;
@@ -77,5 +78,9 @@ public class ModelMasterDetailsBlock extends MasterDetailsBlock implements IMode
 
 	public ModelMasterSection getMasterSection(){
 		return fMasterSection;
+	}
+
+	public IDetailsPage getCurrentPage(){
+		return detailsPart.getCurrentPage();
 	}
 }
