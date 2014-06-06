@@ -11,6 +11,9 @@
 
 package com.testify.ecfeed.ui.editor;
 
+import java.util.Arrays;
+
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -19,11 +22,13 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
 
 import com.testify.ecfeed.model.CategoryNode;
+import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.utils.AdaptTypeSupport;
 import com.testify.ecfeed.utils.ModelUtils;
 
@@ -75,8 +80,18 @@ public class CategoryDetailsPage extends BasicDetailsPage {
 			@Override
 			public void handleEvent(Event event){
 				if(event.keyCode == SWT.CR || event.keyCode == SWT.KEYPAD_CR){
-					if(applyNewCategoryType(fSelectedCategory, fTypeText)){
-						modelUpdated(null);
+					boolean validName = true;
+					if(!Arrays.asList(fTypeText.getItems()).contains(fTypeText.getText())){
+						validName = ModelUtils.isClassQualifiedNameValid(fTypeText.getText());
+					}
+					if(validName){
+						if(applyNewCategoryType(fSelectedCategory, fTypeText)){
+							modelUpdated(null);
+						}
+					} else{
+						MessageDialog.openError(Display.getCurrent().getActiveShell(),
+								Messages.DIALOG_PARAMETER_TYPE_PROBLEM_TITLE,
+								Messages.DIALOG_PARAMETER_TYPE_PROBLEM_MESSAGE);
 					}
 				}
 			}
