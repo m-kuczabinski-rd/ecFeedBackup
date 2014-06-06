@@ -71,25 +71,21 @@ public class ModelLabelProvider extends LabelProvider {
 	
 	private static Image getClassImage(ClassNode node) {
 		if (ModelUtils.isClassImplemented(node)) {
-			return getImage("class_node.gif");
+			return getImage("class_node.ico");
 		} else if (ModelUtils.isClassPartiallyImplemented(node)) {
-			// TODO change icon to PARTIALLY implemented
-			return getImage("sample.gif");
+			return getImage("partial_class_node.ico");
 		} else {
-			// TODO change icon to NOT implemented
-			return getImage("sample.gif");
+			return getImage("unimplemented_class_node.ico");
 		}
 	}
 	
 	private static Image getMethodImage(MethodNode node) {
 		if (ModelUtils.isMethodImplemented(node)) {
-			return getImage("method_node.gif");	
+			return getImage("method_node.ico");	
 		} else if (ModelUtils.isMethodPartiallyImplemented(node)) {
-			// TODO change icon to PARTIALLY implemented
-			return getImage("sample.gif");
+			return getImage("partial_method_node.ico");
 		} else {
-			// TODO change icon to NOT implemented
-			return getImage("sample.gif");
+			return getImage("unimplemented_method_node.ico");
 		}
 	}
 	
@@ -97,11 +93,9 @@ public class ModelLabelProvider extends LabelProvider {
 		if (ModelUtils.isTestCaseImplemented(node)) {
 			return getImage("test_case_node.gif");
 		} else if (ModelUtils.isTestCasePartiallyImplemented(node)) {
-			// TODO change icon to PARTIALLY implemented
-			return getImage("sample.gif");
+			return getImage("partial_test_case_node.ico");
 		} else {
-			// TODO change icon to NOT implemented
-			return getImage("sample.gif");
+			return getImage("unimplemented_test_case_node.ico");
 		}
 	}
 	
@@ -110,18 +104,15 @@ public class ModelLabelProvider extends LabelProvider {
 			if(ModelUtils.isCategoryImplemented(node)){
 				return getImage("expected_value_category_node.gif");
 			} else{
-				// TODO change icon to NOT implemented
-				return getImage("sample.gif");
+				return getImage("unimplemented_expected_value_category_node.ico");
 			}
 		} else{
 			if(ModelUtils.isCategoryImplemented(node)){
 				return getImage("category_node.gif");
 			} else if(ModelUtils.isCategoryPartiallyImplemented(node)){
-				// TODO change icon to PARTIALLY implemented
-				return getImage("sample.gif");
+				return getImage("partial_category_node.ico");
 			} else{
-				// TODO change icon to NOT implemented
-				return getImage("sample.gif");
+				return getImage("unimplemented_category_node.ico");
 			}
 		}
 	}
@@ -133,8 +124,7 @@ public class ModelLabelProvider extends LabelProvider {
 		if (ModelUtils.isPartitionImplemented(node)) {
 			return getImage("partition_node.gif");
 		} else {
-			// TODO change icon to NOT implemented
-			return getImage("sample.gif");
+			return getImage("unimplemented_partition_node.ico");
 		}
 	}
 }
