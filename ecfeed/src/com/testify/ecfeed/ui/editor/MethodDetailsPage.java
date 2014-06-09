@@ -154,10 +154,11 @@ public class MethodDetailsPage extends BasicDetailsPage {
 		if(fSelectedMethod != null){
 			String title = fSelectedMethod.getName();
 			boolean implemented = ModelUtils.isMethodImplemented(fSelectedMethod);
+			boolean partiallyImplemented = ModelUtils.isMethodPartiallyImplemented(fSelectedMethod);
 			if (implemented) {
 				title += " [implemented]";
 			}
-			fTestOnlineButton.setEnabled(implemented);
+			fTestOnlineButton.setEnabled(implemented || partiallyImplemented);
 			getMainSection().setText(title);
 			fParemetersSection.setInput(fSelectedMethod);
 			fConstraintsSection.setInput(fSelectedMethod);

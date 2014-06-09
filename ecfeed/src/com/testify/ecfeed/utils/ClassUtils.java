@@ -12,8 +12,6 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
 
-import com.testify.ecfeed.model.PartitionNode;
-
 public class ClassUtils {
 
 	private static URLClassLoader classLoader = null;
@@ -39,21 +37,6 @@ public class ClassUtils {
 			classLoader = new URLClassLoader(urls.toArray(new URL[]{}), parentLoader);
 		}
 		return classLoader;
-	}
-
-	public static ArrayList<PartitionNode> defaultEnumPartitions(String typeName) {
-		ArrayList<PartitionNode> partitions = new ArrayList<PartitionNode>();
-		try {
-			Class<?> typeClass = getClassLoader(true, null).loadClass(typeName);
-			if (typeClass != null) {
-				for (Object object: typeClass.getEnumConstants()) {
-					partitions.add(new PartitionNode(object.toString(), ((Enum<?>)object).name()));
-				}	
-			}
-		} catch (Throwable e) {
-			e.printStackTrace();
-		}
-		return partitions;
 	}
 
 	public static HashMap<String, String> defaultEnumValues(String typeName) {
@@ -262,5 +245,13 @@ public class ClassUtils {
 			return Float.NEGATIVE_INFINITY;
 		}
 		return null;
+	}
+
+	public static boolean isPartitionImplemented(String value, String type, ClassLoader loader) {
+		boolean implemented = (getPartitionValueFromString(value, type, loader) != null);
+		if (!implemented && type.equals(com.testify.ecfeed.model.Constants.TYPE_NAME_STRING)) {
+			implemented = true;
+		}
+		return implemented;
 	}
 }

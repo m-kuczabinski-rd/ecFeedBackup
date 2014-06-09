@@ -291,8 +291,23 @@ public class ModelUtils {
 		case com.testify.ecfeed.model.Constants.TYPE_NAME_STRING:
 			return defaultStringPartitions();
 		default:
-			return ClassUtils.defaultEnumPartitions(typeSignature);
+			return defaultEnumPartitions(typeSignature);
 		}
+	}
+
+	public static ArrayList<PartitionNode> defaultEnumPartitions(String typeName) {
+		ArrayList<PartitionNode> partitions = new ArrayList<PartitionNode>();
+		try {
+			Class<?> typeClass = ClassUtils.getClassLoader(true, null).loadClass(typeName);
+			if (typeClass != null) {
+				for (Object object: typeClass.getEnumConstants()) {
+					partitions.add(new PartitionNode(object.toString(), ((Enum<?>)object).name()));
+				}
+			}
+		} catch (Throwable e) {
+			e.printStackTrace();
+		}
+		return partitions;
 	}
 
 	public static HashMap<String, String> generatePredefinedValues(String type) {
@@ -461,11 +476,7 @@ public class ModelUtils {
 
 	public static boolean isPartitionImplemented(PartitionNode node) {
 		URLClassLoader loader = ClassUtils.getClassLoader(true, null);
-		boolean implemented = (ClassUtils.getPartitionValueFromString(node.getSimpleValueString(), node.getCategory().getType(), loader) != null);
-		if (!implemented && node.getCategory().getType().equals(com.testify.ecfeed.model.Constants.TYPE_NAME_STRING)) {
-			implemented = true;
-		}
-		return implemented;
+		return ClassUtils.isPartitionImplemented(node.getSimpleValueString(), node.getCategory().getType(), loader);
 	}
 
 	public static boolean isTestCaseImplemented(TestCaseNode node) {
