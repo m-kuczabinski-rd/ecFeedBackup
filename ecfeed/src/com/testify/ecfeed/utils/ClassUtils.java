@@ -246,4 +246,12 @@ public class ClassUtils {
 		}
 		return null;
 	}
+
+	public static boolean isPartitionImplemented(String value, String type, ClassLoader loader) {
+		boolean implemented = (getPartitionValueFromString(value, type, loader) != null);
+		if (!implemented && type.equals(com.testify.ecfeed.model.Constants.TYPE_NAME_STRING)) {
+			implemented = true;
+		}
+		return implemented;
+	}
 }

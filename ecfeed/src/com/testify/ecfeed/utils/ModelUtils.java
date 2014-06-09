@@ -476,11 +476,7 @@ public class ModelUtils {
 
 	public static boolean isPartitionImplemented(PartitionNode node) {
 		URLClassLoader loader = ClassUtils.getClassLoader(true, null);
-		boolean implemented = (ClassUtils.getPartitionValueFromString(node.getSimpleValueString(), node.getCategory().getType(), loader) != null);
-		if (!implemented && node.getCategory().getType().equals(com.testify.ecfeed.model.Constants.TYPE_NAME_STRING)) {
-			implemented = true;
-		}
-		return implemented;
+		return ClassUtils.isPartitionImplemented(node.getSimpleValueString(), node.getCategory().getType(), loader);
 	}
 
 	public static boolean isTestCaseImplemented(TestCaseNode node) {
