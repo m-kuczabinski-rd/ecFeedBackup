@@ -192,8 +192,10 @@ public class AdaptTypeSupport{
 			Iterator<PartitionNode> itr = category.getPartitions().iterator();
 			while(itr.hasNext()){
 				PartitionNode partition = itr.next();
-				if(!adaptOrRemovePartitions(partition, newtype))
+				if(!adaptOrRemovePartitions(partition, newtype)){
 					itr.remove();
+					partition.getParent().removePartition(partition);
+				}
 			}
 			if(!assignDefaultValueString(category, newtype))
 				category.setDefaultValueString(null);
@@ -213,22 +215,32 @@ public class AdaptTypeSupport{
 
 	// returns true if adapted successfully, false if destined for removal.
 	private static boolean adaptOrRemovePartitions(PartitionNode partition, String type){
-		List<PartitionNode> partitions = partition.getLeafPartitions();
-		if(partitions.size() == 1 && partitions.contains(partition)){
+		List<PartitionNode> partitions = partition.getPartitions();
+		if(!partitions.isEmpty()){
+			Iterator<PartitionNode> itr = partitions.iterator();
+			while(itr.hasNext()){
+				PartitionNode childpart = itr.next();
+				if(!adaptOrRemovePartitions(childpart, type)){
+					itr.remove();
+					childpart.getParent().removePartition(childpart);
+					childpart.getParent().partitionRemoved(partition);
+				}
+			}
+			if(partition.getPartitions().isEmpty()){
+				String newvalue = adaptValueToType(partition.getValueString(), type);
+				if(newvalue != null){
+					partition.setValueString(newvalue);
+				} else{
+					return false;
+				}				
+			}
+		}
+		if(partitions.isEmpty()){
 			String newvalue = adaptValueToType(partition.getValueString(), type);
 			if(newvalue != null){
 				partition.setValueString(newvalue);
 			} else{
 				return false;
-				// partition.getParent().removePartition(partition);
-			}
-		} else{
-			Iterator<PartitionNode> itr = partitions.iterator();
-			while(itr.hasNext()){
-				PartitionNode childpart = itr.next();
-				if(!adaptOrRemovePartitions(childpart, type))
-					itr.remove();
-				partition.partitionRemoved(partition);
 			}
 		}
 		return true;
@@ -239,8 +251,6 @@ public class AdaptTypeSupport{
 	}
 
 	private static String adaptValueToByte(String value){
-		// char to byte... Needed? If so, 2nd argument with type is needed. Or
-		// just make one method for all this stuff.
 		try{
 			NumberFormat formatter = NumberFormat.getInstance();
 			formatter.setParseIntegerOnly(true);
