@@ -188,6 +188,7 @@ public class CategoryDetailsPage extends BasicDetailsPage {
 		fBoolExpectedValueMenu.addData("false");
 		fBoolExpectedValueMenu.createMenu();
 		fDefaultValueText.addListener(SWT.MouseDown, fBoolExpectedValueMenu);
+		fDefaultValueText.addListener(SWT.SELECTED, fBoolExpectedValueMenu);
 		
 		fExpectedCheckbox = getToolkit().createButton(composite, "Expected", SWT.CHECK);
 		fExpectedCheckbox.setLayoutData(new GridData(SWT.FILL,  SWT.CENTER, false, false));
