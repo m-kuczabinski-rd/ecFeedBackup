@@ -60,7 +60,11 @@ public class ExecuteStaticTestAdapter extends ExecuteTestAdapter {
 				testCases.add((TestCaseNode)element);
 			}
 			else if(element instanceof String && !fViewerSection.getCheckboxViewer().getGrayed(element)){
-				testCases.addAll(getMethodModel().getTestCases((String)element));
+				for (TestCaseNode testCase : getMethodModel().getTestCases((String)element)) {
+					if (fViewerSection.getCheckboxViewer().getChecked(testCase)) {
+						testCases.add((TestCaseNode)testCase);
+					}
+				}
 			}
 		}
 		return testCases;
