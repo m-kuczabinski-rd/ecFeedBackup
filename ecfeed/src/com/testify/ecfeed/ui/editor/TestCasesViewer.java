@@ -220,6 +220,6 @@ public class TestCasesViewer extends CheckboxTreeViewerSection {
 	@Override
 	public void refresh() {
 		super.refresh();
-		fExecuteSeletedButton.setEnabled(ModelUtils.isMethodImplemented(fSelectedMethod));
+		fExecuteSeletedButton.setEnabled(ModelUtils.isMethodImplemented(fSelectedMethod) || ModelUtils.isMethodPartiallyImplemented(fSelectedMethod));
 	}
 }
