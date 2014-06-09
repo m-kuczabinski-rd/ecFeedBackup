@@ -100,7 +100,7 @@ public class ClassUtils {
 				}
 			}
 		} catch (Throwable e) {
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
 		return value;
 	}
@@ -187,7 +187,7 @@ public class ClassUtils {
 	private static Object getBooleanPredefinedValueFromString(String valueString) {
 		if (valueString.equals(Constants.BOOLEAN_FALSE_STRING_REPRESENTATION)) {
 			return Boolean.FALSE;
-		} else if (valueString.equals(Constants.BOOLEAN_FALSE_STRING_REPRESENTATION)) {
+		} else if (valueString.equals(Constants.BOOLEAN_TRUE_STRING_REPRESENTATION)) {
 			return Boolean.TRUE;
 		}
 		return null;
