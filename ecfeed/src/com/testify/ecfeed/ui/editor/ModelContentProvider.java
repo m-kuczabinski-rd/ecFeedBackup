@@ -48,7 +48,7 @@ public class ModelContentProvider extends TreeNodeContentProvider implements ITr
 			children.addAll(method.getConstraintNodes());
 			for(String testSuite : method.getTestSuites()){
 				Collection<TestCaseNode> testCases = method.getTestCases(testSuite);
-				if(testCases.size() < Constants.MAX_DISPLAYED_TEST_CASES_PER_SUITE){
+				if(testCases.size() <= Constants.MAX_DISPLAYED_TEST_CASES_PER_SUITE){
 					children.addAll(testCases);
 				}
 			}

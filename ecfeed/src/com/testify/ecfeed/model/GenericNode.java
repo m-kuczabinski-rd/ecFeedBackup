@@ -156,7 +156,7 @@ public class GenericNode implements IGenericNode{
 	protected boolean validateNodeName(String name) {
 		if (name == null) return false;
 		if(name.length() == 0) return false;
-		if(name.length() >= Constants.MAX_NODE_NAME_LENGTH) return false;
+		if(name.length() > Constants.MAX_NODE_NAME_LENGTH) return false;
 		if(name.matches("[ ]+.*")) return false;
 		
 		return true;
