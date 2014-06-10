@@ -23,6 +23,7 @@ import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.runner.ParameterizedMethod;
 import com.testify.ecfeed.ui.common.Messages;
+import com.testify.ecfeed.utils.ModelUtils;
 
 public class ExecuteStaticTestAdapter extends ExecuteTestAdapter {
 
@@ -61,7 +62,7 @@ public class ExecuteStaticTestAdapter extends ExecuteTestAdapter {
 			}
 			else if(element instanceof String && !fViewerSection.getCheckboxViewer().getGrayed(element)){
 				for (TestCaseNode testCase : getMethodModel().getTestCases((String)element)) {
-					if (fViewerSection.getCheckboxViewer().getChecked(testCase)) {
+					if (ModelUtils.isTestCaseImplemented(testCase)) {
 						testCases.add((TestCaseNode)testCase);
 					}
 				}
