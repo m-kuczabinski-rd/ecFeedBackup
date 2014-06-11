@@ -128,7 +128,7 @@ public class CategoryNode extends GenericNode implements IPartitionedNode{
 		fExpected = expected;
 		fType = type;
 		fPartitions = new ArrayList<PartitionNode>();
-		fDefaultValue = new PartitionNode("default value" , null);
+		fDefaultValue = new PartitionNode("default value" , "/null");
 		fDefaultValue.setParent(this);
 	}
 

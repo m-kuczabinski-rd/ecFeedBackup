@@ -93,6 +93,7 @@ public class ClassUtils {
 	}
 
 	public static Object getPartitionValueFromString(String valueString, String type, ClassLoader loader) {
+		if (valueString == null) return "/null";
 		if (isPredefinedValueString(valueString)) {
 			return getPredefinedValueFromString(valueString, type);
 		} else {
