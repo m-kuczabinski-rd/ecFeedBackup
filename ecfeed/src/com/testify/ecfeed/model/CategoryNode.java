@@ -13,44 +13,14 @@ public class CategoryNode extends GenericNode implements IPartitionedNode{
 	private boolean fExpected;
 	private PartitionNode fDefaultValue;
 	
-	public CategoryNode(String name, String type, boolean expected) {
-		super(name);
-		fExpected = expected;
-		fType = type;
-		fPartitions = new ArrayList<PartitionNode>();
-		fDefaultValue = new PartitionNode("default value" , null);
-		fDefaultValue.setParent(this);
-	}
-
-	public String getType() {
-		return fType;
-	}
-
-	public void setType(String type) {
-		fType = type;
-	}
-
-	public MethodNode getMethod() {
-		return (MethodNode)getParent();
-	}
-
-	/**
-	 * Checks if certain name is valid for given partition in given category
-	 * @param name Name to validate
-	 * @param parent Parent for which the name is validated
-	 * @param partition Partition for which the name is validated. May be null
-	 * @return
-	 */ 
-	public boolean validatePartitionName(String name){
-		return validateNodeName(name);
-	}
-
+	@Override
 	public void partitionRemoved(PartitionNode partition) {
 		if(getMethod() != null){
 			getMethod().partitionRemoved(partition);
 		}
 	}
 
+	@Override
 	public String toString(){
 		if(fExpected){
 			return super.toString() + "(" + getDefaultValueString() + ")";
@@ -58,18 +28,13 @@ public class CategoryNode extends GenericNode implements IPartitionedNode{
 		return new String(getName() + ": " + getType());
 	}
 	
-	
-	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~PARTITIONED~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+	@Override
 	public void addPartition(PartitionNode partition) {
 			fPartitions.add(partition);
 			partition.setParent(this);
 	}
 	
 	@Override
-	public CategoryNode getCategory() {
-		return this;
-	}
-
 	public PartitionNode getPartition(String qualifiedName){
 		if(fExpected){
 			return null;
@@ -77,17 +42,15 @@ public class CategoryNode extends GenericNode implements IPartitionedNode{
 		return (PartitionNode)getChild(qualifiedName);
 	}
 	
+	@Override
 	public List<PartitionNode> getPartitions() {
 		if(fExpected){
 			return Arrays.asList(new PartitionNode[]{fDefaultValue});
 		}
 		return fPartitions;
 	}
-	
-	public List<PartitionNode> getOrdinaryPartitions(){
-		return fPartitions;
-	}
 
+	@Override
 	public List<PartitionNode> getLeafPartitions(){
 		if(fExpected){
 			return getPartitions();
@@ -99,6 +62,7 @@ public class CategoryNode extends GenericNode implements IPartitionedNode{
 		return leafs;
 	}
 	
+	@Override
 	public List<String> getAllPartitionNames(){
 		if(fExpected){
 			return Arrays.asList(new String[]{fDefaultValue.getName()});
@@ -111,6 +75,7 @@ public class CategoryNode extends GenericNode implements IPartitionedNode{
 		return names;
 	}
 
+	@Override
 	public boolean removePartition(PartitionNode partition){
 		if(fExpected){
 			return false;
@@ -151,6 +116,43 @@ public class CategoryNode extends GenericNode implements IPartitionedNode{
 		}
 		category.setParent(getParent());
 		return category;
+	}
+	
+	@Override
+	public CategoryNode getCategory() {
+		return this;
+	}
+	
+	public CategoryNode(String name, String type, boolean expected) {
+		super(name);
+		fExpected = expected;
+		fType = type;
+		fPartitions = new ArrayList<PartitionNode>();
+		fDefaultValue = new PartitionNode("default value" , null);
+		fDefaultValue.setParent(this);
+	}
+
+	public String getType() {
+		return fType;
+	}
+
+	public void setType(String type) {
+		fType = type;
+	}
+
+	public MethodNode getMethod() {
+		return (MethodNode)getParent();
+	}
+
+	/**
+	 * Checks if certain name is valid for given partition in given category
+	 * @param name Name to validate
+	 * @param parent Parent for which the name is validated
+	 * @param partition Partition for which the name is validated. May be null
+	 * @return
+	 */ 
+	public boolean validatePartitionName(String name){
+		return validateNodeName(name);
 	}
 
 	public List<String> getPartitionNames() {
@@ -196,6 +198,10 @@ public class CategoryNode extends GenericNode implements IPartitionedNode{
 	
 	public void setExpected(boolean isexpected){
 		fExpected = isexpected;
+	}
+	
+	public List<PartitionNode> getOrdinaryPartitions(){
+		return fPartitions;
 	}
 
 }
