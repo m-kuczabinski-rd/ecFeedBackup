@@ -55,14 +55,7 @@ public class CategoryChildrenViewer extends CheckboxTableViewerSection {
 					Messages.DIALOG_REMOVE_PARTITIONS_TITLE, 
 					Messages.DIALOG_REMOVE_PARTITIONS_MESSAGE)) {
 				for(Object partition : getCheckedElements()){
-					if(fSelectedCategory.getPartitions().size() > 1){
 						fSelectedCategory.removePartition((PartitionNode)partition);
-					}
-					else{
-						MessageDialog.openInformation(getActiveShell(), 
-								Messages.DIALOG_REMOVE_LAST_PARTITION_TITLE, 
-								Messages.DIALOG_REMOVE_LAST_PARTITION_MESSAGE);
-					}
 				}
 				modelUpdated();
 			}
