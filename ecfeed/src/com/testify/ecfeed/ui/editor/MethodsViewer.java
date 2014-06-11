@@ -39,11 +39,12 @@ public class MethodsViewer extends CheckboxTableViewerSection {
 	private class RemoveSelectedMethodsAdapter extends SelectionAdapter{
 		@Override
 		public void widgetSelected(SelectionEvent e) {
-			if(MessageDialog.openConfirm(getActiveShell(), 
-					Messages.DIALOG_REMOVE_METHODS_TITLE, 
-					Messages.DIALOG_REMOVE_METHODS_MESSAGE)){
-				removeMethods(getCheckboxViewer().getCheckedElements());
-			}
+			if(getCheckedElements().length > 0)
+				if(MessageDialog.openConfirm(getActiveShell(), 
+						Messages.DIALOG_REMOVE_METHODS_TITLE, 
+						Messages.DIALOG_REMOVE_METHODS_MESSAGE)){
+					removeMethods(getCheckboxViewer().getCheckedElements());
+				}
 		}
 
 		private void removeMethods(Object[] checkedElements) {
