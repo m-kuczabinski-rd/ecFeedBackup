@@ -32,6 +32,7 @@ public class Messages {
 	public static final String DIALOG_REMOVE_TEST_SUITES_TITLE = "Remove test suites";
 	public static final String DIALOG_REMOVE_TEST_SUITES_MESSAGE = "Select test suites to remove.";
 	public static final String DIALOG_TEST_SUITE_NAME_ERROR_MESSAGE = "Name of a test suite must be between 1 and 64 characters long.";
+	public static final String DIALOG_TEST_SUITE_NAME_ERROR_MESSAGE_2 = "Name of a test suite cannot consist of whitespace characters only.";
 	public static final String DIALOG_PARTITION_NAME_PROBLEM_TITLE = "Wrong partition name";
 	public static final String DIALOG_PARTITION_NAME_PROBLEM_MESSAGE = "Partition name must have between 1 and 64 characters, " +
 			"must not contain only white characters and must be unique within category.";
@@ -127,9 +128,11 @@ public class Messages {
 	public static final String DIALOG_REMOVE_PARAMETERS_MESSAGE = "This operation will remove selected parameters from the method.";
 	public static final String DIALOG_CATEGORY_EXISTS_TITLE = "Category exists";
 	public static final String DIALOG_CATEGORY_EXISTS_MESSAGE = "Entered category is already contained in the method.";
-	public static final String DIALOG_CLASS_NAME_PROBLEM_TITLE = "Wrong class qualified name";
-	public static final String DIALOG_CLASS_NAME_PROBLEM_MESSAGE = "Class qualified name must contain between 1 and 64 characters " +
-			"may not contain only white characters and must contain package name, followed by \".\", followed by class name.";
+	public static final String DIALOG_CLASS_NAME_PROBLEM_TITLE = "Wrong class name";
+	public static final String DIALOG_CLASS_NAME_PROBLEM_MESSAGE = "Class name must contain between 1 and 64 characters " +
+			"and fulfill java class naming rules.";
+	public static final String DIALOG_PACKAGE_NAME_PROBLEM_TITLE = "Wrong package";
+	public static final String DIALOG_PACKAGE_NAME_PROBLEM_MESSAGE = "Package must fulfill java package naming rules.";
 	public static final String DIALOG_METHOD_NAME_PROBLEM_TITLE = "Wrong method name";
 	public static final String DIALOG_METHOD_NAME_PROBLEM_MESSAGE = "Method name must contain between 1 and 64 characters " +
 			"and may not contain only white characters.";

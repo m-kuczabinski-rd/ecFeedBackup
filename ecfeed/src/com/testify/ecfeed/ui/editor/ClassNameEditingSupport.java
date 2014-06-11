@@ -63,6 +63,16 @@ public class ClassNameEditingSupport extends EditingSupport{
 	@Override
 	protected void setValue(Object element, Object value) {
 		String newName = (String)value;
+		
+		if(!fPackageName){
+			if(!ModelUtils.validateNodeName(newName)){
+				MessageDialog.openError(Display.getCurrent().getActiveShell(),
+						Messages.DIALOG_CLASS_NAME_PROBLEM_TITLE,
+						Messages.DIALOG_CLASS_NAME_PROBLEM_MESSAGE);
+				return;
+			}	
+		}
+		
 		ClassNode classNode = (ClassNode)element;
 		int lastDotIndex = classNode.getQualifiedName().lastIndexOf('.');
 		String newQualifiedName = classNode.getQualifiedName().substring(0, lastDotIndex + 1) + newName;
@@ -74,8 +84,8 @@ public class ClassNameEditingSupport extends EditingSupport{
 		boolean validName = ModelUtils.isClassQualifiedNameValid(newQualifiedName);
 		if (!validName) {
 			MessageDialog.openError(Display.getCurrent().getActiveShell(),
-					Messages.DIALOG_CLASS_NAME_PROBLEM_TITLE,
-					Messages.DIALOG_CLASS_NAME_PROBLEM_MESSAGE);
+					Messages.DIALOG_PACKAGE_NAME_PROBLEM_TITLE,
+					Messages.DIALOG_PACKAGE_NAME_PROBLEM_MESSAGE);
 		}
 
 		if (validName && !classNode.getName().equals(newQualifiedName)) {
