@@ -58,7 +58,6 @@ public class ModelMasterSection extends TreeViewerSection{
 		
 		@Override
 		public void widgetSelected(SelectionEvent e){
-			//should mark as dirty only when altering model, I.E. not when copying...
 			fOperation.execute();
 		}
 		

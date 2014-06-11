@@ -54,7 +54,7 @@ public class ClassNameEditingSupport extends EditingSupport{
 	protected Object getValue(Object element) {
 		if (fPackageName) {
 			String qualifiedName = ((ClassNode)element).getQualifiedName();
-			return qualifiedName.substring(0, qualifiedName.indexOf("."));
+			return qualifiedName.substring(0, qualifiedName.lastIndexOf("."));
 		} else {
 			return ((ClassNode)element).getLocalName();
 		}
