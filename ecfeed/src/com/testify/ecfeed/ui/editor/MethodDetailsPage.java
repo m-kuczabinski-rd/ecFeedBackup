@@ -28,6 +28,7 @@ import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
 
 import com.testify.ecfeed.model.CategoryNode;
+import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.dialogs.TestMethodRenameDialog;
@@ -41,6 +42,7 @@ public class MethodDetailsPage extends BasicDetailsPage {
 	private TestCasesViewer fTestCasesSection;
 	private Text fMethodNameText;
 	private Button fTestOnlineButton;
+	private Button fReassignButton;
 	
 	private class ReassignAdapter extends SelectionAdapter{
 
@@ -115,8 +117,8 @@ public class MethodDetailsPage extends BasicDetailsPage {
 				changeName();
 			}
 		});
-		Button reassignButton = getToolkit().createButton(composite, "Reassign", SWT.NONE);
-		reassignButton.addSelectionListener(new ReassignAdapter());
+		fReassignButton = getToolkit().createButton(composite, "Reassign", SWT.NONE);
+		fReassignButton.addSelectionListener(new ReassignAdapter());
 		fTestOnlineButton = getToolkit().createButton(composite, "Test online", SWT.NONE);
 		fTestOnlineButton.addSelectionListener(new ExecuteOnlineTestAdapter(this));
 
@@ -164,6 +166,9 @@ public class MethodDetailsPage extends BasicDetailsPage {
 			fConstraintsSection.setInput(fSelectedMethod);
 			fTestCasesSection.setInput(fSelectedMethod);
 			fMethodNameText.setText(fSelectedMethod.getName());
+			
+			fReassignButton.setEnabled(ModelUtils.isClassPartiallyImplemented((ClassNode)fSelectedMethod.getParent())
+						|| ModelUtils.isClassImplemented((ClassNode)fSelectedMethod.getParent()));
 		}
 	}
 }
