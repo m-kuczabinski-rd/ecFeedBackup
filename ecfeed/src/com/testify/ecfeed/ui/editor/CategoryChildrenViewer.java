@@ -35,13 +35,9 @@ public class CategoryChildrenViewer extends CheckboxTableViewerSection {
 		@Override
 		public void widgetSelected(SelectionEvent e){
 			String newPartitionName = Constants.DEFAULT_NEW_PARTITION_NAME;
-			int i = 1;
-			while(fSelectedCategory.getPartition(newPartitionName) != null){
-				newPartitionName = Constants.DEFAULT_NEW_PARTITION_NAME + "_" + i;
-				i++;
-			}
 			String value = ModelUtils.getDefaultExpectedValueString(fSelectedCategory.getType());
 			PartitionNode newPartition = new PartitionNode(newPartitionName, value);
+			ModelUtils.setUniqueNodeName(newPartition, fSelectedCategory);
 			fSelectedCategory.addPartition(newPartition);
 			getTable().setSelection(fSelectedCategory.getPartitions().size() - 1);
 			modelUpdated();
@@ -55,14 +51,7 @@ public class CategoryChildrenViewer extends CheckboxTableViewerSection {
 					Messages.DIALOG_REMOVE_PARTITIONS_TITLE, 
 					Messages.DIALOG_REMOVE_PARTITIONS_MESSAGE)) {
 				for(Object partition : getCheckedElements()){
-					if(fSelectedCategory.getPartitions().size() > 1){
 						fSelectedCategory.removePartition((PartitionNode)partition);
-					}
-					else{
-						MessageDialog.openInformation(getActiveShell(), 
-								Messages.DIALOG_REMOVE_LAST_PARTITION_TITLE, 
-								Messages.DIALOG_REMOVE_LAST_PARTITION_MESSAGE);
-					}
 				}
 				modelUpdated();
 			}

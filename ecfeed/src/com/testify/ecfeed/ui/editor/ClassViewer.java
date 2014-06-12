@@ -135,7 +135,7 @@ public class ClassViewer extends CheckboxTableViewerSection {
 			@Override
 			public String getText(Object element){
 				String qualifiedName = ((ClassNode)element).getQualifiedName();
-				return qualifiedName.substring(0, qualifiedName.indexOf("."));
+				return qualifiedName.substring(0, qualifiedName.lastIndexOf("."));
 			}
 		});
 		packageNameColumn.setEditingSupport(new ClassNameEditingSupport(this, true));

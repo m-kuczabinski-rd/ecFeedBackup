@@ -12,6 +12,7 @@
 package com.testify.ecfeed.ui.editor;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
@@ -27,6 +28,7 @@ import org.eclipse.ui.forms.widgets.Section;
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
+import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.ui.common.ColorConstants;
 import com.testify.ecfeed.ui.common.ColorManager;
 import com.testify.ecfeed.ui.common.DefaultValueEditingSupport;
@@ -103,10 +105,12 @@ public class ParametersViewer extends CheckboxTableViewerSection implements Test
 	private class RemoveParameterAdapter extends SelectionAdapter {
 		@Override
 		public void widgetSelected(SelectionEvent e) {
-			if (MessageDialog.openConfirm(getActiveShell(),
-					Messages.DIALOG_REMOVE_PARAMETERS_TITLE,
-					Messages.DIALOG_REMOVE_PARAMETERS_MESSAGE)) {
-				removeParameters(getCheckedElements());
+			if(getCheckedElements().length > 0){
+				if (MessageDialog.openConfirm(getActiveShell(),
+						Messages.DIALOG_REMOVE_PARAMETERS_TITLE,
+						Messages.DIALOG_REMOVE_PARAMETERS_MESSAGE)) {
+					removeParameters(getCheckedElements());
+				}
 			}
 		}
 
@@ -127,7 +131,11 @@ public class ParametersViewer extends CheckboxTableViewerSection implements Test
 		if (getSelectedElement() != null) {
 			CategoryNode categoryNode = (CategoryNode)getSelectedElement();
 			if(categoryNode.getParent().moveChild(categoryNode, moveUp)){
-				fSelectedMethod.clearTestCases();
+				int index = fSelectedMethod.getCategories().indexOf(categoryNode);
+				int oldindex = moveUp ? (index + 1) : (index - 1);
+				for(TestCaseNode tcnode: fSelectedMethod.getTestCases()){
+					Collections.swap(tcnode.getTestData(), index, oldindex);
+				}
 				modelUpdated();
 			}
 		}

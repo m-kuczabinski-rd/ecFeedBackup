@@ -12,6 +12,7 @@
 package com.testify.ecfeed.ui.editor;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.jface.viewers.DecoratingLabelProvider;
@@ -40,6 +41,7 @@ import com.testify.ecfeed.model.IGenericNode;
 import com.testify.ecfeed.model.IModelWrapper;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.RootNode;
+import com.testify.ecfeed.model.TestCaseNode;
 
 public class ModelMasterSection extends TreeViewerSection{
 	private static final int STYLE = Section.EXPANDED | Section.TITLE_BAR;
@@ -57,7 +59,6 @@ public class ModelMasterSection extends TreeViewerSection{
 		
 		@Override
 		public void widgetSelected(SelectionEvent e){
-			//should mark as dirty only when altering model, I.E. not when copying...
 			fOperation.execute();
 		}
 		
@@ -189,12 +190,19 @@ public class ModelMasterSection extends TreeViewerSection{
 		}
 	}
 
-	private void moveSelectedItem(boolean moveUp) {
+	private void moveSelectedItem(boolean moveUp){
 		if(selectedNode() != null && selectedNode().getParent() != null){
 			if(selectedNode().getParent().moveChild(selectedNode(), moveUp)){
 				if(selectedNode() instanceof CategoryNode){
-					MethodNode method = ((CategoryNode)selectedNode()).getMethod();
-					if(method != null) method.clearTestCases();			
+					CategoryNode categoryNode = (CategoryNode)selectedNode();
+					MethodNode method = categoryNode.getMethod();
+					if(method != null){
+						int index = method.getCategories().indexOf(categoryNode);
+						int oldindex = moveUp ? (index + 1) : (index - 1);
+						for(TestCaseNode tcnode : method.getTestCases()){
+							Collections.swap(tcnode.getTestData(), index, oldindex);
+						}
+					}
 				}
 				markDirty();
 				refresh();
