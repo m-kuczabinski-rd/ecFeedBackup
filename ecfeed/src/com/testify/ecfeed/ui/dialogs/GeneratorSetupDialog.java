@@ -83,6 +83,7 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 	private Composite fMainContainer;
 	private GeneratorFactory<PartitionNode> fGeneratorFactory; 
 	private int fContent;
+	private boolean fGenerateExecutableContent;
 	
 	private final String fTitle;
 	private final String fMessage;
@@ -160,7 +161,7 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 		}
 	}
 	
-	public GeneratorSetupDialog(Shell parentShell, MethodNode method, int content, String title, String message) {
+	public GeneratorSetupDialog(Shell parentShell, MethodNode method, int content, String title, String message, boolean generateExecutables) {
 		super(parentShell);
 		setHelpAvailable(false);
 		setShellStyle(SWT.BORDER | SWT.RESIZE | SWT.TITLE);
@@ -169,6 +170,7 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 		fContent = content;
 		fTitle = title;
 		fMessage = message;
+		fGenerateExecutableContent = generateExecutables;
 	}
 	
 	protected  List<List<PartitionNode>> algorithmInput(){
@@ -332,23 +334,40 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 		fCategoriesViewer.getTree().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 		fCategoriesViewer.setInput(fMethod);
 		tree.addListener(SWT.Selection, new Listener() {
-			public void handleEvent(Event event) {
-				if (event.detail == SWT.CHECK) {
-					tree.setRedraw(false);
-					TreeItem item = (TreeItem)event.item;
-					if (item.getData() instanceof PartitionNode) {
-						if (!ModelUtils.isPartitionImplemented((PartitionNode)item.getData())) {
-							item.setChecked(false);
-						}
-					} else if (item.getData() instanceof CategoryNode) {
-						for(int i = 0; i < item.getItemCount(); ++i) {
-							TreeItem subItem = item.getItem(i);
-							if (!ModelUtils.isPartitionImplemented((PartitionNode)subItem.getData())) {
-								subItem.setChecked(false);
+			public void handleEvent(Event event){
+				if(fGenerateExecutableContent){
+					if(event.detail == SWT.CHECK){
+						tree.setRedraw(false);
+						TreeItem item = (TreeItem)event.item;
+						if(item.getData() instanceof PartitionNode){
+							if(!ModelUtils.isPartitionImplemented((PartitionNode)item.getData())){
+								item.setChecked(false);
+								TreeItem parentItem = item.getParentItem();
+								if(parentItem.getData() instanceof CategoryNode){
+									boolean isAnyImplemented = false;
+									for(int i = 0; i < parentItem.getItemCount(); ++i){
+										TreeItem subItem = parentItem.getItem(i);
+										if(subItem.getChecked() && ModelUtils.isPartitionImplemented((PartitionNode)subItem.getData())){
+											isAnyImplemented = true;
+											break;
+										}
+									}
+									if(!isAnyImplemented){
+										parentItem.setChecked(false);
+										setOkButton(false);
+									}
+								}
+							}
+						} else if(item.getData() instanceof CategoryNode){
+							for(int i = 0; i < item.getItemCount(); ++i){
+								TreeItem subItem = item.getItem(i);
+								if(!ModelUtils.isPartitionImplemented((PartitionNode)subItem.getData())){
+									subItem.setChecked(false);
+								}
 							}
 						}
+						tree.setRedraw(true);
 					}
-					tree.setRedraw(true);
 				}
 			}
 		});
@@ -357,7 +376,7 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 			for (Object item : fCategoriesViewer.getCheckedElements()) {
 				if (item instanceof PartitionNode) {
 					if (!ModelUtils.isPartitionImplemented((PartitionNode)item)) {
-						fCategoriesViewer.setChecked(item, false);
+						fCategoriesViewer.setChecked(item, !fGenerateExecutableContent);
 					}
 				}
 			}
