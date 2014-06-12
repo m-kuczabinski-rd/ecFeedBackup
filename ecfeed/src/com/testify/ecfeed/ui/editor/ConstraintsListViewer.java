@@ -13,6 +13,7 @@ package com.testify.ecfeed.ui.editor;
 
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
+import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -33,6 +34,7 @@ public class ConstraintsListViewer extends CheckboxTableViewerSection {
 	private final static int STYLE = Section.TITLE_BAR | Section.EXPANDED;
 
 	private MethodNode fSelectedMethod;
+	private TableViewerColumn fNameColumn;
 
 	private class AddConstraintAdapter extends SelectionAdapter{
 		@Override 
@@ -75,12 +77,13 @@ public class ConstraintsListViewer extends CheckboxTableViewerSection {
 
 	@Override
 	protected void createTableColumns() {
-		addColumn("Name", 150, new ColumnLabelProvider(){
+		fNameColumn = addColumn("Name", 150, new ColumnLabelProvider(){
 			@Override
 			public String getText(Object element){
 				return ((ConstraintNode)element).getName();
 			}
 		});
+		fNameColumn.setEditingSupport(new ConstraintNameEditingSupport(this));
 		
 		addColumn("Definition", 150, new ColumnLabelProvider(){
 			@Override
