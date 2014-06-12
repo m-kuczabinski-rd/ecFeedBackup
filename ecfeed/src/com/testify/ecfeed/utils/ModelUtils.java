@@ -14,6 +14,7 @@ package com.testify.ecfeed.utils;
 import java.lang.reflect.Method;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -438,7 +439,14 @@ public class ModelUtils {
 
 	public static boolean validatePartitionStringValue(String valueString, String type){
 		if(type.equals(com.testify.ecfeed.model.Constants.TYPE_NAME_STRING)) return true;
-		return (ClassUtils.getPartitionValueFromString(valueString, type, ClassUtils.getClassLoader(true, null)) != null);
+		if (ClassUtils.getPartitionValueFromString(valueString, type, ClassUtils.getClassLoader(true, null)) != null){
+			return true;
+		} else {
+			if(Arrays.asList(AdaptTypeSupport.getSupportedTypes()).contains(type)){
+				return false;
+			}
+			return true;
+		}
 	}
 
 	public static boolean classDefinitionImplemented(ClassNode node) {
