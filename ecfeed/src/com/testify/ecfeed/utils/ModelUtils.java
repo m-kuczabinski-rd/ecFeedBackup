@@ -71,7 +71,7 @@ public class ModelUtils {
 		String namesuffix = "";
 		int i = 1;
 		while(desiredParent.getChild(children.getName() + namesuffix) != null){
-			namesuffix = "" + i;
+			namesuffix = "_" + i;
 			i++;
 		}
 		children.setName(children.getName() + namesuffix);
