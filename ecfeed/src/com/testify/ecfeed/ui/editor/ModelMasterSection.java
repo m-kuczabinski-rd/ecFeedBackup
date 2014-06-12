@@ -14,6 +14,7 @@ package com.testify.ecfeed.ui.editor;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.jface.viewers.DecoratingLabelProvider;
 import org.eclipse.jface.viewers.IBaseLabelProvider;
 import org.eclipse.jface.viewers.IContentProvider;
 import org.eclipse.jface.viewers.ISelection;
@@ -151,8 +152,8 @@ public class ModelMasterSection extends TreeViewerSection{
 	}
 	
 	@Override 
-	protected IBaseLabelProvider viewerLabelProvider(){
-		return new ModelLabelProvider();
+	protected IBaseLabelProvider viewerLabelProvider() {
+		return new DecoratingLabelProvider(new ModelLabelProvider(), new ModelLabelDecorator());
 	}
 	
 	protected void createMenu(){
