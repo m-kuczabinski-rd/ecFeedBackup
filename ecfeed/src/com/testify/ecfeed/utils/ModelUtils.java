@@ -69,9 +69,9 @@ public class ModelUtils {
 	
 	public static void setUniqueNodeName(GenericNode children, GenericNode desiredParent){
 		String namesuffix = "";
-		int i = 2;
+		int i = 1;
 		while(desiredParent.getChild(children.getName() + namesuffix) != null){
-			namesuffix = "_" + i;
+			namesuffix = "" + i;
 			i++;
 		}
 		children.setName(children.getName() + namesuffix);

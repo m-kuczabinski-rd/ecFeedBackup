@@ -35,13 +35,9 @@ public class CategoryChildrenViewer extends CheckboxTableViewerSection {
 		@Override
 		public void widgetSelected(SelectionEvent e){
 			String newPartitionName = Constants.DEFAULT_NEW_PARTITION_NAME;
-			int i = 1;
-			while(fSelectedCategory.getPartition(newPartitionName) != null){
-				newPartitionName = Constants.DEFAULT_NEW_PARTITION_NAME + "_" + i;
-				i++;
-			}
 			String value = ModelUtils.getDefaultExpectedValueString(fSelectedCategory.getType());
 			PartitionNode newPartition = new PartitionNode(newPartitionName, value);
+			ModelUtils.setUniqueNodeName(newPartition, fSelectedCategory);
 			fSelectedCategory.addPartition(newPartition);
 			getTable().setSelection(fSelectedCategory.getPartitions().size() - 1);
 			modelUpdated();
