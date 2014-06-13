@@ -41,7 +41,7 @@ public class ModelUtils {
 	public static ClassNode generateClassModel(IType type){ 
 		ClassNode classNode = new ClassNode(type.getFullyQualifiedName());
 		try{
-			Class<?> testClass = ClassUtils.getClassLoader(true, null).loadClass(type.getFullyQualifiedName());
+			Class<?> testClass = ClassUtils.loadClass(ClassUtils.getClassLoader(true, null), type.getFullyQualifiedName());
 			for(IMethod method : type.getMethods()){
 				IAnnotation[] annotations = method.getAnnotations();
 				if(method.getParameters().length > 0){
@@ -298,15 +298,11 @@ public class ModelUtils {
 
 	public static ArrayList<PartitionNode> defaultEnumPartitions(String typeName) {
 		ArrayList<PartitionNode> partitions = new ArrayList<PartitionNode>();
-		try {
-			Class<?> typeClass = ClassUtils.getClassLoader(true, null).loadClass(typeName);
-			if (typeClass != null) {
-				for (Object object: typeClass.getEnumConstants()) {
-					partitions.add(new PartitionNode(object.toString(), ((Enum<?>)object).name()));
-				}
+		Class<?> typeClass = ClassUtils.loadClass(ClassUtils.getClassLoader(true, null), typeName);
+		if (typeClass != null) {
+			for (Object object: typeClass.getEnumConstants()) {
+				partitions.add(new PartitionNode(object.toString(), ((Enum<?>)object).name()));
 			}
-		} catch (Throwable e) {
-			e.printStackTrace();
 		}
 		return partitions;
 	}
@@ -451,12 +447,9 @@ public class ModelUtils {
 
 	public static boolean classDefinitionImplemented(ClassNode node) {
 		boolean implemented = false;
-		try {
-			Class<?> typeClass = ClassUtils.getClassLoader(true, null).loadClass(node.getQualifiedName());
-			if (typeClass != null) {
-				implemented = true;
-			}
-		} catch (Throwable e) {
+		Class<?> typeClass = ClassUtils.loadClass(ClassUtils.getClassLoader(true, null), node.getQualifiedName());
+		if (typeClass != null) {
+			implemented = true;
 		}
 		return implemented;
 	}
@@ -553,7 +546,7 @@ public class ModelUtils {
 		
 		try {
 			IType type = getTypeObject(methodModel.getClassNode().getQualifiedName());
-			Class<?> testClass = ClassUtils.getClassLoader(true, null).loadClass(methodModel.getClassNode().getQualifiedName());
+			Class<?> testClass = ClassUtils.loadClass(ClassUtils.getClassLoader(true, null), methodModel.getClassNode().getQualifiedName());
 			if ((type != null) && (testClass != null)) {
 				for (IMethod method : type.getMethods()){
 					if (method.getElementName().equals(methodModel.getName())) {
