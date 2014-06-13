@@ -154,7 +154,7 @@ public class MethodDetailsPage extends BasicDetailsPage {
 			fSelectedMethod = (MethodNode)getSelectedElement();
 		}
 		if(fSelectedMethod != null){
-			String title = fSelectedMethod.getName();
+			String title = fSelectedMethod.toString();
 			boolean implemented = ModelUtils.isMethodImplemented(fSelectedMethod);
 			boolean partiallyImplemented = ModelUtils.isMethodPartiallyImplemented(fSelectedMethod);
 			if (implemented) {
