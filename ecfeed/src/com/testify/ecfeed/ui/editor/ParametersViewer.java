@@ -76,19 +76,29 @@ public class ParametersViewer extends CheckboxTableViewerSection implements Test
 	private class AddNewParameterAdapter extends SelectionAdapter {
 		@Override
 		public void widgetSelected(SelectionEvent e) {
-			String startName = Constants.DEFAULT_NEW_CATEGORY_NAME;
-			String name = startName;
+ 			ArrayList<String> tmpTypes = new ArrayList<String>();
+			String type = Constants.DEFAULT_NEW_CATEGORY_TYPE;
+			String name = Constants.DEFAULT_NEW_CATEGORY_NAME;
 			int i = 1;
 
 			while (true) {
 				if (fSelectedMethod.getCategory(name) == null) {
 					break;
 				}
-				name = startName + i;
+				name += i;
 				++i;
 			}
 
-			String type = Constants.DEFAULT_NEW_CATEGORY_TYPE;
+			while (true) {
+				tmpTypes.clear();
+				tmpTypes.add(type);
+				if (fSelectedMethod.getClassNode().getMethod(fSelectedMethod.getName(), tmpTypes) == null) {
+					break;
+				}
+				type += i;
+				++i;
+			}
+
 			CategoryNode categoryNode = new CategoryNode(name, type, false);
 			categoryNode.setDefaultValueString(ModelUtils.getDefaultExpectedValueString(type));
 			ArrayList<PartitionNode> defaultPartitions = ModelUtils.generateDefaultPartitions(type);

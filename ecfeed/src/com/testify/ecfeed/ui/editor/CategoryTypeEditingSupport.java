@@ -33,8 +33,8 @@ public class CategoryTypeEditingSupport extends EditingSupport {
 	public CategoryTypeEditingSupport(ParametersViewer viewer) {
 		super(viewer.getTableViewer());
 		fSection = viewer;
-		String[] items = {"boolean", "byte", "char", "short", "int", "long", "float", "double", "String"};
-		fCellEditor = new ComboBoxCellEditor(viewer.getTable(), items);
+		String[] items = {""};
+		fCellEditor = new ComboBoxCellEditor(viewer.getTable(), ModelUtils.getJavaTypes().toArray(items));
 		fCellEditor.setActivationStyle(ComboBoxCellEditor.DROP_DOWN_ON_MOUSE_ACTIVATION);
 	}
 
@@ -87,8 +87,21 @@ public class CategoryTypeEditingSupport extends EditingSupport {
 		}
 
 		if (validName && !node.getType().equals(newType)) {
-			AdaptTypeSupport.changeCategoryType(node, newType);
-			fSection.modelUpdated();
+			ArrayList<String> tmpTypes = node.getMethod().getCategoriesTypes();
+			for (int i = 0; i < node.getMethod().getCategories().size(); ++i) {
+				CategoryNode type = node.getMethod().getCategories().get(i);
+				if (type.getName().equals(node.getName()) && type.getType().equals(node.getType())) {
+					tmpTypes.set(i, newType);
+				}
+			}
+			if (node.getMethod().getClassNode().getMethod(node.getMethod().getName(), tmpTypes) == null) {
+				AdaptTypeSupport.changeCategoryType(node, newType);
+				fSection.modelUpdated();
+			} else {
+				MessageDialog.openError(Display.getCurrent().getActiveShell(),
+						Messages.DIALOG_METHOD_EXISTS_TITLE,
+						Messages.DIALOG_METHOD_WITH_PARAMETERS_EXISTS_MESSAGE);
+			}
 		}
 
 		fCellEditor.setFocus();

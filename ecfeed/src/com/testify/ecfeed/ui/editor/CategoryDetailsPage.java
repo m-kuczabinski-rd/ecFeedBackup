@@ -11,6 +11,7 @@
 
 package com.testify.ecfeed.ui.editor;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -229,6 +230,20 @@ public class CategoryDetailsPage extends BasicDetailsPage {
 	
 	protected boolean applyNewCategoryType(CategoryNode category, Combo valueText) {
 		String newValue = valueText.getText();
-		return AdaptTypeSupport.changeCategoryType(category, newValue);
+		ArrayList<String> tmpTypes = category.getMethod().getCategoriesTypes();
+		for (int i = 0; i < category.getMethod().getCategories().size(); ++i) {
+			CategoryNode type = category.getMethod().getCategories().get(i);
+			if (type.getName().equals(category.getName()) && type.getType().equals(category.getType())) {
+				tmpTypes.set(i, newValue);
+			}
+		}
+		if (category.getMethod().getClassNode().getMethod(category.getMethod().getName(), tmpTypes) == null) {
+			return AdaptTypeSupport.changeCategoryType(category, newValue);
+		} else {
+			MessageDialog.openError(Display.getCurrent().getActiveShell(),
+					Messages.DIALOG_METHOD_EXISTS_TITLE,
+					Messages.DIALOG_METHOD_WITH_PARAMETERS_EXISTS_MESSAGE);
+		}
+		return false;
 	}
 }
