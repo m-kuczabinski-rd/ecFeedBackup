@@ -43,9 +43,9 @@ public class ModelLabelProvider extends LabelProvider {
 		if (element instanceof RootNode){
 			return getImage("root_node.gif");
 		} else if (element instanceof ClassNode){
-			return getImage("class_node.ico");
+			return getImage("class_node.gif");
 		} else if (element instanceof MethodNode){
-			return getImage("method_node.ico");
+			return getImage("method_node.gif");
 		} else if(element instanceof TestCaseNode){
 			return getImage("test_case_node.gif");
 		} else if (element instanceof CategoryNode){
