@@ -36,7 +36,7 @@ public class MethodNode extends GenericNode {
 	@Override
 	public String toString(){
 		String result = new String(getName()) + "(";
-		ArrayList<String> types = getCategoriesTypes();
+		ArrayList<String> types = getCategoriesShortTypes();
 		ArrayList<String> names = getCategoriesNames();
 		for(int i = 0; i < types.size(); i++){
 			if(getCategories().get(i).isExpected()){
@@ -183,6 +183,14 @@ public class MethodNode extends GenericNode {
 		ArrayList<String> types = new ArrayList<String>();
 		for(CategoryNode category : fCategories){
 			types.add(category.getType());
+		}
+		return types;
+	}
+	
+	public ArrayList<String> getCategoriesShortTypes() {
+		ArrayList<String> types = new ArrayList<String>();
+		for(CategoryNode category : fCategories){
+			types.add(category.getShortType());
 		}
 		return types;
 	}

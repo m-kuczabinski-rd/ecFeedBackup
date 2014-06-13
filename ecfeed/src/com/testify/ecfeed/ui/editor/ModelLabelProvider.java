@@ -34,6 +34,9 @@ public class ModelLabelProvider extends LabelProvider {
 	
 	public String getText(Object element){
 		if(element instanceof GenericNode){
+			if(element instanceof CategoryNode){
+				return ((CategoryNode)element).toShortString();
+			}
 			return element.toString();
 		}
 		return null;

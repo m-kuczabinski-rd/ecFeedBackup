@@ -203,5 +203,24 @@ public class CategoryNode extends GenericNode implements IPartitionedNode{
 	public List<PartitionNode> getOrdinaryPartitions(){
 		return fPartitions;
 	}
+	
+	public String toShortString(){
+		if(fExpected){
+			return toString();
+		}
 
+		return new String(getName() + ": " + getShortType());
+	}
+	
+	public String getShortType(){
+		String type = fType;
+		int lastindex = type.lastIndexOf(".");
+		if(!(lastindex == -1 || lastindex >= type.length())){
+			type = type.substring(lastindex + 1);
+		}
+		return new String(type);
+	}
+
+
+	
 }
