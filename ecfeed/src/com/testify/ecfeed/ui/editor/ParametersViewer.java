@@ -12,7 +12,9 @@
 package com.testify.ecfeed.ui.editor;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
@@ -76,8 +78,7 @@ public class ParametersViewer extends CheckboxTableViewerSection implements Test
 	private class AddNewParameterAdapter extends SelectionAdapter {
 		@Override
 		public void widgetSelected(SelectionEvent e) {
- 			ArrayList<String> tmpTypes = new ArrayList<String>();
-			String type = Constants.DEFAULT_NEW_CATEGORY_TYPE;
+			String type = null;
 			String name = Constants.DEFAULT_NEW_CATEGORY_NAME;
 			int i = 1;
 
@@ -89,14 +90,41 @@ public class ParametersViewer extends CheckboxTableViewerSection implements Test
 				++i;
 			}
 
-			while (true) {
-				tmpTypes.clear();
-				tmpTypes.add(type);
-				if (fSelectedMethod.getClassNode().getMethod(fSelectedMethod.getName(), tmpTypes) == null) {
+			List<String> types = Arrays.asList(new String[]{
+					com.testify.ecfeed.model.Constants.TYPE_NAME_INT,
+					com.testify.ecfeed.model.Constants.TYPE_NAME_LONG,
+					com.testify.ecfeed.model.Constants.TYPE_NAME_SHORT,
+					com.testify.ecfeed.model.Constants.TYPE_NAME_BYTE,
+					com.testify.ecfeed.model.Constants.TYPE_NAME_BOOLEAN,
+					com.testify.ecfeed.model.Constants.TYPE_NAME_DOUBLE,
+					com.testify.ecfeed.model.Constants.TYPE_NAME_FLOAT,
+					com.testify.ecfeed.model.Constants.TYPE_NAME_STRING,
+					"user.type"
+			});
+			for(String typeCandidate : types){
+				List<String> methodTypes = fSelectedMethod.getCategoriesTypes();
+				methodTypes.add(typeCandidate);
+				if (fSelectedMethod.getClassNode().getMethod(fSelectedMethod.getName(), methodTypes) == null) {
+					type = typeCandidate;
 					break;
 				}
-				type += i;
-				++i;
+			}
+
+			if(type == null){
+				i = 1;
+				while(true){
+					List<String> methodTypes = fSelectedMethod.getCategoriesTypes();
+					String typeCandidate = "user.type" + i;
+					methodTypes.add(typeCandidate);
+					if (fSelectedMethod.getClassNode().getMethod(fSelectedMethod.getName(), methodTypes) == null) {
+						type = typeCandidate;
+						break;
+					}
+					else{
+						++i;
+					}
+				}
+
 			}
 
 			CategoryNode categoryNode = new CategoryNode(name, type, false);
