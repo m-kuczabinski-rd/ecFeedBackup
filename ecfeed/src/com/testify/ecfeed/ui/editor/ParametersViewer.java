@@ -39,6 +39,7 @@ import com.testify.ecfeed.utils.ModelUtils;
 public class ParametersViewer extends CheckboxTableViewerSection implements TestDataEditorListener{
 
 	private final static int STYLE = Section.EXPANDED | Section.TITLE_BAR;
+	private static final boolean DISABLED = false;
 	private final String EMPTY_STRING = "";
 	private ColorManager fColorManager;
 	private TableViewerColumn fDefaultValueColumn;
@@ -210,7 +211,7 @@ public class ParametersViewer extends CheckboxTableViewerSection implements Test
 	}
 
 	private Color getColor(Object element){
-		if(element instanceof CategoryNode && ((CategoryNode)element).isExpected()){
+		if(DISABLED){
 			return fColorManager.getColor(ColorConstants.EXPECTED_VALUE_CATEGORY);
 		}
 		return null;
