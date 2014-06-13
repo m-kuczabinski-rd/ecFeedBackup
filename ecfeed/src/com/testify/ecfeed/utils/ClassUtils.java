@@ -70,7 +70,7 @@ public class ClassUtils {
 	}
 
 	public static String defaultEnumExpectedValueString(String typeName) {
-		String value = "";
+		String value = "VALUE";
 		Class<?> typeClass = ClassUtils.loadClass(getClassLoader(true, null), typeName);
 		if (typeClass != null) {
 			for (Object object: typeClass.getEnumConstants()) {
