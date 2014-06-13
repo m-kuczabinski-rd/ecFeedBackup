@@ -22,6 +22,7 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Section;
 
@@ -74,7 +75,10 @@ public class ParametersViewer extends CheckboxTableViewerSection implements Test
 	private class AddNewParameterAdapter extends SelectionAdapter {
 		@Override
 		public void widgetSelected(SelectionEvent e) {
+			ArrayList<String> tmpTypes = new ArrayList<String>();
+			String startType = "NewPackage.NewType";
 			String startName = "NewCategory";
+			String type = startType;
 			String name = startName;
 			int i = 1;
 
@@ -86,7 +90,16 @@ public class ParametersViewer extends CheckboxTableViewerSection implements Test
 				++i;
 			}
 
-			String type = "int";
+			while (true) {
+				tmpTypes.clear();
+				tmpTypes.add(type);
+				if (fSelectedMethod.getClassNode().getMethod(fSelectedMethod.getName(), tmpTypes) == null) {
+					break;
+				}
+				type = startType + i;
+				++i;
+			}
+
 			CategoryNode categoryNode = new CategoryNode(name, type, false);
 			categoryNode.setDefaultValueString(ModelUtils.getDefaultExpectedValueString(type));
 			ArrayList<PartitionNode> defaultPartitions = ModelUtils.generateDefaultPartitions(type);
@@ -106,10 +119,26 @@ public class ParametersViewer extends CheckboxTableViewerSection implements Test
 		@Override
 		public void widgetSelected(SelectionEvent e) {
 			if(getCheckedElements().length > 0){
-				if (MessageDialog.openConfirm(getActiveShell(),
-						Messages.DIALOG_REMOVE_PARAMETERS_TITLE,
-						Messages.DIALOG_REMOVE_PARAMETERS_MESSAGE)) {
-					removeParameters(getCheckedElements());
+				ArrayList<String> tmpTypes = fSelectedMethod.getCategoriesTypes();
+				for (Object element : getCheckedElements()) {
+					CategoryNode node = (CategoryNode)element;
+					for (int i = 0; i < fSelectedMethod.getCategories().size(); ++i) {
+						CategoryNode type = fSelectedMethod.getCategories().get(i);
+						if (type.getName().equals(node.getName()) && type.getType().equals(node.getType())) {
+							tmpTypes.remove(node.getType());
+						}
+					}
+				}
+				if (fSelectedMethod.getClassNode().getMethod(fSelectedMethod.getName(), tmpTypes) == null) {
+					if (MessageDialog.openConfirm(getActiveShell(),
+							Messages.DIALOG_REMOVE_PARAMETERS_TITLE,
+							Messages.DIALOG_REMOVE_PARAMETERS_MESSAGE)) {
+						removeParameters(getCheckedElements());
+					}
+				} else {
+					MessageDialog.openError(Display.getCurrent().getActiveShell(),
+							Messages.DIALOG_METHOD_EXISTS_TITLE,
+							Messages.DIALOG_METHOD_WITH_PARAMETERS_EXISTS_MESSAGE);
 				}
 			}
 		}
@@ -130,13 +159,40 @@ public class ParametersViewer extends CheckboxTableViewerSection implements Test
 	private void moveSelectedItem(boolean moveUp) {
 		if (getSelectedElement() != null) {
 			CategoryNode categoryNode = (CategoryNode)getSelectedElement();
-			if(categoryNode.getParent().moveChild(categoryNode, moveUp)){
-				int index = fSelectedMethod.getCategories().indexOf(categoryNode);
-				int oldindex = moveUp ? (index + 1) : (index - 1);
-				for(TestCaseNode tcnode: fSelectedMethod.getTestCases()){
-					Collections.swap(tcnode.getTestData(), index, oldindex);
+			ArrayList<String> tmpTypes = fSelectedMethod.getCategoriesTypes();
+			boolean move = false;
+			for (int i = 0; i < fSelectedMethod.getCategories().size(); ++i) {
+				CategoryNode type = fSelectedMethod.getCategories().get(i);
+				if (type.getName().equals(categoryNode.getName()) && type.getType().equals(categoryNode.getType())) {
+					if (moveUp && (i > 0)) {
+						String prevValue = tmpTypes.get(i - 1);
+						tmpTypes.set(i - 1, categoryNode.getType());
+						tmpTypes.set(i, prevValue);
+						move = true;
+					} else if (!moveUp && (i < tmpTypes.size() - 1)){
+						String nextValue = tmpTypes.get(i + 1);
+						tmpTypes.set(i + 1, categoryNode.getType());
+						tmpTypes.set(i, nextValue);
+						move = true;
+					}
 				}
-				modelUpdated();
+			}
+
+			if (move) {
+				if ((fSelectedMethod.getClassNode().getMethod(fSelectedMethod.getName(), tmpTypes) == null)) {
+					if(categoryNode.getParent().moveChild(categoryNode, moveUp)){
+						int index = fSelectedMethod.getCategories().indexOf(categoryNode);
+						int oldindex = moveUp ? (index + 1) : (index - 1);
+						for(TestCaseNode tcnode: fSelectedMethod.getTestCases()){
+							Collections.swap(tcnode.getTestData(), index, oldindex);
+						}
+						modelUpdated();
+					}
+				} else {
+					MessageDialog.openError(Display.getCurrent().getActiveShell(),
+							Messages.DIALOG_METHOD_EXISTS_TITLE,
+							Messages.DIALOG_METHOD_WITH_PARAMETERS_EXISTS_MESSAGE);
+				}
 			}
 		}
 	}

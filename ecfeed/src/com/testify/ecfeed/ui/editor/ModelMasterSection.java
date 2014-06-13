@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.DecoratingLabelProvider;
 import org.eclipse.jface.viewers.IBaseLabelProvider;
 import org.eclipse.jface.viewers.IContentProvider;
@@ -29,6 +30,7 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.Tree;
@@ -42,6 +44,7 @@ import com.testify.ecfeed.model.IModelWrapper;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.TestCaseNode;
+import com.testify.ecfeed.ui.common.Messages;
 
 public class ModelMasterSection extends TreeViewerSection{
 	private static final int STYLE = Section.EXPANDED | Section.TITLE_BAR;
@@ -192,20 +195,53 @@ public class ModelMasterSection extends TreeViewerSection{
 
 	private void moveSelectedItem(boolean moveUp){
 		if(selectedNode() != null && selectedNode().getParent() != null){
-			if(selectedNode().getParent().moveChild(selectedNode(), moveUp)){
-				if(selectedNode() instanceof CategoryNode){
-					CategoryNode categoryNode = (CategoryNode)selectedNode();
-					MethodNode method = categoryNode.getMethod();
-					if(method != null){
-						int index = method.getCategories().indexOf(categoryNode);
-						int oldindex = moveUp ? (index + 1) : (index - 1);
-						for(TestCaseNode tcnode : method.getTestCases()){
-							Collections.swap(tcnode.getTestData(), index, oldindex);
+			boolean move = true;
+			if (selectedNode() instanceof CategoryNode) {
+				move = false;
+				CategoryNode categoryNode = (CategoryNode)selectedNode();
+				ArrayList<String> tmpTypes = categoryNode.getMethod().getCategoriesTypes();
+				for (int i = 0; i < categoryNode.getMethod().getCategories().size(); ++i) {
+					CategoryNode type = categoryNode.getMethod().getCategories().get(i);
+					if (type.getName().equals(categoryNode.getName()) && type.getType().equals(categoryNode.getType())) {
+						if (moveUp && (i > 0)) {
+							String prevValue = tmpTypes.get(i - 1);
+							tmpTypes.set(i - 1, categoryNode.getType());
+							tmpTypes.set(i, prevValue);
+							move = true;
+						} else if (!moveUp && (i < tmpTypes.size() - 1)){
+							String nextValue = tmpTypes.get(i + 1);
+							tmpTypes.set(i + 1, categoryNode.getType());
+							tmpTypes.set(i, nextValue);
+							move = true;
 						}
 					}
 				}
-				markDirty();
-				refresh();
+
+				if (move) {
+					if (categoryNode.getMethod().getClassNode().getMethod(categoryNode.getMethod().getName(), tmpTypes) != null) {
+						MessageDialog.openError(Display.getCurrent().getActiveShell(),
+								Messages.DIALOG_METHOD_EXISTS_TITLE,
+								Messages.DIALOG_METHOD_WITH_PARAMETERS_EXISTS_MESSAGE);
+						move = false;
+					}
+				}
+			}
+			if (move) {
+				if(selectedNode().getParent().moveChild(selectedNode(), moveUp)){
+					if(selectedNode() instanceof CategoryNode){
+						CategoryNode categoryNode = (CategoryNode)selectedNode();
+						MethodNode method = categoryNode.getMethod();
+						if(method != null){
+							int index = method.getCategories().indexOf(categoryNode);
+							int oldindex = moveUp ? (index + 1) : (index - 1);
+							for(TestCaseNode tcnode : method.getTestCases()){
+								Collections.swap(tcnode.getTestData(), index, oldindex);
+							}
+						}
+					}
+					markDirty();
+					refresh();
+				}
 			}
 		}
 	}

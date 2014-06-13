@@ -643,5 +643,18 @@ public class ModelUtils {
 		
 		return argTypes;
 	}
-	
+
+	public static ArrayList<String> getJavaTypes() {
+		ArrayList<String> types = new ArrayList<String>();
+		types.add(com.testify.ecfeed.model.Constants.TYPE_NAME_BOOLEAN);
+		types.add(com.testify.ecfeed.model.Constants.TYPE_NAME_BYTE);
+		types.add(com.testify.ecfeed.model.Constants.TYPE_NAME_CHAR);
+		types.add(com.testify.ecfeed.model.Constants.TYPE_NAME_SHORT);
+		types.add(com.testify.ecfeed.model.Constants.TYPE_NAME_INT);
+		types.add(com.testify.ecfeed.model.Constants.TYPE_NAME_LONG);
+		types.add(com.testify.ecfeed.model.Constants.TYPE_NAME_FLOAT);
+		types.add(com.testify.ecfeed.model.Constants.TYPE_NAME_DOUBLE);
+		types.add(com.testify.ecfeed.model.Constants.TYPE_NAME_STRING);
+		return types;
+	}
 }
