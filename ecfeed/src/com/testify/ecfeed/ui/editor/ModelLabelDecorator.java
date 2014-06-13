@@ -12,6 +12,8 @@
 package com.testify.ecfeed.ui.editor;
 
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.Path;
@@ -35,20 +37,22 @@ public class ModelLabelDecorator implements ILabelDecorator {
 	@Override
     public Image decorateImage(Image image, Object element) {
 		GC gc = new GC(image);
-		Image decoration = null;
+		List<Image> decorations = null;
     	if (element instanceof ClassNode) {
-    		decoration = getClassImageDecoration((ClassNode)element);
+    		decorations = getClassImageDecoration((ClassNode)element);
     	} else if (element instanceof MethodNode) {
-    		decoration = getMethodImageDecoration((MethodNode)element);
+    		decorations = getMethodImageDecoration((MethodNode)element);
     	} else if (element instanceof TestCaseNode) {
-    		decoration = getTestCaseImageDecoration((TestCaseNode)element);
+    		decorations = getTestCaseImageDecoration((TestCaseNode)element);
     	} else if (element instanceof CategoryNode) {
-    		decoration = getCategoryImageDecoration((CategoryNode)element);
+    		decorations = getCategoryImageDecoration((CategoryNode)element);
     	} else if (element instanceof PartitionNode) {
-    		decoration = getPartitionImageDecoration((PartitionNode)element);
+    		decorations = getPartitionImageDecoration((PartitionNode)element);
     	}
-    	if (decoration != null) {
-    		gc.drawImage(decoration, 0, 0);
+    	if (decorations != null) {
+    		for(Image decoration : decorations){
+    			gc.drawImage(decoration, 0, 0);
+    		}
     	}
 		gc.dispose();
     	return image;
@@ -83,46 +87,75 @@ public class ModelLabelDecorator implements ILabelDecorator {
 	    return descriptor.createImage();
 	}
 
-	private Image getClassImageDecoration(ClassNode node) {
+	private List<Image> getClassImageDecoration(ClassNode node) {
+		List<Image> decorations = new ArrayList<Image>();
 		if (ModelUtils.isClassImplemented(node)) {
-			return getImage("implemented.gif");
+			decorations.add(getImage("implemented.gif"));
 		} else if (ModelUtils.isClassPartiallyImplemented(node)) {
-			return getImage("partially_implemented.gif");
+			decorations.add(getImage("partially_implemented.gif"));
 		}
-		return getImage("unimplemented.gif");
+		else{
+			decorations.add(getImage("unimplemented.gif"));
+		}
+		return decorations;
 	}
 
-	private Image getMethodImageDecoration(MethodNode node) {
+	private List<Image> getMethodImageDecoration(MethodNode node) {
+		List<Image> decorations = new ArrayList<Image>();
 		if (ModelUtils.isMethodImplemented(node)) {
-			return getImage("implemented.gif");
+			decorations.add(getImage("implemented.gif"));
 		} else if (ModelUtils.isMethodPartiallyImplemented(node)) {
-			return getImage("partially_implemented.gif");
+			decorations.add(getImage("partially_implemented.gif"));
 		}
-		return getImage("unimplemented.gif");
+		else{
+			decorations.add(getImage("unimplemented.gif"));
+		}
+		return decorations;
 	}
 
-	private Image getTestCaseImageDecoration(TestCaseNode node) {
+	private List<Image> getTestCaseImageDecoration(TestCaseNode node) {
+		List<Image> decorations = new ArrayList<Image>();
 		if (ModelUtils.isTestCaseImplemented(node)) {
-			return getImage("implemented.gif");
+			decorations.add(getImage("implemented.gif"));
 		} else if (ModelUtils.isTestCasePartiallyImplemented(node)) {
-			return getImage("partially_implemented.gif");
+			decorations.add(getImage("partially_implemented.gif"));
 		}
-		return getImage("unimplemented.gif");
+		else{
+			decorations.add(getImage("unimplemented.gif"));
+		}
+		return decorations;
 	}
 
-	private Image getCategoryImageDecoration(CategoryNode node) {
+	private List<Image> getCategoryImageDecoration(CategoryNode node) {
+		List<Image> decorations = new ArrayList<Image>();
 		if (ModelUtils.isCategoryImplemented(node)) {
-			return getImage("implemented.gif");
-		} else if(!node.isExpected() && ModelUtils.isCategoryPartiallyImplemented(node)) {
-			return getImage("partially_implemented.gif");
+			decorations.add(getImage("implemented.gif"));
+		} else if (ModelUtils.isCategoryPartiallyImplemented(node)) {
+			decorations.add(getImage("partially_implemented.gif"));
 		}
-		return getImage("unimplemented.gif");
+		else{
+			decorations.add(getImage("unimplemented.gif"));
+		}
+		return decorations;
 	}
 
-	private Image getPartitionImageDecoration(PartitionNode node) {
-		if (!node.isAbstract() && ModelUtils.isPartitionImplemented(node)) {
-			return getImage("implemented.gif");
+	private List<Image> getPartitionImageDecoration(PartitionNode node) {
+		List<Image> decorations = new ArrayList<>();
+		
+		if(node.isAbstract()){
+			decorations.add(getImage("abstract.gif"));
 		}
-		return getImage("unimplemented.gif");
+		
+		if (ModelUtils.isPartitionImplemented(node)) {
+			decorations.add(getImage("implemented.gif"));
+		}
+		else if(ModelUtils.isPartitionPartiallyImplemented(node)){
+			decorations.add(getImage("partially_implemented.gif"));
+		}
+		else{
+			decorations.add(getImage("unimplemented.gif"));
+		}
+		
+		return decorations;
 	}
 }

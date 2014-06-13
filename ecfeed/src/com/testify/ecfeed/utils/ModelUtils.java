@@ -476,8 +476,37 @@ public class ModelUtils {
 	}
 
 	public static boolean isPartitionImplemented(PartitionNode node) {
-		URLClassLoader loader = ClassUtils.getClassLoader(false, null);
-		return ClassUtils.isPartitionImplemented(node.getSimpleValueString(), node.getCategory().getType(), loader);
+		if(node.isAbstract()){
+			for(PartitionNode child : node.getPartitions()){
+				if(!isPartitionImplemented(child)){
+					return false;
+				}
+			}
+			return true;
+		}
+		else{
+			URLClassLoader loader = ClassUtils.getClassLoader(false, null);
+			return ClassUtils.isPartitionImplemented(node.getSimpleValueString(), node.getCategory().getType(), loader);
+		}
+	}
+
+	public static boolean isPartitionPartiallyImplemented(PartitionNode node) {
+		if(node.isAbstract()){
+			boolean hasUnimplemented = false;
+			boolean hasNotUnimplemented = false;
+			for(PartitionNode child : node.getPartitions()){
+				if(isPartitionImplemented(child) || isPartitionPartiallyImplemented(child)){
+					hasNotUnimplemented = true;
+				}
+				else{
+					hasUnimplemented = true;
+				}
+			}
+			if(hasUnimplemented && hasNotUnimplemented){
+				return true;
+			}
+		}
+		return false;
 	}
 
 	public static boolean isTestCaseImplemented(TestCaseNode node) {
