@@ -27,6 +27,7 @@ import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.ui.common.ColorConstants;
 import com.testify.ecfeed.ui.common.ColorManager;
 import com.testify.ecfeed.ui.common.Messages;
+import com.testify.ecfeed.utils.Constants;
 import com.testify.ecfeed.utils.ModelUtils;
 
 public class MethodsViewer extends CheckboxTableViewerSection {
@@ -61,7 +62,7 @@ public class MethodsViewer extends CheckboxTableViewerSection {
 
 		@Override
 		public void widgetSelected(SelectionEvent e) {
-			String startName = "NewMethod";
+			String startName = Constants.DEFAULT_NEW_METHOD_NAME;
 			String name = startName;
 			int i = 1;
 

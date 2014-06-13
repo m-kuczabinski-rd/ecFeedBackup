@@ -34,6 +34,7 @@ import com.testify.ecfeed.ui.common.ColorManager;
 import com.testify.ecfeed.ui.common.DefaultValueEditingSupport;
 import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.common.TestDataEditorListener;
+import com.testify.ecfeed.utils.Constants;
 import com.testify.ecfeed.utils.ModelUtils;
 
 public class ParametersViewer extends CheckboxTableViewerSection implements TestDataEditorListener{
@@ -75,7 +76,7 @@ public class ParametersViewer extends CheckboxTableViewerSection implements Test
 	private class AddNewParameterAdapter extends SelectionAdapter {
 		@Override
 		public void widgetSelected(SelectionEvent e) {
-			String startName = "NewCategory";
+			String startName = Constants.DEFAULT_NEW_CATEGORY_NAME;
 			String name = startName;
 			int i = 1;
 
@@ -87,7 +88,7 @@ public class ParametersViewer extends CheckboxTableViewerSection implements Test
 				++i;
 			}
 
-			String type = "int";
+			String type = Constants.DEFAULT_NEW_CATEGORY_TYPE;
 			CategoryNode categoryNode = new CategoryNode(name, type, false);
 			categoryNode.setDefaultValueString(ModelUtils.getDefaultExpectedValueString(type));
 			ArrayList<PartitionNode> defaultPartitions = ModelUtils.generateDefaultPartitions(type);
