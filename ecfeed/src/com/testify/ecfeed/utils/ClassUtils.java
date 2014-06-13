@@ -39,51 +39,58 @@ public class ClassUtils {
 		return classLoader;
 	}
 
-	public static HashMap<String, String> defaultEnumValues(String typeName) {
-		HashMap<String, String> values = new HashMap<String, String>();
+	public static Class<?> loadClass(ClassLoader loader, String className) {
 		try {
-			Class<?> typeClass = getClassLoader(true, null).loadClass(typeName);
-			if (typeClass != null) {
-				for (Object object: typeClass.getEnumConstants()) {
-					values.put(((Enum<?>)object).name(), ((Enum<?>)object).name());
+			return loader.loadClass(className);
+		} catch (Throwable e) {
+		}
+
+		try {
+			Class<?> typeClass = loader.loadClass(className.substring(0, className.lastIndexOf('.')));
+			for (Class<?> innerClass : typeClass.getDeclaredClasses()) {
+				if (innerClass.getCanonicalName().equals(className)) {
+					return innerClass;
 				}
 			}
 		} catch (Throwable e) {
-			e.printStackTrace();
+		}
+
+		return null;
+	}
+
+	public static HashMap<String, String> defaultEnumValues(String typeName) {
+		HashMap<String, String> values = new HashMap<String, String>();
+		Class<?> typeClass = ClassUtils.loadClass(getClassLoader(true, null), typeName);
+		if (typeClass != null) {
+			for (Object object: typeClass.getEnumConstants()) {
+				values.put(((Enum<?>)object).name(), ((Enum<?>)object).name());
+			}
 		}
 		return values;
 	}
 
 	public static String defaultEnumExpectedValueString(String typeName) {
 		String value = "";
-		try {
-			Class<?> typeClass = getClassLoader(true, null).loadClass(typeName);
-			if (typeClass != null) {
-				for (Object object: typeClass.getEnumConstants()) {
-					value = ((Enum<?>)object).name();
-					break;
-				}	
+		Class<?> typeClass = ClassUtils.loadClass(getClassLoader(true, null), typeName);
+		if (typeClass != null) {
+			for (Object object: typeClass.getEnumConstants()) {
+				value = ((Enum<?>)object).name();
+				break;
 			}
-		} catch (Throwable e) {
-			e.printStackTrace();
-		}			
+		}
 		return value;
 	}
 
 	public static Object enumPartitionValue(String valueString, String typeName, ClassLoader loader) {
 		Object value = null;
-		try {
-			Class<?> typeClass = loader.loadClass(typeName);
-			if (typeClass != null) {
-				for (Object object: typeClass.getEnumConstants()) {
-					if ((((Enum<?>)object).name()).equals(valueString)) {
-						value = object;
-						break;
-					}
+		Class<?> typeClass = ClassUtils.loadClass(loader, typeName);
+		if (typeClass != null) {
+			for (Object object: typeClass.getEnumConstants()) {
+				if ((((Enum<?>)object).name()).equals(valueString)) {
+					value = object;
+					break;
 				}
 			}
-		} catch (Throwable e) {
-			//e.printStackTrace();
 		}
 		return value;
 	}
