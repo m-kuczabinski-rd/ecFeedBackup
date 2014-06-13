@@ -89,7 +89,7 @@ public class ModelLabelDecorator implements ILabelDecorator {
 		} else if (ModelUtils.isClassPartiallyImplemented(node)) {
 			return getImage("partially_implemented.gif");
 		}
-		return null;
+		return getImage("unimplemented.gif");
 	}
 
 	private Image getMethodImageDecoration(MethodNode node) {
@@ -98,7 +98,7 @@ public class ModelLabelDecorator implements ILabelDecorator {
 		} else if (ModelUtils.isMethodPartiallyImplemented(node)) {
 			return getImage("partially_implemented.gif");
 		}
-		return null;
+		return getImage("unimplemented.gif");
 	}
 
 	private Image getTestCaseImageDecoration(TestCaseNode node) {
@@ -107,7 +107,7 @@ public class ModelLabelDecorator implements ILabelDecorator {
 		} else if (ModelUtils.isTestCasePartiallyImplemented(node)) {
 			return getImage("partially_implemented.gif");
 		}
-		return null;
+		return getImage("unimplemented.gif");
 	}
 
 	private Image getCategoryImageDecoration(CategoryNode node) {
@@ -116,13 +116,13 @@ public class ModelLabelDecorator implements ILabelDecorator {
 		} else if(!node.isExpected() && ModelUtils.isCategoryPartiallyImplemented(node)) {
 			return getImage("partially_implemented.gif");
 		}
-		return null;
+		return getImage("unimplemented.gif");
 	}
 
 	private Image getPartitionImageDecoration(PartitionNode node) {
 		if (!node.isAbstract() && ModelUtils.isPartitionImplemented(node)) {
 			return getImage("implemented.gif");
 		}
-		return null;
+		return getImage("unimplemented.gif");
 	}
 }
