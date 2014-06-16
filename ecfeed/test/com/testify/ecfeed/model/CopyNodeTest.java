@@ -169,7 +169,7 @@ public class CopyNodeTest{
 		testParent(copypartcat, copy, true);
 		// Test expected category
 		CategoryNode expcat = method.getCategories(true).get(0);
-		CategoryNode copyexpcat = copy.getExpectedCategory(expcat.getName());
+		CategoryNode copyexpcat = copy.getCategory(expcat.getName());
 		testExpectedCategories(fExCat1, copyexpcat);
 		testParent(copyexpcat, copy, true);
 	}

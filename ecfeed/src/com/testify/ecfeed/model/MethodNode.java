@@ -151,15 +151,6 @@ public class MethodNode extends GenericNode {
 		return null;
 	}
 	
-	public CategoryNode getExpectedCategory(String categoryName) {
-		for(CategoryNode category : fCategories){
-			if(category.isExpected() && category.getName().equals(categoryName)){
-				return category;
-			}
-		}
-		return null;
-	}
-
 	public CategoryNode getPartitionedCategory(String categoryName) {
 		for(CategoryNode category : fCategories){
 			if((!category.isExpected()) && category.getName().equals(categoryName)){
