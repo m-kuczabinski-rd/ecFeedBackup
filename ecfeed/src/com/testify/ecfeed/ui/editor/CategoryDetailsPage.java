@@ -11,10 +11,6 @@
 
 package com.testify.ecfeed.ui.editor;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -23,7 +19,6 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.MenuItem;
@@ -31,9 +26,8 @@ import org.eclipse.swt.widgets.Text;
 
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.Constants;
-import com.testify.ecfeed.ui.common.Messages;
+import com.testify.ecfeed.ui.common.CategoryNodeAbstractOperations;
 import com.testify.ecfeed.ui.common.SimpleControlMenuListener;
-import com.testify.ecfeed.utils.AdaptTypeSupport;
 import com.testify.ecfeed.utils.ModelUtils;
 
 public class CategoryDetailsPage extends BasicDetailsPage {
@@ -71,7 +65,7 @@ public class CategoryDetailsPage extends BasicDetailsPage {
 			fNameText.setText(fSelectedCategory.getName());
 			fNameText.setEnabled(true);
 			fTypeText.setEnabled(true);
-			fTypeText.setItems(AdaptTypeSupport.getSupportedTypes());
+			fTypeText.setItems(ModelUtils.getJavaTypes().toArray(new String[0]));
 			fTypeText.setText(fSelectedCategory.getType());
 			
 			fExpectedCheckbox.setEnabled(true);
@@ -130,18 +124,8 @@ public class CategoryDetailsPage extends BasicDetailsPage {
 			@Override
 			public void handleEvent(Event event){
 				if(event.keyCode == SWT.CR || event.keyCode == SWT.KEYPAD_CR){
-					boolean validName = true;
-					if(!Arrays.asList(fTypeText.getItems()).contains(fTypeText.getText())){
-						validName = ModelUtils.isClassQualifiedNameValid(fTypeText.getText());
-					}
-					if(validName){
-						if(applyNewCategoryType(fSelectedCategory, fTypeText)){
-							modelUpdated(null);
-						}
-					} else{
-						MessageDialog.openError(Display.getCurrent().getActiveShell(),
-								Messages.DIALOG_PARAMETER_TYPE_PROBLEM_TITLE,
-								Messages.DIALOG_PARAMETER_TYPE_PROBLEM_MESSAGE);
+					if(applyNewCategoryType(fSelectedCategory, fTypeText)){
+						modelUpdated(null);
 					}
 				}
 			}
@@ -196,8 +180,9 @@ public class CategoryDetailsPage extends BasicDetailsPage {
 		fExpectedCheckbox.addSelectionListener(new SelectionAdapter(){
 			@Override
 			public void widgetSelected(SelectionEvent e){
-				fSelectedCategory.getMethod().changeCategoryExpectedStatus(fSelectedCategory, fExpectedCheckbox.getSelection());
-				modelUpdated(null);
+				if(CategoryNodeAbstractOperations.changeCategoryExpectedStatus(fSelectedCategory, fExpectedCheckbox.getSelection())){
+					modelUpdated(null);
+				}
 			}
 		});
 		
@@ -230,20 +215,6 @@ public class CategoryDetailsPage extends BasicDetailsPage {
 	
 	protected boolean applyNewCategoryType(CategoryNode category, Combo valueText) {
 		String newValue = valueText.getText();
-		ArrayList<String> tmpTypes = category.getMethod().getCategoriesTypes();
-		for (int i = 0; i < category.getMethod().getCategories().size(); ++i) {
-			CategoryNode type = category.getMethod().getCategories().get(i);
-			if (type.getName().equals(category.getName()) && type.getType().equals(category.getType())) {
-				tmpTypes.set(i, newValue);
-			}
-		}
-		if (category.getMethod().getClassNode().getMethod(category.getMethod().getName(), tmpTypes) == null) {
-			return AdaptTypeSupport.changeCategoryType(category, newValue);
-		} else {
-			MessageDialog.openError(Display.getCurrent().getActiveShell(),
-					Messages.DIALOG_METHOD_EXISTS_TITLE,
-					Messages.DIALOG_METHOD_WITH_PARAMETERS_EXISTS_MESSAGE);
-		}
-		return false;
+		return CategoryNodeAbstractOperations.changeCategoryType(category, newValue);
 	}
 }
