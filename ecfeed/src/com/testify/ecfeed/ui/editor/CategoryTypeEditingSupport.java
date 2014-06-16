@@ -21,6 +21,7 @@ import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.widgets.Display;
 
 import com.testify.ecfeed.model.CategoryNode;
+import com.testify.ecfeed.model.ConstraintNode;
 import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.utils.AdaptTypeSupport;
 import com.testify.ecfeed.utils.ModelUtils;
@@ -95,8 +96,27 @@ public class CategoryTypeEditingSupport extends EditingSupport {
 				}
 			}
 			if (node.getMethod().getClassNode().getMethod(node.getMethod().getName(), tmpTypes) == null) {
-				AdaptTypeSupport.changeCategoryType(node, newType);
-				fSection.modelUpdated();
+				// checking if there is any reason to display warning  - test cases and constraints
+				boolean warn  = false;
+				if(node.getMethod().getTestCases().isEmpty()){
+					for(ConstraintNode constraint : node.getMethod().getConstraintNodes()){
+						if(constraint.mentions(node)){
+							warn = true;
+							break;
+						}
+					}
+				}
+				if(warn){
+					if (MessageDialog.openConfirm(Display.getCurrent().getActiveShell(),
+							Messages.DIALOG_DATA_MIGHT_BE_LOST_TITLE,
+							Messages.DIALOG_DATA_MIGHT_BE_LOST_MESSAGE)) {
+						AdaptTypeSupport.changeCategoryType(node, newType);
+						fSection.modelUpdated();
+					}
+				} else {
+					AdaptTypeSupport.changeCategoryType(node, newType);
+					fSection.modelUpdated();
+				}
 			} else {
 				MessageDialog.openError(Display.getCurrent().getActiveShell(),
 						Messages.DIALOG_METHOD_EXISTS_TITLE,

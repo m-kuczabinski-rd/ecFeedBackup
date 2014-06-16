@@ -125,7 +125,9 @@ public class Messages {
 	public static final String DIALOG_METHOD_INVALID_NAME_TITLE = "Invalid method name";
 	public static final String DIALOG_METHOD_INVALID_NAME_MESSAGE = "Entered method name is not valid.";
 	public static final String DIALOG_REMOVE_PARAMETERS_TITLE = "Remove parameters";
-	public static final String DIALOG_REMOVE_PARAMETERS_MESSAGE = "This operation will remove selected parameters from the method.";
+	public static final String DIALOG_REMOVE_PARAMETERS_MESSAGE = "This operation will remove selected parameters and all correlated data from the method.";
+	public static final String DIALOG_DATA_MIGHT_BE_LOST_TITLE = "Correlated data might be lost.";
+	public static final String DIALOG_DATA_MIGHT_BE_LOST_MESSAGE = "This operation might cause loss of data, i.e. generated test cases.\nProceed?";
 	public static final String DIALOG_CATEGORY_EXISTS_TITLE = "Category exists";
 	public static final String DIALOG_CATEGORY_EXISTS_MESSAGE = "Entered category is already contained in the method.";
 	public static final String DIALOG_CLASS_NAME_PROBLEM_TITLE = "Wrong class name";

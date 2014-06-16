@@ -27,6 +27,7 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Section;
 
 import com.testify.ecfeed.model.CategoryNode;
+import com.testify.ecfeed.model.ConstraintNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.TestCaseNode;
@@ -75,43 +76,46 @@ public class ParametersViewer extends CheckboxTableViewerSection implements Test
 	private class AddNewParameterAdapter extends SelectionAdapter {
 		@Override
 		public void widgetSelected(SelectionEvent e) {
-			ArrayList<String> tmpTypes = new ArrayList<String>();
-			String startType = "NewPackage.NewType";
-			String startName = "NewCategory";
-			String type = startType;
-			String name = startName;
-			int i = 1;
+			if(fSelectedMethod.getTestCases().isEmpty() || MessageDialog.openConfirm(getActiveShell(),
+					Messages.DIALOG_DATA_MIGHT_BE_LOST_TITLE, Messages.DIALOG_DATA_MIGHT_BE_LOST_MESSAGE)){
+				ArrayList<String> tmpTypes = new ArrayList<String>();
+				String startType = "NewPackage.NewType";
+				String startName = "NewCategory";
+				String type = startType;
+				String name = startName;
+				int i = 1;
 
-			while (true) {
-				if (fSelectedMethod.getCategory(name) == null) {
-					break;
+				while(true){
+					if(fSelectedMethod.getCategory(name) == null){
+						break;
+					}
+					name = startName + i;
+					++i;
 				}
-				name = startName + i;
-				++i;
-			}
 
-			while (true) {
-				tmpTypes.clear();
-				tmpTypes.add(type);
-				if (fSelectedMethod.getClassNode().getMethod(fSelectedMethod.getName(), tmpTypes) == null) {
-					break;
+				while(true){
+					tmpTypes.clear();
+					tmpTypes.add(type);
+					if(fSelectedMethod.getClassNode().getMethod(fSelectedMethod.getName(), tmpTypes) == null){
+						break;
+					}
+					type = startType + i;
+					++i;
 				}
-				type = startType + i;
-				++i;
-			}
 
-			CategoryNode categoryNode = new CategoryNode(name, type, false);
-			categoryNode.setDefaultValueString(ModelUtils.getDefaultExpectedValueString(type));
-			ArrayList<PartitionNode> defaultPartitions = ModelUtils.generateDefaultPartitions(type);
-			for (PartitionNode partition : defaultPartitions) {
-				categoryNode.addPartition(partition);
-			}
+				CategoryNode categoryNode = new CategoryNode(name, type, false);
+				categoryNode.setDefaultValueString(ModelUtils.getDefaultExpectedValueString(type));
+				ArrayList<PartitionNode> defaultPartitions = ModelUtils.generateDefaultPartitions(type);
+				for(PartitionNode partition : defaultPartitions){
+					categoryNode.addPartition(partition);
+				}
 
-			fSelectedMethod.addCategory(categoryNode);
-			fSelectedMethod.clearTestCases();
-			modelUpdated();
-			selectElement(categoryNode);
-			nameColumn.getViewer().editElement(categoryNode, 0);
+				fSelectedMethod.addCategory(categoryNode);
+				fSelectedMethod.clearTestCases();
+				modelUpdated();
+				selectElement(categoryNode);
+				nameColumn.getViewer().editElement(categoryNode, 0);
+			}
 		}
 	}
 
@@ -130,9 +134,27 @@ public class ParametersViewer extends CheckboxTableViewerSection implements Test
 					}
 				}
 				if (fSelectedMethod.getClassNode().getMethod(fSelectedMethod.getName(), tmpTypes) == null) {
-					if (MessageDialog.openConfirm(getActiveShell(),
-							Messages.DIALOG_REMOVE_PARAMETERS_TITLE,
-							Messages.DIALOG_REMOVE_PARAMETERS_MESSAGE)) {
+					// checking if there is any reason to display warning  - test cases and constraints
+					boolean warn  = false;
+					if(fSelectedMethod.getTestCases().isEmpty()){
+						for(ConstraintNode constraint: fSelectedMethod.getConstraintNodes()){
+							for(Object element: getCheckedElements()){
+								if(constraint.mentions((CategoryNode)element)){
+									warn  = true;
+									break;
+								}
+							}
+							if(warn == true)
+								break;
+						}
+					}
+					if(warn){
+						if (MessageDialog.openConfirm(getActiveShell(),
+								Messages.DIALOG_REMOVE_PARAMETERS_TITLE,
+								Messages.DIALOG_REMOVE_PARAMETERS_MESSAGE)) {
+							removeParameters(getCheckedElements());
+						}
+					} else {
 						removeParameters(getCheckedElements());
 					}
 				} else {
