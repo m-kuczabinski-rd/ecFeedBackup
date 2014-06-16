@@ -23,7 +23,7 @@ public class CategoryNode extends GenericNode implements IPartitionedNode{
 	@Override
 	public String toString(){
 		if(fExpected){
-			return super.toString() + "(" + getDefaultValueString() + ")";
+			return super.toString() + "(" + getDefaultValueString() + "): " + getType();
 		}
 		return new String(getName() + ": " + getType());
 	}

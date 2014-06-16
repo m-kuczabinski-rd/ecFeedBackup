@@ -154,12 +154,11 @@ public class MethodDetailsPage extends BasicDetailsPage {
 			fSelectedMethod = (MethodNode)getSelectedElement();
 		}
 		if(fSelectedMethod != null){
-			String title = fSelectedMethod.toString();
 			boolean implemented = ModelUtils.isMethodImplemented(fSelectedMethod);
 			boolean partiallyImplemented = ModelUtils.isMethodPartiallyImplemented(fSelectedMethod);
-			if (implemented) {
-				title += " [implemented]";
-			}
+
+			String title = fSelectedMethod.getName();
+			title += " " + getImplementationStatusIndicator(implemented, partiallyImplemented);
 			fTestOnlineButton.setEnabled(implemented || partiallyImplemented);
 			getMainSection().setText(title);
 			fParemetersSection.setInput(fSelectedMethod);
@@ -170,5 +169,19 @@ public class MethodDetailsPage extends BasicDetailsPage {
 			fReassignButton.setEnabled(ModelUtils.isClassPartiallyImplemented((ClassNode)fSelectedMethod.getParent())
 						|| ModelUtils.isClassImplemented((ClassNode)fSelectedMethod.getParent()));
 		}
+	}
+	
+	private String getImplementationStatusIndicator(boolean implemented, boolean partiallyImplemented){
+		String status;
+		if (implemented) {
+			status = "[implemented]";
+		}
+		else if (partiallyImplemented){
+			status = "[partially unimplemented]";
+		}
+		else{
+			status = "[unimplemented]";
+		}
+		return status;
 	}
 }

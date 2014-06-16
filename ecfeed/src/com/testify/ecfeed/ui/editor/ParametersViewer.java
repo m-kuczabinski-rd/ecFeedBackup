@@ -12,7 +12,9 @@
 package com.testify.ecfeed.ui.editor;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
@@ -36,6 +38,7 @@ import com.testify.ecfeed.ui.common.ColorManager;
 import com.testify.ecfeed.ui.common.DefaultValueEditingSupport;
 import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.common.TestDataEditorListener;
+import com.testify.ecfeed.utils.Constants;
 import com.testify.ecfeed.utils.ModelUtils;
 
 public class ParametersViewer extends CheckboxTableViewerSection implements TestDataEditorListener{
@@ -78,31 +81,55 @@ public class ParametersViewer extends CheckboxTableViewerSection implements Test
 		public void widgetSelected(SelectionEvent e) {
 			if(fSelectedMethod.getTestCases().isEmpty() || MessageDialog.openConfirm(getActiveShell(),
 					Messages.DIALOG_DATA_MIGHT_BE_LOST_TITLE, Messages.DIALOG_DATA_MIGHT_BE_LOST_MESSAGE)){
-				ArrayList<String> tmpTypes = new ArrayList<String>();
-				String startType = "NewPackage.NewType";
-				String startName = "NewCategory";
-				String type = startType;
-				String name = startName;
+				String type = null;
+				String name = Constants.DEFAULT_NEW_CATEGORY_NAME;
 				int i = 1;
-
-				while(true){
-					if(fSelectedMethod.getCategory(name) == null){
-						break;
-					}
-					name = startName + i;
+	
+					while(true){
+						if(fSelectedMethod.getCategory(name) == null){
+							break;
+						}
+					name += i;
 					++i;
 				}
-
-				while(true){
-					tmpTypes.clear();
-					tmpTypes.add(type);
-					if(fSelectedMethod.getClassNode().getMethod(fSelectedMethod.getName(), tmpTypes) == null){
+					
+				List<String> types = Arrays.asList(new String[]{
+						com.testify.ecfeed.model.Constants.TYPE_NAME_INT,
+						com.testify.ecfeed.model.Constants.TYPE_NAME_LONG,
+						com.testify.ecfeed.model.Constants.TYPE_NAME_SHORT,
+						com.testify.ecfeed.model.Constants.TYPE_NAME_BYTE,
+						com.testify.ecfeed.model.Constants.TYPE_NAME_BOOLEAN,
+						com.testify.ecfeed.model.Constants.TYPE_NAME_DOUBLE,
+						com.testify.ecfeed.model.Constants.TYPE_NAME_FLOAT,
+						com.testify.ecfeed.model.Constants.TYPE_NAME_STRING,
+						"user.type"
+				});
+				for(String typeCandidate : types){
+					List<String> methodTypes = fSelectedMethod.getCategoriesTypes();
+					methodTypes.add(typeCandidate);
+					if (fSelectedMethod.getClassNode().getMethod(fSelectedMethod.getName(), methodTypes) == null) {
+						type = typeCandidate;
 						break;
 					}
-					type = startType + i;
-					++i;
 				}
+	
+				if(type == null){
+					i = 1;
+					while(true){
+						List<String> methodTypes = fSelectedMethod.getCategoriesTypes();
+						String typeCandidate = "user.type" + i;
+						methodTypes.add(typeCandidate);
+						if (fSelectedMethod.getClassNode().getMethod(fSelectedMethod.getName(), methodTypes) == null) {
+							type = typeCandidate;
+							break;
+						}
+						else{
+							++i;
+						}
+					}
 
+				}
+		
 				CategoryNode categoryNode = new CategoryNode(name, type, false);
 				categoryNode.setDefaultValueString(ModelUtils.getDefaultExpectedValueString(type));
 				ArrayList<PartitionNode> defaultPartitions = ModelUtils.generateDefaultPartitions(type);
@@ -114,7 +141,7 @@ public class ParametersViewer extends CheckboxTableViewerSection implements Test
 				fSelectedMethod.clearTestCases();
 				modelUpdated();
 				selectElement(categoryNode);
-				nameColumn.getViewer().editElement(categoryNode, 0);
+				nameColumn.getViewer().editElement(categoryNode, 0);			
 			}
 		}
 	}
@@ -147,6 +174,8 @@ public class ParametersViewer extends CheckboxTableViewerSection implements Test
 							if(warn == true)
 								break;
 						}
+					} else{
+						warn =  true;
 					}
 					if(warn){
 						if (MessageDialog.openConfirm(getActiveShell(),
@@ -202,14 +231,14 @@ public class ParametersViewer extends CheckboxTableViewerSection implements Test
 
 			if (move) {
 				if ((fSelectedMethod.getClassNode().getMethod(fSelectedMethod.getName(), tmpTypes) == null)) {
-					if(categoryNode.getParent().moveChild(categoryNode, moveUp)){
-						int index = fSelectedMethod.getCategories().indexOf(categoryNode);
-						int oldindex = moveUp ? (index + 1) : (index - 1);
-						for(TestCaseNode tcnode: fSelectedMethod.getTestCases()){
-							Collections.swap(tcnode.getTestData(), index, oldindex);
-						}
-						modelUpdated();
-					}
+			if(categoryNode.getParent().moveChild(categoryNode, moveUp)){
+				int index = fSelectedMethod.getCategories().indexOf(categoryNode);
+				int oldindex = moveUp ? (index + 1) : (index - 1);
+				for(TestCaseNode tcnode: fSelectedMethod.getTestCases()){
+					Collections.swap(tcnode.getTestData(), index, oldindex);
+				}
+				modelUpdated();
+			}
 				} else {
 					MessageDialog.openError(Display.getCurrent().getActiveShell(),
 							Messages.DIALOG_METHOD_EXISTS_TITLE,

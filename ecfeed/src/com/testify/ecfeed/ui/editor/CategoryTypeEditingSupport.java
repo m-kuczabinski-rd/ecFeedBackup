@@ -105,6 +105,8 @@ public class CategoryTypeEditingSupport extends EditingSupport {
 							break;
 						}
 					}
+				} else{
+					warn =  true;
 				}
 				if(warn){
 					if (MessageDialog.openConfirm(Display.getCurrent().getActiveShell(),

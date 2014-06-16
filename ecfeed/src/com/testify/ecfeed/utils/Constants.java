@@ -52,4 +52,10 @@ public class Constants {
 	public static final String BOOLEAN_FALSE_STRING_REPRESENTATION = "false";
 	public static final String POSITIVE_INFINITY_STRING_REPRESENTATION = "POSITIVE_INFINITY";
 	public static final String NEGATIVE_INFINITY_STRING_REPRESENTATION = "NEGATIVE_INFINITY";
+	
+	public static final String DEFAULT_NEW_CATEGORY_NAME = "arg";
+	public static final String DEFAULT_NEW_CATEGORY_TYPE = "int";
+	public static final String DEFAULT_NEW_METHOD_NAME = "testMethod";
+	public static final String DEFAULT_NEW_PACKAGE_NAME = "com.example.test";
+	public static final String DEFAULT_NEW_CLASS_NAME = "TestClass";
 }

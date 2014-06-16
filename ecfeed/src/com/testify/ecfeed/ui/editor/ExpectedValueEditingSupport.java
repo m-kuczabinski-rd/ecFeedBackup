@@ -65,6 +65,8 @@ public class ExpectedValueEditingSupport extends EditingSupport {
 						break;
 					}
 				}
+			} else{
+				warn =  true;
 			}
 			if(warn){
 				if (MessageDialog.openConfirm(Display.getCurrent().getActiveShell(),
