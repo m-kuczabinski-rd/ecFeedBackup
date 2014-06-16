@@ -123,16 +123,18 @@ public class TestCasesViewer extends CheckboxTreeViewerSection {
 	private class RemoveSelectedAdapter extends SelectionAdapter{
 		@Override
 		public void widgetSelected(SelectionEvent e){
-			if(MessageDialog.openConfirm(getActiveShell(), 
-					Messages.DIALOG_REMOVE_TEST_CASES_TITLE,
-					Messages.DIALOG_REMOVE_TEST_CASES_MESSAGE)){
-				removeCheckedTestSuites();
-				removeCheckedTestCases();
-				
-				for(String testSuite : fSelectedMethod.getTestSuites()){
-					getCheckboxViewer().setGrayChecked(testSuite, false);
+			if(!fSelectedMethod.getTestCases().isEmpty()){
+				if(MessageDialog.openConfirm(getActiveShell(), 
+						Messages.DIALOG_REMOVE_TEST_CASES_TITLE,
+						Messages.DIALOG_REMOVE_TEST_CASES_MESSAGE)){
+					removeCheckedTestSuites();
+					removeCheckedTestCases();
+					
+					for(String testSuite : fSelectedMethod.getTestSuites()){
+						getCheckboxViewer().setGrayChecked(testSuite, false);
+					}
+					modelUpdated();
 				}
-				modelUpdated();
 			}
 		}
 

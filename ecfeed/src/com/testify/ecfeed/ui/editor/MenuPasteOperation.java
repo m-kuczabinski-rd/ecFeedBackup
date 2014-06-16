@@ -10,6 +10,10 @@
  ******************************************************************************/
 package com.testify.ecfeed.ui.editor;
 
+import static com.testify.ecfeed.ui.common.Messages.DIALOG_PASTE_OPERATION_FAILED_MESSAGE;
+import static com.testify.ecfeed.ui.common.Messages.DIALOG_PASTE_OPERATION_FAILED_TITLE;
+import static com.testify.ecfeed.utils.ModelUtils.setUniqueNodeName;
+
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
 
@@ -21,20 +25,18 @@ import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.TestCaseNode;
-import static com.testify.ecfeed.utils.ModelUtils.setUniqueNodeName;
+import com.testify.ecfeed.ui.common.WarningModelOperations;
 
 public class MenuPasteOperation extends MenuOperation{
 	protected IGenericNode fSource;
 	protected IGenericNode fTarget;
 	protected ModelMasterSection fModel;
-	protected final String DIALOG_OPERATION_FAILED_TITLE = "Paste failed";
-	protected final String DIALOG_OPERATION_FAILED_MESSAGE = "Clipboard content doesn't match here.";
 
 	@Override
 	public void execute(){
 		if(!paste()){
-			MessageDialog.openInformation(Display.getCurrent().getActiveShell(), DIALOG_OPERATION_FAILED_TITLE,
-					DIALOG_OPERATION_FAILED_MESSAGE);
+			MessageDialog.openInformation(Display.getCurrent().getActiveShell(), DIALOG_PASTE_OPERATION_FAILED_TITLE,
+					DIALOG_PASTE_OPERATION_FAILED_MESSAGE);
 		} else{
 			fModel.markDirty();
 			fModel.refresh();
@@ -95,8 +97,7 @@ public class MenuPasteOperation extends MenuOperation{
 				if(fSource instanceof CategoryNode){
 					CategoryNode source = (CategoryNode)fSource;
 					setUniqueNodeName(source, target);
-					target.addCategory(source);
-					target.clearTestCases();
+					WarningModelOperations.addCategory(source, target);
 					return true;
 				} else if(fSource instanceof ConstraintNode){
 					ConstraintNode source = (ConstraintNode)fSource;
