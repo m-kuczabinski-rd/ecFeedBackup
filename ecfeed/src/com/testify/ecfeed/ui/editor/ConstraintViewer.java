@@ -186,15 +186,11 @@ public class ConstraintViewer extends TreeViewerSection {
 
 				CategoryNode category = method.getCategory(categoryName);
 				
-//				CategoryNode partitionedCategory = method.getPartitionedCategory(categoryName);
-//				CategoryNode expectedCategory = method.getExpectedCategory(categoryName);
 				if(!category.isExpected()){
-//				if(partitionedCategory != null){
 					PartitionNode condition = category.getPartitions().get(0);
 					statement = new PartitionedCategoryStatement(category, relation, condition);
 				}
 				else{
-//				else if(expectedCategory != null){
 					PartitionNode condition = new PartitionNode("expected", category.getDefaultValueString());
 					condition.setParent(category);
 					statement = new ExpectedValueStatement(category, condition);
