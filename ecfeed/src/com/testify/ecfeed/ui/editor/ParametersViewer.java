@@ -84,12 +84,11 @@ public class ParametersViewer extends CheckboxTableViewerSection implements Test
 				String type = null;
 				String name = Constants.DEFAULT_NEW_CATEGORY_NAME;
 				int i = 1;
-	
-					while(true){
-						if(fSelectedMethod.getCategory(name) == null){
-							break;
-						}
-					name += i;
+				while(true){
+					if(fSelectedMethod.getCategory(name) == null){
+						break;
+					}
+					name = Constants.DEFAULT_NEW_CATEGORY_NAME + i;
 					++i;
 				}
 					
