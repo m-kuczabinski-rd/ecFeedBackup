@@ -56,7 +56,7 @@ public class ModelUtils {
 			}
 		}
 		catch(Throwable e){
-			System.out.println("Unexpected error");
+			System.err.println("Unexpected error during class import");
 		}
 		return classNode;
 	}
