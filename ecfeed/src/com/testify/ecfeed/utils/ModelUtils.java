@@ -578,9 +578,7 @@ public class ModelUtils {
 				for (IMethod method : type.getMethods()){
 					if (method.getElementName().equals(methodModel.getName())) {
 						List<String> argTypes = getArgTypes(method, testClass);
-						List<String> paramNames = getParamNames(method);
-						if (methodModel.getCategoriesTypes().equals(argTypes) &&
-								methodModel.getCategoriesNames().equals(paramNames)) {
+						if (methodModel.getCategoriesTypes().equals(argTypes)){
 							implemented = true;
 							break;
 						}
@@ -628,7 +626,7 @@ public class ModelUtils {
 		return argTypes;
 	}
 	
-	private static List<String> getParamNames(IMethod method) {
+	public static List<String> getParamNames(IMethod method) {
 		List<String> argTypes = new ArrayList<String>();
 		
 		try {
