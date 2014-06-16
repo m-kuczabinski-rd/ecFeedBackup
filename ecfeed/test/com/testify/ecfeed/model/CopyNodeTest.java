@@ -164,7 +164,7 @@ public class CopyNodeTest{
 		testNode(method, copy);
 		// Test partitioned category
 		CategoryNode partcat = method.getCategories(false).get(0);
-		CategoryNode copypartcat = copy.getPartitionedCategory(partcat.getName());
+		CategoryNode copypartcat = copy.getCategory(partcat.getName());
 		testPartitionedCategories(partcat, copypartcat, parentlabel, childlabel);
 		testParent(copypartcat, copy, true);
 		// Test expected category

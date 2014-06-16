@@ -200,8 +200,8 @@ public class XmlModelParser implements IModelParser{
 
 	protected BasicStatement parsePartitionStatement(Element element, MethodNode method) throws ParserException {
 		String categoryName = getAttributeValue(element, Constants.STATEMENT_CATEGORY_ATTRIBUTE_NAME);
-		CategoryNode category = method.getPartitionedCategory(categoryName);
-		if(category == null){
+		CategoryNode category = method.getCategory(categoryName);
+		if(category == null || category.isExpected()){
 			throw new ParserException(Messages.WRONG_CATEGORY_NAME(categoryName, method.getName()));
 		}
 		String partitionName = getAttributeValue(element, Constants.STATEMENT_PARTITION_ATTRIBUTE_NAME);
@@ -221,8 +221,8 @@ public class XmlModelParser implements IModelParser{
 		String label = getAttributeValue(element, Constants.STATEMENT_LABEL_ATTRIBUTE_NAME);
 		String relationName = getAttributeValue(element, Constants.STATEMENT_RELATION_ATTRIBUTE_NAME);
 		
-		CategoryNode category = method.getPartitionedCategory(categoryName);
-		if(category == null){
+		CategoryNode category = method.getCategory(categoryName);
+		if(category == null || category.isExpected()){
 			throw new ParserException(Messages.WRONG_CATEGORY_NAME(categoryName, method.getName()));
 		}
 		Relation relation = getRalation(relationName);
