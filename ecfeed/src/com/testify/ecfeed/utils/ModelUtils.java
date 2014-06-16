@@ -44,15 +44,13 @@ public class ModelUtils {
 			Class<?> testClass = ClassUtils.loadClass(ClassUtils.getClassLoader(true, null), type.getFullyQualifiedName());
 			for(IMethod method : type.getMethods()){
 				IAnnotation[] annotations = method.getAnnotations();
-				if(method.getParameters().length > 0){
-					for(IAnnotation annotation : annotations){
-						if(annotation.getElementName().equals("Test")){
-							MethodNode methodModel = generateMethodModel(method, testClass);
-							if(methodModel != null){
-								classNode.addMethod(methodModel);
-							}
-							break;
+				for(IAnnotation annotation : annotations){
+					if(annotation.getElementName().equals("Test")){
+						MethodNode methodModel = generateMethodModel(method, testClass);
+						if(methodModel != null){
+							classNode.addMethod(methodModel);
 						}
+						break;
 					}
 				}
 			}
