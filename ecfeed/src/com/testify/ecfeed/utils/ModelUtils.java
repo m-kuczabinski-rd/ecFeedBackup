@@ -433,8 +433,13 @@ public class ModelUtils {
 		return true;
 	}
 
-	public static boolean validatePartitionStringValue(String valueString, String type){
-		if(type.equals(com.testify.ecfeed.model.Constants.TYPE_NAME_STRING)) return true;
+	public static boolean validatePartitionStringValue(String valueString, String type) {
+		if (type.equals(com.testify.ecfeed.model.Constants.TYPE_NAME_STRING)) return true;
+
+		if (valueString.length() == 0) return false;
+		if (valueString.length() > com.testify.ecfeed.model.Constants.MAX_NODE_NAME_LENGTH) return false;
+		if (valueString.matches("\\s*")) return false;
+
 		if (ClassUtils.getPartitionValueFromString(valueString, type, ClassUtils.getClassLoader(true, null)) != null){
 			return true;
 		} else {

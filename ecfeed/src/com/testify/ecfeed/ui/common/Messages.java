@@ -38,14 +38,14 @@ public class Messages {
 			"must not contain only white characters and must be unique within category.";
 	public static final String DIALOG_PARTITION_VALUE_PROBLEM_TITLE = "Wrong partition value";
 	public static final String DIALOG_PARTITION_VALUE_PROBLEM_MESSAGE = "Partition value must fit to type and range of the variable " +
-			"represented by the partition.";
+			"represented by the partition, must contain between 1 and 64 characters and must not contain only white characters.";
 	public static final String DIALOG_REMOVE_PARTITIONS_TITLE = "Remove partitions";
 	public static final String DIALOG_REMOVE_PARTITIONS_MESSAGE = "Removing partitions will remove also all test cases " +
 			"referencing those partitions. Are you sure that you want to proceed?";
 	public static final String DIALOG_PARTITION_SETTINGS_DIALOG_TITLE = "Partition settings";
 	public static final String DIALOG_PARTITION_SETTINGS_DIALOG_MESSAGE = "Enter partition name and value.";
 	public static final String DIALOG_TEST_SUITE_NAME_PROBLEM_TITLE = "Wrong test suite name";
-	public static final String DIALOG_TEST_SUITE_NAME_PROBLEM_MESSAGE = "Test suite name mus contain between 1 and 64 characters " +
+	public static final String DIALOG_TEST_SUITE_NAME_PROBLEM_MESSAGE = "Test suite name must contain between 1 and 64 characters " +
 			"and may not contain only white characters.";
 	public static final String DIALOG_CLASS_EXISTS_TITLE = "Class exists";
 	public static final String DIALOG_CLASS_EXISTS_MESSAGE = "Selected class is already contained in the model.";
