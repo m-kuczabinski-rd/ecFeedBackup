@@ -286,8 +286,9 @@ public class MethodNode extends GenericNode {
 				for(TestCaseNode testCase : fTestCases){
 					testCase.replaceValue(index, newCategory.getDefaultValuePartition().getIndependentCopy());
 				}
-			} else
+			} else{
 				fTestCases.clear();
+			}
 		}
 	}
 	
