@@ -36,13 +36,7 @@ public class ClassNameEditingSupport extends EditingSupport{
 
 	@Override
 	protected CellEditor getCellEditor(Object element) {
-		boolean doRename = true;
-		if (ModelUtils.isClassImplemented((ClassNode)element)) {
-			doRename = MessageDialog.openConfirm(Display.getCurrent().getActiveShell(), 
-				Messages.DIALOG_CLASS_EXISTS_TITLE,
-				Messages.DIALOG_RENAME_IMPLEMENTED_CLASS_MESSAGE);
-		}
-		return doRename ? fNameCellEditor : null;
+		return fNameCellEditor;
 	}
 
 	@Override
@@ -63,7 +57,8 @@ public class ClassNameEditingSupport extends EditingSupport{
 	@Override
 	protected void setValue(Object element, Object value) {
 		String newName = (String)value;
-		
+		boolean doRename = true;
+
 		if(!fPackageName){
 			if(!ModelUtils.validateNodeName(newName)){
 				MessageDialog.openError(Display.getCurrent().getActiveShell(),
@@ -90,8 +85,15 @@ public class ClassNameEditingSupport extends EditingSupport{
 
 		if (validName && !classNode.getName().equals(newQualifiedName)) {
 			if (classNode.getRoot().getClassModel(newQualifiedName) == null) {
-				classNode.setName(newQualifiedName);
-				fSection.modelUpdated();
+				if (ModelUtils.isClassImplemented((ClassNode)element)) {
+					doRename = MessageDialog.openConfirm(Display.getCurrent().getActiveShell(),
+						Messages.DIALOG_CLASS_EXISTS_TITLE,
+						Messages.DIALOG_RENAME_IMPLEMENTED_CLASS_MESSAGE);
+				}
+				if (doRename) {
+					classNode.setName(newQualifiedName);
+					fSection.modelUpdated();
+				}
 			} else {
 				MessageDialog.openError(Display.getCurrent().getActiveShell(),
 						Messages.DIALOG_CLASS_EXISTS_TITLE,
