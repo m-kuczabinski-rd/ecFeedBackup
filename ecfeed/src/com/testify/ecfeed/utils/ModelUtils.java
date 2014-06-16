@@ -413,10 +413,8 @@ public class ModelUtils {
 						"throws", "case", "enum", "instanceof", "return", "transient", "catch", "extends", "int", "short", "try", "char",
 						"final", "interface", "static", "void", "class", "finally", "long", "strictfp", "volatile", "const", "float",
 						"native", "super", "while", "null", "true", "false" };
-		for(String keyword : javaKeywords){
-			if(name.equals(keyword)) return false;
-		}
-		return true;
+		
+		return !Arrays.asList(javaKeywords).contains(name);
 	}
 
 	public static boolean isClassQualifiedNameValid(String qualifiedName) {
