@@ -66,14 +66,13 @@ public class ModelUtils {
 			   getNotContainedMethods(classNode, classNode.getQualifiedName()).size() == 0);
 	}
 	
-	public static void setUniqueNodeName(GenericNode children, GenericNode desiredParent){
-		String namesuffix = "";
+	public static void setUniqueNodeName(GenericNode child, GenericNode desiredParent){
+		String name = child.getName();
 		int i = 1;
-		while(desiredParent.getChild(children.getName() + namesuffix) != null){
-			namesuffix = "_" + i;
-			i++;
+		while(desiredParent.getChild(name) != null){
+			name = child.getName() + i++;
 		}
-		children.setName(children.getName() + namesuffix);
+		child.setName(name);
 	}
 	
 	//TODO Unit tests
