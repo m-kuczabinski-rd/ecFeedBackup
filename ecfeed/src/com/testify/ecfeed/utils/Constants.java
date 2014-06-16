@@ -58,4 +58,5 @@ public class Constants {
 	public static final String DEFAULT_NEW_METHOD_NAME = "testMethod";
 	public static final String DEFAULT_NEW_PACKAGE_NAME = "com.example.test";
 	public static final String DEFAULT_NEW_CLASS_NAME = "TestClass";
+	public static final String DEFAULT_USER_TYPE_NAME = "default.UserType";
 }
