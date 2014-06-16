@@ -82,12 +82,12 @@ public class ParametersViewer extends CheckboxTableViewerSection implements Test
 				String type = null;
 				String name = Constants.DEFAULT_NEW_CATEGORY_NAME;
 				int i = 1;
-	
+				
 				while(true){
-						if(fSelectedMethod.getCategory(name) == null){
-							break;
-						}
-					name += i;
+					if(fSelectedMethod.getCategory(name) == null){
+						break;
+					}
+					name = Constants.DEFAULT_NEW_CATEGORY_NAME + i;
 					++i;
 				}
 					
@@ -100,8 +100,8 @@ public class ParametersViewer extends CheckboxTableViewerSection implements Test
 						com.testify.ecfeed.model.Constants.TYPE_NAME_DOUBLE,
 						com.testify.ecfeed.model.Constants.TYPE_NAME_FLOAT,
 						com.testify.ecfeed.model.Constants.TYPE_NAME_STRING,
-						"user.type"
 				});
+				
 				for(String typeCandidate : types){
 					List<String> methodTypes = fSelectedMethod.getCategoriesTypes();
 					methodTypes.add(typeCandidate);
@@ -113,16 +113,16 @@ public class ParametersViewer extends CheckboxTableViewerSection implements Test
 	
 				if(type == null){
 					i = 1;
+					String typeCandidate = Constants.DEFAULT_USER_TYPE_NAME;
 					while(true){
 						List<String> methodTypes = fSelectedMethod.getCategoriesTypes();
-						String typeCandidate = "user.type" + i;
 						methodTypes.add(typeCandidate);
 						if (fSelectedMethod.getClassNode().getMethod(fSelectedMethod.getName(), methodTypes) == null) {
 							type = typeCandidate;
 							break;
 						}
 						else{
-							++i;
+							typeCandidate = Constants.DEFAULT_USER_TYPE_NAME + i++;
 						}
 					}
 				}
