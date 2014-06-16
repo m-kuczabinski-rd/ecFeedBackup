@@ -11,19 +11,16 @@
 
 package com.testify.ecfeed.ui.editor;
 
+import static com.testify.ecfeed.ui.common.WarningModelOperations.changeCategoryType;
+
 import java.util.ArrayList;
 
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ComboBoxCellEditor;
 import org.eclipse.jface.viewers.EditingSupport;
 import org.eclipse.swt.custom.CCombo;
-import org.eclipse.swt.widgets.Display;
 
 import com.testify.ecfeed.model.CategoryNode;
-import com.testify.ecfeed.model.ConstraintNode;
-import com.testify.ecfeed.ui.common.Messages;
-import com.testify.ecfeed.utils.AdaptTypeSupport;
 import com.testify.ecfeed.utils.ModelUtils;
 
 public class CategoryTypeEditingSupport extends EditingSupport {
@@ -72,58 +69,14 @@ public class CategoryTypeEditingSupport extends EditingSupport {
 		CategoryNode node = (CategoryNode)element;
 		String newType = null;
 		int index = (int)value;
-		boolean validName = true;
 
 		if (index >= 0) {
 			newType = fCellEditor.getItems()[index];
 		} else {
 			newType = ((CCombo)fCellEditor.getControl()).getText();
-			validName = ModelUtils.isClassQualifiedNameValid(newType);
 		}
-
-		if (!validName) {
-			MessageDialog.openError(Display.getCurrent().getActiveShell(),
-					Messages.DIALOG_PARAMETER_TYPE_PROBLEM_TITLE,
-					Messages.DIALOG_PARAMETER_TYPE_PROBLEM_MESSAGE);
-		}
-
-		if (validName && !node.getType().equals(newType)) {
-			ArrayList<String> tmpTypes = node.getMethod().getCategoriesTypes();
-			for (int i = 0; i < node.getMethod().getCategories().size(); ++i) {
-				CategoryNode type = node.getMethod().getCategories().get(i);
-				if (type.getName().equals(node.getName()) && type.getType().equals(node.getType())) {
-					tmpTypes.set(i, newType);
-				}
-			}
-			if (node.getMethod().getClassNode().getMethod(node.getMethod().getName(), tmpTypes) == null) {
-				// checking if there is any reason to display warning  - test cases and constraints
-				boolean warn  = false;
-				if(node.getMethod().getTestCases().isEmpty()){
-					for(ConstraintNode constraint : node.getMethod().getConstraintNodes()){
-						if(constraint.mentions(node)){
-							warn = true;
-							break;
-						}
-					}
-				} else{
-					warn =  true;
-				}
-				if(warn){
-					if (MessageDialog.openConfirm(Display.getCurrent().getActiveShell(),
-							Messages.DIALOG_DATA_MIGHT_BE_LOST_TITLE,
-							Messages.DIALOG_DATA_MIGHT_BE_LOST_MESSAGE)) {
-						AdaptTypeSupport.changeCategoryType(node, newType);
-						fSection.modelUpdated();
-					}
-				} else {
-					AdaptTypeSupport.changeCategoryType(node, newType);
-					fSection.modelUpdated();
-				}
-			} else {
-				MessageDialog.openError(Display.getCurrent().getActiveShell(),
-						Messages.DIALOG_METHOD_EXISTS_TITLE,
-						Messages.DIALOG_METHOD_WITH_PARAMETERS_EXISTS_MESSAGE);
-			}
+		if(changeCategoryType(node, newType)){
+			fSection.modelUpdated();
 		}
 
 		fCellEditor.setFocus();

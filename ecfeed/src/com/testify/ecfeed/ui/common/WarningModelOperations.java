@@ -2,6 +2,7 @@ package com.testify.ecfeed.ui.common;
 
 import static com.testify.ecfeed.ui.common.Messages.DIALOG_METHOD_EXISTS_TITLE;
 import static com.testify.ecfeed.ui.common.Messages.DIALOG_METHOD_WITH_PARAMETERS_EXISTS_MESSAGE;
+import static com.testify.ecfeed.utils.ModelUtils.getJavaTypes;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,6 +15,8 @@ import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.ConstraintNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
+import com.testify.ecfeed.utils.AdaptTypeSupport;
+import com.testify.ecfeed.utils.ModelUtils;
 
 public class WarningModelOperations{
 
@@ -110,7 +113,51 @@ public class WarningModelOperations{
 		return true;
 	}
 
-	public static void changeCategoryType(CategoryNode category, String newtype){
+	public static boolean changeCategoryType(CategoryNode category, String newType){
+		if (!getJavaTypes().contains(newType) && !ModelUtils.isClassQualifiedNameValid(newType)) {
+			MessageDialog.openError(Display.getCurrent().getActiveShell(),
+					Messages.DIALOG_PARAMETER_TYPE_PROBLEM_TITLE,
+					Messages.DIALOG_PARAMETER_TYPE_PROBLEM_MESSAGE);
+			return false;
+		}
+
+		if (!category.getType().equals(newType)) {
+			ArrayList<String> tmpTypes = category.getMethod().getCategoriesTypes();
+			for (int i = 0; i < category.getMethod().getCategories().size(); ++i) {
+				CategoryNode type = category.getMethod().getCategories().get(i);
+				if (type.getName().equals(category.getName()) && type.getType().equals(category.getType())) {
+					tmpTypes.set(i, newType);
+				}
+			}
+			if (category.getMethod().getClassNode().getMethod(category.getMethod().getName(), tmpTypes) == null) {
+				// checking if there is any reason to display warning  - test cases and constraints
+				boolean warn  = false;
+				if(category.getMethod().getTestCases().isEmpty()){
+					for(ConstraintNode constraint : category.getMethod().getConstraintNodes()){
+						if(constraint.mentions(category)){
+							warn = true;
+							break;
+						}
+					}
+				} else{
+					warn =  true;
+				}
+				if(warn){
+					if (!MessageDialog.openConfirm(Display.getCurrent().getActiveShell(),
+							Messages.DIALOG_DATA_MIGHT_BE_LOST_TITLE,
+							Messages.DIALOG_DATA_MIGHT_BE_LOST_MESSAGE)) {
+						return false;
+					}
+				}
+				AdaptTypeSupport.changeCategoryType(category, newType);
+				return true;
+			} else {
+				MessageDialog.openError(Display.getCurrent().getActiveShell(),
+						Messages.DIALOG_METHOD_EXISTS_TITLE,
+						Messages.DIALOG_METHOD_WITH_PARAMETERS_EXISTS_MESSAGE);
+			}
+		}
+		return false;
 
 	}
 
