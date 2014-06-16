@@ -10,6 +10,7 @@
  ******************************************************************************/
 package com.testify.ecfeed.ui.editor;
 
+import static com.testify.ecfeed.ui.common.CategoryNodeAbstractOperations.addCategory;
 import static com.testify.ecfeed.ui.common.Messages.DIALOG_PASTE_OPERATION_FAILED_MESSAGE;
 import static com.testify.ecfeed.ui.common.Messages.DIALOG_PASTE_OPERATION_FAILED_TITLE;
 import static com.testify.ecfeed.utils.ModelUtils.setUniqueNodeName;
@@ -25,7 +26,6 @@ import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.TestCaseNode;
-import com.testify.ecfeed.ui.common.WarningModelOperations;
 
 public class MenuPasteOperation extends MenuOperation{
 	protected IGenericNode fSource;
@@ -97,7 +97,7 @@ public class MenuPasteOperation extends MenuOperation{
 				if(fSource instanceof CategoryNode){
 					CategoryNode source = (CategoryNode)fSource;
 					setUniqueNodeName(source, target);
-					WarningModelOperations.addCategory(source, target);
+					addCategory(source, target);
 					return true;
 				} else if(fSource instanceof ConstraintNode){
 					ConstraintNode source = (ConstraintNode)fSource;

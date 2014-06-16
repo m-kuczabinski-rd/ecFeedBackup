@@ -11,23 +11,13 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
 
 import com.testify.ecfeed.model.CategoryNode;
-import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.ConstraintNode;
 import com.testify.ecfeed.model.MethodNode;
-import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.utils.AdaptTypeSupport;
 import com.testify.ecfeed.utils.ModelUtils;
 
-public class WarningModelOperations{
-
-	public static void removePartition(PartitionNode partition, CategoryNode parent){
-
-	}
-
-	public static void removePartition(PartitionNode partition, PartitionNode parent){
-
-	}
-
+public class CategoryNodeAbstractOperations{
+	
 	public static void removeCategory(CategoryNode category){
 
 	}
@@ -186,14 +176,6 @@ public class WarningModelOperations{
 			return true;
 		}
 		return false;
-	}
-
-	public static void removeMethod(MethodNode method){
-
-	}
-
-	public static void removeClass(ClassNode classnode){
-
 	}
 
 }

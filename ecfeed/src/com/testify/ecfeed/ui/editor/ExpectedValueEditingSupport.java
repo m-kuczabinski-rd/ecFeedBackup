@@ -11,13 +11,14 @@
 
 package com.testify.ecfeed.ui.editor;
 
+import static com.testify.ecfeed.ui.common.CategoryNodeAbstractOperations.changeCategoryExpectedStatus;
+
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ComboBoxCellEditor;
 import org.eclipse.jface.viewers.EditingSupport;
 import org.eclipse.swt.SWT;
 
 import com.testify.ecfeed.model.CategoryNode;
-import com.testify.ecfeed.ui.common.WarningModelOperations;
 
 public class ExpectedValueEditingSupport extends EditingSupport {
 
@@ -52,7 +53,7 @@ public class ExpectedValueEditingSupport extends EditingSupport {
 	protected void setValue(Object element, Object value) {
 		CategoryNode node = (CategoryNode)element;
 		boolean expected = ((int)value == 0) ? true : false;
-		if(WarningModelOperations.changeCategoryExpectedStatus(node, expected)){
+		if(changeCategoryExpectedStatus(node, expected)){
 			fSection.modelUpdated();
 		}
 		fCellEditor.setFocus();
