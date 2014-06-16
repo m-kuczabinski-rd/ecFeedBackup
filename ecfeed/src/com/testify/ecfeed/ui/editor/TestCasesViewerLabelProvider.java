@@ -47,11 +47,11 @@ public class TestCasesViewerLabelProvider extends LabelProvider implements IColo
 	@Override
 	public Color getForeground(Object element) {
 		if (element instanceof TestCaseNode) {
-			if (ModelUtils.isTestCaseImplemented((TestCaseNode)element)){
+			if (ModelUtils.isTestCaseImplemented((TestCaseNode)element) && ModelUtils.methodDefinitionImplemented(fMethod)) {
 				return fColorManager.getColor(ColorConstants.ITEM_IMPLEMENTED);
 			}
 		} else if (element instanceof String) {
-			if (ModelUtils.isTestSuiteImplemented(fMethod, (String)element)) {
+			if (ModelUtils.isTestSuiteImplemented(fMethod, (String)element) && ModelUtils.methodDefinitionImplemented(fMethod)) {
 				return fColorManager.getColor(ColorConstants.ITEM_IMPLEMENTED);
 			}
 		}

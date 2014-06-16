@@ -88,7 +88,7 @@ public class PartitionValueEditingSupport extends EditingSupport {
 			valueString = ((CCombo)fCellEditor.getControl()).getText();
 		}
 
-		if(!ModelUtils.validatePartitionStringValue(valueString, getCategory().getType()) && !isUserType(getCategory().getType())) {
+		if(!ModelUtils.validatePartitionStringValue(valueString, getCategory().getType())) {
 			MessageDialog.openError(Display.getCurrent().getActiveShell(), 
 					Messages.DIALOG_PARTITION_VALUE_PROBLEM_TITLE, 
 					Messages.DIALOG_PARTITION_VALUE_PROBLEM_MESSAGE);
@@ -99,18 +99,6 @@ public class PartitionValueEditingSupport extends EditingSupport {
 				fSection.modelUpdated();
 			}
 		}
-	}
-
-	private static boolean isUserType(String type) {
-		return !(type.equals(com.testify.ecfeed.model.Constants.TYPE_NAME_STRING) ||
-				type.equals(com.testify.ecfeed.model.Constants.TYPE_NAME_INT) ||
-				type.equals(com.testify.ecfeed.model.Constants.TYPE_NAME_BOOLEAN) ||
-				type.equals(com.testify.ecfeed.model.Constants.TYPE_NAME_DOUBLE) ||
-				type.equals(com.testify.ecfeed.model.Constants.TYPE_NAME_BYTE) ||
-				type.equals(com.testify.ecfeed.model.Constants.TYPE_NAME_CHAR) ||
-				type.equals(com.testify.ecfeed.model.Constants.TYPE_NAME_FLOAT) ||
-				type.equals(com.testify.ecfeed.model.Constants.TYPE_NAME_LONG) ||
-				type.equals(com.testify.ecfeed.model.Constants.TYPE_NAME_SHORT));
 	}
 
 	private CategoryNode getCategory(){
