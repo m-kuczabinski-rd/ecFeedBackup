@@ -157,7 +157,7 @@ public class MethodDetailsPage extends BasicDetailsPage {
 			boolean implemented = ModelUtils.isMethodImplemented(fSelectedMethod);
 			boolean partiallyImplemented = ModelUtils.isMethodPartiallyImplemented(fSelectedMethod);
 
-			String title = fSelectedMethod.getName();
+			String title = fSelectedMethod.toString();
 			title += " " + getImplementationStatusIndicator(implemented, partiallyImplemented);
 			fTestOnlineButton.setEnabled(implemented || partiallyImplemented);
 			getMainSection().setText(title);

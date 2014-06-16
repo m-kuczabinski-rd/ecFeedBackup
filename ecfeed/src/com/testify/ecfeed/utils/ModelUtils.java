@@ -66,14 +66,13 @@ public class ModelUtils {
 			   getNotContainedMethods(classNode, classNode.getQualifiedName()).size() == 0);
 	}
 	
-	public static void setUniqueNodeName(GenericNode children, GenericNode desiredParent){
-		String namesuffix = "";
+	public static void setUniqueNodeName(GenericNode child, GenericNode desiredParent){
+		String name = child.getName();
 		int i = 1;
-		while(desiredParent.getChild(children.getName() + namesuffix) != null){
-			namesuffix = "_" + i;
-			i++;
+		while(desiredParent.getChild(name) != null){
+			name = child.getName() + i++;
 		}
-		children.setName(children.getName() + namesuffix);
+		child.setName(name);
 	}
 	
 	//TODO Unit tests
@@ -583,9 +582,7 @@ public class ModelUtils {
 				for (IMethod method : type.getMethods()){
 					if (method.getElementName().equals(methodModel.getName())) {
 						List<String> argTypes = getArgTypes(method, testClass);
-						List<String> paramNames = getParamNames(method);
-						if (methodModel.getCategoriesTypes().equals(argTypes) &&
-								methodModel.getCategoriesNames().equals(paramNames)) {
+						if (methodModel.getCategoriesTypes().equals(argTypes)){
 							implemented = true;
 							break;
 						}
@@ -633,7 +630,7 @@ public class ModelUtils {
 		return argTypes;
 	}
 	
-	private static List<String> getParamNames(IMethod method) {
+	public static List<String> getParamNames(IMethod method) {
 		List<String> argTypes = new ArrayList<String>();
 		
 		try {
