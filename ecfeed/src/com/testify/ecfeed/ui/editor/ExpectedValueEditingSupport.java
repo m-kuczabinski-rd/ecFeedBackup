@@ -11,7 +11,7 @@
 
 package com.testify.ecfeed.ui.editor;
 
-import static com.testify.ecfeed.ui.common.CategoryNodeAbstractOperations.changeCategoryExpectedStatus;
+import static com.testify.ecfeed.ui.common.CategoryNodeAbstractLayer.changeCategoryExpectedStatus;
 
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ComboBoxCellEditor;

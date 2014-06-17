@@ -26,7 +26,7 @@ import org.eclipse.swt.widgets.Text;
 
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.Constants;
-import com.testify.ecfeed.ui.common.CategoryNodeAbstractOperations;
+import com.testify.ecfeed.ui.common.CategoryNodeAbstractLayer;
 import com.testify.ecfeed.ui.common.SimpleControlMenuListener;
 import com.testify.ecfeed.utils.ModelUtils;
 
@@ -180,7 +180,7 @@ public class CategoryDetailsPage extends BasicDetailsPage {
 		fExpectedCheckbox.addSelectionListener(new SelectionAdapter(){
 			@Override
 			public void widgetSelected(SelectionEvent e){
-				if(CategoryNodeAbstractOperations.changeCategoryExpectedStatus(fSelectedCategory, fExpectedCheckbox.getSelection())){
+				if(CategoryNodeAbstractLayer.changeCategoryExpectedStatus(fSelectedCategory, fExpectedCheckbox.getSelection())){
 					modelUpdated(null);
 				}
 			}
@@ -215,6 +215,6 @@ public class CategoryDetailsPage extends BasicDetailsPage {
 	
 	protected boolean applyNewCategoryType(CategoryNode category, Combo valueText) {
 		String newValue = valueText.getText();
-		return CategoryNodeAbstractOperations.changeCategoryType(category, newValue);
+		return CategoryNodeAbstractLayer.changeCategoryType(category, newValue);
 	}
 }

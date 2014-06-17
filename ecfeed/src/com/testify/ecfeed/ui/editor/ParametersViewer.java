@@ -11,8 +11,8 @@
 
 package com.testify.ecfeed.ui.editor;
 
-import static com.testify.ecfeed.ui.common.CategoryNodeAbstractOperations.addCategory;
-import static com.testify.ecfeed.ui.common.CategoryNodeAbstractOperations.removeCategories;
+import static com.testify.ecfeed.ui.common.CategoryNodeAbstractLayer.addCategory;
+import static com.testify.ecfeed.ui.common.CategoryNodeAbstractLayer.removeCategories;
 
 import java.util.ArrayList;
 import java.util.Arrays;

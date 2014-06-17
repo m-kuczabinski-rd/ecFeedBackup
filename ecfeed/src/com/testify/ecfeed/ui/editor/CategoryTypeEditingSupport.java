@@ -11,7 +11,7 @@
 
 package com.testify.ecfeed.ui.editor;
 
-import static com.testify.ecfeed.ui.common.CategoryNodeAbstractOperations.changeCategoryType;
+import static com.testify.ecfeed.ui.common.CategoryNodeAbstractLayer.changeCategoryType;
 
 import java.util.ArrayList;
 

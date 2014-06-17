@@ -10,7 +10,7 @@
  ******************************************************************************/
 package com.testify.ecfeed.ui.editor;
 
-import static com.testify.ecfeed.ui.common.CategoryNodeAbstractOperations.addCategory;
+import static com.testify.ecfeed.ui.common.CategoryNodeAbstractLayer.addCategory;
 import static com.testify.ecfeed.ui.common.Messages.DIALOG_PASTE_OPERATION_FAILED_MESSAGE;
 import static com.testify.ecfeed.ui.common.Messages.DIALOG_PASTE_OPERATION_FAILED_TITLE;
 import static com.testify.ecfeed.utils.ModelUtils.setUniqueNodeName;
