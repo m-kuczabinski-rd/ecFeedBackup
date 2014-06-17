@@ -39,7 +39,7 @@ public class ClassViewer extends CheckboxTableViewerSection {
 		public void widgetSelected(SelectionEvent e) {
 			IType selectedClass = selectClass();
 
-			if(fModel != null){
+			if(fModel != null && selectedClass != null){
 				addClass(selectedClass, fModel);
 			}
 		}
