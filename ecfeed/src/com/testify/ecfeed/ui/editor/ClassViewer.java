@@ -37,15 +37,20 @@ public class ClassViewer extends CheckboxTableViewerSection {
 
 		@Override
 		public void widgetSelected(SelectionEvent e) {
-			IType selectedClass = selectClass();
+			TestClassSelectionDialog dialog = new TestClassSelectionDialog(getActiveShell());
 
-			if(fModel != null){
-				addClass(selectedClass, fModel);
+			if (dialog.open() == IDialogConstants.OK_ID) {
+				IType selectedClass = (IType)dialog.getFirstResult();
+				boolean testOnly = dialog.getTestOnlyFlag();
+
+				if(fModel != null && selectedClass != null){
+					addClass(selectedClass, fModel, testOnly);
+				}
 			}
 		}
 
-		private void addClass(IType selectedClass, RootNode model){
-			ClassNode classNode = ModelUtils.generateClassModel(selectedClass);
+		private void addClass(IType selectedClass, RootNode model, boolean testOnly){
+			ClassNode classNode = ModelUtils.generateClassModel(selectedClass, testOnly);
 			if(model.getClassModel(classNode.getQualifiedName()) == null){
 				model.addClass(classNode);
 				modelUpdated();
@@ -57,14 +62,6 @@ public class ClassViewer extends CheckboxTableViewerSection {
 			}
 		}
 
-		private IType selectClass() {
-			TestClassSelectionDialog dialog = new TestClassSelectionDialog(getActiveShell());
-
-			if (dialog.open() == IDialogConstants.OK_ID) {
-				return (IType)dialog.getFirstResult();
-			}
-			return null;
-		}
 	}
 	
 	private class RemoveClassesAdapter extends SelectionAdapter {

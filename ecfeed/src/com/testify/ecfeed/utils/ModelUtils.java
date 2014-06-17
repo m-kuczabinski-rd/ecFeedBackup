@@ -20,6 +20,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.jdt.core.Flags;
 import org.eclipse.jdt.core.IAnnotation;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.ILocalVariable;
@@ -38,19 +39,15 @@ import com.testify.ecfeed.model.TestCaseNode;
 
 public class ModelUtils {
 	
-	public static ClassNode generateClassModel(IType type){ 
+	public static  ClassNode generateClassModel(IType type, boolean testMethodsOnly){ 
 		ClassNode classNode = new ClassNode(type.getFullyQualifiedName());
 		try{
 			Class<?> testClass = ClassUtils.loadClass(ClassUtils.getClassLoader(true, null), type.getFullyQualifiedName());
 			for(IMethod method : type.getMethods()){
-				IAnnotation[] annotations = method.getAnnotations();
-				for(IAnnotation annotation : annotations){
-					if(annotation.getElementName().equals("Test")){
-						MethodNode methodModel = generateMethodModel(method, testClass);
-						if(methodModel != null){
-							classNode.addMethod(methodModel);
-						}
-						break;
+				if((testMethodsOnly && isAnnotated(method, "Test")) || (!testMethodsOnly && isPublicVoid(method))){
+					MethodNode methodModel = generateMethodModel(method, testClass);
+					if(methodModel != null){
+						classNode.addMethod(methodModel);
 					}
 				}
 			}
@@ -60,10 +57,28 @@ public class ModelUtils {
 		}
 		return classNode;
 	}
+	
+	private static boolean isAnnotated(IMethod method, String name) throws JavaModelException{
+		IAnnotation[] annotations = method.getAnnotations();
+		for(IAnnotation annotation : annotations){
+			if(annotation.getElementName().equals(name)){
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	private static boolean isPublicVoid(IMethod method) throws JavaModelException{
+		return (method.getReturnType().equals(Signature.SIG_VOID) && Flags.isPublic(method.getFlags()));
+	}
+	
+	public static ClassNode generateClassModel(IType type){
+		return generateClassModel(type, true);
+	}
 
 	public static boolean isClassModelUpToDate(ClassNode classNode) throws JavaModelException{
 		return(getObsoleteMethods(classNode, classNode.getQualifiedName()).size() == 0 && 
-			   getNotContainedMethods(classNode, classNode.getQualifiedName()).size() == 0);
+			   getNotContainedMethods(classNode, classNode.getQualifiedName(), false).size() == 0);
 	}
 	
 	public static void setUniqueNodeName(GenericNode child, GenericNode desiredParent){
@@ -103,7 +118,7 @@ public class ModelUtils {
 	 * Returns list generated models of test method that are not contained in the provided class model;
 	 * @throws JavaModelException 
 	 */
-	public static List<MethodNode> getNotContainedMethods(ClassNode classNode, String qualifiedTypeName){
+	public static List<MethodNode> getNotContainedMethods(ClassNode classNode, String qualifiedTypeName, boolean testOnly){
 		ArrayList<MethodNode> empty = new ArrayList<MethodNode>();
 		IType type;
 		
@@ -117,7 +132,7 @@ public class ModelUtils {
 			return empty;
 		}
 
-		ClassNode model = generateClassModel(type);
+		ClassNode model = generateClassModel(type, testOnly);
 		if(classNode == null){
 			return model.getMethods();
 		}
@@ -132,7 +147,7 @@ public class ModelUtils {
 	 */
 	public static List<MethodNode> getCompatibleMethods(MethodNode method) {
 		ClassNode parent = (ClassNode)method.getParent();
-		List<MethodNode> potentialMatches = getNotContainedMethods(parent, parent.getQualifiedName());
+		List<MethodNode> potentialMatches = getNotContainedMethods(parent, parent.getQualifiedName(), false);
 		List<MethodNode> matches = new ArrayList<MethodNode>();
 		for(MethodNode potentialMatch : potentialMatches){
 			if (potentialMatch.getCategoriesTypes().equals(method.getCategoriesTypes())){
@@ -204,6 +219,10 @@ public class ModelUtils {
 			}
 		}
 		return false;
+	}
+
+	public static boolean isMethodWithParameters(MethodNode methodNode) {
+		return (methodNode.getCategories().size() > 0);
 	}
 
 	public static String getDefaultExpectedValueString(String type) {
@@ -532,7 +551,7 @@ public class ModelUtils {
 	}
 
 	private static boolean allPartitionsImplemented(List<PartitionNode> partitions) {
-		boolean implemented = (partitions.size() > 0) ? true : false;
+		boolean implemented = true;
 
 		for (PartitionNode partition : partitions) {
 			implemented = isPartitionImplemented(partition);
