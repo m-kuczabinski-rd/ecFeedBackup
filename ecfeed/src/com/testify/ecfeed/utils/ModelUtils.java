@@ -14,6 +14,7 @@ package com.testify.ecfeed.utils;
 import java.lang.reflect.Method;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -402,20 +403,18 @@ public class ModelUtils {
 	public static boolean validateNodeName(String name){
 		if(name.length() < 1) return false;
 		if(!name.matches("(^[a-zA-Z][a-zA-Z0-9_$]*)|(^[_][a-zA-Z0-9_$]+)")) return false;
-		return assertNotKeyword(name);
+		return isKeyword(name);
 	}
 	
-	public static boolean assertNotKeyword(String name){
+	public static boolean isKeyword(String name){
 		String[] javaKeywords =
 				{ "abstract", "continue", "for", "new", "switch", "assert", "default", "goto", "package", "synchronized", "boolean", "do",
 						"if", "private", "this", "break", "double", "implements", "protected", "throw", "byte", "else", "import", "public",
 						"throws", "case", "enum", "instanceof", "return", "transient", "catch", "extends", "int", "short", "try", "char",
 						"final", "interface", "static", "void", "class", "finally", "long", "strictfp", "volatile", "const", "float",
 						"native", "super", "while", "null", "true", "false" };
-		for(String keyword : javaKeywords){
-			if(name.equals(keyword)) return false;
-		}
-		return true;
+		
+		return !Arrays.asList(javaKeywords).contains(name);
 	}
 
 	public static boolean isClassQualifiedNameValid(String qualifiedName) {
