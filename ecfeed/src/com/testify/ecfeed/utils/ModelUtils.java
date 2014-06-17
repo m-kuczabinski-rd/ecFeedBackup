@@ -14,7 +14,6 @@ package com.testify.ecfeed.utils;
 import java.lang.reflect.Method;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -438,7 +437,7 @@ public class ModelUtils {
 		if (ClassUtils.getPartitionValueFromString(valueString, type, ClassUtils.getClassLoader(true, null)) != null){
 			return true;
 		} else {
-			if(Arrays.asList(AdaptTypeSupport.getSupportedTypes()).contains(type)){
+			if(getJavaTypes().contains(type)){
 				return false;
 			}
 			return true;

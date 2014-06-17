@@ -11,6 +11,9 @@
 
 package com.testify.ecfeed.ui.editor;
 
+import static com.testify.ecfeed.ui.common.CategoryNodeAbstractOperations.addCategory;
+import static com.testify.ecfeed.ui.common.CategoryNodeAbstractOperations.removeCategories;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -37,7 +40,6 @@ import com.testify.ecfeed.ui.common.ColorManager;
 import com.testify.ecfeed.ui.common.DefaultValueEditingSupport;
 import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.common.TestDataEditorListener;
-import com.testify.ecfeed.ui.common.WarningModelOperations;
 import com.testify.ecfeed.utils.Constants;
 import com.testify.ecfeed.utils.ModelUtils;
 
@@ -134,7 +136,7 @@ public class ParametersViewer extends CheckboxTableViewerSection implements Test
 					categoryNode.addPartition(partition);
 				}
 				
-				WarningModelOperations.addCategory(categoryNode, fSelectedMethod);
+				addCategory(categoryNode, fSelectedMethod);
 				
 				modelUpdated();
 				selectElement(categoryNode);
@@ -151,7 +153,7 @@ public class ParametersViewer extends CheckboxTableViewerSection implements Test
 				for (Object element : getCheckedElements()) {
 					categories.add((CategoryNode)element);
 				}
-				if(WarningModelOperations.removeCategories(categories, fSelectedMethod)){
+				if(removeCategories(categories, fSelectedMethod)){
 					modelUpdated();
 				}
 			}

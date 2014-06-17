@@ -4,7 +4,6 @@ import static com.testify.ecfeed.utils.ModelUtils.getDefaultExpectedValueString;
 
 import java.text.NumberFormat;
 import java.text.ParseException;
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
@@ -17,14 +16,6 @@ public class AdaptTypeSupport{
 
 	public static enum ConversionType{
 		DONE, POSSIBLE, IMPOSSIBLE;
-	}
-
-	public static String[] getSupportedTypes(){
-		return new String[] { com.testify.ecfeed.model.Constants.TYPE_NAME_STRING, com.testify.ecfeed.model.Constants.TYPE_NAME_INT,
-				com.testify.ecfeed.model.Constants.TYPE_NAME_BOOLEAN, com.testify.ecfeed.model.Constants.TYPE_NAME_DOUBLE,
-				com.testify.ecfeed.model.Constants.TYPE_NAME_BYTE, com.testify.ecfeed.model.Constants.TYPE_NAME_CHAR,
-				com.testify.ecfeed.model.Constants.TYPE_NAME_FLOAT, com.testify.ecfeed.model.Constants.TYPE_NAME_LONG,
-				com.testify.ecfeed.model.Constants.TYPE_NAME_SHORT };
 	}
 
 	// returns true if model has changed in any way
@@ -135,7 +126,7 @@ public class AdaptTypeSupport{
 		}
 		// if no conversion was possible, try to assign predefined
 		// default value
-		if(category.getDefaultValueString() == null && Arrays.asList(getSupportedTypes()).contains(newtype)){
+		if(category.getDefaultValueString() == null && ModelUtils.getJavaTypes().contains(newtype)){
 			assignDefaultValueString(category, newtype);
 		}
 	}
@@ -203,7 +194,7 @@ public class AdaptTypeSupport{
 	}
 
 	private static boolean assignDefaultValueString(CategoryNode category, String type){
-		if(Arrays.asList(getSupportedTypes()).contains(type)){
+		if(ModelUtils.getJavaTypes().contains(type)){
 			String expvalue = getDefaultExpectedValueString(type);
 			if(expvalue != null){
 				category.setDefaultValueString(expvalue);
