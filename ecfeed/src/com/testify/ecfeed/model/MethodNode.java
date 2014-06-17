@@ -330,6 +330,32 @@ public class MethodNode extends GenericNode {
 		return super.validateNodeName(name);
 	}
 	
+	public boolean isPartitionMentioned(PartitionNode partition){
+		for(ConstraintNode constraint : fConstraints){
+			if(constraint.mentions(partition)){
+				return true;
+			}
+		}	
+		for(TestCaseNode testCase: fTestCases){
+			if(testCase.mentions(partition)){
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public boolean isCategoryMentioned(CategoryNode category){
+		for(ConstraintNode constraint : fConstraints){
+			if(constraint.mentions(category)){
+				return true;
+			}
+		}
+		if(fTestCases.isEmpty()){
+			return false;
+		}
+		return true;
+	}
+	
 	public void removeMentioningConstraints(CategoryNode category){
 		Iterator<ConstraintNode> it = fConstraints.iterator();
 		while(it.hasNext()){
