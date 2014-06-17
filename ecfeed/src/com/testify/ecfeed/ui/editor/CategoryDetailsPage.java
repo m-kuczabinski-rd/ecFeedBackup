@@ -183,6 +183,7 @@ public class CategoryDetailsPage extends BasicDetailsPage {
 				if(CategoryNodeAbstractLayer.changeCategoryExpectedStatus(fSelectedCategory, fExpectedCheckbox.getSelection())){
 					modelUpdated(null);
 				}
+				else fExpectedCheckbox.setSelection(!fExpectedCheckbox.getSelection());
 			}
 		});
 		
