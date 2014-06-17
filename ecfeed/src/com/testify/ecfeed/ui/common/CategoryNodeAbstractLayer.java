@@ -16,7 +16,7 @@ import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.utils.AdaptTypeSupport;
 import com.testify.ecfeed.utils.ModelUtils;
 
-public class CategoryNodeAbstractOperations{
+public class CategoryNodeAbstractLayer{
 	
 	public static boolean removeCategory(CategoryNode category, MethodNode method){
 	
