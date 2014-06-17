@@ -11,16 +11,14 @@
 
 package com.testify.ecfeed.ui.editor;
 
-import org.eclipse.jface.dialogs.MessageDialog;
+import static com.testify.ecfeed.ui.common.CategoryNodeAbstractOperations.changeCategoryExpectedStatus;
+
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ComboBoxCellEditor;
 import org.eclipse.jface.viewers.EditingSupport;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.widgets.Display;
 
 import com.testify.ecfeed.model.CategoryNode;
-import com.testify.ecfeed.model.ConstraintNode;
-import com.testify.ecfeed.ui.common.Messages;
 
 public class ExpectedValueEditingSupport extends EditingSupport {
 
@@ -55,30 +53,8 @@ public class ExpectedValueEditingSupport extends EditingSupport {
 	protected void setValue(Object element, Object value) {
 		CategoryNode node = (CategoryNode)element;
 		boolean expected = ((int)value == 0) ? true : false;
-		if (node.isExpected() != expected) {
-			// checking if there is any reason to display warning  - test cases and constraints
-			boolean warn  = false;
-			if(node.getMethod().getTestCases().isEmpty()){
-				for(ConstraintNode constraint : node.getMethod().getConstraintNodes()){
-					if(constraint.mentions(node)){
-						warn = true;
-						break;
-					}
-				}
-			} else{
-				warn =  true;
-			}
-			if(warn){
-				if (MessageDialog.openConfirm(Display.getCurrent().getActiveShell(),
-						Messages.DIALOG_DATA_MIGHT_BE_LOST_TITLE,
-						Messages.DIALOG_DATA_MIGHT_BE_LOST_MESSAGE)) {
-					node.getMethod().changeCategoryExpectedStatus(node, expected);
-					fSection.modelUpdated();
-				}
-			} else {
-				node.getMethod().changeCategoryExpectedStatus(node, expected);
-				fSection.modelUpdated();
-			}
+		if(changeCategoryExpectedStatus(node, expected)){
+			fSection.modelUpdated();
 		}
 		fCellEditor.setFocus();
 	}

@@ -151,24 +151,6 @@ public class MethodNode extends GenericNode {
 		return null;
 	}
 	
-	public CategoryNode getExpectedCategory(String categoryName) {
-		for(CategoryNode category : fCategories){
-			if(category.isExpected() && category.getName().equals(categoryName)){
-				return category;
-			}
-		}
-		return null;
-	}
-
-	public CategoryNode getPartitionedCategory(String categoryName) {
-		for(CategoryNode category : fCategories){
-			if((!category.isExpected()) && category.getName().equals(categoryName)){
-				return category;
-			}
-		}
-		return null;
-	}
-
 	public List<CategoryNode> getCategories(boolean expected) {
 		ArrayList<CategoryNode> categories = new ArrayList<>();
 		for(CategoryNode category : fCategories){
@@ -304,8 +286,9 @@ public class MethodNode extends GenericNode {
 				for(TestCaseNode testCase : fTestCases){
 					testCase.replaceValue(index, newCategory.getDefaultValuePartition().getIndependentCopy());
 				}
-			} else
+			} else{
 				fTestCases.clear();
+			}
 		}
 	}
 	

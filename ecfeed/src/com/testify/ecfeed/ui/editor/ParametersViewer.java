@@ -11,6 +11,9 @@
 
 package com.testify.ecfeed.ui.editor;
 
+import static com.testify.ecfeed.ui.common.CategoryNodeAbstractOperations.addCategory;
+import static com.testify.ecfeed.ui.common.CategoryNodeAbstractOperations.removeCategories;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -29,7 +32,6 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Section;
 
 import com.testify.ecfeed.model.CategoryNode;
-import com.testify.ecfeed.model.ConstraintNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.TestCaseNode;
@@ -79,11 +81,10 @@ public class ParametersViewer extends CheckboxTableViewerSection implements Test
 	private class AddNewParameterAdapter extends SelectionAdapter {
 		@Override
 		public void widgetSelected(SelectionEvent e) {
-			if(fSelectedMethod.getTestCases().isEmpty() || MessageDialog.openConfirm(getActiveShell(),
-					Messages.DIALOG_DATA_MIGHT_BE_LOST_TITLE, Messages.DIALOG_DATA_MIGHT_BE_LOST_MESSAGE)){
 				String type = null;
 				String name = Constants.DEFAULT_NEW_CATEGORY_NAME;
 				int i = 1;
+				
 				while(true){
 					if(fSelectedMethod.getCategory(name) == null){
 						break;
@@ -101,8 +102,8 @@ public class ParametersViewer extends CheckboxTableViewerSection implements Test
 						com.testify.ecfeed.model.Constants.TYPE_NAME_DOUBLE,
 						com.testify.ecfeed.model.Constants.TYPE_NAME_FLOAT,
 						com.testify.ecfeed.model.Constants.TYPE_NAME_STRING,
-						"user.type"
 				});
+				
 				for(String typeCandidate : types){
 					List<String> methodTypes = fSelectedMethod.getCategoriesTypes();
 					methodTypes.add(typeCandidate);
@@ -114,19 +115,18 @@ public class ParametersViewer extends CheckboxTableViewerSection implements Test
 	
 				if(type == null){
 					i = 1;
+					String typeCandidate = Constants.DEFAULT_USER_TYPE_NAME;
 					while(true){
 						List<String> methodTypes = fSelectedMethod.getCategoriesTypes();
-						String typeCandidate = "user.type" + i;
 						methodTypes.add(typeCandidate);
 						if (fSelectedMethod.getClassNode().getMethod(fSelectedMethod.getName(), methodTypes) == null) {
 							type = typeCandidate;
 							break;
 						}
 						else{
-							++i;
+							typeCandidate = Constants.DEFAULT_USER_TYPE_NAME + i++;
 						}
 					}
-
 				}
 		
 				CategoryNode categoryNode = new CategoryNode(name, type, false);
@@ -135,13 +135,13 @@ public class ParametersViewer extends CheckboxTableViewerSection implements Test
 				for(PartitionNode partition : defaultPartitions){
 					categoryNode.addPartition(partition);
 				}
-
-				fSelectedMethod.addCategory(categoryNode);
-				fSelectedMethod.clearTestCases();
+				
+				addCategory(categoryNode, fSelectedMethod);
+				
 				modelUpdated();
 				selectElement(categoryNode);
 				nameColumn.getViewer().editElement(categoryNode, 0);			
-			}
+			
 		}
 	}
 
@@ -149,60 +149,14 @@ public class ParametersViewer extends CheckboxTableViewerSection implements Test
 		@Override
 		public void widgetSelected(SelectionEvent e) {
 			if(getCheckedElements().length > 0){
-				ArrayList<String> tmpTypes = fSelectedMethod.getCategoriesTypes();
+				ArrayList<CategoryNode> categories = new ArrayList<>();
 				for (Object element : getCheckedElements()) {
-					CategoryNode node = (CategoryNode)element;
-					for (int i = 0; i < fSelectedMethod.getCategories().size(); ++i) {
-						CategoryNode type = fSelectedMethod.getCategories().get(i);
-						if (type.getName().equals(node.getName()) && type.getType().equals(node.getType())) {
-							tmpTypes.remove(node.getType());
-						}
-					}
+					categories.add((CategoryNode)element);
 				}
-				if (fSelectedMethod.getClassNode().getMethod(fSelectedMethod.getName(), tmpTypes) == null) {
-					// checking if there is any reason to display warning  - test cases and constraints
-					boolean warn  = false;
-					if(fSelectedMethod.getTestCases().isEmpty()){
-						for(ConstraintNode constraint: fSelectedMethod.getConstraintNodes()){
-							for(Object element: getCheckedElements()){
-								if(constraint.mentions((CategoryNode)element)){
-									warn  = true;
-									break;
-								}
-							}
-							if(warn == true)
-								break;
-						}
-					} else{
-						warn =  true;
-					}
-					if(warn){
-						if (MessageDialog.openConfirm(getActiveShell(),
-								Messages.DIALOG_REMOVE_PARAMETERS_TITLE,
-								Messages.DIALOG_REMOVE_PARAMETERS_MESSAGE)) {
-							removeParameters(getCheckedElements());
-						}
-					} else {
-						removeParameters(getCheckedElements());
-					}
-				} else {
-					MessageDialog.openError(Display.getCurrent().getActiveShell(),
-							Messages.DIALOG_METHOD_EXISTS_TITLE,
-							Messages.DIALOG_METHOD_WITH_PARAMETERS_EXISTS_MESSAGE);
+				if(removeCategories(categories, fSelectedMethod)){
+					modelUpdated();
 				}
 			}
-		}
-
-		private void removeParameters(Object[] checkedElements) {
-			for(Object element : checkedElements){
-				if (element instanceof CategoryNode){
-					if(fSelectedMethod.removeCategory((CategoryNode)element)){
-						fSelectedMethod.clearTestCases();
-					};
-					
-				}
-			}
-			modelUpdated();
 		}
 	}
 
