@@ -52,7 +52,7 @@ public class OtherMethodsViewer extends CheckboxTableViewerSection {
 	
 	public void setInput(ClassNode classNode){
 		fSelectedClass = classNode;
-		List<MethodNode> notContainedMethods = ModelUtils.getNotContainedMethods(fSelectedClass, fSelectedClass.getQualifiedName());
+		List<MethodNode> notContainedMethods = ModelUtils.getNotContainedMethods(fSelectedClass, fSelectedClass.getQualifiedName(), false);
 		setText("Other methods in " + fSelectedClass.getLocalName());
 		setVisible(notContainedMethods.size() > 0);
 		super.setInput(notContainedMethods);
