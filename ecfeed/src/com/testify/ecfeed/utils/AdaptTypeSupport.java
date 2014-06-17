@@ -184,7 +184,8 @@ public class AdaptTypeSupport{
 			while(itr.hasNext()){
 				PartitionNode partition = itr.next();
 				if(!adaptOrRemovePartitions(partition, newtype)){
-					partition.getParent().removePartition(partition);
+					itr.remove();
+					partition.getParent().partitionRemoved(partition);
 				}
 			}
 			if(!assignDefaultValueString(category, newtype))
@@ -211,7 +212,8 @@ public class AdaptTypeSupport{
 			while(itr.hasNext()){
 				PartitionNode childpart = itr.next();
 				if(!adaptOrRemovePartitions(childpart, type)){
-					childpart.getParent().removePartition(childpart);
+					itr.remove();
+					childpart.getParent().partitionRemoved(childpart);
 				}
 			}
 		}
