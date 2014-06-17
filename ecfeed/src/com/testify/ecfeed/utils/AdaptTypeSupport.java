@@ -184,8 +184,7 @@ public class AdaptTypeSupport{
 			while(itr.hasNext()){
 				PartitionNode partition = itr.next();
 				if(!adaptOrRemovePartitions(partition, newtype)){
-					itr.remove();
-					partition.getParent().removePartition(partition);
+					category.removePartition(partition);
 				}
 			}
 			if(!assignDefaultValueString(category, newtype))
@@ -217,16 +216,8 @@ public class AdaptTypeSupport{
 					childpart.getParent().partitionRemoved(partition);
 				}
 			}
-			if(partition.getPartitions().isEmpty()){
-				String newvalue = adaptValueToType(partition.getValueString(), type);
-				if(newvalue != null){
-					partition.setValueString(newvalue);
-				} else{
-					return false;
-				}				
-			}
 		}
-		if(partitions.isEmpty()){
+		if(partition.getPartitions().isEmpty()){
 			String newvalue = adaptValueToType(partition.getValueString(), type);
 			if(newvalue != null){
 				partition.setValueString(newvalue);
@@ -234,6 +225,7 @@ public class AdaptTypeSupport{
 				return false;
 			}
 		}
+
 		return true;
 	}
 
