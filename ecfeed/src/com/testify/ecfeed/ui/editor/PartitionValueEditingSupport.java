@@ -34,7 +34,6 @@ public class PartitionValueEditingSupport extends EditingSupport {
 		super(viewer.getTableViewer());
 		String[] items = {""};
 		fCellEditor = new ComboBoxCellEditor(viewer.getTable(), items);
-		fCellEditor.setActivationStyle(ComboBoxCellEditor.DROP_DOWN_ON_MOUSE_ACTIVATION);
 		fSection = viewer;
 	}
 
@@ -42,12 +41,16 @@ public class PartitionValueEditingSupport extends EditingSupport {
 		super(viewer.getTableViewer());
 		String[] items = {""};
 		fCellEditor = new ComboBoxCellEditor(viewer.getTable(), items);
-		fCellEditor.setActivationStyle(ComboBoxCellEditor.DROP_DOWN_ON_MOUSE_ACTIVATION);
 		fSection = viewer;
 	}
 	
 	@Override
 	protected CellEditor getCellEditor(Object element) {
+		PartitionNode node = (PartitionNode)element;
+		if (!ModelUtils.getJavaTypes().contains(node.getCategory().getType())
+				|| node.getCategory().getType().equals(com.testify.ecfeed.model.Constants.TYPE_NAME_BOOLEAN)) {
+			fCellEditor.setActivationStyle(ComboBoxCellEditor.DROP_DOWN_ON_MOUSE_ACTIVATION);
+		}
 		return fCellEditor;
 	}
 
