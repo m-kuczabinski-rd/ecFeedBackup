@@ -206,6 +206,10 @@ public class ModelUtils {
 		return false;
 	}
 
+	public static boolean isMethodWithParameters(MethodNode methodNode) {
+		return (methodNode.getCategories().size() > 0);
+	}
+
 	public static String getDefaultExpectedValueString(String type) {
 		switch(type){
 		case com.testify.ecfeed.model.Constants.TYPE_NAME_BYTE:
@@ -532,7 +536,7 @@ public class ModelUtils {
 	}
 
 	private static boolean allPartitionsImplemented(List<PartitionNode> partitions) {
-		boolean implemented = (partitions.size() > 0) ? true : false;
+		boolean implemented = true;
 
 		for (PartitionNode partition : partitions) {
 			implemented = isPartitionImplemented(partition);

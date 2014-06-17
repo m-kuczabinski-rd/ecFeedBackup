@@ -34,6 +34,7 @@ import com.testify.ecfeed.model.constraint.Constraint;
 import com.testify.ecfeed.runner.ParameterizedMethod;
 import com.testify.ecfeed.ui.dialogs.ExecuteOnlineSetupDialog;
 import com.testify.ecfeed.ui.dialogs.GeneratorProgressMonitorDialog;
+import com.testify.ecfeed.utils.ModelUtils;
 
 public class ExecuteOnlineTestAdapter extends ExecuteTestAdapter {
 
@@ -63,16 +64,25 @@ public class ExecuteOnlineTestAdapter extends ExecuteTestAdapter {
 			Method testMethod = getTestMethod(testClass, getMethodModel());
 			List<PartitionNode> next;
 			try {
-				fGenerator.initialize(fInput, fConstraints, fParameters);
-				monitor.beginTask("Executing test function with generated parameters", fGenerator.totalWork());
-				while((next = fGenerator.next()) != null && monitor.isCanceled() == false){
+				if (ModelUtils.isMethodWithParameters(getMethodModel())) {
+					fGenerator.initialize(fInput, fConstraints, fParameters);
+					monitor.beginTask("Executing test function with generated parameters", fGenerator.totalWork());
+					while((next = fGenerator.next()) != null && monitor.isCanceled() == false){
+						List<TestCaseNode> testCases = new ArrayList<TestCaseNode>();
+						testCases.add(new TestCaseNode("", next));
+						ParameterizedMethod frameworkMethod = new ParameterizedMethod(testMethod, testCases);
+						frameworkMethod.invokeExplosively(testClass.newInstance(), new Object[]{});
+						monitor.worked(fGenerator.workProgress());
+					}
+					monitor.done();
+				} else {
+					monitor.beginTask("Executing test function with generated parameters", 1);
 					List<TestCaseNode> testCases = new ArrayList<TestCaseNode>();
-					testCases.add(new TestCaseNode("", next));
+					testCases.add(new TestCaseNode("", new ArrayList<PartitionNode>()));
 					ParameterizedMethod frameworkMethod = new ParameterizedMethod(testMethod, testCases);
 					frameworkMethod.invokeExplosively(testClass.newInstance(), new Object[]{});
-					monitor.worked(fGenerator.workProgress());
+					monitor.worked(1);
 				}
-				monitor.done();
 			} catch (Throwable e) {
 				throw new InvocationTargetException(e, e.getMessage());
 			}
@@ -86,20 +96,22 @@ public class ExecuteOnlineTestAdapter extends ExecuteTestAdapter {
 
 	@Override
 	public void widgetSelected(SelectionEvent e){
-		ExecuteOnlineSetupDialog dialog = new ExecuteOnlineSetupDialog(fPage.getActiveShell(), 
-				getMethodModel());
-		if(dialog.open() == IDialogConstants.OK_ID){
-			IGenerator<PartitionNode> selectedGenerator = dialog.getSelectedGenerator();
-			List<List<PartitionNode>> algorithmInput = dialog.getAlgorithmInput();
-			Collection<Constraint> constraints = dialog.getConstraints();
-			
-			Collection<IConstraint<PartitionNode>> constraintList = new ArrayList<IConstraint<PartitionNode>>();
-			for(Constraint constraint : constraints){
-				constraintList.add(constraint);
+		if (ModelUtils.isMethodWithParameters(getMethodModel())) {
+			ExecuteOnlineSetupDialog dialog = new ExecuteOnlineSetupDialog(fPage.getActiveShell(), getMethodModel());
+			if(dialog.open() == IDialogConstants.OK_ID){
+				IGenerator<PartitionNode> selectedGenerator = dialog.getSelectedGenerator();
+				List<List<PartitionNode>> algorithmInput = dialog.getAlgorithmInput();
+				Collection<Constraint> constraints = dialog.getConstraints();
+
+				Collection<IConstraint<PartitionNode>> constraintList = new ArrayList<IConstraint<PartitionNode>>();
+				for(Constraint constraint : constraints){
+					constraintList.add(constraint);
+				}
+				Map<String, Object> parameters = dialog.getGeneratorParameters();
+				executeTest(selectedGenerator, algorithmInput, constraintList, parameters);
 			}
-			
-			Map<String, Object> parameters = dialog.getGeneratorParameters();
-			executeTest(selectedGenerator, algorithmInput, constraintList, parameters);
+		} else {
+			executeTest(null, null, null, null);
 		}
 	}
 	

@@ -52,6 +52,7 @@ public class TestCasesViewer extends CheckboxTreeViewerSection {
 	private TestCasesViewerLabelProvider fLabelProvider;
 	private TestCasesViewerContentProvider fContentProvider;
 	private Button fExecuteSeletedButton;
+	private Button fGenerateSuiteButton;
 
 	@Override
 	protected TreeViewer createTreeViewer(Composite parent, int style) {
@@ -178,7 +179,7 @@ public class TestCasesViewer extends CheckboxTreeViewerSection {
 		
 		addButton("Add test case", new AddTestCaseAdapter());
 		addButton("Rename suite", new RenameSuiteAdapter());
-		addButton("Generate test suite", new GenerateTestSuiteAdapter(this));
+		fGenerateSuiteButton = addButton("Generate test suite", new GenerateTestSuiteAdapter(this));
 		addButton("Calculate coverage", new CalculateCoverageAdapter());
 		addButton("Remove selected", new RemoveSelectedAdapter());
 		fExecuteSeletedButton = addButton("Execute selected", new ExecuteStaticTestAdapter(this));
@@ -223,5 +224,6 @@ public class TestCasesViewer extends CheckboxTreeViewerSection {
 	public void refresh() {
 		super.refresh();
 		fExecuteSeletedButton.setEnabled(ModelUtils.isMethodImplemented(fSelectedMethod) || ModelUtils.isMethodPartiallyImplemented(fSelectedMethod));
+		fGenerateSuiteButton.setEnabled(ModelUtils.isMethodWithParameters(fSelectedMethod));
 	}
 }
