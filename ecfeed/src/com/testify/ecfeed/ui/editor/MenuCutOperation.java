@@ -18,6 +18,7 @@ import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.TestCaseNode;
+import com.testify.ecfeed.ui.common.CategoryNodeAbstractOperations;
 
 public class MenuCutOperation extends MenuOperation{
 	private NodeClipboard fSource;
@@ -58,8 +59,7 @@ public class MenuCutOperation extends MenuOperation{
 			CategoryNode target = (CategoryNode)fTarget;
 			MethodNode method = target.getMethod();
 			if(target.getMethod() != null){
-				if(method.removeCategory(target))
-					method.clearTestCases();
+				CategoryNodeAbstractOperations.removeCategory(target, method);
 			}
 		} else if(fTarget instanceof MethodNode){
 			MethodNode target = (MethodNode)fTarget;

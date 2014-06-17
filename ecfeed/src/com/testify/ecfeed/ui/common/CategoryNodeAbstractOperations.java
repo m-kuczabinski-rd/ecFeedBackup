@@ -18,61 +18,102 @@ import com.testify.ecfeed.utils.ModelUtils;
 
 public class CategoryNodeAbstractOperations{
 	
-	public static void removeCategory(CategoryNode category){
-
-	}
+	public static boolean removeCategory(CategoryNode category, MethodNode method){
 	
-	public static boolean removeCategories(List<CategoryNode> categories, MethodNode method){
-		{
-			ArrayList<String> tmpTypes = method.getCategoriesTypes();
-			for (CategoryNode node : categories) {
-				for (int i = 0; i < method.getCategories().size(); ++i) {
-					CategoryNode type = method.getCategories().get(i);
-					if (type.getName().equals(node.getName()) && type.getType().equals(node.getType())) {
-						tmpTypes.remove(node.getType());
-					}
-				}
-			}
-			if (method.getClassNode().getMethod(method.getName(), tmpTypes) == null) {
-				// checking if there is any reason to display warning  - test cases and constraints
-				boolean warn  = false;
-				if(method.getTestCases().isEmpty()){
-					for(ConstraintNode constraint: method.getConstraintNodes()){
-						for(CategoryNode node : categories){
-							if(constraint.mentions(node)){
-								warn  = true;
-								break;
-							}
-						}
-						if(warn == true)
-							break;
-					}
-				} else{
-					warn =  true;
-				}
-				if(warn){
-					if (!MessageDialog.openConfirm(Display.getCurrent().getActiveShell(),
-							Messages.DIALOG_REMOVE_PARAMETERS_TITLE,
-							Messages.DIALOG_REMOVE_PARAMETERS_MESSAGE)) {
-						return false;
-					}
-				}
-				boolean ischanged = false;
-				for(CategoryNode category: categories){
-					if(method.removeCategory(category) && !ischanged){
-						method.clearTestCases();
-						ischanged = true;
-					}
-				}
-				return ischanged;
-			} else {
-				MessageDialog.openError(Display.getCurrent().getActiveShell(),
-						Messages.DIALOG_METHOD_EXISTS_TITLE,
-						Messages.DIALOG_METHOD_WITH_PARAMETERS_EXISTS_MESSAGE);
-				return false;
+		ArrayList<String> tmpTypes = method.getCategoriesTypes();
+
+		for(int i = 0; i < method.getCategories().size(); ++i){
+			CategoryNode type = method.getCategories().get(i);
+			if(type.getName().equals(category.getName()) && type.getType().equals(category.getType())){
+				tmpTypes.remove(i);
 			}
 		}
 		
+		if(method.getClassNode().getMethod(method.getName(), tmpTypes) == null){
+			// checking if there is any reason to display warning - test cases
+			// and constraints
+			boolean warn = false;
+			if(method.getTestCases().isEmpty()){
+				for(ConstraintNode constraint : method.getConstraintNodes()){
+					if(constraint.mentions(category)){
+						warn = true;
+						break;
+					}
+				}
+			} else {
+				warn = true;
+			}
+
+			if(warn){
+				if (!MessageDialog.openConfirm(Display.getCurrent().getActiveShell(),
+						Messages.DIALOG_REMOVE_PARAMETERS_TITLE,
+						Messages.DIALOG_REMOVE_PARAMETERS_MESSAGE)) {
+					return false;
+				}
+			}
+			if(method.removeCategory(category)){
+				method.clearTestCases();
+				return true;
+			}
+			
+			return false;
+		} else {
+			MessageDialog.openError(Display.getCurrent().getActiveShell(),
+					Messages.DIALOG_METHOD_EXISTS_TITLE,
+					Messages.DIALOG_METHOD_WITH_PARAMETERS_EXISTS_MESSAGE);
+			return false;
+		}
+	}
+	
+	
+	public static boolean removeCategories(List<CategoryNode> categories, MethodNode method){	
+		ArrayList<String> tmpTypes = method.getCategoriesTypes();
+		for(CategoryNode node : categories){
+			for(int i = 0; i < method.getCategories().size(); ++i){
+				CategoryNode type = method.getCategories().get(i);
+				if(type.getName().equals(node.getName()) && type.getType().equals(node.getType())){
+					tmpTypes.remove(node.getType());
+				}
+			}
+		}
+		if(method.getClassNode().getMethod(method.getName(), tmpTypes) == null){
+			// checking if there is any reason to display warning - test cases
+			// and constraints
+			boolean warn = false;
+			if(method.getTestCases().isEmpty()){
+				for(ConstraintNode constraint : method.getConstraintNodes()){
+					for(CategoryNode node : categories){
+						if(constraint.mentions(node)){
+							warn = true;
+							break;
+						}
+					}
+					if(warn == true)
+						break;
+				}
+			} else{
+				warn = true;
+			}
+			if(warn){
+				if(!MessageDialog.openConfirm(Display.getCurrent().getActiveShell(), Messages.DIALOG_REMOVE_PARAMETERS_TITLE,
+						Messages.DIALOG_REMOVE_PARAMETERS_MESSAGE)){
+					return false;
+				}
+			}
+			boolean ischanged = false;
+			for(CategoryNode category : categories){
+				if(method.removeCategory(category) && !ischanged){
+					method.clearTestCases();
+					ischanged = true;
+				}
+			}
+			return ischanged;
+		} else{
+			MessageDialog.openError(Display.getCurrent().getActiveShell(), Messages.DIALOG_METHOD_EXISTS_TITLE,
+					Messages.DIALOG_METHOD_WITH_PARAMETERS_EXISTS_MESSAGE);
+			return false;
+		}
+
 	}
 
 	public static boolean addCategory(CategoryNode category, MethodNode method){
