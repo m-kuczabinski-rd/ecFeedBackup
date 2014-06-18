@@ -122,6 +122,7 @@ public class CategoryDetailsPage extends BasicDetailsPage {
 					if(applyNewCategoryType(fSelectedCategory, fTypeCombo)){
 						modelUpdated(null);
 					}
+					fTypeText.setText(fSelectedCategory.getType());
 				}
 			}
 		});
@@ -131,6 +132,7 @@ public class CategoryDetailsPage extends BasicDetailsPage {
 				if(applyNewCategoryType(fSelectedCategory, fTypeCombo)){
 					modelUpdated(null);
 				}
+				fTypeText.setText(fSelectedCategory.getType());
 			}
 		});
 		getToolkit().paintBordersFor(composite);

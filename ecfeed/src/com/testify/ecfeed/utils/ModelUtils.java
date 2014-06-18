@@ -452,16 +452,13 @@ public class ModelUtils {
 
 		if (valueString.length() == 0) return false;
 		if (valueString.length() > com.testify.ecfeed.model.Constants.MAX_NODE_NAME_LENGTH) return false;
-		if (valueString.matches("\\s*")) return false;
 
 		if (ClassUtils.getPartitionValueFromString(valueString, type, ClassUtils.getClassLoader(true, null)) != null){
 			return true;
-		} else {
-			if(getJavaTypes().contains(type)){
-				return false;
-			}
-			return true;
+		} else if (!getJavaTypes().contains(type)) {
+				return valueString.matches("^[a-zA-Z_$][a-zA-Z0-9_$]*$");
 		}
+		return false;
 	}
 
 	public static boolean classDefinitionImplemented(ClassNode node) {
