@@ -14,6 +14,7 @@ package com.testify.ecfeed.ui.editor;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -22,11 +23,13 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
 
 import com.testify.ecfeed.model.PartitionNode;
+import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.utils.ModelUtils;
 
 public class PartitionDetailsPage extends BasicDetailsPage {
@@ -51,9 +54,14 @@ public class PartitionDetailsPage extends BasicDetailsPage {
 	private class ApplyChangesSelectionAdapter extends SelectionAdapter{
 		@Override
 		public void widgetSelected(SelectionEvent e){
-			boolean updated = false;
-			updated |= applyNewPartitionName(fSelectedPartition, fPartitionNameText);
-			updated |= applyNewPartitionValue(fSelectedPartition, fPartitionValueCombo);
+			boolean updated = applyNewPartitionName(fSelectedPartition, fPartitionNameText);
+			if (applyNewPartitionValue(fSelectedPartition, fPartitionValueCombo)) {
+				updated = true;
+			} else {
+				MessageDialog.openError(Display.getCurrent().getActiveShell(),
+						Messages.DIALOG_PARTITION_VALUE_PROBLEM_TITLE,
+						Messages.DIALOG_PARTITION_VALUE_PROBLEM_MESSAGE);
+			}
 			if(updated){
 				modelUpdated(null);
 			}
@@ -163,6 +171,10 @@ public class PartitionDetailsPage extends BasicDetailsPage {
 				if(event.keyCode == SWT.CR || event.keyCode == SWT.KEYPAD_CR){
 					if(applyNewPartitionValue(fSelectedPartition, fPartitionValueCombo)){
 						modelUpdated(null);
+					} else {
+						MessageDialog.openError(Display.getCurrent().getActiveShell(),
+								Messages.DIALOG_PARTITION_VALUE_PROBLEM_TITLE,
+								Messages.DIALOG_PARTITION_VALUE_PROBLEM_MESSAGE);
 					}
 				}
 			}
@@ -172,6 +184,10 @@ public class PartitionDetailsPage extends BasicDetailsPage {
 			public void widgetSelected(SelectionEvent e){
 				if(applyNewPartitionValue(fSelectedPartition, fPartitionValueCombo)){
 					modelUpdated(null);
+				} else {
+					MessageDialog.openError(Display.getCurrent().getActiveShell(),
+							Messages.DIALOG_PARTITION_VALUE_PROBLEM_TITLE,
+							Messages.DIALOG_PARTITION_VALUE_PROBLEM_MESSAGE);
 				}
 			}
 		});
