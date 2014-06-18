@@ -11,6 +11,10 @@
 
 package com.testify.ecfeed.ui.editor;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -21,24 +25,21 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
-import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.Text;
 
 import com.testify.ecfeed.model.CategoryNode;
-import com.testify.ecfeed.model.Constants;
+import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.ui.common.CategoryNodeAbstractLayer;
-import com.testify.ecfeed.ui.common.SimpleControlMenuListener;
 import com.testify.ecfeed.utils.ModelUtils;
 
 public class CategoryDetailsPage extends BasicDetailsPage {
 
-	private Text fDefaultValueText;
+	private Combo fDefaultValueCombo;
 	private Text fNameText;
-	private Combo fTypeText;
+	private Combo fTypeCombo;
 	private Button fExpectedCheckbox;
 	private CategoryNode fSelectedCategory;
 	private CategoryChildrenViewer fPartitionsViewer;
-	private SimpleControlMenuListener	fBoolExpectedValueMenu;
 	
 	public CategoryDetailsPage(ModelMasterSection masterSection) {
 		super(masterSection);
@@ -64,38 +65,32 @@ public class CategoryDetailsPage extends BasicDetailsPage {
 			
 			fNameText.setText(fSelectedCategory.getName());
 			fNameText.setEnabled(true);
-			fTypeText.setEnabled(true);
-			fTypeText.setItems(ModelUtils.getJavaTypes().toArray(new String[0]));
-			fTypeText.setText(fSelectedCategory.getType());
+			fTypeCombo.setEnabled(true);
+			fTypeCombo.setItems(ModelUtils.getJavaTypes().toArray(new String[0]));
+			fTypeCombo.setText(fSelectedCategory.getType());
 			
 			fExpectedCheckbox.setEnabled(true);
 			fExpectedCheckbox.setSelection(fSelectedCategory.isExpected());
 			
 			if(fSelectedCategory.isExpected()){
-				fDefaultValueText.setText(fSelectedCategory.getDefaultValueString());
-				fDefaultValueText.setEnabled(true);
+				prepareDefaultValues(fSelectedCategory, fDefaultValueCombo);
+				fDefaultValueCombo.setText(fSelectedCategory.getDefaultValueString());
+				fDefaultValueCombo.setEnabled(true);
 				fPartitionsViewer.setVisible(false);
-				if(fSelectedCategory.getType().equals(Constants.TYPE_NAME_BOOLEAN)){
-					fBoolExpectedValueMenu.setEnabled(true);
-					fDefaultValueText.setEditable(false);
-				} else{
-					fBoolExpectedValueMenu.setEnabled(false);
-					fDefaultValueText.setEditable(true);
-				}
 			} else{
-				fDefaultValueText.setText("");
-				fDefaultValueText.setEnabled(false);
+				fDefaultValueCombo.setText("");
+				fDefaultValueCombo.setEnabled(false);
 				fPartitionsViewer.setVisible(true);
 			}
 
 		} else{
 			fExpectedCheckbox.setEnabled(false);
-			fDefaultValueText.setText("");
-			fDefaultValueText.setEnabled(false);
+			fDefaultValueCombo.setText("");
+			fDefaultValueCombo.setEnabled(false);
 			fNameText.setText("");
 			fNameText.setEnabled(false);
-			fTypeText.setText("");
-			fTypeText.setEnabled(false);
+			fTypeCombo.setText("");
+			fTypeCombo.setEnabled(false);
 			fPartitionsViewer.setVisible(false);
 		}
 	}
@@ -118,22 +113,22 @@ public class CategoryDetailsPage extends BasicDetailsPage {
 			}
 		});
 		getToolkit().createLabel(composite, "Category type: ", SWT.NONE);
-		fTypeText = new Combo(composite,SWT.DROP_DOWN);
-		fTypeText.setLayoutData(new GridData(SWT.FILL,  SWT.CENTER, false, false));
-		fTypeText.addListener(SWT.KeyDown, new Listener(){
+		fTypeCombo = new Combo(composite,SWT.DROP_DOWN);
+		fTypeCombo.setLayoutData(new GridData(SWT.FILL,  SWT.CENTER, false, false));
+		fTypeCombo.addListener(SWT.KeyDown, new Listener(){
 			@Override
 			public void handleEvent(Event event){
 				if(event.keyCode == SWT.CR || event.keyCode == SWT.KEYPAD_CR){
-					if(applyNewCategoryType(fSelectedCategory, fTypeText)){
+					if(applyNewCategoryType(fSelectedCategory, fTypeCombo)){
 						modelUpdated(null);
 					}
 				}
 			}
 		});
-		fTypeText.addSelectionListener(new SelectionAdapter(){
+		fTypeCombo.addSelectionListener(new SelectionAdapter(){
 			@Override
 			public void widgetSelected(SelectionEvent e){
-				if(applyNewCategoryType(fSelectedCategory, fTypeText)){
+				if(applyNewCategoryType(fSelectedCategory, fTypeCombo)){
 					modelUpdated(null);
 				}
 			}
@@ -146,34 +141,26 @@ public class CategoryDetailsPage extends BasicDetailsPage {
 		composite.setLayout(new GridLayout(1, false));
 		composite.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
 		getToolkit().createLabel(composite, "Default value: ", SWT.NONE);
-		fDefaultValueText = getToolkit().createText(composite, "",SWT.NONE);
-		fDefaultValueText.setLayoutData(new GridData(SWT.FILL,  SWT.CENTER, true, false));
-		fDefaultValueText.addListener(SWT.KeyDown, new Listener(){
+		fDefaultValueCombo = new Combo(composite,SWT.DROP_DOWN);
+		fDefaultValueCombo.setLayoutData(new GridData(SWT.FILL,  SWT.CENTER, true, false));
+		fDefaultValueCombo.addListener(SWT.KeyDown, new Listener(){
 			@Override
 			public void handleEvent(Event event){
 				if(event.keyCode == SWT.CR || event.keyCode == SWT.KEYPAD_CR){
-					if(applyNewDefaultValue(fSelectedCategory, fDefaultValueText)){
+					if(applyNewDefaultValue(fSelectedCategory, fDefaultValueCombo)){
 						modelUpdated(null);
 					}
 				}
 			}
 		});
-		
-		fBoolExpectedValueMenu = new SimpleControlMenuListener(composite, fDefaultValueText){
+		fDefaultValueCombo.addSelectionListener(new SelectionAdapter(){
 			@Override
-			protected void menuItemSelected(SelectionEvent e){
-				MenuItem item = (MenuItem)e.getSource();
-				fDefaultValueText.setText(item.getText());
-				if(applyNewDefaultValue(fSelectedCategory, fDefaultValueText)){
+			public void widgetSelected(SelectionEvent e){
+				if(applyNewDefaultValue(fSelectedCategory, fDefaultValueCombo)){
 					modelUpdated(null);
 				}
 			}
-		};
-		fBoolExpectedValueMenu.addData("true");
-		fBoolExpectedValueMenu.addData("false");
-		fBoolExpectedValueMenu.createMenu();
-		fDefaultValueText.addListener(SWT.MouseDown, fBoolExpectedValueMenu);
-		fDefaultValueText.addListener(SWT.SELECTED, fBoolExpectedValueMenu);
+		});
 		
 		fExpectedCheckbox = getToolkit().createButton(composite, "Expected", SWT.CHECK);
 		fExpectedCheckbox.setLayoutData(new GridData(SWT.FILL,  SWT.CENTER, false, false));
@@ -190,7 +177,7 @@ public class CategoryDetailsPage extends BasicDetailsPage {
 		getToolkit().paintBordersFor(composite);
 	}
 	
-	protected boolean applyNewDefaultValue(CategoryNode category, Text valueText) {
+	protected boolean applyNewDefaultValue(CategoryNode category, Combo valueText) {
 		String newValue = valueText.getText();
 		if(newValue.equals(fSelectedCategory.getDefaultValueString())) return false;
 		if(ModelUtils.validatePartitionStringValue(newValue, category.getType())){
@@ -217,5 +204,28 @@ public class CategoryDetailsPage extends BasicDetailsPage {
 	protected boolean applyNewCategoryType(CategoryNode category, Combo valueText) {
 		String newValue = valueText.getText();
 		return CategoryNodeAbstractLayer.changeCategoryType(category, newValue);
+	}
+	
+	private void prepareDefaultValues(CategoryNode node, Combo valueText){
+		HashMap<String, String> values = ModelUtils.generatePredefinedValues(node.getType());
+		HashSet<String> itemset = new HashSet<>();
+		itemset.addAll(values.values());
+		for(PartitionNode partition: node.getLeafPartitions()){
+			itemset.add(partition.getValueString());
+		}
+		String [] items = new String[itemset.size()];
+		items = itemset.toArray(items);
+		ArrayList<String> newItems = new ArrayList<String>();
+
+		valueText.setItems(items);
+		for (int i = 0; i < items.length; ++i) {
+			newItems.add(items[i]);
+			if (items[i].equals(node.getDefaultValueString())) {
+				return;
+			}
+		}
+
+		newItems.add(node.getDefaultValueString());
+		valueText.setItems(newItems.toArray(items));
 	}
 }
