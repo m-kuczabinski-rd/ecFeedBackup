@@ -143,7 +143,9 @@ public class MethodDetailsPage extends BasicDetailsPage {
 			} else {
 				MessageDialog.openInformation(getActiveShell(),
 					Messages.DIALOG_METHOD_EXISTS_TITLE,
-					Messages.DIALOG_METHOD_EXISTS_MESSAGE);
+					Messages.DIALOG_METHOD_WITH_PARAMETERS_EXISTS_MESSAGE);
+				fMethodNameText.setText(fSelectedMethod.getName());
+				fMethodNameText.setSelection(fSelectedMethod.getName().length());
 			}
 		}
 	}
