@@ -65,7 +65,7 @@ public class XmlParserSerializerTest {
 	private final int MAX_CLASSES = 5;
 	private final int MAX_METHODS = 5;
 	private final int MAX_CATEGORIES = 5;
-	private final int MAX_EXPECTED_CATEGORIES = 3;
+//	private final int MAX_EXPECTED_CATEGORIES = 3;
 	private final int MAX_PARTITIONS = 10;
 	private final int MAX_PARTITION_LEVELS = 5;
 	private final int MAX_PARTITION_LABELS = 5;
