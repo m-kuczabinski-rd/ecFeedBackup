@@ -11,7 +11,8 @@
 
 package com.testify.ecfeed.ui.editor;
 
-import org.eclipse.jface.dialogs.MessageDialog;
+import java.util.ArrayList;
+
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -20,7 +21,7 @@ import org.eclipse.ui.forms.widgets.Section;
 
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.PartitionNode;
-import com.testify.ecfeed.ui.common.Messages;
+import com.testify.ecfeed.ui.common.PartitionNodeAbstractLayer;
 import com.testify.ecfeed.utils.Constants;
 import com.testify.ecfeed.utils.ModelUtils;
 
@@ -47,12 +48,11 @@ public class CategoryChildrenViewer extends CheckboxTableViewerSection {
 	private class RemovePartitionsAdapter extends SelectionAdapter{
 		@Override
 		public void widgetSelected(SelectionEvent e){
-			if (MessageDialog.openConfirm(getActiveShell(), 
-					Messages.DIALOG_REMOVE_PARTITIONS_TITLE, 
-					Messages.DIALOG_REMOVE_PARTITIONS_MESSAGE)) {
-				for(Object partition : getCheckedElements()){
-						fSelectedCategory.removePartition((PartitionNode)partition);
-				}
+			ArrayList<PartitionNode> nodes = new ArrayList<>();
+			for(Object partition : getCheckedElements()){
+				nodes.add((PartitionNode)partition);
+			}			
+			if(PartitionNodeAbstractLayer.removePartitions(nodes, fSelectedCategory)){
 				modelUpdated();
 			}
 		}

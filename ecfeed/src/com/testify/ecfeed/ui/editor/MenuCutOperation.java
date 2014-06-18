@@ -18,6 +18,8 @@ import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.TestCaseNode;
+import com.testify.ecfeed.ui.common.CategoryNodeAbstractLayer;
+import com.testify.ecfeed.ui.common.PartitionNodeAbstractLayer;
 
 public class MenuCutOperation extends MenuOperation{
 	private NodeClipboard fSource;
@@ -35,9 +37,10 @@ public class MenuCutOperation extends MenuOperation{
 	public void execute(){
 		if(fTarget != null){
 			fSource.setClipboardNode(fTarget);
-			cut();
-			fModel.markDirty();
-			fModel.refresh();
+			if(cut()){
+				fModel.markDirty();
+				fModel.refresh();
+			}
 		}
 	}
 	
@@ -48,40 +51,40 @@ public class MenuCutOperation extends MenuOperation{
 		fModel = model;
 	}
 
-	public void cut(){
+	public boolean cut(){
 		if(fTarget instanceof PartitionNode){
 			PartitionNode target = (PartitionNode)fTarget;
 			if(target.getParent() != null){
-				target.getParent().removePartition(target);
+				return PartitionNodeAbstractLayer.removePartition(target);
 			}
 		} else if(fTarget instanceof CategoryNode){
 			CategoryNode target = (CategoryNode)fTarget;
 			MethodNode method = target.getMethod();
 			if(target.getMethod() != null){
-				if(method.removeCategory(target))
-					method.clearTestCases();
+				return CategoryNodeAbstractLayer.removeCategory(target, method);
 			}
 		} else if(fTarget instanceof MethodNode){
 			MethodNode target = (MethodNode)fTarget;
 			if(target.getClassNode() != null){
-				target.getClassNode().removeMethod(target);
+				return target.getClassNode().removeMethod(target);
 			}
 		} else if(fTarget instanceof ConstraintNode){
 			ConstraintNode target = (ConstraintNode)fTarget;
 			if(target.getMethod() != null){
-				target.getMethod().removeConstraint(target);
+				return target.getMethod().removeConstraint(target);
 			}
 		} else if(fTarget instanceof TestCaseNode){
 			TestCaseNode target = (TestCaseNode)fTarget;
 			if(target.getMethod() != null){
-				target.getMethod().removeTestCase(target);
+				return target.getMethod().removeTestCase(target);
 			}
 		} else if(fTarget instanceof ClassNode){
 			ClassNode target = (ClassNode)fTarget;
 			if(target.getRoot() != null){
-				target.getRoot().removeClass(target);
+				return target.getRoot().removeClass(target);
 			}
 		}
+		return false;
 	}
 
 }

@@ -45,9 +45,6 @@ public class CategoryNode extends GenericNode implements IPartitionedNode{
 	
 	@Override
 	public PartitionNode getPartition(String qualifiedName){
-		if(fExpected){
-			return null;
-		}
 		return (PartitionNode)getChild(qualifiedName);
 	}
 	
@@ -61,9 +58,6 @@ public class CategoryNode extends GenericNode implements IPartitionedNode{
 
 	@Override
 	public List<PartitionNode> getLeafPartitions(){
-		if(fExpected){
-			return getPartitions();
-		}
 		List<PartitionNode> leafs = new ArrayList<PartitionNode>();
 		for(PartitionNode child : fPartitions){
 			leafs.addAll(child.getLeafPartitions());
@@ -94,6 +88,7 @@ public class CategoryNode extends GenericNode implements IPartitionedNode{
 			if(parentMethod != null){
 				parentMethod.partitionRemoved(partition);
 			}
+			return true;
 		}
 		return false;
 	}
@@ -108,9 +103,6 @@ public class CategoryNode extends GenericNode implements IPartitionedNode{
 
 	@Override
 	public List<? extends IGenericNode> getChildren(){
-		if(fExpected){
-			return EMPTY_CHILDREN_ARRAY;
-		}
 		return fPartitions;
 	}
 	

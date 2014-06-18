@@ -10,10 +10,8 @@
  ******************************************************************************/
 package com.testify.ecfeed.ui.editor;
 
-import static com.testify.ecfeed.ui.common.CategoryNodeAbstractOperations.addCategory;
 import static com.testify.ecfeed.ui.common.Messages.DIALOG_PASTE_OPERATION_FAILED_MESSAGE;
 import static com.testify.ecfeed.ui.common.Messages.DIALOG_PASTE_OPERATION_FAILED_TITLE;
-import static com.testify.ecfeed.utils.ModelUtils.setUniqueNodeName;
 
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
@@ -26,21 +24,25 @@ import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.TestCaseNode;
+import com.testify.ecfeed.ui.common.CategoryNodeAbstractLayer;
+import com.testify.ecfeed.utils.ModelUtils;
 
 public class MenuPasteOperation extends MenuOperation{
 	protected IGenericNode fSource;
 	protected IGenericNode fTarget;
 	protected ModelMasterSection fModel;
+	private boolean fCanceled;
 
 	@Override
 	public void execute(){
-		if(!paste()){
+		if(!paste() && !fCanceled){
 			MessageDialog.openInformation(Display.getCurrent().getActiveShell(), DIALOG_PASTE_OPERATION_FAILED_TITLE,
 					DIALOG_PASTE_OPERATION_FAILED_MESSAGE);
-		} else{
+		} else if(!fCanceled){
 			fModel.markDirty();
 			fModel.refresh();
 		}
+		fCanceled = false;
 	}
 
 	@Override
@@ -75,7 +77,7 @@ public class MenuPasteOperation extends MenuOperation{
 				if(fSource instanceof PartitionNode){
 					PartitionNode source = (PartitionNode)fSource;
 					if(target.getCategory().getType().equals(source.getCategory().getType())){
-						setUniqueNodeName(source, target);
+						ModelUtils.setUniqueNodeName(source, target);
 						target.addPartition(source);
 						return true;
 					}
@@ -86,7 +88,7 @@ public class MenuPasteOperation extends MenuOperation{
 					if(fSource instanceof PartitionNode){
 						PartitionNode source = (PartitionNode)fSource;
 						if(target.getType().equals(source.getCategory().getType())){
-							setUniqueNodeName(source, target);
+							ModelUtils.setUniqueNodeName(source, target);
 							target.addPartition(source);
 							return true;
 						}
@@ -96,8 +98,8 @@ public class MenuPasteOperation extends MenuOperation{
 				MethodNode target = (MethodNode)fTarget;
 				if(fSource instanceof CategoryNode){
 					CategoryNode source = (CategoryNode)fSource;
-					setUniqueNodeName(source, target);
-					addCategory(source, target);
+					ModelUtils.setUniqueNodeName(source, target);
+					fCanceled = !CategoryNodeAbstractLayer.addCategory(source, target);
 					return true;
 				} else if(fSource instanceof ConstraintNode){
 					ConstraintNode source = (ConstraintNode)fSource;
@@ -116,7 +118,7 @@ public class MenuPasteOperation extends MenuOperation{
 				ClassNode target = (ClassNode)fTarget;
 				if(fSource instanceof MethodNode){
 					MethodNode source = (MethodNode)fSource;
-					setUniqueNodeName(source, target);
+					ModelUtils.setUniqueNodeName(source, target);
 					target.addMethod(source);
 					return true;
 				}
@@ -124,7 +126,7 @@ public class MenuPasteOperation extends MenuOperation{
 				RootNode target = (RootNode)fTarget;
 				if(fSource instanceof ClassNode){
 					ClassNode source = (ClassNode)fSource;
-					setUniqueNodeName(source, target);
+					ModelUtils.setUniqueNodeName(source, target);
 					target.addClass(source);
 					return true;
 				}
