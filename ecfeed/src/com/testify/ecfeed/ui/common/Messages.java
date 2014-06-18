@@ -38,7 +38,8 @@ public class Messages {
 			"must not contain only white characters and must be unique within category.";
 	public static final String DIALOG_PARTITION_VALUE_PROBLEM_TITLE = "Wrong partition value";
 	public static final String DIALOG_PARTITION_VALUE_PROBLEM_MESSAGE = "Partition value must fit to type and range of the variable " +
-			"represented by the partition, must contain between 1 and 64 characters and must not contain only white characters.";
+			"represented by the partition, contain between 1 and 64 characters " +
+			"and in case of user defined type contain only alphanumeric characters, starting with alphabetic character.";
 	public static final String DIALOG_REMOVE_PARTITIONS_TITLE = "Remove partitions";
 	public static final String DIALOG_REMOVE_PARTITIONS_MESSAGE = "Removing partitions will remove also all test cases " +
 			"referencing those partitions. Are you sure that you want to proceed?";
