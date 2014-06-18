@@ -65,7 +65,7 @@ public class MethodNameEditingSupport extends EditingSupport{
 			} else {
 				MessageDialog.openError(Display.getCurrent().getActiveShell(),
 						Messages.DIALOG_METHOD_EXISTS_TITLE,
-						Messages.DIALOG_METHOD_EXISTS_MESSAGE);
+						Messages.DIALOG_METHOD_WITH_PARAMETERS_EXISTS_MESSAGE);
 			}
 		}
 	}
