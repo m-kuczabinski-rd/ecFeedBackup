@@ -40,7 +40,7 @@ public class CategoryChildrenViewer extends CheckboxTableViewerSection {
 			PartitionNode newPartition = new PartitionNode(newPartitionName, value);
 			ModelUtils.setUniqueNodeName(newPartition, fSelectedCategory);
 			fSelectedCategory.addPartition(newPartition);
-			getTable().setSelection(fSelectedCategory.getPartitions().size() - 1);
+			getTable().setSelection(fSelectedCategory.getOrdinaryPartitions().size() - 1);
 			modelUpdated();
 		}
 	}
@@ -83,7 +83,7 @@ public class CategoryChildrenViewer extends CheckboxTableViewerSection {
 
 	public void setInput(CategoryNode category){
 		fSelectedCategory = category;
-		super.setInput(category.getPartitions());
+		super.setInput(category.getOrdinaryPartitions());
 	}
 	
 	public void setVisible(boolean visible){

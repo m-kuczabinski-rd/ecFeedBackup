@@ -76,7 +76,15 @@ public class CategoryDetailsPage extends BasicDetailsPage {
 				prepareDefaultValues(fSelectedCategory, fDefaultValueCombo);
 				fDefaultValueCombo.setText(fSelectedCategory.getDefaultValueString());
 				fDefaultValueCombo.setEnabled(true);
-				fPartitionsViewer.setVisible(false);
+
+				if(fSelectedCategory.getType().equals(com.testify.ecfeed.model.Constants.TYPE_NAME_BOOLEAN)){
+
+				}
+				if(!ModelUtils.getJavaTypes().contains(fSelectedCategory.getType())){
+					fPartitionsViewer.setVisible(true);
+				} else {
+					fPartitionsViewer.setVisible(false);
+				}
 			} else{
 				fDefaultValueCombo.setText("");
 				fDefaultValueCombo.setEnabled(false);
