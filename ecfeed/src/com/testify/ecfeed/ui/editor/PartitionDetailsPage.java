@@ -11,21 +11,22 @@
 
 package com.testify.ecfeed.ui.editor;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
-import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.Text;
 
-import com.testify.ecfeed.model.Constants;
 import com.testify.ecfeed.model.PartitionNode;
-import com.testify.ecfeed.ui.common.SimpleControlMenuListener;
 import com.testify.ecfeed.utils.ModelUtils;
 
 public class PartitionDetailsPage extends BasicDetailsPage {
@@ -34,8 +35,7 @@ public class PartitionDetailsPage extends BasicDetailsPage {
 	private PartitionChildrenViewer fPartitionChildren;
 	private PartitionLabelsViewer fLabelsViewer;
 	private Text fPartitionNameText;
-	private Text fPartitionValueText;
-	private SimpleControlMenuListener	fBoolValueMenu;
+	private Combo fPartitionValueCombo;
 
 	private class PartitionNameTextListener extends ApplyChangesSelectionAdapter implements Listener{
 		@Override
@@ -48,23 +48,12 @@ public class PartitionDetailsPage extends BasicDetailsPage {
 		}
 	}
 	
-	private class PartitionValueTextListener extends ApplyChangesSelectionAdapter implements Listener{
-		@Override
-		public void handleEvent(Event event) {
-			if(event.keyCode == SWT.CR || event.keyCode == SWT.KEYPAD_CR){
-				if(applyNewPartitionValue(fSelectedPartition, fPartitionValueText)){
-					modelUpdated(null);
-				}
-			}
-		}
-	}
-	
 	private class ApplyChangesSelectionAdapter extends SelectionAdapter{
 		@Override
 		public void widgetSelected(SelectionEvent e){
 			boolean updated = false;
 			updated |= applyNewPartitionName(fSelectedPartition, fPartitionNameText);
-			updated |= applyNewPartitionValue(fSelectedPartition, fPartitionValueText);
+			updated |= applyNewPartitionValue(fSelectedPartition, fPartitionValueCombo);
 			if(updated){
 				modelUpdated(null);
 			}
@@ -99,20 +88,13 @@ public class PartitionDetailsPage extends BasicDetailsPage {
 			fLabelsViewer.setInput(fSelectedPartition);
 			fPartitionNameText.setText(fSelectedPartition.getName());
 			if(fSelectedPartition.isAbstract()){
-				fPartitionValueText.setEnabled(false);
-				fPartitionValueText.setText("");
+				fPartitionValueCombo.setEnabled(false);
+				fPartitionValueCombo.setText("");
 			}
 			else{
-				fPartitionValueText.setEnabled(true);
-				fPartitionValueText.setText(fSelectedPartition.getValueString());
-				
-				if(fSelectedPartition.getCategory().getType().equals(Constants.TYPE_NAME_BOOLEAN)){
-					fBoolValueMenu.setEnabled(true);
-					fPartitionValueText.setEditable(false);
-				} else{
-					fBoolValueMenu.setEnabled(false);
-					fPartitionValueText.setEditable(true);
-				}
+				fPartitionValueCombo.setEnabled(true);
+				prepareDefaultValues(fSelectedPartition, fPartitionValueCombo);
+				fPartitionValueCombo.setText(fSelectedPartition.getValueString());
 			}
 		}
 	}
@@ -135,7 +117,7 @@ public class PartitionDetailsPage extends BasicDetailsPage {
 		return false;
 	}
 
-	private boolean applyNewPartitionValue(PartitionNode partition, Text valueText) {
+	private boolean applyNewPartitionValue(PartitionNode partition, Combo valueText) {
 		String newValue = valueText.getText(); 
 		if(newValue.equals(partition.getValueString()) == false){
 			if(ModelUtils.validatePartitionStringValue(newValue, partition.getCategory().getType())){
@@ -173,26 +155,45 @@ public class PartitionDetailsPage extends BasicDetailsPage {
 
 	private void createValueEdit(Composite parent) {
 		getToolkit().createLabel(parent, "Value");
-		fPartitionValueText = getToolkit().createText(parent, "", SWT.NONE);
-		fPartitionValueText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
-		fPartitionValueText.addListener(SWT.KeyDown, new PartitionValueTextListener());
-		getToolkit().paintBordersFor(parent);
-		
-		fBoolValueMenu = new SimpleControlMenuListener(parent, fPartitionValueText){
+		fPartitionValueCombo = new Combo(parent,SWT.DROP_DOWN);
+		fPartitionValueCombo.setLayoutData(new GridData(SWT.FILL,  SWT.CENTER, true, false));
+		fPartitionValueCombo.addListener(SWT.KeyDown, new Listener(){
 			@Override
-			protected void menuItemSelected(SelectionEvent e){
-				MenuItem item = (MenuItem)e.getSource();
-				fPartitionValueText.setText(item.getText());
-				if( applyNewPartitionValue(fSelectedPartition, fPartitionValueText)){
+			public void handleEvent(Event event){
+				if(event.keyCode == SWT.CR || event.keyCode == SWT.KEYPAD_CR){
+					if(applyNewPartitionValue(fSelectedPartition, fPartitionValueCombo)){
+						modelUpdated(null);
+					}
+				}
+			}
+		});
+		fPartitionValueCombo.addSelectionListener(new SelectionAdapter(){
+			@Override
+			public void widgetSelected(SelectionEvent e){
+				if(applyNewPartitionValue(fSelectedPartition, fPartitionValueCombo)){
 					modelUpdated(null);
 				}
 			}
-		};
-		fBoolValueMenu.addData("true");
-		fBoolValueMenu.addData("false");
-		fBoolValueMenu.createMenu();
-		fPartitionValueText.addListener(SWT.MouseDown, fBoolValueMenu);		
-		fPartitionValueText.addListener(SWT.SELECTED, fBoolValueMenu);		
+		});
+		getToolkit().paintBordersFor(parent);	
+	}
+	
+	private void prepareDefaultValues(PartitionNode node, Combo valueText){
+		HashMap<String, String> values = ModelUtils.generatePredefinedValues(node.getCategory().getType());
+		String [] items = new String[values.values().size()];
+		items = values.values().toArray(items);
+		ArrayList<String> newItems = new ArrayList<String>();
+
+		valueText.setItems(items);
+		for (int i = 0; i < items.length; ++i) {
+			newItems.add(items[i]);
+			if (items[i].equals(node.getValueString())) {
+				return;
+			}
+		}
+
+		newItems.add(node.getValueString());
+		valueText.setItems(newItems.toArray(items));
 	}
 	
 }
