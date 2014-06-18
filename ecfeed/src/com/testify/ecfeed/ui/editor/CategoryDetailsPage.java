@@ -105,10 +105,10 @@ public class CategoryDetailsPage extends BasicDetailsPage {
 				}
 			} else{
 				fComboLayout.topControl = fDefaultEditableValueCombo;
+				fDefaultValueCombo.setVisible(false);
+				fDefaultEditableValueCombo.setVisible(true);
 				fDefaultEditableValueCombo.setText("");
 				fDefaultEditableValueCombo.setEnabled(false);
-				fDefaultValueCombo.setText("");
-				fDefaultValueCombo.setEnabled(false);
 				fPartitionsViewer.setVisible(true);
 			}
 
