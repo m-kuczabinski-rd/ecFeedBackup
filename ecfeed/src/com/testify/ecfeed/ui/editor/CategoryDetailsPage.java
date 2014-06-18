@@ -16,6 +16,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.StackLayout;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
@@ -34,12 +35,14 @@ import com.testify.ecfeed.utils.ModelUtils;
 
 public class CategoryDetailsPage extends BasicDetailsPage {
 
-	private Combo fDefaultValueCombo;
+	private Combo fDefaultEditableValueCombo;
 	private Text fNameText;
 	private Combo fTypeCombo;
 	private Button fExpectedCheckbox;
 	private CategoryNode fSelectedCategory;
 	private CategoryChildrenViewer fPartitionsViewer;
+	private StackLayout fComboLayout;
+	private Combo fDefaultValueCombo;
 	
 	public CategoryDetailsPage(ModelMasterSection masterSection) {
 		super(masterSection);
@@ -73,19 +76,37 @@ public class CategoryDetailsPage extends BasicDetailsPage {
 			fExpectedCheckbox.setSelection(fSelectedCategory.isExpected());
 			
 			if(fSelectedCategory.isExpected()){
-				prepareDefaultValues(fSelectedCategory, fDefaultValueCombo);
-				fDefaultValueCombo.setText(fSelectedCategory.getDefaultValueString());
-				fDefaultValueCombo.setEnabled(true);
-
-				if(fSelectedCategory.getType().equals(com.testify.ecfeed.model.Constants.TYPE_NAME_BOOLEAN)){
-
-				}
-				if(!ModelUtils.getJavaTypes().contains(fSelectedCategory.getType())){
-					fPartitionsViewer.setVisible(true);
-				} else {
+				if(ModelUtils.getJavaTypes().contains(fSelectedCategory.getType())){
 					fPartitionsViewer.setVisible(false);
+					if(fSelectedCategory.getType().equals(com.testify.ecfeed.model.Constants.TYPE_NAME_BOOLEAN)){
+						fDefaultEditableValueCombo.setVisible(false);
+						fDefaultValueCombo.setVisible(true);
+						fDefaultValueCombo.setEnabled(true);
+						prepareDefaultValues(fSelectedCategory, fDefaultValueCombo);
+						fDefaultValueCombo.setText(fSelectedCategory.getDefaultValueString());
+						fComboLayout.topControl = fDefaultValueCombo;
+					} else {
+						fDefaultEditableValueCombo.setVisible(true);
+						fDefaultValueCombo.setVisible(false);
+						fDefaultEditableValueCombo.setEnabled(true);
+						prepareDefaultValues(fSelectedCategory, fDefaultEditableValueCombo);
+						fDefaultEditableValueCombo.setText(fSelectedCategory.getDefaultValueString());
+						fComboLayout.topControl = fDefaultEditableValueCombo;
+					}
+				} else {
+					fDefaultEditableValueCombo.setVisible(false);
+					fDefaultValueCombo.setVisible(true);
+					fPartitionsViewer.setVisible(true);
+					fDefaultValueCombo.setEnabled(true);
+					prepareDefaultValues(fSelectedCategory, fDefaultValueCombo);
+					fDefaultValueCombo.setText(fSelectedCategory.getDefaultValueString());
+					//fDefaultEditableValueCombo.setEnabled(false);
+					fComboLayout.topControl = fDefaultValueCombo;
 				}
 			} else{
+				fComboLayout.topControl = fDefaultEditableValueCombo;
+				fDefaultEditableValueCombo.setText("");
+				fDefaultEditableValueCombo.setEnabled(false);
 				fDefaultValueCombo.setText("");
 				fDefaultValueCombo.setEnabled(false);
 				fPartitionsViewer.setVisible(true);
@@ -93,8 +114,8 @@ public class CategoryDetailsPage extends BasicDetailsPage {
 
 		} else{
 			fExpectedCheckbox.setEnabled(false);
-			fDefaultValueCombo.setText("");
-			fDefaultValueCombo.setEnabled(false);
+			fDefaultEditableValueCombo.setText("");
+			fDefaultEditableValueCombo.setEnabled(false);
 			fNameText.setText("");
 			fNameText.setEnabled(false);
 			fTypeCombo.setText("");
@@ -147,11 +168,38 @@ public class CategoryDetailsPage extends BasicDetailsPage {
 	}
 	
 	public void createDefaultValueEdit(){
-		Composite composite = getToolkit().createComposite(getMainComposite());
+		Composite composite = getToolkit().createComposite(getMainComposite());		
 		composite.setLayout(new GridLayout(1, false));
 		composite.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
 		getToolkit().createLabel(composite, "Default value: ", SWT.NONE);
-		fDefaultValueCombo = new Combo(composite,SWT.DROP_DOWN);
+		
+		// Stack layout for editable/noneditable comboboxes
+		Composite valueComposite = getToolkit().createComposite(composite);
+		fComboLayout = new StackLayout();
+		valueComposite.setLayout(fComboLayout);
+		valueComposite.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
+		fDefaultEditableValueCombo = new Combo(valueComposite,SWT.DROP_DOWN);
+		fDefaultEditableValueCombo.setLayoutData(new GridData(SWT.FILL,  SWT.CENTER, true, false));
+		fDefaultEditableValueCombo.addListener(SWT.KeyDown, new Listener(){
+			@Override
+			public void handleEvent(Event event){
+				if(event.keyCode == SWT.CR || event.keyCode == SWT.KEYPAD_CR){
+					if(applyNewDefaultValue(fSelectedCategory, fDefaultEditableValueCombo)){
+						modelUpdated(null);
+					}
+				}
+			}
+		});
+		fDefaultEditableValueCombo.addSelectionListener(new SelectionAdapter(){
+			@Override
+			public void widgetSelected(SelectionEvent e){
+				if(applyNewDefaultValue(fSelectedCategory, fDefaultEditableValueCombo)){
+					modelUpdated(null);
+				}
+			}
+		});
+		
+		fDefaultValueCombo = new Combo(valueComposite,SWT.READ_ONLY);
 		fDefaultValueCombo.setLayoutData(new GridData(SWT.FILL,  SWT.CENTER, true, false));
 		fDefaultValueCombo.addListener(SWT.KeyDown, new Listener(){
 			@Override
@@ -170,8 +218,8 @@ public class CategoryDetailsPage extends BasicDetailsPage {
 					modelUpdated(null);
 				}
 			}
-		});
-		
+		});		
+		//------------------------
 		fExpectedCheckbox = getToolkit().createButton(composite, "Expected", SWT.CHECK);
 		fExpectedCheckbox.setLayoutData(new GridData(SWT.FILL,  SWT.CENTER, false, false));
 		fExpectedCheckbox.addSelectionListener(new SelectionAdapter(){
@@ -184,6 +232,7 @@ public class CategoryDetailsPage extends BasicDetailsPage {
 			}
 		});
 		
+		getToolkit().paintBordersFor(valueComposite);
 		getToolkit().paintBordersFor(composite);
 	}
 	
