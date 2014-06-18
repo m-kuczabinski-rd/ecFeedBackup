@@ -202,14 +202,14 @@ public class XmlParserSerializerTest {
 	protected ClassNode createClassNode(int methods) {
 		ClassNode classNode = new ClassNode("com.example." + randomName());
 		for(int i = 0; i < methods; ++i){
-			int numOfCategories = rand.nextInt(MAX_CATEGORIES);
-			int numOfExpCategories = rand.nextInt(MAX_EXPECTED_CATEGORIES);
-			if(numOfCategories + numOfExpCategories == 0){
-				numOfCategories = 1;
-			}
+			int numOfCategories = rand.nextInt(MAX_CATEGORIES) + 1;
+//			int numOfExpCategories = rand.nextInt(MAX_EXPECTED_CATEGORIES);
+//			if(numOfCategories + numOfExpCategories == 0){
+//				numOfCategories = 1;
+//			}
 			int numOfConstraints = rand.nextInt(MAX_CONSTRAINTS) + 1;
 			int numOfTestCases = rand.nextInt(MAX_TEST_CASES);
-			classNode.addMethod(createMethodNode(numOfCategories, numOfExpCategories, numOfConstraints, numOfTestCases));
+			classNode.addMethod(createMethodNode(numOfCategories, 0, numOfConstraints, numOfTestCases));
 		}
 		return classNode;
 	}
