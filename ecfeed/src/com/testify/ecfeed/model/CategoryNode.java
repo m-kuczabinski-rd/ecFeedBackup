@@ -80,9 +80,6 @@ public class CategoryNode extends GenericNode implements IPartitionedNode{
 
 	@Override
 	public boolean removePartition(PartitionNode partition){
-		if(fExpected){
-			return false;
-		}
 		if(fPartitions.contains(partition) && fPartitions.remove(partition)){
 			MethodNode parentMethod = getMethod();
 			if(parentMethod != null){
