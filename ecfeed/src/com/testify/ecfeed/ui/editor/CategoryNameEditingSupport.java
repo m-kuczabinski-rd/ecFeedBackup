@@ -11,15 +11,12 @@
 
 package com.testify.ecfeed.ui.editor;
 
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.EditingSupport;
 import org.eclipse.jface.viewers.TextCellEditor;
-import org.eclipse.swt.widgets.Display;
 
 import com.testify.ecfeed.model.CategoryNode;
-import com.testify.ecfeed.ui.common.Messages;
-import com.testify.ecfeed.utils.ModelUtils;
+import com.testify.ecfeed.ui.common.CategoryNodeAbstractLayer;
 
 public class CategoryNameEditingSupport extends EditingSupport {
 
@@ -51,23 +48,8 @@ public class CategoryNameEditingSupport extends EditingSupport {
 	protected void setValue(Object element, Object value) {
 		String newName = (String)value;
 		CategoryNode categoryNode = (CategoryNode)element;
-		boolean validName = ModelUtils.validateNodeName(newName);
-
-		if (!validName) {
-			MessageDialog.openError(Display.getCurrent().getActiveShell(),
-					Messages.DIALOG_PARAMETER_NAME_PROBLEM_TITLE,
-					Messages.DIALOG_PARAMETER_NAME_PROBLEM_MESSAGE);
-		}
-
-		if (validName && !categoryNode.getName().equals(newName)) {
-			if (categoryNode.getMethod().getCategory(newName) == null) {
-				categoryNode.setName(newName);
+		if(CategoryNodeAbstractLayer.changeCategoryName(categoryNode, newName)){
 				fSection.modelUpdated();
-			} else {
-				MessageDialog.openError(Display.getCurrent().getActiveShell(),
-						Messages.DIALOG_CATEGORY_EXISTS_TITLE,
-						Messages.DIALOG_CATEGORY_EXISTS_MESSAGE);
-			}
 		}
 	}
 }

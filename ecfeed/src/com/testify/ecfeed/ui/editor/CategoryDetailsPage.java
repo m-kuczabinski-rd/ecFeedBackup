@@ -31,6 +31,7 @@ import org.eclipse.swt.widgets.Text;
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.ui.common.CategoryNodeAbstractLayer;
+import com.testify.ecfeed.ui.common.PartitionNodeAbstractLayer;
 import com.testify.ecfeed.utils.ModelUtils;
 
 public class CategoryDetailsPage extends BasicDetailsPage {
@@ -100,7 +101,6 @@ public class CategoryDetailsPage extends BasicDetailsPage {
 					fDefaultValueCombo.setEnabled(true);
 					prepareDefaultValues(fSelectedCategory, fDefaultValueCombo);
 					fDefaultValueCombo.setText(fSelectedCategory.getDefaultValueString());
-					//fDefaultEditableValueCombo.setEnabled(false);
 					fComboLayout.topControl = fDefaultValueCombo;
 				}
 			} else{
@@ -135,9 +135,10 @@ public class CategoryDetailsPage extends BasicDetailsPage {
 			@Override
 			public void handleEvent(Event event){
 				if(event.keyCode == SWT.CR || event.keyCode == SWT.KEYPAD_CR){
-					if(applyNewCategoryName(fSelectedCategory, fNameText)){
+					if(CategoryNodeAbstractLayer.changeCategoryName(fSelectedCategory, fNameText.getText())){
 						modelUpdated(null);
 					}
+					fNameText.setText(fSelectedCategory.getName());
 				}
 			}
 		});
@@ -148,7 +149,7 @@ public class CategoryDetailsPage extends BasicDetailsPage {
 			@Override
 			public void handleEvent(Event event){
 				if(event.keyCode == SWT.CR || event.keyCode == SWT.KEYPAD_CR){
-					if(applyNewCategoryType(fSelectedCategory, fTypeCombo)){
+					if(CategoryNodeAbstractLayer.changeCategoryType(fSelectedCategory, fTypeCombo.getText())){
 						modelUpdated(null);
 					}
 					fTypeCombo.setText(fSelectedCategory.getType());
@@ -158,7 +159,7 @@ public class CategoryDetailsPage extends BasicDetailsPage {
 		fTypeCombo.addSelectionListener(new SelectionAdapter(){
 			@Override
 			public void widgetSelected(SelectionEvent e){
-				if(applyNewCategoryType(fSelectedCategory, fTypeCombo)){
+				if(CategoryNodeAbstractLayer.changeCategoryType(fSelectedCategory, fTypeCombo.getText())){
 					modelUpdated(null);
 				}
 				fTypeCombo.setText(fSelectedCategory.getType());
@@ -184,8 +185,9 @@ public class CategoryDetailsPage extends BasicDetailsPage {
 			@Override
 			public void handleEvent(Event event){
 				if(event.keyCode == SWT.CR || event.keyCode == SWT.KEYPAD_CR){
-					if(applyNewDefaultValue(fSelectedCategory, fDefaultEditableValueCombo)){
-						modelUpdated(null);
+						if(PartitionNodeAbstractLayer.changePartitionValue(fSelectedCategory.getDefaultValuePartition(),
+								fDefaultEditableValueCombo.getText())){
+							modelUpdated(null);
 					}
 				}
 			}
@@ -193,7 +195,8 @@ public class CategoryDetailsPage extends BasicDetailsPage {
 		fDefaultEditableValueCombo.addSelectionListener(new SelectionAdapter(){
 			@Override
 			public void widgetSelected(SelectionEvent e){
-				if(applyNewDefaultValue(fSelectedCategory, fDefaultEditableValueCombo)){
+				if(PartitionNodeAbstractLayer.changePartitionValue(fSelectedCategory.getDefaultValuePartition(),
+						fDefaultEditableValueCombo.getText())){
 					modelUpdated(null);
 				}
 			}
@@ -201,20 +204,11 @@ public class CategoryDetailsPage extends BasicDetailsPage {
 		
 		fDefaultValueCombo = new Combo(valueComposite,SWT.READ_ONLY);
 		fDefaultValueCombo.setLayoutData(new GridData(SWT.FILL,  SWT.CENTER, true, false));
-		fDefaultValueCombo.addListener(SWT.KeyDown, new Listener(){
-			@Override
-			public void handleEvent(Event event){
-				if(event.keyCode == SWT.CR || event.keyCode == SWT.KEYPAD_CR){
-					if(applyNewDefaultValue(fSelectedCategory, fDefaultValueCombo)){
-						modelUpdated(null);
-					}
-				}
-			}
-		});
 		fDefaultValueCombo.addSelectionListener(new SelectionAdapter(){
 			@Override
 			public void widgetSelected(SelectionEvent e){
-				if(applyNewDefaultValue(fSelectedCategory, fDefaultValueCombo)){
+				if(PartitionNodeAbstractLayer.changePartitionValue(fSelectedCategory.getDefaultValuePartition(),
+						fDefaultValueCombo.getText())){
 					modelUpdated(null);
 				}
 			}
@@ -234,35 +228,6 @@ public class CategoryDetailsPage extends BasicDetailsPage {
 		
 		getToolkit().paintBordersFor(valueComposite);
 		getToolkit().paintBordersFor(composite);
-	}
-	
-	protected boolean applyNewDefaultValue(CategoryNode category, Combo valueText) {
-		String newValue = valueText.getText();
-		if(newValue.equals(fSelectedCategory.getDefaultValueString())) return false;
-		if(ModelUtils.validatePartitionStringValue(newValue, category.getType())){
-			category.setDefaultValueString(newValue);
-			return true;
-		}
-		valueText.setText(category.getDefaultValuePartition().getValueString());
-		return false;
-	}
-	
-	protected boolean applyNewCategoryName(CategoryNode category, Text valueText) {
-		String newValue = valueText.getText();
-		if(newValue.equals(fSelectedCategory.getName()) || fSelectedCategory.getSibling(newValue) != null){
-			return false;
-		}
-		if(ModelUtils.validateNodeName(newValue)){
-			category.setName(newValue);
-			return true;
-		}
-		valueText.setText(category.getName());
-		return false;
-	}
-	
-	protected boolean applyNewCategoryType(CategoryNode category, Combo valueText) {
-		String newValue = valueText.getText();
-		return CategoryNodeAbstractLayer.changeCategoryType(category, newValue);
 	}
 	
 	private void prepareDefaultValues(CategoryNode node, Combo valueText){
