@@ -28,8 +28,9 @@ public class MenuCutOperation extends MenuOperation{
 
 	@Override
 	public boolean isEnabled(){
-		if(fTarget == null || (fTarget instanceof RootNode) || (fTarget instanceof CategoryNode && ((CategoryNode)fTarget).isExpected()))
+		if(fTarget == null || (fTarget instanceof RootNode)){
 			return false;
+		}
 		return true;
 	}
 
