@@ -14,7 +14,6 @@ package com.testify.ecfeed.ui.editor;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -23,13 +22,12 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
 
 import com.testify.ecfeed.model.PartitionNode;
-import com.testify.ecfeed.ui.common.Messages;
+import com.testify.ecfeed.ui.common.PartitionNodeAbstractLayer;
 import com.testify.ecfeed.utils.ModelUtils;
 
 public class PartitionDetailsPage extends BasicDetailsPage {
@@ -44,7 +42,7 @@ public class PartitionDetailsPage extends BasicDetailsPage {
 		@Override
 		public void handleEvent(Event event) {
 			if(event.keyCode == SWT.CR || event.keyCode == SWT.KEYPAD_CR){
-				if(applyNewPartitionName(fSelectedPartition, fPartitionNameText)){
+				if(PartitionNodeAbstractLayer.changePartitionName(fSelectedPartition, fPartitionNameText.getText())){
 					modelUpdated(null);
 				}
 			}
@@ -54,19 +52,19 @@ public class PartitionDetailsPage extends BasicDetailsPage {
 	private class ApplyChangesSelectionAdapter extends SelectionAdapter{
 		@Override
 		public void widgetSelected(SelectionEvent e){
-			boolean updated = applyNewPartitionName(fSelectedPartition, fPartitionNameText);
-			if (applyNewPartitionValue(fSelectedPartition, fPartitionValueCombo)) {
-				updated = true;
-			} else {
-				MessageDialog.openError(Display.getCurrent().getActiveShell(),
-						Messages.DIALOG_PARTITION_VALUE_PROBLEM_TITLE,
-						Messages.DIALOG_PARTITION_VALUE_PROBLEM_MESSAGE);
+			boolean update = false;
+			if(PartitionNodeAbstractLayer.changePartitionName(fSelectedPartition, fPartitionNameText.getText())){
+				update = true;
 			}
-			if(updated){
+			if(PartitionNodeAbstractLayer.changePartitionValue(fSelectedPartition, fPartitionValueCombo.getText())){
+				update = true;
+			}
+			if(update){
 				modelUpdated(null);
 			}
+			fPartitionNameText.setText(fSelectedPartition.getName());
+			fPartitionValueCombo.setText(fSelectedPartition.getValueString());
 		}
-		
 	}
 	
 	@Override
@@ -111,34 +109,6 @@ public class PartitionDetailsPage extends BasicDetailsPage {
 		super(masterSection);
 	}
 	
-	private boolean applyNewPartitionName(PartitionNode partition, Text nameText) {
-		String newName = nameText.getText(); 
-		if(newName.equals(partition.getName()) == false){
-			if(partition.getCategory().validatePartitionName(newName)){
-				partition.setName(newName);
-				return true;
-			}
-			else{
-				nameText.setText(partition.getName());
-			}
-		}
-		return false;
-	}
-
-	private boolean applyNewPartitionValue(PartitionNode partition, Combo valueText) {
-		String newValue = valueText.getText(); 
-		if(newValue.equals(partition.getValueString()) == false){
-			if(ModelUtils.validatePartitionStringValue(newValue, partition.getCategory().getType())){
-				partition.setValueString(newValue);
-				return true;
-			}
-			else{
-				valueText.setText(partition.getValueString());
-			}
-		}
-		return false;
-	}
-	
 	private void createNameValueEdit(Composite parent) {
 		Composite composite = getToolkit().createComposite(parent);
 		composite.setLayout(new GridLayout(3, false));
@@ -168,13 +138,9 @@ public class PartitionDetailsPage extends BasicDetailsPage {
 		fPartitionValueCombo.addListener(SWT.KeyDown, new Listener(){
 			@Override
 			public void handleEvent(Event event){
-				if(event.keyCode == SWT.CR || event.keyCode == SWT.KEYPAD_CR){
-					if(applyNewPartitionValue(fSelectedPartition, fPartitionValueCombo)){
-						modelUpdated(null);
-					} else {
-						MessageDialog.openError(Display.getCurrent().getActiveShell(),
-								Messages.DIALOG_PARTITION_VALUE_PROBLEM_TITLE,
-								Messages.DIALOG_PARTITION_VALUE_PROBLEM_MESSAGE);
+				if(event.keyCode == SWT.CR || event.keyCode == SWT.KEYPAD_CR){					
+					if(PartitionNodeAbstractLayer.changePartitionValue(fSelectedPartition, fPartitionValueCombo.getText())){
+							modelUpdated(null);
 					}
 				}
 			}
@@ -182,12 +148,8 @@ public class PartitionDetailsPage extends BasicDetailsPage {
 		fPartitionValueCombo.addSelectionListener(new SelectionAdapter(){
 			@Override
 			public void widgetSelected(SelectionEvent e){
-				if(applyNewPartitionValue(fSelectedPartition, fPartitionValueCombo)){
+				if(PartitionNodeAbstractLayer.changePartitionValue(fSelectedPartition, fPartitionValueCombo.getText())){
 					modelUpdated(null);
-				} else {
-					MessageDialog.openError(Display.getCurrent().getActiveShell(),
-							Messages.DIALOG_PARTITION_VALUE_PROBLEM_TITLE,
-							Messages.DIALOG_PARTITION_VALUE_PROBLEM_MESSAGE);
 				}
 			}
 		});
