@@ -218,5 +218,28 @@ public class CategoryNodeAbstractLayer{
 		}
 		return false;
 	}
+	
+	public static boolean changeCategoryName(CategoryNode category, String newName){
+		boolean validName = ModelUtils.validateNodeName(newName);
+
+		if (!validName) {
+			MessageDialog.openError(Display.getCurrent().getActiveShell(),
+					Messages.DIALOG_PARAMETER_NAME_PROBLEM_TITLE,
+					Messages.DIALOG_PARAMETER_NAME_PROBLEM_MESSAGE);
+			return false;
+		}
+		if (!category.getName().equals(newName)) {
+			if (category.getMethod().getCategory(newName) == null) {
+				category.setName(newName);
+				return true;
+			} else {
+				MessageDialog.openError(Display.getCurrent().getActiveShell(),
+						Messages.DIALOG_CATEGORY_EXISTS_TITLE,
+						Messages.DIALOG_CATEGORY_EXISTS_MESSAGE);
+				return false;
+			}
+		}		
+		return false;
+	}
 
 }
