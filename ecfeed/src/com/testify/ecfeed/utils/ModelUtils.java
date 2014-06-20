@@ -420,7 +420,7 @@ public class ModelUtils {
 	}
 	
 	public static boolean validateNodeName(String name){
-		if(name.length() < 1) return false;
+		if(name.length() < 1 || name.length() > com.testify.ecfeed.model.Constants.MAX_NODE_NAME_LENGTH) return false;
 		if(!name.matches("(^[a-zA-Z][a-zA-Z0-9_$]*)|(^[_][a-zA-Z0-9_$]+)")) return false;
 		return isKeyword(name);
 	}
