@@ -129,17 +129,26 @@ public class CategoryDetailsPage extends BasicDetailsPage {
 		composite.setLayout(new GridLayout(1, false));
 		composite.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
 		getToolkit().createLabel(composite, "Category name: ", SWT.NONE);
-		fNameText = getToolkit().createText(composite, "",SWT.NONE);
+		Composite nameComposite = getToolkit().createComposite(composite);
+		GridLayout nameGrid = new GridLayout(2, false);
+		nameGrid.marginWidth = 2;
+		nameComposite.setLayout(nameGrid);
+		nameComposite.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
+		fNameText = getToolkit().createText(nameComposite, "",SWT.NONE);
 		fNameText.setLayoutData(new GridData(SWT.FILL,  SWT.CENTER, true, false));
 		fNameText.addListener(SWT.KeyDown, new Listener(){
 			@Override
 			public void handleEvent(Event event){
 				if(event.keyCode == SWT.CR || event.keyCode == SWT.KEYPAD_CR){
-					if(CategoryNodeAbstractLayer.changeCategoryName(fSelectedCategory, fNameText.getText())){
-						modelUpdated(null);
-					}
-					fNameText.setText(fSelectedCategory.getName());
+					changeName();
 				}
+			}
+		});
+		Button changeButton = getToolkit().createButton(nameComposite, "Change", SWT.NONE);
+		changeButton.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e){
+				changeName();
 			}
 		});
 		getToolkit().createLabel(composite, "Category type: ", SWT.NONE);
@@ -166,8 +175,17 @@ public class CategoryDetailsPage extends BasicDetailsPage {
 			}
 		});
 		getToolkit().paintBordersFor(composite);
+		getToolkit().paintBordersFor(nameComposite);
 	}
-	
+
+	private void changeName() {
+		if (CategoryNodeAbstractLayer.changeCategoryName(fSelectedCategory, fNameText.getText())){
+			modelUpdated(null);
+		}
+		fNameText.setText(fSelectedCategory.getName());
+		fNameText.setSelection(fSelectedCategory.getName().length());
+	}
+
 	public void createDefaultValueEdit(){
 		Composite composite = getToolkit().createComposite(getMainComposite());		
 		composite.setLayout(new GridLayout(1, false));
