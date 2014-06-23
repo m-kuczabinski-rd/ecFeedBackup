@@ -37,7 +37,15 @@ public class TestCasesViewerLabelProvider extends LabelProvider implements IColo
 	public String getText(Object element) {
 		if (element instanceof String) {
 			int testCasesCount = fMethod.getTestCases((String) element).size();
-			return (String) element + " [" + testCasesCount + " test case" + (testCasesCount == 1 ? "" : "s") + "]";
+			int executableCount = 0;
+			for (TestCaseNode testCase : fMethod.getTestCases((String) element)) {
+				if (ModelUtils.isTestCaseImplemented(testCase) && ModelUtils.methodDefinitionImplemented(fMethod)) {
+					++executableCount;
+				}
+			}
+			return (String) element +
+					" [" + testCasesCount + " test case" + (testCasesCount == 1 ? "" : "s") +
+					", " + executableCount + " executable" + "]";
 		} else if (element instanceof TestCaseNode) {
 			return fMethod.getName() + "(" + ((TestCaseNode) element).testDataString() + ")";
 		}
