@@ -72,8 +72,8 @@ public class AdaptTypeSupport{
 		case com.testify.ecfeed.model.Constants.TYPE_NAME_STRING:
 			return adaptValueToString(value);
 		default:
+			return adaptValueToEnum(value);
 		}
-		return null;
 	}
 
 	/*
@@ -314,6 +314,13 @@ public class AdaptTypeSupport{
 	private static String adaptValueToString(String value){
 		return value;
 	}
+	
+	private static String adaptValueToEnum(String value){
+		if(ModelUtils.validatePartitionStringValue(value, "default")){
+			return value;
+		}
+		return null;
+	}
 
 	private static ConversionType booleanCompatibility(String newtype){
 		switch(newtype){
@@ -333,7 +340,6 @@ public class AdaptTypeSupport{
 		case com.testify.ecfeed.model.Constants.TYPE_NAME_CHAR:
 		case com.testify.ecfeed.model.Constants.TYPE_NAME_DOUBLE:
 		case com.testify.ecfeed.model.Constants.TYPE_NAME_FLOAT:
-			;
 		case com.testify.ecfeed.model.Constants.TYPE_NAME_INT:
 		case com.testify.ecfeed.model.Constants.TYPE_NAME_LONG:
 		case com.testify.ecfeed.model.Constants.TYPE_NAME_SHORT:
@@ -446,10 +452,19 @@ public class AdaptTypeSupport{
 
 	private static ConversionType enumCompatibility(String newtype){
 		switch(newtype){
+		case com.testify.ecfeed.model.Constants.TYPE_NAME_BYTE:
+		case com.testify.ecfeed.model.Constants.TYPE_NAME_BOOLEAN:
+		case com.testify.ecfeed.model.Constants.TYPE_NAME_CHAR:
+		case com.testify.ecfeed.model.Constants.TYPE_NAME_DOUBLE:
+		case com.testify.ecfeed.model.Constants.TYPE_NAME_FLOAT:
+		case com.testify.ecfeed.model.Constants.TYPE_NAME_INT:
+		case com.testify.ecfeed.model.Constants.TYPE_NAME_LONG:
+		case com.testify.ecfeed.model.Constants.TYPE_NAME_SHORT:
+			return ConversionType.IMPOSSIBLE;
 		case com.testify.ecfeed.model.Constants.TYPE_NAME_STRING:
 			return ConversionType.POSSIBLE;
 		default:
-			return ConversionType.IMPOSSIBLE;
+			return ConversionType.POSSIBLE;
 		}
 	}
 }
