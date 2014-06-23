@@ -84,6 +84,7 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 	private GeneratorFactory<PartitionNode> fGeneratorFactory; 
 	private int fContent;
 	private boolean fGenerateExecutableContent;
+	private boolean fOkButtonEnabled;
 	
 	private final String fTitle;
 	private final String fMessage;
@@ -171,6 +172,7 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 		fTitle = title;
 		fMessage = message;
 		fGenerateExecutableContent = generateExecutables;
+		fOkButtonEnabled = true;
 	}
 	
 	protected  List<List<PartitionNode>> algorithmInput(){
@@ -213,6 +215,14 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 	protected void createButtonsForButtonBar(Composite parent) {
 		fOkButton = createButton(parent, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL,
 				true);
+		for(CategoryNode category: fMethod.getCategories()){
+			if(category.getPartitions().isEmpty()){
+				fOkButtonEnabled = false;
+				fOkButton.setEnabled(false);
+				break;
+			}
+		}
+		
 		createButton(parent, IDialogConstants.CANCEL_ID,
 				IDialogConstants.CANCEL_LABEL, false);
 	}
@@ -372,11 +382,13 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 			}
 		});
 		for(CategoryNode category : fMethod.getCategories()){
-			fCategoriesViewer.setSubtreeChecked(category, true);
-			for (Object item : fCategoriesViewer.getCheckedElements()) {
-				if (item instanceof PartitionNode) {
-					if (!ModelUtils.isPartitionImplemented((PartitionNode)item)) {
-						fCategoriesViewer.setChecked(item, !fGenerateExecutableContent);
+			if(!category.getPartitions().isEmpty()){
+				fCategoriesViewer.setSubtreeChecked(category, true);
+				for (Object item : fCategoriesViewer.getCheckedElements()) {
+					if (item instanceof PartitionNode) {
+						if (!ModelUtils.isPartitionImplemented((PartitionNode)item)) {
+							fCategoriesViewer.setChecked(item, !fGenerateExecutableContent);
+						}
 					}
 				}
 			}
@@ -431,7 +443,7 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 	}
 
 	private void setOkButton(boolean enabled) {
-		if(fOkButton != null && !fOkButton.isDisposed()){
+		if(fOkButton != null && !fOkButton.isDisposed() && fOkButtonEnabled){
 			fOkButton.setEnabled(enabled);
 		}
 	}
