@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.StackLayout;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
@@ -26,6 +27,7 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
 
+import com.testify.ecfeed.model.Constants;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.ui.common.PartitionNodeAbstractLayer;
 import com.testify.ecfeed.utils.ModelUtils;
@@ -37,6 +39,8 @@ public class PartitionDetailsPage extends BasicDetailsPage {
 	private PartitionLabelsViewer fLabelsViewer;
 	private Text fPartitionNameText;
 	private Combo fPartitionValueCombo;
+	private StackLayout fComboLayout;
+	private Combo fBooleanValueCombo;
 
 	private class PartitionNameTextListener extends ApplyChangesSelectionAdapter implements Listener{
 		@Override
@@ -95,12 +99,26 @@ public class PartitionDetailsPage extends BasicDetailsPage {
 			fPartitionNameText.setText(fSelectedPartition.getName());
 			if(fSelectedPartition.isAbstract()){
 				fPartitionValueCombo.setEnabled(false);
+				fBooleanValueCombo.setEnabled(false);
 				fPartitionValueCombo.setText("");
+				fBooleanValueCombo.setText("");
 			}
 			else{
-				fPartitionValueCombo.setEnabled(true);
-				prepareDefaultValues(fSelectedPartition, fPartitionValueCombo);
-				fPartitionValueCombo.setText(fSelectedPartition.getValueString());
+				if(fSelectedPartition.getCategory().getType().equals(Constants.TYPE_NAME_BOOLEAN)){
+					fPartitionValueCombo.setVisible(false);
+					fBooleanValueCombo.setVisible(true);
+					fBooleanValueCombo.setEnabled(true);
+					prepareDefaultValues(fSelectedPartition, fBooleanValueCombo);
+					fBooleanValueCombo.setText(fSelectedPartition.getValueString());
+					fComboLayout.topControl = fBooleanValueCombo;
+				} else {
+					fBooleanValueCombo.setVisible(false);
+					fPartitionValueCombo.setEnabled(true);
+					fPartitionValueCombo.setVisible(true);
+					prepareDefaultValues(fSelectedPartition, fPartitionValueCombo);
+					fPartitionValueCombo.setText(fSelectedPartition.getValueString());
+					fComboLayout.topControl = fPartitionValueCombo;
+				}
 			}
 		}
 	}
@@ -133,7 +151,11 @@ public class PartitionDetailsPage extends BasicDetailsPage {
 
 	private void createValueEdit(Composite parent) {
 		getToolkit().createLabel(parent, "Value");
-		fPartitionValueCombo = new Combo(parent,SWT.DROP_DOWN);
+		Composite valueComposite = getToolkit().createComposite(parent);
+		fComboLayout = new StackLayout();
+		valueComposite.setLayout(fComboLayout);
+		valueComposite.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
+		fPartitionValueCombo = new Combo(valueComposite,SWT.DROP_DOWN);
 		fPartitionValueCombo.setLayoutData(new GridData(SWT.FILL,  SWT.CENTER, true, false));
 		fPartitionValueCombo.addListener(SWT.KeyDown, new Listener(){
 			@Override
@@ -153,6 +175,18 @@ public class PartitionDetailsPage extends BasicDetailsPage {
 				}
 			}
 		});
+		// boolean value combo
+		fBooleanValueCombo = new Combo(valueComposite,SWT.READ_ONLY);
+		fBooleanValueCombo.setLayoutData(new GridData(SWT.FILL,  SWT.CENTER, true, false));
+		fBooleanValueCombo.addSelectionListener(new SelectionAdapter(){
+			@Override
+			public void widgetSelected(SelectionEvent e){
+				if(PartitionNodeAbstractLayer.changePartitionValue(fSelectedPartition,
+						fBooleanValueCombo.getText())){
+					modelUpdated(null);
+				}
+			}
+		});	
 		getToolkit().paintBordersFor(parent);	
 	}
 	
