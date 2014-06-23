@@ -30,7 +30,6 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Tree;
-import org.eclipse.swt.widgets.TreeItem;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Section;
 
@@ -51,7 +50,7 @@ public class TestCasesViewer extends CheckboxTreeViewerSection {
 	private MethodNode fSelectedMethod;
 	private TestCasesViewerLabelProvider fLabelProvider;
 	private TestCasesViewerContentProvider fContentProvider;
-	private Button fExecuteSeletedButton;
+	private Button fExecuteSelectedButton;
 	private Button fGenerateSuiteButton;
 
 	@Override
@@ -59,27 +58,26 @@ public class TestCasesViewer extends CheckboxTreeViewerSection {
 		TreeViewer treeViewer = super.createTreeViewer(parent, style);
 		final Tree tree = treeViewer.getTree();
 		tree.addListener(SWT.Selection, new Listener() {
+			@Override
 			public void handleEvent(Event event) {
 				if (event.detail == SWT.CHECK) {
-					tree.setRedraw(false);
-					TreeItem item = (TreeItem)event.item;
-					if (item.getData() instanceof TestCaseNode) {
-						if (!ModelUtils.isTestCaseImplemented((TestCaseNode)item.getData())) {
-							item.setChecked(false);
-						}
-					} else if (item.getData() instanceof String) {
-						for(int i = 0; i < item.getItemCount(); ++i) {
-							TreeItem subItem = item.getItem(i);
-							if (!ModelUtils.isTestCaseImplemented((TestCaseNode)subItem.getData())) {
-								subItem.setChecked(false);
-							}
-						}
-					}
-					tree.setRedraw(true);
+					isSelectionExecutable();
 				}
 			}
 		});
 		return treeViewer;
+	}
+	
+	private void isSelectionExecutable(){
+		for(Object element: getCheckboxViewer().getCheckedElements()){
+			if(element instanceof TestCaseNode){
+				if (!ModelUtils.isTestCaseImplemented((TestCaseNode)element)){
+					fExecuteSelectedButton.setEnabled(false);
+					return;
+				}
+			}
+		}
+		fExecuteSelectedButton.setEnabled(true);
 	}
 
 	private class AddTestCaseAdapter extends SelectionAdapter{
@@ -182,7 +180,7 @@ public class TestCasesViewer extends CheckboxTreeViewerSection {
 		fGenerateSuiteButton = addButton("Generate test suite", new GenerateTestSuiteAdapter(this));
 		addButton("Calculate coverage", new CalculateCoverageAdapter());
 		addButton("Remove selected", new RemoveSelectedAdapter());
-		fExecuteSeletedButton = addButton("Execute selected", new ExecuteStaticTestAdapter(this));
+		fExecuteSelectedButton = addButton("Execute selected", new ExecuteStaticTestAdapter(this));
 
 		addDoubleClickListener(new SelectNodeDoubleClickListener(parent.getMasterSection()));
 	}
@@ -223,7 +221,7 @@ public class TestCasesViewer extends CheckboxTreeViewerSection {
 	@Override
 	public void refresh() {
 		super.refresh();
-		fExecuteSeletedButton.setEnabled(ModelUtils.isMethodImplemented(fSelectedMethod) || ModelUtils.isMethodPartiallyImplemented(fSelectedMethod));
+		fExecuteSelectedButton.setEnabled(ModelUtils.isMethodImplemented(fSelectedMethod) || ModelUtils.isMethodPartiallyImplemented(fSelectedMethod));
 		fGenerateSuiteButton.setEnabled(ModelUtils.isMethodWithParameters(fSelectedMethod));
 	}
 }
