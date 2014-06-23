@@ -52,6 +52,7 @@ public class TestCasesViewer extends CheckboxTreeViewerSection {
 	private TestCasesViewerContentProvider fContentProvider;
 	private Button fExecuteSelectedButton;
 	private Button fGenerateSuiteButton;
+	private boolean fIsExecutable;
 
 	@Override
 	protected TreeViewer createTreeViewer(Composite parent, int style) {
@@ -66,18 +67,6 @@ public class TestCasesViewer extends CheckboxTreeViewerSection {
 			}
 		});
 		return treeViewer;
-	}
-	
-	private void isSelectionExecutable(){
-		for(Object element: getCheckboxViewer().getCheckedElements()){
-			if(element instanceof TestCaseNode){
-				if (!ModelUtils.isTestCaseImplemented((TestCaseNode)element)){
-					fExecuteSelectedButton.setEnabled(false);
-					return;
-				}
-			}
-		}
-		fExecuteSelectedButton.setEnabled(true);
 	}
 
 	private class AddTestCaseAdapter extends SelectionAdapter{
@@ -206,6 +195,14 @@ public class TestCasesViewer extends CheckboxTreeViewerSection {
 		}
 		return fLabelProvider;
 	}
+	
+	@Override
+	public void refresh() {
+		super.refresh();
+		fIsExecutable = ModelUtils.isMethodImplemented(fSelectedMethod) || ModelUtils.isMethodPartiallyImplemented(fSelectedMethod);
+		setExecuteEnabled(true);
+		fGenerateSuiteButton.setEnabled(ModelUtils.isMethodWithParameters(fSelectedMethod));
+	}
 
 	public void setInput(MethodNode method){
 		fSelectedMethod = method;
@@ -217,11 +214,23 @@ public class TestCasesViewer extends CheckboxTreeViewerSection {
 	public MethodNode getSelectedMethod(){
 		return fSelectedMethod;
 	}
-
-	@Override
-	public void refresh() {
-		super.refresh();
-		fExecuteSelectedButton.setEnabled(ModelUtils.isMethodImplemented(fSelectedMethod) || ModelUtils.isMethodPartiallyImplemented(fSelectedMethod));
-		fGenerateSuiteButton.setEnabled(ModelUtils.isMethodWithParameters(fSelectedMethod));
+	
+	private void setExecuteEnabled(boolean enabled){
+			fExecuteSelectedButton.setEnabled(enabled && fIsExecutable);
 	}
+	
+	private void isSelectionExecutable(){
+		if(fIsExecutable){
+			for(Object element: getCheckboxViewer().getCheckedElements()){
+				if(element instanceof TestCaseNode){
+					if (!ModelUtils.isTestCaseImplemented((TestCaseNode)element)){
+						setExecuteEnabled(false);
+						return;
+					}
+				}
+			}
+		}
+		setExecuteEnabled(true);
+	}
+	
 }
