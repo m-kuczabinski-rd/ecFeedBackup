@@ -18,6 +18,7 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ComboBoxCellEditor;
 import org.eclipse.jface.viewers.EditingSupport;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.widgets.Display;
 
@@ -50,6 +51,8 @@ public class PartitionValueEditingSupport extends EditingSupport {
 		if (!ModelUtils.getJavaTypes().contains(node.getCategory().getType())
 				|| node.getCategory().getType().equals(com.testify.ecfeed.model.Constants.TYPE_NAME_BOOLEAN)) {
 			fCellEditor.setActivationStyle(ComboBoxCellEditor.DROP_DOWN_ON_MOUSE_ACTIVATION);
+		} else {
+			fCellEditor.setActivationStyle(SWT.NONE);
 		}
 		return fCellEditor;
 	}
