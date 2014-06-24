@@ -345,10 +345,10 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 		fCategoriesViewer.setInput(fMethod);
 		tree.addListener(SWT.Selection, new Listener() {
 			public void handleEvent(Event event){
-				if(fGenerateExecutableContent){
-					if(event.detail == SWT.CHECK){
-						tree.setRedraw(false);
-						TreeItem item = (TreeItem)event.item;
+				if(event.detail == SWT.CHECK){
+					tree.setRedraw(false);
+					TreeItem item = (TreeItem)event.item;
+					if(fGenerateExecutableContent){
 						if(item.getData() instanceof PartitionNode){
 							if(!ModelUtils.isPartitionImplemented((PartitionNode)item.getData())){
 								item.setChecked(false);
@@ -376,8 +376,14 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 								}
 							}
 						}
-						tree.setRedraw(true);
 					}
+
+					if (item.getData() instanceof CategoryNode) {
+						if (((CategoryNode)item.getData()).getPartitions().isEmpty()) {
+							item.setChecked(false);
+						}
+					}
+					tree.setRedraw(true);
 				}
 			}
 		});
