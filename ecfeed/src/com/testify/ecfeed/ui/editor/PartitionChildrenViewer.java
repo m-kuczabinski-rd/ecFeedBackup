@@ -69,17 +69,21 @@ public class PartitionChildrenViewer extends CheckboxTableViewerSection {
 			}
 		}
 	}
-
-	public PartitionChildrenViewer(BasicDetailsPage parent, FormToolkit toolkit) {
-		super(parent.getMainComposite(), toolkit, STYLE, parent);
-
-		getSection().setText("Partitions");
-		addButton("Add partition", new AddPartitionAdapter());
-		addButton("Remove selected", new RemovePartitionsAdapter());
-
-		addDoubleClickListener(new SelectNodeDoubleClickListener(parent.getMasterSection()));
+	
+	private class MoveUpAdapter extends SelectionAdapter{
+		@Override
+		public void widgetSelected(SelectionEvent e){
+			moveSelectedItem(true);
+		}
 	}
 
+	private class MoveDownAdapter extends SelectionAdapter{
+		@Override
+		public void widgetSelected(SelectionEvent e){
+			moveSelectedItem(false);
+		}
+	}
+	
 	@Override
 	protected void createTableColumns() {
 		TableViewerColumn nameColumn = addColumn("Name", 150, new PartitionNameLabelProvider());
@@ -90,6 +94,18 @@ public class PartitionChildrenViewer extends CheckboxTableViewerSection {
 
 	}
 
+	public PartitionChildrenViewer(BasicDetailsPage parent, FormToolkit toolkit) {
+		super(parent.getMainComposite(), toolkit, STYLE, parent);
+
+		getSection().setText("Partitions");
+		addButton("Add partition", new AddPartitionAdapter());
+		addButton("Remove selected", new RemovePartitionsAdapter());
+		addButton("Move Up", new MoveUpAdapter());
+		addButton("Move Down", new MoveDownAdapter());
+
+		addDoubleClickListener(new SelectNodeDoubleClickListener(parent.getMasterSection()));
+	}
+
 	public void setInput(PartitionNode	partition){
 		fSelectedPartition = partition;
 		super.setInput(partition.getPartitions());
@@ -97,5 +113,25 @@ public class PartitionChildrenViewer extends CheckboxTableViewerSection {
 
 	public PartitionNode getSelectedPartition(){
 		return fSelectedPartition;
+	}
+	
+	private void moveSelectedItem(boolean moveUp) {
+		if (getSelectedElement() != null) {
+			PartitionNode partitionNode = (PartitionNode)getSelectedElement();
+			int index = fSelectedPartition.getPartitions().indexOf(partitionNode);			
+			if(index > -1){
+				if(moveUp && index > 0){
+					PartitionNode swap = fSelectedPartition.getPartitions().get(index-1);
+					fSelectedPartition.getPartitions().set(index-1, fSelectedPartition.getPartitions().get(index));
+					fSelectedPartition.getPartitions().set(index, swap);
+					modelUpdated();
+				} else if(!moveUp && index < fSelectedPartition.getPartitions().size() -1){
+					PartitionNode swap = fSelectedPartition.getPartitions().get(index+1);
+					fSelectedPartition.getPartitions().set(index+1, fSelectedPartition.getPartitions().get(index));
+					fSelectedPartition.getPartitions().set(index, swap);
+					modelUpdated();
+				}	
+			}		
+		}
 	}
 }

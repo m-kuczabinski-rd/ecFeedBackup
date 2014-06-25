@@ -57,16 +57,21 @@ public class CategoryChildrenViewer extends CheckboxTableViewerSection {
 			}
 		}
 	}
-	public CategoryChildrenViewer(BasicDetailsPage parent, FormToolkit toolkit) {
-		super(parent.getMainComposite(), toolkit, STYLE, parent);
-		
-		getSection().setText("Partitions");
-		addButton("Add partition", new AddPartitionAdapter());
-		addButton("Remove selected", new RemovePartitionsAdapter());
-		
-		addDoubleClickListener(new SelectNodeDoubleClickListener(parent.getMasterSection()));
+	
+	private class MoveUpAdapter extends SelectionAdapter{
+		@Override
+		public void widgetSelected(SelectionEvent e){
+			moveSelectedItem(true);
+		}
 	}
 
+	private class MoveDownAdapter extends SelectionAdapter{
+		@Override
+		public void widgetSelected(SelectionEvent e){
+			moveSelectedItem(false);
+		}
+	}
+	
 	@Override
 	protected void createTableColumns() {
 		TableViewerColumn nameColumn = addColumn("Name", 150, new PartitionNameLabelProvider());
@@ -75,6 +80,18 @@ public class CategoryChildrenViewer extends CheckboxTableViewerSection {
 		TableViewerColumn valueColumn = addColumn("Value", 150, new PartitionValueLabelProvider());
 		valueColumn.setEditingSupport(new PartitionValueEditingSupport(this));
 
+	}
+	
+	public CategoryChildrenViewer(BasicDetailsPage parent, FormToolkit toolkit) {
+		super(parent.getMainComposite(), toolkit, STYLE, parent);
+		
+		getSection().setText("Partitions");
+		addButton("Add partition", new AddPartitionAdapter());
+		addButton("Remove selected", new RemovePartitionsAdapter());
+		addButton("Move Up", new MoveUpAdapter());
+		addButton("Move Down", new MoveDownAdapter());
+		
+		addDoubleClickListener(new SelectNodeDoubleClickListener(parent.getMasterSection()));
 	}
 
 	public CategoryNode getSelectedCategory(){
@@ -88,5 +105,25 @@ public class CategoryChildrenViewer extends CheckboxTableViewerSection {
 	
 	public void setVisible(boolean visible){
 		this.getSection().setVisible(visible);
+	}
+	
+	private void moveSelectedItem(boolean moveUp) {
+		if (getSelectedElement() != null) {
+			PartitionNode partitionNode = (PartitionNode)getSelectedElement();
+			int index = fSelectedCategory.getPartitions().indexOf(partitionNode);			
+			if(index > -1){
+				if(moveUp && index > 0){
+					PartitionNode swap = fSelectedCategory.getPartitions().get(index-1);
+					fSelectedCategory.getPartitions().set(index-1, fSelectedCategory.getPartitions().get(index));
+					fSelectedCategory.getPartitions().set(index, swap);
+					modelUpdated();
+				} else if(!moveUp && index < fSelectedCategory.getPartitions().size() -1){
+					PartitionNode swap = fSelectedCategory.getPartitions().get(index+1);
+					fSelectedCategory.getPartitions().set(index+1, fSelectedCategory.getPartitions().get(index));
+					fSelectedCategory.getPartitions().set(index, swap);
+					modelUpdated();
+				}	
+			}		
+		}
 	}
 }
