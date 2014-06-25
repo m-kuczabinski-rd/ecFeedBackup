@@ -45,37 +45,29 @@ public class DefaultValueEditingSupport extends EditingSupport {
 			fComboCellEditor.setLabelProvider(new LabelProvider());
 			fComboCellEditor.setContentProvider(new ArrayContentProvider());
 		}
-		if (partition.getCategory().isExpected()) {
-			ArrayList<String> expectedValues = new ArrayList<String>();
-			for (PartitionNode node : ModelUtils.generateDefaultPartitions(partition.getCategory().getType())) {
-				expectedValues.add(node.getValueString());
+		ArrayList<String> expectedValues = new ArrayList<String>();
+		for(PartitionNode node : ModelUtils.generateDefaultPartitions(partition.getCategory().getType())){
+			expectedValues.add(node.getValueString());
+		}
+		if(!expectedValues.contains(partition.getValueString())){
+			expectedValues.add(partition.getValueString());
+		}
+		for(PartitionNode leaf : partition.getCategory().getLeafPartitions()){
+			if(!expectedValues.contains(leaf.getValueString())){
+				expectedValues.add(leaf.getValueString());
 			}
-			if (!expectedValues.contains(partition.getValueString())) {
-				expectedValues.add(partition.getValueString());
-			}
-			for(PartitionNode leaf : partition.getCategory().getLeafPartitions()){
-				if(!expectedValues.contains(leaf.getValueString())){
-					expectedValues.add(leaf.getValueString());
-				}
-			}
-			
-			fComboCellEditor.setInput(expectedValues);
-			fComboCellEditor.setValue(partition.getValueString());
+		}
 
-			if (ModelUtils.getJavaTypes().contains(partition.getCategory().getType())
-					&& !partition.getCategory().getType().equals(com.testify.ecfeed.model.Constants.TYPE_NAME_BOOLEAN)) {
-				fComboCellEditor.getViewer().getCCombo().setEditable(true);
-			} else {
-				fComboCellEditor.setActivationStyle(ComboBoxViewerCellEditor.DROP_DOWN_ON_KEY_ACTIVATION |
-						ComboBoxViewerCellEditor.DROP_DOWN_ON_MOUSE_ACTIVATION);
-				fComboCellEditor.getViewer().getCCombo().setEditable(false);
-			}
-		} else {
-			fComboCellEditor.setActivationStyle(ComboBoxViewerCellEditor.DROP_DOWN_ON_KEY_ACTIVATION |
-					ComboBoxViewerCellEditor.DROP_DOWN_ON_MOUSE_ACTIVATION);
-			fComboCellEditor.setInput(partition.getCategory().getLeafPartitions());
+		fComboCellEditor.setInput(expectedValues);
+		fComboCellEditor.setValue(partition.getValueString());
+
+		if(ModelUtils.getJavaTypes().contains(partition.getCategory().getType())
+				&& !partition.getCategory().getType().equals(com.testify.ecfeed.model.Constants.TYPE_NAME_BOOLEAN)){
+			fComboCellEditor.getViewer().getCCombo().setEditable(true);
+		} else{
+			fComboCellEditor.setActivationStyle(ComboBoxViewerCellEditor.DROP_DOWN_ON_KEY_ACTIVATION
+					| ComboBoxViewerCellEditor.DROP_DOWN_ON_MOUSE_ACTIVATION);
 			fComboCellEditor.getViewer().getCCombo().setEditable(false);
-			fComboCellEditor.setValue(partition);
 		}
 		return fComboCellEditor;
 	}
@@ -100,25 +92,19 @@ public class DefaultValueEditingSupport extends EditingSupport {
 	protected void setValue(Object element, Object value) {
 		CategoryNode category = (CategoryNode)element;
 		String valueString = null;
-		if (category.isExpected()) {
-			if (value instanceof String) {
-				valueString = (String)value;
-			} else if (value == null){
-				valueString = fComboCellEditor.getViewer().getCCombo().getText();
+		if(value instanceof String){
+			valueString = (String)value;
+		} else if(value == null){
+			valueString = fComboCellEditor.getViewer().getCCombo().getText();
+		}
+		if(!valueString.equals(category.getDefaultValueString())){
+			if(!ModelUtils.validatePartitionStringValue(valueString, category.getType())){
+				MessageDialog.openError(Display.getCurrent().getActiveShell(), Messages.DIALOG_PARTITION_VALUE_PROBLEM_TITLE,
+						Messages.DIALOG_PARTITION_VALUE_PROBLEM_MESSAGE);
+			} else{
+				category.setDefaultValueString(valueString);
+				fSetValueListener.testDataChanged();
 			}
-			if (!valueString.equals(category.getDefaultValueString())) {
-				if (!ModelUtils.validatePartitionStringValue(valueString, category.getType())) {
-					MessageDialog.openError(Display.getCurrent().getActiveShell(),
-							Messages.DIALOG_PARTITION_VALUE_PROBLEM_TITLE,
-							Messages.DIALOG_PARTITION_VALUE_PROBLEM_MESSAGE);
-				} else {
-					category.setDefaultValueString(valueString);
-					fSetValueListener.testDataChanged();
-				}
-			}
-		} else if (value instanceof PartitionNode) {
-			PartitionNode partitionValue = (PartitionNode)value;
-			category.setDefaultValueString(partitionValue.getValueString());
 		}
 	}
 
