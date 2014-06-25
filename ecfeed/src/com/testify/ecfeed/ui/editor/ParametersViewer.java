@@ -183,15 +183,16 @@ public class ParametersViewer extends CheckboxTableViewerSection implements Test
 			}
 
 			if (move) {
-				if ((fSelectedMethod.getClassNode().getMethod(fSelectedMethod.getName(), tmpTypes) == null)) {
-			if(categoryNode.getParent().moveChild(categoryNode, moveUp)){
-				int index = fSelectedMethod.getCategories().indexOf(categoryNode);
-				int oldindex = moveUp ? (index + 1) : (index - 1);
-				for(TestCaseNode tcnode: fSelectedMethod.getTestCases()){
-					Collections.swap(tcnode.getTestData(), index, oldindex);
-				}
-				modelUpdated();
-			}
+				MethodNode twinMethod = fSelectedMethod.getClassNode().getMethod(fSelectedMethod.getName(), tmpTypes);
+				if (twinMethod == null || twinMethod == fSelectedMethod) {
+					if(categoryNode.getParent().moveChild(categoryNode, moveUp)){
+						int index = fSelectedMethod.getCategories().indexOf(categoryNode);
+						int oldindex = moveUp ? (index + 1) : (index - 1);
+						for(TestCaseNode tcnode: fSelectedMethod.getTestCases()){
+							Collections.swap(tcnode.getTestData(), index, oldindex);
+						}
+						modelUpdated();
+					}
 				} else {
 					MessageDialog.openError(Display.getCurrent().getActiveShell(),
 							Messages.DIALOG_METHOD_EXISTS_TITLE,
