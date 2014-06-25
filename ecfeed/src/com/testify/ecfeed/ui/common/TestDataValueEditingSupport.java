@@ -61,6 +61,12 @@ public class TestDataValueEditingSupport extends EditingSupport {
 			if (!expectedValues.contains(partition.getValueString())) {
 				expectedValues.add(partition.getValueString());
 			}
+			for(PartitionNode leaf : partition.getCategory().getLeafPartitions()){
+				if(!expectedValues.contains(leaf.getValueString())){
+					expectedValues.add(leaf.getValueString());
+				}
+			}
+			
 			fComboCellEditor.setInput(expectedValues);
 			fComboCellEditor.setValue(partition.getValueString());
 
