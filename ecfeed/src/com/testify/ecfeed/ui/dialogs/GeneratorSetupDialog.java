@@ -215,11 +215,21 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 	protected void createButtonsForButtonBar(Composite parent) {
 		fOkButton = createButton(parent, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL,
 				true);
-		for(CategoryNode category: fMethod.getCategories()){
-			if(category.getPartitions().isEmpty()){
-				fOkButtonEnabled = false;
-				fOkButton.setEnabled(false);
-				break;
+		if(fGenerateExecutableContent){
+			for(CategoryNode category: fMethod.getCategories()){
+				if(category.getPartitions().isEmpty() || !ModelUtils.isCategoryPartiallyImplemented(category)){
+					fOkButtonEnabled = false;
+					fOkButton.setEnabled(false);
+					break;
+				}
+			}
+		} else {
+			for(CategoryNode category: fMethod.getCategories()){
+				if(category.getPartitions().isEmpty()){
+					fOkButtonEnabled = false;
+					fOkButton.setEnabled(false);
+					break;
+				}
 			}
 		}
 		
