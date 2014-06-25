@@ -49,6 +49,7 @@ public class PartitionDetailsPage extends BasicDetailsPage {
 				if(PartitionNodeAbstractLayer.changePartitionName(fSelectedPartition, fPartitionNameText.getText())){
 					modelUpdated(null);
 				}
+				fPartitionNameText.setText(fSelectedPartition.getName());
 			}
 		}
 	}
@@ -164,6 +165,7 @@ public class PartitionDetailsPage extends BasicDetailsPage {
 					if(PartitionNodeAbstractLayer.changePartitionValue(fSelectedPartition, fPartitionValueCombo.getText())){
 							modelUpdated(null);
 					}
+					fPartitionValueCombo.setText(fSelectedPartition.getValueString());
 				}
 			}
 		});
@@ -173,6 +175,7 @@ public class PartitionDetailsPage extends BasicDetailsPage {
 				if(PartitionNodeAbstractLayer.changePartitionValue(fSelectedPartition, fPartitionValueCombo.getText())){
 					modelUpdated(null);
 				}
+				fPartitionValueCombo.setText(fSelectedPartition.getValueString());
 			}
 		});
 		// boolean value combo
@@ -185,6 +188,7 @@ public class PartitionDetailsPage extends BasicDetailsPage {
 						fBooleanValueCombo.getText())){
 					modelUpdated(null);
 				}
+				fBooleanValueCombo.setText(fSelectedPartition.getValueString());
 			}
 		});	
 		getToolkit().paintBordersFor(parent);	
