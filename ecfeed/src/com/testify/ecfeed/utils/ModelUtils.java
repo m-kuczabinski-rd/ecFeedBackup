@@ -578,7 +578,8 @@ public class ModelUtils {
 			return ModelUtils.isPartitionImplemented(node.getDefaultValuePartition());
 		}
 		else{
-			return allPartitionsImplemented(node.getPartitions());
+			return (allPartitionsImplemented(node.getPartitions())
+					&& !node.getPartitions().isEmpty());
 		}
 	}
 	
