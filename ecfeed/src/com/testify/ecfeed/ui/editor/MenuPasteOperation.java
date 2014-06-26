@@ -25,6 +25,7 @@ import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.ui.common.CategoryNodeAbstractLayer;
+import com.testify.ecfeed.utils.AdaptTypeSupport;
 import com.testify.ecfeed.utils.ModelUtils;
 
 public class MenuPasteOperation extends MenuOperation{
@@ -76,7 +77,7 @@ public class MenuPasteOperation extends MenuOperation{
 				PartitionNode target = (PartitionNode)fTarget;
 				if(fSource instanceof PartitionNode){
 					PartitionNode source = (PartitionNode)fSource;
-					if(target.getCategory().getType().equals(source.getCategory().getType())){
+					if(target.getCategory().getType().equals(source.getCategory().getType()) ||AdaptTypeSupport.adaptOrRemovePartitions(source, target.getCategory().getType())){
 						ModelUtils.setUniqueNodeName(source, target);
 						target.addPartition(source);
 						return true;
@@ -87,7 +88,7 @@ public class MenuPasteOperation extends MenuOperation{
 				if(!target.isExpected()){
 					if(fSource instanceof PartitionNode){
 						PartitionNode source = (PartitionNode)fSource;
-						if(target.getType().equals(source.getCategory().getType())){
+						if(target.getType().equals(source.getCategory().getType()) || AdaptTypeSupport.adaptOrRemovePartitions(source, target.getType())){
 							ModelUtils.setUniqueNodeName(source, target);
 							target.addPartition(source);
 							return true;

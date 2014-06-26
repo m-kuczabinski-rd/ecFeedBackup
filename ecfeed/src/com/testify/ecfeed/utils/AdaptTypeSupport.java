@@ -107,6 +107,32 @@ public class AdaptTypeSupport{
 			return enumCompatibility(newtype);
 		}
 	}
+	
+	// returns true if adapted successfully, false if destined for removal.
+	public static boolean adaptOrRemovePartitions(PartitionNode partition, String type){
+		List<PartitionNode> partitions = partition.getPartitions();
+		if(!partitions.isEmpty()){
+			Iterator<PartitionNode> itr = partitions.iterator();
+			while(itr.hasNext()){
+				PartitionNode childpart = itr.next();
+				if(!adaptOrRemovePartitions(childpart, type)){
+					itr.remove();
+					childpart.getParent().partitionRemoved(childpart);
+				}
+			}
+		}
+		if(partition.getPartitions().isEmpty()){
+			String newvalue = adaptValueToType(partition.getValueString(), type);
+			if(newvalue != null){
+				partition.setValueString(newvalue);
+			} else{
+				return false;
+			}
+		}
+
+		return true;
+	}
+
 
 	private static void orphanCategoryTypeChange(CategoryNode category, ConversionType compatibility, String oldtype, String newtype){
 		category.setType(newtype);
@@ -202,31 +228,6 @@ public class AdaptTypeSupport{
 			}
 		}
 		return false;
-	}
-
-	// returns true if adapted successfully, false if destined for removal.
-	private static boolean adaptOrRemovePartitions(PartitionNode partition, String type){
-		List<PartitionNode> partitions = partition.getPartitions();
-		if(!partitions.isEmpty()){
-			Iterator<PartitionNode> itr = partitions.iterator();
-			while(itr.hasNext()){
-				PartitionNode childpart = itr.next();
-				if(!adaptOrRemovePartitions(childpart, type)){
-					itr.remove();
-					childpart.getParent().partitionRemoved(childpart);
-				}
-			}
-		}
-		if(partition.getPartitions().isEmpty()){
-			String newvalue = adaptValueToType(partition.getValueString(), type);
-			if(newvalue != null){
-				partition.setValueString(newvalue);
-			} else{
-				return false;
-			}
-		}
-
-		return true;
 	}
 
 	private static String adaptValueToBoolean(String value){
