@@ -206,7 +206,8 @@ public class CategoryDetailsPage extends BasicDetailsPage {
 						if(PartitionNodeAbstractLayer.changePartitionValue(fSelectedCategory.getDefaultValuePartition(),
 								fDefaultEditableValueCombo.getText())){
 							modelUpdated(null);
-					}
+						}
+						fDefaultEditableValueCombo.setText(fSelectedCategory.getDefaultValueString());
 				}
 			}
 		});
@@ -217,6 +218,7 @@ public class CategoryDetailsPage extends BasicDetailsPage {
 						fDefaultEditableValueCombo.getText())){
 					modelUpdated(null);
 				}
+				fDefaultEditableValueCombo.setText(fSelectedCategory.getDefaultValueString());
 			}
 		});
 		
@@ -229,6 +231,7 @@ public class CategoryDetailsPage extends BasicDetailsPage {
 						fDefaultValueCombo.getText())){
 					modelUpdated(null);
 				}
+				fDefaultValueCombo.setText(fSelectedCategory.getDefaultValueString());
 			}
 		});		
 		//------------------------
