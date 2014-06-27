@@ -32,6 +32,7 @@ import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.model.constraint.Constraint;
 import com.testify.ecfeed.runner.ParameterizedMethod;
+import com.testify.ecfeed.ui.common.ConsoleManager;
 import com.testify.ecfeed.ui.dialogs.ExecuteOnlineSetupDialog;
 import com.testify.ecfeed.ui.dialogs.GeneratorProgressMonitorDialog;
 import com.testify.ecfeed.utils.ModelUtils;
@@ -96,6 +97,8 @@ public class ExecuteOnlineTestAdapter extends ExecuteTestAdapter {
 
 	@Override
 	public void widgetSelected(SelectionEvent e){
+		ConsoleManager.displayConsole();
+		ConsoleManager.redirectSystemOutputToStream(ConsoleManager.getOutputStream());
 		if (ModelUtils.isMethodWithParameters(getMethodModel())) {
 			ExecuteOnlineSetupDialog dialog = new ExecuteOnlineSetupDialog(fPage.getActiveShell(), getMethodModel());
 			if(dialog.open() == IDialogConstants.OK_ID){
