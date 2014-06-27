@@ -67,14 +67,14 @@ public class ParametersViewer extends CheckboxTableViewerSection implements Test
 	private class MoveUpAdapter extends SelectionAdapter{
 		@Override
 		public void widgetSelected(SelectionEvent e){
-			moveSelectedItem(true);
+			moveSelectedItem(true, 1);
 		}
 	}
 
 	private class MoveDownAdapter extends SelectionAdapter{
 		@Override
 		public void widgetSelected(SelectionEvent e){
-			moveSelectedItem(false);
+			moveSelectedItem(false, 1);
 		}
 	}
 
@@ -160,46 +160,44 @@ public class ParametersViewer extends CheckboxTableViewerSection implements Test
 		}
 	}
 
-	private void moveSelectedItem(boolean moveUp) {
-		if (getSelectedElement() != null) {
+	private boolean moveSelectedItem(boolean moveUp, int shift){
+		if(getSelectedElement() != null && shift > 0){
 			CategoryNode categoryNode = (CategoryNode)getSelectedElement();
-			ArrayList<String> tmpTypes = fSelectedMethod.getCategoriesTypes();
-			boolean move = false;
-			for (int i = 0; i < fSelectedMethod.getCategories().size(); ++i) {
-				CategoryNode type = fSelectedMethod.getCategories().get(i);
-				if (type.getName().equals(categoryNode.getName()) && type.getType().equals(categoryNode.getType())) {
-					if (moveUp && (i > 0)) {
-						String prevValue = tmpTypes.get(i - 1);
-						tmpTypes.set(i - 1, categoryNode.getType());
-						tmpTypes.set(i, prevValue);
-						move = true;
-					} else if (!moveUp && (i < tmpTypes.size() - 1)){
-						String nextValue = tmpTypes.get(i + 1);
-						tmpTypes.set(i + 1, categoryNode.getType());
-						tmpTypes.set(i, nextValue);
-						move = true;
-					}
-				}
+			int index = fSelectedMethod.getCategories().indexOf(categoryNode);
+			if(moveUp){
+				if(index - shift < 0)
+					return false;
+			} else{
+				if(index + shift >= fSelectedMethod.getCategories().size())
+					return false;
 			}
 
-			if (move) {
-				MethodNode twinMethod = fSelectedMethod.getClassNode().getMethod(fSelectedMethod.getName(), tmpTypes);
-				if (twinMethod == null || twinMethod == fSelectedMethod) {
-					if(categoryNode.getParent().moveChild(categoryNode, moveUp)){
-						int index = fSelectedMethod.getCategories().indexOf(categoryNode);
-						int oldindex = moveUp ? (index + 1) : (index - 1);
-						for(TestCaseNode tcnode: fSelectedMethod.getTestCases()){
-							Collections.swap(tcnode.getTestData(), index, oldindex);
-						}
-						modelUpdated();
-					}
-				} else {
+			ArrayList<String> tmpTypes = fSelectedMethod.getCategoriesTypes();	
+			int currentindex = index;
+			for(int i = 0; i < shift; i++){
+				Collections.swap(tmpTypes, currentindex, currentindex = moveUp ? currentindex-1 : currentindex+1);
+			}
+
+			MethodNode twinMethod = fSelectedMethod.getClassNode().getMethod(fSelectedMethod.getName(), tmpTypes);
+			if(twinMethod == null || twinMethod == fSelectedMethod){
+				for(int i = 0; i < shift; i++){
+					categoryNode.getParent().moveChild(categoryNode, moveUp);
+				}
+				int newindex = fSelectedMethod.getCategories().indexOf(categoryNode);
+				for(TestCaseNode tcnode : fSelectedMethod.getTestCases()){
+					Collections.swap(tcnode.getTestData(), newindex, index);
+				}
+				modelUpdated();
+				return true;
+			} else{
+				if(!moveSelectedItem(moveUp, shift + 1))
 					MessageDialog.openError(Display.getCurrent().getActiveShell(),
 							Messages.DIALOG_METHOD_EXISTS_TITLE,
 							Messages.DIALOG_METHOD_WITH_PARAMETERS_EXISTS_MESSAGE);
-				}
+				return true;
 			}
 		}
+		return true;
 	}
 
 	@Override
