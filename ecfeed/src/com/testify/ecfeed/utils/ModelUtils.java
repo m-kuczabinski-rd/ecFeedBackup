@@ -439,7 +439,7 @@ public class ModelUtils {
 	public static boolean isClassQualifiedNameValid(String qualifiedName) {
 		int lastDotIndex = qualifiedName.lastIndexOf('.');
 		if(!( (lastDotIndex != -1) ? true : false)) return false;
-			String path[] = qualifiedName.split("\\.");
+			String path[] = qualifiedName.split("\\.", -1);
 			for(String name: path){
 				if(!validateNodeName(name)) return false;
 			}
