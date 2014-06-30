@@ -37,7 +37,7 @@ public class RandomGeneratorTest {
 			List<List<String>> inputDomain = GeneratorTestUtils.prepareInput(3, 3);
 			Collection<IConstraint<String>> constraints = new ArrayList<IConstraint<String>>();
 			Map<String, Object> parameters = new HashMap<String, Object>();
-			parameters.put("Test suite size", 100);
+			parameters.put("Length", 100);
 
 			generator.initialize(inputDomain, constraints, parameters);
 			IAlgorithm<String> algorithm = generator.getAlgorithm(); 

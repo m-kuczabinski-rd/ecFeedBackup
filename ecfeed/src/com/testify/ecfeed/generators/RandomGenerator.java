@@ -23,7 +23,7 @@ import com.testify.ecfeed.generators.api.IGenerator;
 public class RandomGenerator<E> extends AbstractGenerator<E> implements
 		IGenerator<E> {
 
-	public final String LENGTH_PARAMETER_NAME = "Test suite size";
+	public final String LENGTH_PARAMETER_NAME = "Length";
 	public final int DEFAULT_LENGTH = 1;
 	public final String DUPLICATES_PARAMETER_NAME = "Duplicates"; 
 	public final boolean DEFAULT_DUPLICATES = false;
