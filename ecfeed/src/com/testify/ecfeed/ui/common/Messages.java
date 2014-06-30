@@ -56,7 +56,7 @@ public class Messages {
 			+ "\nTo have some minimal tidiness however, keep the name between 1 and 64 characters long and let it not "
 			+ "contain white characters only.";
 	public static final String DIALOG_TEST_CLASS_SELECTION_TITLE = "Test class selection";
-	public static final String DIALOG_TEST_CLASS_SELECTION_MESSAGE = "Select a class with at lease one method annotated with @Test.";
+	public static final String DIALOG_TEST_CLASS_SELECTION_MESSAGE = "Select class to import";
 	public static final String DIALOG_TEST_METHOD_SELECTION_TITLE = "Test method selection";
 	public static final String DIALOG_TEST_METHOD_SELECTION_MESSAGE = "Select a method annotated with @Test with the same arguments set" +
 			"as the original method.";

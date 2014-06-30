@@ -16,11 +16,8 @@ import java.util.ArrayList;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.jdt.core.IAnnotation;
-import org.eclipse.jdt.core.IMethod;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaCore;
-import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.ui.StandardJavaElementContentProvider;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -40,7 +37,7 @@ public class TestClassSelectionDialog extends ElementTreeSelectionDialog {
 
     private static final IStatus OK = new Status(IStatus.OK, "com.testify.ecfeed", "");
     private static final IStatus ERROR = new Status(IStatus.ERROR, "com.testify.ecfeed", 
-    		"Select class with methods annotated with @Test");
+    		"Select class element");
     
     private boolean fTestOnly;
 	private Button fTestOnlyButton;
@@ -99,20 +96,7 @@ public class TestClassSelectionDialog extends ElementTreeSelectionDialog {
     			return ERROR;
     		}
     		
-    		IType type = (IType)selection[0];
-
-    		try{
-    			for(IMethod method : type.getMethods()){
-    				for(IAnnotation annotation : method.getAnnotations()){
-    					if(annotation.getElementName().equals("Test")){
-    						return OK;
-    					}
-    				}
-    			}
-    		}catch(JavaModelException e){
-    			System.out.println("Class parsing error" + e.getMessage());
-    		}
-    		return ERROR;
+    		return OK;
         }
     };
 }
