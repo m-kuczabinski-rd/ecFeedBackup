@@ -17,6 +17,7 @@ import java.util.Collection;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.TreeNodeContentProvider;
 
+import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.IGenericNode;
 import com.testify.ecfeed.model.IModelWrapper;
 import com.testify.ecfeed.model.MethodNode;
@@ -54,7 +55,14 @@ public class ModelContentProvider extends TreeNodeContentProvider implements ITr
 			}
 			return children.toArray();
 		}
-		else if(parentElement instanceof IGenericNode){
+		else if(parentElement instanceof CategoryNode){
+			CategoryNode category = (CategoryNode)parentElement;
+			if(category.isExpected()){
+				return EMPTY_ARRAY;
+			}
+		}
+		
+		if(parentElement instanceof IGenericNode){
 			IGenericNode node = (IGenericNode)parentElement;
 			if(node.getChildren().size() < Constants.MAX_DISPLAYED_CHILDREN_PER_NODE){
 				return node.getChildren().toArray();
