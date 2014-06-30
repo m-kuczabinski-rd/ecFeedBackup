@@ -312,6 +312,23 @@ public class ModelUtils {
 		}
 	}
 
+	public static boolean isTypePrimitive(String typeSignature){
+		switch(typeSignature){
+		case com.testify.ecfeed.model.Constants.TYPE_NAME_BOOLEAN:
+		case com.testify.ecfeed.model.Constants.TYPE_NAME_BYTE:
+		case com.testify.ecfeed.model.Constants.TYPE_NAME_CHAR:
+		case com.testify.ecfeed.model.Constants.TYPE_NAME_DOUBLE:
+		case com.testify.ecfeed.model.Constants.TYPE_NAME_FLOAT:
+		case com.testify.ecfeed.model.Constants.TYPE_NAME_INT:
+		case com.testify.ecfeed.model.Constants.TYPE_NAME_LONG:
+		case com.testify.ecfeed.model.Constants.TYPE_NAME_SHORT:
+		case com.testify.ecfeed.model.Constants.TYPE_NAME_STRING:
+			return true;
+		default:
+			return false;
+		}
+	}
+	
 	public static ArrayList<PartitionNode> defaultEnumPartitions(String typeName) {
 		ArrayList<PartitionNode> partitions = new ArrayList<PartitionNode>();
 		Class<?> typeClass = ClassUtils.loadClass(ClassUtils.getClassLoader(true, null), typeName);
