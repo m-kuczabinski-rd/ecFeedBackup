@@ -44,25 +44,25 @@ public class ModelLabelProvider extends LabelProvider {
 	
 	public Image getImage(Object element){
 		if (element instanceof RootNode){
-			return getImage("root_node.gif");
+			return getImage("root_node.png");
 		} else if (element instanceof ClassNode){
-			return getImage("class_node.gif");
+			return getImage("class_node.png");
 		} else if (element instanceof MethodNode){
-			return getImage("method_node.gif");
+			return getImage("method_node.png");
 		} else if(element instanceof TestCaseNode){
-			return getImage("test_case_node.gif");
+			return getImage("test_case_node.png");
 		} else if (element instanceof CategoryNode){
 			if (((CategoryNode)element).isExpected()) {
-				return getImage("expected_value_category_node.gif");
+				return getImage("expected_value_category_node.png");
 			} else {
-				return getImage("category_node.gif");
+				return getImage("category_node.png");
 			}
 		} else if (element instanceof ConstraintNode){
-			return getImage("constraint_node.gif");
+			return getImage("constraint_node.png");
 		} else if (element instanceof PartitionNode){
-			return getImage("partition_node.gif");
+			return getImage("partition_node.png");
 		}
-		return getImage("sample.gif");
+		return getImage("sample.png");
 	}
 	
 	private static Image getImage(String file) {

@@ -90,12 +90,12 @@ public class ModelLabelDecorator implements ILabelDecorator {
 	private List<Image> getClassImageDecoration(ClassNode node) {
 		List<Image> decorations = new ArrayList<Image>();
 		if (ModelUtils.isClassImplemented(node)) {
-			decorations.add(getImage("implemented.gif"));
+			decorations.add(getImage("implemented.png"));
 		} else if (ModelUtils.isClassPartiallyImplemented(node)) {
-			decorations.add(getImage("partially_implemented.gif"));
+			decorations.add(getImage("partially_implemented.png"));
 		}
 		else{
-			decorations.add(getImage("unimplemented.gif"));
+			decorations.add(getImage("unimplemented.png"));
 		}
 		return decorations;
 	}
@@ -103,12 +103,12 @@ public class ModelLabelDecorator implements ILabelDecorator {
 	private List<Image> getMethodImageDecoration(MethodNode node) {
 		List<Image> decorations = new ArrayList<Image>();
 		if (ModelUtils.isMethodImplemented(node)) {
-			decorations.add(getImage("implemented.gif"));
+			decorations.add(getImage("implemented.png"));
 		} else if (ModelUtils.isMethodPartiallyImplemented(node)) {
-			decorations.add(getImage("partially_implemented.gif"));
+			decorations.add(getImage("partially_implemented.png"));
 		}
 		else{
-			decorations.add(getImage("unimplemented.gif"));
+			decorations.add(getImage("unimplemented.png"));
 		}
 		return decorations;
 	}
@@ -116,12 +116,12 @@ public class ModelLabelDecorator implements ILabelDecorator {
 	private List<Image> getTestCaseImageDecoration(TestCaseNode node) {
 		List<Image> decorations = new ArrayList<Image>();
 		if (ModelUtils.isTestCaseImplemented(node)) {
-			decorations.add(getImage("implemented.gif"));
+			decorations.add(getImage("implemented.png"));
 		} else if (ModelUtils.isTestCasePartiallyImplemented(node)) {
-			decorations.add(getImage("partially_implemented.gif"));
+			decorations.add(getImage("partially_implemented.png"));
 		}
 		else{
-			decorations.add(getImage("unimplemented.gif"));
+			decorations.add(getImage("unimplemented.png"));
 		}
 		return decorations;
 	}
@@ -129,12 +129,12 @@ public class ModelLabelDecorator implements ILabelDecorator {
 	private List<Image> getCategoryImageDecoration(CategoryNode node) {
 		List<Image> decorations = new ArrayList<Image>();
 		if (ModelUtils.isCategoryImplemented(node)) {
-			decorations.add(getImage("implemented.gif"));
+			decorations.add(getImage("implemented.png"));
 		} else if (ModelUtils.isCategoryPartiallyImplemented(node)) {
-			decorations.add(getImage("partially_implemented.gif"));
+			decorations.add(getImage("partially_implemented.png"));
 		}
 		else{
-			decorations.add(getImage("unimplemented.gif"));
+			decorations.add(getImage("unimplemented.png"));
 		}
 		return decorations;
 	}
@@ -143,17 +143,17 @@ public class ModelLabelDecorator implements ILabelDecorator {
 		List<Image> decorations = new ArrayList<>();
 		
 		if(node.isAbstract()){
-			decorations.add(getImage("abstract.gif"));
+			decorations.add(getImage("abstract.png"));
 		}
 		
 		if (ModelUtils.isPartitionImplemented(node)) {
-			decorations.add(getImage("implemented.gif"));
+			decorations.add(getImage("implemented.png"));
 		}
 		else if(ModelUtils.isPartitionPartiallyImplemented(node)){
-			decorations.add(getImage("partially_implemented.gif"));
+			decorations.add(getImage("partially_implemented.png"));
 		}
 		else{
-			decorations.add(getImage("unimplemented.gif"));
+			decorations.add(getImage("unimplemented.png"));
 		}
 		
 		return decorations;
