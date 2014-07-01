@@ -45,9 +45,13 @@ public class ModelUtils {
 			Class<?> testClass = ClassUtils.loadClass(ClassUtils.getClassLoader(true, null), type.getFullyQualifiedName());
 			for(IMethod method : type.getMethods()){
 				if((testMethodsOnly && isAnnotated(method, "Test")) || (!testMethodsOnly && isPublicVoid(method))){
-					MethodNode methodModel = generateMethodModel(method, testClass);
-					if(methodModel != null){
-						classNode.addMethod(methodModel);
+					try{
+						MethodNode methodModel = generateMethodModel(method, testClass);
+						if(methodModel != null){
+							classNode.addMethod(methodModel);
+						}
+					} catch(Throwable e){		
+						System.err.println("Unexpected error during method import");
 					}
 				}
 			}
