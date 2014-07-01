@@ -13,6 +13,7 @@ package com.testify.ecfeed.ui.editor;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 
 import org.eclipse.jface.viewers.ComboViewer;
@@ -34,11 +35,11 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
-import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Section;
 
 import com.testify.ecfeed.model.CategoryNode;
+import com.testify.ecfeed.model.Constants;
 import com.testify.ecfeed.model.ConstraintNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
@@ -51,6 +52,7 @@ import com.testify.ecfeed.model.constraint.PartitionedCategoryStatement;
 import com.testify.ecfeed.model.constraint.Relation;
 import com.testify.ecfeed.model.constraint.StatementArray;
 import com.testify.ecfeed.model.constraint.StaticStatement;
+import com.testify.ecfeed.utils.ModelUtils;
 
 public class ConstraintViewer extends TreeViewerSection {
 
@@ -71,7 +73,8 @@ public class ConstraintViewer extends TreeViewerSection {
 	private Combo fStatementCombo;
 	private Combo fRelationCombo;
 	private Combo fConditionCombo;
-	private Text fConditionText;
+	private Combo fExpectedConditionCombo;
+	private Combo fReadOnlyConditionCombo;
 	
 	private Button fAddStatementButton;
 	private Button fRemoveStatementButton;
@@ -235,7 +238,7 @@ public class ConstraintViewer extends TreeViewerSection {
 			else{
 				fRelationCombo.setVisible(false);
 				fConditionCombo.setVisible(false);
-				fConditionText.setVisible(false);
+				fExpectedConditionCombo.setVisible(false);
 				fConditionLayout.topControl = null;
 			}
 			fStatementEditListenersEnabled = true;
@@ -245,10 +248,18 @@ public class ConstraintViewer extends TreeViewerSection {
 			List<String> items = new ArrayList<String>();
 			items.addAll(Arrays.asList(FIXED_STATEMENTS));
 			if(fSelectedStatement == fSelectedConstraint.getConstraint().getConsequence()){
-				items.addAll(fSelectedConstraint.getMethod().getCategoriesNames());
+				for(CategoryNode category: fSelectedConstraint.getMethod().getCategories()){
+					if(category.isExpected() || !category.getPartitions().isEmpty()){
+						items.add(category.getName());
+					}
+				}
 			}
 			else{
-				items.addAll(fSelectedConstraint.getMethod().getCategoriesNames(false));
+				for(CategoryNode category: fSelectedConstraint.getMethod().getCategories(false)){
+					if(!category.getPartitions().isEmpty()){
+						items.add(category.getName());
+					}
+				}
 			}
 			fStatementCombo.setItems(items.toArray(new String[]{}));
 
@@ -272,16 +283,48 @@ public class ConstraintViewer extends TreeViewerSection {
 
 			fConditionLayout.topControl = fConditionCombo;
 			fConditionCombo.setVisible(true);
-			fConditionText.setVisible(false);
+			fReadOnlyConditionCombo.setVisible(false);
+			fExpectedConditionCombo.setVisible(false);
 			fConditionCombo.setItems(items.toArray(new String[]{}));
 			fConditionCombo.setText(statement.getConditionName());
 		}
 
 		private void refreshConditionComposite(ExpectedValueStatement statement) {
-			fConditionLayout.topControl = fConditionText;
-			fConditionCombo.setVisible(false);
-			fConditionText.setVisible(true);
-			fConditionText.setText(statement.getCondition().getValueString());
+			String type = statement.getCategory().getType();
+			if(type.equals(Constants.TYPE_NAME_BOOLEAN) || !ModelUtils.getJavaTypes().contains(type)){
+				fConditionLayout.topControl = fReadOnlyConditionCombo;
+				fConditionCombo.setVisible(false);
+				fExpectedConditionCombo.setVisible(false);
+				fReadOnlyConditionCombo.setVisible(true);
+				if(type.equals(Constants.TYPE_NAME_BOOLEAN)){
+					String[] items = {"false", "true"};
+					fReadOnlyConditionCombo.setItems(items);
+				} else {
+					HashSet<String> itemset = new HashSet<>();
+					for(PartitionNode leaf: statement.getCategory().getLeafPartitions()){
+						itemset.add(leaf.getValueString());
+					}
+					Object[] values = itemset.toArray();
+					String[] items = new String[values.length];
+					for(int i = 0; i < items.length; i++){
+						items[i] = values[i].toString();
+					}
+					fReadOnlyConditionCombo.setItems(items);
+				}
+				fReadOnlyConditionCombo.setText(statement.getCondition().getValueString());
+			} else{
+				fConditionLayout.topControl = fExpectedConditionCombo;
+				fConditionCombo.setVisible(false);
+				fReadOnlyConditionCombo.setVisible(false);
+				fExpectedConditionCombo.setVisible(true);
+				Object[] predefinedValues = ModelUtils.generatePredefinedValues(type).values().toArray();
+				String[] items = new String[predefinedValues.length];
+				for(int i = 0; i < items.length; i++){
+					items[i] = predefinedValues[i].toString();				
+				}
+				fExpectedConditionCombo.setItems(items);
+				fExpectedConditionCombo.setText(statement.getCondition().getValueString());
+			}
 		}
 	}
 	
@@ -327,18 +370,49 @@ public class ConstraintViewer extends TreeViewerSection {
 		fConditionCombo.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
 		fConditionCombo.addModifyListener(new ModifyConditionComboListener());
 		
-		fConditionText = getToolkit().createText(conditionComposite, "", SWT.BORDER);
-		fConditionText.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
-		fConditionText.addListener(SWT.KeyDown, new Listener() {
-			public void handleEvent(Event event) {
+		fReadOnlyConditionCombo  = new ComboViewer(conditionComposite, SWT.READ_ONLY).getCombo();
+		fReadOnlyConditionCombo.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
+		fReadOnlyConditionCombo.addSelectionListener(new SelectionAdapter(){
+			@Override
+			public void widgetSelected(SelectionEvent e){
+				if(fStatementEditListenersEnabled == false){
+					return;
+				}
+				ExpectedValueStatement statement = (ExpectedValueStatement)fSelectedStatement;
+				if(!fReadOnlyConditionCombo.getText().equals(statement.getCondition().getValueString())){
+					statement.getCondition().setValueString(fReadOnlyConditionCombo.getText());
+					fReadOnlyConditionCombo.setText(statement.getCondition().getValueString());
+					modelUpdated();
+				}
+			}
+		});
+		
+		fExpectedConditionCombo  = new ComboViewer(conditionComposite,SWT.DROP_DOWN).getCombo();
+		fExpectedConditionCombo.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
+		fExpectedConditionCombo.addSelectionListener(new SelectionAdapter(){
+			@Override
+			public void widgetSelected(SelectionEvent e){
+				if(fStatementEditListenersEnabled == false){
+					return;
+				}			
+				ExpectedValueStatement statement = (ExpectedValueStatement)fSelectedStatement;
+				if(!fExpectedConditionCombo.getText().equals(statement.getCondition().getValueString())){
+					statement.getCondition().setValueString(fExpectedConditionCombo.getText());
+					fExpectedConditionCombo.setText(statement.getCondition().getValueString());
+					modelUpdated();
+				}
+			}
+		});
+		fExpectedConditionCombo.addListener(SWT.KeyDown, new Listener() {
+			public void handleEvent(Event event){
 				if(event.keyCode == SWT.CR || event.keyCode == SWT.KEYPAD_CR){
 					ExpectedValueStatement statement = (ExpectedValueStatement)fSelectedStatement;
-					if(!fConditionText.getText().equals(statement.getCondition().getValueString())){
-						statement.getCondition().setValueString(fConditionText.getText());
+					if(!fExpectedConditionCombo.getText().equals(statement.getCondition().getValueString())
+							&& ModelUtils.validatePartitionStringValue(fExpectedConditionCombo.getText(), statement.getCategory().getType())){
+						statement.getCondition().setValueString(fExpectedConditionCombo.getText());
 						modelUpdated();
 					}
-					fConditionText.setText(statement.getCondition().getValueString());
-
+					fExpectedConditionCombo.setText(statement.getCondition().getValueString());
 				}
 			}
 		});
