@@ -124,7 +124,7 @@ public class OnlineRunner extends StaticRunner {
 		List<IGeneratorParameter> parameters = generator.parameters();
 		Map<String, Object> result = new HashMap<String, Object>();
 		Map<String, String>	parsedParameters = parseParameters(method.getAnnotations());{
-			if(parsedParameters == null){
+			if(parsedParameters.size() == 0){
 				parsedParameters = parseParameters(getTestClass().getAnnotations());
 			}
 		}
@@ -182,12 +182,12 @@ public class OnlineRunner extends StaticRunner {
 	}
 
 	private Map<String, String> parseParameters(Annotation[] annotations) throws RunnerException {
-		Map<String, String> result = null;
+		Map<String, String> result = new HashMap<String, String>();
+
 		String[] parameterNames = null;
 		String[] parameterValues = null;
 		for(Annotation annotation : annotations){
 			if(annotation instanceof GeneratorParameter){
-				result = new HashMap<String, String>();
 				GeneratorParameter parameter = (GeneratorParameter)annotation;
 				result.put(parameter.name(), parameter.value());
 			}
@@ -201,9 +201,6 @@ public class OnlineRunner extends StaticRunner {
 		if(parameterNames != null && parameterValues != null){
 			if(parameterNames.length != parameterValues.length){
 				throw new RunnerException(Messages.PARAMETERS_ANNOTATION_LENGTH_ERROR);
-			}
-			if(result == null){
-				result = new HashMap<String, String>();
 			}
 			for(int i = 0; i < parameterNames.length; i++){
 				result.put(parameterNames[i], parameterValues[i]);
