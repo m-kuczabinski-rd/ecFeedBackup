@@ -20,13 +20,13 @@ import com.testify.ecfeed.generators.api.GeneratorException;
 import com.testify.ecfeed.generators.api.IConstraint;
 
 public class AdaptiveRandomGenerator<E> extends AbstractGenerator<E> {
-	public final String HISTORY_DEPTH_PARAMETER_NAME = "Depth";
+	public final String HISTORY_DEPTH_PARAMETER_NAME = "depth";
 	public final int DEFAULT_HISTORY_DEPTH_VALUE = -1;
-	public final String CANDIDATE_SET_SIZE_PARAMETER_NAME = "Candidate set size";
+	public final String CANDIDATE_SET_SIZE_PARAMETER_NAME = "candidate set size";
 	public final int DEFAULT_CANDIDATE_SET_SIZE_PARAMETER_VALUE = 100;
-	public final String TEST_SUITE_SIZE_PARAMETER_NAME = "Length";
+	public final String TEST_SUITE_SIZE_PARAMETER_NAME = "length";
 	public final int DEFAULT_TEST_SUITE_SIZE_PARAMETER_VALUE = 1;
-	public final String DUPLICATES_PARAMETER_NAME = "Duplicates";
+	public final String DUPLICATES_PARAMETER_NAME = "duplicates";
 	public final boolean DEFAULT_DUPLICATES_PARAMETER_VALUE = false;
 
 	public AdaptiveRandomGenerator() throws GeneratorException{
