@@ -1,12 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site>
-   <feature url="features/com.testify.ecfeed.feature_1.4.0.qualifier.jar" id="com.testify.ecfeed.feature" version="1.4.0.qualifier">
-      <category name="com.testify.ecfeed"/>
-   </feature>
-   <feature url="features/com.testify.ecfeed.feature_1.5.0.qualifier.jar" id="com.testify.ecfeed.feature" version="1.5.0.qualifier">
-      <category name="com.testify.ecfeed"/>
-   </feature>
-   <feature url="features/com.testify.ecfeed.feature_1.5.1.qualifier.jar" id="com.testify.ecfeed.feature" version="1.5.1.qualifier">
+   <feature url="features/com.testify.ecfeed.feature_1.6.0.qualifier.jar" id="com.testify.ecfeed.feature" version="1.6.0.qualifier">
       <category name="com.testify.ecfeed"/>
    </feature>
    <category-def name="com.testify.ecfeed" label="ecFeed">
