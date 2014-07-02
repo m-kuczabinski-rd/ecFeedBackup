@@ -23,9 +23,9 @@ import com.testify.ecfeed.generators.api.IGenerator;
 public class RandomGenerator<E> extends AbstractGenerator<E> implements
 		IGenerator<E> {
 
-	public final String LENGTH_PARAMETER_NAME = "Length";
+	public final String LENGTH_PARAMETER_NAME = "length";
 	public final int DEFAULT_LENGTH = 1;
-	public final String DUPLICATES_PARAMETER_NAME = "Duplicates"; 
+	public final String DUPLICATES_PARAMETER_NAME = "duplicates"; 
 	public final boolean DEFAULT_DUPLICATES = false;
 	
 	public RandomGenerator() throws GeneratorException{

@@ -454,8 +454,8 @@ public class XmlParserSerializerTest {
 			RandomGenerator<PartitionNode> generator = new RandomGenerator<PartitionNode>();
 			List<List<PartitionNode>> input = getGeneratorInput(categories);
 			Map<String, Object> parameters = new HashMap<String, Object>();
-			parameters.put("Length", numOfTestCases);
-			parameters.put("Duplicates", true);
+			parameters.put("length", numOfTestCases);
+			parameters.put("duplicates", true);
 
 			generator.initialize(input, constraints, parameters);
 			List<PartitionNode> next;

@@ -37,7 +37,7 @@ public class RandomGeneratorTest {
 			List<List<String>> inputDomain = GeneratorTestUtils.prepareInput(3, 3);
 			Collection<IConstraint<String>> constraints = new ArrayList<IConstraint<String>>();
 			Map<String, Object> parameters = new HashMap<String, Object>();
-			parameters.put("Length", 100);
+			parameters.put("length", 100);
 
 			generator.initialize(inputDomain, constraints, parameters);
 			IAlgorithm<String> algorithm = generator.getAlgorithm(); 
@@ -46,7 +46,7 @@ public class RandomGeneratorTest {
 			assertEquals(100, ((RandomAlgorithm<String>)algorithm).getLength());
 			
 			try{
-				parameters.put("Duplicates", true);
+				parameters.put("duplicates", true);
 				generator.initialize(inputDomain, constraints, parameters);
 				assertEquals(false, ((RandomAlgorithm<String>)algorithm).getDuplicates());
 			}catch(GeneratorException e) {
