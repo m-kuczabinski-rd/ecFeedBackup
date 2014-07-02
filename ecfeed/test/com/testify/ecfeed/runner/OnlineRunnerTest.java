@@ -118,6 +118,16 @@ public class OnlineRunnerTest extends StaticRunnerTest{
 		}
 	}
 	
+	@RunWith(OnlineRunner.class)
+	@Generator(CartesianProductGenerator.class)
+	@EcModel(MODEL_PATH)
+	public static class NoConstraintsTestClass{
+		@Test
+		public void testWithNoConstraints(String arg1, String arg2, String arg3, String arg4){
+			executeTest(arg1, arg2, arg3, arg4);
+		}
+	}
+	
 	@Before
 	public void clearResult(){
 		fExecuted.clear();
@@ -184,6 +194,24 @@ public class OnlineRunnerTest extends StaticRunnerTest{
 				List<List<PartitionNode>> input = referenceInput(runner.getModel(), method);
 				Collection<IConstraint<PartitionNode>> constraints = getConstraints(runner.getModel(), method, 
 						OVERRIDING_CONSTRAINT_NAME);
+				Set<List<String>> referenceResult = computeReferenceResult(referenceCartesianGenerator(input, constraints));
+				method.invokeExplosively(testClass.newInstance(), (Object[])null);
+				assertEquals(referenceResult, fExecuted);
+			}
+		}
+		catch(Throwable e){
+			fail("Unexpected exception: " + e.getMessage());
+		}
+	}
+	
+	@Test
+	public void testNoConstraints(){
+		try{
+			Class<NoConstraintsTestClass> testClass = NoConstraintsTestClass.class;
+			OnlineRunner runner = new OnlineRunner(testClass);
+			for(FrameworkMethod method : runner.computeTestMethods()){
+				List<List<PartitionNode>> input = referenceInput(runner.getModel(), method);
+				Collection<IConstraint<PartitionNode>> constraints = EMPTY_CONSTRAINTS;
 				Set<List<String>> referenceResult = computeReferenceResult(referenceCartesianGenerator(input, constraints));
 				method.invokeExplosively(testClass.newInstance(), (Object[])null);
 				assertEquals(referenceResult, fExecuted);

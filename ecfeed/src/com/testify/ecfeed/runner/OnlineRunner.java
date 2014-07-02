@@ -75,20 +75,21 @@ public class OnlineRunner extends StaticRunner {
 	protected Collection<IConstraint<PartitionNode>> getConstraints(
 			FrameworkMethod method, MethodNode methodModel) {
 		Collection<String> constraintsNames = constraintsNames(method);
-		if(constraintsNames == null){
-			return methodModel.getAllConstraints();
-		}
-		if(constraintsNames.contains(Constraints.ALL)){
-			constraintsNames = methodModel.getConstraintsNames();
-		}
-		else if(constraintsNames.contains(Constraints.NONE)){
-			constraintsNames.clear();
+		Collection<IConstraint<PartitionNode>> constraints = new HashSet<IConstraint<PartitionNode>>();
+
+		if(constraintsNames != null){
+			if(constraintsNames.contains(Constraints.ALL)){
+				constraintsNames = methodModel.getConstraintsNames();
+			}
+			else if(constraintsNames.contains(Constraints.NONE)){
+				constraintsNames.clear();
+			}
+
+			for(String name : constraintsNames){
+				constraints.addAll(methodModel.getConstraints(name));
+			}
 		}
 		
-		Collection<IConstraint<PartitionNode>> constraints = new HashSet<IConstraint<PartitionNode>>();
-		for(String name : constraintsNames){
-			constraints.addAll(methodModel.getConstraints(name));
-		}
 		return constraints;
 	}
 
