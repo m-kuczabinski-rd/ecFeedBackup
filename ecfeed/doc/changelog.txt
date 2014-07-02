@@ -13,10 +13,12 @@ Version 1.6.0
  - Abstract models
  - Copy&Paste
  - Introduced context menu for model viewer
+ - Unified partitioned and expected (parameters)
+ - User type parameters (enums)
 
 Version 1.5.0
  - Execute online and static tests from GUI
- - Calculate coverage feature
+ - Calculate coverage dialog
  - Assertion exceptions point parameter configuration causing exception
 
 Version 1.4.2
