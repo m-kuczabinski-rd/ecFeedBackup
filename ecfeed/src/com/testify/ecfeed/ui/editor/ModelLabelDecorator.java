@@ -37,8 +37,10 @@ public class ModelLabelDecorator implements ILabelDecorator {
 
 	@Override
     public Image decorateImage(Image image, Object element) {
-		Image img = new Image(Display.getCurrent(), image.getBounds().width, image.getBounds().height);
-		GC gc = new GC(img);
+		// We create new image as workaround for windows display overlapping decorator transparency
+		// with icon background transparency - long story short, now it works.
+		Image newImage = new Image(Display.getCurrent(), image.getBounds().width, image.getBounds().height);
+		GC gc = new GC(newImage);
 		gc.drawImage(image, 0, 0);	
 		List<Image> decorations = null;
     	if (element instanceof ClassNode) {
@@ -58,7 +60,7 @@ public class ModelLabelDecorator implements ILabelDecorator {
     		}
     	}	
 		gc.dispose();
-    	return img;
+    	return newImage;
     }
 
 	@Override
