@@ -38,6 +38,7 @@ import com.testify.ecfeed.model.constraint.Constraint;
 import com.testify.ecfeed.model.constraint.ExpectedValueStatement;
 import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.dialogs.GenerateTestSuiteDialog;
+import com.testify.ecfeed.ui.dialogs.GeneratorProgressMonitorDialog;
 import com.testify.ecfeed.utils.Constants;
 
 class GenerateTestSuiteAdapter extends SelectionAdapter{
