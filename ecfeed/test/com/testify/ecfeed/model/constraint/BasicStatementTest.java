@@ -24,6 +24,10 @@ public class BasicStatementTest {
 		public String getLeftHandName() {
 			return null;
 		}
+		@Override
+		public BasicStatement getCopy(){
+			return null;
+		}
 	}
 	
 	@Test

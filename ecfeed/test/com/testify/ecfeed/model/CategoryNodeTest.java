@@ -24,11 +24,11 @@ public class CategoryNodeTest{
 	
 	@Test
 	public void addPartitionTest() {
-		PartitionedCategoryNode category = new PartitionedCategoryNode("category", "type");
+		CategoryNode category = new CategoryNode("category", "type", false);
 		
 		assertEquals(0, category.getPartitions().size());
 		
-		PartitionNode partition = new PartitionNode("partition", 0); 
+		PartitionNode partition = new PartitionNode("partition", "0"); 
 		category.addPartition(partition);
 
 		assertEquals(1, category.getPartitions().size());
@@ -36,10 +36,10 @@ public class CategoryNodeTest{
 	
 	@Test
 	public void getPartitionTest(){
-		PartitionedCategoryNode category = new PartitionedCategoryNode("category", "type");
-		PartitionNode p = new PartitionNode("p", 0);
-		PartitionNode p1 = new PartitionNode("p1", 0);
-		PartitionNode p11 = new PartitionNode("p11", 0);
+		CategoryNode category = new CategoryNode("category", "type", false);
+		PartitionNode p = new PartitionNode("p", "0");
+		PartitionNode p1 = new PartitionNode("p1", "0");
+		PartitionNode p11 = new PartitionNode("p11", "0");
 		category.addPartition(p);
 		p.addPartition(p1);
 		p1.addPartition(p11);
@@ -54,9 +54,9 @@ public class CategoryNodeTest{
 
 	@Test
 	public void getPartitionsTest() {
-		PartitionedCategoryNode category = new PartitionedCategoryNode("category", "type");
-		PartitionNode partition1 = new PartitionNode("partition1", 0); 
-		PartitionNode partition2 = new PartitionNode("partition2", 0); 
+		CategoryNode category = new CategoryNode("category", "type", false);
+		PartitionNode partition1 = new PartitionNode("partition1", "0"); 
+		PartitionNode partition2 = new PartitionNode("partition2", "0"); 
 		category.addPartition(partition1);
 		category.addPartition(partition2);
 		
@@ -68,9 +68,9 @@ public class CategoryNodeTest{
 	
 	@Test
 	public void getChildrenTest() {
-		PartitionedCategoryNode category = new PartitionedCategoryNode("category", "type");
-		PartitionNode partition1 = new PartitionNode("partition1", 0); 
-		PartitionNode partition2 = new PartitionNode("partition2", 0); 
+		CategoryNode category = new CategoryNode("category", "type", false);
+		PartitionNode partition1 = new PartitionNode("partition1", "0"); 
+		PartitionNode partition2 = new PartitionNode("partition2", "0"); 
 		category.addPartition(partition1);
 		category.addPartition(partition2);
 		
@@ -82,9 +82,9 @@ public class CategoryNodeTest{
 
 	@Test
 	public void getPartitionNames() {
-		PartitionedCategoryNode category = new PartitionedCategoryNode("category", "type");
-		PartitionNode partition1 = new PartitionNode("partition1", 0); 
-		PartitionNode partition2 = new PartitionNode("partition2", 0); 
+		CategoryNode category = new CategoryNode("category", "type", false);
+		PartitionNode partition1 = new PartitionNode("partition1", "0"); 
+		PartitionNode partition2 = new PartitionNode("partition2", "0"); 
 		category.addPartition(partition1);
 		category.addPartition(partition2);
 		
@@ -95,11 +95,11 @@ public class CategoryNodeTest{
 
 	@Test
 	public void getLeafPartitionNamesTest() {
-		PartitionedCategoryNode category = new PartitionedCategoryNode("category", "type");
-		PartitionNode p1 = new PartitionNode("p1", 0); 
-		PartitionNode p11 = new PartitionNode("p11", 0); 
-		PartitionNode p12 = new PartitionNode("p12", 0); 
-		PartitionNode p2 = new PartitionNode("p2", 0);
+		CategoryNode category = new CategoryNode("category", "type", false);
+		PartitionNode p1 = new PartitionNode("p1", "0"); 
+		PartitionNode p11 = new PartitionNode("p11", "0"); 
+		PartitionNode p12 = new PartitionNode("p12", "0"); 
+		PartitionNode p2 = new PartitionNode("p2", "0");
 		p1.addPartition(p11);
 		p1.addPartition(p12);
 		category.addPartition(p1);
@@ -114,11 +114,11 @@ public class CategoryNodeTest{
 
 	@Test
 	public void getAllPartitionNamesTest(){
-		PartitionedCategoryNode category = new PartitionedCategoryNode("category", "type");
-		PartitionNode p1 = new PartitionNode("p1", 0); 
-		PartitionNode p11 = new PartitionNode("p11", 0); 
-		PartitionNode p12 = new PartitionNode("p12", 0); 
-		PartitionNode p2 = new PartitionNode("p2", 0);
+		CategoryNode category = new CategoryNode("category", "type", false);
+		PartitionNode p1 = new PartitionNode("p1", "0"); 
+		PartitionNode p11 = new PartitionNode("p11", "0"); 
+		PartitionNode p12 = new PartitionNode("p12", "0"); 
+		PartitionNode p2 = new PartitionNode("p2", "0");
 		p1.addPartition(p11);
 		p1.addPartition(p12);
 		category.addPartition(p1);
@@ -136,7 +136,7 @@ public class CategoryNodeTest{
 	@Test
 	public void getMethodTest() {
 		MethodNode method = new MethodNode("method");
-		PartitionedCategoryNode category = new PartitionedCategoryNode("category", "type");
+		CategoryNode category = new CategoryNode("category", "type", false);
 		method.addCategory(category);
 		
 		assertEquals(method, category.getMethod());
@@ -144,23 +144,23 @@ public class CategoryNodeTest{
 
 	@Test
 	public void getLeafPartitionsTest(){
-		PartitionedCategoryNode category = new PartitionedCategoryNode("category", "type");
+		CategoryNode category = new CategoryNode("category", "type", false);
 		
-		PartitionNode p1 = new PartitionNode("p1", 0);
-		PartitionNode p2 = new PartitionNode("p1", 0);
-		PartitionNode p3 = new PartitionNode("p1", 0);
+		PartitionNode p1 = new PartitionNode("p1", "0");
+		PartitionNode p2 = new PartitionNode("p1", "0");
+		PartitionNode p3 = new PartitionNode("p1", "0");
 		
-		PartitionNode p21 = new PartitionNode("p21", 0);
-		PartitionNode p22 = new PartitionNode("p22", 0);
-		PartitionNode p23 = new PartitionNode("p23", 0);
+		PartitionNode p21 = new PartitionNode("p21", "0");
+		PartitionNode p22 = new PartitionNode("p22", "0");
+		PartitionNode p23 = new PartitionNode("p23", "0");
 
-		PartitionNode p31 = new PartitionNode("p31", 0);
-		PartitionNode p32 = new PartitionNode("p32", 0);
-		PartitionNode p33 = new PartitionNode("p33", 0);
+		PartitionNode p31 = new PartitionNode("p31", "0");
+		PartitionNode p32 = new PartitionNode("p32", "0");
+		PartitionNode p33 = new PartitionNode("p33", "0");
 
-		PartitionNode p321 = new PartitionNode("p321", 0);
-		PartitionNode p322 = new PartitionNode("p322", 0);
-		PartitionNode p323 = new PartitionNode("p323", 0);
+		PartitionNode p321 = new PartitionNode("p321", "0");
+		PartitionNode p322 = new PartitionNode("p322", "0");
+		PartitionNode p323 = new PartitionNode("p323", "0");
 		
 		category.addPartition(p1);
 		category.addPartition(p2);
@@ -192,22 +192,22 @@ public class CategoryNodeTest{
 	
 	@Test
 	public void getAllLabelsTest(){
-		PartitionNode p1 = new PartitionNode("p1", 0);
+		PartitionNode p1 = new PartitionNode("p1", "0");
 		p1.addLabel("l11");
 		p1.addLabel("l12");
-		PartitionNode p2 = new PartitionNode("p2", 0);
+		PartitionNode p2 = new PartitionNode("p2", "0");
 		p2.addLabel("l21");
 		p2.addLabel("l22");
-		PartitionNode p11 = new PartitionNode("p11", 0);
+		PartitionNode p11 = new PartitionNode("p11", "0");
 		p11.addLabel("l111");
 		p11.addLabel("l112");
-		PartitionNode p12 = new PartitionNode("p12", 0);
+		PartitionNode p12 = new PartitionNode("p12", "0");
 		p12.addLabel("l121");
 		p12.addLabel("l122");
-		PartitionNode p21 = new PartitionNode("p21", 0);
+		PartitionNode p21 = new PartitionNode("p21", "0");
 		p21.addLabel("l211");
 		p21.addLabel("l212");
-		PartitionNode p22 = new PartitionNode("p22", 0);
+		PartitionNode p22 = new PartitionNode("p22", "0");
 		p22.addLabel("l221");
 		p22.addLabel("l222");
 
@@ -216,7 +216,7 @@ public class CategoryNodeTest{
 		p2.addPartition(p21);
 		p2.addPartition(p22);
 		
-		PartitionedCategoryNode c = new PartitionedCategoryNode("c", "type");
+		CategoryNode c = new CategoryNode("c", "type", false);
 		c.addPartition(p1);
 		c.addPartition(p2);
 		

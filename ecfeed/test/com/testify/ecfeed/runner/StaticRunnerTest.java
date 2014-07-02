@@ -144,7 +144,7 @@ public class StaticRunnerTest extends StaticRunner{
 			Set<List<Integer>> target) {
 		List<Integer> result = new ArrayList<Integer>();
 		for(PartitionNode parameter : testCase.getTestData()){
-			result.add((int)parameter.getValue());
+			result.add(Integer.valueOf(parameter.getValueString()));
 		}
 		target.add(result);
 	}

@@ -41,6 +41,9 @@ public class TestCaseDetailsPage extends BasicDetailsPage {
 		
 		protected void applyNewTestCaseName(TestCaseNode testCase, Combo nameCombo){
 			String newName = nameCombo.getText();
+			if(newName.equals(fSelectedTestCase.getName())){
+				return;
+			}
 			if(TestCaseNode.validateTestSuiteName(newName)){
 				testCase.setName(newName);
 				modelUpdated(null);

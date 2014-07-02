@@ -23,6 +23,8 @@ import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.runner.ParameterizedMethod;
 import com.testify.ecfeed.ui.common.Messages;
+import com.testify.ecfeed.ui.common.ConsoleManager;
+import com.testify.ecfeed.utils.ModelUtils;
 
 public class ExecuteStaticTestAdapter extends ExecuteTestAdapter {
 
@@ -35,6 +37,8 @@ public class ExecuteStaticTestAdapter extends ExecuteTestAdapter {
 	@SuppressWarnings("rawtypes")
 	@Override
 	public void widgetSelected(SelectionEvent event){
+		ConsoleManager.displayConsole();
+		ConsoleManager.redirectSystemOutputToStream(ConsoleManager.getOutputStream());
 		try {
 			Class testClass = loadTestClass();
 			Method testMethod = getTestMethod(testClass, getMethodModel());
@@ -60,7 +64,11 @@ public class ExecuteStaticTestAdapter extends ExecuteTestAdapter {
 				testCases.add((TestCaseNode)element);
 			}
 			else if(element instanceof String && !fViewerSection.getCheckboxViewer().getGrayed(element)){
-				testCases.addAll(getMethodModel().getTestCases((String)element));
+				for (TestCaseNode testCase : getMethodModel().getTestCases((String)element)) {
+					if (ModelUtils.isTestCaseImplemented(testCase)) {
+						testCases.add((TestCaseNode)testCase);
+					}
+				}
 			}
 		}
 		return testCases;

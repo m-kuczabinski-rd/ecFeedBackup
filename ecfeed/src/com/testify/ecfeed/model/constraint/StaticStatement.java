@@ -47,4 +47,9 @@ public class StaticStatement extends BasicStatement {
 	public String toString(){
 		return fValue?STATIC_STATEMENT_TRUE_VALUE:STATIC_STATEMENT_FALSE_VALUE;
 	}
+	
+	@Override
+	public StaticStatement getCopy(){
+		return new StaticStatement(fValue);
+	}
 }

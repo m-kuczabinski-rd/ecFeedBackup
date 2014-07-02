@@ -18,6 +18,31 @@ import java.util.ArrayList;
 
 public class ClassNode extends GenericNode {
 	private List<MethodNode> fMethods;
+	
+	@Override
+	public List<? extends IGenericNode> getChildren(){
+		return fMethods;
+	}
+
+	@Override
+	public String toString(){
+		return getLocalName();
+	}
+	
+	@Override
+	public ClassNode getCopy(){
+		ClassNode copy = new ClassNode(getQualifiedName());
+		for(MethodNode method : fMethods){
+			copy.addMethod(method.getCopy());
+		}
+		copy.setParent(getParent());
+		return copy;
+	}
+	
+	@Override
+	public RootNode getRoot(){
+		return (RootNode) getParent();
+	}
 
 	public ClassNode(String qualifiedName) {
 		super(qualifiedName);
@@ -40,7 +65,7 @@ public class ClassNode extends GenericNode {
 	public MethodNode getMethod(String name, List<String> argTypes) {
 		for(MethodNode methodNode : getMethods()){
 			List<String> args = new ArrayList<String>();
-			for(AbstractCategoryNode arg : methodNode.getCategories()){
+			for(CategoryNode arg : methodNode.getCategories()){
 				args.add(arg.getType());
 			}
 			if(methodNode.getName().equals(name) && args.equals(argTypes)){
@@ -54,10 +79,6 @@ public class ClassNode extends GenericNode {
 		return fMethods;
 	}
 	
-	public RootNode getRoot(){
-		return (RootNode) getParent();
-	}
-	
 	public boolean removeMethod(MethodNode method) {
 		return fMethods.remove(method);
 	}
@@ -68,16 +89,6 @@ public class ClassNode extends GenericNode {
 			suites.addAll(method.getTestSuites());
 		}
 		return suites;
-	}
-
-	@Override
-	public List<? extends IGenericNode> getChildren(){
-		return fMethods;
-	}
-
-	@Override
-	public String toString(){
-		return getLocalName();
 	}
 
 	private String getLocalName(String qualifiedName){

@@ -29,18 +29,16 @@ import org.eclipse.swt.widgets.Shell;
 import com.testify.ecfeed.generators.api.GeneratorException;
 import com.testify.ecfeed.generators.api.IConstraint;
 import com.testify.ecfeed.generators.api.IGenerator;
-import com.testify.ecfeed.model.AbstractCategoryNode;
-import com.testify.ecfeed.model.ExpectedCategoryNode;
+import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.model.constraint.BasicStatement;
 import com.testify.ecfeed.model.constraint.Constraint;
 import com.testify.ecfeed.model.constraint.ExpectedValueStatement;
-import com.testify.ecfeed.utils.Constants;
 import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.dialogs.GenerateTestSuiteDialog;
-import com.testify.ecfeed.ui.dialogs.GeneratorProgressMonitorDialog;
+import com.testify.ecfeed.utils.Constants;
 
 class GenerateTestSuiteAdapter extends SelectionAdapter{
 
@@ -204,18 +202,18 @@ class GenerateTestSuiteAdapter extends SelectionAdapter{
 	}
 
 	private void replaceExpectedValues(List<TestCaseNode> testSuite) {
-		if(getSelectedMethod().getExpectedCategoriesNames().size() == 0){
+		if(getSelectedMethod().getCategoriesNames(true).size() == 0){
 			return;
 		}
 		//replace expected values partitions with anonymous ones
 		for(TestCaseNode testCase : testSuite){
 			List<PartitionNode> testData = testCase.getTestData();
 			for(int i = 0; i < testData.size(); i++){
-				AbstractCategoryNode category = testData.get(i).getCategory();
-				if(category instanceof ExpectedCategoryNode){
+				CategoryNode category = testData.get(i).getCategory();
+				if(category.isExpected()){
 					PartitionNode anonymousPartition = 
 							new PartitionNode(Constants.EXPECTED_VALUE_PARTITION_NAME, 
-									testData.get(i).getValue());
+									testData.get(i).getValueString());
 					anonymousPartition.setParent(category);
 					testData.set(i, anonymousPartition);
 				}

@@ -12,6 +12,7 @@
 package com.testify.ecfeed.runner;
 
 import java.lang.reflect.Method;
+import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
@@ -52,19 +53,13 @@ public class ParameterizedMethod extends FrameworkMethod {
 
 	protected Object[] getParameters(List<PartitionNode> testCase) throws Exception {
 		List<Object> parameters = new ArrayList<Object>();
+		URLClassLoader loader = ClassUtils.getClassLoader(false, getClass().getClassLoader());
 		for(PartitionNode parameter : testCase){
-			Object value = parameter.getValue();
-			if ((value != null) && value.getClass().isEnum()) {
-				ClassLoader loader = ClassUtils.getClassLoader(false, null);
-				Object enumValue = ClassUtils.enumPartitionValue(((Enum<?>)value).name(), value.getClass().getName(), loader);
-				if (enumValue != null) {
-					parameters.add(enumValue);	
-				} else {
-					throw new Exception("Enum constant " + ((Enum<?>)value).name() + " not found in " + value.getClass().getName() + " enum definition.");
-				}
-				
-			} else {
+			Object value = ClassUtils.getPartitionValueFromString(parameter.getSimpleValueString(), parameter.getCategory().getType(), loader);
+			if ((value != null) || (parameter.getCategory().getType().equals(com.testify.ecfeed.model.Constants.TYPE_NAME_STRING))) {
 				parameters.add(value);
+			} else {
+				throw new Exception("Value " + "\'" + (parameter.getSimpleValueString() + "\'" + " is incorrect for " + "\'" + parameter.getCategory().getType() + "\'" + " type."));
 			}
 		}
 		return parameters.toArray();

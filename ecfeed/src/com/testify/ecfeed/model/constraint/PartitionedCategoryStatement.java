@@ -13,13 +13,13 @@ package com.testify.ecfeed.model.constraint;
 
 import java.util.List;
 
-import com.testify.ecfeed.model.AbstractCategoryNode;
+import com.testify.ecfeed.model.CategoryNode;
+import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
-import com.testify.ecfeed.model.PartitionedCategoryNode;
 
 public class PartitionedCategoryStatement extends BasicStatement implements IRelationalStatement{
 
-	private PartitionedCategoryNode fCategory;
+	private CategoryNode fCategory;
 	private Relation fRelation;
 	private ICondition fCondition;
 	
@@ -27,6 +27,8 @@ public class PartitionedCategoryStatement extends BasicStatement implements IRel
 		public Object getCondition();
 		public boolean evaluate(List<PartitionNode> values);
 		public boolean adapt(List<PartitionNode> values);
+		public ICondition getCopy();
+		public boolean updateReferences(CategoryNode category);
 	}
 	
 	private class LabelCondition implements ICondition{
@@ -65,6 +67,16 @@ public class PartitionedCategoryStatement extends BasicStatement implements IRel
 		@Override
 		public boolean adapt(List<PartitionNode> values) {
 			return false;
+		}
+		
+		@Override
+		public LabelCondition getCopy(){
+			return new LabelCondition(fLabel);
+		}
+		
+		@Override
+		public boolean updateReferences(CategoryNode category){
+			return true;
 		}
 	}
 	
@@ -117,21 +129,42 @@ public class PartitionedCategoryStatement extends BasicStatement implements IRel
 		public boolean adapt(List<PartitionNode> values) {
 			return false;
 		}
+		
+		@Override
+		public PartitionCondition getCopy(){
+			return new PartitionCondition(fPartition.getCopy());
+		}
+		
+		@Override
+		public boolean updateReferences(CategoryNode category){
+			PartitionNode condition = category.getPartition(fPartition.getQualifiedName());
+			if(condition != null){
+				fPartition = condition;
+			}
+			return true;
+		}
+		
 	}
 	
-	public PartitionedCategoryStatement(PartitionedCategoryNode category, Relation relation, String labelCondition){
+	public PartitionedCategoryStatement(CategoryNode category, Relation relation, String labelCondition){
 		fCategory = category;
 		fRelation = relation;
 		fCondition = new LabelCondition(labelCondition);
 	}
 	
-	public PartitionedCategoryStatement(PartitionedCategoryNode category, Relation relation, PartitionNode partitionCondition){
+	public PartitionedCategoryStatement(CategoryNode category, Relation relation, PartitionNode partitionCondition){
 		fCategory = category;
 		fRelation = relation;
 		fCondition = new PartitionCondition(partitionCondition);
 	}
 	
-	public PartitionedCategoryNode getCategory(){
+	private PartitionedCategoryStatement(CategoryNode category, Relation relation, ICondition condition){
+		fCategory = category;
+		fRelation = relation;
+		fCondition = condition;
+	}
+	
+	public CategoryNode getCategory(){
 		return fCategory;
 	}
 	
@@ -151,7 +184,7 @@ public class PartitionedCategoryStatement extends BasicStatement implements IRel
 		fCondition = new PartitionCondition(partition);
 	}
 	
-	public void setCondition(PartitionedCategoryNode category, PartitionNode partition){
+	public void setCondition(CategoryNode category, PartitionNode partition){
 		fCondition = new PartitionCondition(partition);
 	}
 	
@@ -164,7 +197,7 @@ public class PartitionedCategoryStatement extends BasicStatement implements IRel
 	}
 
 	@Override
-	public boolean mentions(AbstractCategoryNode category){
+	public boolean mentions(CategoryNode category){
 		return getCategory() == category;
 	}
 
@@ -190,6 +223,23 @@ public class PartitionedCategoryStatement extends BasicStatement implements IRel
 	@Override
 	public Relation[] getAvailableRelations() {
 		return new Relation[]{Relation.EQUAL, Relation.NOT};
+	}
+	
+	@Override
+	public PartitionedCategoryStatement getCopy(){
+		return new PartitionedCategoryStatement(fCategory, fRelation, fCondition.getCopy());
+	}
+	
+	@Override
+	public boolean updateReferences(MethodNode method){
+		CategoryNode category = method.getCategory(fCategory.getName());
+		if(category != null && !category.isExpected()){
+			if(fCondition.updateReferences(category)){
+				fCategory = category;
+				return true;
+			}
+		}
+		return false;
 	}
 
 }

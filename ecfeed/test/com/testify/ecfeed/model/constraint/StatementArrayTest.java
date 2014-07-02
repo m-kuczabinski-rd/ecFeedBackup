@@ -23,16 +23,16 @@ import org.junit.Test;
 
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
-import com.testify.ecfeed.model.PartitionedCategoryNode;
+import com.testify.ecfeed.model.CategoryNode;
 
 public class StatementArrayTest {
 
 	private static MethodNode fMethod;
-	private static PartitionedCategoryNode fCategory1;
+	private static CategoryNode fCategory1;
 	private static PartitionNode fPartition11;
 	private static PartitionNode fPartition12;
 	private static PartitionNode fPartition13;
-	private static PartitionedCategoryNode fCategory2;
+	private static CategoryNode fCategory2;
 	private static PartitionNode fPartition21;
 	private static PartitionNode fPartition22;
 	private static PartitionNode fPartition23;
@@ -40,14 +40,14 @@ public class StatementArrayTest {
 	@BeforeClass
 	public static void prepareModel(){
 		fMethod = new MethodNode("method");
-		fCategory1 = new PartitionedCategoryNode("category", "type");
+		fCategory1 = new CategoryNode("category", "type", false);
 		fPartition11 = new PartitionNode("partition11", null);
 		fPartition12 = new PartitionNode("partition12", null);
 		fPartition13 = new PartitionNode("partition13", null);
 		fCategory1.addPartition(fPartition11);
 		fCategory1.addPartition(fPartition12);
 		fCategory1.addPartition(fPartition13);
-		fCategory2 = new PartitionedCategoryNode("category", "type");
+		fCategory2 = new CategoryNode("category", "type", false);
 		fPartition21 = new PartitionNode("partition21", null);
 		fPartition22 = new PartitionNode("partition22", null);
 		fPartition23 = new PartitionNode("partition23", null);

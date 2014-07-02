@@ -21,21 +21,21 @@ import org.junit.Test;
 
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
-import com.testify.ecfeed.model.PartitionedCategoryNode;
+import com.testify.ecfeed.model.CategoryNode;
 
 public class LabelStatementTest {
 	
 	@Test
 	public void evaluateTest(){
-		PartitionNode q = new PartitionNode("q", 0);
+		PartitionNode q = new PartitionNode("q", "0");
 		
-		PartitionNode p = new PartitionNode("p", 0);
-		PartitionNode p1 = new PartitionNode("p1", 0);
-		PartitionNode p2 = new PartitionNode("p2", 0);
-		PartitionNode p11 = new PartitionNode("p11", 0);
-		PartitionNode p12 = new PartitionNode("p12", 0);
-		PartitionNode p21 = new PartitionNode("p21", 0);
-		PartitionNode p22 = new PartitionNode("p22", 0);
+		PartitionNode p = new PartitionNode("p", "0");
+		PartitionNode p1 = new PartitionNode("p1", "0");
+		PartitionNode p2 = new PartitionNode("p2", "0");
+		PartitionNode p11 = new PartitionNode("p11", "0");
+		PartitionNode p12 = new PartitionNode("p12", "0");
+		PartitionNode p21 = new PartitionNode("p21", "0");
+		PartitionNode p22 = new PartitionNode("p22", "0");
 		
 		p.addPartition(p1);
 		p.addPartition(p2);
@@ -52,9 +52,9 @@ public class LabelStatementTest {
 		p21.addLabel("p21");
 		p22.addLabel("p22");
 		
-		PartitionedCategoryNode c1 = new PartitionedCategoryNode("c1", "type");
+		CategoryNode c1 = new CategoryNode("c1", "type", false);
 		c1.addPartition(p);
-		PartitionedCategoryNode c2 = new PartitionedCategoryNode("c2", "type");
+		CategoryNode c2 = new CategoryNode("c2", "type", false);
 		c2.addPartition(q);
 		
 		MethodNode method = new MethodNode("method");

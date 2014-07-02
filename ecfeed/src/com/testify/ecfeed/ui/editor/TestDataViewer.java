@@ -19,14 +19,14 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Section;
 
-import com.testify.ecfeed.model.AbstractCategoryNode;
-import com.testify.ecfeed.model.ExpectedCategoryNode;
+import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.ui.common.ColorConstants;
 import com.testify.ecfeed.ui.common.ColorManager;
 import com.testify.ecfeed.ui.common.TestDataEditorListener;
 import com.testify.ecfeed.ui.common.TestDataValueEditingSupport;
+import com.testify.ecfeed.utils.ModelUtils;
 
 public class TestDataViewer extends TableViewerSection implements TestDataEditorListener{
 
@@ -46,7 +46,7 @@ public class TestDataViewer extends TableViewerSection implements TestDataEditor
 			@Override
 			public String getText(Object element){
 				PartitionNode testValue = (PartitionNode)element;
-				AbstractCategoryNode parent = testValue.getCategory();
+				CategoryNode parent = testValue.getCategory();
 				return parent.toString();
 			}
 			@Override
@@ -59,7 +59,7 @@ public class TestDataViewer extends TableViewerSection implements TestDataEditor
 			@Override
 			public String getText(Object element){
 				PartitionNode testValue = (PartitionNode)element;
-				if(testValue.getCategory() instanceof ExpectedCategoryNode){
+				if(testValue.getCategory().isExpected()){
 					return testValue.getValueString();
 				}
 				return testValue.toString();
@@ -73,8 +73,8 @@ public class TestDataViewer extends TableViewerSection implements TestDataEditor
 	
 	private Color getColor(Object element){
 		PartitionNode partition = (PartitionNode)element;
-		if(partition.getCategory() instanceof ExpectedCategoryNode){
-			fColorManager.getColor(ColorConstants.EXPECTED_VALUE_CATEGORY);
+		if (ModelUtils.isPartitionImplemented(partition)) {
+			return fColorManager.getColor(ColorConstants.ITEM_IMPLEMENTED);
 		}
 		return null;
 	}

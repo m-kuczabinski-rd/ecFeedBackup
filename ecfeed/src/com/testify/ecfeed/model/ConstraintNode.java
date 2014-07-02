@@ -18,6 +18,16 @@ import com.testify.ecfeed.model.constraint.Constraint;
 public class ConstraintNode extends GenericNode{
 
 	private Constraint fConstraint;
+	
+	@Override
+	public String toString(){
+		return getName() + ": " + getConstraint().toString();
+	}
+	
+	@Override
+	public ConstraintNode getCopy(){
+		return new ConstraintNode(getName(), fConstraint.getCopy());	
+	}
 
 	public ConstraintNode(String name, Constraint constraint) {
 		super(name);
@@ -34,6 +44,10 @@ public class ConstraintNode extends GenericNode{
 		}
 		return null;
 	}
+	
+	public void setMethod(MethodNode method){
+		setParent(method);
+	}
 
 	public boolean evaluate(List<PartitionNode> values) {
 		if(fConstraint != null){
@@ -49,12 +63,24 @@ public class ConstraintNode extends GenericNode{
 		return false;
 	}
 
-	public boolean mentions(AbstractCategoryNode category) {
+	public boolean mentions(CategoryNode category) {
 		return fConstraint.mentions(category);
 	}
-
-	@Override
-	public String toString(){
-		return getName() + ": " + getConstraint().toString();
+	
+	public boolean updateReferences(MethodNode method){
+		if(fConstraint.updateRefrences(method)){
+			setParent(method);
+			return true;
+		}
+		return false;
 	}
+	
+	public ConstraintNode getCopy(MethodNode method){
+		ConstraintNode copy = getCopy();
+		if(copy.updateReferences(method))
+			return copy;
+		else
+			return null;
+	}
+	
 }

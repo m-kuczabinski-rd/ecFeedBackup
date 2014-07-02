@@ -23,18 +23,21 @@ import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Listener;
+import org.eclipse.swt.widgets.Text;
 
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.dialogs.TestClassSelectionDialog;
+import com.testify.ecfeed.utils.ModelUtils;
 
 public class ClassDetailsPage extends BasicDetailsPage {
 
 	private ClassNode fSelectedClass;
 	private MethodsViewer fMethodsSection;
 	private OtherMethodsViewer fOtherMethodsSection;
-	private Label fQualifiedNameLabel;
+	private Text fClassNameText;
 	
 	private class ReassignClassSelectionAdapter extends SelectionAdapter{
 		@Override
@@ -76,13 +79,6 @@ public class ClassDetailsPage extends BasicDetailsPage {
 		Composite textClientComposite = getToolkit().createComposite(getMainSection());
 		textClientComposite.setLayout(new RowLayout());
 		
-		Button refreshButton = getToolkit().createButton(textClientComposite, "Refresh", SWT.NONE);
-		refreshButton.addSelectionListener(new SelectionAdapter(){
-			@Override
-			public void widgetSelected(SelectionEvent e){
-				refresh();
-			}
-		});
 		getMainSection().setTextClient(textClientComposite);
 
 		createQualifiedNameComposite(getMainComposite());
@@ -96,13 +92,54 @@ public class ClassDetailsPage extends BasicDetailsPage {
 	
 	private void createQualifiedNameComposite(Composite parent) {
 		Composite composite = getToolkit().createComposite(parent);
-		composite.setLayout(new GridLayout(3, false));
+		composite.setLayout(new GridLayout(4, false));
 		composite.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
-		getToolkit().createLabel(composite, "Qualified name: ");
-		fQualifiedNameLabel = getToolkit().createLabel(composite, "");
-		fQualifiedNameLabel.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
+		getToolkit().createLabel(composite, "Class path");
+		fClassNameText = getToolkit().createText(composite, null, SWT.NONE);
+		fClassNameText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
+		fClassNameText.addListener(SWT.KeyDown, new Listener() {
+			public void handleEvent(Event event) {
+				if(event.keyCode == SWT.CR || event.keyCode == SWT.KEYPAD_CR){
+					changeName();
+				}
+			}
+		});
+		Button changeButton = getToolkit().createButton(composite, "Change", SWT.NONE);
+		changeButton.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e){
+				changeName();
+			}
+		});
+
 		Button button = getToolkit().createButton(composite, "Reassign", SWT.NONE);
 		button.addSelectionListener(new ReassignClassSelectionAdapter());
+
+		getToolkit().paintBordersFor(composite);
+	}
+
+	private void changeName() {
+		String name = fClassNameText.getText();
+		boolean validName = ModelUtils.isClassQualifiedNameValid(name);
+
+		if (!validName) {
+			MessageDialog.openError(Display.getCurrent().getActiveShell(),
+					Messages.DIALOG_CLASS_NAME_PROBLEM_TITLE,
+					Messages.DIALOG_CLASS_NAME_PROBLEM_MESSAGE);
+			fClassNameText.setText(fSelectedClass.getQualifiedName());
+			fClassNameText.setSelection(fSelectedClass.getQualifiedName().length());
+		}
+
+		if (validName && (!fSelectedClass.getName().equals(name))) {
+			if (fSelectedClass.getRoot().getClassModel(name) == null) {
+				fSelectedClass.setName(name);
+				modelUpdated(null);
+			} else {
+				MessageDialog.openInformation(getActiveShell(),
+					Messages.DIALOG_CLASS_EXISTS_TITLE,
+					Messages.DIALOG_CLASS_EXISTS_MESSAGE);
+			}
+		}
 	}
 
 	@Override
@@ -111,8 +148,12 @@ public class ClassDetailsPage extends BasicDetailsPage {
 			fSelectedClass = (ClassNode)getSelectedElement();
 		}
 		if(fSelectedClass != null){
-			getMainSection().setText(fSelectedClass.getLocalName());
-			fQualifiedNameLabel.setText(fSelectedClass.getQualifiedName());
+			String title = fSelectedClass.getLocalName();
+			if (ModelUtils.isClassImplemented(fSelectedClass)) {
+				title += " [implemented]";
+			}
+			getMainSection().setText(title);
+			fClassNameText.setText(fSelectedClass.getQualifiedName());
 			fMethodsSection.setInput(fSelectedClass);
 			fOtherMethodsSection.setInput(fSelectedClass);
 			getMainSection().layout();

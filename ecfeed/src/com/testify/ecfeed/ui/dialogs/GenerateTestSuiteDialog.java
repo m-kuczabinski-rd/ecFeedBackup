@@ -30,7 +30,8 @@ public class GenerateTestSuiteDialog extends GeneratorSetupDialog {
 	public GenerateTestSuiteDialog(Shell parentShell, MethodNode method) {
 		super(parentShell, method, CONTENT, 
 				Messages.DIALOG_GENERATE_TEST_SUITE_TITLE, 
-				Messages.DIALOG_GENERATE_TEST_SUITE_MESSAGE);
+				Messages.DIALOG_GENERATE_TEST_SUITE_MESSAGE,
+				false);
 	}
 
 	public IGenerator<PartitionNode> getSelectedGenerator() {

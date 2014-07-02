@@ -22,13 +22,13 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
 
-import com.testify.ecfeed.model.ExpectedCategoryNode;
-import com.testify.ecfeed.utils.ModelUtils;;
+import com.testify.ecfeed.model.CategoryNode;
+import com.testify.ecfeed.utils.ModelUtils;
 
 public class ExpectedValueDetailsPage extends BasicDetailsPage {
 
 	private Text fDefaultValueText;
-	private ExpectedCategoryNode fSelectedCategory;
+	private CategoryNode fSelectedCategory;
 
 	private class ApplyButtonAdapter extends SelectionAdapter{
 		@Override
@@ -38,10 +38,10 @@ public class ExpectedValueDetailsPage extends BasicDetailsPage {
 			}
 		}
 
-		protected boolean applyNewDefaultValue(ExpectedCategoryNode category, Text valueText) {
+		protected boolean applyNewDefaultValue(CategoryNode category, Text valueText) {
 			String newValue = valueText.getText();
 			if(ModelUtils.validatePartitionStringValue(newValue, category.getType())){
-				category.setDefaultValue(ModelUtils.getPartitionValueFromString(newValue, category.getType()));
+				category.setDefaultValueString(newValue);
 				return true;
 			}
 			valueText.setText(category.getDefaultValuePartition().getValueString());
@@ -85,8 +85,8 @@ public class ExpectedValueDetailsPage extends BasicDetailsPage {
 	
 	@Override
 	public void refresh(){
-		if(getSelectedElement() instanceof ExpectedCategoryNode){
-			fSelectedCategory = (ExpectedCategoryNode)getSelectedElement();
+		if(getSelectedElement() instanceof CategoryNode && ((CategoryNode)getSelectedElement()).isExpected()){
+			fSelectedCategory = (CategoryNode)getSelectedElement();
 		}
 		getMainSection().setText(fSelectedCategory.toString());
 		fDefaultValueText.setText(fSelectedCategory.getDefaultValuePartition().getValueString());

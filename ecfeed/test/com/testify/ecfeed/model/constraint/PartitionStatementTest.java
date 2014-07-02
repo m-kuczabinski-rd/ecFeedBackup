@@ -23,15 +23,14 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.testify.ecfeed.model.AbstractCategoryNode;
+import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
-import com.testify.ecfeed.model.PartitionedCategoryNode;
 
 public class PartitionStatementTest {
 
 	private static MethodNode fMethod;
-	private static PartitionedCategoryNode fCategory;
+	private static CategoryNode fCategory;
 	private static PartitionNode fPartition1;
 	private static PartitionNode fPartition2;
 	private static PartitionNode fPartition3;
@@ -39,25 +38,25 @@ public class PartitionStatementTest {
 	private static List<PartitionNode> fList2;
 	private static List<PartitionNode> fList3;
 
-	private PartitionNode fP1 = new PartitionNode("p1", 0);
-	private PartitionNode fP2 = new PartitionNode("p2", 0);
-	private PartitionNode fP3 = new PartitionNode("p3", 0);
+	private PartitionNode fP1 = new PartitionNode("p1", "0");
+	private PartitionNode fP2 = new PartitionNode("p2", "0");
+	private PartitionNode fP3 = new PartitionNode("p3", "0");
 
-	private PartitionNode fP11 = new PartitionNode("p11", 0);
-	private PartitionNode fP12 = new PartitionNode("p12", 0);
-	private PartitionNode fP13 = new PartitionNode("p13", 0);
+	private PartitionNode fP11 = new PartitionNode("p11", "0");
+	private PartitionNode fP12 = new PartitionNode("p12", "0");
+	private PartitionNode fP13 = new PartitionNode("p13", "0");
 
-	private PartitionNode fP21 = new PartitionNode("p21", 0);
-	private PartitionNode fP22 = new PartitionNode("p22", 0);
-	private PartitionNode fP23 = new PartitionNode("p23", 0);
+	private PartitionNode fP21 = new PartitionNode("p21", "0");
+	private PartitionNode fP22 = new PartitionNode("p22", "0");
+	private PartitionNode fP23 = new PartitionNode("p23", "0");
 
-	private PartitionNode fP221 = new PartitionNode("p21", 0);
-	private PartitionNode fP222 = new PartitionNode("p22", 0);
-	private PartitionNode fP223 = new PartitionNode("p23", 0);
+	private PartitionNode fP221 = new PartitionNode("p21", "0");
+	private PartitionNode fP222 = new PartitionNode("p22", "0");
+	private PartitionNode fP223 = new PartitionNode("p23", "0");
 
-	private PartitionNode fP31 = new PartitionNode("p31", 0);
-	private PartitionNode fP32 = new PartitionNode("p32", 0);
-	private PartitionNode fP33 = new PartitionNode("p33", 0);
+	private PartitionNode fP31 = new PartitionNode("p31", "0");
+	private PartitionNode fP32 = new PartitionNode("p32", "0");
+	private PartitionNode fP33 = new PartitionNode("p33", "0");
 
 	@Before
 	public void prepareStructure(){
@@ -117,7 +116,7 @@ public class PartitionStatementTest {
 	@BeforeClass
 	public static void prepareModel(){
 		fMethod = new MethodNode("method");
-		fCategory = new PartitionedCategoryNode("category", "type");
+		fCategory = new CategoryNode("category", "type", false);
 		fPartition1 = new PartitionNode("partition1", null);
 		fPartition2 = new PartitionNode("partition2", null);
 		fPartition3 = new PartitionNode("partition3", null);
@@ -159,7 +158,7 @@ public class PartitionStatementTest {
 	@Test
 	public void testMentionsCategoryNode() {
 		PartitionedCategoryStatement statement = new PartitionedCategoryStatement(fCategory, Relation.EQUAL, fPartition2);
-		AbstractCategoryNode category = new PartitionedCategoryNode("name", "type");
+		CategoryNode category = new CategoryNode("name", "type", false);
 		assertTrue(statement.mentions(fCategory));
 		assertFalse(statement.mentions(category));
 	}
