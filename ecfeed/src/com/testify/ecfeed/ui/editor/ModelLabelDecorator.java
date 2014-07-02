@@ -22,6 +22,7 @@ import org.eclipse.jface.viewers.ILabelDecorator;
 import org.eclipse.jface.viewers.ILabelProviderListener;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.widgets.Display;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.FrameworkUtil;
 
@@ -36,7 +37,9 @@ public class ModelLabelDecorator implements ILabelDecorator {
 
 	@Override
     public Image decorateImage(Image image, Object element) {
-		GC gc = new GC(image);
+		Image img = new Image(Display.getCurrent(), image.getBounds().width, image.getBounds().height);
+		GC gc = new GC(img);
+		gc.drawImage(image, 0, 0);	
 		List<Image> decorations = null;
     	if (element instanceof ClassNode) {
     		decorations = getClassImageDecoration((ClassNode)element);
@@ -53,9 +56,9 @@ public class ModelLabelDecorator implements ILabelDecorator {
     		for(Image decoration : decorations){
     			gc.drawImage(decoration, 0, 0);
     		}
-    	}
+    	}	
 		gc.dispose();
-    	return image;
+    	return img;
     }
 
 	@Override
