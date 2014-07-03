@@ -165,7 +165,7 @@ public class CategoryDetailsPage extends BasicDetailsPage {
 		}
 	}
 	
-	public void createCommonParametersEdit(){
+	private void createCommonParametersEdit(){
 		Composite composite = getToolkit().createComposite(getMainComposite());
 		composite.setLayout(new GridLayout(1, false));
 		composite.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
@@ -191,15 +191,7 @@ public class CategoryDetailsPage extends BasicDetailsPage {
 		getToolkit().paintBordersFor(nameComposite);
 	}
 
-	private void changeName() {
-		if (CategoryNodeAbstractLayer.changeCategoryName(fSelectedCategory, fNameText.getText())){
-			modelUpdated(null);
-		}
-		fNameText.setText(fSelectedCategory.getName());
-		fNameText.setSelection(fSelectedCategory.getName().length());
-	}
-
-	public void createDefaultValueEdit(){
+	private void createDefaultValueEdit(){
 		Composite composite = getToolkit().createComposite(getMainComposite());		
 		composite.setLayout(new GridLayout(1, false));
 		composite.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
@@ -274,6 +266,14 @@ public class CategoryDetailsPage extends BasicDetailsPage {
 		fTypeCombo.setText("");
 		fTypeCombo.setEnabled(false);
 		fPartitionsViewer.setVisible(false);
+	}
+	
+	private void changeName() {
+		if (CategoryNodeAbstractLayer.changeCategoryName(fSelectedCategory, fNameText.getText())){
+			modelUpdated(null);
+		}
+		fNameText.setText(fSelectedCategory.getName());
+		fNameText.setSelection(fSelectedCategory.getName().length());
 	}
 	
 	private void prepareDefaultValues(CategoryNode node, Combo valueText){
