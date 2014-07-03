@@ -115,10 +115,12 @@ public class ConstraintViewer extends TreeViewerSection {
 			if(fStatementEditListenersEnabled == false){
 				return;
 			}
-			IRelationalStatement statement = (IRelationalStatement)fSelectedStatement;
-			if(statement.getRelation().toString().equals(fRelationCombo.getText()) == false){
-				statement.setRelation(Relation.getRelation(fRelationCombo.getText()));
-				modelUpdated();
+			if(fSelectedStatement instanceof IRelationalStatement){
+				IRelationalStatement statement = (IRelationalStatement)fSelectedStatement;
+				if(statement.getRelation().toString().equals(fRelationCombo.getText()) == false){
+					statement.setRelation(Relation.getRelation(fRelationCombo.getText()));
+					modelUpdated();
+				}
 			}
 		}
 	}
@@ -129,17 +131,19 @@ public class ConstraintViewer extends TreeViewerSection {
 			if(fStatementEditListenersEnabled == false){
 				return;
 			}
-			PartitionedCategoryStatement statement = (PartitionedCategoryStatement)fSelectedStatement;
-			if(statement.getConditionName().equals(fConditionCombo.getText()) == false){
-				String conditionText = fConditionCombo.getText();
-				PartitionNode partition = statement.getCategory().getPartition(conditionText);
-				if(partition != null){//text in the combo is a partition name
-					statement.setCondition(partition);
+			if(fSelectedStatement instanceof PartitionedCategoryStatement){
+				PartitionedCategoryStatement statement = (PartitionedCategoryStatement)fSelectedStatement;
+				if(statement.getConditionName().equals(fConditionCombo.getText()) == false){
+					String conditionText = fConditionCombo.getText();
+					PartitionNode partition = statement.getCategory().getPartition(conditionText);
+					if(partition != null){//text in the combo is a partition name
+						statement.setCondition(partition);
+					}
+					else{//text in the combo is a label
+						statement.setCondition(conditionText);
+					}
+					modelUpdated();
 				}
-				else{//text in the combo is a label
-					statement.setCondition(conditionText);
-				}
-				modelUpdated();
 			}
 		}
 	}
