@@ -179,7 +179,6 @@ public class ModelLabelDecorator implements ILabelDecorator {
 					idIcon.data[4*indexa]=idDecorator.data[4*indexb];
 					idIcon.data[4*indexa+1]=idDecorator.data[4*indexb+1];
 					idIcon.data[4*indexa+2]=idDecorator.data[4*indexb+2];
-					idIcon.data[4*indexa+3]=idDecorator.data[4*indexb+2];
 				}
 				indexa += 1;
 				indexb += 1;
