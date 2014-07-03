@@ -140,7 +140,7 @@ public class StaticRunner extends BlockJUnit4ClassRunner {
 		URLClassLoader loader = ClassUtils.getClassLoader(false, getClass().getClassLoader());
 
 		for (PartitionNode partition : partitions) {
-			implemented = ClassUtils.isPartitionImplemented(partition.getSimpleValueString(), partition.getCategory().getType(), loader);
+			implemented = ClassUtils.isPartitionImplemented(partition.getExactValueString(), partition.getCategory().getType(), loader);
 			if (!implemented) {
 				break;
 			}

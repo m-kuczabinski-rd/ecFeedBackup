@@ -359,7 +359,7 @@ public class MethodNodeTest {
 		method.addConstraint(mentioningConstraintNode);
 		method.addTestCase(testCaseNode);
 		
-		method.replaceCategoryOfSameType(0, newExpCat);
+		method.replaceCategory(0, newExpCat);
 		
 		assertFalse(method.getCategories().contains(category));
 		assertFalse(method.getCategories(false).contains(category));
@@ -391,7 +391,7 @@ public class MethodNodeTest {
 		method.addConstraint(mentioningConstraintNode);
 		method.addTestCase(testCaseNode);
 		
-		method.replaceCategoryOfSameType(0, newCat);
+		method.replaceCategory(0, newCat);
 		
 		assertFalse(method.getCategories().contains(category));
 		assertFalse(method.getCategories(true).contains(category));

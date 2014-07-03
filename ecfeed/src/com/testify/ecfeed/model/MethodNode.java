@@ -276,15 +276,16 @@ public class MethodNode extends GenericNode {
 		}
 	}
 	
-	public void replaceCategoryOfSameType(int index, CategoryNode newCategory){
+	public void replaceCategory(int index, CategoryNode newCategory){
 		CategoryNode oldCategory = fCategories.get(index);
-		if(fCategories.remove(oldCategory)){
+		if(oldCategory.getType().equals(newCategory.getType())
+				&& fCategories.remove(oldCategory)){
 			removeMentioningConstraints(oldCategory);
 			newCategory.setParent(this);
 			fCategories.add(index, newCategory);
 			if(!oldCategory.isExpected() && newCategory.getDefaultValuePartition() != null){
 				for(TestCaseNode testCase : fTestCases){
-					testCase.replaceValue(index, newCategory.getDefaultValuePartition().getIndependentCopy());
+					testCase.replaceValue(index, newCategory.getDefaultValuePartition().getLeaflessCopy());
 				}
 			} else{
 				fTestCases.clear();
@@ -310,7 +311,7 @@ public class MethodNode extends GenericNode {
 						category.setDefaultValueString(category.getPartitions().get(0).getValueString());
 					}
 					for(TestCaseNode testCase : fTestCases){
-						testCase.replaceValue(index, category.getDefaultValuePartition().getIndependentCopy());
+						testCase.replaceValue(index, category.getDefaultValuePartition().getLeaflessCopy());
 					}
 					for(PartitionNode partition : category.getPartitions()){
 						removeMentioningConstraints(partition);

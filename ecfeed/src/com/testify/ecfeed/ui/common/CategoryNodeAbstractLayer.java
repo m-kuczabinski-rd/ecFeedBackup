@@ -1,9 +1,5 @@
 package com.testify.ecfeed.ui.common;
 
-import static com.testify.ecfeed.ui.common.Messages.DIALOG_METHOD_EXISTS_TITLE;
-import static com.testify.ecfeed.ui.common.Messages.DIALOG_METHOD_WITH_PARAMETERS_EXISTS_MESSAGE;
-import static com.testify.ecfeed.utils.ModelUtils.getJavaTypes;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,6 +9,7 @@ import org.eclipse.swt.widgets.Display;
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.ConstraintNode;
 import com.testify.ecfeed.model.MethodNode;
+import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.utils.AdaptTypeSupport;
 import com.testify.ecfeed.utils.ModelUtils;
 
@@ -128,8 +125,8 @@ public class CategoryNodeAbstractLayer{
 		ArrayList<String> tmpTypes = method.getCategoriesTypes();
 		tmpTypes.add(category.getType());
 		if(method.getClassNode().getMethod(method.getName(), tmpTypes) != null){
-			MessageDialog.openError(Display.getCurrent().getActiveShell(), DIALOG_METHOD_EXISTS_TITLE,
-					DIALOG_METHOD_WITH_PARAMETERS_EXISTS_MESSAGE);
+			MessageDialog.openError(Display.getCurrent().getActiveShell(), Messages.DIALOG_METHOD_EXISTS_TITLE,
+					Messages.DIALOG_METHOD_WITH_PARAMETERS_EXISTS_MESSAGE);
 			return false;
 		}
 		// checking if data loss warning should appear...
@@ -145,7 +142,7 @@ public class CategoryNodeAbstractLayer{
 	}
 
 	public static boolean changeCategoryType(CategoryNode category, String newType){
-		if (!getJavaTypes().contains(newType) && !ModelUtils.isClassQualifiedNameValid(newType)) {
+		if (!ModelUtils.getJavaTypes().contains(newType) && !ModelUtils.isClassQualifiedNameValid(newType)) {
 			MessageDialog.openError(Display.getCurrent().getActiveShell(),
 					Messages.DIALOG_PARAMETER_TYPE_PROBLEM_TITLE,
 					Messages.DIALOG_PARAMETER_TYPE_PROBLEM_MESSAGE);

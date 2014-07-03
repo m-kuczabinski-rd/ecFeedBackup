@@ -10,9 +10,7 @@
  ******************************************************************************/
 package com.testify.ecfeed.ui.editor;
 
-import static com.testify.ecfeed.ui.common.Messages.DIALOG_PASTE_OPERATION_FAILED_MESSAGE;
-import static com.testify.ecfeed.ui.common.Messages.DIALOG_PASTE_OPERATION_FAILED_TITLE;
-
+import com.testify.ecfeed.ui.common.Messages;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
 
@@ -37,8 +35,8 @@ public class MenuPasteOperation extends MenuOperation{
 	@Override
 	public void execute(){
 		if(!paste() && !fCanceled){
-			MessageDialog.openInformation(Display.getCurrent().getActiveShell(), DIALOG_PASTE_OPERATION_FAILED_TITLE,
-					DIALOG_PASTE_OPERATION_FAILED_MESSAGE);
+			MessageDialog.openInformation(Display.getCurrent().getActiveShell(), Messages.DIALOG_PASTE_OPERATION_FAILED_TITLE,
+					Messages.DIALOG_PASTE_OPERATION_FAILED_MESSAGE);
 		} else if(!fCanceled){
 			fModel.markDirty();
 			fModel.refresh();
