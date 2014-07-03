@@ -20,8 +20,8 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.ILabelDecorator;
 import org.eclipse.jface.viewers.ILabelProviderListener;
-import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.widgets.Display;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.FrameworkUtil;
@@ -37,11 +37,6 @@ public class ModelLabelDecorator implements ILabelDecorator {
 
 	@Override
     public Image decorateImage(Image image, Object element) {
-		// We create new image as workaround for windows display overlapping decorator transparency
-		// with icon background transparency - long story short, now it works.
-		Image newImage = new Image(Display.getCurrent(), image.getBounds().width, image.getBounds().height);
-		GC gc = new GC(newImage);
-		gc.drawImage(image, 0, 0);	
 		List<Image> decorations = null;
     	if (element instanceof ClassNode) {
     		decorations = getClassImageDecoration((ClassNode)element);
@@ -55,12 +50,13 @@ public class ModelLabelDecorator implements ILabelDecorator {
     		decorations = getPartitionImageDecoration((PartitionNode)element);
     	}
     	if (decorations != null) {
+    		Image img = new Image(Display.getCurrent(), image.getImageData());
     		for(Image decoration : decorations){
-    			gc.drawImage(decoration, 0, 0);
+    			img = fuseImages(img, decoration, 0, 0);
     		}
-    	}	
-		gc.dispose();
-    	return newImage;
+    		return img;
+    	}
+    	return image;
     }
 
 	@Override
@@ -162,5 +158,36 @@ public class ModelLabelDecorator implements ILabelDecorator {
 		}
 		
 		return decorations;
+	}
+	
+	private Image fuseImages(Image icon, Image decorator, int x, int y){
+		ImageData idIcon = icon.getImageData();
+		ImageData idDecorator = decorator.getImageData();
+		if(idIcon.width <= x || idIcon.height <= y){
+			return icon;
+		}
+		int rbw = (idDecorator.width + x > idIcon.width) ? (idDecorator.width + x - idIcon.width) : idDecorator.width;
+		int rbh = (idDecorator.height + y > idIcon.height) ? (idDecorator.height + y - idIcon.height) : idDecorator.height;		
+		
+		int indexa = y*idIcon.scanlinePad + x;
+		int indexb = 0;
+		byte[] alphatab = idIcon.alphaData.clone();
+		byte[] datatab = idIcon.data.clone();
+		for(int row = 0; row < rbh; row ++){
+			for(int col = 0; col < rbw; col++){
+				if(idDecorator.alphaData[indexb] < 0){
+					alphatab[indexa] = (byte)-1;
+					datatab[4*indexa]=idDecorator.data[4*indexb];
+					datatab[4*indexa+1]=idDecorator.data[4*indexb+1];
+					datatab[4*indexa+2]=idDecorator.data[4*indexb+2];
+					datatab[4*indexa+3]=idDecorator.data[4*indexb+3];
+				}
+				indexa += 1;
+				indexb += 1;
+			}
+			indexa += x;
+		}
+		ImageData result = new ImageData(idIcon.width, idIcon.height, idIcon.depth, idIcon.palette, idIcon.scanlinePad, datatab);
+		return new Image(Display.getDefault(), result);
 	}
 }
