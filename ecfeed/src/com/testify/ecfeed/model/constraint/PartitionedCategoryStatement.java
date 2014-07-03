@@ -38,6 +38,26 @@ public class PartitionedCategoryStatement extends BasicStatement implements IRel
 			fLabel = label;
 		}
 		
+		@Override
+		public String toString(){
+			return fLabel;
+		}
+
+		@Override
+		public boolean adapt(List<PartitionNode> values) {
+			return false;
+		}
+		
+		@Override
+		public LabelCondition getCopy(){
+			return new LabelCondition(fLabel);
+		}
+		
+		@Override
+		public boolean updateReferences(CategoryNode category){
+			return true;
+		}
+		
 		public Object getCondition(){
 			return fLabel;
 		}
@@ -58,10 +78,18 @@ public class PartitionedCategoryStatement extends BasicStatement implements IRel
 				return false;
 			}
 		}
+	}
+	
+	private class PartitionCondition implements ICondition{
+		private PartitionNode fPartition;
+		
+		public PartitionCondition(PartitionNode partition){
+			fPartition = partition;
+		}
 		
 		@Override
 		public String toString(){
-			return fLabel;
+			return fPartition.getQualifiedName();
 		}
 
 		@Override
@@ -70,21 +98,17 @@ public class PartitionedCategoryStatement extends BasicStatement implements IRel
 		}
 		
 		@Override
-		public LabelCondition getCopy(){
-			return new LabelCondition(fLabel);
+		public PartitionCondition getCopy(){
+			return new PartitionCondition(fPartition.getCopy());
 		}
 		
 		@Override
 		public boolean updateReferences(CategoryNode category){
+			PartitionNode condition = category.getPartition(fPartition.getQualifiedName());
+			if(condition != null){
+				fPartition = condition;
+			}
 			return true;
-		}
-	}
-	
-	private class PartitionCondition implements ICondition{
-		private PartitionNode fPartition;
-		
-		public PartitionCondition(PartitionNode partition){
-			fPartition = partition;
 		}
 
 		public Object getCondition(){
@@ -119,31 +143,6 @@ public class PartitionedCategoryStatement extends BasicStatement implements IRel
 				return false;
 			}
 		}
-		
-		@Override
-		public String toString(){
-			return fPartition.getQualifiedName();
-		}
-
-		@Override
-		public boolean adapt(List<PartitionNode> values) {
-			return false;
-		}
-		
-		@Override
-		public PartitionCondition getCopy(){
-			return new PartitionCondition(fPartition.getCopy());
-		}
-		
-		@Override
-		public boolean updateReferences(CategoryNode category){
-			PartitionNode condition = category.getPartition(fPartition.getQualifiedName());
-			if(condition != null){
-				fPartition = condition;
-			}
-			return true;
-		}
-		
 	}
 	
 	public PartitionedCategoryStatement(CategoryNode category, Relation relation, String labelCondition){
@@ -164,38 +163,6 @@ public class PartitionedCategoryStatement extends BasicStatement implements IRel
 		fCondition = condition;
 	}
 	
-	public CategoryNode getCategory(){
-		return fCategory;
-	}
-	
-	public void setRelation(Relation relation){
-		fRelation = relation;
-	}
-	
-	public Relation getRelation(){
-		return fRelation;
-	}
-	
-	public void setCondition(String label){
-		fCondition = new LabelCondition(label);
-	}
-	
-	public void setCondition(PartitionNode partition){
-		fCondition = new PartitionCondition(partition);
-	}
-	
-	public void setCondition(CategoryNode category, PartitionNode partition){
-		fCondition = new PartitionCondition(partition);
-	}
-	
-	public Object getConditionValue(){
-		return fCondition.getCondition();
-	}
-
-	public String getConditionName(){
-		return fCondition.toString();
-	}
-
 	@Override
 	public boolean mentions(CategoryNode category){
 		return getCategory() == category;
@@ -206,6 +173,7 @@ public class PartitionedCategoryStatement extends BasicStatement implements IRel
 		return getConditionValue() == partition;
 	}
 
+	@Override
 	public boolean evaluate(List<PartitionNode> values){
 		return fCondition.evaluate(values);
 	}
@@ -240,6 +208,38 @@ public class PartitionedCategoryStatement extends BasicStatement implements IRel
 			}
 		}
 		return false;
+	}
+	
+	public CategoryNode getCategory(){
+		return fCategory;
+	}
+	
+	public void setRelation(Relation relation){
+		fRelation = relation;
+	}
+	
+	public Relation getRelation(){
+		return fRelation;
+	}
+	
+	public void setCondition(String label){
+		fCondition = new LabelCondition(label);
+	}
+	
+	public void setCondition(PartitionNode partition){
+		fCondition = new PartitionCondition(partition);
+	}
+	
+	public void setCondition(CategoryNode category, PartitionNode partition){
+		fCondition = new PartitionCondition(partition);
+	}
+	
+	public Object getConditionValue(){
+		return fCondition.getCondition();
+	}
+
+	public String getConditionName(){
+		return fCondition.toString();
 	}
 
 }
