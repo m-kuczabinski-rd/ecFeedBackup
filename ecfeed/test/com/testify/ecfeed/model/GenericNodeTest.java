@@ -209,4 +209,19 @@ public class GenericNodeTest{
 		assertEquals(null, p1.getSibling("some string"));
 		
 	}
+	
+	@Test
+	public void compareTest(){
+		GenericNode n1 = new GenericNode("n");
+		GenericNode n2 = new GenericNode("n");
+		
+		assertTrue(n1.compare(n2));
+
+		n2.setName("nn");
+		assertFalse(n1.compare(n2));
+
+		n1.setName("nn");
+		assertTrue(n1.compare(n2));
+
+	}
 }
