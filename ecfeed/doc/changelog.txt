@@ -15,6 +15,7 @@ Version 1.6.0
  - Introduced context menu for model viewer
  - Unified partitioned and expected (parameters)
  - User type parameters (enums)
+ - Expected values constraining
 
 Version 1.5.0
  - Execute online and static tests from GUI
