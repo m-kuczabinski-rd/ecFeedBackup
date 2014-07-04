@@ -55,11 +55,11 @@ public class ParameterizedMethod extends FrameworkMethod {
 		List<Object> parameters = new ArrayList<Object>();
 		URLClassLoader loader = ClassUtils.getClassLoader(false, getClass().getClassLoader());
 		for(PartitionNode parameter : testCase){
-			Object value = ClassUtils.getPartitionValueFromString(parameter.getSimpleValueString(), parameter.getCategory().getType(), loader);
+			Object value = ClassUtils.getPartitionValueFromString(parameter.getExactValueString(), parameter.getCategory().getType(), loader);
 			if ((value != null) || (parameter.getCategory().getType().equals(com.testify.ecfeed.model.Constants.TYPE_NAME_STRING))) {
 				parameters.add(value);
 			} else {
-				throw new Exception("Value " + "\'" + (parameter.getSimpleValueString() + "\'" + " is incorrect for " + "\'" + parameter.getCategory().getType() + "\'" + " type."));
+				throw new Exception("Value " + "\'" + (parameter.getExactValueString() + "\'" + " is incorrect for " + "\'" + parameter.getCategory().getType() + "\'" + " type."));
 			}
 		}
 		return parameters.toArray();

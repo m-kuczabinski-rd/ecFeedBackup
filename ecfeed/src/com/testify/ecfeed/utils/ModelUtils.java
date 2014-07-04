@@ -523,7 +523,7 @@ public class ModelUtils {
 		}
 		else{
 			URLClassLoader loader = ClassUtils.getClassLoader(false, null);
-			return ClassUtils.isPartitionImplemented(node.getSimpleValueString(), node.getCategory().getType(), loader);
+			return ClassUtils.isPartitionImplemented(node.getExactValueString(), node.getCategory().getType(), loader);
 		}
 	}
 

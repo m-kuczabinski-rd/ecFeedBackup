@@ -591,7 +591,7 @@ public class XmlParserSerializerTest {
 	private void compareExpectedValueStatements(
 			ExpectedValueStatement statement1, ExpectedValueStatement statement2) {
 		compareCategories(statement1.getCategory(), statement2.getCategory());
-		assertEquals(statement1.getCondition().getSimpleValueString(), statement2.getCondition().getSimpleValueString());
+		assertEquals(statement1.getCondition().getExactValueString(), statement2.getCondition().getExactValueString());
 	}
 
 	private void compareRelationStatements(PartitionedCategoryStatement statement1, PartitionedCategoryStatement statement2) {

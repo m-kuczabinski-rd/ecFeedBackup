@@ -72,6 +72,42 @@ public class PartitionDetailsPage extends BasicDetailsPage {
 		}
 	}
 	
+	private class booleanValueComboSelectionAdapter extends SelectionAdapter {
+		@Override
+		public void widgetSelected(SelectionEvent e){
+			if(PartitionNodeAbstractLayer.changePartitionValue(fSelectedPartition, fBooleanValueCombo.getText())){
+				modelUpdated(null);
+			}
+			fBooleanValueCombo.setText(fSelectedPartition.getValueString());
+		}
+	}
+	
+	private class valueComboSelectionAdapter extends SelectionAdapter {
+		@Override
+		public void widgetSelected(SelectionEvent e){
+			if(PartitionNodeAbstractLayer.changePartitionValue(fSelectedPartition, fPartitionValueCombo.getText())){
+				modelUpdated(null);
+			}
+			fPartitionValueCombo.setText(fSelectedPartition.getValueString());
+		}
+	}
+	
+	private class valueTextListener implements Listener{
+		@Override
+		public void handleEvent(Event event){
+			if(event.keyCode == SWT.CR || event.keyCode == SWT.KEYPAD_CR){
+				if(PartitionNodeAbstractLayer.changePartitionValue(fSelectedPartition, fPartitionValueCombo.getText())){
+					modelUpdated(null);
+				}
+				fPartitionValueCombo.setText(fSelectedPartition.getValueString());
+			}
+		}
+	}
+	
+	public PartitionDetailsPage(ModelMasterSection masterSection) {
+		super(masterSection);
+	}
+	
 	@Override
 	public void createContents(Composite parent){
 		super.createContents(parent);
@@ -85,53 +121,49 @@ public class PartitionDetailsPage extends BasicDetailsPage {
 	
 	@Override
 	public void refresh(){
-		if(getSelectedElement() instanceof PartitionNode){
+		if(getSelectedElement() != null && getSelectedElement() instanceof PartitionNode) {
 			fSelectedPartition = (PartitionNode)getSelectedElement();
+		} else {
+			return;
 		}
-		if(fSelectedPartition != null){
-			String title = fSelectedPartition.toString();
-			boolean implemented = ModelUtils.isPartitionImplemented(fSelectedPartition);
-			if (implemented) {
-				title += " [implemented]";
-			}
-			getMainSection().setText(title);
-			fPartitionChildren.setInput(fSelectedPartition);
-			fLabelsViewer.setInput(fSelectedPartition);
-			fPartitionNameText.setText(fSelectedPartition.getName());
-			if(fSelectedPartition.isAbstract()){
-				fPartitionValueCombo.setEnabled(false);
-				fBooleanValueCombo.setEnabled(false);
-				fPartitionValueCombo.setText("");
-				fBooleanValueCombo.setText("");
-			}
-			else{
-				if(fSelectedPartition.getCategory().getType().equals(Constants.TYPE_NAME_BOOLEAN)){
-					fPartitionValueCombo.setVisible(false);
-					fBooleanValueCombo.setVisible(true);
-					fBooleanValueCombo.setEnabled(true);
-					prepareDefaultValues(fSelectedPartition, fBooleanValueCombo);
-					fBooleanValueCombo.setText(fSelectedPartition.getValueString());
-					fComboLayout.topControl = fBooleanValueCombo;
-				} else {
-					fBooleanValueCombo.setVisible(false);
-					fPartitionValueCombo.setEnabled(true);
-					fPartitionValueCombo.setVisible(true);
-					prepareDefaultValues(fSelectedPartition, fPartitionValueCombo);
-					fPartitionValueCombo.setText(fSelectedPartition.getValueString());
-					fComboLayout.topControl = fPartitionValueCombo;
-				}
-			}
+		String title = fSelectedPartition.toString();
+		boolean implemented = ModelUtils.isPartitionImplemented(fSelectedPartition);
+		if(implemented){
+			title += " [implemented]";
 		}
-	}
-
-	public PartitionDetailsPage(ModelMasterSection masterSection) {
-		super(masterSection);
+		getMainSection().setText(title);
+		fPartitionChildren.setInput(fSelectedPartition);
+		fLabelsViewer.setInput(fSelectedPartition);
+		fPartitionNameText.setText(fSelectedPartition.getName());
+		if(fSelectedPartition.isAbstract()){
+			fPartitionValueCombo.setEnabled(false);
+			fBooleanValueCombo.setEnabled(false);
+			fPartitionValueCombo.setText("");
+			fBooleanValueCombo.setText("");
+		} else{
+			if(fSelectedPartition.getCategory().getType().equals(Constants.TYPE_NAME_BOOLEAN)){
+				fPartitionValueCombo.setVisible(false);
+				fBooleanValueCombo.setVisible(true);
+				fBooleanValueCombo.setEnabled(true);
+				prepareDefaultValues(fSelectedPartition, fBooleanValueCombo);
+				fBooleanValueCombo.setText(fSelectedPartition.getValueString());
+				fComboLayout.topControl = fBooleanValueCombo;
+			} else{
+				fBooleanValueCombo.setVisible(false);
+				fPartitionValueCombo.setEnabled(true);
+				fPartitionValueCombo.setVisible(true);
+				prepareDefaultValues(fSelectedPartition, fPartitionValueCombo);
+				fPartitionValueCombo.setText(fSelectedPartition.getValueString());
+				fComboLayout.topControl = fPartitionValueCombo;
+			}
+		}	
 	}
 	
 	private void createNameValueEdit(Composite parent) {
 		Composite composite = getToolkit().createComposite(parent);
 		composite.setLayout(new GridLayout(3, false));
 		composite.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
+		
 		createNameEdit(composite);
 		createValueEdit(composite);
 	}
@@ -141,11 +173,13 @@ public class PartitionDetailsPage extends BasicDetailsPage {
 		fPartitionNameText = getToolkit().createText(parent, "", SWT.NONE);
 		fPartitionNameText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 		fPartitionNameText.addListener(SWT.KeyDown, new PartitionNameTextListener());
+		
 		Composite buttonComposite = getToolkit().createComposite(parent);
 		buttonComposite.setLayout(new GridLayout(1, false));
 		buttonComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true, 1, 2));
 		Button applyButton = getToolkit().createButton(buttonComposite, "Change", SWT.CENTER);
 		applyButton.addSelectionListener(new ApplyChangesSelectionAdapter());
+		
 		getToolkit().paintBordersFor(parent);
 
 	}
@@ -158,39 +192,13 @@ public class PartitionDetailsPage extends BasicDetailsPage {
 		valueComposite.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
 		fPartitionValueCombo = new Combo(valueComposite,SWT.DROP_DOWN);
 		fPartitionValueCombo.setLayoutData(new GridData(SWT.FILL,  SWT.CENTER, true, false));
-		fPartitionValueCombo.addListener(SWT.KeyDown, new Listener(){
-			@Override
-			public void handleEvent(Event event){
-				if(event.keyCode == SWT.CR || event.keyCode == SWT.KEYPAD_CR){					
-					if(PartitionNodeAbstractLayer.changePartitionValue(fSelectedPartition, fPartitionValueCombo.getText())){
-							modelUpdated(null);
-					}
-					fPartitionValueCombo.setText(fSelectedPartition.getValueString());
-				}
-			}
-		});
-		fPartitionValueCombo.addSelectionListener(new SelectionAdapter(){
-			@Override
-			public void widgetSelected(SelectionEvent e){
-				if(PartitionNodeAbstractLayer.changePartitionValue(fSelectedPartition, fPartitionValueCombo.getText())){
-					modelUpdated(null);
-				}
-				fPartitionValueCombo.setText(fSelectedPartition.getValueString());
-			}
-		});
+		fPartitionValueCombo.addListener(SWT.KeyDown, new valueTextListener());
+		fPartitionValueCombo.addSelectionListener(new valueComboSelectionAdapter());
 		// boolean value combo
 		fBooleanValueCombo = new Combo(valueComposite,SWT.READ_ONLY);
 		fBooleanValueCombo.setLayoutData(new GridData(SWT.FILL,  SWT.CENTER, true, false));
-		fBooleanValueCombo.addSelectionListener(new SelectionAdapter(){
-			@Override
-			public void widgetSelected(SelectionEvent e){
-				if(PartitionNodeAbstractLayer.changePartitionValue(fSelectedPartition,
-						fBooleanValueCombo.getText())){
-					modelUpdated(null);
-				}
-				fBooleanValueCombo.setText(fSelectedPartition.getValueString());
-			}
-		});	
+		fBooleanValueCombo.addSelectionListener(new booleanValueComboSelectionAdapter());	
+		
 		getToolkit().paintBordersFor(parent);	
 	}
 	
@@ -207,7 +215,6 @@ public class PartitionDetailsPage extends BasicDetailsPage {
 				return;
 			}
 		}
-
 		newItems.add(node.getValueString());
 		valueText.setItems(newItems.toArray(items));
 	}

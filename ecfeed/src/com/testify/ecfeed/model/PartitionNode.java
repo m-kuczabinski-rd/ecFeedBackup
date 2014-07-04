@@ -127,7 +127,7 @@ public class PartitionNode extends GenericNode implements IPartitionedNode{
 	
 	@Override
 	public PartitionNode getCopy(){
-		PartitionNode copy = getIndependentCopy();
+		PartitionNode copy = getLeaflessCopy();
 		for(PartitionNode partition : fPartitions){
 			copy.addPartition(partition.getCopy());
 		}
@@ -175,7 +175,7 @@ public class PartitionNode extends GenericNode implements IPartitionedNode{
 		return fValueString;
 	}
 
-	public String getSimpleValueString() {
+	public String getExactValueString() {
 		return fValueString;
 	}
 
@@ -273,7 +273,7 @@ public class PartitionNode extends GenericNode implements IPartitionedNode{
 		return fParentPartition.level() + 1;
 	}
 	
-	public PartitionNode getIndependentCopy() {
+	public PartitionNode getLeaflessCopy() {
 		PartitionNode copy = new PartitionNode(getName(), fValueString);
 		copy.setParent(fPartitionedParent);
 		return copy;

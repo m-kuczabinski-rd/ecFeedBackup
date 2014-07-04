@@ -97,7 +97,5 @@ public abstract class BasicStatement implements IStatement {
 	
 	public abstract BasicStatement getCopy();
 	
-	public boolean updateReferences(MethodNode method){
-		return true;
-	}
+	public abstract boolean updateReferences(MethodNode method);
 }

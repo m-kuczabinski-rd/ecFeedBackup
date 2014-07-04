@@ -70,7 +70,7 @@ public class MethodDetailsPage extends BasicDetailsPage {
 			if(isOriginalCategoryExpected == isNewCategoryExpected){
 				fSelectedMethod.getCategories().get(index).setName(newCategory.getName());
 			} else{
-				fSelectedMethod.replaceCategoryOfSameType(index, newCategory);
+				fSelectedMethod.replaceCategory(index, newCategory);
 			}
 		}
 	}
