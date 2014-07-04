@@ -236,4 +236,31 @@ public class CategoryNodeTest{
 		assertTrue(labels.contains("l221"));
 		
 	}
+	
+	@Test
+	public void compareTest(){
+		assertTrue(new CategoryNode("c", "int", true).compare(new CategoryNode("c", "int", true)));
+		assertTrue(new CategoryNode("c", "int", false).compare(new CategoryNode("c", "int", false)));
+
+		assertFalse(new CategoryNode("c1", "int", false).compare(new CategoryNode("c", "int", false)));
+		assertFalse(new CategoryNode("c", "boolean", false).compare(new CategoryNode("c", "int", false)));
+		assertFalse(new CategoryNode("c", "int", true).compare(new CategoryNode("c", "int", false)));
+
+		CategoryNode c1 = new CategoryNode("c", "int", false);
+		CategoryNode c2 = new CategoryNode("c", "int", false);
+		assertTrue(c1.compare(c2));
+
+		c1.setDefaultValueString("cc");
+		assertFalse(c1.compare(c2));
+		c2.setDefaultValueString("cc");
+		assertTrue(c1.compare(c2));
+
+		c1.addPartition(new PartitionNode("p", "x"));
+		c1.setDefaultValueString("cc");
+		assertFalse(c1.compare(c2));
+		c2.addPartition(new PartitionNode("p1", "x"));
+		assertFalse(c1.compare(c2));
+		c2.getPartition("p1").setName("p");
+		assertTrue(c1.compare(c2));
+	}
 }
