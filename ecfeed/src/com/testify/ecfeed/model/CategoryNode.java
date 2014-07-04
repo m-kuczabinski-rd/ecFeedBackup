@@ -225,21 +225,23 @@ public class CategoryNode extends GenericNode implements IPartitionedNode{
 			return false;
 		}
 		
-		if(getDefaultValuePartition().compare(comparedCategory.getDefaultValuePartition()) == false){
-			return false;
-		}
-		
-		int partitionsCount = getPartitions().size();
-		if(partitionsCount != comparedCategory.getPartitions().size()){
-			return false;
-		}
-		
-		for(int i = 0; i < partitionsCount; i++){
-			if(getPartitions().get(i).compare(comparedCategory.getPartitions().get(i)) == false){
+		if(isExpected()){
+			if(getDefaultValuePartition().compare(comparedCategory.getDefaultValuePartition()) == false){
 				return false;
 			}
 		}
-		
+		else{
+			int partitionsCount = getPartitions().size();
+			if(partitionsCount != comparedCategory.getPartitions().size()){
+				return false;
+			}
+
+			for(int i = 0; i < partitionsCount; i++){
+				if(getPartitions().get(i).compare(comparedCategory.getPartitions().get(i)) == false){
+					return false;
+				}
+			}
+		}
 		return super.compare(node);
 	}
 	
