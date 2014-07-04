@@ -29,7 +29,18 @@ public class Constants {
 	public static final String RELATION_EQUAL = "=";
 	public static final String RELATION_NOT = "\u2260";
 
-	public static final String ROOT_NODE_NAME_REGEX = "[A-Za-z][A-Za-z0-9 _]{1,64}";
-	public static final String CLASS_NODE_NAME_REGEX = "([A-Za-z]{1}[A-Za-z0-9]{1,16}){1}(\\.[A-Za-z_]{1}[A-Za-z0-9_]{1,16})*";
-	public static final String METHOD_NODE_NAME_REGEX = "[_A-Za-z][A-Za-z0-9_]{1,64}";
+	public static final String REGEX_JAVA_IDENTIFIER = "[A-Za-z][A-Za-z0-9_]{1,64}";
+	public static final String REGEX_ALPHANUMERIC_WITH_SPACES = "[A-Za-z][A-Za-z0-9_]{1,64}";
+	public static final String REGEX_ROOT_NODE_NAME = REGEX_ALPHANUMERIC_WITH_SPACES;
+	public static final String REGEX_CLASS_NODE_NAME = "([A-Za-z]{1}[A-Za-z0-9]{1,16}){1}(\\.[A-Za-z_]{1}[A-Za-z0-9_]{1,16})*";
+	public static final String REGEX_METHOD_NODE_NAME = REGEX_JAVA_IDENTIFIER;
+	public static final String REGEX_CATEGORY_NODE_NAME = REGEX_JAVA_IDENTIFIER;
+	public static final String REGEX_CATEGORY_TYPE_NAME = REGEX_CLASS_NODE_NAME;
+	public static final String REGEX_CONSTRAINT_NODE_NAME = REGEX_ALPHANUMERIC_WITH_SPACES;
+	public static final String REGEX_PARTITION_NODE_NAME = REGEX_ALPHANUMERIC_WITH_SPACES;
+	public static final String REGEX_PARTITION_LABEL = REGEX_ALPHANUMERIC_WITH_SPACES;
+	
+	public static final String REGEX_USER_TYPE_VALUE = REGEX_JAVA_IDENTIFIER;
+	public static final String REGEX_STRING_TYPE_VALUE = "*{0, 1024}";
+	
 }

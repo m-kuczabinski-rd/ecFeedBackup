@@ -493,4 +493,9 @@ public class MethodNodeTest {
 		
 	}
 	
+	@Test
+	public void compareTest(){
+		
+	}
+	
 }

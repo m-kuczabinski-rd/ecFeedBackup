@@ -63,7 +63,7 @@ public class RootNode extends GenericNode {
 	}
 
 	public static boolean validateModelName(String name){
-		return name.matches(ROOT_NODE_NAME_REGEX);
+		return name.matches(REGEX_ROOT_NODE_NAME);
 	}
 	
 	public boolean compare(IGenericNode node){
