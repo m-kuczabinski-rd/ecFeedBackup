@@ -27,11 +27,6 @@ public class ExpectedValueStatement extends BasicStatement implements IRelationa
 	
 	@Override
 	public boolean evaluate(List<PartitionNode> values) {
-//		if(fCategory.getMethod() != null){
-//			int index = fCategory.getMethod().getCategories().indexOf(fCategory);
-//			return values.get(index).getValue().equals(fCondition.getValue());
-//		}
-//		return false;
 		return true;
 	}
 
@@ -85,5 +80,23 @@ public class ExpectedValueStatement extends BasicStatement implements IRelationa
 			return true;
 		}
 		return false;
+	}
+	
+	@Override
+	public boolean compare(IStatement statement){
+		if(statement instanceof ExpectedValueStatement == false){
+			return false;
+		}
+		
+		ExpectedValueStatement compared = (ExpectedValueStatement)statement;
+		if(getCategory().getName().equals(compared.getCategory().getName()) == false){
+			return false;
+		}
+		
+		if(getCondition().getValueString().equals(compared.getCondition().getValueString()) == false){
+			return false;
+		}
+		
+		return true;
 	}
 }

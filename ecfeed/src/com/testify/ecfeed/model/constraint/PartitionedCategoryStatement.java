@@ -29,6 +29,7 @@ public class PartitionedCategoryStatement extends BasicStatement implements IRel
 		public boolean adapt(List<PartitionNode> values);
 		public ICondition getCopy();
 		public boolean updateReferences(CategoryNode category);
+		public boolean compare(ICondition condition);
 	}
 	
 	private class LabelCondition implements ICondition{
@@ -77,6 +78,15 @@ public class PartitionedCategoryStatement extends BasicStatement implements IRel
 			default:
 				return false;
 			}
+		}
+		
+		public boolean compare(ICondition condition){
+			if(condition instanceof LabelCondition == false){
+				return false;
+			}
+			LabelCondition compared = (LabelCondition)condition;
+			
+			return (getCondition().equals(compared.getCondition()));
 		}
 	}
 	
@@ -142,6 +152,15 @@ public class PartitionedCategoryStatement extends BasicStatement implements IRel
 			default:
 				return false;
 			}
+		}
+		
+		public boolean compare(ICondition condition){
+			if(condition instanceof PartitionCondition == false){
+				return false;
+			}
+			PartitionCondition compared = (PartitionCondition)condition;
+			
+			return (fPartition.compare((PartitionNode)compared.getCondition()));
 		}
 	}
 	
@@ -234,6 +253,10 @@ public class PartitionedCategoryStatement extends BasicStatement implements IRel
 		fCondition = new PartitionCondition(partition);
 	}
 	
+	protected ICondition getCondition(){
+		return fCondition;
+	}
+	
 	public Object getConditionValue(){
 		return fCondition.getCondition();
 	}
@@ -241,6 +264,25 @@ public class PartitionedCategoryStatement extends BasicStatement implements IRel
 	public String getConditionName(){
 		return fCondition.toString();
 	}
+	
+	
 
+	public boolean compare(IStatement statement){
+		if(statement instanceof PartitionedCategoryStatement == false){
+			return false;
+		}
+		
+		PartitionedCategoryStatement compared = (PartitionedCategoryStatement)statement;
+		
+		if(getCategory().getName().equals(compared.getCategory().getName()) == false){
+			return false;
+		}
+		
+		if(getRelation() != compared.getRelation()){
+			return false;
+		}
+		
+		return getCondition().compare(compared.getCondition());
+	}
 }
 

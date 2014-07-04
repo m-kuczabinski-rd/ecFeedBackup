@@ -128,4 +128,32 @@ public class StatementArray extends BasicStatement{
 		}
 		return true;
 	}
+	
+	List<BasicStatement> getStatements(){
+		return fStatements;
+	}
+	
+	@Override 
+	public boolean compare(IStatement statement){
+		if(statement instanceof StatementArray == false){
+			return false;
+		}
+		StatementArray compared = (StatementArray)statement;
+
+		if(getOperator() != compared.getOperator()){
+			return false;
+		}
+		
+		if(getStatements().size() != compared.getStatements().size()){
+			return false;
+		}
+		
+		for(int i = 0; i < getStatements().size(); i++){
+			if(getStatements().get(i).compare(compared.getStatements().get(i)) == false){
+				return false;
+			}
+		}
+		
+		return true;
+	}
 }

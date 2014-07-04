@@ -11,10 +11,10 @@
 
 package com.testify.ecfeed.model;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.ArrayList;
 
 public class ClassNode extends GenericNode {
 	private List<MethodNode> fMethods;
@@ -94,5 +94,29 @@ public class ClassNode extends GenericNode {
 	private String getLocalName(String qualifiedName){
 		int lastDotIndex = qualifiedName.lastIndexOf('.');
 		return (lastDotIndex == -1)?qualifiedName: qualifiedName.substring(lastDotIndex + 1);
+	}
+
+	public Object convert(IConverter converter) {
+		return converter.convert(this);
+	}
+	
+	public boolean compare(IGenericNode node){
+		if(node instanceof ClassNode == false){
+			return false;
+		}
+		ClassNode compared = (ClassNode) node;
+		List<MethodNode> comparedMethods = compared.getMethods();
+		
+		if(getMethods().size() != comparedMethods.size()){
+			return false;
+		}
+		
+		for(int i = 0; i < comparedMethods.size(); i++){
+			if(getMethods().get(i).compare(comparedMethods.get(i)) == false){
+				return false;
+			}
+		}
+		
+		return super.compare(node);
 	}
 }

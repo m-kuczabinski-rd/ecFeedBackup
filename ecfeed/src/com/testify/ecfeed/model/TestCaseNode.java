@@ -122,4 +122,25 @@ public class TestCaseNode extends GenericNode {
 		}
 		return true;
 	}
+	
+	public boolean compare(IGenericNode node){
+		if(node instanceof TestCaseNode == false){
+			return false;
+		}
+		
+		TestCaseNode compared = (TestCaseNode)node;
+		
+		if(getTestData().size() != compared.getTestData().size()){
+			return false;
+		}
+		
+		for(int i = 0; i < getTestData().size(); i++){
+			if(getTestData().get(i).compare(compared.getTestData().get(i)) == false){
+				return false;
+			}
+		}
+		
+		return super.compare(node);
+		
+	}
 }

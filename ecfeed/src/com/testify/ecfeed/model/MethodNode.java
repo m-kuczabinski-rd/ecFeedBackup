@@ -398,6 +398,36 @@ public class MethodNode extends GenericNode {
 			return false;
 		}
 		
+		MethodNode comparedMethod = (MethodNode)node;
+
+		int categoriesCount = getCategories().size();
+		int testCasesCount = getTestCases().size();
+		int constraintsCount = getConstraintNodes().size();
+		
+		if(categoriesCount != comparedMethod.getCategories().size() || 
+				testCasesCount != comparedMethod.getTestCases().size() ||
+				constraintsCount != comparedMethod.getConstraintNodes().size()){
+			return false;
+		}
+		
+		for(int i = 0; i < categoriesCount; i++){
+			if(getCategories().get(i).compare(comparedMethod.getCategories().get(i)) == false){
+				return true;
+			}
+		}
+		
+		for(int i = 0; i < testCasesCount; i++){
+			if(getTestCases().get(i).compare(comparedMethod.getTestCases().get(i)) == false){
+				return true;
+			}
+		}
+		
+		for(int i = 0; i < constraintsCount; i++){
+			if(getConstraintNodes().get(i).compare(comparedMethod.getConstraintNodes().get(i)) == false){
+				return true;
+			}
+		}
+		
 		return super.compare(node);
 	}
 }

@@ -83,4 +83,20 @@ public class ConstraintNode extends GenericNode{
 			return null;
 	}
 	
+	public boolean compare(IGenericNode node){
+		if(node instanceof ConstraintNode == false){
+			return false;
+		}
+		ConstraintNode compared = (ConstraintNode)node;
+		if(getConstraint().getPremise().compare(compared.getConstraint().getPremise()) == false){
+			return false;
+		}
+		
+		if(getConstraint().getConsequence().compare(compared.getConstraint().getConsequence()) == false){
+			return false;
+		}
+		
+		return super.compare(node);
+	}
+	
 }

@@ -58,4 +58,12 @@ public class StaticStatement extends BasicStatement {
 	public boolean updateReferences(MethodNode method){
 		return true;
 	}
+	
+	public boolean compare(IStatement statement){
+		if(statement instanceof StaticStatement == false){
+			return false;
+		}
+		StaticStatement compared = (StaticStatement)statement;
+		return getValue() == compared.getValue();
+	}
 }
