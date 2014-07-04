@@ -11,16 +11,17 @@
 
 package com.testify.ecfeed.ui.editor;
 
-import org.eclipse.jface.dialogs.MessageDialog;
+import java.util.ArrayList;
+
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Section;
 
-import com.testify.ecfeed.model.AbstractCategoryNode;
+import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.PartitionNode;
-import com.testify.ecfeed.ui.common.Messages;
+import com.testify.ecfeed.ui.common.PartitionNodeAbstractLayer;
 import com.testify.ecfeed.utils.Constants;
 import com.testify.ecfeed.utils.ModelUtils;
 
@@ -28,22 +29,18 @@ public class CategoryChildrenViewer extends CheckboxTableViewerSection {
 
 	private final static int STYLE = Section.EXPANDED | Section.TITLE_BAR;
 	
-	private AbstractCategoryNode fSelectedCategory;
+	private CategoryNode fSelectedCategory;
 
 	private class AddPartitionAdapter extends SelectionAdapter{
 		
 		@Override
 		public void widgetSelected(SelectionEvent e){
 			String newPartitionName = Constants.DEFAULT_NEW_PARTITION_NAME;
-			int i = 1;
-			while(fSelectedCategory.getPartition(newPartitionName) != null){
-				newPartitionName = Constants.DEFAULT_NEW_PARTITION_NAME + "_" + i;
-				i++;
-			}
-			Object value = ModelUtils.getDefaultExpectedValue(fSelectedCategory.getType());
+			String value = ModelUtils.getDefaultExpectedValueString(fSelectedCategory.getType());
 			PartitionNode newPartition = new PartitionNode(newPartitionName, value);
+			ModelUtils.setUniqueNodeName(newPartition, fSelectedCategory);
 			fSelectedCategory.addPartition(newPartition);
-			getTable().setSelection(fSelectedCategory.getPartitions().size() - 1);
+			getTable().setSelection(fSelectedCategory.getOrdinaryPartitions().size() - 1);
 			modelUpdated();
 		}
 	}
@@ -51,33 +48,30 @@ public class CategoryChildrenViewer extends CheckboxTableViewerSection {
 	private class RemovePartitionsAdapter extends SelectionAdapter{
 		@Override
 		public void widgetSelected(SelectionEvent e){
-			if (MessageDialog.openConfirm(getActiveShell(), 
-					Messages.DIALOG_REMOVE_PARTITIONS_TITLE, 
-					Messages.DIALOG_REMOVE_PARTITIONS_MESSAGE)) {
-				for(Object partition : getCheckedElements()){
-					if(fSelectedCategory.getPartitions().size() > 1){
-						fSelectedCategory.removePartition((PartitionNode)partition);
-					}
-					else{
-						MessageDialog.openInformation(getActiveShell(), 
-								Messages.DIALOG_REMOVE_LAST_PARTITION_TITLE, 
-								Messages.DIALOG_REMOVE_LAST_PARTITION_MESSAGE);
-					}
-				}
+			ArrayList<PartitionNode> nodes = new ArrayList<>();
+			for(Object partition : getCheckedElements()){
+				nodes.add((PartitionNode)partition);
+			}			
+			if(PartitionNodeAbstractLayer.removePartitions(nodes, fSelectedCategory)){
 				modelUpdated();
 			}
 		}
 	}
-	public CategoryChildrenViewer(BasicDetailsPage parent, FormToolkit toolkit) {
-		super(parent.getMainComposite(), toolkit, STYLE, parent);
-		
-		getSection().setText("Partitions");
-		addButton("Add partition", new AddPartitionAdapter());
-		addButton("Remove selected", new RemovePartitionsAdapter());
-		
-		addDoubleClickListener(new SelectNodeDoubleClickListener(parent.getMasterSection()));
+	
+	private class MoveUpAdapter extends SelectionAdapter{
+		@Override
+		public void widgetSelected(SelectionEvent e){
+			moveSelectedItem(true);
+		}
 	}
 
+	private class MoveDownAdapter extends SelectionAdapter{
+		@Override
+		public void widgetSelected(SelectionEvent e){
+			moveSelectedItem(false);
+		}
+	}
+	
 	@Override
 	protected void createTableColumns() {
 		TableViewerColumn nameColumn = addColumn("Name", 150, new PartitionNameLabelProvider());
@@ -87,13 +81,49 @@ public class CategoryChildrenViewer extends CheckboxTableViewerSection {
 		valueColumn.setEditingSupport(new PartitionValueEditingSupport(this));
 
 	}
+	
+	public CategoryChildrenViewer(BasicDetailsPage parent, FormToolkit toolkit) {
+		super(parent.getMainComposite(), toolkit, STYLE, parent);
+		
+		getSection().setText("Partitions");
+		addButton("Add partition", new AddPartitionAdapter());
+		addButton("Remove selected", new RemovePartitionsAdapter());
+		addButton("Move Up", new MoveUpAdapter());
+		addButton("Move Down", new MoveDownAdapter());
+		
+		addDoubleClickListener(new SelectNodeDoubleClickListener(parent.getMasterSection()));
+	}
 
-	public AbstractCategoryNode getSelectedCategory(){
+	public CategoryNode getSelectedCategory(){
 		return fSelectedCategory;
 	}
 
-	public void setInput(AbstractCategoryNode category){
+	public void setInput(CategoryNode category){
 		fSelectedCategory = category;
-		super.setInput(category.getPartitions());
+		super.setInput(category.getOrdinaryPartitions());
+	}
+	
+	public void setVisible(boolean visible){
+		this.getSection().setVisible(visible);
+	}
+	
+	private void moveSelectedItem(boolean moveUp) {
+		if (getSelectedElement() != null) {
+			PartitionNode partitionNode = (PartitionNode)getSelectedElement();
+			int index = fSelectedCategory.getPartitions().indexOf(partitionNode);			
+			if(index > -1){
+				if(moveUp && index > 0){
+					PartitionNode swap = fSelectedCategory.getPartitions().get(index-1);
+					fSelectedCategory.getPartitions().set(index-1, fSelectedCategory.getPartitions().get(index));
+					fSelectedCategory.getPartitions().set(index, swap);
+					modelUpdated();
+				} else if(!moveUp && index < fSelectedCategory.getPartitions().size() -1){
+					PartitionNode swap = fSelectedCategory.getPartitions().get(index+1);
+					fSelectedCategory.getPartitions().set(index+1, fSelectedCategory.getPartitions().get(index));
+					fSelectedCategory.getPartitions().set(index, swap);
+					modelUpdated();
+				}	
+			}		
+		}
 	}
 }

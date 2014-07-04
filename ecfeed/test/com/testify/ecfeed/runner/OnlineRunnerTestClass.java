@@ -46,7 +46,7 @@ public class OnlineRunnerTestClass {
 
 	@Test
 	@Generator(RandomGenerator.class)
-	@GeneratorParameterNames({"Test suite size", "Duplicates"})
+	@GeneratorParameterNames({"length", "duplicates"})
 	@GeneratorParameterValues({"100", "false"})
 	public void randomTest(int a, int b, int c, int d) {
 //		System.out.println("test(" + a + ", " + b + ", " + c + ", " + d + ")");

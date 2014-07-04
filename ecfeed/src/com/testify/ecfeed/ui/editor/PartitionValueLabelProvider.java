@@ -17,6 +17,7 @@ import org.eclipse.swt.graphics.Color;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.ui.common.ColorConstants;
 import com.testify.ecfeed.ui.common.ColorManager;
+import com.testify.ecfeed.utils.ModelUtils;
 
 public class PartitionValueLabelProvider extends ColumnLabelProvider {
 
@@ -42,6 +43,8 @@ public class PartitionValueLabelProvider extends ColumnLabelProvider {
 			PartitionNode partition = (PartitionNode)element;
 			if(partition.isAbstract()){
 				return fColorManager.getColor(ColorConstants.ABSTRACT_PARTITION);
+			} else if (ModelUtils.isPartitionImplemented(partition)) {
+				return fColorManager.getColor(ColorConstants.ITEM_IMPLEMENTED);
 			}
 		}
 		return null;

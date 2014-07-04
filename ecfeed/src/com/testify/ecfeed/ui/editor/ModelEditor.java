@@ -17,6 +17,10 @@ import java.io.InputStream;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IResourceChangeEvent;
+import org.eclipse.core.resources.IResourceChangeListener;
+import org.eclipse.core.resources.IResourceDelta;
+import org.eclipse.core.resources.IResourceDeltaVisitor;
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
@@ -45,6 +49,40 @@ public class ModelEditor extends FormEditor implements IModelWrapper{
 
 	private RootNode fModel;
 	private ModelPage fModelPage;
+	private boolean fResourceChange = false;
+
+	private class ResourceChangeReporter implements IResourceChangeListener {
+		@Override
+		public void resourceChanged(IResourceChangeEvent event) {
+			switch (event.getType()) {
+				case IResourceChangeEvent.POST_CHANGE:
+					try {
+						event.getDelta().accept(new ResourceDeltaVisitor());
+					} catch (CoreException e) {
+						e.printStackTrace();
+					}
+					break;
+				default:
+					break;
+			}
+		}
+	}
+
+	private class ResourceDeltaVisitor implements IResourceDeltaVisitor {
+		@Override
+		public boolean visit(IResourceDelta delta) throws CoreException {
+			switch (delta.getKind()) {
+				case IResourceDelta.ADDED:
+				case IResourceDelta.REMOVED:
+				case IResourceDelta.CHANGED:
+					fResourceChange = true;
+					break;
+				default:
+					break;
+			}
+			return false;
+		}
+	}
 
 	public RootNode getModel(){
 		if (fModel == null){
@@ -73,6 +111,8 @@ public class ModelEditor extends FormEditor implements IModelWrapper{
 
 	public ModelEditor() {
 		super();
+		ResourceChangeReporter listener = new ResourceChangeReporter();
+		ResourcesPlugin.getWorkspace().addResourceChangeListener(listener, IResourceChangeEvent.POST_CHANGE);
 	}
 	
 	@Override
@@ -147,5 +187,15 @@ public class ModelEditor extends FormEditor implements IModelWrapper{
 	public void commitPages(boolean onSave){
 		super.commitPages(onSave);
 		fModelPage.commitMasterPart(onSave);
+	}
+
+	@Override
+	public void setFocus() {
+		if (fResourceChange) {
+			fModelPage.getMasterBlock().getMasterSection().refresh();
+			fModelPage.getMasterBlock().getCurrentPage().refresh();
+			fResourceChange = false;
+		}
+		super.setFocus();
 	}
 }

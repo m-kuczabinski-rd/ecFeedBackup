@@ -22,26 +22,29 @@ public class PartitionNode extends GenericNode implements IPartitionedNode{
 	private IPartitionedNode fPartitionedParent;
 	private PartitionNode fParentPartition;
 	
-	private Object fValue;
+	private String fValueString;
 	private List<PartitionNode> fPartitions;
 	private Set<String> fLabels;
 	
-	public PartitionNode(String name, Object value) {
+	public PartitionNode(String name, String value) {
 		super(name);
-		fValue = value;
+		fValueString = value;
 		fPartitions = new ArrayList<PartitionNode>();
 		fLabels = new LinkedHashSet<String>();
 	}
 
+	@Override
 	public void addPartition(PartitionNode partition){
 		fPartitions.add(partition);
 		partition.setParent(this);
 	}
 
-	public AbstractCategoryNode getCategory() {
+	@Override
+	public CategoryNode getCategory() {
 		return fPartitionedParent.getCategory();
 	}
 
+	@Override
 	public PartitionNode getPartition(String name){
 		for(PartitionNode partition : fPartitions){
 			if(partition.getName().equals(name)){
@@ -51,6 +54,7 @@ public class PartitionNode extends GenericNode implements IPartitionedNode{
 		return null;
 	}
 
+	@Override
 	public List<PartitionNode> getPartitions(){
 		return fPartitions;
 	}
@@ -65,6 +69,7 @@ public class PartitionNode extends GenericNode implements IPartitionedNode{
 		return names;
 	}
 
+	@Override
 	public List<PartitionNode> getLeafPartitions() {
 		List<PartitionNode> leafs = new ArrayList<PartitionNode>();
 		if(fPartitions.size() == 0){
@@ -83,6 +88,7 @@ public class PartitionNode extends GenericNode implements IPartitionedNode{
 		getParent().partitionRemoved(partition);
 	}
 
+	@Override
 	public boolean removePartition(PartitionNode partition){
 		boolean result = fPartitions.remove(partition); 
 		if(result && getCategory() != null){
@@ -91,6 +97,7 @@ public class PartitionNode extends GenericNode implements IPartitionedNode{
 		return result;
 	}
 
+	@Override
 	public boolean removePartition(String name){
 		for(PartitionNode partition : fPartitions){
 			if(partition.getName().equals(name)){
@@ -110,11 +117,24 @@ public class PartitionNode extends GenericNode implements IPartitionedNode{
 		return getPartitions();
 	}
 
+	@Override
 	public String toString(){
 		if(isAbstract()){
 			return getQualifiedName() + "[ABSTRACT]";
 		}
 		return getQualifiedName() + " [" + getValueString() + "]";
+	}
+	
+	@Override
+	public PartitionNode getCopy(){
+		PartitionNode copy = getLeaflessCopy();
+		for(PartitionNode partition : fPartitions){
+			copy.addPartition(partition.getCopy());
+		}
+		for(String label : fLabels){
+			copy.addLabel(label);
+		}
+		return copy;
 	}
 
 	public String getQualifiedName(){
@@ -124,14 +144,6 @@ public class PartitionNode extends GenericNode implements IPartitionedNode{
 		return getName();
 	}
 
-	public Object getValue() {
-		return fValue;
-	}
-
-	public void setValue(Object value) {
-		this.fValue = value;
-	}
-	
 	public void setParent(IPartitionedNode parent){
 		fPartitionedParent = parent;
 	}
@@ -139,20 +151,36 @@ public class PartitionNode extends GenericNode implements IPartitionedNode{
 	public void setParent(PartitionNode parentPartition){
 		fPartitionedParent = fParentPartition = parentPartition;
 	}
-	
-	public String getValueString(){
-		if(fValue == null) return Constants.NULL_VALUE_STRING_REPRESENTATION;
-		if(fValue instanceof Character){
-			if((Character)fValue != 0) return " \\" + (int)((char)fValue ) + " ['" + fValue + "']";
-			return "\\0";
+
+	public String getValueString() {
+		// FIXME remove category dependency
+		try {
+			String type = getCategory().getType();
+			if ((fValueString.length()) > 1) {
+				if (type.equals("char") && (fValueString.charAt(0) == '\\')) {
+					String value = fValueString.substring(1);
+					return "\\" + Integer.parseInt(value) + " ['" + Character.valueOf((char)Integer.parseInt(value)) + "']";
+				} else if (type.equals("byte")) {
+					return Byte.decode(fValueString).toString();
+				} else if (type.equals("int")) {
+					return Integer.decode(fValueString).toString();
+				} else if (type.equals("long")) {
+					return Long.decode(fValueString).toString();
+				} else if (type.equals("short")) {
+					return Short.decode(fValueString).toString();
+				}
+			}
+		} catch (Throwable e) {
 		}
-		return String.valueOf(fValue);
+		return fValueString;
 	}
-	
-	public PartitionNode getCopy() {
-		PartitionNode copy = new PartitionNode(getName(), fValue);
-		copy.setParent(fPartitionedParent);
-		return copy;
+
+	public String getExactValueString() {
+		return fValueString;
+	}
+
+	public void setValueString(String value) {
+		fValueString = value;
 	}
 	
 	/*
@@ -207,7 +235,7 @@ public class PartitionNode extends GenericNode implements IPartitionedNode{
 	}
 	
 	public Set<String> getAllDescendingLabels() {
-		Set<String> labels = getLabels();
+		Set<String> labels = new LinkedHashSet<>(getLabels());
 		for(PartitionNode p : fPartitions){
 			labels.addAll(p.getAllDescendingLabels());
 		}
@@ -244,4 +272,11 @@ public class PartitionNode extends GenericNode implements IPartitionedNode{
 		}
 		return fParentPartition.level() + 1;
 	}
+	
+	public PartitionNode getLeaflessCopy() {
+		PartitionNode copy = new PartitionNode(getName(), fValueString);
+		copy.setParent(fPartitionedParent);
+		return copy;
+	}
+
 }

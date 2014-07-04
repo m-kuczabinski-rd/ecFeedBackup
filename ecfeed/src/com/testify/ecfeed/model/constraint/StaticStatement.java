@@ -13,6 +13,7 @@ package com.testify.ecfeed.model.constraint;
 
 import java.util.List;
 
+import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
 
 public class StaticStatement extends BasicStatement {
@@ -46,5 +47,15 @@ public class StaticStatement extends BasicStatement {
 	@Override
 	public String toString(){
 		return fValue?STATIC_STATEMENT_TRUE_VALUE:STATIC_STATEMENT_FALSE_VALUE;
+	}
+	
+	@Override
+	public StaticStatement getCopy(){
+		return new StaticStatement(fValue);
+	}
+	
+	@Override
+	public boolean updateReferences(MethodNode method){
+		return true;
 	}
 }

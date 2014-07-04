@@ -26,7 +26,11 @@ import org.junit.Test;
 import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.InitializationError;
 
-import com.testify.ecfeed.model.AbstractCategoryNode;
+import com.testify.ecfeed.generators.api.GeneratorException;
+import com.testify.ecfeed.generators.api.IConstraint;
+import com.testify.ecfeed.generators.api.IGenerator;
+import com.testify.ecfeed.generators.api.IGeneratorParameter;
+import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.runner.annotations.Constraints;
@@ -34,10 +38,6 @@ import com.testify.ecfeed.runner.annotations.Generator;
 import com.testify.ecfeed.runner.annotations.GeneratorParameter;
 import com.testify.ecfeed.runner.annotations.GeneratorParameterNames;
 import com.testify.ecfeed.runner.annotations.GeneratorParameterValues;
-import com.testify.ecfeed.generators.api.GeneratorException;
-import com.testify.ecfeed.generators.api.IConstraint;
-import com.testify.ecfeed.generators.api.IGenerator;
-import com.testify.ecfeed.generators.api.IGeneratorParameter;
 
 public class OnlineRunner extends StaticRunner {
 
@@ -75,26 +75,27 @@ public class OnlineRunner extends StaticRunner {
 	protected Collection<IConstraint<PartitionNode>> getConstraints(
 			FrameworkMethod method, MethodNode methodModel) {
 		Collection<String> constraintsNames = constraintsNames(method);
-		if(constraintsNames == null){
-			return methodModel.getAllConstraints();
-		}
-		if(constraintsNames.contains(Constraints.ALL)){
-			constraintsNames = methodModel.getConstraintsNames();
-		}
-		else if(constraintsNames.contains(Constraints.NONE)){
-			constraintsNames.clear();
+		Collection<IConstraint<PartitionNode>> constraints = new HashSet<IConstraint<PartitionNode>>();
+
+		if(constraintsNames != null){
+			if(constraintsNames.contains(Constraints.ALL)){
+				constraintsNames = methodModel.getConstraintsNames();
+			}
+			else if(constraintsNames.contains(Constraints.NONE)){
+				constraintsNames.clear();
+			}
+
+			for(String name : constraintsNames){
+				constraints.addAll(methodModel.getConstraints(name));
+			}
 		}
 		
-		Collection<IConstraint<PartitionNode>> constraints = new HashSet<IConstraint<PartitionNode>>();
-		for(String name : constraintsNames){
-			constraints.addAll(methodModel.getConstraints(name));
-		}
 		return constraints;
 	}
 
 	protected List<List<PartitionNode>> getInput(MethodNode methodModel) {
 		List<List<PartitionNode>> result = new ArrayList<List<PartitionNode>>();
-		for(AbstractCategoryNode category : methodModel.getCategories()){
+		for(CategoryNode category : methodModel.getCategories()){
 			result.add(category.getPartitions());
 		}
 		return result;
@@ -124,7 +125,7 @@ public class OnlineRunner extends StaticRunner {
 		List<IGeneratorParameter> parameters = generator.parameters();
 		Map<String, Object> result = new HashMap<String, Object>();
 		Map<String, String>	parsedParameters = parseParameters(method.getAnnotations());{
-			if(parsedParameters == null){
+			if(parsedParameters.size() == 0){
 				parsedParameters = parseParameters(getTestClass().getAnnotations());
 			}
 		}
@@ -182,12 +183,12 @@ public class OnlineRunner extends StaticRunner {
 	}
 
 	private Map<String, String> parseParameters(Annotation[] annotations) throws RunnerException {
-		Map<String, String> result = null;
+		Map<String, String> result = new HashMap<String, String>();
+
 		String[] parameterNames = null;
 		String[] parameterValues = null;
 		for(Annotation annotation : annotations){
 			if(annotation instanceof GeneratorParameter){
-				result = new HashMap<String, String>();
 				GeneratorParameter parameter = (GeneratorParameter)annotation;
 				result.put(parameter.name(), parameter.value());
 			}
@@ -201,9 +202,6 @@ public class OnlineRunner extends StaticRunner {
 		if(parameterNames != null && parameterValues != null){
 			if(parameterNames.length != parameterValues.length){
 				throw new RunnerException(Messages.PARAMETERS_ANNOTATION_LENGTH_ERROR);
-			}
-			if(result == null){
-				result = new HashMap<String, String>();
 			}
 			for(int i = 0; i < parameterNames.length; i++){
 				result.put(parameterNames[i], parameterValues[i]);

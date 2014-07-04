@@ -32,19 +32,21 @@ public class Messages {
 	public static final String DIALOG_REMOVE_TEST_SUITES_TITLE = "Remove test suites";
 	public static final String DIALOG_REMOVE_TEST_SUITES_MESSAGE = "Select test suites to remove.";
 	public static final String DIALOG_TEST_SUITE_NAME_ERROR_MESSAGE = "Name of a test suite must be between 1 and 64 characters long.";
+	public static final String DIALOG_TEST_SUITE_NAME_ERROR_MESSAGE_NO_WHITESPACE = "Name of a test suite cannot consist of whitespace characters only.";
 	public static final String DIALOG_PARTITION_NAME_PROBLEM_TITLE = "Wrong partition name";
 	public static final String DIALOG_PARTITION_NAME_PROBLEM_MESSAGE = "Partition name must have between 1 and 64 characters, " +
 			"must not contain only white characters and must be unique within category.";
 	public static final String DIALOG_PARTITION_VALUE_PROBLEM_TITLE = "Wrong partition value";
 	public static final String DIALOG_PARTITION_VALUE_PROBLEM_MESSAGE = "Partition value must fit to type and range of the variable " +
-			"represented by the partition.";
+			"represented by the partition, contain between 1 and 64 characters.\n" +
+			"Partitions of user defined type must follow Java enum defining rules.";
 	public static final String DIALOG_REMOVE_PARTITIONS_TITLE = "Remove partitions";
 	public static final String DIALOG_REMOVE_PARTITIONS_MESSAGE = "Removing partitions will remove also all test cases " +
 			"referencing those partitions. Are you sure that you want to proceed?";
 	public static final String DIALOG_PARTITION_SETTINGS_DIALOG_TITLE = "Partition settings";
 	public static final String DIALOG_PARTITION_SETTINGS_DIALOG_MESSAGE = "Enter partition name and value.";
 	public static final String DIALOG_TEST_SUITE_NAME_PROBLEM_TITLE = "Wrong test suite name";
-	public static final String DIALOG_TEST_SUITE_NAME_PROBLEM_MESSAGE = "Test suite name mus contain between 1 and 64 characters " +
+	public static final String DIALOG_TEST_SUITE_NAME_PROBLEM_MESSAGE = "Test suite name must contain between 1 and 64 characters " +
 			"and may not contain only white characters.";
 	public static final String DIALOG_CLASS_EXISTS_TITLE = "Class exists";
 	public static final String DIALOG_CLASS_EXISTS_MESSAGE = "Selected class is already contained in the model.";
@@ -54,7 +56,7 @@ public class Messages {
 			+ "\nTo have some minimal tidiness however, keep the name between 1 and 64 characters long and let it not "
 			+ "contain white characters only.";
 	public static final String DIALOG_TEST_CLASS_SELECTION_TITLE = "Test class selection";
-	public static final String DIALOG_TEST_CLASS_SELECTION_MESSAGE = "Select a class with at lease one method annotated with @Test.";
+	public static final String DIALOG_TEST_CLASS_SELECTION_MESSAGE = "Select class to import";
 	public static final String DIALOG_TEST_METHOD_SELECTION_TITLE = "Test method selection";
 	public static final String DIALOG_TEST_METHOD_SELECTION_MESSAGE = "Select a method annotated with @Test with the same arguments set" +
 			"as the original method.";
@@ -117,4 +119,32 @@ public class Messages {
 	}
 	public static final String DIALOG_EXECUTE_ONLINE_TITLE = "Execute online test";
 	public static final String DIALOG_EXECUTE_ONLINE_MESSAGE = "Setup the test data generator and select which constraints and partitions shall be considered for generating test cases";
+	public static final String DIALOG_TEST_CLASS_NAME_ERROR_MESSAGE = "Name of a test class must be between 1 and 64 characters long.";
+	public static final String DIALOG_RENAME_IMPLEMENTED_CLASS_MESSAGE = "You are about to rename implemented class. Continue?";
+	public static final String DIALOG_METHOD_INVALID_NAME_TITLE = "Invalid method name";
+	public static final String DIALOG_METHOD_INVALID_NAME_MESSAGE = "Entered method name is not valid.";
+	public static final String DIALOG_REMOVE_PARAMETERS_TITLE = "Remove parameters";
+	public static final String DIALOG_REMOVE_PARAMETERS_MESSAGE = "This operation will remove selected parameters and all correlated data from the method.";
+	public static final String DIALOG_DATA_MIGHT_BE_LOST_TITLE = "Correlated data might be lost.";
+	public static final String DIALOG_DATA_MIGHT_BE_LOST_MESSAGE = "This operation might cause loss of data, i.e. generated test cases.\nProceed?";
+	public static final String DIALOG_CATEGORY_EXISTS_TITLE = "Category exists";
+	public static final String DIALOG_CATEGORY_EXISTS_MESSAGE = "Entered category is already contained in the method.";
+	public static final String DIALOG_CLASS_NAME_PROBLEM_TITLE = "Wrong class name";
+	public static final String DIALOG_CLASS_NAME_PROBLEM_MESSAGE = "Class name must contain between 1 and 64 characters " +
+			"and fulfill java class naming rules.";
+	public static final String DIALOG_PACKAGE_NAME_PROBLEM_TITLE = "Wrong package";
+	public static final String DIALOG_PACKAGE_NAME_PROBLEM_MESSAGE = "Package must fulfill java package naming rules.";
+	public static final String DIALOG_METHOD_NAME_PROBLEM_TITLE = "Wrong method name";
+	public static final String DIALOG_METHOD_NAME_PROBLEM_MESSAGE = "Method name must contain between 1 and 64 characters " +
+			"and may not contain only white characters.";
+	public static final String DIALOG_PARAMETER_NAME_PROBLEM_TITLE = "Wrong parameter name";
+	public static final String DIALOG_PARAMETER_NAME_PROBLEM_MESSAGE = "Parameter name must contain between 1 and 64 characters " +
+			"and may not contain only white characters.";
+	public static final String DIALOG_PARAMETER_TYPE_PROBLEM_TITLE = "Wrong parameter type name";
+	public static final String DIALOG_PARAMETER_TYPE_PROBLEM_MESSAGE = "Parameter type name must contain between 1 and 64 characters " +
+			"and must not contain white characters.";
+	public static final String DIALOG_METHOD_EXISTS_TITLE = "Method exists";
+	public static final String DIALOG_METHOD_WITH_PARAMETERS_EXISTS_MESSAGE = "Method with the same name and parameter types already exists in the class.";
+	public static final String DIALOG_PASTE_OPERATION_FAILED_TITLE = "Paste failed";
+	public static final String DIALOG_PASTE_OPERATION_FAILED_MESSAGE = "Clipboard content doesn't match here.";
 }

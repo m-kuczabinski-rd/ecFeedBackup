@@ -9,7 +9,7 @@
       </category>
       <wizard
             name="New Equivalence Class Tree file"
-            icon="icons/root_node.gif"
+            icon="icons/root_node.png"
             category="com.testify.ecfeed"
             class="com.testify.ecfeed.ui.wizards.NewEcFileWizard"
             id="com.testify.ecfeed.ui.wizards.NewEcFileWizard">
@@ -21,7 +21,7 @@
       <editor
             class="com.testify.ecfeed.ui.editor.ModelEditor"
             extensions="ect"
-            icon="icons/root_node.gif"
+            icon="icons/root_node.png"
             id="com.testify.ecfeed.ui.editors.EcMultiPageEditor"
             name="ecmodel">
       </editor>

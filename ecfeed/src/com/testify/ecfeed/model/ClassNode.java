@@ -18,6 +18,31 @@ import java.util.ArrayList;
 
 public class ClassNode extends GenericNode {
 	private List<MethodNode> fMethods;
+	
+	@Override
+	public List<? extends IGenericNode> getChildren(){
+		return fMethods;
+	}
+
+	@Override
+	public String toString(){
+		return getLocalName();
+	}
+	
+	@Override
+	public ClassNode getCopy(){
+		ClassNode copy = new ClassNode(getQualifiedName());
+		for(MethodNode method : fMethods){
+			copy.addMethod(method.getCopy());
+		}
+		copy.setParent(getParent());
+		return copy;
+	}
+	
+	@Override
+	public RootNode getRoot(){
+		return (RootNode) getParent();
+	}
 
 	public ClassNode(String qualifiedName) {
 		super(qualifiedName);
@@ -40,7 +65,7 @@ public class ClassNode extends GenericNode {
 	public MethodNode getMethod(String name, List<String> argTypes) {
 		for(MethodNode methodNode : getMethods()){
 			List<String> args = new ArrayList<String>();
-			for(AbstractCategoryNode arg : methodNode.getCategories()){
+			for(CategoryNode arg : methodNode.getCategories()){
 				args.add(arg.getType());
 			}
 			if(methodNode.getName().equals(name) && args.equals(argTypes)){
@@ -52,10 +77,6 @@ public class ClassNode extends GenericNode {
 
 	public List<MethodNode> getMethods() {
 		return fMethods;
-	}
-	
-	public RootNode getRoot(){
-		return (RootNode) getParent();
 	}
 	
 	public boolean removeMethod(MethodNode method) {
@@ -70,39 +91,8 @@ public class ClassNode extends GenericNode {
 		return suites;
 	}
 
-	@Override
-	public List<? extends IGenericNode> getChildren(){
-		return fMethods;
-	}
-
-	@Override
-	public String toString(){
-		return getLocalName();
-	}
-	
-	public Object convert(IConverter converter){
-		return converter.convert(this);
-	}
-
 	private String getLocalName(String qualifiedName){
 		int lastDotIndex = qualifiedName.lastIndexOf('.');
 		return (lastDotIndex == -1)?qualifiedName: qualifiedName.substring(lastDotIndex + 1);
-	}
-	
-	public boolean compare(IGenericNode node){
-		if(node instanceof ClassNode == false){
-			return false;
-		}
-		ClassNode _class = (ClassNode)node;
-		if(getMethods().size() != _class.getMethods().size()){
-			return false;
-		}
-		
-		for(int i = 0; i < getMethods().size(); i++){
-			if(getMethods().get(i).compare(_class.getMethods().get(i)) == false){
-				return false;
-			}
-		}
-		return super.compare(node);
 	}
 }

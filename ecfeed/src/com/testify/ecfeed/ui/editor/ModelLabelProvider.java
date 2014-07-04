@@ -21,10 +21,9 @@ import org.eclipse.swt.graphics.Image;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.FrameworkUtil;
 
-import com.testify.ecfeed.model.AbstractCategoryNode;
+import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.ConstraintNode;
-import com.testify.ecfeed.model.ExpectedCategoryNode;
 import com.testify.ecfeed.model.GenericNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
@@ -32,43 +31,38 @@ import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.TestCaseNode;
 
 public class ModelLabelProvider extends LabelProvider {
-
+	
 	public String getText(Object element){
 		if(element instanceof GenericNode){
+			if(element instanceof CategoryNode){
+				return ((CategoryNode)element).toShortString();
+			}
 			return element.toString();
 		}
 		return null;
 	}
 	
 	public Image getImage(Object element){
-		if(element instanceof RootNode){
-			return getImage("root_node.gif");
-		}
-		if(element instanceof ClassNode){
-			return getImage("class_node.gif");
-		}
-		if(element instanceof MethodNode){
-			return getImage("method_node.gif");
-		}
-		if(element instanceof TestCaseNode){
-			return getImage("test_case_node.gif");
-		}
-		if(element instanceof ExpectedCategoryNode){
-			return getImage("expected_value_category_node.gif");
-		}
-		if(element instanceof AbstractCategoryNode){
-			return getImage("category_node.gif");
-		}
-		if(element instanceof ConstraintNode){
-			return getImage("constraint_node.gif");
-		}
-		if(element instanceof PartitionNode){
-			if(((PartitionNode)element).isAbstract()){
-				return getImage("abstract_partition_node.gif");
+		if (element instanceof RootNode){
+			return getImage("root_node.png");
+		} else if (element instanceof ClassNode){
+			return getImage("class_node.png");
+		} else if (element instanceof MethodNode){
+			return getImage("method_node.png");
+		} else if(element instanceof TestCaseNode){
+			return getImage("test_case_node.png");
+		} else if (element instanceof CategoryNode){
+			if (((CategoryNode)element).isExpected()) {
+				return getImage("expected_value_category_node.png");
+			} else {
+				return getImage("category_node.png");
 			}
-			return getImage("partition_node.gif");
+		} else if (element instanceof ConstraintNode){
+			return getImage("constraint_node.png");
+		} else if (element instanceof PartitionNode){
+			return getImage("partition_node.png");
 		}
-		return getImage("sample.gif");
+		return getImage("sample.png");
 	}
 	
 	private static Image getImage(String file) {
@@ -78,5 +72,4 @@ public class ModelLabelProvider extends LabelProvider {
 	    return image.createImage();
 
 	  }
-
 }

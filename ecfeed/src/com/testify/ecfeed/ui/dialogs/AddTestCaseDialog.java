@@ -16,37 +16,36 @@ import java.util.List;
 
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.TitleAreaDialog;
+import org.eclipse.jface.viewers.ArrayContentProvider;
+import org.eclipse.jface.viewers.ColumnLabelProvider;
+import org.eclipse.jface.viewers.ComboViewer;
+import org.eclipse.jface.viewers.TableViewer;
+import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Shell;
-import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Combo;
-import org.eclipse.jface.viewers.ArrayContentProvider;
-import org.eclipse.jface.viewers.ColumnLabelProvider;
-import org.eclipse.jface.viewers.ComboViewer;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
-import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.widgets.TableColumn;
-import org.eclipse.jface.viewers.TableViewerColumn;
 
-import com.testify.ecfeed.utils.Constants;
-import com.testify.ecfeed.ui.common.Messages;
-import com.testify.ecfeed.ui.common.ColorConstants;
-import com.testify.ecfeed.ui.common.ColorManager;
-import com.testify.ecfeed.ui.common.TestDataEditorListener;
-import com.testify.ecfeed.ui.common.TestDataValueEditingSupport;
-import com.testify.ecfeed.model.AbstractCategoryNode;
-import com.testify.ecfeed.model.ExpectedCategoryNode;
+import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.TestCaseNode;
+import com.testify.ecfeed.ui.common.ColorConstants;
+import com.testify.ecfeed.ui.common.ColorManager;
+import com.testify.ecfeed.ui.common.Messages;
+import com.testify.ecfeed.ui.common.TestDataEditorListener;
+import com.testify.ecfeed.ui.common.TestDataValueEditingSupport;
+import com.testify.ecfeed.utils.Constants;
 
 public class AddTestCaseDialog extends TitleAreaDialog implements TestDataEditorListener {
 
@@ -67,26 +66,27 @@ public class AddTestCaseDialog extends TitleAreaDialog implements TestDataEditor
 		setHelpAvailable(false);
 		setShellStyle(SWT.BORDER | SWT.RESIZE | SWT.TITLE | SWT.APPLICATION_MODAL);
 		fTestData = new ArrayList<PartitionNode>();
-		List<AbstractCategoryNode> categories = method.getCategories();
-		for(AbstractCategoryNode category : categories){
-			if(category instanceof ExpectedCategoryNode){
-				ExpectedCategoryNode expValCat = (ExpectedCategoryNode)category;
-				fTestData.add(createAnonymuousPartition(expValCat));
+		List<CategoryNode> categories = method.getCategories();
+		for(CategoryNode category : categories){
+			if(category.isExpected()){
+				fTestData.add(createAnonymuousPartition(category));
 			}
 			else{
+
 				PartitionNode testValue = category.getPartitions().get(0);
 				while(testValue.isAbstract()){
 					testValue = testValue.getPartitions().get(0);
 				}
 				fTestData.add(testValue);
 			}
+			
 		}
 		fMethod = method;
 		fColorManager = new ColorManager();
 	}
 
-	private PartitionNode createAnonymuousPartition(ExpectedCategoryNode parent) {
-		PartitionNode partition = new PartitionNode("@expected", parent.getDefaultValue()); 
+	private PartitionNode createAnonymuousPartition(CategoryNode parent) {
+		PartitionNode partition = new PartitionNode("@expected", parent.getDefaultValueString()); 
 		partition.setParent(parent);
 		return partition;
 	}
@@ -141,7 +141,7 @@ public class AddTestCaseDialog extends TitleAreaDialog implements TestDataEditor
 			@Override
 			public String getText(Object element){
 				PartitionNode testValue = (PartitionNode)element;
-				if(testValue.getCategory()  instanceof ExpectedCategoryNode){
+				if(testValue.getCategory().isExpected()){
 					return testValue.getValueString();
 				}
 				return testValue.toString();
@@ -159,7 +159,7 @@ public class AddTestCaseDialog extends TitleAreaDialog implements TestDataEditor
 
 	private Color getColor(Object element){
 		PartitionNode partition = (PartitionNode)element;
-		if(partition.getCategory() instanceof ExpectedCategoryNode){
+		if(partition.getCategory().isExpected()){
 			return fColorManager.getColor(ColorConstants.EXPECTED_VALUE_CATEGORY);
 		}
 		return null;

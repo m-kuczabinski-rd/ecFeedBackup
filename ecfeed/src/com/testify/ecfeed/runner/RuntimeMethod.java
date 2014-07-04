@@ -12,6 +12,7 @@
 package com.testify.ecfeed.runner;
 
 import java.lang.reflect.Method;
+import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,6 +21,7 @@ import org.junit.runners.model.FrameworkMethod;
 import com.testify.ecfeed.generators.api.GeneratorException;
 import com.testify.ecfeed.generators.api.IGenerator;
 import com.testify.ecfeed.model.PartitionNode;
+import com.testify.ecfeed.utils.ClassUtils;
 
 public class RuntimeMethod extends FrameworkMethod{
 
@@ -35,10 +37,11 @@ public class RuntimeMethod extends FrameworkMethod{
 		List<PartitionNode> next;
 		List<Object> parameters = new ArrayList<Object>();
 		try {
+			URLClassLoader loader = ClassUtils.getClassLoader(false, getClass().getClassLoader());
 			while((next = fGenerator.next()) !=null){
 				parameters = new ArrayList<Object>();
 				for (PartitionNode partitionNode : next) {
-					parameters.add(partitionNode.getValue());
+					parameters.add(ClassUtils.getPartitionValueFromString(partitionNode.getExactValueString(), partitionNode.getCategory().getType(), loader));
 				}
 				super.invokeExplosively(target, parameters.toArray());
 			}

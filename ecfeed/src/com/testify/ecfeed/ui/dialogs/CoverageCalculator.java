@@ -14,8 +14,7 @@ import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.swt.widgets.Display;
 
 import com.testify.ecfeed.generators.algorithms.Tuples;
-import com.testify.ecfeed.model.AbstractCategoryNode;
-import com.testify.ecfeed.model.ExpectedCategoryNode;
+import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.TestCaseNode;
 
@@ -25,7 +24,7 @@ public class CoverageCalculator {
 	private int[] fTuplesCovered;
 	private int[] fTotalWork;
 	private double[] fResults;
-	private List<AbstractCategoryNode> fCategories;
+	private List<CategoryNode> fCategories;
 
 	private List<List<PartitionNode>> fInput;
 	// The map of expected categories default values. Said values are used to replace unique values in algorithm.
@@ -37,7 +36,7 @@ public class CoverageCalculator {
 	// If user added test cases = true; else we are substracting tuples;
 	private boolean fAddingFlag;
 
-	public CoverageCalculator(List<AbstractCategoryNode> categories) {
+	public CoverageCalculator(List<CategoryNode> categories) {
 		fCategories = categories;
 		initialize();
 	}
@@ -176,7 +175,7 @@ public class CoverageCalculator {
 
 	private List<List<PartitionNode>> prepareInput() {
 		List<List<PartitionNode>> input = new ArrayList<List<PartitionNode>>();
-		for (AbstractCategoryNode cnode : fCategories) {
+		for (CategoryNode cnode : fCategories) {
 			List<PartitionNode> category = new ArrayList<PartitionNode>();
 			for (PartitionNode pnode : cnode.getLeafPartitions()) {
 				category.add(pnode);
@@ -189,9 +188,9 @@ public class CoverageCalculator {
 	private Map<Integer, PartitionNode> prepareExpectedPartitions() {
 		int n = 0;
 		Map<Integer, PartitionNode> expected = new HashMap<>();
-		for (AbstractCategoryNode cnode : fCategories) {
-			if (cnode instanceof ExpectedCategoryNode) {
-				expected.put(n, ((ExpectedCategoryNode) cnode).getDefaultValuePartition());
+		for (CategoryNode cnode : fCategories) {
+			if (cnode.isExpected()) {
+				expected.put(n, cnode.getDefaultValuePartition());
 			}
 			n++;
 		}

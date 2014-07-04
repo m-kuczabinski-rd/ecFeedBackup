@@ -69,11 +69,11 @@ public class ClassNodeTest extends ClassNode {
 		method2Types.add("int");
 
 		for(String type : method1Types){
-			method1.addCategory(new PartitionedCategoryNode("category", type));
+			method1.addCategory(new CategoryNode("category", type, false));
 		}
 
 		for(String type : method2Types){
-			method2.addCategory(new PartitionedCategoryNode("category", type));
+			method2.addCategory(new CategoryNode("category", type, false));
 		}
 		
 		classNode.addMethod(method1);

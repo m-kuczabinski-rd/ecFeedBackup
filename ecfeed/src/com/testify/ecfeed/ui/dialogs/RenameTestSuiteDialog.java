@@ -90,6 +90,9 @@ public class RenameTestSuiteDialog extends TitleAreaDialog {
 		if (fNewNameText.getText().length() == 0 || fNewNameText.getText().length() > 64){
 			setErrorMessage(Messages.DIALOG_TEST_SUITE_NAME_ERROR_MESSAGE);
 			fOkButton.setEnabled(false);
+		} else if(fNewNameText.getText().matches("\\s*")){
+			setErrorMessage(Messages.DIALOG_TEST_SUITE_NAME_ERROR_MESSAGE_NO_WHITESPACE);
+			fOkButton.setEnabled(false);
 		}
 		else{
 			setErrorMessage(null);
@@ -105,6 +108,7 @@ public class RenameTestSuiteDialog extends TitleAreaDialog {
 	protected void createButtonsForButtonBar(Composite parent) {
 		fOkButton = createButton(parent, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL,
 				true);
+		fOkButton.setEnabled(false);
 		createButton(parent, IDialogConstants.CANCEL_ID,
 				IDialogConstants.CANCEL_LABEL, false);
 	}

@@ -32,7 +32,7 @@ import com.testify.ecfeed.generators.NWiseGenerator;
 import com.testify.ecfeed.generators.api.GeneratorException;
 import com.testify.ecfeed.generators.api.IConstraint;
 import com.testify.ecfeed.generators.api.IGenerator;
-import com.testify.ecfeed.model.AbstractCategoryNode;
+import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.ConstraintNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
@@ -118,6 +118,16 @@ public class OnlineRunnerTest extends StaticRunnerTest{
 		}
 	}
 	
+	@RunWith(OnlineRunner.class)
+	@Generator(CartesianProductGenerator.class)
+	@EcModel(MODEL_PATH)
+	public static class NoConstraintsTestClass{
+		@Test
+		public void testWithNoConstraints(String arg1, String arg2, String arg3, String arg4){
+			executeTest(arg1, arg2, arg3, arg4);
+		}
+	}
+	
 	@Before
 	public void clearResult(){
 		fExecuted.clear();
@@ -194,6 +204,24 @@ public class OnlineRunnerTest extends StaticRunnerTest{
 		}
 	}
 	
+	@Test
+	public void testNoConstraints(){
+		try{
+			Class<NoConstraintsTestClass> testClass = NoConstraintsTestClass.class;
+			OnlineRunner runner = new OnlineRunner(testClass);
+			for(FrameworkMethod method : runner.computeTestMethods()){
+				List<List<PartitionNode>> input = referenceInput(runner.getModel(), method);
+				Collection<IConstraint<PartitionNode>> constraints = EMPTY_CONSTRAINTS;
+				Set<List<String>> referenceResult = computeReferenceResult(referenceCartesianGenerator(input, constraints));
+				method.invokeExplosively(testClass.newInstance(), (Object[])null);
+				assertEquals(referenceResult, fExecuted);
+			}
+		}
+		catch(Throwable e){
+			fail("Unexpected exception: " + e.getMessage());
+		}
+	}
+	
 	private Collection<IConstraint<PartitionNode>> getConstraints(
 			RootNode model, FrameworkMethod method,
 			String name) throws RunnerException {
@@ -217,7 +245,7 @@ public class OnlineRunnerTest extends StaticRunnerTest{
 		while((next = initializedGenerator.next()) != null){
 			List<String> sample = new ArrayList<String>();
 			for(PartitionNode partition : next){
-				sample.add((String)partition.getValue());
+				sample.add((String)partition.getValueString());
 			}
 			result.add(sample);
 		}
@@ -246,7 +274,7 @@ public class OnlineRunnerTest extends StaticRunnerTest{
 	private List<List<PartitionNode>> referenceInput(RootNode model, FrameworkMethod method) throws RunnerException {
 		List<List<PartitionNode>> result = new ArrayList<List<PartitionNode>>();
 		MethodNode methodModel = getMethodModel(model, method);
-		for(AbstractCategoryNode category : methodModel.getCategories()){
+		for(CategoryNode category : methodModel.getCategories()){
 			result.add(category.getPartitions());
 		}
 		return result;

@@ -13,9 +13,10 @@ package com.testify.ecfeed.model.constraint;
 
 import java.util.List;
 
-import com.testify.ecfeed.model.AbstractCategoryNode;
-import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.generators.api.IConstraint;
+import com.testify.ecfeed.model.CategoryNode;
+import com.testify.ecfeed.model.MethodNode;
+import com.testify.ecfeed.model.PartitionNode;
 
 public class Constraint implements IConstraint<PartitionNode> {
 	
@@ -85,11 +86,23 @@ public class Constraint implements IConstraint<PartitionNode> {
 		fConsequence = consequence;
 	}
 	
-	public boolean mentions(AbstractCategoryNode category) {
+	public boolean mentions(CategoryNode category) {
 		return fPremise.mentions(category) || fConsequence.mentions(category);
 	}
 
 	public boolean mentions(PartitionNode partition) {
 		return fPremise.mentions(partition) || fConsequence.mentions(partition);
+	}
+	
+	public Constraint getCopy(){
+		BasicStatement premise = fPremise.getCopy();
+		BasicStatement consequence = fConsequence.getCopy();
+		return new Constraint(premise, consequence);
+	}
+
+	public boolean updateRefrences(MethodNode method){
+		if(fPremise.updateReferences(method) && fConsequence.updateReferences(method))
+			return true;
+		return false;
 	}
 }

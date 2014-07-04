@@ -26,6 +26,7 @@ import com.testify.ecfeed.generators.CartesianProductGenerator;
 import com.testify.ecfeed.generators.api.GeneratorException;
 import com.testify.ecfeed.generators.api.IConstraint;
 import com.testify.ecfeed.generators.api.IGenerator;
+import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.runner.RuntimeMethod;
 
@@ -75,7 +76,7 @@ public class RuntimeMethodTest {
 			while((next = referenceGenerator.next()) != null){
 				List<Integer> testCase = new ArrayList<Integer>();
 				for(PartitionNode parameter : next){
-					testCase.add((int)parameter.getValue());
+					testCase.add(Integer.valueOf(parameter.getValueString()));
 				}
 				result.add(testCase);
 			}
@@ -95,9 +96,12 @@ public class RuntimeMethodTest {
 	}
 
 	private List<PartitionNode> generateCategory(int partitions) {
+		CategoryNode parent = new CategoryNode("Category", "int", false);
 		List<PartitionNode> category = new ArrayList<PartitionNode>();
 		for(int i = 0; i < partitions; i++){
-			category.add(new PartitionNode(String.valueOf(i), i));
+			PartitionNode partition = new PartitionNode(String.valueOf(i), String.valueOf(i));
+			partition.setParent(parent);
+			category.add(partition);
 		}
 		return category;
 	}

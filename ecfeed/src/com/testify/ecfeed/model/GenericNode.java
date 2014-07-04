@@ -113,14 +113,17 @@ public class GenericNode implements IGenericNode{
 	}
 	
 	@Override
-	public void moveChild(IGenericNode child, boolean moveUp) {
+	public boolean moveChild(IGenericNode child, boolean moveUp) {
 		int childIndex = getChildren().indexOf(child);
 		if(moveUp && childIndex > 0){
 			Collections.swap(getChildren(), childIndex, childIndex - 1);
+			return true;
 		}
 		if(!moveUp && childIndex < getChildren().size() - 1){
 			Collections.swap(getChildren(), childIndex, childIndex + 1);
+			return true;
 		}
+		return false;
 	}
 	
 	@Override
@@ -144,11 +147,16 @@ public class GenericNode implements IGenericNode{
 		}
 		return false;
 	}
+	
+	@Override
+	public GenericNode getCopy(){
+		return new GenericNode(getName());
+	}
 
 	protected boolean validateNodeName(String name) {
 		if (name == null) return false;
 		if(name.length() == 0) return false;
-		if(name.length() >= Constants.MAX_NODE_NAME_LENGTH) return false;
+		if(name.length() > Constants.MAX_NODE_NAME_LENGTH) return false;
 		if(name.matches("[ ]+.*")) return false;
 		
 		return true;

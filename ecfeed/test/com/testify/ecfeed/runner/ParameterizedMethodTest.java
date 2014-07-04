@@ -24,6 +24,7 @@ import java.util.Set;
 import org.junit.Test;
 import org.junit.runners.model.FrameworkMethod;
 
+import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.runner.ParameterizedMethod;
@@ -71,8 +72,11 @@ public class ParameterizedMethodTest {
 		Collection<TestCaseNode> suite = new HashSet<TestCaseNode>();
 		for(int i = 0; i < size; i++){
 			List<PartitionNode> testData = new ArrayList<PartitionNode>();
+			CategoryNode category = new CategoryNode("Category", "int", false);
 			for(int j = 0; j < parameters; j++){
-				testData.add(new PartitionNode("dummy", random.nextInt()));
+				PartitionNode partition = new PartitionNode("dummy", Integer.toString(random.nextInt()));
+				partition.setParent(category);
+				testData.add(partition);
 			}
 			suite.add(new TestCaseNode("dummy", testData));
 		}
@@ -85,7 +89,7 @@ public class ParameterizedMethodTest {
 		for(TestCaseNode testCase : testSuite){
 			List<Integer> parameters = new ArrayList<Integer>();
 			for(PartitionNode parameter : testCase.getTestData()){
-				parameters.add((int)parameter.getValue());
+				parameters.add(Integer.valueOf(parameter.getValueString()));
 			}
 			result.add(parameters);
 		}

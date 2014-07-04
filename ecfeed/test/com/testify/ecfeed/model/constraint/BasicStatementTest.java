@@ -11,11 +11,15 @@
 
 package com.testify.ecfeed.model.constraint;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 
 import org.junit.Test;
+
+import com.testify.ecfeed.model.MethodNode;
 
 public class BasicStatementTest {
 
@@ -23,6 +27,14 @@ public class BasicStatementTest {
 		@Override
 		public String getLeftHandName() {
 			return null;
+		}
+		@Override
+		public BasicStatement getCopy(){
+			return null;
+		}
+		@Override
+		public boolean updateReferences(MethodNode method){
+			return true;
 		}
 	}
 	

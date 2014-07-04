@@ -19,13 +19,25 @@ import static com.testify.ecfeed.model.Constants.*;
 public class RootNode extends GenericNode {
 	public List<ClassNode> fClasses;
 
+	@Override
+	public List<? extends IGenericNode> getChildren(){
+		return fClasses;
+	}
+	
+	@Override
+	public RootNode getCopy(){
+		RootNode copy = new RootNode(this.getName());
+
+		for(ClassNode classnode : fClasses){
+			copy.addClass(classnode.getCopy());
+		}
+		copy.setParent(this.getParent());
+		return copy;
+	}
+	
 	public RootNode(String name) {
 		super(name);
 		fClasses = new ArrayList<ClassNode>();
-	}
-	
-	public List<? extends IGenericNode> getChildren(){
-		return fClasses;
 	}
 
 	public void addClass(ClassNode node){
@@ -76,4 +88,5 @@ public class RootNode extends GenericNode {
 	public Object convert(IConverter converter){
 		return converter.convert(this);
 	}
+	
 }

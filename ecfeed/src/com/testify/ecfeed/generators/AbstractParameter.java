@@ -61,4 +61,9 @@ public class AbstractParameter implements IGeneratorParameter {
 	public boolean test(Object value){
 		return false;
 	}
+	
+	@Override
+	public String toString(){
+		return fName + "[" + fType + "]";
+	}
 }

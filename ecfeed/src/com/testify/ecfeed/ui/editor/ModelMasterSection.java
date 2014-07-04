@@ -12,26 +12,39 @@
 package com.testify.ecfeed.ui.editor;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
+import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.viewers.DecoratingLabelProvider;
 import org.eclipse.jface.viewers.IBaseLabelProvider;
 import org.eclipse.jface.viewers.IContentProvider;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.MenuAdapter;
+import org.eclipse.swt.events.MenuEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Menu;
+import org.eclipse.swt.widgets.MenuItem;
+import org.eclipse.swt.widgets.Tree;
 import org.eclipse.ui.forms.AbstractFormPart;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Section;
 
-import com.testify.ecfeed.model.AbstractCategoryNode;
+import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.IGenericNode;
 import com.testify.ecfeed.model.IModelWrapper;
+import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.RootNode;
+import com.testify.ecfeed.model.TestCaseNode;
+import com.testify.ecfeed.ui.common.Messages;
 
 public class ModelMasterSection extends TreeViewerSection{
 	private static final int STYLE = Section.EXPANDED | Section.TITLE_BAR;
@@ -41,6 +54,23 @@ public class ModelMasterSection extends TreeViewerSection{
 	private Button fMoveUpButton;
 	private Button fMoveDownButton;
 	private RootNode fModel;
+	private MenuOperationManager fMenuManager;
+	private Menu fMenu;
+	
+	protected class MenuSelectionAdapter extends SelectionAdapter{
+		MenuOperation fOperation;
+		
+		@Override
+		public void widgetSelected(SelectionEvent e){
+			fOperation.execute();
+		}
+		
+		public MenuSelectionAdapter(MenuOperation operation,IGenericNode target){
+			super();
+			fOperation = operation;			
+		}
+		
+	}
 	
 	private static class DummyUpdateListener implements IModelUpdateListener{
 		@Override
@@ -73,7 +103,7 @@ public class ModelMasterSection extends TreeViewerSection{
 
 		private void enableSortButtons(IGenericNode selectedElement) {
 			boolean enabled = true;
-			if((selectedElement instanceof RootNode) || (selectedElement instanceof AbstractCategoryNode)){
+			if (selectedElement instanceof RootNode) {
 				enabled = false;
 			}
 			fMoveUpButton.setEnabled(enabled);
@@ -84,44 +114,13 @@ public class ModelMasterSection extends TreeViewerSection{
 	public ModelMasterSection(Composite parent, FormToolkit toolkit) {
 		super(parent, toolkit, STYLE, new DummyUpdateListener());
 		fModelSelectionListeners = new ArrayList<IModelSelectionListener>();
+		fMenuManager = new MenuOperationManager(this);
 	}
 	
 	public void addModelSelectionChangedListener(IModelSelectionListener listener){
 		fModelSelectionListeners.add(listener);
 	}
-	
-	@Override
-	protected void createContent(){
-		super.createContent();
-		getSection().setText("Structure");
-		fMoveUpButton = addButton("Move Up", new MoveUpAdapter());
-		fMoveDownButton = addButton("Move Down", new MoveDownAdapter());
-		getTreeViewer().setAutoExpandLevel(AUTO_EXPAND_LEVEL);
-		addSelectionChangedListener(new ModelSelectionListener());
-	}
-
-	private void notifyModelSelectionListeners(ISelection newSelection) {
-		for(IModelSelectionListener listener : fModelSelectionListeners){
-			listener.modelSelectionChanged(newSelection);
-		}
-	}
-
-	private void moveSelectedItem(boolean moveUp) {
-		if(selectedNode() != null && selectedNode().getParent() != null){
-			selectedNode().getParent().moveChild(selectedNode(), moveUp);
-			markDirty();
-			refresh();
-		}
-	}
-
-	private IGenericNode selectedNode() {
-		Object selectedElement = getSelectedElement();
-		if(selectedElement instanceof IGenericNode){
-			return (IGenericNode)selectedElement;
-		}
-		return null;
-	}
-	
+		
 	public void setInput(IModelWrapper wrapper){
 		super.setInput(wrapper);
 	}
@@ -139,6 +138,17 @@ public class ModelMasterSection extends TreeViewerSection{
 	public RootNode getModel(){
 		return fModel;
 	}
+	
+	@Override
+	protected void createContent(){
+		super.createContent();
+		getSection().setText("Structure");
+		fMoveUpButton = addButton("Move Up", new MoveUpAdapter());
+		fMoveDownButton = addButton("Move Down", new MoveDownAdapter());
+		getTreeViewer().setAutoExpandLevel(AUTO_EXPAND_LEVEL);
+		addSelectionChangedListener(new ModelSelectionListener());
+		createMenu();
+	}
 
 	@Override
 	protected IContentProvider viewerContentProvider() {
@@ -146,8 +156,102 @@ public class ModelMasterSection extends TreeViewerSection{
 	}
 	
 	@Override 
-	protected IBaseLabelProvider viewerLabelProvider(){
-		return new ModelLabelProvider();
+	protected IBaseLabelProvider viewerLabelProvider() {
+		return new DecoratingLabelProvider(new ModelLabelProvider(), new ModelLabelDecorator());
+	}
+	
+	protected void createMenu(){
+		fMenu = new Menu(getTreeViewer().getTree());
+		Tree tree = getTreeViewer().getTree();
+		tree.setMenu(fMenu);
+
+		fMenu.addMenuListener(new MenuAdapter(){
+			@Override
+			public void menuShown(MenuEvent e){
+				Tree tree = getTreeViewer().getTree();
+				Menu menu = (Menu)e.getSource();
+				MenuItem[] items = menu.getItems();
+				for(int i = 0; i < items.length; i++){
+					items[i].dispose();
+				}
+
+				if(tree.getSelection()[0].getData() instanceof IGenericNode){
+					IGenericNode target = (IGenericNode)tree.getSelection()[0].getData();
+					for(MenuOperation operation : fMenuManager.getOperations(target)){
+						MenuItem item = new MenuItem(fMenu, SWT.NONE);
+						item.setText(operation.getOperationName());
+						item.addSelectionListener(new MenuSelectionAdapter(operation, target));
+						item.setEnabled(operation.isEnabled());
+					}
+				}
+			}
+		});
+	}
+	private void notifyModelSelectionListeners(ISelection newSelection) {
+		for(IModelSelectionListener listener : fModelSelectionListeners){
+			listener.modelSelectionChanged(newSelection);
+		}
+	}
+
+	private void moveSelectedItem(boolean moveUp){
+		if(selectedNode() != null && selectedNode().getParent() != null){
+			boolean move = true;
+			if (selectedNode() instanceof CategoryNode) {
+				move = false;
+				CategoryNode categoryNode = (CategoryNode)selectedNode();
+				ArrayList<String> tmpTypes = categoryNode.getMethod().getCategoriesTypes();
+				for (int i = 0; i < categoryNode.getMethod().getCategories().size(); ++i) {
+					CategoryNode type = categoryNode.getMethod().getCategories().get(i);
+					if (type.getName().equals(categoryNode.getName()) && type.getType().equals(categoryNode.getType())) {
+						if (moveUp && (i > 0)) {
+							String prevValue = tmpTypes.get(i - 1);
+							tmpTypes.set(i - 1, categoryNode.getType());
+							tmpTypes.set(i, prevValue);
+							move = true;
+						} else if (!moveUp && (i < tmpTypes.size() - 1)){
+							String nextValue = tmpTypes.get(i + 1);
+							tmpTypes.set(i + 1, categoryNode.getType());
+							tmpTypes.set(i, nextValue);
+							move = true;
+						}
+					}
+				}
+
+				if (move) {
+					if (categoryNode.getMethod().getClassNode().getMethod(categoryNode.getMethod().getName(), tmpTypes) != null) {
+						MessageDialog.openError(Display.getCurrent().getActiveShell(),
+								Messages.DIALOG_METHOD_EXISTS_TITLE,
+								Messages.DIALOG_METHOD_WITH_PARAMETERS_EXISTS_MESSAGE);
+						move = false;
+					}
+				}
+			}
+			if (move) {
+				if(selectedNode().getParent().moveChild(selectedNode(), moveUp)){
+					if(selectedNode() instanceof CategoryNode){
+						CategoryNode categoryNode = (CategoryNode)selectedNode();
+						MethodNode method = categoryNode.getMethod();
+						if(method != null){
+							int index = method.getCategories().indexOf(categoryNode);
+							int oldindex = moveUp ? (index + 1) : (index - 1);
+							for(TestCaseNode tcnode : method.getTestCases()){
+								Collections.swap(tcnode.getTestData(), index, oldindex);
+							}
+						}
+					}
+					markDirty();
+					refresh();
+				}
+			}
+		}
+	}
+
+	private IGenericNode selectedNode() {
+		Object selectedElement = getSelectedElement();
+		if(selectedElement instanceof IGenericNode){
+			return (IGenericNode)selectedElement;
+		}
+		return null;
 	}
 
 }

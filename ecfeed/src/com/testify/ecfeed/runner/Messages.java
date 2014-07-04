@@ -23,7 +23,7 @@ public class Messages {
 	public static final String CANNOT_PARSE_MODEL(String message)
 		{return "Model could not be parsed: " + message;}
 	public static final String NO_VALID_GENERATOR(String name)
-		{return "No valid generator was defined for the method" + name;}
+		{return "No valid generator was defined for the method " + name;}
 	public static final String CLASS_NOT_FOUND_IN_THE_MODEL(String name)
 		{return "Class " + name + " not found in the model";}
 	public static final String MISSING_REQUIRED_PARAMETER(String name) 

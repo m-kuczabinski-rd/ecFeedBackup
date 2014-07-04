@@ -16,6 +16,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.lang.annotation.Annotation;
+import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -32,6 +33,7 @@ import org.junit.runners.model.TestClass;
 
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.MethodNode;
+import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.parsers.IModelParser;
@@ -39,6 +41,7 @@ import com.testify.ecfeed.parsers.ParserException;
 import com.testify.ecfeed.parsers.xml.XmlModelParser;
 import com.testify.ecfeed.runner.annotations.EcModel;
 import com.testify.ecfeed.runner.annotations.TestSuites;
+import com.testify.ecfeed.utils.ClassUtils;
 
 public class StaticRunner extends BlockJUnit4ClassRunner {
 
@@ -114,13 +117,36 @@ public class StaticRunner extends BlockJUnit4ClassRunner {
 		return result;
 	}
 
-	private Collection<TestCaseNode> getTestCases(MethodNode methodModel,
-			Set<String> testSuites) {
+	private Collection<TestCaseNode> getTestCases(MethodNode methodModel, Set<String> testSuites) {
 		Collection<TestCaseNode> result = new LinkedList<TestCaseNode>();
 		for(String testSuite : testSuites){
-			result.addAll(methodModel.getTestCases(testSuite));
+			result.addAll(getImplementedTestCases(methodModel, testSuite));
 		}
 		return result;
+	}
+
+	private LinkedList<TestCaseNode> getImplementedTestCases(MethodNode methodModel, String testSuite) {
+		LinkedList<TestCaseNode> result = new LinkedList<TestCaseNode>();
+		for (TestCaseNode testCase : methodModel.getTestCases(testSuite)) {
+			if (allPartitionsImplemented(testCase.getTestData())) {
+				result.add(testCase);
+			}
+		}
+		return result;
+	}
+
+	private boolean allPartitionsImplemented(List<PartitionNode> partitions) {
+		boolean implemented = (partitions.size() > 0) ? true : false;
+		URLClassLoader loader = ClassUtils.getClassLoader(false, getClass().getClassLoader());
+
+		for (PartitionNode partition : partitions) {
+			implemented = ClassUtils.isPartitionImplemented(partition.getExactValueString(), partition.getCategory().getType(), loader);
+			if (!implemented) {
+				break;
+			}
+		}
+
+		return implemented;
 	}
 
 	private ArrayList<String> getParameterTypes(Class<?>[] parameterTypes) {

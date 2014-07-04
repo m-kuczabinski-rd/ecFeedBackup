@@ -30,7 +30,8 @@ public class ExecuteOnlineSetupDialog extends GeneratorSetupDialog {
 	public ExecuteOnlineSetupDialog(Shell parentShell, MethodNode method) {
 		super(parentShell, method, CONTENT, 
 				Messages.DIALOG_EXECUTE_ONLINE_TITLE, 
-				Messages.DIALOG_EXECUTE_ONLINE_MESSAGE);
+				Messages.DIALOG_EXECUTE_ONLINE_MESSAGE,
+				true);
 	}
 
 	public IGenerator<PartitionNode> getSelectedGenerator() {
