@@ -177,8 +177,12 @@ public class CoverageCalculator {
 		List<List<PartitionNode>> input = new ArrayList<List<PartitionNode>>();
 		for (CategoryNode cnode : fCategories) {
 			List<PartitionNode> category = new ArrayList<PartitionNode>();
-			for (PartitionNode pnode : cnode.getLeafPartitions()) {
-				category.add(pnode);
+			if(cnode.isExpected()){
+			category.add(cnode.getDefaultValuePartition());
+			} else {
+				for (PartitionNode pnode : cnode.getLeafPartitions()) {
+					category.add(pnode);
+				}
 			}
 			input.add(category);
 		}
