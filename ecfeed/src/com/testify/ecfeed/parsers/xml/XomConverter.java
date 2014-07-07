@@ -4,6 +4,7 @@ import static com.testify.ecfeed.parsers.Constants.*;
 import nu.xom.Attribute;
 import nu.xom.Element;
 
+import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.IConverter;
 import com.testify.ecfeed.model.IGenericNode;
@@ -39,6 +40,20 @@ public class XomConverter implements IConverter {
 	public Object convert(MethodNode node) {
 		Element element = createNamedElement(METHOD_NODE_NAME, node);
 		
+		return element;
+	}
+	
+	@Override
+	public Object convert(CategoryNode node){
+		Element element = createNamedElement(CATEGORY_NODE_NAME, node);
+		element.addAttribute(new Attribute(TYPE_NAME_ATTRIBUTE, node.getType()));
+		element.addAttribute(new Attribute(CATEGORY_IS_EXPECTED_ATTRIBUTE_NAME, Boolean.toString(node.isExpected())));
+		element.addAttribute(new Attribute(DEFAULT_EXPECTED_VALUE_ATTRIBUTE_NAME, node.getDefaultValueString()));
+
+		for(PartitionNode child : node.getPartitions()){
+			element.appendChild((Element)child.convert(this));
+		}
+	
 		return element;
 	}
 	

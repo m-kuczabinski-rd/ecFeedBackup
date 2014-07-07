@@ -1,5 +1,6 @@
 package com.testify.ecfeed.parsers;
 
+import static com.testify.ecfeed.testutils.Constants.SUPPORTED_TYPES;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
@@ -13,9 +14,9 @@ import nu.xom.Serializer;
 
 import org.junit.Test;
 
-import static com.testify.ecfeed.testutils.Constants.*;
-
+import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.ClassNode;
+import com.testify.ecfeed.model.IGenericNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.parsers.xml.XomConverter;
@@ -70,10 +71,25 @@ public class XomParserTest {
 	}
 	
 	@Test
+	public void parseCategoryTest(){
+		for(String type : SUPPORTED_TYPES){
+			for(boolean expected : new Boolean[]{true, false}){
+				CategoryNode c = fModelGenerator.generateCategory(type, expected);
+				Element element = (Element)c.convert(new XomConverter());
+				try{
+					CategoryNode c1 = fParser.parseCategory(element); 
+					assertElementsEqual(c, c1);
+				}
+				catch (ParserException e) {
+					fail("Unexpected exception: " + e.getMessage());
+				}
+			}
+		}
+	}
+	
+	@Test
 	public void parsePartitionTest(){
 		for(String type: SUPPORTED_TYPES){
-			System.out.println(type);
-			
 			PartitionNode p = fModelGenerator.generatePartition(5, 5, 10, type);
 			
 			Element element = (Element)p.convert(new XomConverter());
@@ -81,9 +97,7 @@ public class XomParserTest {
 			PartitionNode p1;
 			try {
 				p1 = fParser.parsePartition(element);
-				if(p.compare(p1) == false){
-					fail("Parsed element differs from original\n" + fStringifier.stringify(p, 0) + "\n" + fStringifier.stringify(p1, 0));
-				}
+				assertElementsEqual(p, p1);
 			} catch (ParserException e) {
 				fail("Unexpected exception: " + e.getMessage());
 			}
@@ -91,7 +105,13 @@ public class XomParserTest {
 		}
 	}
 	
-//	@Test
+	private void assertElementsEqual(IGenericNode n, IGenericNode n1) {
+		if(n.compare(n1) == false){
+			fail("Parsed element differs from original\n" + fStringifier.stringify(n, 0) + "\n" + fStringifier.stringify(n1, 0));
+		}
+	}
+
+	//	@Test
 	public void assertTypeTest(){
 		RootNode root = fModelGenerator.generateModel();
 		ClassNode _class = fModelGenerator.generateClass();

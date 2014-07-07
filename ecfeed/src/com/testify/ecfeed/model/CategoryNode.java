@@ -242,5 +242,10 @@ public class CategoryNode extends GenericNode implements IPartitionedNode{
 
 		return super.compare(node);
 	}
+
+	/**************************************VISITORS*********************************************/
+	public Object convert(IConverter converter) {
+		return converter.convert(this);
+	}
 	
 }

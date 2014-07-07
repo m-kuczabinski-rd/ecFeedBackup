@@ -1,8 +1,6 @@
 package com.testify.ecfeed.parsers.xml;
 
 import static com.testify.ecfeed.parsers.Constants.*;
-import static com.testify.ecfeed.parsers.Constants.METHOD_NODE_NAME;
-import static com.testify.ecfeed.parsers.Constants.ROOT_NODE_NAME;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,6 +9,7 @@ import nu.xom.Element;
 import nu.xom.Elements;
 import nu.xom.Node;
 
+import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
@@ -54,7 +53,25 @@ public class XomParser {
 		return method;
 	}
 
+	public CategoryNode parseCategory(Element element) throws ParserException{
+		assertNodeTag(element.getQualifiedName(), CATEGORY_NODE_NAME);
+		String name = getElementName(element);
+		String type = getAttributeValue(element, TYPE_NAME_ATTRIBUTE);
+		String defaultValue = getAttributeValue(element, DEFAULT_EXPECTED_VALUE_ATTRIBUTE_NAME);
+		String expected = getAttributeValue(element, CATEGORY_IS_EXPECTED_ATTRIBUTE_NAME);
+		
+		CategoryNode category = new CategoryNode(name, type, Boolean.parseBoolean(expected));
+		category.setDefaultValueString(defaultValue);
+		
+		for(Element child : getIterableChildren(element)){
+			category.addPartition(parsePartition(child));
+		}
+		
+		return category;
+	}
+	
 	public PartitionNode parsePartition(Element element) throws ParserException{
+		assertNodeTag(element.getQualifiedName(), PARTITION_NODE_NAME);
 		String name = getElementName(element);
 		String value = getAttributeValue(element, VALUE_ATTRIBUTE);
 		

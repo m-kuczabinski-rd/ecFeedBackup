@@ -92,7 +92,10 @@ public class RandomModelGenerator {
 		MethodNode method = new MethodNode(name);
 		
 		for(int i = 0; i < MAX_CATEGORIES; i++){
-			method.addCategory(generateCategory());
+			boolean expected = rand.nextInt(4) < 3 ? false : true;
+			String type = randomType();
+			
+			method.addCategory(generateCategory(type, expected));
 		}
 		
 		for(int i = 0; i < MAX_CONSTRAINTS; i++){
@@ -102,10 +105,8 @@ public class RandomModelGenerator {
 		return method;
 	}
 	
-	public CategoryNode generateCategory(){
+	public CategoryNode generateCategory(String type, boolean expected){
 		String name = generateString(REGEX_CATEGORY_NODE_NAME);
-		String type = randomType();
-		boolean expected = rand.nextInt(4) < 3 ? false : true;
 		
 		CategoryNode category = new CategoryNode(name, type, expected);
 		category.setDefaultValueString(randomPartitionValue(type));
@@ -328,7 +329,7 @@ public class RandomModelGenerator {
 	}
 	
 	//DEBUG
-	@Test
+//	@Test
 	public void testPartitionGeneration(){
 		System.out.println("Childless partitions:");
 		for(String type : new String[]{"String"}){
@@ -343,4 +344,16 @@ public class RandomModelGenerator {
 			System.out.println(fStringifier.stringify(p1, 0));
 		}
 	}
+	
+	@Test
+	public void testCategoryGenerator(){
+		for(String type : SUPPORTED_TYPES){
+			for(boolean expected : new Boolean[]{true, false}){
+				System.out.println("Type: " + type);
+				CategoryNode c = generateCategory(type, expected);
+				System.out.println(fStringifier.stringify(c, 0));
+			}
+		}
+	}
+	
 }
