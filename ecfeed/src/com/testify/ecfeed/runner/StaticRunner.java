@@ -82,6 +82,7 @@ public class StaticRunner extends BlockJUnit4ClassRunner {
 				if(methodModel == null){
 					continue;
 				}
+
 				methods.add(new ParameterizedMethod(method.getMethod(), getTestCases(methodModel, getTestSuites(method))));
 			}
 		}
@@ -110,10 +111,33 @@ public class StaticRunner extends BlockJUnit4ClassRunner {
 		Annotation annotation = method.getAnnotation(TestSuites.class);
 		if(annotation != null){
 			result = new HashSet<String>(Arrays.asList(((TestSuites)annotation).value()));
+			if(result.contains(TestSuites.ALL)){
+				result = getMethodModel(getModel(), method).getTestSuites();
+			} else if(result.contains(TestSuites.NONE)){
+				result.clear();
+			}
 		}
 		else{
-			result = getMethodModel(getModel(), method).getTestSuites();
+			Annotation classAnnotation = null;
+			TestClass testClass = getTestClass();
+			for(Annotation element : testClass.getAnnotations()){
+				if(element.annotationType().equals(TestSuites.class)){
+					classAnnotation = (TestSuites)element;
+				}
+			}
+			if(classAnnotation != null) {
+				result = new HashSet<String>(Arrays.asList(((TestSuites)classAnnotation).value()));
+				if(result.contains(TestSuites.ALL)){
+					result = getMethodModel(getModel(), method).getTestSuites();
+				} else if(result.contains(TestSuites.NONE)){
+					result.clear();
+				}
+			}
+			else {
+				result = getMethodModel(getModel(), method).getTestSuites();
+			}
 		}
+
 		return result;
 	}
 
