@@ -2,6 +2,7 @@ package com.testify.ecfeed.testutils;
 
 import static com.testify.ecfeed.model.Constants.REGEX_CATEGORY_NODE_NAME;
 import static com.testify.ecfeed.model.Constants.REGEX_CATEGORY_TYPE_NAME;
+import static com.testify.ecfeed.model.Constants.REGEX_CHAR_TYPE_VALUE;
 import static com.testify.ecfeed.model.Constants.REGEX_CLASS_NODE_NAME;
 import static com.testify.ecfeed.model.Constants.REGEX_CONSTRAINT_NODE_NAME;
 import static com.testify.ecfeed.model.Constants.REGEX_METHOD_NODE_NAME;
@@ -19,6 +20,7 @@ import static com.testify.ecfeed.model.Constants.TYPE_NAME_INT;
 import static com.testify.ecfeed.model.Constants.TYPE_NAME_LONG;
 import static com.testify.ecfeed.model.Constants.TYPE_NAME_SHORT;
 import static com.testify.ecfeed.model.Constants.TYPE_NAME_STRING;
+import static com.testify.ecfeed.testutils.Constants.SUPPORTED_TYPES;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +28,8 @@ import java.util.Random;
 import java.util.Set;
 
 import nl.flotsam.xeger.Xeger;
+
+import org.junit.Test;
 
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.ClassNode;
@@ -45,6 +49,7 @@ import com.testify.ecfeed.model.constraint.StaticStatement;
 public class RandomModelGenerator {
 	
 	private Random rand = new Random();
+	private ModelStringifier fStringifier = new ModelStringifier();
 	
 	public int MAX_CLASSES = 10;
 	public int MAX_METHODS = 10;
@@ -54,22 +59,6 @@ public class RandomModelGenerator {
 	public int MAX_PARTITION_LEVELS = 5;
 	public int MAX_PARTITION_LABELS = 10;
 	public int MAX_STATEMENTS = 5;
-	
-	
-	private final String USER_TYPE = "user.type";
-	private final String[] SUPPORTED_TYPES = {
-			TYPE_NAME_BOOLEAN,
-			TYPE_NAME_BYTE,
-			TYPE_NAME_CHAR,
-			TYPE_NAME_DOUBLE,
-			TYPE_NAME_FLOAT,
-			TYPE_NAME_INT,
-			TYPE_NAME_LONG,
-			TYPE_NAME_SHORT,
-			TYPE_NAME_STRING,
-			USER_TYPE
-	};
-
 	
 	public RootNode generateModel(){
 		String name = generateString(REGEX_ROOT_NODE_NAME);
@@ -271,7 +260,7 @@ public class RandomModelGenerator {
 	}
 
 	private String randomCharValue() {
-		return String.valueOf((char)rand.nextInt());
+		return generateString(REGEX_CHAR_TYPE_VALUE);
 	}
 
 	private String randomDoubleValue() {
@@ -339,7 +328,7 @@ public class RandomModelGenerator {
 	}
 	
 	//DEBUG
-//	@Test
+	@Test
 	public void testPartitionGeneration(){
 		System.out.println("Childless partitions:");
 		for(String type : new String[]{"String"}){
@@ -351,21 +340,7 @@ public class RandomModelGenerator {
 		for(String type : SUPPORTED_TYPES){
 			System.out.println("Type: " + type);
 			PartitionNode p1 = generatePartition(MAX_PARTITION_LEVELS, MAX_PARTITIONS, MAX_PARTITION_LABELS, type);
-			printPartition(p1, 0);
-		}
-	}
-	
-	private void printPartition(PartitionNode p, int indent){
-		indent(indent);
-		System.out.println(p + ", Labels: " + p.getLabels());
-		for(PartitionNode child : p.getPartitions()){
-			printPartition(child, indent + 4);
-		}
-	}
-	
-	private void indent(int indent){
-		for(int i = 0; i < indent; i++){
-			System.out.print(" ");
+			System.out.println(fStringifier.stringify(p1, 0));
 		}
 	}
 }
