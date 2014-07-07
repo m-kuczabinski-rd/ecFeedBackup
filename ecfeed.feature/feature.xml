@@ -2,7 +2,7 @@
 <feature
       id="com.testify.ecfeed.feature"
       label="ecFeed"
-      version="1.6.0.qualifier">
+      version="1.6.1.qualifier">
 
    <description url="https://github.com/testify-no/ecFeed">
       Test development tool build around equivalence class concept integrated with jUnit framework.
