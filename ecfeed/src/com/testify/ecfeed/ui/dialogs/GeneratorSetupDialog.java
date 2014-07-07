@@ -107,6 +107,12 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 		
 		public Object[] getChildren(Object element){
 			if(element instanceof CategoryNode){
+				CategoryNode category = (CategoryNode)element;
+				if(category.isExpected()){
+					List<Object> list = new ArrayList<Object>();
+					list.add(category.getDefaultValuePartition());
+					return list.toArray();
+				}
 				return ((CategoryNode)element).getPartitions().toArray();
 			}
 			if(element instanceof PartitionNode){

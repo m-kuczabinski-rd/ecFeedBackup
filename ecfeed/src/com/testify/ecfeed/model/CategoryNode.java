@@ -50,9 +50,6 @@ public class CategoryNode extends GenericNode implements IPartitionedNode{
 	
 	@Override
 	public List<PartitionNode> getPartitions() {
-		if(fExpected){
-			return Arrays.asList(new PartitionNode[]{fDefaultValue});
-		}
 		return fPartitions;
 	}
 
