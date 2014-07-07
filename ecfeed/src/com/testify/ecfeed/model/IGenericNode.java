@@ -38,4 +38,6 @@ public interface IGenericNode {
 	public void setName(String newName);
 	public int subtreeSize();
 	public IGenericNode getCopy();
+	
+	public boolean compare(IGenericNode node);
 }
