@@ -68,9 +68,9 @@ public class XomConverter implements IConverter {
                 + "\uE000-\uFFFD"
                 + "\ud800\udc00-\udbff\udfff"
                 + "]";
-		value.replaceAll(xml10pattern, "");
+		String legalValue = value.replaceAll(xml10pattern, "");
 
-		element.addAttribute(new Attribute(VALUE_ATTRIBUTE, value));
+		element.addAttribute(new Attribute(VALUE_ATTRIBUTE, legalValue));
 		
 		for(String label : node.getLabels()){
 			Element labelElement = new Element(Constants.LABEL_NODE_NAME);
