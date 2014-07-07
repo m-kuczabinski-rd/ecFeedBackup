@@ -17,6 +17,7 @@ import org.junit.Test;
 
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.RootNode;
+import com.testify.ecfeed.testutils.RandomModelGenerator;
 
 public class RootNodeTest{
 	
@@ -81,6 +82,15 @@ public class RootNodeTest{
 		
 		class2.setName("new name");
 		assertFalse(r1.compare(r2));
+	}
+
+//	@Test
+	public void getCopyTest(){
+		RandomModelGenerator generator = new RandomModelGenerator();
+		for(int i = 0; i < 1; i++){
+			RootNode root = generator.generateModel();
+			System.out.println(root);
+		}
 	}
 	
 }
