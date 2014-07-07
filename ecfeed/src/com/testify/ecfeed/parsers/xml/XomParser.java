@@ -1,15 +1,19 @@
 package com.testify.ecfeed.parsers.xml;
 
+import static com.testify.ecfeed.parsers.Constants.*;
+import static com.testify.ecfeed.parsers.Constants.METHOD_NODE_NAME;
+import static com.testify.ecfeed.parsers.Constants.ROOT_NODE_NAME;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import nu.xom.Element;
 import nu.xom.Elements;
 import nu.xom.Node;
-import static com.testify.ecfeed.parsers.Constants.*;
 
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.MethodNode;
+import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.parsers.Constants;
 import com.testify.ecfeed.parsers.ParserException;
@@ -50,6 +54,23 @@ public class XomParser {
 		return method;
 	}
 
+	public PartitionNode parsePartition(Element element) throws ParserException{
+		String name = getElementName(element);
+		String value = getAttributeValue(element, VALUE_ATTRIBUTE);
+		
+		PartitionNode partition = new PartitionNode(name, value);
+		
+		for(Element child : getIterableChildren(element)){
+			if(child.getLocalName() == Constants.PARTITION_NODE_NAME){
+				partition.addPartition(parsePartition(child));
+			}
+			if(child.getLocalName() == Constants.LABEL_NODE_NAME){
+				partition.addLabel(child.getAttributeValue(Constants.LABEL_ATTRIBUTE_NAME));
+			}
+		}
+
+		return partition;
+	}
 
 	private void assertNodeTag(String qualifiedName, String expectedName) throws ParserException {
 		if(qualifiedName.equals(expectedName) == false){

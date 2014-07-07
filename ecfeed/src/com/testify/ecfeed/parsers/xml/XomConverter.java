@@ -8,7 +8,9 @@ import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.IConverter;
 import com.testify.ecfeed.model.IGenericNode;
 import com.testify.ecfeed.model.MethodNode;
+import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.RootNode;
+import com.testify.ecfeed.parsers.Constants;
 
 public class XomConverter implements IConverter {
 
@@ -36,6 +38,34 @@ public class XomConverter implements IConverter {
 	@Override
 	public Object convert(MethodNode node) {
 		Element element = createNamedElement(METHOD_NODE_NAME, node);
+		
+		return element;
+	}
+	
+	@Override
+	public Object convert(PartitionNode node){
+		Element element = createNamedElement(PARTITION_NODE_NAME, node);
+		String value = node.getValueString();
+		//remove disallowed XML characters
+		String xml10pattern = "[^"
+                + "\u0009\r\n"
+                + "\u0020-\uD7FF"
+                + "\uE000-\uFFFD"
+                + "\ud800\udc00-\udbff\udfff"
+                + "]";
+		value.replaceAll(xml10pattern, "");
+
+		element.addAttribute(new Attribute(VALUE_ATTRIBUTE, value));
+		
+		for(String label : node.getLabels()){
+			Element labelElement = new Element(Constants.LABEL_NODE_NAME);
+			labelElement.addAttribute(new Attribute(Constants.LABEL_ATTRIBUTE_NAME, label));
+			element.appendChild(labelElement);
+		}
+		
+		for(PartitionNode child : node.getPartitions()){
+			element.appendChild((Element)child.convert(this));
+		}
 		
 		return element;
 	}

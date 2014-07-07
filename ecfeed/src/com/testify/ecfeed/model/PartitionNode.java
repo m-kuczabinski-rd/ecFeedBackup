@@ -124,7 +124,7 @@ public class PartitionNode extends GenericNode implements IPartitionedNode{
 		}
 		return getQualifiedName() + " [" + getValueString() + "]";
 	}
-	
+
 	@Override
 	public PartitionNode getCopy(){
 		PartitionNode copy = getLeaflessCopy();
@@ -307,4 +307,8 @@ public class PartitionNode extends GenericNode implements IPartitionedNode{
 		return super.compare(node);
 	}
 
+	/**************************************VISITORS*********************************************/
+	public Object convert(IConverter converter){
+		return converter.convert(this);
+	}
 }

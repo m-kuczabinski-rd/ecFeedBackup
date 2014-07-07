@@ -13,10 +13,14 @@ import nu.xom.Serializer;
 
 import org.junit.Test;
 
+import static com.testify.ecfeed.testutils.Constants.*;
+
 import com.testify.ecfeed.model.ClassNode;
+import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.parsers.xml.XomConverter;
 import com.testify.ecfeed.parsers.xml.XomParser;
+import com.testify.ecfeed.testutils.ModelStringifier;
 import com.testify.ecfeed.testutils.RandomModelGenerator;
 
 public class XomParserTest {
@@ -25,6 +29,7 @@ public class XomParserTest {
 	
 	RandomModelGenerator fModelGenerator = new RandomModelGenerator();
 	XomParser fParser = new XomParser();
+	ModelStringifier fStringifier = new ModelStringifier();
 	
 //	@Test
 	public void parseRootTest(){
@@ -61,6 +66,28 @@ public class XomParserTest {
 
 		} catch (ParserException e) {
 			fail("Unexpected exception: " + e.getMessage());
+		}
+	}
+	
+	@Test
+	public void parsePartitionTest(){
+		for(String type: SUPPORTED_TYPES){
+			System.out.println(type);
+			
+			PartitionNode p = fModelGenerator.generatePartition(5, 5, 10, type);
+			
+			Element element = (Element)p.convert(new XomConverter());
+			
+			PartitionNode p1;
+			try {
+				p1 = fParser.parsePartition(element);
+				if(p.compare(p1) == false){
+					fail("Parsed element differs from original\n" + fStringifier.stringify(p, 0) + "\n" + fStringifier.stringify(p1, 0));
+				}
+			} catch (ParserException e) {
+				fail("Unexpected exception: " + e.getMessage());
+			}
+			
 		}
 	}
 	
