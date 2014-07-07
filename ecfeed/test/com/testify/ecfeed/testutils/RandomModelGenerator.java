@@ -27,8 +27,6 @@ import java.util.Set;
 
 import nl.flotsam.xeger.Xeger;
 
-import org.junit.Test;
-
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.ConstraintNode;
@@ -341,10 +339,10 @@ public class RandomModelGenerator {
 	}
 	
 	//DEBUG
-	@Test
+//	@Test
 	public void testPartitionGeneration(){
 		System.out.println("Childless partitions:");
-		for(String type : SUPPORTED_TYPES){
+		for(String type : new String[]{"String"}){
 			PartitionNode p0 = generatePartition(0, 0, 0, type);
 			System.out.println(type + " partition:" + p0);
 		}
@@ -355,8 +353,6 @@ public class RandomModelGenerator {
 			PartitionNode p1 = generatePartition(MAX_PARTITION_LEVELS, MAX_PARTITIONS, MAX_PARTITION_LABELS, type);
 			printPartition(p1, 0);
 		}
-		
-		
 	}
 	
 	private void printPartition(PartitionNode p, int indent){
