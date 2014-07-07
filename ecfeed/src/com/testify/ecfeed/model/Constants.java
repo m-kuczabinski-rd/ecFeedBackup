@@ -41,6 +41,6 @@ public class Constants {
 	public static final String REGEX_PARTITION_LABEL = REGEX_ALPHANUMERIC_WITH_SPACES;
 	
 	public static final String REGEX_USER_TYPE_VALUE = REGEX_JAVA_IDENTIFIER;
-	public static final String REGEX_STRING_TYPE_VALUE = "*{0, 1024}";
+	public static final String REGEX_STRING_TYPE_VALUE = "[A-Za-z1-9 !@#$%^&*()_+=;':,.<>/?]{0,1024}";
 	
 }
