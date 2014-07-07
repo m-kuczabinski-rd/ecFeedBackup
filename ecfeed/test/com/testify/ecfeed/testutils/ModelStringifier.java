@@ -28,7 +28,7 @@ public class ModelStringifier {
 	public String stringify(PartitionNode p, int indent){
 		String result = intendentString(indent);
 		result += "Partition ";
-		result += p.toString();
+		result += p.getName() + "[" + p.getValueString() + "]";
 		result += ", Labels: ";
 		for(String label : p.getLabels()){
 			result += label + " ";

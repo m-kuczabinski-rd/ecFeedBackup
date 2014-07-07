@@ -17,6 +17,7 @@ import org.junit.Test;
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.IGenericNode;
+import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.parsers.xml.XomConverter;
@@ -71,11 +72,30 @@ public class XomParserTest {
 	}
 	
 	@Test
+	public void parseMethodTest(){
+		for(int i = 0; i < 3; i++){
+			MethodNode m = fModelGenerator.generateMethod(5, 0, 0);
+			
+			Element element = (Element)m.convert(new XomConverter());
+			TRACE(element);
+
+			try{
+				MethodNode m1 = fParser.parseMethod(element); 
+				assertElementsEqual(m, m1);
+			}
+			catch (ParserException e) {
+				fail("Unexpected exception: " + e.getMessage());
+			}
+		}
+	}
+	
+	@Test
 	public void parseCategoryTest(){
 		for(String type : SUPPORTED_TYPES){
 			for(boolean expected : new Boolean[]{true, false}){
-				CategoryNode c = fModelGenerator.generateCategory(type, expected);
+				CategoryNode c = fModelGenerator.generateCategory(type, expected, 3, 5, 5);
 				Element element = (Element)c.convert(new XomConverter());
+				TRACE(element);
 				try{
 					CategoryNode c1 = fParser.parseCategory(element); 
 					assertElementsEqual(c, c1);
@@ -91,12 +111,10 @@ public class XomParserTest {
 	public void parsePartitionTest(){
 		for(String type: SUPPORTED_TYPES){
 			PartitionNode p = fModelGenerator.generatePartition(5, 5, 10, type);
-			
 			Element element = (Element)p.convert(new XomConverter());
-			
-			PartitionNode p1;
+			TRACE(element);
 			try {
-				p1 = fParser.parsePartition(element);
+				PartitionNode p1 = fParser.parsePartition(element);
 				assertElementsEqual(p, p1);
 			} catch (ParserException e) {
 				fail("Unexpected exception: " + e.getMessage());
@@ -111,7 +129,7 @@ public class XomParserTest {
 		}
 	}
 
-	//	@Test
+//		@Test
 	public void assertTypeTest(){
 		RootNode root = fModelGenerator.generateModel();
 		ClassNode _class = fModelGenerator.generateClass();

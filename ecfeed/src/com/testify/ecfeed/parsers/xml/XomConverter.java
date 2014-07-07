@@ -40,6 +40,10 @@ public class XomConverter implements IConverter {
 	public Object convert(MethodNode node) {
 		Element element = createNamedElement(METHOD_NODE_NAME, node);
 		
+		for(CategoryNode category : node.getCategories()){
+			element.appendChild((Element)category.convert(this));
+		}
+		
 		return element;
 	}
 	

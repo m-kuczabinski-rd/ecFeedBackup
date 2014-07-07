@@ -50,6 +50,22 @@ public class XomParser {
 		
 		MethodNode method = new MethodNode(name);
 		
+		for(Element child : getIterableChildren(element)){
+			if(child.getLocalName() == Constants.CATEGORY_NODE_NAME){
+				method.addCategory(parseCategory(child));
+			}
+			
+//			else if(child.getLocalName() == Constants.TEST_CASE_NODE_NAME){
+//				method.addTestCase(parseTestCase(child, method.getCategories()));
+//			}
+//			else if(child.getLocalName() == Constants.CONSTRAINT_NODE_NAME){
+//				method.addConstraint(parseConstraint(child, method));
+//			}
+			else{
+				throw new ParserException(Messages.WRONG_CHILD_ELEMENT_TYPE(element, child.getLocalName()));
+			}
+		}
+		
 		return method;
 	}
 
