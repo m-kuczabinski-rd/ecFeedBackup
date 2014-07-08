@@ -4,10 +4,10 @@ import com.testify.ecfeed.model.constraint.PartitionedCategoryStatement.LabelCon
 import com.testify.ecfeed.model.constraint.PartitionedCategoryStatement.PartitionCondition;
 
 public interface IStatementVisitor {
-	public Object visit(StaticStatement statement);
-	public Object visit(StatementArray statement);
-	public Object visit(ExpectedValueStatement statement);
-	public Object visit(PartitionedCategoryStatement statement);
-	public Object visit(LabelCondition condition);
-	public Object visit(PartitionCondition condition);
+	public Object visit(StaticStatement statement) throws Exception;
+	public Object visit(StatementArray statement) throws Exception;
+	public Object visit(ExpectedValueStatement statement) throws Exception;
+	public Object visit(PartitionedCategoryStatement statement) throws Exception;
+	public Object visit(LabelCondition condition) throws Exception;
+	public Object visit(PartitionCondition condition) throws Exception;
 }

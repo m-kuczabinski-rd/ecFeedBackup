@@ -99,5 +99,5 @@ public abstract class BasicStatement implements IStatement {
 	
 	public abstract boolean updateReferences(MethodNode method);
 	
-	public abstract Object accept(IStatementVisitor visitor);
+	public abstract Object accept(IStatementVisitor visitor) throws Exception;
 }

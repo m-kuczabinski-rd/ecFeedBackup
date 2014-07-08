@@ -30,7 +30,7 @@ public class PartitionedCategoryStatement extends BasicStatement implements IRel
 		public ICondition getCopy();
 		public boolean updateReferences(CategoryNode category);
 		public boolean compare(ICondition condition);
-		public Object accept(IStatementVisitor visitor);
+		public Object accept(IStatementVisitor visitor) throws Exception;
 	}
 	
 	public class LabelCondition implements ICondition{
@@ -94,7 +94,7 @@ public class PartitionedCategoryStatement extends BasicStatement implements IRel
 			return (getCondition().equals(compared.getCondition()));
 		}
 		
-		public Object accept(IStatementVisitor visitor){
+		public Object accept(IStatementVisitor visitor) throws Exception {
 			return visitor.visit(this);
 		}
 	}
@@ -177,7 +177,7 @@ public class PartitionedCategoryStatement extends BasicStatement implements IRel
 		}
 
 		@Override
-		public Object accept(IStatementVisitor visitor) {
+		public Object accept(IStatementVisitor visitor) throws Exception {
 			return visitor.visit(this);
 		}
 	}
@@ -304,7 +304,7 @@ public class PartitionedCategoryStatement extends BasicStatement implements IRel
 	}
 
 	@Override
-	public Object accept(IStatementVisitor visitor){
+	public Object accept(IStatementVisitor visitor) throws Exception {
 		return visitor.visit(this);
 	}
 

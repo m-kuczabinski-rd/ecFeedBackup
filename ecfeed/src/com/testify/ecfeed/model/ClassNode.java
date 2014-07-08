@@ -96,7 +96,7 @@ public class ClassNode extends GenericNode {
 		return (lastDotIndex == -1)?qualifiedName: qualifiedName.substring(lastDotIndex + 1);
 	}
 
-	public Object accept(IModelVisitor visitor) {
+	public Object accept(IModelVisitor visitor) throws Exception {
 		return visitor.visit(this);
 	}
 	

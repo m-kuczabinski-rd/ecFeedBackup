@@ -389,7 +389,7 @@ public class MethodNode extends GenericNode {
 		}
 	}
 	
-	public Object accept(IModelVisitor visitor){
+	public Object accept(IModelVisitor visitor) throws Exception{
 		return visitor.visit(this);
 	}
 	

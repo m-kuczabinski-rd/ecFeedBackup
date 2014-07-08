@@ -158,7 +158,7 @@ public class StatementArray extends BasicStatement{
 	}
 	
 	@Override
-	public Object accept(IStatementVisitor visitor){
+	public Object accept(IStatementVisitor visitor) throws Exception {
 		return visitor.visit(this);
 	}
 

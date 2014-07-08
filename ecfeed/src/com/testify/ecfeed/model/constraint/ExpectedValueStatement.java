@@ -101,7 +101,7 @@ public class ExpectedValueStatement extends BasicStatement implements IRelationa
 	}
 	
 	@Override
-	public Object accept(IStatementVisitor visitor){
+	public Object accept(IStatementVisitor visitor) throws Exception {
 		return visitor.visit(this);
 	}
 }

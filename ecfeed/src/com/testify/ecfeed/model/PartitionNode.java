@@ -307,7 +307,7 @@ public class PartitionNode extends GenericNode implements IPartitionedNode{
 		return super.compare(node);
 	}
 
-	public Object accept(IModelVisitor visitor){
+	public Object accept(IModelVisitor visitor) throws Exception{
 		return visitor.visit(this);
 	}
 }

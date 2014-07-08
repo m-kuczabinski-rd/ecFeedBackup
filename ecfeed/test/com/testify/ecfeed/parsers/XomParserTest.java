@@ -44,27 +44,26 @@ public class XomParserTest {
 	
 	@Test
 	public void parseRootTest(){
-		RootNode r = fModelGenerator.generateModel(3);
-		Element rootElement = (Element)r.convert(fConverter);
-		TRACE(rootElement);
 		try {
+			RootNode r = fModelGenerator.generateModel(3);
+			Element rootElement = (Element)r.accept(fConverter);
+			TRACE(rootElement);
 			RootNode parsedR = fParser.parseRoot(rootElement);
 			assertElementsEqual(r, parsedR);
-		} catch (ParserException e) {
+		} catch (Exception e) {
 			fail("Unexpected exception: " + e.getMessage());
 		}
 	}
 	
 //	@Test
 	public void parseClassTest(){
-		ClassNode _class = fModelGenerator.generateClass(3);
-		Element element = (Element)_class.convert(fConverter);
-		TRACE(element);
-		
 		try {
+			ClassNode _class = fModelGenerator.generateClass(3);
+			Element element = (Element)_class.accept(fConverter);
+			TRACE(element);
 			ClassNode parsedClass = fParser.parseClass(element);
 			assertElementsEqual(_class, parsedClass);
-		} catch (ParserException e) {
+		} catch (Exception e) {
 			fail("Unexpected exception: " + e.getMessage());
 		}
 	}
@@ -72,16 +71,14 @@ public class XomParserTest {
 //	@Test
 	public void parseMethodTest(){
 		for(int i = 0; i < 10; i++){
-			MethodNode m = fModelGenerator.generateMethod(5, 5, 5);
-			
-			Element element = (Element)m.convert(fConverter);
-			TRACE(element);
-
 			try{
+				MethodNode m = fModelGenerator.generateMethod(5, 5, 5);
+				Element element = (Element)m.accept(fConverter);
+				TRACE(element);
 				MethodNode m1 = fParser.parseMethod(element); 
 				assertElementsEqual(m, m1);
 			}
-			catch (ParserException e) {
+			catch (Exception e) {
 				fail("Unexpected exception: " + e.getMessage());
 			}
 		}
@@ -90,17 +87,17 @@ public class XomParserTest {
 //	@Test
 	public void parseCategoryTest(){
 		for(String type : SUPPORTED_TYPES){
+			try{
 			for(boolean expected : new Boolean[]{true, false}){
 				CategoryNode c = fModelGenerator.generateCategory(type, expected, 3, 3, 3);
-				Element element = (Element)c.convert(fConverter);
+				Element element = (Element)c.accept(fConverter);
 				TRACE(element);
-				try{
 					CategoryNode c1 = fParser.parseCategory(element); 
 					assertElementsEqual(c, c1);
 				}
-				catch (ParserException e) {
-					fail("Unexpected exception: " + e.getMessage());
-				}
+			}
+			catch (Exception e) {
+				fail("Unexpected exception: " + e.getMessage());
 			}
 		}
 	}
@@ -110,13 +107,13 @@ public class XomParserTest {
 		for(int i = 0; i < 10; i++){
 			MethodNode m = fModelGenerator.generateMethod(5, 0, 0);
 			for(int j = 0; j < 100; j++){
-				TestCaseNode tc = fModelGenerator.generateTestCase(m);
-				Element element = (Element)tc.convert(fConverter);
-				TRACE(element);
 				try {
+					TestCaseNode tc = fModelGenerator.generateTestCase(m);
+					Element element = (Element)tc.accept(fConverter);
+					TRACE(element);
 					TestCaseNode tc1 = fParser.parseTestCase(element, m);
 					assertElementsEqual(tc, tc1);
-				} catch (ParserException e) {
+				} catch (Exception e) {
 					fail("Unexpected exception: " + e.getMessage());
 				}
 			}
@@ -128,13 +125,13 @@ public class XomParserTest {
 		for(int i = 0; i < 10; i++){
 			MethodNode m = fModelGenerator.generateMethod(10, 0, 0);
 			for(int j = 0; j < 10; j++){
-				ConstraintNode c = fModelGenerator.generateConstraint(m);
-				Element element = (Element)c.convert(fConverter);
-				TRACE(element);
 				try {
+					ConstraintNode c = fModelGenerator.generateConstraint(m);
+					Element element = (Element)c.accept(fConverter);
+					TRACE(element);
 					ConstraintNode c1 = fParser.parseConstraint(element, m);
 					assertElementsEqual(c, c1);
-				} catch (ParserException e) {
+				} catch (Exception e) {
 					fail("Unexpected exception: " + e.getMessage());
 				}
 			}
@@ -144,13 +141,13 @@ public class XomParserTest {
 //	@Test
 	public void parsePartitionTest(){
 		for(String type: SUPPORTED_TYPES){
-			PartitionNode p = fModelGenerator.generatePartition(3, 3, 3, type);
-			Element element = (Element)p.convert(fConverter);
-			TRACE(element);
 			try {
+				PartitionNode p = fModelGenerator.generatePartition(3, 3, 3, type);
+				Element element = (Element)p.accept(fConverter);
+				TRACE(element);
 				PartitionNode p1 = fParser.parsePartition(element);
 				assertElementsEqual(p, p1);
-			} catch (ParserException e) {
+			} catch (Exception e) {
 				fail("Unexpected exception: " + e.getMessage());
 			}
 		}
@@ -160,19 +157,18 @@ public class XomParserTest {
 	public void parseStaticStatementTest(){
 		StaticStatement trueStatement = new StaticStatement(true);
 		StaticStatement falseStatement = new StaticStatement(false);
-
-		Element trueElement = (Element)trueStatement.accept(fConverter);
-		Element falseElement = (Element)falseStatement.accept(fConverter);
-		TRACE(trueElement);
-		TRACE(falseElement);
-
 		try{
+			Element trueElement = (Element)trueStatement.accept(fConverter);
+			Element falseElement = (Element)falseStatement.accept(fConverter);
+			TRACE(trueElement);
+			TRACE(falseElement);
+
 			StaticStatement parsedTrue = fParser.parseStaticStatement(trueElement);
 			StaticStatement parsedFalse = fParser.parseStaticStatement(falseElement);
 
 			assertStatementsEqual(trueStatement, parsedTrue);
 			assertStatementsEqual(falseStatement, parsedFalse);
-		} catch (ParserException e) {
+		} catch (Exception e) {
 			fail("Unexpected exception: " + e.getMessage());
 		}
 	}
@@ -180,11 +176,11 @@ public class XomParserTest {
 	@Test 
 	public void parsePartitionStatementTest(){
 		for(int i = 0; i < 10; i++){
-			MethodNode m = fModelGenerator.generateMethod(5, 0, 0);
-			PartitionedCategoryStatement s = fModelGenerator.generatePartitionedStatement(m);
-			Element element = (Element)s.accept(fConverter);
-			TRACE(element);
 			try{
+				MethodNode m = fModelGenerator.generateMethod(5, 0, 0);
+				PartitionedCategoryStatement s = fModelGenerator.generatePartitionedStatement(m);
+				Element element = (Element)s.accept(fConverter);
+				TRACE(element);
 				PartitionedCategoryStatement parsedS = null;
 				switch(element.getLocalName()){
 				case Constants.CONSTRAINT_LABEL_STATEMENT_NODE_NAME:
@@ -196,7 +192,7 @@ public class XomParserTest {
 				}					
 
 				assertStatementsEqual(s, parsedS);
-			} catch (ParserException e) {
+			} catch (Exception e) {
 				fail("Unexpected exception: " + e.getMessage());
 			}
 		}
@@ -205,14 +201,14 @@ public class XomParserTest {
 //	@Test
 	public void parseExpectedValueStatementTest(){
 		for(int i = 0; i < 10; i++){
-			MethodNode m = fModelGenerator.generateMethod(10, 0, 0);
-			ExpectedValueStatement s = fModelGenerator.generateExpectedValueStatement(m);
-			Element element = (Element)s.accept(fConverter);
-			TRACE(element);
 			try{
+				MethodNode m = fModelGenerator.generateMethod(10, 0, 0);
+				ExpectedValueStatement s = fModelGenerator.generateExpectedValueStatement(m);
+				Element element = (Element)s.accept(fConverter);
+				TRACE(element);
 				ExpectedValueStatement parsedS = fParser.parseExpectedValueStatement(element, m);
 				assertStatementsEqual(s, parsedS);
-			} catch (ParserException e) {
+			} catch (Exception e) {
 				fail("Unexpected exception: " + e.getMessage());
 			}
 		}
@@ -220,14 +216,14 @@ public class XomParserTest {
 
 //	@Test
 	public void parseStatementArrayTest(){
-		MethodNode m = fModelGenerator.generateMethod(10, 0, 0);
-		StatementArray s = fModelGenerator.generateStatementArray(m, 4);
-		Element element = (Element)s.accept(fConverter);
-		TRACE(element);
 		try{
+			MethodNode m = fModelGenerator.generateMethod(10, 0, 0);
+			StatementArray s = fModelGenerator.generateStatementArray(m, 4);
+			Element element = (Element)s.accept(fConverter);
+			TRACE(element);
 			StatementArray parsedS = fParser.parseStatementArray(element, m);
 			assertStatementsEqual(s, parsedS);
-		} catch (ParserException e) {
+		} catch (Exception e) {
 			fail("Unexpected exception: " + e.getMessage());
 		}
 		
@@ -235,35 +231,36 @@ public class XomParserTest {
 	
 	//		@Test
 	public void assertTypeTest(){
-		RootNode root = fModelGenerator.generateModel(3);
-		ClassNode _class = fModelGenerator.generateClass(3);
+		try{
+			RootNode root = fModelGenerator.generateModel(3);
+			ClassNode _class = fModelGenerator.generateClass(3);
+
+			Element rootElement = (Element)root.accept(fConverter);
+			Element classElement = (Element)_class.accept(fConverter);
 		
-		Element rootElement = (Element)root.convert(fConverter);
-		Element classElement = (Element)_class.convert(fConverter);
-		
-		try {
 			fParser.parseRoot(rootElement);
-		} catch (ParserException e) {
+			
+			try {
+				fParser.parseClass(classElement);
+			} catch (Exception e) {
+				fail("Unexpected exception: " + e.getMessage());
+			}
+		
+			try {
+				fParser.parseClass(rootElement);
+				fail("exception expected");
+			} catch (Exception e) {
+			}
+		
+			try {
+				fParser.parseRoot(classElement);
+				fail("exception expected");
+			} catch (Exception e) {
+			}
+		} catch (Exception e) {
 			fail("Unexpected exception: " + e.getMessage());
 		}
 	
-		try {
-			fParser.parseClass(classElement);
-		} catch (ParserException e) {
-			fail("Unexpected exception: " + e.getMessage());
-		}
-	
-		try {
-			fParser.parseClass(rootElement);
-			fail("exception expected");
-		} catch (ParserException e) {
-		}
-	
-		try {
-			fParser.parseRoot(classElement);
-			fail("exception expected");
-		} catch (ParserException e) {
-		}
 	}
 
 	private void assertStatementsEqual(BasicStatement s1, BasicStatement s2) {

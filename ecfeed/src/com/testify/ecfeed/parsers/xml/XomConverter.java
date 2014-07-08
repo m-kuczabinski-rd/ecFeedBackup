@@ -1,7 +1,6 @@
 package com.testify.ecfeed.parsers.xml;
 
 import static com.testify.ecfeed.parsers.Constants.*;
-
 import nu.xom.Attribute;
 import nu.xom.Element;
 
@@ -27,7 +26,7 @@ import com.testify.ecfeed.model.constraint.StaticStatement;
 public class XomConverter implements IModelVisitor, IStatementVisitor {
 
 	@Override
-	public Object visit(RootNode node) {
+	public Object visit(RootNode node) throws Exception{
 		Element element = createNamedElement(ROOT_NODE_NAME, node); 
 				
 		for(ClassNode _class : node.getClasses()){
@@ -38,7 +37,7 @@ public class XomConverter implements IModelVisitor, IStatementVisitor {
 	}
 
 	@Override
-	public Object visit(ClassNode node) {
+	public Object visit(ClassNode node) throws Exception {
 		Element element = createNamedElement(CLASS_NODE_NAME, node);
 		
 		for(MethodNode method : node.getMethods()){
@@ -48,7 +47,7 @@ public class XomConverter implements IModelVisitor, IStatementVisitor {
 	}
 
 	@Override
-	public Object visit(MethodNode node) {
+	public Object visit(MethodNode node) throws Exception {
 		Element element = createNamedElement(METHOD_NODE_NAME, node);
 		
 		for(CategoryNode category : node.getCategories()){
@@ -67,7 +66,7 @@ public class XomConverter implements IModelVisitor, IStatementVisitor {
 	}
 	
 	@Override
-	public Object visit(CategoryNode node){
+	public Object visit(CategoryNode node)  throws Exception {
 		Element element = createNamedElement(CATEGORY_NODE_NAME, node);
 		element.addAttribute(new Attribute(TYPE_NAME_ATTRIBUTE, node.getType()));
 		element.addAttribute(new Attribute(CATEGORY_IS_EXPECTED_ATTRIBUTE_NAME, Boolean.toString(node.isExpected())));
@@ -81,7 +80,7 @@ public class XomConverter implements IModelVisitor, IStatementVisitor {
 	}
 	
 	@Override
-	public Object visit(TestCaseNode node){
+	public Object visit(TestCaseNode node) throws Exception {
 		Element element = new Element(TEST_CASE_NODE_NAME);
 		element.addAttribute(new Attribute(TEST_SUITE_NAME_ATTRIBUTE, node.getName()));
 		for(PartitionNode testParameter : node.getTestData()){
@@ -103,7 +102,7 @@ public class XomConverter implements IModelVisitor, IStatementVisitor {
 	}
 
 	@Override
-	public Object visit(ConstraintNode node){
+	public Object visit(ConstraintNode node) throws Exception{
 		Element element = createNamedElement(CONSTRAINT_NODE_NAME, node);
 		BasicStatement premise = node.getConstraint().getPremise();
 		BasicStatement consequence = node.getConstraint().getConsequence();
@@ -122,7 +121,7 @@ public class XomConverter implements IModelVisitor, IStatementVisitor {
 	}
 	
 	@Override
-	public Object visit(PartitionNode node){
+	public Object visit(PartitionNode node) throws Exception {
 		Element element = createNamedElement(PARTITION_NODE_NAME, node);
 		String value = node.getValueString();
 		//remove disallowed XML characters
@@ -150,7 +149,7 @@ public class XomConverter implements IModelVisitor, IStatementVisitor {
 	}
 
 	@Override
-	public Object visit(StaticStatement statement) {
+	public Object visit(StaticStatement statement) throws Exception {
 		Element statementElement = new Element(CONSTRAINT_STATIC_STATEMENT_NODE_NAME);
 		String attrName = STATEMENT_STATIC_VALUE_ATTRIBUTE_NAME;
 		String attrValue = statement.getValue()?STATIC_STATEMENT_TRUE_VALUE:
@@ -161,7 +160,7 @@ public class XomConverter implements IModelVisitor, IStatementVisitor {
 	}
 
 	@Override
-	public Object visit(StatementArray statement) {
+	public Object visit(StatementArray statement) throws Exception {
 		Element element = new Element(CONSTRAINT_STATEMENT_ARRAY_NODE_NAME);
 		Attribute operatorAttribute = null;
 		switch(statement.getOperator()){
@@ -183,7 +182,7 @@ public class XomConverter implements IModelVisitor, IStatementVisitor {
 	}
 
 	@Override
-	public Object visit(ExpectedValueStatement statement) {
+	public Object visit(ExpectedValueStatement statement) throws Exception {
 		String categoryName = statement.getLeftHandName();
 		PartitionNode condition = statement.getCondition();
 		Attribute categoryAttribute = 
@@ -199,7 +198,7 @@ public class XomConverter implements IModelVisitor, IStatementVisitor {
 	}
 
 	@Override
-	public Object visit(PartitionedCategoryStatement statement) {
+	public Object visit(PartitionedCategoryStatement statement) throws Exception {
 
 		String categoryName = statement.getCategory().getName();
 		Attribute categoryAttribute = 
@@ -216,14 +215,14 @@ public class XomConverter implements IModelVisitor, IStatementVisitor {
 	}
 
 	@Override
-	public Object visit(LabelCondition condition) {
+	public Object visit(LabelCondition condition) throws Exception {
 			Element element = new Element(CONSTRAINT_LABEL_STATEMENT_NODE_NAME);
 			element.addAttribute(new Attribute(STATEMENT_LABEL_ATTRIBUTE_NAME, condition.getLabel()));
 			return element;
 	}
 
 	@Override
-	public Object visit(PartitionCondition condition) {
+	public Object visit(PartitionCondition condition) throws Exception {
 		PartitionNode partition = condition.getPartition();
 		Element element = new Element(CONSTRAINT_PARTITION_STATEMENT_NODE_NAME);
 		element.addAttribute(new Attribute(STATEMENT_PARTITION_ATTRIBUTE_NAME, partition.getQualifiedName()));

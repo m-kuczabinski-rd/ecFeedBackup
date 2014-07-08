@@ -1,11 +1,11 @@
 package com.testify.ecfeed.model;
 
 public interface IModelVisitor {
-	public Object visit(RootNode node);
-	public Object visit(ClassNode node);
-	public Object visit(MethodNode node);
-	public Object visit(CategoryNode node);
-	public Object visit(TestCaseNode node);
-	public Object visit(ConstraintNode node);
-	public Object visit(PartitionNode node);
+	public Object visit(RootNode node) throws Exception;
+	public Object visit(ClassNode node) throws Exception;
+	public Object visit(MethodNode node) throws Exception;
+	public Object visit(CategoryNode node) throws Exception;
+	public Object visit(TestCaseNode node) throws Exception;
+	public Object visit(ConstraintNode node) throws Exception;
+	public Object visit(PartitionNode node) throws Exception;
 }
