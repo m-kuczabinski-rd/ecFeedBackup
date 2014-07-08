@@ -173,6 +173,10 @@ public class RandomModelGenerator {
 		default: return generateStatementArray(method); 
 		}
 	}
+	
+	public StaticStatement generateStaticStatement(){
+		return new StaticStatement(rand.nextBoolean());
+	}
 
 	public BasicStatement generatePartitionedStatement(MethodNode method) {
 		List<CategoryNode> categories = new ArrayList<CategoryNode>();
@@ -358,10 +362,10 @@ public class RandomModelGenerator {
 	}
 
 	private String generateString(String regex){
-//		return "name" + id++;
+		return "name" + id++;
 		
-		Xeger generator = new Xeger(regex);
-		return generator.generate();
+//		Xeger generator = new Xeger(regex);
+//		return generator.generate();
 	}
 	
 	//DEBUG
@@ -401,11 +405,19 @@ public class RandomModelGenerator {
 		System.out.println(fStringifier.stringify(m, 0));
 	}
 	
-	@Test
+//	@Test
 	public void testTestCaseGenerator(){
 		MethodNode m = generateMethod(5, 0, 0);
 		TestCaseNode tc = generateTestCase(m);
 		System.out.println(fStringifier.stringify(m, 0));
 		System.out.println(fStringifier.stringify(tc, 0));
+	}
+	
+	@Test
+	public void testGenerateStaticStatement(){
+		for(int i = 0; i < 10; i++){
+			StaticStatement statement = generateStaticStatement();
+			System.out.println(fStringifier.stringify(statement, 0));
+		}
 	}
 }

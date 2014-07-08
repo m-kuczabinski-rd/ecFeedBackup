@@ -40,6 +40,10 @@ public class BasicStatementTest {
 		public boolean compare(IStatement statement) {
 			return false;
 		}
+		@Override
+		public Object accept(IStatementVisitor visitor) {
+			return null;
+		}
 	}
 	
 	@Test

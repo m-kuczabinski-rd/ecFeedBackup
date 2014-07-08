@@ -6,5 +6,6 @@ public interface IConverter {
 	public Object convert(MethodNode node);
 	public Object convert(CategoryNode node);
 	public Object convert(TestCaseNode node);
+	public Object convert(ConstraintNode node);
 	public Object convert(PartitionNode node);
 }

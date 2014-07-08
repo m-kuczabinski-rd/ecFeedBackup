@@ -11,10 +11,19 @@ import nu.xom.Node;
 
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.ClassNode;
+import com.testify.ecfeed.model.ConstraintNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.TestCaseNode;
+import com.testify.ecfeed.model.constraint.BasicStatement;
+import com.testify.ecfeed.model.constraint.Constraint;
+import com.testify.ecfeed.model.constraint.ExpectedValueStatement;
+import com.testify.ecfeed.model.constraint.Operator;
+import com.testify.ecfeed.model.constraint.PartitionedCategoryStatement;
+import com.testify.ecfeed.model.constraint.Relation;
+import com.testify.ecfeed.model.constraint.StatementArray;
+import com.testify.ecfeed.model.constraint.StaticStatement;
 import com.testify.ecfeed.parsers.Constants;
 import com.testify.ecfeed.parsers.ParserException;
 
@@ -126,6 +135,137 @@ public class XomParser {
 		return new TestCaseNode(name, testData);
 	}
 	
+	public ConstraintNode parseConstraint(Element element, MethodNode method) throws ParserException{
+		assertNodeTag(element.getQualifiedName(), CONSTRAINT_NODE_NAME);
+		String name = getElementName(element);
+		
+		
+		BasicStatement premise = null;
+		BasicStatement consequence = null;
+		for(Element child : getIterableChildren(element)){
+			if(child.getLocalName().equals(Constants.CONSTRAINT_PREMISE_NODE_NAME)){
+				if(getIterableChildren(child).size() == 1){
+					//there is only one statement per premise or consequence that is either
+					//a single statement or statement array
+					premise = parseStatement(child.getChildElements().get(0), method);
+				}
+				else{
+					throw new ParserException(Messages.MALFORMED_CONSTRAINT_NODE_DEFINITION(method.getName(), name));
+				}
+			}
+			else if(child.getLocalName().equals(Constants.CONSTRAINT_CONSEQUENCE_NODE_NAME)){
+				if(getIterableChildren(child).size() == 1){
+					consequence = parseStatement(child.getChildElements().get(0), method);
+				}
+				else{
+					throw new ParserException(Messages.MALFORMED_CONSTRAINT_NODE_DEFINITION(method.getName(), name));
+				}
+			}
+			else{
+				throw new ParserException(Messages.MALFORMED_CONSTRAINT_NODE_DEFINITION(method.getName(), name));
+			}
+		}
+		if(premise == null || consequence == null){
+			throw new ParserException(Messages.MALFORMED_CONSTRAINT_NODE_DEFINITION(method.getName(), name));
+		}
+		return new ConstraintNode(name, new Constraint(premise, consequence));
+	}
+	
+	public BasicStatement parseStatement(Element element, MethodNode method) throws ParserException {
+		switch(element.getLocalName()){
+		case Constants.CONSTRAINT_PARTITION_STATEMENT_NODE_NAME:
+			return parsePartitionStatement(element, method);
+		case Constants.CONSTRAINT_LABEL_STATEMENT_NODE_NAME:
+			return parseLabelStatement(element, method);
+		case Constants.CONSTRAINT_STATEMENT_ARRAY_NODE_NAME:
+			return parseStatementArray(element, method);
+		case Constants.CONSTRAINT_STATIC_STATEMENT_NODE_NAME:
+			return parseStaticStatement(element);
+		case Constants.CONSTRAINT_EXPECTED_STATEMENT_NODE_NAME:
+			return parseExpectedValueStatement(element, method);
+		default: return null;
+		}
+	}
+
+	public BasicStatement parseStatementArray(Element element, MethodNode method) throws ParserException {
+		StatementArray statementArray = null;
+		String operatorValue = getAttributeValue(element, Constants.STATEMENT_OPERATOR_ATTRIBUTE_NAME);
+		switch(operatorValue){
+		case Constants.STATEMENT_OPERATOR_OR_ATTRIBUTE_VALUE:
+			statementArray = new StatementArray(Operator.OR);
+			break;
+		case Constants.STATEMENT_OPERATOR_AND_ATTRIBUTE_VALUE:
+			statementArray = new StatementArray(Operator.AND);
+			break;
+		default: 
+			throw new ParserException(Messages.WRONG_STATEMENT_ARRAY_OPERATOR(method.getName(), operatorValue));
+		}
+		for(Element child : getIterableChildren(element)){
+			BasicStatement childStatement = parseStatement(child, method);
+			if(childStatement != null){
+				statementArray.addStatement(childStatement);
+			}
+		}
+		return statementArray;
+	}
+
+	public StaticStatement parseStaticStatement(Element element) throws ParserException {
+		String valueString = getAttributeValue(element, Constants.STATIC_VALUE_ATTRIBUTE_NAME);
+		switch(valueString){
+		case Constants.STATIC_STATEMENT_TRUE_VALUE:
+			return new StaticStatement(true);
+		case Constants.STATIC_STATEMENT_FALSE_VALUE:
+			return new StaticStatement(false);
+		default:
+			throw new ParserException(Messages.WRONG_STATIC_STATEMENT_VALUE(valueString));
+		}
+	}
+
+	public BasicStatement parsePartitionStatement(Element element, MethodNode method) throws ParserException {
+		String categoryName = getAttributeValue(element, Constants.STATEMENT_CATEGORY_ATTRIBUTE_NAME);
+		CategoryNode category = method.getCategory(categoryName);
+		if(category == null || category.isExpected()){
+			throw new ParserException(Messages.WRONG_CATEGORY_NAME(categoryName, method.getName()));
+		}
+		String partitionName = getAttributeValue(element, Constants.STATEMENT_PARTITION_ATTRIBUTE_NAME);
+		PartitionNode partition = category.getPartition(partitionName);
+		if(partition == null){
+			throw new ParserException(Messages.WRONG_PARTITION_NAME(categoryName, method.getName()));
+		}
+	
+		String relationName = getAttributeValue(element, Constants.STATEMENT_RELATION_ATTRIBUTE_NAME);
+		Relation relation = getRelation(relationName);
+		
+		return new PartitionedCategoryStatement(category, relation, partition); 
+	}
+
+	public BasicStatement parseLabelStatement(Element element, MethodNode method) throws ParserException {
+		String categoryName = getAttributeValue(element, Constants.STATEMENT_CATEGORY_ATTRIBUTE_NAME);
+		String label = getAttributeValue(element, Constants.STATEMENT_LABEL_ATTRIBUTE_NAME);
+		String relationName = getAttributeValue(element, Constants.STATEMENT_RELATION_ATTRIBUTE_NAME);
+		
+		CategoryNode category = method.getCategory(categoryName);
+		if(category == null || category.isExpected()){
+			throw new ParserException(Messages.WRONG_CATEGORY_NAME(categoryName, method.getName()));
+		}
+		Relation relation = getRelation(relationName);
+		
+		return new PartitionedCategoryStatement(category, relation, label);
+	}
+
+	public BasicStatement parseExpectedValueStatement(Element element, MethodNode method) throws ParserException {
+		String categoryName = getAttributeValue(element, Constants.STATEMENT_CATEGORY_ATTRIBUTE_NAME);
+		String valueString = getAttributeValue(element, Constants.STATEMENT_EXPECTED_VALUE_ATTRIBUTE_NAME);
+		CategoryNode category = method.getCategory(categoryName);
+		if(category == null || !category.isExpected()){
+			throw new ParserException(Messages.WRONG_CATEGORY_NAME(categoryName, method.getName()));
+		}
+		PartitionNode condition = new PartitionNode("expected", valueString);
+		condition.setParent(category);
+		
+		return new ExpectedValueStatement(category, condition);
+	}
+
 	public PartitionNode parsePartition(Element element) throws ParserException{
 		assertNodeTag(element.getQualifiedName(), PARTITION_NODE_NAME);
 		String name = getElementName(element);
@@ -179,5 +319,20 @@ public class XomParser {
 		return value;
 	}
 
+	protected Relation getRelation(String relationName) throws ParserException{
+		Relation relation = null;
+		switch(relationName){
+		case Constants.RELATION_EQUAL:
+			relation = Relation.EQUAL;
+			break;
+		case Constants.RELATION_NOT:
+		case Constants.RELATION_NOT_ASCII:
+			relation = Relation.NOT;
+			break;
+		default:
+			throw new ParserException(Messages.WRONG_OR_MISSING_RELATION_FORMAT(relationName));
+		}
+		return relation;
+	}
 
 }

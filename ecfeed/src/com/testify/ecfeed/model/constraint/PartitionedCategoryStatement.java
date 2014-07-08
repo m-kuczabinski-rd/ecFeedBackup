@@ -23,20 +23,25 @@ public class PartitionedCategoryStatement extends BasicStatement implements IRel
 	private Relation fRelation;
 	private ICondition fCondition;
 	
-	private interface ICondition{
+	public interface ICondition{
 		public Object getCondition();
 		public boolean evaluate(List<PartitionNode> values);
 		public boolean adapt(List<PartitionNode> values);
 		public ICondition getCopy();
 		public boolean updateReferences(CategoryNode category);
 		public boolean compare(ICondition condition);
+		public Object accept(IStatementVisitor visitor);
 	}
 	
-	private class LabelCondition implements ICondition{
+	public class LabelCondition implements ICondition{
 		private String fLabel;
 		
 		public LabelCondition(String label){
 			fLabel = label;
+		}
+		
+		public String getLabel(){
+			return fLabel;
 		}
 		
 		@Override
@@ -88,15 +93,23 @@ public class PartitionedCategoryStatement extends BasicStatement implements IRel
 			
 			return (getCondition().equals(compared.getCondition()));
 		}
+		
+		public Object accept(IStatementVisitor visitor){
+			return visitor.visit(this);
+		}
 	}
 	
-	private class PartitionCondition implements ICondition{
+	public class PartitionCondition implements ICondition{
 		private PartitionNode fPartition;
 		
 		public PartitionCondition(PartitionNode partition){
 			fPartition = partition;
 		}
 		
+		public PartitionNode getPartition() {
+			return fPartition;
+		}
+
 		@Override
 		public String toString(){
 			return fPartition.getQualifiedName();
@@ -161,6 +174,11 @@ public class PartitionedCategoryStatement extends BasicStatement implements IRel
 			PartitionCondition compared = (PartitionCondition)condition;
 			
 			return (fPartition.compare((PartitionNode)compared.getCondition()));
+		}
+
+		@Override
+		public Object accept(IStatementVisitor visitor) {
+			return visitor.visit(this);
 		}
 	}
 	
@@ -253,7 +271,7 @@ public class PartitionedCategoryStatement extends BasicStatement implements IRel
 		fCondition = new PartitionCondition(partition);
 	}
 	
-	protected ICondition getCondition(){
+	public ICondition getCondition(){
 		return fCondition;
 	}
 	

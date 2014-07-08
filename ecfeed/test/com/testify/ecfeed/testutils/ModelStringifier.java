@@ -6,6 +6,8 @@ import com.testify.ecfeed.model.IGenericNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.TestCaseNode;
+import com.testify.ecfeed.model.constraint.BasicStatement;
+import com.testify.ecfeed.model.constraint.StaticStatement;
 
 public class ModelStringifier {
 	public String stringify(IGenericNode node, int indent){
@@ -24,6 +26,15 @@ public class ModelStringifier {
 		return null;
 	}
 
+	public String stringify(BasicStatement statement, int indent){
+		if(statement instanceof StaticStatement){
+			return stringify((StaticStatement)statement, indent);
+		}
+		
+		return null;
+	}
+
+	
 	public String stringify(MethodNode m, int indent){
 		String result = intendentString(indent);
 		result += "Method " + m.toString();
@@ -82,6 +93,12 @@ public class ModelStringifier {
 			result += "\n";
 			result += stringify(child, indent + 2);
 		}
+		return result;
+	}
+	
+	public String stringify(StaticStatement s, int indent){
+		String result = intendentString(indent);
+		result += "Static statement " + s.getValue();
 		return result;
 	}
 	
