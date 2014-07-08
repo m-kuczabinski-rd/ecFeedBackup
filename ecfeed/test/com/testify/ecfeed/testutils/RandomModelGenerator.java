@@ -10,6 +10,7 @@ import static com.testify.ecfeed.model.Constants.REGEX_PARTITION_LABEL;
 import static com.testify.ecfeed.model.Constants.REGEX_PARTITION_NODE_NAME;
 import static com.testify.ecfeed.model.Constants.REGEX_ROOT_NODE_NAME;
 import static com.testify.ecfeed.model.Constants.REGEX_STRING_TYPE_VALUE;
+import static com.testify.ecfeed.model.Constants.REGEX_TEST_CASE_NODE_NAME;
 import static com.testify.ecfeed.model.Constants.REGEX_USER_TYPE_VALUE;
 import static com.testify.ecfeed.model.Constants.TYPE_NAME_BOOLEAN;
 import static com.testify.ecfeed.model.Constants.TYPE_NAME_BYTE;
@@ -37,6 +38,7 @@ import com.testify.ecfeed.model.ConstraintNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.RootNode;
+import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.model.constraint.BasicStatement;
 import com.testify.ecfeed.model.constraint.Constraint;
 import com.testify.ecfeed.model.constraint.ExpectedValueStatement;
@@ -50,14 +52,16 @@ public class RandomModelGenerator {
 	
 	private Random rand = new Random();
 	private ModelStringifier fStringifier = new ModelStringifier();
+	private static int id = 0;
 	
-	public int MAX_CLASSES = 10;
-	public int MAX_METHODS = 10;
-	public int MAX_CATEGORIES = 10;
-	public int MAX_CONSTRAINTS = 10;
-	public int MAX_PARTITIONS = 10;
-	public int MAX_PARTITION_LEVELS = 5;
-	public int MAX_PARTITION_LABELS = 10;
+	public int MAX_CLASSES = 3;
+	public int MAX_METHODS = 3;
+	public int MAX_CATEGORIES = 3;
+	public int MAX_CONSTRAINTS = 3;
+	public int MAX_TEST_CASES = 10;
+	public int MAX_PARTITIONS = 5;
+	public int MAX_PARTITION_LEVELS = 3;
+	public int MAX_PARTITION_LABELS = 3;
 	public int MAX_STATEMENTS = 5;
 	
 	public RootNode generateModel(){
@@ -80,43 +84,74 @@ public class RandomModelGenerator {
 		ClassNode _class = new ClassNode(name);
 		
 		for(int i = 0; i < rand.nextInt(MAX_METHODS) + 1; i++){
-			_class.addMethod(generateMethod());
+			int categories = rand.nextInt(MAX_CATEGORIES);
+			int constraints = rand.nextInt(MAX_CONSTRAINTS);
+			int testCases = rand.nextInt(MAX_TEST_CASES);
+			_class.addMethod(generateMethod(categories, constraints, testCases));
 		}
 
 		return _class;
 	}
 
-	public MethodNode generateMethod(){
+	public MethodNode generateMethod(int categories, int constraints, int testCases){
 		String name = generateString(REGEX_METHOD_NODE_NAME);
 		
 		MethodNode method = new MethodNode(name);
 		
-		for(int i = 0; i < MAX_CATEGORIES; i++){
+		for(int i = 0; i < categories; i++){
 			boolean expected = rand.nextInt(4) < 3 ? false : true;
 			String type = randomType();
 			
-			method.addCategory(generateCategory(type, expected));
+			method.addCategory(generateCategory(type, expected, 
+					rand.nextInt(MAX_PARTITION_LEVELS), rand.nextInt(MAX_PARTITIONS) + 1, 
+					rand.nextInt(MAX_PARTITION_LABELS)));
 		}
 		
-		for(int i = 0; i < MAX_CONSTRAINTS; i++){
+		for(int i = 0; i < constraints; i++){
 			method.addConstraint(generateConstraint(method));
 		}
 		
 		return method;
 	}
 	
-	public CategoryNode generateCategory(String type, boolean expected){
+	public CategoryNode generateCategory(String type, boolean expected, int partitionLevels, int partitions, int labels){
 		String name = generateString(REGEX_CATEGORY_NODE_NAME);
 		
 		CategoryNode category = new CategoryNode(name, type, expected);
 		category.setDefaultValueString(randomPartitionValue(type));
 		
-		for(int i = 0; i < rand.nextInt(MAX_PARTITIONS); i++){
-			int levels = rand.nextInt(MAX_PARTITION_LEVELS);
-			category.addPartition(generatePartition(levels, MAX_PARTITIONS, MAX_PARTITION_LABELS, type));
+		for(int i = 0; i < rand.nextInt(MAX_PARTITIONS) + 1; i++){
+			category.addPartition(generatePartition(partitionLevels, partitions, labels, type));
+		}
+
+		return category;
+	}
+
+	public TestCaseNode generateTestCase(MethodNode method){
+		String name = generateString(REGEX_TEST_CASE_NODE_NAME);
+		List<PartitionNode> testData = new ArrayList<PartitionNode>();
+		
+		for(CategoryNode c : method.getCategories()){
+			if(c.isExpected()){
+				PartitionNode expectedValue = new PartitionNode("@expected", randomPartitionValue(c.getType()));
+				expectedValue.setParent(c);
+				testData.add(expectedValue);
+			}
+			else{
+				List<PartitionNode> partitions = c.getPartitions();
+				if(partitions.size() == 0){
+					System.out.println("Empty category!");
+				}
+				PartitionNode p = c.getPartitions().get(rand.nextInt(partitions.size()));
+				while(p.getPartitions().size() > 0){
+					List<PartitionNode> ppartitions = p.getPartitions();
+					p = ppartitions.get(rand.nextInt(ppartitions.size()));
+				}
+				testData.add(p);
+			}
 		}
 		
-		return category;
+		return new TestCaseNode(name, testData);
 	}
 
 	public ConstraintNode generateConstraint(MethodNode method){
@@ -191,25 +226,24 @@ public class RandomModelGenerator {
 		return new ExpectedValueStatement(category, new PartitionNode(name, value));
 	}
 
-	public PartitionNode generatePartition(int levels, int maxNoOfPartitions, int maxNoOfLabels, String type) {
+	public PartitionNode generatePartition(int levels, int partitions, int labels, String type) {
 		String name = generateString(REGEX_PARTITION_NODE_NAME);
 		String value = randomPartitionValue(type);
 		
 		PartitionNode partition = new PartitionNode(name, value);
-		for(int i = 0; i < rand.nextInt(maxNoOfLabels + 1); i++){
-			partition.addLabel(generateString(REGEX_PARTITION_LABEL));
+		for(int i = 0; i < labels; i++){
+			String label = generateString(REGEX_PARTITION_LABEL);
+			partition.addLabel(label);
 		}
 		
 		if(levels > 0){
-			for(int i = 0; i < rand.nextInt(maxNoOfPartitions); i++){
-				partition.addPartition(generatePartition(levels - 1, maxNoOfPartitions, maxNoOfLabels, type));
+			for(int i = 0; i < partitions; i++){
+				partition.addPartition(generatePartition(levels - 1, partitions, labels, type));
 			}
 		}
 		
 		return partition;
 	}
-
-
 
 	private String randomType(){
 		
@@ -324,6 +358,8 @@ public class RandomModelGenerator {
 	}
 
 	private String generateString(String regex){
+//		return "name" + id++;
+		
 		Xeger generator = new Xeger(regex);
 		return generator.generate();
 	}
@@ -345,15 +381,31 @@ public class RandomModelGenerator {
 		}
 	}
 	
-	@Test
+//	@Test
 	public void testCategoryGenerator(){
 		for(String type : SUPPORTED_TYPES){
 			for(boolean expected : new Boolean[]{true, false}){
 				System.out.println("Type: " + type);
-				CategoryNode c = generateCategory(type, expected);
+				int partitions = rand.nextInt(MAX_PARTITIONS);
+				int labels = rand.nextInt(MAX_PARTITION_LABELS);
+				int levels = rand.nextInt(MAX_PARTITION_LEVELS);
+				CategoryNode c = generateCategory(type, expected, levels, partitions, labels);
 				System.out.println(fStringifier.stringify(c, 0));
 			}
 		}
 	}
 	
+//	@Test
+	public void testMethodGenerator(){
+		MethodNode m = generateMethod(5, 0, 0);
+		System.out.println(fStringifier.stringify(m, 0));
+	}
+	
+	@Test
+	public void testTestCaseGenerator(){
+		MethodNode m = generateMethod(5, 0, 0);
+		TestCaseNode tc = generateTestCase(m);
+		System.out.println(fStringifier.stringify(m, 0));
+		System.out.println(fStringifier.stringify(tc, 0));
+	}
 }

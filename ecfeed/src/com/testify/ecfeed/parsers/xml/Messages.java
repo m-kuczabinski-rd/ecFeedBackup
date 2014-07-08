@@ -65,7 +65,7 @@ public class Messages {
 		return "Partition " + partitionName + " does not exist in method " + categoryName;
 	}
 
-	public static String WRONG_TEST_PAREMETERS_NUMBER(String testSuiteName){
+	public static String WRONG_NUMBER_OF_TEST_PAREMETERS(String testSuiteName){
 		return "Number of test parameters in test case of " + testSuiteName 
 				+ "suite is different than number of parameters in parent method";
 	}
@@ -77,4 +77,7 @@ public class Messages {
 	public static String PARTITION_DOES_NOT_EXIST(String categoryName, String partitionName) {
 		return "Partition " + partitionName + " is not defined for category " + categoryName;
 	}
+	
+	public static final String MISSING_VALUE_ATTRIBUTE_IN_TEST_CASE_ELEMENT = "The expected test parameter element misses value attribute";
+
 }

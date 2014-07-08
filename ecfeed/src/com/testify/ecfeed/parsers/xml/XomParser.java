@@ -14,6 +14,7 @@ import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.RootNode;
+import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.parsers.Constants;
 import com.testify.ecfeed.parsers.ParserException;
 
@@ -84,6 +85,45 @@ public class XomParser {
 		}
 		
 		return category;
+	}
+	
+	public TestCaseNode parseTestCase(Element element, MethodNode method) throws ParserException{
+		assertNodeTag(element.getQualifiedName(), TEST_CASE_NODE_NAME);
+		String name = getAttributeValue(element, TEST_SUITE_NAME_ATTRIBUTE);
+
+		List<Element> parameterElements = getIterableChildren(element);
+		List<CategoryNode> categories = method.getCategories();
+		
+		List<PartitionNode> testData = new ArrayList<PartitionNode>();
+		
+		if(categories.size() != parameterElements.size()){
+			throw new ParserException(Messages.WRONG_NUMBER_OF_TEST_PAREMETERS(name));
+		}
+
+		for(int i = 0; i < parameterElements.size(); i++){
+			Element testParameterElement = parameterElements.get(i);
+			CategoryNode category = categories.get(i);
+			PartitionNode testValue = null;
+
+			if(testParameterElement.getLocalName().equals(Constants.TEST_PARAMETER_NODE_NAME)){
+				String partitionName = getAttributeValue(testParameterElement, Constants.PARTITION_ATTRIBUTE_NAME);
+				testValue = category.getPartition(partitionName);
+				if(testValue == null){
+					throw new ParserException(Messages.PARTITION_DOES_NOT_EXIST(category.getName(), partitionName));
+				}
+			}
+			else if(testParameterElement.getLocalName().equals(Constants.EXPECTED_PARAMETER_NODE_NAME)){
+				String valueString = getAttributeValue(testParameterElement, Constants.VALUE_ATTRIBUTE_NAME);
+				if(valueString == null){
+					throw new ParserException(Messages.MISSING_VALUE_ATTRIBUTE_IN_TEST_CASE_ELEMENT);
+				}
+				testValue = new PartitionNode(Constants.EXPECTED_VALUE_PARTITION_NAME, valueString);
+				testValue.setParent(category);
+			}
+			testData.add(testValue);
+		}
+		
+		return new TestCaseNode(name, testData);
 	}
 	
 	public PartitionNode parsePartition(Element element) throws ParserException{

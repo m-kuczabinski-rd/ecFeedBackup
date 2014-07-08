@@ -265,7 +265,7 @@ public class XmlModelParser implements IModelParser{
 		List<Element> parameterElements = getIterableElements(element.getChildElements());
 		
 		if(categories.size() != parameterElements.size()){
-			throw new ParserException(Messages.WRONG_TEST_PAREMETERS_NUMBER(testSuiteName));
+			throw new ParserException(Messages.WRONG_NUMBER_OF_TEST_PAREMETERS(testSuiteName));
 		}
 
 		for(int i = 0; i < parameterElements.size(); i++){

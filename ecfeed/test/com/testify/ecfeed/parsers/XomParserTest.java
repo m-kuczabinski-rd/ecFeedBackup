@@ -20,6 +20,7 @@ import com.testify.ecfeed.model.IGenericNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.RootNode;
+import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.parsers.xml.XomConverter;
 import com.testify.ecfeed.parsers.xml.XomParser;
 import com.testify.ecfeed.testutils.ModelStringifier;
@@ -73,7 +74,7 @@ public class XomParserTest {
 	
 	@Test
 	public void parseMethodTest(){
-		for(int i = 0; i < 3; i++){
+		for(int i = 0; i < 10; i++){
 			MethodNode m = fModelGenerator.generateMethod(5, 0, 0);
 			
 			Element element = (Element)m.convert(new XomConverter());
@@ -93,7 +94,7 @@ public class XomParserTest {
 	public void parseCategoryTest(){
 		for(String type : SUPPORTED_TYPES){
 			for(boolean expected : new Boolean[]{true, false}){
-				CategoryNode c = fModelGenerator.generateCategory(type, expected, 3, 5, 5);
+				CategoryNode c = fModelGenerator.generateCategory(type, expected, 3, 3, 3);
 				Element element = (Element)c.convert(new XomConverter());
 				TRACE(element);
 				try{
@@ -108,9 +109,27 @@ public class XomParserTest {
 	}
 	
 	@Test
+	public void parseTestCaseTest(){
+		for(int i = 0; i < 10; i++){
+			MethodNode m = fModelGenerator.generateMethod(5, 0, 0);
+			for(int j = 0; j < 100; j++){
+				TestCaseNode tc = fModelGenerator.generateTestCase(m);
+				Element element = (Element)tc.convert(new XomConverter());
+				TRACE(element);
+				try {
+					TestCaseNode tc1 = fParser.parseTestCase(element, m);
+					assertElementsEqual(tc, tc1);
+				} catch (ParserException e) {
+					fail("Unexpected exception: " + e.getMessage());
+				}
+			}
+		}
+	}
+	
+	@Test
 	public void parsePartitionTest(){
 		for(String type: SUPPORTED_TYPES){
-			PartitionNode p = fModelGenerator.generatePartition(5, 5, 10, type);
+			PartitionNode p = fModelGenerator.generatePartition(3, 3, 3, type);
 			Element element = (Element)p.convert(new XomConverter());
 			TRACE(element);
 			try {
@@ -119,7 +138,6 @@ public class XomParserTest {
 			} catch (ParserException e) {
 				fail("Unexpected exception: " + e.getMessage());
 			}
-			
 		}
 	}
 	
