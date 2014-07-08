@@ -1,7 +1,6 @@
 package com.testify.ecfeed.parsers;
 
 import static com.testify.ecfeed.testutils.Constants.SUPPORTED_TYPES;
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.io.ByteArrayOutputStream;
@@ -35,7 +34,7 @@ import com.testify.ecfeed.testutils.RandomModelGenerator;
 
 public class XomParserTest {
 	
-	private final boolean DEBUG = true;
+	private final boolean DEBUG = false;
 	
 	RandomModelGenerator fModelGenerator = new RandomModelGenerator();
 	XomConverter fConverter = new XomConverter();
@@ -43,27 +42,20 @@ public class XomParserTest {
 	ModelStringifier fStringifier = new ModelStringifier();
 	Random rand = new Random();
 	
-//	@Test
+	@Test
 	public void parseRootTest(){
-		RootNode root = fModelGenerator.generateModel(3);
-		
-		Element rootElement = (Element)root.convert(fConverter);
-		
+		RootNode r = fModelGenerator.generateModel(3);
+		Element rootElement = (Element)r.convert(fConverter);
 		TRACE(rootElement);
-		
 		try {
-			RootNode parsedRoot = fParser.parseRoot(rootElement);
-			
-			assertTrue(parsedRoot.compare(root));
-
-			
-
+			RootNode parsedR = fParser.parseRoot(rootElement);
+			assertElementsEqual(r, parsedR);
 		} catch (ParserException e) {
 			fail("Unexpected exception: " + e.getMessage());
 		}
 	}
 	
-	@Test
+//	@Test
 	public void parseClassTest(){
 		ClassNode _class = fModelGenerator.generateClass(3);
 		Element element = (Element)_class.convert(fConverter);
@@ -164,7 +156,7 @@ public class XomParserTest {
 		}
 	}
 	
-//	@Test 
+	@Test 
 	public void parseStaticStatementTest(){
 		StaticStatement trueStatement = new StaticStatement(true);
 		StaticStatement falseStatement = new StaticStatement(false);
@@ -185,7 +177,7 @@ public class XomParserTest {
 		}
 	}
 	
-//	@Test 
+	@Test 
 	public void parsePartitionStatementTest(){
 		for(int i = 0; i < 10; i++){
 			MethodNode m = fModelGenerator.generateMethod(5, 0, 0);

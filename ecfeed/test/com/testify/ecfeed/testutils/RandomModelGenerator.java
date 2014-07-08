@@ -264,6 +264,10 @@ public class RandomModelGenerator {
 	}
 
 	public BasicStatement generateConsequence(MethodNode method) {
+		if(method.getCategories().size() == 0){
+			method.addCategory(generateCategory(TYPE_NAME_INT, false, 0, 1, 1));
+		}
+		
 		List<CategoryNode> categories = method.getCategories();
 		CategoryNode category = categories.get(rand.nextInt(categories.size()));
 		if(category.isExpected()){
@@ -404,10 +408,10 @@ public class RandomModelGenerator {
 	}
 
 	private String generateString(String regex){
-		return "name" + id++;
+//		return "name" + id++;
 		
-//		Xeger generator = new Xeger(regex);
-//		return generator.generate();
+		Xeger generator = new Xeger(regex);
+		return generator.generate();
 	}
 	
 	//DEBUG

@@ -189,6 +189,8 @@ public class XomParser {
 	}
 
 	public StatementArray parseStatementArray(Element element, MethodNode method) throws ParserException {
+		assertNodeTag(element.getQualifiedName(), CONSTRAINT_STATEMENT_ARRAY_NODE_NAME);
+
 		StatementArray statementArray = null;
 		String operatorValue = getAttributeValue(element, Constants.STATEMENT_OPERATOR_ATTRIBUTE_NAME);
 		switch(operatorValue){
@@ -211,6 +213,8 @@ public class XomParser {
 	}
 
 	public StaticStatement parseStaticStatement(Element element) throws ParserException {
+		assertNodeTag(element.getQualifiedName(), CONSTRAINT_STATIC_STATEMENT_NODE_NAME);
+
 		String valueString = getAttributeValue(element, Constants.STATIC_VALUE_ATTRIBUTE_NAME);
 		switch(valueString){
 		case Constants.STATIC_STATEMENT_TRUE_VALUE:
@@ -223,6 +227,8 @@ public class XomParser {
 	}
 	
 	public PartitionedCategoryStatement parsePartitionStatement(Element element, MethodNode method) throws ParserException {
+		assertNodeTag(element.getQualifiedName(), CONSTRAINT_PARTITION_STATEMENT_NODE_NAME);
+
 		String categoryName = getAttributeValue(element, Constants.STATEMENT_CATEGORY_ATTRIBUTE_NAME);
 		CategoryNode category = method.getCategory(categoryName);
 		if(category == null || category.isExpected()){
@@ -241,6 +247,8 @@ public class XomParser {
 	}
 
 	public PartitionedCategoryStatement parseLabelStatement(Element element, MethodNode method) throws ParserException {
+		assertNodeTag(element.getQualifiedName(), CONSTRAINT_LABEL_STATEMENT_NODE_NAME);
+
 		String categoryName = getAttributeValue(element, Constants.STATEMENT_CATEGORY_ATTRIBUTE_NAME);
 		String label = getAttributeValue(element, Constants.STATEMENT_LABEL_ATTRIBUTE_NAME);
 		String relationName = getAttributeValue(element, Constants.STATEMENT_RELATION_ATTRIBUTE_NAME);
@@ -255,6 +263,8 @@ public class XomParser {
 	}
 
 	public ExpectedValueStatement parseExpectedValueStatement(Element element, MethodNode method) throws ParserException {
+		assertNodeTag(element.getQualifiedName(), CONSTRAINT_EXPECTED_STATEMENT_NODE_NAME);
+
 		String categoryName = getAttributeValue(element, Constants.STATEMENT_CATEGORY_ATTRIBUTE_NAME);
 		String valueString = getAttributeValue(element, Constants.STATEMENT_EXPECTED_VALUE_ATTRIBUTE_NAME);
 		CategoryNode category = method.getCategory(categoryName);
