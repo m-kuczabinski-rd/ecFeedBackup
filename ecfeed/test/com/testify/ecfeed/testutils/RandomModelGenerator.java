@@ -218,13 +218,11 @@ public class RandomModelGenerator {
 		}
 	}
 
-	public BasicStatement generateExpectedValueStatement(CategoryNode category) {
+	public ExpectedValueStatement generateExpectedValueStatement(CategoryNode category) {
 		String value = randomPartitionValue(category.getType());
 		String name = generateString(REGEX_PARTITION_NODE_NAME);
 		return new ExpectedValueStatement(category, new PartitionNode(name, value));
 	}
-
-
 
 	public BasicStatement generateStatementArray(MethodNode method) {
 		StatementArray statement = new StatementArray(rand.nextBoolean()?Operator.AND:Operator.OR);

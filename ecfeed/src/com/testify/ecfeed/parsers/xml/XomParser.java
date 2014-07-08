@@ -253,7 +253,7 @@ public class XomParser {
 		return new PartitionedCategoryStatement(category, relation, label);
 	}
 
-	public BasicStatement parseExpectedValueStatement(Element element, MethodNode method) throws ParserException {
+	public ExpectedValueStatement parseExpectedValueStatement(Element element, MethodNode method) throws ParserException {
 		String categoryName = getAttributeValue(element, Constants.STATEMENT_CATEGORY_ATTRIBUTE_NAME);
 		String valueString = getAttributeValue(element, Constants.STATEMENT_EXPECTED_VALUE_ATTRIBUTE_NAME);
 		CategoryNode category = method.getCategory(categoryName);
