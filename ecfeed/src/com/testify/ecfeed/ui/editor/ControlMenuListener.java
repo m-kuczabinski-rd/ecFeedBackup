@@ -48,8 +48,6 @@ public abstract class ControlMenuListener implements Listener{
 		fEnabled = true;
 	}
 	
-	protected abstract void menuItemSelected(int index, SelectionEvent e);
-
 	@Override
 	public void handleEvent(Event e){
 		if(fEnabled){
@@ -109,4 +107,7 @@ public abstract class ControlMenuListener implements Listener{
 	public int getSelectedItemIndex(){
 		return fLastIndexSelected;
 	}
+	
+	protected abstract void menuItemSelected(int index, SelectionEvent e);
+
 }

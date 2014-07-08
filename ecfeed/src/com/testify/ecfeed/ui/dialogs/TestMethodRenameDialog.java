@@ -58,6 +58,23 @@ public class TestMethodRenameDialog extends TitleAreaDialog {
 		setHelpAvailable(false);
 		fRenamedMethod = method;
 	}
+	
+	public MethodNode getSelectedMethod(){
+		return fSelectedMethod;
+	}
+	
+	/**
+	 * Create contents of the button bar.
+	 * @param parent
+	 */
+	@Override
+	protected void createButtonsForButtonBar(Composite parent) {
+		fOkButton = createButton(parent, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL,
+				true);
+		fOkButton.setEnabled(false);
+		createButton(parent, IDialogConstants.CANCEL_ID,
+				IDialogConstants.CANCEL_LABEL, false);
+	}
 
 	/**
 	 * Create contents of the dialog.
@@ -116,23 +133,6 @@ public class TestMethodRenameDialog extends TitleAreaDialog {
 		});
 
 		return area;
-	}
-	
-	public MethodNode getSelectedMethod(){
-		return fSelectedMethod;
-	}
-	
-	/**
-	 * Create contents of the button bar.
-	 * @param parent
-	 */
-	@Override
-	protected void createButtonsForButtonBar(Composite parent) {
-		fOkButton = createButton(parent, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL,
-				true);
-		fOkButton.setEnabled(false);
-		createButton(parent, IDialogConstants.CANCEL_ID,
-				IDialogConstants.CANCEL_LABEL, false);
 	}
 
 }

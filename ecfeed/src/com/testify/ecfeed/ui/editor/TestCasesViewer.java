@@ -54,22 +54,8 @@ public class TestCasesViewer extends CheckboxTreeViewerSection {
 	private Button fGenerateSuiteButton;
 	private boolean fIsExecutable;
 
-	@Override
-	protected TreeViewer createTreeViewer(Composite parent, int style) {
-		TreeViewer treeViewer = super.createTreeViewer(parent, style);
-		final Tree tree = treeViewer.getTree();
-		tree.addListener(SWT.Selection, new Listener() {
-			@Override
-			public void handleEvent(Event event) {
-				if (event.detail == SWT.CHECK) {
-					isSelectionExecutable();
-				}
-			}
-		});
-		return treeViewer;
-	}
-
 	private class AddTestCaseAdapter extends SelectionAdapter{
+		@Override
 		public void widgetSelected(SelectionEvent e){
 			
 			for(CategoryNode category : fSelectedMethod.getCategories()){
@@ -175,6 +161,40 @@ public class TestCasesViewer extends CheckboxTreeViewerSection {
 	}
 	
 	@Override
+	public void refresh() {
+		super.refresh();
+		fIsExecutable = ModelUtils.isMethodImplemented(fSelectedMethod) || ModelUtils.isMethodPartiallyImplemented(fSelectedMethod);
+		setExecuteEnabled(true);
+		fGenerateSuiteButton.setEnabled(ModelUtils.isMethodWithParameters(fSelectedMethod));
+	}
+
+	public void setInput(MethodNode method){
+		fSelectedMethod = method;
+		fContentProvider.setMethod(method);
+		fLabelProvider.setMethod(method);
+		super.setInput(method);
+	}
+	
+	public MethodNode getSelectedMethod(){
+		return fSelectedMethod;
+	}
+	
+	@Override
+	protected TreeViewer createTreeViewer(Composite parent, int style) {
+		TreeViewer treeViewer = super.createTreeViewer(parent, style);
+		final Tree tree = treeViewer.getTree();
+		tree.addListener(SWT.Selection, new Listener() {
+			@Override
+			public void handleEvent(Event event) {
+				if (event.detail == SWT.CHECK) {
+					isSelectionExecutable();
+				}
+			}
+		});
+		return treeViewer;
+	}
+	
+	@Override
 	//Put buttons next to the viewer instead below
 	protected int buttonsPosition(){
 		return BUTTONS_ASIDE;
@@ -194,25 +214,6 @@ public class TestCasesViewer extends CheckboxTreeViewerSection {
 			fLabelProvider = new TestCasesViewerLabelProvider(fSelectedMethod);
 		}
 		return fLabelProvider;
-	}
-	
-	@Override
-	public void refresh() {
-		super.refresh();
-		fIsExecutable = ModelUtils.isMethodImplemented(fSelectedMethod) || ModelUtils.isMethodPartiallyImplemented(fSelectedMethod);
-		setExecuteEnabled(true);
-		fGenerateSuiteButton.setEnabled(ModelUtils.isMethodWithParameters(fSelectedMethod));
-	}
-
-	public void setInput(MethodNode method){
-		fSelectedMethod = method;
-		fContentProvider.setMethod(method);
-		fLabelProvider.setMethod(method);
-		super.setInput(method);
-	}
-	
-	public MethodNode getSelectedMethod(){
-		return fSelectedMethod;
 	}
 	
 	private void setExecuteEnabled(boolean enabled){

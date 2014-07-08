@@ -27,18 +27,12 @@ public class StatementArray extends BasicStatement{
 		fOperator = operator;
 	}
 
+	@Override
 	public String getLeftHandName(){
 		return fOperator == Operator.AND?Operator.AND.toString():Operator.OR.toString();
 	}
-
-	public Operator getOperator(){
-		return fOperator;
-	}
-
-	public void setOperator(Operator operator) {
-		fOperator = operator;
-	}
-
+	
+	@Override
 	public void addStatement(BasicStatement statement){
 		fStatements.add(statement);
 		statement.setParent(this);
@@ -128,4 +122,13 @@ public class StatementArray extends BasicStatement{
 		}
 		return true;
 	}
+
+	public Operator getOperator(){
+		return fOperator;
+	}
+
+	public void setOperator(Operator operator) {
+		fOperator = operator;
+	}
+
 }

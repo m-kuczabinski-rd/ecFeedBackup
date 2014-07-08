@@ -56,6 +56,11 @@ public class ExecuteStaticTestAdapter extends ExecuteTestAdapter {
 				Messages.DIALOG_TEST_METHOD_EXECUTION_STOPPED_MESSAGE(getMethodModel().toString(), e.getMessage()));
 		} 
 	}
+	
+	@Override
+	protected MethodNode getMethodModel() {
+		return fViewerSection.getSelectedMethod();
+	}
 
 	protected Collection<TestCaseNode> getSelectedTestCases() {
 		Collection<TestCaseNode> testCases = new HashSet<TestCaseNode>();
@@ -74,8 +79,4 @@ public class ExecuteStaticTestAdapter extends ExecuteTestAdapter {
 		return testCases;
 	}
 
-	@Override
-	protected MethodNode getMethodModel() {
-		return fViewerSection.getSelectedMethod();
-	}
 }

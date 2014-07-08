@@ -79,10 +79,6 @@ public class MethodDetailsPage extends BasicDetailsPage {
 		super(masterSection);
 	}
 
-	public MethodNode getSelectedMethod() {
-		return fSelectedMethod;
-	}
-
 	@Override
 	public void createContents(Composite parent){
 		super.createContents(parent);
@@ -94,6 +90,33 @@ public class MethodDetailsPage extends BasicDetailsPage {
 		
 		getToolkit().paintBordersFor(getMainComposite());
 	}
+
+	@Override
+	public void refresh(){
+		if(getSelectedElement() instanceof MethodNode){
+			fSelectedMethod = (MethodNode)getSelectedElement();
+		}
+		if(fSelectedMethod != null){
+			boolean implemented = ModelUtils.isMethodImplemented(fSelectedMethod);
+			boolean partiallyImplemented = ModelUtils.isMethodPartiallyImplemented(fSelectedMethod);
+
+			String title = fSelectedMethod.toString();
+			title += " " + getImplementationStatusIndicator(implemented, partiallyImplemented);
+			fTestOnlineButton.setEnabled(implemented || partiallyImplemented);
+			getMainSection().setText(title);
+			fParemetersSection.setInput(fSelectedMethod);
+			fConstraintsSection.setInput(fSelectedMethod);
+			fTestCasesSection.setInput(fSelectedMethod);
+			fMethodNameText.setText(fSelectedMethod.getName());
+			
+			fReassignButton.setEnabled(ModelUtils.isClassPartiallyImplemented((ClassNode)fSelectedMethod.getParent())
+						|| ModelUtils.isClassImplemented((ClassNode)fSelectedMethod.getParent()));
+		}
+	}
+	
+	public MethodNode getSelectedMethod() {
+		return fSelectedMethod;
+	}	
 
 	private void createTextClient() {
 		Composite composite = getToolkit().createComposite(getMainComposite());
@@ -150,29 +173,6 @@ public class MethodDetailsPage extends BasicDetailsPage {
 		}
 	}
 
-	@Override
-	public void refresh(){
-		if(getSelectedElement() instanceof MethodNode){
-			fSelectedMethod = (MethodNode)getSelectedElement();
-		}
-		if(fSelectedMethod != null){
-			boolean implemented = ModelUtils.isMethodImplemented(fSelectedMethod);
-			boolean partiallyImplemented = ModelUtils.isMethodPartiallyImplemented(fSelectedMethod);
-
-			String title = fSelectedMethod.toString();
-			title += " " + getImplementationStatusIndicator(implemented, partiallyImplemented);
-			fTestOnlineButton.setEnabled(implemented || partiallyImplemented);
-			getMainSection().setText(title);
-			fParemetersSection.setInput(fSelectedMethod);
-			fConstraintsSection.setInput(fSelectedMethod);
-			fTestCasesSection.setInput(fSelectedMethod);
-			fMethodNameText.setText(fSelectedMethod.getName());
-			
-			fReassignButton.setEnabled(ModelUtils.isClassPartiallyImplemented((ClassNode)fSelectedMethod.getParent())
-						|| ModelUtils.isClassImplemented((ClassNode)fSelectedMethod.getParent()));
-		}
-	}
-	
 	private String getImplementationStatusIndicator(boolean implemented, boolean partiallyImplemented){
 		String status;
 		if (implemented) {

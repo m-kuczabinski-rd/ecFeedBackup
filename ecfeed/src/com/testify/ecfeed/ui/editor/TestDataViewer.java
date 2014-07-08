@@ -39,6 +39,17 @@ public class TestDataViewer extends TableViewerSection implements TestDataEditor
 		fColorManager = new ColorManager();
 		getSection().setText("Test data");
 	}
+	
+	@Override
+	public void testDataChanged() {
+		modelUpdated();
+	}
+	
+	public void setInput(TestCaseNode testCase){
+		List<PartitionNode> testData = testCase.getTestData();
+		super.setInput(testData);
+		fValueColumn.setEditingSupport(new TestDataValueEditingSupport(getTableViewer(), testData, this));
+	}
 
 	@Override
 	protected void createTableColumns() {
@@ -77,17 +88,6 @@ public class TestDataViewer extends TableViewerSection implements TestDataEditor
 			return fColorManager.getColor(ColorConstants.ITEM_IMPLEMENTED);
 		}
 		return null;
-	}
-
-	public void setInput(TestCaseNode testCase){
-		List<PartitionNode> testData = testCase.getTestData();
-		super.setInput(testData);
-		fValueColumn.setEditingSupport(new TestDataValueEditingSupport(getTableViewer(), testData, this));
-	}
-
-	@Override
-	public void testDataChanged() {
-		modelUpdated();
 	}
 	
 }

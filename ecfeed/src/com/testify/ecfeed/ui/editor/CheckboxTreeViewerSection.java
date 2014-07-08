@@ -24,6 +24,14 @@ public abstract class CheckboxTreeViewerSection extends TreeViewerSection {
 		super(parent, toolkit, style, updateListener);
 	}
 
+	public Object[] getCheckedElements(){
+		return getCheckboxViewer().getCheckedElements();
+	}
+
+	public Object[] getGrayedElements(){
+		return getCheckboxViewer().getGrayedElements();
+	}
+
 	@Override
 	protected TreeViewer createTreeViewer(Composite parent, int style) {
 		Tree tree = new Tree(parent, style | SWT.CHECK);
@@ -35,12 +43,5 @@ public abstract class CheckboxTreeViewerSection extends TreeViewerSection {
 	protected CheckboxTreeViewer getCheckboxViewer(){
 		return (CheckboxTreeViewer)getViewer();
 	}
-
-	public Object[] getCheckedElements(){
-		return getCheckboxViewer().getCheckedElements();
-	}
-
-	public Object[] getGrayedElements(){
-		return getCheckboxViewer().getGrayedElements();
-	}
+	
 }

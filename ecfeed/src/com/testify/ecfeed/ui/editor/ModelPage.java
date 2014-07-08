@@ -34,6 +34,14 @@ public class ModelPage extends FormPage {
 			fBlock.getMasterSection().commit(onSave);
 		}
 	}
+	
+	public RootNode getModel(){
+		return fEditor.getModel();
+	}
+
+	public ModelMasterDetailsBlock getMasterBlock() {
+		return fBlock;
+	}
 
 	@Override
 	protected void createFormContent(IManagedForm managedForm) {
@@ -45,12 +53,5 @@ public class ModelPage extends FormPage {
 		boolean masterSectionDirty = fBlock.getMasterSection() == null ? false : fBlock.getMasterSection().isDirty();
 		return super.isDirty() || masterSectionDirty;
 	}
-	
-	public RootNode getModel(){
-		return fEditor.getModel();
-	}
 
-	public ModelMasterDetailsBlock getMasterBlock() {
-		return fBlock;
-	}
 }

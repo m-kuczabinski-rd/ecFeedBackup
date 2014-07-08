@@ -120,6 +120,11 @@ public class ClassViewer extends CheckboxTableViewerSection {
 		addDoubleClickListener(new SelectNodeDoubleClickListener(parent.getMasterSection()));
 	}
 	
+	public void setInput(RootNode model){
+		super.setInput(model.getClasses());
+		fModel = model;
+	}
+	
 	@Override
 	protected void createTableColumns(){
 		nameColumn = addColumn("Class", 150, new ClassViewerColumnLabelProvider(){
@@ -137,11 +142,6 @@ public class ClassViewer extends CheckboxTableViewerSection {
 			}
 		});
 		packageNameColumn.setEditingSupport(new ClassNameEditingSupport(this, true));
-	}
-	
-	public void setInput(RootNode model){
-		super.setInput(model.getClasses());
-		fModel = model;
 	}
 	
 }

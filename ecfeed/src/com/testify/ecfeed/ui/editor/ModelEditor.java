@@ -83,49 +83,19 @@ public class ModelEditor extends FormEditor implements IModelWrapper{
 			return false;
 		}
 	}
-
-	public RootNode getModel(){
-		if (fModel == null){
-			fModel = createModel();
-		}
-		return fModel;
-	}
 	
-	private RootNode createModel() {
-		RootNode root = null;
-		IEditorInput input = getEditorInput();
-		if(input instanceof FileEditorInput){
-			IFile file = ((FileEditorInput)input).getFile();
-			InputStream iStream;
-			try {
-				XmlModelParser parser = new XmlModelParser();
-				iStream = file.getContents();
-				root = parser.parseModel(iStream);
-			} catch (CoreException | ParserException e) {
-				MessageDialog.openError(Display.getCurrent().getActiveShell(), "Error", "Exception: " + e.getMessage());
-				e.printStackTrace();
-			}
-		}
-		return root;
-	}
-
 	public ModelEditor() {
 		super();
 		ResourceChangeReporter listener = new ResourceChangeReporter();
 		ResourcesPlugin.getWorkspace().addResourceChangeListener(listener, IResourceChangeEvent.POST_CHANGE);
 	}
-	
-	@Override
-	protected void addPages() {
-		try {
-			setPartName(getEditorInput().getName());
-			addPage(fModelPage = new ModelPage(this));
 
-		} catch (PartInitException e) {
-			ErrorDialog.openError(getSite().getShell(),
-					"Error creating nested text editor",
-					null, e.getStatus());
+	@Override
+	public RootNode getModel(){
+		if (fModel == null){
+			fModel = createModel();
 		}
+		return fModel;
 	}
 	
 	@Override
@@ -152,32 +122,6 @@ public class ModelEditor extends FormEditor implements IModelWrapper{
 		}
 	}
 	
-	private void saveEditor(IFile file, IProgressMonitor monitor){
-		try{
-			FileOutputStream fout = new FileOutputStream(file.getLocation().toOSString());
-			XmlModelSerializer writer = new XmlModelSerializer(fout);
-			writer.writeXmlDocument(fModel);
-			refreshWorkspace(monitor);
-			commitPages(true);
-			firePropertyChange(PROP_DIRTY);
-		}
-		catch(Exception e){
-			MessageDialog.openError(Display.getCurrent().getActiveShell(), 
-					"Error", "Couldn't write the file:" + e.getMessage());
-		}
-	}
-	
-	private void refreshWorkspace(IProgressMonitor monitor) throws CoreException {
-		for(IResource resource : ResourcesPlugin.getWorkspace().getRoot().getProjects()){
-			resource.refreshLocal(IResource.DEPTH_INFINITE, monitor);
-		}
-	}
-
-	public void gotoMarker(IMarker marker) {
-		setActivePage(0);
-		IDE.gotoMarker(getEditor(0), marker);
-	}
-	
 	@Override
 	public boolean isSaveAsAllowed() {
 		return true;
@@ -198,4 +142,63 @@ public class ModelEditor extends FormEditor implements IModelWrapper{
 		}
 		super.setFocus();
 	}
+	
+
+	public void gotoMarker(IMarker marker) {
+		setActivePage(0);
+		IDE.gotoMarker(getEditor(0), marker);
+	}
+	
+	private RootNode createModel() {
+		RootNode root = null;
+		IEditorInput input = getEditorInput();
+		if(input instanceof FileEditorInput){
+			IFile file = ((FileEditorInput)input).getFile();
+			InputStream iStream;
+			try {
+				XmlModelParser parser = new XmlModelParser();
+				iStream = file.getContents();
+				root = parser.parseModel(iStream);
+			} catch (CoreException | ParserException e) {
+				MessageDialog.openError(Display.getCurrent().getActiveShell(), "Error", "Exception: " + e.getMessage());
+				e.printStackTrace();
+			}
+		}
+		return root;
+	}
+	
+	@Override
+	protected void addPages() {
+		try {
+			setPartName(getEditorInput().getName());
+			addPage(fModelPage = new ModelPage(this));
+
+		} catch (PartInitException e) {
+			ErrorDialog.openError(getSite().getShell(),
+					"Error creating nested text editor",
+					null, e.getStatus());
+		}
+	}
+	
+	private void saveEditor(IFile file, IProgressMonitor monitor){
+		try{
+			FileOutputStream fout = new FileOutputStream(file.getLocation().toOSString());
+			XmlModelSerializer writer = new XmlModelSerializer(fout);
+			writer.writeXmlDocument(fModel);
+			refreshWorkspace(monitor);
+			commitPages(true);
+			firePropertyChange(PROP_DIRTY);
+		}
+		catch(Exception e){
+			MessageDialog.openError(Display.getCurrent().getActiveShell(), 
+					"Error", "Couldn't write the file:" + e.getMessage());
+		}
+	}
+	
+	private void refreshWorkspace(IProgressMonitor monitor) throws CoreException {
+		for(IResource resource : ResourcesPlugin.getWorkspace().getRoot().getProjects()){
+			resource.refreshLocal(IResource.DEPTH_INFINITE, monitor);
+		}
+	}
+	
 }

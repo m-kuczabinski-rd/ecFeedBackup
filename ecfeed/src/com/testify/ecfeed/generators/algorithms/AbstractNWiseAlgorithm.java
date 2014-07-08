@@ -32,6 +32,7 @@ public abstract class AbstractNWiseAlgorithm<E> extends AbstractAlgorithm<E> imp
 		N = n;
 	}
 	
+	@Override
 	public void initialize(List<List<E>> input, 
 			Collection<IConstraint<E>> constraints) throws GeneratorException {
 
@@ -52,6 +53,15 @@ public abstract class AbstractNWiseAlgorithm<E> extends AbstractAlgorithm<E> imp
 		fTuplesToGenerate = calculateTotalTuples();
 		setTotalWork(fTuplesToGenerate);
 		super.reset();
+	}
+	
+	@Override
+	public void cancel() {
+		fCartesianGenerator.cancel();
+	}
+
+	public int getCoverage() {
+		return fCoverage;
 	}
 	
 	public int getN(){
@@ -90,17 +100,6 @@ public abstract class AbstractNWiseAlgorithm<E> extends AbstractAlgorithm<E> imp
 			totalWork += combinations;
 		}
 		return (int) Math.ceil(((double) (fCoverage * totalWork)) / 100);
-	}
-	
-
-	
-	@Override
-	public void cancel() {
-		fCartesianGenerator.cancel();
-	}
-
-	public int getCoverage() {
-		return fCoverage;
 	}
 
 }

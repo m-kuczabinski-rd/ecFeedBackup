@@ -29,10 +29,6 @@ public class TestCasesViewerLabelProvider extends LabelProvider implements IColo
 		fColorManager = new ColorManager();
 	}
 	
-	public void setMethod(MethodNode method){
-		fMethod = method;
-	}
-	
 	@Override
 	public String getText(Object element) {
 		if (element instanceof String) {
@@ -70,4 +66,9 @@ public class TestCasesViewerLabelProvider extends LabelProvider implements IColo
 	public Color getBackground(Object element) {
 		return null;
 	}
+	
+	public void setMethod(MethodNode method){
+		fMethod = method;
+	}
+	
 }

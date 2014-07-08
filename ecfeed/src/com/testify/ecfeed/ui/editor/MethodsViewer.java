@@ -126,17 +126,17 @@ public class MethodsViewer extends CheckboxTableViewerSection {
 		addButton("Remove selected", new RemoveSelectedMethodsAdapter());
 		addDoubleClickListener(new SelectNodeDoubleClickListener(parent.getMasterSection()));
 	}
+	
+	public void setInput(ClassNode classNode){
+		fSelectedClass = classNode;
+		super.setInput(classNode.getMethods());
+	}
 
 	@Override
 	protected void createTableColumns() {
 		methods = addColumn("Methods", 150, new MethodsNameLabelProvider());
 		methods.setEditingSupport(new MethodNameEditingSupport(this));
 		addColumn("Arguments", 450, new MethodsArgsLabelProvider());
-	}
-	
-	public void setInput(ClassNode classNode){
-		fSelectedClass = classNode;
-		super.setInput(classNode.getMethods());
 	}
 
 	@Override

@@ -48,21 +48,7 @@ public abstract class ViewerSection extends BasicSection {
 		super.refresh();
 		fViewer.refresh();
 	}
-
-	@Override
-	protected Composite createClientComposite() {
-		Composite client = super.createClientComposite();
-		createViewerComposite(client); 
-		fButtonsComposite = createButtonsComposite(client); 
-		return client;
-	}
 	
-	@Override 
-	protected Layout clientLayout() {
-		GridLayout layout = new GridLayout(buttonsPosition() == BUTTONS_BELOW?1:2, false);
-		return layout;
-	}
-
 	public Object getSelectedElement(){
 		return fSelectedElement;
 	}
@@ -78,6 +64,20 @@ public abstract class ViewerSection extends BasicSection {
 
 	public Object getInput(){
 		return fViewer.getInput();
+	}
+
+	@Override
+	protected Composite createClientComposite() {
+		Composite client = super.createClientComposite();
+		createViewerComposite(client); 
+		fButtonsComposite = createButtonsComposite(client); 
+		return client;
+	}
+	
+	@Override 
+	protected Layout clientLayout() {
+		GridLayout layout = new GridLayout(buttonsPosition() == BUTTONS_BELOW?1:2, false);
+		return layout;
 	}
 
 	/*

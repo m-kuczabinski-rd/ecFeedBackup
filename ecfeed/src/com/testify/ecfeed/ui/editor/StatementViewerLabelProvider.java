@@ -33,10 +33,6 @@ public class StatementViewerLabelProvider extends LabelProvider {
 	public StatementViewerLabelProvider(){
 	}
 	
-	public void setConstraint(Constraint constraint){
-		fConstraint = constraint;
-	}
-	
 	public String getText(Object element){
 		if(element instanceof StatementArray){
 			return ((StatementArray)element).getOperator().toString();
@@ -57,6 +53,10 @@ public class StatementViewerLabelProvider extends LabelProvider {
 			}
 		}
 		return null;
+	}
+	
+	public void setConstraint(Constraint constraint){
+		fConstraint = constraint;
 	}
 	
 	private static Image getImage(String file) {

@@ -62,20 +62,6 @@ public class ModelUtils {
 		return classNode;
 	}
 	
-	private static boolean isAnnotated(IMethod method, String name) throws JavaModelException{
-		IAnnotation[] annotations = method.getAnnotations();
-		for(IAnnotation annotation : annotations){
-			if(annotation.getElementName().equals(name)){
-				return true;
-			}
-		}
-		return false;
-	}
-	
-	private static boolean isPublicVoid(IMethod method) throws JavaModelException{
-		return (method.getReturnType().equals(Signature.SIG_VOID) && Flags.isPublic(method.getFlags()));
-	}
-	
 	public static ClassNode generateClassModel(IType type){
 		return generateClassModel(type, true);
 	}
@@ -161,70 +147,6 @@ public class ModelUtils {
 		return matches;
 	}
 
-	/**
-	 * Returns elements in v1 that are not mentioned in v2 by checking toString() value; 
-	 */
-	private static List<MethodNode> diff(List<MethodNode> v1, List<MethodNode> v2){
-		ArrayList<MethodNode> diff = new ArrayList<MethodNode>();
-		
-		for(MethodNode method1 : v1){
-			boolean nodeMentioned = false;
-			for(MethodNode method2 : v2){
-				if(method1.toString().equals(method2.toString())){
-					nodeMentioned = true;
-					break;
-				}
-			}
-			if(nodeMentioned == false){
-				diff.add(method1);
-			}
-		}				
-		return diff;
-	}
-	
-	private static IType getTypeObject(String qualifiedName) throws JavaModelException{
-		IJavaProject[] projects = JavaCore.create(ResourcesPlugin.getWorkspace().getRoot()).getJavaProjects();
-		for(IJavaProject project : projects){
-			IType type = project.findType(qualifiedName);
-			if(type != null){
-				return type; 
-			}
-		}
-		return null;
-	}
-	
-	private static MethodNode generateMethodModel(IMethod method, Class<?> testClass) throws JavaModelException {
-		MethodNode methodNode = new MethodNode(method.getElementName());
-		for(ILocalVariable parameter : method.getParameters()){
-			methodNode.addCategory(generateCategoryModel(parameter, getTypeName(parameter, method, testClass), isExpected(parameter)));
-		}
-		return methodNode;
-	}
-	
-	private static CategoryNode generateCategoryModel(ILocalVariable parameter, String type, boolean expected){
-		CategoryNode category = new CategoryNode(parameter.getElementName(), type, expected);
-		if(expected){
-			category.setDefaultValueString(getDefaultExpectedValueString(type));
-			return category;
-		} else{
-			ArrayList<PartitionNode> defaultPartitions = generateDefaultPartitions(type);
-			for(PartitionNode partition : defaultPartitions){
-				category.addPartition(partition);
-			}
-			return category;
-		}
-	}
-
-	private static boolean isExpected(ILocalVariable parameter) throws JavaModelException {
-		IAnnotation[] annotations = parameter.getAnnotations();
-		for(IAnnotation annotation : annotations){
-			if(annotation.getElementName().equals("expected")){
-				return true;
-			}
-		}
-		return false;
-	}
-
 	public static boolean isMethodWithParameters(MethodNode methodNode) {
 		return (methodNode.getCategories().size() > 0);
 	}
@@ -251,43 +173,6 @@ public class ModelUtils {
 			return Constants.DEFAULT_EXPECTED_STRING_VALUE;
 		default:
 			return ClassUtils.defaultEnumExpectedValueString(type);
-		}
-	}
-
-	private static String getTypeName(ILocalVariable parameter, IMethod method, Class<?> testClass) {
-		String typeSignature = parameter.getTypeSignature();
-		switch(typeSignature){
-		case Signature.SIG_BOOLEAN:
-			return com.testify.ecfeed.model.Constants.TYPE_NAME_BOOLEAN;
-		case Signature.SIG_BYTE:
-			return com.testify.ecfeed.model.Constants.TYPE_NAME_BYTE;
-		case Signature.SIG_CHAR:
-			return com.testify.ecfeed.model.Constants.TYPE_NAME_CHAR;
-		case Signature.SIG_DOUBLE:
-			return com.testify.ecfeed.model.Constants.TYPE_NAME_DOUBLE;
-		case Signature.SIG_FLOAT:
-			return com.testify.ecfeed.model.Constants.TYPE_NAME_FLOAT;
-		case Signature.SIG_INT:
-			return com.testify.ecfeed.model.Constants.TYPE_NAME_INT;
-		case Signature.SIG_LONG:
-			return com.testify.ecfeed.model.Constants.TYPE_NAME_LONG;
-		case Signature.SIG_SHORT:
-			return com.testify.ecfeed.model.Constants.TYPE_NAME_SHORT;
-		case "QString;":
-			return com.testify.ecfeed.model.Constants.TYPE_NAME_STRING;
-		default:
-			if (typeSignature.startsWith("Q") && typeSignature.endsWith(";")){
-				for (Method reflection : testClass.getMethods()) {
-					if (method.getElementName().equals(reflection.getName())) {
-						for (Class<?> type : reflection.getParameterTypes()) {
-							if (type.getSimpleName().equals(typeSignature.substring(1, typeSignature.lastIndexOf(";")))) {
-								return type.getCanonicalName();
-							}
-						}
-					}
-				}
-			}
-			return com.testify.ecfeed.model.Constants.TYPE_NAME_UNSUPPORTED;
 		}
 	}
 
@@ -368,72 +253,7 @@ public class ModelUtils {
 			return ClassUtils.defaultEnumValues(type);
 		}
 	}
-
-	private static ArrayList<PartitionNode> defaultBooleanPartitions() {
-		ArrayList<PartitionNode> partitions = new ArrayList<PartitionNode>();
-		HashMap<String, String> values = predefinedBooleanValues();
-		for (String key : values.keySet()) {
-			partitions.add(new PartitionNode(key, values.get(key)));
-		}
-		return partitions;
-	}
-
-	private static HashMap<String, String> predefinedBooleanValues() {
-		HashMap<String, String> values = new HashMap<String, String>();
-		values.put("true", Constants.BOOLEAN_TRUE_STRING_REPRESENTATION);
-		values.put("false", Constants.BOOLEAN_FALSE_STRING_REPRESENTATION);
-		return values;
-	}
-
-	private static ArrayList<PartitionNode> defaultIntegerPartitions() {
-		ArrayList<PartitionNode> partitions = new ArrayList<PartitionNode>();
-		HashMap<String, String> values = predefinedIntegerValues();
-		for (String key : values.keySet()) {
-			partitions.add(new PartitionNode(key, values.get(key)));
-		}
-		return partitions;
-	}
-
-	private static HashMap<String, String> predefinedIntegerValues() {
-		HashMap<String, String> values = new HashMap<String, String>();
-		values.put("min", Constants.MIN_VALUE_STRING_REPRESENTATION);
-		values.put("max", Constants.MAX_VALUE_STRING_REPRESENTATION);
-		return values;
-	}
-
-	private static ArrayList<PartitionNode> defaultFloatPartitions() {
-		ArrayList<PartitionNode> partitions = new ArrayList<PartitionNode>();
-		HashMap<String, String> values = predefinedFloatValues();
-		for (String key : values.keySet()) {
-			partitions.add(new PartitionNode(key, values.get(key)));
-		}
-		return partitions;
-	}
-
-	private static HashMap<String, String> predefinedFloatValues() {
-		HashMap<String, String> values = new HashMap<String, String>();
-		values.put("min", Constants.MIN_VALUE_STRING_REPRESENTATION);
-		values.put("max", Constants.MAX_VALUE_STRING_REPRESENTATION);
-		values.put("positive infinity", Constants.POSITIVE_INFINITY_STRING_REPRESENTATION);
-		values.put("negative infinity", Constants.NEGATIVE_INFINITY_STRING_REPRESENTATION);
-		return values;
-	}
-
-	private static ArrayList<PartitionNode> defaultStringPartitions() {
-		ArrayList<PartitionNode> partitions = new ArrayList<PartitionNode>();
-		HashMap<String, String> values = predefinedStringValues();
-		for (String key : values.keySet()) {
-			partitions.add(new PartitionNode(key, values.get(key)));
-		}
-		return partitions;
-	}
-
-	private static HashMap<String, String> predefinedStringValues() {
-		HashMap<String, String> values = new HashMap<String, String>();
-		values.put("null", Constants.NULL_VALUE_STRING_REPRESENTATION);
-		return values;
-	}
-
+	
 	public static boolean validateConstraintName(String name) {
 		if(name.length() < 1 || name.length() > 64) return false;
 		if(name.matches("[ ]+.*")) return false;
@@ -567,32 +387,6 @@ public class ModelUtils {
 
 		return implemented;
 	}
-
-	private static boolean allPartitionsImplemented(List<PartitionNode> partitions) {
-		boolean implemented = true;
-
-		for (PartitionNode partition : partitions) {
-			implemented = isPartitionImplemented(partition);
-			if (implemented == false) {
-				break;
-			}
-		}
-		
-		return implemented;		
-	}
-	
-	private static boolean anyPartitionImplemented(List<PartitionNode> partitions) {
-		boolean implemented = false;
-		
-		for (PartitionNode partition : partitions) {
-			implemented = isPartitionImplemented(partition);
-			if (implemented == true) {
-				break;
-			}
-		}
-		
-		return implemented;		
-	}
 	
 	public static boolean isCategoryImplemented(CategoryNode node) {
 		if(node.isExpected()){
@@ -651,20 +445,6 @@ public class ModelUtils {
 	public static boolean isMethodPartiallyImplemented(MethodNode methodModel) {
 		return methodDefinitionImplemented(methodModel) && !methodCategoriesImplemented(methodModel);
 	}
-
-	private static List<String> getArgTypes(IMethod method, Class<?> testClass) {
-		List<String> argTypes = new ArrayList<String>();
-		
-		try {
-			for (ILocalVariable arg : method.getParameters()){
-				argTypes.add(getTypeName(arg, method, testClass));
-			}
-		} catch (Throwable e) {
-			e.printStackTrace();
-		}
-		
-		return argTypes;
-	}
 	
 	public static List<String> getParamNames(IMethod method) {
 		List<String> argTypes = new ArrayList<String>();
@@ -693,4 +473,225 @@ public class ModelUtils {
 		types.add(com.testify.ecfeed.model.Constants.TYPE_NAME_STRING);
 		return types;
 	}
+	
+	private static boolean isAnnotated(IMethod method, String name) throws JavaModelException{
+		IAnnotation[] annotations = method.getAnnotations();
+		for(IAnnotation annotation : annotations){
+			if(annotation.getElementName().equals(name)){
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	private static boolean isPublicVoid(IMethod method) throws JavaModelException{
+		return (method.getReturnType().equals(Signature.SIG_VOID) && Flags.isPublic(method.getFlags()));
+	}
+
+	/**
+	 * Returns elements in v1 that are not mentioned in v2 by checking toString() value; 
+	 */
+	private static List<MethodNode> diff(List<MethodNode> v1, List<MethodNode> v2){
+		ArrayList<MethodNode> diff = new ArrayList<MethodNode>();
+		
+		for(MethodNode method1 : v1){
+			boolean nodeMentioned = false;
+			for(MethodNode method2 : v2){
+				if(method1.toString().equals(method2.toString())){
+					nodeMentioned = true;
+					break;
+				}
+			}
+			if(nodeMentioned == false){
+				diff.add(method1);
+			}
+		}				
+		return diff;
+	}
+	
+	private static IType getTypeObject(String qualifiedName) throws JavaModelException{
+		IJavaProject[] projects = JavaCore.create(ResourcesPlugin.getWorkspace().getRoot()).getJavaProjects();
+		for(IJavaProject project : projects){
+			IType type = project.findType(qualifiedName);
+			if(type != null){
+				return type; 
+			}
+		}
+		return null;
+	}
+	
+	private static MethodNode generateMethodModel(IMethod method, Class<?> testClass) throws JavaModelException {
+		MethodNode methodNode = new MethodNode(method.getElementName());
+		for(ILocalVariable parameter : method.getParameters()){
+			methodNode.addCategory(generateCategoryModel(parameter, getTypeName(parameter, method, testClass), isExpected(parameter)));
+		}
+		return methodNode;
+	}
+	
+	private static CategoryNode generateCategoryModel(ILocalVariable parameter, String type, boolean expected){
+		CategoryNode category = new CategoryNode(parameter.getElementName(), type, expected);
+		if(expected){
+			category.setDefaultValueString(getDefaultExpectedValueString(type));
+			return category;
+		} else{
+			ArrayList<PartitionNode> defaultPartitions = generateDefaultPartitions(type);
+			for(PartitionNode partition : defaultPartitions){
+				category.addPartition(partition);
+			}
+			return category;
+		}
+	}
+
+	private static boolean isExpected(ILocalVariable parameter) throws JavaModelException {
+		IAnnotation[] annotations = parameter.getAnnotations();
+		for(IAnnotation annotation : annotations){
+			if(annotation.getElementName().equals("expected")){
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private static String getTypeName(ILocalVariable parameter, IMethod method, Class<?> testClass) {
+		String typeSignature = parameter.getTypeSignature();
+		switch(typeSignature){
+		case Signature.SIG_BOOLEAN:
+			return com.testify.ecfeed.model.Constants.TYPE_NAME_BOOLEAN;
+		case Signature.SIG_BYTE:
+			return com.testify.ecfeed.model.Constants.TYPE_NAME_BYTE;
+		case Signature.SIG_CHAR:
+			return com.testify.ecfeed.model.Constants.TYPE_NAME_CHAR;
+		case Signature.SIG_DOUBLE:
+			return com.testify.ecfeed.model.Constants.TYPE_NAME_DOUBLE;
+		case Signature.SIG_FLOAT:
+			return com.testify.ecfeed.model.Constants.TYPE_NAME_FLOAT;
+		case Signature.SIG_INT:
+			return com.testify.ecfeed.model.Constants.TYPE_NAME_INT;
+		case Signature.SIG_LONG:
+			return com.testify.ecfeed.model.Constants.TYPE_NAME_LONG;
+		case Signature.SIG_SHORT:
+			return com.testify.ecfeed.model.Constants.TYPE_NAME_SHORT;
+		case "QString;":
+			return com.testify.ecfeed.model.Constants.TYPE_NAME_STRING;
+		default:
+			if (typeSignature.startsWith("Q") && typeSignature.endsWith(";")){
+				for (Method reflection : testClass.getMethods()) {
+					if (method.getElementName().equals(reflection.getName())) {
+						for (Class<?> type : reflection.getParameterTypes()) {
+							if (type.getSimpleName().equals(typeSignature.substring(1, typeSignature.lastIndexOf(";")))) {
+								return type.getCanonicalName();
+							}
+						}
+					}
+				}
+			}
+			return com.testify.ecfeed.model.Constants.TYPE_NAME_UNSUPPORTED;
+		}
+	}
+
+	private static ArrayList<PartitionNode> defaultBooleanPartitions() {
+		ArrayList<PartitionNode> partitions = new ArrayList<PartitionNode>();
+		HashMap<String, String> values = predefinedBooleanValues();
+		for (String key : values.keySet()) {
+			partitions.add(new PartitionNode(key, values.get(key)));
+		}
+		return partitions;
+	}
+
+	private static HashMap<String, String> predefinedBooleanValues() {
+		HashMap<String, String> values = new HashMap<String, String>();
+		values.put("true", Constants.BOOLEAN_TRUE_STRING_REPRESENTATION);
+		values.put("false", Constants.BOOLEAN_FALSE_STRING_REPRESENTATION);
+		return values;
+	}
+
+	private static ArrayList<PartitionNode> defaultIntegerPartitions() {
+		ArrayList<PartitionNode> partitions = new ArrayList<PartitionNode>();
+		HashMap<String, String> values = predefinedIntegerValues();
+		for (String key : values.keySet()) {
+			partitions.add(new PartitionNode(key, values.get(key)));
+		}
+		return partitions;
+	}
+
+	private static HashMap<String, String> predefinedIntegerValues() {
+		HashMap<String, String> values = new HashMap<String, String>();
+		values.put("min", Constants.MIN_VALUE_STRING_REPRESENTATION);
+		values.put("max", Constants.MAX_VALUE_STRING_REPRESENTATION);
+		return values;
+	}
+
+	private static ArrayList<PartitionNode> defaultFloatPartitions() {
+		ArrayList<PartitionNode> partitions = new ArrayList<PartitionNode>();
+		HashMap<String, String> values = predefinedFloatValues();
+		for (String key : values.keySet()) {
+			partitions.add(new PartitionNode(key, values.get(key)));
+		}
+		return partitions;
+	}
+
+	private static HashMap<String, String> predefinedFloatValues() {
+		HashMap<String, String> values = new HashMap<String, String>();
+		values.put("min", Constants.MIN_VALUE_STRING_REPRESENTATION);
+		values.put("max", Constants.MAX_VALUE_STRING_REPRESENTATION);
+		values.put("positive infinity", Constants.POSITIVE_INFINITY_STRING_REPRESENTATION);
+		values.put("negative infinity", Constants.NEGATIVE_INFINITY_STRING_REPRESENTATION);
+		return values;
+	}
+
+	private static ArrayList<PartitionNode> defaultStringPartitions() {
+		ArrayList<PartitionNode> partitions = new ArrayList<PartitionNode>();
+		HashMap<String, String> values = predefinedStringValues();
+		for (String key : values.keySet()) {
+			partitions.add(new PartitionNode(key, values.get(key)));
+		}
+		return partitions;
+	}
+
+	private static HashMap<String, String> predefinedStringValues() {
+		HashMap<String, String> values = new HashMap<String, String>();
+		values.put("null", Constants.NULL_VALUE_STRING_REPRESENTATION);
+		return values;
+	}
+
+	private static boolean allPartitionsImplemented(List<PartitionNode> partitions) {
+		boolean implemented = true;
+
+		for (PartitionNode partition : partitions) {
+			implemented = isPartitionImplemented(partition);
+			if (implemented == false) {
+				break;
+			}
+		}
+		
+		return implemented;		
+	}
+	
+	private static boolean anyPartitionImplemented(List<PartitionNode> partitions) {
+		boolean implemented = false;
+		
+		for (PartitionNode partition : partitions) {
+			implemented = isPartitionImplemented(partition);
+			if (implemented == true) {
+				break;
+			}
+		}
+		
+		return implemented;		
+	}
+
+	private static List<String> getArgTypes(IMethod method, Class<?> testClass) {
+		List<String> argTypes = new ArrayList<String>();
+		
+		try {
+			for (ILocalVariable arg : method.getParameters()){
+				argTypes.add(getTypeName(arg, method, testClass));
+			}
+		} catch (Throwable e) {
+			e.printStackTrace();
+		}
+		
+		return argTypes;
+	}
+
 }

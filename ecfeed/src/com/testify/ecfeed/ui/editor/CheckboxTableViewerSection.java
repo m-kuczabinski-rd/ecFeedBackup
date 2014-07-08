@@ -23,6 +23,10 @@ public abstract class CheckboxTableViewerSection extends TableViewerSection {
 	public CheckboxTableViewerSection(Composite parent, FormToolkit toolkit, int style, IModelUpdateListener updateListener) {
 		super(parent, toolkit, style, updateListener);
 	}
+	
+	public Object[] getCheckedElements(){
+		return getCheckboxViewer().getCheckedElements();
+	}
 
 	@Override
 	protected Table createTable(Composite parent, int style){
@@ -38,10 +42,6 @@ public abstract class CheckboxTableViewerSection extends TableViewerSection {
 	
 	protected CheckboxTableViewer getCheckboxViewer(){
 		return (CheckboxTableViewer)getViewer();
-	}
-
-	public Object[] getCheckedElements(){
-		return getCheckboxViewer().getCheckedElements();
 	}
 
 }

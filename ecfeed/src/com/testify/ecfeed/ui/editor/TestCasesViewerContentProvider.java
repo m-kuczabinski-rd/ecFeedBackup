@@ -26,10 +26,6 @@ public class TestCasesViewerContentProvider extends TreeNodeContentProvider impl
 	public TestCasesViewerContentProvider(MethodNode method){
 		fMethod = method;
 	}
-	
-	public void setMethod(MethodNode method){
-		fMethod = method;
-	}
 
 	@Override
 	public Object[] getElements(Object inputElement){
@@ -61,5 +57,9 @@ public class TestCasesViewerContentProvider extends TreeNodeContentProvider impl
 	@Override
 	public boolean hasChildren(Object element){
 		return getChildren(element).length > 0;
+	}
+	
+	public void setMethod(MethodNode method){
+		fMethod = method;
 	}
 }

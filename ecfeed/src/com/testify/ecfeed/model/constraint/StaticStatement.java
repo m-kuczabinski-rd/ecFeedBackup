@@ -27,18 +27,11 @@ public class StaticStatement extends BasicStatement {
 		fValue = value;
 	}
 
+	@Override
 	public String getLeftHandName(){
 		return fValue?STATIC_STATEMENT_TRUE_VALUE:STATIC_STATEMENT_FALSE_VALUE;
 	}
 	
-	public boolean getValue(){
-		return fValue;
-	}
-	
-	public void setValue(boolean value) {
-		fValue = value;
-	}
-
 	@Override
 	public boolean evaluate(List<PartitionNode> values) {
 		return fValue;
@@ -58,4 +51,13 @@ public class StaticStatement extends BasicStatement {
 	public boolean updateReferences(MethodNode method){
 		return true;
 	}
+	
+	public boolean getValue(){
+		return fValue;
+	}
+	
+	public void setValue(boolean value) {
+		fValue = value;
+	}
+
 }

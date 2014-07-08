@@ -52,18 +52,18 @@ public abstract class BasicSection extends SectionPart{
 		}
 	}
 
-	@Override
-	public void refresh(){
-		if(fTextClient != null){
-			updateTextClient();
-		}
-	}
-
 	public BasicSection(Composite parent, FormToolkit toolkit, int style, IModelUpdateListener updateListener) {
 		super(parent, toolkit, style);
 		fModelUpdateListener = updateListener;
 		fToolkit = toolkit;
 		createContent();
+	}
+	
+	@Override
+	public void refresh(){
+		if(fTextClient != null){
+			updateTextClient();
+		}
 	}
 
 	public FormToolkit getToolkit(){

@@ -76,6 +76,11 @@ public abstract class AbstractAlgorithm<E> implements IAlgorithm<E> {
 	public Collection<? extends IConstraint<E>> getConstraints() {
 		return fConstraints;
 	}
+	
+	@Override
+	public void cancel() {
+		fCancel = true;
+	}
 
 	public List<List<E>> getInput(){
 		return fInput;
@@ -122,11 +127,6 @@ public abstract class AbstractAlgorithm<E> implements IAlgorithm<E> {
 				}
 			}
 			return true;
-	}
-	
-	@Override
-	public void cancel() {
-		fCancel = true;
 	}
 
 }

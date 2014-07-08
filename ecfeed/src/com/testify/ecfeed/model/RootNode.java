@@ -16,6 +16,11 @@ import java.util.List;
 
 public class RootNode extends GenericNode {
 	public List<ClassNode> fClasses;
+	
+	public RootNode(String name) {
+		super(name);
+		fClasses = new ArrayList<ClassNode>();
+	}
 
 	@Override
 	public List<? extends IGenericNode> getChildren(){
@@ -31,11 +36,6 @@ public class RootNode extends GenericNode {
 		}
 		copy.setParent(this.getParent());
 		return copy;
-	}
-	
-	public RootNode(String name) {
-		super(name);
-		fClasses = new ArrayList<ClassNode>();
 	}
 
 	public void addClass(ClassNode node){

@@ -140,6 +140,7 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 			return EMPTY_ARRAY;
 		}
 		
+		@Override
 		public Object[] getChildren(Object element){
 			if(element instanceof String){
 				Object[] result = fMethod.getConstraints((String)element).toArray(); 
@@ -175,26 +176,6 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 		fOkButtonEnabled = true;
 	}
 	
-	protected  List<List<PartitionNode>> algorithmInput(){
-		return fAlgorithmInput;
-	}
-
-	protected  Collection<Constraint> constraints(){
-		return fConstraints;
-	}
-
-	protected  String testSuiteName(){
-		return fTestSuiteName;
-	}
-
-	protected  IGenerator<PartitionNode> selectedGenerator() {
-		return fSelectedGenerator;
-	}
-
-	protected  Map<String, Object> generatorParameters() {
-		return fParameters;
-	}
-
 	@Override
 	public Point getInitialSize(){
 		return new Point(600, 800);
@@ -262,6 +243,26 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 			createGeneratorSelectionComposite(fMainContainer);
 		}		
 		return area;
+	}
+	
+	protected  List<List<PartitionNode>> algorithmInput(){
+		return fAlgorithmInput;
+	}
+
+	protected  Collection<Constraint> constraints(){
+		return fConstraints;
+	}
+
+	protected  String testSuiteName(){
+		return fTestSuiteName;
+	}
+
+	protected  IGenerator<PartitionNode> selectedGenerator() {
+		return fSelectedGenerator;
+	}
+
+	protected  Map<String, Object> generatorParameters() {
+		return fParameters;
 	}
 
 	private void createConstraintsComposite(Composite parent) {

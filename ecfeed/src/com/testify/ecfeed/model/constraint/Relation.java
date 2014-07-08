@@ -23,6 +23,7 @@ public enum Relation{
 		fValue = value;
 	}
 	
+	@Override
 	public String toString(){
 		return fValue; 
 	}

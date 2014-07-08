@@ -125,7 +125,20 @@ public abstract class BasicDetailsPage implements IDetailsPage, IModelUpdateList
 	public FormToolkit getToolkit(){
 		return fManagedForm.getToolkit();
 	}
-
+	
+	public void modelUpdated(AbstractFormPart source){
+		if(source != null){
+			source.markDirty();
+		}
+		if(getMasterSection() != null){
+			getMasterSection().markDirty();
+		}
+		if(getMasterSection() != null){
+			getMasterSection().refresh();
+		}
+		refresh();
+	}
+	
 	protected Section getMainSection(){
 		return fMainSection;
 	}
@@ -149,19 +162,6 @@ public abstract class BasicDetailsPage implements IDetailsPage, IModelUpdateList
 
 	protected Composite getMainComposite(){
 		return fMainComposite;
-	}
-	
-	public void modelUpdated(AbstractFormPart source){
-		if(source != null){
-			source.markDirty();
-		}
-		if(getMasterSection() != null){
-			getMasterSection().markDirty();
-		}
-		if(getMasterSection() != null){
-			getMasterSection().refresh();
-		}
-		refresh();
 	}
 	
 	protected Shell getActiveShell(){

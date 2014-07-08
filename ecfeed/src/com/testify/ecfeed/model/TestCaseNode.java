@@ -18,6 +18,10 @@ import java.util.List;
 public class TestCaseNode extends GenericNode {
 	List<PartitionNode> fTestData;
 	
+	public MethodNode getMethod() {
+		return (MethodNode)getParent();
+	}
+	
 	@Override
 	public String toString(){
 		String methodName = null;
@@ -47,10 +51,6 @@ public class TestCaseNode extends GenericNode {
 	public TestCaseNode(String name, List<PartitionNode> testData) {
 		super(name);
 		fTestData = testData;
-	}
-
-	public MethodNode getMethod() {
-		return (MethodNode)getParent();
 	}
 
 	public List<PartitionNode> getTestData(){

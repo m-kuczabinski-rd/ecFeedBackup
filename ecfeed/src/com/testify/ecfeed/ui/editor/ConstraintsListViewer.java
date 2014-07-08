@@ -74,6 +74,12 @@ public class ConstraintsListViewer extends CheckboxTableViewerSection {
 		
 		addDoubleClickListener(new SelectNodeDoubleClickListener(parent.getMasterSection()));
 	}
+	
+	public void setInput(MethodNode method){
+		fSelectedMethod = method;
+		super.setInput(method.getConstraintNodes());
+		refresh();
+	}
 
 	@Override
 	protected void createTableColumns() {
@@ -93,9 +99,4 @@ public class ConstraintsListViewer extends CheckboxTableViewerSection {
 		});
 	}
 	
-	public void setInput(MethodNode method){
-		fSelectedMethod = method;
-		super.setInput(method.getConstraintNodes());
-		refresh();
-	}
 }

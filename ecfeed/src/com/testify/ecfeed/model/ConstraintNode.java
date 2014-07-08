@@ -19,6 +19,11 @@ public class ConstraintNode extends GenericNode{
 
 	private Constraint fConstraint;
 	
+	public ConstraintNode(String name, Constraint constraint) {
+		super(name);
+		fConstraint = constraint;
+	}
+	
 	@Override
 	public String toString(){
 		return getName() + ": " + getConstraint().toString();
@@ -27,11 +32,6 @@ public class ConstraintNode extends GenericNode{
 	@Override
 	public ConstraintNode getCopy(){
 		return new ConstraintNode(getName(), fConstraint.getCopy());	
-	}
-
-	public ConstraintNode(String name, Constraint constraint) {
-		super(name);
-		fConstraint = constraint;
 	}
 	
 	public Constraint getConstraint(){

@@ -28,10 +28,6 @@ public class GenericNode implements IGenericNode{
 		this.fName = name;
 	}
 	
-	public int getId(){
-		return fId;
-	}
-	
 	@Override
 	public String getName() {
 		return fName;
@@ -151,6 +147,10 @@ public class GenericNode implements IGenericNode{
 	@Override
 	public GenericNode getCopy(){
 		return new GenericNode(getName());
+	}
+	
+	public int getId(){
+		return fId;
 	}
 
 	protected boolean validateNodeName(String name) {

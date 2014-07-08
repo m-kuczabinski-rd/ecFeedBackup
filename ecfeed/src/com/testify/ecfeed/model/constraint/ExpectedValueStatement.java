@@ -59,14 +59,7 @@ public class ExpectedValueStatement extends BasicStatement implements IRelationa
 	public void setRelation(Relation relation) {
 	}
 	
-	public CategoryNode getCategory(){
-		return fCategory;
-	}
-	
-	public PartitionNode getCondition(){
-		return fCondition;
-	}
-	
+	@Override
 	public String toString(){
 		return getCategory().getName() + getRelation().toString() + fCondition.getValueString();
 	}
@@ -86,4 +79,13 @@ public class ExpectedValueStatement extends BasicStatement implements IRelationa
 		}
 		return false;
 	}
+	
+	public CategoryNode getCategory(){
+		return fCategory;
+	}
+	
+	public PartitionNode getCondition(){
+		return fCondition;
+	}
+
 }
