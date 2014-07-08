@@ -284,5 +284,11 @@ public class PartitionedCategoryStatement extends BasicStatement implements IRel
 		
 		return getCondition().compare(compared.getCondition());
 	}
+
+	@Override
+	public Object accept(IStatementVisitor visitor){
+		return visitor.visit(this);
+	}
+
 }
 

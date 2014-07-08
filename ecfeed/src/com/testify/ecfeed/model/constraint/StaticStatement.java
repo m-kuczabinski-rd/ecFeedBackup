@@ -66,4 +66,10 @@ public class StaticStatement extends BasicStatement {
 		StaticStatement compared = (StaticStatement)statement;
 		return getValue() == compared.getValue();
 	}
+	
+	@Override
+	public Object accept(IStatementVisitor visitor){
+		return visitor.visit(this);
+	}
+
 }

@@ -99,4 +99,9 @@ public class ExpectedValueStatement extends BasicStatement implements IRelationa
 		
 		return true;
 	}
+	
+	@Override
+	public Object accept(IStatementVisitor visitor){
+		return visitor.visit(this);
+	}
 }

@@ -98,4 +98,6 @@ public abstract class BasicStatement implements IStatement {
 	public abstract BasicStatement getCopy();
 	
 	public abstract boolean updateReferences(MethodNode method);
+	
+	public abstract Object accept(IStatementVisitor visitor);
 }

@@ -156,4 +156,10 @@ public class StatementArray extends BasicStatement{
 		
 		return true;
 	}
+	
+	@Override
+	public Object accept(IStatementVisitor visitor){
+		return visitor.visit(this);
+	}
+
 }
