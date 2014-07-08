@@ -88,7 +88,7 @@ public class RootNodeTest{
 	public void getCopyTest(){
 		RandomModelGenerator generator = new RandomModelGenerator();
 		for(int i = 0; i < 1; i++){
-			RootNode root = generator.generateModel();
+			RootNode root = generator.generateModel(3);
 			System.out.println(root);
 		}
 	}

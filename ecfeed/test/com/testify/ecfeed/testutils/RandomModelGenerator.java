@@ -65,13 +65,13 @@ public class RandomModelGenerator {
 	public int MAX_STATEMENTS = 5;
 	public int MAX_STATEMENTS_DEPTH = 3;
 	
-	public RootNode generateModel(){
+	public RootNode generateModel(int classes){
 		String name = generateString(REGEX_ROOT_NODE_NAME);
 		
 		RootNode root = new RootNode(name);
 		
-		for(int i = 0; i < rand.nextInt(MAX_CLASSES) + 1; i++){
-			root.addClass(generateClass());
+		for(int i = 0; i < classes; i++){
+			root.addClass(generateClass(rand.nextInt(MAX_METHODS)));
 		}
 		
 		return root;
@@ -79,15 +79,16 @@ public class RandomModelGenerator {
 
 	
 	
-	public ClassNode generateClass() {
+	public ClassNode generateClass(int methods) {
 		String name = generateString(REGEX_CLASS_NODE_NAME);
 
 		ClassNode _class = new ClassNode(name);
 		
-		for(int i = 0; i < rand.nextInt(MAX_METHODS) + 1; i++){
+		for(int i = 0; i < methods; i++){
 			int categories = rand.nextInt(MAX_CATEGORIES);
 			int constraints = rand.nextInt(MAX_CONSTRAINTS);
 			int testCases = rand.nextInt(MAX_TEST_CASES);
+			
 			_class.addMethod(generateMethod(categories, constraints, testCases));
 		}
 
@@ -110,6 +111,10 @@ public class RandomModelGenerator {
 		
 		for(int i = 0; i < constraints; i++){
 			method.addConstraint(generateConstraint(method));
+		}
+		
+		for(int i = 0; i < testCases; i++){
+			method.addTestCase(generateTestCase(method));
 		}
 		
 		return method;
@@ -406,6 +411,13 @@ public class RandomModelGenerator {
 	}
 	
 	//DEBUG
+	
+	@Test
+	public void testGenerateClass(){
+		ClassNode _class = generateClass(5);
+		System.out.println(fStringifier.stringify(_class, 0));
+	}
+	
 //	@Test
 	public void testPartitionGeneration(){
 		System.out.println("Childless partitions:");
@@ -438,7 +450,7 @@ public class RandomModelGenerator {
 	
 //	@Test
 	public void testMethodGenerator(){
-		MethodNode m = generateMethod(5, 0, 0);
+		MethodNode m = generateMethod(5, 5, 5);
 		System.out.println(fStringifier.stringify(m, 0));
 	}
 	
@@ -450,7 +462,7 @@ public class RandomModelGenerator {
 		System.out.println(fStringifier.stringify(tc, 0));
 	}
 	
-	@Test
+//	@Test
 	public void testGenerateConstraint(){
 		MethodNode m = generateMethod(10, 0, 0);
 		ConstraintNode c = generateConstraint(m);

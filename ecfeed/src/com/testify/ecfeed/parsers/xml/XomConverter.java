@@ -55,6 +55,14 @@ public class XomConverter implements IConverter, IStatementVisitor {
 			element.appendChild((Element)category.convert(this));
 		}
 		
+		for(ConstraintNode constraint : node.getConstraintNodes()){
+			element.appendChild((Element)constraint.convert(this));
+		}
+		
+		for(TestCaseNode testCase : node.getTestCases()){
+			element.appendChild((Element)testCase.convert(this));
+		}
+		
 		return element;
 	}
 	

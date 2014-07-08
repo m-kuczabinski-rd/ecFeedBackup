@@ -1,6 +1,7 @@
 package com.testify.ecfeed.testutils;
 
 import com.testify.ecfeed.model.CategoryNode;
+import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.ConstraintNode;
 import com.testify.ecfeed.model.IGenericNode;
 import com.testify.ecfeed.model.MethodNode;
@@ -51,6 +52,16 @@ public class ModelStringifier {
 		return null;
 	}
 
+	public String stringify(ClassNode c, int indent){
+		String result = intendentString(indent);
+		result += "Class " + c.getQualifiedName();
+		
+		for(MethodNode m : c.getMethods()){
+			result += "\n" + stringify(m, indent + 2);
+		}
+		
+		return result;
+	}
 	
 	public String stringify(MethodNode m, int indent){
 		String result = intendentString(indent);

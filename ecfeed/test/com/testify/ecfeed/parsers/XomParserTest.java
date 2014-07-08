@@ -45,7 +45,7 @@ public class XomParserTest {
 	
 //	@Test
 	public void parseRootTest(){
-		RootNode root = fModelGenerator.generateModel();
+		RootNode root = fModelGenerator.generateModel(3);
 		
 		Element rootElement = (Element)root.convert(fConverter);
 		
@@ -63,19 +63,15 @@ public class XomParserTest {
 		}
 	}
 	
-//	@Test
+	@Test
 	public void parseClassTest(){
-		ClassNode _class = fModelGenerator.generateClass();
-
-		Element classElement = (Element)_class.convert(fConverter);
-		
-		TRACE(classElement);
+		ClassNode _class = fModelGenerator.generateClass(3);
+		Element element = (Element)_class.convert(fConverter);
+		TRACE(element);
 		
 		try {
-			ClassNode parsedRoot = fParser.parseClass(classElement);
-			
-			assertTrue(parsedRoot.compare(_class));
-
+			ClassNode parsedClass = fParser.parseClass(element);
+			assertElementsEqual(_class, parsedClass);
 		} catch (ParserException e) {
 			fail("Unexpected exception: " + e.getMessage());
 		}
@@ -84,7 +80,7 @@ public class XomParserTest {
 //	@Test
 	public void parseMethodTest(){
 		for(int i = 0; i < 10; i++){
-			MethodNode m = fModelGenerator.generateMethod(5, 0, 0);
+			MethodNode m = fModelGenerator.generateMethod(5, 5, 5);
 			
 			Element element = (Element)m.convert(fConverter);
 			TRACE(element);
@@ -135,7 +131,7 @@ public class XomParserTest {
 		}
 	}
 	
-	@Test
+//	@Test
 	public void parseConstraintTest(){
 		for(int i = 0; i < 10; i++){
 			MethodNode m = fModelGenerator.generateMethod(10, 0, 0);
@@ -247,8 +243,8 @@ public class XomParserTest {
 	
 	//		@Test
 	public void assertTypeTest(){
-		RootNode root = fModelGenerator.generateModel();
-		ClassNode _class = fModelGenerator.generateClass();
+		RootNode root = fModelGenerator.generateModel(3);
+		ClassNode _class = fModelGenerator.generateClass(3);
 		
 		Element rootElement = (Element)root.convert(fConverter);
 		Element classElement = (Element)_class.convert(fConverter);
