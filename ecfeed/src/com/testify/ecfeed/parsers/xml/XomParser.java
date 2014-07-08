@@ -220,8 +220,8 @@ public class XomParser {
 			throw new ParserException(Messages.WRONG_STATIC_STATEMENT_VALUE(valueString));
 		}
 	}
-
-	public BasicStatement parsePartitionStatement(Element element, MethodNode method) throws ParserException {
+	
+	public PartitionedCategoryStatement parsePartitionStatement(Element element, MethodNode method) throws ParserException {
 		String categoryName = getAttributeValue(element, Constants.STATEMENT_CATEGORY_ATTRIBUTE_NAME);
 		CategoryNode category = method.getCategory(categoryName);
 		if(category == null || category.isExpected()){
@@ -239,7 +239,7 @@ public class XomParser {
 		return new PartitionedCategoryStatement(category, relation, partition); 
 	}
 
-	public BasicStatement parseLabelStatement(Element element, MethodNode method) throws ParserException {
+	public PartitionedCategoryStatement parseLabelStatement(Element element, MethodNode method) throws ParserException {
 		String categoryName = getAttributeValue(element, Constants.STATEMENT_CATEGORY_ATTRIBUTE_NAME);
 		String label = getAttributeValue(element, Constants.STATEMENT_LABEL_ATTRIBUTE_NAME);
 		String relationName = getAttributeValue(element, Constants.STATEMENT_RELATION_ATTRIBUTE_NAME);

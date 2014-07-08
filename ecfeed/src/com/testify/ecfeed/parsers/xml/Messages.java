@@ -32,7 +32,7 @@ public class Messages {
 	}
 
 	public static String MISSING_ATTRIBUTE(Element element, String attribute) {
-		return "Tag " + element.getLocalName() + " does not contain expected " + attribute + " attribute";
+		return "Tag " + element.getLocalName() + " does not contain expected \"" + attribute + "\" attribute";
 	}
 
 	public static String WRONG_CHILD_ELEMENT_TYPE(Element element, String childLocalName) {

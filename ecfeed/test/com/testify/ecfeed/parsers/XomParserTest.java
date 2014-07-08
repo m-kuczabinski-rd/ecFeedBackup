@@ -22,6 +22,7 @@ import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.model.constraint.BasicStatement;
+import com.testify.ecfeed.model.constraint.PartitionedCategoryStatement;
 import com.testify.ecfeed.model.constraint.StaticStatement;
 import com.testify.ecfeed.parsers.xml.XomConverter;
 import com.testify.ecfeed.parsers.xml.XomParser;
@@ -163,7 +164,30 @@ public class XomParserTest {
 		}
 	}
 	
-	
+	@Test 
+	public void parsePartitionStatementTest(){
+		for(int i = 0; i < 10; i++){
+			MethodNode m = fModelGenerator.generateMethod(5, 0, 0);
+			PartitionedCategoryStatement s = fModelGenerator.generatePartitionedStatement(m);
+
+			try{
+				Element element = (Element)s.accept(fConverter);
+				PartitionedCategoryStatement parsedS = null;
+				switch(element.getLocalName()){
+				case Constants.CONSTRAINT_LABEL_STATEMENT_NODE_NAME:
+					parsedS = fParser.parseLabelStatement(element, m);
+					break;
+				case Constants.CONSTRAINT_PARTITION_STATEMENT_NODE_NAME:
+					parsedS = fParser.parsePartitionStatement(element, m);
+					break;
+				}					
+
+				assertStatementsEqual(s, parsedS);
+			} catch (ParserException e) {
+				fail("Unexpected exception: " + e.getMessage());
+			}
+		}
+	}
 	
 	//		@Test
 	public void assertTypeTest(){

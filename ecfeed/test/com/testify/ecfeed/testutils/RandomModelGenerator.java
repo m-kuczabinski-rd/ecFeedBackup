@@ -167,8 +167,8 @@ public class RandomModelGenerator {
 	}
 
 	public BasicStatement generateStatement(MethodNode method) {
-		switch(rand.nextInt(3)){
-		case 0: return new StaticStatement(rand.nextBoolean());
+		switch(rand.nextInt(4)){
+		case 0: return generateStaticStatement();
 		case 1: return generatePartitionedStatement(method);
 		default: return generateStatementArray(method); 
 		}
@@ -178,7 +178,7 @@ public class RandomModelGenerator {
 		return new StaticStatement(rand.nextBoolean());
 	}
 
-	public BasicStatement generatePartitionedStatement(MethodNode method) {
+	public PartitionedCategoryStatement generatePartitionedStatement(MethodNode method) {
 		List<CategoryNode> categories = new ArrayList<CategoryNode>();
 		
 		for(CategoryNode category : method.getCategories()){
@@ -188,11 +188,17 @@ public class RandomModelGenerator {
 		}
 		
 		if(categories.size() == 0){
-			return new StaticStatement(true);
+			CategoryNode category = generateCategory(TYPE_NAME_INT, false, 0, 1, 1);
+			method.addCategory(category);
+			categories.add(category);
 		}
 		
-		CategoryNode category = categories.get(categories.size());
+		CategoryNode category = categories.get(rand.nextInt(categories.size()));
 		Relation relation = rand.nextBoolean() ? Relation.EQUAL : Relation.NOT;
+		if(category.getPartitions().size() == 0){
+			PartitionNode partition = generatePartition(0, 0, 1, category.getType());
+			category.addPartition(partition);
+		}
 		
 		if(rand.nextBoolean()){
 			List<String> partitionNames = category.getAllPartitionNames();
@@ -201,11 +207,24 @@ public class RandomModelGenerator {
 			return new PartitionedCategoryStatement(category, relation, condition);
 		}
 		else{
+			if(category.getAllPartitionLabels().size() == 0){
+				category.getPartitions().get(0).addLabel(generateString(REGEX_PARTITION_LABEL));
+			}
+			
 			Set<String>labels = category.getAllPartitionLabels();
+			
 			String label = labels.toArray(new String[]{})[rand.nextInt(labels.size())];
 			return new PartitionedCategoryStatement(category, relation, label);
 		}
 	}
+
+	public BasicStatement generateExpectedValueStatement(CategoryNode category) {
+		String value = randomPartitionValue(category.getType());
+		String name = generateString(REGEX_PARTITION_NODE_NAME);
+		return new ExpectedValueStatement(category, new PartitionNode(name, value));
+	}
+
+
 
 	public BasicStatement generateStatementArray(MethodNode method) {
 		StatementArray statement = new StatementArray(rand.nextBoolean()?Operator.AND:Operator.OR);
@@ -222,12 +241,6 @@ public class RandomModelGenerator {
 			return generateExpectedValueStatement(category);
 		}
 		return generateStatement(method);
-	}
-
-	public BasicStatement generateExpectedValueStatement(CategoryNode category) {
-		String value = randomPartitionValue(category.getType());
-		String name = generateString(REGEX_PARTITION_NODE_NAME);
-		return new ExpectedValueStatement(category, new PartitionNode(name, value));
 	}
 
 	public PartitionNode generatePartition(int levels, int partitions, int labels, String type) {
