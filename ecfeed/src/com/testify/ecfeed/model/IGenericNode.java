@@ -40,4 +40,5 @@ public interface IGenericNode {
 	public IGenericNode getCopy();
 	
 	public boolean compare(IGenericNode node);
+	public Object accept(IModelVisitor visitor);
 }

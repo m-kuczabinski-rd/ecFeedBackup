@@ -240,9 +240,8 @@ public class CategoryNode extends GenericNode implements IPartitionedNode{
 		return super.compare(node);
 	}
 
-	/**************************************VISITORS*********************************************/
-	public Object convert(IModelVisitor converter) {
-		return converter.visit(this);
+	public Object accept(IModelVisitor visitor) {
+		return visitor.visit(this);
 	}
 	
 }

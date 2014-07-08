@@ -52,15 +52,15 @@ public class XomConverter implements IModelVisitor, IStatementVisitor {
 		Element element = createNamedElement(METHOD_NODE_NAME, node);
 		
 		for(CategoryNode category : node.getCategories()){
-			element.appendChild((Element)category.convert(this));
+			element.appendChild((Element)category.accept(this));
 		}
 		
 		for(ConstraintNode constraint : node.getConstraintNodes()){
-			element.appendChild((Element)constraint.convert(this));
+			element.appendChild((Element)constraint.accept(this));
 		}
 		
 		for(TestCaseNode testCase : node.getTestCases()){
-			element.appendChild((Element)testCase.convert(this));
+			element.appendChild((Element)testCase.accept(this));
 		}
 		
 		return element;
@@ -74,7 +74,7 @@ public class XomConverter implements IModelVisitor, IStatementVisitor {
 		element.addAttribute(new Attribute(DEFAULT_EXPECTED_VALUE_ATTRIBUTE_NAME, node.getDefaultValueString()));
 
 		for(PartitionNode child : node.getPartitions()){
-			element.appendChild((Element)child.convert(this));
+			element.appendChild((Element)child.accept(this));
 		}
 	
 		return element;
@@ -143,7 +143,7 @@ public class XomConverter implements IModelVisitor, IStatementVisitor {
 		}
 		
 		for(PartitionNode child : node.getPartitions()){
-			element.appendChild((Element)child.convert(this));
+			element.appendChild((Element)child.accept(this));
 		}
 		
 		return element;

@@ -389,8 +389,8 @@ public class MethodNode extends GenericNode {
 		}
 	}
 	
-	public Object convert(IModelVisitor converter){
-		return converter.visit(this);
+	public Object accept(IModelVisitor visitor){
+		return visitor.visit(this);
 	}
 	
 	public boolean compare(IGenericNode node){

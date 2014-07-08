@@ -143,7 +143,7 @@ public class TestCaseNode extends GenericNode {
 		return super.compare(node);
 	}
 	
-	public Object convert(IModelVisitor converter){
-		return converter.visit(this);
+	public Object accept(IModelVisitor visitor){
+		return visitor.visit(this);
 	}
 }
