@@ -96,8 +96,8 @@ public class ClassNode extends GenericNode {
 		return (lastDotIndex == -1)?qualifiedName: qualifiedName.substring(lastDotIndex + 1);
 	}
 
-	public Object convert(IConverter converter) {
-		return converter.convert(this);
+	public Object convert(IModelVisitor converter) {
+		return converter.visit(this);
 	}
 	
 	public boolean compare(IGenericNode node){

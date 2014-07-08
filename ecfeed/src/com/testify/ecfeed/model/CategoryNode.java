@@ -241,8 +241,8 @@ public class CategoryNode extends GenericNode implements IPartitionedNode{
 	}
 
 	/**************************************VISITORS*********************************************/
-	public Object convert(IConverter converter) {
-		return converter.convert(this);
+	public Object convert(IModelVisitor converter) {
+		return converter.visit(this);
 	}
 	
 }

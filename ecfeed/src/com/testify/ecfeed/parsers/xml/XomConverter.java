@@ -8,7 +8,7 @@ import nu.xom.Element;
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.ConstraintNode;
-import com.testify.ecfeed.model.IConverter;
+import com.testify.ecfeed.model.IModelVisitor;
 import com.testify.ecfeed.model.IGenericNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
@@ -24,31 +24,31 @@ import com.testify.ecfeed.model.constraint.PartitionedCategoryStatement.Partitio
 import com.testify.ecfeed.model.constraint.StatementArray;
 import com.testify.ecfeed.model.constraint.StaticStatement;
 
-public class XomConverter implements IConverter, IStatementVisitor {
+public class XomConverter implements IModelVisitor, IStatementVisitor {
 
 	@Override
-	public Object convert(RootNode node) {
+	public Object visit(RootNode node) {
 		Element element = createNamedElement(ROOT_NODE_NAME, node); 
 				
 		for(ClassNode _class : node.getClasses()){
-			element.appendChild((Element)convert(_class));
+			element.appendChild((Element)visit(_class));
 		}
 		
 		return element;
 	}
 
 	@Override
-	public Object convert(ClassNode node) {
+	public Object visit(ClassNode node) {
 		Element element = createNamedElement(CLASS_NODE_NAME, node);
 		
 		for(MethodNode method : node.getMethods()){
-			element.appendChild((Element)convert(method));
+			element.appendChild((Element)visit(method));
 		}
 		return element;
 	}
 
 	@Override
-	public Object convert(MethodNode node) {
+	public Object visit(MethodNode node) {
 		Element element = createNamedElement(METHOD_NODE_NAME, node);
 		
 		for(CategoryNode category : node.getCategories()){
@@ -67,7 +67,7 @@ public class XomConverter implements IConverter, IStatementVisitor {
 	}
 	
 	@Override
-	public Object convert(CategoryNode node){
+	public Object visit(CategoryNode node){
 		Element element = createNamedElement(CATEGORY_NODE_NAME, node);
 		element.addAttribute(new Attribute(TYPE_NAME_ATTRIBUTE, node.getType()));
 		element.addAttribute(new Attribute(CATEGORY_IS_EXPECTED_ATTRIBUTE_NAME, Boolean.toString(node.isExpected())));
@@ -81,7 +81,7 @@ public class XomConverter implements IConverter, IStatementVisitor {
 	}
 	
 	@Override
-	public Object convert(TestCaseNode node){
+	public Object visit(TestCaseNode node){
 		Element element = new Element(TEST_CASE_NODE_NAME);
 		element.addAttribute(new Attribute(TEST_SUITE_NAME_ATTRIBUTE, node.getName()));
 		for(PartitionNode testParameter : node.getTestData()){
@@ -103,7 +103,7 @@ public class XomConverter implements IConverter, IStatementVisitor {
 	}
 
 	@Override
-	public Object convert(ConstraintNode node){
+	public Object visit(ConstraintNode node){
 		Element element = createNamedElement(CONSTRAINT_NODE_NAME, node);
 		BasicStatement premise = node.getConstraint().getPremise();
 		BasicStatement consequence = node.getConstraint().getConsequence();
@@ -122,7 +122,7 @@ public class XomConverter implements IConverter, IStatementVisitor {
 	}
 	
 	@Override
-	public Object convert(PartitionNode node){
+	public Object visit(PartitionNode node){
 		Element element = createNamedElement(PARTITION_NODE_NAME, node);
 		String value = node.getValueString();
 		//remove disallowed XML characters

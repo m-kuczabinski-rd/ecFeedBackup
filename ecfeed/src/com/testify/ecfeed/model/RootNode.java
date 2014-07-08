@@ -85,8 +85,8 @@ public class RootNode extends GenericNode {
 		return super.compare(root);
 	}
 	
-	public Object convert(IConverter converter){
-		return converter.convert(this);
+	public Object convert(IModelVisitor converter){
+		return converter.visit(this);
 	}
 	
 }

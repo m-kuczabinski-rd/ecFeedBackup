@@ -13,10 +13,7 @@ package com.testify.ecfeed.model;
 
 import java.util.List;
 
-import nu.xom.Element;
-
 import com.testify.ecfeed.model.constraint.Constraint;
-import com.testify.ecfeed.parsers.xml.XomConverter;
 
 public class ConstraintNode extends GenericNode{
 
@@ -102,8 +99,8 @@ public class ConstraintNode extends GenericNode{
 		return super.compare(node);
 	}
 
-	public Object convert(IConverter converter) {
-		return converter.convert(this);
+	public Object convert(IModelVisitor converter) {
+		return converter.visit(this);
 	}
 	
 }
