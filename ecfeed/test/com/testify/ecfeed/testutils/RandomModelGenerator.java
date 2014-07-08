@@ -63,6 +63,7 @@ public class RandomModelGenerator {
 	public int MAX_PARTITION_LEVELS = 3;
 	public int MAX_PARTITION_LABELS = 3;
 	public int MAX_STATEMENTS = 5;
+	public int MAX_STATEMENTS_DEPTH = 3;
 	
 	public RootNode generateModel(){
 		String name = generateString(REGEX_ROOT_NODE_NAME);
@@ -163,15 +164,23 @@ public class RandomModelGenerator {
 	}
 	
 	public BasicStatement generatePremise(MethodNode method) {
-		return generateStatement(method);
+		return generateStatement(method, MAX_STATEMENTS_DEPTH);
 	}
 
-	public BasicStatement generateStatement(MethodNode method) {
-		switch(rand.nextInt(4)){
-		case 0: return generateStaticStatement();
-		case 1: return generatePartitionedStatement(method);
-		default: return generateStatementArray(method); 
+	public BasicStatement generateStatement(MethodNode method, int maxDepth) {
+		switch(rand.nextInt(5)){
+		case 0:
+			return generateStaticStatement();
+		case 1:
+		case 2:
+			return generatePartitionedStatement(method);
+		case 3:
+		case 4:
+			if(maxDepth > 0){
+				return generateStatementArray(method, maxDepth); 
+			}
 		}
+		return generateStaticStatement();
 	}
 	
 	public StaticStatement generateStaticStatement(){
@@ -218,16 +227,33 @@ public class RandomModelGenerator {
 		}
 	}
 
-	public ExpectedValueStatement generateExpectedValueStatement(CategoryNode category) {
+	public ExpectedValueStatement generateExpectedValueStatement(MethodNode method) {
+		List<CategoryNode> categories = new ArrayList<CategoryNode>();
+		
+		for(CategoryNode category : method.getCategories()){
+			if(category.isExpected() == true){
+				categories.add(category);
+			}
+		}
+		
+		if(categories.size() == 0){
+			CategoryNode category = generateCategory(SUPPORTED_TYPES[rand.nextInt(SUPPORTED_TYPES.length)], true, 0, 1, 1);
+			method.addCategory(category);
+			categories.add(category);
+		}
+		
+		CategoryNode category = categories.get(rand.nextInt(categories.size()));
+		
+		
 		String value = randomPartitionValue(category.getType());
 		String name = generateString(REGEX_PARTITION_NODE_NAME);
 		return new ExpectedValueStatement(category, new PartitionNode(name, value));
 	}
 
-	public BasicStatement generateStatementArray(MethodNode method) {
+	public StatementArray generateStatementArray(MethodNode method, int depth) {
 		StatementArray statement = new StatementArray(rand.nextBoolean()?Operator.AND:Operator.OR);
 		for(int i = 0; i < MAX_STATEMENTS; i++){
-			statement.addStatement(generateStatement(method));
+			statement.addStatement(generateStatement(method, depth - 1));
 		}
 		return statement;
 	}
@@ -236,9 +262,9 @@ public class RandomModelGenerator {
 		List<CategoryNode> categories = method.getCategories();
 		CategoryNode category = categories.get(rand.nextInt(categories.size()));
 		if(category.isExpected()){
-			return generateExpectedValueStatement(category);
+			return generateExpectedValueStatement(method);
 		}
-		return generateStatement(method);
+		return generateStatement(method, MAX_STATEMENTS_DEPTH);
 	}
 
 	public PartitionNode generatePartition(int levels, int partitions, int labels, String type) {
@@ -424,10 +450,37 @@ public class RandomModelGenerator {
 		System.out.println(fStringifier.stringify(tc, 0));
 	}
 	
-	@Test
+//	@Test
 	public void testGenerateStaticStatement(){
 		for(int i = 0; i < 10; i++){
 			StaticStatement statement = generateStaticStatement();
+			System.out.println(fStringifier.stringify(statement, 0));
+		}
+	}
+	
+//	@Test
+	public void testGeneratePartitionedStatement(){
+		for(int i = 0; i < 10; i++){
+			MethodNode m = generateMethod(10, 0, 0);
+			PartitionedCategoryStatement statement = generatePartitionedStatement(m);
+			System.out.println(fStringifier.stringify(statement, 0));
+		}
+	}
+	
+//	@Test
+	public void testGenerateExpectedValueStatement(){
+		for(int i = 0; i < 10; i++){
+			MethodNode m = generateMethod(10, 0, 0);
+			ExpectedValueStatement statement = generateExpectedValueStatement(m);
+			System.out.println(fStringifier.stringify(statement, 0));
+		}
+	}
+	
+	@Test
+	public void testGenerateStatementArray(){
+		for(int i = 0; i < 10; i++){
+			MethodNode m = generateMethod(10, 0, 0);
+			StatementArray statement = generateStatementArray(m, 3);
 			System.out.println(fStringifier.stringify(statement, 0));
 		}
 	}

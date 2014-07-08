@@ -187,7 +187,7 @@ public class XomParser {
 		}
 	}
 
-	public BasicStatement parseStatementArray(Element element, MethodNode method) throws ParserException {
+	public StatementArray parseStatementArray(Element element, MethodNode method) throws ParserException {
 		StatementArray statementArray = null;
 		String operatorValue = getAttributeValue(element, Constants.STATEMENT_OPERATOR_ATTRIBUTE_NAME);
 		switch(operatorValue){

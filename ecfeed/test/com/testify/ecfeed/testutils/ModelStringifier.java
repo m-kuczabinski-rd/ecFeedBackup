@@ -7,6 +7,11 @@ import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.model.constraint.BasicStatement;
+import com.testify.ecfeed.model.constraint.ExpectedValueStatement;
+import com.testify.ecfeed.model.constraint.PartitionedCategoryStatement;
+import com.testify.ecfeed.model.constraint.PartitionedCategoryStatement.LabelCondition;
+import com.testify.ecfeed.model.constraint.PartitionedCategoryStatement.PartitionCondition;
+import com.testify.ecfeed.model.constraint.StatementArray;
 import com.testify.ecfeed.model.constraint.StaticStatement;
 
 public class ModelStringifier {
@@ -29,6 +34,15 @@ public class ModelStringifier {
 	public String stringify(BasicStatement statement, int indent){
 		if(statement instanceof StaticStatement){
 			return stringify((StaticStatement)statement, indent);
+		}
+		if(statement instanceof PartitionedCategoryStatement){
+			return stringify((PartitionedCategoryStatement)statement, indent);
+		}
+		if(statement instanceof ExpectedValueStatement){
+			return stringify((ExpectedValueStatement)statement, indent);
+		}
+		if(statement instanceof StatementArray){
+			return stringify((StatementArray)statement, indent);
 		}
 		
 		return null;
@@ -102,6 +116,35 @@ public class ModelStringifier {
 		return result;
 	}
 	
+	public String stringify(PartitionedCategoryStatement s, int indent){
+		String result = intendentString(indent);
+		result += "Partitioned statement ";
+		if(s.getCondition() instanceof LabelCondition){
+			result += "[label] ";
+		}
+		else if(s.getCondition() instanceof PartitionCondition){
+			result += "[partition] ";
+		}
+		result += s.toString();
+		return result;
+	}
+	
+	public String stringify(ExpectedValueStatement s, int indent){
+		String result = intendentString(indent);
+		result += "Expected value statement ";
+		result += s.getCategory().getName() + "[" + s.getCategory().getType() + "] " + s.getRelation() + " " + s.getCondition().getValueString();
+		return result;
+	}
+
+	public String stringify(StatementArray s, int indent){
+		String result = intendentString(indent);
+		result += "Statement array " + s.getOperator();
+		for(BasicStatement child : s.getChildren()){
+			result += "\n" + stringify(child, indent + 2);
+		}
+		return result;
+	}
+
 	private String intendentString(int indent){
 		String result = new String();
 		for(int i = 0; i < indent; i++){

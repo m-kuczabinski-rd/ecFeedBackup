@@ -7,8 +7,6 @@ import static org.junit.Assert.fail;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 
 import nu.xom.Document;
@@ -27,6 +25,7 @@ import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.model.constraint.BasicStatement;
 import com.testify.ecfeed.model.constraint.ExpectedValueStatement;
 import com.testify.ecfeed.model.constraint.PartitionedCategoryStatement;
+import com.testify.ecfeed.model.constraint.StatementArray;
 import com.testify.ecfeed.model.constraint.StaticStatement;
 import com.testify.ecfeed.parsers.xml.XomConverter;
 import com.testify.ecfeed.parsers.xml.XomParser;
@@ -157,6 +156,8 @@ public class XomParserTest {
 
 		Element trueElement = (Element)trueStatement.accept(fConverter);
 		Element falseElement = (Element)falseStatement.accept(fConverter);
+		TRACE(trueElement);
+		TRACE(falseElement);
 
 		try{
 			StaticStatement parsedTrue = fParser.parseStaticStatement(trueElement);
@@ -174,9 +175,9 @@ public class XomParserTest {
 		for(int i = 0; i < 10; i++){
 			MethodNode m = fModelGenerator.generateMethod(5, 0, 0);
 			PartitionedCategoryStatement s = fModelGenerator.generatePartitionedStatement(m);
-
+			Element element = (Element)s.accept(fConverter);
+			TRACE(element);
 			try{
-				Element element = (Element)s.accept(fConverter);
 				PartitionedCategoryStatement parsedS = null;
 				switch(element.getLocalName()){
 				case Constants.CONSTRAINT_LABEL_STATEMENT_NODE_NAME:
@@ -198,33 +199,33 @@ public class XomParserTest {
 	public void parseExpectedValueStatementTest(){
 		for(int i = 0; i < 10; i++){
 			MethodNode m = fModelGenerator.generateMethod(10, 0, 0);
-			List<CategoryNode> expectedCategories = new ArrayList<CategoryNode>();
-			for(CategoryNode c : m.getCategories()){
-				if(c.isExpected()){
-					expectedCategories.add(c);
-				}
-			}
-			if(expectedCategories.size() == 0){
-				CategoryNode c = fModelGenerator.generateCategory(Constants.TYPE_NAME_INT, true, 0, 0, 0);
-				m.addCategory(c);
-				expectedCategories.add(c);
-			}
-
-			for(int j = 0; j < 10; j++){
-				CategoryNode luckyCategory = expectedCategories.get(rand.nextInt(expectedCategories.size()));
-				ExpectedValueStatement s = fModelGenerator.generateExpectedValueStatement(luckyCategory);
-				Element element = (Element)s.accept(fConverter);
-				try{
-					ExpectedValueStatement parsedS = fParser.parseExpectedValueStatement(element, m);
-					assertStatementsEqual(s, parsedS);
-				} catch (ParserException e) {
-					fail("Unexpected exception: " + e.getMessage());
-				}
+			ExpectedValueStatement s = fModelGenerator.generateExpectedValueStatement(m);
+			Element element = (Element)s.accept(fConverter);
+			TRACE(element);
+			try{
+				ExpectedValueStatement parsedS = fParser.parseExpectedValueStatement(element, m);
+				assertStatementsEqual(s, parsedS);
+			} catch (ParserException e) {
+				fail("Unexpected exception: " + e.getMessage());
 			}
 		}
-
 	}
 
+	@Test
+	public void parseStatementArrayTest(){
+		MethodNode m = fModelGenerator.generateMethod(10, 0, 0);
+		StatementArray s = fModelGenerator.generateStatementArray(m, 4);
+		Element element = (Element)s.accept(fConverter);
+		TRACE(element);
+		try{
+			StatementArray parsedS = fParser.parseStatementArray(element, m);
+			assertStatementsEqual(s, parsedS);
+		} catch (ParserException e) {
+			fail("Unexpected exception: " + e.getMessage());
+		}
+		
+	}
+	
 	//		@Test
 	public void assertTypeTest(){
 		RootNode root = fModelGenerator.generateModel();
