@@ -96,7 +96,7 @@ public class XomConverter implements IConverter, IStatementVisitor {
 
 	@Override
 	public Object convert(ConstraintNode node){
-		Element element = createNamedElement(PARTITION_NODE_NAME, node);
+		Element element = createNamedElement(CONSTRAINT_NODE_NAME, node);
 		BasicStatement premise = node.getConstraint().getPremise();
 		BasicStatement consequence = node.getConstraint().getConsequence();
 		
@@ -106,6 +106,9 @@ public class XomConverter implements IConverter, IStatementVisitor {
 		
 		Element consequenceElement = new Element(CONSTRAINT_CONSEQUENCE_NODE_NAME);
 		consequenceElement.appendChild((Element)consequence.accept(this));
+		
+		element.appendChild(premiseElement);
+		element.appendChild(consequenceElement);
 
 		return element;
 	}

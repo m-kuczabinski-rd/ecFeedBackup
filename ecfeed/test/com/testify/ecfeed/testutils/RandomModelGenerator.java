@@ -450,6 +450,13 @@ public class RandomModelGenerator {
 		System.out.println(fStringifier.stringify(tc, 0));
 	}
 	
+	@Test
+	public void testGenerateConstraint(){
+		MethodNode m = generateMethod(10, 0, 0);
+		ConstraintNode c = generateConstraint(m);
+		System.out.println(fStringifier.stringify(c, 2));
+	}
+	
 //	@Test
 	public void testGenerateStaticStatement(){
 		for(int i = 0; i < 10; i++){
@@ -476,7 +483,7 @@ public class RandomModelGenerator {
 		}
 	}
 	
-	@Test
+//	@Test
 	public void testGenerateStatementArray(){
 		for(int i = 0; i < 10; i++){
 			MethodNode m = generateMethod(10, 0, 0);

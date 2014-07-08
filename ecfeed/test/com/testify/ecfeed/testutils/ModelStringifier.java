@@ -28,6 +28,9 @@ public class ModelStringifier {
 		if(node instanceof TestCaseNode){
 			return stringify((TestCaseNode)node, indent);
 		}
+		if(node instanceof ConstraintNode){
+			return stringify((ConstraintNode)node, indent);
+		}
 		return null;
 	}
 
@@ -94,6 +97,22 @@ public class ModelStringifier {
 		return result + "]";
 	}
 
+	public String stringify(ConstraintNode node, int indent){
+		String result = intendentString(indent);
+		result += "Constraint " + node.getName() + "\n"; 
+		for(int i = 0; i < indent + 2; i++){
+			result += " ";
+		}
+		result += "Premise:\n";
+		result += stringify(node.getConstraint().getPremise(), indent + 4);
+		result += "\n";
+		for(int i = 0; i < indent + 2; i++){
+			result += " ";
+		}
+		result += "Consequence:\n";
+		result += stringify(node.getConstraint().getConsequence(), indent + 4);
+		return result;
+	}
 	
 	public String stringify(PartitionNode p, int indent){
 		String result = intendentString(indent);
