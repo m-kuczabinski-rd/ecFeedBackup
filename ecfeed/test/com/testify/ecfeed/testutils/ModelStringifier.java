@@ -6,6 +6,7 @@ import com.testify.ecfeed.model.ConstraintNode;
 import com.testify.ecfeed.model.IGenericNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
+import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.model.constraint.BasicStatement;
 import com.testify.ecfeed.model.constraint.ExpectedValueStatement;
@@ -32,6 +33,12 @@ public class ModelStringifier {
 		if(node instanceof ConstraintNode){
 			return stringify((ConstraintNode)node, indent);
 		}
+		if(node instanceof ClassNode){
+			return stringify((ClassNode)node, indent);
+		}
+		if(node instanceof RootNode){
+			return stringify((RootNode)node, indent);
+		}
 		return null;
 	}
 
@@ -52,6 +59,17 @@ public class ModelStringifier {
 		return null;
 	}
 
+	public String stringify(RootNode r, int indent){
+		String result = intendentString(indent);
+		result += "Model " + r.getName();
+		
+		for(ClassNode c : r.getClasses()){
+			result += "\n" + stringify(c, indent + 2);
+		}
+		
+		return result;
+	}
+	
 	public String stringify(ClassNode c, int indent){
 		String result = intendentString(indent);
 		result += "Class " + c.getQualifiedName();
@@ -85,6 +103,7 @@ public class ModelStringifier {
 	public String stringify(CategoryNode c, int indent){
 		String result = intendentString(indent);
 		result += "Category " + c.getName() + "[" + c.getType() + "], " + (c.isExpected() ? "expected" : "patitioned");
+		result += " default value: " + c.getDefaultValueString(); 
 		for(PartitionNode child : c.getPartitions()){
 			result += "\n";
 			result += stringify(child, indent + 2);
