@@ -26,6 +26,7 @@ import com.testify.ecfeed.model.constraint.StatementArray;
 import com.testify.ecfeed.model.constraint.StaticStatement;
 import com.testify.ecfeed.serialization.Constants;
 import com.testify.ecfeed.serialization.ParserException;
+import com.testify.ecfeed.utils.ModelUtils;
 
 public class XomAnalyser {
 	public RootNode parseRoot(Element element) throws ParserException{
@@ -84,9 +85,12 @@ public class XomAnalyser {
 		assertNodeTag(element.getQualifiedName(), CATEGORY_NODE_NAME);
 		String name = getElementName(element);
 		String type = getAttributeValue(element, TYPE_NAME_ATTRIBUTE);
-		String defaultValue = getAttributeValue(element, DEFAULT_EXPECTED_VALUE_ATTRIBUTE_NAME);
-		String expected = getAttributeValue(element, CATEGORY_IS_EXPECTED_ATTRIBUTE_NAME);
-		
+		String defaultValue = ModelUtils.getDefaultExpectedValueString(type);
+		String expected = String.valueOf(false);
+		if(element.getAttribute(CATEGORY_IS_EXPECTED_ATTRIBUTE_NAME) != null){
+			expected = getAttributeValue(element, CATEGORY_IS_EXPECTED_ATTRIBUTE_NAME);
+			defaultValue = getAttributeValue(element, DEFAULT_EXPECTED_VALUE_ATTRIBUTE_NAME);
+		}
 		CategoryNode category = new CategoryNode(name, type, Boolean.parseBoolean(expected));
 		category.setDefaultValueString(defaultValue);
 		
