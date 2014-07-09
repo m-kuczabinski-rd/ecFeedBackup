@@ -55,7 +55,7 @@ public class XomParserTest {
 		}
 	}
 	
-//	@Test
+	@Test
 	public void parseClassTest(){
 		try {
 			ClassNode _class = fModelGenerator.generateClass(3);
@@ -68,7 +68,7 @@ public class XomParserTest {
 		}
 	}
 	
-//	@Test
+	@Test
 	public void parseMethodTest(){
 		for(int i = 0; i < 10; i++){
 			try{
@@ -84,7 +84,7 @@ public class XomParserTest {
 		}
 	}
 	
-//	@Test
+	@Test
 	public void parseCategoryTest(){
 		for(String type : SUPPORTED_TYPES){
 			try{
@@ -102,7 +102,7 @@ public class XomParserTest {
 		}
 	}
 	
-//	@Test
+	@Test
 	public void parseTestCaseTest(){
 		for(int i = 0; i < 10; i++){
 			MethodNode m = fModelGenerator.generateMethod(5, 0, 0);
@@ -120,7 +120,7 @@ public class XomParserTest {
 		}
 	}
 	
-//	@Test
+	@Test
 	public void parseConstraintTest(){
 		for(int i = 0; i < 10; i++){
 			MethodNode m = fModelGenerator.generateMethod(10, 0, 0);
@@ -138,7 +138,7 @@ public class XomParserTest {
 		}
 	}
 	
-//	@Test
+	@Test
 	public void parsePartitionTest(){
 		for(String type: SUPPORTED_TYPES){
 			try {
@@ -198,7 +198,7 @@ public class XomParserTest {
 		}
 	}
 	
-//	@Test
+	@Test
 	public void parseExpectedValueStatementTest(){
 		for(int i = 0; i < 10; i++){
 			try{
@@ -214,7 +214,7 @@ public class XomParserTest {
 		}
 	}
 
-//	@Test
+	@Test
 	public void parseStatementArrayTest(){
 		try{
 			MethodNode m = fModelGenerator.generateMethod(10, 0, 0);
@@ -229,7 +229,7 @@ public class XomParserTest {
 		
 	}
 	
-	//		@Test
+	@Test
 	public void assertTypeTest(){
 		try{
 			RootNode root = fModelGenerator.generateModel(3);
