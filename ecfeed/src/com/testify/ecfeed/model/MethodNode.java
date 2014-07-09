@@ -412,19 +412,19 @@ public class MethodNode extends GenericNode {
 		
 		for(int i = 0; i < categoriesCount; i++){
 			if(getCategories().get(i).compare(comparedMethod.getCategories().get(i)) == false){
-				return true;
+				return false;
 			}
 		}
 		
 		for(int i = 0; i < testCasesCount; i++){
 			if(getTestCases().get(i).compare(comparedMethod.getTestCases().get(i)) == false){
-				return true;
+				return false;
 			}
 		}
 		
 		for(int i = 0; i < constraintsCount; i++){
 			if(getConstraintNodes().get(i).compare(comparedMethod.getConstraintNodes().get(i)) == false){
-				return true;
+				return false;
 			}
 		}
 		
