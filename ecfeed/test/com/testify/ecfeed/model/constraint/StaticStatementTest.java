@@ -43,4 +43,13 @@ public class StaticStatementTest {
 		assertFalse(statement.evaluate(list));
 	}
 
+	@Test
+	public void compareTest(){
+		StaticStatement true1 = new StaticStatement(true);
+		StaticStatement true2 = new StaticStatement(true);
+		StaticStatement false1 = new StaticStatement(false);
+		
+		assertTrue(true1.compare(true2));
+		assertFalse(true1.compare(false1));
+	}
 }
