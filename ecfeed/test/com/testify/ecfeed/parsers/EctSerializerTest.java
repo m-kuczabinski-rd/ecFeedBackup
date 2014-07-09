@@ -15,7 +15,7 @@ import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.serialization.IModelParser;
 import com.testify.ecfeed.serialization.IModelSerializer;
 import com.testify.ecfeed.serialization.ect.EctParser;
-import com.testify.ecfeed.serialization.ect.EtcSerializer;
+import com.testify.ecfeed.serialization.ect.EctSerializer;
 import com.testify.ecfeed.serialization.ect.XmlModelParser;
 import com.testify.ecfeed.serialization.ect.XmlModelSerializer;
 import com.testify.ecfeed.testutils.RandomModelGenerator;
@@ -29,7 +29,7 @@ public class EctSerializerTest {
 		RootNode model = fGenerator.generateModel(3);
 		
 		OutputStream ostream = new ByteArrayOutputStream();
-		EtcSerializer serializer = new EtcSerializer(ostream);
+		EctSerializer serializer = new EctSerializer(ostream);
 		try {
 			serializer.serialize(model);
 			InputStream istream = new ByteArrayInputStream(((ByteArrayOutputStream)ostream).toByteArray());
@@ -47,7 +47,7 @@ public class EctSerializerTest {
 		ClassNode c = fGenerator.generateClass(3);
 		
 		OutputStream ostream = new ByteArrayOutputStream();
-		EtcSerializer serializer = new EtcSerializer(ostream);
+		EctSerializer serializer = new EctSerializer(ostream);
 		try {
 			serializer.serialize(c);
 			InputStream istream = new ByteArrayInputStream(((ByteArrayOutputStream)ostream).toByteArray());
@@ -65,7 +65,7 @@ public class EctSerializerTest {
 		RootNode r = fGenerator.generateModel(3);
 		
 		OutputStream ostream = new ByteArrayOutputStream();
-		EtcSerializer serializer = new EtcSerializer(ostream);
+		EctSerializer serializer = new EctSerializer(ostream);
 		try {
 			serializer.serialize(r);
 			InputStream istream = new ByteArrayInputStream(((ByteArrayOutputStream)ostream).toByteArray());
@@ -100,7 +100,7 @@ public class EctSerializerTest {
 		for(int i = 0; i < 10; i++){
 			RootNode model = fGenerator.generateModel(5);
 			OutputStream ostream = new ByteArrayOutputStream();
-			IModelSerializer serializer = new EtcSerializer(ostream);
+			IModelSerializer serializer = new EctSerializer(ostream);
 			try {
 				serializer.serialize(model);
 				InputStream istream = new ByteArrayInputStream(((ByteArrayOutputStream)ostream).toByteArray());

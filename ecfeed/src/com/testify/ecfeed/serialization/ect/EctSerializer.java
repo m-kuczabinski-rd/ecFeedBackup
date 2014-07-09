@@ -16,12 +16,12 @@ import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.serialization.IModelSerializer;
 
-public class EtcSerializer implements IModelSerializer{
+public class EctSerializer implements IModelSerializer{
 
 	private OutputStream fOutputStream;
 	private XomBuilder fConverter;
 
-	public EtcSerializer(OutputStream ostream){
+	public EctSerializer(OutputStream ostream){
 		fOutputStream = ostream;
 		fConverter = new XomBuilder();
 	}
