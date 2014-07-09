@@ -199,6 +199,8 @@ public class PartitionStatementTest {
 		
 		s1.setCondition("label");
 		assertFalse(s1.compare(s2));
+		s2.setCondition("label1");
+		assertFalse(s1.compare(s2));
 		s2.setCondition("label");
 		assertTrue(s1.compare(s2));
 		
