@@ -34,13 +34,13 @@ import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.TestCaseNode;
-import com.testify.ecfeed.parsers.IModelParser;
-import com.testify.ecfeed.parsers.ParserException;
-import com.testify.ecfeed.parsers.etc.XmlModelParser;
 import com.testify.ecfeed.runner.RunnerException;
 import com.testify.ecfeed.runner.StaticRunner;
 import com.testify.ecfeed.runner.annotations.EcModel;
 import com.testify.ecfeed.runner.annotations.TestSuites;
+import com.testify.ecfeed.serialization.IModelParser;
+import com.testify.ecfeed.serialization.ParserException;
+import com.testify.ecfeed.serialization.ect.XmlModelParser;
 
 public class StaticRunnerTest extends StaticRunner{
 	public StaticRunnerTest() throws InitializationError {

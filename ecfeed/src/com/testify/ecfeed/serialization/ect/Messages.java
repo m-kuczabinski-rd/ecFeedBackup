@@ -9,11 +9,11 @@
  *     Patryk Chamuczynski (p.chamuczynski(at)radytek.com) - initial implementation
  ******************************************************************************/
 
-package com.testify.ecfeed.parsers.etc;
+package com.testify.ecfeed.serialization.ect;
 
 import java.io.IOException;
 
-import com.testify.ecfeed.parsers.Constants;
+import com.testify.ecfeed.serialization.Constants;
 
 import nu.xom.Element;
 import nu.xom.ParsingException;

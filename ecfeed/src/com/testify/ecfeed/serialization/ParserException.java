@@ -9,7 +9,7 @@
  *     Patryk Chamuczynski (p.chamuczynski(at)radytek.com) - initial implementation
  ******************************************************************************/
 
-package com.testify.ecfeed.parsers;
+package com.testify.ecfeed.serialization;
 
 public class ParserException extends Exception {
 

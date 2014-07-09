@@ -1,4 +1,4 @@
-package com.testify.ecfeed.parsers.etc;
+package com.testify.ecfeed.serialization.ect;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -14,7 +14,7 @@ import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.TestCaseNode;
-import com.testify.ecfeed.parsers.IModelSerializer;
+import com.testify.ecfeed.serialization.IModelSerializer;
 
 public class EtcSerializer implements IModelSerializer{
 

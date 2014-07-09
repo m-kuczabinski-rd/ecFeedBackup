@@ -31,9 +31,9 @@ import org.eclipse.core.runtime.*;
 import org.eclipse.core.resources.*;
 import org.eclipse.core.runtime.CoreException;
 
+import com.testify.ecfeed.serialization.ect.XmlModelSerializer;
 import com.testify.ecfeed.utils.Constants;
 import com.testify.ecfeed.model.RootNode;
-import com.testify.ecfeed.parsers.etc.XmlModelSerializer;
 import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.editor.ModelEditor;
 

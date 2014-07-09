@@ -9,7 +9,7 @@
  *     Patryk Chamuczynski (p.chamuczynski(at)radytek.com) - initial implementation
  ******************************************************************************/
 
-package com.testify.ecfeed.parsers.etc;
+package com.testify.ecfeed.serialization.ect;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -38,9 +38,9 @@ import com.testify.ecfeed.model.constraint.PartitionedCategoryStatement;
 import com.testify.ecfeed.model.constraint.Relation;
 import com.testify.ecfeed.model.constraint.StatementArray;
 import com.testify.ecfeed.model.constraint.StaticStatement;
-import com.testify.ecfeed.parsers.Constants;
-import com.testify.ecfeed.parsers.IModelParser;
-import com.testify.ecfeed.parsers.ParserException;
+import com.testify.ecfeed.serialization.Constants;
+import com.testify.ecfeed.serialization.IModelParser;
+import com.testify.ecfeed.serialization.ParserException;
 
 public class XmlModelParser implements IModelParser{
 	

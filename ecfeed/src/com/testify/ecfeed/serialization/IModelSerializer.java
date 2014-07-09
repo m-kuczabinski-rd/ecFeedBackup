@@ -1,4 +1,4 @@
-package com.testify.ecfeed.parsers;
+package com.testify.ecfeed.serialization;
 
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.ClassNode;

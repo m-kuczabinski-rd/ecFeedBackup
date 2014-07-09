@@ -1,6 +1,6 @@
-package com.testify.ecfeed.parsers.etc;
+package com.testify.ecfeed.serialization.ect;
 
-import static com.testify.ecfeed.parsers.Constants.*;
+import static com.testify.ecfeed.serialization.Constants.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,8 +24,8 @@ import com.testify.ecfeed.model.constraint.PartitionedCategoryStatement;
 import com.testify.ecfeed.model.constraint.Relation;
 import com.testify.ecfeed.model.constraint.StatementArray;
 import com.testify.ecfeed.model.constraint.StaticStatement;
-import com.testify.ecfeed.parsers.Constants;
-import com.testify.ecfeed.parsers.ParserException;
+import com.testify.ecfeed.serialization.Constants;
+import com.testify.ecfeed.serialization.ParserException;
 
 public class XomAnalyser {
 	public RootNode parseRoot(Element element) throws ParserException{

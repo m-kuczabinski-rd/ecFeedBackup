@@ -12,10 +12,12 @@ import org.junit.Test;
 
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.RootNode;
-import com.testify.ecfeed.parsers.etc.EctParser;
-import com.testify.ecfeed.parsers.etc.EtcSerializer;
-import com.testify.ecfeed.parsers.etc.XmlModelParser;
-import com.testify.ecfeed.parsers.etc.XmlModelSerializer;
+import com.testify.ecfeed.serialization.IModelParser;
+import com.testify.ecfeed.serialization.IModelSerializer;
+import com.testify.ecfeed.serialization.ect.EctParser;
+import com.testify.ecfeed.serialization.ect.EtcSerializer;
+import com.testify.ecfeed.serialization.ect.XmlModelParser;
+import com.testify.ecfeed.serialization.ect.XmlModelSerializer;
 import com.testify.ecfeed.testutils.RandomModelGenerator;
 
 public class EctSerializerTest {

@@ -46,8 +46,10 @@ import com.testify.ecfeed.model.constraint.PartitionedCategoryStatement;
 import com.testify.ecfeed.model.constraint.Relation;
 import com.testify.ecfeed.model.constraint.StatementArray;
 import com.testify.ecfeed.model.constraint.StaticStatement;
-import com.testify.ecfeed.parsers.etc.XmlModelParser;
-import com.testify.ecfeed.parsers.etc.XmlModelSerializer;
+import com.testify.ecfeed.serialization.Constants;
+import com.testify.ecfeed.serialization.ParserException;
+import com.testify.ecfeed.serialization.ect.XmlModelParser;
+import com.testify.ecfeed.serialization.ect.XmlModelSerializer;
 
 public class XmlParserSerializerTest {
 	private final int TEST_RUNS = 10;
