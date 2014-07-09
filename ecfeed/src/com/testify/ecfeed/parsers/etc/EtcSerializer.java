@@ -10,13 +10,13 @@ import nu.xom.Serializer;
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.ConstraintNode;
-import com.testify.ecfeed.model.IModelVisitor;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.TestCaseNode;
+import com.testify.ecfeed.parsers.IModelSerializer;
 
-public class EtcSerializer implements IModelVisitor {
+public class EtcSerializer implements IModelSerializer{
 
 	private OutputStream fOutputStream;
 	private XomBuilder fConverter;
@@ -26,50 +26,43 @@ public class EtcSerializer implements IModelVisitor {
 		fConverter = new XomBuilder();
 	}
 	
-	@Override
-	public Object visit(RootNode node) throws Exception {
+	public Object serialize(RootNode node) throws Exception{
+		Element element = (Element)node.accept(fConverter);
+		writeDocument(element);
+		return null;
+	}
+	
+	public Object serialize(ClassNode node) throws Exception {
 		Element element = (Element)node.accept(fConverter);
 		writeDocument(element);
 		return null;
 	}
 
-	@Override
-	public Object visit(ClassNode node) throws Exception {
+	public Object serialize(MethodNode node) throws Exception {
 		Element element = (Element)node.accept(fConverter);
 		writeDocument(element);
 		return null;
 	}
 
-	@Override
-	public Object visit(MethodNode node) throws Exception {
+	public Object serialize(CategoryNode node) throws Exception {
 		Element element = (Element)node.accept(fConverter);
 		writeDocument(element);
 		return null;
 	}
 
-	@Override
-	public Object visit(CategoryNode node) throws Exception {
+	public Object serialize(TestCaseNode node) throws Exception {
 		Element element = (Element)node.accept(fConverter);
 		writeDocument(element);
 		return null;
 	}
 
-	@Override
-	public Object visit(TestCaseNode node) throws Exception {
+	public Object serialize(ConstraintNode node) throws Exception {
 		Element element = (Element)node.accept(fConverter);
 		writeDocument(element);
 		return null;
 	}
 
-	@Override
-	public Object visit(ConstraintNode node) throws Exception {
-		Element element = (Element)node.accept(fConverter);
-		writeDocument(element);
-		return null;
-	}
-
-	@Override
-	public Object visit(PartitionNode node) throws Exception {
+	public Object serialize(PartitionNode node) throws Exception {
 		Element element = (Element)node.accept(fConverter);
 		writeDocument(element);
 		return null;
