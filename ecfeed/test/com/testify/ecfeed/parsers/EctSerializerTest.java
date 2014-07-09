@@ -10,6 +10,7 @@ import java.io.OutputStream;
 
 import org.junit.Test;
 
+import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.parsers.etc.EctParser;
 import com.testify.ecfeed.parsers.etc.EtcSerializer;
@@ -36,6 +37,41 @@ public class EctSerializerTest {
 			assertElementsEqual(model, parsedModel);
 		} catch (Exception e) {
 			fail("Unexpected exception: " + e.getMessage());
+		}
+	}
+	
+	@Test
+	public void classSerializerTest(){
+		ClassNode c = fGenerator.generateClass(3);
+		
+		OutputStream ostream = new ByteArrayOutputStream();
+		EtcSerializer serializer = new EtcSerializer(ostream);
+		try {
+			serializer.serialize(c);
+			InputStream istream = new ByteArrayInputStream(((ByteArrayOutputStream)ostream).toByteArray());
+			IModelParser parser = new EctParser();
+			ClassNode parsedC = parser.parseClass(istream);
+			
+			assertElementsEqual(c, parsedC);
+		} catch (Exception e) {
+			fail("Unexpected exception: " + e.getMessage());
+		}
+	}
+	
+	@Test
+	public void wrongTypeStreamTest(){
+		RootNode r = fGenerator.generateModel(3);
+		
+		OutputStream ostream = new ByteArrayOutputStream();
+		EtcSerializer serializer = new EtcSerializer(ostream);
+		try {
+			serializer.serialize(r);
+			InputStream istream = new ByteArrayInputStream(((ByteArrayOutputStream)ostream).toByteArray());
+			IModelParser parser = new EctParser();
+			parser.parseClass(istream);
+			fail("Exception expected");
+		} catch (Exception e) {
+//			System.out.println("Exception caught: " + e.getMessage());
 		}
 	}
 	
