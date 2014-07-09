@@ -10,7 +10,7 @@
  ******************************************************************************/
 package com.testify.ecfeed.model.constraint;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -61,5 +61,29 @@ public class ExpectedValueStatementTest{
 		testStatement.adapt(testData);
 		
 		assertTrue(testData.get(1).getValueString().equals(statementPartition.getValueString()));
+	}
+	
+	@Test
+	public void compareTest(){
+		CategoryNode c1 = new CategoryNode("c", "type", true);
+		CategoryNode c2 = new CategoryNode("c", "type", true);
+		
+		PartitionNode p1 = new PartitionNode("name", "value");
+		PartitionNode p2 = new PartitionNode("name", "value");
+		
+		ExpectedValueStatement s1 = new ExpectedValueStatement(c1, p1);
+		ExpectedValueStatement s2 = new ExpectedValueStatement(c2, p2);
+		
+		assertTrue(s1.compare(s2));
+		c1.setName("c1");
+		assertFalse(s1.compare(s2));
+		c2.setName("c1");
+		assertTrue(s1.compare(s2));
+
+		s1.getCondition().setValueString("v1");
+		assertFalse(s1.compare(s2));
+		s2.getCondition().setValueString("v1");
+		assertTrue(s1.compare(s2));
+
 	}
 }
