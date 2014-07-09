@@ -40,8 +40,8 @@ import org.eclipse.ui.part.FileEditorInput;
 import com.testify.ecfeed.model.IModelWrapper;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.parsers.ParserException;
-import com.testify.ecfeed.parsers.xml.XmlModelParser;
-import com.testify.ecfeed.parsers.xml.XmlModelSerializer;
+import com.testify.ecfeed.parsers.etc.XmlModelParser;
+import com.testify.ecfeed.parsers.etc.XmlModelSerializer;
 
 public class ModelEditor extends FormEditor implements IModelWrapper{
 	

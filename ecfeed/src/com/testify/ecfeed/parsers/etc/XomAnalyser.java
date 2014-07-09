@@ -1,4 +1,4 @@
-package com.testify.ecfeed.parsers.xml;
+package com.testify.ecfeed.parsers.etc;
 
 import static com.testify.ecfeed.parsers.Constants.*;
 
@@ -27,7 +27,7 @@ import com.testify.ecfeed.model.constraint.StaticStatement;
 import com.testify.ecfeed.parsers.Constants;
 import com.testify.ecfeed.parsers.ParserException;
 
-public class XomParser {
+public class XomAnalyser {
 	public RootNode parseRoot(Element element) throws ParserException{
 		assertNodeTag(element.getQualifiedName(), ROOT_NODE_NAME);
 		String name = getElementName(element);

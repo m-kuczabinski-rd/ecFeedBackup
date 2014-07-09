@@ -9,7 +9,7 @@
  *     Patryk Chamuczynski (p.chamuczynski(at)radytek.com) - initial implementation
  ******************************************************************************/
 
-package com.testify.ecfeed.parsers.xml;
+package com.testify.ecfeed.parsers.etc;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -366,5 +366,81 @@ public class XmlModelParser implements IModelParser{
 			throw new ParserException(Messages.MISSING_ATTRIBUTE(element, attributeName));
 		}
 		return value;
+	}
+
+	/********DUMMIES******************/
+	@Override
+	public ClassNode parseClass(InputStream istream) throws ParserException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public MethodNode parseMethod(InputStream istream) throws ParserException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public CategoryNode parseCategory(InputStream istream)
+			throws ParserException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public PartitionNode parsePartition(InputStream istream)
+			throws ParserException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public TestCaseNode parseTestCase(InputStream istream, MethodNode method)
+			throws ParserException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public ConstraintNode parseConstraint(InputStream istream, MethodNode method)
+			throws ParserException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public BasicStatement parseStatement(InputStream istream, MethodNode method)
+			throws ParserException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public StaticStatement parseStaticStatement(InputStream istream)
+			throws ParserException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public PartitionedCategoryStatement parsePartitionedCategoryStatement(
+			InputStream istream, MethodNode method) throws ParserException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public ExpectedValueStatement parseExpectedValueStatement(
+			InputStream istream, MethodNode method) throws ParserException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public StatementArray parseStatementArray(InputStream istream,
+			MethodNode method) throws ParserException {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

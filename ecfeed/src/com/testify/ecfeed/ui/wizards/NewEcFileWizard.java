@@ -33,7 +33,7 @@ import org.eclipse.core.runtime.CoreException;
 
 import com.testify.ecfeed.utils.Constants;
 import com.testify.ecfeed.model.RootNode;
-import com.testify.ecfeed.parsers.xml.XmlModelSerializer;
+import com.testify.ecfeed.parsers.etc.XmlModelSerializer;
 import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.editor.ModelEditor;
 

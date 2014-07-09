@@ -27,8 +27,8 @@ import com.testify.ecfeed.model.constraint.ExpectedValueStatement;
 import com.testify.ecfeed.model.constraint.PartitionedCategoryStatement;
 import com.testify.ecfeed.model.constraint.StatementArray;
 import com.testify.ecfeed.model.constraint.StaticStatement;
-import com.testify.ecfeed.parsers.xml.XomConverter;
-import com.testify.ecfeed.parsers.xml.XomParser;
+import com.testify.ecfeed.parsers.etc.XomAnalyser;
+import com.testify.ecfeed.parsers.etc.XomBuilder;
 import com.testify.ecfeed.testutils.ModelStringifier;
 import com.testify.ecfeed.testutils.RandomModelGenerator;
 
@@ -37,8 +37,8 @@ public class XomParserTest {
 	private final boolean DEBUG = false;
 	
 	RandomModelGenerator fModelGenerator = new RandomModelGenerator();
-	XomConverter fConverter = new XomConverter();
-	XomParser fParser = new XomParser();
+	XomBuilder fConverter = new XomBuilder();
+	XomAnalyser fParser = new XomAnalyser();
 	ModelStringifier fStringifier = new ModelStringifier();
 	Random rand = new Random();
 	

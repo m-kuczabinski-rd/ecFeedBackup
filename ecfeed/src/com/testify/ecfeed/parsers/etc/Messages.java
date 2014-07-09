@@ -9,7 +9,7 @@
  *     Patryk Chamuczynski (p.chamuczynski(at)radytek.com) - initial implementation
  ******************************************************************************/
 
-package com.testify.ecfeed.parsers.xml;
+package com.testify.ecfeed.parsers.etc;
 
 import java.io.IOException;
 

@@ -38,7 +38,7 @@ import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.parsers.IModelParser;
 import com.testify.ecfeed.parsers.ParserException;
-import com.testify.ecfeed.parsers.xml.XmlModelParser;
+import com.testify.ecfeed.parsers.etc.XmlModelParser;
 import com.testify.ecfeed.runner.annotations.EcModel;
 import com.testify.ecfeed.runner.annotations.TestSuites;
 import com.testify.ecfeed.utils.ClassUtils;

@@ -1,4 +1,4 @@
-package com.testify.ecfeed.parsers.xml;
+package com.testify.ecfeed.parsers.etc;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -16,14 +16,14 @@ import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.TestCaseNode;
 
-public class XomSerializer implements IModelVisitor {
+public class EtcSerializer implements IModelVisitor {
 
 	private OutputStream fOutputStream;
-	private XomConverter fConverter;
+	private XomBuilder fConverter;
 
-	public XomSerializer(OutputStream ostream){
+	public EtcSerializer(OutputStream ostream){
 		fOutputStream = ostream;
-		fConverter = new XomConverter();
+		fConverter = new XomBuilder();
 	}
 	
 	@Override

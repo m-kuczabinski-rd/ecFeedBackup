@@ -1,4 +1,4 @@
-package com.testify.ecfeed.parsers.xml;
+package com.testify.ecfeed.parsers.etc;
 
 import static com.testify.ecfeed.parsers.Constants.*;
 import nu.xom.Attribute;
@@ -23,7 +23,7 @@ import com.testify.ecfeed.model.constraint.PartitionedCategoryStatement.Partitio
 import com.testify.ecfeed.model.constraint.StatementArray;
 import com.testify.ecfeed.model.constraint.StaticStatement;
 
-public class XomConverter implements IModelVisitor, IStatementVisitor {
+public class XomBuilder implements IModelVisitor, IStatementVisitor {
 
 	@Override
 	public Object visit(RootNode node) throws Exception{
