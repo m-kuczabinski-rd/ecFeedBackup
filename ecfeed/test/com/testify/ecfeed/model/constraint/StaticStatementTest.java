@@ -48,8 +48,10 @@ public class StaticStatementTest {
 		StaticStatement true1 = new StaticStatement(true);
 		StaticStatement true2 = new StaticStatement(true);
 		StaticStatement false1 = new StaticStatement(false);
+		StaticStatement false2 = new StaticStatement(false);
 		
 		assertTrue(true1.compare(true2));
+		assertTrue(false1.compare(false2));
 		assertFalse(true1.compare(false1));
 	}
 }
