@@ -25,13 +25,13 @@ import com.testify.ecfeed.serialization.ParserException;
 public class EctParser implements IModelParser {
 	
 	Builder fBuilder = new Builder();
-	XomAnalyser fParser = new XomAnalyser();
+	XomAnalyser fXomParser = new XomAnalyser();
 
 	@Override
 	public RootNode parseModel(InputStream istream) throws ParserException {
 		try {
 			Document document = fBuilder.build(istream);
-			return fParser.parseRoot(document.getRootElement());
+			return fXomParser.parseRoot(document.getRootElement());
 		} catch (ParsingException e) {
 			throw new ParserException(Messages.PARSING_EXCEPTION(e));
 		} catch (IOException e) {
@@ -43,7 +43,7 @@ public class EctParser implements IModelParser {
 	public ClassNode parseClass(InputStream istream) throws ParserException {
 		try {
 			Document document = fBuilder.build(istream);
-			return fParser.parseClass(document.getRootElement());
+			return fXomParser.parseClass(document.getRootElement());
 		} catch (ParsingException e) {
 			throw new ParserException(Messages.PARSING_EXCEPTION(e));
 		} catch (IOException e) {
@@ -55,7 +55,7 @@ public class EctParser implements IModelParser {
 	public MethodNode parseMethod(InputStream istream) throws ParserException {
 		try {
 			Document document = fBuilder.build(istream);
-			return fParser.parseMethod(document.getRootElement());
+			return fXomParser.parseMethod(document.getRootElement());
 		} catch (ParsingException e) {
 			throw new ParserException(Messages.PARSING_EXCEPTION(e));
 		} catch (IOException e) {
@@ -67,7 +67,7 @@ public class EctParser implements IModelParser {
 	public CategoryNode parseCategory(InputStream istream) throws ParserException {
 		try {
 			Document document = fBuilder.build(istream);
-			return fParser.parseCategory(document.getRootElement());
+			return fXomParser.parseCategory(document.getRootElement());
 		} catch (ParsingException e) {
 			throw new ParserException(Messages.PARSING_EXCEPTION(e));
 		} catch (IOException e) {
@@ -79,7 +79,7 @@ public class EctParser implements IModelParser {
 	public PartitionNode parsePartition(InputStream istream) throws ParserException {
 		try {
 			Document document = fBuilder.build(istream);
-			return fParser.parsePartition(document.getRootElement());
+			return fXomParser.parsePartition(document.getRootElement());
 		} catch (ParsingException e) {
 			throw new ParserException(Messages.PARSING_EXCEPTION(e));
 		} catch (IOException e) {
@@ -91,7 +91,7 @@ public class EctParser implements IModelParser {
 	public TestCaseNode parseTestCase(InputStream istream, MethodNode method) throws ParserException {
 		try {
 			Document document = fBuilder.build(istream);
-			return fParser.parseTestCase(document.getRootElement(), method);
+			return fXomParser.parseTestCase(document.getRootElement(), method);
 		} catch (ParsingException e) {
 			throw new ParserException(Messages.PARSING_EXCEPTION(e));
 		} catch (IOException e) {
@@ -103,7 +103,7 @@ public class EctParser implements IModelParser {
 	public ConstraintNode parseConstraint(InputStream istream, MethodNode method) throws ParserException {
 		try {
 			Document document = fBuilder.build(istream);
-			return fParser.parseConstraint(document.getRootElement(), method);
+			return fXomParser.parseConstraint(document.getRootElement(), method);
 		} catch (ParsingException e) {
 			throw new ParserException(Messages.PARSING_EXCEPTION(e));
 		} catch (IOException e) {
@@ -115,7 +115,7 @@ public class EctParser implements IModelParser {
 	public BasicStatement parseStatement(InputStream istream, MethodNode method) throws ParserException {
 		try {
 			Document document = fBuilder.build(istream);
-			return fParser.parseStatement(document.getRootElement(), method);
+			return fXomParser.parseStatement(document.getRootElement(), method);
 		} catch (ParsingException e) {
 			throw new ParserException(Messages.PARSING_EXCEPTION(e));
 		} catch (IOException e) {
@@ -127,7 +127,7 @@ public class EctParser implements IModelParser {
 	public StaticStatement parseStaticStatement(InputStream istream) throws ParserException {
 		try {
 			Document document = fBuilder.build(istream);
-			return fParser.parseStaticStatement(document.getRootElement());
+			return fXomParser.parseStaticStatement(document.getRootElement());
 		} catch (ParsingException e) {
 			throw new ParserException(Messages.PARSING_EXCEPTION(e));
 		} catch (IOException e) {
@@ -139,7 +139,7 @@ public class EctParser implements IModelParser {
 	public PartitionedCategoryStatement parsePartitionedCategoryStatement(InputStream istream, MethodNode method) throws ParserException {
 		try {
 			Document document = fBuilder.build(istream);
-			return fParser.parsePartitionStatement(document.getRootElement(), method);
+			return fXomParser.parsePartitionStatement(document.getRootElement(), method);
 		} catch (ParsingException e) {
 			throw new ParserException(Messages.PARSING_EXCEPTION(e));
 		} catch (IOException e) {
@@ -151,7 +151,7 @@ public class EctParser implements IModelParser {
 	public ExpectedValueStatement parseExpectedValueStatement(InputStream istream, MethodNode method) throws ParserException {
 		try {
 			Document document = fBuilder.build(istream);
-			return fParser.parseExpectedValueStatement(document.getRootElement(), method);
+			return fXomParser.parseExpectedValueStatement(document.getRootElement(), method);
 		} catch (ParsingException e) {
 			throw new ParserException(Messages.PARSING_EXCEPTION(e));
 		} catch (IOException e) {
@@ -163,7 +163,7 @@ public class EctParser implements IModelParser {
 	public StatementArray parseStatementArray(InputStream istream, MethodNode method) throws ParserException {
 		try {
 			Document document = fBuilder.build(istream);
-			return fParser.parseStatementArray(document.getRootElement(), method);
+			return fXomParser.parseStatementArray(document.getRootElement(), method);
 		} catch (ParsingException e) {
 			throw new ParserException(Messages.PARSING_EXCEPTION(e));
 		} catch (IOException e) {
