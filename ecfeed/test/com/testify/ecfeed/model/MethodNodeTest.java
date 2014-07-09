@@ -25,6 +25,7 @@ import com.testify.ecfeed.model.constraint.PartitionedCategoryStatement;
 import com.testify.ecfeed.model.constraint.Constraint;
 import com.testify.ecfeed.model.constraint.Relation;
 import com.testify.ecfeed.model.constraint.StaticStatement;
+import com.testify.ecfeed.testutils.RandomModelGenerator;
 
 public class MethodNodeTest {
 	@Test
@@ -493,9 +494,89 @@ public class MethodNodeTest {
 		
 	}
 	
+	/************compare()*************************/
 	@Test
-	public void compareTest(){
+	public void compareNameTest(){
+		MethodNode m1 = new MethodNode("m");
+		MethodNode m2 = new MethodNode("m");
 		
+		assertTrue(m1.compare(m2));
+		m1.setName("m1");
+		assertFalse(m1.compare(m2));
+		m2.setName("m1");
+		assertTrue(m1.compare(m2));
+	}
+
+	@Test
+	public void compareCategoriesTest(){
+		MethodNode m1 = new MethodNode("m");
+		MethodNode m2 = new MethodNode("m");
+		
+		assertTrue(m1.compare(m2));
+		m1.setName("m1");
+		assertFalse(m1.compare(m2));
+		m2.setName("m1");
+		assertTrue(m1.compare(m2));
+		
+		CategoryNode c1 = new CategoryNode("c", "type", true);
+		CategoryNode c2 = new CategoryNode("c", "type", true);
+		
+		m1.addCategory(c1);
+		assertFalse(m1.compare(m2));
+		m2.addCategory(c2);
+		assertTrue(m1.compare(m2));
+		
+		c1.setName("c1");
+		assertFalse(m1.compare(m2));
+		c2.setName("c1");
+		assertTrue(m1.compare(m2));
+	}
+	
+	@Test
+	public void compareConstraintsTest(){
+		MethodNode m1 = new MethodNode("m");
+		MethodNode m2 = new MethodNode("m");
+
+		ConstraintNode c1 = new ConstraintNode("c", new Constraint(new StaticStatement(true), new StaticStatement(true)));
+		ConstraintNode c2 = new ConstraintNode("c", new Constraint(new StaticStatement(true), new StaticStatement(true)));
+		
+		m1.addConstraint(c1);
+		assertFalse(m1.compare(m2));
+		m2.addConstraint(c2);
+		assertTrue(m1.compare(m2));
+		
+		c1.setName("c1");
+		assertFalse(m1.compare(m2));
+		c2.setName("c1");
+		assertTrue(m1.compare(m2));
+	}
+	
+	@Test
+	public void compareTestCasesTest(){
+		MethodNode m1 = new MethodNode("m");
+		MethodNode m2 = new MethodNode("m");
+
+		TestCaseNode tc1 = new TestCaseNode("tc", new ArrayList<PartitionNode>());
+		TestCaseNode tc2 = new TestCaseNode("tc", new ArrayList<PartitionNode>());
+
+		m1.addTestCase(tc1);
+		assertFalse(m1.compare(m2));
+		m2.addTestCase(tc2);
+		assertTrue(m1.compare(m2));
+		
+		tc1.setName("tc1");
+		assertFalse(m1.compare(m2));
+		tc2.setName("tc1");
+		assertTrue(m1.compare(m2));
+}
+	
+	@Test
+	public void compareSmokeTest(){
+		for(int i = 0; i < 5; i++){
+			RandomModelGenerator gen = new RandomModelGenerator();
+			MethodNode m = gen.generateMethod(3, 3, 10);
+			assertTrue(m.compare(m));
+		}
 	}
 	
 }
