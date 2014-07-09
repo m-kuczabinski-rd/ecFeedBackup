@@ -52,7 +52,6 @@ public class RandomModelGenerator {
 	
 	private Random rand = new Random();
 	private ModelStringifier fStringifier = new ModelStringifier();
-	private static int id = 0;
 	
 	public int MAX_CLASSES = 3;
 	public int MAX_METHODS = 3;
