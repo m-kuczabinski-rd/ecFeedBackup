@@ -11,6 +11,7 @@
 
 package com.testify.ecfeed.model;
 
+import static com.testify.ecfeed.testutils.Constants.SUPPORTED_TYPES;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -19,6 +20,8 @@ import java.util.List;
 import java.util.Set;
 
 import org.junit.Test;
+
+import com.testify.ecfeed.testutils.RandomModelGenerator;
 
 public class CategoryNodeTest{
 	
@@ -236,6 +239,92 @@ public class CategoryNodeTest{
 		assertTrue(labels.contains("l221"));
 		
 	}
+	
+	/*****************compare()************************/
+//	@Test
+	public void compareSmokeTest(){
+		for(String type : SUPPORTED_TYPES){
+			for(Boolean expected : new Boolean[]{true, false}){
+				CategoryNode c = new RandomModelGenerator().generateCategory(type, expected, 3, 3, 3);
+				
+				assertTrue(c.compare(c));
+			}
+		}
+	}
+	
+	@Test
+	public void compareNameTest(){
+		CategoryNode c1 = new CategoryNode("c", "type", true);
+		CategoryNode c2 = new CategoryNode("c", "type", true);
+		
+		assertTrue(c1.compare(c2));
+		
+		c1.setName("c1");
+		assertFalse(c1.compare(c2));
+		c2.setName("c1");
+		assertTrue(c1.compare(c2));
+	}
+	
+	@Test
+	public void compareTypeTest(){
+		CategoryNode c1 = new CategoryNode("c", "type", true);
+		CategoryNode c2 = new CategoryNode("c", "type", true);
+		
+		assertTrue(c1.compare(c2));
+		
+		c1.setType("type1");
+		assertFalse(c1.compare(c2));
+		c2.setType("type1");
+		assertTrue(c1.compare(c2));
+	}
+	
+	@Test
+	public void compareExpectedTest(){
+		CategoryNode c1 = new CategoryNode("c", "type", true);
+		CategoryNode c2 = new CategoryNode("c", "type", true);
+		
+		assertTrue(c1.compare(c2));
+
+		c1.setExpected(false);
+		assertFalse(c1.compare(c2));
+		c2.setExpected(false);
+		assertTrue(c1.compare(c2));
+	}
+	
+	@Test
+	public void compareDefaultValueTest(){
+		CategoryNode c1 = new CategoryNode("c", "type", true);
+		CategoryNode c2 = new CategoryNode("c", "type", true);
+		
+		assertTrue(c1.compare(c2));
+
+		c1.setDefaultValueString("new default value");
+		assertFalse(c1.compare(c2));
+		c2.setDefaultValueString("new default value");
+		assertTrue(c1.compare(c2));
+	}
+	
+	@Test
+	public void comparePartitionsTest(){
+		CategoryNode c1 = new CategoryNode("c", "type", true);
+		CategoryNode c2 = new CategoryNode("c", "type", true);
+		
+		assertTrue(c1.compare(c2));
+
+		PartitionNode p1 = new PartitionNode("p", "value");
+		PartitionNode p2 = new PartitionNode("p", "value");
+		
+		c1.addPartition(p1);
+		assertFalse(c1.compare(c2));
+		c2.addPartition(p2);
+		assertTrue(c1.compare(c2));
+		
+		p1.setName("p1");
+		assertFalse(c1.compare(c2));
+		p2.setName("p1");
+		assertTrue(c1.compare(c2));
+	}
+	
 	
 	@Test
 	public void compareTest(){
