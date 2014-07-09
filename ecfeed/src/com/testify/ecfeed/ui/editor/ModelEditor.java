@@ -39,9 +39,11 @@ import org.eclipse.ui.part.FileEditorInput;
 
 import com.testify.ecfeed.model.IModelWrapper;
 import com.testify.ecfeed.model.RootNode;
+import com.testify.ecfeed.serialization.IModelParser;
+import com.testify.ecfeed.serialization.IModelSerializer;
 import com.testify.ecfeed.serialization.ParserException;
-import com.testify.ecfeed.serialization.ect.XmlModelParser;
-import com.testify.ecfeed.serialization.ect.XmlModelSerializer;
+import com.testify.ecfeed.serialization.ect.EctParser;
+import com.testify.ecfeed.serialization.ect.EctSerializer;
 
 public class ModelEditor extends FormEditor implements IModelWrapper{
 	
@@ -98,7 +100,8 @@ public class ModelEditor extends FormEditor implements IModelWrapper{
 			IFile file = ((FileEditorInput)input).getFile();
 			InputStream iStream;
 			try {
-				XmlModelParser parser = new XmlModelParser();
+//				XmlModelParser parser = new XmlModelParser();
+				IModelParser parser = new EctParser();
 				iStream = file.getContents();
 				root = parser.parseModel(iStream);
 			} catch (CoreException | ParserException e) {
@@ -155,8 +158,10 @@ public class ModelEditor extends FormEditor implements IModelWrapper{
 	private void saveEditor(IFile file, IProgressMonitor monitor){
 		try{
 			FileOutputStream fout = new FileOutputStream(file.getLocation().toOSString());
-			XmlModelSerializer writer = new XmlModelSerializer(fout);
-			writer.writeXmlDocument(fModel);
+			IModelSerializer serializer = new EctSerializer(fout);
+			serializer.serialize(fModel);
+//			XmlModelSerializer writer = new XmlModelSerializer(fout);
+//			writer.writeXmlDocument(fModel);
 			refreshWorkspace(monitor);
 			commitPages(true);
 			firePropertyChange(PROP_DIRTY);
