@@ -39,7 +39,7 @@ public class EctSerializerTest {
 		}
 	}
 	
-	@Test
+//	@Test
 	public void modelSerializerCrossTest1(){
 		RootNode model = fGenerator.generateModel(3);
 		OutputStream ostream = new ByteArrayOutputStream();
@@ -56,7 +56,8 @@ public class EctSerializerTest {
 		}		
 	}
 
-	@Test
+
+//	@Test
 	public void modelSerializerCrossTest2(){
 		for(int i = 0; i < 10; i++){
 			RootNode model = fGenerator.generateModel(5);
