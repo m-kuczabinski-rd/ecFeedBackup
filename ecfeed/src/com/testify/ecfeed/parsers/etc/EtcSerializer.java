@@ -73,7 +73,7 @@ public class EtcSerializer implements IModelSerializer{
 		Serializer serializer = new Serializer(fOutputStream);
 		// Uncomment for pretty formatting. This however will affect 
 		// whitespaces in the document's ... infoset
-		serializer.setIndent(4);
+//		serializer.setIndent(4);
 		serializer.write(document);
 	}
 
