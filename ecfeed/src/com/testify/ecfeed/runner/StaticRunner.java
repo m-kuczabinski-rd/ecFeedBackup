@@ -40,7 +40,7 @@ import com.testify.ecfeed.runner.annotations.EcModel;
 import com.testify.ecfeed.runner.annotations.TestSuites;
 import com.testify.ecfeed.serialization.IModelParser;
 import com.testify.ecfeed.serialization.ParserException;
-import com.testify.ecfeed.serialization.ect.XmlModelParser;
+import com.testify.ecfeed.serialization.ect.EctParser;
 import com.testify.ecfeed.utils.ClassUtils;
 
 public class StaticRunner extends BlockJUnit4ClassRunner {
@@ -179,7 +179,8 @@ public class StaticRunner extends BlockJUnit4ClassRunner {
 	}
 
 	private RootNode createModel() throws RunnerException {
-		IModelParser parser = new XmlModelParser();
+		IModelParser parser = new EctParser();
+//		IModelParser parser = new XmlModelParser();
 		String ectFilePath = getEctFilePath();
 		InputStream istream;
 		try {
