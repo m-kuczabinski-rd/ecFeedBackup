@@ -47,7 +47,7 @@ public class TestCasesViewerLabelProvider extends LabelProvider implements IColo
 			int executableCount = testCasesCount;
 			
 			// if method is not implemented - no testcase can be
-			if(!ModelUtils.isMethodImplemented(fMethod)){
+			if(!ModelUtils.isMethodImplemented(fMethod) && !ModelUtils.isMethodPartiallyImplemented(fMethod)){
 				return (String) element +
 				" [" + testCasesCount + " test case" + (testCasesCount == 1 ? "" : "s") +
 				", " + 0 + " executable" + "]";
