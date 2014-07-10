@@ -39,7 +39,7 @@ public class ConstraintNameEditingSupport extends EditingSupport{
 	protected void setValue(Object element, Object value){
 		String newName = (String)value;
 		ConstraintNode ConstraintNode = (ConstraintNode)element;
-		if(newName == ConstraintNode.getName())
+		if(newName.equals(ConstraintNode.getName()))
 			return;
 
 		boolean validName = ConstraintNode.getMethod().validateConstraintName(newName);

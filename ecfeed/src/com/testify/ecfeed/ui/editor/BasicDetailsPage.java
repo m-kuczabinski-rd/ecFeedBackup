@@ -52,7 +52,7 @@ public abstract class BasicDetailsPage implements IDetailsPage, IModelUpdateList
 	
 	@Override
 	public void selectionChanged(IFormPart part, ISelection selection) {
-		refresh();
+		//refresh();
 	}
 
 	@Override

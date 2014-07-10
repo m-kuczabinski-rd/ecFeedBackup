@@ -19,6 +19,7 @@ import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.ui.common.ColorConstants;
 import com.testify.ecfeed.ui.common.ColorManager;
 import com.testify.ecfeed.utils.ModelUtils;
+import com.testify.ecfeed.utils.Constants;
 
 public class TestCasesViewerLabelProvider extends LabelProvider implements IColorProvider {
 	private MethodNode fMethod;
@@ -33,6 +34,11 @@ public class TestCasesViewerLabelProvider extends LabelProvider implements IColo
 	public String getText(Object element) {
 		if (element instanceof String) {
 			int testCasesCount = fMethod.getTestCases((String) element).size();
+			
+			if(testCasesCount > Constants.MAX_DISPLAYED_CHILDREN_PER_NODE*2){
+				return (String) element + " [" + testCasesCount + " test cases]";
+			}			
+
 			int executableCount = 0;
 			for (TestCaseNode testCase : fMethod.getTestCases((String) element)) {
 				if (ModelUtils.isTestCaseImplemented(testCase) && ModelUtils.methodDefinitionImplemented(fMethod)) {
