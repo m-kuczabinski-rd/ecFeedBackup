@@ -24,7 +24,7 @@ public class ExpectedValueStatement extends BasicStatement implements IRelationa
 	
 	public ExpectedValueStatement(CategoryNode category, PartitionNode condition) {
 		fCategory = category;
-		fCondition = condition.getLeaflessCopy();
+		fCondition = condition.getCopy();
 	}
 	
 	@Override
@@ -46,7 +46,7 @@ public class ExpectedValueStatement extends BasicStatement implements IRelationa
 		if(values == null) return true;
 		if(fCategory.getMethod() != null){
 			int index = fCategory.getMethod().getCategories().indexOf(fCategory);
-			values.set(index, fCondition.getLeaflessCopy());
+			values.set(index, fCondition.getCopy());
 		}
 		return true;
 	}

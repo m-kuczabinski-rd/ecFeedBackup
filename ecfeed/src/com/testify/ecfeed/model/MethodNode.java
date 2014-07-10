@@ -285,7 +285,7 @@ public class MethodNode extends GenericNode {
 			fCategories.add(index, newCategory);
 			if(!oldCategory.isExpected() && newCategory.getDefaultValuePartition() != null){
 				for(TestCaseNode testCase : fTestCases){
-					testCase.replaceValue(index, newCategory.getDefaultValuePartition().getLeaflessCopy());
+					testCase.replaceValue(index, newCategory.getDefaultValuePartition().getCopy());
 				}
 			} else{
 				fTestCases.clear();
@@ -311,7 +311,7 @@ public class MethodNode extends GenericNode {
 						category.setDefaultValueString(category.getPartitions().get(0).getValueString());
 					}
 					for(TestCaseNode testCase : fTestCases){
-						testCase.replaceValue(index, category.getDefaultValuePartition().getLeaflessCopy());
+						testCase.replaceValue(index, category.getDefaultValuePartition().getCopy());
 					}
 					for(PartitionNode partition : category.getPartitions()){
 						removeMentioningConstraints(partition);
