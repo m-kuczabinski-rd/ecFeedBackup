@@ -59,6 +59,7 @@ public class StaticStatement extends BasicStatement {
 		return true;
 	}
 	
+	@Override
 	public boolean compare(IStatement statement){
 		if(statement instanceof StaticStatement == false){
 			return false;
