@@ -135,7 +135,7 @@ public class XomParserTest {
 	@Test
 	public void parseConstraintTest(){
 		for(int i = 0; i < 10; i++){
-			MethodNode m = fModelGenerator.generateMethod(10, 0, 0);
+			MethodNode m = fModelGenerator.generateMethod(3, 0, 0);
 			for(int j = 0; j < 10; j++){
 				try {
 					ConstraintNode c = fModelGenerator.generateConstraint(m);
@@ -144,7 +144,7 @@ public class XomParserTest {
 					ConstraintNode c1 = fParser.parseConstraint(element, m);
 					assertElementsEqual(c, c1);
 				} catch (Exception e) {
-					fail("Unexpected exception: " + e.getMessage());
+					fail("Unexpected exception: " + e.getMessage() + "\nMethod\n" + new ModelStringifier().stringify(m, 0));
 				}
 			}
 		}
