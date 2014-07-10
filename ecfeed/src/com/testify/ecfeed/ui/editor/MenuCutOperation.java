@@ -8,6 +8,7 @@
  * Contributors:
  *     Michal Gluszko (m.gluszko(at)radytek.com) - initial implementation
  ******************************************************************************/
+
 package com.testify.ecfeed.ui.editor;
 
 import com.testify.ecfeed.model.CategoryNode;
@@ -25,14 +26,7 @@ public class MenuCutOperation extends MenuOperation{
 	private NodeClipboard fSource;
 	private IGenericNode fTarget;
 	private ModelMasterSection fModel;
-	
-	public MenuCutOperation(IGenericNode target, NodeClipboard source, ModelMasterSection model){
-		super("Cut");
-		fTarget = target;
-		fSource = source;
-		fModel = model;
-	}
-	
+
 	@Override
 	public boolean isEnabled(){
 		if(fTarget == null || (fTarget instanceof RootNode)){
@@ -50,6 +44,13 @@ public class MenuCutOperation extends MenuOperation{
 				fModel.refresh();
 			}
 		}
+	}
+	
+	public MenuCutOperation(IGenericNode target, NodeClipboard source, ModelMasterSection model){
+		super("Cut");
+		fTarget = target;
+		fSource = source;
+		fModel = model;
 	}
 
 	public boolean cut(){

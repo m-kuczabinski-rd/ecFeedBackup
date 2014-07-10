@@ -9,7 +9,7 @@
  *     Patryk Chamuczynski (p.chamuczynski(at)radytek.com) - initial implementation
  ******************************************************************************/
 
-package com.testify.ecfeed.parsers.xml;
+package com.testify.ecfeed.serialization.ect;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -35,12 +35,11 @@ import com.testify.ecfeed.model.constraint.IStatement;
 import com.testify.ecfeed.model.constraint.PartitionedCategoryStatement;
 import com.testify.ecfeed.model.constraint.StatementArray;
 import com.testify.ecfeed.model.constraint.StaticStatement;
-import com.testify.ecfeed.parsers.Constants;
 
-public class XmlModelSerializer {
+public class ObsoleteXmlModelSerializer {
 	private OutputStream fOutputStream;
 
-	public XmlModelSerializer(OutputStream ostream){
+	public ObsoleteXmlModelSerializer(OutputStream ostream){
 		fOutputStream = ostream;
 	}
 

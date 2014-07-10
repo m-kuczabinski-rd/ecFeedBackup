@@ -16,11 +16,9 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-@Target({ElementType.METHOD, ElementType.TYPE})
+
+@Target({ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface TestSuites {
-	public static final String ALL = "__ALL__"; 
-	public static final String NONE = "__NONE__";
-	
 	String[] value();
 }

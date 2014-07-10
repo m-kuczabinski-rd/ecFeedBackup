@@ -46,16 +46,16 @@ public class OtherMethodsViewer extends CheckboxTableViewerSection {
 		addButton("Add selected", new AddSelectedAdapter());
 	}
 	
+	@Override
+	protected void createTableColumns() {
+	}
+	
 	public void setInput(ClassNode classNode){
 		fSelectedClass = classNode;
 		List<MethodNode> notContainedMethods = ModelUtils.getNotContainedMethods(fSelectedClass, fSelectedClass.getQualifiedName(), false);
 		setText("Other methods in " + fSelectedClass.getLocalName());
 		setVisible(notContainedMethods.size() > 0);
 		super.setInput(notContainedMethods);
-	}
-	
-	@Override
-	protected void createTableColumns() {
 	}
 	
 	private void setVisible(boolean visible) {

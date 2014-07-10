@@ -9,7 +9,7 @@
  *     Patryk Chamuczynski (p.chamuczynski(at)radytek.com) - initial implementation
  ******************************************************************************/
 
-package com.testify.ecfeed.parsers;
+package com.testify.ecfeed.serialization;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -46,8 +46,10 @@ import com.testify.ecfeed.model.constraint.PartitionedCategoryStatement;
 import com.testify.ecfeed.model.constraint.Relation;
 import com.testify.ecfeed.model.constraint.StatementArray;
 import com.testify.ecfeed.model.constraint.StaticStatement;
-import com.testify.ecfeed.parsers.xml.XmlModelParser;
-import com.testify.ecfeed.parsers.xml.XmlModelSerializer;
+import com.testify.ecfeed.serialization.ParserException;
+import com.testify.ecfeed.serialization.ect.Constants;
+import com.testify.ecfeed.serialization.ect.ObsoleteXmlModelParser;
+import com.testify.ecfeed.serialization.ect.ObsoleteXmlModelSerializer;
 
 public class XmlParserSerializerTest {
 	private final int TEST_RUNS = 10;
@@ -87,8 +89,8 @@ public class XmlParserSerializerTest {
 		for(int i = 0; i < TEST_RUNS; ++i){
 			RootNode model = createRootNode(rand.nextInt(MAX_CLASSES) + 1);
 			ByteArrayOutputStream ostream = new ByteArrayOutputStream();
-			XmlModelSerializer serializer = new XmlModelSerializer(ostream);
-			XmlModelParser parser = new XmlModelParser();
+			ObsoleteXmlModelSerializer serializer = new ObsoleteXmlModelSerializer(ostream);
+			ObsoleteXmlModelParser parser = new ObsoleteXmlModelParser();
 			serializer.writeXmlDocument(model);
 			ByteArrayInputStream istream = new ByteArrayInputStream(ostream.toByteArray());
 			RootNode parsedModel = parser.parseModel(istream);
@@ -121,8 +123,8 @@ public class XmlParserSerializerTest {
 			method.addTestCase(testCase);
 
 			ByteArrayOutputStream ostream = new ByteArrayOutputStream();
-			XmlModelSerializer serializer = new XmlModelSerializer(ostream);
-			XmlModelParser parser = new XmlModelParser();
+			ObsoleteXmlModelSerializer serializer = new ObsoleteXmlModelSerializer(ostream);
+			ObsoleteXmlModelParser parser = new ObsoleteXmlModelParser();
 			serializer.writeXmlDocument(root);
 			ByteArrayInputStream istream = new ByteArrayInputStream(ostream.toByteArray());
 			RootNode parsedModel = parser.parseModel(istream);
@@ -176,8 +178,8 @@ public class XmlParserSerializerTest {
 			method.addConstraint(expectedConstraintNode);
 
 			ByteArrayOutputStream ostream = new ByteArrayOutputStream();
-			XmlModelSerializer serializer = new XmlModelSerializer(ostream);
-			XmlModelParser parser = new XmlModelParser();
+			ObsoleteXmlModelSerializer serializer = new ObsoleteXmlModelSerializer(ostream);
+			ObsoleteXmlModelParser parser = new ObsoleteXmlModelParser();
 			serializer.writeXmlDocument(root);
 //			System.out.println(ostream.toString());
 			ByteArrayInputStream istream = new ByteArrayInputStream(ostream.toByteArray());

@@ -77,19 +77,6 @@ public class TestCaseDetailsPage extends BasicDetailsPage {
 		addForm(fTestDataSection = new TestDataViewer(this, getToolkit()));
 	}
 	
-	@Override
-	public void refresh(){
-		if(getSelectedElement() instanceof TestCaseNode){
-			fSelectedTestCase = (TestCaseNode)getSelectedElement();
-		}
-		if(fSelectedTestCase != null){
-			getMainSection().setText(fSelectedTestCase.toString());
-			fTestSuiteNameCombo.setItems(fSelectedTestCase.getMethod().getTestSuites().toArray(new String[]{}));
-			fTestSuiteNameCombo.setText(fSelectedTestCase.getName());
-			fTestDataSection.setInput(fSelectedTestCase);
-		}
-	}
-	
 	private void createTestSuiteEdit(Composite parent) {
 		Composite composite = getToolkit().createComposite(parent);
 		composite.setLayout(new GridLayout(3, false));
@@ -107,4 +94,16 @@ public class TestCaseDetailsPage extends BasicDetailsPage {
 		button.addSelectionListener(new RenameTestCaseAdapter());
 	}
 
+	@Override
+	public void refresh(){
+		if(getSelectedElement() instanceof TestCaseNode){
+			fSelectedTestCase = (TestCaseNode)getSelectedElement();
+		}
+		if(fSelectedTestCase != null){
+			getMainSection().setText(fSelectedTestCase.toString());
+			fTestSuiteNameCombo.setItems(fSelectedTestCase.getMethod().getTestSuites().toArray(new String[]{}));
+			fTestSuiteNameCombo.setText(fSelectedTestCase.getName());
+			fTestDataSection.setInput(fSelectedTestCase);
+		}
+	}
 }

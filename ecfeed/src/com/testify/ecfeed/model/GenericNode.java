@@ -16,7 +16,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-public class GenericNode implements IGenericNode{
+public abstract class GenericNode implements IGenericNode{
 	private String fName;
 	private IGenericNode fParent;
 	private final int fId;
@@ -26,6 +26,10 @@ public class GenericNode implements IGenericNode{
 	public GenericNode(String name){
 		fId = ++fLastId;
 		this.fName = name;
+	}
+	
+	public int getId(){
+		return fId;
 	}
 	
 	@Override
@@ -144,15 +148,6 @@ public class GenericNode implements IGenericNode{
 		return false;
 	}
 	
-	@Override
-	public GenericNode getCopy(){
-		return new GenericNode(getName());
-	}
-	
-	public int getId(){
-		return fId;
-	}
-
 	protected boolean validateNodeName(String name) {
 		if (name == null) return false;
 		if(name.length() == 0) return false;
@@ -160,5 +155,10 @@ public class GenericNode implements IGenericNode{
 		if(name.matches("[ ]+.*")) return false;
 		
 		return true;
+	}
+	
+	@Override
+	public boolean compare(IGenericNode node){
+		return getName().equals(node.getName());
 	}
 }

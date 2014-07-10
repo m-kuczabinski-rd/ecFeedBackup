@@ -89,6 +89,10 @@ class GenerateTestSuiteAdapter extends SelectionAdapter{
 	GenerateTestSuiteAdapter(TestCasesViewer viewerSection) {
 		fViewerSection = viewerSection;
 	}
+	
+	private MethodNode getSelectedMethod(){
+		return fViewerSection.getSelectedMethod();
+	}
 
 	@Override
 	public void widgetSelected(SelectionEvent e){
@@ -111,11 +115,6 @@ class GenerateTestSuiteAdapter extends SelectionAdapter{
 			addGeneratedDataToModel(testSuiteName, generatedData);
 		}
 	}
-	
-	private MethodNode getSelectedMethod(){
-		return fViewerSection.getSelectedMethod();
-	}
-
 
 	private Shell getActiveShell() {
 		return Display.getCurrent().getActiveShell();

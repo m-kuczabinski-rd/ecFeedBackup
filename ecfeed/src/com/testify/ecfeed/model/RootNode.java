@@ -14,13 +14,10 @@ package com.testify.ecfeed.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.testify.ecfeed.model.Constants.*;
+
 public class RootNode extends GenericNode {
 	public List<ClassNode> fClasses;
-	
-	public RootNode(String name) {
-		super(name);
-		fClasses = new ArrayList<ClassNode>();
-	}
 
 	@Override
 	public List<? extends IGenericNode> getChildren(){
@@ -36,6 +33,11 @@ public class RootNode extends GenericNode {
 		}
 		copy.setParent(this.getParent());
 		return copy;
+	}
+	
+	public RootNode(String name) {
+		super(name);
+		fClasses = new ArrayList<ClassNode>();
 	}
 
 	public void addClass(ClassNode node){
@@ -61,7 +63,32 @@ public class RootNode extends GenericNode {
 	}
 
 	public static boolean validateModelName(String name){
-		return new GenericNode("").validateNodeName(name);
+		return name.matches(REGEX_ROOT_NODE_NAME);
+	}
+	
+	@Override
+	public boolean compare(IGenericNode node){
+		if(node instanceof RootNode == false){
+			return false;
+		}
+
+		RootNode root = (RootNode)node;
+		if(getClasses().size() != root.getClasses().size()){
+			return false;
+		}
+		
+		for(int i = 0; i < getClasses().size(); i++){
+			if(getClasses().get(i).compare(root.getClasses().get(i)) == false){
+				return false;
+			}
+		}
+		
+		return super.compare(root);
+	}
+	
+	@Override
+	public Object accept(IModelVisitor converter) throws Exception{
+		return converter.visit(this);
 	}
 	
 }

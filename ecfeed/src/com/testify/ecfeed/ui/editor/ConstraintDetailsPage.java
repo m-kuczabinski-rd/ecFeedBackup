@@ -70,19 +70,6 @@ public class ConstraintDetailsPage extends BasicDetailsPage {
 		addForm(fConstraintViewer = new ConstraintViewer(this, getToolkit()));
 	}
 	
-	@Override
-	public void refresh(){
-		if(getSelectedElement() instanceof ConstraintNode){
-			fSelectedConstraint = (ConstraintNode)getSelectedElement();
-		}
-		if(fSelectedConstraint != null){
-			getMainSection().setText(fSelectedConstraint.toString());
-			fNameCombo.setItems(fSelectedConstraint.getMethod().getConstraintsNames().toArray(new String[]{}));
-			fNameCombo.setText(fSelectedConstraint.getName());
-			fConstraintViewer.setInput(fSelectedConstraint);
-		}
-	}
-	
 	private void createConstraintNameEdit(Composite parent) {
 		Composite composite = getToolkit().createComposite(parent);
 		composite.setLayout(new GridLayout(3, false));
@@ -96,5 +83,19 @@ public class ConstraintDetailsPage extends BasicDetailsPage {
 		Button button = getToolkit().createButton(composite, "Change", SWT.NONE);
 		button.addSelectionListener(new RenameConstraintAdapter());
 	}
+
+	@Override
+	public void refresh(){
+		if(getSelectedElement() instanceof ConstraintNode){
+			fSelectedConstraint = (ConstraintNode)getSelectedElement();
+		}
+		if(fSelectedConstraint != null){
+			getMainSection().setText(fSelectedConstraint.toString());
+			fNameCombo.setItems(fSelectedConstraint.getMethod().getConstraintsNames().toArray(new String[]{}));
+			fNameCombo.setText(fSelectedConstraint.getName());
+			fConstraintViewer.setInput(fSelectedConstraint);
+		}
+	}
+
 
 }

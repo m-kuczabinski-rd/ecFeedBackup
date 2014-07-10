@@ -27,12 +27,18 @@ public class StatementArray extends BasicStatement{
 		fOperator = operator;
 	}
 
-	@Override
 	public String getLeftHandName(){
 		return fOperator == Operator.AND?Operator.AND.toString():Operator.OR.toString();
 	}
-	
-	@Override
+
+	public Operator getOperator(){
+		return fOperator;
+	}
+
+	public void setOperator(Operator operator) {
+		fOperator = operator;
+	}
+
 	public void addStatement(BasicStatement statement){
 		fStatements.add(statement);
 		statement.setParent(this);
@@ -122,13 +128,38 @@ public class StatementArray extends BasicStatement{
 		}
 		return true;
 	}
-
-	public Operator getOperator(){
-		return fOperator;
+	
+	List<BasicStatement> getStatements(){
+		return fStatements;
 	}
+	
+	@Override 
+	public boolean compare(IStatement statement){
+		if(statement instanceof StatementArray == false){
+			return false;
+		}
+		StatementArray compared = (StatementArray)statement;
 
-	public void setOperator(Operator operator) {
-		fOperator = operator;
+		if(getOperator() != compared.getOperator()){
+			return false;
+		}
+		
+		if(getStatements().size() != compared.getStatements().size()){
+			return false;
+		}
+		
+		for(int i = 0; i < getStatements().size(); i++){
+			if(getStatements().get(i).compare(compared.getStatements().get(i)) == false){
+				return false;
+			}
+		}
+		
+		return true;
+	}
+	
+	@Override
+	public Object accept(IStatementVisitor visitor) throws Exception {
+		return visitor.visit(this);
 	}
 
 }

@@ -1,3 +1,14 @@
+/*******************************************************************************
+ * Copyright (c) 2014 Testify AS.                                                
+ * All rights reserved. This program and the accompanying materials              
+ * are made available under the terms of the Eclipse Public License v1.0         
+ * which accompanies this distribution, and is available at                      
+ * http://www.eclipse.org/legal/epl-v10.html                                     
+ *                                                                               
+ * Contributors:                                                                 
+ *     Patryk Chamuczynski (p.chamuczynski(at)radytek.com) - initial implementation
+ ******************************************************************************/
+
 package com.testify.ecfeed.utils;
 
 import java.net.URL;
@@ -137,14 +148,6 @@ public class ClassUtils {
 			}
 		}
 	}
-	
-	public static boolean isPartitionImplemented(String value, String type, ClassLoader loader) {
-		boolean implemented = (getPartitionValueFromString(value, type, loader) != null);
-		if (!implemented && type.equals(com.testify.ecfeed.model.Constants.TYPE_NAME_STRING)) {
-			implemented = true;
-		}
-		return implemented;
-	}
 
 	private static boolean isPredefinedValueString(String valueString) {
 		return valueString.equals(Constants.NULL_VALUE_STRING_REPRESENTATION) ||
@@ -263,4 +266,11 @@ public class ClassUtils {
 		return null;
 	}
 
+	public static boolean isPartitionImplemented(String value, String type, ClassLoader loader) {
+		boolean implemented = (getPartitionValueFromString(value, type, loader) != null);
+		if (!implemented && type.equals(com.testify.ecfeed.model.Constants.TYPE_NAME_STRING)) {
+			implemented = true;
+		}
+		return implemented;
+	}
 }

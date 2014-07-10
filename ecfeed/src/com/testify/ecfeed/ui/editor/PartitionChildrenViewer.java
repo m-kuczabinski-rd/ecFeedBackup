@@ -84,6 +84,16 @@ public class PartitionChildrenViewer extends CheckboxTableViewerSection {
 		}
 	}
 	
+	@Override
+	protected void createTableColumns() {
+		TableViewerColumn nameColumn = addColumn("Name", 150, new PartitionNameLabelProvider());
+		nameColumn.setEditingSupport(new PartitionNameEditingSupport(this));
+
+		TableViewerColumn valueColumn = addColumn("Value", 150, new PartitionValueLabelProvider());
+		valueColumn.setEditingSupport(new PartitionValueEditingSupport(this));
+
+	}
+
 	public PartitionChildrenViewer(BasicDetailsPage parent, FormToolkit toolkit) {
 		super(parent.getMainComposite(), toolkit, STYLE, parent);
 
@@ -103,16 +113,6 @@ public class PartitionChildrenViewer extends CheckboxTableViewerSection {
 
 	public PartitionNode getSelectedPartition(){
 		return fSelectedPartition;
-	}
-	
-	@Override
-	protected void createTableColumns() {
-		TableViewerColumn nameColumn = addColumn("Name", 150, new PartitionNameLabelProvider());
-		nameColumn.setEditingSupport(new PartitionNameEditingSupport(this));
-
-		TableViewerColumn valueColumn = addColumn("Value", 150, new PartitionValueLabelProvider());
-		valueColumn.setEditingSupport(new PartitionValueEditingSupport(this));
-
 	}
 	
 	private void moveSelectedItem(boolean moveUp) {

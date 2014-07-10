@@ -159,19 +159,47 @@ public class ParametersViewer extends CheckboxTableViewerSection implements Test
 			}
 		}
 	}
-	
 
-	@Override
-	public void testDataChanged() {
-		modelUpdated();
+	private boolean moveSelectedItem(boolean moveUp, int shift){
+		if(getSelectedElement() != null && shift > 0){
+			CategoryNode categoryNode = (CategoryNode)getSelectedElement();
+			int index = fSelectedMethod.getCategories().indexOf(categoryNode);
+			if(moveUp){
+				if(index - shift < 0)
+					return false;
+			} else{
+				if(index + shift >= fSelectedMethod.getCategories().size())
+					return false;
+			}
+
+			ArrayList<String> tmpTypes = fSelectedMethod.getCategoriesTypes();	
+			int currentindex = index;
+			for(int i = 0; i < shift; i++){
+				Collections.swap(tmpTypes, currentindex, currentindex = moveUp ? currentindex-1 : currentindex+1);
+			}
+
+			MethodNode twinMethod = fSelectedMethod.getClassNode().getMethod(fSelectedMethod.getName(), tmpTypes);
+			if(twinMethod == null || twinMethod == fSelectedMethod){
+				for(int i = 0; i < shift; i++){
+					categoryNode.getParent().moveChild(categoryNode, moveUp);
+				}
+				int newindex = fSelectedMethod.getCategories().indexOf(categoryNode);
+				for(TestCaseNode tcnode : fSelectedMethod.getTestCases()){
+					Collections.swap(tcnode.getTestData(), newindex, index);
+				}
+				modelUpdated();
+				return true;
+			} else{
+				if(!moveSelectedItem(moveUp, shift + 1))
+					MessageDialog.openError(Display.getCurrent().getActiveShell(),
+							Messages.DIALOG_METHOD_EXISTS_TITLE,
+							Messages.DIALOG_METHOD_WITH_PARAMETERS_EXISTS_MESSAGE);
+				return true;
+			}
+		}
+		return true;
 	}
 
-	public void setInput(MethodNode method){
-		fSelectedMethod = method;
-		showDefaultValueColumn(fSelectedMethod.getCategoriesNames(true).size() == 0);
-		super.setInput(method.getCategories());
-	}
-	
 	@Override
 	protected void createTableColumns() {
 		nameColumn = addColumn("Name", 150, new ColumnLabelProvider(){
@@ -233,45 +261,11 @@ public class ParametersViewer extends CheckboxTableViewerSection implements Test
 		});
 		fDefaultValueColumn.setEditingSupport(new DefaultValueEditingSupport(getTableViewer(), this));
 	}
-
-	private boolean moveSelectedItem(boolean moveUp, int shift){
-		if(getSelectedElement() != null && shift > 0){
-			CategoryNode categoryNode = (CategoryNode)getSelectedElement();
-			int index = fSelectedMethod.getCategories().indexOf(categoryNode);
-			if(moveUp){
-				if(index - shift < 0)
-					return false;
-			} else{
-				if(index + shift >= fSelectedMethod.getCategories().size())
-					return false;
-			}
-
-			ArrayList<String> tmpTypes = fSelectedMethod.getCategoriesTypes();	
-			int currentindex = index;
-			for(int i = 0; i < shift; i++){
-				Collections.swap(tmpTypes, currentindex, currentindex = moveUp ? currentindex-1 : currentindex+1);
-			}
-
-			MethodNode twinMethod = fSelectedMethod.getClassNode().getMethod(fSelectedMethod.getName(), tmpTypes);
-			if(twinMethod == null || twinMethod == fSelectedMethod){
-				for(int i = 0; i < shift; i++){
-					categoryNode.getParent().moveChild(categoryNode, moveUp);
-				}
-				int newindex = fSelectedMethod.getCategories().indexOf(categoryNode);
-				for(TestCaseNode tcnode : fSelectedMethod.getTestCases()){
-					Collections.swap(tcnode.getTestData(), newindex, index);
-				}
-				modelUpdated();
-				return true;
-			} else{
-				if(!moveSelectedItem(moveUp, shift + 1))
-					MessageDialog.openError(Display.getCurrent().getActiveShell(),
-							Messages.DIALOG_METHOD_EXISTS_TITLE,
-							Messages.DIALOG_METHOD_WITH_PARAMETERS_EXISTS_MESSAGE);
-				return true;
-			}
-		}
-		return true;
+		
+	public void setInput(MethodNode method){
+		fSelectedMethod = method;
+		showDefaultValueColumn(fSelectedMethod.getCategoriesNames(true).size() == 0);
+		super.setInput(method.getCategories());
 	}
 
 	private Color getColor(Object element){
@@ -290,6 +284,11 @@ public class ParametersViewer extends CheckboxTableViewerSection implements Test
 			fDefaultValueColumn.getColumn().setWidth(150);
 			fDefaultValueColumn.getColumn().setResizable(true);
 		}
+	}
+
+	@Override
+	public void testDataChanged() {
+		modelUpdated();
 	}
 
 }

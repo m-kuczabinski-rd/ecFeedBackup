@@ -9,7 +9,7 @@
  *     Patryk Chamuczynski (p.chamuczynski(at)radytek.com) - initial implementation
  ******************************************************************************/
 
-package com.testify.ecfeed.parsers.xml;
+package com.testify.ecfeed.serialization.ect;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -38,11 +38,10 @@ import com.testify.ecfeed.model.constraint.PartitionedCategoryStatement;
 import com.testify.ecfeed.model.constraint.Relation;
 import com.testify.ecfeed.model.constraint.StatementArray;
 import com.testify.ecfeed.model.constraint.StaticStatement;
-import com.testify.ecfeed.parsers.Constants;
-import com.testify.ecfeed.parsers.IModelParser;
-import com.testify.ecfeed.parsers.ParserException;
+import com.testify.ecfeed.serialization.IModelParser;
+import com.testify.ecfeed.serialization.ParserException;
 
-public class XmlModelParser implements IModelParser{
+public class ObsoleteXmlModelParser implements IModelParser{
 	
 	public RootNode parseModel(InputStream istream) throws ParserException{
 		try {
@@ -265,7 +264,7 @@ public class XmlModelParser implements IModelParser{
 		List<Element> parameterElements = getIterableElements(element.getChildElements());
 		
 		if(categories.size() != parameterElements.size()){
-			throw new ParserException(Messages.WRONG_TEST_PAREMETERS_NUMBER(testSuiteName));
+			throw new ParserException(Messages.WRONG_NUMBER_OF_TEST_PAREMETERS(testSuiteName));
 		}
 
 		for(int i = 0; i < parameterElements.size(); i++){
@@ -366,5 +365,81 @@ public class XmlModelParser implements IModelParser{
 			throw new ParserException(Messages.MISSING_ATTRIBUTE(element, attributeName));
 		}
 		return value;
+	}
+
+	/********DUMMIES******************/
+	@Override
+	public ClassNode parseClass(InputStream istream) throws ParserException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public MethodNode parseMethod(InputStream istream) throws ParserException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public CategoryNode parseCategory(InputStream istream)
+			throws ParserException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public PartitionNode parsePartition(InputStream istream)
+			throws ParserException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public TestCaseNode parseTestCase(InputStream istream, MethodNode method)
+			throws ParserException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public ConstraintNode parseConstraint(InputStream istream, MethodNode method)
+			throws ParserException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public BasicStatement parseStatement(InputStream istream, MethodNode method)
+			throws ParserException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public StaticStatement parseStaticStatement(InputStream istream)
+			throws ParserException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public PartitionedCategoryStatement parsePartitionedCategoryStatement(
+			InputStream istream, MethodNode method) throws ParserException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public ExpectedValueStatement parseExpectedValueStatement(
+			InputStream istream, MethodNode method) throws ParserException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public StatementArray parseStatementArray(InputStream istream,
+			MethodNode method) throws ParserException {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

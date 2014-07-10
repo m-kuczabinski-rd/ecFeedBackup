@@ -101,11 +101,6 @@ public class AbstractGenerator<E> implements IGenerator<E> {
 	public Collection<? extends IConstraint<E>> getConstraints() {
 		return fAlgorithm.getConstraints();
 	}
-	
-	@Override
-	public void cancel(){
-		fAlgorithm.cancel();
-	}
 
 	protected void validateParameters(Map<String, Object> parameters) throws GeneratorException {
 		int requiredParameters = 0;
@@ -146,6 +141,11 @@ public class AbstractGenerator<E> implements IGenerator<E> {
 
 	protected IAlgorithm<E> getAlgorithm(){
 		return fAlgorithm;
+	}
+	
+	@Override
+	public void cancel(){
+		fAlgorithm.cancel();
 	}
 	
 	protected void addParameterDefinition(IGeneratorParameter definition){

@@ -175,4 +175,38 @@ public class PartitionStatementTest {
 		assertEquals(Relation.EQUAL, statement.getRelation());
 	}
 
+	@Test
+	public void compareTest(){
+		CategoryNode c1 = new CategoryNode("name", "type", true);
+		CategoryNode c2 = new CategoryNode("name", "type", true);
+		
+		PartitionNode p1 = new PartitionNode("name", "value");
+		PartitionNode p2 = new PartitionNode("name", "value");
+		
+		PartitionedCategoryStatement s1 = new PartitionedCategoryStatement(c1, Relation.NOT, p1);
+		PartitionedCategoryStatement s2 = new PartitionedCategoryStatement(c2, Relation.NOT, p2);
+		
+		assertTrue(s1.compare(s2));
+		c1.setName("c1");
+		assertFalse(s1.compare(s2));
+		c2.setName("c1");
+		assertTrue(s1.compare(s2));
+		
+		p1.setName("p1");
+		assertFalse(s1.compare(s2));
+		p2.setName("p1");
+		assertTrue(s1.compare(s2));
+		
+		s1.setCondition("label");
+		assertFalse(s1.compare(s2));
+		s2.setCondition("label1");
+		assertFalse(s1.compare(s2));
+		s2.setCondition("label");
+		assertTrue(s1.compare(s2));
+		
+		s1.setRelation(Relation.EQUAL);
+		assertFalse(s1.compare(s2));
+		s2.setRelation(Relation.EQUAL);
+		assertTrue(s1.compare(s2));
+	}
 }

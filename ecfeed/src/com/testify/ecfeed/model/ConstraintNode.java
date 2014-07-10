@@ -19,11 +19,6 @@ public class ConstraintNode extends GenericNode{
 
 	private Constraint fConstraint;
 	
-	public ConstraintNode(String name, Constraint constraint) {
-		super(name);
-		fConstraint = constraint;
-	}
-	
 	@Override
 	public String toString(){
 		return getName() + ": " + getConstraint().toString();
@@ -32,6 +27,11 @@ public class ConstraintNode extends GenericNode{
 	@Override
 	public ConstraintNode getCopy(){
 		return new ConstraintNode(getName(), fConstraint.getCopy());	
+	}
+
+	public ConstraintNode(String name, Constraint constraint) {
+		super(name);
+		fConstraint = constraint;
 	}
 	
 	public Constraint getConstraint(){
@@ -81,6 +81,28 @@ public class ConstraintNode extends GenericNode{
 			return copy;
 		else
 			return null;
+	}
+	
+	@Override
+	public boolean compare(IGenericNode node){
+		if(node instanceof ConstraintNode == false){
+			return false;
+		}
+		ConstraintNode compared = (ConstraintNode)node;
+		if(getConstraint().getPremise().compare(compared.getConstraint().getPremise()) == false){
+			return false;
+		}
+		
+		if(getConstraint().getConsequence().compare(compared.getConstraint().getConsequence()) == false){
+			return false;
+		}
+		
+		return super.compare(node);
+	}
+
+	@Override
+	public Object accept(IModelVisitor visitor) throws Exception {
+		return visitor.visit(this);
 	}
 	
 }

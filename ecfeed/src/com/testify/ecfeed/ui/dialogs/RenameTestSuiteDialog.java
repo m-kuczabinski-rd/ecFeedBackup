@@ -48,42 +48,6 @@ public class RenameTestSuiteDialog extends TitleAreaDialog {
 		fTestSuites = testSuites.toArray(new String[]{});
 		setHelpAvailable(false);
 	}
-	
-	@Override
-	public void okPressed(){
-		fRenamedTestSuite = fRenamedTestSuiteCombo.getText();
-		fNewName = fNewNameText.getText();
-		super.okPressed();
-	}
-	
-	public String getRenamedTestSuite(){
-		return fRenamedTestSuite;
-	}
-	
-	public String getNewName(){
-		return fNewName;
-	}
-	
-	/**
-	 * Create contents of the button bar.
-	 * @param parent
-	 */
-	@Override
-	protected void createButtonsForButtonBar(Composite parent) {
-		fOkButton = createButton(parent, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL,
-				true);
-		fOkButton.setEnabled(false);
-		createButton(parent, IDialogConstants.CANCEL_ID,
-				IDialogConstants.CANCEL_LABEL, false);
-	}
-	
-	/**
-	 * Return the initial size of the dialog.
-	 */
-	@Override
-	protected Point getInitialSize() {
-		return new Point(450, 300);
-	}
 
 	/**
 	 * Create contents of the dialog.
@@ -136,4 +100,38 @@ public class RenameTestSuiteDialog extends TitleAreaDialog {
 		}
 	}
 
+	/**
+	 * Create contents of the button bar.
+	 * @param parent
+	 */
+	@Override
+	protected void createButtonsForButtonBar(Composite parent) {
+		fOkButton = createButton(parent, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL,
+				true);
+		fOkButton.setEnabled(false);
+		createButton(parent, IDialogConstants.CANCEL_ID,
+				IDialogConstants.CANCEL_LABEL, false);
+	}
+
+	@Override
+	public void okPressed(){
+		fRenamedTestSuite = fRenamedTestSuiteCombo.getText();
+		fNewName = fNewNameText.getText();
+		super.okPressed();
+	}
+	/**
+	 * Return the initial size of the dialog.
+	 */
+	@Override
+	protected Point getInitialSize() {
+		return new Point(450, 300);
+	}
+
+	public String getRenamedTestSuite(){
+		return fRenamedTestSuite;
+	}
+	
+	public String getNewName(){
+		return fNewName;
+	}
 }

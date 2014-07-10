@@ -8,6 +8,7 @@
  * Contributors:
  *     Michal Gluszko (m.gluszko(at)radytek.com) - initial implementation
  ******************************************************************************/
+
 package com.testify.ecfeed.ui.editor;
 
 import com.testify.ecfeed.ui.common.Messages;
@@ -32,14 +33,6 @@ public class MenuPasteOperation extends MenuOperation{
 	protected ModelMasterSection fModel;
 	private boolean fCanceled;
 
-
-	public MenuPasteOperation(IGenericNode target, IGenericNode source, ModelMasterSection model){
-		super("Paste");
-		fSource = source;
-		fTarget = target;
-		fModel = model;
-	}
-	
 	@Override
 	public void execute(){
 		if(!paste() && !fCanceled){
@@ -68,6 +61,13 @@ public class MenuPasteOperation extends MenuOperation{
 				return true;
 		}
 		return false;
+	}
+
+	public MenuPasteOperation(IGenericNode target, IGenericNode source, ModelMasterSection model){
+		super("Paste");
+		fSource = source;
+		fTarget = target;
+		fModel = model;
 	}
 
 	public boolean paste(){

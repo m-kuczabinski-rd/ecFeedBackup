@@ -15,9 +15,14 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import static com.testify.ecfeed.testutils.ModelTestUtils.*;
+import static com.testify.ecfeed.testutils.Constants.*;
+
 import java.util.List;
 
 import org.junit.Test;
+
+import com.testify.ecfeed.testutils.RandomModelGenerator;
 
 public class PartitionNodeTest{
 	@Test
@@ -301,6 +306,81 @@ public class PartitionNodeTest{
 		assertTrue(p1.getAllDescendingLabels().contains("p12Label.0"));
 		assertTrue(p1.getAllDescendingLabels().contains("p12Label.1"));
 		
+	}
+	
+//	@Test
+	public void compareSmokeTest(){
+		for(String type : SUPPORTED_TYPES){
+			
+			PartitionNode p = new RandomModelGenerator().generatePartition(3, 3, 3, type);
+			assertElementsEqual(p, p);
+		}
+	}
+	
+	/*******************compare()***************************/
+	@Test
+	public void compareNameTest(){
+		PartitionNode p1 = new PartitionNode("p", "VALUE");
+		PartitionNode p2 = new PartitionNode("p", "VALUE");
+		
+		assertTrue(p1.compare(p2));
+		
+		p1.setName("p1");
+		assertFalse(p1.compare(p2));
+		p2.setName("p1");
+		assertTrue(p1.compare(p2));
+	}
+	
+	@Test
+	public void compareValueTest(){
+		PartitionNode p1 = new PartitionNode("p", "VALUE");
+		PartitionNode p2 = new PartitionNode("p", "VALUE");
+		
+		assertTrue(p1.compare(p2));
+		
+		p1.setValueString("NEW VALUE");
+		assertFalse(p1.compare(p2));
+		p2.setValueString("NEW VALUE");
+		assertTrue(p1.compare(p2));
+	}
+	
+	@Test
+	public void compareLabelsTest(){
+		PartitionNode p1 = new PartitionNode("p", "VALUE");
+		PartitionNode p2 = new PartitionNode("p", "VALUE");
+		
+		assertTrue(p1.compare(p2));
+
+		p1.addLabel("label");
+		assertFalse(p1.compare(p2));
+		p2.addLabel("label");
+		assertTrue(p1.compare(p2));
+
+		p1.addLabel("label1");
+		assertFalse(p1.compare(p2));
+		p2.addLabel("label1");
+		assertTrue(p1.compare(p2));
+	}
+	
+	@Test
+	public void compareChildrenTest(){
+		PartitionNode p1 = new PartitionNode("p", "VALUE");
+		PartitionNode p2 = new PartitionNode("p", "VALUE");
+
+		PartitionNode p11 = new PartitionNode("p", "VALUE");
+		PartitionNode p21 = new PartitionNode("p", "VALUE");
+
+		assertTrue(p1.compare(p2));
+
+		p1.addPartition(p11);
+		assertFalse(p1.compare(p2));
+		p2.addPartition(p21);
+		assertTrue(p1.compare(p2));
+		
+		p11.setName("p11");
+		assertFalse(p1.compare(p2));
+		p21.setName("p11");
+		assertTrue(p1.compare(p2));
 	}
 	
 }

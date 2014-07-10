@@ -41,6 +41,39 @@ public class PartitionLabelsViewer extends CheckboxTableViewerSection {
 	private static final int STYLE = Section.TITLE_BAR | Section.EXPANDED;
 
 	private PartitionNode fSelectedPartition;
+
+	private class AddLabelAdapter extends SelectionAdapter{
+		@Override
+		public void widgetSelected(SelectionEvent e){
+			String newLabel = Constants.DEFAULT_LABEL;
+			int i = 1;
+			while(fSelectedPartition.getAllLabels().contains(newLabel)){
+				newLabel = Constants.DEFAULT_LABEL + "(" + i + ")";
+				i++;
+			}
+			if(fSelectedPartition.addLabel(newLabel) == false){
+				MessageDialog.openError(getActiveShell(),  
+						Messages.DIALOG_CANNOT_ADD_LABEL_TITLE, 
+						Messages.DIALOG_CANNOT_ADD_LABEL_MESSAGE);
+			};
+			modelUpdated();
+		}
+	}
+	
+	private class RemoveLabelsAdapter extends SelectionAdapter{
+		@Override
+		public void widgetSelected(SelectionEvent e){
+			for(Object element : getCheckedElements()){
+				String label = (String)element;
+				if(fSelectedPartition.removeLabel(label) == false){
+					MessageDialog.openError(getActiveShell(), 
+							Messages.DIALOG_CANNOT_REMOVE_LABEL_TITLE, 
+							Messages.DIALOG_CANNOT_REMOVE_LABEL_MESSAGE(label));
+				}
+				modelUpdated();
+			}
+		}
+	}
 	
 	public class LabelEditingSupport extends EditingSupport{
 		private TextCellEditor fLabelCellEditor;
@@ -72,39 +105,6 @@ public class PartitionLabelsViewer extends CheckboxTableViewerSection {
 			if(fSelectedPartition.getAllLabels().contains(newLabel) == false){
 				fSelectedPartition.removeLabel(oldLabel);
 				fSelectedPartition.addLabel(newLabel);
-				modelUpdated();
-			}
-		}
-	}
-
-	private class AddLabelAdapter extends SelectionAdapter{
-		@Override
-		public void widgetSelected(SelectionEvent e){
-			String newLabel = Constants.DEFAULT_LABEL;
-			int i = 1;
-			while(fSelectedPartition.getAllLabels().contains(newLabel)){
-				newLabel = Constants.DEFAULT_LABEL + "(" + i + ")";
-				i++;
-			}
-			if(fSelectedPartition.addLabel(newLabel) == false){
-				MessageDialog.openError(getActiveShell(),  
-						Messages.DIALOG_CANNOT_ADD_LABEL_TITLE, 
-						Messages.DIALOG_CANNOT_ADD_LABEL_MESSAGE);
-			};
-			modelUpdated();
-		}
-	}
-	
-	private class RemoveLabelsAdapter extends SelectionAdapter{
-		@Override
-		public void widgetSelected(SelectionEvent e){
-			for(Object element : getCheckedElements()){
-				String label = (String)element;
-				if(fSelectedPartition.removeLabel(label) == false){
-					MessageDialog.openError(getActiveShell(), 
-							Messages.DIALOG_CANNOT_REMOVE_LABEL_TITLE, 
-							Messages.DIALOG_CANNOT_REMOVE_LABEL_MESSAGE(label));
-				}
 				modelUpdated();
 			}
 		}
@@ -172,16 +172,17 @@ public class PartitionLabelsViewer extends CheckboxTableViewerSection {
 		getCheckboxViewer().addCheckStateListener(new LabelCheckStateListener());
 		addDoubleClickListener(new SelectNodeDoubleClickListener(parent.getMasterSection()));
 	}
-	
-	public void setInput(PartitionNode	partition){
-		fSelectedPartition = partition;
-		super.setInput(partition.getAllLabels());
-	}
 
 	@Override
 	protected void createTableColumns() {
 		TableViewerColumn labelColumn = addColumn("Label", 150, new LabelColumnLabelProvider());
 		labelColumn.setEditingSupport(new LabelEditingSupport(getTableViewer()));
-	}	
+	}
+	
+	public void setInput(PartitionNode	partition){
+		fSelectedPartition = partition;
+		super.setInput(partition.getAllLabels());
+	}
+	
 	
 }

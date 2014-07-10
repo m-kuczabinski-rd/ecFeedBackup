@@ -9,7 +9,7 @@
  *     Patryk Chamuczynski (p.chamuczynski(at)radytek.com) - initial implementation
  ******************************************************************************/
 
-package com.testify.ecfeed.parsers;
+package com.testify.ecfeed.serialization.ect;
 
 public class Constants {
 	public static final String ROOT_NODE_NAME = "Model";

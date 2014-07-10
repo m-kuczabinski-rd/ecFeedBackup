@@ -340,37 +340,6 @@ public class ConstraintViewer extends TreeViewerSection {
 		createStatementEditComposite();
 		getViewer().addSelectionChangedListener(new StatementSelectionListener());
 	}
-	
-	public void setInput(ConstraintNode constraintNode){
-		super.setInput(constraintNode.getConstraint());
-		fSelectedConstraint = constraintNode;
-
-		fStatementLabelProvider.setConstraint(constraintNode.getConstraint());
-
-		getTreeViewer().expandAll();
-		if(getSelectedElement() == null){
-			getViewer().setSelection(new StructuredSelection(fSelectedConstraint.getConstraint().getPremise()));
-		}
-	}
-
-	@Override
-	protected int buttonsPosition(){
-		return BUTTONS_ASIDE;
-	}
-
-
-	@Override
-	protected IContentProvider viewerContentProvider() {
-		return new StatementViewerContentProvider();
-	}
-
-	@Override
-	protected IBaseLabelProvider viewerLabelProvider() {
-		if(fStatementLabelProvider == null){
-			fStatementLabelProvider = new StatementViewerLabelProvider();
-		}
-		return fStatementLabelProvider;
-	}
 
 	private void createStatementEditComposite(){
 		fStatementEditComposite = getToolkit().createComposite(getClientComposite());
@@ -471,4 +440,34 @@ public class ConstraintViewer extends TreeViewerSection {
 		getViewer().setSelection(new StructuredSelection(newStatement));
 	}
 
+	@Override
+	protected int buttonsPosition(){
+		return BUTTONS_ASIDE;
+	}
+
+
+	@Override
+	protected IContentProvider viewerContentProvider() {
+		return new StatementViewerContentProvider();
+	}
+
+	@Override
+	protected IBaseLabelProvider viewerLabelProvider() {
+		if(fStatementLabelProvider == null){
+			fStatementLabelProvider = new StatementViewerLabelProvider();
+		}
+		return fStatementLabelProvider;
+	}
+
+	public void setInput(ConstraintNode constraintNode){
+		super.setInput(constraintNode.getConstraint());
+		fSelectedConstraint = constraintNode;
+
+		fStatementLabelProvider.setConstraint(constraintNode.getConstraint());
+
+		getTreeViewer().expandAll();
+		if(getSelectedElement() == null){
+			getViewer().setSelection(new StructuredSelection(fSelectedConstraint.getConstraint().getPremise()));
+		}
+	}
 }

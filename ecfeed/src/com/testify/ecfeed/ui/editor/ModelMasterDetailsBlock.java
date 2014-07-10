@@ -38,29 +38,16 @@ public class ModelMasterDetailsBlock extends MasterDetailsBlock implements IMode
 	}
 
 	@Override
-	public void modelSelectionChanged(ISelection newSelection) {
-		detailsPart.selectionChanged(fMasterSection, newSelection);
-	}
-	
-	public void selectNode(IGenericNode node){
-		fMasterSection.selectElement(node);
-	}
-
-	public ModelMasterSection getMasterSection(){
-		return fMasterSection;
-	}
-
-	public IDetailsPage getCurrentPage(){
-		return detailsPart.getCurrentPage();
-	}
-
-	@Override
 	protected void createMasterPart(IManagedForm managedForm, Composite parent) {
 		FormToolkit toolkit = managedForm.getToolkit();
 		fMasterSection = new ModelMasterSection(parent, toolkit);
 		fMasterSection.initialize(managedForm);
 		fMasterSection.addModelSelectionChangedListener(this);
 		fMasterSection.setModel(getModel());
+	}
+
+	private RootNode getModel() {
+		return fPage.getModel();
 	}
 
 	@Override
@@ -79,8 +66,21 @@ public class ModelMasterDetailsBlock extends MasterDetailsBlock implements IMode
 	@Override
 	protected void createToolBarActions(IManagedForm managedForm) {
 	}
+	
+	public void selectNode(IGenericNode node){
+		fMasterSection.selectElement(node);
+	}
 
-	private RootNode getModel() {
-		return fPage.getModel();
+	@Override
+	public void modelSelectionChanged(ISelection newSelection) {
+		detailsPart.selectionChanged(fMasterSection, newSelection);
+	}
+
+	public ModelMasterSection getMasterSection(){
+		return fMasterSection;
+	}
+
+	public IDetailsPage getCurrentPage(){
+		return detailsPart.getCurrentPage();
 	}
 }

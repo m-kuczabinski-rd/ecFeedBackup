@@ -13,8 +13,9 @@ package com.testify.ecfeed.ui.wizards;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -27,15 +28,12 @@ import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.WizardNewFileCreationPage;
 import org.eclipse.ui.part.FileEditorInput;
-import org.eclipse.core.runtime.*;
-import org.eclipse.core.resources.*;
-import org.eclipse.core.runtime.CoreException;
 
-import com.testify.ecfeed.utils.Constants;
 import com.testify.ecfeed.model.RootNode;
-import com.testify.ecfeed.parsers.xml.XmlModelSerializer;
+import com.testify.ecfeed.serialization.ect.EctSerializer;
 import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.editor.ModelEditor;
+import com.testify.ecfeed.utils.Constants;
 
 public class NewEcFileWizard extends Wizard implements INewWizard {
 	
@@ -81,8 +79,7 @@ public class NewEcFileWizard extends Wizard implements INewWizard {
 			String modelName = newFileFullPath.removeFileExtension().lastSegment();
 			RootNode model = new RootNode(modelName != null ? modelName : Constants.DEFAULT_NEW_ECT_MODEL_NAME);
 			ByteArrayOutputStream ostream = new ByteArrayOutputStream();
-			XmlModelSerializer writer = new XmlModelSerializer(ostream);
-			writer.writeXmlDocument(model);
+			new EctSerializer(ostream).serialize(model);
 			ByteArrayInputStream istream = new ByteArrayInputStream(ostream.toByteArray());
 			file.setContents(istream, true, true, null);
 
@@ -90,7 +87,7 @@ public class NewEcFileWizard extends Wizard implements INewWizard {
 			IWorkbenchPage page =  PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
 
 			page.openEditor(new FileEditorInput(file), ModelEditor.ID);
-		} catch (CoreException | IOException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		

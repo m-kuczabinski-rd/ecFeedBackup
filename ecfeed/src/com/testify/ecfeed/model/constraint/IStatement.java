@@ -18,4 +18,6 @@ import com.testify.ecfeed.model.PartitionNode;
 public interface IStatement{
 	public boolean evaluate(List<PartitionNode> values);
 	public boolean adapt(List<PartitionNode> values);
+	public boolean compare(IStatement statement);
+	public Object accept(IStatementVisitor visitor) throws Exception;
 }

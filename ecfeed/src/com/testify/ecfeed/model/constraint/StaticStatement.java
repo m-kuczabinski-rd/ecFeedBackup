@@ -27,11 +27,18 @@ public class StaticStatement extends BasicStatement {
 		fValue = value;
 	}
 
-	@Override
 	public String getLeftHandName(){
 		return fValue?STATIC_STATEMENT_TRUE_VALUE:STATIC_STATEMENT_FALSE_VALUE;
 	}
 	
+	public boolean getValue(){
+		return fValue;
+	}
+	
+	public void setValue(boolean value) {
+		fValue = value;
+	}
+
 	@Override
 	public boolean evaluate(List<PartitionNode> values) {
 		return fValue;
@@ -52,12 +59,18 @@ public class StaticStatement extends BasicStatement {
 		return true;
 	}
 	
-	public boolean getValue(){
-		return fValue;
+	@Override
+	public boolean compare(IStatement statement){
+		if(statement instanceof StaticStatement == false){
+			return false;
+		}
+		StaticStatement compared = (StaticStatement)statement;
+		return getValue() == compared.getValue();
 	}
 	
-	public void setValue(boolean value) {
-		fValue = value;
+	@Override
+	public Object accept(IStatementVisitor visitor) throws Exception {
+		return visitor.visit(this);
 	}
 
 }

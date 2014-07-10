@@ -23,19 +23,25 @@ public class PartitionedCategoryStatement extends BasicStatement implements IRel
 	private Relation fRelation;
 	private ICondition fCondition;
 	
-	private interface ICondition{
+	public interface ICondition{
 		public Object getCondition();
 		public boolean evaluate(List<PartitionNode> values);
 		public boolean adapt(List<PartitionNode> values);
 		public ICondition getCopy();
 		public boolean updateReferences(CategoryNode category);
+		public boolean compare(ICondition condition);
+		public Object accept(IStatementVisitor visitor) throws Exception;
 	}
 	
-	private class LabelCondition implements ICondition{
+	public class LabelCondition implements ICondition{
 		private String fLabel;
 		
 		public LabelCondition(String label){
 			fLabel = label;
+		}
+		
+		public String getLabel(){
+			return fLabel;
 		}
 		
 		@Override
@@ -78,15 +84,32 @@ public class PartitionedCategoryStatement extends BasicStatement implements IRel
 				return false;
 			}
 		}
+		
+		public boolean compare(ICondition condition){
+			if(condition instanceof LabelCondition == false){
+				return false;
+			}
+			LabelCondition compared = (LabelCondition)condition;
+			
+			return (getCondition().equals(compared.getCondition()));
+		}
+		
+		public Object accept(IStatementVisitor visitor) throws Exception {
+			return visitor.visit(this);
+		}
 	}
 	
-	private class PartitionCondition implements ICondition{
+	public class PartitionCondition implements ICondition{
 		private PartitionNode fPartition;
 		
 		public PartitionCondition(PartitionNode partition){
 			fPartition = partition;
 		}
 		
+		public PartitionNode getPartition() {
+			return fPartition;
+		}
+
 		@Override
 		public String toString(){
 			return fPartition.getQualifiedName();
@@ -142,6 +165,20 @@ public class PartitionedCategoryStatement extends BasicStatement implements IRel
 			default:
 				return false;
 			}
+		}
+		
+		public boolean compare(ICondition condition){
+			if(condition instanceof PartitionCondition == false){
+				return false;
+			}
+			PartitionCondition compared = (PartitionCondition)condition;
+			
+			return (fPartition.compare((PartitionNode)compared.getCondition()));
+		}
+
+		@Override
+		public Object accept(IStatementVisitor visitor) throws Exception {
+			return visitor.visit(this);
 		}
 	}
 	
@@ -234,12 +271,40 @@ public class PartitionedCategoryStatement extends BasicStatement implements IRel
 		fCondition = new PartitionCondition(partition);
 	}
 	
+	public ICondition getCondition(){
+		return fCondition;
+	}
+	
 	public Object getConditionValue(){
 		return fCondition.getCondition();
 	}
 
 	public String getConditionName(){
 		return fCondition.toString();
+	}
+	
+	@Override
+	public boolean compare(IStatement statement){
+		if(statement instanceof PartitionedCategoryStatement == false){
+			return false;
+		}
+		
+		PartitionedCategoryStatement compared = (PartitionedCategoryStatement)statement;
+		
+		if(getCategory().getName().equals(compared.getCategory().getName()) == false){
+			return false;
+		}
+		
+		if(getRelation() != compared.getRelation()){
+			return false;
+		}
+		
+		return getCondition().compare(compared.getCondition());
+	}
+
+	@Override
+	public Object accept(IStatementVisitor visitor) throws Exception {
+		return visitor.visit(this);
 	}
 
 }

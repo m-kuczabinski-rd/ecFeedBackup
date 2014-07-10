@@ -29,24 +29,6 @@ public abstract class BasicStatement implements IStatement {
 	public int getId(){
 		return fId;
 	}
-	
-	@Override
-	public boolean evaluate(List<PartitionNode> values) {
-		return false;
-	}
-
-	@Override
-	public boolean equals(Object obj){
-		if(obj instanceof BasicStatement == false){
-			return false;
-		}
-		return fId == ((BasicStatement)obj).getId();
-	}
-	
-	@Override
-	public boolean adapt(List<PartitionNode> values){
-		return false;
-	}
 
 	public abstract String getLeftHandName();
 	
@@ -92,6 +74,24 @@ public abstract class BasicStatement implements IStatement {
 	}
 
 	public boolean mentions(CategoryNode category) {
+		return false;
+	}
+
+	@Override
+	public boolean evaluate(List<PartitionNode> values) {
+		return false;
+	}
+
+	@Override
+	public boolean equals(Object obj){
+		if(obj instanceof BasicStatement == false){
+			return false;
+		}
+		return fId == ((BasicStatement)obj).getId();
+	}
+	
+	@Override
+	public boolean adapt(List<PartitionNode> values){
 		return false;
 	}
 	

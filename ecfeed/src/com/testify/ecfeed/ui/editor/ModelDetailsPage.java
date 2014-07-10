@@ -45,17 +45,7 @@ public class ModelDetailsPage extends BasicDetailsPage {
 		getToolkit().paintBordersFor(getMainComposite());
 	}
 
-	@Override
-	public void refresh() {
-		if(getSelectedElement() instanceof RootNode){
-			fModel = (RootNode)getSelectedElement();
-		}
-		if(fModel != null){
-			fModelNameText.setText(fModel.getName());
-			fClassesSection.setInput(fModel);
-		}
-	}
-	
+
 	private void createModelNameEdit(Composite parent) {
 		Composite composite = getToolkit().createComposite(parent);
 		composite.setLayout(new GridLayout(3, false));
@@ -89,5 +79,17 @@ public class ModelDetailsPage extends BasicDetailsPage {
 			fModelNameText.setText(fModel.getName());
 		}
 	}
+
+	@Override
+	public void refresh() {
+		if(getSelectedElement() instanceof RootNode){
+			fModel = (RootNode)getSelectedElement();
+		}
+		if(fModel != null){
+			fModelNameText.setText(fModel.getName());
+			fClassesSection.setInput(fModel);
+		}
+	}
+	
 
 }

@@ -11,33 +11,12 @@
 
 package com.testify.ecfeed.model;
 
-import static org.junit.Assert.*;
-
-import org.junit.Test;
-
-public class ExpectedValueCategoryNodeTest {
-
-	@Test
-	public void testGetChildren(){
-		CategoryNode category = new CategoryNode("name", "type", true);
-		assertEquals(0, category.getChildren().size());
-		assertFalse(category.hasChildren());
-	}
-	
-	@Test
-	public void testGetDefaultValue() {
-		CategoryNode category = new CategoryNode("name", "type", true);
-		category.setDefaultValueString("0");
-		assertEquals("0", category.getDefaultValueString());
-		
-		category.setDefaultValueString("1");
-		assertEquals("1", category.getDefaultValueString());
-	}
-	
-	@Test
-	public void testGetDefaultValuePartition() {
-		CategoryNode category = new CategoryNode("name", "type", true);
-		category.setDefaultValueString("value");
-		assertEquals("value", category.getDefaultValuePartition().getValueString());
-	}
+public interface IModelVisitor {
+	public Object visit(RootNode node) throws Exception;
+	public Object visit(ClassNode node) throws Exception;
+	public Object visit(MethodNode node) throws Exception;
+	public Object visit(CategoryNode node) throws Exception;
+	public Object visit(TestCaseNode node) throws Exception;
+	public Object visit(ConstraintNode node) throws Exception;
+	public Object visit(PartitionNode node) throws Exception;
 }

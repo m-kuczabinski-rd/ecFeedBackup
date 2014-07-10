@@ -36,6 +36,29 @@ public class CoverageCalculator {
 	// If user added test cases = true; else we are substracting tuples;
 	private boolean fAddingFlag;
 
+	public CoverageCalculator(List<CategoryNode> categories) {
+		fCategories = categories;
+		initialize();
+	}
+
+	private void initialize() {
+		fInput = prepareInput();
+		N = fInput.size();
+		fTuplesCovered = new int[N];
+		fTotalWork = new int[N];
+		fResults = new double[N];
+		fCurrentlyChangedCases = new ArrayList<>();
+
+		fTuples = new ArrayList<Map<List<PartitionNode>, Integer>>();
+		fExpectedPartitions = prepareExpectedPartitions();
+
+		for (int n = 0; n < fTotalWork.length; n++) {
+			fTotalWork[n] = calculateTotalTuples(fInput, n + 1, 100);
+			fTuples.add(new HashMap<List<PartitionNode>, Integer>());
+		}
+	}
+
+	
 	private class CalculatorRunnable implements IRunnableWithProgress {
 		private boolean isCanceled;
 		// if true - add occurences, else substract them
@@ -80,30 +103,7 @@ public class CoverageCalculator {
 		}
 	}
 	
-	public CoverageCalculator(List<CategoryNode> categories) {
-		fCategories = categories;
-		initialize();
-	}
-	
-	// Getters & Setters
-	public void resetResults() {
-		for (int i = 0; i < fResults.length; i++) {
-			fResults[i] = 0;
-		}
-	}
-	
-	public double[] getCoverage(){
-		return fResults;
-	}
-	
-	public void setCurrentChangedCases(Collection<TestCaseNode> testCases, boolean isAdding) {
-		fAddingFlag = isAdding;
-		if (testCases == null)
-			fCurrentlyChangedCases = null;
-		else
-			fCurrentlyChangedCases = prepareCasesToAdd(testCases);
-	}
-	
+
 	public boolean calculateCoverage() {
 		// CurrentlyChangedCases are null if deselection left no test cases selected, 
 		// hence we can just clear tuple map and set results to 0
@@ -139,23 +139,6 @@ public class CoverageCalculator {
 		}
 
 	}
-
-	private void initialize() {
-		fInput = prepareInput();
-		N = fInput.size();
-		fTuplesCovered = new int[N];
-		fTotalWork = new int[N];
-		fResults = new double[N];
-		fCurrentlyChangedCases = new ArrayList<>();
-
-		fTuples = new ArrayList<Map<List<PartitionNode>, Integer>>();
-		fExpectedPartitions = prepareExpectedPartitions();
-
-		for (int n = 0; n < fTotalWork.length; n++) {
-			fTotalWork[n] = calculateTotalTuples(fInput, n + 1, 100);
-			fTuples.add(new HashMap<List<PartitionNode>, Integer>());
-		}
-	}	
 	
 	private static void addTuplesToMap(Map<List<PartitionNode>, Integer> map, List<PartitionNode> tuple) {
 		if (!map.containsKey(tuple)) {
@@ -194,12 +177,8 @@ public class CoverageCalculator {
 		List<List<PartitionNode>> input = new ArrayList<List<PartitionNode>>();
 		for (CategoryNode cnode : fCategories) {
 			List<PartitionNode> category = new ArrayList<PartitionNode>();
-			if(cnode.isExpected()){
-			category.add(cnode.getDefaultValuePartition());
-			} else {
-				for (PartitionNode pnode : cnode.getLeafPartitions()) {
-					category.add(pnode);
-				}
+			for (PartitionNode pnode : cnode.getLeafPartitions()) {
+				category.add(pnode);
 			}
 			input.add(category);
 		}
@@ -262,4 +241,22 @@ public class CoverageCalculator {
 		return (int) Math.ceil(((double) (coverage * totalWork)) / 100);
 	}
 
+	// Getters & Setters
+	public void resetResults() {
+		for (int i = 0; i < fResults.length; i++) {
+			fResults[i] = 0;
+		}
+	}
+	
+	public double[] getCoverage(){
+		return fResults;
+	}
+	
+	public void setCurrentChangedCases(Collection<TestCaseNode> testCases, boolean isAdding) {
+		fAddingFlag = isAdding;
+		if (testCases == null)
+			fCurrentlyChangedCases = null;
+		else
+			fCurrentlyChangedCases = prepareCasesToAdd(testCases);
+	}
 }

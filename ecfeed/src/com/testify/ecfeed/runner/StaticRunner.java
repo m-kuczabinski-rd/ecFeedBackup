@@ -36,11 +36,11 @@ import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.TestCaseNode;
-import com.testify.ecfeed.parsers.IModelParser;
-import com.testify.ecfeed.parsers.ParserException;
-import com.testify.ecfeed.parsers.xml.XmlModelParser;
 import com.testify.ecfeed.runner.annotations.EcModel;
 import com.testify.ecfeed.runner.annotations.TestSuites;
+import com.testify.ecfeed.serialization.IModelParser;
+import com.testify.ecfeed.serialization.ParserException;
+import com.testify.ecfeed.serialization.ect.EctParser;
 import com.testify.ecfeed.utils.ClassUtils;
 
 public class StaticRunner extends BlockJUnit4ClassRunner {
@@ -82,7 +82,6 @@ public class StaticRunner extends BlockJUnit4ClassRunner {
 				if(methodModel == null){
 					continue;
 				}
-
 				methods.add(new ParameterizedMethod(method.getMethod(), getTestCases(methodModel, getTestSuites(method))));
 			}
 		}
@@ -111,33 +110,10 @@ public class StaticRunner extends BlockJUnit4ClassRunner {
 		Annotation annotation = method.getAnnotation(TestSuites.class);
 		if(annotation != null){
 			result = new HashSet<String>(Arrays.asList(((TestSuites)annotation).value()));
-			if(result.contains(TestSuites.ALL)){
-				result = getMethodModel(getModel(), method).getTestSuites();
-			} else if(result.contains(TestSuites.NONE)){
-				result.clear();
-			}
 		}
 		else{
-			Annotation classAnnotation = null;
-			TestClass testClass = getTestClass();
-			for(Annotation element : testClass.getAnnotations()){
-				if(element.annotationType().equals(TestSuites.class)){
-					classAnnotation = (TestSuites)element;
-				}
-			}
-			if(classAnnotation != null) {
-				result = new HashSet<String>(Arrays.asList(((TestSuites)classAnnotation).value()));
-				if(result.contains(TestSuites.ALL)){
-					result = getMethodModel(getModel(), method).getTestSuites();
-				} else if(result.contains(TestSuites.NONE)){
-					result.clear();
-				}
-			}
-			else {
-				result = getMethodModel(getModel(), method).getTestSuites();
-			}
+			result = getMethodModel(getModel(), method).getTestSuites();
 		}
-
 		return result;
 	}
 
@@ -203,7 +179,8 @@ public class StaticRunner extends BlockJUnit4ClassRunner {
 	}
 
 	private RootNode createModel() throws RunnerException {
-		IModelParser parser = new XmlModelParser();
+		IModelParser parser = new EctParser();
+//		IModelParser parser = new XmlModelParser();
 		String ectFilePath = getEctFilePath();
 		InputStream istream;
 		try {

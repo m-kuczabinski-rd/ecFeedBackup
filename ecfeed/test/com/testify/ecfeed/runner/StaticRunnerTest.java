@@ -35,11 +35,11 @@ import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.TestCaseNode;
-import com.testify.ecfeed.parsers.IModelParser;
-import com.testify.ecfeed.parsers.ParserException;
-import com.testify.ecfeed.parsers.xml.XmlModelParser;
 import com.testify.ecfeed.runner.annotations.EcModel;
 import com.testify.ecfeed.runner.annotations.TestSuites;
+import com.testify.ecfeed.serialization.IModelParser;
+import com.testify.ecfeed.serialization.ParserException;
+import com.testify.ecfeed.serialization.ect.EctParser;
 
 public class StaticRunnerTest extends StaticRunner{
 	public StaticRunnerTest() throws InitializationError {
@@ -53,7 +53,7 @@ public class StaticRunnerTest extends StaticRunner{
 	
 	@RunWith(StaticRunner.class)
 	@EcModel(MODEL_PATH)
-	public static class TestClass1{
+	public static class TestClass{
 		@Test
 		public void noArgsTestFunction(){
 			if(fExecutedTestCases != null){
@@ -63,145 +63,33 @@ public class StaticRunnerTest extends StaticRunner{
 		
 		@Test
 		public void noTestSuitesTestFunction(int arg1, int arg2){
-			saveTestInput(arg1, arg2);
+			List<Integer> args = new ArrayList<Integer>();
+			args.add(arg1); 
+			args.add(arg2);
+			if(fExecutedTestCases != null){
+				fExecutedTestCases.add(args);
+			}
 		}
 		
 		@Test
 		@TestSuites({"Test Suite 1", "Test Suite 2"})
 		public void testSuitesFunction(int arg1, int arg2){
-			saveTestInput(arg1, arg2);
-		}
-	}
-	
-	@RunWith(StaticRunner.class)
-	@EcModel(MODEL_PATH)
-	@TestSuites({"Test Suite 1", TestSuites.ALL})
-	public static class TestClassAll{
-
-		/*
-		 * method annotation overrides class annotation. It should execute no suites.
-		 */
-		@Test
-		@TestSuites(TestSuites.NONE)
-		public void noneTestSuitesFunction(int arg1, int arg2){
-			saveTestInput(arg1, arg2);
-		}
-	
-		/*
-		 * method annotation overrides class annotation. It should execute 1 out of 3 suites.
-		 */
-		@Test
-		@TestSuites({"Test Suite 2"})
-		public void oneTestSuiteFunction(int arg1, int arg2){
-			saveTestInput(arg1, arg2);
-		}
-		
-		/*
-		 * no method annotation to override class annotation. It should execute 3 out of 3 suites.
-		 */
-		@Test
-		public void noTestSuitesFunction(int arg1, int arg2){
-			saveTestInput(arg1, arg2);
-		}	
-		
-	}
-	
-	@RunWith(StaticRunner.class)
-	@EcModel(MODEL_PATH)
-	@TestSuites({"Test Suite 1", "TestSuite 2"})
-	public static class TestClassTwoSuites{
-		
-		/*
-		 * method annotation overrides class annotation. It should execute no suite.
-		 */
-		@Test
-		@TestSuites(TestSuites.NONE)
-		public void noneTestSuitesFunction(int arg1, int arg2){
-			saveTestInput(arg1, arg2);
-		}
-		
-		/*
-		 * no method annotation to override class annotation. It should execute 2 out of 3 suites.
-		 */
-		@Test
-		public void noTestSuitesFunction(int arg1, int arg2){
-			saveTestInput(arg1, arg2);
-		}
-		
-		/*
-		 * method annotation overrides class annotation. It should execute 1 out of 3 suites.
-		 */
-		@Test
-		@TestSuites({"Test Suite 2"})
-		public void oneTestSuiteFunction(int arg1, int arg2){
-			saveTestInput(arg1, arg2);
-		}
-		
-		/*
-		 * method annotation overrides class annotation. It should execute 3 out of 3 suites.
-		 */
-		@Test
-		@TestSuites(TestSuites.ALL)
-		public void allTestSuitesFunction(int arg1, int arg2){
-			saveTestInput(arg1, arg2);
-		}
-		
-	}
-	
-	@RunWith(StaticRunner.class)
-	@EcModel(MODEL_PATH)
-	@TestSuites({"Test Suite 1", TestSuites.NONE})
-	public static class TestClassNone{
-		
-		/*
-		 * No method annotation to override class annotation. It should execute no suite.
-		 */
-		@Test
-		public void noTestSuitesFunction(int arg1, int arg2){
-			saveTestInput(arg1, arg2);
-		}
-		
-		/*
-		 * method annotation overrides class annotation. It should execute 2 out of 3 suites.
-		 */
-		@Test
-		@TestSuites({"Test Suite 1", "Test Suite 2"})
-		public void twoTestSuitesFunction(int arg1, int arg2){
-			saveTestInput(arg1, arg2);
-		}
-		
-		/*
-		 * method annotation overrides class annotation. It should execute 3 out of 3 suites.
-		 */
-		@Test
-		@TestSuites(TestSuites.ALL)
-		public void allTestSuitesFunction(int arg1, int arg2){
-			saveTestInput(arg1, arg2);
+			List<Integer> args = new ArrayList<Integer>();
+			args.add(arg1); 
+			args.add(arg2);
+			if(fExecutedTestCases != null){
+				fExecutedTestCases.add(args);
+			}
 		}
 	}
 
-	private static void saveTestInput(int arg1, int arg2){
-		List<Integer> args = new ArrayList<Integer>();
-		args.add(arg1); 
-		args.add(arg2);
-		if(fExecutedTestCases != null){
-			fExecutedTestCases.add(args);
-		}
-	}
-	
 	@Test
 	public void frameworkMethodsTest(){
-		frameworkMethodTest(TestClass1.class, new TestClass1());
-		frameworkMethodTest(TestClassAll.class, new TestClassAll());
-		frameworkMethodTest(TestClassNone.class, new TestClassNone());
-		frameworkMethodTest(TestClassTwoSuites.class, new TestClassTwoSuites());
-	}
-	
-	private void frameworkMethodTest(Class<?> klass, Object target){
 		try {
-			StaticRunner runner = new StaticRunner(klass);
+			StaticRunner runner = new StaticRunner(TestClass.class);
 			List<FrameworkMethod> methods = runner.computeTestMethods();
 			RootNode model = getModel(MODEL_PATH);
+			TestClass target = new TestClass();
 			for(FrameworkMethod method : methods){
 				try {
 					fExecutedTestCases = new HashSet<List<Integer>>();
@@ -211,8 +99,7 @@ public class StaticRunnerTest extends StaticRunner{
 						fail("Unexpected invokation exception: " + e.getMessage());
 					}
 					MethodNode methodModel = getMethodModel(model, method);
-					Set<List<Integer>> referenceResult = referenceResult(method, methodModel, klass); 
-					
+					Set<List<Integer>> referenceResult = referenceResult(method, methodModel); 
 					assertEquals(fExecutedTestCases, referenceResult);
 				} catch (RunnerException e) {
 					fail("Unexpected runner exception: " + e.getMessage());
@@ -224,14 +111,14 @@ public class StaticRunnerTest extends StaticRunner{
 	}
 
 	private Set<List<Integer>> referenceResult(FrameworkMethod method,
-			MethodNode methodModel, Class<?> clazz) {
+			MethodNode methodModel) {
 		Set<List<Integer>> result = new HashSet<List<Integer>>();
 		if(method.getMethod().getParameterTypes().length == 0){
 			result.add(new ArrayList<Integer>());
 		}
 		else{
 			Set<String> testSuites;
-			testSuites = getTestSuites(method, methodModel, clazz);
+			testSuites = getTestSuites(method, methodModel);
 			Collection<TestCaseNode> testCases = getTestCases(methodModel, testSuites);
 			for(TestCaseNode testCase : testCases){
 				addTestCaseResult(testCase, result);
@@ -240,38 +127,15 @@ public class StaticRunnerTest extends StaticRunner{
 		return result;
 	}
 
-	private Set<String> getTestSuites(FrameworkMethod method, MethodNode methodModel, Class<?> clazz){
+	private Set<String> getTestSuites(FrameworkMethod method, MethodNode methodModel){
 		Set<String> result;
 		Annotation annotation = method.getAnnotation(TestSuites.class);
 		if(annotation != null){
 			result = new HashSet<String>(Arrays.asList(((TestSuites)annotation).value()));
-			if(result.contains(TestSuites.ALL)){
-				result = methodModel.getTestSuites();
-			} else if(result.contains(TestSuites.NONE)){
-				result.clear();
-			}
 		}
 		else{
-			Annotation classAnnotation = null;
-			for(Annotation element : clazz.getAnnotations()){
-				if(element.annotationType().equals(TestSuites.class)){
-					classAnnotation = (TestSuites)element;
-					break;
-				}
-			}
-			if(classAnnotation != null) {
-				result = new HashSet<String>(Arrays.asList(((TestSuites)classAnnotation).value()));
-				if(result.contains(TestSuites.ALL)){
-					result = methodModel.getTestSuites();
-				} else if(result.contains(TestSuites.NONE)){
-					result.clear();
-				}
-			}
-			else {
-				result = methodModel.getTestSuites();
-			}
+			result = methodModel.getTestSuites();
 		}
-
 		return result;
 	}
 	
@@ -287,14 +151,19 @@ public class StaticRunnerTest extends StaticRunner{
 	private Collection<TestCaseNode> getTestCases(MethodNode methodModel,
 			Set<String> testSuites) {
 		Collection<TestCaseNode> testCases = new HashSet<TestCaseNode>();
-		for(String testSuite : testSuites){
-			testCases.addAll(methodModel.getTestCases(testSuite));
+		if(testSuites.size() == 0){
+			testCases = methodModel.getTestCases();
+		}
+		else{
+			for(String testSuite : testSuites){
+				testCases.addAll(methodModel.getTestCases(testSuite));
+			}
 		}
 		return testCases;
 	}
 
 	protected RootNode getModel(String path){
-		IModelParser parser = new XmlModelParser();
+		IModelParser parser = new EctParser();
 		InputStream istream;
 		try {
 			istream = new FileInputStream(new File(path));

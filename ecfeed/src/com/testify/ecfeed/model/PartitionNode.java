@@ -124,7 +124,7 @@ public class PartitionNode extends GenericNode implements IPartitionedNode{
 		}
 		return getQualifiedName() + " [" + getValueString() + "]";
 	}
-	
+
 	@Override
 	public PartitionNode getCopy(){
 		PartitionNode copy = getLeaflessCopy();
@@ -278,5 +278,38 @@ public class PartitionNode extends GenericNode implements IPartitionedNode{
 		copy.setParent(fPartitionedParent);
 		return copy;
 	}
+	
+	@Override
+	public boolean compare(IGenericNode node){
+		if(node instanceof PartitionNode == false){
+			return false;
+		}
+		
+		PartitionNode compared = (PartitionNode)node;
+		
+		if(getLabels().equals(compared.getLabels()) == false){
+			return false;
+		}
+		
+		if(getValueString().equals(compared.getValueString()) == false){
+			return false;
+		}
+		
+		if(getPartitions().size() != compared.getPartitions().size()){
+			return false;
+		}
+		
+		for(int i = 0; i < getPartitions().size(); i++){
+			if(getPartitions().get(i).compare(compared.getPartitions().get(i)) == false){
+				return false;
+			}
+		}
+		
+		return super.compare(node);
+	}
 
+	@Override
+	public Object accept(IModelVisitor visitor) throws Exception{
+		return visitor.visit(this);
+	}
 }

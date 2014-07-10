@@ -9,12 +9,16 @@
  *     Patryk Chamuczynski (p.chamuczynski(at)radytek.com) - initial implementation
  ******************************************************************************/
 
-package com.testify.ecfeed.parsers;
+package com.testify.ecfeed.model.constraint;
 
-import java.io.InputStream;
+import com.testify.ecfeed.model.constraint.PartitionedCategoryStatement.LabelCondition;
+import com.testify.ecfeed.model.constraint.PartitionedCategoryStatement.PartitionCondition;
 
-import com.testify.ecfeed.model.RootNode;
-
-public interface IModelParser {
-	public RootNode parseModel(InputStream istream) throws ParserException;
+public interface IStatementVisitor {
+	public Object visit(StaticStatement statement) throws Exception;
+	public Object visit(StatementArray statement) throws Exception;
+	public Object visit(ExpectedValueStatement statement) throws Exception;
+	public Object visit(PartitionedCategoryStatement statement) throws Exception;
+	public Object visit(LabelCondition condition) throws Exception;
+	public Object visit(PartitionCondition condition) throws Exception;
 }

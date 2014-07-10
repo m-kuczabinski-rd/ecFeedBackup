@@ -8,6 +8,7 @@
  * Contributors:
  *     Michal Gluszko (m.gluszko(at)radytek.com) - initial implementation
  ******************************************************************************/
+
 package com.testify.ecfeed.ui.dialogs;
 
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;

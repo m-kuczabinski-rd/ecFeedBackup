@@ -146,11 +146,6 @@ public class CalculateCoverageDialog extends TitleAreaDialog {
 		}
 	
 	}
-	
-	@Override
-	public Point getInitialSize() {
-		return new Point(600, 800);
-	}
 
 	public CalculateCoverageDialog(Shell parentShell, MethodNode method,
 			Object[] checked, Object[] grayed) {
@@ -162,6 +157,11 @@ public class CalculateCoverageDialog extends TitleAreaDialog {
 		
 		fInitChecked = checked;
 		fInitGrayed = grayed;
+	}
+	
+	@Override
+	public Point getInitialSize() {
+		return new Point(600, 800);
 	}
 
 	@Override
@@ -262,7 +262,6 @@ public class CalculateCoverageDialog extends TitleAreaDialog {
 		scrolled.setContent(composite);
 		final ScrollBar vBar = scrolled.getVerticalBar();
 		SelectionListener listener = new SelectionAdapter() {
-			@Override
 			public void widgetSelected(SelectionEvent e) {
 				drawBarGraph();
 			}

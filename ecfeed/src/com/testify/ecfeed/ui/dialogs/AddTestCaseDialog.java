@@ -84,38 +84,13 @@ public class AddTestCaseDialog extends TitleAreaDialog implements TestDataEditor
 		fMethod = method;
 		fColorManager = new ColorManager();
 	}
-	
-	@Override
-	public void testDataChanged() {
-		fTestDataViewer.refresh();
-	}
-	
-	@Override
-	public void okPressed(){
-		fTestSuiteName = fTestSuiteCombo.getText();
-		super.okPressed();
-	}
-	
-	public String getTestSuite(){
-		return fTestSuiteName;
-	}
-	
-	public ArrayList<PartitionNode> getTestData(){
-		return fTestData;
+
+	private PartitionNode createAnonymuousPartition(CategoryNode parent) {
+		PartitionNode partition = new PartitionNode("@expected", parent.getDefaultValueString()); 
+		partition.setParent(parent);
+		return partition;
 	}
 
-	/**
-	 * Create contents of the button bar.
-	 * @param parent
-	 */
-	@Override
-	protected void createButtonsForButtonBar(Composite parent) {
-		fOkButton = createButton(parent, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL,
-				true);
-		createButton(parent, IDialogConstants.CANCEL_ID,
-				IDialogConstants.CANCEL_LABEL, false);
-	}
-	
 	/**
 	 * Create contents of the dialog.
 	 * @param parent
@@ -134,12 +109,6 @@ public class AddTestCaseDialog extends TitleAreaDialog implements TestDataEditor
 		createTestDataViewer(container);
 
 		return area;
-	}
-
-	private PartitionNode createAnonymuousPartition(CategoryNode parent) {
-		PartitionNode partition = new PartitionNode("@expected", parent.getDefaultValueString()); 
-		partition.setParent(parent);
-		return partition;
 	}
 
 	private void createTestDataViewer(Composite container) {
@@ -217,6 +186,24 @@ public class AddTestCaseDialog extends TitleAreaDialog implements TestDataEditor
 		});
 		fTestSuiteCombo.setText(Constants.DEFAULT_TEST_SUITE_NAME);
 	}
+
+	/**
+	 * Create contents of the button bar.
+	 * @param parent
+	 */
+	@Override
+	protected void createButtonsForButtonBar(Composite parent) {
+		fOkButton = createButton(parent, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL,
+				true);
+		createButton(parent, IDialogConstants.CANCEL_ID,
+				IDialogConstants.CANCEL_LABEL, false);
+	}
+
+	@Override
+	public void okPressed(){
+		fTestSuiteName = fTestSuiteCombo.getText();
+		super.okPressed();
+	}
 	
 	private void validateTestSuiteName() {
 		if(!TestCaseNode.validateTestSuiteName(fTestSuiteCombo.getText())){
@@ -235,4 +222,16 @@ public class AddTestCaseDialog extends TitleAreaDialog implements TestDataEditor
 		}
 	}
 
+	@Override
+	public void testDataChanged() {
+		fTestDataViewer.refresh();
+	}
+	
+	public String getTestSuite(){
+		return fTestSuiteName;
+	}
+	
+	public ArrayList<PartitionNode> getTestData(){
+		return fTestData;
+	}
 }

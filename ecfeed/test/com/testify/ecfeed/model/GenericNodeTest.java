@@ -25,17 +25,35 @@ import com.testify.ecfeed.model.constraint.StaticStatement;
 
 public class GenericNodeTest{
 	
+	private class GenericNodeImpl extends GenericNode{
+
+		public GenericNodeImpl(String name) {
+			super(name);
+		}
+
+		@Override
+		public IGenericNode getCopy() {
+			return null;
+		}
+
+		@Override
+		public Object accept(IModelVisitor visitor) {
+			return null;
+		}
+		
+	}
+	
 	@Test
 	public void testId(){
-		GenericNode node1 = new GenericNode("name");
-		GenericNode node2 = new GenericNode("name");
+		GenericNode node1 = new GenericNodeImpl("name");
+		GenericNode node2 = new GenericNodeImpl("name");
 		
 		assertNotEquals(node1.getId(), node2.getId());
 	}
 	
 	@Test
 	public void testName() {
-		GenericNode node = new GenericNode("name");
+		GenericNode node = new GenericNodeImpl("name");
 		assertEquals("name", node.getName());
 		node.setName("new name");
 		assertEquals("new name", node.getName());
@@ -43,8 +61,8 @@ public class GenericNodeTest{
 
 	@Test
 	public void testParent(){
-		GenericNode parent = new GenericNode("parent");
-		GenericNode child = new GenericNode("child");
+		GenericNode parent = new GenericNodeImpl("parent");
+		GenericNode child = new GenericNodeImpl("child");
 		
 		assertEquals(null, child.getParent());
 		child.setParent(parent);
@@ -53,7 +71,7 @@ public class GenericNodeTest{
 		
 	@Test
 	public void testHasChildren(){
-		GenericNode node = new GenericNode("name");
+		GenericNode node = new GenericNodeImpl("name");
 		assertFalse(node.hasChildren());
 	}
 	
@@ -89,8 +107,8 @@ public class GenericNodeTest{
 
 	@Test
 	public void testEquals(){
-		GenericNode node1 = new GenericNode("name");
-		GenericNode node2 = new GenericNode("name");
+		GenericNode node1 = new GenericNodeImpl("name");
+		GenericNode node2 = new GenericNodeImpl("name");
 		
 		assertNotEquals(node1, node2);
 		assertEquals(node1, node1);
@@ -208,5 +226,20 @@ public class GenericNodeTest{
 		assertEquals(null, p1.getSibling("p1"));
 		assertEquals(null, p1.getSibling("some string"));
 		
+	}
+	
+	@Test
+	public void compareTest(){
+		GenericNode n1 = new GenericNodeImpl("n");
+		GenericNode n2 = new GenericNodeImpl("n");
+		
+		assertTrue(n1.compare(n2));
+
+		n2.setName("nn");
+		assertFalse(n1.compare(n2));
+
+		n1.setName("nn");
+		assertTrue(n1.compare(n2));
+
 	}
 }

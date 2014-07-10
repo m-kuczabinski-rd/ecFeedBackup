@@ -18,10 +18,6 @@ import java.util.List;
 public class TestCaseNode extends GenericNode {
 	List<PartitionNode> fTestData;
 	
-	public MethodNode getMethod() {
-		return (MethodNode)getParent();
-	}
-	
 	@Override
 	public String toString(){
 		String methodName = null;
@@ -51,6 +47,10 @@ public class TestCaseNode extends GenericNode {
 	public TestCaseNode(String name, List<PartitionNode> testData) {
 		super(name);
 		fTestData = testData;
+	}
+
+	public MethodNode getMethod() {
+		return (MethodNode)getParent();
 	}
 
 	public List<PartitionNode> getTestData(){
@@ -121,5 +121,31 @@ public class TestCaseNode extends GenericNode {
 			}
 		}
 		return true;
+	}
+	
+	@Override
+	public boolean compare(IGenericNode node){
+		if(node instanceof TestCaseNode == false){
+			return false;
+		}
+		
+		TestCaseNode compared = (TestCaseNode)node;
+		
+		if(getTestData().size() != compared.getTestData().size()){
+			return false;
+		}
+		
+		for(int i = 0; i < getTestData().size(); i++){
+			if(getTestData().get(i).compare(compared.getTestData().get(i)) == false){
+				return false;
+			}
+		}
+		
+		return super.compare(node);
+	}
+	
+	@Override
+	public Object accept(IModelVisitor visitor) throws Exception{
+		return visitor.visit(this);
 	}
 }

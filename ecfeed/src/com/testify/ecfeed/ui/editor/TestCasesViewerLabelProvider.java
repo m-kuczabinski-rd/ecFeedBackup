@@ -8,6 +8,7 @@
  * Contributors:
  *     Michal Gluszko (m.gluszko(at)radytek.com) - initial implementation
  ******************************************************************************/
+
 package com.testify.ecfeed.ui.editor;
 
 import org.eclipse.jface.viewers.LabelProvider;
@@ -28,6 +29,10 @@ public class TestCasesViewerLabelProvider extends LabelProvider implements IColo
 	public TestCasesViewerLabelProvider(MethodNode method){
 		fMethod = method;
 		fColorManager = new ColorManager();
+	}
+	
+	public void setMethod(MethodNode method){
+		fMethod = method;
 	}
 	
 	@Override
@@ -72,9 +77,4 @@ public class TestCasesViewerLabelProvider extends LabelProvider implements IColo
 	public Color getBackground(Object element) {
 		return null;
 	}
-	
-	public void setMethod(MethodNode method){
-		fMethod = method;
-	}
-	
 }

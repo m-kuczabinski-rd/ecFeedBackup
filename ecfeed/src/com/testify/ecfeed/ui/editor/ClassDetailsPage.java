@@ -67,6 +67,10 @@ public class ClassDetailsPage extends BasicDetailsPage {
 			return null;
 		}
 	}
+	
+	public ClassDetailsPage(ModelMasterSection masterSection) {
+		super(masterSection);
+	}
 
 	@Override
 	public void createContents(Composite parent){
@@ -84,27 +88,7 @@ public class ClassDetailsPage extends BasicDetailsPage {
 		getToolkit().paintBordersFor(getMainComposite());
 	}
 
-	@Override
-	public void refresh(){
-		if(getSelectedElement() instanceof ClassNode){
-			fSelectedClass = (ClassNode)getSelectedElement();
-		}
-		if(fSelectedClass != null){
-			String title = fSelectedClass.getLocalName();
-			if (ModelUtils.isClassImplemented(fSelectedClass)) {
-				title += " [implemented]";
-			}
-			getMainSection().setText(title);
-			fClassNameText.setText(fSelectedClass.getQualifiedName());
-			fMethodsSection.setInput(fSelectedClass);
-			fOtherMethodsSection.setInput(fSelectedClass);
-			getMainSection().layout();
-		}
-	}
 	
-	public ClassDetailsPage(ModelMasterSection masterSection) {
-		super(masterSection);
-	}
 	
 	private void createQualifiedNameComposite(Composite parent) {
 		Composite composite = getToolkit().createComposite(parent);
@@ -155,6 +139,24 @@ public class ClassDetailsPage extends BasicDetailsPage {
 					Messages.DIALOG_CLASS_EXISTS_TITLE,
 					Messages.DIALOG_CLASS_EXISTS_MESSAGE);
 			}
+		}
+	}
+
+	@Override
+	public void refresh(){
+		if(getSelectedElement() instanceof ClassNode){
+			fSelectedClass = (ClassNode)getSelectedElement();
+		}
+		if(fSelectedClass != null){
+			String title = fSelectedClass.getLocalName();
+			if (ModelUtils.isClassImplemented(fSelectedClass)) {
+				title += " [implemented]";
+			}
+			getMainSection().setText(title);
+			fClassNameText.setText(fSelectedClass.getQualifiedName());
+			fMethodsSection.setInput(fSelectedClass);
+			fOtherMethodsSection.setInput(fSelectedClass);
+			getMainSection().layout();
 		}
 	}
 

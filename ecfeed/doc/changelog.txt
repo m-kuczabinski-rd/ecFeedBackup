@@ -9,9 +9,6 @@
 #     Patryk Chamuczynski (p.chamuczynski(at)radytek.com) - initial implementation
 #-------------------------------------------------------------------------------
 
-Version 1.6.1
- - Fixing coverage analysis
-
 Version 1.6.0
  - Abstract models
  - Copy&Paste

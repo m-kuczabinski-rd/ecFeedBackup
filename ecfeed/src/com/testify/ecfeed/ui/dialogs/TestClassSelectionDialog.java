@@ -67,10 +67,6 @@ public class TestClassSelectionDialog extends ElementTreeSelectionDialog {
 		
 		setValidator(fTestClassSelectionValidator);
 	}
-	
-	public boolean getTestOnlyFlag(){
-		return fTestOnly;
-	}
 
 	protected Control createDialogArea(Composite parent){
 		Composite composite = (Composite)super.createDialogArea(parent);
@@ -87,8 +83,11 @@ public class TestClassSelectionDialog extends ElementTreeSelectionDialog {
 		return composite;
 	}
 	
+	public boolean getTestOnlyFlag(){
+		return fTestOnly;
+	}
+	
     private ISelectionStatusValidator fTestClassSelectionValidator = new ISelectionStatusValidator() {
-    	@Override
         public IStatus validate(Object[] selection) {
     		if(selection.length != 1){
     			return ERROR;

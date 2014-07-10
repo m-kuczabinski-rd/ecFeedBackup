@@ -1,4 +1,15 @@
- package com.testify.ecfeed.model.constraint;
+/*******************************************************************************
+ * Copyright (c) 2013 Testify AS.                                                
+ * All rights reserved. This program and the accompanying materials              
+ * are made available under the terms of the Eclipse Public License v1.0         
+ * which accompanies this distribution, and is available at                      
+ * http://www.eclipse.org/legal/epl-v10.html                                     
+ *                                                                               
+ * Contributors:                                                                 
+ *     Patryk Chamuczynski (p.chamuczynski(at)radytek.com) - initial implementation
+ ******************************************************************************/
+
+package com.testify.ecfeed.model.constraint;
 
 import java.util.List;
 
@@ -27,11 +38,6 @@ public class ExpectedValueStatement extends BasicStatement implements IRelationa
 	
 	@Override
 	public boolean evaluate(List<PartitionNode> values) {
-//		if(fCategory.getMethod() != null){
-//			int index = fCategory.getMethod().getCategories().indexOf(fCategory);
-//			return values.get(index).getValue().equals(fCondition.getValue());
-//		}
-//		return false;
 		return true;
 	}
 
@@ -59,7 +65,14 @@ public class ExpectedValueStatement extends BasicStatement implements IRelationa
 	public void setRelation(Relation relation) {
 	}
 	
-	@Override
+	public CategoryNode getCategory(){
+		return fCategory;
+	}
+	
+	public PartitionNode getCondition(){
+		return fCondition;
+	}
+	
 	public String toString(){
 		return getCategory().getName() + getRelation().toString() + fCondition.getValueString();
 	}
@@ -80,12 +93,26 @@ public class ExpectedValueStatement extends BasicStatement implements IRelationa
 		return false;
 	}
 	
-	public CategoryNode getCategory(){
-		return fCategory;
+	@Override
+	public boolean compare(IStatement statement){
+		if(statement instanceof ExpectedValueStatement == false){
+			return false;
+		}
+		
+		ExpectedValueStatement compared = (ExpectedValueStatement)statement;
+		if(getCategory().getName().equals(compared.getCategory().getName()) == false){
+			return false;
+		}
+		
+		if(getCondition().getValueString().equals(compared.getCondition().getValueString()) == false){
+			return false;
+		}
+		
+		return true;
 	}
 	
-	public PartitionNode getCondition(){
-		return fCondition;
+	@Override
+	public Object accept(IStatementVisitor visitor) throws Exception {
+		return visitor.visit(this);
 	}
-
 }

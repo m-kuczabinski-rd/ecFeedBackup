@@ -8,6 +8,7 @@
  * Contributors:
  *     Michal Gluszko (m.gluszko(at)radytek.com) - initial implementation
  ******************************************************************************/
+
 package com.testify.ecfeed.ui.editor;
 
 import java.util.Collection;
@@ -24,6 +25,10 @@ public class TestCasesViewerContentProvider extends TreeNodeContentProvider impl
 	MethodNode fMethod;
 
 	public TestCasesViewerContentProvider(MethodNode method){
+		fMethod = method;
+	}
+	
+	public void setMethod(MethodNode method){
 		fMethod = method;
 	}
 
@@ -57,9 +62,5 @@ public class TestCasesViewerContentProvider extends TreeNodeContentProvider impl
 	@Override
 	public boolean hasChildren(Object element){
 		return getChildren(element).length > 0;
-	}
-	
-	public void setMethod(MethodNode method){
-		fMethod = method;
 	}
 }

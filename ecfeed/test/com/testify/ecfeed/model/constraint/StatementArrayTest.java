@@ -177,4 +177,37 @@ public class StatementArrayTest {
 		assertFalse(array.getChildren().contains(statement2));
 	}
 
+	/*****************compare()**********************/
+	@Test
+	public void compareOperatorTest(){
+		StatementArray or1 = new StatementArray(Operator.OR);
+		StatementArray or2 = new StatementArray(Operator.OR);
+		StatementArray and1 = new StatementArray(Operator.AND);
+		StatementArray and2 = new StatementArray(Operator.AND);
+		
+		assertTrue(or1.compare(or2));
+		assertTrue(and1.compare(and2));
+		assertFalse(or1.compare(and1));
+		assertFalse(and1.compare(or1));
+	}
+
+	@Test
+	public void compareChildrenTest(){
+		StatementArray s1 = new StatementArray(Operator.OR);
+		StatementArray s2 = new StatementArray(Operator.OR);
+		
+		StaticStatement ss1 = new StaticStatement(true);
+		StaticStatement ss2 = new StaticStatement(true);
+		assertTrue(s1.compare(s2));
+		
+		s1.addStatement(ss1);
+		assertFalse(s1.compare(s2));
+		s2.addStatement(ss2);
+		assertTrue(s1.compare(s2));
+		
+		ss1.setValue(false);;
+		assertFalse(s1.compare(s2));
+		ss2.setValue(false);
+		assertTrue(s1.compare(s2));
+	}
 }

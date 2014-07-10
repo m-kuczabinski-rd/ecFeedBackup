@@ -1,3 +1,14 @@
+/*******************************************************************************
+ * Copyright (c) 2013 Testify AS.                                                
+ * All rights reserved. This program and the accompanying materials              
+ * are made available under the terms of the Eclipse Public License v1.0         
+ * which accompanies this distribution, and is available at                      
+ * http://www.eclipse.org/legal/epl-v10.html                                     
+ *                                                                               
+ * Contributors:                                                                 
+ *     Patryk Chamuczynski (p.chamuczynski(at)radytek.com) - initial implementation
+ ******************************************************************************/
+
 package com.testify.ecfeed.model;
 
 import java.util.ArrayList;
@@ -50,9 +61,6 @@ public class CategoryNode extends GenericNode implements IPartitionedNode{
 	
 	@Override
 	public List<PartitionNode> getPartitions() {
-		if(fExpected){
-			return Arrays.asList(new PartitionNode[]{fDefaultValue});
-		}
 		return fPartitions;
 	}
 
@@ -210,6 +218,42 @@ public class CategoryNode extends GenericNode implements IPartitionedNode{
 		return new String(type);
 	}
 
+	@Override
+	public boolean compare(IGenericNode node){
+		if(node instanceof CategoryNode == false){
+			return false;
+		}
+		CategoryNode comparedCategory = (CategoryNode)node;
+		
+		if(getType().equals(comparedCategory.getType()) == false){
+			return false;
+		}
 
+		if(isExpected() != comparedCategory.isExpected()){
+			return false;
+		}
+		
+		if(getDefaultValuePartition().compare(comparedCategory.getDefaultValuePartition()) == false){
+			return false;
+		}
+
+		int partitionsCount = getPartitions().size();
+		if(partitionsCount != comparedCategory.getPartitions().size()){
+			return false;
+		}
+
+		for(int i = 0; i < partitionsCount; i++){
+			if(getPartitions().get(i).compare(comparedCategory.getPartitions().get(i)) == false){
+				return false;
+			}
+		}
+
+		return super.compare(node);
+	}
+
+	@Override
+	public Object accept(IModelVisitor visitor) throws Exception {
+		return visitor.visit(this);
+	}
 	
 }

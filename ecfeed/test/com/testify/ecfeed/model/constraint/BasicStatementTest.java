@@ -36,6 +36,14 @@ public class BasicStatementTest {
 		public boolean updateReferences(MethodNode method){
 			return true;
 		}
+		@Override
+		public boolean compare(IStatement statement) {
+			return false;
+		}
+		@Override
+		public Object accept(IStatementVisitor visitor) {
+			return null;
+		}
 	}
 	
 	@Test
