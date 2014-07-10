@@ -41,7 +41,7 @@ import com.testify.ecfeed.model.constraint.StaticStatement;
 import com.testify.ecfeed.serialization.IModelParser;
 import com.testify.ecfeed.serialization.ParserException;
 
-public class XmlModelParser implements IModelParser{
+public class ObsoleteXmlModelParser implements IModelParser{
 	
 	public RootNode parseModel(InputStream istream) throws ParserException{
 		try {

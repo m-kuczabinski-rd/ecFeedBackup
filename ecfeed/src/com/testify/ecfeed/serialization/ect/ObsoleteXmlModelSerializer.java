@@ -36,10 +36,10 @@ import com.testify.ecfeed.model.constraint.PartitionedCategoryStatement;
 import com.testify.ecfeed.model.constraint.StatementArray;
 import com.testify.ecfeed.model.constraint.StaticStatement;
 
-public class XmlModelSerializer {
+public class ObsoleteXmlModelSerializer {
 	private OutputStream fOutputStream;
 
-	public XmlModelSerializer(OutputStream ostream){
+	public ObsoleteXmlModelSerializer(OutputStream ostream){
 		fOutputStream = ostream;
 	}
 

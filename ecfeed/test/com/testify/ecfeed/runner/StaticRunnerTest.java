@@ -40,7 +40,7 @@ import com.testify.ecfeed.runner.annotations.EcModel;
 import com.testify.ecfeed.runner.annotations.TestSuites;
 import com.testify.ecfeed.serialization.IModelParser;
 import com.testify.ecfeed.serialization.ParserException;
-import com.testify.ecfeed.serialization.ect.XmlModelParser;
+import com.testify.ecfeed.serialization.ect.ObsoleteXmlModelParser;
 
 public class StaticRunnerTest extends StaticRunner{
 	public StaticRunnerTest() throws InitializationError {
@@ -164,7 +164,7 @@ public class StaticRunnerTest extends StaticRunner{
 	}
 
 	protected RootNode getModel(String path){
-		IModelParser parser = new XmlModelParser();
+		IModelParser parser = new ObsoleteXmlModelParser();
 		InputStream istream;
 		try {
 			istream = new FileInputStream(new File(path));
