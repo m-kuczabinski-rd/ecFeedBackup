@@ -41,12 +41,17 @@ public class TestCasesViewerLabelProvider extends LabelProvider implements IColo
 	
 	@Override
 	public String getText(Object element) {
-		if (element instanceof String) {
-			Collection<TestCaseNode> testSuite = fMethod.getTestCases((String)element);
-			
+		if (element instanceof String) {				
+			Collection<TestCaseNode> testSuite = fMethod.getTestCases((String)element);	
 			int testCasesCount = testSuite.size();		
-			
 			int executableCount = testCasesCount;
+			
+			// if method is not implemented - no testcase can be
+			if(!ModelUtils.isMethodImplemented(fMethod)){
+				return (String) element +
+				" [" + testCasesCount + " test case" + (testCasesCount == 1 ? "" : "s") +
+				", " + 0 + " executable" + "]";
+			}
 			
 			HashSet<PartitionNode> unimplemented = new HashSet<>();
 			for(CategoryNode category: fMethod.getCategories(false)){
