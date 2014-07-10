@@ -279,6 +279,7 @@ public class PartitionNode extends GenericNode implements IPartitionedNode{
 		return copy;
 	}
 	
+	@Override
 	public boolean compare(IGenericNode node){
 		if(node instanceof PartitionNode == false){
 			return false;
@@ -307,6 +308,7 @@ public class PartitionNode extends GenericNode implements IPartitionedNode{
 		return super.compare(node);
 	}
 
+	@Override
 	public Object accept(IModelVisitor visitor) throws Exception{
 		return visitor.visit(this);
 	}

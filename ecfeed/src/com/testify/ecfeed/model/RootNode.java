@@ -66,6 +66,7 @@ public class RootNode extends GenericNode {
 		return name.matches(REGEX_ROOT_NODE_NAME);
 	}
 	
+	@Override
 	public boolean compare(IGenericNode node){
 		if(node instanceof RootNode == false){
 			return false;
@@ -85,6 +86,7 @@ public class RootNode extends GenericNode {
 		return super.compare(root);
 	}
 	
+	@Override
 	public Object accept(IModelVisitor converter) throws Exception{
 		return converter.visit(this);
 	}

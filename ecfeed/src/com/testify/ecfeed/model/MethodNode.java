@@ -389,10 +389,12 @@ public class MethodNode extends GenericNode {
 		}
 	}
 	
+	@Override
 	public Object accept(IModelVisitor visitor) throws Exception{
 		return visitor.visit(this);
 	}
 	
+	@Override
 	public boolean compare(IGenericNode node){
 		if(node instanceof MethodNode == false){
 			return false;

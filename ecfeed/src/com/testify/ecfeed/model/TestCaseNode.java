@@ -123,6 +123,7 @@ public class TestCaseNode extends GenericNode {
 		return true;
 	}
 	
+	@Override
 	public boolean compare(IGenericNode node){
 		if(node instanceof TestCaseNode == false){
 			return false;
@@ -143,6 +144,7 @@ public class TestCaseNode extends GenericNode {
 		return super.compare(node);
 	}
 	
+	@Override
 	public Object accept(IModelVisitor visitor) throws Exception{
 		return visitor.visit(this);
 	}

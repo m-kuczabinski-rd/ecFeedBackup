@@ -157,6 +157,7 @@ public abstract class GenericNode implements IGenericNode{
 		return true;
 	}
 	
+	@Override
 	public boolean compare(IGenericNode node){
 		return getName().equals(node.getName());
 	}

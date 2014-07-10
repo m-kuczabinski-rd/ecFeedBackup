@@ -83,6 +83,7 @@ public class ConstraintNode extends GenericNode{
 			return null;
 	}
 	
+	@Override
 	public boolean compare(IGenericNode node){
 		if(node instanceof ConstraintNode == false){
 			return false;
@@ -99,6 +100,7 @@ public class ConstraintNode extends GenericNode{
 		return super.compare(node);
 	}
 
+	@Override
 	public Object accept(IModelVisitor visitor) throws Exception {
 		return visitor.visit(this);
 	}
