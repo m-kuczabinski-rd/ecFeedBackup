@@ -11,16 +11,20 @@
 
 package com.testify.ecfeed.ui.editor;
 
+import java.util.Collection;
+import java.util.HashSet;
+
+import org.eclipse.jface.viewers.IColorProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.graphics.Color;
-import org.eclipse.jface.viewers.IColorProvider;
 
+import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.MethodNode;
+import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.ui.common.ColorConstants;
 import com.testify.ecfeed.ui.common.ColorManager;
 import com.testify.ecfeed.utils.ModelUtils;
-import com.testify.ecfeed.utils.Constants;
 
 public class TestCasesViewerLabelProvider extends LabelProvider implements IColorProvider {
 	private MethodNode fMethod;
@@ -38,18 +42,36 @@ public class TestCasesViewerLabelProvider extends LabelProvider implements IColo
 	@Override
 	public String getText(Object element) {
 		if (element instanceof String) {
-			int testCasesCount = fMethod.getTestCases((String) element).size();
+			Collection<TestCaseNode> testSuite = fMethod.getTestCases((String)element);
 			
-			if(testCasesCount > Constants.MAX_DISPLAYED_CHILDREN_PER_NODE*2){
-				return (String) element + " [" + testCasesCount + " test cases]";
-			}			
-
-			int executableCount = 0;
-			for (TestCaseNode testCase : fMethod.getTestCases((String) element)) {
-				if (ModelUtils.isTestCaseImplemented(testCase) && ModelUtils.methodDefinitionImplemented(fMethod)) {
-					++executableCount;
+			int testCasesCount = testSuite.size();		
+			
+			int executableCount = testCasesCount;
+			
+			HashSet<PartitionNode> unimplemented = new HashSet<>();
+			for(CategoryNode category: fMethod.getCategories(false)){
+				for(PartitionNode partition: category.getLeafPartitions()){
+					if(!ModelUtils.isPartitionImplemented(partition)){
+						unimplemented.add(partition);
+					}
 				}
 			}
+			// if all partitions are implemented - no unimplemented testcases possible
+			if(unimplemented.isEmpty()){
+				return (String) element +
+				" [" + testCasesCount + " test case" + (testCasesCount == 1 ? "" : "s") +
+				", " + testCasesCount + " executable" + "]";
+			}
+			// count unimplemented
+			for (TestCaseNode testCase : testSuite) {
+				for(PartitionNode partition : testCase.getTestData()){
+					if(unimplemented.contains(partition)){
+						executableCount--;
+						break;
+					}
+				}
+			}
+
 			return (String) element +
 					" [" + testCasesCount + " test case" + (testCasesCount == 1 ? "" : "s") +
 					", " + executableCount + " executable" + "]";
