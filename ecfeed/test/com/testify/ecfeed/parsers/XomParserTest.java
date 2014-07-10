@@ -27,7 +27,7 @@ import com.testify.ecfeed.model.constraint.ExpectedValueStatement;
 import com.testify.ecfeed.model.constraint.PartitionedCategoryStatement;
 import com.testify.ecfeed.model.constraint.StatementArray;
 import com.testify.ecfeed.model.constraint.StaticStatement;
-import com.testify.ecfeed.serialization.Constants;
+import com.testify.ecfeed.serialization.ect.Constants;
 import com.testify.ecfeed.serialization.ect.XomAnalyser;
 import com.testify.ecfeed.serialization.ect.XomBuilder;
 import com.testify.ecfeed.testutils.ModelStringifier;

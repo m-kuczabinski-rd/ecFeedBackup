@@ -1,6 +1,6 @@
 package com.testify.ecfeed.serialization.ect;
 
-import static com.testify.ecfeed.serialization.Constants.*;
+import static com.testify.ecfeed.serialization.ect.Constants.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +24,6 @@ import com.testify.ecfeed.model.constraint.PartitionedCategoryStatement;
 import com.testify.ecfeed.model.constraint.Relation;
 import com.testify.ecfeed.model.constraint.StatementArray;
 import com.testify.ecfeed.model.constraint.StaticStatement;
-import com.testify.ecfeed.serialization.Constants;
 import com.testify.ecfeed.serialization.ParserException;
 import com.testify.ecfeed.utils.ModelUtils;
 

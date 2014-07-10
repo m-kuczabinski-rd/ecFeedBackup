@@ -13,8 +13,6 @@ package com.testify.ecfeed.serialization.ect;
 
 import java.io.IOException;
 
-import com.testify.ecfeed.serialization.Constants;
-
 import nu.xom.Element;
 import nu.xom.ParsingException;
 

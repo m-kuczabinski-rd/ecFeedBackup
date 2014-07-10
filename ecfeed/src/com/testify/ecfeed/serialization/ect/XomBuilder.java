@@ -1,6 +1,6 @@
 package com.testify.ecfeed.serialization.ect;
 
-import static com.testify.ecfeed.serialization.Constants.*;
+import static com.testify.ecfeed.serialization.ect.Constants.*;
 import nu.xom.Attribute;
 import nu.xom.Element;
 
