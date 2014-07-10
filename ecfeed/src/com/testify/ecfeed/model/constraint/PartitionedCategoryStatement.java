@@ -283,8 +283,7 @@ public class PartitionedCategoryStatement extends BasicStatement implements IRel
 		return fCondition.toString();
 	}
 	
-	
-
+	@Override
 	public boolean compare(IStatement statement){
 		if(statement instanceof PartitionedCategoryStatement == false){
 			return false;
