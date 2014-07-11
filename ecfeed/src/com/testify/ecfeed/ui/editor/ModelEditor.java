@@ -37,6 +37,7 @@ import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.part.FileEditorInput;
 
+import com.testify.ecfeed.gal.ModelOperationManager;
 import com.testify.ecfeed.model.IModelWrapper;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.serialization.IModelParser;
@@ -52,6 +53,7 @@ public class ModelEditor extends FormEditor implements IModelWrapper{
 	private RootNode fModel;
 	private ModelPage fModelPage;
 	private boolean fResourceChange = false;
+	private ModelOperationManager fModelManager;
 
 	private class ResourceChangeReporter implements IResourceChangeListener {
 		@Override
@@ -86,6 +88,13 @@ public class ModelEditor extends FormEditor implements IModelWrapper{
 		}
 	}
 
+	public ModelEditor() {
+		super();
+		ResourceChangeReporter listener = new ResourceChangeReporter();
+		ResourcesPlugin.getWorkspace().addResourceChangeListener(listener, IResourceChangeEvent.POST_CHANGE);
+		fModelManager = new ModelOperationManager();
+	}
+
 	public RootNode getModel(){
 		if (fModel == null){
 			fModel = createModel();
@@ -112,12 +121,6 @@ public class ModelEditor extends FormEditor implements IModelWrapper{
 		return root;
 	}
 
-	public ModelEditor() {
-		super();
-		ResourceChangeReporter listener = new ResourceChangeReporter();
-		ResourcesPlugin.getWorkspace().addResourceChangeListener(listener, IResourceChangeEvent.POST_CHANGE);
-	}
-	
 	@Override
 	protected void addPages() {
 		try {
@@ -202,5 +205,9 @@ public class ModelEditor extends FormEditor implements IModelWrapper{
 			fResourceChange = false;
 		}
 		super.setFocus();
+	}
+	
+	public ModelOperationManager getModelOperationManager(){
+		return fModelManager;
 	}
 }
