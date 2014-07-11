@@ -13,15 +13,19 @@ package com.testify.ecfeed.gal;
 
 import com.testify.ecfeed.model.PartitionNode;
 
-public class PartitionAbstractionLayer {
+public class PartitionAbstractionLayer extends NodeAbstractionLayer{
 
 	PartitionNode fTarget;
 	
+	public PartitionAbstractionLayer(ModelOperationManager modelAbstraction) {
+		super(modelAbstraction);
+	}
+
 	public void setTarget(PartitionNode partition){
 		fTarget = partition;
 	}
 	
-	public boolean setName(String newName){
-		return false;
+	public void setName(String newName) throws GalException{
+		execute(new PartitionOperationRename(fTarget, newName));
 	}
 }
