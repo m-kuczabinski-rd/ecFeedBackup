@@ -6,10 +6,12 @@ public class PartitionOperationRename implements IModelOperation {
 
 	private String fNewName;
 	private PartitionNode fTarget;
+	private String fOriginalName;
 
 	public PartitionOperationRename(PartitionNode target, String newName){
 		fNewName = newName;
 		fTarget = target;
+		fOriginalName = fTarget.getName();
 	}
 	
 	@Override
@@ -25,7 +27,7 @@ public class PartitionOperationRename implements IModelOperation {
 
 	@Override
 	public IModelOperation reverseOperation() {
-		return new PartitionOperationRename(fTarget, fTarget.getName());
+		return new PartitionOperationRename(fTarget, fOriginalName);
 	}
 	
 	@Override
