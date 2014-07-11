@@ -94,14 +94,14 @@ public class ParametersViewer extends CheckboxTableViewerSection implements Test
 				}
 					
 				List<String> types = Arrays.asList(new String[]{
-						com.testify.ecfeed.model.Constants.TYPE_NAME_INT,
-						com.testify.ecfeed.model.Constants.TYPE_NAME_LONG,
-						com.testify.ecfeed.model.Constants.TYPE_NAME_SHORT,
-						com.testify.ecfeed.model.Constants.TYPE_NAME_BYTE,
-						com.testify.ecfeed.model.Constants.TYPE_NAME_BOOLEAN,
-						com.testify.ecfeed.model.Constants.TYPE_NAME_DOUBLE,
-						com.testify.ecfeed.model.Constants.TYPE_NAME_FLOAT,
-						com.testify.ecfeed.model.Constants.TYPE_NAME_STRING,
+						com.testify.ecfeed.gal.Constants.TYPE_NAME_INT,
+						com.testify.ecfeed.gal.Constants.TYPE_NAME_LONG,
+						com.testify.ecfeed.gal.Constants.TYPE_NAME_SHORT,
+						com.testify.ecfeed.gal.Constants.TYPE_NAME_BYTE,
+						com.testify.ecfeed.gal.Constants.TYPE_NAME_BOOLEAN,
+						com.testify.ecfeed.gal.Constants.TYPE_NAME_DOUBLE,
+						com.testify.ecfeed.gal.Constants.TYPE_NAME_FLOAT,
+						com.testify.ecfeed.gal.Constants.TYPE_NAME_STRING,
 				});
 				
 				for(String typeCandidate : types){

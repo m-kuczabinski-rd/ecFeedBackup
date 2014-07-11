@@ -11,8 +11,8 @@
 
 package com.testify.ecfeed.utils;
 
-import static com.testify.ecfeed.model.Constants.TYPE_NAME_BOOLEAN;
-import static com.testify.ecfeed.model.Constants.TYPE_NAME_BYTE;
+import static com.testify.ecfeed.gal.Constants.TYPE_NAME_BOOLEAN;
+import static com.testify.ecfeed.gal.Constants.TYPE_NAME_BYTE;
 import static com.testify.ecfeed.utils.AdaptTypeSupport.adaptValueToType;
 import static org.junit.Assert.assertEquals;
 

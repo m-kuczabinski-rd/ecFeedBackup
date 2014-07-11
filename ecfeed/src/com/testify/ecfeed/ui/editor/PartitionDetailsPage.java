@@ -27,7 +27,7 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
 
-import com.testify.ecfeed.model.Constants;
+import com.testify.ecfeed.gal.Constants;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.ui.common.PartitionNodeAbstractLayer;
 import com.testify.ecfeed.utils.ModelUtils;

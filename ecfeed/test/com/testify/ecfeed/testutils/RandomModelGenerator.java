@@ -11,27 +11,27 @@
 
 package com.testify.ecfeed.testutils;
 
-import static com.testify.ecfeed.model.Constants.REGEX_CATEGORY_NODE_NAME;
-import static com.testify.ecfeed.model.Constants.REGEX_CATEGORY_TYPE_NAME;
-import static com.testify.ecfeed.model.Constants.REGEX_CHAR_TYPE_VALUE;
-import static com.testify.ecfeed.model.Constants.REGEX_CLASS_NODE_NAME;
-import static com.testify.ecfeed.model.Constants.REGEX_CONSTRAINT_NODE_NAME;
-import static com.testify.ecfeed.model.Constants.REGEX_METHOD_NODE_NAME;
-import static com.testify.ecfeed.model.Constants.REGEX_PARTITION_LABEL;
-import static com.testify.ecfeed.model.Constants.REGEX_PARTITION_NODE_NAME;
-import static com.testify.ecfeed.model.Constants.REGEX_ROOT_NODE_NAME;
-import static com.testify.ecfeed.model.Constants.REGEX_STRING_TYPE_VALUE;
-import static com.testify.ecfeed.model.Constants.REGEX_TEST_CASE_NODE_NAME;
-import static com.testify.ecfeed.model.Constants.REGEX_USER_TYPE_VALUE;
-import static com.testify.ecfeed.model.Constants.TYPE_NAME_BOOLEAN;
-import static com.testify.ecfeed.model.Constants.TYPE_NAME_BYTE;
-import static com.testify.ecfeed.model.Constants.TYPE_NAME_CHAR;
-import static com.testify.ecfeed.model.Constants.TYPE_NAME_DOUBLE;
-import static com.testify.ecfeed.model.Constants.TYPE_NAME_FLOAT;
-import static com.testify.ecfeed.model.Constants.TYPE_NAME_INT;
-import static com.testify.ecfeed.model.Constants.TYPE_NAME_LONG;
-import static com.testify.ecfeed.model.Constants.TYPE_NAME_SHORT;
-import static com.testify.ecfeed.model.Constants.TYPE_NAME_STRING;
+import static com.testify.ecfeed.gal.Constants.REGEX_CATEGORY_NODE_NAME;
+import static com.testify.ecfeed.gal.Constants.REGEX_CATEGORY_TYPE_NAME;
+import static com.testify.ecfeed.gal.Constants.REGEX_CHAR_TYPE_VALUE;
+import static com.testify.ecfeed.gal.Constants.REGEX_CLASS_NODE_NAME;
+import static com.testify.ecfeed.gal.Constants.REGEX_CONSTRAINT_NODE_NAME;
+import static com.testify.ecfeed.gal.Constants.REGEX_METHOD_NODE_NAME;
+import static com.testify.ecfeed.gal.Constants.REGEX_PARTITION_LABEL;
+import static com.testify.ecfeed.gal.Constants.REGEX_PARTITION_NODE_NAME;
+import static com.testify.ecfeed.gal.Constants.REGEX_ROOT_NODE_NAME;
+import static com.testify.ecfeed.gal.Constants.REGEX_STRING_TYPE_VALUE;
+import static com.testify.ecfeed.gal.Constants.REGEX_TEST_CASE_NODE_NAME;
+import static com.testify.ecfeed.gal.Constants.REGEX_USER_TYPE_VALUE;
+import static com.testify.ecfeed.gal.Constants.TYPE_NAME_BOOLEAN;
+import static com.testify.ecfeed.gal.Constants.TYPE_NAME_BYTE;
+import static com.testify.ecfeed.gal.Constants.TYPE_NAME_CHAR;
+import static com.testify.ecfeed.gal.Constants.TYPE_NAME_DOUBLE;
+import static com.testify.ecfeed.gal.Constants.TYPE_NAME_FLOAT;
+import static com.testify.ecfeed.gal.Constants.TYPE_NAME_INT;
+import static com.testify.ecfeed.gal.Constants.TYPE_NAME_LONG;
+import static com.testify.ecfeed.gal.Constants.TYPE_NAME_SHORT;
+import static com.testify.ecfeed.gal.Constants.TYPE_NAME_STRING;
 import static com.testify.ecfeed.testutils.Constants.SUPPORTED_TYPES;
 
 import java.util.ArrayList;

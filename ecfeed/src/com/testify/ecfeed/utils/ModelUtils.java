@@ -231,23 +231,23 @@ public class ModelUtils {
 
 	public static String getDefaultExpectedValueString(String type) {
 		switch(type){
-		case com.testify.ecfeed.model.Constants.TYPE_NAME_BYTE:
+		case com.testify.ecfeed.gal.Constants.TYPE_NAME_BYTE:
 			return Constants.DEFAULT_EXPECTED_BYTE_VALUE;
-		case com.testify.ecfeed.model.Constants.TYPE_NAME_BOOLEAN:
+		case com.testify.ecfeed.gal.Constants.TYPE_NAME_BOOLEAN:
 			return Constants.DEFAULT_EXPECTED_BOOLEAN_VALUE;
-		case com.testify.ecfeed.model.Constants.TYPE_NAME_CHAR:
+		case com.testify.ecfeed.gal.Constants.TYPE_NAME_CHAR:
 			return Constants.DEFAULT_EXPECTED_CHAR_VALUE;
-		case com.testify.ecfeed.model.Constants.TYPE_NAME_DOUBLE:
+		case com.testify.ecfeed.gal.Constants.TYPE_NAME_DOUBLE:
 			return Constants.DEFAULT_EXPECTED_DOUBLE_VALUE;
-		case com.testify.ecfeed.model.Constants.TYPE_NAME_FLOAT:
+		case com.testify.ecfeed.gal.Constants.TYPE_NAME_FLOAT:
 			return Constants.DEFAULT_EXPECTED_FLOAT_VALUE;
-		case com.testify.ecfeed.model.Constants.TYPE_NAME_INT:
+		case com.testify.ecfeed.gal.Constants.TYPE_NAME_INT:
 			return Constants.DEFAULT_EXPECTED_INT_VALUE;
-		case com.testify.ecfeed.model.Constants.TYPE_NAME_LONG:
+		case com.testify.ecfeed.gal.Constants.TYPE_NAME_LONG:
 			return Constants.DEFAULT_EXPECTED_LONG_VALUE;
-		case com.testify.ecfeed.model.Constants.TYPE_NAME_SHORT:
+		case com.testify.ecfeed.gal.Constants.TYPE_NAME_SHORT:
 			return Constants.DEFAULT_EXPECTED_SHORT_VALUE;
-		case com.testify.ecfeed.model.Constants.TYPE_NAME_STRING:
+		case com.testify.ecfeed.gal.Constants.TYPE_NAME_STRING:
 			return Constants.DEFAULT_EXPECTED_STRING_VALUE;
 		default:
 			return ClassUtils.defaultEnumExpectedValueString(type);
@@ -258,23 +258,23 @@ public class ModelUtils {
 		String typeSignature = parameter.getTypeSignature();
 		switch(typeSignature){
 		case Signature.SIG_BOOLEAN:
-			return com.testify.ecfeed.model.Constants.TYPE_NAME_BOOLEAN;
+			return com.testify.ecfeed.gal.Constants.TYPE_NAME_BOOLEAN;
 		case Signature.SIG_BYTE:
-			return com.testify.ecfeed.model.Constants.TYPE_NAME_BYTE;
+			return com.testify.ecfeed.gal.Constants.TYPE_NAME_BYTE;
 		case Signature.SIG_CHAR:
-			return com.testify.ecfeed.model.Constants.TYPE_NAME_CHAR;
+			return com.testify.ecfeed.gal.Constants.TYPE_NAME_CHAR;
 		case Signature.SIG_DOUBLE:
-			return com.testify.ecfeed.model.Constants.TYPE_NAME_DOUBLE;
+			return com.testify.ecfeed.gal.Constants.TYPE_NAME_DOUBLE;
 		case Signature.SIG_FLOAT:
-			return com.testify.ecfeed.model.Constants.TYPE_NAME_FLOAT;
+			return com.testify.ecfeed.gal.Constants.TYPE_NAME_FLOAT;
 		case Signature.SIG_INT:
-			return com.testify.ecfeed.model.Constants.TYPE_NAME_INT;
+			return com.testify.ecfeed.gal.Constants.TYPE_NAME_INT;
 		case Signature.SIG_LONG:
-			return com.testify.ecfeed.model.Constants.TYPE_NAME_LONG;
+			return com.testify.ecfeed.gal.Constants.TYPE_NAME_LONG;
 		case Signature.SIG_SHORT:
-			return com.testify.ecfeed.model.Constants.TYPE_NAME_SHORT;
+			return com.testify.ecfeed.gal.Constants.TYPE_NAME_SHORT;
 		case "QString;":
-			return com.testify.ecfeed.model.Constants.TYPE_NAME_STRING;
+			return com.testify.ecfeed.gal.Constants.TYPE_NAME_STRING;
 		default:
 			if (typeSignature.startsWith("Q") && typeSignature.endsWith(";")){
 				for (Method reflection : testClass.getMethods()) {
@@ -287,29 +287,29 @@ public class ModelUtils {
 					}
 				}
 			}
-			return com.testify.ecfeed.model.Constants.TYPE_NAME_UNSUPPORTED;
+			return com.testify.ecfeed.gal.Constants.TYPE_NAME_UNSUPPORTED;
 		}
 	}
 
 	public static ArrayList<PartitionNode> generateDefaultPartitions(String typeSignature) {
 		switch(typeSignature){
-		case com.testify.ecfeed.model.Constants.TYPE_NAME_BOOLEAN:
+		case com.testify.ecfeed.gal.Constants.TYPE_NAME_BOOLEAN:
 			return defaultBooleanPartitions();
-		case com.testify.ecfeed.model.Constants.TYPE_NAME_BYTE:
+		case com.testify.ecfeed.gal.Constants.TYPE_NAME_BYTE:
 			return defaultIntegerPartitions();
-		case com.testify.ecfeed.model.Constants.TYPE_NAME_CHAR:
+		case com.testify.ecfeed.gal.Constants.TYPE_NAME_CHAR:
 			return defaultIntegerPartitions();
-		case com.testify.ecfeed.model.Constants.TYPE_NAME_DOUBLE:
+		case com.testify.ecfeed.gal.Constants.TYPE_NAME_DOUBLE:
 			return defaultFloatPartitions();
-		case com.testify.ecfeed.model.Constants.TYPE_NAME_FLOAT:
+		case com.testify.ecfeed.gal.Constants.TYPE_NAME_FLOAT:
 			return defaultFloatPartitions();
-		case com.testify.ecfeed.model.Constants.TYPE_NAME_INT:
+		case com.testify.ecfeed.gal.Constants.TYPE_NAME_INT:
 			return defaultIntegerPartitions();
-		case com.testify.ecfeed.model.Constants.TYPE_NAME_LONG:
+		case com.testify.ecfeed.gal.Constants.TYPE_NAME_LONG:
 			return defaultIntegerPartitions();
-		case com.testify.ecfeed.model.Constants.TYPE_NAME_SHORT:
+		case com.testify.ecfeed.gal.Constants.TYPE_NAME_SHORT:
 			return defaultIntegerPartitions();
-		case com.testify.ecfeed.model.Constants.TYPE_NAME_STRING:
+		case com.testify.ecfeed.gal.Constants.TYPE_NAME_STRING:
 			return defaultStringPartitions();
 		default:
 			return defaultEnumPartitions(typeSignature);
@@ -318,15 +318,15 @@ public class ModelUtils {
 
 	public static boolean isTypePrimitive(String typeSignature){
 		switch(typeSignature){
-		case com.testify.ecfeed.model.Constants.TYPE_NAME_BOOLEAN:
-		case com.testify.ecfeed.model.Constants.TYPE_NAME_BYTE:
-		case com.testify.ecfeed.model.Constants.TYPE_NAME_CHAR:
-		case com.testify.ecfeed.model.Constants.TYPE_NAME_DOUBLE:
-		case com.testify.ecfeed.model.Constants.TYPE_NAME_FLOAT:
-		case com.testify.ecfeed.model.Constants.TYPE_NAME_INT:
-		case com.testify.ecfeed.model.Constants.TYPE_NAME_LONG:
-		case com.testify.ecfeed.model.Constants.TYPE_NAME_SHORT:
-		case com.testify.ecfeed.model.Constants.TYPE_NAME_STRING:
+		case com.testify.ecfeed.gal.Constants.TYPE_NAME_BOOLEAN:
+		case com.testify.ecfeed.gal.Constants.TYPE_NAME_BYTE:
+		case com.testify.ecfeed.gal.Constants.TYPE_NAME_CHAR:
+		case com.testify.ecfeed.gal.Constants.TYPE_NAME_DOUBLE:
+		case com.testify.ecfeed.gal.Constants.TYPE_NAME_FLOAT:
+		case com.testify.ecfeed.gal.Constants.TYPE_NAME_INT:
+		case com.testify.ecfeed.gal.Constants.TYPE_NAME_LONG:
+		case com.testify.ecfeed.gal.Constants.TYPE_NAME_SHORT:
+		case com.testify.ecfeed.gal.Constants.TYPE_NAME_STRING:
 			return true;
 		default:
 			return false;
@@ -346,23 +346,23 @@ public class ModelUtils {
 
 	public static HashMap<String, String> generatePredefinedValues(String type) {
 		switch(type){
-		case com.testify.ecfeed.model.Constants.TYPE_NAME_BOOLEAN:
+		case com.testify.ecfeed.gal.Constants.TYPE_NAME_BOOLEAN:
 			return predefinedBooleanValues();
-		case com.testify.ecfeed.model.Constants.TYPE_NAME_BYTE:
+		case com.testify.ecfeed.gal.Constants.TYPE_NAME_BYTE:
 			return predefinedIntegerValues();
-		case com.testify.ecfeed.model.Constants.TYPE_NAME_CHAR:
+		case com.testify.ecfeed.gal.Constants.TYPE_NAME_CHAR:
 			return predefinedIntegerValues();
-		case com.testify.ecfeed.model.Constants.TYPE_NAME_DOUBLE:
+		case com.testify.ecfeed.gal.Constants.TYPE_NAME_DOUBLE:
 			return predefinedFloatValues();
-		case com.testify.ecfeed.model.Constants.TYPE_NAME_FLOAT:
+		case com.testify.ecfeed.gal.Constants.TYPE_NAME_FLOAT:
 			return predefinedFloatValues();
-		case com.testify.ecfeed.model.Constants.TYPE_NAME_INT:
+		case com.testify.ecfeed.gal.Constants.TYPE_NAME_INT:
 			return predefinedIntegerValues();
-		case com.testify.ecfeed.model.Constants.TYPE_NAME_LONG:
+		case com.testify.ecfeed.gal.Constants.TYPE_NAME_LONG:
 			return predefinedIntegerValues();
-		case com.testify.ecfeed.model.Constants.TYPE_NAME_SHORT:
+		case com.testify.ecfeed.gal.Constants.TYPE_NAME_SHORT:
 			return predefinedIntegerValues();
-		case com.testify.ecfeed.model.Constants.TYPE_NAME_STRING:
+		case com.testify.ecfeed.gal.Constants.TYPE_NAME_STRING:
 			return predefinedStringValues();
 		default:
 			return ClassUtils.defaultEnumValues(type);
@@ -441,7 +441,7 @@ public class ModelUtils {
 	}
 	
 	public static boolean validateNodeName(String name){
-		if(name.length() < 1 || name.length() > com.testify.ecfeed.model.Constants.MAX_NODE_NAME_LENGTH) return false;
+		if(name.length() < 1 || name.length() > com.testify.ecfeed.gal.Constants.MAX_NODE_NAME_LENGTH) return false;
 		if(!name.matches("(^[a-zA-Z][a-zA-Z0-9_$]*)|(^[_][a-zA-Z0-9_$]+)")) return false;
 		return isKeyword(name);
 	}
@@ -469,10 +469,10 @@ public class ModelUtils {
 	}
 
 	public static boolean validatePartitionStringValue(String valueString, String type) {
-		if (type.equals(com.testify.ecfeed.model.Constants.TYPE_NAME_STRING)) return true;
+		if (type.equals(com.testify.ecfeed.gal.Constants.TYPE_NAME_STRING)) return true;
 
 		if (valueString.length() == 0) return false;
-		if (valueString.length() > com.testify.ecfeed.model.Constants.MAX_NODE_NAME_LENGTH) return false;
+		if (valueString.length() > com.testify.ecfeed.gal.Constants.MAX_NODE_NAME_LENGTH) return false;
 
 		if (ClassUtils.getPartitionValueFromString(valueString, type, ClassUtils.getClassLoader(true, null)) != null){
 			return true;
@@ -682,15 +682,15 @@ public class ModelUtils {
 
 	public static ArrayList<String> getJavaTypes() {
 		ArrayList<String> types = new ArrayList<String>();
-		types.add(com.testify.ecfeed.model.Constants.TYPE_NAME_BOOLEAN);
-		types.add(com.testify.ecfeed.model.Constants.TYPE_NAME_BYTE);
-		types.add(com.testify.ecfeed.model.Constants.TYPE_NAME_CHAR);
-		types.add(com.testify.ecfeed.model.Constants.TYPE_NAME_SHORT);
-		types.add(com.testify.ecfeed.model.Constants.TYPE_NAME_INT);
-		types.add(com.testify.ecfeed.model.Constants.TYPE_NAME_LONG);
-		types.add(com.testify.ecfeed.model.Constants.TYPE_NAME_FLOAT);
-		types.add(com.testify.ecfeed.model.Constants.TYPE_NAME_DOUBLE);
-		types.add(com.testify.ecfeed.model.Constants.TYPE_NAME_STRING);
+		types.add(com.testify.ecfeed.gal.Constants.TYPE_NAME_BOOLEAN);
+		types.add(com.testify.ecfeed.gal.Constants.TYPE_NAME_BYTE);
+		types.add(com.testify.ecfeed.gal.Constants.TYPE_NAME_CHAR);
+		types.add(com.testify.ecfeed.gal.Constants.TYPE_NAME_SHORT);
+		types.add(com.testify.ecfeed.gal.Constants.TYPE_NAME_INT);
+		types.add(com.testify.ecfeed.gal.Constants.TYPE_NAME_LONG);
+		types.add(com.testify.ecfeed.gal.Constants.TYPE_NAME_FLOAT);
+		types.add(com.testify.ecfeed.gal.Constants.TYPE_NAME_DOUBLE);
+		types.add(com.testify.ecfeed.gal.Constants.TYPE_NAME_STRING);
 		return types;
 	}
 }

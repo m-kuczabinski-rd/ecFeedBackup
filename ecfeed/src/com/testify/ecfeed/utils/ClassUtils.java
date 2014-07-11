@@ -117,28 +117,28 @@ public class ClassUtils {
 		} else {
 			try{
 				switch(type){
-				case com.testify.ecfeed.model.Constants.TYPE_NAME_BOOLEAN:
+				case com.testify.ecfeed.gal.Constants.TYPE_NAME_BOOLEAN:
 					return Boolean.valueOf(valueString).booleanValue();
-				case com.testify.ecfeed.model.Constants.TYPE_NAME_BYTE:
+				case com.testify.ecfeed.gal.Constants.TYPE_NAME_BYTE:
 					return Byte.decode(valueString);
-				case com.testify.ecfeed.model.Constants.TYPE_NAME_CHAR:
+				case com.testify.ecfeed.gal.Constants.TYPE_NAME_CHAR:
 					if (valueString.charAt(0) == '\\') {
 						return new Character((char)Integer.parseInt(valueString.substring(1)));
 					} else if (valueString.length() == 1) {
 						return valueString.charAt(0);
 					}
 					return null;
-				case com.testify.ecfeed.model.Constants.TYPE_NAME_DOUBLE:
+				case com.testify.ecfeed.gal.Constants.TYPE_NAME_DOUBLE:
 					return Double.valueOf(valueString).doubleValue();
-				case com.testify.ecfeed.model.Constants.TYPE_NAME_FLOAT:
+				case com.testify.ecfeed.gal.Constants.TYPE_NAME_FLOAT:
 					return Float.valueOf(valueString).floatValue();
-				case com.testify.ecfeed.model.Constants.TYPE_NAME_INT:
+				case com.testify.ecfeed.gal.Constants.TYPE_NAME_INT:
 					return Integer.decode(valueString);
-				case com.testify.ecfeed.model.Constants.TYPE_NAME_LONG:
+				case com.testify.ecfeed.gal.Constants.TYPE_NAME_LONG:
 					return Long.decode(valueString);
-				case com.testify.ecfeed.model.Constants.TYPE_NAME_SHORT:
+				case com.testify.ecfeed.gal.Constants.TYPE_NAME_SHORT:
 					return Short.decode(valueString);
-				case com.testify.ecfeed.model.Constants.TYPE_NAME_STRING:
+				case com.testify.ecfeed.gal.Constants.TYPE_NAME_STRING:
 					return valueString;
 				default:
 					return enumPartitionValue(valueString, type, loader);
@@ -161,23 +161,23 @@ public class ClassUtils {
 
 	private static Object getPredefinedValueFromString(String valueString, String type){
 		switch (type) {
-		case com.testify.ecfeed.model.Constants.TYPE_NAME_BOOLEAN:
+		case com.testify.ecfeed.gal.Constants.TYPE_NAME_BOOLEAN:
 			return getBooleanPredefinedValueFromString(valueString);
-		case com.testify.ecfeed.model.Constants.TYPE_NAME_BYTE:
+		case com.testify.ecfeed.gal.Constants.TYPE_NAME_BYTE:
 			return getBytePredefinedValueFromString(valueString);
-		case com.testify.ecfeed.model.Constants.TYPE_NAME_CHAR:
+		case com.testify.ecfeed.gal.Constants.TYPE_NAME_CHAR:
 			return getCharPredefinedValueFromString(valueString);
-		case com.testify.ecfeed.model.Constants.TYPE_NAME_DOUBLE:
+		case com.testify.ecfeed.gal.Constants.TYPE_NAME_DOUBLE:
 			return getDoublePredefinedValueFromString(valueString);
-		case com.testify.ecfeed.model.Constants.TYPE_NAME_FLOAT:
+		case com.testify.ecfeed.gal.Constants.TYPE_NAME_FLOAT:
 			return getFloatPredefinedValueFromString(valueString);
-		case com.testify.ecfeed.model.Constants.TYPE_NAME_INT:
+		case com.testify.ecfeed.gal.Constants.TYPE_NAME_INT:
 			return getIntegerPredefinedValueFromString(valueString);
-		case com.testify.ecfeed.model.Constants.TYPE_NAME_LONG:
+		case com.testify.ecfeed.gal.Constants.TYPE_NAME_LONG:
 			return getLongPredefinedValueFromString(valueString);
-		case com.testify.ecfeed.model.Constants.TYPE_NAME_SHORT:
+		case com.testify.ecfeed.gal.Constants.TYPE_NAME_SHORT:
 			return getShortPredefinedValueFromString(valueString);
-		case com.testify.ecfeed.model.Constants.TYPE_NAME_STRING:
+		case com.testify.ecfeed.gal.Constants.TYPE_NAME_STRING:
 			if (valueString.equals(Constants.NULL_VALUE_STRING_REPRESENTATION)) {
 				return null;
 			}
@@ -268,7 +268,7 @@ public class ClassUtils {
 
 	public static boolean isPartitionImplemented(String value, String type, ClassLoader loader) {
 		boolean implemented = (getPartitionValueFromString(value, type, loader) != null);
-		if (!implemented && type.equals(com.testify.ecfeed.model.Constants.TYPE_NAME_STRING)) {
+		if (!implemented && type.equals(com.testify.ecfeed.gal.Constants.TYPE_NAME_STRING)) {
 			implemented = true;
 		}
 		return implemented;

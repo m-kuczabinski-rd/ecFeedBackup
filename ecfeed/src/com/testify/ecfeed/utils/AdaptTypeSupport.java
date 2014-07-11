@@ -64,23 +64,23 @@ public class AdaptTypeSupport{
 
 	public static String adaptValueToType(String value, String type){
 		switch(type){
-		case com.testify.ecfeed.model.Constants.TYPE_NAME_BOOLEAN:
+		case com.testify.ecfeed.gal.Constants.TYPE_NAME_BOOLEAN:
 			return adaptValueToBoolean(value);
-		case com.testify.ecfeed.model.Constants.TYPE_NAME_BYTE:
+		case com.testify.ecfeed.gal.Constants.TYPE_NAME_BYTE:
 			return adaptValueToByte(value);
-		case com.testify.ecfeed.model.Constants.TYPE_NAME_CHAR:
+		case com.testify.ecfeed.gal.Constants.TYPE_NAME_CHAR:
 			return adaptValueToCharacter(value);
-		case com.testify.ecfeed.model.Constants.TYPE_NAME_DOUBLE:
+		case com.testify.ecfeed.gal.Constants.TYPE_NAME_DOUBLE:
 			return adaptValueToDouble(value);
-		case com.testify.ecfeed.model.Constants.TYPE_NAME_FLOAT:
+		case com.testify.ecfeed.gal.Constants.TYPE_NAME_FLOAT:
 			return adaptValueToFloat(value);
-		case com.testify.ecfeed.model.Constants.TYPE_NAME_INT:
+		case com.testify.ecfeed.gal.Constants.TYPE_NAME_INT:
 			return adaptValueToInteger(value);
-		case com.testify.ecfeed.model.Constants.TYPE_NAME_LONG:
+		case com.testify.ecfeed.gal.Constants.TYPE_NAME_LONG:
 			return adaptValueToLong(value);
-		case com.testify.ecfeed.model.Constants.TYPE_NAME_SHORT:
+		case com.testify.ecfeed.gal.Constants.TYPE_NAME_SHORT:
 			return adaptValueToShort(value);
-		case com.testify.ecfeed.model.Constants.TYPE_NAME_STRING:
+		case com.testify.ecfeed.gal.Constants.TYPE_NAME_STRING:
 			return adaptValueToString(value);
 		default:
 			return adaptValueToEnum(value);
@@ -96,23 +96,23 @@ public class AdaptTypeSupport{
 			return ConversionType.DONE;
 
 		switch(oldtype){
-		case com.testify.ecfeed.model.Constants.TYPE_NAME_BOOLEAN:
+		case com.testify.ecfeed.gal.Constants.TYPE_NAME_BOOLEAN:
 			return booleanCompatibility(newtype);
-		case com.testify.ecfeed.model.Constants.TYPE_NAME_BYTE:
+		case com.testify.ecfeed.gal.Constants.TYPE_NAME_BYTE:
 			return byteCompatibility(newtype);
-		case com.testify.ecfeed.model.Constants.TYPE_NAME_CHAR:
+		case com.testify.ecfeed.gal.Constants.TYPE_NAME_CHAR:
 			return charCompatibility(newtype);
-		case com.testify.ecfeed.model.Constants.TYPE_NAME_DOUBLE:
+		case com.testify.ecfeed.gal.Constants.TYPE_NAME_DOUBLE:
 			return doubleCompatibility(newtype);
-		case com.testify.ecfeed.model.Constants.TYPE_NAME_FLOAT:
+		case com.testify.ecfeed.gal.Constants.TYPE_NAME_FLOAT:
 			return floatCompatibility(newtype);
-		case com.testify.ecfeed.model.Constants.TYPE_NAME_INT:
+		case com.testify.ecfeed.gal.Constants.TYPE_NAME_INT:
 			return intCompatibility(newtype);
-		case com.testify.ecfeed.model.Constants.TYPE_NAME_LONG:
+		case com.testify.ecfeed.gal.Constants.TYPE_NAME_LONG:
 			return longCompatibility(newtype);
-		case com.testify.ecfeed.model.Constants.TYPE_NAME_SHORT:
+		case com.testify.ecfeed.gal.Constants.TYPE_NAME_SHORT:
 			return shortCompatibility(newtype);
-		case com.testify.ecfeed.model.Constants.TYPE_NAME_STRING:
+		case com.testify.ecfeed.gal.Constants.TYPE_NAME_STRING:
 			return stringCompatibility(newtype);
 		default:
 			return enumCompatibility(newtype);
@@ -336,9 +336,9 @@ public class AdaptTypeSupport{
 
 	private static ConversionType booleanCompatibility(String newtype){
 		switch(newtype){
-		case com.testify.ecfeed.model.Constants.TYPE_NAME_BOOLEAN:
+		case com.testify.ecfeed.gal.Constants.TYPE_NAME_BOOLEAN:
 			return ConversionType.DONE;
-		case com.testify.ecfeed.model.Constants.TYPE_NAME_STRING:
+		case com.testify.ecfeed.gal.Constants.TYPE_NAME_STRING:
 			return ConversionType.POSSIBLE;
 		default:
 			return ConversionType.IMPOSSIBLE;
@@ -347,15 +347,15 @@ public class AdaptTypeSupport{
 
 	private static ConversionType byteCompatibility(String newtype){
 		switch(newtype){
-		case com.testify.ecfeed.model.Constants.TYPE_NAME_BYTE:
+		case com.testify.ecfeed.gal.Constants.TYPE_NAME_BYTE:
 			return ConversionType.DONE;
-		case com.testify.ecfeed.model.Constants.TYPE_NAME_CHAR:
-		case com.testify.ecfeed.model.Constants.TYPE_NAME_DOUBLE:
-		case com.testify.ecfeed.model.Constants.TYPE_NAME_FLOAT:
-		case com.testify.ecfeed.model.Constants.TYPE_NAME_INT:
-		case com.testify.ecfeed.model.Constants.TYPE_NAME_LONG:
-		case com.testify.ecfeed.model.Constants.TYPE_NAME_SHORT:
-		case com.testify.ecfeed.model.Constants.TYPE_NAME_STRING:
+		case com.testify.ecfeed.gal.Constants.TYPE_NAME_CHAR:
+		case com.testify.ecfeed.gal.Constants.TYPE_NAME_DOUBLE:
+		case com.testify.ecfeed.gal.Constants.TYPE_NAME_FLOAT:
+		case com.testify.ecfeed.gal.Constants.TYPE_NAME_INT:
+		case com.testify.ecfeed.gal.Constants.TYPE_NAME_LONG:
+		case com.testify.ecfeed.gal.Constants.TYPE_NAME_SHORT:
+		case com.testify.ecfeed.gal.Constants.TYPE_NAME_STRING:
 			return ConversionType.POSSIBLE;
 		default:
 			return ConversionType.IMPOSSIBLE;
@@ -364,9 +364,9 @@ public class AdaptTypeSupport{
 
 	private static ConversionType charCompatibility(String newtype){
 		switch(newtype){
-		case com.testify.ecfeed.model.Constants.TYPE_NAME_CHAR:
+		case com.testify.ecfeed.gal.Constants.TYPE_NAME_CHAR:
 			return ConversionType.DONE;
-		case com.testify.ecfeed.model.Constants.TYPE_NAME_STRING:
+		case com.testify.ecfeed.gal.Constants.TYPE_NAME_STRING:
 			return ConversionType.POSSIBLE;
 		default:
 			return ConversionType.IMPOSSIBLE;
@@ -375,14 +375,14 @@ public class AdaptTypeSupport{
 
 	private static ConversionType doubleCompatibility(String newtype){
 		switch(newtype){
-		case com.testify.ecfeed.model.Constants.TYPE_NAME_DOUBLE:
+		case com.testify.ecfeed.gal.Constants.TYPE_NAME_DOUBLE:
 			return ConversionType.DONE;
-		case com.testify.ecfeed.model.Constants.TYPE_NAME_BYTE:
-		case com.testify.ecfeed.model.Constants.TYPE_NAME_FLOAT:
-		case com.testify.ecfeed.model.Constants.TYPE_NAME_INT:
-		case com.testify.ecfeed.model.Constants.TYPE_NAME_LONG:
-		case com.testify.ecfeed.model.Constants.TYPE_NAME_SHORT:
-		case com.testify.ecfeed.model.Constants.TYPE_NAME_STRING:
+		case com.testify.ecfeed.gal.Constants.TYPE_NAME_BYTE:
+		case com.testify.ecfeed.gal.Constants.TYPE_NAME_FLOAT:
+		case com.testify.ecfeed.gal.Constants.TYPE_NAME_INT:
+		case com.testify.ecfeed.gal.Constants.TYPE_NAME_LONG:
+		case com.testify.ecfeed.gal.Constants.TYPE_NAME_SHORT:
+		case com.testify.ecfeed.gal.Constants.TYPE_NAME_STRING:
 			return ConversionType.POSSIBLE;
 		default:
 			return ConversionType.IMPOSSIBLE;
@@ -391,14 +391,14 @@ public class AdaptTypeSupport{
 
 	private static ConversionType floatCompatibility(String newtype){
 		switch(newtype){
-		case com.testify.ecfeed.model.Constants.TYPE_NAME_FLOAT:
+		case com.testify.ecfeed.gal.Constants.TYPE_NAME_FLOAT:
 			return ConversionType.DONE;
-		case com.testify.ecfeed.model.Constants.TYPE_NAME_BYTE:
-		case com.testify.ecfeed.model.Constants.TYPE_NAME_DOUBLE:
-		case com.testify.ecfeed.model.Constants.TYPE_NAME_INT:
-		case com.testify.ecfeed.model.Constants.TYPE_NAME_LONG:
-		case com.testify.ecfeed.model.Constants.TYPE_NAME_SHORT:
-		case com.testify.ecfeed.model.Constants.TYPE_NAME_STRING:
+		case com.testify.ecfeed.gal.Constants.TYPE_NAME_BYTE:
+		case com.testify.ecfeed.gal.Constants.TYPE_NAME_DOUBLE:
+		case com.testify.ecfeed.gal.Constants.TYPE_NAME_INT:
+		case com.testify.ecfeed.gal.Constants.TYPE_NAME_LONG:
+		case com.testify.ecfeed.gal.Constants.TYPE_NAME_SHORT:
+		case com.testify.ecfeed.gal.Constants.TYPE_NAME_STRING:
 			return ConversionType.POSSIBLE;
 		default:
 			return ConversionType.IMPOSSIBLE;
@@ -407,14 +407,14 @@ public class AdaptTypeSupport{
 
 	private static ConversionType intCompatibility(String newtype){
 		switch(newtype){
-		case com.testify.ecfeed.model.Constants.TYPE_NAME_BYTE:
-		case com.testify.ecfeed.model.Constants.TYPE_NAME_DOUBLE:
-		case com.testify.ecfeed.model.Constants.TYPE_NAME_FLOAT:
-		case com.testify.ecfeed.model.Constants.TYPE_NAME_LONG:
-		case com.testify.ecfeed.model.Constants.TYPE_NAME_SHORT:
-		case com.testify.ecfeed.model.Constants.TYPE_NAME_STRING:
+		case com.testify.ecfeed.gal.Constants.TYPE_NAME_BYTE:
+		case com.testify.ecfeed.gal.Constants.TYPE_NAME_DOUBLE:
+		case com.testify.ecfeed.gal.Constants.TYPE_NAME_FLOAT:
+		case com.testify.ecfeed.gal.Constants.TYPE_NAME_LONG:
+		case com.testify.ecfeed.gal.Constants.TYPE_NAME_SHORT:
+		case com.testify.ecfeed.gal.Constants.TYPE_NAME_STRING:
 			return ConversionType.POSSIBLE;
-		case com.testify.ecfeed.model.Constants.TYPE_NAME_INT:
+		case com.testify.ecfeed.gal.Constants.TYPE_NAME_INT:
 			return ConversionType.DONE;
 		default:
 			return ConversionType.IMPOSSIBLE;
@@ -423,14 +423,14 @@ public class AdaptTypeSupport{
 
 	private static ConversionType longCompatibility(String newtype){
 		switch(newtype){
-		case com.testify.ecfeed.model.Constants.TYPE_NAME_BYTE:
-		case com.testify.ecfeed.model.Constants.TYPE_NAME_DOUBLE:
-		case com.testify.ecfeed.model.Constants.TYPE_NAME_FLOAT:
-		case com.testify.ecfeed.model.Constants.TYPE_NAME_INT:
-		case com.testify.ecfeed.model.Constants.TYPE_NAME_SHORT:
-		case com.testify.ecfeed.model.Constants.TYPE_NAME_STRING:
+		case com.testify.ecfeed.gal.Constants.TYPE_NAME_BYTE:
+		case com.testify.ecfeed.gal.Constants.TYPE_NAME_DOUBLE:
+		case com.testify.ecfeed.gal.Constants.TYPE_NAME_FLOAT:
+		case com.testify.ecfeed.gal.Constants.TYPE_NAME_INT:
+		case com.testify.ecfeed.gal.Constants.TYPE_NAME_SHORT:
+		case com.testify.ecfeed.gal.Constants.TYPE_NAME_STRING:
 			return ConversionType.POSSIBLE;
-		case com.testify.ecfeed.model.Constants.TYPE_NAME_LONG:
+		case com.testify.ecfeed.gal.Constants.TYPE_NAME_LONG:
 			return ConversionType.DONE;
 		default:
 			return ConversionType.IMPOSSIBLE;
@@ -439,14 +439,14 @@ public class AdaptTypeSupport{
 
 	private static ConversionType shortCompatibility(String newtype){
 		switch(newtype){
-		case com.testify.ecfeed.model.Constants.TYPE_NAME_BYTE:
-		case com.testify.ecfeed.model.Constants.TYPE_NAME_DOUBLE:
-		case com.testify.ecfeed.model.Constants.TYPE_NAME_FLOAT:
-		case com.testify.ecfeed.model.Constants.TYPE_NAME_LONG:
-		case com.testify.ecfeed.model.Constants.TYPE_NAME_INT:
-		case com.testify.ecfeed.model.Constants.TYPE_NAME_STRING:
+		case com.testify.ecfeed.gal.Constants.TYPE_NAME_BYTE:
+		case com.testify.ecfeed.gal.Constants.TYPE_NAME_DOUBLE:
+		case com.testify.ecfeed.gal.Constants.TYPE_NAME_FLOAT:
+		case com.testify.ecfeed.gal.Constants.TYPE_NAME_LONG:
+		case com.testify.ecfeed.gal.Constants.TYPE_NAME_INT:
+		case com.testify.ecfeed.gal.Constants.TYPE_NAME_STRING:
 			return ConversionType.POSSIBLE;
-		case com.testify.ecfeed.model.Constants.TYPE_NAME_SHORT:
+		case com.testify.ecfeed.gal.Constants.TYPE_NAME_SHORT:
 			return ConversionType.DONE;
 		default:
 			return ConversionType.IMPOSSIBLE;
@@ -455,7 +455,7 @@ public class AdaptTypeSupport{
 
 	private static ConversionType stringCompatibility(String newtype){
 		switch(newtype){
-		case com.testify.ecfeed.model.Constants.TYPE_NAME_STRING:
+		case com.testify.ecfeed.gal.Constants.TYPE_NAME_STRING:
 			return ConversionType.DONE;
 		default:
 			return ConversionType.POSSIBLE;
@@ -464,16 +464,16 @@ public class AdaptTypeSupport{
 
 	private static ConversionType enumCompatibility(String newtype){
 		switch(newtype){
-		case com.testify.ecfeed.model.Constants.TYPE_NAME_BYTE:
-		case com.testify.ecfeed.model.Constants.TYPE_NAME_BOOLEAN:
-		case com.testify.ecfeed.model.Constants.TYPE_NAME_CHAR:
-		case com.testify.ecfeed.model.Constants.TYPE_NAME_DOUBLE:
-		case com.testify.ecfeed.model.Constants.TYPE_NAME_FLOAT:
-		case com.testify.ecfeed.model.Constants.TYPE_NAME_INT:
-		case com.testify.ecfeed.model.Constants.TYPE_NAME_LONG:
-		case com.testify.ecfeed.model.Constants.TYPE_NAME_SHORT:
+		case com.testify.ecfeed.gal.Constants.TYPE_NAME_BYTE:
+		case com.testify.ecfeed.gal.Constants.TYPE_NAME_BOOLEAN:
+		case com.testify.ecfeed.gal.Constants.TYPE_NAME_CHAR:
+		case com.testify.ecfeed.gal.Constants.TYPE_NAME_DOUBLE:
+		case com.testify.ecfeed.gal.Constants.TYPE_NAME_FLOAT:
+		case com.testify.ecfeed.gal.Constants.TYPE_NAME_INT:
+		case com.testify.ecfeed.gal.Constants.TYPE_NAME_LONG:
+		case com.testify.ecfeed.gal.Constants.TYPE_NAME_SHORT:
 			return ConversionType.IMPOSSIBLE;
-		case com.testify.ecfeed.model.Constants.TYPE_NAME_STRING:
+		case com.testify.ecfeed.gal.Constants.TYPE_NAME_STRING:
 			return ConversionType.POSSIBLE;
 		default:
 			return ConversionType.POSSIBLE;
