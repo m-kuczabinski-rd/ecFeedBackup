@@ -106,4 +106,31 @@ public class PartitionOperationRenameTest {
 		}
 	}
 
+	@Test
+	public void reverseOperationTest(){
+		CategoryNode category = new CategoryNode("name", "int", false);
+		PartitionNode p1 = new PartitionNode("p1", "0");
+		PartitionNode p2 = new PartitionNode("p2", "0");
+		
+		category.addPartition(p1);
+		category.addPartition(p2);
+		
+		IModelOperation renameOperation = new PartitionOperationRename(p1, "p3");
+		try{
+			renameOperation.execute();
+		}
+		catch (GalException e){
+			fail("unexpected exception: " + e.getMessage());
+		}
+		assertEquals("p3", p1.getName());
+		
+		IModelOperation reverseOperation = renameOperation.reverseOperation();
+		try{
+			reverseOperation.execute();
+		}
+		catch (GalException e){
+			fail("unexpected exception: " + e.getMessage());
+		}
+		assertEquals("p1", p1.getName());
+	}
 }
