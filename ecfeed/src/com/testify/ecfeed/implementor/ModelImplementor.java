@@ -54,39 +54,51 @@ import com.testify.ecfeed.model.Constants;
 import com.testify.ecfeed.utils.ModelUtils;
 
 public class ModelImplementor implements IModelImplementor {
-	private IPath compilationUnitPath;
+	private IPath testUnitPath;
+	private IPath categoryUnitPath;
 
 	public void implement(ClassNode node) {
-		CompilationUnit unit = getCompilationUnitInstance(node);
+		CompilationUnit testUnit = getCompilationUnitInstance(node.getQualifiedName(), true);
 		TypeDeclaration type = null;
-		if (unit != null) {
-			type = implementClass(unit, node);
+		if (testUnit != null) {
+			type = getTypeInstance(testUnit, node.getRoot().getName(), node.getQualifiedName(), ModelUtils.classDefinitionImplemented(node), true);
 
-			if (!ModelUtils.classMethodsImplemented(node)) {
+			if ((type != null) && !ModelUtils.classMethodsImplemented(node)) {
 				for (MethodNode method : node.getMethods()) {
 					if (!ModelUtils.methodDefinitionImplemented(method)) {
-						implementMethodDefinition(unit, type, method.getName(), method.getCategoriesNames(), method.getCategoriesTypes());
-					}				
+						implementMethodDefinition(testUnit, type, method.getName(), method.getCategoriesNames(), method.getCategoriesTypes());
+					}
+					if (!ModelUtils.methodCategoriesImplemented(method)) {
+						for (CategoryNode category : method.getCategories()) {
+							if (!ModelUtils.isCategoryImplemented(category) && !ModelUtils.getJavaTypes().contains(category.getShortType())) {
+								CompilationUnit categoryUnit = getCompilationUnitInstance(category.getType(), false);
+								TypeDeclaration categoryType = null;
+								if (categoryUnit != null) {
+									categoryType = getTypeInstance(categoryUnit, node.getRoot().getName(), category.getType(), false, false);
+									writeCompilationUnit(categoryUnit, categoryUnitPath);
+								}
+							}
+						}
+					}
 				}
 			}
+			writeCompilationUnit(testUnit, testUnitPath);
 		}
-
-		writeCompilationUnit(unit, compilationUnitPath);
 	}
 
 	public void implement(MethodNode node) {
-		CompilationUnit unit = getCompilationUnitInstance(node.getClassNode());
+		CompilationUnit testUnit = getCompilationUnitInstance(node.getClassNode().getQualifiedName(), true);
 		TypeDeclaration type = null;
 
-		if (unit != null) {
-			type = implementClass(unit, node.getClassNode());
+		if (testUnit != null) {
+			type = getTypeInstance(
+					testUnit, node.getRoot().getName(), node.getClassNode().getQualifiedName(), ModelUtils.classDefinitionImplemented(node.getClassNode()), true);
 
-			if (!ModelUtils.methodDefinitionImplemented(node)) {
-				implementMethodDefinition(unit, type, node.getName(), node.getCategoriesNames(), node.getCategoriesTypes());
+			if ((type != null) && !ModelUtils.methodDefinitionImplemented(node)) {
+				implementMethodDefinition(testUnit, type, node.getName(), node.getCategoriesNames(), node.getCategoriesTypes());
 			}
+			writeCompilationUnit(testUnit, testUnitPath);
 		}
-
-		writeCompilationUnit(unit, compilationUnitPath);
 	}
 
 	public void implement(CategoryNode node) {
@@ -97,7 +109,7 @@ public class ModelImplementor implements IModelImplementor {
 		System.out.println("implement " + node.getQualifiedName());
 	}
 
-	private CompilationUnit getCompilationUnit(String classQualifiedName) {
+	private CompilationUnit getCompilationUnit(String classQualifiedName, boolean testClass) {
 		CompilationUnit unit = null;
 		try {
 			IProject[] projects = ResourcesPlugin.getWorkspace().getRoot().getProjects();
@@ -111,9 +123,14 @@ public class ModelImplementor implements IModelImplementor {
 						parser.setSource(iType.getCompilationUnit());
 						unit = (CompilationUnit) parser.createAST(null);
 						ITextFileBufferManager bufferManager = FileBuffers.getTextFileBufferManager();
-						compilationUnitPath = unit.getJavaElement().getPath();
-						bufferManager.connect(compilationUnitPath, LocationKind.LOCATION, null);
+						IPath path = unit.getJavaElement().getPath();
+						bufferManager.connect(path, LocationKind.LOCATION, null);
 						unit.recordModifications();
+						if (testClass) {
+							testUnitPath = path;
+						} else {
+							categoryUnitPath = path;
+						}
 						break;
 					}
 				}
@@ -124,7 +141,7 @@ public class ModelImplementor implements IModelImplementor {
 		return unit;
 	}
 
-	private CompilationUnit createCompilationUnit(String projectName, String classQualifiedName) {
+	private CompilationUnit createCompilationUnit(String projectName, String classQualifiedName, boolean testClass) {
 		CompilationUnit unit = null;
 		IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject(projectName);
 		IJavaProject javaProject = JavaCore.create(project);
@@ -142,15 +159,19 @@ public class ModelImplementor implements IModelImplementor {
 						path = path.append(element);
 					}
 					ITextFileBufferManager bufferManager = FileBuffers.getTextFileBufferManager();
-					compilationUnitPath = path;
-					bufferManager.connect(compilationUnitPath, LocationKind.LOCATION, null);
-					ITextFileBuffer textFileBuffer = bufferManager.getTextFileBuffer(compilationUnitPath, LocationKind.LOCATION);
+					bufferManager.connect(path, LocationKind.LOCATION, null);
+					ITextFileBuffer textFileBuffer = bufferManager.getTextFileBuffer(path, LocationKind.LOCATION);
 					IDocument document = textFileBuffer.getDocument();
 					final ASTParser parser = ASTParser.newParser(AST.JLS4);
 					parser.setKind(ASTParser.K_COMPILATION_UNIT);
 					parser.setSource(document.get().toCharArray());
 					unit = (CompilationUnit) parser.createAST(null);
 					unit.recordModifications();
+					if (testClass) {
+						testUnitPath = path;
+					} else {
+						categoryUnitPath = path;
+					}
 					break;
 				}
 			}
@@ -160,10 +181,10 @@ public class ModelImplementor implements IModelImplementor {
 		return unit;
 	}
 
-	public CompilationUnit getCompilationUnitInstance(ClassNode node) {
-		CompilationUnit unit = getCompilationUnit(node.getQualifiedName());
+	public CompilationUnit getCompilationUnitInstance(String classQualifiedName, boolean testClass) {
+		CompilationUnit unit = getCompilationUnit(classQualifiedName, testClass);
 		if (unit == null) {
-			unit = createCompilationUnit("example_enum_debug", node.getQualifiedName());
+			unit = createCompilationUnit("example_enum_debug", classQualifiedName, testClass);
 		}
 		return unit;
 	}
@@ -177,7 +198,6 @@ public class ModelImplementor implements IModelImplementor {
 			edits.apply(document);
 			textFileBuffer.commit(null, false);
 			bufferManager.disconnect(compilationUnitPath, LocationKind.LOCATION, null);
-			compilationUnitPath = null;
 		} catch (Throwable e) {
 			e.printStackTrace();
 		}
@@ -250,12 +270,12 @@ public class ModelImplementor implements IModelImplementor {
 		return type;
 	}
 
-	public TypeDeclaration implementClass(CompilationUnit unit, ClassNode node) {
+	public TypeDeclaration getTypeInstance(CompilationUnit unit, String modelName, String classQualifiedName, boolean implemented, boolean classType) {
 		TypeDeclaration type = null;
-		if (!ModelUtils.classDefinitionImplemented(node)) {
-			type = implementClassDefinition(unit, node.getRoot().getName(), node.getQualifiedName(), true);
+		if (!implemented) {
+			type = implementClassDefinition(unit, modelName, classQualifiedName, classType);
 		} else {
-			String className = node.getQualifiedName().substring(node.getQualifiedName().lastIndexOf(".") + 1);
+			String className = classQualifiedName.substring(classQualifiedName.lastIndexOf(".") + 1);
 			for (Object object : unit.types()) {
 				TypeDeclaration declaration = (TypeDeclaration)object;
 				if (declaration.getName().toString().equals(className)) {
