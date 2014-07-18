@@ -593,7 +593,16 @@ public class ModelUtils {
 		
 		return implemented;		
 	}
-	
+
+	public static boolean categoryDefinitionImplemented(CategoryNode node) {
+		boolean implemented = false;
+		Class<?> typeClass = ClassUtils.loadClass(ClassUtils.getClassLoader(true, null), node.getType());
+		if (typeClass != null) {
+			implemented = true;
+		}
+		return implemented;
+	}
+
 	public static boolean isCategoryImplemented(CategoryNode node) {
 		if(node.isExpected()){
 			return ModelUtils.isPartitionImplemented(node.getDefaultValuePartition());
