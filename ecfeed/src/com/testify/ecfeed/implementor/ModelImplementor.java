@@ -26,8 +26,10 @@ import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTParser;
+import org.eclipse.jdt.core.dom.AbstractTypeDeclaration;
 import org.eclipse.jdt.core.dom.Block;
 import org.eclipse.jdt.core.dom.CompilationUnit;
+import org.eclipse.jdt.core.dom.EnumDeclaration;
 import org.eclipse.jdt.core.dom.ExpressionStatement;
 import org.eclipse.jdt.core.dom.ImportDeclaration;
 import org.eclipse.jdt.core.dom.MarkerAnnotation;
@@ -61,7 +63,7 @@ public class ModelImplementor implements IModelImplementor {
 		CompilationUnit testUnit = getCompilationUnitInstance(node.getQualifiedName(), true);
 		TypeDeclaration type = null;
 		if (testUnit != null) {
-			type = getTypeInstance(testUnit, node.getRoot().getName(), node.getQualifiedName(), ModelUtils.classDefinitionImplemented(node), true);
+			type = (TypeDeclaration)getTypeInstance(testUnit, node.getRoot().getName(), node.getQualifiedName(), ModelUtils.classDefinitionImplemented(node), true);
 
 			if ((type != null) && !ModelUtils.classMethodsImplemented(node)) {
 				for (MethodNode method : node.getMethods()) {
@@ -72,9 +74,13 @@ public class ModelImplementor implements IModelImplementor {
 						for (CategoryNode category : method.getCategories()) {
 							if (!ModelUtils.isCategoryImplemented(category) && !ModelUtils.getJavaTypes().contains(category.getShortType())) {
 								CompilationUnit categoryUnit = getCompilationUnitInstance(category.getType(), false);
-								TypeDeclaration categoryType = null;
+								EnumDeclaration categoryType = null;
 								if (categoryUnit != null) {
-									categoryType = getTypeInstance(categoryUnit, node.getRoot().getName(), category.getType(), false, false);
+									categoryType = (EnumDeclaration)getTypeInstance(
+											categoryUnit, node.getRoot().getName(), category.getType(),
+											ModelUtils.categoryDefinitionImplemented(category), false);
+									if (categoryType != null) {
+									}
 									writeCompilationUnit(categoryUnit, categoryUnitPath);
 								}
 							}
@@ -91,7 +97,7 @@ public class ModelImplementor implements IModelImplementor {
 		TypeDeclaration type = null;
 
 		if (testUnit != null) {
-			type = getTypeInstance(
+			type = (TypeDeclaration)getTypeInstance(
 					testUnit, node.getRoot().getName(), node.getClassNode().getQualifiedName(), ModelUtils.classDefinitionImplemented(node.getClassNode()), true);
 
 			if ((type != null) && !ModelUtils.methodDefinitionImplemented(node)) {
@@ -204,7 +210,7 @@ public class ModelImplementor implements IModelImplementor {
 	}
 
 	@SuppressWarnings("unchecked")
-	private TypeDeclaration implementClassDefinition(CompilationUnit unit, String modelName, String classQualifiedName, boolean testClass) {
+	private AbstractTypeDeclaration implementClassDefinition(CompilationUnit unit, String modelName, String classQualifiedName, boolean testClass) {
 		if (testClass) {
 			ImportDeclaration importDeclaration = unit.getAST().newImportDeclaration();
 			QualifiedName importName = unit.getAST().newQualifiedName(
@@ -247,9 +253,11 @@ public class ModelImplementor implements IModelImplementor {
 		PackageDeclaration packageDeclaration = unit.getAST().newPackageDeclaration();
 		packageDeclaration.setName(unit.getAST().newName(packageName));
 		unit.setPackage(packageDeclaration);
-		TypeDeclaration type = unit.getAST().newTypeDeclaration();
-		type.setInterface(false);
+		AbstractTypeDeclaration type = null;
 		if (testClass) {
+			type = unit.getAST().newTypeDeclaration();
+			TypeDeclaration typeDeclaration = (TypeDeclaration)type;
+			typeDeclaration.setInterface(false);
 			SingleMemberAnnotation annotation = unit.getAST().newSingleMemberAnnotation();
 			annotation.setTypeName(unit.getAST().newSimpleName("RunWith"));
 			TypeLiteral typeName = unit.getAST().newTypeLiteral();
@@ -262,6 +270,8 @@ public class ModelImplementor implements IModelImplementor {
 			modelFile.setLiteralValue(modelName + ".ect");
 			annotation.setValue(modelFile);
 			type.modifiers().add(annotation);
+		} else {
+			type = unit.getAST().newEnumDeclaration();
 		}
 		type.modifiers().add(unit.getAST().newModifier(Modifier.ModifierKeyword.PUBLIC_KEYWORD));
 		String className = classQualifiedName.substring(classQualifiedName.lastIndexOf(".") + 1);
@@ -270,8 +280,8 @@ public class ModelImplementor implements IModelImplementor {
 		return type;
 	}
 
-	public TypeDeclaration getTypeInstance(CompilationUnit unit, String modelName, String classQualifiedName, boolean implemented, boolean classType) {
-		TypeDeclaration type = null;
+	public AbstractTypeDeclaration getTypeInstance(CompilationUnit unit, String modelName, String classQualifiedName, boolean implemented, boolean classType) {
+		AbstractTypeDeclaration type = null;
 		if (!implemented) {
 			type = implementClassDefinition(unit, modelName, classQualifiedName, classType);
 		} else {
