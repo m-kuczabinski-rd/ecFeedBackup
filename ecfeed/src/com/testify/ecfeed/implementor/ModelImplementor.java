@@ -29,6 +29,7 @@ import org.eclipse.jdt.core.dom.ASTParser;
 import org.eclipse.jdt.core.dom.AbstractTypeDeclaration;
 import org.eclipse.jdt.core.dom.Block;
 import org.eclipse.jdt.core.dom.CompilationUnit;
+import org.eclipse.jdt.core.dom.EnumConstantDeclaration;
 import org.eclipse.jdt.core.dom.EnumDeclaration;
 import org.eclipse.jdt.core.dom.ExpressionStatement;
 import org.eclipse.jdt.core.dom.ImportDeclaration;
@@ -67,25 +68,7 @@ public class ModelImplementor implements IModelImplementor {
 
 			if ((type != null) && !ModelUtils.classMethodsImplemented(node)) {
 				for (MethodNode method : node.getMethods()) {
-					if (!ModelUtils.methodDefinitionImplemented(method)) {
-						implementMethodDefinition(testUnit, type, method.getName(), method.getCategoriesNames(), method.getCategoriesTypes());
-					}
-					if (!ModelUtils.methodCategoriesImplemented(method)) {
-						for (CategoryNode category : method.getCategories()) {
-							if (!ModelUtils.isCategoryImplemented(category) && !ModelUtils.getJavaTypes().contains(category.getShortType())) {
-								CompilationUnit categoryUnit = getCompilationUnitInstance(category.getType(), false);
-								EnumDeclaration categoryType = null;
-								if (categoryUnit != null) {
-									categoryType = (EnumDeclaration)getTypeInstance(
-											categoryUnit, node.getRoot().getName(), category.getType(),
-											ModelUtils.categoryDefinitionImplemented(category), false);
-									if (categoryType != null) {
-									}
-									writeCompilationUnit(categoryUnit, categoryUnitPath);
-								}
-							}
-						}
-					}
+					implementMethodNode(testUnit, type, method);
 				}
 			}
 			writeCompilationUnit(testUnit, testUnitPath);
@@ -95,24 +78,80 @@ public class ModelImplementor implements IModelImplementor {
 	public void implement(MethodNode node) {
 		CompilationUnit testUnit = getCompilationUnitInstance(node.getClassNode().getQualifiedName(), true);
 		TypeDeclaration type = null;
-
 		if (testUnit != null) {
 			type = (TypeDeclaration)getTypeInstance(
 					testUnit, node.getRoot().getName(), node.getClassNode().getQualifiedName(), ModelUtils.classDefinitionImplemented(node.getClassNode()), true);
 
 			if ((type != null) && !ModelUtils.methodDefinitionImplemented(node)) {
-				implementMethodDefinition(testUnit, type, node.getName(), node.getCategoriesNames(), node.getCategoriesTypes());
+				implementMethodNode(testUnit, type, node);
 			}
 			writeCompilationUnit(testUnit, testUnitPath);
 		}
 	}
 
 	public void implement(CategoryNode node) {
-		System.out.println("implement " + node.getName());
+		implementCategoryNode(node);
 	}
 
 	public void implement(PartitionNode node) {
-		System.out.println("implement " + node.getQualifiedName());
+		if (!ModelUtils.isCategoryImplemented(node.getCategory()) && !ModelUtils.getJavaTypes().contains(node.getCategory().getShortType())) {
+			CompilationUnit categoryUnit = getCompilationUnitInstance(node.getCategory().getType(), false);
+			EnumDeclaration categoryType = null;
+			if (categoryUnit != null) {
+				categoryType = (EnumDeclaration)getTypeInstance(
+						categoryUnit, node.getRoot().getName(), node.getCategory().getType(),
+						ModelUtils.categoryDefinitionImplemented(node.getCategory()), false);
+				if (categoryType != null) {
+					if (!ModelUtils.isPartitionImplemented(node)) {
+						implementPartitionNode(categoryUnit, categoryType, node);
+					}
+				}
+				writeCompilationUnit(categoryUnit, categoryUnitPath);
+			}
+		}
+	}
+
+	public void implementMethodNode(CompilationUnit unit, TypeDeclaration type, MethodNode node) {
+		if (!ModelUtils.methodDefinitionImplemented(node)) {
+			implementMethodDefinition(unit, type, node.getName(), node.getCategoriesNames(), node.getCategoriesTypes());
+		}
+		if (!ModelUtils.methodCategoriesImplemented(node)) {
+			for (CategoryNode category : node.getCategories()) {
+				implementCategoryNode(category);
+			}
+		}
+	}
+
+	public void implementCategoryNode(CategoryNode node) {
+		if (!ModelUtils.isCategoryImplemented(node) && !ModelUtils.getJavaTypes().contains(node.getShortType())) {
+			CompilationUnit categoryUnit = getCompilationUnitInstance(node.getType(), false);
+			EnumDeclaration categoryType = null;
+			if (categoryUnit != null) {
+				categoryType = (EnumDeclaration)getTypeInstance(
+						categoryUnit, node.getRoot().getName(), node.getType(),
+						ModelUtils.categoryDefinitionImplemented(node), false);
+				if (categoryType != null) {
+					for (PartitionNode partition : node.getPartitions()) {
+						if (!ModelUtils.isPartitionImplemented(partition)) {
+							implementPartitionNode(categoryUnit, categoryType, partition);
+						}
+					}
+				}
+				writeCompilationUnit(categoryUnit, categoryUnitPath);
+			}
+		}
+	}
+
+	public void implementPartitionNode(CompilationUnit unit, EnumDeclaration categoryType, PartitionNode node) {
+		if (node.isAbstract()) {
+			for (PartitionNode child : node.getPartitions()) {
+				if (!ModelUtils.isPartitionImplemented(child)) {
+					implementPartitionNode(unit, categoryType, child);
+				}
+			}
+		} else {
+			implementEnumConstant(unit, categoryType, node.getValueString());
+		}
 	}
 
 	private CompilationUnit getCompilationUnit(String classQualifiedName, boolean testClass) {
@@ -287,7 +326,7 @@ public class ModelImplementor implements IModelImplementor {
 		} else {
 			String className = classQualifiedName.substring(classQualifiedName.lastIndexOf(".") + 1);
 			for (Object object : unit.types()) {
-				TypeDeclaration declaration = (TypeDeclaration)object;
+				AbstractTypeDeclaration declaration = (AbstractTypeDeclaration)object;
 				if (declaration.getName().toString().equals(className)) {
 					type = declaration;
 					break;
@@ -347,6 +386,23 @@ public class ModelImplementor implements IModelImplementor {
 		block.statements().add(expressionStatement);
 		methodDeclaration.setBody(block);
 		type.bodyDeclarations().add(methodDeclaration);
+	}
+
+	@SuppressWarnings("unchecked")
+	private void implementEnumConstant(CompilationUnit unit, EnumDeclaration type, String constantName) {
+		boolean add = true;
+		for (Object object : type.enumConstants()) {
+			EnumConstantDeclaration declaration = (EnumConstantDeclaration)object;
+			if (declaration.getName().toString().equals(constantName)) {
+				add = false;
+				break;
+			}
+		}
+		if (add) {
+			EnumConstantDeclaration constant = unit.getAST().newEnumConstantDeclaration();
+			constant.setName(unit.getAST().newSimpleName(constantName));
+			type.enumConstants().add(constant);
+		}
 	}
 
 	private Type getPrimitiveType(CompilationUnit unit, String typeName) {
