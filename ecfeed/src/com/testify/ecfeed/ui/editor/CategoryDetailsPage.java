@@ -28,6 +28,7 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
 
+import com.testify.ecfeed.implementor.ModelImplementor;
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.ui.common.CategoryNodeAbstractLayer;
@@ -44,6 +45,7 @@ public class CategoryDetailsPage extends BasicDetailsPage {
 	private CategoryChildrenViewer fPartitionsViewer;
 	private StackLayout fComboLayout;
 	private Combo fDefaultValueCombo;
+	private Button fImplementButton;
 	
 	private class valueComboSelectionAdapter extends SelectionAdapter{
 		@Override
@@ -160,6 +162,7 @@ public class CategoryDetailsPage extends BasicDetailsPage {
 			} else{
 				refreshForPartitioned();
 			}
+			fImplementButton.setEnabled(!ModelUtils.isCategoryImplemented(fSelectedCategory) || ModelUtils.isCategoryPartiallyImplemented(fSelectedCategory));
 		} else{
 			refreshForInvalidInput();
 		}
@@ -172,7 +175,7 @@ public class CategoryDetailsPage extends BasicDetailsPage {
 		
 		getToolkit().createLabel(composite, "Category name: ", SWT.NONE);
 		Composite nameComposite = getToolkit().createComposite(composite);
-		GridLayout nameGrid = new GridLayout(2, false);
+		GridLayout nameGrid = new GridLayout(3, false);
 		nameGrid.marginWidth = 2;
 		nameComposite.setLayout(nameGrid);
 		nameComposite.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
@@ -181,7 +184,15 @@ public class CategoryDetailsPage extends BasicDetailsPage {
 		fNameText.addListener(SWT.KeyDown, new nameTextListener());
 		Button changeButton = getToolkit().createButton(nameComposite, "Change", SWT.NONE);
 		changeButton.addSelectionListener(new nameChangeButtonListener());
-		
+		fImplementButton = getToolkit().createButton(nameComposite, "Implement", SWT.NONE);
+		fImplementButton.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e){
+				ModelImplementor implementor = new ModelImplementor();
+				implementor.implement(fSelectedCategory);
+			}
+		});
+
 		getToolkit().createLabel(composite, "Category type: ", SWT.NONE);
 		fTypeCombo = new Combo(composite,SWT.DROP_DOWN);
 		fTypeCombo.setLayoutData(new GridData(SWT.FILL,  SWT.CENTER, false, false));

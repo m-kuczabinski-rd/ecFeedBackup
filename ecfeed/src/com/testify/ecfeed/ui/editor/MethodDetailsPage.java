@@ -27,6 +27,7 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
 
+import com.testify.ecfeed.implementor.ModelImplementor;
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.MethodNode;
@@ -43,6 +44,7 @@ public class MethodDetailsPage extends BasicDetailsPage {
 	private Text fMethodNameText;
 	private Button fTestOnlineButton;
 	private Button fReassignButton;
+	private Button fImplementButton;
 	
 	private class ReassignAdapter extends SelectionAdapter{
 
@@ -97,7 +99,7 @@ public class MethodDetailsPage extends BasicDetailsPage {
 
 	private void createTextClient() {
 		Composite composite = getToolkit().createComposite(getMainComposite());
-		composite.setLayout(new GridLayout(5, false));
+		composite.setLayout(new GridLayout(6, false));
 		composite.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
 		getToolkit().createLabel(composite, "Method name", SWT.NONE);
 		fMethodNameText = getToolkit().createText(composite, null, SWT.NONE);
@@ -121,6 +123,15 @@ public class MethodDetailsPage extends BasicDetailsPage {
 		fReassignButton.addSelectionListener(new ReassignAdapter());
 		fTestOnlineButton = getToolkit().createButton(composite, "Test online", SWT.NONE);
 		fTestOnlineButton.addSelectionListener(new ExecuteOnlineTestAdapter(this));
+
+		fImplementButton = getToolkit().createButton(composite, "Implement", SWT.NONE);
+		fImplementButton.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e){
+				ModelImplementor implementor = new ModelImplementor();
+				implementor.implement(fSelectedMethod);
+			}
+		});
 
 		getToolkit().paintBordersFor(composite);
 	}
@@ -170,6 +181,7 @@ public class MethodDetailsPage extends BasicDetailsPage {
 			
 			fReassignButton.setEnabled(ModelUtils.isClassPartiallyImplemented((ClassNode)fSelectedMethod.getParent())
 						|| ModelUtils.isClassImplemented((ClassNode)fSelectedMethod.getParent()));
+			fImplementButton.setEnabled(!ModelUtils.isMethodImplemented(fSelectedMethod) || ModelUtils.isMethodPartiallyImplemented(fSelectedMethod));
 		}
 	}
 	

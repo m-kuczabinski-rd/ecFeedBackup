@@ -27,6 +27,7 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
 
+import com.testify.ecfeed.implementor.ModelImplementor;
 import com.testify.ecfeed.model.Constants;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.ui.common.PartitionNodeAbstractLayer;
@@ -41,6 +42,7 @@ public class PartitionDetailsPage extends BasicDetailsPage {
 	private Combo fPartitionValueCombo;
 	private StackLayout fComboLayout;
 	private Combo fBooleanValueCombo;
+	private Button fImplementButton;
 
 	private class PartitionNameTextListener extends ApplyChangesSelectionAdapter implements Listener{
 		@Override
@@ -156,7 +158,8 @@ public class PartitionDetailsPage extends BasicDetailsPage {
 				fPartitionValueCombo.setText(fSelectedPartition.getValueString());
 				fComboLayout.topControl = fPartitionValueCombo;
 			}
-		}	
+		}
+		fImplementButton.setEnabled(!ModelUtils.isPartitionImplemented(fSelectedPartition) || ModelUtils.isPartitionPartiallyImplemented(fSelectedPartition));
 	}
 	
 	private void createNameValueEdit(Composite parent) {
@@ -175,10 +178,18 @@ public class PartitionDetailsPage extends BasicDetailsPage {
 		fPartitionNameText.addListener(SWT.KeyDown, new PartitionNameTextListener());
 		
 		Composite buttonComposite = getToolkit().createComposite(parent);
-		buttonComposite.setLayout(new GridLayout(1, false));
+		buttonComposite.setLayout(new GridLayout(2, false));
 		buttonComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true, 1, 2));
 		Button applyButton = getToolkit().createButton(buttonComposite, "Change", SWT.CENTER);
 		applyButton.addSelectionListener(new ApplyChangesSelectionAdapter());
+		fImplementButton = getToolkit().createButton(buttonComposite, "Implement", SWT.NONE);
+		fImplementButton.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e){
+				ModelImplementor implementor = new ModelImplementor();
+				implementor.implement(fSelectedPartition);
+			}
+		});
 		
 		getToolkit().paintBordersFor(parent);
 

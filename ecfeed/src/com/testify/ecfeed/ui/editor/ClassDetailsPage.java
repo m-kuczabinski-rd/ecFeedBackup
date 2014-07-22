@@ -31,6 +31,7 @@ import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.dialogs.TestClassSelectionDialog;
 import com.testify.ecfeed.utils.ModelUtils;
+import com.testify.ecfeed.implementor.ModelImplementor;
 
 public class ClassDetailsPage extends BasicDetailsPage {
 
@@ -38,6 +39,7 @@ public class ClassDetailsPage extends BasicDetailsPage {
 	private MethodsViewer fMethodsSection;
 	private OtherMethodsViewer fOtherMethodsSection;
 	private Text fClassNameText;
+	private Button fImplementButton;
 	
 	private class ReassignClassSelectionAdapter extends SelectionAdapter{
 		@Override
@@ -92,7 +94,7 @@ public class ClassDetailsPage extends BasicDetailsPage {
 	
 	private void createQualifiedNameComposite(Composite parent) {
 		Composite composite = getToolkit().createComposite(parent);
-		composite.setLayout(new GridLayout(4, false));
+		composite.setLayout(new GridLayout(5, false));
 		composite.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
 		getToolkit().createLabel(composite, "Class path");
 		fClassNameText = getToolkit().createText(composite, null, SWT.NONE);
@@ -114,6 +116,15 @@ public class ClassDetailsPage extends BasicDetailsPage {
 
 		Button button = getToolkit().createButton(composite, "Reassign", SWT.NONE);
 		button.addSelectionListener(new ReassignClassSelectionAdapter());
+
+		fImplementButton = getToolkit().createButton(composite, "Implement", SWT.NONE);
+		fImplementButton.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e){
+				ModelImplementor implementor = new ModelImplementor();
+				implementor.implement(fSelectedClass);
+			}
+		});
 
 		getToolkit().paintBordersFor(composite);
 	}
@@ -157,6 +168,7 @@ public class ClassDetailsPage extends BasicDetailsPage {
 			fMethodsSection.setInput(fSelectedClass);
 			fOtherMethodsSection.setInput(fSelectedClass);
 			getMainSection().layout();
+			fImplementButton.setEnabled(!ModelUtils.isClassImplemented(fSelectedClass) || ModelUtils.isClassPartiallyImplemented(fSelectedClass));
 		}
 	}
 
