@@ -58,6 +58,7 @@ public class ModelEditor extends FormEditor implements IModelWrapper{
 		public void resourceChanged(IResourceChangeEvent event) {
 			switch (event.getType()) {
 				case IResourceChangeEvent.POST_CHANGE:
+				case IResourceChangeEvent.POST_BUILD:
 					try {
 						event.getDelta().accept(new ResourceDeltaVisitor());
 					} catch (CoreException e) {
