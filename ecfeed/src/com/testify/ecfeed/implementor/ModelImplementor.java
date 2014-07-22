@@ -90,7 +90,11 @@ public class ModelImplementor implements IModelImplementor {
 	}
 
 	public void implement(CategoryNode node) {
-		implementCategoryNode(node);
+		if (node.isExpected()) {
+			implement(node.getDefaultValuePartition());
+		} else {
+			implementCategoryNode(node);
+		}
 	}
 
 	public void implement(PartitionNode node) {
