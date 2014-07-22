@@ -111,7 +111,7 @@ public class ModelImplementor implements IModelImplementor {
 		}
 	}
 
-	public void implementMethodNode(CompilationUnit unit, TypeDeclaration type, MethodNode node) {
+	private void implementMethodNode(CompilationUnit unit, TypeDeclaration type, MethodNode node) {
 		if (!ModelUtils.methodDefinitionImplemented(node)) {
 			implementMethodDefinition(unit, type, node.getName(), node.getCategoriesNames(), node.getCategoriesTypes());
 		}
@@ -122,7 +122,7 @@ public class ModelImplementor implements IModelImplementor {
 		}
 	}
 
-	public void implementCategoryNode(CategoryNode node) {
+	private void implementCategoryNode(CategoryNode node) {
 		if (!ModelUtils.isCategoryImplemented(node) && !ModelUtils.getJavaTypes().contains(node.getShortType())) {
 			CompilationUnit categoryUnit = getCompilationUnitInstance(node.getType(), false);
 			EnumDeclaration categoryType = null;
@@ -142,7 +142,7 @@ public class ModelImplementor implements IModelImplementor {
 		}
 	}
 
-	public void implementPartitionNode(CompilationUnit unit, EnumDeclaration categoryType, PartitionNode node) {
+	private void implementPartitionNode(CompilationUnit unit, EnumDeclaration categoryType, PartitionNode node) {
 		if (node.isAbstract()) {
 			for (PartitionNode child : node.getPartitions()) {
 				if (!ModelUtils.isPartitionImplemented(child)) {
@@ -226,7 +226,7 @@ public class ModelImplementor implements IModelImplementor {
 		return unit;
 	}
 
-	public CompilationUnit getCompilationUnitInstance(String classQualifiedName, boolean testClass) {
+	private CompilationUnit getCompilationUnitInstance(String classQualifiedName, boolean testClass) {
 		CompilationUnit unit = getCompilationUnit(classQualifiedName, testClass);
 		if (unit == null) {
 			unit = createCompilationUnit("example_enum_debug", classQualifiedName, testClass);
@@ -319,7 +319,7 @@ public class ModelImplementor implements IModelImplementor {
 		return type;
 	}
 
-	public AbstractTypeDeclaration getTypeInstance(CompilationUnit unit, String modelName, String classQualifiedName, boolean implemented, boolean classType) {
+	private AbstractTypeDeclaration getTypeInstance(CompilationUnit unit, String modelName, String classQualifiedName, boolean implemented, boolean classType) {
 		AbstractTypeDeclaration type = null;
 		if (!implemented) {
 			type = implementClassDefinition(unit, modelName, classQualifiedName, classType);
