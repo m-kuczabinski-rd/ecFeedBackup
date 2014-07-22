@@ -13,6 +13,9 @@ package com.testify.ecfeed.ui.editor;
 
 import java.util.List;
 
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
@@ -130,6 +133,10 @@ public class MethodDetailsPage extends BasicDetailsPage {
 			public void widgetSelected(SelectionEvent e){
 				ModelImplementor implementor = new ModelImplementor();
 				implementor.implement(fSelectedMethod);
+				try {
+					ResourcesPlugin.getWorkspace().getRoot().refreshLocal(IResource.DEPTH_INFINITE, null);
+				} catch (CoreException f) {
+				}
 			}
 		});
 
