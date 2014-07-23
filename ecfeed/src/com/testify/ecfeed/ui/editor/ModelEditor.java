@@ -51,7 +51,6 @@ public class ModelEditor extends FormEditor implements IModelWrapper{
 
 	private RootNode fModel;
 	private ModelPage fModelPage;
-	private boolean fResourceChange = false;
 
 	private class ResourceChangeReporter implements IResourceChangeListener {
 		@Override
@@ -78,7 +77,12 @@ public class ModelEditor extends FormEditor implements IModelWrapper{
 				case IResourceDelta.ADDED:
 				case IResourceDelta.REMOVED:
 				case IResourceDelta.CHANGED:
-					fResourceChange = true;
+					Display.getDefault().asyncExec(new Runnable() {
+						public void run() {
+							fModelPage.getMasterBlock().getMasterSection().refresh();
+							fModelPage.getMasterBlock().getCurrentPage().refresh();
+						}
+					});
 					break;
 				default:
 					break;
@@ -193,15 +197,5 @@ public class ModelEditor extends FormEditor implements IModelWrapper{
 	public void commitPages(boolean onSave){
 		super.commitPages(onSave);
 		fModelPage.commitMasterPart(onSave);
-	}
-
-	@Override
-	public void setFocus() {
-		if (fResourceChange) {
-			fModelPage.getMasterBlock().getMasterSection().refresh();
-			fModelPage.getMasterBlock().getCurrentPage().refresh();
-			fResourceChange = false;
-		}
-		super.setFocus();
 	}
 }
