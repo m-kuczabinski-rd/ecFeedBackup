@@ -19,6 +19,7 @@ import org.eclipse.core.filebuffers.ITextFileBufferManager;
 import org.eclipse.core.filebuffers.LocationKind;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IPackageFragmentRoot;
@@ -232,8 +233,19 @@ public class ModelImplementor implements IModelImplementor {
 
 	private CompilationUnit getCompilationUnitInstance(String classQualifiedName, boolean testClass) {
 		CompilationUnit unit = getCompilationUnit(classQualifiedName, testClass);
+		String projectName = null;
 		if (unit == null) {
-			unit = createCompilationUnit("example_enum_debug", classQualifiedName, testClass);
+			try {
+				IProject[] projects = ResourcesPlugin.getWorkspace().getRoot().getProjects();
+				for (IProject project : projects) {
+					if (project.isOpen() && project.hasNature(JavaCore.NATURE_ID)) {
+						projectName = project.getName();
+						break;
+					}
+				}
+			} catch (CoreException e) {
+			}
+			unit = createCompilationUnit(projectName, classQualifiedName, testClass);
 		}
 		return unit;
 	}
