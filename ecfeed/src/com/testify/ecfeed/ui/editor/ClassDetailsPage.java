@@ -14,6 +14,7 @@ package com.testify.ecfeed.ui.editor;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -32,6 +33,7 @@ import org.eclipse.swt.widgets.Text;
 
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.ui.common.Messages;
+import com.testify.ecfeed.ui.dialogs.ProjectSelectionDialog;
 import com.testify.ecfeed.ui.dialogs.TestClassSelectionDialog;
 import com.testify.ecfeed.utils.ModelUtils;
 import com.testify.ecfeed.implementor.ModelImplementor;
@@ -123,9 +125,18 @@ public class ClassDetailsPage extends BasicDetailsPage {
 		fImplementButton = getToolkit().createButton(composite, "Implement", SWT.NONE);
 		fImplementButton.addSelectionListener(new SelectionAdapter() {
 			@Override
-			public void widgetSelected(SelectionEvent e){
+			public void widgetSelected(SelectionEvent e) {
 				ModelImplementor implementor = new ModelImplementor();
-				implementor.implement(fSelectedClass);
+				if (!implementor.compilationUnitExists(fSelectedClass.getQualifiedName())) {
+					ProjectSelectionDialog dialog = new ProjectSelectionDialog(Display.getCurrent().getActiveShell());
+					if (dialog.open() == IDialogConstants.OK_ID) {
+						IJavaProject selectedProject = (IJavaProject)dialog.getFirstResult();
+						implementor.setProjectName(selectedProject.getProject().getName());
+						implementor.implement(fSelectedClass);
+					}
+				} else {
+					implementor.implement(fSelectedClass);
+				}
 				try {
 					ResourcesPlugin.getWorkspace().getRoot().refreshLocal(IResource.DEPTH_INFINITE, null);
 				} catch (CoreException f) {

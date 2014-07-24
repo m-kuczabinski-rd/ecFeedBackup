@@ -18,6 +18,8 @@ import java.util.HashSet;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.jdt.core.IJavaProject;
+import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StackLayout;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -27,6 +29,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
@@ -36,6 +39,7 @@ import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.ui.common.CategoryNodeAbstractLayer;
 import com.testify.ecfeed.ui.common.PartitionNodeAbstractLayer;
+import com.testify.ecfeed.ui.dialogs.ProjectSelectionDialog;
 import com.testify.ecfeed.utils.ModelUtils;
 
 public class CategoryDetailsPage extends BasicDetailsPage {
@@ -192,7 +196,16 @@ public class CategoryDetailsPage extends BasicDetailsPage {
 			@Override
 			public void widgetSelected(SelectionEvent e){
 				ModelImplementor implementor = new ModelImplementor();
-				implementor.implement(fSelectedCategory);
+				if (!implementor.compilationUnitExists(fSelectedCategory.getType())) {
+					ProjectSelectionDialog dialog = new ProjectSelectionDialog(Display.getCurrent().getActiveShell());
+					if (dialog.open() == IDialogConstants.OK_ID) {
+						IJavaProject selectedProject = (IJavaProject)dialog.getFirstResult();
+						implementor.setProjectName(selectedProject.getProject().getName());
+						implementor.implement(fSelectedCategory);
+					}
+				} else {
+					implementor.implement(fSelectedCategory);
+				}
 				try {
 					ResourcesPlugin.getWorkspace().getRoot().refreshLocal(IResource.DEPTH_INFINITE, null);
 				} catch (CoreException f) {
