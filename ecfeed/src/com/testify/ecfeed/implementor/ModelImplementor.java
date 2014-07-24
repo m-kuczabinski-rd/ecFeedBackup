@@ -20,7 +20,6 @@ import org.eclipse.core.filebuffers.ITextFileBufferManager;
 import org.eclipse.core.filebuffers.LocationKind;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IPackageFragmentRoot;
@@ -59,6 +58,7 @@ import com.testify.ecfeed.model.Constants;
 import com.testify.ecfeed.utils.ModelUtils;
 
 public class ModelImplementor implements IModelImplementor {
+	private String testProjectName = null;
 
 	public void implement(ClassNode node) {
 		AbstractMap.SimpleEntry<IPath,CompilationUnit> unitPair = getCompilationUnitInstance(node.getQualifiedName());
@@ -116,6 +116,30 @@ public class ModelImplementor implements IModelImplementor {
 				writeCompilationUnit(categoryUnit, unitPair.getKey());
 			}
 		}
+	}
+
+	public boolean compilationUnitExists(String classQualifiedName) {
+		boolean exists = false;
+		try {
+			IProject[] projects = ResourcesPlugin.getWorkspace().getRoot().getProjects();
+			for (IProject project : projects) {
+				if (project.isOpen() && project.hasNature(JavaCore.NATURE_ID)) {
+					IJavaProject javaProject = JavaCore.create(project);
+					IType iType = javaProject.findType(classQualifiedName);
+					if (iType != null) {
+						exists = true;
+						break;
+					}
+				}
+			}
+		} catch (Throwable e) {
+			e.printStackTrace();
+		}
+		return exists;
+	}
+
+	public void setProjectName(String projectName) {
+		testProjectName = projectName;
 	}
 
 	private void implementMethodNode(CompilationUnit unit, TypeDeclaration type, MethodNode node) {
@@ -177,8 +201,10 @@ public class ModelImplementor implements IModelImplementor {
 						parser.setSource(iType.getCompilationUnit());
 						unit = (CompilationUnit) parser.createAST(null);
 						ITextFileBufferManager bufferManager = FileBuffers.getTextFileBufferManager();
-						IPath path = unit.getJavaElement().getPath();
+						IPath path = ResourcesPlugin.getWorkspace().getRoot().getLocation();
+						path = path.append(unit.getJavaElement().getPath());
 						bufferManager.connect(path, LocationKind.LOCATION, null);
+						setProjectName(project.getName());
 						unit.recordModifications();
 						unitPath = path;
 						break;
@@ -230,19 +256,8 @@ public class ModelImplementor implements IModelImplementor {
 
 	private AbstractMap.SimpleEntry<IPath,CompilationUnit> getCompilationUnitInstance(String classQualifiedName) {
 		AbstractMap.SimpleEntry<IPath,CompilationUnit> unitPair = getCompilationUnit(classQualifiedName);
-		String projectName = null;
 		if ((unitPair.getKey() == null) || (unitPair.getValue() == null)) {
-			try {
-				IProject[] projects = ResourcesPlugin.getWorkspace().getRoot().getProjects();
-				for (IProject project : projects) {
-					if (project.isOpen() && project.hasNature(JavaCore.NATURE_ID)) {
-						projectName = project.getName();
-						break;
-					}
-				}
-			} catch (CoreException e) {
-			}
-			unitPair = createCompilationUnit(projectName, classQualifiedName);
+			unitPair = createCompilationUnit(testProjectName, classQualifiedName);
 		}
 		return unitPair;
 	}
