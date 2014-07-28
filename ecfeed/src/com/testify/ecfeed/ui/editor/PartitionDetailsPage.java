@@ -42,7 +42,6 @@ import com.testify.ecfeed.utils.ModelUtils;
 
 public class PartitionDetailsPage extends BasicDetailsPage {
 	
-//	private PartitionNode fSelectedPartition;
 	private PartitionChildrenViewer fPartitionChildren;
 	private PartitionLabelsViewer fLabelsViewer;
 	private Text fPartitionNameText;
@@ -174,11 +173,6 @@ public class PartitionDetailsPage extends BasicDetailsPage {
 	@Override
 	public void selectionChanged(IFormPart part, ISelection selection){
 		super.selectionChanged(part, selection);
-		
-//		if(getSelectedElement() != null && getSelectedElement() instanceof PartitionNode) {
-//			fSelectedPartition = (PartitionNode)getSelectedElement();
-//		}
-//		
 		fPartitionAL.setTarget(getSelectedPartition());
 	}
 	
@@ -186,10 +180,6 @@ public class PartitionDetailsPage extends BasicDetailsPage {
 		if(getSelectedElement() != null && getSelectedElement() instanceof PartitionNode) {
 			return (PartitionNode)getSelectedElement();
 		}
-
-//		if(getSelectedElement() == fSelectedPartition){
-//			return fSelectedPartition;
-//		}
 		return null;
 	}
 	
