@@ -9,8 +9,11 @@
  *     Patryk Chamuczynski (p.chamuczynski(at)radytek.com) - initial implementation
  ******************************************************************************/
 
-package com.testify.ecfeed.gal;
+package com.testify.ecfeed.gal.javax.partition;
 
+import com.testify.ecfeed.gal.GalException;
+import com.testify.ecfeed.gal.ModelOperationManager;
+import com.testify.ecfeed.gal.NodeAbstractionLayer;
 import com.testify.ecfeed.model.PartitionNode;
 
 public class PartitionAbstractionLayer extends NodeAbstractionLayer{
