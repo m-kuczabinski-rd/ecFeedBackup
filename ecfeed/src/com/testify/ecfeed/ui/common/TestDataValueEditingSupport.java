@@ -117,7 +117,7 @@ public class TestDataValueEditingSupport extends EditingSupport {
 				if (!ModelUtils.validatePartitionStringValue(valueString, category.getType())) {
 					MessageDialog.openError(Display.getCurrent().getActiveShell(),
 							Messages.DIALOG_PARTITION_VALUE_PROBLEM_TITLE,
-							Messages.DIALOG_PARTITION_VALUE_PROBLEM_MESSAGE);
+							Messages.DIALOG_PARTITION_VALUE_PROBLEM_MESSAGE(valueString));
 				} else {
 					((PartitionNode)element).setValueString(valueString);
 					fSetValueListener.testDataChanged();

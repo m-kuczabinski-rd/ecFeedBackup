@@ -31,4 +31,16 @@ public class PartitionAbstractionLayer extends NodeAbstractionLayer{
 	public void setName(String newName) throws GalException{
 		execute(new PartitionOperationRename(fTarget, newName));
 	}
+
+	public void setValue(String newValue) throws GalException{
+		execute(new PartitionOperationSetValue(fTarget, newValue));
+	}
+	
+	public String getName(){
+		return fTarget.getName();
+	}
+
+	public String getValue(){
+		return fTarget.getValueString();
+	}
 }

@@ -3,7 +3,6 @@ package com.testify.ecfeed.gal.java.partition;
 import com.testify.ecfeed.gal.Constants;
 import com.testify.ecfeed.gal.GalException;
 import com.testify.ecfeed.gal.IModelOperation;
-import com.testify.ecfeed.gal.Messages;
 import com.testify.ecfeed.model.PartitionNode;
 
 public class PartitionOperationRename implements IModelOperation {

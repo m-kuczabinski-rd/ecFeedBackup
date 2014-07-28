@@ -52,7 +52,7 @@ public class PartitionNodeAbstractLayer{
 			} else{
 				MessageDialog.openError(Display.getCurrent().getActiveShell(),
 						Messages.DIALOG_PARTITION_VALUE_PROBLEM_TITLE,
-						Messages.DIALOG_PARTITION_VALUE_PROBLEM_MESSAGE);
+						Messages.DIALOG_PARTITION_VALUE_PROBLEM_MESSAGE(value));
 			}
 		}
 		return false;

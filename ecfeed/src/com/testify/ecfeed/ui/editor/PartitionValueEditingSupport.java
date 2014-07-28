@@ -22,7 +22,9 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.widgets.Display;
 
-import com.testify.ecfeed.model.CategoryNode;
+import com.testify.ecfeed.gal.GalException;
+import com.testify.ecfeed.gal.ModelOperationManager;
+import com.testify.ecfeed.gal.java.partition.PartitionAbstractionLayer;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.utils.ModelUtils;
@@ -30,21 +32,23 @@ import com.testify.ecfeed.utils.ModelUtils;
 public class PartitionValueEditingSupport extends EditingSupport {
 	private ComboBoxCellEditor fCellEditor;
 	private BasicSection fSection;
+	private ModelOperationManager fModelOperationManager;
 	
-	public PartitionValueEditingSupport(CategoryChildrenViewer viewer) {
+	public PartitionValueEditingSupport(CheckboxTableViewerSection viewer, ModelOperationManager operationManager) {
 		super(viewer.getTableViewer());
 		String[] items = {""};
 		fCellEditor = new ComboBoxCellEditor(viewer.getTable(), items);
+		fModelOperationManager = operationManager;
 		fSection = viewer;
 	}
-
-	public PartitionValueEditingSupport(PartitionChildrenViewer viewer) {
-		super(viewer.getTableViewer());
-		String[] items = {""};
-		fCellEditor = new ComboBoxCellEditor(viewer.getTable(), items);
-		fSection = viewer;
-	}
-	
+//
+//	public PartitionValueEditingSupport(PartitionChildrenViewer viewer) {
+//		super(viewer.getTableViewer());
+//		String[] items = {""};
+//		fCellEditor = new ComboBoxCellEditor(viewer.getTable(), items);
+//		fSection = viewer;
+//	}
+//	
 	@Override
 	protected CellEditor getCellEditor(Object element) {
 		PartitionNode node = (PartitionNode)element;
@@ -85,35 +89,63 @@ public class PartitionValueEditingSupport extends EditingSupport {
 
 	@Override
 	protected void setValue(Object element, Object value) {
-		String valueString = null;
+		String newValue = null;
 		int index = (int)value;
 
 		if (index >= 0) {
-			valueString = fCellEditor.getItems()[index];
+			newValue = fCellEditor.getItems()[index];
 		} else {
-			valueString = ((CCombo)fCellEditor.getControl()).getText();
+			newValue = ((CCombo)fCellEditor.getControl()).getText();
+		}
+		PartitionNode partition = (PartitionNode)element;
+		
+		PartitionAbstractionLayer al = new PartitionAbstractionLayer(fModelOperationManager);
+		al.setTarget(partition);
+
+		if(newValue.equals(al.getValue())){
+			return;
 		}
 
-		if(!ModelUtils.validatePartitionStringValue(valueString, getCategory().getType())) {
+		try {
+			al.setValue(newValue);
+			fSection.modelUpdated();
+		} catch (GalException e) {
 			MessageDialog.openError(Display.getCurrent().getActiveShell(), 
 					Messages.DIALOG_PARTITION_VALUE_PROBLEM_TITLE, 
-					Messages.DIALOG_PARTITION_VALUE_PROBLEM_MESSAGE);
-		} else {
-			PartitionNode partition = (PartitionNode)element;
-			if (valueString.equals(partition.getValueString()) == false) {
-				((PartitionNode)element).setValueString(valueString);
-				fSection.modelUpdated();
-			}
+					e.getMessage());
 		}
-	}
 
-	private CategoryNode getCategory(){
-		if(fSection instanceof CategoryChildrenViewer){
-			return ((CategoryChildrenViewer)fSection).getSelectedCategory();
-		}
-		else if(fSection instanceof PartitionChildrenViewer){
-			return ((PartitionChildrenViewer)fSection).getSelectedPartition().getCategory();
-		}
-		return null;
+		
+		
+//		String valueString = null;
+//		int index = (int)value;
+//
+//		if (index >= 0) {
+//			valueString = fCellEditor.getItems()[index];
+//		} else {
+//			valueString = ((CCombo)fCellEditor.getControl()).getText();
+//		}
+//
+//		if(!ModelUtils.validatePartitionStringValue(valueString, getCategory().getType())) {
+//			MessageDialog.openError(Display.getCurrent().getActiveShell(), 
+//					Messages.DIALOG_PARTITION_VALUE_PROBLEM_TITLE, 
+//					Messages.DIALOG_PARTITION_VALUE_PROBLEM_MESSAGE(valueString));
+//		} else {
+//			PartitionNode partition = (PartitionNode)element;
+//			if (valueString.equals(partition.getValueString()) == false) {
+//				((PartitionNode)element).setValueString(valueString);
+//				fSection.modelUpdated();
+//			}
+//		}
 	}
+//
+//	private CategoryNode getCategory(){
+//		if(fSection instanceof CategoryChildrenViewer){
+//			return ((CategoryChildrenViewer)fSection).getSelectedCategory();
+//		}
+//		else if(fSection instanceof PartitionChildrenViewer){
+//			return ((PartitionChildrenViewer)fSection).getSelectedPartition().getCategory();
+//		}
+//		return null;
+//	}
 }

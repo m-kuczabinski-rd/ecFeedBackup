@@ -14,6 +14,7 @@ package com.testify.ecfeed.gal;
 public class Constants {
 
 	public static final int MAX_NODE_NAME_LENGTH = 64;
+	public static final int MAX_PARTITION_VALUE_STRING_LENGTH = 512;
 	
 	public static final String TYPE_NAME_BOOLEAN = "boolean";
 	public static final String TYPE_NAME_BYTE = "byte";
@@ -25,6 +26,18 @@ public class Constants {
 	public static final String TYPE_NAME_SHORT = "short";
 	public static final String TYPE_NAME_STRING = "String";
 	public static final String TYPE_NAME_UNSUPPORTED = "unsupported";
+	
+	public static final String[] SUPPORTED_PRIMITIVE_TYPES = new String[]{
+		TYPE_NAME_BOOLEAN,
+		TYPE_NAME_BYTE, 
+		TYPE_NAME_CHAR,
+		TYPE_NAME_DOUBLE, 
+		TYPE_NAME_FLOAT,
+		TYPE_NAME_INT,
+		TYPE_NAME_LONG, 
+		TYPE_NAME_SHORT,
+		TYPE_NAME_STRING
+	};
 
 	public static final String RELATION_EQUAL = "=";
 	public static final String RELATION_NOT = "\u2260";

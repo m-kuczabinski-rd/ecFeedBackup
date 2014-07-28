@@ -36,6 +36,8 @@ public class CategoryChildrenViewer extends CheckboxTableViewerSection {
 
 	private TableViewerColumn fNameColumn;
 
+	private TableViewerColumn fValueColumn;
+
 	private class AddPartitionAdapter extends SelectionAdapter{
 		
 		@Override
@@ -80,10 +82,7 @@ public class CategoryChildrenViewer extends CheckboxTableViewerSection {
 	@Override
 	protected void createTableColumns() {
 		fNameColumn = addColumn("Name", 150, new PartitionNameLabelProvider());
-
-		TableViewerColumn valueColumn = addColumn("Value", 150, new PartitionValueLabelProvider());
-		valueColumn.setEditingSupport(new PartitionValueEditingSupport(this));
-
+		fValueColumn = addColumn("Value", 150, new PartitionValueLabelProvider());
 	}
 	
 	public CategoryChildrenViewer(BasicDetailsPage parent, FormToolkit toolkit, ModelOperationManager operationManager) {
@@ -91,7 +90,8 @@ public class CategoryChildrenViewer extends CheckboxTableViewerSection {
 		
 		fOperationManager = operationManager;
 		fNameColumn.setEditingSupport(new PartitionNameEditingSupport(this, fOperationManager));
-		
+		fValueColumn.setEditingSupport(new PartitionValueEditingSupport(this, fOperationManager));
+
 		getSection().setText("Partitions");
 		addButton("Add partition", new AddPartitionAdapter());
 		addButton("Remove selected", new RemovePartitionsAdapter());

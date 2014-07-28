@@ -100,7 +100,7 @@ public class DefaultValueEditingSupport extends EditingSupport {
 		if(!valueString.equals(category.getDefaultValueString())){
 			if(!ModelUtils.validatePartitionStringValue(valueString, category.getType())){
 				MessageDialog.openError(Display.getCurrent().getActiveShell(), Messages.DIALOG_PARTITION_VALUE_PROBLEM_TITLE,
-						Messages.DIALOG_PARTITION_VALUE_PROBLEM_MESSAGE);
+						Messages.DIALOG_PARTITION_VALUE_PROBLEM_MESSAGE(valueString));
 			} else{
 				category.setDefaultValueString(valueString);
 				fSetValueListener.testDataChanged();

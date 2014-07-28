@@ -37,9 +37,13 @@ public class Messages {
 	public static final String DIALOG_PARTITION_NAME_PROBLEM_MESSAGE = "Partition name must have between 1 and 64 characters, " +
 			"must not contain only white characters and must be unique within category.";
 	public static final String DIALOG_PARTITION_VALUE_PROBLEM_TITLE = "Wrong partition value";
-	public static final String DIALOG_PARTITION_VALUE_PROBLEM_MESSAGE = "Partition value must fit to type and range of the variable " +
-			"represented by the partition, contain between 1 and 64 characters.\n" +
-			"Partitions of user defined type must follow Java enum defining rules.";
+	public static final String DIALOG_PARTITION_VALUE_PROBLEM_MESSAGE(String value){
+		return "Value " + value + " is not valid for given category.\n" + 
+				"Partition value must fit to type and range of the variable " +
+				"represented by the partition, contain between 1 and 64 characters.\n" +
+				"Partitions of user defined type must follow Java enum defining rules.";
+
+	}
 	public static final String DIALOG_REMOVE_PARTITIONS_TITLE = "Remove partitions";
 	public static final String DIALOG_REMOVE_PARTITIONS_MESSAGE = "Removing partitions will remove also all test cases " +
 			"referencing those partitions. Are you sure that you want to proceed?";

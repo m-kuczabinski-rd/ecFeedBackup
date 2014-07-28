@@ -37,7 +37,6 @@ import com.testify.ecfeed.gal.ModelOperationManager;
 import com.testify.ecfeed.gal.java.partition.PartitionAbstractionLayer;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.ui.common.Messages;
-import com.testify.ecfeed.ui.common.PartitionNodeAbstractLayer;
 import com.testify.ecfeed.utils.ModelUtils;
 
 public class PartitionDetailsPage extends BasicDetailsPage {
@@ -71,48 +70,51 @@ public class PartitionDetailsPage extends BasicDetailsPage {
 	private class ApplyChangesSelectionAdapter extends SelectionAdapter{
 		@Override
 		public void widgetSelected(SelectionEvent e){
-			boolean update = false;
-			if(PartitionNodeAbstractLayer.changePartitionName(getSelectedPartition(), fPartitionNameText.getText())){
-				update = true;
+			if(fPartitionAL.getName().equals(fPartitionNameText.getText()) == false){
+				try{
+					fPartitionAL.setName(fPartitionNameText.getText());
+				}catch(GalException e1){
+					MessageDialog.openError(Display.getCurrent().getActiveShell(),
+					Messages.DIALOG_PARTITION_NAME_PROBLEM_TITLE,
+					e1.getMessage());
+				}
+				fPartitionNameText.setText(getSelectedPartition().getName());
 			}
-			if(PartitionNodeAbstractLayer.changePartitionValue(getSelectedPartition(), fPartitionValueCombo.getText())){
-				update = true;
+			
+			if(fPartitionAL.getValue().equals(fPartitionValueCombo.getText()) == false){
+				try{
+					fPartitionAL.setValue(fPartitionValueCombo.getText());
+				}catch(GalException e1){
+					MessageDialog.openError(Display.getCurrent().getActiveShell(),
+					Messages.DIALOG_PARTITION_VALUE_PROBLEM_TITLE,
+					e1.getMessage());
+				}
+				fPartitionNameText.setText(getSelectedPartition().getName());
 			}
-			if(update){
-				modelUpdated(null);
-			}
-			fPartitionNameText.setText(getSelectedPartition().getName());
-			fPartitionValueCombo.setText(getSelectedPartition().getValueString());
 		}
 	}
 	
-	private class booleanValueComboSelectionAdapter extends SelectionAdapter {
+	private class BooleanValueComboSelectionAdapter extends SelectionAdapter {
 		@Override
 		public void widgetSelected(SelectionEvent e){
-			if(PartitionNodeAbstractLayer.changePartitionValue(getSelectedPartition(), fBooleanValueCombo.getText())){
-				modelUpdated(null);
-			}
+			setPartitionValue(fBooleanValueCombo.getText());
 			fBooleanValueCombo.setText(getSelectedPartition().getValueString());
 		}
 	}
 	
-	private class valueComboSelectionAdapter extends SelectionAdapter {
+	private class ValueComboSelectionAdapter extends SelectionAdapter {
 		@Override
 		public void widgetSelected(SelectionEvent e){
-			if(PartitionNodeAbstractLayer.changePartitionValue(getSelectedPartition(), fPartitionValueCombo.getText())){
-				modelUpdated(null);
-			}
+			setPartitionValue(fPartitionValueCombo.getText());
 			fPartitionValueCombo.setText(getSelectedPartition().getValueString());
 		}
 	}
 	
-	private class valueTextListener implements Listener{
+	private class ValueTextListener implements Listener{
 		@Override
 		public void handleEvent(Event event){
 			if(event.keyCode == SWT.CR || event.keyCode == SWT.KEYPAD_CR){
-				if(PartitionNodeAbstractLayer.changePartitionValue(getSelectedPartition(), fPartitionValueCombo.getText())){
-					modelUpdated(null);
-				}
+				setPartitionValue(fPartitionValueCombo.getText());
 				fPartitionValueCombo.setText(getSelectedPartition().getValueString());
 			}
 		}
@@ -218,12 +220,12 @@ public class PartitionDetailsPage extends BasicDetailsPage {
 		valueComposite.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
 		fPartitionValueCombo = new Combo(valueComposite,SWT.DROP_DOWN);
 		fPartitionValueCombo.setLayoutData(new GridData(SWT.FILL,  SWT.CENTER, true, false));
-		fPartitionValueCombo.addListener(SWT.KeyDown, new valueTextListener());
-		fPartitionValueCombo.addSelectionListener(new valueComboSelectionAdapter());
+		fPartitionValueCombo.addListener(SWT.KeyDown, new ValueTextListener());
+		fPartitionValueCombo.addSelectionListener(new ValueComboSelectionAdapter());
 		// boolean value combo
 		fBooleanValueCombo = new Combo(valueComposite,SWT.READ_ONLY);
 		fBooleanValueCombo.setLayoutData(new GridData(SWT.FILL,  SWT.CENTER, true, false));
-		fBooleanValueCombo.addSelectionListener(new booleanValueComboSelectionAdapter());	
+		fBooleanValueCombo.addSelectionListener(new BooleanValueComboSelectionAdapter());	
 		
 		getToolkit().paintBordersFor(parent);	
 	}
@@ -244,5 +246,17 @@ public class PartitionDetailsPage extends BasicDetailsPage {
 		newItems.add(node.getValueString());
 		valueText.setItems(newItems.toArray(items));
 	}
+	
+	private void setPartitionValue(String newValue) {
+		try {
+			fPartitionAL.setValue(newValue);
+			modelUpdated(null);
+		} catch (GalException e1) {
+			MessageDialog.openError(Display.getCurrent().getActiveShell(),
+					Messages.DIALOG_PARTITION_VALUE_PROBLEM_TITLE,
+					e1.getMessage());
+		}
+	}
+
 	
 }
