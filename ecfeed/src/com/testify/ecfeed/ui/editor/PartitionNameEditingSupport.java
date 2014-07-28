@@ -19,7 +19,7 @@ import org.eclipse.swt.widgets.Display;
 
 import com.testify.ecfeed.gal.GalException;
 import com.testify.ecfeed.gal.ModelOperationManager;
-import com.testify.ecfeed.gal.javax.partition.PartitionAbstractionLayer;
+import com.testify.ecfeed.gal.java.partition.PartitionAbstractionLayer;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.ui.common.Messages;
 

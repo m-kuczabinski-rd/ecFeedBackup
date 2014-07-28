@@ -1,4 +1,4 @@
-package com.testify.ecfeed.gal.javax.partition;
+package com.testify.ecfeed.gal.java.partition;
 
 import com.testify.ecfeed.gal.Constants;
 import com.testify.ecfeed.gal.GalException;

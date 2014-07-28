@@ -34,7 +34,7 @@ import org.eclipse.ui.forms.IFormPart;
 import com.testify.ecfeed.gal.Constants;
 import com.testify.ecfeed.gal.GalException;
 import com.testify.ecfeed.gal.ModelOperationManager;
-import com.testify.ecfeed.gal.javax.partition.PartitionAbstractionLayer;
+import com.testify.ecfeed.gal.java.partition.PartitionAbstractionLayer;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.common.PartitionNodeAbstractLayer;
