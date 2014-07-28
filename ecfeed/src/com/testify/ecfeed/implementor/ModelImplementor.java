@@ -20,6 +20,7 @@ import org.eclipse.core.filebuffers.ITextFileBufferManager;
 import org.eclipse.core.filebuffers.LocationKind;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IPackageFragmentRoot;
@@ -58,10 +59,9 @@ import com.testify.ecfeed.model.Constants;
 import com.testify.ecfeed.utils.ModelUtils;
 
 public class ModelImplementor implements IModelImplementor {
-	private String testProjectName = null;
 
 	public void implement(ClassNode node) {
-		AbstractMap.SimpleEntry<IPath,CompilationUnit> unitPair = getCompilationUnitInstance(node.getQualifiedName());
+		AbstractMap.SimpleEntry<IPath,CompilationUnit> unitPair = getCompilationUnitInstance(node.getRoot().getName(), node.getQualifiedName());
 		CompilationUnit testUnit = unitPair.getValue();
 		TypeDeclaration type = null;
 		if (testUnit != null) {
@@ -77,7 +77,7 @@ public class ModelImplementor implements IModelImplementor {
 	}
 
 	public void implement(MethodNode node) {
-		AbstractMap.SimpleEntry<IPath,CompilationUnit> unitPair = getCompilationUnitInstance(node.getClassNode().getQualifiedName());
+		AbstractMap.SimpleEntry<IPath,CompilationUnit> unitPair = getCompilationUnitInstance(node.getRoot().getName(), node.getClassNode().getQualifiedName());
 		CompilationUnit testUnit = unitPair.getValue();
 		TypeDeclaration type = null;
 		if (testUnit != null) {
@@ -101,7 +101,7 @@ public class ModelImplementor implements IModelImplementor {
 
 	public void implement(PartitionNode node) {
 		if (!ModelUtils.isCategoryImplemented(node.getCategory()) && !ModelUtils.getJavaTypes().contains(node.getCategory().getShortType())) {
-			AbstractMap.SimpleEntry<IPath,CompilationUnit> unitPair = getCompilationUnitInstance(node.getCategory().getType());
+			AbstractMap.SimpleEntry<IPath,CompilationUnit> unitPair = getCompilationUnitInstance(node.getRoot().getName(), node.getCategory().getType());
 			CompilationUnit categoryUnit = unitPair.getValue();
 			EnumDeclaration categoryType = null;
 			if (categoryUnit != null) {
@@ -118,30 +118,6 @@ public class ModelImplementor implements IModelImplementor {
 		}
 	}
 
-	public boolean compilationUnitExists(String classQualifiedName) {
-		boolean exists = false;
-		try {
-			IProject[] projects = ResourcesPlugin.getWorkspace().getRoot().getProjects();
-			for (IProject project : projects) {
-				if (project.isOpen() && project.hasNature(JavaCore.NATURE_ID)) {
-					IJavaProject javaProject = JavaCore.create(project);
-					IType iType = javaProject.findType(classQualifiedName);
-					if (iType != null) {
-						exists = true;
-						break;
-					}
-				}
-			}
-		} catch (Throwable e) {
-			e.printStackTrace();
-		}
-		return exists;
-	}
-
-	public void setProjectName(String projectName) {
-		testProjectName = projectName;
-	}
-
 	private void implementMethodNode(CompilationUnit unit, TypeDeclaration type, MethodNode node) {
 		if (!ModelUtils.methodDefinitionImplemented(node)) {
 			implementMethodDefinition(unit, type, node.getName(), node.getCategoriesNames(), node.getCategoriesTypes());
@@ -155,7 +131,7 @@ public class ModelImplementor implements IModelImplementor {
 
 	private void implementCategoryNode(CategoryNode node) {
 		if (!ModelUtils.isCategoryImplemented(node) && !ModelUtils.getJavaTypes().contains(node.getShortType())) {
-			AbstractMap.SimpleEntry<IPath,CompilationUnit> unitPair = getCompilationUnitInstance(node.getType());
+			AbstractMap.SimpleEntry<IPath,CompilationUnit> unitPair = getCompilationUnitInstance(node.getRoot().getName(), node.getType());
 			CompilationUnit categoryUnit = unitPair.getValue();
 			EnumDeclaration categoryType = null;
 			if (categoryUnit != null) {
@@ -204,7 +180,6 @@ public class ModelImplementor implements IModelImplementor {
 						IPath path = ResourcesPlugin.getWorkspace().getRoot().getLocation();
 						path = path.append(unit.getJavaElement().getPath());
 						bufferManager.connect(path, LocationKind.LOCATION, null);
-						setProjectName(project.getName());
 						unit.recordModifications();
 						unitPath = path;
 						break;
@@ -254,10 +229,10 @@ public class ModelImplementor implements IModelImplementor {
 		return new AbstractMap.SimpleEntry<IPath,CompilationUnit>(unitPath, unit);
 	}
 
-	private AbstractMap.SimpleEntry<IPath,CompilationUnit> getCompilationUnitInstance(String classQualifiedName) {
+	private AbstractMap.SimpleEntry<IPath,CompilationUnit> getCompilationUnitInstance(String modelName, String classQualifiedName) {
 		AbstractMap.SimpleEntry<IPath,CompilationUnit> unitPair = getCompilationUnit(classQualifiedName);
 		if ((unitPair.getKey() == null) || (unitPair.getValue() == null)) {
-			unitPair = createCompilationUnit(testProjectName, classQualifiedName);
+			unitPair = createCompilationUnit(getProjectName(modelName), classQualifiedName);
 		}
 		return unitPair;
 	}
@@ -274,6 +249,24 @@ public class ModelImplementor implements IModelImplementor {
 		} catch (Throwable e) {
 			e.printStackTrace();
 		}
+	}
+
+	private String getProjectName(String modelName) {
+		String projectName = null;
+		try {
+			IProject[] projects = ResourcesPlugin.getWorkspace().getRoot().getProjects();
+			for (IProject project : projects) {
+				if (project.isOpen() && project.hasNature(JavaCore.NATURE_ID)) {
+					if (project.exists(new Path(modelName + ".ect"))) {
+						projectName = project.getName();
+						break;
+					}
+				}
+			}
+		} catch (Throwable e) {
+			e.printStackTrace();
+		}
+		return projectName;
 	}
 
 	@SuppressWarnings("unchecked")

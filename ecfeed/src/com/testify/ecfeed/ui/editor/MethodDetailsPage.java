@@ -16,7 +16,6 @@ import java.util.List;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
@@ -36,7 +35,6 @@ import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.ui.common.Messages;
-import com.testify.ecfeed.ui.dialogs.ProjectSelectionDialog;
 import com.testify.ecfeed.ui.dialogs.TestMethodRenameDialog;
 import com.testify.ecfeed.utils.ModelUtils;
 
@@ -134,16 +132,7 @@ public class MethodDetailsPage extends BasicDetailsPage {
 			@Override
 			public void widgetSelected(SelectionEvent e){
 				ModelImplementor implementor = new ModelImplementor();
-				if (!implementor.compilationUnitExists(fSelectedMethod.getClassNode().getQualifiedName())) {
-					ProjectSelectionDialog dialog = new ProjectSelectionDialog(Display.getCurrent().getActiveShell());
-					if (dialog.open() == IDialogConstants.OK_ID) {
-						IJavaProject selectedProject = (IJavaProject)dialog.getFirstResult();
-						implementor.setProjectName(selectedProject.getProject().getName());
-						implementor.implement(fSelectedMethod);
-					}
-				} else {
-					implementor.implement(fSelectedMethod);
-				}
+				implementor.implement(fSelectedMethod);
 				try {
 					ResourcesPlugin.getWorkspace().getRoot().refreshLocal(IResource.DEPTH_INFINITE, null);
 				} catch (CoreException f) {
