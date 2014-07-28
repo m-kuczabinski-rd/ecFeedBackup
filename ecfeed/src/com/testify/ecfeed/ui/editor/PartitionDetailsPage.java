@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StackLayout;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -28,6 +29,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.forms.IFormPart;
 
 import com.testify.ecfeed.gal.Constants;
 import com.testify.ecfeed.gal.GalException;
@@ -40,7 +42,7 @@ import com.testify.ecfeed.utils.ModelUtils;
 
 public class PartitionDetailsPage extends BasicDetailsPage {
 	
-	private PartitionNode fSelectedPartition;
+//	private PartitionNode fSelectedPartition;
 	private PartitionChildrenViewer fPartitionChildren;
 	private PartitionLabelsViewer fLabelsViewer;
 	private Text fPartitionNameText;
@@ -61,13 +63,7 @@ public class PartitionDetailsPage extends BasicDetailsPage {
 							Messages.DIALOG_PARTITION_NAME_PROBLEM_TITLE,
 							e.getMessage());
 				}
-				fPartitionNameText.setText(fSelectedPartition.getName());
-				
-				
-//				if(PartitionNodeAbstractLayer.changePartitionName(fSelectedPartition, fPartitionNameText.getText())){
-//					modelUpdated(null);
-//				}
-//				fPartitionNameText.setText(fSelectedPartition.getName());
+				fPartitionNameText.setText(getSelectedPartition().getName());
 			}
 		}
 	}
@@ -76,37 +72,37 @@ public class PartitionDetailsPage extends BasicDetailsPage {
 		@Override
 		public void widgetSelected(SelectionEvent e){
 			boolean update = false;
-			if(PartitionNodeAbstractLayer.changePartitionName(fSelectedPartition, fPartitionNameText.getText())){
+			if(PartitionNodeAbstractLayer.changePartitionName(getSelectedPartition(), fPartitionNameText.getText())){
 				update = true;
 			}
-			if(PartitionNodeAbstractLayer.changePartitionValue(fSelectedPartition, fPartitionValueCombo.getText())){
+			if(PartitionNodeAbstractLayer.changePartitionValue(getSelectedPartition(), fPartitionValueCombo.getText())){
 				update = true;
 			}
 			if(update){
 				modelUpdated(null);
 			}
-			fPartitionNameText.setText(fSelectedPartition.getName());
-			fPartitionValueCombo.setText(fSelectedPartition.getValueString());
+			fPartitionNameText.setText(getSelectedPartition().getName());
+			fPartitionValueCombo.setText(getSelectedPartition().getValueString());
 		}
 	}
 	
 	private class booleanValueComboSelectionAdapter extends SelectionAdapter {
 		@Override
 		public void widgetSelected(SelectionEvent e){
-			if(PartitionNodeAbstractLayer.changePartitionValue(fSelectedPartition, fBooleanValueCombo.getText())){
+			if(PartitionNodeAbstractLayer.changePartitionValue(getSelectedPartition(), fBooleanValueCombo.getText())){
 				modelUpdated(null);
 			}
-			fBooleanValueCombo.setText(fSelectedPartition.getValueString());
+			fBooleanValueCombo.setText(getSelectedPartition().getValueString());
 		}
 	}
 	
 	private class valueComboSelectionAdapter extends SelectionAdapter {
 		@Override
 		public void widgetSelected(SelectionEvent e){
-			if(PartitionNodeAbstractLayer.changePartitionValue(fSelectedPartition, fPartitionValueCombo.getText())){
+			if(PartitionNodeAbstractLayer.changePartitionValue(getSelectedPartition(), fPartitionValueCombo.getText())){
 				modelUpdated(null);
 			}
-			fPartitionValueCombo.setText(fSelectedPartition.getValueString());
+			fPartitionValueCombo.setText(getSelectedPartition().getValueString());
 		}
 	}
 	
@@ -114,10 +110,10 @@ public class PartitionDetailsPage extends BasicDetailsPage {
 		@Override
 		public void handleEvent(Event event){
 			if(event.keyCode == SWT.CR || event.keyCode == SWT.KEYPAD_CR){
-				if(PartitionNodeAbstractLayer.changePartitionValue(fSelectedPartition, fPartitionValueCombo.getText())){
+				if(PartitionNodeAbstractLayer.changePartitionValue(getSelectedPartition(), fPartitionValueCombo.getText())){
 					modelUpdated(null);
 				}
-				fPartitionValueCombo.setText(fSelectedPartition.getValueString());
+				fPartitionValueCombo.setText(getSelectedPartition().getValueString());
 			}
 		}
 	}
@@ -140,42 +136,61 @@ public class PartitionDetailsPage extends BasicDetailsPage {
 	
 	@Override
 	public void refresh(){
-		if(getSelectedElement() != null && getSelectedElement() instanceof PartitionNode) {
-			fSelectedPartition = (PartitionNode)getSelectedElement();
-		} else {
-			return;
-		}
-		String title = fSelectedPartition.toString();
-		boolean implemented = ModelUtils.isPartitionImplemented(fSelectedPartition);
+		PartitionNode selectedPartition = getSelectedPartition();
+		
+		String title = getSelectedPartition().toString();
+		boolean implemented = ModelUtils.isPartitionImplemented(selectedPartition);
 		if(implemented){
 			title += " [implemented]";
 		}
 		getMainSection().setText(title);
-		fPartitionChildren.setInput(fSelectedPartition);
-		fLabelsViewer.setInput(fSelectedPartition);
-		fPartitionNameText.setText(fSelectedPartition.getName());
-		if(fSelectedPartition.isAbstract()){
+		fPartitionChildren.setInput(selectedPartition);
+		fLabelsViewer.setInput(selectedPartition);
+		fPartitionNameText.setText(selectedPartition.getName());
+		if(selectedPartition.isAbstract()){
 			fPartitionValueCombo.setEnabled(false);
 			fBooleanValueCombo.setEnabled(false);
 			fPartitionValueCombo.setText("");
 			fBooleanValueCombo.setText("");
 		} else{
-			if(fSelectedPartition.getCategory().getType().equals(Constants.TYPE_NAME_BOOLEAN)){
+			if(selectedPartition.getCategory().getType().equals(Constants.TYPE_NAME_BOOLEAN)){
 				fPartitionValueCombo.setVisible(false);
 				fBooleanValueCombo.setVisible(true);
 				fBooleanValueCombo.setEnabled(true);
-				prepareDefaultValues(fSelectedPartition, fBooleanValueCombo);
-				fBooleanValueCombo.setText(fSelectedPartition.getValueString());
+				prepareDefaultValues(selectedPartition, fBooleanValueCombo);
+				fBooleanValueCombo.setText(selectedPartition.getValueString());
 				fComboLayout.topControl = fBooleanValueCombo;
 			} else{
 				fBooleanValueCombo.setVisible(false);
 				fPartitionValueCombo.setEnabled(true);
 				fPartitionValueCombo.setVisible(true);
-				prepareDefaultValues(fSelectedPartition, fPartitionValueCombo);
-				fPartitionValueCombo.setText(fSelectedPartition.getValueString());
+				prepareDefaultValues(selectedPartition, fPartitionValueCombo);
+				fPartitionValueCombo.setText(selectedPartition.getValueString());
 				fComboLayout.topControl = fPartitionValueCombo;
 			}
 		}	
+	}
+	
+	@Override
+	public void selectionChanged(IFormPart part, ISelection selection){
+		super.selectionChanged(part, selection);
+		
+//		if(getSelectedElement() != null && getSelectedElement() instanceof PartitionNode) {
+//			fSelectedPartition = (PartitionNode)getSelectedElement();
+//		}
+//		
+		fPartitionAL.setTarget(getSelectedPartition());
+	}
+	
+	private PartitionNode getSelectedPartition(){
+		if(getSelectedElement() != null && getSelectedElement() instanceof PartitionNode) {
+			return (PartitionNode)getSelectedElement();
+		}
+
+//		if(getSelectedElement() == fSelectedPartition){
+//			return fSelectedPartition;
+//		}
+		return null;
 	}
 	
 	private void createNameValueEdit(Composite parent) {
