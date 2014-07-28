@@ -49,6 +49,7 @@ public class PartitionDetailsPage extends BasicDetailsPage {
 	private StackLayout fComboLayout;
 	private Combo fBooleanValueCombo;
 	private PartitionAbstractionLayer fPartitionAL;
+	private ModelOperationManager fOperationManager;
 
 	private class PartitionNameTextListener extends ApplyChangesSelectionAdapter implements Listener{
 		@Override
@@ -119,7 +120,8 @@ public class PartitionDetailsPage extends BasicDetailsPage {
 	
 	public PartitionDetailsPage(ModelMasterSection masterSection, ModelOperationManager operationManager) {
 		super(masterSection);
-		fPartitionAL = new PartitionAbstractionLayer(operationManager);
+		fOperationManager = operationManager;
+		fPartitionAL = new PartitionAbstractionLayer(fOperationManager);
 	}
 	
 	@Override
@@ -127,7 +129,7 @@ public class PartitionDetailsPage extends BasicDetailsPage {
 		super.createContents(parent);
 
 		createNameValueEdit(getMainComposite());
-		addForm(fPartitionChildren = new PartitionChildrenViewer(this, getToolkit()));
+		addForm(fPartitionChildren = new PartitionChildrenViewer(this, getToolkit(), fOperationManager));
 		addForm(fLabelsViewer = new PartitionLabelsViewer(this, getToolkit()));
 		
 		getToolkit().paintBordersFor(getMainComposite());

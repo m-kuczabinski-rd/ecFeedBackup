@@ -19,6 +19,7 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Section;
 
+import com.testify.ecfeed.gal.ModelOperationManager;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.TestCaseNode;
@@ -31,6 +32,9 @@ public class PartitionChildrenViewer extends CheckboxTableViewerSection {
 	private final static int STYLE = Section.EXPANDED | Section.TITLE_BAR;
 	
 	private PartitionNode fSelectedPartition;
+	private ModelOperationManager fOperationManager;
+
+	private TableViewerColumn fNameColumn;
 
 	private class AddPartitionAdapter extends SelectionAdapter{
 
@@ -86,16 +90,18 @@ public class PartitionChildrenViewer extends CheckboxTableViewerSection {
 	
 	@Override
 	protected void createTableColumns() {
-		TableViewerColumn nameColumn = addColumn("Name", 150, new PartitionNameLabelProvider());
-		nameColumn.setEditingSupport(new PartitionNameEditingSupport(this));
+		fNameColumn = addColumn("Name", 150, new PartitionNameLabelProvider());
 
 		TableViewerColumn valueColumn = addColumn("Value", 150, new PartitionValueLabelProvider());
 		valueColumn.setEditingSupport(new PartitionValueEditingSupport(this));
 
 	}
 
-	public PartitionChildrenViewer(BasicDetailsPage parent, FormToolkit toolkit) {
+	public PartitionChildrenViewer(BasicDetailsPage parent, FormToolkit toolkit, ModelOperationManager operationManager) {
 		super(parent.getMainComposite(), toolkit, STYLE, parent);
+		
+		fOperationManager = operationManager;
+		fNameColumn.setEditingSupport(new PartitionNameEditingSupport(this, fOperationManager));
 
 		getSection().setText("Partitions");
 		addButton("Add partition", new AddPartitionAdapter());

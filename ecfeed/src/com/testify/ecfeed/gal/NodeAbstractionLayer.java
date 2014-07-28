@@ -2,14 +2,14 @@ package com.testify.ecfeed.gal;
 
 public class NodeAbstractionLayer {
 	
-	private ModelOperationManager fModelOperation;
+	private ModelOperationManager fModelOperationManager;
 
-	public NodeAbstractionLayer(ModelOperationManager modelAbstraction){
-		fModelOperation = modelAbstraction;
+	public NodeAbstractionLayer(ModelOperationManager modelOperationManager){
+		fModelOperationManager = modelOperationManager;
 	}
 	
 	protected void execute(IModelOperation operation) throws GalException{
 		operation.execute();
-		fModelOperation.updateHistory(operation);
+		fModelOperationManager.updateHistory(operation);
 	}
 }

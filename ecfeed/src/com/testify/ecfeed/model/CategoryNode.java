@@ -133,10 +133,10 @@ public class CategoryNode extends GenericNode implements IPartitionedNode{
 		return fType;
 	}
 
-	public List<PartitionNode> getOrdinaryPartitions(){
-		return fPartitions;
-	}
-
+//	public List<PartitionNode> getOrdinaryPartitions(){
+//		return fPartitions;
+//	}
+//
 	public void setType(String type) {
 		fType = type;
 	}

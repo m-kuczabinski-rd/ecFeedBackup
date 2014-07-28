@@ -17,25 +17,23 @@ import org.eclipse.jface.viewers.EditingSupport;
 import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.swt.widgets.Display;
 
-import com.testify.ecfeed.model.CategoryNode;
+import com.testify.ecfeed.gal.GalException;
+import com.testify.ecfeed.gal.ModelOperationManager;
+import com.testify.ecfeed.gal.javax.partition.PartitionAbstractionLayer;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.ui.common.Messages;
 
 public class PartitionNameEditingSupport extends EditingSupport{
 
 	private TextCellEditor fNameCellEditor;
-	BasicSection fSection;
+	private BasicSection fSection;
+	private ModelOperationManager fOperationManager;
 
-	public PartitionNameEditingSupport(CategoryChildrenViewer viewer) {
+	public PartitionNameEditingSupport(CheckboxTableViewerSection viewer, ModelOperationManager operationManager) {
 		super(viewer.getTableViewer());
 		fSection = viewer;
 		fNameCellEditor = new TextCellEditor(viewer.getTable());
-	}
-
-	public PartitionNameEditingSupport(PartitionChildrenViewer viewer) {
-		super(viewer.getTableViewer());
-		fSection = viewer;
-		fNameCellEditor = new TextCellEditor(viewer.getTable());
+		fOperationManager = operationManager;
 	}
 
 	@Override
@@ -57,27 +55,20 @@ public class PartitionNameEditingSupport extends EditingSupport{
 	protected void setValue(Object element, Object value) {
 		String newName = (String)value;
 		PartitionNode partition = (PartitionNode)element;
-		if(partition.getName().equals(newName)) return;
-		if(!getCategory().validatePartitionName(newName) || 
-				partition.hasSibling(newName)){
+		
+		if(newName.equals(partition.getName())){
+			return;
+		}
+		PartitionAbstractionLayer al = new PartitionAbstractionLayer(fOperationManager);
+		al.setTarget(partition);
+
+		try {
+			al.setName(newName);
+			fSection.modelUpdated();
+		} catch (GalException e) {
 			MessageDialog.openError(Display.getCurrent().getActiveShell(), 
 					Messages.DIALOG_PARTITION_NAME_PROBLEM_TITLE, 
-					Messages.DIALOG_PARTITION_NAME_PROBLEM_MESSAGE);
-		}
-		else{
-			((PartitionNode)element).setName((String)value);
-			fSection.modelUpdated();
+					e.getMessage());
 		}
 	}
-
-	private CategoryNode getCategory() {
-		if(fSection instanceof CategoryChildrenViewer){
-			return ((CategoryChildrenViewer)fSection).getSelectedCategory();
-		}
-		else if(fSection instanceof PartitionChildrenViewer){
-			return ((PartitionChildrenViewer)fSection).getSelectedPartition().getCategory();
-		}
-		return null;
-	}
-
 }

@@ -28,6 +28,7 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
 
+import com.testify.ecfeed.gal.ModelOperationManager;
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.ui.common.CategoryNodeAbstractLayer;
@@ -44,6 +45,7 @@ public class CategoryDetailsPage extends BasicDetailsPage {
 	private CategoryChildrenViewer fPartitionsViewer;
 	private StackLayout fComboLayout;
 	private Combo fDefaultValueCombo;
+	private ModelOperationManager fOperationManager;
 	
 	private class valueComboSelectionAdapter extends SelectionAdapter{
 		@Override
@@ -124,8 +126,9 @@ public class CategoryDetailsPage extends BasicDetailsPage {
 	}
 	
 	
-	public CategoryDetailsPage(ModelMasterSection masterSection) {
+	public CategoryDetailsPage(ModelMasterSection masterSection, ModelOperationManager operationManager) {
 		super(masterSection);
+		fOperationManager = operationManager;
 	}
 
 	@Override
@@ -134,7 +137,7 @@ public class CategoryDetailsPage extends BasicDetailsPage {
 		
 		createCommonParametersEdit();
 		createDefaultValueEdit();
-		addForm(fPartitionsViewer = new CategoryChildrenViewer(this, getToolkit()));
+		addForm(fPartitionsViewer = new CategoryChildrenViewer(this, getToolkit(), fOperationManager));
 
 		getToolkit().paintBordersFor(getMainComposite());
 	}

@@ -149,13 +149,13 @@ public class AdaptTypeSupport{
 		category.setType(newtype);
 		if(compatibility == ConversionType.IMPOSSIBLE){
 			category.setType(newtype);
-			category.getOrdinaryPartitions().clear();
+			category.getPartitions().clear();
 			category.setDefaultValueString(null);
 		} else{
 			if(category.isExpected()){
 				if(category.getDefaultValueString() != null && adaptValueToType(category.getDefaultValueString(), oldtype) != null)
 					category.setDefaultValueString(adaptValueToType(category.getDefaultValueString(), oldtype));
-				category.getOrdinaryPartitions().clear();
+				category.getPartitions().clear();
 			}
 			for(PartitionNode partition : category.getPartitions()){
 				adaptOrRemovePartitions(partition, newtype);
@@ -172,7 +172,7 @@ public class AdaptTypeSupport{
 		MethodNode method = category.getMethod();
 		// remove any mentioning constraints
 		method.removeMentioningConstraints(category);
-		category.getOrdinaryPartitions().clear();
+		category.getPartitions().clear();
 		// Clear test cases
 		method.getTestCases().clear();
 		// add new category in place of removed one
@@ -198,7 +198,7 @@ public class AdaptTypeSupport{
 				}
 			}
 			// remove regular partitions in case there were any
-			category.getOrdinaryPartitions().clear();
+			category.getPartitions().clear();
 			// adapt or remove test cases
 			Iterator<TestCaseNode> iterator = method.getTestCases().iterator();
 			while(iterator.hasNext()){

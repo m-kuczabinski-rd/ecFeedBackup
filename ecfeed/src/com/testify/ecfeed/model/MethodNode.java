@@ -307,7 +307,7 @@ public class MethodNode extends GenericNode {
 				}
 				// from partitioned to expected
 				else{
-					if (!category.getOrdinaryPartitions().isEmpty()){
+					if (!category.getPartitions().isEmpty()){
 						category.setDefaultValueString(category.getPartitions().get(0).getValueString());
 					}
 					for(TestCaseNode testCase : fTestCases){

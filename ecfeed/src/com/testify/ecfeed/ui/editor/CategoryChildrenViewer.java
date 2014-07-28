@@ -19,6 +19,7 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Section;
 
+import com.testify.ecfeed.gal.ModelOperationManager;
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.ui.common.PartitionNodeAbstractLayer;
@@ -31,6 +32,8 @@ public class CategoryChildrenViewer extends CheckboxTableViewerSection {
 	
 	private CategoryNode fSelectedCategory;
 
+	private ModelOperationManager fOperationManager;
+
 	private class AddPartitionAdapter extends SelectionAdapter{
 		
 		@Override
@@ -40,7 +43,7 @@ public class CategoryChildrenViewer extends CheckboxTableViewerSection {
 			PartitionNode newPartition = new PartitionNode(newPartitionName, value);
 			ModelUtils.setUniqueNodeName(newPartition, fSelectedCategory);
 			fSelectedCategory.addPartition(newPartition);
-			getTable().setSelection(fSelectedCategory.getOrdinaryPartitions().size() - 1);
+			getTable().setSelection(fSelectedCategory.getPartitions().size() - 1);
 			modelUpdated();
 		}
 	}
@@ -75,15 +78,17 @@ public class CategoryChildrenViewer extends CheckboxTableViewerSection {
 	@Override
 	protected void createTableColumns() {
 		TableViewerColumn nameColumn = addColumn("Name", 150, new PartitionNameLabelProvider());
-		nameColumn.setEditingSupport(new PartitionNameEditingSupport(this));
+		nameColumn.setEditingSupport(new PartitionNameEditingSupport(this, fOperationManager));
 
 		TableViewerColumn valueColumn = addColumn("Value", 150, new PartitionValueLabelProvider());
 		valueColumn.setEditingSupport(new PartitionValueEditingSupport(this));
 
 	}
 	
-	public CategoryChildrenViewer(BasicDetailsPage parent, FormToolkit toolkit) {
+	public CategoryChildrenViewer(BasicDetailsPage parent, FormToolkit toolkit, ModelOperationManager operationManager) {
 		super(parent.getMainComposite(), toolkit, STYLE, parent);
+		
+		fOperationManager = operationManager;
 		
 		getSection().setText("Partitions");
 		addButton("Add partition", new AddPartitionAdapter());
@@ -100,7 +105,7 @@ public class CategoryChildrenViewer extends CheckboxTableViewerSection {
 
 	public void setInput(CategoryNode category){
 		fSelectedCategory = category;
-		super.setInput(category.getOrdinaryPartitions());
+		super.setInput(category.getPartitions());
 	}
 	
 	public void setVisible(boolean visible){
