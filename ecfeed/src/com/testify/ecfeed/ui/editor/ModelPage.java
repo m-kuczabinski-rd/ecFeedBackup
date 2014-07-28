@@ -26,7 +26,7 @@ public class ModelPage extends FormPage {
 	public ModelPage(ModelEditor editor) {
 		super(editor, ID, TITLE);
 		fEditor = editor;
-		fBlock = new ModelMasterDetailsBlock(this);
+		fBlock = new ModelMasterDetailsBlock(this, fEditor.getModelOperationManager());
 	}
 
 	public void commitMasterPart(boolean onSave){
@@ -53,4 +53,9 @@ public class ModelPage extends FormPage {
 	public ModelMasterDetailsBlock getMasterBlock() {
 		return fBlock;
 	}
+
+	public ModelEditor getEditor(){
+		return fEditor;
+	}
+
 }

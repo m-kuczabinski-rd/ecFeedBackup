@@ -19,6 +19,7 @@ import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.MasterDetailsBlock;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
+import com.testify.ecfeed.gal.ModelOperationManager;
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.ConstraintNode;
@@ -33,7 +34,7 @@ public class ModelMasterDetailsBlock extends MasterDetailsBlock implements IMode
 	private ModelMasterSection fMasterSection;
 	private ModelPage fPage;
 
-	public ModelMasterDetailsBlock(ModelPage modelPage) {
+	public ModelMasterDetailsBlock(ModelPage modelPage, ModelOperationManager operationManager) {
 		fPage = modelPage;
 	}
 
@@ -52,13 +53,15 @@ public class ModelMasterDetailsBlock extends MasterDetailsBlock implements IMode
 
 	@Override
 	protected void registerPages(DetailsPart detailsPart) {
+		ModelOperationManager operationManager = getPage().getEditor().getModelOperationManager();
+		
 		detailsPart.registerPage(RootNode.class, new ModelDetailsPage(fMasterSection));
 		detailsPart.registerPage(ClassNode.class, new ClassDetailsPage(fMasterSection));
 		detailsPart.registerPage(MethodNode.class, new MethodDetailsPage(fMasterSection));
 		detailsPart.registerPage(CategoryNode.class, new CategoryDetailsPage(fMasterSection));
 		detailsPart.registerPage(TestCaseNode.class, new TestCaseDetailsPage(fMasterSection));
 		detailsPart.registerPage(ConstraintNode.class, new ConstraintDetailsPage(fMasterSection));
-		detailsPart.registerPage(PartitionNode.class, new PartitionDetailsPage(fMasterSection));
+		detailsPart.registerPage(PartitionNode.class, new PartitionDetailsPage(fMasterSection, operationManager));
 
 		selectNode(getModel());
 	}
@@ -82,5 +85,9 @@ public class ModelMasterDetailsBlock extends MasterDetailsBlock implements IMode
 
 	public IDetailsPage getCurrentPage(){
 		return detailsPart.getCurrentPage();
+	}
+	
+	public ModelPage getPage(){
+		return fPage;
 	}
 }

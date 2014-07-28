@@ -14,6 +14,7 @@ package com.testify.ecfeed.ui.editor;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StackLayout;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -23,12 +24,17 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
 
 import com.testify.ecfeed.gal.Constants;
+import com.testify.ecfeed.gal.GalException;
+import com.testify.ecfeed.gal.ModelOperationManager;
+import com.testify.ecfeed.gal.javax.partition.PartitionAbstractionLayer;
 import com.testify.ecfeed.model.PartitionNode;
+import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.common.PartitionNodeAbstractLayer;
 import com.testify.ecfeed.utils.ModelUtils;
 
@@ -41,15 +47,27 @@ public class PartitionDetailsPage extends BasicDetailsPage {
 	private Combo fPartitionValueCombo;
 	private StackLayout fComboLayout;
 	private Combo fBooleanValueCombo;
+	private PartitionAbstractionLayer fPartitionAL;
 
 	private class PartitionNameTextListener extends ApplyChangesSelectionAdapter implements Listener{
 		@Override
 		public void handleEvent(Event event) {
 			if(event.keyCode == SWT.CR || event.keyCode == SWT.KEYPAD_CR){
-				if(PartitionNodeAbstractLayer.changePartitionName(fSelectedPartition, fPartitionNameText.getText())){
+				try {
+					fPartitionAL.setName(fPartitionNameText.getText());
 					modelUpdated(null);
+				} catch (GalException e) {
+					MessageDialog.openError(Display.getCurrent().getActiveShell(),
+							Messages.DIALOG_PARTITION_NAME_PROBLEM_TITLE,
+							e.getMessage());
 				}
 				fPartitionNameText.setText(fSelectedPartition.getName());
+				
+				
+//				if(PartitionNodeAbstractLayer.changePartitionName(fSelectedPartition, fPartitionNameText.getText())){
+//					modelUpdated(null);
+//				}
+//				fPartitionNameText.setText(fSelectedPartition.getName());
 			}
 		}
 	}
@@ -104,8 +122,9 @@ public class PartitionDetailsPage extends BasicDetailsPage {
 		}
 	}
 	
-	public PartitionDetailsPage(ModelMasterSection masterSection) {
+	public PartitionDetailsPage(ModelMasterSection masterSection, ModelOperationManager operationManager) {
 		super(masterSection);
+		fPartitionAL = new PartitionAbstractionLayer(operationManager);
 	}
 	
 	@Override
