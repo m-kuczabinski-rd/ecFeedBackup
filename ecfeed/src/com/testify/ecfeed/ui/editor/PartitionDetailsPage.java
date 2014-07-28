@@ -23,6 +23,7 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
@@ -117,6 +118,22 @@ public class PartitionDetailsPage extends BasicDetailsPage {
 	public void createContents(Composite parent){
 		super.createContents(parent);
 
+		Composite textClientComposite = getToolkit().createComposite(getMainSection());
+		textClientComposite.setLayout(new RowLayout());
+		fImplementButton = getToolkit().createButton(textClientComposite, "Implement", SWT.NONE);
+		fImplementButton.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e){
+				ModelImplementor implementor = new ModelImplementor();
+				implementor.implement(fSelectedPartition);
+				try {
+					ResourcesPlugin.getWorkspace().getRoot().refreshLocal(IResource.DEPTH_INFINITE, null);
+				} catch (CoreException f) {
+				}
+			}
+		});
+		getMainSection().setTextClient(textClientComposite);
+
 		createNameValueEdit(getMainComposite());
 		addForm(fPartitionChildren = new PartitionChildrenViewer(this, getToolkit()));
 		addForm(fLabelsViewer = new PartitionLabelsViewer(this, getToolkit()));
@@ -185,19 +202,7 @@ public class PartitionDetailsPage extends BasicDetailsPage {
 		buttonComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true, 1, 2));
 		Button applyButton = getToolkit().createButton(buttonComposite, "Change", SWT.CENTER);
 		applyButton.addSelectionListener(new ApplyChangesSelectionAdapter());
-		fImplementButton = getToolkit().createButton(buttonComposite, "Implement", SWT.NONE);
-		fImplementButton.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e){
-				ModelImplementor implementor = new ModelImplementor();
-				implementor.implement(fSelectedPartition);
-				try {
-					ResourcesPlugin.getWorkspace().getRoot().refreshLocal(IResource.DEPTH_INFINITE, null);
-				} catch (CoreException f) {
-				}
-			}
-		});
-		
+
 		getToolkit().paintBordersFor(parent);
 
 	}

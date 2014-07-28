@@ -83,7 +83,18 @@ public class ClassDetailsPage extends BasicDetailsPage {
 
 		Composite textClientComposite = getToolkit().createComposite(getMainSection());
 		textClientComposite.setLayout(new RowLayout());
-		
+		fImplementButton = getToolkit().createButton(textClientComposite, "Implement", SWT.NONE);
+		fImplementButton.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				ModelImplementor implementor = new ModelImplementor();
+				implementor.implement(fSelectedClass);
+				try {
+					ResourcesPlugin.getWorkspace().getRoot().refreshLocal(IResource.DEPTH_INFINITE, null);
+				} catch (CoreException f) {
+				}
+			}
+		});
 		getMainSection().setTextClient(textClientComposite);
 
 		createQualifiedNameComposite(getMainComposite());
@@ -119,19 +130,6 @@ public class ClassDetailsPage extends BasicDetailsPage {
 
 		Button button = getToolkit().createButton(composite, "Reassign", SWT.NONE);
 		button.addSelectionListener(new ReassignClassSelectionAdapter());
-
-		fImplementButton = getToolkit().createButton(composite, "Implement", SWT.NONE);
-		fImplementButton.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				ModelImplementor implementor = new ModelImplementor();
-				implementor.implement(fSelectedClass);
-				try {
-					ResourcesPlugin.getWorkspace().getRoot().refreshLocal(IResource.DEPTH_INFINITE, null);
-				} catch (CoreException f) {
-				}
-			}
-		});
 
 		getToolkit().paintBordersFor(composite);
 	}

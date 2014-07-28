@@ -24,6 +24,7 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
@@ -165,13 +166,29 @@ public class CategoryDetailsPage extends BasicDetailsPage {
 			} else{
 				refreshForPartitioned();
 			}
-			fImplementButton.setEnabled(!ModelUtils.isCategoryImplemented(fSelectedCategory) || ModelUtils.isCategoryPartiallyImplemented(fSelectedCategory));
+			fImplementButton.setEnabled(!ModelUtils.isCategoryImplemented(fSelectedCategory));
 		} else{
 			refreshForInvalidInput();
 		}
 	}
 	
 	private void createCommonParametersEdit(){
+		Composite textClientComposite = getToolkit().createComposite(getMainSection());
+		textClientComposite.setLayout(new RowLayout());
+		fImplementButton = getToolkit().createButton(textClientComposite, "Implement", SWT.NONE);
+		fImplementButton.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e){
+				ModelImplementor implementor = new ModelImplementor();
+				implementor.implement(fSelectedCategory);
+				try {
+					ResourcesPlugin.getWorkspace().getRoot().refreshLocal(IResource.DEPTH_INFINITE, null);
+				} catch (CoreException f) {
+				}
+			}
+		});
+		getMainSection().setTextClient(textClientComposite);
+
 		Composite composite = getToolkit().createComposite(getMainComposite());
 		composite.setLayout(new GridLayout(1, false));
 		composite.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
@@ -187,24 +204,13 @@ public class CategoryDetailsPage extends BasicDetailsPage {
 		fNameText.addListener(SWT.KeyDown, new nameTextListener());
 		Button changeButton = getToolkit().createButton(nameComposite, "Change", SWT.NONE);
 		changeButton.addSelectionListener(new nameChangeButtonListener());
-		fImplementButton = getToolkit().createButton(nameComposite, "Implement", SWT.NONE);
-		fImplementButton.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e){
-				ModelImplementor implementor = new ModelImplementor();
-				implementor.implement(fSelectedCategory);
-				try {
-					ResourcesPlugin.getWorkspace().getRoot().refreshLocal(IResource.DEPTH_INFINITE, null);
-				} catch (CoreException f) {
-				}
-			}
-		});
 
 		getToolkit().createLabel(composite, "Category type: ", SWT.NONE);
 		fTypeCombo = new Combo(composite,SWT.DROP_DOWN);
 		fTypeCombo.setLayoutData(new GridData(SWT.FILL,  SWT.CENTER, false, false));
 		fTypeCombo.addListener(SWT.KeyDown, new typeTextListener());
 		fTypeCombo.addSelectionListener(new typeComboSelectionListener());
+
 		getToolkit().paintBordersFor(composite);
 		getToolkit().paintBordersFor(nameComposite);
 	}

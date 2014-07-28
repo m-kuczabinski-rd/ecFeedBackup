@@ -23,6 +23,7 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
@@ -101,6 +102,22 @@ public class MethodDetailsPage extends BasicDetailsPage {
 	}
 
 	private void createTextClient() {
+		Composite textClientComposite = getToolkit().createComposite(getMainSection());
+		textClientComposite.setLayout(new RowLayout());
+		fImplementButton = getToolkit().createButton(textClientComposite, "Implement", SWT.NONE);
+		fImplementButton.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e){
+				ModelImplementor implementor = new ModelImplementor();
+				implementor.implement(fSelectedMethod);
+				try {
+					ResourcesPlugin.getWorkspace().getRoot().refreshLocal(IResource.DEPTH_INFINITE, null);
+				} catch (CoreException f) {
+				}
+			}
+		});
+		getMainSection().setTextClient(textClientComposite);
+
 		Composite composite = getToolkit().createComposite(getMainComposite());
 		composite.setLayout(new GridLayout(6, false));
 		composite.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
@@ -126,19 +143,6 @@ public class MethodDetailsPage extends BasicDetailsPage {
 		fReassignButton.addSelectionListener(new ReassignAdapter());
 		fTestOnlineButton = getToolkit().createButton(composite, "Test online", SWT.NONE);
 		fTestOnlineButton.addSelectionListener(new ExecuteOnlineTestAdapter(this));
-
-		fImplementButton = getToolkit().createButton(composite, "Implement", SWT.NONE);
-		fImplementButton.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e){
-				ModelImplementor implementor = new ModelImplementor();
-				implementor.implement(fSelectedMethod);
-				try {
-					ResourcesPlugin.getWorkspace().getRoot().refreshLocal(IResource.DEPTH_INFINITE, null);
-				} catch (CoreException f) {
-				}
-			}
-		});
 
 		getToolkit().paintBordersFor(composite);
 	}
