@@ -55,4 +55,13 @@ public class Constants {
 	public static final String REGEX_STRING_TYPE_VALUE = "[A-Za-z1-9 !@#$%^&*()_+=;':,.<>/?]{0,1024}";
 	public static final String REGEX_CHAR_TYPE_VALUE = "[A-Za-z1-9 !@#$%^&*()_+=;':,.<>/?]";
 	
+//	public static final String NULL_VALUE_STRING_REPRESENTATION = "/null";
+//	public static final String MAX_VALUE_STRING_REPRESENTATION = "MAX_VALUE";
+//	public static final String MIN_VALUE_STRING_REPRESENTATION = "MIN_VALUE";
+//	public static final String BOOLEAN_TRUE_STRING_REPRESENTATION = "true";
+//	public static final String BOOLEAN_FALSE_STRING_REPRESENTATION = "false";
+//	public static final String POSITIVE_INFINITY_STRING_REPRESENTATION = "POSITIVE_INFINITY";
+//	public static final String NEGATIVE_INFINITY_STRING_REPRESENTATION = "NEGATIVE_INFINITY";
+//	
+//
 }

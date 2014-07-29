@@ -151,4 +151,6 @@ public class Messages {
 	public static final String DIALOG_METHOD_WITH_PARAMETERS_EXISTS_MESSAGE = "Method with the same name and parameter types already exists in the class.";
 	public static final String DIALOG_PASTE_OPERATION_FAILED_TITLE = "Paste failed";
 	public static final String DIALOG_PASTE_OPERATION_FAILED_MESSAGE = "Clipboard content doesn't match here.";
+	public static final String DIALOG_RENAME_MODEL_PROBLEM_TITLE = "Couldn't rename model";
+
 }
