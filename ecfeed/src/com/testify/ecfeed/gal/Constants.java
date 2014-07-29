@@ -38,11 +38,10 @@ public class Constants {
 		TYPE_NAME_SHORT,
 		TYPE_NAME_STRING
 	};
-
 	public static final String RELATION_EQUAL = "=";
 	public static final String RELATION_NOT = "\u2260";
 
-	public static final String REGEX_JAVA_IDENTIFIER = "[A-Za-z][A-Za-z0-9_]{1,64}";
+	public static final String REGEX_JAVA_IDENTIFIER = "[A-Za-z_][A-Za-z0-9_]{1,64}";
 	public static final String REGEX_ALPHANUMERIC_WITH_SPACES_64 = "[A-Za-z0-9][A-Za-z0-9_ ]{1,63}";
 	public static final String REGEX_ROOT_NODE_NAME = REGEX_ALPHANUMERIC_WITH_SPACES_64;
 	public static final String REGEX_CLASS_NODE_NAME = "([A-Za-z]{1}[A-Za-z0-9]{1,16}){1}(\\.[A-Za-z_]{1}[A-Za-z0-9_]{1,16})*";

@@ -50,7 +50,7 @@ public class PartitionOperationSetValue implements IModelOperation {
 		if (ClassUtils.getPartitionValueFromString(value, type, ClassUtils.getClassLoader(true, null)) != null){
 			return true;
 		} else if (!getJavaTypes().contains(type)) {
-				return value.matches("^[a-zA-Z_$][a-zA-Z0-9_$]*$");
+				return value.matches(Constants.REGEX_JAVA_IDENTIFIER);
 		}
 		return false;
 	}

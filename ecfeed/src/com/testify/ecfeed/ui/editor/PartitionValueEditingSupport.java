@@ -14,19 +14,15 @@ package com.testify.ecfeed.ui.editor;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ComboBoxCellEditor;
 import org.eclipse.jface.viewers.EditingSupport;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CCombo;
-import org.eclipse.swt.widgets.Display;
 
-import com.testify.ecfeed.gal.GalException;
 import com.testify.ecfeed.gal.ModelOperationManager;
-import com.testify.ecfeed.gal.java.partition.PartitionAbstractionLayer;
 import com.testify.ecfeed.model.PartitionNode;
-import com.testify.ecfeed.ui.common.Messages;
+import com.testify.ecfeed.ui.common.PartitionInterface;
 import com.testify.ecfeed.utils.ModelUtils;
 
 public class PartitionValueEditingSupport extends EditingSupport {
@@ -99,53 +95,13 @@ public class PartitionValueEditingSupport extends EditingSupport {
 		}
 		PartitionNode partition = (PartitionNode)element;
 		
-		PartitionAbstractionLayer al = new PartitionAbstractionLayer(fModelOperationManager);
+		PartitionInterface al = new PartitionInterface(fModelOperationManager);
 		al.setTarget(partition);
 
-		if(newValue.equals(al.getValue())){
+		if(newValue.equals(partition.getValueString())){
 			return;
 		}
 
-		try {
-			al.setValue(newValue);
-			fSection.modelUpdated();
-		} catch (GalException e) {
-			MessageDialog.openError(Display.getCurrent().getActiveShell(), 
-					Messages.DIALOG_PARTITION_VALUE_PROBLEM_TITLE, 
-					e.getMessage());
-		}
-
-		
-		
-//		String valueString = null;
-//		int index = (int)value;
-//
-//		if (index >= 0) {
-//			valueString = fCellEditor.getItems()[index];
-//		} else {
-//			valueString = ((CCombo)fCellEditor.getControl()).getText();
-//		}
-//
-//		if(!ModelUtils.validatePartitionStringValue(valueString, getCategory().getType())) {
-//			MessageDialog.openError(Display.getCurrent().getActiveShell(), 
-//					Messages.DIALOG_PARTITION_VALUE_PROBLEM_TITLE, 
-//					Messages.DIALOG_PARTITION_VALUE_PROBLEM_MESSAGE(valueString));
-//		} else {
-//			PartitionNode partition = (PartitionNode)element;
-//			if (valueString.equals(partition.getValueString()) == false) {
-//				((PartitionNode)element).setValueString(valueString);
-//				fSection.modelUpdated();
-//			}
-//		}
+		al.setValue(newValue, fSection);
 	}
-//
-//	private CategoryNode getCategory(){
-//		if(fSection instanceof CategoryChildrenViewer){
-//			return ((CategoryChildrenViewer)fSection).getSelectedCategory();
-//		}
-//		else if(fSection instanceof PartitionChildrenViewer){
-//			return ((PartitionChildrenViewer)fSection).getSelectedPartition().getCategory();
-//		}
-//		return null;
-//	}
 }

@@ -11,17 +11,13 @@
 
 package com.testify.ecfeed.ui.editor;
 
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.EditingSupport;
 import org.eclipse.jface.viewers.TextCellEditor;
-import org.eclipse.swt.widgets.Display;
 
-import com.testify.ecfeed.gal.GalException;
 import com.testify.ecfeed.gal.ModelOperationManager;
-import com.testify.ecfeed.gal.java.partition.PartitionAbstractionLayer;
 import com.testify.ecfeed.model.PartitionNode;
-import com.testify.ecfeed.ui.common.Messages;
+import com.testify.ecfeed.ui.common.PartitionInterface;
 
 public class PartitionNameEditingSupport extends EditingSupport{
 
@@ -59,16 +55,9 @@ public class PartitionNameEditingSupport extends EditingSupport{
 		if(newName.equals(partition.getName())){
 			return;
 		}
-		PartitionAbstractionLayer al = new PartitionAbstractionLayer(fOperationManager);
+		PartitionInterface al = new PartitionInterface(fOperationManager);
 		al.setTarget(partition);
 
-		try {
-			al.setName(newName);
-			fSection.modelUpdated();
-		} catch (GalException e) {
-			MessageDialog.openError(Display.getCurrent().getActiveShell(), 
-					Messages.DIALOG_PARTITION_NAME_PROBLEM_TITLE, 
-					e.getMessage());
-		}
+		al.setName(newName, fSection);
 	}
 }

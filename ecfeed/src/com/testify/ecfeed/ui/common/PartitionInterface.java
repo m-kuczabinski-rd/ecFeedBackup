@@ -9,18 +9,19 @@
  *     Patryk Chamuczynski (p.chamuczynski(at)radytek.com) - initial implementation
  ******************************************************************************/
 
-package com.testify.ecfeed.gal.java.partition;
+package com.testify.ecfeed.ui.common;
 
-import com.testify.ecfeed.gal.GalException;
 import com.testify.ecfeed.gal.ModelOperationManager;
-import com.testify.ecfeed.gal.NodeAbstractionLayer;
+import com.testify.ecfeed.gal.java.partition.PartitionOperationRename;
+import com.testify.ecfeed.gal.java.partition.PartitionOperationSetValue;
 import com.testify.ecfeed.model.PartitionNode;
+import com.testify.ecfeed.ui.editor.BasicSection;
 
-public class PartitionAbstractionLayer extends NodeAbstractionLayer{
+public class PartitionInterface extends GenericNodeInterface{
 
 	PartitionNode fTarget;
 	
-	public PartitionAbstractionLayer(ModelOperationManager modelAbstraction) {
+	public PartitionInterface(ModelOperationManager modelAbstraction) {
 		super(modelAbstraction);
 	}
 
@@ -28,19 +29,11 @@ public class PartitionAbstractionLayer extends NodeAbstractionLayer{
 		fTarget = partition;
 	}
 	
-	public void setName(String newName) throws GalException{
-		execute(new PartitionOperationRename(fTarget, newName));
+	public void setName(String newName, BasicSection source){
+		execute(new PartitionOperationRename(fTarget, newName), source, Messages.DIALOG_PARTITION_NAME_PROBLEM_TITLE);
 	}
 
-	public void setValue(String newValue) throws GalException{
-		execute(new PartitionOperationSetValue(fTarget, newValue));
-	}
-	
-	public String getName(){
-		return fTarget.getName();
-	}
-
-	public String getValue(){
-		return fTarget.getValueString();
+	public void setValue(String newValue, BasicSection source){
+		execute(new PartitionOperationSetValue(fTarget, newValue), source, Messages.DIALOG_PARTITION_VALUE_PROBLEM_TITLE);
 	}
 }

@@ -1,5 +1,6 @@
 package com.testify.ecfeed.gal;
 
+
 public class NodeAbstractionLayer {
 	
 	private ModelOperationManager fModelOperationManager;
@@ -12,4 +13,5 @@ public class NodeAbstractionLayer {
 		operation.execute();
 		fModelOperationManager.updateHistory(operation);
 	}
+	
 }

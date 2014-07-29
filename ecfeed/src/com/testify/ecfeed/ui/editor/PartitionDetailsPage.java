@@ -14,7 +14,6 @@ package com.testify.ecfeed.ui.editor;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StackLayout;
@@ -25,18 +24,15 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.IFormPart;
 
 import com.testify.ecfeed.gal.Constants;
-import com.testify.ecfeed.gal.GalException;
 import com.testify.ecfeed.gal.ModelOperationManager;
-import com.testify.ecfeed.gal.java.partition.PartitionAbstractionLayer;
 import com.testify.ecfeed.model.PartitionNode;
-import com.testify.ecfeed.ui.common.Messages;
+import com.testify.ecfeed.ui.common.PartitionInterface;
 import com.testify.ecfeed.utils.ModelUtils;
 
 public class PartitionDetailsPage extends BasicDetailsPage {
@@ -47,21 +43,14 @@ public class PartitionDetailsPage extends BasicDetailsPage {
 	private Combo fPartitionValueCombo;
 	private StackLayout fComboLayout;
 	private Combo fBooleanValueCombo;
-	private PartitionAbstractionLayer fPartitionAL;
+	private PartitionInterface fPartitionAL;
 	private ModelOperationManager fOperationManager;
 
 	private class PartitionNameTextListener extends ApplyChangesSelectionAdapter implements Listener{
 		@Override
 		public void handleEvent(Event event) {
 			if(event.keyCode == SWT.CR || event.keyCode == SWT.KEYPAD_CR){
-				try {
-					fPartitionAL.setName(fPartitionNameText.getText());
-					modelUpdated(null);
-				} catch (GalException e) {
-					MessageDialog.openError(Display.getCurrent().getActiveShell(),
-							Messages.DIALOG_PARTITION_NAME_PROBLEM_TITLE,
-							e.getMessage());
-				}
+				fPartitionAL.setName(fPartitionNameText.getText(), null);
 				fPartitionNameText.setText(getSelectedPartition().getName());
 			}
 		}
@@ -70,25 +59,13 @@ public class PartitionDetailsPage extends BasicDetailsPage {
 	private class ApplyChangesSelectionAdapter extends SelectionAdapter{
 		@Override
 		public void widgetSelected(SelectionEvent e){
-			if(fPartitionAL.getName().equals(fPartitionNameText.getText()) == false){
-				try{
-					fPartitionAL.setName(fPartitionNameText.getText());
-				}catch(GalException e1){
-					MessageDialog.openError(Display.getCurrent().getActiveShell(),
-					Messages.DIALOG_PARTITION_NAME_PROBLEM_TITLE,
-					e1.getMessage());
-				}
+			if(getSelectedPartition().getName().equals(fPartitionNameText.getText()) == false){
+				fPartitionAL.setName(fPartitionNameText.getText(), null);
 				fPartitionNameText.setText(getSelectedPartition().getName());
 			}
 			
-			if(fPartitionAL.getValue().equals(fPartitionValueCombo.getText()) == false){
-				try{
-					fPartitionAL.setValue(fPartitionValueCombo.getText());
-				}catch(GalException e1){
-					MessageDialog.openError(Display.getCurrent().getActiveShell(),
-					Messages.DIALOG_PARTITION_VALUE_PROBLEM_TITLE,
-					e1.getMessage());
-				}
+			if(getSelectedPartition().getValueString().equals(fPartitionValueCombo.getText()) == false){
+				fPartitionAL.setValue(fPartitionValueCombo.getText(), null);
 				fPartitionNameText.setText(getSelectedPartition().getName());
 			}
 		}
@@ -97,7 +74,7 @@ public class PartitionDetailsPage extends BasicDetailsPage {
 	private class BooleanValueComboSelectionAdapter extends SelectionAdapter {
 		@Override
 		public void widgetSelected(SelectionEvent e){
-			setPartitionValue(fBooleanValueCombo.getText());
+			fPartitionAL.setValue(fPartitionValueCombo.getText(), null);
 			fBooleanValueCombo.setText(getSelectedPartition().getValueString());
 		}
 	}
@@ -105,7 +82,7 @@ public class PartitionDetailsPage extends BasicDetailsPage {
 	private class ValueComboSelectionAdapter extends SelectionAdapter {
 		@Override
 		public void widgetSelected(SelectionEvent e){
-			setPartitionValue(fPartitionValueCombo.getText());
+			fPartitionAL.setValue(fPartitionValueCombo.getText(), null);
 			fPartitionValueCombo.setText(getSelectedPartition().getValueString());
 		}
 	}
@@ -114,7 +91,7 @@ public class PartitionDetailsPage extends BasicDetailsPage {
 		@Override
 		public void handleEvent(Event event){
 			if(event.keyCode == SWT.CR || event.keyCode == SWT.KEYPAD_CR){
-				setPartitionValue(fPartitionValueCombo.getText());
+				fPartitionAL.setValue(fPartitionValueCombo.getText(), null);
 				fPartitionValueCombo.setText(getSelectedPartition().getValueString());
 			}
 		}
@@ -123,7 +100,7 @@ public class PartitionDetailsPage extends BasicDetailsPage {
 	public PartitionDetailsPage(ModelMasterSection masterSection, ModelOperationManager operationManager) {
 		super(masterSection);
 		fOperationManager = operationManager;
-		fPartitionAL = new PartitionAbstractionLayer(fOperationManager);
+		fPartitionAL = new PartitionInterface(fOperationManager);
 	}
 	
 	@Override
@@ -246,17 +223,5 @@ public class PartitionDetailsPage extends BasicDetailsPage {
 		newItems.add(node.getValueString());
 		valueText.setItems(newItems.toArray(items));
 	}
-	
-	private void setPartitionValue(String newValue) {
-		try {
-			fPartitionAL.setValue(newValue);
-			modelUpdated(null);
-		} catch (GalException e1) {
-			MessageDialog.openError(Display.getCurrent().getActiveShell(),
-					Messages.DIALOG_PARTITION_VALUE_PROBLEM_TITLE,
-					e1.getMessage());
-		}
-	}
-
 	
 }
