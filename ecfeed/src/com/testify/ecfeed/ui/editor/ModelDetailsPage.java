@@ -71,7 +71,7 @@ public class ModelDetailsPage extends BasicDetailsPage {
 	}
 
 	private void renameModel(String text) {
-		if(RootNode.validateModelName(text) && !fModel.getName().equals(text)){
+		if(!fModel.getName().equals(text)){
 			fModel.setName(text);
 			modelUpdated(null);
 		}

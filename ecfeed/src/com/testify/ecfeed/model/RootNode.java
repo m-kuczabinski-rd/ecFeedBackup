@@ -14,8 +14,6 @@ package com.testify.ecfeed.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.testify.ecfeed.modelif.java.Constants.*;
-
 public class RootNode extends GenericNode {
 	public List<ClassNode> fClasses;
 
@@ -62,10 +60,6 @@ public class RootNode extends GenericNode {
 		return fClasses.remove(classNode);
 	}
 
-	public static boolean validateModelName(String name){
-		return name.matches(REGEX_ROOT_NODE_NAME);
-	}
-	
 	@Override
 	public boolean compare(IGenericNode node){
 		if(node instanceof RootNode == false){

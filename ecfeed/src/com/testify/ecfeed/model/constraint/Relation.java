@@ -11,14 +11,17 @@
 
 package com.testify.ecfeed.model.constraint;
 
-import com.testify.ecfeed.modelif.java.Constants;
-
 public enum Relation{
-	EQUAL(Constants.RELATION_EQUAL), 
-	NOT(Constants.RELATION_NOT);
+	
+	EQUAL("="), 
+	NOT("\u2260");
 	
 	String fValue;
-	
+
+	public static final String RELATION_EQUAL = "=";
+	public static final String RELATION_NOT = "\u2260";
+
+
 	private Relation(String value){
 		fValue = value;
 	}
@@ -29,9 +32,9 @@ public enum Relation{
 	
 	public static Relation getRelation(String text){
 		switch(text){
-		case Constants.RELATION_EQUAL:
+		case RELATION_EQUAL:
 			return EQUAL;
-		case Constants.RELATION_NOT:
+		case RELATION_NOT:
 			return NOT;
 		}
 		return NOT;
