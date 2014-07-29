@@ -1,9 +1,9 @@
 package com.testify.ecfeed.modelif.java.partition;
 
 import com.testify.ecfeed.model.PartitionNode;
-import com.testify.ecfeed.modelif.Constants;
 import com.testify.ecfeed.modelif.ModelIfException;
 import com.testify.ecfeed.modelif.IModelOperation;
+import com.testify.ecfeed.modelif.java.Constants;
 
 public class PartitionOperationRename implements IModelOperation {
 

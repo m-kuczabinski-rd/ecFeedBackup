@@ -9,7 +9,7 @@
  *     Patryk Chamuczynski (p.chamuczynski(at)radytek.com) - initial implementation
  ******************************************************************************/
 
-package com.testify.ecfeed.modelif;
+package com.testify.ecfeed.modelif.java;
 
 public class Constants {
 

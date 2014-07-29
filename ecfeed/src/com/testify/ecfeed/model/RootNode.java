@@ -14,7 +14,7 @@ package com.testify.ecfeed.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.testify.ecfeed.modelif.Constants.*;
+import static com.testify.ecfeed.modelif.java.Constants.*;
 
 public class RootNode extends GenericNode {
 	public List<ClassNode> fClasses;
