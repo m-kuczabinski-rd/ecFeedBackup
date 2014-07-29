@@ -22,8 +22,8 @@ import org.eclipse.swt.widgets.Display;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.runner.ParameterizedMethod;
-import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.common.ConsoleManager;
+import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.utils.ModelUtils;
 
 public class ExecuteStaticTestAdapter extends ExecuteTestAdapter {

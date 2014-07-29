@@ -22,7 +22,7 @@ import org.eclipse.swt.custom.CCombo;
 
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.modelif.ModelOperationManager;
-import com.testify.ecfeed.ui.common.PartitionInterface;
+import com.testify.ecfeed.ui.modelif.PartitionInterface;
 import com.testify.ecfeed.utils.ModelUtils;
 
 public class PartitionValueEditingSupport extends EditingSupport {

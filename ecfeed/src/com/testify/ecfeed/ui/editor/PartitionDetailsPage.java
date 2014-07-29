@@ -32,7 +32,7 @@ import org.eclipse.ui.forms.IFormPart;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.modelif.ModelOperationManager;
 import com.testify.ecfeed.modelif.java.Constants;
-import com.testify.ecfeed.ui.common.PartitionInterface;
+import com.testify.ecfeed.ui.modelif.PartitionInterface;
 import com.testify.ecfeed.utils.ModelUtils;
 
 public class PartitionDetailsPage extends BasicDetailsPage {

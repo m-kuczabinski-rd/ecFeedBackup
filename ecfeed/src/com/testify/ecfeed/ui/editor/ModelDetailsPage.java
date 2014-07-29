@@ -26,7 +26,7 @@ import org.eclipse.ui.forms.IFormPart;
 
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.modelif.ModelOperationManager;
-import com.testify.ecfeed.ui.common.RootInterface;
+import com.testify.ecfeed.ui.modelif.RootInterface;
 
 public class ModelDetailsPage extends BasicDetailsPage {
 
@@ -77,7 +77,7 @@ public class ModelDetailsPage extends BasicDetailsPage {
 	}
 
 	private void renameModel(String text) {
-		fRootIf.setName(text, null, this);
+		fRootIf.renameModel(text, null, this);
 		fModelNameText.setText(fModel.getName());
 	}
 

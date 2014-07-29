@@ -9,12 +9,14 @@
  *     Patryk Chamuczynski (p.chamuczynski(at)radytek.com) - initial implementation
  ******************************************************************************/
 
-package com.testify.ecfeed.ui.common;
+package com.testify.ecfeed.ui.modelif;
 
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.modelif.ModelOperationManager;
 import com.testify.ecfeed.modelif.java.partition.PartitionOperationRename;
 import com.testify.ecfeed.modelif.java.partition.PartitionOperationSetValue;
+import com.testify.ecfeed.ui.common.GenericNodeInterface;
+import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.editor.BasicSection;
 import com.testify.ecfeed.ui.editor.IModelUpdateListener;
 
