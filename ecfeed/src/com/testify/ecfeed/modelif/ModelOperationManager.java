@@ -39,4 +39,10 @@ public class ModelOperationManager {
 			++fHistoryIndex;
 		}
 	}
+	
+	public void execute(IModelOperation operation) throws ModelIfException{
+		operation.execute();
+		updateHistory(operation);
+	}
+
 }
