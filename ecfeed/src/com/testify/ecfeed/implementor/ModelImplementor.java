@@ -397,6 +397,12 @@ public class ModelImplementor implements IModelImplementor {
 			methodDeclaration.parameters().add(variableDeclaration);
 		}
 
+		methodDeclaration.setBody(implementMethodBody(unit, parameters));
+		type.bodyDeclarations().add(methodDeclaration);
+	}
+
+	@SuppressWarnings("unchecked")
+	private Block implementMethodBody(CompilationUnit unit, ArrayList<String> parameters) {
 		Block block = unit.getAST().newBlock();
 		MethodInvocation methodInvocation = unit.getAST().newMethodInvocation();
 		QualifiedName name = unit.getAST().newQualifiedName(unit.getAST().newSimpleName("System"), unit.getAST().newSimpleName("out"));
@@ -450,9 +456,7 @@ public class ModelImplementor implements IModelImplementor {
 		methodInvocation.arguments().add(expression);
 		ExpressionStatement expressionStatement = unit.getAST().newExpressionStatement(methodInvocation);
 		block.statements().add(expressionStatement);
-		methodDeclaration.setBody(block);
-		type.bodyDeclarations().add(methodDeclaration);
-		// TODO Auto-generated method stub
+		return block;
 	}
 
 	@SuppressWarnings("unchecked")
