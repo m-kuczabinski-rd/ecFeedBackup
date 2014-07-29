@@ -5,7 +5,6 @@ import com.testify.ecfeed.modelif.ModelOperationManager;
 import com.testify.ecfeed.modelif.java.root.RootOperationAddNewClass;
 import com.testify.ecfeed.modelif.java.root.RootOperationRename;
 import com.testify.ecfeed.ui.common.GenericNodeInterface;
-import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.editor.BasicSection;
 import com.testify.ecfeed.ui.editor.IModelUpdateListener;
 

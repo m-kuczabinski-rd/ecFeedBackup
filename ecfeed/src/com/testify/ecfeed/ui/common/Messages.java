@@ -153,7 +153,5 @@ public class Messages {
 	public static final String DIALOG_PASTE_OPERATION_FAILED_MESSAGE = "Clipboard content doesn't match here.";
 	
 	
-	public static final String DIALOG_RENAME_MODEL_PROBLEM_TITLE = "Couldn't rename model";
-	public static final String DIALOG_ADD_NEW_CLASS_PROBLEM_TITLE = "Couldn't add new class";
 
 }
