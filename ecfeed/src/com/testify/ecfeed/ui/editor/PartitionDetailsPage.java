@@ -50,7 +50,7 @@ public class PartitionDetailsPage extends BasicDetailsPage {
 		@Override
 		public void handleEvent(Event event) {
 			if(event.keyCode == SWT.CR || event.keyCode == SWT.KEYPAD_CR){
-				fPartitionAL.setName(fPartitionNameText.getText(), null);
+				fPartitionAL.setName(fPartitionNameText.getText(), null, PartitionDetailsPage.this);
 				fPartitionNameText.setText(getSelectedPartition().getName());
 			}
 		}
@@ -60,12 +60,12 @@ public class PartitionDetailsPage extends BasicDetailsPage {
 		@Override
 		public void widgetSelected(SelectionEvent e){
 			if(getSelectedPartition().getName().equals(fPartitionNameText.getText()) == false){
-				fPartitionAL.setName(fPartitionNameText.getText(), null);
+				fPartitionAL.setName(fPartitionNameText.getText(), null, PartitionDetailsPage.this);
 				fPartitionNameText.setText(getSelectedPartition().getName());
 			}
 			
 			if(getSelectedPartition().getValueString().equals(fPartitionValueCombo.getText()) == false){
-				fPartitionAL.setValue(fPartitionValueCombo.getText(), null);
+				fPartitionAL.setValue(fPartitionValueCombo.getText(), null, PartitionDetailsPage.this);
 				fPartitionNameText.setText(getSelectedPartition().getName());
 			}
 		}
@@ -74,7 +74,7 @@ public class PartitionDetailsPage extends BasicDetailsPage {
 	private class BooleanValueComboSelectionAdapter extends SelectionAdapter {
 		@Override
 		public void widgetSelected(SelectionEvent e){
-			fPartitionAL.setValue(fPartitionValueCombo.getText(), null);
+			fPartitionAL.setValue(fPartitionValueCombo.getText(), null, PartitionDetailsPage.this);
 			fBooleanValueCombo.setText(getSelectedPartition().getValueString());
 		}
 	}
@@ -82,7 +82,7 @@ public class PartitionDetailsPage extends BasicDetailsPage {
 	private class ValueComboSelectionAdapter extends SelectionAdapter {
 		@Override
 		public void widgetSelected(SelectionEvent e){
-			fPartitionAL.setValue(fPartitionValueCombo.getText(), null);
+			fPartitionAL.setValue(fPartitionValueCombo.getText(), null, PartitionDetailsPage.this);
 			fPartitionValueCombo.setText(getSelectedPartition().getValueString());
 		}
 	}
@@ -91,7 +91,7 @@ public class PartitionDetailsPage extends BasicDetailsPage {
 		@Override
 		public void handleEvent(Event event){
 			if(event.keyCode == SWT.CR || event.keyCode == SWT.KEYPAD_CR){
-				fPartitionAL.setValue(fPartitionValueCombo.getText(), null);
+				fPartitionAL.setValue(fPartitionValueCombo.getText(), null, PartitionDetailsPage.this);
 				fPartitionValueCombo.setText(getSelectedPartition().getValueString());
 			}
 		}

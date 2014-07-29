@@ -16,6 +16,7 @@ import com.testify.ecfeed.modelif.ModelOperationManager;
 import com.testify.ecfeed.modelif.java.partition.PartitionOperationRename;
 import com.testify.ecfeed.modelif.java.partition.PartitionOperationSetValue;
 import com.testify.ecfeed.ui.editor.BasicSection;
+import com.testify.ecfeed.ui.editor.IModelUpdateListener;
 
 public class PartitionInterface extends GenericNodeInterface{
 
@@ -29,11 +30,11 @@ public class PartitionInterface extends GenericNodeInterface{
 		fTarget = partition;
 	}
 	
-	public void setName(String newName, BasicSection source){
-		execute(new PartitionOperationRename(fTarget, newName), source, Messages.DIALOG_PARTITION_NAME_PROBLEM_TITLE);
+	public void setName(String newName, BasicSection source, IModelUpdateListener updateListener){
+		execute(new PartitionOperationRename(fTarget, newName), source, updateListener, Messages.DIALOG_PARTITION_NAME_PROBLEM_TITLE);
 	}
 
-	public void setValue(String newValue, BasicSection source){
-		execute(new PartitionOperationSetValue(fTarget, newValue), source, Messages.DIALOG_PARTITION_VALUE_PROBLEM_TITLE);
+	public void setValue(String newValue, BasicSection source, IModelUpdateListener updateListener){
+		execute(new PartitionOperationSetValue(fTarget, newValue), source, updateListener, Messages.DIALOG_PARTITION_VALUE_PROBLEM_TITLE);
 	}
 }

@@ -1,7 +1,5 @@
 package com.testify.ecfeed.modelif.java.partition;
 
-import com.testify.ecfeed.modelif.java.Constants;
-import com.testify.ecfeed.utils.ClassUtils;
 
 public class PartitionUtils {
 //	public static Object getPartitionValueFromString(String valueString, String type, ClassLoader loader) {

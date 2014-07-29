@@ -11,6 +11,7 @@
 
 package com.testify.ecfeed.ui.editor;
 
+import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -21,17 +22,22 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.forms.IFormPart;
 
 import com.testify.ecfeed.model.RootNode;
+import com.testify.ecfeed.modelif.ModelOperationManager;
+import com.testify.ecfeed.ui.common.RootInterface;
 
 public class ModelDetailsPage extends BasicDetailsPage {
 
 	RootNode fModel;
 	private ClassViewer fClassesSection;
 	private Text fModelNameText;
+	private RootInterface fRootIf;
 	
-	public ModelDetailsPage(ModelMasterSection masterSection) {
+	public ModelDetailsPage(ModelMasterSection masterSection, ModelOperationManager operationManager) {
 		super(masterSection);
+		fRootIf = new RootInterface(operationManager);
 	}
 
 	@Override
@@ -71,13 +77,8 @@ public class ModelDetailsPage extends BasicDetailsPage {
 	}
 
 	private void renameModel(String text) {
-		if(!fModel.getName().equals(text)){
-			fModel.setName(text);
-			modelUpdated(null);
-		}
-		else{
-			fModelNameText.setText(fModel.getName());
-		}
+		fRootIf.setName(text, null, this);
+		fModelNameText.setText(fModel.getName());
 	}
 
 	@Override
@@ -91,5 +92,12 @@ public class ModelDetailsPage extends BasicDetailsPage {
 		}
 	}
 	
+	@Override
+	public void selectionChanged(IFormPart part, ISelection selection) {
+		super.selectionChanged(part, selection);
+		if(getSelectedElement() instanceof RootNode){
+			fRootIf.setTarget((RootNode)getSelectedElement());
+		}
+	}
 
 }

@@ -9,6 +9,6 @@ public class Messages {
 				"Partition value must fit to type and range of the represented parameter.\n" +
 				"Partitions of user defined type must follow Java enum defining rules.";
 	}
-	public static final String MODEL_NAME_REGEX_PROBLEM = "Model name must contain between 1 and 64 alphanumeric characters or spaces and most not contain only spaces.";
+	public static final String MODEL_NAME_REGEX_PROBLEM = "Model name must contain between 1 and 64 alphanumeric characters or spaces.\n The model name must not start with space.";
 
 }

@@ -7,6 +7,7 @@ import com.testify.ecfeed.modelif.IModelOperation;
 import com.testify.ecfeed.modelif.ModelIfException;
 import com.testify.ecfeed.modelif.ModelOperationManager;
 import com.testify.ecfeed.ui.editor.BasicSection;
+import com.testify.ecfeed.ui.editor.IModelUpdateListener;
 
 public class GenericNodeInterface {
 
@@ -16,17 +17,16 @@ public class GenericNodeInterface {
 		fOperationManager = modelOperationManager;
 	}
 
-	protected void execute(IModelOperation operation, BasicSection source, String errorMessageTitle){
+	protected void execute(IModelOperation operation, BasicSection source, IModelUpdateListener updateListener, String errorMessageTitle){
 		try{
 			fOperationManager.execute(operation);
-			if(source != null){
-				source.getUpdateListener().modelUpdated(source);
+			if(updateListener != null){
+				updateListener.modelUpdated(source);
 			}
 		}catch(ModelIfException e){
 			MessageDialog.openError(Display.getCurrent().getActiveShell(), 
 					errorMessageTitle, 
 					e.getMessage());
-
 		}
 	}
 }

@@ -58,6 +58,6 @@ public class PartitionNameEditingSupport extends EditingSupport{
 		PartitionInterface al = new PartitionInterface(fOperationManager);
 		al.setTarget(partition);
 
-		al.setName(newName, fSection);
+		al.setName(newName, fSection, fSection.getUpdateListener());
 	}
 }

@@ -37,14 +37,7 @@ public class PartitionValueEditingSupport extends EditingSupport {
 		fModelOperationManager = operationManager;
 		fSection = viewer;
 	}
-//
-//	public PartitionValueEditingSupport(PartitionChildrenViewer viewer) {
-//		super(viewer.getTableViewer());
-//		String[] items = {""};
-//		fCellEditor = new ComboBoxCellEditor(viewer.getTable(), items);
-//		fSection = viewer;
-//	}
-//	
+
 	@Override
 	protected CellEditor getCellEditor(Object element) {
 		PartitionNode node = (PartitionNode)element;
@@ -102,6 +95,6 @@ public class PartitionValueEditingSupport extends EditingSupport {
 			return;
 		}
 
-		al.setValue(newValue, fSection);
+		al.setValue(newValue, fSection, fSection.getUpdateListener());
 	}
 }

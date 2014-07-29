@@ -55,7 +55,7 @@ public class ModelMasterDetailsBlock extends MasterDetailsBlock implements IMode
 	protected void registerPages(DetailsPart detailsPart) {
 		ModelOperationManager operationManager = getPage().getEditor().getModelOperationManager();
 		
-		detailsPart.registerPage(RootNode.class, new ModelDetailsPage(fMasterSection));
+		detailsPart.registerPage(RootNode.class, new ModelDetailsPage(fMasterSection, operationManager));
 		detailsPart.registerPage(ClassNode.class, new ClassDetailsPage(fMasterSection));
 		detailsPart.registerPage(MethodNode.class, new MethodDetailsPage(fMasterSection));
 		detailsPart.registerPage(CategoryNode.class, new CategoryDetailsPage(fMasterSection, operationManager));
