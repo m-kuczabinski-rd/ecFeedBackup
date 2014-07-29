@@ -38,7 +38,6 @@ import org.eclipse.swt.widgets.Listener;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Section;
 
-import com.testify.ecfeed.gal.Constants;
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.ConstraintNode;
 import com.testify.ecfeed.model.MethodNode;
@@ -52,6 +51,7 @@ import com.testify.ecfeed.model.constraint.PartitionedCategoryStatement;
 import com.testify.ecfeed.model.constraint.Relation;
 import com.testify.ecfeed.model.constraint.StatementArray;
 import com.testify.ecfeed.model.constraint.StaticStatement;
+import com.testify.ecfeed.modelif.Constants;
 import com.testify.ecfeed.utils.ModelUtils;
 
 public class ConstraintViewer extends TreeViewerSection {

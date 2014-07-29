@@ -62,7 +62,7 @@ public class DefaultValueEditingSupport extends EditingSupport {
 		fComboCellEditor.setValue(partition.getValueString());
 
 		if(ModelUtils.getJavaTypes().contains(partition.getCategory().getType())
-				&& !partition.getCategory().getType().equals(com.testify.ecfeed.gal.Constants.TYPE_NAME_BOOLEAN)){
+				&& !partition.getCategory().getType().equals(com.testify.ecfeed.modelif.Constants.TYPE_NAME_BOOLEAN)){
 			fComboCellEditor.getViewer().getCCombo().setEditable(true);
 		} else{
 			fComboCellEditor.setActivationStyle(ComboBoxViewerCellEditor.DROP_DOWN_ON_KEY_ACTIVATION

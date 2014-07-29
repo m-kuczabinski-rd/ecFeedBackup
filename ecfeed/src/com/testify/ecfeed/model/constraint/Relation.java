@@ -11,7 +11,7 @@
 
 package com.testify.ecfeed.model.constraint;
 
-import com.testify.ecfeed.gal.Constants;
+import com.testify.ecfeed.modelif.Constants;
 
 public enum Relation{
 	EQUAL(Constants.RELATION_EQUAL), 

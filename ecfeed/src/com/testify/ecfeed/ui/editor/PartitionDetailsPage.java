@@ -29,9 +29,9 @@ import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.IFormPart;
 
-import com.testify.ecfeed.gal.Constants;
-import com.testify.ecfeed.gal.ModelOperationManager;
 import com.testify.ecfeed.model.PartitionNode;
+import com.testify.ecfeed.modelif.Constants;
+import com.testify.ecfeed.modelif.ModelOperationManager;
 import com.testify.ecfeed.ui.common.PartitionInterface;
 import com.testify.ecfeed.utils.ModelUtils;
 

@@ -3,10 +3,10 @@ package com.testify.ecfeed.ui.common;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
 
-import com.testify.ecfeed.gal.GalException;
-import com.testify.ecfeed.gal.IModelOperation;
-import com.testify.ecfeed.gal.ModelOperationManager;
-import com.testify.ecfeed.gal.NodeAbstractionLayer;
+import com.testify.ecfeed.modelif.GalException;
+import com.testify.ecfeed.modelif.IModelOperation;
+import com.testify.ecfeed.modelif.ModelOperationManager;
+import com.testify.ecfeed.modelif.NodeAbstractionLayer;
 import com.testify.ecfeed.ui.editor.BasicSection;
 
 public class GenericNodeInterface extends NodeAbstractionLayer {

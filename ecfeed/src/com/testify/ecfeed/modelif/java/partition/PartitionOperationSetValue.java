@@ -1,12 +1,12 @@
-package com.testify.ecfeed.gal.java.partition;
+package com.testify.ecfeed.modelif.java.partition;
 
 import java.util.Arrays;
 import java.util.List;
 
-import com.testify.ecfeed.gal.Constants;
-import com.testify.ecfeed.gal.GalException;
-import com.testify.ecfeed.gal.IModelOperation;
 import com.testify.ecfeed.model.PartitionNode;
+import com.testify.ecfeed.modelif.Constants;
+import com.testify.ecfeed.modelif.GalException;
+import com.testify.ecfeed.modelif.IModelOperation;
 import com.testify.ecfeed.utils.ClassUtils;
 
 public class PartitionOperationSetValue implements IModelOperation {
@@ -42,10 +42,10 @@ public class PartitionOperationSetValue implements IModelOperation {
 	}
 
 	private boolean validatePartitionValue(String type, String value) {
-		if (type.equals(com.testify.ecfeed.gal.Constants.TYPE_NAME_STRING)) return true;
+		if (type.equals(com.testify.ecfeed.modelif.Constants.TYPE_NAME_STRING)) return true;
 	
 		if (value.length() == 0) return false;
-		if (value.length() > com.testify.ecfeed.gal.Constants.MAX_PARTITION_VALUE_STRING_LENGTH) return false;
+		if (value.length() > com.testify.ecfeed.modelif.Constants.MAX_PARTITION_VALUE_STRING_LENGTH) return false;
 	
 		if (ClassUtils.getPartitionValueFromString(value, type, ClassUtils.getClassLoader(true, null)) != null){
 			return true;

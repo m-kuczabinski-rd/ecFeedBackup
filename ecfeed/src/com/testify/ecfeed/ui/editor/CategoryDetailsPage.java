@@ -28,9 +28,9 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
 
-import com.testify.ecfeed.gal.ModelOperationManager;
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.PartitionNode;
+import com.testify.ecfeed.modelif.ModelOperationManager;
 import com.testify.ecfeed.ui.common.CategoryNodeAbstractLayer;
 import com.testify.ecfeed.ui.common.PartitionNodeAbstractLayer;
 import com.testify.ecfeed.utils.ModelUtils;
@@ -225,7 +225,7 @@ public class CategoryDetailsPage extends BasicDetailsPage {
 	private void refreshForExpected(){
 		if(ModelUtils.getJavaTypes().contains(fSelectedCategory.getType())){
 			fPartitionsViewer.setVisible(false);
-			if(fSelectedCategory.getType().equals(com.testify.ecfeed.gal.Constants.TYPE_NAME_BOOLEAN)){
+			if(fSelectedCategory.getType().equals(com.testify.ecfeed.modelif.Constants.TYPE_NAME_BOOLEAN)){
 				fDefaultEditableValueCombo.setVisible(false);
 				fDefaultValueCombo.setVisible(true);
 				fDefaultValueCombo.setEnabled(true);

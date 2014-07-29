@@ -11,7 +11,7 @@
 
 package com.testify.ecfeed.testutils;
 
-import static com.testify.ecfeed.gal.Constants.*;
+import static com.testify.ecfeed.modelif.Constants.*;
 
 public class Constants {
 	public static final String USER_TYPE = "user.type";

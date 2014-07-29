@@ -15,8 +15,8 @@ import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.EditingSupport;
 import org.eclipse.jface.viewers.TextCellEditor;
 
-import com.testify.ecfeed.gal.ModelOperationManager;
 import com.testify.ecfeed.model.PartitionNode;
+import com.testify.ecfeed.modelif.ModelOperationManager;
 import com.testify.ecfeed.ui.common.PartitionInterface;
 
 public class PartitionNameEditingSupport extends EditingSupport{

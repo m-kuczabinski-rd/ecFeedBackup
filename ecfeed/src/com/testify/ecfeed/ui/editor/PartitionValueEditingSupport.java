@@ -20,8 +20,8 @@ import org.eclipse.jface.viewers.EditingSupport;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CCombo;
 
-import com.testify.ecfeed.gal.ModelOperationManager;
 import com.testify.ecfeed.model.PartitionNode;
+import com.testify.ecfeed.modelif.ModelOperationManager;
 import com.testify.ecfeed.ui.common.PartitionInterface;
 import com.testify.ecfeed.utils.ModelUtils;
 
@@ -49,7 +49,7 @@ public class PartitionValueEditingSupport extends EditingSupport {
 	protected CellEditor getCellEditor(Object element) {
 		PartitionNode node = (PartitionNode)element;
 		if (!ModelUtils.getJavaTypes().contains(node.getCategory().getType())
-				|| node.getCategory().getType().equals(com.testify.ecfeed.gal.Constants.TYPE_NAME_BOOLEAN)) {
+				|| node.getCategory().getType().equals(com.testify.ecfeed.modelif.Constants.TYPE_NAME_BOOLEAN)) {
 			fCellEditor.setActivationStyle(ComboBoxCellEditor.DROP_DOWN_ON_MOUSE_ACTIVATION);
 		} else {
 			fCellEditor.setActivationStyle(SWT.NONE);

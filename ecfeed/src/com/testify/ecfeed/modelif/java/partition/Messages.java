@@ -1,4 +1,4 @@
-package com.testify.ecfeed.gal.java.partition;
+package com.testify.ecfeed.modelif.java.partition;
 
 public class Messages {
 

@@ -19,9 +19,9 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Section;
 
-import com.testify.ecfeed.gal.ModelOperationManager;
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.PartitionNode;
+import com.testify.ecfeed.modelif.ModelOperationManager;
 import com.testify.ecfeed.ui.common.PartitionNodeAbstractLayer;
 import com.testify.ecfeed.utils.Constants;
 import com.testify.ecfeed.utils.ModelUtils;

@@ -16,7 +16,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import com.testify.ecfeed.gal.Constants;
+import com.testify.ecfeed.modelif.Constants;
 
 public abstract class GenericNode implements IGenericNode{
 	private String fName;

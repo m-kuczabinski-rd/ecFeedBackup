@@ -11,10 +11,10 @@
 
 package com.testify.ecfeed.ui.common;
 
-import com.testify.ecfeed.gal.ModelOperationManager;
-import com.testify.ecfeed.gal.java.partition.PartitionOperationRename;
-import com.testify.ecfeed.gal.java.partition.PartitionOperationSetValue;
 import com.testify.ecfeed.model.PartitionNode;
+import com.testify.ecfeed.modelif.ModelOperationManager;
+import com.testify.ecfeed.modelif.java.partition.PartitionOperationRename;
+import com.testify.ecfeed.modelif.java.partition.PartitionOperationSetValue;
 import com.testify.ecfeed.ui.editor.BasicSection;
 
 public class PartitionInterface extends GenericNodeInterface{

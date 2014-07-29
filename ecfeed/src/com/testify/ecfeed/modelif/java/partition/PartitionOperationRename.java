@@ -1,9 +1,9 @@
-package com.testify.ecfeed.gal.java.partition;
+package com.testify.ecfeed.modelif.java.partition;
 
-import com.testify.ecfeed.gal.Constants;
-import com.testify.ecfeed.gal.GalException;
-import com.testify.ecfeed.gal.IModelOperation;
 import com.testify.ecfeed.model.PartitionNode;
+import com.testify.ecfeed.modelif.Constants;
+import com.testify.ecfeed.modelif.GalException;
+import com.testify.ecfeed.modelif.IModelOperation;
 
 public class PartitionOperationRename implements IModelOperation {
 

@@ -1,4 +1,4 @@
-package com.testify.ecfeed.gal;
+package com.testify.ecfeed.modelif;
 
 import java.util.ArrayList;
 import java.util.List;

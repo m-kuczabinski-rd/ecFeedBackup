@@ -1,4 +1,4 @@
-package com.testify.ecfeed.gal;
+package com.testify.ecfeed.modelif;
 
 public class GalException extends Exception {
 
