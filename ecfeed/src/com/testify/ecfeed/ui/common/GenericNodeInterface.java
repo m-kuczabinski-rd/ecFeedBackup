@@ -17,16 +17,18 @@ public class GenericNodeInterface {
 		fOperationManager = modelOperationManager;
 	}
 
-	protected void execute(IModelOperation operation, BasicSection source, IModelUpdateListener updateListener, String errorMessageTitle){
+	protected boolean execute(IModelOperation operation, BasicSection source, IModelUpdateListener updateListener, String errorMessageTitle){
 		try{
 			fOperationManager.execute(operation);
 			if(updateListener != null){
 				updateListener.modelUpdated(source);
 			}
+			return true;
 		}catch(ModelIfException e){
 			MessageDialog.openError(Display.getCurrent().getActiveShell(), 
 					errorMessageTitle, 
 					e.getMessage());
 		}
+		return false;
 	}
 }

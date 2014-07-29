@@ -34,9 +34,11 @@ public class ModelDetailsPage extends BasicDetailsPage {
 	private ClassViewer fClassesSection;
 	private Text fModelNameText;
 	private RootInterface fRootIf;
+	private ModelOperationManager fOperationManager;
 	
 	public ModelDetailsPage(ModelMasterSection masterSection, ModelOperationManager operationManager) {
 		super(masterSection);
+		fOperationManager = operationManager;
 		fRootIf = new RootInterface(operationManager);
 	}
 
@@ -46,7 +48,7 @@ public class ModelDetailsPage extends BasicDetailsPage {
 		getMainSection().setText("Model details");
 
 		createModelNameEdit(getMainComposite());
-		addForm(fClassesSection = new ClassViewer(this, getToolkit()));
+		addForm(fClassesSection = new ClassViewer(this, getToolkit(), fOperationManager));
 
 		getToolkit().paintBordersFor(getMainComposite());
 	}

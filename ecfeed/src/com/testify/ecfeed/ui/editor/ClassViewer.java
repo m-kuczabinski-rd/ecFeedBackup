@@ -22,16 +22,21 @@ import org.eclipse.ui.forms.widgets.Section;
 
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.RootNode;
+import com.testify.ecfeed.modelif.ModelOperationManager;
 import com.testify.ecfeed.utils.Constants;
 import com.testify.ecfeed.utils.ModelUtils;
 import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.dialogs.TestClassSelectionDialog;
+import com.testify.ecfeed.ui.modelif.RootInterface;
 
 public class ClassViewer extends CheckboxTableViewerSection {
 	private static final int STYLE = Section.EXPANDED | Section.TITLE_BAR;
 
 	private RootNode fModel;
 	private TableViewerColumn nameColumn;
+	private ModelOperationManager fOperationManager;
+
+	private RootInterface fRootIf;
 
 	private class AddImplementedClassAdapter extends SelectionAdapter {
 
@@ -90,28 +95,32 @@ public class ClassViewer extends CheckboxTableViewerSection {
 	private class AddNewClassAdapter extends SelectionAdapter {
 		@Override
 		public void widgetSelected(SelectionEvent e) {
-			String startName = Constants.DEFAULT_NEW_PACKAGE_NAME + "." + Constants.DEFAULT_NEW_CLASS_NAME;
-			String name = startName;
-			int i = 1;
-
-			while (true) {
-				if (fModel.getClassModel(name) == null) {
-					break;
-				}
-				name = startName + i;
-				++i;
+//			String startName = Constants.DEFAULT_NEW_PACKAGE_NAME + "." + Constants.DEFAULT_NEW_CLASS_NAME;
+//			String name = startName;
+//			int i = 1;
+//
+//			while (true) {
+//				if (fModel.getClassModel(name) == null) {
+//					break;
+//				}
+//				name = startName + i;
+//				++i;
+//			}
+//
+//			ClassNode classNode = new ClassNode(name);
+//			fModel.addClass(classNode);
+//			modelUpdated();
+			ClassNode addedClass = fRootIf.addNewClass(null, ClassViewer.this, getUpdateListener());
+			if(addedClass != null){
+				selectElement(addedClass);
+				nameColumn.getViewer().editElement(addedClass, 0);
 			}
-
-			ClassNode classNode = new ClassNode(name);
-			fModel.addClass(classNode);
-			modelUpdated();
-			selectElement(classNode);
-			nameColumn.getViewer().editElement(classNode, 0);
 		}
 	}
 
-	public ClassViewer(BasicDetailsPage parent, FormToolkit toolkit) {
+	public ClassViewer(BasicDetailsPage parent, FormToolkit toolkit, ModelOperationManager operationManager) {
 		super(parent.getMainComposite(), toolkit, STYLE, parent);
+		fRootIf = new RootInterface(operationManager);
 		
 		setText("Classes");
 		addButton("Add implemented class", new AddImplementedClassAdapter());
@@ -141,6 +150,7 @@ public class ClassViewer extends CheckboxTableViewerSection {
 	
 	public void setInput(RootNode model){
 		super.setInput(model.getClasses());
+		fRootIf.setTarget(model);
 		fModel = model;
 	}
 	

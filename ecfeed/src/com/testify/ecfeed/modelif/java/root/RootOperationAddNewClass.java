@@ -12,11 +12,6 @@ public class RootOperationAddNewClass implements IModelOperation {
 	private RootNode fTarget;
 	private ClassNode fAddedClass;
 	
-	public RootOperationAddNewClass(RootNode target, String className) {
-		fTarget = target;
-		fAddedClass = new ClassNode(className);
-	}
-	
 	public RootOperationAddNewClass(RootNode target, ClassNode addedClass) {
 		fTarget = target;
 		fAddedClass = addedClass;
