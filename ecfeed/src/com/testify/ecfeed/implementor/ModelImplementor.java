@@ -33,8 +33,10 @@ import org.eclipse.jdt.core.dom.Block;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.EnumConstantDeclaration;
 import org.eclipse.jdt.core.dom.EnumDeclaration;
+import org.eclipse.jdt.core.dom.Expression;
 import org.eclipse.jdt.core.dom.ExpressionStatement;
 import org.eclipse.jdt.core.dom.ImportDeclaration;
+import org.eclipse.jdt.core.dom.InfixExpression;
 import org.eclipse.jdt.core.dom.MarkerAnnotation;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.MethodInvocation;
@@ -399,14 +401,58 @@ public class ModelImplementor implements IModelImplementor {
 		MethodInvocation methodInvocation = unit.getAST().newMethodInvocation();
 		QualifiedName name = unit.getAST().newQualifiedName(unit.getAST().newSimpleName("System"), unit.getAST().newSimpleName("out"));
 		methodInvocation.setExpression(name);
-		methodInvocation.setName(unit.getAST().newSimpleName("println")); 
-		StringLiteral literal = unit.getAST().newStringLiteral();
-		literal.setLiteralValue(methodName);
-		methodInvocation.arguments().add(literal);
+		methodInvocation.setName(unit.getAST().newSimpleName("println"));
+
+		Expression expression = null;
+		if (parameters.size() > 0) {
+			StringLiteral literal = unit.getAST().newStringLiteral();
+			literal.setLiteralValue("(");
+			expression = literal;
+			for (int k = 0; k < parameters.size(); ++k) {
+				Expression argExpression = null;
+				if (k < parameters.size() - 1) {
+					InfixExpression plusExpression = unit.getAST().newInfixExpression();
+					plusExpression.setOperator(InfixExpression.Operator.PLUS);
+					literal = unit.getAST().newStringLiteral();
+					literal.setLiteralValue(", ");
+					plusExpression.setLeftOperand(unit.getAST().newSimpleName(parameters.get(k)));
+					plusExpression.setRightOperand(literal);
+					argExpression = plusExpression;
+				} else {
+					argExpression = unit.getAST().newSimpleName(parameters.get(k));
+				}
+
+				InfixExpression newExpression = unit.getAST().newInfixExpression();
+				newExpression.setOperator(InfixExpression.Operator.PLUS);
+				newExpression.setLeftOperand(expression);
+				newExpression.setRightOperand(argExpression);
+				expression = newExpression;
+			}
+			literal = unit.getAST().newStringLiteral();
+			literal.setLiteralValue(")");
+			InfixExpression newExpression = unit.getAST().newInfixExpression();
+			newExpression.setOperator(InfixExpression.Operator.PLUS);
+			newExpression.setLeftOperand(expression);
+			newExpression.setRightOperand(literal);
+			expression = newExpression;
+		} else {
+			InfixExpression plusExpression = unit.getAST().newInfixExpression();
+			plusExpression.setOperator(InfixExpression.Operator.PLUS);
+			StringLiteral literal = unit.getAST().newStringLiteral();
+			literal.setLiteralValue("(");
+			plusExpression.setLeftOperand(literal);
+			literal = unit.getAST().newStringLiteral();
+			literal.setLiteralValue(")");
+			plusExpression.setRightOperand(literal);
+			expression = plusExpression;
+		}
+
+		methodInvocation.arguments().add(expression);
 		ExpressionStatement expressionStatement = unit.getAST().newExpressionStatement(methodInvocation);
 		block.statements().add(expressionStatement);
 		methodDeclaration.setBody(block);
 		type.bodyDeclarations().add(methodDeclaration);
+		// TODO Auto-generated method stub
 	}
 
 	@SuppressWarnings("unchecked")
