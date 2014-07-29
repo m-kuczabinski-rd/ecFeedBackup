@@ -23,19 +23,16 @@ import org.eclipse.ui.forms.widgets.Section;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.modelif.ModelOperationManager;
-import com.testify.ecfeed.utils.Constants;
-import com.testify.ecfeed.utils.ModelUtils;
 import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.dialogs.TestClassSelectionDialog;
 import com.testify.ecfeed.ui.modelif.RootInterface;
+import com.testify.ecfeed.utils.ModelUtils;
 
 public class ClassViewer extends CheckboxTableViewerSection {
 	private static final int STYLE = Section.EXPANDED | Section.TITLE_BAR;
 
 	private RootNode fModel;
 	private TableViewerColumn nameColumn;
-	private ModelOperationManager fOperationManager;
-
 	private RootInterface fRootIf;
 
 	private class AddImplementedClassAdapter extends SelectionAdapter {
@@ -95,21 +92,6 @@ public class ClassViewer extends CheckboxTableViewerSection {
 	private class AddNewClassAdapter extends SelectionAdapter {
 		@Override
 		public void widgetSelected(SelectionEvent e) {
-//			String startName = Constants.DEFAULT_NEW_PACKAGE_NAME + "." + Constants.DEFAULT_NEW_CLASS_NAME;
-//			String name = startName;
-//			int i = 1;
-//
-//			while (true) {
-//				if (fModel.getClassModel(name) == null) {
-//					break;
-//				}
-//				name = startName + i;
-//				++i;
-//			}
-//
-//			ClassNode classNode = new ClassNode(name);
-//			fModel.addClass(classNode);
-//			modelUpdated();
 			ClassNode addedClass = fRootIf.addNewClass(null, ClassViewer.this, getUpdateListener());
 			if(addedClass != null){
 				selectElement(addedClass);
