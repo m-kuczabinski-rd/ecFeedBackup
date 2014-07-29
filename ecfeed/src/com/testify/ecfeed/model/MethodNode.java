@@ -327,10 +327,6 @@ public class MethodNode extends GenericNode {
 		removeMentioningTestCases(partition);
 	}
 
-	public boolean validateConstraintName(String name) {
-		return super.validateNodeName(name);
-	}
-	
 	public boolean isPartitionMentioned(PartitionNode partition){
 		for(ConstraintNode constraint : fConstraints){
 			if(constraint.mentions(partition)){

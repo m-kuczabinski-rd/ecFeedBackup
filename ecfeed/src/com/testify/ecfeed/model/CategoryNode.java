@@ -145,17 +145,6 @@ public class CategoryNode extends GenericNode implements IPartitionedNode{
 		return (MethodNode)getParent();
 	}
 
-	/**
-	 * Checks if certain name is valid for given partition in given category
-	 * @param name Name to validate
-	 * @param parent Parent for which the name is validated
-	 * @param partition Partition for which the name is validated. May be null
-	 * @return
-	 */ 
-	public boolean validatePartitionName(String name){
-		return validateNodeName(name);
-	}
-
 	public List<String> getPartitionNames() {
 		ArrayList<String> names = new ArrayList<String>();
 		for(PartitionNode partition : getPartitions()){

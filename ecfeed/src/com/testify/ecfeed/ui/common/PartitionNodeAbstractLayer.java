@@ -58,17 +58,4 @@ public class PartitionNodeAbstractLayer{
 		return false;
 	}
 
-	public static boolean changePartitionName(PartitionNode partition, String newName){
-		if(newName.equals(partition.getName()) == false){
-			if(!partition.getCategory().validatePartitionName(newName) || partition.hasSibling(newName)){
-				MessageDialog.openError(Display.getCurrent().getActiveShell(),
-						Messages.DIALOG_PARTITION_NAME_PROBLEM_TITLE,
-						Messages.DIALOG_PARTITION_NAME_PROBLEM_MESSAGE);
-				return false;
-			}
-			partition.setName(newName);
-			return true;
-		}
-		return false;
-	}
 }

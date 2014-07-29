@@ -11,14 +11,11 @@
 
 package com.testify.ecfeed.ui.editor;
 
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.EditingSupport;
 import org.eclipse.jface.viewers.TextCellEditor;
-import org.eclipse.swt.widgets.Display;
 
 import com.testify.ecfeed.model.ConstraintNode;
-import com.testify.ecfeed.ui.common.Messages;
 
 public class ConstraintNameEditingSupport extends EditingSupport{
 
@@ -53,14 +50,8 @@ public class ConstraintNameEditingSupport extends EditingSupport{
 		if(newName.equals(ConstraintNode.getName()))
 			return;
 
-		boolean validName = ConstraintNode.getMethod().validateConstraintName(newName);
-		if(!validName){
-			MessageDialog.openError(Display.getCurrent().getActiveShell(), Messages.DIALOG_CONSTRAINT_NAME_PROBLEM_TITLE,
-					Messages.DIALOG_CONSTRAINT_NAME_PROBLEM_MESSAGE);
-		} else{
-			ConstraintNode.setName(newName);
-			fSection.modelUpdated();
-		}
+		ConstraintNode.setName(newName);
+		fSection.modelUpdated();
 	}
 	
 }

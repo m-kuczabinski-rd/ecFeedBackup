@@ -16,8 +16,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import com.testify.ecfeed.modelif.Constants;
-
 public abstract class GenericNode implements IGenericNode{
 	private String fName;
 	private IGenericNode fParent;
@@ -148,15 +146,6 @@ public abstract class GenericNode implements IGenericNode{
 			return ((GenericNode)obj).getId() == fId;
 		}
 		return false;
-	}
-	
-	protected boolean validateNodeName(String name) {
-		if (name == null) return false;
-		if(name.length() == 0) return false;
-		if(name.length() > Constants.MAX_NODE_NAME_LENGTH) return false;
-		if(name.matches("[ ]+.*")) return false;
-		
-		return true;
 	}
 	
 	@Override

@@ -39,8 +39,7 @@ public class ConstraintDetailsPage extends BasicDetailsPage {
 
 		protected void applyConstraintName(ConstraintNode constraint, Combo nameCombo) {
 			String newName = nameCombo.getText();
-			if(constraint.getMethod().validateConstraintName(newName) && 
-					newName.equals(constraint.getName()) == false){
+			if(newName.equals(constraint.getName()) == false){
 				constraint.setName(newName);
 				modelUpdated(null);
 			}
