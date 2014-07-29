@@ -19,6 +19,7 @@ Bundle-ActivationPolicy: lazy
 Import-Package: 
  org.eclipse.jdt.core,
  org.eclipse.jdt.core.dom,
+ org.eclipse.jdt.core.dom.rewrite,
  org.eclipse.jdt.ui,
  org.eclipse.jface.text,
  org.eclipse.jface.text.presentation,

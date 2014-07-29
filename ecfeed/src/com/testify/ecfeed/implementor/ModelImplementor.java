@@ -27,6 +27,7 @@ import org.eclipse.jdt.core.IPackageFragmentRoot;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.dom.AST;
+import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.ASTParser;
 import org.eclipse.jdt.core.dom.AbstractTypeDeclaration;
 import org.eclipse.jdt.core.dom.Block;
@@ -44,12 +45,15 @@ import org.eclipse.jdt.core.dom.PackageDeclaration;
 import org.eclipse.jdt.core.dom.PrimitiveType;
 import org.eclipse.jdt.core.dom.SingleMemberAnnotation;
 import org.eclipse.jdt.core.dom.SingleVariableDeclaration;
+import org.eclipse.jdt.core.dom.Statement;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 import org.eclipse.jdt.core.dom.Modifier;
 import org.eclipse.jdt.core.dom.QualifiedName;
 import org.eclipse.jdt.core.dom.StringLiteral;
 import org.eclipse.jdt.core.dom.TypeLiteral;
 import org.eclipse.jdt.core.dom.Type;
+import org.eclipse.jdt.core.dom.rewrite.ASTRewrite;
+import org.eclipse.jdt.core.dom.rewrite.ListRewrite;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.text.edits.TextEdit;
 
@@ -68,13 +72,14 @@ public class ModelImplementor implements IModelImplementor {
 		TypeDeclaration type = null;
 		if (testUnit != null) {
 			type = (TypeDeclaration)getTypeInstance(testUnit, node.getRoot().getName(), node.getQualifiedName(), ModelUtils.classDefinitionImplemented(node), true);
+			int methods = type.getMethods().length;
 
 			if ((type != null) && !ModelUtils.classMethodsImplemented(node)) {
 				for (MethodNode method : node.getMethods()) {
 					implementMethodNode(testUnit, type, method);
 				}
 			}
-			writeCompilationUnit(testUnit, unitPair.getKey());
+			writeCompilationUnit(testUnit, unitPair.getKey(), type.getMethods().length - methods);
 		}
 	}
 
@@ -85,11 +90,12 @@ public class ModelImplementor implements IModelImplementor {
 		if (testUnit != null) {
 			type = (TypeDeclaration)getTypeInstance(
 					testUnit, node.getRoot().getName(), node.getClassNode().getQualifiedName(), ModelUtils.classDefinitionImplemented(node.getClassNode()), true);
+			int methods = type.getMethods().length;
 
 			if ((type != null) && !ModelUtils.methodDefinitionImplemented(node)) {
 				implementMethodNode(testUnit, type, node);
 			}
-			writeCompilationUnit(testUnit, unitPair.getKey());
+			writeCompilationUnit(testUnit, unitPair.getKey(), type.getMethods().length - methods);
 		}
 	}
 
@@ -115,7 +121,7 @@ public class ModelImplementor implements IModelImplementor {
 						implementPartitionNode(categoryUnit, categoryType, node);
 					}
 				}
-				writeCompilationUnit(categoryUnit, unitPair.getKey());
+				writeCompilationUnit(categoryUnit, unitPair.getKey(), 0);
 			}
 		}
 	}
@@ -147,7 +153,7 @@ public class ModelImplementor implements IModelImplementor {
 						}
 					}
 				}
-				writeCompilationUnit(categoryUnit, unitPair.getKey());
+				writeCompilationUnit(categoryUnit, unitPair.getKey(), 0);
 			}
 		}
 	}
@@ -239,17 +245,40 @@ public class ModelImplementor implements IModelImplementor {
 		return unitPair;
 	}
 
-	private void writeCompilationUnit(CompilationUnit unit, IPath compilationUnitPath) {
+	private void writeCompilationUnit(CompilationUnit unit, IPath compilationUnitPath, int addedMethods) {
 		ITextFileBufferManager bufferManager = FileBuffers.getTextFileBufferManager();
 		ITextFileBuffer textFileBuffer = bufferManager.getTextFileBuffer(compilationUnitPath, LocationKind.LOCATION);
 		IDocument document = textFileBuffer.getDocument();
 		TextEdit edits = unit.rewrite(document, null);
 		try {
 			edits.apply(document);
+			applyComments(document, addedMethods);
 			textFileBuffer.commit(null, false);
 			bufferManager.disconnect(compilationUnitPath, LocationKind.LOCATION, null);
 		} catch (Throwable e) {
 			e.printStackTrace();
+		}
+	}
+
+	private void applyComments(IDocument document, int addedMethods) {
+		final ASTParser parser = ASTParser.newParser(AST.JLS4);
+		parser.setKind(ASTParser.K_COMPILATION_UNIT);
+		parser.setSource(document.get().toCharArray());
+		CompilationUnit unit = (CompilationUnit) parser.createAST(null);
+		ASTRewrite rewriter = ASTRewrite.create(unit.getAST());
+		try {
+			TypeDeclaration typeDecl = (TypeDeclaration)unit.types().get(0);
+			MethodDeclaration [] methods = typeDecl.getMethods();
+			for (int i = methods.length - addedMethods; i < methods.length; ++i) {
+				MethodDeclaration methodDecl = methods[i];
+				Block block = methodDecl.getBody();
+				ListRewrite listRewrite = rewriter.getListRewrite(block, Block.STATEMENTS_PROPERTY);
+				Statement placeHolder = (Statement) rewriter.createStringPlaceholder("// TODO Auto-generated method stub", ASTNode.EMPTY_STATEMENT);
+				listRewrite.insertFirst(placeHolder, null);
+			}
+			TextEdit comments = rewriter.rewriteAST(document, null);
+			comments.apply(document);
+		} catch (Throwable e) {
 		}
 	}
 
