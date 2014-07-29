@@ -2,7 +2,7 @@ package com.testify.ecfeed.modelif.java.partition;
 
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.modelif.Constants;
-import com.testify.ecfeed.modelif.GalException;
+import com.testify.ecfeed.modelif.ModelIfException;
 import com.testify.ecfeed.modelif.IModelOperation;
 
 public class PartitionOperationRename implements IModelOperation {
@@ -18,12 +18,12 @@ public class PartitionOperationRename implements IModelOperation {
 	}
 	
 	@Override
-	public void execute() throws GalException{
+	public void execute() throws ModelIfException{
 		if(fTarget.getSibling(fNewName) != null){
-			throw new GalException(Messages.PARTITION_NAME_NOT_UNIQUE_PROBLEM);
+			throw new ModelIfException(Messages.PARTITION_NAME_NOT_UNIQUE_PROBLEM);
 		}
 		if(fNewName.matches(Constants.REGEX_PARTITION_NODE_NAME) == false){
-			throw new GalException(Messages.PARTITION_NAME_REGEX_PROBLEM);
+			throw new ModelIfException(Messages.PARTITION_NAME_REGEX_PROBLEM);
 		}
 		fTarget.setName(fNewName);
 	}

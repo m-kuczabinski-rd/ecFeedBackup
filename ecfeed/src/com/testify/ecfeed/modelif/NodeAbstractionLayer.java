@@ -9,7 +9,7 @@ public class NodeAbstractionLayer {
 		fModelOperationManager = modelOperationManager;
 	}
 	
-	protected void execute(IModelOperation operation) throws GalException{
+	protected void execute(IModelOperation operation) throws ModelIfException{
 		operation.execute();
 		fModelOperationManager.updateHistory(operation);
 	}

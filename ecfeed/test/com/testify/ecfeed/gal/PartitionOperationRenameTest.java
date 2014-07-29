@@ -10,7 +10,7 @@ import org.junit.Test;
 
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.PartitionNode;
-import com.testify.ecfeed.modelif.GalException;
+import com.testify.ecfeed.modelif.ModelIfException;
 import com.testify.ecfeed.modelif.IModelOperation;
 import com.testify.ecfeed.modelif.java.partition.PartitionOperationRename;
 
@@ -34,7 +34,7 @@ public class PartitionOperationRenameTest {
 		try {
 			operation1.execute();
 			operation2.execute();
-		} catch (GalException e) {
+		} catch (ModelIfException e) {
 			fail("Unexpected exception: " + e.getMessage());
 		}
 		
@@ -60,7 +60,7 @@ public class PartitionOperationRenameTest {
 		try {
 			operation.execute();
 			fail("exception expected");
-		} catch (GalException e) {
+		} catch (ModelIfException e) {
 			assertEquals("p1", p1.getName());
 		}
 
@@ -68,7 +68,7 @@ public class PartitionOperationRenameTest {
 		try {
 			operation.execute();
 			fail("exception expected");
-		} catch (GalException e) {
+		} catch (ModelIfException e) {
 			assertEquals("p1", p1.getName());
 		}
 	}
@@ -103,7 +103,7 @@ public class PartitionOperationRenameTest {
 				operation.execute();
 				fail("Exception expected for operation " + operation);
 			}
-			catch(GalException e){
+			catch(ModelIfException e){
 				assertEquals("p1", p1.getName());
 			}
 		}
@@ -122,7 +122,7 @@ public class PartitionOperationRenameTest {
 		try{
 			renameOperation.execute();
 		}
-		catch (GalException e){
+		catch (ModelIfException e){
 			fail("unexpected exception: " + e.getMessage());
 		}
 		assertEquals("p3", p1.getName());
@@ -131,7 +131,7 @@ public class PartitionOperationRenameTest {
 		try{
 			reverseOperation.execute();
 		}
-		catch (GalException e){
+		catch (ModelIfException e){
 			fail("unexpected exception: " + e.getMessage());
 		}
 		assertEquals("p1", p1.getName());

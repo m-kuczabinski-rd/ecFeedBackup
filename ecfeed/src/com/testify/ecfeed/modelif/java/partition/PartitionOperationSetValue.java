@@ -5,7 +5,7 @@ import java.util.List;
 
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.modelif.Constants;
-import com.testify.ecfeed.modelif.GalException;
+import com.testify.ecfeed.modelif.ModelIfException;
 import com.testify.ecfeed.modelif.IModelOperation;
 import com.testify.ecfeed.utils.ClassUtils;
 
@@ -22,12 +22,12 @@ public class PartitionOperationSetValue implements IModelOperation {
 	}
 	
 	@Override
-	public void execute() throws GalException {
+	public void execute() throws ModelIfException {
 		if(validatePartitionValue(fTarget.getCategory().getType(), fNewValue)){
 			fTarget.setValueString(fNewValue);
 		}
 		else{
-			throw new GalException(Messages.PARTITION_VALUE_PROBLEM(fNewValue));
+			throw new ModelIfException(Messages.PARTITION_VALUE_PROBLEM(fNewValue));
 		}
 	}
 

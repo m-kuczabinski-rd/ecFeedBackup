@@ -24,7 +24,7 @@ public class ModelOperationManager {
 		++fHistoryIndex;
 	}
 	
-	public void undo() throws GalException{
+	public void undo() throws ModelIfException{
 		if(fHistoryIndex > 0){
 			IModelOperation operation = fHistory.get(fHistoryIndex - 1).reverseOperation();
 			operation.execute();
@@ -32,7 +32,7 @@ public class ModelOperationManager {
 		}
 	}
 	
-	public void redo() throws GalException{
+	public void redo() throws ModelIfException{
 		if(fHistoryIndex <= fHistory.size()){
 			IModelOperation operation = fHistory.get(fHistoryIndex);
 			operation.execute();

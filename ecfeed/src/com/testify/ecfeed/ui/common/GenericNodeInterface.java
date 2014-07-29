@@ -3,7 +3,7 @@ package com.testify.ecfeed.ui.common;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
 
-import com.testify.ecfeed.modelif.GalException;
+import com.testify.ecfeed.modelif.ModelIfException;
 import com.testify.ecfeed.modelif.IModelOperation;
 import com.testify.ecfeed.modelif.ModelOperationManager;
 import com.testify.ecfeed.modelif.NodeAbstractionLayer;
@@ -21,7 +21,7 @@ public class GenericNodeInterface extends NodeAbstractionLayer {
 			if(source != null){
 				source.getUpdateListener().modelUpdated(source);
 			}
-		}catch(GalException e){
+		}catch(ModelIfException e){
 			MessageDialog.openError(Display.getCurrent().getActiveShell(), 
 					errorMessageTitle, 
 					e.getMessage());
