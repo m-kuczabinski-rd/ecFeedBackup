@@ -5,9 +5,9 @@ import org.eclipse.swt.widgets.Display;
 
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.modelif.ModelOperationManager;
+import com.testify.ecfeed.modelif.java.ImplementationStatus;
 import com.testify.ecfeed.modelif.java.classx.ClassOperationRename;
 import com.testify.ecfeed.modelif.java.classx.JavaClassUtils;
-import com.testify.ecfeed.modelif.java.common.ImplementationStatus;
 import com.testify.ecfeed.ui.common.GenericNodeInterface;
 import com.testify.ecfeed.ui.editor.BasicSection;
 import com.testify.ecfeed.ui.editor.IModelUpdateListener;

@@ -1,7 +1,7 @@
 package com.testify.ecfeed.modelif.java.classx;
 
 import com.testify.ecfeed.model.ClassNode;
-import com.testify.ecfeed.modelif.java.common.ImplementationStatus;
+import com.testify.ecfeed.modelif.java.ImplementationStatus;
 
 public class JavaClassUtils {
 	public static ImplementationStatus implementationStatus(ClassNode classNode){
