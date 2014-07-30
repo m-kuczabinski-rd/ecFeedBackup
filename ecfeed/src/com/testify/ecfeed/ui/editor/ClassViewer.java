@@ -23,6 +23,7 @@ import org.eclipse.ui.forms.widgets.Section;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.modelif.ModelOperationManager;
+import com.testify.ecfeed.ui.modelif.ClassInterface;
 import com.testify.ecfeed.ui.modelif.RootInterface;
 
 public class ClassViewer extends CheckboxTableViewerSection {
@@ -30,6 +31,7 @@ public class ClassViewer extends CheckboxTableViewerSection {
 
 	private TableViewerColumn fNameColumn;
 	private RootInterface fRootIf;
+	private ClassInterface fClassIf;
 
 	private class AddImplementedClassAdapter extends SelectionAdapter {
 		@Override
@@ -70,6 +72,7 @@ public class ClassViewer extends CheckboxTableViewerSection {
 	public ClassViewer(BasicDetailsPage parent, FormToolkit toolkit, ModelOperationManager operationManager) {
 		super(parent.getMainComposite(), toolkit, STYLE, parent);
 		fRootIf = new RootInterface(operationManager);
+		fClassIf = new ClassInterface(operationManager);
 		
 		setText("Classes");
 		addButton("Add implemented class", new AddImplementedClassAdapter());
@@ -83,15 +86,17 @@ public class ClassViewer extends CheckboxTableViewerSection {
 		fNameColumn = addColumn("Class", 150, new ClassViewerColumnLabelProvider(){
 			@Override
 			public String getText(Object element){
-				return ((ClassNode)element).getLocalName();
+				fClassIf.setTarget((ClassNode)element);
+				return fClassIf.getLocalName();
 			}
 		});
 		fNameColumn.setEditingSupport(new ClassNameEditingSupport(this, false));
+		
 		TableViewerColumn packageNameColumn = addColumn("Package", 150, new ClassViewerColumnLabelProvider(){
 			@Override
 			public String getText(Object element){
-				String qualifiedName = ((ClassNode)element).getQualifiedName();
-				return qualifiedName.substring(0, qualifiedName.lastIndexOf("."));
+				fClassIf.setTarget((ClassNode)element);
+				return fClassIf.getPackageName();
 			}
 		});
 		packageNameColumn.setEditingSupport(new ClassNameEditingSupport(this, true));
