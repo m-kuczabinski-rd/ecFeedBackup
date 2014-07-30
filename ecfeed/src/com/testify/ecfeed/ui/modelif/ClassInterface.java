@@ -24,7 +24,7 @@ public class ClassInterface extends GenericNodeInterface {
 	}
 
 	public String getQualifiedName(){
-		return fTarget.getName();
+		return JavaClassUtils.getQualifiedName(fTarget);
 	}
 	
 	public String getLocalName(){

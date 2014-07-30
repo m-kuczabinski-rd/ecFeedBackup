@@ -3,7 +3,6 @@ package com.testify.ecfeed.ui.editor;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.modelif.ModelOperationManager;
 import com.testify.ecfeed.modelif.java.classx.JavaClassUtils;
-import com.testify.ecfeed.ui.modelif.ClassInterface;
 
 public class PackageNameEditingSupport extends ClassNameEditingSupport{
 
@@ -18,8 +17,9 @@ public class PackageNameEditingSupport extends ClassNameEditingSupport{
 
 	@Override
 	protected void setValue(Object element, Object value) {
-		ClassInterface classIf = new ClassInterface(fOperationManager);
-		classIf.setTarget((ClassNode)element);
-		classIf.setPackageName((String)value, fSection, fSection.getUpdateListener());
+		ClassNode target = (ClassNode)element;
+		String localName = JavaClassUtils.getLocalName(target);
+		String packageName = (String)value;
+		renameClass(target, JavaClassUtils.getQualifiedName(packageName, localName));
 	}
 }

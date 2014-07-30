@@ -23,6 +23,7 @@ public class ClassOperationRename extends AbstractOperationRename {
 		if(target.getRoot().getClassModel(fNewName) != null){
 			throw new ModelIfException(Messages.CLASS_NAME_DUPLICATE_PROBLEM);
 		}
+		target.setName(fNewName);
 	}
 
 	@Override

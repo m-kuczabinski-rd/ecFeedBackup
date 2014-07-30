@@ -34,6 +34,8 @@ public class ClassViewer extends CheckboxTableViewerSection {
 
 	private ModelOperationManager fOperationManager;
 
+	private TableViewerColumn fPackageNameColumn;
+
 	private class AddImplementedClassAdapter extends SelectionAdapter {
 		@Override
 		public void widgetSelected(SelectionEvent e) {
@@ -74,7 +76,9 @@ public class ClassViewer extends CheckboxTableViewerSection {
 		super(parent.getMainComposite(), toolkit, STYLE, parent);
 		fOperationManager = operationManager;
 		fRootIf = new RootInterface(operationManager);
-		
+		fNameColumn.setEditingSupport(new LocalNameEditingSupport(this, fOperationManager));
+		fPackageNameColumn.setEditingSupport(new PackageNameEditingSupport(this, fOperationManager));
+
 		setText("Classes");
 		addButton("Add implemented class", new AddImplementedClassAdapter());
 		addButton("New test class", new AddNewClassAdapter());
@@ -90,15 +94,13 @@ public class ClassViewer extends CheckboxTableViewerSection {
 				return JavaClassUtils.getLocalName((ClassNode)element);
 			}
 		});
-		fNameColumn.setEditingSupport(new LocalNameEditingSupport(this, fOperationManager));
 		
-		TableViewerColumn packageNameColumn = addColumn("Package", 150, new ClassViewerColumnLabelProvider(){
+		fPackageNameColumn = addColumn("Package", 150, new ClassViewerColumnLabelProvider(){
 			@Override
 			public String getText(Object element){
 				return JavaClassUtils.getPackageName((ClassNode)element);
 			}
 		});
-		packageNameColumn.setEditingSupport(new PackageNameEditingSupport(this, fOperationManager));
 	}
 	
 	public void setInput(RootNode model){

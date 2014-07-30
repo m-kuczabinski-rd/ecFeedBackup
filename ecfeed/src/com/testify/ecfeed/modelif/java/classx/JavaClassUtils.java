@@ -17,8 +17,16 @@ public class JavaClassUtils {
 		return (lastDotIndex == -1)?qualifiedName: qualifiedName.substring(lastDotIndex + 1);
 	}
 
+	public static String getQualifiedName(ClassNode classNode){
+		return classNode.getName();
+	}
+
 	public static String getPackageName(ClassNode classNode){
 		return getPackageName(classNode.getName());
+	}
+	
+	public static String getQualifiedName(String packageName, String localName){
+		return packageName + "." + localName;
 	}
 
 	public static String getPackageName(String qualifiedName){

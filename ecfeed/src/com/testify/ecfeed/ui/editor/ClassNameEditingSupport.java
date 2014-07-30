@@ -15,7 +15,9 @@ import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.EditingSupport;
 import org.eclipse.jface.viewers.TextCellEditor;
 
+import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.modelif.ModelOperationManager;
+import com.testify.ecfeed.ui.modelif.ClassInterface;
 
 public abstract class ClassNameEditingSupport extends EditingSupport{
 
@@ -40,6 +42,13 @@ public abstract class ClassNameEditingSupport extends EditingSupport{
 		return true;
 	}
 
+	protected void renameClass(ClassNode target, String qualifiedName){
+		ClassInterface classIf = new ClassInterface(fOperationManager);
+		classIf.setTarget(target);
+		if(classIf.getQualifiedName().equals(qualifiedName) == false){
+			classIf.setQualifiedName(qualifiedName, fSection, fSection.getUpdateListener());
+		}
+	}
 //	@Override
 //	protected void setValue(Object element, Object value) {
 //		String newName = (String)value;
