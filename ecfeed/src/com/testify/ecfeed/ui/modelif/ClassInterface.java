@@ -39,14 +39,18 @@ public class ClassInterface extends GenericNodeInterface {
 		return JavaClassUtils.implementationStatus(fTarget);
 	}
 	
-	public void setQualifiedName(String newName, BasicSection source, IModelUpdateListener updateListener){
+	public boolean setQualifiedName(String newName, BasicSection source, IModelUpdateListener updateListener){
+		if(newName.equals(fTarget.getQualifiedName())){
+			return false;
+		}
 		if(JavaClassUtils.implementationStatus(fTarget) != ImplementationStatus.NOT_IMPLEMENTED){
 			if(MessageDialog.openConfirm(Display.getCurrent().getActiveShell(), 
 					Messages.DIALOG_RENAME_IMPLEMENTED_CLASS_TITLE, 
-					Messages.DIALOG_RENAME_IMPLEMENTED_CLASS_MESSAGE)){
-				execute(new ClassOperationRename(fTarget, newName), source, updateListener, Messages.DIALOG_RENAME_CLASS_PROBLEM_TITLE);
+					Messages.DIALOG_RENAME_IMPLEMENTED_CLASS_MESSAGE) == false){
+				return false;
 			}
 		}
+		return execute(new ClassOperationRename(fTarget, newName), source, updateListener, Messages.DIALOG_RENAME_CLASS_PROBLEM_TITLE);
 	}
 
 	public void setLocalName(String newLocalName, BasicSection source, IModelUpdateListener updateListener){

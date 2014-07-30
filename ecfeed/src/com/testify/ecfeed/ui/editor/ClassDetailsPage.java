@@ -14,6 +14,7 @@ package com.testify.ecfeed.ui.editor;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -26,10 +27,13 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.forms.IFormPart;
 
 import com.testify.ecfeed.model.ClassNode;
+import com.testify.ecfeed.modelif.ModelOperationManager;
 import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.dialogs.TestClassSelectionDialog;
+import com.testify.ecfeed.ui.modelif.ClassInterface;
 import com.testify.ecfeed.utils.ModelUtils;
 
 public class ClassDetailsPage extends BasicDetailsPage {
@@ -38,6 +42,8 @@ public class ClassDetailsPage extends BasicDetailsPage {
 	private MethodsViewer fMethodsSection;
 	private OtherMethodsViewer fOtherMethodsSection;
 	private Text fClassNameText;
+	private ModelOperationManager fOperationManager;
+	private ClassInterface fClassIf;
 	
 	private class ReassignClassSelectionAdapter extends SelectionAdapter{
 		@Override
@@ -68,8 +74,10 @@ public class ClassDetailsPage extends BasicDetailsPage {
 		}
 	}
 	
-	public ClassDetailsPage(ModelMasterSection masterSection) {
+	public ClassDetailsPage(ModelMasterSection masterSection, ModelOperationManager operationManager) {
 		super(masterSection);
+		fOperationManager = operationManager;
+		fClassIf = new ClassInterface(fOperationManager);
 	}
 
 	@Override
@@ -119,26 +127,9 @@ public class ClassDetailsPage extends BasicDetailsPage {
 	}
 
 	private void changeName() {
-		String name = fClassNameText.getText();
-		boolean validName = ModelUtils.isClassQualifiedNameValid(name);
-
-		if (!validName) {
-			MessageDialog.openError(Display.getCurrent().getActiveShell(),
-					Messages.DIALOG_CLASS_NAME_PROBLEM_TITLE,
-					Messages.DIALOG_CLASS_NAME_PROBLEM_MESSAGE);
-			fClassNameText.setText(fSelectedClass.getQualifiedName());
-			fClassNameText.setSelection(fSelectedClass.getQualifiedName().length());
-		}
-
-		if (validName && (!fSelectedClass.getName().equals(name))) {
-			if (fSelectedClass.getRoot().getClassModel(name) == null) {
-				fSelectedClass.setName(name);
-				modelUpdated(null);
-			} else {
-				MessageDialog.openInformation(getActiveShell(),
-					Messages.DIALOG_CLASS_EXISTS_TITLE,
-					Messages.DIALOG_CLASS_EXISTS_MESSAGE);
-			}
+		if(fClassIf.setQualifiedName(fClassNameText.getText(), null, ClassDetailsPage.this) == false){
+			fClassNameText.setText(fClassIf.getQualifiedName());
+			fClassNameText.setSelection(fClassIf.getQualifiedName().length());
 		}
 	}
 
@@ -157,6 +148,14 @@ public class ClassDetailsPage extends BasicDetailsPage {
 			fMethodsSection.setInput(fSelectedClass);
 			fOtherMethodsSection.setInput(fSelectedClass);
 			getMainSection().layout();
+		}
+	}
+	
+	@Override
+	public void selectionChanged(IFormPart part, ISelection selection) {
+		super.selectionChanged(part, selection);
+		if(getSelectedElement() instanceof ClassNode){
+			fClassIf.setTarget((ClassNode)getSelectedElement());
 		}
 	}
 
