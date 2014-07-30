@@ -198,7 +198,7 @@ public class PartitionDetailsPage extends BasicDetailsPage {
 		fPartitionNameText.addListener(SWT.KeyDown, new PartitionNameTextListener());
 		
 		Composite buttonComposite = getToolkit().createComposite(parent);
-		buttonComposite.setLayout(new GridLayout(2, false));
+		buttonComposite.setLayout(new GridLayout(1, false));
 		buttonComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, true, 1, 2));
 		Button applyButton = getToolkit().createButton(buttonComposite, "Change", SWT.CENTER);
 		applyButton.addSelectionListener(new ApplyChangesSelectionAdapter());

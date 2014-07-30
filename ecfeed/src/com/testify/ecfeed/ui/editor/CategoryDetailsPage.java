@@ -195,7 +195,7 @@ public class CategoryDetailsPage extends BasicDetailsPage {
 		
 		getToolkit().createLabel(composite, "Category name: ", SWT.NONE);
 		Composite nameComposite = getToolkit().createComposite(composite);
-		GridLayout nameGrid = new GridLayout(3, false);
+		GridLayout nameGrid = new GridLayout(2, false);
 		nameGrid.marginWidth = 2;
 		nameComposite.setLayout(nameGrid);
 		nameComposite.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));

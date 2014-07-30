@@ -108,7 +108,7 @@ public class ClassDetailsPage extends BasicDetailsPage {
 	
 	private void createQualifiedNameComposite(Composite parent) {
 		Composite composite = getToolkit().createComposite(parent);
-		composite.setLayout(new GridLayout(5, false));
+		composite.setLayout(new GridLayout(4, false));
 		composite.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
 		getToolkit().createLabel(composite, "Class path");
 		fClassNameText = getToolkit().createText(composite, null, SWT.NONE);
