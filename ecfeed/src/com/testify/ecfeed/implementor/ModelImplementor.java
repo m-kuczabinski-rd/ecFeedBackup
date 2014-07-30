@@ -309,36 +309,6 @@ public class ModelImplementor implements IModelImplementor {
 					unit.getAST().newSimpleName("Test"));
 			importDeclaration.setName(importName);
 			unit.imports().add(importDeclaration);
-			importDeclaration = unit.getAST().newImportDeclaration();
-			importName = unit.getAST().newQualifiedName(
-					unit.getAST().newQualifiedName(
-							unit.getAST().newQualifiedName(unit.getAST().newSimpleName("org"), unit.getAST().newSimpleName("junit")),
-							unit.getAST().newSimpleName("runner")),
-					unit.getAST().newSimpleName("RunWith"));
-			importDeclaration.setName(importName);
-			unit.imports().add(importDeclaration);
-			importDeclaration = unit.getAST().newImportDeclaration();
-			importName = unit.getAST().newQualifiedName(
-					unit.getAST().newQualifiedName(
-							unit.getAST().newQualifiedName(
-									unit.getAST().newQualifiedName(unit.getAST().newSimpleName("com"), unit.getAST().newSimpleName("testify")),
-									unit.getAST().newSimpleName("ecfeed")),
-							unit.getAST().newSimpleName("runner")),
-					unit.getAST().newSimpleName("StaticRunner"));
-			importDeclaration.setName(importName);
-			unit.imports().add(importDeclaration);
-			importDeclaration = unit.getAST().newImportDeclaration();
-			importName = unit.getAST().newQualifiedName(
-					unit.getAST().newQualifiedName(
-							unit.getAST().newQualifiedName(
-									unit.getAST().newQualifiedName(
-											unit.getAST().newQualifiedName(unit.getAST().newSimpleName("com"), unit.getAST().newSimpleName("testify")),
-											unit.getAST().newSimpleName("ecfeed")),
-									unit.getAST().newSimpleName("runner")),
-							unit.getAST().newSimpleName("annotations")),
-					unit.getAST().newSimpleName("EcModel"));
-			importDeclaration.setName(importName);
-			unit.imports().add(importDeclaration);
 		}
 		String packageName = classQualifiedName.substring(0, classQualifiedName.lastIndexOf("."));
 		PackageDeclaration packageDeclaration = unit.getAST().newPackageDeclaration();
@@ -349,18 +319,6 @@ public class ModelImplementor implements IModelImplementor {
 			type = unit.getAST().newTypeDeclaration();
 			TypeDeclaration typeDeclaration = (TypeDeclaration)type;
 			typeDeclaration.setInterface(false);
-			SingleMemberAnnotation annotation = unit.getAST().newSingleMemberAnnotation();
-			annotation.setTypeName(unit.getAST().newSimpleName("RunWith"));
-			TypeLiteral typeName = unit.getAST().newTypeLiteral();
-			typeName.setType(unit.getAST().newSimpleType(unit.getAST().newSimpleName("StaticRunner")));
-			annotation.setValue(typeName);
-			type.modifiers().add(annotation);
-			annotation = unit.getAST().newSingleMemberAnnotation();
-			annotation.setTypeName(unit.getAST().newSimpleName("EcModel"));
-			StringLiteral modelFile = unit.getAST().newStringLiteral();
-			modelFile.setLiteralValue(modelName + ".ect");
-			annotation.setValue(modelFile);
-			type.modifiers().add(annotation);
 		} else {
 			type = unit.getAST().newEnumDeclaration();
 		}
