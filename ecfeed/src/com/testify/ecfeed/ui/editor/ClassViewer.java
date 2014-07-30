@@ -11,9 +11,9 @@
 
 package com.testify.ecfeed.ui.editor;
 
-import org.eclipse.jdt.core.IType;
-import org.eclipse.jface.dialogs.IDialogConstants;
-import org.eclipse.jface.dialogs.MessageDialog;
+import java.util.ArrayList;
+import java.util.Collection;
+
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -23,69 +23,36 @@ import org.eclipse.ui.forms.widgets.Section;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.modelif.ModelOperationManager;
-import com.testify.ecfeed.ui.common.Messages;
-import com.testify.ecfeed.ui.dialogs.TestClassSelectionDialog;
 import com.testify.ecfeed.ui.modelif.RootInterface;
-import com.testify.ecfeed.utils.ModelUtils;
 
 public class ClassViewer extends CheckboxTableViewerSection {
 	private static final int STYLE = Section.EXPANDED | Section.TITLE_BAR;
 
-	private RootNode fModel;
-	private TableViewerColumn nameColumn;
+	private TableViewerColumn fNameColumn;
 	private RootInterface fRootIf;
 
 	private class AddImplementedClassAdapter extends SelectionAdapter {
-
 		@Override
 		public void widgetSelected(SelectionEvent e) {
-			TestClassSelectionDialog dialog = new TestClassSelectionDialog(getActiveShell());
-
-			if (dialog.open() == IDialogConstants.OK_ID) {
-				IType selectedClass = (IType)dialog.getFirstResult();
-				boolean testOnly = dialog.getTestOnlyFlag();
-
-				if(fModel != null && selectedClass != null){
-					addClass(selectedClass, fModel, testOnly);
-				}
+			ClassNode addedClass = fRootIf.addImplementedClass(ClassViewer.this, getUpdateListener());
+			if(addedClass != null){
+				selectElement(addedClass);
+				fNameColumn.getViewer().editElement(addedClass, 0);
 			}
 		}
-
-		private void addClass(IType selectedClass, RootNode model, boolean testOnly){
-			ClassNode classNode = ModelUtils.generateClassModel(selectedClass, testOnly);
-			if(model.getClassModel(classNode.getQualifiedName()) == null){
-				model.addClass(classNode);
-				modelUpdated();
-			}
-			else{
-				MessageDialog.openError(getActiveShell(), 
-						Messages.DIALOG_CLASS_EXISTS_TITLE,
-						Messages.DIALOG_CLASS_EXISTS_MESSAGE);
-			}
-		}
-
 	}
 	
 	private class RemoveClassesAdapter extends SelectionAdapter {
 
 		@Override
 		public void widgetSelected(SelectionEvent e) {
-			if(MessageDialog.openConfirm(getActiveShell(), 
-					Messages.DIALOG_REMOVE_CLASSES_TITLE, 
-					Messages.DIALOG_REMOVE_CLASSES_MESSAGE)){
-				removeClasses(getCheckedElements());
-			}
-		}
-		
-		private void removeClasses(Object[] checkedElements) {
-			if(fModel != null){
-				for(Object element : checkedElements){
-					if(element instanceof ClassNode){
-						fModel.removeClass((ClassNode)element);
-					}
+			Collection<ClassNode> checkedClasses = new ArrayList<ClassNode>();
+			for(Object checked : getCheckedElements()){
+				if(checked instanceof ClassNode){
+					checkedClasses.add((ClassNode)checked);
 				}
-				modelUpdated();
 			}
+			fRootIf.removeClasses(checkedClasses, ClassViewer.this, getUpdateListener());
 		}
 	}
 	
@@ -95,7 +62,7 @@ public class ClassViewer extends CheckboxTableViewerSection {
 			ClassNode addedClass = fRootIf.addNewClass(null, ClassViewer.this, getUpdateListener());
 			if(addedClass != null){
 				selectElement(addedClass);
-				nameColumn.getViewer().editElement(addedClass, 0);
+				fNameColumn.getViewer().editElement(addedClass, 0);
 			}
 		}
 	}
@@ -113,13 +80,13 @@ public class ClassViewer extends CheckboxTableViewerSection {
 	
 	@Override
 	protected void createTableColumns(){
-		nameColumn = addColumn("Class", 150, new ClassViewerColumnLabelProvider(){
+		fNameColumn = addColumn("Class", 150, new ClassViewerColumnLabelProvider(){
 			@Override
 			public String getText(Object element){
 				return ((ClassNode)element).getLocalName();
 			}
 		});
-		nameColumn.setEditingSupport(new ClassNameEditingSupport(this, false));
+		fNameColumn.setEditingSupport(new ClassNameEditingSupport(this, false));
 		TableViewerColumn packageNameColumn = addColumn("Package", 150, new ClassViewerColumnLabelProvider(){
 			@Override
 			public String getText(Object element){
@@ -133,7 +100,6 @@ public class ClassViewer extends CheckboxTableViewerSection {
 	public void setInput(RootNode model){
 		super.setInput(model.getClasses());
 		fRootIf.setTarget(model);
-		fModel = model;
 	}
 	
 }
