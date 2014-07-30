@@ -3,6 +3,7 @@ package com.testify.ecfeed.modelif.java;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.eclipse.core.resources.IProject;
@@ -56,4 +57,7 @@ public class JavaUtils {
 		return null;
 	}
 
+	public static boolean isJavaKeyword(String word){
+		return Arrays.asList(Constants.JAVA_IDENTIFIERS).contains(word);
+	}
 }

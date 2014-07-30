@@ -5,6 +5,7 @@ import com.testify.ecfeed.model.GenericNode;
 import com.testify.ecfeed.modelif.IModelOperation;
 import com.testify.ecfeed.modelif.ModelIfException;
 import com.testify.ecfeed.modelif.java.Constants;
+import com.testify.ecfeed.modelif.java.JavaUtils;
 import com.testify.ecfeed.modelif.java.common.AbstractOperationRename;
 import com.testify.ecfeed.modelif.java.common.Messages;
 
@@ -19,6 +20,13 @@ public class ClassOperationRename extends AbstractOperationRename {
 		if(fNewName.matches(Constants.REGEX_CLASS_NODE_NAME) == false){
 			throw new ModelIfException(Messages.CLASS_NAME_REGEX_PROBLEM);
 		}
+		
+		for(String token : fNewName.split("\\.")){
+			if(JavaUtils.isJavaKeyword(token)){
+				throw new ModelIfException(Messages.CLASS_NAME_CONTAINS_KEYWORD_PROBLEM);
+			}
+		}
+		
 		ClassNode target = (ClassNode)fTarget;
 		if(target.getRoot().getClassModel(fNewName) != null){
 			throw new ModelIfException(Messages.CLASS_NAME_DUPLICATE_PROBLEM);

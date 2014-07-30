@@ -92,11 +92,11 @@ public class PartitionOperationRenameTest {
 		//forbidden character
 		unallowed.add(new PartitionOperationRename(p1, "x&"));
 		//too long [65 characters]
-		String tooLong = "";
-		for(int i = 0; i < 65; i++){
-			tooLong += "x";
-		}
-		unallowed.add(new PartitionOperationRename(p1, tooLong));
+//		String tooLong = "";
+//		for(int i = 0; i < 65; i++){
+//			tooLong += "x";
+//		}
+//		unallowed.add(new PartitionOperationRename(p1, tooLong));
 		
 		for(PartitionOperationRename operation : unallowed){
 			try{
