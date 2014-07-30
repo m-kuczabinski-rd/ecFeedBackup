@@ -38,7 +38,6 @@ import org.eclipse.jdt.core.dom.Expression;
 import org.eclipse.jdt.core.dom.ExpressionStatement;
 import org.eclipse.jdt.core.dom.ImportDeclaration;
 import org.eclipse.jdt.core.dom.InfixExpression;
-import org.eclipse.jdt.core.dom.MarkerAnnotation;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.MethodInvocation;
 import org.eclipse.jdt.core.dom.PackageDeclaration;
@@ -300,14 +299,6 @@ public class ModelImplementor implements IModelImplementor {
 
 	@SuppressWarnings("unchecked")
 	private AbstractTypeDeclaration implementClassDefinition(CompilationUnit unit, String modelName, String classQualifiedName, boolean testClass) {
-		if (testClass) {
-			ImportDeclaration importDeclaration = unit.getAST().newImportDeclaration();
-			QualifiedName importName = unit.getAST().newQualifiedName(
-					unit.getAST().newQualifiedName(unit.getAST().newSimpleName("org"), unit.getAST().newSimpleName("junit")),
-					unit.getAST().newSimpleName("Test"));
-			importDeclaration.setName(importName);
-			unit.imports().add(importDeclaration);
-		}
 		String packageName = classQualifiedName.substring(0, classQualifiedName.lastIndexOf("."));
 		PackageDeclaration packageDeclaration = unit.getAST().newPackageDeclaration();
 		packageDeclaration.setName(unit.getAST().newName(packageName));
@@ -348,9 +339,6 @@ public class ModelImplementor implements IModelImplementor {
 	private void implementMethodDefinition(CompilationUnit unit, TypeDeclaration type, String methodName, ArrayList<String> parameters, ArrayList<String> types) {
 		MethodDeclaration methodDeclaration = unit.getAST().newMethodDeclaration();
 		methodDeclaration.setConstructor(false);
-		MarkerAnnotation annotation = unit.getAST().newMarkerAnnotation();
-		annotation.setTypeName(unit.getAST().newSimpleName("Test"));
-		methodDeclaration.modifiers().add(annotation);
 		methodDeclaration.modifiers().add(unit.getAST().newModifier(Modifier.ModifierKeyword.PUBLIC_KEYWORD));
 		methodDeclaration.setName(unit.getAST().newSimpleName(methodName));
 		methodDeclaration.setReturnType2(unit.getAST().newPrimitiveType(PrimitiveType.VOID));
