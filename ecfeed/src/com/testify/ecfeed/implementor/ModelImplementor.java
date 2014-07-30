@@ -43,14 +43,12 @@ import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.MethodInvocation;
 import org.eclipse.jdt.core.dom.PackageDeclaration;
 import org.eclipse.jdt.core.dom.PrimitiveType;
-import org.eclipse.jdt.core.dom.SingleMemberAnnotation;
 import org.eclipse.jdt.core.dom.SingleVariableDeclaration;
 import org.eclipse.jdt.core.dom.Statement;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 import org.eclipse.jdt.core.dom.Modifier;
 import org.eclipse.jdt.core.dom.QualifiedName;
 import org.eclipse.jdt.core.dom.StringLiteral;
-import org.eclipse.jdt.core.dom.TypeLiteral;
 import org.eclipse.jdt.core.dom.Type;
 import org.eclipse.jdt.core.dom.rewrite.ASTRewrite;
 import org.eclipse.jdt.core.dom.rewrite.ListRewrite;
@@ -384,12 +382,12 @@ public class ModelImplementor implements IModelImplementor {
 			methodDeclaration.parameters().add(variableDeclaration);
 		}
 
-		methodDeclaration.setBody(implementMethodBody(unit, parameters));
+		methodDeclaration.setBody(implementMethodBody(unit, methodName, parameters));
 		type.bodyDeclarations().add(methodDeclaration);
 	}
 
 	@SuppressWarnings("unchecked")
-	private Block implementMethodBody(CompilationUnit unit, ArrayList<String> parameters) {
+	private Block implementMethodBody(CompilationUnit unit, String methodName, ArrayList<String> parameters) {
 		Block block = unit.getAST().newBlock();
 		MethodInvocation methodInvocation = unit.getAST().newMethodInvocation();
 		QualifiedName name = unit.getAST().newQualifiedName(unit.getAST().newSimpleName("System"), unit.getAST().newSimpleName("out"));
@@ -399,7 +397,7 @@ public class ModelImplementor implements IModelImplementor {
 		Expression expression = null;
 		if (parameters.size() > 0) {
 			StringLiteral literal = unit.getAST().newStringLiteral();
-			literal.setLiteralValue("(");
+			literal.setLiteralValue(methodName + "(");
 			expression = literal;
 			for (int k = 0; k < parameters.size(); ++k) {
 				Expression argExpression = null;
