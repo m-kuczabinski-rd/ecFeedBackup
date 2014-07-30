@@ -7,11 +7,11 @@ public abstract class AbstractOperationRename implements IModelOperation {
 
 	protected GenericNode fTarget;
 	protected String fNewName;
-	protected String fCurrentName;
+	protected String fOriginalName;
 
 	public AbstractOperationRename(GenericNode target, String newName){
 		fTarget = target;
 		fNewName = newName;
-		fCurrentName = target.getName();
+		fOriginalName = target.getName();
 	}
 }

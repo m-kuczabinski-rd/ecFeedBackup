@@ -1,6 +1,6 @@
 package com.testify.ecfeed.modelif.java.root;
 
-import com.testify.ecfeed.model.RootNode;
+import com.testify.ecfeed.model.GenericNode;
 import com.testify.ecfeed.modelif.IModelOperation;
 import com.testify.ecfeed.modelif.ModelIfException;
 import com.testify.ecfeed.modelif.java.Constants;
@@ -9,7 +9,7 @@ import com.testify.ecfeed.modelif.java.common.Messages;
 
 public class RootOperationRename extends AbstractOperationRename{
 
-	public RootOperationRename(RootNode target, String newName){
+	public RootOperationRename(GenericNode target, String newName){
 		super(target, newName);
 	}
 	
@@ -25,8 +25,7 @@ public class RootOperationRename extends AbstractOperationRename{
 
 	@Override
 	public IModelOperation reverseOperation() {
-		// TODO Auto-generated method stub
-		return null;
+		return new RootOperationRename(fTarget, fOriginalName);
 	}
 
 }
