@@ -12,14 +12,17 @@
 package com.testify.ecfeed.ui.editor;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Display;
 
 import com.testify.ecfeed.model.MethodNode;
+import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.runner.ParameterizedMethod;
 import com.testify.ecfeed.ui.common.Messages;
@@ -47,9 +50,16 @@ public class ExecuteStaticTestAdapter extends ExecuteTestAdapter {
 					Messages.DIALOG_COULDNT_LOAD_TEST_METHOD_TITLE, 
 					Messages.DIALOG_COULDNT_LOAD_TEST_METHOD_MESSAGE(getMethodModel().toString()));
 			}
-			Collection<TestCaseNode> selectedTestCases = getSelectedTestCases();
-			ParameterizedMethod frameworkMethod = new ParameterizedMethod(testMethod, selectedTestCases);
-			frameworkMethod.invokeExplosively(testClass.newInstance(), new Object[]{});
+			if (ModelUtils.isMethodWithParameters(getMethodModel())) {
+				Collection<TestCaseNode> selectedTestCases = getSelectedTestCases();
+				ParameterizedMethod frameworkMethod = new ParameterizedMethod(testMethod, selectedTestCases);
+				frameworkMethod.invokeExplosively(testClass.newInstance(), new Object[]{});
+			} else {
+				List<TestCaseNode> testCases = new ArrayList<TestCaseNode>();
+				testCases.add(new TestCaseNode("", new ArrayList<PartitionNode>()));
+				ParameterizedMethod frameworkMethod = new ParameterizedMethod(testMethod, testCases);
+				frameworkMethod.invokeExplosively(testClass.newInstance(), new Object[]{});
+			}
 		} catch (Throwable e) {
 			MessageDialog.openError(Display.getDefault().getActiveShell(), 
 				Messages.DIALOG_TEST_METHOD_EXECUTION_STOPPED_TITLE, 
