@@ -1,63 +1,42 @@
 package com.testify.ecfeed.modelif.java;
 
-import java.net.URL;
-import java.net.URLClassLoader;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
-
-import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.core.runtime.IPath;
-import org.eclipse.jdt.core.IJavaProject;
-import org.eclipse.jdt.core.JavaCore;
 
 public class JavaUtils {
-	private static URLClassLoader fClassLoader = null;
-
-	public static URLClassLoader getClassLoader(boolean create, ClassLoader parentLoader) {
-		if ((fClassLoader == null) || create){
-			List<URL> urls = new ArrayList<URL>();
-			try {
-				IProject[] projects = ResourcesPlugin.getWorkspace().getRoot().getProjects();
-				for (IProject project : projects){
-					if (project.isOpen() && project.hasNature(JavaCore.NATURE_ID)){
-						IJavaProject javaProject = JavaCore.create(project);
-						IPath path = project.getWorkspace().getRoot().getLocation();
-						path = path.append(javaProject.getOutputLocation());
-						urls.add(new URL("file", null, path.toOSString() + "/"));
-					}
-				}
-				if (fClassLoader != null) {
-					fClassLoader.close();
-				}
-			} catch (Throwable e) {
-			}
-			fClassLoader = new URLClassLoader(urls.toArray(new URL[]{}), parentLoader);
-		}
-		return fClassLoader;
-	}
-
-	public static Class<?> loadClass(ClassLoader loader, String className) {
-		try {
-			return loader.loadClass(className);
-		} catch (Throwable e) {
-		}
-
-		try {
-			Class<?> typeClass = loader.loadClass(className.substring(0, className.lastIndexOf('.')));
-			for (Class<?> innerClass : typeClass.getDeclaredClasses()) {
-				if (innerClass.getCanonicalName().equals(className)) {
-					return innerClass;
-				}
-			}
-		} catch (Throwable e) {
-		}
-
-		return null;
-	}
 
 	public static boolean isJavaKeyword(String word){
 		return Arrays.asList(Constants.JAVA_IDENTIFIERS).contains(word);
+	}
+
+	public static String getTypeName(String cannonicalName) {
+		if(cannonicalName.equals(boolean.class.getName())){
+			return Constants.TYPE_NAME_BOOLEAN;
+		}
+		if(cannonicalName.equals(byte.class.getName())){
+			return Constants.TYPE_NAME_BYTE;
+		}
+		if(cannonicalName.equals(char.class.getName())){
+			return Constants.TYPE_NAME_CHAR;
+		}
+		if(cannonicalName.equals(double.class.getName())){
+			return Constants.TYPE_NAME_DOUBLE;
+		}
+		if(cannonicalName.equals(float.class.getName())){
+			return Constants.TYPE_NAME_FLOAT;
+		}
+		if(cannonicalName.equals(int.class.getName())){
+			return Constants.TYPE_NAME_INT;
+		}
+		if(cannonicalName.equals(long.class.getName())){
+			return Constants.TYPE_NAME_LONG;
+		}
+		if(cannonicalName.equals(short.class.getName())){
+			return Constants.TYPE_NAME_SHORT;
+		}
+		if(cannonicalName.equals(String.class.getName())){
+			return Constants.TYPE_NAME_STRING;
+		}
+	
+		return cannonicalName;
 	}
 }

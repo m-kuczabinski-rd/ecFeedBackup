@@ -2,7 +2,7 @@ package com.testify.ecfeed.ui.editor;
 
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.modelif.ModelOperationManager;
-import com.testify.ecfeed.modelif.java.classx.JavaClassUtils;
+import com.testify.ecfeed.modelif.java.JavaClassUtils;
 
 public class PackageNameEditingSupport extends ClassNameEditingSupport{
 
