@@ -89,7 +89,7 @@ public class ModelImplementor implements IModelImplementor {
 					testUnit, node.getRoot().getName(), node.getClassNode().getQualifiedName(), ModelUtils.classDefinitionImplemented(node.getClassNode()), true);
 			int methods = type.getMethods().length;
 
-			if ((type != null) && !ModelUtils.methodDefinitionImplemented(node)) {
+			if (type != null) {
 				implementMethodNode(testUnit, type, node);
 			}
 			writeCompilationUnit(testUnit, unitPair.getKey(), type.getMethods().length - methods);
