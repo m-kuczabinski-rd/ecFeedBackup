@@ -418,7 +418,7 @@ public class ModelImplementor implements IModelImplementor {
 			InfixExpression plusExpression = unit.getAST().newInfixExpression();
 			plusExpression.setOperator(InfixExpression.Operator.PLUS);
 			StringLiteral literal = unit.getAST().newStringLiteral();
-			literal.setLiteralValue("(");
+			literal.setLiteralValue(methodName + "(");
 			plusExpression.setLeftOperand(literal);
 			literal = unit.getAST().newStringLiteral();
 			literal.setLiteralValue(")");
