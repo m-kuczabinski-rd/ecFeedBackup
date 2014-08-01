@@ -42,7 +42,6 @@ public class Constants {
 	public static final String REGEX_JAVA_IDENTIFIER = "[A-Za-z_][A-Za-z0-9_]+";
 	public static final String REGEX_ALPHANUMERIC_WITH_SPACES_64 = "[A-Za-z0-9][A-Za-z0-9_ ]{1,64}";
 	public static final String REGEX_ROOT_NODE_NAME = REGEX_ALPHANUMERIC_WITH_SPACES_64;
-//	public static final String REGEX_CLASS_NODE_NAME = REGEX_JAVA_IDENTIFIER;
 	public static final String REGEX_CLASS_NODE_NAME = "([A-Za-z]{1}[A-Za-z0-9]{1,16}){1}(\\.[A-Za-z_]{1}[A-Za-z0-9_]+)*";
 	public static final String REGEX_METHOD_NODE_NAME = REGEX_JAVA_IDENTIFIER;
 	public static final String REGEX_CATEGORY_NODE_NAME = REGEX_JAVA_IDENTIFIER;
@@ -56,10 +55,19 @@ public class Constants {
 	public static final String REGEX_STRING_TYPE_VALUE = "[A-Za-z1-9 !@#$%^&*()_+=;':,.<>/?]{0,1024}";
 	public static final String REGEX_CHAR_TYPE_VALUE = "[A-Za-z1-9 !@#$%^&*()_+=;':,.<>/?]";
 
-	public static final String[] JAVA_IDENTIFIERS = new String[]
+	public static final String[] JAVA_KEYWORDS = new String[]
 		{ "abstract", "continue", "for", "new", "switch", "assert", "default", "goto", "package", "synchronized", "boolean", "do",
 		"if", "private", "this", "break", "double", "implements", "protected", "throw", "byte", "else", "import", "public",
 		"throws", "case", "enum", "instanceof", "return", "transient", "catch", "extends", "int", "short", "try", "char",
 		"final", "interface", "static", "void", "class", "finally", "long", "strictfp", "volatile", "const", "float",
 		"native", "super", "while", "null", "true", "false" };
+	
+	public static final String VALUE_REPRESENTATION_NULL = "/null";
+	public static final String VALUE_REPRESENTATION_MAX = "MAX_VALUE";
+	public static final String VALUE_REPRESENTATION_MIN = "MIN_VALUE";
+	public static final String VALUE_REPRESENTATION_TRUE = "true";
+	public static final String VALUE_REPRESENTATION_FALSE = "false";
+	public static final String VALUE_REPRESENTATION_POSITIVE_INF = "POSITIVE_INFINITY";
+	public static final String VALUE_REPRESENTATION_NEGATIVE_INF = "NEGATIVE_INFINITY";
+
 }

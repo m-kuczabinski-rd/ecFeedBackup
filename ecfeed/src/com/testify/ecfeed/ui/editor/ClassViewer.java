@@ -23,7 +23,7 @@ import org.eclipse.ui.forms.widgets.Section;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.modelif.ModelOperationManager;
-import com.testify.ecfeed.modelif.java.JavaClassUtils;
+import com.testify.ecfeed.modelif.java.classx.JavaClassUtils;
 import com.testify.ecfeed.ui.modelif.RootInterface;
 
 public class ClassViewer extends CheckboxTableViewerSection {

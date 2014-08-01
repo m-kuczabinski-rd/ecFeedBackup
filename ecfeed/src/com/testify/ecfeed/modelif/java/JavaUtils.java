@@ -5,7 +5,7 @@ import java.util.Arrays;
 public class JavaUtils {
 
 	public static boolean isJavaKeyword(String word){
-		return Arrays.asList(Constants.JAVA_IDENTIFIERS).contains(word);
+		return Arrays.asList(Constants.JAVA_KEYWORDS).contains(word);
 	}
 
 	public static String getTypeName(String cannonicalName) {

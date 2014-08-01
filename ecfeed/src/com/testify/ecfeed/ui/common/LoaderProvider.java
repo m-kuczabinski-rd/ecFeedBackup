@@ -1,4 +1,4 @@
-package com.testify.ecfeed.modelif.java;
+package com.testify.ecfeed.ui.common;
 
 import java.net.URL;
 import java.net.URLClassLoader;
@@ -11,11 +11,14 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
 
-public class LoaderProvider {
-	private static URLClassLoader fClassLoader = null;
+import com.testify.ecfeed.modelif.java.ModelClassLoader;
 
-	public static URLClassLoader getClassLoader(boolean create, ClassLoader parentLoader) {
-		if ((fClassLoader == null) || create){
+public class LoaderProvider {
+
+	private static ModelClassLoader fLoader;
+
+	public static ModelClassLoader getLoader(boolean create, URLClassLoader parent){
+		if ((fLoader == null) || create){
 			List<URL> urls = new ArrayList<URL>();
 			try {
 				IProject[] projects = ResourcesPlugin.getWorkspace().getRoot().getProjects();
@@ -27,33 +30,13 @@ public class LoaderProvider {
 						urls.add(new URL("file", null, path.toOSString() + "/"));
 					}
 				}
-				if (fClassLoader != null) {
-					fClassLoader.close();
+				if (fLoader != null) {
+					fLoader.close();
 				}
 			} catch (Throwable e) {
 			}
-			fClassLoader = new URLClassLoader(urls.toArray(new URL[]{}), parentLoader);
+			fLoader = new ModelClassLoader(urls.toArray(new URL[]{}), parent);
 		}
-		return fClassLoader;
+		return fLoader;
 	}
-
-	public static Class<?> loadClass(ClassLoader loader, String className) {
-		try {
-			return loader.loadClass(className);
-		} catch (Throwable e) {
-		}
-
-		try {
-			Class<?> typeClass = loader.loadClass(className.substring(0, className.lastIndexOf('.')));
-			for (Class<?> innerClass : typeClass.getDeclaredClasses()) {
-				if (innerClass.getCanonicalName().equals(className)) {
-					return innerClass;
-				}
-			}
-		} catch (Throwable e) {
-		}
-
-		return null;
-	}
-
 }

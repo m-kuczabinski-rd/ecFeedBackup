@@ -4,11 +4,10 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
 
 import com.testify.ecfeed.model.ClassNode;
+import com.testify.ecfeed.modelif.ImplementationStatus;
 import com.testify.ecfeed.modelif.ModelOperationManager;
-import com.testify.ecfeed.modelif.java.ImplementationStatus;
-import com.testify.ecfeed.modelif.java.JavaClassUtils;
 import com.testify.ecfeed.modelif.java.classx.ClassOperationRename;
-import com.testify.ecfeed.ui.common.GenericNodeInterface;
+import com.testify.ecfeed.modelif.java.classx.JavaClassUtils;
 import com.testify.ecfeed.ui.editor.BasicSection;
 import com.testify.ecfeed.ui.editor.IModelUpdateListener;
 
@@ -35,15 +34,11 @@ public class ClassInterface extends GenericNodeInterface {
 		return JavaClassUtils.getPackageName(fTarget);
 	}
 
-	public ImplementationStatus implementationStatus(){
-		return JavaClassUtils.implementationStatus(fTarget);
-	}
-	
 	public boolean setQualifiedName(String newName, BasicSection source, IModelUpdateListener updateListener){
 		if(newName.equals(fTarget.getQualifiedName())){
 			return false;
 		}
-		if(JavaClassUtils.implementationStatus(fTarget) != ImplementationStatus.NOT_IMPLEMENTED){
+		if(implementationStatus(fTarget) != ImplementationStatus.NOT_IMPLEMENTED){
 			if(MessageDialog.openConfirm(Display.getCurrent().getActiveShell(), 
 					Messages.DIALOG_RENAME_IMPLEMENTED_CLASS_TITLE, 
 					Messages.DIALOG_RENAME_IMPLEMENTED_CLASS_MESSAGE) == false){
