@@ -19,6 +19,14 @@ public class TestCaseNode extends GenericNode {
 	List<PartitionNode> fTestData;
 	
 	@Override
+	public int getIndex(){
+		if(getMethod() == null){
+			return -1;
+		}
+		return getMethod().getTestCases().indexOf(this);
+	}
+
+	@Override
 	public String toString(){
 		String methodName = null;
 		if (getParent() != null){

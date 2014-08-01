@@ -6,6 +6,7 @@ public class Messages {
 	public static final String DIALOG_ADD_NEW_CLASS_PROBLEM_TITLE = "Couldn't add new class";
 	public static final String DIALOG_REMOVE_CLASSES_PROBLEM_TITLE = "Couldn't remove classes";
 	public static final String DIALOG_RENAME_CLASS_PROBLEM_TITLE = "Couldn't rename class";
+	public static final String DIALOG_MOVE_CLASS_PROBLEM_TITLE = "Couldn't move class";
 
 	//CONFIRMATIONS AND WARNINGS
 	public static final String DIALOG_REMOVE_CLASSES_TITLE = "Remove classes"; 

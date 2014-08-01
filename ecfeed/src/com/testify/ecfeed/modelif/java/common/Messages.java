@@ -13,5 +13,8 @@ public class Messages {
 	public static final String CLASS_NAME_REGEX_PROBLEM = "The provided name must fulfill all rules for a qualified name of a class in Java";
 	public static final String CLASS_NAME_CONTAINS_KEYWORD_PROBLEM = "The new class name contains Java keyword";
 	public static final String CLASS_NAME_DUPLICATE_PROBLEM = "The model already contains a class with this name";
+	public static final String CLASS_INDEX_NEGATIVE_PROBLEM = "The index of a class must be non-negative";
+	public static final String CLASS_INDEX_TOO_HIGH_PROBLEM = "The index of a class must not be higher than number of classes in the model";
+	public static final String CLASS_PARENT_DOES_NOT_EXIST_PROBLEM = "Missing current or new parent of moved class";
 
 }

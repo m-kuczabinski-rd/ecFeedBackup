@@ -20,6 +20,14 @@ public class ConstraintNode extends GenericNode{
 	private Constraint fConstraint;
 	
 	@Override
+	public int getIndex(){
+		if(getMethod() == null){
+			return -1;
+		}
+		return getMethod().getConstraintNodes().indexOf(this);
+	}
+
+	@Override
 	public String toString(){
 		return getName() + ": " + getConstraint().toString();
 	}

@@ -32,6 +32,14 @@ public class CategoryNode extends GenericNode implements IPartitionedNode{
 		fDefaultValue = new PartitionNode("default value" , "/null");
 		fDefaultValue.setParent(this);
 	}
+	
+	@Override
+	public int getIndex(){
+		if(getMethod() == null){
+			return -1;
+		}
+		return getMethod().getCategories().indexOf(this);
+	}
 
 	@Override
 	public void partitionRemoved(PartitionNode partition) {

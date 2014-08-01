@@ -38,9 +38,17 @@ public class RootNode extends GenericNode {
 		fClasses = new ArrayList<ClassNode>();
 	}
 
-	public void addClass(ClassNode node){
-		fClasses.add(node);
-		node.setParent(this);
+	public boolean addClass(ClassNode node){
+		return addClass(node, fClasses.size());
+	}
+
+	public boolean addClass(ClassNode node, int index){
+		if(index > 0 && index < fClasses.size()){
+			fClasses.add(index, node);
+			node.setParent(this);
+			return fClasses.indexOf(node) == index;
+		}
+		return false;
 	}
 
 	public List<ClassNode> getClasses() {

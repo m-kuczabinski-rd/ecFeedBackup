@@ -32,6 +32,13 @@ public abstract class GenericNode implements IGenericNode{
 		return fId;
 	}
 	
+	public int getIndex(){
+		if(getParent() == null){
+			return -1;
+		}
+		return getParent().getChildren().indexOf(this);
+	}
+	
 	@Override
 	public String getName() {
 		return fName;
