@@ -59,7 +59,7 @@ public class XomParserTest {
 		try {
 			RootNode r = fModelGenerator.generateModel(3);
 			Element rootElement = (Element)r.accept(fConverter);
-			TRACE(rootElement);
+//			TRACE(rootElement);
 			RootNode parsedR = fParser.parseRoot(rootElement);
 			assertElementsEqual(r, parsedR);
 		} catch (Exception e) {
