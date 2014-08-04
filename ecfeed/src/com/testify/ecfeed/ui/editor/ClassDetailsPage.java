@@ -34,7 +34,6 @@ import com.testify.ecfeed.modelif.ModelOperationManager;
 import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.dialogs.TestClassSelectionDialog;
 import com.testify.ecfeed.ui.modelif.ClassInterface;
-import com.testify.ecfeed.utils.ModelUtils;
 
 public class ClassDetailsPage extends BasicDetailsPage {
 
@@ -44,6 +43,7 @@ public class ClassDetailsPage extends BasicDetailsPage {
 	private Text fClassNameText;
 	private ModelOperationManager fOperationManager;
 	private ClassInterface fClassIf;
+	private Text fPackageNameText;
 	
 	private class ReassignClassSelectionAdapter extends SelectionAdapter{
 		@Override
@@ -100,63 +100,92 @@ public class ClassDetailsPage extends BasicDetailsPage {
 	
 	private void createQualifiedNameComposite(Composite parent) {
 		Composite composite = getToolkit().createComposite(parent);
-		composite.setLayout(new GridLayout(4, false));
+		composite.setLayout(new GridLayout(2, false));
 		composite.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
-		getToolkit().createLabel(composite, "Class path");
-		fClassNameText = getToolkit().createText(composite, null, SWT.NONE);
+		Composite textComposite = getToolkit().createComposite(composite);
+		
+		textComposite.setLayout(new GridLayout(2, false));
+		textComposite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
+		Composite buttonsComposite = getToolkit().createComposite(composite);
+		buttonsComposite.setLayout(new GridLayout(1, false));
+		buttonsComposite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false));
+
+		createPackageNameText(textComposite);
+		createClassNameText(textComposite);
+
+		createApplyButton(buttonsComposite);
+		createBrowseButton(buttonsComposite);
+
+		getToolkit().paintBordersFor(textComposite);
+		getToolkit().paintBordersFor(buttonsComposite);
+	}
+
+	private void createClassNameText(Composite textComposite) {
+		getToolkit().createLabel(textComposite, "Class name");
+		fClassNameText = getToolkit().createText(textComposite, null, SWT.NONE);
 		fClassNameText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 		fClassNameText.addListener(SWT.KeyDown, new Listener() {
 			public void handleEvent(Event event) {
 				if(event.keyCode == SWT.CR || event.keyCode == SWT.KEYPAD_CR){
-					changeName();
+					fClassIf.setLocalName(fClassNameText.getText(), null, ClassDetailsPage.this);
+					fClassNameText.setText(fClassIf.getLocalName());
 				}
 			}
 		});
-		Button changeButton = getToolkit().createButton(composite, "Change", SWT.NONE);
-		changeButton.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e){
-				changeName();
-			}
-		});
-
-		Button button = getToolkit().createButton(composite, "Reassign", SWT.NONE);
-		button.addSelectionListener(new ReassignClassSelectionAdapter());
-
-		getToolkit().paintBordersFor(composite);
 	}
 
-	private void changeName() {
-		if(fClassIf.setQualifiedName(fClassNameText.getText(), null, ClassDetailsPage.this) == false){
-			fClassNameText.setText(fClassIf.getQualifiedName());
-			fClassNameText.setSelection(fClassIf.getQualifiedName().length());
-		}
+	private void createPackageNameText(Composite textComposite) {
+		getToolkit().createLabel(textComposite, "Package name");
+		fPackageNameText = getToolkit().createText(textComposite, null, SWT.NONE);
+		fPackageNameText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
+		fPackageNameText.addListener(SWT.KeyDown, new Listener() {
+			public void handleEvent(Event event) {
+				if(event.keyCode == SWT.CR || event.keyCode == SWT.KEYPAD_CR){
+					fClassIf.setPackageName(fPackageNameText.getText(), null, ClassDetailsPage.this);
+					fPackageNameText.setText(fClassIf.getPackageName());
+				}
+			}
+		});
+	}
+
+	private void createBrowseButton(Composite buttonsComposite) {
+		Button browseButton = getToolkit().createButton(buttonsComposite, "Browse...", SWT.NONE);
+		browseButton.addSelectionListener(new ReassignClassSelectionAdapter());
+		browseButton.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false));
+	}
+
+	private void createApplyButton(Composite buttonsComposite) {
+		Button applyButton = getToolkit().createButton(buttonsComposite, "Apply", SWT.NONE);
+		applyButton.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false));
+		applyButton.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e){
+				fClassIf.setPackageName(fPackageNameText.getText(), null, ClassDetailsPage.this);
+				fClassIf.setLocalName(fClassNameText.getText(), null, ClassDetailsPage.this);
+				fClassNameText.setText(fClassIf.getLocalName());
+				fPackageNameText.setText(fClassIf.getPackageName());
+			}
+		});
 	}
 
 	@Override
 	public void refresh(){
 		if(getSelectedElement() instanceof ClassNode){
-			fSelectedClass = (ClassNode)getSelectedElement();
-		}
-		if(fSelectedClass != null){
-			String title = fSelectedClass.getLocalName();
-			if (ModelUtils.isClassImplemented(fSelectedClass)) {
-				title += " [implemented]";
-			}
-			getMainSection().setText(title);
-			fClassNameText.setText(fSelectedClass.getQualifiedName());
-			fMethodsSection.setInput(fSelectedClass);
-			fOtherMethodsSection.setInput(fSelectedClass);
-			getMainSection().layout();
-		}
-	}
-	
-	@Override
-	public void selectionChanged(IFormPart part, ISelection selection) {
-		super.selectionChanged(part, selection);
-		if(getSelectedElement() instanceof ClassNode){
 			fClassIf.setTarget((ClassNode)getSelectedElement());
 		}
+		else{
+			return;
+		}
+		String title = fClassIf.getQualifiedName() + " [" + fClassIf.implementationStatus() + "]";
+		getMainSection().setText(title);
+		fClassNameText.setText(fClassIf.getLocalName());
+		fPackageNameText.setText(fClassIf.getPackageName());
+		
+		fMethodsSection.setInput(fClassIf.getTarget());
+		fOtherMethodsSection.setInput(fClassIf.getTarget());
+		fOtherMethodsSection.setVisible(fOtherMethodsSection.getItemsCount() > 0);
+		
+		getMainSection().layout();
 	}
-
+	
 }

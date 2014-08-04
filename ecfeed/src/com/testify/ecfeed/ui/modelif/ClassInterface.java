@@ -22,6 +22,10 @@ public class ClassInterface extends GenericNodeInterface {
 		super.setTarget(target);
 		fTarget = target;
 	}
+	
+	public ClassNode getTarget(){
+		return fTarget;
+	}
 
 	public String getQualifiedName(){
 		return JavaClassUtils.getQualifiedName(fTarget);
@@ -49,13 +53,13 @@ public class ClassInterface extends GenericNodeInterface {
 		return execute(new ClassOperationRename(fTarget, newName), source, updateListener, Messages.DIALOG_RENAME_CLASS_PROBLEM_TITLE);
 	}
 
-	public void setLocalName(String newLocalName, BasicSection source, IModelUpdateListener updateListener){
+	public boolean setLocalName(String newLocalName, BasicSection source, IModelUpdateListener updateListener){
 		String newQualifiedName = getPackageName() + "." + newLocalName;
-		setQualifiedName(newQualifiedName, source, updateListener);
+		return setQualifiedName(newQualifiedName, source, updateListener);
 	}
 
-	public void setPackageName(String newPackageName, BasicSection source, IModelUpdateListener updateListener){
+	public boolean setPackageName(String newPackageName, BasicSection source, IModelUpdateListener updateListener){
 		String newQualifiedName = newPackageName + "." + getLocalName(); 
-		setQualifiedName(newQualifiedName, source, updateListener);
+		return setQualifiedName(newQualifiedName, source, updateListener);
 	}
 }

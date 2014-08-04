@@ -54,14 +54,18 @@ public class OtherMethodsViewer extends CheckboxTableViewerSection {
 		fSelectedClass = classNode;
 		List<MethodNode> notContainedMethods = ModelUtils.getNotContainedMethods(fSelectedClass, fSelectedClass.getQualifiedName(), false);
 		setText("Other methods in " + fSelectedClass.getLocalName());
-		setVisible(notContainedMethods.size() > 0);
+//		setVisible(notContainedMethods.size() > 0);
 		super.setInput(notContainedMethods);
 	}
 	
-	private void setVisible(boolean visible) {
+	public void setVisible(boolean visible) {
 		GridData gd = (GridData)getSection().getLayoutData();
 		gd.exclude = !visible;
 		getSection().setLayoutData(gd);
 		getSection().setVisible(visible);
+	}
+	
+	public int getItemsCount(){
+		return ModelUtils.getNotContainedMethods(fSelectedClass, fSelectedClass.getQualifiedName(), false).size();
 	}
 }
