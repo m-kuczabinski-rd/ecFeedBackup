@@ -67,7 +67,7 @@ public class ModelDetailsPage extends BasicDetailsPage {
 				}
 			}
 		});
-		Button button = getToolkit().createButton(composite, "Change", SWT.NONE);
+		Button button = getToolkit().createButton(composite, "Apply", SWT.NONE);
 		button.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e){
