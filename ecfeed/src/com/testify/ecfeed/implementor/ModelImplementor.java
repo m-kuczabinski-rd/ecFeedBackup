@@ -348,8 +348,10 @@ public class ModelImplementor implements IModelImplementor {
 						importName.setQualifier(unit.getAST().newName(importName.getFullyQualifiedName()));
 						importName.setName(unit.getAST().newSimpleName(data[j]));
 					}
-					importDeclaration.setName(importName);
-					unit.imports().add(importDeclaration);
+					if (!isTypeImported(unit, types.get(i))) {
+						importDeclaration.setName(importName);
+						unit.imports().add(importDeclaration);
+					}
 				}
 			}
 			variableDeclaration.setName(unit.getAST().newSimpleName(parameters.get(i)));
@@ -358,6 +360,18 @@ public class ModelImplementor implements IModelImplementor {
 
 		methodDeclaration.setBody(implementMethodBody(unit, methodName, parameters));
 		type.bodyDeclarations().add(methodDeclaration);
+	}
+
+	private boolean isTypeImported(CompilationUnit unit, String typeName) {
+		boolean imported = false;
+		for (Object element : unit.imports()) {
+			ImportDeclaration type = (ImportDeclaration)element;
+			if (typeName.equals(type.getName().getFullyQualifiedName())) {
+				imported = true;
+				break;
+			}
+		}
+		return imported;
 	}
 
 	@SuppressWarnings("unchecked")
