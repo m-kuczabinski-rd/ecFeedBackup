@@ -13,8 +13,6 @@ package com.testify.ecfeed.ui.editor;
 
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jface.dialogs.IDialogConstants;
-import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -27,23 +25,20 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.ui.forms.IFormPart;
 
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.modelif.ModelOperationManager;
-import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.dialogs.TestClassSelectionDialog;
 import com.testify.ecfeed.ui.modelif.ClassInterface;
 
 public class ClassDetailsPage extends BasicDetailsPage {
 
-	private ClassNode fSelectedClass;
 	private MethodsViewer fMethodsSection;
 	private OtherMethodsViewer fOtherMethodsSection;
 	private Text fClassNameText;
+	private Text fPackageNameText;
 	private ModelOperationManager fOperationManager;
 	private ClassInterface fClassIf;
-	private Text fPackageNameText;
 	
 	private class ReassignClassSelectionAdapter extends SelectionAdapter{
 		@Override
@@ -52,15 +47,7 @@ public class ClassDetailsPage extends BasicDetailsPage {
 
 			if(selectedClass != null){
 				String qualifiedName = selectedClass.getFullyQualifiedName();
-				if(fSelectedClass.getRoot().getClassModel(qualifiedName) == null){
-					fSelectedClass.setName(qualifiedName);
-					modelUpdated(null);
-				}
-				else{
-					MessageDialog.openInformation(getActiveShell(), 
-							Messages.DIALOG_CLASS_EXISTS_TITLE, 
-							Messages.DIALOG_CLASS_EXISTS_MESSAGE);
-				}
+				fClassIf.setQualifiedName(qualifiedName, null, ClassDetailsPage.this);
 			}
 		}
 		
