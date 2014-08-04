@@ -30,7 +30,6 @@ import com.testify.ecfeed.ui.modelif.RootInterface;
 
 public class ModelDetailsPage extends BasicDetailsPage {
 
-	RootNode fModel;
 	private ClassViewer fClassesSection;
 	private Text fModelNameText;
 	private RootInterface fRootIf;
@@ -80,17 +79,15 @@ public class ModelDetailsPage extends BasicDetailsPage {
 
 	private void renameModel(String text) {
 		fRootIf.renameModel(text, null, this);
-		fModelNameText.setText(fModel.getName());
+		fModelNameText.setText(fRootIf.getName());
 	}
 
 	@Override
 	public void refresh() {
 		if(getSelectedElement() instanceof RootNode){
-			fModel = (RootNode)getSelectedElement();
-		}
-		if(fModel != null){
-			fModelNameText.setText(fModel.getName());
-			fClassesSection.setInput(fModel);
+			fRootIf.setTarget((RootNode)getSelectedElement());
+			fModelNameText.setText(fRootIf.getName());
+			fClassesSection.setInput(fRootIf.getTarget());
 		}
 	}
 	

@@ -189,6 +189,10 @@ public class GenericNodeInterface {
 		return fStatusResolver.getImplementationStatus(fTarget);
 	}
 	
+	public String getName(){
+		return fTarget.getName();
+	}
+	
 	public boolean move(GenericNode newParent, int newIndex, BasicSection source, IModelUpdateListener updateListener){
 		try {
 			IModelOperation moveOperation = (IModelOperation)fTarget.accept(new MoveOperationProvider(newParent, newIndex));
