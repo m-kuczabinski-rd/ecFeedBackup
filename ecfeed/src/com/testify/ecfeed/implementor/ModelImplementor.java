@@ -72,7 +72,7 @@ public class ModelImplementor implements IModelImplementor {
 		CompilationUnit testUnit = unitPair.getValue();
 		TypeDeclaration type = null;
 		if (testUnit != null) {
-			type = (TypeDeclaration)getTypeInstance(testUnit, node.getRoot().getName(), node.getQualifiedName(), ModelUtils.classDefinitionImplemented(node), true);
+			type = (TypeDeclaration)getTypeInstance(testUnit, node.getRoot().getName(), node.getQualifiedName(), true);
 			int methods = type.getMethods().length;
 
 			if ((type != null) && !ModelUtils.classMethodsImplemented(node)) {
@@ -90,7 +90,7 @@ public class ModelImplementor implements IModelImplementor {
 		TypeDeclaration type = null;
 		if (testUnit != null) {
 			type = (TypeDeclaration)getTypeInstance(
-					testUnit, node.getRoot().getName(), node.getClassNode().getQualifiedName(), ModelUtils.classDefinitionImplemented(node.getClassNode()), true);
+					testUnit, node.getRoot().getName(), node.getClassNode().getQualifiedName(), true);
 			int methods = type.getMethods().length;
 
 			if (type != null) {
@@ -115,8 +115,7 @@ public class ModelImplementor implements IModelImplementor {
 			EnumDeclaration categoryType = null;
 			if (categoryUnit != null) {
 				categoryType = (EnumDeclaration)getTypeInstance(
-						categoryUnit, node.getRoot().getName(), node.getCategory().getType(),
-						ModelUtils.categoryDefinitionImplemented(node.getCategory()), false);
+						categoryUnit, node.getRoot().getName(), node.getCategory().getType(), false);
 				if (categoryType != null) {
 					if (!ModelUtils.isPartitionImplemented(node)) {
 						implementPartitionNode(categoryUnit, categoryType, node);
@@ -145,8 +144,7 @@ public class ModelImplementor implements IModelImplementor {
 			EnumDeclaration categoryType = null;
 			if (categoryUnit != null) {
 				categoryType = (EnumDeclaration)getTypeInstance(
-						categoryUnit, node.getRoot().getName(), node.getType(),
-						ModelUtils.categoryDefinitionImplemented(node), false);
+						categoryUnit, node.getRoot().getName(), node.getType(), false);
 				if (categoryType != null) {
 					for (PartitionNode partition : node.getPartitions()) {
 						if (!ModelUtils.isPartitionImplemented(partition)) {
@@ -304,20 +302,22 @@ public class ModelImplementor implements IModelImplementor {
 		return type;
 	}
 
-	private AbstractTypeDeclaration getTypeInstance(CompilationUnit unit, String modelName, String classQualifiedName, boolean implemented, boolean classType) {
+	private AbstractTypeDeclaration getTypeInstance(CompilationUnit unit, String modelName, String classQualifiedName, boolean classType) {
 		AbstractTypeDeclaration type = null;
-		if (!implemented) {
-			type = implementClassDefinition(unit, modelName, classQualifiedName, classType);
-		} else {
-			String className = classQualifiedName.substring(classQualifiedName.lastIndexOf(".") + 1);
-			for (Object object : unit.types()) {
-				AbstractTypeDeclaration declaration = (AbstractTypeDeclaration)object;
-				if (declaration.getName().toString().equals(className)) {
-					type = declaration;
-					break;
-				}
+
+		String className = classQualifiedName.substring(classQualifiedName.lastIndexOf(".") + 1);
+		for (Object object : unit.types()) {
+			AbstractTypeDeclaration declaration = (AbstractTypeDeclaration)object;
+			if (declaration.getName().toString().equals(className)) {
+				type = declaration;
+				break;
 			}
 		}
+
+		if (type == null) {
+			type = implementClassDefinition(unit, modelName, classQualifiedName, classType);
+		}
+
 		return type;
 	}
 
