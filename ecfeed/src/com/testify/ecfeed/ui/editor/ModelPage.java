@@ -53,4 +53,8 @@ public class ModelPage extends FormPage {
 	public ModelMasterDetailsBlock getMasterBlock() {
 		return fBlock;
 	}
+
+	public String getProjectName() {
+		return fEditor.getProjectName();
+	}
 }

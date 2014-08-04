@@ -108,7 +108,7 @@ public class MethodDetailsPage extends BasicDetailsPage {
 		fImplementButton.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e){
-				ModelImplementor implementor = new ModelImplementor();
+				ModelImplementor implementor = new ModelImplementor(getMasterSection().getProjectName());
 				implementor.implement(fSelectedMethod);
 				try {
 					ResourcesPlugin.getWorkspace().getRoot().refreshLocal(IResource.DEPTH_INFINITE, null);

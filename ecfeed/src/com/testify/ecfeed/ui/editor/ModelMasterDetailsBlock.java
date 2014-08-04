@@ -44,6 +44,7 @@ public class ModelMasterDetailsBlock extends MasterDetailsBlock implements IMode
 		fMasterSection.initialize(managedForm);
 		fMasterSection.addModelSelectionChangedListener(this);
 		fMasterSection.setModel(getModel());
+		fMasterSection.setProjectName(fPage.getProjectName());
 	}
 
 	private RootNode getModel() {

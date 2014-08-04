@@ -20,7 +20,6 @@ import org.eclipse.core.filebuffers.ITextFileBufferManager;
 import org.eclipse.core.filebuffers.LocationKind;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IPackageFragmentRoot;
@@ -62,6 +61,11 @@ import com.testify.ecfeed.model.Constants;
 import com.testify.ecfeed.utils.ModelUtils;
 
 public class ModelImplementor implements IModelImplementor {
+	private String currentProjectName;
+
+	public ModelImplementor(String projectName) {
+		currentProjectName = projectName;
+	}
 
 	public void implement(ClassNode node) {
 		AbstractMap.SimpleEntry<IPath,CompilationUnit> unitPair = getCompilationUnitInstance(node.getRoot().getName(), node.getQualifiedName());
@@ -237,7 +241,7 @@ public class ModelImplementor implements IModelImplementor {
 	private AbstractMap.SimpleEntry<IPath,CompilationUnit> getCompilationUnitInstance(String modelName, String classQualifiedName) {
 		AbstractMap.SimpleEntry<IPath,CompilationUnit> unitPair = getCompilationUnit(classQualifiedName);
 		if ((unitPair.getKey() == null) || (unitPair.getValue() == null)) {
-			unitPair = createCompilationUnit(getProjectName(modelName), classQualifiedName);
+			unitPair = createCompilationUnit(currentProjectName, classQualifiedName);
 		}
 		return unitPair;
 	}
@@ -277,24 +281,6 @@ public class ModelImplementor implements IModelImplementor {
 			comments.apply(document);
 		} catch (Throwable e) {
 		}
-	}
-
-	private String getProjectName(String modelName) {
-		String projectName = null;
-		try {
-			IProject[] projects = ResourcesPlugin.getWorkspace().getRoot().getProjects();
-			for (IProject project : projects) {
-				if (project.isOpen() && project.hasNature(JavaCore.NATURE_ID)) {
-					if (project.exists(new Path(modelName + ".ect"))) {
-						projectName = project.getName();
-						break;
-					}
-				}
-			}
-		} catch (Throwable e) {
-			e.printStackTrace();
-		}
-		return projectName;
 	}
 
 	@SuppressWarnings("unchecked")

@@ -179,7 +179,7 @@ public class CategoryDetailsPage extends BasicDetailsPage {
 		fImplementButton.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e){
-				ModelImplementor implementor = new ModelImplementor();
+				ModelImplementor implementor = new ModelImplementor(getMasterSection().getProjectName());
 				implementor.implement(fSelectedCategory);
 				try {
 					ResourcesPlugin.getWorkspace().getRoot().refreshLocal(IResource.DEPTH_INFINITE, null);

@@ -198,4 +198,13 @@ public class ModelEditor extends FormEditor implements IModelWrapper{
 		super.commitPages(onSave);
 		fModelPage.commitMasterPart(onSave);
 	}
+
+	public String getProjectName() {
+		IEditorInput input = getEditorInput();
+		if (input instanceof FileEditorInput){
+			IFile file = ((FileEditorInput)input).getFile();
+			return file.getProject().getName();
+		}
+		return null;
+	}
 }

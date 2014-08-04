@@ -56,6 +56,7 @@ public class ModelMasterSection extends TreeViewerSection{
 	private RootNode fModel;
 	private MenuOperationManager fMenuManager;
 	private Menu fMenu;
+	private String projectName;
 	
 	protected class MenuSelectionAdapter extends SelectionAdapter{
 		MenuOperation fOperation;
@@ -254,4 +255,11 @@ public class ModelMasterSection extends TreeViewerSection{
 		return null;
 	}
 
+	public String getProjectName() {
+		return projectName;
+	}
+
+	public void setProjectName(String name) {
+		projectName = name;
+	}
 }
