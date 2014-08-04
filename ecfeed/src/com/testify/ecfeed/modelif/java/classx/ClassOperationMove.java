@@ -24,6 +24,10 @@ public class ClassOperationMove implements IModelOperation {
 		fNewIndex = newIndex;
 	}
 
+	public ClassOperationMove(ClassNode target, RootNode newParent) {
+		this(target, newParent, newParent.getClasses().size());
+	}
+
 	@Override
 	public void execute() throws ModelIfException {
 		if(fCurrentParent == null || fNewParent == null){
@@ -36,10 +40,12 @@ public class ClassOperationMove implements IModelOperation {
 			throw new ModelIfException(Messages.CLASS_INDEX_TOO_HIGH_PROBLEM);
 		}
 		String targetName = JavaClassUtils.getQualifiedName(fTarget);
-		for(ClassNode child : fNewParent.getClasses()){
-			String childName = JavaClassUtils.getQualifiedName(child);
-			if(targetName.equals(childName)){
-				throw new ModelIfException(Messages.CLASS_NAME_DUPLICATE_PROBLEM);
+		if(fCurrentParent != fNewParent){
+			for(ClassNode child : fNewParent.getClasses()){
+				String childName = JavaClassUtils.getQualifiedName(child);
+				if(targetName.equals(childName)){
+					throw new ModelIfException(Messages.CLASS_NAME_DUPLICATE_PROBLEM);
+				}
 			}
 		}
 		fCurrentParent.removeClass(fTarget);

@@ -43,7 +43,7 @@ public class RootNode extends GenericNode {
 	}
 
 	public boolean addClass(ClassNode node, int index){
-		if(index > 0 && index < fClasses.size()){
+		if(index >= 0 && index <= fClasses.size()){
 			fClasses.add(index, node);
 			node.setParent(this);
 			return fClasses.indexOf(node) == index;

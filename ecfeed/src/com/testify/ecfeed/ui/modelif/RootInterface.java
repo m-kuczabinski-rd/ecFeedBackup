@@ -27,6 +27,7 @@ public class RootInterface extends GenericNodeInterface {
 	}
 	
 	public void setTarget(RootNode target){
+		super.setTarget(target);
 		fTarget = target;
 	}
 	
@@ -85,6 +86,4 @@ public class RootInterface extends GenericNodeInterface {
 		}
 		return className + String.valueOf(i);
 	}
-	
-	
 }

@@ -22,6 +22,28 @@ import com.testify.ecfeed.testutils.RandomModelGenerator;
 public class RootNodeTest{
 	
 	@Test
+	public void addClassTest(){
+		RootNode root = new RootNode("name");
+		ClassNode c1 = new ClassNode("c1");
+		ClassNode c2 = new ClassNode("c2");
+		ClassNode c3 = new ClassNode("c3");
+		assertEquals(0,  root.getClasses().size());
+		root.addClass(c1);
+		assertEquals(1,  root.getClasses().size());
+		assertEquals(c1, root.getClasses().get(0));
+		root.addClass(c2);
+		assertEquals(2,  root.getClasses().size());
+		assertEquals(c1, root.getClasses().get(0));
+		assertEquals(c2, root.getClasses().get(1));
+		root.addClass(c3,0);
+		assertEquals(3,  root.getClasses().size());
+		assertEquals(c3, root.getClasses().get(0));
+		assertEquals(c1, root.getClasses().get(1));
+		assertEquals(c2, root.getClasses().get(2));
+	}
+	
+	
+	@Test
 	public void tesGetClass(){
 		RootNode root = new RootNode("name");
 		ClassNode classNode1 = new ClassNode("name");

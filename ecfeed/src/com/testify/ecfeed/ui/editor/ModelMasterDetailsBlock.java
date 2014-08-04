@@ -41,7 +41,7 @@ public class ModelMasterDetailsBlock extends MasterDetailsBlock implements IMode
 	@Override
 	protected void createMasterPart(IManagedForm managedForm, Composite parent) {
 		FormToolkit toolkit = managedForm.getToolkit();
-		fMasterSection = new ModelMasterSection(parent, toolkit);
+		fMasterSection = new ModelMasterSection(parent, toolkit, getPage().getEditor().getModelOperationManager());
 		fMasterSection.initialize(managedForm);
 		fMasterSection.addModelSelectionChangedListener(this);
 		fMasterSection.setModel(getModel());

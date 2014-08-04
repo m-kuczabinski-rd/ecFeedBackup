@@ -4,10 +4,8 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
 
 import com.testify.ecfeed.model.ClassNode;
-import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.modelif.ImplementationStatus;
 import com.testify.ecfeed.modelif.ModelOperationManager;
-import com.testify.ecfeed.modelif.java.classx.ClassOperationMove;
 import com.testify.ecfeed.modelif.java.classx.ClassOperationRename;
 import com.testify.ecfeed.modelif.java.classx.JavaClassUtils;
 import com.testify.ecfeed.ui.editor.BasicSection;
@@ -21,6 +19,7 @@ public class ClassInterface extends GenericNodeInterface {
 	}
 	
 	public void setTarget(ClassNode target){
+		super.setTarget(target);
 		fTarget = target;
 	}
 
@@ -59,27 +58,4 @@ public class ClassInterface extends GenericNodeInterface {
 		String newQualifiedName = newPackageName + "." + getLocalName(); 
 		setQualifiedName(newQualifiedName, source, updateListener);
 	}
-	
-	public boolean move(RootNode newParent, int newIndex, BasicSection source, IModelUpdateListener updateListener){
-		return execute(new ClassOperationMove(fTarget, newParent, newIndex), source, updateListener, Messages.DIALOG_MOVE_CLASS_PROBLEM_TITLE);
-	}
-	
-	public void move(RootNode newParent, BasicSection source, IModelUpdateListener updateListener){
-		move(newParent, newParent.getClasses().size(), source, updateListener);
-	}
-	
-	public void moveUp(BasicSection source, IModelUpdateListener updateListener){
-		int currentIndex = fTarget.getIndex();
-		if(currentIndex > 0){
-			move(fTarget.getRoot(), currentIndex - 1, source, updateListener);
-		}
-	}
-	
-	public void moveDown(BasicSection source, IModelUpdateListener updateListener){
-		int currentIndex = fTarget.getIndex();
-		if(currentIndex < fTarget.getRoot().getClasses().size() - 1){
-			move(fTarget.getRoot(), currentIndex + 1, source, updateListener);
-		}
-	}
-	
 }
