@@ -172,20 +172,17 @@ public class ClassDetailsPage extends BasicDetailsPage {
 	public void refresh(){
 		if(getSelectedElement() instanceof ClassNode){
 			fClassIf.setTarget((ClassNode)getSelectedElement());
+			String title = fClassIf.getQualifiedName() + " [" + fClassIf.implementationStatus() + "]";
+			getMainSection().setText(title);
+			fClassNameText.setText(fClassIf.getLocalName());
+			fPackageNameText.setText(fClassIf.getPackageName());
+
+			fMethodsSection.setInput(fClassIf.getTarget());
+			fOtherMethodsSection.setInput(fClassIf.getTarget());
+			fOtherMethodsSection.setVisible(fOtherMethodsSection.getItemsCount() > 0);
+
+			getMainSection().layout();
 		}
-		else{
-			return;
-		}
-		String title = fClassIf.getQualifiedName() + " [" + fClassIf.implementationStatus() + "]";
-		getMainSection().setText(title);
-		fClassNameText.setText(fClassIf.getLocalName());
-		fPackageNameText.setText(fClassIf.getPackageName());
-		
-		fMethodsSection.setInput(fClassIf.getTarget());
-		fOtherMethodsSection.setInput(fClassIf.getTarget());
-		fOtherMethodsSection.setVisible(fOtherMethodsSection.getItemsCount() > 0);
-		
-		getMainSection().layout();
 	}
 	
 }
