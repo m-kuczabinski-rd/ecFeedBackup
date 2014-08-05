@@ -77,12 +77,14 @@ public class ModelEditor extends FormEditor implements IModelWrapper{
 				case IResourceDelta.ADDED:
 				case IResourceDelta.REMOVED:
 				case IResourceDelta.CHANGED:
-					Display.getDefault().asyncExec(new Runnable() {
-						public void run() {
-							fModelPage.getMasterBlock().getMasterSection().refresh();
-							fModelPage.getMasterBlock().getCurrentPage().refresh();
-						}
-					});
+					if (!Display.getDefault().isDisposed()) {
+						Display.getDefault().asyncExec(new Runnable() {
+							public void run() {
+								fModelPage.getMasterBlock().getMasterSection().refresh();
+								fModelPage.getMasterBlock().getCurrentPage().refresh();
+							}
+						});
+					}
 					break;
 				default:
 					break;
