@@ -15,7 +15,6 @@ import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.modelif.ImplementationStatus;
-import com.testify.ecfeed.modelif.java.classx.JavaClassUtils;
 
 public class ImplementationStatusResolver {
 	private ModelClassLoader fLoader;

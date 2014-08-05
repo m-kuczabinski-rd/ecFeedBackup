@@ -36,8 +36,8 @@ public class MethodNode extends GenericNode {
 	@Override
 	public String toString(){
 		String result = new String(getName()) + "(";
-		ArrayList<String> types = getCategoriesShortTypes();
-		ArrayList<String> names = getCategoriesNames();
+		List<String> types = getCategoriesShortTypes();
+		List<String> names = getCategoriesNames();
 		for(int i = 0; i < types.size(); i++){
 			if(getCategories().get(i).isExpected()){
 				result += "[e]";
@@ -161,24 +161,24 @@ public class MethodNode extends GenericNode {
 		return categories;
 	}
 
-	public ArrayList<String> getCategoriesTypes() {
-		ArrayList<String> types = new ArrayList<String>();
+	public List<String> getCategoriesTypes() {
+		List<String> types = new ArrayList<String>();
 		for(CategoryNode category : fCategories){
 			types.add(category.getType());
 		}
 		return types;
 	}
 	
-	public ArrayList<String> getCategoriesShortTypes() {
-		ArrayList<String> types = new ArrayList<String>();
+	public List<String> getCategoriesShortTypes() {
+		List<String> types = new ArrayList<String>();
 		for(CategoryNode category : fCategories){
 			types.add(category.getShortType());
 		}
 		return types;
 	}
 
-	public ArrayList<String> getCategoriesNames() {
-		ArrayList<String> names = new ArrayList<String>();
+	public List<String> getCategoriesNames() {
+		List<String> names = new ArrayList<String>();
 		for(CategoryNode category : fCategories){
 			names.add(category.getName());
 		}

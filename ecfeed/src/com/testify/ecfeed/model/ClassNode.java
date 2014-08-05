@@ -57,9 +57,10 @@ public class ClassNode extends GenericNode {
 		return super.getName();
 	}
 	
-	public void addMethod(MethodNode method) {
+	public boolean addMethod(MethodNode method) {
 		fMethods.add(method);
 		method.setParent(this);
+		return true;
 	}
 	
 	public MethodNode getMethod(String name, List<String> argTypes) {

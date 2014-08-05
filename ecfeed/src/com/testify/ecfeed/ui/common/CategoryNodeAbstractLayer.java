@@ -1,6 +1,5 @@
 package com.testify.ecfeed.ui.common;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -16,7 +15,7 @@ public class CategoryNodeAbstractLayer{
 	
 	public static boolean removeCategory(CategoryNode category, MethodNode method){
 	
-		ArrayList<String> tmpTypes = method.getCategoriesTypes();
+		List<String> tmpTypes = method.getCategoriesTypes();
 
 		for(int i = 0; i < method.getCategories().size(); ++i){
 			CategoryNode type = method.getCategories().get(i);
@@ -63,7 +62,7 @@ public class CategoryNodeAbstractLayer{
 	
 	
 	public static boolean removeCategories(List<CategoryNode> categories, MethodNode method){	
-		ArrayList<String> tmpTypes = method.getCategoriesTypes();
+		List<String> tmpTypes = method.getCategoriesTypes();
 		for(CategoryNode node : categories){
 			for(int i = 0; i < method.getCategories().size(); ++i){
 				CategoryNode type = method.getCategories().get(i);
@@ -121,7 +120,7 @@ public class CategoryNodeAbstractLayer{
 		}
 		// checking if class doesn't already contain method with name and
 		// parameters same as after adding this category...
-		ArrayList<String> tmpTypes = method.getCategoriesTypes();
+		List<String> tmpTypes = method.getCategoriesTypes();
 		tmpTypes.add(category.getType());
 		if(method.getClassNode().getMethod(method.getName(), tmpTypes) != null){
 			MessageDialog.openError(Display.getCurrent().getActiveShell(), Messages.DIALOG_METHOD_EXISTS_TITLE,
@@ -149,7 +148,7 @@ public class CategoryNodeAbstractLayer{
 		}
 
 		if (!category.getType().equals(newType)) {
-			ArrayList<String> tmpTypes = category.getMethod().getCategoriesTypes();
+			List<String> tmpTypes = category.getMethod().getCategoriesTypes();
 			for (int i = 0; i < category.getMethod().getCategories().size(); ++i) {
 				CategoryNode type = category.getMethod().getCategories().get(i);
 				if (type.getName().equals(category.getName()) && type.getType().equals(category.getType())) {

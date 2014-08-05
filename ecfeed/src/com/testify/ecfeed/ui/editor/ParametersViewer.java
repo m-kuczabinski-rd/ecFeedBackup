@@ -172,7 +172,7 @@ public class ParametersViewer extends CheckboxTableViewerSection implements Test
 					return false;
 			}
 
-			ArrayList<String> tmpTypes = fSelectedMethod.getCategoriesTypes();	
+			List<String> tmpTypes = fSelectedMethod.getCategoriesTypes();	
 			int currentindex = index;
 			for(int i = 0; i < shift; i++){
 				Collections.swap(tmpTypes, currentindex, currentindex = moveUp ? currentindex-1 : currentindex+1);

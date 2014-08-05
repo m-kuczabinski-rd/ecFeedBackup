@@ -5,27 +5,23 @@ import java.util.Collection;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.modelif.IModelOperation;
-import com.testify.ecfeed.modelif.ModelIfException;
+import com.testify.ecfeed.modelif.java.common.AbstractBulkOperation;
 
-public class RootOperationRemoveClasses implements IModelOperation {
+public class RootOperationRemoveClasses extends AbstractBulkOperation {
 
-	private Collection<ClassNode> fRemovedClasses;
 	private RootNode fTarget;
-	
-	public RootOperationRemoveClasses(RootNode target, Collection<ClassNode> removedClasses){
-		fRemovedClasses = removedClasses;
-		fTarget = target;
-	}
-	
-	@Override
-	public void execute() throws ModelIfException {
-		for(ClassNode removed : fRemovedClasses){
-			fTarget.removeClass(removed);
+	private Collection<ClassNode> fClasses;
+
+	public RootOperationRemoveClasses(RootNode target, Collection<ClassNode> classes){
+		for(ClassNode removedClass : classes){
+			addOperation(new RootOperationAddNewClass(target, removedClass));
 		}
+		fTarget = target;
+		fClasses = classes;
 	}
 
 	@Override
 	public IModelOperation reverseOperation() {
-		return new RootOperationAddClasses(fTarget, fRemovedClasses);
+		return new RootOperationAddClasses(fTarget, fClasses);
 	}
 }

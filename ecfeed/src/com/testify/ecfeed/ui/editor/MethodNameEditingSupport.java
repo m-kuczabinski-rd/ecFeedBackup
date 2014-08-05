@@ -11,23 +11,23 @@
 
 package com.testify.ecfeed.ui.editor;
 
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.EditingSupport;
 import org.eclipse.jface.viewers.TextCellEditor;
-import org.eclipse.swt.widgets.Display;
 
 import com.testify.ecfeed.model.MethodNode;
-import com.testify.ecfeed.ui.common.Messages;
-import com.testify.ecfeed.utils.ModelUtils;
+import com.testify.ecfeed.modelif.ModelOperationManager;
+import com.testify.ecfeed.ui.modelif.MethodInterface;
 
 public class MethodNameEditingSupport extends EditingSupport{
 
 	private TextCellEditor fNameCellEditor;
 	BasicSection fSection;
+	private MethodInterface fMethodIf;
 
-	public MethodNameEditingSupport(MethodsViewer viewer) {
+	public MethodNameEditingSupport(MethodsViewer viewer, ModelOperationManager operationManager) {
 		super(viewer.getTableViewer());
+		fMethodIf = new MethodInterface(operationManager);
 		fSection = viewer;
 		fNameCellEditor = new TextCellEditor(viewer.getTable());
 	}
@@ -44,29 +44,15 @@ public class MethodNameEditingSupport extends EditingSupport{
 
 	@Override
 	protected Object getValue(Object element) {
-		String name = ((MethodNode)element).toString();
-		return name.substring(0, name.indexOf('('));
+		fMethodIf.setTarget((MethodNode)element);
+		return fMethodIf.getName();
 	}
 
 	@Override
 	protected void setValue(Object element, Object value) {
 		String newName = (String)value;
-		MethodNode methodNode = (MethodNode)element;
-		boolean validName = ModelUtils.validateNodeName(newName);
-		if (!validName) {
-			MessageDialog.openError(Display.getCurrent().getActiveShell(),
-					Messages.DIALOG_METHOD_NAME_PROBLEM_TITLE,
-					Messages.DIALOG_METHOD_NAME_PROBLEM_MESSAGE);
-		}
-		if (validName && !methodNode.getName().equals(newName)) {
-			if (methodNode.getClassNode().getMethod(newName, methodNode.getCategoriesTypes()) == null) {
-				methodNode.setName(newName);
-				fSection.modelUpdated();
-			} else {
-				MessageDialog.openError(Display.getCurrent().getActiveShell(),
-						Messages.DIALOG_METHOD_EXISTS_TITLE,
-						Messages.DIALOG_METHOD_WITH_PARAMETERS_EXISTS_MESSAGE);
-			}
-		}
+		MethodNode method = (MethodNode)element;
+		fMethodIf.setTarget(method);
+		fMethodIf.setName(newName, fSection, fSection.getUpdateListener());
 	}
 }

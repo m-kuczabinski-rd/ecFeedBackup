@@ -4,6 +4,7 @@ import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.modelif.IModelOperation;
 import com.testify.ecfeed.modelif.ModelIfException;
+import com.testify.ecfeed.modelif.java.JavaClassUtils;
 import com.testify.ecfeed.modelif.java.common.Messages;;
 
 public class ClassOperationMove implements IModelOperation {

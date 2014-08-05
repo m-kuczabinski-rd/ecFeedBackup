@@ -1,6 +1,7 @@
 package com.testify.ecfeed.modelif.java;
 
 import java.util.Arrays;
+import java.util.Collection;
 
 public class JavaUtils {
 
@@ -38,5 +39,13 @@ public class JavaUtils {
 		}
 	
 		return cannonicalName;
+	}
+	
+	public static String consolidate(Collection<String> strings){
+		String consolidated = "";
+		for(String string : strings){
+			consolidated += string + "\n";
+		}
+		return consolidated;
 	}
 }
