@@ -288,6 +288,7 @@ public class RandomModelGenerator {
 
 	public PartitionNode generatePartition(int levels, int partitions, int labels, String type) {
 		String name = generateString(REGEX_PARTITION_NODE_NAME);
+		name = name.replaceAll(":", "_");
 		String value = randomPartitionValue(type);
 		
 		PartitionNode partition = new PartitionNode(name, value);
