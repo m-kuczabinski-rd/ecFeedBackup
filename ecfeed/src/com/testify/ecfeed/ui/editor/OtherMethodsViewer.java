@@ -11,6 +11,7 @@
 
 package com.testify.ecfeed.ui.editor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.swt.events.SelectionAdapter;
@@ -21,28 +22,24 @@ import org.eclipse.ui.forms.widgets.Section;
 
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.MethodNode;
-import com.testify.ecfeed.utils.ModelUtils;
+import com.testify.ecfeed.modelif.ModelOperationManager;
+import com.testify.ecfeed.ui.modelif.ClassInterface;
 
 public class OtherMethodsViewer extends CheckboxTableViewerSection {
 	
 	public final static int STYLE = Section.TITLE_BAR | Section.EXPANDED;
-	private ClassNode fSelectedClass;
+	private ClassInterface fClassIf;
 
 	private class AddSelectedAdapter extends SelectionAdapter{
 		@Override
 		public void widgetSelected(SelectionEvent e){
-			for(Object object : getCheckboxViewer().getCheckedElements()){
-				if(object instanceof MethodNode){
-					fSelectedClass.addMethod((MethodNode)object);
-				}
-			}
-			modelUpdated();
+			fClassIf.addMethods(getSelectedMethods(), OtherMethodsViewer.this, getUpdateListener());
 		}
 	}
 	
-	public OtherMethodsViewer(BasicDetailsPage parent, FormToolkit toolkit) {
+	public OtherMethodsViewer(BasicDetailsPage parent, FormToolkit toolkit, ModelOperationManager operationManager) {
 		super(parent.getMainComposite(), toolkit, STYLE, parent);
-		
+		fClassIf = new ClassInterface(operationManager);
 		addButton("Add selected", new AddSelectedAdapter());
 	}
 	
@@ -51,11 +48,9 @@ public class OtherMethodsViewer extends CheckboxTableViewerSection {
 	}
 	
 	public void setInput(ClassNode classNode){
-		fSelectedClass = classNode;
-		List<MethodNode> notContainedMethods = ModelUtils.getNotContainedMethods(fSelectedClass, fSelectedClass.getQualifiedName(), false);
-		setText("Other methods in " + fSelectedClass.getLocalName());
-//		setVisible(notContainedMethods.size() > 0);
-		super.setInput(notContainedMethods);
+		fClassIf.setTarget(classNode);
+		setText("Other methods in " + classNode.getLocalName());
+		super.setInput(fClassIf.getOtherMethods());
 	}
 	
 	public void setVisible(boolean visible) {
@@ -66,6 +61,17 @@ public class OtherMethodsViewer extends CheckboxTableViewerSection {
 	}
 	
 	public int getItemsCount(){
-		return ModelUtils.getNotContainedMethods(fSelectedClass, fSelectedClass.getQualifiedName(), false).size();
+		return fClassIf.getOtherMethods().size();
+	}
+	
+	public List<MethodNode> getSelectedMethods(){
+		List<MethodNode> methods = new ArrayList<MethodNode>();
+		for(Object object : getCheckboxViewer().getCheckedElements()){
+			if(object instanceof MethodNode){
+				methods.add((MethodNode)object);
+			}
+		}
+		return methods;
+
 	}
 }

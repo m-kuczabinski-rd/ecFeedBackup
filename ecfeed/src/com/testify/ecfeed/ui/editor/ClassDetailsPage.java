@@ -78,7 +78,7 @@ public class ClassDetailsPage extends BasicDetailsPage {
 
 		createQualifiedNameComposite(getMainComposite());
 		addForm(fMethodsSection = new MethodsViewer(this, getToolkit(), fOperationManager));
-		addForm(fOtherMethodsSection = new OtherMethodsViewer(this, getToolkit()));
+		addForm(fOtherMethodsSection = new OtherMethodsViewer(this, getToolkit(), fOperationManager));
 		
 		getToolkit().paintBordersFor(getMainComposite());
 	}

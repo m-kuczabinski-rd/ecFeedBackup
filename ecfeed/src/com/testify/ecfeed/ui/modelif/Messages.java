@@ -27,11 +27,12 @@ public class Messages {
 	public static final String DIALOG_REMOVE_METHODS_MESSAGE = "This operation will remove selected test methods from the model.";
 
 	//EXCEPTIONS
-	public static final String METHOD_IMPORT_EXCEPTION(String name){
+	public static final String EXCEPTION_METHOD_IMPORT(String name){
 		return "Unexpected problems with importing method " + name;
 	}
-	public static final String CLASS_IMPORT_EXCEPTION(String name){
+	public static final String EXCEPTION_CLASS_IMPORT(String name){
 		return "Unexpected problems with importing class " + name;
 	}
+	public static final String EXCEPTION_TYPE_DOES_NOT_EXIST_IN_THE_PROJECT = "The imported type does not exist in the project";
 
 }

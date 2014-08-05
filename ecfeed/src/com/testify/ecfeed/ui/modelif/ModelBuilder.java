@@ -4,11 +4,14 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.jdt.core.Flags;
 import org.eclipse.jdt.core.IAnnotation;
+import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.ILocalVariable;
 import org.eclipse.jdt.core.IMethod;
 import org.eclipse.jdt.core.IType;
+import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.core.Signature;
 
@@ -17,14 +20,38 @@ import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.modelif.ModelIfException;
+import com.testify.ecfeed.modelif.java.ModelClassLoader;
+import com.testify.ecfeed.ui.common.LoaderProvider;
 import com.testify.ecfeed.utils.ClassUtils;
-import com.testify.ecfeed.ui.modelif.Constants;
 
 public class ModelBuilder {
+	
+	public ClassNode generateClassModel(String qualifiedName, boolean testOnly) throws ModelIfException{
+		IType type = getIType(qualifiedName);
+		if(type != null){
+			return generateClassModel(type, testOnly);
+		}
+		throw new ModelIfException(Messages.EXCEPTION_TYPE_DOES_NOT_EXIST_IN_THE_PROJECT);
+	}
+	
+	
+	private IType getIType(String qualifiedName) {
+		try {
+			for(IJavaProject project : JavaCore.create(ResourcesPlugin.getWorkspace().getRoot()).getJavaProjects()){
+				if(project.findType(qualifiedName) != null){
+					return project.findType(qualifiedName);
+				}
+			}
+		} catch (JavaModelException e) {}
+		return null;
+	}
+
+
 	public ClassNode generateClassModel(IType type, boolean testOnly) throws ModelIfException{
-		ClassNode classNode = new ClassNode(type.getFullyQualifiedName());
 		try{
-			Class<?> testClass = ClassUtils.loadClass(ClassUtils.getClassLoader(true, null), type.getFullyQualifiedName());
+			ClassNode classNode = new ClassNode(type.getFullyQualifiedName());
+			ModelClassLoader loader = LoaderProvider.getLoader(false, null);
+			Class<?> testClass = loader.loadClass(type.getFullyQualifiedName());
 			for(IMethod method : type.getMethods()){
 				if((testOnly && isAnnotated(method, "Test")) || (!testOnly && isPublicVoid(method))){
 					try{
@@ -38,11 +65,11 @@ public class ModelBuilder {
 					}
 				}
 			}
+			return classNode;
 		}
 		catch(Throwable e){
-			throw new ModelIfException(Messages.CLASS_IMPORT_EXCEPTION(type.getElementName()));
+			throw new ModelIfException(Messages.EXCEPTION_CLASS_IMPORT(type.getElementName()));
 		}
-		return classNode;
 	}
 	
 	public MethodNode generateMethodModel(IMethod method, Class<?> testClass) throws JavaModelException {

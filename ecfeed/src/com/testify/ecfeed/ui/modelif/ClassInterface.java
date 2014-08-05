@@ -2,6 +2,7 @@ package com.testify.ecfeed.ui.modelif;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
@@ -9,6 +10,7 @@ import org.eclipse.swt.widgets.Display;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.modelif.ImplementationStatus;
+import com.testify.ecfeed.modelif.ModelIfException;
 import com.testify.ecfeed.modelif.ModelOperationManager;
 import com.testify.ecfeed.modelif.java.JavaClassUtils;
 import com.testify.ecfeed.modelif.java.classx.ClassOperationAddMethod;
@@ -123,8 +125,18 @@ public class ClassInterface extends GenericNodeInterface {
 		}
 		return name;
 	}
-	
-//	public MethodNode getMethod(String name, List<String> argTypes){
-//		return JavaMethodUtils.getMethod(fTarget, name, argTypes);
-//	}
+
+	public List<MethodNode> getOtherMethods(){
+		List<MethodNode> otherMethods = new ArrayList<MethodNode>();
+		ModelBuilder builder = new ModelBuilder();
+		try{
+			ClassNode completeModel = builder.generateClassModel(getQualifiedName(), false);
+			for(MethodNode method : completeModel.getMethods()){
+				if(fTarget.getMethod(method.getName(), method.getCategoriesTypes()) == null){
+					otherMethods.add(method);
+				}
+			}
+		}catch (ModelIfException e){}
+		return otherMethods;
+	}
 }
