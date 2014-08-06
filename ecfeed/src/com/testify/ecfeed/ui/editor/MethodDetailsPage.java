@@ -39,6 +39,7 @@ public class MethodDetailsPage extends BasicDetailsPage {
 	private Button fTestOnlineButton;
 	private Button fReassignButton;
 	private MethodInterface fMethodIf;
+	private ModelOperationManager fOperationManager;
 	
 	private class ReassignAdapter extends SelectionAdapter{
 
@@ -54,6 +55,7 @@ public class MethodDetailsPage extends BasicDetailsPage {
 	
 	public MethodDetailsPage(ModelMasterSection masterSection, ModelOperationManager operationManager) {
 		super(masterSection);
+		fOperationManager = operationManager;
 		fMethodIf = new MethodInterface(operationManager);
 	}
 
@@ -66,7 +68,7 @@ public class MethodDetailsPage extends BasicDetailsPage {
 		super.createContents(parent);
 
 		createNameTextComposite();
-		addForm(fParemetersSection = new ParametersViewer(this, getToolkit()));
+		addForm(fParemetersSection = new ParametersViewer(this, getToolkit(), fOperationManager));
 		addForm(fConstraintsSection = new ConstraintsListViewer(this, getToolkit()));
 		addForm(fTestCasesSection = new TestCasesViewer(this, getToolkit()));
 		

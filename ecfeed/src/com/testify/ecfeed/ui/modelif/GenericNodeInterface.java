@@ -19,6 +19,7 @@ import com.testify.ecfeed.modelif.ModelIfException;
 import com.testify.ecfeed.modelif.ModelOperationManager;
 import com.testify.ecfeed.modelif.java.ILoaderProvider;
 import com.testify.ecfeed.modelif.java.ImplementationStatusResolver;
+import com.testify.ecfeed.modelif.java.category.CategoryOperationSwap;
 import com.testify.ecfeed.modelif.java.classx.ClassOperationMove;
 import com.testify.ecfeed.modelif.java.method.MethodOperationMove;
 import com.testify.ecfeed.ui.common.LoaderProvider;
@@ -78,7 +79,6 @@ public class GenericNodeInterface {
 
 		@Override
 		public Object visit(CategoryNode node) throws Exception {
-			// TODO Auto-generated method stub
 			return null;
 		}
 
@@ -147,8 +147,14 @@ public class GenericNodeInterface {
 
 		@Override
 		public Object visit(CategoryNode node) throws Exception {
-			// TODO Auto-generated method stub
-			return null;
+			int newIndex = node.getIndex() + (fMoveUp ? -1 : 1);
+			while(CategoryOperationSwap.swapAllowed(node, newIndex) == false){
+				newIndex += (fMoveUp ? -1 : 1);
+				if(newIndex < 0 || newIndex > node.getMethod().getCategories().size()){
+					return null;
+				}
+			}
+			return new CategoryOperationSwap(node, newIndex);
 		}
 
 		@Override

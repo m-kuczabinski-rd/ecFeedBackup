@@ -22,5 +22,6 @@ public class Messages {
 	public static final String UNEXPECTED_PROBLEM_WHILE_ADDING_METHOD = "Method could not be added to the class model";
 	public static final String UNEXPECTED_PROBLEM_WHILE_REMOVING_METHOD = "Method could not be removed from the class model";
 	public static final String METHODS_INCOMPATIBLE_PROBLEM = "The converted methods do not have the same parameter count and types";
+	public static final String CATEGORY_NAME_DUPLICATE_PROBLEM = "The method already contains a parameter with this name";
 
 }

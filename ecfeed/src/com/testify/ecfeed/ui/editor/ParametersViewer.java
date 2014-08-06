@@ -16,10 +16,8 @@ import static com.testify.ecfeed.ui.common.CategoryNodeAbstractLayer.removeCateg
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.swt.SWT;
@@ -27,19 +25,18 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Section;
 
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
-import com.testify.ecfeed.model.TestCaseNode;
+import com.testify.ecfeed.modelif.ModelOperationManager;
 import com.testify.ecfeed.ui.common.ColorConstants;
 import com.testify.ecfeed.ui.common.ColorManager;
 import com.testify.ecfeed.ui.common.DefaultValueEditingSupport;
-import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.common.TestDataEditorListener;
+import com.testify.ecfeed.ui.modelif.CategoryInterface;
 import com.testify.ecfeed.utils.Constants;
 import com.testify.ecfeed.utils.ModelUtils;
 
@@ -51,9 +48,11 @@ public class ParametersViewer extends CheckboxTableViewerSection implements Test
 	private TableViewerColumn fDefaultValueColumn;
 	private MethodNode fSelectedMethod;
 	private TableViewerColumn nameColumn;
+	private CategoryInterface fCategoryIf;
 	
-	public ParametersViewer(BasicDetailsPage parent, FormToolkit toolkit) {
+	public ParametersViewer(BasicDetailsPage parent, FormToolkit toolkit, ModelOperationManager operationManager) {
 		super(parent.getMainComposite(), toolkit, STYLE, parent);
+		fCategoryIf = new CategoryInterface(operationManager);
 		getSection().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
 		fColorManager = new ColorManager();
 		getSection().setText("Parameters");
@@ -67,14 +66,16 @@ public class ParametersViewer extends CheckboxTableViewerSection implements Test
 	private class MoveUpAdapter extends SelectionAdapter{
 		@Override
 		public void widgetSelected(SelectionEvent e){
-			moveSelectedItem(true, 1);
+			fCategoryIf.setTarget((CategoryNode)getSelectedElement());
+			fCategoryIf.moveUp(ParametersViewer.this, getUpdateListener());
 		}
 	}
 
 	private class MoveDownAdapter extends SelectionAdapter{
 		@Override
 		public void widgetSelected(SelectionEvent e){
-			moveSelectedItem(false, 1);
+			fCategoryIf.setTarget((CategoryNode)getSelectedElement());
+			fCategoryIf.moveDown(ParametersViewer.this, getUpdateListener());
 		}
 	}
 
@@ -160,45 +161,45 @@ public class ParametersViewer extends CheckboxTableViewerSection implements Test
 		}
 	}
 
-	private boolean moveSelectedItem(boolean moveUp, int shift){
-		if(getSelectedElement() != null && shift > 0){
-			CategoryNode categoryNode = (CategoryNode)getSelectedElement();
-			int index = fSelectedMethod.getCategories().indexOf(categoryNode);
-			if(moveUp){
-				if(index - shift < 0)
-					return false;
-			} else{
-				if(index + shift >= fSelectedMethod.getCategories().size())
-					return false;
-			}
-
-			List<String> tmpTypes = fSelectedMethod.getCategoriesTypes();	
-			int currentindex = index;
-			for(int i = 0; i < shift; i++){
-				Collections.swap(tmpTypes, currentindex, currentindex = moveUp ? currentindex-1 : currentindex+1);
-			}
-
-			MethodNode twinMethod = fSelectedMethod.getClassNode().getMethod(fSelectedMethod.getName(), tmpTypes);
-			if(twinMethod == null || twinMethod == fSelectedMethod){
-				for(int i = 0; i < shift; i++){
-					categoryNode.getParent().moveChild(categoryNode, moveUp);
-				}
-				int newindex = fSelectedMethod.getCategories().indexOf(categoryNode);
-				for(TestCaseNode tcnode : fSelectedMethod.getTestCases()){
-					Collections.swap(tcnode.getTestData(), newindex, index);
-				}
-				modelUpdated();
-				return true;
-			} else{
-				if(!moveSelectedItem(moveUp, shift + 1))
-					MessageDialog.openError(Display.getCurrent().getActiveShell(),
-							Messages.DIALOG_METHOD_EXISTS_TITLE,
-							Messages.DIALOG_METHOD_WITH_PARAMETERS_EXISTS_MESSAGE);
-				return true;
-			}
-		}
-		return true;
-	}
+//	private boolean moveSelectedItem(boolean moveUp, int shift){
+//		if(getSelectedElement() != null && shift > 0){
+//			CategoryNode categoryNode = (CategoryNode)getSelectedElement();
+//			int index = fSelectedMethod.getCategories().indexOf(categoryNode);
+//			if(moveUp){
+//				if(index - shift < 0)
+//					return false;
+//			} else{
+//				if(index + shift >= fSelectedMethod.getCategories().size())
+//					return false;
+//			}
+//
+//			List<String> tmpTypes = fSelectedMethod.getCategoriesTypes();	
+//			int currentindex = index;
+//			for(int i = 0; i < shift; i++){
+//				Collections.swap(tmpTypes, currentindex, currentindex = moveUp ? currentindex-1 : currentindex+1);
+//			}
+//
+//			MethodNode twinMethod = fSelectedMethod.getClassNode().getMethod(fSelectedMethod.getName(), tmpTypes);
+//			if(twinMethod == null || twinMethod == fSelectedMethod){
+//				for(int i = 0; i < shift; i++){
+//					categoryNode.getParent().moveChild(categoryNode, moveUp);
+//				}
+//				int newindex = fSelectedMethod.getCategories().indexOf(categoryNode);
+//				for(TestCaseNode tcnode : fSelectedMethod.getTestCases()){
+//					Collections.swap(tcnode.getTestData(), newindex, index);
+//				}
+//				modelUpdated();
+//				return true;
+//			} else{
+//				if(!moveSelectedItem(moveUp, shift + 1))
+//					MessageDialog.openError(Display.getCurrent().getActiveShell(),
+//							Messages.DIALOG_METHOD_EXISTS_TITLE,
+//							Messages.DIALOG_METHOD_WITH_PARAMETERS_EXISTS_MESSAGE);
+//				return true;
+//			}
+//		}
+//		return true;
+//	}
 
 	@Override
 	protected void createTableColumns() {

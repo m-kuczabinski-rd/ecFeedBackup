@@ -249,11 +249,21 @@ public class MethodNode extends GenericNode {
 
 	public boolean removeCategory(CategoryNode category){
 		category.setParent(null);
+		int index = fCategories.indexOf(category);
 		if(fCategories.remove(category)){
 			removeMentioningConstraints(category);
+			removeTestParameters(index);
 			return true;
 		}
 		return false;
+	}
+
+	private void removeTestParameters(int index) {
+		for(TestCaseNode testCase : fTestCases){
+			if(testCase.getTestData().size() > index){
+				testCase.getTestData().remove(index);
+			}
+		}
 	}
 
 	public boolean removeTestCase(TestCaseNode testCase){
