@@ -11,35 +11,37 @@
 
 package com.testify.ecfeed.ui.dialogs;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.TitleAreaDialog;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.widgets.Button;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Shell;
-import org.eclipse.swt.layout.GridLayout;
-
-import com.testify.ecfeed.ui.common.Messages;
-import com.testify.ecfeed.model.MethodNode;
-import com.testify.ecfeed.utils.ModelUtils;
-
-import org.eclipse.swt.widgets.Table;
-import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.layout.TableColumnLayout;
-import org.eclipse.swt.widgets.Text;
-import org.eclipse.wb.swt.SWTResourceManager;
 import org.eclipse.jface.viewers.ArrayContentProvider;
-import org.eclipse.swt.widgets.TableColumn;
+import org.eclipse.jface.viewers.ColumnPixelData;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
+import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
-import org.eclipse.jface.viewers.ColumnPixelData;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.Table;
+import org.eclipse.swt.widgets.TableColumn;
+import org.eclipse.swt.widgets.Text;
+import org.eclipse.wb.swt.SWTResourceManager;
+
+import com.testify.ecfeed.model.MethodNode;
+import com.testify.ecfeed.ui.common.Messages;
+import com.testify.ecfeed.ui.modelif.ClassInterface;
 
 public class TestMethodRenameDialog extends TitleAreaDialog {
 	private MethodNode fRenamedMethod;
@@ -97,7 +99,7 @@ public class TestMethodRenameDialog extends TitleAreaDialog {
 				return ((MethodNode)element).toString();
 			}
 		});
-		fMethodViewer.setInput(ModelUtils.getCompatibleMethods(fRenamedMethod));
+		fMethodViewer.setInput(getCompatibleMethods());
 		fMethodViewer.addSelectionChangedListener(new ISelectionChangedListener() {
 			@Override
 			public void selectionChanged(SelectionChangedEvent event) {
@@ -135,4 +137,13 @@ public class TestMethodRenameDialog extends TitleAreaDialog {
 				IDialogConstants.CANCEL_LABEL, false);
 	}
 
+	private List<MethodNode> getCompatibleMethods(){
+		List<MethodNode> compatibleMethods = new ArrayList<MethodNode>();
+		for(MethodNode m : ClassInterface.getOtherMethods(fRenamedMethod.getClassNode())){
+			if(m.getCategoriesTypes().equals(fRenamedMethod.getCategoriesTypes())){
+				compatibleMethods.add(m);
+			}
+		}
+		return compatibleMethods;
+	}
 }

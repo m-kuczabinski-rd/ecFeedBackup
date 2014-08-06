@@ -117,18 +117,23 @@ public class ClassInterface extends GenericNodeInterface {
 		return false;
 	}
 
-	public List<MethodNode> getOtherMethods(){
+	public static List<MethodNode> getOtherMethods(ClassNode target){
 		List<MethodNode> otherMethods = new ArrayList<MethodNode>();
 		EclipseModelBuilder builder = new EclipseModelBuilder();
 		try{
-			ClassNode completeModel = builder.buildClassModel(getQualifiedName(), false);
+			ClassNode completeModel = builder.buildClassModel(JavaClassUtils.getQualifiedName(target), false);
 			for(MethodNode method : completeModel.getMethods()){
-				if(fTarget.getMethod(method.getName(), method.getCategoriesTypes()) == null){
+				if(target.getMethod(method.getName(), method.getCategoriesTypes()) == null){
 					otherMethods.add(method);
 				}
 			}
 		}catch (ModelIfException e){}
 		return otherMethods;
+	}
+
+	
+	public List<MethodNode> getOtherMethods(){
+		return getOtherMethods(fTarget);
 	}
 
 	private String generateNewMethodName() {
