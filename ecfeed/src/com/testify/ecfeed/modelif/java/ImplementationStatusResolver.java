@@ -184,19 +184,19 @@ public class ImplementationStatusResolver {
 		}
 		for(Method m : parentClass.getMethods()){
 			if(m.getReturnType().equals(Void.TYPE) == false){
-				break;
+				continue;
 			}
 			if(m.getName().equals(methodModel.getName()) == false){
-				break;
+				continue;
 			}
 			List<String> typeNames = getArgTypes(m);
 			List<CategoryNode> modelCategories = methodModel.getCategories();
 			if(typeNames.size() != methodModel.getCategories().size()){
-				break;
+				continue;
 			}
 			for(int i = 0; i < typeNames.size(); i++){
 				if(typeNames.get(i).equals(modelCategories.get(i).getName()) == false){
-					break;
+					continue;
 				}
 			}
 			return true;

@@ -25,6 +25,7 @@ import org.eclipse.ui.forms.widgets.Section;
 
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.MethodNode;
+import com.testify.ecfeed.modelif.ImplementationStatus;
 import com.testify.ecfeed.modelif.ModelOperationManager;
 import com.testify.ecfeed.modelif.java.JavaClassUtils;
 import com.testify.ecfeed.ui.common.ColorConstants;
@@ -75,7 +76,8 @@ public class MethodsViewer extends CheckboxTableViewerSection {
 		@Override
 		public Color getForeground(Object element){
 			fMethodIf.setTarget((MethodNode)element);
-			switch(fMethodIf.implementationStatus()){
+			ImplementationStatus status = fMethodIf.implementationStatus();
+			switch(status){
 			case IMPLEMENTED: return fColorManager.getColor(ColorConstants.ITEM_IMPLEMENTED);
 			default: return null;
 			}
