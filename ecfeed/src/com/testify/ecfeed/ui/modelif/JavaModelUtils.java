@@ -13,8 +13,6 @@ import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.core.Signature;
 
-import com.testify.ecfeed.modelif.java.JavaClassUtils;
-
 public class JavaModelUtils {
 
 	public static IType getVariableType(String signature){
@@ -137,7 +135,7 @@ public class JavaModelUtils {
 					qualifiedName = importDeclaration.getElementName().replaceFirst("\\*", variableTypeName);
 				}
 				IType type = getIType(qualifiedName); 
-				if(type != null && JavaClassUtils.getLocalName(type.getFullyQualifiedName()).equals(variableTypeName)){
+				if(type != null && type.getElementName().equals(variableTypeName)){
 					return type;
 				}
 			}
