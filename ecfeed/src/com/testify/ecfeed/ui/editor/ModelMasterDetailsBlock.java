@@ -57,7 +57,7 @@ public class ModelMasterDetailsBlock extends MasterDetailsBlock implements IMode
 		
 		detailsPart.registerPage(RootNode.class, new ModelDetailsPage(fMasterSection, operationManager));
 		detailsPart.registerPage(ClassNode.class, new ClassDetailsPage(fMasterSection, operationManager));
-		detailsPart.registerPage(MethodNode.class, new MethodDetailsPage(fMasterSection));
+		detailsPart.registerPage(MethodNode.class, new MethodDetailsPage(fMasterSection, operationManager));
 		detailsPart.registerPage(CategoryNode.class, new CategoryDetailsPage(fMasterSection, operationManager));
 		detailsPart.registerPage(TestCaseNode.class, new TestCaseDetailsPage(fMasterSection));
 		detailsPart.registerPage(ConstraintNode.class, new ConstraintDetailsPage(fMasterSection));

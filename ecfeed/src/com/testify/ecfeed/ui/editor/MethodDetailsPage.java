@@ -14,7 +14,6 @@ package com.testify.ecfeed.ui.editor;
 import java.util.List;
 
 import org.eclipse.jface.dialogs.IDialogConstants;
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -22,17 +21,16 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
 
 import com.testify.ecfeed.model.CategoryNode;
-import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.MethodNode;
-import com.testify.ecfeed.ui.common.Messages;
+import com.testify.ecfeed.modelif.ImplementationStatus;
+import com.testify.ecfeed.modelif.ModelOperationManager;
 import com.testify.ecfeed.ui.dialogs.TestMethodRenameDialog;
-import com.testify.ecfeed.utils.ModelUtils;
+import com.testify.ecfeed.ui.modelif.MethodInterface;
 
 public class MethodDetailsPage extends BasicDetailsPage {
 
@@ -43,6 +41,7 @@ public class MethodDetailsPage extends BasicDetailsPage {
 	private Text fMethodNameText;
 	private Button fTestOnlineButton;
 	private Button fReassignButton;
+	private MethodInterface fMethodIf;
 	
 	private class ReassignAdapter extends SelectionAdapter{
 
@@ -75,8 +74,9 @@ public class MethodDetailsPage extends BasicDetailsPage {
 		}
 	}
 	
-	public MethodDetailsPage(ModelMasterSection masterSection) {
+	public MethodDetailsPage(ModelMasterSection masterSection, ModelOperationManager operationManager) {
 		super(masterSection);
+		fMethodIf = new MethodInterface(operationManager);
 	}
 
 	public MethodNode getSelectedMethod() {
@@ -105,7 +105,7 @@ public class MethodDetailsPage extends BasicDetailsPage {
 		fMethodNameText.addListener(SWT.KeyDown, new Listener() {
 			public void handleEvent(Event event) {
 				if(event.keyCode == SWT.CR || event.keyCode == SWT.KEYPAD_CR){
-					changeName();
+					applyNewName();
 				}
 			}
 		});
@@ -114,7 +114,7 @@ public class MethodDetailsPage extends BasicDetailsPage {
 		changeButton.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e){
-				changeName();
+				applyNewName();
 			}
 		});
 		fReassignButton = getToolkit().createButton(composite, "Reassign", SWT.NONE);
@@ -124,66 +124,31 @@ public class MethodDetailsPage extends BasicDetailsPage {
 
 		getToolkit().paintBordersFor(composite);
 	}
-
-	private void changeName() {
-		String name = fMethodNameText.getText();
-		boolean validName = ModelUtils.validateNodeName(name);
-
-		if (!validName) {
-			MessageDialog.openError(Display.getCurrent().getActiveShell(),
-					Messages.DIALOG_METHOD_NAME_PROBLEM_TITLE,
-					Messages.DIALOG_METHOD_NAME_PROBLEM_MESSAGE);
-			fMethodNameText.setText(fSelectedMethod.getName());
-			fMethodNameText.setSelection(fSelectedMethod.getName().length());
-		}
-		if (validName && (!fSelectedMethod.getName().equals(name))) {
-			if (fSelectedMethod.getClassNode().getMethod(name, fSelectedMethod.getCategoriesTypes()) == null){
-				fSelectedMethod.setName(name);
-				modelUpdated(null);
-			} else {
-				MessageDialog.openInformation(getActiveShell(),
-					Messages.DIALOG_METHOD_EXISTS_TITLE,
-					Messages.DIALOG_METHOD_WITH_PARAMETERS_EXISTS_MESSAGE);
-				fMethodNameText.setText(fSelectedMethod.getName());
-				fMethodNameText.setSelection(fSelectedMethod.getName().length());
-			}
-		}
-	}
-
+	
 	@Override
 	public void refresh(){
 		if(getSelectedElement() instanceof MethodNode){
+			MethodNode selectedMethod = (MethodNode)getSelectedElement(); 
+			fMethodIf.setTarget(selectedMethod);
+			ImplementationStatus methodStatus = fMethodIf.implementationStatus();
+			getMainSection().setText(selectedMethod.toString() + methodStatus);
+			fTestOnlineButton.setEnabled(methodStatus == ImplementationStatus.IMPLEMENTED || 
+					methodStatus == ImplementationStatus.PARTIALLY_IMPLEMENTED);
+			fParemetersSection.setInput(selectedMethod);
+			fConstraintsSection.setInput(selectedMethod);
+			fTestCasesSection.setInput(selectedMethod);
+			fMethodNameText.setText(fMethodIf.getName());
+			
+			ImplementationStatus parentStatus = fMethodIf.implementationStatus(selectedMethod.getClassNode());
+			fReassignButton.setEnabled(parentStatus == ImplementationStatus.IMPLEMENTED || 
+					parentStatus == ImplementationStatus.PARTIALLY_IMPLEMENTED);
+					
 			fSelectedMethod = (MethodNode)getSelectedElement();
 		}
-		if(fSelectedMethod != null){
-			boolean implemented = ModelUtils.isMethodImplemented(fSelectedMethod);
-			boolean partiallyImplemented = ModelUtils.isMethodPartiallyImplemented(fSelectedMethod);
-
-			String title = fSelectedMethod.toString();
-			title += " " + getImplementationStatusIndicator(implemented, partiallyImplemented);
-			fTestOnlineButton.setEnabled(implemented || partiallyImplemented);
-			getMainSection().setText(title);
-			fParemetersSection.setInput(fSelectedMethod);
-			fConstraintsSection.setInput(fSelectedMethod);
-			fTestCasesSection.setInput(fSelectedMethod);
-			fMethodNameText.setText(fSelectedMethod.getName());
-			
-			fReassignButton.setEnabled(ModelUtils.isClassPartiallyImplemented((ClassNode)fSelectedMethod.getParent())
-						|| ModelUtils.isClassImplemented((ClassNode)fSelectedMethod.getParent()));
-		}
 	}
-	
-	private String getImplementationStatusIndicator(boolean implemented, boolean partiallyImplemented){
-		String status;
-		if (implemented) {
-			status = "[implemented]";
-		}
-		else if (partiallyImplemented){
-			status = "[partially unimplemented]";
-		}
-		else{
-			status = "[unimplemented]";
-		}
-		return status;
+
+	private void applyNewName(){
+		fMethodIf.setName(fMethodNameText.getText(), null, this);
+		fMethodNameText.setText(fMethodIf.getName());
 	}
 }
