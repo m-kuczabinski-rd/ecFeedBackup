@@ -15,7 +15,6 @@ import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.modelif.ModelIfException;
 import com.testify.ecfeed.ui.common.LoaderProvider;
-import com.testify.ecfeed.utils.ClassUtils;
 
 public class JavaModelBuilder {
 	
@@ -105,7 +104,8 @@ public class JavaModelBuilder {
 	}
 
 	protected String getDefaultExpectedValueString(String type) {
-		switch(type){
+		return "0";
+//		switch(type){
 //		case com.testify.ecfeed.modelif.java.Constants.TYPE_NAME_BYTE:
 //			return Constants.DEFAULT_EXPECTED_BYTE_VALUE;
 //		case com.testify.ecfeed.modelif.java.Constants.TYPE_NAME_BOOLEAN:
@@ -124,9 +124,9 @@ public class JavaModelBuilder {
 //			return Constants.DEFAULT_EXPECTED_SHORT_VALUE;
 //		case com.testify.ecfeed.modelif.java.Constants.TYPE_NAME_STRING:
 //			return Constants.DEFAULT_EXPECTED_STRING_VALUE;
-		default:
-			return ClassUtils.defaultEnumExpectedValueString(type);
-		}
+//		default:
+//			return ClassUtils.defaultEnumExpectedValueString(type);
+//		}
 	}
 
 	protected static String defaultEnumExpectedValueString(String typeName) {
