@@ -35,7 +35,7 @@ import com.testify.ecfeed.runner.ParameterizedMethod;
 import com.testify.ecfeed.ui.common.ConsoleManager;
 import com.testify.ecfeed.ui.dialogs.ExecuteOnlineSetupDialog;
 import com.testify.ecfeed.ui.dialogs.GeneratorProgressMonitorDialog;
-import com.testify.ecfeed.utils.ModelUtils;
+import com.testify.ecfeed.ui.modelif.Messages;
 
 public class ExecuteOnlineTestAdapter extends ExecuteTestAdapter {
 
@@ -65,9 +65,9 @@ public class ExecuteOnlineTestAdapter extends ExecuteTestAdapter {
 			Method testMethod = getTestMethod(testClass, getMethodModel());
 			List<PartitionNode> next;
 			try {
-				if (ModelUtils.isMethodWithParameters(getMethodModel())) {
+				if (getMethodModel().getCategories().size() > 0) {
 					fGenerator.initialize(fInput, fConstraints, fParameters);
-					monitor.beginTask("Executing test function with generated parameters", fGenerator.totalWork());
+					monitor.beginTask(Messages.EXECUTING_TEST_WITH_PARAMETERS, fGenerator.totalWork());
 					while((next = fGenerator.next()) != null && monitor.isCanceled() == false){
 						List<TestCaseNode> testCases = new ArrayList<TestCaseNode>();
 						testCases.add(new TestCaseNode("", next));
@@ -77,7 +77,8 @@ public class ExecuteOnlineTestAdapter extends ExecuteTestAdapter {
 					}
 					monitor.done();
 				} else {
-					monitor.beginTask("Executing test function with generated parameters", 1);
+					monitor.beginTask(Messages.EXECUTING_TEST_WITH_NO_PARAMETERS, 1);
+					
 					List<TestCaseNode> testCases = new ArrayList<TestCaseNode>();
 					testCases.add(new TestCaseNode("", new ArrayList<PartitionNode>()));
 					ParameterizedMethod frameworkMethod = new ParameterizedMethod(testMethod, testCases);
@@ -99,7 +100,7 @@ public class ExecuteOnlineTestAdapter extends ExecuteTestAdapter {
 	public void widgetSelected(SelectionEvent e){
 		ConsoleManager.displayConsole();
 		ConsoleManager.redirectSystemOutputToStream(ConsoleManager.getOutputStream());
-		if (ModelUtils.isMethodWithParameters(getMethodModel())) {
+		if (getMethodModel().getCategories().size() > 0) {
 			ExecuteOnlineSetupDialog dialog = new ExecuteOnlineSetupDialog(fPage.getActiveShell(), getMethodModel());
 			if(dialog.open() == IDialogConstants.OK_ID){
 				IGenerator<PartitionNode> selectedGenerator = dialog.getSelectedGenerator();
@@ -134,7 +135,8 @@ public class ExecuteOnlineTestAdapter extends ExecuteTestAdapter {
 		try {
 			progressDialog.run(true,  true, runnable);
 		} catch (InvocationTargetException | InterruptedException e) {
-			MessageDialog.openError(Display.getDefault().getActiveShell(), "Exception:\n", e.getMessage());
+			MessageDialog.openError(Display.getDefault().getActiveShell(), 
+					Messages.DIALOG_UNEXPECTED_PROBLEM_WITH_TEST_EXECUTION + "\n", e.getMessage());
 		}
 	}
 

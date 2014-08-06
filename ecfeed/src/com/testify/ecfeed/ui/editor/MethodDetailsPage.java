@@ -65,7 +65,7 @@ public class MethodDetailsPage extends BasicDetailsPage {
 	public void createContents(Composite parent){
 		super.createContents(parent);
 
-		createTextClient();
+		createNameTextComposite();
 		addForm(fParemetersSection = new ParametersViewer(this, getToolkit()));
 		addForm(fConstraintsSection = new ConstraintsListViewer(this, getToolkit()));
 		addForm(fTestCasesSection = new TestCasesViewer(this, getToolkit()));
@@ -73,7 +73,7 @@ public class MethodDetailsPage extends BasicDetailsPage {
 		getToolkit().paintBordersFor(getMainComposite());
 	}
 
-	private void createTextClient() {
+	private void createNameTextComposite() {
 		Composite composite = getToolkit().createComposite(getMainComposite());
 		composite.setLayout(new GridLayout(5, false));
 		composite.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));

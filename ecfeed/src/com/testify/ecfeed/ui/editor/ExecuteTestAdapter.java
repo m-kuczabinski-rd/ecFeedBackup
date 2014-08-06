@@ -13,7 +13,6 @@ package com.testify.ecfeed.ui.editor;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,16 +22,15 @@ import org.eclipse.swt.widgets.Display;
 
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.MethodNode;
+import com.testify.ecfeed.ui.common.LoaderProvider;
 import com.testify.ecfeed.ui.common.Messages;
-import com.testify.ecfeed.utils.ClassUtils;
 
 public abstract class ExecuteTestAdapter extends SelectionAdapter {
 
 	protected Class<?> loadTestClass() {
 		ClassNode classNode = getMethodModel().getClassNode();
 		String className = classNode.getQualifiedName();
-		URLClassLoader loader = ClassUtils.getClassLoader(true, null);
-		Class<?> testClass = ClassUtils.loadClass(loader, className.toString());
+		Class<?> testClass = new LoaderProvider().getLoader(true, null).loadClass(className.toString());
 
 		if (testClass == null) {
 			MessageDialog.openError(Display.getDefault().getActiveShell(), 

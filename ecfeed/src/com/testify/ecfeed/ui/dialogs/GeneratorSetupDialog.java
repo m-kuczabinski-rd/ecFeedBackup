@@ -62,10 +62,12 @@ import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.model.constraint.Constraint;
+import com.testify.ecfeed.modelif.ImplementationStatus;
 import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.common.TreeCheckStateListener;
+import com.testify.ecfeed.ui.modelif.CategoryInterface;
+import com.testify.ecfeed.ui.modelif.PartitionInterface;
 import com.testify.ecfeed.utils.Constants;
-import com.testify.ecfeed.utils.ModelUtils;
 
 public class GeneratorSetupDialog extends TitleAreaDialog {
 	private Combo fTestSuiteCombo;
@@ -94,6 +96,63 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 	public final static int TEST_SUITE_NAME_COMPOSITE = 1 << 2;
 	public final static int GENERATOR_SELECTION_COMPOSITE = 1 << 3;
 
+	private class PartitionViewerCheckStateListener implements Listener{
+		
+		private Tree fTree;
+
+		public PartitionViewerCheckStateListener(Tree tree) {
+			fTree = tree;
+		}
+
+		@Override
+		public void handleEvent(Event event){
+			PartitionInterface pIf = new PartitionInterface(null);
+			if(event.detail == SWT.CHECK){
+				fTree.setRedraw(false);
+				TreeItem item = (TreeItem)event.item;
+				if(fGenerateExecutableContent){
+					if(item.getData() instanceof PartitionNode){
+						PartitionNode partition = (PartitionNode)item.getData();
+						ImplementationStatus partitionStatus = pIf.implementationStatus(partition);
+						if(partitionStatus != ImplementationStatus.IMPLEMENTED){
+							item.setChecked(false);
+							TreeItem parentItem = item.getParentItem();
+							if(parentItem.getData() instanceof CategoryNode){
+								boolean isAnyImplemented = false;
+								for(int i = 0; i < parentItem.getItemCount(); ++i){
+									TreeItem subItem = parentItem.getItem(i);
+									PartitionNode child = (PartitionNode)subItem.getData();
+									if(subItem.getChecked() && pIf.implementationStatus(child) == ImplementationStatus.IMPLEMENTED){
+										isAnyImplemented = true;
+										break;
+									}
+								}
+								if(!isAnyImplemented){
+									parentItem.setChecked(false);
+									setOkButton(false);
+								}
+							}
+						}
+					} else if(item.getData() instanceof CategoryNode){
+						for(int i = 0; i < item.getItemCount(); ++i){
+							TreeItem subItem = item.getItem(i);
+							if(pIf.implementationStatus((PartitionNode)subItem.getData()) != ImplementationStatus.IMPLEMENTED){
+								subItem.setChecked(false);
+							}
+						}
+					}
+				}
+
+				if (item.getData() instanceof CategoryNode) {
+					if (((CategoryNode)item.getData()).getPartitions().isEmpty()) {
+						item.setChecked(false);
+					}
+				}
+				fTree.setRedraw(true);
+			}
+		}
+	}
+	
 	private class CategoriesContentProvider extends TreeNodeContentProvider implements ITreeContentProvider{
 		private final Object[] EMPTY_ARRAY = new Object[]{};
 		
@@ -223,7 +282,9 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 				true);
 		if(fGenerateExecutableContent){
 			for(CategoryNode category: fMethod.getCategories()){
-				if(category.getPartitions().isEmpty() || !ModelUtils.isCategoryPartiallyImplemented(category)){
+				ImplementationStatus categoryStatus = new CategoryInterface(null).implementationStatus(category);
+				if(category.getPartitions().isEmpty() ||
+						categoryStatus == ImplementationStatus.NOT_IMPLEMENTED){
 					fOkButtonEnabled = false;
 					fOkButton.setEnabled(false);
 					break;
@@ -357,58 +418,17 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 				return null;
 			}
 		});
+		
 		fCategoriesViewer.getTree().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 		fCategoriesViewer.setInput(fMethod);
-		tree.addListener(SWT.Selection, new Listener() {
-			public void handleEvent(Event event){
-				if(event.detail == SWT.CHECK){
-					tree.setRedraw(false);
-					TreeItem item = (TreeItem)event.item;
-					if(fGenerateExecutableContent){
-						if(item.getData() instanceof PartitionNode){
-							if(!ModelUtils.isPartitionImplemented((PartitionNode)item.getData())){
-								item.setChecked(false);
-								TreeItem parentItem = item.getParentItem();
-								if(parentItem.getData() instanceof CategoryNode){
-									boolean isAnyImplemented = false;
-									for(int i = 0; i < parentItem.getItemCount(); ++i){
-										TreeItem subItem = parentItem.getItem(i);
-										if(subItem.getChecked() && ModelUtils.isPartitionImplemented((PartitionNode)subItem.getData())){
-											isAnyImplemented = true;
-											break;
-										}
-									}
-									if(!isAnyImplemented){
-										parentItem.setChecked(false);
-										setOkButton(false);
-									}
-								}
-							}
-						} else if(item.getData() instanceof CategoryNode){
-							for(int i = 0; i < item.getItemCount(); ++i){
-								TreeItem subItem = item.getItem(i);
-								if(!ModelUtils.isPartitionImplemented((PartitionNode)subItem.getData())){
-									subItem.setChecked(false);
-								}
-							}
-						}
-					}
-
-					if (item.getData() instanceof CategoryNode) {
-						if (((CategoryNode)item.getData()).getPartitions().isEmpty()) {
-							item.setChecked(false);
-						}
-					}
-					tree.setRedraw(true);
-				}
-			}
-		});
+//		tree.addListener(SWT.Selection, new Listener() {
+		tree.addListener(SWT.Selection, new PartitionViewerCheckStateListener(tree));
 		for(CategoryNode category : fMethod.getCategories()){
 			if(!category.getPartitions().isEmpty()){
 				fCategoriesViewer.setSubtreeChecked(category, true);
 				for (Object item : fCategoriesViewer.getCheckedElements()) {
 					if (item instanceof PartitionNode) {
-						if (!ModelUtils.isPartitionImplemented((PartitionNode)item)) {
+						if (new PartitionInterface(null).implementationStatus((PartitionNode) item) != ImplementationStatus.IMPLEMENTED){
 							fCategoriesViewer.setChecked(item, !fGenerateExecutableContent);
 						}
 					}
@@ -503,7 +523,7 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 			String[] availableGenerators = fGeneratorFactory.availableGenerators().toArray(new String[] {});
 			for(String generator : availableGenerators){
 				fGeneratorCombo.add(generator);
-				}
+			}
 			fGeneratorCombo.select(0);
 			setOkButton(true);
 		}

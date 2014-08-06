@@ -120,7 +120,8 @@ public class ImplementationStatusResolver {
 	protected ImplementationStatus implementationStatus(PartitionNode partition){
 		if(partition.isAbstract() == false){
 			PartitionValueParser valueParser = new PartitionValueParser(createLoader());
-			if(valueParser.parseValue(partition) != null || partition.getCategory().getType() == Constants.TYPE_NAME_STRING){
+			String type = partition.getCategory().getType();
+			if(valueParser.parseValue(partition) != null || type.equals(Constants.TYPE_NAME_STRING)){
 				return ImplementationStatus.IMPLEMENTED;
 			}
 			return ImplementationStatus.NOT_IMPLEMENTED;

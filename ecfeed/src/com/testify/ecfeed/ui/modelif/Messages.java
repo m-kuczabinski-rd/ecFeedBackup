@@ -13,6 +13,8 @@ public class Messages {
 	public static final String DIALOG_REMOVE_METHODS_PROBLEM_TITLE = "Couldn't remove some of requested methods";
 	public static final String DIALOG_RENAME_METHOD_PROBLEM_TITLE = "Couldn't rename method";
 	public static final String DIALOG_CONVERT_METHOD_PROBLEM_TITLE = "Couldn't convert method";
+	public static final String DIALOG_UNEXPECTED_PROBLEM_WITH_TEST_EXECUTION = "Unexpected problem with test execution";
+
 
 	//CONFIRMATIONS AND WARNINGS
 	public static final String DIALOG_REMOVE_CLASSES_TITLE = "Remove classes"; 
@@ -35,5 +37,9 @@ public class Messages {
 		return "Unexpected problems with importing class " + name;
 	}
 	public static final String EXCEPTION_TYPE_DOES_NOT_EXIST_IN_THE_PROJECT = "The imported type does not exist in the project";
+	
+	//OTHER MESSAGES
+	public static final String EXECUTING_TEST_WITH_PARAMETERS = "Executing test function with generated parameters";
+	public static final String EXECUTING_TEST_WITH_NO_PARAMETERS = "Executing test function";
 
 }
