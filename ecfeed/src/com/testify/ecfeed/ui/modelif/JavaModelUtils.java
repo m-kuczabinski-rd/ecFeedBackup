@@ -85,12 +85,23 @@ public class JavaModelUtils {
 	}
 
 	public static boolean isPublicVoid(IMethod method){
-		try{
-		return (method.getReturnType().equals(Signature.SIG_VOID) && Flags.isPublic(method.getFlags()));
-		}catch(JavaModelException e){}
+		return isPublic(method) && isVoid(method);
+	}
+	
+	public static boolean isPublic(IMethod method){
+		try {
+			return Flags.isPublic(method.getFlags());
+		} catch (JavaModelException e) {}
 		return false;
 	}
 
+	public static boolean isVoid(IMethod method){
+		try {
+			return method.getReturnType().equals(Signature.SIG_VOID);
+		} catch (JavaModelException e) {}
+		return false;
+	}
+	
 	protected static IType getLocalVariableType(IMethod method, ILocalVariable var){
 		try {
 			IType declaringType = method.getDeclaringType();

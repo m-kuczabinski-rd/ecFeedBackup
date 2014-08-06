@@ -35,8 +35,8 @@ public class EclipseModelBuilder {
 			String qualifiedName = type.getFullyQualifiedName();
 			ClassNode classNode = new ClassNode(qualifiedName);
 			for(IMethod method : type.getMethods()){
-				if((testOnly && JavaModelUtils.isAnnotated(method, "Test")) || (!testOnly && JavaModelUtils.isPublicVoid(method))){
-					if(hasSupportedParameters(method)){
+				if((testOnly && JavaModelUtils.isAnnotated(method, "Test")) || (!testOnly)){
+					if(hasSupportedParameters(method) && JavaModelUtils.isPublicVoid(method)){
 						try{
 							MethodNode methodModel = buildMethodModel(method);
 							if(methodModel != null){
