@@ -8,4 +8,8 @@ public class CategoryInterface extends GenericNodeInterface {
 		super(modelOperationManager);
 	}
 
+	public String getDefaultValue(String type) {
+		return new EclipseModelBuilder().getDefaultExpectedValue(type);
+	}
+
 }

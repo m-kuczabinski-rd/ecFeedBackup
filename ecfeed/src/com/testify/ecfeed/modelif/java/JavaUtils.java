@@ -69,4 +69,8 @@ public class JavaUtils {
 		}
 		return values;
 	}
+	
+	public static String[] supportedPrimitiveTypes(){
+		return Constants.SUPPORTED_PRIMITIVE_TYPES;
+	}
 }

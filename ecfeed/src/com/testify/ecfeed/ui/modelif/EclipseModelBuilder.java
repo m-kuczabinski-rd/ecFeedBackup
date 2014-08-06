@@ -127,7 +127,7 @@ public class EclipseModelBuilder {
 		return partitions;
 	}
 
-	protected String getDefaultExpectedValue(String type) {
+	public String getDefaultExpectedValue(String type) {
 		switch(type){
 		case com.testify.ecfeed.modelif.java.Constants.TYPE_NAME_BYTE:
 			return Constants.DEFAULT_EXPECTED_BYTE_VALUE;

@@ -271,6 +271,10 @@ public class MethodNode extends GenericNode {
 		return fTestCases.remove(testCase);
 	}
 
+	public void removeTestCases(){
+		fTestCases.clear();
+	}
+
 	public boolean removeConstraint(ConstraintNode constraint) {
 		constraint.setParent(null);
 		return fConstraints.remove(constraint);
