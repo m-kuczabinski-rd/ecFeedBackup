@@ -11,13 +11,14 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
 
+import com.testify.ecfeed.modelif.java.ILoaderProvider;
 import com.testify.ecfeed.modelif.java.ModelClassLoader;
 
-public class LoaderProvider {
+public class LoaderProvider implements ILoaderProvider {
 
 	private static ModelClassLoader fLoader;
 
-	public static ModelClassLoader getLoader(boolean create, URLClassLoader parent){
+	public ModelClassLoader getLoader(boolean create, URLClassLoader parent){
 		if ((fLoader == null) || create){
 			List<URL> urls = new ArrayList<URL>();
 			try {

@@ -5,6 +5,7 @@ import java.util.List;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.modelif.ModelOperationManager;
 import com.testify.ecfeed.modelif.java.JavaMethodUtils;
+import com.testify.ecfeed.modelif.java.method.MethodOperationConvertTo;
 import com.testify.ecfeed.modelif.java.method.MethodOperationRename;
 import com.testify.ecfeed.ui.editor.BasicSection;
 import com.testify.ecfeed.ui.editor.IModelUpdateListener;
@@ -39,6 +40,10 @@ public class MethodInterface extends GenericNodeInterface {
 			return false;
 		}
 		return execute(new MethodOperationRename(fTarget, newName), source, updateListener, Messages.DIALOG_RENAME_METHOD_PROBLEM_TITLE);
+	}
+
+	public boolean convertTo(MethodNode method, BasicSection source, IModelUpdateListener updateListener) {
+		return execute(new MethodOperationConvertTo(fTarget, method), source, updateListener, Messages.DIALOG_CONVERT_METHOD_PROBLEM_TITLE);
 	}
 	
 	

@@ -14,15 +14,19 @@ import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.modelif.ModelIfException;
-import com.testify.ecfeed.ui.common.LoaderProvider;
 
 public class JavaModelBuilder {
+	
+	private ModelClassLoader fLoader;
+
+	public JavaModelBuilder(ILoaderProvider loaderProvider){
+		fLoader = loaderProvider.getLoader(true, null);
+	}
 	
 	public ClassNode buildClassModel(String qualifiedName, boolean testOnly) throws ModelIfException{
 		ClassNode classNode = new ClassNode(qualifiedName);
 		try{
-			ModelClassLoader loader = LoaderProvider.getLoader(false, null);
-			Class<?> testClass = loader.loadClass(qualifiedName);
+			Class<?> testClass = fLoader.loadClass(qualifiedName);
 			if(testClass != null){
 				for(Method method : testClass.getMethods()){
 					if((testOnly && isAnnotated(method, "Test") && isPublicVoid(method)) || (!testOnly && isPublicVoid(method))){
@@ -91,10 +95,9 @@ public class JavaModelBuilder {
 		}
 	}
 
-	public static ArrayList<PartitionNode> defaultEnumPartitions(String typeName) {
+	public ArrayList<PartitionNode> defaultEnumPartitions(String typeName) {
 		ArrayList<PartitionNode> partitions = new ArrayList<PartitionNode>();
-		ModelClassLoader loader = LoaderProvider.getLoader(false, null);
-		Class<?> typeClass = loader.loadClass(typeName);
+		Class<?> typeClass = fLoader.loadClass(typeName);
 		if (typeClass != null) {
 			for (Object object: typeClass.getEnumConstants()) {
 				partitions.add(new PartitionNode(object.toString(), ((Enum<?>)object).name()));
@@ -129,9 +132,9 @@ public class JavaModelBuilder {
 //		}
 	}
 
-	protected static String defaultEnumExpectedValueString(String typeName) {
+	protected String defaultEnumExpectedValueString(String typeName) {
 		String value = "VALUE";
-		List<String> values = JavaUtils.enumValuesNames(LoaderProvider.getLoader(false, null), typeName);
+		List<String> values = JavaUtils.enumValuesNames(fLoader, typeName);
 		if(values.size() > 0){
 			value = values.get(0);
 		}

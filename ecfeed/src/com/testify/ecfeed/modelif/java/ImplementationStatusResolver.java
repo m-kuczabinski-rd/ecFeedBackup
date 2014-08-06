@@ -17,7 +17,7 @@ import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.modelif.ImplementationStatus;
 
 public class ImplementationStatusResolver {
-	private ModelClassLoader fLoader;
+	private ILoaderProvider fLoaderProvider;
 
 	private class StatusResolver implements IModelVisitor{
 
@@ -58,8 +58,8 @@ public class ImplementationStatusResolver {
 		
 	}
 	
-	public ImplementationStatusResolver(ModelClassLoader loader){
-		fLoader = loader;
+	public ImplementationStatusResolver(ILoaderProvider loaderProvider){
+		fLoaderProvider = loaderProvider;
 	}
 	
 	public ImplementationStatus getImplementationStatus(IGenericNode node){
@@ -103,7 +103,7 @@ public class ImplementationStatusResolver {
 			return category.getPartitions().size() > 0 ? ImplementationStatus.IMPLEMENTED : ImplementationStatus.PARTIALLY_IMPLEMENTED;
 		}
 		
-		Class<?> typeObject = fLoader.loadClass(category.getType());
+		Class<?> typeObject = createLoader().loadClass(category.getType());
 		if(typeObject == null){
 			return ImplementationStatus.NOT_IMPLEMENTED;
 		}
@@ -119,7 +119,7 @@ public class ImplementationStatusResolver {
 	
 	protected ImplementationStatus implementationStatus(PartitionNode partition){
 		if(partition.isAbstract() == false){
-			PartitionValueParser valueParser = new PartitionValueParser(fLoader);
+			PartitionValueParser valueParser = new PartitionValueParser(createLoader());
 			if(valueParser.parseValue(partition) != null || partition.getCategory().getType() == Constants.TYPE_NAME_STRING){
 				return ImplementationStatus.IMPLEMENTED;
 			}
@@ -174,11 +174,11 @@ public class ImplementationStatusResolver {
 	}
 
 	private boolean classDefinitionImplemented(ClassNode classNode) {
-		return (fLoader.loadClass(classNode.getQualifiedName()) != null);
+		return (createLoader().loadClass(classNode.getQualifiedName()) != null);
 	}
 	
 	private boolean methodDefinitionImplemented(MethodNode methodModel){
-		Class<?> parentClass = fLoader.loadClass(JavaClassUtils.getQualifiedName(methodModel.getClassNode()));
+		Class<?> parentClass = createLoader().loadClass(JavaClassUtils.getQualifiedName(methodModel.getClassNode()));
 		if(parentClass == null){
 			return false;
 		}
@@ -212,5 +212,8 @@ public class ImplementationStatusResolver {
 		return argTypes;
 	}
 
+	private ModelClassLoader createLoader(){
+		return fLoaderProvider.getLoader(true, null);
+	}
 
 }

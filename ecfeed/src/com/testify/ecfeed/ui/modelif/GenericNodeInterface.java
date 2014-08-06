@@ -17,8 +17,8 @@ import com.testify.ecfeed.modelif.IModelOperation;
 import com.testify.ecfeed.modelif.ImplementationStatus;
 import com.testify.ecfeed.modelif.ModelIfException;
 import com.testify.ecfeed.modelif.ModelOperationManager;
+import com.testify.ecfeed.modelif.java.ILoaderProvider;
 import com.testify.ecfeed.modelif.java.ImplementationStatusResolver;
-import com.testify.ecfeed.modelif.java.ModelClassLoader;
 import com.testify.ecfeed.modelif.java.classx.ClassOperationMove;
 import com.testify.ecfeed.modelif.java.method.MethodOperationMove;
 import com.testify.ecfeed.ui.common.LoaderProvider;
@@ -28,7 +28,7 @@ import com.testify.ecfeed.ui.editor.IModelUpdateListener;
 public class GenericNodeInterface {
 
 	private ModelOperationManager fOperationManager;
-	private ModelClassLoader fLoader;
+	private ILoaderProvider fLoaderProvider;
 	private ImplementationStatusResolver fStatusResolver;
 	private GenericNode fTarget;
 	
@@ -173,12 +173,16 @@ public class GenericNodeInterface {
 	
 	public GenericNodeInterface(ModelOperationManager modelOperationManager) {
 		fOperationManager = modelOperationManager;
-		fLoader = LoaderProvider.getLoader(false, null);
-		fStatusResolver = new ImplementationStatusResolver(fLoader);
+		fLoaderProvider = new LoaderProvider();
+		fStatusResolver = new ImplementationStatusResolver(fLoaderProvider);
 	}
 
 	public void setTarget(GenericNode target){
 		fTarget = target;
+	}
+	
+	protected ModelOperationManager getOperationManager(){
+		return fOperationManager;
 	}
 	
 	protected boolean execute(IModelOperation operation, BasicSection source, IModelUpdateListener updateListener, String errorMessageTitle){

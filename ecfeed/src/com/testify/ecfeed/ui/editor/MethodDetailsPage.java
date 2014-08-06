@@ -11,8 +11,6 @@
 
 package com.testify.ecfeed.ui.editor;
 
-import java.util.List;
-
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -25,7 +23,6 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
 
-import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.modelif.ImplementationStatus;
 import com.testify.ecfeed.modelif.ModelOperationManager;
@@ -50,26 +47,7 @@ public class MethodDetailsPage extends BasicDetailsPage {
 			TestMethodRenameDialog dialog = new TestMethodRenameDialog(getActiveShell(), fSelectedMethod);
 			if(dialog.open() == IDialogConstants.OK_ID){
 				MethodNode selectedMethod = dialog.getSelectedMethod();
-				fSelectedMethod.setName(selectedMethod.getName());
-				updateParemeters(selectedMethod);
-				modelUpdated(null);
-			}
-		}
-
-		private void updateParemeters(MethodNode newMethod) {
-			List<CategoryNode> srcParameters = newMethod.getCategories();
-			for(int i = 0; i < srcParameters.size(); i++){
-				updateParameter(i, srcParameters.get(i));
-			}
-		}
-		
-		private void updateParameter(int index, CategoryNode newCategory){
-			boolean isOriginalCategoryExpected = fSelectedMethod.getCategories().get(index).isExpected();
-			boolean isNewCategoryExpected = newCategory.isExpected();
-			if(isOriginalCategoryExpected == isNewCategoryExpected){
-				fSelectedMethod.getCategories().get(index).setName(newCategory.getName());
-			} else{
-				fSelectedMethod.replaceCategory(index, newCategory);
+				fMethodIf.convertTo(selectedMethod, null, MethodDetailsPage.this);
 			}
 		}
 	}
@@ -110,15 +88,17 @@ public class MethodDetailsPage extends BasicDetailsPage {
 			}
 		});
 
-		Button changeButton = getToolkit().createButton(composite, "Change", SWT.NONE);
+		Button changeButton = getToolkit().createButton(composite, "Apply", SWT.NONE);
 		changeButton.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e){
 				applyNewName();
 			}
 		});
-		fReassignButton = getToolkit().createButton(composite, "Reassign", SWT.NONE);
+		
+		fReassignButton = getToolkit().createButton(composite, "Browse...", SWT.NONE);
 		fReassignButton.addSelectionListener(new ReassignAdapter());
+		
 		fTestOnlineButton = getToolkit().createButton(composite, "Test online", SWT.NONE);
 		fTestOnlineButton.addSelectionListener(new ExecuteOnlineTestAdapter(this));
 
