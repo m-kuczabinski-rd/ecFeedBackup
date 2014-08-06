@@ -17,7 +17,6 @@ import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.modelif.ModelIfException;
 import com.testify.ecfeed.modelif.java.JavaUtils;
-import com.testify.ecfeed.utils.ClassUtils;
 
 public class EclipseModelBuilder {
 	
@@ -71,7 +70,7 @@ public class EclipseModelBuilder {
 				category.addPartition(partition);
 			}
 		}
-		category.setDefaultValueString(getDefaultExpectedValueString(type));
+		category.setDefaultValueString(getDefaultExpectedValue(type));
 		return category;
 	}
 
@@ -128,7 +127,7 @@ public class EclipseModelBuilder {
 		return partitions;
 	}
 
-	protected String getDefaultExpectedValueString(String type) {
+	protected String getDefaultExpectedValue(String type) {
 		switch(type){
 		case com.testify.ecfeed.modelif.java.Constants.TYPE_NAME_BYTE:
 			return Constants.DEFAULT_EXPECTED_BYTE_VALUE;
@@ -149,9 +148,19 @@ public class EclipseModelBuilder {
 		case com.testify.ecfeed.modelif.java.Constants.TYPE_NAME_STRING:
 			return Constants.DEFAULT_EXPECTED_STRING_VALUE;
 		default:
-			return ClassUtils.defaultEnumExpectedValueString(type);
+			return defaultEnumExpectedValue(type);
 		}
 	}
+
+	protected String defaultEnumExpectedValue(String type) {
+		String value = "VALUE";
+		List<PartitionNode> values = defaultUserTypePartitions(type);
+		if(values.size() > 0){
+			value = values.get(0).getValueString();
+		}
+		return value;
+	}
+
 
 	protected ArrayList<PartitionNode> defaultBooleanPartitions() {
 		ArrayList<PartitionNode> partitions = new ArrayList<PartitionNode>();
