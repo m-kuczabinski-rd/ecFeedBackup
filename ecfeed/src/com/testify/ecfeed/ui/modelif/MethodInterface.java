@@ -40,6 +40,8 @@ public class MethodInterface extends GenericNodeInterface {
 		}
 		return execute(new MethodOperationRename(fTarget, newName), source, updateListener, Messages.DIALOG_RENAME_METHOD_PROBLEM_TITLE);
 	}
+	
+	
 
 	
 }

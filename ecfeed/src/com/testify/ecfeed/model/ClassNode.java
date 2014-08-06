@@ -58,9 +58,16 @@ public class ClassNode extends GenericNode {
 	}
 	
 	public boolean addMethod(MethodNode method) {
-		fMethods.add(method);
-		method.setParent(this);
-		return true;
+		return addMethod(method, fMethods.size());
+	}
+	
+	public boolean addMethod(MethodNode method, int index) {
+		if(index >= 0 && index <= fMethods.size()){
+			fMethods.add(index, method);
+			method.setParent(this);
+			return fMethods.indexOf(method) == index;
+		}
+		return false;
 	}
 	
 	public MethodNode getMethod(String name, List<String> argTypes) {

@@ -32,13 +32,13 @@ public class ClassOperationMove implements IModelOperation {
 	@Override
 	public void execute() throws ModelIfException {
 		if(fCurrentParent == null || fNewParent == null){
-			throw new ModelIfException(Messages.CLASS_PARENT_DOES_NOT_EXIST_PROBLEM);
+			throw new ModelIfException(Messages.MISSING_PARENT_PROBLEM);
 		}
 		if(fNewIndex < 0){
-			throw new ModelIfException(Messages.CLASS_INDEX_NEGATIVE_PROBLEM);
+			throw new ModelIfException(Messages.NEGATIVE_INDEX_PROBLEM);
 		}
 		if(fNewIndex > fNewParent.getClasses().size()){
-			throw new ModelIfException(Messages.CLASS_INDEX_TOO_HIGH_PROBLEM);
+			throw new ModelIfException(Messages.TOO_HIGH_INDEX_PROBLEM);
 		}
 		String targetName = JavaClassUtils.getQualifiedName(fTarget);
 		if(fCurrentParent != fNewParent){

@@ -20,6 +20,7 @@ import com.testify.ecfeed.modelif.ModelOperationManager;
 import com.testify.ecfeed.modelif.java.ImplementationStatusResolver;
 import com.testify.ecfeed.modelif.java.ModelClassLoader;
 import com.testify.ecfeed.modelif.java.classx.ClassOperationMove;
+import com.testify.ecfeed.modelif.java.method.MethodOperationMove;
 import com.testify.ecfeed.ui.common.LoaderProvider;
 import com.testify.ecfeed.ui.editor.BasicSection;
 import com.testify.ecfeed.ui.editor.IModelUpdateListener;
@@ -66,7 +67,12 @@ public class GenericNodeInterface {
 
 		@Override
 		public Object visit(MethodNode node) throws Exception {
-			// TODO Auto-generated method stub
+			if(fNewParent instanceof ClassNode){
+				if(fValidIndex){
+					return new MethodOperationMove(node, (ClassNode)fNewParent, fNewIndex);
+				}
+				return new MethodOperationMove(node, (ClassNode)fNewParent);
+			}
 			return null;
 		}
 
@@ -126,7 +132,16 @@ public class GenericNodeInterface {
 
 		@Override
 		public Object visit(MethodNode node) throws Exception {
-			// TODO Auto-generated method stub
+			if(fMoveUp){
+				if(node.getIndex() > 0){
+					return new MethodOperationMove(node, node.getClassNode(), node.getIndex() - 1);
+				}
+			}
+			else{
+				if(node.getIndex() < node.getClassNode().getMethods().size() - 1){
+					return new MethodOperationMove(node, node.getClassNode(), node.getIndex() + 1);
+				}
+			}
 			return null;
 		}
 

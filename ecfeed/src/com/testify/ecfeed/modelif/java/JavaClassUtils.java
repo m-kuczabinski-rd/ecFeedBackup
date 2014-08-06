@@ -38,7 +38,7 @@ public class JavaClassUtils {
 		if(parent.getMethod(methodName, argTypes) != null){
 			valid = false;
 			if(problems != null){
-				problems.add(Messages.METOD_SIGNATURE_DUPLICATE_PROBLEM);
+				problems.add(Messages.METHOD_SIGNATURE_DUPLICATE_PROBLEM);
 			}
 		}
 		return valid;
