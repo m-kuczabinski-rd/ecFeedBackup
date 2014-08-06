@@ -60,7 +60,8 @@ public class RootInterface extends GenericNodeInterface {
 			if(selectedClass != null){
 				ClassNode classModel;
 				try {
-					classModel = new ModelBuilder().generateClassModel(selectedClass, testOnly);
+//					classModel = new JavaModelBuilder().buildClassModel(selectedClass.getFullyQualifiedName(), testOnly);
+					classModel = new EclipseModelBuilder().buildClassModel(selectedClass, testOnly);
 					if(execute(new RootOperationAddNewClass(fTarget, classModel), source, updateListener, Messages.DIALOG_ADD_NEW_CLASS_PROBLEM_TITLE)){
 						return classModel;
 					}

@@ -1,7 +1,10 @@
 package com.testify.ecfeed.modelif.java;
 
+import java.net.URLClassLoader;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 
 public class JavaUtils {
 
@@ -9,6 +12,10 @@ public class JavaUtils {
 		return Arrays.asList(Constants.JAVA_KEYWORDS).contains(word);
 	}
 
+	public static boolean isPrimitive(String typeName){
+		return Arrays.asList(Constants.SUPPORTED_PRIMITIVE_TYPES).contains(typeName);
+	}
+	
 	public static String getTypeName(String cannonicalName) {
 		if(cannonicalName.equals(boolean.class.getName())){
 			return Constants.TYPE_NAME_BOOLEAN;
@@ -47,5 +54,19 @@ public class JavaUtils {
 			consolidated += string + "\n";
 		}
 		return consolidated;
+	}
+	
+	public static List<String> enumValuesNames(URLClassLoader loader, String enumTypeName){
+		List<String> values = new ArrayList<String>();
+		try {
+			Class<?> enumType = loader.loadClass(enumTypeName);
+			if(enumType != null && enumType.isEnum()){
+				for (Object object: enumType.getEnumConstants()) {
+					values.add(((Enum<?>)object).name());
+				}
+			}
+		} catch (ClassNotFoundException e) {
+		}
+		return values;
 	}
 }

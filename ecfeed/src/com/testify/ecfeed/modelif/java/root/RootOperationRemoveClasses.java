@@ -14,7 +14,7 @@ public class RootOperationRemoveClasses extends AbstractBulkOperation {
 
 	public RootOperationRemoveClasses(RootNode target, Collection<ClassNode> classes){
 		for(ClassNode removedClass : classes){
-			addOperation(new RootOperationAddNewClass(target, removedClass));
+			addOperation(new RootOperationRemoveClass(target, removedClass));
 		}
 		fTarget = target;
 		fClasses = classes;

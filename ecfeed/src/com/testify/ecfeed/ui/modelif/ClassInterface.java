@@ -117,20 +117,11 @@ public class ClassInterface extends GenericNodeInterface {
 		return false;
 	}
 
-	private String generateNewMethodName() {
-		String name = Constants.DEFAULT_NEW_METHOD_NAME;
-		int i = 0;
-		while(fTarget.getMethod(name, new ArrayList<String>()) != null){
-			name = Constants.DEFAULT_NEW_METHOD_NAME + i++;
-		}
-		return name;
-	}
-
 	public List<MethodNode> getOtherMethods(){
 		List<MethodNode> otherMethods = new ArrayList<MethodNode>();
-		ModelBuilder builder = new ModelBuilder();
+		EclipseModelBuilder builder = new EclipseModelBuilder();
 		try{
-			ClassNode completeModel = builder.generateClassModel(getQualifiedName(), false);
+			ClassNode completeModel = builder.buildClassModel(getQualifiedName(), false);
 			for(MethodNode method : completeModel.getMethods()){
 				if(fTarget.getMethod(method.getName(), method.getCategoriesTypes()) == null){
 					otherMethods.add(method);
@@ -138,5 +129,14 @@ public class ClassInterface extends GenericNodeInterface {
 			}
 		}catch (ModelIfException e){}
 		return otherMethods;
+	}
+
+	private String generateNewMethodName() {
+		String name = Constants.DEFAULT_NEW_METHOD_NAME;
+		int i = 0;
+		while(fTarget.getMethod(name, new ArrayList<String>()) != null){
+			name = Constants.DEFAULT_NEW_METHOD_NAME + i++;
+		}
+		return name;
 	}
 }

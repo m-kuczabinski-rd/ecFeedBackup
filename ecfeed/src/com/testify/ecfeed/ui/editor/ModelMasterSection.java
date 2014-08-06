@@ -196,58 +196,6 @@ public class ModelMasterSection extends TreeViewerSection{
 		nodeIf.setTarget(selectedNode());
 		nodeIf.moveUpDown(moveUp, this, this.getUpdateListener());
 		refresh();
-		
-		
-//		if(selectedNode() != null && selectedNode().getParent() != null){
-//			boolean move = true;
-//			if (selectedNode() instanceof CategoryNode) {
-//				move = false;
-//				CategoryNode categoryNode = (CategoryNode)selectedNode();
-//				ArrayList<String> tmpTypes = categoryNode.getMethod().getCategoriesTypes();
-//				for (int i = 0; i < categoryNode.getMethod().getCategories().size(); ++i) {
-//					CategoryNode type = categoryNode.getMethod().getCategories().get(i);
-//					if (type.getName().equals(categoryNode.getName()) && type.getType().equals(categoryNode.getType())) {
-//						if (moveUp && (i > 0)) {
-//							String prevValue = tmpTypes.get(i - 1);
-//							tmpTypes.set(i - 1, categoryNode.getType());
-//							tmpTypes.set(i, prevValue);
-//							move = true;
-//						} else if (!moveUp && (i < tmpTypes.size() - 1)){
-//							String nextValue = tmpTypes.get(i + 1);
-//							tmpTypes.set(i + 1, categoryNode.getType());
-//							tmpTypes.set(i, nextValue);
-//							move = true;
-//						}
-//					}
-//				}
-//
-//				if (move) {
-//					if (categoryNode.getMethod().getClassNode().getMethod(categoryNode.getMethod().getName(), tmpTypes) != null) {
-//						MessageDialog.openError(Display.getCurrent().getActiveShell(),
-//								Messages.DIALOG_METHOD_EXISTS_TITLE,
-//								Messages.DIALOG_METHOD_WITH_PARAMETERS_EXISTS_MESSAGE);
-//						move = false;
-//					}
-//				}
-//			}
-//			if (move) {
-//				if(selectedNode().getParent().moveChild(selectedNode(), moveUp)){
-//					if(selectedNode() instanceof CategoryNode){
-//						CategoryNode categoryNode = (CategoryNode)selectedNode();
-//						MethodNode method = categoryNode.getMethod();
-//						if(method != null){
-//							int index = method.getCategories().indexOf(categoryNode);
-//							int oldindex = moveUp ? (index + 1) : (index - 1);
-//							for(TestCaseNode tcnode : method.getTestCases()){
-//								Collections.swap(tcnode.getTestData(), index, oldindex);
-//							}
-//						}
-//					}
-//					markDirty();
-//					refresh();
-//				}
-//			}
-//		}
 	}
 
 	private GenericNode selectedNode() {
