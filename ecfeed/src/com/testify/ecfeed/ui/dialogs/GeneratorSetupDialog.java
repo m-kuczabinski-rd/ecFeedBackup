@@ -60,9 +60,9 @@ import com.testify.ecfeed.model.ConstraintNode;
 import com.testify.ecfeed.model.GenericNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
-import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.model.constraint.Constraint;
 import com.testify.ecfeed.modelif.ImplementationStatus;
+import com.testify.ecfeed.modelif.java.JavaTestCaseUtils;
 import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.common.TreeCheckStateListener;
 import com.testify.ecfeed.ui.modelif.CategoryInterface;
@@ -473,7 +473,7 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 	}
 
 	private void validateTestSuiteName() {
-		if(!TestCaseNode.validateTestSuiteName(fTestSuiteCombo.getText())){
+		if(JavaTestCaseUtils.validateTestCaseName(fTestSuiteCombo.getText()) == false){
 			setErrorMessage(Messages.DIALOG_TEST_SUITE_NAME_PROBLEM_MESSAGE);
 			setOkButton(false);
 		}
