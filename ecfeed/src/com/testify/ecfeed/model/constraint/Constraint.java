@@ -11,12 +11,16 @@
 
 package com.testify.ecfeed.model.constraint;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import com.testify.ecfeed.generators.api.IConstraint;
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
+import com.testify.ecfeed.model.constraint.PartitionedCategoryStatement.LabelCondition;
+import com.testify.ecfeed.model.constraint.PartitionedCategoryStatement.PartitionCondition;
 
 public class Constraint implements IConstraint<PartitionNode> {
 	
@@ -26,6 +30,48 @@ public class Constraint implements IConstraint<PartitionNode> {
 	private BasicStatement fPremise;
 	private BasicStatement fConsequence; 
 
+	private class ReferencedPartitionsProvider implements IStatementVisitor{
+
+		@Override
+		public Object visit(StaticStatement statement) throws Exception {
+			return new HashSet<PartitionNode>();
+		}
+
+		@SuppressWarnings("unchecked")
+		@Override
+		public Object visit(StatementArray statement) throws Exception {
+			Set<PartitionNode> set = new HashSet<PartitionNode>();
+			for(BasicStatement s : statement.getStatements()){
+				set.addAll((Set<PartitionNode>)s.accept(this));
+			}
+			return set;
+		}
+
+		@Override
+		public Object visit(ExpectedValueStatement statement) throws Exception {
+			return new HashSet<PartitionNode>();
+		}
+
+		@Override
+		public Object visit(PartitionedCategoryStatement statement)
+				throws Exception {
+			return statement.getCondition().accept(this);
+		}
+
+		@Override
+		public Object visit(LabelCondition condition) throws Exception {
+			return new HashSet<PartitionNode>();
+		}
+
+		@Override
+		public Object visit(PartitionCondition condition) throws Exception {
+			Set<PartitionNode> set = new HashSet<PartitionNode>();
+			set.add(condition.getPartition());
+			return set;
+		}
+		
+	}
+	
 	public Constraint(BasicStatement premise, BasicStatement consequence){
 		ID = fLastId++;
 		fPremise = premise;
@@ -104,5 +150,17 @@ public class Constraint implements IConstraint<PartitionNode> {
 		if(fPremise.updateReferences(method) && fConsequence.updateReferences(method))
 			return true;
 		return false;
+	}
+
+	@SuppressWarnings("unchecked")
+	public Set<PartitionNode> getReferencedPartitions() {
+		try{
+			Set<PartitionNode> referenced = (Set<PartitionNode>)fPremise.accept(new ReferencedPartitionsProvider());
+			referenced.addAll((Set<PartitionNode>)fConsequence.accept(new ReferencedPartitionsProvider()));
+			return referenced;
+		}
+		catch(Exception e){
+			return new HashSet<PartitionNode>();
+		}
 	}
 }

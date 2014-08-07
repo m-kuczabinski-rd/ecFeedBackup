@@ -7,9 +7,22 @@ import java.util.Collection;
 import java.util.List;
 
 public class JavaUtils {
+	
+	public static boolean isValidTypeName(String name){
+		if(isPrimitive(name)) return true;
+		if(name.matches(Constants.REGEX_CLASS_NODE_NAME) == false) return false;
+		for(String keyword : javaKeywords()){
+			if(name.contains(keyword)) return false;
+		}
+		return true;
+	}
 
 	public static boolean isJavaKeyword(String word){
 		return Arrays.asList(Constants.JAVA_KEYWORDS).contains(word);
+	}
+	
+	public static String[] javaKeywords(){
+		return Constants.JAVA_KEYWORDS;
 	}
 
 	public static boolean isPrimitive(String typeName){
@@ -72,5 +85,9 @@ public class JavaUtils {
 	
 	public static String[] supportedPrimitiveTypes(){
 		return Constants.SUPPORTED_PRIMITIVE_TYPES;
+	}
+
+	public static boolean isValidJavaIdentifier(String value) {
+		return (value.matches(Constants.REGEX_JAVA_IDENTIFIER) && isJavaKeyword(value) == false); 
 	}
 }

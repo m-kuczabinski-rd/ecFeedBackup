@@ -1,5 +1,7 @@
 package com.testify.ecfeed.ui.modelif;
 
+import java.net.URLClassLoader;
+
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
 
@@ -19,6 +21,7 @@ import com.testify.ecfeed.modelif.ModelIfException;
 import com.testify.ecfeed.modelif.ModelOperationManager;
 import com.testify.ecfeed.modelif.java.ILoaderProvider;
 import com.testify.ecfeed.modelif.java.ImplementationStatusResolver;
+import com.testify.ecfeed.modelif.java.ModelClassLoader;
 import com.testify.ecfeed.modelif.java.category.CategoryOperationSwap;
 import com.testify.ecfeed.modelif.java.classx.ClassOperationMove;
 import com.testify.ecfeed.modelif.java.method.MethodOperationMove;
@@ -189,6 +192,10 @@ public class GenericNodeInterface {
 	
 	protected ModelOperationManager getOperationManager(){
 		return fOperationManager;
+	}
+	
+	protected ModelClassLoader getLoader(boolean create, URLClassLoader parent){
+		return fLoaderProvider.getLoader(create, parent);
 	}
 	
 	protected boolean execute(IModelOperation operation, BasicSection source, IModelUpdateListener updateListener, String errorMessageTitle){

@@ -442,4 +442,27 @@ public class MethodNode extends GenericNode {
 		
 		return super.compare(node);
 	}
+
+	public void makeConsistent() {
+		removeInconsistentConstraints();
+		removeInconsistentTestCases();
+	}
+
+	private void removeInconsistentTestCases() {
+		Iterator<TestCaseNode> it = fTestCases.iterator();
+		while(it.hasNext()){
+			if(it.next().isConsistent() == false){
+				it.remove();
+			}
+		}
+	}
+
+	private void removeInconsistentConstraints() {
+		Iterator<ConstraintNode> it = fConstraints.iterator();
+		while(it.hasNext()){
+			if(it.next().isConsistent() == false){
+				it.remove();
+			}
+		}
+	}
 }

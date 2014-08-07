@@ -180,6 +180,7 @@ public class PartitionedCategoryStatement extends BasicStatement implements IRel
 		public Object accept(IStatementVisitor visitor) throws Exception {
 			return visitor.visit(this);
 		}
+
 	}
 	
 	public PartitionedCategoryStatement(CategoryNode category, Relation relation, String labelCondition){
@@ -306,6 +307,5 @@ public class PartitionedCategoryStatement extends BasicStatement implements IRel
 	public Object accept(IStatementVisitor visitor) throws Exception {
 		return visitor.visit(this);
 	}
-
 }
 

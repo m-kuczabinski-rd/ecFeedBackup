@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.MethodNode;
+import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.modelif.ModelOperationManager;
 import com.testify.ecfeed.modelif.java.JavaMethodUtils;
 import com.testify.ecfeed.modelif.java.JavaUtils;
@@ -50,10 +51,13 @@ public class MethodInterface extends GenericNodeInterface {
 	}
 	
 	public CategoryNode addNewParameter(BasicSection source, IModelUpdateListener updateListener) {
+		EclipseModelBuilder modelBuilder = new EclipseModelBuilder();
 		String name = generateNewParameterName(fTarget);
 		String type = generateNewParameterType(fTarget);
 		CategoryNode parameter = new CategoryNode(name, type, false);
-		parameter.setDefaultValueString(new EclipseModelBuilder().getDefaultExpectedValue(type));
+		parameter.setDefaultValueString(modelBuilder.getDefaultExpectedValue(type));
+		List<PartitionNode> defaultPartitions = modelBuilder.defaultPartitions(type);
+		parameter.addPartitions(defaultPartitions);
 		if(addNewParameter(parameter, source, updateListener)){
 			return parameter;
 		}
@@ -90,7 +94,7 @@ public class MethodInterface extends GenericNodeInterface {
 				break;
 			}
 			else{
-				type = Constants.DEFAULT_USER_TYPE_NAME + i;
+				type = Constants.DEFAULT_USER_TYPE_NAME + i++;
 			}
 		}
 		return type;

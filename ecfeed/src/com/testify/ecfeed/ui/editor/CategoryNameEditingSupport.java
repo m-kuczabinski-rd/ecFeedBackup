@@ -16,15 +16,18 @@ import org.eclipse.jface.viewers.EditingSupport;
 import org.eclipse.jface.viewers.TextCellEditor;
 
 import com.testify.ecfeed.model.CategoryNode;
-import com.testify.ecfeed.ui.common.CategoryNodeAbstractLayer;
+import com.testify.ecfeed.modelif.ModelOperationManager;
+import com.testify.ecfeed.ui.modelif.CategoryInterface;
 
 public class CategoryNameEditingSupport extends EditingSupport {
 
 	private TextCellEditor fNameCellEditor;
 	BasicSection fSection;
+	CategoryInterface fCategoryIf;
 
-	public CategoryNameEditingSupport(ParametersViewer viewer) {
+	public CategoryNameEditingSupport(ParametersViewer viewer, ModelOperationManager operationManager) {
 		super(viewer.getTableViewer());
+		fCategoryIf = new CategoryInterface(operationManager);
 		fSection = viewer;
 		fNameCellEditor = new TextCellEditor(viewer.getTable());
 	}
@@ -46,10 +49,7 @@ public class CategoryNameEditingSupport extends EditingSupport {
 
 	@Override
 	protected void setValue(Object element, Object value) {
-		String newName = (String)value;
-		CategoryNode categoryNode = (CategoryNode)element;
-		if(CategoryNodeAbstractLayer.changeCategoryName(categoryNode, newName)){
-				fSection.modelUpdated();
-		}
+		fCategoryIf.setTarget((CategoryNode)element);
+		fCategoryIf.setName((String)value, fSection, fSection.getUpdateListener());
 	}
 }

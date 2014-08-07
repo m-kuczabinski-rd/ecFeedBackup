@@ -100,33 +100,6 @@ public class EclipseModelBuilder {
 	}
 
 	
-	protected List<PartitionNode> defaultUserTypePartitions(String typeName) {
-		IType type = JavaModelUtils.getIType(typeName);
-		try {
-			if(type.isEnum()){
-				return defaultEnumPartitions(type);
-			}
-		} catch (JavaModelException e) {}
-		return new ArrayList<PartitionNode>();
-	}
-
-	protected List<PartitionNode> defaultEnumPartitions(IType type) {
-		List<PartitionNode> partitions = new ArrayList<PartitionNode>();
-		String typeSignature = Signature.createTypeSignature(type.getElementName(), false);
-		try {
-			if(type.isEnum()){
-				for(IField field : type.getFields()){
-					if(field.getTypeSignature().equals(typeSignature)){
-						String value = field.getElementName();
-						String name = value.toLowerCase().replaceAll("_", " ");
-						partitions.add(new PartitionNode(name, value));
-					}
-				}
-			}
-		} catch (JavaModelException e) {}
-		return partitions;
-	}
-
 	public String getDefaultExpectedValue(String type) {
 		switch(type){
 		case com.testify.ecfeed.modelif.java.Constants.TYPE_NAME_BYTE:
@@ -152,8 +125,36 @@ public class EclipseModelBuilder {
 		}
 	}
 
+
+	protected List<PartitionNode> defaultUserTypePartitions(String typeName) {
+		IType type = JavaModelUtils.getIType(typeName);
+		try {
+			if(type != null && type.isEnum()){
+				return defaultEnumPartitions(type);
+			}
+		} catch (JavaModelException e) {}
+		return new ArrayList<PartitionNode>();
+	}
+
+	protected List<PartitionNode> defaultEnumPartitions(IType type) {
+		List<PartitionNode> partitions = new ArrayList<PartitionNode>();
+		String typeSignature = Signature.createTypeSignature(type.getElementName(), false);
+		try {
+			if(type.isEnum()){
+				for(IField field : type.getFields()){
+					if(field.getTypeSignature().equals(typeSignature)){
+						String value = field.getElementName();
+						String name = value.toLowerCase().replaceAll("_", " ");
+						partitions.add(new PartitionNode(name, value));
+					}
+				}
+			}
+		} catch (JavaModelException e) {}
+		return partitions;
+	}
+
 	protected String defaultEnumExpectedValue(String type) {
-		String value = "VALUE";
+		String value = Constants.DEFAULT_EXPECTED_ENUM_VALUE;
 		List<PartitionNode> values = defaultUserTypePartitions(type);
 		if(values.size() > 0){
 			value = values.get(0).getValueString();

@@ -11,8 +11,6 @@
 
 package com.testify.ecfeed.ui.editor;
 
-import static com.testify.ecfeed.ui.common.CategoryNodeAbstractLayer.changeCategoryType;
-
 import java.util.ArrayList;
 
 import org.eclipse.jface.viewers.CellEditor;
@@ -21,18 +19,21 @@ import org.eclipse.jface.viewers.EditingSupport;
 import org.eclipse.swt.custom.CCombo;
 
 import com.testify.ecfeed.model.CategoryNode;
+import com.testify.ecfeed.modelif.ModelOperationManager;
+import com.testify.ecfeed.ui.modelif.CategoryInterface;
 import com.testify.ecfeed.utils.ModelUtils;
 
 public class CategoryTypeEditingSupport extends EditingSupport {
 
 	private ComboBoxCellEditor fCellEditor;
 	private BasicSection fSection;
+	private CategoryInterface fCategoryIf;
 
-	public CategoryTypeEditingSupport(ParametersViewer viewer) {
+	public CategoryTypeEditingSupport(ParametersViewer viewer, ModelOperationManager operationManager) {
 		super(viewer.getTableViewer());
+		fCategoryIf = new CategoryInterface(operationManager);
 		fSection = viewer;
-		String[] items = {""};
-		fCellEditor = new ComboBoxCellEditor(viewer.getTable(), ModelUtils.getJavaTypes().toArray(items));
+		fCellEditor = new ComboBoxCellEditor(viewer.getTable(), ModelUtils.getJavaTypes().toArray(new String[]{}));
 		fCellEditor.setActivationStyle(ComboBoxCellEditor.DROP_DOWN_ON_MOUSE_ACTIVATION);
 	}
 
@@ -75,10 +76,12 @@ public class CategoryTypeEditingSupport extends EditingSupport {
 		} else {
 			newType = ((CCombo)fCellEditor.getControl()).getText();
 		}
-		if(changeCategoryType(node, newType)){
-			fSection.modelUpdated();
-		}
-
+		fCategoryIf.setTarget(node);
+		fCategoryIf.setType(newType, fSection, fSection.getUpdateListener());
+//		if(changeCategoryType(node, newType)){
+//			fSection.modelUpdated();
+//		}
+//
 		fCellEditor.setFocus();
 	}
 }

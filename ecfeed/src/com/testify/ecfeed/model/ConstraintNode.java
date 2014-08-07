@@ -12,6 +12,7 @@
 package com.testify.ecfeed.model;
 
 import java.util.List;
+import java.util.Set;
 
 import com.testify.ecfeed.model.constraint.Constraint;
 
@@ -111,6 +112,16 @@ public class ConstraintNode extends GenericNode{
 	@Override
 	public Object accept(IModelVisitor visitor) throws Exception {
 		return visitor.visit(this);
+	}
+
+	public boolean isConsistent() {
+		Set<PartitionNode> referencedPartitions = getConstraint().getReferencedPartitions();
+		for(PartitionNode p : referencedPartitions){
+			if(p.getCategory() == null || p.getCategory().getPartition(p.getQualifiedName()) == null){
+				return false;
+			}
+		}
+		return true;
 	}
 	
 }

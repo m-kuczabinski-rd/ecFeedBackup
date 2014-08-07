@@ -11,12 +11,9 @@
 
 package com.testify.ecfeed.ui.editor;
 
-import static com.testify.ecfeed.ui.common.CategoryNodeAbstractLayer.addCategory;
 import static com.testify.ecfeed.ui.common.CategoryNodeAbstractLayer.removeCategories;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.TableViewerColumn;
@@ -30,15 +27,13 @@ import org.eclipse.ui.forms.widgets.Section;
 
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.MethodNode;
-import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.modelif.ModelOperationManager;
 import com.testify.ecfeed.ui.common.ColorConstants;
 import com.testify.ecfeed.ui.common.ColorManager;
 import com.testify.ecfeed.ui.common.DefaultValueEditingSupport;
 import com.testify.ecfeed.ui.common.TestDataEditorListener;
 import com.testify.ecfeed.ui.modelif.CategoryInterface;
-import com.testify.ecfeed.utils.Constants;
-import com.testify.ecfeed.utils.ModelUtils;
+import com.testify.ecfeed.ui.modelif.MethodInterface;
 
 public class ParametersViewer extends CheckboxTableViewerSection implements TestDataEditorListener{
 
@@ -47,12 +42,18 @@ public class ParametersViewer extends CheckboxTableViewerSection implements Test
 	private ColorManager fColorManager;
 	private TableViewerColumn fDefaultValueColumn;
 	private MethodNode fSelectedMethod;
-	private TableViewerColumn nameColumn;
+	private TableViewerColumn fNameColumn;
 	private CategoryInterface fCategoryIf;
+	private MethodInterface fMethodIf;
+	private ModelOperationManager fOperationManager;
+	private TableViewerColumn fTypeColumn;
 	
 	public ParametersViewer(BasicDetailsPage parent, FormToolkit toolkit, ModelOperationManager operationManager) {
 		super(parent.getMainComposite(), toolkit, STYLE, parent);
 		fCategoryIf = new CategoryInterface(operationManager);
+		fMethodIf = new MethodInterface(operationManager);
+		fOperationManager = operationManager;
+
 		getSection().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
 		fColorManager = new ColorManager();
 		getSection().setText("Parameters");
@@ -60,6 +61,10 @@ public class ParametersViewer extends CheckboxTableViewerSection implements Test
 		addButton("Remove selected", new RemoveParameterAdapter());
 		addButton("Move Up", new MoveUpAdapter());
 		addButton("Move Down", new MoveDownAdapter());
+
+		fNameColumn.setEditingSupport(new CategoryNameEditingSupport(this, fOperationManager));
+		fTypeColumn.setEditingSupport(new CategoryTypeEditingSupport(this, fOperationManager));
+
 		addDoubleClickListener(new SelectNodeDoubleClickListener(parent.getMasterSection()));
 	}
 
@@ -82,67 +87,11 @@ public class ParametersViewer extends CheckboxTableViewerSection implements Test
 	private class AddNewParameterAdapter extends SelectionAdapter {
 		@Override
 		public void widgetSelected(SelectionEvent e) {
-				String type = null;
-				String name = Constants.DEFAULT_NEW_CATEGORY_NAME;
-				int i = 1;
-				
-				while(true){
-					if(fSelectedMethod.getCategory(name) == null){
-						break;
-					}
-					name = Constants.DEFAULT_NEW_CATEGORY_NAME + i;
-					++i;
-				}
-					
-				List<String> types = Arrays.asList(new String[]{
-						com.testify.ecfeed.modelif.java.Constants.TYPE_NAME_INT,
-						com.testify.ecfeed.modelif.java.Constants.TYPE_NAME_LONG,
-						com.testify.ecfeed.modelif.java.Constants.TYPE_NAME_SHORT,
-						com.testify.ecfeed.modelif.java.Constants.TYPE_NAME_BYTE,
-						com.testify.ecfeed.modelif.java.Constants.TYPE_NAME_BOOLEAN,
-						com.testify.ecfeed.modelif.java.Constants.TYPE_NAME_DOUBLE,
-						com.testify.ecfeed.modelif.java.Constants.TYPE_NAME_FLOAT,
-						com.testify.ecfeed.modelif.java.Constants.TYPE_NAME_STRING,
-				});
-				
-				for(String typeCandidate : types){
-					List<String> methodTypes = fSelectedMethod.getCategoriesTypes();
-					methodTypes.add(typeCandidate);
-					if (fSelectedMethod.getClassNode().getMethod(fSelectedMethod.getName(), methodTypes) == null) {
-						type = typeCandidate;
-						break;
-					}
-				}
-	
-				if(type == null){
-					i = 1;
-					String typeCandidate = Constants.DEFAULT_USER_TYPE_NAME;
-					while(true){
-						List<String> methodTypes = fSelectedMethod.getCategoriesTypes();
-						methodTypes.add(typeCandidate);
-						if (fSelectedMethod.getClassNode().getMethod(fSelectedMethod.getName(), methodTypes) == null) {
-							type = typeCandidate;
-							break;
-						}
-						else{
-							typeCandidate = Constants.DEFAULT_USER_TYPE_NAME + i++;
-						}
-					}
-				}
-		
-				CategoryNode categoryNode = new CategoryNode(name, type, false);
-				categoryNode.setDefaultValueString(ModelUtils.getDefaultExpectedValueString(type));
-				ArrayList<PartitionNode> defaultPartitions = ModelUtils.generateDefaultPartitions(type);
-				for(PartitionNode partition : defaultPartitions){
-					categoryNode.addPartition(partition);
-				}
-				
-				addCategory(categoryNode, fSelectedMethod);
-				
-				modelUpdated();
-				selectElement(categoryNode);
-				nameColumn.getViewer().editElement(categoryNode, 0);			
-			
+			CategoryNode addedParameter = fMethodIf.addNewParameter(ParametersViewer.this, getUpdateListener());
+			if(addedParameter != null){
+				selectElement(addedParameter);
+				fNameColumn.getViewer().editElement(addedParameter, 0);			
+			}
 		}
 	}
 
@@ -161,49 +110,9 @@ public class ParametersViewer extends CheckboxTableViewerSection implements Test
 		}
 	}
 
-//	private boolean moveSelectedItem(boolean moveUp, int shift){
-//		if(getSelectedElement() != null && shift > 0){
-//			CategoryNode categoryNode = (CategoryNode)getSelectedElement();
-//			int index = fSelectedMethod.getCategories().indexOf(categoryNode);
-//			if(moveUp){
-//				if(index - shift < 0)
-//					return false;
-//			} else{
-//				if(index + shift >= fSelectedMethod.getCategories().size())
-//					return false;
-//			}
-//
-//			List<String> tmpTypes = fSelectedMethod.getCategoriesTypes();	
-//			int currentindex = index;
-//			for(int i = 0; i < shift; i++){
-//				Collections.swap(tmpTypes, currentindex, currentindex = moveUp ? currentindex-1 : currentindex+1);
-//			}
-//
-//			MethodNode twinMethod = fSelectedMethod.getClassNode().getMethod(fSelectedMethod.getName(), tmpTypes);
-//			if(twinMethod == null || twinMethod == fSelectedMethod){
-//				for(int i = 0; i < shift; i++){
-//					categoryNode.getParent().moveChild(categoryNode, moveUp);
-//				}
-//				int newindex = fSelectedMethod.getCategories().indexOf(categoryNode);
-//				for(TestCaseNode tcnode : fSelectedMethod.getTestCases()){
-//					Collections.swap(tcnode.getTestData(), newindex, index);
-//				}
-//				modelUpdated();
-//				return true;
-//			} else{
-//				if(!moveSelectedItem(moveUp, shift + 1))
-//					MessageDialog.openError(Display.getCurrent().getActiveShell(),
-//							Messages.DIALOG_METHOD_EXISTS_TITLE,
-//							Messages.DIALOG_METHOD_WITH_PARAMETERS_EXISTS_MESSAGE);
-//				return true;
-//			}
-//		}
-//		return true;
-//	}
-
 	@Override
 	protected void createTableColumns() {
-		nameColumn = addColumn("Name", 150, new ColumnLabelProvider(){
+		fNameColumn = addColumn("Name", 150, new ColumnLabelProvider(){
 			@Override
 			public String getText(Object element){
 				String result = new String();
@@ -219,9 +128,8 @@ public class ParametersViewer extends CheckboxTableViewerSection implements Test
 				return getColor(element);
 			}
 		});
-		nameColumn.setEditingSupport(new CategoryNameEditingSupport(this));
 		
-		TableViewerColumn typeColumn = addColumn("Type", 150, new ColumnLabelProvider(){
+		fTypeColumn = addColumn("Type", 150, new ColumnLabelProvider(){
 			@Override
 			public String getText(Object element){
 				return ((CategoryNode)element).getType();
@@ -231,7 +139,6 @@ public class ParametersViewer extends CheckboxTableViewerSection implements Test
 				return getColor(element);
 			}
 		});
-		typeColumn.setEditingSupport(new CategoryTypeEditingSupport(this));
 		
 		TableViewerColumn expectedColumn = addColumn("Expected", 150, new ColumnLabelProvider(){
 			@Override
@@ -264,6 +171,7 @@ public class ParametersViewer extends CheckboxTableViewerSection implements Test
 	}
 		
 	public void setInput(MethodNode method){
+		fMethodIf.setTarget(method);
 		fSelectedMethod = method;
 		showDefaultValueColumn(fSelectedMethod.getCategoriesNames(true).size() == 0);
 		super.setInput(method.getCategories());

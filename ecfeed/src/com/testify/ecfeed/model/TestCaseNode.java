@@ -156,4 +156,14 @@ public class TestCaseNode extends GenericNode {
 	public Object accept(IModelVisitor visitor) throws Exception{
 		return visitor.visit(this);
 	}
+
+	public boolean isConsistent() {
+		for(PartitionNode p : getTestData()){
+			CategoryNode category = p.getCategory();
+			if(category == null || category.getPartition(p.getQualifiedName()) == null){
+				return false;
+			}
+		}
+		return true;
+	}
 }

@@ -56,6 +56,12 @@ public class CategoryNode extends GenericNode implements IPartitionedNode{
 		return new String(getName() + ": " + getType());
 	}
 	
+	public void addPartitions(List<PartitionNode> partitions) {
+		for(PartitionNode p : partitions){
+			addPartition(p);
+		}
+	}
+
 	@Override
 	public void addPartition(PartitionNode partition) {
 			fPartitions.add(partition);

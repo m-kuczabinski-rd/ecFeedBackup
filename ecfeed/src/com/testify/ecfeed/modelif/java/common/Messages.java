@@ -23,5 +23,7 @@ public class Messages {
 	public static final String UNEXPECTED_PROBLEM_WHILE_REMOVING_METHOD = "Method could not be removed from the class model";
 	public static final String METHODS_INCOMPATIBLE_PROBLEM = "The converted methods do not have the same parameter count and types";
 	public static final String CATEGORY_NAME_DUPLICATE_PROBLEM = "The method already contains a parameter with this name";
+	public static final String CATEGORY_NAME_REGEX_PROBLEM = "Parameter name must be a valid java identifier";
+	public static final String CATEGORY_TYPE_REGEX_PROBLEM = "Parameter type must be a valid type identifier in Java, i.e. it must be either a primitive type name or String or a valid qualified type name of user type";
 
 }
