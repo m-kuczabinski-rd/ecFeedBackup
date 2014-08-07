@@ -31,7 +31,7 @@ public abstract class ExecuteTestAdapter extends SelectionAdapter {
 	protected Class<?> loadTestClass() {
 		ClassNode classNode = getMethodModel().getClassNode();
 		String className = classNode.getQualifiedName();
-		URLClassLoader loader = ClassUtils.getClassLoader(true, null);
+		URLClassLoader loader = ClassUtils.getClassLoader(true, getClass().getClassLoader());
 		Class<?> testClass = ClassUtils.loadClass(loader, className.toString());
 
 		if (testClass == null) {
