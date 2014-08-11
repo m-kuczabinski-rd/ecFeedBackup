@@ -74,8 +74,8 @@ public class EclipseModelBuilder {
 		return category;
 	}
 
-	public List<PartitionNode> defaultPartitions(String typeSignature) {
-		switch(typeSignature){
+	public List<PartitionNode> defaultPartitions(String typeName) {
+		switch(typeName){
 		case com.testify.ecfeed.modelif.java.Constants.TYPE_NAME_BOOLEAN:
 			return defaultBooleanPartitions();
 		case com.testify.ecfeed.modelif.java.Constants.TYPE_NAME_BYTE:
@@ -95,7 +95,7 @@ public class EclipseModelBuilder {
 		case com.testify.ecfeed.modelif.java.Constants.TYPE_NAME_STRING:
 			return defaultStringPartitions();
 		default:
-			return defaultUserTypePartitions(typeSignature);
+			return defaultUserTypePartitions(typeName);
 		}
 	}
 

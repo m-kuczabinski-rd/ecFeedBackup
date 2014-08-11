@@ -71,11 +71,11 @@ public abstract class TableViewerSection extends ViewerSection {
 		getTableViewer().addSelectionChangedListener(listener);
 	}
 	
-	protected Table getTable(){
+	public Table getTable(){
 		return getTableViewer().getTable();
 	}
 	
-	protected TableViewer getTableViewer(){
+	public TableViewer getTableViewer(){
 		return (TableViewer)getViewer();
 	}
 	

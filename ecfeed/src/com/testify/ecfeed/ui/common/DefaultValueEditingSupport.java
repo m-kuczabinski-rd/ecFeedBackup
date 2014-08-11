@@ -13,40 +13,40 @@ package com.testify.ecfeed.ui.common;
 
 import java.util.ArrayList;
 
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ComboBoxViewerCellEditor;
 import org.eclipse.jface.viewers.EditingSupport;
 import org.eclipse.jface.viewers.LabelProvider;
-import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.widgets.Display;
 
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.PartitionNode;
-import com.testify.ecfeed.utils.ModelUtils;
+import com.testify.ecfeed.modelif.ModelOperationManager;
+import com.testify.ecfeed.ui.editor.TableViewerSection;
+import com.testify.ecfeed.ui.modelif.CategoryInterface;
+import com.testify.ecfeed.ui.modelif.EclipseModelBuilder;
 
 public class DefaultValueEditingSupport extends EditingSupport {
-	private final TableViewer fViewer;
-	private TestDataEditorListener fSetValueListener;
+	private final TableViewerSection fSection;
 	private ComboBoxViewerCellEditor fComboCellEditor = null;
+	private CategoryInterface fCategoryIf;
 	
 
-	public DefaultValueEditingSupport(TableViewer viewer, TestDataEditorListener setValueListener) {
-		super(viewer);
-		fViewer = viewer;
-		fSetValueListener = setValueListener;
-	}
+	public DefaultValueEditingSupport(TableViewerSection section, ModelOperationManager operationManager) {
+		super(section.getTableViewer());
+		fSection = section;
+		fCategoryIf = new CategoryInterface(operationManager);
+
+		fComboCellEditor = new ComboBoxViewerCellEditor(fSection.getTable(), SWT.TRAIL);
+		fComboCellEditor.setLabelProvider(new LabelProvider());
+		fComboCellEditor.setContentProvider(new ArrayContentProvider());
+}
 	
 	private CellEditor getComboCellEditor(PartitionNode partition) {
-		if(fComboCellEditor == null){
-			fComboCellEditor = new ComboBoxViewerCellEditor(fViewer.getTable(), SWT.TRAIL);
-			fComboCellEditor.setLabelProvider(new LabelProvider());
-			fComboCellEditor.setContentProvider(new ArrayContentProvider());
-		}
+		
 		ArrayList<String> expectedValues = new ArrayList<String>();
-		for(PartitionNode node : ModelUtils.generateDefaultPartitions(partition.getCategory().getType())){
+		for(PartitionNode node : new EclipseModelBuilder().defaultPartitions(partition.getCategory().getType())){
 			expectedValues.add(node.getValueString());
 		}
 		if(!expectedValues.contains(partition.getValueString())){
@@ -61,21 +61,31 @@ public class DefaultValueEditingSupport extends EditingSupport {
 		fComboCellEditor.setInput(expectedValues);
 		fComboCellEditor.setValue(partition.getValueString());
 
-		if(ModelUtils.getJavaTypes().contains(partition.getCategory().getType())
-				&& !partition.getCategory().getType().equals(com.testify.ecfeed.modelif.java.Constants.TYPE_NAME_BOOLEAN)){
-			fComboCellEditor.getViewer().getCCombo().setEditable(true);
-		} else{
-			fComboCellEditor.setActivationStyle(ComboBoxViewerCellEditor.DROP_DOWN_ON_KEY_ACTIVATION
-					| ComboBoxViewerCellEditor.DROP_DOWN_ON_MOUSE_ACTIVATION);
+		fCategoryIf.setTarget(partition.getCategory());
+		if(fCategoryIf.hasLimitedValuesSet()){
 			fComboCellEditor.getViewer().getCCombo().setEditable(false);
 		}
+		else{
+			fComboCellEditor.setActivationStyle(ComboBoxViewerCellEditor.DROP_DOWN_ON_KEY_ACTIVATION
+					| ComboBoxViewerCellEditor.DROP_DOWN_ON_MOUSE_ACTIVATION);
+			fComboCellEditor.getViewer().getCCombo().setEditable(true);
+		}
+		
+//		if(ModelUtils.getJavaTypes().contains(partition.getCategory().getType())
+//				&& !partition.getCategory().getType().equals(com.testify.ecfeed.modelif.java.Constants.TYPE_NAME_BOOLEAN)){
+//			fComboCellEditor.getViewer().getCCombo().setEditable(true);
+//		} else{
+//			fComboCellEditor.setActivationStyle(ComboBoxViewerCellEditor.DROP_DOWN_ON_KEY_ACTIVATION
+//					| ComboBoxViewerCellEditor.DROP_DOWN_ON_MOUSE_ACTIVATION);
+//			fComboCellEditor.getViewer().getCCombo().setEditable(false);
+//		}
 		return fComboCellEditor;
 	}
 
 	@Override
 	protected CellEditor getCellEditor(Object element) {
-		PartitionNode partition = ((CategoryNode)element).getDefaultValuePartition();
-		return getComboCellEditor(partition);
+		PartitionNode defaultValuePartition = ((CategoryNode)element).getDefaultValuePartition();
+		return getComboCellEditor(defaultValuePartition);
 	}
 
 	@Override
@@ -97,15 +107,18 @@ public class DefaultValueEditingSupport extends EditingSupport {
 		} else if(value == null){
 			valueString = fComboCellEditor.getViewer().getCCombo().getText();
 		}
-		if(!valueString.equals(category.getDefaultValueString())){
-			if(!ModelUtils.validatePartitionStringValue(valueString, category.getType())){
-				MessageDialog.openError(Display.getCurrent().getActiveShell(), Messages.DIALOG_PARTITION_VALUE_PROBLEM_TITLE,
-						Messages.DIALOG_PARTITION_VALUE_PROBLEM_MESSAGE(valueString));
-			} else{
-				category.setDefaultValueString(valueString);
-				fSetValueListener.testDataChanged();
-			}
-		}
+		fCategoryIf.setTarget(category);
+		fCategoryIf.setDefaultValue(valueString, fSection, fSection.getUpdateListener());
+//		
+//		
+//		if(!valueString.equals(category.getDefaultValueString())){
+//			if(!ModelUtils.validatePartitionStringValue(valueString, category.getType())){
+//				MessageDialog.openError(Display.getCurrent().getActiveShell(), Messages.DIALOG_PARTITION_VALUE_PROBLEM_TITLE,
+//						Messages.DIALOG_PARTITION_VALUE_PROBLEM_MESSAGE(valueString));
+//			} else{
+//				category.setDefaultValueString(valueString);
+//			}
+//		}
 	}
 
 }

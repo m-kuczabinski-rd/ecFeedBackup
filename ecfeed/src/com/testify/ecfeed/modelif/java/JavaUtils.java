@@ -90,4 +90,8 @@ public class JavaUtils {
 	public static boolean isValidJavaIdentifier(String value) {
 		return (value.matches(Constants.REGEX_JAVA_IDENTIFIER) && isJavaKeyword(value) == false); 
 	}
+	
+	public static String getBooleanTypeName(){
+		return Constants.TYPE_NAME_BOOLEAN;
+	}
 }

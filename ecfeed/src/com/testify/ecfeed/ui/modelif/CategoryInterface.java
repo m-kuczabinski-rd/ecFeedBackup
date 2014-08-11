@@ -1,5 +1,7 @@
 package com.testify.ecfeed.ui.modelif;
 
+import java.util.Arrays;
+
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
 
@@ -7,19 +9,24 @@ import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.ConstraintNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.modelif.ModelOperationManager;
+import com.testify.ecfeed.modelif.java.JavaUtils;
 import com.testify.ecfeed.modelif.java.category.CategoryOperationRename;
+import com.testify.ecfeed.modelif.java.category.CategoryOperationSetDefaultValue;
 import com.testify.ecfeed.modelif.java.category.CategoryOperationSetExpected;
 import com.testify.ecfeed.modelif.java.category.CategoryOperationSetType;
 import com.testify.ecfeed.modelif.java.category.ITypeAdapterProvider;
 import com.testify.ecfeed.ui.editor.BasicSection;
 import com.testify.ecfeed.ui.editor.IModelUpdateListener;
+import com.testify.ecfeed.ui.editor.TableViewerSection;
 
 public class CategoryInterface extends GenericNodeInterface {
 	
 	private CategoryNode fTarget;
+	private ITypeAdapterProvider fAdapterProvider;
 	
 	public CategoryInterface(ModelOperationManager modelOperationManager) {
 		super(modelOperationManager);
+		fAdapterProvider = new TypeAdaptationSupport().getAdapterProvider();
 	}
 
 	public void setTarget(CategoryNode target){
@@ -83,6 +90,24 @@ public class CategoryInterface extends GenericNodeInterface {
 		}
 		return false;
 	}
+
+	public boolean setDefaultValue(String valueString, TableViewerSection source, IModelUpdateListener updateListener) {
+		if(fTarget.getDefaultValueString().equals(valueString) == false){
+			return execute(new CategoryOperationSetDefaultValue(fTarget, valueString, fAdapterProvider.getAdapter(fTarget.getType())), source, updateListener, Messages.DIALOG_SET_DEFAULT_VALUE_PROBLEM_TITLE);
+		}
+		return false;
+	}
+
+	public boolean hasLimitedValuesSet() {
+		return !isPrimitive() || isBoolean();
+	}
+
+	private boolean isPrimitive() {
+		return Arrays.asList(JavaUtils.supportedPrimitiveTypes()).contains(fTarget.getType());
+	}
 	
+	private boolean isBoolean(){
+		return fTarget.getType().equals(JavaUtils.getBooleanTypeName());
+	}
 
 }

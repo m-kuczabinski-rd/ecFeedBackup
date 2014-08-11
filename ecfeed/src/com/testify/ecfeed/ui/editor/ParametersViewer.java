@@ -31,11 +31,10 @@ import com.testify.ecfeed.modelif.ModelOperationManager;
 import com.testify.ecfeed.ui.common.ColorConstants;
 import com.testify.ecfeed.ui.common.ColorManager;
 import com.testify.ecfeed.ui.common.DefaultValueEditingSupport;
-import com.testify.ecfeed.ui.common.TestDataEditorListener;
 import com.testify.ecfeed.ui.modelif.CategoryInterface;
 import com.testify.ecfeed.ui.modelif.MethodInterface;
 
-public class ParametersViewer extends CheckboxTableViewerSection implements TestDataEditorListener{
+public class ParametersViewer extends CheckboxTableViewerSection /*implements TestDataEditorListener*/{
 
 	private final static int STYLE = Section.EXPANDED | Section.TITLE_BAR;
 	private final String EMPTY_STRING = "";
@@ -45,7 +44,6 @@ public class ParametersViewer extends CheckboxTableViewerSection implements Test
 	private TableViewerColumn fNameColumn;
 	private CategoryInterface fCategoryIf;
 	private MethodInterface fMethodIf;
-	private ModelOperationManager fOperationManager;
 	private TableViewerColumn fTypeColumn;
 	private TableViewerColumn fExpectedColumn;
 	
@@ -53,7 +51,6 @@ public class ParametersViewer extends CheckboxTableViewerSection implements Test
 		super(parent.getMainComposite(), toolkit, STYLE, parent);
 		fCategoryIf = new CategoryInterface(operationManager);
 		fMethodIf = new MethodInterface(operationManager);
-		fOperationManager = operationManager;
 
 		getSection().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
 		fColorManager = new ColorManager();
@@ -63,9 +60,10 @@ public class ParametersViewer extends CheckboxTableViewerSection implements Test
 		addButton("Move Up", new MoveUpAdapter());
 		addButton("Move Down", new MoveDownAdapter());
 
-		fNameColumn.setEditingSupport(new CategoryNameEditingSupport(this, fOperationManager));
-		fTypeColumn.setEditingSupport(new CategoryTypeEditingSupport(this, fOperationManager));
-		fExpectedColumn.setEditingSupport(new ExpectedValueEditingSupport(this, fOperationManager));
+		fNameColumn.setEditingSupport(new CategoryNameEditingSupport(this, operationManager));
+		fTypeColumn.setEditingSupport(new CategoryTypeEditingSupport(this, operationManager));
+		fExpectedColumn.setEditingSupport(new ExpectedValueEditingSupport(this, operationManager));
+		fDefaultValueColumn.setEditingSupport(new DefaultValueEditingSupport(this, operationManager));
 
 		addDoubleClickListener(new SelectNodeDoubleClickListener(parent.getMasterSection()));
 	}
@@ -168,7 +166,6 @@ public class ParametersViewer extends CheckboxTableViewerSection implements Test
 				return getColor(element);
 			}
 		});
-		fDefaultValueColumn.setEditingSupport(new DefaultValueEditingSupport(getTableViewer(), this));
 	}
 		
 	public void setInput(MethodNode method){
@@ -196,9 +193,9 @@ public class ParametersViewer extends CheckboxTableViewerSection implements Test
 		}
 	}
 
-	@Override
-	public void testDataChanged() {
-		modelUpdated();
-	}
-
+//	@Override
+//	public void testDataChanged() {
+//		modelUpdated();
+//	}
+//
 }

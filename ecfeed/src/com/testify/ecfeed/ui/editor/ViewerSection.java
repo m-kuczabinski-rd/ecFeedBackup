@@ -158,7 +158,7 @@ public abstract class ViewerSection extends BasicSection {
 		getViewer().addDoubleClickListener(listener);
 	}
 	
-	protected StructuredViewer getViewer(){
+	public StructuredViewer getViewer(){
 		return fViewer;
 	}
 
