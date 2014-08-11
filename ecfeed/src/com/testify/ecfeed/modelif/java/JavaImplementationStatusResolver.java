@@ -8,15 +8,16 @@ import java.util.List;
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.ConstraintNode;
-import com.testify.ecfeed.model.IGenericNode;
+import com.testify.ecfeed.model.GenericNode;
 import com.testify.ecfeed.model.IModelVisitor;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.TestCaseNode;
+import com.testify.ecfeed.modelif.IImplementationStatusResolver;
 import com.testify.ecfeed.modelif.ImplementationStatus;
 
-public class ImplementationStatusResolver {
+public class JavaImplementationStatusResolver implements IImplementationStatusResolver{
 	private ILoaderProvider fLoaderProvider;
 
 	private class StatusResolver implements IModelVisitor{
@@ -58,11 +59,11 @@ public class ImplementationStatusResolver {
 		
 	}
 	
-	public ImplementationStatusResolver(ILoaderProvider loaderProvider){
+	public JavaImplementationStatusResolver(ILoaderProvider loaderProvider){
 		fLoaderProvider = loaderProvider;
 	}
 	
-	public ImplementationStatus getImplementationStatus(IGenericNode node){
+	public ImplementationStatus getImplementationStatus(GenericNode node){
 		try {
 			return (ImplementationStatus)node.accept(new StatusResolver());
 		} catch (Exception e) {

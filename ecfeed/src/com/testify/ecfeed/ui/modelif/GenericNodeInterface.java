@@ -9,18 +9,18 @@ import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.ConstraintNode;
 import com.testify.ecfeed.model.GenericNode;
-import com.testify.ecfeed.model.IGenericNode;
 import com.testify.ecfeed.model.IModelVisitor;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.TestCaseNode;
+import com.testify.ecfeed.modelif.IImplementationStatusResolver;
 import com.testify.ecfeed.modelif.IModelOperation;
 import com.testify.ecfeed.modelif.ImplementationStatus;
 import com.testify.ecfeed.modelif.ModelIfException;
 import com.testify.ecfeed.modelif.ModelOperationManager;
 import com.testify.ecfeed.modelif.java.ILoaderProvider;
-import com.testify.ecfeed.modelif.java.ImplementationStatusResolver;
+import com.testify.ecfeed.modelif.java.JavaImplementationStatusResolver;
 import com.testify.ecfeed.modelif.java.ModelClassLoader;
 import com.testify.ecfeed.modelif.java.category.CategoryOperationSwap;
 import com.testify.ecfeed.modelif.java.classx.ClassOperationMove;
@@ -33,7 +33,7 @@ public class GenericNodeInterface {
 
 	private ModelOperationManager fOperationManager;
 	private ILoaderProvider fLoaderProvider;
-	private ImplementationStatusResolver fStatusResolver;
+	private IImplementationStatusResolver fStatusResolver;
 	private GenericNode fTarget;
 	
 	private class MoveOperationProvider implements IModelVisitor{
@@ -183,7 +183,7 @@ public class GenericNodeInterface {
 	public GenericNodeInterface(ModelOperationManager modelOperationManager) {
 		fOperationManager = modelOperationManager;
 		fLoaderProvider = new LoaderProvider();
-		fStatusResolver = new ImplementationStatusResolver(fLoaderProvider);
+		fStatusResolver = new JavaImplementationStatusResolver(fLoaderProvider);
 	}
 
 	public void setTarget(GenericNode target){
@@ -213,7 +213,7 @@ public class GenericNodeInterface {
 		return false;
 	}
 	
-	public ImplementationStatus implementationStatus(IGenericNode node){
+	public ImplementationStatus implementationStatus(GenericNode node){
 		return fStatusResolver.getImplementationStatus(node);
 	}
 	
