@@ -120,7 +120,11 @@ public class MethodNode extends GenericNode {
 	}
 
 	public void addCategory(CategoryNode category){
-		fCategories.add(category);
+		addCategory(category, fCategories.size());
+	}
+
+	public void addCategory(CategoryNode category, int index) {
+		fCategories.add(index, category);
 		category.setParent(this);
 	}
 
