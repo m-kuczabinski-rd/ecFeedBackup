@@ -72,6 +72,52 @@ public class Constraint implements IConstraint<PartitionNode> {
 		
 	}
 	
+	private class ReferencedCategoriesProvider implements IStatementVisitor{
+
+		@Override
+		public Object visit(StaticStatement statement) throws Exception {
+			return new HashSet<CategoryNode>();
+		}
+
+		@SuppressWarnings("unchecked")
+		@Override
+		public Object visit(StatementArray statement) throws Exception {
+			Set<CategoryNode> set = new HashSet<CategoryNode>();
+			for(BasicStatement s : statement.getStatements()){
+				set.addAll((Set<CategoryNode>)s.accept(this));
+			}
+			return set;
+		}
+
+		@Override
+		public Object visit(ExpectedValueStatement statement) throws Exception {
+			Set<CategoryNode> set = new HashSet<CategoryNode>();
+			set.add(statement.getCategory());
+			return set;
+		}
+
+		@Override
+		public Object visit(PartitionedCategoryStatement statement)
+				throws Exception {
+			return statement.getCondition().accept(this);
+		}
+
+		@Override
+		public Object visit(LabelCondition condition) throws Exception {
+			return new HashSet<CategoryNode>();
+		}
+
+		@Override
+		public Object visit(PartitionCondition condition) throws Exception {
+			Set<CategoryNode> set = new HashSet<CategoryNode>();
+			CategoryNode category = condition.getPartition().getCategory();
+			if(category != null){
+				set.add(category);
+			}
+			return set;
+		}
+	}
+	
 	public Constraint(BasicStatement premise, BasicStatement consequence){
 		ID = fLastId++;
 		fPremise = premise;
@@ -161,6 +207,18 @@ public class Constraint implements IConstraint<PartitionNode> {
 		}
 		catch(Exception e){
 			return new HashSet<PartitionNode>();
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	public Set<CategoryNode> getReferencedCategories() {
+		try{
+			Set<CategoryNode> referenced = (Set<CategoryNode>)fPremise.accept(new ReferencedCategoriesProvider());
+			referenced.addAll((Set<CategoryNode>)fConsequence.accept(new ReferencedCategoriesProvider()));
+			return referenced;
+		}
+		catch(Exception e){
+			return new HashSet<CategoryNode>();
 		}
 	}
 }

@@ -11,22 +11,24 @@
 
 package com.testify.ecfeed.ui.editor;
 
-import static com.testify.ecfeed.ui.common.CategoryNodeAbstractLayer.changeCategoryExpectedStatus;
-
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ComboBoxCellEditor;
 import org.eclipse.jface.viewers.EditingSupport;
 import org.eclipse.swt.SWT;
 
 import com.testify.ecfeed.model.CategoryNode;
+import com.testify.ecfeed.modelif.ModelOperationManager;
+import com.testify.ecfeed.ui.modelif.CategoryInterface;
 
 public class ExpectedValueEditingSupport extends EditingSupport {
 
 	private ComboBoxCellEditor fCellEditor;
 	BasicSection fSection;
+	private CategoryInterface fCategoryIf;
 
-	public ExpectedValueEditingSupport(ParametersViewer viewer) {
+	public ExpectedValueEditingSupport(ParametersViewer viewer, ModelOperationManager operationManager) {
 		super(viewer.getTableViewer());
+		fCategoryIf = new CategoryInterface(operationManager);
 		fSection = viewer;
 		String[] items = {"Yes", "No"};
 		fCellEditor = new ComboBoxCellEditor(viewer.getTable(), items, SWT.READ_ONLY);
@@ -53,9 +55,8 @@ public class ExpectedValueEditingSupport extends EditingSupport {
 	protected void setValue(Object element, Object value) {
 		CategoryNode node = (CategoryNode)element;
 		boolean expected = ((int)value == 0) ? true : false;
-		if(changeCategoryExpectedStatus(node, expected)){
-			fSection.modelUpdated();
-		}
+		fCategoryIf.setTarget(node);
+		fCategoryIf.setExpected(expected, fSection, fSection.getUpdateListener());
 		fCellEditor.setFocus();
 	}
 }

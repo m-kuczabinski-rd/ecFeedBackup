@@ -14,6 +14,7 @@ public class Messages {
 	public static final String DIALOG_RENAME_METHOD_PROBLEM_TITLE = "Couldn't rename method";
 	public static final String DIALOG_CONVERT_METHOD_PROBLEM_TITLE = "Couldn't convert method";
 	public static final String DIALOG_UNEXPECTED_PROBLEM_WITH_TEST_EXECUTION = "Unexpected problem with test execution";
+	public static final String DIALOG_SET_CATEGORY_EXPECTED_PROBLEM_TITLE = "Couldn't change category expected status";
 
 
 	//CONFIRMATIONS AND WARNINGS
@@ -28,6 +29,11 @@ public class Messages {
 	public static final String DIALOG_REMOVE_METHOD_MESSAGE = "This operation will remove selected test method from the model.";
 	public static final String DIALOG_REMOVE_METHODS_TITLE = "Remove method";;
 	public static final String DIALOG_REMOVE_METHODS_MESSAGE = "This operation will remove selected test methods from the model.";
+	public static final String DIALOG_SET_CATEGORY_EXPECTED_WARNING_TITLE = "Change parameter's expected property";
+	public static final String DIALOG_SET_CATEGORY_EXPECTED_TEST_CASES_REMOVED = "All test cases will be removed"; 
+	public static final String DIALOG_SET_CATEGORY_EXPECTED_TEST_CASES_ALTERED = "Corresponding test parameter in all test cases will be replaced by default value";
+	public static final String DIALOG_SET_CATEGORY_EXPECTED_CONSTRAINTS_REMOVED = "All constraints that refer to that parameter will be removed";
+	
 
 	//EXCEPTIONS
 	public static final String EXCEPTION_METHOD_IMPORT(String name){

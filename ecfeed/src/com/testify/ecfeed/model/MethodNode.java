@@ -381,6 +381,10 @@ public class MethodNode extends GenericNode {
 		fTestCases.clear();
 	}
 
+	public void clearConstraints(){
+		fConstraints.clear();
+	}
+
 	protected void removeMentioningConstraints(PartitionNode partition) {
 		Iterator<ConstraintNode> iterator = fConstraints.iterator();
 		while(iterator.hasNext()){

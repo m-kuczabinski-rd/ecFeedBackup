@@ -47,6 +47,7 @@ public class ParametersViewer extends CheckboxTableViewerSection implements Test
 	private MethodInterface fMethodIf;
 	private ModelOperationManager fOperationManager;
 	private TableViewerColumn fTypeColumn;
+	private TableViewerColumn fExpectedColumn;
 	
 	public ParametersViewer(BasicDetailsPage parent, FormToolkit toolkit, ModelOperationManager operationManager) {
 		super(parent.getMainComposite(), toolkit, STYLE, parent);
@@ -64,6 +65,7 @@ public class ParametersViewer extends CheckboxTableViewerSection implements Test
 
 		fNameColumn.setEditingSupport(new CategoryNameEditingSupport(this, fOperationManager));
 		fTypeColumn.setEditingSupport(new CategoryTypeEditingSupport(this, fOperationManager));
+		fExpectedColumn.setEditingSupport(new ExpectedValueEditingSupport(this, fOperationManager));
 
 		addDoubleClickListener(new SelectNodeDoubleClickListener(parent.getMasterSection()));
 	}
@@ -140,7 +142,7 @@ public class ParametersViewer extends CheckboxTableViewerSection implements Test
 			}
 		});
 		
-		TableViewerColumn expectedColumn = addColumn("Expected", 150, new ColumnLabelProvider(){
+		fExpectedColumn = addColumn("Expected", 150, new ColumnLabelProvider(){
 			@Override
 			public String getText(Object element) {
 				CategoryNode node = (CategoryNode)element;
@@ -151,7 +153,6 @@ public class ParametersViewer extends CheckboxTableViewerSection implements Test
 				return getColor(element);
 			}
 		});
-		expectedColumn.setEditingSupport(new ExpectedValueEditingSupport(this));
 
 		fDefaultValueColumn = addColumn("Default value", 150, new ColumnLabelProvider(){
 			@Override
