@@ -70,15 +70,6 @@ public class DefaultValueEditingSupport extends EditingSupport {
 					| ComboBoxViewerCellEditor.DROP_DOWN_ON_MOUSE_ACTIVATION);
 			fComboCellEditor.getViewer().getCCombo().setEditable(true);
 		}
-		
-//		if(ModelUtils.getJavaTypes().contains(partition.getCategory().getType())
-//				&& !partition.getCategory().getType().equals(com.testify.ecfeed.modelif.java.Constants.TYPE_NAME_BOOLEAN)){
-//			fComboCellEditor.getViewer().getCCombo().setEditable(true);
-//		} else{
-//			fComboCellEditor.setActivationStyle(ComboBoxViewerCellEditor.DROP_DOWN_ON_KEY_ACTIVATION
-//					| ComboBoxViewerCellEditor.DROP_DOWN_ON_MOUSE_ACTIVATION);
-//			fComboCellEditor.getViewer().getCCombo().setEditable(false);
-//		}
 		return fComboCellEditor;
 	}
 
