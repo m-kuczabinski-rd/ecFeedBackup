@@ -18,9 +18,27 @@ public class CategoryOperationSetExpected implements IModelOperation {
 	private List<TestCaseNode> fOriginalTestCases;
 	private List<ConstraintNode> fOriginalConstraints;
 	
-	public CategoryOperationSetExpected(CategoryNode target, boolean enabled){
+	private class ReverseOperation implements IModelOperation{
+
+		@Override
+		public void execute() throws ModelIfException {
+			fTarget.setExpected(!fExpected);
+			if(fTarget.getMethod() != null){
+				fTarget.getMethod().replaceConstraints(fOriginalConstraints);
+				fTarget.getMethod().replaceTestCases(fOriginalTestCases);
+			}
+		}
+
+		@Override
+		public IModelOperation reverseOperation() {
+			return new CategoryOperationSetExpected(fTarget, fExpected);
+		}
+		
+	}
+	
+	public CategoryOperationSetExpected(CategoryNode target, boolean expected){
 		fTarget = target;
-		fExpected = enabled;
+		fExpected = expected;
 		
 		MethodNode method = target.getMethod(); 
 		if(method != null){
@@ -62,7 +80,7 @@ public class CategoryOperationSetExpected implements IModelOperation {
 
 	@Override
 	public IModelOperation reverseOperation() {
-		return new CategoryOperationReverseSetExpected(fTarget, !fExpected, fOriginalTestCases, fOriginalConstraints);
+		return new ReverseOperation();
 	}
 	
 	protected CategoryNode getTarget(){

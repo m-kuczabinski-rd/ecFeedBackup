@@ -14,6 +14,21 @@ public class MethodOperationAddParameter implements IModelOperation {
 	List<TestCaseNode> fRemovedTestCases;
 	MethodNode fTarget;
 	CategoryNode fParameter;
+	
+	private class ReverseOperation implements IModelOperation{
+
+		@Override
+		public void execute() throws ModelIfException {
+			fTarget.removeCategory(fParameter);
+			fTarget.replaceTestCases(fRemovedTestCases);
+		}
+
+		@Override
+		public IModelOperation reverseOperation() {
+			return new MethodOperationAddParameter(fTarget, fParameter);
+		}
+		
+	}
 
 	public MethodOperationAddParameter(MethodNode target, CategoryNode parameter) {
 		fRemovedTestCases = target.getTestCases();
@@ -38,7 +53,7 @@ public class MethodOperationAddParameter implements IModelOperation {
 
 	@Override
 	public IModelOperation reverseOperation() {
-		return new MethodOperationReverseAddParameter(fTarget, fParameter, fRemovedTestCases);
+		return new ReverseOperation();
 	}
 
 }

@@ -20,6 +20,24 @@ public class CategoryOperationMove implements IModelOperation {
 	private List<TestCaseNode> fCurrentParentOriginalTestCases;
 	private List<TestCaseNode> fNewParentOriginalTestCases;
 	
+	private class ReverseOperation implements IModelOperation{
+
+		@Override
+		public void execute() throws ModelIfException {
+			fNewParent.removeCategory(fTarget);
+			fNewParent.replaceTestCases(fNewParentOriginalTestCases);
+			fCurrentParent.addCategory(fTarget, fCurrentIndex);
+			fCurrentParent.replaceConstraints(fCurrentParentOriginalConstraints);
+			fCurrentParent.replaceTestCases(fCurrentParentOriginalTestCases);
+		}
+
+		@Override
+		public IModelOperation reverseOperation() {
+			return new CategoryOperationMove(fTarget, fNewParent, fNewIndex);
+		}
+		
+	}
+	
 	public CategoryOperationMove(CategoryNode target, MethodNode newParent, int index){
 		fTarget = target;
 		fCurrentParent = target.getMethod();
@@ -42,7 +60,7 @@ public class CategoryOperationMove implements IModelOperation {
 
 	@Override
 	public IModelOperation reverseOperation() {
-		return new CategoryOperationReverseMove(fTarget, fCurrentParent, fCurrentIndex, fCurrentParentOriginalConstraints, fCurrentParentOriginalTestCases, fNewParentOriginalTestCases);
+		return new ReverseOperation();
 	}
 
 }

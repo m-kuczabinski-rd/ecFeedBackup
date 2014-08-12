@@ -20,6 +20,7 @@ public interface IPartitionedNode extends IGenericNode{
 	public PartitionNode getPartition(String name);
 	public boolean removePartition(PartitionNode partition);
 	public boolean removePartition(String name);
+	public void replacePartitions(List<PartitionNode> newPpartitions);
 	public List<PartitionNode> getLeafPartitions();
 	public List<String> getAllPartitionNames();
 	public void partitionRemoved(PartitionNode partition);

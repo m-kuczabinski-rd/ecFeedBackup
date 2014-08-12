@@ -11,8 +11,8 @@ import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.modelif.ModelIfException;
 import com.testify.ecfeed.modelif.ModelOperationManager;
+import com.testify.ecfeed.modelif.java.common.RemoveNodesOperation;
 import com.testify.ecfeed.modelif.java.root.RootOperationAddNewClass;
-import com.testify.ecfeed.modelif.java.root.RootOperationRemoveClasses;
 import com.testify.ecfeed.modelif.java.root.RootOperationRename;
 import com.testify.ecfeed.ui.dialogs.TestClassSelectionDialog;
 import com.testify.ecfeed.ui.editor.BasicSection;
@@ -79,7 +79,7 @@ public class RootInterface extends GenericNodeInterface {
 		if(MessageDialog.openConfirm(Display.getCurrent().getActiveShell(), 
 				Messages.DIALOG_REMOVE_CLASSES_TITLE, 
 				Messages.DIALOG_REMOVE_CLASSES_MESSAGE)){
-			execute(new RootOperationRemoveClasses(fTarget, removedClasses), source, updateListener, Messages.DIALOG_REMOVE_CLASSES_PROBLEM_TITLE);
+			execute(new RemoveNodesOperation(removedClasses), source, updateListener, Messages.DIALOG_REMOVE_CLASSES_PROBLEM_TITLE);
 		}
 	}
 	

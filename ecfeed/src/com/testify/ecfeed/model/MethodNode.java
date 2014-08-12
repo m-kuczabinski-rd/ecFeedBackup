@@ -385,6 +385,16 @@ public class MethodNode extends GenericNode {
 		fTestCases.clear();
 	}
 
+	public void replaceTestCases(List<TestCaseNode> testCases){
+		fTestCases.clear();
+		fTestCases.addAll(testCases);
+	}
+	
+	public void replaceConstraints(List<ConstraintNode> constraints){
+		fConstraints.clear();
+		fConstraints.addAll(constraints);
+	}
+	
 	public void clearConstraints(){
 		fConstraints.clear();
 	}

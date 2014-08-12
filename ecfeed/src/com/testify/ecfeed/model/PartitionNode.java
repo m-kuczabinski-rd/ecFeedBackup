@@ -307,4 +307,10 @@ public class PartitionNode extends GenericNode implements IPartitionedNode{
 	public Object accept(IModelVisitor visitor) throws Exception{
 		return visitor.visit(this);
 	}
+
+	@Override
+	public void replacePartitions(List<PartitionNode> newPpartitions) {
+		fPartitions.clear();
+		fPartitions.addAll(newPpartitions);
+	}
 }

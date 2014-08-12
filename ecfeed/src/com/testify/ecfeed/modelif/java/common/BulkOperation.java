@@ -6,12 +6,16 @@ import java.util.List;
 import com.testify.ecfeed.modelif.IModelOperation;
 import com.testify.ecfeed.modelif.ModelIfException;
 
-public abstract class AbstractBulkOperation implements IModelOperation{
+public class BulkOperation implements IModelOperation{
 
 	List<IModelOperation> fOperations;
 	
-	public AbstractBulkOperation() {
+	public BulkOperation() {
 		fOperations = new ArrayList<IModelOperation>();
+	}
+	
+	public BulkOperation(List<IModelOperation> operations) {
+		fOperations = operations;
 	}
 	
 	protected void addOperation(IModelOperation operation) {
@@ -35,7 +39,23 @@ public abstract class AbstractBulkOperation implements IModelOperation{
 			}
 			throw new ModelIfException(message);
 		}
-
 	}
 
+	@Override
+	public IModelOperation reverseOperation(){
+		return new BulkOperation(reverseOperations());
+	}
+	
+	
+	protected List<IModelOperation> operations(){
+		return fOperations;
+	}
+
+	protected List<IModelOperation> reverseOperations(){
+		List<IModelOperation> reverseOperations = new ArrayList<IModelOperation>();
+		for(IModelOperation operation : operations()){
+			reverseOperations.add(0, operation);
+		}
+		return reverseOperations;
+	}
 }

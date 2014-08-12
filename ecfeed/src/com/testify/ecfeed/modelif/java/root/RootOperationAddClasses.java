@@ -5,9 +5,9 @@ import java.util.Collection;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.modelif.IModelOperation;
-import com.testify.ecfeed.modelif.java.common.AbstractBulkOperation;
+import com.testify.ecfeed.modelif.java.common.BulkOperation;
 
-public class RootOperationAddClasses extends AbstractBulkOperation{
+public class RootOperationAddClasses extends BulkOperation{
 
 	private RootNode fTarget;
 	private Collection<ClassNode> fClasses;

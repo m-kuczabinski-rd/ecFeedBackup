@@ -27,4 +27,6 @@ public class Messages {
 	public static final String CATEGORY_TYPE_REGEX_PROBLEM = "Parameter type must be a valid type identifier in Java, i.e. it must be either a primitive type name or String or a valid qualified type name of user type";
 	public static final String CATEGORY_DEFAULT_VALUE_REGEX_PROBLEM = "The entered value is not compatible with parameter type";
 
+	public static final String OPERATION_NOT_SUPPORTED_PROBLEM = "Operation not supported";
+
 }

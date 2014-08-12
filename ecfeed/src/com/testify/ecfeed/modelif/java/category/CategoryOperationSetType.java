@@ -18,29 +18,45 @@ public class CategoryOperationSetType implements IModelOperation {
 	private CategoryNode fTarget;
 	private String fNewType;
 	private String fCurrentType;
+	
 	private ITypeAdapterProvider fAdapterProvider;
 	
-	private List<PartitionNode> fOriginalPartitionSetCopy;
-	private List<ConstraintNode> fOriginalConstraintSetCopy;
-	private List<TestCaseNode> fOriginalTestCaseSetCopy;
+	private String fOriginalDefaultValue;
+	private List<PartitionNode> fOriginalPartitions;
+	private List<ConstraintNode> fOriginalConstraints;
+	private List<TestCaseNode> fOriginalTestCases;
 
+	private class ReverseOperation implements IModelOperation{
+
+		@Override
+		public void execute() throws ModelIfException {
+			fTarget.setType(fCurrentType);
+			fTarget.setDefaultValueString(fOriginalDefaultValue);
+			fTarget.replacePartitions(fOriginalPartitions);
+			if(fTarget.getMethod() != null){
+				fTarget.getMethod().replaceTestCases(fOriginalTestCases);
+				fTarget.getMethod().replaceConstraints(fOriginalConstraints);
+			}
+		}
+
+		@Override
+		public IModelOperation reverseOperation() {
+			return new CategoryOperationSetType(fTarget, fNewType, fAdapterProvider);
+		}
+		
+	}
+	
 	public CategoryOperationSetType(CategoryNode target, String newType, ITypeAdapterProvider adapterProvider) {
 		fTarget = target;
 		fNewType = newType;
+
 		fAdapterProvider = adapterProvider;
 		
-		fOriginalPartitionSetCopy = new ArrayList<PartitionNode>();
-		fOriginalConstraintSetCopy = new ArrayList<ConstraintNode>();
-		fOriginalTestCaseSetCopy = new ArrayList<TestCaseNode>();
-		
-		for(PartitionNode p : fTarget.getPartitions()){
-			fOriginalPartitionSetCopy.add(p.getCopy());
-		}
-		for(ConstraintNode c : fTarget.getMethod().getConstraintNodes()){
-			fOriginalConstraintSetCopy.add(c.getCopy());
-		}
-		for(TestCaseNode tc : fTarget.getMethod().getTestCases()){
-			fOriginalTestCaseSetCopy.add(tc.getCopy());
+		fOriginalDefaultValue = target.getDefaultValueString();
+		if(fTarget.getMethod() != null){
+			fOriginalPartitions = fTarget.getPartitions();
+			fOriginalConstraints = fTarget.getMethod().getConstraintNodes();
+			fOriginalTestCases = fTarget.getMethod().getTestCases();
 		}
 	}
 
@@ -66,7 +82,7 @@ public class CategoryOperationSetType implements IModelOperation {
 
 	@Override
 	public IModelOperation reverseOperation() {
-		return new CategoryOperationReverseSetType(fTarget, fCurrentType, fOriginalPartitionSetCopy, fOriginalConstraintSetCopy, fOriginalTestCaseSetCopy);
+		return new ReverseOperation();
 	}
 
 	private void convertPartitionValues(IPartitionedNode parent, ITypeAdapter adapter) {
