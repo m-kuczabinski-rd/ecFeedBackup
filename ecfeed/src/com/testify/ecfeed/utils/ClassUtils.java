@@ -39,6 +39,9 @@ public class ClassUtils {
 						IPath path = project.getWorkspace().getRoot().getLocation();
 						path = path.append(javaProject.getOutputLocation());
 						urls.add(new URL("file", null, path.toOSString() + "/"));
+						path = project.getLocation();
+						path = path.append(javaProject.getOutputLocation().lastSegment());
+						urls.add(new URL("file", null, path.toOSString() + "/"));
 						IClasspathEntry table[] = javaProject.getResolvedClasspath(true);
 						for (int i = 0; i < table.length; ++i) {
 							if (table[i].getEntryKind() == IClasspathEntry.CPE_LIBRARY) {
