@@ -1,13 +1,20 @@
 package com.testify.ecfeed.ui.modelif;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.Set;
+
+import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.swt.widgets.Display;
 
 import com.testify.ecfeed.model.CategoryNode;
+import com.testify.ecfeed.model.ConstraintNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.modelif.ModelOperationManager;
 import com.testify.ecfeed.modelif.java.JavaMethodUtils;
 import com.testify.ecfeed.modelif.java.JavaUtils;
+import com.testify.ecfeed.modelif.java.common.RemoveNodesOperation;
 import com.testify.ecfeed.modelif.java.method.MethodOperationAddParameter;
 import com.testify.ecfeed.modelif.java.method.MethodOperationConvertTo;
 import com.testify.ecfeed.modelif.java.method.MethodOperationRename;
@@ -66,6 +73,17 @@ public class MethodInterface extends GenericNodeInterface {
 	
 	public boolean addNewParameter(CategoryNode parameter, BasicSection source, IModelUpdateListener updateListener) {
 		return execute(new MethodOperationAddParameter(fTarget, parameter), source, updateListener, Messages.DIALOG_CONVERT_METHOD_PROBLEM_TITLE);
+	}
+	
+	public boolean removeParameters(Collection<CategoryNode> parameters, BasicSection source, IModelUpdateListener updateListener){
+		Set<ConstraintNode> constraints = fTarget.mentioningConstraints(parameters);
+		if(constraints.size() > 0 || fTarget.getTestCases().size() > 0){
+			if(MessageDialog.openConfirm(Display.getCurrent().getActiveShell(), 
+					Messages.DIALOG_REMOVE_PARAMETERS_WARNING_TITLE, Messages.DIALOG_REMOVE_PARAMETERS_WARNING_MESSAGE) == false){
+				return false;
+			}
+		}
+		return execute(new RemoveNodesOperation(parameters), source, updateListener, Messages.DIALOG_REMOVE_PARAMETERS_PROBLEM_TITLE);
 	}
 
 	private String generateNewParameterName(MethodNode method) {

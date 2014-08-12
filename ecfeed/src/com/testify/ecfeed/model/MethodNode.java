@@ -311,34 +311,34 @@ public class MethodNode extends GenericNode {
 		}
 	}
 	
-	public void changeCategoryExpectedStatus(CategoryNode category, boolean expected){
-		if(category.isExpected() == expected) return;
-		else{
-			int index = fCategories.indexOf(category);
-			if(index < 0)
-				return;
-			else{
-				// from expected to partitioned
-				if(!expected){
-					fTestCases.clear();
-					removeMentioningConstraints(category);
-				}
-				// from partitioned to expected
-				else{
-					if (!category.getPartitions().isEmpty()){
-						category.setDefaultValueString(category.getPartitions().get(0).getValueString());
-					}
-					for(TestCaseNode testCase : fTestCases){
-						testCase.replaceValue(index, category.getDefaultValuePartition().getCopy());
-					}
-					for(PartitionNode partition : category.getPartitions()){
-						removeMentioningConstraints(partition);
-					}
-				}
-				category.setExpected(expected);
-			}
-		}
-	}
+//	public void changeCategoryExpectedStatus(CategoryNode category, boolean expected){
+//		if(category.isExpected() == expected) return;
+//		else{
+//			int index = fCategories.indexOf(category);
+//			if(index < 0)
+//				return;
+//			else{
+//				// from expected to partitioned
+//				if(!expected){
+//					fTestCases.clear();
+//					removeMentioningConstraints(category);
+//				}
+//				// from partitioned to expected
+//				else{
+//					if (!category.getPartitions().isEmpty()){
+//						category.setDefaultValueString(category.getPartitions().get(0).getValueString());
+//					}
+//					for(TestCaseNode testCase : fTestCases){
+//						testCase.replaceValue(index, category.getDefaultValuePartition().getCopy());
+//					}
+//					for(PartitionNode partition : category.getPartitions()){
+//						removeMentioningConstraints(partition);
+//					}
+//				}
+//				category.setExpected(expected);
+//			}
+//		}
+//	}
 
 	public void partitionRemoved(PartitionNode partition){
 		removeMentioningConstraints(partition);
@@ -357,6 +357,44 @@ public class MethodNode extends GenericNode {
 			}
 		}
 		return false;
+	}
+	
+	public Set<ConstraintNode> mentioningConstraints(Collection<CategoryNode> categories){
+		Set<ConstraintNode> result = new HashSet<ConstraintNode>();
+		for(CategoryNode category : categories){
+			result.addAll(mentioningConstraints(category));
+		}
+		return result;
+	}
+	
+	public Set<ConstraintNode> mentioningConstraints(CategoryNode category){
+		Set<ConstraintNode> result = new HashSet<ConstraintNode>();
+		for(ConstraintNode constraint : fConstraints){
+			if(constraint.mentions(category)){
+				result.add(constraint);
+			}
+		}
+		return result;
+	}
+	
+	public Set<ConstraintNode> mentioningConstraints(PartitionNode partition){
+		Set<ConstraintNode> result = new HashSet<ConstraintNode>();
+		for(ConstraintNode constraint : fConstraints){
+			if(constraint.mentions(partition)){
+				result.add(constraint);
+			}
+		}
+		return result;
+	}
+	
+	public List<TestCaseNode> mentioningTestCases(PartitionNode partition){
+		List<TestCaseNode> result = new ArrayList<TestCaseNode>();
+		for(TestCaseNode testCase : fTestCases){
+			if(testCase.getTestData().contains(partition)){
+				result.add(testCase);
+			}
+		}
+		return result;
 	}
 	
 	public boolean isCategoryMentioned(CategoryNode category){

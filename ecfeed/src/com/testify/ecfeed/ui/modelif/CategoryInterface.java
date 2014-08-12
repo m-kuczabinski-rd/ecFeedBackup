@@ -6,7 +6,6 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
 
 import com.testify.ecfeed.model.CategoryNode;
-import com.testify.ecfeed.model.ConstraintNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.modelif.ModelOperationManager;
 import com.testify.ecfeed.modelif.java.JavaUtils;
@@ -58,13 +57,7 @@ public class CategoryInterface extends GenericNodeInterface {
 			MethodNode method = fTarget.getMethod();
 			if(method != null){
 				boolean testCases = method.getTestCases().size() > 0;
-				boolean constraints = false;
-				for(ConstraintNode c : method.getConstraintNodes()){
-					if(c.mentions(fTarget)){
-						constraints = true;
-						break;
-					}
-				}
+				boolean constraints = method.mentioningConstraints(fTarget).size() > 0;
 				if(testCases || constraints){
 					String message = "";
 					if(testCases){
@@ -78,11 +71,9 @@ public class CategoryInterface extends GenericNodeInterface {
 					if(constraints){
 						message += Messages.DIALOG_SET_CATEGORY_EXPECTED_CONSTRAINTS_REMOVED;
 					}
-					if(testCases || constraints){
-						if(MessageDialog.openConfirm(Display.getCurrent().getActiveShell(), 
-								Messages.DIALOG_SET_CATEGORY_EXPECTED_WARNING_TITLE, message) == false){
-							return false;
-						}
+					if(MessageDialog.openConfirm(Display.getCurrent().getActiveShell(), 
+							Messages.DIALOG_SET_CATEGORY_EXPECTED_WARNING_TITLE, message) == false){
+						return false;
 					}
 				}
 			}

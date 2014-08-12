@@ -208,7 +208,7 @@ public class CategoryNodeAbstractLayer{
 					return false;
 				}
 			}
-			category.getMethod().changeCategoryExpectedStatus(category, expected);
+//			category.getMethod().changeCategoryExpectedStatus(category, expected);
 			return true;
 		}
 		return false;
