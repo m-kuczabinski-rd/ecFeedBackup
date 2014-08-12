@@ -78,7 +78,7 @@ public class ModelDetailsPage extends BasicDetailsPage {
 	}
 
 	private void renameModel(String text) {
-		fRootIf.renameModel(text, null, this);
+		fRootIf.setName(text, null, this);
 		fModelNameText.setText(fRootIf.getName());
 	}
 

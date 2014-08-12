@@ -129,10 +129,14 @@ public class MethodNode extends GenericNode {
 	}
 
 	public void addConstraint(ConstraintNode constraint) {
-		constraint.setParent(this);
-		fConstraints.add(constraint);
+		addConstraint(constraint, fConstraints.size());
 	}
 	
+	public void addConstraint(ConstraintNode constraint, int index) {
+		constraint.setParent(this);
+		fConstraints.add(index, constraint);
+	}
+
 	public void addTestCase(TestCaseNode testCase){
 		fTestCases.add(testCase);
 		testCase.setParent(this);

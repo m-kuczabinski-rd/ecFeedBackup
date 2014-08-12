@@ -11,7 +11,10 @@
 
 package com.testify.ecfeed.ui.editor;
 
-import org.eclipse.jface.dialogs.MessageDialog;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.swt.SWT;
@@ -23,45 +26,34 @@ import org.eclipse.ui.forms.widgets.Section;
 
 import com.testify.ecfeed.model.ConstraintNode;
 import com.testify.ecfeed.model.MethodNode;
-import com.testify.ecfeed.model.constraint.BasicStatement;
-import com.testify.ecfeed.model.constraint.Constraint;
-import com.testify.ecfeed.model.constraint.StaticStatement;
-import com.testify.ecfeed.utils.Constants;
-import com.testify.ecfeed.ui.common.Messages;
+import com.testify.ecfeed.modelif.ModelOperationManager;
+import com.testify.ecfeed.ui.modelif.MethodInterface;
 
 public class ConstraintsListViewer extends CheckboxTableViewerSection {
 	
 	private final static int STYLE = Section.TITLE_BAR | Section.EXPANDED;
 
-	private MethodNode fSelectedMethod;
 	private TableViewerColumn fNameColumn;
+	private MethodInterface fMethodInterface;
 
 	private class AddConstraintAdapter extends SelectionAdapter{
 		@Override 
 		public void widgetSelected(SelectionEvent e){
-			String name = Constants.DEFAULT_CONSTRAINT_NAME;
-			BasicStatement premise = new StaticStatement(true);
-			BasicStatement consequence = new StaticStatement(true);
-			fSelectedMethod.addConstraint(new ConstraintNode(name, new Constraint(premise, consequence)));
-			modelUpdated();
+			ConstraintNode constraint = fMethodInterface.addNewConstraint(ConstraintsListViewer.this, getUpdateListener());
+			if(constraint != null){
+				selectElement(constraint);
+			}
 		}
 	}
 	
 	private class RemoveSelectedConstraintsAdapter extends SelectionAdapter{
 		@Override 
 		public void widgetSelected(SelectionEvent e){
-			if(MessageDialog.openConfirm(getActiveShell(), 
-					Messages.DIALOG_REMOVE_CONSTRAINTS_TITLE, 
-					Messages.DIALOG_REMOVE_CONSTRAINTS_MESSAGE)){
-				for(Object constraint : getCheckboxViewer().getCheckedElements()){
-					fSelectedMethod.removeConstraint((ConstraintNode)constraint);
-				}
-				modelUpdated();
-			}
+			fMethodInterface.removeConstraints(getCheckedConstrainst(), ConstraintsListViewer.this, getUpdateListener());
 		}
 	}
 
-	public ConstraintsListViewer(BasicDetailsPage parent, FormToolkit toolkit) {
+	public ConstraintsListViewer(BasicDetailsPage parent, FormToolkit toolkit, ModelOperationManager operationManager){
 		super(parent.getMainComposite(), toolkit, STYLE, parent);
 		GridData gd = new GridData(SWT.FILL, SWT.FILL, true, true);
 		gd.minimumHeight = 250;
@@ -69,15 +61,26 @@ public class ConstraintsListViewer extends CheckboxTableViewerSection {
 		
 		getSection().setText("Constraints");
 		
+		fMethodInterface = new MethodInterface(operationManager);
+		fNameColumn.setEditingSupport(new ConstraintNameEditingSupport(this, operationManager));
+
 		addButton("Add constraint", new AddConstraintAdapter());
 		addButton("Remove selected", new RemoveSelectedConstraintsAdapter());
 		
 		addDoubleClickListener(new SelectNodeDoubleClickListener(parent.getMasterSection()));
 	}
 	
+	public Collection<ConstraintNode> getCheckedConstrainst() {
+		List<ConstraintNode> result = new ArrayList<ConstraintNode>();
+		for(Object object : getCheckedElements()){
+			result.add((ConstraintNode)object);
+		}
+		return result;
+	}
+
 	public void setInput(MethodNode method){
-		fSelectedMethod = method;
 		super.setInput(method.getConstraintNodes());
+		fMethodInterface.setTarget(method);
 	}
 
 	@Override
@@ -88,7 +91,6 @@ public class ConstraintsListViewer extends CheckboxTableViewerSection {
 				return ((ConstraintNode)element).getName();
 			}
 		});
-		fNameColumn.setEditingSupport(new ConstraintNameEditingSupport(this));
 		
 		addColumn("Definition", 150, new ColumnLabelProvider(){
 			@Override

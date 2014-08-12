@@ -16,16 +16,20 @@ import org.eclipse.jface.viewers.EditingSupport;
 import org.eclipse.jface.viewers.TextCellEditor;
 
 import com.testify.ecfeed.model.ConstraintNode;
+import com.testify.ecfeed.modelif.ModelOperationManager;
+import com.testify.ecfeed.ui.modelif.ConstraintInterface;
 
 public class ConstraintNameEditingSupport extends EditingSupport{
 
 	private TextCellEditor fNameCellEditor;
 	BasicSection fSection;
+	private ConstraintInterface fConstraintIf;
 
-	public ConstraintNameEditingSupport(ConstraintsListViewer viewer){
+	public ConstraintNameEditingSupport(ConstraintsListViewer viewer, ModelOperationManager operationManager){
 		super(viewer.getTableViewer());
 		fSection = viewer;
 		fNameCellEditor = new TextCellEditor(viewer.getTable());
+		fConstraintIf = new ConstraintInterface(operationManager);
 	}
 
 	@Override
@@ -46,12 +50,11 @@ public class ConstraintNameEditingSupport extends EditingSupport{
 	@Override
 	protected void setValue(Object element, Object value){
 		String newName = (String)value;
-		ConstraintNode ConstraintNode = (ConstraintNode)element;
-		if(newName.equals(ConstraintNode.getName()))
-			return;
-
-		ConstraintNode.setName(newName);
-		fSection.modelUpdated();
+		ConstraintNode constraint = (ConstraintNode)element;
+		if(newName.equals(constraint.getName()) == false){
+			fConstraintIf.setTarget(constraint);
+			fConstraintIf.setName(newName, fSection, fSection.getUpdateListener());
+		}
 	}
 	
 }

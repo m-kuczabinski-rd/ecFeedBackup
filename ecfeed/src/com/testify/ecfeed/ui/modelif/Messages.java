@@ -17,6 +17,8 @@ public class Messages {
 	public static final String DIALOG_SET_CATEGORY_EXPECTED_PROBLEM_TITLE = "Couldn't change category expected status";
 	public static final String DIALOG_SET_DEFAULT_VALUE_PROBLEM_TITLE = "Couldn't change default value for category";
 	public static final String DIALOG_REMOVE_PARAMETERS_PROBLEM_TITLE = "Couldn't remove parameters";
+	public static final String DIALOG_ADD_CONSTRAINT_PROBLEM_TITLE = "Couldn't add constraint";
+	public static final String DIALOG_REMOVE_CONSTRAINTS_PROBLEM_TITLE = "Couldn't remove constraints";
 
 
 	//CONFIRMATIONS AND WARNINGS
@@ -50,5 +52,5 @@ public class Messages {
 	//OTHER MESSAGES
 	public static final String EXECUTING_TEST_WITH_PARAMETERS = "Executing test function with generated parameters";
 	public static final String EXECUTING_TEST_WITH_NO_PARAMETERS = "Executing test function";
-
+	
 }

@@ -11,10 +11,14 @@ import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.ConstraintNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
+import com.testify.ecfeed.model.constraint.Constraint;
+import com.testify.ecfeed.model.constraint.StaticStatement;
+import com.testify.ecfeed.modelif.IModelOperation;
 import com.testify.ecfeed.modelif.ModelOperationManager;
 import com.testify.ecfeed.modelif.java.JavaMethodUtils;
 import com.testify.ecfeed.modelif.java.JavaUtils;
 import com.testify.ecfeed.modelif.java.common.RemoveNodesOperation;
+import com.testify.ecfeed.modelif.java.method.MethodOperationAddConstraint;
 import com.testify.ecfeed.modelif.java.method.MethodOperationAddParameter;
 import com.testify.ecfeed.modelif.java.method.MethodOperationConvertTo;
 import com.testify.ecfeed.modelif.java.method.MethodOperationRename;
@@ -86,6 +90,24 @@ public class MethodInterface extends GenericNodeInterface {
 		return execute(new RemoveNodesOperation(parameters), source, updateListener, Messages.DIALOG_REMOVE_PARAMETERS_PROBLEM_TITLE);
 	}
 
+	public ConstraintNode addNewConstraint(BasicSection source, IModelUpdateListener updateListener){
+		Constraint constraint = new Constraint(new StaticStatement(true), new StaticStatement(true));
+		ConstraintNode node = new ConstraintNode(Constants.DEFAULT_NEW_CONSTRAINT_NAME, constraint);
+		if(addNewConstraint(node, source, updateListener)){
+			return node;
+		}
+		return null;
+	}
+	
+	public boolean addNewConstraint(ConstraintNode constraint, BasicSection source, IModelUpdateListener updateListener){
+		IModelOperation operation = new MethodOperationAddConstraint(fTarget, constraint, fTarget.getConstraintNodes().size());
+		return execute(operation, source, updateListener, Messages.DIALOG_ADD_CONSTRAINT_PROBLEM_TITLE);
+	}
+	
+	public boolean removeConstraints(Collection<ConstraintNode> constraints, BasicSection source, IModelUpdateListener updateListener){
+		return execute(new RemoveNodesOperation(constraints), source, updateListener, Messages.DIALOG_REMOVE_CONSTRAINTS_PROBLEM_TITLE);
+	}
+	
 	private String generateNewParameterName(MethodNode method) {
 		int i = 0;
 		String name = Constants.DEFAULT_NEW_PARAMETER_NAME + i++;

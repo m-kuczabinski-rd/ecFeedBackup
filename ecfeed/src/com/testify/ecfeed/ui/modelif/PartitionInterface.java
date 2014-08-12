@@ -31,8 +31,8 @@ public class PartitionInterface extends GenericNodeInterface{
 		fTarget = partition;
 	}
 	
-	public void setName(String newName, BasicSection source, IModelUpdateListener updateListener){
-		execute(new PartitionOperationRename(fTarget, newName), source, updateListener, Messages.DIALOG_PARTITION_NAME_PROBLEM_TITLE);
+	public boolean setName(String newName, BasicSection source, IModelUpdateListener updateListener){
+		return execute(new PartitionOperationRename(fTarget, newName), source, updateListener, Messages.DIALOG_PARTITION_NAME_PROBLEM_TITLE);
 	}
 
 	public void setValue(String newValue, BasicSection source, IModelUpdateListener updateListener){

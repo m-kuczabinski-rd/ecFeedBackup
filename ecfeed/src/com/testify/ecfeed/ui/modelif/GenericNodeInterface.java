@@ -225,6 +225,10 @@ public class GenericNodeInterface {
 		return fTarget.getName();
 	}
 	
+	public boolean setName(String newName, BasicSection source, IModelUpdateListener updateListener){
+		return false;
+	}
+
 	public boolean move(GenericNode newParent, int newIndex, BasicSection source, IModelUpdateListener updateListener){
 		try {
 			IModelOperation moveOperation = (IModelOperation)fTarget.accept(new MoveOperationProvider(newParent, newIndex));

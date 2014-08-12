@@ -69,7 +69,7 @@ public class MethodDetailsPage extends BasicDetailsPage {
 
 		createNameTextComposite();
 		addForm(fParemetersSection = new ParametersViewer(this, getToolkit(), fOperationManager));
-		addForm(fConstraintsSection = new ConstraintsListViewer(this, getToolkit()));
+		addForm(fConstraintsSection = new ConstraintsListViewer(this, getToolkit(), fOperationManager));
 		addForm(fTestCasesSection = new TestCasesViewer(this, getToolkit()));
 		
 		getToolkit().paintBordersFor(getMainComposite());

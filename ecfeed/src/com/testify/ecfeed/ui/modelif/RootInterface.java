@@ -35,8 +35,8 @@ public class RootInterface extends GenericNodeInterface {
 		return fTarget;
 	}
 
-	public void renameModel(String newName, BasicSection source, IModelUpdateListener updateListener){
-		execute(new RootOperationRename(fTarget, newName), source, updateListener, Messages.DIALOG_RENAME_MODEL_PROBLEM_TITLE);
+	public boolean setName(String newName, BasicSection source, IModelUpdateListener updateListener){
+		return execute(new RootOperationRename(fTarget, newName), source, updateListener, Messages.DIALOG_RENAME_MODEL_PROBLEM_TITLE);
 	}
 
 	public ClassNode addNewClass(String className, BasicSection source, IModelUpdateListener updateListener){

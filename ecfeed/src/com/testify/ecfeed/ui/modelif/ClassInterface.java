@@ -49,6 +49,11 @@ public class ClassInterface extends GenericNodeInterface {
 		return JavaClassUtils.getPackageName(fTarget);
 	}
 
+	@Override
+	public boolean setName(String newName, BasicSection source, IModelUpdateListener updateListener) {
+		return setQualifiedName(newName, source, updateListener);
+	}
+
 	public boolean setQualifiedName(String newName, BasicSection source, IModelUpdateListener updateListener){
 		if(newName.equals(getQualifiedName())){
 			return false;
