@@ -42,6 +42,7 @@ public class ConstraintsListViewer extends CheckboxTableViewerSection {
 			ConstraintNode constraint = fMethodInterface.addNewConstraint(ConstraintsListViewer.this, getUpdateListener());
 			if(constraint != null){
 				selectElement(constraint);
+				fNameColumn.getViewer().editElement(constraint, 0);
 			}
 		}
 	}

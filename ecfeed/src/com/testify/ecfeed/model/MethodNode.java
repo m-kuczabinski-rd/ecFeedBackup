@@ -138,7 +138,11 @@ public class MethodNode extends GenericNode {
 	}
 
 	public void addTestCase(TestCaseNode testCase){
-		fTestCases.add(testCase);
+		addTestCase(testCase, fTestCases.size());
+	}
+	
+	public void addTestCase(TestCaseNode testCase, int index){
+		fTestCases.add(index, testCase);
 		testCase.setParent(this);
 	}
 	
