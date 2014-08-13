@@ -141,6 +141,10 @@ public class MethodInterface extends GenericNodeInterface {
 		return execute(new MethodOperationAddTestCase(fTarget, testCase, fTarget.getTestCases().size()), source, updateListener, Messages.DIALOG_ADD_TEST_CASE_PROBLEM_TITLE);
 	}
 
+	public void removeTestCases(Collection<TestCaseNode> testCases, BasicSection source, IModelUpdateListener updateListener) {
+		execute(new RemoveNodesOperation(testCases), source, updateListener, Messages.DIALOG_REMOVE_TEST_CASES_PROBLEM_TITLE);
+	}
+
 	public void renameSuite(BasicSection source, IModelUpdateListener updateListener) {
 		RenameTestSuiteDialog dialog = 
 				new RenameTestSuiteDialog(Display.getDefault().getActiveShell(), fTarget.getTestSuites());
@@ -152,7 +156,7 @@ public class MethodInterface extends GenericNodeInterface {
 		}
 	}
 
-	private void renameSuite(String oldName, String newName, BasicSection source, IModelUpdateListener updateListener) {
+	public void renameSuite(String oldName, String newName, BasicSection source, IModelUpdateListener updateListener) {
 		try{
 			execute(new MethodOperationRenameTestCases(fTarget.getTestCases(oldName), newName), 
 					source, updateListener, Messages.DIALOG_RENAME_TEST_SUITE_PROBLEM);

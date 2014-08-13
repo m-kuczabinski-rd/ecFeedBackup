@@ -94,4 +94,12 @@ public class JavaUtils {
 	public static String getBooleanTypeName(){
 		return Constants.TYPE_NAME_BOOLEAN;
 	}
+
+	public static boolean isValidTestCaseName(String name) {
+		return name.matches(Constants.REGEX_TEST_CASE_NODE_NAME);
+	}
+
+	public static boolean isValidConstraintName(String name) {
+		return name.matches(Constants.REGEX_CONSTRAINT_NODE_NAME);
+	}
 }

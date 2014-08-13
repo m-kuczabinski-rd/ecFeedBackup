@@ -221,6 +221,10 @@ public class GenericNodeInterface {
 		return fStatusResolver.getImplementationStatus(fTarget);
 	}
 	
+	static public boolean validateName(String name){
+		return true;
+	}
+	
 	public String getName(){
 		return fTarget.getName();
 	}

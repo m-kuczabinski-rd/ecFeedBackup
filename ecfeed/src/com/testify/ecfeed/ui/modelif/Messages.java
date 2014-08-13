@@ -22,6 +22,7 @@ public class Messages {
 	public static final String DIALOG_ADD_TEST_CASE_PROBLEM_TITLE = "Cannot add test case";
 	public static final String DIALOG_TEST_CASE_WITH_EMPTY_CATEGORY_MESSAGE = "Some non-expected parameters have empty partition set.";
 	public static final String DIALOG_RENAME_TEST_SUITE_PROBLEM = "Couldn't rename test cases";
+	public static final String DIALOG_REMOVE_TEST_CASES_PROBLEM_TITLE = "Couldn't remove some of requested test cases";
 
 
 	//CONFIRMATIONS AND WARNINGS

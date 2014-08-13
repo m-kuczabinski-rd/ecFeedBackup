@@ -12,7 +12,9 @@ import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.modelif.IModelOperation;
 import com.testify.ecfeed.modelif.ModelIfException;
 import com.testify.ecfeed.modelif.java.classx.ClassOperationRemoveMethod;
+import com.testify.ecfeed.modelif.java.method.MethodOperationRemoveConstraint;
 import com.testify.ecfeed.modelif.java.method.MethodOperationRemoveParameter;
+import com.testify.ecfeed.modelif.java.method.MethodOperationRemoveTestCase;
 import com.testify.ecfeed.modelif.java.root.RootOperationRemoveClass;
 
 public class RemoveOperationFactory {
@@ -53,12 +55,12 @@ public class RemoveOperationFactory {
 
 		@Override
 		public Object visit(TestCaseNode node) throws Exception {
-			return new DummyModelOperation();
+			return new MethodOperationRemoveTestCase(node.getMethod(), node);
 		}
 
 		@Override
 		public Object visit(ConstraintNode node) throws Exception {
-			return new DummyModelOperation();
+			return new MethodOperationRemoveConstraint(node.getMethod(), node);
 		}
 
 		@Override

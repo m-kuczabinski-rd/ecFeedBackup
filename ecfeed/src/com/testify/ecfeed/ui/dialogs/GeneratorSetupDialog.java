@@ -62,11 +62,11 @@ import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.constraint.Constraint;
 import com.testify.ecfeed.modelif.ImplementationStatus;
-import com.testify.ecfeed.modelif.java.JavaTestCaseUtils;
 import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.common.TreeCheckStateListener;
 import com.testify.ecfeed.ui.modelif.CategoryInterface;
 import com.testify.ecfeed.ui.modelif.PartitionInterface;
+import com.testify.ecfeed.ui.modelif.TestCaseInterface;
 import com.testify.ecfeed.utils.Constants;
 
 public class GeneratorSetupDialog extends TitleAreaDialog {
@@ -421,7 +421,6 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 		
 		fCategoriesViewer.getTree().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 		fCategoriesViewer.setInput(fMethod);
-//		tree.addListener(SWT.Selection, new Listener() {
 		tree.addListener(SWT.Selection, new PartitionViewerCheckStateListener(tree));
 		for(CategoryNode category : fMethod.getCategories()){
 			if(!category.getPartitions().isEmpty()){
@@ -473,7 +472,7 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 	}
 
 	private void validateTestSuiteName() {
-		if(JavaTestCaseUtils.validateTestCaseName(fTestSuiteCombo.getText()) == false){
+		if(TestCaseInterface.validateName(fTestSuiteCombo.getText()) == false){
 			setErrorMessage(Messages.DIALOG_TEST_SUITE_NAME_PROBLEM_MESSAGE);
 			setOkButton(false);
 		}

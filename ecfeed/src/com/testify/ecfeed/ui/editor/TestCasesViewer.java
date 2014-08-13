@@ -11,7 +11,9 @@
 
 package com.testify.ecfeed.ui.editor;
 
-import org.eclipse.jface.dialogs.MessageDialog;
+import java.util.ArrayList;
+import java.util.Collection;
+
 import org.eclipse.jface.viewers.IBaseLabelProvider;
 import org.eclipse.jface.viewers.IContentProvider;
 import org.eclipse.jface.viewers.TreeViewer;
@@ -65,47 +67,16 @@ public class TestCasesViewer extends CheckboxTreeViewerSection {
 	private class RemoveSelectedAdapter extends SelectionAdapter{
 		@Override
 		public void widgetSelected(SelectionEvent e){
-			if(!fSelectedMethod.getTestCases().isEmpty()){
-				if(MessageDialog.openConfirm(getActiveShell(), "dupa", "cycki"
-						/*Messages.DIALOG_REMOVE_TEST_CASES_TITLE,
-						Messages.DIALOG_REMOVE_TEST_CASES_MESSAGE*/)){
-					removeCheckedTestSuites();
-					removeCheckedTestCases();
-					
-					for(String testSuite : fSelectedMethod.getTestSuites()){
-						getCheckboxViewer().setGrayChecked(testSuite, false);
-					}
-					modelUpdated();
-				}
-			}
-		}
-
-		private void removeCheckedTestSuites() {
-			for(String testSuite : fSelectedMethod.getTestSuites()){
-				if(getCheckboxViewer().getChecked(testSuite) && !getCheckboxViewer().getGrayed(testSuite)){
-					fSelectedMethod.removeTestSuite(testSuite);
-				}
-			}
-		}
-
-		private void removeCheckedTestCases() {
-			for(Object element : getCheckboxViewer().getCheckedElements()){
-				if(element instanceof TestCaseNode){
-					fSelectedMethod.removeTestCase((TestCaseNode)element);
-				}
-			}
+			fMethodIf.removeTestCases(getCheckedTestCases(), TestCasesViewer.this, getUpdateListener());
 		}
 	}
 	
 	private class CalculateCoverageAdapter extends SelectionAdapter {
-		
 		@Override
 		public void widgetSelected(SelectionEvent e) {
-			CalculateCoverageDialog dialog = new CalculateCoverageDialog(getActiveShell(), 
-					fSelectedMethod, getCheckedElements(), getGrayedElements());
-			dialog.open();
+			new CalculateCoverageDialog(getActiveShell(), 
+					fMethodIf.getTarget(), getCheckedElements(), getGrayedElements()).open();
 		}
-
 	}
 	
 	public TestCasesViewer(BasicDetailsPage parent, FormToolkit toolkit, ModelOperationManager operationManager) {
@@ -130,6 +101,16 @@ public class TestCasesViewer extends CheckboxTreeViewerSection {
 		addDoubleClickListener(new SelectNodeDoubleClickListener(parent.getMasterSection()));
 	}
 	
+	protected Collection<TestCaseNode> getCheckedTestCases() {
+		Collection<TestCaseNode> result = new ArrayList<TestCaseNode>();
+		for(Object o : getCheckedElements()){
+			if(o instanceof TestCaseNode){
+				result.add((TestCaseNode)o);
+			}
+		}
+		return result;
+	}
+
 	@Override
 	public void refresh() {
 		//super.refresh();
