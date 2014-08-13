@@ -19,12 +19,23 @@ public class MethodOperationAddTestCase implements IModelOperation {
 		fIndex = index;
 	}
 
+	public MethodOperationAddTestCase(MethodNode target, TestCaseNode testCase) {
+		fTarget = target;
+		fTestCase = testCase;
+		fIndex = -1;
+	}
+
 	@Override
 	public void execute() throws ModelIfException {
 		if(fTestCase.getName().matches(Constants.REGEX_TEST_CASE_NODE_NAME) == false){
 			throw new ModelIfException(Messages.TEST_CASE_NAME_REGEX_PROBLEM);
 		}
-		fTarget.addTestCase(fTestCase, fIndex);
+		if(fIndex == -1){
+			fTarget.addTestCase(fTestCase);
+		}
+		else{
+			fTarget.addTestCase(fTestCase, fIndex);
+		}
 	}
 
 	@Override

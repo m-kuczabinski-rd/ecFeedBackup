@@ -33,6 +33,7 @@ import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.TestCaseNode;
+import com.testify.ecfeed.model.constraint.AbstractConstraint;
 import com.testify.ecfeed.model.constraint.BasicStatement;
 import com.testify.ecfeed.model.constraint.Constraint;
 import com.testify.ecfeed.model.constraint.ExpectedValueStatement;
@@ -104,7 +105,7 @@ class GenerateTestSuiteAdapter extends SelectionAdapter{
 			fSelectedConstraints = dialog.getConstraints();
 
 			List<IConstraint<PartitionNode>> constraints = new ArrayList<IConstraint<PartitionNode>>();
-			for(Constraint constraint : fSelectedConstraints){
+			for(AbstractConstraint constraint : fSelectedConstraints){
 				constraints.add(constraint);
 			}
 			

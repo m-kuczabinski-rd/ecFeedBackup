@@ -25,6 +25,7 @@ import com.testify.ecfeed.modelif.java.common.RemoveNodesOperation;
 import com.testify.ecfeed.modelif.java.method.MethodOperationAddConstraint;
 import com.testify.ecfeed.modelif.java.method.MethodOperationAddParameter;
 import com.testify.ecfeed.modelif.java.method.MethodOperationAddTestCase;
+import com.testify.ecfeed.modelif.java.method.MethodOperationAddTestSuite;
 import com.testify.ecfeed.modelif.java.method.MethodOperationConvertTo;
 import com.testify.ecfeed.modelif.java.method.MethodOperationRename;
 import com.testify.ecfeed.modelif.java.method.MethodOperationRenameTestCases;
@@ -32,6 +33,7 @@ import com.testify.ecfeed.ui.dialogs.AddTestCaseDialog;
 import com.testify.ecfeed.ui.dialogs.RenameTestSuiteDialog;
 import com.testify.ecfeed.ui.editor.BasicSection;
 import com.testify.ecfeed.ui.editor.IModelUpdateListener;
+import com.testify.ecfeed.ui.editor.TestSuiteGenerationSupport;
 
 public class MethodInterface extends GenericNodeInterface {
 
@@ -168,6 +170,28 @@ public class MethodInterface extends GenericNodeInterface {
 		}
 	}
 
+	public boolean generateTestSuite(BasicSection source, IModelUpdateListener updateListener){
+		TestSuiteGenerationSupport testGenerator = new TestSuiteGenerationSupport(fTarget);
+		String testSuiteName = testGenerator.getTestSuiteName();
+		List<List<PartitionNode>> testData = testGenerator.getGeneratedData();
+		
+		int dataLength = testData.size();
+		if(dataLength < 0 && (testGenerator.wasCancelled() == false)){
+			MessageDialog.openInformation(Display.getDefault().getActiveShell(),
+			Messages.DIALOG_ADD_TEST_SUITE_PROBLEM_TITLE,
+			Messages.DIALOG_EMPTY_TEST_SUITE_GENERATED_MESSAGE);
+			return false;
+		}
+		if(testData.size() > Constants.TEST_SUITE_SIZE_WARNING_LIMIT){
+			if(MessageDialog.openConfirm(Display.getDefault().getActiveShell(),
+					Messages.DIALOG_LARGE_TEST_SUITE_GENERATED_TITLE,
+					Messages.DIALOG_LARGE_TEST_SUITE_GENERATED_MESSAGE(dataLength)) == false){
+				return false;
+			}
+		}
+		return execute(new MethodOperationAddTestSuite(fTarget, testSuiteName, testData), source, updateListener, Messages.DIALOG_ADD_TEST_SUITE_PROBLEM_TITLE);
+	}
+	
 	private String generateNewParameterName(MethodNode method) {
 		int i = 0;
 		String name = Constants.DEFAULT_NEW_PARAMETER_NAME + i++;

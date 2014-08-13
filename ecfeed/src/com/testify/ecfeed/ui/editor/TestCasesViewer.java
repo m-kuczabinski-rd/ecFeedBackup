@@ -57,6 +57,13 @@ public class TestCasesViewer extends CheckboxTreeViewerSection {
 		}
 	}
 	
+	private class TestSuiteAdapter extends SelectionAdapter{
+		@Override
+		public void widgetSelected(SelectionEvent e){
+			fMethodIf.generateTestSuite(TestCasesViewer.this, getUpdateListener());
+		}
+	}
+	
 	private class RenameSuiteAdapter extends SelectionAdapter{
 		@Override
 		public void widgetSelected(SelectionEvent e){
@@ -93,7 +100,8 @@ public class TestCasesViewer extends CheckboxTreeViewerSection {
 		
 		addButton("Add test case", new AddTestCaseAdapter());
 		addButton("Rename suite", new RenameSuiteAdapter());
-		fGenerateSuiteButton = addButton("Generate test suite", new GenerateTestSuiteAdapter(this));
+		fGenerateSuiteButton = addButton("Generate test suite", new TestSuiteAdapter());
+//		fGenerateSuiteButton = addButton("Generate test suite", new GenerateTestSuiteAdapter(this));
 		addButton("Calculate coverage", new CalculateCoverageAdapter());
 		addButton("Remove selected", new RemoveSelectedAdapter());
 		fExecuteSelectedButton = addButton("Execute selected", new ExecuteStaticTestAdapter(this));

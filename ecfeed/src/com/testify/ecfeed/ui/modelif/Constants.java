@@ -28,4 +28,6 @@ public class Constants {
 	public static final String DEFAULT_EXPECTED_SHORT_VALUE = DEFAULT_EXPECTED_NUMERIC_VALUE;
 	public static final String DEFAULT_EXPECTED_STRING_VALUE = "";
 	public static final String DEFAULT_EXPECTED_ENUM_VALUE = "VALUE";
+
+	public static final int TEST_SUITE_SIZE_WARNING_LIMIT = 1000;
 }

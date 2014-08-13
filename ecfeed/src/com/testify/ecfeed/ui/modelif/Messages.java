@@ -23,6 +23,8 @@ public class Messages {
 	public static final String DIALOG_TEST_CASE_WITH_EMPTY_CATEGORY_MESSAGE = "Some non-expected parameters have empty partition set.";
 	public static final String DIALOG_RENAME_TEST_SUITE_PROBLEM = "Couldn't rename test cases";
 	public static final String DIALOG_REMOVE_TEST_CASES_PROBLEM_TITLE = "Couldn't remove some of requested test cases";
+	public static final String DIALOG_ADD_TEST_SUITE_PROBLEM_TITLE = "Couldn't add test cases";
+	public static final String DIALOG_EMPTY_TEST_SUITE_GENERATED_MESSAGE = "The generated test suite was empty";
 
 
 	//CONFIRMATIONS AND WARNINGS
@@ -42,7 +44,13 @@ public class Messages {
 	public static final String DIALOG_SET_CATEGORY_EXPECTED_CONSTRAINTS_REMOVED = "All constraints that refer to that parameter will be removed.";
 	public static final String DIALOG_REMOVE_PARAMETERS_WARNING_TITLE = "Remove parameters";
 	public static final String DIALOG_REMOVE_PARAMETERS_WARNING_MESSAGE = "Removing selected parameters will result in removing all test cases and constraints that refer to removed parameters.";
-	
+	public static final String DIALOG_LARGE_TEST_SUITE_GENERATED_TITLE = "Large size of generated data";
+	public static final String DIALOG_LARGE_TEST_SUITE_GENERATED_MESSAGE(int length) {
+		return "The algortithm generated " + length 
+				+ " test cases. Adding this amount of data to the model may heavily affect tool's performance"
+				+ " and cause loss of data. Do you want to continue?";
+	}
+
 
 	//EXCEPTIONS
 	public static final String EXCEPTION_METHOD_IMPORT(String name){

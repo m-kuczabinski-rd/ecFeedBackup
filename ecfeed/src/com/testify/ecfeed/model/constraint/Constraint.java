@@ -15,14 +15,13 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import com.testify.ecfeed.generators.api.IConstraint;
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.constraint.PartitionedCategoryStatement.LabelCondition;
 import com.testify.ecfeed.model.constraint.PartitionedCategoryStatement.PartitionCondition;
 
-public class Constraint implements IConstraint<PartitionNode> {
+public class Constraint extends AbstractConstraint {
 	
 	private final int ID;
 	private static int fLastId = 0;
