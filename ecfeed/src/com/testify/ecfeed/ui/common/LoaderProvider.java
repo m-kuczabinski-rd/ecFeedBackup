@@ -40,4 +40,25 @@ public class LoaderProvider implements ILoaderProvider {
 		}
 		return fLoader;
 	}
+
+	public static ModelClassLoader createLoader(){
+		List<URL> urls = new ArrayList<URL>();
+		try {
+			IProject[] projects = ResourcesPlugin.getWorkspace().getRoot().getProjects();
+			for (IProject project : projects){
+				if (project.isOpen() && project.hasNature(JavaCore.NATURE_ID)){
+					IJavaProject javaProject = JavaCore.create(project);
+					IPath path = project.getWorkspace().getRoot().getLocation();
+					path = path.append(javaProject.getOutputLocation());
+					urls.add(new URL("file", null, path.toOSString() + "/"));
+				}
+			}
+			if (fLoader != null) {
+				fLoader.close();
+			}
+		} catch (Throwable e) {
+		}
+		fLoader = new ModelClassLoader(urls.toArray(new URL[]{}), null);
+		return fLoader;
+	}
 }

@@ -28,6 +28,7 @@ import com.testify.ecfeed.modelif.ImplementationStatus;
 import com.testify.ecfeed.modelif.ModelOperationManager;
 import com.testify.ecfeed.ui.dialogs.TestMethodRenameDialog;
 import com.testify.ecfeed.ui.modelif.MethodInterface;
+import com.testify.ecfeed.ui.modelif.OnlineTestRunningSupport;
 
 public class MethodDetailsPage extends BasicDetailsPage {
 
@@ -41,8 +42,16 @@ public class MethodDetailsPage extends BasicDetailsPage {
 	private MethodInterface fMethodIf;
 	private ModelOperationManager fOperationManager;
 	
+	private class OnlineTestAdapter extends SelectionAdapter{
+		@Override
+		public void widgetSelected(SelectionEvent e){
+			OnlineTestRunningSupport runner = new OnlineTestRunningSupport();
+			runner.setTarget(fMethodIf.getTarget());
+			runner.proceed();
+		}
+	}
+	
 	private class ReassignAdapter extends SelectionAdapter{
-
 		@Override
 		public void widgetSelected(SelectionEvent e){
 			TestMethodRenameDialog dialog = new TestMethodRenameDialog(getActiveShell(), fSelectedMethod);
@@ -102,7 +111,8 @@ public class MethodDetailsPage extends BasicDetailsPage {
 		fReassignButton.addSelectionListener(new ReassignAdapter());
 		
 		fTestOnlineButton = getToolkit().createButton(composite, "Test online", SWT.NONE);
-		fTestOnlineButton.addSelectionListener(new ExecuteOnlineTestAdapter(this));
+		fTestOnlineButton.addSelectionListener(new OnlineTestAdapter());
+//		fTestOnlineButton.addSelectionListener(new ExecuteOnlineTestAdapter(this));
 
 		getToolkit().paintBordersFor(composite);
 	}

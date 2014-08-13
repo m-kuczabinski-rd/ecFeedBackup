@@ -8,7 +8,6 @@ import java.util.List;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
-import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.modelif.java.JavaUtils;
 import com.testify.ecfeed.modelif.java.ModelClassLoader;
 import com.testify.ecfeed.modelif.java.PartitionValueParser;
@@ -24,20 +23,20 @@ public class JavaTestRunner {
 		fLoader = loader;
 	}
 	
-	public void runTestCase(TestCaseNode testCase) throws RunnerException{
-		validateTestData(testCase.getTestData());
+	public void runTestCase(List<PartitionNode> testData) throws RunnerException{
+		validateTestData(testData);
 		try {
-			fTestMethod.invoke(fTestClass.newInstance(), getArguments(testCase));
+			fTestMethod.invoke(fTestClass.newInstance(), getArguments(testData));
 		} catch (IllegalAccessException | IllegalArgumentException
 				| InvocationTargetException | InstantiationException e) {
-			throw new RunnerException(Messages.CANNOT_INVOKE_TEST_METHOD(fTarget.toString(), testCase.toString()));
+			throw new RunnerException(Messages.CANNOT_INVOKE_TEST_METHOD(fTarget.toString(), testData.toString()));
 		}
 	}
 	
-	protected Object[] getArguments(TestCaseNode testCase) {
+	protected Object[] getArguments(List<PartitionNode> testData) {
 		List<Object> args = new ArrayList<Object>();
 		PartitionValueParser parser = new PartitionValueParser(fLoader);
-		for(PartitionNode p : testCase.getTestData()){
+		for(PartitionNode p : testData){
 			args.add(parser.parseValue(p));
 		}
 		return args.toArray();
