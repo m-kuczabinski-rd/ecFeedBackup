@@ -15,7 +15,7 @@ public class Messages {
 	public final static String CANNOT_FIND_MODEL = 
 		"Cannot locate model path. Make sure that the test class is annotated with EcModel annotation with right path";
 	public static final String CANNOT_BUILD_MODEL = 
-		"Unexpected problems while creating class model";
+			"Unexpected problems while creating class model";
 	public static final String PARAMETERS_ANNOTATION_LENGTH_ERROR = 
 		"GeneratorParameterNames and GeneratorParameterValues must be of the same length";
 	public static final String MISSING_PARAMETERS_ANNOTATION = 
@@ -39,5 +39,15 @@ public class Messages {
 	public static String RUNNER_EXCEPTION(String message) {
 		{return "Runner exception: " + message;}
 	}
+
+	///Test Runner messages
+	public static final String WRONG_TEST_METHOD_SIGNATURE(String name) 
+	{return "Parameter types of requested test case do not match the method signature " + name;}
+	public static final String CANNOT_LOAD_CLASS(String name) 
+	{return "Couldn't load class " + name;}
+	public static final String METHOD_NOT_FOUND(String name) 
+	{return "Method " + name + " does not exist in loaded test class";}
+	public static String CANNOT_INVOKE_TEST_METHOD(String method, String testCase)
+	{return "Problems with invoking test method " + method + " with following parameters set: " + testCase;}
 
 }

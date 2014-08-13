@@ -30,7 +30,6 @@ import com.testify.ecfeed.generators.api.IGenerator;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.TestCaseNode;
-import com.testify.ecfeed.model.constraint.Constraint;
 import com.testify.ecfeed.runner.ParameterizedMethod;
 import com.testify.ecfeed.ui.common.ConsoleManager;
 import com.testify.ecfeed.ui.dialogs.ExecuteOnlineSetupDialog;
@@ -105,12 +104,8 @@ public class ExecuteOnlineTestAdapter extends ExecuteTestAdapter {
 			if(dialog.open() == IDialogConstants.OK_ID){
 				IGenerator<PartitionNode> selectedGenerator = dialog.getSelectedGenerator();
 				List<List<PartitionNode>> algorithmInput = dialog.getAlgorithmInput();
-				Collection<Constraint> constraints = dialog.getConstraints();
-
 				Collection<IConstraint<PartitionNode>> constraintList = new ArrayList<IConstraint<PartitionNode>>();
-				for(Constraint constraint : constraints){
-					constraintList.add(constraint);
-				}
+				constraintList.addAll(dialog.getConstraints());
 				Map<String, Object> parameters = dialog.getGeneratorParameters();
 				executeTest(selectedGenerator, algorithmInput, constraintList, parameters);
 			}
@@ -136,7 +131,7 @@ public class ExecuteOnlineTestAdapter extends ExecuteTestAdapter {
 			progressDialog.run(true,  true, runnable);
 		} catch (InvocationTargetException | InterruptedException e) {
 			MessageDialog.openError(Display.getDefault().getActiveShell(), 
-					Messages.DIALOG_UNEXPECTED_PROBLEM_WITH_TEST_EXECUTION + "\n", e.getMessage());
+					Messages.DIALOG_UNEXPECTED_PROBLEM_WITH_TEST_EXECUTION, e.getMessage());
 		}
 	}
 
