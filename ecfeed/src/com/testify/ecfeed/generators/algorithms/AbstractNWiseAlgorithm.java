@@ -15,13 +15,12 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
-import com.testify.ecfeed.generators.CartesianProductGenerator;
 import com.testify.ecfeed.generators.api.GeneratorException;
 import com.testify.ecfeed.generators.api.IConstraint;
 
 public abstract class AbstractNWiseAlgorithm<E> extends AbstractAlgorithm<E> implements IAlgorithm<E> {
 
-	private CartesianProductGenerator<E> fCartesianGenerator;
+	private CartesianProductAlgorithm<E> fCartesianAlgorithm;
 	protected int N  = -1;
 	private int fTuplesToGenerate;
 	protected int fProgress;
@@ -41,14 +40,14 @@ public abstract class AbstractNWiseAlgorithm<E> extends AbstractAlgorithm<E> imp
 		if (fCoverage > 100 || fCoverage < 0) {
 			throw new GeneratorException("Coverage must be between 1 and 100");
 		}
-		fCartesianGenerator = new CartesianProductGenerator<E>();
-		fCartesianGenerator.initialize(input, constraints, null);
+		fCartesianAlgorithm = new CartesianProductAlgorithm<E>();
+		fCartesianAlgorithm.initialize(input, constraints);
 		super.initialize(input, constraints);
 	}
 	
 	@Override
 	public void reset(){
-		fCartesianGenerator.reset();
+		fCartesianAlgorithm.reset();
 		fTuplesToGenerate = calculateTotalTuples();
 		setTotalWork(fTuplesToGenerate);
 		super.reset();
@@ -59,7 +58,7 @@ public abstract class AbstractNWiseAlgorithm<E> extends AbstractAlgorithm<E> imp
 	}
 	
 	protected List<E> cartesianNext() throws GeneratorException{
-		return fCartesianGenerator.next();
+		return fCartesianAlgorithm.getNext();
 	}
 
 	protected int maxTuples(List<List<E>> input, int n){
@@ -75,7 +74,7 @@ public abstract class AbstractNWiseAlgorithm<E> extends AbstractAlgorithm<E> imp
 	}
 	
 	protected void cartesianReset(){
-		fCartesianGenerator.reset();
+		fCartesianAlgorithm.reset();
 	}
 
 	private int calculateTotalTuples(){
@@ -96,7 +95,7 @@ public abstract class AbstractNWiseAlgorithm<E> extends AbstractAlgorithm<E> imp
 	
 	@Override
 	public void cancel() {
-		fCartesianGenerator.cancel();
+		fCartesianAlgorithm.cancel();
 	}
 
 	public int getCoverage() {

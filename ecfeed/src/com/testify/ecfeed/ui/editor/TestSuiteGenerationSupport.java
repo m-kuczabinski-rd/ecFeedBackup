@@ -103,10 +103,8 @@ public class TestSuiteGenerationSupport {
 			fSelectedConstraints.add(new ExpectedValueReplacer());
 			List<IConstraint<PartitionNode>> constraints = new ArrayList<IConstraint<PartitionNode>>();
 			constraints.addAll(fSelectedConstraints);
-			
 			fTestSuiteName = dialog.getTestSuiteName();
 			Map<String, Object> parameters = dialog.getGeneratorParameters();
-			
 			fGeneratedData = generateTestData(selectedGenerator, algorithmInput, constraints, parameters);
 			return true;
 		}
