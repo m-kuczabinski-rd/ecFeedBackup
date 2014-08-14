@@ -22,7 +22,6 @@ import org.eclipse.jface.dialogs.TitleAreaDialog;
 import org.eclipse.jface.viewers.CheckStateChangedEvent;
 import org.eclipse.jface.viewers.CheckboxTreeViewer;
 import org.eclipse.jface.viewers.ComboViewer;
-import org.eclipse.jface.viewers.ICheckStateListener;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.TreeNodeContentProvider;
@@ -39,14 +38,11 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Spinner;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Tree;
-import org.eclipse.swt.widgets.TreeItem;
 
 import com.testify.ecfeed.generators.DoubleParameter;
 import com.testify.ecfeed.generators.GeneratorFactory;
@@ -58,14 +54,15 @@ import com.testify.ecfeed.generators.api.IGeneratorParameter.TYPE;
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.ConstraintNode;
 import com.testify.ecfeed.model.GenericNode;
+import com.testify.ecfeed.model.IPartitionedNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.constraint.Constraint;
 import com.testify.ecfeed.modelif.ImplementationStatus;
-import com.testify.ecfeed.ui.common.Messages;
+import com.testify.ecfeed.ui.common.GenericNodeNameLabelProvidee;
 import com.testify.ecfeed.ui.common.TreeCheckStateListener;
-import com.testify.ecfeed.ui.modelif.CategoryInterface;
-import com.testify.ecfeed.ui.modelif.PartitionInterface;
+import com.testify.ecfeed.ui.modelif.GenericNodeInterface;
+import com.testify.ecfeed.ui.modelif.Messages;
 import com.testify.ecfeed.ui.modelif.TestCaseInterface;
 import com.testify.ecfeed.utils.Constants;
 
@@ -86,7 +83,7 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 	private GeneratorFactory<PartitionNode> fGeneratorFactory; 
 	private int fContent;
 	private boolean fGenerateExecutableContent;
-	private boolean fOkButtonEnabled;
+	private GenericNodeInterface fNodeIf;
 	
 	private final String fTitle;
 	private final String fMessage;
@@ -95,68 +92,21 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 	public final static int PARTITIONS_COMPOSITE = 1 << 1;
 	public final static int TEST_SUITE_NAME_COMPOSITE = 1 << 2;
 	public final static int GENERATOR_SELECTION_COMPOSITE = 1 << 3;
+	
+	private class PartitionTreeCheckStateListener extends TreeCheckStateListener{
 
-	private class PartitionViewerCheckStateListener implements Listener{
-		
-		private Tree fTree;
-
-		public PartitionViewerCheckStateListener(Tree tree) {
-			fTree = tree;
+		public PartitionTreeCheckStateListener(CheckboxTreeViewer treeViewer) {
+			super(treeViewer);
 		}
 
 		@Override
-		public void handleEvent(Event event){
-			PartitionInterface pIf = new PartitionInterface(null);
-			if(event.detail == SWT.CHECK){
-				fTree.setRedraw(false);
-				TreeItem item = (TreeItem)event.item;
-				if(fGenerateExecutableContent){
-					if(item.getData() instanceof PartitionNode){
-						PartitionNode partition = (PartitionNode)item.getData();
-						ImplementationStatus partitionStatus = pIf.implementationStatus(partition);
-						if(partitionStatus != ImplementationStatus.IMPLEMENTED){
-							item.setChecked(false);
-							TreeItem parentItem = item.getParentItem();
-							if(parentItem.getData() instanceof CategoryNode){
-								boolean isAnyImplemented = false;
-								for(int i = 0; i < parentItem.getItemCount(); ++i){
-									TreeItem subItem = parentItem.getItem(i);
-									PartitionNode child = (PartitionNode)subItem.getData();
-									if(subItem.getChecked() && pIf.implementationStatus(child) == ImplementationStatus.IMPLEMENTED){
-										isAnyImplemented = true;
-										break;
-									}
-								}
-								if(!isAnyImplemented){
-									parentItem.setChecked(false);
-									setOkButton(false);
-								}
-							}
-						}
-					} else if(item.getData() instanceof CategoryNode){
-						for(int i = 0; i < item.getItemCount(); ++i){
-							TreeItem subItem = item.getItem(i);
-							if(pIf.implementationStatus((PartitionNode)subItem.getData()) != ImplementationStatus.IMPLEMENTED){
-								subItem.setChecked(false);
-							}
-						}
-					}
-				}
-
-				if (item.getData() instanceof CategoryNode) {
-					CategoryNode c = (CategoryNode)item.getData();
-					if (c.isExpected() == false && c.getPartitions().isEmpty()) {
-						item.setChecked(false);
-					}
-				}
-				fTree.setRedraw(true);
-			}
+		public void checkStateChanged(CheckStateChangedEvent event) {
+			super.checkStateChanged(event);
+			updateOkButton();
 		}
 	}
 	
 	private class CategoriesContentProvider extends TreeNodeContentProvider implements ITreeContentProvider{
-		private final Object[] EMPTY_ARRAY = new Object[]{};
-		
 		@Override
 		public Object[] getElements(Object input){
 			if(input instanceof MethodNode){
@@ -166,19 +116,25 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 		}
 		
 		public Object[] getChildren(Object element){
-			if(element instanceof CategoryNode){
+			List<Object> children = new ArrayList<Object>();
+			if(element instanceof CategoryNode && ((CategoryNode)element).isExpected()){
 				CategoryNode category = (CategoryNode)element;
-				if(category.isExpected()){
-					List<Object> list = new ArrayList<Object>();
-					list.add(category.getDefaultValuePartition());
-					return list.toArray();
+				children.add(category.getDefaultValuePartition());
+			}
+			else if(element instanceof IPartitionedNode){
+				IPartitionedNode parent = (IPartitionedNode)element;
+				if(fGenerateExecutableContent == false){
+					children.addAll(parent.getPartitions());
 				}
-				return ((CategoryNode)element).getPartitions().toArray();
+				else{
+					for(PartitionNode child : parent.getPartitions()){
+						if(fNodeIf.implementationStatus(child) != ImplementationStatus.NOT_IMPLEMENTED){
+							children.add(child);
+						}
+					}
+				}
 			}
-			if(element instanceof PartitionNode){
-				return ((PartitionNode)element).getPartitions().toArray();
-			}
-			return EMPTY_ARRAY;
+			return children.toArray();
 		}
 		
 		@Override
@@ -238,7 +194,7 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 		fTitle = title;
 		fMessage = message;
 		fGenerateExecutableContent = generateExecutables;
-		fOkButtonEnabled = true;
+		fNodeIf = new GenericNodeInterface(null);
 	}
 	
 	protected  List<List<PartitionNode>> algorithmInput(){
@@ -283,19 +239,17 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 				true);
 		if(fGenerateExecutableContent){
 			for(CategoryNode category: fMethod.getCategories()){
-				ImplementationStatus categoryStatus = new CategoryInterface(null).implementationStatus(category);
+				ImplementationStatus categoryStatus = fNodeIf.implementationStatus(category);
 				if(category.getPartitions().isEmpty() ||
 						categoryStatus == ImplementationStatus.NOT_IMPLEMENTED){
-					fOkButtonEnabled = false;
-					fOkButton.setEnabled(false);
+					setOkButton(false);
 					break;
 				}
 			}
 		} else {
 			for(CategoryNode category: fMethod.getCategories()){
 				if(category.getPartitions().isEmpty()){
-					fOkButtonEnabled = false;
-					fOkButton.setEnabled(false);
+					setOkButton(false);
 					break;
 				}
 			}
@@ -410,44 +364,15 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 		tree.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, true, 1, 1));
 		fCategoriesViewer = new CheckboxTreeViewer(tree);
 		fCategoriesViewer.setContentProvider(new CategoriesContentProvider());
-		fCategoriesViewer.setLabelProvider(new LabelProvider(){
-			@Override
-			public String getText(Object element){
-				if(element instanceof GenericNode){
-					return ((GenericNode)element).getName();
-				}
-				return null;
-			}
-		});
-		
+		fCategoriesViewer.setLabelProvider(new GenericNodeNameLabelProvidee());
 		fCategoriesViewer.getTree().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 		fCategoriesViewer.setInput(fMethod);
-		tree.addListener(SWT.Selection, new PartitionViewerCheckStateListener(tree));
+		fCategoriesViewer.addCheckStateListener(new PartitionTreeCheckStateListener(fCategoriesViewer));
 		for(CategoryNode category : fMethod.getCategories()){
-			if(!category.getPartitions().isEmpty()){
-				fCategoriesViewer.setSubtreeChecked(category, true);
-				for (Object item : fCategoriesViewer.getCheckedElements()) {
-					if (item instanceof PartitionNode) {
-						if (new PartitionInterface(null).implementationStatus((PartitionNode) item) != ImplementationStatus.IMPLEMENTED){
-							fCategoriesViewer.setChecked(item, !fGenerateExecutableContent);
-						}
-					}
-				}
-			}
+			fCategoriesViewer.expandAll();
+			fCategoriesViewer.setSubtreeChecked(category, true);
+			fCategoriesViewer.collapseAll();
 		}
-		fCategoriesViewer.addCheckStateListener(new TreeCheckStateListener(fCategoriesViewer));
-		fCategoriesViewer.addCheckStateListener(new ICheckStateListener() {
-			@Override
-			public void checkStateChanged(CheckStateChangedEvent event) {
-				for(CategoryNode category : fMethod.getCategories()){
-					if(fCategoriesViewer.getChecked(category) == false){
-						setOkButton(false);
-						return;
-					}
-					setOkButton(true);
-				}
-			}
-		});
 	}
 
 	private void createTestSuiteComposite(Composite container) {
@@ -466,26 +391,61 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 		fTestSuiteCombo.addModifyListener(new ModifyListener() {
 			@Override
 			public void modifyText(ModifyEvent e) {
-				validateTestSuiteName();
+				updateOkButton();
 			}
 		});
 		fTestSuiteCombo.setText(Constants.DEFAULT_TEST_SUITE_NAME);
 	}
 
-	private void validateTestSuiteName() {
-		if(TestCaseInterface.validateName(fTestSuiteCombo.getText()) == false){
+	private void updateOkButton() {
+		boolean okEnabled = true;
+		if((okEnabled = validateTestSuiteName()) == false){
 			setErrorMessage(Messages.DIALOG_TEST_SUITE_NAME_PROBLEM_MESSAGE);
-			setOkButton(false);
 		}
-		else{
+		if((okEnabled &= validateGeneratorInput(fGenerateExecutableContent)) == false){
+			if(fGenerateExecutableContent){
+				setErrorMessage(Messages.DIALOG_GENERATOR_EXECUTABLE_INPUT_PROBLEM_MESSAGE);
+			}
+			else{
+				setErrorMessage(Messages.DIALOG_GENERATOR_INPUT_PROBLEM_MESSAGE);
+			}
+		}
+		if(okEnabled){
 			setErrorMessage(null);
-			setOkButton(true);
-			fTestSuiteName = fTestSuiteCombo.getText();
 		}
+		setOkButton(okEnabled);
 	}
 
+	private boolean validateGeneratorInput(boolean onlyExecutable) {
+		for(CategoryNode category : fMethod.getCategories()){
+			boolean leafChecked = false;
+			for(PartitionNode leaf : category.getLeafPartitions()){
+				leafChecked |= fCategoriesViewer.getChecked(leaf);
+				ImplementationStatus status = fNodeIf.implementationStatus(leaf);
+				if(status != ImplementationStatus.IMPLEMENTED && onlyExecutable){
+					return false;
+				}
+			}
+			if(leafChecked == false){
+				return false;
+			}
+		}
+		return true;
+	}
+
+	private boolean validateTestSuiteName() {
+		boolean testSuiteValid = true;
+		if(fTestSuiteCombo != null && fTestSuiteCombo.isDisposed() == false){
+			testSuiteValid = TestCaseInterface.validateName(fTestSuiteCombo.getText());
+			if(testSuiteValid){
+				fTestSuiteName = fTestSuiteCombo.getText();
+			}
+		}
+		return testSuiteValid;
+	}
+	
 	private void setOkButton(boolean enabled) {
-		if(fOkButton != null && !fOkButton.isDisposed() && fOkButtonEnabled){
+		if(fOkButton != null && !fOkButton.isDisposed()){
 			fOkButton.setEnabled(enabled);
 		}
 	}
@@ -503,6 +463,7 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 	}
 
 	private void createGeneratorViewer(final Composite parent) {
+		final GeneratorFactory<PartitionNode> generatorFactory = new GeneratorFactory<>();
 		ComboViewer generatorViewer = new ComboViewer(parent, SWT.READ_ONLY);
 		fGeneratorCombo = generatorViewer.getCombo();
 		fGeneratorCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
@@ -510,7 +471,7 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 			@Override
 			public void modifyText(ModifyEvent e) {
 				try {
-					fSelectedGenerator = fGeneratorFactory.getGenerator(fGeneratorCombo.getText());
+					fSelectedGenerator = generatorFactory.getGenerator(fGeneratorCombo.getText());
 					createParametersComposite(parent, fSelectedGenerator.parameters());
 					fMainContainer.layout();
 				} catch (GeneratorException exception) {
@@ -520,7 +481,7 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 			}
 		});
 		if(fGeneratorFactory.availableGenerators().size() > 0){
-			String[] availableGenerators = fGeneratorFactory.availableGenerators().toArray(new String[] {});
+			String[] availableGenerators = generatorFactory.availableGenerators().toArray(new String[] {});
 			for(String generator : availableGenerators){
 				fGeneratorCombo.add(generator);
 			}

@@ -94,9 +94,6 @@ public class Messages {
 	public static final String DIALOG_ADD_CONSTRAINT_MESSAGE = "Enter constraint's name and define its premise and consequence";
 	public static final String DIALOG_CONSTRAINT_NAME_PROBLEM_TITLE = "Wrong constraint name.";
 	public static final String DIALOG_CONSTRAINT_NAME_PROBLEM_MESSAGE = "Name of a constrant must be between 1 and 64 characters long.";
-	public static final String DIALOG_GENERATE_TEST_SUITES_SELECT_CONSTRAINTS_LABEL = "Select constraints considered when generating test suite";
-	public static final String DIALOG_GENERATE_TEST_SUITES_SELECT_PARTITIONS_LABEL = "Select which partitions will be considered for generating test suite. "
-			+ "Each category must be represented by at least one partition.";
 	public static final String DIALOG_LARGE_TEST_SUITE_GENERATED_TITLE = "Large size of generated data";
 	public static final String DIALOG_TEST_GENERATOR_EXCEPTION_TITLE = "Test generator issue";
 	public static final String DIALOG_CANNOT_ADD_LABEL_TITLE = "Cannot add label for partition";

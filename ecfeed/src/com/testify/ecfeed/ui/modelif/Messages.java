@@ -66,4 +66,11 @@ public class Messages {
 	public static final String EXECUTING_TEST_WITH_PARAMETERS = "Executing test function with generated parameters";
 	public static final String EXECUTING_TEST_WITH_NO_PARAMETERS = "Executing test function";
 	
+	public static final String DIALOG_GENERATOR_INPUT_PROBLEM_MESSAGE = "At least one partition per category must be check";
+	public static final String DIALOG_GENERATOR_EXECUTABLE_INPUT_PROBLEM_MESSAGE = "At least one partition per category must be check. All checked categories must be implemented";
+	public static final String DIALOG_GENERATE_TEST_SUITES_SELECT_CONSTRAINTS_LABEL = "Select constraints considered when generating test suite";
+	public static final String DIALOG_GENERATE_TEST_SUITES_SELECT_PARTITIONS_LABEL = "Select which partitions will be considered for generating test suite. "
+			+ "Each category must be represented by at least one partition.";
+	public static final String DIALOG_TEST_SUITE_NAME_PROBLEM_MESSAGE = "Entered test suite name not allowed";
+
 }
