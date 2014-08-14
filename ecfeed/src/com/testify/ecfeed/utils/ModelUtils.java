@@ -108,7 +108,7 @@ public class ModelUtils {
 		IType type;
 		try {
 			type = getTypeObject(qualifiedTypeName);
-		} catch (JavaModelException e) {
+		} catch (Throwable e) {
 			return classNode.getMethods();
 		}
 		if(type == null){
@@ -129,7 +129,7 @@ public class ModelUtils {
 		//if we cannot generate model from type, return empty vector, i.e. no new methods are in the second class
 		try {
 			type = getTypeObject(qualifiedTypeName);
-		} catch (JavaModelException e) {
+		} catch (Throwable e) {
 			return empty;
 		}
 		if(type == null){
