@@ -42,15 +42,57 @@ public class TestCasesViewerLabelProvider extends LabelProvider implements IColo
 		fTestCasesStatusMap = new HashMap<TestCaseNode, Boolean>();
 	}
 	
+	@Override
+	public String getText(Object element) {
+		if (element instanceof String) {
+			String suiteName = (String)element;
+			int executable = 0;{
+				if(fExecutableTestSuites.containsKey(suiteName)){
+					executable = fExecutableTestSuites.get(suiteName);
+				}
+			}
+			Collection<TestCaseNode> testCases = fMethod.getTestCases(suiteName);
+			String plural = testCases.size() != 1 ? "s" : "";
+			return suiteName + " [" + testCases.size() + " test case" + plural + ", " + executable + " executable]";   
+		}
+		else if(element instanceof TestCaseNode){
+			return fMethod.getName() + "(" + ((TestCaseNode)element).testDataString() + ")";
+		}
+		return null;
+	}
+
+	@Override
+	public Color getForeground(Object element) {
+		Color executableColor = fColorManager.getColor(ColorConstants.TEST_CASE_EXECUTABLE);
+		if (element instanceof TestCaseNode) {
+			TestCaseNode tc = (TestCaseNode)element;
+			if(fTestCasesStatusMap.containsKey(tc) && fTestCasesStatusMap.get(tc) == true){
+				return executableColor;
+			}
+			return null;
+		}
+		if (element instanceof String) {
+			String name = (String)element;
+			boolean suiteExecutable = fExecutableTestSuites.get(name) == fMethod.getTestCases(name).size(); 
+			return suiteExecutable ? executableColor : null;
+		}
+		return null;
+	}
+
+	@Override
+	public Color getBackground(Object element) {
+		return null;
+	}
+
 	public void setMethod(MethodNode method){
 		fMethod = method;
 		refresh();
 	}
-	
+
 	public void refresh(){
 		updateExecutableTable();
 	}
-	
+
 	private void updateExecutableTable() {
 		Map<PartitionNode, ImplementationStatus> partitionStatusMap = new HashMap<PartitionNode, ImplementationStatus>();
 		fExecutableTestSuites.clear();
@@ -83,43 +125,5 @@ public class TestCasesViewerLabelProvider extends LabelProvider implements IColo
 				fTestCasesStatusMap.put(tc, executable);
 			}
 		}
-	}
-
-	@Override
-	public String getText(Object element) {
-		if (element instanceof String) {
-			String suiteName = (String)element;
-			Collection<TestCaseNode> testCases = fMethod.getTestCases(suiteName);
-			String plural = testCases.size() != 1 ? "s" : "";
-			return suiteName + " [" + testCases.size() + " test case" + plural + 
-					", " + fExecutableTestSuites.get(suiteName) + " executable]";   
-		}
-		else if(element instanceof TestCaseNode){
-			return fMethod.getName() + "(" + ((TestCaseNode)element).testDataString() + ")";
-		}
-		return null;
-	}
-
-	@Override
-	public Color getForeground(Object element) {
-		Color executableColor = fColorManager.getColor(ColorConstants.TEST_CASE_EXECUTABLE);
-		if (element instanceof TestCaseNode) {
-			TestCaseNode tc = (TestCaseNode)element;
-			if(fTestCasesStatusMap.containsKey(tc) && fTestCasesStatusMap.get(tc) == true){
-				return executableColor;
-			}
-			return null;
-		}
-		if (element instanceof String) {
-			String name = (String)element;
-			boolean suiteExecutable = fExecutableTestSuites.get(name) == fMethod.getTestCases(name).size(); 
-			return suiteExecutable ? executableColor : null;
-		}
-		return null;
-	}
-
-	@Override
-	public Color getBackground(Object element) {
-		return null;
 	}
 }
