@@ -46,10 +46,9 @@ public class TestCasesViewerLabelProvider extends LabelProvider implements IColo
 	public String getText(Object element) {
 		if (element instanceof String) {
 			String suiteName = (String)element;
-			int executable = 0;{
-				if(fExecutableTestSuites.containsKey(suiteName)){
-					executable = fExecutableTestSuites.get(suiteName);
-				}
+			int executable = 0;
+			if(fExecutableTestSuites.containsKey(suiteName)){
+				executable = fExecutableTestSuites.get(suiteName);
 			}
 			Collection<TestCaseNode> testCases = fMethod.getTestCases(suiteName);
 			String plural = testCases.size() != 1 ? "s" : "";
