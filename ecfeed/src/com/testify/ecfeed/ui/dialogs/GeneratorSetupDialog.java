@@ -419,6 +419,12 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 	private boolean validateGeneratorInput(boolean onlyExecutable) {
 		for(CategoryNode category : fMethod.getCategories()){
 			boolean leafChecked = false;
+			if(category.isExpected()){
+				if(fCategoriesViewer.getChecked(category.getDefaultValuePartition()) == false){
+					return false;
+				}
+				continue;
+			}
 			for(PartitionNode leaf : category.getLeafPartitions()){
 				leafChecked |= fCategoriesViewer.getChecked(leaf);
 				ImplementationStatus status = fNodeIf.implementationStatus(leaf);

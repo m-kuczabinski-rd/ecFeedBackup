@@ -175,14 +175,14 @@ public class MethodInterface extends GenericNodeInterface {
 	}
 
 	public boolean generateTestSuite(BasicSection source, IModelUpdateListener updateListener){
-		TestSuiteGenerationSupport testGenerator = new TestSuiteGenerationSupport(fTarget);
-		if(testGenerator.hasData() == false) return false;
+		TestSuiteGenerationSupport testGenerationSupport = new TestSuiteGenerationSupport(fTarget);
+		if(testGenerationSupport.hasData() == false) return false;
 		
-		String testSuiteName = testGenerator.getTestSuiteName();
-		List<List<PartitionNode>> testData = testGenerator.getGeneratedData();
+		String testSuiteName = testGenerationSupport.getTestSuiteName();
+		List<List<PartitionNode>> testData = testGenerationSupport.getGeneratedData();
 		
 		int dataLength = testData.size();
-		if(dataLength < 0 && (testGenerator.wasCancelled() == false)){
+		if(dataLength < 0 && (testGenerationSupport.wasCancelled() == false)){
 			MessageDialog.openInformation(Display.getDefault().getActiveShell(),
 			Messages.DIALOG_ADD_TEST_SUITE_PROBLEM_TITLE,
 			Messages.DIALOG_EMPTY_TEST_SUITE_GENERATED_MESSAGE);

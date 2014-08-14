@@ -101,11 +101,8 @@ public class TestSuiteGenerationSupport {
 			fSelectedConstraints = new ArrayList<AbstractConstraint>();
 			fSelectedConstraints.addAll(dialog.getConstraints());
 			fSelectedConstraints.add(new ExpectedValueReplacer());
-
 			List<IConstraint<PartitionNode>> constraints = new ArrayList<IConstraint<PartitionNode>>();
-			for(IConstraint<PartitionNode> constraint : fSelectedConstraints){
-				constraints.add(constraint);
-			}
+			constraints.addAll(fSelectedConstraints);
 			
 			fTestSuiteName = dialog.getTestSuiteName();
 			Map<String, Object> parameters = dialog.getGeneratorParameters();
