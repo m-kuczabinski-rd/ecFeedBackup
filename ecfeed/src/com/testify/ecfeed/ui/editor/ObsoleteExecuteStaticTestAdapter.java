@@ -26,11 +26,11 @@ import com.testify.ecfeed.ui.common.ConsoleManager;
 import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.utils.ModelUtils;
 
-public class ExecuteStaticTestAdapter extends ExecuteTestAdapter {
+public class ObsoleteExecuteStaticTestAdapter extends ExecuteTestAdapter {
 
 	private TestCasesViewer fViewerSection;
 
-	public ExecuteStaticTestAdapter(TestCasesViewer viewerSection) {
+	public ObsoleteExecuteStaticTestAdapter(TestCasesViewer viewerSection) {
 		fViewerSection = viewerSection;
 	}
 

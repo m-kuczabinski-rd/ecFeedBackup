@@ -42,7 +42,7 @@ import com.testify.ecfeed.ui.dialogs.GenerateTestSuiteDialog;
 import com.testify.ecfeed.ui.dialogs.GeneratorProgressMonitorDialog;
 import com.testify.ecfeed.utils.Constants;
 
-class GenerateTestSuiteAdapter extends SelectionAdapter{
+class ObsoleteGenerateTestSuiteAdapter extends SelectionAdapter{
 
 	private boolean fCanceled;
 	private TestCasesViewer fViewerSection;
@@ -87,7 +87,7 @@ class GenerateTestSuiteAdapter extends SelectionAdapter{
 		
 	}
 	
-	GenerateTestSuiteAdapter(TestCasesViewer viewerSection) {
+	ObsoleteGenerateTestSuiteAdapter(TestCasesViewer viewerSection) {
 		fViewerSection = viewerSection;
 	}
 	

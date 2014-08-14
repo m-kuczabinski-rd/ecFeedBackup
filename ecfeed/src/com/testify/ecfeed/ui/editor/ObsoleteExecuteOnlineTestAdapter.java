@@ -30,15 +30,13 @@ import com.testify.ecfeed.generators.api.IGenerator;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.TestCaseNode;
-import com.testify.ecfeed.runner.JavaTestRunner;
 import com.testify.ecfeed.runner.ParameterizedMethod;
 import com.testify.ecfeed.ui.common.ConsoleManager;
-import com.testify.ecfeed.ui.common.LoaderProvider;
 import com.testify.ecfeed.ui.dialogs.ExecuteOnlineSetupDialog;
 import com.testify.ecfeed.ui.dialogs.GeneratorProgressMonitorDialog;
 import com.testify.ecfeed.ui.modelif.Messages;
 
-public class ExecuteOnlineTestAdapter extends ExecuteTestAdapter {
+public class ObsoleteExecuteOnlineTestAdapter extends ExecuteTestAdapter {
 
 	private MethodDetailsPage fPage;
 
@@ -64,8 +62,6 @@ public class ExecuteOnlineTestAdapter extends ExecuteTestAdapter {
 				throws InvocationTargetException, InterruptedException {
 			Class<?> testClass = loadTestClass();
 			Method testMethod = getTestMethod(testClass, getMethodModel());
-			JavaTestRunner testRunner = new JavaTestRunner(new LoaderProvider().getLoader(true, null));
-//			testRunner.setTarget(getMethodModel());
 			List<PartitionNode> next;
 			try {
 				if (getMethodModel().getCategories().size() > 0) {
@@ -95,7 +91,7 @@ public class ExecuteOnlineTestAdapter extends ExecuteTestAdapter {
 		
 	}
 
-	public ExecuteOnlineTestAdapter(MethodDetailsPage page) {
+	public ObsoleteExecuteOnlineTestAdapter(MethodDetailsPage page) {
 		fPage = page;
 	}
 

@@ -12,90 +12,108 @@
 package com.testify.ecfeed.ui.editor;
 
 import java.util.Collection;
-import java.util.HashSet;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.eclipse.jface.viewers.IColorProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.graphics.Color;
 
-import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.TestCaseNode;
+import com.testify.ecfeed.modelif.ImplementationStatus;
 import com.testify.ecfeed.ui.common.ColorConstants;
 import com.testify.ecfeed.ui.common.ColorManager;
-import com.testify.ecfeed.utils.ModelUtils;
+import com.testify.ecfeed.ui.modelif.GenericNodeInterface;
 
 public class TestCasesViewerLabelProvider extends LabelProvider implements IColorProvider {
 	private MethodNode fMethod;
 	private ColorManager fColorManager;
+	private GenericNodeInterface fNodeIf;
+	private Map<String, Integer> fExecutableTestSuites;
+	private Map<TestCaseNode, Boolean> fTestCasesStatusMap;
 	
 	public TestCasesViewerLabelProvider(MethodNode method){
 		fMethod = method;
 		fColorManager = new ColorManager();
+		fNodeIf = new GenericNodeInterface(null);
+		fExecutableTestSuites = new HashMap<String, Integer>();
+		fTestCasesStatusMap = new HashMap<TestCaseNode, Boolean>();
 	}
 	
 	public void setMethod(MethodNode method){
 		fMethod = method;
+		refresh();
 	}
 	
-	@Override
-	public String getText(Object element) {
-		if (element instanceof String) {				
-			Collection<TestCaseNode> testSuite = fMethod.getTestCases((String)element);	
-			int testCasesCount = testSuite.size();		
-			int executableCount = testCasesCount;
-			
-			// if method is not implemented - no testcase can be
-			if(!ModelUtils.isMethodImplemented(fMethod) && !ModelUtils.isMethodPartiallyImplemented(fMethod)){
-				return (String) element +
-				" [" + testCasesCount + " test case" + (testCasesCount == 1 ? "" : "s") +
-				", " + 0 + " executable" + "]";
-			}
-			
-			HashSet<PartitionNode> unimplemented = new HashSet<>();
-			for(CategoryNode category: fMethod.getCategories(false)){
-				for(PartitionNode partition: category.getLeafPartitions()){
-					if(!ModelUtils.isPartitionImplemented(partition)){
-						unimplemented.add(partition);
-					}
+	public void refresh(){
+		updateExecutableTable();
+	}
+	
+	private void updateExecutableTable() {
+		Map<PartitionNode, ImplementationStatus> partitionStatusMap = new HashMap<PartitionNode, ImplementationStatus>();
+		fExecutableTestSuites.clear();
+		fTestCasesStatusMap.clear();
+		for(String testSuite : fMethod.getTestSuites()){
+			fExecutableTestSuites.put(testSuite, 0);
+		}
+		if(fNodeIf.implementationStatus(fMethod) != ImplementationStatus.NOT_IMPLEMENTED){
+			for(TestCaseNode tc : fMethod.getTestCases()){
+				boolean executable = true;
+				String name = tc.getName();
+				if(fExecutableTestSuites.containsKey(name) == false){
+					fExecutableTestSuites.put(name, 0);
 				}
-			}
-			// if all partitions are implemented - no unimplemented testcases possible
-			if(unimplemented.isEmpty()){
-				return (String) element +
-				" [" + testCasesCount + " test case" + (testCasesCount == 1 ? "" : "s") +
-				", " + testCasesCount + " executable" + "]";
-			}
-			// count unimplemented
-			for (TestCaseNode testCase : testSuite) {
-				for(PartitionNode partition : testCase.getTestData()){
-					if(unimplemented.contains(partition)){
-						executableCount--;
+				for(PartitionNode p : tc.getTestData()){
+					ImplementationStatus status = partitionStatusMap.get(p);
+					if(status == null){
+						status = fNodeIf.implementationStatus(p);
+						partitionStatusMap.put(p, status);
+					}
+					if(status != ImplementationStatus.IMPLEMENTED){
+						executable = false;
 						break;
 					}
 				}
+				if(executable){
+					int current = fExecutableTestSuites.get(name);
+					fExecutableTestSuites.put(name, current + 1);
+				}
+				fTestCasesStatusMap.put(tc, executable);
 			}
+		}
+	}
 
-			return (String) element +
-					" [" + testCasesCount + " test case" + (testCasesCount == 1 ? "" : "s") +
-					", " + executableCount + " executable" + "]";
-		} else if (element instanceof TestCaseNode) {
-			return fMethod.getName() + "(" + ((TestCaseNode) element).testDataString() + ")";
+	@Override
+	public String getText(Object element) {
+		if (element instanceof String) {
+			String suiteName = (String)element;
+			Collection<TestCaseNode> testCases = fMethod.getTestCases(suiteName);
+			String plural = testCases.size() != 1 ? "s" : "";
+			return suiteName + " [" + testCases.size() + " test case" + plural + 
+					", " + fExecutableTestSuites.get(suiteName) + " executable]";   
+		}
+		else if(element instanceof TestCaseNode){
+			return fMethod.getName() + "(" + ((TestCaseNode)element).testDataString() + ")";
 		}
 		return null;
 	}
 
 	@Override
 	public Color getForeground(Object element) {
+		Color executableColor = fColorManager.getColor(ColorConstants.TEST_CASE_EXECUTABLE);
 		if (element instanceof TestCaseNode) {
-			if (ModelUtils.isTestCaseImplemented((TestCaseNode)element) && ModelUtils.methodDefinitionImplemented(fMethod)) {
-				return fColorManager.getColor(ColorConstants.ITEM_IMPLEMENTED);
+			TestCaseNode tc = (TestCaseNode)element;
+			if(fTestCasesStatusMap.containsKey(tc) && fTestCasesStatusMap.get(tc) == true){
+				return executableColor;
 			}
-		} else if (element instanceof String) {
-			if (ModelUtils.isTestSuiteImplemented(fMethod, (String)element) && ModelUtils.methodDefinitionImplemented(fMethod)) {
-				return fColorManager.getColor(ColorConstants.ITEM_IMPLEMENTED);
-			}
+			return null;
+		}
+		if (element instanceof String) {
+			String name = (String)element;
+			boolean suiteExecutable = fExecutableTestSuites.get(name) == fMethod.getTestCases(name).size(); 
+			return suiteExecutable ? executableColor : null;
 		}
 		return null;
 	}

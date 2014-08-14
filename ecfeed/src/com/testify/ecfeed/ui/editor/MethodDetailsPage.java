@@ -28,7 +28,6 @@ import com.testify.ecfeed.modelif.ImplementationStatus;
 import com.testify.ecfeed.modelif.ModelOperationManager;
 import com.testify.ecfeed.ui.dialogs.TestMethodRenameDialog;
 import com.testify.ecfeed.ui.modelif.MethodInterface;
-import com.testify.ecfeed.ui.modelif.OnlineTestRunningSupport;
 
 public class MethodDetailsPage extends BasicDetailsPage {
 
@@ -45,9 +44,7 @@ public class MethodDetailsPage extends BasicDetailsPage {
 	private class OnlineTestAdapter extends SelectionAdapter{
 		@Override
 		public void widgetSelected(SelectionEvent e){
-			OnlineTestRunningSupport runner = new OnlineTestRunningSupport();
-			runner.setTarget(fMethodIf.getTarget());
-			runner.proceed();
+			fMethodIf.executeOnlineTests();
 		}
 	}
 	
@@ -112,7 +109,6 @@ public class MethodDetailsPage extends BasicDetailsPage {
 		
 		fTestOnlineButton = getToolkit().createButton(composite, "Test online", SWT.NONE);
 		fTestOnlineButton.addSelectionListener(new OnlineTestAdapter());
-//		fTestOnlineButton.addSelectionListener(new ExecuteOnlineTestAdapter(this));
 
 		getToolkit().paintBordersFor(composite);
 	}
@@ -124,8 +120,7 @@ public class MethodDetailsPage extends BasicDetailsPage {
 			fMethodIf.setTarget(selectedMethod);
 			ImplementationStatus methodStatus = fMethodIf.implementationStatus();
 			getMainSection().setText(selectedMethod.toString() + " [" + methodStatus + "]");
-			fTestOnlineButton.setEnabled(methodStatus == ImplementationStatus.IMPLEMENTED || 
-					methodStatus == ImplementationStatus.PARTIALLY_IMPLEMENTED);
+			fTestOnlineButton.setEnabled(methodStatus != ImplementationStatus.NOT_IMPLEMENTED);
 			fParemetersSection.setInput(selectedMethod);
 			fConstraintsSection.setInput(selectedMethod);
 			fTestCasesSection.setInput(selectedMethod);

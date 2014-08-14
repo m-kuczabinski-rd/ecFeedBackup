@@ -30,4 +30,5 @@ public class Constants {
 	public static final String DEFAULT_EXPECTED_ENUM_VALUE = "VALUE";
 
 	public static final int TEST_SUITE_SIZE_WARNING_LIMIT = 1000;
+	public static final int MAX_DISPLAYED_TEST_CASES_PER_SUITE = 500;
 }

@@ -29,6 +29,10 @@ import com.testify.ecfeed.modelif.java.method.MethodOperationAddTestSuite;
 import com.testify.ecfeed.modelif.java.method.MethodOperationConvertTo;
 import com.testify.ecfeed.modelif.java.method.MethodOperationRename;
 import com.testify.ecfeed.modelif.java.method.MethodOperationRenameTestCases;
+import com.testify.ecfeed.runner.JavaTestRunner;
+import com.testify.ecfeed.runner.RunnerException;
+import com.testify.ecfeed.ui.common.ConsoleManager;
+import com.testify.ecfeed.ui.common.LoaderProvider;
 import com.testify.ecfeed.ui.dialogs.AddTestCaseDialog;
 import com.testify.ecfeed.ui.dialogs.RenameTestSuiteDialog;
 import com.testify.ecfeed.ui.editor.BasicSection;
@@ -146,7 +150,7 @@ public class MethodInterface extends GenericNodeInterface {
 	public void removeTestCases(Collection<TestCaseNode> testCases, BasicSection source, IModelUpdateListener updateListener) {
 		execute(new RemoveNodesOperation(testCases), source, updateListener, Messages.DIALOG_REMOVE_TEST_CASES_PROBLEM_TITLE);
 	}
-
+	
 	public void renameSuite(BasicSection source, IModelUpdateListener updateListener) {
 		RenameTestSuiteDialog dialog = 
 				new RenameTestSuiteDialog(Display.getDefault().getActiveShell(), fTarget.getTestSuites());
@@ -223,7 +227,25 @@ public class MethodInterface extends GenericNodeInterface {
 		}
 		return type;
 	}
-	
 
+	public void executeOnlineTests() {
+		OnlineTestRunningSupport runner = new OnlineTestRunningSupport();
+		runner.setTarget(fTarget);
+		runner.proceed();
+	}
+
+	public void executeStaticTests(Collection<TestCaseNode> testCases) {
+		ConsoleManager.displayConsole();
+		ConsoleManager.redirectSystemOutputToStream(ConsoleManager.getOutputStream());
+		JavaTestRunner runner = new JavaTestRunner(LoaderProvider.createLoader());
+		try {
+			runner.setTarget(fTarget);
+			for(TestCaseNode testCase : testCases){
+				runner.runTestCase(testCase.getTestData());
+			}
+		} catch (RunnerException e) {
+			MessageDialog.openError(Display.getCurrent().getActiveShell(), Messages.DIALOG_TEST_EXECUTION_PROBLEM_TITLE, e.getMessage());
+		}
+	}
 	
 }

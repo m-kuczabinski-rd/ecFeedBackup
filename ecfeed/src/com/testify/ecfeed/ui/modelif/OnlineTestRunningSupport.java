@@ -98,6 +98,7 @@ public class OnlineTestRunningSupport {
 				Collection<IConstraint<PartitionNode>> constraintList = new ArrayList<IConstraint<PartitionNode>>();
 				constraintList.addAll(dialog.getConstraints());
 				Map<String, Object> parameters = dialog.getGeneratorParameters();
+				
 				executeGeneratedTests(selectedGenerator, algorithmInput, constraintList, parameters);
 			}
 		} else {
