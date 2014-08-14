@@ -176,6 +176,8 @@ public class MethodInterface extends GenericNodeInterface {
 
 	public boolean generateTestSuite(BasicSection source, IModelUpdateListener updateListener){
 		TestSuiteGenerationSupport testGenerator = new TestSuiteGenerationSupport(fTarget);
+		if(testGenerator.hasData() == false) return false;
+		
 		String testSuiteName = testGenerator.getTestSuiteName();
 		List<List<PartitionNode>> testData = testGenerator.getGeneratedData();
 		

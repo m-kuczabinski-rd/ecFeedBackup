@@ -29,6 +29,7 @@ public class TestSuiteGenerationSupport {
 	private MethodNode fTarget;
 	private String fTestSuiteName;
 	private List<List<PartitionNode>> fGeneratedData;
+	private boolean fHasData;
 	
 	private class ExpectedValueReplacer extends AbstractConstraint{
 		
@@ -89,10 +90,10 @@ public class TestSuiteGenerationSupport {
 	
 	public TestSuiteGenerationSupport(MethodNode target) {
 		fTarget = target;
-		generate();
+		fHasData = generate() && !fCanceled;
 	}
 	
-	protected void generate(){
+	protected boolean generate(){
 		GenerateTestSuiteDialog dialog = new GenerateTestSuiteDialog(getActiveShell(), fTarget);
 		if(dialog.open() == IDialogConstants.OK_ID){
 			IGenerator<PartitionNode> selectedGenerator = dialog.getSelectedGenerator();
@@ -110,7 +111,9 @@ public class TestSuiteGenerationSupport {
 			Map<String, Object> parameters = dialog.getGeneratorParameters();
 			
 			fGeneratedData = generateTestData(selectedGenerator, algorithmInput, constraints, parameters);
+			return true;
 		}
+		return false;
 	}
 
 	public List<List<PartitionNode>> getGeneratedData(){
@@ -158,5 +161,9 @@ public class TestSuiteGenerationSupport {
 
 	public boolean wasCancelled() {
 		return fCanceled;
+	}
+	
+	public boolean hasData(){
+		return fHasData;
 	}
 }
