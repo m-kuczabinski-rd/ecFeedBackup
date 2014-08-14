@@ -90,6 +90,10 @@ public class TestSuiteGenerationSupport {
 	
 	public TestSuiteGenerationSupport(MethodNode target) {
 		fTarget = target;
+		fHasData = false;
+	}
+	
+	public void proceed(){
 		fHasData = generate() && !fCanceled;
 	}
 	
