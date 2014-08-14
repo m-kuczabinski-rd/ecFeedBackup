@@ -144,7 +144,8 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 				}
 
 				if (item.getData() instanceof CategoryNode) {
-					if (((CategoryNode)item.getData()).getPartitions().isEmpty()) {
+					CategoryNode c = (CategoryNode)item.getData();
+					if (c.isExpected() == false && c.getPartitions().isEmpty()) {
 						item.setChecked(false);
 					}
 				}
