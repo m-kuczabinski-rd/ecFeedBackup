@@ -72,8 +72,11 @@ public class TestCasesViewerLabelProvider extends LabelProvider implements IColo
 		}
 		if (element instanceof String) {
 			String name = (String)element;
-			boolean suiteExecutable = fExecutableTestSuites.get(name) == fMethod.getTestCases(name).size(); 
-			return suiteExecutable ? executableColor : null;
+			if(fExecutableTestSuites.containsKey(name)){
+				boolean suiteExecutable = (fExecutableTestSuites.get(name) == fMethod.getTestCases(name).size());
+				return suiteExecutable ? executableColor : null;
+			}
+			return null;
 		}
 		return null;
 	}
