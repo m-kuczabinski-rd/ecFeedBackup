@@ -4,7 +4,7 @@ import org.eclipse.jface.viewers.LabelProvider;
 
 import com.testify.ecfeed.model.GenericNode;
 
-public class GenericNodeNameLabelProvidee extends LabelProvider {
+public class GenericNodeNameLabelProvider extends LabelProvider {
 
 	@Override
 	public String getText(Object element){

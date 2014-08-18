@@ -9,9 +9,11 @@ import com.testify.ecfeed.modelif.ModelIfException;
 public class BulkOperation implements IModelOperation{
 
 	List<IModelOperation> fOperations;
+	private boolean fExecuteAll;
 	
-	public BulkOperation() {
+	public BulkOperation(boolean executeAll) {
 		fOperations = new ArrayList<IModelOperation>();
+		fExecuteAll = executeAll;
 	}
 	
 	public BulkOperation(List<IModelOperation> operations) {
@@ -30,6 +32,9 @@ public class BulkOperation implements IModelOperation{
 				operation.execute();
 			}catch(ModelIfException e){
 				errors.add(e.getMessage());
+				if(fExecuteAll == false){
+					break;
+				}
 			}
 		}
 		if(errors.size() > 0){

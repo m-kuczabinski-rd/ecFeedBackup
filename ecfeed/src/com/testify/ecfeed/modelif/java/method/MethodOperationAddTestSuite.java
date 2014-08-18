@@ -11,6 +11,7 @@ public class MethodOperationAddTestSuite extends BulkOperation {
 
 	public MethodOperationAddTestSuite(MethodNode target, String testSuiteName,
 			List<List<PartitionNode>> testData) {
+		super(true);
 		for(List<PartitionNode> values : testData){
 			addOperation(new MethodOperationAddTestCase(target, new TestCaseNode(testSuiteName, values)));
 		}

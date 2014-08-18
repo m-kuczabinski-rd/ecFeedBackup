@@ -4,24 +4,14 @@ import java.util.Collection;
 
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.MethodNode;
-import com.testify.ecfeed.modelif.IModelOperation;
 import com.testify.ecfeed.modelif.java.common.BulkOperation;
-import com.testify.ecfeed.modelif.java.common.RemoveNodesOperation;
 
 public class ClassOperationAddMethods extends BulkOperation{
 
-	private Collection<MethodNode> fMethods;
-
-	public ClassOperationAddMethods(ClassNode target, Collection<MethodNode> methods) {
+	public ClassOperationAddMethods(ClassNode target, Collection<MethodNode> methods, int index) {
+		super(true);
 		for(MethodNode method : methods){
-			addOperation(new ClassOperationAddMethod(target, method));
+			addOperation(new ClassOperationAddMethod(target, method, index++));
 		}
-		fMethods = methods;
 	}
-
-	@Override
-	public IModelOperation reverseOperation() {
-		return new RemoveNodesOperation(fMethods);
-	}
-	
 }

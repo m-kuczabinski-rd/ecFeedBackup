@@ -91,11 +91,11 @@ public class ClassInterface extends GenericNodeInterface {
 	}
 	
 	public boolean addMethods(Collection<MethodNode> methods, BasicSection source, IModelUpdateListener updateListener){
-		return execute(new ClassOperationAddMethods(fTarget, methods), source, updateListener, Messages.DIALOG_ADD_METHODS_PROBLEM_TITLE);
+		return execute(new ClassOperationAddMethods(fTarget, methods, fTarget.getMethods().size()), source, updateListener, Messages.DIALOG_ADD_METHODS_PROBLEM_TITLE);
 	}
 	
 	public boolean addMethod(MethodNode method, BasicSection source, IModelUpdateListener updateListener){
-		return execute(new ClassOperationAddMethod(fTarget, method), source, updateListener, Messages.DIALOG_ADD_METHOD_PROBLEM_TITLE);
+		return execute(new ClassOperationAddMethod(fTarget, method, fTarget.getMethods().size()), source, updateListener, Messages.DIALOG_ADD_METHOD_PROBLEM_TITLE);
 	}
 
 	public boolean removeMethod(MethodNode method, BasicSection source, IModelUpdateListener updateListener){

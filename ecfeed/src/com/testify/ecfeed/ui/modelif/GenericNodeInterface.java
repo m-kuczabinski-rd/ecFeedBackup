@@ -22,9 +22,11 @@ import com.testify.ecfeed.modelif.ModelOperationManager;
 import com.testify.ecfeed.modelif.java.ILoaderProvider;
 import com.testify.ecfeed.modelif.java.JavaImplementationStatusResolver;
 import com.testify.ecfeed.modelif.java.ModelClassLoader;
+import com.testify.ecfeed.modelif.java.category.CategoryOperationMove;
 import com.testify.ecfeed.modelif.java.category.CategoryOperationSwap;
 import com.testify.ecfeed.modelif.java.classx.ClassOperationMove;
 import com.testify.ecfeed.modelif.java.method.MethodOperationMove;
+import com.testify.ecfeed.modelif.java.testcase.TestCaseOperationMove;
 import com.testify.ecfeed.ui.common.LoaderProvider;
 import com.testify.ecfeed.ui.editor.BasicSection;
 import com.testify.ecfeed.ui.editor.IModelUpdateListener;
@@ -40,17 +42,10 @@ public class GenericNodeInterface {
 
 		private GenericNode fNewParent;
 		private int fNewIndex;
-		private boolean fValidIndex;
 
 		public MoveOperationProvider(GenericNode newParent, int newIndex){
 			fNewParent = newParent;
 			fNewIndex = newIndex;
-			fValidIndex = true;
-		}
-		
-		public MoveOperationProvider(GenericNode newParent){
-			fNewParent = newParent;
-			fValidIndex = false;
 		}
 		
 		@Override
@@ -61,10 +56,7 @@ public class GenericNodeInterface {
 		@Override
 		public Object visit(ClassNode node) throws Exception {
 			if(fNewParent instanceof RootNode){
-				if(fValidIndex){
-					return new ClassOperationMove(node, (RootNode)fNewParent, fNewIndex);
-				}
-				return new ClassOperationMove(node, (RootNode)fNewParent);
+				return new ClassOperationMove(node, (RootNode)fNewParent, fNewIndex);
 			}
 			return null;
 		}
@@ -72,16 +64,22 @@ public class GenericNodeInterface {
 		@Override
 		public Object visit(MethodNode node) throws Exception {
 			if(fNewParent instanceof ClassNode){
-				if(fValidIndex){
-					return new MethodOperationMove(node, (ClassNode)fNewParent, fNewIndex);
-				}
-				return new MethodOperationMove(node, (ClassNode)fNewParent);
+				return new MethodOperationMove(node, (ClassNode)fNewParent, fNewIndex);
 			}
 			return null;
 		}
 
 		@Override
 		public Object visit(CategoryNode node) throws Exception {
+			if(fNewParent instanceof MethodNode){
+				MethodNode newMethod = (MethodNode)fNewParent;
+				if(newMethod != node.getMethod()){
+					return new CategoryOperationMove(node, (MethodNode)fNewParent, fNewIndex);
+				}
+				else{
+					return new CategoryOperationSwap(node, fNewIndex);
+				}
+			}
 			return null;
 		}
 
@@ -104,6 +102,7 @@ public class GenericNodeInterface {
 		}
 		
 	}
+
 	
 	private class MoveUpDownOperationProvider implements IModelVisitor{
 
@@ -162,7 +161,16 @@ public class GenericNodeInterface {
 
 		@Override
 		public Object visit(TestCaseNode node) throws Exception {
-			// TODO Auto-generated method stub
+			if(fMoveUp){
+				if(node.getIndex() > 0){
+					return new TestCaseOperationMove(node, node.getMethod(), node.getIndex() - 1);
+				}
+			}
+			else{
+				if(node.getIndex() < node.getMethod().getTestCases().size() - 1){
+					return new TestCaseOperationMove(node, node.getMethod(), node.getIndex() + 1);
+				}
+			}
 			return null;
 		}
 
@@ -243,13 +251,7 @@ public class GenericNodeInterface {
 	}
 	
 	public boolean move(GenericNode newParent, BasicSection source, IModelUpdateListener updateListener){
-		try{
-			IModelOperation moveOperation = (IModelOperation)fTarget.accept(new MoveOperationProvider(newParent));
-			return executeMoveOperation(moveOperation, source, updateListener);
-		}
-		catch (Exception e) {
-			return false;
-		}
+		return move(newParent, 0, source, updateListener);
 	}
 	
 	public boolean moveUp(BasicSection source, IModelUpdateListener updateListener){

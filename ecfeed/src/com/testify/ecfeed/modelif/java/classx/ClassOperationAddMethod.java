@@ -15,10 +15,12 @@ public class ClassOperationAddMethod implements IModelOperation {
 	
 	private ClassNode fTarget;
 	private MethodNode fMethod;
+	private int fIndex;
 
-	public ClassOperationAddMethod(ClassNode target, MethodNode method) {
+	public ClassOperationAddMethod(ClassNode target, MethodNode method, int index) {
 		fTarget = target;
 		fMethod = method;
+		fIndex = index;
 	}
 
 	@Override
@@ -27,7 +29,7 @@ public class ClassOperationAddMethod implements IModelOperation {
 		if(JavaClassUtils.validateNewMethodSignature(fTarget, fMethod.getName(), fMethod.getCategoriesTypes(), problems) == false){
 			throw new ModelIfException(JavaUtils.consolidate(problems));
 		}
-		if(fTarget.addMethod(fMethod) == false){
+		if(fTarget.addMethod(fMethod, fIndex) == false){
 			throw new ModelIfException(Messages.UNEXPECTED_PROBLEM_WHILE_ADDING_METHOD);
 		}
 	}

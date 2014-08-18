@@ -44,7 +44,7 @@ public class RootInterface extends GenericNodeInterface {
 			className = generateClassName();
 		}
 		ClassNode addedClass = new ClassNode(className);
-		if(execute(new RootOperationAddNewClass(fTarget, addedClass), source, updateListener, Messages.DIALOG_ADD_NEW_CLASS_PROBLEM_TITLE)){
+		if(execute(new RootOperationAddNewClass(fTarget, addedClass, fTarget.getClasses().size()), source, updateListener, Messages.DIALOG_ADD_NEW_CLASS_PROBLEM_TITLE)){
 			return addedClass;
 		}
 		return null;
@@ -60,9 +60,8 @@ public class RootInterface extends GenericNodeInterface {
 			if(selectedClass != null){
 				ClassNode classModel;
 				try {
-//					classModel = new JavaModelBuilder().buildClassModel(selectedClass.getFullyQualifiedName(), testOnly);
 					classModel = new EclipseModelBuilder().buildClassModel(selectedClass, testOnly);
-					if(execute(new RootOperationAddNewClass(fTarget, classModel), source, updateListener, Messages.DIALOG_ADD_NEW_CLASS_PROBLEM_TITLE)){
+					if(execute(new RootOperationAddNewClass(fTarget, classModel, fTarget.getClasses().size()), source, updateListener, Messages.DIALOG_ADD_NEW_CLASS_PROBLEM_TITLE)){
 						return classModel;
 					}
 				} catch (ModelIfException e) {

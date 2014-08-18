@@ -10,10 +10,12 @@ public class ClassOperationRemoveMethod implements IModelOperation {
 
 	private ClassNode fTarget;
 	private MethodNode fMethod;
+	private int fCurrentIndex;
 
 	public ClassOperationRemoveMethod(ClassNode target, MethodNode method) {
 		fTarget = target;
 		fMethod = method;
+		fCurrentIndex = fMethod.getIndex();
 	}
 	
 	@Override
@@ -25,7 +27,7 @@ public class ClassOperationRemoveMethod implements IModelOperation {
 
 	@Override
 	public IModelOperation reverseOperation() {
-		return new ClassOperationAddMethod(fTarget, fMethod);
+		return new ClassOperationAddMethod(fTarget, fMethod, fCurrentIndex);
 	}
 
 }

@@ -9,10 +9,12 @@ public class RootOperationRemoveClass implements IModelOperation {
 
 	private ClassNode fRemovedClass;
 	private RootNode fTarget;
+	private int fCurrentIndex;
 	
 	public RootOperationRemoveClass(RootNode target, ClassNode removedClass) {
 		fTarget = target;
 		fRemovedClass = removedClass;
+		fCurrentIndex = removedClass.getIndex();
 	}
 
 	@Override
@@ -22,7 +24,7 @@ public class RootOperationRemoveClass implements IModelOperation {
 
 	@Override
 	public IModelOperation reverseOperation() {
-		return new RootOperationAddNewClass(fTarget, fRemovedClass);
+		return new RootOperationAddNewClass(fTarget, fRemovedClass, fCurrentIndex);
 	}
 
 }

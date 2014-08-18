@@ -30,5 +30,6 @@ public class Messages {
 	public static final String TEST_CASE_NAME_REGEX_PROBLEM = "Test case name not allowed";
 
 	public static final String OPERATION_NOT_SUPPORTED_PROBLEM = "Operation not supported";
+	public static final String TEST_CASE_INCOMPATIBLE_WITH_METHOD = "Target method must have the same number of parameters and corresponding partition names as added test case.";
 
 }

@@ -11,10 +11,12 @@ public class RootOperationAddNewClass implements IModelOperation {
 	
 	private RootNode fTarget;
 	private ClassNode fAddedClass;
+	private int fIndex;
 	
-	public RootOperationAddNewClass(RootNode target, ClassNode addedClass) {
+	public RootOperationAddNewClass(RootNode target, ClassNode addedClass, int index) {
 		fTarget = target;
 		fAddedClass = addedClass;
+		fIndex = index;
 	}
 	
 	@Override
@@ -26,8 +28,7 @@ public class RootOperationAddNewClass implements IModelOperation {
 		if(fTarget.getClassModel(name) != null){
 			throw new ModelIfException(Messages.CLASS_NAME_DUPLICATE_PROBLEM);
 		}
-		
-		fTarget.addClass(fAddedClass);
+		fTarget.addClass(fAddedClass, fIndex);
 	}
 
 	@Override
