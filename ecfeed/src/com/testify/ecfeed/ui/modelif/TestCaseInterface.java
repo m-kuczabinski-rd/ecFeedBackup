@@ -5,6 +5,7 @@ import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.modelif.ImplementationStatus;
 import com.testify.ecfeed.modelif.ModelOperationManager;
 import com.testify.ecfeed.modelif.java.JavaUtils;
+import com.testify.ecfeed.modelif.java.testcase.TestCaseOperationRename;
 import com.testify.ecfeed.modelif.java.testcase.TestCaseOperationUpdateTestData;
 import com.testify.ecfeed.ui.editor.BasicSection;
 import com.testify.ecfeed.ui.editor.IModelUpdateListener;
@@ -25,7 +26,7 @@ public class TestCaseInterface extends GenericNodeInterface {
 	
 	@Override
 	public boolean setName(String newName, BasicSection source, IModelUpdateListener updateListener) {
-		return false;
+		return execute(new TestCaseOperationRename(fTarget, newName), source, updateListener, Messages.DIALOG_TEST_SUITE_NAME_PROBLEM_MESSAGE);
 	}
 
 	public boolean isExecutable(TestCaseNode tc){

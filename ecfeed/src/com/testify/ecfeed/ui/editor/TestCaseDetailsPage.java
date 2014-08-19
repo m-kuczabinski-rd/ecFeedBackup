@@ -11,7 +11,6 @@
 
 package com.testify.ecfeed.ui.editor;
 
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -26,36 +25,19 @@ import org.eclipse.swt.widgets.Listener;
 
 import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.modelif.ModelOperationManager;
-import com.testify.ecfeed.ui.common.Messages;
+import com.testify.ecfeed.ui.modelif.TestCaseInterface;
 
 public class TestCaseDetailsPage extends BasicDetailsPage {
 
-	private TestCaseNode fSelectedTestCase;
 	private Combo fTestSuiteNameCombo;
 	private TestDataViewer fTestDataSection;
 	private ModelOperationManager fOperationManager;
+	private TestCaseInterface fTestCaseIf;
 	
 	private class RenameTestCaseAdapter extends SelectionAdapter{
 		@Override
 		public void widgetSelected(SelectionEvent e){
-			applyNewTestCaseName(fSelectedTestCase, fTestSuiteNameCombo);
-		}
-		
-		protected void applyNewTestCaseName(TestCaseNode testCase, Combo nameCombo){
-			String newName = nameCombo.getText();
-			if(newName.equals(fSelectedTestCase.getName())){
-				return;
-			}
-			if(TestCaseNode.validateTestSuiteName(newName)){
-				testCase.setName(newName);
-				modelUpdated(null);
-			}
-			else{
-				MessageDialog.openError(getActiveShell(), 
-						Messages.DIALOG_TEST_SUITE_NAME_PROBLEM_TITLE, 
-						Messages.DIALOG_TEST_SUITE_NAME_PROBLEM_MESSAGE);
-				nameCombo.setText(testCase.getName());
-			}
+			applyNewTestCaseName();
 		}
 	}
 	
@@ -63,7 +45,7 @@ public class TestCaseDetailsPage extends BasicDetailsPage {
 		@Override
 		public void handleEvent(Event event) {
 			if(event.keyCode == SWT.CR || event.keyCode == SWT.KEYPAD_CR){
-				applyNewTestCaseName(fSelectedTestCase, fTestSuiteNameCombo);
+				applyNewTestCaseName();
 			}
 		}
 	}
@@ -71,6 +53,12 @@ public class TestCaseDetailsPage extends BasicDetailsPage {
 	public TestCaseDetailsPage(ModelMasterSection masterSection, ModelOperationManager operationManager) {
 		super(masterSection);
 		fOperationManager = operationManager;
+		fTestCaseIf = new TestCaseInterface(operationManager);
+	}
+
+	private void applyNewTestCaseName() {
+		fTestCaseIf.setName(fTestSuiteNameCombo.getText(), null, TestCaseDetailsPage.this);
+		fTestSuiteNameCombo.setText(fTestCaseIf.getName());
 	}
 
 	@Override
@@ -100,13 +88,13 @@ public class TestCaseDetailsPage extends BasicDetailsPage {
 	@Override
 	public void refresh(){
 		if(getSelectedElement() instanceof TestCaseNode){
-			fSelectedTestCase = (TestCaseNode)getSelectedElement();
-		}
-		if(fSelectedTestCase != null){
-			getMainSection().setText(fSelectedTestCase.toString());
-			fTestSuiteNameCombo.setItems(fSelectedTestCase.getMethod().getTestSuites().toArray(new String[]{}));
-			fTestSuiteNameCombo.setText(fSelectedTestCase.getName());
-			fTestDataSection.setInput(fSelectedTestCase);
+			TestCaseNode testCase = (TestCaseNode)getSelectedElement();
+			fTestCaseIf.setTarget(testCase);
+
+			getMainSection().setText(testCase.toString());
+			fTestSuiteNameCombo.setItems(testCase.getMethod().getTestSuites().toArray(new String[]{}));
+			fTestSuiteNameCombo.setText(testCase.getName());
+			fTestDataSection.setInput(testCase);
 		}
 	}
 }
