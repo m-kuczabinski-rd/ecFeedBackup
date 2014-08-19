@@ -1,7 +1,9 @@
 package com.testify.ecfeed.modelif.java.common;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import com.testify.ecfeed.modelif.IModelOperation;
 import com.testify.ecfeed.modelif.ModelIfException;
@@ -9,7 +11,8 @@ import com.testify.ecfeed.modelif.ModelIfException;
 public class BulkOperation implements IModelOperation{
 
 	List<IModelOperation> fOperations;
-	private boolean fExecuteAll;
+	List<IModelOperation> fExecutedOperations;
+private boolean fExecuteAll;
 	
 	public BulkOperation(boolean executeAll) {
 		fOperations = new ArrayList<IModelOperation>();
@@ -26,10 +29,11 @@ public class BulkOperation implements IModelOperation{
 	
 	@Override
 	public void execute() throws ModelIfException {
-		List<String> errors = new ArrayList<String>();
+		Set<String> errors = new HashSet<String>();
 		for(IModelOperation operation : fOperations){
 			try{
 				operation.execute();
+				fExecutedOperations.add(operation);
 			}catch(ModelIfException e){
 				errors.add(e.getMessage());
 				if(fExecuteAll == false){
@@ -56,9 +60,13 @@ public class BulkOperation implements IModelOperation{
 		return fOperations;
 	}
 
+	protected List<IModelOperation> executedOperations(){
+		return fExecutedOperations;
+	}
+
 	protected List<IModelOperation> reverseOperations(){
 		List<IModelOperation> reverseOperations = new ArrayList<IModelOperation>();
-		for(IModelOperation operation : operations()){
+		for(IModelOperation operation : executedOperations()){
 			reverseOperations.add(0, operation);
 		}
 		return reverseOperations;
