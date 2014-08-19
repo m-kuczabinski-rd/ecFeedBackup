@@ -25,6 +25,7 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 
 import com.testify.ecfeed.model.TestCaseNode;
+import com.testify.ecfeed.modelif.ModelOperationManager;
 import com.testify.ecfeed.ui.common.Messages;
 
 public class TestCaseDetailsPage extends BasicDetailsPage {
@@ -32,6 +33,7 @@ public class TestCaseDetailsPage extends BasicDetailsPage {
 	private TestCaseNode fSelectedTestCase;
 	private Combo fTestSuiteNameCombo;
 	private TestDataViewer fTestDataSection;
+	private ModelOperationManager fOperationManager;
 	
 	private class RenameTestCaseAdapter extends SelectionAdapter{
 		@Override
@@ -66,15 +68,16 @@ public class TestCaseDetailsPage extends BasicDetailsPage {
 		}
 	}
 	
-	public TestCaseDetailsPage(ModelMasterSection masterSection) {
+	public TestCaseDetailsPage(ModelMasterSection masterSection, ModelOperationManager operationManager) {
 		super(masterSection);
+		fOperationManager = operationManager;
 	}
 
 	@Override
 	public void createContents(Composite parent) {
 		super.createContents(parent);
 		createTestSuiteEdit(getMainComposite());
-		addForm(fTestDataSection = new TestDataViewer(this, getToolkit()));
+		addForm(fTestDataSection = new TestDataViewer(this, getToolkit(), fOperationManager));
 	}
 	
 	private void createTestSuiteEdit(Composite parent) {

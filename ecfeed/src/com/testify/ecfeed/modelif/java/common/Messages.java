@@ -31,5 +31,6 @@ public class Messages {
 
 	public static final String OPERATION_NOT_SUPPORTED_PROBLEM = "Operation not supported";
 	public static final String TEST_CASE_INCOMPATIBLE_WITH_METHOD = "Target method must have the same number of parameters and corresponding partition names as added test case.";
+	public static final String TEST_DATA_CATEGORY_MISMATCH_PROBLEM = "New test value has wrong parent category.";
 
 }

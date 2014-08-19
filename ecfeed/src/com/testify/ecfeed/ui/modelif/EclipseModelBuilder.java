@@ -81,7 +81,7 @@ public class EclipseModelBuilder {
 		case com.testify.ecfeed.modelif.java.Constants.TYPE_NAME_BYTE:
 			return defaultIntegerPartitions();
 		case com.testify.ecfeed.modelif.java.Constants.TYPE_NAME_CHAR:
-			return defaultIntegerPartitions();
+			return new ArrayList<PartitionNode>();
 		case com.testify.ecfeed.modelif.java.Constants.TYPE_NAME_DOUBLE:
 			return defaultFloatPartitions();
 		case com.testify.ecfeed.modelif.java.Constants.TYPE_NAME_FLOAT:
@@ -97,6 +97,15 @@ public class EclipseModelBuilder {
 		default:
 			return defaultUserTypePartitions(typeName);
 		}
+	}
+
+	public List<String> getSpecialValues(String typeName) {
+		List<PartitionNode> partitions = defaultPartitions(typeName);
+		List<String> result = new ArrayList<String>();
+		for(PartitionNode p : partitions){
+			result.add(p.getValueString());
+		}
+		return result;
 	}
 
 	

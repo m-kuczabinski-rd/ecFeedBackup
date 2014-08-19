@@ -223,7 +223,8 @@ public class AddTestCaseDialog extends TitleAreaDialog implements TestDataEditor
 	}
 
 	@Override
-	public void testDataChanged() {
+	public void testDataChanged(int index, PartitionNode newValue) {
+		fTestData.set(index, newValue);
 		fTestDataViewer.refresh();
 	}
 	

@@ -1,9 +1,11 @@
 package com.testify.ecfeed.ui.modelif;
 
+import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.modelif.ImplementationStatus;
 import com.testify.ecfeed.modelif.ModelOperationManager;
 import com.testify.ecfeed.modelif.java.JavaUtils;
+import com.testify.ecfeed.modelif.java.testcase.TestCaseOperationUpdateTestData;
 import com.testify.ecfeed.ui.editor.BasicSection;
 import com.testify.ecfeed.ui.editor.IModelUpdateListener;
 
@@ -41,6 +43,10 @@ public class TestCaseInterface extends GenericNodeInterface {
 	
 	static public boolean validateName(String name){
 		return JavaUtils.isValidTestCaseName(name);
+	}
+
+	public boolean updateTestData(int index, PartitionNode value, BasicSection source, IModelUpdateListener updateListener) {
+		return execute(new TestCaseOperationUpdateTestData(fTarget, index, value), source, updateListener, Messages.DIALOG_UPDATE_TEST_DATA_PROBLEM_TITLE);
 	}
 
 }

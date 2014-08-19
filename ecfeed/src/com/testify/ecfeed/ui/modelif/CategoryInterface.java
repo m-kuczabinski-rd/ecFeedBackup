@@ -1,6 +1,7 @@
 package com.testify.ecfeed.ui.modelif;
 
 import java.util.Arrays;
+import java.util.List;
 
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
@@ -90,15 +91,31 @@ public class CategoryInterface extends GenericNodeInterface {
 	}
 
 	public boolean hasLimitedValuesSet() {
-		return !isPrimitive() || isBoolean();
+		return !isPrimitive(fTarget.getType()) || isBoolean(fTarget.getType());
 	}
 
-	private boolean isPrimitive() {
-		return Arrays.asList(JavaUtils.supportedPrimitiveTypes()).contains(fTarget.getType());
+	public static boolean hasLimitedValuesSet(CategoryNode category) {
+		String type = category.getType();
+		return !isPrimitive(type) || isBoolean(type);
+	}
+
+	public static boolean isPrimitive(String type) {
+		return Arrays.asList(JavaUtils.supportedPrimitiveTypes()).contains(type);
 	}
 	
-	private boolean isBoolean(){
-		return fTarget.getType().equals(JavaUtils.getBooleanTypeName());
+	public boolean isPrimitive() {
+		return isPrimitive(fTarget.getType());
+	}
+	
+	private static boolean isBoolean(String type){
+		return type.equals(JavaUtils.getBooleanTypeName());
 	}
 
+	public List<String> getSpecialValues() {
+		return new EclipseModelBuilder().getSpecialValues(fTarget.getType());
+	}
+
+	public static List<String> getSpecialValues(String type) {
+		return new EclipseModelBuilder().getSpecialValues(type);
+	}
 }

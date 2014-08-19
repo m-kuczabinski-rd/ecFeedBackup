@@ -11,6 +11,8 @@
 
 package com.testify.ecfeed.ui.common;
 
+import com.testify.ecfeed.model.PartitionNode;
+
 public interface TestDataEditorListener {
-	public void testDataChanged();
+	public void testDataChanged(int index, PartitionNode newValue);
 }

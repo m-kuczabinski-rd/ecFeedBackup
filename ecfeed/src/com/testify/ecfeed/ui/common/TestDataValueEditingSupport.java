@@ -11,8 +11,9 @@
 
 package com.testify.ecfeed.ui.common;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ArrayContentProvider;
@@ -26,19 +27,23 @@ import org.eclipse.swt.widgets.Display;
 
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.PartitionNode;
-import com.testify.ecfeed.utils.ModelUtils;
+import com.testify.ecfeed.modelif.java.category.ITypeAdapter;
+import com.testify.ecfeed.ui.modelif.CategoryInterface;
+import com.testify.ecfeed.ui.modelif.TypeAdaptationSupport;
 
 public class TestDataValueEditingSupport extends EditingSupport {
 	private final TableViewer fViewer;
-	private List<PartitionNode> fTestData;
-	private ComboBoxViewerCellEditor fComboCellEditor = null;
+	private ComboBoxViewerCellEditor fComboCellEditor;
 	private TestDataEditorListener fSetValueListener;
 
 	public TestDataValueEditingSupport(TableViewer viewer, List<PartitionNode> testData, TestDataEditorListener setValueListener) {
 		super(viewer);
 		fViewer = viewer;
-		fTestData = testData;
 		fSetValueListener = setValueListener;
+
+		fComboCellEditor = new ComboBoxViewerCellEditor(fViewer.getTable(), SWT.TRAIL);
+		fComboCellEditor.setLabelProvider(new LabelProvider());
+		fComboCellEditor.setContentProvider(new ArrayContentProvider());
 	}
 
 	@Override
@@ -48,30 +53,20 @@ public class TestDataValueEditingSupport extends EditingSupport {
 	}
 
 	private CellEditor getComboCellEditor(PartitionNode partition) {
-		if(fComboCellEditor == null){
-			fComboCellEditor = new ComboBoxViewerCellEditor(fViewer.getTable(), SWT.TRAIL);
-			fComboCellEditor.setLabelProvider(new LabelProvider());
-			fComboCellEditor.setContentProvider(new ArrayContentProvider());
-		}
+		CategoryInterface catIf = new CategoryInterface(null);
+		catIf.setTarget(partition.getCategory());
+		
 		if (partition.getCategory().isExpected()) {
-			ArrayList<String> expectedValues = new ArrayList<String>();
-			for (PartitionNode node : ModelUtils.generateDefaultPartitions(partition.getCategory().getType())) {
-				expectedValues.add(node.getValueString());
+			Set<String> expectedValues = new HashSet<String>();
+			for (String specialValue : catIf.getSpecialValues()) {
+				expectedValues.add(specialValue);
 			}
-			if (!expectedValues.contains(partition.getValueString())) {
+			if (expectedValues.contains(partition.getValueString()) == false) {
 				expectedValues.add(partition.getValueString());
 			}
-			for(PartitionNode leaf : partition.getCategory().getLeafPartitions()){
-				if(!expectedValues.contains(leaf.getValueString())){
-					expectedValues.add(leaf.getValueString());
-				}
-			}
-			
 			fComboCellEditor.setInput(expectedValues);
-			fComboCellEditor.setValue(partition.getValueString());
 
-			if (ModelUtils.getJavaTypes().contains(partition.getCategory().getType())
-					&& !partition.getCategory().getType().equals(com.testify.ecfeed.modelif.java.Constants.TYPE_NAME_BOOLEAN)) {
+			if (catIf.hasLimitedValuesSet() == false) {
 				fComboCellEditor.getViewer().getCCombo().setEditable(true);
 			} else {
 				fComboCellEditor.setActivationStyle(ComboBoxViewerCellEditor.DROP_DOWN_ON_KEY_ACTIVATION |
@@ -104,32 +99,32 @@ public class TestDataValueEditingSupport extends EditingSupport {
 
 	@Override
 	protected void setValue(Object element, Object value) {
-		PartitionNode partitionElement = (PartitionNode)element;
-		CategoryNode category = partitionElement.getCategory();
-		String valueString = null;
-		if (category.isExpected()) {
-			if (value instanceof String) {
-				valueString = (String)value;
-			} else if (value == null){
-				valueString = fComboCellEditor.getViewer().getCCombo().getText();
+		PartitionNode current = (PartitionNode)element;
+		CategoryNode category = current.getCategory();
+		int index = category.getIndex();
+		PartitionNode newValue = null;
+		if(category.isExpected()){
+			String valueString = fComboCellEditor.getViewer().getCCombo().getText();
+			String type = category.getType(); 
+			ITypeAdapter adapter = new TypeAdaptationSupport().getAdapterProvider().getAdapter(type);
+			if(adapter.convert(valueString) == null){
+				MessageDialog.openError(Display.getCurrent().getActiveShell(),
+						Messages.DIALOG_PARTITION_VALUE_PROBLEM_TITLE,
+						Messages.DIALOG_PARTITION_VALUE_PROBLEM_MESSAGE(valueString));
+				return;
 			}
-			if (!valueString.equals(partitionElement.getValueString())) {
-				if (!ModelUtils.validatePartitionStringValue(valueString, category.getType())) {
-					MessageDialog.openError(Display.getCurrent().getActiveShell(),
-							Messages.DIALOG_PARTITION_VALUE_PROBLEM_TITLE,
-							Messages.DIALOG_PARTITION_VALUE_PROBLEM_MESSAGE(valueString));
-				} else {
-					((PartitionNode)element).setValueString(valueString);
-					fSetValueListener.testDataChanged();
-				}
+			else if(valueString.equals(current.getValueString()) == false){
+				newValue = current.getCopy();
+				newValue.setValueString(valueString);
 			}
-		} else if (value instanceof PartitionNode) {
-			PartitionNode partitionValue = (PartitionNode)value;
-			int parentIndex = category.getMethod().getCategories().indexOf(category);
-			if(parentIndex >= 0 && parentIndex <= fTestData.size()) {
-				fTestData.set(parentIndex, partitionValue);
-				fSetValueListener.testDataChanged();
+		}
+		else if(value instanceof PartitionNode){
+			if((PartitionNode)value != current){
+				newValue = (PartitionNode)value;
 			}
+		}
+		if(newValue != null){
+			fSetValueListener.testDataChanged(index, newValue);
 		}
 	}
 }

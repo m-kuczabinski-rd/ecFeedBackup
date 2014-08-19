@@ -26,6 +26,7 @@ public class Messages {
 	public static final String DIALOG_ADD_TEST_SUITE_PROBLEM_TITLE = "Couldn't add test cases";
 	public static final String DIALOG_EMPTY_TEST_SUITE_GENERATED_MESSAGE = "The generated test suite was empty";
 	public static final String DIALOG_TEST_EXECUTION_PROBLEM_TITLE = "Couldn't execute test";
+	public static final String DIALOG_UPDATE_TEST_DATA_PROBLEM_TITLE = "Couldn't update test data";
 
 
 	//CONFIRMATIONS AND WARNINGS

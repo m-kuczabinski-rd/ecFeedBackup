@@ -13,5 +13,4 @@ public class TestCaseOperationMove extends BulkOperation {
 		addOperation(new MethodOperationRemoveTestCase(target.getMethod(), target));
 		addOperation(new MethodOperationAddTestCase(newParent, target, newIndex));
 	}
-
 }
