@@ -194,7 +194,7 @@ public class XomBuilder implements IModelVisitor, IStatementVisitor {
 
 	@Override
 	public Object visit(ExpectedValueStatement statement) throws Exception {
-		String categoryName = statement.getLeftHandName();
+		String categoryName = statement.getLeftOperandName();
 		PartitionNode condition = statement.getCondition();
 		Attribute categoryAttribute = 
 				new Attribute(STATEMENT_CATEGORY_ATTRIBUTE_NAME, categoryName);

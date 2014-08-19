@@ -2,9 +2,6 @@ package com.testify.ecfeed.ui.modelif;
 
 import java.net.URLClassLoader;
 
-import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.swt.widgets.Display;
-
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.ConstraintNode;
@@ -17,7 +14,6 @@ import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.modelif.IImplementationStatusResolver;
 import com.testify.ecfeed.modelif.IModelOperation;
 import com.testify.ecfeed.modelif.ImplementationStatus;
-import com.testify.ecfeed.modelif.ModelIfException;
 import com.testify.ecfeed.modelif.ModelOperationManager;
 import com.testify.ecfeed.modelif.java.ILoaderProvider;
 import com.testify.ecfeed.modelif.java.JavaImplementationStatusResolver;
@@ -31,9 +27,8 @@ import com.testify.ecfeed.ui.common.LoaderProvider;
 import com.testify.ecfeed.ui.editor.BasicSection;
 import com.testify.ecfeed.ui.editor.IModelUpdateListener;
 
-public class GenericNodeInterface {
+public class GenericNodeInterface extends OperationExecuter{
 
-	private ModelOperationManager fOperationManager;
 	private ILoaderProvider fLoaderProvider;
 	private IImplementationStatusResolver fStatusResolver;
 	private GenericNode fTarget;
@@ -189,7 +184,7 @@ public class GenericNodeInterface {
 	}
 	
 	public GenericNodeInterface(ModelOperationManager modelOperationManager) {
-		fOperationManager = modelOperationManager;
+		super(modelOperationManager);
 		fLoaderProvider = new LoaderProvider();
 		fStatusResolver = new JavaImplementationStatusResolver(fLoaderProvider);
 	}
@@ -198,27 +193,8 @@ public class GenericNodeInterface {
 		fTarget = target;
 	}
 	
-	protected ModelOperationManager getOperationManager(){
-		return fOperationManager;
-	}
-	
 	protected ModelClassLoader getLoader(boolean create, URLClassLoader parent){
 		return fLoaderProvider.getLoader(create, parent);
-	}
-	
-	protected boolean execute(IModelOperation operation, BasicSection source, IModelUpdateListener updateListener, String errorMessageTitle){
-		try{
-			fOperationManager.execute(operation);
-			if(updateListener != null){
-				updateListener.modelUpdated(source);
-			}
-			return true;
-		}catch(ModelIfException e){
-			MessageDialog.openError(Display.getCurrent().getActiveShell(), 
-					errorMessageTitle, 
-					e.getMessage());
-		}
-		return false;
 	}
 	
 	public ImplementationStatus implementationStatus(GenericNode node){

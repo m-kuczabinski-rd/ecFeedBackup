@@ -28,7 +28,7 @@ public class ExpectedValueStatement extends BasicStatement implements IRelationa
 	}
 	
 	@Override
-	public String getLeftHandName() {
+	public String getLeftOperandName() {
 		return fCategory.getName();
 	}
 	

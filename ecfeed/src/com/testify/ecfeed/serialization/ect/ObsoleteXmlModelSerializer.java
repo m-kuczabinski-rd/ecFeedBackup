@@ -235,7 +235,7 @@ public class ObsoleteXmlModelSerializer {
 		}
 		else if(istatement instanceof ExpectedValueStatement){
 			ExpectedValueStatement statement = (ExpectedValueStatement)istatement;
-			String categoryName = statement.getLeftHandName();
+			String categoryName = statement.getLeftOperandName();
 			PartitionNode condition = statement.getCondition();
 			Attribute categoryAttribute = 
 					new Attribute(Constants.STATEMENT_CATEGORY_ATTRIBUTE_NAME, categoryName);

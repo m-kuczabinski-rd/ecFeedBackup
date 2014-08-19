@@ -28,6 +28,7 @@ public class Messages {
 	public static final String CATEGORY_DEFAULT_VALUE_REGEX_PROBLEM = "The entered value is not compatible with parameter type";
 	public static final String CONSTRAINT_NAME_REGEX_PROBLEM = "Constraint name not allowed";
 	public static final String TEST_CASE_NAME_REGEX_PROBLEM = "Test case name not allowed";
+	public static final String INCOMPATIBLE_CONSTRAINT_PROBLEM = "The added constraint does not match the method model";
 
 	public static final String OPERATION_NOT_SUPPORTED_PROBLEM = "Operation not supported";
 	public static final String TEST_CASE_INCOMPATIBLE_WITH_METHOD = "Target method must have the same number of parameters and corresponding partition names as added test case.";

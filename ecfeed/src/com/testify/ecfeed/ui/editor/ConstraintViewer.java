@@ -51,17 +51,20 @@ import com.testify.ecfeed.model.constraint.PartitionedCategoryStatement;
 import com.testify.ecfeed.model.constraint.Relation;
 import com.testify.ecfeed.model.constraint.StatementArray;
 import com.testify.ecfeed.model.constraint.StaticStatement;
+import com.testify.ecfeed.modelif.ModelOperationManager;
 import com.testify.ecfeed.modelif.java.Constants;
+import com.testify.ecfeed.ui.modelif.BasicStatementInterface;
+import com.testify.ecfeed.ui.modelif.StatementInterfaceFactory;
 import com.testify.ecfeed.utils.ModelUtils;
 
 public class ConstraintViewer extends TreeViewerSection {
 
 	private final static int STYLE = Section.TITLE_BAR | Section.EXPANDED;
 	
-	private final String STATEMENT_FALSE = new StaticStatement(false).getLeftHandName();
-	private final String STATEMENT_TRUE = new StaticStatement(true).getLeftHandName();;
-	private final String STATEMENT_AND = new StatementArray(Operator.AND).getLeftHandName();
-	private final String STATEMENT_OR = new StatementArray(Operator.OR).getLeftHandName();
+	private final String STATEMENT_FALSE = new StaticStatement(false).getLeftOperandName();
+	private final String STATEMENT_TRUE = new StaticStatement(true).getLeftOperandName();;
+	private final String STATEMENT_AND = new StatementArray(Operator.AND).getLeftOperandName();
+	private final String STATEMENT_OR = new StatementArray(Operator.OR).getLeftOperandName();
 	
 	private final String[] FIXED_STATEMENTS = {STATEMENT_FALSE, STATEMENT_TRUE, STATEMENT_OR, STATEMENT_AND};
 
@@ -84,16 +87,21 @@ public class ConstraintViewer extends TreeViewerSection {
 	private Composite fStatementEditComposite;
 
 	private StackLayout fConditionLayout;
+	
+	
+	
+	BasicStatementInterface fStatementIf;
+	StatementInterfaceFactory fStatementInterfaceFactory;
 
 	private class AddStatementAdapter extends SelectionAdapter{
 		@Override 
 		public void widgetSelected(SelectionEvent e){
-			BasicStatement newStatement = new StaticStatement(true); 
-			fSelectedStatement.addStatement(newStatement);
-			modelUpdated();
+			BasicStatement statement = fStatementIf.addNewStatement(ConstraintViewer.this, getUpdateListener());
+			if(statement != null){
 			//modelUpdated must be called before to refresh viewer before selecting the newly added statement
-			getTreeViewer().expandToLevel(newStatement, 1);
-			getTreeViewer().setSelection(new StructuredSelection(newStatement));
+				getTreeViewer().expandToLevel(statement, 1);
+				getTreeViewer().setSelection(new StructuredSelection(statement));
+			}
 		}
 	}
 	
@@ -101,10 +109,10 @@ public class ConstraintViewer extends TreeViewerSection {
 		@Override 
 		public void widgetSelected(SelectionEvent e){
 			BasicStatement parentStatement = fSelectedStatement.getParent();
-			if(parentStatement != null){
-				parentStatement.removeChild(fSelectedStatement);
-				getViewer().setSelection(new StructuredSelection(parentStatement));
-				modelUpdated();
+			if(fStatementIf.remove(ConstraintViewer.this, getUpdateListener())){
+				if(parentStatement != null){
+					getViewer().setSelection(new StructuredSelection(parentStatement));
+				}
 			}
 		}
 	}
@@ -154,7 +162,7 @@ public class ConstraintViewer extends TreeViewerSection {
 			if(fStatementEditListenersEnabled == false){
 				return;
 			}
-			if(fSelectedStatement.getLeftHandName().equals(fStatementCombo.getText()) == false){
+			if(fSelectedStatement.getLeftOperandName().equals(fStatementCombo.getText()) == false){
 				BasicStatement statement = createStatementFromCombo();
 				if(statement != null){
 					replaceSelectedStatement(statement);
@@ -171,7 +179,7 @@ public class ConstraintViewer extends TreeViewerSection {
 				statement = new StaticStatement(false);
 			}
 			else if (fStatementCombo.getText().equals(STATEMENT_AND)){
-				if(fSelectedStatement instanceof StatementArray && fSelectedStatement.getLeftHandName() == STATEMENT_OR){
+				if(fSelectedStatement instanceof StatementArray && fSelectedStatement.getLeftOperandName() == STATEMENT_OR){
 					StatementArray statementArray = (StatementArray) fSelectedStatement;
 					statementArray.setOperator(Operator.AND);	
 					statement = fSelectedStatement;
@@ -179,7 +187,7 @@ public class ConstraintViewer extends TreeViewerSection {
 				statement = new StatementArray(Operator.AND);
 			}
 			else if(fStatementCombo.getText().equals(STATEMENT_OR)){
-				if(fSelectedStatement instanceof StatementArray && fSelectedStatement.getLeftHandName() == STATEMENT_AND){
+				if(fSelectedStatement instanceof StatementArray && fSelectedStatement.getLeftOperandName() == STATEMENT_AND){
 					StatementArray statementArray = (StatementArray) fSelectedStatement;
 					statementArray.setOperator(Operator.OR);	
 					statement = fSelectedStatement;
@@ -213,6 +221,7 @@ public class ConstraintViewer extends TreeViewerSection {
 			Object selectedElement = ((StructuredSelection)event.getSelection()).getFirstElement();
 			if(selectedElement instanceof BasicStatement){
 				fSelectedStatement = (BasicStatement)selectedElement;
+				fStatementIf = fStatementInterfaceFactory.getInterface(fSelectedStatement);
 				enableSideButtons(fSelectedStatement);
 				refreshStatementEditPart(fSelectedStatement);
 				fStatementEditComposite.layout();
@@ -267,7 +276,7 @@ public class ConstraintViewer extends TreeViewerSection {
 			}
 			fStatementCombo.setItems(items.toArray(new String[]{}));
 
-			fStatementCombo.setText(statement.getLeftHandName());
+			fStatementCombo.setText(statement.getLeftOperandName());
 		}
 
 		private void refreshRelationCombo(IRelationalStatement statement) {
@@ -332,13 +341,14 @@ public class ConstraintViewer extends TreeViewerSection {
 		}
 	}
 	
-	public ConstraintViewer(BasicDetailsPage page, FormToolkit toolkit) {
+	public ConstraintViewer(BasicDetailsPage page, FormToolkit toolkit, ModelOperationManager operationManager) {
 		super(page.getMainComposite(), toolkit, STYLE, page);
 		getSection().setText("Constraint editor");
 		fAddStatementButton = addButton("Add statement", new AddStatementAdapter());
 		fRemoveStatementButton = addButton("Remove statement", new RemoveStatementAdapter());
 		createStatementEditComposite();
 		getViewer().addSelectionChangedListener(new StatementSelectionListener());
+		fStatementInterfaceFactory = new StatementInterfaceFactory(operationManager);
 	}
 
 	private void createStatementEditComposite(){

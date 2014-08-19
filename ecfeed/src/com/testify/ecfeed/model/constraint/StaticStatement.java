@@ -27,7 +27,7 @@ public class StaticStatement extends BasicStatement {
 		fValue = value;
 	}
 
-	public String getLeftHandName(){
+	public String getLeftOperandName(){
 		return fValue?STATIC_STATEMENT_TRUE_VALUE:STATIC_STATEMENT_FALSE_VALUE;
 	}
 	

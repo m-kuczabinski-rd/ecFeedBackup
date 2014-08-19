@@ -508,10 +508,20 @@ public class MethodNode extends GenericNode {
 	}
 
 	public void makeConsistent() {
+//		updateReferences();
 		removeInconsistentConstraints();
 		removeInconsistentTestCases();
 	}
 
+//	public void updateReferences() {
+//		for(TestCaseNode testCase : fTestCases){
+//			testCase.updateReferences(this);
+//		}
+//		for(ConstraintNode constraint : fConstraints){
+//			constraint.updateReferences(this);
+//		}
+//	}
+//
 	private void removeInconsistentTestCases() {
 		Iterator<TestCaseNode> it = fTestCases.iterator();
 		while(it.hasNext()){

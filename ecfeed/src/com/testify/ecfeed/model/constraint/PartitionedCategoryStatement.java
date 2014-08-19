@@ -217,13 +217,13 @@ public class PartitionedCategoryStatement extends BasicStatement implements IRel
 	}
 	
 	@Override
-	public String getLeftHandName() {
+	public String getLeftOperandName() {
 		return getCategory().getName();
 	}
 	
 	@Override
 	public String toString(){
-		return getLeftHandName() + getRelation() + fCondition.toString();
+		return getLeftOperandName() + getRelation() + fCondition.toString();
 	}
 	
 	@Override

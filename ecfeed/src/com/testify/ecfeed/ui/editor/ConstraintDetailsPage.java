@@ -24,49 +24,48 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 
 import com.testify.ecfeed.model.ConstraintNode;
+import com.testify.ecfeed.modelif.ModelOperationManager;
+import com.testify.ecfeed.ui.modelif.ConstraintInterface;
 
 public class ConstraintDetailsPage extends BasicDetailsPage {
 
-	private ConstraintNode fSelectedConstraint;
 	private Combo fNameCombo;
 	private ConstraintViewer fConstraintViewer;
+	private ConstraintInterface fConstraintIf;
+	private ModelOperationManager fOperationManager;
 	
 	private class RenameConstraintAdapter extends SelectionAdapter{
 		@Override
 		public void widgetSelected(SelectionEvent e){
-			applyConstraintName(fSelectedConstraint, fNameCombo);
-		}
-
-		protected void applyConstraintName(ConstraintNode constraint, Combo nameCombo) {
-			String newName = nameCombo.getText();
-			if(newName.equals(constraint.getName()) == false){
-				constraint.setName(newName);
-				modelUpdated(null);
-			}
-			else{
-				nameCombo.setText(constraint.getName());
-			}
+			applyConstraintName(fNameCombo.getText());
 		}
 	}
 
-	private class ConstraintNameListener extends RenameConstraintAdapter implements Listener{
+	private class ConstraintNameListener implements Listener{
 		@Override
 		public void handleEvent(Event event) {
 			if(event.keyCode == SWT.CR || event.keyCode == SWT.KEYPAD_CR){
-				applyConstraintName(fSelectedConstraint, fNameCombo);
+				applyConstraintName(fNameCombo.getText());
 			}
 		}
 	}
 	
-	public ConstraintDetailsPage(ModelMasterSection masterSection) {
+	private void applyConstraintName(String newName) {
+		fConstraintIf.setName(newName, null, this);
+		fNameCombo.setText(fConstraintIf.getName());
+	}
+
+	public ConstraintDetailsPage(ModelMasterSection masterSection, ModelOperationManager operationManager) {
 		super(masterSection);
+		fOperationManager = operationManager;
+		fConstraintIf = new ConstraintInterface(operationManager);
 	}
 	
 	@Override
 	public void createContents(Composite parent){
 		super.createContents(parent);
 		createConstraintNameEdit(getMainComposite());
-		addForm(fConstraintViewer = new ConstraintViewer(this, getToolkit()));
+		addForm(fConstraintViewer = new ConstraintViewer(this, getToolkit(), fOperationManager));
 	}
 	
 	private void createConstraintNameEdit(Composite parent) {
@@ -86,13 +85,13 @@ public class ConstraintDetailsPage extends BasicDetailsPage {
 	@Override
 	public void refresh(){
 		if(getSelectedElement() instanceof ConstraintNode){
-			fSelectedConstraint = (ConstraintNode)getSelectedElement();
-		}
-		if(fSelectedConstraint != null){
-			getMainSection().setText(fSelectedConstraint.toString());
-			fNameCombo.setItems(fSelectedConstraint.getMethod().getConstraintsNames().toArray(new String[]{}));
-			fNameCombo.setText(fSelectedConstraint.getName());
-			fConstraintViewer.setInput(fSelectedConstraint);
+			ConstraintNode constraint = (ConstraintNode)getSelectedElement();
+
+			getMainSection().setText(constraint.toString());
+			fNameCombo.setItems(constraint.getMethod().getConstraintsNames().toArray(new String[]{}));
+			fNameCombo.setText(constraint.getName());
+			fConstraintViewer.setInput(constraint);
+			fConstraintIf.setTarget(constraint);
 		}
 	}
 

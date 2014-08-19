@@ -30,7 +30,7 @@ public abstract class BasicStatement implements IStatement {
 		return fId;
 	}
 
-	public abstract String getLeftHandName();
+	public abstract String getLeftOperandName();
 	
 	public BasicStatement getParent() {
 		return fParent;
@@ -56,17 +56,17 @@ public abstract class BasicStatement implements IStatement {
 		}
 	}
 
-	public void removeChild(BasicStatement child) {
-		List<BasicStatement> children = getChildren();
-		if(children != null){
-			children.remove(child);
-		}
-	}
+//	public void removeChild(BasicStatement child) {
+//		List<BasicStatement> children = getChildren();
+//		if(children != null){
+//			children.remove(child);
+//		}
+//	}
 	
 	public void addStatement(BasicStatement statement){
-		if(getParent() != null){
-			getParent().addStatement(statement);
-		}
+//		if(getParent() != null){
+//			getParent().addStatement(statement);
+//		}
 	}
 
 	public boolean mentions(PartitionNode partition) {

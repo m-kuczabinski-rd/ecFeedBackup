@@ -24,7 +24,11 @@ public class MethodOperationAddConstraint implements IModelOperation {
 		if(fConstraint.getName().matches(Constants.REGEX_CONSTRAINT_NODE_NAME) == false){
 			throw new ModelIfException(Messages.CONSTRAINT_NAME_REGEX_PROBLEM);
 		}
+		if(fConstraint.updateReferences(fTarget) == false){
+			throw new ModelIfException(Messages.INCOMPATIBLE_CONSTRAINT_PROBLEM);
+		}
 		fTarget.addConstraint(fConstraint, fIndex);
+		fTarget.makeConsistent();
 	}
 
 	@Override

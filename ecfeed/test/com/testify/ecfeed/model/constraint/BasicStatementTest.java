@@ -25,7 +25,7 @@ public class BasicStatementTest {
 
 	private class StatementImplementation extends BasicStatement{
 		@Override
-		public String getLeftHandName() {
+		public String getLeftOperandName() {
 			return null;
 		}
 		@Override

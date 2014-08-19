@@ -27,7 +27,7 @@ public class StatementArray extends BasicStatement{
 		fOperator = operator;
 	}
 
-	public String getLeftHandName(){
+	public String getLeftOperandName(){
 		return fOperator == Operator.AND?Operator.AND.toString():Operator.OR.toString();
 	}
 
@@ -39,14 +39,22 @@ public class StatementArray extends BasicStatement{
 		fOperator = operator;
 	}
 
-	public void addStatement(BasicStatement statement){
-		fStatements.add(statement);
+	public void addStatement(BasicStatement statement, int index){
+		fStatements.add(index, statement);
 		statement.setParent(this);
+	}
+	
+	public void addStatement(BasicStatement statement){
+		addStatement(statement, fStatements.size());
 	}
 	
 	@Override
 	public List<BasicStatement> getChildren(){
 		return fStatements;
+	}
+	
+	public boolean removeChild(BasicStatement child){
+		return getChildren().remove(child);
 	}
 	
 	@Override
@@ -161,5 +169,4 @@ public class StatementArray extends BasicStatement{
 	public Object accept(IStatementVisitor visitor) throws Exception {
 		return visitor.visit(this);
 	}
-
 }
