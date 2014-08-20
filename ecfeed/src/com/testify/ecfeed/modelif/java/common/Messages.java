@@ -29,6 +29,7 @@ public class Messages {
 	public static final String CONSTRAINT_NAME_REGEX_PROBLEM = "Constraint name not allowed";
 	public static final String TEST_CASE_NAME_REGEX_PROBLEM = "Test case name not allowed";
 	public static final String INCOMPATIBLE_CONSTRAINT_PROBLEM = "The added constraint does not match the method model";
+	public static final String DIALOG_UNALLOWED_RELATION_MESSAGE = "This relation is not allowed for given statement";
 
 	public static final String OPERATION_NOT_SUPPORTED_PROBLEM = "Operation not supported";
 	public static final String TEST_CASE_INCOMPATIBLE_WITH_METHOD = "Target method must have the same number of parameters and corresponding partition names as added test case.";

@@ -260,6 +260,10 @@ public class PartitionedCategoryStatement extends BasicStatement implements IRel
 		return fRelation;
 	}
 	
+	public void setCondition(ICondition condition){
+		fCondition = condition;
+	}
+	
 	public void setCondition(String label){
 		fCondition = new LabelCondition(label);
 	}

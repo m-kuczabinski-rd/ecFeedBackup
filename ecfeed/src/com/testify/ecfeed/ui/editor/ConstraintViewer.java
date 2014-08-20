@@ -123,13 +123,7 @@ public class ConstraintViewer extends TreeViewerSection {
 			if(fStatementEditListenersEnabled == false){
 				return;
 			}
-			if(fSelectedStatement instanceof IRelationalStatement){
-				IRelationalStatement statement = (IRelationalStatement)fSelectedStatement;
-				if(statement.getRelation().toString().equals(fRelationCombo.getText()) == false){
-					statement.setRelation(Relation.getRelation(fRelationCombo.getText()));
-					modelUpdated();
-				}
-			}
+			fStatementIf.setRelation(Relation.getRelation(fRelationCombo.getText()), ConstraintViewer.this, getUpdateListener());
 		}
 	}
 	
@@ -138,21 +132,8 @@ public class ConstraintViewer extends TreeViewerSection {
 		public void modifyText(ModifyEvent e) {
 			if(fStatementEditListenersEnabled == false){
 				return;
-			}
-			if(fSelectedStatement instanceof PartitionedCategoryStatement){
-				PartitionedCategoryStatement statement = (PartitionedCategoryStatement)fSelectedStatement;
-				if(statement.getConditionName().equals(fConditionCombo.getText()) == false){
-					String conditionText = fConditionCombo.getText();
-					PartitionNode partition = statement.getCategory().getPartition(conditionText);
-					if(partition != null){//text in the combo is a partition name
-						statement.setCondition(partition);
-					}
-					else{//text in the combo is a label
-						statement.setCondition(conditionText);
-					}
-					modelUpdated();
-				}
-			}
+			} 
+			fStatementIf.updateCondition(fConditionCombo.getText(), ConstraintViewer.this, getUpdateListener());
 		}
 	}
 	

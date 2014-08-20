@@ -30,9 +30,6 @@ public class StatementViewerLabelProvider extends LabelProvider {
 	
 	private Constraint fConstraint;
 
-	public StatementViewerLabelProvider(){
-	}
-	
 	public void setConstraint(Constraint constraint){
 		fConstraint = constraint;
 	}

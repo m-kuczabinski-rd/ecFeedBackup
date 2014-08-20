@@ -1,6 +1,7 @@
 package com.testify.ecfeed.ui.modelif;
 
 import com.testify.ecfeed.model.constraint.BasicStatement;
+import com.testify.ecfeed.model.constraint.Relation;
 import com.testify.ecfeed.model.constraint.StaticStatement;
 import com.testify.ecfeed.modelif.ModelOperationManager;
 import com.testify.ecfeed.ui.editor.BasicSection;
@@ -49,5 +50,13 @@ public class BasicStatementInterface extends OperationExecuter {
 	public BasicStatementInterface parentIf(){
 		BasicStatement parent = fTarget.getParent();
 		return new StatementInterfaceFactory(getOperationManager()).getInterface(parent);
+	}
+
+	public boolean setRelation(Relation relation, BasicSection source, IModelUpdateListener updateListener) {
+		return false;
+	}
+
+	public boolean updateCondition(String text, BasicSection source, IModelUpdateListener updateListener) {
+		return false;
 	}
 }

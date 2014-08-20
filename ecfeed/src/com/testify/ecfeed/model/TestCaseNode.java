@@ -160,7 +160,7 @@ public class TestCaseNode extends GenericNode {
 	public boolean isConsistent() {
 		for(PartitionNode p : getTestData()){
 			CategoryNode category = p.getCategory();
-			if(category == null || category.getPartition(p.getQualifiedName()) == null){
+			if(category == null || (category.isExpected() == false && category.getPartition(p.getQualifiedName()) == null)){
 				return false;
 			}
 		}

@@ -29,6 +29,8 @@ public class Messages {
 	public static final String DIALOG_UPDATE_TEST_DATA_PROBLEM_TITLE = "Couldn't update test data";
 	public static final String DIALOG_ADD_STATEMENT_PROBLEM_TITLE = "Couldn't add statement";
 	public static final String DIALOG_REMOVE_STATEMENT_PROBLEM_TITLE = "Couldn't remove statement";
+	public static final String DIALOG_SET_RELATION_PROBLEM_TITLE = "Couldn't set statement relation";
+	public static final String DIALOG_SET_CONDITION_PROBLEM_TITLE = "Couldn't set statement condition";
 
 
 	//CONFIRMATIONS AND WARNINGS

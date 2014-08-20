@@ -12,10 +12,11 @@ public class BulkOperation implements IModelOperation{
 
 	List<IModelOperation> fOperations;
 	List<IModelOperation> fExecutedOperations;
-private boolean fExecuteAll;
+	private boolean fExecuteAll;
 	
 	public BulkOperation(boolean executeAll) {
 		fOperations = new ArrayList<IModelOperation>();
+		fExecutedOperations = new ArrayList<IModelOperation>();
 		fExecuteAll = executeAll;
 	}
 	

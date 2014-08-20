@@ -39,7 +39,6 @@ public class MethodOperationAddTestCase implements IModelOperation {
 		else{
 			fTarget.addTestCase(fTestCase, fIndex);
 		}
-		fTarget.makeConsistent();
 	}
 
 	@Override
