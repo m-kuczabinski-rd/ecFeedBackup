@@ -13,15 +13,13 @@ package com.testify.ecfeed.ui.editor;
 
 import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Event;
-import org.eclipse.swt.widgets.Listener;
 
 import com.testify.ecfeed.model.ConstraintNode;
 import com.testify.ecfeed.modelif.ModelOperationManager;
@@ -30,31 +28,27 @@ import com.testify.ecfeed.ui.modelif.ConstraintInterface;
 public class ConstraintDetailsPage extends BasicDetailsPage {
 
 	private Combo fNameCombo;
-	private ConstraintViewer fConstraintViewer;
 	private ConstraintInterface fConstraintIf;
 	private ModelOperationManager fOperationManager;
+	private ConstraintViewer fConstraintViewer;
 	
-	private class RenameConstraintAdapter extends SelectionAdapter{
+	private class ConstraintNameListener implements SelectionListener{
 		@Override
-		public void widgetSelected(SelectionEvent e){
+		public void widgetSelected(SelectionEvent e) {
 			applyConstraintName(fNameCombo.getText());
 		}
-	}
 
-	private class ConstraintNameListener implements Listener{
 		@Override
-		public void handleEvent(Event event) {
-			if(event.keyCode == SWT.CR || event.keyCode == SWT.KEYPAD_CR){
-				applyConstraintName(fNameCombo.getText());
-			}
+		public void widgetDefaultSelected(SelectionEvent e) {
+			widgetSelected(e);
+		}
+
+		private void applyConstraintName(String newName) {
+			fConstraintIf.setName(newName, null, ConstraintDetailsPage.this);
+			fNameCombo.setText(fConstraintIf.getName());
 		}
 	}
 	
-	private void applyConstraintName(String newName) {
-		fConstraintIf.setName(newName, null, this);
-		fNameCombo.setText(fConstraintIf.getName());
-	}
-
 	public ConstraintDetailsPage(ModelMasterSection masterSection, ModelOperationManager operationManager) {
 		super(masterSection);
 		fOperationManager = operationManager;
@@ -76,10 +70,9 @@ public class ConstraintDetailsPage extends BasicDetailsPage {
 		ComboViewer nameComboViewer = new ComboViewer(composite, SWT.NONE);
 		fNameCombo = nameComboViewer.getCombo();
 		fNameCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
-		fNameCombo.addListener(SWT.KeyDown, new ConstraintNameListener());
-		fNameCombo.addSelectionListener(new RenameConstraintAdapter());
+		fNameCombo.addSelectionListener(new ConstraintNameListener());
 		Button button = getToolkit().createButton(composite, "Change", SWT.NONE);
-		button.addSelectionListener(new RenameConstraintAdapter());
+		button.addSelectionListener(new ConstraintNameListener());
 	}
 
 	@Override

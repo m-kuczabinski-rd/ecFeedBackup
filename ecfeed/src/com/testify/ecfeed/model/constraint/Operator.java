@@ -12,6 +12,30 @@
 package com.testify.ecfeed.model.constraint;
 
 public enum Operator{
-	AND, 
-	OR
+	AND("AND"), 
+	OR("OR");
+	
+	public static final String OPERATOR_AND = "AND";
+	public static final String OPERATOR_OR = "OR";
+
+	String fValue;
+
+	private Operator(String value){
+		fValue = value;
+	}
+	
+	public String toString(){
+		return fValue; 
+	}
+	
+	public static Operator getOperator(String text){
+		switch(text){
+		case OPERATOR_AND:
+			return AND;
+		case OPERATOR_OR:
+			return OR;
+		}
+		return null;
+	}
+
 }

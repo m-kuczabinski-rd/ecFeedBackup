@@ -1,6 +1,7 @@
 package com.testify.ecfeed.ui.modelif;
 
 import com.testify.ecfeed.model.constraint.BasicStatement;
+import com.testify.ecfeed.model.constraint.Operator;
 import com.testify.ecfeed.model.constraint.Relation;
 import com.testify.ecfeed.model.constraint.StaticStatement;
 import com.testify.ecfeed.modelif.ModelOperationManager;
@@ -22,7 +23,7 @@ public class BasicStatementInterface extends OperationExecuter {
 	
 	public boolean remove(BasicSection source, IModelUpdateListener updateListener){
 		if(fTarget.getParent() != null){
-			return parentIf().removeChild(fTarget, source, updateListener);
+			return getParentInterface().removeChild(fTarget, source, updateListener);
 		}
 		return false;
 	}
@@ -42,21 +43,40 @@ public class BasicStatementInterface extends OperationExecuter {
 	
 	public boolean addStatement(BasicStatement statement, BasicSection source, IModelUpdateListener updateListener){
 		if(fTarget.getParent() != null){
-			return parentIf().addStatement(statement, source, updateListener);
+			return getParentInterface().addStatement(statement, source, updateListener);
 		}
 		return false;
 	}
 	
-	public BasicStatementInterface parentIf(){
+	public BasicStatementInterface getParentInterface(){
 		BasicStatement parent = fTarget.getParent();
-		return new StatementInterfaceFactory(getOperationManager()).getInterface(parent);
+		if(parent != null){
+			return new StatementInterfaceFactory(getOperationManager()).getInterface(parent);
+		}
+		return null;
 	}
 
 	public boolean setRelation(Relation relation, BasicSection source, IModelUpdateListener updateListener) {
 		return false;
 	}
 
-	public boolean updateCondition(String text, BasicSection source, IModelUpdateListener updateListener) {
+	public boolean setConditionValue(String text, BasicSection source, IModelUpdateListener updateListener) {
+		return false;
+	}
+
+	public String getConditionValue() {
+		return null;
+	}
+
+	public boolean setOperator(Operator operator, BasicSection source, IModelUpdateListener updateListener) {
+		return false;
+	}
+
+	public Operator getOperator() {
+		return null;
+	}
+
+	public boolean replaceChild(BasicStatement child, BasicStatement newStatement, BasicSection source, IModelUpdateListener updateListener) {
 		return false;
 	}
 }

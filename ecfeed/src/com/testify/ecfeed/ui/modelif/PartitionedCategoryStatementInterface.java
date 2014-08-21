@@ -28,13 +28,13 @@ public class PartitionedCategoryStatementInterface extends BasicStatementInterfa
 	public boolean setRelation(Relation relation, BasicSection source, IModelUpdateListener updateListener) {
 		if(relation != fTarget.getRelation()){
 			IModelOperation operation = new StatementOperationSetRelation(fTarget, relation);
-			return execute(operation, source, updateListener, Messages.DIALOG_SET_RELATION_PROBLEM_TITLE);
+			return execute(operation, source, updateListener, Messages.DIALOG_EDIT_STATEMENT_PROBLEM_TITLE);
 		}
 		return false;
 	}
 
 	@Override
-	public boolean updateCondition(String text, BasicSection source, IModelUpdateListener updateListener) {
+	public boolean setConditionValue(String text, BasicSection source, IModelUpdateListener updateListener) {
 		if(fTarget.getConditionName().equals(text) == false){
 			ICondition newCondition;
 			CategoryNode category = fTarget.getCategory();
@@ -45,8 +45,14 @@ public class PartitionedCategoryStatementInterface extends BasicStatementInterfa
 				newCondition = fTarget.new LabelCondition(text);
 			}
 			IModelOperation operation = new StatementOperationSetCondition(fTarget, newCondition);
-			return execute(operation, source, updateListener, Messages.DIALOG_SET_CONDITION_PROBLEM_TITLE);
+			return execute(operation, source, updateListener, Messages.DIALOG_EDIT_STATEMENT_PROBLEM_TITLE);
 		}
 		return false;
 	}
+	
+	@Override
+	public String getConditionValue() {
+		return fTarget.getConditionName();
+	}
+
 }

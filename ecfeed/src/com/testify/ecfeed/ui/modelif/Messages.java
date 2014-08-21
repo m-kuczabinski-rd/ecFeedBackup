@@ -29,8 +29,7 @@ public class Messages {
 	public static final String DIALOG_UPDATE_TEST_DATA_PROBLEM_TITLE = "Couldn't update test data";
 	public static final String DIALOG_ADD_STATEMENT_PROBLEM_TITLE = "Couldn't add statement";
 	public static final String DIALOG_REMOVE_STATEMENT_PROBLEM_TITLE = "Couldn't remove statement";
-	public static final String DIALOG_SET_RELATION_PROBLEM_TITLE = "Couldn't set statement relation";
-	public static final String DIALOG_SET_CONDITION_PROBLEM_TITLE = "Couldn't set statement condition";
+	public static final String DIALOG_EDIT_STATEMENT_PROBLEM_TITLE = "Couldn't edit statement";
 
 
 	//CONFIRMATIONS AND WARNINGS
@@ -77,5 +76,4 @@ public class Messages {
 	public static final String DIALOG_GENERATE_TEST_SUITES_SELECT_PARTITIONS_LABEL = "Select which partitions will be considered for generating test suite. "
 			+ "Each category must be represented by at least one partition.";
 	public static final String DIALOG_TEST_SUITE_NAME_PROBLEM_MESSAGE = "Entered test suite name not allowed";
-
 }

@@ -1,19 +1,7 @@
-/*******************************************************************************
- * Copyright (c) 2013 Testify AS.                                                   
- * All rights reserved. This program and the accompanying materials                 
- * are made available under the terms of the Eclipse Public License v1.0            
- * which accompanies this distribution, and is available at                         
- * http://www.eclipse.org/legal/epl-v10.html                                        
- *                                                                                  
- * Contributors:                                                                    
- *     Patryk Chamuczynski (p.chamuczynski(at)radytek.com) - initial implementation
- ******************************************************************************/
-
 package com.testify.ecfeed.ui.editor;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
 
 import org.eclipse.jface.viewers.ComboViewer;
@@ -23,75 +11,314 @@ import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.StackLayout;
-import org.eclipse.swt.events.ModifyEvent;
-import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Event;
-import org.eclipse.swt.widgets.Listener;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Section;
 
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.ConstraintNode;
-import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.constraint.BasicStatement;
-import com.testify.ecfeed.model.constraint.Constraint;
 import com.testify.ecfeed.model.constraint.ExpectedValueStatement;
 import com.testify.ecfeed.model.constraint.IRelationalStatement;
+import com.testify.ecfeed.model.constraint.IStatementVisitor;
 import com.testify.ecfeed.model.constraint.Operator;
 import com.testify.ecfeed.model.constraint.PartitionedCategoryStatement;
+import com.testify.ecfeed.model.constraint.PartitionedCategoryStatement.LabelCondition;
+import com.testify.ecfeed.model.constraint.PartitionedCategoryStatement.PartitionCondition;
 import com.testify.ecfeed.model.constraint.Relation;
 import com.testify.ecfeed.model.constraint.StatementArray;
 import com.testify.ecfeed.model.constraint.StaticStatement;
 import com.testify.ecfeed.modelif.ModelOperationManager;
-import com.testify.ecfeed.modelif.java.Constants;
 import com.testify.ecfeed.ui.modelif.BasicStatementInterface;
+import com.testify.ecfeed.ui.modelif.CategoryInterface;
+import com.testify.ecfeed.ui.modelif.ConstraintInterface;
 import com.testify.ecfeed.ui.modelif.StatementInterfaceFactory;
-import com.testify.ecfeed.utils.ModelUtils;
 
 public class ConstraintViewer extends TreeViewerSection {
 
 	private final static int STYLE = Section.TITLE_BAR | Section.EXPANDED;
-	
-	private final String STATEMENT_FALSE = new StaticStatement(false).getLeftOperandName();
-	private final String STATEMENT_TRUE = new StaticStatement(true).getLeftOperandName();;
-	private final String STATEMENT_AND = new StatementArray(Operator.AND).getLeftOperandName();
-	private final String STATEMENT_OR = new StatementArray(Operator.OR).getLeftOperandName();
-	
-	private final String[] FIXED_STATEMENTS = {STATEMENT_FALSE, STATEMENT_TRUE, STATEMENT_OR, STATEMENT_AND};
 
-	private StatementViewerLabelProvider fStatementLabelProvider;
-
-	private BasicStatement fSelectedStatement;
-	private ConstraintNode fSelectedConstraint;
-
-	private Combo fStatementCombo;
-	private Combo fRelationCombo;
-	private Combo fConditionCombo;
-	private Combo fExpectedConditionCombo;
-	private Combo fReadOnlyConditionCombo;
-	
 	private Button fAddStatementButton;
 	private Button fRemoveStatementButton;
 	
-	private boolean fStatementEditListenersEnabled;
+	StatementViewerLabelProvider fStatementLabelProvider;
+	
+	private BasicStatementInterface fStatementIf;
+	private BasicStatement fSelectedStatement;
 
-	private Composite fStatementEditComposite;
+	private StatementEditor fStatementEditor;
 
-	private StackLayout fConditionLayout;
-	
-	
-	
-	BasicStatementInterface fStatementIf;
-	StatementInterfaceFactory fStatementInterfaceFactory;
+	private class StatementEditor extends Composite{
+		
+		private final String STATEMENT_FALSE = new StaticStatement(false).getLeftOperandName();
+		private final String STATEMENT_TRUE = new StaticStatement(true).getLeftOperandName();
+		private final String STATEMENT_AND = new StatementArray(Operator.AND).getLeftOperandName();
+		private final String STATEMENT_OR = new StatementArray(Operator.OR).getLeftOperandName();
+		private final String[] FIXED_STATEMENTS = {STATEMENT_FALSE, STATEMENT_TRUE, STATEMENT_OR, STATEMENT_AND};
+		
+		private final int STATEMENT_COMBO_WIDTH = 3;
+		private final int RELATION_COMBO_WIDTH = 1;
+		private final int CONDITION_COMBO_WIDTH = 4;
+		private final int TOTAL_EDITOR_WIDTH = STATEMENT_COMBO_WIDTH + RELATION_COMBO_WIDTH + CONDITION_COMBO_WIDTH;
+		
+		private Combo fStatementCombo;
+		private Combo fRelationCombo;
+		private Combo fConditionCombo;
+		private Composite fRightOperandComposite;
+		
+		private ConstraintNode fConstraint;
+		private StatementInterfaceFactory fInterfaceFactory;
+		private ConstraintInterface fConstraintIf;
+		
+		private class ConditionComboListener implements SelectionListener{
+
+			@Override
+			public void widgetSelected(SelectionEvent e){
+				applyNewValue();
+			}
+
+			@Override
+			public void widgetDefaultSelected(SelectionEvent e) {
+				applyNewValue();				
+			}
+			
+			protected void applyNewValue(){
+				fStatementIf.setConditionValue(fConditionCombo.getText(), ConstraintViewer.this, getUpdateListener());
+				fConditionCombo.setText(fStatementIf.getConditionValue());
+			}
+
+		}
+		
+		private class StatementComboListener implements SelectionListener{
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				Operator operator = Operator.getOperator(fStatementCombo.getText());
+				if(operator != null && operator != fStatementIf.getOperator()){
+					fStatementIf.setOperator(operator, ConstraintViewer.this, getUpdateListener());
+				}
+				BasicStatement statement = buildStatement();
+				if(statement != null){
+					BasicStatementInterface parentIf = fStatementIf.getParentInterface();
+					boolean result = false;
+					if(parentIf != null){
+						result = parentIf.replaceChild(fSelectedStatement, statement, ConstraintViewer.this, getUpdateListener());
+					}
+					else{
+						result = fConstraintIf.replaceStatement(fSelectedStatement, statement, ConstraintViewer.this, getUpdateListener());
+					}
+					if(result){
+						getViewer().setSelection(new StructuredSelection(statement));
+
+					}
+				}
+			}
+
+			@Override
+			public void widgetDefaultSelected(SelectionEvent e) {
+				System.out.println("widgetDefaultSelected(" + e + ")");
+				widgetSelected(e);
+			}
+
+			private BasicStatement buildStatement() {
+				String statementText = fStatementCombo.getText();
+				if(statementText.equals(STATEMENT_TRUE) || statementText.equals(STATEMENT_FALSE)){
+					return new StaticStatement(Boolean.parseBoolean(statementText));
+				}
+				if(statementText.equals(STATEMENT_AND) || statementText.equals(STATEMENT_OR)){
+					return new StatementArray(Operator.getOperator(statementText));
+				}
+				CategoryNode category = fConstraint.getMethod().getCategory(statementText);
+				Relation relation = Relation.EQUAL;
+				if(category != null && category.isExpected()){
+					PartitionNode condition = new PartitionNode("expected", category.getDefaultValueString());
+					condition.setParent(category);
+					return new ExpectedValueStatement(category, condition);
+				}
+				else if(category != null && category.getPartitions().size() > 0){
+					PartitionNode condition = category.getPartitions().get(0);
+					return new PartitionedCategoryStatement(category, relation, condition);
+				}
+			
+				return null;
+			}
+		}
+
+		private class RelationComboListener implements SelectionListener{
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				Relation relation = Relation.getRelation(fRelationCombo.getText());
+				fStatementIf.setRelation(relation, ConstraintViewer.this, getUpdateListener());
+			}
+
+			@Override
+			public void widgetDefaultSelected(SelectionEvent e) {
+				widgetSelected(e);
+			}
+		}
+
+		private class EditorBuilder implements IStatementVisitor{
+			@Override
+			public Object visit(StaticStatement statement) throws Exception {
+				fRelationCombo.setVisible(false);
+				fRightOperandComposite.setVisible(false);
+				StatementEditor.this.redraw();
+				return null;
+			}
+		
+			@Override
+			public Object visit(StatementArray statement) throws Exception {
+				fRelationCombo.setVisible(false);
+				fRightOperandComposite.setVisible(false);
+				StatementEditor.this.redraw();
+				return null;
+			}
+		
+			@Override
+			public Object visit(ExpectedValueStatement statement) throws Exception {
+				disposeRightOperandComposite();
+				if(CategoryInterface.hasLimitedValuesSet(statement.getCategory())){
+					fRightOperandComposite = fConditionCombo = new ComboViewer(StatementEditor.this).getCombo();
+				}
+				else{
+					fRightOperandComposite = fConditionCombo = new ComboViewer(StatementEditor.this, SWT.BORDER).getCombo();
+				}
+
+				prepareRelationalStatementEditor(statement, availableConditions(statement), statement.getCondition().getValueString());
+				StatementEditor.this.layout();
+				return null;
+			}
+		
+			@Override
+			public Object visit(PartitionedCategoryStatement statement) throws Exception {
+				disposeRightOperandComposite();
+				fRightOperandComposite = fConditionCombo = new ComboViewer(StatementEditor.this).getCombo();
+				prepareRelationalStatementEditor(statement, availableConditions(statement), statement.getCondition().toString());
+
+				StatementEditor.this.layout();
+				return null;
+			}
+		
+			@Override
+			public Object visit(LabelCondition condition) throws Exception {
+				return null;
+			}
+			@Override
+			public Object visit(PartitionCondition condition) throws Exception {
+				return null;
+			}
+		
+			private void disposeRightOperandComposite() {
+				if(fRightOperandComposite != null && fRightOperandComposite.isDisposed() == false){
+					fRightOperandComposite.dispose();
+				}
+				
+			}
+
+			private void prepareRelationalStatementEditor(IRelationalStatement statement, String[] items, String item) {
+							fRelationCombo.setVisible(true);
+							fRelationCombo.setItems(availableRelations(statement));
+							fRelationCombo.setText(statement.getRelation().toString());
+							
+							fConditionCombo.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, CONDITION_COMBO_WIDTH, 1));
+							fConditionCombo.setItems(items);
+							fConditionCombo.setText(item);
+							fConditionCombo.addSelectionListener(new ConditionComboListener());
+							StatementEditor.this.layout();
+						}
+
+			private String[] availableRelations(IRelationalStatement statement){
+				List<String> relations = new ArrayList<String>();
+				for(Relation r : statement.getAvailableRelations()){
+					relations.add(r.toString());
+				}
+				return relations.toArray(new String[]{});
+			}
+
+			private String[] availableConditions(ExpectedValueStatement statement) {
+				CategoryNode category  = statement.getCategory();
+				List<String> values = CategoryInterface.getSpecialValues(category.getType());
+				if(values.isEmpty()){
+					for(PartitionNode p : category.getLeafPartitions()){
+						values.add(p.getValueString());
+					}
+				}
+				return values.toArray(new String[]{});
+			}
+
+			private String[] availableConditions(PartitionedCategoryStatement statement) {
+				List<String> result = new ArrayList<String>();
+				CategoryNode category = statement.getCategory();
+				result.addAll(category.getAllPartitionNames());
+				result.addAll(category.getAllPartitionLabels());
+				return result.toArray(new String[]{});
+			}
+		}
+
+		public StatementEditor(Composite parent, ModelOperationManager operationManager) {
+			super(parent, SWT.NONE);
+			setLayout(new GridLayout(TOTAL_EDITOR_WIDTH, true));
+			setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 2, 1));
+			fInterfaceFactory = new StatementInterfaceFactory(operationManager);
+			fConstraintIf = new ConstraintInterface(operationManager);
+			
+			createStatementCombo(this);
+			createRelationCombo(this);
+		}
+		
+		public void setInput(BasicStatement statement){
+			fStatementIf = fInterfaceFactory.getInterface(statement);
+			fStatementCombo.setItems(statementComboItems(statement));
+			fStatementCombo.setText(statement.getLeftOperandName());
+			try{
+				statement.accept(new EditorBuilder());
+			}catch(Exception e){}
+		}
+
+		public void setConstraint(ConstraintNode constraintNode) {
+			fConstraint = constraintNode;
+			fConstraintIf.setTarget(constraintNode);
+		}
+		
+		private void createStatementCombo(Composite parent) {
+			fStatementCombo = new ComboViewer(parent).getCombo();
+			fStatementCombo.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, STATEMENT_COMBO_WIDTH, 1));
+			fStatementCombo.addSelectionListener(new StatementComboListener());
+		}
+
+		private void createRelationCombo(Composite parent) {
+			fRelationCombo = new ComboViewer(parent).getCombo();
+			fRelationCombo.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, RELATION_COMBO_WIDTH, 1));
+			fRelationCombo.addSelectionListener(new RelationComboListener());
+		}
+
+		private String[] statementComboItems(BasicStatement statement){
+			List<String> items = new ArrayList<String>();
+			items.addAll(Arrays.asList(FIXED_STATEMENTS));
+			boolean consequence = fConstraint.getConstraint().getConsequence() == statement;
+			for(CategoryNode c : fConstraint.getMethod().getCategories()){
+				if(c.isExpected()){
+					if(consequence){
+						items.add(c.getName());
+					}
+				}
+				else{
+					if(c.getPartitions().size() > 0){
+						items.add(c.getName());
+					}
+				}
+			}
+			return items.toArray(new String[]{});
+		}
+	}
 
 	private class AddStatementAdapter extends SelectionAdapter{
 		@Override 
@@ -108,334 +335,45 @@ public class ConstraintViewer extends TreeViewerSection {
 	private class RemoveStatementAdapter extends SelectionAdapter{
 		@Override 
 		public void widgetSelected(SelectionEvent e){
-			BasicStatement parentStatement = fSelectedStatement.getParent();
-			if(fStatementIf.remove(ConstraintViewer.this, getUpdateListener())){
-				if(parentStatement != null){
-					getViewer().setSelection(new StructuredSelection(parentStatement));
+			if(fStatementIf.getParentInterface() != null){
+				BasicStatement parent = fSelectedStatement.getParent();
+				if(parent != null && fStatementIf.getParentInterface().removeChild(fSelectedStatement, ConstraintViewer.this, getUpdateListener())){
+					getViewer().setSelection(new StructuredSelection(parent));
 				}
 			}
 		}
 	}
-	
-	private class ModifyRelationListener implements ModifyListener{
-		@Override
-		public void modifyText(ModifyEvent e) {
-			if(fStatementEditListenersEnabled == false){
-				return;
-			}
-			fStatementIf.setRelation(Relation.getRelation(fRelationCombo.getText()), ConstraintViewer.this, getUpdateListener());
-		}
-	}
-	
-	private class ModifyConditionComboListener implements ModifyListener{
-		@Override
-		public void modifyText(ModifyEvent e) {
-			if(fStatementEditListenersEnabled == false){
-				return;
-			} 
-			fStatementIf.updateCondition(fConditionCombo.getText(), ConstraintViewer.this, getUpdateListener());
-		}
-	}
-	
-	private class StatementModifyListener implements ModifyListener{
-		@Override
-		public void modifyText(ModifyEvent e) {
-			if(fStatementEditListenersEnabled == false){
-				return;
-			}
-			if(fSelectedStatement.getLeftOperandName().equals(fStatementCombo.getText()) == false){
-				BasicStatement statement = createStatementFromCombo();
-				if(statement != null){
-					replaceSelectedStatement(statement);
-				}
-			} 	
-		}
 
-		private BasicStatement createStatementFromCombo() {
-			BasicStatement statement = null;
-			if(fStatementCombo.getText().equals(STATEMENT_TRUE)){
-				statement = new StaticStatement(true);
-			}
-			else if(fStatementCombo.getText().equals(STATEMENT_FALSE)){
-				statement = new StaticStatement(false);
-			}
-			else if (fStatementCombo.getText().equals(STATEMENT_AND)){
-				if(fSelectedStatement instanceof StatementArray && fSelectedStatement.getLeftOperandName() == STATEMENT_OR){
-					StatementArray statementArray = (StatementArray) fSelectedStatement;
-					statementArray.setOperator(Operator.AND);	
-					statement = fSelectedStatement;
-				} else
-				statement = new StatementArray(Operator.AND);
-			}
-			else if(fStatementCombo.getText().equals(STATEMENT_OR)){
-				if(fSelectedStatement instanceof StatementArray && fSelectedStatement.getLeftOperandName() == STATEMENT_AND){
-					StatementArray statementArray = (StatementArray) fSelectedStatement;
-					statementArray.setOperator(Operator.OR);	
-					statement = fSelectedStatement;
-				} else
-				statement = new StatementArray(Operator.OR);
-			}
-			else{
-				MethodNode method = fSelectedConstraint.getMethod();
-				Relation relation = Relation.EQUAL; 
-				String categoryName = fStatementCombo.getText();
-
-				CategoryNode category = method.getCategory(categoryName);
-				
-				if(!category.isExpected()){
-					PartitionNode condition = category.getPartitions().get(0);
-					statement = new PartitionedCategoryStatement(category, relation, condition);
-				}
-				else{
-					PartitionNode condition = new PartitionNode("expected", category.getDefaultValueString());
-					condition.setParent(category);
-					statement = new ExpectedValueStatement(category, condition);
-				}
-			}
-			return statement;
-		}
-	}
-	
 	private class StatementSelectionListener implements ISelectionChangedListener{
+
 		@Override
 		public void selectionChanged(SelectionChangedEvent event) {
-			Object selectedElement = ((StructuredSelection)event.getSelection()).getFirstElement();
-			if(selectedElement instanceof BasicStatement){
-				fSelectedStatement = (BasicStatement)selectedElement;
-				fStatementIf = fStatementInterfaceFactory.getInterface(fSelectedStatement);
-				enableSideButtons(fSelectedStatement);
-				refreshStatementEditPart(fSelectedStatement);
-				fStatementEditComposite.layout();
+			BasicStatement statement = (BasicStatement)((StructuredSelection)event.getSelection()).getFirstElement();
+			if(statement != null){
+				fSelectedStatement = statement;
+				fStatementEditor.setInput(statement);
+				updateSideButtons(statement);
 			}
 		}
 
-		private void enableSideButtons(BasicStatement statement) {
-			boolean enableAddStatementButton = (statement instanceof StatementArray 
-					|| statement.getParent() != null);
-			boolean enableRemoveStatementButton = (statement.getParent() != null);
+		private void updateSideButtons(BasicStatement selectedStatement) {
+			boolean enableAddStatementButton = (selectedStatement instanceof StatementArray || selectedStatement.getParent() != null);
+			boolean enableRemoveStatementButton = (selectedStatement.getParent() != null);
 			fAddStatementButton.setEnabled(enableAddStatementButton);
 			fRemoveStatementButton.setEnabled(enableRemoveStatementButton);
 		}
 
-		private void refreshStatementEditPart(BasicStatement statement) {
-			fStatementEditListenersEnabled = false;
-			refreshStatementCombo(statement);
-			if(statement instanceof IRelationalStatement){
-				refreshRelationCombo((IRelationalStatement)statement);
-				if(statement instanceof PartitionedCategoryStatement){
-					refreshConditionComposite((PartitionedCategoryStatement)statement);
-				}
-				else if(statement instanceof ExpectedValueStatement){
-					refreshConditionComposite((ExpectedValueStatement)statement);
-				}
-			}
-			else{
-				fRelationCombo.setVisible(false);
-				fConditionCombo.setVisible(false);
-				fExpectedConditionCombo.setVisible(false);
-				fConditionLayout.topControl = null;
-			}
-			fStatementEditListenersEnabled = true;
-		}
-
-		private void refreshStatementCombo(BasicStatement statement) {
-			List<String> items = new ArrayList<String>();
-			items.addAll(Arrays.asList(FIXED_STATEMENTS));
-			if(fSelectedStatement == fSelectedConstraint.getConstraint().getConsequence()){
-				for(CategoryNode category: fSelectedConstraint.getMethod().getCategories()){
-					if(category.isExpected() || !category.getPartitions().isEmpty()){
-						items.add(category.getName());
-					}
-				}
-			}
-			else{
-				for(CategoryNode category: fSelectedConstraint.getMethod().getCategories(false)){
-					if(!category.getPartitions().isEmpty()){
-						items.add(category.getName());
-					}
-				}
-			}
-			fStatementCombo.setItems(items.toArray(new String[]{}));
-
-			fStatementCombo.setText(statement.getLeftOperandName());
-		}
-
-		private void refreshRelationCombo(IRelationalStatement statement) {
-			fRelationCombo.setVisible(true);
-			List<String> items = new ArrayList<String>();
-			for(Relation relation : statement.getAvailableRelations()){
-				items.add(relation.toString());
-			}
-			fRelationCombo.setItems(items.toArray(new String[]{}));
-			fRelationCombo.setText(statement.getRelation().toString());
-		}
-
-		private void refreshConditionComposite(PartitionedCategoryStatement statement) {
-			List<String> items = new ArrayList<String>();
-			items.addAll(statement.getCategory().getAllPartitionNames());
-			items.addAll(statement.getCategory().getAllPartitionLabels());
-
-			fConditionLayout.topControl = fConditionCombo;
-			fConditionCombo.setVisible(true);
-			fReadOnlyConditionCombo.setVisible(false);
-			fExpectedConditionCombo.setVisible(false);
-			fConditionCombo.setItems(items.toArray(new String[]{}));
-			fConditionCombo.setText(statement.getConditionName());
-		}
-
-		private void refreshConditionComposite(ExpectedValueStatement statement) {
-			String type = statement.getCategory().getType();
-			if(type.equals(Constants.TYPE_NAME_BOOLEAN) || !ModelUtils.getJavaTypes().contains(type)){
-				fConditionLayout.topControl = fReadOnlyConditionCombo;
-				fConditionCombo.setVisible(false);
-				fExpectedConditionCombo.setVisible(false);
-				fReadOnlyConditionCombo.setVisible(true);
-				if(type.equals(Constants.TYPE_NAME_BOOLEAN)){
-					String[] items = {"false", "true"};
-					fReadOnlyConditionCombo.setItems(items);
-				} else {
-					HashSet<String> itemset = new HashSet<>();
-					for(PartitionNode leaf: statement.getCategory().getLeafPartitions()){
-						itemset.add(leaf.getValueString());
-					}
-					Object[] values = itemset.toArray();
-					String[] items = new String[values.length];
-					for(int i = 0; i < items.length; i++){
-						items[i] = values[i].toString();
-					}
-					fReadOnlyConditionCombo.setItems(items);
-				}
-				fReadOnlyConditionCombo.setText(statement.getCondition().getValueString());
-			} else{
-				fConditionLayout.topControl = fExpectedConditionCombo;
-				fConditionCombo.setVisible(false);
-				fReadOnlyConditionCombo.setVisible(false);
-				fExpectedConditionCombo.setVisible(true);
-				Object[] predefinedValues = ModelUtils.generatePredefinedValues(type).values().toArray();
-				String[] items = new String[predefinedValues.length];
-				for(int i = 0; i < items.length; i++){
-					items[i] = predefinedValues[i].toString();				
-				}
-				fExpectedConditionCombo.setItems(items);
-				fExpectedConditionCombo.setText(statement.getCondition().getValueString());
-			}
-		}
 	}
-	
+
 	public ConstraintViewer(BasicDetailsPage page, FormToolkit toolkit, ModelOperationManager operationManager) {
 		super(page.getMainComposite(), toolkit, STYLE, page);
 		getSection().setText("Constraint editor");
 		fAddStatementButton = addButton("Add statement", new AddStatementAdapter());
 		fRemoveStatementButton = addButton("Remove statement", new RemoveStatementAdapter());
-		createStatementEditComposite();
 		getViewer().addSelectionChangedListener(new StatementSelectionListener());
-		fStatementInterfaceFactory = new StatementInterfaceFactory(operationManager);
-	}
 
-	private void createStatementEditComposite(){
-		fStatementEditComposite = getToolkit().createComposite(getClientComposite());
-		fStatementEditComposite.setLayout(new GridLayout(3, false));
-		fStatementEditComposite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 2, 1));
-		
-		createStatementCombo();
-		createRelationCombo();
-		createConditionComposite();
+		fStatementEditor = new StatementEditor(getClientComposite(), operationManager);
 	}
-
-
-	private void createStatementCombo() {
-		fStatementCombo = new ComboViewer(fStatementEditComposite).getCombo();
-		fStatementCombo.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
-		fStatementCombo.addModifyListener(new StatementModifyListener());
-	}
-
-	private void createRelationCombo() {
-		fRelationCombo = new ComboViewer(fStatementEditComposite, SWT.READ_ONLY).getCombo();
-		fRelationCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false));
-		fRelationCombo.addModifyListener(new ModifyRelationListener());
-	}
-
-	private void createConditionComposite() {
-		Composite conditionComposite = getToolkit().createComposite(fStatementEditComposite);
-		fConditionLayout = new StackLayout();
-		conditionComposite.setLayout(fConditionLayout);
-		conditionComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
-		
-		fConditionCombo = new ComboViewer(conditionComposite).getCombo();
-		fConditionCombo.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
-		fConditionCombo.addModifyListener(new ModifyConditionComboListener());
-		
-		fReadOnlyConditionCombo  = new ComboViewer(conditionComposite, SWT.READ_ONLY).getCombo();
-		fReadOnlyConditionCombo.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
-		fReadOnlyConditionCombo.addSelectionListener(new SelectionAdapter(){
-			@Override
-			public void widgetSelected(SelectionEvent e){
-				if(fStatementEditListenersEnabled == false){
-					return;
-				}
-				ExpectedValueStatement statement = (ExpectedValueStatement)fSelectedStatement;
-				if(!fReadOnlyConditionCombo.getText().equals(statement.getCondition().getValueString())){
-					statement.getCondition().setValueString(fReadOnlyConditionCombo.getText());
-					fReadOnlyConditionCombo.setText(statement.getCondition().getValueString());
-					modelUpdated();
-				}
-			}
-		});
-		
-		fExpectedConditionCombo  = new ComboViewer(conditionComposite,SWT.DROP_DOWN).getCombo();
-		fExpectedConditionCombo.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
-		fExpectedConditionCombo.addSelectionListener(new SelectionAdapter(){
-			@Override
-			public void widgetSelected(SelectionEvent e){
-				if(fStatementEditListenersEnabled == false){
-					return;
-				}			
-				ExpectedValueStatement statement = (ExpectedValueStatement)fSelectedStatement;
-				if(!fExpectedConditionCombo.getText().equals(statement.getCondition().getValueString())){
-					statement.getCondition().setValueString(fExpectedConditionCombo.getText());
-					fExpectedConditionCombo.setText(statement.getCondition().getValueString());
-					modelUpdated();
-				}
-			}
-		});
-		fExpectedConditionCombo.addListener(SWT.KeyDown, new Listener() {
-			public void handleEvent(Event event){
-				if(event.keyCode == SWT.CR || event.keyCode == SWT.KEYPAD_CR){
-					ExpectedValueStatement statement = (ExpectedValueStatement)fSelectedStatement;
-					if(!fExpectedConditionCombo.getText().equals(statement.getCondition().getValueString())
-							&& ModelUtils.validatePartitionStringValue(fExpectedConditionCombo.getText(), statement.getCategory().getType())){
-						statement.getCondition().setValueString(fExpectedConditionCombo.getText());
-						modelUpdated();
-					}
-					fExpectedConditionCombo.setText(statement.getCondition().getValueString());
-				}
-			}
-		});
-		getToolkit().paintBordersFor(conditionComposite);
-		getToolkit().paintBordersFor(fStatementEditComposite);
-	}
-	
-	private void replaceSelectedStatement(BasicStatement newStatement) {
-		Constraint constraint = fSelectedConstraint.getConstraint();
-		if(fSelectedStatement == constraint.getPremise()){
-			constraint.setPremise(newStatement);
-		}
-		else if(fSelectedStatement == constraint.getConsequence()){
-			constraint.setConsequence(newStatement);
-		}
-		else if(fSelectedStatement.getParent() != null){
-			fSelectedStatement.getParent().replaceChild(fSelectedStatement, newStatement);
-			fSelectedStatement = newStatement;
-		}
-		modelUpdated();
-		getViewer().setSelection(new StructuredSelection(newStatement));
-	}
-
-	@Override
-	protected int buttonsPosition(){
-		return BUTTONS_ASIDE;
-	}
-
 
 	@Override
 	protected IContentProvider viewerContentProvider() {
@@ -449,16 +387,21 @@ public class ConstraintViewer extends TreeViewerSection {
 		}
 		return fStatementLabelProvider;
 	}
+	
+	@Override
+	protected int buttonsPosition(){
+		return BUTTONS_ASIDE;
+	}
 
 	public void setInput(ConstraintNode constraintNode){
-		super.setInput(constraintNode.getConstraint());
-		fSelectedConstraint = constraintNode;
-
+		//Update the statement provider before setting input to get the correct images
 		fStatementLabelProvider.setConstraint(constraintNode.getConstraint());
+		super.setInput(constraintNode.getConstraint());
+		fStatementEditor.setConstraint(constraintNode);
 
 		getTreeViewer().expandAll();
 		if(getSelectedElement() == null){
-			getViewer().setSelection(new StructuredSelection(fSelectedConstraint.getConstraint().getPremise()));
+			getViewer().setSelection(new StructuredSelection(constraintNode.getConstraint().getPremise()));
 		}
 	}
 }

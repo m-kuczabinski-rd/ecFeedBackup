@@ -28,7 +28,7 @@ public class StatementArray extends BasicStatement{
 	}
 
 	public String getLeftOperandName(){
-		return fOperator == Operator.AND?Operator.AND.toString():Operator.OR.toString();
+		return fOperator.toString();
 	}
 
 	public Operator getOperator(){
