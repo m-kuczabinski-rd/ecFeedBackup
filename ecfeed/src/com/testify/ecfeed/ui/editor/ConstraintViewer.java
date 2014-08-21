@@ -224,16 +224,16 @@ public class ConstraintViewer extends TreeViewerSection {
 			}
 
 			private void prepareRelationalStatementEditor(IRelationalStatement statement, String[] items, String item) {
-							fRelationCombo.setVisible(true);
-							fRelationCombo.setItems(availableRelations(statement));
-							fRelationCombo.setText(statement.getRelation().toString());
-							
-							fConditionCombo.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, CONDITION_COMBO_WIDTH, 1));
-							fConditionCombo.setItems(items);
-							fConditionCombo.setText(item);
-							fConditionCombo.addSelectionListener(new ConditionComboListener());
-							StatementEditor.this.layout();
-						}
+				fRelationCombo.setVisible(true);
+				fRelationCombo.setItems(availableRelations(statement));
+				fRelationCombo.setText(statement.getRelation().toString());
+
+				fConditionCombo.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, CONDITION_COMBO_WIDTH, 1));
+				fConditionCombo.setItems(items);
+				fConditionCombo.setText(item);
+				fConditionCombo.addSelectionListener(new ConditionComboListener());
+				StatementEditor.this.layout();
+			}
 
 			private String[] availableRelations(IRelationalStatement statement){
 				List<String> relations = new ArrayList<String>();
