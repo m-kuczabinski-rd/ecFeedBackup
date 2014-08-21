@@ -68,15 +68,19 @@ public class CategoryOperationSetType implements IModelOperation {
 		
 		ITypeAdapter adapter = fAdapterProvider.getAdapter(fNewType);
 		fTarget.setType(fNewType);
-		
+
+		convertPartitionValues(fTarget, adapter);
+		removeDeadPartitions(fTarget);
+
 		String defaultValue = adapter.convert(fTarget.getDefaultValueString());
 		if(defaultValue == null){
+			if(fTarget.getLeafPartitions().size() > 0){
+				defaultValue = fTarget.getLeafPartitions().get(0).getValueString();
+			}
 			defaultValue = adapter.defaultValue();
 		}
 		fTarget.setDefaultValueString(defaultValue);
 		
-		convertPartitionValues(fTarget, adapter);
-		removeDeadPartitions(fTarget);
 		fTarget.getMethod().makeConsistent();
 	}
 
