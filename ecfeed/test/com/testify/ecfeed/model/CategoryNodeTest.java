@@ -27,7 +27,7 @@ public class CategoryNodeTest{
 	
 	@Test
 	public void addPartitionTest() {
-		CategoryNode category = new CategoryNode("category", "type", false);
+		CategoryNode category = new CategoryNode("category", "type", "0", false);
 		
 		assertEquals(0, category.getPartitions().size());
 		
@@ -39,7 +39,7 @@ public class CategoryNodeTest{
 	
 	@Test
 	public void getPartitionTest(){
-		CategoryNode category = new CategoryNode("category", "type", false);
+		CategoryNode category = new CategoryNode("category", "type", "0", false);
 		PartitionNode p = new PartitionNode("p", "0");
 		PartitionNode p1 = new PartitionNode("p1", "0");
 		PartitionNode p11 = new PartitionNode("p11", "0");
@@ -57,7 +57,7 @@ public class CategoryNodeTest{
 
 	@Test
 	public void getPartitionsTest() {
-		CategoryNode category = new CategoryNode("category", "type", false);
+		CategoryNode category = new CategoryNode("category", "type", "0", false);
 		PartitionNode partition1 = new PartitionNode("partition1", "0"); 
 		PartitionNode partition2 = new PartitionNode("partition2", "0"); 
 		category.addPartition(partition1);
@@ -71,7 +71,7 @@ public class CategoryNodeTest{
 	
 	@Test
 	public void getChildrenTest() {
-		CategoryNode category = new CategoryNode("category", "type", false);
+		CategoryNode category = new CategoryNode("category", "type", "0", false);
 		PartitionNode partition1 = new PartitionNode("partition1", "0"); 
 		PartitionNode partition2 = new PartitionNode("partition2", "0"); 
 		category.addPartition(partition1);
@@ -85,7 +85,7 @@ public class CategoryNodeTest{
 
 	@Test
 	public void getPartitionNames() {
-		CategoryNode category = new CategoryNode("category", "type", false);
+		CategoryNode category = new CategoryNode("category", "type", "0", false);
 		PartitionNode partition1 = new PartitionNode("partition1", "0"); 
 		PartitionNode partition2 = new PartitionNode("partition2", "0"); 
 		category.addPartition(partition1);
@@ -98,7 +98,7 @@ public class CategoryNodeTest{
 
 	@Test
 	public void getLeafPartitionNamesTest() {
-		CategoryNode category = new CategoryNode("category", "type", false);
+		CategoryNode category = new CategoryNode("category", "type", "0", false);
 		PartitionNode p1 = new PartitionNode("p1", "0"); 
 		PartitionNode p11 = new PartitionNode("p11", "0"); 
 		PartitionNode p12 = new PartitionNode("p12", "0"); 
@@ -117,7 +117,7 @@ public class CategoryNodeTest{
 
 	@Test
 	public void getAllPartitionNamesTest(){
-		CategoryNode category = new CategoryNode("category", "type", false);
+		CategoryNode category = new CategoryNode("category", "type", "0", false);
 		PartitionNode p1 = new PartitionNode("p1", "0"); 
 		PartitionNode p11 = new PartitionNode("p11", "0"); 
 		PartitionNode p12 = new PartitionNode("p12", "0"); 
@@ -139,7 +139,7 @@ public class CategoryNodeTest{
 	@Test
 	public void getMethodTest() {
 		MethodNode method = new MethodNode("method");
-		CategoryNode category = new CategoryNode("category", "type", false);
+		CategoryNode category = new CategoryNode("category", "type", "0", false);
 		method.addCategory(category);
 		
 		assertEquals(method, category.getMethod());
@@ -147,7 +147,7 @@ public class CategoryNodeTest{
 
 	@Test
 	public void getLeafPartitionsTest(){
-		CategoryNode category = new CategoryNode("category", "type", false);
+		CategoryNode category = new CategoryNode("category", "type", "0", false);
 		
 		PartitionNode p1 = new PartitionNode("p1", "0");
 		PartitionNode p2 = new PartitionNode("p1", "0");
@@ -219,7 +219,7 @@ public class CategoryNodeTest{
 		p2.addPartition(p21);
 		p2.addPartition(p22);
 		
-		CategoryNode c = new CategoryNode("c", "type", false);
+		CategoryNode c = new CategoryNode("c", "type", "0", false);
 		c.addPartition(p1);
 		c.addPartition(p2);
 		
@@ -254,8 +254,8 @@ public class CategoryNodeTest{
 	
 	@Test
 	public void compareNameTest(){
-		CategoryNode c1 = new CategoryNode("c", "type", true);
-		CategoryNode c2 = new CategoryNode("c", "type", true);
+		CategoryNode c1 = new CategoryNode("c", "type", "0", true);
+		CategoryNode c2 = new CategoryNode("c", "type", "0", true);
 		
 		assertTrue(c1.compare(c2));
 		
@@ -267,8 +267,8 @@ public class CategoryNodeTest{
 	
 	@Test
 	public void compareTypeTest(){
-		CategoryNode c1 = new CategoryNode("c", "type", true);
-		CategoryNode c2 = new CategoryNode("c", "type", true);
+		CategoryNode c1 = new CategoryNode("c", "type", "0", true);
+		CategoryNode c2 = new CategoryNode("c", "type", "0", true);
 		
 		assertTrue(c1.compare(c2));
 		
@@ -280,8 +280,8 @@ public class CategoryNodeTest{
 	
 	@Test
 	public void compareExpectedTest(){
-		CategoryNode c1 = new CategoryNode("c", "type", true);
-		CategoryNode c2 = new CategoryNode("c", "type", true);
+		CategoryNode c1 = new CategoryNode("c", "type", "0", true);
+		CategoryNode c2 = new CategoryNode("c", "type", "0", true);
 		
 		assertTrue(c1.compare(c2));
 
@@ -293,8 +293,8 @@ public class CategoryNodeTest{
 	
 	@Test
 	public void compareDefaultValueTest(){
-		CategoryNode c1 = new CategoryNode("c", "type", true);
-		CategoryNode c2 = new CategoryNode("c", "type", true);
+		CategoryNode c1 = new CategoryNode("c", "type", "0", true);
+		CategoryNode c2 = new CategoryNode("c", "type", "0", true);
 		
 		assertTrue(c1.compare(c2));
 
@@ -306,8 +306,8 @@ public class CategoryNodeTest{
 	
 	@Test
 	public void comparePartitionsTest(){
-		CategoryNode c1 = new CategoryNode("c", "type", true);
-		CategoryNode c2 = new CategoryNode("c", "type", true);
+		CategoryNode c1 = new CategoryNode("c", "type", "0", true);
+		CategoryNode c2 = new CategoryNode("c", "type", "0", true);
 		
 		assertTrue(c1.compare(c2));
 
@@ -328,15 +328,15 @@ public class CategoryNodeTest{
 	
 	@Test
 	public void compareTest(){
-		assertTrue(new CategoryNode("c", "int", true).compare(new CategoryNode("c", "int", true)));
-		assertTrue(new CategoryNode("c", "int", false).compare(new CategoryNode("c", "int", false)));
+		assertTrue(new CategoryNode("c", "int", "0", true).compare(new CategoryNode("c", "int", "0", true)));
+		assertTrue(new CategoryNode("c", "int", "0", false).compare(new CategoryNode("c", "int", "0", false)));
 
-		assertFalse(new CategoryNode("c1", "int", false).compare(new CategoryNode("c", "int", false)));
-		assertFalse(new CategoryNode("c", "boolean", false).compare(new CategoryNode("c", "int", false)));
-		assertFalse(new CategoryNode("c", "int", true).compare(new CategoryNode("c", "int", false)));
+		assertFalse(new CategoryNode("c1", "int", "0", false).compare(new CategoryNode("c", "int","0",  false)));
+		assertFalse(new CategoryNode("c", "boolean", "0", false).compare(new CategoryNode("c", "int", "0", false)));
+		assertFalse(new CategoryNode("c", "int", "0", true).compare(new CategoryNode("c", "int", "0", false)));
 
-		CategoryNode c1 = new CategoryNode("c", "int", false);
-		CategoryNode c2 = new CategoryNode("c", "int", false);
+		CategoryNode c1 = new CategoryNode("c", "int", "0", false);
+		CategoryNode c2 = new CategoryNode("c", "int", "0", false);
 		assertTrue(c1.compare(c2));
 
 		c1.setDefaultValueString("cc");

@@ -79,8 +79,8 @@ public class MethodInterface extends GenericNodeInterface {
 		EclipseModelBuilder modelBuilder = new EclipseModelBuilder();
 		String name = generateNewParameterName(fTarget);
 		String type = generateNewParameterType(fTarget);
-		CategoryNode parameter = new CategoryNode(name, type, false);
-		parameter.setDefaultValueString(modelBuilder.getDefaultExpectedValue(type));
+		String defaultValue = modelBuilder.getDefaultExpectedValue(type);
+		CategoryNode parameter = new CategoryNode(name, type, defaultValue, false);
 		List<PartitionNode> defaultPartitions = modelBuilder.defaultPartitions(type);
 		parameter.addPartitions(defaultPartitions);
 		if(addNewParameter(parameter, source, updateListener)){

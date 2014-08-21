@@ -80,8 +80,8 @@ public class GenericNodeTest{
 		RootNode root = new RootNode("root");
 		ClassNode classNode = new ClassNode("class");
 		MethodNode method = new MethodNode("method");
-		CategoryNode category = new CategoryNode("name", "type", false);
-		CategoryNode expCat = new CategoryNode("name", "type", true);
+		CategoryNode category = new CategoryNode("name", "type", "0", false);
+		CategoryNode expCat = new CategoryNode("name", "type", "0", true);
 		expCat.setDefaultValueString("0");
 		ConstraintNode constraint = new ConstraintNode("name", new Constraint(new StaticStatement(true), new StaticStatement(false)));
 		TestCaseNode testCase = new TestCaseNode("name", new ArrayList<PartitionNode>());
@@ -137,8 +137,8 @@ public class GenericNodeTest{
 		RootNode root = new RootNode("root");
 		ClassNode classNode = new ClassNode("class");
 		MethodNode method = new MethodNode("method");
-		CategoryNode category = new CategoryNode("name", "type", false);
-		CategoryNode expCat = new CategoryNode("name", "type", true);
+		CategoryNode category = new CategoryNode("name", "type", "0", false);
+		CategoryNode expCat = new CategoryNode("name", "type", "0", true);
 		expCat.setDefaultValueString("0");
 		ConstraintNode constraint = new ConstraintNode("name", new Constraint(new StaticStatement(true), new StaticStatement(false)));
 		TestCaseNode testCase = new TestCaseNode("name", new ArrayList<PartitionNode>());
@@ -167,8 +167,8 @@ public class GenericNodeTest{
 		RootNode root = new RootNode("root");
 		ClassNode classNode = new ClassNode("class");
 		MethodNode method = new MethodNode("method");
-		CategoryNode category = new CategoryNode("category", "type", false);
-		CategoryNode expCat = new CategoryNode("expCat", "type", true);
+		CategoryNode category = new CategoryNode("category", "type", "0", false);
+		CategoryNode expCat = new CategoryNode("expCat", "type", "0", true);
 		expCat.setDefaultValueString("0");
 		ConstraintNode constraint = new ConstraintNode("constraint", new Constraint(new StaticStatement(true), new StaticStatement(false)));
 		TestCaseNode testCase = new TestCaseNode("testCase", new ArrayList<PartitionNode>());
@@ -212,7 +212,7 @@ public class GenericNodeTest{
 	
 	@Test
 	public void getSiblingTest(){
-		CategoryNode cat = new CategoryNode("cat", "type", false);
+		CategoryNode cat = new CategoryNode("cat", "type", "0", false);
 		PartitionNode p1 = new PartitionNode("p1", "0");
 		PartitionNode p2 = new PartitionNode("p2", "0");
 		

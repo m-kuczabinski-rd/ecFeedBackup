@@ -116,7 +116,7 @@ public class PartitionStatementTest {
 	@BeforeClass
 	public static void prepareModel(){
 		fMethod = new MethodNode("method");
-		fCategory = new CategoryNode("category", "type", false);
+		fCategory = new CategoryNode("category", "type", "0", false);
 		fPartition1 = new PartitionNode("partition1", null);
 		fPartition2 = new PartitionNode("partition2", null);
 		fPartition3 = new PartitionNode("partition3", null);
@@ -158,7 +158,7 @@ public class PartitionStatementTest {
 	@Test
 	public void testMentionsCategoryNode() {
 		PartitionedCategoryStatement statement = new PartitionedCategoryStatement(fCategory, Relation.EQUAL, fPartition2);
-		CategoryNode category = new CategoryNode("name", "type", false);
+		CategoryNode category = new CategoryNode("name", "type", "0", false);
 		assertTrue(statement.mentions(fCategory));
 		assertFalse(statement.mentions(category));
 	}
@@ -177,8 +177,8 @@ public class PartitionStatementTest {
 
 	@Test
 	public void compareTest(){
-		CategoryNode c1 = new CategoryNode("name", "type", true);
-		CategoryNode c2 = new CategoryNode("name", "type", true);
+		CategoryNode c1 = new CategoryNode("name", "type", "0", true);
+		CategoryNode c2 = new CategoryNode("name", "type", "0", true);
 		
 		PartitionNode p1 = new PartitionNode("name", "value");
 		PartitionNode p2 = new PartitionNode("name", "value");

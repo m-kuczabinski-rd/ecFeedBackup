@@ -110,7 +110,7 @@ public class XmlParserSerializerTest {
 			RootNode root = new RootNode("root");
 			ClassNode classNode = new ClassNode("classNode");
 			MethodNode method = new MethodNode("method");
-			CategoryNode category = new CategoryNode("category", com.testify.ecfeed.modelif.java.Constants.TYPE_NAME_STRING, false);
+			CategoryNode category = new CategoryNode("category", com.testify.ecfeed.modelif.java.Constants.TYPE_NAME_STRING, "0", false);
 			PartitionNode partition = new PartitionNode("partition", "A                 B");
 			List<PartitionNode> testData = new ArrayList<PartitionNode>();
 			testData.add(partition);
@@ -144,9 +144,9 @@ public class XmlParserSerializerTest {
 			ClassNode classNode = new ClassNode("classNode");
 			MethodNode method = new MethodNode("method");
 			CategoryNode partitionedCategory = 
-					new CategoryNode("partitionedCategory", com.testify.ecfeed.modelif.java.Constants.TYPE_NAME_STRING, false);
+					new CategoryNode("partitionedCategory", com.testify.ecfeed.modelif.java.Constants.TYPE_NAME_STRING, "0", false);
 			CategoryNode expectedCategory = 
-					new CategoryNode("expectedCategory", com.testify.ecfeed.modelif.java.Constants.TYPE_NAME_CHAR, true);
+					new CategoryNode("expectedCategory", com.testify.ecfeed.modelif.java.Constants.TYPE_NAME_CHAR, "0", true);
 			expectedCategory.setDefaultValueString("d");
 			PartitionNode partition1 = new PartitionNode("partition", "p");
 			partition1.setParent(partitionedCategory);
@@ -255,7 +255,7 @@ public class XmlParserSerializerTest {
 	}
 
 	private CategoryNode createPartitionedCategory(String type, int numOfPartitions) {
-		CategoryNode category = new CategoryNode(randomName(), type, false);
+		CategoryNode category = new CategoryNode(randomName(), type, "0", false);
 		for(int i = 0; i < numOfPartitions; i++){
 			category.addPartition(createPartition(type, 1));
 		}
@@ -272,7 +272,7 @@ public class XmlParserSerializerTest {
 
 	private CategoryNode createExpectedValueCategory(String type) {
 		String defaultValue = createRandomValue(type);
-		CategoryNode category = new CategoryNode(randomName(), type, true);
+		CategoryNode category = new CategoryNode(randomName(), type, "0", true);
 		category.setDefaultValueString(defaultValue);
 		return category;
 	}

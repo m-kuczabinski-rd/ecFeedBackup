@@ -202,7 +202,7 @@ public class ModelUtils {
 	}
 	
 	private static CategoryNode generateCategoryModel(ILocalVariable parameter, String type, boolean expected){
-		CategoryNode category = new CategoryNode(parameter.getElementName(), type, expected);
+		CategoryNode category = new CategoryNode(parameter.getElementName(), type, getDefaultExpectedValueString(type), expected);
 		if(expected){
 			category.setDefaultValueString(getDefaultExpectedValueString(type));
 			return category;

@@ -96,7 +96,7 @@ public class RuntimeMethodTest {
 	}
 
 	private List<PartitionNode> generateCategory(int partitions) {
-		CategoryNode parent = new CategoryNode("Category", "int", false);
+		CategoryNode parent = new CategoryNode("Category", "int","0",  false);
 		List<PartitionNode> category = new ArrayList<PartitionNode>();
 		for(int i = 0; i < partitions; i++){
 			PartitionNode partition = new PartitionNode(String.valueOf(i), String.valueOf(i));

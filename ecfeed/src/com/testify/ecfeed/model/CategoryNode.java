@@ -24,12 +24,12 @@ public class CategoryNode extends GenericNode implements IPartitionedNode{
 	private boolean fExpected;
 	private PartitionNode fDefaultValue;
 	
-	public CategoryNode(String name, String type, boolean expected) {
+	public CategoryNode(String name, String type, String defaultValue, boolean expected) {
 		super(name);
 		fExpected = expected;
 		fType = type;
 		fPartitions = new ArrayList<PartitionNode>();
-		fDefaultValue = new PartitionNode("default value" , "/null");
+		fDefaultValue = new PartitionNode("default value" , defaultValue);
 		fDefaultValue.setParent(this);
 	}
 	
@@ -127,7 +127,7 @@ public class CategoryNode extends GenericNode implements IPartitionedNode{
 	
 	@Override
 	public CategoryNode getCopy(){
-		CategoryNode category = new CategoryNode(getName(), getType(), isExpected());
+		CategoryNode category = new CategoryNode(getName(), getType(), getDefaultValueString(), isExpected());
 		category.setParent(this.getParent());
 		if(getDefaultValueString() != null)
 			category.setDefaultValueString(getDefaultValueString());

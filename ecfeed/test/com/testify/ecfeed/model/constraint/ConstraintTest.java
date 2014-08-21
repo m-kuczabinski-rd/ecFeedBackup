@@ -62,7 +62,7 @@ public class ConstraintTest {
 	@Test
 	public void testMentions() {
 		PartitionNode partition = new PartitionNode("partition", null);
-		CategoryNode category = new CategoryNode("category", "type", false);
+		CategoryNode category = new CategoryNode("category", "type", "0", false);
 		category.addPartition(partition);
 
 		BasicStatement mentioningStatement = new PartitionedCategoryStatement(category, Relation.EQUAL, partition);

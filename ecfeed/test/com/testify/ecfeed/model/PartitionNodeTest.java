@@ -37,7 +37,7 @@ public class PartitionNodeTest{
 	@Test
 	public void testGetCategory(){
 		MethodNode method = new MethodNode("method");
-		CategoryNode category = new CategoryNode("name", "type", false);
+		CategoryNode category = new CategoryNode("name", "type","0",  false);
 		PartitionNode p1 = new PartitionNode("p1", "0");
 		PartitionNode p11 = new PartitionNode("p11", "0");
 		PartitionNode p111 = new PartitionNode("p111", "0");
@@ -61,7 +61,7 @@ public class PartitionNodeTest{
 	@Test
 	public void testLevel(){
 		MethodNode method = new MethodNode("method");
-		CategoryNode category = new CategoryNode("name", "type", false);
+		CategoryNode category = new CategoryNode("name", "type", "0", false);
 		PartitionNode p1 = new PartitionNode("p1", "0");
 		PartitionNode p11 = new PartitionNode("p11", "0");
 		PartitionNode p111 = new PartitionNode("p111", "0");

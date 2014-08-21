@@ -101,8 +101,7 @@ public class XomAnalyser {
 			expected = getAttributeValue(element, CATEGORY_IS_EXPECTED_ATTRIBUTE_NAME);
 			defaultValue = getAttributeValue(element, DEFAULT_EXPECTED_VALUE_ATTRIBUTE_NAME);
 		}
-		CategoryNode category = new CategoryNode(name, type, Boolean.parseBoolean(expected));
-		category.setDefaultValueString(defaultValue);
+		CategoryNode category = new CategoryNode(name, type, defaultValue, Boolean.parseBoolean(expected));
 		
 		for(Element child : getIterableChildren(element)){
 			category.addPartition(parsePartition(child));

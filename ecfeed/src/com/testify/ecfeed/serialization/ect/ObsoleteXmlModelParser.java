@@ -293,7 +293,7 @@ public class ObsoleteXmlModelParser implements IModelParser{
 		String name = getElementName(element);
 		String type = getAttributeValue(element, Constants.TYPE_NAME_ATTRIBUTE);
 		String defaultValueString = getAttributeValue(element, Constants.DEFAULT_EXPECTED_VALUE_ATTRIBUTE_NAME);
-		CategoryNode category = new CategoryNode(name, type, true);
+		CategoryNode category = new CategoryNode(name, type, defaultValueString, true);
 		category.setDefaultValueString(defaultValueString);
 		return category;
 	}
@@ -309,11 +309,14 @@ public class ObsoleteXmlModelParser implements IModelParser{
 			expected = Boolean.parseBoolean(getAttributeValue(element, Constants.CATEGORY_IS_EXPECTED_ATTRIBUTE_NAME));
 		}
 	
-		CategoryNode categoryNode = new CategoryNode(name, type, expected);
+		CategoryNode categoryNode;
 		
 		if(expected){
 			String defaultValueString = getAttributeValue(element, Constants.DEFAULT_EXPECTED_VALUE_ATTRIBUTE_NAME);
-			categoryNode.setDefaultValueString(defaultValueString);
+			categoryNode = new CategoryNode(name, type, defaultValueString, expected);
+		}
+		else{
+			categoryNode = new CategoryNode(name, type, null, expected);
 		}
 
 		for(Element child : getIterableElements(element.getChildElements())){

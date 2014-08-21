@@ -63,14 +63,13 @@ public class EclipseModelBuilder {
 	}
 	
 	public CategoryNode buildCategoryModel(String name, String type, boolean expected){
-		CategoryNode category = new CategoryNode(name, type, expected);
+		CategoryNode category = new CategoryNode(name, type, getDefaultExpectedValue(type), expected);
 		if(!expected){
 			List<PartitionNode> defaultPartitions = defaultPartitions(type);
 			for(PartitionNode partition : defaultPartitions){
 				category.addPartition(partition);
 			}
 		}
-		category.setDefaultValueString(getDefaultExpectedValue(type));
 		return category;
 	}
 

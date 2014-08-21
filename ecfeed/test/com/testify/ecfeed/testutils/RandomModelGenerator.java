@@ -133,8 +133,7 @@ public class RandomModelGenerator {
 	public CategoryNode generateCategory(String type, boolean expected, int partitionLevels, int partitions, int labels){
 		String name = generateString(REGEX_CATEGORY_NODE_NAME);
 		
-		CategoryNode category = new CategoryNode(name, type, expected);
-		category.setDefaultValueString(randomPartitionValue(type));
+		CategoryNode category = new CategoryNode(name, type, randomPartitionValue(type), expected);
 		
 		for(int i = 0; i < rand.nextInt(MAX_PARTITIONS) + 1; i++){
 			category.addPartition(generatePartition(partitionLevels, partitions, labels, type));

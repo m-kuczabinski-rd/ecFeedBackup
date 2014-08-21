@@ -18,7 +18,7 @@ public class PartitionOperationRenameTest {
 
 	@Test
 	public void setValidNameTest(){
-		CategoryNode category = new CategoryNode("name", "int", false);
+		CategoryNode category = new CategoryNode("name", "int", "0", false);
 		PartitionNode p1 = new PartitionNode("p1", "0");
 		PartitionNode p11 = new PartitionNode("p11", "0");
 		PartitionNode p12 = new PartitionNode("p12", "0");
@@ -44,7 +44,7 @@ public class PartitionOperationRenameTest {
 
 	@Test
 	public void setNotUniqueNameTest(){
-		CategoryNode category = new CategoryNode("name", "int", false);
+		CategoryNode category = new CategoryNode("name", "int", "0", false);
 		PartitionNode p1 = new PartitionNode("p1", "0");
 		PartitionNode p11 = new PartitionNode("p11", "0");
 		PartitionNode p12 = new PartitionNode("p12", "0");
@@ -75,7 +75,7 @@ public class PartitionOperationRenameTest {
 	
 	@Test
 	public void wrongNameTest(){
-		CategoryNode category = new CategoryNode("name", "int", false);
+		CategoryNode category = new CategoryNode("name", "int", "0", false);
 		PartitionNode p1 = new PartitionNode("p1", "0");
 		PartitionNode p2 = new PartitionNode("p2", "0");
 		
@@ -111,7 +111,7 @@ public class PartitionOperationRenameTest {
 
 	@Test
 	public void reverseOperationTest(){
-		CategoryNode category = new CategoryNode("name", "int", false);
+		CategoryNode category = new CategoryNode("name", "int", "0", false);
 		PartitionNode p1 = new PartitionNode("p1", "0");
 		PartitionNode p2 = new PartitionNode("p2", "0");
 		

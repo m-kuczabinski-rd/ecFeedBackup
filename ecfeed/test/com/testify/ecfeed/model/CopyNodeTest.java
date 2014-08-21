@@ -47,11 +47,11 @@ public class CopyNodeTest{
 		fClass2 = new ClassNode("com.testify.ecfeed.model.Class2");
 		fMethod1 = new MethodNode("firstMethod");
 		fMethod2 = new MethodNode("secondMethod");
-		fPartCat1 = new CategoryNode("pcat1", "type", false);
-		fPartCat2 = new CategoryNode("pcat2", "type2", false);
-		fExCat1 = new CategoryNode("ecat1", "type", true);
+		fPartCat1 = new CategoryNode("pcat1", "type", "0", false);
+		fPartCat2 = new CategoryNode("pcat2", "type2", "0", false);
+		fExCat1 = new CategoryNode("ecat1", "type", "0", true);
 		fExCat1.setDefaultValueString("value1");
-		fExCat2 = new CategoryNode("ecat2", "type", true);
+		fExCat2 = new CategoryNode("ecat2", "type", "0", true);
 		fExCat2.setDefaultValueString("value2");
 		fPartition1 = new PartitionNode("p1", "value1");
 		fPartition2 = new PartitionNode("p2", "value2");

@@ -52,9 +52,9 @@ public class LabelStatementTest {
 		p21.addLabel("p21");
 		p22.addLabel("p22");
 		
-		CategoryNode c1 = new CategoryNode("c1", "type", false);
+		CategoryNode c1 = new CategoryNode("c1", "type", "0", false);
 		c1.addPartition(p);
-		CategoryNode c2 = new CategoryNode("c2", "type", false);
+		CategoryNode c2 = new CategoryNode("c2", "type", "0", false);
 		c2.addPartition(q);
 		
 		MethodNode method = new MethodNode("method");

@@ -37,10 +37,10 @@ public class ExpectedValueStatementTest{
 		fMethod = new MethodNode("method");
 		fExpectedValue1 = "value1";
 
-		fExpCategory1 = new CategoryNode("category", "type", true);
+		fExpCategory1 = new CategoryNode("category", "type","0",  true);
 		fExpCategory1.setDefaultValueString(fExpectedValue1);
-		fPartCategory1 = new CategoryNode("category", "type", false);
-		fPartCategory2 = new CategoryNode("category", "type", false);
+		fPartCategory1 = new CategoryNode("category", "type","0",  false);
+		fPartCategory2 = new CategoryNode("category", "type", "0", false);
 
 		fMethod.addCategory(fPartCategory1);
 		fMethod.addCategory(fExpCategory1);
@@ -66,8 +66,8 @@ public class ExpectedValueStatementTest{
 	
 	@Test
 	public void compareTest(){
-		CategoryNode c1 = new CategoryNode("c", "type", true);
-		CategoryNode c2 = new CategoryNode("c", "type", true);
+		CategoryNode c1 = new CategoryNode("c", "type", "0", true);
+		CategoryNode c2 = new CategoryNode("c", "type", "0", true);
 		
 		PartitionNode p1 = new PartitionNode("name", "value");
 		PartitionNode p2 = new PartitionNode("name", "value");

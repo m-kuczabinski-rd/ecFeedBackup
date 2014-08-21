@@ -72,7 +72,7 @@ public class ParameterizedMethodTest {
 		Collection<TestCaseNode> suite = new HashSet<TestCaseNode>();
 		for(int i = 0; i < size; i++){
 			List<PartitionNode> testData = new ArrayList<PartitionNode>();
-			CategoryNode category = new CategoryNode("Category", "int", false);
+			CategoryNode category = new CategoryNode("Category", "int", "0", false);
 			for(int j = 0; j < parameters; j++){
 				PartitionNode partition = new PartitionNode("dummy", Integer.toString(random.nextInt()));
 				partition.setParent(category);

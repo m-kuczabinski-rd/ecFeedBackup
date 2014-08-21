@@ -40,14 +40,14 @@ public class StatementArrayTest {
 	@BeforeClass
 	public static void prepareModel(){
 		fMethod = new MethodNode("method");
-		fCategory1 = new CategoryNode("category", "type", false);
+		fCategory1 = new CategoryNode("category", "type", "0", false);
 		fPartition11 = new PartitionNode("partition11", null);
 		fPartition12 = new PartitionNode("partition12", null);
 		fPartition13 = new PartitionNode("partition13", null);
 		fCategory1.addPartition(fPartition11);
 		fCategory1.addPartition(fPartition12);
 		fCategory1.addPartition(fPartition13);
-		fCategory2 = new CategoryNode("category", "type", false);
+		fCategory2 = new CategoryNode("category", "type", "0", false);
 		fPartition21 = new PartitionNode("partition21", null);
 		fPartition22 = new PartitionNode("partition22", null);
 		fPartition23 = new PartitionNode("partition23", null);

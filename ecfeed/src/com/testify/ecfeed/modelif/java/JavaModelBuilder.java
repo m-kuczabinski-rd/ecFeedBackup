@@ -59,7 +59,8 @@ public class JavaModelBuilder {
 	
 	public CategoryNode buildCategoryModel(String name, Class<?>type, boolean expected){
 		String typeName = JavaUtils.getTypeName(type.getName());
-		CategoryNode category = new CategoryNode(name, typeName, expected);
+		String defaultValue = getDefaultExpectedValueString(typeName);
+		CategoryNode category = new CategoryNode(name, typeName, defaultValue, expected);
 		category.setDefaultValueString(getDefaultExpectedValueString(typeName));
 		if(!expected){
 			List<PartitionNode> defaultPartitions = getDefaultPartitions(typeName);
