@@ -191,8 +191,8 @@ public class ConstraintViewer extends TreeViewerSection {
 				else{
 					fRightOperandComposite = fConditionCombo = new ComboViewer(StatementEditor.this, SWT.BORDER).getCombo();
 				}
-
 				prepareRelationalStatementEditor(statement, availableConditions(statement), statement.getCondition().getValueString());
+
 				StatementEditor.this.layout();
 				return null;
 			}
