@@ -21,7 +21,6 @@ import org.eclipse.swt.custom.CCombo;
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.modelif.ModelOperationManager;
 import com.testify.ecfeed.ui.modelif.CategoryInterface;
-import com.testify.ecfeed.utils.ModelUtils;
 
 public class CategoryTypeEditingSupport extends EditingSupport {
 
@@ -33,7 +32,7 @@ public class CategoryTypeEditingSupport extends EditingSupport {
 		super(viewer.getTableViewer());
 		fCategoryIf = new CategoryInterface(operationManager);
 		fSection = viewer;
-		fCellEditor = new ComboBoxCellEditor(viewer.getTable(), ModelUtils.getJavaTypes().toArray(new String[]{}));
+		fCellEditor = new ComboBoxCellEditor(viewer.getTable(), CategoryInterface.supportedPrimitiveTypes());
 		fCellEditor.setActivationStyle(ComboBoxCellEditor.DROP_DOWN_ON_MOUSE_ACTIVATION);
 	}
 
@@ -78,10 +77,7 @@ public class CategoryTypeEditingSupport extends EditingSupport {
 		}
 		fCategoryIf.setTarget(node);
 		fCategoryIf.setType(newType, fSection, fSection.getUpdateListener());
-//		if(changeCategoryType(node, newType)){
-//			fSection.modelUpdated();
-//		}
-//
+
 		fCellEditor.setFocus();
 	}
 }

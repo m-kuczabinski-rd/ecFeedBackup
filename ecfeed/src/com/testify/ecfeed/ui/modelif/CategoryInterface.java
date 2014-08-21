@@ -118,4 +118,20 @@ public class CategoryInterface extends GenericNodeInterface {
 	public static List<String> getSpecialValues(String type) {
 		return new EclipseModelBuilder().getSpecialValues(type);
 	}
+
+	public String getType() {
+		return fTarget.getType();
+	}
+
+	public static String[] supportedPrimitiveTypes() {
+		return JavaUtils.supportedPrimitiveTypes();
+	}
+
+	public String getDefaultValue() {
+		return fTarget.getDefaultValueString();
+	}
+
+	public boolean isExpected() {
+		return fTarget.isExpected();
+	}
 }
