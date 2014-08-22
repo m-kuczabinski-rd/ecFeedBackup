@@ -1,13 +1,16 @@
 package com.testify.ecfeed.ui.modelif;
 
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
 
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.MethodNode;
+import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.modelif.ModelOperationManager;
 import com.testify.ecfeed.modelif.java.JavaUtils;
 import com.testify.ecfeed.modelif.java.category.CategoryOperationRename;
@@ -134,6 +137,19 @@ public class CategoryInterface extends GenericNodeInterface {
 
 	public boolean isExpected() {
 		return fTarget.isExpected();
+	}
+	
+	public String[] defaultValueSuggestions(){
+		Set<String> items = new HashSet<String>(getSpecialValues());
+		if(JavaUtils.isPrimitive(getType()) == false){
+			for(PartitionNode p : fTarget.getLeafPartitions()){
+				items.add(p.getValueString());
+			}
+			if(items.contains(fTarget.getDefaultValueString())== false){
+				items.add(fTarget.getDefaultValueString());
+			}
+		}
+		return items.toArray(new String[]{});
 	}
 
 	@Override

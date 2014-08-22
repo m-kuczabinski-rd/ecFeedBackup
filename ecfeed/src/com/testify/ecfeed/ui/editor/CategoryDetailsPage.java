@@ -11,8 +11,6 @@
 
 package com.testify.ecfeed.ui.editor;
 
-import java.util.List;
-
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
@@ -24,7 +22,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
 
 import com.testify.ecfeed.model.CategoryNode;
-import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.modelif.ModelOperationManager;
 import com.testify.ecfeed.ui.modelif.CategoryInterface;
 
@@ -151,14 +148,7 @@ public class CategoryDetailsPage extends BasicDetailsPage {
 			fDefaultValueCombo = new Combo(fAttributesComposite,SWT.DROP_DOWN);
 		}
 		fDefaultValueCombo.setLayoutData(new GridData(SWT.FILL,  SWT.CENTER, false, false, 2, 1));
-		List<String> items = fCategoryIf.getSpecialValues();
-		for(PartitionNode p : category.getLeafPartitions()){
-			items.add(p.getValueString());
-		}
-		if(items.contains(category.getDefaultValueString())== false){
-			items.add(category.getDefaultValueString());
-		}
-		fDefaultValueCombo.setItems(items.toArray(new String[]{}));
+		fDefaultValueCombo.setItems(fCategoryIf.defaultValueSuggestions());
 		fDefaultValueCombo.setText(category.getDefaultValueString());
 		fDefaultValueCombo.addSelectionListener(new SetDefaultValueListener());
 		

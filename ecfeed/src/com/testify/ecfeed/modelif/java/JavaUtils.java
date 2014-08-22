@@ -102,4 +102,8 @@ public class JavaUtils {
 	public static boolean isValidConstraintName(String name) {
 		return name.matches(Constants.REGEX_CONSTRAINT_NODE_NAME);
 	}
+	
+	public static boolean hasLimitedValuesSet(String type){
+		return isPrimitive(type) || type.equals(getBooleanTypeName());
+	}
 }

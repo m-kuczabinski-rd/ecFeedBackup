@@ -62,7 +62,7 @@ public class CategoryOperationSetExpected implements IModelOperation {
 	public void execute() throws ModelIfException {
 		fTarget.setExpected(fExpected);
 		String type = fTarget.getType();
-		if(fExpected && (JavaUtils.isPrimitive(type) == false)){
+		if(fExpected && JavaUtils.hasLimitedValuesSet(type)){
 			boolean validDefaultValue = false;
 			String currentDefaultValue = fTarget.getDefaultValueString();
 			for(PartitionNode leaf : fTarget.getLeafPartitions()){
