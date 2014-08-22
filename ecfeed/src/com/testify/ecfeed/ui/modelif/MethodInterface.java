@@ -83,14 +83,14 @@ public class MethodInterface extends GenericNodeInterface {
 		CategoryNode parameter = new CategoryNode(name, type, defaultValue, false);
 		List<PartitionNode> defaultPartitions = modelBuilder.defaultPartitions(type);
 		parameter.addPartitions(defaultPartitions);
-		if(addNewParameter(parameter, source, updateListener)){
+		if(addNewParameter(parameter, fTarget.getCategories().size(), source, updateListener)){
 			return parameter;
 		}
 		return null;
 	}
 	
-	public boolean addNewParameter(CategoryNode parameter, BasicSection source, IModelUpdateListener updateListener) {
-		return execute(new MethodOperationAddParameter(fTarget, parameter), source, updateListener, Messages.DIALOG_CONVERT_METHOD_PROBLEM_TITLE);
+	public boolean addNewParameter(CategoryNode parameter, int index, BasicSection source, IModelUpdateListener updateListener) {
+		return execute(new MethodOperationAddParameter(fTarget, parameter, index), source, updateListener, Messages.DIALOG_CONVERT_METHOD_PROBLEM_TITLE);
 	}
 	
 	public boolean removeParameters(Collection<CategoryNode> parameters, BasicSection source, IModelUpdateListener updateListener){

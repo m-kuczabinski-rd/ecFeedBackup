@@ -9,9 +9,8 @@ import com.testify.ecfeed.modelif.java.common.BulkOperation;
 
 public class MethodOperationAddTestSuite extends BulkOperation {
 
-	public MethodOperationAddTestSuite(MethodNode target, String testSuiteName,
-			List<List<PartitionNode>> testData) {
-		super(true);
+	public MethodOperationAddTestSuite(MethodNode target, String testSuiteName, List<List<PartitionNode>> testData) {
+		super(false);
 		for(List<PartitionNode> values : testData){
 			addOperation(new MethodOperationAddTestCase(target, new TestCaseNode(testSuiteName, values)));
 		}

@@ -14,6 +14,8 @@ public class MethodOperationAddParameter implements IModelOperation {
 	List<TestCaseNode> fRemovedTestCases;
 	MethodNode fTarget;
 	CategoryNode fParameter;
+	private int fNewIndex;
+	private int fCurrentIndex;
 	
 	private class ReverseOperation implements IModelOperation{
 
@@ -25,15 +27,17 @@ public class MethodOperationAddParameter implements IModelOperation {
 
 		@Override
 		public IModelOperation reverseOperation() {
-			return new MethodOperationAddParameter(fTarget, fParameter);
+			return new MethodOperationAddParameter(fTarget, fParameter, fCurrentIndex);
 		}
 		
 	}
 
-	public MethodOperationAddParameter(MethodNode target, CategoryNode parameter) {
+	public MethodOperationAddParameter(MethodNode target, CategoryNode parameter, int index) {
 		fRemovedTestCases = target.getTestCases();
 		fTarget = target;
 		fParameter = parameter;
+		fNewIndex = index;
+		fCurrentIndex = parameter.getIndex();
 	}
 
 	@Override
@@ -47,7 +51,7 @@ public class MethodOperationAddParameter implements IModelOperation {
 		if(fTarget.getClassNode().getMethod(parameterName, types) != null){
 			throw new ModelIfException(Messages.METHOD_SIGNATURE_DUPLICATE_PROBLEM);
 		}
-		fTarget.addCategory(fParameter);
+		fTarget.addCategory(fParameter, fNewIndex);
 		fTarget.removeTestCases();
 	}
 

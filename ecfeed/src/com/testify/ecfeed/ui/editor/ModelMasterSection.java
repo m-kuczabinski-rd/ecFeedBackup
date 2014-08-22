@@ -41,6 +41,7 @@ import com.testify.ecfeed.model.IModelWrapper;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.modelif.ModelOperationManager;
 import com.testify.ecfeed.ui.modelif.GenericNodeInterface;
+import com.testify.ecfeed.ui.modelif.NodeInterfaceFactory;
 
 public class ModelMasterSection extends TreeViewerSection{
 	private static final int STYLE = Section.EXPANDED | Section.TITLE_BAR;
@@ -69,9 +70,10 @@ public class ModelMasterSection extends TreeViewerSection{
 		
 	}
 	
-	private static class DummyUpdateListener implements IModelUpdateListener{
+	private static class UpdateListener implements IModelUpdateListener{
 		@Override
 		public void modelUpdated(AbstractFormPart source) {
+			source.markDirty();
 		}
 	}
 
@@ -109,7 +111,7 @@ public class ModelMasterSection extends TreeViewerSection{
 	}
 
 	public ModelMasterSection(Composite parent, FormToolkit toolkit, ModelOperationManager operationManager) {
-		super(parent, toolkit, STYLE, new DummyUpdateListener());
+		super(parent, toolkit, STYLE, new UpdateListener());
 		fModelSelectionListeners = new ArrayList<IModelSelectionListener>();
 		fMenuManager = new MenuOperationManager(this);
 		fOperationManager = operationManager;
@@ -192,8 +194,7 @@ public class ModelMasterSection extends TreeViewerSection{
 	}
 
 	private void moveSelectedItem(boolean moveUp){
-		GenericNodeInterface nodeIf = new GenericNodeInterface(fOperationManager);
-		nodeIf.setTarget(selectedNode());
+		GenericNodeInterface nodeIf = new NodeInterfaceFactory(fOperationManager).getNodeInterface(selectedNode());
 		nodeIf.moveUpDown(moveUp, this, this.getUpdateListener());
 		refresh();
 	}

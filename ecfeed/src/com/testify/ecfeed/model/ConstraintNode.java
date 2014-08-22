@@ -124,4 +124,12 @@ public class ConstraintNode extends GenericNode{
 		return true;
 	}
 	
+	@Override 
+	public int getMaxIndex(){
+		if(getMethod() != null){
+			return getMethod().getConstraintNodes().size();
+		}
+		return -1;
+	}
+
 }

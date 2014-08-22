@@ -159,4 +159,11 @@ public abstract class GenericNode implements IGenericNode{
 	public boolean compare(IGenericNode node){
 		return getName().equals(node.getName());
 	}
+
+	public int getMaxIndex() {
+		if(getParent() != null){
+			return getParent().getChildren().size();
+		}
+		return -1;
+	}
 }

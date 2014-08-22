@@ -12,7 +12,7 @@ import com.testify.ecfeed.modelif.java.testcase.TestCaseOperationRename;
 public class MethodOperationRenameTestCases extends BulkOperation {
 
 	public MethodOperationRenameTestCases(Collection<TestCaseNode> testCases, String newName) throws ModelIfException {
-		super(true);
+		super(false);
 		if(newName.matches(Constants.REGEX_TEST_CASE_NODE_NAME) == false){
 			throw new ModelIfException(Messages.TEST_CASE_NAME_REGEX_PROBLEM);
 		}

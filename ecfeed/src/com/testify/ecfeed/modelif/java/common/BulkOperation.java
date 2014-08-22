@@ -12,12 +12,14 @@ public class BulkOperation implements IModelOperation{
 
 	List<IModelOperation> fOperations;
 	List<IModelOperation> fExecutedOperations;
-	private boolean fExecuteAll;
+	// either all operation or none. if false, all operations are executed
+	// otherwise after first error the reverse operation is called
+	private boolean fAtomic; 
 	
-	public BulkOperation(boolean executeAll) {
+	public BulkOperation(boolean atomic) {
 		fOperations = new ArrayList<IModelOperation>();
 		fExecutedOperations = new ArrayList<IModelOperation>();
-		fExecuteAll = executeAll;
+		fAtomic = atomic;
 	}
 	
 	public BulkOperation(List<IModelOperation> operations) {
@@ -37,7 +39,8 @@ public class BulkOperation implements IModelOperation{
 				fExecutedOperations.add(operation);
 			}catch(ModelIfException e){
 				errors.add(e.getMessage());
-				if(fExecuteAll == false){
+				if(fAtomic){
+					reverseOperation().execute();
 					break;
 				}
 			}

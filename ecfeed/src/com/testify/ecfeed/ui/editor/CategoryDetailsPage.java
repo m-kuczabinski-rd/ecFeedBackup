@@ -113,30 +113,6 @@ public class CategoryDetailsPage extends BasicDetailsPage {
 		}
 	}
 	
-	private void recreateDefaultValueCombo(CategoryNode category) {
-		if(fDefaultValueCombo != null && fDefaultValueCombo.isDisposed() == false){
-			fDefaultValueCombo.dispose();
-		}
-		if(fCategoryIf.hasLimitedValuesSet()){
-			fDefaultValueCombo = new Combo(fAttributesComposite,SWT.DROP_DOWN | SWT.READ_ONLY);
-		}
-		else{
-			fDefaultValueCombo = new Combo(fAttributesComposite,SWT.DROP_DOWN);
-		}
-		fDefaultValueCombo.setLayoutData(new GridData(SWT.FILL,  SWT.CENTER, false, false, 2, 1));
-		List<String> items = fCategoryIf.getSpecialValues();
-		for(PartitionNode p : category.getLeafPartitions()){
-			items.add(p.getValueString());
-		}
-		fDefaultValueCombo.setItems(items.toArray(new String[]{}));
-		fDefaultValueCombo.setText(category.getDefaultValueString());
-		fDefaultValueCombo.addSelectionListener(new SetDefaultValueListener());
-		
-		fDefaultValueCombo.setEnabled(category.isExpected());
-		
-		fAttributesComposite.layout();
-	}
-
 	private void createAttributesComposite(){
 		fAttributesComposite = getToolkit().createComposite(getMainComposite());
 		fAttributesComposite.setLayout(new GridLayout(3, false));
@@ -156,11 +132,38 @@ public class CategoryDetailsPage extends BasicDetailsPage {
 		fTypeCombo.addSelectionListener(new SetTypeListener());
 		
 		getToolkit().paintBordersFor(fAttributesComposite);
-
+	
 		getToolkit().createLabel(fAttributesComposite, "Default value: ", SWT.NONE);
-
+	
 		fExpectedCheckbox = getToolkit().createButton(getMainComposite(), "Expected", SWT.CHECK);
 		fExpectedCheckbox.setLayoutData(new GridData(SWT.FILL,  SWT.CENTER, false, false));
 		fExpectedCheckbox.addSelectionListener(new SetExpectedListener());
+	}
+
+	private void recreateDefaultValueCombo(CategoryNode category) {
+		if(fDefaultValueCombo != null && fDefaultValueCombo.isDisposed() == false){
+			fDefaultValueCombo.dispose();
+		}
+		if(fCategoryIf.hasLimitedValuesSet()){
+			fDefaultValueCombo = new Combo(fAttributesComposite,SWT.DROP_DOWN | SWT.READ_ONLY);
+		}
+		else{
+			fDefaultValueCombo = new Combo(fAttributesComposite,SWT.DROP_DOWN);
+		}
+		fDefaultValueCombo.setLayoutData(new GridData(SWT.FILL,  SWT.CENTER, false, false, 2, 1));
+		List<String> items = fCategoryIf.getSpecialValues();
+		for(PartitionNode p : category.getLeafPartitions()){
+			items.add(p.getValueString());
+		}
+		if(items.contains(category.getDefaultValueString())== false){
+			items.add(category.getDefaultValueString());
+		}
+		fDefaultValueCombo.setItems(items.toArray(new String[]{}));
+		fDefaultValueCombo.setText(category.getDefaultValueString());
+		fDefaultValueCombo.addSelectionListener(new SetDefaultValueListener());
+		
+		fDefaultValueCombo.setEnabled(category.isExpected());
+		
+		fAttributesComposite.layout();
 	}
 }

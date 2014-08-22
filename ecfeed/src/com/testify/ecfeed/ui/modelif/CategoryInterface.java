@@ -14,6 +14,7 @@ import com.testify.ecfeed.modelif.java.category.CategoryOperationRename;
 import com.testify.ecfeed.modelif.java.category.CategoryOperationSetDefaultValue;
 import com.testify.ecfeed.modelif.java.category.CategoryOperationSetExpected;
 import com.testify.ecfeed.modelif.java.category.CategoryOperationSetType;
+import com.testify.ecfeed.modelif.java.category.CategoryOperationShift;
 import com.testify.ecfeed.modelif.java.category.ITypeAdapterProvider;
 import com.testify.ecfeed.ui.editor.BasicSection;
 import com.testify.ecfeed.ui.editor.IModelUpdateListener;
@@ -133,5 +134,14 @@ public class CategoryInterface extends GenericNodeInterface {
 
 	public boolean isExpected() {
 		return fTarget.isExpected();
+	}
+
+	@Override
+	public boolean moveUpDown(boolean up, BasicSection source, IModelUpdateListener updateListener){
+		int index = CategoryOperationShift.nextAllowedIndex(fTarget, up);
+		if(index != -1){
+			return executeMoveOperation(new CategoryOperationShift(fTarget, index), source, updateListener);
+		}
+		return false;
 	}
 }

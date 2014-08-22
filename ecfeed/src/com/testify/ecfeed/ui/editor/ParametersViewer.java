@@ -19,6 +19,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Section;
 
@@ -40,20 +41,14 @@ public class ParametersViewer extends CheckboxTableViewerSection{
 	private MethodInterface fMethodIf;
 	private TableViewerColumn fTypeColumn;
 	private TableViewerColumn fExpectedColumn;
+	private Button fMoveUpButton;
 	
-	private class MoveUpAdapter extends SelectionAdapter{
+	private class MoveUpDownAdapter extends SelectionAdapter{
 		@Override
 		public void widgetSelected(SelectionEvent e){
+			boolean up = (e.getSource() == fMoveUpButton);
 			fCategoryIf.setTarget((CategoryNode)getSelectedElement());
-			fCategoryIf.moveUp(ParametersViewer.this, getUpdateListener());
-		}
-	}
-
-	private class MoveDownAdapter extends SelectionAdapter{
-		@Override
-		public void widgetSelected(SelectionEvent e){
-			fCategoryIf.setTarget((CategoryNode)getSelectedElement());
-			fCategoryIf.moveDown(ParametersViewer.this, getUpdateListener());
+			fCategoryIf.moveUpDown(up, ParametersViewer.this, getUpdateListener());
 		}
 	}
 
@@ -90,8 +85,9 @@ public class ParametersViewer extends CheckboxTableViewerSection{
 		getSection().setText("Parameters");
 		addButton("New parameter", new AddNewParameterAdapter());
 		addButton("Remove selected", new RemoveParameterAdapter());
-		addButton("Move Up", new MoveUpAdapter());
-		addButton("Move Down", new MoveDownAdapter());
+		MoveUpDownAdapter adapter = new MoveUpDownAdapter();
+		fMoveUpButton = addButton("Move Up", adapter);
+		addButton("Move Down", adapter);
 
 		fNameColumn.setEditingSupport(new CategoryNameEditingSupport(this, operationManager));
 		fTypeColumn.setEditingSupport(new CategoryTypeEditingSupport(this, operationManager));

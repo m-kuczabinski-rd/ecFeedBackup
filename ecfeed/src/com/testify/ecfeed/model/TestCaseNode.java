@@ -166,4 +166,13 @@ public class TestCaseNode extends GenericNode {
 		}
 		return true;
 	}
+	
+	@Override 
+	public int getMaxIndex(){
+		if(getMethod() != null){
+			return getMethod().getTestCases().size();
+		}
+		return -1;
+	}
+
 }

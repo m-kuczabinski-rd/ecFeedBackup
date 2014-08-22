@@ -260,9 +260,16 @@ public class CategoryNode extends GenericNode implements IPartitionedNode{
 	}
 
 	@Override
-	public void replacePartitions(List<PartitionNode> newPpartitions) {
+	public void replacePartitions(List<PartitionNode> newPartitions) {
 		fPartitions.clear();
-		fPartitions.addAll(newPpartitions);
+		fPartitions.addAll(newPartitions);
 	}
 	
+	@Override 
+	public int getMaxIndex(){
+		if(getMethod() != null){
+			return getMethod().getCategories().size();
+		}
+		return -1;
+	}
 }

@@ -19,7 +19,7 @@ import com.testify.ecfeed.modelif.java.root.RootOperationRemoveClass;
 
 public class RemoveOperationFactory {
 	
-	private static class DummyModelOperation implements IModelOperation{
+	private static class UnsupportedModelOperation implements IModelOperation{
 		@Override
 		public void execute() throws ModelIfException {
 			throw new ModelIfException(Messages.OPERATION_NOT_SUPPORTED_PROBLEM);
@@ -27,7 +27,7 @@ public class RemoveOperationFactory {
 
 		@Override
 		public IModelOperation reverseOperation() {
-			return new DummyModelOperation();
+			return new UnsupportedModelOperation();
 		}
 	}
 	
@@ -35,7 +35,7 @@ public class RemoveOperationFactory {
 
 		@Override
 		public Object visit(RootNode node) throws Exception {
-			return new DummyModelOperation();
+			return new UnsupportedModelOperation();
 		}
 
 		@Override
@@ -65,7 +65,7 @@ public class RemoveOperationFactory {
 
 		@Override
 		public Object visit(PartitionNode node) throws Exception {
-			return new DummyModelOperation();
+			return new UnsupportedModelOperation();
 		}
 	}
 	
@@ -73,7 +73,7 @@ public class RemoveOperationFactory {
 		try {
 			return (IModelOperation)node.accept(new RemoveOperationVisitor());
 		} catch (Exception e) {
-			return new DummyModelOperation();
+			return new UnsupportedModelOperation();
 		}
 	}
 }
