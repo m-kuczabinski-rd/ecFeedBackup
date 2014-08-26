@@ -36,7 +36,6 @@ public class OperationExecuter {
 	protected boolean execute(BulkOperation operation, BasicSection source, IModelUpdateListener updateListener, String errorMessageTitle){
 		try{
 			fOperationManager.execute(operation);
-			return true;
 		}catch(ModelIfException e){
 			MessageDialog.openError(Display.getCurrent().getActiveShell(), 
 					errorMessageTitle, 
@@ -44,6 +43,7 @@ public class OperationExecuter {
 		}
 		if(operation.modelUpdated()){
 			updateListener.modelUpdated(source);
+			return true;
 		}
 		return false;
 	}
