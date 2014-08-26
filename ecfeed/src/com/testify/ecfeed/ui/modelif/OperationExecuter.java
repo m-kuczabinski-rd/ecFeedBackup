@@ -6,6 +6,7 @@ import org.eclipse.swt.widgets.Display;
 import com.testify.ecfeed.modelif.IModelOperation;
 import com.testify.ecfeed.modelif.ModelIfException;
 import com.testify.ecfeed.modelif.ModelOperationManager;
+import com.testify.ecfeed.modelif.java.common.BulkOperation;
 import com.testify.ecfeed.ui.editor.BasicSection;
 import com.testify.ecfeed.ui.editor.IModelUpdateListener;
 
@@ -28,6 +29,21 @@ public class OperationExecuter {
 			MessageDialog.openError(Display.getCurrent().getActiveShell(), 
 					errorMessageTitle, 
 					e.getMessage());
+		}
+		return false;
+	}
+	
+	protected boolean execute(BulkOperation operation, BasicSection source, IModelUpdateListener updateListener, String errorMessageTitle){
+		try{
+			fOperationManager.execute(operation);
+			return true;
+		}catch(ModelIfException e){
+			MessageDialog.openError(Display.getCurrent().getActiveShell(), 
+					errorMessageTitle, 
+					e.getMessage());
+		}
+		if(operation.modelUpdated()){
+			updateListener.modelUpdated(source);
 		}
 		return false;
 	}

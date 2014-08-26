@@ -11,90 +11,73 @@
 
 package com.testify.ecfeed.ui.editor;
 
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.List;
 
+import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ComboBoxCellEditor;
+import org.eclipse.jface.viewers.ComboBoxViewerCellEditor;
 import org.eclipse.jface.viewers.EditingSupport;
+import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.CCombo;
 
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.modelif.ModelOperationManager;
+import com.testify.ecfeed.ui.modelif.CategoryInterface;
 import com.testify.ecfeed.ui.modelif.PartitionInterface;
-import com.testify.ecfeed.utils.ModelUtils;
 
 public class PartitionValueEditingSupport extends EditingSupport {
-	private ComboBoxCellEditor fCellEditor;
-	private BasicSection fSection;
-	private ModelOperationManager fModelOperationManager;
+	private ComboBoxViewerCellEditor fCellEditor;
+	private CheckboxTableViewerSection fSection;
+	private PartitionInterface fPartitionIf;
 	
 	public PartitionValueEditingSupport(CheckboxTableViewerSection viewer, ModelOperationManager operationManager) {
 		super(viewer.getTableViewer());
-		String[] items = {""};
-		fCellEditor = new ComboBoxCellEditor(viewer.getTable(), items);
-		fModelOperationManager = operationManager;
 		fSection = viewer;
+
+		fCellEditor = new ComboBoxViewerCellEditor(viewer.getTable(), SWT.TRAIL);
+		fCellEditor.setLabelProvider(new LabelProvider());
+		fCellEditor.setContentProvider(new ArrayContentProvider());
+
+		fPartitionIf = new PartitionInterface(operationManager);
 	}
 
 	@Override
 	protected CellEditor getCellEditor(Object element) {
 		PartitionNode node = (PartitionNode)element;
-		if (!ModelUtils.getJavaTypes().contains(node.getCategory().getType())
-				|| node.getCategory().getType().equals(com.testify.ecfeed.modelif.java.Constants.TYPE_NAME_BOOLEAN)) {
+		if(CategoryInterface.hasLimitedValuesSet(node.getCategory())){
 			fCellEditor.setActivationStyle(ComboBoxCellEditor.DROP_DOWN_ON_MOUSE_ACTIVATION);
 		} else {
 			fCellEditor.setActivationStyle(SWT.NONE);
 		}
+		List<String> items = CategoryInterface.getSpecialValues(node.getCategory().getType());
+		if(items.contains(node.getValueString()) == false){
+			items.add(node.getValueString());
+		}
+		fCellEditor.setInput(items);
+		fCellEditor.getViewer().getCCombo().setEditable(CategoryInterface.isBoolean(node.getCategory().getType()) == false);
 		return fCellEditor;
 	}
 
 	@Override
 	protected boolean canEdit(Object element) {
-		return !((PartitionNode)element).isAbstract();
+		return ((PartitionNode)element).isAbstract() == false;
 	}
 
 	@Override
 	protected Object getValue(Object element) {
-		PartitionNode node = (PartitionNode)element;
-		HashMap<String, String> values = ModelUtils.generatePredefinedValues(node.getCategory().getType());
-		String [] items = new String[values.size()];
-		items = values.values().toArray(items);
-		ArrayList<String> newItems = new ArrayList<String>();
-
-		fCellEditor.setItems(items);
-		for (int i = 0; i < items.length; ++i) {
-			newItems.add(items[i]);
-			if (items[i].equals(node.getValueString())) {
-				return i;
-			}
-		}
-
-		newItems.add(node.getValueString());
-		fCellEditor.setItems(newItems.toArray(items));
-		return (newItems.size() - 1);
+		return ((PartitionNode)element).getValueString();
 	}
 
 	@Override
 	protected void setValue(Object element, Object value) {
-		String newValue = null;
-		int index = (int)value;
-
-		if (index >= 0) {
-			newValue = fCellEditor.getItems()[index];
-		} else {
-			newValue = ((CCombo)fCellEditor.getControl()).getText();
+		String valueString = null;
+		if(value instanceof String){
+			valueString = (String)value;
+		} else if(value == null){
+			valueString = fCellEditor.getViewer().getCCombo().getText();
 		}
-		PartitionNode partition = (PartitionNode)element;
-		
-		PartitionInterface al = new PartitionInterface(fModelOperationManager);
-		al.setTarget(partition);
-
-		if(newValue.equals(partition.getValueString())){
-			return;
-		}
-
-		al.setValue(newValue, fSection, fSection.getUpdateListener());
+		fPartitionIf.setTarget((PartitionNode)element);
+		fPartitionIf.setValue(valueString, fSection, fSection.getUpdateListener());
 	}
 }

@@ -7,7 +7,7 @@ import com.testify.ecfeed.model.GenericNode;
 public class RemoveNodesOperation extends BulkOperation {
 
 	public RemoveNodesOperation(Collection<? extends GenericNode> nodes){
-		super(true);
+		super(false);
 		for(GenericNode node : nodes){
 			addOperation(RemoveOperationFactory.getRemoveOperation(node));
 		}

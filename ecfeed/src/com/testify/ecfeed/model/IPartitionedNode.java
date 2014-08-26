@@ -14,9 +14,14 @@ package com.testify.ecfeed.model;
 import java.util.List;
 
 public interface IPartitionedNode extends IGenericNode{
+	//quick fix
+	//TODO: make PartitionedNode abstract class for category and partition
+	public int getIndex();
+	
 	public CategoryNode getCategory();
 	public List<PartitionNode> getPartitions();
 	public void addPartition(PartitionNode partition);
+	public void addPartition(PartitionNode partition, int index);
 	public PartitionNode getPartition(String name);
 	public boolean removePartition(PartitionNode partition);
 	public boolean removePartition(String name);
@@ -24,4 +29,5 @@ public interface IPartitionedNode extends IGenericNode{
 	public List<PartitionNode> getLeafPartitions();
 	public List<String> getAllPartitionNames();
 	public void partitionRemoved(PartitionNode partition);
+	public List<String> getPartitionNames();
 }

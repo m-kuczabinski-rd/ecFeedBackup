@@ -28,6 +28,7 @@ public class PartitionInterface extends GenericNodeInterface{
 	}
 
 	public void setTarget(PartitionNode partition){
+		super.setTarget(partition);
 		fTarget = partition;
 	}
 	
@@ -37,5 +38,9 @@ public class PartitionInterface extends GenericNodeInterface{
 
 	public void setValue(String newValue, BasicSection source, IModelUpdateListener updateListener){
 		execute(new PartitionOperationSetValue(fTarget, newValue), source, updateListener, Messages.DIALOG_PARTITION_VALUE_PROBLEM_TITLE);
+	}
+
+	public String getValue() {
+		return fTarget.getValueString();
 	}
 }

@@ -3,10 +3,12 @@ package com.testify.ecfeed.modelif.java.partition;
 import java.util.Arrays;
 import java.util.List;
 
+import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.PartitionNode;
-import com.testify.ecfeed.modelif.ModelIfException;
 import com.testify.ecfeed.modelif.IModelOperation;
+import com.testify.ecfeed.modelif.ModelIfException;
 import com.testify.ecfeed.modelif.java.Constants;
+import com.testify.ecfeed.modelif.java.JavaUtils;
 import com.testify.ecfeed.modelif.java.common.Messages;
 import com.testify.ecfeed.utils.ClassUtils;
 
@@ -14,27 +16,47 @@ public class PartitionOperationSetValue implements IModelOperation {
 
 	private String fNewValue;
 	private String fOriginalValue;
+	private String fOriginalDefaultValue;
 	private PartitionNode fTarget;
+	
+	private class ReverseOperation implements IModelOperation{
+
+		@Override
+		public void execute() throws ModelIfException {
+			fTarget.setValueString(fOriginalValue);
+			fTarget.getCategory().setDefaultValueString(fOriginalDefaultValue);
+		}
+
+		@Override
+		public IModelOperation reverseOperation() {
+			return new PartitionOperationSetValue(fTarget, fNewValue);
+		}
+	}
 	
 	public PartitionOperationSetValue(PartitionNode target, String newValue){
 		fTarget = target;
 		fNewValue = newValue;
 		fOriginalValue = fTarget.getValueString();
+		fOriginalDefaultValue = fTarget.getCategory().getDefaultValueString();
 	}
 	
 	@Override
 	public void execute() throws ModelIfException {
-		if(validatePartitionValue(fTarget.getCategory().getType(), fNewValue)){
-			fTarget.setValueString(fNewValue);
-		}
-		else{
+		if(validatePartitionValue(fTarget.getCategory().getType(), fNewValue) == false){
 			throw new ModelIfException(Messages.PARTITION_VALUE_PROBLEM(fNewValue));
+		}
+		fTarget.setValueString(fNewValue);
+		CategoryNode category = fTarget.getCategory();
+		if(category != null && JavaUtils.isUserType(category.getType())){
+			if(category.getLeafPartitionValues().contains(fOriginalDefaultValue) == false){
+				category.setDefaultValueString(fNewValue);
+			}
 		}
 	}
 
 	@Override
 	public IModelOperation reverseOperation() {
-		return new PartitionOperationSetValue(fTarget, fOriginalValue);
+		return new ReverseOperation();
 	}
 
 	@Override

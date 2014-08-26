@@ -11,6 +11,7 @@ import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.modelif.IModelOperation;
 import com.testify.ecfeed.modelif.ModelIfException;
+import com.testify.ecfeed.modelif.java.category.GenericOperationRemovePartition;
 import com.testify.ecfeed.modelif.java.classx.ClassOperationRemoveMethod;
 import com.testify.ecfeed.modelif.java.method.MethodOperationRemoveConstraint;
 import com.testify.ecfeed.modelif.java.method.MethodOperationRemoveParameter;
@@ -65,7 +66,7 @@ public class RemoveOperationFactory {
 
 		@Override
 		public Object visit(PartitionNode node) throws Exception {
-			return new UnsupportedModelOperation();
+			return new GenericOperationRemovePartition(node.getParent(), node);
 		}
 	}
 	

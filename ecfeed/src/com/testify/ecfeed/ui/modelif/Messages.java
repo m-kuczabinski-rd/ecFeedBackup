@@ -30,6 +30,9 @@ public class Messages {
 	public static final String DIALOG_ADD_STATEMENT_PROBLEM_TITLE = "Couldn't add statement";
 	public static final String DIALOG_REMOVE_STATEMENT_PROBLEM_TITLE = "Couldn't remove statement";
 	public static final String DIALOG_EDIT_STATEMENT_PROBLEM_TITLE = "Couldn't edit statement";
+	public static final String DIALOG_ADD_PARTITION_PROBLEM_TITLE = "Couldn't add partition";
+	public static final String DIALOG_REMOVE_PARTITION_TITLE = "Couldn't remove partition";
+	public static final String DIALOG_REMOVE_PARTITIONS_PROBLEM_TITLE = "Couldn't remove some of requested patitions";
 
 
 	//CONFIRMATIONS AND WARNINGS
@@ -55,6 +58,8 @@ public class Messages {
 				+ " test cases. Adding this amount of data to the model may heavily affect tool's performance"
 				+ " and cause loss of data. Do you want to continue?";
 	}
+	public static final String DIALOG_REMOVE_PARTITION_WARNING_TITLE = "Removing partition";
+	public static final String DIALOG_REMOVE_PARTITION_WARNING_MESSAGE = "Removing partition will cause removing of all test cases and constraints referring to that partition";
 
 
 	//EXCEPTIONS

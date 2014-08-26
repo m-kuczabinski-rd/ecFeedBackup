@@ -23,13 +23,13 @@ public class PartitionNameEditingSupport extends EditingSupport{
 
 	private TextCellEditor fNameCellEditor;
 	private BasicSection fSection;
-	private ModelOperationManager fOperationManager;
+	private PartitionInterface fPartitionIf;
 
 	public PartitionNameEditingSupport(CheckboxTableViewerSection viewer, ModelOperationManager operationManager) {
 		super(viewer.getTableViewer());
+		fPartitionIf = new PartitionInterface(operationManager);
 		fSection = viewer;
 		fNameCellEditor = new TextCellEditor(viewer.getTable());
-		fOperationManager = operationManager;
 	}
 
 	@Override
@@ -52,12 +52,9 @@ public class PartitionNameEditingSupport extends EditingSupport{
 		String newName = (String)value;
 		PartitionNode partition = (PartitionNode)element;
 		
-		if(newName.equals(partition.getName())){
-			return;
+		if(newName.equals(partition.getName()) == false){
+			fPartitionIf.setTarget(partition);
+			fPartitionIf.setName(newName, fSection, fSection.getUpdateListener());
 		}
-		PartitionInterface al = new PartitionInterface(fOperationManager);
-		al.setTarget(partition);
-
-		al.setName(newName, fSection, fSection.getUpdateListener());
 	}
 }

@@ -29,6 +29,10 @@ public class JavaUtils {
 		return Arrays.asList(Constants.SUPPORTED_PRIMITIVE_TYPES).contains(typeName);
 	}
 	
+	public static boolean isUserType(String typeName){
+		return isPrimitive(typeName) == false;
+	}
+	
 	public static String getTypeName(String cannonicalName) {
 		if(cannonicalName.equals(boolean.class.getName())){
 			return Constants.TYPE_NAME_BOOLEAN;
@@ -104,6 +108,6 @@ public class JavaUtils {
 	}
 	
 	public static boolean hasLimitedValuesSet(String type){
-		return isPrimitive(type) || type.equals(getBooleanTypeName());
+		return isPrimitive(type) == false || type.equals(getBooleanTypeName());
 	}
 }

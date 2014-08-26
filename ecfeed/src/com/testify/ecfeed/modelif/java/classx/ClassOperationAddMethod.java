@@ -30,7 +30,7 @@ public class ClassOperationAddMethod implements IModelOperation {
 			throw new ModelIfException(JavaUtils.consolidate(problems));
 		}
 		if(fTarget.addMethod(fMethod, fIndex) == false){
-			throw new ModelIfException(Messages.UNEXPECTED_PROBLEM_WHILE_ADDING_METHOD);
+			throw new ModelIfException(Messages.UNEXPECTED_PROBLEM_WHILE_ADDING_ELEMENT);
 		}
 	}
 

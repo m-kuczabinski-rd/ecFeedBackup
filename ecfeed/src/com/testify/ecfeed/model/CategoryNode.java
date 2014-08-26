@@ -13,6 +13,7 @@ package com.testify.ecfeed.model;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
@@ -64,7 +65,12 @@ public class CategoryNode extends GenericNode implements IPartitionedNode{
 
 	@Override
 	public void addPartition(PartitionNode partition) {
-			fPartitions.add(partition);
+		addPartition(partition, fPartitions.size());
+	}
+	
+	@Override
+	public void addPartition(PartitionNode partition, int index) {
+			fPartitions.add(index, partition);
 			partition.setParent(this);
 	}
 	
@@ -174,6 +180,15 @@ public class CategoryNode extends GenericNode implements IPartitionedNode{
 			names.add(leaf.getQualifiedName());
 		}
 		return names;
+	}
+	
+	public Set<String> getLeafPartitionValues(){
+		List<PartitionNode> leafPartitions = getLeafPartitions();
+		Set<String> values = new HashSet<String>();
+		for(PartitionNode leaf : leafPartitions){
+			values.add(leaf.getValueString());
+		}
+		return values;
 	}
 	
 	public Set<String> getAllPartitionLabels(){

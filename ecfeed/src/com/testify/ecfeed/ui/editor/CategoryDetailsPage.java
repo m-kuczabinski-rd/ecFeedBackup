@@ -105,6 +105,12 @@ public class CategoryDetailsPage extends BasicDetailsPage {
 			fTypeCombo.setText(category.getType());
 			recreateDefaultValueCombo(category);
 			fExpectedCheckbox.setSelection(category.isExpected());
+			if(fCategoryIf.isExpected() && fCategoryIf.isPrimitive()){
+				fPartitionsViewer.setVisible(false);
+			}
+			else{
+				fPartitionsViewer.setVisible(true);
+			}
 			
 			fPartitionsViewer.setInput(category);
 		}
@@ -125,7 +131,7 @@ public class CategoryDetailsPage extends BasicDetailsPage {
 		
 		getToolkit().createLabel(fAttributesComposite, "Parameter type: ", SWT.NONE);
 		fTypeCombo = new Combo(fAttributesComposite,SWT.DROP_DOWN);
-		fTypeCombo.setLayoutData(new GridData(SWT.FILL,  SWT.CENTER, false, false,2, 1));
+		fTypeCombo.setLayoutData(new GridData(SWT.FILL,  SWT.CENTER, true, false,2, 1));
 		fTypeCombo.addSelectionListener(new SetTypeListener());
 		
 		getToolkit().paintBordersFor(fAttributesComposite);
@@ -133,7 +139,7 @@ public class CategoryDetailsPage extends BasicDetailsPage {
 		getToolkit().createLabel(fAttributesComposite, "Default value: ", SWT.NONE);
 	
 		fExpectedCheckbox = getToolkit().createButton(getMainComposite(), "Expected", SWT.CHECK);
-		fExpectedCheckbox.setLayoutData(new GridData(SWT.FILL,  SWT.CENTER, false, false));
+		fExpectedCheckbox.setLayoutData(new GridData(SWT.FILL,  SWT.CENTER, true, false));
 		fExpectedCheckbox.addSelectionListener(new SetExpectedListener());
 	}
 

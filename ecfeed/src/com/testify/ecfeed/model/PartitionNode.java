@@ -35,8 +35,13 @@ public class PartitionNode extends GenericNode implements IPartitionedNode{
 
 	@Override
 	public void addPartition(PartitionNode partition){
-		fPartitions.add(partition);
-		partition.setParent(this);
+		addPartition(partition, fPartitions.size());
+	}
+
+	@Override
+	public void addPartition(PartitionNode partition, int index) {
+			fPartitions.add(index, partition);
+			partition.setParent(this);
 	}
 
 	@Override
@@ -57,6 +62,14 @@ public class PartitionNode extends GenericNode implements IPartitionedNode{
 	@Override
 	public List<PartitionNode> getPartitions(){
 		return fPartitions;
+	}
+
+	public List<String> getPartitionNames() {
+		ArrayList<String> names = new ArrayList<String>();
+		for(PartitionNode partition : getPartitions()){
+			names.add(partition.getName());
+		}
+		return names;
 	}
 
 	@Override

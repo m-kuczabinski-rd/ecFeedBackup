@@ -12,70 +12,57 @@
 package com.testify.ecfeed.ui.editor;
 
 import java.util.ArrayList;
+import java.util.Collection;
 
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Section;
 
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.modelif.ModelOperationManager;
-import com.testify.ecfeed.ui.common.PartitionNodeAbstractLayer;
-import com.testify.ecfeed.utils.Constants;
-import com.testify.ecfeed.utils.ModelUtils;
+import com.testify.ecfeed.ui.modelif.CategoryInterface;
+import com.testify.ecfeed.ui.modelif.PartitionInterface;
 
 public class CategoryChildrenViewer extends CheckboxTableViewerSection {
 
 	private final static int STYLE = Section.EXPANDED | Section.TITLE_BAR;
 	
-	private CategoryNode fSelectedCategory;
-
-	private ModelOperationManager fOperationManager;
-
+	private CategoryInterface fCategoryIf;
+	private PartitionInterface fPartitionIf;
+	
 	private TableViewerColumn fNameColumn;
-
 	private TableViewerColumn fValueColumn;
+	private Button fMoveUpButton;
 
 	private class AddPartitionAdapter extends SelectionAdapter{
 		
 		@Override
 		public void widgetSelected(SelectionEvent e){
-			String newPartitionName = Constants.DEFAULT_NEW_PARTITION_NAME;
-			String value = ModelUtils.getDefaultExpectedValueString(fSelectedCategory.getType());
-			PartitionNode newPartition = new PartitionNode(newPartitionName, value);
-			ModelUtils.setUniqueNodeName(newPartition, fSelectedCategory);
-			fSelectedCategory.addPartition(newPartition);
-			getTable().setSelection(fSelectedCategory.getPartitions().size() - 1);
-			modelUpdated();
+			PartitionNode added = fCategoryIf.addNewPartition(CategoryChildrenViewer.this, getUpdateListener());
+			if(added != null){
+				getTable().setSelection(added.getIndex());
+			}
 		}
 	}
 	
 	private class RemovePartitionsAdapter extends SelectionAdapter{
 		@Override
 		public void widgetSelected(SelectionEvent e){
-			ArrayList<PartitionNode> nodes = new ArrayList<>();
-			for(Object partition : getCheckedElements()){
-				nodes.add((PartitionNode)partition);
-			}			
-			if(PartitionNodeAbstractLayer.removePartitions(nodes, fSelectedCategory)){
-				modelUpdated();
-			}
+			fCategoryIf.removePartitions(getCheckedPartitions(), CategoryChildrenViewer.this, getUpdateListener());
 		}
 	}
 	
-	private class MoveUpAdapter extends SelectionAdapter{
+	private class MoveUpDownAdapter extends SelectionAdapter{
 		@Override
 		public void widgetSelected(SelectionEvent e){
-			moveSelectedItem(true);
-		}
-	}
-
-	private class MoveDownAdapter extends SelectionAdapter{
-		@Override
-		public void widgetSelected(SelectionEvent e){
-			moveSelectedItem(false);
+			if(getSelectedPartition() != null){
+				fPartitionIf.setTarget(getSelectedPartition());
+				fPartitionIf.moveUpDown(e.getSource() == fMoveUpButton, CategoryChildrenViewer.this, getUpdateListener());
+			}
 		}
 	}
 	
@@ -88,49 +75,44 @@ public class CategoryChildrenViewer extends CheckboxTableViewerSection {
 	public CategoryChildrenViewer(BasicDetailsPage parent, FormToolkit toolkit, ModelOperationManager operationManager) {
 		super(parent.getMainComposite(), toolkit, STYLE, parent);
 		
-		fOperationManager = operationManager;
-		fNameColumn.setEditingSupport(new PartitionNameEditingSupport(this, fOperationManager));
-		fValueColumn.setEditingSupport(new PartitionValueEditingSupport(this, fOperationManager));
+		fCategoryIf = new CategoryInterface(operationManager);
+		fPartitionIf = new PartitionInterface(operationManager);
+		
+		fNameColumn.setEditingSupport(new PartitionNameEditingSupport(this, operationManager));
+		fValueColumn.setEditingSupport(new PartitionValueEditingSupport(this, operationManager));
 
 		getSection().setText("Partitions");
 		addButton("Add partition", new AddPartitionAdapter());
 		addButton("Remove selected", new RemovePartitionsAdapter());
-		addButton("Move Up", new MoveUpAdapter());
-		addButton("Move Down", new MoveDownAdapter());
+		fMoveUpButton = addButton("Move Up", new MoveUpDownAdapter());
+		addButton("Move Down", new MoveUpDownAdapter());
 		
 		addDoubleClickListener(new SelectNodeDoubleClickListener(parent.getMasterSection()));
 	}
 
-	public CategoryNode getSelectedCategory(){
-		return fSelectedCategory;
-	}
-
 	public void setInput(CategoryNode category){
-		fSelectedCategory = category;
 		super.setInput(category.getPartitions());
+		fCategoryIf.setTarget(category);
 	}
 	
 	public void setVisible(boolean visible){
 		this.getSection().setVisible(visible);
 	}
 	
-	private void moveSelectedItem(boolean moveUp) {
-		if (getSelectedElement() != null) {
-			PartitionNode partitionNode = (PartitionNode)getSelectedElement();
-			int index = fSelectedCategory.getPartitions().indexOf(partitionNode);			
-			if(index > -1){
-				if(moveUp && index > 0){
-					PartitionNode swap = fSelectedCategory.getPartitions().get(index-1);
-					fSelectedCategory.getPartitions().set(index-1, fSelectedCategory.getPartitions().get(index));
-					fSelectedCategory.getPartitions().set(index, swap);
-					modelUpdated();
-				} else if(!moveUp && index < fSelectedCategory.getPartitions().size() -1){
-					PartitionNode swap = fSelectedCategory.getPartitions().get(index+1);
-					fSelectedCategory.getPartitions().set(index+1, fSelectedCategory.getPartitions().get(index));
-					fSelectedCategory.getPartitions().set(index, swap);
-					modelUpdated();
-				}	
-			}		
+	protected Collection<PartitionNode> getCheckedPartitions(){
+		Collection<PartitionNode> result = new ArrayList<PartitionNode>();
+		for(Object element : getCheckedElements()){
+			if(element instanceof PartitionNode){
+				result.add((PartitionNode)element);
+			}
 		}
+		return result;
+	}
+
+	private PartitionNode getSelectedPartition() {
+		if(getSelectedElement() != null && getSelectedElement() instanceof PartitionNode){
+			return (PartitionNode)getSelectedElement();
+		}
+		return null;
 	}
 }
