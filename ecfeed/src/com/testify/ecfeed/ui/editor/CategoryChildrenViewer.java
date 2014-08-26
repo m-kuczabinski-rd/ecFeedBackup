@@ -32,7 +32,7 @@ public class CategoryChildrenViewer extends CheckboxTableViewerSection {
 	private final static int STYLE = Section.EXPANDED | Section.TITLE_BAR;
 	
 	private CategoryInterface fCategoryIf;
-	private PartitionInterface fPartitionIf;
+	private PartitionInterface fTableItemIf;
 	
 	private TableViewerColumn fNameColumn;
 	private TableViewerColumn fValueColumn;
@@ -60,8 +60,8 @@ public class CategoryChildrenViewer extends CheckboxTableViewerSection {
 		@Override
 		public void widgetSelected(SelectionEvent e){
 			if(getSelectedPartition() != null){
-				fPartitionIf.setTarget(getSelectedPartition());
-				fPartitionIf.moveUpDown(e.getSource() == fMoveUpButton, CategoryChildrenViewer.this, getUpdateListener());
+				fTableItemIf.setTarget(getSelectedPartition());
+				fTableItemIf.moveUpDown(e.getSource() == fMoveUpButton, CategoryChildrenViewer.this, getUpdateListener());
 			}
 		}
 	}
@@ -76,7 +76,7 @@ public class CategoryChildrenViewer extends CheckboxTableViewerSection {
 		super(parent.getMainComposite(), toolkit, STYLE, parent);
 		
 		fCategoryIf = new CategoryInterface(operationManager);
-		fPartitionIf = new PartitionInterface(operationManager);
+		fTableItemIf = new PartitionInterface(operationManager);
 		
 		fNameColumn.setEditingSupport(new PartitionNameEditingSupport(this, operationManager));
 		fValueColumn.setEditingSupport(new PartitionValueEditingSupport(this, operationManager));

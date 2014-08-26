@@ -51,7 +51,7 @@ public class CategoryInterface extends GenericNodeInterface {
 		if(newName.equals(getName())){
 			return false;
 		}
-		return execute(new CategoryOperationRename(fTarget, newName), source, updateListener, Messages.DIALOG_RENAME_METHOD_PROBLEM_TITLE);
+		return execute(new CategoryOperationRename(fTarget, newName), source, updateListener, Messages.DIALOG_RENAME_PAREMETER_PROBLEM_TITLE);
 	}
 
 	public boolean setType(String newType, BasicSection source, IModelUpdateListener updateListener) {
@@ -59,7 +59,7 @@ public class CategoryInterface extends GenericNodeInterface {
 		if(newType.equals(fTarget.getType())){
 			return false;
 		}
-		return execute(new CategoryOperationSetType(fTarget, newType, adapterProvider), source, updateListener, Messages.DIALOG_RENAME_METHOD_PROBLEM_TITLE);
+		return execute(new CategoryOperationSetType(fTarget, newType, adapterProvider), source, updateListener, Messages.DIALOG_RENAME_PAREMETER_PROBLEM_TITLE);
 	}
 	
 	public boolean setExpected(boolean expected, BasicSection source, IModelUpdateListener updateListener){
@@ -194,6 +194,23 @@ public class CategoryInterface extends GenericNodeInterface {
 		return execute(operation, source, updateListener, Messages.DIALOG_REMOVE_PARTITION_TITLE);
 	}
 
+	public boolean removePartitions(Collection<PartitionNode> partitions, BasicSection source, IModelUpdateListener updateListener) {
+		boolean displayWarning = false;
+		for(PartitionNode p : partitions){
+			if(fTarget.getMethod().mentioningConstraints(p).size() > 0 || fTarget.getMethod().mentioningTestCases(p).size() > 0){
+				displayWarning = true;
+			}
+		}
+		if(displayWarning){
+			if(MessageDialog.openConfirm(Display.getCurrent().getActiveShell(), 
+					Messages.DIALOG_REMOVE_PARTITION_WARNING_TITLE, 
+					Messages.DIALOG_REMOVE_PARTITION_WARNING_MESSAGE) == false){
+				return false;
+			}
+		}
+		return execute(new RemoveNodesOperation(partitions), source, updateListener, Messages.DIALOG_REMOVE_PARTITIONS_PROBLEM_TITLE);
+	}
+
 	protected String generateNewPartitionValue() {
 		EclipseModelBuilder builder = new EclipseModelBuilder();
 		String value = builder.getDefaultExpectedValue(getType());
@@ -213,22 +230,5 @@ public class CategoryInterface extends GenericNodeInterface {
 			name = Constants.DEFAULT_NEW_PARTITION_NAME + i++; 
 		}
 		return name;
-	}
-
-	public boolean removePartitions(Collection<PartitionNode> partitions, BasicSection source, IModelUpdateListener updateListener) {
-		boolean displayWarning = false;
-		for(PartitionNode p : partitions){
-			if(fTarget.getMethod().mentioningConstraints(p).size() > 0 || fTarget.getMethod().mentioningTestCases(p).size() > 0){
-				displayWarning = true;
-			}
-		}
-		if(displayWarning){
-			if(MessageDialog.openConfirm(Display.getCurrent().getActiveShell(), 
-					Messages.DIALOG_REMOVE_PARTITION_WARNING_TITLE, 
-					Messages.DIALOG_REMOVE_PARTITION_WARNING_MESSAGE) == false){
-				return false;
-			}
-		}
-		return execute(new RemoveNodesOperation(partitions), source, updateListener, Messages.DIALOG_REMOVE_PARTITIONS_PROBLEM_TITLE);
 	}
 }

@@ -33,6 +33,9 @@ public class Messages {
 	public static final String DIALOG_ADD_PARTITION_PROBLEM_TITLE = "Couldn't add partition";
 	public static final String DIALOG_REMOVE_PARTITION_TITLE = "Couldn't remove partition";
 	public static final String DIALOG_REMOVE_PARTITIONS_PROBLEM_TITLE = "Couldn't remove some of requested patitions";
+	public static final String DIALOG_RENAME_PAREMETER_PROBLEM_TITLE = "Couldn't rename parameter";
+	public static final String DIALOG_RENAME_PARTITION_PROBLEM_TITLE = "Couldn't rename partition";
+	public static final String DIALOG_SET_PARTITION_VALUE_PROBLEM_TITLE = "Couldn't change partition value";
 
 
 	//CONFIRMATIONS AND WARNINGS

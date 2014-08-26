@@ -12,81 +12,55 @@
 package com.testify.ecfeed.ui.editor;
 
 import java.util.ArrayList;
+import java.util.Collection;
 
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Section;
 
-import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
-import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.modelif.ModelOperationManager;
-import com.testify.ecfeed.ui.common.PartitionNodeAbstractLayer;
-import com.testify.ecfeed.utils.Constants;
-import com.testify.ecfeed.utils.ModelUtils;
+import com.testify.ecfeed.ui.modelif.PartitionInterface;
 
 public class PartitionChildrenViewer extends CheckboxTableViewerSection {
 
 	private final static int STYLE = Section.EXPANDED | Section.TITLE_BAR;
 	
-	private PartitionNode fSelectedPartition;
-	private ModelOperationManager fOperationManager;
+	private PartitionInterface fPartitionIf;
+	private PartitionInterface fTableItemIf;
 
 	private TableViewerColumn fNameColumn;
-
 	private TableViewerColumn fValueColumn;
 
-	private class AddPartitionAdapter extends SelectionAdapter{
+	private Button fMoveUpButton;
 
+	private class AddPartitionAdapter extends SelectionAdapter{
 		@Override
 		public void widgetSelected(SelectionEvent e){
-			String newPartitionName = Constants.DEFAULT_NEW_PARTITION_NAME;
-			String value = ModelUtils.getDefaultExpectedValueString(fSelectedPartition.getCategory().getType());
-			PartitionNode newPartition = new PartitionNode(newPartitionName, value);
-			ModelUtils.setUniqueNodeName(newPartition, fSelectedPartition);
-			
-			fSelectedPartition.addPartition(newPartition);
-			getTable().setSelection(fSelectedPartition.getPartitions().size() - 1);
-			MethodNode method = fSelectedPartition.getCategory().getMethod();
-			int categoryIndex = method.getCategories().indexOf(fSelectedPartition.getCategory());
-			//replace the current partition (that is abstract now) by newly created partition
-			for(TestCaseNode testCase : method.getTestCases()){
-				if(testCase.getTestData().get(categoryIndex) == fSelectedPartition){
-					testCase.getTestData().set(categoryIndex, newPartition);
-				}
+			PartitionNode added = fPartitionIf.addNewPartition(PartitionChildrenViewer.this, getUpdateListener());
+			if(added != null){
+				getTable().setSelection(added.getIndex());
 			}
-
-			modelUpdated();
 		}
 	}
 
 	private class RemovePartitionsAdapter extends SelectionAdapter{
-
 		@Override
 		public void widgetSelected(SelectionEvent e){
-			ArrayList<PartitionNode> nodes = new ArrayList<>();
-			for(Object partition : getCheckedElements()){
-				nodes.add((PartitionNode)partition);
-			}			
-			if(PartitionNodeAbstractLayer.removePartitions(nodes, fSelectedPartition)){
-				modelUpdated();
-			}
+			fPartitionIf.removePartitions(getCheckedPartitions(), PartitionChildrenViewer.this, getUpdateListener());
 		}
 	}
 	
-	private class MoveUpAdapter extends SelectionAdapter{
+	private class MoveUpDownAdapter extends SelectionAdapter{
 		@Override
 		public void widgetSelected(SelectionEvent e){
-			moveSelectedItem(true);
-		}
-	}
-
-	private class MoveDownAdapter extends SelectionAdapter{
-		@Override
-		public void widgetSelected(SelectionEvent e){
-			moveSelectedItem(false);
+			if(getSelectedPartition() != null){
+				fTableItemIf.setTarget(getSelectedPartition());
+				fTableItemIf.moveUpDown(e.getSource() == fMoveUpButton, PartitionChildrenViewer.this, getUpdateListener());
+			}
 		}
 	}
 	
@@ -99,45 +73,40 @@ public class PartitionChildrenViewer extends CheckboxTableViewerSection {
 	public PartitionChildrenViewer(BasicDetailsPage parent, FormToolkit toolkit, ModelOperationManager operationManager) {
 		super(parent.getMainComposite(), toolkit, STYLE, parent);
 		
-		fOperationManager = operationManager;
-		fNameColumn.setEditingSupport(new PartitionNameEditingSupport(this, fOperationManager));
-		fValueColumn.setEditingSupport(new PartitionValueEditingSupport(this, fOperationManager));
+		fPartitionIf = new PartitionInterface(operationManager);
+		fTableItemIf = new PartitionInterface(operationManager);
+		
+		fNameColumn.setEditingSupport(new PartitionNameEditingSupport(this, operationManager));
+		fValueColumn.setEditingSupport(new PartitionValueEditingSupport(this, operationManager));
 
 		getSection().setText("Partitions");
 		addButton("Add partition", new AddPartitionAdapter());
 		addButton("Remove selected", new RemovePartitionsAdapter());
-		addButton("Move Up", new MoveUpAdapter());
-		addButton("Move Down", new MoveDownAdapter());
+		fMoveUpButton = addButton("Move Up", new MoveUpDownAdapter());
+		addButton("Move Down", new MoveUpDownAdapter());
 
 		addDoubleClickListener(new SelectNodeDoubleClickListener(parent.getMasterSection()));
 	}
 
-	public void setInput(PartitionNode	partition){
-		fSelectedPartition = partition;
-		super.setInput(partition.getPartitions());
-	}
-
-	public PartitionNode getSelectedPartition(){
-		return fSelectedPartition;
+	public void setInput(PartitionNode parent){
+		super.setInput(parent.getPartitions());
+		fPartitionIf.setTarget(parent);
 	}
 	
-	private void moveSelectedItem(boolean moveUp) {
-		if (getSelectedElement() != null) {
-			PartitionNode partitionNode = (PartitionNode)getSelectedElement();
-			int index = fSelectedPartition.getPartitions().indexOf(partitionNode);			
-			if(index > -1){
-				if(moveUp && index > 0){
-					PartitionNode swap = fSelectedPartition.getPartitions().get(index-1);
-					fSelectedPartition.getPartitions().set(index-1, fSelectedPartition.getPartitions().get(index));
-					fSelectedPartition.getPartitions().set(index, swap);
-					modelUpdated();
-				} else if(!moveUp && index < fSelectedPartition.getPartitions().size() -1){
-					PartitionNode swap = fSelectedPartition.getPartitions().get(index+1);
-					fSelectedPartition.getPartitions().set(index+1, fSelectedPartition.getPartitions().get(index));
-					fSelectedPartition.getPartitions().set(index, swap);
-					modelUpdated();
-				}	
-			}		
+	protected Collection<PartitionNode> getCheckedPartitions(){
+		Collection<PartitionNode> result = new ArrayList<PartitionNode>();
+		for(Object element : getCheckedElements()){
+			if(element instanceof PartitionNode){
+				result.add((PartitionNode)element);
+			}
 		}
+		return result;
+	}
+
+	private PartitionNode getSelectedPartition() {
+		if(getSelectedElement() != null && getSelectedElement() instanceof PartitionNode){
+			return (PartitionNode)getSelectedElement();
+		}
+		return null;
 	}
 }
