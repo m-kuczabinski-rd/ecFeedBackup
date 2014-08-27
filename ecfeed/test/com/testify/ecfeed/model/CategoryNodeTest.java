@@ -91,7 +91,7 @@ public class CategoryNodeTest{
 		category.addPartition(partition1);
 		category.addPartition(partition2);
 		
-		List<String> partitionNames = category.getPartitionNames();
+		Set<String> partitionNames = category.getPartitionNames();
 		assertTrue(partitionNames.contains("partition1"));
 		assertTrue(partitionNames.contains("partition2"));
 	}
@@ -108,7 +108,7 @@ public class CategoryNodeTest{
 		category.addPartition(p1);
 		category.addPartition(p2);
 		
-		List<String> leafNames = category.getLeafPartitionNames();
+		Set<String> leafNames = category.getLeafPartitionNames();
 		assertTrue(leafNames.contains("p1:p11"));
 		assertTrue(leafNames.contains("p1:p12"));
 		assertTrue(leafNames.contains("p2"));
@@ -127,7 +127,7 @@ public class CategoryNodeTest{
 		category.addPartition(p1);
 		category.addPartition(p2);
 		
-		List<String> names = category.getAllPartitionNames();
+		Set<String> names = category.getAllPartitionNames();
 		
 		assertTrue(names.contains("p1"));
 		assertTrue(names.contains("p1:p11"));

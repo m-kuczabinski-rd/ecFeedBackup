@@ -11,16 +11,11 @@
 
 package com.testify.ecfeed.model;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
-public class CategoryNode extends GenericNode implements IPartitionedNode{
+public class CategoryNode extends PartitionedNode{
 	
 	private String fType;
-	protected final List<PartitionNode> fPartitions;
 	private boolean fExpected;
 	private PartitionNode fDefaultValue;
 	
@@ -28,7 +23,6 @@ public class CategoryNode extends GenericNode implements IPartitionedNode{
 		super(name);
 		fExpected = expected;
 		fType = type;
-		fPartitions = new ArrayList<PartitionNode>();
 		fDefaultValue = new PartitionNode("default value" , defaultValue);
 		fDefaultValue.setParent(this);
 	}
@@ -56,77 +50,12 @@ public class CategoryNode extends GenericNode implements IPartitionedNode{
 	}
 
 	@Override
-	public void addPartition(PartitionNode partition) {
-		addPartition(partition, fPartitions.size());
-	}
-	
-	@Override
-	public void addPartition(PartitionNode partition, int index) {
-			fPartitions.add(index, partition);
-			partition.setParent(this);
-	}
-	
-	@Override
-	public PartitionNode getPartition(String qualifiedName){
-		return (PartitionNode)getChild(qualifiedName);
-	}
-	
-	@Override
-	public List<PartitionNode> getPartitions() {
-		return fPartitions;
-	}
-
-	@Override
-	public List<PartitionNode> getLeafPartitions(){
-		List<PartitionNode> leafs = new ArrayList<PartitionNode>();
-		for(PartitionNode child : fPartitions){
-			leafs.addAll(child.getLeafPartitions());
-		}
-		return leafs;
-	}
-	
-	@Override
-	public List<String> getAllPartitionNames(){
-		if(fExpected){
-			return Arrays.asList(new String[]{fDefaultValue.getName()});
-		}
-		List<String> names = new ArrayList<String>();
-		for(PartitionNode child : getPartitions()){
-			names.add(child.getQualifiedName());
-			names.addAll(child.getAllPartitionNames());
-		}
-		return names;
-	}
-
-	@Override
-	public boolean removePartition(PartitionNode partition){
-		if(fPartitions.contains(partition) && fPartitions.remove(partition)){
-			partition.setParent(null);
-			return true;
-		}
-		return false;
-	}
-
-	@Override
-	public boolean removePartition(String qualifiedName) {
-		if(fExpected){
-			return false;
-		}
-		return removePartition(getPartition(qualifiedName));
-	}
-
-	@Override
-	public List<? extends IGenericNode> getChildren(){
-		return fPartitions;
-	}
-	
-	@Override
 	public CategoryNode getCopy(){
 		CategoryNode category = new CategoryNode(getName(), getType(), getDefaultValueString(), isExpected());
 		category.setParent(this.getParent());
 		if(getDefaultValueString() != null)
 			category.setDefaultValueString(getDefaultValueString());
-		for(PartitionNode partition : fPartitions){
+		for(PartitionNode partition : getPartitions()){
 			category.addPartition(partition.getCopy());
 		}
 		category.setParent(getParent());
@@ -150,46 +79,6 @@ public class CategoryNode extends GenericNode implements IPartitionedNode{
 		return (MethodNode)getParent();
 	}
 
-	public List<String> getPartitionNames() {
-		ArrayList<String> names = new ArrayList<String>();
-		for(PartitionNode partition : getPartitions()){
-			names.add(partition.getName());
-		}
-		return names;
-	}
-
-	public List<String> getLeafPartitionNames(){
-		List<PartitionNode> leafPartitions = getLeafPartitions();
-		List<String> names = new ArrayList<String>();
-		for(PartitionNode leaf : leafPartitions){
-			names.add(leaf.getQualifiedName());
-		}
-		return names;
-	}
-	
-	public Set<String> getLeafPartitionValues(){
-		List<PartitionNode> leafPartitions = getLeafPartitions();
-		Set<String> values = new HashSet<String>();
-		for(PartitionNode leaf : leafPartitions){
-			values.add(leaf.getValueString());
-		}
-		return values;
-	}
-	
-	public Set<String> getLeafLabels(){
-		Set<String> result = new HashSet<String>();
-		for(PartitionNode p : getLeafPartitions()){
-			result.addAll(p.getAllLabels());
-		}
-		return result;
-
-//		Set<String> labels = new LinkedHashSet<String>();
-//		for(PartitionNode p : getPartitions()){
-//			labels.addAll(p.getAllDescendingLabels());
-//		}
-//		return labels;
-	}
-	
 	public PartitionNode getDefaultValuePartition(){
 		return fDefaultValue;
 	}
@@ -265,28 +154,11 @@ public class CategoryNode extends GenericNode implements IPartitionedNode{
 		return visitor.visit(this);
 	}
 
-	@Override
-	public void replacePartitions(List<PartitionNode> newPartitions) {
-		fPartitions.clear();
-		fPartitions.addAll(newPartitions);
-	}
-	
 	@Override 
 	public int getMaxIndex(){
 		if(getMethod() != null){
 			return getMethod().getCategories().size();
 		}
 		return -1;
-	}
-
-	public List<PartitionNode> getLabeledPartitions(String label) {
-		List<PartitionNode> result = new ArrayList<PartitionNode>();
-		for(PartitionNode p : getPartitions()){
-			if(p.getLabels().contains(label)){
-				result.add(p);
-				result.addAll(p.getLabeledPartitions(label));
-			}
-		}
-		return result;
 	}
 }

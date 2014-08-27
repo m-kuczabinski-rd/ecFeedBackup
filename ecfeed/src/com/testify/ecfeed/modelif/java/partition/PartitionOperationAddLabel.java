@@ -1,6 +1,6 @@
 package com.testify.ecfeed.modelif.java.partition;
 
-import java.util.List;
+import java.util.Set;
 
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.modelif.IModelOperation;
@@ -10,7 +10,7 @@ public class PartitionOperationAddLabel implements IModelOperation {
 
 	private PartitionNode fTarget;
 	private String fLabel;
-	private List<PartitionNode> fLabeledDescendants;
+	private Set<PartitionNode> fLabeledDescendants;
 	
 	private class ReverseOperation implements IModelOperation{
 

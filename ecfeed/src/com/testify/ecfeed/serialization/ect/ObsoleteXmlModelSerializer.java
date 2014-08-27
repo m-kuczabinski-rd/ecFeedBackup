@@ -71,7 +71,7 @@ public class ObsoleteXmlModelSerializer {
 			element = createCategoryElement(name, type, ((CategoryNode)node).isExpected(), value);
 		}
 		else if (node instanceof PartitionNode){
-			String value = ((PartitionNode)node).getExactValueString();
+			String value = ((PartitionNode)node).getValueString();
 			String type = ((PartitionNode)node).getCategory().getType();
 			element = createPartitionElement(type, name, value, ((PartitionNode)node).getLabels());
 			
@@ -112,7 +112,7 @@ public class ObsoleteXmlModelSerializer {
 	protected void createExpectedValueElement(Element testCaseElement,
 			PartitionNode parameter) {
 		Element testParameterElement = new Element(Constants.EXPECTED_PARAMETER_NODE_NAME);
-		Attribute partitionNameAttribute = new Attribute(Constants.VALUE_ATTRIBUTE_NAME, parameter.getExactValueString());
+		Attribute partitionNameAttribute = new Attribute(Constants.VALUE_ATTRIBUTE_NAME, parameter.getValueString());
 		testParameterElement.addAttribute(partitionNameAttribute);
 		testCaseElement.appendChild(testParameterElement);
 	}
@@ -240,7 +240,7 @@ public class ObsoleteXmlModelSerializer {
 			Attribute categoryAttribute = 
 					new Attribute(Constants.STATEMENT_CATEGORY_ATTRIBUTE_NAME, categoryName);
 			Attribute valueAttribute = 
-					new Attribute(Constants.STATEMENT_EXPECTED_VALUE_ATTRIBUTE_NAME, condition.getExactValueString());
+					new Attribute(Constants.STATEMENT_EXPECTED_VALUE_ATTRIBUTE_NAME, condition.getValueString());
 			
 			Element statementElement = new Element(Constants.CONSTRAINT_EXPECTED_STATEMENT_NODE_NAME);
 			statementElement.addAttribute(categoryAttribute);

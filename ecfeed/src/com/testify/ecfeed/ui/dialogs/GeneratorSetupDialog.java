@@ -54,9 +54,9 @@ import com.testify.ecfeed.generators.api.IGeneratorParameter.TYPE;
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.ConstraintNode;
 import com.testify.ecfeed.model.GenericNode;
-import com.testify.ecfeed.model.IPartitionedNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
+import com.testify.ecfeed.model.PartitionedNode;
 import com.testify.ecfeed.model.constraint.Constraint;
 import com.testify.ecfeed.modelif.ImplementationStatus;
 import com.testify.ecfeed.ui.common.GenericNodeNameLabelProvider;
@@ -121,8 +121,8 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 				CategoryNode category = (CategoryNode)element;
 				children.add(category.getDefaultValuePartition());
 			}
-			else if(element instanceof IPartitionedNode){
-				IPartitionedNode parent = (IPartitionedNode)element;
+			else if(element instanceof PartitionedNode){
+				PartitionedNode parent = (PartitionedNode)element;
 				if(fGenerateExecutableContent == false){
 					children.addAll(parent.getPartitions());
 				}

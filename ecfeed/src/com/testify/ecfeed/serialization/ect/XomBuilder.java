@@ -199,7 +199,7 @@ public class XomBuilder implements IModelVisitor, IStatementVisitor {
 		Attribute categoryAttribute = 
 				new Attribute(STATEMENT_CATEGORY_ATTRIBUTE_NAME, categoryName);
 		Attribute valueAttribute = 
-				new Attribute(STATEMENT_EXPECTED_VALUE_ATTRIBUTE_NAME, condition.getExactValueString());
+				new Attribute(STATEMENT_EXPECTED_VALUE_ATTRIBUTE_NAME, condition.getValueString());
 		
 		Element statementElement = new Element(CONSTRAINT_EXPECTED_STATEMENT_NODE_NAME);
 		statementElement.addAttribute(categoryAttribute);

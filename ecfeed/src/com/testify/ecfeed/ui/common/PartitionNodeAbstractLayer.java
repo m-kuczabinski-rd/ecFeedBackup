@@ -5,8 +5,8 @@ import java.util.List;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
 
-import com.testify.ecfeed.model.IPartitionedNode;
 import com.testify.ecfeed.model.PartitionNode;
+import com.testify.ecfeed.model.PartitionedNode;
 import com.testify.ecfeed.utils.ModelUtils;
 
 public class PartitionNodeAbstractLayer{
@@ -23,7 +23,7 @@ public class PartitionNodeAbstractLayer{
 		return true;
 	}
 
-	public static boolean removePartitions(List<PartitionNode> partitions, IPartitionedNode parent){
+	public static boolean removePartitions(List<PartitionNode> partitions, PartitionedNode parent){
 		boolean warn = false;
 		for(PartitionNode partition : partitions){
 			if(partition.getCategory().getMethod().isPartitionMentioned(partition)){

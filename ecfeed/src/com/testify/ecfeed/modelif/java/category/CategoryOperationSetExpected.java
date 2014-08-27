@@ -73,7 +73,7 @@ public class CategoryOperationSetExpected implements IModelOperation {
 			}
 			if(validDefaultValue == false){
 				if(fTarget.getLeafPartitions().size() > 0){
-					fTarget.setDefaultValueString(fTarget.getLeafPartitions().get(0).getValueString());
+					fTarget.setDefaultValueString(fTarget.getLeafPartitions().toArray(new PartitionNode[]{})[0].getValueString());
 				}
 				else{
 					fTarget.addPartition(new PartitionNode("partition", currentDefaultValue));

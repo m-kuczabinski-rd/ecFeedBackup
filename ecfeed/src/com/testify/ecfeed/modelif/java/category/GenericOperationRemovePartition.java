@@ -3,8 +3,8 @@ package com.testify.ecfeed.modelif.java.category;
 import java.util.Set;
 
 import com.testify.ecfeed.model.CategoryNode;
-import com.testify.ecfeed.model.IPartitionedNode;
 import com.testify.ecfeed.model.PartitionNode;
+import com.testify.ecfeed.model.PartitionedNode;
 import com.testify.ecfeed.modelif.IModelOperation;
 import com.testify.ecfeed.modelif.ModelIfException;
 import com.testify.ecfeed.modelif.java.JavaUtils;
@@ -16,7 +16,7 @@ public class GenericOperationRemovePartition extends BulkOperation {
 
 	private class RemovePartitionOperation implements IModelOperation{
 		
-		private IPartitionedNode fTarget;
+		private PartitionedNode fTarget;
 		private PartitionNode fPartition;
 		private String fOriginalDefaultValue;
 		private int fOriginalIndex;
@@ -36,7 +36,7 @@ public class GenericOperationRemovePartition extends BulkOperation {
 			
 		}
 		
-		public RemovePartitionOperation(IPartitionedNode target, PartitionNode partition){
+		public RemovePartitionOperation(PartitionedNode target, PartitionNode partition){
 			fTarget = target;
 			fPartition = partition;
 			fOriginalIndex = fPartition.getIndex();
@@ -73,7 +73,7 @@ public class GenericOperationRemovePartition extends BulkOperation {
 		}
 	}
 
-	public GenericOperationRemovePartition(IPartitionedNode target, PartitionNode partition) {
+	public GenericOperationRemovePartition(PartitionedNode target, PartitionNode partition) {
 		super(true);
 		addOperation(new RemovePartitionOperation(target, partition));
 		if(target.getCategory().getMethod() != null){

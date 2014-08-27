@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.testify.ecfeed.model.CategoryNode;
-import com.testify.ecfeed.model.IPartitionedNode;
 import com.testify.ecfeed.model.PartitionNode;
+import com.testify.ecfeed.model.PartitionedNode;
 import com.testify.ecfeed.modelif.IModelOperation;
 import com.testify.ecfeed.modelif.ModelIfException;
 import com.testify.ecfeed.modelif.java.JavaUtils;
@@ -65,7 +65,7 @@ public class CategoryOperationSetType extends BulkOperation{
 			String defaultValue = adapter.convert(fTarget.getDefaultValueString());
 			if(defaultValue == null){
 				if(fTarget.getLeafPartitions().size() > 0){
-					defaultValue = fTarget.getLeafPartitions().get(0).getValueString();
+					defaultValue = fTarget.getLeafPartitions().toArray(new PartitionNode[]{})[0].getValueString();
 				}
 				defaultValue = adapter.defaultValue();
 			}
@@ -77,7 +77,7 @@ public class CategoryOperationSetType extends BulkOperation{
 			return new ReverseOperation();
 		}
 		
-		private void convertPartitionValues(IPartitionedNode parent, ITypeAdapter adapter) {
+		private void convertPartitionValues(PartitionedNode parent, ITypeAdapter adapter) {
 			for(PartitionNode p : parent.getPartitions()){
 				convertPartitionValue(p, adapter);
 				convertPartitionValues(p, adapter);
@@ -88,7 +88,7 @@ public class CategoryOperationSetType extends BulkOperation{
 			p.setValueString(adapter.convert(p.getValueString()));
 		}
 
-		private void removeDeadPartitions(IPartitionedNode parent) {
+		private void removeDeadPartitions(PartitionedNode parent) {
 			List<PartitionNode> toRemove = new ArrayList<PartitionNode>();
 			for(PartitionNode p : parent.getPartitions()){
 				if(isDead(p)){

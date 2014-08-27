@@ -11,113 +11,31 @@
 
 package com.testify.ecfeed.model;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
-public class PartitionNode extends GenericNode implements IPartitionedNode{
+public class PartitionNode extends PartitionedNode{
 
-	private IPartitionedNode fPartitionedParent;
-	private PartitionNode fParentPartition;
-	
+	private PartitionedNode fParent;
 	private String fValueString;
-	private List<PartitionNode> fPartitions;
 	private Set<String> fLabels;
 	
 	public PartitionNode(String name, String value) {
 		super(name);
 		fValueString = value;
-		fPartitions = new ArrayList<PartitionNode>();
 		fLabels = new LinkedHashSet<String>();
 	}
 
 	@Override
-	public void addPartition(PartitionNode partition){
-		addPartition(partition, fPartitions.size());
-	}
-
-	@Override
-	public void addPartition(PartitionNode partition, int index) {
-			fPartitions.add(index, partition);
-			partition.setParent(this);
-	}
-
-	@Override
 	public CategoryNode getCategory() {
-		return fPartitionedParent.getCategory();
+		return fParent.getCategory();
 	}
 
 	@Override
-	public PartitionNode getPartition(String name){
-		for(PartitionNode partition : fPartitions){
-			if(partition.getName().equals(name)){
-				return partition;
-			}
-		}
-		return null;
-	}
-
-	@Override
-	public List<PartitionNode> getPartitions(){
-		return fPartitions;
-	}
-
-	public List<String> getPartitionNames() {
-		ArrayList<String> names = new ArrayList<String>();
-		for(PartitionNode partition : getPartitions()){
-			names.add(partition.getName());
-		}
-		return names;
-	}
-
-	@Override
-	public List<String> getAllPartitionNames() {
-		List<String> names = new ArrayList<String>();
-		for(PartitionNode child : fPartitions){
-			names.add(child.getQualifiedName());
-			names.addAll(child.getAllPartitionNames());
-		}
-		return names;
-	}
-
-	@Override
-	public List<PartitionNode> getLeafPartitions() {
-		List<PartitionNode> leafs = new ArrayList<PartitionNode>();
-		if(fPartitions.size() == 0){
-			leafs.add(this);
-		}
-		else{
-			for(PartitionNode child : fPartitions){
-				leafs.addAll(child.getLeafPartitions());
-			}
-		}
-		return leafs;
-	}
-
-	@Override
-	public boolean removePartition(PartitionNode partition){
-		if(fPartitions.contains(partition) && fPartitions.remove(partition)){
-			partition.setParent(null);
-			return true;
-		}
-		return false;
-	}
-
-	@Override
-	public boolean removePartition(String name){
-		for(PartitionNode partition : fPartitions){
-			if(partition.getName().equals(name)){
-				return fPartitions.remove(partition);
-			}
-		}
-		return false;
-	}
-
-	@Override
-	public IPartitionedNode getParent(){
-		return fPartitionedParent;
+	public PartitionedNode getParent(){
+		return fParent;
 	}
 
 	@Override
@@ -136,8 +54,8 @@ public class PartitionNode extends GenericNode implements IPartitionedNode{
 	@Override
 	public PartitionNode getCopy(){
 		PartitionNode copy = new PartitionNode(getName(), fValueString);
-		copy.setParent(fPartitionedParent);
-		for(PartitionNode partition : fPartitions){
+		copy.setParent(fParent);
+		for(PartitionNode partition : getPartitions()){
 			copy.addPartition(partition.getCopy());
 		}
 		for(String label : fLabels){
@@ -147,44 +65,18 @@ public class PartitionNode extends GenericNode implements IPartitionedNode{
 	}
 
 	public String getQualifiedName(){
-		if(fParentPartition != null){
-			return fParentPartition.getQualifiedName() + ":" + getName();
+		if(parentPartition() != null){
+			return parentPartition().getQualifiedName() + ":" + getName();
 		}
 		return getName();
 	}
 
-	public void setParent(IPartitionedNode parent){
-		fPartitionedParent = parent;
+	public void setParent(PartitionedNode parent){
+		super.setParent(parent);
+		fParent = parent;
 	}
 	
-	public void setParent(PartitionNode parentPartition){
-		fPartitionedParent = fParentPartition = parentPartition;
-	}
-
 	public String getValueString() {
-		// FIXME remove category dependency
-		try {
-			String type = getCategory().getType();
-			if ((fValueString.length()) > 1) {
-				if (type.equals("char") && (fValueString.charAt(0) == '\\')) {
-					String value = fValueString.substring(1);
-					return "\\" + Integer.parseInt(value) + " ['" + Character.valueOf((char)Integer.parseInt(value)) + "']";
-				} else if (type.equals("byte")) {
-					return Byte.decode(fValueString).toString();
-				} else if (type.equals("int")) {
-					return Integer.decode(fValueString).toString();
-				} else if (type.equals("long")) {
-					return Long.decode(fValueString).toString();
-				} else if (type.equals("short")) {
-					return Short.decode(fValueString).toString();
-				}
-			}
-		} catch (Throwable e) {
-		}
-		return fValueString;
-	}
-
-	public String getExactValueString() {
 		return fValueString;
 	}
 
@@ -192,37 +84,11 @@ public class PartitionNode extends GenericNode implements IPartitionedNode{
 		fValueString = value;
 	}
 	
-	/*
-	 * Returns name of this partition and names of all parent partitions
-	 */
-	public List<String> getAllAncestorsNames(){
-		List<String> names;
-		if(fParentPartition != null){
-			names = fParentPartition.getAllAncestorsNames();
-		}
-		else{
-			names = new ArrayList<String>();
-		}
-		names.add(getName());
-		return names;
-	}
-
 	public boolean addLabel(String label){
-		if(getAllLabels().contains(label) == false){
-			for(PartitionNode child : fPartitions){
-				//in case when a child already was labeled with new label,
-				//the parent (this) takes the label (non-reversible operation)
-				child.removeLabel(label);
-			}
-			return fLabels.add(label);
-		}
-		return false;
+		return fLabels.add(label);
 	}
 	
 	public boolean removeLabel(String label){
-		for(PartitionNode child : fPartitions){
-			child.removeLabel(label);
-		}
 		return fLabels.remove(label);
 	}
 	
@@ -237,49 +103,25 @@ public class PartitionNode extends GenericNode implements IPartitionedNode{
 	}
 	
 	public Set<String> getInheritedLabels(){
-		if(fParentPartition != null){
-			return fParentPartition.getAllLabels();
+		if(parentPartition() != null){
+			return parentPartition().getAllLabels();
 		}
 		return new HashSet<String>();
 	}
-	
-	public Set<String> getAllDescendingLabels() {
-		Set<String> labels = new LinkedHashSet<>(getLabels());
-		for(PartitionNode p : fPartitions){
-			labels.addAll(p.getAllDescendingLabels());
-		}
-		return labels;
-	}
 
 	public boolean isAbstract(){
-		return fPartitions.size() != 0;
+		return getPartitions().size() != 0;
 	}
 	
 	public boolean is(PartitionNode partition){
-		return this.isDescendant(partition) || this == (partition);
+		return (this == (partition)) || (parentPartition() != null ? parentPartition().is(partition) : false);
 	}
 	
-	public boolean isAncestor(PartitionNode partition) {
-		for(PartitionNode child : fPartitions){
-			if(child == partition || child.isAncestor(partition)){
-				return true;
-			}
-		}
-		return false;
-	}
-
-	public boolean isDescendant(PartitionNode partition){
-		if(fParentPartition != null){
-			return fParentPartition == partition || fParentPartition.isDescendant(partition);
-		}
-		return false;
-	}
-
 	public int level(){
-		if(fParentPartition == null){
+		if(parentPartition() == null){
 			return 0;
 		}
-		return fParentPartition.level() + 1;
+		return parentPartition().level() + 1;
 	}
 	
 	@Override
@@ -316,30 +158,10 @@ public class PartitionNode extends GenericNode implements IPartitionedNode{
 		return visitor.visit(this);
 	}
 
-	@Override
-	public void replacePartitions(List<PartitionNode> newPpartitions) {
-		fPartitions.clear();
-		fPartitions.addAll(newPpartitions);
-	}
-
-	@Override
-	public List<PartitionNode> getLabeledPartitions(String label) {
-		List<PartitionNode> result = new ArrayList<PartitionNode>();
-		for(PartitionNode p : getPartitions()){
-			if(p.getLabels().contains(label)){
-				result.add(p);
-				result.addAll(p.getLabeledPartitions(label));
-			}
+	private PartitionNode parentPartition(){
+		if(fParent != null && fParent != getCategory()){
+			return (PartitionNode)fParent;
 		}
-		return result;
-	}
-
-	@Override
-	public Set<String> getLeafLabels() {
-		Set<String> result = new HashSet<String>();
-		for(PartitionNode p : getLeafPartitions()){
-			result.addAll(p.getAllLabels());
-		}
-		return result;
+		return null;
 	}
 }

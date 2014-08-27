@@ -224,7 +224,7 @@ public class RandomModelGenerator {
 		}
 		
 		if(rand.nextBoolean()){
-			List<String> partitionNames = category.getAllPartitionNames();
+			List<String> partitionNames = new ArrayList<String>(category.getAllPartitionNames());
 			String luckyPartitionName = partitionNames.get(rand.nextInt(partitionNames.size()));
 			PartitionNode condition = category.getPartition(luckyPartitionName);
 			return new PartitionedCategoryStatement(category, relation, condition);

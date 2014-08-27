@@ -1,18 +1,18 @@
 package com.testify.ecfeed.modelif.java.category;
 
-import com.testify.ecfeed.model.IPartitionedNode;
 import com.testify.ecfeed.model.PartitionNode;
+import com.testify.ecfeed.model.PartitionedNode;
 import com.testify.ecfeed.modelif.IModelOperation;
 import com.testify.ecfeed.modelif.ModelIfException;
 import com.testify.ecfeed.modelif.java.common.Messages;
 
 public class GenericOperationAddPartition implements IModelOperation {
 
-	private IPartitionedNode fTarget;
+	private PartitionedNode fTarget;
 	private PartitionNode fPartition;
 	private int fIndex;
 
-	public GenericOperationAddPartition(IPartitionedNode target, PartitionNode partition, int index) {
+	public GenericOperationAddPartition(PartitionedNode target, PartitionNode partition, int index) {
 		fTarget = target;
 		fPartition = partition;
 		fIndex = index;

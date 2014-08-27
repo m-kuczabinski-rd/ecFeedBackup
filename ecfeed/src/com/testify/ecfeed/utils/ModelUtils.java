@@ -12,7 +12,6 @@
 package com.testify.ecfeed.utils;
 
 import java.lang.reflect.Method;
-import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -522,8 +521,9 @@ public class ModelUtils {
 			return true;
 		}
 		else{
-			URLClassLoader loader = ClassUtils.getClassLoader(false, null);
-			return ClassUtils.isPartitionImplemented(node.getExactValueString(), node.getCategory().getType(), loader);
+//			URLClassLoader loader = ClassUtils.getClassLoader(false, null);
+//			return ClassUtils.isPartitionImplemented(node.getExactValueString(), node.getCategory().getType(), loader);
+			return false;
 		}
 	}
 
