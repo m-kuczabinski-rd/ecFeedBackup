@@ -63,7 +63,7 @@ public class MenuCutOperation extends MenuOperation{
 			CategoryNode target = (CategoryNode)fTarget;
 			MethodNode method = target.getMethod();
 			if(target.getMethod() != null){
-				return CategoryNodeAbstractLayer.removeCategory(target, method);
+//				return CategoryNodeAbstractLayer.removeCategory(target, method);
 			}
 		} else if(fTarget instanceof MethodNode){
 			MethodNode target = (MethodNode)fTarget;

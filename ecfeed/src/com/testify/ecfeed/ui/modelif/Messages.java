@@ -36,6 +36,9 @@ public class Messages {
 	public static final String DIALOG_RENAME_PAREMETER_PROBLEM_TITLE = "Couldn't rename parameter";
 	public static final String DIALOG_RENAME_PARTITION_PROBLEM_TITLE = "Couldn't rename partition";
 	public static final String DIALOG_SET_PARTITION_VALUE_PROBLEM_TITLE = "Couldn't change partition value";
+	public static final String DIALOG_REMOVE_LABEL_PROBLEM_TITLE = "Couldn't remove label";
+	public static final String DIALOG_ADD_LABEL_PROBLEM_TITLE = "Cannot add label";
+	public static final String DIALOG_CHANGE_LABEL_PROBLEM_TITLE = "Cannot change label";
 
 
 	//CONFIRMATIONS AND WARNINGS
@@ -63,7 +66,11 @@ public class Messages {
 	}
 	public static final String DIALOG_REMOVE_PARTITION_WARNING_TITLE = "Removing partition";
 	public static final String DIALOG_REMOVE_PARTITION_WARNING_MESSAGE = "Removing partition will cause removing of all test cases and constraints referring to that partition";
-
+	public static final String DIALOG_REMOVE_LABELS_WARNING_TITLE = "Removing labels";
+	public static final String DIALOG_REMOVE_LABELS_WARNING_MESSAGE = "Removing labels will result in removing constraints that refer to the labels.";
+	public static final String DIALOG_RENAME_LABELS_ERROR_TITLE = "Could't rename label";
+	public static final String DIALOG_LABEL_IS_ALREADY_INHERITED = "The label is already inherited from a parent partition";
+	public static final String DIALOG_RENAME_LABELS_WARNING_TITLE = "Renaming label";
 
 	//EXCEPTIONS
 	public static final String EXCEPTION_METHOD_IMPORT(String name){
@@ -84,4 +91,5 @@ public class Messages {
 	public static final String DIALOG_GENERATE_TEST_SUITES_SELECT_PARTITIONS_LABEL = "Select which partitions will be considered for generating test suite. "
 			+ "Each category must be represented by at least one partition.";
 	public static final String DIALOG_TEST_SUITE_NAME_PROBLEM_MESSAGE = "Entered test suite name not allowed";
+	public static final String DIALOG_DESCENDING_LABELS_WILL_BE_REMOVED_WARNING_TITLE = "Partitions below in the hierarchy are already labeled with this label. Changing the label will result in removing the labels from all that partitions";
 }

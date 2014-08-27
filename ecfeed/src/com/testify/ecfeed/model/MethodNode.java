@@ -261,21 +261,7 @@ public class MethodNode extends GenericNode {
 
 	public boolean removeCategory(CategoryNode category){
 		category.setParent(null);
-		int index = fCategories.indexOf(category);
-		if(fCategories.remove(category)){
-			removeMentioningConstraints(category);
-			removeTestParameters(index);
-			return true;
-		}
-		return false;
-	}
-
-	private void removeTestParameters(int index) {
-		for(TestCaseNode testCase : fTestCases){
-			if(testCase.getTestData().size() > index){
-				testCase.getTestData().remove(index);
-			}
-		}
+		return fCategories.remove(category);
 	}
 
 	public boolean removeTestCase(TestCaseNode testCase){
@@ -302,57 +288,6 @@ public class MethodNode extends GenericNode {
 		}
 	}
 	
-	public void replaceCategory(int index, CategoryNode newCategory){
-		CategoryNode oldCategory = fCategories.get(index);
-		if(oldCategory.getType().equals(newCategory.getType())
-				&& fCategories.remove(oldCategory)){
-			removeMentioningConstraints(oldCategory);
-			newCategory.setParent(this);
-			fCategories.add(index, newCategory);
-			if(!oldCategory.isExpected() && newCategory.getDefaultValuePartition() != null){
-				for(TestCaseNode testCase : fTestCases){
-					testCase.replaceValue(index, newCategory.getDefaultValuePartition().getCopy());
-				}
-			} else{
-				fTestCases.clear();
-			}
-		}
-	}
-	
-//	public void changeCategoryExpectedStatus(CategoryNode category, boolean expected){
-//		if(category.isExpected() == expected) return;
-//		else{
-//			int index = fCategories.indexOf(category);
-//			if(index < 0)
-//				return;
-//			else{
-//				// from expected to partitioned
-//				if(!expected){
-//					fTestCases.clear();
-//					removeMentioningConstraints(category);
-//				}
-//				// from partitioned to expected
-//				else{
-//					if (!category.getPartitions().isEmpty()){
-//						category.setDefaultValueString(category.getPartitions().get(0).getValueString());
-//					}
-//					for(TestCaseNode testCase : fTestCases){
-//						testCase.replaceValue(index, category.getDefaultValuePartition().getCopy());
-//					}
-//					for(PartitionNode partition : category.getPartitions()){
-//						removeMentioningConstraints(partition);
-//					}
-//				}
-//				category.setExpected(expected);
-//			}
-//		}
-//	}
-
-	public void partitionRemoved(PartitionNode partition){
-		removeMentioningConstraints(partition);
-		removeMentioningTestCases(partition);
-	}
-
 	public boolean isPartitionMentioned(PartitionNode partition){
 		for(ConstraintNode constraint : fConstraints){
 			if(constraint.mentions(partition)){
@@ -379,6 +314,16 @@ public class MethodNode extends GenericNode {
 		Set<ConstraintNode> result = new HashSet<ConstraintNode>();
 		for(ConstraintNode constraint : fConstraints){
 			if(constraint.mentions(category)){
+				result.add(constraint);
+			}
+		}
+		return result;
+	}
+	
+	public Set<ConstraintNode> mentioningConstraints(CategoryNode category, String label){
+		Set<ConstraintNode> result = new HashSet<ConstraintNode>();
+		for(ConstraintNode constraint : fConstraints){
+			if(constraint.mentions(category, label)){
 				result.add(constraint);
 			}
 		}
@@ -417,16 +362,6 @@ public class MethodNode extends GenericNode {
 		return true;
 	}
 	
-	public void removeMentioningConstraints(CategoryNode category){
-		Iterator<ConstraintNode> it = fConstraints.iterator();
-		while(it.hasNext()){
-			ConstraintNode constraint = it.next();
-			if(constraint.mentions(category)){
-				it.remove();
-			}
-		}
-	}
-	
 	public void clearTestCases(){
 		fTestCases.clear();
 	}
@@ -445,24 +380,6 @@ public class MethodNode extends GenericNode {
 		fConstraints.clear();
 	}
 
-	protected void removeMentioningConstraints(PartitionNode partition) {
-		Iterator<ConstraintNode> iterator = fConstraints.iterator();
-		while(iterator.hasNext()){
-			if(iterator.next().mentions(partition)){
-				iterator.remove();
-			}
-		}
-	}
-
-	protected void removeMentioningTestCases(PartitionNode partition) {
-		Iterator<TestCaseNode> iterator = fTestCases.iterator();
-		while(iterator.hasNext()){
-			if(iterator.next().mentions(partition)){
-				iterator.remove();
-			}
-		}
-	}
-	
 	@Override
 	public Object accept(IModelVisitor visitor) throws Exception{
 		return visitor.visit(this);
@@ -505,28 +422,5 @@ public class MethodNode extends GenericNode {
 		}
 		
 		return super.compare(node);
-	}
-
-	public void makeConsistent() {
-		removeInconsistentConstraints();
-		removeInconsistentTestCases();
-	}
-
-	private void removeInconsistentTestCases() {
-		Iterator<TestCaseNode> it = fTestCases.iterator();
-		while(it.hasNext()){
-			if(it.next().isConsistent() == false){
-				it.remove();
-			}
-		}
-	}
-
-	private void removeInconsistentConstraints() {
-		Iterator<ConstraintNode> it = fConstraints.iterator();
-		while(it.hasNext()){
-			if(it.next().isConsistent() == false){
-				it.remove();
-			}
-		}
 	}
 }

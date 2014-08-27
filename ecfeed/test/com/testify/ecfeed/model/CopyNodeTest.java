@@ -136,8 +136,8 @@ public class CopyNodeTest{
 		testPartitions(partitioncopy, partition);
 		testParent(partitioncopy, copy, true);
 		// labels copied properly?
-		assertTrue(copy.getAllPartitionLabels().contains(parentlabel));
-		assertTrue(copy.getAllPartitionLabels().contains(childlabel));
+		assertTrue(copy.getLeafLabels().contains(parentlabel));
+		assertTrue(copy.getLeafLabels().contains(childlabel));
 		testPartitionLabels(partition, partitioncopy);
 		// children partitions copied properly?
 		PartitionNode partitionChild = partition.getPartitions().get(0);

@@ -230,11 +230,11 @@ public class RandomModelGenerator {
 			return new PartitionedCategoryStatement(category, relation, condition);
 		}
 		else{
-			if(category.getAllPartitionLabels().size() == 0){
+			if(category.getLeafLabels().size() == 0){
 				category.getPartitions().get(0).addLabel(generateString(REGEX_PARTITION_LABEL));
 			}
 			
-			Set<String>labels = category.getAllPartitionLabels();
+			Set<String>labels = category.getLeafLabels();
 			
 			String label = labels.toArray(new String[]{})[rand.nextInt(labels.size())];
 			return new PartitionedCategoryStatement(category, relation, label);

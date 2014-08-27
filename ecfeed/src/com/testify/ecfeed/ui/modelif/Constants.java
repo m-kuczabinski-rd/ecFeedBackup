@@ -8,6 +8,7 @@ public class Constants {
 	public static final String DEFAULT_USER_TYPE_NAME = "default.UserType";
 	public static final String DEFAULT_NEW_CONSTRAINT_NAME = "constraint";
 	public static final String DEFAULT_NEW_PARTITION_NAME = "partition";
+	public static final String DEFAULT_NEW_PARTITION_LABEL = "label";
 
 	public static final String NULL_VALUE_STRING_REPRESENTATION = "/null";
 	public static final String MAX_VALUE_STRING_REPRESENTATION = "MAX_VALUE";

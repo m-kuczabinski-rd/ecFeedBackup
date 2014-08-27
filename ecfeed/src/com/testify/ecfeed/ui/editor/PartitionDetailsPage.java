@@ -79,7 +79,7 @@ public class PartitionDetailsPage extends BasicDetailsPage {
 
 		createNameValueEditor(getMainComposite());
 		addForm(fChildrenViewer = new PartitionChildrenViewer(this, getToolkit(), fOperationManager));
-		addForm(fLabelsViewer = new PartitionLabelsViewer(this, getToolkit()));
+		addForm(fLabelsViewer = new PartitionLabelsViewer(this, getToolkit(), fOperationManager));
 		
 		getToolkit().paintBordersFor(getMainComposite());
 	}

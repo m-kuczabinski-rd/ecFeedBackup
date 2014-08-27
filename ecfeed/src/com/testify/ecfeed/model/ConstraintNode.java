@@ -12,7 +12,6 @@
 package com.testify.ecfeed.model;
 
 import java.util.List;
-import java.util.Set;
 
 import com.testify.ecfeed.model.constraint.Constraint;
 
@@ -76,6 +75,10 @@ public class ConstraintNode extends GenericNode{
 		return fConstraint.mentions(category);
 	}
 	
+	public boolean mentions(CategoryNode category, String label) {
+		return fConstraint.mentions(category, label);
+	}
+	
 	public boolean updateReferences(MethodNode method){
 		if(fConstraint.updateRefrences(method)){
 			setParent(method);
@@ -115,10 +118,16 @@ public class ConstraintNode extends GenericNode{
 	}
 
 	public boolean isConsistent() {
-		Set<PartitionNode> referencedPartitions = getConstraint().getReferencedPartitions();
-		for(PartitionNode p : referencedPartitions){
+		for(PartitionNode p : getConstraint().getReferencedPartitions()){
 			if(p.getCategory() == null || p.getCategory().getPartition(p.getQualifiedName()) == null){
 				return false;
+			}
+		}
+		for(CategoryNode c : getMethod().getCategories()){
+			for(String label : getConstraint().getReferencedLabels(c)){
+				if(c.getLeafLabels().contains(label) == false){
+					return false;
+				}
 			}
 		}
 		return true;

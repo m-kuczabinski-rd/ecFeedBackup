@@ -12,6 +12,7 @@
 package com.testify.ecfeed.model;
 
 import java.util.List;
+import java.util.Set;
 
 public interface IPartitionedNode extends IGenericNode{
 	//quick fix
@@ -28,6 +29,7 @@ public interface IPartitionedNode extends IGenericNode{
 	public void replacePartitions(List<PartitionNode> newPpartitions);
 	public List<PartitionNode> getLeafPartitions();
 	public List<String> getAllPartitionNames();
-	public void partitionRemoved(PartitionNode partition);
 	public List<String> getPartitionNames();
+	public List<PartitionNode> getLabeledPartitions(String label);
+	public Set<String> getLeafLabels();
 }

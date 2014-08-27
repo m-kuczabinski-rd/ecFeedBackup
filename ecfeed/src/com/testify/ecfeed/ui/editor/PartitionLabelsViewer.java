@@ -11,7 +11,9 @@
 
 package com.testify.ecfeed.ui.editor;
 
-import org.eclipse.jface.dialogs.MessageDialog;
+import java.util.ArrayList;
+import java.util.Collection;
+
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.CheckStateChangedEvent;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
@@ -31,47 +33,31 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Section;
 
 import com.testify.ecfeed.model.PartitionNode;
+import com.testify.ecfeed.modelif.ModelOperationManager;
 import com.testify.ecfeed.ui.common.ColorConstants;
 import com.testify.ecfeed.ui.common.ColorManager;
-import com.testify.ecfeed.ui.common.Messages;
-import com.testify.ecfeed.utils.Constants;
+import com.testify.ecfeed.ui.modelif.PartitionInterface;
 
 public class PartitionLabelsViewer extends CheckboxTableViewerSection {
 	
 	private static final int STYLE = Section.TITLE_BAR | Section.EXPANDED;
 
-	private PartitionNode fSelectedPartition;
+	private PartitionInterface fPartitionIf;
 
 	private class AddLabelAdapter extends SelectionAdapter{
 		@Override
 		public void widgetSelected(SelectionEvent e){
-			String newLabel = Constants.DEFAULT_LABEL;
-			int i = 1;
-			while(fSelectedPartition.getAllLabels().contains(newLabel)){
-				newLabel = Constants.DEFAULT_LABEL + "(" + i + ")";
-				i++;
+			String newLabel = fPartitionIf.addNewLabel(PartitionLabelsViewer.this, getUpdateListener());
+			if(newLabel != null){
+				getTableViewer().editElement(newLabel, 0);
 			}
-			if(fSelectedPartition.addLabel(newLabel) == false){
-				MessageDialog.openError(getActiveShell(),  
-						Messages.DIALOG_CANNOT_ADD_LABEL_TITLE, 
-						Messages.DIALOG_CANNOT_ADD_LABEL_MESSAGE);
-			};
-			modelUpdated();
 		}
 	}
 	
 	private class RemoveLabelsAdapter extends SelectionAdapter{
 		@Override
 		public void widgetSelected(SelectionEvent e){
-			for(Object element : getCheckedElements()){
-				String label = (String)element;
-				if(fSelectedPartition.removeLabel(label) == false){
-					MessageDialog.openError(getActiveShell(), 
-							Messages.DIALOG_CANNOT_REMOVE_LABEL_TITLE, 
-							Messages.DIALOG_CANNOT_REMOVE_LABEL_MESSAGE(label));
-				}
-				modelUpdated();
-			}
+			fPartitionIf.removeLabels(getCheckedLabels(), PartitionLabelsViewer.this, getUpdateListener());
 		}
 	}
 	
@@ -90,7 +76,7 @@ public class PartitionLabelsViewer extends CheckboxTableViewerSection {
 
 		@Override
 		protected boolean canEdit(Object element) {
-			return !fSelectedPartition.getInheritedLabels().contains((String)element);
+			return fPartitionIf.isLabelInherited((String)element) == false;
 		}
 
 		@Override
@@ -100,13 +86,7 @@ public class PartitionLabelsViewer extends CheckboxTableViewerSection {
 
 		@Override
 		protected void setValue(Object element, Object value) {
-			String oldLabel = (String)element;
-			String newLabel = (String)value;
-			if(fSelectedPartition.getAllLabels().contains(newLabel) == false){
-				fSelectedPartition.removeLabel(oldLabel);
-				fSelectedPartition.addLabel(newLabel);
-				modelUpdated();
-			}
+			fPartitionIf.renameLabel((String)element, (String)value, PartitionLabelsViewer.this, getUpdateListener());
 		}
 	}
 
@@ -127,18 +107,29 @@ public class PartitionLabelsViewer extends CheckboxTableViewerSection {
 		public Color getForeground(Object element){
 			if(element instanceof String){
 				String label = (String)element;
-				if(fSelectedPartition.getInheritedLabels().contains(label)){
+				if(fPartitionIf.isLabelInherited(label)){
 					return fColorManager.getColor(ColorConstants.INHERITED_LABEL_FOREGROUND);
 				}
 			}
 			return null;
 		}
 
+//		@Override
+//		public Color getBackground(Object element){
+//			if(element instanceof String){
+//				String label = (String)element;
+//				if(fPartitionIf.isLabelInherited(label)){
+//					return fColorManager.getColor(ColorConstants.INHERITED_LABEL_BACKGROUND);
+//				}
+//			}
+//			return null;
+//		}
+//
 		@Override
 		public Font getFont(Object element){
 			if(element instanceof String){
 				String label = (String)element;
-				if(fSelectedPartition.getInheritedLabels().contains(label)){
+				if(fPartitionIf.isLabelInherited(label)){
 					Font font = getTable().getFont();
 					FontData currentFontData = font.getFontData()[0];
 					FontData fd = new FontData();
@@ -156,16 +147,18 @@ public class PartitionLabelsViewer extends CheckboxTableViewerSection {
 		@Override
 		public void checkStateChanged(CheckStateChangedEvent event) {
 			String label = (String)event.getElement();
-			if(fSelectedPartition.getInheritedLabels().contains(label)){
+			if(fPartitionIf.isLabelInherited(label)){
 				getCheckboxViewer().setChecked(label, false);
 			}
 		}
 	}
 
-	public PartitionLabelsViewer(BasicDetailsPage parent, FormToolkit toolkit) {
+	public PartitionLabelsViewer(BasicDetailsPage parent, FormToolkit toolkit, ModelOperationManager operationManager) {
 		super(parent.getMainComposite(), toolkit, STYLE, parent);
 
+		fPartitionIf = new PartitionInterface(operationManager);
 		getSection().setText("Labels");
+		
 		addButton("Add label", new AddLabelAdapter());
 		addButton("Remove selected", new RemoveLabelsAdapter());
 
@@ -180,9 +173,18 @@ public class PartitionLabelsViewer extends CheckboxTableViewerSection {
 	}
 	
 	public void setInput(PartitionNode	partition){
-		fSelectedPartition = partition;
+//		fSelectedPartition = partition;
+		fPartitionIf.setTarget(partition);
 		super.setInput(partition.getAllLabels());
 	}
 	
-	
+	protected Collection<String> getCheckedLabels(){
+		Collection<String> labels = new ArrayList<String>();
+		for(Object o : getCheckedElements()){
+			if(o instanceof String){
+				labels.add((String)o);
+			}
+		}
+		return labels;
+	}
 }

@@ -14,7 +14,6 @@ package com.testify.ecfeed.model;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -40,13 +39,6 @@ public class CategoryNode extends GenericNode implements IPartitionedNode{
 			return -1;
 		}
 		return getMethod().getCategories().indexOf(this);
-	}
-
-	@Override
-	public void partitionRemoved(PartitionNode partition) {
-		if(getMethod() != null){
-			getMethod().partitionRemoved(partition);
-		}
 	}
 
 	@Override
@@ -109,10 +101,7 @@ public class CategoryNode extends GenericNode implements IPartitionedNode{
 	@Override
 	public boolean removePartition(PartitionNode partition){
 		if(fPartitions.contains(partition) && fPartitions.remove(partition)){
-			MethodNode parentMethod = getMethod();
-			if(parentMethod != null){
-				parentMethod.partitionRemoved(partition);
-			}
+			partition.setParent(null);
 			return true;
 		}
 		return false;
@@ -153,10 +142,6 @@ public class CategoryNode extends GenericNode implements IPartitionedNode{
 		return fType;
 	}
 
-//	public List<PartitionNode> getOrdinaryPartitions(){
-//		return fPartitions;
-//	}
-//
 	public void setType(String type) {
 		fType = type;
 	}
@@ -191,12 +176,18 @@ public class CategoryNode extends GenericNode implements IPartitionedNode{
 		return values;
 	}
 	
-	public Set<String> getAllPartitionLabels(){
-		Set<String> labels = new LinkedHashSet<String>();
-		for(PartitionNode p : getPartitions()){
-			labels.addAll(p.getAllDescendingLabels());
+	public Set<String> getLeafLabels(){
+		Set<String> result = new HashSet<String>();
+		for(PartitionNode p : getLeafPartitions()){
+			result.addAll(p.getAllLabels());
 		}
-		return labels;
+		return result;
+
+//		Set<String> labels = new LinkedHashSet<String>();
+//		for(PartitionNode p : getPartitions()){
+//			labels.addAll(p.getAllDescendingLabels());
+//		}
+//		return labels;
 	}
 	
 	public PartitionNode getDefaultValuePartition(){
@@ -286,5 +277,16 @@ public class CategoryNode extends GenericNode implements IPartitionedNode{
 			return getMethod().getCategories().size();
 		}
 		return -1;
+	}
+
+	public List<PartitionNode> getLabeledPartitions(String label) {
+		List<PartitionNode> result = new ArrayList<PartitionNode>();
+		for(PartitionNode p : getPartitions()){
+			if(p.getLabels().contains(label)){
+				result.add(p);
+				result.addAll(p.getLabeledPartitions(label));
+			}
+		}
+		return result;
 	}
 }

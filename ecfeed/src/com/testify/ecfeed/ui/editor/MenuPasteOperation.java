@@ -76,22 +76,22 @@ public class MenuPasteOperation extends MenuOperation{
 				PartitionNode target = (PartitionNode)fTarget;
 				if(fSource instanceof PartitionNode){
 					PartitionNode source = (PartitionNode)fSource;
-					if(target.getCategory().getType().equals(source.getCategory().getType()) ||AdaptTypeSupport.adaptOrRemovePartitions(source, target.getCategory().getType())){
+//					if(target.getCategory().getType().equals(source.getCategory().getType()) ||AdaptTypeSupport.adaptOrRemovePartitions(source, target.getCategory().getType())){
 						ModelUtils.setUniqueNodeName(source, target);
 						target.addPartition(source);
 						return true;
-					}
+//					}
 				}
 			} else if(fTarget instanceof CategoryNode){
 				CategoryNode target = (CategoryNode)fTarget;
 				if(!target.isExpected()){
 					if(fSource instanceof PartitionNode){
 						PartitionNode source = (PartitionNode)fSource;
-						if(target.getType().equals(source.getCategory().getType()) || AdaptTypeSupport.adaptOrRemovePartitions(source, target.getType())){
+//						if(target.getType().equals(source.getCategory().getType()) || AdaptTypeSupport.adaptOrRemovePartitions(source, target.getType())){
 							ModelUtils.setUniqueNodeName(source, target);
 							target.addPartition(source);
 							return true;
-						}
+//						}
 					}
 				}
 			} else if(fTarget instanceof MethodNode){
@@ -99,7 +99,7 @@ public class MenuPasteOperation extends MenuOperation{
 				if(fSource instanceof CategoryNode){
 					CategoryNode source = (CategoryNode)fSource;
 					ModelUtils.setUniqueNodeName(source, target);
-					fCanceled = !CategoryNodeAbstractLayer.addCategory(source, target);
+//					fCanceled = !CategoryNodeAbstractLayer.addCategory(source, target);
 					return true;
 				} else if(fSource instanceof ConstraintNode){
 					ConstraintNode source = (ConstraintNode)fSource;

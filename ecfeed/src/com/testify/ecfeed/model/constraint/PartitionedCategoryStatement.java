@@ -206,6 +206,10 @@ public class PartitionedCategoryStatement extends BasicStatement implements IRel
 		return getCategory() == category;
 	}
 
+	public boolean mentions(CategoryNode category, String label) {
+		return getCategory() == category && getConditionValue().equals(label);
+	}
+
 	@Override
 	public boolean mentions(PartitionNode partition){
 		return getConditionValue() == partition;

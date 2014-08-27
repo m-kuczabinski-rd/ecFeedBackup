@@ -223,7 +223,7 @@ public class CategoryNodeTest{
 		c.addPartition(p1);
 		c.addPartition(p2);
 		
-		Set<String> labels = c.getAllPartitionLabels();
+		Set<String> labels = c.getLeafLabels();
 		
 		assertTrue(labels.contains("l11"));
 		assertTrue(labels.contains("l12"));

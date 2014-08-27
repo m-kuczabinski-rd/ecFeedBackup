@@ -77,6 +77,10 @@ public abstract class BasicStatement implements IStatement {
 		return false;
 	}
 
+	public boolean mentions(CategoryNode category, String label) {
+		return false;
+	}
+
 	@Override
 	public boolean evaluate(List<PartitionNode> values) {
 		return false;

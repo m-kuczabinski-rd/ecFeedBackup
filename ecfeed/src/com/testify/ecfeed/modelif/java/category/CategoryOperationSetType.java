@@ -4,129 +4,127 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.testify.ecfeed.model.CategoryNode;
-import com.testify.ecfeed.model.ConstraintNode;
 import com.testify.ecfeed.model.IPartitionedNode;
 import com.testify.ecfeed.model.PartitionNode;
-import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.modelif.IModelOperation;
 import com.testify.ecfeed.modelif.ModelIfException;
 import com.testify.ecfeed.modelif.java.JavaUtils;
+import com.testify.ecfeed.modelif.java.common.BulkOperation;
 import com.testify.ecfeed.modelif.java.common.Messages;
+import com.testify.ecfeed.modelif.java.method.MethodOperationMakeConsistent;
 
-public class CategoryOperationSetType implements IModelOperation {
+public class CategoryOperationSetType extends BulkOperation{
 
-	private CategoryNode fTarget;
-	private String fNewType;
-	private String fCurrentType;
-	
-	private ITypeAdapterProvider fAdapterProvider;
-	
-	private String fOriginalDefaultValue;
-	private List<PartitionNode> fOriginalPartitions;
-	private List<ConstraintNode> fOriginalConstraints;
-	private List<TestCaseNode> fOriginalTestCases;
+	private class SetTypeOperation implements IModelOperation{
+		
+		private CategoryNode fTarget;
+		private String fNewType;
+		private String fCurrentType;
+		private String fOriginalDefaultValue;
+		private List<PartitionNode> fOriginalPartitions;
+		
+		private ITypeAdapterProvider fAdapterProvider;
 
-	private class ReverseOperation implements IModelOperation{
+		private class ReverseOperation implements IModelOperation{
 
+			@Override
+			public void execute() throws ModelIfException {
+				fTarget.setType(fCurrentType);
+				fTarget.setDefaultValueString(fOriginalDefaultValue);
+				fTarget.replacePartitions(fOriginalPartitions);
+			}
+
+			@Override
+			public IModelOperation reverseOperation() {
+				return new SetTypeOperation(fTarget, fNewType, fAdapterProvider);
+			}
+			
+		}
+		
+		public SetTypeOperation(CategoryNode target, String newType, ITypeAdapterProvider adapterProvider) {
+			fTarget = target;
+			fNewType = newType;
+			fCurrentType = target.getType();
+			fAdapterProvider = adapterProvider;
+			fOriginalDefaultValue = target.getDefaultValueString();
+			fOriginalPartitions = target.getPartitions();
+		}
+		
 		@Override
 		public void execute() throws ModelIfException {
-			fTarget.setType(fCurrentType);
-			fTarget.setDefaultValueString(fOriginalDefaultValue);
-			fTarget.replacePartitions(fOriginalPartitions);
-			if(fTarget.getMethod() != null){
-				fTarget.getMethod().replaceTestCases(fOriginalTestCases);
-				fTarget.getMethod().replaceConstraints(fOriginalConstraints);
+			if(JavaUtils.isValidTypeName(fNewType) == false){
+				throw new ModelIfException(Messages.CATEGORY_TYPE_REGEX_PROBLEM);
+			}
+			
+			ITypeAdapter adapter = fAdapterProvider.getAdapter(fNewType);
+			fTarget.setType(fNewType);
+
+			convertPartitionValues(fTarget, adapter);
+			removeDeadPartitions(fTarget);
+
+			String defaultValue = adapter.convert(fTarget.getDefaultValueString());
+			if(defaultValue == null){
+				if(fTarget.getLeafPartitions().size() > 0){
+					defaultValue = fTarget.getLeafPartitions().get(0).getValueString();
+				}
+				defaultValue = adapter.defaultValue();
+			}
+			fTarget.setDefaultValueString(defaultValue);
+		}
+
+		@Override 
+		public IModelOperation reverseOperation(){
+			return new ReverseOperation();
+		}
+		
+		private void convertPartitionValues(IPartitionedNode parent, ITypeAdapter adapter) {
+			for(PartitionNode p : parent.getPartitions()){
+				convertPartitionValue(p, adapter);
+				convertPartitionValues(p, adapter);
 			}
 		}
 
-		@Override
-		public IModelOperation reverseOperation() {
-			return new CategoryOperationSetType(fTarget, fNewType, fAdapterProvider);
+		private void convertPartitionValue(PartitionNode p, ITypeAdapter adapter) {
+			p.setValueString(adapter.convert(p.getValueString()));
 		}
-		
+
+		private void removeDeadPartitions(IPartitionedNode parent) {
+			List<PartitionNode> toRemove = new ArrayList<PartitionNode>();
+			for(PartitionNode p : parent.getPartitions()){
+				if(isDead(p)){
+					toRemove.add(p);
+				}
+				else{
+					removeDeadPartitions(p);
+				}
+			}
+			for(PartitionNode removed : toRemove){
+				parent.removePartition(removed);
+			}
+		}
+
+		private boolean isDead(PartitionNode p) {
+			if(p.isAbstract() == false){
+				return p.getValueString() == null;
+			}
+			boolean allChildrenDead = true;
+			for(PartitionNode child : p.getPartitions()){
+				if(isDead(child) == false){
+					allChildrenDead = false;
+					break;
+				}
+			}
+			return allChildrenDead;
+		}
 	}
 	
 	public CategoryOperationSetType(CategoryNode target, String newType, ITypeAdapterProvider adapterProvider) {
-		fTarget = target;
-		fNewType = newType;
-
-		fAdapterProvider = adapterProvider;
-		
-		fOriginalDefaultValue = target.getDefaultValueString();
-		if(fTarget.getMethod() != null){
-			fOriginalPartitions = fTarget.getPartitions();
-			fOriginalConstraints = fTarget.getMethod().getConstraintNodes();
-			fOriginalTestCases = fTarget.getMethod().getTestCases();
+		super(true);
+		addOperation(new SetTypeOperation(target, newType, adapterProvider));
+		if(target.getMethod() != null){
+			addOperation(new MethodOperationMakeConsistent(target.getMethod()));
 		}
 	}
 
-	@Override
-	public void execute() throws ModelIfException {
-		if(JavaUtils.isValidTypeName(fNewType) == false){
-			throw new ModelIfException(Messages.CATEGORY_TYPE_REGEX_PROBLEM);
-		}
-		
-		ITypeAdapter adapter = fAdapterProvider.getAdapter(fNewType);
-		fTarget.setType(fNewType);
-
-		convertPartitionValues(fTarget, adapter);
-		removeDeadPartitions(fTarget);
-
-		String defaultValue = adapter.convert(fTarget.getDefaultValueString());
-		if(defaultValue == null){
-			if(fTarget.getLeafPartitions().size() > 0){
-				defaultValue = fTarget.getLeafPartitions().get(0).getValueString();
-			}
-			defaultValue = adapter.defaultValue();
-		}
-		fTarget.setDefaultValueString(defaultValue);
-		
-		fTarget.getMethod().makeConsistent();
-	}
-
-	@Override
-	public IModelOperation reverseOperation() {
-		return new ReverseOperation();
-	}
-
-	private void convertPartitionValues(IPartitionedNode parent, ITypeAdapter adapter) {
-		for(PartitionNode p : parent.getPartitions()){
-			convertPartitionValue(p, adapter);
-			convertPartitionValues(p, adapter);
-		}
-	}
-
-	private void convertPartitionValue(PartitionNode p, ITypeAdapter adapter) {
-		p.setValueString(adapter.convert(p.getValueString()));
-	}
-
-	private void removeDeadPartitions(IPartitionedNode parent) {
-		List<PartitionNode> toRemove = new ArrayList<PartitionNode>();
-		for(PartitionNode p : parent.getPartitions()){
-			if(isDead(p)){
-				toRemove.add(p);
-			}
-			else{
-				removeDeadPartitions(p);
-			}
-		}
-		for(PartitionNode removed : toRemove){
-			parent.removePartition(removed);
-		}
-	}
-
-	private boolean isDead(PartitionNode p) {
-		if(p.isAbstract() == false){
-			return p.getValueString() == null;
-		}
-		boolean allChildrenDead = true;
-		for(PartitionNode child : p.getPartitions()){
-			if(isDead(child) == false){
-				allChildrenDead = false;
-				break;
-			}
-		}
-		return allChildrenDead;
-	}
 
 }

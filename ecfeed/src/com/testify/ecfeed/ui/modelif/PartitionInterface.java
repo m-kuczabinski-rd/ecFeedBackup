@@ -17,12 +17,16 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
 
 import com.testify.ecfeed.model.CategoryNode;
+import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.modelif.IModelOperation;
 import com.testify.ecfeed.modelif.ModelOperationManager;
 import com.testify.ecfeed.modelif.java.category.GenericOperationAddPartition;
 import com.testify.ecfeed.modelif.java.common.RemoveNodesOperation;
+import com.testify.ecfeed.modelif.java.partition.PartitionOperationAddLabel;
+import com.testify.ecfeed.modelif.java.partition.PartitionOperationRemoveLabels;
 import com.testify.ecfeed.modelif.java.partition.PartitionOperationRename;
+import com.testify.ecfeed.modelif.java.partition.PartitionOperationRenameLabel;
 import com.testify.ecfeed.modelif.java.partition.PartitionOperationSetValue;
 import com.testify.ecfeed.ui.editor.BasicSection;
 import com.testify.ecfeed.ui.editor.IModelUpdateListener;
@@ -109,6 +113,69 @@ public class PartitionInterface extends GenericNodeInterface{
 			name = Constants.DEFAULT_NEW_PARTITION_NAME + i++; 
 		}
 		return name;
+	}
+
+	public boolean removeLabels(Collection<String> labels, BasicSection source, IModelUpdateListener updateListener) {
+		MethodNode method = fTarget.getCategory().getMethod();
+		boolean removeMentioningConstraints = false;
+		for(String label : labels){
+			if(method.mentioningConstraints(fTarget.getCategory(), label).size() > 0 && fTarget.getCategory().getLabeledPartitions(label).size() == 1){
+				removeMentioningConstraints = true;
+				break;
+			}
+		}
+		if(removeMentioningConstraints){
+			if(MessageDialog.openConfirm(Display.getCurrent().getActiveShell(), 
+					Messages.DIALOG_REMOVE_LABELS_WARNING_TITLE, 
+					Messages.DIALOG_REMOVE_LABELS_WARNING_MESSAGE) == false){
+				return false;
+			}
+		}
+		return execute(new PartitionOperationRemoveLabels(fTarget, labels), source, updateListener, Messages.DIALOG_REMOVE_LABEL_PROBLEM_TITLE);
+	}
+
+	public String addNewLabel(BasicSection source, IModelUpdateListener updateListener) {
+		String newLabel = Constants.DEFAULT_NEW_PARTITION_LABEL;
+		int i = 1;
+		while(fTarget.getLeafLabels().contains(newLabel)){
+			newLabel = Constants.DEFAULT_NEW_PARTITION_LABEL + "(" + i + ")";
+			i++;
+		}
+		if(addLabel(newLabel, source, updateListener)){
+			return newLabel;
+		}
+		return null;
+	}
+
+	private boolean addLabel(String newLabel, BasicSection source, IModelUpdateListener updateListener) {
+		IModelOperation operation = new PartitionOperationAddLabel(fTarget, newLabel);
+		return execute(operation, source, updateListener, Messages.DIALOG_ADD_LABEL_PROBLEM_TITLE);
+	}
+
+	public boolean isLabelInherited(String label) {
+		return fTarget.getInheritedLabels().contains(label);
+	}
+
+	public boolean renameLabel(String label, String newValue, BasicSection source, IModelUpdateListener updateListener) {
+		if(label.equals(newValue)){
+			return false;
+		}
+		if(fTarget.getInheritedLabels().contains(newValue)){
+			MessageDialog.openError(Display.getCurrent().getActiveShell(), 
+					Messages.DIALOG_RENAME_LABELS_ERROR_TITLE, 
+					Messages.DIALOG_LABEL_IS_ALREADY_INHERITED);
+				return false;
+		}
+		if(fTarget.getLeafLabels().contains(newValue)){
+			if(MessageDialog.openConfirm(Display.getCurrent().getActiveShell(), 
+					Messages.DIALOG_RENAME_LABELS_WARNING_TITLE, 
+					Messages.DIALOG_DESCENDING_LABELS_WILL_BE_REMOVED_WARNING_TITLE) == false){
+				return false;
+			}
+		}
+		
+		IModelOperation operation = new PartitionOperationRenameLabel(fTarget, label, newValue);
+		return execute(operation, source, updateListener, Messages.DIALOG_CHANGE_LABEL_PROBLEM_TITLE);
 	}
 
 }

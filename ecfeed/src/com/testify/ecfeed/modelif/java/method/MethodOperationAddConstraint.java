@@ -28,7 +28,6 @@ public class MethodOperationAddConstraint implements IModelOperation {
 			throw new ModelIfException(Messages.INCOMPATIBLE_CONSTRAINT_PROBLEM);
 		}
 		fTarget.addConstraint(fConstraint, fIndex);
-		fTarget.makeConsistent();
 	}
 
 	@Override

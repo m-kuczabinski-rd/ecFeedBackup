@@ -384,7 +384,7 @@ public class XmlParserSerializerTest {
 
 	private BasicStatement createLabelStatement(List<CategoryNode> categories) {
 		CategoryNode category = categories.get(rand.nextInt(categories.size()));
-		Set<String> labels = category.getAllPartitionLabels();
+		Set<String> labels = category.getLeafLabels();
 		String label;
 		if(labels.size() > 0){
 			label = new ArrayList<String>(labels).get(rand.nextInt(labels.size()));

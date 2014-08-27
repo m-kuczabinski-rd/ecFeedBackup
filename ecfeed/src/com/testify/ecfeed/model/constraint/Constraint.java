@@ -29,6 +29,7 @@ public class Constraint extends AbstractConstraint {
 	private BasicStatement fPremise;
 	private BasicStatement fConsequence; 
 
+	//TODO resign from the visitor pattern for better readability of the code
 	private class ReferencedPartitionsProvider implements IStatementVisitor{
 
 		@Override
@@ -117,6 +118,58 @@ public class Constraint extends AbstractConstraint {
 		}
 	}
 	
+	private class ReferencedLabelsPrivider implements IStatementVisitor{
+		
+		private CategoryNode fCategory;
+		private Set<String> EMPTY_SET = new HashSet<String>();
+		
+		public ReferencedLabelsPrivider(CategoryNode category){
+			fCategory = category;
+		}
+		
+		@Override
+		public Object visit(StaticStatement statement) throws Exception {
+			return EMPTY_SET;
+		}
+
+		@SuppressWarnings("unchecked")
+		@Override
+		public Object visit(StatementArray statement) throws Exception {
+			Set<String> set = new HashSet<String>();
+			for(BasicStatement s : statement.getStatements()){
+				set.addAll((Set<String>)s.accept(this));
+			}
+			return set;
+		}
+
+		@Override
+		public Object visit(ExpectedValueStatement statement) throws Exception {
+			return EMPTY_SET;
+		}
+
+		@Override
+		public Object visit(PartitionedCategoryStatement statement)
+				throws Exception {
+			if(fCategory == statement.getCategory()){
+				return statement.getCondition().accept(this);
+			}
+			return EMPTY_SET;
+		}
+
+		@Override
+		public Object visit(LabelCondition condition) throws Exception {
+			Set<String> result = new HashSet<String>();
+			result.add(condition.getLabel());
+			return result;
+		}
+
+		@Override
+		public Object visit(PartitionCondition condition) throws Exception {
+			return EMPTY_SET;
+		}
+		
+	}
+	
 	public Constraint(BasicStatement premise, BasicStatement consequence){
 		ID = fLastId++;
 		fPremise = premise;
@@ -181,6 +234,10 @@ public class Constraint extends AbstractConstraint {
 		return fPremise.mentions(category) || fConsequence.mentions(category);
 	}
 
+	public boolean mentions(CategoryNode category, String label) {
+		return fPremise.mentions(category, label) || fConsequence.mentions(category, label);
+	}
+
 	public boolean mentions(PartitionNode partition) {
 		return fPremise.mentions(partition) || fConsequence.mentions(partition);
 	}
@@ -218,6 +275,18 @@ public class Constraint extends AbstractConstraint {
 		}
 		catch(Exception e){
 			return new HashSet<CategoryNode>();
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	public Set<String> getReferencedLabels(CategoryNode category) {
+		try{
+			Set<String> referenced = (Set<String>)fPremise.accept(new ReferencedLabelsPrivider(category));
+			referenced.addAll((Set<String>)fConsequence.accept(new ReferencedLabelsPrivider(category)));
+			return referenced;
+		}
+		catch(Exception e){
+			return new HashSet<String>();
 		}
 	}
 }

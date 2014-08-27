@@ -258,7 +258,7 @@ public class ConstraintViewer extends TreeViewerSection {
 				List<String> result = new ArrayList<String>();
 				CategoryNode category = statement.getCategory();
 				result.addAll(category.getAllPartitionNames());
-				result.addAll(category.getAllPartitionLabels());
+				result.addAll(category.getLeafLabels());
 				return result.toArray(new String[]{});
 			}
 		}

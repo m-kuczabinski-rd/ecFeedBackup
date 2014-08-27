@@ -97,17 +97,12 @@ public class PartitionNode extends GenericNode implements IPartitionedNode{
 	}
 
 	@Override
-	public void partitionRemoved(PartitionNode partition) {
-		getParent().partitionRemoved(partition);
-	}
-
-	@Override
 	public boolean removePartition(PartitionNode partition){
-		boolean result = fPartitions.remove(partition); 
-		if(result && getCategory() != null){
-			getCategory().partitionRemoved(partition);
+		if(fPartitions.contains(partition) && fPartitions.remove(partition)){
+			partition.setParent(null);
+			return true;
 		}
-		return result;
+		return false;
 	}
 
 	@Override
@@ -325,5 +320,26 @@ public class PartitionNode extends GenericNode implements IPartitionedNode{
 	public void replacePartitions(List<PartitionNode> newPpartitions) {
 		fPartitions.clear();
 		fPartitions.addAll(newPpartitions);
+	}
+
+	@Override
+	public List<PartitionNode> getLabeledPartitions(String label) {
+		List<PartitionNode> result = new ArrayList<PartitionNode>();
+		for(PartitionNode p : getPartitions()){
+			if(p.getLabels().contains(label)){
+				result.add(p);
+				result.addAll(p.getLabeledPartitions(label));
+			}
+		}
+		return result;
+	}
+
+	@Override
+	public Set<String> getLeafLabels() {
+		Set<String> result = new HashSet<String>();
+		for(PartitionNode p : getLeafPartitions()){
+			result.addAll(p.getAllLabels());
+		}
+		return result;
 	}
 }
