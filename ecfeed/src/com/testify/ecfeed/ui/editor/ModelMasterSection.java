@@ -37,9 +37,9 @@ import org.eclipse.ui.forms.widgets.Section;
 
 import com.testify.ecfeed.model.GenericNode;
 import com.testify.ecfeed.model.IGenericNode;
-import com.testify.ecfeed.model.IModelWrapper;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.modelif.ModelOperationManager;
+import com.testify.ecfeed.ui.editor.ModelContentProvider.IModelWrapper;
 import com.testify.ecfeed.ui.modelif.GenericNodeInterface;
 import com.testify.ecfeed.ui.modelif.NodeInterfaceFactory;
 
@@ -121,10 +121,6 @@ public class ModelMasterSection extends TreeViewerSection{
 		fModelSelectionListeners.add(listener);
 	}
 		
-	public void setInput(IModelWrapper wrapper){
-		super.setInput(wrapper);
-	}
-	
 	public void setModel(RootNode model){
 		fModel = model;
 		setInput(new IModelWrapper() {

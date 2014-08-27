@@ -19,7 +19,6 @@ import org.eclipse.jface.viewers.TreeNodeContentProvider;
 
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.IGenericNode;
-import com.testify.ecfeed.model.IModelWrapper;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.TestCaseNode;
@@ -29,6 +28,10 @@ import com.testify.ecfeed.utils.ModelUtils;
 public class ModelContentProvider extends TreeNodeContentProvider implements ITreeContentProvider {
 
 	public static final Object[] EMPTY_ARRAY = new Object[]{};
+	
+	public interface IModelWrapper{
+		public RootNode getModel();
+	}
 	
 	@Override
 	public Object[] getElements(Object inputElement) {

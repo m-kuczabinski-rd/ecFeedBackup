@@ -37,7 +37,6 @@ import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.part.FileEditorInput;
 
-import com.testify.ecfeed.model.IModelWrapper;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.modelif.ModelOperationManager;
 import com.testify.ecfeed.serialization.IModelParser;
@@ -46,7 +45,7 @@ import com.testify.ecfeed.serialization.ParserException;
 import com.testify.ecfeed.serialization.ect.EctParser;
 import com.testify.ecfeed.serialization.ect.EctSerializer;
 
-public class ModelEditor extends FormEditor implements IModelWrapper{
+public class ModelEditor extends FormEditor/* implements IModelWrapper*/{
 	
 	public static String ID = "com.testify.ecfeed.ui.editors.EcMultiPageEditor";
 
