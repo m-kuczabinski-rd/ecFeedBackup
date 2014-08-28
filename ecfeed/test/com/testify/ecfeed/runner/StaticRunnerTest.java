@@ -100,7 +100,7 @@ public class StaticRunnerTest extends StaticRunner{
 					}
 					MethodNode methodModel = getMethodModel(model, method);
 					Set<List<Integer>> referenceResult = referenceResult(method, methodModel); 
-					assertEquals(fExecutedTestCases, referenceResult);
+					assertEquals(referenceResult, fExecutedTestCases);
 				} catch (RunnerException e) {
 					fail("Unexpected runner exception: " + e.getMessage());
 				}

@@ -23,6 +23,13 @@ public class JavaTestRunner {
 		fLoader = loader;
 	}
 	
+	public void setTarget(MethodNode target) throws RunnerException{
+		fTarget = target;
+		ClassNode testClassModel = fTarget.getClassNode();
+		fTestClass = getTestClass(testClassModel.getQualifiedName());
+		fTestMethod = getTestMethod(fTestClass, fTarget);
+	}
+
 	public void runTestCase(List<PartitionNode> testData) throws RunnerException{
 		validateTestData(testData);
 		try {
@@ -33,6 +40,25 @@ public class JavaTestRunner {
 		}
 	}
 	
+	protected Method getTestMethod(Class<?> testClass, MethodNode methodModel) throws RunnerException {
+		for(Method method : testClass.getMethods()){
+			if(isModel(method, methodModel)){
+				return method;
+			}
+		}
+		throw new RunnerException(Messages.METHOD_NOT_FOUND(methodModel.toString()));
+	}
+
+	protected boolean isModel(Method method, MethodNode methodModel) {
+		String methodName = method.getName();
+		Class<?>[] parameterTypes = method.getParameterTypes();
+		List<String> types = new ArrayList<String>();
+		for(Class<?> type : parameterTypes){
+			types.add(JavaUtils.getTypeName(type.getCanonicalName()));
+		}
+		return methodName.equals(methodModel.getName()) || types.equals(methodModel.getCategoriesTypes());
+	}
+
 	protected Object[] getArguments(List<PartitionNode> testData) {
 		List<Object> args = new ArrayList<Object>();
 		PartitionValueParser parser = new PartitionValueParser(fLoader);
@@ -52,38 +78,12 @@ public class JavaTestRunner {
 		}
 	}
 
-	public void setTarget(MethodNode target) throws RunnerException{
-		fTarget = target;
-		ClassNode testClassModel = fTarget.getClassNode();
-		fTestClass = getTestClass(testClassModel.getQualifiedName());
-		fTestMethod = getTestMethod(fTestClass, fTarget);
-	}
-	
 	private Class<?> getTestClass(String qualifiedName) throws RunnerException {
 		Class<?> testClass = fLoader.loadClass(qualifiedName);
 		if(testClass == null){
 			throw new RunnerException(Messages.CANNOT_LOAD_CLASS(qualifiedName));
 		}
 		return testClass;
-	}
-
-	protected Method getTestMethod(Class<?> testClass, MethodNode methodModel) throws RunnerException {
-		for(Method method : testClass.getMethods()){
-			if(isModel(method, methodModel)){
-				return method;
-			}
-		}
-		throw new RunnerException(Messages.METHOD_NOT_FOUND(methodModel.toString()));
-	}
-
-	protected boolean isModel(Method method, MethodNode methodModel) {
-		String methodName = method.getName();
-		Class<?>[] parameterTypes = method.getParameterTypes();
-		List<String> types = new ArrayList<String>();
-		for(Class<?> type : parameterTypes){
-			types.add(JavaUtils.getTypeName(type.getCanonicalName()));
-		}
-		return methodName.equals(methodModel.getName()) || types.equals(methodModel.getCategoriesTypes());
 	}
 
 }
