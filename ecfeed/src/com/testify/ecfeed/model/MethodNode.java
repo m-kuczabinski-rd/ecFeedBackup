@@ -11,13 +11,12 @@
 
 package com.testify.ecfeed.model;
 
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
-import java.util.ArrayList;
 
 import com.testify.ecfeed.generators.api.IConstraint;
 
@@ -52,8 +51,8 @@ public class MethodNode extends GenericNode {
 	}
 
 	@Override
-	public ArrayList<? extends IGenericNode> getChildren(){
-		ArrayList<IGenericNode> children = new ArrayList<IGenericNode>();
+	public List<? extends GenericNode> getChildren(){
+		List<GenericNode> children = new ArrayList<GenericNode>();
 		children.addAll(fCategories);
 		children.addAll(fConstraints);
 		children.addAll(fTestCases);
@@ -66,35 +65,35 @@ public class MethodNode extends GenericNode {
 		return(fCategories.size() != 0 || fConstraints.size() != 0 || fTestCases.size() != 0);
 	}
 
-	@SuppressWarnings("rawtypes")
-	@Override
-	public boolean moveChild(IGenericNode child, boolean moveUp){
-		List childrenArray = null;
-		if(child instanceof CategoryNode){
-			childrenArray = fCategories;
-		}
-		if(child instanceof ConstraintNode){
-			childrenArray = fConstraints;
-		}
-		if(child instanceof TestCaseNode){
-			childrenArray = fTestCases;
-		}
-		if(childrenArray == null){
-			return false;
-		}
-
-		int childIndex = childrenArray.indexOf(child);
-		if(moveUp && childIndex > 0){
-			Collections.swap(childrenArray, childIndex, childIndex - 1);
-			return true;
-		}
-		if(!moveUp && childIndex < childrenArray.size() - 1){
-			Collections.swap(childrenArray, childIndex, childIndex + 1);
-			return true;
-		}
-		return false;
-	}
-	
+//	@SuppressWarnings("rawtypes")
+//	@Override
+//	public boolean moveChild(GenericNode child, boolean moveUp){
+//		List childrenArray = null;
+//		if(child instanceof CategoryNode){
+//			childrenArray = fCategories;
+//		}
+//		if(child instanceof ConstraintNode){
+//			childrenArray = fConstraints;
+//		}
+//		if(child instanceof TestCaseNode){
+//			childrenArray = fTestCases;
+//		}
+//		if(childrenArray == null){
+//			return false;
+//		}
+//
+//		int childIndex = childrenArray.indexOf(child);
+//		if(moveUp && childIndex > 0){
+//			Collections.swap(childrenArray, childIndex, childIndex - 1);
+//			return true;
+//		}
+//		if(!moveUp && childIndex < childrenArray.size() - 1){
+//			Collections.swap(childrenArray, childIndex, childIndex + 1);
+//			return true;
+//		}
+//		return false;
+//	}
+//	
 	@Override
 	public MethodNode getCopy(){
 		MethodNode copy = new MethodNode(this.getName());
@@ -386,7 +385,7 @@ public class MethodNode extends GenericNode {
 	}
 	
 	@Override
-	public boolean compare(IGenericNode node){
+	public boolean compare(GenericNode node){
 		if(node instanceof MethodNode == false){
 			return false;
 		}

@@ -117,7 +117,7 @@ public class CategoryNode extends PartitionedNode{
 	}
 
 	@Override
-	public boolean compare(IGenericNode node){
+	public boolean compare(GenericNode node){
 		if(node instanceof CategoryNode == false){
 			return false;
 		}

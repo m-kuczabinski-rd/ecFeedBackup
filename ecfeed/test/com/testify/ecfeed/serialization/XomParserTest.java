@@ -28,7 +28,7 @@ import org.junit.Test;
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.ConstraintNode;
-import com.testify.ecfeed.model.IGenericNode;
+import com.testify.ecfeed.model.GenericNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.RootNode;
@@ -282,7 +282,7 @@ public class XomParserTest {
 		
 	}
 
-	private void assertElementsEqual(IGenericNode n, IGenericNode n1) {
+	private void assertElementsEqual(GenericNode n, GenericNode n1) {
 		if(n.compare(n1) == false){
 			fail("Parsed element differs from original\n" + fStringifier.stringify(n, 0) + "\n" + fStringifier.stringify(n1, 0));
 		}

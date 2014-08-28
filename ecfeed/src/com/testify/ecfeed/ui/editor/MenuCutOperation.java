@@ -14,17 +14,16 @@ package com.testify.ecfeed.ui.editor;
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.ConstraintNode;
-import com.testify.ecfeed.model.IGenericNode;
+import com.testify.ecfeed.model.GenericNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.TestCaseNode;
-import com.testify.ecfeed.ui.common.CategoryNodeAbstractLayer;
 import com.testify.ecfeed.ui.common.PartitionNodeAbstractLayer;
 
 public class MenuCutOperation extends MenuOperation{
 	private NodeClipboard fSource;
-	private IGenericNode fTarget;
+	private GenericNode fTarget;
 	private ModelMasterSection fModel;
 
 	@Override
@@ -46,7 +45,7 @@ public class MenuCutOperation extends MenuOperation{
 		}
 	}
 	
-	public MenuCutOperation(IGenericNode target, NodeClipboard source, ModelMasterSection model){
+	public MenuCutOperation(GenericNode target, NodeClipboard source, ModelMasterSection model){
 		super("Cut");
 		fTarget = target;
 		fSource = source;

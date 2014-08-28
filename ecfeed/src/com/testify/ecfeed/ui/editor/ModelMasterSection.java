@@ -36,7 +36,6 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Section;
 
 import com.testify.ecfeed.model.GenericNode;
-import com.testify.ecfeed.model.IGenericNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.modelif.ModelOperationManager;
 import com.testify.ecfeed.ui.editor.ModelContentProvider.IModelWrapper;
@@ -63,7 +62,7 @@ public class ModelMasterSection extends TreeViewerSection{
 			fOperation.execute();
 		}
 		
-		public MenuSelectionAdapter(MenuOperation operation,IGenericNode target){
+		public MenuSelectionAdapter(MenuOperation operation, GenericNode target){
 			super();
 			fOperation = operation;			
 		}
@@ -95,12 +94,12 @@ public class ModelMasterSection extends TreeViewerSection{
 		@Override
 		public void selectionChanged(SelectionChangedEvent event) {
 			IStructuredSelection selection = (IStructuredSelection)event.getSelection();
-			IGenericNode selectedNode = (IGenericNode)selection.getFirstElement();
+			GenericNode selectedNode = (GenericNode)selection.getFirstElement();
 			enableSortButtons(selectedNode);
 			notifyModelSelectionListeners(selection);
 		}
 
-		private void enableSortButtons(IGenericNode selectedElement) {
+		private void enableSortButtons(GenericNode selectedElement) {
 			boolean enabled = true;
 			if (selectedElement instanceof RootNode) {
 				enabled = false;
@@ -171,8 +170,8 @@ public class ModelMasterSection extends TreeViewerSection{
 					items[i].dispose();
 				}
 
-				if(tree.getSelection()[0].getData() instanceof IGenericNode){
-					IGenericNode target = (IGenericNode)tree.getSelection()[0].getData();
+				if(tree.getSelection()[0].getData() instanceof GenericNode){
+					GenericNode target = (GenericNode)tree.getSelection()[0].getData();
 					for(MenuOperation operation : fMenuManager.getOperations(target)){
 						MenuItem item = new MenuItem(fMenu, SWT.NONE);
 						item.setText(operation.getOperationName());
@@ -197,7 +196,7 @@ public class ModelMasterSection extends TreeViewerSection{
 
 	private GenericNode selectedNode() {
 		Object selectedElement = getSelectedElement();
-		if(selectedElement instanceof IGenericNode){
+		if(selectedElement instanceof GenericNode){
 			return (GenericNode)selectedElement;
 		}
 		return null;

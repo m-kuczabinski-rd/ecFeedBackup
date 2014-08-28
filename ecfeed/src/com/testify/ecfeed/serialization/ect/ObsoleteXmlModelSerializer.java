@@ -24,7 +24,7 @@ import nu.xom.Serializer;
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.ConstraintNode;
-import com.testify.ecfeed.model.IGenericNode;
+import com.testify.ecfeed.model.GenericNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.RootNode;
@@ -53,7 +53,7 @@ public class ObsoleteXmlModelSerializer {
 		serializer.write(document);
 	}
 
-	protected Element createElement(IGenericNode node) {
+	protected Element createElement(GenericNode node) {
 		String name = node.getName();
 		Element element = null;
 		if(node instanceof RootNode){
@@ -84,7 +84,7 @@ public class ObsoleteXmlModelSerializer {
 			element = createConstraintElement(name, (Constraint)((ConstraintNode)node).getConstraint());
 		}
 		
-		for(IGenericNode child : node.getChildren()){
+		for(GenericNode child : node.getChildren()){
 			element.appendChild(createElement(child));
 		}
 		return element;

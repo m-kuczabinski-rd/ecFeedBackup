@@ -14,15 +14,14 @@ package com.testify.ecfeed.ui.editor;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.testify.ecfeed.model.IGenericNode;
-import com.testify.ecfeed.ui.editor.NodeClipboard;
+import com.testify.ecfeed.model.GenericNode;
 
 public class MenuOperationManager{
 
 	private NodeClipboard fClipboard;
 	private ModelMasterSection fModel;
 
-	public List<MenuOperation> getOperations(IGenericNode target){
+	public List<MenuOperation> getOperations(GenericNode target){
 		ArrayList<MenuOperation> operations = new ArrayList<>();
 
 		operations.add(new MenuCopyOperation(target, fClipboard));

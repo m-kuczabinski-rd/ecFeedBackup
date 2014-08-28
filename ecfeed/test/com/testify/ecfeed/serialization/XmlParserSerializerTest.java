@@ -399,7 +399,7 @@ public class XmlParserSerializerTest {
 
 	private BasicStatement createPartitionStatement(List<CategoryNode> categories) {
 		CategoryNode category = categories.get(rand.nextInt(categories.size()));
-		PartitionNode partition = category.getLeafPartitions().get(rand.nextInt(category.getPartitions().size()));
+		PartitionNode partition = new ArrayList<PartitionNode>(category.getLeafPartitions()).get(rand.nextInt(category.getPartitions().size()));
 		Relation relation = pickRelation();
 		return new PartitionedCategoryStatement(category, relation, partition);
 	}
@@ -593,7 +593,7 @@ public class XmlParserSerializerTest {
 	private void compareExpectedValueStatements(
 			ExpectedValueStatement statement1, ExpectedValueStatement statement2) {
 		compareCategories(statement1.getCategory(), statement2.getCategory());
-		assertEquals(statement1.getCondition().getExactValueString(), statement2.getCondition().getExactValueString());
+		assertEquals(statement1.getCondition().getValueString(), statement2.getCondition().getValueString());
 	}
 
 	private void compareRelationStatements(PartitionedCategoryStatement statement1, PartitionedCategoryStatement statement2) {

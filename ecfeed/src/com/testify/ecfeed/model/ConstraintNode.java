@@ -96,7 +96,7 @@ public class ConstraintNode extends GenericNode{
 	}
 	
 	@Override
-	public boolean compare(IGenericNode node){
+	public boolean compare(GenericNode node){
 		if(node instanceof ConstraintNode == false){
 			return false;
 		}

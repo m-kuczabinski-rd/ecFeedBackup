@@ -77,7 +77,7 @@ public class CategoryNodeTest{
 		category.addPartition(partition1);
 		category.addPartition(partition2);
 		
-		List<? extends IGenericNode> children = category.getChildren();
+		List<? extends GenericNode> children = category.getChildren();
 		assertEquals(2, children.size());
 		assertTrue(children.contains(partition1));
 		assertTrue(children.contains(partition2));

@@ -17,19 +17,17 @@ import org.eclipse.swt.widgets.Display;
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.ConstraintNode;
-import com.testify.ecfeed.model.IGenericNode;
+import com.testify.ecfeed.model.GenericNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.TestCaseNode;
-import com.testify.ecfeed.ui.common.CategoryNodeAbstractLayer;
 import com.testify.ecfeed.ui.common.Messages;
-import com.testify.ecfeed.utils.AdaptTypeSupport;
 import com.testify.ecfeed.utils.ModelUtils;
 
 public class MenuPasteOperation extends MenuOperation{
-	protected IGenericNode fSource;
-	protected IGenericNode fTarget;
+	protected GenericNode fSource;
+	protected GenericNode fTarget;
 	protected ModelMasterSection fModel;
 	private boolean fCanceled;
 
@@ -63,7 +61,7 @@ public class MenuPasteOperation extends MenuOperation{
 		return false;
 	}
 
-	public MenuPasteOperation(IGenericNode target, IGenericNode source, ModelMasterSection model){
+	public MenuPasteOperation(GenericNode target, GenericNode source, ModelMasterSection model){
 		super("Paste");
 		fSource = source;
 		fTarget = target;

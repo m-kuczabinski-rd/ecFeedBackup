@@ -30,7 +30,10 @@ public class PartitionNode extends PartitionedNode{
 
 	@Override
 	public CategoryNode getCategory() {
-		return fParent.getCategory();
+		if(fParent != null){
+			return fParent.getCategory();
+		}
+		return null;
 	}
 
 	@Override
@@ -39,7 +42,7 @@ public class PartitionNode extends PartitionedNode{
 	}
 
 	@Override
-	public List<? extends IGenericNode> getChildren(){
+	public List<? extends GenericNode> getChildren(){
 		return getPartitions();
 	}
 
@@ -125,7 +128,7 @@ public class PartitionNode extends PartitionedNode{
 	}
 	
 	@Override
-	public boolean compare(IGenericNode node){
+	public boolean compare(GenericNode node){
 		if(node instanceof PartitionNode == false){
 			return false;
 		}

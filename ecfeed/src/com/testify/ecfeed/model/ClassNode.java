@@ -20,7 +20,7 @@ public class ClassNode extends GenericNode {
 	private List<MethodNode> fMethods;
 	
 	@Override
-	public List<? extends IGenericNode> getChildren(){
+	public List<? extends GenericNode> getChildren(){
 		return fMethods;
 	}
 
@@ -110,7 +110,7 @@ public class ClassNode extends GenericNode {
 	}
 	
 	@Override
-	public boolean compare(IGenericNode node){
+	public boolean compare(GenericNode node){
 		if(node instanceof ClassNode == false){
 			return false;
 		}

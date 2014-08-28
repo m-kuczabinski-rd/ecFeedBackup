@@ -132,7 +132,7 @@ public class TestCaseNode extends GenericNode {
 	}
 	
 	@Override
-	public boolean compare(IGenericNode node){
+	public boolean compare(GenericNode node){
 		if(node instanceof TestCaseNode == false){
 			return false;
 		}

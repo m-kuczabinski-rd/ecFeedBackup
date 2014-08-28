@@ -11,22 +11,22 @@
 
 package com.testify.ecfeed.ui.editor;
 
-import com.testify.ecfeed.model.IGenericNode;
+import com.testify.ecfeed.model.GenericNode;
 
 public class NodeClipboard{
 
-	private IGenericNode fClipboardNode = null;
-	private IGenericNode fOriginalNode = null;
+	private GenericNode fClipboardNode = null;
+	private GenericNode fOriginalNode = null;
 
-	public IGenericNode getClipboardNode(){
+	public GenericNode getClipboardNode(){
 		return fClipboardNode;
 	}
 
-	public IGenericNode getOriginalNode(){
+	public GenericNode getOriginalNode(){
 		return fOriginalNode;
 	}
 
-	public void setClipboardNode(IGenericNode node){
+	public void setClipboardNode(GenericNode node){
 		fClipboardNode = node.getCopy();
 		fOriginalNode = node;
 	}

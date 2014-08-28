@@ -14,7 +14,7 @@ package com.testify.ecfeed.testutils;
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.ConstraintNode;
-import com.testify.ecfeed.model.IGenericNode;
+import com.testify.ecfeed.model.GenericNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.RootNode;
@@ -28,7 +28,7 @@ import com.testify.ecfeed.model.constraint.StatementArray;
 import com.testify.ecfeed.model.constraint.StaticStatement;
 
 public class ModelStringifier {
-	public String stringify(IGenericNode node, int indent){
+	public String stringify(GenericNode node, int indent){
 		if(node instanceof PartitionNode){
 			return stringify((PartitionNode)node, indent);
 		}

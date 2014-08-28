@@ -11,15 +11,51 @@
 
 package com.testify.ecfeed.serialization.ect;
 
-import static com.testify.ecfeed.serialization.ect.Constants.*;
+import static com.testify.ecfeed.serialization.ect.Constants.CATEGORY_IS_EXPECTED_ATTRIBUTE_NAME;
+import static com.testify.ecfeed.serialization.ect.Constants.CATEGORY_NODE_NAME;
+import static com.testify.ecfeed.serialization.ect.Constants.CLASS_NODE_NAME;
+import static com.testify.ecfeed.serialization.ect.Constants.CONSTRAINT_CONSEQUENCE_NODE_NAME;
+import static com.testify.ecfeed.serialization.ect.Constants.CONSTRAINT_EXPECTED_STATEMENT_NODE_NAME;
+import static com.testify.ecfeed.serialization.ect.Constants.CONSTRAINT_LABEL_STATEMENT_NODE_NAME;
+import static com.testify.ecfeed.serialization.ect.Constants.CONSTRAINT_NODE_NAME;
+import static com.testify.ecfeed.serialization.ect.Constants.CONSTRAINT_PARTITION_STATEMENT_NODE_NAME;
+import static com.testify.ecfeed.serialization.ect.Constants.CONSTRAINT_PREMISE_NODE_NAME;
+import static com.testify.ecfeed.serialization.ect.Constants.CONSTRAINT_STATEMENT_ARRAY_NODE_NAME;
+import static com.testify.ecfeed.serialization.ect.Constants.CONSTRAINT_STATIC_STATEMENT_NODE_NAME;
+import static com.testify.ecfeed.serialization.ect.Constants.DEFAULT_EXPECTED_VALUE_ATTRIBUTE_NAME;
+import static com.testify.ecfeed.serialization.ect.Constants.EXPECTED_PARAMETER_NODE_NAME;
+import static com.testify.ecfeed.serialization.ect.Constants.LABEL_ATTRIBUTE_NAME;
+import static com.testify.ecfeed.serialization.ect.Constants.LABEL_NODE_NAME;
+import static com.testify.ecfeed.serialization.ect.Constants.METHOD_NODE_NAME;
+import static com.testify.ecfeed.serialization.ect.Constants.NODE_NAME_ATTRIBUTE;
+import static com.testify.ecfeed.serialization.ect.Constants.PARTITION_ATTRIBUTE_NAME;
+import static com.testify.ecfeed.serialization.ect.Constants.PARTITION_NODE_NAME;
+import static com.testify.ecfeed.serialization.ect.Constants.ROOT_NODE_NAME;
+import static com.testify.ecfeed.serialization.ect.Constants.STATEMENT_CATEGORY_ATTRIBUTE_NAME;
+import static com.testify.ecfeed.serialization.ect.Constants.STATEMENT_EXPECTED_VALUE_ATTRIBUTE_NAME;
+import static com.testify.ecfeed.serialization.ect.Constants.STATEMENT_LABEL_ATTRIBUTE_NAME;
+import static com.testify.ecfeed.serialization.ect.Constants.STATEMENT_OPERATOR_AND_ATTRIBUTE_VALUE;
+import static com.testify.ecfeed.serialization.ect.Constants.STATEMENT_OPERATOR_ATTRIBUTE_NAME;
+import static com.testify.ecfeed.serialization.ect.Constants.STATEMENT_OPERATOR_OR_ATTRIBUTE_VALUE;
+import static com.testify.ecfeed.serialization.ect.Constants.STATEMENT_PARTITION_ATTRIBUTE_NAME;
+import static com.testify.ecfeed.serialization.ect.Constants.STATEMENT_RELATION_ATTRIBUTE_NAME;
+import static com.testify.ecfeed.serialization.ect.Constants.STATEMENT_STATIC_VALUE_ATTRIBUTE_NAME;
+import static com.testify.ecfeed.serialization.ect.Constants.STATIC_STATEMENT_FALSE_VALUE;
+import static com.testify.ecfeed.serialization.ect.Constants.STATIC_STATEMENT_TRUE_VALUE;
+import static com.testify.ecfeed.serialization.ect.Constants.TEST_CASE_NODE_NAME;
+import static com.testify.ecfeed.serialization.ect.Constants.TEST_PARAMETER_NODE_NAME;
+import static com.testify.ecfeed.serialization.ect.Constants.TEST_SUITE_NAME_ATTRIBUTE;
+import static com.testify.ecfeed.serialization.ect.Constants.TYPE_NAME_ATTRIBUTE;
+import static com.testify.ecfeed.serialization.ect.Constants.VALUE_ATTRIBUTE;
+import static com.testify.ecfeed.serialization.ect.Constants.VALUE_ATTRIBUTE_NAME;
 import nu.xom.Attribute;
 import nu.xom.Element;
 
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.ConstraintNode;
+import com.testify.ecfeed.model.GenericNode;
 import com.testify.ecfeed.model.IModelVisitor;
-import com.testify.ecfeed.model.IGenericNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.RootNode;
@@ -241,7 +277,7 @@ public class XomBuilder implements IModelVisitor, IStatementVisitor {
 		return element;
 	}
 
-	private Element createNamedElement(String nodeTag, IGenericNode node){
+	private Element createNamedElement(String nodeTag, GenericNode node){
 		Element element = new Element(nodeTag);
 		Attribute nameAttr = new Attribute(NODE_NAME_ATTRIBUTE, node.getName());
 		element.addAttribute(nameAttr);

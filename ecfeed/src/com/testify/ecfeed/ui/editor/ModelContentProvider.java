@@ -18,7 +18,7 @@ import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.TreeNodeContentProvider;
 
 import com.testify.ecfeed.model.CategoryNode;
-import com.testify.ecfeed.model.IGenericNode;
+import com.testify.ecfeed.model.GenericNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.TestCaseNode;
@@ -66,8 +66,8 @@ public class ModelContentProvider extends TreeNodeContentProvider implements ITr
 			}
 		}
 		
-		if(parentElement instanceof IGenericNode){
-			IGenericNode node = (IGenericNode)parentElement;
+		if(parentElement instanceof GenericNode){
+			GenericNode node = (GenericNode)parentElement;
 			if(node.getChildren().size() < Constants.MAX_DISPLAYED_CHILDREN_PER_NODE){
 				return node.getChildren().toArray();
 			}
@@ -77,8 +77,8 @@ public class ModelContentProvider extends TreeNodeContentProvider implements ITr
 
 	@Override
 	public Object getParent(Object element) {
-		if(element instanceof IGenericNode){
-			return ((IGenericNode)element).getParent();
+		if(element instanceof GenericNode){
+			return ((GenericNode)element).getParent();
 		}
 		return null;
 	}

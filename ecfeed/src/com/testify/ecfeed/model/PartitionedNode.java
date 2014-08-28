@@ -17,7 +17,7 @@ public abstract class PartitionedNode extends GenericNode{
 	public abstract CategoryNode getCategory();
 	
 	@Override
-	public List<? extends IGenericNode> getChildren(){
+	public List<? extends GenericNode> getChildren(){
 		return fPartitions;
 	}
 
@@ -54,8 +54,8 @@ public abstract class PartitionedNode extends GenericNode{
 		}
 	}
 
-	public Set<PartitionNode> getLeafPartitions() {
-		Set<PartitionNode> result = new LinkedHashSet<PartitionNode>();
+	public List<PartitionNode> getLeafPartitions() {
+		List<PartitionNode> result = new ArrayList<PartitionNode>();
 		for(PartitionNode p : fPartitions){
 			if(p.isAbstract() == false){
 				result.add(p);

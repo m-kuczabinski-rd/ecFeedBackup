@@ -74,13 +74,13 @@ public class CopyNodeTest{
 		fPartition2.addLabel(fLabel2);
 	}
 
-	public void testNode(IGenericNode node, IGenericNode copy){
+	public void testNode(GenericNode node, GenericNode copy){
 		assertTrue(node.getClass().isInstance(copy));
 		assertNotEquals(node, copy);
 		assertEquals(node.getName(), copy.getName());
 	}
 
-	public void testParent(IGenericNode node, IGenericNode parent, boolean isParent){
+	public void testParent(GenericNode node, GenericNode parent, boolean isParent){
 		if(isParent)
 			assertEquals(node.getParent(), parent);
 		else

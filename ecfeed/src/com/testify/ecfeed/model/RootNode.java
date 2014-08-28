@@ -18,7 +18,7 @@ public class RootNode extends GenericNode {
 	public List<ClassNode> fClasses;
 
 	@Override
-	public List<? extends IGenericNode> getChildren(){
+	public List<? extends GenericNode> getChildren(){
 		return fClasses;
 	}
 	
@@ -69,7 +69,7 @@ public class RootNode extends GenericNode {
 	}
 
 	@Override
-	public boolean compare(IGenericNode node){
+	public boolean compare(GenericNode node){
 		if(node instanceof RootNode == false){
 			return false;
 		}

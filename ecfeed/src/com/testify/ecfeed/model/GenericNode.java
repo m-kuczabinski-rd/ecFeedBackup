@@ -13,15 +13,14 @@ package com.testify.ecfeed.model;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
-public abstract class GenericNode implements IGenericNode{
+public abstract class GenericNode{
 	private String fName;
-	private IGenericNode fParent;
+	private GenericNode fParent;
 	private final int fId;
 	private static int fLastId = 0;
-	protected final ArrayList<IGenericNode> EMPTY_CHILDREN_ARRAY = new ArrayList<IGenericNode>();
+	protected final ArrayList<GenericNode> EMPTY_CHILDREN_ARRAY = new ArrayList<GenericNode>();
 
 	public GenericNode(String name){
 		fId = ++fLastId;
@@ -39,27 +38,22 @@ public abstract class GenericNode implements IGenericNode{
 		return getParent().getChildren().indexOf(this);
 	}
 	
-	@Override
 	public String getName() {
 		return fName;
 	}
 
-	@Override
 	public void setName(String name) {
-		this.fName = name;
+		fName = name;
 	}
 	
-	@Override
-	public void setParent(IGenericNode newParent) {
+	public void setParent(GenericNode newParent) {
 		fParent = newParent;
 	}
 
-	@Override
-	public List<? extends IGenericNode> getChildren() {
+	public List<? extends GenericNode> getChildren() {
 		return EMPTY_CHILDREN_ARRAY;
 	}
 	
-	@Override
 	public boolean hasChildren(){
 		if(getChildren() != null){
 			return (getChildren().size() > 0);
@@ -67,34 +61,31 @@ public abstract class GenericNode implements IGenericNode{
 		return false;
 	}
 	
-	@Override
-	public IGenericNode getParent(){
+	public GenericNode getParent(){
 		return fParent;
 	}
 	
-	@Override
-	public IGenericNode getRoot(){
+	public GenericNode getRoot(){
 		if(getParent() == null){
 			return this;
 		}
 		return getParent().getRoot();
 	}
 
-	@Override
-	public IGenericNode getChild(String qualifiedName) {
+	public GenericNode getChild(String qualifiedName) {
 		String[] tokens = qualifiedName.split(":");
 		if(tokens.length == 0){
 			return null;
 		}
 		if(tokens.length == 1){
-			for(IGenericNode child : getChildren()){
+			for(GenericNode child : getChildren()){
 				if(child.getName().equals(tokens[0])){
 					return child;
 				}
 			}
 		}
 		else{
-			IGenericNode nextChild = getChild(tokens[0]);
+			GenericNode nextChild = getChild(tokens[0]);
 			if(nextChild == null) return null;
 			tokens = Arrays.copyOfRange(tokens, 1, tokens.length);
 			String newName = qualifiedName.substring(qualifiedName.indexOf(":") + 1);
@@ -103,10 +94,9 @@ public abstract class GenericNode implements IGenericNode{
 		return null;
 	}
 
-	@Override
-	public IGenericNode getSibling(String name){
+	public GenericNode getSibling(String name){
 		if(getParent() == null) return null;
-		for(IGenericNode sibling : getParent().getChildren()){
+		for(GenericNode sibling : getParent().getChildren()){
 			if(sibling.getName().equals(name) && sibling != this){
 				return sibling;
 			}
@@ -114,40 +104,35 @@ public abstract class GenericNode implements IGenericNode{
 		return null;
 	}
 	
-	@Override
 	public boolean hasSibling(String name){
 		return getSibling(name) != null;
 	}
 	
-	@Override
-	public boolean moveChild(IGenericNode child, boolean moveUp) {
-		int childIndex = getChildren().indexOf(child);
-		if(moveUp && childIndex > 0){
-			Collections.swap(getChildren(), childIndex, childIndex - 1);
-			return true;
-		}
-		if(!moveUp && childIndex < getChildren().size() - 1){
-			Collections.swap(getChildren(), childIndex, childIndex + 1);
-			return true;
-		}
-		return false;
-	}
-	
-	@Override
+//	public boolean moveChild(GenericNode child, boolean moveUp) {
+//		int childIndex = getChildren().indexOf(child);
+//		if(moveUp && childIndex > 0){
+//			Collections.swap(getChildren(), childIndex, childIndex - 1);
+//			return true;
+//		}
+//		if(!moveUp && childIndex < getChildren().size() - 1){
+//			Collections.swap(getChildren(), childIndex, childIndex + 1);
+//			return true;
+//		}
+//		return false;
+//	}
+//	
 	public int subtreeSize(){
 		int size = 1;
-		for(IGenericNode child : getChildren()){
+		for(GenericNode child : getChildren()){
 			size += child.subtreeSize();
 		}
 		return size;
 	}
 
-	@Override
 	public String toString(){
 		return getName();
 	}
 
-	@Override
 	public boolean equals(Object obj){
 		if(obj instanceof GenericNode){
 			return ((GenericNode)obj).getId() == fId;
@@ -155,8 +140,7 @@ public abstract class GenericNode implements IGenericNode{
 		return false;
 	}
 	
-	@Override
-	public boolean compare(IGenericNode node){
+	public boolean compare(GenericNode node){
 		return getName().equals(node.getName());
 	}
 
@@ -166,4 +150,7 @@ public abstract class GenericNode implements IGenericNode{
 		}
 		return -1;
 	}
+	
+	public abstract GenericNode getCopy();
+	public abstract Object accept(IModelVisitor visitor) throws Exception;
 }

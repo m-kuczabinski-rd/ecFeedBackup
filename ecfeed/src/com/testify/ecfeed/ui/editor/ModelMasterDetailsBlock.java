@@ -22,7 +22,7 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.ConstraintNode;
-import com.testify.ecfeed.model.IGenericNode;
+import com.testify.ecfeed.model.GenericNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.RootNode;
@@ -70,7 +70,7 @@ public class ModelMasterDetailsBlock extends MasterDetailsBlock implements IMode
 	protected void createToolBarActions(IManagedForm managedForm) {
 	}
 	
-	public void selectNode(IGenericNode node){
+	public void selectNode(GenericNode node){
 		fMasterSection.selectElement(node);
 	}
 

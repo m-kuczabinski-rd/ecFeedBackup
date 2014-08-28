@@ -11,12 +11,11 @@
 
 package com.testify.ecfeed.ui.editor;
 
-import com.testify.ecfeed.model.IGenericNode;
-import com.testify.ecfeed.ui.editor.NodeClipboard;
+import com.testify.ecfeed.model.GenericNode;
 
 public class MenuCopyOperation extends MenuOperation{
 	private NodeClipboard fSource;
-	private IGenericNode fTarget;
+	private GenericNode fTarget;
 
 	@Override
 	public void execute(){
@@ -28,7 +27,7 @@ public class MenuCopyOperation extends MenuOperation{
 		return (fTarget != null);
 	}
 	
-	public MenuCopyOperation(IGenericNode target, NodeClipboard source){
+	public MenuCopyOperation(GenericNode target, NodeClipboard source){
 		super("Copy");
 		fTarget = target;
 		fSource = source;

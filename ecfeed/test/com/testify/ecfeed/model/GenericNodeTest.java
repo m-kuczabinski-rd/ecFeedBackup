@@ -32,7 +32,7 @@ public class GenericNodeTest{
 		}
 
 		@Override
-		public IGenericNode getCopy() {
+		public GenericNode getCopy() {
 			return null;
 		}
 
@@ -114,23 +114,23 @@ public class GenericNodeTest{
 		assertEquals(node1, node1);
 	}
 
-	@Test
-	public void testMoveChild(){
-		RootNode root = new RootNode("name");
-		ClassNode class1 = new ClassNode("name");
-		ClassNode class2 = new ClassNode("name");
-		ClassNode class3 = new ClassNode("name");
-		
-		root.addClass(class1);
-		root.addClass(class2);
-		root.addClass(class3);
-		
-		int index = root.getClasses().indexOf(class2);
-		root.moveChild(class2, true);
-		assertTrue(root.getClasses().indexOf(class2) == index - 1);
-		root.moveChild(class2, false);
-		assertTrue(root.getClasses().indexOf(class2) == index);
-	}
+//	@Test
+//	public void testMoveChild(){
+//		RootNode root = new RootNode("name");
+//		ClassNode class1 = new ClassNode("name");
+//		ClassNode class2 = new ClassNode("name");
+//		ClassNode class3 = new ClassNode("name");
+//		
+//		root.addClass(class1);
+//		root.addClass(class2);
+//		root.addClass(class3);
+//		
+//		int index = root.getClasses().indexOf(class2);
+//		root.moveChild(class2, true);
+//		assertTrue(root.getClasses().indexOf(class2) == index - 1);
+//		root.moveChild(class2, false);
+//		assertTrue(root.getClasses().indexOf(class2) == index);
+//	}
 	
 	@Test
 	public void testSubtreeSize(){

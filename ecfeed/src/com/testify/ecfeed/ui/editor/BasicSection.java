@@ -25,7 +25,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.forms.SectionPart;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
-import com.testify.ecfeed.model.IGenericNode;
+import com.testify.ecfeed.model.GenericNode;
 
 public abstract class BasicSection extends SectionPart{
 	private Composite fClientComposite;
@@ -45,7 +45,7 @@ public abstract class BasicSection extends SectionPart{
 		public void doubleClick(DoubleClickEvent event) {
 			if(event.getSelection() instanceof IStructuredSelection){
 				IStructuredSelection selection = (IStructuredSelection)event.getSelection();
-				if(selection.getFirstElement() instanceof IGenericNode){
+				if(selection.getFirstElement() instanceof GenericNode){
 					fMasterSection.selectElement(selection.getFirstElement());
 				}
 			}
