@@ -155,7 +155,7 @@ public class CategoryDetailsPage extends BasicDetailsPage {
 		}
 		fDefaultValueCombo.setLayoutData(new GridData(SWT.FILL,  SWT.CENTER, false, false, 2, 1));
 		fDefaultValueCombo.setItems(fCategoryIf.defaultValueSuggestions());
-		fDefaultValueCombo.setText(category.getDefaultValueString());
+		fDefaultValueCombo.setText(category.getDefaultValue());
 		fDefaultValueCombo.addSelectionListener(new SetDefaultValueListener());
 		
 		fDefaultValueCombo.setEnabled(category.isExpected());

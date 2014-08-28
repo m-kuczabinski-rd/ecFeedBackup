@@ -93,7 +93,7 @@ public class CategoryInterface extends GenericNodeInterface {
 	}
 
 	public boolean setDefaultValue(String valueString, TableViewerSection source, IModelUpdateListener updateListener) {
-		if(fTarget.getDefaultValueString().equals(valueString) == false){
+		if(fTarget.getDefaultValue().equals(valueString) == false){
 			return execute(new CategoryOperationSetDefaultValue(fTarget, valueString, fAdapterProvider.getAdapter(fTarget.getType())), source, updateListener, Messages.DIALOG_SET_DEFAULT_VALUE_PROBLEM_TITLE);
 		}
 		return false;
@@ -145,7 +145,7 @@ public class CategoryInterface extends GenericNodeInterface {
 	}
 
 	public String getDefaultValue() {
-		return fTarget.getDefaultValueString();
+		return fTarget.getDefaultValue();
 	}
 
 	public boolean isExpected() {
@@ -158,8 +158,8 @@ public class CategoryInterface extends GenericNodeInterface {
 			for(PartitionNode p : fTarget.getLeafPartitions()){
 				items.add(p.getValueString());
 			}
-			if(items.contains(fTarget.getDefaultValueString())== false){
-				items.add(fTarget.getDefaultValueString());
+			if(items.contains(fTarget.getDefaultValue())== false){
+				items.add(fTarget.getDefaultValue());
 			}
 		}
 		return items.toArray(new String[]{});

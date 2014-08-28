@@ -46,7 +46,7 @@ public class CategoryOperationSetType extends BulkOperation{
 			fNewType = newType;
 			fCurrentType = target.getType();
 			fAdapterProvider = adapterProvider;
-			fOriginalDefaultValue = target.getDefaultValueString();
+			fOriginalDefaultValue = target.getDefaultValue();
 			fOriginalPartitions = target.getPartitions();
 		}
 		
@@ -62,7 +62,7 @@ public class CategoryOperationSetType extends BulkOperation{
 			convertPartitionValues(fTarget, adapter);
 			removeDeadPartitions(fTarget);
 
-			String defaultValue = adapter.convert(fTarget.getDefaultValueString());
+			String defaultValue = adapter.convert(fTarget.getDefaultValue());
 			if(defaultValue == null){
 				if(fTarget.getLeafPartitions().size() > 0){
 					defaultValue = fTarget.getLeafPartitions().toArray(new PartitionNode[]{})[0].getValueString();

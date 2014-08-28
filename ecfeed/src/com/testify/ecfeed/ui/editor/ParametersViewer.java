@@ -126,7 +126,7 @@ public class ParametersViewer extends CheckboxTableViewerSection{
 			public String getText(Object element){
 				if(element instanceof CategoryNode && ((CategoryNode)element).isExpected()){
 					CategoryNode category = (CategoryNode)element;
-					return category.getDefaultValuePartition().getValueString();
+					return category.getDefaultValue();
 				}
 				return EMPTY_STRING ;
 			}

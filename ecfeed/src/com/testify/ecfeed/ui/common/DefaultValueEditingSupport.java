@@ -43,25 +43,26 @@ public class DefaultValueEditingSupport extends EditingSupport {
 		fComboCellEditor.setContentProvider(new ArrayContentProvider());
 }
 	
-	private CellEditor getComboCellEditor(PartitionNode partition) {
-		
+	@Override
+	protected CellEditor getCellEditor(Object element) {
+		CategoryNode category = (CategoryNode)element;
 		ArrayList<String> expectedValues = new ArrayList<String>();
-		for(PartitionNode node : new EclipseModelBuilder().defaultPartitions(partition.getCategory().getType())){
+		for(PartitionNode node : new EclipseModelBuilder().defaultPartitions(category.getType())){
 			expectedValues.add(node.getValueString());
 		}
-		if(!expectedValues.contains(partition.getValueString())){
-			expectedValues.add(partition.getValueString());
+		if(expectedValues.contains(category.getDefaultValue()) == false){
+			expectedValues.add(category.getDefaultValue());
 		}
-		for(PartitionNode leaf : partition.getCategory().getLeafPartitions()){
+		for(PartitionNode leaf : category.getLeafPartitions()){
 			if(!expectedValues.contains(leaf.getValueString())){
 				expectedValues.add(leaf.getValueString());
 			}
 		}
 
 		fComboCellEditor.setInput(expectedValues);
-		fComboCellEditor.setValue(partition.getValueString());
+		fComboCellEditor.setValue(category.getDefaultValue());
 
-		fCategoryIf.setTarget(partition.getCategory());
+		fCategoryIf.setTarget(category);
 		if(fCategoryIf.hasLimitedValuesSet()){
 			fComboCellEditor.getViewer().getCCombo().setEditable(false);
 		}
@@ -74,19 +75,13 @@ public class DefaultValueEditingSupport extends EditingSupport {
 	}
 
 	@Override
-	protected CellEditor getCellEditor(Object element) {
-		PartitionNode defaultValuePartition = ((CategoryNode)element).getDefaultValuePartition();
-		return getComboCellEditor(defaultValuePartition);
-	}
-
-	@Override
 	protected boolean canEdit(Object element) {
 		return (element instanceof CategoryNode && ((CategoryNode)element).isExpected());
 	}
 
 	@Override
 	protected Object getValue(Object element) {
-		return ((CategoryNode)element).getDefaultValuePartition().getValueString();
+		return ((CategoryNode)element).getDefaultValue();
 	}
 
 	@Override
@@ -100,16 +95,6 @@ public class DefaultValueEditingSupport extends EditingSupport {
 		}
 		fCategoryIf.setTarget(category);
 		fCategoryIf.setDefaultValue(valueString, fSection, fSection.getUpdateListener());
-//		
-//		
-//		if(!valueString.equals(category.getDefaultValueString())){
-//			if(!ModelUtils.validatePartitionStringValue(valueString, category.getType())){
-//				MessageDialog.openError(Display.getCurrent().getActiveShell(), Messages.DIALOG_PARTITION_VALUE_PROBLEM_TITLE,
-//						Messages.DIALOG_PARTITION_VALUE_PROBLEM_MESSAGE(valueString));
-//			} else{
-//				category.setDefaultValueString(valueString);
-//			}
-//		}
 	}
 
 }

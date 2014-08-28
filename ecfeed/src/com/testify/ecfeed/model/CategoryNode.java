@@ -17,14 +17,13 @@ public class CategoryNode extends PartitionedNode{
 	
 	private String fType;
 	private boolean fExpected;
-	private PartitionNode fDefaultValue;
+	private String fDefaultValue;
 	
 	public CategoryNode(String name, String type, String defaultValue, boolean expected) {
 		super(name);
 		fExpected = expected;
 		fType = type;
-		fDefaultValue = new PartitionNode("default value" , defaultValue);
-		fDefaultValue.setParent(this);
+		fDefaultValue = defaultValue;
 	}
 	
 	@Override
@@ -38,7 +37,7 @@ public class CategoryNode extends PartitionedNode{
 	@Override
 	public String toString(){
 		if(fExpected){
-			return super.toString() + "(" + getDefaultValueString() + "): " + getType();
+			return super.toString() + "(" + getDefaultValue() + "): " + getType();
 		}
 		return new String(getName() + ": " + getType());
 	}
@@ -51,10 +50,10 @@ public class CategoryNode extends PartitionedNode{
 
 	@Override
 	public CategoryNode getCopy(){
-		CategoryNode category = new CategoryNode(getName(), getType(), getDefaultValueString(), isExpected());
+		CategoryNode category = new CategoryNode(getName(), getType(), getDefaultValue(), isExpected());
 		category.setParent(this.getParent());
-		if(getDefaultValueString() != null)
-			category.setDefaultValueString(getDefaultValueString());
+		if(getDefaultValue() != null)
+			category.setDefaultValueString(getDefaultValue());
 		for(PartitionNode partition : getPartitions()){
 			category.addPartition(partition.getCopy());
 		}
@@ -79,16 +78,12 @@ public class CategoryNode extends PartitionedNode{
 		return (MethodNode)getParent();
 	}
 
-	public PartitionNode getDefaultValuePartition(){
+	public String getDefaultValue() {
 		return fDefaultValue;
 	}
 
-	public String getDefaultValueString() {
-		return fDefaultValue.getValueString();
-	}
-
 	public void setDefaultValueString(String value) {
-		fDefaultValue.setValueString(value);
+		fDefaultValue = value;
 	}
 	
 	public boolean isExpected(){
@@ -131,7 +126,7 @@ public class CategoryNode extends PartitionedNode{
 			return false;
 		}
 		
-		if(getDefaultValuePartition().compare(comparedCategory.getDefaultValuePartition()) == false){
+		if(fDefaultValue.equals(comparedCategory.getDefaultValue()) == false){
 			return false;
 		}
 

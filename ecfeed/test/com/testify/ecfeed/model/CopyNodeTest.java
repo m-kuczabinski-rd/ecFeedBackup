@@ -158,10 +158,10 @@ public class CopyNodeTest{
 
 	public void testExpectedCategories(CategoryNode category, CategoryNode copy){
 		testNode(category, copy);
-		PartitionNode partition = category.getDefaultValuePartition();
-		PartitionNode partitioncopy = copy.getDefaultValuePartition();
-		testPartitions(partition, partitioncopy);
-		testParent(partition, partitioncopy.getParent(), false);
+//		PartitionNode partition = category.getDefaultValuePartition();
+//		PartitionNode partitioncopy = copy.getDefaultValuePartition();
+//		testPartitions(partition, partitioncopy);
+//		testParent(partition, partitioncopy.getParent(), false);
 	}
 
 	@Test

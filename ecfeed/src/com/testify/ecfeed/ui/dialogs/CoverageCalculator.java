@@ -190,7 +190,10 @@ public class CoverageCalculator {
 		Map<Integer, PartitionNode> expected = new HashMap<>();
 		for (CategoryNode cnode : fCategories) {
 			if (cnode.isExpected()) {
-				expected.put(n, cnode.getDefaultValuePartition());
+				PartitionNode p = new PartitionNode("", cnode.getDefaultValue());
+				p.setParent(cnode);
+				expected.put(n, p);
+//				expected.put(n, cnode.getDefaultValuePartition());
 			}
 			n++;
 		}

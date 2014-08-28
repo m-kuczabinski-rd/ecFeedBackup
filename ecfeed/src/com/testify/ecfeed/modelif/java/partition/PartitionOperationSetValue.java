@@ -37,7 +37,7 @@ public class PartitionOperationSetValue implements IModelOperation {
 		fTarget = target;
 		fNewValue = newValue;
 		fOriginalValue = fTarget.getValueString();
-		fOriginalDefaultValue = fTarget.getCategory().getDefaultValueString();
+		fOriginalDefaultValue = fTarget.getCategory().getDefaultValue();
 	}
 	
 	@Override

@@ -55,7 +55,7 @@ public class CategoryOperationSetExpected implements IModelOperation {
 		}
 		fOriginalPartitions = new ArrayList<PartitionNode>();
 		fOriginalPartitions.addAll(fTarget.getPartitions());
-		fOriginalDefaultValue = fTarget.getDefaultValueString();
+		fOriginalDefaultValue = fTarget.getDefaultValue();
 	}
 
 	@Override
@@ -64,7 +64,7 @@ public class CategoryOperationSetExpected implements IModelOperation {
 		String type = fTarget.getType();
 		if(fExpected && JavaUtils.hasLimitedValuesSet(type)){
 			boolean validDefaultValue = false;
-			String currentDefaultValue = fTarget.getDefaultValueString();
+			String currentDefaultValue = fTarget.getDefaultValue();
 			for(PartitionNode leaf : fTarget.getLeafPartitions()){
 				if(currentDefaultValue.equals(leaf.getValueString())){
 					validDefaultValue = true;
@@ -88,7 +88,9 @@ public class CategoryOperationSetExpected implements IModelOperation {
 			while(tcIt.hasNext()){
 				TestCaseNode testCase = tcIt.next();
 				if(fExpected){
-					testCase.getTestData().set(index, fTarget.getDefaultValuePartition().getCopy());
+					PartitionNode p = new PartitionNode("expected", fTarget.getDefaultValue());
+					p.setParent(fTarget);
+					testCase.getTestData().set(index, p.getCopy());
 				}
 				else{
 					tcIt.remove();

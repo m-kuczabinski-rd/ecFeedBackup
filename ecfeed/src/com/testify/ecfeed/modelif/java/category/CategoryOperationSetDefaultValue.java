@@ -15,7 +15,7 @@ public class CategoryOperationSetDefaultValue implements IModelOperation {
 	public CategoryOperationSetDefaultValue(CategoryNode target, String newValue, ITypeAdapter typeAdapter) {
 		fTarget = target;
 		fNewValue = newValue;
-		fOriginalValue = target.getDefaultValueString();
+		fOriginalValue = target.getDefaultValue();
 		fTypeAdapter = typeAdapter;
 	}
 

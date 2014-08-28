@@ -114,7 +114,7 @@ public class ModelStringifier {
 	public String stringify(CategoryNode c, int indent){
 		String result = intendentString(indent);
 		result += "Category " + c.getName() + "[" + c.getType() + "], " + (c.isExpected() ? "expected" : "patitioned");
-		result += " default value: " + c.getDefaultValueString(); 
+		result += " default value: " + c.getDefaultValue(); 
 		for(PartitionNode child : c.getPartitions()){
 			result += "\n";
 			result += stringify(child, indent + 2);

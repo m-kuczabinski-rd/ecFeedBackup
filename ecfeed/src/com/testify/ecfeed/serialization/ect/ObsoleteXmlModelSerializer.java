@@ -67,7 +67,7 @@ public class ObsoleteXmlModelSerializer {
 		}
 		else if (node instanceof CategoryNode){
 			String type = ((CategoryNode)node).getType();
-			String value = ((CategoryNode)node).getDefaultValueString();
+			String value = ((CategoryNode)node).getDefaultValue();
 			element = createCategoryElement(name, type, ((CategoryNode)node).isExpected(), value);
 		}
 		else if (node instanceof PartitionNode){

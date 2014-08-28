@@ -596,7 +596,8 @@ public class ModelUtils {
 	
 	public static boolean isCategoryImplemented(CategoryNode node) {
 		if(node.isExpected()){
-			return ModelUtils.isPartitionImplemented(node.getDefaultValuePartition());
+//			return ModelUtils.isPartitionImplemented(node.getDefaultValuePartition());
+			return true;
 		}
 		else{
 			return (allPartitionsImplemented(node.getPartitions())

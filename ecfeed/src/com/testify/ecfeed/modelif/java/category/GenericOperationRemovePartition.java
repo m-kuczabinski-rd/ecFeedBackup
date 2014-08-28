@@ -40,7 +40,7 @@ public class GenericOperationRemovePartition extends BulkOperation {
 			fTarget = target;
 			fPartition = partition;
 			fOriginalIndex = fPartition.getIndex();
-			fOriginalDefaultValue = target.getCategory().getDefaultValueString();
+			fOriginalDefaultValue = target.getCategory().getDefaultValue();
 		}
 		
 		@Override
@@ -52,11 +52,11 @@ public class GenericOperationRemovePartition extends BulkOperation {
 				throw new ModelIfException(Messages.EXPECTED_USER_TYPE_CATEGORY_LAST_PARTITION_PROBLEM);
 			}
 			fTarget.removePartition(fPartition);
-			if(category.isExpected() && fPartition.getValueString().equals(category.getDefaultValueString())){
+			if(category.isExpected() && fPartition.getValueString().equals(category.getDefaultValue())){
 				// the value of removed partition is the same as default expected value
 				// Check if there are leaf partitions with the same value. If not, update the default value
 				Set<String> leafValues = category.getLeafPartitionValues();
-				if(leafValues.contains(category.getDefaultValueString()) == false){
+				if(leafValues.contains(category.getDefaultValue()) == false){
 					if(leafValues.size() > 0){
 						category.setDefaultValueString(leafValues.toArray(new String[]{})[0]);
 					}

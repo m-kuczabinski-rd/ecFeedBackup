@@ -117,7 +117,7 @@ public class XomBuilder implements IModelVisitor, IStatementVisitor {
 		Element element = createNamedElement(CATEGORY_NODE_NAME, node);
 		element.addAttribute(new Attribute(TYPE_NAME_ATTRIBUTE, node.getType()));
 		element.addAttribute(new Attribute(CATEGORY_IS_EXPECTED_ATTRIBUTE_NAME, Boolean.toString(node.isExpected())));
-		element.addAttribute(new Attribute(DEFAULT_EXPECTED_VALUE_ATTRIBUTE_NAME, node.getDefaultValueString()));
+		element.addAttribute(new Attribute(DEFAULT_EXPECTED_VALUE_ATTRIBUTE_NAME, node.getDefaultValue()));
 
 		for(PartitionNode child : node.getPartitions()){
 			element.appendChild((Element)child.accept(this));

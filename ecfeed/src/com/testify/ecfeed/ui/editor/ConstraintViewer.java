@@ -138,7 +138,7 @@ public class ConstraintViewer extends TreeViewerSection {
 				CategoryNode category = fConstraint.getMethod().getCategory(statementText);
 				Relation relation = Relation.EQUAL;
 				if(category != null && category.isExpected()){
-					PartitionNode condition = new PartitionNode("expected", category.getDefaultValueString());
+					PartitionNode condition = new PartitionNode("expected", category.getDefaultValue());
 					condition.setParent(category);
 					return new ExpectedValueStatement(category, condition);
 				}

@@ -56,7 +56,7 @@ public class ExpectedValueStatementTest{
 		
 		List<PartitionNode> testData = new ArrayList<>();
 		testData.add(partition1);	
-		testData.add(fExpCategory1.getDefaultValuePartition());
+		testData.add(new PartitionNode("", fExpCategory1.getDefaultValue()));
 		testData.add(partition1);
 		
 		testStatement.adapt(testData);

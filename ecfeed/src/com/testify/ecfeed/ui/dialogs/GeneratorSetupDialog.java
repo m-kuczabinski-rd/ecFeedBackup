@@ -119,7 +119,7 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 			List<Object> children = new ArrayList<Object>();
 			if(element instanceof CategoryNode && ((CategoryNode)element).isExpected()){
 				CategoryNode category = (CategoryNode)element;
-				children.add(category.getDefaultValuePartition());
+				children.add(category.getDefaultValue());
 			}
 			else if(element instanceof PartitionedNode){
 				PartitionedNode parent = (PartitionedNode)element;
@@ -420,7 +420,7 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 		for(CategoryNode category : fMethod.getCategories()){
 			boolean leafChecked = false;
 			if(category.isExpected()){
-				if(fCategoriesViewer.getChecked(category.getDefaultValuePartition()) == false){
+				if(fCategoriesViewer.getChecked(category.getDefaultValue()) == false){
 					return false;
 				}
 				continue;
@@ -650,7 +650,7 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 		for(int i = 0; i < categories.size(); i++){
 			List<PartitionNode> partitions = new ArrayList<PartitionNode>();
 			if(categories.get(i).isExpected()){
-				partitions.add(categories.get(i).getDefaultValuePartition());
+				partitions.add(expectedValuePartition(categories.get(i)));
 			}
 			else{
 				for(PartitionNode partition : categories.get(i).getLeafPartitions()){
@@ -663,4 +663,9 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 		}
 	}
 
+	private PartitionNode expectedValuePartition(CategoryNode c){
+		PartitionNode p = new PartitionNode("", c.getDefaultValue());
+		p.setParent(c);
+		return p;
+	}
 }
