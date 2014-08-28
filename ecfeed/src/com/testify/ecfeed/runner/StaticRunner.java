@@ -49,7 +49,7 @@ public class StaticRunner extends AbstractJUnitRunner {
 				if(methodModel == null){
 					continue;
 				}
-				methods.add(new ParameterizedMethod(method.getMethod(), getTestCases(methodModel, getTestSuites(method))));
+				methods.add(new ParameterizedMethod(method.getMethod(), getTestCases(methodModel, getTestSuites(method)), getLoader()));
 			}
 		}
 		return methods;

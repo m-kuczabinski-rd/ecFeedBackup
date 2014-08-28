@@ -1,7 +1,6 @@
 package com.testify.ecfeed.ui.common;
 
 import java.net.URL;
-import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,11 +13,11 @@ import org.eclipse.jdt.core.JavaCore;
 import com.testify.ecfeed.modelif.java.ILoaderProvider;
 import com.testify.ecfeed.modelif.java.ModelClassLoader;
 
-public class LoaderProvider implements ILoaderProvider {
+public class EclipseLoaderProvider implements ILoaderProvider {
 
 	private static ModelClassLoader fLoader;
 
-	public ModelClassLoader getLoader(boolean create, URLClassLoader parent){
+	public ModelClassLoader getLoader(boolean create, ClassLoader parent){
 		if ((fLoader == null) || create){
 			List<URL> urls = new ArrayList<URL>();
 			try {

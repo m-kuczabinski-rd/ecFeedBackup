@@ -6,7 +6,6 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.lang.annotation.Annotation;
 import java.net.URL;
-import java.net.URLClassLoader;
 import java.util.List;
 
 import org.junit.Test;
@@ -30,11 +29,12 @@ public abstract class AbstractJUnitRunner extends BlockJUnit4ClassRunner {
 
 	private List<FrameworkMethod> fTestMethods;
 	private RootNode fModel;
+	private ILoaderProvider fLoaderProvider;
 	private JavaImplementationStatusResolver fImplementationStatusResolver;
 	
 	private class JUnitLoaderProvider implements ILoaderProvider{
 		@Override
-		public ModelClassLoader getLoader(boolean create, URLClassLoader parent) {
+		public ModelClassLoader getLoader(boolean create, ClassLoader parent) {
 			return new ModelClassLoader(new URL[]{}, this.getClass().getClassLoader());
 		}
 	}
@@ -56,6 +56,8 @@ public abstract class AbstractJUnitRunner extends BlockJUnit4ClassRunner {
 		return fTestMethods;
 	}
 
+	protected abstract List<FrameworkMethod> generateTestMethods() throws RunnerException;
+
 	@Override
 	protected void validateTestMethods(List<Throwable> errors){
 		validatePublicVoidMethods(Test.class, false, errors);
@@ -72,11 +74,20 @@ public abstract class AbstractJUnitRunner extends BlockJUnit4ClassRunner {
 		return getImplementationStatusResolver().getImplementationStatus(node);
 	}
 	
-	protected abstract List<FrameworkMethod> generateTestMethods() throws RunnerException;
-
-	private JavaImplementationStatusResolver getImplementationStatusResolver() {
+	protected ILoaderProvider getLoaderProvider(){
+		if(fLoaderProvider == null){
+			fLoaderProvider = new JUnitLoaderProvider();
+		}
+		return fLoaderProvider;
+	}
+	
+	protected ModelClassLoader getLoader(){
+		return getLoaderProvider().getLoader(true, this.getClass().getClassLoader());
+	}
+	
+	protected JavaImplementationStatusResolver getImplementationStatusResolver() {
 		if(fImplementationStatusResolver == null){
-			fImplementationStatusResolver = new JavaImplementationStatusResolver(new JUnitLoaderProvider());
+			fImplementationStatusResolver = new JavaImplementationStatusResolver(getLoaderProvider());
 		}
 		return fImplementationStatusResolver;
 	}

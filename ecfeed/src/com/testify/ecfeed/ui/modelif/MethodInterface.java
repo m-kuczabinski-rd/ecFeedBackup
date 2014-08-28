@@ -32,7 +32,7 @@ import com.testify.ecfeed.modelif.java.method.MethodOperationRenameTestCases;
 import com.testify.ecfeed.runner.JavaTestRunner;
 import com.testify.ecfeed.runner.RunnerException;
 import com.testify.ecfeed.ui.common.ConsoleManager;
-import com.testify.ecfeed.ui.common.LoaderProvider;
+import com.testify.ecfeed.ui.common.EclipseLoaderProvider;
 import com.testify.ecfeed.ui.dialogs.AddTestCaseDialog;
 import com.testify.ecfeed.ui.dialogs.RenameTestSuiteDialog;
 import com.testify.ecfeed.ui.editor.BasicSection;
@@ -240,7 +240,7 @@ public class MethodInterface extends GenericNodeInterface {
 	public void executeStaticTests(Collection<TestCaseNode> testCases) {
 		ConsoleManager.displayConsole();
 		ConsoleManager.redirectSystemOutputToStream(ConsoleManager.getOutputStream());
-		JavaTestRunner runner = new JavaTestRunner(LoaderProvider.createLoader());
+		JavaTestRunner runner = new JavaTestRunner(EclipseLoaderProvider.createLoader());
 		try {
 			runner.setTarget(fTarget);
 			for(TestCaseNode testCase : testCases){

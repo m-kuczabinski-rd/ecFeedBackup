@@ -20,7 +20,7 @@ import com.testify.ecfeed.modelif.java.ModelClassLoader;
 import com.testify.ecfeed.runner.JavaTestRunner;
 import com.testify.ecfeed.runner.RunnerException;
 import com.testify.ecfeed.ui.common.ConsoleManager;
-import com.testify.ecfeed.ui.common.LoaderProvider;
+import com.testify.ecfeed.ui.common.EclipseLoaderProvider;
 import com.testify.ecfeed.ui.dialogs.ExecuteOnlineSetupDialog;
 import com.testify.ecfeed.ui.dialogs.GeneratorProgressMonitorDialog;
 
@@ -50,7 +50,7 @@ public class OnlineTestRunningSupport {
 		public void run(IProgressMonitor monitor)
 				throws InvocationTargetException, InterruptedException {
 			try{
-				JavaTestRunner testRunner = new JavaTestRunner(LoaderProvider.createLoader());
+				JavaTestRunner testRunner = new JavaTestRunner(EclipseLoaderProvider.createLoader());
 				testRunner.setTarget(fTarget);
 				List<PartitionNode> next;
 				fGenerator.initialize(fInput, fConstraints, fParameters);
@@ -74,7 +74,7 @@ public class OnlineTestRunningSupport {
 	}
 	
 	public OnlineTestRunningSupport() {
-		ModelClassLoader loader = new LoaderProvider().getLoader(true, null);
+		ModelClassLoader loader = new EclipseLoaderProvider().getLoader(true, null);
 		fRunner = new JavaTestRunner(loader);
 	}
 

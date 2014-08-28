@@ -12,35 +12,32 @@
 package com.testify.ecfeed.runner;
 
 import java.lang.reflect.Method;
-import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.LinkedList;
 import java.util.List;
 
 import org.junit.runners.model.FrameworkMethod;
 
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.TestCaseNode;
-import com.testify.ecfeed.utils.ClassUtils;
+import com.testify.ecfeed.modelif.java.ModelClassLoader;
+import com.testify.ecfeed.modelif.java.PartitionValueParser;
 
 public class ParameterizedMethod extends FrameworkMethod {
+
+	private Collection<TestCaseNode> fTestCases;
+	private PartitionValueParser fValueParser;
 	
-
-	private Collection<List<PartitionNode>> fTestData;
-
-	public ParameterizedMethod(Method method, Collection<TestCaseNode> testCases) {
+	public ParameterizedMethod(Method method, Collection<TestCaseNode> testCases, ModelClassLoader loader) {
 		super(method);
-		fTestData = new LinkedList<List<PartitionNode>>();
-		for(TestCaseNode testCase : testCases){
-			fTestData.add(testCase.getTestData());
-		}
+		fTestCases = testCases;
+		fValueParser = new PartitionValueParser(loader);
 	}
 
 	@Override
 	public Object invokeExplosively(Object target, Object... parameters) throws Throwable{
-		for(List<PartitionNode> testCase : fTestData){
-			Object[] arguments = getParameters(testCase);
+		for(TestCaseNode testCase : fTestCases){
+			Object[] arguments = getParameters(testCase.getTestData());
 			try{
 				super.invokeExplosively(target, arguments);
 			}catch (Throwable e){
@@ -50,13 +47,12 @@ public class ParameterizedMethod extends FrameworkMethod {
 		}
 		return null;
 	}
-
+	
 	protected Object[] getParameters(List<PartitionNode> testCase) throws Exception {
 		List<Object> parameters = new ArrayList<Object>();
-		URLClassLoader loader = ClassUtils.getClassLoader(false, getClass().getClassLoader());
 		for(PartitionNode parameter : testCase){
-			Object value = ClassUtils.getPartitionValueFromString(parameter.getValueString(), parameter.getCategory().getType(), loader);
-			if ((value != null) || (parameter.getCategory().getType().equals(com.testify.ecfeed.modelif.java.Constants.TYPE_NAME_STRING))) {
+			Object value = fValueParser.parseValue(parameter);
+			if (value != null) {
 				parameters.add(value);
 			} else {
 				throw new Exception("Value " + "\'" + (parameter.getValueString() + "\'" + " is incorrect for " + "\'" + parameter.getCategory().getType() + "\'" + " type."));

@@ -22,7 +22,7 @@ import org.eclipse.swt.widgets.Display;
 
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.MethodNode;
-import com.testify.ecfeed.ui.common.LoaderProvider;
+import com.testify.ecfeed.ui.common.EclipseLoaderProvider;
 import com.testify.ecfeed.ui.common.Messages;
 
 public abstract class ExecuteTestAdapter extends SelectionAdapter {
@@ -30,7 +30,7 @@ public abstract class ExecuteTestAdapter extends SelectionAdapter {
 	protected Class<?> loadTestClass() {
 		ClassNode classNode = getMethodModel().getClassNode();
 		String className = classNode.getQualifiedName();
-		Class<?> testClass = new LoaderProvider().getLoader(true, null).loadClass(className.toString());
+		Class<?> testClass = new EclipseLoaderProvider().getLoader(true, null).loadClass(className.toString());
 
 		if (testClass == null) {
 			MessageDialog.openError(Display.getDefault().getActiveShell(), 
