@@ -12,43 +12,34 @@
 package com.testify.ecfeed.runner;
 
 import java.lang.reflect.Method;
-import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.List;
-
-import org.junit.runners.model.FrameworkMethod;
 
 import com.testify.ecfeed.generators.api.GeneratorException;
 import com.testify.ecfeed.generators.api.IGenerator;
 import com.testify.ecfeed.model.PartitionNode;
-import com.testify.ecfeed.utils.ClassUtils;
+import com.testify.ecfeed.modelif.java.ModelClassLoader;
 
-public class RuntimeMethod extends FrameworkMethod{
+public class RuntimeMethod extends AbstractFrameworkMethod{
 
 	IGenerator<PartitionNode> fGenerator;
 	
-	public RuntimeMethod(Method method, IGenerator<PartitionNode> initializedGenerator) throws RunnerException{
-		super(method);
+	public RuntimeMethod(Method method, IGenerator<PartitionNode> initializedGenerator, ModelClassLoader loader) throws RunnerException{
+		super(method, loader);
 		fGenerator = initializedGenerator;
 	}
-	
+
 	@Override
 	public Object invokeExplosively(Object target, Object... p) throws Throwable{
-		List<PartitionNode> next;
-		List<Object> parameters = new ArrayList<Object>();
+		List<PartitionNode> next = new ArrayList<>();
 		try {
-			URLClassLoader loader = ClassUtils.getClassLoader(false, getClass().getClassLoader());
 			while((next = fGenerator.next()) !=null){
-				parameters = new ArrayList<Object>();
-				for (PartitionNode partitionNode : next) {
-					parameters.add(ClassUtils.getPartitionValueFromString(partitionNode.getValueString(), partitionNode.getCategory().getType(), loader));
-				}
-				super.invokeExplosively(target, parameters.toArray());
+				super.invoke(target, next);
 			}
 		} catch (GeneratorException e) {
-			throw new RunnerException("Generator execution fault: " + e.getMessage());
+			throw new RunnerException(Messages.RUNNER_EXCEPTION(e.getMessage()));
 		} catch (Throwable e){
-			String message = getName() + "(" + parameters + "): " + e.getMessage();
+			String message = getName() + "(" + next.toString() + "): " + e.getMessage();
 			throw new Exception(message, e);
 		}
 		return null;

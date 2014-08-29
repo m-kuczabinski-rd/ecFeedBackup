@@ -99,6 +99,10 @@ public class JavaUtils {
 		return Constants.TYPE_NAME_BOOLEAN;
 	}
 
+	public static String getStringTypeName(){
+		return Constants.TYPE_NAME_STRING;
+	}
+
 	public static boolean isValidTestCaseName(String name) {
 		return name.matches(Constants.REGEX_TEST_CASE_NODE_NAME);
 	}

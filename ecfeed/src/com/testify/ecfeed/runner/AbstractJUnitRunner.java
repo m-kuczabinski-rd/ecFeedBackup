@@ -6,6 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.lang.annotation.Annotation;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Test;
@@ -14,7 +15,9 @@ import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.InitializationError;
 import org.junit.runners.model.TestClass;
 
+import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.GenericNode;
+import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.modelif.ImplementationStatus;
 import com.testify.ecfeed.modelif.java.ILoaderProvider;
@@ -70,6 +73,16 @@ public abstract class AbstractJUnitRunner extends BlockJUnit4ClassRunner {
 		return fModel;
 	}
 
+	protected MethodNode getMethodModel(RootNode rootNode, FrameworkMethod method) throws RunnerException {
+		String methodName = method.getName();
+		String parentClassName = method.getMethod().getDeclaringClass().getName();
+		ClassNode classModel = rootNode.getClassModel(parentClassName);
+		if(classModel == null){
+			throw new RunnerException(Messages.CLASS_NOT_FOUND_IN_THE_MODEL(parentClassName));
+		}
+		return classModel.getMethod(methodName, getParameterTypes(method.getMethod().getParameterTypes()));
+	}
+	
 	protected ImplementationStatus implementationStatus(GenericNode node){
 		return getImplementationStatusResolver().getImplementationStatus(node);
 	}
@@ -121,5 +134,17 @@ public abstract class AbstractJUnitRunner extends BlockJUnit4ClassRunner {
 			}
 		}
 		throw new RunnerException(Messages.CANNOT_FIND_MODEL);
+	}
+	
+	private ArrayList<String> getParameterTypes(Class<?>[] parameterTypes) {
+		ArrayList<String> result = new ArrayList<String>();
+		for(Class<?> parameter : parameterTypes){
+			if (parameter.isEnum()) {
+				result.add(parameter.getCanonicalName());	
+			} else {
+				result.add(parameter.getSimpleName());
+			}
+		}
+		return result;
 	}
 }

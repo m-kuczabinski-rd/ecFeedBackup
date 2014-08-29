@@ -39,7 +39,7 @@ import com.testify.ecfeed.runner.annotations.GeneratorParameter;
 import com.testify.ecfeed.runner.annotations.GeneratorParameterNames;
 import com.testify.ecfeed.runner.annotations.GeneratorParameterValues;
 
-public class OnlineRunner extends StaticRunner {
+public class OnlineRunner extends AbstractJUnitRunner {
 
 	public OnlineRunner(Class<?> klass) throws InitializationError {
 		super(klass);
@@ -66,7 +66,7 @@ public class OnlineRunner extends StaticRunner {
 				} catch (GeneratorException e) {
 					throw new RunnerException(Messages.GENERATOR_INITIALIZATION_PROBLEM(e.getMessage()));
 				}
-				methods.add(new RuntimeMethod(method.getMethod(), generator));
+				methods.add(new RuntimeMethod(method.getMethod(), generator, getLoader()));
 			}
 		}
 		return methods;
@@ -96,7 +96,12 @@ public class OnlineRunner extends StaticRunner {
 	protected List<List<PartitionNode>> getInput(MethodNode methodModel) {
 		List<List<PartitionNode>> result = new ArrayList<List<PartitionNode>>();
 		for(CategoryNode category : methodModel.getCategories()){
-			result.add(category.getPartitions());
+			if(category.isExpected()){
+				result.add(Arrays.asList(new PartitionNode[]{new PartitionNode("expected", category.getDefaultValue())}));
+			}
+			else{
+				result.add(category.getPartitions());
+			}
 		}
 		return result;
 	}

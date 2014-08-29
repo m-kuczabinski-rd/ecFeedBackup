@@ -24,9 +24,7 @@ import org.junit.Test;
 import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.InitializationError;
 
-import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.MethodNode;
-import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.modelif.ImplementationStatus;
 import com.testify.ecfeed.runner.annotations.TestSuites;
@@ -55,16 +53,6 @@ public class StaticRunner extends AbstractJUnitRunner {
 		return methods;
 	}
 
-	protected MethodNode getMethodModel(RootNode rootNode, FrameworkMethod method) throws RunnerException {
-		String methodName = method.getName();
-		String parentClassName = method.getMethod().getDeclaringClass().getName();
-		ClassNode classModel = rootNode.getClassModel(parentClassName);
-		if(classModel == null){
-			throw new RunnerException(Messages.CLASS_NOT_FOUND_IN_THE_MODEL(parentClassName));
-		}
-		return classModel.getMethod(methodName, getParameterTypes(method.getMethod().getParameterTypes()));
-	}
-	
 	protected Set<String> getTestSuites(FrameworkMethod method) throws RunnerException{
 		Set<String> result;
 		Annotation annotation = method.getAnnotation(TestSuites.class);
@@ -90,18 +78,6 @@ public class StaticRunner extends AbstractJUnitRunner {
 		for (TestCaseNode testCase : methodModel.getTestCases(testSuite)) {
 			if (implementationStatus(testCase) == ImplementationStatus.IMPLEMENTED) {
 				result.add(testCase);
-			}
-		}
-		return result;
-	}
-
-	private ArrayList<String> getParameterTypes(Class<?>[] parameterTypes) {
-		ArrayList<String> result = new ArrayList<String>();
-		for(Class<?> parameter : parameterTypes){
-			if (parameter.isEnum()) {
-				result.add(parameter.getCanonicalName());	
-			} else {
-				result.add(parameter.getSimpleName());
 			}
 		}
 		return result;
