@@ -14,6 +14,7 @@ package com.testify.ecfeed.runner;
 import static org.junit.Assert.*;
 
 import java.lang.reflect.Method;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -28,6 +29,7 @@ import com.testify.ecfeed.generators.api.IConstraint;
 import com.testify.ecfeed.generators.api.IGenerator;
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.PartitionNode;
+import com.testify.ecfeed.modelif.java.ModelClassLoader;
 import com.testify.ecfeed.runner.RuntimeMethod;
 
 public class RuntimeMethodTest {
@@ -58,7 +60,7 @@ public class RuntimeMethodTest {
 		try {
 			Method methodUnterTest = this.getClass().getMethod("functionUnderTest", int.class, int.class);
 			generator.initialize(input, EMPTY_CONSTRAINTS, null);
-			RuntimeMethod testedMethod = new RuntimeMethod(methodUnterTest, generator);
+			RuntimeMethod testedMethod = new RuntimeMethod(methodUnterTest, generator, new ModelClassLoader(new URL[]{}, this.getClass().getClassLoader()));
 			fExecuted = new HashSet<List<Integer>>();
 			testedMethod.invokeExplosively(this, (Object[])null);
 			assertEquals(referenceResult(input), fExecuted);

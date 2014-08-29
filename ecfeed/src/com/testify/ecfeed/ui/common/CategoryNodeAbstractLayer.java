@@ -1,15 +1,5 @@
 package com.testify.ecfeed.ui.common;
 
-import java.util.List;
-
-import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.swt.widgets.Display;
-
-import com.testify.ecfeed.model.CategoryNode;
-import com.testify.ecfeed.model.ConstraintNode;
-import com.testify.ecfeed.model.MethodNode;
-import com.testify.ecfeed.utils.AdaptTypeSupport;
-import com.testify.ecfeed.utils.ModelUtils;
 
 public class CategoryNodeAbstractLayer{
 	

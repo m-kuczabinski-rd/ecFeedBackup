@@ -33,6 +33,14 @@ public class JavaUtils {
 		return isPrimitive(typeName) == false;
 	}
 	
+	public static boolean isString(String typeName){
+		return typeName.equals(Constants.TYPE_NAME_STRING);
+	}
+	
+	public static boolean isBoolean(String typeName){
+		return typeName.equals(Constants.TYPE_NAME_BOOLEAN);
+	}
+	
 	public static String getTypeName(String cannonicalName) {
 		if(cannonicalName.equals(boolean.class.getName())){
 			return Constants.TYPE_NAME_BOOLEAN;

@@ -1,6 +1,7 @@
 package com.testify.ecfeed.ui.modelif;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -74,40 +75,37 @@ public class EclipseModelBuilder {
 	}
 
 	public List<PartitionNode> defaultPartitions(String typeName) {
-		switch(typeName){
-		case com.testify.ecfeed.modelif.java.Constants.TYPE_NAME_BOOLEAN:
-			return defaultBooleanPartitions();
-		case com.testify.ecfeed.modelif.java.Constants.TYPE_NAME_BYTE:
-			return defaultIntegerPartitions();
-		case com.testify.ecfeed.modelif.java.Constants.TYPE_NAME_CHAR:
-			return new ArrayList<PartitionNode>();
-		case com.testify.ecfeed.modelif.java.Constants.TYPE_NAME_DOUBLE:
-			return defaultFloatPartitions();
-		case com.testify.ecfeed.modelif.java.Constants.TYPE_NAME_FLOAT:
-			return defaultFloatPartitions();
-		case com.testify.ecfeed.modelif.java.Constants.TYPE_NAME_INT:
-			return defaultIntegerPartitions();
-		case com.testify.ecfeed.modelif.java.Constants.TYPE_NAME_LONG:
-			return defaultIntegerPartitions();
-		case com.testify.ecfeed.modelif.java.Constants.TYPE_NAME_SHORT:
-			return defaultIntegerPartitions();
-		case com.testify.ecfeed.modelif.java.Constants.TYPE_NAME_STRING:
-			return defaultStringPartitions();
-		default:
-			return defaultUserTypePartitions(typeName);
+		List<PartitionNode> partitions = new ArrayList<PartitionNode>();
+		for(String value : getSpecialValues(typeName)){
+			String name = value.toLowerCase();
+			name = name.replace("_", " ");
+			partitions.add(new PartitionNode(name, value));
 		}
+		return partitions;
 	}
 
 	public List<String> getSpecialValues(String typeName) {
-		List<PartitionNode> partitions = defaultPartitions(typeName);
-		List<String> result = new ArrayList<String>();
-		for(PartitionNode p : partitions){
-			result.add(p.getValueString());
+		switch(typeName){
+		case com.testify.ecfeed.modelif.java.Constants.TYPE_NAME_BOOLEAN:
+			return Arrays.asList(Constants.BOOLEAN_SPECIAL_VALUES);
+		case com.testify.ecfeed.modelif.java.Constants.TYPE_NAME_CHAR:
+			return new ArrayList<String>();
+		case com.testify.ecfeed.modelif.java.Constants.TYPE_NAME_BYTE:
+		case com.testify.ecfeed.modelif.java.Constants.TYPE_NAME_INT:
+		case com.testify.ecfeed.modelif.java.Constants.TYPE_NAME_LONG:
+		case com.testify.ecfeed.modelif.java.Constants.TYPE_NAME_SHORT:
+			return Arrays.asList(Constants.INTEGER_SPECIAL_VALUES);
+		case com.testify.ecfeed.modelif.java.Constants.TYPE_NAME_DOUBLE:
+		case com.testify.ecfeed.modelif.java.Constants.TYPE_NAME_FLOAT:
+			return Arrays.asList(Constants.FLOAT_SPECIAL_VALUES);
+		case com.testify.ecfeed.modelif.java.Constants.TYPE_NAME_STRING:
+			return Arrays.asList(Constants.STRING_SPECIAL_VALUES);
+		default:
+			return enumValues(typeName);
 		}
-		return result;
 	}
 
-	
+
 	public String getDefaultExpectedValue(String type) {
 		switch(type){
 		case com.testify.ecfeed.modelif.java.Constants.TYPE_NAME_BYTE:
@@ -133,39 +131,34 @@ public class EclipseModelBuilder {
 		}
 	}
 
-
-	protected List<PartitionNode> defaultUserTypePartitions(String typeName) {
+	protected List<String> enumValues(String typeName) {
 		IType type = JavaModelUtils.getIType(typeName);
+		List<String> result = new ArrayList<String>();
 		try {
 			if(type != null && type.isEnum()){
-				return defaultEnumPartitions(type);
+				String typeSignature = Signature.createTypeSignature(type.getElementName(), false);
+				try {
+					if(type.isEnum()){
+						for(IField field : type.getFields()){
+							if(field.getTypeSignature().equals(typeSignature)){
+								result.add(field.getElementName());
+							}
+						}
+					}
+				} catch (JavaModelException e) {}
+				return result;
 			}
 		} catch (JavaModelException e) {}
-		return new ArrayList<PartitionNode>();
+		return new ArrayList<String>();
 	}
 
-	protected List<PartitionNode> defaultEnumPartitions(IType type) {
-		List<PartitionNode> partitions = new ArrayList<PartitionNode>();
-		String typeSignature = Signature.createTypeSignature(type.getElementName(), false);
-		try {
-			if(type.isEnum()){
-				for(IField field : type.getFields()){
-					if(field.getTypeSignature().equals(typeSignature)){
-						String value = field.getElementName();
-						String name = value.toLowerCase().replaceAll("_", " ");
-						partitions.add(new PartitionNode(name, value));
-					}
-				}
-			}
-		} catch (JavaModelException e) {}
-		return partitions;
-	}
 
 	protected String defaultEnumExpectedValue(String type) {
 		String value = Constants.DEFAULT_EXPECTED_ENUM_VALUE;
-		List<PartitionNode> values = defaultUserTypePartitions(type);
-		if(values.size() > 0){
-			value = values.get(0).getValueString();
+
+		List<String> enumValues = enumValues(type);
+		if(enumValues.size() > 0){
+			value = enumValues.get(0);
 		}
 		return value;
 	}

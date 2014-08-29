@@ -12,7 +12,7 @@ import com.testify.ecfeed.modelif.java.JavaUtils;
 import com.testify.ecfeed.modelif.java.ModelClassLoader;
 import com.testify.ecfeed.modelif.java.PartitionValueParser;
 
-public abstract class AbstractFrameworkMethod extends FrameworkMethod {
+public class AbstractFrameworkMethod extends FrameworkMethod {
 
 	private PartitionValueParser fValueParser;
 
@@ -33,7 +33,7 @@ public abstract class AbstractFrameworkMethod extends FrameworkMethod {
 		String type = partition.getCategory().getType();
 		Object value = fValueParser.parseValue(partition);
 		
-		if(type.equals(JavaUtils.getStringTypeName()) || JavaUtils.isPrimitive(type) == false){
+		if(JavaUtils.isString(type) || JavaUtils.isUserType(type)){
 			//null value acceptable
 			if(partition.getValueString().equals(Constants.VALUE_REPRESENTATION_NULL)){
 				return null;
