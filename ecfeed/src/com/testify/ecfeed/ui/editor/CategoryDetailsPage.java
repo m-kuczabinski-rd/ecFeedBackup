@@ -38,14 +38,7 @@ public class CategoryDetailsPage extends BasicDetailsPage {
 	private ModelOperationManager fOperationManager;
 	private CategoryInterface fCategoryIf;
 	
-	private abstract class GenericListener implements SelectionListener{
-		@Override
-		public void widgetDefaultSelected(SelectionEvent e) {
-			widgetSelected(e);
-		}
-	}
-	
-	private class SetNameListener extends GenericListener{
+	private class SetNameListener extends AbstractSelectionAdapter{
 		@Override
 		public void widgetSelected(SelectionEvent e) {
 			fCategoryIf.setName(fNameText.getText(), null, CategoryDetailsPage.this);
@@ -53,7 +46,7 @@ public class CategoryDetailsPage extends BasicDetailsPage {
 		}
 	}
 	
-	private class SetTypeListener extends GenericListener{
+	private class SetTypeListener extends AbstractSelectionAdapter{
 		@Override
 		public void widgetSelected(SelectionEvent e) {
 			fCategoryIf.setType(fTypeCombo.getText(), null, CategoryDetailsPage.this);
@@ -61,7 +54,7 @@ public class CategoryDetailsPage extends BasicDetailsPage {
 		}
 	}
 	
-	private class SetDefaultValueListener extends GenericListener{
+	private class SetDefaultValueListener extends AbstractSelectionAdapter{
 		@Override
 		public void widgetSelected(SelectionEvent e) {
 			fCategoryIf.setDefaultValue(fDefaultValueCombo.getText(), null, CategoryDetailsPage.this);
@@ -69,7 +62,7 @@ public class CategoryDetailsPage extends BasicDetailsPage {
 		}
 	}
 	
-	private class SetExpectedListener extends GenericListener{
+	private class SetExpectedListener extends AbstractSelectionAdapter{
 		@Override
 		public void widgetSelected(SelectionEvent e) {
 			fCategoryIf.setExpected(fExpectedCheckbox.getSelection(), null, CategoryDetailsPage.this);
@@ -118,20 +111,18 @@ public class CategoryDetailsPage extends BasicDetailsPage {
 	
 	private void createAttributesComposite(){
 		fAttributesComposite = getToolkit().createComposite(getMainComposite());
-		fAttributesComposite.setLayout(new GridLayout(3, false));
+		fAttributesComposite.setLayout(new GridLayout(2, false));
 		fAttributesComposite.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
 		
 		getToolkit().createLabel(fAttributesComposite, "Parameter name: ", SWT.NONE);
 		fNameText = getToolkit().createText(fAttributesComposite, "",SWT.NONE);
 		fNameText.setLayoutData(new GridData(SWT.FILL,  SWT.CENTER, true, false));
-		Button changeButton = getToolkit().createButton(fAttributesComposite, "Change", SWT.NONE);
 		SelectionListener nameListener = new SetNameListener();
 		fNameText.addSelectionListener(nameListener);
-		changeButton.addSelectionListener(nameListener);
 		
 		getToolkit().createLabel(fAttributesComposite, "Parameter type: ", SWT.NONE);
 		fTypeCombo = new Combo(fAttributesComposite,SWT.DROP_DOWN);
-		fTypeCombo.setLayoutData(new GridData(SWT.FILL,  SWT.CENTER, true, false,2, 1));
+		fTypeCombo.setLayoutData(new GridData(SWT.FILL,  SWT.CENTER, true, false));
 		fTypeCombo.addSelectionListener(new SetTypeListener());
 		
 		getToolkit().paintBordersFor(fAttributesComposite);
@@ -153,7 +144,7 @@ public class CategoryDetailsPage extends BasicDetailsPage {
 		else{
 			fDefaultValueCombo = new Combo(fAttributesComposite,SWT.DROP_DOWN);
 		}
-		fDefaultValueCombo.setLayoutData(new GridData(SWT.FILL,  SWT.CENTER, false, false, 2, 1));
+		fDefaultValueCombo.setLayoutData(new GridData(SWT.FILL,  SWT.CENTER, false, false));
 		fDefaultValueCombo.setItems(fCategoryIf.defaultValueSuggestions());
 		fDefaultValueCombo.setText(category.getDefaultValue());
 		fDefaultValueCombo.addSelectionListener(new SetDefaultValueListener());
