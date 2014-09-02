@@ -20,7 +20,6 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 
 import com.testify.ecfeed.model.ConstraintNode;
-import com.testify.ecfeed.modelif.ModelOperationManager;
 import com.testify.ecfeed.ui.modelif.ConstraintInterface;
 
 public class ConstraintDetailsPage extends BasicDetailsPage {
