@@ -90,7 +90,7 @@ public class MethodDetailsPage extends BasicDetailsPage {
 
 	private void createNameTextComposite() {
 		Composite composite = getToolkit().createComposite(getMainComposite());
-		composite.setLayout(new GridLayout(5, false));
+		composite.setLayout(new GridLayout(4, false));
 		composite.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
 		getToolkit().createLabel(composite, "Method name", SWT.NONE);
 		fMethodNameText = getToolkit().createText(composite, null, SWT.NONE);
