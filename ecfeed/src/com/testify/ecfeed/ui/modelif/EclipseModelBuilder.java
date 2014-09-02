@@ -85,24 +85,31 @@ public class EclipseModelBuilder {
 	}
 
 	public List<String> getSpecialValues(String typeName) {
+		List<String> result = new ArrayList<String>();
 		switch(typeName){
 		case com.testify.ecfeed.modelif.java.Constants.TYPE_NAME_BOOLEAN:
-			return Arrays.asList(Constants.BOOLEAN_SPECIAL_VALUES);
+			result.addAll(Arrays.asList(Constants.BOOLEAN_SPECIAL_VALUES));
+			break;
 		case com.testify.ecfeed.modelif.java.Constants.TYPE_NAME_CHAR:
-			return new ArrayList<String>();
+			break;
 		case com.testify.ecfeed.modelif.java.Constants.TYPE_NAME_BYTE:
 		case com.testify.ecfeed.modelif.java.Constants.TYPE_NAME_INT:
 		case com.testify.ecfeed.modelif.java.Constants.TYPE_NAME_LONG:
 		case com.testify.ecfeed.modelif.java.Constants.TYPE_NAME_SHORT:
-			return Arrays.asList(Constants.INTEGER_SPECIAL_VALUES);
+			result.addAll(Arrays.asList(Constants.INTEGER_SPECIAL_VALUES));
+			break;
 		case com.testify.ecfeed.modelif.java.Constants.TYPE_NAME_DOUBLE:
 		case com.testify.ecfeed.modelif.java.Constants.TYPE_NAME_FLOAT:
-			return Arrays.asList(Constants.FLOAT_SPECIAL_VALUES);
+			result.addAll(Arrays.asList(Constants.FLOAT_SPECIAL_VALUES));
+			break;
 		case com.testify.ecfeed.modelif.java.Constants.TYPE_NAME_STRING:
-			return Arrays.asList(Constants.STRING_SPECIAL_VALUES);
+			result.addAll(Arrays.asList(Constants.STRING_SPECIAL_VALUES));
+			break;
 		default:
-			return enumValues(typeName);
+			result.addAll(enumValues(typeName));
+			break;
 		}
+		return result;
 	}
 
 

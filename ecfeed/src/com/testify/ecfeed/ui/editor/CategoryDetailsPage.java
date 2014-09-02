@@ -33,7 +33,7 @@ public class CategoryDetailsPage extends BasicDetailsPage {
 	private Button fExpectedCheckbox;
 	private Combo fDefaultValueCombo;
 
-	private CategoryChildrenViewer fPartitionsViewer;
+	private PartitionsViewer fPartitionsViewer;
 	
 	private ModelOperationManager fOperationManager;
 	private CategoryInterface fCategoryIf;
@@ -88,7 +88,7 @@ public class CategoryDetailsPage extends BasicDetailsPage {
 		super.createContents(parent);
 		
 		createAttributesComposite();
-		addForm(fPartitionsViewer = new CategoryChildrenViewer(this, getToolkit(), fOperationManager));
+		addForm(fPartitionsViewer = new PartitionsViewer(this, getToolkit(), fOperationManager));
 
 		getToolkit().paintBordersFor(getMainComposite());
 	}

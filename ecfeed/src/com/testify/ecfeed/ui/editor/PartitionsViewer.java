@@ -22,35 +22,38 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Section;
 
 import com.testify.ecfeed.model.PartitionNode;
+import com.testify.ecfeed.model.PartitionedNode;
 import com.testify.ecfeed.modelif.ModelOperationManager;
+import com.testify.ecfeed.ui.modelif.CategoryInterface;
 import com.testify.ecfeed.ui.modelif.PartitionInterface;
+import com.testify.ecfeed.ui.modelif.PartitionedNodeInterface;
 
-public class PartitionChildrenViewer extends CheckboxTableViewerSection {
+public class PartitionsViewer extends CheckboxTableViewerSection {
 
 	private final static int STYLE = Section.EXPANDED | Section.TITLE_BAR;
 	
-	private PartitionInterface fPartitionIf;
+	private PartitionedNodeInterface fParentIf;
 	private PartitionInterface fTableItemIf;
-
+	
 	private TableViewerColumn fNameColumn;
 	private TableViewerColumn fValueColumn;
-
 	private Button fMoveUpButton;
 
 	private class AddPartitionAdapter extends SelectionAdapter{
+		
 		@Override
 		public void widgetSelected(SelectionEvent e){
-			PartitionNode added = fPartitionIf.addNewPartition(PartitionChildrenViewer.this, getUpdateListener());
+			PartitionNode added = fParentIf.addNewPartition(PartitionsViewer.this, getUpdateListener());
 			if(added != null){
 				getTable().setSelection(added.getIndex());
 			}
 		}
 	}
-
+	
 	private class RemovePartitionsAdapter extends SelectionAdapter{
 		@Override
 		public void widgetSelected(SelectionEvent e){
-			fPartitionIf.removePartitions(getCheckedPartitions(), PartitionChildrenViewer.this, getUpdateListener());
+			fParentIf.removePartitions(getCheckedPartitions(), PartitionsViewer.this, getUpdateListener());
 		}
 	}
 	
@@ -59,7 +62,7 @@ public class PartitionChildrenViewer extends CheckboxTableViewerSection {
 		public void widgetSelected(SelectionEvent e){
 			if(getSelectedPartition() != null){
 				fTableItemIf.setTarget(getSelectedPartition());
-				fTableItemIf.moveUpDown(e.getSource() == fMoveUpButton, PartitionChildrenViewer.this, getUpdateListener());
+				fTableItemIf.moveUpDown(e.getSource() == fMoveUpButton, PartitionsViewer.this, getUpdateListener());
 			}
 		}
 	}
@@ -69,11 +72,11 @@ public class PartitionChildrenViewer extends CheckboxTableViewerSection {
 		fNameColumn = addColumn("Name", 150, new PartitionNameLabelProvider());
 		fValueColumn = addColumn("Value", 150, new PartitionValueLabelProvider());
 	}
-
-	public PartitionChildrenViewer(BasicDetailsPage parent, FormToolkit toolkit, ModelOperationManager operationManager) {
+	
+	public PartitionsViewer(BasicDetailsPage parent, FormToolkit toolkit, ModelOperationManager operationManager) {
 		super(parent.getMainComposite(), toolkit, STYLE, parent);
 		
-		fPartitionIf = new PartitionInterface(operationManager);
+		fParentIf = new CategoryInterface(operationManager);
 		fTableItemIf = new PartitionInterface(operationManager);
 		
 		fNameColumn.setEditingSupport(new PartitionNameEditingSupport(this, operationManager));
@@ -84,13 +87,17 @@ public class PartitionChildrenViewer extends CheckboxTableViewerSection {
 		addButton("Remove selected", new RemovePartitionsAdapter());
 		fMoveUpButton = addButton("Move Up", new MoveUpDownAdapter());
 		addButton("Move Down", new MoveUpDownAdapter());
-
+		
 		addDoubleClickListener(new SelectNodeDoubleClickListener(parent.getMasterSection()));
 	}
 
-	public void setInput(PartitionNode parent){
+	public void setInput(PartitionedNode parent){
 		super.setInput(parent.getPartitions());
-		fPartitionIf.setTarget(parent);
+		fParentIf.setTarget(parent);
+	}
+	
+	public void setVisible(boolean visible){
+		this.getSection().setVisible(visible);
 	}
 	
 	protected Collection<PartitionNode> getCheckedPartitions(){

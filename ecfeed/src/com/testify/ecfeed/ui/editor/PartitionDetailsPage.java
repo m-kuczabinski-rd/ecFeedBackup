@@ -31,7 +31,7 @@ import com.testify.ecfeed.ui.modelif.PartitionInterface;
 
 public class PartitionDetailsPage extends BasicDetailsPage {
 	
-	private PartitionChildrenViewer fChildrenViewer;
+	private PartitionsViewer fChildrenViewer;
 	private PartitionLabelsViewer fLabelsViewer;
 	private Composite fAttributesComposite;
 	private Text fNameText;
@@ -78,7 +78,7 @@ public class PartitionDetailsPage extends BasicDetailsPage {
 		super.createContents(parent);
 
 		createNameValueEditor(getMainComposite());
-		addForm(fChildrenViewer = new PartitionChildrenViewer(this, getToolkit(), fOperationManager));
+		addForm(fChildrenViewer = new PartitionsViewer(this, getToolkit(), fOperationManager));
 		addForm(fLabelsViewer = new PartitionLabelsViewer(this, getToolkit(), fOperationManager));
 		
 		getToolkit().paintBordersFor(getMainComposite());
