@@ -81,7 +81,10 @@ public class ParametersViewer extends CheckboxTableViewerSection{
 		fCategoryIf = new CategoryInterface(operationManager);
 		fMethodIf = new MethodInterface(operationManager);
 
-		getSection().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
+		GridData gd = new GridData(SWT.FILL, SWT.FILL, true, true);
+		gd.minimumHeight = 250;
+		getSection().setLayoutData(gd);
+
 		getSection().setText("Parameters");
 		addButton("New parameter", new AddNewParameterAdapter());
 		addButton("Remove selected", new RemoveParameterAdapter());

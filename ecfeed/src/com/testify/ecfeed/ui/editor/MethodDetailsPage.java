@@ -19,8 +19,6 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Event;
-import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
 
 import com.testify.ecfeed.model.MethodNode;
@@ -37,7 +35,7 @@ public class MethodDetailsPage extends BasicDetailsPage {
 	private TestCasesViewer fTestCasesSection;
 	private Text fMethodNameText;
 	private Button fTestOnlineButton;
-	private Button fReassignButton;
+	private Button fBrowseButton;
 	private MethodInterface fMethodIf;
 	private ModelOperationManager fOperationManager;
 	
@@ -56,6 +54,14 @@ public class MethodDetailsPage extends BasicDetailsPage {
 				MethodNode selectedMethod = dialog.getSelectedMethod();
 				fMethodIf.convertTo(selectedMethod, null, MethodDetailsPage.this);
 			}
+		}
+	}
+	
+	private class RenameMethodAdapter extends AbstractSelectionAdapter{
+		@Override
+		public void widgetSelected(SelectionEvent e) {
+			fMethodIf.setName(fMethodNameText.getText(), null, MethodDetailsPage.this);
+			fMethodNameText.setText(fMethodIf.getName());
 		}
 	}
 	
@@ -88,24 +94,10 @@ public class MethodDetailsPage extends BasicDetailsPage {
 		getToolkit().createLabel(composite, "Method name", SWT.NONE);
 		fMethodNameText = getToolkit().createText(composite, null, SWT.NONE);
 		fMethodNameText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
-		fMethodNameText.addListener(SWT.KeyDown, new Listener() {
-			public void handleEvent(Event event) {
-				if(event.keyCode == SWT.CR || event.keyCode == SWT.KEYPAD_CR){
-					applyNewName();
-				}
-			}
-		});
+		fMethodNameText.addSelectionListener(new RenameMethodAdapter());
 
-		Button changeButton = getToolkit().createButton(composite, "Apply", SWT.NONE);
-		changeButton.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e){
-				applyNewName();
-			}
-		});
-		
-		fReassignButton = getToolkit().createButton(composite, "Browse...", SWT.NONE);
-		fReassignButton.addSelectionListener(new ReassignAdapter());
+		fBrowseButton = getToolkit().createButton(composite, "Browse...", SWT.NONE);
+		fBrowseButton.addSelectionListener(new ReassignAdapter());
 		
 		fTestOnlineButton = getToolkit().createButton(composite, "Test online", SWT.NONE);
 		fTestOnlineButton.addSelectionListener(new OnlineTestAdapter());
@@ -127,15 +119,10 @@ public class MethodDetailsPage extends BasicDetailsPage {
 			fMethodNameText.setText(fMethodIf.getName());
 			
 			ImplementationStatus parentStatus = fMethodIf.implementationStatus(selectedMethod.getClassNode());
-			fReassignButton.setEnabled(parentStatus == ImplementationStatus.IMPLEMENTED || 
+			fBrowseButton.setEnabled(parentStatus == ImplementationStatus.IMPLEMENTED || 
 					parentStatus == ImplementationStatus.PARTIALLY_IMPLEMENTED);
 					
 			fSelectedMethod = (MethodNode)getSelectedElement();
 		}
-	}
-
-	private void applyNewName(){
-		fMethodIf.setName(fMethodNameText.getText(), null, this);
-		fMethodNameText.setText(fMethodIf.getName());
 	}
 }
