@@ -20,7 +20,6 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 
 import com.testify.ecfeed.model.TestCaseNode;
-import com.testify.ecfeed.modelif.ModelOperationManager;
 import com.testify.ecfeed.ui.modelif.TestCaseInterface;
 
 public class TestCaseDetailsPage extends BasicDetailsPage {
@@ -46,7 +45,7 @@ public class TestCaseDetailsPage extends BasicDetailsPage {
 	public void createContents(Composite parent) {
 		super.createContents(parent);
 		createTestSuiteEdit(getMainComposite());
-		addForm(fTestDataViewer = new TestDataViewer(this, getToolkit(), fOperationManager));
+		addForm(fTestDataViewer = new TestDataViewer(this, getToolkit()));
 	}
 	
 	@Override
