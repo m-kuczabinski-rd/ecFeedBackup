@@ -19,10 +19,10 @@ import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.modelif.ModelIfException;
 import com.testify.ecfeed.modelif.java.JavaUtils;
 
-public class EclipseModelBuilder {
+public class EclipseModelBuilder extends JavaModelAnalyser{
 	
 	public ClassNode buildClassModel(String qualifiedName, boolean testOnly) throws ModelIfException{
-		IType type = JavaModelUtils.getIType(qualifiedName);
+		IType type = getIType(qualifiedName);
 		if(type != null){
 			return buildClassModel(type, testOnly);
 		}
@@ -35,8 +35,8 @@ public class EclipseModelBuilder {
 			String qualifiedName = type.getFullyQualifiedName();
 			ClassNode classNode = new ClassNode(qualifiedName);
 			for(IMethod method : type.getMethods()){
-				if((testOnly && JavaModelUtils.isAnnotated(method, "Test")) || (!testOnly)){
-					if(hasSupportedParameters(method) && JavaModelUtils.isPublicVoid(method)){
+				if((testOnly && isAnnotated(method, "Test")) || (!testOnly)){
+					if(hasSupportedParameters(method) && isPublicVoid(method)){
 						try{
 							MethodNode methodModel = buildMethodModel(method);
 							if(methodModel != null){
@@ -57,7 +57,7 @@ public class EclipseModelBuilder {
 		MethodNode methodNode = new MethodNode(method.getElementName());
 		for(ILocalVariable parameter : method.getParameters()){
 			String typeName = getTypeName(method, parameter);
-			boolean expected = JavaModelUtils.isExpected(parameter);
+			boolean expected = isAnnotated(parameter, "expected");
 			methodNode.addCategory(buildCategoryModel(parameter.getElementName(), typeName, expected));
 		}
 		return methodNode;
@@ -139,7 +139,7 @@ public class EclipseModelBuilder {
 	}
 
 	protected List<String> enumValues(String typeName) {
-		IType type = JavaModelUtils.getIType(typeName);
+		IType type = getIType(typeName);
 		List<String> result = new ArrayList<String>();
 		try {
 			if(type != null && type.isEnum()){
@@ -259,7 +259,7 @@ public class EclipseModelBuilder {
 		case "QString;":
 			return com.testify.ecfeed.modelif.java.Constants.TYPE_NAME_STRING;
 		default:
-			return JavaModelUtils.getVariableType(method, parameter).getFullyQualifiedName().replaceAll("\\$",	"\\.");
+			return getVariableType(method, parameter).getFullyQualifiedName().replaceAll("\\$",	"\\.");
 		}
 	}
 
@@ -267,7 +267,7 @@ public class EclipseModelBuilder {
 	protected boolean hasSupportedParameters(IMethod method) {
 		try {
 			for(ILocalVariable var : method.getParameters()){
-				if(JavaUtils.isPrimitive(getTypeName(method, var)) == false && JavaModelUtils.isEnumType(method, var) == false){
+				if(JavaUtils.isPrimitive(getTypeName(method, var)) == false && isEnumType(method, var) == false){
 					return false;
 				}
 			}

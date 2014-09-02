@@ -13,9 +13,9 @@ import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.core.Signature;
 
-public class JavaModelUtils {
+public class JavaModelAnalyser {
 
-	public static IType getVariableType(String signature){
+	public IType getVariableType(String signature){
 		for(IProject project : ResourcesPlugin.getWorkspace().getRoot().getProjects()){
 			IJavaProject javaProject = JavaCore.create(project);
 			String qualifiedName = Signature.toString(signature);
@@ -27,7 +27,7 @@ public class JavaModelUtils {
 		return null;
 	}
 
-	public static IType getVariableType(IMethod method, ILocalVariable var){
+	public IType getVariableType(IMethod method, ILocalVariable var){
 		IType type = getLocalVariableType(method, var);
 		if(type == null){
 			type = getPackageVariableType(method, var);
@@ -38,7 +38,7 @@ public class JavaModelUtils {
 		return type;
 	}
 
-	public static boolean isEnumType(IMethod method, ILocalVariable var) {
+	public boolean isEnumType(IMethod method, ILocalVariable var) {
 		IType type = getVariableType(method, var);
 		try {
 			return type != null && type.isEnum();
@@ -47,7 +47,7 @@ public class JavaModelUtils {
 		}
 	}
 
-	public static IType getIType(String qualifiedName) {
+	public IType getIType(String qualifiedName) {
 		try {
 			for(IJavaProject project : JavaCore.create(ResourcesPlugin.getWorkspace().getRoot()).getJavaProjects()){
 				if(project.findType(qualifiedName) != null){
@@ -58,11 +58,11 @@ public class JavaModelUtils {
 		return null;
 	}
 
-	public static boolean isExpected(ILocalVariable parameter){
+	public boolean isAnnotated(ILocalVariable parameter, String annotationType){
 		try{
 			IAnnotation[] annotations = parameter.getAnnotations();
 			for(IAnnotation annotation : annotations){
-				if(annotation.getElementName().equals("expected")){
+				if(annotation.getElementName().equals(annotationType)){
 					return true;
 				}
 			}
@@ -70,7 +70,7 @@ public class JavaModelUtils {
 		return false;
 	}
 
-	public static boolean isAnnotated(IMethod method, String name){
+	public boolean isAnnotated(IMethod method, String name){
 		try{
 			IAnnotation[] annotations = method.getAnnotations();
 			for(IAnnotation annotation : annotations){
@@ -82,25 +82,25 @@ public class JavaModelUtils {
 		return false;
 	}
 
-	public static boolean isPublicVoid(IMethod method){
+	public boolean isPublicVoid(IMethod method){
 		return isPublic(method) && isVoid(method);
 	}
 	
-	public static boolean isPublic(IMethod method){
+	public boolean isPublic(IMethod method){
 		try {
 			return Flags.isPublic(method.getFlags());
 		} catch (JavaModelException e) {}
 		return false;
 	}
 
-	public static boolean isVoid(IMethod method){
+	public boolean isVoid(IMethod method){
 		try {
 			return method.getReturnType().equals(Signature.SIG_VOID);
 		} catch (JavaModelException e) {}
 		return false;
 	}
 	
-	protected static IType getLocalVariableType(IMethod method, ILocalVariable var){
+	protected IType getLocalVariableType(IMethod method, ILocalVariable var){
 		try {
 			IType declaringType = method.getDeclaringType();
 			String variableTypeName = Signature.toString(var.getTypeSignature());
@@ -114,7 +114,7 @@ public class JavaModelUtils {
 		return null;
 	}
 
-	protected static IType getPackageVariableType(IMethod method, ILocalVariable var){
+	protected IType getPackageVariableType(IMethod method, ILocalVariable var){
 		IType declaringType = method.getDeclaringType();
 		String packageName = declaringType.getPackageFragment().getElementName();
 		String variableTypeName = Signature.toString(var.getTypeSignature());
@@ -123,7 +123,7 @@ public class JavaModelUtils {
 		return type;
 	}
 
-	protected static IType getImportedVariableType(IMethod method, ILocalVariable var) {
+	protected IType getImportedVariableType(IMethod method, ILocalVariable var) {
 		String variableTypeName = Signature.toString(var.getTypeSignature());
 		try {
 			for(IImportDeclaration importDeclaration : method.getDeclaringType().getCompilationUnit().getImports()){
