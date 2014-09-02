@@ -14,16 +14,12 @@ package com.testify.ecfeed.ui.editor;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Event;
-import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
 
 import com.testify.ecfeed.model.ClassNode;
@@ -40,7 +36,7 @@ public class ClassDetailsPage extends BasicDetailsPage {
 	private ModelOperationManager fOperationManager;
 	private ClassInterface fClassIf;
 	
-	private class ReassignClassSelectionAdapter extends SelectionAdapter{
+	private class BrowseClassesAdapter extends AbstractSelectionAdapter{
 		@Override
 		public void widgetSelected(SelectionEvent e){
 			IType selectedClass = selectClass();
@@ -61,6 +57,22 @@ public class ClassDetailsPage extends BasicDetailsPage {
 		}
 	}
 	
+	private class ClassNameTextAdapter extends AbstractSelectionAdapter{
+		@Override
+		public void widgetSelected(SelectionEvent e) {
+			fClassIf.setLocalName(fClassNameText.getText(), null, ClassDetailsPage.this);
+			fClassNameText.setText(fClassIf.getLocalName());
+		}
+	}
+	
+	private class PackageNameTextAdapter extends AbstractSelectionAdapter{
+		@Override
+		public void widgetSelected(SelectionEvent e) {
+			fClassIf.setPackageName(fPackageNameText.getText(), null, ClassDetailsPage.this);
+			fPackageNameText.setText(fClassIf.getPackageName());
+		}
+	}
+	
 	public ClassDetailsPage(ModelMasterSection masterSection, ModelOperationManager operationManager) {
 		super(masterSection);
 		fOperationManager = operationManager;
@@ -70,11 +82,6 @@ public class ClassDetailsPage extends BasicDetailsPage {
 	@Override
 	public void createContents(Composite parent){
 		super.createContents(parent);
-
-		Composite textClientComposite = getToolkit().createComposite(getMainSection());
-		textClientComposite.setLayout(new RowLayout());
-		
-		getMainSection().setTextClient(textClientComposite);
 
 		createQualifiedNameComposite(getMainComposite());
 		addForm(fMethodsSection = new MethodsViewer(this, getToolkit(), fOperationManager));
@@ -100,59 +107,29 @@ public class ClassDetailsPage extends BasicDetailsPage {
 		createPackageNameText(textComposite);
 		createClassNameText(textComposite);
 
-		createApplyButton(buttonsComposite);
 		createBrowseButton(buttonsComposite);
 
 		getToolkit().paintBordersFor(textComposite);
-		getToolkit().paintBordersFor(buttonsComposite);
-	}
-
-	private void createClassNameText(Composite textComposite) {
-		getToolkit().createLabel(textComposite, "Class name");
-		fClassNameText = getToolkit().createText(textComposite, null, SWT.NONE);
-		fClassNameText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
-		fClassNameText.addListener(SWT.KeyDown, new Listener() {
-			public void handleEvent(Event event) {
-				if(event.keyCode == SWT.CR || event.keyCode == SWT.KEYPAD_CR){
-					fClassIf.setLocalName(fClassNameText.getText(), null, ClassDetailsPage.this);
-					fClassNameText.setText(fClassIf.getLocalName());
-				}
-			}
-		});
 	}
 
 	private void createPackageNameText(Composite textComposite) {
 		getToolkit().createLabel(textComposite, "Package name");
 		fPackageNameText = getToolkit().createText(textComposite, null, SWT.NONE);
 		fPackageNameText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
-		fPackageNameText.addListener(SWT.KeyDown, new Listener() {
-			public void handleEvent(Event event) {
-				if(event.keyCode == SWT.CR || event.keyCode == SWT.KEYPAD_CR){
-					fClassIf.setPackageName(fPackageNameText.getText(), null, ClassDetailsPage.this);
-					fPackageNameText.setText(fClassIf.getPackageName());
-				}
-			}
-		});
+		fPackageNameText.addSelectionListener(new PackageNameTextAdapter());
+	}
+
+	private void createClassNameText(Composite textComposite) {
+		getToolkit().createLabel(textComposite, "Class name");
+		fClassNameText = getToolkit().createText(textComposite, null, SWT.NONE);
+		fClassNameText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
+		fClassNameText.addSelectionListener(new ClassNameTextAdapter());
 	}
 
 	private void createBrowseButton(Composite buttonsComposite) {
 		Button browseButton = getToolkit().createButton(buttonsComposite, "Browse...", SWT.NONE);
-		browseButton.addSelectionListener(new ReassignClassSelectionAdapter());
+		browseButton.addSelectionListener(new BrowseClassesAdapter());
 		browseButton.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false));
-	}
-
-	private void createApplyButton(Composite buttonsComposite) {
-		Button applyButton = getToolkit().createButton(buttonsComposite, "Apply", SWT.NONE);
-		applyButton.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false));
-		applyButton.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e){
-				fClassIf.setPackageName(fPackageNameText.getText(), null, ClassDetailsPage.this);
-				fClassIf.setLocalName(fClassNameText.getText(), null, ClassDetailsPage.this);
-				fClassNameText.setText(fClassIf.getLocalName());
-				fPackageNameText.setText(fClassIf.getPackageName());
-			}
-		});
 	}
 
 	@Override
@@ -171,5 +148,4 @@ public class ClassDetailsPage extends BasicDetailsPage {
 			getMainSection().layout();
 		}
 	}
-	
 }
