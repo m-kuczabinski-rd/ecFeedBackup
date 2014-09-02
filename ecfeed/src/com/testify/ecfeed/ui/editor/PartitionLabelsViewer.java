@@ -33,7 +33,6 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Section;
 
 import com.testify.ecfeed.model.PartitionNode;
-import com.testify.ecfeed.modelif.ModelOperationManager;
 import com.testify.ecfeed.ui.common.ColorConstants;
 import com.testify.ecfeed.ui.common.ColorManager;
 import com.testify.ecfeed.ui.modelif.PartitionInterface;
@@ -153,10 +152,10 @@ public class PartitionLabelsViewer extends CheckboxTableViewerSection {
 		}
 	}
 
-	public PartitionLabelsViewer(BasicDetailsPage parent, FormToolkit toolkit, ModelOperationManager operationManager) {
+	public PartitionLabelsViewer(BasicDetailsPage parent, FormToolkit toolkit) {
 		super(parent.getMainComposite(), toolkit, STYLE, parent);
 
-		fPartitionIf = new PartitionInterface(operationManager);
+		fPartitionIf = new PartitionInterface(parent.getOperationManager());
 		getSection().setText("Labels");
 		
 		addButton("Add label", new AddLabelAdapter());
@@ -173,7 +172,6 @@ public class PartitionLabelsViewer extends CheckboxTableViewerSection {
 	}
 	
 	public void setInput(PartitionNode	partition){
-//		fSelectedPartition = partition;
 		fPartitionIf.setTarget(partition);
 		super.setInput(partition.getAllLabels());
 	}

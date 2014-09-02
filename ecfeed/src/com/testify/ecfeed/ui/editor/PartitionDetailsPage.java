@@ -24,7 +24,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
 
 import com.testify.ecfeed.model.PartitionNode;
-import com.testify.ecfeed.modelif.ModelOperationManager;
 import com.testify.ecfeed.ui.modelif.CategoryInterface;
 import com.testify.ecfeed.ui.modelif.PartitionInterface;
 
@@ -37,8 +36,6 @@ public class PartitionDetailsPage extends BasicDetailsPage {
 	private Combo fValueCombo;
 
 	private PartitionInterface fPartitionIf;
-	private ModelOperationManager fOperationManager;
-	
 
 	private class NameTextListener extends AbstractSelectionAdapter{
 		@Override
@@ -56,10 +53,9 @@ public class PartitionDetailsPage extends BasicDetailsPage {
 		}
 	}
 	
-	public PartitionDetailsPage(ModelMasterSection masterSection, ModelOperationManager operationManager) {
+	public PartitionDetailsPage(ModelMasterSection masterSection) {
 		super(masterSection);
-		fOperationManager = operationManager;
-		fPartitionIf = new PartitionInterface(fOperationManager);
+		fPartitionIf = new PartitionInterface(getOperationManager());
 	}
 	
 	@Override
@@ -67,8 +63,8 @@ public class PartitionDetailsPage extends BasicDetailsPage {
 		super.createContents(parent);
 
 		createNameValueEditor(getMainComposite());
-		addForm(fChildrenViewer = new PartitionsViewer(this, getToolkit(), fOperationManager));
-		addForm(fLabelsViewer = new PartitionLabelsViewer(this, getToolkit(), fOperationManager));
+		addForm(fChildrenViewer = new PartitionsViewer(this, getToolkit()));
+		addForm(fLabelsViewer = new PartitionLabelsViewer(this, getToolkit()));
 		
 		getToolkit().paintBordersFor(getMainComposite());
 	}

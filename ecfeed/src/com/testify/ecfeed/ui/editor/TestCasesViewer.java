@@ -32,7 +32,6 @@ import org.eclipse.ui.forms.widgets.Section;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.modelif.ImplementationStatus;
-import com.testify.ecfeed.modelif.ModelOperationManager;
 import com.testify.ecfeed.ui.common.TreeCheckStateListener;
 import com.testify.ecfeed.ui.dialogs.CalculateCoverageDialog;
 import com.testify.ecfeed.ui.modelif.MethodInterface;
@@ -92,13 +91,13 @@ public class TestCasesViewer extends CheckboxTreeViewerSection {
 		}
 	}
 	
-	public TestCasesViewer(BasicDetailsPage parent, FormToolkit toolkit, ModelOperationManager operationManager) {
+	public TestCasesViewer(BasicDetailsPage parent, FormToolkit toolkit) {
 		super(parent.getMainComposite(), toolkit, STYLE, parent);
 		GridData gd = new GridData(SWT.FILL, SWT.FILL, true, true);
 		gd.minimumHeight = 250;
 		getSection().setLayoutData(gd);
 		
-		fMethodIf = new MethodInterface(operationManager);
+		fMethodIf = new MethodInterface(parent.getOperationManager());
 
 		getCheckboxViewer().addCheckStateListener(new TreeCheckStateListener(getCheckboxViewer()));
 

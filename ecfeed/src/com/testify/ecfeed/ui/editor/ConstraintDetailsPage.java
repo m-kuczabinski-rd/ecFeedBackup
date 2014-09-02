@@ -27,7 +27,6 @@ public class ConstraintDetailsPage extends BasicDetailsPage {
 
 	private Combo fNameCombo;
 	private ConstraintInterface fConstraintIf;
-	private ModelOperationManager fOperationManager;
 	private ConstraintViewer fConstraintViewer;
 	
 	private class ConstraintNameListener extends AbstractSelectionAdapter{
@@ -38,17 +37,16 @@ public class ConstraintDetailsPage extends BasicDetailsPage {
 		}
 	}
 	
-	public ConstraintDetailsPage(ModelMasterSection masterSection, ModelOperationManager operationManager) {
+	public ConstraintDetailsPage(ModelMasterSection masterSection) {
 		super(masterSection);
-		fOperationManager = operationManager;
-		fConstraintIf = new ConstraintInterface(operationManager);
+		fConstraintIf = new ConstraintInterface(getOperationManager());
 	}
 	
 	@Override
 	public void createContents(Composite parent){
 		super.createContents(parent);
 		createConstraintNameEdit(getMainComposite());
-		addForm(fConstraintViewer = new ConstraintViewer(this, getToolkit(), fOperationManager));
+		addForm(fConstraintViewer = new ConstraintViewer(this, getToolkit()));
 	}
 	
 	private void createConstraintNameEdit(Composite parent) {

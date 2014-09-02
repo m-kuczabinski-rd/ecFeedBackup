@@ -26,7 +26,6 @@ import org.eclipse.ui.forms.widgets.Section;
 
 import com.testify.ecfeed.model.ConstraintNode;
 import com.testify.ecfeed.model.MethodNode;
-import com.testify.ecfeed.modelif.ModelOperationManager;
 import com.testify.ecfeed.ui.modelif.MethodInterface;
 
 public class ConstraintsListViewer extends CheckboxTableViewerSection {
@@ -54,7 +53,7 @@ public class ConstraintsListViewer extends CheckboxTableViewerSection {
 		}
 	}
 
-	public ConstraintsListViewer(BasicDetailsPage parent, FormToolkit toolkit, ModelOperationManager operationManager){
+	public ConstraintsListViewer(BasicDetailsPage parent, FormToolkit toolkit){
 		super(parent.getMainComposite(), toolkit, STYLE, parent);
 		GridData gd = new GridData(SWT.FILL, SWT.FILL, true, true);
 		gd.minimumHeight = 250;
@@ -62,8 +61,8 @@ public class ConstraintsListViewer extends CheckboxTableViewerSection {
 		
 		getSection().setText("Constraints");
 		
-		fMethodInterface = new MethodInterface(operationManager);
-		fNameColumn.setEditingSupport(new ConstraintNameEditingSupport(this, operationManager));
+		fMethodInterface = new MethodInterface(parent.getOperationManager());
+		fNameColumn.setEditingSupport(new ConstraintNameEditingSupport(this, parent.getOperationManager()));
 
 		addButton("Add constraint", new AddConstraintAdapter());
 		addButton("Remove selected", new RemoveSelectedConstraintsAdapter());

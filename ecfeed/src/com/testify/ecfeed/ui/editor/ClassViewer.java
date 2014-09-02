@@ -32,8 +32,6 @@ public class ClassViewer extends CheckboxTableViewerSection {
 	private TableViewerColumn fNameColumn;
 	private RootInterface fRootIf;
 
-	private ModelOperationManager fOperationManager;
-
 	private TableViewerColumn fPackageNameColumn;
 
 	private class AddImplementedClassAdapter extends SelectionAdapter {
@@ -72,12 +70,12 @@ public class ClassViewer extends CheckboxTableViewerSection {
 		}
 	}
 
-	public ClassViewer(BasicDetailsPage parent, FormToolkit toolkit, ModelOperationManager operationManager) {
+	public ClassViewer(BasicDetailsPage parent, FormToolkit toolkit) {
 		super(parent.getMainComposite(), toolkit, STYLE, parent);
-		fOperationManager = operationManager;
+		ModelOperationManager operationManager = parent.getOperationManager();
 		fRootIf = new RootInterface(operationManager);
-		fNameColumn.setEditingSupport(new LocalNameEditingSupport(this, fOperationManager));
-		fPackageNameColumn.setEditingSupport(new PackageNameEditingSupport(this, fOperationManager));
+		fNameColumn.setEditingSupport(new LocalNameEditingSupport(this, operationManager));
+		fPackageNameColumn.setEditingSupport(new PackageNameEditingSupport(this, operationManager));
 
 		setText("Classes");
 		addButton("Add implemented class", new AddImplementedClassAdapter());

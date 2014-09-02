@@ -12,6 +12,7 @@
 package com.testify.ecfeed.ui.editor;
 
 import java.util.ArrayList;
+import java.util.Collection;
 
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.TableViewerColumn;
@@ -67,17 +68,14 @@ public class ParametersViewer extends CheckboxTableViewerSection{
 		@Override
 		public void widgetSelected(SelectionEvent e) {
 			if(getCheckedElements().length > 0){
-				ArrayList<CategoryNode> categories = new ArrayList<>();
-				for (Object element : getCheckedElements()) {
-					categories.add((CategoryNode)element);
-				}
-				fMethodIf.removeParameters(categories, ParametersViewer.this, getUpdateListener());
+				fMethodIf.removeParameters(getCheckedParameters(), ParametersViewer.this, getUpdateListener());
 			}
 		}
 	}
 
-	public ParametersViewer(BasicDetailsPage parent, FormToolkit toolkit, ModelOperationManager operationManager) {
+	public ParametersViewer(BasicDetailsPage parent, FormToolkit toolkit) {
 		super(parent.getMainComposite(), toolkit, STYLE, parent);
+		ModelOperationManager operationManager = parent.getOperationManager();
 		fCategoryIf = new CategoryInterface(operationManager);
 		fMethodIf = new MethodInterface(operationManager);
 
@@ -143,6 +141,14 @@ public class ParametersViewer extends CheckboxTableViewerSection{
 		super.setInput(method.getCategories());
 	}
 
+	private Collection<CategoryNode> getCheckedParameters(){
+		Collection<CategoryNode> categories = new ArrayList<>();
+		for (Object element : getCheckedElements()) {
+			categories.add((CategoryNode)element);
+		}
+		return categories;
+	}
+	
 	private void showDefaultValueColumn(boolean show) {
 		if(show){
 			fDefaultValueColumn.getColumn().setWidth(0);

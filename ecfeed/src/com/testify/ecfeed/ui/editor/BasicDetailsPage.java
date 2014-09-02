@@ -29,6 +29,7 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Section;
 
 import com.testify.ecfeed.model.RootNode;
+import com.testify.ecfeed.modelif.ModelOperationManager;
 
 public abstract class BasicDetailsPage implements IDetailsPage, IModelUpdateListener{
 
@@ -124,6 +125,10 @@ public abstract class BasicDetailsPage implements IDetailsPage, IModelUpdateList
 
 	public FormToolkit getToolkit(){
 		return fManagedForm.getToolkit();
+	}
+	
+	public ModelOperationManager getOperationManager(){
+		return fMasterSection.getOperationManager();
 	}
 
 	protected Section getMainSection(){

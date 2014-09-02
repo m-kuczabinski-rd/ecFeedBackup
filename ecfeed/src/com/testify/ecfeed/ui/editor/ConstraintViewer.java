@@ -365,14 +365,14 @@ public class ConstraintViewer extends TreeViewerSection {
 
 	}
 
-	public ConstraintViewer(BasicDetailsPage page, FormToolkit toolkit, ModelOperationManager operationManager) {
-		super(page.getMainComposite(), toolkit, STYLE, page);
+	public ConstraintViewer(BasicDetailsPage parent, FormToolkit toolkit) {
+		super(parent.getMainComposite(), toolkit, STYLE, parent);
 		getSection().setText("Constraint editor");
 		fAddStatementButton = addButton("Add statement", new AddStatementAdapter());
 		fRemoveStatementButton = addButton("Remove statement", new RemoveStatementAdapter());
 		getViewer().addSelectionChangedListener(new StatementSelectionListener());
 
-		fStatementEditor = new StatementEditor(getClientComposite(), operationManager);
+		fStatementEditor = new StatementEditor(getClientComposite(), parent.getOperationManager());
 	}
 
 	@Override

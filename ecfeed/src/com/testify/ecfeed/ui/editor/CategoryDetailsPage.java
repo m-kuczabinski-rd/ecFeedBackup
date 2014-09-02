@@ -22,7 +22,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
 
 import com.testify.ecfeed.model.CategoryNode;
-import com.testify.ecfeed.modelif.ModelOperationManager;
 import com.testify.ecfeed.ui.modelif.CategoryInterface;
 
 public class CategoryDetailsPage extends BasicDetailsPage {
@@ -35,7 +34,6 @@ public class CategoryDetailsPage extends BasicDetailsPage {
 
 	private PartitionsViewer fPartitionsViewer;
 	
-	private ModelOperationManager fOperationManager;
 	private CategoryInterface fCategoryIf;
 	
 	private class SetNameListener extends AbstractSelectionAdapter{
@@ -70,10 +68,9 @@ public class CategoryDetailsPage extends BasicDetailsPage {
 		}
 	}
 	
-	public CategoryDetailsPage(ModelMasterSection masterSection, ModelOperationManager operationManager) {
+	public CategoryDetailsPage(ModelMasterSection masterSection) {
 		super(masterSection);
-		fOperationManager = operationManager;
-		fCategoryIf = new CategoryInterface(operationManager);
+		fCategoryIf = new CategoryInterface(getOperationManager());
 	}
 
 	@Override
@@ -81,7 +78,7 @@ public class CategoryDetailsPage extends BasicDetailsPage {
 		super.createContents(parent);
 		
 		createAttributesComposite();
-		addForm(fPartitionsViewer = new PartitionsViewer(this, getToolkit(), fOperationManager));
+		addForm(fPartitionsViewer = new PartitionsViewer(this, getToolkit()));
 
 		getToolkit().paintBordersFor(getMainComposite());
 	}

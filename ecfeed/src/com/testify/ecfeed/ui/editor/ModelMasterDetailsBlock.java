@@ -53,15 +53,13 @@ public class ModelMasterDetailsBlock extends MasterDetailsBlock implements IMode
 
 	@Override
 	protected void registerPages(DetailsPart detailsPart) {
-		ModelOperationManager operationManager = getPage().getEditor().getModelOperationManager();
-		
-		detailsPart.registerPage(RootNode.class, new ModelDetailsPage(fMasterSection, operationManager));
-		detailsPart.registerPage(ClassNode.class, new ClassDetailsPage(fMasterSection, operationManager));
-		detailsPart.registerPage(MethodNode.class, new MethodDetailsPage(fMasterSection, operationManager));
-		detailsPart.registerPage(CategoryNode.class, new CategoryDetailsPage(fMasterSection, operationManager));
-		detailsPart.registerPage(TestCaseNode.class, new TestCaseDetailsPage(fMasterSection, operationManager));
-		detailsPart.registerPage(ConstraintNode.class, new ConstraintDetailsPage(fMasterSection, operationManager));
-		detailsPart.registerPage(PartitionNode.class, new PartitionDetailsPage(fMasterSection, operationManager));
+		detailsPart.registerPage(RootNode.class, new ModelDetailsPage(fMasterSection));
+		detailsPart.registerPage(ClassNode.class, new ClassDetailsPage(fMasterSection));
+		detailsPart.registerPage(MethodNode.class, new MethodDetailsPage(fMasterSection));
+		detailsPart.registerPage(CategoryNode.class, new CategoryDetailsPage(fMasterSection));
+		detailsPart.registerPage(TestCaseNode.class, new TestCaseDetailsPage(fMasterSection));
+		detailsPart.registerPage(ConstraintNode.class, new ConstraintDetailsPage(fMasterSection));
+		detailsPart.registerPage(PartitionNode.class, new PartitionDetailsPage(fMasterSection));
 
 		selectNode(getModel());
 	}

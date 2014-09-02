@@ -23,7 +23,6 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Text;
 
 import com.testify.ecfeed.model.ClassNode;
-import com.testify.ecfeed.modelif.ModelOperationManager;
 import com.testify.ecfeed.ui.dialogs.TestClassSelectionDialog;
 import com.testify.ecfeed.ui.modelif.ClassInterface;
 
@@ -33,7 +32,6 @@ public class ClassDetailsPage extends BasicDetailsPage {
 	private OtherMethodsViewer fOtherMethodsSection;
 	private Text fClassNameText;
 	private Text fPackageNameText;
-	private ModelOperationManager fOperationManager;
 	private ClassInterface fClassIf;
 	
 	private class BrowseClassesAdapter extends AbstractSelectionAdapter{
@@ -73,10 +71,9 @@ public class ClassDetailsPage extends BasicDetailsPage {
 		}
 	}
 	
-	public ClassDetailsPage(ModelMasterSection masterSection, ModelOperationManager operationManager) {
+	public ClassDetailsPage(ModelMasterSection masterSection) {
 		super(masterSection);
-		fOperationManager = operationManager;
-		fClassIf = new ClassInterface(fOperationManager);
+		fClassIf = new ClassInterface(getOperationManager());
 	}
 
 	@Override
@@ -84,8 +81,8 @@ public class ClassDetailsPage extends BasicDetailsPage {
 		super.createContents(parent);
 
 		createQualifiedNameComposite(getMainComposite());
-		addForm(fMethodsSection = new MethodsViewer(this, getToolkit(), fOperationManager));
-		addForm(fOtherMethodsSection = new OtherMethodsViewer(this, getToolkit(), fOperationManager));
+		addForm(fMethodsSection = new MethodsViewer(this, getToolkit()));
+		addForm(fOtherMethodsSection = new OtherMethodsViewer(this, getToolkit()));
 		
 		getToolkit().paintBordersFor(getMainComposite());
 	}

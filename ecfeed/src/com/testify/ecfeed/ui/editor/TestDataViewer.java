@@ -23,7 +23,6 @@ import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.modelif.ImplementationStatus;
-import com.testify.ecfeed.modelif.ModelOperationManager;
 import com.testify.ecfeed.ui.common.ColorConstants;
 import com.testify.ecfeed.ui.common.ColorManager;
 import com.testify.ecfeed.ui.common.TestDataEditorListener;
@@ -35,15 +34,13 @@ public class TestDataViewer extends TableViewerSection implements TestDataEditor
 
 	private static final int STYLE = Section.EXPANDED | Section.TITLE_BAR;
 	private ColorManager fColorManager;
-//	private TableViewerColumn fValueColumn; 
+
 	private TestCaseInterface fTestCaseIf;
-//	private TestDataValueEditingSupport fTestDataEditingSupport;
 	
-	public TestDataViewer(BasicDetailsPage page, FormToolkit toolkit, ModelOperationManager operationManager) {
-		super(page.getMainComposite(), toolkit, STYLE, page);
-		fTestCaseIf = new TestCaseInterface(operationManager);
+	public TestDataViewer(BasicDetailsPage parent, FormToolkit toolkit) {
+		super(parent.getMainComposite(), toolkit, STYLE, parent);
+		fTestCaseIf = new TestCaseInterface(parent.getOperationManager());
 		fColorManager = new ColorManager();
-//		fTestDataEditingSupport = new TestDataValueEditingSupport(getTableViewer(), null, this);
 		getSection().setText("Test data");
 	}
 
@@ -92,8 +89,6 @@ public class TestDataViewer extends TableViewerSection implements TestDataEditor
 		List<PartitionNode> testData = testCase.getTestData();
 		super.setInput(testData);
 		fTestCaseIf.setTarget(testCase);
-//		fTestDataEditingSupport.setTestData(testCase.getTestData());
-//		fValueColumn.setEditingSupport(new TestDataValueEditingSupport(getTableViewer(), testData, this));
 	}
 
 	@Override

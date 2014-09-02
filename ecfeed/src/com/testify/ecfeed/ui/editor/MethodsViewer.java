@@ -49,7 +49,6 @@ public class MethodsViewer extends CheckboxTableViewerSection {
 	}
 	
 	private class AddNewMethodAdapter extends SelectionAdapter {
-
 		@Override
 		public void widgetSelected(SelectionEvent e) {
 			MethodNode newMethod = fClassIf.addNewMethod(MethodsViewer.this, getUpdateListener());
@@ -104,8 +103,10 @@ public class MethodsViewer extends CheckboxTableViewerSection {
 		}
 	}
 	
-	public MethodsViewer(BasicDetailsPage parent, FormToolkit toolkit, ModelOperationManager operationManager) {
+	public MethodsViewer(BasicDetailsPage parent, FormToolkit toolkit) {
 		super(parent.getMainComposite(), toolkit, STYLE, parent);
+		
+		ModelOperationManager operationManager = parent.getOperationManager();
 		
 		fClassIf = new ClassInterface(operationManager);
 		fMethodIf = new MethodInterface(operationManager);

@@ -134,6 +134,10 @@ public class ModelMasterSection extends TreeViewerSection{
 		return fModel;
 	}
 	
+	public ModelOperationManager getOperationManager(){
+		return fOperationManager;
+	}
+	
 	@Override
 	protected void createContent(){
 		super.createContent();
@@ -202,4 +206,5 @@ public class ModelMasterSection extends TreeViewerSection{
 		return null;
 	}
 
+	
 }

@@ -27,7 +27,7 @@ public class TestCaseDetailsPage extends BasicDetailsPage {
 
 	private Combo fTestSuiteNameCombo;
 	private TestDataViewer fTestDataViewer;
-	private ModelOperationManager fOperationManager;
+
 	private TestCaseInterface fTestCaseIf;
 	
 	private class RenameTestCaseAdapter extends AbstractSelectionAdapter{
@@ -37,10 +37,9 @@ public class TestCaseDetailsPage extends BasicDetailsPage {
 			fTestSuiteNameCombo.setText(fTestCaseIf.getName());
 		}
 	}
-	public TestCaseDetailsPage(ModelMasterSection masterSection, ModelOperationManager operationManager) {
+	public TestCaseDetailsPage(ModelMasterSection masterSection) {
 		super(masterSection);
-		fOperationManager = operationManager;
-		fTestCaseIf = new TestCaseInterface(operationManager);
+		fTestCaseIf = new TestCaseInterface(getOperationManager());
 	}
 
 	@Override

@@ -22,7 +22,6 @@ import org.eclipse.ui.forms.widgets.Section;
 
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.MethodNode;
-import com.testify.ecfeed.modelif.ModelOperationManager;
 import com.testify.ecfeed.ui.modelif.ClassInterface;
 
 public class OtherMethodsViewer extends CheckboxTableViewerSection {
@@ -37,9 +36,9 @@ public class OtherMethodsViewer extends CheckboxTableViewerSection {
 		}
 	}
 	
-	public OtherMethodsViewer(BasicDetailsPage parent, FormToolkit toolkit, ModelOperationManager operationManager) {
+	public OtherMethodsViewer(BasicDetailsPage parent, FormToolkit toolkit) {
 		super(parent.getMainComposite(), toolkit, STYLE, parent);
-		fClassIf = new ClassInterface(operationManager);
+		fClassIf = new ClassInterface(parent.getOperationManager());
 		addButton("Add selected", new AddSelectedAdapter());
 	}
 	

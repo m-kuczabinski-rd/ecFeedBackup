@@ -73,8 +73,10 @@ public class PartitionsViewer extends CheckboxTableViewerSection {
 		fValueColumn = addColumn("Value", 150, new PartitionValueLabelProvider());
 	}
 	
-	public PartitionsViewer(BasicDetailsPage parent, FormToolkit toolkit, ModelOperationManager operationManager) {
+	public PartitionsViewer(BasicDetailsPage parent, FormToolkit toolkit) {
 		super(parent.getMainComposite(), toolkit, STYLE, parent);
+		
+		ModelOperationManager operationManager = parent.getOperationManager();
 		
 		fParentIf = new CategoryInterface(operationManager);
 		fTableItemIf = new PartitionInterface(operationManager);

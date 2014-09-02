@@ -23,7 +23,6 @@ import org.eclipse.swt.widgets.Text;
 
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.modelif.ImplementationStatus;
-import com.testify.ecfeed.modelif.ModelOperationManager;
 import com.testify.ecfeed.ui.dialogs.TestMethodRenameDialog;
 import com.testify.ecfeed.ui.modelif.MethodInterface;
 
@@ -37,8 +36,6 @@ public class MethodDetailsPage extends BasicDetailsPage {
 	private TestCasesViewer fTestCasesSection;
 	
 	private MethodInterface fMethodIf;
-	
-	private ModelOperationManager fOperationManager;
 	
 	private class OnlineTestAdapter extends SelectionAdapter{
 		@Override
@@ -66,10 +63,9 @@ public class MethodDetailsPage extends BasicDetailsPage {
 		}
 	}
 	
-	public MethodDetailsPage(ModelMasterSection masterSection, ModelOperationManager operationManager) {
+	public MethodDetailsPage(ModelMasterSection masterSection) {
 		super(masterSection);
-		fOperationManager = operationManager;
-		fMethodIf = new MethodInterface(operationManager);
+		fMethodIf = new MethodInterface(getOperationManager());
 	}
 
 	public MethodNode getSelectedMethod() {
@@ -81,9 +77,9 @@ public class MethodDetailsPage extends BasicDetailsPage {
 		super.createContents(parent);
 
 		createNameTextComposite();
-		addForm(fParemetersSection = new ParametersViewer(this, getToolkit(), fOperationManager));
-		addForm(fConstraintsSection = new ConstraintsListViewer(this, getToolkit(), fOperationManager));
-		addForm(fTestCasesSection = new TestCasesViewer(this, getToolkit(), fOperationManager));
+		addForm(fParemetersSection = new ParametersViewer(this, getToolkit()));
+		addForm(fConstraintsSection = new ConstraintsListViewer(this, getToolkit()));
+		addForm(fTestCasesSection = new TestCasesViewer(this, getToolkit()));
 		
 		getToolkit().paintBordersFor(getMainComposite());
 	}
