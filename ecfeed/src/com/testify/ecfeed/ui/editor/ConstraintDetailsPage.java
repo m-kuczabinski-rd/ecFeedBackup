@@ -14,10 +14,8 @@ package com.testify.ecfeed.ui.editor;
 import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 
@@ -32,19 +30,10 @@ public class ConstraintDetailsPage extends BasicDetailsPage {
 	private ModelOperationManager fOperationManager;
 	private ConstraintViewer fConstraintViewer;
 	
-	private class ConstraintNameListener implements SelectionListener{
+	private class ConstraintNameListener extends AbstractSelectionAdapter{
 		@Override
 		public void widgetSelected(SelectionEvent e) {
-			applyConstraintName(fNameCombo.getText());
-		}
-
-		@Override
-		public void widgetDefaultSelected(SelectionEvent e) {
-			widgetSelected(e);
-		}
-
-		private void applyConstraintName(String newName) {
-			fConstraintIf.setName(newName, null, ConstraintDetailsPage.this);
+			fConstraintIf.setName(fNameCombo.getText(), null, ConstraintDetailsPage.this);
 			fNameCombo.setText(fConstraintIf.getName());
 		}
 	}
@@ -64,15 +53,12 @@ public class ConstraintDetailsPage extends BasicDetailsPage {
 	
 	private void createConstraintNameEdit(Composite parent) {
 		Composite composite = getToolkit().createComposite(parent);
-		composite.setLayout(new GridLayout(3, false));
+		composite.setLayout(new GridLayout(2, false));
 		composite.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
 		getToolkit().createLabel(composite, "Constraint name:");
-		ComboViewer nameComboViewer = new ComboViewer(composite, SWT.NONE);
-		fNameCombo = nameComboViewer.getCombo();
+		fNameCombo = new ComboViewer(composite, SWT.NONE).getCombo();
 		fNameCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 		fNameCombo.addSelectionListener(new ConstraintNameListener());
-		Button button = getToolkit().createButton(composite, "Change", SWT.NONE);
-		button.addSelectionListener(new ConstraintNameListener());
 	}
 
 	@Override
