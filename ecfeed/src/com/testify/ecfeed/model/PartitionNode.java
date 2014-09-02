@@ -11,7 +11,6 @@
 
 package com.testify.ecfeed.model;
 
-import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
@@ -109,7 +108,7 @@ public class PartitionNode extends PartitionedNode{
 		if(parentPartition() != null){
 			return parentPartition().getAllLabels();
 		}
-		return new HashSet<String>();
+		return new LinkedHashSet<String>();
 	}
 
 	public boolean isAbstract(){

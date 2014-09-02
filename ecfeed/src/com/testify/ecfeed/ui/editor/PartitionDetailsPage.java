@@ -16,7 +16,6 @@ import java.util.Set;
 
 import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -41,29 +40,19 @@ public class PartitionDetailsPage extends BasicDetailsPage {
 	private ModelOperationManager fOperationManager;
 	
 
-	private class NameTextListener extends SelectionAdapter{
+	private class NameTextListener extends AbstractSelectionAdapter{
 		@Override
 		public void widgetSelected(SelectionEvent e){
 			fPartitionIf.setName(fNameText.getText(), null, PartitionDetailsPage.this);
 			fNameText.setText(fPartitionIf.getName());
 		}
-		
-		@Override
-		public void widgetDefaultSelected(SelectionEvent e){
-			widgetSelected(e);
-		}
 	}
 	
-	private class ValueComboListener extends SelectionAdapter{
+	private class ValueComboListener extends AbstractSelectionAdapter{
 		@Override
 		public void widgetSelected(SelectionEvent e){
 			fPartitionIf.setValue(fValueCombo.getText(), null, PartitionDetailsPage.this);
 			fValueCombo.setText(fPartitionIf.getValue());
-		}
-
-		@Override
-		public void widgetDefaultSelected(SelectionEvent e){
-			widgetSelected(e);
 		}
 	}
 	
@@ -87,15 +76,17 @@ public class PartitionDetailsPage extends BasicDetailsPage {
 	@Override
 	public void refresh(){
 		PartitionNode selectedPartition = getSelectedPartition();
-		fPartitionIf.setTarget(selectedPartition);
-		
-		String title = getSelectedPartition().toString() + " [" + fPartitionIf.implementationStatus().toString() + "]";
-		getMainSection().setText(title);
-		
-		fChildrenViewer.setInput(selectedPartition);
-		fLabelsViewer.setInput(selectedPartition);
-		fNameText.setText(selectedPartition.getName());
-		refreshValueEditor();
+		if(selectedPartition != null){
+			fPartitionIf.setTarget(selectedPartition);
+
+			String title = getSelectedPartition().toString() + " [" + fPartitionIf.implementationStatus().toString() + "]";
+			getMainSection().setText(title);
+
+			fChildrenViewer.setInput(selectedPartition);
+			fLabelsViewer.setInput(selectedPartition);
+			fNameText.setText(selectedPartition.getName());
+			refreshValueEditor();
+		}
 	}
 	
 	private void refreshValueEditor() {
