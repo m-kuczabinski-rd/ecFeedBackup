@@ -1,7 +1,6 @@
 package com.testify.ecfeed.ui.modelif;
 
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -12,23 +11,18 @@ import org.eclipse.swt.widgets.Display;
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
-import com.testify.ecfeed.modelif.IModelOperation;
 import com.testify.ecfeed.modelif.ModelOperationManager;
 import com.testify.ecfeed.modelif.java.JavaUtils;
-import com.testify.ecfeed.modelif.java.category.GenericOperationAddPartition;
 import com.testify.ecfeed.modelif.java.category.CategoryOperationRename;
 import com.testify.ecfeed.modelif.java.category.CategoryOperationSetDefaultValue;
 import com.testify.ecfeed.modelif.java.category.CategoryOperationSetExpected;
 import com.testify.ecfeed.modelif.java.category.CategoryOperationSetType;
 import com.testify.ecfeed.modelif.java.category.CategoryOperationShift;
-import com.testify.ecfeed.modelif.java.category.GenericOperationRemovePartition;
 import com.testify.ecfeed.modelif.java.category.ITypeAdapterProvider;
-import com.testify.ecfeed.modelif.java.common.RemoveNodesOperation;
 import com.testify.ecfeed.ui.editor.BasicSection;
 import com.testify.ecfeed.ui.editor.IModelUpdateListener;
-import com.testify.ecfeed.ui.editor.TableViewerSection;
 
-public class CategoryInterface extends GenericNodeInterface {
+public class CategoryInterface extends PartitionedNodeInterface {
 	
 	private CategoryNode fTarget;
 	private ITypeAdapterProvider fAdapterProvider;
@@ -92,15 +86,15 @@ public class CategoryInterface extends GenericNodeInterface {
 		return false;
 	}
 
-	public boolean setDefaultValue(String valueString, TableViewerSection source, IModelUpdateListener updateListener) {
+	public boolean setDefaultValue(String valueString, BasicSection source, IModelUpdateListener updateListener) {
 		if(fTarget.getDefaultValue().equals(valueString) == false){
 			return execute(new CategoryOperationSetDefaultValue(fTarget, valueString, fAdapterProvider.getAdapter(fTarget.getType())), source, updateListener, Messages.DIALOG_SET_DEFAULT_VALUE_PROBLEM_TITLE);
 		}
 		return false;
 	}
 
-	public boolean hasLimitedValuesSet() {
-		return !isPrimitive(fTarget.getType()) || isBoolean(fTarget.getType());
+	public static boolean hasLimitedValuesSet(String type) {
+		return !isPrimitive(type) || isBoolean(type);
 	}
 
 	public static boolean hasLimitedValuesSet(CategoryNode category) {
@@ -116,20 +110,8 @@ public class CategoryInterface extends GenericNodeInterface {
 		return !isPrimitive(type);
 	}
 	
-	public boolean isPrimitive() {
-		return isPrimitive(fTarget.getType());
-	}
-	
-	public boolean isUserType() {
-		return !isPrimitive();
-	}
-	
 	public static boolean isBoolean(String type){
 		return type.equals(JavaUtils.getBooleanTypeName());
-	}
-
-	public List<String> getSpecialValues() {
-		return new EclipseModelBuilder().getSpecialValues(fTarget.getType());
 	}
 
 	public static List<String> getSpecialValues(String type) {
@@ -174,61 +156,4 @@ public class CategoryInterface extends GenericNodeInterface {
 		return false;
 	}
 
-	public PartitionNode addNewPartition(BasicSection source, IModelUpdateListener updateListener) {
-		String name = generatePartitionName();
-		String value = generateNewPartitionValue();
-		PartitionNode newPartition = new PartitionNode(name, value);
-		if(addPartition(newPartition, source, updateListener)){
-			return newPartition;
-		}
-		return null;
-	}
-	
-	public boolean addPartition(PartitionNode newPartition, BasicSection source, IModelUpdateListener updateListener) {
-		IModelOperation operation = new GenericOperationAddPartition(fTarget, newPartition, fTarget.getPartitions().size()); 
-		return execute(operation, source, updateListener, Messages.DIALOG_ADD_PARTITION_PROBLEM_TITLE);
-	}
-	
-	public boolean removePartition(PartitionNode partition, BasicSection source, IModelUpdateListener updateListener) {
-		IModelOperation operation = new GenericOperationRemovePartition(fTarget, partition);
-		return execute(operation, source, updateListener, Messages.DIALOG_REMOVE_PARTITION_TITLE);
-	}
-
-	public boolean removePartitions(Collection<PartitionNode> partitions, BasicSection source, IModelUpdateListener updateListener) {
-		boolean displayWarning = false;
-		for(PartitionNode p : partitions){
-			if(fTarget.getMethod().mentioningConstraints(p).size() > 0 || fTarget.getMethod().mentioningTestCases(p).size() > 0){
-				displayWarning = true;
-			}
-		}
-		if(displayWarning){
-			if(MessageDialog.openConfirm(Display.getCurrent().getActiveShell(), 
-					Messages.DIALOG_REMOVE_PARTITION_WARNING_TITLE, 
-					Messages.DIALOG_REMOVE_PARTITION_WARNING_MESSAGE) == false){
-				return false;
-			}
-		}
-		return execute(new RemoveNodesOperation(partitions), source, updateListener, Messages.DIALOG_REMOVE_PARTITIONS_PROBLEM_TITLE);
-	}
-
-	protected String generateNewPartitionValue() {
-		EclipseModelBuilder builder = new EclipseModelBuilder();
-		String value = builder.getDefaultExpectedValue(getType());
-		if(isPrimitive() == false && builder.getSpecialValues(getType()).size() == 0){
-			int i = 0;
-			while(fTarget.getLeafPartitionValues().contains(value)){
-				value = builder.getDefaultExpectedValue(getType()) + i++; 
-			}
-		}
-		return value;
-	}
-
-	protected String generatePartitionName(){
-		String name = Constants.DEFAULT_NEW_PARTITION_NAME;
-		int i = 0;
-		while(fTarget.getPartitionNames().contains(name)){
-			name = Constants.DEFAULT_NEW_PARTITION_NAME + i++; 
-		}
-		return name;
-	}
 }
