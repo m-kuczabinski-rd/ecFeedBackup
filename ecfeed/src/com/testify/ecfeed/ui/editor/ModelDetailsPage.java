@@ -13,14 +13,10 @@ package com.testify.ecfeed.ui.editor;
 
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Event;
-import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.IFormPart;
 
@@ -34,6 +30,14 @@ public class ModelDetailsPage extends BasicDetailsPage {
 	private Text fModelNameText;
 	private RootInterface fRootIf;
 	private ModelOperationManager fOperationManager;
+	
+	private class SetNameAdapter extends AbstractSelectionAdapter{
+		@Override
+		public void widgetSelected(SelectionEvent e) {
+			fRootIf.setName(fModelNameText.getText(), null, ModelDetailsPage.this);
+			fModelNameText.setText(fRootIf.getName());
+		}
+	}
 	
 	public ModelDetailsPage(ModelMasterSection masterSection, ModelOperationManager operationManager) {
 		super(masterSection);
@@ -55,31 +59,13 @@ public class ModelDetailsPage extends BasicDetailsPage {
 
 	private void createModelNameEdit(Composite parent) {
 		Composite composite = getToolkit().createComposite(parent);
-		composite.setLayout(new GridLayout(3, false));
+		composite.setLayout(new GridLayout(2, false));
 		composite.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
 		getToolkit().createLabel(composite, "Model name", SWT.NONE);
 		fModelNameText = getToolkit().createText(composite, null, SWT.NONE);
 		fModelNameText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
-		fModelNameText.addListener(SWT.KeyDown, new Listener() {
-			public void handleEvent(Event event) {
-				if(event.keyCode == SWT.CR || event.keyCode == SWT.KEYPAD_CR){
-					renameModel(fModelNameText.getText());
-				}
-			}
-		});
-		Button button = getToolkit().createButton(composite, "Apply", SWT.NONE);
-		button.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e){
-				renameModel(fModelNameText.getText());
-			}
-		});
+		fModelNameText.addSelectionListener(new SetNameAdapter());
 		getToolkit().paintBordersFor(composite);
-	}
-
-	private void renameModel(String text) {
-		fRootIf.setName(text, null, this);
-		fModelNameText.setText(fRootIf.getName());
 	}
 
 	@Override
