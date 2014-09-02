@@ -29,14 +29,15 @@ import com.testify.ecfeed.ui.modelif.MethodInterface;
 
 public class MethodDetailsPage extends BasicDetailsPage {
 
-	private MethodNode fSelectedMethod;
-	private ParametersViewer fParemetersSection;
-	private ConstraintsListViewer fConstraintsSection;
-	private TestCasesViewer fTestCasesSection;
 	private Text fMethodNameText;
 	private Button fTestOnlineButton;
 	private Button fBrowseButton;
+	private ParametersViewer fParemetersSection;
+	private ConstraintsListViewer fConstraintsSection;
+	private TestCasesViewer fTestCasesSection;
+	
 	private MethodInterface fMethodIf;
+	
 	private ModelOperationManager fOperationManager;
 	
 	private class OnlineTestAdapter extends SelectionAdapter{
@@ -49,7 +50,7 @@ public class MethodDetailsPage extends BasicDetailsPage {
 	private class ReassignAdapter extends SelectionAdapter{
 		@Override
 		public void widgetSelected(SelectionEvent e){
-			TestMethodRenameDialog dialog = new TestMethodRenameDialog(getActiveShell(), fSelectedMethod);
+			TestMethodRenameDialog dialog = new TestMethodRenameDialog(getActiveShell(), getSelectedMethod());
 			if(dialog.open() == IDialogConstants.OK_ID){
 				MethodNode selectedMethod = dialog.getSelectedMethod();
 				fMethodIf.convertTo(selectedMethod, null, MethodDetailsPage.this);
@@ -72,7 +73,7 @@ public class MethodDetailsPage extends BasicDetailsPage {
 	}
 
 	public MethodNode getSelectedMethod() {
-		return fSelectedMethod;
+		return fMethodIf.getTarget();
 	}
 
 	@Override
@@ -121,8 +122,6 @@ public class MethodDetailsPage extends BasicDetailsPage {
 			ImplementationStatus parentStatus = fMethodIf.implementationStatus(selectedMethod.getClassNode());
 			fBrowseButton.setEnabled(parentStatus == ImplementationStatus.IMPLEMENTED || 
 					parentStatus == ImplementationStatus.PARTIALLY_IMPLEMENTED);
-					
-			fSelectedMethod = (MethodNode)getSelectedElement();
 		}
 	}
 }
