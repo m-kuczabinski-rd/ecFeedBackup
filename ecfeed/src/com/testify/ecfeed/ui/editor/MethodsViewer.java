@@ -16,23 +16,20 @@ import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.jface.viewers.CellEditor;
-import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.EditingSupport;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.graphics.Color;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Section;
 
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.MethodNode;
-import com.testify.ecfeed.modelif.ImplementationStatus;
 import com.testify.ecfeed.modelif.ModelOperationManager;
 import com.testify.ecfeed.modelif.java.JavaClassUtils;
-import com.testify.ecfeed.ui.common.ColorConstants;
-import com.testify.ecfeed.ui.common.ColorManager;
+import com.testify.ecfeed.ui.common.NodeNameColumnLabelProvider;
+import com.testify.ecfeed.ui.common.NodeViewerColumnLabelProvider;
 import com.testify.ecfeed.ui.modelif.ClassInterface;
 import com.testify.ecfeed.ui.modelif.MethodInterface;
 
@@ -95,26 +92,7 @@ public class MethodsViewer extends CheckboxTableViewerSection {
 		}
 	}
 
-	private class MethodsNameLabelProvider extends ColumnLabelProvider{
-		@Override
-		public String getText(Object element){
-			MethodNode method = (MethodNode)element;
-			String result = method.getName();
-			return result;
-		}
-
-		@Override
-		public Color getForeground(Object element){
-			fMethodIf.setTarget((MethodNode)element);
-			ImplementationStatus status = fMethodIf.implementationStatus();
-			switch(status){
-			case IMPLEMENTED: return ColorManager.getColor(ColorConstants.ITEM_IMPLEMENTED);
-			default: return null;
-			}
-		}
-	}
-	
-	private class MethodsArgsLabelProvider extends MethodsNameLabelProvider{
+	private class MethodsArgsLabelProvider extends NodeViewerColumnLabelProvider{
 		public MethodsArgsLabelProvider() {
 			super();
 		}
@@ -157,7 +135,7 @@ public class MethodsViewer extends CheckboxTableViewerSection {
 
 	@Override
 	protected void createTableColumns() {
-		fMethodsColumn = addColumn("Methods", 150, new MethodsNameLabelProvider());
+		fMethodsColumn = addColumn("Methods", 150, new NodeNameColumnLabelProvider());
 		addColumn("Arguments", 450, new MethodsArgsLabelProvider());
 	}
 	

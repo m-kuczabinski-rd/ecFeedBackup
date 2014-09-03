@@ -16,7 +16,6 @@ import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.jface.viewers.CellEditor;
-import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.EditingSupport;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.viewers.TextCellEditor;
@@ -29,6 +28,8 @@ import org.eclipse.ui.forms.widgets.Section;
 
 import com.testify.ecfeed.model.ConstraintNode;
 import com.testify.ecfeed.model.MethodNode;
+import com.testify.ecfeed.ui.common.NodeNameColumnLabelProvider;
+import com.testify.ecfeed.ui.common.NodeViewerColumnLabelProvider;
 import com.testify.ecfeed.ui.modelif.ConstraintInterface;
 import com.testify.ecfeed.ui.modelif.MethodInterface;
 
@@ -125,14 +126,9 @@ public class ConstraintsListViewer extends CheckboxTableViewerSection {
 
 	@Override
 	protected void createTableColumns() {
-		fNameColumn = addColumn("Name", 150, new ColumnLabelProvider(){
-			@Override
-			public String getText(Object element){
-				return ((ConstraintNode)element).getName();
-			}
-		});
+		fNameColumn = addColumn("Name", 150, new NodeNameColumnLabelProvider());
 		
-		addColumn("Definition", 150, new ColumnLabelProvider(){
+		addColumn("Definition", 150, new NodeViewerColumnLabelProvider(){
 			@Override
 			public String getText(Object element){
 				return ((ConstraintNode)element).getConstraint().toString();

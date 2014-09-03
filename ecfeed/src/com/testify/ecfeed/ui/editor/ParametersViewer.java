@@ -16,7 +16,6 @@ import java.util.Collection;
 
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.CellEditor;
-import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.ComboBoxCellEditor;
 import org.eclipse.jface.viewers.ComboBoxViewerCellEditor;
 import org.eclipse.jface.viewers.EditingSupport;
@@ -36,8 +35,9 @@ import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.modelif.ModelOperationManager;
+import com.testify.ecfeed.ui.common.NodeNameColumnLabelProvider;
+import com.testify.ecfeed.ui.common.NodeViewerColumnLabelProvider;
 import com.testify.ecfeed.ui.modelif.CategoryInterface;
-import com.testify.ecfeed.ui.modelif.EclipseModelBuilder;
 import com.testify.ecfeed.ui.modelif.MethodInterface;
 
 public class ParametersViewer extends CheckboxTableViewerSection{
@@ -200,8 +200,8 @@ public class ParametersViewer extends CheckboxTableViewerSection{
 		protected CellEditor getCellEditor(Object element) {
 			CategoryNode category = (CategoryNode)element;
 			ArrayList<String> expectedValues = new ArrayList<String>();
-			for(PartitionNode node : new EclipseModelBuilder().defaultPartitions(category.getType())){
-				expectedValues.add(node.getValueString());
+			for(String value : CategoryInterface.getSpecialValues(category.getType())){
+				expectedValues.add(value);
 			}
 			if(expectedValues.contains(category.getDefaultValue()) == false){
 				expectedValues.add(category.getDefaultValue());
@@ -308,21 +308,16 @@ public class ParametersViewer extends CheckboxTableViewerSection{
 
 	@Override
 	protected void createTableColumns() {
-		fNameColumn = addColumn("Name", 150, new ColumnLabelProvider(){
-			@Override
-			public String getText(Object element){
-				return ((CategoryNode)element).getName();
-			}
-		});
+		fNameColumn = addColumn("Name", 150, new NodeNameColumnLabelProvider());
 		
-		fTypeColumn = addColumn("Type", 150, new ColumnLabelProvider(){
+		fTypeColumn = addColumn("Type", 150, new NodeViewerColumnLabelProvider(){
 			@Override
 			public String getText(Object element){
 				return ((CategoryNode)element).getType();
 			}
 		});
 		
-		fExpectedColumn = addColumn("Expected", 150, new ColumnLabelProvider(){
+		fExpectedColumn = addColumn("Expected", 150, new NodeViewerColumnLabelProvider(){
 			@Override
 			public String getText(Object element) {
 				CategoryNode node = (CategoryNode)element;
@@ -330,7 +325,7 @@ public class ParametersViewer extends CheckboxTableViewerSection{
 			}
 		});
 
-		fDefaultValueColumn = addColumn("Default value", 150, new ColumnLabelProvider(){
+		fDefaultValueColumn = addColumn("Default value", 150, new NodeViewerColumnLabelProvider(){
 			@Override
 			public String getText(Object element){
 				if(element instanceof CategoryNode && ((CategoryNode)element).isExpected()){

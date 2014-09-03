@@ -59,12 +59,12 @@ import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.PartitionedNode;
 import com.testify.ecfeed.model.constraint.Constraint;
 import com.testify.ecfeed.modelif.ImplementationStatus;
-import com.testify.ecfeed.ui.common.GenericNodeNameLabelProvider;
+import com.testify.ecfeed.ui.common.Constants;
+import com.testify.ecfeed.ui.common.NodeNameColumnLabelProvider;
 import com.testify.ecfeed.ui.common.TreeCheckStateListener;
 import com.testify.ecfeed.ui.modelif.GenericNodeInterface;
 import com.testify.ecfeed.ui.modelif.Messages;
 import com.testify.ecfeed.ui.modelif.TestCaseInterface;
-import com.testify.ecfeed.ui.common.Constants;
 
 public class GeneratorSetupDialog extends TitleAreaDialog {
 	private Combo fTestSuiteCombo;
@@ -364,7 +364,7 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 		tree.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, true, 1, 1));
 		fCategoriesViewer = new CheckboxTreeViewer(tree);
 		fCategoriesViewer.setContentProvider(new CategoriesContentProvider());
-		fCategoriesViewer.setLabelProvider(new GenericNodeNameLabelProvider());
+		fCategoriesViewer.setLabelProvider(new NodeNameColumnLabelProvider());
 		fCategoriesViewer.getTree().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 		fCategoriesViewer.setInput(fMethod);
 		fCategoriesViewer.addCheckStateListener(new PartitionTreeCheckStateListener(fCategoriesViewer));

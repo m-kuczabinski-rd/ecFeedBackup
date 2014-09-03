@@ -60,7 +60,6 @@ public class ConstraintViewer extends TreeViewerSection {
 	private Button fAddStatementButton;
 	private Button fRemoveStatementButton;
 	
-//	StatementViewerLabelProvider fStatementLabelProvider;
 	private Constraint fCurrentConstraint;
 	private BasicStatementInterface fStatementIf;
 	private BasicStatement fSelectedStatement;

@@ -155,4 +155,8 @@ public class CategoryInterface extends PartitionedNodeInterface {
 		return false;
 	}
 
+	public static Object getDefaultPa_rtitions(String type) {
+		return null;
+	}
+
 }

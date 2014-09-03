@@ -13,21 +13,16 @@ package com.testify.ecfeed.ui.editor;
 
 import java.util.List;
 
-import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.TableViewerColumn;
-import org.eclipse.swt.graphics.Color;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Section;
 
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.TestCaseNode;
-import com.testify.ecfeed.modelif.ImplementationStatus;
-import com.testify.ecfeed.ui.common.ColorConstants;
-import com.testify.ecfeed.ui.common.ColorManager;
 import com.testify.ecfeed.ui.common.ITestDataEditorListener;
+import com.testify.ecfeed.ui.common.NodeViewerColumnLabelProvider;
 import com.testify.ecfeed.ui.common.TestDataValueEditingSupport;
-import com.testify.ecfeed.ui.modelif.GenericNodeInterface;
 import com.testify.ecfeed.ui.modelif.TestCaseInterface;
 
 public class TestDataViewer extends TableViewerSection implements ITestDataEditorListener{
@@ -44,20 +39,16 @@ public class TestDataViewer extends TableViewerSection implements ITestDataEdito
 
 	@Override
 	protected void createTableColumns() {
-		addColumn("Parameter", 150, new ColumnLabelProvider(){
+		addColumn("Parameter", 150, new NodeViewerColumnLabelProvider(){
 			@Override
 			public String getText(Object element){
 				PartitionNode testValue = (PartitionNode)element;
 				CategoryNode parent = testValue.getCategory();
 				return parent.toString();
 			}
-			@Override
-			public Color getForeground(Object element){
-				return getColor(element);
-			}
 		});
 		
-		TableViewerColumn valueColumn = addColumn("Value", 150, new ColumnLabelProvider(){
+		TableViewerColumn valueColumn = addColumn("Value", 150, new NodeViewerColumnLabelProvider(){
 			@Override
 			public String getText(Object element){
 				PartitionNode testValue = (PartitionNode)element;
@@ -66,23 +57,11 @@ public class TestDataViewer extends TableViewerSection implements ITestDataEdito
 				}
 				return testValue.toString();
 			}
-			@Override
-			public Color getForeground(Object element){
-				return getColor(element);
-			}
 		});
 		
 		valueColumn.setEditingSupport(new TestDataValueEditingSupport(getTableViewer(), null, this));
 	}
 	
-	private Color getColor(Object element){
-		GenericNodeInterface nodeIf = new GenericNodeInterface(null);
-		if (nodeIf.implementationStatus((PartitionNode)element) == ImplementationStatus.IMPLEMENTED) {
-			return ColorManager.getColor(ColorConstants.ITEM_IMPLEMENTED);
-		}
-		return null;
-	}
-
 	public void setInput(TestCaseNode testCase){
 		List<PartitionNode> testData = testCase.getTestData();
 		super.setInput(testData);

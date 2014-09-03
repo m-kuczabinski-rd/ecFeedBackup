@@ -167,12 +167,18 @@ public class TestCasesViewer extends CheckboxTreeViewerSection {
 	
 	@Override
 	protected IContentProvider viewerContentProvider() {
-		return new TestCasesViewerContentProvider();	
+		if(fContentProvider == null){
+			fContentProvider = new TestCasesViewerContentProvider(); 
+		}
+		return fContentProvider;
 	}
 
 	@Override
 	protected IBaseLabelProvider viewerLabelProvider() {
-		return  new TestCasesViewerLabelProvider();
+		if(fLabelProvider == null){
+			fLabelProvider = new TestCasesViewerLabelProvider();
+		}
+		return fLabelProvider;
 	}
 	
 	private boolean executionEnabled(){
