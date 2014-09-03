@@ -37,7 +37,6 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.wb.swt.SWTResourceManager;
 
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.ui.common.Messages;
@@ -75,7 +74,6 @@ public class TestMethodRenameDialog extends TitleAreaDialog {
 		
 		Text infoText = new Text(container, SWT.READ_ONLY | SWT.WRAP);
 		infoText.setText(Messages.DIALOG_RENAME_METHOD_MESSAGE);
-		infoText.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
 		infoText.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false, 1, 1));
 		
 		Composite tableComposite = new Composite(container, SWT.NONE);
