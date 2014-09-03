@@ -301,7 +301,7 @@ public class XmlParserSerializerTest {
 			return Short.toString((short)rand.nextInt());
 		case Constants.TYPE_NAME_STRING:
 			if(rand.nextInt(5) == 0){
-				return com.testify.ecfeed.utils.Constants.NULL_VALUE_STRING_REPRESENTATION;
+				return com.testify.ecfeed.ui.common.Constants.NULL_VALUE_STRING_REPRESENTATION;
 			}
 			else{
 				return generateRandomString(rand.nextInt(10));
