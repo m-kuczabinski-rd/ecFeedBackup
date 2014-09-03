@@ -29,7 +29,7 @@ public class CategoryInterface extends PartitionedNodeInterface {
 	
 	public CategoryInterface(ModelOperationManager modelOperationManager) {
 		super(modelOperationManager);
-		fAdapterProvider = new TypeAdaptationSupport().getAdapterProvider();
+		fAdapterProvider = new TypeAdapterProvider();
 	}
 
 	public void setTarget(CategoryNode target){
@@ -49,11 +49,10 @@ public class CategoryInterface extends PartitionedNodeInterface {
 	}
 
 	public boolean setType(String newType, BasicSection source, IModelUpdateListener updateListener) {
-		ITypeAdapterProvider adapterProvider = new TypeAdaptationSupport().getAdapterProvider();
 		if(newType.equals(fTarget.getType())){
 			return false;
 		}
-		return execute(new CategoryOperationSetType(fTarget, newType, adapterProvider), source, updateListener, Messages.DIALOG_RENAME_PAREMETER_PROBLEM_TITLE);
+		return execute(new CategoryOperationSetType(fTarget, newType, fAdapterProvider), source, updateListener, Messages.DIALOG_RENAME_PAREMETER_PROBLEM_TITLE);
 	}
 	
 	public boolean setExpected(boolean expected, BasicSection source, IModelUpdateListener updateListener){

@@ -15,15 +15,18 @@ import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.swt.graphics.Color;
 
 import com.testify.ecfeed.model.PartitionNode;
+import com.testify.ecfeed.modelif.ImplementationStatus;
 import com.testify.ecfeed.ui.common.ColorConstants;
 import com.testify.ecfeed.ui.common.ColorManager;
-import com.testify.ecfeed.utils.ModelUtils;
+import com.testify.ecfeed.ui.modelif.GenericNodeInterface;
 
 public class PartitionNameLabelProvider extends ColumnLabelProvider {
 	private ColorManager fColorManager;
+	private GenericNodeInterface fNodeIf;
 
 	public PartitionNameLabelProvider() {
 		fColorManager = new ColorManager();
+		fNodeIf = new GenericNodeInterface(null);
 	}
 	
 	@Override
@@ -40,7 +43,7 @@ public class PartitionNameLabelProvider extends ColumnLabelProvider {
 			PartitionNode partition = (PartitionNode)element;
 			if(partition.isAbstract()){
 				return fColorManager.getColor(ColorConstants.ABSTRACT_PARTITION);
-			} else if (ModelUtils.isPartitionImplemented(partition)) {
+			} else if (fNodeIf.implementationStatus(partition) == ImplementationStatus.IMPLEMENTED) {
 				return fColorManager.getColor(ColorConstants.ITEM_IMPLEMENTED);
 			}
 		}

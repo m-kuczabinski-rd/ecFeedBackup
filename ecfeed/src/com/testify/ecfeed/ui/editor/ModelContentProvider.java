@@ -22,8 +22,8 @@ import com.testify.ecfeed.model.GenericNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.TestCaseNode;
+import com.testify.ecfeed.ui.modelif.CategoryInterface;
 import com.testify.ecfeed.utils.Constants;
-import com.testify.ecfeed.utils.ModelUtils;
 
 public class ModelContentProvider extends TreeNodeContentProvider implements ITreeContentProvider {
 
@@ -61,7 +61,7 @@ public class ModelContentProvider extends TreeNodeContentProvider implements ITr
 		}
 		else if(parentElement instanceof CategoryNode){
 			CategoryNode category = (CategoryNode)parentElement;
-			if(category.isExpected() && ModelUtils.isTypePrimitive(category.getType())){
+			if(category.isExpected() && CategoryInterface.isPrimitive(category.getType())){
 				return EMPTY_ARRAY;
 			}
 		}

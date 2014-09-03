@@ -29,7 +29,7 @@ import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.modelif.java.category.ITypeAdapter;
 import com.testify.ecfeed.ui.modelif.CategoryInterface;
-import com.testify.ecfeed.ui.modelif.TypeAdaptationSupport;
+import com.testify.ecfeed.ui.modelif.TypeAdapterProvider;
 
 public class TestDataValueEditingSupport extends EditingSupport {
 	private final TableViewer fViewer;
@@ -106,7 +106,7 @@ public class TestDataValueEditingSupport extends EditingSupport {
 		if(category.isExpected()){
 			String valueString = fComboCellEditor.getViewer().getCCombo().getText();
 			String type = category.getType(); 
-			ITypeAdapter adapter = new TypeAdaptationSupport().getAdapterProvider().getAdapter(type);
+			ITypeAdapter adapter = new TypeAdapterProvider().getAdapter(type);
 			if(adapter.convert(valueString) == null){
 				MessageDialog.openError(Display.getCurrent().getActiveShell(),
 						Messages.DIALOG_PARTITION_VALUE_PROBLEM_TITLE,

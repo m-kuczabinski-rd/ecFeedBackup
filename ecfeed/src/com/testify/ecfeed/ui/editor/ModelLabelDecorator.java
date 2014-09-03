@@ -13,7 +13,10 @@ package com.testify.ecfeed.ui.editor;
 
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.Path;
@@ -28,34 +31,107 @@ import org.osgi.framework.FrameworkUtil;
 
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.ClassNode;
+import com.testify.ecfeed.model.ConstraintNode;
+import com.testify.ecfeed.model.GenericNode;
+import com.testify.ecfeed.model.IModelVisitor;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
+import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.TestCaseNode;
-import com.testify.ecfeed.utils.ModelUtils;
+import com.testify.ecfeed.ui.modelif.GenericNodeInterface;
 
 public class ModelLabelDecorator implements ILabelDecorator {
 
+	Map<List<Image>, Image> fFusedImages;
+	
+	private class DecorationProvider implements IModelVisitor{
+		GenericNodeInterface fNodeInterface;
+
+		public DecorationProvider(){
+			fNodeInterface = new GenericNodeInterface(null);
+		}
+		
+		@Override
+		public Object visit(RootNode node) throws Exception {
+			return Arrays.asList(new Image[]{implementationStatusDecoration(node)});
+		}
+
+		@Override
+		public Object visit(ClassNode node) throws Exception {
+			return Arrays.asList(new Image[]{implementationStatusDecoration(node)});
+		}
+
+		@Override
+		public Object visit(MethodNode node) throws Exception {
+			return Arrays.asList(new Image[]{implementationStatusDecoration(node)});
+		}
+
+		@Override
+		public Object visit(CategoryNode node) throws Exception {
+			return Arrays.asList(new Image[]{implementationStatusDecoration(node)});
+		}
+
+		@Override
+		public Object visit(TestCaseNode node) throws Exception {
+			return Arrays.asList(new Image[]{implementationStatusDecoration(node)});
+		}
+
+		@Override
+		public Object visit(ConstraintNode node) throws Exception {
+			return Arrays.asList(new Image[]{implementationStatusDecoration(node)});
+		}
+
+		@Override
+		public Object visit(PartitionNode node) throws Exception {
+			List<Image> decorations = new ArrayList<Image>();
+			decorations.add(implementationStatusDecoration(node));
+			if(node.isAbstract()){
+				decorations.add(getImage("abstract.png"));
+			}
+			return decorations;
+		}
+
+		private Image implementationStatusDecoration(GenericNode node) {
+			switch (fNodeInterface.implementationStatus(node)){
+			case IMPLEMENTED:
+				return getImage("implemented.png");
+			case PARTIALLY_IMPLEMENTED:
+				return getImage("partially_implemented.png");
+			case NOT_IMPLEMENTED:
+				return getImage("unimplemented.png");
+			case IRRELEVANT:
+			default:
+				return null;
+			}
+		}
+		
+	}
+
+	
+	public ModelLabelDecorator() {
+		fFusedImages = new HashMap<List<Image>, Image>();
+	}
+	
+	@SuppressWarnings("unchecked")
 	@Override
     public Image decorateImage(Image image, Object element) {
-		List<Image> decorations = null;
-    	if (element instanceof ClassNode) {
-    		decorations = getClassImageDecoration((ClassNode)element);
-    	} else if (element instanceof MethodNode) {
-    		decorations = getMethodImageDecoration((MethodNode)element);
-    	} else if (element instanceof TestCaseNode) {
-    		decorations = getTestCaseImageDecoration((TestCaseNode)element);
-    	} else if (element instanceof CategoryNode) {
-    		decorations = getCategoryImageDecoration((CategoryNode)element);
-    	} else if (element instanceof PartitionNode) {
-    		decorations = getPartitionImageDecoration((PartitionNode)element);
-    	}
-    	if (decorations != null) {
-    		Image img = new Image(Display.getCurrent(), image.getImageData());
-    		for(Image decoration : decorations){
-    			img = fuseImages(img, decoration, 0, 0);
-    		}
-    		return img;
-    	}
+		if(element instanceof GenericNode){
+			try{
+				List<Image> decorations = (List<Image>)((GenericNode)element).accept(new DecorationProvider());
+				List<Image> all = new ArrayList<Image>(decorations);
+				all.add(0, image);
+				if(fFusedImages.containsKey(all) == false){
+					Image decorated = new Image(Display.getCurrent(), image.getImageData());
+					for(Image decoration : decorations){
+						if(decoration != null){
+							decorated = fuseImages(decorated, decoration, 0, 0);
+						}
+					}
+					fFusedImages.put(decorations, decorated);
+				}
+				return fFusedImages.get(decorations);
+			}catch(Exception e){}
+		}
     	return image;
     }
 
@@ -88,78 +164,6 @@ public class ModelLabelDecorator implements ILabelDecorator {
 	    return descriptor.createImage();
 	}
 
-	private List<Image> getClassImageDecoration(ClassNode node) {
-		List<Image> decorations = new ArrayList<Image>();
-		if (ModelUtils.isClassImplemented(node)) {
-			decorations.add(getImage("implemented.png"));
-		} else if (ModelUtils.isClassPartiallyImplemented(node)) {
-			decorations.add(getImage("partially_implemented.png"));
-		}
-		else{
-			decorations.add(getImage("unimplemented.png"));
-		}
-		return decorations;
-	}
-
-	private List<Image> getMethodImageDecoration(MethodNode node) {
-		List<Image> decorations = new ArrayList<Image>();
-		if (ModelUtils.isMethodImplemented(node)) {
-			decorations.add(getImage("implemented.png"));
-		} else if (ModelUtils.isMethodPartiallyImplemented(node)) {
-			decorations.add(getImage("partially_implemented.png"));
-		}
-		else{
-			decorations.add(getImage("unimplemented.png"));
-		}
-		return decorations;
-	}
-
-	private List<Image> getTestCaseImageDecoration(TestCaseNode node) {
-		List<Image> decorations = new ArrayList<Image>();
-		if (ModelUtils.isTestCaseImplemented(node)) {
-			decorations.add(getImage("implemented.png"));
-		} else if (ModelUtils.isTestCasePartiallyImplemented(node)) {
-			decorations.add(getImage("partially_implemented.png"));
-		}
-		else{
-			decorations.add(getImage("unimplemented.png"));
-		}
-		return decorations;
-	}
-
-	private List<Image> getCategoryImageDecoration(CategoryNode node) {
-		List<Image> decorations = new ArrayList<Image>();
-		if (ModelUtils.isCategoryImplemented(node)) {
-			decorations.add(getImage("implemented.png"));
-		} else if (ModelUtils.isCategoryPartiallyImplemented(node)) {
-			decorations.add(getImage("partially_implemented.png"));
-		}
-		else{
-			decorations.add(getImage("unimplemented.png"));
-		}
-		return decorations;
-	}
-
-	private List<Image> getPartitionImageDecoration(PartitionNode node) {
-		List<Image> decorations = new ArrayList<>();
-		
-		if(node.isAbstract()){
-			decorations.add(getImage("abstract.png"));
-		}
-		
-		if (ModelUtils.isPartitionImplemented(node)) {
-			decorations.add(getImage("implemented.png"));
-		}
-		else if(ModelUtils.isPartitionPartiallyImplemented(node)){
-			decorations.add(getImage("partially_implemented.png"));
-		}
-		else{
-			decorations.add(getImage("unimplemented.png"));
-		}
-		
-		return decorations;
-	}
-	
 	private Image fuseImages(Image icon, Image decorator, int x, int y){
 		ImageData idIcon = (ImageData)icon.getImageData().clone();
 		ImageData idDecorator = decorator.getImageData();

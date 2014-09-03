@@ -23,7 +23,6 @@ import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.ui.common.Messages;
-import com.testify.ecfeed.utils.ModelUtils;
 
 public class MenuPasteOperation extends MenuOperation{
 	protected GenericNode fSource;
@@ -75,7 +74,7 @@ public class MenuPasteOperation extends MenuOperation{
 				if(fSource instanceof PartitionNode){
 					PartitionNode source = (PartitionNode)fSource;
 //					if(target.getCategory().getType().equals(source.getCategory().getType()) ||AdaptTypeSupport.adaptOrRemovePartitions(source, target.getCategory().getType())){
-						ModelUtils.setUniqueNodeName(source, target);
+//						ModelUtils.setUniqueNodeName(source, target);
 						target.addPartition(source);
 						return true;
 //					}
@@ -86,7 +85,7 @@ public class MenuPasteOperation extends MenuOperation{
 					if(fSource instanceof PartitionNode){
 						PartitionNode source = (PartitionNode)fSource;
 //						if(target.getType().equals(source.getCategory().getType()) || AdaptTypeSupport.adaptOrRemovePartitions(source, target.getType())){
-							ModelUtils.setUniqueNodeName(source, target);
+//							ModelUtils.setUniqueNodeName(source, target);
 							target.addPartition(source);
 							return true;
 //						}
@@ -95,8 +94,8 @@ public class MenuPasteOperation extends MenuOperation{
 			} else if(fTarget instanceof MethodNode){
 				MethodNode target = (MethodNode)fTarget;
 				if(fSource instanceof CategoryNode){
-					CategoryNode source = (CategoryNode)fSource;
-					ModelUtils.setUniqueNodeName(source, target);
+//					CategoryNode source = (CategoryNode)fSource;
+//					ModelUtils.setUniqueNodeName(source, target);
 //					fCanceled = !CategoryNodeAbstractLayer.addCategory(source, target);
 					return true;
 				} else if(fSource instanceof ConstraintNode){
@@ -116,7 +115,7 @@ public class MenuPasteOperation extends MenuOperation{
 				ClassNode target = (ClassNode)fTarget;
 				if(fSource instanceof MethodNode){
 					MethodNode source = (MethodNode)fSource;
-					ModelUtils.setUniqueNodeName(source, target);
+//					ModelUtils.setUniqueNodeName(source, target);
 					target.addMethod(source);
 					return true;
 				}
@@ -124,7 +123,7 @@ public class MenuPasteOperation extends MenuOperation{
 				RootNode target = (RootNode)fTarget;
 				if(fSource instanceof ClassNode){
 					ClassNode source = (ClassNode)fSource;
-					ModelUtils.setUniqueNodeName(source, target);
+//					ModelUtils.setUniqueNodeName(source, target);
 					target.addClass(source);
 					return true;
 				}

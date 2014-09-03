@@ -47,7 +47,8 @@ public class PartitionInterface extends PartitionedNodeInterface{
 	}
 
 	public void setValue(String newValue, BasicSection source, IModelUpdateListener updateListener){
-		execute(new PartitionOperationSetValue(fTarget, newValue), source, updateListener, Messages.DIALOG_SET_PARTITION_VALUE_PROBLEM_TITLE);
+		IModelOperation operation = new PartitionOperationSetValue(fTarget, newValue, new TypeAdapterProvider()); 
+		execute(operation, source, updateListener, Messages.DIALOG_SET_PARTITION_VALUE_PROBLEM_TITLE);
 	}
 
 	public String getValue() {

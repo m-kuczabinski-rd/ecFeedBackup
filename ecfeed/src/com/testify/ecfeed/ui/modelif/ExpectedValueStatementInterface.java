@@ -32,7 +32,8 @@ public class ExpectedValueStatementInterface extends BasicStatementInterface{
 
 	@Override
 	public boolean setConditionValue(String newValue, BasicSection source, IModelUpdateListener updateListener) {
-		return 	execute(new PartitionOperationSetValue(fTarget.getCondition(), newValue), source, updateListener, Messages.DIALOG_EDIT_STATEMENT_PROBLEM_TITLE);
+		IModelOperation operation = new PartitionOperationSetValue(fTarget.getCondition(), newValue, new TypeAdapterProvider());
+		return 	execute(operation, source, updateListener, Messages.DIALOG_EDIT_STATEMENT_PROBLEM_TITLE);
 	}
 	
 	@Override
