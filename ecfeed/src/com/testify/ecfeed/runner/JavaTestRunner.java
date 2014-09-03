@@ -36,7 +36,7 @@ public class JavaTestRunner {
 			fTestMethod.invoke(fTestClass.newInstance(), getArguments(testData));
 		} catch (IllegalAccessException | IllegalArgumentException
 				| InvocationTargetException | InstantiationException e) {
-			throw new RunnerException(Messages.CANNOT_INVOKE_TEST_METHOD(fTarget.toString(), testData.toString()));
+			throw new RunnerException(Messages.CANNOT_INVOKE_TEST_METHOD(fTarget.toString(), testData.toString(), e.getMessage()));
 		}
 	}
 	
@@ -56,7 +56,8 @@ public class JavaTestRunner {
 		for(Class<?> type : parameterTypes){
 			types.add(JavaUtils.getTypeName(type.getCanonicalName()));
 		}
-		return methodName.equals(methodModel.getName()) || types.equals(methodModel.getCategoriesTypes());
+		boolean result = methodName.equals(methodModel.getName()) && types.equals(methodModel.getCategoriesTypes()); 
+		return result;
 	}
 
 	protected Object[] getArguments(List<PartitionNode> testData) {
