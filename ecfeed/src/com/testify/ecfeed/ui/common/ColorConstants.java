@@ -13,24 +13,13 @@ package com.testify.ecfeed.ui.common;
 
 import org.eclipse.swt.graphics.RGB;
 
-public interface ColorConstants {
-	RGB OBSOLETE_METHOD = new RGB(128, 0, 0);
-	RGB EXPECTED_VALUE_CATEGORY = new RGB(0, 0, 128);
-	RGB ABSTRACT_PARTITION = new RGB(0, 128, 128);
-	RGB INHERITED_LABEL_FOREGROUND = new RGB(32,32,32);
-	RGB INHERITED_LABEL_BACKGROUND = new RGB(196,196,196);
+public class ColorConstants {
+	public static RGB OBSOLETE_METHOD = new RGB(128, 0, 0);
+	public static RGB EXPECTED_VALUE_CATEGORY = new RGB(0, 0, 128);
+	public static RGB ABSTRACT_PARTITION = new RGB(0, 128, 128);
+	public static RGB INHERITED_LABEL_FOREGROUND = new RGB(32,32,32);
+	public static RGB INHERITED_LABEL_BACKGROUND = new RGB(196,196,196);
 	
-	RGB XML_COMMENT = new RGB(128, 0, 0);
-	RGB PROC_INSTR = new RGB(128, 128, 128);
-	RGB STRING = new RGB(0, 128, 0);
-	RGB DEFAULT = new RGB(0, 0, 0);
-	RGB TAG = new RGB(0, 0, 128);
-
-	//enhancements
-	RGB ESCAPED_CHAR = new RGB(128, 128, 0);
-	RGB CDATA = new RGB(0, 128, 128);
-	RGB CDATA_TEXT = new RGB(255, 0, 0);
-	
-	RGB ITEM_IMPLEMENTED = new RGB(0, 100, 0);
-	RGB TEST_CASE_EXECUTABLE = ITEM_IMPLEMENTED;
+	public static RGB ITEM_IMPLEMENTED = new RGB(0, 100, 0);
+	public static RGB TEST_CASE_EXECUTABLE = ITEM_IMPLEMENTED;
 }
