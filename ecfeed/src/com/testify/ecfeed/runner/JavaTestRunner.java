@@ -56,8 +56,7 @@ public class JavaTestRunner {
 		for(Class<?> type : parameterTypes){
 			types.add(JavaUtils.getTypeName(type.getCanonicalName()));
 		}
-		boolean result = methodName.equals(methodModel.getName()) && types.equals(methodModel.getCategoriesTypes()); 
-		return result;
+		return methodName.equals(methodModel.getName()) && types.equals(methodModel.getCategoriesTypes()); 
 	}
 
 	protected Object[] getArguments(List<PartitionNode> testData) {
