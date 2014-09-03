@@ -14,16 +14,21 @@ package com.testify.ecfeed.ui.editor;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Section;
 
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.RootNode;
+import com.testify.ecfeed.modelif.ImplementationStatus;
 import com.testify.ecfeed.modelif.ModelOperationManager;
 import com.testify.ecfeed.modelif.java.JavaClassUtils;
+import com.testify.ecfeed.ui.common.ColorConstants;
+import com.testify.ecfeed.ui.common.ColorManager;
 import com.testify.ecfeed.ui.modelif.RootInterface;
 
 public class ClassViewer extends CheckboxTableViewerSection {
@@ -70,6 +75,20 @@ public class ClassViewer extends CheckboxTableViewerSection {
 		}
 	}
 
+	private class ClassViewerColumnLabelProvider extends ColumnLabelProvider {
+		private ColorManager fColorManager = new ColorManager();
+		
+		@Override
+		public Color getForeground(Object element) {
+			if (element instanceof ClassNode) {
+				if(fRootIf.implementationStatus((ClassNode)element) == ImplementationStatus.IMPLEMENTED){
+					return fColorManager.getColor(ColorConstants.ITEM_IMPLEMENTED);
+				}
+			}
+			return null;
+		}
+	}
+	
 	public ClassViewer(BasicDetailsPage parent, FormToolkit toolkit) {
 		super(parent.getMainComposite(), toolkit, STYLE, parent);
 		ModelOperationManager operationManager = parent.getOperationManager();

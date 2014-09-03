@@ -11,7 +11,23 @@
 
 package com.testify.ecfeed.serialization.ect;
 
-import static com.testify.ecfeed.serialization.ect.Constants.*;
+import static com.testify.ecfeed.serialization.ect.Constants.CATEGORY_IS_EXPECTED_ATTRIBUTE_NAME;
+import static com.testify.ecfeed.serialization.ect.Constants.CATEGORY_NODE_NAME;
+import static com.testify.ecfeed.serialization.ect.Constants.CLASS_NODE_NAME;
+import static com.testify.ecfeed.serialization.ect.Constants.CONSTRAINT_EXPECTED_STATEMENT_NODE_NAME;
+import static com.testify.ecfeed.serialization.ect.Constants.CONSTRAINT_LABEL_STATEMENT_NODE_NAME;
+import static com.testify.ecfeed.serialization.ect.Constants.CONSTRAINT_NODE_NAME;
+import static com.testify.ecfeed.serialization.ect.Constants.CONSTRAINT_PARTITION_STATEMENT_NODE_NAME;
+import static com.testify.ecfeed.serialization.ect.Constants.CONSTRAINT_STATEMENT_ARRAY_NODE_NAME;
+import static com.testify.ecfeed.serialization.ect.Constants.CONSTRAINT_STATIC_STATEMENT_NODE_NAME;
+import static com.testify.ecfeed.serialization.ect.Constants.DEFAULT_EXPECTED_VALUE_ATTRIBUTE_NAME;
+import static com.testify.ecfeed.serialization.ect.Constants.METHOD_NODE_NAME;
+import static com.testify.ecfeed.serialization.ect.Constants.PARTITION_NODE_NAME;
+import static com.testify.ecfeed.serialization.ect.Constants.ROOT_NODE_NAME;
+import static com.testify.ecfeed.serialization.ect.Constants.TEST_CASE_NODE_NAME;
+import static com.testify.ecfeed.serialization.ect.Constants.TEST_SUITE_NAME_ATTRIBUTE;
+import static com.testify.ecfeed.serialization.ect.Constants.TYPE_NAME_ATTRIBUTE;
+import static com.testify.ecfeed.serialization.ect.Constants.VALUE_ATTRIBUTE;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,7 +52,6 @@ import com.testify.ecfeed.model.constraint.Relation;
 import com.testify.ecfeed.model.constraint.StatementArray;
 import com.testify.ecfeed.model.constraint.StaticStatement;
 import com.testify.ecfeed.serialization.ParserException;
-import com.testify.ecfeed.utils.ModelUtils;
 
 public class XomAnalyser {
 	public RootNode parseRoot(Element element) throws ParserException{
@@ -95,7 +110,7 @@ public class XomAnalyser {
 		assertNodeTag(element.getQualifiedName(), CATEGORY_NODE_NAME);
 		String name = getElementName(element);
 		String type = getAttributeValue(element, TYPE_NAME_ATTRIBUTE);
-		String defaultValue = ModelUtils.getDefaultExpectedValueString(type);
+		String defaultValue = null;
 		String expected = String.valueOf(false);
 		if(element.getAttribute(CATEGORY_IS_EXPECTED_ATTRIBUTE_NAME) != null){
 			expected = getAttributeValue(element, CATEGORY_IS_EXPECTED_ATTRIBUTE_NAME);
@@ -109,7 +124,7 @@ public class XomAnalyser {
 		
 		return category;
 	}
-	
+
 	public TestCaseNode parseTestCase(Element element, MethodNode method) throws ParserException{
 		assertNodeTag(element.getQualifiedName(), TEST_CASE_NODE_NAME);
 		String name = getAttributeValue(element, TEST_SUITE_NAME_ATTRIBUTE);

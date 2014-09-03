@@ -72,4 +72,5 @@ public class Constants {
 	public static final String TYPE_NAME_SHORT = "short";
 	public static final String TYPE_NAME_STRING = "String";
 	public static final String TYPE_NAME_UNSUPPORTED = "unsupported";
+	
 }
