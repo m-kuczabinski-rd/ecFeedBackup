@@ -43,11 +43,11 @@ import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.ui.common.ColorConstants;
 import com.testify.ecfeed.ui.common.ColorManager;
 import com.testify.ecfeed.ui.common.Messages;
-import com.testify.ecfeed.ui.common.TestDataEditorListener;
+import com.testify.ecfeed.ui.common.ITestDataEditorListener;
 import com.testify.ecfeed.ui.common.TestDataValueEditingSupport;
 import com.testify.ecfeed.ui.common.Constants;
 
-public class AddTestCaseDialog extends TitleAreaDialog implements TestDataEditorListener {
+public class AddTestCaseDialog extends TitleAreaDialog implements ITestDataEditorListener {
 
 	private MethodNode fMethod;
 	private ArrayList<PartitionNode> fTestData;

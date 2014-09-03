@@ -25,12 +25,12 @@ import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.modelif.ImplementationStatus;
 import com.testify.ecfeed.ui.common.ColorConstants;
 import com.testify.ecfeed.ui.common.ColorManager;
-import com.testify.ecfeed.ui.common.TestDataEditorListener;
+import com.testify.ecfeed.ui.common.ITestDataEditorListener;
 import com.testify.ecfeed.ui.common.TestDataValueEditingSupport;
 import com.testify.ecfeed.ui.modelif.GenericNodeInterface;
 import com.testify.ecfeed.ui.modelif.TestCaseInterface;
 
-public class TestDataViewer extends TableViewerSection implements TestDataEditorListener{
+public class TestDataViewer extends TableViewerSection implements ITestDataEditorListener{
 
 	private static final int STYLE = Section.EXPANDED | Section.TITLE_BAR;
 

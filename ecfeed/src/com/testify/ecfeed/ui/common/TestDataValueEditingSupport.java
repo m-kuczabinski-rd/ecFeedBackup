@@ -34,9 +34,9 @@ import com.testify.ecfeed.ui.modelif.TypeAdapterProvider;
 public class TestDataValueEditingSupport extends EditingSupport {
 	private final TableViewer fViewer;
 	private ComboBoxViewerCellEditor fComboCellEditor;
-	private TestDataEditorListener fSetValueListener;
+	private ITestDataEditorListener fSetValueListener;
 
-	public TestDataValueEditingSupport(TableViewer viewer, List<PartitionNode> testData, TestDataEditorListener setValueListener) {
+	public TestDataValueEditingSupport(TableViewer viewer, List<PartitionNode> testData, ITestDataEditorListener setValueListener) {
 		super(viewer);
 		fViewer = viewer;
 		fSetValueListener = setValueListener;

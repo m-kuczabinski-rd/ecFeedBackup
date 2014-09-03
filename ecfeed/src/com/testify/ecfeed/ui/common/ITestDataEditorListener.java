@@ -13,6 +13,6 @@ package com.testify.ecfeed.ui.common;
 
 import com.testify.ecfeed.model.PartitionNode;
 
-public interface TestDataEditorListener {
+public interface ITestDataEditorListener {
 	public void testDataChanged(int index, PartitionNode newValue);
 }
