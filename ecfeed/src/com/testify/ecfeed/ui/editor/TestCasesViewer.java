@@ -113,19 +113,6 @@ public class TestCasesViewer extends CheckboxTreeViewerSection {
 		addDoubleClickListener(new SelectNodeDoubleClickListener(parent.getMasterSection()));
 	}
 	
-	protected Collection<TestCaseNode> getCheckedTestCases() {
-		Collection<TestCaseNode> result = new HashSet<TestCaseNode>();
-		for(Object o : getCheckedElements()){
-			if(o instanceof TestCaseNode){
-				result.add((TestCaseNode)o);
-			}
-			if(o instanceof String && getCheckboxViewer().getGrayed(o) == false){
-				result.addAll(fMethodIf.getTarget().getTestCases((String)o));
-			}
-		}
-		return result;
-	}
-
 	@Override
 	public void refresh() {
 		fGenerateSuiteButton.setEnabled(getSelectedMethod().getCategories().size() > 0);
@@ -144,6 +131,19 @@ public class TestCasesViewer extends CheckboxTreeViewerSection {
 		return fMethodIf.getTarget();
 	}
 	
+	protected Collection<TestCaseNode> getCheckedTestCases() {
+		Collection<TestCaseNode> result = new HashSet<TestCaseNode>();
+		for(Object o : getCheckedElements()){
+			if(o instanceof TestCaseNode){
+				result.add((TestCaseNode)o);
+			}
+			if(o instanceof String && getCheckboxViewer().getGrayed(o) == false){
+				result.addAll(fMethodIf.getTarget().getTestCases((String)o));
+			}
+		}
+		return result;
+	}
+
 	@Override
 	protected TreeViewer createTreeViewer(Composite parent, int style) {
 		TreeViewer treeViewer = super.createTreeViewer(parent, style);
@@ -175,7 +175,7 @@ public class TestCasesViewer extends CheckboxTreeViewerSection {
 		return  new TestCasesViewerLabelProvider();
 	}
 	
-	public boolean executionEnabled(){
+	private boolean executionEnabled(){
 		Collection<TestCaseNode> checked = getCheckedTestCases(); 
 		if(checked.size() == 0) return false;
 		if(fMethodIf.implementationStatus() == ImplementationStatus.NOT_IMPLEMENTED) return false;
