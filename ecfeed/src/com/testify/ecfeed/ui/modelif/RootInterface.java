@@ -14,6 +14,7 @@ import com.testify.ecfeed.modelif.ModelOperationManager;
 import com.testify.ecfeed.modelif.java.common.RemoveNodesOperation;
 import com.testify.ecfeed.modelif.java.root.RootOperationAddNewClass;
 import com.testify.ecfeed.modelif.java.root.RootOperationRename;
+import com.testify.ecfeed.ui.common.Constants;
 import com.testify.ecfeed.ui.dialogs.TestClassSelectionDialog;
 import com.testify.ecfeed.ui.editor.BasicSection;
 import com.testify.ecfeed.ui.editor.IModelUpdateListener;

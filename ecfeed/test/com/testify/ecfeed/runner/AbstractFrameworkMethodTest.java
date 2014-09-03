@@ -14,7 +14,7 @@ import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.modelif.java.ModelClassLoader;
 import com.testify.ecfeed.modelif.java.PartitionValueParser;
-import com.testify.ecfeed.ui.modelif.Constants;
+import com.testify.ecfeed.ui.common.Constants;
 
 public class AbstractFrameworkMethodTest {
 

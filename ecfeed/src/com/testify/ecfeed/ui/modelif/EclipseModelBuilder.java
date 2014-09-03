@@ -18,6 +18,7 @@ import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.modelif.ModelIfException;
 import com.testify.ecfeed.modelif.java.JavaUtils;
+import com.testify.ecfeed.ui.common.Constants;
 
 public class EclipseModelBuilder extends JavaModelAnalyser{
 	

@@ -33,7 +33,7 @@ import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.serialization.ect.EctSerializer;
 import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.editor.ModelEditor;
-import com.testify.ecfeed.utils.Constants;
+import com.testify.ecfeed.ui.common.Constants;
 
 public class NewEcFileWizard extends Wizard implements INewWizard {
 	

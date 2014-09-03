@@ -64,7 +64,7 @@ import com.testify.ecfeed.ui.common.TreeCheckStateListener;
 import com.testify.ecfeed.ui.modelif.GenericNodeInterface;
 import com.testify.ecfeed.ui.modelif.Messages;
 import com.testify.ecfeed.ui.modelif.TestCaseInterface;
-import com.testify.ecfeed.utils.Constants;
+import com.testify.ecfeed.ui.common.Constants;
 
 public class GeneratorSetupDialog extends TitleAreaDialog {
 	private Combo fTestSuiteCombo;
@@ -394,7 +394,7 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 				updateOkButton();
 			}
 		});
-		fTestSuiteCombo.setText(Constants.DEFAULT_TEST_SUITE_NAME);
+		fTestSuiteCombo.setText(Constants.DEFAULT_NEW_TEST_SUITE_NAME);
 	}
 
 	private void updateOkButton() {

@@ -1,11 +1,16 @@
-package com.testify.ecfeed.ui.modelif;
+package com.testify.ecfeed.ui.common;
 
 public class Constants {
+	public static final String EQUIVALENCE_CLASS_FILE_EXTENSION = "ect";
+	public static final String DEFAULT_NEW_ECT_MODEL_NAME = "newEct";
+	public static final String DEFAULT_NEW_ECT_FILE_NAME = DEFAULT_NEW_ECT_MODEL_NAME + "." + EQUIVALENCE_CLASS_FILE_EXTENSION;
+
 	public static final String DEFAULT_NEW_PACKAGE_NAME = "com.example.test";
 	public static final String DEFAULT_NEW_CLASS_NAME = "TestClass";
 	public static final String DEFAULT_NEW_METHOD_NAME = "testMethod";
 	public static final String DEFAULT_NEW_PARAMETER_NAME = "arg";
 	public static final String DEFAULT_USER_TYPE_NAME = "default.UserType";
+	public static final String DEFAULT_NEW_TEST_SUITE_NAME = "default suite";
 	public static final String DEFAULT_NEW_CONSTRAINT_NAME = "constraint";
 	public static final String DEFAULT_NEW_PARTITION_NAME = "partition";
 	public static final String DEFAULT_NEW_PARTITION_LABEL = "label";
@@ -43,4 +48,5 @@ public class Constants {
 
 	public static final int TEST_SUITE_SIZE_WARNING_LIMIT = 1000;
 	public static final int MAX_DISPLAYED_TEST_CASES_PER_SUITE = 500;
+	public static final int MAX_DISPLAYED_CHILDREN_PER_NODE = 1000;
 }

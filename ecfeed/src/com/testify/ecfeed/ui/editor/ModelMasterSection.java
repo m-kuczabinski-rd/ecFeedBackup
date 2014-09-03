@@ -65,7 +65,7 @@ import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.modelif.ModelOperationManager;
 import com.testify.ecfeed.ui.modelif.GenericNodeInterface;
 import com.testify.ecfeed.ui.modelif.NodeInterfaceFactory;
-import com.testify.ecfeed.utils.Constants;
+import com.testify.ecfeed.ui.common.Constants;
 
 public class ModelMasterSection extends TreeViewerSection{
 	private static final int STYLE = Section.EXPANDED | Section.TITLE_BAR;

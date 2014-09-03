@@ -45,7 +45,7 @@ import com.testify.ecfeed.ui.common.ColorManager;
 import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.common.TestDataEditorListener;
 import com.testify.ecfeed.ui.common.TestDataValueEditingSupport;
-import com.testify.ecfeed.utils.Constants;
+import com.testify.ecfeed.ui.common.Constants;
 
 public class AddTestCaseDialog extends TitleAreaDialog implements TestDataEditorListener {
 
@@ -55,7 +55,6 @@ public class AddTestCaseDialog extends TitleAreaDialog implements TestDataEditor
 	private Combo fTestSuiteCombo;
 	private Button fOkButton;
 	private TableViewer fTestDataViewer;
-	private ColorManager fColorManager;
 
 	/**
 	 * Create the dialog.
@@ -79,10 +78,8 @@ public class AddTestCaseDialog extends TitleAreaDialog implements TestDataEditor
 				}
 				fTestData.add(testValue);
 			}
-			
 		}
 		fMethod = method;
-		fColorManager = new ColorManager();
 	}
 
 	private PartitionNode createAnonymuousPartition(CategoryNode parent) {
@@ -160,7 +157,7 @@ public class AddTestCaseDialog extends TitleAreaDialog implements TestDataEditor
 	private Color getColor(Object element){
 		PartitionNode partition = (PartitionNode)element;
 		if(partition.getCategory().isExpected()){
-			return fColorManager.getColor(ColorConstants.EXPECTED_VALUE_CATEGORY);
+			return ColorManager.getColor(ColorConstants.EXPECTED_VALUE_CATEGORY);
 		}
 		return null;
 	}
@@ -184,7 +181,7 @@ public class AddTestCaseDialog extends TitleAreaDialog implements TestDataEditor
 				validateTestSuiteName();
 			}
 		});
-		fTestSuiteCombo.setText(Constants.DEFAULT_TEST_SUITE_NAME);
+		fTestSuiteCombo.setText(Constants.DEFAULT_NEW_TEST_SUITE_NAME);
 	}
 
 	/**

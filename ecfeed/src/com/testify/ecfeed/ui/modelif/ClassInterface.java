@@ -18,6 +18,7 @@ import com.testify.ecfeed.modelif.java.classx.ClassOperationAddMethods;
 import com.testify.ecfeed.modelif.java.classx.ClassOperationRemoveMethod;
 import com.testify.ecfeed.modelif.java.classx.ClassOperationRename;
 import com.testify.ecfeed.modelif.java.common.RemoveNodesOperation;
+import com.testify.ecfeed.ui.common.Constants;
 import com.testify.ecfeed.ui.editor.BasicSection;
 import com.testify.ecfeed.ui.editor.IModelUpdateListener;
 

@@ -26,6 +26,7 @@ import com.testify.ecfeed.modelif.java.partition.PartitionOperationRemoveLabels;
 import com.testify.ecfeed.modelif.java.partition.PartitionOperationRename;
 import com.testify.ecfeed.modelif.java.partition.PartitionOperationRenameLabel;
 import com.testify.ecfeed.modelif.java.partition.PartitionOperationSetValue;
+import com.testify.ecfeed.ui.common.Constants;
 import com.testify.ecfeed.ui.editor.BasicSection;
 import com.testify.ecfeed.ui.editor.IModelUpdateListener;
 

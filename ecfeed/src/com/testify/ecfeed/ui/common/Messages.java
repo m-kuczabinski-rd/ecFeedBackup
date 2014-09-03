@@ -11,7 +11,7 @@
 
 package com.testify.ecfeed.ui.common;
 
-import com.testify.ecfeed.utils.Constants;
+import com.testify.ecfeed.ui.common.Constants;
 
 public class Messages {
 	public static final String DIALOG_REMOVE_CLASSES_TITLE = "Remove classes"; 
