@@ -90,13 +90,6 @@ public class PartitionLabelsViewer extends CheckboxTableViewerSection {
 	}
 
 	private class LabelColumnLabelProvider extends ColumnLabelProvider{
-		
-		private ColorManager fColorManager;
-
-		LabelColumnLabelProvider(){
-			fColorManager = new ColorManager();
-		}
-		
 		@Override
 		public String getText(Object element){
 			return (String)element;
@@ -107,23 +100,12 @@ public class PartitionLabelsViewer extends CheckboxTableViewerSection {
 			if(element instanceof String){
 				String label = (String)element;
 				if(fPartitionIf.isLabelInherited(label)){
-					return fColorManager.getColor(ColorConstants.INHERITED_LABEL_FOREGROUND);
+					return ColorManager.getColor(ColorConstants.INHERITED_LABEL_FOREGROUND);
 				}
 			}
 			return null;
 		}
 
-//		@Override
-//		public Color getBackground(Object element){
-//			if(element instanceof String){
-//				String label = (String)element;
-//				if(fPartitionIf.isLabelInherited(label)){
-//					return fColorManager.getColor(ColorConstants.INHERITED_LABEL_BACKGROUND);
-//				}
-//			}
-//			return null;
-//		}
-//
 		@Override
 		public Font getFont(Object element){
 			if(element instanceof String){

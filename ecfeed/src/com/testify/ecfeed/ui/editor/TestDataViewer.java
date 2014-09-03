@@ -33,14 +33,12 @@ import com.testify.ecfeed.ui.modelif.TestCaseInterface;
 public class TestDataViewer extends TableViewerSection implements TestDataEditorListener{
 
 	private static final int STYLE = Section.EXPANDED | Section.TITLE_BAR;
-	private ColorManager fColorManager;
 
 	private TestCaseInterface fTestCaseIf;
 	
 	public TestDataViewer(BasicDetailsPage parent, FormToolkit toolkit) {
 		super(parent.getMainComposite(), toolkit, STYLE, parent);
 		fTestCaseIf = new TestCaseInterface(parent.getOperationManager());
-		fColorManager = new ColorManager();
 		getSection().setText("Test data");
 	}
 
@@ -80,7 +78,7 @@ public class TestDataViewer extends TableViewerSection implements TestDataEditor
 	private Color getColor(Object element){
 		GenericNodeInterface nodeIf = new GenericNodeInterface(null);
 		if (nodeIf.implementationStatus((PartitionNode)element) == ImplementationStatus.IMPLEMENTED) {
-			return fColorManager.getColor(ColorConstants.ITEM_IMPLEMENTED);
+			return ColorManager.getColor(ColorConstants.ITEM_IMPLEMENTED);
 		}
 		return null;
 	}

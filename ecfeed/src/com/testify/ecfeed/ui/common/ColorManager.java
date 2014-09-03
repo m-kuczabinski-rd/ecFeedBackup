@@ -22,16 +22,16 @@ import org.eclipse.swt.widgets.Display;
 public class ColorManager {
 
 	@SuppressWarnings("rawtypes")
-	protected Map fColorTable = new HashMap(10);
+	protected static Map fColorTable = new HashMap(10);
 
 	@SuppressWarnings("rawtypes")
-	public void dispose() {
+	public static void dispose() {
 		Iterator e = fColorTable.values().iterator();
 		while (e.hasNext())
 			 ((Color) e.next()).dispose();
 	}
 	@SuppressWarnings("unchecked")
-	public Color getColor(RGB rgb) {
+	public static Color getColor(RGB rgb) {
 		Color color = (Color) fColorTable.get(rgb);
 		if (color == null) {
 			color = new Color(Display.getCurrent(), rgb);

@@ -1,19 +1,27 @@
 package com.testify.ecfeed.ui.editor;
 
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.eclipse.core.runtime.FileLocator;
+import org.eclipse.core.runtime.Path;
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.jface.viewers.IBaseLabelProvider;
 import org.eclipse.jface.viewers.IContentProvider;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.ITreeContentProvider;
+import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.jface.viewers.TreeNodeContentProvider;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -21,11 +29,14 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Section;
+import org.osgi.framework.Bundle;
+import org.osgi.framework.FrameworkUtil;
 
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.ConstraintNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.constraint.BasicStatement;
+import com.testify.ecfeed.model.constraint.Constraint;
 import com.testify.ecfeed.model.constraint.ExpectedValueStatement;
 import com.testify.ecfeed.model.constraint.IRelationalStatement;
 import com.testify.ecfeed.model.constraint.IStatementVisitor;
@@ -49,12 +60,84 @@ public class ConstraintViewer extends TreeViewerSection {
 	private Button fAddStatementButton;
 	private Button fRemoveStatementButton;
 	
-	StatementViewerLabelProvider fStatementLabelProvider;
-	
+//	StatementViewerLabelProvider fStatementLabelProvider;
+	private Constraint fCurrentConstraint;
 	private BasicStatementInterface fStatementIf;
 	private BasicStatement fSelectedStatement;
 
 	private StatementEditor fStatementEditor;
+
+	private class StatementViewerContentProvider extends TreeNodeContentProvider implements ITreeContentProvider {
+		public final Object[] EMPTY_ARRAY = {};
+
+		@Override
+		public Object[] getElements(Object inputElement) {
+			if(inputElement instanceof Constraint){
+				Constraint constraint = (Constraint)inputElement;
+				return new Object[]{constraint.getPremise(), constraint.getConsequence()};
+			}
+			return null;
+		}
+
+		@Override
+		public Object[] getChildren(Object parentElement) {
+			if(parentElement instanceof BasicStatement){
+				return ((BasicStatement)parentElement).getChildren().toArray();
+			}
+			return EMPTY_ARRAY;
+		}
+
+		@Override
+		public Object getParent(Object element) {
+			if(element instanceof BasicStatement){
+				return ((BasicStatement)element).getParent();
+			}
+			return null;
+		}
+
+		@Override
+		public boolean hasChildren(Object element) {
+			if(element instanceof StatementArray){
+				StatementArray statementArray = (StatementArray)element;
+				List<BasicStatement> children = statementArray.getChildren();
+				return (children.size() > 0);
+			}
+			return false;
+		}
+	}
+	
+	private class StatementViewerLabelProvider extends LabelProvider {
+		
+		public String getText(Object element){
+			if(element instanceof StatementArray){
+				return ((StatementArray)element).getOperator().toString();
+			}
+			else if(element instanceof BasicStatement){
+				return ((BasicStatement)element).toString();
+			}
+			return null;
+		}
+		
+		public Image getImage(Object element){
+			if(fCurrentConstraint != null){
+				if(element == fCurrentConstraint.getPremise()){
+					return getImage("premise_statement.gif");
+				}
+				else if(element == fCurrentConstraint.getConsequence()){
+					return getImage("consequence_statement.gif");
+				}
+			}
+			return null;
+		}
+		
+		private Image getImage(String file) {
+		    Bundle bundle = FrameworkUtil.getBundle(StatementViewerLabelProvider.class);
+		    URL url = FileLocator.find(bundle, new Path("icons/" + file), null);
+		    ImageDescriptor image = ImageDescriptor.createFromURL(url);
+		    return image.createImage();
+		  }
+
+	}
 
 	private class StatementEditor extends Composite{
 		
@@ -382,10 +465,7 @@ public class ConstraintViewer extends TreeViewerSection {
 
 	@Override
 	protected IBaseLabelProvider viewerLabelProvider() {
-		if(fStatementLabelProvider == null){
-			fStatementLabelProvider = new StatementViewerLabelProvider();
-		}
-		return fStatementLabelProvider;
+		return new StatementViewerLabelProvider();
 	}
 	
 	@Override
@@ -395,7 +475,7 @@ public class ConstraintViewer extends TreeViewerSection {
 
 	public void setInput(ConstraintNode constraintNode){
 		//Update the statement provider before setting input to get the correct images
-		fStatementLabelProvider.setConstraint(constraintNode.getConstraint());
+		fCurrentConstraint = constraintNode.getConstraint();
 		super.setInput(constraintNode.getConstraint());
 		fStatementEditor.setConstraint(constraintNode);
 

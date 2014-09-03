@@ -6,9 +6,6 @@ import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.modelif.java.common.Messages;
 
 public class JavaClassUtils {
-	public static String getLocalName(ClassNode classNode){
-		return getLocalName(classNode.getName());
-	}
 
 	public static String getLocalName(String qualifiedName){
 		int lastDotIndex = qualifiedName.lastIndexOf('.');

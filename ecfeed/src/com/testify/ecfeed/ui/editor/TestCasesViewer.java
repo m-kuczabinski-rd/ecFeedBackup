@@ -32,6 +32,8 @@ import org.eclipse.ui.forms.widgets.Section;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.modelif.ImplementationStatus;
+import com.testify.ecfeed.ui.common.TestCasesViewerContentProvider;
+import com.testify.ecfeed.ui.common.TestCasesViewerLabelProvider;
 import com.testify.ecfeed.ui.common.TreeCheckStateListener;
 import com.testify.ecfeed.ui.dialogs.CalculateCoverageDialog;
 import com.testify.ecfeed.ui.modelif.MethodInterface;
@@ -40,13 +42,11 @@ public class TestCasesViewer extends CheckboxTreeViewerSection {
 
 	private final static int STYLE = Section.EXPANDED | Section.TITLE_BAR;
 	
-	private MethodNode fSelectedMethod;
 	private TestCasesViewerLabelProvider fLabelProvider;
 	private TestCasesViewerContentProvider fContentProvider;
 	private Button fExecuteSelectedButton;
 	private Button fGenerateSuiteButton;
 	private MethodInterface fMethodIf;
-	
 	
 	private class AddTestCaseAdapter extends SelectionAdapter{
 		@Override
@@ -135,8 +135,8 @@ public class TestCasesViewer extends CheckboxTreeViewerSection {
 
 	public void setInput(MethodNode method){
 		fMethodIf.setTarget(method);
-		fContentProvider.setMethod(method);
 		fLabelProvider.setMethod(method);
+		fContentProvider.setMethod(method);
 		super.setInput(method);
 	}
 	
@@ -167,18 +167,12 @@ public class TestCasesViewer extends CheckboxTreeViewerSection {
 	
 	@Override
 	protected IContentProvider viewerContentProvider() {
-		if(fContentProvider == null){
-			fContentProvider = new TestCasesViewerContentProvider(fSelectedMethod);	
-		}
-		return fContentProvider;
+		return new TestCasesViewerContentProvider();	
 	}
 
 	@Override
 	protected IBaseLabelProvider viewerLabelProvider() {
-		if(fLabelProvider == null){
-			fLabelProvider = new TestCasesViewerLabelProvider(fSelectedMethod);
-		}
-		return fLabelProvider;
+		return  new TestCasesViewerLabelProvider();
 	}
 	
 	public boolean executionEnabled(){

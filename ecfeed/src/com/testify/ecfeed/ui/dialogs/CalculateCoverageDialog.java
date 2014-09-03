@@ -47,9 +47,9 @@ import org.eclipse.swt.widgets.Tree;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.ui.common.Messages;
+import com.testify.ecfeed.ui.common.TestCasesViewerContentProvider;
+import com.testify.ecfeed.ui.common.TestCasesViewerLabelProvider;
 import com.testify.ecfeed.ui.common.TreeCheckStateListener;
-import com.testify.ecfeed.ui.editor.TestCasesViewerContentProvider;
-import com.testify.ecfeed.ui.editor.TestCasesViewerLabelProvider;
 
 public class CalculateCoverageDialog extends TitleAreaDialog {
 	private Canvas[] fCanvasSet;

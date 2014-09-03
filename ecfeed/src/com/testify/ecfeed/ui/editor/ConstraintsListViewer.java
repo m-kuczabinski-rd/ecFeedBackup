@@ -15,8 +15,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
+import org.eclipse.jface.viewers.EditingSupport;
 import org.eclipse.jface.viewers.TableViewerColumn;
+import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -26,6 +29,7 @@ import org.eclipse.ui.forms.widgets.Section;
 
 import com.testify.ecfeed.model.ConstraintNode;
 import com.testify.ecfeed.model.MethodNode;
+import com.testify.ecfeed.ui.modelif.ConstraintInterface;
 import com.testify.ecfeed.ui.modelif.MethodInterface;
 
 public class ConstraintsListViewer extends CheckboxTableViewerSection {
@@ -34,6 +38,40 @@ public class ConstraintsListViewer extends CheckboxTableViewerSection {
 
 	private TableViewerColumn fNameColumn;
 	private MethodInterface fMethodInterface;
+	private ConstraintInterface fConstraintIf;
+
+	public class ConstraintNameEditingSupport extends EditingSupport{
+
+		private CellEditor fNameCellEditor;
+
+		public ConstraintNameEditingSupport(){
+			super(getTableViewer());
+			fNameCellEditor = new TextCellEditor(getTable());
+		}
+
+		@Override
+		protected CellEditor getCellEditor(Object element){
+			return fNameCellEditor;
+		}
+
+		@Override
+		protected boolean canEdit(Object element){
+			return true;
+		}
+
+		@Override
+		protected Object getValue(Object element){
+			return ((ConstraintNode)element).getName();
+		}
+
+		@Override
+		protected void setValue(Object element, Object value){
+			String newName = (String)value;
+			ConstraintNode constraint = (ConstraintNode)element;
+			fConstraintIf.setTarget(constraint);
+			fConstraintIf.setName(newName, ConstraintsListViewer.this, getUpdateListener());
+		}
+	}
 
 	private class AddConstraintAdapter extends SelectionAdapter{
 		@Override 
@@ -62,7 +100,9 @@ public class ConstraintsListViewer extends CheckboxTableViewerSection {
 		getSection().setText("Constraints");
 		
 		fMethodInterface = new MethodInterface(parent.getOperationManager());
-		fNameColumn.setEditingSupport(new ConstraintNameEditingSupport(this, parent.getOperationManager()));
+		fConstraintIf = new ConstraintInterface(parent.getOperationManager());
+		
+		fNameColumn.setEditingSupport(new ConstraintNameEditingSupport());
 
 		addButton("Add constraint", new AddConstraintAdapter());
 		addButton("Remove selected", new RemoveSelectedConstraintsAdapter());

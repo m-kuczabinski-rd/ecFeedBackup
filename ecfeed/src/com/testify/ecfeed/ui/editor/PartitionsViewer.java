@@ -13,17 +13,31 @@ package com.testify.ecfeed.ui.editor;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
+import org.eclipse.jface.viewers.ArrayContentProvider;
+import org.eclipse.jface.viewers.CellEditor;
+import org.eclipse.jface.viewers.ColumnLabelProvider;
+import org.eclipse.jface.viewers.ComboBoxCellEditor;
+import org.eclipse.jface.viewers.ComboBoxViewerCellEditor;
+import org.eclipse.jface.viewers.EditingSupport;
+import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.TableViewerColumn;
+import org.eclipse.jface.viewers.TextCellEditor;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Section;
 
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.PartitionedNode;
+import com.testify.ecfeed.modelif.ImplementationStatus;
 import com.testify.ecfeed.modelif.ModelOperationManager;
+import com.testify.ecfeed.ui.common.ColorConstants;
+import com.testify.ecfeed.ui.common.ColorManager;
 import com.testify.ecfeed.ui.modelif.CategoryInterface;
 import com.testify.ecfeed.ui.modelif.PartitionInterface;
 import com.testify.ecfeed.ui.modelif.PartitionedNodeInterface;
@@ -38,6 +52,141 @@ public class PartitionsViewer extends CheckboxTableViewerSection {
 	private TableViewerColumn fNameColumn;
 	private TableViewerColumn fValueColumn;
 	private Button fMoveUpButton;
+	
+	private class PartitionNameEditingSupport extends EditingSupport{
+
+		private TextCellEditor fNameCellEditor;
+
+		public PartitionNameEditingSupport() {
+			super(getTableViewer());
+			fNameCellEditor = new TextCellEditor(getTable());
+		}
+
+		@Override
+		protected CellEditor getCellEditor(Object element) {
+			return fNameCellEditor;
+		}
+
+		@Override
+		protected boolean canEdit(Object element) {
+			return true;
+		}
+
+		@Override
+		protected Object getValue(Object element) {
+			return ((PartitionNode)element).getName();
+		}
+
+		@Override
+		protected void setValue(Object element, Object value) {
+			String newName = (String)value;
+			PartitionNode partition = (PartitionNode)element;
+			
+			if(newName.equals(partition.getName()) == false){
+				fTableItemIf.setTarget(partition);
+				fTableItemIf.setName(newName, PartitionsViewer.this, getUpdateListener());
+			}
+		}
+	}
+
+	private class PartitionNameLabelProvider extends ColumnLabelProvider {
+		@Override
+		public String getText(Object element){
+			if(element instanceof PartitionNode){
+				return ((PartitionNode)element).getName();
+			}
+			return "";
+		}
+
+		@Override
+		public Color getForeground(Object element){
+			if(element instanceof PartitionNode){
+				PartitionNode partition = (PartitionNode)element;
+				if(partition.isAbstract()){
+					return ColorManager.getColor(ColorConstants.ABSTRACT_PARTITION);
+				} else if (fTableItemIf.implementationStatus(partition) == ImplementationStatus.IMPLEMENTED) {
+					return ColorManager.getColor(ColorConstants.ITEM_IMPLEMENTED);
+				}
+			}
+			return null;
+		}
+	}
+	
+	private class PartitionValueEditingSupport extends EditingSupport {
+		private ComboBoxViewerCellEditor fCellEditor;
+		
+		public PartitionValueEditingSupport(CheckboxTableViewerSection viewer, ModelOperationManager operationManager) {
+			super(viewer.getTableViewer());
+			fCellEditor = new ComboBoxViewerCellEditor(viewer.getTable(), SWT.TRAIL);
+			fCellEditor.setLabelProvider(new LabelProvider());
+			fCellEditor.setContentProvider(new ArrayContentProvider());
+		}
+
+		@Override
+		protected CellEditor getCellEditor(Object element) {
+			PartitionNode node = (PartitionNode)element;
+			if(CategoryInterface.hasLimitedValuesSet(node.getCategory())){
+				fCellEditor.setActivationStyle(ComboBoxCellEditor.DROP_DOWN_ON_MOUSE_ACTIVATION);
+			} else {
+				fCellEditor.setActivationStyle(SWT.NONE);
+			}
+			List<String> items = CategoryInterface.getSpecialValues(node.getCategory().getType());
+			if(items.contains(node.getValueString()) == false){
+				items.add(node.getValueString());
+			}
+			fCellEditor.setInput(items);
+			fCellEditor.getViewer().getCCombo().setEditable(CategoryInterface.isBoolean(node.getCategory().getType()) == false);
+			return fCellEditor;
+		}
+
+		@Override
+		protected boolean canEdit(Object element) {
+			return ((PartitionNode)element).isAbstract() == false;
+		}
+
+		@Override
+		protected Object getValue(Object element) {
+			return ((PartitionNode)element).getValueString();
+		}
+
+		@Override
+		protected void setValue(Object element, Object value) {
+			String valueString = null;
+			if(value instanceof String){
+				valueString = (String)value;
+			} else if(value == null){
+				valueString = fCellEditor.getViewer().getCCombo().getText();
+			}
+			fTableItemIf.setTarget((PartitionNode)element);
+			fTableItemIf.setValue(valueString, PartitionsViewer.this, getUpdateListener());
+		}
+	}
+
+	private class PartitionValueLabelProvider extends ColumnLabelProvider {
+
+		@Override
+		public String getText(Object element){
+			if(element instanceof PartitionNode){
+				PartitionNode partition = (PartitionNode)element;
+				return partition.isAbstract()?"[ABSTRACT]":partition.getValueString();
+			}
+			return "";
+		}
+
+		@Override
+		public Color getForeground(Object element){
+			if(element instanceof PartitionNode){
+				PartitionNode partition = (PartitionNode)element;
+				if(partition.isAbstract()){
+					return ColorManager.getColor(ColorConstants.ABSTRACT_PARTITION);
+				} else if (fTableItemIf.implementationStatus(partition) == ImplementationStatus.IMPLEMENTED) {
+					return ColorManager.getColor(ColorConstants.ITEM_IMPLEMENTED);
+				}
+			}
+			return null;
+		}
+
+	}
 
 	private class AddPartitionAdapter extends SelectionAdapter{
 		
@@ -80,8 +229,8 @@ public class PartitionsViewer extends CheckboxTableViewerSection {
 		
 		fParentIf = new CategoryInterface(operationManager);
 		fTableItemIf = new PartitionInterface(operationManager);
-		
-		fNameColumn.setEditingSupport(new PartitionNameEditingSupport(this, operationManager));
+
+		fNameColumn.setEditingSupport(new PartitionNameEditingSupport());
 		fValueColumn.setEditingSupport(new PartitionValueEditingSupport(this, operationManager));
 
 		getSection().setText("Partitions");

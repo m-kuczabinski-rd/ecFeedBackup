@@ -37,16 +37,32 @@ public class ClassInterface extends GenericNodeInterface {
 		return fTarget;
 	}
 
+	public static String getQualifiedName(ClassNode classNode){
+		return classNode.getName();
+	}
+	
+	public static String getQualifiedName(String packageName, String localName){
+		return packageName + "." + localName;
+	}
+	
 	public String getQualifiedName(){
-		return JavaClassUtils.getQualifiedName(fTarget);
+		return getQualifiedName(fTarget);
 	}
 	
 	public String getLocalName(){
-		return JavaClassUtils.getLocalName(fTarget);
+		return getLocalName(fTarget);
+	}
+
+	public static String getLocalName(ClassNode classNode){
+		return JavaClassUtils.getLocalName(classNode.getName());
+	}
+
+	public static String getPackageName(ClassNode classNode){
+		return JavaClassUtils.getPackageName(classNode.getName());
 	}
 
 	public String getPackageName(){
-		return JavaClassUtils.getPackageName(fTarget);
+		return getPackageName(fTarget);
 	}
 
 	@Override

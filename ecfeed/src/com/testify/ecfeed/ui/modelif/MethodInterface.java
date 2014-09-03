@@ -251,4 +251,15 @@ public class MethodInterface extends GenericNodeInterface {
 		}
 	}
 	
+	public Collection<TestCaseNode> getTestCases(String testSuite){
+		return fTarget.getTestCases(testSuite);
+	}
+
+	public Collection<String> getTestSuites() {
+		return fTarget.getTestSuites();
+	}
+
+	public Collection<TestCaseNode> getTestCases() {
+		return fTarget.getTestCases();
+	}
 }

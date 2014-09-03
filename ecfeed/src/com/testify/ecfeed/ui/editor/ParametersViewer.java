@@ -14,9 +14,17 @@ package com.testify.ecfeed.ui.editor;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import org.eclipse.jface.viewers.ArrayContentProvider;
+import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
+import org.eclipse.jface.viewers.ComboBoxCellEditor;
+import org.eclipse.jface.viewers.ComboBoxViewerCellEditor;
+import org.eclipse.jface.viewers.EditingSupport;
+import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.TableViewerColumn;
+import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
@@ -26,24 +34,224 @@ import org.eclipse.ui.forms.widgets.Section;
 
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.MethodNode;
+import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.modelif.ModelOperationManager;
-import com.testify.ecfeed.ui.common.DefaultValueEditingSupport;
 import com.testify.ecfeed.ui.modelif.CategoryInterface;
+import com.testify.ecfeed.ui.modelif.EclipseModelBuilder;
 import com.testify.ecfeed.ui.modelif.MethodInterface;
 
 public class ParametersViewer extends CheckboxTableViewerSection{
 
 	private final static int STYLE = Section.EXPANDED | Section.TITLE_BAR;
 	private final String EMPTY_STRING = "";
-	private TableViewerColumn fDefaultValueColumn;
+
 	private MethodNode fSelectedMethod;
+	
+	private Button fMoveUpButton;
+
 	private TableViewerColumn fNameColumn;
-	private CategoryInterface fCategoryIf;
-	private MethodInterface fMethodIf;
 	private TableViewerColumn fTypeColumn;
 	private TableViewerColumn fExpectedColumn;
-	private Button fMoveUpButton;
+	private TableViewerColumn fDefaultValueColumn;
+
+	private CategoryInterface fCategoryIf;
+	private MethodInterface fMethodIf;
 	
+	private class CategoryTypeEditingSupport extends EditingSupport {
+
+		private ComboBoxCellEditor fCellEditor;
+
+		public CategoryTypeEditingSupport() {
+			super(getTableViewer());
+		}
+
+		@Override
+		protected CellEditor getCellEditor(Object element) {
+			if(fCellEditor == null){
+				fCellEditor = new ComboBoxCellEditor(getTable(), CategoryInterface.supportedPrimitiveTypes());
+				fCellEditor.setActivationStyle(ComboBoxCellEditor.DROP_DOWN_ON_MOUSE_ACTIVATION);
+			}
+			return fCellEditor;
+		}
+
+		@Override
+		protected boolean canEdit(Object element) {
+			return true;
+		}
+
+		@Override
+		protected Object getValue(Object element) {
+			CategoryNode node = (CategoryNode)element;
+			String [] items = fCellEditor.getItems();
+			ArrayList<String> newItems = new ArrayList<String>();
+
+			for (int i = 0; i < items.length; ++i) {
+				newItems.add(items[i]);
+				if (items[i].equals(node.getType())) {
+					return i;
+				}
+			}
+
+			newItems.add(node.getType());
+			fCellEditor.setItems(newItems.toArray(items));
+			return (newItems.size() - 1);
+		}
+
+		@Override
+		protected void setValue(Object element, Object value) {
+			CategoryNode node = (CategoryNode)element;
+			String newType = null;
+			int index = (int)value;
+
+			if (index >= 0) {
+				newType = fCellEditor.getItems()[index];
+			} else {
+				newType = ((CCombo)fCellEditor.getControl()).getText();
+			}
+			fCategoryIf.setTarget(node);
+			fCategoryIf.setType(newType, ParametersViewer.this, getUpdateListener());
+
+			fCellEditor.setFocus();
+		}
+	}
+
+	
+	private class CategoryNameEditingSupport extends EditingSupport {
+
+		private TextCellEditor fNameCellEditor;
+
+		public CategoryNameEditingSupport() {
+			super(getTableViewer());
+			fNameCellEditor = new TextCellEditor(getTable());
+		}
+
+		@Override
+		protected CellEditor getCellEditor(Object element) {
+			return fNameCellEditor;
+		}
+
+		@Override
+		protected boolean canEdit(Object element) {
+			return true;
+		}
+
+		@Override
+		protected Object getValue(Object element) {
+			return ((CategoryNode)element).getName();
+		}
+
+		@Override
+		protected void setValue(Object element, Object value) {
+			fCategoryIf.setTarget((CategoryNode)element);
+			fCategoryIf.setName((String)value, ParametersViewer.this, getUpdateListener());
+		}
+	}
+
+	private class ExpectedValueEditingSupport extends EditingSupport {
+
+		private final String[] EDITOR_ITEMS = {"Yes", "No"};
+		private ComboBoxCellEditor fCellEditor;
+
+		public ExpectedValueEditingSupport() {
+			super(getTableViewer());
+		}
+
+		@Override
+		protected CellEditor getCellEditor(Object element) {
+			if(fCellEditor == null){
+				fCellEditor = new ComboBoxCellEditor(getTable(), EDITOR_ITEMS, SWT.READ_ONLY);
+				fCellEditor.setActivationStyle(ComboBoxCellEditor.DROP_DOWN_ON_MOUSE_ACTIVATION);
+			}
+			return fCellEditor;
+		}
+
+		@Override
+		protected boolean canEdit(Object element) {
+			return true;
+		}
+
+		@Override
+		protected Object getValue(Object element) {
+			CategoryNode node = (CategoryNode)element;
+			return (node.isExpected() ? 0 : 1);
+		}
+
+		@Override
+		protected void setValue(Object element, Object value) {
+			CategoryNode node = (CategoryNode)element;
+			boolean expected = ((int)value == 0) ? true : false;
+			fCategoryIf.setTarget(node);
+			fCategoryIf.setExpected(expected, ParametersViewer.this, getUpdateListener());
+			fCellEditor.setFocus();
+		}
+	}
+	
+	private class DefaultValueEditingSupport extends EditingSupport {
+		private ComboBoxViewerCellEditor fComboCellEditor;
+
+		public DefaultValueEditingSupport() {
+			super(getTableViewer());
+			fComboCellEditor = new ComboBoxViewerCellEditor(getTable(), SWT.TRAIL);
+			fComboCellEditor.setLabelProvider(new LabelProvider());
+			fComboCellEditor.setContentProvider(new ArrayContentProvider());
+		}
+
+		@Override
+		protected CellEditor getCellEditor(Object element) {
+			CategoryNode category = (CategoryNode)element;
+			ArrayList<String> expectedValues = new ArrayList<String>();
+			for(PartitionNode node : new EclipseModelBuilder().defaultPartitions(category.getType())){
+				expectedValues.add(node.getValueString());
+			}
+			if(expectedValues.contains(category.getDefaultValue()) == false){
+				expectedValues.add(category.getDefaultValue());
+			}
+			for(PartitionNode leaf : category.getLeafPartitions()){
+				if(!expectedValues.contains(leaf.getValueString())){
+					expectedValues.add(leaf.getValueString());
+				}
+			}
+
+			fComboCellEditor.setInput(expectedValues);
+			fComboCellEditor.setValue(category.getDefaultValue());
+
+			fCategoryIf.setTarget(category);
+			if(fCategoryIf.hasLimitedValuesSet()){
+				fComboCellEditor.getViewer().getCCombo().setEditable(false);
+			}
+			else{
+				fComboCellEditor.setActivationStyle(ComboBoxViewerCellEditor.DROP_DOWN_ON_KEY_ACTIVATION
+						| ComboBoxViewerCellEditor.DROP_DOWN_ON_MOUSE_ACTIVATION);
+				fComboCellEditor.getViewer().getCCombo().setEditable(true);
+			}
+			return fComboCellEditor;
+		}
+
+		@Override
+		protected boolean canEdit(Object element) {
+			return (element instanceof CategoryNode && ((CategoryNode)element).isExpected());
+		}
+
+		@Override
+		protected Object getValue(Object element) {
+			return ((CategoryNode)element).getDefaultValue();
+		}
+
+		@Override
+		protected void setValue(Object element, Object value) {
+			CategoryNode category = (CategoryNode)element;
+			String valueString = null;
+			if(value instanceof String){
+				valueString = (String)value;
+			} else if(value == null){
+				valueString = fComboCellEditor.getViewer().getCCombo().getText();
+			}
+			fCategoryIf.setTarget(category);
+			fCategoryIf.setDefaultValue(valueString, ParametersViewer.this, getUpdateListener());
+		}
+
+	}
+
 	private class MoveUpDownAdapter extends SelectionAdapter{
 		@Override
 		public void widgetSelected(SelectionEvent e){
@@ -90,10 +298,10 @@ public class ParametersViewer extends CheckboxTableViewerSection{
 		fMoveUpButton = addButton("Move Up", adapter);
 		addButton("Move Down", adapter);
 
-		fNameColumn.setEditingSupport(new CategoryNameEditingSupport(this, operationManager));
-		fTypeColumn.setEditingSupport(new CategoryTypeEditingSupport(this, operationManager));
-		fExpectedColumn.setEditingSupport(new ExpectedValueEditingSupport(this, operationManager));
-		fDefaultValueColumn.setEditingSupport(new DefaultValueEditingSupport(this, operationManager));
+		fNameColumn.setEditingSupport(new CategoryNameEditingSupport());
+		fTypeColumn.setEditingSupport(new CategoryTypeEditingSupport());
+		fExpectedColumn.setEditingSupport(new ExpectedValueEditingSupport());
+		fDefaultValueColumn.setEditingSupport(new DefaultValueEditingSupport());
 
 		addDoubleClickListener(new SelectNodeDoubleClickListener(parent.getMasterSection()));
 	}

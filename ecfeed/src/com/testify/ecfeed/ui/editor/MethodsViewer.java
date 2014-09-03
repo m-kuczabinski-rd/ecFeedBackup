@@ -15,8 +15,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
+import org.eclipse.jface.viewers.EditingSupport;
 import org.eclipse.jface.viewers.TableViewerColumn;
+import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
@@ -36,11 +39,44 @@ import com.testify.ecfeed.ui.modelif.MethodInterface;
 public class MethodsViewer extends CheckboxTableViewerSection {
 
 	private static final int STYLE = Section.EXPANDED | Section.TITLE_BAR;
-	private ColorManager fColorManager;
 	private TableViewerColumn fMethodsColumn;
 	private ClassInterface fClassIf;
 	private MethodInterface fMethodIf;
 	
+	public class MethodNameEditingSupport extends EditingSupport{
+
+		private TextCellEditor fNameCellEditor;
+
+		public MethodNameEditingSupport() {
+			super(getTableViewer());
+			fNameCellEditor = new TextCellEditor(getTable());
+		}
+
+		@Override
+		protected CellEditor getCellEditor(Object element) {
+			return fNameCellEditor;
+		}
+
+		@Override
+		protected boolean canEdit(Object element) {
+			return true;
+		}
+
+		@Override
+		protected Object getValue(Object element) {
+			fMethodIf.setTarget((MethodNode)element);
+			return fMethodIf.getName();
+		}
+
+		@Override
+		protected void setValue(Object element, Object value) {
+			String newName = (String)value;
+			MethodNode method = (MethodNode)element;
+			fMethodIf.setTarget(method);
+			fMethodIf.setName(newName, MethodsViewer.this, getUpdateListener());
+		}
+	}
+
 	private class RemoveSelectedMethodsAdapter extends SelectionAdapter{
 		@Override
 		public void widgetSelected(SelectionEvent e) {
@@ -60,11 +96,6 @@ public class MethodsViewer extends CheckboxTableViewerSection {
 	}
 
 	private class MethodsNameLabelProvider extends ColumnLabelProvider{
-		
-		public MethodsNameLabelProvider() {
-			fColorManager = new ColorManager();
-		}
-		
 		@Override
 		public String getText(Object element){
 			MethodNode method = (MethodNode)element;
@@ -77,7 +108,7 @@ public class MethodsViewer extends CheckboxTableViewerSection {
 			fMethodIf.setTarget((MethodNode)element);
 			ImplementationStatus status = fMethodIf.implementationStatus();
 			switch(status){
-			case IMPLEMENTED: return fColorManager.getColor(ColorConstants.ITEM_IMPLEMENTED);
+			case IMPLEMENTED: return ColorManager.getColor(ColorConstants.ITEM_IMPLEMENTED);
 			default: return null;
 			}
 		}
@@ -111,7 +142,7 @@ public class MethodsViewer extends CheckboxTableViewerSection {
 		fClassIf = new ClassInterface(operationManager);
 		fMethodIf = new MethodInterface(operationManager);
 
-		fMethodsColumn.setEditingSupport(new MethodNameEditingSupport(this, operationManager));
+		fMethodsColumn.setEditingSupport(new MethodNameEditingSupport());
 
 		setText("Methods");
 		addButton("Add new method", new AddNewMethodAdapter());
