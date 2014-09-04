@@ -77,8 +77,10 @@ public class ModelMasterSection extends TreeViewerSection{
 	private Button fMoveUpButton;
 	private Button fMoveDownButton;
 	private RootNode fModel;
+	
 	private MenuOperationManager fMenuManager;
 	private Menu fMenu;
+	
 	private ModelOperationManager fOperationManager;
 
 	private interface IModelWrapper{
@@ -335,7 +337,7 @@ public class ModelMasterSection extends TreeViewerSection{
 		}
 	}
 	
-	protected class MenuSelectionAdapter extends SelectionAdapter{
+	private class MenuSelectionAdapter extends SelectionAdapter{
 		MenuOperation fOperation;
 		
 		@Override
@@ -357,20 +359,14 @@ public class ModelMasterSection extends TreeViewerSection{
 		}
 	}
 
-	private class MoveUpAdapter extends SelectionAdapter{
+	private class MoveUpDownAdapter extends SelectionAdapter{
 		@Override
 		public void widgetSelected(SelectionEvent e){
-			moveSelectedItem(true);
+			boolean up = e.getSource() == fMoveUpButton;
+			moveSelectedItem(up);
 		}
 	}
 
-	private class MoveDownAdapter extends SelectionAdapter{
-		@Override
-		public void widgetSelected(SelectionEvent e){
-			moveSelectedItem(false);
-		}
-	}
-	
 	private class ModelSelectionListener implements ISelectionChangedListener{
 		@Override
 		public void selectionChanged(SelectionChangedEvent event) {
@@ -387,6 +383,12 @@ public class ModelMasterSection extends TreeViewerSection{
 			}
 			fMoveUpButton.setEnabled(enabled);
 			fMoveDownButton.setEnabled(enabled);
+		}
+
+		private void notifyModelSelectionListeners(ISelection newSelection) {
+			for(IModelSelectionListener listener : fModelSelectionListeners){
+				listener.modelSelectionChanged(newSelection);
+			}
 		}
 	}
 
@@ -423,8 +425,8 @@ public class ModelMasterSection extends TreeViewerSection{
 	protected void createContent(){
 		super.createContent();
 		getSection().setText("Structure");
-		fMoveUpButton = addButton("Move Up", new MoveUpAdapter());
-		fMoveDownButton = addButton("Move Down", new MoveDownAdapter());
+		fMoveUpButton = addButton("Move Up", new MoveUpDownAdapter());
+		fMoveDownButton = addButton("Move Down", new MoveUpDownAdapter());
 		getTreeViewer().setAutoExpandLevel(AUTO_EXPAND_LEVEL);
 		addSelectionChangedListener(new ModelSelectionListener());
 		createMenu();
@@ -467,12 +469,7 @@ public class ModelMasterSection extends TreeViewerSection{
 			}
 		});
 	}
-	private void notifyModelSelectionListeners(ISelection newSelection) {
-		for(IModelSelectionListener listener : fModelSelectionListeners){
-			listener.modelSelectionChanged(newSelection);
-		}
-	}
-
+	
 	private void moveSelectedItem(boolean moveUp){
 		GenericNodeInterface nodeIf = new NodeInterfaceFactory(fOperationManager).getNodeInterface(selectedNode());
 		nodeIf.moveUpDown(moveUp, this, this.getUpdateListener());
@@ -486,6 +483,4 @@ public class ModelMasterSection extends TreeViewerSection{
 		}
 		return null;
 	}
-
-	
 }
