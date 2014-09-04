@@ -9,28 +9,21 @@
  *     Michal Gluszko (m.gluszko(at)radytek.com) - initial implementation
  ******************************************************************************/
 
-package com.testify.ecfeed.ui.editor;
+package com.testify.ecfeed.ui.editor.menu;
 
-import com.testify.ecfeed.model.GenericNode;
+public abstract class MenuOperation{
+	protected String operationName;
 
-public class MenuCopyOperation extends MenuOperation{
-	private NodeClipboard fSource;
-	private GenericNode fTarget;
+	public abstract void execute();
 
-	@Override
-	public void execute(){
-		fSource.setClipboardNode(fTarget);
+	public abstract boolean isEnabled();
+
+	public MenuOperation(String opname){
+		operationName = opname;
 	}
 
-	@Override
-	public boolean isEnabled(){
-		return (fTarget != null);
-	}
-	
-	public MenuCopyOperation(GenericNode target, NodeClipboard source){
-		super("Copy");
-		fTarget = target;
-		fSource = source;
+	public String getOperationName(){
+		return operationName;
 	}
 
 }

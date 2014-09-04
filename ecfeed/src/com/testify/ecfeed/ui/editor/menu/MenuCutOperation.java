@@ -9,7 +9,7 @@
  *     Michal Gluszko (m.gluszko(at)radytek.com) - initial implementation
  ******************************************************************************/
 
-package com.testify.ecfeed.ui.editor;
+package com.testify.ecfeed.ui.editor.menu;
 
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.ClassNode;
@@ -19,6 +19,8 @@ import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.TestCaseNode;
+import com.testify.ecfeed.ui.editor.ModelMasterSection;
+import com.testify.ecfeed.ui.editor.NodeClipboard;
 
 public class MenuCutOperation extends MenuOperation{
 	private NodeClipboard fSource;

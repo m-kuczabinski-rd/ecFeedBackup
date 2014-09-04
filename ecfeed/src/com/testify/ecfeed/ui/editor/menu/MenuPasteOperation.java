@@ -9,7 +9,7 @@
  *     Michal Gluszko (m.gluszko(at)radytek.com) - initial implementation
  ******************************************************************************/
 
-package com.testify.ecfeed.ui.editor;
+package com.testify.ecfeed.ui.editor.menu;
 
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
@@ -23,6 +23,7 @@ import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.ui.common.Messages;
+import com.testify.ecfeed.ui.editor.ModelMasterSection;
 
 public class MenuPasteOperation extends MenuOperation{
 	protected GenericNode fSource;

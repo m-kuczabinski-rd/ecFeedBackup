@@ -9,12 +9,14 @@
  *     Michal Gluszko (m.gluszko(at)radytek.com) - initial implementation
  ******************************************************************************/
 
-package com.testify.ecfeed.ui.editor;
+package com.testify.ecfeed.ui.editor.menu;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import com.testify.ecfeed.model.GenericNode;
+import com.testify.ecfeed.ui.editor.ModelMasterSection;
+import com.testify.ecfeed.ui.editor.NodeClipboard;
 
 public class MenuOperationManager{
 
