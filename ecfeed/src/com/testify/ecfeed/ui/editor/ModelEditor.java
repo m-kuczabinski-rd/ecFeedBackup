@@ -45,7 +45,7 @@ import com.testify.ecfeed.serialization.ParserException;
 import com.testify.ecfeed.serialization.ect.EctParser;
 import com.testify.ecfeed.serialization.ect.EctSerializer;
 
-public class ModelEditor extends FormEditor/* implements IModelWrapper*/{
+public class ModelEditor extends FormEditor{
 	
 	public static String ID = "com.testify.ecfeed.ui.editors.EcMultiPageEditor";
 
