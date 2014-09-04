@@ -11,6 +11,8 @@
 
 package com.testify.ecfeed.ui.editor;
 
+import java.util.List;
+
 import org.eclipse.jface.viewers.IBaseLabelProvider;
 import org.eclipse.jface.viewers.IContentProvider;
 import org.eclipse.jface.viewers.IDoubleClickListener;
@@ -32,14 +34,15 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 public abstract class ViewerSection extends BasicSection {
 	public static final int BUTTONS_ASIDE = 1;
 	public static final int BUTTONS_BELOW = 2;
+
+	private final int VIEWER_STYLE = SWT.BORDER;
 	
-	private Object fSelectedElement;
+	private List<Object> fSelectedElements;
 
 	private Composite fButtonsComposite;
 	private StructuredViewer fViewer;
 	private Composite fViewerComposite;
 	
-	private final int VIEWER_STYLE = SWT.BORDER;
 	
 	public ViewerSection(Composite parent, FormToolkit toolkit, int style, IModelUpdateListener updateListener) {
 		super(parent, toolkit, style, updateListener);
@@ -66,7 +69,10 @@ public abstract class ViewerSection extends BasicSection {
 	}
 
 	public Object getSelectedElement(){
-		return fSelectedElement;
+		if(fSelectedElements.size() > 0){
+			return fSelectedElements.get(0);
+		}
+		return null;
 	}
 
 	public void selectElement(Object element){
@@ -104,9 +110,10 @@ public abstract class ViewerSection extends BasicSection {
 		createViewerColumns();
 
 		fViewer.addSelectionChangedListener(new ISelectionChangedListener() {
+			@SuppressWarnings("unchecked")
 			@Override
 			public void selectionChanged(SelectionChangedEvent event) {
-				fSelectedElement = ((IStructuredSelection)event.getSelection()).getFirstElement();
+				fSelectedElements = ((IStructuredSelection)event.getSelection()).toList();
 			}
 		});
 

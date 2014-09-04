@@ -27,7 +27,6 @@ import org.eclipse.jface.viewers.IBaseLabelProvider;
 import org.eclipse.jface.viewers.IContentProvider;
 import org.eclipse.jface.viewers.ILabelDecorator;
 import org.eclipse.jface.viewers.ILabelProviderListener;
-import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.ITreeContentProvider;
@@ -63,11 +62,11 @@ import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.modelif.ModelOperationManager;
-import com.testify.ecfeed.ui.modelif.GenericNodeInterface;
-import com.testify.ecfeed.ui.modelif.NodeInterfaceFactory;
 import com.testify.ecfeed.ui.common.Constants;
 import com.testify.ecfeed.ui.editor.menu.MenuOperation;
 import com.testify.ecfeed.ui.editor.menu.MenuOperationManager;
+import com.testify.ecfeed.ui.modelif.GenericNodeInterface;
+import com.testify.ecfeed.ui.modelif.NodeInterfaceFactory;
 
 public class ModelMasterSection extends TreeViewerSection{
 	private static final int STYLE = Section.EXPANDED | Section.TITLE_BAR;
@@ -371,21 +370,23 @@ public class ModelMasterSection extends TreeViewerSection{
 		@Override
 		public void selectionChanged(SelectionChangedEvent event) {
 			IStructuredSelection selection = (IStructuredSelection)event.getSelection();
-			GenericNode selectedNode = (GenericNode)selection.getFirstElement();
-			enableSortButtons(selectedNode);
+			enableSortButtons(selection);
 			notifyModelSelectionListeners(selection);
 		}
 
-		private void enableSortButtons(GenericNode selectedElement) {
+		private void enableSortButtons(IStructuredSelection selection) {
 			boolean enabled = true;
-			if (selectedElement instanceof RootNode) {
+			if(selection.toList().size() != 1){
+				enabled = false;
+			}
+			if (selection.getFirstElement() instanceof RootNode) {
 				enabled = false;
 			}
 			fMoveUpButton.setEnabled(enabled);
 			fMoveDownButton.setEnabled(enabled);
 		}
 
-		private void notifyModelSelectionListeners(ISelection newSelection) {
+		private void notifyModelSelectionListeners(IStructuredSelection newSelection) {
 			for(IModelSelectionListener listener : fModelSelectionListeners){
 				listener.modelSelectionChanged(newSelection);
 			}
