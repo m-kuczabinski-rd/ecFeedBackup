@@ -12,18 +12,18 @@
 package com.testify.ecfeed.ui.editor.menu;
 
 public abstract class MenuOperation{
-	protected String operationName;
+	protected String fName;
 
 	public abstract void execute();
 
 	public abstract boolean isEnabled();
 
-	public MenuOperation(String opname){
-		operationName = opname;
+	public MenuOperation(String name){
+		fName = name;
 	}
 
-	public String getOperationName(){
-		return operationName;
+	public String getName(){
+		return fName;
 	}
 
 }

@@ -84,8 +84,8 @@ public abstract class ViewerSection extends BasicSection implements ISelectionPr
     	fViewer.addSelectionChangedListener(listener);
     }
     
-    public ISelection getSelection(){
-    	return fViewer.getSelection();
+    public IStructuredSelection getSelection(){
+    	return (IStructuredSelection)fViewer.getSelection();
     }
     
     public void removeSelectionChangedListener(ISelectionChangedListener listener){
