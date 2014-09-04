@@ -39,6 +39,8 @@ public abstract class ViewerSection extends BasicSection {
 	private StructuredViewer fViewer;
 	private Composite fViewerComposite;
 	
+	private final int VIEWER_STYLE = SWT.BORDER;
+	
 	public ViewerSection(Composite parent, FormToolkit toolkit, int style, IModelUpdateListener updateListener) {
 		super(parent, toolkit, style, updateListener);
 	}	
@@ -88,11 +90,15 @@ public abstract class ViewerSection extends BasicSection {
 		return BUTTONS_BELOW;
 	}
 
+	protected int viewerStyle(){
+		return VIEWER_STYLE;
+	}
+	
 	protected Composite createViewerComposite(Composite parent) {
 		fViewerComposite = getToolkit().createComposite(parent);
 		fViewerComposite.setLayout(new GridLayout(1, false));
 		fViewerComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
-		fViewer = createViewer(fViewerComposite, SWT.BORDER);
+		fViewer = createViewer(fViewerComposite, viewerStyle());
 		fViewer.setContentProvider(viewerContentProvider());
 		fViewer.setLabelProvider(viewerLabelProvider());
 		createViewerColumns();
@@ -177,6 +183,4 @@ public abstract class ViewerSection extends BasicSection {
 	protected abstract StructuredViewer createViewer(Composite viewerComposite, int style);
 	protected abstract IContentProvider viewerContentProvider();
 	protected abstract IBaseLabelProvider viewerLabelProvider();
-
-
 }

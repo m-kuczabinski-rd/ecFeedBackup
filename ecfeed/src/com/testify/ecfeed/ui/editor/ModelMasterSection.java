@@ -431,6 +431,11 @@ public class ModelMasterSection extends TreeViewerSection{
 		addSelectionChangedListener(new ModelSelectionListener());
 		createMenu();
 	}
+	
+	@Override
+	protected int viewerStyle(){
+		return super.viewerStyle() | SWT.MULTI;
+	}
 
 	@Override
 	protected IContentProvider viewerContentProvider() {
