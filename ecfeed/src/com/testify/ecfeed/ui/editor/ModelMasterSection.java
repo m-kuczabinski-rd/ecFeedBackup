@@ -72,12 +72,10 @@ public class ModelMasterSection extends TreeViewerSection{
 	private static final int STYLE = Section.EXPANDED | Section.TITLE_BAR;
 	private static final int AUTO_EXPAND_LEVEL = 3;
 
-	private List<IModelSelectionListener> fModelSelectionListeners;
 	private Button fMoveUpButton;
 	private Button fMoveDownButton;
 	private RootNode fModel;
 	
-	private MenuOperationManager fMenuManager;
 	private Menu fMenu;
 	
 	private ModelOperationManager fOperationManager;
@@ -364,6 +362,20 @@ public class ModelMasterSection extends TreeViewerSection{
 			boolean up = e.getSource() == fMoveUpButton;
 			moveSelectedItem(up);
 		}
+
+		private void moveSelectedItem(boolean moveUp){
+			GenericNodeInterface nodeIf = new NodeInterfaceFactory(fOperationManager).getNodeInterface(selectedNode());
+			nodeIf.moveUpDown(moveUp, ModelMasterSection.this, getUpdateListener());
+			refresh();
+		}
+
+		private GenericNode selectedNode() {
+			Object selectedElement = getSelectedElement();
+			if(selectedElement instanceof GenericNode){
+				return (GenericNode)selectedElement;
+			}
+			return null;
+		}
 	}
 
 	private class ModelSelectionListener implements ISelectionChangedListener{
@@ -371,7 +383,6 @@ public class ModelMasterSection extends TreeViewerSection{
 		public void selectionChanged(SelectionChangedEvent event) {
 			IStructuredSelection selection = (IStructuredSelection)event.getSelection();
 			enableSortButtons(selection);
-			notifyModelSelectionListeners(selection);
 		}
 
 		private void enableSortButtons(IStructuredSelection selection) {
@@ -385,25 +396,46 @@ public class ModelMasterSection extends TreeViewerSection{
 			fMoveUpButton.setEnabled(enabled);
 			fMoveDownButton.setEnabled(enabled);
 		}
+	}
 
-		private void notifyModelSelectionListeners(IStructuredSelection newSelection) {
-			for(IModelSelectionListener listener : fModelSelectionListeners){
-				listener.modelSelectionChanged(newSelection);
+	private class ModelTreeMenuAdapter extends MenuAdapter{
+		
+		private MenuOperationManager fMenuManager;
+
+		public ModelTreeMenuAdapter(){
+			fMenuManager = new MenuOperationManager(ModelMasterSection.this);
+		}
+		
+		@Override
+		public void menuShown(MenuEvent e){
+			Tree tree = getTreeViewer().getTree();
+			Menu menu = (Menu)e.getSource();
+			MenuItem[] items = menu.getItems();
+			for(int i = 0; i < items.length; i++){
+				items[i].dispose();
+			}
+
+			if(tree.getSelection()[0].getData() instanceof GenericNode){
+				GenericNode target = (GenericNode)tree.getSelection()[0].getData();
+				for(MenuOperation operation : fMenuManager.getOperations(target)){
+					MenuItem item = new MenuItem(fMenu, SWT.NONE);
+					item.setText(operation.getOperationName());
+					item.addSelectionListener(new MenuSelectionAdapter(operation, target));
+					item.setEnabled(operation.isEnabled());
+				}
 			}
 		}
 	}
-
+	
 	public ModelMasterSection(Composite parent, FormToolkit toolkit, ModelOperationManager operationManager) {
 		super(parent, toolkit, STYLE, new UpdateListener());
-		fModelSelectionListeners = new ArrayList<IModelSelectionListener>();
-		fMenuManager = new MenuOperationManager(this);
 		fOperationManager = operationManager;
 	}
 	
-	public void addModelSelectionChangedListener(IModelSelectionListener listener){
-		fModelSelectionListeners.add(listener);
-	}
-		
+//	public void addModelSelectionChangedListener(IModelSelectionListener listener){
+//		fModelSelectionListeners.add(listener);
+//	}
+//		
 	public void setModel(RootNode model){
 		fModel = model;
 		setInput(new IModelWrapper() {
@@ -449,44 +481,10 @@ public class ModelMasterSection extends TreeViewerSection{
 	}
 	
 	protected void createMenu(){
-		fMenu = new Menu(getTreeViewer().getTree());
-		Tree tree = getTreeViewer().getTree();
+		Tree tree = getTree();
+		fMenu = new Menu(tree);
 		tree.setMenu(fMenu);
 
-		fMenu.addMenuListener(new MenuAdapter(){
-			@Override
-			public void menuShown(MenuEvent e){
-				Tree tree = getTreeViewer().getTree();
-				Menu menu = (Menu)e.getSource();
-				MenuItem[] items = menu.getItems();
-				for(int i = 0; i < items.length; i++){
-					items[i].dispose();
-				}
-
-				if(tree.getSelection()[0].getData() instanceof GenericNode){
-					GenericNode target = (GenericNode)tree.getSelection()[0].getData();
-					for(MenuOperation operation : fMenuManager.getOperations(target)){
-						MenuItem item = new MenuItem(fMenu, SWT.NONE);
-						item.setText(operation.getOperationName());
-						item.addSelectionListener(new MenuSelectionAdapter(operation, target));
-						item.setEnabled(operation.isEnabled());
-					}
-				}
-			}
-		});
-	}
-	
-	private void moveSelectedItem(boolean moveUp){
-		GenericNodeInterface nodeIf = new NodeInterfaceFactory(fOperationManager).getNodeInterface(selectedNode());
-		nodeIf.moveUpDown(moveUp, this, this.getUpdateListener());
-		refresh();
-	}
-
-	private GenericNode selectedNode() {
-		Object selectedElement = getSelectedElement();
-		if(selectedElement instanceof GenericNode){
-			return (GenericNode)selectedElement;
-		}
-		return null;
+		fMenu.addMenuListener(new ModelTreeMenuAdapter());
 	}
 }

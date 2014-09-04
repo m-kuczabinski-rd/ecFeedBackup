@@ -15,7 +15,6 @@ import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.IBaseLabelProvider;
 import org.eclipse.jface.viewers.IContentProvider;
-import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.StructuredViewer;
 import org.eclipse.jface.viewers.TableViewer;
@@ -67,10 +66,6 @@ public abstract class TableViewerSection extends ViewerSection {
 		return new Table(parent, style);
 	}
 
-	protected void addSelectionChangedListener(ISelectionChangedListener listener){
-		getTableViewer().addSelectionChangedListener(listener);
-	}
-	
 	public Table getTable(){
 		return getTableViewer().getTable();
 	}

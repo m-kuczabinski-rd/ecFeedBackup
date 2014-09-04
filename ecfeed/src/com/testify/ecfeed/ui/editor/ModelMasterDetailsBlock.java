@@ -11,7 +11,8 @@
 
 package com.testify.ecfeed.ui.editor;
 
-import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.forms.DetailsPart;
 import org.eclipse.ui.forms.IDetailsPage;
@@ -29,7 +30,7 @@ import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.modelif.ModelOperationManager;
 
-public class ModelMasterDetailsBlock extends MasterDetailsBlock implements IModelSelectionListener{
+public class ModelMasterDetailsBlock extends MasterDetailsBlock implements ISelectionChangedListener{
 
 	private ModelMasterSection fMasterSection;
 	private ModelPage fPage;
@@ -43,7 +44,7 @@ public class ModelMasterDetailsBlock extends MasterDetailsBlock implements IMode
 		FormToolkit toolkit = managedForm.getToolkit();
 		fMasterSection = new ModelMasterSection(parent, toolkit, getPage().getEditor().getModelOperationManager());
 		fMasterSection.initialize(managedForm);
-		fMasterSection.addModelSelectionChangedListener(this);
+		fMasterSection.addSelectionChangedListener(this);
 		fMasterSection.setModel(getModel());
 	}
 
@@ -72,11 +73,6 @@ public class ModelMasterDetailsBlock extends MasterDetailsBlock implements IMode
 		fMasterSection.selectElement(node);
 	}
 
-	@Override
-	public void modelSelectionChanged(ISelection newSelection) {
-		detailsPart.selectionChanged(fMasterSection, newSelection);
-	}
-
 	public ModelMasterSection getMasterSection(){
 		return fMasterSection;
 	}
@@ -87,5 +83,10 @@ public class ModelMasterDetailsBlock extends MasterDetailsBlock implements IMode
 	
 	public ModelPage getPage(){
 		return fPage;
+	}
+
+	@Override
+	public void selectionChanged(SelectionChangedEvent event) {
+		detailsPart.selectionChanged(fMasterSection, event.getSelection());
 	}
 }

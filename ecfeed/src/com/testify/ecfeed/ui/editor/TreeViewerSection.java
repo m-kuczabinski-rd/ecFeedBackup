@@ -11,7 +11,6 @@
 
 package com.testify.ecfeed.ui.editor;
 
-import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.StructuredViewer;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.widgets.Composite;
@@ -38,10 +37,6 @@ public abstract class TreeViewerSection extends ViewerSection {
 		tree.setLayoutData(viewerLayoutData());
 		TreeViewer treeViewer = new TreeViewer(tree);
 		return treeViewer;
-	}
-	
-	protected void addSelectionChangedListener(ISelectionChangedListener listener){
-		getTreeViewer().addSelectionChangedListener(listener);
 	}
 	
 	protected Tree getTree(){

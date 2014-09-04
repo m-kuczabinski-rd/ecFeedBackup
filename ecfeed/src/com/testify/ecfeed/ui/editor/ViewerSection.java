@@ -16,7 +16,9 @@ import java.util.List;
 import org.eclipse.jface.viewers.IBaseLabelProvider;
 import org.eclipse.jface.viewers.IContentProvider;
 import org.eclipse.jface.viewers.IDoubleClickListener;
+import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
@@ -31,7 +33,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Layout;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
-public abstract class ViewerSection extends BasicSection {
+public abstract class ViewerSection extends BasicSection implements ISelectionProvider{
 	public static final int BUTTONS_ASIDE = 1;
 	public static final int BUTTONS_BELOW = 2;
 
@@ -54,20 +56,6 @@ public abstract class ViewerSection extends BasicSection {
 		fViewer.refresh();
 	}
 
-	@Override
-	protected Composite createClientComposite() {
-		Composite client = super.createClientComposite();
-		createViewerComposite(client); 
-		fButtonsComposite = createButtonsComposite(client); 
-		return client;
-	}
-	
-	@Override 
-	protected Layout clientLayout() {
-		GridLayout layout = new GridLayout(buttonsPosition() == BUTTONS_BELOW?1:2, false);
-		return layout;
-	}
-
 	public Object getSelectedElement(){
 		if(fSelectedElements.size() > 0){
 			return fSelectedElements.get(0);
@@ -86,6 +74,40 @@ public abstract class ViewerSection extends BasicSection {
 
 	public Object getInput(){
 		return fViewer.getInput();
+	}
+
+	public StructuredViewer getViewer(){
+		return fViewer;
+	}
+
+    public void addSelectionChangedListener(ISelectionChangedListener listener){
+    	fViewer.addSelectionChangedListener(listener);
+    }
+    
+    public ISelection getSelection(){
+    	return fViewer.getSelection();
+    }
+    
+    public void removeSelectionChangedListener(ISelectionChangedListener listener){
+    	fViewer.removeSelectionChangedListener(listener);
+    }
+
+    public void setSelection(ISelection selection){
+    	fViewer.setSelection(selection);
+    }
+
+	@Override
+	protected Composite createClientComposite() {
+		Composite client = super.createClientComposite();
+		createViewerComposite(client); 
+		fButtonsComposite = createButtonsComposite(client); 
+		return client;
+	}
+
+	@Override 
+	protected Layout clientLayout() {
+		GridLayout layout = new GridLayout(buttonsPosition() == BUTTONS_BELOW?1:2, false);
+		return layout;
 	}
 
 	/*
@@ -171,10 +193,6 @@ public abstract class ViewerSection extends BasicSection {
 		getViewer().addDoubleClickListener(listener);
 	}
 	
-	public StructuredViewer getViewer(){
-		return fViewer;
-	}
-
 	protected GridData viewerLayoutData(){
 		GridData gd = new GridData(SWT.FILL, SWT.FILL, true, true);
 		gd.widthHint = 100;
