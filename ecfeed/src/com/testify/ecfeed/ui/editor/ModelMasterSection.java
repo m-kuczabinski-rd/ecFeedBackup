@@ -74,14 +74,21 @@ public class ModelMasterSection extends TreeViewerSection{
 
 	private Button fMoveUpButton;
 	private Button fMoveDownButton;
-	private RootNode fModel;
 	
 	private Menu fMenu;
 	
 	private ModelOperationManager fOperationManager;
 
-	private interface IModelWrapper{
-		public RootNode getModel();
+	private class ModelWrapper{
+		private RootNode fModel;
+		
+		public ModelWrapper(RootNode model){
+			fModel = model;
+		}
+		
+		public RootNode getModel(){
+			return fModel;
+		}
 	}
 
 	private class ModelContentProvider extends TreeNodeContentProvider implements ITreeContentProvider {
@@ -90,8 +97,8 @@ public class ModelMasterSection extends TreeViewerSection{
 
 		@Override
 		public Object[] getElements(Object inputElement) {
-			if(inputElement instanceof IModelWrapper){
-				RootNode root = ((IModelWrapper)inputElement).getModel(); 
+			if(inputElement instanceof ModelWrapper){
+				RootNode root = ((ModelWrapper)inputElement).getModel(); 
 				return new Object[]{root};
 			}
 			return getChildren(inputElement);
@@ -432,18 +439,8 @@ public class ModelMasterSection extends TreeViewerSection{
 		fOperationManager = operationManager;
 	}
 	
-	public void setModel(RootNode model){
-		fModel = model;
-		setInput(new IModelWrapper() {
-			@Override
-			public RootNode getModel() {
-				return fModel;
-			}
-		});
-	}
-	
-	public RootNode getModel(){
-		return fModel;
+	public void setInput(RootNode model){
+		setInput(new ModelWrapper(model));
 	}
 	
 	public ModelOperationManager getOperationManager(){

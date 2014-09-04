@@ -45,7 +45,7 @@ public class ModelMasterDetailsBlock extends MasterDetailsBlock implements ISele
 		fMasterSection = new ModelMasterSection(parent, toolkit, getPage().getEditor().getModelOperationManager());
 		fMasterSection.initialize(managedForm);
 		fMasterSection.addSelectionChangedListener(this);
-		fMasterSection.setModel(getModel());
+		fMasterSection.setInput(getModel());
 	}
 
 	private RootNode getModel() {
