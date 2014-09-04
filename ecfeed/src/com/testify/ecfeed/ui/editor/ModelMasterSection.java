@@ -432,10 +432,6 @@ public class ModelMasterSection extends TreeViewerSection{
 		fOperationManager = operationManager;
 	}
 	
-//	public void addModelSelectionChangedListener(IModelSelectionListener listener){
-//		fModelSelectionListeners.add(listener);
-//	}
-//		
 	public void setModel(RootNode model){
 		fModel = model;
 		setInput(new IModelWrapper() {
