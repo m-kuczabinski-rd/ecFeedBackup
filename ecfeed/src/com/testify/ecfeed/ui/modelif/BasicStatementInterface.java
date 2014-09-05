@@ -6,7 +6,6 @@ import com.testify.ecfeed.model.constraint.Relation;
 import com.testify.ecfeed.model.constraint.StaticStatement;
 import com.testify.ecfeed.modelif.ModelOperationManager;
 import com.testify.ecfeed.ui.editor.BasicSection;
-import com.testify.ecfeed.ui.editor.IModelUpdateListener;
 
 public class BasicStatementInterface extends OperationExecuter {
 	

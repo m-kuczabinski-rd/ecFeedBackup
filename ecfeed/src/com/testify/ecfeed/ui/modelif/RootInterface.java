@@ -17,7 +17,6 @@ import com.testify.ecfeed.modelif.java.root.RootOperationRename;
 import com.testify.ecfeed.ui.common.Constants;
 import com.testify.ecfeed.ui.dialogs.TestClassSelectionDialog;
 import com.testify.ecfeed.ui.editor.BasicSection;
-import com.testify.ecfeed.ui.editor.IModelUpdateListener;
 
 public class RootInterface extends GenericNodeInterface {
 

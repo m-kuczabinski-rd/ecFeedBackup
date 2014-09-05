@@ -17,6 +17,8 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
+import com.testify.ecfeed.ui.modelif.IModelUpdateListener;
+
 public abstract class TreeViewerSection extends ViewerSection {
 
 	public TreeViewerSection(Composite parent, FormToolkit toolkit, int style, IModelUpdateListener updateListener) {

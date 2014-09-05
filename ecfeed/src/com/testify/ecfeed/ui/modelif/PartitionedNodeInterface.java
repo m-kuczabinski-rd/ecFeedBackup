@@ -15,7 +15,6 @@ import com.testify.ecfeed.modelif.java.category.GenericOperationRemovePartition;
 import com.testify.ecfeed.modelif.java.common.RemoveNodesOperation;
 import com.testify.ecfeed.ui.common.Constants;
 import com.testify.ecfeed.ui.editor.BasicSection;
-import com.testify.ecfeed.ui.editor.IModelUpdateListener;
 
 public class PartitionedNodeInterface extends GenericNodeInterface {
 

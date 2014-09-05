@@ -29,6 +29,7 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Section;
 
 import com.testify.ecfeed.modelif.ModelOperationManager;
+import com.testify.ecfeed.ui.modelif.IModelUpdateListener;
 
 public abstract class BasicDetailsPage implements IDetailsPage, IModelUpdateListener{
 

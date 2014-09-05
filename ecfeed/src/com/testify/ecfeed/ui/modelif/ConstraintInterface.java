@@ -6,7 +6,6 @@ import com.testify.ecfeed.modelif.ModelOperationManager;
 import com.testify.ecfeed.modelif.java.constraint.ConstraintOperationRename;
 import com.testify.ecfeed.modelif.java.constraint.ConstraintOperationReplaceStatement;
 import com.testify.ecfeed.ui.editor.BasicSection;
-import com.testify.ecfeed.ui.editor.IModelUpdateListener;
 
 public class ConstraintInterface extends GenericNodeInterface {
 

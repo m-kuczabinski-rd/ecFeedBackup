@@ -8,7 +8,6 @@ import com.testify.ecfeed.modelif.ModelIfException;
 import com.testify.ecfeed.modelif.ModelOperationManager;
 import com.testify.ecfeed.modelif.java.common.BulkOperation;
 import com.testify.ecfeed.ui.editor.BasicSection;
-import com.testify.ecfeed.ui.editor.IModelUpdateListener;
 
 public class OperationExecuter {
 	

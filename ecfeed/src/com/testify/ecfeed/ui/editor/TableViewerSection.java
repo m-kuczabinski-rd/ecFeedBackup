@@ -25,6 +25,8 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
+import com.testify.ecfeed.ui.modelif.IModelUpdateListener;
+
 public abstract class TableViewerSection extends ViewerSection {
 
 	public TableViewerSection(Composite parent, FormToolkit toolkit, int style, IModelUpdateListener updateListener) {

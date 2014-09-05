@@ -20,7 +20,6 @@ import com.testify.ecfeed.modelif.java.category.CategoryOperationSetType;
 import com.testify.ecfeed.modelif.java.category.CategoryOperationShift;
 import com.testify.ecfeed.modelif.java.category.ITypeAdapterProvider;
 import com.testify.ecfeed.ui.editor.BasicSection;
-import com.testify.ecfeed.ui.editor.IModelUpdateListener;
 
 public class CategoryInterface extends PartitionedNodeInterface {
 	

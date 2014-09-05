@@ -10,7 +10,6 @@ import com.testify.ecfeed.modelif.java.constraint.StatementOperationChangeOperat
 import com.testify.ecfeed.modelif.java.constraint.StatementOperationRemoveStatement;
 import com.testify.ecfeed.modelif.java.constraint.StatementOperationReplaceChild;
 import com.testify.ecfeed.ui.editor.BasicSection;
-import com.testify.ecfeed.ui.editor.IModelUpdateListener;
 
 public class StatementArrayInterface extends BasicStatementInterface{
 

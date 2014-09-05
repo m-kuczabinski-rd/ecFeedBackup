@@ -34,6 +34,8 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Layout;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
+import com.testify.ecfeed.ui.modelif.IModelUpdateListener;
+
 public abstract class ViewerSection extends BasicSection implements ISelectionProvider{
 	public static final int BUTTONS_ASIDE = 1;
 	public static final int BUTTONS_BELOW = 2;

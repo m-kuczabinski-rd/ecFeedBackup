@@ -9,7 +9,6 @@ import com.testify.ecfeed.modelif.ModelOperationManager;
 import com.testify.ecfeed.modelif.java.constraint.StatementOperationSetCondition;
 import com.testify.ecfeed.modelif.java.constraint.StatementOperationSetRelation;
 import com.testify.ecfeed.ui.editor.BasicSection;
-import com.testify.ecfeed.ui.editor.IModelUpdateListener;
 
 public class PartitionedCategoryStatementInterface extends BasicStatementInterface{
 

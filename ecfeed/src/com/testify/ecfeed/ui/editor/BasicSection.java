@@ -26,6 +26,7 @@ import org.eclipse.ui.forms.SectionPart;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import com.testify.ecfeed.model.GenericNode;
+import com.testify.ecfeed.ui.modelif.IModelUpdateListener;
 
 public abstract class BasicSection extends SectionPart{
 	private Composite fClientComposite;

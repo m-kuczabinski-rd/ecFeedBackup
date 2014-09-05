@@ -14,7 +14,6 @@ import com.testify.ecfeed.modelif.java.common.GenericMoveOperation;
 import com.testify.ecfeed.modelif.java.common.GenericShiftOperation;
 import com.testify.ecfeed.ui.common.EclipseLoaderProvider;
 import com.testify.ecfeed.ui.editor.BasicSection;
-import com.testify.ecfeed.ui.editor.IModelUpdateListener;
 
 public class GenericNodeInterface extends OperationExecuter{
 

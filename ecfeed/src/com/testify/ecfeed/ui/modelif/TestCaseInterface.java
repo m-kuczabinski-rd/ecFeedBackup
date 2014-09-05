@@ -8,7 +8,6 @@ import com.testify.ecfeed.modelif.java.JavaUtils;
 import com.testify.ecfeed.modelif.java.testcase.TestCaseOperationRename;
 import com.testify.ecfeed.modelif.java.testcase.TestCaseOperationUpdateTestData;
 import com.testify.ecfeed.ui.editor.BasicSection;
-import com.testify.ecfeed.ui.editor.IModelUpdateListener;
 
 public class TestCaseInterface extends GenericNodeInterface {
 

@@ -37,7 +37,6 @@ import com.testify.ecfeed.ui.common.EclipseLoaderProvider;
 import com.testify.ecfeed.ui.dialogs.AddTestCaseDialog;
 import com.testify.ecfeed.ui.dialogs.RenameTestSuiteDialog;
 import com.testify.ecfeed.ui.editor.BasicSection;
-import com.testify.ecfeed.ui.editor.IModelUpdateListener;
 import com.testify.ecfeed.ui.editor.TestSuiteGenerationSupport;
 
 public class MethodInterface extends GenericNodeInterface {

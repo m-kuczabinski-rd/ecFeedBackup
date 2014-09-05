@@ -61,6 +61,7 @@ import com.testify.ecfeed.modelif.ModelOperationManager;
 import com.testify.ecfeed.ui.common.Constants;
 import com.testify.ecfeed.ui.editor.menu.ModelMenuAdapter;
 import com.testify.ecfeed.ui.modelif.GenericNodeInterface;
+import com.testify.ecfeed.ui.modelif.IModelUpdateListener;
 import com.testify.ecfeed.ui.modelif.NodeInterfaceFactory;
 
 public class ModelMasterSection extends TreeViewerSection{
