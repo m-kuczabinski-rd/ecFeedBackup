@@ -34,8 +34,6 @@ import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TreeNodeContentProvider;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.MenuAdapter;
-import org.eclipse.swt.events.MenuEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Image;
@@ -44,8 +42,6 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Menu;
-import org.eclipse.swt.widgets.MenuItem;
-import org.eclipse.swt.widgets.Tree;
 import org.eclipse.ui.forms.AbstractFormPart;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Section;
@@ -63,8 +59,7 @@ import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.modelif.ModelOperationManager;
 import com.testify.ecfeed.ui.common.Constants;
-import com.testify.ecfeed.ui.editor.menu.MenuOperation;
-import com.testify.ecfeed.ui.editor.menu.MenuOperationManager;
+import com.testify.ecfeed.ui.editor.menu.ModelMenuAdapter;
 import com.testify.ecfeed.ui.modelif.GenericNodeInterface;
 import com.testify.ecfeed.ui.modelif.NodeInterfaceFactory;
 
@@ -74,8 +69,6 @@ public class ModelMasterSection extends TreeViewerSection{
 
 	private Button fMoveUpButton;
 	private Button fMoveDownButton;
-	
-	private Menu fMenu;
 	
 	private ModelOperationManager fOperationManager;
 
@@ -341,25 +334,11 @@ public class ModelMasterSection extends TreeViewerSection{
 		}
 	}
 	
-	private class MenuSelectionAdapter extends SelectionAdapter{
-		MenuOperation fOperation;
-		
-		@Override
-		public void widgetSelected(SelectionEvent e){
-			fOperation.execute();
-		}
-		
-		public MenuSelectionAdapter(MenuOperation operation, GenericNode target){
-			super();
-			fOperation = operation;			
-		}
-		
-	}
-	
-	private static class UpdateListener implements IModelUpdateListener{
+	private class UpdateListener implements IModelUpdateListener{
 		@Override
 		public void modelUpdated(AbstractFormPart source) {
 			source.markDirty();
+			refresh();
 		}
 	}
 
@@ -373,7 +352,6 @@ public class ModelMasterSection extends TreeViewerSection{
 		private void moveSelectedItem(boolean moveUp){
 			GenericNodeInterface nodeIf = new NodeInterfaceFactory(fOperationManager).getNodeInterface(selectedNode());
 			nodeIf.moveUpDown(moveUp, ModelMasterSection.this, getUpdateListener());
-			refresh();
 		}
 
 		private GenericNode selectedNode() {
@@ -404,38 +382,10 @@ public class ModelMasterSection extends TreeViewerSection{
 			fMoveDownButton.setEnabled(enabled);
 		}
 	}
-
-	private class ModelTreeMenuAdapter extends MenuAdapter{
-		
-		private MenuOperationManager fMenuManager;
-
-		public ModelTreeMenuAdapter(){
-			fMenuManager = new MenuOperationManager(ModelMasterSection.this);
-		}
-		
-		@Override
-		public void menuShown(MenuEvent e){
-			Tree tree = getTreeViewer().getTree();
-			Menu menu = (Menu)e.getSource();
-			MenuItem[] items = menu.getItems();
-			for(int i = 0; i < items.length; i++){
-				items[i].dispose();
-			}
-
-			if(tree.getSelection()[0].getData() instanceof GenericNode){
-				GenericNode target = (GenericNode)tree.getSelection()[0].getData();
-				for(MenuOperation operation : fMenuManager.getOperations(target)){
-					MenuItem item = new MenuItem(fMenu, SWT.NONE);
-					item.setText(operation.getOperationName());
-					item.addSelectionListener(new MenuSelectionAdapter(operation, target));
-					item.setEnabled(operation.isEnabled());
-				}
-			}
-		}
-	}
 	
 	public ModelMasterSection(Composite parent, FormToolkit toolkit, ModelOperationManager operationManager) {
-		super(parent, toolkit, STYLE, new UpdateListener());
+		super(parent, toolkit, STYLE, null);
+		setModelUpdateListener(new UpdateListener());
 		fOperationManager = operationManager;
 	}
 	
@@ -474,10 +424,8 @@ public class ModelMasterSection extends TreeViewerSection{
 	}
 	
 	protected void createMenu(){
-		Tree tree = getTree();
-		fMenu = new Menu(tree);
-		tree.setMenu(fMenu);
-
-		fMenu.addMenuListener(new ModelTreeMenuAdapter());
+		Menu menu = new Menu(getTree());
+		getTree().setMenu(menu);
+		menu.addMenuListener(new ModelMenuAdapter(this));
 	}
 }

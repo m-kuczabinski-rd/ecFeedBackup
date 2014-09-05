@@ -123,4 +123,8 @@ public abstract class BasicSection extends SectionPart{
 	protected void modelUpdated(){
 		getUpdateListener().modelUpdated(this);
 	}
+	
+	protected void setModelUpdateListener(IModelUpdateListener listener){
+		fModelUpdateListener = listener;
+	}
 }

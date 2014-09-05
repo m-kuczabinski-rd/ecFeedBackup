@@ -40,10 +40,11 @@ public class RootInterface extends GenericNodeInterface {
 		return execute(new RootOperationRename(fTarget, newName), source, updateListener, Messages.DIALOG_RENAME_MODEL_PROBLEM_TITLE);
 	}
 
+	public ClassNode addNewClass(BasicSection source, IModelUpdateListener updateListener){
+		return addNewClass(generateClassName(), source, updateListener);
+	}
+	
 	public ClassNode addNewClass(String className, BasicSection source, IModelUpdateListener updateListener){
-		if(className == null){
-			className = generateClassName();
-		}
 		ClassNode addedClass = new ClassNode(className);
 		if(execute(new RootOperationAddNewClass(fTarget, addedClass, fTarget.getClasses().size()), source, updateListener, Messages.DIALOG_ADD_NEW_CLASS_PROBLEM_TITLE)){
 			return addedClass;

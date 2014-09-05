@@ -132,7 +132,7 @@ public class ClassViewer extends CheckboxTableViewerSection {
 	private class AddNewClassAdapter extends SelectionAdapter {
 		@Override
 		public void widgetSelected(SelectionEvent e) {
-			ClassNode addedClass = fRootIf.addNewClass(null, ClassViewer.this, getUpdateListener());
+			ClassNode addedClass = fRootIf.addNewClass(ClassViewer.this, getUpdateListener());
 			if(addedClass != null){
 				selectElement(addedClass);
 				fNameColumn.getViewer().editElement(addedClass, 0);
