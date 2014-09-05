@@ -22,8 +22,8 @@ import org.eclipse.swt.widgets.Display;
 
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.MethodNode;
-import com.testify.ecfeed.ui.common.EclipseLoaderProvider;
 import com.testify.ecfeed.ui.common.Messages;
+import com.testify.ecfeed.ui.modelif.EclipseLoaderProvider;
 
 public abstract class ExecuteTestAdapter extends SelectionAdapter {
 

@@ -14,7 +14,6 @@ import com.testify.ecfeed.modelif.java.JavaImplementationStatusResolver;
 import com.testify.ecfeed.modelif.java.ModelClassLoader;
 import com.testify.ecfeed.modelif.java.common.GenericMoveOperation;
 import com.testify.ecfeed.modelif.java.common.GenericShiftOperation;
-import com.testify.ecfeed.ui.common.EclipseLoaderProvider;
 
 public class GenericNodeInterface extends OperationExecuter{
 
