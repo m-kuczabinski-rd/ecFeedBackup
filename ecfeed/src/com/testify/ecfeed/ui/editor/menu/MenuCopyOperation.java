@@ -12,7 +12,7 @@
 package com.testify.ecfeed.ui.editor.menu;
 
 import com.testify.ecfeed.model.GenericNode;
-import com.testify.ecfeed.ui.editor.NodeClipboard;
+import com.testify.ecfeed.ui.modelif.NodeClipboard;
 
 public class MenuCopyOperation extends MenuOperation{
 	private NodeClipboard fSource;

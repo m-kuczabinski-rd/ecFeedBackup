@@ -16,7 +16,7 @@ import java.util.List;
 
 import com.testify.ecfeed.model.GenericNode;
 import com.testify.ecfeed.ui.editor.ModelMasterSection;
-import com.testify.ecfeed.ui.editor.NodeClipboard;
+import com.testify.ecfeed.ui.modelif.NodeClipboard;
 
 public class MenuOperationManager{
 

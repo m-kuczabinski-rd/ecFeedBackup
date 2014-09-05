@@ -20,7 +20,7 @@ import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.ui.editor.ModelMasterSection;
-import com.testify.ecfeed.ui.editor.NodeClipboard;
+import com.testify.ecfeed.ui.modelif.NodeClipboard;
 
 public class MenuCutOperation extends MenuOperation{
 	private NodeClipboard fSource;
