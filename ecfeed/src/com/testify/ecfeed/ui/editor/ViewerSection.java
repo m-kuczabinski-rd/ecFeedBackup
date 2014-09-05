@@ -11,6 +11,7 @@
 
 package com.testify.ecfeed.ui.editor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.jface.viewers.IBaseLabelProvider;
@@ -48,6 +49,7 @@ public abstract class ViewerSection extends BasicSection implements ISelectionPr
 	
 	public ViewerSection(Composite parent, FormToolkit toolkit, int style, IModelUpdateListener updateListener) {
 		super(parent, toolkit, style, updateListener);
+		fSelectedElements = new ArrayList<>();
 	}	
 	
 	@Override

@@ -29,7 +29,17 @@ public class ModelMenuAdapter extends MenuAdapter {
 		public void widgetSelected(SelectionEvent e){
 			fOperation.execute();
 		}
+	}
 
+	private class AddNodeSelectionAdapter extends MenuSelectionAdapter{
+		public AddNodeSelectionAdapter(MenuOperation operation) {
+			super(operation);
+		}
+
+		@Override
+		public void widgetSelected(SelectionEvent e){
+			fMasterSection.selectElement((GenericNode)fOperation.execute());
+		}
 	}
 
 	public ModelMenuAdapter(ModelMasterSection parentSection) {
@@ -53,8 +63,10 @@ public class ModelMenuAdapter extends MenuAdapter {
 		if(selected.size() == 1 && selected.get(0) instanceof GenericNode){
 			addNewChildOperations(menu, (GenericNode)selected.get(0));
 		}
+		new MenuItem(menu, SWT.SEPARATOR);
 //		addCommonOperations(menu, selected);
-//		addTypeSpecificOperations(selected);
+		new MenuItem(menu, SWT.SEPARATOR);
+		//		addTypeSpecificOperations(selected);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -67,7 +79,7 @@ public class ModelMenuAdapter extends MenuAdapter {
 				MenuItem item = new MenuItem(menu, SWT.NONE);
 				item.setText(operation.getName());
 				item.setEnabled(operation.isEnabled());
-				item.addSelectionListener(new MenuSelectionAdapter(operation));
+				item.addSelectionListener(new AddNodeSelectionAdapter(operation));
 			}
 		} catch (Exception e) {} 
 	}

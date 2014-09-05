@@ -36,7 +36,7 @@ public class MenuCutOperation extends MenuOperation{
 	}
 
 	@Override
-	public void execute(){
+	public Object execute(){
 		if(fTarget != null){
 			fSource.setClipboardNode(fTarget);
 			if(cut()){
@@ -44,6 +44,7 @@ public class MenuCutOperation extends MenuOperation{
 				fModel.refresh();
 			}
 		}
+		return null;
 	}
 	
 	public MenuCutOperation(GenericNode target, NodeClipboard source, ModelMasterSection model){

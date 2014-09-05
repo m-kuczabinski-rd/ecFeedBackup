@@ -32,7 +32,7 @@ public class MenuPasteOperation extends MenuOperation{
 	private boolean fCanceled;
 
 	@Override
-	public void execute(){
+	public Object execute(){
 		if(!paste() && !fCanceled){
 			MessageDialog.openInformation(Display.getCurrent().getActiveShell(), Messages.DIALOG_PASTE_OPERATION_FAILED_TITLE,
 					Messages.DIALOG_PASTE_OPERATION_FAILED_MESSAGE);
@@ -41,6 +41,7 @@ public class MenuPasteOperation extends MenuOperation{
 			fModel.refresh();
 		}
 		fCanceled = false;
+		return null;
 	}
 
 	@Override

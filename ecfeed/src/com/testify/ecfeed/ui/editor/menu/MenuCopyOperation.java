@@ -19,8 +19,9 @@ public class MenuCopyOperation extends MenuOperation{
 	private GenericNode fTarget;
 
 	@Override
-	public void execute(){
+	public Object execute(){
 		fSource.setClipboardNode(fTarget);
+		return null;
 	}
 
 	@Override

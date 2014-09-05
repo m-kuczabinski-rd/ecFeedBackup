@@ -14,7 +14,7 @@ package com.testify.ecfeed.ui.editor.menu;
 public abstract class MenuOperation{
 	protected String fName;
 
-	public abstract void execute();
+	public abstract Object execute();
 
 	public abstract boolean isEnabled();
 

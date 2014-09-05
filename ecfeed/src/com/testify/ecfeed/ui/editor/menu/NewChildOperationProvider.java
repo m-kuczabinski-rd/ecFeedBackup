@@ -57,8 +57,8 @@ public class NewChildOperationProvider implements IModelVisitor {
 		}
 
 		@Override
-		public void execute() {
-			fRootIf.addNewClass(fSource, fUpdateListener);
+		public Object execute() {
+			return fRootIf.addNewClass(fSource, fUpdateListener);
 		}
 	}
 	
@@ -73,8 +73,8 @@ public class NewChildOperationProvider implements IModelVisitor {
 		}
 
 		@Override
-		public void execute() {
-			fClassIf.addNewMethod(fSource, fUpdateListener);
+		public Object execute() {
+			return fClassIf.addNewMethod(fSource, fUpdateListener);
 		}
 	}
 	
@@ -94,8 +94,8 @@ public class NewChildOperationProvider implements IModelVisitor {
 		}
 
 		@Override
-		public void execute() {
-			fMethodIf.addTestCase(fSource, fUpdateListener);
+		public Object execute() {
+			return fMethodIf.addTestCase(fSource, fUpdateListener);
 		}
 	}
 	
@@ -105,8 +105,8 @@ public class NewChildOperationProvider implements IModelVisitor {
 		}
 
 		@Override
-		public void execute() {
-			fMethodIf.addNewParameter(fSource, fUpdateListener);
+		public Object execute() {
+			return fMethodIf.addNewParameter(fSource, fUpdateListener);
 		}
 	}
 	
@@ -116,8 +116,8 @@ public class NewChildOperationProvider implements IModelVisitor {
 		}
 
 		@Override
-		public void execute() {
-			fMethodIf.addNewConstraint(fSource, fUpdateListener);
+		public Object execute() {
+			return fMethodIf.addNewConstraint(fSource, fUpdateListener);
 		}
 	}
 	
@@ -131,8 +131,8 @@ public class NewChildOperationProvider implements IModelVisitor {
 		}
 
 		@Override
-		public void execute() {
-			fPartitionedNodeIf.addNewPartition(fSource, fUpdateListener);
+		public Object execute() {
+			return fPartitionedNodeIf.addNewPartition(fSource, fUpdateListener);
 		}
 	}
 	
