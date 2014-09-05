@@ -7,6 +7,7 @@ import java.util.Set;
 
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.forms.AbstractFormPart;
 
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.MethodNode;
@@ -19,7 +20,6 @@ import com.testify.ecfeed.modelif.java.category.CategoryOperationSetExpected;
 import com.testify.ecfeed.modelif.java.category.CategoryOperationSetType;
 import com.testify.ecfeed.modelif.java.category.CategoryOperationShift;
 import com.testify.ecfeed.modelif.java.category.ITypeAdapterProvider;
-import com.testify.ecfeed.ui.editor.BasicSection;
 
 public class CategoryInterface extends PartitionedNodeInterface {
 	
@@ -40,21 +40,21 @@ public class CategoryInterface extends PartitionedNodeInterface {
 		return new EclipseModelBuilder().getDefaultExpectedValue(type);
 	}
 
-	public boolean setName(String newName, BasicSection source, IModelUpdateListener updateListener) {
+	public boolean setName(String newName, AbstractFormPart source, IModelUpdateListener updateListener) {
 		if(newName.equals(getName())){
 			return false;
 		}
 		return execute(new CategoryOperationRename(fTarget, newName), source, updateListener, Messages.DIALOG_RENAME_PAREMETER_PROBLEM_TITLE);
 	}
 
-	public boolean setType(String newType, BasicSection source, IModelUpdateListener updateListener) {
+	public boolean setType(String newType, AbstractFormPart source, IModelUpdateListener updateListener) {
 		if(newType.equals(fTarget.getType())){
 			return false;
 		}
 		return execute(new CategoryOperationSetType(fTarget, newType, fAdapterProvider), source, updateListener, Messages.DIALOG_RENAME_PAREMETER_PROBLEM_TITLE);
 	}
 	
-	public boolean setExpected(boolean expected, BasicSection source, IModelUpdateListener updateListener){
+	public boolean setExpected(boolean expected, AbstractFormPart source, IModelUpdateListener updateListener){
 		if(expected != fTarget.isExpected()){
 			MethodNode method = fTarget.getMethod();
 			if(method != null){
@@ -84,7 +84,7 @@ public class CategoryInterface extends PartitionedNodeInterface {
 		return false;
 	}
 
-	public boolean setDefaultValue(String valueString, BasicSection source, IModelUpdateListener updateListener) {
+	public boolean setDefaultValue(String valueString, AbstractFormPart source, IModelUpdateListener updateListener) {
 		if(fTarget.getDefaultValue().equals(valueString) == false){
 			return execute(new CategoryOperationSetDefaultValue(fTarget, valueString, fAdapterProvider.getAdapter(fTarget.getType())), source, updateListener, Messages.DIALOG_SET_DEFAULT_VALUE_PROBLEM_TITLE);
 		}
@@ -146,7 +146,7 @@ public class CategoryInterface extends PartitionedNodeInterface {
 	}
 
 	@Override
-	public boolean moveUpDown(boolean up, BasicSection source, IModelUpdateListener updateListener){
+	public boolean moveUpDown(boolean up, AbstractFormPart source, IModelUpdateListener updateListener){
 		int index = CategoryOperationShift.nextAllowedIndex(fTarget, up);
 		if(index != -1){
 			return executeMoveOperation(new CategoryOperationShift(fTarget, index), source, updateListener);

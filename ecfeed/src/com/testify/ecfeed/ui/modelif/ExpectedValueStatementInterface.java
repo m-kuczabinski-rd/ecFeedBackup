@@ -1,12 +1,13 @@
 package com.testify.ecfeed.ui.modelif;
 
+import org.eclipse.ui.forms.AbstractFormPart;
+
 import com.testify.ecfeed.model.constraint.ExpectedValueStatement;
 import com.testify.ecfeed.model.constraint.Relation;
 import com.testify.ecfeed.modelif.IModelOperation;
 import com.testify.ecfeed.modelif.ModelOperationManager;
 import com.testify.ecfeed.modelif.java.constraint.StatementOperationSetRelation;
 import com.testify.ecfeed.modelif.java.partition.PartitionOperationSetValue;
-import com.testify.ecfeed.ui.editor.BasicSection;
 
 public class ExpectedValueStatementInterface extends BasicStatementInterface{
 
@@ -21,7 +22,7 @@ public class ExpectedValueStatementInterface extends BasicStatementInterface{
 		fTarget = target;
 	}
 
-	public boolean setRelation(Relation relation, BasicSection source, IModelUpdateListener updateListener) {
+	public boolean setRelation(Relation relation, AbstractFormPart source, IModelUpdateListener updateListener) {
 		if(relation != fTarget.getRelation()){
 			IModelOperation operation = new StatementOperationSetRelation(fTarget, relation);
 			return execute(operation, source, updateListener, Messages.DIALOG_EDIT_STATEMENT_PROBLEM_TITLE);
@@ -30,7 +31,7 @@ public class ExpectedValueStatementInterface extends BasicStatementInterface{
 	}
 
 	@Override
-	public boolean setConditionValue(String newValue, BasicSection source, IModelUpdateListener updateListener) {
+	public boolean setConditionValue(String newValue, AbstractFormPart source, IModelUpdateListener updateListener) {
 		IModelOperation operation = new PartitionOperationSetValue(fTarget.getCondition(), newValue, new TypeAdapterProvider());
 		return 	execute(operation, source, updateListener, Messages.DIALOG_EDIT_STATEMENT_PROBLEM_TITLE);
 	}

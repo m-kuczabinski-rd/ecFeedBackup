@@ -1,11 +1,12 @@
 package com.testify.ecfeed.ui.modelif;
 
+import org.eclipse.ui.forms.AbstractFormPart;
+
 import com.testify.ecfeed.model.ConstraintNode;
 import com.testify.ecfeed.model.constraint.BasicStatement;
 import com.testify.ecfeed.modelif.ModelOperationManager;
 import com.testify.ecfeed.modelif.java.constraint.ConstraintOperationRename;
 import com.testify.ecfeed.modelif.java.constraint.ConstraintOperationReplaceStatement;
-import com.testify.ecfeed.ui.editor.BasicSection;
 
 public class ConstraintInterface extends GenericNodeInterface {
 
@@ -15,7 +16,7 @@ public class ConstraintInterface extends GenericNodeInterface {
 		super(modelOperationManager);
 	}
 
-	public boolean setName(String newName, BasicSection source, IModelUpdateListener updateListener) {
+	public boolean setName(String newName, AbstractFormPart source, IModelUpdateListener updateListener) {
 		if(newName.equals(getName())){
 			return false;
 		}
@@ -27,7 +28,7 @@ public class ConstraintInterface extends GenericNodeInterface {
 		super.setTarget(target);
 	}
 
-	public boolean replaceStatement(BasicStatement current, BasicStatement newStatement, BasicSection source, IModelUpdateListener updateListener) {
+	public boolean replaceStatement(BasicStatement current, BasicStatement newStatement, AbstractFormPart source, IModelUpdateListener updateListener) {
 		if(current != newStatement){
 			return execute(new ConstraintOperationReplaceStatement(fTarget, current, newStatement), source, updateListener, Messages.DIALOG_REMOVE_TEST_CASES_PROBLEM_TITLE);
 		}

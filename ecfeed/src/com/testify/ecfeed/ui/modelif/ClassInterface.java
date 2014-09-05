@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.forms.AbstractFormPart;
 
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.MethodNode;
@@ -19,7 +20,6 @@ import com.testify.ecfeed.modelif.java.classx.ClassOperationRemoveMethod;
 import com.testify.ecfeed.modelif.java.classx.ClassOperationRename;
 import com.testify.ecfeed.modelif.java.common.RemoveNodesOperation;
 import com.testify.ecfeed.ui.common.Constants;
-import com.testify.ecfeed.ui.editor.BasicSection;
 
 public class ClassInterface extends GenericNodeInterface {
 	private ClassNode fTarget;	
@@ -66,11 +66,11 @@ public class ClassInterface extends GenericNodeInterface {
 	}
 
 	@Override
-	public boolean setName(String newName, BasicSection source, IModelUpdateListener updateListener) {
+	public boolean setName(String newName, AbstractFormPart source, IModelUpdateListener updateListener) {
 		return setQualifiedName(newName, source, updateListener);
 	}
 
-	public boolean setQualifiedName(String newName, BasicSection source, IModelUpdateListener updateListener){
+	public boolean setQualifiedName(String newName, AbstractFormPart source, IModelUpdateListener updateListener){
 		if(newName.equals(getQualifiedName())){
 			return false;
 		}
@@ -84,21 +84,21 @@ public class ClassInterface extends GenericNodeInterface {
 		return execute(new ClassOperationRename(fTarget, newName), source, updateListener, Messages.DIALOG_RENAME_CLASS_PROBLEM_TITLE);
 	}
 
-	public boolean setLocalName(String newLocalName, BasicSection source, IModelUpdateListener updateListener){
+	public boolean setLocalName(String newLocalName, AbstractFormPart source, IModelUpdateListener updateListener){
 		String newQualifiedName = getPackageName() + "." + newLocalName;
 		return setQualifiedName(newQualifiedName, source, updateListener);
 	}
 
-	public boolean setPackageName(String newPackageName, BasicSection source, IModelUpdateListener updateListener){
+	public boolean setPackageName(String newPackageName, AbstractFormPart source, IModelUpdateListener updateListener){
 		String newQualifiedName = newPackageName + "." + getLocalName(); 
 		return setQualifiedName(newQualifiedName, source, updateListener);
 	}
 	
-	public MethodNode addNewMethod(BasicSection source, IModelUpdateListener updateListener){
+	public MethodNode addNewMethod(AbstractFormPart source, IModelUpdateListener updateListener){
 		return addNewMethod(generateNewMethodName(), source, updateListener);
 	}
 	
-	public MethodNode addNewMethod(String name, BasicSection source, IModelUpdateListener updateListener){
+	public MethodNode addNewMethod(String name, AbstractFormPart source, IModelUpdateListener updateListener){
 		MethodNode method = new MethodNode(name);
 		if(addMethod(method, source, updateListener)){
 			return method;
@@ -106,15 +106,15 @@ public class ClassInterface extends GenericNodeInterface {
 		return null;
 	}
 	
-	public boolean addMethods(Collection<MethodNode> methods, BasicSection source, IModelUpdateListener updateListener){
+	public boolean addMethods(Collection<MethodNode> methods, AbstractFormPart source, IModelUpdateListener updateListener){
 		return execute(new ClassOperationAddMethods(fTarget, methods, fTarget.getMethods().size()), source, updateListener, Messages.DIALOG_ADD_METHODS_PROBLEM_TITLE);
 	}
 	
-	public boolean addMethod(MethodNode method, BasicSection source, IModelUpdateListener updateListener){
+	public boolean addMethod(MethodNode method, AbstractFormPart source, IModelUpdateListener updateListener){
 		return execute(new ClassOperationAddMethod(fTarget, method, fTarget.getMethods().size()), source, updateListener, Messages.DIALOG_ADD_METHOD_PROBLEM_TITLE);
 	}
 
-	public boolean removeMethod(MethodNode method, BasicSection source, IModelUpdateListener updateListener){
+	public boolean removeMethod(MethodNode method, AbstractFormPart source, IModelUpdateListener updateListener){
 		if(MessageDialog.openConfirm(Display.getCurrent().getActiveShell(), 
 				Messages.DIALOG_REMOVE_METHOD_TITLE, 
 				Messages.DIALOG_REMOVE_METHOD_MESSAGE)){
@@ -123,7 +123,7 @@ public class ClassInterface extends GenericNodeInterface {
 		return false;
 	}
 
-	public boolean removeMethods(Collection<MethodNode> methods, BasicSection source, IModelUpdateListener updateListener){
+	public boolean removeMethods(Collection<MethodNode> methods, AbstractFormPart source, IModelUpdateListener updateListener){
 		if(methods.size() == 0){
 			return false;
 		}

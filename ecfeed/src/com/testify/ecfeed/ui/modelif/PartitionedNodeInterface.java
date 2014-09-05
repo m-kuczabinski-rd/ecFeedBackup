@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.forms.AbstractFormPart;
 
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.PartitionedNode;
@@ -14,7 +15,6 @@ import com.testify.ecfeed.modelif.java.category.GenericOperationAddPartition;
 import com.testify.ecfeed.modelif.java.category.GenericOperationRemovePartition;
 import com.testify.ecfeed.modelif.java.common.RemoveNodesOperation;
 import com.testify.ecfeed.ui.common.Constants;
-import com.testify.ecfeed.ui.editor.BasicSection;
 
 public class PartitionedNodeInterface extends GenericNodeInterface {
 
@@ -29,7 +29,7 @@ public class PartitionedNodeInterface extends GenericNodeInterface {
 		super(modelOperationManager);
 	}
 
-	public PartitionNode addNewPartition(BasicSection source, IModelUpdateListener updateListener) {
+	public PartitionNode addNewPartition(AbstractFormPart source, IModelUpdateListener updateListener) {
 		String name = generatePartitionName();
 		String value = generateNewPartitionValue();
 		PartitionNode newPartition = new PartitionNode(name, value);
@@ -39,17 +39,17 @@ public class PartitionedNodeInterface extends GenericNodeInterface {
 		return null;
 	}
 	
-	public boolean addPartition(PartitionNode newPartition, BasicSection source, IModelUpdateListener updateListener) {
+	public boolean addPartition(PartitionNode newPartition, AbstractFormPart source, IModelUpdateListener updateListener) {
 		IModelOperation operation = new GenericOperationAddPartition(fTarget, newPartition, fTarget.getPartitions().size()); 
 		return execute(operation, source, updateListener, Messages.DIALOG_ADD_PARTITION_PROBLEM_TITLE);
 	}
 	
-	public boolean removePartition(PartitionNode partition, BasicSection source, IModelUpdateListener updateListener) {
+	public boolean removePartition(PartitionNode partition, AbstractFormPart source, IModelUpdateListener updateListener) {
 		IModelOperation operation = new GenericOperationRemovePartition(fTarget, partition);
 		return execute(operation, source, updateListener, Messages.DIALOG_REMOVE_PARTITION_TITLE);
 	}
 
-	public boolean removePartitions(Collection<PartitionNode> partitions, BasicSection source, IModelUpdateListener updateListener) {
+	public boolean removePartitions(Collection<PartitionNode> partitions, AbstractFormPart source, IModelUpdateListener updateListener) {
 		boolean displayWarning = false;
 		for(PartitionNode p : partitions){
 			if(fTarget.getCategory().getMethod().mentioningConstraints(p).size() > 0 || fTarget.getCategory().getMethod().mentioningTestCases(p).size() > 0){

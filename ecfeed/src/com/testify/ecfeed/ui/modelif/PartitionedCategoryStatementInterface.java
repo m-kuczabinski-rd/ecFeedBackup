@@ -1,5 +1,7 @@
 package com.testify.ecfeed.ui.modelif;
 
+import org.eclipse.ui.forms.AbstractFormPart;
+
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.constraint.PartitionedCategoryStatement;
 import com.testify.ecfeed.model.constraint.PartitionedCategoryStatement.ICondition;
@@ -8,7 +10,6 @@ import com.testify.ecfeed.modelif.IModelOperation;
 import com.testify.ecfeed.modelif.ModelOperationManager;
 import com.testify.ecfeed.modelif.java.constraint.StatementOperationSetCondition;
 import com.testify.ecfeed.modelif.java.constraint.StatementOperationSetRelation;
-import com.testify.ecfeed.ui.editor.BasicSection;
 
 public class PartitionedCategoryStatementInterface extends BasicStatementInterface{
 
@@ -24,7 +25,7 @@ public class PartitionedCategoryStatementInterface extends BasicStatementInterfa
 	}
 	
 	@Override
-	public boolean setRelation(Relation relation, BasicSection source, IModelUpdateListener updateListener) {
+	public boolean setRelation(Relation relation, AbstractFormPart source, IModelUpdateListener updateListener) {
 		if(relation != fTarget.getRelation()){
 			IModelOperation operation = new StatementOperationSetRelation(fTarget, relation);
 			return execute(operation, source, updateListener, Messages.DIALOG_EDIT_STATEMENT_PROBLEM_TITLE);
@@ -33,7 +34,7 @@ public class PartitionedCategoryStatementInterface extends BasicStatementInterfa
 	}
 
 	@Override
-	public boolean setConditionValue(String text, BasicSection source, IModelUpdateListener updateListener) {
+	public boolean setConditionValue(String text, AbstractFormPart source, IModelUpdateListener updateListener) {
 		if(fTarget.getConditionName().equals(text) == false){
 			ICondition newCondition;
 			CategoryNode category = fTarget.getCategory();

@@ -1,5 +1,7 @@
 package com.testify.ecfeed.ui.modelif;
 
+import org.eclipse.ui.forms.AbstractFormPart;
+
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.modelif.ImplementationStatus;
@@ -7,7 +9,6 @@ import com.testify.ecfeed.modelif.ModelOperationManager;
 import com.testify.ecfeed.modelif.java.JavaUtils;
 import com.testify.ecfeed.modelif.java.testcase.TestCaseOperationRename;
 import com.testify.ecfeed.modelif.java.testcase.TestCaseOperationUpdateTestData;
-import com.testify.ecfeed.ui.editor.BasicSection;
 
 public class TestCaseInterface extends GenericNodeInterface {
 
@@ -24,7 +25,7 @@ public class TestCaseInterface extends GenericNodeInterface {
 	}
 	
 	@Override
-	public boolean setName(String newName, BasicSection source, IModelUpdateListener updateListener) {
+	public boolean setName(String newName, AbstractFormPart source, IModelUpdateListener updateListener) {
 		return execute(new TestCaseOperationRename(fTarget, newName), source, updateListener, Messages.DIALOG_TEST_SUITE_NAME_PROBLEM_MESSAGE);
 	}
 
@@ -45,7 +46,7 @@ public class TestCaseInterface extends GenericNodeInterface {
 		return JavaUtils.isValidTestCaseName(name);
 	}
 
-	public boolean updateTestData(int index, PartitionNode value, BasicSection source, IModelUpdateListener updateListener) {
+	public boolean updateTestData(int index, PartitionNode value, AbstractFormPart source, IModelUpdateListener updateListener) {
 		return execute(new TestCaseOperationUpdateTestData(fTarget, index, value), source, updateListener, Messages.DIALOG_UPDATE_TEST_DATA_PROBLEM_TITLE);
 	}
 

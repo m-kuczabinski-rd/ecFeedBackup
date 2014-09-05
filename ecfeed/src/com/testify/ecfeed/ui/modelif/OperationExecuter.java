@@ -2,12 +2,12 @@ package com.testify.ecfeed.ui.modelif;
 
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.forms.AbstractFormPart;
 
 import com.testify.ecfeed.modelif.IModelOperation;
 import com.testify.ecfeed.modelif.ModelIfException;
 import com.testify.ecfeed.modelif.ModelOperationManager;
 import com.testify.ecfeed.modelif.java.common.BulkOperation;
-import com.testify.ecfeed.ui.editor.BasicSection;
 
 public class OperationExecuter {
 	
@@ -17,7 +17,7 @@ public class OperationExecuter {
 		fOperationManager = operationManager;
 	}
 	
-	protected boolean execute(IModelOperation operation, BasicSection source, IModelUpdateListener updateListener, String errorMessageTitle){
+	protected boolean execute(IModelOperation operation, AbstractFormPart source, IModelUpdateListener updateListener, String errorMessageTitle){
 		try{
 			fOperationManager.execute(operation);
 			if(updateListener != null){
@@ -32,7 +32,7 @@ public class OperationExecuter {
 		return false;
 	}
 	
-	protected boolean execute(BulkOperation operation, BasicSection source, IModelUpdateListener updateListener, String errorMessageTitle){
+	protected boolean execute(BulkOperation operation, AbstractFormPart source, IModelUpdateListener updateListener, String errorMessageTitle){
 		try{
 			fOperationManager.execute(operation);
 		}catch(ModelIfException e){

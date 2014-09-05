@@ -12,5 +12,4 @@ public class StaticStatementInterface extends BasicStatementInterface{
 	public void setTarget(StaticStatement statement) {
 		super.setTarget(statement);
 	}
-
 }
