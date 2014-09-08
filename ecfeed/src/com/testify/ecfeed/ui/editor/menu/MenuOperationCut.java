@@ -16,32 +16,30 @@ import java.util.List;
 import org.eclipse.ui.forms.AbstractFormPart;
 
 import com.testify.ecfeed.model.GenericNode;
-import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.modelif.ModelOperationManager;
 import com.testify.ecfeed.ui.modelif.IModelUpdateListener;
-import com.testify.ecfeed.ui.modelif.RootInterface;
 
 public class MenuOperationCut extends ModelModyfingOperation{
 
 	private MenuOperationCopy fCopyOperation;
-	private RootInterface fModelIf;
+	private MenuOperationDelete fDeleteOperation;
 	
 	public MenuOperationCut(List<GenericNode> nodes, ModelOperationManager operationManager, AbstractFormPart source, IModelUpdateListener updateListener) {
 		super("Cut", nodes, operationManager, source, updateListener);
-		fModelIf = new RootInterface(operationManager);
-		fModelIf.setTarget((RootNode)nodes.get(0).getRoot());
 		
 		fCopyOperation = new MenuOperationCopy(nodes);
+		fDeleteOperation = new MenuOperationDelete(nodes, operationManager, source, updateListener);
 	}
 
 	@Override
 	public Object execute(){
 		fCopyOperation.execute();
-		return fModelIf.removeNodes(getSelectedNodes(), getSource(), getUpdateListener());
+		fDeleteOperation.execute();
+		return null;
 	}
 	
 	@Override 
 	public boolean isEnabled(){
-		return fCopyOperation.isEnabled();
+		return fCopyOperation.isEnabled() && fDeleteOperation.isEnabled();
 	}
 }
