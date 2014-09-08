@@ -34,14 +34,18 @@ import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TreeNodeContentProvider;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.MenuAdapter;
+import org.eclipse.swt.events.MenuEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Menu;
+import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.ui.forms.AbstractFormPart;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Section;
@@ -59,7 +63,13 @@ import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.modelif.ModelOperationManager;
 import com.testify.ecfeed.ui.common.Constants;
-import com.testify.ecfeed.ui.editor.menu.ModelMenuAdapter;
+import com.testify.ecfeed.ui.editor.menu.MenuOperation;
+import com.testify.ecfeed.ui.editor.menu.MenuOperationCopy;
+import com.testify.ecfeed.ui.editor.menu.MenuOperationCut;
+import com.testify.ecfeed.ui.editor.menu.MenuOperationDelete;
+import com.testify.ecfeed.ui.editor.menu.MenuOperationPaste;
+import com.testify.ecfeed.ui.editor.menu.MenuOperationSelectAll;
+import com.testify.ecfeed.ui.editor.menu.NewChildOperationProvider;
 import com.testify.ecfeed.ui.modelif.GenericNodeInterface;
 import com.testify.ecfeed.ui.modelif.IModelUpdateListener;
 import com.testify.ecfeed.ui.modelif.NodeInterfaceFactory;
@@ -384,6 +394,96 @@ public class ModelMasterSection extends TreeViewerSection{
 		}
 	}
 	
+	private class ModelMenuAdapter extends MenuAdapter {
+
+		private class MenuSelectionAdapter extends SelectionAdapter{
+			MenuOperation fOperation;
+			public MenuSelectionAdapter(MenuOperation operation) {
+				fOperation = operation;
+			}
+			@Override
+			public void widgetSelected(SelectionEvent e){
+				fOperation.execute();
+			}
+		}
+
+		private class SelectNodeOperationAdapter extends MenuSelectionAdapter{
+			public SelectNodeOperationAdapter(MenuOperation operation) {
+				super(operation);
+			}
+			@Override
+			public void widgetSelected(SelectionEvent e){
+				selectElement((GenericNode)fOperation.execute());
+			}
+		}
+
+		@Override
+		public void menuShown(MenuEvent e){
+			Menu menu = (Menu)e.getSource();
+			
+			for(MenuItem item : menu.getItems()){
+				item.dispose();
+			}
+			
+			populateMenu(menu, getSelection());
+		}
+
+		@SuppressWarnings("unchecked")
+		protected void populateMenu(Menu menu, IStructuredSelection selection) {
+			List<GenericNode> selected = selection.toList();
+			if(selected.size() == 1 && selected.get(0) instanceof GenericNode){
+				addNewChildOperations(menu, (GenericNode)selected.get(0));
+			}
+			addCommonOperations(menu, selected);
+			new MenuItem(menu, SWT.SEPARATOR);
+			addTreeOperations(menu, selected);
+			//		addTypeSpecificOperations(selected);
+		}
+
+		private void addTreeOperations(Menu menu, List<GenericNode> selected) {
+			MenuOperation selectAllOperation = new MenuOperationSelectAll(getTreeViewer());
+//			MenuOperation expandOperation = new MenuOperationExpand(getTreeViewer());
+//			MenuOperation collapseOperation = new MenuOperationCollapse(getTreeViewer());
+			addOperation(menu, selectAllOperation, new MenuSelectionAdapter(selectAllOperation));
+//			addOperation(menu, expandOperation, new MenuSelectionAdapter(expandOperation));
+//			addOperation(menu, collapseOperation, new MenuSelectionAdapter(collapseOperation));
+		}
+
+		private void addCommonOperations(Menu menu, List<GenericNode> selected) {
+			new MenuItem(menu, SWT.SEPARATOR);
+			MenuOperation copyOperation = new MenuOperationCopy(selected);
+			MenuOperation cutOperation = new MenuOperationCut(selected, getOperationManager(), ModelMasterSection.this, getUpdateListener());
+			MenuOperation pasteOperation = new MenuOperationPaste(selected, getOperationManager(), ModelMasterSection.this, getUpdateListener());
+			MenuOperation deleteOperation = new MenuOperationDelete(selected, getOperationManager(), ModelMasterSection.this, getUpdateListener());
+			addOperation(menu, copyOperation, new MenuSelectionAdapter(copyOperation));
+			addOperation(menu, cutOperation, new MenuSelectionAdapter(cutOperation));
+			addOperation(menu, pasteOperation, new MenuSelectionAdapter(pasteOperation));
+			addOperation(menu, deleteOperation, new MenuSelectionAdapter(deleteOperation));
+		}
+
+		private void addOperation(Menu menu, MenuOperation operation, SelectionListener listener) {
+			MenuItem item = new MenuItem(menu, SWT.NONE);
+			item.setText(operation.getName());
+			item.setEnabled(operation.isEnabled());
+			item.addSelectionListener(listener);
+		}
+
+		@SuppressWarnings("unchecked")
+		private void addNewChildOperations(Menu menu, GenericNode node) {
+			NewChildOperationProvider opProvider = new NewChildOperationProvider(getOperationManager(), ModelMasterSection.this, getUpdateListener());
+			try {
+				List<MenuOperation> operations = (List<MenuOperation>)node.accept(opProvider);
+				if(operations == null) return;
+				for(MenuOperation operation : operations){
+					MenuItem item = new MenuItem(menu, SWT.NONE);
+					item.setText(operation.getName());
+					item.setEnabled(operation.isEnabled());
+					item.addSelectionListener(new SelectNodeOperationAdapter(operation));
+				}
+			} catch (Exception e) {} 
+		}
+	}
+	
 	public ModelMasterSection(Composite parent, FormToolkit toolkit, ModelOperationManager operationManager) {
 		super(parent, toolkit, STYLE, null);
 		setModelUpdateListener(new UpdateListener());
@@ -427,6 +527,6 @@ public class ModelMasterSection extends TreeViewerSection{
 	protected void createMenu(){
 		Menu menu = new Menu(getTree());
 		getTree().setMenu(menu);
-		menu.addMenuListener(new ModelMenuAdapter(this));
+		menu.addMenuListener(new ModelMenuAdapter());
 	}
 }
