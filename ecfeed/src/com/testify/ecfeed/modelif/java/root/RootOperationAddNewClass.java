@@ -19,9 +19,16 @@ public class RootOperationAddNewClass implements IModelOperation {
 		fIndex = index;
 	}
 	
+	public RootOperationAddNewClass(RootNode target, ClassNode addedClass) {
+		this(target, addedClass, -1);
+	}
+	
 	@Override
 	public void execute() throws ModelIfException {
 		String name = fAddedClass.getQualifiedName(); 
+		if(fIndex == -1){
+			fIndex = fTarget.getClasses().size();
+		}
 		if(name.matches(Constants.REGEX_CLASS_NODE_NAME) == false){
 			throw new ModelIfException(Messages.CLASS_NAME_REGEX_PROBLEM);
 		}

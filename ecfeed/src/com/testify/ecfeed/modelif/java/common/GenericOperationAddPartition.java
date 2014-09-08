@@ -16,9 +16,15 @@ public class GenericOperationAddPartition implements IModelOperation {
 		fPartition = partition;
 		fIndex = index;
 	}
+	public GenericOperationAddPartition(PartitionedNode target, PartitionNode partition) {
+		this(target, partition, -1);
+	}
 
 	@Override
 	public void execute() throws ModelIfException {
+		if(fIndex == -1){
+			fIndex = fTarget.getPartitions().size();
+		}
 		if(fTarget.getPartitionNames().contains(fPartition.getName())){
 			throw new ModelIfException(Messages.PARTITION_NAME_DUPLICATE_PROBLEM);
 		}

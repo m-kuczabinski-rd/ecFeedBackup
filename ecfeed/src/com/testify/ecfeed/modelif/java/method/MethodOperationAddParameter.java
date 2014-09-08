@@ -40,8 +40,15 @@ public class MethodOperationAddParameter implements IModelOperation {
 		fCurrentIndex = parameter.getIndex();
 	}
 
+	public MethodOperationAddParameter(MethodNode target, CategoryNode parameter) {
+		this(target, parameter, -1);
+	}
+
 	@Override
 	public void execute() throws ModelIfException {
+		if(fNewIndex == -1){
+			fNewIndex = fTarget.getCategories().size();
+		}
 		String parameterName = fParameter.getName();
 		if(fTarget.getCategory(parameterName) != null){
 			throw new ModelIfException(Messages.CATEGORY_NAME_DUPLICATE_PROBLEM);

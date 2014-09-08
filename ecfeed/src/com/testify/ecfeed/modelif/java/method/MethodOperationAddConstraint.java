@@ -18,9 +18,16 @@ public class MethodOperationAddConstraint implements IModelOperation {
 		fConstraint = constraint;
 		fIndex = index; 
 	}
-	
+
+	public MethodOperationAddConstraint(MethodNode target, ConstraintNode constraint){
+		this(target, constraint, -1);
+	}
+
 	@Override
 	public void execute() throws ModelIfException {
+		if(fIndex == -1){
+			fIndex = fTarget.getConstraintNodes().size();
+		}
 		if(fConstraint.getName().matches(Constants.REGEX_CONSTRAINT_NODE_NAME) == false){
 			throw new ModelIfException(Messages.CONSTRAINT_NAME_REGEX_PROBLEM);
 		}

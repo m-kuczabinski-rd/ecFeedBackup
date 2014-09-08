@@ -33,7 +33,7 @@ public class AddChildOperationProvider implements IModelVisitor{
 	public Object visit(RootNode node) throws Exception {
 		if(fChild instanceof ClassNode){
 			if(fIndex == -1){
-				fIndex = node.getClasses().size();
+				return new RootOperationAddNewClass(node, (ClassNode)fChild);
 			}
 			return new RootOperationAddNewClass(node, (ClassNode)fChild, fIndex);
 		}
@@ -44,7 +44,7 @@ public class AddChildOperationProvider implements IModelVisitor{
 	public Object visit(ClassNode node) throws Exception {
 		if(fChild instanceof MethodNode){
 			if(fIndex == -1){
-				fIndex = node.getMethods().size();
+				return new ClassOperationAddMethod(node, (MethodNode)fChild);
 			}
 			return new ClassOperationAddMethod(node, (MethodNode)fChild, fIndex);
 		}
@@ -55,19 +55,19 @@ public class AddChildOperationProvider implements IModelVisitor{
 	public Object visit(MethodNode node) throws Exception {
 		if(fChild instanceof CategoryNode){
 			if(fIndex == -1){
-				fIndex = node.getCategories().size();
+				return new MethodOperationAddParameter(node, (CategoryNode)fChild);
 			}
 			return new MethodOperationAddParameter(node, (CategoryNode)fChild, fIndex);
 		}
 		if(fChild instanceof ConstraintNode){
 			if(fIndex == -1){
-				fIndex = node.getConstraintNodes().size();
+				return new MethodOperationAddConstraint(node, (ConstraintNode)fChild);
 			}
 			return new MethodOperationAddConstraint(node, (ConstraintNode)fChild, fIndex);
 		}
 		if(fChild instanceof TestCaseNode){
 			if(fIndex == -1){
-				fIndex = node.getTestCases().size();
+				return new MethodOperationAddTestCase(node, (TestCaseNode)fChild);
 			}
 			return new MethodOperationAddTestCase(node, (TestCaseNode)fChild, fIndex);
 		}
@@ -77,6 +77,9 @@ public class AddChildOperationProvider implements IModelVisitor{
 	@Override
 	public Object visit(CategoryNode node) throws Exception {
 		if(fChild instanceof PartitionNode){
+			if(fIndex == -1){
+				return new GenericOperationAddPartition(node, (PartitionNode)fChild);
+			}
 			return new GenericOperationAddPartition(node, (PartitionNode)fChild, fIndex);
 		}
 		return null;
@@ -95,6 +98,9 @@ public class AddChildOperationProvider implements IModelVisitor{
 	@Override
 	public Object visit(PartitionNode node) throws Exception {
 		if(fChild instanceof PartitionNode){
+			if(fIndex == -1){
+				return new GenericOperationAddPartition(node, (PartitionNode)fChild);
+			}
 			return new GenericOperationAddPartition(node, (PartitionNode)fChild, fIndex);
 		}
 		return null;

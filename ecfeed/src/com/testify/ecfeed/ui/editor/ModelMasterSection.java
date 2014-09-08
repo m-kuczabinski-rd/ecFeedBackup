@@ -415,7 +415,10 @@ public class ModelMasterSection extends TreeViewerSection{
 			}
 			@Override
 			public void widgetSelected(SelectionEvent e){
-				selectElement((GenericNode)fOperation.execute());
+				GenericNode element = (GenericNode)fOperation.execute();
+				if(element != null){
+					selectElement(element);
+				}
 			}
 		}
 
@@ -450,7 +453,7 @@ public class ModelMasterSection extends TreeViewerSection{
 			MenuOperation deleteOperation = new MenuOperationDelete(selected, getOperationManager(), ModelMasterSection.this, getUpdateListener());
 			addOperation(menu, copyOperation, new MenuSelectionAdapter(copyOperation));
 			addOperation(menu, cutOperation, new MenuSelectionAdapter(cutOperation));
-			addOperation(menu, pasteOperation, new MenuSelectionAdapter(pasteOperation));
+			addOperation(menu, pasteOperation, new SelectNodeOperationAdapter(pasteOperation));
 			addOperation(menu, deleteOperation, new MenuSelectionAdapter(deleteOperation));
 		}
 

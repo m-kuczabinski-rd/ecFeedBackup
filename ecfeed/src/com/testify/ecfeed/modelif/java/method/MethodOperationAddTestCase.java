@@ -27,14 +27,14 @@ public class MethodOperationAddTestCase implements IModelOperation {
 
 	@Override
 	public void execute() throws ModelIfException {
+		if(fIndex == -1){
+			fIndex = fTarget.getTestCases().size();
+		}
 		if(fTestCase.getName().matches(Constants.REGEX_TEST_CASE_NODE_NAME) == false){
 			throw new ModelIfException(Messages.TEST_CASE_NAME_REGEX_PROBLEM);
 		}
 		if(fTestCase.updateReferences(fTarget) == false){
 			throw new ModelIfException(Messages.TEST_CASE_INCOMPATIBLE_WITH_METHOD);
-		}
-		if(fIndex == -1){
-			fTarget.addTestCase(fTestCase);
 		}
 		else{
 			fTarget.addTestCase(fTestCase, fIndex);

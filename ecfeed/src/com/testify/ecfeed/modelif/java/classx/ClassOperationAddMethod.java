@@ -23,9 +23,16 @@ public class ClassOperationAddMethod implements IModelOperation {
 		fIndex = index;
 	}
 
+	public ClassOperationAddMethod(ClassNode target, MethodNode method) {
+		this(target, method, -1);
+	}
+
 	@Override
 	public void execute() throws ModelIfException {
 		List<String> problems = new ArrayList<String>();
+		if(fIndex == -1){
+			fIndex = fTarget.getMethods().size();
+		}
 		if(JavaClassUtils.validateNewMethodSignature(fTarget, fMethod.getName(), fMethod.getCategoriesTypes(), problems) == false){
 			throw new ModelIfException(JavaUtils.consolidate(problems));
 		}

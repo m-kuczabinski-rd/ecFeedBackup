@@ -80,8 +80,8 @@ public class GenericNodeInterface extends OperationExecuter{
 		return execute(operation, source, updateListener, Messages.DIALOG_ADD_CHILDREN_PROBLEM_TITLE);
 	}
 	
-	public boolean canAddChildren(Collection<? extends GenericNode> children){
-		GenericAddChildrenOperation operation = new GenericAddChildrenOperation(fTarget, children);
+	public boolean pasteEnabled(Collection<? extends GenericNode> pasted){
+		GenericAddChildrenOperation operation = new GenericAddChildrenOperation(fTarget, pasted);
 		return operation.posible();
 	}
 	
