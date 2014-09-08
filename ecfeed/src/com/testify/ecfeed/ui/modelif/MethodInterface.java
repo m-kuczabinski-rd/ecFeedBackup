@@ -22,7 +22,6 @@ import com.testify.ecfeed.modelif.ModelIfException;
 import com.testify.ecfeed.modelif.ModelOperationManager;
 import com.testify.ecfeed.modelif.java.JavaMethodUtils;
 import com.testify.ecfeed.modelif.java.JavaUtils;
-import com.testify.ecfeed.modelif.java.common.RemoveNodesOperation;
 import com.testify.ecfeed.modelif.java.method.MethodOperationAddConstraint;
 import com.testify.ecfeed.modelif.java.method.MethodOperationAddParameter;
 import com.testify.ecfeed.modelif.java.method.MethodOperationAddTestCase;
@@ -99,7 +98,7 @@ public class MethodInterface extends GenericNodeInterface {
 				return false;
 			}
 		}
-		return execute(new RemoveNodesOperation(parameters), source, updateListener, Messages.DIALOG_REMOVE_PARAMETERS_PROBLEM_TITLE);
+		return super.removeChildren(parameters, source, updateListener, Messages.DIALOG_REMOVE_PARAMETERS_PROBLEM_TITLE);
 	}
 
 	public ConstraintNode addNewConstraint(AbstractFormPart source, IModelUpdateListener updateListener){
@@ -117,7 +116,7 @@ public class MethodInterface extends GenericNodeInterface {
 	}
 	
 	public boolean removeConstraints(Collection<ConstraintNode> constraints, AbstractFormPart source, IModelUpdateListener updateListener){
-		return execute(new RemoveNodesOperation(constraints), source, updateListener, Messages.DIALOG_REMOVE_CONSTRAINTS_PROBLEM_TITLE);
+		return removeChildren(constraints, source, updateListener, Messages.DIALOG_REMOVE_CONSTRAINTS_PROBLEM_TITLE);
 	}
 	
 	public TestCaseNode addTestCase(AbstractFormPart source, IModelUpdateListener updateListener) {
@@ -145,8 +144,8 @@ public class MethodInterface extends GenericNodeInterface {
 		return execute(new MethodOperationAddTestCase(fTarget, testCase, fTarget.getTestCases().size()), source, updateListener, Messages.DIALOG_ADD_TEST_CASE_PROBLEM_TITLE);
 	}
 
-	public void removeTestCases(Collection<TestCaseNode> testCases, AbstractFormPart source, IModelUpdateListener updateListener) {
-		execute(new RemoveNodesOperation(testCases), source, updateListener, Messages.DIALOG_REMOVE_TEST_CASES_PROBLEM_TITLE);
+	public boolean removeTestCases(Collection<TestCaseNode> testCases, AbstractFormPart source, IModelUpdateListener updateListener) {
+		return removeChildren(testCases, source, updateListener, Messages.DIALOG_REMOVE_TEST_CASES_PROBLEM_TITLE);
 	}
 	
 	public void renameSuite(AbstractFormPart source, IModelUpdateListener updateListener) {

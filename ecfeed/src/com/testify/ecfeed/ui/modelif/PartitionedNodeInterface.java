@@ -11,9 +11,8 @@ import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.PartitionedNode;
 import com.testify.ecfeed.modelif.IModelOperation;
 import com.testify.ecfeed.modelif.ModelOperationManager;
-import com.testify.ecfeed.modelif.java.category.GenericOperationAddPartition;
-import com.testify.ecfeed.modelif.java.category.GenericOperationRemovePartition;
-import com.testify.ecfeed.modelif.java.common.RemoveNodesOperation;
+import com.testify.ecfeed.modelif.java.common.GenericOperationAddPartition;
+import com.testify.ecfeed.modelif.java.common.GenericOperationRemovePartition;
 import com.testify.ecfeed.ui.common.Constants;
 
 public class PartitionedNodeInterface extends GenericNodeInterface {
@@ -63,7 +62,7 @@ public class PartitionedNodeInterface extends GenericNodeInterface {
 				return false;
 			}
 		}
-		return execute(new RemoveNodesOperation(partitions), source, updateListener, Messages.DIALOG_REMOVE_PARTITIONS_PROBLEM_TITLE);
+		return removeChildren(partitions, source, updateListener, Messages.DIALOG_REMOVE_PARTITIONS_PROBLEM_TITLE);
 	}
 
 	protected String generateNewPartitionValue() {

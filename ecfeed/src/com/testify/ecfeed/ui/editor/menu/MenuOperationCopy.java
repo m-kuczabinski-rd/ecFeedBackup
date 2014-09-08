@@ -11,28 +11,38 @@
 
 package com.testify.ecfeed.ui.editor.menu;
 
+import java.util.List;
+
 import com.testify.ecfeed.model.GenericNode;
 import com.testify.ecfeed.ui.modelif.NodeClipboard;
 
-public class MenuCopyOperation extends MenuOperation{
-	private NodeClipboard fSource;
-	private GenericNode fTarget;
+public class MenuOperationCopy extends MenuOperation{
+	protected List<GenericNode> fNodes;
 
 	@Override
 	public Object execute(){
-		fSource.setClipboardNode(fTarget);
+		NodeClipboard.setContent(fNodes);
 		return null;
 	}
 
 	@Override
 	public boolean isEnabled(){
-		return (fTarget != null);
+		if(fNodes == null || fNodes.size() == 0) return false;
+		
+		boolean enabled = true;
+		Class<?> type = fNodes.get(0).getClass();
+		for(GenericNode node : fNodes){
+			if(node.getClass() != type){
+				enabled = false;
+				break;
+			}
+		}
+		return enabled;
 	}
 	
-	public MenuCopyOperation(GenericNode target, NodeClipboard source){
+	public MenuOperationCopy(List<GenericNode> nodes){
 		super("Copy");
-		fTarget = target;
-		fSource = source;
+		fNodes = nodes;
 	}
 
 }

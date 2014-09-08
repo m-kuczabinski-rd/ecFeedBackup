@@ -13,7 +13,6 @@ import com.testify.ecfeed.modelif.java.testcase.TestCaseOperationUpdateTestData;
 public class TestCaseInterface extends GenericNodeInterface {
 
 	private TestCaseNode fTarget;
-//	private MethodInterface fMethodIf;
 	
 	public TestCaseInterface(ModelOperationManager modelOperationManager) {
 		super(modelOperationManager);

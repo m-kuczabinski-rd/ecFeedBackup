@@ -18,7 +18,6 @@ import com.testify.ecfeed.modelif.java.classx.ClassOperationAddMethod;
 import com.testify.ecfeed.modelif.java.classx.ClassOperationAddMethods;
 import com.testify.ecfeed.modelif.java.classx.ClassOperationRemoveMethod;
 import com.testify.ecfeed.modelif.java.classx.ClassOperationRename;
-import com.testify.ecfeed.modelif.java.common.RemoveNodesOperation;
 import com.testify.ecfeed.ui.common.Constants;
 
 public class ClassInterface extends GenericNodeInterface {
@@ -93,7 +92,7 @@ public class ClassInterface extends GenericNodeInterface {
 		String newQualifiedName = newPackageName + "." + getLocalName(); 
 		return setQualifiedName(newQualifiedName, source, updateListener);
 	}
-	
+
 	public MethodNode addNewMethod(AbstractFormPart source, IModelUpdateListener updateListener){
 		return addNewMethod(generateNewMethodName(), source, updateListener);
 	}
@@ -133,7 +132,7 @@ public class ClassInterface extends GenericNodeInterface {
 		else if(MessageDialog.openConfirm(Display.getCurrent().getActiveShell(), 
 					Messages.DIALOG_REMOVE_METHODS_TITLE, 
 					Messages.DIALOG_REMOVE_METHODS_MESSAGE)){
-			return execute(new RemoveNodesOperation(methods), source, updateListener, Messages.DIALOG_REMOVE_METHODS_PROBLEM_TITLE);
+			return removeChildren(methods, source, updateListener, Messages.DIALOG_REMOVE_METHODS_PROBLEM_TITLE);
 		}
 		return false;
 	}

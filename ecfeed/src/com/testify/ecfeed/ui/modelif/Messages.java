@@ -39,7 +39,9 @@ public class Messages {
 	public static final String DIALOG_REMOVE_LABEL_PROBLEM_TITLE = "Couldn't remove label";
 	public static final String DIALOG_ADD_LABEL_PROBLEM_TITLE = "Cannot add label";
 	public static final String DIALOG_CHANGE_LABEL_PROBLEM_TITLE = "Cannot change label";
-
+	public static final String DIALOG_REMOVE_NODE_PROBLEM_TITLE = "Connot remove element";
+	public static final String DIALOG_REMOVE_NODES_PROBLEM_TITLE = "Connot remove elements";
+	public static final String DIALOG_ADD_CHILDREN_PROBLEM_TITLE = "Cannot add children elements";
 
 	//CONFIRMATIONS AND WARNINGS
 	public static final String DIALOG_REMOVE_CLASSES_TITLE = "Remove classes"; 

@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.eclipse.ui.forms.AbstractFormPart;
+
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.ConstraintNode;
@@ -14,7 +16,6 @@ import com.testify.ecfeed.model.PartitionedNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.modelif.ModelOperationManager;
-import com.testify.ecfeed.ui.editor.BasicSection;
 import com.testify.ecfeed.ui.modelif.ClassInterface;
 import com.testify.ecfeed.ui.modelif.IModelUpdateListener;
 import com.testify.ecfeed.ui.modelif.MethodInterface;
@@ -31,7 +32,7 @@ public class NewChildOperationProvider implements IModelVisitor {
 	private final String ADD_CONSTRAINT_MENU_OPERATION_OPERATION_NAME = "Add new constraint";
 
 	protected ModelOperationManager fOperationManager;
-	protected BasicSection fSource;
+	protected AbstractFormPart fSource;
 	protected IModelUpdateListener fUpdateListener;
 
 
@@ -136,7 +137,7 @@ public class NewChildOperationProvider implements IModelVisitor {
 		}
 	}
 	
-	public NewChildOperationProvider(ModelOperationManager operationManager, BasicSection source, IModelUpdateListener updateListener){
+	public NewChildOperationProvider(ModelOperationManager operationManager, AbstractFormPart source, IModelUpdateListener updateListener){
 		fOperationManager = operationManager;
 		fSource = source;
 		fUpdateListener = updateListener;

@@ -1,4 +1,4 @@
-package com.testify.ecfeed.modelif.java.category;
+package com.testify.ecfeed.modelif.java.common;
 
 import java.util.Set;
 
@@ -8,8 +8,6 @@ import com.testify.ecfeed.model.PartitionedNode;
 import com.testify.ecfeed.modelif.IModelOperation;
 import com.testify.ecfeed.modelif.ModelIfException;
 import com.testify.ecfeed.modelif.java.JavaUtils;
-import com.testify.ecfeed.modelif.java.common.BulkOperation;
-import com.testify.ecfeed.modelif.java.common.Messages;
 import com.testify.ecfeed.modelif.java.method.MethodOperationMakeConsistent;
 
 public class GenericOperationRemovePartition extends BulkOperation {

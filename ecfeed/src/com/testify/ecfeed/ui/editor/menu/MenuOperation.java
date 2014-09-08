@@ -12,7 +12,7 @@
 package com.testify.ecfeed.ui.editor.menu;
 
 public abstract class MenuOperation{
-	protected String fName;
+	private String fName;
 
 	public abstract Object execute();
 

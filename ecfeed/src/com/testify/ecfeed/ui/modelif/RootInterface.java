@@ -12,7 +12,7 @@ import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.modelif.ModelIfException;
 import com.testify.ecfeed.modelif.ModelOperationManager;
-import com.testify.ecfeed.modelif.java.common.RemoveNodesOperation;
+import com.testify.ecfeed.modelif.java.root.RootOperationAddClasses;
 import com.testify.ecfeed.modelif.java.root.RootOperationAddNewClass;
 import com.testify.ecfeed.modelif.java.root.RootOperationRename;
 import com.testify.ecfeed.ui.common.Constants;
@@ -75,14 +75,19 @@ public class RootInterface extends GenericNodeInterface {
 		return null;
 	}
 
-	public void removeClasses(Collection<ClassNode> removedClasses, AbstractFormPart source, IModelUpdateListener updateListener){
+	public boolean removeClasses(Collection<ClassNode> removedClasses, AbstractFormPart source, IModelUpdateListener updateListener){
 		if(MessageDialog.openConfirm(Display.getCurrent().getActiveShell(), 
 				Messages.DIALOG_REMOVE_CLASSES_TITLE, 
 				Messages.DIALOG_REMOVE_CLASSES_MESSAGE)){
-			execute(new RemoveNodesOperation(removedClasses), source, updateListener, Messages.DIALOG_REMOVE_CLASSES_PROBLEM_TITLE);
+			return removeChildren(removedClasses, source, updateListener, Messages.DIALOG_REMOVE_CLASSES_PROBLEM_TITLE);
 		}
+		return false;
 	}
 	
+	public boolean addClasses(Collection<ClassNode> classes, AbstractFormPart source, IModelUpdateListener updateListener) {
+		return execute(new RootOperationAddClasses(fTarget, classes, fTarget.getClasses().size()), source, updateListener, Messages.DIALOG_ADD_METHODS_PROBLEM_TITLE);
+	}
+
 	private String generateClassName() {
 		String className = Constants.DEFAULT_NEW_PACKAGE_NAME + "." + Constants.DEFAULT_NEW_CLASS_NAME;
 		int i = 0;

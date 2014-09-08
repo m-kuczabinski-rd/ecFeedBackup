@@ -1,6 +1,7 @@
 package com.testify.ecfeed.ui.modelif;
 
 import java.net.URLClassLoader;
+import java.util.Collection;
 
 import org.eclipse.ui.forms.AbstractFormPart;
 
@@ -12,8 +13,11 @@ import com.testify.ecfeed.modelif.ModelOperationManager;
 import com.testify.ecfeed.modelif.java.ILoaderProvider;
 import com.testify.ecfeed.modelif.java.JavaImplementationStatusResolver;
 import com.testify.ecfeed.modelif.java.ModelClassLoader;
+import com.testify.ecfeed.modelif.java.common.GenericAddChildrenOperation;
 import com.testify.ecfeed.modelif.java.common.GenericMoveOperation;
 import com.testify.ecfeed.modelif.java.common.GenericShiftOperation;
+import com.testify.ecfeed.modelif.java.common.RemoveNodesOperation;
+import com.testify.ecfeed.modelif.java.common.RemoveOperationFactory;
 
 public class GenericNodeInterface extends OperationExecuter{
 
@@ -39,6 +43,10 @@ public class GenericNodeInterface extends OperationExecuter{
 		return fStatusResolver.getImplementationStatus(fTarget);
 	}
 	
+	public boolean removeNodes(Collection<? extends GenericNode> nodes, AbstractFormPart source, IModelUpdateListener updateListener){
+		return execute(new RemoveNodesOperation(nodes), source, updateListener, Messages.DIALOG_REMOVE_CLASSES_PROBLEM_TITLE);
+	}
+	
 	static public boolean validateName(String name){
 		return true;
 	}
@@ -51,8 +59,30 @@ public class GenericNodeInterface extends OperationExecuter{
 		return false;
 	}
 
+	public boolean remove(AbstractFormPart source, IModelUpdateListener updateListener){
+		return execute(RemoveOperationFactory.getRemoveOperation(fTarget), source, updateListener, Messages.DIALOG_REMOVE_NODE_PROBLEM_TITLE);
+	}
+	
 	public boolean move(GenericNode newParent, AbstractFormPart source, IModelUpdateListener updateListener){
 		return move(newParent, 0, source, updateListener);
+	}
+	
+	public boolean removeChildren(Collection<? extends GenericNode> children, AbstractFormPart source, IModelUpdateListener updateListener, String message){
+		if(children == null || children.size() == 0) return false;
+		for(GenericNode node : children){
+			if(node.getParent() != fTarget) return false;
+		}
+		return execute(new RemoveNodesOperation(children), source, updateListener, message);
+	}
+	
+	public boolean addChildren(Collection<? extends GenericNode> children, AbstractFormPart source, IModelUpdateListener updateListener, String message){
+		IModelOperation operation = new GenericAddChildrenOperation(fTarget, children);
+		return execute(operation, source, updateListener, Messages.DIALOG_ADD_CHILDREN_PROBLEM_TITLE);
+	}
+	
+	public boolean canAddChildren(Collection<? extends GenericNode> children){
+		GenericAddChildrenOperation operation = new GenericAddChildrenOperation(fTarget, children);
+		return operation.posible();
 	}
 	
 	public boolean move(GenericNode newParent, int newIndex, AbstractFormPart source, IModelUpdateListener updateListener){
@@ -82,5 +112,4 @@ public class GenericNodeInterface extends OperationExecuter{
 			AbstractFormPart source, IModelUpdateListener updateListener) {
 		return execute(moveOperation, source, updateListener, Messages.DIALOG_MOVE_NODE_PROBLEM_TITLE);	
 	}
-	
 }

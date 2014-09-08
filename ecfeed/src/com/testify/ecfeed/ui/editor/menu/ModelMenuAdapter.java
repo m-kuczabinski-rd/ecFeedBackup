@@ -8,6 +8,7 @@ import org.eclipse.swt.events.MenuAdapter;
 import org.eclipse.swt.events.MenuEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 
@@ -59,14 +60,37 @@ public class ModelMenuAdapter extends MenuAdapter {
 
 	@SuppressWarnings("unchecked")
 	protected void populateMenu(Menu menu, IStructuredSelection selection) {
-		List<Object> selected = selection.toList();
+		List<GenericNode> selected = selection.toList();
 		if(selected.size() == 1 && selected.get(0) instanceof GenericNode){
 			addNewChildOperations(menu, (GenericNode)selected.get(0));
 		}
-		new MenuItem(menu, SWT.SEPARATOR);
-//		addCommonOperations(menu, selected);
+		addCommonOperations(menu, selected);
 		new MenuItem(menu, SWT.SEPARATOR);
 		//		addTypeSpecificOperations(selected);
+	}
+
+	private void addCommonOperations(Menu menu, List<GenericNode> selected) {
+		new MenuItem(menu, SWT.SEPARATOR);
+		MenuOperation copyOperation = new MenuOperationCopy(selected);
+		MenuOperation cutOperation = new MenuOperationCut(selected, fMasterSection.getOperationManager(), fMasterSection, fMasterSection.getUpdateListener());
+		MenuOperation pasteOperation = new MenuOperationPaste(selected, fMasterSection.getOperationManager(), fMasterSection, fMasterSection.getUpdateListener());
+		MenuOperation deleteOperation = new MenuOperationDelete(selected, fMasterSection.getOperationManager(), fMasterSection, fMasterSection.getUpdateListener());
+		addOperation(menu, copyOperation, new MenuSelectionAdapter(copyOperation));
+		addOperation(menu, cutOperation, new MenuSelectionAdapter(cutOperation));
+		addOperation(menu, pasteOperation, new MenuSelectionAdapter(pasteOperation));
+		addOperation(menu, deleteOperation, new MenuSelectionAdapter(deleteOperation));
+//		addCutOperation(menu, selected);
+//		addPasteOperation(menu, selected);
+//		new MenuItem(menu, SWT.SEPARATOR);
+//		addDeleteOperation(menu, selected);
+//		addSelectAllOperation(menu, selected);
+	}
+
+	private void addOperation(Menu menu, MenuOperation operation, SelectionListener listener) {
+		MenuItem item = new MenuItem(menu, SWT.NONE);
+		item.setText(operation.getName());
+		item.setEnabled(operation.isEnabled());
+		item.addSelectionListener(listener);
 	}
 
 	@SuppressWarnings("unchecked")

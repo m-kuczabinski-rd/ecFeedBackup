@@ -11,24 +11,36 @@
 
 package com.testify.ecfeed.ui.modelif;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.testify.ecfeed.model.GenericNode;
 
 public class NodeClipboard{
 
-	private GenericNode fClipboardNode = null;
-	private GenericNode fOriginalNode = null;
+	private static List<GenericNode> fClipboardNodes = new ArrayList<>();
 
-	public GenericNode getClipboardNode(){
-		return fClipboardNode;
+	public static List<GenericNode> getContent(){
+		return fClipboardNodes;
 	}
-
-	public GenericNode getOriginalNode(){
-		return fOriginalNode;
+	
+	public static List<GenericNode> getContentCopy(){
+		List<GenericNode> copy = new ArrayList<GenericNode>();
+		for(GenericNode node : fClipboardNodes){
+			copy.add(node.getCopy());
+		}
+		return copy;
 	}
-
-	public void setClipboardNode(GenericNode node){
-		fClipboardNode = node.getCopy();
-		fOriginalNode = node;
+	
+	public static void setContent(GenericNode node){
+		fClipboardNodes.clear();
+		fClipboardNodes.add(node.getCopy());
 	}
-
+	
+	public static void setContent(List<GenericNode> nodes){
+		fClipboardNodes.clear();
+		for(GenericNode node : nodes){
+			fClipboardNodes.add(node.getCopy());
+		}
+	}
 }
