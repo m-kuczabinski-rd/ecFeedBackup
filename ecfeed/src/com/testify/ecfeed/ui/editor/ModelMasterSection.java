@@ -64,9 +64,11 @@ import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.modelif.ModelOperationManager;
 import com.testify.ecfeed.ui.common.Constants;
 import com.testify.ecfeed.ui.editor.menu.MenuOperation;
+import com.testify.ecfeed.ui.editor.menu.MenuOperationCollapse;
 import com.testify.ecfeed.ui.editor.menu.MenuOperationCopy;
 import com.testify.ecfeed.ui.editor.menu.MenuOperationCut;
 import com.testify.ecfeed.ui.editor.menu.MenuOperationDelete;
+import com.testify.ecfeed.ui.editor.menu.MenuOperationExpand;
 import com.testify.ecfeed.ui.editor.menu.MenuOperationPaste;
 import com.testify.ecfeed.ui.editor.menu.MenuOperationSelectAll;
 import com.testify.ecfeed.ui.editor.menu.NewChildOperationProvider;
@@ -440,15 +442,6 @@ public class ModelMasterSection extends TreeViewerSection{
 			//		addTypeSpecificOperations(selected);
 		}
 
-		private void addTreeOperations(Menu menu, List<GenericNode> selected) {
-			MenuOperation selectAllOperation = new MenuOperationSelectAll(getTreeViewer());
-//			MenuOperation expandOperation = new MenuOperationExpand(getTreeViewer());
-//			MenuOperation collapseOperation = new MenuOperationCollapse(getTreeViewer());
-			addOperation(menu, selectAllOperation, new MenuSelectionAdapter(selectAllOperation));
-//			addOperation(menu, expandOperation, new MenuSelectionAdapter(expandOperation));
-//			addOperation(menu, collapseOperation, new MenuSelectionAdapter(collapseOperation));
-		}
-
 		private void addCommonOperations(Menu menu, List<GenericNode> selected) {
 			new MenuItem(menu, SWT.SEPARATOR);
 			MenuOperation copyOperation = new MenuOperationCopy(selected);
@@ -459,6 +452,15 @@ public class ModelMasterSection extends TreeViewerSection{
 			addOperation(menu, cutOperation, new MenuSelectionAdapter(cutOperation));
 			addOperation(menu, pasteOperation, new MenuSelectionAdapter(pasteOperation));
 			addOperation(menu, deleteOperation, new MenuSelectionAdapter(deleteOperation));
+		}
+
+		private void addTreeOperations(Menu menu, List<GenericNode> selected) {
+			MenuOperation selectAllOperation = new MenuOperationSelectAll(getTreeViewer());
+			MenuOperation expandOperation = new MenuOperationExpand(getTreeViewer(), selected);
+			MenuOperation collapseOperation = new MenuOperationCollapse(getTreeViewer(), selected);
+			addOperation(menu, selectAllOperation, new MenuSelectionAdapter(selectAllOperation));
+			addOperation(menu, expandOperation, new MenuSelectionAdapter(expandOperation));
+			addOperation(menu, collapseOperation, new MenuSelectionAdapter(collapseOperation));
 		}
 
 		private void addOperation(Menu menu, MenuOperation operation, SelectionListener listener) {

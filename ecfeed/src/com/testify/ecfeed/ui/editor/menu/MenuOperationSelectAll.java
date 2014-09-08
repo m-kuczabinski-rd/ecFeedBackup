@@ -2,20 +2,17 @@ package com.testify.ecfeed.ui.editor.menu;
 
 import org.eclipse.jface.viewers.TreeViewer;
 
-public class MenuOperationSelectAll extends MenuOperation {
-
-	private TreeViewer fViewer;
+public class MenuOperationSelectAll extends ViewerManipulationOperation {
 
 	public MenuOperationSelectAll(TreeViewer viewer) {
-		super("Select all");
-		fViewer = viewer;
+		super("Select all", viewer);
 	}
 
 	@Override
 	public Object execute() {
-		fViewer.expandAll();
-		fViewer.getTree().selectAll();
-		fViewer.getTree().deselect(fViewer.getTree().getTopItem());
+		getViewer().expandAll();
+		getViewer().getTree().selectAll();
+		getViewer().getTree().deselect(getViewer().getTree().getTopItem());
 		return true;
 	}
 
