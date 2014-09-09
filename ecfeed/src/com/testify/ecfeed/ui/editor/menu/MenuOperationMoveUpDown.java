@@ -9,26 +9,28 @@ import com.testify.ecfeed.modelif.ModelOperationManager;
 import com.testify.ecfeed.ui.modelif.IModelUpdateListener;
 import com.testify.ecfeed.ui.modelif.SelectionInterface;
 
-public class MenuOperationDelete extends ModelModyfingOperation {
+public class MenuOperationMoveUpDown extends ModelModyfingOperation {
 
-	private SelectionInterface fSelectionIf;
+	private boolean fUp;
 	
-	public MenuOperationDelete(List<GenericNode> selected,
+	public MenuOperationMoveUpDown(List<GenericNode> selected, boolean up,
 			ModelOperationManager operationManager, AbstractFormPart source,
 			IModelUpdateListener updateListener) {
-		super("Delete", selected, operationManager, source, updateListener);
-		fSelectionIf = new SelectionInterface(operationManager);
+		super(up ? "Move up" : "Move down", selected, operationManager, source, updateListener);
+		fUp = up;
 	}
 
 	@Override
 	public Object execute() {
-		fSelectionIf.setTarget(getSelectedNodes());
-		return fSelectionIf.delete(getSource(), getUpdateListener());
+		SelectionInterface selectionIf = new SelectionInterface(getOperationManager());
+		selectionIf.setTarget(getSelectedNodes());
+		selectionIf.moveUpDown(fUp, getSource(), getUpdateListener());
+		return null;
 	}
 
 	@Override
 	public boolean isEnabled() {
-		return getSelectedNodes().size() > 0;
+		return getSelectedNodes().size() == 1;
 	}
 
 }

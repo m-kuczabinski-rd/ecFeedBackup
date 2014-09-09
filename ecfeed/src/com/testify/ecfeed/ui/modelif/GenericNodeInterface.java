@@ -43,10 +43,6 @@ public class GenericNodeInterface extends OperationExecuter{
 		return fStatusResolver.getImplementationStatus(fTarget);
 	}
 	
-	public boolean removeNodes(Collection<? extends GenericNode> nodes, AbstractFormPart source, IModelUpdateListener updateListener){
-		return execute(new RemoveNodesOperation(nodes), source, updateListener, Messages.DIALOG_REMOVE_CLASSES_PROBLEM_TITLE);
-	}
-	
 	static public boolean validateName(String name){
 		return true;
 	}
@@ -77,6 +73,17 @@ public class GenericNodeInterface extends OperationExecuter{
 	
 	public boolean addChildren(Collection<? extends GenericNode> children, AbstractFormPart source, IModelUpdateListener updateListener, String message){
 		IModelOperation operation = new GenericAddChildrenOperation(fTarget, children);
+		return execute(operation, source, updateListener, Messages.DIALOG_ADD_CHILDREN_PROBLEM_TITLE);
+	}
+	
+	public boolean addChildren(Collection<? extends GenericNode> children, int index, AbstractFormPart source, IModelUpdateListener updateListener, String message){
+		IModelOperation operation;
+		if(index == -1){
+			operation = new GenericAddChildrenOperation(fTarget, children);
+		}
+		else{
+			operation = new GenericAddChildrenOperation(fTarget, children, index);
+		}
 		return execute(operation, source, updateListener, Messages.DIALOG_ADD_CHILDREN_PROBLEM_TITLE);
 	}
 	

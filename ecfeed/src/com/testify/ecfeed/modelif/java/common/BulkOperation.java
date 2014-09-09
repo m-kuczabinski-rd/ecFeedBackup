@@ -15,12 +15,18 @@ public class BulkOperation implements IModelOperation{
 	// either all operation or none. if false, all operations are executed
 	// otherwise after first error the reverse operation is called
 	private boolean fAtomic;
-	private boolean fModelUpdated; 
+	private boolean fModelUpdated;
+	private List<ICheckOperation> fCheckOperations; 
+	
+	protected interface ICheckOperation{
+		public void check() throws ModelIfException;
+	}
 	
 	public BulkOperation(boolean atomic) {
 		fModelUpdated = false;
 		fOperations = new ArrayList<IModelOperation>();
 		fExecutedOperations = new ArrayList<IModelOperation>();
+		fCheckOperations = new ArrayList<ICheckOperation>();
 		fAtomic = atomic;
 	}
 	
@@ -30,6 +36,10 @@ public class BulkOperation implements IModelOperation{
 	
 	protected void addOperation(IModelOperation operation) {
 		fOperations.add(operation);
+	}
+	
+	protected void addCheckOperation(ICheckOperation operation){
+		fCheckOperations.add(operation);
 	}
 	
 	@Override
@@ -46,6 +56,15 @@ public class BulkOperation implements IModelOperation{
 					reverseOperation().execute();
 					break;
 				}
+			}
+		}
+		for(ICheckOperation operation : fCheckOperations){
+			try{
+				operation.check();
+			}catch(ModelIfException e){
+				errors.add(e.getMessage());
+				reverseOperation().execute();
+				break;
 			}
 		}
 		if(errors.size() > 0){

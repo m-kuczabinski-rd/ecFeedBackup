@@ -69,12 +69,13 @@ import com.testify.ecfeed.ui.editor.menu.MenuOperationCopy;
 import com.testify.ecfeed.ui.editor.menu.MenuOperationCut;
 import com.testify.ecfeed.ui.editor.menu.MenuOperationDelete;
 import com.testify.ecfeed.ui.editor.menu.MenuOperationExpand;
+import com.testify.ecfeed.ui.editor.menu.MenuOperationMoveUpDown;
 import com.testify.ecfeed.ui.editor.menu.MenuOperationPaste;
 import com.testify.ecfeed.ui.editor.menu.MenuOperationSelectAll;
 import com.testify.ecfeed.ui.editor.menu.NewChildOperationProvider;
 import com.testify.ecfeed.ui.modelif.GenericNodeInterface;
 import com.testify.ecfeed.ui.modelif.IModelUpdateListener;
-import com.testify.ecfeed.ui.modelif.NodeInterfaceFactory;
+import com.testify.ecfeed.ui.modelif.SelectionInterface;
 
 public class ModelMasterSection extends TreeViewerSection{
 	private static final int STYLE = Section.EXPANDED | Section.TITLE_BAR;
@@ -362,18 +363,13 @@ public class ModelMasterSection extends TreeViewerSection{
 			moveSelectedItem(up);
 		}
 
+		@SuppressWarnings("unchecked")
 		private void moveSelectedItem(boolean moveUp){
-			GenericNodeInterface nodeIf = new NodeInterfaceFactory(fOperationManager).getNodeInterface(selectedNode());
-			nodeIf.moveUpDown(moveUp, ModelMasterSection.this, getUpdateListener());
+			SelectionInterface selectionIf = new SelectionInterface(getOperationManager());
+			selectionIf.setTarget(getSelection().toList());
+			selectionIf.moveUpDown(moveUp, ModelMasterSection.this, getUpdateListener());
 		}
 
-		private GenericNode selectedNode() {
-			Object selectedElement = getSelectedElement();
-			if(selectedElement instanceof GenericNode){
-				return (GenericNode)selectedElement;
-			}
-			return null;
-		}
 	}
 
 	private class ModelSelectionListener implements ISelectionChangedListener{
@@ -440,9 +436,17 @@ public class ModelMasterSection extends TreeViewerSection{
 				addNewChildOperations(menu, (GenericNode)selected.get(0));
 			}
 			addCommonOperations(menu, selected);
-			new MenuItem(menu, SWT.SEPARATOR);
 			addTreeOperations(menu, selected);
+			addMoveOperations(menu, selected);
 			//		addTypeSpecificOperations(selected);
+		}
+
+		private void addMoveOperations(Menu menu, List<GenericNode> selected) {
+			new MenuItem(menu, SWT.SEPARATOR);
+			MenuOperation moveUpOperation = new MenuOperationMoveUpDown(selected, true, getOperationManager(), ModelMasterSection.this, getUpdateListener());
+			MenuOperation moveDownOperation = new MenuOperationMoveUpDown(selected, false, getOperationManager(), ModelMasterSection.this, getUpdateListener());
+			addOperation(menu, moveUpOperation, new MenuSelectionAdapter(moveUpOperation));
+			addOperation(menu, moveDownOperation, new MenuSelectionAdapter(moveDownOperation));
 		}
 
 		private void addCommonOperations(Menu menu, List<GenericNode> selected) {
@@ -458,6 +462,7 @@ public class ModelMasterSection extends TreeViewerSection{
 		}
 
 		private void addTreeOperations(Menu menu, List<GenericNode> selected) {
+			new MenuItem(menu, SWT.SEPARATOR);
 			MenuOperation selectAllOperation = new MenuOperationSelectAll(getTreeViewer());
 			MenuOperation expandOperation = new MenuOperationExpand(getTreeViewer(), selected);
 			MenuOperation collapseOperation = new MenuOperationCollapse(getTreeViewer(), selected);

@@ -9,6 +9,7 @@ import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.TestCaseNode;
+import com.testify.ecfeed.modelif.ModelIfException;
 import com.testify.ecfeed.modelif.java.classx.ClassOperationAddMethod;
 import com.testify.ecfeed.modelif.java.method.MethodOperationAddConstraint;
 import com.testify.ecfeed.modelif.java.method.MethodOperationAddParameter;
@@ -37,7 +38,7 @@ public class AddChildOperationProvider implements IModelVisitor{
 			}
 			return new RootOperationAddNewClass(node, (ClassNode)fChild, fIndex);
 		}
-		return null;
+		throw new ModelIfException(Messages.OPERATION_NOT_SUPPORTED_PROBLEM);
 	}
 
 	@Override
@@ -48,7 +49,7 @@ public class AddChildOperationProvider implements IModelVisitor{
 			}
 			return new ClassOperationAddMethod(node, (MethodNode)fChild, fIndex);
 		}
-		return null;
+		throw new ModelIfException(Messages.OPERATION_NOT_SUPPORTED_PROBLEM);
 	}
 
 	@Override
@@ -71,7 +72,7 @@ public class AddChildOperationProvider implements IModelVisitor{
 			}
 			return new MethodOperationAddTestCase(node, (TestCaseNode)fChild, fIndex);
 		}
-		return null;
+		throw new ModelIfException(Messages.OPERATION_NOT_SUPPORTED_PROBLEM);
 	}
 
 	@Override
@@ -82,17 +83,17 @@ public class AddChildOperationProvider implements IModelVisitor{
 			}
 			return new GenericOperationAddPartition(node, (PartitionNode)fChild, fIndex);
 		}
-		return null;
+		throw new ModelIfException(Messages.OPERATION_NOT_SUPPORTED_PROBLEM);
 	}
 
 	@Override
 	public Object visit(TestCaseNode node) throws Exception {
-		return null;
+		throw new ModelIfException(Messages.OPERATION_NOT_SUPPORTED_PROBLEM);
 	}
 
 	@Override
 	public Object visit(ConstraintNode node) throws Exception {
-		return null;
+		throw new ModelIfException(Messages.OPERATION_NOT_SUPPORTED_PROBLEM);
 	}
 
 	@Override
@@ -103,7 +104,7 @@ public class AddChildOperationProvider implements IModelVisitor{
 			}
 			return new GenericOperationAddPartition(node, (PartitionNode)fChild, fIndex);
 		}
-		return null;
+		throw new ModelIfException(Messages.OPERATION_NOT_SUPPORTED_PROBLEM);
 	}
 	
 }

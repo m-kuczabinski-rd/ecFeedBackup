@@ -8,11 +8,20 @@ import com.testify.ecfeed.modelif.IModelOperation;
 public class GenericAddChildrenOperation extends BulkOperation {
 
 	public GenericAddChildrenOperation(GenericNode target, Collection<? extends GenericNode> children) {
+		this(target, children, -1);
+	}
+
+	public GenericAddChildrenOperation(GenericNode target, Collection<? extends GenericNode> children, int index) {
 		super(false);
 		for(GenericNode child : children){
 			IModelOperation operation;
 			try {
-				operation = (IModelOperation)target.accept(new AddChildOperationProvider(child));
+				if(index != -1){
+					operation = (IModelOperation)target.accept(new AddChildOperationProvider(child, index++));
+				}
+				else{
+					operation = (IModelOperation)target.accept(new AddChildOperationProvider(child));
+				}
 				if(operation != null){
 					addOperation(operation);
 				}

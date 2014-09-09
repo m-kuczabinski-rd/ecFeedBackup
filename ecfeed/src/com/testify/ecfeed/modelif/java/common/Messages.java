@@ -12,6 +12,7 @@ public class Messages {
 	public static final String PROBLEM_WITH_BULK_OPERATION = "Some problems occured during the operation:";
 	public static final String NEGATIVE_INDEX_PROBLEM = "The index of the element must be non-negative";
 	public static final String TOO_HIGH_INDEX_PROBLEM = "The index of the element is too high";
+	public static final String NAME_DUPLICATE_PROBLEM = "Two elements with the same name are not allowed for this parent";
 	public static final String MODEL_NAME_REGEX_PROBLEM = "Model name must contain between 1 and 64 alphanumeric characters or spaces.\n The model name must not start with space.";
 	public static final String CLASS_NAME_REGEX_PROBLEM = "The provided name must fulfill all rules for a qualified name of a class in Java";
 	public static final String CLASS_NAME_CONTAINS_KEYWORD_PROBLEM = "The new class name contains Java keyword";

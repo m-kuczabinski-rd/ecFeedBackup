@@ -6,7 +6,7 @@ import org.eclipse.jface.viewers.TreeViewer;
 
 import com.testify.ecfeed.model.GenericNode;
 
-public class MenuOperationExpand extends ViewerManipulationOperation {
+public class MenuOperationExpand extends ViewerOperation {
 
 	private List<? extends GenericNode> fNodes;
 
