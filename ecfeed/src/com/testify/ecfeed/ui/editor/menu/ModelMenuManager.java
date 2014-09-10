@@ -60,7 +60,7 @@ public class ModelMenuManager/* extends MenuAdapter */{
 		fUpdateListener = updateListener;
 	}
 
-	public void refresh(IStructuredSelection selection){
+	public void populate(IStructuredSelection selection){
 		for(MenuItem item : fMenu.getItems()){
 			item.dispose();
 		}

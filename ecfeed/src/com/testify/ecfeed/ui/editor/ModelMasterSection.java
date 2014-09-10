@@ -374,7 +374,7 @@ public class ModelMasterSection extends TreeViewerSection{
 		public void selectionChanged(SelectionChangedEvent event) {
 			IStructuredSelection selection = (IStructuredSelection)event.getSelection();
 			enableSortButtons(selection);
-			fMenuAdapter.refresh(selection);
+			fMenuAdapter.populate(selection);
 		}
 	}
 	
