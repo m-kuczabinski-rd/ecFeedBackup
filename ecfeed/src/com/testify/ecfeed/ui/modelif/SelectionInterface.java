@@ -59,6 +59,7 @@ public class SelectionInterface extends OperationExecuter {
 	}
 
 	public boolean moveUpDownEnabed(boolean up) {
+		
 		GenericNode parent = getCommonParent(fSelected);
 		if(parent != null){
 			try {
