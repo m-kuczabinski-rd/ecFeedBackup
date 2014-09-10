@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.StringTokenizer;
 
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.ClassNode;
@@ -16,8 +17,11 @@ public class JavaUtils {
 	public static boolean isValidTypeName(String name){
 		if(isPrimitive(name)) return true;
 		if(name.matches(Constants.REGEX_CLASS_NODE_NAME) == false) return false;
-		for(String keyword : javaKeywords()){
-			if(name.contains(keyword)) return false;
+		StringTokenizer tokenizer = new StringTokenizer(name, ".");
+		while(tokenizer.hasMoreTokens()){
+			if(Arrays.asList(javaKeywords()).contains(tokenizer.nextToken())){
+				return false;
+			}
 		}
 		return true;
 	}

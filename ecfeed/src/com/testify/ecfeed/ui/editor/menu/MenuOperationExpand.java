@@ -11,7 +11,7 @@ public class MenuOperationExpand extends ViewerOperation {
 	private List<? extends GenericNode> fNodes;
 
 	public MenuOperationExpand(TreeViewer viewer, List<? extends GenericNode> nodes){
-		super("Expand", viewer);
+		super("&Expand", viewer);
 		fNodes = nodes;
 	}
 	@Override

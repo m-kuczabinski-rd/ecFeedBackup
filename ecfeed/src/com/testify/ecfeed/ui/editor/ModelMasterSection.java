@@ -73,6 +73,7 @@ import com.testify.ecfeed.ui.editor.menu.MenuOperationMoveUpDown;
 import com.testify.ecfeed.ui.editor.menu.MenuOperationPaste;
 import com.testify.ecfeed.ui.editor.menu.MenuOperationSelectAll;
 import com.testify.ecfeed.ui.editor.menu.NewChildOperationProvider;
+import com.testify.ecfeed.ui.modelif.CategoryInterface;
 import com.testify.ecfeed.ui.modelif.GenericNodeInterface;
 import com.testify.ecfeed.ui.modelif.IModelUpdateListener;
 import com.testify.ecfeed.ui.modelif.SelectionInterface;
@@ -129,6 +130,12 @@ public class ModelMasterSection extends TreeViewerSection{
 				return children.toArray();
 			}
 
+			if(parentElement instanceof CategoryNode){
+				CategoryNode category = (CategoryNode)parentElement;
+				if(category.isExpected() && CategoryInterface.isPrimitive(category.getType())){
+					return EMPTY_ARRAY;
+				}
+			}
 			if(parentElement instanceof GenericNode){
 				GenericNode node = (GenericNode)parentElement;
 				if(node.getChildren().size() < Constants.MAX_DISPLAYED_CHILDREN_PER_NODE){

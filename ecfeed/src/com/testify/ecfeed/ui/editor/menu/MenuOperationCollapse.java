@@ -11,7 +11,7 @@ public class MenuOperationCollapse extends ViewerOperation {
 	private List<? extends GenericNode> fNodes;
 
 	public MenuOperationCollapse(TreeViewer viewer, List<? extends GenericNode> nodes) {
-		super("Collapse", viewer);
+		super("&Collapse", viewer);
 		fNodes = nodes;
 	}
 

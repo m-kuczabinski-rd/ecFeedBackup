@@ -16,7 +16,7 @@ public class MenuOperationDelete extends ModelModyfingOperation {
 	public MenuOperationDelete(List<GenericNode> selected,
 			ModelOperationManager operationManager, AbstractFormPart source,
 			IModelUpdateListener updateListener) {
-		super("Delete", selected, operationManager, source, updateListener);
+		super("&Delete", selected, operationManager, source, updateListener);
 		fSelectionIf = new SelectionInterface(operationManager);
 	}
 

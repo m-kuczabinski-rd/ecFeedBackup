@@ -17,7 +17,7 @@ public class MenuOperationMoveUpDown extends ModelModyfingOperation {
 	public MenuOperationMoveUpDown(List<GenericNode> selected, boolean up,
 			ModelOperationManager operationManager, AbstractFormPart source,
 			IModelUpdateListener updateListener) {
-		super(up ? "Move up" : "Move down", selected, operationManager, source, updateListener);
+		super(up ? "Move &up" : "Move &down", selected, operationManager, source, updateListener);
 		fUp = up;
 		fSelectionIf = new SelectionInterface(getOperationManager());
 		fSelectionIf.setTarget(selected);

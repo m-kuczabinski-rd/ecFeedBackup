@@ -23,15 +23,15 @@ public class BulkOperation implements IModelOperation{
 	}
 	
 	public BulkOperation(boolean atomic) {
+		this(new ArrayList<IModelOperation>(), atomic);
+	}
+	
+	public BulkOperation(List<IModelOperation> operations, boolean atomic) {
 		fModelUpdated = false;
-		fOperations = new ArrayList<IModelOperation>();
+		fOperations = operations;
 		fExecutedOperations = new ArrayList<IModelOperation>();
 		fCheckOperations = new ArrayList<ICheckOperation>();
 		fAtomic = atomic;
-	}
-	
-	public BulkOperation(List<IModelOperation> operations) {
-		fOperations = operations;
 	}
 	
 	protected void addOperation(IModelOperation operation) {
@@ -78,7 +78,7 @@ public class BulkOperation implements IModelOperation{
 
 	@Override
 	public IModelOperation reverseOperation(){
-		return new BulkOperation(reverseOperations());
+		return new BulkOperation(reverseOperations(), fAtomic);
 	}
 	
 	

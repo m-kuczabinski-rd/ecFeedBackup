@@ -5,7 +5,7 @@ import org.eclipse.jface.viewers.TreeViewer;
 public class MenuOperationSelectAll extends ViewerOperation {
 
 	public MenuOperationSelectAll(TreeViewer viewer) {
-		super("Select all", viewer);
+		super("Select &all", viewer);
 	}
 
 	@Override
