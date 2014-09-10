@@ -532,14 +532,19 @@ public class ModelMasterSection extends TreeViewerSection{
 
 	@SuppressWarnings("unchecked")
 	private void enableSortButtons(IStructuredSelection selection) {
-		boolean enabled = true;
+		boolean moveUpEnabled = true;
+		boolean moveDownEnabled = true;
 		SelectionInterface selectionIf = new SelectionInterface(getOperationManager());
-		selectionIf.setTarget(getSelection().toList());
-		
-		if (selection.getFirstElement() instanceof RootNode) {
-			enabled = false;
+		if(selection.isEmpty() == false){
+			selectionIf.setTarget(getSelection().toList());
+
+			if (selection.getFirstElement() instanceof RootNode) {
+				moveUpEnabled = moveDownEnabled = false;
+			}
+			moveUpEnabled &= selectionIf.moveUpDownEnabed(true);
+			moveDownEnabled &= selectionIf.moveUpDownEnabed(false);
 		}
-		fMoveUpButton.setEnabled(enabled & selectionIf.moveUpDownEnabed(true));
-		fMoveDownButton.setEnabled(enabled & selectionIf.moveUpDownEnabed(false));
+		fMoveUpButton.setEnabled(moveUpEnabled);
+		fMoveDownButton.setEnabled(moveDownEnabled);
 	}
 }

@@ -118,7 +118,7 @@ public class GenericShiftOperation implements IModelOperation {
 			return false;
 		}
 		int newIndex = borderNode(shifted, shift).getIndex() + shift;
-		return newIndex >= 0 && newIndex <= shifted.get(0).getMaxIndex();
+		return newIndex >= 0 && newIndex < shifted.get(0).getMaxIndex();
 	}
 
 	private GenericNode minIndexNode(List<? extends GenericNode> nodes){

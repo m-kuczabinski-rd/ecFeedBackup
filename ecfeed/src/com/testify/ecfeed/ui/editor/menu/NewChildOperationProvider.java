@@ -24,12 +24,12 @@ import com.testify.ecfeed.ui.modelif.RootInterface;
 
 public class NewChildOperationProvider implements IModelVisitor {
 	
-	private final String ADD_CLASS_MENU_OPERATION_OPERATION_NAME = "Add new class";
-	private final String ADD_METHOD_MENU_OPERATION_OPERATION_NAME = "Add new method";
-	private final String ADD_PARAMETER_MENU_OPERATION_OPERATION_NAME = "Add new parameter";
-	private final String ADD_TEST_CASE_MENU_OPERATION_OPERATION_NAME = "Add new test case";
-	private final String ADD_PARTITION_MENU_OPERATION_OPERATION_NAME = "Add new partition";
-	private final String ADD_CONSTRAINT_MENU_OPERATION_OPERATION_NAME = "Add new constraint";
+	private final String ADD_CLASS_MENU_OPERATION_OPERATION_NAME = "Add &class";
+	private final String ADD_METHOD_MENU_OPERATION_OPERATION_NAME = "Add &method";
+	private final String ADD_PARAMETER_MENU_OPERATION_OPERATION_NAME = "Add &parameter";
+	private final String ADD_TEST_CASE_MENU_OPERATION_OPERATION_NAME = "Add &test case";
+	private final String ADD_PARTITION_MENU_OPERATION_OPERATION_NAME = "Add pa&rtition";
+	private final String ADD_CONSTRAINT_MENU_OPERATION_OPERATION_NAME = "Add &constraint";
 
 	protected ModelOperationManager fOperationManager;
 	protected AbstractFormPart fSource;
