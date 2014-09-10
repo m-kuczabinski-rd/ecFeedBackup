@@ -108,7 +108,6 @@ public class ModelEditor extends FormEditor{
 			IFile file = ((FileEditorInput)input).getFile();
 			InputStream iStream;
 			try {
-//				XmlModelParser parser = new XmlModelParser();
 				IModelParser parser = new EctParser();
 				iStream = file.getContents();
 				root = parser.parseModel(iStream);
