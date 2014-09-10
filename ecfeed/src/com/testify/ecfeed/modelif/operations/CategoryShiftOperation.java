@@ -29,16 +29,21 @@ public class CategoryShiftOperation extends GenericShiftOperation {
 	}
 	
 	@Override
-	public int minAllowedShift(List<? extends GenericNode> shifted, boolean up){
-		int shift = up ? -1 : 1;
-		while(shiftAllowed(shifted, shift) == false){
-			shift += up ? -1 : 1;
-			int borderIndex = borderNode(shifted, shift).getIndex() + shift; 
-			if(borderIndex < 0 || borderIndex >= borderNode(shifted, shift).getMaxIndex()){
-				return 0;
-			}
+	public void execute() throws ModelIfException {
+		if(shiftAllowed(getShiftedElements(), getShift()) == false){
+			throw new ModelIfException(Messages.METHOD_SIGNATURE_DUPLICATE_PROBLEM);
 		}
-		return shift;
+		MethodNode method = fCategories.get(0).getMethod();
+		List<Integer> indices = indices(fCategories, getShiftedElements());
+		shiftElements(fCategories, indices, getShift());
+		for(TestCaseNode testCase : method.getTestCases()){
+			shiftElements(testCase.getTestData(), indices, getShift());
+		}
+	}
+
+	@Override 
+	public IModelOperation reverseOperation(){
+		return new CategoryShiftOperation(fCategories, getShiftedElements(), -getShift());
 	}
 
 	@Override
@@ -57,21 +62,16 @@ public class CategoryShiftOperation extends GenericShiftOperation {
 	}
 
 	@Override
-	public void execute() throws ModelIfException {
-		if(shiftAllowed(getShiftedElements(), getShift()) == false){
-			throw new ModelIfException(Messages.METHOD_SIGNATURE_DUPLICATE_PROBLEM);
+	protected int minAllowedShift(List<? extends GenericNode> shifted, boolean up){
+		int shift = up ? -1 : 1;
+		while(shiftAllowed(shifted, shift) == false){
+			shift += up ? -1 : 1;
+			int borderIndex = borderNode(shifted, shift).getIndex() + shift; 
+			if(borderIndex < 0 || borderIndex >= borderNode(shifted, shift).getMaxIndex()){
+				return 0;
+			}
 		}
-		MethodNode method = fCategories.get(0).getMethod();
-		List<Integer> indices = indices(fCategories, getShiftedElements());
-		shiftElements(fCategories, indices, getShift());
-		for(TestCaseNode testCase : method.getTestCases()){
-			shiftElements(testCase.getTestData(), indices, getShift());
-		}
-	}
-
-	@Override 
-	public IModelOperation reverseOperation(){
-		return new CategoryShiftOperation(fCategories, getShiftedElements(), -getShift());
+		return shift;
 	}
 	
 }

@@ -31,26 +31,6 @@ public class GenericShiftOperation implements IModelOperation {
 		fShift = shift;
 	}
 	
-	protected boolean shiftAllowed(List<? extends GenericNode> shifted, int shift){
-		if(areInstancesOfSameClass(shifted) == false){
-			return false;
-		}
-		if(haveSameParent(shifted) == false){
-			return false;
-		}
-		if(shift == 0){
-			return false;
-		}
-		int newIndex = borderNode(shifted, shift).getIndex() + shift;
-		return newIndex >= 0 && newIndex <= shifted.get(0).getMaxIndex();
-	}
-	
-	public int minAllowedShift(List<? extends GenericNode> shifted, boolean up){
-		int shift = up ? -1 : 1;
-		return shiftAllowed(shifted, shift) ? shift : 0; 
-	}
-
-
 	@Override
 	public void execute() throws ModelIfException {
 		shiftElements(fCollection, indices(fCollection, fShifted), fShift);
@@ -61,10 +41,27 @@ public class GenericShiftOperation implements IModelOperation {
 		return new GenericShiftOperation(fCollection, fShifted, -fShift);
 	}
 
+	public int getShift(){
+		return fShift;
+	}
+
+	protected List<? extends GenericNode> getCollection(){
+		return fCollection;
+	}
+
+	protected List<? extends GenericNode> getShiftedElements(){
+		return fShifted;
+	}
+
 	protected void setShift(int shift){
 		fShift = shift;
 	}
 	
+	protected int minAllowedShift(List<? extends GenericNode> shifted, boolean up){
+		int shift = up ? -1 : 1;
+		return shiftAllowed(shifted, shift) ? shift : 0; 
+	}
+
 	protected boolean haveSameParent(List<? extends GenericNode> shifted) {
 		GenericNode parent = shifted.get(0).getParent();
 		for(GenericNode node : shifted){
@@ -83,22 +80,6 @@ public class GenericShiftOperation implements IModelOperation {
 			}
 		}
 		return true;
-	}
-	
-	protected GenericNode minIndexNode(List<? extends GenericNode> nodes){
-		GenericNode minIndexNode = nodes.get(0);
-		for(GenericNode node : nodes){
-			minIndexNode = node.getIndex() < minIndexNode.getIndex() ? node : minIndexNode; 
-		}
-		return minIndexNode;
-	}
-
-	protected GenericNode maxIndexNode(List<? extends GenericNode> nodes){
-		GenericNode maxIndexNode = nodes.get(0);
-		for(GenericNode node : nodes){
-			maxIndexNode = node.getIndex() > maxIndexNode.getIndex() ? node : maxIndexNode; 
-		}
-		return maxIndexNode;
 	}
 	
 	protected GenericNode borderNode(List<? extends GenericNode> nodes, int shift){
@@ -126,20 +107,34 @@ public class GenericShiftOperation implements IModelOperation {
 		}
 	}
 	
-	public int getShift(){
-		return fShift;
-	}
-	
-	protected List<? extends GenericNode> getCollection(){
-		return fCollection;
-	}
-	
-	protected List<? extends GenericNode> getShiftedElements(){
-		return fShifted;
+	protected boolean shiftAllowed(List<? extends GenericNode> shifted, int shift){
+		if(areInstancesOfSameClass(shifted) == false){
+			return false;
+		}
+		if(haveSameParent(shifted) == false){
+			return false;
+		}
+		if(shift == 0){
+			return false;
+		}
+		int newIndex = borderNode(shifted, shift).getIndex() + shift;
+		return newIndex >= 0 && newIndex <= shifted.get(0).getMaxIndex();
 	}
 
-	public boolean shiftAllowed(List<? extends GenericNode> shifted) {
-		return shiftAllowed(shifted, fShift);
+	private GenericNode minIndexNode(List<? extends GenericNode> nodes){
+		GenericNode minIndexNode = nodes.get(0);
+		for(GenericNode node : nodes){
+			minIndexNode = node.getIndex() < minIndexNode.getIndex() ? node : minIndexNode; 
+		}
+		return minIndexNode;
+	}
+
+	private GenericNode maxIndexNode(List<? extends GenericNode> nodes){
+		GenericNode maxIndexNode = nodes.get(0);
+		for(GenericNode node : nodes){
+			maxIndexNode = node.getIndex() > maxIndexNode.getIndex() ? node : maxIndexNode; 
+		}
+		return maxIndexNode;
 	}
 
 }
