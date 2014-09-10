@@ -13,12 +13,12 @@ import com.testify.ecfeed.modelif.ModelOperationManager;
 import com.testify.ecfeed.modelif.java.ILoaderProvider;
 import com.testify.ecfeed.modelif.java.JavaImplementationStatusResolver;
 import com.testify.ecfeed.modelif.java.ModelClassLoader;
-import com.testify.ecfeed.modelif.java.common.GenericAddChildrenOperation;
-import com.testify.ecfeed.modelif.java.common.GenericMoveOperation;
-import com.testify.ecfeed.modelif.java.common.GenericRemoveNodesOperation;
-import com.testify.ecfeed.modelif.java.common.RemoveOperationFactory;
-import com.testify.ecfeed.modelif.java.common.GenericShiftOperation;
-import com.testify.ecfeed.modelif.java.common.ShiftOperationFactory;
+import com.testify.ecfeed.modelif.operations.GenericAddChildrenOperation;
+import com.testify.ecfeed.modelif.operations.GenericMoveOperation;
+import com.testify.ecfeed.modelif.operations.GenericRemoveNodesOperation;
+import com.testify.ecfeed.modelif.operations.GenericShiftOperation;
+import com.testify.ecfeed.modelif.operations.RemoveOperationFactory;
+import com.testify.ecfeed.modelif.operations.ShiftOperationFactory;
 
 public class GenericNodeInterface extends OperationExecuter{
 

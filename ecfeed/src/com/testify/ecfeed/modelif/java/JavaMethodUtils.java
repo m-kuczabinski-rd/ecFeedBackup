@@ -6,7 +6,7 @@ import java.util.List;
 
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.MethodNode;
-import com.testify.ecfeed.modelif.java.common.Messages;
+import com.testify.ecfeed.modelif.operations.Messages;
 
 
 public class JavaMethodUtils {

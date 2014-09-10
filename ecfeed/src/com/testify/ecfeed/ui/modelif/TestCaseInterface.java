@@ -7,8 +7,8 @@ import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.modelif.ImplementationStatus;
 import com.testify.ecfeed.modelif.ModelOperationManager;
 import com.testify.ecfeed.modelif.java.JavaUtils;
-import com.testify.ecfeed.modelif.java.testcase.TestCaseOperationRename;
-import com.testify.ecfeed.modelif.java.testcase.TestCaseOperationUpdateTestData;
+import com.testify.ecfeed.modelif.operations.TestCaseOperationRename;
+import com.testify.ecfeed.modelif.operations.TestCaseOperationUpdateTestData;
 
 public class TestCaseInterface extends GenericNodeInterface {
 

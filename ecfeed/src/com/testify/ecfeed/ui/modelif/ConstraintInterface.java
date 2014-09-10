@@ -5,8 +5,8 @@ import org.eclipse.ui.forms.AbstractFormPart;
 import com.testify.ecfeed.model.ConstraintNode;
 import com.testify.ecfeed.model.constraint.BasicStatement;
 import com.testify.ecfeed.modelif.ModelOperationManager;
-import com.testify.ecfeed.modelif.java.constraint.ConstraintOperationRename;
-import com.testify.ecfeed.modelif.java.constraint.ConstraintOperationReplaceStatement;
+import com.testify.ecfeed.modelif.operations.ConstraintOperationRename;
+import com.testify.ecfeed.modelif.operations.ConstraintOperationReplaceStatement;
 
 public class ConstraintInterface extends GenericNodeInterface {
 

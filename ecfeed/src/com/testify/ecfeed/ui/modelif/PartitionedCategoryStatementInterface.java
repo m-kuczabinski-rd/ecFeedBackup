@@ -8,8 +8,8 @@ import com.testify.ecfeed.model.constraint.PartitionedCategoryStatement.IConditi
 import com.testify.ecfeed.model.constraint.Relation;
 import com.testify.ecfeed.modelif.IModelOperation;
 import com.testify.ecfeed.modelif.ModelOperationManager;
-import com.testify.ecfeed.modelif.java.constraint.StatementOperationSetCondition;
-import com.testify.ecfeed.modelif.java.constraint.StatementOperationSetRelation;
+import com.testify.ecfeed.modelif.operations.StatementOperationSetCondition;
+import com.testify.ecfeed.modelif.operations.StatementOperationSetRelation;
 
 public class PartitionedCategoryStatementInterface extends BasicStatementInterface{
 

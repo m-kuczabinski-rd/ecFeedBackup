@@ -22,11 +22,11 @@ import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.modelif.IModelOperation;
 import com.testify.ecfeed.modelif.ModelOperationManager;
-import com.testify.ecfeed.modelif.java.partition.PartitionOperationAddLabel;
-import com.testify.ecfeed.modelif.java.partition.PartitionOperationRemoveLabels;
-import com.testify.ecfeed.modelif.java.partition.PartitionOperationRename;
-import com.testify.ecfeed.modelif.java.partition.PartitionOperationRenameLabel;
-import com.testify.ecfeed.modelif.java.partition.PartitionOperationSetValue;
+import com.testify.ecfeed.modelif.operations.PartitionOperationAddLabel;
+import com.testify.ecfeed.modelif.operations.PartitionOperationRemoveLabels;
+import com.testify.ecfeed.modelif.operations.PartitionOperationRename;
+import com.testify.ecfeed.modelif.operations.PartitionOperationRenameLabel;
+import com.testify.ecfeed.modelif.operations.PartitionOperationSetValue;
 import com.testify.ecfeed.ui.common.Constants;
 
 public class PartitionInterface extends PartitionedNodeInterface{

@@ -7,9 +7,9 @@ import org.eclipse.ui.forms.AbstractFormPart;
 import com.testify.ecfeed.model.GenericNode;
 import com.testify.ecfeed.modelif.IModelOperation;
 import com.testify.ecfeed.modelif.ModelOperationManager;
-import com.testify.ecfeed.modelif.java.common.GenericRemoveNodesOperation;
-import com.testify.ecfeed.modelif.java.common.GenericShiftOperation;
-import com.testify.ecfeed.modelif.java.common.ShiftOperationFactory;
+import com.testify.ecfeed.modelif.operations.GenericRemoveNodesOperation;
+import com.testify.ecfeed.modelif.operations.GenericShiftOperation;
+import com.testify.ecfeed.modelif.operations.ShiftOperationFactory;
 
 public class SelectionInterface extends OperationExecuter {
 

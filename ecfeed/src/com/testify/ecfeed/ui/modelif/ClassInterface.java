@@ -14,10 +14,10 @@ import com.testify.ecfeed.modelif.ImplementationStatus;
 import com.testify.ecfeed.modelif.ModelIfException;
 import com.testify.ecfeed.modelif.ModelOperationManager;
 import com.testify.ecfeed.modelif.java.JavaClassUtils;
-import com.testify.ecfeed.modelif.java.classx.ClassOperationAddMethod;
-import com.testify.ecfeed.modelif.java.classx.ClassOperationAddMethods;
-import com.testify.ecfeed.modelif.java.classx.ClassOperationRemoveMethod;
-import com.testify.ecfeed.modelif.java.classx.ClassOperationRename;
+import com.testify.ecfeed.modelif.operations.ClassOperationAddMethod;
+import com.testify.ecfeed.modelif.operations.ClassOperationAddMethods;
+import com.testify.ecfeed.modelif.operations.ClassOperationRemoveMethod;
+import com.testify.ecfeed.modelif.operations.ClassOperationRename;
 import com.testify.ecfeed.ui.common.Constants;
 
 public class ClassInterface extends GenericNodeInterface {

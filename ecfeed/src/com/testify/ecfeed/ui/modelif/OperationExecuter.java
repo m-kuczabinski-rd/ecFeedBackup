@@ -7,7 +7,7 @@ import org.eclipse.ui.forms.AbstractFormPart;
 import com.testify.ecfeed.modelif.IModelOperation;
 import com.testify.ecfeed.modelif.ModelIfException;
 import com.testify.ecfeed.modelif.ModelOperationManager;
-import com.testify.ecfeed.modelif.java.common.BulkOperation;
+import com.testify.ecfeed.modelif.operations.BulkOperation;
 
 public class OperationExecuter {
 	

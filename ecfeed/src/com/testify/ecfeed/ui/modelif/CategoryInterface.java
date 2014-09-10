@@ -15,10 +15,10 @@ import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.modelif.ITypeAdapterProvider;
 import com.testify.ecfeed.modelif.ModelOperationManager;
 import com.testify.ecfeed.modelif.java.JavaUtils;
-import com.testify.ecfeed.modelif.java.category.CategoryOperationRename;
-import com.testify.ecfeed.modelif.java.category.CategoryOperationSetDefaultValue;
-import com.testify.ecfeed.modelif.java.category.CategoryOperationSetExpected;
-import com.testify.ecfeed.modelif.java.category.CategoryOperationSetType;
+import com.testify.ecfeed.modelif.operations.CategoryOperationRename;
+import com.testify.ecfeed.modelif.operations.CategoryOperationSetDefaultValue;
+import com.testify.ecfeed.modelif.operations.CategoryOperationSetExpected;
+import com.testify.ecfeed.modelif.operations.CategoryOperationSetType;
 
 public class CategoryInterface extends PartitionedNodeInterface {
 	

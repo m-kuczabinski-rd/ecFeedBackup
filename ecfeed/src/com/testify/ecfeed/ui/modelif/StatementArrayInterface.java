@@ -7,10 +7,10 @@ import com.testify.ecfeed.model.constraint.Operator;
 import com.testify.ecfeed.model.constraint.StatementArray;
 import com.testify.ecfeed.modelif.IModelOperation;
 import com.testify.ecfeed.modelif.ModelOperationManager;
-import com.testify.ecfeed.modelif.java.constraint.StatementOperationAddStatement;
-import com.testify.ecfeed.modelif.java.constraint.StatementOperationChangeOperator;
-import com.testify.ecfeed.modelif.java.constraint.StatementOperationRemoveStatement;
-import com.testify.ecfeed.modelif.java.constraint.StatementOperationReplaceChild;
+import com.testify.ecfeed.modelif.operations.StatementOperationAddStatement;
+import com.testify.ecfeed.modelif.operations.StatementOperationChangeOperator;
+import com.testify.ecfeed.modelif.operations.StatementOperationRemoveStatement;
+import com.testify.ecfeed.modelif.operations.StatementOperationReplaceChild;
 
 public class StatementArrayInterface extends BasicStatementInterface{
 

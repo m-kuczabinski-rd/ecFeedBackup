@@ -6,8 +6,8 @@ import com.testify.ecfeed.model.constraint.ExpectedValueStatement;
 import com.testify.ecfeed.model.constraint.Relation;
 import com.testify.ecfeed.modelif.IModelOperation;
 import com.testify.ecfeed.modelif.ModelOperationManager;
-import com.testify.ecfeed.modelif.java.constraint.StatementOperationSetRelation;
-import com.testify.ecfeed.modelif.java.partition.PartitionOperationSetValue;
+import com.testify.ecfeed.modelif.operations.PartitionOperationSetValue;
+import com.testify.ecfeed.modelif.operations.StatementOperationSetRelation;
 
 public class ExpectedValueStatementInterface extends BasicStatementInterface{
 

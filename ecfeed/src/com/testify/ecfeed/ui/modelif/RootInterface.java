@@ -12,9 +12,9 @@ import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.modelif.ModelIfException;
 import com.testify.ecfeed.modelif.ModelOperationManager;
-import com.testify.ecfeed.modelif.java.root.RootOperationAddClasses;
-import com.testify.ecfeed.modelif.java.root.RootOperationAddNewClass;
-import com.testify.ecfeed.modelif.java.root.RootOperationRename;
+import com.testify.ecfeed.modelif.operations.RootOperationAddClasses;
+import com.testify.ecfeed.modelif.operations.RootOperationAddNewClass;
+import com.testify.ecfeed.modelif.operations.RootOperationRename;
 import com.testify.ecfeed.ui.common.Constants;
 import com.testify.ecfeed.ui.dialogs.TestClassSelectionDialog;
 

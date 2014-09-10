@@ -3,7 +3,7 @@ package com.testify.ecfeed.modelif.java;
 import java.util.List;
 
 import com.testify.ecfeed.model.ClassNode;
-import com.testify.ecfeed.modelif.java.common.Messages;
+import com.testify.ecfeed.modelif.operations.Messages;
 
 public class JavaClassUtils {
 
