@@ -15,11 +15,11 @@ import com.testify.ecfeed.modelif.java.method.MethodOperationRemoveParameter;
 import com.testify.ecfeed.modelif.java.method.MethodOperationRemoveTestCase;
 import com.testify.ecfeed.modelif.java.root.RootOperationRemoveClass;
 
-public class RemoveChildOperationProvider implements IModelVisitor{
+public class RemoveChildOperationFactory implements IModelVisitor{
 
 	private GenericNode fChild;
 
-	public RemoveChildOperationProvider(GenericNode child) {
+	public RemoveChildOperationFactory(GenericNode child) {
 		fChild = child;
 	}
 

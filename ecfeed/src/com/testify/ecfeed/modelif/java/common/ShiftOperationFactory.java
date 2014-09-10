@@ -1,5 +1,8 @@
 package com.testify.ecfeed.modelif.java.common;
 
+import java.util.Arrays;
+import java.util.List;
+
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.ConstraintNode;
@@ -10,52 +13,57 @@ import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.modelif.ModelIfException;
-import com.testify.ecfeed.modelif.java.category.CategoryOperationShift;
+import com.testify.ecfeed.modelif.java.category.CategoryShiftOperation;
 
-public class SwapOperationFactory implements IModelVisitor{
+public class ShiftOperationFactory implements IModelVisitor {
 
-	private GenericNode fChild;
-	private int fNewIndex;
+	private List<? extends GenericNode> fShifted;
+	private boolean fUp;
 
-	public SwapOperationFactory(GenericNode target, int newIndex) {
-		fChild = target;
-		fNewIndex = newIndex;
+	public ShiftOperationFactory(List<? extends GenericNode> shifted, boolean up) {
+		fShifted = shifted;
+		fUp = up;
+	}
+
+	public ShiftOperationFactory(GenericNode shifted, boolean up) {
+		fShifted = Arrays.asList(new GenericNode[]{shifted});
+		fUp = up;
 	}
 
 	@Override
 	public Object visit(RootNode node) throws Exception {
-		if(fChild instanceof ClassNode){
-			return new GenericShiftOperation(node.getClasses(), fChild.getIndex(), fNewIndex);
+		if(fShifted.get(0) instanceof ClassNode){
+			return new GenericShiftOperation(node.getClasses(), fShifted, fUp);
 		}
 		throw new ModelIfException(Messages.OPERATION_NOT_SUPPORTED_PROBLEM);
 	}
 
 	@Override
 	public Object visit(ClassNode node) throws Exception {
-		if(fChild instanceof MethodNode){
-			return new GenericShiftOperation(node.getMethods(), fChild.getIndex(), fNewIndex);
+		if(fShifted.get(0) instanceof MethodNode){
+			return new GenericShiftOperation(node.getMethods(), fShifted, fUp);
 		}
 		throw new ModelIfException(Messages.OPERATION_NOT_SUPPORTED_PROBLEM);
 	}
 
 	@Override
 	public Object visit(MethodNode node) throws Exception {
-		if(fChild instanceof CategoryNode){
-			return new CategoryOperationShift((CategoryNode)fChild, fNewIndex);
+		if(fShifted.get(0) instanceof CategoryNode){
+			return new CategoryShiftOperation(node.getCategories(), fShifted, fUp);
 		}
-		if(fChild instanceof ConstraintNode){
-			return new GenericShiftOperation(node.getConstraintNodes(), fChild.getIndex(), fNewIndex);
+		if(fShifted.get(0) instanceof ConstraintNode){
+			return new GenericShiftOperation(node.getConstraintNodes(), fShifted, fUp);
 		}
-		if(fChild instanceof TestCaseNode){
-			return new GenericShiftOperation(node.getTestCases(), fChild.getIndex(), fNewIndex);
+		if(fShifted.get(0) instanceof TestCaseNode){
+			return new GenericShiftOperation(node.getTestCases(), fShifted, fUp);
 		}
 		throw new ModelIfException(Messages.OPERATION_NOT_SUPPORTED_PROBLEM);
 	}
 
 	@Override
 	public Object visit(CategoryNode node) throws Exception {
-		if(fChild instanceof PartitionNode){
-			return new GenericShiftOperation(node.getPartitions(), fChild.getIndex(), fNewIndex);
+		if(fShifted.get(0) instanceof PartitionNode){
+			return new GenericShiftOperation(node.getPartitions(), fShifted, fUp);
 		}
 		throw new ModelIfException(Messages.OPERATION_NOT_SUPPORTED_PROBLEM);
 	}
@@ -72,10 +80,9 @@ public class SwapOperationFactory implements IModelVisitor{
 
 	@Override
 	public Object visit(PartitionNode node) throws Exception {
-		if(fChild instanceof PartitionNode){
-			return new GenericShiftOperation(node.getPartitions(), fChild.getIndex(), fNewIndex);
+		if(fShifted.get(0) instanceof PartitionNode){
+			return new GenericShiftOperation(node.getPartitions(), fShifted, fUp);
 		}
 		throw new ModelIfException(Messages.OPERATION_NOT_SUPPORTED_PROBLEM);
 	}
 }
-

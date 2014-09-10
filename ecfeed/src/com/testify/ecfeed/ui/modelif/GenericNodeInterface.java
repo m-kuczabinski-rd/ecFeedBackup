@@ -15,9 +15,10 @@ import com.testify.ecfeed.modelif.java.JavaImplementationStatusResolver;
 import com.testify.ecfeed.modelif.java.ModelClassLoader;
 import com.testify.ecfeed.modelif.java.common.GenericAddChildrenOperation;
 import com.testify.ecfeed.modelif.java.common.GenericMoveOperation;
-import com.testify.ecfeed.modelif.java.common.GenericShiftOperation;
-import com.testify.ecfeed.modelif.java.common.RemoveNodesOperation;
+import com.testify.ecfeed.modelif.java.common.GenericRemoveNodesOperation;
 import com.testify.ecfeed.modelif.java.common.RemoveOperationFactory;
+import com.testify.ecfeed.modelif.java.common.GenericShiftOperation;
+import com.testify.ecfeed.modelif.java.common.ShiftOperationFactory;
 
 public class GenericNodeInterface extends OperationExecuter{
 
@@ -68,7 +69,7 @@ public class GenericNodeInterface extends OperationExecuter{
 		for(GenericNode node : children){
 			if(node.getParent() != fTarget) return false;
 		}
-		return execute(new RemoveNodesOperation(children), source, updateListener, message);
+		return execute(new GenericRemoveNodesOperation(children), source, updateListener, message);
 	}
 	
 	public boolean addChildren(Collection<? extends GenericNode> children, AbstractFormPart source, IModelUpdateListener updateListener, String message){
@@ -103,9 +104,9 @@ public class GenericNodeInterface extends OperationExecuter{
 	
 	public boolean moveUpDown(boolean up, AbstractFormPart source, IModelUpdateListener updateListener) {
 		try{
-			int index = GenericShiftOperation.nextAllowedIndex(fTarget, up);
-			if(index != -1){
-				return executeMoveOperation(new GenericMoveOperation(fTarget, (GenericNode)fTarget.getParent(), index), source, updateListener);
+			GenericShiftOperation operation = (GenericShiftOperation)fTarget.getParent().accept(new ShiftOperationFactory(fTarget, up));
+			if(operation.getShift() > 0){
+				return executeMoveOperation(operation, source, updateListener);
 			}
 		}catch(Exception e){}
 		return false;

@@ -12,25 +12,26 @@ import com.testify.ecfeed.ui.modelif.SelectionInterface;
 public class MenuOperationMoveUpDown extends ModelModyfingOperation {
 
 	private boolean fUp;
+	private SelectionInterface fSelectionIf;
 	
 	public MenuOperationMoveUpDown(List<GenericNode> selected, boolean up,
 			ModelOperationManager operationManager, AbstractFormPart source,
 			IModelUpdateListener updateListener) {
 		super(up ? "Move up" : "Move down", selected, operationManager, source, updateListener);
 		fUp = up;
+		fSelectionIf = new SelectionInterface(getOperationManager());
+		fSelectionIf.setTarget(selected);
 	}
 
 	@Override
 	public Object execute() {
-		SelectionInterface selectionIf = new SelectionInterface(getOperationManager());
-		selectionIf.setTarget(getSelectedNodes());
-		selectionIf.moveUpDown(fUp, getSource(), getUpdateListener());
+		fSelectionIf.moveUpDown(fUp, getSource(), getUpdateListener());
 		return null;
 	}
 
 	@Override
 	public boolean isEnabled() {
-		return getSelectedNodes().size() == 1;
+		return fSelectionIf.moveUpDownEnabed(fUp);
 	}
 
 }

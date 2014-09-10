@@ -353,6 +353,7 @@ public class ModelMasterSection extends TreeViewerSection{
 		public void modelUpdated(AbstractFormPart source) {
 			source.markDirty();
 			refresh();
+			enableSortButtons(getSelection());
 		}
 	}
 
@@ -361,6 +362,7 @@ public class ModelMasterSection extends TreeViewerSection{
 		public void widgetSelected(SelectionEvent e){
 			boolean up = e.getSource() == fMoveUpButton;
 			moveSelectedItem(up);
+			enableSortButtons(getSelection());
 		}
 
 		@SuppressWarnings("unchecked")
@@ -377,18 +379,6 @@ public class ModelMasterSection extends TreeViewerSection{
 		public void selectionChanged(SelectionChangedEvent event) {
 			IStructuredSelection selection = (IStructuredSelection)event.getSelection();
 			enableSortButtons(selection);
-		}
-
-		private void enableSortButtons(IStructuredSelection selection) {
-			boolean enabled = true;
-			if(selection.toList().size() != 1){
-				enabled = false;
-			}
-			if (selection.getFirstElement() instanceof RootNode) {
-				enabled = false;
-			}
-			fMoveUpButton.setEnabled(enabled);
-			fMoveDownButton.setEnabled(enabled);
 		}
 	}
 	
@@ -538,5 +528,18 @@ public class ModelMasterSection extends TreeViewerSection{
 		Menu menu = new Menu(getTree());
 		getTree().setMenu(menu);
 		menu.addMenuListener(new ModelMenuAdapter());
+	}
+
+	@SuppressWarnings("unchecked")
+	private void enableSortButtons(IStructuredSelection selection) {
+		boolean enabled = true;
+		SelectionInterface selectionIf = new SelectionInterface(getOperationManager());
+		selectionIf.setTarget(getSelection().toList());
+		
+		if (selection.getFirstElement() instanceof RootNode) {
+			enabled = false;
+		}
+		fMoveUpButton.setEnabled(enabled & selectionIf.moveUpDownEnabed(true));
+		fMoveDownButton.setEnabled(enabled & selectionIf.moveUpDownEnabed(false));
 	}
 }

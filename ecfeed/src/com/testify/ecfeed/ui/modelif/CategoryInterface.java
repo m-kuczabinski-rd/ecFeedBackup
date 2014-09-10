@@ -18,7 +18,6 @@ import com.testify.ecfeed.modelif.java.category.CategoryOperationRename;
 import com.testify.ecfeed.modelif.java.category.CategoryOperationSetDefaultValue;
 import com.testify.ecfeed.modelif.java.category.CategoryOperationSetExpected;
 import com.testify.ecfeed.modelif.java.category.CategoryOperationSetType;
-import com.testify.ecfeed.modelif.java.category.CategoryOperationShift;
 import com.testify.ecfeed.modelif.java.category.ITypeAdapterProvider;
 
 public class CategoryInterface extends PartitionedNodeInterface {
@@ -144,18 +143,4 @@ public class CategoryInterface extends PartitionedNodeInterface {
 		}
 		return items.toArray(new String[]{});
 	}
-
-	@Override
-	public boolean moveUpDown(boolean up, AbstractFormPart source, IModelUpdateListener updateListener){
-		int index = CategoryOperationShift.nextAllowedIndex(fTarget, up);
-		if(index != -1){
-			return executeMoveOperation(new CategoryOperationShift(fTarget, index), source, updateListener);
-		}
-		return false;
-	}
-
-	public static Object getDefaultPa_rtitions(String type) {
-		return null;
-	}
-
 }
