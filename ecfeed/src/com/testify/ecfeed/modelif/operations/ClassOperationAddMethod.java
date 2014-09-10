@@ -7,7 +7,6 @@ import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.modelif.IModelOperation;
 import com.testify.ecfeed.modelif.ModelIfException;
-import com.testify.ecfeed.modelif.java.JavaClassUtils;
 import com.testify.ecfeed.modelif.java.JavaUtils;
 
 public class ClassOperationAddMethod implements IModelOperation {
@@ -32,7 +31,7 @@ public class ClassOperationAddMethod implements IModelOperation {
 		if(fIndex == -1){
 			fIndex = fTarget.getMethods().size();
 		}
-		if(JavaClassUtils.validateNewMethodSignature(fTarget, fMethod.getName(), fMethod.getCategoriesTypes(), problems) == false){
+		if(JavaUtils.validateNewMethodSignature(fTarget, fMethod.getName(), fMethod.getCategoriesTypes(), problems) == false){
 			throw new ModelIfException(JavaUtils.consolidate(problems));
 		}
 		if(fTarget.addMethod(fMethod, fIndex) == false){

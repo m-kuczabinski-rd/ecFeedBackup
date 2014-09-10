@@ -20,7 +20,6 @@ import com.testify.ecfeed.model.constraint.StaticStatement;
 import com.testify.ecfeed.modelif.IModelOperation;
 import com.testify.ecfeed.modelif.ModelIfException;
 import com.testify.ecfeed.modelif.ModelOperationManager;
-import com.testify.ecfeed.modelif.java.JavaMethodUtils;
 import com.testify.ecfeed.modelif.java.JavaUtils;
 import com.testify.ecfeed.modelif.operations.MethodOperationAddConstraint;
 import com.testify.ecfeed.modelif.operations.MethodOperationAddParameter;
@@ -54,11 +53,11 @@ public class MethodInterface extends GenericNodeInterface {
 	}
 
 	public List<String> getArgTypes(MethodNode method) {
-		return JavaMethodUtils.getArgTypes(method);
+		return JavaUtils.getArgTypes(method);
 	}
 
 	public List<String> getArgNames(MethodNode method) {
-		return JavaMethodUtils.getArgNames(method);
+		return JavaUtils.getArgNames(method);
 	}
 
 	public boolean setName(String newName, AbstractFormPart source, IModelUpdateListener updateListener) {

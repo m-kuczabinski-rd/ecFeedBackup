@@ -13,7 +13,7 @@ import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.modelif.ImplementationStatus;
 import com.testify.ecfeed.modelif.ModelIfException;
 import com.testify.ecfeed.modelif.ModelOperationManager;
-import com.testify.ecfeed.modelif.java.JavaClassUtils;
+import com.testify.ecfeed.modelif.java.JavaUtils;
 import com.testify.ecfeed.modelif.operations.ClassOperationAddMethod;
 import com.testify.ecfeed.modelif.operations.ClassOperationAddMethods;
 import com.testify.ecfeed.modelif.operations.ClassOperationRemoveMethod;
@@ -53,11 +53,11 @@ public class ClassInterface extends GenericNodeInterface {
 	}
 
 	public static String getLocalName(ClassNode classNode){
-		return JavaClassUtils.getLocalName(classNode.getName());
+		return JavaUtils.getLocalName(classNode.getName());
 	}
 
 	public static String getPackageName(ClassNode classNode){
-		return JavaClassUtils.getPackageName(classNode.getName());
+		return JavaUtils.getPackageName(classNode.getName());
 	}
 
 	public String getPackageName(){
@@ -141,7 +141,7 @@ public class ClassInterface extends GenericNodeInterface {
 		List<MethodNode> otherMethods = new ArrayList<MethodNode>();
 		EclipseModelBuilder builder = new EclipseModelBuilder();
 		try{
-			ClassNode completeModel = builder.buildClassModel(JavaClassUtils.getQualifiedName(target), false);
+			ClassNode completeModel = builder.buildClassModel(JavaUtils.getQualifiedName(target), false);
 			for(MethodNode method : completeModel.getMethods()){
 				if(target.getMethod(method.getName(), method.getCategoriesTypes()) == null){
 					otherMethods.add(method);

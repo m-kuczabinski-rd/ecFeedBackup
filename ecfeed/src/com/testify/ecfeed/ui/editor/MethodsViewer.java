@@ -27,7 +27,7 @@ import org.eclipse.ui.forms.widgets.Section;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.modelif.ModelOperationManager;
-import com.testify.ecfeed.modelif.java.JavaClassUtils;
+import com.testify.ecfeed.modelif.java.JavaUtils;
 import com.testify.ecfeed.ui.common.NodeNameColumnLabelProvider;
 import com.testify.ecfeed.ui.common.NodeViewerColumnLabelProvider;
 import com.testify.ecfeed.ui.modelif.ClassInterface;
@@ -103,7 +103,7 @@ public class MethodsViewer extends CheckboxTableViewerSection {
 			List<String> argNames = fMethodIf.getArgNames((MethodNode)element);
 			String result = "";
 			for(int i = 0; i < argTypes.size(); i++){
-				result += JavaClassUtils.getLocalName(argTypes.get(i)) + " " + argNames.get(i);
+				result += JavaUtils.getLocalName(argTypes.get(i)) + " " + argNames.get(i);
 				if(i < argTypes.size() - 1){
 					result += ", ";
 				}

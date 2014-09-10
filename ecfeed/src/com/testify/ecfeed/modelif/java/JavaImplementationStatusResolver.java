@@ -180,7 +180,7 @@ public class JavaImplementationStatusResolver implements IImplementationStatusRe
 	}
 	
 	private boolean methodDefinitionImplemented(MethodNode methodModel){
-		Class<?> parentClass = createLoader().loadClass(JavaClassUtils.getQualifiedName(methodModel.getClassNode()));
+		Class<?> parentClass = createLoader().loadClass(JavaUtils.getQualifiedName(methodModel.getClassNode()));
 		if(parentClass == null){
 			return false;
 		}

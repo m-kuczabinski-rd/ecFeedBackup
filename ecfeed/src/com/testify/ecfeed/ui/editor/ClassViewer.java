@@ -29,7 +29,7 @@ import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.modelif.ImplementationStatus;
 import com.testify.ecfeed.modelif.ModelOperationManager;
-import com.testify.ecfeed.modelif.java.JavaClassUtils;
+import com.testify.ecfeed.modelif.java.JavaUtils;
 import com.testify.ecfeed.ui.common.ColorConstants;
 import com.testify.ecfeed.ui.common.ColorManager;
 import com.testify.ecfeed.ui.modelif.ClassInterface;
@@ -180,7 +180,7 @@ public class ClassViewer extends CheckboxTableViewerSection {
 		fPackageNameColumn = addColumn("Package", 150, new ClassViewerColumnLabelProvider(){
 			@Override
 			public String getText(Object element){
-				return JavaClassUtils.getPackageName((ClassNode)element);
+				return JavaUtils.getPackageName((ClassNode)element);
 			}
 		});
 	}
