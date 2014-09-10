@@ -9,7 +9,7 @@ public class GenericRemoveNodesOperation extends BulkOperation {
 	public GenericRemoveNodesOperation(Collection<? extends GenericNode> nodes){
 		super(false);
 		for(GenericNode node : nodes){
-			addOperation(RemoveOperationFactory.getRemoveOperation(node));
+			addOperation(FactoryRemoveOperation.getRemoveOperation(node));
 		}
 	}
 }

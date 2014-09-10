@@ -10,11 +10,11 @@ import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.TestCaseNode;
 
-public class RemoveChildOperationFactory implements IModelVisitor{
+public class FactoryRemoveChildOperation implements IModelVisitor{
 
 	private GenericNode fChild;
 
-	public RemoveChildOperationFactory(GenericNode child) {
+	public FactoryRemoveChildOperation(GenericNode child) {
 		fChild = child;
 	}
 

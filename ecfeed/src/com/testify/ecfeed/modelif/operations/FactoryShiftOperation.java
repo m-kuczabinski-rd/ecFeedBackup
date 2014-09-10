@@ -14,17 +14,17 @@ import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.modelif.ModelIfException;
 
-public class ShiftOperationFactory implements IModelVisitor {
+public class FactoryShiftOperation implements IModelVisitor {
 
 	private List<? extends GenericNode> fShifted;
 	private boolean fUp;
 
-	public ShiftOperationFactory(List<? extends GenericNode> shifted, boolean up) {
+	public FactoryShiftOperation(List<? extends GenericNode> shifted, boolean up) {
 		fShifted = shifted;
 		fUp = up;
 	}
 
-	public ShiftOperationFactory(GenericNode shifted, boolean up) {
+	public FactoryShiftOperation(GenericNode shifted, boolean up) {
 		fShifted = Arrays.asList(new GenericNode[]{shifted});
 		fUp = up;
 	}

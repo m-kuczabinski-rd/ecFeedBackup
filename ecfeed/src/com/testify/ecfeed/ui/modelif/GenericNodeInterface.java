@@ -17,8 +17,8 @@ import com.testify.ecfeed.modelif.operations.GenericAddChildrenOperation;
 import com.testify.ecfeed.modelif.operations.GenericMoveOperation;
 import com.testify.ecfeed.modelif.operations.GenericRemoveNodesOperation;
 import com.testify.ecfeed.modelif.operations.GenericShiftOperation;
-import com.testify.ecfeed.modelif.operations.RemoveOperationFactory;
-import com.testify.ecfeed.modelif.operations.ShiftOperationFactory;
+import com.testify.ecfeed.modelif.operations.FactoryRemoveOperation;
+import com.testify.ecfeed.modelif.operations.FactoryShiftOperation;
 
 public class GenericNodeInterface extends OperationExecuter{
 
@@ -57,7 +57,7 @@ public class GenericNodeInterface extends OperationExecuter{
 	}
 
 	public boolean remove(AbstractFormPart source, IModelUpdateListener updateListener){
-		return execute(RemoveOperationFactory.getRemoveOperation(fTarget), source, updateListener, Messages.DIALOG_REMOVE_NODE_PROBLEM_TITLE);
+		return execute(FactoryRemoveOperation.getRemoveOperation(fTarget), source, updateListener, Messages.DIALOG_REMOVE_NODE_PROBLEM_TITLE);
 	}
 	
 	public boolean move(GenericNode newParent, AbstractFormPart source, IModelUpdateListener updateListener){
@@ -104,7 +104,7 @@ public class GenericNodeInterface extends OperationExecuter{
 	
 	public boolean moveUpDown(boolean up, AbstractFormPart source, IModelUpdateListener updateListener) {
 		try{
-			GenericShiftOperation operation = (GenericShiftOperation)fTarget.getParent().accept(new ShiftOperationFactory(fTarget, up));
+			GenericShiftOperation operation = (GenericShiftOperation)fTarget.getParent().accept(new FactoryShiftOperation(fTarget, up));
 			if(operation.getShift() > 0){
 				return executeMoveOperation(operation, source, updateListener);
 			}

@@ -20,13 +20,13 @@ public class GenericMoveOperation extends BulkOperation {
 			//all nodes have parents other than newParent
 			if(externalNodes(moved, newParent)){
 				for(GenericNode node : moved){
-					addOperation((IModelOperation)node.getParent().accept(new RemoveChildOperationFactory(node)));
+					addOperation((IModelOperation)node.getParent().accept(new FactoryRemoveChildOperation(node)));
 					addOperation((IModelOperation)newParent.accept(new AddChildOperationProvider(node, newIndex)));
 				}
 			}
 			else if(internalNodes(moved, newParent)){
 				boolean up = moved.get(0).getIndex() > newIndex;
-				GenericShiftOperation operation = (GenericShiftOperation)newParent.accept(new ShiftOperationFactory(moved, up));
+				GenericShiftOperation operation = (GenericShiftOperation)newParent.accept(new FactoryShiftOperation(moved, up));
 				addOperation(operation);
 			}
 		} catch (Exception e) {

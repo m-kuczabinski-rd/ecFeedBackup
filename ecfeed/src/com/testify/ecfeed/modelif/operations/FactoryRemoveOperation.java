@@ -12,7 +12,7 @@ import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.modelif.IModelOperation;
 import com.testify.ecfeed.modelif.ModelIfException;
 
-public class RemoveOperationFactory {
+public class FactoryRemoveOperation {
 	
 	private static class UnsupportedModelOperation implements IModelOperation{
 		@Override

@@ -9,7 +9,7 @@ import com.testify.ecfeed.modelif.IModelOperation;
 import com.testify.ecfeed.modelif.ModelOperationManager;
 import com.testify.ecfeed.modelif.operations.GenericRemoveNodesOperation;
 import com.testify.ecfeed.modelif.operations.GenericShiftOperation;
-import com.testify.ecfeed.modelif.operations.ShiftOperationFactory;
+import com.testify.ecfeed.modelif.operations.FactoryShiftOperation;
 
 public class SelectionInterface extends OperationExecuter {
 
@@ -47,7 +47,7 @@ public class SelectionInterface extends OperationExecuter {
 			}
 		}
 		try{
-			IModelOperation operation = (IModelOperation) parent.accept(new ShiftOperationFactory(fSelected, up));
+			IModelOperation operation = (IModelOperation) parent.accept(new FactoryShiftOperation(fSelected, up));
 			executeMoveOperation(operation, source, updateListener);
 		}catch(Exception e){}
 		return false;
@@ -62,7 +62,7 @@ public class SelectionInterface extends OperationExecuter {
 		GenericNode parent = getCommonParent(fSelected);
 		if(parent != null){
 			try {
-				GenericShiftOperation operation = (GenericShiftOperation) parent.accept(new ShiftOperationFactory(fSelected, up));
+				GenericShiftOperation operation = (GenericShiftOperation) parent.accept(new FactoryShiftOperation(fSelected, up));
 				return operation.getShift() != 0;
 			} catch (Exception e) {}
 		}
