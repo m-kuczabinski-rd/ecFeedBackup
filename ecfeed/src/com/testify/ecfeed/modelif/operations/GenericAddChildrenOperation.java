@@ -29,7 +29,7 @@ public class GenericAddChildrenOperation extends BulkOperation {
 		}
 	}
 	
-	public boolean posible(){
+	public boolean enabled(){
 		return operations().isEmpty() == false;
 	}
 }

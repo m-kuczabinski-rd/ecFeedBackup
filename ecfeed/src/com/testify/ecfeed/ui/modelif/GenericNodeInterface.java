@@ -90,7 +90,7 @@ public class GenericNodeInterface extends OperationExecuter{
 	
 	public boolean pasteEnabled(Collection<? extends GenericNode> pasted){
 		GenericAddChildrenOperation operation = new GenericAddChildrenOperation(fTarget, pasted);
-		return operation.posible();
+		return operation.enabled();
 	}
 	
 	public boolean move(GenericNode newParent, int newIndex, AbstractFormPart source, IModelUpdateListener updateListener){
