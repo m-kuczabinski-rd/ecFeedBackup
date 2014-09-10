@@ -12,9 +12,9 @@ import static com.testify.ecfeed.modelif.java.Constants.TYPE_NAME_STRING;
 
 import java.util.Arrays;
 
+import com.testify.ecfeed.modelif.ITypeAdapter;
+import com.testify.ecfeed.modelif.ITypeAdapterProvider;
 import com.testify.ecfeed.modelif.java.JavaUtils;
-import com.testify.ecfeed.modelif.java.category.ITypeAdapter;
-import com.testify.ecfeed.modelif.java.category.ITypeAdapterProvider;
 import com.testify.ecfeed.ui.common.Constants;
 
 public class TypeAdapterProvider implements ITypeAdapterProvider{

@@ -1,4 +1,4 @@
-package com.testify.ecfeed.modelif.java.category;
+package com.testify.ecfeed.modelif;
 
 public interface ITypeAdapterProvider {
 	public ITypeAdapter getAdapter(String type);

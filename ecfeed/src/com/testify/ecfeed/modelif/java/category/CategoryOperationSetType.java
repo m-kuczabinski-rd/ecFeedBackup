@@ -7,6 +7,8 @@ import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.PartitionedNode;
 import com.testify.ecfeed.modelif.IModelOperation;
+import com.testify.ecfeed.modelif.ITypeAdapter;
+import com.testify.ecfeed.modelif.ITypeAdapterProvider;
 import com.testify.ecfeed.modelif.ModelIfException;
 import com.testify.ecfeed.modelif.java.JavaUtils;
 import com.testify.ecfeed.modelif.java.common.BulkOperation;

@@ -2,6 +2,7 @@ package com.testify.ecfeed.modelif.java.category;
 
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.modelif.IModelOperation;
+import com.testify.ecfeed.modelif.ITypeAdapter;
 import com.testify.ecfeed.modelif.ModelIfException;
 import com.testify.ecfeed.modelif.java.common.Messages;
 

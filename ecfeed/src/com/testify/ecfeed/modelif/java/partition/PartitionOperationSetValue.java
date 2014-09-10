@@ -3,10 +3,10 @@ package com.testify.ecfeed.modelif.java.partition;
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.modelif.IModelOperation;
+import com.testify.ecfeed.modelif.ITypeAdapterProvider;
 import com.testify.ecfeed.modelif.ModelIfException;
 import com.testify.ecfeed.modelif.java.Constants;
 import com.testify.ecfeed.modelif.java.JavaUtils;
-import com.testify.ecfeed.modelif.java.category.ITypeAdapterProvider;
 import com.testify.ecfeed.modelif.java.common.Messages;
 
 public class PartitionOperationSetValue implements IModelOperation {

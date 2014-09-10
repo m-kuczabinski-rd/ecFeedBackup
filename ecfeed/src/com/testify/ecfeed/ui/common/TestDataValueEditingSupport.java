@@ -27,7 +27,7 @@ import org.eclipse.swt.widgets.Display;
 
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.PartitionNode;
-import com.testify.ecfeed.modelif.java.category.ITypeAdapter;
+import com.testify.ecfeed.modelif.ITypeAdapter;
 import com.testify.ecfeed.ui.modelif.CategoryInterface;
 import com.testify.ecfeed.ui.modelif.TypeAdapterProvider;
 

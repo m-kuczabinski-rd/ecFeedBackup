@@ -1,4 +1,4 @@
-package com.testify.ecfeed.modelif.java.category;
+package com.testify.ecfeed.modelif;
 
 public interface ITypeAdapter {
 	public boolean compatible(String type);
