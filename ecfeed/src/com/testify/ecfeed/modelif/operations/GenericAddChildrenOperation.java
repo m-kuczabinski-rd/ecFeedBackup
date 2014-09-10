@@ -17,10 +17,10 @@ public class GenericAddChildrenOperation extends BulkOperation {
 			IModelOperation operation;
 			try {
 				if(index != -1){
-					operation = (IModelOperation)target.accept(new AddChildOperationProvider(child, index++));
+					operation = (IModelOperation)target.accept(new FactoryAddChildOperation(child, index++));
 				}
 				else{
-					operation = (IModelOperation)target.accept(new AddChildOperationProvider(child));
+					operation = (IModelOperation)target.accept(new FactoryAddChildOperation(child));
 				}
 				if(operation != null){
 					addOperation(operation);

@@ -11,17 +11,17 @@ import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.modelif.ModelIfException;
 
-public class AddChildOperationProvider implements IModelVisitor{
+public class FactoryAddChildOperation implements IModelVisitor{
 
 	private GenericNode fChild;
 	private int fIndex;
 
-	public AddChildOperationProvider(GenericNode child, int index) {
+	public FactoryAddChildOperation(GenericNode child, int index) {
 		fChild = child;
 		fIndex = index;
 	}
 
-	public AddChildOperationProvider(GenericNode child) {
+	public FactoryAddChildOperation(GenericNode child) {
 		this(child, -1);
 	}
 
