@@ -24,7 +24,7 @@ import org.eclipse.swt.widgets.Text;
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.ui.modelif.CategoryInterface;
 
-public class CategoryDetailsPage extends BasicDetailsPage {
+public class CategoryDetailsPage extends BasicDetailsPage{
 
 	private Composite fAttributesComposite;
 	private Text fNameText;
@@ -39,7 +39,7 @@ public class CategoryDetailsPage extends BasicDetailsPage {
 	private class SetNameListener extends AbstractSelectionAdapter{
 		@Override
 		public void widgetSelected(SelectionEvent e) {
-			fCategoryIf.setName(fNameText.getText(), null, CategoryDetailsPage.this);
+			fCategoryIf.setName(fNameText.getText(), CategoryDetailsPage.this);
 			fNameText.setText(fCategoryIf.getName());
 		}
 	}
@@ -47,7 +47,7 @@ public class CategoryDetailsPage extends BasicDetailsPage {
 	private class SetTypeListener extends AbstractSelectionAdapter{
 		@Override
 		public void widgetSelected(SelectionEvent e) {
-			fCategoryIf.setType(fTypeCombo.getText(), null, CategoryDetailsPage.this);
+			fCategoryIf.setType(fTypeCombo.getText(), CategoryDetailsPage.this);
 			fTypeCombo.setText(fCategoryIf.getType());
 		}
 	}
@@ -55,7 +55,7 @@ public class CategoryDetailsPage extends BasicDetailsPage {
 	private class SetDefaultValueListener extends AbstractSelectionAdapter{
 		@Override
 		public void widgetSelected(SelectionEvent e) {
-			fCategoryIf.setDefaultValue(fDefaultValueCombo.getText(), null, CategoryDetailsPage.this);
+			fCategoryIf.setDefaultValue(fDefaultValueCombo.getText(), CategoryDetailsPage.this);
 			fDefaultValueCombo.setText(fCategoryIf.getDefaultValue());
 		}
 	}
@@ -63,14 +63,14 @@ public class CategoryDetailsPage extends BasicDetailsPage {
 	private class SetExpectedListener extends AbstractSelectionAdapter{
 		@Override
 		public void widgetSelected(SelectionEvent e) {
-			fCategoryIf.setExpected(fExpectedCheckbox.getSelection(), null, CategoryDetailsPage.this);
+			fCategoryIf.setExpected(fExpectedCheckbox.getSelection(), CategoryDetailsPage.this);
 			fExpectedCheckbox.setSelection(fCategoryIf.isExpected());
 		}
 	}
 	
 	public CategoryDetailsPage(ModelMasterSection masterSection) {
 		super(masterSection);
-		fCategoryIf = new CategoryInterface(getOperationManager());
+		fCategoryIf = new CategoryInterface();
 	}
 
 	@Override

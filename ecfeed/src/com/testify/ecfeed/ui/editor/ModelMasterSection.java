@@ -59,7 +59,6 @@ import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.modelif.ModelOperationManager;
 import com.testify.ecfeed.ui.common.Constants;
-import com.testify.ecfeed.ui.editor.menu.ModelMenuManager;
 import com.testify.ecfeed.ui.modelif.CategoryInterface;
 import com.testify.ecfeed.ui.modelif.GenericNodeInterface;
 import com.testify.ecfeed.ui.modelif.IModelUpdateListener;
@@ -72,9 +71,6 @@ public class ModelMasterSection extends TreeViewerSection{
 	private Button fMoveUpButton;
 	private Button fMoveDownButton;
 	
-	private ModelOperationManager fOperationManager;
-	private ModelMenuManager fMenuAdapter;
-
 	private class ModelWrapper{
 		private RootNode fModel;
 		
@@ -86,7 +82,7 @@ public class ModelMasterSection extends TreeViewerSection{
 			return fModel;
 		}
 	}
-
+	
 	private class ModelContentProvider extends TreeNodeContentProvider implements ITreeContentProvider {
 
 		public final Object[] EMPTY_ARRAY = {};
@@ -195,7 +191,7 @@ public class ModelMasterSection extends TreeViewerSection{
 			GenericNodeInterface fNodeInterface;
 
 			public DecorationProvider(){
-				fNodeInterface = new GenericNodeInterface(null);
+				fNodeInterface = new GenericNodeInterface();
 			}
 
 			@Override
@@ -362,9 +358,9 @@ public class ModelMasterSection extends TreeViewerSection{
 
 		@SuppressWarnings("unchecked")
 		private void moveSelectedItem(boolean moveUp){
-			SelectionInterface selectionIf = new SelectionInterface(getOperationManager());
+			SelectionInterface selectionIf = new SelectionInterface();
 			selectionIf.setTarget(getSelection().toList());
-			selectionIf.moveUpDown(moveUp, ModelMasterSection.this, getUpdateListener());
+			selectionIf.moveUpDown(moveUp, ModelMasterSection.this);
 		}
 
 	}
@@ -374,23 +370,17 @@ public class ModelMasterSection extends TreeViewerSection{
 		public void selectionChanged(SelectionChangedEvent event) {
 			IStructuredSelection selection = (IStructuredSelection)event.getSelection();
 			enableSortButtons(selection);
-			fMenuAdapter.populate(selection);
 		}
 	}
 	
 	public ModelMasterSection(Composite parent, FormToolkit toolkit, ModelOperationManager operationManager) {
-		super(parent, toolkit, STYLE, null);
+		super(parent, toolkit, STYLE, null, operationManager);
 		setModelUpdateListener(new UpdateListener());
-		fOperationManager = operationManager;
 		createMenu(operationManager, getUpdateListener());
 	}
 	
 	public void setInput(RootNode model){
 		setInput(new ModelWrapper(model));
-	}
-	
-	public ModelOperationManager getOperationManager(){
-		return fOperationManager;
 	}
 	
 	@Override
@@ -421,14 +411,14 @@ public class ModelMasterSection extends TreeViewerSection{
 	protected void createMenu(ModelOperationManager operationManager, IModelUpdateListener updateListener){
 		Menu menu = new Menu(getTree());
 		getTree().setMenu(menu);
-		fMenuAdapter = new ModelMenuManager(menu, getTreeViewer(), operationManager, this, updateListener);
+		menu.addMenuListener(new ModelViewerMenuAdapter(getTreeViewer(), this));
 	}
 
 	@SuppressWarnings("unchecked")
 	private void enableSortButtons(IStructuredSelection selection) {
 		boolean moveUpEnabled = true;
 		boolean moveDownEnabled = true;
-		SelectionInterface selectionIf = new SelectionInterface(getOperationManager());
+		SelectionInterface selectionIf = new SelectionInterface();
 		if(selection.isEmpty() == false){
 			selectionIf.setTarget(getSelection().toList());
 

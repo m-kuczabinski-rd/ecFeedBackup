@@ -32,8 +32,8 @@ public class TestDataViewer extends TableViewerSection implements ITestDataEdito
 	private TestCaseInterface fTestCaseIf;
 	
 	public TestDataViewer(BasicDetailsPage parent, FormToolkit toolkit) {
-		super(parent.getMainComposite(), toolkit, STYLE, parent);
-		fTestCaseIf = new TestCaseInterface(parent.getOperationManager());
+		super(parent.getMainComposite(), toolkit, STYLE, parent, parent.getOperationManager());
+		fTestCaseIf = new TestCaseInterface();
 		getSection().setText("Test data");
 	}
 
@@ -70,7 +70,7 @@ public class TestDataViewer extends TableViewerSection implements ITestDataEdito
 
 	@Override
 	public void testDataChanged(int index, PartitionNode value) {
-		fTestCaseIf.updateTestData(index, value, this, getUpdateListener());
+		fTestCaseIf.updateTestData(index, value, this);
 	}
 	
 }

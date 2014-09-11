@@ -2,44 +2,46 @@ package com.testify.ecfeed.ui.modelif;
 
 import java.util.List;
 
-import org.eclipse.ui.forms.AbstractFormPart;
-
 import com.testify.ecfeed.model.GenericNode;
 import com.testify.ecfeed.modelif.IModelOperation;
-import com.testify.ecfeed.modelif.ModelOperationManager;
+import com.testify.ecfeed.modelif.operations.FactoryShiftOperation;
 import com.testify.ecfeed.modelif.operations.GenericRemoveNodesOperation;
 import com.testify.ecfeed.modelif.operations.GenericShiftOperation;
-import com.testify.ecfeed.modelif.operations.FactoryShiftOperation;
 
 public class SelectionInterface extends OperationExecuter {
 
 	private List<? extends GenericNode> fSelected;
 	
-	public SelectionInterface(ModelOperationManager operationManager) {
-		super(operationManager);
-	}
-
 	public void setTarget(List<? extends GenericNode> target){
 		fSelected = target;
 	}
 	
-	public boolean delete(AbstractFormPart source, IModelUpdateListener updateListener){
-		return execute(new GenericRemoveNodesOperation(fSelected), source, updateListener, Messages.DIALOG_REMOVE_CLASSES_PROBLEM_TITLE);
+	public boolean delete(IModelUpdateContext context){
+		return execute(new GenericRemoveNodesOperation(fSelected), context, Messages.DIALOG_REMOVE_NODES_PROBLEM_TITLE);
 	}
 	
-	public boolean move(GenericNode newParent, AbstractFormPart source, IModelUpdateListener updateListener){
-		return move(newParent, 0, source, updateListener);
+	public boolean deleteEnabled(){
+		if(fSelected.size() == 0) return false;
+		GenericNode root = fSelected.get(0).getRoot();
+		for(GenericNode selected : fSelected){
+			if(selected.getRoot() == root) return false;
+		}
+		return true;
+	}
+	
+	public boolean move(GenericNode newParent, IModelUpdateContext context){
+		return move(newParent, 0, context);
 	}
 
-	public boolean move(GenericNode newParent, int newIndex, AbstractFormPart source, IModelUpdateListener updateListener){
+	public boolean move(GenericNode newParent, int newIndex, IModelUpdateContext context){
 		if(fSelected.size() != 1){
 			return false;
 		}
-		GenericNodeInterface nodeIf = new NodeInterfaceFactory(getOperationManager()).getNodeInterface(fSelected.get(0));
-		return nodeIf.move(newParent, newIndex, source, updateListener);
+		GenericNodeInterface nodeIf = NodeInterfaceFactory.getNodeInterface(fSelected.get(0));
+		return nodeIf.move(newParent, newIndex, context);
 	}
 	
-	public boolean moveUpDown(boolean up, AbstractFormPart source, IModelUpdateListener updateListener) {
+	public boolean moveUpDown(boolean up, IModelUpdateContext context) {
 		GenericNode parent = fSelected.get(0).getParent();
 		for(GenericNode node : fSelected){
 			if(node.getParent() != parent){
@@ -48,14 +50,14 @@ public class SelectionInterface extends OperationExecuter {
 		}
 		try{
 			IModelOperation operation = (IModelOperation) parent.accept(new FactoryShiftOperation(fSelected, up));
-			executeMoveOperation(operation, source, updateListener);
+			executeMoveOperation(operation, context);
 		}catch(Exception e){}
 		return false;
 	}
 	
 	protected boolean executeMoveOperation(IModelOperation moveOperation,
-			AbstractFormPart source, IModelUpdateListener updateListener) {
-		return execute(moveOperation, source, updateListener, Messages.DIALOG_MOVE_NODE_PROBLEM_TITLE);	
+			IModelUpdateContext context) {
+		return execute(moveOperation, context, Messages.DIALOG_MOVE_NODE_PROBLEM_TITLE);	
 	}
 
 	public boolean moveUpDownEnabed(boolean up) {

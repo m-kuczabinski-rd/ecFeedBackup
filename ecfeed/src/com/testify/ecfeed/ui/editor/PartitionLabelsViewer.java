@@ -46,7 +46,7 @@ public class PartitionLabelsViewer extends CheckboxTableViewerSection {
 	private class AddLabelAdapter extends SelectionAdapter{
 		@Override
 		public void widgetSelected(SelectionEvent e){
-			String newLabel = fPartitionIf.addNewLabel(PartitionLabelsViewer.this, getUpdateListener());
+			String newLabel = fPartitionIf.addNewLabel(PartitionLabelsViewer.this);
 			if(newLabel != null){
 				getTableViewer().editElement(newLabel, 0);
 			}
@@ -56,7 +56,7 @@ public class PartitionLabelsViewer extends CheckboxTableViewerSection {
 	private class RemoveLabelsAdapter extends SelectionAdapter{
 		@Override
 		public void widgetSelected(SelectionEvent e){
-			fPartitionIf.removeLabels(getCheckedLabels(), PartitionLabelsViewer.this, getUpdateListener());
+			fPartitionIf.removeLabels(getCheckedLabels(), PartitionLabelsViewer.this);
 		}
 	}
 	
@@ -85,7 +85,7 @@ public class PartitionLabelsViewer extends CheckboxTableViewerSection {
 
 		@Override
 		protected void setValue(Object element, Object value) {
-			fPartitionIf.renameLabel((String)element, (String)value, PartitionLabelsViewer.this, getUpdateListener());
+			fPartitionIf.renameLabel((String)element, (String)value, PartitionLabelsViewer.this);
 		}
 	}
 
@@ -135,9 +135,9 @@ public class PartitionLabelsViewer extends CheckboxTableViewerSection {
 	}
 
 	public PartitionLabelsViewer(BasicDetailsPage parent, FormToolkit toolkit) {
-		super(parent.getMainComposite(), toolkit, STYLE, parent);
+		super(parent.getMainComposite(), toolkit, STYLE, parent, parent.getOperationManager());
 
-		fPartitionIf = new PartitionInterface(parent.getOperationManager());
+		fPartitionIf = new PartitionInterface();
 		getSection().setText("Labels");
 		
 		addButton("Add label", new AddLabelAdapter());

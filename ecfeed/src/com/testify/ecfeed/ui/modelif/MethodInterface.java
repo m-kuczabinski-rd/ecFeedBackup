@@ -8,7 +8,6 @@ import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.ui.forms.AbstractFormPart;
 
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.ConstraintNode;
@@ -19,7 +18,6 @@ import com.testify.ecfeed.model.constraint.Constraint;
 import com.testify.ecfeed.model.constraint.StaticStatement;
 import com.testify.ecfeed.modelif.IModelOperation;
 import com.testify.ecfeed.modelif.ModelIfException;
-import com.testify.ecfeed.modelif.ModelOperationManager;
 import com.testify.ecfeed.modelif.java.JavaUtils;
 import com.testify.ecfeed.modelif.operations.MethodOperationAddConstraint;
 import com.testify.ecfeed.modelif.operations.MethodOperationAddParameter;
@@ -39,10 +37,6 @@ public class MethodInterface extends GenericNodeInterface {
 
 	private MethodNode fTarget;
 
-	public MethodInterface(ModelOperationManager modelOperationManager) {
-		super(modelOperationManager);
-	}
-
 	public void setTarget(MethodNode target){
 		super.setTarget(target);
 		fTarget = target;
@@ -60,18 +54,18 @@ public class MethodInterface extends GenericNodeInterface {
 		return JavaUtils.getArgNames(method);
 	}
 
-	public boolean setName(String newName, AbstractFormPart source, IModelUpdateListener updateListener) {
+	public boolean setName(String newName, IModelUpdateContext context) {
 		if(newName.equals(getName())){
 			return false;
 		}
-		return execute(new MethodOperationRename(fTarget, newName), source, updateListener, Messages.DIALOG_RENAME_METHOD_PROBLEM_TITLE);
+		return execute(new MethodOperationRename(fTarget, newName), context, Messages.DIALOG_RENAME_METHOD_PROBLEM_TITLE);
 	}
 
-	public boolean convertTo(MethodNode method, AbstractFormPart source, IModelUpdateListener updateListener) {
-		return execute(new MethodOperationConvertTo(fTarget, method), source, updateListener, Messages.DIALOG_CONVERT_METHOD_PROBLEM_TITLE);
+	public boolean convertTo(MethodNode method, IModelUpdateContext context) {
+		return execute(new MethodOperationConvertTo(fTarget, method), context, Messages.DIALOG_CONVERT_METHOD_PROBLEM_TITLE);
 	}
 	
-	public CategoryNode addNewParameter(AbstractFormPart source, IModelUpdateListener updateListener) {
+	public CategoryNode addNewParameter(IModelUpdateContext context) {
 		EclipseModelBuilder modelBuilder = new EclipseModelBuilder();
 		String name = generateNewParameterName(fTarget);
 		String type = generateNewParameterType(fTarget);
@@ -79,17 +73,17 @@ public class MethodInterface extends GenericNodeInterface {
 		CategoryNode parameter = new CategoryNode(name, type, defaultValue, false);
 		List<PartitionNode> defaultPartitions = modelBuilder.defaultPartitions(type);
 		parameter.addPartitions(defaultPartitions);
-		if(addNewParameter(parameter, fTarget.getCategories().size(), source, updateListener)){
+		if(addNewParameter(parameter, fTarget.getCategories().size(), context)){
 			return parameter;
 		}
 		return null;
 	}
 	
-	public boolean addNewParameter(CategoryNode parameter, int index, AbstractFormPart source, IModelUpdateListener updateListener) {
-		return execute(new MethodOperationAddParameter(fTarget, parameter, index), source, updateListener, Messages.DIALOG_CONVERT_METHOD_PROBLEM_TITLE);
+	public boolean addNewParameter(CategoryNode parameter, int index, IModelUpdateContext context) {
+		return execute(new MethodOperationAddParameter(fTarget, parameter, index), context, Messages.DIALOG_CONVERT_METHOD_PROBLEM_TITLE);
 	}
 	
-	public boolean removeParameters(Collection<CategoryNode> parameters, AbstractFormPart source, IModelUpdateListener updateListener){
+	public boolean removeParameters(Collection<CategoryNode> parameters, IModelUpdateContext context){
 		Set<ConstraintNode> constraints = fTarget.mentioningConstraints(parameters);
 		if(constraints.size() > 0 || fTarget.getTestCases().size() > 0){
 			if(MessageDialog.openConfirm(Display.getCurrent().getActiveShell(), 
@@ -97,28 +91,28 @@ public class MethodInterface extends GenericNodeInterface {
 				return false;
 			}
 		}
-		return super.removeChildren(parameters, source, updateListener, Messages.DIALOG_REMOVE_PARAMETERS_PROBLEM_TITLE);
+		return super.removeChildren(parameters, context, Messages.DIALOG_REMOVE_PARAMETERS_PROBLEM_TITLE);
 	}
 
-	public ConstraintNode addNewConstraint(AbstractFormPart source, IModelUpdateListener updateListener){
+	public ConstraintNode addNewConstraint(IModelUpdateContext context){
 		Constraint constraint = new Constraint(new StaticStatement(true), new StaticStatement(true));
 		ConstraintNode node = new ConstraintNode(Constants.DEFAULT_NEW_CONSTRAINT_NAME, constraint);
-		if(addNewConstraint(node, source, updateListener)){
+		if(addNewConstraint(node, context)){
 			return node;
 		}
 		return null;
 	}
 	
-	public boolean addNewConstraint(ConstraintNode constraint, AbstractFormPart source, IModelUpdateListener updateListener){
+	public boolean addNewConstraint(ConstraintNode constraint, IModelUpdateContext context){
 		IModelOperation operation = new MethodOperationAddConstraint(fTarget, constraint, fTarget.getConstraintNodes().size());
-		return execute(operation, source, updateListener, Messages.DIALOG_ADD_CONSTRAINT_PROBLEM_TITLE);
+		return execute(operation, context, Messages.DIALOG_ADD_CONSTRAINT_PROBLEM_TITLE);
 	}
 	
-	public boolean removeConstraints(Collection<ConstraintNode> constraints, AbstractFormPart source, IModelUpdateListener updateListener){
-		return removeChildren(constraints, source, updateListener, Messages.DIALOG_REMOVE_CONSTRAINTS_PROBLEM_TITLE);
+	public boolean removeConstraints(Collection<ConstraintNode> constraints, IModelUpdateContext context){
+		return removeChildren(constraints, context, Messages.DIALOG_REMOVE_CONSTRAINTS_PROBLEM_TITLE);
 	}
 	
-	public TestCaseNode addTestCase(AbstractFormPart source, IModelUpdateListener updateListener) {
+	public TestCaseNode addTestCase(IModelUpdateContext context) {
 		for(CategoryNode category : fTarget.getCategories()){
 			if(!category.isExpected() && category.getPartitions().isEmpty()){
 				MessageDialog.openError(Display.getDefault().getActiveShell(), Messages.DIALOG_ADD_TEST_CASE_PROBLEM_TITLE, Messages.DIALOG_TEST_CASE_WITH_EMPTY_CATEGORY_MESSAGE);
@@ -132,36 +126,36 @@ public class MethodInterface extends GenericNodeInterface {
 			String testSuite = dialog.getTestSuite();
 			List<PartitionNode> testData = dialog.getTestData();
 			TestCaseNode testCase = new TestCaseNode(testSuite, testData);
-			if(addTestCase(testCase, source, updateListener)){
+			if(addTestCase(testCase, context)){
 				return testCase;
 			}
 		}
 		return null;
 	}
 
-	public boolean addTestCase(TestCaseNode testCase, AbstractFormPart source, IModelUpdateListener updateListener) {
-		return execute(new MethodOperationAddTestCase(fTarget, testCase, fTarget.getTestCases().size()), source, updateListener, Messages.DIALOG_ADD_TEST_CASE_PROBLEM_TITLE);
+	public boolean addTestCase(TestCaseNode testCase, IModelUpdateContext context) {
+		return execute(new MethodOperationAddTestCase(fTarget, testCase, fTarget.getTestCases().size()), context, Messages.DIALOG_ADD_TEST_CASE_PROBLEM_TITLE);
 	}
 
-	public boolean removeTestCases(Collection<TestCaseNode> testCases, AbstractFormPart source, IModelUpdateListener updateListener) {
-		return removeChildren(testCases, source, updateListener, Messages.DIALOG_REMOVE_TEST_CASES_PROBLEM_TITLE);
+	public boolean removeTestCases(Collection<TestCaseNode> testCases, IModelUpdateContext context) {
+		return removeChildren(testCases, context, Messages.DIALOG_REMOVE_TEST_CASES_PROBLEM_TITLE);
 	}
 	
-	public void renameSuite(AbstractFormPart source, IModelUpdateListener updateListener) {
+	public void renameSuite(IModelUpdateContext context) {
 		RenameTestSuiteDialog dialog = 
 				new RenameTestSuiteDialog(Display.getDefault().getActiveShell(), fTarget.getTestSuites());
 		dialog.create();
 		if (dialog.open() == Window.OK) {
 			String oldName = dialog.getRenamedTestSuite();
 			String newName = dialog.getNewName();
-			renameSuite(oldName, newName, source, updateListener);
+			renameSuite(oldName, newName, context);
 		}
 	}
 
-	public void renameSuite(String oldName, String newName, AbstractFormPart source, IModelUpdateListener updateListener) {
+	public void renameSuite(String oldName, String newName, IModelUpdateContext context) {
 		try{
 			execute(new MethodOperationRenameTestCases(fTarget.getTestCases(oldName), newName), 
-					source, updateListener, Messages.DIALOG_RENAME_TEST_SUITE_PROBLEM);
+					context, Messages.DIALOG_RENAME_TEST_SUITE_PROBLEM);
 		}
 		catch(ModelIfException e){
 			MessageDialog.openError(Display.getCurrent().getActiveShell(), 
@@ -170,7 +164,7 @@ public class MethodInterface extends GenericNodeInterface {
 		}
 	}
 
-	public boolean generateTestSuite(AbstractFormPart source, IModelUpdateListener updateListener){
+	public boolean generateTestSuite(IModelUpdateContext context){
 		TestSuiteGenerationSupport testGenerationSupport = new TestSuiteGenerationSupport(fTarget);
 		testGenerationSupport.proceed();
 		if(testGenerationSupport.hasData() == false) return false;
@@ -192,7 +186,8 @@ public class MethodInterface extends GenericNodeInterface {
 				return false;
 			}
 		}
-		return execute(new MethodOperationAddTestSuite(fTarget, testSuiteName, testData), source, updateListener, Messages.DIALOG_ADD_TEST_SUITE_PROBLEM_TITLE);
+		IModelOperation operation = new MethodOperationAddTestSuite(fTarget, testSuiteName, testData);
+		return execute(operation, context, Messages.DIALOG_ADD_TEST_SUITE_PROBLEM_TITLE);
 	}
 	
 	private String generateNewParameterName(MethodNode method) {

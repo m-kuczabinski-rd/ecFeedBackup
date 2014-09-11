@@ -15,13 +15,11 @@ import java.util.Collection;
 
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.ui.forms.AbstractFormPart;
 
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.modelif.IModelOperation;
-import com.testify.ecfeed.modelif.ModelOperationManager;
 import com.testify.ecfeed.modelif.operations.PartitionOperationAddLabel;
 import com.testify.ecfeed.modelif.operations.PartitionOperationRemoveLabels;
 import com.testify.ecfeed.modelif.operations.PartitionOperationRename;
@@ -33,22 +31,18 @@ public class PartitionInterface extends PartitionedNodeInterface{
 
 	PartitionNode fTarget;
 	
-	public PartitionInterface(ModelOperationManager modelAbstraction) {
-		super(modelAbstraction);
-	}
-
 	public void setTarget(PartitionNode partition){
 		super.setTarget(partition);
 		fTarget = partition;
 	}
 	
-	public boolean setName(String newName, AbstractFormPart source, IModelUpdateListener updateListener){
-		return execute(new PartitionOperationRename(fTarget, newName), source, updateListener, Messages.DIALOG_RENAME_PARTITION_PROBLEM_TITLE);
+	public boolean setName(String newName, IModelUpdateContext context){
+		return execute(new PartitionOperationRename(fTarget, newName), context, Messages.DIALOG_RENAME_PARTITION_PROBLEM_TITLE);
 	}
 
-	public void setValue(String newValue, AbstractFormPart source, IModelUpdateListener updateListener){
+	public void setValue(String newValue, IModelUpdateContext context){
 		IModelOperation operation = new PartitionOperationSetValue(fTarget, newValue, new TypeAdapterProvider()); 
-		execute(operation, source, updateListener, Messages.DIALOG_SET_PARTITION_VALUE_PROBLEM_TITLE);
+		execute(operation, context, Messages.DIALOG_SET_PARTITION_VALUE_PROBLEM_TITLE);
 	}
 
 	public String getValue() {
@@ -59,7 +53,7 @@ public class PartitionInterface extends PartitionedNodeInterface{
 		return fTarget.getCategory();
 	}
 
-	public boolean removeLabels(Collection<String> labels, AbstractFormPart source, IModelUpdateListener updateListener) {
+	public boolean removeLabels(Collection<String> labels, IModelUpdateContext context) {
 		MethodNode method = fTarget.getCategory().getMethod();
 		boolean removeMentioningConstraints = false;
 		for(String label : labels){
@@ -75,32 +69,32 @@ public class PartitionInterface extends PartitionedNodeInterface{
 				return false;
 			}
 		}
-		return execute(new PartitionOperationRemoveLabels(fTarget, labels), source, updateListener, Messages.DIALOG_REMOVE_LABEL_PROBLEM_TITLE);
+		return execute(new PartitionOperationRemoveLabels(fTarget, labels), context, Messages.DIALOG_REMOVE_LABEL_PROBLEM_TITLE);
 	}
 
-	public String addNewLabel(AbstractFormPart source, IModelUpdateListener updateListener) {
+	public String addNewLabel(IModelUpdateContext context) {
 		String newLabel = Constants.DEFAULT_NEW_PARTITION_LABEL;
 		int i = 1;
 		while(fTarget.getLeafLabels().contains(newLabel)){
 			newLabel = Constants.DEFAULT_NEW_PARTITION_LABEL + "(" + i + ")";
 			i++;
 		}
-		if(addLabel(newLabel, source, updateListener)){
+		if(addLabel(newLabel, context)){
 			return newLabel;
 		}
 		return null;
 	}
 
-	private boolean addLabel(String newLabel, AbstractFormPart source, IModelUpdateListener updateListener) {
+	private boolean addLabel(String newLabel, IModelUpdateContext context) {
 		IModelOperation operation = new PartitionOperationAddLabel(fTarget, newLabel);
-		return execute(operation, source, updateListener, Messages.DIALOG_ADD_LABEL_PROBLEM_TITLE);
+		return execute(operation, context, Messages.DIALOG_ADD_LABEL_PROBLEM_TITLE);
 	}
 
 	public boolean isLabelInherited(String label) {
 		return fTarget.getInheritedLabels().contains(label);
 	}
 
-	public boolean renameLabel(String label, String newValue, AbstractFormPart source, IModelUpdateListener updateListener) {
+	public boolean renameLabel(String label, String newValue, IModelUpdateContext context) {
 		if(label.equals(newValue)){
 			return false;
 		}
@@ -119,7 +113,7 @@ public class PartitionInterface extends PartitionedNodeInterface{
 		}
 		
 		IModelOperation operation = new PartitionOperationRenameLabel(fTarget, label, newValue);
-		return execute(operation, source, updateListener, Messages.DIALOG_CHANGE_LABEL_PROBLEM_TITLE);
+		return execute(operation, context, Messages.DIALOG_CHANGE_LABEL_PROBLEM_TITLE);
 	}
 
 }

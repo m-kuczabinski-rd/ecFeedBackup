@@ -22,7 +22,7 @@ public class TestCasesViewerLabelProvider extends LabelProvider implements IColo
 	public TestCasesViewerLabelProvider(){
 		fExecutableTestSuites = new HashMap<String, Integer>();
 		fTestCasesStatusMap = new HashMap<TestCaseNode, Boolean>();
-		fMethodIf = new MethodInterface(null);
+		fMethodIf = new MethodInterface();
 	}
 	
 	public TestCasesViewerLabelProvider(MethodNode method){

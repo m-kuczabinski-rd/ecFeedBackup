@@ -41,7 +41,7 @@ public class ClassDetailsPage extends BasicDetailsPage {
 
 			if(selectedClass != null){
 				String qualifiedName = selectedClass.getFullyQualifiedName();
-				fClassIf.setQualifiedName(qualifiedName, null, ClassDetailsPage.this);
+				fClassIf.setQualifiedName(qualifiedName, ClassDetailsPage.this);
 			}
 		}
 		
@@ -58,7 +58,7 @@ public class ClassDetailsPage extends BasicDetailsPage {
 	private class ClassNameTextAdapter extends AbstractSelectionAdapter{
 		@Override
 		public void widgetSelected(SelectionEvent e) {
-			fClassIf.setLocalName(fClassNameText.getText(), null, ClassDetailsPage.this);
+			fClassIf.setLocalName(fClassNameText.getText(), ClassDetailsPage.this);
 			fClassNameText.setText(fClassIf.getLocalName());
 		}
 	}
@@ -66,14 +66,14 @@ public class ClassDetailsPage extends BasicDetailsPage {
 	private class PackageNameTextAdapter extends AbstractSelectionAdapter{
 		@Override
 		public void widgetSelected(SelectionEvent e) {
-			fClassIf.setPackageName(fPackageNameText.getText(), null, ClassDetailsPage.this);
+			fClassIf.setPackageName(fPackageNameText.getText(), ClassDetailsPage.this);
 			fPackageNameText.setText(fClassIf.getPackageName());
 		}
 	}
 	
 	public ClassDetailsPage(ModelMasterSection masterSection) {
 		super(masterSection);
-		fClassIf = new ClassInterface(getOperationManager());
+		fClassIf = new ClassInterface();
 	}
 
 	@Override

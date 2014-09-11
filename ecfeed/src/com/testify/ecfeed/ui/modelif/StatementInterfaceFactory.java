@@ -8,34 +8,27 @@ import com.testify.ecfeed.model.constraint.PartitionedCategoryStatement.LabelCon
 import com.testify.ecfeed.model.constraint.PartitionedCategoryStatement.PartitionCondition;
 import com.testify.ecfeed.model.constraint.StatementArray;
 import com.testify.ecfeed.model.constraint.StaticStatement;
-import com.testify.ecfeed.modelif.ModelOperationManager;
 
 public class StatementInterfaceFactory{
 
-	ModelOperationManager fOperationManager;
-	
-	public StatementInterfaceFactory(ModelOperationManager operationManager){
-		fOperationManager = operationManager;
-	}
-	
-	private class InterfaceProvider implements IStatementVisitor{
+	private static class InterfaceProvider implements IStatementVisitor{
 		@Override
 		public Object visit(StaticStatement statement) throws Exception {
-			StaticStatementInterface statementIf = new StaticStatementInterface(fOperationManager);
+			StaticStatementInterface statementIf = new StaticStatementInterface();
 			statementIf.setTarget(statement);
 			return statementIf;
 		}
 
 		@Override
 		public Object visit(StatementArray statement) throws Exception {
-			StatementArrayInterface statementIf = new StatementArrayInterface(fOperationManager);
+			StatementArrayInterface statementIf = new StatementArrayInterface();
 			statementIf.setTarget(statement);
 			return statementIf;
 		}
 
 		@Override
 		public Object visit(ExpectedValueStatement statement) throws Exception {
-			ExpectedValueStatementInterface statementIf = new ExpectedValueStatementInterface(fOperationManager);
+			ExpectedValueStatementInterface statementIf = new ExpectedValueStatementInterface();
 			statementIf.setTarget(statement);
 			return statementIf;
 		}
@@ -43,7 +36,7 @@ public class StatementInterfaceFactory{
 		@Override
 		public Object visit(PartitionedCategoryStatement statement)
 				throws Exception {
-			PartitionedCategoryStatementInterface statementIf = new PartitionedCategoryStatementInterface(fOperationManager);
+			PartitionedCategoryStatementInterface statementIf = new PartitionedCategoryStatementInterface();
 			statementIf.setTarget(statement);
 			return statementIf;
 		}
@@ -59,11 +52,11 @@ public class StatementInterfaceFactory{
 		}
 	}
 
-	public BasicStatementInterface getInterface(BasicStatement statement){
+	public static BasicStatementInterface getInterface(BasicStatement statement){
 		try {
 			return (BasicStatementInterface) statement.accept(new InterfaceProvider());
 		} catch (Exception e) {
-			return new BasicStatementInterface(fOperationManager);
+			return new BasicStatementInterface();
 		}
 	}
 }

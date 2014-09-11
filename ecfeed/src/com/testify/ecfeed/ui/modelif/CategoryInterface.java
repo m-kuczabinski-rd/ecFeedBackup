@@ -7,13 +7,12 @@ import java.util.Set;
 
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.ui.forms.AbstractFormPart;
 
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
+import com.testify.ecfeed.modelif.IModelOperation;
 import com.testify.ecfeed.modelif.ITypeAdapterProvider;
-import com.testify.ecfeed.modelif.ModelOperationManager;
 import com.testify.ecfeed.modelif.java.JavaUtils;
 import com.testify.ecfeed.modelif.operations.CategoryOperationRename;
 import com.testify.ecfeed.modelif.operations.CategoryOperationSetDefaultValue;
@@ -25,8 +24,7 @@ public class CategoryInterface extends PartitionedNodeInterface {
 	private CategoryNode fTarget;
 	private ITypeAdapterProvider fAdapterProvider;
 	
-	public CategoryInterface(ModelOperationManager modelOperationManager) {
-		super(modelOperationManager);
+	public CategoryInterface() {
 		fAdapterProvider = new TypeAdapterProvider();
 	}
 
@@ -39,21 +37,21 @@ public class CategoryInterface extends PartitionedNodeInterface {
 		return new EclipseModelBuilder().getDefaultExpectedValue(type);
 	}
 
-	public boolean setName(String newName, AbstractFormPart source, IModelUpdateListener updateListener) {
+	public boolean setName(String newName, IModelUpdateContext context) {
 		if(newName.equals(getName())){
 			return false;
 		}
-		return execute(new CategoryOperationRename(fTarget, newName), source, updateListener, Messages.DIALOG_RENAME_PAREMETER_PROBLEM_TITLE);
+		return execute(new CategoryOperationRename(fTarget, newName), context, Messages.DIALOG_RENAME_PAREMETER_PROBLEM_TITLE);
 	}
 
-	public boolean setType(String newType, AbstractFormPart source, IModelUpdateListener updateListener) {
+	public boolean setType(String newType, IModelUpdateContext context) {
 		if(newType.equals(fTarget.getType())){
 			return false;
 		}
-		return execute(new CategoryOperationSetType(fTarget, newType, fAdapterProvider), source, updateListener, Messages.DIALOG_RENAME_PAREMETER_PROBLEM_TITLE);
+		return execute(new CategoryOperationSetType(fTarget, newType, fAdapterProvider), context, Messages.DIALOG_RENAME_PAREMETER_PROBLEM_TITLE);
 	}
 	
-	public boolean setExpected(boolean expected, AbstractFormPart source, IModelUpdateListener updateListener){
+	public boolean setExpected(boolean expected, IModelUpdateContext context){
 		if(expected != fTarget.isExpected()){
 			MethodNode method = fTarget.getMethod();
 			if(method != null){
@@ -78,14 +76,15 @@ public class CategoryInterface extends PartitionedNodeInterface {
 					}
 				}
 			}
-			return execute(new CategoryOperationSetExpected(fTarget, expected), source, updateListener, Messages.DIALOG_SET_CATEGORY_EXPECTED_PROBLEM_TITLE);
+			return execute(new CategoryOperationSetExpected(fTarget, expected), context, Messages.DIALOG_SET_CATEGORY_EXPECTED_PROBLEM_TITLE);
 		}
 		return false;
 	}
 
-	public boolean setDefaultValue(String valueString, AbstractFormPart source, IModelUpdateListener updateListener) {
+	public boolean setDefaultValue(String valueString, IModelUpdateContext context) {
 		if(fTarget.getDefaultValue().equals(valueString) == false){
-			return execute(new CategoryOperationSetDefaultValue(fTarget, valueString, fAdapterProvider.getAdapter(fTarget.getType())), source, updateListener, Messages.DIALOG_SET_DEFAULT_VALUE_PROBLEM_TITLE);
+			IModelOperation operation = new CategoryOperationSetDefaultValue(fTarget, valueString, fAdapterProvider.getAdapter(fTarget.getType()));
+			return execute(operation, context, Messages.DIALOG_SET_DEFAULT_VALUE_PROBLEM_TITLE);
 		}
 		return false;
 	}

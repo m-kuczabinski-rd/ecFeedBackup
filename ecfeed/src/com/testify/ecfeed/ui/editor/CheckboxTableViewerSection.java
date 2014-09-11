@@ -18,12 +18,13 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
+import com.testify.ecfeed.modelif.ModelOperationManager;
 import com.testify.ecfeed.ui.modelif.IModelUpdateListener;
 
 public abstract class CheckboxTableViewerSection extends TableViewerSection {
 
-	public CheckboxTableViewerSection(Composite parent, FormToolkit toolkit, int style, IModelUpdateListener updateListener) {
-		super(parent, toolkit, style, updateListener);
+	public CheckboxTableViewerSection(Composite parent, FormToolkit toolkit, int style, IModelUpdateListener updateListener, ModelOperationManager operationManager) {
+		super(parent, toolkit, style, updateListener, operationManager);
 	}
 
 	@Override

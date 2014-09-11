@@ -31,14 +31,14 @@ public class ConstraintDetailsPage extends BasicDetailsPage {
 	private class ConstraintNameListener extends AbstractSelectionAdapter{
 		@Override
 		public void widgetSelected(SelectionEvent e) {
-			fConstraintIf.setName(fNameCombo.getText(), null, ConstraintDetailsPage.this);
+			fConstraintIf.setName(fNameCombo.getText(), ConstraintDetailsPage.this);
 			fNameCombo.setText(fConstraintIf.getName());
 		}
 	}
 	
 	public ConstraintDetailsPage(ModelMasterSection masterSection) {
 		super(masterSection);
-		fConstraintIf = new ConstraintInterface(getOperationManager());
+		fConstraintIf = new ConstraintInterface();
 	}
 	
 	@Override

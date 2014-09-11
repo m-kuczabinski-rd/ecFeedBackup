@@ -32,13 +32,13 @@ public class OtherMethodsViewer extends CheckboxTableViewerSection {
 	private class AddSelectedAdapter extends SelectionAdapter{
 		@Override
 		public void widgetSelected(SelectionEvent e){
-			fClassIf.addMethods(getSelectedMethods(), OtherMethodsViewer.this, getUpdateListener());
+			fClassIf.addMethods(getSelectedMethods(), OtherMethodsViewer.this);
 		}
 	}
 	
 	public OtherMethodsViewer(BasicDetailsPage parent, FormToolkit toolkit) {
-		super(parent.getMainComposite(), toolkit, STYLE, parent);
-		fClassIf = new ClassInterface(parent.getOperationManager());
+		super(parent.getMainComposite(), toolkit, STYLE, parent, parent.getOperationManager());
+		fClassIf = new ClassInterface();
 		addButton("Add selected", new AddSelectedAdapter());
 	}
 	

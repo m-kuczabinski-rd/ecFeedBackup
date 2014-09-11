@@ -12,7 +12,7 @@ public abstract class NodeViewerColumnLabelProvider extends ColumnLabelProvider{
 	private GenericNodeInterface fNodeIf;
 	
 	public NodeViewerColumnLabelProvider(){
-		fNodeIf = new GenericNodeInterface(null);
+		fNodeIf = new GenericNodeInterface();
 	}
 	
 	@Override

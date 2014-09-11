@@ -29,9 +29,10 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Section;
 
 import com.testify.ecfeed.modelif.ModelOperationManager;
+import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 import com.testify.ecfeed.ui.modelif.IModelUpdateListener;
 
-public abstract class BasicDetailsPage implements IDetailsPage, IModelUpdateListener{
+public abstract class BasicDetailsPage implements IDetailsPage, IModelUpdateListener, IModelUpdateContext{
 
 	private ModelMasterSection fMasterSection;
 	private Section fMainSection;
@@ -167,5 +168,13 @@ public abstract class BasicDetailsPage implements IDetailsPage, IModelUpdateList
 	
 	protected Shell getActiveShell(){
 		return Display.getCurrent().getActiveShell();
+	}
+	
+	public AbstractFormPart getSourceForm(){
+		return null;
+	}
+	
+	public IModelUpdateListener getUpdateListener(){
+		return this;
 	}
 }

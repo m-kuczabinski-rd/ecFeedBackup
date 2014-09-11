@@ -157,7 +157,6 @@ public class ConstraintViewer extends TreeViewerSection {
 		private Composite fRightOperandComposite;
 		
 		private ConstraintNode fConstraint;
-		private StatementInterfaceFactory fInterfaceFactory;
 		private ConstraintInterface fConstraintIf;
 		
 		private class ConditionComboListener implements SelectionListener{
@@ -173,7 +172,7 @@ public class ConstraintViewer extends TreeViewerSection {
 			}
 			
 			protected void applyNewValue(){
-				fStatementIf.setConditionValue(fConditionCombo.getText(), ConstraintViewer.this, getUpdateListener());
+				fStatementIf.setConditionValue(fConditionCombo.getText(), ConstraintViewer.this);
 				fConditionCombo.setText(fStatementIf.getConditionValue());
 			}
 
@@ -184,17 +183,17 @@ public class ConstraintViewer extends TreeViewerSection {
 			public void widgetSelected(SelectionEvent e) {
 				Operator operator = Operator.getOperator(fStatementCombo.getText());
 				if(operator != null && operator != fStatementIf.getOperator()){
-					fStatementIf.setOperator(operator, ConstraintViewer.this, getUpdateListener());
+					fStatementIf.setOperator(operator, ConstraintViewer.this);
 				}
 				BasicStatement statement = buildStatement();
 				if(statement != null){
 					BasicStatementInterface parentIf = fStatementIf.getParentInterface();
 					boolean result = false;
 					if(parentIf != null){
-						result = parentIf.replaceChild(fSelectedStatement, statement, ConstraintViewer.this, getUpdateListener());
+						result = parentIf.replaceChild(fSelectedStatement, statement, ConstraintViewer.this);
 					}
 					else{
-						result = fConstraintIf.replaceStatement(fSelectedStatement, statement, ConstraintViewer.this, getUpdateListener());
+						result = fConstraintIf.replaceStatement(fSelectedStatement, statement, ConstraintViewer.this);
 					}
 					if(result){
 						getViewer().setSelection(new StructuredSelection(statement));
@@ -238,7 +237,7 @@ public class ConstraintViewer extends TreeViewerSection {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				Relation relation = Relation.getRelation(fRelationCombo.getText());
-				fStatementIf.setRelation(relation, ConstraintViewer.this, getUpdateListener());
+				fStatementIf.setRelation(relation, ConstraintViewer.this);
 			}
 
 			@Override
@@ -349,15 +348,14 @@ public class ConstraintViewer extends TreeViewerSection {
 			super(parent, SWT.NONE);
 			setLayout(new GridLayout(TOTAL_EDITOR_WIDTH, true));
 			setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 2, 1));
-			fInterfaceFactory = new StatementInterfaceFactory(operationManager);
-			fConstraintIf = new ConstraintInterface(operationManager);
+			fConstraintIf = new ConstraintInterface();
 			
 			createStatementCombo(this);
 			createRelationCombo(this);
 		}
 		
 		public void setInput(BasicStatement statement){
-			fStatementIf = fInterfaceFactory.getInterface(statement);
+			fStatementIf = StatementInterfaceFactory.getInterface(statement);
 			fStatementCombo.setItems(statementComboItems(statement));
 			fStatementCombo.setText(statement.getLeftOperandName());
 			try{
@@ -405,7 +403,7 @@ public class ConstraintViewer extends TreeViewerSection {
 	private class AddStatementAdapter extends SelectionAdapter{
 		@Override 
 		public void widgetSelected(SelectionEvent e){
-			BasicStatement statement = fStatementIf.addNewStatement(ConstraintViewer.this, getUpdateListener());
+			BasicStatement statement = fStatementIf.addNewStatement(ConstraintViewer.this);
 			if(statement != null){
 			//modelUpdated must be called before to refresh viewer before selecting the newly added statement
 				getTreeViewer().expandToLevel(statement, 1);
@@ -419,7 +417,7 @@ public class ConstraintViewer extends TreeViewerSection {
 		public void widgetSelected(SelectionEvent e){
 			if(fStatementIf.getParentInterface() != null){
 				BasicStatement parent = fSelectedStatement.getParent();
-				if(parent != null && fStatementIf.getParentInterface().removeChild(fSelectedStatement, ConstraintViewer.this, getUpdateListener())){
+				if(parent != null && fStatementIf.getParentInterface().removeChild(fSelectedStatement, ConstraintViewer.this)){
 					getViewer().setSelection(new StructuredSelection(parent));
 				}
 			}
@@ -448,7 +446,7 @@ public class ConstraintViewer extends TreeViewerSection {
 	}
 
 	public ConstraintViewer(BasicDetailsPage parent, FormToolkit toolkit) {
-		super(parent.getMainComposite(), toolkit, STYLE, parent);
+		super(parent.getMainComposite(), toolkit, STYLE, parent, parent.getOperationManager());
 		getSection().setText("Constraint editor");
 		fAddStatementButton = addButton("Add statement", new AddStatementAdapter());
 		fRemoveStatementButton = addButton("Remove statement", new RemoveStatementAdapter());

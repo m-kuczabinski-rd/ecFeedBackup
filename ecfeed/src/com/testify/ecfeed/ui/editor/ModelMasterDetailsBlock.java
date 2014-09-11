@@ -14,6 +14,8 @@ package com.testify.ecfeed.ui.editor;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.IActionBars;
+import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.forms.DetailsPart;
 import org.eclipse.ui.forms.IDetailsPage;
 import org.eclipse.ui.forms.IManagedForm;
@@ -29,6 +31,12 @@ import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.modelif.ModelOperationManager;
+import com.testify.ecfeed.ui.editor.actions.CopyAction;
+import com.testify.ecfeed.ui.editor.actions.CutAction;
+import com.testify.ecfeed.ui.editor.actions.PasteAction;
+import com.testify.ecfeed.ui.editor.actions.RedoAction;
+import com.testify.ecfeed.ui.editor.actions.SelectAllAction;
+import com.testify.ecfeed.ui.editor.actions.UndoAction;
 
 public class ModelMasterDetailsBlock extends MasterDetailsBlock implements ISelectionChangedListener{
 
@@ -67,6 +75,13 @@ public class ModelMasterDetailsBlock extends MasterDetailsBlock implements ISele
 
 	@Override
 	protected void createToolBarActions(IManagedForm managedForm) {
+		IActionBars actionBars = fPage.getEditorSite().getActionBars();
+		actionBars.setGlobalActionHandler(ActionFactory.COPY.getId(), new CopyAction(fMasterSection));
+		actionBars.setGlobalActionHandler(ActionFactory.CUT.getId(), new CutAction(fMasterSection, fMasterSection));
+		actionBars.setGlobalActionHandler(ActionFactory.PASTE.getId(), new PasteAction(fMasterSection, fMasterSection));
+		actionBars.setGlobalActionHandler(ActionFactory.SELECT_ALL.getId(), new SelectAllAction(fMasterSection.getTreeViewer(), false));
+		actionBars.setGlobalActionHandler(ActionFactory.UNDO.getId(), new UndoAction(fMasterSection));
+		actionBars.setGlobalActionHandler(ActionFactory.REDO.getId(), new RedoAction(fMasterSection));
 	}
 	
 	public void selectNode(GenericNode node){

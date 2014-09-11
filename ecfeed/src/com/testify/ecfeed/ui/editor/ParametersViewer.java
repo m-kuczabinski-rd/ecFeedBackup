@@ -34,7 +34,6 @@ import org.eclipse.ui.forms.widgets.Section;
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
-import com.testify.ecfeed.modelif.ModelOperationManager;
 import com.testify.ecfeed.ui.common.NodeNameColumnLabelProvider;
 import com.testify.ecfeed.ui.common.NodeViewerColumnLabelProvider;
 import com.testify.ecfeed.ui.modelif.CategoryInterface;
@@ -109,7 +108,7 @@ public class ParametersViewer extends CheckboxTableViewerSection{
 				newType = ((CCombo)fCellEditor.getControl()).getText();
 			}
 			fCategoryIf.setTarget(node);
-			fCategoryIf.setType(newType, ParametersViewer.this, getUpdateListener());
+			fCategoryIf.setType(newType, ParametersViewer.this);
 
 			fCellEditor.setFocus();
 		}
@@ -143,7 +142,7 @@ public class ParametersViewer extends CheckboxTableViewerSection{
 		@Override
 		protected void setValue(Object element, Object value) {
 			fCategoryIf.setTarget((CategoryNode)element);
-			fCategoryIf.setName((String)value, ParametersViewer.this, getUpdateListener());
+			fCategoryIf.setName((String)value, ParametersViewer.this);
 		}
 	}
 
@@ -181,7 +180,7 @@ public class ParametersViewer extends CheckboxTableViewerSection{
 			CategoryNode node = (CategoryNode)element;
 			boolean expected = ((int)value == 0) ? true : false;
 			fCategoryIf.setTarget(node);
-			fCategoryIf.setExpected(expected, ParametersViewer.this, getUpdateListener());
+			fCategoryIf.setExpected(expected, ParametersViewer.this);
 			fCellEditor.setFocus();
 		}
 	}
@@ -247,7 +246,7 @@ public class ParametersViewer extends CheckboxTableViewerSection{
 				valueString = fComboCellEditor.getViewer().getCCombo().getText();
 			}
 			fCategoryIf.setTarget(category);
-			fCategoryIf.setDefaultValue(valueString, ParametersViewer.this, getUpdateListener());
+			fCategoryIf.setDefaultValue(valueString, ParametersViewer.this);
 		}
 
 	}
@@ -257,14 +256,14 @@ public class ParametersViewer extends CheckboxTableViewerSection{
 		public void widgetSelected(SelectionEvent e){
 			boolean up = (e.getSource() == fMoveUpButton);
 			fCategoryIf.setTarget((CategoryNode)getSelectedElement());
-			fCategoryIf.moveUpDown(up, ParametersViewer.this, getUpdateListener());
+			fCategoryIf.moveUpDown(up, ParametersViewer.this);
 		}
 	}
 
 	private class AddNewParameterAdapter extends SelectionAdapter {
 		@Override
 		public void widgetSelected(SelectionEvent e) {
-			CategoryNode addedParameter = fMethodIf.addNewParameter(ParametersViewer.this, getUpdateListener());
+			CategoryNode addedParameter = fMethodIf.addNewParameter(ParametersViewer.this);
 			if(addedParameter != null){
 				selectElement(addedParameter);
 				fNameColumn.getViewer().editElement(addedParameter, 0);			
@@ -276,16 +275,15 @@ public class ParametersViewer extends CheckboxTableViewerSection{
 		@Override
 		public void widgetSelected(SelectionEvent e) {
 			if(getCheckedElements().length > 0){
-				fMethodIf.removeParameters(getCheckedParameters(), ParametersViewer.this, getUpdateListener());
+				fMethodIf.removeParameters(getCheckedParameters(), ParametersViewer.this);
 			}
 		}
 	}
 
 	public ParametersViewer(BasicDetailsPage parent, FormToolkit toolkit) {
-		super(parent.getMainComposite(), toolkit, STYLE, parent);
-		ModelOperationManager operationManager = parent.getOperationManager();
-		fCategoryIf = new CategoryInterface(operationManager);
-		fMethodIf = new MethodInterface(operationManager);
+		super(parent.getMainComposite(), toolkit, STYLE, parent, parent.getOperationManager());
+		fCategoryIf = new CategoryInterface();
+		fMethodIf = new MethodInterface();
 
 		GridData gd = new GridData(SWT.FILL, SWT.FILL, true, true);
 		gd.minimumHeight = 250;

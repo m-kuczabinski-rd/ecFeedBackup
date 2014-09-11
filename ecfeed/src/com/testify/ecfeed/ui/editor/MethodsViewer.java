@@ -26,7 +26,6 @@ import org.eclipse.ui.forms.widgets.Section;
 
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.MethodNode;
-import com.testify.ecfeed.modelif.ModelOperationManager;
 import com.testify.ecfeed.modelif.java.JavaUtils;
 import com.testify.ecfeed.ui.common.NodeNameColumnLabelProvider;
 import com.testify.ecfeed.ui.common.NodeViewerColumnLabelProvider;
@@ -70,21 +69,21 @@ public class MethodsViewer extends CheckboxTableViewerSection {
 			String newName = (String)value;
 			MethodNode method = (MethodNode)element;
 			fMethodIf.setTarget(method);
-			fMethodIf.setName(newName, MethodsViewer.this, getUpdateListener());
+			fMethodIf.setName(newName, MethodsViewer.this);
 		}
 	}
 
 	private class RemoveSelectedMethodsAdapter extends SelectionAdapter{
 		@Override
 		public void widgetSelected(SelectionEvent e) {
-			fClassIf.removeMethods(getSelectedMethods(), MethodsViewer.this, getUpdateListener());
+			fClassIf.removeMethods(getSelectedMethods(), MethodsViewer.this);
 		}
 	}
 	
 	private class AddNewMethodAdapter extends SelectionAdapter {
 		@Override
 		public void widgetSelected(SelectionEvent e) {
-			MethodNode newMethod = fClassIf.addNewMethod(MethodsViewer.this, getUpdateListener());
+			MethodNode newMethod = fClassIf.addNewMethod(MethodsViewer.this);
 			if(newMethod != null){
 				selectElement(newMethod);
 				fMethodsColumn.getViewer().editElement(newMethod, 0);
@@ -113,12 +112,10 @@ public class MethodsViewer extends CheckboxTableViewerSection {
 	}
 	
 	public MethodsViewer(BasicDetailsPage parent, FormToolkit toolkit) {
-		super(parent.getMainComposite(), toolkit, STYLE, parent);
+		super(parent.getMainComposite(), toolkit, STYLE, parent, parent.getOperationManager());
 		
-		ModelOperationManager operationManager = parent.getOperationManager();
-		
-		fClassIf = new ClassInterface(operationManager);
-		fMethodIf = new MethodInterface(operationManager);
+		fClassIf = new ClassInterface();
+		fMethodIf = new MethodInterface();
 
 		fMethodsColumn.setEditingSupport(new MethodNameEditingSupport());
 

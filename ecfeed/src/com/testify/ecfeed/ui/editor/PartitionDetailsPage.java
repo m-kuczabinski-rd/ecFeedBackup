@@ -40,7 +40,7 @@ public class PartitionDetailsPage extends BasicDetailsPage {
 	private class NameTextListener extends AbstractSelectionAdapter{
 		@Override
 		public void widgetSelected(SelectionEvent e){
-			fPartitionIf.setName(fNameText.getText(), null, PartitionDetailsPage.this);
+			fPartitionIf.setName(fNameText.getText(), PartitionDetailsPage.this);
 			fNameText.setText(fPartitionIf.getName());
 		}
 	}
@@ -48,14 +48,14 @@ public class PartitionDetailsPage extends BasicDetailsPage {
 	private class ValueComboListener extends AbstractSelectionAdapter{
 		@Override
 		public void widgetSelected(SelectionEvent e){
-			fPartitionIf.setValue(fValueCombo.getText(), null, PartitionDetailsPage.this);
+			fPartitionIf.setValue(fValueCombo.getText(), PartitionDetailsPage.this);
 			fValueCombo.setText(fPartitionIf.getValue());
 		}
 	}
 	
 	public PartitionDetailsPage(ModelMasterSection masterSection) {
 		super(masterSection);
-		fPartitionIf = new PartitionInterface(getOperationManager());
+		fPartitionIf = new PartitionInterface();
 	}
 	
 	@Override

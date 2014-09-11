@@ -35,7 +35,6 @@ import org.eclipse.ui.forms.widgets.Section;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.PartitionedNode;
 import com.testify.ecfeed.modelif.ImplementationStatus;
-import com.testify.ecfeed.modelif.ModelOperationManager;
 import com.testify.ecfeed.ui.common.ColorConstants;
 import com.testify.ecfeed.ui.common.ColorManager;
 import com.testify.ecfeed.ui.modelif.CategoryInterface;
@@ -84,7 +83,7 @@ public class PartitionsViewer extends CheckboxTableViewerSection {
 			
 			if(newName.equals(partition.getName()) == false){
 				fTableItemIf.setTarget(partition);
-				fTableItemIf.setName(newName, PartitionsViewer.this, getUpdateListener());
+				fTableItemIf.setName(newName, PartitionsViewer.this);
 			}
 		}
 	}
@@ -115,7 +114,7 @@ public class PartitionsViewer extends CheckboxTableViewerSection {
 	private class PartitionValueEditingSupport extends EditingSupport {
 		private ComboBoxViewerCellEditor fCellEditor;
 		
-		public PartitionValueEditingSupport(CheckboxTableViewerSection viewer, ModelOperationManager operationManager) {
+		public PartitionValueEditingSupport(CheckboxTableViewerSection viewer) {
 			super(viewer.getTableViewer());
 			fCellEditor = new ComboBoxViewerCellEditor(viewer.getTable(), SWT.TRAIL);
 			fCellEditor.setLabelProvider(new LabelProvider());
@@ -158,7 +157,7 @@ public class PartitionsViewer extends CheckboxTableViewerSection {
 				valueString = fCellEditor.getViewer().getCCombo().getText();
 			}
 			fTableItemIf.setTarget((PartitionNode)element);
-			fTableItemIf.setValue(valueString, PartitionsViewer.this, getUpdateListener());
+			fTableItemIf.setValue(valueString, PartitionsViewer.this);
 		}
 	}
 
@@ -192,7 +191,7 @@ public class PartitionsViewer extends CheckboxTableViewerSection {
 		
 		@Override
 		public void widgetSelected(SelectionEvent e){
-			PartitionNode added = fParentIf.addNewPartition(PartitionsViewer.this, getUpdateListener());
+			PartitionNode added = fParentIf.addNewPartition(PartitionsViewer.this);
 			if(added != null){
 				getTable().setSelection(added.getIndex());
 			}
@@ -202,7 +201,7 @@ public class PartitionsViewer extends CheckboxTableViewerSection {
 	private class RemovePartitionsAdapter extends SelectionAdapter{
 		@Override
 		public void widgetSelected(SelectionEvent e){
-			fParentIf.removePartitions(getCheckedPartitions(), PartitionsViewer.this, getUpdateListener());
+			fParentIf.removePartitions(getCheckedPartitions(), PartitionsViewer.this);
 		}
 	}
 	
@@ -211,7 +210,7 @@ public class PartitionsViewer extends CheckboxTableViewerSection {
 		public void widgetSelected(SelectionEvent e){
 			if(getSelectedPartition() != null){
 				fTableItemIf.setTarget(getSelectedPartition());
-				fTableItemIf.moveUpDown(e.getSource() == fMoveUpButton, PartitionsViewer.this, getUpdateListener());
+				fTableItemIf.moveUpDown(e.getSource() == fMoveUpButton, PartitionsViewer.this);
 			}
 		}
 	}
@@ -223,15 +222,13 @@ public class PartitionsViewer extends CheckboxTableViewerSection {
 	}
 	
 	public PartitionsViewer(BasicDetailsPage parent, FormToolkit toolkit) {
-		super(parent.getMainComposite(), toolkit, STYLE, parent);
+		super(parent.getMainComposite(), toolkit, STYLE, parent, parent.getOperationManager());
 		
-		ModelOperationManager operationManager = parent.getOperationManager();
-		
-		fParentIf = new CategoryInterface(operationManager);
-		fTableItemIf = new PartitionInterface(operationManager);
+		fParentIf = new CategoryInterface();
+		fTableItemIf = new PartitionInterface();
 
 		fNameColumn.setEditingSupport(new PartitionNameEditingSupport());
-		fValueColumn.setEditingSupport(new PartitionValueEditingSupport(this, operationManager));
+		fValueColumn.setEditingSupport(new PartitionValueEditingSupport(this));
 
 		getSection().setText("Partitions");
 		addButton("Add partition", new AddPartitionAdapter());

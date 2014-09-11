@@ -51,14 +51,14 @@ public class TestCasesViewer extends CheckboxTreeViewerSection {
 	private class AddTestCaseAdapter extends SelectionAdapter{
 		@Override
 		public void widgetSelected(SelectionEvent e){
-			fMethodIf.addTestCase(TestCasesViewer.this, getUpdateListener());
+			fMethodIf.addTestCase(TestCasesViewer.this);
 		}
 	}
 	
 	private class GenerateTestSuiteAdapter extends SelectionAdapter{
 		@Override
 		public void widgetSelected(SelectionEvent e){
-			fMethodIf.generateTestSuite(TestCasesViewer.this, getUpdateListener());
+			fMethodIf.generateTestSuite(TestCasesViewer.this);
 		}
 	}
 	
@@ -72,14 +72,14 @@ public class TestCasesViewer extends CheckboxTreeViewerSection {
 	private class RenameSuiteAdapter extends SelectionAdapter{
 		@Override
 		public void widgetSelected(SelectionEvent e){
-			fMethodIf.renameSuite(TestCasesViewer.this, getUpdateListener());
+			fMethodIf.renameSuite(TestCasesViewer.this);
 		}
 	}
 	
 	private class RemoveSelectedAdapter extends SelectionAdapter{
 		@Override
 		public void widgetSelected(SelectionEvent e){
-			fMethodIf.removeTestCases(getCheckedTestCases(), TestCasesViewer.this, getUpdateListener());
+			fMethodIf.removeTestCases(getCheckedTestCases(), TestCasesViewer.this);
 		}
 	}
 	
@@ -92,12 +92,12 @@ public class TestCasesViewer extends CheckboxTreeViewerSection {
 	}
 	
 	public TestCasesViewer(BasicDetailsPage parent, FormToolkit toolkit) {
-		super(parent.getMainComposite(), toolkit, STYLE, parent);
+		super(parent.getMainComposite(), toolkit, STYLE, parent, parent.getOperationManager());
 		GridData gd = new GridData(SWT.FILL, SWT.FILL, true, true);
 		gd.minimumHeight = 250;
 		getSection().setLayoutData(gd);
 		
-		fMethodIf = new MethodInterface(parent.getOperationManager());
+		fMethodIf = new MethodInterface();
 
 		getCheckboxViewer().addCheckStateListener(new TreeCheckStateListener(getCheckboxViewer()));
 

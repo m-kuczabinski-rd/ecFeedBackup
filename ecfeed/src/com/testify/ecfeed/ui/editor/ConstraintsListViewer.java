@@ -70,14 +70,14 @@ public class ConstraintsListViewer extends CheckboxTableViewerSection {
 			String newName = (String)value;
 			ConstraintNode constraint = (ConstraintNode)element;
 			fConstraintIf.setTarget(constraint);
-			fConstraintIf.setName(newName, ConstraintsListViewer.this, getUpdateListener());
+			fConstraintIf.setName(newName, ConstraintsListViewer.this);
 		}
 	}
 
 	private class AddConstraintAdapter extends SelectionAdapter{
 		@Override 
 		public void widgetSelected(SelectionEvent e){
-			ConstraintNode constraint = fMethodInterface.addNewConstraint(ConstraintsListViewer.this, getUpdateListener());
+			ConstraintNode constraint = fMethodInterface.addNewConstraint(ConstraintsListViewer.this);
 			if(constraint != null){
 				selectElement(constraint);
 				fNameColumn.getViewer().editElement(constraint, 0);
@@ -88,20 +88,20 @@ public class ConstraintsListViewer extends CheckboxTableViewerSection {
 	private class RemoveSelectedConstraintsAdapter extends SelectionAdapter{
 		@Override 
 		public void widgetSelected(SelectionEvent e){
-			fMethodInterface.removeConstraints(getCheckedConstrainst(), ConstraintsListViewer.this, getUpdateListener());
+			fMethodInterface.removeConstraints(getCheckedConstrainst(), ConstraintsListViewer.this);
 		}
 	}
 
 	public ConstraintsListViewer(BasicDetailsPage parent, FormToolkit toolkit){
-		super(parent.getMainComposite(), toolkit, STYLE, parent);
+		super(parent.getMainComposite(), toolkit, STYLE, parent, parent.getOperationManager());
 		GridData gd = new GridData(SWT.FILL, SWT.FILL, true, true);
 		gd.minimumHeight = 250;
 		getSection().setLayoutData(gd);
 		
 		getSection().setText("Constraints");
 		
-		fMethodInterface = new MethodInterface(parent.getOperationManager());
-		fConstraintIf = new ConstraintInterface(parent.getOperationManager());
+		fMethodInterface = new MethodInterface();
+		fConstraintIf = new ConstraintInterface();
 		
 		fNameColumn.setEditingSupport(new ConstraintNameEditingSupport());
 

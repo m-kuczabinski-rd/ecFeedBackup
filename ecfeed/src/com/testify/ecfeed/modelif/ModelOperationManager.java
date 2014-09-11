@@ -24,6 +24,14 @@ public class ModelOperationManager {
 		++fHistoryIndex;
 	}
 	
+	public boolean undoEnabled(){
+		return fHistoryIndex > 0;
+	}
+	
+	public boolean redoEnabled(){
+		return fHistoryIndex < fHistory.size();
+	}
+	
 	public void undo() throws ModelIfException{
 		if(fHistoryIndex > 0){
 			IModelOperation operation = fHistory.get(fHistoryIndex - 1).reverseOperation();

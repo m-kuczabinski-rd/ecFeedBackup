@@ -50,7 +50,7 @@ public class MethodDetailsPage extends BasicDetailsPage {
 			TestMethodRenameDialog dialog = new TestMethodRenameDialog(getActiveShell(), getSelectedMethod());
 			if(dialog.open() == IDialogConstants.OK_ID){
 				MethodNode selectedMethod = dialog.getSelectedMethod();
-				fMethodIf.convertTo(selectedMethod, null, MethodDetailsPage.this);
+				fMethodIf.convertTo(selectedMethod, MethodDetailsPage.this);
 			}
 		}
 	}
@@ -58,14 +58,14 @@ public class MethodDetailsPage extends BasicDetailsPage {
 	private class RenameMethodAdapter extends AbstractSelectionAdapter{
 		@Override
 		public void widgetSelected(SelectionEvent e) {
-			fMethodIf.setName(fMethodNameText.getText(), null, MethodDetailsPage.this);
+			fMethodIf.setName(fMethodNameText.getText(), MethodDetailsPage.this);
 			fMethodNameText.setText(fMethodIf.getName());
 		}
 	}
 	
 	public MethodDetailsPage(ModelMasterSection masterSection) {
 		super(masterSection);
-		fMethodIf = new MethodInterface(getOperationManager());
+		fMethodIf = new MethodInterface();
 	}
 
 	public MethodNode getSelectedMethod() {

@@ -194,7 +194,7 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 		fTitle = title;
 		fMessage = message;
 		fGenerateExecutableContent = generateExecutables;
-		fNodeIf = new GenericNodeInterface(null);
+		fNodeIf = new GenericNodeInterface();
 	}
 	
 	protected  List<List<PartitionNode>> algorithmInput(){

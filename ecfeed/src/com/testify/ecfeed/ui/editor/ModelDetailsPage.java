@@ -32,14 +32,14 @@ public class ModelDetailsPage extends BasicDetailsPage {
 	private class SetNameAdapter extends AbstractSelectionAdapter{
 		@Override
 		public void widgetSelected(SelectionEvent e) {
-			fRootIf.setName(fModelNameText.getText(), null, ModelDetailsPage.this);
+			fRootIf.setName(fModelNameText.getText(), ModelDetailsPage.this);
 			fModelNameText.setText(fRootIf.getName());
 		}
 	}
 	
 	public ModelDetailsPage(ModelMasterSection masterSection) {
 		super(masterSection);
-		fRootIf = new RootInterface(getOperationManager());
+		fRootIf = new RootInterface();
 	}
 
 	@Override

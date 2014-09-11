@@ -22,17 +22,21 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Layout;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.forms.AbstractFormPart;
 import org.eclipse.ui.forms.SectionPart;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import com.testify.ecfeed.model.GenericNode;
+import com.testify.ecfeed.modelif.ModelOperationManager;
+import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 import com.testify.ecfeed.ui.modelif.IModelUpdateListener;
 
-public abstract class BasicSection extends SectionPart{
+public abstract class BasicSection extends SectionPart implements IModelUpdateContext{
 	private Composite fClientComposite;
 	private FormToolkit fToolkit;
 	private Control fTextClient;
 	private IModelUpdateListener fModelUpdateListener;
+	private ModelOperationManager fOperationManager;
 
 	protected class SelectNodeDoubleClickListener implements IDoubleClickListener {
 
@@ -52,19 +56,20 @@ public abstract class BasicSection extends SectionPart{
 			}
 		}
 	}
+	
+	public BasicSection(Composite parent, FormToolkit toolkit, int style, IModelUpdateListener updateListener, ModelOperationManager operationManager) {
+		super(parent, toolkit, style);
+		fModelUpdateListener = updateListener;
+		fOperationManager = operationManager;
+		fToolkit = toolkit;
+		createContent();
+	}
 
 	@Override
 	public void refresh(){
 		if(fTextClient != null){
 			updateTextClient();
 		}
-	}
-
-	public BasicSection(Composite parent, FormToolkit toolkit, int style, IModelUpdateListener updateListener) {
-		super(parent, toolkit, style);
-		fModelUpdateListener = updateListener;
-		fToolkit = toolkit;
-		createContent();
 	}
 
 	public FormToolkit getToolkit(){
@@ -77,6 +82,10 @@ public abstract class BasicSection extends SectionPart{
 
 	public IModelUpdateListener getUpdateListener(){
 		return fModelUpdateListener;
+	}
+	
+	public ModelOperationManager getOperationManager(){
+		return fOperationManager;
 	}
 
 	protected Composite getClientComposite(){
@@ -127,5 +136,13 @@ public abstract class BasicSection extends SectionPart{
 	
 	protected void setModelUpdateListener(IModelUpdateListener listener){
 		fModelUpdateListener = listener;
+	}
+	
+	protected void setOperationManager(ModelOperationManager operationManager){
+		fOperationManager = operationManager;
+	}
+	
+	public AbstractFormPart getSourceForm(){
+		return this;
 	}
 }

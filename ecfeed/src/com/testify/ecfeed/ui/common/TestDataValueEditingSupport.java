@@ -53,7 +53,7 @@ public class TestDataValueEditingSupport extends EditingSupport {
 	}
 
 	private CellEditor getComboCellEditor(PartitionNode partition) {
-		CategoryInterface catIf = new CategoryInterface(null);
+		CategoryInterface catIf = new CategoryInterface();
 		catIf.setTarget(partition.getCategory());
 		
 		if (partition.getCategory().isExpected()) {

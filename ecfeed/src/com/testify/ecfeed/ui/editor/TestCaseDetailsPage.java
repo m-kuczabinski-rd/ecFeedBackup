@@ -32,13 +32,13 @@ public class TestCaseDetailsPage extends BasicDetailsPage {
 	private class RenameTestCaseAdapter extends AbstractSelectionAdapter{
 		@Override
 		public void widgetSelected(SelectionEvent e){
-			fTestCaseIf.setName(fTestSuiteNameCombo.getText(), null, TestCaseDetailsPage.this);
+			fTestCaseIf.setName(fTestSuiteNameCombo.getText(), TestCaseDetailsPage.this);
 			fTestSuiteNameCombo.setText(fTestCaseIf.getName());
 		}
 	}
 	public TestCaseDetailsPage(ModelMasterSection masterSection) {
 		super(masterSection);
-		fTestCaseIf = new TestCaseInterface(getOperationManager());
+		fTestCaseIf = new TestCaseInterface();
 	}
 
 	@Override

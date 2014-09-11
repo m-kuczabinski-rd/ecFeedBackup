@@ -28,7 +28,6 @@ import org.eclipse.ui.forms.widgets.Section;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.modelif.ImplementationStatus;
-import com.testify.ecfeed.modelif.ModelOperationManager;
 import com.testify.ecfeed.modelif.java.JavaUtils;
 import com.testify.ecfeed.ui.common.ColorConstants;
 import com.testify.ecfeed.ui.common.ColorManager;
@@ -66,7 +65,7 @@ public class ClassViewer extends CheckboxTableViewerSection {
 
 		protected void renameClass(ClassNode target, String qualifiedName){
 			fClassIf.setTarget(target);
-			fClassIf.setQualifiedName(qualifiedName, ClassViewer.this, getUpdateListener());
+			fClassIf.setQualifiedName(qualifiedName, ClassViewer.this);
 		}
 	}
 
@@ -107,7 +106,7 @@ public class ClassViewer extends CheckboxTableViewerSection {
 	private class AddImplementedClassAdapter extends SelectionAdapter {
 		@Override
 		public void widgetSelected(SelectionEvent e) {
-			ClassNode addedClass = fRootIf.addImplementedClass(ClassViewer.this, getUpdateListener());
+			ClassNode addedClass = fRootIf.addImplementedClass(ClassViewer.this);
 			if(addedClass != null){
 				selectElement(addedClass);
 				fNameColumn.getViewer().editElement(addedClass, 0);
@@ -125,14 +124,14 @@ public class ClassViewer extends CheckboxTableViewerSection {
 					checkedClasses.add((ClassNode)checked);
 				}
 			}
-			fRootIf.removeClasses(checkedClasses, ClassViewer.this, getUpdateListener());
+			fRootIf.removeClasses(checkedClasses, ClassViewer.this);
 		}
 	}
 	
 	private class AddNewClassAdapter extends SelectionAdapter {
 		@Override
 		public void widgetSelected(SelectionEvent e) {
-			ClassNode addedClass = fRootIf.addNewClass(ClassViewer.this, getUpdateListener());
+			ClassNode addedClass = fRootIf.addNewClass(ClassViewer.this);
 			if(addedClass != null){
 				selectElement(addedClass);
 				fNameColumn.getViewer().editElement(addedClass, 0);
@@ -153,10 +152,9 @@ public class ClassViewer extends CheckboxTableViewerSection {
 	}
 	
 	public ClassViewer(BasicDetailsPage parent, FormToolkit toolkit) {
-		super(parent.getMainComposite(), toolkit, STYLE, parent);
-		ModelOperationManager operationManager = parent.getOperationManager();
-		fRootIf = new RootInterface(operationManager);
-		fClassIf = new ClassInterface(operationManager);
+		super(parent.getMainComposite(), toolkit, STYLE, parent, parent.getOperationManager());
+		fRootIf = new RootInterface();
+		fClassIf = new ClassInterface();
 
 		fNameColumn.setEditingSupport(new LocalNameEditingSupport());
 		fPackageNameColumn.setEditingSupport(new PackageNameEditingSupport());
