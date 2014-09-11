@@ -43,6 +43,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.forms.AbstractFormPart;
+import org.eclipse.ui.forms.IDetailsPage;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Section;
 import org.osgi.framework.Bundle;
@@ -70,6 +71,7 @@ public class ModelMasterSection extends TreeViewerSection{
 
 	private Button fMoveUpButton;
 	private Button fMoveDownButton;
+	private ModelMasterDetailsBlock fMasterDetailsBlock;
 	
 	private class ModelWrapper{
 		private RootNode fModel;
@@ -373,8 +375,9 @@ public class ModelMasterSection extends TreeViewerSection{
 		}
 	}
 	
-	public ModelMasterSection(Composite parent, FormToolkit toolkit, ModelOperationManager operationManager) {
+	public ModelMasterSection(ModelMasterDetailsBlock masterDetailsBlock, Composite parent, FormToolkit toolkit, ModelOperationManager operationManager) {
 		super(parent, toolkit, STYLE, null, operationManager);
+		fMasterDetailsBlock = masterDetailsBlock;
 		setModelUpdateListener(new UpdateListener());
 		createMenu(operationManager, getUpdateListener());
 	}
@@ -383,6 +386,15 @@ public class ModelMasterSection extends TreeViewerSection{
 		setInput(new ModelWrapper(model));
 	}
 	
+	@Override
+	public void refresh(){
+		super.refresh();
+		IDetailsPage page = fMasterDetailsBlock.getCurrentPage();
+		if(page != null){
+			page.refresh();
+		}
+	}
+
 	@Override
 	protected void createContent(){
 		super.createContent();
@@ -413,7 +425,7 @@ public class ModelMasterSection extends TreeViewerSection{
 		getTree().setMenu(menu);
 		menu.addMenuListener(new ModelViewerMenuAdapter(getTreeViewer(), this));
 	}
-
+	
 	@SuppressWarnings("unchecked")
 	private void enableSortButtons(IStructuredSelection selection) {
 		boolean moveUpEnabled = true;

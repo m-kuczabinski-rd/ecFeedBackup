@@ -50,7 +50,7 @@ public class ModelMasterDetailsBlock extends MasterDetailsBlock implements ISele
 	@Override
 	protected void createMasterPart(IManagedForm managedForm, Composite parent) {
 		FormToolkit toolkit = managedForm.getToolkit();
-		fMasterSection = new ModelMasterSection(parent, toolkit, getPage().getEditor().getModelOperationManager());
+		fMasterSection = new ModelMasterSection(this, parent, toolkit, getPage().getEditor().getModelOperationManager());
 		fMasterSection.initialize(managedForm);
 		fMasterSection.addSelectionChangedListener(this);
 		fMasterSection.setInput(getModel());
@@ -93,7 +93,10 @@ public class ModelMasterDetailsBlock extends MasterDetailsBlock implements ISele
 	}
 
 	public IDetailsPage getCurrentPage(){
-		return detailsPart.getCurrentPage();
+		if(detailsPart != null){
+			return detailsPart.getCurrentPage();
+		}
+		return null;
 	}
 	
 	public ModelPage getPage(){
