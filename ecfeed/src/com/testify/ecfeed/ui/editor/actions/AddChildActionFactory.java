@@ -61,7 +61,7 @@ public class AddChildActionFactory {
 
 		@Override
 		public void run() {
-			getParentInterface().addNewParameter(getUpdateContext());
+			select(getParentInterface().addNewParameter(getUpdateContext()));
 		}
 	}
 	
@@ -72,7 +72,7 @@ public class AddChildActionFactory {
 
 		@Override
 		public void run() {
-			getParentInterface().addNewConstraint(getUpdateContext());
+			select(getParentInterface().addNewConstraint(getUpdateContext()));
 		}
 	}
 	
@@ -83,7 +83,7 @@ public class AddChildActionFactory {
 
 		@Override
 		public void run() {
-			getParentInterface().addTestCase(getUpdateContext());
+			select(getParentInterface().addTestCase(getUpdateContext()));
 		}
 	}
 	
@@ -135,9 +135,7 @@ public class AddChildActionFactory {
 					new AbstractAddChildAction(ADD_PARTITION_ACTION_NAME, fViewer, fContext)
 			});
 		}
-		
 	}
-
 
 	public AddChildActionFactory(TreeViewer viewer, IModelUpdateContext context){
 		fContext = context;
