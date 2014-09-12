@@ -12,7 +12,6 @@
 package com.testify.ecfeed.ui.editor;
 
 import org.eclipse.jface.action.Action;
-import org.eclipse.jface.action.IContributionItem;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.widgets.Composite;
@@ -62,7 +61,6 @@ public class ModelMasterDetailsBlock extends MasterDetailsBlock implements ISele
 			if(action != null){
 				action.run();
 			}
-			System.out.println("Dupa: " + fActionId);
 		}
 	}
 
