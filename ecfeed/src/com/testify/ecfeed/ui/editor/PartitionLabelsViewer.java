@@ -11,15 +11,12 @@
 
 package com.testify.ecfeed.ui.editor;
 
-import java.util.ArrayList;
-import java.util.Collection;
+import java.util.List;
 
 import org.eclipse.jface.viewers.CellEditor;
-import org.eclipse.jface.viewers.CheckStateChangedEvent;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.ColumnViewer;
 import org.eclipse.jface.viewers.EditingSupport;
-import org.eclipse.jface.viewers.ICheckStateListener;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.swt.SWT;
@@ -35,9 +32,10 @@ import org.eclipse.ui.forms.widgets.Section;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.ui.common.ColorConstants;
 import com.testify.ecfeed.ui.common.ColorManager;
+import com.testify.ecfeed.ui.editor.actions.ModelModyfyingAction;
 import com.testify.ecfeed.ui.modelif.PartitionInterface;
 
-public class PartitionLabelsViewer extends CheckboxTableViewerSection {
+public class PartitionLabelsViewer extends TableViewerSection {
 	
 	private static final int STYLE = Section.TITLE_BAR | Section.EXPANDED;
 
@@ -53,10 +51,29 @@ public class PartitionLabelsViewer extends CheckboxTableViewerSection {
 		}
 	}
 	
-	private class RemoveLabelsAdapter extends SelectionAdapter{
+	private class RemoveLabelsAction extends ModelModyfyingAction{
+		public RemoveLabelsAction() {
+			super(getViewer(), PartitionLabelsViewer.this);
+		}
+		
 		@Override
-		public void widgetSelected(SelectionEvent e){
-			fPartitionIf.removeLabels(getCheckedLabels(), PartitionLabelsViewer.this);
+		public boolean isEnabled(){
+			for(String label : getSelectedLabels()){
+				if(fPartitionIf.isLabelInherited(label) == false){
+					return true;
+				}
+			}
+			return false;
+		}
+		
+		@Override
+		public void run(){
+			fPartitionIf.removeLabels(getSelectedLabels(), PartitionLabelsViewer.this);
+		}
+
+		@SuppressWarnings("unchecked")
+		private List<String> getSelectedLabels(){
+			return getSelection().toList();
 		}
 	}
 	
@@ -123,16 +140,6 @@ public class PartitionLabelsViewer extends CheckboxTableViewerSection {
 			return null;
 		}
 	}
-	
-	private class LabelCheckStateListener implements ICheckStateListener{
-		@Override
-		public void checkStateChanged(CheckStateChangedEvent event) {
-			String label = (String)event.getElement();
-			if(fPartitionIf.isLabelInherited(label)){
-				getCheckboxViewer().setChecked(label, false);
-			}
-		}
-	}
 
 	public PartitionLabelsViewer(BasicDetailsPage parent, FormToolkit toolkit) {
 		super(parent.getMainComposite(), toolkit, STYLE, parent, parent.getOperationManager());
@@ -141,10 +148,10 @@ public class PartitionLabelsViewer extends CheckboxTableViewerSection {
 		getSection().setText("Labels");
 		
 		addButton("Add label", new AddLabelAdapter());
-		addButton("Remove selected", new RemoveLabelsAdapter());
+		addButton("Remove selected", new ActionSelectionAdapter(new RemoveLabelsAction()));
 
-		getCheckboxViewer().addCheckStateListener(new LabelCheckStateListener());
 		addDoubleClickListener(new SelectNodeDoubleClickListener(parent.getMasterSection()));
+		addKeyListener(SWT.DEL, new RemoveLabelsAction());
 	}
 
 	@Override
@@ -156,15 +163,5 @@ public class PartitionLabelsViewer extends CheckboxTableViewerSection {
 	public void setInput(PartitionNode	partition){
 		fPartitionIf.setTarget(partition);
 		super.setInput(partition.getAllLabels());
-	}
-	
-	protected Collection<String> getCheckedLabels(){
-		Collection<String> labels = new ArrayList<String>();
-		for(Object o : getCheckedElements()){
-			if(o instanceof String){
-				labels.add((String)o);
-			}
-		}
-		return labels;
 	}
 }

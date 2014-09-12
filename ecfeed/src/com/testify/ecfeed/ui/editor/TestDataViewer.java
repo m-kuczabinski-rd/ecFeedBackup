@@ -14,6 +14,7 @@ package com.testify.ecfeed.ui.editor;
 import java.util.List;
 
 import org.eclipse.jface.viewers.TableViewerColumn;
+import org.eclipse.swt.SWT;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Section;
 
@@ -28,6 +29,7 @@ import com.testify.ecfeed.ui.modelif.TestCaseInterface;
 public class TestDataViewer extends TableViewerSection implements ITestDataEditorListener{
 
 	private static final int STYLE = Section.EXPANDED | Section.TITLE_BAR;
+	private final static int VIEWER_STYLE = SWT.BORDER;
 
 	private TestCaseInterface fTestCaseIf;
 	
@@ -73,4 +75,8 @@ public class TestDataViewer extends TableViewerSection implements ITestDataEdito
 		fTestCaseIf.updateTestData(index, value, this);
 	}
 	
+	@Override
+	protected int viewerStyle(){
+		return VIEWER_STYLE;
+	}
 }

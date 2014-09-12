@@ -12,7 +12,7 @@ public class SelectionInterface extends OperationExecuter {
 
 	private List<? extends GenericNode> fSelected;
 	
-	public void setTarget(List<? extends GenericNode> target){
+	public void setTarget(List<GenericNode> target){
 		fSelected = target;
 	}
 	

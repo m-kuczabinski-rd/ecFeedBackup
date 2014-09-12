@@ -29,6 +29,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.layout.RowLayout;
@@ -37,6 +38,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Layout;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
+import com.testify.ecfeed.model.GenericNode;
 import com.testify.ecfeed.modelif.ModelOperationManager;
 import com.testify.ecfeed.ui.modelif.IModelUpdateListener;
 
@@ -44,7 +46,7 @@ public abstract class ViewerSection extends BasicSection implements ISelectionPr
 	public static final int BUTTONS_ASIDE = 1;
 	public static final int BUTTONS_BELOW = 2;
 
-	private final int VIEWER_STYLE = SWT.BORDER;
+	private final int VIEWER_STYLE = SWT.BORDER | SWT.MULTI;
 	
 	private List<Object> fSelectedElements;
 
@@ -66,6 +68,19 @@ public abstract class ViewerSection extends BasicSection implements ISelectionPr
 			if(e.keyCode == fKeyCode){
 				fAction.run();
 			}
+		}
+	}
+	
+	protected class ActionSelectionAdapter extends SelectionAdapter{
+		private Action fAction;
+
+		public ActionSelectionAdapter(Action action){
+			fAction = action;
+		}
+		
+		@Override 
+		public void widgetSelected(SelectionEvent e){
+			fAction.run();
 		}
 	}
 	
@@ -110,6 +125,16 @@ public abstract class ViewerSection extends BasicSection implements ISelectionPr
     
     public IStructuredSelection getSelection(){
     	return (IStructuredSelection)fViewer.getSelection();
+    }
+
+    public List<GenericNode> getSelectedNodes(){
+    	List<GenericNode> result = new ArrayList<>();
+		for(Object o : getSelection().toList()){
+    		if(o instanceof GenericNode){
+    			result .add((GenericNode)o);
+    		}
+    	}
+    	return result;
     }
     
     public void removeSelectionChangedListener(ISelectionChangedListener listener){

@@ -11,14 +11,12 @@
 
 package com.testify.ecfeed.ui.editor;
 
-import java.util.ArrayList;
-import java.util.Collection;
-
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.EditingSupport;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.viewers.TextCellEditor;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
@@ -31,10 +29,11 @@ import com.testify.ecfeed.modelif.ImplementationStatus;
 import com.testify.ecfeed.modelif.java.JavaUtils;
 import com.testify.ecfeed.ui.common.ColorConstants;
 import com.testify.ecfeed.ui.common.ColorManager;
+import com.testify.ecfeed.ui.editor.actions.DeleteAction;
 import com.testify.ecfeed.ui.modelif.ClassInterface;
 import com.testify.ecfeed.ui.modelif.RootInterface;
 
-public class ClassViewer extends CheckboxTableViewerSection {
+public class ClassViewer extends TableViewerSection {
 	private static final int STYLE = Section.EXPANDED | Section.TITLE_BAR;
 
 	private TableViewerColumn fNameColumn;
@@ -86,7 +85,7 @@ public class ClassViewer extends CheckboxTableViewerSection {
 
 	}
 
-	public class PackageNameEditingSupport extends ClassNameEditingSupport{
+	private class PackageNameEditingSupport extends ClassNameEditingSupport{
 
 		@Override
 		protected Object getValue(Object element) {
@@ -111,20 +110,6 @@ public class ClassViewer extends CheckboxTableViewerSection {
 				selectElement(addedClass);
 				fNameColumn.getViewer().editElement(addedClass, 0);
 			}
-		}
-	}
-	
-	private class RemoveClassesAdapter extends SelectionAdapter {
-
-		@Override
-		public void widgetSelected(SelectionEvent e) {
-			Collection<ClassNode> checkedClasses = new ArrayList<ClassNode>();
-			for(Object checked : getCheckedElements()){
-				if(checked instanceof ClassNode){
-					checkedClasses.add((ClassNode)checked);
-				}
-			}
-			fRootIf.removeClasses(checkedClasses, ClassViewer.this);
 		}
 	}
 	
@@ -162,8 +147,10 @@ public class ClassViewer extends CheckboxTableViewerSection {
 		setText("Classes");
 		addButton("Add implemented class", new AddImplementedClassAdapter());
 		addButton("New test class", new AddNewClassAdapter());
-		addButton("Remove selected", new RemoveClassesAdapter());
+		addButton("Remove selected", new ActionSelectionAdapter(new DeleteAction(getViewer(), this)));
+		
 		addDoubleClickListener(new SelectNodeDoubleClickListener(parent.getMasterSection()));
+		addKeyListener(SWT.DEL, new DeleteAction(getViewer(), this));
 	}
 	
 	@Override

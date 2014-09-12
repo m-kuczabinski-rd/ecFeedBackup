@@ -11,10 +11,6 @@
 
 package com.testify.ecfeed.ui.editor;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.EditingSupport;
 import org.eclipse.jface.viewers.TableViewerColumn;
@@ -30,10 +26,11 @@ import com.testify.ecfeed.model.ConstraintNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.ui.common.NodeNameColumnLabelProvider;
 import com.testify.ecfeed.ui.common.NodeViewerColumnLabelProvider;
+import com.testify.ecfeed.ui.editor.actions.DeleteAction;
 import com.testify.ecfeed.ui.modelif.ConstraintInterface;
 import com.testify.ecfeed.ui.modelif.MethodInterface;
 
-public class ConstraintsListViewer extends CheckboxTableViewerSection {
+public class ConstraintsListViewer extends TableViewerSection {
 	
 	private final static int STYLE = Section.TITLE_BAR | Section.EXPANDED;
 
@@ -85,13 +82,6 @@ public class ConstraintsListViewer extends CheckboxTableViewerSection {
 		}
 	}
 	
-	private class RemoveSelectedConstraintsAdapter extends SelectionAdapter{
-		@Override 
-		public void widgetSelected(SelectionEvent e){
-			fMethodInterface.removeConstraints(getCheckedConstrainst(), ConstraintsListViewer.this);
-		}
-	}
-
 	public ConstraintsListViewer(BasicDetailsPage parent, FormToolkit toolkit){
 		super(parent.getMainComposite(), toolkit, STYLE, parent, parent.getOperationManager());
 		GridData gd = new GridData(SWT.FILL, SWT.FILL, true, true);
@@ -106,19 +96,12 @@ public class ConstraintsListViewer extends CheckboxTableViewerSection {
 		fNameColumn.setEditingSupport(new ConstraintNameEditingSupport());
 
 		addButton("Add constraint", new AddConstraintAdapter());
-		addButton("Remove selected", new RemoveSelectedConstraintsAdapter());
+		addButton("Remove selected", new ActionSelectionAdapter(new DeleteAction(getViewer(), this)));
 		
 		addDoubleClickListener(new SelectNodeDoubleClickListener(parent.getMasterSection()));
+		addKeyListener(SWT.DEL, new DeleteAction(getViewer(), this));
 	}
 	
-	public Collection<ConstraintNode> getCheckedConstrainst() {
-		List<ConstraintNode> result = new ArrayList<ConstraintNode>();
-		for(Object object : getCheckedElements()){
-			result.add((ConstraintNode)object);
-		}
-		return result;
-	}
-
 	public void setInput(MethodNode method){
 		super.setInput(method.getConstraintNodes());
 		fMethodInterface.setTarget(method);

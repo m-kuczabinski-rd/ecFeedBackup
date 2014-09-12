@@ -12,7 +12,6 @@
 package com.testify.ecfeed.ui.editor;
 
 import java.util.ArrayList;
-import java.util.Collection;
 
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.CellEditor;
@@ -36,10 +35,11 @@ import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.ui.common.NodeNameColumnLabelProvider;
 import com.testify.ecfeed.ui.common.NodeViewerColumnLabelProvider;
+import com.testify.ecfeed.ui.editor.actions.DeleteAction;
 import com.testify.ecfeed.ui.modelif.CategoryInterface;
 import com.testify.ecfeed.ui.modelif.MethodInterface;
 
-public class ParametersViewer extends CheckboxTableViewerSection{
+public class ParametersViewer extends TableViewerSection{
 
 	private final static int STYLE = Section.EXPANDED | Section.TITLE_BAR;
 	private final String EMPTY_STRING = "";
@@ -271,15 +271,6 @@ public class ParametersViewer extends CheckboxTableViewerSection{
 		}
 	}
 
-	private class RemoveParameterAdapter extends SelectionAdapter {
-		@Override
-		public void widgetSelected(SelectionEvent e) {
-			if(getCheckedElements().length > 0){
-				fMethodIf.removeParameters(getCheckedParameters(), ParametersViewer.this);
-			}
-		}
-	}
-
 	public ParametersViewer(BasicDetailsPage parent, FormToolkit toolkit) {
 		super(parent.getMainComposite(), toolkit, STYLE, parent, parent.getOperationManager());
 		fCategoryIf = new CategoryInterface();
@@ -291,7 +282,7 @@ public class ParametersViewer extends CheckboxTableViewerSection{
 
 		getSection().setText("Parameters");
 		addButton("New parameter", new AddNewParameterAdapter());
-		addButton("Remove selected", new RemoveParameterAdapter());
+		addButton("Remove selected", new ActionSelectionAdapter(new DeleteAction(getViewer(), this)));
 		MoveUpDownAdapter adapter = new MoveUpDownAdapter();
 		fMoveUpButton = addButton("Move Up", adapter);
 		addButton("Move Down", adapter);
@@ -342,14 +333,6 @@ public class ParametersViewer extends CheckboxTableViewerSection{
 		super.setInput(method.getCategories());
 	}
 
-	private Collection<CategoryNode> getCheckedParameters(){
-		Collection<CategoryNode> categories = new ArrayList<>();
-		for (Object element : getCheckedElements()) {
-			categories.add((CategoryNode)element);
-		}
-		return categories;
-	}
-	
 	private void showDefaultValueColumn(boolean show) {
 		if(show){
 			fDefaultValueColumn.getColumn().setWidth(0);

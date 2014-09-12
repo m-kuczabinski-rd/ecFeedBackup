@@ -14,6 +14,7 @@ package com.testify.ecfeed.ui.editor;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
@@ -26,7 +27,9 @@ import com.testify.ecfeed.ui.modelif.ClassInterface;
 
 public class OtherMethodsViewer extends CheckboxTableViewerSection {
 	
-	public final static int STYLE = Section.TITLE_BAR | Section.EXPANDED;
+	private final static int STYLE = Section.TITLE_BAR | Section.EXPANDED;
+	private final static int VIEWER_STYLE = SWT.BORDER;
+
 	private ClassInterface fClassIf;
 
 	private class AddSelectedAdapter extends SelectionAdapter{
@@ -40,10 +43,6 @@ public class OtherMethodsViewer extends CheckboxTableViewerSection {
 		super(parent.getMainComposite(), toolkit, STYLE, parent, parent.getOperationManager());
 		fClassIf = new ClassInterface();
 		addButton("Add selected", new AddSelectedAdapter());
-	}
-	
-	@Override
-	protected void createTableColumns() {
 	}
 	
 	public void setInput(ClassNode classNode){
@@ -71,6 +70,14 @@ public class OtherMethodsViewer extends CheckboxTableViewerSection {
 			}
 		}
 		return methods;
+	}
+	
+	@Override
+	protected void createTableColumns() {
+	}
 
+	@Override
+	protected int viewerStyle(){
+		return VIEWER_STYLE;
 	}
 }

@@ -56,6 +56,7 @@ import com.testify.ecfeed.ui.modelif.StatementInterfaceFactory;
 public class ConstraintViewer extends TreeViewerSection {
 
 	private final static int STYLE = Section.TITLE_BAR | Section.EXPANDED;
+	private final static int VIEWER_STYLE = SWT.BORDER;
 
 	private Button fAddStatementButton;
 	private Button fRemoveStatementButton;
@@ -470,6 +471,11 @@ public class ConstraintViewer extends TreeViewerSection {
 		return BUTTONS_ASIDE;
 	}
 
+	@Override
+	protected int viewerStyle(){
+		return VIEWER_STYLE; 
+	}
+	
 	public void setInput(ConstraintNode constraintNode){
 		//Update the statement provider before setting input to get the correct images
 		fCurrentConstraint = constraintNode.getConstraint();

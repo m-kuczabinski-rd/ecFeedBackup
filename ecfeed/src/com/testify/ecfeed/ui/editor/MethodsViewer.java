@@ -11,14 +11,13 @@
 
 package com.testify.ecfeed.ui.editor;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.EditingSupport;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.viewers.TextCellEditor;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.ui.forms.widgets.FormToolkit;
@@ -29,10 +28,11 @@ import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.modelif.java.JavaUtils;
 import com.testify.ecfeed.ui.common.NodeNameColumnLabelProvider;
 import com.testify.ecfeed.ui.common.NodeViewerColumnLabelProvider;
+import com.testify.ecfeed.ui.editor.actions.DeleteAction;
 import com.testify.ecfeed.ui.modelif.ClassInterface;
 import com.testify.ecfeed.ui.modelif.MethodInterface;
 
-public class MethodsViewer extends CheckboxTableViewerSection {
+public class MethodsViewer extends TableViewerSection {
 
 	private static final int STYLE = Section.EXPANDED | Section.TITLE_BAR;
 	private TableViewerColumn fMethodsColumn;
@@ -73,13 +73,6 @@ public class MethodsViewer extends CheckboxTableViewerSection {
 		}
 	}
 
-	private class RemoveSelectedMethodsAdapter extends SelectionAdapter{
-		@Override
-		public void widgetSelected(SelectionEvent e) {
-			fClassIf.removeMethods(getSelectedMethods(), MethodsViewer.this);
-		}
-	}
-	
 	private class AddNewMethodAdapter extends SelectionAdapter {
 		@Override
 		public void widgetSelected(SelectionEvent e) {
@@ -121,8 +114,9 @@ public class MethodsViewer extends CheckboxTableViewerSection {
 
 		setText("Methods");
 		addButton("Add new method", new AddNewMethodAdapter());
-		addButton("Remove selected", new RemoveSelectedMethodsAdapter());
+		addButton("Remove selected", new ActionSelectionAdapter(new DeleteAction(getViewer(), this)));
 		addDoubleClickListener(new SelectNodeDoubleClickListener(parent.getMasterSection()));
+		addKeyListener(SWT.DEL, new DeleteAction(getViewer(), this));
 	}
 
 	public void setInput(ClassNode classNode){
@@ -144,15 +138,5 @@ public class MethodsViewer extends CheckboxTableViewerSection {
 	@Override
 	protected boolean tableHeaderVisible() {
 		return true;
-	}
-	
-	protected Collection<MethodNode> getSelectedMethods(){
-		List<MethodNode> methods = new ArrayList<MethodNode>();
-		for(Object o : getCheckedElements()){
-			if(o instanceof MethodNode){
-				methods.add((MethodNode)o);
-			}
-		}
-		return methods;
 	}
 }

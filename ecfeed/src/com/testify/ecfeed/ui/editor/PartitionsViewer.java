@@ -11,8 +11,6 @@
 
 package com.testify.ecfeed.ui.editor;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.jface.viewers.ArrayContentProvider;
@@ -28,7 +26,6 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Section;
 
@@ -42,7 +39,7 @@ import com.testify.ecfeed.ui.modelif.CategoryInterface;
 import com.testify.ecfeed.ui.modelif.PartitionInterface;
 import com.testify.ecfeed.ui.modelif.PartitionedNodeInterface;
 
-public class PartitionsViewer extends CheckboxTableViewerSection {
+public class PartitionsViewer extends TableViewerSection {
 
 	private final static int STYLE = Section.EXPANDED | Section.TITLE_BAR;
 	
@@ -51,7 +48,7 @@ public class PartitionsViewer extends CheckboxTableViewerSection {
 	
 	private TableViewerColumn fNameColumn;
 	private TableViewerColumn fValueColumn;
-	private Button fMoveUpButton;
+//	private Button fMoveUpButton;
 	
 	private class PartitionNameEditingSupport extends EditingSupport{
 
@@ -115,7 +112,7 @@ public class PartitionsViewer extends CheckboxTableViewerSection {
 	private class PartitionValueEditingSupport extends EditingSupport {
 		private ComboBoxViewerCellEditor fCellEditor;
 		
-		public PartitionValueEditingSupport(CheckboxTableViewerSection viewer) {
+		public PartitionValueEditingSupport(TableViewerSection viewer) {
 			super(viewer.getTableViewer());
 			fCellEditor = new ComboBoxViewerCellEditor(viewer.getTable(), SWT.TRAIL);
 			fCellEditor.setLabelProvider(new LabelProvider());
@@ -199,23 +196,16 @@ public class PartitionsViewer extends CheckboxTableViewerSection {
 		}
 	}
 	
-	private class RemovePartitionsAdapter extends SelectionAdapter{
-		@Override
-		public void widgetSelected(SelectionEvent e){
-			fParentIf.removePartitions(getCheckedPartitions(), PartitionsViewer.this);
-		}
-	}
-	
-	private class MoveUpDownAdapter extends SelectionAdapter{
-		@Override
-		public void widgetSelected(SelectionEvent e){
-			if(getSelectedPartition() != null){
-				fTableItemIf.setTarget(getSelectedPartition());
-				fTableItemIf.moveUpDown(e.getSource() == fMoveUpButton, PartitionsViewer.this);
-			}
-		}
-	}
-	
+//	private class MoveUpDownAdapter extends SelectionAdapter{
+//		@SuppressWarnings("unchecked")
+//		@Override
+//		public void widgetSelected(SelectionEvent e){
+//			SelectionInterface selectionIf = new SelectionInterface();
+//			selectionIf.setTarget(getSelection().toList());
+//			selectionIf.moveUpDown(e.getSource() == fMoveUpButton, PartitionsViewer.this);
+//		}
+//	}
+//	
 	@Override
 	protected void createTableColumns() {
 		fNameColumn = addColumn("Name", 150, new PartitionNameLabelProvider());
@@ -233,9 +223,7 @@ public class PartitionsViewer extends CheckboxTableViewerSection {
 
 		getSection().setText("Partitions");
 		addButton("Add partition", new AddPartitionAdapter());
-		addButton("Remove selected", new RemovePartitionsAdapter());
-		fMoveUpButton = addButton("Move Up", new MoveUpDownAdapter());
-		addButton("Move Down", new MoveUpDownAdapter());
+		addButton("Remove selected", new ActionSelectionAdapter(new DeleteAction(getViewer(), this)));
 		
 		addDoubleClickListener(new SelectNodeDoubleClickListener(parent.getMasterSection()));
 		addKeyListener(SWT.DEL, new DeleteAction(getViewer(), this));
@@ -248,22 +236,5 @@ public class PartitionsViewer extends CheckboxTableViewerSection {
 	
 	public void setVisible(boolean visible){
 		this.getSection().setVisible(visible);
-	}
-	
-	protected Collection<PartitionNode> getCheckedPartitions(){
-		Collection<PartitionNode> result = new ArrayList<PartitionNode>();
-		for(Object element : getCheckedElements()){
-			if(element instanceof PartitionNode){
-				result.add((PartitionNode)element);
-			}
-		}
-		return result;
-	}
-
-	private PartitionNode getSelectedPartition() {
-		if(getSelectedElement() != null && getSelectedElement() instanceof PartitionNode){
-			return (PartitionNode)getSelectedElement();
-		}
-		return null;
 	}
 }

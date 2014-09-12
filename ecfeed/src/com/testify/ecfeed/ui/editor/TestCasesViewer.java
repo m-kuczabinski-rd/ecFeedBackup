@@ -41,6 +41,7 @@ import com.testify.ecfeed.ui.modelif.MethodInterface;
 public class TestCasesViewer extends CheckboxTreeViewerSection {
 
 	private final static int STYLE = Section.EXPANDED | Section.TITLE_BAR;
+	private final static int VIEWER_STYLE = SWT.BORDER;
 	
 	private TestCasesViewerLabelProvider fLabelProvider;
 	private TestCasesViewerContentProvider fContentProvider;
@@ -179,6 +180,11 @@ public class TestCasesViewer extends CheckboxTreeViewerSection {
 			fLabelProvider = new TestCasesViewerLabelProvider();
 		}
 		return fLabelProvider;
+	}
+	
+	@Override
+	protected int viewerStyle(){
+		return VIEWER_STYLE;
 	}
 	
 	private boolean executionEnabled(){
