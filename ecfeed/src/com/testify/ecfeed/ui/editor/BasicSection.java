@@ -88,6 +88,10 @@ public abstract class BasicSection extends SectionPart implements IModelUpdateCo
 		return fOperationManager;
 	}
 
+	public AbstractFormPart getSourceForm(){
+		return this;
+	}
+
 	protected Composite getClientComposite(){
 		return fClientComposite;
 	}
@@ -140,9 +144,5 @@ public abstract class BasicSection extends SectionPart implements IModelUpdateCo
 	
 	protected void setOperationManager(ModelOperationManager operationManager){
 		fOperationManager = operationManager;
-	}
-	
-	public AbstractFormPart getSourceForm(){
-		return this;
 	}
 }
