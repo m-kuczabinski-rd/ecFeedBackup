@@ -48,6 +48,7 @@ import com.testify.ecfeed.model.constraint.Relation;
 import com.testify.ecfeed.model.constraint.StatementArray;
 import com.testify.ecfeed.model.constraint.StaticStatement;
 import com.testify.ecfeed.modelif.ModelOperationManager;
+import com.testify.ecfeed.ui.editor.actions.ModelModyfyingAction;
 import com.testify.ecfeed.ui.modelif.BasicStatementInterface;
 import com.testify.ecfeed.ui.modelif.CategoryInterface;
 import com.testify.ecfeed.ui.modelif.ConstraintInterface;
@@ -413,14 +414,21 @@ public class ConstraintViewer extends TreeViewerSection {
 		}
 	}
 	
-	private class RemoveStatementAdapter extends SelectionAdapter{
-		@Override 
-		public void widgetSelected(SelectionEvent e){
-			if(fStatementIf.getParentInterface() != null){
-				BasicStatement parent = fSelectedStatement.getParent();
-				if(parent != null && fStatementIf.getParentInterface().removeChild(fSelectedStatement, ConstraintViewer.this)){
-					getViewer().setSelection(new StructuredSelection(parent));
-				}
+	public class DeleteStatementAction extends ModelModyfyingAction {
+		public DeleteStatementAction() {
+			super(getViewer(), ConstraintViewer.this);
+		}
+		
+		@Override
+		public boolean isEnabled(){
+			return fSelectedStatement.getParent() != null;
+		}
+
+		@Override
+		public void run(){
+			BasicStatement parent = fSelectedStatement.getParent();
+			if(parent != null && fStatementIf.getParentInterface().removeChild(fSelectedStatement, ConstraintViewer.this)){
+				getViewer().setSelection(new StructuredSelection(parent));
 			}
 		}
 	}
@@ -450,10 +458,11 @@ public class ConstraintViewer extends TreeViewerSection {
 		super(parent.getMainComposite(), toolkit, STYLE, parent, parent.getOperationManager());
 		getSection().setText("Constraint editor");
 		fAddStatementButton = addButton("Add statement", new AddStatementAdapter());
-		fRemoveStatementButton = addButton("Remove statement", new RemoveStatementAdapter());
+		fRemoveStatementButton = addButton("Remove statement", new ActionSelectionAdapter(new DeleteStatementAction()));
 		getViewer().addSelectionChangedListener(new StatementSelectionListener());
 
 		fStatementEditor = new StatementEditor(getClientComposite(), parent.getOperationManager());
+		addKeyListener(SWT.DEL, new DeleteStatementAction());
 	}
 
 	@Override
