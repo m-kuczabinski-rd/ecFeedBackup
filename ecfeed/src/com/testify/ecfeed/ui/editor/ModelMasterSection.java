@@ -378,10 +378,10 @@ public class ModelMasterSection extends TreeViewerSection{
 	
 	public ModelMasterSection(ModelMasterDetailsBlock masterDetailsBlock, Composite parent, FormToolkit toolkit, ModelOperationManager operationManager) {
 		super(parent, toolkit, STYLE, null, operationManager);
-		addDeleteKeyEventAction(new DeleteAction(this, this));
 		fMasterDetailsBlock = masterDetailsBlock;
 		setModelUpdateListener(new UpdateListener());
 		createMenu(operationManager, getUpdateListener());
+		addKeyListener(SWT.DEL, new DeleteAction(getViewer(), this));
 	}
 	
 	public void setInput(RootNode model){
