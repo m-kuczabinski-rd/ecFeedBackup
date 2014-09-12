@@ -36,8 +36,8 @@ public class ConstraintDetailsPage extends BasicDetailsPage {
 		}
 	}
 	
-	public ConstraintDetailsPage(ModelMasterSection masterSection) {
-		super(masterSection);
+	public ConstraintDetailsPage(ModelMasterDetailsBlock masterDetailsBlock) {
+		super(masterDetailsBlock);
 		fConstraintIf = new ConstraintInterface();
 	}
 	

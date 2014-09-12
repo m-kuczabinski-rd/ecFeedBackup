@@ -68,8 +68,8 @@ public class CategoryDetailsPage extends BasicDetailsPage{
 		}
 	}
 	
-	public CategoryDetailsPage(ModelMasterSection masterSection) {
-		super(masterSection);
+	public CategoryDetailsPage(ModelMasterDetailsBlock masterDetailsBlock) {
+		super(masterDetailsBlock);
 		fCategoryIf = new CategoryInterface();
 	}
 

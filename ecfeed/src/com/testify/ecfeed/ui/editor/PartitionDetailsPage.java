@@ -53,8 +53,8 @@ public class PartitionDetailsPage extends BasicDetailsPage {
 		}
 	}
 	
-	public PartitionDetailsPage(ModelMasterSection masterSection) {
-		super(masterSection);
+	public PartitionDetailsPage(ModelMasterDetailsBlock masterDetailsBlock) {
+		super(masterDetailsBlock);
 		fPartitionIf = new PartitionInterface();
 	}
 	

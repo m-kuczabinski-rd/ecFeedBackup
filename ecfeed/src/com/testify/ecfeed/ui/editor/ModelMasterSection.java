@@ -46,6 +46,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
+import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.forms.AbstractFormPart;
 import org.eclipse.ui.forms.IDetailsPage;
 import org.eclipse.ui.forms.widgets.FormToolkit;
@@ -66,10 +67,12 @@ import com.testify.ecfeed.modelif.ModelOperationManager;
 import com.testify.ecfeed.ui.common.Constants;
 import com.testify.ecfeed.ui.editor.actions.AbstractAddChildAction;
 import com.testify.ecfeed.ui.editor.actions.AddChildActionFactory;
+import com.testify.ecfeed.ui.editor.actions.CollapseAction;
 import com.testify.ecfeed.ui.editor.actions.CopyAction;
 import com.testify.ecfeed.ui.editor.actions.CutAction;
 import com.testify.ecfeed.ui.editor.actions.DeleteAction;
 import com.testify.ecfeed.ui.editor.actions.ExpandAction;
+import com.testify.ecfeed.ui.editor.actions.ModelViewerToolbarUpdater;
 import com.testify.ecfeed.ui.editor.actions.MoveUpDownAction;
 import com.testify.ecfeed.ui.editor.actions.PasteAction;
 import com.testify.ecfeed.ui.editor.actions.RedoAction;
@@ -486,7 +489,7 @@ public class ModelMasterSection extends TreeViewerSection{
 			new MenuItem(menu, SWT.SEPARATOR);
 			addOperation(menu, new MenuOperation("Select All\tCtrl+A", new SelectAllAction(getTreeViewer(), false)));
 			addOperation(menu, new MenuOperation("Expand all\tCTRL+ALT+E", new ExpandAction(getTreeViewer())));
-			addOperation(menu, new MenuOperation("Collapse\tCTRL+ALT+W", new ExpandAction(getTreeViewer())));
+			addOperation(menu, new MenuOperation("Collapse\tCTRL+ALT+W", new CollapseAction(getTreeViewer())));
 		}
 
 		private void addMoveOperations(Menu menu, List<GenericNode> selected) {
@@ -497,12 +500,13 @@ public class ModelMasterSection extends TreeViewerSection{
 	}
 
 	
-	public ModelMasterSection(ModelMasterDetailsBlock masterDetailsBlock, Composite parent, FormToolkit toolkit, ModelOperationManager operationManager) {
+	public ModelMasterSection(ModelMasterDetailsBlock masterDetailsBlock, Composite parent, FormToolkit toolkit, ModelOperationManager operationManager, IActionBars actionBars) {
 		super(parent, toolkit, STYLE, null, operationManager);
 		fMasterDetailsBlock = masterDetailsBlock;
 		setModelUpdateListener(new UpdateListener());
 		createMenu(operationManager, getUpdateListener());
 		addKeyListener(SWT.DEL, new DeleteAction(getViewer(), this));
+		setToolbarUpdater(new ModelViewerToolbarUpdater(getTreeViewer(), this, actionBars));
 	}
 	
 	public void setInput(RootNode model){

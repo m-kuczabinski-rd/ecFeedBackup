@@ -293,6 +293,7 @@ public class ParametersViewer extends TableViewerSection{
 		fDefaultValueColumn.setEditingSupport(new DefaultValueEditingSupport());
 
 		addDoubleClickListener(new SelectNodeDoubleClickListener(parent.getMasterSection()));
+		addKeyListener(SWT.DEL, new DeleteAction(getViewer(), this));
 	}
 
 	@Override

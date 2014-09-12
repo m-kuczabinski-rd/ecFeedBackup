@@ -71,8 +71,8 @@ public class ClassDetailsPage extends BasicDetailsPage {
 		}
 	}
 	
-	public ClassDetailsPage(ModelMasterSection masterSection) {
-		super(masterSection);
+	public ClassDetailsPage(ModelMasterDetailsBlock masterDetailsBlock) {
+		super(masterDetailsBlock);
 		fClassIf = new ClassInterface();
 	}
 

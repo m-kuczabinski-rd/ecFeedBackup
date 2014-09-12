@@ -36,8 +36,8 @@ public class TestCaseDetailsPage extends BasicDetailsPage {
 			fTestSuiteNameCombo.setText(fTestCaseIf.getName());
 		}
 	}
-	public TestCaseDetailsPage(ModelMasterSection masterSection) {
-		super(masterSection);
+	public TestCaseDetailsPage(ModelMasterDetailsBlock masterDetailsBlock) {
+		super(masterDetailsBlock);
 		fTestCaseIf = new TestCaseInterface();
 	}
 

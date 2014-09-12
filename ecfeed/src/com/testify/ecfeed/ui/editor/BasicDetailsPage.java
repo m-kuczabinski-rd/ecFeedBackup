@@ -34,16 +34,16 @@ import com.testify.ecfeed.ui.modelif.IModelUpdateListener;
 
 public abstract class BasicDetailsPage implements IDetailsPage, IModelUpdateListener, IModelUpdateContext{
 
-	private ModelMasterSection fMasterSection;
 	private Section fMainSection;
 	private Composite fMainComposite;
 	private IManagedForm fManagedForm;
 	private List<IFormPart> fForms;
+	private ModelMasterDetailsBlock fMasterDetailsBlock;
 	
 	private static final int MAIN_SECTION_STYLE = Section.EXPANDED | Section.TITLE_BAR;
 
-	public BasicDetailsPage(ModelMasterSection masterSection){
-		fMasterSection = masterSection;
+	public BasicDetailsPage(ModelMasterDetailsBlock masterDetailsBlock){
+		fMasterDetailsBlock = masterDetailsBlock;
 		fForms = new ArrayList<IFormPart>();
 	}
 	
@@ -125,7 +125,7 @@ public abstract class BasicDetailsPage implements IDetailsPage, IModelUpdateList
 	}
 	
 	public ModelOperationManager getOperationManager(){
-		return fMasterSection.getOperationManager();
+		return getMasterSection().getOperationManager();
 	}
 
 	protected Section getMainSection(){
@@ -133,7 +133,7 @@ public abstract class BasicDetailsPage implements IDetailsPage, IModelUpdateList
 	}
 
 	protected ModelMasterSection getMasterSection(){
-		return fMasterSection;
+		return fMasterDetailsBlock.getMasterSection();
 	}
 
 	protected void addForm(IFormPart form){
@@ -142,7 +142,7 @@ public abstract class BasicDetailsPage implements IDetailsPage, IModelUpdateList
 	}
 	
 	protected Object getSelectedElement(){
-		return fMasterSection.getSelectedElement();
+		return getMasterSection().getSelectedElement();
 	}
 	
 	protected IManagedForm getManagedForm(){

@@ -63,8 +63,8 @@ public class MethodDetailsPage extends BasicDetailsPage {
 		}
 	}
 	
-	public MethodDetailsPage(ModelMasterSection masterSection) {
-		super(masterSection);
+	public MethodDetailsPage(ModelMasterDetailsBlock masterDetailsBlock) {
+		super(masterDetailsBlock);
 		fMethodIf = new MethodInterface();
 	}
 

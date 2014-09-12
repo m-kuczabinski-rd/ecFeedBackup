@@ -37,8 +37,8 @@ public class ModelDetailsPage extends BasicDetailsPage {
 		}
 	}
 	
-	public ModelDetailsPage(ModelMasterSection masterSection) {
-		super(masterSection);
+	public ModelDetailsPage(ModelMasterDetailsBlock masterDetailsBlock) {
+		super(masterDetailsBlock);
 		fRootIf = new RootInterface();
 	}
 

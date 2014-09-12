@@ -26,6 +26,8 @@ import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.StructuredViewer;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.FocusEvent;
+import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -40,6 +42,7 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import com.testify.ecfeed.model.GenericNode;
 import com.testify.ecfeed.modelif.ModelOperationManager;
+import com.testify.ecfeed.ui.editor.actions.IToolbarActionsUpdater;
 import com.testify.ecfeed.ui.modelif.IModelUpdateListener;
 
 public abstract class ViewerSection extends BasicSection implements ISelectionProvider{
@@ -53,6 +56,7 @@ public abstract class ViewerSection extends BasicSection implements ISelectionPr
 	private Composite fButtonsComposite;
 	private StructuredViewer fViewer;
 	private Composite fViewerComposite;
+	private IToolbarActionsUpdater fToolbarUpdater;
 	
 	protected class ViewerKeyAdapter extends KeyAdapter{
 		private int fKeyCode;
@@ -84,9 +88,26 @@ public abstract class ViewerSection extends BasicSection implements ISelectionPr
 		}
 	}
 	
+	private class ToolbarUpdateListener implements FocusListener{
+		@Override
+		public void focusGained(FocusEvent e) {
+			if(fToolbarUpdater != null){
+				fToolbarUpdater.updateActionBars();
+			}
+		}
+
+		@Override
+		public void focusLost(FocusEvent e) {
+			if(fToolbarUpdater != null){
+				fToolbarUpdater.cleanActionBars();
+			}
+		}
+	}
+	
 	public ViewerSection(Composite parent, FormToolkit toolkit, int style, IModelUpdateListener updateListener, ModelOperationManager operationManager) {
 		super(parent, toolkit, style, updateListener, operationManager);
 		fSelectedElements = new ArrayList<>();
+		fViewer.getControl().addFocusListener(new ToolbarUpdateListener());
 	}	
 	
 	@Override
@@ -255,6 +276,10 @@ public abstract class ViewerSection extends BasicSection implements ISelectionPr
 	
 	protected void addKeyListener(int keyCode, Action action){
 		fViewer.getControl().addKeyListener(new ViewerKeyAdapter(keyCode, action));
+	}
+	
+	protected void setToolbarUpdater(IToolbarActionsUpdater updater){
+		fToolbarUpdater = updater;
 	}
 	
 	protected abstract void createViewerColumns();

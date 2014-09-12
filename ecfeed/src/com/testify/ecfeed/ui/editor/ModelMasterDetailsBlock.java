@@ -31,11 +31,7 @@ import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.modelif.ModelOperationManager;
-import com.testify.ecfeed.ui.editor.actions.CopyAction;
-import com.testify.ecfeed.ui.editor.actions.CutAction;
-import com.testify.ecfeed.ui.editor.actions.PasteAction;
 import com.testify.ecfeed.ui.editor.actions.RedoAction;
-import com.testify.ecfeed.ui.editor.actions.SelectAllAction;
 import com.testify.ecfeed.ui.editor.actions.UndoAction;
 
 public class ModelMasterDetailsBlock extends MasterDetailsBlock implements ISelectionChangedListener{
@@ -50,7 +46,9 @@ public class ModelMasterDetailsBlock extends MasterDetailsBlock implements ISele
 	@Override
 	protected void createMasterPart(IManagedForm managedForm, Composite parent) {
 		FormToolkit toolkit = managedForm.getToolkit();
-		fMasterSection = new ModelMasterSection(this, parent, toolkit, getPage().getEditor().getModelOperationManager());
+		IActionBars actionBars = fPage.getEditorSite().getActionBars();
+
+		fMasterSection = new ModelMasterSection(this, parent, toolkit, getPage().getEditor().getModelOperationManager(), actionBars);
 		fMasterSection.initialize(managedForm);
 		fMasterSection.addSelectionChangedListener(this);
 		fMasterSection.setInput(getModel());
@@ -62,13 +60,13 @@ public class ModelMasterDetailsBlock extends MasterDetailsBlock implements ISele
 
 	@Override
 	protected void registerPages(DetailsPart detailsPart) {
-		detailsPart.registerPage(RootNode.class, new ModelDetailsPage(fMasterSection));
-		detailsPart.registerPage(ClassNode.class, new ClassDetailsPage(fMasterSection));
-		detailsPart.registerPage(MethodNode.class, new MethodDetailsPage(fMasterSection));
-		detailsPart.registerPage(CategoryNode.class, new CategoryDetailsPage(fMasterSection));
-		detailsPart.registerPage(TestCaseNode.class, new TestCaseDetailsPage(fMasterSection));
-		detailsPart.registerPage(ConstraintNode.class, new ConstraintDetailsPage(fMasterSection));
-		detailsPart.registerPage(PartitionNode.class, new PartitionDetailsPage(fMasterSection));
+		detailsPart.registerPage(RootNode.class, new ModelDetailsPage(this));
+		detailsPart.registerPage(ClassNode.class, new ClassDetailsPage(this));
+		detailsPart.registerPage(MethodNode.class, new MethodDetailsPage(this));
+		detailsPart.registerPage(CategoryNode.class, new CategoryDetailsPage(this));
+		detailsPart.registerPage(TestCaseNode.class, new TestCaseDetailsPage(this));
+		detailsPart.registerPage(ConstraintNode.class, new ConstraintDetailsPage(this));
+		detailsPart.registerPage(PartitionNode.class, new PartitionDetailsPage(this));
 
 		selectNode(getModel());
 	}
@@ -76,10 +74,6 @@ public class ModelMasterDetailsBlock extends MasterDetailsBlock implements ISele
 	@Override
 	protected void createToolBarActions(IManagedForm managedForm) {
 		IActionBars actionBars = fPage.getEditorSite().getActionBars();
-		actionBars.setGlobalActionHandler(ActionFactory.COPY.getId(), new CopyAction(fMasterSection));
-		actionBars.setGlobalActionHandler(ActionFactory.CUT.getId(), new CutAction(fMasterSection, fMasterSection));
-		actionBars.setGlobalActionHandler(ActionFactory.PASTE.getId(), new PasteAction(fMasterSection, fMasterSection));
-		actionBars.setGlobalActionHandler(ActionFactory.SELECT_ALL.getId(), new SelectAllAction(fMasterSection.getTreeViewer(), false));
 		actionBars.setGlobalActionHandler(ActionFactory.UNDO.getId(), new UndoAction(fMasterSection));
 		actionBars.setGlobalActionHandler(ActionFactory.REDO.getId(), new RedoAction(fMasterSection));
 	}
