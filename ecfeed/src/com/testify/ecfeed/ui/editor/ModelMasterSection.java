@@ -72,7 +72,6 @@ import com.testify.ecfeed.ui.editor.actions.CopyAction;
 import com.testify.ecfeed.ui.editor.actions.CutAction;
 import com.testify.ecfeed.ui.editor.actions.DeleteAction;
 import com.testify.ecfeed.ui.editor.actions.ExpandAction;
-import com.testify.ecfeed.ui.editor.actions.ModelViewerToolbarUpdater;
 import com.testify.ecfeed.ui.editor.actions.MoveUpDownAction;
 import com.testify.ecfeed.ui.editor.actions.PasteAction;
 import com.testify.ecfeed.ui.editor.actions.RedoAction;
@@ -506,7 +505,7 @@ public class ModelMasterSection extends TreeViewerSection{
 		setModelUpdateListener(new UpdateListener());
 		createMenu(operationManager, getUpdateListener());
 		addKeyListener(SWT.DEL, new DeleteAction(getViewer(), this));
-		setToolbarUpdater(new ModelViewerToolbarUpdater(getTreeViewer(), this, actionBars));
+		setActionProvider(new ModelViewerGlobalActionProvider(getTreeViewer(), this));
 	}
 	
 	public void setInput(RootNode model){

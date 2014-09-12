@@ -151,6 +151,7 @@ public class ClassViewer extends TableViewerSection {
 		
 		addDoubleClickListener(new SelectNodeDoubleClickListener(parent.getMasterSection()));
 		addKeyListener(SWT.DEL, new DeleteAction(getViewer(), this));
+		setActionProvider(new ModelViewerGlobalActionProvider(getTableViewer(), this));
 	}
 	
 	@Override

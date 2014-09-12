@@ -100,6 +100,7 @@ public class ConstraintsListViewer extends TableViewerSection {
 		
 		addDoubleClickListener(new SelectNodeDoubleClickListener(parent.getMasterSection()));
 		addKeyListener(SWT.DEL, new DeleteAction(getViewer(), this));
+		setActionProvider(new ModelViewerGlobalActionProvider(getTableViewer(), this));
 	}
 	
 	public void setInput(MethodNode method){

@@ -45,7 +45,7 @@ public class TestCaseDetailsPage extends BasicDetailsPage {
 	public void createContents(Composite parent) {
 		super.createContents(parent);
 		createTestSuiteEdit(getMainComposite());
-		addForm(fTestDataViewer = new TestDataViewer(this, getToolkit()));
+		addViewerSection(fTestDataViewer = new TestDataViewer(this, getToolkit()));
 	}
 	
 	@Override

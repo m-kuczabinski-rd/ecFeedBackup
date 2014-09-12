@@ -45,7 +45,7 @@ public class ConstraintDetailsPage extends BasicDetailsPage {
 	public void createContents(Composite parent){
 		super.createContents(parent);
 		createConstraintNameEdit(getMainComposite());
-		addForm(fConstraintViewer = new ConstraintViewer(this, getToolkit()));
+		addViewerSection(fConstraintViewer = new ConstraintViewer(this, getToolkit()));
 	}
 	
 	private void createConstraintNameEdit(Composite parent) {

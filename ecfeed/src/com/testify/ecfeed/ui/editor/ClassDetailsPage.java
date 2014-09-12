@@ -81,8 +81,8 @@ public class ClassDetailsPage extends BasicDetailsPage {
 		super.createContents(parent);
 
 		createQualifiedNameComposite(getMainComposite());
-		addForm(fMethodsSection = new MethodsViewer(this, getToolkit()));
-		addForm(fOtherMethodsSection = new OtherMethodsViewer(this, getToolkit()));
+		addViewerSection(fMethodsSection = new MethodsViewer(this, getToolkit()));
+		addViewerSection(fOtherMethodsSection = new OtherMethodsViewer(this, getToolkit()));
 		
 		getToolkit().paintBordersFor(getMainComposite());
 	}

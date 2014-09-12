@@ -21,6 +21,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.forms.AbstractFormPart;
 import org.eclipse.ui.forms.IDetailsPage;
 import org.eclipse.ui.forms.IFormPart;
@@ -38,6 +39,7 @@ public abstract class BasicDetailsPage implements IDetailsPage, IModelUpdateList
 	private Composite fMainComposite;
 	private IManagedForm fManagedForm;
 	private List<IFormPart> fForms;
+	private List<ViewerSection> fViewerSections;
 	private ModelMasterDetailsBlock fMasterDetailsBlock;
 	
 	private static final int MAIN_SECTION_STYLE = Section.EXPANDED | Section.TITLE_BAR;
@@ -45,6 +47,7 @@ public abstract class BasicDetailsPage implements IDetailsPage, IModelUpdateList
 	public BasicDetailsPage(ModelMasterDetailsBlock masterDetailsBlock){
 		fMasterDetailsBlock = masterDetailsBlock;
 		fForms = new ArrayList<IFormPart>();
+		fViewerSections = new ArrayList<ViewerSection>();
 	}
 	
 	@Override
@@ -141,6 +144,11 @@ public abstract class BasicDetailsPage implements IDetailsPage, IModelUpdateList
 		form.initialize(getManagedForm());
 	}
 	
+	protected void addViewerSection(ViewerSection section){
+		addForm(section);
+		fViewerSections.add(section);
+	}
+	
 	protected Object getSelectedElement(){
 		return getMasterSection().getSelectedElement();
 	}
@@ -176,5 +184,18 @@ public abstract class BasicDetailsPage implements IDetailsPage, IModelUpdateList
 	
 	public IModelUpdateListener getUpdateListener(){
 		return this;
+	}
+	
+	public IActionBars getActionBars(){
+		return fMasterDetailsBlock.getPage().getEditorSite().getActionBars();
+	}
+
+	public BasicSection getFocusedViewerSection(){
+		for(ViewerSection section : fViewerSections){
+			if(section.getViewer().getControl().isFocusControl()){
+				return section;
+			}
+		}
+		return null;
 	}
 }

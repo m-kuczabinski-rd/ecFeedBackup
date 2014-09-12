@@ -11,6 +11,7 @@
 
 package com.testify.ecfeed.ui.editor;
 
+import org.eclipse.jface.action.Action;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -28,6 +29,7 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import com.testify.ecfeed.model.GenericNode;
 import com.testify.ecfeed.modelif.ModelOperationManager;
+import com.testify.ecfeed.ui.editor.actions.IActionProvider;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 import com.testify.ecfeed.ui.modelif.IModelUpdateListener;
 
@@ -37,6 +39,7 @@ public abstract class BasicSection extends SectionPart implements IModelUpdateCo
 	private Control fTextClient;
 	private IModelUpdateListener fModelUpdateListener;
 	private ModelOperationManager fOperationManager;
+	private IActionProvider fActionProvider;
 
 	protected class SelectNodeDoubleClickListener implements IDoubleClickListener {
 
@@ -144,5 +147,16 @@ public abstract class BasicSection extends SectionPart implements IModelUpdateCo
 	
 	protected void setOperationManager(ModelOperationManager operationManager){
 		fOperationManager = operationManager;
+	}
+	
+	public Action getAction(String actionId) {
+		if(fActionProvider != null){
+			return fActionProvider.getAction(actionId);
+		}
+		return null;
+	}
+	
+	protected void setActionProvider(IActionProvider provider){
+		fActionProvider = provider;
 	}
 }

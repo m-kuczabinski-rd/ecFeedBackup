@@ -48,7 +48,6 @@ public class PartitionsViewer extends TableViewerSection {
 	
 	private TableViewerColumn fNameColumn;
 	private TableViewerColumn fValueColumn;
-//	private Button fMoveUpButton;
 	
 	private class PartitionNameEditingSupport extends EditingSupport{
 
@@ -196,16 +195,6 @@ public class PartitionsViewer extends TableViewerSection {
 		}
 	}
 	
-//	private class MoveUpDownAdapter extends SelectionAdapter{
-//		@SuppressWarnings("unchecked")
-//		@Override
-//		public void widgetSelected(SelectionEvent e){
-//			SelectionInterface selectionIf = new SelectionInterface();
-//			selectionIf.setTarget(getSelection().toList());
-//			selectionIf.moveUpDown(e.getSource() == fMoveUpButton, PartitionsViewer.this);
-//		}
-//	}
-//	
 	@Override
 	protected void createTableColumns() {
 		fNameColumn = addColumn("Name", 150, new PartitionNameLabelProvider());
@@ -227,6 +216,7 @@ public class PartitionsViewer extends TableViewerSection {
 		
 		addDoubleClickListener(new SelectNodeDoubleClickListener(parent.getMasterSection()));
 		addKeyListener(SWT.DEL, new DeleteAction(getViewer(), this));
+		setActionProvider(new ModelViewerGlobalActionProvider(getTableViewer(), this));
 	}
 
 	public void setInput(PartitionedNode parent){

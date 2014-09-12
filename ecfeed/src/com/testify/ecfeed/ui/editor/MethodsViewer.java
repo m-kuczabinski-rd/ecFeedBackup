@@ -117,6 +117,7 @@ public class MethodsViewer extends TableViewerSection {
 		addButton("Remove selected", new ActionSelectionAdapter(new DeleteAction(getViewer(), this)));
 		addDoubleClickListener(new SelectNodeDoubleClickListener(parent.getMasterSection()));
 		addKeyListener(SWT.DEL, new DeleteAction(getViewer(), this));
+		setActionProvider(new ModelViewerGlobalActionProvider(getTableViewer(), this));
 	}
 
 	public void setInput(ClassNode classNode){

@@ -48,7 +48,7 @@ public class ModelDetailsPage extends BasicDetailsPage {
 		getMainSection().setText("Model details");
 
 		createModelNameEdit(getMainComposite());
-		addForm(fClassesSection = new ClassViewer(this, getToolkit()));
+		addViewerSection(fClassesSection = new ClassViewer(this, getToolkit()));
 
 		getToolkit().paintBordersFor(getMainComposite());
 	}
