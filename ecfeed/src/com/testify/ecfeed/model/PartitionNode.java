@@ -97,7 +97,16 @@ public class PartitionNode extends PartitionedNode{
 	public Set<String> getLabels(){
 		return fLabels;
 	}
+
+	@Override
+	public Set<String> getLeafLabels() {
+		if(isAbstract() == false){
+			return getAllLabels();
+		}
+		return super.getLeafLabels();
+	}
 	
+
 	public Set<String> getAllLabels(){
 		Set<String> allLabels = getInheritedLabels();
 		allLabels.addAll(fLabels);
