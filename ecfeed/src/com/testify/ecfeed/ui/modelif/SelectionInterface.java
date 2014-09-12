@@ -24,7 +24,7 @@ public class SelectionInterface extends OperationExecuter {
 		if(fSelected.size() == 0) return false;
 		GenericNode root = fSelected.get(0).getRoot();
 		for(GenericNode selected : fSelected){
-			if(selected.getRoot() == root) return false;
+			if(selected == root) return false;
 		}
 		return true;
 	}

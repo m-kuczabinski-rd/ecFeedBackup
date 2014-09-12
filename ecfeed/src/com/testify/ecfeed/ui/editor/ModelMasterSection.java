@@ -60,6 +60,7 @@ import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.modelif.ModelOperationManager;
 import com.testify.ecfeed.ui.common.Constants;
+import com.testify.ecfeed.ui.editor.actions.DeleteAction;
 import com.testify.ecfeed.ui.modelif.CategoryInterface;
 import com.testify.ecfeed.ui.modelif.GenericNodeInterface;
 import com.testify.ecfeed.ui.modelif.IModelUpdateListener;
@@ -377,6 +378,7 @@ public class ModelMasterSection extends TreeViewerSection{
 	
 	public ModelMasterSection(ModelMasterDetailsBlock masterDetailsBlock, Composite parent, FormToolkit toolkit, ModelOperationManager operationManager) {
 		super(parent, toolkit, STYLE, null, operationManager);
+		addDeleteKeyEventAction(new DeleteAction(this, this));
 		fMasterDetailsBlock = masterDetailsBlock;
 		setModelUpdateListener(new UpdateListener());
 		createMenu(operationManager, getUpdateListener());

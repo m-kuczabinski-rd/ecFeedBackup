@@ -14,6 +14,7 @@ package com.testify.ecfeed.ui.editor;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.jface.action.Action;
 import org.eclipse.jface.viewers.IBaseLabelProvider;
 import org.eclipse.jface.viewers.IContentProvider;
 import org.eclipse.jface.viewers.IDoubleClickListener;
@@ -25,6 +26,8 @@ import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.StructuredViewer;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.KeyAdapter;
+import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -49,6 +52,22 @@ public abstract class ViewerSection extends BasicSection implements ISelectionPr
 	private StructuredViewer fViewer;
 	private Composite fViewerComposite;
 	
+	protected class ViewerKeyAdapter extends KeyAdapter{
+		private int fKeyCode;
+		private Action fAction;
+
+		public ViewerKeyAdapter(int keyCode, Action action){
+			fKeyCode = keyCode;
+			fAction = action;
+		}
+		
+		@Override
+		public void keyReleased(KeyEvent e) {
+			if(e.keyCode == fKeyCode){
+				fAction.run();
+			}
+		}
+	}
 	
 	public ViewerSection(Composite parent, FormToolkit toolkit, int style, IModelUpdateListener updateListener, ModelOperationManager operationManager) {
 		super(parent, toolkit, style, updateListener, operationManager);
@@ -207,6 +226,10 @@ public abstract class ViewerSection extends BasicSection implements ISelectionPr
 	
 	protected Composite getViewerComposite(){
 		return fViewerComposite;
+	}
+	
+	protected void addKeyListener(int keyCode, Action action){
+		fViewer.getControl().addKeyListener(new ViewerKeyAdapter(keyCode, action));
 	}
 	
 	protected abstract void createViewerColumns();

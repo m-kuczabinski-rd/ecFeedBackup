@@ -13,11 +13,13 @@ package com.testify.ecfeed.ui.editor;
 
 import org.eclipse.jface.viewers.StructuredViewer;
 import org.eclipse.jface.viewers.TreeViewer;
+import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import com.testify.ecfeed.modelif.ModelOperationManager;
+import com.testify.ecfeed.ui.editor.actions.ModelSelectionAction;
 import com.testify.ecfeed.ui.modelif.IModelUpdateListener;
 
 public abstract class TreeViewerSection extends ViewerSection {
@@ -49,4 +51,11 @@ public abstract class TreeViewerSection extends ViewerSection {
 	protected TreeViewer getTreeViewer(){
 		return (TreeViewer)getViewer();
 	}
+	
+	protected void addDeleteKeyEventAction(ModelSelectionAction action){
+		getTree().addKeyListener(new KeyAdapter() {
+		});
+	}
+	
+
 }
