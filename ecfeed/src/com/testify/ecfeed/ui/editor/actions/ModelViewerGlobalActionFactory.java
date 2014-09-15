@@ -8,24 +8,24 @@ import org.eclipse.ui.actions.ActionFactory;
 
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 
-public class ModelViewerGlobalActionProvider implements IActionProvider {
+public class ModelViewerGlobalActionFactory implements IActionProvider {
 
 	private ISelectionProvider fSelectionProvider;
 	private IModelUpdateContext fUpdateContext;
 	private TreeViewer fTreeViewer;
 	private TableViewer fTableViewer;
 
-	public ModelViewerGlobalActionProvider(TreeViewer viewer, IModelUpdateContext context){
+	public ModelViewerGlobalActionFactory(TreeViewer viewer, IModelUpdateContext context){
 		this((ISelectionProvider)viewer, context);
 		fTreeViewer = viewer;
 	}
 	
-	public ModelViewerGlobalActionProvider(TableViewer viewer, IModelUpdateContext context){
+	public ModelViewerGlobalActionFactory(TableViewer viewer, IModelUpdateContext context){
 		this((ISelectionProvider)viewer, context);
 		fTableViewer = viewer;
 	}
 	
-	private ModelViewerGlobalActionProvider(ISelectionProvider selectionProvider, IModelUpdateContext context){
+	private ModelViewerGlobalActionFactory(ISelectionProvider selectionProvider, IModelUpdateContext context){
 		fSelectionProvider = selectionProvider;
 		fUpdateContext = context;
 	}

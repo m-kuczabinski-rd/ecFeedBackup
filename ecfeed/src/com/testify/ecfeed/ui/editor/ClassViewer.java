@@ -30,7 +30,7 @@ import com.testify.ecfeed.modelif.java.JavaUtils;
 import com.testify.ecfeed.ui.common.ColorConstants;
 import com.testify.ecfeed.ui.common.ColorManager;
 import com.testify.ecfeed.ui.editor.actions.DeleteAction;
-import com.testify.ecfeed.ui.editor.actions.ModelViewerGlobalActionProvider;
+import com.testify.ecfeed.ui.editor.actions.ModelViewerGlobalActionFactory;
 import com.testify.ecfeed.ui.modelif.ClassInterface;
 import com.testify.ecfeed.ui.modelif.RootInterface;
 
@@ -152,7 +152,7 @@ public class ClassViewer extends TableViewerSection {
 		
 		addDoubleClickListener(new SelectNodeDoubleClickListener(parent.getMasterSection()));
 		addKeyListener(SWT.DEL, new DeleteAction(getViewer(), this));
-		setActionProvider(new ModelViewerGlobalActionProvider(getTableViewer(), this));
+		setActionProvider(new ModelViewerGlobalActionFactory(getTableViewer(), this));
 	}
 	
 	@Override
