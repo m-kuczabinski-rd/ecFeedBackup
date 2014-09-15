@@ -35,7 +35,7 @@ import com.testify.ecfeed.modelif.ImplementationStatus;
 import com.testify.ecfeed.ui.common.ColorConstants;
 import com.testify.ecfeed.ui.common.ColorManager;
 import com.testify.ecfeed.ui.editor.actions.DeleteAction;
-import com.testify.ecfeed.ui.editor.actions.ModelViewerGlobalActionFactory;
+import com.testify.ecfeed.ui.editor.actions.ModelViewerActionFactory;
 import com.testify.ecfeed.ui.modelif.CategoryInterface;
 import com.testify.ecfeed.ui.modelif.PartitionInterface;
 import com.testify.ecfeed.ui.modelif.PartitionedNodeInterface;
@@ -216,8 +216,7 @@ public class PartitionsViewer extends TableViewerSection {
 		addButton("Remove selected", new ActionSelectionAdapter(new DeleteAction(getViewer(), this)));
 		
 		addDoubleClickListener(new SelectNodeDoubleClickListener(parent.getMasterSection()));
-		addKeyListener(SWT.DEL, new DeleteAction(getViewer(), this));
-		setActionProvider(new ModelViewerGlobalActionFactory(getTableViewer(), this));
+		setActionProvider(new ModelViewerActionFactory(getTableViewer(), this));
 	}
 
 	public void setInput(PartitionedNode parent){

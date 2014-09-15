@@ -36,7 +36,7 @@ import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.ui.common.NodeNameColumnLabelProvider;
 import com.testify.ecfeed.ui.common.NodeViewerColumnLabelProvider;
 import com.testify.ecfeed.ui.editor.actions.DeleteAction;
-import com.testify.ecfeed.ui.editor.actions.ModelViewerGlobalActionFactory;
+import com.testify.ecfeed.ui.editor.actions.ModelViewerActionFactory;
 import com.testify.ecfeed.ui.modelif.CategoryInterface;
 import com.testify.ecfeed.ui.modelif.MethodInterface;
 
@@ -294,8 +294,7 @@ public class ParametersViewer extends TableViewerSection{
 		fDefaultValueColumn.setEditingSupport(new DefaultValueEditingSupport());
 
 		addDoubleClickListener(new SelectNodeDoubleClickListener(parent.getMasterSection()));
-		addKeyListener(SWT.DEL, new DeleteAction(getViewer(), this));
-		setActionProvider(new ModelViewerGlobalActionFactory(getTableViewer(), this));
+		setActionProvider(new ModelViewerActionFactory(getTableViewer(), this));
 	}
 
 	@Override

@@ -28,6 +28,8 @@ import org.eclipse.jface.viewers.StructuredViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
+import org.eclipse.swt.events.MenuEvent;
+import org.eclipse.swt.events.MenuListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
@@ -36,10 +38,14 @@ import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Layout;
+import org.eclipse.swt.widgets.Menu;
+import org.eclipse.swt.widgets.MenuItem;
+import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import com.testify.ecfeed.model.GenericNode;
 import com.testify.ecfeed.modelif.ModelOperationManager;
+import com.testify.ecfeed.ui.editor.actions.IActionProvider;
 import com.testify.ecfeed.ui.modelif.IModelUpdateListener;
 
 public abstract class ViewerSection extends BasicSection implements ISelectionProvider{
@@ -82,6 +88,49 @@ public abstract class ViewerSection extends BasicSection implements ISelectionPr
 		public void widgetSelected(SelectionEvent e){
 			fAction.run();
 		}
+	}
+	
+	private class ViewerMenuListener implements MenuListener{
+
+		private Menu fMenu;
+		
+		private class MenuItemSelectionAdapter extends SelectionAdapter{
+
+			private Action fAction;
+
+			public MenuItemSelectionAdapter(Action action){
+				fAction = action;
+			}
+			
+			public void widgetSelected(SelectionEvent e){
+				fAction.run();
+			}
+			
+		}
+		
+		public ViewerMenuListener(Menu menu) {
+			fMenu = menu;
+		}
+
+		@Override
+		public void menuHidden(MenuEvent e) {
+		}
+
+		@Override
+		public void menuShown(MenuEvent e) {
+			IActionProvider provider = getActionProvider();
+			for(String groupId : provider.getGroups()){
+				for(String actionId : provider.getActions(groupId)){
+					MenuItem item = new MenuItem(fMenu, SWT.NONE);
+					item.setText(provider.getActionName(actionId));
+					Action action = provider.getAction(actionId);
+					item.setEnabled(action.isEnabled());
+					item.addSelectionListener(new MenuItemSelectionAdapter(action));
+				}
+				new MenuItem(fMenu, SWT.SEPARATOR);
+			}
+		}
+		
 	}
 	
 	public ViewerSection(Composite parent, FormToolkit toolkit, int style, IModelUpdateListener updateListener, ModelOperationManager operationManager) {
@@ -257,7 +306,17 @@ public abstract class ViewerSection extends BasicSection implements ISelectionPr
 		fViewer.getControl().addKeyListener(new ViewerKeyAdapter(keyCode, action));
 	}
 	
-	
+	@Override
+	protected void setActionProvider(IActionProvider provider){
+		super.setActionProvider(provider);
+		Menu menu = new Menu(fViewer.getControl());
+		menu.addMenuListener(new ViewerMenuListener(menu));
+		
+		if(provider.getAction(ActionFactory.DELETE.getId()) != null){
+			addKeyListener(SWT.DEL, provider.getAction(ActionFactory.DELETE.getId()));
+		}
+	}
+
 	protected abstract void createViewerColumns();
 	protected abstract StructuredViewer createViewer(Composite viewerComposite, int style);
 	protected abstract IContentProvider viewerContentProvider();

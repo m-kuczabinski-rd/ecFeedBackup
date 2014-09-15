@@ -159,4 +159,8 @@ public abstract class BasicSection extends SectionPart implements IModelUpdateCo
 	protected void setActionProvider(IActionProvider provider){
 		fActionProvider = provider;
 	}
+	
+	protected IActionProvider getActionProvider(){
+		return fActionProvider;
+	}
 }

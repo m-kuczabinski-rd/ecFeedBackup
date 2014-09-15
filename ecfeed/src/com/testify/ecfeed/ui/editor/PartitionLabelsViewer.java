@@ -35,8 +35,8 @@ import org.eclipse.ui.forms.widgets.Section;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.ui.common.ColorConstants;
 import com.testify.ecfeed.ui.common.ColorManager;
+import com.testify.ecfeed.ui.editor.actions.AbstractActionFactory;
 import com.testify.ecfeed.ui.editor.actions.CutAction;
-import com.testify.ecfeed.ui.editor.actions.IActionProvider;
 import com.testify.ecfeed.ui.editor.actions.ModelModyfyingAction;
 import com.testify.ecfeed.ui.editor.actions.SelectAllAction;
 import com.testify.ecfeed.ui.modelif.PartitionInterface;
@@ -70,7 +70,7 @@ public class PartitionLabelsViewer extends TableViewerSection {
 		}
 	}
 
-	private class LabelsViewerActionProvider implements IActionProvider{
+	private class LabelsViewerActionProvider extends AbstractActionFactory{
 
 		private class LabelCopyAction extends Action{
 			@Override
@@ -100,27 +100,14 @@ public class PartitionLabelsViewer extends TableViewerSection {
 			}
 		}
 		
-		@Override
-		public Action getAction(String actionId) {
-			if(actionId.equals(ActionFactory.COPY.getId())){
-				return new LabelCopyAction();
-			}
-			if(actionId.equals(ActionFactory.CUT.getId())){
-				return new CutAction(new LabelCopyAction(), new LabelDeleteAction());
-			}
-			if(actionId.equals(ActionFactory.DELETE.getId())){
-				return new LabelDeleteAction();
-			}
-			if(actionId.equals(ActionFactory.PASTE.getId())){
-				return new LabelPasteAction();
-			}
-			if(actionId.equals(ActionFactory.SELECT_ALL.getId())){
-				return new SelectAllAction(getTableViewer());
-			}
-
-			return null;
+		public LabelsViewerActionProvider(){
+			super();
+			addAction("edit", ActionFactory.COPY.getId(), "Copy\tCtrl+c", new LabelCopyAction());
+			addAction("edit", ActionFactory.CUT.getId(), "Cut\tCtrl+x", new CutAction(new LabelCopyAction(), new LabelDeleteAction()));
+			addAction("edit", ActionFactory.PASTE.getId(), "Paste\tCtrl+v", new LabelPasteAction());
+			addAction("edit", ActionFactory.DELETE.getId(), "Delete\tDEL", new LabelDeleteAction());
+			addAction("selection", ActionFactory.SELECT_ALL.getId(), "Select All\tCtrl+a", new SelectAllAction(getTableViewer()));
 		}
-		
 	}
 	
 	private class LabelDeleteAction extends ModelModyfyingAction{
@@ -228,8 +215,6 @@ public class PartitionLabelsViewer extends TableViewerSection {
 		addButton("Remove selected", new ActionSelectionAdapter(new LabelDeleteAction()));
 
 		addDoubleClickListener(new SelectNodeDoubleClickListener(parent.getMasterSection()));
-		addKeyListener(SWT.DEL, new LabelDeleteAction());
-		
 		setActionProvider(new LabelsViewerActionProvider());
 	}
 
