@@ -35,6 +35,7 @@ import com.testify.ecfeed.modelif.ImplementationStatus;
 import com.testify.ecfeed.ui.common.ColorConstants;
 import com.testify.ecfeed.ui.common.ColorManager;
 import com.testify.ecfeed.ui.editor.actions.DeleteAction;
+import com.testify.ecfeed.ui.editor.actions.ModelViewerGlobalActionProvider;
 import com.testify.ecfeed.ui.modelif.CategoryInterface;
 import com.testify.ecfeed.ui.modelif.PartitionInterface;
 import com.testify.ecfeed.ui.modelif.PartitionedNodeInterface;

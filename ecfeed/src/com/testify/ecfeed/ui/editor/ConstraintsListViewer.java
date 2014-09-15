@@ -27,6 +27,7 @@ import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.ui.common.NodeNameColumnLabelProvider;
 import com.testify.ecfeed.ui.common.NodeViewerColumnLabelProvider;
 import com.testify.ecfeed.ui.editor.actions.DeleteAction;
+import com.testify.ecfeed.ui.editor.actions.ModelViewerGlobalActionProvider;
 import com.testify.ecfeed.ui.modelif.ConstraintInterface;
 import com.testify.ecfeed.ui.modelif.MethodInterface;
 

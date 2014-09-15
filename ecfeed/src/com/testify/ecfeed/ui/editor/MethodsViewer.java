@@ -29,6 +29,7 @@ import com.testify.ecfeed.modelif.java.JavaUtils;
 import com.testify.ecfeed.ui.common.NodeNameColumnLabelProvider;
 import com.testify.ecfeed.ui.common.NodeViewerColumnLabelProvider;
 import com.testify.ecfeed.ui.editor.actions.DeleteAction;
+import com.testify.ecfeed.ui.editor.actions.ModelViewerGlobalActionProvider;
 import com.testify.ecfeed.ui.modelif.ClassInterface;
 import com.testify.ecfeed.ui.modelif.MethodInterface;
 

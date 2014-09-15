@@ -30,6 +30,7 @@ import com.testify.ecfeed.modelif.java.JavaUtils;
 import com.testify.ecfeed.ui.common.ColorConstants;
 import com.testify.ecfeed.ui.common.ColorManager;
 import com.testify.ecfeed.ui.editor.actions.DeleteAction;
+import com.testify.ecfeed.ui.editor.actions.ModelViewerGlobalActionProvider;
 import com.testify.ecfeed.ui.modelif.ClassInterface;
 import com.testify.ecfeed.ui.modelif.RootInterface;
 

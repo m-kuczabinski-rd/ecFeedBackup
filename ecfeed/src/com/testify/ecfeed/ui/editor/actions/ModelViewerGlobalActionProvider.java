@@ -1,4 +1,4 @@
-package com.testify.ecfeed.ui.editor;
+package com.testify.ecfeed.ui.editor.actions;
 
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.viewers.ISelectionProvider;
@@ -6,11 +6,6 @@ import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.ui.actions.ActionFactory;
 
-import com.testify.ecfeed.ui.editor.actions.CopyAction;
-import com.testify.ecfeed.ui.editor.actions.CutAction;
-import com.testify.ecfeed.ui.editor.actions.DeleteAction;
-import com.testify.ecfeed.ui.editor.actions.IActionProvider;
-import com.testify.ecfeed.ui.editor.actions.SelectAllAction;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 
 public class ModelViewerGlobalActionProvider implements IActionProvider {
