@@ -1,18 +1,15 @@
 package com.testify.ecfeed.ui.editor.actions;
 
-import org.eclipse.jface.viewers.ISelectionProvider;
+import org.eclipse.jface.action.Action;
 
-import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
+public class CutAction extends Action {
 
-public class CutAction extends ModelModyfyingAction {
+	private Action fCopyAction;
+	private Action fDeleteAction;
 
-	private CopyAction fCopyAction;
-	private DeleteAction fDeleteAction;
-
-	public CutAction(ISelectionProvider selectionProvider, IModelUpdateContext updateContext) {
-		super(selectionProvider, updateContext);
-		fCopyAction = new CopyAction(selectionProvider);
-		fDeleteAction = new DeleteAction(selectionProvider, updateContext);
+	public CutAction(Action copyAction, Action deleteAction) {
+		fCopyAction = copyAction;
+		fDeleteAction = deleteAction;
 	}
 
 	@Override

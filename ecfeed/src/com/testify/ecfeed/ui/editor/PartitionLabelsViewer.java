@@ -11,8 +11,10 @@
 
 package com.testify.ecfeed.ui.editor;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.jface.action.Action;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.ColumnViewer;
@@ -26,13 +28,17 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Device;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.FontData;
+import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Section;
 
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.ui.common.ColorConstants;
 import com.testify.ecfeed.ui.common.ColorManager;
+import com.testify.ecfeed.ui.editor.actions.CutAction;
+import com.testify.ecfeed.ui.editor.actions.IActionProvider;
 import com.testify.ecfeed.ui.editor.actions.ModelModyfyingAction;
+import com.testify.ecfeed.ui.editor.actions.SelectAllAction;
 import com.testify.ecfeed.ui.modelif.PartitionInterface;
 
 public class PartitionLabelsViewer extends TableViewerSection {
@@ -41,18 +47,84 @@ public class PartitionLabelsViewer extends TableViewerSection {
 
 	private PartitionInterface fPartitionIf;
 
-	private class AddLabelAdapter extends SelectionAdapter{
-		@Override
-		public void widgetSelected(SelectionEvent e){
-			String newLabel = fPartitionIf.addNewLabel(PartitionLabelsViewer.this);
-			if(newLabel != null){
-				getTableViewer().editElement(newLabel, 0);
+	private static class LabelClipboard{
+		private static List<String> fLabels = new ArrayList<>();
+		
+		public static List<String> getContent(){
+			return fLabels;
+		}
+	
+		public static List<String> getContentCopy(){
+			List<String> copy = new ArrayList<>();
+			for(String label : fLabels){
+				copy.add(new String(label));
+			}
+			return copy;
+		}
+		
+		public static void setContent(List<String> labels){
+			fLabels.clear();
+			for(String label : labels){
+				fLabels.add(new String(label));
 			}
 		}
 	}
+
+	private class LabelsViewerActionProvider implements IActionProvider{
+
+		private class LabelCopyAction extends Action{
+			@Override
+			public boolean isEnabled(){
+				return getSelectedLabels().size() > 0;
+			}
+			
+			@Override
+			public void run(){
+				LabelClipboard.setContent(getSelectedLabels());
+			}
+		}
+		
+		private class LabelPasteAction extends ModelModyfyingAction{
+			public LabelPasteAction() {
+				super(getViewer(), PartitionLabelsViewer.this);
+			}
+
+			@Override
+			public boolean isEnabled(){
+				return LabelClipboard.getContent().size() > 0;
+			}
+			
+			@Override
+			public void run(){
+				fPartitionIf.addLabels(LabelClipboard.getContentCopy(), PartitionLabelsViewer.this);
+			}
+		}
+		
+		@Override
+		public Action getAction(String actionId) {
+			if(actionId.equals(ActionFactory.COPY.getId())){
+				return new LabelCopyAction();
+			}
+			if(actionId.equals(ActionFactory.CUT.getId())){
+				return new CutAction(new LabelCopyAction(), new LabelDeleteAction());
+			}
+			if(actionId.equals(ActionFactory.DELETE.getId())){
+				return new LabelDeleteAction();
+			}
+			if(actionId.equals(ActionFactory.PASTE.getId())){
+				return new LabelPasteAction();
+			}
+			if(actionId.equals(ActionFactory.SELECT_ALL.getId())){
+				return new SelectAllAction(getTableViewer());
+			}
+
+			return null;
+		}
+		
+	}
 	
-	private class RemoveLabelsAction extends ModelModyfyingAction{
-		public RemoveLabelsAction() {
+	private class LabelDeleteAction extends ModelModyfyingAction{
+		public LabelDeleteAction() {
 			super(getViewer(), PartitionLabelsViewer.this);
 		}
 		
@@ -70,10 +142,15 @@ public class PartitionLabelsViewer extends TableViewerSection {
 		public void run(){
 			fPartitionIf.removeLabels(getSelectedLabels(), PartitionLabelsViewer.this);
 		}
+	}
 
-		@SuppressWarnings("unchecked")
-		private List<String> getSelectedLabels(){
-			return getSelection().toList();
+	private class AddLabelAdapter extends SelectionAdapter{
+		@Override
+		public void widgetSelected(SelectionEvent e){
+			String newLabel = fPartitionIf.addNewLabel(PartitionLabelsViewer.this);
+			if(newLabel != null){
+				getTableViewer().editElement(newLabel, 0);
+			}
 		}
 	}
 	
@@ -148,10 +225,12 @@ public class PartitionLabelsViewer extends TableViewerSection {
 		getSection().setText("Labels");
 		
 		addButton("Add label", new AddLabelAdapter());
-		addButton("Remove selected", new ActionSelectionAdapter(new RemoveLabelsAction()));
+		addButton("Remove selected", new ActionSelectionAdapter(new LabelDeleteAction()));
 
 		addDoubleClickListener(new SelectNodeDoubleClickListener(parent.getMasterSection()));
-		addKeyListener(SWT.DEL, new RemoveLabelsAction());
+		addKeyListener(SWT.DEL, new LabelDeleteAction());
+		
+		setActionProvider(new LabelsViewerActionProvider());
 	}
 
 	@Override
@@ -163,5 +242,10 @@ public class PartitionLabelsViewer extends TableViewerSection {
 	public void setInput(PartitionNode	partition){
 		fPartitionIf.setTarget(partition);
 		super.setInput(partition.getAllLabels());
+	}
+
+	@SuppressWarnings("unchecked")
+	private List<String> getSelectedLabels(){
+		return getSelection().toList();
 	}
 }

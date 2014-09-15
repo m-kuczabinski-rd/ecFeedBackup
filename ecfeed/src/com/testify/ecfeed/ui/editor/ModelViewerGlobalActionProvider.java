@@ -41,7 +41,7 @@ public class ModelViewerGlobalActionProvider implements IActionProvider {
 			return new CopyAction(fSelectionProvider);
 		}
 		if(actionId.equals(ActionFactory.CUT.getId())){
-			return new CutAction(fSelectionProvider, fUpdateContext);
+			return new CutAction(new CopyAction(fSelectionProvider), new DeleteAction(fSelectionProvider, fUpdateContext));
 		}
 		if(actionId.equals(ActionFactory.DELETE.getId())){
 			return new DeleteAction(fSelectionProvider, fUpdateContext);

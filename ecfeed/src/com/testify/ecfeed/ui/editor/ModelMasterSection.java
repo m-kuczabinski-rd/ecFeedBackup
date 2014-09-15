@@ -479,7 +479,7 @@ public class ModelMasterSection extends TreeViewerSection{
 			addOperation(menu, new MenuOperation("Redo\tCtrl+Shift+Z", new RedoAction(ModelMasterSection.this)));
 			new MenuItem(menu, SWT.SEPARATOR);
 			addOperation(menu, new MenuOperation("Copy\tCtrl+C", new CopyAction(getTreeViewer())));
-			addOperation(menu, new MenuOperation("Cut\tCtrl+X", new CutAction(getTreeViewer(), ModelMasterSection.this)));
+			addOperation(menu, new MenuOperation("Cut\tCtrl+X", new CutAction(new CopyAction(getTreeViewer()), new DeleteAction(getTreeViewer(), ModelMasterSection.this))));
 			addOperation(menu, new MenuOperation("Paste\tCtrl+V", new PasteAction(getTreeViewer(), ModelMasterSection.this)));
 			addOperation(menu, new MenuOperation("Delete\tDEL", new DeleteAction(ModelMasterSection.this, ModelMasterSection.this)));
 		}

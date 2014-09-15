@@ -12,6 +12,7 @@
 package com.testify.ecfeed.ui.modelif;
 
 import java.util.Collection;
+import java.util.List;
 
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
@@ -21,6 +22,7 @@ import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.modelif.IModelOperation;
 import com.testify.ecfeed.modelif.operations.PartitionOperationAddLabel;
+import com.testify.ecfeed.modelif.operations.PartitionOperationAddLabels;
 import com.testify.ecfeed.modelif.operations.PartitionOperationRemoveLabels;
 import com.testify.ecfeed.modelif.operations.PartitionOperationRename;
 import com.testify.ecfeed.modelif.operations.PartitionOperationRenameLabel;
@@ -85,7 +87,12 @@ public class PartitionInterface extends PartitionedNodeInterface{
 		return null;
 	}
 
-	private boolean addLabel(String newLabel, IModelUpdateContext context) {
+	public boolean addLabels(List<String> labels, IModelUpdateContext context) {
+		IModelOperation operation = new PartitionOperationAddLabels(fTarget, labels);
+		return execute(operation, context, Messages.DIALOG_ADD_LABEL_PROBLEM_TITLE);
+	}
+
+	public boolean addLabel(String newLabel, IModelUpdateContext context) {
 		IModelOperation operation = new PartitionOperationAddLabel(fTarget, newLabel);
 		return execute(operation, context, Messages.DIALOG_ADD_LABEL_PROBLEM_TITLE);
 	}
