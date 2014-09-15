@@ -17,7 +17,7 @@ import com.testify.ecfeed.ui.modelif.ClassInterface;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 import com.testify.ecfeed.ui.modelif.RootInterface;
 
-public class AbstractAddChildAction extends ModelModyfyingAction implements INamedAction {
+public class AbstractAddChildAction extends ModelModyfyingAction{
 	
 	private String fName;
 	private TreeViewer fViewer;
@@ -113,7 +113,6 @@ public class AbstractAddChildAction extends ModelModyfyingAction implements INam
 		fViewer = viewer;
 	}
 
-	@Override
 	public String getName() {
 		return fName;
 	}

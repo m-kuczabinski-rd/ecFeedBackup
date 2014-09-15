@@ -12,6 +12,7 @@
 package com.testify.ecfeed.ui.editor;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.jface.action.Action;
@@ -59,6 +60,7 @@ public abstract class ViewerSection extends BasicSection implements ISelectionPr
 	private Composite fButtonsComposite;
 	private StructuredViewer fViewer;
 	private Composite fViewerComposite;
+	private Menu fMenu;
 	
 	protected class ViewerKeyAdapter extends KeyAdapter{
 		private int fKeyCode;
@@ -90,7 +92,7 @@ public abstract class ViewerSection extends BasicSection implements ISelectionPr
 		}
 	}
 	
-	private class ViewerMenuListener implements MenuListener{
+	protected class ViewerMenuListener implements MenuListener{
 
 		private Menu fMenu;
 		
@@ -112,23 +114,43 @@ public abstract class ViewerSection extends BasicSection implements ISelectionPr
 			fMenu = menu;
 		}
 
+		protected Menu getMenu(){
+			return fMenu;
+		}
+		
 		@Override
 		public void menuHidden(MenuEvent e) {
 		}
 
 		@Override
 		public void menuShown(MenuEvent e) {
-			IActionProvider provider = getActionProvider();
-			for(String groupId : provider.getGroups()){
-				for(String actionId : provider.getActions(groupId)){
-					MenuItem item = new MenuItem(fMenu, SWT.NONE);
-					item.setText(provider.getActionName(actionId));
-					Action action = provider.getAction(actionId);
-					item.setEnabled(action.isEnabled());
-					item.addSelectionListener(new MenuItemSelectionAdapter(action));
-				}
-				new MenuItem(fMenu, SWT.SEPARATOR);
+			for(MenuItem item : getMenu().getItems()){
+				item.dispose();
 			}
+			populate();
+		}
+
+		protected void populate() {
+			IActionProvider provider = getActionProvider();
+			Iterator<String> groupIt = provider.getGroups().iterator();
+			while(groupIt.hasNext()){
+				for(String actionId : provider.getActions(groupIt.next())){
+					Action action = provider.getAction(actionId);
+					String text = provider.getActionName(actionId);
+					addMenuItem(text, action);
+				}
+				if(groupIt.hasNext()){
+					new MenuItem(fMenu, SWT.SEPARATOR);
+				}
+			}
+		}
+		
+		protected void addMenuItem(String text, Action action){
+			MenuItem item = new MenuItem(getMenu(), SWT.NONE);
+
+			item.setText(text);
+			item.setEnabled(action.isEnabled());
+			item.addSelectionListener(new MenuItemSelectionAdapter(action));
 		}
 		
 	}
@@ -309,14 +331,23 @@ public abstract class ViewerSection extends BasicSection implements ISelectionPr
 	@Override
 	protected void setActionProvider(IActionProvider provider){
 		super.setActionProvider(provider);
-		Menu menu = new Menu(fViewer.getControl());
-		menu.addMenuListener(new ViewerMenuListener(menu));
+		fMenu = new Menu(fViewer.getControl());
+		fViewer.getControl().setMenu(fMenu);
+		fMenu.addMenuListener(getMenuListener());
 		
 		if(provider.getAction(ActionFactory.DELETE.getId()) != null){
 			addKeyListener(SWT.DEL, provider.getAction(ActionFactory.DELETE.getId()));
 		}
 	}
 
+	protected MenuListener getMenuListener() {
+		return new ViewerMenuListener(fMenu);
+	}
+
+	protected Menu getMenu(){
+		return fMenu;
+	}
+	
 	protected abstract void createViewerColumns();
 	protected abstract StructuredViewer createViewer(Composite viewerComposite, int style);
 	protected abstract IContentProvider viewerContentProvider();

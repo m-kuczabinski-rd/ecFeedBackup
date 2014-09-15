@@ -25,8 +25,8 @@ public class ModelViewerActionFactory extends AbstractActionFactory {
 	private void addEditActions(ISelectionProvider selectionProvider, IModelUpdateContext context){
 		addAction("edit", ActionFactory.COPY.getId(), "Copy\tCtrl+c", new CopyAction(selectionProvider));
 		addAction("edit", ActionFactory.CUT.getId(), "Cut\tCtrl+x", new CutAction(new CopyAction(selectionProvider), new DeleteAction(selectionProvider, context)));
-		addAction("edit", ActionFactory.PASTE.getId(), "Copy\tCtrl+v", new PasteAction(selectionProvider, context));
-		addAction("edit", ActionFactory.DELETE.getId(), "Delete\tDEL", new PasteAction(selectionProvider, context));
+		addAction("edit", ActionFactory.PASTE.getId(), "Paste\tCtrl+v", new PasteAction(selectionProvider, context));
+		addAction("edit", ActionFactory.DELETE.getId(), "Delete\tDEL", new DeleteAction(selectionProvider, context));
 	}
 	
 	private void addMoveActions(ISelectionProvider selectionProvider, IModelUpdateContext context){
