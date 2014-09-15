@@ -131,7 +131,6 @@ public class AbstractAddChildAction extends ModelModyfyingAction{
 	public void run(){
 		try{
 			select((GenericNode)getSelectedNodes().get(0).accept(new AddChildVisitor()));
-			
 		}
 		catch(Exception e){}
 	}
