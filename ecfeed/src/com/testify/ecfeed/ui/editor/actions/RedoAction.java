@@ -5,7 +5,7 @@ import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 
 public class RedoAction extends ModelModyfyingAction {
 	public RedoAction(IModelUpdateContext updateContext) {
-		super(null, updateContext);
+		super(GlobalActions.REDO.getId(), GlobalActions.REDO.getName(), null, updateContext);
 	}
 
 	@Override

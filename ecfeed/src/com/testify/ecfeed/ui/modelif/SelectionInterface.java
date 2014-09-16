@@ -73,6 +73,7 @@ public class SelectionInterface extends OperationExecuter {
 	}
 
 	private GenericNode getCommonParent(List<? extends GenericNode> list) {
+		if(list == null || list.size() == 0) return null;
 		GenericNode parent = list.get(0).getParent();
 		for(GenericNode node : list){
 			if(node.getParent() != parent) return null;

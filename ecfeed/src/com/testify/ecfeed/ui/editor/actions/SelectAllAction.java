@@ -1,21 +1,22 @@
 package com.testify.ecfeed.ui.editor.actions;
 
-import org.eclipse.jface.action.Action;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TreeViewer;
 
-public class SelectAllAction extends Action {
+public class SelectAllAction extends NamedAction {
 
 	private TableViewer fTableViewer;
 	private TreeViewer fTreeViewer;
 	private boolean fSelectRoot;
 	
 	public SelectAllAction(TreeViewer viewer, boolean selectRoot){
+		super(GlobalActions.SELECT_ALL.getId(), GlobalActions.SELECT_ALL.getName());
 		fTreeViewer = viewer;
 		fSelectRoot = selectRoot;
 	}
 	
 	public SelectAllAction(TableViewer viewer){
+		super(GlobalActions.SELECT_ALL.getId(), GlobalActions.SELECT_ALL.getName());
 		fTableViewer = viewer;
 	}
 

@@ -7,7 +7,7 @@ import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 public class DeleteAction extends ModelModyfyingAction {
 
 	public DeleteAction(ISelectionProvider selectionProvider, IModelUpdateContext updateContext) {
-		super(selectionProvider, updateContext);
+		super(GlobalActions.DELETE.getId(), GlobalActions.DELETE.getName(), selectionProvider, updateContext);
 	}
 	
 	@Override

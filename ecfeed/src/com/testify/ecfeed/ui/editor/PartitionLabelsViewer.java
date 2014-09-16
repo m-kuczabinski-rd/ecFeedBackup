@@ -14,7 +14,6 @@ package com.testify.ecfeed.ui.editor;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.jface.action.Action;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.ColumnViewer;
@@ -28,16 +27,16 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Device;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.FontData;
-import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Section;
 
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.ui.common.ColorConstants;
 import com.testify.ecfeed.ui.common.ColorManager;
-import com.testify.ecfeed.ui.editor.actions.AbstractActionFactory;
+import com.testify.ecfeed.ui.editor.actions.ActionGroups;
 import com.testify.ecfeed.ui.editor.actions.CutAction;
 import com.testify.ecfeed.ui.editor.actions.ModelModyfyingAction;
+import com.testify.ecfeed.ui.editor.actions.NamedAction;
 import com.testify.ecfeed.ui.editor.actions.SelectAllAction;
 import com.testify.ecfeed.ui.modelif.PartitionInterface;
 
@@ -70,49 +69,53 @@ public class PartitionLabelsViewer extends TableViewerSection {
 		}
 	}
 
-	private class LabelsViewerActionProvider extends AbstractActionFactory{
+	private class LabelsViewerActionProvider extends ActionGroups{
 
-		private class LabelCopyAction extends Action{
-			@Override
-			public boolean isEnabled(){
-				return getSelectedLabels().size() > 0;
-			}
-			
-			@Override
-			public void run(){
-				LabelClipboard.setContent(getSelectedLabels());
-			}
-		}
-		
-		private class LabelPasteAction extends ModelModyfyingAction{
-			public LabelPasteAction() {
-				super(getViewer(), PartitionLabelsViewer.this);
-			}
-
-			@Override
-			public boolean isEnabled(){
-				return LabelClipboard.getContent().size() > 0;
-			}
-			
-			@Override
-			public void run(){
-				fPartitionIf.addLabels(LabelClipboard.getContentCopy(), PartitionLabelsViewer.this);
-			}
-		}
-		
 		public LabelsViewerActionProvider(){
 			super();
-			addAction("edit", ActionFactory.COPY.getId(), "Copy\tCtrl+c", new LabelCopyAction());
-			addAction("edit", ActionFactory.CUT.getId(), "Cut\tCtrl+x", new CutAction(new LabelCopyAction(), new LabelDeleteAction()));
-			addAction("edit", ActionFactory.PASTE.getId(), "Paste\tCtrl+v", new LabelPasteAction());
-			addAction("edit", ActionFactory.DELETE.getId(), "Delete\tDEL", new LabelDeleteAction());
-			addAction("selection", ActionFactory.SELECT_ALL.getId(), "Select All\tCtrl+a", new SelectAllAction(getTableViewer()));
+			addAction("edit", new LabelCopyAction());
+			addAction("edit", new CutAction(new LabelCopyAction(), new LabelDeleteAction()));
+			addAction("edit", new LabelPasteAction());
+			addAction("edit", new LabelDeleteAction());
+			addAction("selection", new SelectAllAction(getTableViewer()));
 		}
 	}
 	
+	private class LabelCopyAction extends NamedAction{
+		public LabelCopyAction() {
+			super(GlobalActions.COPY.getId(), GlobalActions.COPY.getName());
+		}
+	
+		@Override
+		public boolean isEnabled(){
+			return getSelectedLabels().size() > 0;
+		}
+		
+		@Override
+		public void run(){
+			LabelClipboard.setContent(getSelectedLabels());
+		}
+	}
+
+	private class LabelPasteAction extends ModelModyfyingAction{
+		public LabelPasteAction() {
+			super(GlobalActions.PASTE.getId(), GlobalActions.PASTE.getName(), getViewer(), PartitionLabelsViewer.this);
+		}
+	
+		@Override
+		public boolean isEnabled(){
+			return LabelClipboard.getContent().size() > 0;
+		}
+		
+		@Override
+		public void run(){
+			fPartitionIf.addLabels(LabelClipboard.getContentCopy(), PartitionLabelsViewer.this);
+		}
+	}
+
 	private class LabelDeleteAction extends ModelModyfyingAction{
 		public LabelDeleteAction() {
-			super(getViewer(), PartitionLabelsViewer.this);
+			super(GlobalActions.DELETE.getId(), GlobalActions.DELETE.getName(), getTableViewer(), PartitionLabelsViewer.this);
 		}
 		
 		@Override

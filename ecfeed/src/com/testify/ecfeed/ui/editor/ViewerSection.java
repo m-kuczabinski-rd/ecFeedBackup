@@ -47,6 +47,7 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 import com.testify.ecfeed.model.GenericNode;
 import com.testify.ecfeed.modelif.ModelOperationManager;
 import com.testify.ecfeed.ui.editor.actions.IActionProvider;
+import com.testify.ecfeed.ui.editor.actions.NamedAction;
 import com.testify.ecfeed.ui.modelif.IModelUpdateListener;
 
 public abstract class ViewerSection extends BasicSection implements ISelectionProvider{
@@ -134,10 +135,8 @@ public abstract class ViewerSection extends BasicSection implements ISelectionPr
 			IActionProvider provider = getActionProvider();
 			Iterator<String> groupIt = provider.getGroups().iterator();
 			while(groupIt.hasNext()){
-				for(String actionId : provider.getActions(groupIt.next())){
-					Action action = provider.getAction(actionId);
-					String text = provider.getActionName(actionId);
-					addMenuItem(text, action);
+				for(NamedAction action : provider.getActions(groupIt.next())){
+					addMenuItem(action.getName(), action);
 				}
 				if(groupIt.hasNext()){
 					new MenuItem(fMenu, SWT.SEPARATOR);

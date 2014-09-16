@@ -416,7 +416,7 @@ public class ConstraintViewer extends TreeViewerSection {
 	
 	public class DeleteStatementAction extends ModelModyfyingAction {
 		public DeleteStatementAction() {
-			super(getViewer(), ConstraintViewer.this);
+			super(GlobalActions.DELETE.getId(), GlobalActions.DELETE.getName(), getTreeViewer(), ConstraintViewer.this);
 		}
 		
 		@Override

@@ -11,7 +11,7 @@ public class ExpandAction extends ModelSelectionAction {
 	TreeViewer fViewer;
 	
 	public ExpandAction(TreeViewer viewer) {
-		super(viewer);
+		super(GlobalActions.EXPAND.getId(), GlobalActions.EXPAND.getName(), viewer);
 		fViewer = viewer;
 	}
 

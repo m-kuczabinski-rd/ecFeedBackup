@@ -20,18 +20,17 @@ public class PasteAction extends ModelModyfyingAction {
 	}
 	
 	public PasteAction(int index, ISelectionProvider selectionProvider, IModelUpdateContext updateContext) {
-		super(selectionProvider, updateContext);
+		super(GlobalActions.PASTE.getId(), GlobalActions.PASTE.getName(), selectionProvider, updateContext);
 		fIndex = index;
 	}
 	
 	public PasteAction(TreeViewer treeViewer, IModelUpdateContext updateContext) {
-		this(treeViewer, -1, updateContext);
+		this(-1, treeViewer, updateContext);
 	}
 
-	public PasteAction(TreeViewer treeViewer, int index, IModelUpdateContext updateContext) {
-		super(treeViewer, updateContext);
+	public PasteAction(int index, TreeViewer treeViewer, IModelUpdateContext updateContext) {
+		this(index, (ISelectionProvider)treeViewer, updateContext);
 		fTreeViewer = treeViewer;
-		fIndex = index;
 	}
 
 	@Override

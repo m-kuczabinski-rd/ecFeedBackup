@@ -5,7 +5,7 @@ import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 
 public class UndoAction extends ModelModyfyingAction {
 	public UndoAction(IModelUpdateContext updateContext) {
-		super(null, updateContext);
+		super(GlobalActions.UNDO.getId(), GlobalActions.UNDO.getName(), null, updateContext);
 	}
 
 	@Override

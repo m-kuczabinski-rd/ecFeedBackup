@@ -7,7 +7,7 @@ import com.testify.ecfeed.ui.modelif.NodeClipboard;
 public class CopyAction extends ModelSelectionAction {
 	
 	public CopyAction(ISelectionProvider selectionProvider){
-		super(selectionProvider);
+		super(GlobalActions.COPY.getId(), GlobalActions.COPY.getName(), selectionProvider);
 	}
 	
 	@Override

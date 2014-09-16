@@ -3,7 +3,7 @@ package com.testify.ecfeed.ui.editor.actions;
 import java.util.Arrays;
 import java.util.List;
 
-import org.eclipse.jface.viewers.TreeViewer;
+import org.eclipse.jface.viewers.StructuredViewer;
 
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.ClassNode;
@@ -19,21 +19,26 @@ import com.testify.ecfeed.ui.modelif.MethodInterface;
 
 public class AddChildActionFactory {
 
-	private final String ADD_CLASS_ACTION_NAME = "Add class";
-	private final String ADD_METHOD_ACTION_NAME = "Add method";
-	private final String ADD_PARAMETER_ACTION_NAME = "Add parameter";
-	private final String ADD_TEST_CASE_ACTION_NAME = "Add test case";
-	private final String ADD_PARTITION_ACTION_NAME = "Add partition";
-	private final String ADD_CONSTRAINT_ACTION_NAME = "Add constraint";
-
-	private TreeViewer fViewer;
+	private StructuredViewer fViewer;
 	private IModelUpdateContext fContext;
 
+	private class AddClassAction extends AbstractAddChildAction{
+		public AddClassAction(StructuredViewer viewer, IModelUpdateContext context){
+			super(ADD_CLASS_ACTION_ID, ADD_CLASS_ACTION_NAME, viewer, context);
+		}
+	}
+	
+	private class AddMethodAction extends AbstractAddChildAction{
+		public AddMethodAction(StructuredViewer viewer, IModelUpdateContext context){
+			super(ADD_METHOD_ACTION_ID, ADD_METHOD_ACTION_NAME, viewer, context);
+		}
+	}
+	
 	private abstract class AddMethodChildAction extends AbstractAddChildAction{
 		private MethodInterface fParentIf;
 
-		public AddMethodChildAction(String name, TreeViewer viewer, IModelUpdateContext updateContext) {
-			super(name, viewer, updateContext);
+		public AddMethodChildAction(String id, String name, StructuredViewer viewer, IModelUpdateContext updateContext) {
+			super(id, name, viewer, updateContext);
 			fParentIf = new MethodInterface();
 		}
 
@@ -55,8 +60,8 @@ public class AddChildActionFactory {
 	}
 	
 	private class AddParameterAction extends AddMethodChildAction{
-		public AddParameterAction(TreeViewer viewer, IModelUpdateContext updateContext) {
-			super(ADD_PARAMETER_ACTION_NAME, viewer, updateContext);
+		public AddParameterAction(StructuredViewer viewer, IModelUpdateContext updateContext) {
+			super(ADD_PARAMETER_ACTION_ID, ADD_PARAMETER_ACTION_NAME, viewer, updateContext);
 		}
 
 		@Override
@@ -66,8 +71,8 @@ public class AddChildActionFactory {
 	}
 	
 	private class AddConstraintAction extends AddMethodChildAction{
-		public AddConstraintAction(TreeViewer viewer, IModelUpdateContext updateContext) {
-			super(ADD_CONSTRAINT_ACTION_NAME, viewer, updateContext);
+		public AddConstraintAction(StructuredViewer viewer, IModelUpdateContext updateContext) {
+			super(ADD_CONSTRAINT_ACTION_ID, ADD_CONSTRAINT_ACTION_NAME, viewer, updateContext);
 		}
 
 		@Override
@@ -77,8 +82,8 @@ public class AddChildActionFactory {
 	}
 	
 	private class AddTestCaseAction extends AddMethodChildAction{
-		public AddTestCaseAction(TreeViewer viewer, IModelUpdateContext updateContext) {
-			super(ADD_TEST_CASE_ACTION_NAME, viewer, updateContext);
+		public AddTestCaseAction(StructuredViewer viewer, IModelUpdateContext updateContext) {
+			super(ADD_TEST_CASE_ACTION_ID, ADD_TEST_CASE_ACTION_NAME, viewer, updateContext);
 		}
 
 		@Override
@@ -87,19 +92,25 @@ public class AddChildActionFactory {
 		}
 	}
 	
+	private class AddPartitionAction extends AbstractAddChildAction{
+		public AddPartitionAction(StructuredViewer viewer, IModelUpdateContext context){
+			super(ADD_PARTITION_ACTION_ID, ADD_PARTITION_ACTION_NAME, viewer, context);
+		}
+	}
+	
 	private class AddNewChilActionProvider implements IModelVisitor{
 
 		@Override
 		public Object visit(RootNode node) throws Exception {
 			return Arrays.asList(new AbstractAddChildAction[]{
-					new AbstractAddChildAction(ADD_CLASS_ACTION_NAME, fViewer, fContext)
+				new AddClassAction(fViewer, fContext)
 			});
 		}
 
 		@Override
 		public Object visit(ClassNode node) throws Exception {
 			return Arrays.asList(new AbstractAddChildAction[]{
-					new AbstractAddChildAction(ADD_METHOD_ACTION_NAME, fViewer, fContext)
+					new AddMethodAction(fViewer, fContext)
 			});
 		}
 
@@ -115,7 +126,7 @@ public class AddChildActionFactory {
 		@Override
 		public Object visit(CategoryNode node) throws Exception {
 			return Arrays.asList(new AbstractAddChildAction[]{
-					new AbstractAddChildAction(ADD_PARTITION_ACTION_NAME, fViewer, fContext)
+					new AddPartitionAction(fViewer, fContext)
 			});
 		}
 
@@ -132,12 +143,12 @@ public class AddChildActionFactory {
 		@Override
 		public Object visit(PartitionNode node) throws Exception {
 			return Arrays.asList(new AbstractAddChildAction[]{
-					new AbstractAddChildAction(ADD_PARTITION_ACTION_NAME, fViewer, fContext)
+					new AddPartitionAction(fViewer, fContext)
 			});
 		}
 	}
 
-	public AddChildActionFactory(TreeViewer viewer, IModelUpdateContext context){
+	public AddChildActionFactory(StructuredViewer viewer, IModelUpdateContext context){
 		fContext = context;
 		fViewer = viewer;
 	}

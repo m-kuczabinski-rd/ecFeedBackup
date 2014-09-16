@@ -7,9 +7,9 @@ import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 public class ModelModyfyingAction extends ModelSelectionAction {
 
 	private IModelUpdateContext fUPdateContext;
-	
-	public ModelModyfyingAction(ISelectionProvider selectionProvider, IModelUpdateContext updateContext) {
-		super(selectionProvider);
+
+	public ModelModyfyingAction(String id, String name, ISelectionProvider selectionProvider, IModelUpdateContext updateContext) {
+		super(id, name, selectionProvider);
 		fUPdateContext = updateContext;
 	}
 

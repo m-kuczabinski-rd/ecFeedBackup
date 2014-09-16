@@ -9,7 +9,7 @@ public class MoveUpDownAction extends ModelModyfyingAction {
 	private boolean fUp;
 
 	public MoveUpDownAction(boolean up, ISelectionProvider selectionProvider, IModelUpdateContext updateContext) {
-		super(selectionProvider, updateContext);
+		super(chooseId(up), chooseName(up), selectionProvider, updateContext);
 		fUp = up;
 	}
 	
@@ -23,4 +23,11 @@ public class MoveUpDownAction extends ModelModyfyingAction {
 		getSelectionInterface().moveUpDown(fUp, getUpdateContext());
 	}
 
+	private static String chooseId(boolean up){
+		return up?GlobalActions.MOVE_UP.getId():GlobalActions.MOVE_DOWN.getId();
+	}
+
+	private static String chooseName(boolean up){
+		return up?GlobalActions.MOVE_UP.getName():GlobalActions.MOVE_DOWN.getName();
+	}
 }

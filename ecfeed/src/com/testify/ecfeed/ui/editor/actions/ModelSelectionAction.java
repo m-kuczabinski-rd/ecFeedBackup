@@ -3,18 +3,18 @@ package com.testify.ecfeed.ui.editor.actions;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.jface.action.Action;
 import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
 
 import com.testify.ecfeed.model.GenericNode;
 import com.testify.ecfeed.ui.modelif.SelectionInterface;
 
-public class ModelSelectionAction extends Action {
+public class ModelSelectionAction extends NamedAction {
 	
 	private ISelectionProvider fSelectionProvider;
 
-	public ModelSelectionAction(ISelectionProvider selectionProvider){
+	public ModelSelectionAction(String id, String name, ISelectionProvider selectionProvider){
+		super(id, name);
 		fSelectionProvider = selectionProvider;
 	}
 	

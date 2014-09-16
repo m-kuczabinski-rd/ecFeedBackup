@@ -1,7 +1,7 @@
 package com.testify.ecfeed.ui.editor.actions;
 
 import org.eclipse.jface.viewers.StructuredSelection;
-import org.eclipse.jface.viewers.TreeViewer;
+import org.eclipse.jface.viewers.StructuredViewer;
 
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.ClassNode;
@@ -17,10 +17,23 @@ import com.testify.ecfeed.ui.modelif.ClassInterface;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 import com.testify.ecfeed.ui.modelif.RootInterface;
 
-public class AbstractAddChildAction extends ModelModyfyingAction{
+public abstract class AbstractAddChildAction extends ModelModyfyingAction{
 	
-	private String fName;
-	private TreeViewer fViewer;
+	protected final static String ADD_CLASS_ACTION_NAME = "Add class";
+	protected final static String ADD_METHOD_ACTION_NAME = "Add method";
+	protected final static String ADD_PARAMETER_ACTION_NAME = "Add parameter";
+	protected final static String ADD_TEST_CASE_ACTION_NAME = "Add test case";
+	protected final static String ADD_PARTITION_ACTION_NAME = "Add partition";
+	protected final static String ADD_CONSTRAINT_ACTION_NAME = "Add constraint";
+
+	protected final static String ADD_CLASS_ACTION_ID = "addClass";
+	protected final static String ADD_METHOD_ACTION_ID = "addMethod";
+	protected final static String ADD_PARAMETER_ACTION_ID = "addParameter";
+	protected final static String ADD_TEST_CASE_ACTION_ID = "addTestCase";
+	protected final static String ADD_PARTITION_ACTION_ID = "addPartition";
+	protected final static String ADD_CONSTRAINT_ACTION_ID = "addConstraint";
+
+	private StructuredViewer fViewer;
 
 	private class AddChildVisitor implements IModelVisitor{
 
@@ -107,16 +120,11 @@ public class AbstractAddChildAction extends ModelModyfyingAction{
 		
 	}
 	
-	public AbstractAddChildAction(String name, TreeViewer viewer, IModelUpdateContext updateContext) {
-		super(viewer, updateContext);
-		fName = name;
+	public AbstractAddChildAction(String id, String name, StructuredViewer viewer, IModelUpdateContext updateContext) {
+		super(id, name, viewer, updateContext);
 		fViewer = viewer;
 	}
 
-	public String getName() {
-		return fName;
-	}
-	
 	@Override
 	public boolean isEnabled(){
 		if (getSelectedNodes().size() != 1) return false;
@@ -136,7 +144,8 @@ public class AbstractAddChildAction extends ModelModyfyingAction{
 	}
 	
 	protected void select(GenericNode node){
-		fViewer.setSelection(new StructuredSelection(node));
+		if(fViewer != null){
+			fViewer.setSelection(new StructuredSelection(node));
+		}
 	}
-
 }
