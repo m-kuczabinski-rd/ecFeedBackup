@@ -1,4 +1,4 @@
-package com.testify.ecfeed.ui.editor;
+package com.testify.ecfeed.ui.modelif;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;

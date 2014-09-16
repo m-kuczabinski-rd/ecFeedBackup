@@ -11,19 +11,15 @@
 
 package com.testify.ecfeed.ui.editor;
 
-import org.eclipse.jdt.core.IType;
-import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Text;
 
 import com.testify.ecfeed.model.ClassNode;
-import com.testify.ecfeed.ui.dialogs.TestClassSelectionDialog;
 import com.testify.ecfeed.ui.modelif.ClassInterface;
 
 public class ClassDetailsPage extends BasicDetailsPage {
@@ -37,21 +33,7 @@ public class ClassDetailsPage extends BasicDetailsPage {
 	private class BrowseClassesAdapter extends AbstractSelectionAdapter{
 		@Override
 		public void widgetSelected(SelectionEvent e){
-			IType selectedClass = selectClass();
-
-			if(selectedClass != null){
-				String qualifiedName = selectedClass.getFullyQualifiedName();
-				fClassIf.setQualifiedName(qualifiedName, ClassDetailsPage.this);
-			}
-		}
-		
-		private IType selectClass() {
-			TestClassSelectionDialog dialog = new TestClassSelectionDialog(Display.getDefault().getActiveShell());
-			
-			if (dialog.open() == IDialogConstants.OK_ID) {
-				return (IType)dialog.getFirstResult();
-			}
-			return null;
+			fClassIf.reassignClass(ClassDetailsPage.this);
 		}
 	}
 	

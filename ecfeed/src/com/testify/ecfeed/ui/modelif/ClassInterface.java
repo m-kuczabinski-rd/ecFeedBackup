@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import org.eclipse.jdt.core.IType;
+import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
 
@@ -18,6 +20,7 @@ import com.testify.ecfeed.modelif.operations.ClassOperationAddMethods;
 import com.testify.ecfeed.modelif.operations.ClassOperationRemoveMethod;
 import com.testify.ecfeed.modelif.operations.ClassOperationRename;
 import com.testify.ecfeed.ui.common.Constants;
+import com.testify.ecfeed.ui.dialogs.TestClassSelectionDialog;
 
 public class ClassInterface extends GenericNodeInterface {
 	private ClassNode fTarget;	
@@ -161,5 +164,15 @@ public class ClassInterface extends GenericNodeInterface {
 			name = Constants.DEFAULT_NEW_METHOD_NAME + i++;
 		}
 		return name;
+	}
+
+	public void reassignClass(IModelUpdateContext context) {
+		TestClassSelectionDialog dialog = new TestClassSelectionDialog(Display.getDefault().getActiveShell());
+		
+		if (dialog.open() == IDialogConstants.OK_ID) {
+			IType selectedClass = (IType)dialog.getFirstResult();
+			String qualifiedName = selectedClass.getFullyQualifiedName();
+			setQualifiedName(qualifiedName, context);
+		}
 	}
 }
