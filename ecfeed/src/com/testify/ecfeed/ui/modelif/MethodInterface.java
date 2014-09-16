@@ -277,6 +277,6 @@ public class MethodInterface extends GenericNodeInterface {
 	
 	public void opedCoverageDialog(Object[] checkedElements, Object[] grayedElements) {
 		Shell activeShell = Display.getDefault().getActiveShell();
-		new CalculateCoverageDialog(activeShell, fTarget, checkedElements, grayedElements).open();
+		new CalculateCoverageDialog(activeShell, new GenericNodeInterface(), fTarget, checkedElements, grayedElements).open();
 	}
 }

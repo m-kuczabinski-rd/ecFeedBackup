@@ -46,6 +46,7 @@ import org.eclipse.swt.widgets.Tree;
 
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.TestCaseNode;
+import com.testify.ecfeed.modelif.IImplementationStatusResolver;
 import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.common.TestCasesViewerContentProvider;
 import com.testify.ecfeed.ui.common.TestCasesViewerLabelProvider;
@@ -61,6 +62,7 @@ public class CalculateCoverageDialog extends TitleAreaDialog {
 	private final Object[] fInitGrayed;
 	private CheckboxTreeViewer fTestCasesViewer;
 	private CoverageTreeViewerListener fCheckStateListener;
+	private IImplementationStatusResolver fStatusResolver;
 
 	private class CoverageTreeViewerListener extends TreeCheckStateListener {
 		// saved tree state
@@ -147,14 +149,15 @@ public class CalculateCoverageDialog extends TitleAreaDialog {
 	
 	}
 
-	public CalculateCoverageDialog(Shell parentShell, MethodNode method,
-			Object[] checked, Object[] grayed) {
+	public CalculateCoverageDialog(Shell parentShell, IImplementationStatusResolver statusResolver, 
+			MethodNode method, Object[] checked, Object[] grayed) {
 		super(parentShell);
 		setHelpAvailable(false);
 		setShellStyle(SWT.BORDER | SWT.RESIZE | SWT.TITLE | SWT.APPLICATION_MODAL);
 		fMethod = method;
 		fCalculator = new CoverageCalculator(fMethod.getCategories());
 		
+		fStatusResolver = statusResolver;
 		fInitChecked = checked;
 		fInitGrayed = grayed;
 	}
@@ -233,7 +236,7 @@ public class CalculateCoverageDialog extends TitleAreaDialog {
 		tree.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, true, 1, 1));
 		fTestCasesViewer = new CheckboxTreeViewer(tree);
 		fTestCasesViewer.setContentProvider(new TestCasesViewerContentProvider(fMethod));
-		fTestCasesViewer.setLabelProvider(new TestCasesViewerLabelProvider(fMethod));
+		fTestCasesViewer.setLabelProvider(new TestCasesViewerLabelProvider(fStatusResolver, fMethod));
 		fTestCasesViewer.getTree().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 		fTestCasesViewer.setInput(fMethod);
 		

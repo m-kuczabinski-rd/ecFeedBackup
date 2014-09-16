@@ -364,7 +364,7 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 		tree.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, true, 1, 1));
 		fCategoriesViewer = new CheckboxTreeViewer(tree);
 		fCategoriesViewer.setContentProvider(new CategoriesContentProvider());
-		fCategoriesViewer.setLabelProvider(new NodeNameColumnLabelProvider());
+		fCategoriesViewer.setLabelProvider(new NodeNameColumnLabelProvider(fStatusResolver));
 		fCategoriesViewer.getTree().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 		fCategoriesViewer.setInput(fMethod);
 		fCategoriesViewer.addCheckStateListener(new PartitionTreeCheckStateListener(fCategoriesViewer));

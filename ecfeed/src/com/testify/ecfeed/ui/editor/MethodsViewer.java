@@ -30,6 +30,7 @@ import com.testify.ecfeed.ui.common.NodeViewerColumnLabelProvider;
 import com.testify.ecfeed.ui.editor.actions.DeleteAction;
 import com.testify.ecfeed.ui.editor.actions.ModelViewerActionFactory;
 import com.testify.ecfeed.ui.modelif.ClassInterface;
+import com.testify.ecfeed.ui.modelif.GenericNodeInterface;
 import com.testify.ecfeed.ui.modelif.MethodInterface;
 
 public class MethodsViewer extends TableViewerSection {
@@ -86,7 +87,7 @@ public class MethodsViewer extends TableViewerSection {
 
 	private class MethodsArgsLabelProvider extends NodeViewerColumnLabelProvider{
 		public MethodsArgsLabelProvider() {
-			super();
+			super(new GenericNodeInterface());
 		}
 		
 		@Override
@@ -126,7 +127,7 @@ public class MethodsViewer extends TableViewerSection {
 
 	@Override
 	protected void createTableColumns() {
-		fMethodsColumn = addColumn("Methods", 150, new NodeNameColumnLabelProvider());
+		fMethodsColumn = addColumn("Methods", 150, new NodeNameColumnLabelProvider(new GenericNodeInterface()));
 		addColumn("Arguments", 450, new MethodsArgsLabelProvider());
 	}
 	

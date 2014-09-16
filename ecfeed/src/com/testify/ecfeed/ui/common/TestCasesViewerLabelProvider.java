@@ -11,23 +11,24 @@ import org.eclipse.swt.graphics.Color;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.TestCaseNode;
+import com.testify.ecfeed.modelif.IImplementationStatusResolver;
 import com.testify.ecfeed.modelif.ImplementationStatus;
-import com.testify.ecfeed.ui.modelif.MethodInterface;
 
 public class TestCasesViewerLabelProvider extends LabelProvider implements IColorProvider {
 	private Map<String, Integer> fExecutableTestSuites;
 	private Map<TestCaseNode, Boolean> fTestCasesStatusMap;
-	private MethodInterface fMethodIf;
+	MethodNode fMethod;
+	private IImplementationStatusResolver fStatusResolver;
 	
-	public TestCasesViewerLabelProvider(){
+	public TestCasesViewerLabelProvider(IImplementationStatusResolver statusResolver){
 		fExecutableTestSuites = new HashMap<String, Integer>();
 		fTestCasesStatusMap = new HashMap<TestCaseNode, Boolean>();
-		fMethodIf = new MethodInterface();
+		fStatusResolver = statusResolver;
 	}
 	
-	public TestCasesViewerLabelProvider(MethodNode method){
-		this();
-		fMethodIf.setTarget(method);
+	public TestCasesViewerLabelProvider(IImplementationStatusResolver statusResolver, MethodNode method){
+		this(statusResolver);
+		fMethod = method;
 	}
 	
 	@Override
@@ -38,12 +39,12 @@ public class TestCasesViewerLabelProvider extends LabelProvider implements IColo
 			if(fExecutableTestSuites.containsKey(suiteName)){
 				executable = fExecutableTestSuites.get(suiteName);
 			}
-			Collection<TestCaseNode> testCases = fMethodIf.getTestCases(suiteName);
+			Collection<TestCaseNode> testCases = fMethod.getTestCases(suiteName);
 			String plural = testCases.size() != 1 ? "s" : "";
 			return suiteName + " [" + testCases.size() + " test case" + plural + ", " + executable + " executable]";   
 		}
 		else if(element instanceof TestCaseNode){
-			return fMethodIf.getName() + "(" + ((TestCaseNode)element).testDataString() + ")";
+			return fMethod.getName() + "(" + ((TestCaseNode)element).testDataString() + ")";
 		}
 		return null;
 	}
@@ -61,7 +62,7 @@ public class TestCasesViewerLabelProvider extends LabelProvider implements IColo
 		if (element instanceof String) {
 			String name = (String)element;
 			if(fExecutableTestSuites.containsKey(name)){
-				boolean suiteExecutable = (fExecutableTestSuites.get(name) == fMethodIf.getTestCases(name).size());
+				boolean suiteExecutable = (fExecutableTestSuites.get(name) == fMethod.getTestCases(name).size());
 				return suiteExecutable ? executableColor : null;
 			}
 			return null;
@@ -75,7 +76,7 @@ public class TestCasesViewerLabelProvider extends LabelProvider implements IColo
 	}
 
 	public void setMethod(MethodNode method){
-		fMethodIf.setTarget(method);
+		fMethod = method;
 		refresh();
 	}
 	
@@ -87,11 +88,11 @@ public class TestCasesViewerLabelProvider extends LabelProvider implements IColo
 		Map<PartitionNode, ImplementationStatus> partitionStatusMap = new HashMap<PartitionNode, ImplementationStatus>();
 		fExecutableTestSuites.clear();
 		fTestCasesStatusMap.clear();
-		for(String testSuite : fMethodIf.getTestSuites()){
+		for(String testSuite : fMethod.getTestSuites()){
 			fExecutableTestSuites.put(testSuite, 0);
 		}
-		if(fMethodIf.implementationStatus() != ImplementationStatus.NOT_IMPLEMENTED){
-			for(TestCaseNode tc : fMethodIf.getTestCases()){
+		if(fStatusResolver.getImplementationStatus(fMethod) != ImplementationStatus.NOT_IMPLEMENTED){
+			for(TestCaseNode tc : fMethod.getTestCases()){
 				boolean executable = true;
 				String name = tc.getName();
 				if(fExecutableTestSuites.containsKey(name) == false){
@@ -100,7 +101,7 @@ public class TestCasesViewerLabelProvider extends LabelProvider implements IColo
 				for(PartitionNode p : tc.getTestData()){
 					ImplementationStatus status = partitionStatusMap.get(p);
 					if(status == null){
-						status = fMethodIf.getImplementationStatus(p);
+						status = fStatusResolver.getImplementationStatus(p);
 						partitionStatusMap.put(p, status);
 					}
 					if(status != ImplementationStatus.IMPLEMENTED){

@@ -38,6 +38,7 @@ import com.testify.ecfeed.ui.common.NodeViewerColumnLabelProvider;
 import com.testify.ecfeed.ui.editor.actions.DeleteAction;
 import com.testify.ecfeed.ui.editor.actions.ModelViewerActionFactory;
 import com.testify.ecfeed.ui.modelif.CategoryInterface;
+import com.testify.ecfeed.ui.modelif.GenericNodeInterface;
 import com.testify.ecfeed.ui.modelif.MethodInterface;
 
 public class ParametersViewer extends TableViewerSection{
@@ -299,16 +300,16 @@ public class ParametersViewer extends TableViewerSection{
 
 	@Override
 	protected void createTableColumns() {
-		fNameColumn = addColumn("Name", 150, new NodeNameColumnLabelProvider());
+		fNameColumn = addColumn("Name", 150, new NodeNameColumnLabelProvider(new GenericNodeInterface()));
 		
-		fTypeColumn = addColumn("Type", 150, new NodeViewerColumnLabelProvider(){
+		fTypeColumn = addColumn("Type", 150, new NodeViewerColumnLabelProvider(new GenericNodeInterface()){
 			@Override
 			public String getText(Object element){
 				return ((CategoryNode)element).getType();
 			}
 		});
 		
-		fExpectedColumn = addColumn("Expected", 150, new NodeViewerColumnLabelProvider(){
+		fExpectedColumn = addColumn("Expected", 150, new NodeViewerColumnLabelProvider(new GenericNodeInterface()){
 			@Override
 			public String getText(Object element) {
 				CategoryNode node = (CategoryNode)element;
@@ -316,7 +317,7 @@ public class ParametersViewer extends TableViewerSection{
 			}
 		});
 
-		fDefaultValueColumn = addColumn("Default value", 150, new NodeViewerColumnLabelProvider(){
+		fDefaultValueColumn = addColumn("Default value", 150, new NodeViewerColumnLabelProvider(new GenericNodeInterface()){
 			@Override
 			public String getText(Object element){
 				if(element instanceof CategoryNode && ((CategoryNode)element).isExpected()){
