@@ -19,6 +19,7 @@ import com.testify.ecfeed.modelif.operations.CategoryOperationSetDefaultValue;
 import com.testify.ecfeed.modelif.operations.CategoryOperationSetExpected;
 import com.testify.ecfeed.modelif.operations.CategoryOperationSetType;
 import com.testify.ecfeed.ui.common.EclipseModelBuilder;
+import com.testify.ecfeed.ui.common.TypeAdapterProvider;
 
 public class CategoryInterface extends PartitionedNodeInterface {
 	

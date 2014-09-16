@@ -29,7 +29,6 @@ import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.modelif.ITypeAdapter;
 import com.testify.ecfeed.modelif.java.JavaUtils;
-import com.testify.ecfeed.ui.modelif.TypeAdapterProvider;
 
 public class TestDataValueEditingSupport extends EditingSupport {
 	private final TableViewer fViewer;

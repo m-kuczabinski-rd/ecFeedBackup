@@ -1,4 +1,4 @@
-package com.testify.ecfeed.ui.modelif;
+package com.testify.ecfeed.ui.common;
 
 import static com.testify.ecfeed.modelif.java.Constants.TYPE_NAME_BOOLEAN;
 import static com.testify.ecfeed.modelif.java.Constants.TYPE_NAME_BYTE;
@@ -15,8 +15,6 @@ import java.util.Arrays;
 import com.testify.ecfeed.modelif.ITypeAdapter;
 import com.testify.ecfeed.modelif.ITypeAdapterProvider;
 import com.testify.ecfeed.modelif.java.JavaUtils;
-import com.testify.ecfeed.ui.common.Constants;
-import com.testify.ecfeed.ui.common.EclipseModelBuilder;
 
 public class TypeAdapterProvider implements ITypeAdapterProvider{
 

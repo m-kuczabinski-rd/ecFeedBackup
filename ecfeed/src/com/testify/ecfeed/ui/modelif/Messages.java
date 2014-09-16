@@ -75,13 +75,13 @@ public class Messages {
 	public static final String DIALOG_RENAME_LABELS_WARNING_TITLE = "Renaming label";
 
 	//EXCEPTIONS
-	public static final String EXCEPTION_METHOD_IMPORT(String name){
-		return "Unexpected problems with importing method " + name;
-	}
-	public static final String EXCEPTION_CLASS_IMPORT(String name){
-		return "Unexpected problems with importing class " + name;
-	}
-	public static final String EXCEPTION_TYPE_DOES_NOT_EXIST_IN_THE_PROJECT = "The imported type does not exist in the project";
+//	public static final String EXCEPTION_METHOD_IMPORT(String name){
+//		return "Unexpected problems with importing method " + name;
+//	}
+//	public static final String EXCEPTION_CLASS_IMPORT(String name){
+//		return "Unexpected problems with importing class " + name;
+//	}
+//	public static final String EXCEPTION_TYPE_DOES_NOT_EXIST_IN_THE_PROJECT = "The imported type does not exist in the project";
 	
 	//OTHER MESSAGES
 	public static final String EXECUTING_TEST_WITH_PARAMETERS = "Executing test function with generated parameters";

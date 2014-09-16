@@ -1,4 +1,4 @@
-package com.testify.ecfeed.ui.modelif;
+package com.testify.ecfeed.ui.common;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
