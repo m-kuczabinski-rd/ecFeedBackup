@@ -100,7 +100,7 @@ public class TestCasesViewerLabelProvider extends LabelProvider implements IColo
 				for(PartitionNode p : tc.getTestData()){
 					ImplementationStatus status = partitionStatusMap.get(p);
 					if(status == null){
-						status = fMethodIf.implementationStatus(p);
+						status = fMethodIf.getImplementationStatus(p);
 						partitionStatusMap.put(p, status);
 					}
 					if(status != ImplementationStatus.IMPLEMENTED){

@@ -190,7 +190,7 @@ public class TestCasesViewer extends CheckboxTreeViewerSection {
 		if(checked.size() == 0) return false;
 		if(fMethodIf.implementationStatus() == ImplementationStatus.NOT_IMPLEMENTED) return false;
 		for(TestCaseNode tc : checked){
-			if(fMethodIf.implementationStatus(tc) == ImplementationStatus.NOT_IMPLEMENTED) return false;
+			if(fMethodIf.getImplementationStatus(tc) == ImplementationStatus.NOT_IMPLEMENTED) return false;
 		}
 		return true;
 	}

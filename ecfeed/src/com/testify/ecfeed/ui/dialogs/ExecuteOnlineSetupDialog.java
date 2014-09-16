@@ -21,14 +21,15 @@ import com.testify.ecfeed.generators.api.IGenerator;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.constraint.Constraint;
+import com.testify.ecfeed.modelif.IImplementationStatusResolver;
 import com.testify.ecfeed.ui.common.Messages;
 
 public class ExecuteOnlineSetupDialog extends GeneratorSetupDialog {
 	private static final int CONTENT = CONSTRAINTS_COMPOSITE | PARTITIONS_COMPOSITE |
 			GENERATOR_SELECTION_COMPOSITE;
 
-	public ExecuteOnlineSetupDialog(Shell parentShell, MethodNode method) {
-		super(parentShell, method, CONTENT, 
+	public ExecuteOnlineSetupDialog(Shell parentShell, MethodNode method, IImplementationStatusResolver statusResolver) {
+		super(parentShell, method, statusResolver, CONTENT, 
 				Messages.DIALOG_EXECUTE_ONLINE_TITLE, 
 				Messages.DIALOG_EXECUTE_ONLINE_MESSAGE,
 				true);

@@ -101,7 +101,7 @@ public class PartitionsViewer extends TableViewerSection {
 				PartitionNode partition = (PartitionNode)element;
 				if(partition.isAbstract()){
 					return ColorManager.getColor(ColorConstants.ABSTRACT_PARTITION);
-				} else if (fTableItemIf.implementationStatus(partition) == ImplementationStatus.IMPLEMENTED) {
+				} else if (fTableItemIf.getImplementationStatus(partition) == ImplementationStatus.IMPLEMENTED) {
 					return ColorManager.getColor(ColorConstants.ITEM_IMPLEMENTED);
 				}
 			}
@@ -176,7 +176,7 @@ public class PartitionsViewer extends TableViewerSection {
 				PartitionNode partition = (PartitionNode)element;
 				if(partition.isAbstract()){
 					return ColorManager.getColor(ColorConstants.ABSTRACT_PARTITION);
-				} else if (fTableItemIf.implementationStatus(partition) == ImplementationStatus.IMPLEMENTED) {
+				} else if (fTableItemIf.getImplementationStatus(partition) == ImplementationStatus.IMPLEMENTED) {
 					return ColorManager.getColor(ColorConstants.ITEM_IMPLEMENTED);
 				}
 			}

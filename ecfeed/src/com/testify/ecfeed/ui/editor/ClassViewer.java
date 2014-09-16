@@ -128,7 +128,7 @@ public class ClassViewer extends TableViewerSection {
 		@Override
 		public Color getForeground(Object element) {
 			if (element instanceof ClassNode) {
-				if(fRootIf.implementationStatus((ClassNode)element) == ImplementationStatus.IMPLEMENTED){
+				if(fRootIf.getImplementationStatus((ClassNode)element) == ImplementationStatus.IMPLEMENTED){
 					return ColorManager.getColor(ColorConstants.ITEM_IMPLEMENTED);
 				}
 			}

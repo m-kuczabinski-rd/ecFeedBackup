@@ -71,7 +71,7 @@ public class ClassInterface extends GenericNodeInterface {
 		if(newName.equals(getQualifiedName())){
 			return false;
 		}
-		if(implementationStatus(fTarget) != ImplementationStatus.NOT_IMPLEMENTED){
+		if(getImplementationStatus(fTarget) != ImplementationStatus.NOT_IMPLEMENTED){
 			if(MessageDialog.openConfirm(Display.getCurrent().getActiveShell(), 
 					Messages.DIALOG_RENAME_IMPLEMENTED_CLASS_TITLE, 
 					Messages.DIALOG_RENAME_IMPLEMENTED_CLASS_MESSAGE) == false){

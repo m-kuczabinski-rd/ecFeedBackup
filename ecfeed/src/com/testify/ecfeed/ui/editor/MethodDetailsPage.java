@@ -109,7 +109,7 @@ public class MethodDetailsPage extends BasicDetailsPage {
 			fTestCasesSection.setInput(selectedMethod);
 			fMethodNameText.setText(fMethodIf.getName());
 			
-			ImplementationStatus parentStatus = fMethodIf.implementationStatus(selectedMethod.getClassNode());
+			ImplementationStatus parentStatus = fMethodIf.getImplementationStatus(selectedMethod.getClassNode());
 			fBrowseButton.setEnabled(parentStatus == ImplementationStatus.IMPLEMENTED || 
 					parentStatus == ImplementationStatus.PARTIALLY_IMPLEMENTED);
 		}

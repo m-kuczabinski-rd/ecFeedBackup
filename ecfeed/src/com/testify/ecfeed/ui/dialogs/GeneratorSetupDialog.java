@@ -58,11 +58,11 @@ import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.PartitionedNode;
 import com.testify.ecfeed.model.constraint.Constraint;
+import com.testify.ecfeed.modelif.IImplementationStatusResolver;
 import com.testify.ecfeed.modelif.ImplementationStatus;
 import com.testify.ecfeed.ui.common.Constants;
 import com.testify.ecfeed.ui.common.NodeNameColumnLabelProvider;
 import com.testify.ecfeed.ui.common.TreeCheckStateListener;
-import com.testify.ecfeed.ui.modelif.GenericNodeInterface;
 import com.testify.ecfeed.ui.modelif.Messages;
 import com.testify.ecfeed.ui.modelif.TestCaseInterface;
 
@@ -83,7 +83,8 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 	private GeneratorFactory<PartitionNode> fGeneratorFactory; 
 	private int fContent;
 	private boolean fGenerateExecutableContent;
-	private GenericNodeInterface fNodeIf;
+//	private GenericNodeInterface fNodeIf;
+	private IImplementationStatusResolver fStatusResolver;
 	
 	private final String fTitle;
 	private final String fMessage;
@@ -128,7 +129,7 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 				}
 				else{
 					for(PartitionNode child : parent.getPartitions()){
-						if(fNodeIf.implementationStatus(child) != ImplementationStatus.NOT_IMPLEMENTED){
+						if(fStatusResolver.getImplementationStatus(child) != ImplementationStatus.NOT_IMPLEMENTED){
 							children.add(child);
 						}
 					}
@@ -184,7 +185,7 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 		}
 	}
 	
-	public GeneratorSetupDialog(Shell parentShell, MethodNode method, int content, String title, String message, boolean generateExecutables) {
+	public GeneratorSetupDialog(Shell parentShell, MethodNode method, IImplementationStatusResolver statusResolver, int content, String title, String message, boolean generateExecutables) {
 		super(parentShell);
 		setHelpAvailable(false);
 		setShellStyle(SWT.BORDER | SWT.RESIZE | SWT.TITLE | SWT.APPLICATION_MODAL);
@@ -194,7 +195,8 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 		fTitle = title;
 		fMessage = message;
 		fGenerateExecutableContent = generateExecutables;
-		fNodeIf = new GenericNodeInterface();
+		fStatusResolver = statusResolver;
+//		fNodeIf = new GenericNodeInterface();
 	}
 	
 	protected  List<List<PartitionNode>> algorithmInput(){
@@ -239,7 +241,7 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 				true);
 		if(fGenerateExecutableContent){
 			for(CategoryNode category: fMethod.getCategories()){
-				ImplementationStatus categoryStatus = fNodeIf.implementationStatus(category);
+				ImplementationStatus categoryStatus = fStatusResolver.getImplementationStatus(category);
 				if(category.getPartitions().isEmpty() ||
 						categoryStatus == ImplementationStatus.NOT_IMPLEMENTED){
 					setOkButton(false);
@@ -427,7 +429,7 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 			}
 			for(PartitionNode leaf : category.getLeafPartitions()){
 				leafChecked |= fCategoriesViewer.getChecked(leaf);
-				ImplementationStatus status = fNodeIf.implementationStatus(leaf);
+				ImplementationStatus status = fStatusResolver.getImplementationStatus(leaf);
 				if(status != ImplementationStatus.IMPLEMENTED && onlyExecutable){
 					return false;
 				}

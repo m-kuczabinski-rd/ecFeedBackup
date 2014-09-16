@@ -248,7 +248,7 @@ public class ModelMasterSection extends TreeViewerSection{
 			}
 
 			private Image implementationStatusDecoration(GenericNode node) {
-				switch (fNodeInterface.implementationStatus(node)){
+				switch (fNodeInterface.getImplementationStatus(node)){
 				case IMPLEMENTED:
 					return getImage("implemented.png");
 				case PARTIALLY_IMPLEMENTED:

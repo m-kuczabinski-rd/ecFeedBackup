@@ -89,7 +89,7 @@ public class OnlineTestRunningSupport {
 		ConsoleManager.displayConsole();
 		ConsoleManager.redirectSystemOutputToStream(ConsoleManager.getOutputStream());
 		if (fTarget.getCategories().size() > 0) {
-			ExecuteOnlineSetupDialog dialog = new ExecuteOnlineSetupDialog(Display.getCurrent().getActiveShell(), fTarget);
+			ExecuteOnlineSetupDialog dialog = new ExecuteOnlineSetupDialog(Display.getCurrent().getActiveShell(), fTarget, new GenericNodeInterface());
 			if(dialog.open() == IDialogConstants.OK_ID){
 				IGenerator<PartitionNode> selectedGenerator = dialog.getSelectedGenerator();
 				List<List<PartitionNode>> algorithmInput = dialog.getAlgorithmInput();

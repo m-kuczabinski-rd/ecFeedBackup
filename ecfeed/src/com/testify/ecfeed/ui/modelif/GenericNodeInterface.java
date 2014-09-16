@@ -17,7 +17,7 @@ import com.testify.ecfeed.modelif.operations.GenericMoveOperation;
 import com.testify.ecfeed.modelif.operations.GenericRemoveNodesOperation;
 import com.testify.ecfeed.modelif.operations.GenericShiftOperation;
 
-public class GenericNodeInterface extends OperationExecuter{
+public class GenericNodeInterface extends OperationExecuter implements IImplementationStatusResolver{
 
 	private ILoaderProvider fLoaderProvider;
 	private IImplementationStatusResolver fStatusResolver;
@@ -32,7 +32,7 @@ public class GenericNodeInterface extends OperationExecuter{
 		fTarget = target;
 	}
 	
-	public ImplementationStatus implementationStatus(GenericNode node){
+	public ImplementationStatus getImplementationStatus(GenericNode node){
 		return fStatusResolver.getImplementationStatus(node);
 	}
 	

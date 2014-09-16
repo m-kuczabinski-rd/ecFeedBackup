@@ -27,7 +27,7 @@ public class TestCaseInterface extends GenericNodeInterface {
 		MethodInterface mIf = new MethodInterface();
 		if(tc.getMethod() == null) return false;
 		mIf.setTarget(tc.getMethod());
-		ImplementationStatus tcStatus = implementationStatus(tc);
+		ImplementationStatus tcStatus = getImplementationStatus(tc);
 		ImplementationStatus methodStatus = mIf.implementationStatus();
 		return tcStatus == ImplementationStatus.IMPLEMENTED && methodStatus != ImplementationStatus.NOT_IMPLEMENTED;
 	}

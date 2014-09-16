@@ -98,7 +98,7 @@ public class TestSuiteGenerationSupport {
 	}
 	
 	protected boolean generate(){
-		GenerateTestSuiteDialog dialog = new GenerateTestSuiteDialog(getActiveShell(), fTarget);
+		GenerateTestSuiteDialog dialog = new GenerateTestSuiteDialog(getActiveShell(), fTarget, new GenericNodeInterface());
 		if(dialog.open() == IDialogConstants.OK_ID){
 			IGenerator<PartitionNode> selectedGenerator = dialog.getSelectedGenerator();
 			List<List<PartitionNode>> algorithmInput = dialog.getAlgorithmInput();

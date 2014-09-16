@@ -22,7 +22,7 @@ public abstract class NodeViewerColumnLabelProvider extends ColumnLabelProvider{
 	public Color getForeground(Object element){
 		if(element instanceof GenericNode){
 			GenericNode node = (GenericNode)element;
-			ImplementationStatus status = fNodeIf.implementationStatus(node);
+			ImplementationStatus status = fNodeIf.getImplementationStatus(node);
 			switch(status){
 			case IMPLEMENTED: return ColorManager.getColor(ColorConstants.ITEM_IMPLEMENTED);
 			default: return null;
