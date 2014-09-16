@@ -8,6 +8,7 @@ import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Shell;
 
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.ConstraintNode;
@@ -30,6 +31,7 @@ import com.testify.ecfeed.runner.JavaTestRunner;
 import com.testify.ecfeed.runner.RunnerException;
 import com.testify.ecfeed.ui.common.Constants;
 import com.testify.ecfeed.ui.dialogs.AddTestCaseDialog;
+import com.testify.ecfeed.ui.dialogs.CalculateCoverageDialog;
 import com.testify.ecfeed.ui.dialogs.RenameTestSuiteDialog;
 import com.testify.ecfeed.ui.dialogs.TestMethodRenameDialog;
 
@@ -260,5 +262,10 @@ public class MethodInterface extends GenericNodeInterface {
 			MethodNode selectedMethod = dialog.getSelectedMethod();
 			convertTo(selectedMethod, context);
 		}
+	}
+
+	public void opedCoverageDialog(Object[] checkedElements, Object[] grayedElements) {
+		Shell activeShell = Display.getDefault().getActiveShell();
+		new CalculateCoverageDialog(activeShell, fTarget, checkedElements, grayedElements).open();
 	}
 }

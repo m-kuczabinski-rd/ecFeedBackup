@@ -35,7 +35,6 @@ import com.testify.ecfeed.modelif.ImplementationStatus;
 import com.testify.ecfeed.ui.common.TestCasesViewerContentProvider;
 import com.testify.ecfeed.ui.common.TestCasesViewerLabelProvider;
 import com.testify.ecfeed.ui.common.TreeCheckStateListener;
-import com.testify.ecfeed.ui.dialogs.CalculateCoverageDialog;
 import com.testify.ecfeed.ui.modelif.MethodInterface;
 
 public class TestCasesViewer extends CheckboxTreeViewerSection {
@@ -87,8 +86,7 @@ public class TestCasesViewer extends CheckboxTreeViewerSection {
 	private class CalculateCoverageAdapter extends SelectionAdapter {
 		@Override
 		public void widgetSelected(SelectionEvent e) {
-			new CalculateCoverageDialog(getActiveShell(), 
-					fMethodIf.getTarget(), getCheckedElements(), getGrayedElements()).open();
+			fMethodIf.opedCoverageDialog(getCheckedElements(), getGrayedElements());
 		}
 	}
 	
