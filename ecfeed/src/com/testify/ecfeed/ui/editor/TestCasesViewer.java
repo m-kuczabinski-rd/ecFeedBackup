@@ -35,7 +35,6 @@ import com.testify.ecfeed.modelif.ImplementationStatus;
 import com.testify.ecfeed.ui.common.TestCasesViewerContentProvider;
 import com.testify.ecfeed.ui.common.TestCasesViewerLabelProvider;
 import com.testify.ecfeed.ui.common.TreeCheckStateListener;
-import com.testify.ecfeed.ui.modelif.GenericNodeInterface;
 import com.testify.ecfeed.ui.modelif.MethodInterface;
 
 public class TestCasesViewer extends CheckboxTreeViewerSection {
@@ -176,7 +175,7 @@ public class TestCasesViewer extends CheckboxTreeViewerSection {
 	@Override
 	protected IBaseLabelProvider viewerLabelProvider() {
 		if(fLabelProvider == null){
-			fLabelProvider = new TestCasesViewerLabelProvider(new GenericNodeInterface());
+			fLabelProvider = new TestCasesViewerLabelProvider();
 		}
 		return fLabelProvider;
 	}

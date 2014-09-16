@@ -19,6 +19,7 @@ import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.modelif.java.ModelClassLoader;
 import com.testify.ecfeed.runner.JavaTestRunner;
 import com.testify.ecfeed.runner.RunnerException;
+import com.testify.ecfeed.ui.common.EclipseLoaderProvider;
 import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.dialogs.ExecuteOnlineSetupDialog;
 import com.testify.ecfeed.ui.dialogs.GeneratorProgressMonitorDialog;
@@ -90,7 +91,7 @@ public class OnlineTestRunningSupport {
 		ConsoleManager.displayConsole();
 		ConsoleManager.redirectSystemOutputToStream(ConsoleManager.getOutputStream());
 		if (fTarget.getCategories().size() > 0) {
-			ExecuteOnlineSetupDialog dialog = new ExecuteOnlineSetupDialog(Display.getCurrent().getActiveShell(), fTarget, new GenericNodeInterface());
+			ExecuteOnlineSetupDialog dialog = new ExecuteOnlineSetupDialog(Display.getCurrent().getActiveShell(), fTarget);
 			if(dialog.open() == IDialogConstants.OK_ID){
 				IGenerator<PartitionNode> selectedGenerator = dialog.getSelectedGenerator();
 				List<List<PartitionNode>> algorithmInput = dialog.getAlgorithmInput();

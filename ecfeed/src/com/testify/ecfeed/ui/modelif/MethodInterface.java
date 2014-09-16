@@ -31,6 +31,7 @@ import com.testify.ecfeed.modelif.operations.MethodOperationRenameTestCases;
 import com.testify.ecfeed.runner.JavaTestRunner;
 import com.testify.ecfeed.runner.RunnerException;
 import com.testify.ecfeed.ui.common.Constants;
+import com.testify.ecfeed.ui.common.EclipseLoaderProvider;
 import com.testify.ecfeed.ui.common.EclipseModelBuilder;
 import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.dialogs.AddTestCaseDialog;
@@ -279,6 +280,6 @@ public class MethodInterface extends GenericNodeInterface {
 	
 	public void opedCoverageDialog(Object[] checkedElements, Object[] grayedElements) {
 		Shell activeShell = Display.getDefault().getActiveShell();
-		new CalculateCoverageDialog(activeShell, new GenericNodeInterface(), fTarget, checkedElements, grayedElements).open();
+		new CalculateCoverageDialog(activeShell, fTarget, checkedElements, grayedElements).open();
 	}
 }

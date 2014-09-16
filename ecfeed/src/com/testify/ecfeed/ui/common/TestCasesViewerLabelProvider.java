@@ -13,6 +13,7 @@ import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.modelif.IImplementationStatusResolver;
 import com.testify.ecfeed.modelif.ImplementationStatus;
+import com.testify.ecfeed.modelif.java.JavaImplementationStatusResolver;
 
 public class TestCasesViewerLabelProvider extends LabelProvider implements IColorProvider {
 	private Map<String, Integer> fExecutableTestSuites;
@@ -20,14 +21,14 @@ public class TestCasesViewerLabelProvider extends LabelProvider implements IColo
 	MethodNode fMethod;
 	private IImplementationStatusResolver fStatusResolver;
 	
-	public TestCasesViewerLabelProvider(IImplementationStatusResolver statusResolver){
+	public TestCasesViewerLabelProvider(){
 		fExecutableTestSuites = new HashMap<String, Integer>();
 		fTestCasesStatusMap = new HashMap<TestCaseNode, Boolean>();
-		fStatusResolver = statusResolver;
+		fStatusResolver = new JavaImplementationStatusResolver(new EclipseLoaderProvider());
 	}
 	
 	public TestCasesViewerLabelProvider(IImplementationStatusResolver statusResolver, MethodNode method){
-		this(statusResolver);
+		this();
 		fMethod = method;
 	}
 	

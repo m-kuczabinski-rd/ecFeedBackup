@@ -21,15 +21,14 @@ import com.testify.ecfeed.generators.api.IGenerator;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.constraint.Constraint;
-import com.testify.ecfeed.modelif.IImplementationStatusResolver;
 import com.testify.ecfeed.ui.common.Messages;
 
 public class GenerateTestSuiteDialog extends GeneratorSetupDialog {
 	private static final int CONTENT = CONSTRAINTS_COMPOSITE | PARTITIONS_COMPOSITE |
 			TEST_SUITE_NAME_COMPOSITE | GENERATOR_SELECTION_COMPOSITE;
 
-	public GenerateTestSuiteDialog(Shell parentShell, MethodNode method, IImplementationStatusResolver statusResolver) {
-		super(parentShell, method, statusResolver, CONTENT, 
+	public GenerateTestSuiteDialog(Shell parentShell, MethodNode method) {
+		super(parentShell, method, CONTENT, 
 				Messages.DIALOG_GENERATE_TEST_SUITE_TITLE, 
 				Messages.DIALOG_GENERATE_TEST_SUITE_MESSAGE,
 				false);

@@ -29,7 +29,6 @@ import com.testify.ecfeed.ui.common.NodeViewerColumnLabelProvider;
 import com.testify.ecfeed.ui.editor.actions.DeleteAction;
 import com.testify.ecfeed.ui.editor.actions.ModelViewerActionFactory;
 import com.testify.ecfeed.ui.modelif.ConstraintInterface;
-import com.testify.ecfeed.ui.modelif.GenericNodeInterface;
 import com.testify.ecfeed.ui.modelif.MethodInterface;
 
 public class ConstraintsListViewer extends TableViewerSection {
@@ -111,9 +110,9 @@ public class ConstraintsListViewer extends TableViewerSection {
 
 	@Override
 	protected void createTableColumns() {
-		fNameColumn = addColumn("Name", 150, new NodeNameColumnLabelProvider(new GenericNodeInterface()));
+		fNameColumn = addColumn("Name", 150, new NodeNameColumnLabelProvider());
 		
-		addColumn("Definition", 150, new NodeViewerColumnLabelProvider(new GenericNodeInterface()){
+		addColumn("Definition", 150, new NodeViewerColumnLabelProvider(){
 			@Override
 			public String getText(Object element){
 				return ((ConstraintNode)element).getConstraint().toString();

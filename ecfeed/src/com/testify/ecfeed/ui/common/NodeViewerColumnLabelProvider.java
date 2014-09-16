@@ -6,13 +6,14 @@ import org.eclipse.swt.graphics.Color;
 import com.testify.ecfeed.model.GenericNode;
 import com.testify.ecfeed.modelif.IImplementationStatusResolver;
 import com.testify.ecfeed.modelif.ImplementationStatus;
+import com.testify.ecfeed.modelif.java.JavaImplementationStatusResolver;
 
 public abstract class NodeViewerColumnLabelProvider extends ColumnLabelProvider{
 
 	private IImplementationStatusResolver fStatusResolver;
 
-	public NodeViewerColumnLabelProvider(IImplementationStatusResolver statusResolver){
-		fStatusResolver = statusResolver;
+	public NodeViewerColumnLabelProvider(){
+		fStatusResolver = new JavaImplementationStatusResolver(new EclipseLoaderProvider());
 	}
 	
 	@Override

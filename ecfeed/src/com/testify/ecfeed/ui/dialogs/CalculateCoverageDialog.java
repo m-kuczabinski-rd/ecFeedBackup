@@ -47,6 +47,8 @@ import org.eclipse.swt.widgets.Tree;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.modelif.IImplementationStatusResolver;
+import com.testify.ecfeed.modelif.java.JavaImplementationStatusResolver;
+import com.testify.ecfeed.ui.common.EclipseLoaderProvider;
 import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.common.TestCasesViewerContentProvider;
 import com.testify.ecfeed.ui.common.TestCasesViewerLabelProvider;
@@ -149,15 +151,14 @@ public class CalculateCoverageDialog extends TitleAreaDialog {
 	
 	}
 
-	public CalculateCoverageDialog(Shell parentShell, IImplementationStatusResolver statusResolver, 
-			MethodNode method, Object[] checked, Object[] grayed) {
+	public CalculateCoverageDialog(Shell parentShell, MethodNode method, Object[] checked, Object[] grayed) {
 		super(parentShell);
 		setHelpAvailable(false);
 		setShellStyle(SWT.BORDER | SWT.RESIZE | SWT.TITLE | SWT.APPLICATION_MODAL);
 		fMethod = method;
 		fCalculator = new CoverageCalculator(fMethod.getCategories());
 		
-		fStatusResolver = statusResolver;
+		fStatusResolver = new JavaImplementationStatusResolver(new EclipseLoaderProvider());
 		fInitChecked = checked;
 		fInitGrayed = grayed;
 	}

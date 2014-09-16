@@ -60,8 +60,10 @@ import com.testify.ecfeed.model.PartitionedNode;
 import com.testify.ecfeed.model.constraint.Constraint;
 import com.testify.ecfeed.modelif.IImplementationStatusResolver;
 import com.testify.ecfeed.modelif.ImplementationStatus;
+import com.testify.ecfeed.modelif.java.JavaImplementationStatusResolver;
 import com.testify.ecfeed.modelif.java.JavaUtils;
 import com.testify.ecfeed.ui.common.Constants;
+import com.testify.ecfeed.ui.common.EclipseLoaderProvider;
 import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.common.NodeNameColumnLabelProvider;
 import com.testify.ecfeed.ui.common.TreeCheckStateListener;
@@ -184,7 +186,7 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 		}
 	}
 	
-	public GeneratorSetupDialog(Shell parentShell, MethodNode method, IImplementationStatusResolver statusResolver, int content, String title, String message, boolean generateExecutables) {
+	public GeneratorSetupDialog(Shell parentShell, MethodNode method, int content, String title, String message, boolean generateExecutables) {
 		super(parentShell);
 		setHelpAvailable(false);
 		setShellStyle(SWT.BORDER | SWT.RESIZE | SWT.TITLE | SWT.APPLICATION_MODAL);
@@ -194,7 +196,7 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 		fTitle = title;
 		fMessage = message;
 		fGenerateExecutableContent = generateExecutables;
-		fStatusResolver = statusResolver;
+		fStatusResolver = new JavaImplementationStatusResolver(new EclipseLoaderProvider());
 	}
 	
 	protected  List<List<PartitionNode>> algorithmInput(){
@@ -364,7 +366,7 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 		tree.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, true, 1, 1));
 		fCategoriesViewer = new CheckboxTreeViewer(tree);
 		fCategoriesViewer.setContentProvider(new CategoriesContentProvider());
-		fCategoriesViewer.setLabelProvider(new NodeNameColumnLabelProvider(fStatusResolver));
+		fCategoriesViewer.setLabelProvider(new NodeNameColumnLabelProvider());
 		fCategoriesViewer.getTree().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 		fCategoriesViewer.setInput(fMethod);
 		fCategoriesViewer.addCheckStateListener(new PartitionTreeCheckStateListener(fCategoriesViewer));

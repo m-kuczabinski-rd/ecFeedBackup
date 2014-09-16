@@ -1,12 +1,11 @@
 package com.testify.ecfeed.ui.common;
 
 import com.testify.ecfeed.model.GenericNode;
-import com.testify.ecfeed.modelif.IImplementationStatusResolver;
 
 public class NodeNameColumnLabelProvider extends NodeViewerColumnLabelProvider {
 
-	public NodeNameColumnLabelProvider(IImplementationStatusResolver statusResolver) {
-		super(statusResolver);
+	public NodeNameColumnLabelProvider() {
+		super();
 	}
 
 	private final String EMPTY_STRING = "";

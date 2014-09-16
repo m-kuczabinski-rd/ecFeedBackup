@@ -24,7 +24,6 @@ import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.ui.common.ITestDataEditorListener;
 import com.testify.ecfeed.ui.common.NodeViewerColumnLabelProvider;
 import com.testify.ecfeed.ui.common.TestDataValueEditingSupport;
-import com.testify.ecfeed.ui.modelif.GenericNodeInterface;
 import com.testify.ecfeed.ui.modelif.TestCaseInterface;
 
 public class TestDataViewer extends TableViewerSection implements ITestDataEditorListener{
@@ -42,7 +41,7 @@ public class TestDataViewer extends TableViewerSection implements ITestDataEdito
 
 	@Override
 	protected void createTableColumns() {
-		addColumn("Parameter", 150, new NodeViewerColumnLabelProvider(new GenericNodeInterface()){
+		addColumn("Parameter", 150, new NodeViewerColumnLabelProvider(){
 			@Override
 			public String getText(Object element){
 				PartitionNode testValue = (PartitionNode)element;
@@ -51,7 +50,7 @@ public class TestDataViewer extends TableViewerSection implements ITestDataEdito
 			}
 		});
 		
-		TableViewerColumn valueColumn = addColumn("Value", 150, new NodeViewerColumnLabelProvider(new GenericNodeInterface()){
+		TableViewerColumn valueColumn = addColumn("Value", 150, new NodeViewerColumnLabelProvider(){
 			@Override
 			public String getText(Object element){
 				PartitionNode testValue = (PartitionNode)element;

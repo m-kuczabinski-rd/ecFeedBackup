@@ -1,4 +1,4 @@
-package com.testify.ecfeed.ui.modelif;
+package com.testify.ecfeed.ui.common;
 
 import java.net.URL;
 import java.util.ArrayList;

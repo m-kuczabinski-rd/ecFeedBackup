@@ -16,9 +16,10 @@ import com.testify.ecfeed.modelif.operations.GenericAddChildrenOperation;
 import com.testify.ecfeed.modelif.operations.GenericMoveOperation;
 import com.testify.ecfeed.modelif.operations.GenericRemoveNodesOperation;
 import com.testify.ecfeed.modelif.operations.GenericShiftOperation;
+import com.testify.ecfeed.ui.common.EclipseLoaderProvider;
 import com.testify.ecfeed.ui.common.Messages;
 
-public class GenericNodeInterface extends OperationExecuter implements IImplementationStatusResolver{
+public class GenericNodeInterface extends OperationExecuter{
 
 	private ILoaderProvider fLoaderProvider;
 	private IImplementationStatusResolver fStatusResolver;
