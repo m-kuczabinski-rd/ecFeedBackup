@@ -11,7 +11,6 @@
 
 package com.testify.ecfeed.ui.editor;
 
-import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -23,7 +22,6 @@ import org.eclipse.swt.widgets.Text;
 
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.modelif.ImplementationStatus;
-import com.testify.ecfeed.ui.dialogs.TestMethodRenameDialog;
 import com.testify.ecfeed.ui.modelif.MethodInterface;
 
 public class MethodDetailsPage extends BasicDetailsPage {
@@ -47,11 +45,7 @@ public class MethodDetailsPage extends BasicDetailsPage {
 	private class ReassignAdapter extends SelectionAdapter{
 		@Override
 		public void widgetSelected(SelectionEvent e){
-			TestMethodRenameDialog dialog = new TestMethodRenameDialog(getActiveShell(), getSelectedMethod());
-			if(dialog.open() == IDialogConstants.OK_ID){
-				MethodNode selectedMethod = dialog.getSelectedMethod();
-				fMethodIf.convertTo(selectedMethod, MethodDetailsPage.this);
-			}
+			fMethodIf.reassignTarget(MethodDetailsPage.this);
 		}
 	}
 	

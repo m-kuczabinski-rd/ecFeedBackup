@@ -31,6 +31,7 @@ import com.testify.ecfeed.runner.RunnerException;
 import com.testify.ecfeed.ui.common.Constants;
 import com.testify.ecfeed.ui.dialogs.AddTestCaseDialog;
 import com.testify.ecfeed.ui.dialogs.RenameTestSuiteDialog;
+import com.testify.ecfeed.ui.dialogs.TestMethodRenameDialog;
 
 public class MethodInterface extends GenericNodeInterface {
 
@@ -251,5 +252,13 @@ public class MethodInterface extends GenericNodeInterface {
 
 	public Collection<TestCaseNode> getTestCases() {
 		return fTarget.getTestCases();
+	}
+
+	public void reassignTarget(IModelUpdateContext context) {
+		TestMethodRenameDialog dialog = new TestMethodRenameDialog(Display.getDefault().getActiveShell(), fTarget);
+		if(dialog.open() == IDialogConstants.OK_ID){
+			MethodNode selectedMethod = dialog.getSelectedMethod();
+			convertTo(selectedMethod, context);
+		}
 	}
 }
