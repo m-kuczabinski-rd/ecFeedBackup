@@ -60,11 +60,11 @@ import com.testify.ecfeed.model.PartitionedNode;
 import com.testify.ecfeed.model.constraint.Constraint;
 import com.testify.ecfeed.modelif.IImplementationStatusResolver;
 import com.testify.ecfeed.modelif.ImplementationStatus;
+import com.testify.ecfeed.modelif.java.JavaUtils;
 import com.testify.ecfeed.ui.common.Constants;
 import com.testify.ecfeed.ui.common.NodeNameColumnLabelProvider;
 import com.testify.ecfeed.ui.common.TreeCheckStateListener;
 import com.testify.ecfeed.ui.modelif.Messages;
-import com.testify.ecfeed.ui.modelif.TestCaseInterface;
 
 public class GeneratorSetupDialog extends TitleAreaDialog {
 	private Combo fTestSuiteCombo;
@@ -83,7 +83,6 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 	private GeneratorFactory<PartitionNode> fGeneratorFactory; 
 	private int fContent;
 	private boolean fGenerateExecutableContent;
-//	private GenericNodeInterface fNodeIf;
 	private IImplementationStatusResolver fStatusResolver;
 	
 	private final String fTitle;
@@ -196,7 +195,6 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 		fMessage = message;
 		fGenerateExecutableContent = generateExecutables;
 		fStatusResolver = statusResolver;
-//		fNodeIf = new GenericNodeInterface();
 	}
 	
 	protected  List<List<PartitionNode>> algorithmInput(){
@@ -444,7 +442,7 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 	private boolean validateTestSuiteName() {
 		boolean testSuiteValid = true;
 		if(fTestSuiteCombo != null && fTestSuiteCombo.isDisposed() == false){
-			testSuiteValid = TestCaseInterface.validateName(fTestSuiteCombo.getText());
+			testSuiteValid =JavaUtils.isValidTestCaseName(fTestSuiteCombo.getText());
 			if(testSuiteValid){
 				fTestSuiteName = fTestSuiteCombo.getText();
 			}

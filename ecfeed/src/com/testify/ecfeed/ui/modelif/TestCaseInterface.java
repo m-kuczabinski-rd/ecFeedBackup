@@ -4,7 +4,6 @@ import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.modelif.IModelOperation;
 import com.testify.ecfeed.modelif.ImplementationStatus;
-import com.testify.ecfeed.modelif.java.JavaUtils;
 import com.testify.ecfeed.modelif.operations.TestCaseOperationRename;
 import com.testify.ecfeed.modelif.operations.TestCaseOperationUpdateTestData;
 
@@ -36,10 +35,10 @@ public class TestCaseInterface extends GenericNodeInterface {
 		return isExecutable(fTarget);
 	}
 	
-	static public boolean validateName(String name){
-		return JavaUtils.isValidTestCaseName(name);
-	}
-
+//	static public boolean validateName(String name){
+//		return JavaUtils.isValidTestCaseName(name);
+//	}
+//
 	public boolean updateTestData(int index, PartitionNode value, IModelUpdateContext context) {
 		IModelOperation operation = new TestCaseOperationUpdateTestData(fTarget, index, value);
 		return execute(operation, context, Messages.DIALOG_UPDATE_TEST_DATA_PROBLEM_TITLE);
