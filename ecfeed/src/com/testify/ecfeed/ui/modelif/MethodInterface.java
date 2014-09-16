@@ -1,5 +1,6 @@
 package com.testify.ecfeed.ui.modelif;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
@@ -33,7 +34,7 @@ import com.testify.ecfeed.ui.common.Constants;
 import com.testify.ecfeed.ui.dialogs.AddTestCaseDialog;
 import com.testify.ecfeed.ui.dialogs.CalculateCoverageDialog;
 import com.testify.ecfeed.ui.dialogs.RenameTestSuiteDialog;
-import com.testify.ecfeed.ui.dialogs.TestMethodRenameDialog;
+import com.testify.ecfeed.ui.dialogs.SelectCompatibleMethodDialog;
 
 public class MethodInterface extends GenericNodeInterface {
 
@@ -257,13 +258,23 @@ public class MethodInterface extends GenericNodeInterface {
 	}
 
 	public void reassignTarget(IModelUpdateContext context) {
-		TestMethodRenameDialog dialog = new TestMethodRenameDialog(Display.getDefault().getActiveShell(), fTarget);
+		SelectCompatibleMethodDialog dialog = new SelectCompatibleMethodDialog(Display.getDefault().getActiveShell(), getCompatibleMethods());
 		if(dialog.open() == IDialogConstants.OK_ID){
 			MethodNode selectedMethod = dialog.getSelectedMethod();
 			convertTo(selectedMethod, context);
 		}
 	}
 
+	public List<MethodNode> getCompatibleMethods(){
+		List<MethodNode> compatibleMethods = new ArrayList<MethodNode>();
+		for(MethodNode m : ClassInterface.getOtherMethods(fTarget.getClassNode())){
+			if(m.getCategoriesTypes().equals(fTarget.getCategoriesTypes())){
+				compatibleMethods.add(m);
+			}
+		}
+		return compatibleMethods;
+	}
+	
 	public void opedCoverageDialog(Object[] checkedElements, Object[] grayedElements) {
 		Shell activeShell = Display.getDefault().getActiveShell();
 		new CalculateCoverageDialog(activeShell, fTarget, checkedElements, grayedElements).open();

@@ -110,8 +110,9 @@ public class MethodDetailsPage extends BasicDetailsPage {
 			fMethodNameText.setText(fMethodIf.getName());
 			
 			ImplementationStatus parentStatus = fMethodIf.getImplementationStatus(selectedMethod.getClassNode());
-			fBrowseButton.setEnabled(parentStatus == ImplementationStatus.IMPLEMENTED || 
-					parentStatus == ImplementationStatus.PARTIALLY_IMPLEMENTED);
+			fBrowseButton.setEnabled((parentStatus == ImplementationStatus.IMPLEMENTED || 
+					parentStatus == ImplementationStatus.PARTIALLY_IMPLEMENTED) && 
+					fMethodIf.getCompatibleMethods().isEmpty() == false);
 		}
 	}
 }

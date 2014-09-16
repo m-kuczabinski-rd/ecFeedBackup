@@ -11,7 +11,6 @@
 
 package com.testify.ecfeed.ui.dialogs;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.jface.dialogs.IDialogConstants;
@@ -40,24 +39,23 @@ import org.eclipse.swt.widgets.Text;
 
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.ui.common.Messages;
-import com.testify.ecfeed.ui.modelif.ClassInterface;
 
-public class TestMethodRenameDialog extends TitleAreaDialog {
-	private MethodNode fRenamedMethod;
+public class SelectCompatibleMethodDialog extends TitleAreaDialog {
 	private MethodNode fSelectedMethod = null;
 	private TableViewer fMethodViewer;
 	private Button fOkButton;
+	private List<MethodNode> fCompatibleMethods;
 	
 
 	/**
 	 * Create the dialog.
 	 * @param parentShell
 	 */
-	public TestMethodRenameDialog(Shell parentShell, MethodNode method) {
+	public SelectCompatibleMethodDialog(Shell parentShell, List<MethodNode> compatibleMethods) {
 		super(parentShell);
 		setShellStyle(SWT.BORDER | SWT.RESIZE | SWT.TITLE | SWT.APPLICATION_MODAL);
 		setHelpAvailable(false);
-		fRenamedMethod = method;
+		fCompatibleMethods = compatibleMethods;
 	}
 
 	/**
@@ -97,7 +95,7 @@ public class TestMethodRenameDialog extends TitleAreaDialog {
 				return ((MethodNode)element).toString();
 			}
 		});
-		fMethodViewer.setInput(getCompatibleMethods());
+		fMethodViewer.setInput(fCompatibleMethods);
 		fMethodViewer.addSelectionChangedListener(new ISelectionChangedListener() {
 			@Override
 			public void selectionChanged(SelectionChangedEvent event) {
@@ -135,13 +133,13 @@ public class TestMethodRenameDialog extends TitleAreaDialog {
 				IDialogConstants.CANCEL_LABEL, false);
 	}
 
-	private List<MethodNode> getCompatibleMethods(){
-		List<MethodNode> compatibleMethods = new ArrayList<MethodNode>();
-		for(MethodNode m : ClassInterface.getOtherMethods(fRenamedMethod.getClassNode())){
-			if(m.getCategoriesTypes().equals(fRenamedMethod.getCategoriesTypes())){
-				compatibleMethods.add(m);
-			}
-		}
-		return compatibleMethods;
-	}
+//	private List<MethodNode> getCompatibleMethods(){
+//		List<MethodNode> compatibleMethods = new ArrayList<MethodNode>();
+//		for(MethodNode m : ClassInterface.getOtherMethods(fRenamedMethod.getClassNode())){
+//			if(m.getCategoriesTypes().equals(fRenamedMethod.getCategoriesTypes())){
+//				compatibleMethods.add(m);
+//			}
+//		}
+//		return compatibleMethods;
+//	}
 }
