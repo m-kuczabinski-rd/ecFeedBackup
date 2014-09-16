@@ -442,7 +442,7 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 	private boolean validateTestSuiteName() {
 		boolean testSuiteValid = true;
 		if(fTestSuiteCombo != null && fTestSuiteCombo.isDisposed() == false){
-			testSuiteValid =JavaUtils.isValidTestCaseName(fTestSuiteCombo.getText());
+			testSuiteValid = JavaUtils.isValidTestCaseName(fTestSuiteCombo.getText());
 			if(testSuiteValid){
 				fTestSuiteName = fTestSuiteCombo.getText();
 			}
