@@ -36,10 +36,6 @@ public class TestCaseInterface extends GenericNodeInterface {
 		return isExecutable(fTarget);
 	}
 	
-//	static public boolean validateName(String name){
-//		return JavaUtils.isValidTestCaseName(name);
-//	}
-//
 	public boolean updateTestData(int index, PartitionNode value, IModelUpdateContext context) {
 		IModelOperation operation = new TestCaseOperationUpdateTestData(fTarget, index, value);
 		return execute(operation, context, Messages.DIALOG_UPDATE_TEST_DATA_PROBLEM_TITLE);
