@@ -1,4 +1,4 @@
-package com.testify.ecfeed.ui.modelif;
+package com.testify.ecfeed.ui.common;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -18,7 +18,8 @@ import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.modelif.ModelIfException;
 import com.testify.ecfeed.modelif.java.JavaUtils;
-import com.testify.ecfeed.ui.common.Constants;
+import com.testify.ecfeed.ui.modelif.JavaModelAnalyser;
+import com.testify.ecfeed.ui.modelif.Messages;
 
 public class EclipseModelBuilder extends JavaModelAnalyser{
 	

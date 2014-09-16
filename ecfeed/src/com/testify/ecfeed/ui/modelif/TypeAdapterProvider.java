@@ -16,6 +16,7 @@ import com.testify.ecfeed.modelif.ITypeAdapter;
 import com.testify.ecfeed.modelif.ITypeAdapterProvider;
 import com.testify.ecfeed.modelif.java.JavaUtils;
 import com.testify.ecfeed.ui.common.Constants;
+import com.testify.ecfeed.ui.common.EclipseModelBuilder;
 
 public class TypeAdapterProvider implements ITypeAdapterProvider{
 

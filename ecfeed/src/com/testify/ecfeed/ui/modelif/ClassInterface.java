@@ -20,6 +20,7 @@ import com.testify.ecfeed.modelif.operations.ClassOperationAddMethods;
 import com.testify.ecfeed.modelif.operations.ClassOperationRemoveMethod;
 import com.testify.ecfeed.modelif.operations.ClassOperationRename;
 import com.testify.ecfeed.ui.common.Constants;
+import com.testify.ecfeed.ui.common.EclipseModelBuilder;
 import com.testify.ecfeed.ui.dialogs.TestClassSelectionDialog;
 
 public class ClassInterface extends GenericNodeInterface {

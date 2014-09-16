@@ -28,7 +28,7 @@ import org.eclipse.swt.widgets.Display;
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.modelif.ITypeAdapter;
-import com.testify.ecfeed.ui.modelif.CategoryInterface;
+import com.testify.ecfeed.modelif.java.JavaUtils;
 import com.testify.ecfeed.ui.modelif.TypeAdapterProvider;
 
 public class TestDataValueEditingSupport extends EditingSupport {
@@ -53,12 +53,12 @@ public class TestDataValueEditingSupport extends EditingSupport {
 	}
 
 	private CellEditor getComboCellEditor(PartitionNode partition) {
-		CategoryInterface catIf = new CategoryInterface();
-		catIf.setTarget(partition.getCategory());
+		String type = partition.getCategory().getType();
+		EclipseModelBuilder builder = new EclipseModelBuilder();
 		
 		if (partition.getCategory().isExpected()) {
 			Set<String> expectedValues = new HashSet<String>();
-			for (String specialValue : catIf.getSpecialValues()) {
+			for (String specialValue : builder.getSpecialValues(type)) {
 				expectedValues.add(specialValue);
 			}
 			if (expectedValues.contains(partition.getValueString()) == false) {
@@ -66,7 +66,7 @@ public class TestDataValueEditingSupport extends EditingSupport {
 			}
 			fComboCellEditor.setInput(expectedValues);
 
-			if (catIf.hasLimitedValuesSet() == false) {
+			if (JavaUtils.hasLimitedValuesSet(type) == false) {
 				fComboCellEditor.getViewer().getCCombo().setEditable(true);
 			} else {
 				fComboCellEditor.setActivationStyle(ComboBoxViewerCellEditor.DROP_DOWN_ON_KEY_ACTIVATION |

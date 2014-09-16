@@ -15,6 +15,7 @@ import com.testify.ecfeed.modelif.operations.RootOperationAddClasses;
 import com.testify.ecfeed.modelif.operations.RootOperationAddNewClass;
 import com.testify.ecfeed.modelif.operations.RootOperationRename;
 import com.testify.ecfeed.ui.common.Constants;
+import com.testify.ecfeed.ui.common.EclipseModelBuilder;
 import com.testify.ecfeed.ui.dialogs.TestClassSelectionDialog;
 
 public class RootInterface extends GenericNodeInterface {

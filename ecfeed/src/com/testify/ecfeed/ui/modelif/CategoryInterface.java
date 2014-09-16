@@ -18,6 +18,7 @@ import com.testify.ecfeed.modelif.operations.CategoryOperationRename;
 import com.testify.ecfeed.modelif.operations.CategoryOperationSetDefaultValue;
 import com.testify.ecfeed.modelif.operations.CategoryOperationSetExpected;
 import com.testify.ecfeed.modelif.operations.CategoryOperationSetType;
+import com.testify.ecfeed.ui.common.EclipseModelBuilder;
 
 public class CategoryInterface extends PartitionedNodeInterface {
 	
@@ -94,8 +95,7 @@ public class CategoryInterface extends PartitionedNodeInterface {
 	}
 
 	public static boolean hasLimitedValuesSet(CategoryNode category) {
-		String type = category.getType();
-		return !isPrimitive(type) || isBoolean(type);
+		return hasLimitedValuesSet(category.getType());
 	}
 
 	public static boolean isPrimitive(String type) {
