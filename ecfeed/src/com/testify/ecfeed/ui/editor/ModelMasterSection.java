@@ -405,7 +405,6 @@ public class ModelMasterSection extends TreeViewerSection{
 		super(parent, toolkit, STYLE, null, operationManager);
 		fMasterDetailsBlock = masterDetailsBlock;
 		setModelUpdateListener(new UpdateListener());
-		addKeyListener(SWT.DEL, new DeleteAction(getViewer(), this));
 		setActionProvider(new ModelViewerActionFactory(getTreeViewer(), ModelMasterSection.this, false));
 	}
 	
