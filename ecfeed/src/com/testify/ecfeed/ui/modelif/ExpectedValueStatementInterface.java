@@ -5,6 +5,7 @@ import com.testify.ecfeed.model.constraint.Relation;
 import com.testify.ecfeed.modelif.IModelOperation;
 import com.testify.ecfeed.modelif.operations.PartitionOperationSetValue;
 import com.testify.ecfeed.modelif.operations.StatementOperationSetRelation;
+import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.common.TypeAdapterProvider;
 
 public class ExpectedValueStatementInterface extends BasicStatementInterface{

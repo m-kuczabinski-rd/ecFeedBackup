@@ -28,6 +28,7 @@ import com.testify.ecfeed.modelif.operations.PartitionOperationRename;
 import com.testify.ecfeed.modelif.operations.PartitionOperationRenameLabel;
 import com.testify.ecfeed.modelif.operations.PartitionOperationSetValue;
 import com.testify.ecfeed.ui.common.Constants;
+import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.common.TypeAdapterProvider;
 
 public class PartitionInterface extends PartitionedNodeInterface{

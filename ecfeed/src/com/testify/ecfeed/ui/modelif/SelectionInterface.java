@@ -7,6 +7,7 @@ import com.testify.ecfeed.modelif.IModelOperation;
 import com.testify.ecfeed.modelif.operations.FactoryShiftOperation;
 import com.testify.ecfeed.modelif.operations.GenericRemoveNodesOperation;
 import com.testify.ecfeed.modelif.operations.GenericShiftOperation;
+import com.testify.ecfeed.ui.common.Messages;
 
 public class SelectionInterface extends OperationExecuter {
 

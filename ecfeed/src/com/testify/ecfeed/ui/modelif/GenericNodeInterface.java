@@ -16,6 +16,7 @@ import com.testify.ecfeed.modelif.operations.GenericAddChildrenOperation;
 import com.testify.ecfeed.modelif.operations.GenericMoveOperation;
 import com.testify.ecfeed.modelif.operations.GenericRemoveNodesOperation;
 import com.testify.ecfeed.modelif.operations.GenericShiftOperation;
+import com.testify.ecfeed.ui.common.Messages;
 
 public class GenericNodeInterface extends OperationExecuter implements IImplementationStatusResolver{
 
@@ -68,7 +69,7 @@ public class GenericNodeInterface extends OperationExecuter implements IImplemen
 		return execute(new GenericRemoveNodesOperation(children), context, message);
 	}
 	
-	public boolean addChildren(Collection<? extends GenericNode> children, IModelUpdateContext context, String message){
+	public boolean addChildren(Collection<? extends GenericNode> children, IModelUpdateContext context){
 		IModelOperation operation = new GenericAddChildrenOperation(fTarget, children);
 		return execute(operation, context, Messages.DIALOG_ADD_CHILDREN_PROBLEM_TITLE);
 	}

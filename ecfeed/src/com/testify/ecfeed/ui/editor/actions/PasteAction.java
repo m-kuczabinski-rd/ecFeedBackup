@@ -6,7 +6,6 @@ import org.eclipse.jface.viewers.TreeViewer;
 import com.testify.ecfeed.model.GenericNode;
 import com.testify.ecfeed.ui.modelif.GenericNodeInterface;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
-import com.testify.ecfeed.ui.modelif.Messages;
 import com.testify.ecfeed.ui.modelif.NodeClipboard;
 import com.testify.ecfeed.ui.modelif.NodeInterfaceFactory;
 
@@ -47,7 +46,7 @@ public class PasteAction extends ModelModyfyingAction {
 	public void run(){
 		GenericNode parent = getSelectedNodes().get(0);
 		GenericNodeInterface parentIf = NodeInterfaceFactory.getNodeInterface(parent); 
-		parentIf.addChildren(NodeClipboard.getContentCopy(), getUpdateContext(), Messages.DIALOG_ADD_CHILDREN_PROBLEM_TITLE);
+		parentIf.addChildren(NodeClipboard.getContentCopy(), getUpdateContext());
 		if(fTreeViewer != null){
 			fTreeViewer.expandToLevel(parent, 1);
 		}

@@ -13,6 +13,7 @@ import com.testify.ecfeed.modelif.operations.GenericOperationAddPartition;
 import com.testify.ecfeed.modelif.operations.GenericOperationRemovePartition;
 import com.testify.ecfeed.ui.common.Constants;
 import com.testify.ecfeed.ui.common.EclipseModelBuilder;
+import com.testify.ecfeed.ui.common.Messages;
 
 public class PartitionedNodeInterface extends GenericNodeInterface {
 

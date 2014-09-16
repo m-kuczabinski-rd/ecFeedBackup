@@ -62,9 +62,9 @@ import com.testify.ecfeed.modelif.IImplementationStatusResolver;
 import com.testify.ecfeed.modelif.ImplementationStatus;
 import com.testify.ecfeed.modelif.java.JavaUtils;
 import com.testify.ecfeed.ui.common.Constants;
+import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.common.NodeNameColumnLabelProvider;
 import com.testify.ecfeed.ui.common.TreeCheckStateListener;
-import com.testify.ecfeed.ui.modelif.Messages;
 
 public class GeneratorSetupDialog extends TitleAreaDialog {
 	private Combo fTestSuiteCombo;

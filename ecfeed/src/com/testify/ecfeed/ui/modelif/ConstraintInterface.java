@@ -5,6 +5,7 @@ import com.testify.ecfeed.model.constraint.BasicStatement;
 import com.testify.ecfeed.modelif.IModelOperation;
 import com.testify.ecfeed.modelif.operations.ConstraintOperationRename;
 import com.testify.ecfeed.modelif.operations.ConstraintOperationReplaceStatement;
+import com.testify.ecfeed.ui.common.Messages;
 
 public class ConstraintInterface extends GenericNodeInterface {
 

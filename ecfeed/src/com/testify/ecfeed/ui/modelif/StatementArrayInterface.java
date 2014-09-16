@@ -8,6 +8,7 @@ import com.testify.ecfeed.modelif.operations.StatementOperationAddStatement;
 import com.testify.ecfeed.modelif.operations.StatementOperationChangeOperator;
 import com.testify.ecfeed.modelif.operations.StatementOperationRemoveStatement;
 import com.testify.ecfeed.modelif.operations.StatementOperationReplaceChild;
+import com.testify.ecfeed.ui.common.Messages;
 
 public class StatementArrayInterface extends BasicStatementInterface{
 

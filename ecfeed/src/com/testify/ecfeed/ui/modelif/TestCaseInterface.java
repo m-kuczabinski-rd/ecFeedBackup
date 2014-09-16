@@ -6,6 +6,7 @@ import com.testify.ecfeed.modelif.IModelOperation;
 import com.testify.ecfeed.modelif.ImplementationStatus;
 import com.testify.ecfeed.modelif.operations.TestCaseOperationRename;
 import com.testify.ecfeed.modelif.operations.TestCaseOperationUpdateTestData;
+import com.testify.ecfeed.ui.common.Messages;
 
 public class TestCaseInterface extends GenericNodeInterface {
 
