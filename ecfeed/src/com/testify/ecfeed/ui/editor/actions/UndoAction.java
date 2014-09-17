@@ -1,6 +1,6 @@
 package com.testify.ecfeed.ui.editor.actions;
 
-import com.testify.ecfeed.modelif.ModelIfException;
+import com.testify.ecfeed.abstraction.ModelIfException;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 
 public class UndoAction extends ModelModyfyingAction {

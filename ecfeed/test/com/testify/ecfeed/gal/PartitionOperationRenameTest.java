@@ -8,11 +8,11 @@ import java.util.List;
 
 import org.junit.Test;
 
+import com.testify.ecfeed.abstraction.IModelOperation;
+import com.testify.ecfeed.abstraction.ModelIfException;
+import com.testify.ecfeed.abstraction.operations.PartitionOperationRename;
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.PartitionNode;
-import com.testify.ecfeed.modelif.ModelIfException;
-import com.testify.ecfeed.modelif.IModelOperation;
-import com.testify.ecfeed.modelif.operations.PartitionOperationRename;
 
 public class PartitionOperationRenameTest {
 

@@ -20,8 +20,8 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
 
+import com.testify.ecfeed.abstraction.ImplementationStatus;
 import com.testify.ecfeed.model.MethodNode;
-import com.testify.ecfeed.modelif.ImplementationStatus;
 import com.testify.ecfeed.ui.modelif.MethodInterface;
 
 public class MethodDetailsPage extends BasicDetailsPage {

@@ -2,7 +2,7 @@ package com.testify.ecfeed.ui.modelif;
 
 import org.eclipse.ui.forms.AbstractFormPart;
 
-import com.testify.ecfeed.modelif.ModelOperationManager;
+import com.testify.ecfeed.abstraction.ModelOperationManager;
 
 public interface IModelUpdateContext {
 	public ModelOperationManager getOperationManager();

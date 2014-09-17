@@ -3,9 +3,9 @@ package com.testify.ecfeed.ui.modelif;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
 
-import com.testify.ecfeed.modelif.IModelOperation;
-import com.testify.ecfeed.modelif.ModelIfException;
-import com.testify.ecfeed.modelif.operations.BulkOperation;
+import com.testify.ecfeed.abstraction.IModelOperation;
+import com.testify.ecfeed.abstraction.ModelIfException;
+import com.testify.ecfeed.abstraction.operations.BulkOperation;
 
 public class OperationExecuter {
 	

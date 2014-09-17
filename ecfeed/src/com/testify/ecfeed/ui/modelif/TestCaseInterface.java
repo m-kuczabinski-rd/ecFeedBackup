@@ -1,11 +1,11 @@
 package com.testify.ecfeed.ui.modelif;
 
+import com.testify.ecfeed.abstraction.IModelOperation;
+import com.testify.ecfeed.abstraction.ImplementationStatus;
+import com.testify.ecfeed.abstraction.operations.TestCaseOperationRename;
+import com.testify.ecfeed.abstraction.operations.TestCaseOperationUpdateTestData;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.TestCaseNode;
-import com.testify.ecfeed.modelif.IModelOperation;
-import com.testify.ecfeed.modelif.ImplementationStatus;
-import com.testify.ecfeed.modelif.operations.TestCaseOperationRename;
-import com.testify.ecfeed.modelif.operations.TestCaseOperationUpdateTestData;
 import com.testify.ecfeed.ui.common.Messages;
 
 public class TestCaseInterface extends GenericNodeInterface {

@@ -18,7 +18,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
-import com.testify.ecfeed.modelif.ModelOperationManager;
+import com.testify.ecfeed.abstraction.ModelOperationManager;
 import com.testify.ecfeed.ui.modelif.IModelUpdateListener;
 
 public abstract class CheckboxTreeViewerSection extends TreeViewerSection {

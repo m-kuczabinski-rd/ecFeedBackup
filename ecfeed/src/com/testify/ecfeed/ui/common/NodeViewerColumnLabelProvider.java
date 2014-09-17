@@ -3,10 +3,10 @@ package com.testify.ecfeed.ui.common;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.swt.graphics.Color;
 
+import com.testify.ecfeed.abstraction.IImplementationStatusResolver;
+import com.testify.ecfeed.abstraction.ImplementationStatus;
+import com.testify.ecfeed.abstraction.java.JavaImplementationStatusResolver;
 import com.testify.ecfeed.model.GenericNode;
-import com.testify.ecfeed.modelif.IImplementationStatusResolver;
-import com.testify.ecfeed.modelif.ImplementationStatus;
-import com.testify.ecfeed.modelif.java.JavaImplementationStatusResolver;
 
 public abstract class NodeViewerColumnLabelProvider extends ColumnLabelProvider{
 

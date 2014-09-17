@@ -34,6 +34,11 @@ import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TreeNodeContentProvider;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.dnd.ByteArrayTransfer;
+import org.eclipse.swt.dnd.DND;
+import org.eclipse.swt.dnd.DragSourceEvent;
+import org.eclipse.swt.dnd.DragSourceListener;
+import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Image;
@@ -51,6 +56,7 @@ import org.eclipse.ui.forms.widgets.Section;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.FrameworkUtil;
 
+import com.testify.ecfeed.abstraction.ModelOperationManager;
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.ConstraintNode;
@@ -60,7 +66,6 @@ import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.TestCaseNode;
-import com.testify.ecfeed.modelif.ModelOperationManager;
 import com.testify.ecfeed.ui.common.Constants;
 import com.testify.ecfeed.ui.editor.actions.AbstractAddChildAction;
 import com.testify.ecfeed.ui.editor.actions.AddChildActionFactory;
@@ -401,11 +406,48 @@ public class ModelMasterSection extends TreeViewerSection{
 		}
 	}
 	
+	private class ModelTransfer extends ByteArrayTransfer{
+		
+		private final String TRANSFER_TYPE_NAME = "dupa";
+
+		@Override
+		protected String[] getTypeNames() {
+			return new String[]{"dupa"};
+		}
+
+		@Override
+		protected int[] getTypeIds() {
+			return new int[]{1};
+		}
+		
+	}
+	
+	private class DragListener implements DragSourceListener{
+
+		@Override
+		public void dragStart(DragSourceEvent event) {
+			System.out.println("dupa");
+		}
+
+		@Override
+		public void dragSetData(DragSourceEvent event) {
+			System.out.println("cycki");
+		}
+
+		@Override
+		public void dragFinished(DragSourceEvent event) {
+			System.out.println("dupa cycki");
+		}
+		
+	}
+	
 	public ModelMasterSection(ModelMasterDetailsBlock masterDetailsBlock, Composite parent, FormToolkit toolkit, ModelOperationManager operationManager, IActionBars actionBars) {
 		super(parent, toolkit, STYLE, null, operationManager);
 		fMasterDetailsBlock = masterDetailsBlock;
 		setModelUpdateListener(new UpdateListener());
 		setActionProvider(new ModelViewerActionFactory(getTreeViewer(), ModelMasterSection.this, false));
+		
+		getTreeViewer().addDragSupport(DND.DROP_COPY|DND.DROP_MOVE, new Transfer[]{new ModelTransfer()}, new DragListener());
 	}
 	
 	public void setInput(RootNode model){

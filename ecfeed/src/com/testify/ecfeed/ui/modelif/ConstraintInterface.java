@@ -1,10 +1,10 @@
 package com.testify.ecfeed.ui.modelif;
 
+import com.testify.ecfeed.abstraction.IModelOperation;
+import com.testify.ecfeed.abstraction.operations.ConstraintOperationRename;
+import com.testify.ecfeed.abstraction.operations.ConstraintOperationReplaceStatement;
 import com.testify.ecfeed.model.ConstraintNode;
 import com.testify.ecfeed.model.constraint.BasicStatement;
-import com.testify.ecfeed.modelif.IModelOperation;
-import com.testify.ecfeed.modelif.operations.ConstraintOperationRename;
-import com.testify.ecfeed.modelif.operations.ConstraintOperationReplaceStatement;
 import com.testify.ecfeed.ui.common.Messages;
 
 public class ConstraintInterface extends GenericNodeInterface {

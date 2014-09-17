@@ -6,11 +6,11 @@ import java.util.List;
 
 import org.junit.runners.model.FrameworkMethod;
 
+import com.testify.ecfeed.abstraction.java.Constants;
+import com.testify.ecfeed.abstraction.java.JavaUtils;
+import com.testify.ecfeed.abstraction.java.ModelClassLoader;
+import com.testify.ecfeed.abstraction.java.PartitionValueParser;
 import com.testify.ecfeed.model.PartitionNode;
-import com.testify.ecfeed.modelif.java.Constants;
-import com.testify.ecfeed.modelif.java.JavaUtils;
-import com.testify.ecfeed.modelif.java.ModelClassLoader;
-import com.testify.ecfeed.modelif.java.PartitionValueParser;
 
 public class AbstractFrameworkMethod extends FrameworkMethod {
 

@@ -10,10 +10,10 @@ import java.util.List;
 
 import org.junit.Test;
 
+import com.testify.ecfeed.abstraction.java.ModelClassLoader;
+import com.testify.ecfeed.abstraction.java.PartitionValueParser;
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.PartitionNode;
-import com.testify.ecfeed.modelif.java.ModelClassLoader;
-import com.testify.ecfeed.modelif.java.PartitionValueParser;
 import com.testify.ecfeed.ui.common.Constants;
 
 public class AbstractFrameworkMethodTest {

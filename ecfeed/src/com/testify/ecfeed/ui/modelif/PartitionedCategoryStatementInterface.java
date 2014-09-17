@@ -1,12 +1,12 @@
 package com.testify.ecfeed.ui.modelif;
 
+import com.testify.ecfeed.abstraction.IModelOperation;
+import com.testify.ecfeed.abstraction.operations.StatementOperationSetCondition;
+import com.testify.ecfeed.abstraction.operations.StatementOperationSetRelation;
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.constraint.PartitionedCategoryStatement;
 import com.testify.ecfeed.model.constraint.PartitionedCategoryStatement.ICondition;
 import com.testify.ecfeed.model.constraint.Relation;
-import com.testify.ecfeed.modelif.IModelOperation;
-import com.testify.ecfeed.modelif.operations.StatementOperationSetCondition;
-import com.testify.ecfeed.modelif.operations.StatementOperationSetRelation;
 import com.testify.ecfeed.ui.common.Messages;
 
 public class PartitionedCategoryStatementInterface extends BasicStatementInterface{
