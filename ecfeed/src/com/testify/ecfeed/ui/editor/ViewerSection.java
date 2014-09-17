@@ -128,10 +128,10 @@ public abstract class ViewerSection extends BasicSection implements ISelectionPr
 			for(MenuItem item : getMenu().getItems()){
 				item.dispose();
 			}
-			populate();
+			populateMenu();
 		}
 
-		protected void populate() {
+		protected void populateMenu() {
 			IActionProvider provider = getActionProvider();
 			Iterator<String> groupIt = provider.getGroups().iterator();
 			while(groupIt.hasNext()){

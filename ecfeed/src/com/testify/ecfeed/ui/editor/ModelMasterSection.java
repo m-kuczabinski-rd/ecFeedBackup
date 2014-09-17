@@ -392,7 +392,7 @@ public class ModelMasterSection extends TreeViewerSection{
 		}
 
 		@Override
-		protected void populate(){
+		protected void populateMenu(){
 			List<GenericNode> selected = getSelectedNodes();
 			if(selected.size() == 1){
 				AddChildActionFactory factory = new AddChildActionFactory(getTreeViewer(), ModelMasterSection.this);
@@ -402,7 +402,7 @@ public class ModelMasterSection extends TreeViewerSection{
 				}
 			}
 			new MenuItem(getMenu(), SWT.SEPARATOR);
-			super.populate();
+			super.populateMenu();
 		}
 	}
 	
