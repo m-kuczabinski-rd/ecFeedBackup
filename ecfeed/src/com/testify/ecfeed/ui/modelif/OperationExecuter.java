@@ -38,7 +38,4 @@ public class OperationExecuter {
 		}
 		return false;
 	}
-//	protected ModelOperationManager getOperationManager(){
-//		return fOperationManager;
-//	}
 }
