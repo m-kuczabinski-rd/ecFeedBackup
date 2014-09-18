@@ -93,7 +93,7 @@ public class BulkOperation implements IModelOperation{
 	protected List<IModelOperation> reverseOperations(){
 		List<IModelOperation> reverseOperations = new ArrayList<IModelOperation>();
 		for(IModelOperation operation : executedOperations()){
-			reverseOperations.add(0, operation);
+			reverseOperations.add(0, operation.reverseOperation());
 		}
 		return reverseOperations;
 	}
