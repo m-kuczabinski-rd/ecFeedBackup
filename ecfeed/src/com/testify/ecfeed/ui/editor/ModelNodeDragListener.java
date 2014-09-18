@@ -22,11 +22,13 @@ public class ModelNodeDragListener implements DragSourceListener {
 		if(fSelectionToolbox.isSelectionSingleType() == false){
 			event.doit = false;
 		}
+		else{
+			fDnDBuffer.setDraggedNodes(fSelectionToolbox.getSelectedNodes());
+		}
 	}
 
 	@Override
 	public void dragSetData(DragSourceEvent event) {
-		fDnDBuffer.setDraggedNodes(fSelectionToolbox.getSelectedNodes());
 	}
 
 	@Override

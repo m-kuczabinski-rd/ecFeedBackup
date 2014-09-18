@@ -108,19 +108,6 @@ public abstract class GenericNode{
 		return getSibling(name) != null;
 	}
 	
-//	public boolean moveChild(GenericNode child, boolean moveUp) {
-//		int childIndex = getChildren().indexOf(child);
-//		if(moveUp && childIndex > 0){
-//			Collections.swap(getChildren(), childIndex, childIndex - 1);
-//			return true;
-//		}
-//		if(!moveUp && childIndex < getChildren().size() - 1){
-//			Collections.swap(getChildren(), childIndex, childIndex + 1);
-//			return true;
-//		}
-//		return false;
-//	}
-//	
 	public int subtreeSize(){
 		int size = 1;
 		for(GenericNode child : getChildren()){
@@ -153,4 +140,8 @@ public abstract class GenericNode{
 	
 	public abstract GenericNode getCopy();
 	public abstract Object accept(IModelVisitor visitor) throws Exception;
+
+	public int getMaxChildIndex(GenericNode potentialChild) {
+		return getChildren().size();
+	}
 }

@@ -27,13 +27,16 @@ public class NodeDnDBuffer {
 		List<GenericNode> result = new ArrayList<>();
 		if(fDraggedNodes != null){
 			for(GenericNode node : fDraggedNodes){
-				result.add(node);
+				result.add(node.getCopy());
 			}
 		}
 		return result;
 	}
 
 	public void clear() {
-		fDraggedNodes.clear();
+		if(fDraggedNodes != null){
+			fDraggedNodes.clear();
+		}
 	}
+	
 }

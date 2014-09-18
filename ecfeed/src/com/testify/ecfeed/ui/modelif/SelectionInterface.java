@@ -72,7 +72,7 @@ public class SelectionInterface extends OperationExecuter {
 
 	public boolean moveUpDownEnabed(boolean up) {
 		
-		GenericNode parent = getCommonParent(fSelected);
+		GenericNode parent = getCommonParent();
 		if(parent != null){
 			try {
 				GenericShiftOperation operation = (GenericShiftOperation) parent.accept(new FactoryShiftOperation(fSelected, up));
@@ -82,13 +82,22 @@ public class SelectionInterface extends OperationExecuter {
 		return false;
 	}
 
-	private GenericNode getCommonParent(List<? extends GenericNode> list) {
-		if(list == null || list.size() == 0) return null;
-		GenericNode parent = list.get(0).getParent();
-		for(GenericNode node : list){
+	public GenericNode getCommonParent() {
+		if(fSelected == null || fSelected.size() == 0) return null;
+		GenericNode parent = fSelected.get(0).getParent();
+		for(GenericNode node : fSelected){
 			if(node.getParent() != parent) return null;
 		}
 		return parent;
 	}
 
+	public boolean isSingleType(){
+		if(fSelected == null || fSelected.size() == 0) return false;
+		Class<?> type = fSelected.get(0).getClass();
+		for(GenericNode node : fSelected){
+			if(node.getClass().equals(type) == false) return false;
+		}
+		return true;
+		
+	}
 }

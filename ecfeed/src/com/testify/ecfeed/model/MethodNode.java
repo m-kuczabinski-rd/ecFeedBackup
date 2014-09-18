@@ -380,6 +380,14 @@ public class MethodNode extends GenericNode {
 	}
 
 	@Override
+	public int getMaxChildIndex(GenericNode potentialChild){
+		if(potentialChild instanceof CategoryNode) return getCategories().size();
+		if(potentialChild instanceof ConstraintNode) return getConstraintNodes().size();
+		if(potentialChild instanceof TestCaseNode) return getTestCases().size();
+		return super.getMaxChildIndex(potentialChild);
+	}
+	
+	@Override
 	public Object accept(IModelVisitor visitor) throws Exception{
 		return visitor.visit(this);
 	}

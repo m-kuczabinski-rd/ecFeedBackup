@@ -411,54 +411,114 @@ public class ModelMasterSection extends TreeViewerSection{
 	
 	protected class DropListener extends ViewerDropAdapter{
 
+		private class DropValidator implements IModelVisitor{
+
+			@Override
+			public Object visit(RootNode node) throws Exception {
+				return NodeDnDBuffer.getInstance().getDraggedNodes().get(0) instanceof ClassNode;
+			}
+
+			@Override
+			public Object visit(ClassNode node) throws Exception {
+				return NodeDnDBuffer.getInstance().getDraggedNodes().get(0) instanceof MethodNode;
+			}
+
+			@Override
+			public Object visit(MethodNode node) throws Exception {
+				boolean result = NodeDnDBuffer.getInstance().getDraggedNodes().get(0) instanceof CategoryNode;
+				result |= NodeDnDBuffer.getInstance().getDraggedNodes().get(0) instanceof ConstraintNode;
+				result |= NodeDnDBuffer.getInstance().getDraggedNodes().get(0) instanceof TestCaseNode;
+				return result;
+			}
+
+			@Override
+			public Object visit(CategoryNode node) throws Exception {
+				return NodeDnDBuffer.getInstance().getDraggedNodes().get(0) instanceof PartitionNode;
+			}
+
+			@Override
+			public Object visit(TestCaseNode node) throws Exception {
+				return false;
+			}
+
+			@Override
+			public Object visit(ConstraintNode node) throws Exception {
+				return false;
+			}
+
+			@Override
+			public Object visit(PartitionNode node) throws Exception {
+				return NodeDnDBuffer.getInstance().getDraggedNodes().get(0) instanceof PartitionNode;
+			}
+			
+		}
+		
 		protected DropListener(Viewer viewer) {
 			super(viewer);
 		}
 
 		@Override
 		public boolean performDrop(Object data) {
-			int position = determineLocation(getCurrentEvent());
-			GenericNode target = (GenericNode)getCurrentTarget();
-			int index = -1;
-			switch(position){
-			case LOCATION_ON:
-				break;
-			case LOCATION_AFTER:
-				index = target.getIndex() + 1;
-				target = target.getParent();
-				break;
-			case LOCATION_BEFORE:
-				index = target.getIndex();
-				target = target.getParent();
-				break;
-			case LOCATION_NONE:
+			List<GenericNode> dragged = NodeDnDBuffer.getInstance().getDraggedNodes(); 
+			SelectionInterface selectionIf = new SelectionInterface();
+			selectionIf.setTarget(dragged);
+			if((dragged.size() == 0) || (selectionIf.isSingleType() == false)) return false;
+			GenericNode target = determineNewParent(getCurrentTarget(), getCurrentLocation());
+			int index = determineNewIndex(target, getCurrentLocation());
+			if(target == null || index < 0 || index > target.getMaxChildIndex(dragged.get(0))){
 				return false;
 			}
-			
 			switch(getCurrentOperation()){
 			case DND.DROP_COPY: 
 				GenericNodeInterface nodeIf = NodeInterfaceFactory.getNodeInterface(target);
-				if(index == -1){
-					return nodeIf.addChildren(NodeDnDBuffer.getInstance().getDraggedNodesCopy(), ModelMasterSection.this);
-				}
 				return nodeIf.addChildren(NodeDnDBuffer.getInstance().getDraggedNodesCopy(), index, ModelMasterSection.this);
 			case DND.DROP_MOVE:
-				SelectionInterface selectionIf = new SelectionInterface();
-				selectionIf.setTarget(NodeDnDBuffer.getInstance().getDraggedNodes());
-				if(index == -1){
-					return selectionIf.move(target, ModelMasterSection.this);
-				}
 				return selectionIf.move(target, index, ModelMasterSection.this);
 			default:
 				return false;
 			}
-			
 		}
 
 		@Override
 		public boolean validateDrop(Object target, int operation, TransferData transferType) {
-			System.out.println("validateDrop: " + target + ", " + operation + ", " + transferType);
-			return true;
+			GenericNode parent = determineNewParent(target, getCurrentLocation());
+			SelectionInterface selectionIf = new SelectionInterface();
+			List<GenericNode>dragged = NodeDnDBuffer.getInstance().getDraggedNodes();
+			selectionIf.setTarget(dragged);
+			if(dragged.size() == 0) return false;
+			if(selectionIf.isSingleType() == false) return false;
+			try {
+				return (boolean)parent.accept(new DropValidator());
+			} catch (Exception e) {
+				return false;
+			}
+		}
+		
+		protected GenericNode determineNewParent(Object target, int location){
+			int position = determineLocation(getCurrentEvent());
+			if(target instanceof GenericNode == false) return null;
+			GenericNode parent = (GenericNode)target;
+			switch(position){
+			case LOCATION_ON:
+				return parent;
+			case LOCATION_AFTER:
+			case LOCATION_BEFORE:
+				return parent.getParent();
+			}
+			return null;
+		}
+		
+		protected int determineNewIndex(GenericNode target, int location){
+			int position = determineLocation(getCurrentEvent());
+			switch(position){
+			case LOCATION_ON:
+				return target.getMaxChildIndex(NodeDnDBuffer.getInstance().getDraggedNodes().get(0));
+			case LOCATION_AFTER:
+				return target.getIndex() + 1;
+			case LOCATION_BEFORE:
+				return target.getIndex();
+			}
+			return -1;
 		}
 		
 	}
