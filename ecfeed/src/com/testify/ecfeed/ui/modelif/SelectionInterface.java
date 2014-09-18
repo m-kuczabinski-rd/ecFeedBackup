@@ -3,7 +3,9 @@ package com.testify.ecfeed.ui.modelif;
 import java.util.List;
 
 import com.testify.ecfeed.abstraction.IModelOperation;
+import com.testify.ecfeed.abstraction.ModelIfException;
 import com.testify.ecfeed.abstraction.operations.FactoryShiftOperation;
+import com.testify.ecfeed.abstraction.operations.GenericMoveOperation;
 import com.testify.ecfeed.abstraction.operations.GenericRemoveNodesOperation;
 import com.testify.ecfeed.abstraction.operations.GenericShiftOperation;
 import com.testify.ecfeed.model.GenericNode;
@@ -31,15 +33,22 @@ public class SelectionInterface extends OperationExecuter {
 	}
 	
 	public boolean move(GenericNode newParent, IModelUpdateContext context){
-		return move(newParent, 0, context);
+		return move(newParent, -1, context);
 	}
 
 	public boolean move(GenericNode newParent, int newIndex, IModelUpdateContext context){
-		if(fSelected.size() != 1){
+		try{
+			IModelOperation operation;
+			if(newIndex == -1){
+				operation = new GenericMoveOperation(fSelected, newParent);
+			}
+			else{
+				operation = new GenericMoveOperation(fSelected, newParent, newIndex);
+			}
+			return execute(operation, context, Messages.DIALOG_MOVE_NODE_PROBLEM_TITLE);
+		}catch(ModelIfException e){
 			return false;
 		}
-		GenericNodeInterface nodeIf = NodeInterfaceFactory.getNodeInterface(fSelected.get(0));
-		return nodeIf.move(newParent, newIndex, context);
 	}
 	
 	public boolean moveUpDown(boolean up, IModelUpdateContext context) {

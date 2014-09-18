@@ -1,6 +1,5 @@
 package com.testify.ecfeed.abstraction.operations;
 
-import java.util.Arrays;
 import java.util.List;
 
 import com.testify.ecfeed.abstraction.IModelOperation;
@@ -9,10 +8,9 @@ import com.testify.ecfeed.model.GenericNode;
 
 public class GenericMoveOperation extends BulkOperation {
 
-	public GenericMoveOperation(GenericNode target, GenericNode newParent, int newIndex) throws ModelIfException {
-		this(Arrays.asList(new GenericNode[]{target}), newParent, newIndex);
+	public GenericMoveOperation(List<? extends GenericNode> moved, GenericNode newParent) throws ModelIfException {
+		this(moved, newParent, -1);
 	}
-
 	
 	public GenericMoveOperation(List<? extends GenericNode> moved, GenericNode newParent, int newIndex) throws ModelIfException {
 		super(true);
@@ -21,7 +19,12 @@ public class GenericMoveOperation extends BulkOperation {
 			if(externalNodes(moved, newParent)){
 				for(GenericNode node : moved){
 					addOperation((IModelOperation)node.getParent().accept(new FactoryRemoveChildOperation(node)));
-					addOperation((IModelOperation)newParent.accept(new FactoryAddChildOperation(node, newIndex)));
+					if(newIndex != -1){
+						addOperation((IModelOperation)newParent.accept(new FactoryAddChildOperation(node, newIndex)));
+					}
+					else{
+						addOperation((IModelOperation)newParent.accept(new FactoryAddChildOperation(node)));
+					}
 				}
 			}
 			else if(internalNodes(moved, newParent)){

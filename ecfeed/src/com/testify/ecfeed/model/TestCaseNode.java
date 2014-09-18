@@ -163,6 +163,9 @@ public class TestCaseNode extends GenericNode {
 			if(category == null || (category.isExpected() == false && category.getPartition(p.getQualifiedName()) == null)){
 				return false;
 			}
+			if(p.isAbstract()){
+				return false;
+			}
 		}
 		return true;
 	}

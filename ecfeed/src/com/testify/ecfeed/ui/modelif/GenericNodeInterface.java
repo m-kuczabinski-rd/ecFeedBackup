@@ -12,7 +12,6 @@ import com.testify.ecfeed.abstraction.java.ModelClassLoader;
 import com.testify.ecfeed.abstraction.operations.FactoryRemoveOperation;
 import com.testify.ecfeed.abstraction.operations.FactoryShiftOperation;
 import com.testify.ecfeed.abstraction.operations.GenericAddChildrenOperation;
-import com.testify.ecfeed.abstraction.operations.GenericMoveOperation;
 import com.testify.ecfeed.abstraction.operations.GenericRemoveNodesOperation;
 import com.testify.ecfeed.abstraction.operations.GenericShiftOperation;
 import com.testify.ecfeed.model.GenericNode;
@@ -58,10 +57,6 @@ public class GenericNodeInterface extends OperationExecuter{
 		return execute(FactoryRemoveOperation.getRemoveOperation(fTarget), context, Messages.DIALOG_REMOVE_NODE_PROBLEM_TITLE);
 	}
 	
-	public boolean move(GenericNode newParent, IModelUpdateContext context){
-		return move(newParent, 0, context);
-	}
-	
 	public boolean removeChildren(Collection<? extends GenericNode> children, IModelUpdateContext context, String message){
 		if(children == null || children.size() == 0) return false;
 		for(GenericNode node : children){
@@ -75,7 +70,7 @@ public class GenericNodeInterface extends OperationExecuter{
 		return execute(operation, context, Messages.DIALOG_ADD_CHILDREN_PROBLEM_TITLE);
 	}
 	
-	public boolean addChildren(Collection<? extends GenericNode> children, int index, IModelUpdateContext context, String message){
+	public boolean addChildren(Collection<? extends GenericNode> children, int index, IModelUpdateContext context){
 		IModelOperation operation;
 		if(index == -1){
 			operation = new GenericAddChildrenOperation(fTarget, children);
@@ -94,15 +89,6 @@ public class GenericNodeInterface extends OperationExecuter{
 	public boolean pasteEnabled(Collection<? extends GenericNode> pasted, int index){
 		GenericAddChildrenOperation operation = new GenericAddChildrenOperation(fTarget, pasted, index);
 		return operation.enabled();
-	}
-	
-	public boolean move(GenericNode newParent, int newIndex, IModelUpdateContext context){
-		try {
-			IModelOperation operation = new GenericMoveOperation(fTarget, newParent, newIndex);
-			return executeMoveOperation(operation, context);
-		} catch (Exception e) {
-			return false;
-		}
 	}
 	
 	public boolean moveUpDown(boolean up, IModelUpdateContext context) {

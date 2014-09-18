@@ -33,12 +33,12 @@ import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TreeNodeContentProvider;
+import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.jface.viewers.ViewerDropAdapter;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.dnd.ByteArrayTransfer;
 import org.eclipse.swt.dnd.DND;
-import org.eclipse.swt.dnd.DragSourceEvent;
-import org.eclipse.swt.dnd.DragSourceListener;
 import org.eclipse.swt.dnd.Transfer;
+import org.eclipse.swt.dnd.TransferData;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Image;
@@ -74,6 +74,9 @@ import com.testify.ecfeed.ui.editor.actions.ModelViewerActionFactory;
 import com.testify.ecfeed.ui.modelif.CategoryInterface;
 import com.testify.ecfeed.ui.modelif.GenericNodeInterface;
 import com.testify.ecfeed.ui.modelif.IModelUpdateListener;
+import com.testify.ecfeed.ui.modelif.ModelNodesTransfer;
+import com.testify.ecfeed.ui.modelif.NodeDnDBuffer;
+import com.testify.ecfeed.ui.modelif.NodeInterfaceFactory;
 import com.testify.ecfeed.ui.modelif.SelectionInterface;
 
 public class ModelMasterSection extends TreeViewerSection{
@@ -406,37 +409,56 @@ public class ModelMasterSection extends TreeViewerSection{
 		}
 	}
 	
-	private class ModelTransfer extends ByteArrayTransfer{
-		
-		private final String TRANSFER_TYPE_NAME = "dupa";
+	protected class DropListener extends ViewerDropAdapter{
 
-		@Override
-		protected String[] getTypeNames() {
-			return new String[]{"dupa"};
+		protected DropListener(Viewer viewer) {
+			super(viewer);
 		}
 
 		@Override
-		protected int[] getTypeIds() {
-			return new int[]{1};
+		public boolean performDrop(Object data) {
+			int position = determineLocation(getCurrentEvent());
+			GenericNode target = (GenericNode)getCurrentTarget();
+			int index = -1;
+			switch(position){
+			case LOCATION_ON:
+				break;
+			case LOCATION_AFTER:
+				index = target.getIndex() + 1;
+				target = target.getParent();
+				break;
+			case LOCATION_BEFORE:
+				index = target.getIndex();
+				target = target.getParent();
+				break;
+			case LOCATION_NONE:
+				return false;
+			}
+			
+			switch(getCurrentOperation()){
+			case DND.DROP_COPY: 
+				GenericNodeInterface nodeIf = NodeInterfaceFactory.getNodeInterface(target);
+				if(index == -1){
+					return nodeIf.addChildren(NodeDnDBuffer.getInstance().getDraggedNodesCopy(), ModelMasterSection.this);
+				}
+				return nodeIf.addChildren(NodeDnDBuffer.getInstance().getDraggedNodesCopy(), index, ModelMasterSection.this);
+			case DND.DROP_MOVE:
+				SelectionInterface selectionIf = new SelectionInterface();
+				selectionIf.setTarget(NodeDnDBuffer.getInstance().getDraggedNodes());
+				if(index == -1){
+					return selectionIf.move(target, ModelMasterSection.this);
+				}
+				return selectionIf.move(target, index, ModelMasterSection.this);
+			default:
+				return false;
+			}
+			
 		}
-		
-	}
-	
-	private class DragListener implements DragSourceListener{
 
 		@Override
-		public void dragStart(DragSourceEvent event) {
-			System.out.println("dupa");
-		}
-
-		@Override
-		public void dragSetData(DragSourceEvent event) {
-			System.out.println("cycki");
-		}
-
-		@Override
-		public void dragFinished(DragSourceEvent event) {
-			System.out.println("dupa cycki");
+		public boolean validateDrop(Object target, int operation, TransferData transferType) {
+			System.out.println("validateDrop: " + target + ", " + operation + ", " + transferType);
+			return true;
 		}
 		
 	}
@@ -447,7 +469,8 @@ public class ModelMasterSection extends TreeViewerSection{
 		setModelUpdateListener(new UpdateListener());
 		setActionProvider(new ModelViewerActionFactory(getTreeViewer(), ModelMasterSection.this, false));
 		
-		getTreeViewer().addDragSupport(DND.DROP_COPY|DND.DROP_MOVE, new Transfer[]{new ModelTransfer()}, new DragListener());
+		getTreeViewer().addDragSupport(DND.DROP_COPY|DND.DROP_MOVE, new Transfer[]{ModelNodesTransfer.getInstance()}, new ModelNodeDragListener(getTreeViewer()));
+		getTreeViewer().addDropSupport(DND.DROP_COPY|DND.DROP_MOVE, new Transfer[]{ModelNodesTransfer.getInstance()}, new DropListener(getTreeViewer()));
 	}
 	
 	public void setInput(RootNode model){
