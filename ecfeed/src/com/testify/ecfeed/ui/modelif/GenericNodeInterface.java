@@ -54,7 +54,7 @@ public class GenericNodeInterface extends OperationExecuter{
 	}
 
 	public boolean remove(IModelUpdateContext context){
-		return execute(FactoryRemoveOperation.getRemoveOperation(fTarget), context, Messages.DIALOG_REMOVE_NODE_PROBLEM_TITLE);
+		return execute(FactoryRemoveOperation.getRemoveOperation(fTarget, true), context, Messages.DIALOG_REMOVE_NODE_PROBLEM_TITLE);
 	}
 	
 	public boolean removeChildren(Collection<? extends GenericNode> children, IModelUpdateContext context, String message){
@@ -62,32 +62,32 @@ public class GenericNodeInterface extends OperationExecuter{
 		for(GenericNode node : children){
 			if(node.getParent() != fTarget) return false;
 		}
-		return execute(new GenericRemoveNodesOperation(children), context, message);
+		return execute(new GenericRemoveNodesOperation(children, true), context, message);
 	}
 	
 	public boolean addChildren(Collection<? extends GenericNode> children, IModelUpdateContext context){
-		IModelOperation operation = new GenericAddChildrenOperation(fTarget, children);
+		IModelOperation operation = new GenericAddChildrenOperation(fTarget, children, true);
 		return execute(operation, context, Messages.DIALOG_ADD_CHILDREN_PROBLEM_TITLE);
 	}
 	
 	public boolean addChildren(Collection<? extends GenericNode> children, int index, IModelUpdateContext context){
 		IModelOperation operation;
 		if(index == -1){
-			operation = new GenericAddChildrenOperation(fTarget, children);
+			operation = new GenericAddChildrenOperation(fTarget, children, true);
 		}
 		else{
-			operation = new GenericAddChildrenOperation(fTarget, children, index);
+			operation = new GenericAddChildrenOperation(fTarget, children, index, true);
 		}
 		return execute(operation, context, Messages.DIALOG_ADD_CHILDREN_PROBLEM_TITLE);
 	}
 	
 	public boolean pasteEnabled(Collection<? extends GenericNode> pasted){
-		GenericAddChildrenOperation operation = new GenericAddChildrenOperation(fTarget, pasted);
+		GenericAddChildrenOperation operation = new GenericAddChildrenOperation(fTarget, pasted, true);
 		return operation.enabled();
 	}
 	
 	public boolean pasteEnabled(Collection<? extends GenericNode> pasted, int index){
-		GenericAddChildrenOperation operation = new GenericAddChildrenOperation(fTarget, pasted, index);
+		GenericAddChildrenOperation operation = new GenericAddChildrenOperation(fTarget, pasted, index, true);
 		return operation.enabled();
 	}
 	

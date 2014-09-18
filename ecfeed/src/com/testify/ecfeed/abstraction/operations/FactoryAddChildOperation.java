@@ -15,14 +15,16 @@ public class FactoryAddChildOperation implements IModelVisitor{
 
 	private GenericNode fChild;
 	private int fIndex;
+	private boolean fValidate;
 
-	public FactoryAddChildOperation(GenericNode child, int index) {
+	public FactoryAddChildOperation(GenericNode child, int index, boolean validate) {
 		fChild = child;
 		fIndex = index;
+		fValidate = validate;
 	}
 
-	public FactoryAddChildOperation(GenericNode child) {
-		this(child, -1);
+	public FactoryAddChildOperation(GenericNode child, boolean validate) {
+		this(child, -1, validate);
 	}
 
 	@Override
@@ -74,9 +76,9 @@ public class FactoryAddChildOperation implements IModelVisitor{
 	public Object visit(CategoryNode node) throws Exception {
 		if(fChild instanceof PartitionNode){
 			if(fIndex == -1){
-				return new GenericOperationAddPartition(node, (PartitionNode)fChild);
+				return new GenericOperationAddPartition(node, (PartitionNode)fChild, fValidate);
 			}
-			return new GenericOperationAddPartition(node, (PartitionNode)fChild, fIndex);
+			return new GenericOperationAddPartition(node, (PartitionNode)fChild, fIndex, fValidate);
 		}
 		throw new ModelIfException(Messages.OPERATION_NOT_SUPPORTED_PROBLEM);
 	}
@@ -95,9 +97,9 @@ public class FactoryAddChildOperation implements IModelVisitor{
 	public Object visit(PartitionNode node) throws Exception {
 		if(fChild instanceof PartitionNode){
 			if(fIndex == -1){
-				return new GenericOperationAddPartition(node, (PartitionNode)fChild);
+				return new GenericOperationAddPartition(node, (PartitionNode)fChild, fValidate);
 			}
-			return new GenericOperationAddPartition(node, (PartitionNode)fChild, fIndex);
+			return new GenericOperationAddPartition(node, (PartitionNode)fChild, fIndex, fValidate);
 		}
 		throw new ModelIfException(Messages.OPERATION_NOT_SUPPORTED_PROBLEM);
 	}

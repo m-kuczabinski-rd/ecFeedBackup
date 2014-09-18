@@ -28,6 +28,12 @@ public class FactoryRemoveOperation {
 	
 	private static class RemoveOperationVisitor implements IModelVisitor{
 
+		private boolean fValidate;
+		
+		public RemoveOperationVisitor(boolean validate){
+			fValidate = validate;
+		}
+		
 		@Override
 		public Object visit(RootNode node) throws Exception {
 			return new UnsupportedModelOperation();
@@ -45,7 +51,7 @@ public class FactoryRemoveOperation {
 
 		@Override
 		public Object visit(CategoryNode node) throws Exception {
-			return new MethodOperationRemoveParameter(node.getMethod(), node);
+			return new MethodOperationRemoveParameter(node.getMethod(), node, fValidate);
 		}
 
 		@Override
@@ -60,13 +66,13 @@ public class FactoryRemoveOperation {
 
 		@Override
 		public Object visit(PartitionNode node) throws Exception {
-			return new GenericOperationRemovePartition(node.getParent(), node);
+			return new GenericOperationRemovePartition(node.getParent(), node, fValidate);
 		}
 	}
 	
-	public static IModelOperation getRemoveOperation(GenericNode node){
+	public static IModelOperation getRemoveOperation(GenericNode node, boolean validate){
 		try {
-			return (IModelOperation)node.accept(new RemoveOperationVisitor());
+			return (IModelOperation)node.accept(new RemoveOperationVisitor(validate));
 		} catch (Exception e) {
 			return new UnsupportedModelOperation();
 		}

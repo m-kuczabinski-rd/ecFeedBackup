@@ -7,20 +7,20 @@ import com.testify.ecfeed.model.GenericNode;
 
 public class GenericAddChildrenOperation extends BulkOperation {
 
-	public GenericAddChildrenOperation(GenericNode target, Collection<? extends GenericNode> children) {
-		this(target, children, -1);
+	public GenericAddChildrenOperation(GenericNode target, Collection<? extends GenericNode> children, boolean validate) {
+		this(target, children, -1, validate);
 	}
 
-	public GenericAddChildrenOperation(GenericNode target, Collection<? extends GenericNode> children, int index) {
+	public GenericAddChildrenOperation(GenericNode target, Collection<? extends GenericNode> children, int index, boolean validate) {
 		super(false);
 		for(GenericNode child : children){
 			IModelOperation operation;
 			try {
 				if(index != -1){
-					operation = (IModelOperation)target.accept(new FactoryAddChildOperation(child, index++));
+					operation = (IModelOperation)target.accept(new FactoryAddChildOperation(child, index++, validate));
 				}
 				else{
-					operation = (IModelOperation)target.accept(new FactoryAddChildOperation(child));
+					operation = (IModelOperation)target.accept(new FactoryAddChildOperation(child, validate));
 				}
 				if(operation != null){
 					addOperation(operation);

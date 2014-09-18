@@ -37,19 +37,19 @@ public class GenericOperationAddPartition extends BulkOperation {
 
 		@Override
 		public IModelOperation reverseOperation() {
-			return new GenericOperationRemovePartition(fTarget, fPartition);
+			return new GenericOperationRemovePartition(fTarget, fPartition, false);
 		}
 	}
 
-	public GenericOperationAddPartition(PartitionedNode target, PartitionNode partition, int index) {
+	public GenericOperationAddPartition(PartitionedNode target, PartitionNode partition, int index, boolean validate) {
 		super(true);
 		addOperation(new AddPartitionOperation(target, partition, index));
-		if(target.getCategory().getMethod() != null){
+		if((target.getCategory().getMethod() != null) && validate){
 			addOperation(new MethodOperationMakeConsistent(target.getCategory().getMethod()));
 		}
 	}
 
-	public GenericOperationAddPartition(PartitionedNode target, PartitionNode partition) {
-		this(target, partition, -1);
+	public GenericOperationAddPartition(PartitionedNode target, PartitionNode partition, boolean validate) {
+		this(target, partition, -1, validate);
 	}
 }

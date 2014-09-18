@@ -1,10 +1,14 @@
 package com.testify.ecfeed.abstraction.operations;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import com.testify.ecfeed.abstraction.IModelOperation;
 import com.testify.ecfeed.abstraction.ModelIfException;
 import com.testify.ecfeed.model.GenericNode;
+import com.testify.ecfeed.model.MethodNode;
+import com.testify.ecfeed.model.PartitionedNode;
 
 public class GenericMoveOperation extends BulkOperation {
 
@@ -14,16 +18,23 @@ public class GenericMoveOperation extends BulkOperation {
 	
 	public GenericMoveOperation(List<? extends GenericNode> moved, GenericNode newParent, int newIndex) throws ModelIfException {
 		super(true);
+		Set<MethodNode> methodsInvolved = new HashSet<>();
 		try {
 			//all nodes have parents other than newParent
 			if(externalNodes(moved, newParent)){
 				for(GenericNode node : moved){
-					addOperation((IModelOperation)node.getParent().accept(new FactoryRemoveChildOperation(node)));
+					if(node instanceof PartitionedNode){
+						methodsInvolved.add(((PartitionedNode)node).getCategory().getMethod());
+					}
+					addOperation((IModelOperation)node.getParent().accept(new FactoryRemoveChildOperation(node, false)));
 					if(newIndex != -1){
-						addOperation((IModelOperation)newParent.accept(new FactoryAddChildOperation(node, newIndex)));
+						addOperation((IModelOperation)newParent.accept(new FactoryAddChildOperation(node, newIndex, false)));
 					}
 					else{
-						addOperation((IModelOperation)newParent.accept(new FactoryAddChildOperation(node)));
+						addOperation((IModelOperation)newParent.accept(new FactoryAddChildOperation(node, false)));
+					}
+					for(MethodNode method : methodsInvolved){
+						addOperation(new MethodOperationMakeConsistent(method));
 					}
 				}
 			}

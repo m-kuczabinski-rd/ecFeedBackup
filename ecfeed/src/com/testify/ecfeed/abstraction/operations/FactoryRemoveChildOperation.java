@@ -13,9 +13,11 @@ import com.testify.ecfeed.model.TestCaseNode;
 public class FactoryRemoveChildOperation implements IModelVisitor{
 
 	private GenericNode fChild;
+	private boolean fValidate;
 
-	public FactoryRemoveChildOperation(GenericNode child) {
+	public FactoryRemoveChildOperation(GenericNode child, boolean validate) {
 		fChild = child;
+		fValidate = validate;
 	}
 
 	@Override
@@ -51,7 +53,7 @@ public class FactoryRemoveChildOperation implements IModelVisitor{
 	@Override
 	public Object visit(CategoryNode node) throws Exception {
 		if(fChild instanceof PartitionNode){
-			return new GenericOperationRemovePartition(node, (PartitionNode)fChild);
+			return new GenericOperationRemovePartition(node, (PartitionNode)fChild, fValidate);
 		}
 		return null;
 	}
@@ -69,7 +71,7 @@ public class FactoryRemoveChildOperation implements IModelVisitor{
 	@Override
 	public Object visit(PartitionNode node) throws Exception {
 		if(fChild instanceof PartitionNode){
-			return new GenericOperationRemovePartition(node, (PartitionNode)fChild);
+			return new GenericOperationRemovePartition(node, (PartitionNode)fChild, fValidate);
 		}
 		return null;
 	}

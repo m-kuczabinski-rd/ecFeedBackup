@@ -35,12 +35,12 @@ public class PartitionedNodeInterface extends GenericNodeInterface {
 	}
 	
 	public boolean addPartition(PartitionNode newPartition, IModelUpdateContext context) {
-		IModelOperation operation = new GenericOperationAddPartition(fTarget, newPartition, fTarget.getPartitions().size()); 
+		IModelOperation operation = new GenericOperationAddPartition(fTarget, newPartition, fTarget.getPartitions().size(), true); 
 		return execute(operation, context, Messages.DIALOG_ADD_PARTITION_PROBLEM_TITLE);
 	}
 	
 	public boolean removePartition(PartitionNode partition, IModelUpdateContext context) {
-		IModelOperation operation = new GenericOperationRemovePartition(fTarget, partition);
+		IModelOperation operation = new GenericOperationRemovePartition(fTarget, partition, true);
 		return execute(operation, context, Messages.DIALOG_REMOVE_PARTITION_TITLE);
 	}
 

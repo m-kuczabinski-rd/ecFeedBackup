@@ -70,10 +70,10 @@ public class GenericOperationRemovePartition extends BulkOperation {
 		}
 	}
 
-	public GenericOperationRemovePartition(PartitionedNode target, PartitionNode partition) {
+	public GenericOperationRemovePartition(PartitionedNode target, PartitionNode partition, boolean validate) {
 		super(true);
 		addOperation(new RemovePartitionOperation(target, partition));
-		if(target.getCategory().getMethod() != null){
+		if((target.getCategory().getMethod() != null) && validate){
 			addOperation(new MethodOperationMakeConsistent(target.getCategory().getMethod()));
 		}
 	}

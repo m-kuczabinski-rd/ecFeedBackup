@@ -53,9 +53,14 @@ public class MethodOperationRemoveParameter extends BulkOperation{
 		}
 	}
 
-	public MethodOperationRemoveParameter(MethodNode target, CategoryNode parameter) {
+	public MethodOperationRemoveParameter(MethodNode target, CategoryNode parameter, boolean validate) {
 		super(true);
 		addOperation(new RemoveParameterOperation(target, parameter));
-		addOperation(new MethodOperationMakeConsistent(target));
+		if(validate){
+			addOperation(new MethodOperationMakeConsistent(target));
+		}
+	}
+	public MethodOperationRemoveParameter(MethodNode target, CategoryNode parameter) {
+		this(target, parameter, true);
 	}
 }
