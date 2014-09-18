@@ -161,8 +161,6 @@ public class ModelEditor extends FormEditor{
 			FileOutputStream fout = new FileOutputStream(file.getLocation().toOSString());
 			IModelSerializer serializer = new EctSerializer(fout);
 			serializer.serialize(fModel);
-//			XmlModelSerializer writer = new XmlModelSerializer(fout);
-//			writer.writeXmlDocument(fModel);
 			refreshWorkspace(monitor);
 			commitPages(true);
 			firePropertyChange(PROP_DIRTY);
