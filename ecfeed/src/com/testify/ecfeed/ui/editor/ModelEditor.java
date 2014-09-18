@@ -199,7 +199,9 @@ public class ModelEditor extends FormEditor{
 	public void setFocus() {
 		if (fResourceChange) {
 			fModelPage.getMasterBlock().getMasterSection().refresh();
-			fModelPage.getMasterBlock().getCurrentPage().refresh();
+			if(fModelPage.getMasterBlock().getCurrentPage() != null){
+				fModelPage.getMasterBlock().getCurrentPage().refresh();
+			}
 			fResourceChange = false;
 		}
 		super.setFocus();
