@@ -95,8 +95,9 @@ public class ModelMasterDetailsBlock extends MasterDetailsBlock implements ISele
 	@Override
 	protected void createMasterPart(IManagedForm managedForm, Composite parent) {
 		FormToolkit toolkit = managedForm.getToolkit();
+		ModelOperationManager operationManager = getPage().getEditor().getModelOperationManager();
 
-		fMasterSection = new ModelMasterSection(this, parent, toolkit, getPage().getEditor().getModelOperationManager());
+		fMasterSection = new ModelMasterSection(this, parent, toolkit, operationManager);
 		fMasterSection.initialize(managedForm);
 		fMasterSection.addSelectionChangedListener(this);
 		fMasterSection.setInput(getModel());
