@@ -42,6 +42,7 @@ public class GenericOperationRemovePartition extends BulkOperation {
 		
 		@Override
 		public void execute() throws ModelIfException {
+			fOriginalIndex = fPartition.getIndex();
 			CategoryNode category = fTarget.getCategory();
 			if(category.isExpected() && JavaUtils.isPrimitive(category.getType()) == false && category.getPartitions().size() == 1 && category.getPartitions().get(0) == fPartition){
 				// We are removing the only partition of expected category. 

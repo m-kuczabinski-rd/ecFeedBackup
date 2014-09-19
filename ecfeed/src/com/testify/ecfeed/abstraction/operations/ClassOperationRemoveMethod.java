@@ -19,6 +19,7 @@ public class ClassOperationRemoveMethod implements IModelOperation {
 	
 	@Override
 	public void execute() throws ModelIfException {
+		fCurrentIndex = fMethod.getIndex();
 		if(fTarget.removeMethod(fMethod) == false){
 			throw new ModelIfException(Messages.UNEXPECTED_PROBLEM_WHILE_REMOVING_ELEMENT);
 		}

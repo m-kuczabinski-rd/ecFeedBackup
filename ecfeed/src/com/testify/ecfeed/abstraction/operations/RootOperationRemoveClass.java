@@ -19,6 +19,7 @@ public class RootOperationRemoveClass implements IModelOperation {
 
 	@Override
 	public void execute() throws ModelIfException {
+		fCurrentIndex = fRemovedClass.getIndex();
 		fTarget.removeClass(fRemovedClass);
 	}
 

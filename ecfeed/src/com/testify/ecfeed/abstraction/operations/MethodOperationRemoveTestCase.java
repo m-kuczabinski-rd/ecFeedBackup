@@ -19,6 +19,7 @@ public class MethodOperationRemoveTestCase implements IModelOperation {
 
 	@Override
 	public void execute() throws ModelIfException {
+		fIndex = fTestCase.getIndex();
 		fTarget.removeTestCase(fTestCase);
 	}
 

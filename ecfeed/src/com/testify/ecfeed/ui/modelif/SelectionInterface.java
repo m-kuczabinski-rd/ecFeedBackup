@@ -20,7 +20,10 @@ public class SelectionInterface extends OperationExecuter {
 	}
 	
 	public boolean delete(IModelUpdateContext context){
-		return execute(new GenericRemoveNodesOperation(fSelected, true), context, Messages.DIALOG_REMOVE_NODES_PROBLEM_TITLE);
+		if(fSelected.size() > 0){
+			return execute(new GenericRemoveNodesOperation(fSelected, true), context, Messages.DIALOG_REMOVE_NODES_PROBLEM_TITLE);
+		}
+		return false;
 	}
 	
 	public boolean deleteEnabled(){

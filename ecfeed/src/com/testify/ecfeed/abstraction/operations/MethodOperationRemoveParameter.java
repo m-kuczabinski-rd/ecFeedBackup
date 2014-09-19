@@ -41,6 +41,7 @@ public class MethodOperationRemoveParameter extends BulkOperation{
 
 		@Override
 		public void execute() throws ModelIfException {
+			fOriginalIndex = fParameter.getIndex();
 			fTarget.removeCategory(fParameter);
 			for(TestCaseNode tc : fTarget.getTestCases()){
 				tc.getTestData().remove(fOriginalIndex);

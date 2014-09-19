@@ -119,7 +119,11 @@ public class ConstraintNode extends GenericNode{
 
 	public boolean isConsistent() {
 		for(PartitionNode p : getConstraint().getReferencedPartitions()){
-			if(p.getCategory() == null || p.getCategory().getPartition(p.getQualifiedName()) == null){
+			CategoryNode c = p.getCategory();
+			if(c == null || c.getPartition(p.getQualifiedName()) == null){
+				return false;
+			}
+			if((c.getMethod() == null) || (c.getMethod().getCategories().contains(c) == false)){
 				return false;
 			}
 		}

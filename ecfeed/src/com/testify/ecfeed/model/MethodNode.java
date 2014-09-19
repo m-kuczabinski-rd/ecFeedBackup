@@ -365,6 +365,11 @@ public class MethodNode extends GenericNode {
 		fTestCases.clear();
 	}
 
+	public void replaceParameters(List<CategoryNode> parameters) {
+		fCategories.clear();
+		fCategories.addAll(parameters);
+	}
+
 	public void replaceTestCases(List<TestCaseNode> testCases){
 		fTestCases.clear();
 		fTestCases.addAll(testCases);
