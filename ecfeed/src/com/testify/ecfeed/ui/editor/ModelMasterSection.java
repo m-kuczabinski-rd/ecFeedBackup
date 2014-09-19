@@ -48,7 +48,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
-import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.forms.AbstractFormPart;
 import org.eclipse.ui.forms.IDetailsPage;
 import org.eclipse.ui.forms.widgets.FormToolkit;
@@ -523,7 +522,7 @@ public class ModelMasterSection extends TreeViewerSection{
 		
 	}
 	
-	public ModelMasterSection(ModelMasterDetailsBlock masterDetailsBlock, Composite parent, FormToolkit toolkit, ModelOperationManager operationManager, IActionBars actionBars) {
+	public ModelMasterSection(ModelMasterDetailsBlock masterDetailsBlock, Composite parent, FormToolkit toolkit, ModelOperationManager operationManager) {
 		super(parent, toolkit, STYLE, null, operationManager);
 		fMasterDetailsBlock = masterDetailsBlock;
 		setModelUpdateListener(new UpdateListener());
