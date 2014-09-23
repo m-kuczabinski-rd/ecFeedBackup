@@ -5,7 +5,7 @@ import com.testify.ecfeed.abstraction.ModelIfException;
 import com.testify.ecfeed.abstraction.java.Constants;
 import com.testify.ecfeed.model.PartitionNode;
 
-public class PartitionOperationRename implements IModelOperation {
+public class PartitionOperationRename extends AbstractModelOperation {
 
 	private String fNewName;
 	private PartitionNode fTarget;
@@ -26,6 +26,7 @@ public class PartitionOperationRename implements IModelOperation {
 			throw new ModelIfException(Messages.PARTITION_NAME_REGEX_PROBLEM);
 		}
 		fTarget.setName(fNewName);
+		markModelUpdated();
 	}
 
 	@Override

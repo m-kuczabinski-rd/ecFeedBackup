@@ -5,7 +5,7 @@ import com.testify.ecfeed.abstraction.ModelIfException;
 import com.testify.ecfeed.abstraction.java.Constants;
 import com.testify.ecfeed.model.TestCaseNode;
 
-public class TestCaseOperationRename implements IModelOperation {
+public class TestCaseOperationRename extends AbstractModelOperation {
 
 	private TestCaseNode fTarget;
 	private String fNewName;
@@ -23,6 +23,7 @@ public class TestCaseOperationRename implements IModelOperation {
 			throw new ModelIfException(Messages.TEST_CASE_NAME_REGEX_PROBLEM);
 		}
 		fTarget.setName(fNewName);
+		markModelUpdated();
 	}
 
 	@Override

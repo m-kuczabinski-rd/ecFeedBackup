@@ -41,7 +41,7 @@ public class ModelOperationManager {
 	}
 	
 	public void redo() throws ModelIfException{
-		if(fHistoryIndex <= fHistory.size()){
+		if(fHistoryIndex < fHistory.size()){
 			IModelOperation operation = fHistory.get(fHistoryIndex);
 			operation.execute();
 			++fHistoryIndex;

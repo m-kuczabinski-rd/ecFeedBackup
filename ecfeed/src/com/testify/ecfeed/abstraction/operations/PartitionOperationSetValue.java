@@ -8,7 +8,7 @@ import com.testify.ecfeed.abstraction.java.JavaUtils;
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.PartitionNode;
 
-public class PartitionOperationSetValue implements IModelOperation {
+public class PartitionOperationSetValue extends AbstractModelOperation {
 
 	private String fNewValue;
 	private String fOriginalValue;
@@ -17,12 +17,13 @@ public class PartitionOperationSetValue implements IModelOperation {
 	
 	private ITypeAdapterProvider fAdapterProvider;
 	
-	private class ReverseOperation implements IModelOperation{
+	private class ReverseOperation extends AbstractModelOperation{
 
 		@Override
 		public void execute() throws ModelIfException {
 			fTarget.setValueString(fOriginalValue);
 			fTarget.getCategory().setDefaultValueString(fOriginalDefaultValue);
+			markModelUpdated();
 		}
 
 		@Override
@@ -52,6 +53,7 @@ public class PartitionOperationSetValue implements IModelOperation {
 				category.setDefaultValueString(fNewValue);
 			}
 		}
+		markModelUpdated();
 	}
 
 	@Override

@@ -9,7 +9,7 @@ import com.testify.ecfeed.abstraction.java.JavaUtils;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.MethodNode;
 
-public class ClassOperationAddMethod implements IModelOperation {
+public class ClassOperationAddMethod extends AbstractModelOperation{
 	
 	private ClassNode fTarget;
 	private MethodNode fMethod;
@@ -37,6 +37,7 @@ public class ClassOperationAddMethod implements IModelOperation {
 		if(fTarget.addMethod(fMethod, fIndex) == false){
 			throw new ModelIfException(Messages.UNEXPECTED_PROBLEM_WHILE_ADDING_ELEMENT);
 		}
+		markModelUpdated();
 	}
 
 	@Override

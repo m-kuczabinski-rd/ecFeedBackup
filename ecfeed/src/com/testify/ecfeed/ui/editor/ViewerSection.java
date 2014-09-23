@@ -42,13 +42,11 @@ import org.eclipse.swt.widgets.Layout;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.ui.actions.ActionFactory;
-import org.eclipse.ui.forms.widgets.FormToolkit;
 
-import com.testify.ecfeed.abstraction.ModelOperationManager;
 import com.testify.ecfeed.model.GenericNode;
 import com.testify.ecfeed.ui.editor.actions.IActionProvider;
 import com.testify.ecfeed.ui.editor.actions.NamedAction;
-import com.testify.ecfeed.ui.modelif.IModelUpdateListener;
+import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 
 public abstract class ViewerSection extends BasicSection implements ISelectionProvider{
 	public static final int BUTTONS_ASIDE = 1;
@@ -154,11 +152,16 @@ public abstract class ViewerSection extends BasicSection implements ISelectionPr
 		
 	}
 	
-	public ViewerSection(Composite parent, FormToolkit toolkit, int style, IModelUpdateListener updateListener, ModelOperationManager operationManager) {
-		super(parent, toolkit, style, updateListener, operationManager);
+//	public ViewerSection(Composite parent, FormToolkit toolkit, int style, IModelUpdateListener updateListener, ModelOperationManager operationManager) {
+//		super(parent, toolkit, style, updateListener, operationManager);
+//		fSelectedElements = new ArrayList<>();
+//	}	
+
+	public ViewerSection(ISectionContext sectionContext, IModelUpdateContext updateContext, int style) {
+		super(sectionContext, updateContext, style);
 		fSelectedElements = new ArrayList<>();
 	}	
-	
+
 	@Override
 	public void refresh(){
 		super.refresh();
@@ -231,7 +234,7 @@ public abstract class ViewerSection extends BasicSection implements ISelectionPr
 
 	/*
 	 * Indicates whether optional buttons are located below (default)
-	 * or on the left side of the viewer
+	 * or on the right side of the viewer
 	 */
 	protected int buttonsPosition() {
 		return BUTTONS_BELOW;

@@ -5,7 +5,7 @@ import com.testify.ecfeed.abstraction.ModelIfException;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.MethodNode;
 
-public class ClassOperationRemoveMethod implements IModelOperation {
+public class ClassOperationRemoveMethod extends AbstractModelOperation {
 
 	private ClassNode fTarget;
 	private MethodNode fMethod;
@@ -23,6 +23,7 @@ public class ClassOperationRemoveMethod implements IModelOperation {
 		if(fTarget.removeMethod(fMethod) == false){
 			throw new ModelIfException(Messages.UNEXPECTED_PROBLEM_WHILE_REMOVING_ELEMENT);
 		}
+		markModelUpdated();
 	}
 
 	@Override

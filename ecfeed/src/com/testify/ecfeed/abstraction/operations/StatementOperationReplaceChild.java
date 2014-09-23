@@ -5,7 +5,7 @@ import com.testify.ecfeed.abstraction.ModelIfException;
 import com.testify.ecfeed.model.constraint.BasicStatement;
 import com.testify.ecfeed.model.constraint.StatementArray;
 
-public class StatementOperationReplaceChild implements IModelOperation {
+public class StatementOperationReplaceChild extends AbstractModelOperation {
 
 	private BasicStatement fNewChild;
 	private BasicStatement fCurrentChild;
@@ -23,6 +23,7 @@ public class StatementOperationReplaceChild implements IModelOperation {
 			throw new ModelIfException(Messages.NULL_POINTER_TARGET);
 		}
 		fTarget.replaceChild(fCurrentChild, fNewChild);
+		markModelUpdated();
 	}
 
 	@Override

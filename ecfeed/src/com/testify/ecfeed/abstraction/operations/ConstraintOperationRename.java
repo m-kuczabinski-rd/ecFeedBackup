@@ -5,7 +5,7 @@ import com.testify.ecfeed.abstraction.ModelIfException;
 import com.testify.ecfeed.abstraction.java.Constants;
 import com.testify.ecfeed.model.ConstraintNode;
 
-public class ConstraintOperationRename implements IModelOperation {
+public class ConstraintOperationRename extends AbstractModelOperation {
 
 	private ConstraintNode fTarget;
 	private String fNewName;
@@ -23,6 +23,7 @@ public class ConstraintOperationRename implements IModelOperation {
 			throw new ModelIfException(Messages.CONSTRAINT_NAME_REGEX_PROBLEM);
 		}
 		fTarget.setName(fNewName);
+		markModelUpdated();
 	}
 
 	@Override

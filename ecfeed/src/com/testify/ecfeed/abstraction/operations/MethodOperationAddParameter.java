@@ -8,7 +8,7 @@ import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.TestCaseNode;
 
-public class MethodOperationAddParameter implements IModelOperation {
+public class MethodOperationAddParameter extends AbstractModelOperation {
 	
 	List<TestCaseNode> fRemovedTestCases;
 	MethodNode fTarget;
@@ -16,12 +16,13 @@ public class MethodOperationAddParameter implements IModelOperation {
 	private int fNewIndex;
 	private int fCurrentIndex;
 	
-	private class ReverseOperation implements IModelOperation{
+	private class ReverseOperation extends AbstractModelOperation{
 
 		@Override
 		public void execute() throws ModelIfException {
 			fTarget.removeCategory(fParameter);
 			fTarget.replaceTestCases(fRemovedTestCases);
+			markModelUpdated();
 		}
 
 		@Override
@@ -59,6 +60,7 @@ public class MethodOperationAddParameter implements IModelOperation {
 		}
 		fTarget.addCategory(fParameter, fNewIndex);
 		fTarget.removeTestCases();
+		markModelUpdated();
 	}
 
 	@Override

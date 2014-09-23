@@ -27,7 +27,6 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
-import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Section;
 
 import com.testify.ecfeed.model.CategoryNode;
@@ -36,8 +35,9 @@ import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.ui.common.NodeNameColumnLabelProvider;
 import com.testify.ecfeed.ui.common.NodeViewerColumnLabelProvider;
 import com.testify.ecfeed.ui.editor.actions.DeleteAction;
-import com.testify.ecfeed.ui.editor.actions.ModelViewerActionFactory;
+import com.testify.ecfeed.ui.editor.actions.ModelViewerActionProvider;
 import com.testify.ecfeed.ui.modelif.CategoryInterface;
+import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 import com.testify.ecfeed.ui.modelif.MethodInterface;
 
 public class ParametersViewer extends TableViewerSection{
@@ -109,7 +109,7 @@ public class ParametersViewer extends TableViewerSection{
 				newType = ((CCombo)fCellEditor.getControl()).getText();
 			}
 			fCategoryIf.setTarget(node);
-			fCategoryIf.setType(newType, ParametersViewer.this);
+			fCategoryIf.setType(newType);
 
 			fCellEditor.setFocus();
 		}
@@ -143,7 +143,7 @@ public class ParametersViewer extends TableViewerSection{
 		@Override
 		protected void setValue(Object element, Object value) {
 			fCategoryIf.setTarget((CategoryNode)element);
-			fCategoryIf.setName((String)value, ParametersViewer.this);
+			fCategoryIf.setName((String)value);
 		}
 	}
 
@@ -181,7 +181,7 @@ public class ParametersViewer extends TableViewerSection{
 			CategoryNode node = (CategoryNode)element;
 			boolean expected = ((int)value == 0) ? true : false;
 			fCategoryIf.setTarget(node);
-			fCategoryIf.setExpected(expected, ParametersViewer.this);
+			fCategoryIf.setExpected(expected);
 			fCellEditor.setFocus();
 		}
 	}
@@ -247,7 +247,7 @@ public class ParametersViewer extends TableViewerSection{
 				valueString = fComboCellEditor.getViewer().getCCombo().getText();
 			}
 			fCategoryIf.setTarget(category);
-			fCategoryIf.setDefaultValue(valueString, ParametersViewer.this);
+			fCategoryIf.setDefaultValue(valueString);
 		}
 
 	}
@@ -257,14 +257,14 @@ public class ParametersViewer extends TableViewerSection{
 		public void widgetSelected(SelectionEvent e){
 			boolean up = (e.getSource() == fMoveUpButton);
 			fCategoryIf.setTarget((CategoryNode)getSelectedElement());
-			fCategoryIf.moveUpDown(up, ParametersViewer.this);
+			fCategoryIf.moveUpDown(up);
 		}
 	}
 
 	private class AddNewParameterAdapter extends SelectionAdapter {
 		@Override
 		public void widgetSelected(SelectionEvent e) {
-			CategoryNode addedParameter = fMethodIf.addNewParameter(ParametersViewer.this);
+			CategoryNode addedParameter = fMethodIf.addNewParameter();
 			if(addedParameter != null){
 				selectElement(addedParameter);
 				fNameColumn.getViewer().editElement(addedParameter, 0);			
@@ -272,10 +272,10 @@ public class ParametersViewer extends TableViewerSection{
 		}
 	}
 
-	public ParametersViewer(BasicDetailsPage parent, FormToolkit toolkit) {
-		super(parent.getMainComposite(), toolkit, STYLE, parent, parent.getOperationManager());
-		fCategoryIf = new CategoryInterface();
-		fMethodIf = new MethodInterface();
+	public ParametersViewer(ISectionContext sectionContext, IModelUpdateContext updateContext) {
+		super(sectionContext, updateContext, STYLE);
+		fCategoryIf = new CategoryInterface(this);
+		fMethodIf = new MethodInterface(this);
 
 		GridData gd = new GridData(SWT.FILL, SWT.FILL, true, true);
 		gd.minimumHeight = 250;
@@ -293,8 +293,8 @@ public class ParametersViewer extends TableViewerSection{
 		fExpectedColumn.setEditingSupport(new ExpectedValueEditingSupport());
 		fDefaultValueColumn.setEditingSupport(new DefaultValueEditingSupport());
 
-		addDoubleClickListener(new SelectNodeDoubleClickListener(parent.getMasterSection()));
-		setActionProvider(new ModelViewerActionFactory(getTableViewer(), this));
+		addDoubleClickListener(new SelectNodeDoubleClickListener(sectionContext.getMasterSection()));
+		setActionProvider(new ModelViewerActionProvider(getTableViewer(), this));
 	}
 
 	@Override

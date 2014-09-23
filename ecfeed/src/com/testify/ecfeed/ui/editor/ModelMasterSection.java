@@ -44,18 +44,15 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.widgets.Button;
-import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.ui.forms.AbstractFormPart;
 import org.eclipse.ui.forms.IDetailsPage;
-import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Section;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.FrameworkUtil;
 
-import com.testify.ecfeed.abstraction.ModelOperationManager;
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.ConstraintNode;
@@ -69,7 +66,7 @@ import com.testify.ecfeed.ui.common.Constants;
 import com.testify.ecfeed.ui.editor.actions.AbstractAddChildAction;
 import com.testify.ecfeed.ui.editor.actions.AddChildActionFactory;
 import com.testify.ecfeed.ui.editor.actions.DeleteAction;
-import com.testify.ecfeed.ui.editor.actions.ModelViewerActionFactory;
+import com.testify.ecfeed.ui.editor.actions.ModelViewerActionProvider;
 import com.testify.ecfeed.ui.modelif.CategoryInterface;
 import com.testify.ecfeed.ui.modelif.GenericNodeInterface;
 import com.testify.ecfeed.ui.modelif.IModelUpdateListener;
@@ -85,6 +82,7 @@ public class ModelMasterSection extends TreeViewerSection{
 	private Button fMoveUpButton;
 	private Button fMoveDownButton;
 	private ModelMasterDetailsBlock fMasterDetailsBlock;
+	private IModelUpdateListener fUpdateListener;
 	
 	private class ModelWrapper{
 		private RootNode fModel;
@@ -98,6 +96,15 @@ public class ModelMasterSection extends TreeViewerSection{
 		}
 	}
 	
+	private class UpdateListener implements IModelUpdateListener{
+		@Override
+		public void modelUpdated(AbstractFormPart source) {
+			source.markDirty();
+			refresh();
+			enableSortButtons(getSelection());
+		}
+	}
+
 	private class ModelContentProvider extends TreeNodeContentProvider implements ITreeContentProvider {
 
 		public final Object[] EMPTY_ARRAY = {};
@@ -206,7 +213,7 @@ public class ModelMasterSection extends TreeViewerSection{
 			GenericNodeInterface fNodeInterface;
 
 			public DecorationProvider(){
-				fNodeInterface = new GenericNodeInterface();
+				fNodeInterface = new GenericNodeInterface(ModelMasterSection.this);
 			}
 
 			@Override
@@ -354,15 +361,6 @@ public class ModelMasterSection extends TreeViewerSection{
 		}
 	}
 	
-	private class UpdateListener implements IModelUpdateListener{
-		@Override
-		public void modelUpdated(AbstractFormPart source) {
-			source.markDirty();
-			refresh();
-			enableSortButtons(getSelection());
-		}
-	}
-
 	private class MoveUpDownAdapter extends SelectionAdapter{
 		@Override
 		public void widgetSelected(SelectionEvent e){
@@ -373,9 +371,9 @@ public class ModelMasterSection extends TreeViewerSection{
 
 		@SuppressWarnings("unchecked")
 		private void moveSelectedItem(boolean moveUp){
-			SelectionInterface selectionIf = new SelectionInterface();
+			SelectionInterface selectionIf = new SelectionInterface(ModelMasterSection.this);
 			selectionIf.setTarget(getSelection().toList());
-			selectionIf.moveUpDown(moveUp, ModelMasterSection.this);
+			selectionIf.moveUpDown(moveUp);
 		}
 
 	}
@@ -459,7 +457,7 @@ public class ModelMasterSection extends TreeViewerSection{
 		@Override
 		public boolean performDrop(Object data) {
 			List<GenericNode> dragged = NodeDnDBuffer.getInstance().getDraggedNodes(); 
-			SelectionInterface selectionIf = new SelectionInterface();
+			SelectionInterface selectionIf = new SelectionInterface(ModelMasterSection.this);
 			selectionIf.setTarget(dragged);
 			if((dragged.size() == 0) || (selectionIf.isSingleType() == false)) return false;
 			GenericNode target = determineNewParent(getCurrentTarget(), getCurrentLocation());
@@ -469,10 +467,10 @@ public class ModelMasterSection extends TreeViewerSection{
 			}
 			switch(getCurrentOperation()){
 			case DND.DROP_COPY: 
-				GenericNodeInterface nodeIf = NodeInterfaceFactory.getNodeInterface(target);
-				return nodeIf.addChildren(NodeDnDBuffer.getInstance().getDraggedNodesCopy(), index, ModelMasterSection.this);
+				GenericNodeInterface nodeIf = NodeInterfaceFactory.getNodeInterface(target, ModelMasterSection.this);
+				return nodeIf.addChildren(NodeDnDBuffer.getInstance().getDraggedNodesCopy(), index);
 			case DND.DROP_MOVE:
-				return selectionIf.move(target, index, ModelMasterSection.this);
+				return selectionIf.move(target, index);
 			default:
 				return false;
 			}
@@ -481,7 +479,7 @@ public class ModelMasterSection extends TreeViewerSection{
 		@Override
 		public boolean validateDrop(Object target, int operation, TransferData transferType) {
 			GenericNode parent = determineNewParent(target, getCurrentLocation());
-			SelectionInterface selectionIf = new SelectionInterface();
+			SelectionInterface selectionIf = new SelectionInterface(ModelMasterSection.this);
 			List<GenericNode>dragged = NodeDnDBuffer.getInstance().getDraggedNodes();
 			selectionIf.setTarget(dragged);
 			if(dragged.size() == 0) return false;
@@ -522,14 +520,27 @@ public class ModelMasterSection extends TreeViewerSection{
 		
 	}
 	
-	public ModelMasterSection(ModelMasterDetailsBlock masterDetailsBlock, Composite parent, FormToolkit toolkit, ModelOperationManager operationManager) {
-		super(parent, toolkit, STYLE, null, operationManager);
-		fMasterDetailsBlock = masterDetailsBlock;
-		setModelUpdateListener(new UpdateListener());
-		setActionProvider(new ModelViewerActionFactory(getTreeViewer(), ModelMasterSection.this, false));
+//	public ModelMasterSection(ModelMasterDetailsBlock masterDetailsBlock, Composite parent, FormToolkit toolkit, ModelOperationManager operationManager) {
+//		super(parent, toolkit, STYLE, null, operationManager);
+//		fMasterDetailsBlock = masterDetailsBlock;
+//		setModelUpdateListener(new UpdateListener());
+//		setActionProvider(new ModelViewerActionFactory(getTreeViewer(), ModelMasterSection.this, false));
+//		
+//		getTreeViewer().addDragSupport(DND.DROP_COPY|DND.DROP_MOVE, new Transfer[]{ModelNodesTransfer.getInstance()}, new ModelNodeDragListener(getTreeViewer()));
+//		getTreeViewer().addDropSupport(DND.DROP_COPY|DND.DROP_MOVE, new Transfer[]{ModelNodesTransfer.getInstance()}, new DropListener(getTreeViewer()));
+//	}
+	
+//	public ModelMasterSection(ISectionContext sectionContext, IModelUpdateContext updateContext) {
+	public ModelMasterSection(ModelMasterDetailsBlock parentBlock) {
+		super(parentBlock.getMasterSectionContext(), parentBlock.getModelUpdateContext(), STYLE);
+		fMasterDetailsBlock = parentBlock;
+		
+		setActionProvider(new ModelViewerActionProvider(getTreeViewer(), this, false));
 		
 		getTreeViewer().addDragSupport(DND.DROP_COPY|DND.DROP_MOVE, new Transfer[]{ModelNodesTransfer.getInstance()}, new ModelNodeDragListener(getTreeViewer()));
 		getTreeViewer().addDropSupport(DND.DROP_COPY|DND.DROP_MOVE, new Transfer[]{ModelNodesTransfer.getInstance()}, new DropListener(getTreeViewer()));
+
+		addKeyListener(SWT.DEL, new DeleteAction(getViewer(), this));
 	}
 	
 	public void setInput(RootNode model){
@@ -553,7 +564,6 @@ public class ModelMasterSection extends TreeViewerSection{
 		fMoveDownButton = addButton("Move Down", new MoveUpDownAdapter());
 		getTreeViewer().setAutoExpandLevel(AUTO_EXPAND_LEVEL);
 		addSelectionChangedListener(new ModelSelectionListener());
-		addKeyListener(SWT.DEL, new DeleteAction(getViewer(), this));
 	}
 	
 	@Override
@@ -575,7 +585,7 @@ public class ModelMasterSection extends TreeViewerSection{
 	private void enableSortButtons(IStructuredSelection selection) {
 		boolean moveUpEnabled = true;
 		boolean moveDownEnabled = true;
-		SelectionInterface selectionIf = new SelectionInterface();
+		SelectionInterface selectionIf = new SelectionInterface(this);
 		if(selection.isEmpty() == false){
 			selectionIf.setTarget(getSelection().toList());
 
@@ -587,5 +597,13 @@ public class ModelMasterSection extends TreeViewerSection{
 		}
 		fMoveUpButton.setEnabled(moveUpEnabled);
 		fMoveDownButton.setEnabled(moveDownEnabled);
+	}
+	
+	@Override
+	public IModelUpdateListener getUpdateListener(){
+		if(fUpdateListener == null){
+			fUpdateListener = new UpdateListener();
+		}
+		return fUpdateListener;
 	}
 }

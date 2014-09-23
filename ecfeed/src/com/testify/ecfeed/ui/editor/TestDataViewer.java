@@ -15,7 +15,6 @@ import java.util.List;
 
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.swt.SWT;
-import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Section;
 
 import com.testify.ecfeed.model.CategoryNode;
@@ -24,6 +23,7 @@ import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.ui.common.ITestDataEditorListener;
 import com.testify.ecfeed.ui.common.NodeViewerColumnLabelProvider;
 import com.testify.ecfeed.ui.common.TestDataValueEditingSupport;
+import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 import com.testify.ecfeed.ui.modelif.TestCaseInterface;
 
 public class TestDataViewer extends TableViewerSection implements ITestDataEditorListener{
@@ -33,9 +33,9 @@ public class TestDataViewer extends TableViewerSection implements ITestDataEdito
 
 	private TestCaseInterface fTestCaseIf;
 	
-	public TestDataViewer(BasicDetailsPage parent, FormToolkit toolkit) {
-		super(parent.getMainComposite(), toolkit, STYLE, parent, parent.getOperationManager());
-		fTestCaseIf = new TestCaseInterface();
+	public TestDataViewer(ISectionContext sectionContext, IModelUpdateContext updateContext) {
+		super(sectionContext, updateContext, STYLE);
+		fTestCaseIf = new TestCaseInterface(this);
 		getSection().setText("Test data");
 	}
 
@@ -72,7 +72,7 @@ public class TestDataViewer extends TableViewerSection implements ITestDataEdito
 
 	@Override
 	public void testDataChanged(int index, PartitionNode value) {
-		fTestCaseIf.updateTestData(index, value, this);
+		fTestCaseIf.updateTestData(index, value);
 	}
 	
 	@Override

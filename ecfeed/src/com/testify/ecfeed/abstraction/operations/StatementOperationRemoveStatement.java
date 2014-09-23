@@ -5,7 +5,7 @@ import com.testify.ecfeed.abstraction.ModelIfException;
 import com.testify.ecfeed.model.constraint.BasicStatement;
 import com.testify.ecfeed.model.constraint.StatementArray;
 
-public class StatementOperationRemoveStatement implements IModelOperation {
+public class StatementOperationRemoveStatement extends AbstractModelOperation {
 
 	private StatementArray fTarget;
 	private BasicStatement fStatement;
@@ -20,6 +20,7 @@ public class StatementOperationRemoveStatement implements IModelOperation {
 	@Override
 	public void execute() throws ModelIfException {
 		fTarget.removeChild(fStatement);
+		markModelUpdated();
 	}
 
 	@Override

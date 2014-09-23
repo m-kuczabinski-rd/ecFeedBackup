@@ -22,7 +22,11 @@ import com.testify.ecfeed.ui.dialogs.TestClassSelectionDialog;
 public class RootInterface extends GenericNodeInterface {
 
 	private RootNode fTarget;
-	
+
+	public RootInterface(IModelUpdateContext updateContext) {
+		super(updateContext);
+	}
+
 	public void setTarget(RootNode target){
 		super.setTarget(target);
 		fTarget = target;
@@ -32,23 +36,23 @@ public class RootInterface extends GenericNodeInterface {
 		return fTarget;
 	}
 
-	public boolean setName(String newName, IModelUpdateContext context){
-		return execute(new RootOperationRename(fTarget, newName), context, Messages.DIALOG_RENAME_MODEL_PROBLEM_TITLE);
+	public boolean setName(String newName){
+		return execute(new RootOperationRename(fTarget, newName), Messages.DIALOG_RENAME_MODEL_PROBLEM_TITLE);
 	}
 
-	public ClassNode addNewClass(IModelUpdateContext context){
-		return addNewClass(generateClassName(), context);
+	public ClassNode addNewClass(){
+		return addNewClass(generateClassName());
 	}
 	
-	public ClassNode addNewClass(String className, IModelUpdateContext context){
+	public ClassNode addNewClass(String className){
 		ClassNode addedClass = new ClassNode(className);
-		if(execute(new RootOperationAddNewClass(fTarget, addedClass, fTarget.getClasses().size()), context, Messages.DIALOG_ADD_NEW_CLASS_PROBLEM_TITLE)){
+		if(execute(new RootOperationAddNewClass(fTarget, addedClass, fTarget.getClasses().size()), Messages.DIALOG_ADD_NEW_CLASS_PROBLEM_TITLE)){
 			return addedClass;
 		}
 		return null;
 	}
 
-	public ClassNode addImplementedClass(IModelUpdateContext context){
+	public ClassNode addImplementedClass(){
 		TestClassSelectionDialog dialog = new TestClassSelectionDialog(Display.getCurrent().getActiveShell());
 
 		if (dialog.open() == IDialogConstants.OK_ID) {
@@ -59,7 +63,7 @@ public class RootInterface extends GenericNodeInterface {
 				ClassNode classModel;
 				try {
 					classModel = new EclipseModelBuilder().buildClassModel(selectedClass, testOnly);
-					if(execute(new RootOperationAddNewClass(fTarget, classModel, fTarget.getClasses().size()), context, Messages.DIALOG_ADD_NEW_CLASS_PROBLEM_TITLE)){
+					if(execute(new RootOperationAddNewClass(fTarget, classModel, fTarget.getClasses().size()), Messages.DIALOG_ADD_NEW_CLASS_PROBLEM_TITLE)){
 						return classModel;
 					}
 				} catch (ModelIfException e) {
@@ -72,18 +76,18 @@ public class RootInterface extends GenericNodeInterface {
 		return null;
 	}
 
-	public boolean removeClasses(Collection<ClassNode> removedClasses, IModelUpdateContext context){
+	public boolean removeClasses(Collection<ClassNode> removedClasses){
 		if(MessageDialog.openConfirm(Display.getCurrent().getActiveShell(), 
 				Messages.DIALOG_REMOVE_CLASSES_TITLE, 
 				Messages.DIALOG_REMOVE_CLASSES_MESSAGE)){
-			return removeChildren(removedClasses, context, Messages.DIALOG_REMOVE_CLASSES_PROBLEM_TITLE);
+			return removeChildren(removedClasses, Messages.DIALOG_REMOVE_CLASSES_PROBLEM_TITLE);
 		}
 		return false;
 	}
 	
-	public boolean addClasses(Collection<ClassNode> classes, IModelUpdateContext context) {
+	public boolean addClasses(Collection<ClassNode> classes) {
 		IModelOperation operation = new RootOperationAddClasses(fTarget, classes, fTarget.getClasses().size());
-		return execute(operation, context, Messages.DIALOG_ADD_METHODS_PROBLEM_TITLE);
+		return execute(operation, Messages.DIALOG_ADD_METHODS_PROBLEM_TITLE);
 	}
 
 	private String generateClassName() {

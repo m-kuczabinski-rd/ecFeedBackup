@@ -23,6 +23,7 @@ import org.eclipse.swt.widgets.Text;
 
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.ui.modelif.CategoryInterface;
+import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 
 public class CategoryDetailsPage extends BasicDetailsPage{
 
@@ -39,7 +40,7 @@ public class CategoryDetailsPage extends BasicDetailsPage{
 	private class SetNameListener extends AbstractSelectionAdapter{
 		@Override
 		public void widgetSelected(SelectionEvent e) {
-			fCategoryIf.setName(fNameText.getText(), CategoryDetailsPage.this);
+			fCategoryIf.setName(fNameText.getText());
 			fNameText.setText(fCategoryIf.getName());
 		}
 	}
@@ -47,7 +48,7 @@ public class CategoryDetailsPage extends BasicDetailsPage{
 	private class SetTypeListener extends AbstractSelectionAdapter{
 		@Override
 		public void widgetSelected(SelectionEvent e) {
-			fCategoryIf.setType(fTypeCombo.getText(), CategoryDetailsPage.this);
+			fCategoryIf.setType(fTypeCombo.getText());
 			fTypeCombo.setText(fCategoryIf.getType());
 		}
 	}
@@ -55,7 +56,7 @@ public class CategoryDetailsPage extends BasicDetailsPage{
 	private class SetDefaultValueListener extends AbstractSelectionAdapter{
 		@Override
 		public void widgetSelected(SelectionEvent e) {
-			fCategoryIf.setDefaultValue(fDefaultValueCombo.getText(), CategoryDetailsPage.this);
+			fCategoryIf.setDefaultValue(fDefaultValueCombo.getText());
 			fDefaultValueCombo.setText(fCategoryIf.getDefaultValue());
 		}
 	}
@@ -63,14 +64,14 @@ public class CategoryDetailsPage extends BasicDetailsPage{
 	private class SetExpectedListener extends AbstractSelectionAdapter{
 		@Override
 		public void widgetSelected(SelectionEvent e) {
-			fCategoryIf.setExpected(fExpectedCheckbox.getSelection(), CategoryDetailsPage.this);
+			fCategoryIf.setExpected(fExpectedCheckbox.getSelection());
 			fExpectedCheckbox.setSelection(fCategoryIf.isExpected());
 		}
 	}
 	
-	public CategoryDetailsPage(ModelMasterDetailsBlock masterDetailsBlock) {
-		super(masterDetailsBlock);
-		fCategoryIf = new CategoryInterface();
+	public CategoryDetailsPage(ModelMasterSection masterSection, IModelUpdateContext updateContext) {
+		super(masterSection, updateContext);
+		fCategoryIf = new CategoryInterface(this);
 	}
 
 	@Override
@@ -78,7 +79,7 @@ public class CategoryDetailsPage extends BasicDetailsPage{
 		super.createContents(parent);
 		
 		createAttributesComposite();
-		addForm(fPartitionsViewer = new PartitionsViewer(this, getToolkit()));
+		addForm(fPartitionsViewer = new PartitionsViewer(this, this));
 
 		getToolkit().paintBordersFor(getMainComposite());
 	}

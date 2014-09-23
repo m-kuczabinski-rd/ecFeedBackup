@@ -5,32 +5,31 @@ import java.util.List;
 import org.eclipse.jface.viewers.ISelectionProvider;
 
 import com.testify.ecfeed.model.GenericNode;
-import com.testify.ecfeed.ui.common.NodeSelectionToolbox;
-import com.testify.ecfeed.ui.modelif.SelectionInterface;
+import com.testify.ecfeed.ui.common.NodeSelectionUtils;
 
 public abstract class ModelSelectionAction extends NamedAction {
 	
-	private NodeSelectionToolbox fSelectionToolbox;
+	private NodeSelectionUtils fSelectionUtils;
 
 	public ModelSelectionAction(String id, String name, ISelectionProvider selectionProvider){
 		super(id, name);
-		fSelectionToolbox = new NodeSelectionToolbox(selectionProvider);
+		fSelectionUtils = new NodeSelectionUtils(selectionProvider);
 	}
 	
 	protected List<GenericNode> getSelectedNodes(){
-		return fSelectionToolbox.getSelectedNodes();
+		return getSelectionUtils().getSelectedNodes();
 	}
 
-	protected SelectionInterface getSelectionInterface(){
-		return fSelectionToolbox.getSelectionInterface();
-	}
-	
 	protected boolean isSelectionSibling(){
-		return fSelectionToolbox.isSelectionSibling();
+		return getSelectionUtils().isSelectionSibling();
 	}
 	
 	protected boolean isSelectionSingleType(){
-		return fSelectionToolbox.isSelectionSingleType();
+		return getSelectionUtils().isSelectionSingleType();
+	}
+	
+	protected NodeSelectionUtils getSelectionUtils(){
+		return fSelectionUtils;
 	}
 
 }

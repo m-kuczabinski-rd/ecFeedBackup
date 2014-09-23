@@ -9,7 +9,7 @@ import com.testify.ecfeed.abstraction.IModelOperation;
 import com.testify.ecfeed.abstraction.ModelIfException;
 import com.testify.ecfeed.model.GenericNode;
 
-public class GenericShiftOperation implements IModelOperation {
+public class GenericShiftOperation extends AbstractModelOperation {
 
 	private List<? extends GenericNode> fShifted;
 	private int fShift;
@@ -34,6 +34,7 @@ public class GenericShiftOperation implements IModelOperation {
 	@Override
 	public void execute() throws ModelIfException {
 		shiftElements(fCollection, indices(fCollection, fShifted), fShift);
+		markModelUpdated();
 	}
 
 	@Override

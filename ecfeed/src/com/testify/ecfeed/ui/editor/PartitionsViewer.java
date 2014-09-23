@@ -26,7 +26,6 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
-import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Section;
 
 import com.testify.ecfeed.abstraction.ImplementationStatus;
@@ -35,8 +34,9 @@ import com.testify.ecfeed.model.PartitionedNode;
 import com.testify.ecfeed.ui.common.ColorConstants;
 import com.testify.ecfeed.ui.common.ColorManager;
 import com.testify.ecfeed.ui.editor.actions.DeleteAction;
-import com.testify.ecfeed.ui.editor.actions.ModelViewerActionFactory;
+import com.testify.ecfeed.ui.editor.actions.ModelViewerActionProvider;
 import com.testify.ecfeed.ui.modelif.CategoryInterface;
+import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 import com.testify.ecfeed.ui.modelif.PartitionInterface;
 import com.testify.ecfeed.ui.modelif.PartitionedNodeInterface;
 
@@ -81,7 +81,7 @@ public class PartitionsViewer extends TableViewerSection {
 			
 			if(newName.equals(partition.getName()) == false){
 				fTableItemIf.setTarget(partition);
-				fTableItemIf.setName(newName, PartitionsViewer.this);
+				fTableItemIf.setName(newName);
 			}
 		}
 	}
@@ -155,7 +155,7 @@ public class PartitionsViewer extends TableViewerSection {
 				valueString = fCellEditor.getViewer().getCCombo().getText();
 			}
 			fTableItemIf.setTarget((PartitionNode)element);
-			fTableItemIf.setValue(valueString, PartitionsViewer.this);
+			fTableItemIf.setValue(valueString);
 		}
 	}
 
@@ -189,7 +189,7 @@ public class PartitionsViewer extends TableViewerSection {
 		
 		@Override
 		public void widgetSelected(SelectionEvent e){
-			PartitionNode added = fParentIf.addNewPartition(PartitionsViewer.this);
+			PartitionNode added = fParentIf.addNewPartition();
 			if(added != null){
 				getTable().setSelection(added.getIndex());
 			}
@@ -202,11 +202,11 @@ public class PartitionsViewer extends TableViewerSection {
 		fValueColumn = addColumn("Value", 150, new PartitionValueLabelProvider());
 	}
 	
-	public PartitionsViewer(BasicDetailsPage parent, FormToolkit toolkit) {
-		super(parent.getMainComposite(), toolkit, STYLE, parent, parent.getOperationManager());
+	public PartitionsViewer(ISectionContext sectionContext, IModelUpdateContext updateContext) {
+		super(sectionContext, updateContext, STYLE);
 		
-		fParentIf = new CategoryInterface();
-		fTableItemIf = new PartitionInterface();
+		fParentIf = new CategoryInterface(this);
+		fTableItemIf = new PartitionInterface(this);
 
 		fNameColumn.setEditingSupport(new PartitionNameEditingSupport());
 		fValueColumn.setEditingSupport(new PartitionValueEditingSupport(this));
@@ -215,8 +215,8 @@ public class PartitionsViewer extends TableViewerSection {
 		addButton("Add partition", new AddPartitionAdapter());
 		addButton("Remove selected", new ActionSelectionAdapter(new DeleteAction(getViewer(), this)));
 		
-		addDoubleClickListener(new SelectNodeDoubleClickListener(parent.getMasterSection()));
-		setActionProvider(new ModelViewerActionFactory(getTableViewer(), this));
+		addDoubleClickListener(new SelectNodeDoubleClickListener(sectionContext.getMasterSection()));
+		setActionProvider(new ModelViewerActionProvider(getTableViewer(), this));
 	}
 
 	public void setInput(PartitionedNode parent){

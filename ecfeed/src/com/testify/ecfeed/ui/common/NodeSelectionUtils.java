@@ -7,18 +7,19 @@ import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
 
 import com.testify.ecfeed.model.GenericNode;
+import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 import com.testify.ecfeed.ui.modelif.SelectionInterface;
 
-public class NodeSelectionToolbox {
+public class NodeSelectionUtils {
 	
 	private ISelectionProvider fSelectionProvider;
 
-	public NodeSelectionToolbox(ISelectionProvider selectionProvider){
+	public NodeSelectionUtils(ISelectionProvider selectionProvider){
 		fSelectionProvider = selectionProvider;
 	}
 	
-	public SelectionInterface getSelectionInterface(){
-		SelectionInterface selectionIf = new SelectionInterface();
+	public SelectionInterface getSelectionInterface(IModelUpdateContext context){
+		SelectionInterface selectionIf = new SelectionInterface(context);
 		selectionIf.setTarget(getSelectedNodes());
 		return selectionIf;
 	}

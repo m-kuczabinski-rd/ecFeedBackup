@@ -27,12 +27,10 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Section;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.FrameworkUtil;
 
-import com.testify.ecfeed.abstraction.ModelOperationManager;
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.ConstraintNode;
 import com.testify.ecfeed.model.PartitionNode;
@@ -52,6 +50,7 @@ import com.testify.ecfeed.ui.editor.actions.ModelModyfyingAction;
 import com.testify.ecfeed.ui.modelif.BasicStatementInterface;
 import com.testify.ecfeed.ui.modelif.CategoryInterface;
 import com.testify.ecfeed.ui.modelif.ConstraintInterface;
+import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 import com.testify.ecfeed.ui.modelif.StatementInterfaceFactory;
 
 public class ConstraintViewer extends TreeViewerSection {
@@ -174,7 +173,7 @@ public class ConstraintViewer extends TreeViewerSection {
 			}
 			
 			protected void applyNewValue(){
-				fStatementIf.setConditionValue(fConditionCombo.getText(), ConstraintViewer.this);
+				fStatementIf.setConditionValue(fConditionCombo.getText());
 				fConditionCombo.setText(fStatementIf.getConditionValue());
 			}
 
@@ -185,17 +184,17 @@ public class ConstraintViewer extends TreeViewerSection {
 			public void widgetSelected(SelectionEvent e) {
 				Operator operator = Operator.getOperator(fStatementCombo.getText());
 				if(operator != null && operator != fStatementIf.getOperator()){
-					fStatementIf.setOperator(operator, ConstraintViewer.this);
+					fStatementIf.setOperator(operator);
 				}
 				BasicStatement statement = buildStatement();
 				if(statement != null){
 					BasicStatementInterface parentIf = fStatementIf.getParentInterface();
 					boolean result = false;
 					if(parentIf != null){
-						result = parentIf.replaceChild(fSelectedStatement, statement, ConstraintViewer.this);
+						result = parentIf.replaceChild(fSelectedStatement, statement);
 					}
 					else{
-						result = fConstraintIf.replaceStatement(fSelectedStatement, statement, ConstraintViewer.this);
+						result = fConstraintIf.replaceStatement(fSelectedStatement, statement);
 					}
 					if(result){
 						getViewer().setSelection(new StructuredSelection(statement));
@@ -239,7 +238,7 @@ public class ConstraintViewer extends TreeViewerSection {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				Relation relation = Relation.getRelation(fRelationCombo.getText());
-				fStatementIf.setRelation(relation, ConstraintViewer.this);
+				fStatementIf.setRelation(relation);
 			}
 
 			@Override
@@ -346,18 +345,18 @@ public class ConstraintViewer extends TreeViewerSection {
 			}
 		}
 
-		public StatementEditor(Composite parent, ModelOperationManager operationManager) {
+		public StatementEditor(Composite parent) {
 			super(parent, SWT.NONE);
 			setLayout(new GridLayout(TOTAL_EDITOR_WIDTH, true));
 			setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 2, 1));
-			fConstraintIf = new ConstraintInterface();
+			fConstraintIf = new ConstraintInterface(ConstraintViewer.this);
 			
 			createStatementCombo(this);
 			createRelationCombo(this);
 		}
 		
 		public void setInput(BasicStatement statement){
-			fStatementIf = StatementInterfaceFactory.getInterface(statement);
+			fStatementIf = StatementInterfaceFactory.getInterface(statement, ConstraintViewer.this);
 			fStatementCombo.setItems(statementComboItems(statement));
 			fStatementCombo.setText(statement.getLeftOperandName());
 			try{
@@ -405,7 +404,7 @@ public class ConstraintViewer extends TreeViewerSection {
 	private class AddStatementAdapter extends SelectionAdapter{
 		@Override 
 		public void widgetSelected(SelectionEvent e){
-			BasicStatement statement = fStatementIf.addNewStatement(ConstraintViewer.this);
+			BasicStatement statement = fStatementIf.addNewStatement();
 			if(statement != null){
 			//modelUpdated must be called before to refresh viewer before selecting the newly added statement
 				getTreeViewer().expandToLevel(statement, 1);
@@ -415,7 +414,7 @@ public class ConstraintViewer extends TreeViewerSection {
 	}
 	
 	public class DeleteStatementAction extends ModelModyfyingAction {
-		public DeleteStatementAction() {
+		public DeleteStatementAction(IModelUpdateContext updateContext) {
 			super(GlobalActions.DELETE.getId(), GlobalActions.DELETE.getName(), getTreeViewer(), ConstraintViewer.this);
 		}
 		
@@ -427,7 +426,7 @@ public class ConstraintViewer extends TreeViewerSection {
 		@Override
 		public void run(){
 			BasicStatement parent = fSelectedStatement.getParent();
-			if(parent != null && fStatementIf.getParentInterface().removeChild(fSelectedStatement, ConstraintViewer.this)){
+			if(parent != null && fStatementIf.getParentInterface().removeChild(fSelectedStatement)){
 				getViewer().setSelection(new StructuredSelection(parent));
 			}
 		}
@@ -454,15 +453,26 @@ public class ConstraintViewer extends TreeViewerSection {
 
 	}
 
-	public ConstraintViewer(BasicDetailsPage parent, FormToolkit toolkit) {
-		super(parent.getMainComposite(), toolkit, STYLE, parent, parent.getOperationManager());
+//	public ConstraintViewer(BasicDetailsPage parent, FormToolkit toolkit) {
+//		super(parent.getMainComposite(), toolkit, STYLE, parent, parent.getOperationManager());
+//		getSection().setText("Constraint editor");
+//		fAddStatementButton = addButton("Add statement", new AddStatementAdapter());
+//		fRemoveStatementButton = addButton("Remove statement", new ActionSelectionAdapter(new DeleteStatementAction()));
+//		getViewer().addSelectionChangedListener(new StatementSelectionListener());
+//
+//		fStatementEditor = new StatementEditor(getClientComposite(), parent.getOperationManager());
+//		addKeyListener(SWT.DEL, new DeleteStatementAction());
+//	}
+
+	public ConstraintViewer(ISectionContext sectionContext, IModelUpdateContext updateContext) {
+		super(sectionContext, updateContext, STYLE);
 		getSection().setText("Constraint editor");
 		fAddStatementButton = addButton("Add statement", new AddStatementAdapter());
-		fRemoveStatementButton = addButton("Remove statement", new ActionSelectionAdapter(new DeleteStatementAction()));
+		fRemoveStatementButton = addButton("Remove statement", new ActionSelectionAdapter(new DeleteStatementAction(updateContext)));
 		getViewer().addSelectionChangedListener(new StatementSelectionListener());
 
-		fStatementEditor = new StatementEditor(getClientComposite(), parent.getOperationManager());
-		addKeyListener(SWT.DEL, new DeleteStatementAction());
+		fStatementEditor = new StatementEditor(getClientComposite());
+		addKeyListener(SWT.DEL, new DeleteStatementAction(updateContext));
 	}
 
 	@Override

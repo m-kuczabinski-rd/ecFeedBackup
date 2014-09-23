@@ -27,7 +27,6 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Device;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.FontData;
-import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Section;
 
 import com.testify.ecfeed.model.PartitionNode;
@@ -38,6 +37,7 @@ import com.testify.ecfeed.ui.editor.actions.CutAction;
 import com.testify.ecfeed.ui.editor.actions.ModelModyfyingAction;
 import com.testify.ecfeed.ui.editor.actions.NamedAction;
 import com.testify.ecfeed.ui.editor.actions.SelectAllAction;
+import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 import com.testify.ecfeed.ui.modelif.PartitionInterface;
 
 public class PartitionLabelsViewer extends TableViewerSection {
@@ -74,9 +74,9 @@ public class PartitionLabelsViewer extends TableViewerSection {
 		public LabelsViewerActionProvider(){
 			super();
 			addAction("edit", new LabelCopyAction());
-			addAction("edit", new CutAction(new LabelCopyAction(), new LabelDeleteAction()));
-			addAction("edit", new LabelPasteAction());
-			addAction("edit", new LabelDeleteAction());
+			addAction("edit", new CutAction(new LabelCopyAction(), new LabelDeleteAction(PartitionLabelsViewer.this)));
+			addAction("edit", new LabelPasteAction(PartitionLabelsViewer.this));
+			addAction("edit", new LabelDeleteAction(PartitionLabelsViewer.this));
 			addAction("selection", new SelectAllAction(getTableViewer()));
 		}
 	}
@@ -98,8 +98,8 @@ public class PartitionLabelsViewer extends TableViewerSection {
 	}
 
 	private class LabelPasteAction extends ModelModyfyingAction{
-		public LabelPasteAction() {
-			super(GlobalActions.PASTE.getId(), GlobalActions.PASTE.getName(), getViewer(), PartitionLabelsViewer.this);
+		public LabelPasteAction(IModelUpdateContext updateContext) {
+			super(GlobalActions.PASTE.getId(), GlobalActions.PASTE.getName(), getViewer(), updateContext);
 		}
 	
 		@Override
@@ -109,13 +109,13 @@ public class PartitionLabelsViewer extends TableViewerSection {
 		
 		@Override
 		public void run(){
-			fPartitionIf.addLabels(LabelClipboard.getContentCopy(), PartitionLabelsViewer.this);
+			fPartitionIf.addLabels(LabelClipboard.getContentCopy());
 		}
 	}
 
 	private class LabelDeleteAction extends ModelModyfyingAction{
-		public LabelDeleteAction() {
-			super(GlobalActions.DELETE.getId(), GlobalActions.DELETE.getName(), getTableViewer(), PartitionLabelsViewer.this);
+		public LabelDeleteAction(IModelUpdateContext updateContext) {
+			super(GlobalActions.DELETE.getId(), GlobalActions.DELETE.getName(), getTableViewer(), updateContext);
 		}
 		
 		@Override
@@ -130,14 +130,14 @@ public class PartitionLabelsViewer extends TableViewerSection {
 		
 		@Override
 		public void run(){
-			fPartitionIf.removeLabels(getSelectedLabels(), PartitionLabelsViewer.this);
+			fPartitionIf.removeLabels(getSelectedLabels());
 		}
 	}
 
 	private class AddLabelAdapter extends SelectionAdapter{
 		@Override
 		public void widgetSelected(SelectionEvent e){
-			String newLabel = fPartitionIf.addNewLabel(PartitionLabelsViewer.this);
+			String newLabel = fPartitionIf.addNewLabel();
 			if(newLabel != null){
 				getTableViewer().editElement(newLabel, 0);
 			}
@@ -169,7 +169,7 @@ public class PartitionLabelsViewer extends TableViewerSection {
 
 		@Override
 		protected void setValue(Object element, Object value) {
-			fPartitionIf.renameLabel((String)element, (String)value, PartitionLabelsViewer.this);
+			fPartitionIf.renameLabel((String)element, (String)value);
 		}
 	}
 
@@ -208,16 +208,16 @@ public class PartitionLabelsViewer extends TableViewerSection {
 		}
 	}
 
-	public PartitionLabelsViewer(BasicDetailsPage parent, FormToolkit toolkit) {
-		super(parent.getMainComposite(), toolkit, STYLE, parent, parent.getOperationManager());
+	public PartitionLabelsViewer(ISectionContext sectionContext, IModelUpdateContext updateContext) {
+		super(sectionContext, updateContext, STYLE);
 
-		fPartitionIf = new PartitionInterface();
+		fPartitionIf = new PartitionInterface(this);
 		getSection().setText("Labels");
 		
 		addButton("Add label", new AddLabelAdapter());
-		addButton("Remove selected", new ActionSelectionAdapter(new LabelDeleteAction()));
+		addButton("Remove selected", new ActionSelectionAdapter(new LabelDeleteAction(updateContext)));
 
-		addDoubleClickListener(new SelectNodeDoubleClickListener(parent.getMasterSection()));
+		addDoubleClickListener(new SelectNodeDoubleClickListener(sectionContext.getMasterSection()));
 		setActionProvider(new LabelsViewerActionProvider());
 	}
 

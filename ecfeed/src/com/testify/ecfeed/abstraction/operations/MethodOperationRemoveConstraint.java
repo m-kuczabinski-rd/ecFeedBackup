@@ -5,7 +5,7 @@ import com.testify.ecfeed.abstraction.ModelIfException;
 import com.testify.ecfeed.model.ConstraintNode;
 import com.testify.ecfeed.model.MethodNode;
 
-public class MethodOperationRemoveConstraint implements IModelOperation {
+public class MethodOperationRemoveConstraint extends AbstractModelOperation {
 
 	private MethodNode fTarget;
 	private ConstraintNode fConstraint;
@@ -21,6 +21,7 @@ public class MethodOperationRemoveConstraint implements IModelOperation {
 	public void execute() throws ModelIfException {
 		fIndex = fConstraint.getIndex();
 		fTarget.removeConstraint(fConstraint);
+		markModelUpdated();
 	}
 
 	@Override

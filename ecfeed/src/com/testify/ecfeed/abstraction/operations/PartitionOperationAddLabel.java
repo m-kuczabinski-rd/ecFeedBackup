@@ -6,13 +6,13 @@ import com.testify.ecfeed.abstraction.IModelOperation;
 import com.testify.ecfeed.abstraction.ModelIfException;
 import com.testify.ecfeed.model.PartitionNode;
 
-public class PartitionOperationAddLabel implements IModelOperation {
+public class PartitionOperationAddLabel extends AbstractModelOperation {
 
 	private PartitionNode fTarget;
 	private String fLabel;
 	private Set<PartitionNode> fLabeledDescendants;
 	
-	private class ReverseOperation implements IModelOperation{
+	private class ReverseOperation extends AbstractModelOperation{
 
 		@Override
 		public void execute() throws ModelIfException {
@@ -20,6 +20,7 @@ public class PartitionOperationAddLabel implements IModelOperation {
 			for(PartitionNode p : fLabeledDescendants){
 				p.addLabel(fLabel);
 			}
+			markModelUpdated();
 		}
 
 		@Override
@@ -41,6 +42,7 @@ public class PartitionOperationAddLabel implements IModelOperation {
 		for(PartitionNode p : fLabeledDescendants){
 			p.removeLabel(fLabel);
 		}
+		markModelUpdated();
 	}
 
 	@Override

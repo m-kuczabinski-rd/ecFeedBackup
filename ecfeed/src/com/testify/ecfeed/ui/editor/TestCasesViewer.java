@@ -26,7 +26,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Tree;
-import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Section;
 
 import com.testify.ecfeed.abstraction.ImplementationStatus;
@@ -35,6 +34,7 @@ import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.ui.common.TestCasesViewerContentProvider;
 import com.testify.ecfeed.ui.common.TestCasesViewerLabelProvider;
 import com.testify.ecfeed.ui.common.TreeCheckStateListener;
+import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 import com.testify.ecfeed.ui.modelif.MethodInterface;
 
 public class TestCasesViewer extends CheckboxTreeViewerSection {
@@ -51,14 +51,14 @@ public class TestCasesViewer extends CheckboxTreeViewerSection {
 	private class AddTestCaseAdapter extends SelectionAdapter{
 		@Override
 		public void widgetSelected(SelectionEvent e){
-			fMethodIf.addTestCase(TestCasesViewer.this);
+			fMethodIf.addTestCase();
 		}
 	}
 	
 	private class GenerateTestSuiteAdapter extends SelectionAdapter{
 		@Override
 		public void widgetSelected(SelectionEvent e){
-			fMethodIf.generateTestSuite(TestCasesViewer.this);
+			fMethodIf.generateTestSuite();
 		}
 	}
 	
@@ -72,31 +72,31 @@ public class TestCasesViewer extends CheckboxTreeViewerSection {
 	private class RenameSuiteAdapter extends SelectionAdapter{
 		@Override
 		public void widgetSelected(SelectionEvent e){
-			fMethodIf.renameSuite(TestCasesViewer.this);
+			fMethodIf.renameSuite();
 		}
 	}
 	
 	private class RemoveSelectedAdapter extends SelectionAdapter{
 		@Override
 		public void widgetSelected(SelectionEvent e){
-			fMethodIf.removeTestCases(getCheckedTestCases(), TestCasesViewer.this);
+			fMethodIf.removeTestCases(getCheckedTestCases());
 		}
 	}
 	
 	private class CalculateCoverageAdapter extends SelectionAdapter {
 		@Override
 		public void widgetSelected(SelectionEvent e) {
-			fMethodIf.opedCoverageDialog(getCheckedElements(), getGrayedElements());
+			fMethodIf.openCoverageDialog(getCheckedElements(), getGrayedElements());
 		}
 	}
 	
-	public TestCasesViewer(BasicDetailsPage parent, FormToolkit toolkit) {
-		super(parent.getMainComposite(), toolkit, STYLE, parent, parent.getOperationManager());
+	public TestCasesViewer(ISectionContext sectionContext, IModelUpdateContext updateContext) {
+		super(sectionContext, updateContext, STYLE);
 		GridData gd = new GridData(SWT.FILL, SWT.FILL, true, true);
 		gd.minimumHeight = 250;
 		getSection().setLayoutData(gd);
 		
-		fMethodIf = new MethodInterface();
+		fMethodIf = new MethodInterface(this);
 
 		getCheckboxViewer().addCheckStateListener(new TreeCheckStateListener(getCheckboxViewer()));
 
@@ -109,7 +109,7 @@ public class TestCasesViewer extends CheckboxTreeViewerSection {
 		addButton("Remove selected", new RemoveSelectedAdapter());
 		fExecuteSelectedButton = addButton("Execute selected", new ExecuteStaticTestAdapter());
 
-		addDoubleClickListener(new SelectNodeDoubleClickListener(parent.getMasterSection()));
+		addDoubleClickListener(new SelectNodeDoubleClickListener(sectionContext.getMasterSection()));
 	}
 	
 	@Override

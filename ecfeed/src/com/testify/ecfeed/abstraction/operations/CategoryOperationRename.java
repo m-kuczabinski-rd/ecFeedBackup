@@ -26,6 +26,7 @@ public class CategoryOperationRename extends AbstractOperationRename {
 			throw new ModelIfException(Messages.CATEGORY_NAME_DUPLICATE_PROBLEM);
 		}
 		fTarget.setName(fNewName);
+		markModelUpdated();
 	}
 
 	@Override

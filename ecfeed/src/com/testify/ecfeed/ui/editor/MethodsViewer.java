@@ -19,7 +19,6 @@ import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Section;
 
 import com.testify.ecfeed.abstraction.java.JavaUtils;
@@ -28,8 +27,9 @@ import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.ui.common.NodeNameColumnLabelProvider;
 import com.testify.ecfeed.ui.common.NodeViewerColumnLabelProvider;
 import com.testify.ecfeed.ui.editor.actions.DeleteAction;
-import com.testify.ecfeed.ui.editor.actions.ModelViewerActionFactory;
+import com.testify.ecfeed.ui.editor.actions.ModelViewerActionProvider;
 import com.testify.ecfeed.ui.modelif.ClassInterface;
+import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 import com.testify.ecfeed.ui.modelif.MethodInterface;
 
 public class MethodsViewer extends TableViewerSection {
@@ -69,14 +69,14 @@ public class MethodsViewer extends TableViewerSection {
 			String newName = (String)value;
 			MethodNode method = (MethodNode)element;
 			fMethodIf.setTarget(method);
-			fMethodIf.setName(newName, MethodsViewer.this);
+			fMethodIf.setName(newName);
 		}
 	}
 
 	private class AddNewMethodAdapter extends SelectionAdapter {
 		@Override
 		public void widgetSelected(SelectionEvent e) {
-			MethodNode newMethod = fClassIf.addNewMethod(MethodsViewer.this);
+			MethodNode newMethod = fClassIf.addNewMethod();
 			if(newMethod != null){
 				selectElement(newMethod);
 				fMethodsColumn.getViewer().editElement(newMethod, 0);
@@ -100,19 +100,19 @@ public class MethodsViewer extends TableViewerSection {
 		}
 	}
 	
-	public MethodsViewer(BasicDetailsPage parent, FormToolkit toolkit) {
-		super(parent.getMainComposite(), toolkit, STYLE, parent, parent.getOperationManager());
+	public MethodsViewer(ISectionContext sectionContext, IModelUpdateContext updateContext) {
+		super(sectionContext, updateContext, STYLE);
 		
-		fClassIf = new ClassInterface();
-		fMethodIf = new MethodInterface();
+		fClassIf = new ClassInterface(this);
+		fMethodIf = new MethodInterface(this);
 
 		fMethodsColumn.setEditingSupport(new MethodNameEditingSupport());
 
 		setText("Methods");
 		addButton("Add new method", new AddNewMethodAdapter());
 		addButton("Remove selected", new ActionSelectionAdapter(new DeleteAction(getViewer(), this)));
-		addDoubleClickListener(new SelectNodeDoubleClickListener(parent.getMasterSection()));
-		setActionProvider(new ModelViewerActionFactory(getTableViewer(), this));
+		addDoubleClickListener(new SelectNodeDoubleClickListener(sectionContext.getMasterSection()));
+		setActionProvider(new ModelViewerActionProvider(getTableViewer(), this));
 	}
 
 	public void setInput(ClassNode classNode){

@@ -19,7 +19,6 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
-import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Section;
 
 import com.testify.ecfeed.model.ConstraintNode;
@@ -27,8 +26,9 @@ import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.ui.common.NodeNameColumnLabelProvider;
 import com.testify.ecfeed.ui.common.NodeViewerColumnLabelProvider;
 import com.testify.ecfeed.ui.editor.actions.DeleteAction;
-import com.testify.ecfeed.ui.editor.actions.ModelViewerActionFactory;
+import com.testify.ecfeed.ui.editor.actions.ModelViewerActionProvider;
 import com.testify.ecfeed.ui.modelif.ConstraintInterface;
+import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 import com.testify.ecfeed.ui.modelif.MethodInterface;
 
 public class ConstraintsListViewer extends TableViewerSection {
@@ -68,14 +68,14 @@ public class ConstraintsListViewer extends TableViewerSection {
 			String newName = (String)value;
 			ConstraintNode constraint = (ConstraintNode)element;
 			fConstraintIf.setTarget(constraint);
-			fConstraintIf.setName(newName, ConstraintsListViewer.this);
+			fConstraintIf.setName(newName);
 		}
 	}
 
 	private class AddConstraintAdapter extends SelectionAdapter{
 		@Override 
 		public void widgetSelected(SelectionEvent e){
-			ConstraintNode constraint = fMethodInterface.addNewConstraint(ConstraintsListViewer.this);
+			ConstraintNode constraint = fMethodInterface.addNewConstraint();
 			if(constraint != null){
 				selectElement(constraint);
 				fNameColumn.getViewer().editElement(constraint, 0);
@@ -83,24 +83,44 @@ public class ConstraintsListViewer extends TableViewerSection {
 		}
 	}
 	
-	public ConstraintsListViewer(BasicDetailsPage parent, FormToolkit toolkit){
-		super(parent.getMainComposite(), toolkit, STYLE, parent, parent.getOperationManager());
+//	public ConstraintsListViewer(BasicDetailsPage parent, FormToolkit toolkit){
+//		super(parent.getMainComposite(), toolkit, STYLE, parent, parent.getOperationManager());
+//		GridData gd = new GridData(SWT.FILL, SWT.FILL, true, true);
+//		gd.minimumHeight = 250;
+//		getSection().setLayoutData(gd);
+//		
+//		getSection().setText("Constraints");
+//		
+//		fMethodInterface = new MethodInterface();
+//		fConstraintIf = new ConstraintInterface();
+//		
+//		fNameColumn.setEditingSupport(new ConstraintNameEditingSupport());
+//
+//		addButton("Add constraint", new AddConstraintAdapter());
+//		addButton("Remove selected", new ActionSelectionAdapter(new DeleteAction(getViewer(), this)));
+//		
+//		addDoubleClickListener(new SelectNodeDoubleClickListener(parent.getMasterSection()));
+//		setActionProvider(new ModelViewerActionFactory(getTableViewer(), this));
+//	}
+	
+	public ConstraintsListViewer(ISectionContext sectionContext, IModelUpdateContext updateContext){
+		super(sectionContext, updateContext, STYLE);
 		GridData gd = new GridData(SWT.FILL, SWT.FILL, true, true);
 		gd.minimumHeight = 250;
 		getSection().setLayoutData(gd);
 		
 		getSection().setText("Constraints");
 		
-		fMethodInterface = new MethodInterface();
-		fConstraintIf = new ConstraintInterface();
+		fMethodInterface = new MethodInterface(this);
+		fConstraintIf = new ConstraintInterface(this);
 		
 		fNameColumn.setEditingSupport(new ConstraintNameEditingSupport());
 
 		addButton("Add constraint", new AddConstraintAdapter());
 		addButton("Remove selected", new ActionSelectionAdapter(new DeleteAction(getViewer(), this)));
 		
-		addDoubleClickListener(new SelectNodeDoubleClickListener(parent.getMasterSection()));
-		setActionProvider(new ModelViewerActionFactory(getTableViewer(), this));
+		addDoubleClickListener(new SelectNodeDoubleClickListener(sectionContext.getMasterSection()));
+		setActionProvider(new ModelViewerActionProvider(getTableViewer(), updateContext));
 	}
 	
 	public void setInput(MethodNode method){

@@ -15,15 +15,17 @@ import org.eclipse.jface.viewers.StructuredViewer;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Tree;
-import org.eclipse.ui.forms.widgets.FormToolkit;
 
-import com.testify.ecfeed.abstraction.ModelOperationManager;
-import com.testify.ecfeed.ui.modelif.IModelUpdateListener;
+import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 
 public abstract class TreeViewerSection extends ViewerSection {
 
-	public TreeViewerSection(Composite parent, FormToolkit toolkit, int style, IModelUpdateListener updateListener, ModelOperationManager operationManager) {
-		super(parent, toolkit, style, updateListener, operationManager);
+//	public TreeViewerSection(Composite parent, FormToolkit toolkit, int style, IModelUpdateListener updateListener, ModelOperationManager operationManager) {
+//		super(parent, toolkit, style, updateListener, operationManager);
+//	}
+//
+	public TreeViewerSection(ISectionContext sectionContext, IModelUpdateContext updateContext, int style) {
+		super(sectionContext, updateContext, style);
 	}
 
 	@Override

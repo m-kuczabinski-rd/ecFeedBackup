@@ -6,7 +6,7 @@ import com.testify.ecfeed.model.PartitionNode;
 
 public class PartitionOperationRemoveLabel extends BulkOperation{
 
-	private class RemoveLabelOperation implements IModelOperation{
+	private class RemoveLabelOperation extends AbstractModelOperation{
 
 		private PartitionNode fTarget;
 		private String fLabel;
@@ -19,6 +19,7 @@ public class PartitionOperationRemoveLabel extends BulkOperation{
 		@Override
 		public void execute() throws ModelIfException {
 			fTarget.removeLabel(fLabel);
+			markModelUpdated();
 		}
 
 		@Override

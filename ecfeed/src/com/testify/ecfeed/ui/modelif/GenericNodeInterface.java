@@ -24,7 +24,8 @@ public class GenericNodeInterface extends OperationExecuter{
 	private IImplementationStatusResolver fStatusResolver;
 	private GenericNode fTarget;
 	
-	public GenericNodeInterface() {
+	public GenericNodeInterface(IModelUpdateContext updateContext) {
+		super(updateContext);
 		fLoaderProvider = new EclipseLoaderProvider();
 		fStatusResolver = new JavaImplementationStatusResolver(fLoaderProvider);
 	}
@@ -49,28 +50,28 @@ public class GenericNodeInterface extends OperationExecuter{
 		return fTarget.getName();
 	}
 	
-	public boolean setName(String newName, IModelUpdateContext context){
+	public boolean setName(String newName){
 		return false;
 	}
 
-	public boolean remove(IModelUpdateContext context){
-		return execute(FactoryRemoveOperation.getRemoveOperation(fTarget, true), context, Messages.DIALOG_REMOVE_NODE_PROBLEM_TITLE);
+	public boolean remove(){
+		return execute(FactoryRemoveOperation.getRemoveOperation(fTarget, true), Messages.DIALOG_REMOVE_NODE_PROBLEM_TITLE);
 	}
 	
-	public boolean removeChildren(Collection<? extends GenericNode> children, IModelUpdateContext context, String message){
+	public boolean removeChildren(Collection<? extends GenericNode> children, String message){
 		if(children == null || children.size() == 0) return false;
 		for(GenericNode node : children){
 			if(node.getParent() != fTarget) return false;
 		}
-		return execute(new GenericRemoveNodesOperation(children, true), context, message);
+		return execute(new GenericRemoveNodesOperation(children, true), message);
 	}
 	
-	public boolean addChildren(Collection<? extends GenericNode> children, IModelUpdateContext context){
+	public boolean addChildren(Collection<? extends GenericNode> children){
 		IModelOperation operation = new GenericAddChildrenOperation(fTarget, children, true);
-		return execute(operation, context, Messages.DIALOG_ADD_CHILDREN_PROBLEM_TITLE);
+		return execute(operation, Messages.DIALOG_ADD_CHILDREN_PROBLEM_TITLE);
 	}
 	
-	public boolean addChildren(Collection<? extends GenericNode> children, int index, IModelUpdateContext context){
+	public boolean addChildren(Collection<? extends GenericNode> children, int index){
 		IModelOperation operation;
 		if(index == -1){
 			operation = new GenericAddChildrenOperation(fTarget, children, true);
@@ -78,7 +79,7 @@ public class GenericNodeInterface extends OperationExecuter{
 		else{
 			operation = new GenericAddChildrenOperation(fTarget, children, index, true);
 		}
-		return execute(operation, context, Messages.DIALOG_ADD_CHILDREN_PROBLEM_TITLE);
+		return execute(operation, Messages.DIALOG_ADD_CHILDREN_PROBLEM_TITLE);
 	}
 	
 	public boolean pasteEnabled(Collection<? extends GenericNode> pasted){
@@ -91,11 +92,11 @@ public class GenericNodeInterface extends OperationExecuter{
 		return operation.enabled();
 	}
 	
-	public boolean moveUpDown(boolean up, IModelUpdateContext context) {
+	public boolean moveUpDown(boolean up) {
 		try{
 			GenericShiftOperation operation = (GenericShiftOperation)fTarget.getParent().accept(new FactoryShiftOperation(fTarget, up));
 			if(operation.getShift() > 0){
-				return executeMoveOperation(operation, context);
+				return executeMoveOperation(operation);
 			}
 		}catch(Exception e){}
 		return false;
@@ -105,7 +106,7 @@ public class GenericNodeInterface extends OperationExecuter{
 		return fLoaderProvider.getLoader(create, parent);
 	}
 
-	protected boolean executeMoveOperation(IModelOperation moveOperation, IModelUpdateContext context) {
-		return execute(moveOperation, context, Messages.DIALOG_MOVE_NODE_PROBLEM_TITLE);	
+	protected boolean executeMoveOperation(IModelOperation moveOperation) {
+		return execute(moveOperation, Messages.DIALOG_MOVE_NODE_PROBLEM_TITLE);	
 	}
 }

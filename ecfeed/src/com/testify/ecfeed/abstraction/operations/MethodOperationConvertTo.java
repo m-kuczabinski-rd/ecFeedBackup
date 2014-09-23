@@ -5,7 +5,7 @@ import com.testify.ecfeed.abstraction.ModelIfException;
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.MethodNode;
 
-public class MethodOperationConvertTo implements IModelOperation {
+public class MethodOperationConvertTo extends AbstractModelOperation {
 	
 	private MethodNode fTarget;
 	private MethodNode fSource;
@@ -32,6 +32,7 @@ public class MethodOperationConvertTo implements IModelOperation {
 			targetCategory.setName(sourceCategory.getName());
 			targetCategory.setExpected(sourceCategory.isExpected());
 		}
+		markModelUpdated();
 	}
 
 	@Override

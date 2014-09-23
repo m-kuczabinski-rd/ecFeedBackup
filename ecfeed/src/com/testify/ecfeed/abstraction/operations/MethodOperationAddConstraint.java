@@ -6,7 +6,7 @@ import com.testify.ecfeed.abstraction.java.Constants;
 import com.testify.ecfeed.model.ConstraintNode;
 import com.testify.ecfeed.model.MethodNode;
 
-public class MethodOperationAddConstraint implements IModelOperation {
+public class MethodOperationAddConstraint extends AbstractModelOperation {
 
 	private MethodNode fTarget;
 	private ConstraintNode fConstraint;
@@ -34,6 +34,7 @@ public class MethodOperationAddConstraint implements IModelOperation {
 			throw new ModelIfException(Messages.INCOMPATIBLE_CONSTRAINT_PROBLEM);
 		}
 		fTarget.addConstraint(fConstraint, fIndex);
+		markModelUpdated();
 	}
 
 	@Override

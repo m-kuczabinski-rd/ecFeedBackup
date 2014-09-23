@@ -17,7 +17,7 @@ public class UndoAction extends ModelModyfyingAction {
 	public void run(){
 		try {
 			getUpdateContext().getOperationManager().undo();
-			getUpdateContext().getUpdateListener().modelUpdated(getUpdateContext().getSourceForm());
+//			getUpdateContext().getUpdateListener().modelUpdated(getUpdateContext().getSourceForm());
 		} catch (ModelIfException e) {}
 	}
 }

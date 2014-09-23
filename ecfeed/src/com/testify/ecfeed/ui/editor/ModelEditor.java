@@ -14,6 +14,8 @@ package com.testify.ecfeed.ui.editor;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 
+import org.eclipse.core.commands.operations.IUndoContext;
+import org.eclipse.core.commands.operations.ObjectUndoContext;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IResource;
@@ -54,6 +56,8 @@ public class ModelEditor extends FormEditor{
 	private boolean fResourceChange = false;
 	private ModelOperationManager fModelManager;
 
+	private ObjectUndoContext fUndoContext;
+
 	private class ResourceChangeReporter implements IResourceChangeListener {
 		@Override
 		public void resourceChanged(IResourceChangeEvent event) {
@@ -92,6 +96,8 @@ public class ModelEditor extends FormEditor{
 		ResourceChangeReporter listener = new ResourceChangeReporter();
 		ResourcesPlugin.getWorkspace().addResourceChangeListener(listener, IResourceChangeEvent.POST_CHANGE);
 		fModelManager = new ModelOperationManager();
+		fUndoContext = new ObjectUndoContext(fModelManager);
+		
 	}
 
 	public RootNode getModel(){
@@ -207,5 +213,9 @@ public class ModelEditor extends FormEditor{
 	
 	public ModelOperationManager getModelOperationManager(){
 		return fModelManager;
+	}
+
+	public IUndoContext getUndoContext() {
+		return fUndoContext;
 	}
 }

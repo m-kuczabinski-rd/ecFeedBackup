@@ -10,14 +10,15 @@ public class RedoAction extends ModelModyfyingAction {
 
 	@Override
 	public boolean isEnabled(){
-		return getUpdateContext().getOperationManager().redoEnabled();
+//		return getUpdateContext().getOperationManager().redoEnabled();
+		return true;
 	}
 	
 	@Override
 	public void run(){
 		try {
-			getUpdateContext().getOperationManager().undo();
-			getUpdateContext().getUpdateListener().modelUpdated(getUpdateContext().getSourceForm());
+			getUpdateContext().getOperationManager().redo();
+//			getUpdateContext().getUpdateListener().modelUpdated(getUpdateContext().getSourceForm());
 		} catch (ModelIfException e) {}
 	}
 }

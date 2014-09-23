@@ -10,18 +10,19 @@ import com.testify.ecfeed.model.ConstraintNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.TestCaseNode;
 
-public class MethodOperationMakeConsistent implements IModelOperation {
+public class MethodOperationMakeConsistent extends AbstractModelOperation {
 
 	private MethodNode fTarget;
 	private List<ConstraintNode> fOriginalConstraints;
 	private List<TestCaseNode> fOriginalTestCases;
 	
-	private class ReverseOperation implements IModelOperation{
+	private class ReverseOperation extends AbstractModelOperation{
 
 		@Override
 		public void execute() throws ModelIfException {
 			fTarget.replaceTestCases(fOriginalTestCases);
 			fTarget.replaceConstraints(fOriginalConstraints);
+			markModelUpdated();
 		}
 
 		@Override
@@ -39,17 +40,23 @@ public class MethodOperationMakeConsistent implements IModelOperation {
 	
 	@Override
 	public void execute() throws ModelIfException {
+		boolean modelUpdated = false;
 		Iterator<TestCaseNode> tcIt = fTarget.getTestCases().iterator();
 		while(tcIt.hasNext()){
 			if(tcIt.next().isConsistent() == false){
 				tcIt.remove();
+				modelUpdated = true;
 			}
 		}
 		Iterator<ConstraintNode> cIt = fTarget.getConstraintNodes().iterator();
 		while(cIt.hasNext()){
 			if(cIt.next().isConsistent() == false){
 				cIt.remove();
+				modelUpdated = true;
 			}
+		}
+		if(modelUpdated){
+			markModelUpdated();
 		}
 	}
 

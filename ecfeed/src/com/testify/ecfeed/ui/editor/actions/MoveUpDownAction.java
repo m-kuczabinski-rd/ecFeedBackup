@@ -20,7 +20,7 @@ public class MoveUpDownAction extends ModelModyfyingAction {
 	
 	@Override 
 	public void run(){
-		getSelectionInterface().moveUpDown(fUp, getUpdateContext());
+		getSelectionInterface().moveUpDown(fUp);
 	}
 
 	private static String chooseId(boolean up){

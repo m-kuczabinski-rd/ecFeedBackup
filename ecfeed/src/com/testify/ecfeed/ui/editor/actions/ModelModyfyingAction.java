@@ -3,6 +3,7 @@ package com.testify.ecfeed.ui.editor.actions;
 import org.eclipse.jface.viewers.ISelectionProvider;
 
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
+import com.testify.ecfeed.ui.modelif.SelectionInterface;
 
 public class ModelModyfyingAction extends ModelSelectionAction {
 
@@ -15,5 +16,9 @@ public class ModelModyfyingAction extends ModelSelectionAction {
 
 	protected IModelUpdateContext getUpdateContext(){
 		return fUPdateContext;
+	}
+	
+	protected SelectionInterface getSelectionInterface(){
+		return getSelectionUtils().getSelectionInterface(fUPdateContext);
 	}
 }

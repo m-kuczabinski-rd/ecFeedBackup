@@ -21,6 +21,7 @@ import org.eclipse.swt.widgets.Composite;
 
 import com.testify.ecfeed.model.ConstraintNode;
 import com.testify.ecfeed.ui.modelif.ConstraintInterface;
+import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 
 public class ConstraintDetailsPage extends BasicDetailsPage {
 
@@ -31,21 +32,21 @@ public class ConstraintDetailsPage extends BasicDetailsPage {
 	private class ConstraintNameListener extends AbstractSelectionAdapter{
 		@Override
 		public void widgetSelected(SelectionEvent e) {
-			fConstraintIf.setName(fNameCombo.getText(), ConstraintDetailsPage.this);
+			fConstraintIf.setName(fNameCombo.getText());
 			fNameCombo.setText(fConstraintIf.getName());
 		}
 	}
 	
-	public ConstraintDetailsPage(ModelMasterDetailsBlock masterDetailsBlock) {
-		super(masterDetailsBlock);
-		fConstraintIf = new ConstraintInterface();
+	public ConstraintDetailsPage(ModelMasterSection masterSection, IModelUpdateContext updateContext){
+		super(masterSection, updateContext);
+		fConstraintIf = new ConstraintInterface(this);
 	}
 	
 	@Override
 	public void createContents(Composite parent){
 		super.createContents(parent);
 		createConstraintNameEdit(getMainComposite());
-		addViewerSection(fConstraintViewer = new ConstraintViewer(this, getToolkit()));
+		addViewerSection(fConstraintViewer = new ConstraintViewer(this, this));
 	}
 	
 	private void createConstraintNameEdit(Composite parent) {

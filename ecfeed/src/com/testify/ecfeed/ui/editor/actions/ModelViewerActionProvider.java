@@ -7,25 +7,26 @@ import org.eclipse.jface.viewers.TreeViewer;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 
 
-public class ModelViewerActionFactory extends ActionGroups {
+public class ModelViewerActionProvider extends ActionGroups {
 	
-	public ModelViewerActionFactory(TreeViewer viewer, IModelUpdateContext context, boolean selectRoot) {
+	public ModelViewerActionProvider(TreeViewer viewer, IModelUpdateContext context, boolean selectRoot) {
 		addEditActions(viewer, context);
 		addViewerActions(viewer, context, selectRoot);
 		addMoveActions(viewer, context);
 	}
 	
-	public ModelViewerActionFactory(TableViewer viewer, IModelUpdateContext context) {
+	public ModelViewerActionProvider(TableViewer viewer, IModelUpdateContext context) {
 		addEditActions(viewer, context);
-		addViewerActions(viewer, context);
+		addViewerActions(viewer);
 		addMoveActions(viewer, context);
 	}
 
 	private void addEditActions(ISelectionProvider selectionProvider, IModelUpdateContext context){
+		DeleteAction deleteAction = new DeleteAction(selectionProvider, context);
 		addAction("edit", new CopyAction(selectionProvider));
-		addAction("edit", new CutAction(new CopyAction(selectionProvider), new DeleteAction(selectionProvider, context)));
+		addAction("edit", new CutAction(new CopyAction(selectionProvider), deleteAction));
 		addAction("edit", new PasteAction(selectionProvider, context));
-		addAction("edit", new DeleteAction(selectionProvider, context));
+		addAction("edit", deleteAction);
 	}
 	
 	private void addMoveActions(ISelectionProvider selectionProvider, IModelUpdateContext context){
@@ -39,7 +40,7 @@ public class ModelViewerActionFactory extends ActionGroups {
 		addAction("viewer", new CollapseAction(viewer));
 	}
 
-	private void addViewerActions(TableViewer viewer, IModelUpdateContext context){
+	private void addViewerActions(TableViewer viewer){
 		addAction("viewer", new SelectAllAction(viewer));
 	}
 

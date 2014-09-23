@@ -6,7 +6,7 @@ import com.testify.ecfeed.model.ConstraintNode;
 import com.testify.ecfeed.model.constraint.BasicStatement;
 import com.testify.ecfeed.model.constraint.Constraint;
 
-public class ConstraintOperationReplaceStatement implements IModelOperation {
+public class ConstraintOperationReplaceStatement extends AbstractModelOperation{
 
 	private BasicStatement fNewStatement;
 	private BasicStatement fCurrentStatement;
@@ -30,6 +30,7 @@ public class ConstraintOperationReplaceStatement implements IModelOperation {
 		else{
 			throw new ModelIfException(Messages.TARGET_STATEMENT_NOT_FOUND_PROBLEM);
 		}
+		markModelUpdated();
 	}
 
 	@Override

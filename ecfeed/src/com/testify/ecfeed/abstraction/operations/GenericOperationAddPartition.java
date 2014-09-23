@@ -7,7 +7,7 @@ import com.testify.ecfeed.model.PartitionedNode;
 
 public class GenericOperationAddPartition extends BulkOperation {
 
-	private class AddPartitionOperation implements IModelOperation{
+	private class AddPartitionOperation extends AbstractModelOperation{
 		private PartitionedNode fTarget;
 		private PartitionNode fPartition;
 		private int fIndex;
@@ -33,6 +33,7 @@ public class GenericOperationAddPartition extends BulkOperation {
 				throw new ModelIfException(Messages.TOO_HIGH_INDEX_PROBLEM);
 			}
 			fTarget.addPartition(fPartition, fIndex);
+			markModelUpdated();
 		}
 
 		@Override

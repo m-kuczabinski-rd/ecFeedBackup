@@ -21,6 +21,7 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.IFormPart;
 
 import com.testify.ecfeed.model.RootNode;
+import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 import com.testify.ecfeed.ui.modelif.RootInterface;
 
 public class ModelDetailsPage extends BasicDetailsPage {
@@ -32,14 +33,14 @@ public class ModelDetailsPage extends BasicDetailsPage {
 	private class SetNameAdapter extends AbstractSelectionAdapter{
 		@Override
 		public void widgetSelected(SelectionEvent e) {
-			fRootIf.setName(fModelNameText.getText(), ModelDetailsPage.this);
+			fRootIf.setName(fModelNameText.getText());
 			fModelNameText.setText(fRootIf.getName());
 		}
 	}
 	
-	public ModelDetailsPage(ModelMasterDetailsBlock masterDetailsBlock) {
-		super(masterDetailsBlock);
-		fRootIf = new RootInterface();
+	public ModelDetailsPage(ModelMasterSection masterSection, IModelUpdateContext updateContext) {
+		super(masterSection, updateContext);
+		fRootIf = new RootInterface(this);
 	}
 
 	@Override
@@ -48,7 +49,7 @@ public class ModelDetailsPage extends BasicDetailsPage {
 		getMainSection().setText("Model details");
 
 		createModelNameEdit(getMainComposite());
-		addViewerSection(fClassesSection = new ClassViewer(this, getToolkit()));
+		addViewerSection(fClassesSection = new ClassViewer(this, this));
 
 		getToolkit().paintBordersFor(getMainComposite());
 	}

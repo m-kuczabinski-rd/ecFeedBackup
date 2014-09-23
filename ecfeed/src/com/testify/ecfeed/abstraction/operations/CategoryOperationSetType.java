@@ -14,7 +14,7 @@ import com.testify.ecfeed.model.PartitionedNode;
 
 public class CategoryOperationSetType extends BulkOperation{
 
-	private class SetTypeOperation implements IModelOperation{
+	private class SetTypeOperation extends AbstractModelOperation{
 		
 		private CategoryNode fTarget;
 		private String fNewType;
@@ -24,13 +24,14 @@ public class CategoryOperationSetType extends BulkOperation{
 		
 		private ITypeAdapterProvider fAdapterProvider;
 
-		private class ReverseOperation implements IModelOperation{
+		private class ReverseOperation extends AbstractModelOperation{
 
 			@Override
 			public void execute() throws ModelIfException {
 				fTarget.setType(fCurrentType);
 				fTarget.setDefaultValueString(fOriginalDefaultValue);
 				fTarget.replacePartitions(fOriginalPartitions);
+				markModelUpdated();
 			}
 
 			@Override
@@ -69,6 +70,7 @@ public class CategoryOperationSetType extends BulkOperation{
 				defaultValue = adapter.defaultValue();
 			}
 			fTarget.setDefaultValueString(defaultValue);
+			markModelUpdated();
 		}
 
 		@Override 

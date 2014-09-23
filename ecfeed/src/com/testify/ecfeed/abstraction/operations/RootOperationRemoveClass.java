@@ -5,7 +5,7 @@ import com.testify.ecfeed.abstraction.ModelIfException;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.RootNode;
 
-public class RootOperationRemoveClass implements IModelOperation {
+public class RootOperationRemoveClass extends AbstractModelOperation {
 
 	private ClassNode fRemovedClass;
 	private RootNode fTarget;
@@ -21,6 +21,7 @@ public class RootOperationRemoveClass implements IModelOperation {
 	public void execute() throws ModelIfException {
 		fCurrentIndex = fRemovedClass.getIndex();
 		fTarget.removeClass(fRemovedClass);
+		markModelUpdated();
 	}
 
 	@Override

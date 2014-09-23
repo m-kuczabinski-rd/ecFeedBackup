@@ -13,7 +13,7 @@ import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.TestCaseNode;
 
-public class CategoryOperationSetExpected implements IModelOperation {
+public class CategoryOperationSetExpected extends AbstractModelOperation {
 	
 	private CategoryNode fTarget;
 	private boolean fExpected;
@@ -22,7 +22,7 @@ public class CategoryOperationSetExpected implements IModelOperation {
 	private List<PartitionNode> fOriginalPartitions;
 	private String fOriginalDefaultValue;
 	
-	private class ReverseOperation implements IModelOperation{
+	private class ReverseOperation extends AbstractModelOperation{
 
 		@Override
 		public void execute() throws ModelIfException {
@@ -33,6 +33,7 @@ public class CategoryOperationSetExpected implements IModelOperation {
 			}
 			fTarget.replacePartitions(fOriginalPartitions);
 			fTarget.setDefaultValueString(fOriginalDefaultValue);
+			markModelUpdated();
 		}
 
 		@Override
@@ -103,6 +104,7 @@ public class CategoryOperationSetExpected implements IModelOperation {
 				}
 			}
 		}
+		markModelUpdated();
 	}
 
 	@Override

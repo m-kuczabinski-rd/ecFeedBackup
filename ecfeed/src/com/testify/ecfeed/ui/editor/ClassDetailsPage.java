@@ -21,6 +21,7 @@ import org.eclipse.swt.widgets.Text;
 
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.ui.modelif.ClassInterface;
+import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 
 public class ClassDetailsPage extends BasicDetailsPage {
 
@@ -33,14 +34,14 @@ public class ClassDetailsPage extends BasicDetailsPage {
 	private class BrowseClassesAdapter extends AbstractSelectionAdapter{
 		@Override
 		public void widgetSelected(SelectionEvent e){
-			fClassIf.reassignClass(ClassDetailsPage.this);
+			fClassIf.reassignClass();
 		}
 	}
 	
 	private class ClassNameTextAdapter extends AbstractSelectionAdapter{
 		@Override
 		public void widgetSelected(SelectionEvent e) {
-			fClassIf.setLocalName(fClassNameText.getText(), ClassDetailsPage.this);
+			fClassIf.setLocalName(fClassNameText.getText());
 			fClassNameText.setText(fClassIf.getLocalName());
 		}
 	}
@@ -48,14 +49,14 @@ public class ClassDetailsPage extends BasicDetailsPage {
 	private class PackageNameTextAdapter extends AbstractSelectionAdapter{
 		@Override
 		public void widgetSelected(SelectionEvent e) {
-			fClassIf.setPackageName(fPackageNameText.getText(), ClassDetailsPage.this);
+			fClassIf.setPackageName(fPackageNameText.getText());
 			fPackageNameText.setText(fClassIf.getPackageName());
 		}
 	}
 	
-	public ClassDetailsPage(ModelMasterDetailsBlock masterDetailsBlock) {
-		super(masterDetailsBlock);
-		fClassIf = new ClassInterface();
+	public ClassDetailsPage(ModelMasterSection masterSection, IModelUpdateContext updateContext) {
+		super(masterSection, updateContext);
+		fClassIf = new ClassInterface(this);
 	}
 
 	@Override
@@ -63,8 +64,8 @@ public class ClassDetailsPage extends BasicDetailsPage {
 		super.createContents(parent);
 
 		createQualifiedNameComposite(getMainComposite());
-		addViewerSection(fMethodsSection = new MethodsViewer(this, getToolkit()));
-		addViewerSection(fOtherMethodsSection = new OtherMethodsViewer(this, getToolkit()));
+		addViewerSection(fMethodsSection = new MethodsViewer(this, this));
+		addViewerSection(fOtherMethodsSection = new OtherMethodsViewer(this, this));
 		
 		getToolkit().paintBordersFor(getMainComposite());
 	}

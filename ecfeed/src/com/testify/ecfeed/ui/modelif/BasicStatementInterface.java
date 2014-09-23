@@ -9,37 +9,37 @@ public class BasicStatementInterface extends OperationExecuter {
 	
 	BasicStatement fTarget;
 	
-	public BasicStatementInterface() {
+	public BasicStatementInterface(IModelUpdateContext updateContext) {
+		super(updateContext);
 	}
-
 	
 	public void setTarget(BasicStatement target){
 		fTarget = target;
 	}
 	
-	public boolean remove(IModelUpdateContext context){
+	public boolean remove(){
 		if(fTarget.getParent() != null){
-			return getParentInterface().removeChild(fTarget, context);
+			return getParentInterface().removeChild(fTarget);
 		}
 		return false;
 	}
 	
-	public boolean removeChild(BasicStatement child, IModelUpdateContext context){
+	public boolean removeChild(BasicStatement child){
 		return false;
 	}
 	
 	
-	public BasicStatement addNewStatement(IModelUpdateContext context){
+	public BasicStatement addNewStatement(){
 		BasicStatement statement = new StaticStatement(true);
-		if(addStatement(statement, context)){
+		if(addStatement(statement)){
 			return statement;
 		}
 		return null;
 	}
 	
-	public boolean addStatement(BasicStatement statement, IModelUpdateContext context){
+	public boolean addStatement(BasicStatement statement){
 		if(fTarget.getParent() != null){
-			return getParentInterface().addStatement(statement, context);
+			return getParentInterface().addStatement(statement);
 		}
 		return false;
 	}
@@ -47,16 +47,16 @@ public class BasicStatementInterface extends OperationExecuter {
 	public BasicStatementInterface getParentInterface(){
 		BasicStatement parent = fTarget.getParent();
 		if(parent != null){
-			return StatementInterfaceFactory.getInterface(parent);
+			return StatementInterfaceFactory.getInterface(parent, getUpdateContext());
 		}
 		return null;
 	}
 
-	public boolean setRelation(Relation relation, IModelUpdateContext context) {
+	public boolean setRelation(Relation relation) {
 		return false;
 	}
 
-	public boolean setConditionValue(String text, IModelUpdateContext context) {
+	public boolean setConditionValue(String text) {
 		return false;
 	}
 
@@ -64,7 +64,7 @@ public class BasicStatementInterface extends OperationExecuter {
 		return null;
 	}
 
-	public boolean setOperator(Operator operator, IModelUpdateContext context) {
+	public boolean setOperator(Operator operator) {
 		return false;
 	}
 
@@ -72,7 +72,7 @@ public class BasicStatementInterface extends OperationExecuter {
 		return null;
 	}
 
-	public boolean replaceChild(BasicStatement child, BasicStatement newStatement, IModelUpdateContext context) {
+	public boolean replaceChild(BasicStatement child, BasicStatement newStatement) {
 		return false;
 	}
 }

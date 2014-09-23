@@ -34,19 +34,23 @@ import com.testify.ecfeed.ui.common.TypeAdapterProvider;
 public class PartitionInterface extends PartitionedNodeInterface{
 
 	PartitionNode fTarget;
-	
+
+	public PartitionInterface(IModelUpdateContext updateContext) {
+		super(updateContext);
+	}
+
 	public void setTarget(PartitionNode partition){
 		super.setTarget(partition);
 		fTarget = partition;
 	}
 	
-	public boolean setName(String newName, IModelUpdateContext context){
-		return execute(new PartitionOperationRename(fTarget, newName), context, Messages.DIALOG_RENAME_PARTITION_PROBLEM_TITLE);
+	public boolean setName(String newName){
+		return execute(new PartitionOperationRename(fTarget, newName), Messages.DIALOG_RENAME_PARTITION_PROBLEM_TITLE);
 	}
 
-	public void setValue(String newValue, IModelUpdateContext context){
+	public void setValue(String newValue){
 		IModelOperation operation = new PartitionOperationSetValue(fTarget, newValue, new TypeAdapterProvider()); 
-		execute(operation, context, Messages.DIALOG_SET_PARTITION_VALUE_PROBLEM_TITLE);
+		execute(operation, Messages.DIALOG_SET_PARTITION_VALUE_PROBLEM_TITLE);
 	}
 
 	public String getValue() {
@@ -57,7 +61,7 @@ public class PartitionInterface extends PartitionedNodeInterface{
 		return fTarget.getCategory();
 	}
 
-	public boolean removeLabels(Collection<String> labels, IModelUpdateContext context) {
+	public boolean removeLabels(Collection<String> labels) {
 		MethodNode method = fTarget.getCategory().getMethod();
 		boolean removeMentioningConstraints = false;
 		for(String label : labels){
@@ -73,37 +77,37 @@ public class PartitionInterface extends PartitionedNodeInterface{
 				return false;
 			}
 		}
-		return execute(new PartitionOperationRemoveLabels(fTarget, labels), context, Messages.DIALOG_REMOVE_LABEL_PROBLEM_TITLE);
+		return execute(new PartitionOperationRemoveLabels(fTarget, labels), Messages.DIALOG_REMOVE_LABEL_PROBLEM_TITLE);
 	}
 
-	public String addNewLabel(IModelUpdateContext context) {
+	public String addNewLabel() {
 		String newLabel = Constants.DEFAULT_NEW_PARTITION_LABEL;
 		int i = 1;
 		while(fTarget.getLeafLabels().contains(newLabel)){
 			newLabel = Constants.DEFAULT_NEW_PARTITION_LABEL + "(" + i + ")";
 			i++;
 		}
-		if(addLabel(newLabel, context)){
+		if(addLabel(newLabel)){
 			return newLabel;
 		}
 		return null;
 	}
 
-	public boolean addLabels(List<String> labels, IModelUpdateContext context) {
+	public boolean addLabels(List<String> labels) {
 		IModelOperation operation = new PartitionOperationAddLabels(fTarget, labels);
-		return execute(operation, context, Messages.DIALOG_ADD_LABEL_PROBLEM_TITLE);
+		return execute(operation, Messages.DIALOG_ADD_LABEL_PROBLEM_TITLE);
 	}
 
-	public boolean addLabel(String newLabel, IModelUpdateContext context) {
+	public boolean addLabel(String newLabel) {
 		IModelOperation operation = new PartitionOperationAddLabel(fTarget, newLabel);
-		return execute(operation, context, Messages.DIALOG_ADD_LABEL_PROBLEM_TITLE);
+		return execute(operation, Messages.DIALOG_ADD_LABEL_PROBLEM_TITLE);
 	}
 
 	public boolean isLabelInherited(String label) {
 		return fTarget.getInheritedLabels().contains(label);
 	}
 
-	public boolean renameLabel(String label, String newValue, IModelUpdateContext context) {
+	public boolean renameLabel(String label, String newValue) {
 		if(label.equals(newValue)){
 			return false;
 		}
@@ -122,7 +126,6 @@ public class PartitionInterface extends PartitionedNodeInterface{
 		}
 		
 		IModelOperation operation = new PartitionOperationRenameLabel(fTarget, label, newValue);
-		return execute(operation, context, Messages.DIALOG_CHANGE_LABEL_PROBLEM_TITLE);
+		return execute(operation, Messages.DIALOG_CHANGE_LABEL_PROBLEM_TITLE);
 	}
-
 }

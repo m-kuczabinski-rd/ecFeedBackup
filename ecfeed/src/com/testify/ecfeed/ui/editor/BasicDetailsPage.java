@@ -14,6 +14,7 @@ package com.testify.ecfeed.ui.editor;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.core.commands.operations.IUndoContext;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
@@ -21,7 +22,6 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.forms.AbstractFormPart;
 import org.eclipse.ui.forms.IDetailsPage;
 import org.eclipse.ui.forms.IFormPart;
@@ -33,21 +33,24 @@ import com.testify.ecfeed.abstraction.ModelOperationManager;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 import com.testify.ecfeed.ui.modelif.IModelUpdateListener;
 
-public abstract class BasicDetailsPage implements IDetailsPage, IModelUpdateListener, IModelUpdateContext{
+public abstract class BasicDetailsPage implements IDetailsPage, IModelUpdateListener, ISectionContext, IModelUpdateContext{
 
 	private Section fMainSection;
 	private Composite fMainComposite;
 	private IManagedForm fManagedForm;
+
 	private List<IFormPart> fForms;
 	private List<ViewerSection> fViewerSections;
-	private ModelMasterDetailsBlock fMasterDetailsBlock;
+	private ModelMasterSection fMasterSection;
+	private IModelUpdateContext fModelUpdateContext;
 	
 	private static final int MAIN_SECTION_STYLE = Section.EXPANDED | Section.TITLE_BAR;
 
-	public BasicDetailsPage(ModelMasterDetailsBlock masterDetailsBlock){
-		fMasterDetailsBlock = masterDetailsBlock;
+	public BasicDetailsPage(ModelMasterSection masterSection, IModelUpdateContext updateContext){
+		fMasterSection = masterSection;
 		fForms = new ArrayList<IFormPart>();
 		fViewerSections = new ArrayList<ViewerSection>();
+		fModelUpdateContext = updateContext;
 	}
 	
 	@Override
@@ -57,7 +60,6 @@ public abstract class BasicDetailsPage implements IDetailsPage, IModelUpdateList
 	
 	@Override
 	public void selectionChanged(IFormPart part, ISelection selection) {
-		//refresh();
 	}
 
 	@Override
@@ -127,16 +129,16 @@ public abstract class BasicDetailsPage implements IDetailsPage, IModelUpdateList
 		return fManagedForm.getToolkit();
 	}
 	
-	public ModelOperationManager getOperationManager(){
-		return getMasterSection().getOperationManager();
-	}
-
+//	public ModelOperationManager getOperationManager(){
+//		return getMasterSection().getOperationManager();
+//	}
+//
 	protected Section getMainSection(){
 		return fMainSection;
 	}
 
-	protected ModelMasterSection getMasterSection(){
-		return fMasterDetailsBlock.getMasterSection();
+	public ModelMasterSection getMasterSection(){
+		return fMasterSection;
 	}
 
 	protected void addForm(IFormPart form){
@@ -178,18 +180,6 @@ public abstract class BasicDetailsPage implements IDetailsPage, IModelUpdateList
 		return Display.getCurrent().getActiveShell();
 	}
 	
-	public AbstractFormPart getSourceForm(){
-		return null;
-	}
-	
-	public IModelUpdateListener getUpdateListener(){
-		return this;
-	}
-	
-	public IActionBars getActionBars(){
-		return fMasterDetailsBlock.getPage().getEditorSite().getActionBars();
-	}
-
 	public BasicSection getFocusedViewerSection(){
 		for(ViewerSection section : fViewerSections){
 			if(section.getViewer().getControl().isFocusControl()){
@@ -197,5 +187,25 @@ public abstract class BasicDetailsPage implements IDetailsPage, IModelUpdateList
 			}
 		}
 		return null;
+	}
+	
+	public Composite getSectionComposite(){
+		return fMainComposite;
+	}
+	
+	public ModelOperationManager getOperationManager(){
+		return fModelUpdateContext.getOperationManager();
+	}
+	
+	public AbstractFormPart getSourceForm(){
+		return null;
+	}
+
+	public IModelUpdateListener getUpdateListener(){
+		return this;
+	}
+	
+	public IUndoContext getUndoContext(){
+		return fModelUpdateContext.getUndoContext();
 	}
 }

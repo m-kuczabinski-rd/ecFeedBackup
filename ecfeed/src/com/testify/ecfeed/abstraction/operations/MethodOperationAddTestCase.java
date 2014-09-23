@@ -6,7 +6,7 @@ import com.testify.ecfeed.abstraction.java.Constants;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.TestCaseNode;
 
-public class MethodOperationAddTestCase implements IModelOperation {
+public class MethodOperationAddTestCase extends AbstractModelOperation {
 	
 	private MethodNode fTarget;
 	private TestCaseNode fTestCase;
@@ -38,6 +38,7 @@ public class MethodOperationAddTestCase implements IModelOperation {
 		else{
 			fTarget.addTestCase(fTestCase, fIndex);
 		}
+		markModelUpdated();
 	}
 
 	@Override

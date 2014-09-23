@@ -11,16 +11,20 @@
 
 package com.testify.ecfeed.ui.editor;
 
+import org.eclipse.core.commands.operations.IUndoContext;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.actions.ActionFactory;
+import org.eclipse.ui.forms.AbstractFormPart;
 import org.eclipse.ui.forms.DetailsPart;
 import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.MasterDetailsBlock;
 import org.eclipse.ui.forms.widgets.FormToolkit;
+import org.eclipse.ui.operations.RedoActionHandler;
+import org.eclipse.ui.operations.UndoActionHandler;
 
 import com.testify.ecfeed.abstraction.ModelOperationManager;
 import com.testify.ecfeed.model.CategoryNode;
@@ -31,13 +35,58 @@ import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.TestCaseNode;
-import com.testify.ecfeed.ui.editor.actions.RedoAction;
-import com.testify.ecfeed.ui.editor.actions.UndoAction;
+import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
+import com.testify.ecfeed.ui.modelif.IModelUpdateListener;
 
-public class ModelMasterDetailsBlock extends MasterDetailsBlock implements ISelectionChangedListener{
+public class ModelMasterDetailsBlock extends MasterDetailsBlock implements ISelectionChangedListener, ISectionContext{
 
 	private ModelMasterSection fMasterSection;
+	private ISectionContext fMasterSectionContext;
 	private ModelPage fPage;
+	private FormToolkit fToolkit;
+	private ModelUpdateContext fUpdateContext;
+	
+	private class ModelUpdateContext implements IModelUpdateContext{
+
+		@Override
+		public ModelOperationManager getOperationManager() {
+			return getPage().getEditor().getModelOperationManager();
+		}
+
+		@Override
+		public AbstractFormPart getSourceForm() {
+			return null;
+		}
+
+		@Override
+		public IModelUpdateListener getUpdateListener() {
+			return null;
+		}
+
+		@Override
+		public IUndoContext getUndoContext() {
+			return getPage().getEditor().getUndoContext();		
+		}
+	}
+	
+	private class MasterSectionContext implements ISectionContext{
+
+		@Override
+		public ModelMasterSection getMasterSection() {
+			return null;
+		}
+
+		@Override
+		public Composite getSectionComposite() {
+			return sashForm;
+		}
+
+		@Override
+		public FormToolkit getToolkit() {
+			return fToolkit;
+		}
+		
+	}
 	
 	private class GenericToolbarAction extends Action{
 		private final String fActionId;
@@ -63,9 +112,10 @@ public class ModelMasterDetailsBlock extends MasterDetailsBlock implements ISele
 			}
 		}
 	}
-
-	public ModelMasterDetailsBlock(ModelPage modelPage, ModelOperationManager operationManager) {
+	
+	public ModelMasterDetailsBlock(ModelPage modelPage) {
 		fPage = modelPage;
+		fUpdateContext = new ModelUpdateContext();
 	}
 
 	public void selectNode(GenericNode node){
@@ -92,12 +142,19 @@ public class ModelMasterDetailsBlock extends MasterDetailsBlock implements ISele
 		detailsPart.selectionChanged(fMasterSection, event.getSelection());
 	}
 
+	public ISectionContext getMasterSectionContext(){
+		if(fMasterSectionContext == null){
+			fMasterSectionContext = new MasterSectionContext();
+		}
+		return fMasterSectionContext;
+	}
+	
 	@Override
 	protected void createMasterPart(IManagedForm managedForm, Composite parent) {
-		FormToolkit toolkit = managedForm.getToolkit();
-		ModelOperationManager operationManager = getPage().getEditor().getModelOperationManager();
+		fToolkit = managedForm.getToolkit();
 
-		fMasterSection = new ModelMasterSection(this, parent, toolkit, operationManager);
+		fMasterSection = new ModelMasterSection(this);
+//		MasterSectionParent masterParent = new MasterSectionParent(sashForm, toolkit, operationManager, getUndoContext());
 		fMasterSection.initialize(managedForm);
 		fMasterSection.addSelectionChangedListener(this);
 		fMasterSection.setInput(getModel());
@@ -105,13 +162,13 @@ public class ModelMasterDetailsBlock extends MasterDetailsBlock implements ISele
 
 	@Override
 	protected void registerPages(DetailsPart detailsPart) {
-		detailsPart.registerPage(RootNode.class, new ModelDetailsPage(this));
-		detailsPart.registerPage(ClassNode.class, new ClassDetailsPage(this));
-		detailsPart.registerPage(MethodNode.class, new MethodDetailsPage(this));
-		detailsPart.registerPage(CategoryNode.class, new CategoryDetailsPage(this));
-		detailsPart.registerPage(TestCaseNode.class, new TestCaseDetailsPage(this));
-		detailsPart.registerPage(ConstraintNode.class, new ConstraintDetailsPage(this));
-		detailsPart.registerPage(PartitionNode.class, new PartitionDetailsPage(this));
+		detailsPart.registerPage(RootNode.class, new ModelDetailsPage(fMasterSection, fUpdateContext));
+		detailsPart.registerPage(ClassNode.class, new ClassDetailsPage(fMasterSection, fUpdateContext));
+		detailsPart.registerPage(MethodNode.class, new MethodDetailsPage(fMasterSection, fUpdateContext));
+		detailsPart.registerPage(CategoryNode.class, new CategoryDetailsPage(fMasterSection, fUpdateContext));
+		detailsPart.registerPage(TestCaseNode.class, new TestCaseDetailsPage(fMasterSection, fUpdateContext));
+		detailsPart.registerPage(ConstraintNode.class, new ConstraintDetailsPage(fMasterSection, fUpdateContext));
+		detailsPart.registerPage(PartitionNode.class, new PartitionDetailsPage(fMasterSection, fUpdateContext));
 
 		selectNode(getModel());
 	}
@@ -119,8 +176,10 @@ public class ModelMasterDetailsBlock extends MasterDetailsBlock implements ISele
 	@Override
 	protected void createToolBarActions(IManagedForm managedForm) {
 		IActionBars actionBars = fPage.getEditorSite().getActionBars();
-		actionBars.setGlobalActionHandler(ActionFactory.UNDO.getId(), new UndoAction(fMasterSection));
-		actionBars.setGlobalActionHandler(ActionFactory.REDO.getId(), new RedoAction(fMasterSection));
+		actionBars.setGlobalActionHandler(ActionFactory.UNDO.getId(), new UndoActionHandler(fPage.getEditorSite(), fUpdateContext.getUndoContext()));
+		actionBars.setGlobalActionHandler(ActionFactory.REDO.getId(), new RedoActionHandler(fPage.getEditorSite(), fUpdateContext.getUndoContext()));
+//		actionBars.setGlobalActionHandler(ActionFactory.UNDO.getId(), new UndoAction(fMasterSection));
+//		actionBars.setGlobalActionHandler(ActionFactory.REDO.getId(), new RedoAction(fMasterSection));
 		actionBars.setGlobalActionHandler(ActionFactory.COPY.getId(), new GenericToolbarAction(ActionFactory.COPY.getId()));
 		actionBars.setGlobalActionHandler(ActionFactory.CUT.getId(), new GenericToolbarAction(ActionFactory.CUT.getId()));
 		actionBars.setGlobalActionHandler(ActionFactory.PASTE.getId(), new GenericToolbarAction(ActionFactory.PASTE.getId()));
@@ -139,5 +198,19 @@ public class ModelMasterDetailsBlock extends MasterDetailsBlock implements ISele
 
 	private RootNode getModel() {
 		return fPage.getModel();
+	}
+
+	@Override
+	public Composite getSectionComposite() {
+		return sashForm;
+	}
+
+	@Override
+	public FormToolkit getToolkit() {
+		return fToolkit;
+	}
+
+	public IModelUpdateContext getModelUpdateContext() {
+		return fUpdateContext;
 	}
 }

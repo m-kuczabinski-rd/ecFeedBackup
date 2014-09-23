@@ -11,20 +11,24 @@ import com.testify.ecfeed.ui.common.Messages;
 public class TestCaseInterface extends GenericNodeInterface {
 
 	private TestCaseNode fTarget;
-	
+
+	public TestCaseInterface(IModelUpdateContext updateContext) {
+		super(updateContext);
+	}
+
 	public void setTarget(TestCaseNode target){
 		super.setTarget(target);
 		fTarget = target;
 	}
 	
 	@Override
-	public boolean setName(String newName, IModelUpdateContext context) {
+	public boolean setName(String newName) {
 		IModelOperation operation = new TestCaseOperationRename(fTarget, newName);
-		return execute(operation, context, Messages.DIALOG_TEST_SUITE_NAME_PROBLEM_MESSAGE);
+		return execute(operation, Messages.DIALOG_TEST_SUITE_NAME_PROBLEM_MESSAGE);
 	}
 
 	public boolean isExecutable(TestCaseNode tc){
-		MethodInterface mIf = new MethodInterface();
+		MethodInterface mIf = new MethodInterface(getUpdateContext());
 		if(tc.getMethod() == null) return false;
 		mIf.setTarget(tc.getMethod());
 		ImplementationStatus tcStatus = getImplementationStatus(tc);
@@ -36,9 +40,8 @@ public class TestCaseInterface extends GenericNodeInterface {
 		return isExecutable(fTarget);
 	}
 	
-	public boolean updateTestData(int index, PartitionNode value, IModelUpdateContext context) {
+	public boolean updateTestData(int index, PartitionNode value) {
 		IModelOperation operation = new TestCaseOperationUpdateTestData(fTarget, index, value);
-		return execute(operation, context, Messages.DIALOG_UPDATE_TEST_DATA_PROBLEM_TITLE);
+		return execute(operation, Messages.DIALOG_UPDATE_TEST_DATA_PROBLEM_TITLE);
 	}
-
 }

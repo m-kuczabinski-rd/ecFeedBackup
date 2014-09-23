@@ -6,7 +6,7 @@ import com.testify.ecfeed.abstraction.java.Constants;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.RootNode;
 
-public class RootOperationAddNewClass implements IModelOperation {
+public class RootOperationAddNewClass extends AbstractModelOperation {
 	
 	private RootNode fTarget;
 	private ClassNode fAddedClass;
@@ -35,6 +35,7 @@ public class RootOperationAddNewClass implements IModelOperation {
 			throw new ModelIfException(Messages.CLASS_NAME_DUPLICATE_PROBLEM);
 		}
 		fTarget.addClass(fAddedClass, fIndex);
+		markModelUpdated();
 	}
 
 	@Override

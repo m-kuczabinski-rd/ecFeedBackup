@@ -27,7 +27,8 @@ public class CategoryInterface extends PartitionedNodeInterface {
 	private CategoryNode fTarget;
 	private ITypeAdapterProvider fAdapterProvider;
 	
-	public CategoryInterface() {
+	public CategoryInterface(IModelUpdateContext updateContext) {
+		super(updateContext);
 		fAdapterProvider = new TypeAdapterProvider();
 	}
 
@@ -40,21 +41,21 @@ public class CategoryInterface extends PartitionedNodeInterface {
 		return new EclipseModelBuilder().getDefaultExpectedValue(type);
 	}
 
-	public boolean setName(String newName, IModelUpdateContext context) {
+	public boolean setName(String newName) {
 		if(newName.equals(getName())){
 			return false;
 		}
-		return execute(new CategoryOperationRename(fTarget, newName), context, Messages.DIALOG_RENAME_PAREMETER_PROBLEM_TITLE);
+		return execute(new CategoryOperationRename(fTarget, newName), Messages.DIALOG_RENAME_PAREMETER_PROBLEM_TITLE);
 	}
 
-	public boolean setType(String newType, IModelUpdateContext context) {
+	public boolean setType(String newType) {
 		if(newType.equals(fTarget.getType())){
 			return false;
 		}
-		return execute(new CategoryOperationSetType(fTarget, newType, fAdapterProvider), context, Messages.DIALOG_RENAME_PAREMETER_PROBLEM_TITLE);
+		return execute(new CategoryOperationSetType(fTarget, newType, fAdapterProvider), Messages.DIALOG_RENAME_PAREMETER_PROBLEM_TITLE);
 	}
 	
-	public boolean setExpected(boolean expected, IModelUpdateContext context){
+	public boolean setExpected(boolean expected){
 		if(expected != fTarget.isExpected()){
 			MethodNode method = fTarget.getMethod();
 			if(method != null){
@@ -79,15 +80,15 @@ public class CategoryInterface extends PartitionedNodeInterface {
 					}
 				}
 			}
-			return execute(new CategoryOperationSetExpected(fTarget, expected), context, Messages.DIALOG_SET_CATEGORY_EXPECTED_PROBLEM_TITLE);
+			return execute(new CategoryOperationSetExpected(fTarget, expected), Messages.DIALOG_SET_CATEGORY_EXPECTED_PROBLEM_TITLE);
 		}
 		return false;
 	}
 
-	public boolean setDefaultValue(String valueString, IModelUpdateContext context) {
+	public boolean setDefaultValue(String valueString) {
 		if(fTarget.getDefaultValue().equals(valueString) == false){
 			IModelOperation operation = new CategoryOperationSetDefaultValue(fTarget, valueString, fAdapterProvider.getAdapter(fTarget.getType()));
-			return execute(operation, context, Messages.DIALOG_SET_DEFAULT_VALUE_PROBLEM_TITLE);
+			return execute(operation, Messages.DIALOG_SET_DEFAULT_VALUE_PROBLEM_TITLE);
 		}
 		return false;
 	}

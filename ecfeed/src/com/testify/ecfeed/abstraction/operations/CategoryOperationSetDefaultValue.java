@@ -5,7 +5,7 @@ import com.testify.ecfeed.abstraction.ITypeAdapter;
 import com.testify.ecfeed.abstraction.ModelIfException;
 import com.testify.ecfeed.model.CategoryNode;
 
-public class CategoryOperationSetDefaultValue implements IModelOperation {
+public class CategoryOperationSetDefaultValue extends AbstractModelOperation {
 
 	private CategoryNode fTarget;
 	private ITypeAdapter fTypeAdapter;
@@ -25,6 +25,7 @@ public class CategoryOperationSetDefaultValue implements IModelOperation {
 			throw new ModelIfException(Messages.CATEGORY_DEFAULT_VALUE_REGEX_PROBLEM);
 		}
 		fTarget.setDefaultValueString(fNewValue);
+		markModelUpdated();
 	}
 
 	@Override

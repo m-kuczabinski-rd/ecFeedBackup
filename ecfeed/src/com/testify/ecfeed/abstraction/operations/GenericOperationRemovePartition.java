@@ -11,19 +11,20 @@ import com.testify.ecfeed.model.PartitionedNode;
 
 public class GenericOperationRemovePartition extends BulkOperation {
 
-	private class RemovePartitionOperation implements IModelOperation{
+	private class RemovePartitionOperation extends AbstractModelOperation{
 		
 		private PartitionedNode fTarget;
 		private PartitionNode fPartition;
 		private String fOriginalDefaultValue;
 		private int fOriginalIndex;
 
-		private class ReverseOperation implements IModelOperation{
+		private class ReverseOperation extends AbstractModelOperation{
 
 			@Override
 			public void execute() throws ModelIfException {
 				fTarget.addPartition(fPartition, fOriginalIndex);
 				fTarget.getCategory().setDefaultValueString(fOriginalDefaultValue);
+				markModelUpdated();
 			}
 
 			@Override

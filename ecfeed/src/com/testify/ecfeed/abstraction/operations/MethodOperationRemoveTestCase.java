@@ -5,7 +5,7 @@ import com.testify.ecfeed.abstraction.ModelIfException;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.TestCaseNode;
 
-public class MethodOperationRemoveTestCase implements IModelOperation {
+public class MethodOperationRemoveTestCase extends AbstractModelOperation {
 
 	private MethodNode fTarget;
 	private TestCaseNode fTestCase;
@@ -21,6 +21,7 @@ public class MethodOperationRemoveTestCase implements IModelOperation {
 	public void execute() throws ModelIfException {
 		fIndex = fTestCase.getIndex();
 		fTarget.removeTestCase(fTestCase);
+		markModelUpdated();
 	}
 
 	@Override

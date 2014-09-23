@@ -13,15 +13,19 @@ import com.testify.ecfeed.ui.common.Messages;
 
 public class SelectionInterface extends OperationExecuter {
 
+	public SelectionInterface(IModelUpdateContext updateContext) {
+		super(updateContext);
+	}
+
 	private List<? extends GenericNode> fSelected;
 	
 	public void setTarget(List<GenericNode> target){
 		fSelected = target;
 	}
 	
-	public boolean delete(IModelUpdateContext context){
+	public boolean delete(){
 		if(fSelected.size() > 0){
-			return execute(new GenericRemoveNodesOperation(fSelected, true), context, Messages.DIALOG_REMOVE_NODES_PROBLEM_TITLE);
+			return execute(new GenericRemoveNodesOperation(fSelected, true), Messages.DIALOG_REMOVE_NODES_PROBLEM_TITLE);
 		}
 		return false;
 	}
@@ -35,11 +39,11 @@ public class SelectionInterface extends OperationExecuter {
 		return true;
 	}
 	
-	public boolean move(GenericNode newParent, IModelUpdateContext context){
-		return move(newParent, -1, context);
+	public boolean move(GenericNode newParent){
+		return move(newParent, -1);
 	}
 
-	public boolean move(GenericNode newParent, int newIndex, IModelUpdateContext context){
+	public boolean move(GenericNode newParent, int newIndex){
 		try{
 			IModelOperation operation;
 			if(newIndex == -1){
@@ -48,13 +52,13 @@ public class SelectionInterface extends OperationExecuter {
 			else{
 				operation = new GenericMoveOperation(fSelected, newParent, newIndex);
 			}
-			return execute(operation, context, Messages.DIALOG_MOVE_NODE_PROBLEM_TITLE);
+			return execute(operation, Messages.DIALOG_MOVE_NODE_PROBLEM_TITLE);
 		}catch(ModelIfException e){
 			return false;
 		}
 	}
 	
-	public boolean moveUpDown(boolean up, IModelUpdateContext context) {
+	public boolean moveUpDown(boolean up) {
 		GenericNode parent = fSelected.get(0).getParent();
 		for(GenericNode node : fSelected){
 			if(node.getParent() != parent){
@@ -63,16 +67,11 @@ public class SelectionInterface extends OperationExecuter {
 		}
 		try{
 			IModelOperation operation = (IModelOperation) parent.accept(new FactoryShiftOperation(fSelected, up));
-			executeMoveOperation(operation, context);
+			executeMoveOperation(operation);
 		}catch(Exception e){}
 		return false;
 	}
 	
-	protected boolean executeMoveOperation(IModelOperation moveOperation,
-			IModelUpdateContext context) {
-		return execute(moveOperation, context, Messages.DIALOG_MOVE_NODE_PROBLEM_TITLE);	
-	}
-
 	public boolean moveUpDownEnabed(boolean up) {
 		
 		GenericNode parent = getCommonParent();
@@ -102,5 +101,9 @@ public class SelectionInterface extends OperationExecuter {
 		}
 		return true;
 		
+	}
+
+	protected boolean executeMoveOperation(IModelOperation moveOperation) {
+		return execute(moveOperation, Messages.DIALOG_MOVE_NODE_PROBLEM_TITLE);	
 	}
 }

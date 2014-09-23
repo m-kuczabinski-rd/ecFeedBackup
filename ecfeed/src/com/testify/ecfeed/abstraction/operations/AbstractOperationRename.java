@@ -1,9 +1,8 @@
 package com.testify.ecfeed.abstraction.operations;
 
-import com.testify.ecfeed.abstraction.IModelOperation;
 import com.testify.ecfeed.model.GenericNode;
 
-public abstract class AbstractOperationRename implements IModelOperation {
+public abstract class AbstractOperationRename extends AbstractModelOperation {
 
 	protected GenericNode fTarget;
 	protected String fNewName;

@@ -39,16 +39,16 @@ public abstract class AbstractAddChildAction extends ModelModyfyingAction{
 
 		@Override
 		public Object visit(RootNode node) throws Exception {
-			RootInterface rootIf = new RootInterface();
+			RootInterface rootIf = new RootInterface(getUpdateContext());
 			rootIf.setTarget(node);
-			return rootIf.addNewClass(getUpdateContext());
+			return rootIf.addNewClass();
 		}
 
 		@Override
 		public Object visit(ClassNode node) throws Exception {
-			ClassInterface classIf = new ClassInterface();
+			ClassInterface classIf = new ClassInterface(getUpdateContext());
 			classIf.setTarget(node);
-			return classIf.addNewMethod(getUpdateContext());
+			return classIf.addNewMethod();
 		}
 
 		@Override
@@ -58,9 +58,9 @@ public abstract class AbstractAddChildAction extends ModelModyfyingAction{
 
 		@Override
 		public Object visit(CategoryNode node) throws Exception {
-			CategoryInterface parameterIf = new CategoryInterface();
+			CategoryInterface parameterIf = new CategoryInterface(getUpdateContext());
 			parameterIf.setTarget(node);
-			return parameterIf.addNewPartition(getUpdateContext());
+			return parameterIf.addNewPartition();
 		}
 
 		@Override
@@ -75,9 +75,9 @@ public abstract class AbstractAddChildAction extends ModelModyfyingAction{
 
 		@Override
 		public Object visit(PartitionNode node) throws Exception {
-			CategoryInterface parameterIf = new CategoryInterface();
+			CategoryInterface parameterIf = new CategoryInterface(getUpdateContext());
 			parameterIf.setTarget(node);
-			return parameterIf.addNewPartition(getUpdateContext());
+			return parameterIf.addNewPartition();
 		}
 	}
 	

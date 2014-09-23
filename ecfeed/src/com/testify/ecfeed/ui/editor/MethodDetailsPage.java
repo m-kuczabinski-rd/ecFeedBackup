@@ -22,6 +22,7 @@ import org.eclipse.swt.widgets.Text;
 
 import com.testify.ecfeed.abstraction.ImplementationStatus;
 import com.testify.ecfeed.model.MethodNode;
+import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 import com.testify.ecfeed.ui.modelif.MethodInterface;
 
 public class MethodDetailsPage extends BasicDetailsPage {
@@ -45,21 +46,21 @@ public class MethodDetailsPage extends BasicDetailsPage {
 	private class ReassignAdapter extends SelectionAdapter{
 		@Override
 		public void widgetSelected(SelectionEvent e){
-			fMethodIf.reassignTarget(MethodDetailsPage.this);
+			fMethodIf.reassignTarget();
 		}
 	}
 	
 	private class RenameMethodAdapter extends AbstractSelectionAdapter{
 		@Override
 		public void widgetSelected(SelectionEvent e) {
-			fMethodIf.setName(fMethodNameText.getText(), MethodDetailsPage.this);
+			fMethodIf.setName(fMethodNameText.getText());
 			fMethodNameText.setText(fMethodIf.getName());
 		}
 	}
 	
-	public MethodDetailsPage(ModelMasterDetailsBlock masterDetailsBlock) {
-		super(masterDetailsBlock);
-		fMethodIf = new MethodInterface();
+	public MethodDetailsPage(ModelMasterSection masterSection, IModelUpdateContext updateContext) {
+		super(masterSection, updateContext);
+		fMethodIf = new MethodInterface(this);
 	}
 
 	public MethodNode getSelectedMethod() {
@@ -71,9 +72,9 @@ public class MethodDetailsPage extends BasicDetailsPage {
 		super.createContents(parent);
 
 		createNameTextComposite();
-		addViewerSection(fParemetersSection = new ParametersViewer(this, getToolkit()));
-		addViewerSection(fConstraintsSection = new ConstraintsListViewer(this, getToolkit()));
-		addViewerSection(fTestCasesSection = new TestCasesViewer(this, getToolkit()));
+		addViewerSection(fParemetersSection = new ParametersViewer(this, this));
+		addViewerSection(fConstraintsSection = new ConstraintsListViewer(this, this));
+		addViewerSection(fTestCasesSection = new TestCasesViewer(this, this));
 		
 		getToolkit().paintBordersFor(getMainComposite());
 	}

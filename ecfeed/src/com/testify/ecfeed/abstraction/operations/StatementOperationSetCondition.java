@@ -5,7 +5,7 @@ import com.testify.ecfeed.abstraction.ModelIfException;
 import com.testify.ecfeed.model.constraint.PartitionedCategoryStatement;
 import com.testify.ecfeed.model.constraint.PartitionedCategoryStatement.ICondition;
 
-public class StatementOperationSetCondition implements IModelOperation {
+public class StatementOperationSetCondition extends AbstractModelOperation {
 
 	private PartitionedCategoryStatement fTarget;
 	private ICondition fCurrentCondition;
@@ -20,6 +20,7 @@ public class StatementOperationSetCondition implements IModelOperation {
 	@Override
 	public void execute() throws ModelIfException {
 		fTarget.setCondition(fNewCondition);
+		markModelUpdated();
 	}
 
 	@Override

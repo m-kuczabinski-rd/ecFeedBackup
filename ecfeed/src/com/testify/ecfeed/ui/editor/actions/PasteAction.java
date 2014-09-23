@@ -35,7 +35,7 @@ public class PasteAction extends ModelModyfyingAction {
 	@Override
 	public boolean isEnabled(){
 		if(getSelectedNodes().size() != 1) return false;
-		GenericNodeInterface nodeIf = NodeInterfaceFactory.getNodeInterface(getSelectedNodes().get(0)); 
+		GenericNodeInterface nodeIf = NodeInterfaceFactory.getNodeInterface(getSelectedNodes().get(0), getUpdateContext()); 
 		if (fIndex != -1){
 			return nodeIf.pasteEnabled(NodeClipboard.getContent(), fIndex);
 		}
@@ -45,8 +45,8 @@ public class PasteAction extends ModelModyfyingAction {
 	@Override
 	public void run(){
 		GenericNode parent = getSelectedNodes().get(0);
-		GenericNodeInterface parentIf = NodeInterfaceFactory.getNodeInterface(parent); 
-		parentIf.addChildren(NodeClipboard.getContentCopy(), getUpdateContext());
+		GenericNodeInterface parentIf = NodeInterfaceFactory.getNodeInterface(parent, getUpdateContext()); 
+		parentIf.addChildren(NodeClipboard.getContentCopy());
 		if(fTreeViewer != null){
 			fTreeViewer.expandToLevel(parent, 1);
 		}

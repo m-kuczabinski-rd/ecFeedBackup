@@ -19,7 +19,6 @@ import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
-import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Section;
 
 import com.testify.ecfeed.abstraction.ImplementationStatus;
@@ -29,8 +28,9 @@ import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.ui.common.ColorConstants;
 import com.testify.ecfeed.ui.common.ColorManager;
 import com.testify.ecfeed.ui.editor.actions.DeleteAction;
-import com.testify.ecfeed.ui.editor.actions.ModelViewerActionFactory;
+import com.testify.ecfeed.ui.editor.actions.ModelViewerActionProvider;
 import com.testify.ecfeed.ui.modelif.ClassInterface;
+import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 import com.testify.ecfeed.ui.modelif.RootInterface;
 
 public class ClassViewer extends TableViewerSection {
@@ -63,8 +63,8 @@ public class ClassViewer extends TableViewerSection {
 		}
 
 		protected void renameClass(ClassNode target, String qualifiedName){
-			fClassIf.setTarget(target);
-			fClassIf.setQualifiedName(qualifiedName, ClassViewer.this);
+			classIf().setTarget(target);
+			classIf().setQualifiedName(qualifiedName);
 		}
 	}
 
@@ -105,7 +105,7 @@ public class ClassViewer extends TableViewerSection {
 	private class AddImplementedClassAdapter extends SelectionAdapter {
 		@Override
 		public void widgetSelected(SelectionEvent e) {
-			ClassNode addedClass = fRootIf.addImplementedClass(ClassViewer.this);
+			ClassNode addedClass = fRootIf.addImplementedClass();
 			if(addedClass != null){
 				selectElement(addedClass);
 				fNameColumn.getViewer().editElement(addedClass, 0);
@@ -116,7 +116,7 @@ public class ClassViewer extends TableViewerSection {
 	private class AddNewClassAdapter extends SelectionAdapter {
 		@Override
 		public void widgetSelected(SelectionEvent e) {
-			ClassNode addedClass = fRootIf.addNewClass(ClassViewer.this);
+			ClassNode addedClass = fRootIf.addNewClass();
 			if(addedClass != null){
 				selectElement(addedClass);
 				fNameColumn.getViewer().editElement(addedClass, 0);
@@ -136,21 +136,38 @@ public class ClassViewer extends TableViewerSection {
 		}
 	}
 	
-	public ClassViewer(BasicDetailsPage parent, FormToolkit toolkit) {
-		super(parent.getMainComposite(), toolkit, STYLE, parent, parent.getOperationManager());
-		fRootIf = new RootInterface();
-		fClassIf = new ClassInterface();
+//	public ClassViewer(BasicDetailsPage parent, FormToolkit toolkit) {
+//		super(parent.getMainComposite(), toolkit, STYLE, parent, parent.getOperationManager());
+//		fRootIf = new RootInterface();
+//		classIf() = new ClassInterface();
+//
+//		fNameColumn.setEditingSupport(new LocalNameEditingSupport());
+//		fPackageNameColumn.setEditingSupport(new PackageNameEditingSupport());
+//
+//		setText("Classes");
+//		addButton("Add implemented class", new AddImplementedClassAdapter());
+//		addButton("New test class", new AddNewClassAdapter());
+//		addButton("Remove selected", new ActionSelectionAdapter(new DeleteAction(getViewer(), this)));
+//		
+//		addDoubleClickListener(new SelectNodeDoubleClickListener(parent.getMasterSection()));
+//		setActionProvider(new ModelViewerActionFactory(getTableViewer(), this));
+//	}
+	public ClassViewer(ISectionContext parent, IModelUpdateContext updateContext) {
+		super(parent, updateContext, STYLE);
 
 		fNameColumn.setEditingSupport(new LocalNameEditingSupport());
 		fPackageNameColumn.setEditingSupport(new PackageNameEditingSupport());
 
+		fRootIf = new RootInterface(this);
+		fClassIf = new ClassInterface(this);
+		
 		setText("Classes");
 		addButton("Add implemented class", new AddImplementedClassAdapter());
 		addButton("New test class", new AddNewClassAdapter());
 		addButton("Remove selected", new ActionSelectionAdapter(new DeleteAction(getViewer(), this)));
 		
 		addDoubleClickListener(new SelectNodeDoubleClickListener(parent.getMasterSection()));
-		setActionProvider(new ModelViewerActionFactory(getTableViewer(), this));
+		setActionProvider(new ModelViewerActionProvider(getTableViewer(), this));
 	}
 	
 	@Override
@@ -175,4 +192,10 @@ public class ClassViewer extends TableViewerSection {
 		fRootIf.setTarget(model);
 	}
 	
+	private ClassInterface classIf(){
+		if(fClassIf == null){
+			fClassIf = new ClassInterface(this);
+		}
+		return fClassIf;
+	}
 }

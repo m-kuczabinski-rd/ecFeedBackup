@@ -5,7 +5,7 @@ import com.testify.ecfeed.abstraction.ModelIfException;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.TestCaseNode;
 
-public class TestCaseOperationUpdateTestData implements IModelOperation {
+public class TestCaseOperationUpdateTestData extends AbstractModelOperation {
 	
 	private PartitionNode fNewValue;
 	private PartitionNode fPreviousValue;
@@ -25,6 +25,7 @@ public class TestCaseOperationUpdateTestData implements IModelOperation {
 			throw new ModelIfException(Messages.TEST_DATA_CATEGORY_MISMATCH_PROBLEM);
 		}
 		fTarget.getTestData().set(fIndex, fNewValue);
+		markModelUpdated();
 	}
 
 	@Override

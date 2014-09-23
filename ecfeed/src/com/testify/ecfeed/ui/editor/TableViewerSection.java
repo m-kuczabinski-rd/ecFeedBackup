@@ -23,15 +23,17 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
-import org.eclipse.ui.forms.widgets.FormToolkit;
 
-import com.testify.ecfeed.abstraction.ModelOperationManager;
-import com.testify.ecfeed.ui.modelif.IModelUpdateListener;
+import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 
 public abstract class TableViewerSection extends ViewerSection {
 
-	public TableViewerSection(Composite parent, FormToolkit toolkit, int style, IModelUpdateListener updateListener, ModelOperationManager operationManager) {
-		super(parent, toolkit, style, updateListener, operationManager);
+//	public TableViewerSection(Composite parent, FormToolkit toolkit, int style, IModelUpdateListener updateListener, ModelOperationManager operationManager) {
+//		super(parent, toolkit, style, updateListener, operationManager);
+//	}
+
+	public TableViewerSection(ISectionContext sectionContext, IModelUpdateContext updateContext, int style) {
+		super(sectionContext, updateContext, style);
 	}
 
 	@Override

@@ -25,6 +25,11 @@ import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.dialogs.TestClassSelectionDialog;
 
 public class ClassInterface extends GenericNodeInterface {
+	
+	public ClassInterface(IModelUpdateContext updateContext) {
+		super(updateContext);
+	}
+
 	private ClassNode fTarget;	
 	
 	public void setTarget(ClassNode target){
@@ -65,11 +70,11 @@ public class ClassInterface extends GenericNodeInterface {
 	}
 
 	@Override
-	public boolean setName(String newName, IModelUpdateContext context) {
-		return setQualifiedName(newName, context);
+	public boolean setName(String newName) {
+		return setQualifiedName(newName);
 	}
 
-	public boolean setQualifiedName(String newName, IModelUpdateContext context){
+	public boolean setQualifiedName(String newName){
 		if(newName.equals(getQualifiedName())){
 			return false;
 		}
@@ -80,62 +85,62 @@ public class ClassInterface extends GenericNodeInterface {
 				return false;
 			}
 		}
-		return execute(new ClassOperationRename(fTarget, newName), context, Messages.DIALOG_RENAME_CLASS_PROBLEM_TITLE);
+		return execute(new ClassOperationRename(fTarget, newName), Messages.DIALOG_RENAME_CLASS_PROBLEM_TITLE);
 	}
 
-	public boolean setLocalName(String newLocalName, IModelUpdateContext context){
+	public boolean setLocalName(String newLocalName){
 		String newQualifiedName = getPackageName() + "." + newLocalName;
-		return setQualifiedName(newQualifiedName, context);
+		return setQualifiedName(newQualifiedName);
 	}
 
-	public boolean setPackageName(String newPackageName, IModelUpdateContext context){
+	public boolean setPackageName(String newPackageName){
 		String newQualifiedName = newPackageName + "." + getLocalName(); 
-		return setQualifiedName(newQualifiedName, context);
+		return setQualifiedName(newQualifiedName);
 	}
 
-	public MethodNode addNewMethod(IModelUpdateContext context){
-		return addNewMethod(generateNewMethodName(), context);
+	public MethodNode addNewMethod(){
+		return addNewMethod(generateNewMethodName());
 	}
 	
-	public MethodNode addNewMethod(String name, IModelUpdateContext context){
+	public MethodNode addNewMethod(String name){
 		MethodNode method = new MethodNode(name);
-		if(addMethod(method, context)){
+		if(addMethod(method)){
 			return method;
 		}
 		return null;
 	}
 	
-	public boolean addMethods(Collection<MethodNode> methods, IModelUpdateContext context){
+	public boolean addMethods(Collection<MethodNode> methods){
 		IModelOperation operation = new ClassOperationAddMethods(fTarget, methods, fTarget.getMethods().size());
-		return execute(operation, context, Messages.DIALOG_ADD_METHODS_PROBLEM_TITLE);
+		return execute(operation, Messages.DIALOG_ADD_METHODS_PROBLEM_TITLE);
 	}
 	
-	public boolean addMethod(MethodNode method, IModelUpdateContext context){
+	public boolean addMethod(MethodNode method){
 		IModelOperation operation = new ClassOperationAddMethod(fTarget, method, fTarget.getMethods().size());
-		return execute(operation, context, Messages.DIALOG_ADD_METHOD_PROBLEM_TITLE);
+		return execute(operation, Messages.DIALOG_ADD_METHOD_PROBLEM_TITLE);
 	}
 
-	public boolean removeMethod(MethodNode method, IModelUpdateContext context){
+	public boolean removeMethod(MethodNode method){
 		if(MessageDialog.openConfirm(Display.getCurrent().getActiveShell(), 
 				Messages.DIALOG_REMOVE_METHOD_TITLE, 
 				Messages.DIALOG_REMOVE_METHOD_MESSAGE)){
 			IModelOperation operation = new ClassOperationRemoveMethod(fTarget, method);
-			return execute(operation, context, Messages.DIALOG_REMOVE_METHOD_PROBLEM_TITLE);
+			return execute(operation, Messages.DIALOG_REMOVE_METHOD_PROBLEM_TITLE);
 		}
 		return false;
 	}
 
-	public boolean removeMethods(Collection<MethodNode> methods, IModelUpdateContext context){
+	public boolean removeMethods(Collection<MethodNode> methods){
 		if(methods.size() == 0){
 			return false;
 		}
 		if(methods.size() == 1){
-			return removeMethod(new ArrayList<MethodNode>(methods).get(0), context);
+			return removeMethod(new ArrayList<MethodNode>(methods).get(0));
 		}
 		else if(MessageDialog.openConfirm(Display.getCurrent().getActiveShell(), 
 					Messages.DIALOG_REMOVE_METHODS_TITLE, 
 					Messages.DIALOG_REMOVE_METHODS_MESSAGE)){
-			return removeChildren(methods, context, Messages.DIALOG_REMOVE_METHODS_PROBLEM_TITLE);
+			return removeChildren(methods, Messages.DIALOG_REMOVE_METHODS_PROBLEM_TITLE);
 		}
 		return false;
 	}
@@ -168,13 +173,13 @@ public class ClassInterface extends GenericNodeInterface {
 		return name;
 	}
 
-	public void reassignClass(IModelUpdateContext context) {
+	public void reassignClass() {
 		TestClassSelectionDialog dialog = new TestClassSelectionDialog(Display.getDefault().getActiveShell());
 		
 		if (dialog.open() == IDialogConstants.OK_ID) {
 			IType selectedClass = (IType)dialog.getFirstResult();
 			String qualifiedName = selectedClass.getFullyQualifiedName();
-			setQualifiedName(qualifiedName, context);
+			setQualifiedName(qualifiedName);
 		}
 	}
 }

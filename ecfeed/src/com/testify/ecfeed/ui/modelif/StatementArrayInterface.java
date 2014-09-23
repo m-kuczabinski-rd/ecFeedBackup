@@ -13,28 +13,32 @@ import com.testify.ecfeed.ui.common.Messages;
 public class StatementArrayInterface extends BasicStatementInterface{
 
 	private StatementArray fTarget;
-	
+
+	public StatementArrayInterface(IModelUpdateContext updateContext) {
+		super(updateContext);
+	}
+
 	public void setTarget(StatementArray target){
 		super.setTarget(target);
 		fTarget = target;
 	}
 	
 	@Override
-	public boolean addStatement(BasicStatement statement, IModelUpdateContext context){
+	public boolean addStatement(BasicStatement statement){
 		IModelOperation operation = new StatementOperationAddStatement(fTarget, statement, fTarget.getChildren().size()); 
-		return execute(operation, context, Messages.DIALOG_ADD_STATEMENT_PROBLEM_TITLE);
+		return execute(operation, Messages.DIALOG_ADD_STATEMENT_PROBLEM_TITLE);
 	}
 	
-	public boolean removeChild(BasicStatement child, IModelUpdateContext context){
+	public boolean removeChild(BasicStatement child){
 		IModelOperation operation = new StatementOperationRemoveStatement(fTarget, child); 
-		return execute(operation, context, Messages.DIALOG_REMOVE_STATEMENT_PROBLEM_TITLE);
+		return execute(operation, Messages.DIALOG_REMOVE_STATEMENT_PROBLEM_TITLE);
 	}
 
 	@Override
-	public boolean setOperator(Operator operator, IModelUpdateContext context) {
+	public boolean setOperator(Operator operator) {
 		if(operator != fTarget.getOperator()){
 			IModelOperation operation = new StatementOperationChangeOperator(fTarget, operator); 
-			return execute(operation, context, Messages.DIALOG_EDIT_STATEMENT_PROBLEM_TITLE);
+			return execute(operation, Messages.DIALOG_EDIT_STATEMENT_PROBLEM_TITLE);
 		}
 		return false;
 	}
@@ -45,12 +49,11 @@ public class StatementArrayInterface extends BasicStatementInterface{
 	}
 
 	@Override
-	public boolean replaceChild(BasicStatement child, BasicStatement newStatement, IModelUpdateContext context) {
+	public boolean replaceChild(BasicStatement child, BasicStatement newStatement) {
 		if(child != newStatement){
 			IModelOperation operation = new StatementOperationReplaceChild(fTarget, child, newStatement);
-			return execute(operation, context, Messages.DIALOG_ADD_STATEMENT_PROBLEM_TITLE);
+			return execute(operation, Messages.DIALOG_ADD_STATEMENT_PROBLEM_TITLE);
 		}
 		return false;
 	}
-
 }

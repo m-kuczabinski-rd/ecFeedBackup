@@ -24,6 +24,11 @@ public class FactoryRemoveOperation {
 		public IModelOperation reverseOperation() {
 			return new UnsupportedModelOperation();
 		}
+
+		@Override
+		public boolean modelUpdated() {
+			return false;
+		}
 	}
 	
 	private static class RemoveOperationVisitor implements IModelVisitor{

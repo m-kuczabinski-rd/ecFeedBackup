@@ -7,7 +7,7 @@ import com.testify.ecfeed.abstraction.ModelIfException;
 import com.testify.ecfeed.model.constraint.IRelationalStatement;
 import com.testify.ecfeed.model.constraint.Relation;
 
-public class StatementOperationSetRelation implements IModelOperation {
+public class StatementOperationSetRelation extends AbstractModelOperation {
 
 	private IRelationalStatement fTarget;
 	private Relation fNewRelation;
@@ -25,6 +25,7 @@ public class StatementOperationSetRelation implements IModelOperation {
 			throw new ModelIfException(Messages.DIALOG_UNALLOWED_RELATION_MESSAGE);
 		}
 		fTarget.setRelation(fNewRelation);
+		markModelUpdated();
 	}
 
 	@Override

@@ -20,6 +20,7 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 
 import com.testify.ecfeed.model.TestCaseNode;
+import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 import com.testify.ecfeed.ui.modelif.TestCaseInterface;
 
 public class TestCaseDetailsPage extends BasicDetailsPage {
@@ -32,20 +33,20 @@ public class TestCaseDetailsPage extends BasicDetailsPage {
 	private class RenameTestCaseAdapter extends AbstractSelectionAdapter{
 		@Override
 		public void widgetSelected(SelectionEvent e){
-			fTestCaseIf.setName(fTestSuiteNameCombo.getText(), TestCaseDetailsPage.this);
+			fTestCaseIf.setName(fTestSuiteNameCombo.getText());
 			fTestSuiteNameCombo.setText(fTestCaseIf.getName());
 		}
 	}
-	public TestCaseDetailsPage(ModelMasterDetailsBlock masterDetailsBlock) {
-		super(masterDetailsBlock);
-		fTestCaseIf = new TestCaseInterface();
+	public TestCaseDetailsPage(ModelMasterSection masterSection, IModelUpdateContext updateContext) {
+		super(masterSection, updateContext);
+		fTestCaseIf = new TestCaseInterface(this);
 	}
 
 	@Override
 	public void createContents(Composite parent) {
 		super.createContents(parent);
 		createTestSuiteEdit(getMainComposite());
-		addViewerSection(fTestDataViewer = new TestDataViewer(this, getToolkit()));
+		addViewerSection(fTestDataViewer = new TestDataViewer(this, this));
 	}
 	
 	@Override

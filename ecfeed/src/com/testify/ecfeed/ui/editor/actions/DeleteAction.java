@@ -17,7 +17,7 @@ public class DeleteAction extends ModelModyfyingAction {
 
 	@Override
 	public void run(){
-		getSelectionInterface().delete(getUpdateContext());
+		getSelectionInterface().delete();
 	}
 	
 }

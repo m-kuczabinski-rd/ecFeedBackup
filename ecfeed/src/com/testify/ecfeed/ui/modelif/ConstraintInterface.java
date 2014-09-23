@@ -10,12 +10,16 @@ import com.testify.ecfeed.ui.common.Messages;
 public class ConstraintInterface extends GenericNodeInterface {
 
 	private ConstraintNode fTarget;
-	
-	public boolean setName(String newName, IModelUpdateContext context) {
+
+	public ConstraintInterface(IModelUpdateContext updateContext) {
+		super(updateContext);
+	}
+
+	public boolean setName(String newName) {
 		if(newName.equals(getName())){
 			return false;
 		}
-		return execute(new ConstraintOperationRename(fTarget, newName), context, Messages.DIALOG_RENAME_METHOD_PROBLEM_TITLE);
+		return execute(new ConstraintOperationRename(fTarget, newName), Messages.DIALOG_RENAME_METHOD_PROBLEM_TITLE);
 	}
 
 	public void setTarget(ConstraintNode target){
@@ -23,10 +27,10 @@ public class ConstraintInterface extends GenericNodeInterface {
 		super.setTarget(target);
 	}
 
-	public boolean replaceStatement(BasicStatement current, BasicStatement newStatement, IModelUpdateContext context) {
+	public boolean replaceStatement(BasicStatement current, BasicStatement newStatement) {
 		if(current != newStatement){
 			IModelOperation operation = new ConstraintOperationReplaceStatement(fTarget, current, newStatement);
-			return execute(operation, context, Messages.DIALOG_REMOVE_TEST_CASES_PROBLEM_TITLE);
+			return execute(operation, Messages.DIALOG_REMOVE_TEST_CASES_PROBLEM_TITLE);
 		}
 		return false;
 	}

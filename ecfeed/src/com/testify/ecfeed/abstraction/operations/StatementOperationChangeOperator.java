@@ -5,7 +5,7 @@ import com.testify.ecfeed.abstraction.ModelIfException;
 import com.testify.ecfeed.model.constraint.Operator;
 import com.testify.ecfeed.model.constraint.StatementArray;
 
-public class StatementOperationChangeOperator implements IModelOperation {
+public class StatementOperationChangeOperator extends AbstractModelOperation {
 
 	private StatementArray fTarget;
 	private Operator fNewOperator;
@@ -20,6 +20,7 @@ public class StatementOperationChangeOperator implements IModelOperation {
 	@Override
 	public void execute() throws ModelIfException {
 		fTarget.setOperator(fNewOperator);
+		markModelUpdated();
 	}
 
 	@Override

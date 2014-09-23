@@ -11,6 +11,7 @@
 
 package com.testify.ecfeed.ui.editor;
 
+import org.eclipse.core.commands.operations.IUndoContext;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
@@ -33,13 +34,12 @@ import com.testify.ecfeed.ui.editor.actions.IActionProvider;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 import com.testify.ecfeed.ui.modelif.IModelUpdateListener;
 
-public abstract class BasicSection extends SectionPart implements IModelUpdateContext{
+public abstract class BasicSection extends SectionPart implements IModelUpdatingSection, IModelUpdateContext{
 	private Composite fClientComposite;
-	private FormToolkit fToolkit;
 	private Control fTextClient;
-	private IModelUpdateListener fModelUpdateListener;
-	private ModelOperationManager fOperationManager;
 	private IActionProvider fActionProvider;
+	private IModelUpdateContext fUpdateContext;
+	private ISectionContext fSectionContext;
 
 	protected class SelectNodeDoubleClickListener implements IDoubleClickListener {
 
@@ -60,11 +60,23 @@ public abstract class BasicSection extends SectionPart implements IModelUpdateCo
 		}
 	}
 	
-	public BasicSection(Composite parent, FormToolkit toolkit, int style, IModelUpdateListener updateListener, ModelOperationManager operationManager) {
-		super(parent, toolkit, style);
-		fModelUpdateListener = updateListener;
-		fOperationManager = operationManager;
-		fToolkit = toolkit;
+//	public BasicSection(BasicDetailsPage parent, int style){
+//		this(parent.getMainComposite(), parent.getToolkit(), style, parent.getUpdateListener(), parent.getOperationManager(), parent.getUndoContext());
+//	}
+//	
+//	public BasicSection(Composite parent, FormToolkit toolkit, int style, IModelUpdateListener updateListener, ModelOperationManager operationManager, IUndoContext undoContext) {
+//		super(parent, toolkit, style);
+//		fModelUpdateListener = updateListener;
+//		fOperationManager = operationManager;
+//		fToolkit = toolkit;
+//		fUndoContext = undoContext;
+//		createContent();
+//	}
+
+	public BasicSection(ISectionContext sectionContext, IModelUpdateContext updateContext, int style){
+		super(sectionContext.getSectionComposite(), sectionContext.getToolkit(), style);
+		fSectionContext = sectionContext;
+		fUpdateContext = updateContext;
 		createContent();
 	}
 
@@ -75,24 +87,12 @@ public abstract class BasicSection extends SectionPart implements IModelUpdateCo
 		}
 	}
 
-	public FormToolkit getToolkit(){
-		return fToolkit;
+	protected FormToolkit getToolkit(){
+		return fSectionContext.getToolkit();
 	}
 
 	public void setText(String title){
 		getSection().setText(title);
-	}
-
-	public IModelUpdateListener getUpdateListener(){
-		return fModelUpdateListener;
-	}
-	
-	public ModelOperationManager getOperationManager(){
-		return fOperationManager;
-	}
-
-	public AbstractFormPart getSourceForm(){
-		return this;
 	}
 
 	protected Composite getClientComposite(){
@@ -106,7 +106,7 @@ public abstract class BasicSection extends SectionPart implements IModelUpdateCo
 	}
 	
 	protected Composite createClientComposite() {
-		Composite client = fToolkit.createComposite(getSection());
+		Composite client = getToolkit().createComposite(getSection());
 		client.setLayout(clientLayout());
 		if(clientLayoutData() != null){
 			client.setLayoutData(clientLayoutData());
@@ -138,17 +138,17 @@ public abstract class BasicSection extends SectionPart implements IModelUpdateCo
 	}
 	
 	protected void modelUpdated(){
-		getUpdateListener().modelUpdated(this);
+		fUpdateContext.getUpdateListener().modelUpdated(this);
 	}
 	
-	protected void setModelUpdateListener(IModelUpdateListener listener){
-		fModelUpdateListener = listener;
-	}
-	
-	protected void setOperationManager(ModelOperationManager operationManager){
-		fOperationManager = operationManager;
-	}
-	
+//	protected void setModelUpdateListener(IModelUpdateListener listener){
+//		fModelUpdateListener = listener;
+//	}
+//	
+//	protected void setOperationManager(ModelOperationManager operationManager){
+//		fOperationManager = operationManager;
+//	}
+//	
 	public Action getAction(String actionId) {
 		if(fActionProvider != null){
 			return fActionProvider.getAction(actionId);
@@ -162,5 +162,29 @@ public abstract class BasicSection extends SectionPart implements IModelUpdateCo
 	
 	protected IActionProvider getActionProvider(){
 		return fActionProvider;
+	}
+	
+//	protected IModelUpdateContext getUpdateContext(){
+//		return this;
+//	}
+//	
+	@Override
+	public IUndoContext getUndoContext(){
+		return fUpdateContext.getUndoContext();
+	}
+	
+	@Override
+	public ModelOperationManager getOperationManager(){
+		return fUpdateContext.getOperationManager();
+	}
+	
+	@Override 
+	public IModelUpdateListener getUpdateListener(){
+		return fUpdateContext.getUpdateListener();
+	}
+	
+	@Override
+	public AbstractFormPart getSourceForm(){
+		return this;
 	}
 }

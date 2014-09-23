@@ -10,19 +10,20 @@ import com.testify.ecfeed.model.TestCaseNode;
 
 public class MethodOperationRemoveParameter extends BulkOperation{
 
-	private class RemoveParameterOperation implements IModelOperation{
+	private class RemoveParameterOperation extends AbstractModelOperation{
 
 		private MethodNode fTarget;
 		private CategoryNode fParameter;
 		private int fOriginalIndex;
 		private ArrayList<TestCaseNode> fOriginalTestCases;
 
-		private class ReverseOperation implements IModelOperation{
+		private class ReverseOperation extends AbstractModelOperation{
 
 			@Override
 			public void execute() throws ModelIfException {
 				fTarget.addCategory(fParameter, fOriginalIndex);
 				fTarget.replaceTestCases(fOriginalTestCases);
+				markModelUpdated();
 			}
 
 			@Override
@@ -46,6 +47,7 @@ public class MethodOperationRemoveParameter extends BulkOperation{
 			for(TestCaseNode tc : fTarget.getTestCases()){
 				tc.getTestData().remove(fOriginalIndex);
 			}
+			markModelUpdated();
 		}
 
 		@Override

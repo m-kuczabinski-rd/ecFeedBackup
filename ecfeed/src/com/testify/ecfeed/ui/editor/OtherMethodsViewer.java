@@ -18,12 +18,12 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
-import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Section;
 
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.ui.modelif.ClassInterface;
+import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 
 public class OtherMethodsViewer extends CheckboxTableViewerSection {
 	
@@ -35,13 +35,13 @@ public class OtherMethodsViewer extends CheckboxTableViewerSection {
 	private class AddSelectedAdapter extends SelectionAdapter{
 		@Override
 		public void widgetSelected(SelectionEvent e){
-			fClassIf.addMethods(getSelectedMethods(), OtherMethodsViewer.this);
+			fClassIf.addMethods(getSelectedMethods());
 		}
 	}
 	
-	public OtherMethodsViewer(BasicDetailsPage parent, FormToolkit toolkit) {
-		super(parent.getMainComposite(), toolkit, STYLE, parent, parent.getOperationManager());
-		fClassIf = new ClassInterface();
+	public OtherMethodsViewer(ISectionContext sectionContext, IModelUpdateContext updateContext) {
+		super(sectionContext, updateContext, STYLE);
+		fClassIf = new ClassInterface(this);
 		addButton("Add selected", new AddSelectedAdapter());
 	}
 	

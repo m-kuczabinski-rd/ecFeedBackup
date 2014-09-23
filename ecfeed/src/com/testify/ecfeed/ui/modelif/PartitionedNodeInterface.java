@@ -19,32 +19,36 @@ public class PartitionedNodeInterface extends GenericNodeInterface {
 
 	private PartitionedNode fTarget;
 	
+	public PartitionedNodeInterface(IModelUpdateContext updateContext){
+		super(updateContext);
+	}
+	
 	public void setTarget(PartitionedNode target){
 		super.setTarget(target);
 		fTarget = target;
 	}
 	
-	public PartitionNode addNewPartition(IModelUpdateContext context) {
+	public PartitionNode addNewPartition() {
 		String name = generatePartitionName();
 		String value = generateNewPartitionValue();
 		PartitionNode newPartition = new PartitionNode(name, value);
-		if(addPartition(newPartition, context)){
+		if(addPartition(newPartition)){
 			return newPartition;
 		}
 		return null;
 	}
 	
-	public boolean addPartition(PartitionNode newPartition, IModelUpdateContext context) {
+	public boolean addPartition(PartitionNode newPartition) {
 		IModelOperation operation = new GenericOperationAddPartition(fTarget, newPartition, fTarget.getPartitions().size(), true); 
-		return execute(operation, context, Messages.DIALOG_ADD_PARTITION_PROBLEM_TITLE);
+		return execute(operation, Messages.DIALOG_ADD_PARTITION_PROBLEM_TITLE);
 	}
 	
-	public boolean removePartition(PartitionNode partition, IModelUpdateContext context) {
+	public boolean removePartition(PartitionNode partition) {
 		IModelOperation operation = new GenericOperationRemovePartition(fTarget, partition, true);
-		return execute(operation, context, Messages.DIALOG_REMOVE_PARTITION_TITLE);
+		return execute(operation, Messages.DIALOG_REMOVE_PARTITION_TITLE);
 	}
 
-	public boolean removePartitions(Collection<PartitionNode> partitions, IModelUpdateContext context) {
+	public boolean removePartitions(Collection<PartitionNode> partitions) {
 		boolean displayWarning = false;
 		for(PartitionNode p : partitions){
 			if(fTarget.getCategory().getMethod().mentioningConstraints(p).size() > 0 || fTarget.getCategory().getMethod().mentioningTestCases(p).size() > 0){
@@ -58,7 +62,7 @@ public class PartitionedNodeInterface extends GenericNodeInterface {
 				return false;
 			}
 		}
-		return removeChildren(partitions, context, Messages.DIALOG_REMOVE_PARTITIONS_PROBLEM_TITLE);
+		return removeChildren(partitions, Messages.DIALOG_REMOVE_PARTITIONS_PROBLEM_TITLE);
 	}
 
 	protected String generateNewPartitionValue() {

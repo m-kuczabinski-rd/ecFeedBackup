@@ -25,6 +25,7 @@ import org.eclipse.swt.widgets.Text;
 
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.ui.modelif.CategoryInterface;
+import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 import com.testify.ecfeed.ui.modelif.PartitionInterface;
 
 public class PartitionDetailsPage extends BasicDetailsPage {
@@ -40,7 +41,7 @@ public class PartitionDetailsPage extends BasicDetailsPage {
 	private class NameTextListener extends AbstractSelectionAdapter{
 		@Override
 		public void widgetSelected(SelectionEvent e){
-			fPartitionIf.setName(fNameText.getText(), PartitionDetailsPage.this);
+			fPartitionIf.setName(fNameText.getText());
 			fNameText.setText(fPartitionIf.getName());
 		}
 	}
@@ -48,14 +49,14 @@ public class PartitionDetailsPage extends BasicDetailsPage {
 	private class ValueComboListener extends AbstractSelectionAdapter{
 		@Override
 		public void widgetSelected(SelectionEvent e){
-			fPartitionIf.setValue(fValueCombo.getText(), PartitionDetailsPage.this);
+			fPartitionIf.setValue(fValueCombo.getText());
 			fValueCombo.setText(fPartitionIf.getValue());
 		}
 	}
 	
-	public PartitionDetailsPage(ModelMasterDetailsBlock masterDetailsBlock) {
-		super(masterDetailsBlock);
-		fPartitionIf = new PartitionInterface();
+	public PartitionDetailsPage(ModelMasterSection masterSection, IModelUpdateContext updateContext) {
+		super(masterSection, updateContext);
+		fPartitionIf = new PartitionInterface(this);
 	}
 	
 	@Override
@@ -63,8 +64,8 @@ public class PartitionDetailsPage extends BasicDetailsPage {
 		super.createContents(parent);
 
 		createNameValueEditor(getMainComposite());
-		addViewerSection(fChildrenViewer = new PartitionsViewer(this, getToolkit()));
-		addViewerSection(fLabelsViewer = new PartitionLabelsViewer(this, getToolkit()));
+		addViewerSection(fChildrenViewer = new PartitionsViewer(this, this));
+		addViewerSection(fLabelsViewer = new PartitionLabelsViewer(this, this));
 		
 		getToolkit().paintBordersFor(getMainComposite());
 	}
