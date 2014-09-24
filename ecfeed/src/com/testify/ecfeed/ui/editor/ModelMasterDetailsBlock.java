@@ -176,10 +176,9 @@ public class ModelMasterDetailsBlock extends MasterDetailsBlock implements ISele
 	@Override
 	protected void createToolBarActions(IManagedForm managedForm) {
 		IActionBars actionBars = fPage.getEditorSite().getActionBars();
+		
 		actionBars.setGlobalActionHandler(ActionFactory.UNDO.getId(), new UndoActionHandler(fPage.getEditorSite(), fUpdateContext.getUndoContext()));
 		actionBars.setGlobalActionHandler(ActionFactory.REDO.getId(), new RedoActionHandler(fPage.getEditorSite(), fUpdateContext.getUndoContext()));
-//		actionBars.setGlobalActionHandler(ActionFactory.UNDO.getId(), new UndoAction(fMasterSection));
-//		actionBars.setGlobalActionHandler(ActionFactory.REDO.getId(), new RedoAction(fMasterSection));
 		actionBars.setGlobalActionHandler(ActionFactory.COPY.getId(), new GenericToolbarAction(ActionFactory.COPY.getId()));
 		actionBars.setGlobalActionHandler(ActionFactory.CUT.getId(), new GenericToolbarAction(ActionFactory.CUT.getId()));
 		actionBars.setGlobalActionHandler(ActionFactory.PASTE.getId(), new GenericToolbarAction(ActionFactory.PASTE.getId()));

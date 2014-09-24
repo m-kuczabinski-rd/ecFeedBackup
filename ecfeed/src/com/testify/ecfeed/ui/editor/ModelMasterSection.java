@@ -520,17 +520,6 @@ public class ModelMasterSection extends TreeViewerSection{
 		
 	}
 	
-//	public ModelMasterSection(ModelMasterDetailsBlock masterDetailsBlock, Composite parent, FormToolkit toolkit, ModelOperationManager operationManager) {
-//		super(parent, toolkit, STYLE, null, operationManager);
-//		fMasterDetailsBlock = masterDetailsBlock;
-//		setModelUpdateListener(new UpdateListener());
-//		setActionProvider(new ModelViewerActionFactory(getTreeViewer(), ModelMasterSection.this, false));
-//		
-//		getTreeViewer().addDragSupport(DND.DROP_COPY|DND.DROP_MOVE, new Transfer[]{ModelNodesTransfer.getInstance()}, new ModelNodeDragListener(getTreeViewer()));
-//		getTreeViewer().addDropSupport(DND.DROP_COPY|DND.DROP_MOVE, new Transfer[]{ModelNodesTransfer.getInstance()}, new DropListener(getTreeViewer()));
-//	}
-	
-//	public ModelMasterSection(ISectionContext sectionContext, IModelUpdateContext updateContext) {
 	public ModelMasterSection(ModelMasterDetailsBlock parentBlock) {
 		super(parentBlock.getMasterSectionContext(), parentBlock.getModelUpdateContext(), STYLE);
 		fMasterDetailsBlock = parentBlock;
