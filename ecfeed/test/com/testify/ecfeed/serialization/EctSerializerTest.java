@@ -23,12 +23,8 @@ import org.junit.Test;
 
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.RootNode;
-import com.testify.ecfeed.serialization.IModelParser;
-import com.testify.ecfeed.serialization.IModelSerializer;
 import com.testify.ecfeed.serialization.ect.EctParser;
 import com.testify.ecfeed.serialization.ect.EctSerializer;
-import com.testify.ecfeed.serialization.ect.ObsoleteXmlModelParser;
-import com.testify.ecfeed.serialization.ect.ObsoleteXmlModelSerializer;
 import com.testify.ecfeed.testutils.RandomModelGenerator;
 
 public class EctSerializerTest {
@@ -89,40 +85,39 @@ public class EctSerializerTest {
 	}
 	
 //	@Test
-	public void modelSerializerCrossTest1(){
-		RootNode model = fGenerator.generateModel(3);
-		OutputStream ostream = new ByteArrayOutputStream();
-		ObsoleteXmlModelSerializer oldSerializer = new ObsoleteXmlModelSerializer(ostream);
-		try {
-			oldSerializer.writeXmlDocument(model);
-			InputStream istream = new ByteArrayInputStream(((ByteArrayOutputStream)ostream).toByteArray());
-			IModelParser parser = new EctParser();
-			RootNode parsedModel = parser.parseModel(istream);
-			assertElementsEqual(model, parsedModel);
-			
-		} catch (Exception e) {
-			fail("Unexpected exception: " + e.getMessage());
-		}		
-	}
+//	public void modelSerializerCrossTest1(){
+//		RootNode model = fGenerator.generateModel(3);
+//		OutputStream ostream = new ByteArrayOutputStream();
+//		ObsoleteXmlModelSerializer oldSerializer = new ObsoleteXmlModelSerializer(ostream);
+//		try {
+//			oldSerializer.writeXmlDocument(model);
+//			InputStream istream = new ByteArrayInputStream(((ByteArrayOutputStream)ostream).toByteArray());
+//			IModelParser parser = new EctParser();
+//			RootNode parsedModel = parser.parseModel(istream);
+//			assertElementsEqual(model, parsedModel);
+//			
+//		} catch (Exception e) {
+//			fail("Unexpected exception: " + e.getMessage());
+//		}		
+//	}
 
 
 //	@Test
-	public void modelSerializerCrossTest2(){
-		for(int i = 0; i < 10; i++){
-			RootNode model = fGenerator.generateModel(5);
-			OutputStream ostream = new ByteArrayOutputStream();
-			IModelSerializer serializer = new EctSerializer(ostream);
-			try {
-				serializer.serialize(model);
-				InputStream istream = new ByteArrayInputStream(((ByteArrayOutputStream)ostream).toByteArray());
-				IModelParser parser = new ObsoleteXmlModelParser();
-				RootNode parsedModel = parser.parseModel(istream);
-				assertElementsEqual(model, parsedModel);
-
-			} catch (Exception e) {
-				fail("Unexpected exception: " + e.getMessage());
-			}		
-		}
-	}
-
+//	public void modelSerializerCrossTest2(){
+//		for(int i = 0; i < 10; i++){
+//			RootNode model = fGenerator.generateModel(5);
+//			OutputStream ostream = new ByteArrayOutputStream();
+//			IModelSerializer serializer = new EctSerializer(ostream);
+//			try {
+//				serializer.serialize(model);
+//				InputStream istream = new ByteArrayInputStream(((ByteArrayOutputStream)ostream).toByteArray());
+//				IModelParser parser = new ObsoleteXmlModelParser();
+//				RootNode parsedModel = parser.parseModel(istream);
+//				assertElementsEqual(model, parsedModel);
+//
+//			} catch (Exception e) {
+//				fail("Unexpected exception: " + e.getMessage());
+//			}		
+//		}
+//	}
 }

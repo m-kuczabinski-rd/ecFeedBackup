@@ -46,10 +46,9 @@ import com.testify.ecfeed.model.constraint.PartitionedCategoryStatement;
 import com.testify.ecfeed.model.constraint.Relation;
 import com.testify.ecfeed.model.constraint.StatementArray;
 import com.testify.ecfeed.model.constraint.StaticStatement;
-import com.testify.ecfeed.serialization.ParserException;
 import com.testify.ecfeed.serialization.ect.Constants;
-import com.testify.ecfeed.serialization.ect.ObsoleteXmlModelParser;
-import com.testify.ecfeed.serialization.ect.ObsoleteXmlModelSerializer;
+import com.testify.ecfeed.serialization.ect.EctParser;
+import com.testify.ecfeed.serialization.ect.EctSerializer;
 
 public class XmlParserSerializerTest {
 	private final int TEST_RUNS = 10;
@@ -89,9 +88,9 @@ public class XmlParserSerializerTest {
 		for(int i = 0; i < TEST_RUNS; ++i){
 			RootNode model = createRootNode(rand.nextInt(MAX_CLASSES) + 1);
 			ByteArrayOutputStream ostream = new ByteArrayOutputStream();
-			ObsoleteXmlModelSerializer serializer = new ObsoleteXmlModelSerializer(ostream);
-			ObsoleteXmlModelParser parser = new ObsoleteXmlModelParser();
-			serializer.writeXmlDocument(model);
+			IModelSerializer serializer = new EctSerializer(ostream);
+			IModelParser parser = new EctParser();
+			serializer.serialize(model);
 			ByteArrayInputStream istream = new ByteArrayInputStream(ostream.toByteArray());
 			RootNode parsedModel = parser.parseModel(istream);
 			compareModels(model, parsedModel);
@@ -100,6 +99,8 @@ public class XmlParserSerializerTest {
 		} catch (IOException e) {
 			fail("Unexpected exception");
 		} catch (ParserException e) {
+			fail("Unexpected exception: " + e.getMessage());
+		} catch (Exception e) {
 			fail("Unexpected exception: " + e.getMessage());
 		}
 	}
@@ -123,9 +124,9 @@ public class XmlParserSerializerTest {
 			method.addTestCase(testCase);
 
 			ByteArrayOutputStream ostream = new ByteArrayOutputStream();
-			ObsoleteXmlModelSerializer serializer = new ObsoleteXmlModelSerializer(ostream);
-			ObsoleteXmlModelParser parser = new ObsoleteXmlModelParser();
-			serializer.writeXmlDocument(root);
+			IModelSerializer serializer = new EctSerializer(ostream);
+			IModelParser parser = new EctParser();
+			serializer.serialize(root);
 			ByteArrayInputStream istream = new ByteArrayInputStream(ostream.toByteArray());
 			RootNode parsedModel = parser.parseModel(istream);
 			compareModels(root, parsedModel);
@@ -133,6 +134,8 @@ public class XmlParserSerializerTest {
 		catch (IOException e) {
 			fail("Unexpected exception");
 		} catch (ParserException e) {
+			fail("Unexpected exception: " + e.getMessage());
+		} catch (Exception e) {
 			fail("Unexpected exception: " + e.getMessage());
 		}
 	}
@@ -178,9 +181,9 @@ public class XmlParserSerializerTest {
 			method.addConstraint(expectedConstraintNode);
 
 			ByteArrayOutputStream ostream = new ByteArrayOutputStream();
-			ObsoleteXmlModelSerializer serializer = new ObsoleteXmlModelSerializer(ostream);
-			ObsoleteXmlModelParser parser = new ObsoleteXmlModelParser();
-			serializer.writeXmlDocument(root);
+			IModelSerializer serializer = new EctSerializer(ostream);
+			IModelParser parser = new EctParser();
+			serializer.serialize(root);
 //			System.out.println(ostream.toString());
 			ByteArrayInputStream istream = new ByteArrayInputStream(ostream.toByteArray());
 			RootNode parsedModel = parser.parseModel(istream);
@@ -189,6 +192,8 @@ public class XmlParserSerializerTest {
 		catch (IOException e) {
 			fail("Unexpected exception");
 		} catch (ParserException e) {
+			fail("Unexpected exception: " + e.getMessage());
+		} catch (Exception e) {
 			fail("Unexpected exception: " + e.getMessage());
 		}
 	}
