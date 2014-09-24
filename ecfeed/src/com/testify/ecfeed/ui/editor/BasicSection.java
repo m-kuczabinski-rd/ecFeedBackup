@@ -34,7 +34,7 @@ import com.testify.ecfeed.ui.editor.actions.IActionProvider;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 import com.testify.ecfeed.ui.modelif.IModelUpdateListener;
 
-public abstract class BasicSection extends SectionPart implements IModelUpdatingSection, IModelUpdateContext{
+public abstract class BasicSection extends SectionPart implements IModelUpdateContext{
 	private Composite fClientComposite;
 	private Control fTextClient;
 	private IActionProvider fActionProvider;
