@@ -15,7 +15,6 @@ import org.eclipse.ui.forms.AbstractFormPart;
 
 import com.testify.ecfeed.abstraction.IModelOperation;
 import com.testify.ecfeed.abstraction.ModelIfException;
-import com.testify.ecfeed.abstraction.operations.BulkOperation;
 
 public class OperationExecuter {
 	
@@ -29,7 +28,7 @@ public class OperationExecuter {
 		
 		
 		public UndoableOperation(IModelOperation operation, IUndoContext context, String errorMessageTitle){
-			super(operation.toString());
+			super(operation.getName());
 			fOperation = operation;
 			fErrorMessageTitle = errorMessageTitle;
 			addContext(context);
@@ -88,20 +87,20 @@ public class OperationExecuter {
 		return false;
 	}
 	
-	protected boolean execute(BulkOperation operation, String errorMessageTitle){
-		try{
-			getUpdateContext().getOperationManager().execute(operation);
-		}catch(ModelIfException e){
-			MessageDialog.openError(Display.getCurrent().getActiveShell(), 
-					errorMessageTitle, 
-					e.getMessage());
-		}
-		if(operation.modelUpdated()){
-			getUpdateContext().getUpdateListener().modelUpdated(getSourceForm());
-			return true;
-		}
-		return false;
-	}
+//	protected boolean execute(BulkOperation operation, String errorMessageTitle){
+//		try{
+//			getUpdateContext().getOperationManager().execute(operation);
+//		}catch(ModelIfException e){
+//			MessageDialog.openError(Display.getCurrent().getActiveShell(), 
+//					errorMessageTitle, 
+//					e.getMessage());
+//		}
+//		if(operation.modelUpdated()){
+//			getUpdateContext().getUpdateListener().modelUpdated(getSourceForm());
+//			return true;
+//		}
+//		return false;
+//	}
 	
 	protected IModelUpdateContext getUpdateContext(){
 		return fUpdateContext;
