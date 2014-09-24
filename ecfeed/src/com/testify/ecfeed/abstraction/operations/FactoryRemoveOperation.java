@@ -29,6 +29,11 @@ public class FactoryRemoveOperation {
 		public boolean modelUpdated() {
 			return false;
 		}
+
+		@Override
+		public String getName() {
+			return "";
+		}
 	}
 	
 	private static class RemoveOperationVisitor implements IModelVisitor{

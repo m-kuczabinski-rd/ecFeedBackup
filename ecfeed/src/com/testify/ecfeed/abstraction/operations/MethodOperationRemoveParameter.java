@@ -18,6 +18,12 @@ public class MethodOperationRemoveParameter extends BulkOperation{
 		private ArrayList<TestCaseNode> fOriginalTestCases;
 
 		private class ReverseOperation extends AbstractModelOperation{
+			
+			
+
+			public ReverseOperation() {
+				super(MethodOperationRemoveParameter.this.getName());
+			}
 
 			@Override
 			public void execute() throws ModelIfException {
@@ -34,6 +40,7 @@ public class MethodOperationRemoveParameter extends BulkOperation{
 		}
 		
 		public RemoveParameterOperation(MethodNode target, CategoryNode parameter){
+			super(OperationNames.REMOVE_PARAMETER);
 			fTarget = target;
 			fParameter = parameter;
 			fOriginalTestCases = new ArrayList<TestCaseNode>(target.getTestCases());
@@ -57,7 +64,7 @@ public class MethodOperationRemoveParameter extends BulkOperation{
 	}
 
 	public MethodOperationRemoveParameter(MethodNode target, CategoryNode parameter, boolean validate) {
-		super(true);
+		super(OperationNames.REMOVE_PARAMETER, true);
 		addOperation(new RemoveParameterOperation(target, parameter));
 		if(validate){
 			addOperation(new MethodOperationMakeConsistent(target));

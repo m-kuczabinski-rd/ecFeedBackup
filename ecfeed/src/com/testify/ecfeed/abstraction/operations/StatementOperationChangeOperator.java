@@ -12,6 +12,7 @@ public class StatementOperationChangeOperator extends AbstractModelOperation {
 	private Operator fCurrentOperator;
 
 	public StatementOperationChangeOperator(StatementArray target, Operator operator) {
+		super(OperationNames.CHANGE_STATEMENT_OPERATOR);
 		fTarget = target;
 		fNewOperator = operator;
 		fCurrentOperator = target.getOperator();

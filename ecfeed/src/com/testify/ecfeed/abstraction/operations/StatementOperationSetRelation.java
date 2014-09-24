@@ -14,6 +14,7 @@ public class StatementOperationSetRelation extends AbstractModelOperation {
 	private Relation fCurrentRelation;
 
 	public StatementOperationSetRelation(IRelationalStatement target, Relation relation) {
+		super(OperationNames.SET_STATEMENT_RELATION);
 		fTarget = target;
 		fNewRelation = relation;
 		fCurrentRelation = target.getRelation();

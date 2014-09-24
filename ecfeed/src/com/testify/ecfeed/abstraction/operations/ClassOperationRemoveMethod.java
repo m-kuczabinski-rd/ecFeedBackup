@@ -12,6 +12,7 @@ public class ClassOperationRemoveMethod extends AbstractModelOperation {
 	private int fCurrentIndex;
 
 	public ClassOperationRemoveMethod(ClassNode target, MethodNode method) {
+		super(OperationNames.REMOVE_METHOD);
 		fTarget = target;
 		fMethod = method;
 		fCurrentIndex = fMethod.getIndex();

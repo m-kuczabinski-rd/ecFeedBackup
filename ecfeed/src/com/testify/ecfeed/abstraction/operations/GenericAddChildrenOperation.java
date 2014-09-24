@@ -12,7 +12,7 @@ public class GenericAddChildrenOperation extends BulkOperation {
 	}
 
 	public GenericAddChildrenOperation(GenericNode target, Collection<? extends GenericNode> children, int index, boolean validate) {
-		super(false);
+		super(OperationNames.ADD_CHILDREN, false);
 		for(GenericNode child : children){
 			IModelOperation operation;
 			try {

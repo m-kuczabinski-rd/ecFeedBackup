@@ -24,6 +24,10 @@ public class CategoryOperationSetExpected extends AbstractModelOperation {
 	
 	private class ReverseOperation extends AbstractModelOperation{
 
+		public ReverseOperation() {
+			super(CategoryOperationSetExpected.this.getName());
+		}
+
 		@Override
 		public void execute() throws ModelIfException {
 			fTarget.setExpected(!fExpected);
@@ -44,6 +48,7 @@ public class CategoryOperationSetExpected extends AbstractModelOperation {
 	}
 	
 	public CategoryOperationSetExpected(CategoryNode target, boolean expected){
+		super(OperationNames.SET_EXPECTED_STATUS);
 		fTarget = target;
 		fExpected = expected;
 		

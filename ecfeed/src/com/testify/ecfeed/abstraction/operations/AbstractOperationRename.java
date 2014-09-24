@@ -9,6 +9,7 @@ public abstract class AbstractOperationRename extends AbstractModelOperation {
 	protected String fOriginalName;
 
 	public AbstractOperationRename(GenericNode target, String newName){
+		super(OperationNames.RENAME);
 		fTarget = target;
 		fNewName = newName;
 		fOriginalName = target.getName();

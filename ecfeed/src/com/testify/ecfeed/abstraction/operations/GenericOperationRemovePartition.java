@@ -20,6 +20,10 @@ public class GenericOperationRemovePartition extends BulkOperation {
 
 		private class ReverseOperation extends AbstractModelOperation{
 
+			public ReverseOperation() {
+				super(RemovePartitionOperation.this.getName());
+			}
+
 			@Override
 			public void execute() throws ModelIfException {
 				fTarget.addPartition(fPartition, fOriginalIndex);
@@ -35,6 +39,7 @@ public class GenericOperationRemovePartition extends BulkOperation {
 		}
 		
 		public RemovePartitionOperation(PartitionedNode target, PartitionNode partition){
+			super(OperationNames.REMOVE_PARTITION);
 			fTarget = target;
 			fPartition = partition;
 			fOriginalIndex = fPartition.getIndex();
@@ -73,7 +78,7 @@ public class GenericOperationRemovePartition extends BulkOperation {
 	}
 
 	public GenericOperationRemovePartition(PartitionedNode target, PartitionNode partition, boolean validate) {
-		super(true);
+		super(OperationNames.REMOVE_PARTITION, true);
 		addOperation(new RemovePartitionOperation(target, partition));
 		if((target.getCategory().getMethod() != null) && validate){
 			addOperation(new MethodOperationMakeConsistent(target.getCategory().getMethod()));

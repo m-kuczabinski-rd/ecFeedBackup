@@ -8,26 +8,25 @@ import java.util.Set;
 import com.testify.ecfeed.abstraction.IModelOperation;
 import com.testify.ecfeed.abstraction.ModelIfException;
 
-public class BulkOperation implements IModelOperation{
+public class BulkOperation extends AbstractModelOperation{
 
 	List<IModelOperation> fOperations;
 	List<IModelOperation> fExecutedOperations;
 	// either all operation or none. if false, all operations are executed
 	// otherwise after first error the reverse operation is called
 	private boolean fAtomic;
-	private boolean fModelUpdated;
 	private List<ICheckOperation> fCheckOperations; 
 	
 	protected interface ICheckOperation{
 		public void check() throws ModelIfException;
 	}
 	
-	public BulkOperation(boolean atomic) {
-		this(new ArrayList<IModelOperation>(), atomic);
+	public BulkOperation(String name, boolean atomic) {
+		this(name, new ArrayList<IModelOperation>(), atomic);
 	}
 	
-	public BulkOperation(List<IModelOperation> operations, boolean atomic) {
-		fModelUpdated = false;
+	public BulkOperation(String name, List<IModelOperation> operations, boolean atomic) {
+		super(name);
 		fOperations = operations;
 		fExecutedOperations = new ArrayList<IModelOperation>();
 		fCheckOperations = new ArrayList<ICheckOperation>();
@@ -48,7 +47,6 @@ public class BulkOperation implements IModelOperation{
 		for(IModelOperation operation : fOperations){
 			try{
 				operation.execute();
-				fModelUpdated = true;
 				fExecutedOperations.add(operation);
 			}catch(ModelIfException e){
 				errors.add(e.getMessage());
@@ -78,7 +76,7 @@ public class BulkOperation implements IModelOperation{
 
 	@Override
 	public IModelOperation reverseOperation(){
-		return new BulkOperation(reverseOperations(), fAtomic);
+		return new BulkOperation(getName(), reverseOperations(), fAtomic);
 	}
 	
 	
@@ -98,7 +96,13 @@ public class BulkOperation implements IModelOperation{
 		return reverseOperations;
 	}
 
+	@Override
 	public boolean modelUpdated() {
-		return fModelUpdated;
+		for(IModelOperation operation : fExecutedOperations){
+			if(operation.modelUpdated()){
+				return true;
+			}
+		}
+		return false;
 	}
 }

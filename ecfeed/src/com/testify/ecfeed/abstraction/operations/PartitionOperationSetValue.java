@@ -19,6 +19,10 @@ public class PartitionOperationSetValue extends AbstractModelOperation {
 	
 	private class ReverseOperation extends AbstractModelOperation{
 
+		public ReverseOperation() {
+			super(PartitionOperationSetValue.this.getName());
+		}
+
 		@Override
 		public void execute() throws ModelIfException {
 			fTarget.setValueString(fOriginalValue);
@@ -33,6 +37,7 @@ public class PartitionOperationSetValue extends AbstractModelOperation {
 	}
 	
 	public PartitionOperationSetValue(PartitionNode target, String newValue, ITypeAdapterProvider adapterProvider){
+		super(OperationNames.SET_PARTITION_VALUE);
 		fTarget = target;
 		fNewValue = newValue;
 		fOriginalValue = fTarget.getValueString();

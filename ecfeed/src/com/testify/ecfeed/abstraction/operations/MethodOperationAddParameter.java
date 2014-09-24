@@ -18,6 +18,10 @@ public class MethodOperationAddParameter extends AbstractModelOperation {
 	
 	private class ReverseOperation extends AbstractModelOperation{
 
+		public ReverseOperation() {
+			super(OperationNames.ADD_PARAMETER);
+		}
+
 		@Override
 		public void execute() throws ModelIfException {
 			fTarget.removeCategory(fParameter);
@@ -33,6 +37,7 @@ public class MethodOperationAddParameter extends AbstractModelOperation {
 	}
 
 	public MethodOperationAddParameter(MethodNode target, CategoryNode parameter, int index) {
+		super(OperationNames.ADD_PARAMETER);
 		fRemovedTestCases = target.getTestCases();
 		fTarget = target;
 		fParameter = parameter;

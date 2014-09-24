@@ -9,7 +9,7 @@ import com.testify.ecfeed.model.TestCaseNode;
 public class MethodOperationRenameTestCases extends BulkOperation {
 
 	public MethodOperationRenameTestCases(Collection<TestCaseNode> testCases, String newName) throws ModelIfException {
-		super(false);
+		super(OperationNames.RENAME_TEST_CASE, false);
 		if(newName.matches(Constants.REGEX_TEST_CASE_NODE_NAME) == false){
 			throw new ModelIfException(Messages.TEST_CASE_NAME_REGEX_PROBLEM);
 		}

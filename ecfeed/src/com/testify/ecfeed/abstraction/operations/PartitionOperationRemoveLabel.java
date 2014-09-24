@@ -12,6 +12,7 @@ public class PartitionOperationRemoveLabel extends BulkOperation{
 		private String fLabel;
 
 		public RemoveLabelOperation(PartitionNode target, String label) {
+			super(PartitionOperationRemoveLabel.this.getName());
 			fTarget = target;
 			fLabel = label;
 		}
@@ -29,7 +30,7 @@ public class PartitionOperationRemoveLabel extends BulkOperation{
 	}
 
 	public PartitionOperationRemoveLabel(PartitionNode target, String label) {
-		super(true);
+		super(OperationNames.REMOVE_PARTITION_LABEL, true);
 		addOperation(new RemoveLabelOperation(target, label));
 		if(target.getCategory().getMethod() != null){
 			addOperation(new MethodOperationMakeConsistent(target.getCategory().getMethod()));

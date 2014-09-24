@@ -12,6 +12,7 @@ public class StatementOperationSetCondition extends AbstractModelOperation {
 	private ICondition fNewCondition;
 
 	public StatementOperationSetCondition(PartitionedCategoryStatement target, ICondition condition) {
+		super(OperationNames.SET_STATEMENT_CONDITION);
 		fTarget = target;
 		fNewCondition = condition;
 		fCurrentCondition = target.getCondition();

@@ -25,6 +25,7 @@ public class GenericShiftOperation extends AbstractModelOperation {
 	}
 
 	public GenericShiftOperation(List<? extends GenericNode> collection, List<? extends GenericNode> shifted, int shift){
+		super(OperationNames.MOVE);
 		shift = shiftAllowed(shifted, shift) ? shift : 0;
 		fShifted = shifted;
 		fCollection = collection;

@@ -12,6 +12,7 @@ public class StatementOperationReplaceChild extends AbstractModelOperation {
 	private StatementArray fTarget;
 
 	public StatementOperationReplaceChild(StatementArray target, BasicStatement child, BasicStatement newStatement) {
+		super(OperationNames.REPLACE_STATEMENT);
 		fTarget = target;
 		fCurrentChild = child;
 		fNewChild = newStatement;

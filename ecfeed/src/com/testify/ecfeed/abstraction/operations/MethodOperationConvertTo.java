@@ -11,6 +11,7 @@ public class MethodOperationConvertTo extends AbstractModelOperation {
 	private MethodNode fSource;
 
 	public MethodOperationConvertTo(MethodNode target, MethodNode source) {
+		super(OperationNames.CONVERT_METHOD);
 		fTarget = target;
 		fSource = source;
 	}

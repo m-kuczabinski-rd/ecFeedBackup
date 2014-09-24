@@ -12,6 +12,7 @@ public class PartitionOperationRename extends AbstractModelOperation {
 	private String fOriginalName;
 
 	public PartitionOperationRename(PartitionNode target, String newName){
+		super(OperationNames.RENAME);
 		fNewName = newName;
 		fTarget = target;
 		fOriginalName = fTarget.getName();

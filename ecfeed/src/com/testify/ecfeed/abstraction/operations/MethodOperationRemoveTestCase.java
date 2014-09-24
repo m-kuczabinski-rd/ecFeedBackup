@@ -12,6 +12,7 @@ public class MethodOperationRemoveTestCase extends AbstractModelOperation {
 	private int fIndex;
 
 	public MethodOperationRemoveTestCase(MethodNode target, TestCaseNode testCase) {
+		super(OperationNames.REMOVE_TEST_CASE);
 		fTarget = target;
 		fTestCase = testCase;
 		fIndex = testCase.getIndex();

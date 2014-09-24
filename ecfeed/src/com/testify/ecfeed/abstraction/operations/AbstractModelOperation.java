@@ -5,7 +5,12 @@ import com.testify.ecfeed.abstraction.IModelOperation;
 public abstract class AbstractModelOperation implements IModelOperation {
 
 	private boolean fModelUpdated;
+	private String fName;
 
+	public AbstractModelOperation(String name){
+		fName = name;
+	}
+	
 	@Override
 	public boolean modelUpdated() {
 		return fModelUpdated;
@@ -13,5 +18,10 @@ public abstract class AbstractModelOperation implements IModelOperation {
 
 	protected void markModelUpdated(){
 		fModelUpdated = true;
+	}
+	
+	@Override
+	public String getName(){
+		return fName;
 	}
 }

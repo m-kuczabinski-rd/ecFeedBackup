@@ -14,6 +14,10 @@ public class PartitionOperationAddLabel extends AbstractModelOperation {
 	
 	private class ReverseOperation extends AbstractModelOperation{
 
+		public ReverseOperation() {
+			super(PartitionOperationAddLabel.this.getName());
+		}
+
 		@Override
 		public void execute() throws ModelIfException {
 			fTarget.removeLabel(fLabel);
@@ -31,6 +35,7 @@ public class PartitionOperationAddLabel extends AbstractModelOperation {
 	}
 
 	public PartitionOperationAddLabel(PartitionNode target, String label){
+		super(OperationNames.ADD_PARTITION_LABEL);
 		fTarget = target;
 		fLabel = label;
 		fLabeledDescendants = target.getLabeledPartitions(fLabel);

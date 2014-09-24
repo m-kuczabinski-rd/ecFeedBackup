@@ -13,15 +13,14 @@ public class MethodOperationAddTestCase extends AbstractModelOperation {
 	private int fIndex;
 	
 	public MethodOperationAddTestCase(MethodNode target, TestCaseNode testCase, int index) {
+		super(OperationNames.ADD_TEST_CASE);
 		fTarget = target;
 		fTestCase = testCase;
 		fIndex = index;
 	}
 
 	public MethodOperationAddTestCase(MethodNode target, TestCaseNode testCase) {
-		fTarget = target;
-		fTestCase = testCase;
-		fIndex = -1;
+		this(target, testCase, -1);
 	}
 
 	@Override

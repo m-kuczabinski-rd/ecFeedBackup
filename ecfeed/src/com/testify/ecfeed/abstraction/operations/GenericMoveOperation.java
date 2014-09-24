@@ -17,7 +17,7 @@ public class GenericMoveOperation extends BulkOperation {
 	}
 	
 	public GenericMoveOperation(List<? extends GenericNode> moved, GenericNode newParent, int newIndex) throws ModelIfException {
-		super(true);
+		super(OperationNames.MOVE, true);
 		Set<MethodNode> methodsInvolved = new HashSet<>();
 		try {
 			//all nodes have parents other than newParent

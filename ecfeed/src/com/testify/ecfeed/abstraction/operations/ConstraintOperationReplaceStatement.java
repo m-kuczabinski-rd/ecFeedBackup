@@ -13,6 +13,7 @@ public class ConstraintOperationReplaceStatement extends AbstractModelOperation{
 	private ConstraintNode fTarget;
 
 	public ConstraintOperationReplaceStatement(ConstraintNode target, BasicStatement current, BasicStatement newStatement) {
+		super(OperationNames.REPLACE_STATEMENT);
 		fTarget = target;
 		fCurrentStatement = current;
 		fNewStatement = newStatement;

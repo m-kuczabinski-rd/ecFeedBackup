@@ -13,6 +13,7 @@ public class TestCaseOperationUpdateTestData extends AbstractModelOperation {
 	private TestCaseNode fTarget;
 
 	public TestCaseOperationUpdateTestData(TestCaseNode target, int index, PartitionNode value) {
+		super(OperationNames.UPDATE_TEST_DATA);
 		fTarget = target;
 		fIndex = index;
 		fNewValue = value;

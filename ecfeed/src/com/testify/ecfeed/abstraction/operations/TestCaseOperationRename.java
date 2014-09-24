@@ -5,16 +5,10 @@ import com.testify.ecfeed.abstraction.ModelIfException;
 import com.testify.ecfeed.abstraction.java.Constants;
 import com.testify.ecfeed.model.TestCaseNode;
 
-public class TestCaseOperationRename extends AbstractModelOperation {
+public class TestCaseOperationRename extends AbstractOperationRename {
 
-	private TestCaseNode fTarget;
-	private String fNewName;
-	private String fCurrentName;
-	
 	public TestCaseOperationRename(TestCaseNode target, String newName) {
-		fTarget = target;
-		fNewName = newName;
-		fCurrentName = target.getName();
+		super(target, newName);
 	}
 
 	@Override
@@ -22,13 +16,12 @@ public class TestCaseOperationRename extends AbstractModelOperation {
 		if(fNewName.matches(Constants.REGEX_TEST_CASE_NODE_NAME) == false){
 			throw new ModelIfException(Messages.TEST_CASE_NAME_REGEX_PROBLEM);
 		}
-		fTarget.setName(fNewName);
+		getTarget().setName(fNewName);
 		markModelUpdated();
 	}
 
 	@Override
 	public IModelOperation reverseOperation() {
-		return new TestCaseOperationRename(fTarget, fCurrentName);
+		return new TestCaseOperationRename((TestCaseNode)getTarget(), getOriginalName());
 	}
-
 }

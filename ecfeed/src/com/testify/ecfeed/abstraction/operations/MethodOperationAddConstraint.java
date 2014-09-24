@@ -13,6 +13,7 @@ public class MethodOperationAddConstraint extends AbstractModelOperation {
 	private int fIndex;
 
 	public MethodOperationAddConstraint(MethodNode target, ConstraintNode constraint, int index){
+		super(OperationNames.ADD_CONSTRAINT);
 		fTarget = target;
 		fConstraint = constraint;
 		fIndex = index; 

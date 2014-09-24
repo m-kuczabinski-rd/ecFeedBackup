@@ -26,6 +26,10 @@ public class CategoryOperationSetType extends BulkOperation{
 
 		private class ReverseOperation extends AbstractModelOperation{
 
+			public ReverseOperation() {
+				super(CategoryOperationSetType.this.getName());
+			}
+
 			@Override
 			public void execute() throws ModelIfException {
 				fTarget.setType(fCurrentType);
@@ -42,6 +46,7 @@ public class CategoryOperationSetType extends BulkOperation{
 		}
 		
 		public SetTypeOperation(CategoryNode target, String newType, ITypeAdapterProvider adapterProvider) {
+			super(OperationNames.SET_TYPE);
 			fTarget = target;
 			fNewType = newType;
 			fCurrentType = target.getType();
@@ -120,7 +125,7 @@ public class CategoryOperationSetType extends BulkOperation{
 	}
 	
 	public CategoryOperationSetType(CategoryNode target, String newType, ITypeAdapterProvider adapterProvider) {
-		super(true);
+		super(OperationNames.SET_TYPE, true);
 		addOperation(new SetTypeOperation(target, newType, adapterProvider));
 		if(target.getMethod() != null){
 			addOperation(new MethodOperationMakeConsistent(target.getMethod()));

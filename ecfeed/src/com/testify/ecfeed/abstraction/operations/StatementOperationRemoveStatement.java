@@ -12,6 +12,7 @@ public class StatementOperationRemoveStatement extends AbstractModelOperation {
 	private int fIndex;
 
 	public StatementOperationRemoveStatement(StatementArray target, BasicStatement statement){
+		super(OperationNames.REMOVE_STATEMENT);
 		fTarget = target;
 		fStatement = statement;
 		fIndex = target.getChildren().indexOf(statement);

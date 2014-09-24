@@ -16,6 +16,7 @@ public class ClassOperationAddMethod extends AbstractModelOperation{
 	private int fIndex;
 
 	public ClassOperationAddMethod(ClassNode target, MethodNode method, int index) {
+		super(OperationNames.ADD_METHOD);
 		fTarget = target;
 		fMethod = method;
 		fIndex = index;

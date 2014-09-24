@@ -13,6 +13,7 @@ public class GenericOperationAddPartition extends BulkOperation {
 		private int fIndex;
 
 		public AddPartitionOperation(PartitionedNode target, PartitionNode partition, int index) {
+			super(OperationNames.ADD_PARTITION);
 			fTarget = target;
 			fPartition = partition;
 			fIndex = index;
@@ -43,7 +44,7 @@ public class GenericOperationAddPartition extends BulkOperation {
 	}
 
 	public GenericOperationAddPartition(PartitionedNode target, PartitionNode partition, int index, boolean validate) {
-		super(true);
+		super(OperationNames.ADD_PARTITION, true);
 		addOperation(new AddPartitionOperation(target, partition, index));
 		if((target.getCategory().getMethod() != null) && validate){
 			addOperation(new MethodOperationMakeConsistent(target.getCategory().getMethod()));

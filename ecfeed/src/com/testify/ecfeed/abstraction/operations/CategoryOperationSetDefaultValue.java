@@ -13,6 +13,7 @@ public class CategoryOperationSetDefaultValue extends AbstractModelOperation {
 	private String fOriginalValue;
 
 	public CategoryOperationSetDefaultValue(CategoryNode target, String newValue, ITypeAdapter typeAdapter) {
+		super(OperationNames.SET_DEFAULT_VALUE);
 		fTarget = target;
 		fNewValue = newValue;
 		fOriginalValue = target.getDefaultValue();

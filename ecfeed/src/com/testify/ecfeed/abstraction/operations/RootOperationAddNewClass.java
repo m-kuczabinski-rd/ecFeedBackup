@@ -13,6 +13,7 @@ public class RootOperationAddNewClass extends AbstractModelOperation {
 	private int fIndex;
 	
 	public RootOperationAddNewClass(RootNode target, ClassNode addedClass, int index) {
+		super(OperationNames.ADD_CLASS);
 		fTarget = target;
 		fAddedClass = addedClass;
 		fIndex = index;
