@@ -83,26 +83,6 @@ public class ConstraintsListViewer extends TableViewerSection {
 		}
 	}
 	
-//	public ConstraintsListViewer(BasicDetailsPage parent, FormToolkit toolkit){
-//		super(parent.getMainComposite(), toolkit, STYLE, parent, parent.getOperationManager());
-//		GridData gd = new GridData(SWT.FILL, SWT.FILL, true, true);
-//		gd.minimumHeight = 250;
-//		getSection().setLayoutData(gd);
-//		
-//		getSection().setText("Constraints");
-//		
-//		fMethodInterface = new MethodInterface();
-//		fConstraintIf = new ConstraintInterface();
-//		
-//		fNameColumn.setEditingSupport(new ConstraintNameEditingSupport());
-//
-//		addButton("Add constraint", new AddConstraintAdapter());
-//		addButton("Remove selected", new ActionSelectionAdapter(new DeleteAction(getViewer(), this)));
-//		
-//		addDoubleClickListener(new SelectNodeDoubleClickListener(parent.getMasterSection()));
-//		setActionProvider(new ModelViewerActionFactory(getTableViewer(), this));
-//	}
-	
 	public ConstraintsListViewer(ISectionContext sectionContext, IModelUpdateContext updateContext){
 		super(sectionContext, updateContext, STYLE);
 		GridData gd = new GridData(SWT.FILL, SWT.FILL, true, true);

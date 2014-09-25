@@ -453,17 +453,6 @@ public class ConstraintViewer extends TreeViewerSection {
 
 	}
 
-//	public ConstraintViewer(BasicDetailsPage parent, FormToolkit toolkit) {
-//		super(parent.getMainComposite(), toolkit, STYLE, parent, parent.getOperationManager());
-//		getSection().setText("Constraint editor");
-//		fAddStatementButton = addButton("Add statement", new AddStatementAdapter());
-//		fRemoveStatementButton = addButton("Remove statement", new ActionSelectionAdapter(new DeleteStatementAction()));
-//		getViewer().addSelectionChangedListener(new StatementSelectionListener());
-//
-//		fStatementEditor = new StatementEditor(getClientComposite(), parent.getOperationManager());
-//		addKeyListener(SWT.DEL, new DeleteStatementAction());
-//	}
-
 	public ConstraintViewer(ISectionContext sectionContext, IModelUpdateContext updateContext) {
 		super(sectionContext, updateContext, STYLE);
 		getSection().setText("Constraint editor");

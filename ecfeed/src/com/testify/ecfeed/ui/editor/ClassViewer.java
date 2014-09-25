@@ -135,23 +135,7 @@ public class ClassViewer extends TableViewerSection {
 			return null;
 		}
 	}
-	
-//	public ClassViewer(BasicDetailsPage parent, FormToolkit toolkit) {
-//		super(parent.getMainComposite(), toolkit, STYLE, parent, parent.getOperationManager());
-//		fRootIf = new RootInterface();
-//		classIf() = new ClassInterface();
-//
-//		fNameColumn.setEditingSupport(new LocalNameEditingSupport());
-//		fPackageNameColumn.setEditingSupport(new PackageNameEditingSupport());
-//
-//		setText("Classes");
-//		addButton("Add implemented class", new AddImplementedClassAdapter());
-//		addButton("New test class", new AddNewClassAdapter());
-//		addButton("Remove selected", new ActionSelectionAdapter(new DeleteAction(getViewer(), this)));
-//		
-//		addDoubleClickListener(new SelectNodeDoubleClickListener(parent.getMasterSection()));
-//		setActionProvider(new ModelViewerActionFactory(getTableViewer(), this));
-//	}
+
 	public ClassViewer(ISectionContext parent, IModelUpdateContext updateContext) {
 		super(parent, updateContext, STYLE);
 

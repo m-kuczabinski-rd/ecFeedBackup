@@ -21,9 +21,6 @@ import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 
 public abstract class CheckboxTreeViewerSection extends TreeViewerSection {
 
-//	public CheckboxTreeViewerSection(Composite parent, FormToolkit toolkit, int style, IModelUpdateListener updateListener, ModelOperationManager operationManager) {
-//		super(parent, toolkit, style, updateListener, operationManager);
-//	}
 	public CheckboxTreeViewerSection(ISectionContext sectionContext, IModelUpdateContext updateContext, int style) {
 		super(sectionContext, updateContext, style);
 	}

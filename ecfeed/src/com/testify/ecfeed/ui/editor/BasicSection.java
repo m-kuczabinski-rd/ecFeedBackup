@@ -60,19 +60,6 @@ public abstract class BasicSection extends SectionPart implements IModelUpdateCo
 		}
 	}
 	
-//	public BasicSection(BasicDetailsPage parent, int style){
-//		this(parent.getMainComposite(), parent.getToolkit(), style, parent.getUpdateListener(), parent.getOperationManager(), parent.getUndoContext());
-//	}
-//	
-//	public BasicSection(Composite parent, FormToolkit toolkit, int style, IModelUpdateListener updateListener, ModelOperationManager operationManager, IUndoContext undoContext) {
-//		super(parent, toolkit, style);
-//		fModelUpdateListener = updateListener;
-//		fOperationManager = operationManager;
-//		fToolkit = toolkit;
-//		fUndoContext = undoContext;
-//		createContent();
-//	}
-
 	public BasicSection(ISectionContext sectionContext, IModelUpdateContext updateContext, int style){
 		super(sectionContext.getSectionComposite(), sectionContext.getToolkit(), style);
 		fSectionContext = sectionContext;
