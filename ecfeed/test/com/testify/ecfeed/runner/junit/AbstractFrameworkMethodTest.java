@@ -1,4 +1,4 @@
-package com.testify.ecfeed.runner;
+package com.testify.ecfeed.runner.junit;
 
 import static org.junit.Assert.*;
 
@@ -14,6 +14,7 @@ import com.testify.ecfeed.abstraction.java.ModelClassLoader;
 import com.testify.ecfeed.abstraction.java.PartitionValueParser;
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.PartitionNode;
+import com.testify.ecfeed.runner.junit.AbstractFrameworkMethod;
 import com.testify.ecfeed.ui.common.Constants;
 
 public class AbstractFrameworkMethodTest {

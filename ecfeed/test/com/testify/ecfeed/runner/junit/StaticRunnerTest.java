@@ -9,7 +9,7 @@
  *     Patryk Chamuczynski (p.chamuczynski(at)radytek.com) - initial implementation
  ******************************************************************************/
 
-package com.testify.ecfeed.runner;
+package com.testify.ecfeed.runner.junit;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
@@ -35,6 +35,7 @@ import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.TestCaseNode;
+import com.testify.ecfeed.runner.RunnerException;
 import com.testify.ecfeed.runner.annotations.EcModel;
 import com.testify.ecfeed.runner.annotations.TestSuites;
 import com.testify.ecfeed.serialization.IModelParser;
@@ -46,7 +47,7 @@ public class StaticRunnerTest extends StaticRunner{
 		super(StaticRunnerTest.class);
 	}
 
-	protected final static String MODEL_PATH = "test/com/testify/ecfeed/runner/StaticRunnerTest.ect";
+	protected final static String MODEL_PATH = "test/com/testify/ecfeed/runner/junit/StaticRunnerTest.ect";
 	protected final static String TEST_SUITES[] = {"Test Suite 1", "Test Suite 2"};
 	
 	protected static Set<List<Integer>> fExecutedTestCases;

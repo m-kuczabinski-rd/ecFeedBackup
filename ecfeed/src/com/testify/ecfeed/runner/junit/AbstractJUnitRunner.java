@@ -1,4 +1,4 @@
-package com.testify.ecfeed.runner;
+package com.testify.ecfeed.runner.junit;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -23,6 +23,8 @@ import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.GenericNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.RootNode;
+import com.testify.ecfeed.runner.Messages;
+import com.testify.ecfeed.runner.RunnerException;
 import com.testify.ecfeed.runner.annotations.EcModel;
 import com.testify.ecfeed.serialization.IModelParser;
 import com.testify.ecfeed.serialization.ParserException;

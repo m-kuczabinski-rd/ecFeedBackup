@@ -13,7 +13,6 @@ import org.eclipse.swt.widgets.Shell;
 
 import com.testify.ecfeed.abstraction.IModelOperation;
 import com.testify.ecfeed.abstraction.ModelIfException;
-import com.testify.ecfeed.abstraction.java.JavaTestRunner;
 import com.testify.ecfeed.abstraction.java.JavaUtils;
 import com.testify.ecfeed.abstraction.operations.MethodOperationAddConstraint;
 import com.testify.ecfeed.abstraction.operations.MethodOperationAddParameter;
@@ -29,6 +28,7 @@ import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.model.constraint.Constraint;
 import com.testify.ecfeed.model.constraint.StaticStatement;
+import com.testify.ecfeed.runner.JavaTestRunner;
 import com.testify.ecfeed.runner.RunnerException;
 import com.testify.ecfeed.ui.common.Constants;
 import com.testify.ecfeed.ui.common.EclipseLoaderProvider;

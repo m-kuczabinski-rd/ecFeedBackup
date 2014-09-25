@@ -9,9 +9,10 @@
  *     Patryk Chamuczynski (p.chamuczynski(at)radytek.com) - initial implementation
  ******************************************************************************/
 
-package com.testify.ecfeed.runner;
+package com.testify.ecfeed.runner.junit;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -37,7 +38,6 @@ import com.testify.ecfeed.model.ConstraintNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.RootNode;
-import com.testify.ecfeed.runner.OnlineRunner;
 import com.testify.ecfeed.runner.RunnerException;
 import com.testify.ecfeed.runner.annotations.Constraints;
 import com.testify.ecfeed.runner.annotations.EcModel;
@@ -51,7 +51,7 @@ public class OnlineRunnerTest extends StaticRunnerTest{
 		fExecuted = new HashSet<List<String>>();
 	}
 
-	protected final static String MODEL_PATH = "test/com/testify/ecfeed/runner/OnlineRunnerTest.ect";
+	protected final static String MODEL_PATH = "test/com/testify/ecfeed/runner/junit/OnlineRunnerTest.ect";
 
 	protected final static String OVERRIDING_CONSTRAINT_NAME = "constraint";
 

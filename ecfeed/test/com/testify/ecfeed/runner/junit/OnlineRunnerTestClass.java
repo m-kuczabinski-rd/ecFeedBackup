@@ -9,7 +9,7 @@
  *     Patryk Chamuczynski (p.chamuczynski(at)radytek.com) - initial implementation
  ******************************************************************************/
 
-package com.testify.ecfeed.runner;
+package com.testify.ecfeed.runner.junit;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -27,7 +27,7 @@ import com.testify.ecfeed.runner.annotations.GeneratorParameterValues;
 @RunWith(OnlineRunner.class)
 @Generator(CartesianProductGenerator.class)
 @Constraints("constraint")
-@EcModel("test/com/testify/ecfeed/runner/OnlineRunnerTest.ect")
+@EcModel("test/com/testify/ecfeed/runner/junit/OnlineRunnerTest.ect")
 public class OnlineRunnerTestClass {
 
 	@Test

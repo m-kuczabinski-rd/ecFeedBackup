@@ -9,7 +9,7 @@
  *     Patryk Chamuczynski (p.chamuczynski(at)radytek.com) - initial implementation
  ******************************************************************************/
 
-package com.testify.ecfeed.runner;
+package com.testify.ecfeed.runner.junit;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
@@ -33,6 +33,8 @@ import com.testify.ecfeed.generators.api.IGeneratorParameter;
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
+import com.testify.ecfeed.runner.Messages;
+import com.testify.ecfeed.runner.RunnerException;
 import com.testify.ecfeed.runner.annotations.Constraints;
 import com.testify.ecfeed.runner.annotations.Generator;
 import com.testify.ecfeed.runner.annotations.GeneratorParameter;

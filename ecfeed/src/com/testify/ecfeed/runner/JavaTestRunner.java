@@ -1,15 +1,16 @@
-package com.testify.ecfeed.abstraction.java;
+package com.testify.ecfeed.runner;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.testify.ecfeed.abstraction.java.JavaUtils;
+import com.testify.ecfeed.abstraction.java.ModelClassLoader;
+import com.testify.ecfeed.abstraction.java.PartitionValueParser;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
-import com.testify.ecfeed.runner.Messages;
-import com.testify.ecfeed.runner.RunnerException;
 
 public class JavaTestRunner {
 

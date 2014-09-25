@@ -9,7 +9,7 @@
  *     Patryk Chamuczynski (p.chamuczynski(at)radytek.com) - initial implementation
  ******************************************************************************/
 
-package com.testify.ecfeed.runner;
+package com.testify.ecfeed.runner.junit;
 
 import static org.junit.Assert.*;
 
@@ -30,7 +30,7 @@ import com.testify.ecfeed.generators.api.IConstraint;
 import com.testify.ecfeed.generators.api.IGenerator;
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.PartitionNode;
-import com.testify.ecfeed.runner.RuntimeMethod;
+import com.testify.ecfeed.runner.junit.RuntimeMethod;
 
 public class RuntimeMethodTest {
 

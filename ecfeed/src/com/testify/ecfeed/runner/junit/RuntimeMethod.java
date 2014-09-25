@@ -9,7 +9,7 @@
  *     Patryk Chamuczynski (p.chamuczynski(at)radytek.com) - initial implementation
  ******************************************************************************/
 
-package com.testify.ecfeed.runner;
+package com.testify.ecfeed.runner.junit;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -19,6 +19,8 @@ import com.testify.ecfeed.abstraction.java.ModelClassLoader;
 import com.testify.ecfeed.generators.api.GeneratorException;
 import com.testify.ecfeed.generators.api.IGenerator;
 import com.testify.ecfeed.model.PartitionNode;
+import com.testify.ecfeed.runner.Messages;
+import com.testify.ecfeed.runner.RunnerException;
 
 public class RuntimeMethod extends AbstractFrameworkMethod{
 
