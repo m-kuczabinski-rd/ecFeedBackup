@@ -1,4 +1,4 @@
-package com.testify.ecfeed.runner.junit;
+package com.testify.ecfeed.junit;
 
 import static org.junit.Assert.*;
 
@@ -10,11 +10,11 @@ import java.util.List;
 
 import org.junit.Test;
 
+import com.testify.ecfeed.junit.AbstractFrameworkMethod;
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.modeladp.java.ModelClassLoader;
 import com.testify.ecfeed.modeladp.java.PartitionValueParser;
-import com.testify.ecfeed.runner.junit.AbstractFrameworkMethod;
 import com.testify.ecfeed.ui.common.Constants;
 
 public class AbstractFrameworkMethodTest {

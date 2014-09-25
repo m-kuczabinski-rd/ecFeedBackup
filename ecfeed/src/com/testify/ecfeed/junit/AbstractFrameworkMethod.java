@@ -1,4 +1,4 @@
-package com.testify.ecfeed.runner.junit;
+package com.testify.ecfeed.junit;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;

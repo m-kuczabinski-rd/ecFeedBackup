@@ -9,7 +9,7 @@
  *     Patryk Chamuczynski (p.chamuczynski(at)radytek.com) - initial implementation
  ******************************************************************************/
 
-package com.testify.ecfeed.runner.junit;
+package com.testify.ecfeed.junit;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
@@ -31,13 +31,13 @@ import org.junit.runner.RunWith;
 import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.InitializationError;
 
+import com.testify.ecfeed.junit.annotations.EcModel;
+import com.testify.ecfeed.junit.annotations.TestSuites;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.runner.RunnerException;
-import com.testify.ecfeed.runner.annotations.EcModel;
-import com.testify.ecfeed.runner.annotations.TestSuites;
 import com.testify.ecfeed.serialization.IModelParser;
 import com.testify.ecfeed.serialization.ParserException;
 import com.testify.ecfeed.serialization.ect.EctParser;
@@ -47,7 +47,7 @@ public class StaticRunnerTest extends StaticRunner{
 		super(StaticRunnerTest.class);
 	}
 
-	protected final static String MODEL_PATH = "test/com/testify/ecfeed/runner/junit/StaticRunnerTest.ect";
+	protected final static String MODEL_PATH = "test/com/testify/ecfeed/junit/StaticRunnerTest.ect";
 	protected final static String TEST_SUITES[] = {"Test Suite 1", "Test Suite 2"};
 	
 	protected static Set<List<Integer>> fExecutedTestCases;

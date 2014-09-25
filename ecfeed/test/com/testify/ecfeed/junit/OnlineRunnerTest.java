@@ -9,7 +9,7 @@
  *     Patryk Chamuczynski (p.chamuczynski(at)radytek.com) - initial implementation
  ******************************************************************************/
 
-package com.testify.ecfeed.runner.junit;
+package com.testify.ecfeed.junit;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
@@ -33,16 +33,16 @@ import com.testify.ecfeed.generators.NWiseGenerator;
 import com.testify.ecfeed.generators.api.GeneratorException;
 import com.testify.ecfeed.generators.api.IConstraint;
 import com.testify.ecfeed.generators.api.IGenerator;
+import com.testify.ecfeed.junit.annotations.Constraints;
+import com.testify.ecfeed.junit.annotations.EcModel;
+import com.testify.ecfeed.junit.annotations.Generator;
+import com.testify.ecfeed.junit.annotations.GeneratorParameter;
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.ConstraintNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.runner.RunnerException;
-import com.testify.ecfeed.runner.annotations.Constraints;
-import com.testify.ecfeed.runner.annotations.EcModel;
-import com.testify.ecfeed.runner.annotations.Generator;
-import com.testify.ecfeed.runner.annotations.GeneratorParameter;
 
 public class OnlineRunnerTest extends StaticRunnerTest{
 
@@ -51,7 +51,7 @@ public class OnlineRunnerTest extends StaticRunnerTest{
 		fExecuted = new HashSet<List<String>>();
 	}
 
-	protected final static String MODEL_PATH = "test/com/testify/ecfeed/runner/junit/OnlineRunnerTest.ect";
+	protected final static String MODEL_PATH = "test/com/testify/ecfeed/junit/OnlineRunnerTest.ect";
 
 	protected final static String OVERRIDING_CONSTRAINT_NAME = "constraint";
 

@@ -9,7 +9,7 @@
  *     Patryk Chamuczynski (p.chamuczynski(at)radytek.com) - initial implementation
  ******************************************************************************/
 
-package com.testify.ecfeed.runner.junit;
+package com.testify.ecfeed.junit;
 
 import static org.junit.Assert.*;
 
@@ -27,10 +27,10 @@ import com.testify.ecfeed.generators.CartesianProductGenerator;
 import com.testify.ecfeed.generators.api.GeneratorException;
 import com.testify.ecfeed.generators.api.IConstraint;
 import com.testify.ecfeed.generators.api.IGenerator;
+import com.testify.ecfeed.junit.RuntimeMethod;
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.modeladp.java.ModelClassLoader;
-import com.testify.ecfeed.runner.junit.RuntimeMethod;
 
 public class RuntimeMethodTest {
 

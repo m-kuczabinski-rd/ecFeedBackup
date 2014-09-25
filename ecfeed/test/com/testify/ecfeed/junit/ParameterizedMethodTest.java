@@ -9,7 +9,7 @@
  *     Patryk Chamuczynski (p.chamuczynski(at)radytek.com) - initial implementation
  ******************************************************************************/
 
-package com.testify.ecfeed.runner.junit;
+package com.testify.ecfeed.junit;
 
 import static org.junit.Assert.*;
 
@@ -25,13 +25,13 @@ import java.util.Set;
 import org.junit.Test;
 import org.junit.runners.model.FrameworkMethod;
 
+import com.testify.ecfeed.junit.ParameterizedMethod;
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.modeladp.java.ModelClassLoader;
-import com.testify.ecfeed.runner.junit.ParameterizedMethod;
 
 public class ParameterizedMethodTest {
 

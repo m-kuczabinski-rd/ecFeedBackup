@@ -9,7 +9,7 @@
  *     Patryk Chamuczynski (p.chamuczynski(at)radytek.com) - initial implementation
  ******************************************************************************/
 
-package com.testify.ecfeed.runner.junit;
+package com.testify.ecfeed.junit;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,17 +17,17 @@ import org.junit.runner.RunWith;
 import com.testify.ecfeed.generators.CartesianProductGenerator;
 import com.testify.ecfeed.generators.NWiseGenerator;
 import com.testify.ecfeed.generators.RandomGenerator;
-import com.testify.ecfeed.runner.annotations.Constraints;
-import com.testify.ecfeed.runner.annotations.EcModel;
-import com.testify.ecfeed.runner.annotations.Generator;
-import com.testify.ecfeed.runner.annotations.GeneratorParameter;
-import com.testify.ecfeed.runner.annotations.GeneratorParameterNames;
-import com.testify.ecfeed.runner.annotations.GeneratorParameterValues;
+import com.testify.ecfeed.junit.annotations.Constraints;
+import com.testify.ecfeed.junit.annotations.EcModel;
+import com.testify.ecfeed.junit.annotations.Generator;
+import com.testify.ecfeed.junit.annotations.GeneratorParameter;
+import com.testify.ecfeed.junit.annotations.GeneratorParameterNames;
+import com.testify.ecfeed.junit.annotations.GeneratorParameterValues;
 
 @RunWith(OnlineRunner.class)
 @Generator(CartesianProductGenerator.class)
 @Constraints("constraint")
-@EcModel("test/com/testify/ecfeed/runner/junit/OnlineRunnerTest.ect")
+@EcModel("test/com/testify/ecfeed/junit/OnlineRunnerTest.ect")
 public class OnlineRunnerTestClass {
 
 	@Test

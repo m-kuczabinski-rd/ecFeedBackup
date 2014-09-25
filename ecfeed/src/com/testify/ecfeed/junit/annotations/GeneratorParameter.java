@@ -9,7 +9,7 @@
  *     Patryk Chamuczynski (p.chamuczynski(at)radytek.com) - initial implementation
  ******************************************************************************/
 
-package com.testify.ecfeed.runner.annotations;
+package com.testify.ecfeed.junit.annotations;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -18,9 +18,7 @@ import java.lang.annotation.Target;
 
 @Target({ElementType.METHOD, ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Constraints {
-	public static final String ALL = "__ALL__"; 
-	public static final String NONE = "__NONE__"; 
-	
-	String[] value();
+public @interface GeneratorParameter {
+	String name();
+	String value();
 }

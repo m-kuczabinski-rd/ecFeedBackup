@@ -9,7 +9,7 @@
  *     Patryk Chamuczynski (p.chamuczynski(at)radytek.com) - initial implementation
  ******************************************************************************/
 
-package com.testify.ecfeed.runner.junit;
+package com.testify.ecfeed.junit;
 
 import java.lang.annotation.Annotation;
 import java.util.ArrayList;
@@ -24,11 +24,11 @@ import org.junit.Test;
 import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.InitializationError;
 
+import com.testify.ecfeed.junit.annotations.TestSuites;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.modeladp.ImplementationStatus;
 import com.testify.ecfeed.runner.RunnerException;
-import com.testify.ecfeed.runner.annotations.TestSuites;
 
 public class StaticRunner extends AbstractJUnitRunner {
 

@@ -1,4 +1,4 @@
-package com.testify.ecfeed.runner.junit;
+package com.testify.ecfeed.junit;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -15,6 +15,7 @@ import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.InitializationError;
 import org.junit.runners.model.TestClass;
 
+import com.testify.ecfeed.junit.annotations.EcModel;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.GenericNode;
 import com.testify.ecfeed.model.MethodNode;
@@ -25,7 +26,6 @@ import com.testify.ecfeed.modeladp.java.JavaImplementationStatusResolver;
 import com.testify.ecfeed.modeladp.java.ModelClassLoader;
 import com.testify.ecfeed.runner.Messages;
 import com.testify.ecfeed.runner.RunnerException;
-import com.testify.ecfeed.runner.annotations.EcModel;
 import com.testify.ecfeed.serialization.IModelParser;
 import com.testify.ecfeed.serialization.ParserException;
 import com.testify.ecfeed.serialization.ect.EctParser;
