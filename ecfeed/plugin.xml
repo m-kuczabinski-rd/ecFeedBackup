@@ -22,7 +22,7 @@
             class="com.testify.ecfeed.ui.editor.ModelEditor"
             extensions="ect"
             icon="icons/root_node.png"
-            id="com.testify.ecfeed.ui.editors.EcMultiPageEditor"
+            id="com.testify.ecfeed.ui.EctEditor"
             name="ecmodel">
       </editor>
    </extension>
