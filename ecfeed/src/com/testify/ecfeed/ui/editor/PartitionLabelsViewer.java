@@ -34,7 +34,7 @@ import com.testify.ecfeed.ui.common.ColorConstants;
 import com.testify.ecfeed.ui.common.ColorManager;
 import com.testify.ecfeed.ui.editor.actions.ActionGroups;
 import com.testify.ecfeed.ui.editor.actions.CutAction;
-import com.testify.ecfeed.ui.editor.actions.ModelModyfyingAction;
+import com.testify.ecfeed.ui.editor.actions.ModelModifyingAction;
 import com.testify.ecfeed.ui.editor.actions.NamedAction;
 import com.testify.ecfeed.ui.editor.actions.SelectAllAction;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
@@ -97,7 +97,7 @@ public class PartitionLabelsViewer extends TableViewerSection {
 		}
 	}
 
-	private class LabelPasteAction extends ModelModyfyingAction{
+	private class LabelPasteAction extends ModelModifyingAction{
 		public LabelPasteAction(IModelUpdateContext updateContext) {
 			super(GlobalActions.PASTE.getId(), GlobalActions.PASTE.getName(), getViewer(), updateContext);
 		}
@@ -113,7 +113,7 @@ public class PartitionLabelsViewer extends TableViewerSection {
 		}
 	}
 
-	private class LabelDeleteAction extends ModelModyfyingAction{
+	private class LabelDeleteAction extends ModelModifyingAction{
 		public LabelDeleteAction(IModelUpdateContext updateContext) {
 			super(GlobalActions.DELETE.getId(), GlobalActions.DELETE.getName(), getTableViewer(), updateContext);
 		}

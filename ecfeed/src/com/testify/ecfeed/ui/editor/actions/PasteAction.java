@@ -9,7 +9,7 @@ import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 import com.testify.ecfeed.ui.modelif.NodeClipboard;
 import com.testify.ecfeed.ui.modelif.NodeInterfaceFactory;
 
-public class PasteAction extends ModelModyfyingAction {
+public class PasteAction extends ModelModifyingAction {
 
 	private TreeViewer fTreeViewer;
 	private int fIndex;

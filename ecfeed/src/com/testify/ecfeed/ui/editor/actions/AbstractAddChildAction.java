@@ -17,7 +17,7 @@ import com.testify.ecfeed.ui.modelif.ClassInterface;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 import com.testify.ecfeed.ui.modelif.RootInterface;
 
-public abstract class AbstractAddChildAction extends ModelModyfyingAction{
+public abstract class AbstractAddChildAction extends ModelModifyingAction{
 	
 	protected final static String ADD_CLASS_ACTION_NAME = "Add class";
 	protected final static String ADD_METHOD_ACTION_NAME = "Add method";

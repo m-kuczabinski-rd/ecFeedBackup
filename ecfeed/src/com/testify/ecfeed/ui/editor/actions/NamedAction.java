@@ -5,29 +5,29 @@ import org.eclipse.ui.actions.ActionFactory;
 
 public class NamedAction extends Action {
 
-	private static final String COPY_ACTION_ID = ActionFactory.COPY.getId();
-	private static final String CUT_ACTION_ID = ActionFactory.CUT.getId();
-	private static final String PASTE_ACTION_ID = ActionFactory.PASTE.getId();
-	private static final String DELETE_ACTION_ID = ActionFactory.DELETE.getId();
-	private static final String SELECT_ALL_ACTION_ID = ActionFactory.SELECT_ALL.getId();
-	private static final String UNDO_ACTION_ID = ActionFactory.UNDO.getId();
-	private static final String REDO_ACTION_ID = ActionFactory.REDO.getId();
-	private static final String MOVE_UP_ACTION_ID = "moveUp";
-	private static final String MOVE_DOWN_ACTION_ID = "moveDown";
-	private static final String EXPAND_ACTION_ID = "expand";
-	private static final String COLLAPSE_ACTION_ID = "collapse";
+	public static final String COPY_ACTION_ID = ActionFactory.COPY.getId();
+	public static final String CUT_ACTION_ID = ActionFactory.CUT.getId();
+	public static final String PASTE_ACTION_ID = ActionFactory.PASTE.getId();
+	public static final String DELETE_ACTION_ID = ActionFactory.DELETE.getId();
+	public static final String SELECT_ALL_ACTION_ID = ActionFactory.SELECT_ALL.getId();
+	public static final String UNDO_ACTION_ID = ActionFactory.UNDO.getId();
+	public static final String REDO_ACTION_ID = ActionFactory.REDO.getId();
+	public static final String MOVE_UP_ACTION_ID = "moveUp";
+	public static final String MOVE_DOWN_ACTION_ID = "moveDown";
+	public static final String EXPAND_ACTION_ID = "expand";
+	public static final String COLLAPSE_ACTION_ID = "collapse";
 
-	private static final String COPY_ACTION_NAME = "Copy\tCtrl+c";
-	private static final String CUT_ACTION_NAME = "Cut\tCtrl+x";
-	private static final String PASTE_ACTION_NAME = "Paste\tCtrl+x";
-	private static final String DELETE_ACTION_NAME = "Delete\tDEL";
-	private static final String SELECT_ALL_ACTION_NAME = "Select All\tCtrl+a";
-	private static final String UNDO_ACTION_NAME = "Undo\tCtrl+z";
-	private static final String REDO_ACTION_NAME = "Redo\tCtrl+Shift+z";
-	private static final String MOVE_UP_ACTION_NAME = "Move Up\tAlt+Up";
-	private static final String MOVE_DOWN_ACTION_NAME = "Move Up\tAlt+Down";
-	private static final String EXPAND_ACTION_NAME = "Expand\tCtrl+Shift+e";
-	private static final String COLLAPSE_ACTION_NAME = "Collapse\tCtrl+Shift+w";
+	public static final String COPY_ACTION_NAME = "Copy\tCtrl+c";
+	public static final String CUT_ACTION_NAME = "Cut\tCtrl+x";
+	public static final String PASTE_ACTION_NAME = "Paste\tCtrl+x";
+	public static final String DELETE_ACTION_NAME = "Delete\tDEL";
+	public static final String SELECT_ALL_ACTION_NAME = "Select All\tCtrl+a";
+	public static final String UNDO_ACTION_NAME = "Undo\tCtrl+z";
+	public static final String REDO_ACTION_NAME = "Redo\tCtrl+Shift+z";
+	public static final String MOVE_UP_ACTION_NAME = "Move Up\tAlt+Up";
+	public static final String MOVE_DOWN_ACTION_NAME = "Move Up\tAlt+Down";
+	public static final String EXPAND_ACTION_NAME = "Expand\tCtrl+Shift+e";
+	public static final String COLLAPSE_ACTION_NAME = "Collapse\tCtrl+Shift+w";
 	
 	protected enum GlobalActions{
 		COPY(COPY_ACTION_ID, COPY_ACTION_NAME),

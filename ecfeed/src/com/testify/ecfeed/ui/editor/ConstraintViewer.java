@@ -46,7 +46,7 @@ import com.testify.ecfeed.model.constraint.PartitionedCategoryStatement.Partitio
 import com.testify.ecfeed.model.constraint.Relation;
 import com.testify.ecfeed.model.constraint.StatementArray;
 import com.testify.ecfeed.model.constraint.StaticStatement;
-import com.testify.ecfeed.ui.editor.actions.ModelModyfyingAction;
+import com.testify.ecfeed.ui.editor.actions.ModelModifyingAction;
 import com.testify.ecfeed.ui.modelif.BasicStatementInterface;
 import com.testify.ecfeed.ui.modelif.CategoryInterface;
 import com.testify.ecfeed.ui.modelif.ConstraintInterface;
@@ -413,7 +413,7 @@ public class ConstraintViewer extends TreeViewerSection {
 		}
 	}
 	
-	public class DeleteStatementAction extends ModelModyfyingAction {
+	public class DeleteStatementAction extends ModelModifyingAction {
 		public DeleteStatementAction(IModelUpdateContext updateContext) {
 			super(GlobalActions.DELETE.getId(), GlobalActions.DELETE.getName(), getTreeViewer(), ConstraintViewer.this);
 		}

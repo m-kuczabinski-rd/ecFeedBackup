@@ -4,7 +4,7 @@ import org.eclipse.jface.viewers.ISelectionProvider;
 
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 
-public class MoveUpDownAction extends ModelModyfyingAction {
+public class MoveUpDownAction extends ModelModifyingAction {
 
 	private boolean fUp;
 

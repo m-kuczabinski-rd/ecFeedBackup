@@ -4,7 +4,7 @@ import org.eclipse.jface.viewers.ISelectionProvider;
 
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 
-public class DeleteAction extends ModelModyfyingAction {
+public class DeleteAction extends ModelModifyingAction {
 
 	public DeleteAction(ISelectionProvider selectionProvider, IModelUpdateContext updateContext) {
 		super(GlobalActions.DELETE.getId(), GlobalActions.DELETE.getName(), selectionProvider, updateContext);
