@@ -129,10 +129,6 @@ public abstract class BasicDetailsPage implements IDetailsPage, IModelUpdateList
 		return fManagedForm.getToolkit();
 	}
 	
-//	public ModelOperationManager getOperationManager(){
-//		return getMasterSection().getOperationManager();
-//	}
-//
 	protected Section getMainSection(){
 		return fMainSection;
 	}
