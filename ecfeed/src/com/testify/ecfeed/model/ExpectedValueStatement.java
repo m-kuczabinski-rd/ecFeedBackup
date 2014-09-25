@@ -9,13 +9,9 @@
  *     Patryk Chamuczynski (p.chamuczynski(at)radytek.com) - initial implementation
  ******************************************************************************/
 
-package com.testify.ecfeed.model.constraint;
+package com.testify.ecfeed.model;
 
 import java.util.List;
-
-import com.testify.ecfeed.model.CategoryNode;
-import com.testify.ecfeed.model.MethodNode;
-import com.testify.ecfeed.model.PartitionNode;
 
 public class ExpectedValueStatement extends BasicStatement implements IRelationalStatement{
 
@@ -52,17 +48,17 @@ public class ExpectedValueStatement extends BasicStatement implements IRelationa
 	}
 
 	@Override
-	public Relation[] getAvailableRelations() {
-		return new Relation[]{Relation.EQUAL};
+	public EStatementRelation[] getAvailableRelations() {
+		return new EStatementRelation[]{EStatementRelation.EQUAL};
 	}
 
 	@Override
-	public Relation getRelation() {
-		return Relation.EQUAL;
+	public EStatementRelation getRelation() {
+		return EStatementRelation.EQUAL;
 	}
 
 	@Override
-	public void setRelation(Relation relation) {
+	public void setRelation(EStatementRelation relation) {
 	}
 	
 	public CategoryNode getCategory(){

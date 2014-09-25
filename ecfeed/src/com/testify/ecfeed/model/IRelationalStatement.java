@@ -9,33 +9,11 @@
  *     Patryk Chamuczynski (p.chamuczynski(at)radytek.com) - initial implementation
  ******************************************************************************/
 
-package com.testify.ecfeed.model.constraint;
+package com.testify.ecfeed.model;
 
-public enum Operator{
-	AND("AND"), 
-	OR("OR");
-	
-	public static final String OPERATOR_AND = "AND";
-	public static final String OPERATOR_OR = "OR";
 
-	String fValue;
-
-	private Operator(String value){
-		fValue = value;
-	}
-	
-	public String toString(){
-		return fValue; 
-	}
-	
-	public static Operator getOperator(String text){
-		switch(text){
-		case OPERATOR_AND:
-			return AND;
-		case OPERATOR_OR:
-			return OR;
-		}
-		return null;
-	}
-
+public interface IRelationalStatement {
+	public EStatementRelation getRelation();
+	public void setRelation(EStatementRelation relation);
+	public EStatementRelation[] getAvailableRelations();
 }

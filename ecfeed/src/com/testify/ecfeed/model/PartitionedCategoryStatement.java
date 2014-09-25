@@ -9,18 +9,14 @@
  *     Patryk Chamuczynski (p.chamuczynski(at)radytek.com) - initial implementation
  ******************************************************************************/
 
-package com.testify.ecfeed.model.constraint;
+package com.testify.ecfeed.model;
 
 import java.util.List;
-
-import com.testify.ecfeed.model.CategoryNode;
-import com.testify.ecfeed.model.MethodNode;
-import com.testify.ecfeed.model.PartitionNode;
 
 public class PartitionedCategoryStatement extends BasicStatement implements IRelationalStatement{
 
 	private CategoryNode fCategory;
-	private Relation fRelation;
+	private EStatementRelation fRelation;
 	private ICondition fCondition;
 	
 	public interface ICondition{
@@ -183,19 +179,19 @@ public class PartitionedCategoryStatement extends BasicStatement implements IRel
 
 	}
 	
-	public PartitionedCategoryStatement(CategoryNode category, Relation relation, String labelCondition){
+	public PartitionedCategoryStatement(CategoryNode category, EStatementRelation relation, String labelCondition){
 		fCategory = category;
 		fRelation = relation;
 		fCondition = new LabelCondition(labelCondition);
 	}
 	
-	public PartitionedCategoryStatement(CategoryNode category, Relation relation, PartitionNode partitionCondition){
+	public PartitionedCategoryStatement(CategoryNode category, EStatementRelation relation, PartitionNode partitionCondition){
 		fCategory = category;
 		fRelation = relation;
 		fCondition = new PartitionCondition(partitionCondition);
 	}
 	
-	private PartitionedCategoryStatement(CategoryNode category, Relation relation, ICondition condition){
+	private PartitionedCategoryStatement(CategoryNode category, EStatementRelation relation, ICondition condition){
 		fCategory = category;
 		fRelation = relation;
 		fCondition = condition;
@@ -231,8 +227,8 @@ public class PartitionedCategoryStatement extends BasicStatement implements IRel
 	}
 	
 	@Override
-	public Relation[] getAvailableRelations() {
-		return new Relation[]{Relation.EQUAL, Relation.NOT};
+	public EStatementRelation[] getAvailableRelations() {
+		return new EStatementRelation[]{EStatementRelation.EQUAL, EStatementRelation.NOT};
 	}
 	
 	@Override
@@ -256,11 +252,11 @@ public class PartitionedCategoryStatement extends BasicStatement implements IRel
 		return fCategory;
 	}
 	
-	public void setRelation(Relation relation){
+	public void setRelation(EStatementRelation relation){
 		fRelation = relation;
 	}
 	
-	public Relation getRelation(){
+	public EStatementRelation getRelation(){
 		return fRelation;
 	}
 	

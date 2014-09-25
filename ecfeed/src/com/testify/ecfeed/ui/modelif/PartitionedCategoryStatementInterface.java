@@ -1,9 +1,9 @@
 package com.testify.ecfeed.ui.modelif;
 
 import com.testify.ecfeed.model.CategoryNode;
-import com.testify.ecfeed.model.constraint.PartitionedCategoryStatement;
-import com.testify.ecfeed.model.constraint.PartitionedCategoryStatement.ICondition;
-import com.testify.ecfeed.model.constraint.Relation;
+import com.testify.ecfeed.model.PartitionedCategoryStatement;
+import com.testify.ecfeed.model.EStatementRelation;
+import com.testify.ecfeed.model.PartitionedCategoryStatement.ICondition;
 import com.testify.ecfeed.modeladp.IModelOperation;
 import com.testify.ecfeed.modeladp.operations.StatementOperationSetCondition;
 import com.testify.ecfeed.modeladp.operations.StatementOperationSetRelation;
@@ -23,7 +23,7 @@ public class PartitionedCategoryStatementInterface extends BasicStatementInterfa
 	}
 	
 	@Override
-	public boolean setRelation(Relation relation) {
+	public boolean setRelation(EStatementRelation relation) {
 		if(relation != fTarget.getRelation()){
 			IModelOperation operation = new StatementOperationSetRelation(fTarget, relation);
 			return execute(operation, Messages.DIALOG_EDIT_STATEMENT_PROBLEM_TITLE);

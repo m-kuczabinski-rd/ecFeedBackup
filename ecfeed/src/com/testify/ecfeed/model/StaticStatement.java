@@ -9,12 +9,9 @@
  *     Patryk Chamuczynski (p.chamuczynski(at)radytek.com) - initial implementation
  ******************************************************************************/
 
-package com.testify.ecfeed.model.constraint;
+package com.testify.ecfeed.model;
 
 import java.util.List;
-
-import com.testify.ecfeed.model.MethodNode;
-import com.testify.ecfeed.model.PartitionNode;
 
 public class StaticStatement extends BasicStatement {
 

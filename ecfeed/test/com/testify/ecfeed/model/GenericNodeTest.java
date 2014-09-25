@@ -20,9 +20,6 @@ import java.util.ArrayList;
 
 import org.junit.Test;
 
-import com.testify.ecfeed.model.constraint.Constraint;
-import com.testify.ecfeed.model.constraint.StaticStatement;
-
 public class GenericNodeTest{
 	
 	private class GenericNodeImpl extends GenericNode{

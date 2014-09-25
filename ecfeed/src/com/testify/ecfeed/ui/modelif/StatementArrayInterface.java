@@ -1,8 +1,8 @@
 package com.testify.ecfeed.ui.modelif;
 
-import com.testify.ecfeed.model.constraint.BasicStatement;
-import com.testify.ecfeed.model.constraint.Operator;
-import com.testify.ecfeed.model.constraint.StatementArray;
+import com.testify.ecfeed.model.BasicStatement;
+import com.testify.ecfeed.model.EStatementOperator;
+import com.testify.ecfeed.model.StatementArray;
 import com.testify.ecfeed.modeladp.IModelOperation;
 import com.testify.ecfeed.modeladp.operations.StatementOperationAddStatement;
 import com.testify.ecfeed.modeladp.operations.StatementOperationChangeOperator;
@@ -35,7 +35,7 @@ public class StatementArrayInterface extends BasicStatementInterface{
 	}
 
 	@Override
-	public boolean setOperator(Operator operator) {
+	public boolean setOperator(EStatementOperator operator) {
 		if(operator != fTarget.getOperator()){
 			IModelOperation operation = new StatementOperationChangeOperator(fTarget, operator); 
 			return execute(operation, Messages.DIALOG_EDIT_STATEMENT_PROBLEM_TITLE);
@@ -44,7 +44,7 @@ public class StatementArrayInterface extends BasicStatementInterface{
 	}
 
 	@Override
-	public Operator getOperator() {
+	public EStatementOperator getOperator() {
 		return fTarget.getOperator();
 	}
 

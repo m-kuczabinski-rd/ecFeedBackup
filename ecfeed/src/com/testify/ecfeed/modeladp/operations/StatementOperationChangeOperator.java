@@ -1,17 +1,17 @@
 package com.testify.ecfeed.modeladp.operations;
 
-import com.testify.ecfeed.model.constraint.Operator;
-import com.testify.ecfeed.model.constraint.StatementArray;
+import com.testify.ecfeed.model.EStatementOperator;
+import com.testify.ecfeed.model.StatementArray;
 import com.testify.ecfeed.modeladp.IModelOperation;
 import com.testify.ecfeed.modeladp.ModelOperationException;
 
 public class StatementOperationChangeOperator extends AbstractModelOperation {
 
 	private StatementArray fTarget;
-	private Operator fNewOperator;
-	private Operator fCurrentOperator;
+	private EStatementOperator fNewOperator;
+	private EStatementOperator fCurrentOperator;
 
-	public StatementOperationChangeOperator(StatementArray target, Operator operator) {
+	public StatementOperationChangeOperator(StatementArray target, EStatementOperator operator) {
 		super(OperationNames.CHANGE_STATEMENT_OPERATOR);
 		fTarget = target;
 		fNewOperator = operator;

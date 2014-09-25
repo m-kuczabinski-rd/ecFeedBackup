@@ -31,21 +31,21 @@ import org.eclipse.ui.forms.widgets.Section;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.FrameworkUtil;
 
+import com.testify.ecfeed.model.BasicStatement;
 import com.testify.ecfeed.model.CategoryNode;
+import com.testify.ecfeed.model.Constraint;
 import com.testify.ecfeed.model.ConstraintNode;
+import com.testify.ecfeed.model.ExpectedValueStatement;
+import com.testify.ecfeed.model.IRelationalStatement;
+import com.testify.ecfeed.model.IStatementVisitor;
+import com.testify.ecfeed.model.EStatementOperator;
 import com.testify.ecfeed.model.PartitionNode;
-import com.testify.ecfeed.model.constraint.BasicStatement;
-import com.testify.ecfeed.model.constraint.Constraint;
-import com.testify.ecfeed.model.constraint.ExpectedValueStatement;
-import com.testify.ecfeed.model.constraint.IRelationalStatement;
-import com.testify.ecfeed.model.constraint.IStatementVisitor;
-import com.testify.ecfeed.model.constraint.Operator;
-import com.testify.ecfeed.model.constraint.PartitionedCategoryStatement;
-import com.testify.ecfeed.model.constraint.PartitionedCategoryStatement.LabelCondition;
-import com.testify.ecfeed.model.constraint.PartitionedCategoryStatement.PartitionCondition;
-import com.testify.ecfeed.model.constraint.Relation;
-import com.testify.ecfeed.model.constraint.StatementArray;
-import com.testify.ecfeed.model.constraint.StaticStatement;
+import com.testify.ecfeed.model.PartitionedCategoryStatement;
+import com.testify.ecfeed.model.EStatementRelation;
+import com.testify.ecfeed.model.StatementArray;
+import com.testify.ecfeed.model.StaticStatement;
+import com.testify.ecfeed.model.PartitionedCategoryStatement.LabelCondition;
+import com.testify.ecfeed.model.PartitionedCategoryStatement.PartitionCondition;
 import com.testify.ecfeed.ui.editor.actions.ModelModifyingAction;
 import com.testify.ecfeed.ui.modelif.BasicStatementInterface;
 import com.testify.ecfeed.ui.modelif.CategoryInterface;
@@ -143,8 +143,8 @@ public class ConstraintViewer extends TreeViewerSection {
 		
 		private final String STATEMENT_FALSE = new StaticStatement(false).getLeftOperandName();
 		private final String STATEMENT_TRUE = new StaticStatement(true).getLeftOperandName();
-		private final String STATEMENT_AND = new StatementArray(Operator.AND).getLeftOperandName();
-		private final String STATEMENT_OR = new StatementArray(Operator.OR).getLeftOperandName();
+		private final String STATEMENT_AND = new StatementArray(EStatementOperator.AND).getLeftOperandName();
+		private final String STATEMENT_OR = new StatementArray(EStatementOperator.OR).getLeftOperandName();
 		private final String[] FIXED_STATEMENTS = {STATEMENT_FALSE, STATEMENT_TRUE, STATEMENT_OR, STATEMENT_AND};
 		
 		private final int STATEMENT_COMBO_WIDTH = 3;
@@ -182,7 +182,7 @@ public class ConstraintViewer extends TreeViewerSection {
 		private class StatementComboListener implements SelectionListener{
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				Operator operator = Operator.getOperator(fStatementCombo.getText());
+				EStatementOperator operator = EStatementOperator.getOperator(fStatementCombo.getText());
 				if(operator != null && operator != fStatementIf.getOperator()){
 					fStatementIf.setOperator(operator);
 				}
@@ -215,10 +215,10 @@ public class ConstraintViewer extends TreeViewerSection {
 					return new StaticStatement(Boolean.parseBoolean(statementText));
 				}
 				if(statementText.equals(STATEMENT_AND) || statementText.equals(STATEMENT_OR)){
-					return new StatementArray(Operator.getOperator(statementText));
+					return new StatementArray(EStatementOperator.getOperator(statementText));
 				}
 				CategoryNode category = fConstraint.getMethod().getCategory(statementText);
-				Relation relation = Relation.EQUAL;
+				EStatementRelation relation = EStatementRelation.EQUAL;
 				if(category != null && category.isExpected()){
 					PartitionNode condition = new PartitionNode("expected", category.getDefaultValue());
 					condition.setParent(category);
@@ -237,7 +237,7 @@ public class ConstraintViewer extends TreeViewerSection {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
-				Relation relation = Relation.getRelation(fRelationCombo.getText());
+				EStatementRelation relation = EStatementRelation.getRelation(fRelationCombo.getText());
 				fStatementIf.setRelation(relation);
 			}
 
@@ -319,7 +319,7 @@ public class ConstraintViewer extends TreeViewerSection {
 
 			private String[] availableRelations(IRelationalStatement statement){
 				List<String> relations = new ArrayList<String>();
-				for(Relation r : statement.getAvailableRelations()){
+				for(EStatementRelation r : statement.getAvailableRelations()){
 					relations.add(r.toString());
 				}
 				return relations.toArray(new String[]{});

@@ -1,6 +1,6 @@
 package com.testify.ecfeed.ui.modelif;
 
-import com.testify.ecfeed.model.constraint.StaticStatement;
+import com.testify.ecfeed.model.StaticStatement;
 
 public class StaticStatementInterface extends BasicStatementInterface{
 

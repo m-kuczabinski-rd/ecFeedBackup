@@ -1,9 +1,9 @@
 package com.testify.ecfeed.ui.modelif;
 
-import com.testify.ecfeed.model.constraint.BasicStatement;
-import com.testify.ecfeed.model.constraint.Operator;
-import com.testify.ecfeed.model.constraint.Relation;
-import com.testify.ecfeed.model.constraint.StaticStatement;
+import com.testify.ecfeed.model.BasicStatement;
+import com.testify.ecfeed.model.EStatementOperator;
+import com.testify.ecfeed.model.EStatementRelation;
+import com.testify.ecfeed.model.StaticStatement;
 
 public class BasicStatementInterface extends OperationExecuter {
 	
@@ -52,7 +52,7 @@ public class BasicStatementInterface extends OperationExecuter {
 		return null;
 	}
 
-	public boolean setRelation(Relation relation) {
+	public boolean setRelation(EStatementRelation relation) {
 		return false;
 	}
 
@@ -64,11 +64,11 @@ public class BasicStatementInterface extends OperationExecuter {
 		return null;
 	}
 
-	public boolean setOperator(Operator operator) {
+	public boolean setOperator(EStatementOperator operator) {
 		return false;
 	}
 
-	public Operator getOperator() {
+	public EStatementOperator getOperator() {
 		return null;
 	}
 

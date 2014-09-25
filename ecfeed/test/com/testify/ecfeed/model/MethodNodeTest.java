@@ -20,10 +20,6 @@ import java.util.List;
 
 import org.junit.Test;
 
-import com.testify.ecfeed.model.constraint.Constraint;
-import com.testify.ecfeed.model.constraint.PartitionedCategoryStatement;
-import com.testify.ecfeed.model.constraint.Relation;
-import com.testify.ecfeed.model.constraint.StaticStatement;
 import com.testify.ecfeed.testutils.RandomModelGenerator;
 
 public class MethodNodeTest {
@@ -463,7 +459,7 @@ public class MethodNodeTest {
 		MethodNode method = new MethodNode("method");
 		CategoryNode category = new CategoryNode("category", "type", "0", false);
 		PartitionNode partition = new PartitionNode("partition", "value");
-		Constraint mentioningConstraint = new Constraint(new PartitionedCategoryStatement(category, Relation.EQUAL, partition), new StaticStatement(false));
+		Constraint mentioningConstraint = new Constraint(new PartitionedCategoryStatement(category, EStatementRelation.EQUAL, partition), new StaticStatement(false));
 		Constraint notMentioningConstraint = new Constraint(new StaticStatement(false), new StaticStatement(false));
 		ConstraintNode mentioningConstraintNode = new ConstraintNode("constraint", mentioningConstraint);
 		ConstraintNode notMentioningConstraintNode = new ConstraintNode("constraint", notMentioningConstraint);

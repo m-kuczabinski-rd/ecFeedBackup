@@ -9,7 +9,7 @@
  *     Patryk Chamuczynski (p.chamuczynski(at)radytek.com) - initial implementation
  ******************************************************************************/
 
-package com.testify.ecfeed.model.constraint;
+package com.testify.ecfeed.model;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -26,6 +26,8 @@ import org.junit.Test;
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
+import com.testify.ecfeed.model.PartitionedCategoryStatement;
+import com.testify.ecfeed.model.EStatementRelation;
 
 public class PartitionStatementTest {
 
@@ -85,7 +87,7 @@ public class PartitionStatementTest {
 
 	@Test
 	public void equalsTest(){
-		PartitionedCategoryStatement statement = new PartitionedCategoryStatement(fCategory, Relation.EQUAL, fP22);
+		PartitionedCategoryStatement statement = new PartitionedCategoryStatement(fCategory, EStatementRelation.EQUAL, fP22);
 		
 		assertTrue(statement.evaluate(Arrays.asList(new PartitionNode[]{fP221})));
 		assertTrue(statement.evaluate(Arrays.asList(new PartitionNode[]{fP222})));
@@ -100,7 +102,7 @@ public class PartitionStatementTest {
 
 	@Test 
 	public void notEqualsTest(){
-		PartitionedCategoryStatement statement = new PartitionedCategoryStatement(fCategory, Relation.NOT, fP22);
+		PartitionedCategoryStatement statement = new PartitionedCategoryStatement(fCategory, EStatementRelation.NOT, fP22);
 		
 		assertFalse(statement.evaluate(Arrays.asList(new PartitionNode[]{fP221})));
 		assertFalse(statement.evaluate(Arrays.asList(new PartitionNode[]{fP222})));
@@ -137,12 +139,12 @@ public class PartitionStatementTest {
 	@Test
 	public void testEvaluate() {
 
-		PartitionedCategoryStatement statement1 = new PartitionedCategoryStatement(fCategory, Relation.EQUAL, fPartition2);
+		PartitionedCategoryStatement statement1 = new PartitionedCategoryStatement(fCategory, EStatementRelation.EQUAL, fPartition2);
 		assertFalse(statement1.evaluate(fList1));
 		assertTrue(statement1.evaluate(fList2));
 		assertFalse(statement1.evaluate(fList3));
 
-		PartitionedCategoryStatement statement4 = new PartitionedCategoryStatement(fCategory, Relation.NOT, fPartition2);
+		PartitionedCategoryStatement statement4 = new PartitionedCategoryStatement(fCategory, EStatementRelation.NOT, fPartition2);
 		assertTrue(statement4.evaluate(fList1));
 		assertFalse(statement4.evaluate(fList2));
 		assertTrue(statement4.evaluate(fList3));
@@ -150,14 +152,14 @@ public class PartitionStatementTest {
 
 	@Test
 	public void testMentionsPartitionNode() {
-		PartitionedCategoryStatement statement = new PartitionedCategoryStatement(fCategory, Relation.EQUAL, fPartition2);
+		PartitionedCategoryStatement statement = new PartitionedCategoryStatement(fCategory, EStatementRelation.EQUAL, fPartition2);
 		assertTrue(statement.mentions(fPartition2));
 		assertFalse(statement.mentions(fPartition1));
 	}
 
 	@Test
 	public void testMentionsCategoryNode() {
-		PartitionedCategoryStatement statement = new PartitionedCategoryStatement(fCategory, Relation.EQUAL, fPartition2);
+		PartitionedCategoryStatement statement = new PartitionedCategoryStatement(fCategory, EStatementRelation.EQUAL, fPartition2);
 		CategoryNode category = new CategoryNode("name", "type", "0", false);
 		assertTrue(statement.mentions(fCategory));
 		assertFalse(statement.mentions(category));
@@ -165,14 +167,14 @@ public class PartitionStatementTest {
 
 	@Test
 	public void testGetCondition() {
-		PartitionedCategoryStatement statement = new PartitionedCategoryStatement(fCategory, Relation.EQUAL, fPartition2);
+		PartitionedCategoryStatement statement = new PartitionedCategoryStatement(fCategory, EStatementRelation.EQUAL, fPartition2);
 		assertEquals(fPartition2, statement.getConditionValue());
 	}
 
 	@Test
 	public void testGetRelation() {
-		PartitionedCategoryStatement statement = new PartitionedCategoryStatement(fCategory, Relation.EQUAL, fPartition2);
-		assertEquals(Relation.EQUAL, statement.getRelation());
+		PartitionedCategoryStatement statement = new PartitionedCategoryStatement(fCategory, EStatementRelation.EQUAL, fPartition2);
+		assertEquals(EStatementRelation.EQUAL, statement.getRelation());
 	}
 
 	@Test
@@ -183,8 +185,8 @@ public class PartitionStatementTest {
 		PartitionNode p1 = new PartitionNode("name", "value");
 		PartitionNode p2 = new PartitionNode("name", "value");
 		
-		PartitionedCategoryStatement s1 = new PartitionedCategoryStatement(c1, Relation.NOT, p1);
-		PartitionedCategoryStatement s2 = new PartitionedCategoryStatement(c2, Relation.NOT, p2);
+		PartitionedCategoryStatement s1 = new PartitionedCategoryStatement(c1, EStatementRelation.NOT, p1);
+		PartitionedCategoryStatement s2 = new PartitionedCategoryStatement(c2, EStatementRelation.NOT, p2);
 		
 		assertTrue(s1.compare(s2));
 		c1.setName("c1");
@@ -204,9 +206,9 @@ public class PartitionStatementTest {
 		s2.setCondition("label");
 		assertTrue(s1.compare(s2));
 		
-		s1.setRelation(Relation.EQUAL);
+		s1.setRelation(EStatementRelation.EQUAL);
 		assertFalse(s1.compare(s2));
-		s2.setRelation(Relation.EQUAL);
+		s2.setRelation(EStatementRelation.EQUAL);
 		assertTrue(s1.compare(s2));
 	}
 }

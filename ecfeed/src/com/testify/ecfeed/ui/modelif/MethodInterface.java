@@ -12,12 +12,12 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 
 import com.testify.ecfeed.model.CategoryNode;
+import com.testify.ecfeed.model.Constraint;
 import com.testify.ecfeed.model.ConstraintNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
+import com.testify.ecfeed.model.StaticStatement;
 import com.testify.ecfeed.model.TestCaseNode;
-import com.testify.ecfeed.model.constraint.Constraint;
-import com.testify.ecfeed.model.constraint.StaticStatement;
 import com.testify.ecfeed.modeladp.IModelOperation;
 import com.testify.ecfeed.modeladp.ModelOperationException;
 import com.testify.ecfeed.modeladp.java.JavaUtils;

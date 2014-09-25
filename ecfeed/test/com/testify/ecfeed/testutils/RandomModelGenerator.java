@@ -43,21 +43,21 @@ import nl.flotsam.xeger.Xeger;
 
 import org.junit.Test;
 
+import com.testify.ecfeed.model.BasicStatement;
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.ClassNode;
+import com.testify.ecfeed.model.Constraint;
 import com.testify.ecfeed.model.ConstraintNode;
+import com.testify.ecfeed.model.ExpectedValueStatement;
 import com.testify.ecfeed.model.MethodNode;
+import com.testify.ecfeed.model.EStatementOperator;
 import com.testify.ecfeed.model.PartitionNode;
+import com.testify.ecfeed.model.PartitionedCategoryStatement;
+import com.testify.ecfeed.model.EStatementRelation;
 import com.testify.ecfeed.model.RootNode;
+import com.testify.ecfeed.model.StatementArray;
+import com.testify.ecfeed.model.StaticStatement;
 import com.testify.ecfeed.model.TestCaseNode;
-import com.testify.ecfeed.model.constraint.BasicStatement;
-import com.testify.ecfeed.model.constraint.Constraint;
-import com.testify.ecfeed.model.constraint.ExpectedValueStatement;
-import com.testify.ecfeed.model.constraint.Operator;
-import com.testify.ecfeed.model.constraint.PartitionedCategoryStatement;
-import com.testify.ecfeed.model.constraint.Relation;
-import com.testify.ecfeed.model.constraint.StatementArray;
-import com.testify.ecfeed.model.constraint.StaticStatement;
 
 public class RandomModelGenerator {
 	
@@ -217,7 +217,7 @@ public class RandomModelGenerator {
 		}
 		
 		CategoryNode category = categories.get(rand.nextInt(categories.size()));
-		Relation relation = rand.nextBoolean() ? Relation.EQUAL : Relation.NOT;
+		EStatementRelation relation = rand.nextBoolean() ? EStatementRelation.EQUAL : EStatementRelation.NOT;
 		if(category.getPartitions().size() == 0){
 			PartitionNode partition = generatePartition(0, 0, 1, category.getType());
 			category.addPartition(partition);
@@ -265,7 +265,7 @@ public class RandomModelGenerator {
 	}
 
 	public StatementArray generateStatementArray(MethodNode method, int depth) {
-		StatementArray statement = new StatementArray(rand.nextBoolean()?Operator.AND:Operator.OR);
+		StatementArray statement = new StatementArray(rand.nextBoolean()?EStatementOperator.AND:EStatementOperator.OR);
 		for(int i = 0; i < MAX_STATEMENTS; i++){
 			statement.addStatement(generateStatement(method, depth - 1));
 		}

@@ -51,24 +51,24 @@ import static com.testify.ecfeed.serialization.ect.Constants.VALUE_ATTRIBUTE_NAM
 import nu.xom.Attribute;
 import nu.xom.Element;
 
+import com.testify.ecfeed.model.BasicStatement;
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.ConstraintNode;
+import com.testify.ecfeed.model.ExpectedValueStatement;
 import com.testify.ecfeed.model.GenericNode;
 import com.testify.ecfeed.model.IModelVisitor;
+import com.testify.ecfeed.model.IStatementVisitor;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
+import com.testify.ecfeed.model.PartitionedCategoryStatement;
 import com.testify.ecfeed.model.RootNode;
+import com.testify.ecfeed.model.StatementArray;
+import com.testify.ecfeed.model.StaticStatement;
 import com.testify.ecfeed.model.TestCaseNode;
-import com.testify.ecfeed.model.constraint.BasicStatement;
-import com.testify.ecfeed.model.constraint.ExpectedValueStatement;
-import com.testify.ecfeed.model.constraint.IStatementVisitor;
-import com.testify.ecfeed.model.constraint.PartitionedCategoryStatement;
-import com.testify.ecfeed.model.constraint.PartitionedCategoryStatement.ICondition;
-import com.testify.ecfeed.model.constraint.PartitionedCategoryStatement.LabelCondition;
-import com.testify.ecfeed.model.constraint.PartitionedCategoryStatement.PartitionCondition;
-import com.testify.ecfeed.model.constraint.StatementArray;
-import com.testify.ecfeed.model.constraint.StaticStatement;
+import com.testify.ecfeed.model.PartitionedCategoryStatement.ICondition;
+import com.testify.ecfeed.model.PartitionedCategoryStatement.LabelCondition;
+import com.testify.ecfeed.model.PartitionedCategoryStatement.PartitionCondition;
 
 public class XomBuilder implements IModelVisitor, IStatementVisitor {
 

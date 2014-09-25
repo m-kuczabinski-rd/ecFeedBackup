@@ -36,21 +36,21 @@ import nu.xom.Element;
 import nu.xom.Elements;
 import nu.xom.Node;
 
+import com.testify.ecfeed.model.BasicStatement;
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.ClassNode;
+import com.testify.ecfeed.model.Constraint;
 import com.testify.ecfeed.model.ConstraintNode;
+import com.testify.ecfeed.model.ExpectedValueStatement;
 import com.testify.ecfeed.model.MethodNode;
+import com.testify.ecfeed.model.EStatementOperator;
 import com.testify.ecfeed.model.PartitionNode;
+import com.testify.ecfeed.model.PartitionedCategoryStatement;
+import com.testify.ecfeed.model.EStatementRelation;
 import com.testify.ecfeed.model.RootNode;
+import com.testify.ecfeed.model.StatementArray;
+import com.testify.ecfeed.model.StaticStatement;
 import com.testify.ecfeed.model.TestCaseNode;
-import com.testify.ecfeed.model.constraint.BasicStatement;
-import com.testify.ecfeed.model.constraint.Constraint;
-import com.testify.ecfeed.model.constraint.ExpectedValueStatement;
-import com.testify.ecfeed.model.constraint.Operator;
-import com.testify.ecfeed.model.constraint.PartitionedCategoryStatement;
-import com.testify.ecfeed.model.constraint.Relation;
-import com.testify.ecfeed.model.constraint.StatementArray;
-import com.testify.ecfeed.model.constraint.StaticStatement;
 import com.testify.ecfeed.serialization.ParserException;
 
 public class XomAnalyser {
@@ -223,10 +223,10 @@ public class XomAnalyser {
 		String operatorValue = getAttributeValue(element, Constants.STATEMENT_OPERATOR_ATTRIBUTE_NAME);
 		switch(operatorValue){
 		case Constants.STATEMENT_OPERATOR_OR_ATTRIBUTE_VALUE:
-			statementArray = new StatementArray(Operator.OR);
+			statementArray = new StatementArray(EStatementOperator.OR);
 			break;
 		case Constants.STATEMENT_OPERATOR_AND_ATTRIBUTE_VALUE:
-			statementArray = new StatementArray(Operator.AND);
+			statementArray = new StatementArray(EStatementOperator.AND);
 			break;
 		default: 
 			throw new ParserException(Messages.WRONG_STATEMENT_ARRAY_OPERATOR(method.getName(), operatorValue));
@@ -269,7 +269,7 @@ public class XomAnalyser {
 		}
 	
 		String relationName = getAttributeValue(element, Constants.STATEMENT_RELATION_ATTRIBUTE_NAME);
-		Relation relation = getRelation(relationName);
+		EStatementRelation relation = getRelation(relationName);
 		
 		return new PartitionedCategoryStatement(category, relation, partition); 
 	}
@@ -285,7 +285,7 @@ public class XomAnalyser {
 		if(category == null || category.isExpected()){
 			throw new ParserException(Messages.WRONG_CATEGORY_NAME(categoryName, method.getName()));
 		}
-		Relation relation = getRelation(relationName);
+		EStatementRelation relation = getRelation(relationName);
 		
 		return new PartitionedCategoryStatement(category, relation, label);
 	}
@@ -358,15 +358,15 @@ public class XomAnalyser {
 		return value;
 	}
 
-	protected Relation getRelation(String relationName) throws ParserException{
-		Relation relation = null;
+	protected EStatementRelation getRelation(String relationName) throws ParserException{
+		EStatementRelation relation = null;
 		switch(relationName){
 		case Constants.RELATION_EQUAL:
-			relation = Relation.EQUAL;
+			relation = EStatementRelation.EQUAL;
 			break;
 		case Constants.RELATION_NOT:
 		case Constants.RELATION_NOT_ASCII:
-			relation = Relation.NOT;
+			relation = EStatementRelation.NOT;
 			break;
 		default:
 			throw new ParserException(Messages.WRONG_OR_MISSING_RELATION_FORMAT(relationName));

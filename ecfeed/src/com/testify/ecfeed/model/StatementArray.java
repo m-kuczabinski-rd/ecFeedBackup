@@ -9,20 +9,16 @@
  *     Patryk Chamuczynski (p.chamuczynski(at)radytek.com) - initial implementation
  ******************************************************************************/
 
-package com.testify.ecfeed.model.constraint;
+package com.testify.ecfeed.model;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import com.testify.ecfeed.model.CategoryNode;
-import com.testify.ecfeed.model.MethodNode;
-import com.testify.ecfeed.model.PartitionNode;
-
 public class StatementArray extends BasicStatement{
-	private Operator fOperator;
+	private EStatementOperator fOperator;
 	private List<BasicStatement> fStatements;
 	
-	public StatementArray(Operator operator){
+	public StatementArray(EStatementOperator operator){
 		fStatements = new ArrayList<BasicStatement>();
 		fOperator = operator;
 	}
@@ -31,11 +27,11 @@ public class StatementArray extends BasicStatement{
 		return fOperator.toString();
 	}
 
-	public Operator getOperator(){
+	public EStatementOperator getOperator(){
 		return fOperator;
 	}
 
-	public void setOperator(Operator operator) {
+	public void setOperator(EStatementOperator operator) {
 		fOperator = operator;
 	}
 

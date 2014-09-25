@@ -9,9 +9,9 @@
  *     Patryk Chamuczynski (p.chamuczynski(at)radytek.com) - initial implementation
  ******************************************************************************/
 
-package com.testify.ecfeed.model.constraint;
+package com.testify.ecfeed.model;
 
-public enum Relation{
+public enum EStatementRelation{
 	
 	EQUAL("="), 
 	NOT("\u2260");
@@ -22,7 +22,7 @@ public enum Relation{
 	public static final String RELATION_NOT = "\u2260";
 
 
-	private Relation(String value){
+	private EStatementRelation(String value){
 		fValue = value;
 	}
 	
@@ -30,7 +30,7 @@ public enum Relation{
 		return fValue; 
 	}
 	
-	public static Relation getRelation(String text){
+	public static EStatementRelation getRelation(String text){
 		switch(text){
 		case RELATION_EQUAL:
 			return EQUAL;

@@ -13,8 +13,6 @@ package com.testify.ecfeed.model;
 
 import java.util.List;
 
-import com.testify.ecfeed.model.constraint.Constraint;
-
 public class ConstraintNode extends GenericNode{
 
 	private Constraint fConstraint;

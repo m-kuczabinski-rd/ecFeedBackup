@@ -9,7 +9,7 @@
  *     Patryk Chamuczynski (p.chamuczynski(at)radytek.com) - initial implementation
  ******************************************************************************/
 
-package com.testify.ecfeed.model.constraint;
+package com.testify.ecfeed.model;
 
 import static org.junit.Assert.*;
 
@@ -19,6 +19,7 @@ import java.util.List;
 import org.junit.Test;
 
 import com.testify.ecfeed.model.PartitionNode;
+import com.testify.ecfeed.model.StaticStatement;
 
 public class StaticStatementTest {
 

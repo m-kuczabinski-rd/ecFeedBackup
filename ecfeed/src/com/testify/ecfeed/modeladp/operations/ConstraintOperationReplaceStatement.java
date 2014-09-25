@@ -1,8 +1,8 @@
 package com.testify.ecfeed.modeladp.operations;
 
+import com.testify.ecfeed.model.BasicStatement;
+import com.testify.ecfeed.model.Constraint;
 import com.testify.ecfeed.model.ConstraintNode;
-import com.testify.ecfeed.model.constraint.BasicStatement;
-import com.testify.ecfeed.model.constraint.Constraint;
 import com.testify.ecfeed.modeladp.IModelOperation;
 import com.testify.ecfeed.modeladp.ModelOperationException;
 

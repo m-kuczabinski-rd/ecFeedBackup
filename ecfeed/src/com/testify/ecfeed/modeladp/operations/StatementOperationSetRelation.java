@@ -2,18 +2,18 @@ package com.testify.ecfeed.modeladp.operations;
 
 import java.util.Arrays;
 
-import com.testify.ecfeed.model.constraint.IRelationalStatement;
-import com.testify.ecfeed.model.constraint.Relation;
+import com.testify.ecfeed.model.IRelationalStatement;
+import com.testify.ecfeed.model.EStatementRelation;
 import com.testify.ecfeed.modeladp.IModelOperation;
 import com.testify.ecfeed.modeladp.ModelOperationException;
 
 public class StatementOperationSetRelation extends AbstractModelOperation {
 
 	private IRelationalStatement fTarget;
-	private Relation fNewRelation;
-	private Relation fCurrentRelation;
+	private EStatementRelation fNewRelation;
+	private EStatementRelation fCurrentRelation;
 
-	public StatementOperationSetRelation(IRelationalStatement target, Relation relation) {
+	public StatementOperationSetRelation(IRelationalStatement target, EStatementRelation relation) {
 		super(OperationNames.SET_STATEMENT_RELATION);
 		fTarget = target;
 		fNewRelation = relation;

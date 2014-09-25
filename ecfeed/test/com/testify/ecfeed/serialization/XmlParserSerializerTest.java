@@ -31,21 +31,21 @@ import org.junit.Test;
 import com.testify.ecfeed.generators.RandomGenerator;
 import com.testify.ecfeed.generators.api.GeneratorException;
 import com.testify.ecfeed.generators.api.IConstraint;
+import com.testify.ecfeed.model.BasicStatement;
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.ClassNode;
+import com.testify.ecfeed.model.Constraint;
 import com.testify.ecfeed.model.ConstraintNode;
+import com.testify.ecfeed.model.ExpectedValueStatement;
 import com.testify.ecfeed.model.MethodNode;
+import com.testify.ecfeed.model.EStatementOperator;
 import com.testify.ecfeed.model.PartitionNode;
+import com.testify.ecfeed.model.PartitionedCategoryStatement;
+import com.testify.ecfeed.model.EStatementRelation;
 import com.testify.ecfeed.model.RootNode;
+import com.testify.ecfeed.model.StatementArray;
+import com.testify.ecfeed.model.StaticStatement;
 import com.testify.ecfeed.model.TestCaseNode;
-import com.testify.ecfeed.model.constraint.BasicStatement;
-import com.testify.ecfeed.model.constraint.Constraint;
-import com.testify.ecfeed.model.constraint.ExpectedValueStatement;
-import com.testify.ecfeed.model.constraint.Operator;
-import com.testify.ecfeed.model.constraint.PartitionedCategoryStatement;
-import com.testify.ecfeed.model.constraint.Relation;
-import com.testify.ecfeed.model.constraint.StatementArray;
-import com.testify.ecfeed.model.constraint.StaticStatement;
 import com.testify.ecfeed.serialization.ect.Constants;
 import com.testify.ecfeed.serialization.ect.EctParser;
 import com.testify.ecfeed.serialization.ect.EctSerializer;
@@ -161,9 +161,9 @@ public class XmlParserSerializerTest {
 			testData.add(partition2);
 			TestCaseNode testCase = new TestCaseNode("test", testData);
 			Constraint partitionConstraint = new Constraint(new StaticStatement(true), 
-					new PartitionedCategoryStatement(partitionedCategory, Relation.EQUAL, partition1));
+					new PartitionedCategoryStatement(partitionedCategory, EStatementRelation.EQUAL, partition1));
 			Constraint labelConstraint = new Constraint(new StaticStatement(true), 
-					new PartitionedCategoryStatement(partitionedCategory, Relation.EQUAL, "label"));
+					new PartitionedCategoryStatement(partitionedCategory, EStatementRelation.EQUAL, "label"));
 			Constraint expectedConstraint = new Constraint(new StaticStatement(true), 
 					new ExpectedValueStatement(expectedCategory, new PartitionNode("expected", "n")));
 			ConstraintNode partitionConstraintNode = new ConstraintNode("partition constraint", partitionConstraint);
@@ -398,23 +398,23 @@ public class XmlParserSerializerTest {
 			label = "SomeLabel";
 			category.getPartitions().get(0).addLabel(label);
 		}
-		Relation relation = pickRelation();
+		EStatementRelation relation = pickRelation();
 		return new PartitionedCategoryStatement(category, relation, label);
 	}
 
 	private BasicStatement createPartitionStatement(List<CategoryNode> categories) {
 		CategoryNode category = categories.get(rand.nextInt(categories.size()));
 		PartitionNode partition = new ArrayList<PartitionNode>(category.getLeafPartitions()).get(rand.nextInt(category.getPartitions().size()));
-		Relation relation = pickRelation();
+		EStatementRelation relation = pickRelation();
 		return new PartitionedCategoryStatement(category, relation, partition);
 	}
 
-	private Relation pickRelation() {
-		Relation relation;
+	private EStatementRelation pickRelation() {
+		EStatementRelation relation;
 		switch(rand.nextInt(2)){
-		case 0: relation = Relation.EQUAL;
-		case 1: relation = Relation.NOT;
-		default: relation = Relation.EQUAL;
+		case 0: relation = EStatementRelation.EQUAL;
+		case 1: relation = EStatementRelation.NOT;
+		default: relation = EStatementRelation.EQUAL;
 		}
 		return relation;
 	}
@@ -436,7 +436,7 @@ public class XmlParserSerializerTest {
 	}
 
 	private BasicStatement createStatementArray(int levels, List<CategoryNode> categories) {
-		StatementArray array = new StatementArray(rand.nextBoolean()?Operator.AND:Operator.OR);
+		StatementArray array = new StatementArray(rand.nextBoolean()?EStatementOperator.AND:EStatementOperator.OR);
 		for(int i = 0; i < rand.nextInt(3) + 1; ++i){
 			if(levels > 0){
 				array.addStatement(createStatementArray(levels - 1, categories));

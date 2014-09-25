@@ -9,16 +9,13 @@
  *     Patryk Chamuczynski (p.chamuczynski(at)radytek.com) - initial implementation
  ******************************************************************************/
 
-package com.testify.ecfeed.model.constraint;
+package com.testify.ecfeed.model;
 
-import com.testify.ecfeed.model.constraint.PartitionedCategoryStatement.LabelCondition;
-import com.testify.ecfeed.model.constraint.PartitionedCategoryStatement.PartitionCondition;
+import java.util.List;
 
-public interface IStatementVisitor {
-	public Object visit(StaticStatement statement) throws Exception;
-	public Object visit(StatementArray statement) throws Exception;
-	public Object visit(ExpectedValueStatement statement) throws Exception;
-	public Object visit(PartitionedCategoryStatement statement) throws Exception;
-	public Object visit(LabelCondition condition) throws Exception;
-	public Object visit(PartitionCondition condition) throws Exception;
+public interface IStatement{
+	public boolean evaluate(List<PartitionNode> values);
+	public boolean adapt(List<PartitionNode> values);
+	public boolean compare(IStatement statement);
+	public Object accept(IStatementVisitor visitor) throws Exception;
 }

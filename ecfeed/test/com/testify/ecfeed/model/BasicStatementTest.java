@@ -9,7 +9,7 @@
  *     Patryk Chamuczynski (p.chamuczynski(at)radytek.com) - initial implementation
  ******************************************************************************/
 
-package com.testify.ecfeed.model.constraint;
+package com.testify.ecfeed.model;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -19,7 +19,12 @@ import java.util.List;
 
 import org.junit.Test;
 
+import com.testify.ecfeed.model.BasicStatement;
+import com.testify.ecfeed.model.IStatement;
+import com.testify.ecfeed.model.IStatementVisitor;
 import com.testify.ecfeed.model.MethodNode;
+import com.testify.ecfeed.model.EStatementOperator;
+import com.testify.ecfeed.model.StatementArray;
 
 public class BasicStatementTest {
 
@@ -57,7 +62,7 @@ public class BasicStatementTest {
 
 	@Test
 	public void testGetChildren() {
-		StatementArray array = new StatementArray(Operator.AND);
+		StatementArray array = new StatementArray(EStatementOperator.AND);
 		BasicStatement statement2 = new StatementImplementation();
 		BasicStatement statement3 = new StatementImplementation();
 
@@ -72,7 +77,7 @@ public class BasicStatementTest {
 
 	@Test
 	public void testReplaceChild() {
-		StatementArray array = new StatementArray(Operator.AND);
+		StatementArray array = new StatementArray(EStatementOperator.AND);
 		BasicStatement statement2 = new StatementImplementation();
 		BasicStatement statement3 = new StatementImplementation();
 
@@ -89,7 +94,7 @@ public class BasicStatementTest {
 
 	@Test
 	public void testRemoveChild() {
-		StatementArray array = new StatementArray(Operator.AND);
+		StatementArray array = new StatementArray(EStatementOperator.AND);
 		BasicStatement statement2 = new StatementImplementation();
 		BasicStatement statement3 = new StatementImplementation();
 

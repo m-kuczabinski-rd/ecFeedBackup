@@ -9,7 +9,7 @@
  *     Patryk Chamuczynski (p.chamuczynski(at)radytek.com) - initial implementation
  ******************************************************************************/
 
-package com.testify.ecfeed.model.constraint;
+package com.testify.ecfeed.model;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -22,6 +22,8 @@ import org.junit.Test;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.CategoryNode;
+import com.testify.ecfeed.model.PartitionedCategoryStatement;
+import com.testify.ecfeed.model.EStatementRelation;
 
 public class LabelStatementTest {
 	
@@ -76,14 +78,14 @@ public class LabelStatementTest {
 		List<PartitionNode> p21q = new ArrayList<PartitionNode>();
 		p21q.add(p21); p21q.add(q);
 		
-		PartitionedCategoryStatement pEqual = new PartitionedCategoryStatement(c1, Relation.EQUAL, "p");
-		PartitionedCategoryStatement pNotEqual = new PartitionedCategoryStatement(c1, Relation.NOT, "p");
+		PartitionedCategoryStatement pEqual = new PartitionedCategoryStatement(c1, EStatementRelation.EQUAL, "p");
+		PartitionedCategoryStatement pNotEqual = new PartitionedCategoryStatement(c1, EStatementRelation.NOT, "p");
 		
-		PartitionedCategoryStatement p1Equal = new PartitionedCategoryStatement(c1, Relation.EQUAL, "p1");
-		PartitionedCategoryStatement p1NotEqual = new PartitionedCategoryStatement(c1, Relation.NOT, "p1");
+		PartitionedCategoryStatement p1Equal = new PartitionedCategoryStatement(c1, EStatementRelation.EQUAL, "p1");
+		PartitionedCategoryStatement p1NotEqual = new PartitionedCategoryStatement(c1, EStatementRelation.NOT, "p1");
 		
-		PartitionedCategoryStatement p11Equal = new PartitionedCategoryStatement(c1, Relation.EQUAL, "p11");
-		PartitionedCategoryStatement p11NotEqual = new PartitionedCategoryStatement(c1, Relation.NOT, "p11");
+		PartitionedCategoryStatement p11Equal = new PartitionedCategoryStatement(c1, EStatementRelation.EQUAL, "p11");
+		PartitionedCategoryStatement p11NotEqual = new PartitionedCategoryStatement(c1, EStatementRelation.NOT, "p11");
 		
 		//Check that all pEqual statements evaluates to true for all vectors
 		assertTrue(pEqual.evaluate(pq));

@@ -9,15 +9,33 @@
  *     Patryk Chamuczynski (p.chamuczynski(at)radytek.com) - initial implementation
  ******************************************************************************/
 
-package com.testify.ecfeed.model.constraint;
+package com.testify.ecfeed.model;
 
-import java.util.List;
+public enum EStatementOperator{
+	AND("AND"), 
+	OR("OR");
+	
+	public static final String OPERATOR_AND = "AND";
+	public static final String OPERATOR_OR = "OR";
 
-import com.testify.ecfeed.model.PartitionNode;
+	String fValue;
 
-public interface IStatement{
-	public boolean evaluate(List<PartitionNode> values);
-	public boolean adapt(List<PartitionNode> values);
-	public boolean compare(IStatement statement);
-	public Object accept(IStatementVisitor visitor) throws Exception;
+	private EStatementOperator(String value){
+		fValue = value;
+	}
+	
+	public String toString(){
+		return fValue; 
+	}
+	
+	public static EStatementOperator getOperator(String text){
+		switch(text){
+		case OPERATOR_AND:
+			return AND;
+		case OPERATOR_OR:
+			return OR;
+		}
+		return null;
+	}
+
 }

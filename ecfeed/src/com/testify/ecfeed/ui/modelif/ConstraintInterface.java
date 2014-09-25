@@ -1,7 +1,7 @@
 package com.testify.ecfeed.ui.modelif;
 
+import com.testify.ecfeed.model.BasicStatement;
 import com.testify.ecfeed.model.ConstraintNode;
-import com.testify.ecfeed.model.constraint.BasicStatement;
 import com.testify.ecfeed.modeladp.IModelOperation;
 import com.testify.ecfeed.modeladp.operations.ConstraintOperationRename;
 import com.testify.ecfeed.modeladp.operations.ConstraintOperationReplaceStatement;

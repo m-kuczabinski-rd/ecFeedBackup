@@ -9,7 +9,7 @@
  *     Patryk Chamuczynski (p.chamuczynski(at)radytek.com) - initial implementation
  ******************************************************************************/
 
-package com.testify.ecfeed.model.constraint;
+package com.testify.ecfeed.model;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -19,8 +19,13 @@ import java.util.List;
 
 import org.junit.Test;
 
+import com.testify.ecfeed.model.BasicStatement;
 import com.testify.ecfeed.model.CategoryNode;
+import com.testify.ecfeed.model.Constraint;
 import com.testify.ecfeed.model.PartitionNode;
+import com.testify.ecfeed.model.PartitionedCategoryStatement;
+import com.testify.ecfeed.model.EStatementRelation;
+import com.testify.ecfeed.model.StaticStatement;
 
 public class ConstraintTest {
 	@Test
@@ -65,7 +70,7 @@ public class ConstraintTest {
 		CategoryNode category = new CategoryNode("category", "type", "0", false);
 		category.addPartition(partition);
 
-		BasicStatement mentioningStatement = new PartitionedCategoryStatement(category, Relation.EQUAL, partition);
+		BasicStatement mentioningStatement = new PartitionedCategoryStatement(category, EStatementRelation.EQUAL, partition);
 		BasicStatement notMentioningStatement = new StaticStatement(false);
 		
 		assertTrue(new Constraint(mentioningStatement, notMentioningStatement).mentions(category));

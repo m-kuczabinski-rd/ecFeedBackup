@@ -1,13 +1,13 @@
 package com.testify.ecfeed.ui.modelif;
 
-import com.testify.ecfeed.model.constraint.BasicStatement;
-import com.testify.ecfeed.model.constraint.ExpectedValueStatement;
-import com.testify.ecfeed.model.constraint.IStatementVisitor;
-import com.testify.ecfeed.model.constraint.PartitionedCategoryStatement;
-import com.testify.ecfeed.model.constraint.PartitionedCategoryStatement.LabelCondition;
-import com.testify.ecfeed.model.constraint.PartitionedCategoryStatement.PartitionCondition;
-import com.testify.ecfeed.model.constraint.StatementArray;
-import com.testify.ecfeed.model.constraint.StaticStatement;
+import com.testify.ecfeed.model.BasicStatement;
+import com.testify.ecfeed.model.ExpectedValueStatement;
+import com.testify.ecfeed.model.IStatementVisitor;
+import com.testify.ecfeed.model.PartitionedCategoryStatement;
+import com.testify.ecfeed.model.StatementArray;
+import com.testify.ecfeed.model.StaticStatement;
+import com.testify.ecfeed.model.PartitionedCategoryStatement.LabelCondition;
+import com.testify.ecfeed.model.PartitionedCategoryStatement.PartitionCondition;
 
 public class StatementInterfaceFactory{
 
