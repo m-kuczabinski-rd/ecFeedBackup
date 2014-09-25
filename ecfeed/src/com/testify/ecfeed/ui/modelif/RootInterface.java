@@ -7,13 +7,13 @@ import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
 
-import com.testify.ecfeed.abstraction.IModelOperation;
-import com.testify.ecfeed.abstraction.ModelIfException;
-import com.testify.ecfeed.abstraction.operations.RootOperationAddClasses;
-import com.testify.ecfeed.abstraction.operations.RootOperationAddNewClass;
-import com.testify.ecfeed.abstraction.operations.RootOperationRename;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.RootNode;
+import com.testify.ecfeed.modeladp.IModelOperation;
+import com.testify.ecfeed.modeladp.ModelOperationException;
+import com.testify.ecfeed.modeladp.operations.RootOperationAddClasses;
+import com.testify.ecfeed.modeladp.operations.RootOperationAddNewClass;
+import com.testify.ecfeed.modeladp.operations.RootOperationRename;
 import com.testify.ecfeed.ui.common.Constants;
 import com.testify.ecfeed.ui.common.EclipseModelBuilder;
 import com.testify.ecfeed.ui.common.Messages;
@@ -66,7 +66,7 @@ public class RootInterface extends GenericNodeInterface {
 					if(execute(new RootOperationAddNewClass(fTarget, classModel, fTarget.getClasses().size()), Messages.DIALOG_ADD_NEW_CLASS_PROBLEM_TITLE)){
 						return classModel;
 					}
-				} catch (ModelIfException e) {
+				} catch (ModelOperationException e) {
 					MessageDialog.openError(Display.getCurrent().getActiveShell(), 
 							Messages.DIALOG_ADD_NEW_CLASS_PROBLEM_TITLE, 
 							e.getMessage());

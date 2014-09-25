@@ -111,7 +111,7 @@ public class XmlParserSerializerTest {
 			RootNode root = new RootNode("root");
 			ClassNode classNode = new ClassNode("classNode");
 			MethodNode method = new MethodNode("method");
-			CategoryNode category = new CategoryNode("category", com.testify.ecfeed.abstraction.java.Constants.TYPE_NAME_STRING, "0", false);
+			CategoryNode category = new CategoryNode("category", com.testify.ecfeed.modeladp.java.Constants.TYPE_NAME_STRING, "0", false);
 			PartitionNode partition = new PartitionNode("partition", "A                 B");
 			List<PartitionNode> testData = new ArrayList<PartitionNode>();
 			testData.add(partition);
@@ -147,9 +147,9 @@ public class XmlParserSerializerTest {
 			ClassNode classNode = new ClassNode("classNode");
 			MethodNode method = new MethodNode("method");
 			CategoryNode partitionedCategory = 
-					new CategoryNode("partitionedCategory", com.testify.ecfeed.abstraction.java.Constants.TYPE_NAME_STRING, "0", false);
+					new CategoryNode("partitionedCategory", com.testify.ecfeed.modeladp.java.Constants.TYPE_NAME_STRING, "0", false);
 			CategoryNode expectedCategory = 
-					new CategoryNode("expectedCategory", com.testify.ecfeed.abstraction.java.Constants.TYPE_NAME_CHAR, "0", true);
+					new CategoryNode("expectedCategory", com.testify.ecfeed.modeladp.java.Constants.TYPE_NAME_CHAR, "0", true);
 			expectedCategory.setDefaultValueString("d");
 			PartitionNode partition1 = new PartitionNode("partition", "p");
 			partition1.setParent(partitionedCategory);

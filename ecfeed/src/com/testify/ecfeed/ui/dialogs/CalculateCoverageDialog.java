@@ -44,10 +44,10 @@ import org.eclipse.swt.widgets.ScrollBar;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Tree;
 
-import com.testify.ecfeed.abstraction.IImplementationStatusResolver;
-import com.testify.ecfeed.abstraction.java.JavaImplementationStatusResolver;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.TestCaseNode;
+import com.testify.ecfeed.modeladp.IImplementationStatusResolver;
+import com.testify.ecfeed.modeladp.java.JavaImplementationStatusResolver;
 import com.testify.ecfeed.ui.common.EclipseLoaderProvider;
 import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.common.TestCasesViewerContentProvider;

@@ -6,11 +6,11 @@ import java.util.List;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
 
-import com.testify.ecfeed.abstraction.IModelOperation;
-import com.testify.ecfeed.abstraction.operations.GenericOperationAddPartition;
-import com.testify.ecfeed.abstraction.operations.GenericOperationRemovePartition;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.PartitionedNode;
+import com.testify.ecfeed.modeladp.IModelOperation;
+import com.testify.ecfeed.modeladp.operations.GenericOperationAddPartition;
+import com.testify.ecfeed.modeladp.operations.GenericOperationRemovePartition;
 import com.testify.ecfeed.ui.common.Constants;
 import com.testify.ecfeed.ui.common.EclipseModelBuilder;
 import com.testify.ecfeed.ui.common.Messages;

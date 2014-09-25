@@ -11,16 +11,6 @@ import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 
-import com.testify.ecfeed.abstraction.IModelOperation;
-import com.testify.ecfeed.abstraction.ModelIfException;
-import com.testify.ecfeed.abstraction.java.JavaUtils;
-import com.testify.ecfeed.abstraction.operations.MethodOperationAddConstraint;
-import com.testify.ecfeed.abstraction.operations.MethodOperationAddParameter;
-import com.testify.ecfeed.abstraction.operations.MethodOperationAddTestCase;
-import com.testify.ecfeed.abstraction.operations.MethodOperationAddTestSuite;
-import com.testify.ecfeed.abstraction.operations.MethodOperationConvertTo;
-import com.testify.ecfeed.abstraction.operations.MethodOperationRename;
-import com.testify.ecfeed.abstraction.operations.MethodOperationRenameTestCases;
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.ConstraintNode;
 import com.testify.ecfeed.model.MethodNode;
@@ -28,6 +18,16 @@ import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.model.constraint.Constraint;
 import com.testify.ecfeed.model.constraint.StaticStatement;
+import com.testify.ecfeed.modeladp.IModelOperation;
+import com.testify.ecfeed.modeladp.ModelOperationException;
+import com.testify.ecfeed.modeladp.java.JavaUtils;
+import com.testify.ecfeed.modeladp.operations.MethodOperationAddConstraint;
+import com.testify.ecfeed.modeladp.operations.MethodOperationAddParameter;
+import com.testify.ecfeed.modeladp.operations.MethodOperationAddTestCase;
+import com.testify.ecfeed.modeladp.operations.MethodOperationAddTestSuite;
+import com.testify.ecfeed.modeladp.operations.MethodOperationConvertTo;
+import com.testify.ecfeed.modeladp.operations.MethodOperationRename;
+import com.testify.ecfeed.modeladp.operations.MethodOperationRenameTestCases;
 import com.testify.ecfeed.runner.RunnerException;
 import com.testify.ecfeed.runner.java.JavaTestRunner;
 import com.testify.ecfeed.ui.common.Constants;
@@ -167,7 +167,7 @@ public class MethodInterface extends GenericNodeInterface {
 			execute(new MethodOperationRenameTestCases(fTarget.getTestCases(oldName), newName), 
 					Messages.DIALOG_RENAME_TEST_SUITE_PROBLEM);
 		}
-		catch(ModelIfException e){
+		catch(ModelOperationException e){
 			MessageDialog.openError(Display.getCurrent().getActiveShell(), 
 					Messages.DIALOG_RENAME_TEST_SUITE_PROBLEM, 
 					e.getMessage());

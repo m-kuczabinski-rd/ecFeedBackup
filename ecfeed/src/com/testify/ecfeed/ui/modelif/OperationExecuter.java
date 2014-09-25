@@ -13,8 +13,8 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.forms.AbstractFormPart;
 
-import com.testify.ecfeed.abstraction.IModelOperation;
-import com.testify.ecfeed.abstraction.ModelIfException;
+import com.testify.ecfeed.modeladp.IModelOperation;
+import com.testify.ecfeed.modeladp.ModelOperationException;
 
 public class OperationExecuter {
 	
@@ -61,7 +61,7 @@ public class OperationExecuter {
 					fUpdateContext.getUpdateListener().modelUpdated(getSourceForm());
 				}
 				return Status.OK_STATUS;
-			} catch (ModelIfException e) {
+			} catch (ModelOperationException e) {
 				if(operation.modelUpdated()){
 					fUpdateContext.getUpdateListener().modelUpdated(getSourceForm());
 				}

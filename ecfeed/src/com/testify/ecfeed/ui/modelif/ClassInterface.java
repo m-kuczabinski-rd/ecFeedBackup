@@ -9,16 +9,16 @@ import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
 
-import com.testify.ecfeed.abstraction.IModelOperation;
-import com.testify.ecfeed.abstraction.ImplementationStatus;
-import com.testify.ecfeed.abstraction.ModelIfException;
-import com.testify.ecfeed.abstraction.java.JavaUtils;
-import com.testify.ecfeed.abstraction.operations.ClassOperationAddMethod;
-import com.testify.ecfeed.abstraction.operations.ClassOperationAddMethods;
-import com.testify.ecfeed.abstraction.operations.ClassOperationRemoveMethod;
-import com.testify.ecfeed.abstraction.operations.ClassOperationRename;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.MethodNode;
+import com.testify.ecfeed.modeladp.IModelOperation;
+import com.testify.ecfeed.modeladp.ImplementationStatus;
+import com.testify.ecfeed.modeladp.ModelOperationException;
+import com.testify.ecfeed.modeladp.java.JavaUtils;
+import com.testify.ecfeed.modeladp.operations.ClassOperationAddMethod;
+import com.testify.ecfeed.modeladp.operations.ClassOperationAddMethods;
+import com.testify.ecfeed.modeladp.operations.ClassOperationRemoveMethod;
+import com.testify.ecfeed.modeladp.operations.ClassOperationRename;
 import com.testify.ecfeed.ui.common.Constants;
 import com.testify.ecfeed.ui.common.EclipseModelBuilder;
 import com.testify.ecfeed.ui.common.Messages;
@@ -155,7 +155,7 @@ public class ClassInterface extends GenericNodeInterface {
 					otherMethods.add(method);
 				}
 			}
-		}catch (ModelIfException e){}
+		}catch (ModelOperationException e){}
 		return otherMethods;
 	}
 

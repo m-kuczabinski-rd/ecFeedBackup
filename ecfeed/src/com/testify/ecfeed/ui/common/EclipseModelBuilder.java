@@ -12,25 +12,25 @@ import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.core.Signature;
 
-import com.testify.ecfeed.abstraction.ModelIfException;
-import com.testify.ecfeed.abstraction.java.JavaUtils;
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
+import com.testify.ecfeed.modeladp.ModelOperationException;
+import com.testify.ecfeed.modeladp.java.JavaUtils;
 
 public class EclipseModelBuilder extends JavaModelAnalyser{
 	
-	public ClassNode buildClassModel(String qualifiedName, boolean testOnly) throws ModelIfException{
+	public ClassNode buildClassModel(String qualifiedName, boolean testOnly) throws ModelOperationException{
 		IType type = getIType(qualifiedName);
 		if(type != null){
 			return buildClassModel(type, testOnly);
 		}
-		throw new ModelIfException(Messages.EXCEPTION_TYPE_DOES_NOT_EXIST_IN_THE_PROJECT);
+		throw new ModelOperationException(Messages.EXCEPTION_TYPE_DOES_NOT_EXIST_IN_THE_PROJECT);
 	}
 	
 	
-	public ClassNode buildClassModel(IType type, boolean testOnly) throws ModelIfException{
+	public ClassNode buildClassModel(IType type, boolean testOnly) throws ModelOperationException{
 		try{
 			String qualifiedName = type.getFullyQualifiedName();
 			ClassNode classNode = new ClassNode(qualifiedName);
@@ -49,7 +49,7 @@ public class EclipseModelBuilder extends JavaModelAnalyser{
 			return classNode;
 		}
 		catch(Throwable e){
-			throw new ModelIfException(Messages.EXCEPTION_CLASS_IMPORT(type.getElementName()));
+			throw new ModelOperationException(Messages.EXCEPTION_CLASS_IMPORT(type.getElementName()));
 		}
 	}
 	
@@ -87,22 +87,22 @@ public class EclipseModelBuilder extends JavaModelAnalyser{
 	public List<String> getSpecialValues(String typeName) {
 		List<String> result = new ArrayList<String>();
 		switch(typeName){
-		case com.testify.ecfeed.abstraction.java.Constants.TYPE_NAME_BOOLEAN:
+		case com.testify.ecfeed.modeladp.java.Constants.TYPE_NAME_BOOLEAN:
 			result.addAll(Arrays.asList(Constants.BOOLEAN_SPECIAL_VALUES));
 			break;
-		case com.testify.ecfeed.abstraction.java.Constants.TYPE_NAME_CHAR:
+		case com.testify.ecfeed.modeladp.java.Constants.TYPE_NAME_CHAR:
 			break;
-		case com.testify.ecfeed.abstraction.java.Constants.TYPE_NAME_BYTE:
-		case com.testify.ecfeed.abstraction.java.Constants.TYPE_NAME_INT:
-		case com.testify.ecfeed.abstraction.java.Constants.TYPE_NAME_LONG:
-		case com.testify.ecfeed.abstraction.java.Constants.TYPE_NAME_SHORT:
+		case com.testify.ecfeed.modeladp.java.Constants.TYPE_NAME_BYTE:
+		case com.testify.ecfeed.modeladp.java.Constants.TYPE_NAME_INT:
+		case com.testify.ecfeed.modeladp.java.Constants.TYPE_NAME_LONG:
+		case com.testify.ecfeed.modeladp.java.Constants.TYPE_NAME_SHORT:
 			result.addAll(Arrays.asList(Constants.INTEGER_SPECIAL_VALUES));
 			break;
-		case com.testify.ecfeed.abstraction.java.Constants.TYPE_NAME_DOUBLE:
-		case com.testify.ecfeed.abstraction.java.Constants.TYPE_NAME_FLOAT:
+		case com.testify.ecfeed.modeladp.java.Constants.TYPE_NAME_DOUBLE:
+		case com.testify.ecfeed.modeladp.java.Constants.TYPE_NAME_FLOAT:
 			result.addAll(Arrays.asList(Constants.FLOAT_SPECIAL_VALUES));
 			break;
-		case com.testify.ecfeed.abstraction.java.Constants.TYPE_NAME_STRING:
+		case com.testify.ecfeed.modeladp.java.Constants.TYPE_NAME_STRING:
 			result.addAll(Arrays.asList(Constants.STRING_SPECIAL_VALUES));
 			break;
 		default:
@@ -115,23 +115,23 @@ public class EclipseModelBuilder extends JavaModelAnalyser{
 
 	public String getDefaultExpectedValue(String type) {
 		switch(type){
-		case com.testify.ecfeed.abstraction.java.Constants.TYPE_NAME_BYTE:
+		case com.testify.ecfeed.modeladp.java.Constants.TYPE_NAME_BYTE:
 			return Constants.DEFAULT_EXPECTED_BYTE_VALUE;
-		case com.testify.ecfeed.abstraction.java.Constants.TYPE_NAME_BOOLEAN:
+		case com.testify.ecfeed.modeladp.java.Constants.TYPE_NAME_BOOLEAN:
 			return Constants.DEFAULT_EXPECTED_BOOLEAN_VALUE;
-		case com.testify.ecfeed.abstraction.java.Constants.TYPE_NAME_CHAR:
+		case com.testify.ecfeed.modeladp.java.Constants.TYPE_NAME_CHAR:
 			return Constants.DEFAULT_EXPECTED_CHAR_VALUE;
-		case com.testify.ecfeed.abstraction.java.Constants.TYPE_NAME_DOUBLE:
+		case com.testify.ecfeed.modeladp.java.Constants.TYPE_NAME_DOUBLE:
 			return Constants.DEFAULT_EXPECTED_DOUBLE_VALUE;
-		case com.testify.ecfeed.abstraction.java.Constants.TYPE_NAME_FLOAT:
+		case com.testify.ecfeed.modeladp.java.Constants.TYPE_NAME_FLOAT:
 			return Constants.DEFAULT_EXPECTED_FLOAT_VALUE;
-		case com.testify.ecfeed.abstraction.java.Constants.TYPE_NAME_INT:
+		case com.testify.ecfeed.modeladp.java.Constants.TYPE_NAME_INT:
 			return Constants.DEFAULT_EXPECTED_INT_VALUE;
-		case com.testify.ecfeed.abstraction.java.Constants.TYPE_NAME_LONG:
+		case com.testify.ecfeed.modeladp.java.Constants.TYPE_NAME_LONG:
 			return Constants.DEFAULT_EXPECTED_LONG_VALUE;
-		case com.testify.ecfeed.abstraction.java.Constants.TYPE_NAME_SHORT:
+		case com.testify.ecfeed.modeladp.java.Constants.TYPE_NAME_SHORT:
 			return Constants.DEFAULT_EXPECTED_SHORT_VALUE;
-		case com.testify.ecfeed.abstraction.java.Constants.TYPE_NAME_STRING:
+		case com.testify.ecfeed.modeladp.java.Constants.TYPE_NAME_STRING:
 			return Constants.DEFAULT_EXPECTED_STRING_VALUE;
 		default:
 			return defaultEnumExpectedValue(type);
@@ -241,23 +241,23 @@ public class EclipseModelBuilder extends JavaModelAnalyser{
 		String typeSignaure = parameter.getTypeSignature(); 
 		switch(typeSignaure){
 		case Signature.SIG_BOOLEAN:
-			return com.testify.ecfeed.abstraction.java.Constants.TYPE_NAME_BOOLEAN;
+			return com.testify.ecfeed.modeladp.java.Constants.TYPE_NAME_BOOLEAN;
 		case Signature.SIG_BYTE:
-			return com.testify.ecfeed.abstraction.java.Constants.TYPE_NAME_BYTE;
+			return com.testify.ecfeed.modeladp.java.Constants.TYPE_NAME_BYTE;
 		case Signature.SIG_CHAR:
-			return com.testify.ecfeed.abstraction.java.Constants.TYPE_NAME_CHAR;
+			return com.testify.ecfeed.modeladp.java.Constants.TYPE_NAME_CHAR;
 		case Signature.SIG_DOUBLE:
-			return com.testify.ecfeed.abstraction.java.Constants.TYPE_NAME_DOUBLE;
+			return com.testify.ecfeed.modeladp.java.Constants.TYPE_NAME_DOUBLE;
 		case Signature.SIG_FLOAT:
-			return com.testify.ecfeed.abstraction.java.Constants.TYPE_NAME_FLOAT;
+			return com.testify.ecfeed.modeladp.java.Constants.TYPE_NAME_FLOAT;
 		case Signature.SIG_INT:
-			return com.testify.ecfeed.abstraction.java.Constants.TYPE_NAME_INT;
+			return com.testify.ecfeed.modeladp.java.Constants.TYPE_NAME_INT;
 		case Signature.SIG_LONG:
-			return com.testify.ecfeed.abstraction.java.Constants.TYPE_NAME_LONG;
+			return com.testify.ecfeed.modeladp.java.Constants.TYPE_NAME_LONG;
 		case Signature.SIG_SHORT:
-			return com.testify.ecfeed.abstraction.java.Constants.TYPE_NAME_SHORT;
+			return com.testify.ecfeed.modeladp.java.Constants.TYPE_NAME_SHORT;
 		case "QString;":
-			return com.testify.ecfeed.abstraction.java.Constants.TYPE_NAME_STRING;
+			return com.testify.ecfeed.modeladp.java.Constants.TYPE_NAME_STRING;
 		default:
 			return getVariableType(method, parameter).getFullyQualifiedName().replaceAll("\\$",	"\\.");
 		}

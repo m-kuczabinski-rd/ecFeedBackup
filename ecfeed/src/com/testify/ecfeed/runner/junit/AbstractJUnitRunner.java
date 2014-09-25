@@ -15,14 +15,14 @@ import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.InitializationError;
 import org.junit.runners.model.TestClass;
 
-import com.testify.ecfeed.abstraction.ImplementationStatus;
-import com.testify.ecfeed.abstraction.java.ILoaderProvider;
-import com.testify.ecfeed.abstraction.java.JavaImplementationStatusResolver;
-import com.testify.ecfeed.abstraction.java.ModelClassLoader;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.GenericNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.RootNode;
+import com.testify.ecfeed.modeladp.ImplementationStatus;
+import com.testify.ecfeed.modeladp.java.ILoaderProvider;
+import com.testify.ecfeed.modeladp.java.JavaImplementationStatusResolver;
+import com.testify.ecfeed.modeladp.java.ModelClassLoader;
 import com.testify.ecfeed.runner.Messages;
 import com.testify.ecfeed.runner.RunnerException;
 import com.testify.ecfeed.runner.annotations.EcModel;

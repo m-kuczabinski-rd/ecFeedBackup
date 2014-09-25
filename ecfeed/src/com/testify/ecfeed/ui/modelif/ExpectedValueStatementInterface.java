@@ -1,10 +1,10 @@
 package com.testify.ecfeed.ui.modelif;
 
-import com.testify.ecfeed.abstraction.IModelOperation;
-import com.testify.ecfeed.abstraction.operations.PartitionOperationSetValue;
-import com.testify.ecfeed.abstraction.operations.StatementOperationSetRelation;
 import com.testify.ecfeed.model.constraint.ExpectedValueStatement;
 import com.testify.ecfeed.model.constraint.Relation;
+import com.testify.ecfeed.modeladp.IModelOperation;
+import com.testify.ecfeed.modeladp.operations.PartitionOperationSetValue;
+import com.testify.ecfeed.modeladp.operations.StatementOperationSetRelation;
 import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.common.TypeAdapterProvider;
 

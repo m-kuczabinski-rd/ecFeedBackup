@@ -25,10 +25,10 @@ import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Display;
 
-import com.testify.ecfeed.abstraction.ITypeAdapter;
-import com.testify.ecfeed.abstraction.java.JavaUtils;
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.PartitionNode;
+import com.testify.ecfeed.modeladp.ITypeAdapter;
+import com.testify.ecfeed.modeladp.java.JavaUtils;
 
 public class TestDataValueEditingSupport extends EditingSupport {
 	private final TableViewer fViewer;

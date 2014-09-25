@@ -39,8 +39,8 @@ import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.part.FileEditorInput;
 
-import com.testify.ecfeed.abstraction.ModelOperationManager;
 import com.testify.ecfeed.model.RootNode;
+import com.testify.ecfeed.modeladp.ModelOperationManager;
 import com.testify.ecfeed.serialization.IModelParser;
 import com.testify.ecfeed.serialization.IModelSerializer;
 import com.testify.ecfeed.serialization.ParserException;

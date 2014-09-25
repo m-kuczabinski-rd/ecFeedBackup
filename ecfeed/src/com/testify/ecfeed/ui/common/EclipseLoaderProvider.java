@@ -10,8 +10,8 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
 
-import com.testify.ecfeed.abstraction.java.ILoaderProvider;
-import com.testify.ecfeed.abstraction.java.ModelClassLoader;
+import com.testify.ecfeed.modeladp.java.ILoaderProvider;
+import com.testify.ecfeed.modeladp.java.ModelClassLoader;
 
 public class EclipseLoaderProvider implements ILoaderProvider {
 

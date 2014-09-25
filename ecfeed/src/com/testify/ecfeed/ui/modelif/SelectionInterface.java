@@ -2,13 +2,13 @@ package com.testify.ecfeed.ui.modelif;
 
 import java.util.List;
 
-import com.testify.ecfeed.abstraction.IModelOperation;
-import com.testify.ecfeed.abstraction.ModelIfException;
-import com.testify.ecfeed.abstraction.operations.FactoryShiftOperation;
-import com.testify.ecfeed.abstraction.operations.GenericMoveOperation;
-import com.testify.ecfeed.abstraction.operations.GenericRemoveNodesOperation;
-import com.testify.ecfeed.abstraction.operations.GenericShiftOperation;
 import com.testify.ecfeed.model.GenericNode;
+import com.testify.ecfeed.modeladp.IModelOperation;
+import com.testify.ecfeed.modeladp.ModelOperationException;
+import com.testify.ecfeed.modeladp.operations.FactoryShiftOperation;
+import com.testify.ecfeed.modeladp.operations.GenericMoveOperation;
+import com.testify.ecfeed.modeladp.operations.GenericRemoveNodesOperation;
+import com.testify.ecfeed.modeladp.operations.GenericShiftOperation;
 import com.testify.ecfeed.ui.common.Messages;
 
 public class SelectionInterface extends OperationExecuter {
@@ -53,7 +53,7 @@ public class SelectionInterface extends OperationExecuter {
 				operation = new GenericMoveOperation(fSelected, newParent, newIndex);
 			}
 			return execute(operation, Messages.DIALOG_MOVE_NODE_PROBLEM_TITLE);
-		}catch(ModelIfException e){
+		}catch(ModelOperationException e){
 			return false;
 		}
 	}

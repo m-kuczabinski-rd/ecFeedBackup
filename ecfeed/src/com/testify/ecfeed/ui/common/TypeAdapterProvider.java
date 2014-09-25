@@ -1,20 +1,20 @@
 package com.testify.ecfeed.ui.common;
 
-import static com.testify.ecfeed.abstraction.java.Constants.TYPE_NAME_BOOLEAN;
-import static com.testify.ecfeed.abstraction.java.Constants.TYPE_NAME_BYTE;
-import static com.testify.ecfeed.abstraction.java.Constants.TYPE_NAME_CHAR;
-import static com.testify.ecfeed.abstraction.java.Constants.TYPE_NAME_DOUBLE;
-import static com.testify.ecfeed.abstraction.java.Constants.TYPE_NAME_FLOAT;
-import static com.testify.ecfeed.abstraction.java.Constants.TYPE_NAME_INT;
-import static com.testify.ecfeed.abstraction.java.Constants.TYPE_NAME_LONG;
-import static com.testify.ecfeed.abstraction.java.Constants.TYPE_NAME_SHORT;
-import static com.testify.ecfeed.abstraction.java.Constants.TYPE_NAME_STRING;
+import static com.testify.ecfeed.modeladp.java.Constants.TYPE_NAME_BOOLEAN;
+import static com.testify.ecfeed.modeladp.java.Constants.TYPE_NAME_BYTE;
+import static com.testify.ecfeed.modeladp.java.Constants.TYPE_NAME_CHAR;
+import static com.testify.ecfeed.modeladp.java.Constants.TYPE_NAME_DOUBLE;
+import static com.testify.ecfeed.modeladp.java.Constants.TYPE_NAME_FLOAT;
+import static com.testify.ecfeed.modeladp.java.Constants.TYPE_NAME_INT;
+import static com.testify.ecfeed.modeladp.java.Constants.TYPE_NAME_LONG;
+import static com.testify.ecfeed.modeladp.java.Constants.TYPE_NAME_SHORT;
+import static com.testify.ecfeed.modeladp.java.Constants.TYPE_NAME_STRING;
 
 import java.util.Arrays;
 
-import com.testify.ecfeed.abstraction.ITypeAdapter;
-import com.testify.ecfeed.abstraction.ITypeAdapterProvider;
-import com.testify.ecfeed.abstraction.java.JavaUtils;
+import com.testify.ecfeed.modeladp.ITypeAdapter;
+import com.testify.ecfeed.modeladp.ITypeAdapterProvider;
+import com.testify.ecfeed.modeladp.java.JavaUtils;
 
 public class TypeAdapterProvider implements ITypeAdapterProvider{
 
