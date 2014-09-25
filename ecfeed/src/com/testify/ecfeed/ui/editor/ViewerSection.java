@@ -337,14 +337,6 @@ public abstract class ViewerSection extends BasicSection implements ISelectionPr
 		fViewer.getControl().setMenu(fMenu);
 		fMenu.addMenuListener(getMenuListener());
 		
-		if(provider.getAction(NamedAction.MOVE_UP_ACTION_ID) != null){
-			addKeyListener(SWT.UP, provider.getAction(NamedAction.MOVE_UP_ACTION_ID));
-		}
-		
-		if(provider.getAction(NamedAction.MOVE_DOWN_ACTION_ID) != null){
-			addKeyListener(SWT.DOWN, provider.getAction(NamedAction.MOVE_UP_ACTION_ID));
-		}
-		
 		if(provider.getAction(ActionFactory.DELETE.getId()) != null){
 			addKeyListener(SWT.DEL, provider.getAction(ActionFactory.DELETE.getId()));
 		}
