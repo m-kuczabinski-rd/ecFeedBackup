@@ -154,7 +154,6 @@ public class ModelMasterDetailsBlock extends MasterDetailsBlock implements ISele
 		fToolkit = managedForm.getToolkit();
 
 		fMasterSection = new ModelMasterSection(this);
-//		MasterSectionParent masterParent = new MasterSectionParent(sashForm, toolkit, operationManager, getUndoContext());
 		fMasterSection.initialize(managedForm);
 		fMasterSection.addSelectionChangedListener(this);
 		fMasterSection.setInput(getModel());
