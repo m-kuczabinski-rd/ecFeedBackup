@@ -49,8 +49,6 @@ import com.testify.ecfeed.serialization.ect.EctSerializer;
 
 public class ModelEditor extends FormEditor{
 	
-	public static String ID = "com.testify.ecfeed.ui.editors.EcMultiPageEditor";
-
 	private RootNode fModel;
 	private ModelPage fModelPage;
 	private boolean fResourceChange = false;
