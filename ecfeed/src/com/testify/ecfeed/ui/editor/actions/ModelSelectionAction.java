@@ -5,7 +5,7 @@ import java.util.List;
 import org.eclipse.jface.viewers.ISelectionProvider;
 
 import com.testify.ecfeed.model.GenericNode;
-import com.testify.ecfeed.ui.common.NodeSelectionUtils;
+import com.testify.ecfeed.ui.modelif.NodeSelectionUtils;
 
 public abstract class ModelSelectionAction extends NamedAction {
 	

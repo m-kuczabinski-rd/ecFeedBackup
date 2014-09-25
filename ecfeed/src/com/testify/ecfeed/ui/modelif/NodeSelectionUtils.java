@@ -1,4 +1,4 @@
-package com.testify.ecfeed.ui.common;
+package com.testify.ecfeed.ui.modelif;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,8 +7,6 @@ import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
 
 import com.testify.ecfeed.model.GenericNode;
-import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
-import com.testify.ecfeed.ui.modelif.SelectionInterface;
 
 public class NodeSelectionUtils {
 	
