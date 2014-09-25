@@ -1,4 +1,4 @@
-package com.testify.ecfeed.generators.algorithms.utils;
+package com.testify.ecfeed.generators.testutils;
 
 import java.util.HashSet;
 import java.util.List;

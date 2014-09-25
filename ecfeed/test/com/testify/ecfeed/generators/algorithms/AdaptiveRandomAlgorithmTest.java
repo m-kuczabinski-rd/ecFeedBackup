@@ -23,7 +23,7 @@ import org.junit.Test;
 
 import com.testify.ecfeed.generators.api.GeneratorException;
 import com.testify.ecfeed.generators.api.IConstraint;
-import com.testify.ecfeed.generators.utils.GeneratorTestUtils;
+import com.testify.ecfeed.generators.testutils.GeneratorTestUtils;
 
 public class AdaptiveRandomAlgorithmTest {
 	private final Collection<IConstraint<String>> EMPTY_CONSTRAINTS = new ArrayList<IConstraint<String>>();
