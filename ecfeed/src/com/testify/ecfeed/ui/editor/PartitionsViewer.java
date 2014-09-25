@@ -215,6 +215,7 @@ public class PartitionsViewer extends TableViewerSection {
 		addDoubleClickListener(new SelectNodeDoubleClickListener(sectionContext.getMasterSection()));
 		setActionProvider(new ModelViewerActionProvider(getTableViewer(), this));
 		getViewer().addDragSupport(DND.DROP_COPY|DND.DROP_MOVE, new Transfer[]{ModelNodesTransfer.getInstance()}, new ModelNodeDragListener(getViewer()));
+		getViewer().addDropSupport(DND.DROP_COPY|DND.DROP_MOVE, new Transfer[]{ModelNodesTransfer.getInstance()}, new ModelNodeDropListener(getViewer(), this));
 	}
 
 	public void setInput(PartitionedNode parent){
