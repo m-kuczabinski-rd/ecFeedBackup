@@ -17,17 +17,17 @@ public class NamedAction extends Action {
 	public static final String EXPAND_ACTION_ID = "expand";
 	public static final String COLLAPSE_ACTION_ID = "collapse";
 
-	public static final String COPY_ACTION_NAME = "Copy\tCtrl+c";
-	public static final String CUT_ACTION_NAME = "Cut\tCtrl+x";
-	public static final String PASTE_ACTION_NAME = "Paste\tCtrl+x";
+	public static final String COPY_ACTION_NAME = "Copy\tCtrl+C";
+	public static final String CUT_ACTION_NAME = "Cut\tCtrl+X";
+	public static final String PASTE_ACTION_NAME = "Paste\tCtrl+V";
 	public static final String DELETE_ACTION_NAME = "Delete\tDEL";
-	public static final String SELECT_ALL_ACTION_NAME = "Select All\tCtrl+a";
-	public static final String UNDO_ACTION_NAME = "Undo\tCtrl+z";
-	public static final String REDO_ACTION_NAME = "Redo\tCtrl+Shift+z";
+	public static final String SELECT_ALL_ACTION_NAME = "Select All\tCtrl+A";
+	public static final String UNDO_ACTION_NAME = "Undo\tCtrl+Z";
+	public static final String REDO_ACTION_NAME = "Redo\tCtrl+Shift+Z";
 	public static final String MOVE_UP_ACTION_NAME = "Move Up\tAlt+Up";
 	public static final String MOVE_DOWN_ACTION_NAME = "Move Up\tAlt+Down";
-	public static final String EXPAND_ACTION_NAME = "Expand\tCtrl+Shift+e";
-	public static final String COLLAPSE_ACTION_NAME = "Collapse\tCtrl+Shift+w";
+	public static final String EXPAND_ACTION_NAME = "Expand\tCtrl+Shift+E";
+	public static final String COLLAPSE_ACTION_NAME = "Collapse\tCtrl+Shift+W";
 	
 	protected enum GlobalActions{
 		COPY(COPY_ACTION_ID, COPY_ACTION_NAME),
