@@ -1,4 +1,4 @@
-package com.testify.ecfeed.runner;
+package com.testify.ecfeed.runner.java;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -11,6 +11,8 @@ import com.testify.ecfeed.abstraction.java.PartitionValueParser;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
+import com.testify.ecfeed.runner.Messages;
+import com.testify.ecfeed.runner.RunnerException;
 
 public class JavaTestRunner {
 
