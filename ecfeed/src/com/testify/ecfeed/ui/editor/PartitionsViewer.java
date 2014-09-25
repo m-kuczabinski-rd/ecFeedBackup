@@ -23,6 +23,8 @@ import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.dnd.DND;
+import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
@@ -37,6 +39,7 @@ import com.testify.ecfeed.ui.editor.actions.DeleteAction;
 import com.testify.ecfeed.ui.editor.actions.ModelViewerActionProvider;
 import com.testify.ecfeed.ui.modelif.CategoryInterface;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
+import com.testify.ecfeed.ui.modelif.ModelNodesTransfer;
 import com.testify.ecfeed.ui.modelif.PartitionInterface;
 import com.testify.ecfeed.ui.modelif.PartitionedNodeInterface;
 
@@ -196,12 +199,6 @@ public class PartitionsViewer extends TableViewerSection {
 		}
 	}
 	
-	@Override
-	protected void createTableColumns() {
-		fNameColumn = addColumn("Name", 150, new PartitionNameLabelProvider());
-		fValueColumn = addColumn("Value", 150, new PartitionValueLabelProvider());
-	}
-	
 	public PartitionsViewer(ISectionContext sectionContext, IModelUpdateContext updateContext) {
 		super(sectionContext, updateContext, STYLE);
 		
@@ -217,6 +214,7 @@ public class PartitionsViewer extends TableViewerSection {
 		
 		addDoubleClickListener(new SelectNodeDoubleClickListener(sectionContext.getMasterSection()));
 		setActionProvider(new ModelViewerActionProvider(getTableViewer(), this));
+		getViewer().addDragSupport(DND.DROP_COPY|DND.DROP_MOVE, new Transfer[]{ModelNodesTransfer.getInstance()}, new ModelNodeDragListener(getViewer()));
 	}
 
 	public void setInput(PartitionedNode parent){
@@ -226,5 +224,11 @@ public class PartitionsViewer extends TableViewerSection {
 	
 	public void setVisible(boolean visible){
 		this.getSection().setVisible(visible);
+	}
+
+	@Override
+	protected void createTableColumns() {
+		fNameColumn = addColumn("Name", 150, new PartitionNameLabelProvider());
+		fValueColumn = addColumn("Value", 150, new PartitionValueLabelProvider());
 	}
 }
