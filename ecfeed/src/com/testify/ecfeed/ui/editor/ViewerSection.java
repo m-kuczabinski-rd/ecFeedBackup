@@ -152,11 +152,6 @@ public abstract class ViewerSection extends BasicSection implements ISelectionPr
 		
 	}
 	
-//	public ViewerSection(Composite parent, FormToolkit toolkit, int style, IModelUpdateListener updateListener, ModelOperationManager operationManager) {
-//		super(parent, toolkit, style, updateListener, operationManager);
-//		fSelectedElements = new ArrayList<>();
-//	}	
-
 	public ViewerSection(ISectionContext sectionContext, IModelUpdateContext updateContext, int style) {
 		super(sectionContext, updateContext, style);
 		fSelectedElements = new ArrayList<>();
