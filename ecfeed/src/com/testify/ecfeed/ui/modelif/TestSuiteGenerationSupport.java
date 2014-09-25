@@ -18,20 +18,19 @@ import com.testify.ecfeed.generators.api.IConstraint;
 import com.testify.ecfeed.generators.api.IGenerator;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
-import com.testify.ecfeed.model.constraint.AbstractConstraint;
 import com.testify.ecfeed.ui.dialogs.GenerateTestSuiteDialog;
 import com.testify.ecfeed.ui.dialogs.GeneratorProgressMonitorDialog;
 
 public class TestSuiteGenerationSupport {
 
 	private boolean fCanceled;
-	private Collection<AbstractConstraint> fSelectedConstraints;
+	private Collection<IConstraint<PartitionNode>> fSelectedConstraints;
 	private MethodNode fTarget;
 	private String fTestSuiteName;
 	private List<List<PartitionNode>> fGeneratedData;
 	private boolean fHasData;
 	
-	private class ExpectedValueReplacer extends AbstractConstraint{
+	private class ExpectedValueReplacer implements IConstraint<PartitionNode>{
 		
 		@Override
 		public boolean evaluate(List<PartitionNode> values) {
@@ -102,7 +101,7 @@ public class TestSuiteGenerationSupport {
 		if(dialog.open() == IDialogConstants.OK_ID){
 			IGenerator<PartitionNode> selectedGenerator = dialog.getSelectedGenerator();
 			List<List<PartitionNode>> algorithmInput = dialog.getAlgorithmInput();
-			fSelectedConstraints = new ArrayList<AbstractConstraint>();
+			fSelectedConstraints = new ArrayList<IConstraint<PartitionNode>>();
 			fSelectedConstraints.addAll(dialog.getConstraints());
 			fSelectedConstraints.add(new ExpectedValueReplacer());
 			List<IConstraint<PartitionNode>> constraints = new ArrayList<IConstraint<PartitionNode>>();
