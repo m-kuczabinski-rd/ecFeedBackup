@@ -39,7 +39,7 @@ public class GenericMoveOperation extends BulkOperation {
 				}
 			}
 			else if(internalNodes(moved, newParent)){
-				GenericShiftOperation operation = new FactoryShiftOperation().getShiftOperation(moved, newIndex);
+				GenericShiftOperation operation = FactoryShiftOperation.getShiftOperation(moved, newIndex);
 				addOperation(operation);
 			}
 		} catch (Exception e) {

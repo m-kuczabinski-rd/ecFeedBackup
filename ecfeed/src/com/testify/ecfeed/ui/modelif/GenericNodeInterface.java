@@ -95,8 +95,7 @@ public class GenericNodeInterface extends OperationExecuter{
 	
 	public boolean moveUpDown(boolean up) {
 		try{
-			GenericShiftOperation operation = new FactoryShiftOperation().getShiftOperation(Arrays.asList(new GenericNode[]{fTarget}), up);
-//			GenericShiftOperation operation = (GenericShiftOperation)fTarget.getParent().accept(new FactoryShiftOperation(fTarget, up));
+			GenericShiftOperation operation = FactoryShiftOperation.getShiftOperation(Arrays.asList(new GenericNode[]{fTarget}), up);
 			if(operation.getShift() > 0){
 				return executeMoveOperation(operation);
 			}
