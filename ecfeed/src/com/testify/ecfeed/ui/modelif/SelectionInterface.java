@@ -66,7 +66,8 @@ public class SelectionInterface extends OperationExecuter {
 			}
 		}
 		try{
-			IModelOperation operation = (IModelOperation) parent.accept(new FactoryShiftOperation(fSelected, up));
+			IModelOperation operation = new FactoryShiftOperation().getShiftOperation(fSelected, up);
+//			IModelOperation operation = (IModelOperation) parent.accept(new FactoryShiftOperation(fSelected, up));
 			executeMoveOperation(operation);
 		}catch(Exception e){}
 		return false;
@@ -77,7 +78,8 @@ public class SelectionInterface extends OperationExecuter {
 		GenericNode parent = getCommonParent();
 		if(parent != null){
 			try {
-				GenericShiftOperation operation = (GenericShiftOperation) parent.accept(new FactoryShiftOperation(fSelected, up));
+//				GenericShiftOperation operation = (GenericShiftOperation) parent.accept(new FactoryShiftOperation(fSelected, up));
+				GenericShiftOperation operation = new FactoryShiftOperation().getShiftOperation(fSelected, up);
 				return operation.getShift() != 0;
 			} catch (Exception e) {}
 		}

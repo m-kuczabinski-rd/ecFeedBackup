@@ -1,6 +1,7 @@
 package com.testify.ecfeed.ui.modelif;
 
 import java.net.URLClassLoader;
+import java.util.Arrays;
 import java.util.Collection;
 
 import com.testify.ecfeed.model.GenericNode;
@@ -94,7 +95,8 @@ public class GenericNodeInterface extends OperationExecuter{
 	
 	public boolean moveUpDown(boolean up) {
 		try{
-			GenericShiftOperation operation = (GenericShiftOperation)fTarget.getParent().accept(new FactoryShiftOperation(fTarget, up));
+			GenericShiftOperation operation = new FactoryShiftOperation().getShiftOperation(Arrays.asList(new GenericNode[]{fTarget}), up);
+//			GenericShiftOperation operation = (GenericShiftOperation)fTarget.getParent().accept(new FactoryShiftOperation(fTarget, up));
 			if(operation.getShift() > 0){
 				return executeMoveOperation(operation);
 			}

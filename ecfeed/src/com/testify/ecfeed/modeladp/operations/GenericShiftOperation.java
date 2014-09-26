@@ -15,11 +15,11 @@ public class GenericShiftOperation extends AbstractModelOperation {
 	private int fShift;
 	private List<? extends GenericNode> fCollection;
 
-	GenericShiftOperation(List<? extends GenericNode> collection, GenericNode shifted, boolean up){
+	public GenericShiftOperation(List<? extends GenericNode> collection, GenericNode shifted, boolean up){
 		this(collection, Arrays.asList(new GenericNode[]{shifted}), up);
 	}
 
-	GenericShiftOperation(List<? extends GenericNode> collection, List<? extends GenericNode> shifted, boolean up){
+	public GenericShiftOperation(List<? extends GenericNode> collection, List<? extends GenericNode> shifted, boolean up){
 		this(collection, shifted, 0);
 		fShift = minAllowedShift(shifted, up);
 	}
@@ -97,18 +97,24 @@ public class GenericShiftOperation extends AbstractModelOperation {
 	}
 
 	protected void shiftElements(List<?> list, List<Integer> indices, int shift){
+		Collections.sort(indices);
 		if(shift > 0){
-			for(int i = indices.size() - 1; i >= 0; i--){
-				Collections.swap(list, indices.get(i), indices.get(i) + shift);
-			}
+			Collections.reverse(indices);
 		}
-		else{
-			for(int i = 0; i < indices.size(); i++){
-				Collections.swap(list, indices.get(i), indices.get(i) + shift);
-			}
+
+		for(int i = 0; i < indices.size(); i++){
+			shiftElement(list, indices.get(i), shift);
 		}
 	}
 	
+	protected void shiftElement(List<?> list, int index, int shift) {
+		int minIndex = Math.min(index, index+shift);
+		int maxIndex = Math.max(index, index+shift) + ((shift < 0) ? 1:0);
+		List<?> rotated = list.subList(minIndex, maxIndex);
+		int rotation = (shift>0) ? -1 : 1;
+		Collections.rotate(rotated, rotation);
+	}
+
 	protected boolean shiftAllowed(List<? extends GenericNode> shifted, int shift){
 		if(areInstancesOfSameClass(shifted) == false){
 			return false;

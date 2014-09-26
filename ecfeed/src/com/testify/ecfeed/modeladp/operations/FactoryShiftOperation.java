@@ -1,6 +1,5 @@
 package com.testify.ecfeed.modeladp.operations;
 
-import java.util.Arrays;
 import java.util.List;
 
 import com.testify.ecfeed.model.CategoryNode;
@@ -14,74 +13,204 @@ import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.modeladp.ModelOperationException;
 
-public class FactoryShiftOperation implements IModelVisitor {
+public class FactoryShiftOperation{
 
-	private List<? extends GenericNode> fShifted;
-	private boolean fUp;
+	private class MoveUpDownOperationProvider implements IModelVisitor{
+		
+		private List<? extends GenericNode> fShifted;
+		private boolean fUp;
 
-	public FactoryShiftOperation(List<? extends GenericNode> shifted, boolean up) {
-		fShifted = shifted;
-		fUp = up;
-	}
-
-	public FactoryShiftOperation(GenericNode shifted, boolean up) {
-		fShifted = Arrays.asList(new GenericNode[]{shifted});
-		fUp = up;
-	}
-
-	@Override
-	public Object visit(RootNode node) throws Exception {
-		if(fShifted.get(0) instanceof ClassNode){
-			return new GenericShiftOperation(node.getClasses(), fShifted, fUp);
+		public MoveUpDownOperationProvider(List<? extends GenericNode> shifted, boolean up){
+			fShifted = shifted;
+			fUp = up;
 		}
-		throw new ModelOperationException(Messages.OPERATION_NOT_SUPPORTED_PROBLEM);
+		
+		@Override
+		public Object visit(RootNode node) throws Exception {
+			if(fShifted.get(0) instanceof ClassNode){
+				return new GenericShiftOperation(node.getClasses(), fShifted, fUp);
+			}
+			throw new ModelOperationException(Messages.OPERATION_NOT_SUPPORTED_PROBLEM);
+		}
+
+		@Override
+		public Object visit(ClassNode node) throws Exception {
+			if(fShifted.get(0) instanceof MethodNode){
+				return new GenericShiftOperation(node.getMethods(), fShifted, fUp);
+			}
+			throw new ModelOperationException(Messages.OPERATION_NOT_SUPPORTED_PROBLEM);
+		}
+
+		@Override
+		public Object visit(MethodNode node) throws Exception {
+			if(fShifted.get(0) instanceof CategoryNode){
+				return new CategoryShiftOperation(node.getCategories(), fShifted, fUp);
+			}
+			if(fShifted.get(0) instanceof ConstraintNode){
+				return new GenericShiftOperation(node.getConstraintNodes(), fShifted, fUp);
+			}
+			if(fShifted.get(0) instanceof TestCaseNode){
+				return new GenericShiftOperation(node.getTestCases(), fShifted, fUp);
+			}
+			throw new ModelOperationException(Messages.OPERATION_NOT_SUPPORTED_PROBLEM);
+		}
+
+		@Override
+		public Object visit(CategoryNode node) throws Exception {
+			if(fShifted.get(0) instanceof PartitionNode){
+				return new GenericShiftOperation(node.getPartitions(), fShifted, fUp);
+			}
+			throw new ModelOperationException(Messages.OPERATION_NOT_SUPPORTED_PROBLEM);
+		}
+
+		@Override
+		public Object visit(TestCaseNode node) throws Exception {
+			throw new ModelOperationException(Messages.OPERATION_NOT_SUPPORTED_PROBLEM);
+		}
+
+		@Override
+		public Object visit(ConstraintNode node) throws Exception {
+			throw new ModelOperationException(Messages.OPERATION_NOT_SUPPORTED_PROBLEM);
+		}
+
+		@Override
+		public Object visit(PartitionNode node) throws Exception {
+			if(fShifted.get(0) instanceof PartitionNode){
+				return new GenericShiftOperation(node.getPartitions(), fShifted, fUp);
+			}
+			throw new ModelOperationException(Messages.OPERATION_NOT_SUPPORTED_PROBLEM);
+		}
 	}
 
-	@Override
-	public Object visit(ClassNode node) throws Exception {
-		if(fShifted.get(0) instanceof MethodNode){
-			return new GenericShiftOperation(node.getMethods(), fShifted, fUp);
+	private class ShiftToIndexOperationProvider implements IModelVisitor{
+		
+		private List<? extends GenericNode> fShifted;
+		private int fShift;
+
+		public ShiftToIndexOperationProvider(List<? extends GenericNode> shifted, int index){
+			fShifted = shifted;
+			fShift = calculateShift(shifted, index);
 		}
-		throw new ModelOperationException(Messages.OPERATION_NOT_SUPPORTED_PROBLEM);
+		
+		@Override
+		public Object visit(RootNode node) throws Exception {
+			if(fShifted.get(0) instanceof ClassNode){
+				return new GenericShiftOperation(node.getClasses(), fShifted, fShift);
+			}
+			throw new ModelOperationException(Messages.OPERATION_NOT_SUPPORTED_PROBLEM);
+		}
+
+		@Override
+		public Object visit(ClassNode node) throws Exception {
+			if(fShifted.get(0) instanceof MethodNode){
+				return new GenericShiftOperation(node.getMethods(), fShifted, fShift);
+			}
+			throw new ModelOperationException(Messages.OPERATION_NOT_SUPPORTED_PROBLEM);
+		}
+
+		@Override
+		public Object visit(MethodNode node) throws Exception {
+			if(fShifted.get(0) instanceof CategoryNode){
+				return new CategoryShiftOperation(node.getCategories(), fShifted, fShift);
+			}
+			if(fShifted.get(0) instanceof ConstraintNode){
+				return new GenericShiftOperation(node.getConstraintNodes(), fShifted, fShift);
+			}
+			if(fShifted.get(0) instanceof TestCaseNode){
+				return new GenericShiftOperation(node.getTestCases(), fShifted, fShift);
+			}
+			throw new ModelOperationException(Messages.OPERATION_NOT_SUPPORTED_PROBLEM);
+		}
+
+		@Override
+		public Object visit(CategoryNode node) throws Exception {
+			if(fShifted.get(0) instanceof PartitionNode){
+				return new GenericShiftOperation(node.getPartitions(), fShifted, fShift);
+			}
+			throw new ModelOperationException(Messages.OPERATION_NOT_SUPPORTED_PROBLEM);
+		}
+
+		@Override
+		public Object visit(TestCaseNode node) throws Exception {
+			throw new ModelOperationException(Messages.OPERATION_NOT_SUPPORTED_PROBLEM);
+		}
+
+		@Override
+		public Object visit(ConstraintNode node) throws Exception {
+			throw new ModelOperationException(Messages.OPERATION_NOT_SUPPORTED_PROBLEM);
+		}
+
+		@Override
+		public Object visit(PartitionNode node) throws Exception {
+			if(fShifted.get(0) instanceof PartitionNode){
+				return new GenericShiftOperation(node.getPartitions(), fShifted, fShift);
+			}
+			throw new ModelOperationException(Messages.OPERATION_NOT_SUPPORTED_PROBLEM);
+		}
 	}
 
-	@Override
-	public Object visit(MethodNode node) throws Exception {
-		if(fShifted.get(0) instanceof CategoryNode){
-			return new CategoryShiftOperation(node.getCategories(), fShifted, fUp);
-		}
-		if(fShifted.get(0) instanceof ConstraintNode){
-			return new GenericShiftOperation(node.getConstraintNodes(), fShifted, fUp);
-		}
-		if(fShifted.get(0) instanceof TestCaseNode){
-			return new GenericShiftOperation(node.getTestCases(), fShifted, fUp);
-		}
-		throw new ModelOperationException(Messages.OPERATION_NOT_SUPPORTED_PROBLEM);
+	public GenericShiftOperation getShiftOperation(List<? extends GenericNode> shifted, boolean up) throws ModelOperationException{
+		GenericNode parent = getParent(shifted);
+		return getShiftOperation(parent, shifted, new MoveUpDownOperationProvider(shifted, up));
 	}
 
-	@Override
-	public Object visit(CategoryNode node) throws Exception {
-		if(fShifted.get(0) instanceof PartitionNode){
-			return new GenericShiftOperation(node.getPartitions(), fShifted, fUp);
+	public GenericShiftOperation getShiftOperation(List<? extends GenericNode> shifted, int newIndex) throws ModelOperationException{
+		GenericNode parent = getParent(shifted);
+		return getShiftOperation(parent, shifted, new ShiftToIndexOperationProvider(shifted, newIndex));
+	}
+
+	
+	private GenericShiftOperation getShiftOperation(GenericNode parent, List<? extends GenericNode> shifted, IModelVisitor provider) throws ModelOperationException{
+		if(parent == null && haveTheSameType(shifted) == false){
+			throw new ModelOperationException(Messages.OPERATION_NOT_SUPPORTED_PROBLEM);
 		}
-		throw new ModelOperationException(Messages.OPERATION_NOT_SUPPORTED_PROBLEM);
-	}
-
-	@Override
-	public Object visit(TestCaseNode node) throws Exception {
-		throw new ModelOperationException(Messages.OPERATION_NOT_SUPPORTED_PROBLEM);
-	}
-
-	@Override
-	public Object visit(ConstraintNode node) throws Exception {
-		throw new ModelOperationException(Messages.OPERATION_NOT_SUPPORTED_PROBLEM);
-	}
-
-	@Override
-	public Object visit(PartitionNode node) throws Exception {
-		if(fShifted.get(0) instanceof PartitionNode){
-			return new GenericShiftOperation(node.getPartitions(), fShifted, fUp);
+		try{
+			return (GenericShiftOperation)parent.accept(provider);
 		}
-		throw new ModelOperationException(Messages.OPERATION_NOT_SUPPORTED_PROBLEM);
+		catch(Exception e){
+			throw new ModelOperationException(Messages.OPERATION_NOT_SUPPORTED_PROBLEM);
+		}
+	}
+
+	private int calculateShift(List<? extends GenericNode> shifted, int newIndex) {
+		return newIndex - minIndexNode(shifted).getIndex();
+	}
+
+	private GenericNode minIndexNode(List<? extends GenericNode> nodes){
+		GenericNode minIndexNode = nodes.get(0);
+		for(GenericNode node : nodes){
+			minIndexNode = node.getIndex() < minIndexNode.getIndex() ? node : minIndexNode; 
+		}
+		return minIndexNode;
+	}
+
+	private boolean haveTheSameType(List<? extends GenericNode> shifted) {
+		if(shifted.size() == 0){
+			return false;
+		}
+		Class<?> _class = shifted.get(0).getClass();
+		for(GenericNode node : shifted){
+			if(node.getClass().equals(_class) == false){
+				return false;
+			}
+		}
+		return true;
+	}
+
+	private GenericNode getParent(List<? extends GenericNode> nodes) {
+		if(nodes.size() == 0){
+			return null;
+		}
+		GenericNode parent = nodes.get(0).getParent();
+		if(parent == null){
+			return null;
+		}
+		
+		for(GenericNode node : nodes){
+			if(node.getParent() != parent){
+				return null;
+			}
+		}
+		return parent;
 	}
 }
