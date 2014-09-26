@@ -90,7 +90,7 @@ public class ModelNodeDropListener extends ViewerDropAdapter{
 			GenericNodeInterface nodeIf = NodeInterfaceFactory.getNodeInterface(target.getParent(), fUpdateContext);
 			return nodeIf.addChildren(NodeDnDBuffer.getInstance().getDraggedNodesCopy(), index);
 		case DND.DROP_MOVE:
-			return selectionIf.move(target.getParent(), index);
+			return selectionIf.move(target, index);
 		default:
 			return false;
 		}
@@ -129,7 +129,7 @@ public class ModelNodeDropListener extends ViewerDropAdapter{
 		int position = determineLocation(getCurrentEvent());
 		switch(position){
 		case LOCATION_ON:
-			return target.getParent().getMaxChildIndex(NodeDnDBuffer.getInstance().getDraggedNodes().get(0));
+			return target.getMaxChildIndex(NodeDnDBuffer.getInstance().getDraggedNodes().get(0));
 		case LOCATION_AFTER:
 			return target.getIndex() + 1;
 		case LOCATION_BEFORE:
