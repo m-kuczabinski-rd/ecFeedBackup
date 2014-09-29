@@ -66,7 +66,7 @@ public class CategoryShiftOperation extends GenericShiftOperation {
 		int shift = up ? -1 : 1;
 		while(shiftAllowed(shifted, shift) == false){
 			shift += up ? -1 : 1;
-			int borderIndex = borderNode(shifted, shift).getIndex() + shift; 
+			int borderIndex = (borderNode(shifted, shift) != null) ? borderNode(shifted, shift).getIndex() + shift : -1; 
 			if(borderIndex < 0 || borderIndex >= borderNode(shifted, shift).getMaxIndex()){
 				return 0;
 			}

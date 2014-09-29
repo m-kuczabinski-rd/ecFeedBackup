@@ -27,7 +27,7 @@ public class GenericShiftOperation extends AbstractModelOperation {
 	public GenericShiftOperation(List<? extends GenericNode> collection, List<? extends GenericNode> shifted, int shift){
 		super(OperationNames.MOVE);
 		shift = shiftAllowed(shifted, shift) ? shift : 0;
-		fShifted = shifted;
+		fShifted = new ArrayList<>(shifted);
 		fCollection = collection;
 		fShift = shift;
 	}
@@ -65,6 +65,7 @@ public class GenericShiftOperation extends AbstractModelOperation {
 	}
 
 	protected boolean haveSameParent(List<? extends GenericNode> shifted) {
+		if(shifted.size() == 0)return true;
 		GenericNode parent = shifted.get(0).getParent();
 		for(GenericNode node : shifted){
 			if(node.getParent() != parent){
@@ -75,6 +76,7 @@ public class GenericShiftOperation extends AbstractModelOperation {
 	}
 
 	protected boolean areInstancesOfSameClass(List<? extends GenericNode> shifted) {
+		if(shifted.size() == 0) return true;
 		Class<?> _class = shifted.get(0).getClass();
 		for(GenericNode node : shifted){
 			if(node.getClass().equals(_class) == false){
@@ -125,11 +127,12 @@ public class GenericShiftOperation extends AbstractModelOperation {
 		if(shift == 0){
 			return false;
 		}
-		int newIndex = borderNode(shifted, shift).getIndex() + shift;
+		int newIndex = (borderNode(shifted, shift) != null) ? borderNode(shifted, shift).getIndex() + shift : -1;
 		return newIndex >= 0 && newIndex <= shifted.get(0).getMaxIndex();
 	}
 
 	private GenericNode minIndexNode(List<? extends GenericNode> nodes){
+		if(nodes.size() == 0) return null;
 		GenericNode minIndexNode = nodes.get(0);
 		for(GenericNode node : nodes){
 			minIndexNode = node.getIndex() < minIndexNode.getIndex() ? node : minIndexNode; 
@@ -138,6 +141,7 @@ public class GenericShiftOperation extends AbstractModelOperation {
 	}
 
 	private GenericNode maxIndexNode(List<? extends GenericNode> nodes){
+		if(nodes.size() == 0) return null;
 		GenericNode maxIndexNode = nodes.get(0);
 		for(GenericNode node : nodes){
 			maxIndexNode = node.getIndex() > maxIndexNode.getIndex() ? node : maxIndexNode; 
