@@ -64,16 +64,20 @@ public abstract class ViewerSection extends BasicSection implements ISelectionPr
 	protected class ViewerKeyAdapter extends KeyAdapter{
 		private int fKeyCode;
 		private Action fAction;
+		private int fModifier;
 
-		public ViewerKeyAdapter(int keyCode, Action action){
+		public ViewerKeyAdapter(int keyCode, int modifier, Action action){
 			fKeyCode = keyCode;
+			fModifier = modifier;
 			fAction = action;
 		}
 		
 		@Override
 		public void keyReleased(KeyEvent e) {
-			if(e.keyCode == fKeyCode){
-				fAction.run();
+			if((e.stateMask & fModifier) != 0 || fModifier == SWT.NONE){
+				if(e.keyCode == fKeyCode){
+					fAction.run();
+				}
 			}
 		}
 	}
@@ -321,8 +325,8 @@ public abstract class ViewerSection extends BasicSection implements ISelectionPr
 		return fViewerComposite;
 	}
 	
-	protected void addKeyListener(int keyCode, Action action){
-		fViewer.getControl().addKeyListener(new ViewerKeyAdapter(keyCode, action));
+	protected void addKeyListener(int keyCode, int modifier, Action action){
+		fViewer.getControl().addKeyListener(new ViewerKeyAdapter(keyCode, modifier, action));
 	}
 	
 	@Override
@@ -333,8 +337,33 @@ public abstract class ViewerSection extends BasicSection implements ISelectionPr
 		fMenu.addMenuListener(getMenuListener());
 		
 		if(provider.getAction(ActionFactory.DELETE.getId()) != null){
-			addKeyListener(SWT.DEL, provider.getAction(ActionFactory.DELETE.getId()));
+			addKeyListener(SWT.DEL, SWT.NONE, provider.getAction(ActionFactory.DELETE.getId()));
 		}
+		
+		if(provider.getAction(NamedAction.MOVE_UP_ACTION_ID) != null){
+			addKeyListener(SWT.ARROW_UP, SWT.ALT, provider.getAction(NamedAction.MOVE_UP_ACTION_ID));
+		}
+
+		if(provider.getAction(NamedAction.MOVE_DOWN_ACTION_ID) != null){
+			addKeyListener(SWT.ARROW_DOWN, SWT.ALT, provider.getAction(NamedAction.MOVE_DOWN_ACTION_ID));
+		}
+//			getViewer().getControl().addKeyListener(new KeyListener() {
+//				
+//				@Override
+//				public void keyReleased(KeyEvent e) {
+//				}
+//				
+//				@Override
+//				public void keyPressed(KeyEvent e) {
+//					if((e.stateMask & SWT.ALT) != 0){
+//						System.out.println("Cycki");
+//						if(e.keyCode == SWT.ARROW_UP) {
+//							System.out.println("Dupa");
+//						}
+//					}
+//				}
+//			});;
+//		}
 	}
 
 	protected MenuListener getMenuListener() {

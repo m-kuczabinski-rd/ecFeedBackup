@@ -35,17 +35,17 @@ import com.testify.ecfeed.model.BasicStatement;
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.Constraint;
 import com.testify.ecfeed.model.ConstraintNode;
+import com.testify.ecfeed.model.EStatementOperator;
+import com.testify.ecfeed.model.EStatementRelation;
 import com.testify.ecfeed.model.ExpectedValueStatement;
 import com.testify.ecfeed.model.IRelationalStatement;
 import com.testify.ecfeed.model.IStatementVisitor;
-import com.testify.ecfeed.model.EStatementOperator;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.PartitionedCategoryStatement;
-import com.testify.ecfeed.model.EStatementRelation;
-import com.testify.ecfeed.model.StatementArray;
-import com.testify.ecfeed.model.StaticStatement;
 import com.testify.ecfeed.model.PartitionedCategoryStatement.LabelCondition;
 import com.testify.ecfeed.model.PartitionedCategoryStatement.PartitionCondition;
+import com.testify.ecfeed.model.StatementArray;
+import com.testify.ecfeed.model.StaticStatement;
 import com.testify.ecfeed.ui.editor.actions.ModelModifyingAction;
 import com.testify.ecfeed.ui.modelif.BasicStatementInterface;
 import com.testify.ecfeed.ui.modelif.CategoryInterface;
@@ -461,7 +461,7 @@ public class ConstraintViewer extends TreeViewerSection {
 		getViewer().addSelectionChangedListener(new StatementSelectionListener());
 
 		fStatementEditor = new StatementEditor(getClientComposite());
-		addKeyListener(SWT.DEL, new DeleteStatementAction(updateContext));
+		addKeyListener(SWT.DEL, SWT.NONE, new DeleteStatementAction(updateContext));
 	}
 
 	@Override

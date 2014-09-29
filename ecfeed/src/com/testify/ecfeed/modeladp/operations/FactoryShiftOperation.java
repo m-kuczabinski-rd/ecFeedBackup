@@ -173,7 +173,11 @@ public class FactoryShiftOperation{
 	}
 
 	private static int calculateShift(List<? extends GenericNode> shifted, int newIndex) {
-		return newIndex - minIndexNode(shifted).getIndex();
+		int shift = newIndex - minIndexNode(shifted).getIndex(); 
+		if(minIndexNode(shifted).getIndex() < newIndex){
+			shift -= 1;
+		}
+		return shift;
 	}
 
 	private static GenericNode minIndexNode(List<? extends GenericNode> nodes){

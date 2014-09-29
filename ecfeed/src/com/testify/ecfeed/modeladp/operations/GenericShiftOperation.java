@@ -106,11 +106,11 @@ public class GenericShiftOperation extends AbstractModelOperation {
 			shiftElement(list, indices.get(i), shift);
 		}
 	}
-	
 	protected void shiftElement(List<?> list, int index, int shift) {
+	
 		int minIndex = Math.min(index, index+shift);
 		int maxIndex = Math.max(index, index+shift) + ((shift < 0) ? 1:0);
-		List<?> rotated = list.subList(minIndex, maxIndex);
+		List<?> rotated = list.subList(minIndex, (shift > 0) ? maxIndex + 1 : maxIndex);
 		int rotation = (shift>0) ? -1 : 1;
 		Collections.rotate(rotated, rotation);
 	}
