@@ -79,18 +79,17 @@ public class ModelNodeDropListener extends ViewerDropAdapter{
 		SelectionInterface selectionIf = new SelectionInterface(fUpdateContext);
 		selectionIf.setTarget(dragged);
 		if((dragged.size() == 0) || (selectionIf.isSingleType() == false)) return false;
-		GenericNode target = (GenericNode)getCurrentTarget();
-		int location = getCurrentLocation();
-		int index = determineNewIndex(target, location);
-		if(target == null || index < 0 || index > target.getParent().getMaxChildIndex(dragged.get(0))){
+		GenericNode newParent = determineNewParent(getCurrentTarget(), getCurrentLocation());
+		int index = determineNewIndex((GenericNode)getCurrentTarget(), getCurrentLocation());
+		if(newParent == null || index < 0 || index > newParent.getMaxChildIndex(dragged.get(0))){
 			return false;
 		}
 		switch(getCurrentOperation()){
 		case DND.DROP_COPY: 
-			GenericNodeInterface nodeIf = NodeInterfaceFactory.getNodeInterface(target.getParent(), fUpdateContext);
+			GenericNodeInterface nodeIf = NodeInterfaceFactory.getNodeInterface(newParent, fUpdateContext);
 			return nodeIf.addChildren(NodeDnDBuffer.getInstance().getDraggedNodesCopy(), index);
 		case DND.DROP_MOVE:
-			return selectionIf.move(target, index);
+			return selectionIf.move(newParent, index);
 		default:
 			return false;
 		}
