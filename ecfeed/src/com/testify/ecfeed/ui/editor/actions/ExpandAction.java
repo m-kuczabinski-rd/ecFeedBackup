@@ -35,6 +35,7 @@ public class ExpandAction extends ModelSelectionAction {
 	}
 	
 	protected boolean getBranchExpandedState(GenericNode branchRoot, TreeViewer viewer){
+ 		if(branchRoot.getChildren().size() == 0) return true;
 		if(viewer.getExpandedState(branchRoot) == false) return false;
 		for(GenericNode child : branchRoot.getChildren()){
 			if(getBranchExpandedState(child, viewer) == false) return false;

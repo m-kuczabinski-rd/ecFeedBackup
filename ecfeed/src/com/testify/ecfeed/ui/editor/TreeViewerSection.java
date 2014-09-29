@@ -13,9 +13,12 @@ package com.testify.ecfeed.ui.editor;
 
 import org.eclipse.jface.viewers.StructuredViewer;
 import org.eclipse.jface.viewers.TreeViewer;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Tree;
 
+import com.testify.ecfeed.ui.editor.actions.IActionProvider;
+import com.testify.ecfeed.ui.editor.actions.NamedAction;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 
 public abstract class TreeViewerSection extends ViewerSection {
@@ -46,5 +49,13 @@ public abstract class TreeViewerSection extends ViewerSection {
 	
 	protected TreeViewer getTreeViewer(){
 		return (TreeViewer)getViewer();
+	}
+	
+	@Override
+	protected void setActionProvider(IActionProvider provider){
+		super.setActionProvider(provider);
+		if(provider.getAction(NamedAction.EXPAND_COLLAPSE_ACTION_ID) != null){
+			addKeyListener(SWT.SPACE, SWT.NONE, provider.getAction(NamedAction.EXPAND_COLLAPSE_ACTION_ID));
+		}
 	}
 }

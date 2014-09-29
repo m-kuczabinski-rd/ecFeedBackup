@@ -347,23 +347,6 @@ public abstract class ViewerSection extends BasicSection implements ISelectionPr
 		if(provider.getAction(NamedAction.MOVE_DOWN_ACTION_ID) != null){
 			addKeyListener(SWT.ARROW_DOWN, SWT.ALT, provider.getAction(NamedAction.MOVE_DOWN_ACTION_ID));
 		}
-//			getViewer().getControl().addKeyListener(new KeyListener() {
-//				
-//				@Override
-//				public void keyReleased(KeyEvent e) {
-//				}
-//				
-//				@Override
-//				public void keyPressed(KeyEvent e) {
-//					if((e.stateMask & SWT.ALT) != 0){
-//						System.out.println("Cycki");
-//						if(e.keyCode == SWT.ARROW_UP) {
-//							System.out.println("Dupa");
-//						}
-//					}
-//				}
-//			});;
-//		}
 	}
 
 	protected MenuListener getMenuListener() {
