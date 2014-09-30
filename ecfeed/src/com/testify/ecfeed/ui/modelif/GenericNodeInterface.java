@@ -6,9 +6,10 @@ import java.util.Collection;
 
 import com.testify.ecfeed.model.GenericNode;
 import com.testify.ecfeed.modeladp.EImplementationStatus;
-import com.testify.ecfeed.modeladp.IModelImplementer;
+import com.testify.ecfeed.modeladp.IImplementationStatusResolver;
 import com.testify.ecfeed.modeladp.IModelOperation;
 import com.testify.ecfeed.modeladp.java.ILoaderProvider;
+import com.testify.ecfeed.modeladp.java.JavaImplementationStatusResolver;
 import com.testify.ecfeed.modeladp.java.ModelClassLoader;
 import com.testify.ecfeed.modeladp.operations.FactoryRemoveOperation;
 import com.testify.ecfeed.modeladp.operations.FactoryShiftOperation;
@@ -16,19 +17,18 @@ import com.testify.ecfeed.modeladp.operations.GenericAddChildrenOperation;
 import com.testify.ecfeed.modeladp.operations.GenericRemoveNodesOperation;
 import com.testify.ecfeed.modeladp.operations.GenericShiftOperation;
 import com.testify.ecfeed.ui.common.EclipseLoaderProvider;
-import com.testify.ecfeed.ui.common.EclipseModelImplementer;
 import com.testify.ecfeed.ui.common.Messages;
 
 public class GenericNodeInterface extends OperationExecuter{
 
 	private ILoaderProvider fLoaderProvider;
 	private GenericNode fTarget;
-	private IModelImplementer fImplementer;
+	private IImplementationStatusResolver fStatusResolver;
 	
 	public GenericNodeInterface(IModelUpdateContext updateContext) {
 		super(updateContext);
 		fLoaderProvider = new EclipseLoaderProvider();
-		fImplementer = new EclipseModelImplementer(null);
+		fStatusResolver = new JavaImplementationStatusResolver(fLoaderProvider);
 	}
 
 	public void setTarget(GenericNode target){
@@ -36,7 +36,7 @@ public class GenericNodeInterface extends OperationExecuter{
 	}
 	
 	public EImplementationStatus getImplementationStatus(GenericNode node){
-		return fImplementer.getImplementationStatus(node);
+		return fStatusResolver.getImplementationStatus(node);
 	}
 	
 	public EImplementationStatus getImplementationStatus(){
