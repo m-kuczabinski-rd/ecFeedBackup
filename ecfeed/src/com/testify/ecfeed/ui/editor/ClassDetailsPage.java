@@ -116,7 +116,7 @@ public class ClassDetailsPage extends BasicDetailsPage {
 	public void refresh(){
 		if(getSelectedElement() instanceof ClassNode){
 			fClassIf.setTarget((ClassNode)getSelectedElement());
-			String title = fClassIf.getQualifiedName() + " [" + fClassIf.implementationStatus() + "]";
+			String title = fClassIf.getQualifiedName() + " [" + fClassIf.getImplementationStatus() + "]";
 			getMainSection().setText(title);
 			fClassNameText.setText(fClassIf.getLocalName());
 			fPackageNameText.setText(fClassIf.getPackageName());

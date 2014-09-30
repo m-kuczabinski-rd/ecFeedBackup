@@ -5,7 +5,7 @@ import org.eclipse.swt.graphics.Color;
 
 import com.testify.ecfeed.model.GenericNode;
 import com.testify.ecfeed.modeladp.IImplementationStatusResolver;
-import com.testify.ecfeed.modeladp.ImplementationStatus;
+import com.testify.ecfeed.modeladp.EImplementationStatus;
 import com.testify.ecfeed.modeladp.java.JavaImplementationStatusResolver;
 
 public abstract class NodeViewerColumnLabelProvider extends ColumnLabelProvider{
@@ -23,7 +23,7 @@ public abstract class NodeViewerColumnLabelProvider extends ColumnLabelProvider{
 	public Color getForeground(Object element){
 		if(element instanceof GenericNode){
 			GenericNode node = (GenericNode)element;
-			ImplementationStatus status = fStatusResolver.getImplementationStatus(node);
+			EImplementationStatus status = fStatusResolver.getImplementationStatus(node);
 			switch(status){
 			case IMPLEMENTED: return ColorManager.getColor(ColorConstants.ITEM_IMPLEMENTED);
 			default: return null;

@@ -30,10 +30,11 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Section;
 
 import com.testify.ecfeed.modeladp.ModelOperationManager;
+import com.testify.ecfeed.ui.common.IProjectNameProvider;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 import com.testify.ecfeed.ui.modelif.IModelUpdateListener;
 
-public abstract class BasicDetailsPage implements IDetailsPage, IModelUpdateListener, ISectionContext, IModelUpdateContext{
+public abstract class BasicDetailsPage implements IDetailsPage, IModelUpdateListener, ISectionContext, IModelUpdateContext, IProjectNameProvider{
 
 	private Section fMainSection;
 	private Composite fMainComposite;
@@ -203,5 +204,9 @@ public abstract class BasicDetailsPage implements IDetailsPage, IModelUpdateList
 	
 	public IUndoContext getUndoContext(){
 		return fModelUpdateContext.getUndoContext();
+	}
+	
+	public String getProjectName(){
+		return fMasterSection.getProjectName();
 	}
 }

@@ -30,7 +30,7 @@ import org.eclipse.ui.forms.widgets.Section;
 
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.TestCaseNode;
-import com.testify.ecfeed.modeladp.ImplementationStatus;
+import com.testify.ecfeed.modeladp.EImplementationStatus;
 import com.testify.ecfeed.ui.common.TestCasesViewerContentProvider;
 import com.testify.ecfeed.ui.common.TestCasesViewerLabelProvider;
 import com.testify.ecfeed.ui.common.TreeCheckStateListener;
@@ -188,9 +188,9 @@ public class TestCasesViewer extends CheckboxTreeViewerSection {
 	private boolean executionEnabled(){
 		Collection<TestCaseNode> checked = getCheckedTestCases(); 
 		if(checked.size() == 0) return false;
-		if(fMethodIf.implementationStatus() == ImplementationStatus.NOT_IMPLEMENTED) return false;
+		if(fMethodIf.getImplementationStatus() == EImplementationStatus.NOT_IMPLEMENTED) return false;
 		for(TestCaseNode tc : checked){
-			if(fMethodIf.getImplementationStatus(tc) == ImplementationStatus.NOT_IMPLEMENTED) return false;
+			if(fMethodIf.getImplementationStatus(tc) == EImplementationStatus.NOT_IMPLEMENTED) return false;
 		}
 		return true;
 	}

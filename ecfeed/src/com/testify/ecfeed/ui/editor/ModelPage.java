@@ -57,5 +57,4 @@ public class ModelPage extends FormPage {
 	public ModelEditor getEditor(){
 		return fEditor;
 	}
-
 }

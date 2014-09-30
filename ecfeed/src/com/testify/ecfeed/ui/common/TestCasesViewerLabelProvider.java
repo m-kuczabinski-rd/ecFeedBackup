@@ -12,7 +12,7 @@ import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.modeladp.IImplementationStatusResolver;
-import com.testify.ecfeed.modeladp.ImplementationStatus;
+import com.testify.ecfeed.modeladp.EImplementationStatus;
 import com.testify.ecfeed.modeladp.java.JavaImplementationStatusResolver;
 
 public class TestCasesViewerLabelProvider extends LabelProvider implements IColorProvider {
@@ -86,13 +86,13 @@ public class TestCasesViewerLabelProvider extends LabelProvider implements IColo
 	}
 
 	private void updateExecutableTable() {
-		Map<PartitionNode, ImplementationStatus> partitionStatusMap = new HashMap<PartitionNode, ImplementationStatus>();
+		Map<PartitionNode, EImplementationStatus> partitionStatusMap = new HashMap<PartitionNode, EImplementationStatus>();
 		fExecutableTestSuites.clear();
 		fTestCasesStatusMap.clear();
 		for(String testSuite : fMethod.getTestSuites()){
 			fExecutableTestSuites.put(testSuite, 0);
 		}
-		if(fStatusResolver.getImplementationStatus(fMethod) != ImplementationStatus.NOT_IMPLEMENTED){
+		if(fStatusResolver.getImplementationStatus(fMethod) != EImplementationStatus.NOT_IMPLEMENTED){
 			for(TestCaseNode tc : fMethod.getTestCases()){
 				boolean executable = true;
 				String name = tc.getName();
@@ -100,12 +100,12 @@ public class TestCasesViewerLabelProvider extends LabelProvider implements IColo
 					fExecutableTestSuites.put(name, 0);
 				}
 				for(PartitionNode p : tc.getTestData()){
-					ImplementationStatus status = partitionStatusMap.get(p);
+					EImplementationStatus status = partitionStatusMap.get(p);
 					if(status == null){
 						status = fStatusResolver.getImplementationStatus(p);
 						partitionStatusMap.put(p, status);
 					}
-					if(status != ImplementationStatus.IMPLEMENTED){
+					if(status != EImplementationStatus.IMPLEMENTED){
 						executable = false;
 						break;
 					}

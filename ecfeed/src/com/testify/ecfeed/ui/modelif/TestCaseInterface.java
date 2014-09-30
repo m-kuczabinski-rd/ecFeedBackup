@@ -2,8 +2,8 @@ package com.testify.ecfeed.ui.modelif;
 
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.TestCaseNode;
+import com.testify.ecfeed.modeladp.EImplementationStatus;
 import com.testify.ecfeed.modeladp.IModelOperation;
-import com.testify.ecfeed.modeladp.ImplementationStatus;
 import com.testify.ecfeed.modeladp.operations.TestCaseOperationRename;
 import com.testify.ecfeed.modeladp.operations.TestCaseOperationUpdateTestData;
 import com.testify.ecfeed.ui.common.Messages;
@@ -31,9 +31,9 @@ public class TestCaseInterface extends GenericNodeInterface {
 		MethodInterface mIf = new MethodInterface(getUpdateContext());
 		if(tc.getMethod() == null) return false;
 		mIf.setTarget(tc.getMethod());
-		ImplementationStatus tcStatus = getImplementationStatus(tc);
-		ImplementationStatus methodStatus = mIf.implementationStatus();
-		return tcStatus == ImplementationStatus.IMPLEMENTED && methodStatus != ImplementationStatus.NOT_IMPLEMENTED;
+		EImplementationStatus tcStatus = getImplementationStatus(tc);
+		EImplementationStatus methodStatus = mIf.getImplementationStatus();
+		return tcStatus == EImplementationStatus.IMPLEMENTED && methodStatus != EImplementationStatus.NOT_IMPLEMENTED;
 	}
 
 	public boolean isExecutable(){

@@ -51,7 +51,6 @@ public class ModelEditor extends FormEditor{
 	
 	private RootNode fModel;
 	private ModelPage fModelPage;
-	private boolean fResourceChange = false;
 	private ModelOperationManager fModelManager;
 
 	private ObjectUndoContext fUndoContext;
@@ -61,6 +60,7 @@ public class ModelEditor extends FormEditor{
 		public void resourceChanged(IResourceChangeEvent event) {
 			switch (event.getType()) {
 				case IResourceChangeEvent.POST_CHANGE:
+				case IResourceChangeEvent.POST_BUILD:
 					try {
 						event.getDelta().accept(new ResourceDeltaVisitor());
 					} catch (CoreException e) {
@@ -80,7 +80,14 @@ public class ModelEditor extends FormEditor{
 				case IResourceDelta.ADDED:
 				case IResourceDelta.REMOVED:
 				case IResourceDelta.CHANGED:
-					fResourceChange = true;
+					if (!Display.getDefault().isDisposed()) {
+						Display.getDefault().asyncExec(new Runnable() {
+							public void run() {
+								fModelPage.getMasterBlock().getMasterSection().refresh();
+								fModelPage.getMasterBlock().getCurrentPage().refresh();
+							}
+						});
+					}
 					break;
 				default:
 					break;
@@ -95,7 +102,6 @@ public class ModelEditor extends FormEditor{
 		ResourcesPlugin.getWorkspace().addResourceChangeListener(listener, IResourceChangeEvent.POST_CHANGE);
 		fModelManager = new ModelOperationManager();
 		fUndoContext = new ObjectUndoContext(fModelManager);
-		
 	}
 
 	public RootNode getModel(){
@@ -199,14 +205,19 @@ public class ModelEditor extends FormEditor{
 
 	@Override
 	public void setFocus() {
-		if (fResourceChange) {
-			fModelPage.getMasterBlock().getMasterSection().refresh();
-			if(fModelPage.getMasterBlock().getCurrentPage() != null){
-				fModelPage.getMasterBlock().getCurrentPage().refresh();
-			}
-			fResourceChange = false;
+		fModelPage.getMasterBlock().getMasterSection().refresh();
+		if(fModelPage.getMasterBlock().getCurrentPage() != null){
+			fModelPage.getMasterBlock().getCurrentPage().refresh();
 		}
-		super.setFocus();
+	}
+	
+	public String getProjectName() {
+		IEditorInput input = getEditorInput();
+		if (input instanceof FileEditorInput){
+			IFile file = ((FileEditorInput)input).getFile();
+			return file.getProject().getName();
+		}
+		return null;
 	}
 	
 	public ModelOperationManager getModelOperationManager(){

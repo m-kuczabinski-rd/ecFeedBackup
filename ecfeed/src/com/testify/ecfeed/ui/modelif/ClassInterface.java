@@ -12,7 +12,7 @@ import org.eclipse.swt.widgets.Display;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.modeladp.IModelOperation;
-import com.testify.ecfeed.modeladp.ImplementationStatus;
+import com.testify.ecfeed.modeladp.EImplementationStatus;
 import com.testify.ecfeed.modeladp.ModelOperationException;
 import com.testify.ecfeed.modeladp.java.JavaUtils;
 import com.testify.ecfeed.modeladp.operations.ClassOperationAddMethod;
@@ -78,7 +78,7 @@ public class ClassInterface extends GenericNodeInterface {
 		if(newName.equals(getQualifiedName())){
 			return false;
 		}
-		if(getImplementationStatus(fTarget) != ImplementationStatus.NOT_IMPLEMENTED){
+		if(getImplementationStatus(fTarget) != EImplementationStatus.NOT_IMPLEMENTED){
 			if(MessageDialog.openConfirm(Display.getCurrent().getActiveShell(), 
 					Messages.DIALOG_RENAME_IMPLEMENTED_CLASS_TITLE, 
 					Messages.DIALOG_RENAME_IMPLEMENTED_CLASS_MESSAGE) == false){

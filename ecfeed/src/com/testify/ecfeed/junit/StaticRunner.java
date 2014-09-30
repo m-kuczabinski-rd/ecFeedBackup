@@ -27,7 +27,7 @@ import org.junit.runners.model.InitializationError;
 import com.testify.ecfeed.junit.annotations.TestSuites;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.TestCaseNode;
-import com.testify.ecfeed.modeladp.ImplementationStatus;
+import com.testify.ecfeed.modeladp.EImplementationStatus;
 import com.testify.ecfeed.runner.RunnerException;
 
 public class StaticRunner extends AbstractJUnitRunner {
@@ -77,7 +77,7 @@ public class StaticRunner extends AbstractJUnitRunner {
 	private LinkedList<TestCaseNode> getImplementedTestCases(MethodNode methodModel, String testSuite) {
 		LinkedList<TestCaseNode> result = new LinkedList<TestCaseNode>();
 		for (TestCaseNode testCase : methodModel.getTestCases(testSuite)) {
-			if (implementationStatus(testCase) == ImplementationStatus.IMPLEMENTED) {
+			if (implementationStatus(testCase) == EImplementationStatus.IMPLEMENTED) {
 				result.add(testCase);
 			}
 		}

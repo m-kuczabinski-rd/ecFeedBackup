@@ -21,7 +21,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
 
 import com.testify.ecfeed.model.MethodNode;
-import com.testify.ecfeed.modeladp.ImplementationStatus;
+import com.testify.ecfeed.modeladp.EImplementationStatus;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 import com.testify.ecfeed.ui.modelif.MethodInterface;
 
@@ -102,17 +102,17 @@ public class MethodDetailsPage extends BasicDetailsPage {
 		if(getSelectedElement() instanceof MethodNode){
 			MethodNode selectedMethod = (MethodNode)getSelectedElement(); 
 			fMethodIf.setTarget(selectedMethod);
-			ImplementationStatus methodStatus = fMethodIf.implementationStatus();
+			EImplementationStatus methodStatus = fMethodIf.getImplementationStatus();
 			getMainSection().setText(selectedMethod.toString() + " [" + methodStatus + "]");
-			fTestOnlineButton.setEnabled(methodStatus != ImplementationStatus.NOT_IMPLEMENTED);
+			fTestOnlineButton.setEnabled(methodStatus != EImplementationStatus.NOT_IMPLEMENTED);
 			fParemetersSection.setInput(selectedMethod);
 			fConstraintsSection.setInput(selectedMethod);
 			fTestCasesSection.setInput(selectedMethod);
 			fMethodNameText.setText(fMethodIf.getName());
 			
-			ImplementationStatus parentStatus = fMethodIf.getImplementationStatus(selectedMethod.getClassNode());
-			fBrowseButton.setEnabled((parentStatus == ImplementationStatus.IMPLEMENTED || 
-					parentStatus == ImplementationStatus.PARTIALLY_IMPLEMENTED) && 
+			EImplementationStatus parentStatus = fMethodIf.getImplementationStatus(selectedMethod.getClassNode());
+			fBrowseButton.setEnabled((parentStatus == EImplementationStatus.IMPLEMENTED || 
+					parentStatus == EImplementationStatus.PARTIALLY_IMPLEMENTED) && 
 					fMethodIf.getCompatibleMethods().isEmpty() == false);
 		}
 	}

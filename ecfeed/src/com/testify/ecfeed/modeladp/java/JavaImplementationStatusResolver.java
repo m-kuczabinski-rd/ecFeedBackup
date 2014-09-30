@@ -15,7 +15,7 @@ import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.modeladp.IImplementationStatusResolver;
-import com.testify.ecfeed.modeladp.ImplementationStatus;
+import com.testify.ecfeed.modeladp.EImplementationStatus;
 
 public class JavaImplementationStatusResolver implements IImplementationStatusResolver{
 	private ILoaderProvider fLoaderProvider;
@@ -63,116 +63,116 @@ public class JavaImplementationStatusResolver implements IImplementationStatusRe
 		fLoaderProvider = loaderProvider;
 	}
 	
-	public ImplementationStatus getImplementationStatus(GenericNode node){
+	public EImplementationStatus getImplementationStatus(GenericNode node){
 		try {
-			return (ImplementationStatus)node.accept(new StatusResolver());
+			return (EImplementationStatus)node.accept(new StatusResolver());
 		} catch (Exception e) {
-			return ImplementationStatus.IRRELEVANT;
+			return EImplementationStatus.IRRELEVANT;
 		}
 	}
 
-	protected ImplementationStatus implementationStatus(RootNode classNode){
-		return ImplementationStatus.IRRELEVANT;
+	protected EImplementationStatus implementationStatus(RootNode classNode){
+		return EImplementationStatus.IRRELEVANT;
 	}
 	
-	protected ImplementationStatus implementationStatus(ClassNode classNode){
+	protected EImplementationStatus implementationStatus(ClassNode classNode){
 		if(classDefinitionImplemented(classNode) == false){
-			return ImplementationStatus.NOT_IMPLEMENTED;
+			return EImplementationStatus.NOT_IMPLEMENTED;
 		}
 		for(MethodNode method : classNode.getMethods()){
-			if(implementationStatus(method) != ImplementationStatus.IMPLEMENTED){
-				return ImplementationStatus.PARTIALLY_IMPLEMENTED;
+			if(implementationStatus(method) != EImplementationStatus.IMPLEMENTED){
+				return EImplementationStatus.PARTIALLY_IMPLEMENTED;
 			}
 		}
-		return ImplementationStatus.IMPLEMENTED;
+		return EImplementationStatus.IMPLEMENTED;
 	}
 	
-	protected ImplementationStatus implementationStatus(MethodNode method){
+	protected EImplementationStatus implementationStatus(MethodNode method){
 		if(methodDefinitionImplemented(method) == false){
-			return ImplementationStatus.NOT_IMPLEMENTED;
+			return EImplementationStatus.NOT_IMPLEMENTED;
 		}
 		for(CategoryNode category : method.getCategories()){
-			if(implementationStatus(category) != ImplementationStatus.IMPLEMENTED){
-				return ImplementationStatus.PARTIALLY_IMPLEMENTED;
+			if(implementationStatus(category) != EImplementationStatus.IMPLEMENTED){
+				return EImplementationStatus.PARTIALLY_IMPLEMENTED;
 			}
 		}
-		return ImplementationStatus.IMPLEMENTED;
+		return EImplementationStatus.IMPLEMENTED;
 	}
 	
-	protected ImplementationStatus implementationStatus(CategoryNode category){
+	protected EImplementationStatus implementationStatus(CategoryNode category){
 		if(Arrays.asList(Constants.SUPPORTED_PRIMITIVE_TYPES).contains(category.getType())){
-			return category.getPartitions().size() > 0 ? ImplementationStatus.IMPLEMENTED : ImplementationStatus.PARTIALLY_IMPLEMENTED;
+			return category.getPartitions().size() > 0 ? EImplementationStatus.IMPLEMENTED : EImplementationStatus.PARTIALLY_IMPLEMENTED;
 		}
 		
 		Class<?> typeObject = createLoader().loadClass(category.getType());
 		if(typeObject == null){
-			return ImplementationStatus.NOT_IMPLEMENTED;
+			return EImplementationStatus.NOT_IMPLEMENTED;
 		}
 		
 		for(PartitionNode partition : category.getPartitions()){
-			if(implementationStatus(partition) != ImplementationStatus.IMPLEMENTED){
-				return ImplementationStatus.PARTIALLY_IMPLEMENTED;
+			if(implementationStatus(partition) != EImplementationStatus.IMPLEMENTED){
+				return EImplementationStatus.PARTIALLY_IMPLEMENTED;
 			}
 		}
 		
-		return ImplementationStatus.IMPLEMENTED;
+		return EImplementationStatus.IMPLEMENTED;
 	}
 	
-	protected ImplementationStatus implementationStatus(PartitionNode partition){
+	protected EImplementationStatus implementationStatus(PartitionNode partition){
 		if(partition.isAbstract() == false){
 			PartitionValueParser valueParser = new PartitionValueParser(createLoader());
 			String type = partition.getCategory().getType();
 			if(valueParser.parseValue(partition) != null || type.equals(Constants.TYPE_NAME_STRING)){
-				return ImplementationStatus.IMPLEMENTED;
+				return EImplementationStatus.IMPLEMENTED;
 			}
-			return ImplementationStatus.NOT_IMPLEMENTED;
+			return EImplementationStatus.NOT_IMPLEMENTED;
 		}
 		else{
 			int childrenCount = partition.getPartitions().size();
 			int implementedChildren = 0;
 			int notImplementedChildren = 0;
 			for(PartitionNode child : partition.getPartitions()){
-				if(getImplementationStatus(child) == ImplementationStatus.IMPLEMENTED){
+				if(getImplementationStatus(child) == EImplementationStatus.IMPLEMENTED){
 					implementedChildren++;
 				}
-				else if(getImplementationStatus(child) == ImplementationStatus.NOT_IMPLEMENTED){
+				else if(getImplementationStatus(child) == EImplementationStatus.NOT_IMPLEMENTED){
 					notImplementedChildren++;
 				}
 			}
 			if(implementedChildren == childrenCount){
-				return ImplementationStatus.IMPLEMENTED;
+				return EImplementationStatus.IMPLEMENTED;
 			}
 			else if(notImplementedChildren == childrenCount){
-				return ImplementationStatus.NOT_IMPLEMENTED;
+				return EImplementationStatus.NOT_IMPLEMENTED;
 			}
-			return ImplementationStatus.PARTIALLY_IMPLEMENTED;
+			return EImplementationStatus.PARTIALLY_IMPLEMENTED;
 		}
 	}
 	
-	protected ImplementationStatus implementationStatus(TestCaseNode testCase){
+	protected EImplementationStatus implementationStatus(TestCaseNode testCase){
 		int testDataSize = testCase.getTestData().size();
 		int implementedParameters = 0;
 		int notImplementedParameters = 0;
 		for(PartitionNode partition : testCase.getTestData()){
-			ImplementationStatus status = implementationStatus(partition);
-			if(status == ImplementationStatus.IMPLEMENTED){
+			EImplementationStatus status = implementationStatus(partition);
+			if(status == EImplementationStatus.IMPLEMENTED){
 				implementedParameters++;
 			}
-			else if(status == ImplementationStatus.NOT_IMPLEMENTED){
+			else if(status == EImplementationStatus.NOT_IMPLEMENTED){
 				notImplementedParameters++;
 			}
 		}
 		if(implementedParameters == testDataSize){
-			return ImplementationStatus.IMPLEMENTED;
+			return EImplementationStatus.IMPLEMENTED;
 		}
 		else if(notImplementedParameters == testDataSize){
-			return ImplementationStatus.NOT_IMPLEMENTED;
+			return EImplementationStatus.NOT_IMPLEMENTED;
 		}
-		return ImplementationStatus.PARTIALLY_IMPLEMENTED;
+		return EImplementationStatus.PARTIALLY_IMPLEMENTED;
 	}
 
-	protected ImplementationStatus implementationStatus(ConstraintNode constraint){
-		return ImplementationStatus.IRRELEVANT;
+	protected EImplementationStatus implementationStatus(ConstraintNode constraint){
+		return EImplementationStatus.IRRELEVANT;
 	}
 
 	private boolean classDefinitionImplemented(ClassNode classNode) {

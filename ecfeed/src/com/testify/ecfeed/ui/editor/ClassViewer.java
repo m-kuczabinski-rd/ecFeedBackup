@@ -25,7 +25,7 @@ import org.eclipse.ui.forms.widgets.Section;
 
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.RootNode;
-import com.testify.ecfeed.modeladp.ImplementationStatus;
+import com.testify.ecfeed.modeladp.EImplementationStatus;
 import com.testify.ecfeed.modeladp.java.JavaUtils;
 import com.testify.ecfeed.ui.common.ColorConstants;
 import com.testify.ecfeed.ui.common.ColorManager;
@@ -131,7 +131,7 @@ public class ClassViewer extends TableViewerSection {
 		@Override
 		public Color getForeground(Object element) {
 			if (element instanceof ClassNode) {
-				if(fRootIf.getImplementationStatus((ClassNode)element) == ImplementationStatus.IMPLEMENTED){
+				if(fRootIf.getImplementationStatus((ClassNode)element) == EImplementationStatus.IMPLEMENTED){
 					return ColorManager.getColor(ColorConstants.ITEM_IMPLEMENTED);
 				}
 			}

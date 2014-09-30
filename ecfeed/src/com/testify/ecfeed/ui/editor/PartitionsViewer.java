@@ -32,7 +32,7 @@ import org.eclipse.ui.forms.widgets.Section;
 
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.PartitionedNode;
-import com.testify.ecfeed.modeladp.ImplementationStatus;
+import com.testify.ecfeed.modeladp.EImplementationStatus;
 import com.testify.ecfeed.ui.common.ColorConstants;
 import com.testify.ecfeed.ui.common.ColorManager;
 import com.testify.ecfeed.ui.editor.actions.DeleteAction;
@@ -104,7 +104,7 @@ public class PartitionsViewer extends TableViewerSection {
 				PartitionNode partition = (PartitionNode)element;
 				if(partition.isAbstract()){
 					return ColorManager.getColor(ColorConstants.ABSTRACT_PARTITION);
-				} else if (fTableItemIf.getImplementationStatus(partition) == ImplementationStatus.IMPLEMENTED) {
+				} else if (fTableItemIf.getImplementationStatus(partition) == EImplementationStatus.IMPLEMENTED) {
 					return ColorManager.getColor(ColorConstants.ITEM_IMPLEMENTED);
 				}
 			}
@@ -179,7 +179,7 @@ public class PartitionsViewer extends TableViewerSection {
 				PartitionNode partition = (PartitionNode)element;
 				if(partition.isAbstract()){
 					return ColorManager.getColor(ColorConstants.ABSTRACT_PARTITION);
-				} else if (fTableItemIf.getImplementationStatus(partition) == ImplementationStatus.IMPLEMENTED) {
+				} else if (fTableItemIf.getImplementationStatus(partition) == EImplementationStatus.IMPLEMENTED) {
 					return ColorManager.getColor(ColorConstants.ITEM_IMPLEMENTED);
 				}
 			}

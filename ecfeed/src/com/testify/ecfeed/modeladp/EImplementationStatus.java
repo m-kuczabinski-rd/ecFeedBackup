@@ -1,6 +1,6 @@
 package com.testify.ecfeed.modeladp;
 
-public enum ImplementationStatus {
+public enum EImplementationStatus {
 	IMPLEMENTED, PARTIALLY_IMPLEMENTED, NOT_IMPLEMENTED, IRRELEVANT;
 	
 	public String toString(){

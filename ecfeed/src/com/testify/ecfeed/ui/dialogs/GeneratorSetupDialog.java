@@ -59,7 +59,7 @@ import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.PartitionedNode;
 import com.testify.ecfeed.modeladp.IImplementationStatusResolver;
-import com.testify.ecfeed.modeladp.ImplementationStatus;
+import com.testify.ecfeed.modeladp.EImplementationStatus;
 import com.testify.ecfeed.modeladp.java.JavaImplementationStatusResolver;
 import com.testify.ecfeed.modeladp.java.JavaUtils;
 import com.testify.ecfeed.ui.common.Constants;
@@ -130,7 +130,7 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 				}
 				else{
 					for(PartitionNode child : parent.getPartitions()){
-						if(fStatusResolver.getImplementationStatus(child) != ImplementationStatus.NOT_IMPLEMENTED){
+						if(fStatusResolver.getImplementationStatus(child) != EImplementationStatus.NOT_IMPLEMENTED){
 							children.add(child);
 						}
 					}
@@ -241,9 +241,9 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 				true);
 		if(fGenerateExecutableContent){
 			for(CategoryNode category: fMethod.getCategories()){
-				ImplementationStatus categoryStatus = fStatusResolver.getImplementationStatus(category);
+				EImplementationStatus categoryStatus = fStatusResolver.getImplementationStatus(category);
 				if(category.getPartitions().isEmpty() ||
-						categoryStatus == ImplementationStatus.NOT_IMPLEMENTED){
+						categoryStatus == EImplementationStatus.NOT_IMPLEMENTED){
 					setOkButton(false);
 					break;
 				}
@@ -429,8 +429,8 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 			}
 			for(PartitionNode leaf : category.getLeafPartitions()){
 				leafChecked |= fCategoriesViewer.getChecked(leaf);
-				ImplementationStatus status = fStatusResolver.getImplementationStatus(leaf);
-				if(status != ImplementationStatus.IMPLEMENTED && onlyExecutable){
+				EImplementationStatus status = fStatusResolver.getImplementationStatus(leaf);
+				if(status != EImplementationStatus.IMPLEMENTED && onlyExecutable){
 					return false;
 				}
 			}
