@@ -17,7 +17,6 @@ import com.testify.ecfeed.modeladp.java.JavaUtils;
 import com.testify.ecfeed.modeladp.operations.CategoryOperationSetDefaultValue;
 import com.testify.ecfeed.modeladp.operations.CategoryOperationSetExpected;
 import com.testify.ecfeed.modeladp.operations.CategoryOperationSetType;
-import com.testify.ecfeed.modeladp.operations.FactoryRenameOperation;
 import com.testify.ecfeed.ui.common.EclipseModelBuilder;
 import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.common.TypeAdapterProvider;
@@ -39,13 +38,6 @@ public class CategoryInterface extends PartitionedNodeInterface {
 
 	public String getDefaultValue(String type) {
 		return new EclipseModelBuilder().getDefaultExpectedValue(type);
-	}
-
-	public boolean setName(String newName) {
-		if(newName.equals(getName())){
-			return false;
-		}
-		return execute(FactoryRenameOperation.getRenameOperation(fTarget, newName), Messages.DIALOG_RENAME_PAREMETER_PROBLEM_TITLE);
 	}
 
 	public boolean setType(String newType) {

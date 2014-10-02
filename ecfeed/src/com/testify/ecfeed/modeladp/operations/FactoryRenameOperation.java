@@ -18,7 +18,7 @@ import com.testify.ecfeed.modeladp.java.JavaUtils;
 
 public class FactoryRenameOperation {
 
-	private static class ClassOperationRename extends AbstractOperationRename {
+	private static class ClassOperationRename extends GenericOperationRename {
 
 		public ClassOperationRename(GenericNode target, String newName) {
 			super(target, newName);
@@ -42,7 +42,7 @@ public class FactoryRenameOperation {
 		}
 	}
 	
-	private static class MethodOperationRename extends AbstractOperationRename {
+	private static class MethodOperationRename extends GenericOperationRename {
 		
 		public MethodOperationRename(MethodNode target, String newName){
 			super(target, newName);
@@ -63,7 +63,7 @@ public class FactoryRenameOperation {
 		}
 	}
 
-	private static class CategoryOperationRename extends AbstractOperationRename {
+	private static class CategoryOperationRename extends GenericOperationRename {
 
 		public CategoryOperationRename(GenericNode target, String newName) {
 			super(target, newName);
@@ -86,7 +86,7 @@ public class FactoryRenameOperation {
 		}
 	}
 	
-	private static class PartitionOperationRename extends AbstractOperationRename {
+	private static class PartitionOperationRename extends GenericOperationRename {
 
 		public PartitionOperationRename(PartitionNode target, String newName){
 			super(target, newName);
@@ -115,7 +115,7 @@ public class FactoryRenameOperation {
 
 		@Override
 		public Object visit(RootNode node) throws Exception {
-			return new AbstractOperationRename(node, fNewName);
+			return new GenericOperationRename(node, fNewName);
 		}
 
 		@Override
@@ -135,12 +135,12 @@ public class FactoryRenameOperation {
 
 		@Override
 		public Object visit(TestCaseNode node) throws Exception {
-			return new AbstractOperationRename(node, fNewName);
+			return new GenericOperationRename(node, fNewName);
 		}
 
 		@Override
 		public Object visit(ConstraintNode node) throws Exception {
-			return new AbstractOperationRename(node, fNewName);
+			return new GenericOperationRename(node, fNewName);
 		}
 
 		@Override

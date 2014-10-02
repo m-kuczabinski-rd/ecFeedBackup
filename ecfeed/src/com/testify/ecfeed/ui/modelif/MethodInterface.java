@@ -21,7 +21,6 @@ import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.modeladp.IModelOperation;
 import com.testify.ecfeed.modeladp.ModelOperationException;
 import com.testify.ecfeed.modeladp.java.JavaUtils;
-import com.testify.ecfeed.modeladp.operations.FactoryRenameOperation;
 import com.testify.ecfeed.modeladp.operations.MethodOperationAddConstraint;
 import com.testify.ecfeed.modeladp.operations.MethodOperationAddParameter;
 import com.testify.ecfeed.modeladp.operations.MethodOperationAddTestCase;
@@ -62,13 +61,6 @@ public class MethodInterface extends GenericNodeInterface {
 
 	public List<String> getArgNames(MethodNode method) {
 		return JavaUtils.getArgNames(method);
-	}
-
-	public boolean setName(String newName) {
-		if(newName.equals(getName())){
-			return false;
-		}
-		return execute(FactoryRenameOperation.getRenameOperation(fTarget, newName), Messages.DIALOG_RENAME_METHOD_PROBLEM_TITLE);
 	}
 
 	public boolean convertTo(MethodNode method) {

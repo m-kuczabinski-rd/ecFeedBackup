@@ -91,6 +91,7 @@ public class Messages {
 	public static final String DIALOG_REMOVE_NODE_PROBLEM_TITLE = "Connot remove element";
 	public static final String DIALOG_REMOVE_NODES_PROBLEM_TITLE = "Connot remove elements";
 	public static final String DIALOG_ADD_CHILDREN_PROBLEM_TITLE = "Cannot add children elements";
+	public static final String DIALOG_RENAME_CONSTRAINT_PROBLEM_TITLE = "Cannot rename constraint";
 
 	//CONFIRMATIONS AND WARNINGS
 	public static final String DIALOG_REMOVE_CLASSES_TITLE = "Remove classes"; 
@@ -134,5 +135,4 @@ public class Messages {
 			+ "Each category must be represented by at least one partition.";
 	public static final String DIALOG_TEST_SUITE_NAME_PROBLEM_MESSAGE = "Entered test suite name not allowed";
 	public static final String DIALOG_DESCENDING_LABELS_WILL_BE_REMOVED_WARNING_TITLE = "Partitions below in the hierarchy are already labeled with this label. Changing the label will result in removing the labels from all that partitions";
-
 }

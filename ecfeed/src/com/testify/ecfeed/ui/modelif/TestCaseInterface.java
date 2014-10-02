@@ -4,7 +4,6 @@ import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.modeladp.EImplementationStatus;
 import com.testify.ecfeed.modeladp.IModelOperation;
-import com.testify.ecfeed.modeladp.operations.FactoryRenameOperation;
 import com.testify.ecfeed.modeladp.operations.TestCaseOperationUpdateTestData;
 import com.testify.ecfeed.ui.common.Messages;
 
@@ -21,11 +20,6 @@ public class TestCaseInterface extends GenericNodeInterface {
 		fTarget = target;
 	}
 	
-	@Override
-	public boolean setName(String newName) {
-		return execute(FactoryRenameOperation.getRenameOperation(fTarget, newName), Messages.DIALOG_TEST_SUITE_NAME_PROBLEM_MESSAGE);
-	}
-
 	public boolean isExecutable(TestCaseNode tc){
 		MethodInterface mIf = new MethodInterface(getUpdateContext());
 		if(tc.getMethod() == null) return false;

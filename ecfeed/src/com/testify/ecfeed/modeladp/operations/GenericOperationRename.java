@@ -13,7 +13,7 @@ import com.testify.ecfeed.modeladp.IModelOperation;
 import com.testify.ecfeed.modeladp.ModelOperationException;
 import com.testify.ecfeed.modeladp.java.Constants;
 
-public class AbstractOperationRename extends AbstractModelOperation {
+public class GenericOperationRename extends AbstractModelOperation {
 
 	private GenericNode fTarget;
 	private String fNewName;
@@ -96,7 +96,7 @@ public class AbstractOperationRename extends AbstractModelOperation {
 		}
 	}
 	
-	public AbstractOperationRename(GenericNode target, String newName){
+	public GenericOperationRename(GenericNode target, String newName){
 		super(OperationNames.RENAME);
 		fTarget = target;
 		fNewName = newName;
@@ -114,7 +114,7 @@ public class AbstractOperationRename extends AbstractModelOperation {
 
 	@Override
 	public IModelOperation reverseOperation() {
-		return new AbstractOperationRename(getTarget(), getOriginalName());
+		return new GenericOperationRename(getTarget(), getOriginalName());
 	}
 
 	protected GenericNode getTarget(){

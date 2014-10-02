@@ -4,7 +4,15 @@ import java.net.URLClassLoader;
 import java.util.Arrays;
 import java.util.Collection;
 
+import com.testify.ecfeed.model.CategoryNode;
+import com.testify.ecfeed.model.ClassNode;
+import com.testify.ecfeed.model.ConstraintNode;
 import com.testify.ecfeed.model.GenericNode;
+import com.testify.ecfeed.model.IModelVisitor;
+import com.testify.ecfeed.model.MethodNode;
+import com.testify.ecfeed.model.PartitionNode;
+import com.testify.ecfeed.model.RootNode;
+import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.modeladp.EImplementationStatus;
 import com.testify.ecfeed.modeladp.IImplementationStatusResolver;
 import com.testify.ecfeed.modeladp.IModelOperation;
@@ -12,6 +20,7 @@ import com.testify.ecfeed.modeladp.java.ILoaderProvider;
 import com.testify.ecfeed.modeladp.java.JavaImplementationStatusResolver;
 import com.testify.ecfeed.modeladp.java.ModelClassLoader;
 import com.testify.ecfeed.modeladp.operations.FactoryRemoveOperation;
+import com.testify.ecfeed.modeladp.operations.FactoryRenameOperation;
 import com.testify.ecfeed.modeladp.operations.FactoryShiftOperation;
 import com.testify.ecfeed.modeladp.operations.GenericAddChildrenOperation;
 import com.testify.ecfeed.modeladp.operations.GenericRemoveNodesOperation;
@@ -24,6 +33,45 @@ public class GenericNodeInterface extends OperationExecuter{
 	private ILoaderProvider fLoaderProvider;
 	private GenericNode fTarget;
 	private IImplementationStatusResolver fStatusResolver;
+	
+	private class RenameParameterProblemTitleProvider implements IModelVisitor{
+
+		@Override
+		public Object visit(RootNode node) throws Exception {
+			return Messages.DIALOG_RENAME_MODEL_PROBLEM_TITLE;
+		}
+
+		@Override
+		public Object visit(ClassNode node) throws Exception {
+			return Messages.DIALOG_RENAME_CLASS_PROBLEM_TITLE;
+		}
+
+		@Override
+		public Object visit(MethodNode node) throws Exception {
+			return Messages.DIALOG_RENAME_METHOD_PROBLEM_TITLE;
+		}
+
+		@Override
+		public Object visit(CategoryNode node) throws Exception {
+			return Messages.DIALOG_RENAME_PAREMETER_PROBLEM_TITLE;
+		}
+
+		@Override
+		public Object visit(TestCaseNode node) throws Exception {
+			return Messages.DIALOG_TEST_SUITE_NAME_PROBLEM_MESSAGE;
+		}
+
+		@Override
+		public Object visit(ConstraintNode node) throws Exception {
+			return Messages.DIALOG_RENAME_CONSTRAINT_PROBLEM_TITLE;
+		}
+
+		@Override
+		public Object visit(PartitionNode node) throws Exception {
+			return Messages.DIALOG_RENAME_PARTITION_PROBLEM_TITLE;
+		}
+		
+	}
 	
 	public GenericNodeInterface(IModelUpdateContext updateContext) {
 		super(updateContext);
@@ -52,7 +100,14 @@ public class GenericNodeInterface extends OperationExecuter{
 	}
 	
 	public boolean setName(String newName){
-		return false;
+		if(newName.equals(getName())){
+			return false;
+		}
+		String problemTitle = "";
+		try{
+			problemTitle = (String)fTarget.accept(new RenameParameterProblemTitleProvider());
+		}catch(Exception e){}
+		return execute(FactoryRenameOperation.getRenameOperation(fTarget, newName), problemTitle);
 	}
 
 	public boolean remove(){

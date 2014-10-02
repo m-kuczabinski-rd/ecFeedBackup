@@ -21,7 +21,6 @@ import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.modeladp.IModelOperation;
-import com.testify.ecfeed.modeladp.operations.FactoryRenameOperation;
 import com.testify.ecfeed.modeladp.operations.PartitionOperationAddLabel;
 import com.testify.ecfeed.modeladp.operations.PartitionOperationAddLabels;
 import com.testify.ecfeed.modeladp.operations.PartitionOperationRemoveLabels;
@@ -44,10 +43,6 @@ public class PartitionInterface extends PartitionedNodeInterface{
 		fTarget = partition;
 	}
 	
-	public boolean setName(String newName){
-		return execute(FactoryRenameOperation.getRenameOperation(fTarget, newName), Messages.DIALOG_RENAME_PARTITION_PROBLEM_TITLE);
-	}
-
 	public void setValue(String newValue){
 		IModelOperation operation = new PartitionOperationSetValue(fTarget, newValue, new TypeAdapterProvider()); 
 		execute(operation, Messages.DIALOG_SET_PARTITION_VALUE_PROBLEM_TITLE);
