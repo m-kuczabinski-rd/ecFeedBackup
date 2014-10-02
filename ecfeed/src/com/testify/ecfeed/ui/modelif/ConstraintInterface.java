@@ -4,7 +4,6 @@ import com.testify.ecfeed.model.BasicStatement;
 import com.testify.ecfeed.model.ConstraintNode;
 import com.testify.ecfeed.modeladp.IModelOperation;
 import com.testify.ecfeed.modeladp.operations.ConstraintOperationReplaceStatement;
-import com.testify.ecfeed.modeladp.operations.FactoryRenameOperation;
 import com.testify.ecfeed.ui.common.Messages;
 
 public class ConstraintInterface extends GenericNodeInterface {
@@ -13,13 +12,6 @@ public class ConstraintInterface extends GenericNodeInterface {
 
 	public ConstraintInterface(IModelUpdateContext updateContext) {
 		super(updateContext);
-	}
-
-	public boolean setName(String newName) {
-		if(newName.equals(getName())){
-			return false;
-		}
-		return execute(FactoryRenameOperation.getRenameOperation(fTarget, newName), Messages.DIALOG_RENAME_METHOD_PROBLEM_TITLE);
 	}
 
 	public void setTarget(ConstraintNode target){
