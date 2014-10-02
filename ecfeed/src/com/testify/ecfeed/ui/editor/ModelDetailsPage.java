@@ -54,6 +54,12 @@ public class ModelDetailsPage extends BasicDetailsPage {
 		getToolkit().paintBordersFor(getMainComposite());
 	}
 
+	@Override
+	protected Composite createTextClientComposite(){
+		Composite textClient = super.createTextClientComposite();
+		createImplementerButton(textClient);
+		return textClient;
+	}
 
 	private void createModelNameEdit(Composite parent) {
 		Composite composite = getToolkit().createComposite(parent);
@@ -68,6 +74,7 @@ public class ModelDetailsPage extends BasicDetailsPage {
 
 	@Override
 	public void refresh() {
+		super.refresh();
 		if(getSelectedElement() instanceof RootNode){
 			fRootIf.setTarget((RootNode)getSelectedElement());
 			fModelNameText.setText(fRootIf.getName());

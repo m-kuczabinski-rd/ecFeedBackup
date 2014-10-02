@@ -71,7 +71,15 @@ public class PartitionDetailsPage extends BasicDetailsPage {
 	}
 	
 	@Override
+	protected Composite createTextClientComposite(){
+		Composite textClient = super.createTextClientComposite();
+		createImplementerButton(textClient);
+		return textClient;
+	}
+	
+	@Override
 	public void refresh(){
+		super.refresh();
 		PartitionNode selectedPartition = getSelectedPartition();
 		if(selectedPartition != null){
 			fPartitionIf.setTarget(selectedPartition);

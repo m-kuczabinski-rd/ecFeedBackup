@@ -50,7 +50,15 @@ public class TestCaseDetailsPage extends BasicDetailsPage {
 	}
 	
 	@Override
+	protected Composite createTextClientComposite(){
+		Composite textClient = super.createTextClientComposite();
+		createImplementerButton(textClient);
+		return textClient;
+	}
+
+	@Override
 	public void refresh(){
+		super.refresh();
 		if(getSelectedElement() instanceof TestCaseNode){
 			TestCaseNode testCase = (TestCaseNode)getSelectedElement();
 			fTestCaseIf.setTarget(testCase);

@@ -79,6 +79,13 @@ public class MethodDetailsPage extends BasicDetailsPage {
 		getToolkit().paintBordersFor(getMainComposite());
 	}
 
+	@Override
+	protected Composite createTextClientComposite(){
+		Composite textClient = super.createTextClientComposite();
+		createImplementerButton(textClient);
+		return textClient;
+	}
+
 	private void createNameTextComposite() {
 		Composite composite = getToolkit().createComposite(getMainComposite());
 		composite.setLayout(new GridLayout(4, false));
@@ -99,6 +106,7 @@ public class MethodDetailsPage extends BasicDetailsPage {
 	
 	@Override
 	public void refresh(){
+		super.refresh();
 		if(getSelectedElement() instanceof MethodNode){
 			MethodNode selectedMethod = (MethodNode)getSelectedElement(); 
 			fMethodIf.setTarget(selectedMethod);

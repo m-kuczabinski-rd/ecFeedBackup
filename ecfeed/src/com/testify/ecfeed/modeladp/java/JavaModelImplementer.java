@@ -70,6 +70,20 @@ public abstract class JavaModelImplementer implements IModelImplementer{
 		return false;
 	}
 	
+	public boolean implementable(Class<? extends GenericNode> type){
+		if(type.equals(RootNode.class) ||
+			(type.equals(ClassNode.class))||
+			(type.equals(MethodNode.class))||
+			(type.equals(CategoryNode.class))||
+			(type.equals(TestCaseNode.class))||
+			(type.equals(PartitionNode.class))
+		){
+			return true;
+		}
+		return false;
+			
+	}
+
 	public EImplementationStatus getImplementationStatus(GenericNode node){
 		return fImplementationStatusResolver.getImplementationStatus(node);
 	}

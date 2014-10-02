@@ -17,8 +17,10 @@ import java.util.List;
 import org.eclipse.core.commands.operations.IUndoContext;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
@@ -29,7 +31,11 @@ import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Section;
 
+import com.testify.ecfeed.model.GenericNode;
+import com.testify.ecfeed.modeladp.EImplementationStatus;
+import com.testify.ecfeed.modeladp.IModelImplementer;
 import com.testify.ecfeed.modeladp.ModelOperationManager;
+import com.testify.ecfeed.ui.common.EclipseModelImplementer;
 import com.testify.ecfeed.ui.common.IProjectNameProvider;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 import com.testify.ecfeed.ui.modelif.IModelUpdateListener;
@@ -44,6 +50,9 @@ public abstract class BasicDetailsPage implements IDetailsPage, IModelUpdateList
 	private List<ViewerSection> fViewerSections;
 	private ModelMasterSection fMasterSection;
 	private IModelUpdateContext fModelUpdateContext;
+	private GenericNode fSelectedNode;
+	private IModelImplementer fImplementer;
+	private Button fImplementButton;
 	
 	private static final int MAIN_SECTION_STYLE = Section.EXPANDED | Section.TITLE_BAR;
 
@@ -52,6 +61,7 @@ public abstract class BasicDetailsPage implements IDetailsPage, IModelUpdateList
 		fForms = new ArrayList<IFormPart>();
 		fViewerSections = new ArrayList<ViewerSection>();
 		fModelUpdateContext = updateContext;
+		fImplementer = new EclipseModelImplementer(this);
 	}
 	
 	@Override
@@ -61,12 +71,15 @@ public abstract class BasicDetailsPage implements IDetailsPage, IModelUpdateList
 	
 	@Override
 	public void selectionChanged(IFormPart part, ISelection selection) {
+		fSelectedNode = (GenericNode)fMasterSection.getSelectedElement();
 	}
 
 	@Override
 	public void createContents(Composite parent) {
 		parent.setLayout(new FillLayout());
 		fMainSection = getToolkit().createSection(parent, MAIN_SECTION_STYLE);
+		Composite textClient = createTextClientComposite();
+		fMainSection.setTextClient(textClient);
 
 		getToolkit().adapt(getMainSection());
 		
@@ -76,10 +89,42 @@ public abstract class BasicDetailsPage implements IDetailsPage, IModelUpdateList
 		getMainSection().setClient(fMainComposite);
 	}
 	
+	protected Composite createTextClientComposite() {
+		Composite client = getToolkit().createComposite(fMainSection);
+		client.setLayout(new FillLayout());
+		return client;
+	}
+
+	protected Button createImplementerButton(Composite parent){
+		fImplementButton = getToolkit().createButton(parent, "Implement", SWT.NONE);
+		fImplementButton.addSelectionListener(new AbstractSelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				fImplementer.implement(fSelectedNode);
+			}
+		});
+		return fImplementButton;
+	}
+	
 	@Override
 	public void refresh(){
-		for(IFormPart form : fForms){
-			form.refresh();
+//		fSelectedNode = (GenericNode)fMasterSection.getSelectedElement();
+//		for(IFormPart form : fForms){
+//			form.refresh();
+//		}
+		refreshTextClient();
+	}
+
+	protected void refreshTextClient(){
+		if(fImplementButton != null){
+			EImplementationStatus status = fImplementer.getImplementationStatus(fSelectedNode);
+			boolean implementable = fImplementer.implementable(fSelectedNode);
+			if(status != EImplementationStatus.IMPLEMENTED && implementable){
+				fImplementButton.setEnabled(true);
+			}
+			else{
+				fImplementButton.setEnabled(false);
+			}
 		}
 	}
 

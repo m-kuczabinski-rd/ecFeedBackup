@@ -21,12 +21,12 @@ import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.modeladp.IModelOperation;
 import com.testify.ecfeed.modeladp.ModelOperationException;
 import com.testify.ecfeed.modeladp.java.JavaUtils;
+import com.testify.ecfeed.modeladp.operations.FactoryRenameOperation;
 import com.testify.ecfeed.modeladp.operations.MethodOperationAddConstraint;
 import com.testify.ecfeed.modeladp.operations.MethodOperationAddParameter;
 import com.testify.ecfeed.modeladp.operations.MethodOperationAddTestCase;
 import com.testify.ecfeed.modeladp.operations.MethodOperationAddTestSuite;
 import com.testify.ecfeed.modeladp.operations.MethodOperationConvertTo;
-import com.testify.ecfeed.modeladp.operations.MethodOperationRename;
 import com.testify.ecfeed.modeladp.operations.MethodOperationRenameTestCases;
 import com.testify.ecfeed.runner.RunnerException;
 import com.testify.ecfeed.runner.java.JavaTestRunner;
@@ -68,7 +68,7 @@ public class MethodInterface extends GenericNodeInterface {
 		if(newName.equals(getName())){
 			return false;
 		}
-		return execute(new MethodOperationRename(fTarget, newName), Messages.DIALOG_RENAME_METHOD_PROBLEM_TITLE);
+		return execute(FactoryRenameOperation.getRenameOperation(fTarget, newName), Messages.DIALOG_RENAME_METHOD_PROBLEM_TITLE);
 	}
 
 	public boolean convertTo(MethodNode method) {

@@ -3,8 +3,8 @@ package com.testify.ecfeed.ui.modelif;
 import com.testify.ecfeed.model.BasicStatement;
 import com.testify.ecfeed.model.ConstraintNode;
 import com.testify.ecfeed.modeladp.IModelOperation;
-import com.testify.ecfeed.modeladp.operations.ConstraintOperationRename;
 import com.testify.ecfeed.modeladp.operations.ConstraintOperationReplaceStatement;
+import com.testify.ecfeed.modeladp.operations.FactoryRenameOperation;
 import com.testify.ecfeed.ui.common.Messages;
 
 public class ConstraintInterface extends GenericNodeInterface {
@@ -19,7 +19,7 @@ public class ConstraintInterface extends GenericNodeInterface {
 		if(newName.equals(getName())){
 			return false;
 		}
-		return execute(new ConstraintOperationRename(fTarget, newName), Messages.DIALOG_RENAME_METHOD_PROBLEM_TITLE);
+		return execute(FactoryRenameOperation.getRenameOperation(fTarget, newName), Messages.DIALOG_RENAME_METHOD_PROBLEM_TITLE);
 	}
 
 	public void setTarget(ConstraintNode target){

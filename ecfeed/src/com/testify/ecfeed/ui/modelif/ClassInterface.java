@@ -11,14 +11,14 @@ import org.eclipse.swt.widgets.Display;
 
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.MethodNode;
-import com.testify.ecfeed.modeladp.IModelOperation;
 import com.testify.ecfeed.modeladp.EImplementationStatus;
+import com.testify.ecfeed.modeladp.IModelOperation;
 import com.testify.ecfeed.modeladp.ModelOperationException;
 import com.testify.ecfeed.modeladp.java.JavaUtils;
 import com.testify.ecfeed.modeladp.operations.ClassOperationAddMethod;
 import com.testify.ecfeed.modeladp.operations.ClassOperationAddMethods;
 import com.testify.ecfeed.modeladp.operations.ClassOperationRemoveMethod;
-import com.testify.ecfeed.modeladp.operations.ClassOperationRename;
+import com.testify.ecfeed.modeladp.operations.FactoryRenameOperation;
 import com.testify.ecfeed.ui.common.Constants;
 import com.testify.ecfeed.ui.common.EclipseModelBuilder;
 import com.testify.ecfeed.ui.common.Messages;
@@ -85,7 +85,7 @@ public class ClassInterface extends GenericNodeInterface {
 				return false;
 			}
 		}
-		return execute(new ClassOperationRename(fTarget, newName), Messages.DIALOG_RENAME_CLASS_PROBLEM_TITLE);
+		return execute(FactoryRenameOperation.getRenameOperation(fTarget, newName), Messages.DIALOG_RENAME_CLASS_PROBLEM_TITLE);
 	}
 
 	public boolean setLocalName(String newLocalName){

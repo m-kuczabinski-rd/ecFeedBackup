@@ -14,7 +14,7 @@ public class MethodOperationRenameTestCases extends BulkOperation {
 			throw new ModelOperationException(Messages.TEST_CASE_NAME_REGEX_PROBLEM);
 		}
 		for(TestCaseNode testCase : testCases){
-			addOperation(new TestCaseOperationRename(testCase, newName));
+			addOperation(FactoryRenameOperation.getRenameOperation(testCase, newName));
 		}
 	}
 }

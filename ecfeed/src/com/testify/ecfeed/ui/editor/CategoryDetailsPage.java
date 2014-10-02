@@ -85,7 +85,15 @@ public class CategoryDetailsPage extends BasicDetailsPage{
 	}
 	
 	@Override
+	protected Composite createTextClientComposite(){
+		Composite textClient = super.createTextClientComposite();
+		createImplementerButton(textClient);
+		return textClient;
+	}
+	
+	@Override
 	public void refresh(){
+		super.refresh();
 		if(getSelectedElement() instanceof CategoryNode){
 			CategoryNode category = (CategoryNode)getSelectedElement();
 			fCategoryIf.setTarget(category);

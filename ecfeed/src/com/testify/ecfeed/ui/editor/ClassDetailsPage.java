@@ -70,7 +70,12 @@ public class ClassDetailsPage extends BasicDetailsPage {
 		getToolkit().paintBordersFor(getMainComposite());
 	}
 
-	
+	@Override
+	protected Composite createTextClientComposite(){
+		Composite textClient = super.createTextClientComposite();
+		createImplementerButton(textClient);
+		return textClient;
+	}
 	
 	private void createQualifiedNameComposite(Composite parent) {
 		Composite composite = getToolkit().createComposite(parent);
@@ -114,6 +119,7 @@ public class ClassDetailsPage extends BasicDetailsPage {
 
 	@Override
 	public void refresh(){
+		super.refresh();
 		if(getSelectedElement() instanceof ClassNode){
 			fClassIf.setTarget((ClassNode)getSelectedElement());
 			String title = fClassIf.getQualifiedName() + " [" + fClassIf.getImplementationStatus() + "]";

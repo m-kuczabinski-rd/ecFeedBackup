@@ -11,9 +11,9 @@ import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.modeladp.IModelOperation;
 import com.testify.ecfeed.modeladp.ModelOperationException;
+import com.testify.ecfeed.modeladp.operations.FactoryRenameOperation;
 import com.testify.ecfeed.modeladp.operations.RootOperationAddClasses;
 import com.testify.ecfeed.modeladp.operations.RootOperationAddNewClass;
-import com.testify.ecfeed.modeladp.operations.RootOperationRename;
 import com.testify.ecfeed.ui.common.Constants;
 import com.testify.ecfeed.ui.common.EclipseModelBuilder;
 import com.testify.ecfeed.ui.common.Messages;
@@ -37,7 +37,7 @@ public class RootInterface extends GenericNodeInterface {
 	}
 
 	public boolean setName(String newName){
-		return execute(new RootOperationRename(fTarget, newName), Messages.DIALOG_RENAME_MODEL_PROBLEM_TITLE);
+		return execute(FactoryRenameOperation.getRenameOperation(fTarget, newName), Messages.DIALOG_RENAME_MODEL_PROBLEM_TITLE);
 	}
 
 	public ClassNode addNewClass(){
