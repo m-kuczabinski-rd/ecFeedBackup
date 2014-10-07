@@ -2,13 +2,13 @@ package com.testify.ecfeed.ui.modelif;
 
 import java.util.List;
 
+import com.testify.ecfeed.adapter.IModelOperation;
+import com.testify.ecfeed.adapter.ModelOperationException;
+import com.testify.ecfeed.adapter.operations.FactoryShiftOperation;
+import com.testify.ecfeed.adapter.operations.GenericMoveOperation;
+import com.testify.ecfeed.adapter.operations.GenericRemoveNodesOperation;
+import com.testify.ecfeed.adapter.operations.GenericShiftOperation;
 import com.testify.ecfeed.model.GenericNode;
-import com.testify.ecfeed.modeladp.IModelOperation;
-import com.testify.ecfeed.modeladp.ModelOperationException;
-import com.testify.ecfeed.modeladp.operations.FactoryShiftOperation;
-import com.testify.ecfeed.modeladp.operations.GenericMoveOperation;
-import com.testify.ecfeed.modeladp.operations.GenericRemoveNodesOperation;
-import com.testify.ecfeed.modeladp.operations.GenericShiftOperation;
 import com.testify.ecfeed.ui.common.Messages;
 
 public class SelectionInterface extends OperationExecuter {

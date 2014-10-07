@@ -8,12 +8,12 @@ import org.eclipse.jface.viewers.IColorProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.graphics.Color;
 
+import com.testify.ecfeed.adapter.EImplementationStatus;
+import com.testify.ecfeed.adapter.IImplementationStatusResolver;
+import com.testify.ecfeed.adapter.java.JavaImplementationStatusResolver;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.TestCaseNode;
-import com.testify.ecfeed.modeladp.IImplementationStatusResolver;
-import com.testify.ecfeed.modeladp.EImplementationStatus;
-import com.testify.ecfeed.modeladp.java.JavaImplementationStatusResolver;
 
 public class TestCasesViewerLabelProvider extends LabelProvider implements IColorProvider {
 	private Map<String, Integer> fExecutableTestSuites;

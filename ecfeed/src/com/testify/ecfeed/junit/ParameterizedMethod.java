@@ -14,8 +14,8 @@ package com.testify.ecfeed.junit;
 import java.lang.reflect.Method;
 import java.util.Collection;
 
+import com.testify.ecfeed.adapter.java.ModelClassLoader;
 import com.testify.ecfeed.model.TestCaseNode;
-import com.testify.ecfeed.modeladp.java.ModelClassLoader;
 import com.testify.ecfeed.runner.Messages;
 
 public class ParameterizedMethod extends AbstractFrameworkMethod {

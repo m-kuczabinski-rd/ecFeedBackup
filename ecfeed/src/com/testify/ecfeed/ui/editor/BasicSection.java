@@ -28,8 +28,8 @@ import org.eclipse.ui.forms.AbstractFormPart;
 import org.eclipse.ui.forms.SectionPart;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
+import com.testify.ecfeed.adapter.ModelOperationManager;
 import com.testify.ecfeed.model.GenericNode;
-import com.testify.ecfeed.modeladp.ModelOperationManager;
 import com.testify.ecfeed.ui.editor.actions.IActionProvider;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 import com.testify.ecfeed.ui.modelif.IModelUpdateListener;

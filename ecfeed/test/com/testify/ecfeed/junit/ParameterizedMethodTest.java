@@ -25,13 +25,13 @@ import java.util.Set;
 import org.junit.Test;
 import org.junit.runners.model.FrameworkMethod;
 
+import com.testify.ecfeed.adapter.java.ModelClassLoader;
 import com.testify.ecfeed.junit.ParameterizedMethod;
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.TestCaseNode;
-import com.testify.ecfeed.modeladp.java.ModelClassLoader;
 
 public class ParameterizedMethodTest {
 

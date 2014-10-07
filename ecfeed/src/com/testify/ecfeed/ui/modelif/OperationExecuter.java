@@ -13,8 +13,8 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.forms.AbstractFormPart;
 
-import com.testify.ecfeed.modeladp.IModelOperation;
-import com.testify.ecfeed.modeladp.ModelOperationException;
+import com.testify.ecfeed.adapter.IModelOperation;
+import com.testify.ecfeed.adapter.ModelOperationException;
 
 public class OperationExecuter {
 	

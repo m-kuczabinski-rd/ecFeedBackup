@@ -7,12 +7,12 @@ import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
 
+import com.testify.ecfeed.adapter.IModelOperation;
+import com.testify.ecfeed.adapter.ModelOperationException;
+import com.testify.ecfeed.adapter.operations.RootOperationAddClasses;
+import com.testify.ecfeed.adapter.operations.RootOperationAddNewClass;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.RootNode;
-import com.testify.ecfeed.modeladp.IModelOperation;
-import com.testify.ecfeed.modeladp.ModelOperationException;
-import com.testify.ecfeed.modeladp.operations.RootOperationAddClasses;
-import com.testify.ecfeed.modeladp.operations.RootOperationAddNewClass;
 import com.testify.ecfeed.ui.common.Constants;
 import com.testify.ecfeed.ui.common.EclipseModelBuilder;
 import com.testify.ecfeed.ui.common.Messages;

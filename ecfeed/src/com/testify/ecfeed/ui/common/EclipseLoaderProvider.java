@@ -11,8 +11,8 @@ import org.eclipse.jdt.core.IClasspathEntry;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
 
-import com.testify.ecfeed.modeladp.java.ILoaderProvider;
-import com.testify.ecfeed.modeladp.java.ModelClassLoader;
+import com.testify.ecfeed.adapter.java.ILoaderProvider;
+import com.testify.ecfeed.adapter.java.ModelClassLoader;
 
 public class EclipseLoaderProvider implements ILoaderProvider {
 

@@ -31,10 +31,10 @@ import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Section;
 
+import com.testify.ecfeed.adapter.EImplementationStatus;
+import com.testify.ecfeed.adapter.IModelImplementer;
+import com.testify.ecfeed.adapter.ModelOperationManager;
 import com.testify.ecfeed.model.GenericNode;
-import com.testify.ecfeed.modeladp.EImplementationStatus;
-import com.testify.ecfeed.modeladp.IModelImplementer;
-import com.testify.ecfeed.modeladp.ModelOperationManager;
 import com.testify.ecfeed.ui.common.EclipseModelImplementer;
 import com.testify.ecfeed.ui.common.IProjectNameProvider;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;

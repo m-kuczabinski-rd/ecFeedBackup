@@ -5,12 +5,12 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.testify.ecfeed.adapter.java.JavaUtils;
+import com.testify.ecfeed.adapter.java.ModelClassLoader;
+import com.testify.ecfeed.adapter.java.PartitionValueParser;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
-import com.testify.ecfeed.modeladp.java.JavaUtils;
-import com.testify.ecfeed.modeladp.java.ModelClassLoader;
-import com.testify.ecfeed.modeladp.java.PartitionValueParser;
 import com.testify.ecfeed.runner.Messages;
 import com.testify.ecfeed.runner.RunnerException;
 

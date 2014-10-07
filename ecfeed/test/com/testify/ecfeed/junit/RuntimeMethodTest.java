@@ -23,6 +23,7 @@ import java.util.Set;
 
 import org.junit.Test;
 
+import com.testify.ecfeed.adapter.java.ModelClassLoader;
 import com.testify.ecfeed.generators.CartesianProductGenerator;
 import com.testify.ecfeed.generators.api.GeneratorException;
 import com.testify.ecfeed.generators.api.IConstraint;
@@ -30,7 +31,6 @@ import com.testify.ecfeed.generators.api.IGenerator;
 import com.testify.ecfeed.junit.RuntimeMethod;
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.PartitionNode;
-import com.testify.ecfeed.modeladp.java.ModelClassLoader;
 
 public class RuntimeMethodTest {
 

@@ -3,7 +3,7 @@ package com.testify.ecfeed.ui.modelif;
 import org.eclipse.core.commands.operations.IUndoContext;
 import org.eclipse.ui.forms.AbstractFormPart;
 
-import com.testify.ecfeed.modeladp.ModelOperationManager;
+import com.testify.ecfeed.adapter.ModelOperationManager;
 
 public interface IModelUpdateContext {
 	public ModelOperationManager getOperationManager();

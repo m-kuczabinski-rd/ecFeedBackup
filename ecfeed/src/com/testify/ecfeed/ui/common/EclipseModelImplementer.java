@@ -41,6 +41,9 @@ import org.eclipse.jdt.core.dom.rewrite.ListRewrite;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.text.edits.TextEdit;
 
+import com.testify.ecfeed.adapter.EImplementationStatus;
+import com.testify.ecfeed.adapter.java.JavaModelImplementer;
+import com.testify.ecfeed.adapter.java.JavaUtils;
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.ConstraintNode;
@@ -50,9 +53,6 @@ import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.TestCaseNode;
-import com.testify.ecfeed.modeladp.EImplementationStatus;
-import com.testify.ecfeed.modeladp.java.JavaModelImplementer;
-import com.testify.ecfeed.modeladp.java.JavaUtils;
 
 public class EclipseModelImplementer extends JavaModelImplementer {
 
@@ -485,21 +485,21 @@ public class EclipseModelImplementer extends JavaModelImplementer {
 
 	private Type getPrimitiveType(CompilationUnit unit, String typeName) {
 		switch(typeName) {
-		case com.testify.ecfeed.modeladp.java.Constants.TYPE_NAME_BOOLEAN:
+		case com.testify.ecfeed.adapter.java.Constants.TYPE_NAME_BOOLEAN:
 			return unit.getAST().newPrimitiveType(PrimitiveType.BOOLEAN);
-		case com.testify.ecfeed.modeladp.java.Constants.TYPE_NAME_BYTE:
+		case com.testify.ecfeed.adapter.java.Constants.TYPE_NAME_BYTE:
 			return unit.getAST().newPrimitiveType(PrimitiveType.BYTE);
-		case com.testify.ecfeed.modeladp.java.Constants.TYPE_NAME_CHAR:
+		case com.testify.ecfeed.adapter.java.Constants.TYPE_NAME_CHAR:
 			return unit.getAST().newPrimitiveType(PrimitiveType.CHAR);
-		case com.testify.ecfeed.modeladp.java.Constants.TYPE_NAME_DOUBLE:
+		case com.testify.ecfeed.adapter.java.Constants.TYPE_NAME_DOUBLE:
 			return unit.getAST().newPrimitiveType(PrimitiveType.DOUBLE);
-		case com.testify.ecfeed.modeladp.java.Constants.TYPE_NAME_FLOAT:
+		case com.testify.ecfeed.adapter.java.Constants.TYPE_NAME_FLOAT:
 			return unit.getAST().newPrimitiveType(PrimitiveType.FLOAT);
-		case com.testify.ecfeed.modeladp.java.Constants.TYPE_NAME_INT:
+		case com.testify.ecfeed.adapter.java.Constants.TYPE_NAME_INT:
 			return unit.getAST().newPrimitiveType(PrimitiveType.INT);
-		case com.testify.ecfeed.modeladp.java.Constants.TYPE_NAME_LONG:
+		case com.testify.ecfeed.adapter.java.Constants.TYPE_NAME_LONG:
 			return unit.getAST().newPrimitiveType(PrimitiveType.LONG);
-		case com.testify.ecfeed.modeladp.java.Constants.TYPE_NAME_SHORT:
+		case com.testify.ecfeed.adapter.java.Constants.TYPE_NAME_SHORT:
 			return unit.getAST().newPrimitiveType(PrimitiveType.SHORT);
 		default:
 			return null;

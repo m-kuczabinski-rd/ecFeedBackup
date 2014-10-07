@@ -1,13 +1,13 @@
 package com.testify.ecfeed.ui.modelif;
 
+import com.testify.ecfeed.adapter.IModelOperation;
+import com.testify.ecfeed.adapter.operations.StatementOperationAddStatement;
+import com.testify.ecfeed.adapter.operations.StatementOperationChangeOperator;
+import com.testify.ecfeed.adapter.operations.StatementOperationRemoveStatement;
+import com.testify.ecfeed.adapter.operations.StatementOperationReplaceChild;
 import com.testify.ecfeed.model.BasicStatement;
 import com.testify.ecfeed.model.EStatementOperator;
 import com.testify.ecfeed.model.StatementArray;
-import com.testify.ecfeed.modeladp.IModelOperation;
-import com.testify.ecfeed.modeladp.operations.StatementOperationAddStatement;
-import com.testify.ecfeed.modeladp.operations.StatementOperationChangeOperator;
-import com.testify.ecfeed.modeladp.operations.StatementOperationRemoveStatement;
-import com.testify.ecfeed.modeladp.operations.StatementOperationReplaceChild;
 import com.testify.ecfeed.ui.common.Messages;
 
 public class StatementArrayInterface extends BasicStatementInterface{
