@@ -7,7 +7,9 @@ import org.eclipse.core.filebuffers.ITextFileBuffer;
 import org.eclipse.core.filebuffers.ITextFileBufferManager;
 import org.eclipse.core.filebuffers.LocationKind;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IPackageFragmentRoot;
@@ -150,9 +152,18 @@ public class EclipseModelImplementer extends JavaModelImplementer {
 	
 	@Override
 	public void implement(GenericNode node) {
+		//TODO Unit tests. Need to be implemented as a separate eclipse plugin to have access to workspace resources
 		try{
+			refreshWorkspace();
 			node.accept(new NodeImplementer());
+			refreshWorkspace();
 		}catch(Exception e){}
+	}
+
+	private void refreshWorkspace() {
+		try {
+			ResourcesPlugin.getWorkspace().getRoot().refreshLocal(IWorkspaceRoot.DEPTH_INFINITE, null);
+		} catch (CoreException e) {}
 	}
 
 	private void implementClassDefinition(ClassNode node) {
@@ -190,12 +201,14 @@ public class EclipseModelImplementer extends JavaModelImplementer {
 		return (getImplementationStatus(node) != EImplementationStatus.NOT_IMPLEMENTED);
 	}
 
+
 	private void implementParameterDefinition(CategoryNode node) {
 		String type = node.getType();
 		if (implementable(node) && JavaUtils.isUserType(type)) {
 			AbstractMap.SimpleEntry<IPath,CompilationUnit> unitPair = getCompilationUnitInstance(type);
 			CompilationUnit categoryUnit = unitPair.getValue();
 			if (categoryUnit != null) {
+				implementClassDefinition(categoryUnit, type, false);
 				writeCompilationUnit(categoryUnit, unitPair.getKey(), 0);
 			}
 		}

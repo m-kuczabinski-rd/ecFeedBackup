@@ -101,6 +101,7 @@ public abstract class BasicDetailsPage implements IDetailsPage, IModelUpdateList
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				fImplementer.implement(fSelectedNode);
+				getMasterSection().refresh();
 			}
 		});
 		return fImplementButton;
