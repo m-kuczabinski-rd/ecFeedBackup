@@ -48,12 +48,13 @@ import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.Constraint;
 import com.testify.ecfeed.model.ConstraintNode;
-import com.testify.ecfeed.model.ExpectedValueStatement;
-import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.EStatementOperator;
+import com.testify.ecfeed.model.EStatementRelation;
+import com.testify.ecfeed.model.ExpectedValueStatement;
+import com.testify.ecfeed.model.GenericNode;
+import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.PartitionedCategoryStatement;
-import com.testify.ecfeed.model.EStatementRelation;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.StatementArray;
 import com.testify.ecfeed.model.StaticStatement;
@@ -74,6 +75,26 @@ public class RandomModelGenerator {
 	public int MAX_PARTITION_LABELS = 3;
 	public int MAX_STATEMENTS = 5;
 	public int MAX_STATEMENTS_DEPTH = 3;
+	
+	public GenericNode generateNode(ENodeType type){
+		switch(type){
+		case CHOICE:
+			return generatePartition(MAX_PARTITION_LEVELS, MAX_PARTITIONS, MAX_PARTITION_LABELS, randomType());
+		case CLASS:
+			return generateClass(MAX_METHODS);
+		case CONSTRAINT:
+			return generateMethod(MAX_CATEGORIES, MAX_CONSTRAINTS, 0).getConstraintNodes().get(rand.nextInt(MAX_CONSTRAINTS));
+		case METHOD:
+			return generateMethod(MAX_CATEGORIES, MAX_CONSTRAINTS, MAX_TEST_CASES);
+		case PARAMETER:
+			return generateCategory(randomType(), rand.nextBoolean(), MAX_PARTITION_LEVELS, MAX_PARTITIONS, MAX_PARTITION_LABELS);
+		case PROJECT:
+			return generateModel(MAX_CLASSES);
+		case TEST_CASE:
+			return generateMethod(MAX_CATEGORIES, 0, MAX_TEST_CASES).getTestCases().get(rand.nextInt(MAX_TEST_CASES));
+		}
+		return null;
+	}
 	
 	public RootNode generateModel(int classes){
 		String name = generateString(REGEX_ROOT_NODE_NAME);

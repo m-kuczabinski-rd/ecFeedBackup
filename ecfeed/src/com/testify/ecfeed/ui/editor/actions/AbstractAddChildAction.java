@@ -3,6 +3,7 @@ package com.testify.ecfeed.ui.editor.actions;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.StructuredViewer;
 
+import com.testify.ecfeed.adapter.java.JavaUtils;
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.ConstraintNode;
@@ -100,7 +101,10 @@ public abstract class AbstractAddChildAction extends ModelModifyingAction{
 
 		@Override
 		public Object visit(CategoryNode node) throws Exception {
-			return true;
+			if(node.isExpected() == false || JavaUtils.isUserType(node.getType())){
+				return true;
+			}
+			return false;
 		}
 
 		@Override
@@ -129,7 +133,8 @@ public abstract class AbstractAddChildAction extends ModelModifyingAction{
 	public boolean isEnabled(){
 		if (getSelectedNodes().size() != 1) return false;
 		try{
-			return (boolean)getSelectedNodes().get(0).accept(new ActionEnabledResolver());
+			IModelVisitor resolver = new ActionEnabledResolver();
+			return (boolean)getSelectedNodes().get(0).accept(resolver);
 		}
 		catch(Exception e){}
 		return false;
