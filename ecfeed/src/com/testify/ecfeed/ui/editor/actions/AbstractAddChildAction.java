@@ -138,7 +138,9 @@ public abstract class AbstractAddChildAction extends ModelModifyingAction{
 	@Override
 	public void run(){
 		try{
-			select((GenericNode)getSelectedNodes().get(0).accept(new AddChildVisitor()));
+			if (getSelectedNodes().size() == 1){
+				select((GenericNode)getSelectedNodes().get(0).accept(new AddChildVisitor()));
+			}
 		}
 		catch(Exception e){}
 	}
