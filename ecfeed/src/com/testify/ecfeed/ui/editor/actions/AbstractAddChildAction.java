@@ -81,7 +81,7 @@ public abstract class AbstractAddChildAction extends ModelModifyingAction{
 		}
 	}
 	
-	private class ClassEnabledResolver implements IModelVisitor{
+	private class ActionEnabledResolver implements IModelVisitor{
 
 		@Override
 		public Object visit(RootNode node) throws Exception {
@@ -129,7 +129,7 @@ public abstract class AbstractAddChildAction extends ModelModifyingAction{
 	public boolean isEnabled(){
 		if (getSelectedNodes().size() != 1) return false;
 		try{
-			return (boolean)getSelectedNodes().get(0).accept(new ClassEnabledResolver());
+			return (boolean)getSelectedNodes().get(0).accept(new ActionEnabledResolver());
 		}
 		catch(Exception e){}
 		return false;
