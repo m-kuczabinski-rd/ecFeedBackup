@@ -59,8 +59,8 @@ public class Messages {
 		return "Category " + categoryName + " does not exist in method " + methodName;
 	}
 
-	public static String WRONG_PARTITION_NAME(String partitionName, String categoryName) {
-		return "Partition " + partitionName + " does not exist in method " + categoryName;
+	public static String WRONG_PARTITION_NAME(String partitionName, String parameterName, String methodName) {
+		return "Partition " + partitionName + " does not exist for parameter " + parameterName + " in method " + methodName;
 	}
 
 	public static String WRONG_NUMBER_OF_TEST_PAREMETERS(String testSuiteName){

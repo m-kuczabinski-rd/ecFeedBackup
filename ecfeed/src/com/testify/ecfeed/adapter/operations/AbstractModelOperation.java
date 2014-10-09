@@ -24,4 +24,8 @@ public abstract class AbstractModelOperation implements IModelOperation {
 	public String getName(){
 		return fName;
 	}
+	
+	@Override public String toString(){
+		return getName();
+	}
 }

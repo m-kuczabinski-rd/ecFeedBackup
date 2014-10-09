@@ -41,12 +41,12 @@ import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.Constraint;
 import com.testify.ecfeed.model.ConstraintNode;
+import com.testify.ecfeed.model.EStatementOperator;
+import com.testify.ecfeed.model.EStatementRelation;
 import com.testify.ecfeed.model.ExpectedValueStatement;
 import com.testify.ecfeed.model.MethodNode;
-import com.testify.ecfeed.model.EStatementOperator;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.PartitionedCategoryStatement;
-import com.testify.ecfeed.model.EStatementRelation;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.StatementArray;
 import com.testify.ecfeed.model.StaticStatement;
@@ -265,7 +265,7 @@ public class XomAnalyser {
 		String partitionName = getAttributeValue(element, Constants.STATEMENT_PARTITION_ATTRIBUTE_NAME);
 		PartitionNode partition = category.getPartition(partitionName);
 		if(partition == null){
-			throw new ParserException(Messages.WRONG_PARTITION_NAME(categoryName, method.getName()));
+			throw new ParserException(Messages.WRONG_PARTITION_NAME(partitionName, categoryName, method.getName()));
 		}
 	
 		String relationName = getAttributeValue(element, Constants.STATEMENT_RELATION_ATTRIBUTE_NAME);
