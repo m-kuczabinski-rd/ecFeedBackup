@@ -79,7 +79,7 @@ public class RandomModelGenerator {
 	public GenericNode generateNode(ENodeType type){
 		switch(type){
 		case CHOICE:
-			return generatePartition(MAX_PARTITION_LEVELS, MAX_PARTITIONS, MAX_PARTITION_LABELS, randomType());
+			return generatePartition(MAX_PARTITION_LEVELS, MAX_PARTITIONS, MAX_PARTITION_LABELS, randomType(true));
 		case CLASS:
 			return generateClass(MAX_METHODS);
 		case CONSTRAINT:
@@ -87,7 +87,7 @@ public class RandomModelGenerator {
 		case METHOD:
 			return generateMethod(MAX_CATEGORIES, MAX_CONSTRAINTS, MAX_TEST_CASES);
 		case PARAMETER:
-			return generateCategory(randomType(), rand.nextBoolean(), MAX_PARTITION_LEVELS, MAX_PARTITIONS, MAX_PARTITION_LABELS);
+			return generateCategory(randomType(true), rand.nextBoolean(), MAX_PARTITION_LEVELS, MAX_PARTITIONS, MAX_PARTITION_LABELS);
 		case PROJECT:
 			return generateModel(MAX_CLASSES);
 		case TEST_CASE:
@@ -133,7 +133,7 @@ public class RandomModelGenerator {
 		
 		for(int i = 0; i < categories; i++){
 			boolean expected = rand.nextInt(4) < 3 ? false : true;
-			String type = randomType();
+			String type = randomType(true);
 			
 			method.addCategory(generateCategory(type, expected, 
 					rand.nextInt(MAX_PARTITION_LEVELS), rand.nextInt(MAX_PARTITIONS) + 1, 
@@ -156,8 +156,10 @@ public class RandomModelGenerator {
 		
 		CategoryNode category = new CategoryNode(name, type, randomPartitionValue(type), expected);
 		
-		for(int i = 0; i < rand.nextInt(MAX_PARTITIONS) + 1; i++){
-			category.addPartition(generatePartition(partitionLevels, partitions, labels, type));
+		if(partitions > 0){
+			for(int i = 0; i < rand.nextInt(partitions) + 1; i++){
+				category.addPartition(generatePartition(partitionLevels, partitions, labels, type));
+			}
 		}
 
 		return category;
@@ -326,9 +328,9 @@ public class RandomModelGenerator {
 		return partition;
 	}
 
-	private String randomType(){
+	public String randomType(boolean includeUserType){
 		
-		int typeIdx = rand.nextInt(SUPPORTED_TYPES.length + 1);
+		int typeIdx = rand.nextInt(SUPPORTED_TYPES.length + (includeUserType ? 1 : 0));
 		if(typeIdx < SUPPORTED_TYPES.length){
 			return SUPPORTED_TYPES[typeIdx];
 		}

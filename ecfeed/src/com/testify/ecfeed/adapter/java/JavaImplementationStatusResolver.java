@@ -71,8 +71,13 @@ public class JavaImplementationStatusResolver implements IImplementationStatusRe
 		}
 	}
 
-	protected EImplementationStatus implementationStatus(RootNode classNode){
-		return EImplementationStatus.IRRELEVANT;
+	protected EImplementationStatus implementationStatus(RootNode node){
+		for(ClassNode _class : node.getClasses()){
+			if(implementationStatus(_class) != EImplementationStatus.IMPLEMENTED){
+				return EImplementationStatus.PARTIALLY_IMPLEMENTED;
+			}
+		}
+		return EImplementationStatus.IMPLEMENTED;
 	}
 	
 	protected EImplementationStatus implementationStatus(ClassNode classNode){
@@ -107,6 +112,10 @@ public class JavaImplementationStatusResolver implements IImplementationStatusRe
 		Class<?> typeObject = createLoader().loadClass(category.getType());
 		if(typeObject == null){
 			return EImplementationStatus.NOT_IMPLEMENTED;
+		}
+
+		if(category.getPartitions().size() == 0){
+			return EImplementationStatus.PARTIALLY_IMPLEMENTED;
 		}
 		
 		for(PartitionNode partition : category.getPartitions()){
@@ -196,11 +205,21 @@ public class JavaImplementationStatusResolver implements IImplementationStatusRe
 			if(typeNames.size() != methodModel.getCategories().size()){
 				continue;
 			}
-			for(int i = 0; i < typeNames.size(); i++){
-				if(typeNames.get(i).equals(modelCategories.get(i).getName()) == false){
-					continue;
-				}
+			List<String> modelTypeNames = new ArrayList<>();
+			for(CategoryNode parameter : modelCategories){
+				modelTypeNames.add(parameter.getType());
 			}
+			if(modelTypeNames.equals(typeNames) == false){
+				continue;
+			}
+			
+//			for(int i = 0; i < typeNames.size(); i++){
+//				String type = typeNames.get(i);
+//				String modelType = modelCategories.get(i).getType();
+//				if(typeNames.get(i).equals(modelCategories.get(i).getType()) == false){
+//					continue;
+//				}
+//			}
 			return true;
 		}
 		return false;

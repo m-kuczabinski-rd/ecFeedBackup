@@ -89,8 +89,8 @@ public class RootNode extends GenericNode {
 	}
 	
 	@Override
-	public Object accept(IModelVisitor converter) throws Exception{
-		return converter.visit(this);
+	public Object accept(IModelVisitor visitor) throws Exception{
+		return visitor.visit(this);
 	}
 	
 }
