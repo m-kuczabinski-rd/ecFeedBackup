@@ -61,7 +61,7 @@ public class EclipseModelImplementer extends JavaModelImplementer {
 	IProjectNameProvider fProjectNameProvider;
 	
 	public EclipseModelImplementer(IProjectNameProvider projectNameProvider) {
-		super(new EclipseLoaderProvider());
+		super(new EclipseImplementationStatusResolver());
 		fProjectNameProvider = projectNameProvider;
 	}
 
@@ -155,8 +155,10 @@ public class EclipseModelImplementer extends JavaModelImplementer {
 		//TODO Unit tests. Need to be implemented as a separate eclipse plugin to have access to workspace resources
 		try{
 			refreshWorkspace();
-			node.accept(new NodeImplementer());
-			refreshWorkspace();
+			if(implementable(node) && getImplementationStatus(node) != EImplementationStatus.IMPLEMENTED){
+				node.accept(new NodeImplementer());
+				refreshWorkspace();
+			}
 		}catch(Exception e){}
 	}
 
@@ -171,6 +173,7 @@ public class EclipseModelImplementer extends JavaModelImplementer {
 		AbstractMap.SimpleEntry<IPath,CompilationUnit> unitPair = getCompilationUnitInstance(qualifiedName);
 		CompilationUnit testUnit = unitPair.getValue();
 		if (testUnit != null) {
+			implementClassDefinition(testUnit, qualifiedName, true);
 			writeCompilationUnit(testUnit, unitPair.getKey(), 0);
 		}
 	}

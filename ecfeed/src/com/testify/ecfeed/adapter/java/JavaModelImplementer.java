@@ -1,6 +1,7 @@
 package com.testify.ecfeed.adapter.java;
 
 import com.testify.ecfeed.adapter.EImplementationStatus;
+import com.testify.ecfeed.adapter.IImplementationStatusResolver;
 import com.testify.ecfeed.adapter.IModelImplementer;
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.ClassNode;
@@ -14,7 +15,7 @@ import com.testify.ecfeed.model.TestCaseNode;
 
 public abstract class JavaModelImplementer implements IModelImplementer{
 	
-	private JavaImplementationStatusResolver fImplementationStatusResolver;
+	private IImplementationStatusResolver fImplementationStatusResolver;
 	private class ImplementableVisitor implements IModelVisitor{
 
 		@Override
@@ -59,8 +60,8 @@ public abstract class JavaModelImplementer implements IModelImplementer{
 		}
 	}
 
-	public JavaModelImplementer(ILoaderProvider loaderProvider){
-		fImplementationStatusResolver = new JavaImplementationStatusResolver(loaderProvider);
+	public JavaModelImplementer(IImplementationStatusResolver resolver){
+		fImplementationStatusResolver = resolver;
 	}
 	
 	public boolean implementable(GenericNode node){
