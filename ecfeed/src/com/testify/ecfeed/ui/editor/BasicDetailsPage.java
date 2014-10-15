@@ -32,6 +32,7 @@ import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Section;
 
+import com.testify.ecfeed.adapter.EImplementationStatus;
 import com.testify.ecfeed.adapter.IModelImplementer;
 import com.testify.ecfeed.adapter.ModelOperationManager;
 import com.testify.ecfeed.model.GenericNode;
@@ -109,23 +110,23 @@ public abstract class BasicDetailsPage implements IDetailsPage, IModelUpdateList
 	
 	@Override
 	public void refresh(){
-//		fSelectedNode = (GenericNode)fMasterSection.getSelectedElement();
-//		for(IFormPart form : fForms){
-//			form.refresh();
-//		}
+		fSelectedNode = (GenericNode)fMasterSection.getSelectedElement();
 		refreshTextClient();
 	}
 
 	protected void refreshTextClient(){
-		if(fImplementButton != null && fImplementButton.isDisposed() == false){
-//			EImplementationStatus status = fImplementer.getImplementationStatus(fSelectedNode);
-//			boolean implementable = fImplementer.implementable(fSelectedNode);
-//			if(status != EImplementationStatus.IMPLEMENTED && implementable){
-//				fImplementButton.setEnabled(true);
-//			}
-//			else{
-//				fImplementButton.setEnabled(false);
-//			}
+		if(fSelectedNode == null){
+			fImplementButton.setEnabled(false);
+		}
+		else if(fImplementButton != null && fImplementButton.isDisposed() == false){
+			EImplementationStatus status = fImplementer.getImplementationStatus(fSelectedNode);
+			boolean implementable = fImplementer.implementable(fSelectedNode);
+			if((status != EImplementationStatus.IMPLEMENTED) && implementable){
+				fImplementButton.setEnabled(true);
+			}
+			else{
+				fImplementButton.setEnabled(false);
+			}
 		}
 	}
 
