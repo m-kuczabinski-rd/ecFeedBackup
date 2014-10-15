@@ -164,7 +164,9 @@ public abstract class ViewerSection extends BasicSection implements ISelectionPr
 	@Override
 	public void refresh(){
 		super.refresh();
-		fViewer.refresh();
+		if(fViewer != null && fViewer.getControl().isDisposed() == false){
+			fViewer.refresh();
+		}
 	}
 
 	public Object getSelectedElement(){

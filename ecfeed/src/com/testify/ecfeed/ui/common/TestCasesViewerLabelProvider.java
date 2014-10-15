@@ -10,7 +10,6 @@ import org.eclipse.swt.graphics.Color;
 
 import com.testify.ecfeed.adapter.EImplementationStatus;
 import com.testify.ecfeed.adapter.IImplementationStatusResolver;
-import com.testify.ecfeed.adapter.java.JavaImplementationStatusResolver;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.TestCaseNode;
@@ -24,7 +23,7 @@ public class TestCasesViewerLabelProvider extends LabelProvider implements IColo
 	public TestCasesViewerLabelProvider(){
 		fExecutableTestSuites = new HashMap<String, Integer>();
 		fTestCasesStatusMap = new HashMap<TestCaseNode, Boolean>();
-		fStatusResolver = new JavaImplementationStatusResolver(new EclipseLoaderProvider());
+		fStatusResolver = new EclipseImplementationStatusResolver();
 	}
 	
 	public TestCasesViewerLabelProvider(IImplementationStatusResolver statusResolver, MethodNode method){

@@ -12,6 +12,7 @@
 package com.testify.ecfeed.ui.editor;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.eclipse.core.commands.operations.IUndoContext;
@@ -31,7 +32,6 @@ import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Section;
 
-import com.testify.ecfeed.adapter.EImplementationStatus;
 import com.testify.ecfeed.adapter.IModelImplementer;
 import com.testify.ecfeed.adapter.ModelOperationManager;
 import com.testify.ecfeed.model.GenericNode;
@@ -117,15 +117,15 @@ public abstract class BasicDetailsPage implements IDetailsPage, IModelUpdateList
 	}
 
 	protected void refreshTextClient(){
-		if(fImplementButton != null){
-			EImplementationStatus status = fImplementer.getImplementationStatus(fSelectedNode);
-			boolean implementable = fImplementer.implementable(fSelectedNode);
-			if(status != EImplementationStatus.IMPLEMENTED && implementable){
-				fImplementButton.setEnabled(true);
-			}
-			else{
-				fImplementButton.setEnabled(false);
-			}
+		if(fImplementButton != null && fImplementButton.isDisposed() == false){
+//			EImplementationStatus status = fImplementer.getImplementationStatus(fSelectedNode);
+//			boolean implementable = fImplementer.implementable(fSelectedNode);
+//			if(status != EImplementationStatus.IMPLEMENTED && implementable){
+//				fImplementButton.setEnabled(true);
+//			}
+//			else{
+//				fImplementButton.setEnabled(false);
+//			}
 		}
 	}
 
@@ -244,8 +244,8 @@ public abstract class BasicDetailsPage implements IDetailsPage, IModelUpdateList
 		return null;
 	}
 
-	public IModelUpdateListener getUpdateListener(){
-		return this;
+	public List<IModelUpdateListener> getUpdateListeners(){
+		return Arrays.asList(new IModelUpdateListener[]{this});
 	}
 	
 	public IUndoContext getUndoContext(){

@@ -46,7 +46,6 @@ import org.eclipse.swt.widgets.Tree;
 
 import com.testify.ecfeed.adapter.EImplementationStatus;
 import com.testify.ecfeed.adapter.IImplementationStatusResolver;
-import com.testify.ecfeed.adapter.java.JavaImplementationStatusResolver;
 import com.testify.ecfeed.adapter.java.JavaUtils;
 import com.testify.ecfeed.generators.DoubleParameter;
 import com.testify.ecfeed.generators.GeneratorFactory;
@@ -63,7 +62,7 @@ import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.PartitionedNode;
 import com.testify.ecfeed.ui.common.Constants;
-import com.testify.ecfeed.ui.common.EclipseLoaderProvider;
+import com.testify.ecfeed.ui.common.EclipseImplementationStatusResolver;
 import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.common.NodeNameColumnLabelProvider;
 import com.testify.ecfeed.ui.common.TreeCheckStateListener;
@@ -196,7 +195,7 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 		fTitle = title;
 		fMessage = message;
 		fGenerateExecutableContent = generateExecutables;
-		fStatusResolver = new JavaImplementationStatusResolver(new EclipseLoaderProvider());
+		fStatusResolver = new EclipseImplementationStatusResolver();
 	}
 	
 	protected  List<List<PartitionNode>> algorithmInput(){

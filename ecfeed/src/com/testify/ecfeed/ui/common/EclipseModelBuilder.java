@@ -236,34 +236,6 @@ public class EclipseModelBuilder extends JavaModelAnalyser{
 		return values;
 	}
 
-
-	protected String getTypeName(IMethod method, ILocalVariable parameter){
-		String typeSignaure = parameter.getTypeSignature(); 
-		switch(typeSignaure){
-		case Signature.SIG_BOOLEAN:
-			return com.testify.ecfeed.adapter.java.Constants.TYPE_NAME_BOOLEAN;
-		case Signature.SIG_BYTE:
-			return com.testify.ecfeed.adapter.java.Constants.TYPE_NAME_BYTE;
-		case Signature.SIG_CHAR:
-			return com.testify.ecfeed.adapter.java.Constants.TYPE_NAME_CHAR;
-		case Signature.SIG_DOUBLE:
-			return com.testify.ecfeed.adapter.java.Constants.TYPE_NAME_DOUBLE;
-		case Signature.SIG_FLOAT:
-			return com.testify.ecfeed.adapter.java.Constants.TYPE_NAME_FLOAT;
-		case Signature.SIG_INT:
-			return com.testify.ecfeed.adapter.java.Constants.TYPE_NAME_INT;
-		case Signature.SIG_LONG:
-			return com.testify.ecfeed.adapter.java.Constants.TYPE_NAME_LONG;
-		case Signature.SIG_SHORT:
-			return com.testify.ecfeed.adapter.java.Constants.TYPE_NAME_SHORT;
-		case "QString;":
-			return com.testify.ecfeed.adapter.java.Constants.TYPE_NAME_STRING;
-		default:
-			return getVariableType(method, parameter).getFullyQualifiedName().replaceAll("\\$",	"\\.");
-		}
-	}
-
-
 	protected boolean hasSupportedParameters(IMethod method) {
 		try {
 			for(ILocalVariable var : method.getParameters()){

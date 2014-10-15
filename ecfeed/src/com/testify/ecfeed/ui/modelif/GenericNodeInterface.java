@@ -1,15 +1,10 @@
 package com.testify.ecfeed.ui.modelif;
 
-import java.net.URLClassLoader;
 import java.util.Arrays;
 import java.util.Collection;
 
 import com.testify.ecfeed.adapter.EImplementationStatus;
-import com.testify.ecfeed.adapter.IImplementationStatusResolver;
 import com.testify.ecfeed.adapter.IModelOperation;
-import com.testify.ecfeed.adapter.java.ILoaderProvider;
-import com.testify.ecfeed.adapter.java.JavaImplementationStatusResolver;
-import com.testify.ecfeed.adapter.java.ModelClassLoader;
 import com.testify.ecfeed.adapter.operations.FactoryRemoveOperation;
 import com.testify.ecfeed.adapter.operations.FactoryRenameOperation;
 import com.testify.ecfeed.adapter.operations.FactoryShiftOperation;
@@ -25,14 +20,13 @@ import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.TestCaseNode;
-import com.testify.ecfeed.ui.common.EclipseLoaderProvider;
+import com.testify.ecfeed.ui.common.EclipseImplementationStatusResolver;
 import com.testify.ecfeed.ui.common.Messages;
 
 public class GenericNodeInterface extends OperationExecuter{
 
-	private ILoaderProvider fLoaderProvider;
 	private GenericNode fTarget;
-	private IImplementationStatusResolver fStatusResolver;
+	private EclipseImplementationStatusResolver fStatusResolver;
 	
 	private class RenameParameterProblemTitleProvider implements IModelVisitor{
 
@@ -72,11 +66,10 @@ public class GenericNodeInterface extends OperationExecuter{
 		}
 		
 	}
-	
+
 	public GenericNodeInterface(IModelUpdateContext updateContext) {
 		super(updateContext);
-		fLoaderProvider = new EclipseLoaderProvider();
-		fStatusResolver = new JavaImplementationStatusResolver(fLoaderProvider);
+		fStatusResolver = new EclipseImplementationStatusResolver();
 	}
 
 	public void setTarget(GenericNode target){
@@ -156,10 +149,6 @@ public class GenericNodeInterface extends OperationExecuter{
 			}
 		}catch(Exception e){}
 		return false;
-	}
-
-	protected ModelClassLoader getLoader(boolean create, URLClassLoader parent){
-		return fLoaderProvider.getLoader(create, parent);
 	}
 
 	protected boolean executeMoveOperation(IModelOperation moveOperation) {

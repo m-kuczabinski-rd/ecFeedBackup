@@ -11,6 +11,8 @@
 
 package com.testify.ecfeed.ui.editor;
 
+import java.util.List;
+
 import org.eclipse.core.commands.operations.IUndoContext;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
@@ -59,7 +61,7 @@ public class ModelMasterDetailsBlock extends MasterDetailsBlock implements ISele
 		}
 
 		@Override
-		public IModelUpdateListener getUpdateListener() {
+		public List<IModelUpdateListener> getUpdateListeners() {
 			return null;
 		}
 

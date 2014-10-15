@@ -11,6 +11,8 @@
 
 package com.testify.ecfeed.ui.editor;
 
+import java.util.List;
+
 import org.eclipse.core.commands.operations.IUndoContext;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.viewers.DoubleClickEvent;
@@ -125,7 +127,9 @@ public abstract class BasicSection extends SectionPart implements IModelUpdateCo
 	}
 	
 	protected void modelUpdated(){
-		fUpdateContext.getUpdateListener().modelUpdated(this);
+		for(IModelUpdateListener listener : fUpdateContext.getUpdateListeners()){
+			listener.modelUpdated(this);
+		}
 	}
 	
 //	protected void setModelUpdateListener(IModelUpdateListener listener){
@@ -166,8 +170,8 @@ public abstract class BasicSection extends SectionPart implements IModelUpdateCo
 	}
 	
 	@Override 
-	public IModelUpdateListener getUpdateListener(){
-		return fUpdateContext.getUpdateListener();
+	public List<IModelUpdateListener> getUpdateListeners(){
+		return fUpdateContext.getUpdateListeners();
 	}
 	
 	@Override

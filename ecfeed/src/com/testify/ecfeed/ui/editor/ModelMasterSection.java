@@ -467,11 +467,11 @@ public class ModelMasterSection extends TreeViewerSection{
 	}
 	
 	@Override
-	public IModelUpdateListener getUpdateListener(){
+	public List<IModelUpdateListener> getUpdateListeners(){
 		if(fUpdateListener == null){
 			fUpdateListener = new UpdateListener();
 		}
-		return fUpdateListener;
+		return Arrays.asList(new IModelUpdateListener[]{fUpdateListener});
 	}
 
 	public String getProjectName() {

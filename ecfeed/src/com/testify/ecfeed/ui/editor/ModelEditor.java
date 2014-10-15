@@ -39,6 +39,7 @@ import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.part.FileEditorInput;
 
+import com.testify.ecfeed.adapter.CachedImplementationStatusResolver;
 import com.testify.ecfeed.adapter.ModelOperationManager;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.serialization.IModelParser;
@@ -83,8 +84,11 @@ public class ModelEditor extends FormEditor{
 					if (!Display.getDefault().isDisposed()) {
 						Display.getDefault().asyncExec(new Runnable() {
 							public void run() {
+								CachedImplementationStatusResolver.clearCache();
 								fModelPage.getMasterBlock().getMasterSection().refresh();
-								fModelPage.getMasterBlock().getCurrentPage().refresh();
+								if(fModelPage.getMasterBlock().getCurrentPage() != null){
+									fModelPage.getMasterBlock().getCurrentPage().refresh();
+								}
 							}
 						});
 					}

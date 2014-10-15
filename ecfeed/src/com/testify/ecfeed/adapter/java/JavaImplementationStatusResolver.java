@@ -3,7 +3,9 @@ package com.testify.ecfeed.adapter.java;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.testify.ecfeed.adapter.EImplementationStatus;
 import com.testify.ecfeed.adapter.IImplementationStatusResolver;
@@ -19,6 +21,10 @@ import com.testify.ecfeed.model.TestCaseNode;
 
 public class JavaImplementationStatusResolver implements IImplementationStatusResolver{
 	private ILoaderProvider fLoaderProvider;
+	private ModelClassLoader fLoader;
+	
+	private static Map<GenericNode, EImplementationStatus> fStatusMap = new HashMap<>();
+	private Map<String, Class<?>> fLoadedClasses;
 
 	private class StatusResolver implements IModelVisitor{
 
@@ -60,17 +66,40 @@ public class JavaImplementationStatusResolver implements IImplementationStatusRe
 	}
 	
 	public JavaImplementationStatusResolver(ILoaderProvider loaderProvider){
-		fLoaderProvider = loaderProvider;
+//		fLoaderProvider = loaderProvider;
+		fLoader = loaderProvider.getLoader(true, null);
+		fLoadedClasses = new HashMap<>();
 	}
 	
 	public EImplementationStatus getImplementationStatus(GenericNode node){
 		try {
-			return (EImplementationStatus)node.accept(new StatusResolver());
+			long start = System.nanoTime();
+			if(fStatusMap.containsKey(node) == false){
+				fLoadedClasses.clear();
+				//			return EImplementationStatus.IRRELEVANT;
+
+				//			fStatusMap.clear();
+				EImplementationStatus status = (EImplementationStatus)node.accept(new StatusResolver());
+				fStatusMap.put(node, status);
+			}
+			long stop = System.nanoTime();
+			System.out.print("Implementation status of " + node + " measured in " + (stop - start)/1000 + "." + (stop - start)%1000  + "us\n");
+//			return status;
+			return fStatusMap.get(node);
+//			return (EImplementationStatus)node.accept(new StatusResolver());
 		} catch (Exception e) {
 			return EImplementationStatus.IRRELEVANT;
 		}
 	}
 
+	public void clearStatus(GenericNode node){
+		fStatusMap.remove(node);
+		while(node.getParent() != null){
+			node = node.getParent();
+			fStatusMap.remove(node);
+		}
+	}
+	
 	protected EImplementationStatus implementationStatus(RootNode node){
 		for(ClassNode _class : node.getClasses()){
 			if(implementationStatus(_class) != EImplementationStatus.IMPLEMENTED){
@@ -109,7 +138,8 @@ public class JavaImplementationStatusResolver implements IImplementationStatusRe
 			return category.getPartitions().size() > 0 ? EImplementationStatus.IMPLEMENTED : EImplementationStatus.PARTIALLY_IMPLEMENTED;
 		}
 		
-		Class<?> typeObject = createLoader().loadClass(category.getType());
+//		Class<?> typeObject = getLoader().loadClass(category.getType());
+		Class<?> typeObject = loadClass(category.getType());
 		if(typeObject == null){
 			return EImplementationStatus.NOT_IMPLEMENTED;
 		}
@@ -129,22 +159,41 @@ public class JavaImplementationStatusResolver implements IImplementationStatusRe
 	
 	protected EImplementationStatus implementationStatus(PartitionNode partition){
 		if(partition.isAbstract() == false){
-			PartitionValueParser valueParser = new PartitionValueParser(createLoader());
 			String type = partition.getCategory().getType();
-			if(valueParser.parseValue(partition) != null || type.equals(Constants.TYPE_NAME_STRING)){
+			if(type == null){
+				return EImplementationStatus.NOT_IMPLEMENTED;
+			}
+			if(JavaUtils.isPrimitive(type)){
 				return EImplementationStatus.IMPLEMENTED;
 			}
+			Class<?> typeClass = loadClass(type);
+			if(typeClass.isEnum() == false){
+				return EImplementationStatus.NOT_IMPLEMENTED;
+			}
+			for(Object value : typeClass.getEnumConstants()){
+				String name = ((Enum<?>)value).name();
+				if(partition.getValueString().equals(name)){
+					return EImplementationStatus.IMPLEMENTED;
+				}
+			}
 			return EImplementationStatus.NOT_IMPLEMENTED;
+//			PartitionValueParser valueParser = new PartitionValueParser(getLoader());
+//			String type = partition.getCategory().getType();
+//			if(valueParser.parseValue(partition) != null || type.equals(Constants.TYPE_NAME_STRING)){
+//				return EImplementationStatus.IMPLEMENTED;
+//			}
+//			return EImplementationStatus.NOT_IMPLEMENTED;
 		}
 		else{
 			int childrenCount = partition.getPartitions().size();
 			int implementedChildren = 0;
 			int notImplementedChildren = 0;
 			for(PartitionNode child : partition.getPartitions()){
-				if(getImplementationStatus(child) == EImplementationStatus.IMPLEMENTED){
+				EImplementationStatus childStatus = implementationStatus(child);
+				if(childStatus == EImplementationStatus.IMPLEMENTED){
 					implementedChildren++;
 				}
-				else if(getImplementationStatus(child) == EImplementationStatus.NOT_IMPLEMENTED){
+				else if(childStatus == EImplementationStatus.NOT_IMPLEMENTED){
 					notImplementedChildren++;
 				}
 			}
@@ -184,12 +233,14 @@ public class JavaImplementationStatusResolver implements IImplementationStatusRe
 		return EImplementationStatus.IRRELEVANT;
 	}
 
-	private boolean classDefinitionImplemented(ClassNode classNode) {
-		return (createLoader().loadClass(classNode.getQualifiedName()) != null);
+	protected boolean classDefinitionImplemented(ClassNode classNode) {
+//		return (getLoader().loadClass(classNode.getQualifiedName()) != null);
+		return (loadClass(classNode.getQualifiedName()) != null);
 	}
 	
-	private boolean methodDefinitionImplemented(MethodNode methodModel){
-		Class<?> parentClass = createLoader().loadClass(JavaUtils.getQualifiedName(methodModel.getClassNode()));
+	protected boolean methodDefinitionImplemented(MethodNode methodModel){
+		Class<?> parentClass = loadClass(JavaUtils.getQualifiedName(methodModel.getClassNode()));
+//		Class<?> parentClass = getLoader().loadClass(JavaUtils.getQualifiedName(methodModel.getClassNode()));
 		if(parentClass == null){
 			return false;
 		}
@@ -233,8 +284,21 @@ public class JavaImplementationStatusResolver implements IImplementationStatusRe
 		return argTypes;
 	}
 
-	private ModelClassLoader createLoader(){
-		return fLoaderProvider.getLoader(true, null);
+	private ModelClassLoader getLoader(){
+//		static ModelClassLoader loader = null;
+//		return fLoaderProvider.getLoader(true, null);
+		if(fLoader == null){
+			fLoader = fLoaderProvider.getLoader(true, null);
+		}
+		return fLoader;
 	}
 
+	private Class<?> loadClass(String name){
+		if(fLoadedClasses.containsKey(name) == false){
+			Class<?> loaded = getLoader().loadClass(name);
+			fLoadedClasses.put(name, loaded);
+		}
+		return fLoadedClasses.get(name);
+	}
+	
 }
