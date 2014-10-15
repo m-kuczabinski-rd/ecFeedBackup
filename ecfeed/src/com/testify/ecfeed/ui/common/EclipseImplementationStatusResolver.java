@@ -67,7 +67,7 @@ public class EclipseImplementationStatusResolver extends CachedImplementationSta
 	protected boolean enumValueImplemented(String qualifiedName, String value) {
 		IType type = fJavaModelAnalyser.getIType(qualifiedName); 
 		try {
-			if(type == null || type.isEnum()){
+			if(type == null || type.isEnum() == false){
 				return false;
 			}
 			for(IField field : type.getFields()){

@@ -74,20 +74,11 @@ public abstract class CachedImplementationStatusResolver extends
 	}
 	
 	public EImplementationStatus getImplementationStatus(GenericNode node){
-//		long start = System.nanoTime();
-//		System.out.print(node);
 		EImplementationStatus status = fCache.get(node);
 		if(status == null){
-//			System.out.print(" not in cache");
 			status = super.getImplementationStatus(node);
 			updateCache(node, status);
 		}
-//		else{
-//			System.out.print(" in cache");
-//		}
-//		long stop = System.nanoTime();
-//		long elapsed = stop - start;
-//		System.out.print(" checked in " + elapsed/1000 + "." + elapsed%1000 + "us\n");
 		return status;
 	}
 	
@@ -102,7 +93,9 @@ public abstract class CachedImplementationStatusResolver extends
 	
 	public void updateCache(GenericNode node, EImplementationStatus status){
 		fCache.put(node, status);
-		clearCache(node.getParent());
+		if(node != null && node.getParent() != null){
+			clearCache(node.getParent());
+		}
 	}
 	
 	public static void clearCache(){
