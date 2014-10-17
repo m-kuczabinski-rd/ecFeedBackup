@@ -473,8 +473,4 @@ public class ModelMasterSection extends TreeViewerSection{
 		}
 		return Arrays.asList(new IModelUpdateListener[]{fUpdateListener});
 	}
-
-	public String getProjectName() {
-		return fMasterDetailsBlock.getPage().getEditor().getProjectName();
-	}
 }

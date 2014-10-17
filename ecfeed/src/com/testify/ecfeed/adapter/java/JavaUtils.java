@@ -172,6 +172,10 @@ public class JavaUtils {
 		return (lastDotIndex == -1)?qualifiedName: qualifiedName.substring(lastDotIndex + 1);
 	}
 
+	public static String getLocalName(ClassNode node){
+		return getLocalName(node.getName());
+	}
+
 	public static String getPackageName(ClassNode classNode){
 		return getPackageName(classNode.getName());
 	}

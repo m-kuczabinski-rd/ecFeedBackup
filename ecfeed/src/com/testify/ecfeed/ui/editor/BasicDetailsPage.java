@@ -37,11 +37,11 @@ import com.testify.ecfeed.adapter.IModelImplementer;
 import com.testify.ecfeed.adapter.ModelOperationManager;
 import com.testify.ecfeed.model.GenericNode;
 import com.testify.ecfeed.ui.common.EclipseModelImplementer;
-import com.testify.ecfeed.ui.common.IProjectNameProvider;
+import com.testify.ecfeed.ui.common.IFileInfoProvider;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 import com.testify.ecfeed.ui.modelif.IModelUpdateListener;
 
-public abstract class BasicDetailsPage implements IDetailsPage, IModelUpdateListener, ISectionContext, IModelUpdateContext, IProjectNameProvider{
+public abstract class BasicDetailsPage implements IDetailsPage, IModelUpdateListener, ISectionContext, IModelUpdateContext{
 
 	private Section fMainSection;
 	private Composite fMainComposite;
@@ -57,12 +57,12 @@ public abstract class BasicDetailsPage implements IDetailsPage, IModelUpdateList
 	
 	private static final int MAIN_SECTION_STYLE = Section.EXPANDED | Section.TITLE_BAR;
 
-	public BasicDetailsPage(ModelMasterSection masterSection, IModelUpdateContext updateContext){
+	public BasicDetailsPage(ModelMasterSection masterSection, IModelUpdateContext updateContext, IFileInfoProvider fileInforProvider){
 		fMasterSection = masterSection;
 		fForms = new ArrayList<IFormPart>();
 		fViewerSections = new ArrayList<ViewerSection>();
 		fModelUpdateContext = updateContext;
-		fImplementer = new EclipseModelImplementer(this);
+		fImplementer = new EclipseModelImplementer(fileInforProvider);
 	}
 	
 	@Override
@@ -251,9 +251,5 @@ public abstract class BasicDetailsPage implements IDetailsPage, IModelUpdateList
 	
 	public IUndoContext getUndoContext(){
 		return fModelUpdateContext.getUndoContext();
-	}
-	
-	public String getProjectName(){
-		return fMasterSection.getProjectName();
 	}
 }

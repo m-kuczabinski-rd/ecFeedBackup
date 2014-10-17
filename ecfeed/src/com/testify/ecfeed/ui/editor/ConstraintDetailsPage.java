@@ -20,6 +20,7 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 
 import com.testify.ecfeed.model.ConstraintNode;
+import com.testify.ecfeed.ui.common.IFileInfoProvider;
 import com.testify.ecfeed.ui.modelif.ConstraintInterface;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 
@@ -37,8 +38,8 @@ public class ConstraintDetailsPage extends BasicDetailsPage {
 		}
 	}
 	
-	public ConstraintDetailsPage(ModelMasterSection masterSection, IModelUpdateContext updateContext){
-		super(masterSection, updateContext);
+	public ConstraintDetailsPage(ModelMasterSection masterSection, IModelUpdateContext updateContext, IFileInfoProvider fileInforProvider){
+		super(masterSection, updateContext, fileInforProvider);
 		fConstraintIf = new ConstraintInterface(this);
 	}
 	

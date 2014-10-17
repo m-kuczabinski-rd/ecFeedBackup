@@ -21,6 +21,7 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.IFormPart;
 
 import com.testify.ecfeed.model.RootNode;
+import com.testify.ecfeed.ui.common.IFileInfoProvider;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 import com.testify.ecfeed.ui.modelif.RootInterface;
 
@@ -38,8 +39,8 @@ public class ModelDetailsPage extends BasicDetailsPage {
 		}
 	}
 	
-	public ModelDetailsPage(ModelMasterSection masterSection, IModelUpdateContext updateContext) {
-		super(masterSection, updateContext);
+	public ModelDetailsPage(ModelMasterSection masterSection, IModelUpdateContext updateContext, IFileInfoProvider fileInforProvider) {
+		super(masterSection, updateContext, fileInforProvider);
 		fRootIf = new RootInterface(this);
 	}
 

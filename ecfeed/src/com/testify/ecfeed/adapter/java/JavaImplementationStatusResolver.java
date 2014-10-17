@@ -111,7 +111,7 @@ public class JavaImplementationStatusResolver extends AbstractImplementationStat
 		if(m.getReturnType().equals(Void.TYPE) == false){
 			continue;
 		}
-		if(Modifier.isPublic(m.getModifiers())){
+		if(Modifier.isPublic(m.getModifiers()) == false){
 			continue;
 		}
 		if(m.getName().equals(methodModel.getName()) == false){
@@ -143,7 +143,7 @@ public class JavaImplementationStatusResolver extends AbstractImplementationStat
 	@Override
 	protected boolean enumValueImplemented(String qualifiedName, String value) {
 		Class<?> classDefinition = loadClass(qualifiedName);
-		if(classDefinition == null || classDefinition.isEnum() == false){
+		if(classDefinition != null && classDefinition.isEnum()){
 			for(Field field : classDefinition.getFields()){
 				if(field.isEnumConstant() && field.getName().equals(value)){
 					return true;

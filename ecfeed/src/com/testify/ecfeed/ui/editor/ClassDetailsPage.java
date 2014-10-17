@@ -20,6 +20,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
 
 import com.testify.ecfeed.model.ClassNode;
+import com.testify.ecfeed.ui.common.IFileInfoProvider;
 import com.testify.ecfeed.ui.modelif.ClassInterface;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 
@@ -54,8 +55,8 @@ public class ClassDetailsPage extends BasicDetailsPage {
 		}
 	}
 	
-	public ClassDetailsPage(ModelMasterSection masterSection, IModelUpdateContext updateContext) {
-		super(masterSection, updateContext);
+	public ClassDetailsPage(ModelMasterSection masterSection, IModelUpdateContext updateContext, IFileInfoProvider fileInforProvider) {
+		super(masterSection, updateContext, fileInforProvider);
 		fClassIf = new ClassInterface(this);
 	}
 

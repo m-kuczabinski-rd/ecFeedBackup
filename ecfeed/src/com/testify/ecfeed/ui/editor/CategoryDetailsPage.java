@@ -22,6 +22,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
 
 import com.testify.ecfeed.model.CategoryNode;
+import com.testify.ecfeed.ui.common.IFileInfoProvider;
 import com.testify.ecfeed.ui.modelif.CategoryInterface;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 
@@ -69,8 +70,8 @@ public class CategoryDetailsPage extends BasicDetailsPage{
 		}
 	}
 	
-	public CategoryDetailsPage(ModelMasterSection masterSection, IModelUpdateContext updateContext) {
-		super(masterSection, updateContext);
+	public CategoryDetailsPage(ModelMasterSection masterSection, IModelUpdateContext updateContext, IFileInfoProvider fileInforProvider) {
+		super(masterSection, updateContext, fileInforProvider);
 		fCategoryIf = new CategoryInterface(this);
 	}
 

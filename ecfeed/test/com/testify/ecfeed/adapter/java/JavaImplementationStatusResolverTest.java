@@ -160,7 +160,7 @@ public class JavaImplementationStatusResolverTest {
 	@Test
 	public void methodStatusTest(boolean parentDefinitionInplemented, EImplementedSignatureElements signature, EChildrenStatus childrenStatus, EImplementationStatus status){
 //		System.out.println("methodStatusTest(" + parentDefinitionInplemented + ", " + signature + ", " + childrenStatus + ", " + status + ")");
-//		MethodNode method = prepareMethod(true, EImplementedSignatureElements.PARAMETERS_NAME_AND_PARAMETERS_IMPLEMENTED, EChildrenStatus.ALL_PARTLY_IMPLEMENTED);
+//		MethodNode method = prepareMethod(true, EImplementedSignatureElements.PARAMETERS_NOTHING_IMPLEMENTED, EChildrenStatus.ALL_NOT_IMPLEMENTED);
 		MethodNode method = prepareMethod(parentDefinitionInplemented, signature, childrenStatus);
 		EImplementationStatus resolvedStatus = fResolver.getImplementationStatus(method);
 //		System.out.print("Method " + method + " resolved to " + resolvedStatus + "\n");

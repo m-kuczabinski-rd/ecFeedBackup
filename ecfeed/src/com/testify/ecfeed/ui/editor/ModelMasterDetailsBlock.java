@@ -163,13 +163,13 @@ public class ModelMasterDetailsBlock extends MasterDetailsBlock implements ISele
 
 	@Override
 	protected void registerPages(DetailsPart detailsPart) {
-		detailsPart.registerPage(RootNode.class, new ModelDetailsPage(fMasterSection, fUpdateContext));
-		detailsPart.registerPage(ClassNode.class, new ClassDetailsPage(fMasterSection, fUpdateContext));
-		detailsPart.registerPage(MethodNode.class, new MethodDetailsPage(fMasterSection, fUpdateContext));
-		detailsPart.registerPage(CategoryNode.class, new CategoryDetailsPage(fMasterSection, fUpdateContext));
-		detailsPart.registerPage(TestCaseNode.class, new TestCaseDetailsPage(fMasterSection, fUpdateContext));
-		detailsPart.registerPage(ConstraintNode.class, new ConstraintDetailsPage(fMasterSection, fUpdateContext));
-		detailsPart.registerPage(PartitionNode.class, new PartitionDetailsPage(fMasterSection, fUpdateContext));
+		detailsPart.registerPage(RootNode.class, new ModelDetailsPage(fMasterSection, fUpdateContext, fPage.getEditor()));
+		detailsPart.registerPage(ClassNode.class, new ClassDetailsPage(fMasterSection, fUpdateContext, fPage.getEditor()));
+		detailsPart.registerPage(MethodNode.class, new MethodDetailsPage(fMasterSection, fUpdateContext, fPage.getEditor()));
+		detailsPart.registerPage(CategoryNode.class, new CategoryDetailsPage(fMasterSection, fUpdateContext, fPage.getEditor()));
+		detailsPart.registerPage(TestCaseNode.class, new TestCaseDetailsPage(fMasterSection, fUpdateContext, fPage.getEditor()));
+		detailsPart.registerPage(ConstraintNode.class, new ConstraintDetailsPage(fMasterSection, fUpdateContext, fPage.getEditor()));
+		detailsPart.registerPage(PartitionNode.class, new PartitionDetailsPage(fMasterSection, fUpdateContext, fPage.getEditor()));
 
 		selectNode(getModel());
 	}

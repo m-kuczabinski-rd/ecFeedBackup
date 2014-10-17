@@ -18,9 +18,9 @@ public abstract class CachedImplementationStatusResolver extends
 		AbstractImplementationStatusResolver {
 
 	private static Map<GenericNode, EImplementationStatus> fCache = new HashMap<>();
-	private CacheCleaner fCacheCleaner;
+	private static CacheCleaner fCacheCleaner = new CacheCleaner();
 	
-	private class CacheCleaner implements IModelVisitor{
+	private static class CacheCleaner implements IModelVisitor{
 
 		@Override
 		public Object visit(RootNode node) throws Exception {
@@ -82,7 +82,7 @@ public abstract class CachedImplementationStatusResolver extends
 		return status;
 	}
 	
-	public void clearCache(GenericNode node){
+	public static void clearCache(GenericNode node){
 		if(node != null){
 			try{
 				node.accept(fCacheCleaner);

@@ -22,6 +22,7 @@ import org.eclipse.swt.widgets.Text;
 
 import com.testify.ecfeed.adapter.EImplementationStatus;
 import com.testify.ecfeed.model.MethodNode;
+import com.testify.ecfeed.ui.common.IFileInfoProvider;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 import com.testify.ecfeed.ui.modelif.MethodInterface;
 
@@ -58,8 +59,8 @@ public class MethodDetailsPage extends BasicDetailsPage {
 		}
 	}
 	
-	public MethodDetailsPage(ModelMasterSection masterSection, IModelUpdateContext updateContext) {
-		super(masterSection, updateContext);
+	public MethodDetailsPage(ModelMasterSection masterSection, IModelUpdateContext updateContext, IFileInfoProvider fileInforProvider) {
+		super(masterSection, updateContext, fileInforProvider);
 		fMethodIf = new MethodInterface(this);
 	}
 

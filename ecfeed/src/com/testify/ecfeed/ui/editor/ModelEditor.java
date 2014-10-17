@@ -18,6 +18,7 @@ import org.eclipse.core.commands.operations.IUndoContext;
 import org.eclipse.core.commands.operations.ObjectUndoContext;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceChangeEvent;
 import org.eclipse.core.resources.IResourceChangeListener;
@@ -28,6 +29,9 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.jdt.core.IJavaProject;
+import org.eclipse.jdt.core.IPackageFragmentRoot;
+import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.window.Window;
@@ -47,8 +51,9 @@ import com.testify.ecfeed.serialization.IModelSerializer;
 import com.testify.ecfeed.serialization.ParserException;
 import com.testify.ecfeed.serialization.ect.EctParser;
 import com.testify.ecfeed.serialization.ect.EctSerializer;
+import com.testify.ecfeed.ui.common.IFileInfoProvider;
 
-public class ModelEditor extends FormEditor{
+public class ModelEditor extends FormEditor implements IFileInfoProvider{
 	
 	private RootNode fModel;
 	private ModelPage fModelPage;
@@ -215,11 +220,45 @@ public class ModelEditor extends FormEditor{
 		}
 	}
 	
-	public String getProjectName() {
+	public IFile getFile(){
 		IEditorInput input = getEditorInput();
 		if (input instanceof FileEditorInput){
-			IFile file = ((FileEditorInput)input).getFile();
-			return file.getProject().getName();
+			return ((FileEditorInput)input).getFile();
+		}
+		return null;
+	}
+	
+	public IProject getProject() {
+		IFile file = getFile();
+		if (file != null){
+			return file.getProject();
+		}
+		return null;
+	}
+
+	public IPath getPath(){
+		IFile file = getFile();
+		if (file != null){
+			IPath path = file.getFullPath(); 
+			return path;
+		}
+		return null;
+	}
+	
+	public IPackageFragmentRoot getPackageFragmentRoot() {
+		try {
+			if(getProject().hasNature(JavaCore.NATURE_ID)){
+				IJavaProject javaProject = JavaCore.create(getProject());
+				IPath path = getPath();
+				if(javaProject != null){
+					for(IPackageFragmentRoot root : javaProject.getPackageFragmentRoots()){
+						if(root.getPath().isPrefixOf(path)){
+							return root;
+						}
+					}
+				}
+			}
+		} catch (CoreException e) {
 		}
 		return null;
 	}
