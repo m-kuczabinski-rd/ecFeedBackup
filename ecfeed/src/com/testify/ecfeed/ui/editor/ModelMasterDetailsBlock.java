@@ -17,6 +17,7 @@ import org.eclipse.core.commands.operations.IUndoContext;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
+import org.eclipse.swt.SWTException;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.actions.ActionFactory;
@@ -130,7 +131,9 @@ public class ModelMasterDetailsBlock extends MasterDetailsBlock implements ISele
 
 	public BasicDetailsPage getCurrentPage(){
 		if(detailsPart != null){
-			return (BasicDetailsPage)detailsPart.getCurrentPage();
+			try{
+				return (BasicDetailsPage)detailsPart.getCurrentPage();
+			}catch(SWTException e){}
 		}
 		return null;
 	}
