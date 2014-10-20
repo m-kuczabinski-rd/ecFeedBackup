@@ -126,7 +126,7 @@ public class PartitionsViewer extends TableViewerSection {
 		protected CellEditor getCellEditor(Object element) {
 			PartitionNode node = (PartitionNode)element;
 			if(CategoryInterface.hasLimitedValuesSet(node.getCategory())){
-				fCellEditor.setActivationStyle(ComboBoxCellEditor.DROP_DOWN_ON_MOUSE_ACTIVATION);
+				fCellEditor.setActivationStyle(ComboBoxCellEditor.DROP_DOWN_ON_KEY_ACTIVATION);
 			} else {
 				fCellEditor.setActivationStyle(SWT.NONE);
 			}

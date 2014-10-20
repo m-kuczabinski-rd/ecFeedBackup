@@ -72,7 +72,7 @@ public class ParametersViewer extends TableViewerSection{
 		protected CellEditor getCellEditor(Object element) {
 			if(fCellEditor == null){
 				fCellEditor = new ComboBoxCellEditor(getTable(), CategoryInterface.supportedPrimitiveTypes());
-				fCellEditor.setActivationStyle(ComboBoxCellEditor.DROP_DOWN_ON_MOUSE_ACTIVATION);
+				fCellEditor.setActivationStyle(ComboBoxCellEditor.DROP_DOWN_ON_KEY_ACTIVATION);
 			}
 			return fCellEditor;
 		}
