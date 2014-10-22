@@ -35,9 +35,12 @@ public class JavaTestRunner {
 	public void runTestCase(List<PartitionNode> testData) throws RunnerException{
 		validateTestData(testData);
 		try {
-			fTestMethod.invoke(fTestClass.newInstance(), getArguments(testData));
+			Object instance = fTestClass.newInstance();
+			Object[] arguments = getArguments(testData);
+			fTestMethod.invoke(instance, arguments);
 		} catch (IllegalAccessException | IllegalArgumentException
 				| InvocationTargetException | InstantiationException e) {
+			e.printStackTrace();
 			throw new RunnerException(Messages.CANNOT_INVOKE_TEST_METHOD(fTarget.toString(), testData.toString(), e.getMessage()));
 		}
 	}
