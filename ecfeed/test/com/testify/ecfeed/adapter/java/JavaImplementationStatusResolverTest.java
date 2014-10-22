@@ -167,6 +167,15 @@ public class JavaImplementationStatusResolverTest {
 		assertEquals(status, resolvedStatus);
 	}
 	
+	@Test
+		public void classStatusTest(boolean classDefinitionImplemented, int noOfMethods, EImplementedChildren implementedMethods, @expected EImplementationStatus status){
+	//		System.out.print("classStatusTest(" + classDefinitionImplemented + ", " + noOfMethods + ", " + implementedMethods + ", " + status + ")");
+			ClassNode _class = prepareClass(classDefinitionImplemented, noOfMethods, implementedMethods);
+			EImplementationStatus resolvedStatus = fResolver.getImplementationStatus(_class);
+	//		System.out.print(" resolved to " + resolvedStatus + "\n");
+			assertEquals(status, resolvedStatus);
+		}
+
 	@Test 
 	public void projectStatusTest(EChildrenStatus classes, @expected EImplementationStatus status){
 //		System.out.println("projectStatusTest(" + classes + ", " +  status + ")");
@@ -315,15 +324,6 @@ public class JavaImplementationStatusResolverTest {
 		return method;
 	}
 
-	@Test
-	public void classStatusTest(boolean classDefinitionImplemented, int noOfMethods, EImplementedChildren implementedMethods, @expected EImplementationStatus status){
-//		System.out.print("classStatusTest(" + classDefinitionImplemented + ", " + noOfMethods + ", " + implementedMethods + ", " + status + ")");
-		ClassNode _class = prepareClass(classDefinitionImplemented, noOfMethods, implementedMethods);
-		EImplementationStatus resolvedStatus = fResolver.getImplementationStatus(_class);
-//		System.out.print(" resolved to " + resolvedStatus + "\n");
-		assertEquals(status, resolvedStatus);
-	}
-	
 	private ClassNode prepareClass(boolean classDefinitionImplemented, int noOfMethods, EImplementedChildren implementedMethods) {
 		if((classDefinitionImplemented == false && implementedMethods != EImplementedChildren.NONE)||
 			(noOfMethods == 0 && implementedMethods != EImplementedChildren.NONE)){
