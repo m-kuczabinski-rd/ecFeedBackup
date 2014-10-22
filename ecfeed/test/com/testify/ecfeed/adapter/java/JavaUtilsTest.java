@@ -19,10 +19,15 @@ public class JavaUtilsTest {
 
 	@Test
 	public void isValidTypeNameTest(String packageName, String className, boolean valid){
-		// TODO Auto-generated method stub
-		System.out.println("isValidTypeNameTest(" + packageName + ", " + className + ", " + valid + ")");
+//		packageName = "";
+//		className = "int";
+//		valid = false;
+//		System.out.println("isValidTypeNameTest(" + packageName + ", " + className + ", " + valid + ")");
 		String typeName;
-		if(packageName.length() > 0){
+		if(packageName == null || className == null){
+			typeName = null;
+		}
+		else if(packageName.length() > 0){
 			typeName = packageName + "." + className;
 		}
 		else{

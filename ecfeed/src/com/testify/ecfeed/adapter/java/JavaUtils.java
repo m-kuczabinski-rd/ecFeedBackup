@@ -15,6 +15,7 @@ import com.testify.ecfeed.model.MethodNode;
 public class JavaUtils {
 	
 	public static boolean isValidTypeName(String name){
+		if(name == null) return false;
 		if(isPrimitive(name)) return true;
 		if(name.matches(Constants.REGEX_CLASS_NODE_NAME) == false) return false;
 		StringTokenizer tokenizer = new StringTokenizer(name, ".");
