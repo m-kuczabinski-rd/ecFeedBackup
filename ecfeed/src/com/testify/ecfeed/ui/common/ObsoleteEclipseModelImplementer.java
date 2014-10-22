@@ -26,9 +26,9 @@ import org.eclipse.jdt.core.dom.EnumDeclaration;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.text.edits.TextEdit;
 
+import com.testify.ecfeed.adapter.AbstractModelImplementer;
 import com.testify.ecfeed.adapter.CachedImplementationStatusResolver;
 import com.testify.ecfeed.adapter.EImplementationStatus;
-import com.testify.ecfeed.adapter.java.JavaModelImplementer;
 import com.testify.ecfeed.adapter.java.JavaUtils;
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.ClassNode;
@@ -40,7 +40,7 @@ import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.TestCaseNode;
 
-public abstract class ObsoleteEclipseModelImplementer extends JavaModelImplementer {
+public abstract class ObsoleteEclipseModelImplementer extends AbstractModelImplementer {
 
 	IFileInfoProvider fFileInfoProvider;
 	
