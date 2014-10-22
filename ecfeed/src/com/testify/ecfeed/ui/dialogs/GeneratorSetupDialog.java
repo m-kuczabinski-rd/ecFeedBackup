@@ -320,6 +320,11 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 		fConstraintsViewer.getTree().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 		fConstraintsViewer.setInput(fMethod);
 		fConstraintsViewer.addCheckStateListener(new TreeCheckStateListener(fConstraintsViewer));
+		fConstraintsViewer.expandAll();
+		for(String constraint : fMethod.getConstraintsNames()){
+			fConstraintsViewer.setSubtreeChecked(constraint, true);
+		}
+		fConstraintsViewer.collapseAll();
 	}
 
 	private void createConstraintsButtons(Composite parent) {
