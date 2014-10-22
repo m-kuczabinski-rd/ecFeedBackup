@@ -21,7 +21,8 @@ public class ModelClassLoader extends URLClassLoader {
 		}
 
 		try {
-			Class<?> typeClass = super.loadClass(className.substring(0, className.lastIndexOf('.')));
+			String topClass = className.substring(0, className.lastIndexOf('.'));
+			Class<?> typeClass = super.loadClass(topClass);
 			for (Class<?> innerClass : typeClass.getDeclaredClasses()) {
 				if (innerClass.getCanonicalName().equals(className)) {
 					return innerClass;
