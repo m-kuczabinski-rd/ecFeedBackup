@@ -12,6 +12,7 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.swt.widgets.Display;
 
+import com.testify.ecfeed.adapter.java.ILoaderProvider;
 import com.testify.ecfeed.adapter.java.ModelClassLoader;
 import com.testify.ecfeed.generators.api.IConstraint;
 import com.testify.ecfeed.generators.api.IGenerator;
@@ -50,13 +51,12 @@ public class OnlineTestRunningSupport {
 		public void run(IProgressMonitor monitor)
 				throws InvocationTargetException, InterruptedException {
 			try{
-				JavaTestRunner testRunner = new JavaTestRunner(EclipseLoaderProvider.createLoader());
-				testRunner.setTarget(fTarget);
+				fRunner.setTarget(fTarget);
 				List<PartitionNode> next;
 				fGenerator.initialize(fInput, fConstraints, fParameters);
 				monitor.beginTask(Messages.EXECUTING_TEST_WITH_PARAMETERS, fGenerator.totalWork());
 				while((next = fGenerator.next()) != null && monitor.isCanceled() == false){
-					testRunner.runTestCase(next);
+					fRunner.runTestCase(next);
 					monitor.worked(fGenerator.workProgress());
 				}
 				monitor.done();
@@ -74,7 +74,8 @@ public class OnlineTestRunningSupport {
 	}
 	
 	public OnlineTestRunningSupport() {
-		ModelClassLoader loader = new EclipseLoaderProvider().getLoader(true, null);
+		ILoaderProvider loaderProvider = new EclipseLoaderProvider();
+		ModelClassLoader loader = loaderProvider.getLoader(true, null);
 		fRunner = new JavaTestRunner(loader);
 	}
 
