@@ -1,11 +1,18 @@
 package com.testify.ecfeed.ui.common;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 import org.eclipse.core.filebuffers.FileBuffers;
 import org.eclipse.core.filebuffers.ITextFileBuffer;
 import org.eclipse.core.filebuffers.ITextFileBufferManager;
 import org.eclipse.core.filebuffers.LocationKind;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.jdt.core.IClasspathEntry;
@@ -27,6 +34,7 @@ import org.eclipse.text.edits.TextEdit;
 
 import com.testify.ecfeed.adapter.AbstractModelImplementer;
 import com.testify.ecfeed.adapter.CachedImplementationStatusResolver;
+import com.testify.ecfeed.adapter.EImplementationStatus;
 import com.testify.ecfeed.adapter.java.JavaUtils;
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.ClassNode;
@@ -45,14 +53,52 @@ public class EclipseModelImplementer extends AbstractModelImplementer {
 	
 	@Override
 	public boolean implement(GenericNode node){
+		refreshWorkspace();
 		boolean result = super.implement(node);
-		if(result){
-			CachedImplementationStatusResolver.clearCache(node);
-		}
 		CachedImplementationStatusResolver.clearCache(node);
+		refreshWorkspace();
 		return result; 
 	}
+
+	@Override
+	protected boolean implement(CategoryNode node) throws CoreException{
+		if(parameterDefinitionImplemented(node) == false){
+			implementParameterDefinition(node, node.getLeafPartitionValues());
+		}
+		else{
+			List<PartitionNode> unimplemented = unimplementedChoices(node.getLeafPartitions()); 
+			implementChoicesDefinitions(unimplemented);
+			for(PartitionNode choice : unimplemented){
+				CachedImplementationStatusResolver.clearCache(choice);
+			}
+		}
+		return true;
+	}
 	
+	@Override
+	protected boolean implement(PartitionNode node) throws CoreException{
+		CategoryNode parameter = node.getCategory();
+		if(parameterDefinitionImplemented(parameter) == false){
+			if(parameterDefinitionImplementable(parameter)){
+				implementParameterDefinition(parameter, new HashSet<String>(Arrays.asList(new String[]{node.getValueString()})));
+			}
+			else{
+				return false;
+			}
+		}
+		else{
+			if(node.isAbstract()){
+				implementChoicesDefinitions(unimplementedChoices(node.getLeafPartitions()));
+			}
+			else{
+				if(implementable(node) && getImplementationStatus(node) != EImplementationStatus.IMPLEMENTED){
+					implementChoicesDefinitions(Arrays.asList(new PartitionNode[]{node}));
+				}
+			}
+		}
+		return true;
+	}
+
 	@Override
 	protected void implementClassDefinition(ClassNode node) throws CoreException {
 		String packageName = JavaUtils.getPackageName(node.getName());
@@ -85,6 +131,10 @@ public class EclipseModelImplementer extends AbstractModelImplementer {
 
 	@Override
 	protected void implementParameterDefinition(CategoryNode node) throws CoreException {
+		implementParameterDefinition(node, null);
+	}
+
+	protected void implementParameterDefinition(CategoryNode node, Set<String> fields) throws CoreException {
 		String typeName = node.getType();
 		if(JavaUtils.isPrimitive(typeName)){
 			return;
@@ -97,22 +147,40 @@ public class EclipseModelImplementer extends AbstractModelImplementer {
 		String unitName = localName + ".java";
 		IPackageFragment packageFragment = getPackageFragment(packageName);
 		ICompilationUnit unit = packageFragment.getCompilationUnit(unitName);
-		unit.createType(enumDefinitionContent(node), null, false, null);
+		unit.createType(enumDefinitionContent(node, fields), null, false, null);
+	}
+
+	@Override
+	protected void implementChoiceDefinition(PartitionNode node) throws CoreException {
+		if(implementable(node) && getImplementationStatus(node) != EImplementationStatus.IMPLEMENTED){
+			implementChoicesDefinitions(Arrays.asList(new PartitionNode[]{node}));
+		}
 	}
 
 	@SuppressWarnings("unchecked")
-	@Override
-	protected void implementPartitionDefinition(PartitionNode node) throws CoreException {
-		String typeName = node.getCategory().getType();
+	protected void implementChoicesDefinitions(List<PartitionNode> nodes) throws CoreException {
+		refreshWorkspace();
+		CategoryNode parent = getParameter(nodes);
+		if(parent == null){
+			return;
+		}
+		String typeName = parent.getType();
+		if(parameterDefinitionImplemented(parent) == false){
+			implementParameterDefinition(parent);
+		}
 		IType enumType = getJavaProject().findType(typeName);
 		CompilationUnit unit = getCompilationUnit(enumType);
 		EnumDeclaration enumDeclaration = getEnumDeclaration(unit, typeName);
 		if(enumDeclaration != null){
-			EnumConstantDeclaration constant = unit.getAST().newEnumConstantDeclaration();
-			constant.setName(unit.getAST().newSimpleName(node.getValueString()));
-			enumDeclaration.enumConstants().add(constant);
+			for(PartitionNode node : nodes){
+				EnumConstantDeclaration constant = unit.getAST().newEnumConstantDeclaration();
+				constant.setName(unit.getAST().newSimpleName(node.getValueString()));
+				enumDeclaration.enumConstants().add(constant);
+			}
 			saveChanges(unit, enumType.getResource().getLocation());
 		}
+		enumType.getResource().refreshLocal(IResource.DEPTH_ONE, null);
+		refreshWorkspace();
 	}
 
 	protected boolean implementable(ClassNode node){
@@ -217,23 +285,38 @@ public class EclipseModelImplementer extends AbstractModelImplementer {
 	protected String methodDefinitionContent(MethodNode node){
 		String args = "";
 		String comment = "// TODO Auto-generated method stub";
-		String content = "System.out.println(\"" + node.getName() + "(\" + ";
-				
-		for(int i = 0; i < node.getCategories().size(); ++i){
-			CategoryNode parameter = node.getCategories().get(i);
-			args += JavaUtils.getLocalName(parameter.getType()) + " " + parameter.getName();
-			content += node.getCategories().get(i).getName();
-			if(i != node.getCategories().size() - 1){
-				args += ", ";
-				content += " + \", \" + ";
+		String content = "System.out.println(\"" + node.getName() + "(";
+
+		if(node.getCategories().size() > 0){
+			content +=  "\" + ";
+			for(int i = 0; i < node.getCategories().size(); ++i){
+				CategoryNode parameter = node.getCategories().get(i);
+				args += JavaUtils.getLocalName(parameter.getType()) + " " + parameter.getName();
+				content += node.getCategories().get(i).getName();
+				if(i != node.getCategories().size() - 1){
+					args += ", ";
+					content += " + \", \"";
+				}
+				content += " + ";
 			}
+			content += "\")\");";
 		}
-		content += " + \")\");";
+		else{
+			content += ")\");";
+		}
 		return "public void " + node.getName() + "(" + args + "){\n\t" + comment + "\n\t" + content + "\n}";
 	}
 	
-	protected String enumDefinitionContent(CategoryNode node){
-		return "public enum " + JavaUtils.getLocalName(node.getType()) + "{\n\n}";
+	protected String enumDefinitionContent(CategoryNode node, Set<String> fields){
+		String fieldsDefinition = "";
+		if(fields != null){
+			for(String field: fields){
+				fieldsDefinition += field + ", ";
+			}
+			fieldsDefinition = fieldsDefinition.substring(0, fieldsDefinition.length() - 2);
+		}
+		String result = "public enum " + JavaUtils.getLocalName(node.getType()) + "{\n\t" + fieldsDefinition + "\n}";  
+		return result;
 	}
 	
 	private boolean methodDefinitionImplementable(MethodNode node) {
@@ -305,6 +388,7 @@ public class EclipseModelImplementer extends AbstractModelImplementer {
 			edits.apply(document);
 			textFileBuffer.commit(null, false);
 			bufferManager.disconnect(location, LocationKind.LOCATION, null);
+			refreshWorkspace();
 		} catch (Throwable e) {
 			e.printStackTrace();
 		}
@@ -368,4 +452,36 @@ public class EclipseModelImplementer extends AbstractModelImplementer {
 		javaProject.setRawClasspath(updated, null);
 		return root;
 	}
+	
+	private List<PartitionNode> unimplementedChoices(List<PartitionNode> choices){
+		List<PartitionNode> unimplemented = new ArrayList<>();
+		for(PartitionNode choice : choices){
+			if(implementable(choice) && getImplementationStatus(choice) != EImplementationStatus.IMPLEMENTED){
+				unimplemented.add(choice);
+			}
+		}
+		return unimplemented;
+	}
+
+	private CategoryNode getParameter(List<PartitionNode> nodes) {
+		if(nodes.size() == 0){
+			return null;
+		}
+		CategoryNode parameter = nodes.get(0).getCategory();
+		for(PartitionNode node : nodes){
+			if(node.getCategory() != parameter){
+				return null;
+			}
+		}
+		return parameter;
+	}
+
+	private void refreshWorkspace() {
+		try {
+			getJavaProject().getProject().getWorkspace().getRoot().refreshLocal(IResource.DEPTH_INFINITE, null);
+		} catch (CoreException e) {
+			e.printStackTrace();
+		}
+	}
+
 }

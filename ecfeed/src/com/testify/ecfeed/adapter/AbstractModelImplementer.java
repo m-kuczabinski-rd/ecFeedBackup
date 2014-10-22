@@ -61,88 +61,37 @@ public abstract class AbstractModelImplementer implements IModelImplementer {
 
 		@Override
 		public Object visit(RootNode node) throws Exception {
-			for(ClassNode classNode : node.getClasses()){
-				if(implementable(classNode) && getImplementationStatus(classNode) != EImplementationStatus.IMPLEMENTED){
-					implement(classNode);
-				}
-			}
-			return true;
+			return implement(node);
 		}
 
 		@Override
 		public Object visit(ClassNode node) throws Exception {
-			if(classDefinitionImplemented(node) == false){
-				implementClassDefinition(node);
-			}
-			for(MethodNode method : node.getMethods()){
-				if(implementable(method) && getImplementationStatus(method) != EImplementationStatus.IMPLEMENTED){
-					implement(method);
-				}
-			}
-			return true;
+			return implement(node);
 		}
 
 		@Override
 		public Object visit(MethodNode node) throws Exception {
-			if(methodDefinitionImplemented(node) == false){
-				implementMethodDefinition(node);
-			}
-			for(CategoryNode parameter : node.getCategories()){
-				if(implementable(parameter) && getImplementationStatus(parameter) != EImplementationStatus.IMPLEMENTED){
-					implement(parameter);
-				}
-			}
-			for(TestCaseNode testCase : node.getTestCases()){
-				if(implementable(testCase) && getImplementationStatus(testCase) != EImplementationStatus.IMPLEMENTED){
-					implement(testCase);
-				}
-			}
-			return true;
+			return implement(node);
 		}
 
 		@Override
 		public Object visit(CategoryNode node) throws Exception {
-			if(parameterDefinitionImplemented(node) == false){
-				implementParameterDefinition(node);
-			}
-			for(PartitionNode partition : node.getPartitions()){
-				if(implementable(partition) && getImplementationStatus(partition) != EImplementationStatus.IMPLEMENTED){
-					implement(partition);
-				}
-			}
-			return true;
+			return implement(node);
 		}
 
 		@Override
 		public Object visit(TestCaseNode node) throws Exception {
-			for(PartitionNode partition : node.getTestData()){
-				if(implementable(partition) && getImplementationStatus(partition) != EImplementationStatus.IMPLEMENTED){
-					implement(partition);
-				}
-			}
-			return true;
+			return implement(node);
 		}
 
 		@Override
 		public Object visit(ConstraintNode node) throws Exception {
-			return false;
+			return implement(node);
 		}
 
 		@Override
 		public Object visit(PartitionNode node) throws Exception {
-			if(node.isAbstract()){
-				for(PartitionNode partition : node.getPartitions()){
-					if(implementable(partition) && getImplementationStatus(partition) != EImplementationStatus.IMPLEMENTED){
-						implement(partition);
-					}
-				}
-			}
-			else{
-				if(implementable(node) && getImplementationStatus(node) != EImplementationStatus.IMPLEMENTED){
-					implementPartitionDefinition(node);
-				}
-			}
-			return true;
+			return implement(node);
 		}
 		
 	}
@@ -190,6 +139,89 @@ public abstract class AbstractModelImplementer implements IModelImplementer {
 		return fStatusResolver.getImplementationStatus(node);
 	}
 
+	protected boolean implement(RootNode node) throws CoreException{
+		for(ClassNode classNode : node.getClasses()){
+			if(implementable(classNode) && getImplementationStatus(classNode) != EImplementationStatus.IMPLEMENTED){
+				implement(classNode);
+			}
+		}
+		return true;
+	}
+
+	protected boolean implement(ClassNode node) throws CoreException{
+		if(classDefinitionImplemented(node) == false){
+			implementClassDefinition(node);
+		}
+		for(MethodNode method : node.getMethods()){
+			if(implementable(method) && getImplementationStatus(method) != EImplementationStatus.IMPLEMENTED){
+				implement(method);
+			}
+		}
+		return true;
+	}
+
+	protected boolean implement(MethodNode node) throws CoreException{
+		if(methodDefinitionImplemented(node) == false){
+			implementMethodDefinition(node);
+		}
+		for(CategoryNode parameter : node.getCategories()){
+			if(implementable(parameter) && getImplementationStatus(parameter) != EImplementationStatus.IMPLEMENTED){
+				implement(parameter);
+			}
+		}
+		for(TestCaseNode testCase : node.getTestCases()){
+			if(implementable(testCase) && getImplementationStatus(testCase) != EImplementationStatus.IMPLEMENTED){
+				implement(testCase);
+			}
+		}
+		return true;
+	}
+
+	protected boolean implement(CategoryNode node) throws CoreException{
+		if(parameterDefinitionImplemented(node) == false){
+			implementParameterDefinition(node);
+		}
+		for(PartitionNode choice : node.getLeafPartitions()){
+			if(implementable(choice) && getImplementationStatus(choice) != EImplementationStatus.IMPLEMENTED){
+				implement(choice);
+				CachedImplementationStatusResolver.clearCache(choice);
+			}
+		}
+		return true;
+	}
+
+	protected boolean implement(TestCaseNode node) throws CoreException{
+		for(PartitionNode partition : node.getTestData()){
+			if(implementable(partition) && getImplementationStatus(partition) != EImplementationStatus.IMPLEMENTED){
+				implement(partition);
+			}
+		}
+		return true;
+	}
+
+	protected boolean implement(ConstraintNode node) throws CoreException{
+		return false;
+	}
+	
+	protected boolean implement(PartitionNode node) throws CoreException{
+		if(parameterDefinitionImplemented(node.getCategory()) == false){
+			implementParameterDefinition(node.getCategory());
+		}
+		if(node.isAbstract()){
+			for(PartitionNode leaf : node.getLeafPartitions()){
+				if(implementable(leaf) && getImplementationStatus(leaf) != EImplementationStatus.IMPLEMENTED){
+					implement(leaf);
+				}
+			}
+		}
+		else{
+			if(implementable(node) && getImplementationStatus(node) != EImplementationStatus.IMPLEMENTED){
+				implementChoiceDefinition(node);
+			}
+		}
+		return true;
+	}
+	
 	protected boolean implementable(RootNode node){
 		return hasImplementableNode(node.getClasses());
 	}
@@ -229,5 +261,5 @@ public abstract class AbstractModelImplementer implements IModelImplementer {
 	protected abstract void implementClassDefinition(ClassNode node) throws CoreException;
 	protected abstract void implementMethodDefinition(MethodNode node) throws CoreException;
 	protected abstract void implementParameterDefinition(CategoryNode node) throws CoreException;
-	protected abstract void implementPartitionDefinition(PartitionNode node) throws CoreException;
+	protected abstract void implementChoiceDefinition(PartitionNode node) throws CoreException;
 }

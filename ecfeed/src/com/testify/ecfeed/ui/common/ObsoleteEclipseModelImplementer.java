@@ -40,7 +40,7 @@ import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.TestCaseNode;
 
-public class ObsoleteEclipseModelImplementer extends JavaModelImplementer {
+public abstract class ObsoleteEclipseModelImplementer extends JavaModelImplementer {
 
 	IFileInfoProvider fFileInfoProvider;
 	
