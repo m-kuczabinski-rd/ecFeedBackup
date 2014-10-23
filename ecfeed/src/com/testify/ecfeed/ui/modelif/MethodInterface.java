@@ -202,7 +202,7 @@ public class MethodInterface extends GenericNodeInterface {
 	public void executeStaticTests(Collection<TestCaseNode> testCases) {
 		ConsoleManager.displayConsole();
 		ConsoleManager.redirectSystemOutputToStream(ConsoleManager.getOutputStream());
-		JavaTestRunner runner = new JavaTestRunner(EclipseLoaderProvider.createLoader());
+		JavaTestRunner runner = new JavaTestRunner(new EclipseLoaderProvider().getLoader(true, null));
 		try {
 			runner.setTarget(fTarget);
 			for(TestCaseNode testCase : testCases){
