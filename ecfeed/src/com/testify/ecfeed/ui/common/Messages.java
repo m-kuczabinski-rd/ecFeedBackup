@@ -136,4 +136,10 @@ public class Messages {
 			+ "Each category must be represented by at least one partition.";
 	public static final String DIALOG_TEST_SUITE_NAME_PROBLEM_MESSAGE = "Entered test suite name not allowed";
 	public static final String DIALOG_DESCENDING_LABELS_WILL_BE_REMOVED_WARNING_TITLE = "Partitions below in the hierarchy are already labeled with this label. Changing the label will result in removing the labels from all that partitions";
+	public static String DIALOG_UNSUCCESFUL_TEST_EXECUTION(int totalTestCases, int unsuccesfull) {
+		return String.valueOf(unsuccesfull) + " of " + totalTestCases + " test cases have met problems during execution.";
+	}
+	public static String DIALOG_SUCCESFUL_TEST_EXECUTION(int totalTestCases) {
+		return "All of " + totalTestCases + " test cases were succesfully executed.";
+	}
 }
