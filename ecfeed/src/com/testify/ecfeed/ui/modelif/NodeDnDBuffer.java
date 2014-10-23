@@ -1,6 +1,7 @@
 package com.testify.ecfeed.ui.modelif;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import com.testify.ecfeed.model.GenericNode;
@@ -17,6 +18,7 @@ public class NodeDnDBuffer {
 	
 	public void setDraggedNodes(List<GenericNode>nodes){
 		fDraggedNodes = nodes;
+		removeDuplicatedChildren(fDraggedNodes);
 	}
 	
 	public List<GenericNode> getDraggedNodes(){
@@ -38,5 +40,19 @@ public class NodeDnDBuffer {
 			fDraggedNodes.clear();
 		}
 	}
-	
+
+	private void removeDuplicatedChildren(List<GenericNode> nodes) {
+		Iterator<GenericNode> it = nodes.iterator();
+		while(it.hasNext()){
+			GenericNode node = it.next();
+			GenericNode parent = node.getParent();
+			while(parent != null){
+				if(nodes.contains(parent)){
+					it.remove();
+					break;
+				}
+				parent = parent.getParent();
+			}
+		}
+	}
 }

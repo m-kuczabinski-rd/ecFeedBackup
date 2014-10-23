@@ -12,6 +12,7 @@
 package com.testify.ecfeed.ui.modelif;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import com.testify.ecfeed.model.GenericNode;
@@ -40,7 +41,20 @@ public class NodeClipboard{
 	public static void setContent(List<GenericNode> nodes){
 		fClipboardNodes.clear();
 		for(GenericNode node : nodes){
-			fClipboardNodes.add(node.getCopy());
+			if(isPredecessorInCollection(node, nodes) == false){
+				fClipboardNodes.add(node.getCopy());
+			}
 		}
+	}
+	
+	private static boolean isPredecessorInCollection(GenericNode node, Collection<GenericNode> nodes) {
+		GenericNode predecessor = node.getParent();
+		while(predecessor != null){
+			if(nodes.contains(predecessor)){
+				return true;
+			}
+			predecessor = predecessor.getParent();
+		}
+		return false;
 	}
 }
