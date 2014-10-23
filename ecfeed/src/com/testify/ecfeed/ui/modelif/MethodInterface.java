@@ -1,6 +1,5 @@
 package com.testify.ecfeed.ui.modelif;
 
-import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -28,10 +27,7 @@ import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.StaticStatement;
 import com.testify.ecfeed.model.TestCaseNode;
-import com.testify.ecfeed.runner.RunnerException;
-import com.testify.ecfeed.runner.java.JavaTestRunner;
 import com.testify.ecfeed.ui.common.Constants;
-import com.testify.ecfeed.ui.common.EclipseLoaderProvider;
 import com.testify.ecfeed.ui.common.EclipseModelBuilder;
 import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.dialogs.AddTestCaseDialog;
@@ -199,21 +195,9 @@ public class MethodInterface extends GenericNodeInterface {
 		runner.proceed();
 	}
 
-	//TODO progress monitor with cancel
 	public void executeStaticTests(Collection<TestCaseNode> testCases) {
-		PrintStream currentOut = System.out;
-		ConsoleManager.displayConsole();
-		ConsoleManager.redirectSystemOutputToStream(ConsoleManager.getOutputStream());
-		JavaTestRunner runner = new JavaTestRunner(new EclipseLoaderProvider().getLoader(true, null));
-		try {
-			runner.setTarget(fTarget);
-			for(TestCaseNode testCase : testCases){
-				runner.runTestCase(testCase.getTestData());
-			}
-		} catch (RunnerException e) {
-			MessageDialog.openError(Display.getCurrent().getActiveShell(), Messages.DIALOG_TEST_EXECUTION_PROBLEM_TITLE, e.getMessage());
-		}
-		System.setOut(currentOut);
+		StaticTestExecutionSupport support = new StaticTestExecutionSupport(testCases);
+		support.proceed();
 	}
 	
 	public Collection<TestCaseNode> getTestCases(String testSuite){

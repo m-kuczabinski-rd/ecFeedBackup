@@ -26,10 +26,11 @@ import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.dialogs.ExecuteOnlineSetupDialog;
 import com.testify.ecfeed.ui.dialogs.GeneratorProgressMonitorDialog;
 
-public class OnlineTestRunningSupport {
+public class OnlineTestRunningSupport extends TestExecutionSupport{
 
 	private MethodNode fTarget;
 	private JavaTestRunner fRunner;
+	private int fExecutedTestCases;
 	
 	private class ExecuteRunnable implements IRunnableWithProgress{
 
@@ -57,7 +58,12 @@ public class OnlineTestRunningSupport {
 				fGenerator.initialize(fInput, fConstraints, fParameters);
 				monitor.beginTask(Messages.EXECUTING_TEST_WITH_PARAMETERS, fGenerator.totalWork());
 				while((next = fGenerator.next()) != null && monitor.isCanceled() == false){
-					fRunner.runTestCase(next);
+					++fExecutedTestCases;
+					try{
+						fRunner.runTestCase(next);
+					} catch(RunnerException e){
+						addFailedTest(e);
+					}
 					monitor.worked(fGenerator.workProgress());
 				}
 				monitor.done();
@@ -78,6 +84,7 @@ public class OnlineTestRunningSupport {
 		ILoaderProvider loaderProvider = new EclipseLoaderProvider();
 		ModelClassLoader loader = loaderProvider.getLoader(true, null);
 		fRunner = new JavaTestRunner(loader);
+		fExecutedTestCases = 0;
 	}
 
 	public void setTarget(MethodNode target) {
@@ -102,11 +109,13 @@ public class OnlineTestRunningSupport {
 				constraintList.addAll(dialog.getConstraints());
 				Map<String, Object> parameters = dialog.getGeneratorParameters();
 				
+				fExecutedTestCases = 0;
 				executeGeneratedTests(selectedGenerator, algorithmInput, constraintList, parameters);
 			}
 		} else {
 			executeSingleTest();
 		}
+		displayTestStatusDialog(fExecutedTestCases);
 		System.setOut(currentOut);
 	}
 

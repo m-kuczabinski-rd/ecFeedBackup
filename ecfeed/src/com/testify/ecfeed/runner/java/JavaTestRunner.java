@@ -39,7 +39,8 @@ public class JavaTestRunner {
 			Object[] arguments = getArguments(testData);
 			fTestMethod.invoke(instance, arguments);
 		}catch(InvocationTargetException e){
-			throw new RunnerException(Messages.TEST_METHOD_INVOKATION_EXCEPTION(fTarget.toString(), testData.toString(), e.getTargetException().toString()));
+//			throw new RunnerException(Messages.TEST_METHOD_INVOCATION_EXCEPTION(fTarget.toString(), testData.toString(), e.getTargetException().toString()));
+			throw new RunnerException(fTarget.getName() + testData.toString() + ": " + e.getTargetException().toString());
 		} catch (IllegalAccessException | IllegalArgumentException | InstantiationException e) {
 			e.printStackTrace();
 			throw new RunnerException(Messages.CANNOT_INVOKE_TEST_METHOD(fTarget.toString(), testData.toString(), e.getMessage()));
