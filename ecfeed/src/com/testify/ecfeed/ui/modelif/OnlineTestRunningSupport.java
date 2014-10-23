@@ -71,9 +71,7 @@ public class OnlineTestRunningSupport extends TestExecutionSupport{
 				throw new InvocationTargetException(e, e.getMessage());
 			}
 		}
-		
 	}
-
 	
 	public OnlineTestRunningSupport(MethodNode target){
 		this();
@@ -111,17 +109,18 @@ public class OnlineTestRunningSupport extends TestExecutionSupport{
 				
 				fExecutedTestCases = 0;
 				executeGeneratedTests(selectedGenerator, algorithmInput, constraintList, parameters);
+				displayTestStatusDialog(fExecutedTestCases);
 			}
 		} else {
 			executeSingleTest();
 		}
-		displayTestStatusDialog(fExecutedTestCases);
 		System.setOut(currentOut);
 	}
 
 	private void executeSingleTest() {
 		try {
 			fRunner.runTestCase(new ArrayList<PartitionNode>());
+			MessageDialog.openInformation(null, "Test case executed correctly", "The execution of " + fTarget.toString() + " has been succesful");
 		} catch (RunnerException e) {
 			MessageDialog.openError(Display.getCurrent().getActiveShell(), Messages.DIALOG_TEST_EXECUTION_PROBLEM_TITLE, e.getMessage());
 		}
