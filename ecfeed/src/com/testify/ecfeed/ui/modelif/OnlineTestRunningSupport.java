@@ -1,5 +1,6 @@
 package com.testify.ecfeed.ui.modelif;
 
+import java.io.PrintStream;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -89,6 +90,7 @@ public class OnlineTestRunningSupport {
 	}
 
 	public void proceed(){
+		PrintStream currentOut = System.out;
 		ConsoleManager.displayConsole();
 		ConsoleManager.redirectSystemOutputToStream(ConsoleManager.getOutputStream());
 		if (fTarget.getCategories().size() > 0) {
@@ -105,6 +107,7 @@ public class OnlineTestRunningSupport {
 		} else {
 			executeSingleTest();
 		}
+		System.setOut(currentOut);
 	}
 
 	private void executeSingleTest() {

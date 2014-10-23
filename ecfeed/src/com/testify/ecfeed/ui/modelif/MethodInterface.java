@@ -1,5 +1,6 @@
 package com.testify.ecfeed.ui.modelif;
 
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -200,6 +201,7 @@ public class MethodInterface extends GenericNodeInterface {
 
 	//TODO progress monitor with cancel
 	public void executeStaticTests(Collection<TestCaseNode> testCases) {
+		PrintStream currentOut = System.out;
 		ConsoleManager.displayConsole();
 		ConsoleManager.redirectSystemOutputToStream(ConsoleManager.getOutputStream());
 		JavaTestRunner runner = new JavaTestRunner(new EclipseLoaderProvider().getLoader(true, null));
@@ -211,6 +213,7 @@ public class MethodInterface extends GenericNodeInterface {
 		} catch (RunnerException e) {
 			MessageDialog.openError(Display.getCurrent().getActiveShell(), Messages.DIALOG_TEST_EXECUTION_PROBLEM_TITLE, e.getMessage());
 		}
+		System.setOut(currentOut);
 	}
 	
 	public Collection<TestCaseNode> getTestCases(String testSuite){
