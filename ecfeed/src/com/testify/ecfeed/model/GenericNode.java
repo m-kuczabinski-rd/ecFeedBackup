@@ -20,7 +20,7 @@ public abstract class GenericNode{
 	private GenericNode fParent;
 	private final int fId;
 	private static int fLastId = 0;
-	protected final ArrayList<GenericNode> EMPTY_CHILDREN_ARRAY = new ArrayList<GenericNode>();
+	protected final List<GenericNode> EMPTY_CHILDREN_ARRAY = new ArrayList<GenericNode>();
 
 	public GenericNode(String name){
 		fId = ++fLastId;
@@ -59,6 +59,19 @@ public abstract class GenericNode{
 			return (getChildren().size() > 0);
 		}
 		return false;
+	}
+	
+	public List<GenericNode> getAncestors(){
+		List<GenericNode> ancestors;
+		GenericNode parent = getParent();
+		if(parent != null){
+			ancestors = parent.getAncestors();
+			ancestors.add(parent);
+		}
+		else{
+			ancestors = new ArrayList<>();
+		}
+		return ancestors;
 	}
 	
 	public GenericNode getParent(){
