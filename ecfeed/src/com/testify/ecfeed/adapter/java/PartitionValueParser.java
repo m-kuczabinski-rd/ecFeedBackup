@@ -17,7 +17,7 @@ public class PartitionValueParser {
 	}
 	
 	public Object parseValue(String valueString, String typeName){
-		if(typeName == null){
+		if(typeName == null || valueString == null){
 			return null;
 		}
 		switch(typeName){
@@ -45,10 +45,10 @@ public class PartitionValueParser {
 	}
 
 	private Object parseBooleanValue(String valueString) {
-		if(valueString.equals(Constants.VALUE_REPRESENTATION_TRUE)){
+		if(valueString.toLowerCase().equals(Constants.VALUE_REPRESENTATION_TRUE.toLowerCase())){
 			return true;
 		}
-		if(valueString.equals(Constants.VALUE_REPRESENTATION_FALSE)){
+		if(valueString.toLowerCase().equals(Constants.VALUE_REPRESENTATION_FALSE.toLowerCase())){
 			return false;
 		}
 		return null;
