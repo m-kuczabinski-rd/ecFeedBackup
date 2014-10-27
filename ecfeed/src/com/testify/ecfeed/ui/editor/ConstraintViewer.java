@@ -183,29 +183,32 @@ public class ConstraintViewer extends TreeViewerSection {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				EStatementOperator operator = EStatementOperator.getOperator(fStatementCombo.getText());
-				if(operator != null && operator != fStatementIf.getOperator()){
-					fStatementIf.setOperator(operator);
+				if(fStatementIf.getOperator() != null && operator != null){
+					if(operator != fStatementIf.getOperator()){
+						fStatementIf.setOperator(operator);
+					}
 				}
-				BasicStatement statement = buildStatement();
-				if(statement != null){
-					BasicStatementInterface parentIf = fStatementIf.getParentInterface();
-					boolean result = false;
-					if(parentIf != null){
-						result = parentIf.replaceChild(fSelectedStatement, statement);
-					}
-					else{
-						result = fConstraintIf.replaceStatement(fSelectedStatement, statement);
-					}
-					if(result){
-						getViewer().setSelection(new StructuredSelection(statement));
+				else{
+					BasicStatement statement = buildStatement();
+					if(statement != null){
+						BasicStatementInterface parentIf = fStatementIf.getParentInterface();
+						boolean result = false;
+						if(parentIf != null){
+							result = parentIf.replaceChild(fSelectedStatement, statement);
+						}
+						else{
+							result = fConstraintIf.replaceStatement(fSelectedStatement, statement);
+						}
+						if(result){
+							getViewer().setSelection(new StructuredSelection(statement));
 
+						}
 					}
 				}
 			}
 
 			@Override
 			public void widgetDefaultSelected(SelectionEvent e) {
-				System.out.println("widgetDefaultSelected(" + e + ")");
 				widgetSelected(e);
 			}
 
