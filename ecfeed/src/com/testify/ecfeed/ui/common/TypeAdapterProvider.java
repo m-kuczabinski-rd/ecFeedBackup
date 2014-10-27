@@ -118,7 +118,7 @@ public class TypeAdapterProvider implements ITypeAdapterProvider{
 		}
 
 		public String convert(String value){
-			if(value.length() > 0){
+			if(value.length() == 1){
 				byte firstByte = value.getBytes()[0]; 
 				return String.valueOf(firstByte);
 			}
