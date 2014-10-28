@@ -118,7 +118,8 @@ public abstract class AbstractImplementationStatusResolver implements
 	protected EImplementationStatus implementationStatus(CategoryNode category){
 		EImplementationStatus status = EImplementationStatus.IMPLEMENTED;
 		if(JavaUtils.isPrimitive(category.getType())){
-			status = category.getPartitions().size() > 0 ? EImplementationStatus.IMPLEMENTED : EImplementationStatus.PARTIALLY_IMPLEMENTED;
+			if(category.getPartitions().size() == 0 && category.isExpected() == false)
+			status = EImplementationStatus.PARTIALLY_IMPLEMENTED;
 		}
 		else{
 			if(enumDefinitionImplemented(category.getType()) == false){
