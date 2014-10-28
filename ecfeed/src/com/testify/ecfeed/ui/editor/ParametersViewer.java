@@ -28,7 +28,6 @@ import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.ui.forms.widgets.Section;
 
 import com.testify.ecfeed.model.CategoryNode;
@@ -50,8 +49,6 @@ public class ParametersViewer extends TableViewerSection{
 
 	private MethodNode fSelectedMethod;
 	
-	private Button fMoveUpButton;
-
 	private TableViewerColumn fNameColumn;
 	private TableViewerColumn fTypeColumn;
 	private TableViewerColumn fExpectedColumn;
@@ -255,15 +252,6 @@ public class ParametersViewer extends TableViewerSection{
 
 	}
 
-	private class MoveUpDownAdapter extends SelectionAdapter{
-		@Override
-		public void widgetSelected(SelectionEvent e){
-			boolean up = (e.getSource() == fMoveUpButton);
-			fCategoryIf.setTarget((CategoryNode)getSelectedElement());
-			fCategoryIf.moveUpDown(up);
-		}
-	}
-
 	private class AddNewParameterAdapter extends SelectionAdapter {
 		@Override
 		public void widgetSelected(SelectionEvent e) {
@@ -287,9 +275,6 @@ public class ParametersViewer extends TableViewerSection{
 		getSection().setText("Parameters");
 		addButton("New parameter", new AddNewParameterAdapter());
 		addButton("Remove selected", new ActionSelectionAdapter(new DeleteAction(getViewer(), this)));
-		MoveUpDownAdapter adapter = new MoveUpDownAdapter();
-		fMoveUpButton = addButton("Move Up", adapter);
-		addButton("Move Down", adapter);
 
 		fNameColumn.setEditingSupport(new CategoryNameEditingSupport());
 		fTypeColumn.setEditingSupport(new CategoryTypeEditingSupport());

@@ -27,20 +27,14 @@ import org.eclipse.jface.viewers.IBaseLabelProvider;
 import org.eclipse.jface.viewers.IContentProvider;
 import org.eclipse.jface.viewers.ILabelDecorator;
 import org.eclipse.jface.viewers.ILabelProviderListener;
-import org.eclipse.jface.viewers.ISelectionChangedListener;
-import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.LabelProvider;
-import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TreeNodeContentProvider;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.Transfer;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.ImageData;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
@@ -67,14 +61,11 @@ import com.testify.ecfeed.ui.modelif.CategoryInterface;
 import com.testify.ecfeed.ui.modelif.GenericNodeInterface;
 import com.testify.ecfeed.ui.modelif.IModelUpdateListener;
 import com.testify.ecfeed.ui.modelif.ModelNodesTransfer;
-import com.testify.ecfeed.ui.modelif.SelectionInterface;
 
 public class ModelMasterSection extends TreeViewerSection{
 	private static final int STYLE = Section.EXPANDED | Section.TITLE_BAR;
 	private static final int AUTO_EXPAND_LEVEL = 3;
 
-	private Button fMoveUpButton;
-	private Button fMoveDownButton;
 	private ModelMasterDetailsBlock fMasterDetailsBlock;
 	private IModelUpdateListener fUpdateListener;
 	
@@ -95,7 +86,6 @@ public class ModelMasterSection extends TreeViewerSection{
 		public void modelUpdated(AbstractFormPart source) {
 			source.markDirty();
 			refresh();
-			enableSortButtons(getSelection());
 		}
 	}
 
@@ -355,31 +345,6 @@ public class ModelMasterSection extends TreeViewerSection{
 		}
 	}
 	
-	private class MoveUpDownAdapter extends SelectionAdapter{
-		@Override
-		public void widgetSelected(SelectionEvent e){
-			boolean up = e.getSource() == fMoveUpButton;
-			moveSelectedItem(up);
-			enableSortButtons(getSelection());
-		}
-
-		@SuppressWarnings("unchecked")
-		private void moveSelectedItem(boolean moveUp){
-			SelectionInterface selectionIf = new SelectionInterface(ModelMasterSection.this);
-			selectionIf.setTarget(getSelection().toList());
-			selectionIf.moveUpDown(moveUp);
-		}
-
-	}
-
-	private class ModelSelectionListener implements ISelectionChangedListener{
-		@Override
-		public void selectionChanged(SelectionChangedEvent event) {
-			IStructuredSelection selection = (IStructuredSelection)event.getSelection();
-			enableSortButtons(selection);
-		}
-	}
-	
 	protected class MasterViewerMenuListener extends ViewerMenuListener{
 		public MasterViewerMenuListener(Menu menu) {
 			super(menu);
@@ -427,10 +392,7 @@ public class ModelMasterSection extends TreeViewerSection{
 	protected void createContent(){
 		super.createContent();
 		getSection().setText("Structure");
-		fMoveUpButton = addButton("Move Up", new MoveUpDownAdapter());
-		fMoveDownButton = addButton("Move Down", new MoveUpDownAdapter());
 		getTreeViewer().setAutoExpandLevel(AUTO_EXPAND_LEVEL);
-		addSelectionChangedListener(new ModelSelectionListener());
 	}
 	
 	@Override
@@ -446,24 +408,6 @@ public class ModelMasterSection extends TreeViewerSection{
 	@Override 
 	protected ViewerMenuListener getMenuListener(){
 		return new MasterViewerMenuListener(getMenu());
-	}
-	
-	@SuppressWarnings("unchecked")
-	private void enableSortButtons(IStructuredSelection selection) {
-		boolean moveUpEnabled = true;
-		boolean moveDownEnabled = true;
-		SelectionInterface selectionIf = new SelectionInterface(this);
-		if(selection.isEmpty() == false){
-			selectionIf.setTarget(getSelection().toList());
-
-			if (selection.getFirstElement() instanceof RootNode) {
-				moveUpEnabled = moveDownEnabled = false;
-			}
-			moveUpEnabled &= selectionIf.moveUpDownEnabed(true);
-			moveDownEnabled &= selectionIf.moveUpDownEnabed(false);
-		}
-		fMoveUpButton.setEnabled(moveUpEnabled);
-		fMoveDownButton.setEnabled(moveDownEnabled);
 	}
 	
 	@Override
