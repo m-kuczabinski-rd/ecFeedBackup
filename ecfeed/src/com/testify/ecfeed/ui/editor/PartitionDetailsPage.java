@@ -85,7 +85,7 @@ public class PartitionDetailsPage extends BasicDetailsPage {
 		if(selectedPartition != null){
 			fPartitionIf.setTarget(selectedPartition);
 
-			String title = getSelectedPartition().toString() + " [" + fPartitionIf.getImplementationStatus().toString() + "]";
+			String title = getSelectedPartition().toString();
 			getMainSection().setText(title);
 
 			fChildrenViewer.setInput(selectedPartition);

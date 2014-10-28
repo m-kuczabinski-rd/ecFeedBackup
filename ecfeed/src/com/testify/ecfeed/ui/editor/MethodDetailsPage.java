@@ -112,7 +112,7 @@ public class MethodDetailsPage extends BasicDetailsPage {
 			MethodNode selectedMethod = (MethodNode)getSelectedElement(); 
 			fMethodIf.setTarget(selectedMethod);
 			EImplementationStatus methodStatus = fMethodIf.getImplementationStatus();
-			getMainSection().setText(selectedMethod.toString() + " [" + methodStatus + "]");
+			getMainSection().setText(selectedMethod.toString());
 			fTestOnlineButton.setEnabled(methodStatus != EImplementationStatus.NOT_IMPLEMENTED);
 			fParemetersSection.setInput(selectedMethod);
 			fConstraintsSection.setInput(selectedMethod);
