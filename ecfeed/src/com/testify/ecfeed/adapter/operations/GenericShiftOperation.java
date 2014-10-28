@@ -128,7 +128,7 @@ public class GenericShiftOperation extends AbstractModelOperation {
 			return false;
 		}
 		int newIndex = (borderNode(shifted, shift) != null) ? borderNode(shifted, shift).getIndex() + shift : -1;
-		return newIndex >= 0 && newIndex <= shifted.get(0).getMaxIndex();
+		return newIndex >= 0 && newIndex < shifted.get(0).getMaxIndex();
 	}
 
 	private GenericNode minIndexNode(List<? extends GenericNode> nodes){
