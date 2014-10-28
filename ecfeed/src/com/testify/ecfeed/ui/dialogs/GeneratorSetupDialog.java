@@ -124,10 +124,6 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 		public Object[] getChildren(Object element){
 			List<Object> children = new ArrayList<Object>();
 			if(element instanceof CategoryNode && ((CategoryNode)element).isExpected()){
-//				return children.toArray();
-//				CategoryNode category = (CategoryNode)element;
-//				children.add(category.getDefaultValue());
-//				children.add("expected value");
 			}
 			else if(element instanceof PartitionedNode){
 				PartitionedNode parent = (PartitionedNode)element;
@@ -158,19 +154,6 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 			return getChildren(element).length > 0;
 		}
 	}
-	
-//	private class ParametersLabelProvider extends LabelProvider{
-//		@Override
-//		public String getText(Object element){
-//			if(element instanceof GenericNode){
-//				return ((GenericNode)element).getName();
-//			}
-//			else if (element instanceof String){
-//				return (String)element;
-//			}
-//			return null;
-//		}
-//	}
 	
 	private class ConstraintsViewerContentProvider extends TreeNodeContentProvider implements ITreeContentProvider{
 		private final Object[] EMPTY_ARRAY = new Object[]{};
