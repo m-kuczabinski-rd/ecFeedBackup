@@ -13,9 +13,11 @@ package com.testify.ecfeed.ui.editor;
 
 import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 
@@ -80,6 +82,14 @@ public class TestCaseDetailsPage extends BasicDetailsPage {
 		fTestSuiteNameCombo = new ComboViewer(composite, SWT.NONE).getCombo();
 		fTestSuiteNameCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		fTestSuiteNameCombo.addSelectionListener(new RenameTestCaseAdapter());
+		 
+		Button executeButton = getToolkit().createButton(composite, "Execute", SWT.NONE);
+		executeButton.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e){
+				fTestCaseIf.execute();
+			}
+		});
 		getToolkit().paintBordersFor(fTestSuiteNameCombo);
 	}
 }

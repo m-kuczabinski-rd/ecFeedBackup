@@ -40,8 +40,6 @@ public class StaticTestExecutionSupport extends TestExecutionSupport{
 						fRunner.runTestCase(testCase.getTestData());
 					} catch (RunnerException e) {
 						addFailedTest(e);
-//						fFailedTests.add(testCase);
-//						System.err.println(Messages.DIALOG_TEST_EXECUTION_PROBLEM_TITLE + " " + testCase + ": " + e.getMessage());
 					}
 					monitor.worked(1);
 				}

@@ -1,5 +1,8 @@
 package com.testify.ecfeed.ui.modelif;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import com.testify.ecfeed.adapter.EImplementationStatus;
 import com.testify.ecfeed.adapter.IModelOperation;
 import com.testify.ecfeed.adapter.operations.TestCaseOperationUpdateTestData;
@@ -33,6 +36,11 @@ public class TestCaseInterface extends GenericNodeInterface {
 		return isExecutable(fTarget);
 	}
 	
+	public void execute() {
+		MethodInterface methodIf = new MethodInterface(getUpdateContext());
+		methodIf.executeStaticTests(new ArrayList<TestCaseNode>(Arrays.asList(new TestCaseNode[]{fTarget})));
+	}
+
 	public boolean updateTestData(int index, PartitionNode value) {
 		IModelOperation operation = new TestCaseOperationUpdateTestData(fTarget, index, value);
 		return execute(operation, Messages.DIALOG_UPDATE_TEST_DATA_PROBLEM_TITLE);
