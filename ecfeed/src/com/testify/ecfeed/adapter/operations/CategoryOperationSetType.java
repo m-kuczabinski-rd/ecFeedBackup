@@ -73,18 +73,30 @@ public class CategoryOperationSetType extends BulkOperation{
 			convertPartitionValues(fTarget, adapter);
 			removeDeadPartitions(fTarget);
 			
-			if(fTarget.isExpected()){
-				adaptTestCases();
-			}
-
 			String defaultValue = adapter.convert(fTarget.getDefaultValue());
 			if(defaultValue == null){
 				if(fTarget.getLeafPartitions().size() > 0){
 					defaultValue = fTarget.getLeafPartitions().toArray(new PartitionNode[]{})[0].getValueString();
 				}
-				defaultValue = adapter.defaultValue();
+				else{
+					defaultValue = adapter.defaultValue();
+				}
+			}
+			if(JavaUtils.isUserType(fNewType)){
+				if(fTarget.getLeafPartitions().size() > 0){
+					if(fTarget.getLeafPartitionValues().contains(defaultValue) == false){
+						defaultValue = fTarget.getLeafPartitionValues().toArray(new String[]{})[0];
+					}
+				}
+				else{
+					fTarget.addPartition(new PartitionNode(defaultValue.toLowerCase(), defaultValue));
+				}
 			}
 			fTarget.setDefaultValueString(defaultValue);
+			if(fTarget.isExpected()){
+				adaptTestCases();
+			}
+
 			markModelUpdated();
 		}
 
@@ -121,14 +133,21 @@ public class CategoryOperationSetType extends BulkOperation{
 
 		private void adaptTestCases() {
 			MethodNode method = fTarget.getMethod();
-			ITypeAdapter adapter = fAdapterProvider.getAdapter(fNewType);
 			if(method != null){
 				Iterator<TestCaseNode> tcIt = method.getTestCases().iterator();
+				ITypeAdapter adapter = fAdapterProvider.getAdapter(fNewType);
 				while(tcIt.hasNext()){
 					PartitionNode expectedValue = tcIt.next().getTestData().get(fTarget.getIndex());
 					String newValue = adapter.convert(expectedValue.getValueString()); 
+					if(JavaUtils.isUserType(fNewType)){
+						if(fTarget.getLeafPartitionValues().contains(newValue) == false){
+							tcIt.remove();
+							break;
+						}
+					}
 					if(newValue == null && adapter.isNullAllowed() == false){
 						tcIt.remove();
+						break;
 					}
 					else{
 						if(expectedValue.getValueString().equals(newValue) == false){
