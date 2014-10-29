@@ -20,7 +20,8 @@ public class JavaUtils {
 		if(name.matches(Constants.REGEX_CLASS_NODE_NAME) == false) return false;
 		StringTokenizer tokenizer = new StringTokenizer(name, ".");
 		while(tokenizer.hasMoreTokens()){
-			if(Arrays.asList(javaKeywords()).contains(tokenizer.nextToken())){
+			String segment = tokenizer.nextToken();
+			if(isValidJavaIdentifier(segment) == false){
 				return false;
 			}
 		}
