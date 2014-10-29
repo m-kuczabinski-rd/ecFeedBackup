@@ -24,6 +24,7 @@ public class CategoryOperationSetType extends BulkOperation{
 		private String fCurrentType;
 		private String fOriginalDefaultValue;
 		private List<PartitionNode> fOriginalPartitions;
+		private List<TestCaseNode> fOriginalTestCases;
 		
 		private ITypeAdapterProvider fAdapterProvider;
 
@@ -38,6 +39,7 @@ public class CategoryOperationSetType extends BulkOperation{
 				fTarget.setType(fCurrentType);
 				fTarget.setDefaultValueString(fOriginalDefaultValue);
 				fTarget.replacePartitions(fOriginalPartitions);
+				fTarget.getMethod().replaceTestCases(fOriginalTestCases);
 				markModelUpdated();
 			}
 
@@ -56,6 +58,7 @@ public class CategoryOperationSetType extends BulkOperation{
 			fAdapterProvider = adapterProvider;
 			fOriginalDefaultValue = target.getDefaultValue();
 			fOriginalPartitions = target.getPartitions();
+			fOriginalTestCases = new ArrayList<>(target.getMethod().getTestCases());
 		}
 		
 		@Override
