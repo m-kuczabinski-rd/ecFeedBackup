@@ -70,6 +70,11 @@ public class TypeAdapterProvider implements ITypeAdapterProvider{
 		public String defaultValue() {
 			return Constants.DEFAULT_EXPECTED_BOOLEAN_VALUE;
 		}
+
+		@Override
+		public boolean isNullAllowed() {
+			return false;
+		}
 	}
 
 	private class StringTypeAdapter implements ITypeAdapter{
@@ -85,6 +90,11 @@ public class TypeAdapterProvider implements ITypeAdapterProvider{
 		@Override
 		public String defaultValue() {
 			return Constants.DEFAULT_EXPECTED_STRING_VALUE;
+		}
+
+		@Override
+		public boolean isNullAllowed() {
+			return true;
 		}
 	}
 
@@ -109,6 +119,11 @@ public class TypeAdapterProvider implements ITypeAdapterProvider{
 		public String defaultValue() {
 			return new EclipseModelBuilder().getDefaultExpectedValue(fType);
 		}
+
+		@Override
+		public boolean isNullAllowed() {
+			return true;
+		}
 	}
 
 	private class CharTypeAdapter implements ITypeAdapter{
@@ -128,6 +143,11 @@ public class TypeAdapterProvider implements ITypeAdapterProvider{
 		@Override
 		public String defaultValue() {
 			return Constants.DEFAULT_EXPECTED_CHAR_VALUE;
+		}
+
+		@Override
+		public boolean isNullAllowed() {
+			return false;
 		}
 	}
 
@@ -151,6 +171,11 @@ public class TypeAdapterProvider implements ITypeAdapterProvider{
 		@Override
 		public String defaultValue(){
 			return Constants.DEFAULT_EXPECTED_NUMERIC_VALUE;
+		}
+
+		@Override
+		public boolean isNullAllowed() {
+			return false;
 		}
 	}
 

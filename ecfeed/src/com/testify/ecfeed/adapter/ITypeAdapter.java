@@ -5,4 +5,5 @@ public interface ITypeAdapter {
 	// returns null if conversion is not possible
 	public String convert(String value);
 	public String defaultValue();
+	public boolean isNullAllowed();
 }

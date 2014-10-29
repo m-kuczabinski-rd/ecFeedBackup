@@ -1,6 +1,7 @@
 package com.testify.ecfeed.adapter.operations;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import com.testify.ecfeed.adapter.IModelOperation;
@@ -9,8 +10,10 @@ import com.testify.ecfeed.adapter.ITypeAdapterProvider;
 import com.testify.ecfeed.adapter.ModelOperationException;
 import com.testify.ecfeed.adapter.java.JavaUtils;
 import com.testify.ecfeed.model.CategoryNode;
+import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.PartitionedNode;
+import com.testify.ecfeed.model.TestCaseNode;
 
 public class CategoryOperationSetType extends BulkOperation{
 
@@ -66,6 +69,10 @@ public class CategoryOperationSetType extends BulkOperation{
 
 			convertPartitionValues(fTarget, adapter);
 			removeDeadPartitions(fTarget);
+			
+			if(fTarget.isExpected()){
+				adaptTestCases();
+			}
 
 			String defaultValue = adapter.convert(fTarget.getDefaultValue());
 			if(defaultValue == null){
@@ -106,6 +113,26 @@ public class CategoryOperationSetType extends BulkOperation{
 			}
 			for(PartitionNode removed : toRemove){
 				parent.removePartition(removed);
+			}
+		}
+
+		private void adaptTestCases() {
+			MethodNode method = fTarget.getMethod();
+			ITypeAdapter adapter = fAdapterProvider.getAdapter(fNewType);
+			if(method != null){
+				Iterator<TestCaseNode> tcIt = method.getTestCases().iterator();
+				while(tcIt.hasNext()){
+					PartitionNode expectedValue = tcIt.next().getTestData().get(fTarget.getIndex());
+					String newValue = adapter.convert(expectedValue.getValueString()); 
+					if(newValue == null && adapter.isNullAllowed() == false){
+						tcIt.remove();
+					}
+					else{
+						if(expectedValue.getValueString().equals(newValue) == false){
+							expectedValue.setValueString(newValue);
+						}
+					}
+				}
 			}
 		}
 
