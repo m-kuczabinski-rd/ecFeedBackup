@@ -150,6 +150,7 @@ public abstract class ObsoleteEclipseModelImplementer extends AbstractModelImple
 		return false;
 	}
 
+	@Override
 	protected void implementClassDefinition(ClassNode node) throws CoreException{
 		String packageName = JavaUtils.getPackageName(node.getName());
 		String className = JavaUtils.getLocalName(node.getName());
@@ -160,6 +161,7 @@ public abstract class ObsoleteEclipseModelImplementer extends AbstractModelImple
 		CachedImplementationStatusResolver.clearCache(node);
 	}
 	
+	@Override
 	protected void implementMethodDefinition(MethodNode node) throws CoreException {
 		if(classDefinitionImplemented(node.getClassNode()) == false){
 			implementClassDefinition(node.getClassNode());
@@ -180,6 +182,7 @@ public abstract class ObsoleteEclipseModelImplementer extends AbstractModelImple
 		CachedImplementationStatusResolver.clearCache(node);
 	}
 
+	@Override
 	protected void implementParameterDefinition(CategoryNode node) throws CoreException {
 		String typeName = node.getType();
 		if(JavaUtils.isPrimitive(typeName)){
@@ -224,7 +227,7 @@ public abstract class ObsoleteEclipseModelImplementer extends AbstractModelImple
 	}
 	
 	private CompilationUnit getCompilationUnit(IType type) throws CoreException{
-		final ASTParser parser = ASTParser.newParser(AST.JLS4);
+		final ASTParser parser = ASTParser.newParser(AST.JLS8);
 		parser.setKind(ASTParser.K_COMPILATION_UNIT);
 		parser.setSource(type.getCompilationUnit());
 		CompilationUnit unit = (CompilationUnit)parser.createAST(null);
@@ -260,14 +263,17 @@ public abstract class ObsoleteEclipseModelImplementer extends AbstractModelImple
 		}
 	}
 
+	@Override
 	protected boolean classDefinitionImplemented(ClassNode node) {
 		return (getImplementationStatus(node) != EImplementationStatus.NOT_IMPLEMENTED);
 	}
 
+	@Override
 	protected boolean methodDefinitionImplemented(MethodNode node) {
 		return (getImplementationStatus(node) != EImplementationStatus.NOT_IMPLEMENTED);
 	}
 
+	@Override
 	protected boolean parameterDefinitionImplemented(CategoryNode node) {
 		return (getImplementationStatus(node) != EImplementationStatus.NOT_IMPLEMENTED);
 	}
