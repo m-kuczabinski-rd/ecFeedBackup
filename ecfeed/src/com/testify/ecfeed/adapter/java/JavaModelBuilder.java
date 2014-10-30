@@ -7,8 +7,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import org.eclipse.jdt.core.JavaModelException;
-
 import com.testify.ecfeed.adapter.ModelOperationException;
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.ClassNode;
@@ -216,7 +214,7 @@ public class JavaModelBuilder {
 		return false;
 	}
 
-	private boolean isAnnotated(Method method, String name) throws JavaModelException{
+	private boolean isAnnotated(Method method, String name) throws Exception{
 		Annotation[] annotations = method.getAnnotations();
 		for(Annotation annotation : annotations){
 			if(annotation.annotationType().getName().equals(name)){
@@ -226,7 +224,7 @@ public class JavaModelBuilder {
 		return false;
 	}
 
-	private boolean isPublicVoid(Method method) throws JavaModelException{
+	private boolean isPublicVoid(Method method) throws Exception{
 		return (method.getReturnType().equals(Void.TYPE) && Modifier.isPublic(method.getModifiers()));
 	}
 

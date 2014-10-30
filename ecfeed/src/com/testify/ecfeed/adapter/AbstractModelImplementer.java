@@ -2,8 +2,6 @@ package com.testify.ecfeed.adapter;
 
 import java.util.List;
 
-import org.eclipse.core.runtime.CoreException;
-
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.ConstraintNode;
@@ -139,7 +137,7 @@ public abstract class AbstractModelImplementer implements IModelImplementer {
 		return fStatusResolver.getImplementationStatus(node);
 	}
 
-	protected boolean implement(RootNode node) throws CoreException{
+	protected boolean implement(RootNode node) throws Exception{
 		for(ClassNode classNode : node.getClasses()){
 			if(implementable(classNode) && getImplementationStatus(classNode) != EImplementationStatus.IMPLEMENTED){
 				implement(classNode);
@@ -148,7 +146,7 @@ public abstract class AbstractModelImplementer implements IModelImplementer {
 		return true;
 	}
 
-	protected boolean implement(ClassNode node) throws CoreException{
+	protected boolean implement(ClassNode node) throws Exception{
 		if(classDefinitionImplemented(node) == false){
 			implementClassDefinition(node);
 		}
@@ -160,7 +158,7 @@ public abstract class AbstractModelImplementer implements IModelImplementer {
 		return true;
 	}
 
-	protected boolean implement(MethodNode node) throws CoreException{
+	protected boolean implement(MethodNode node) throws Exception{
 		if(methodDefinitionImplemented(node) == false){
 			implementMethodDefinition(node);
 		}
@@ -177,7 +175,7 @@ public abstract class AbstractModelImplementer implements IModelImplementer {
 		return true;
 	}
 
-	protected boolean implement(CategoryNode node) throws CoreException{
+	protected boolean implement(CategoryNode node) throws Exception{
 		if(parameterDefinitionImplemented(node) == false){
 			implementParameterDefinition(node);
 		}
@@ -190,7 +188,7 @@ public abstract class AbstractModelImplementer implements IModelImplementer {
 		return true;
 	}
 
-	protected boolean implement(TestCaseNode node) throws CoreException{
+	protected boolean implement(TestCaseNode node) throws Exception{
 		for(PartitionNode partition : node.getTestData()){
 			if(implementable(partition) && getImplementationStatus(partition) != EImplementationStatus.IMPLEMENTED){
 				implement(partition);
@@ -199,11 +197,11 @@ public abstract class AbstractModelImplementer implements IModelImplementer {
 		return true;
 	}
 
-	protected boolean implement(ConstraintNode node) throws CoreException{
+	protected boolean implement(ConstraintNode node) throws Exception{
 		return false;
 	}
 	
-	protected boolean implement(PartitionNode node) throws CoreException{
+	protected boolean implement(PartitionNode node) throws Exception{
 		if(parameterDefinitionImplemented(node.getCategory()) == false){
 			implementParameterDefinition(node.getCategory());
 		}
@@ -258,8 +256,8 @@ public abstract class AbstractModelImplementer implements IModelImplementer {
 	protected abstract boolean methodDefinitionImplemented(MethodNode node);
 	protected abstract boolean parameterDefinitionImplemented(CategoryNode node);
 	
-	protected abstract void implementClassDefinition(ClassNode node) throws CoreException;
-	protected abstract void implementMethodDefinition(MethodNode node) throws CoreException;
-	protected abstract void implementParameterDefinition(CategoryNode node) throws CoreException;
-	protected abstract void implementChoiceDefinition(PartitionNode node) throws CoreException;
+	protected abstract void implementClassDefinition(ClassNode node) throws Exception;
+	protected abstract void implementMethodDefinition(MethodNode node) throws Exception;
+	protected abstract void implementParameterDefinition(CategoryNode node) throws Exception;
+	protected abstract void implementChoiceDefinition(PartitionNode node) throws Exception;
 }
