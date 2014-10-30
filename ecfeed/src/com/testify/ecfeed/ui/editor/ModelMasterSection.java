@@ -68,6 +68,8 @@ public class ModelMasterSection extends TreeViewerSection{
 
 	private final ModelMasterDetailsBlock fMasterDetailsBlock;
 	private IModelUpdateListener fUpdateListener;
+	private final Map<String, Image> fImages;
+	
 	
 	private class ModelWrapper{
 		private final RootNode fModel;
@@ -151,12 +153,6 @@ public class ModelMasterSection extends TreeViewerSection{
 
 	private class ModelLabelProvider extends LabelProvider {
 
-		Map<String, Image> fImages;
-		
-		public ModelLabelProvider() {
-			fImages = new HashMap<String, Image>();
-		}
-		
 		@Override
 		public String getText(Object element){
 			if(element instanceof GenericNode){
@@ -171,33 +167,21 @@ public class ModelMasterSection extends TreeViewerSection{
 		@Override
 		public Image getImage(Object element){
 			if (element instanceof RootNode){
-				return getImage("root_node.png");
+				return getImageFromFile("root_node.png");
 			} else if (element instanceof ClassNode){
-				return getImage("class_node.png");
+				return getImageFromFile("class_node.png");
 			} else if (element instanceof MethodNode){
-				return getImage("method_node.png");
+				return getImageFromFile("method_node.png");
 			} else if(element instanceof TestCaseNode){
-				return getImage("test_case_node.png");
+				return getImageFromFile("test_case_node.png");
 			} else if (element instanceof CategoryNode){
-				return getImage("category_node.png");
+				return getImageFromFile("category_node.png");
 			} else if (element instanceof ConstraintNode){
-				return getImage("constraint_node.png");
+				return getImageFromFile("constraint_node.png");
 			} else if (element instanceof PartitionNode){
-				return getImage("partition_node.png");
+				return getImageFromFile("partition_node.png");
 			}
-			return getImage("sample.png");
-		}
-
-		private Image getImage(String file) {
-			Image image = fImages.get(file);
-			if(image == null){
-				Bundle bundle = FrameworkUtil.getBundle(ModelLabelProvider.class);
-				URL url = FileLocator.find(bundle, new Path("icons/" + file), null);
-				ImageDescriptor imageDsc = ImageDescriptor.createFromURL(url);
-				image = imageDsc.createImage();
-				fImages.put(file, image);
-			}
-			return image;
+			return getImageFromFile("sample.png");
 		}
 	}
 
@@ -232,7 +216,7 @@ public class ModelMasterSection extends TreeViewerSection{
 				List<Image> decorations = new ArrayList<Image>();
 				decorations.add(implementationStatusDecoration(node));
 				if(node.isExpected()){
-					decorations.add(getImage("expected.png"));
+					decorations.add(getImageFromFile("expected.png"));
 				}
 				return decorations;
 			}
@@ -252,7 +236,7 @@ public class ModelMasterSection extends TreeViewerSection{
 				List<Image> decorations = new ArrayList<Image>();
 				decorations.add(implementationStatusDecoration(node));
 				if(node.isAbstract()){
-					decorations.add(getImage("abstract.png"));
+					decorations.add(getImageFromFile("abstract.png"));
 				}
 				return decorations;
 			}
@@ -260,11 +244,11 @@ public class ModelMasterSection extends TreeViewerSection{
 			private Image implementationStatusDecoration(GenericNode node) {
 				switch (fNodeInterface.getImplementationStatus(node)){
 				case IMPLEMENTED:
-					return getImage("implemented.png");
+					return getImageFromFile("implemented.png");
 				case PARTIALLY_IMPLEMENTED:
-					return getImage("partially_implemented.png");
+					return getImageFromFile("partially_implemented.png");
 				case NOT_IMPLEMENTED:
-					return getImage("unimplemented.png");
+					return getImageFromFile("unimplemented.png");
 				case IRRELEVANT:
 				default:
 					return null;
@@ -321,13 +305,6 @@ public class ModelMasterSection extends TreeViewerSection{
 		public void removeListener(ILabelProviderListener listener) {
 		}
 
-		private Image getImage(String file) {
-			Bundle bundle = FrameworkUtil.getBundle(ModelLabelDecorator.class);
-			URL url = FileLocator.find(bundle, new Path("icons/" + file), null);
-			ImageDescriptor descriptor = ImageDescriptor.createFromURL(url);
-			return descriptor.createImage();
-		}
-
 		private Image fuseImages(Image icon, Image decorator, int x, int y){
 			ImageData idIcon = (ImageData)icon.getImageData().clone();
 			ImageData idDecorator = decorator.getImageData();
@@ -380,6 +357,7 @@ public class ModelMasterSection extends TreeViewerSection{
 	public ModelMasterSection(ModelMasterDetailsBlock parentBlock) {
 		super(parentBlock.getMasterSectionContext(), parentBlock.getModelUpdateContext(), STYLE);
 		fMasterDetailsBlock = parentBlock;
+		fImages = new HashMap<String, Image>();
 		
 		setActionProvider(new ModelViewerActionProvider(getTreeViewer(), this, false));
 		
@@ -428,5 +406,17 @@ public class ModelMasterSection extends TreeViewerSection{
 			fUpdateListener = new UpdateListener();
 		}
 		return Arrays.asList(new IModelUpdateListener[]{fUpdateListener});
+	}
+
+	private Image getImageFromFile(String file) {
+		Image image = fImages.get(file);
+		if(image == null){
+			Bundle bundle = FrameworkUtil.getBundle(this.getClass());
+			URL url = FileLocator.find(bundle, new Path("icons/" + file), null);
+			ImageDescriptor imageDsc = ImageDescriptor.createFromURL(url);
+			image = imageDsc.createImage();
+			fImages.put(file, image);
+		}
+		return image;
 	}
 }
