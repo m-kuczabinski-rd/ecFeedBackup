@@ -66,11 +66,11 @@ public class ModelMasterSection extends TreeViewerSection{
 	private static final int STYLE = Section.EXPANDED | Section.TITLE_BAR;
 	private static final int AUTO_EXPAND_LEVEL = 3;
 
-	private ModelMasterDetailsBlock fMasterDetailsBlock;
+	private final ModelMasterDetailsBlock fMasterDetailsBlock;
 	private IModelUpdateListener fUpdateListener;
 	
 	private class ModelWrapper{
-		private RootNode fModel;
+		private final RootNode fModel;
 		
 		public ModelWrapper(RootNode model){
 			fModel = model;
@@ -151,6 +151,13 @@ public class ModelMasterSection extends TreeViewerSection{
 
 	private class ModelLabelProvider extends LabelProvider {
 
+		Map<String, Image> fImages;
+		
+		public ModelLabelProvider() {
+			fImages = new HashMap<String, Image>();
+		}
+		
+		@Override
 		public String getText(Object element){
 			if(element instanceof GenericNode){
 				if(element instanceof CategoryNode){
@@ -161,6 +168,7 @@ public class ModelMasterSection extends TreeViewerSection{
 			return null;
 		}
 
+		@Override
 		public Image getImage(Object element){
 			if (element instanceof RootNode){
 				return getImage("root_node.png");
@@ -181,11 +189,15 @@ public class ModelMasterSection extends TreeViewerSection{
 		}
 
 		private Image getImage(String file) {
-			Bundle bundle = FrameworkUtil.getBundle(ModelLabelProvider.class);
-			URL url = FileLocator.find(bundle, new Path("icons/" + file), null);
-			ImageDescriptor image = ImageDescriptor.createFromURL(url);
-			return image.createImage();
-
+			Image image = fImages.get(file);
+			if(image == null){
+				Bundle bundle = FrameworkUtil.getBundle(ModelLabelProvider.class);
+				URL url = FileLocator.find(bundle, new Path("icons/" + file), null);
+				ImageDescriptor imageDsc = ImageDescriptor.createFromURL(url);
+				image = imageDsc.createImage();
+				fImages.put(file, image);
+			}
+			return image;
 		}
 	}
 
