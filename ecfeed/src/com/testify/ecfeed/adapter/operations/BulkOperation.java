@@ -44,6 +44,7 @@ public class BulkOperation extends AbstractModelOperation{
 	@Override
 	public void execute() throws ModelOperationException {
 		Set<String> errors = new HashSet<String>();
+		fExecutedOperations.clear();
 		for(IModelOperation operation : fOperations){
 			try{
 				operation.execute();
