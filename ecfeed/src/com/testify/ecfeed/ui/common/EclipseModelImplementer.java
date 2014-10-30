@@ -44,7 +44,7 @@ import com.testify.ecfeed.model.PartitionNode;
 
 public class EclipseModelImplementer extends AbstractModelImplementer {
 
-	private IFileInfoProvider fFileInfoProvider;
+	private final IFileInfoProvider fFileInfoProvider;
 
 	public EclipseModelImplementer(IFileInfoProvider fileInfoProvider) {
 		super(new EclipseImplementationStatusResolver());
@@ -183,6 +183,7 @@ public class EclipseModelImplementer extends AbstractModelImplementer {
 		refreshWorkspace();
 	}
 
+	@Override
 	protected boolean implementable(ClassNode node){
 		if(classDefinitionImplemented(node)){
 			return hasImplementableNode(node.getMethods());
@@ -190,6 +191,7 @@ public class EclipseModelImplementer extends AbstractModelImplementer {
 		return classDefinitionImplementable(node);
 	}
 	
+	@Override
 	protected boolean implementable(MethodNode node){
 		if(methodDefinitionImplemented(node)){
 			return hasImplementableNode(node.getCategories()) || hasImplementableNode(node.getTestCases());
@@ -197,6 +199,7 @@ public class EclipseModelImplementer extends AbstractModelImplementer {
 		return methodDefinitionImplementable(node);
 	}
 	
+	@Override
 	protected boolean implementable(CategoryNode node){
 		if(parameterDefinitionImplemented(node)){
 			return hasImplementableNode(node.getPartitions());
@@ -204,6 +207,7 @@ public class EclipseModelImplementer extends AbstractModelImplementer {
 		return parameterDefinitionImplementable(node);
 	}
 	
+	@Override
 	protected boolean implementable(PartitionNode node){
 		if(node.isAbstract()){
 			return hasImplementableNode(node.getPartitions());
@@ -357,7 +361,7 @@ public class EclipseModelImplementer extends AbstractModelImplementer {
 	}
 
 	private CompilationUnit getCompilationUnit(IType type) throws CoreException{
-		final ASTParser parser = ASTParser.newParser(AST.JLS4);
+		final ASTParser parser = ASTParser.newParser(AST.JLS8);
 		parser.setKind(ASTParser.K_COMPILATION_UNIT);
 		parser.setSource(type.getCompilationUnit());
 		CompilationUnit unit = (CompilationUnit)parser.createAST(null);
