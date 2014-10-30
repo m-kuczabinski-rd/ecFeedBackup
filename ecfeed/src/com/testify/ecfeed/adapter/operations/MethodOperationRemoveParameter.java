@@ -18,11 +18,9 @@ public class MethodOperationRemoveParameter extends BulkOperation{
 		private ArrayList<TestCaseNode> fOriginalTestCases;
 
 		private class ReverseOperation extends AbstractModelOperation{
-			
-			
 
 			public ReverseOperation() {
-				super(MethodOperationRemoveParameter.this.getName());
+				super("reverse " + MethodOperationRemoveParameter.this.getName());
 			}
 
 			@Override

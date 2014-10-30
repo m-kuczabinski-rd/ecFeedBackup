@@ -76,7 +76,7 @@ public class BulkOperation extends AbstractModelOperation{
 
 	@Override
 	public IModelOperation reverseOperation(){
-		return new BulkOperation(getName(), reverseOperations(), fAtomic);
+		return new BulkOperation("reverse " + getName(), reverseOperations(), fAtomic);
 	}
 	
 	
