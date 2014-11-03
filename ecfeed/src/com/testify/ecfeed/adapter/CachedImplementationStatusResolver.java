@@ -2,6 +2,7 @@ package com.testify.ecfeed.adapter;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Predicate;
 
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.ClassNode;
@@ -69,10 +70,12 @@ public abstract class CachedImplementationStatusResolver extends
 		
 	}
 	
-	public CachedImplementationStatusResolver() {
+	public CachedImplementationStatusResolver(Predicate<String> primitiveTypePredicate) {
+		super(primitiveTypePredicate);
 		fCacheCleaner = new CacheCleaner();
 	}
 	
+	@Override
 	public EImplementationStatus getImplementationStatus(GenericNode node){
 		EImplementationStatus status = fCache.get(node);
 		if(status == null){

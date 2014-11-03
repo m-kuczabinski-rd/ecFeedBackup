@@ -12,6 +12,7 @@ import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.core.Signature;
 
 import com.testify.ecfeed.adapter.CachedImplementationStatusResolver;
+import com.testify.ecfeed.adapter.java.JavaUtils;
 import com.testify.ecfeed.model.MethodNode;
 
 public class EclipseImplementationStatusResolver extends CachedImplementationStatusResolver{
@@ -19,9 +20,11 @@ public class EclipseImplementationStatusResolver extends CachedImplementationSta
 	private JavaModelAnalyser fJavaModelAnalyser;
 
 	public EclipseImplementationStatusResolver(){
+		super((String type)-> JavaUtils.isPrimitive(type));
 		fJavaModelAnalyser = new JavaModelAnalyser();
 	}
 	
+	@Override
 	protected boolean classDefinitionImplemented(String qualifiedName) {
 		IType type = fJavaModelAnalyser.getIType(qualifiedName); 
 		try {
@@ -30,6 +33,7 @@ public class EclipseImplementationStatusResolver extends CachedImplementationSta
 		return false;
 	}
 	
+	@Override
 	protected boolean methodDefinitionImplemented(MethodNode method) {
 		IType classType = fJavaModelAnalyser.getIType(method.getClassNode().getName());
 		if(classType == null){

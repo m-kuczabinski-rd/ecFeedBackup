@@ -64,6 +64,7 @@ public class JavaImplementationStatusResolver extends AbstractImplementationStat
 	}
 	
 	public JavaImplementationStatusResolver(ILoaderProvider loaderProvider){
+		super((String type) -> JavaUtils.isPrimitive(type));
 		fLoader = loaderProvider.getLoader(true, null);
 		fStatusVisitor = new InternalStatusResolver();
 		fLoadedClasses = new HashMap<>();
@@ -102,6 +103,7 @@ public class JavaImplementationStatusResolver extends AbstractImplementationStat
 		return classDefinition != null && classDefinition.isInterface() == false && classDefinition.isEnum() == false && classDefinition.isAnnotation() == false;
 	}
 
+	@Override
 	protected boolean methodDefinitionImplemented(MethodNode methodModel){
 	Class<?> parentClass = loadClass(JavaUtils.getQualifiedName(methodModel.getClassNode()));
 	if(parentClass == null){
