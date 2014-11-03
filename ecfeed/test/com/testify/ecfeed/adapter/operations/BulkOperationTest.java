@@ -18,7 +18,7 @@ public class BulkOperationTest {
 
 		@Override
 		public void execute() throws ModelOperationException {
-			System.out.println("executed " + getName());
+//			System.out.println("executed " + getName());
 		}
 
 		@Override
@@ -44,9 +44,9 @@ public class BulkOperationTest {
 		IModelOperation operation = new DummyBulkOperation("operation");
 		try{
 			opManager.execute(operation);
-			System.out.println("Undo:");
+//			System.out.println("Undo:");
 			opManager.undo();
-			System.out.println("Redo:");
+//			System.out.println("Redo:");
 			opManager.redo();
 		}catch(ModelOperationException e){
 			fail("Unexpected exception: " + e.getMessage());
