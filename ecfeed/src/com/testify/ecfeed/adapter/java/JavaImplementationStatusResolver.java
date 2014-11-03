@@ -64,7 +64,7 @@ public class JavaImplementationStatusResolver extends AbstractImplementationStat
 	}
 	
 	public JavaImplementationStatusResolver(ILoaderProvider loaderProvider){
-		super((String type) -> JavaUtils.isPrimitive(type));
+		super(new JavaPrimitiveTypePredicate());
 		fLoader = loaderProvider.getLoader(true, null);
 		fStatusVisitor = new InternalStatusResolver();
 		fLoadedClasses = new HashMap<>();

@@ -1,7 +1,6 @@
 package com.testify.ecfeed.adapter;
 
 import java.util.List;
-import java.util.function.Predicate;
 
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.ClassNode;
@@ -17,7 +16,7 @@ public abstract class AbstractImplementationStatusResolver implements
 		IImplementationStatusResolver {
 
 	private StatusResolver fStatusResolver;
-	private Predicate<String> fPrimitiveTypeTester;
+	private IPrimitiveTypePredicate fPrimitiveTypeTester;
 	
 	private class StatusResolver implements IModelVisitor{
 
@@ -57,7 +56,7 @@ public abstract class AbstractImplementationStatusResolver implements
 		}
 	}
 	
-	public AbstractImplementationStatusResolver(Predicate<String> primitiveTypeTester){
+	public AbstractImplementationStatusResolver(IPrimitiveTypePredicate primitiveTypeTester){
 		fStatusResolver = new StatusResolver();
 		fPrimitiveTypeTester = primitiveTypeTester;
 	}
@@ -119,7 +118,7 @@ public abstract class AbstractImplementationStatusResolver implements
 	
 	protected EImplementationStatus implementationStatus(CategoryNode category){
 		EImplementationStatus status = EImplementationStatus.IMPLEMENTED;
-		if(fPrimitiveTypeTester.test(category.getType())){
+		if(fPrimitiveTypeTester.isPrimitive(category.getType())){
 			if(category.getPartitions().size() == 0 && category.isExpected() == false)
 			status = EImplementationStatus.PARTIALLY_IMPLEMENTED;
 		}
@@ -158,7 +157,7 @@ public abstract class AbstractImplementationStatusResolver implements
 			}
 			else{
 				String type = parameter.getType();
-				if(fPrimitiveTypeTester.test(type)){
+				if(fPrimitiveTypeTester.isPrimitive(type)){
 					status = EImplementationStatus.IMPLEMENTED;
 				}
 				else{

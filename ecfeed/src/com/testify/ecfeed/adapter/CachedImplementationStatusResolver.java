@@ -2,8 +2,8 @@ package com.testify.ecfeed.adapter;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.function.Predicate;
 
+import com.testify.ecfeed.adapter.java.JavaPrimitiveTypePredicate;
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.ConstraintNode;
@@ -70,8 +70,8 @@ public abstract class CachedImplementationStatusResolver extends
 		
 	}
 	
-	public CachedImplementationStatusResolver(Predicate<String> primitiveTypePredicate) {
-		super(primitiveTypePredicate);
+	public CachedImplementationStatusResolver(IPrimitiveTypePredicate primitiveTypePredicate) {
+		super(new JavaPrimitiveTypePredicate());
 		fCacheCleaner = new CacheCleaner();
 	}
 	

@@ -12,7 +12,7 @@ import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.core.Signature;
 
 import com.testify.ecfeed.adapter.CachedImplementationStatusResolver;
-import com.testify.ecfeed.adapter.java.JavaUtils;
+import com.testify.ecfeed.adapter.java.JavaPrimitiveTypePredicate;
 import com.testify.ecfeed.model.MethodNode;
 
 public class EclipseImplementationStatusResolver extends CachedImplementationStatusResolver{
@@ -20,7 +20,7 @@ public class EclipseImplementationStatusResolver extends CachedImplementationSta
 	private JavaModelAnalyser fJavaModelAnalyser;
 
 	public EclipseImplementationStatusResolver(){
-		super((String type)-> JavaUtils.isPrimitive(type));
+		super(new JavaPrimitiveTypePredicate());
 		fJavaModelAnalyser = new JavaModelAnalyser();
 	}
 	
