@@ -1,6 +1,7 @@
 package com.testify.ecfeed.adapter.operations;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import com.testify.ecfeed.adapter.IModelOperation;
 import com.testify.ecfeed.adapter.ModelOperationException;
@@ -12,10 +13,10 @@ public class MethodOperationRemoveParameter extends BulkOperation{
 
 	private class RemoveParameterOperation extends AbstractModelOperation{
 
-		private MethodNode fTarget;
-		private CategoryNode fParameter;
+		private final MethodNode fTarget;
+		private final CategoryNode fParameter;
 		private int fOriginalIndex;
-		private ArrayList<TestCaseNode> fOriginalTestCases;
+		private final ArrayList<TestCaseNode> fOriginalTestCases;
 
 		private class ReverseOperation extends AbstractModelOperation{
 
@@ -47,6 +48,9 @@ public class MethodOperationRemoveParameter extends BulkOperation{
 
 		@Override
 		public void execute() throws ModelOperationException {
+			if(validateNewSignature() == false){
+				throw new ModelOperationException(Messages.METHOD_SIGNATURE_DUPLICATE_PROBLEM);
+			}
 			fOriginalIndex = fParameter.getIndex();
 			fTarget.removeCategory(fParameter);
 			for(TestCaseNode tc : fTarget.getTestCases()){
@@ -58,6 +62,16 @@ public class MethodOperationRemoveParameter extends BulkOperation{
 		@Override
 		public IModelOperation reverseOperation() {
 			return new ReverseOperation();
+		}
+
+		private boolean validateNewSignature() {
+			List<String> types = fTarget.getCategoriesTypes();
+			int index = fParameter.getIndex();
+			types.remove(index);
+			if(fTarget.getClassNode().getMethod(fTarget.getName(), types) != null){
+				return false;
+			}
+			return true;
 		}
 	}
 

@@ -14,8 +14,8 @@ public class BulkOperation extends AbstractModelOperation{
 	List<IModelOperation> fExecutedOperations;
 	// either all operation or none. if false, all operations are executed
 	// otherwise after first error the reverse operation is called
-	private boolean fAtomic;
-	private List<ICheckOperation> fCheckOperations; 
+	private final boolean fAtomic;
+	private final List<ICheckOperation> fCheckOperations; 
 	
 	protected interface ICheckOperation{
 		public void check() throws ModelOperationException;
@@ -67,7 +67,7 @@ public class BulkOperation extends AbstractModelOperation{
 			}
 		}
 		if(errors.size() > 0){
-			String message = Messages.PROBLEM_WITH_BULK_OPERATION;
+			String message = Messages.PROBLEM_WITH_BULK_OPERATION(getName());
 			for(String error : errors){
 				message += "\n" + error;
 			}
