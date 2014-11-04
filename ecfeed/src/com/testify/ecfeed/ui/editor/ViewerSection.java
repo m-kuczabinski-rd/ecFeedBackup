@@ -1,11 +1,11 @@
 /*******************************************************************************
- * Copyright (c) 2013 Testify AS.                                                   
- * All rights reserved. This program and the accompanying materials                 
- * are made available under the terms of the Eclipse Public License v1.0            
- * which accompanies this distribution, and is available at                         
- * http://www.eclipse.org/legal/epl-v10.html                                        
- *                                                                                  
- * Contributors:                                                                    
+ * Copyright (c) 2013 Testify AS.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
  *     Patryk Chamuczynski (p.chamuczynski(at)radytek.com) - initial implementation
  ******************************************************************************/
 
@@ -53,14 +53,14 @@ public abstract class ViewerSection extends BasicSection implements ISelectionPr
 	public static final int BUTTONS_BELOW = 2;
 
 	private final int VIEWER_STYLE = SWT.BORDER | SWT.MULTI;
-	
+
 	private List<Object> fSelectedElements;
 
 	private Composite fButtonsComposite;
 	private StructuredViewer fViewer;
 	private Composite fViewerComposite;
 	private Menu fMenu;
-	
+
 	protected class ViewerKeyAdapter extends KeyAdapter{
 		private int fKeyCode;
 		private Action fAction;
@@ -71,7 +71,7 @@ public abstract class ViewerSection extends BasicSection implements ISelectionPr
 			fModifier = modifier;
 			fAction = action;
 		}
-		
+
 		@Override
 		public void keyReleased(KeyEvent e) {
 			if((e.stateMask & fModifier) != 0 || fModifier == SWT.NONE){
@@ -81,24 +81,24 @@ public abstract class ViewerSection extends BasicSection implements ISelectionPr
 			}
 		}
 	}
-	
+
 	protected class ActionSelectionAdapter extends SelectionAdapter{
 		private Action fAction;
 
 		public ActionSelectionAdapter(Action action){
 			fAction = action;
 		}
-		
-		@Override 
+
+		@Override
 		public void widgetSelected(SelectionEvent e){
 			fAction.run();
 		}
 	}
-	
+
 	protected class ViewerMenuListener implements MenuListener{
 
 		private Menu fMenu;
-		
+
 		private class MenuItemSelectionAdapter extends SelectionAdapter{
 
 			private Action fAction;
@@ -106,13 +106,14 @@ public abstract class ViewerSection extends BasicSection implements ISelectionPr
 			public MenuItemSelectionAdapter(Action action){
 				fAction = action;
 			}
-			
+
+			@Override
 			public void widgetSelected(SelectionEvent e){
 				fAction.run();
 			}
-			
+
 		}
-		
+
 		public ViewerMenuListener(Menu menu) {
 			fMenu = menu;
 		}
@@ -120,7 +121,7 @@ public abstract class ViewerSection extends BasicSection implements ISelectionPr
 		protected Menu getMenu(){
 			return fMenu;
 		}
-		
+
 		@Override
 		public void menuHidden(MenuEvent e) {
 		}
@@ -145,7 +146,7 @@ public abstract class ViewerSection extends BasicSection implements ISelectionPr
 				}
 			}
 		}
-		
+
 		protected void addMenuItem(String text, Action action){
 			MenuItem item = new MenuItem(getMenu(), SWT.NONE);
 
@@ -153,13 +154,13 @@ public abstract class ViewerSection extends BasicSection implements ISelectionPr
 			item.setEnabled(action.isEnabled());
 			item.addSelectionListener(new MenuItemSelectionAdapter(action));
 		}
-		
+
 	}
-	
+
 	public ViewerSection(ISectionContext sectionContext, IModelUpdateContext updateContext, int style) {
 		super(sectionContext, updateContext, style);
 		fSelectedElements = new ArrayList<>();
-	}	
+	}
 
 	@Override
 	public void refresh(){
@@ -193,11 +194,13 @@ public abstract class ViewerSection extends BasicSection implements ISelectionPr
 		return fViewer;
 	}
 
-    public void addSelectionChangedListener(ISelectionChangedListener listener){
+    @Override
+	public void addSelectionChangedListener(ISelectionChangedListener listener){
     	fViewer.addSelectionChangedListener(listener);
     }
-    
-    public IStructuredSelection getSelection(){
+
+    @Override
+	public IStructuredSelection getSelection(){
     	return (IStructuredSelection)fViewer.getSelection();
     }
 
@@ -210,24 +213,26 @@ public abstract class ViewerSection extends BasicSection implements ISelectionPr
     	}
     	return result;
     }
-    
-    public void removeSelectionChangedListener(ISelectionChangedListener listener){
+
+    @Override
+	public void removeSelectionChangedListener(ISelectionChangedListener listener){
     	fViewer.removeSelectionChangedListener(listener);
     }
 
-    public void setSelection(ISelection selection){
+    @Override
+	public void setSelection(ISelection selection){
     	fViewer.setSelection(selection);
     }
 
 	@Override
 	protected Composite createClientComposite() {
 		Composite client = super.createClientComposite();
-		createViewerComposite(client); 
-		fButtonsComposite = createButtonsComposite(client); 
+		createViewerComposite(client);
+		fButtonsComposite = createButtonsComposite(client);
 		return client;
 	}
 
-	@Override 
+	@Override
 	protected Layout clientLayout() {
 		GridLayout layout = new GridLayout(buttonsPosition() == BUTTONS_BELOW?1:2, false);
 		return layout;
@@ -244,7 +249,7 @@ public abstract class ViewerSection extends BasicSection implements ISelectionPr
 	protected int viewerStyle(){
 		return VIEWER_STYLE;
 	}
-	
+
 	protected Composite createViewerComposite(Composite parent) {
 		fViewerComposite = getToolkit().createComposite(parent);
 		fViewerComposite.setLayout(new GridLayout(1, false));
@@ -273,7 +278,7 @@ public abstract class ViewerSection extends BasicSection implements ISelectionPr
 		}
 		return buttonsComposite;
 	}
-	
+
 	protected Layout buttonsCompositeLayout() {
 		if(buttonsPosition() == BUTTONS_BELOW){
 			RowLayout rl = new RowLayout();
@@ -287,7 +292,7 @@ public abstract class ViewerSection extends BasicSection implements ISelectionPr
 
 	protected Object buttonsCompositeLayoutData() {
 		if(buttonsPosition() == BUTTONS_BELOW){
-			return null;
+			return new GridData(SWT.FILL, SWT.TOP, true, false);
 		}
 		else{
 			return new GridData(SWT.FILL, SWT.TOP, false, true);
@@ -304,7 +309,7 @@ public abstract class ViewerSection extends BasicSection implements ISelectionPr
 		}
 		return button;
 	}
-	
+
 	protected Object buttonLayoutData() {
 		if(buttonsPosition() == BUTTONS_ASIDE){
 			return new GridData(SWT.FILL,  SWT.TOP, true, false);
@@ -315,33 +320,33 @@ public abstract class ViewerSection extends BasicSection implements ISelectionPr
 	protected void addDoubleClickListener(IDoubleClickListener listener){
 		getViewer().addDoubleClickListener(listener);
 	}
-	
+
 	protected GridData viewerLayoutData(){
 		GridData gd = new GridData(SWT.FILL, SWT.FILL, true, true);
 		gd.widthHint = 100;
 		gd.heightHint = 100;
 		return gd;
 	}
-	
+
 	protected Composite getViewerComposite(){
 		return fViewerComposite;
 	}
-	
+
 	protected void addKeyListener(int keyCode, int modifier, Action action){
 		fViewer.getControl().addKeyListener(new ViewerKeyAdapter(keyCode, modifier, action));
 	}
-	
+
 	@Override
 	protected void setActionProvider(IActionProvider provider){
 		super.setActionProvider(provider);
 		fMenu = new Menu(fViewer.getControl());
 		fViewer.getControl().setMenu(fMenu);
 		fMenu.addMenuListener(getMenuListener());
-		
+
 		if(provider.getAction(ActionFactory.DELETE.getId()) != null){
 			addKeyListener(SWT.DEL, SWT.NONE, provider.getAction(ActionFactory.DELETE.getId()));
 		}
-		
+
 		if(provider.getAction(NamedAction.MOVE_UP_ACTION_ID) != null){
 			addKeyListener(SWT.ARROW_UP, SWT.ALT, provider.getAction(NamedAction.MOVE_UP_ACTION_ID));
 		}
@@ -358,7 +363,7 @@ public abstract class ViewerSection extends BasicSection implements ISelectionPr
 	protected Menu getMenu(){
 		return fMenu;
 	}
-	
+
 	protected abstract void createViewerColumns();
 	protected abstract StructuredViewer createViewer(Composite viewerComposite, int style);
 	protected abstract IContentProvider viewerContentProvider();
