@@ -26,11 +26,11 @@ public class NamedAction extends Action {
 	public static final String UNDO_ACTION_NAME = "Undo\tCtrl+Z";
 	public static final String REDO_ACTION_NAME = "Redo\tCtrl+Shift+Z";
 	public static final String MOVE_UP_ACTION_NAME = "Move Up\tAlt+Up";
-	public static final String MOVE_DOWN_ACTION_NAME = "Move Up\tAlt+Down";
+	public static final String MOVE_DOWN_ACTION_NAME = "Move Down\tAlt+Down";
 	public static final String EXPAND_ACTION_NAME = "Expand\tCtrl+Shift+E";
 	public static final String COLLAPSE_ACTION_NAME = "Collapse\tCtrl+Shift+W";
 	public static final String EXPAND_COLLAPSE_ACTION_NAME = "Expand/Collapse\tSpace";
-	
+
 	protected enum GlobalActions{
 		COPY(COPY_ACTION_ID, COPY_ACTION_NAME),
 		CUT(CUT_ACTION_ID, CUT_ACTION_NAME),
@@ -43,24 +43,24 @@ public class NamedAction extends Action {
 		MOVE_DOWN(MOVE_DOWN_ACTION_ID, MOVE_DOWN_ACTION_NAME),
 		EXPAND(EXPAND_ACTION_ID, EXPAND_ACTION_NAME),
 		COLLAPSE(COLLAPSE_ACTION_ID, COLLAPSE_ACTION_NAME);
-		
+
 		private String fActionId;
 		private String fActionName;
 
 		GlobalActions(String actionId, String actionName){
-			fActionId = actionId; 
+			fActionId = actionId;
 			fActionName = actionName;
 		}
-		
+
 		public String getName(){
 			return fActionName;
 		}
-		
+
 		public String getId(){
 			return fActionId;
 		}
 	}
-	
+
 	private final String fName;
 	private final String fId;
 
@@ -68,11 +68,12 @@ public class NamedAction extends Action {
 		fId = id;
 		fName = name;
 	}
-	
+
 	public String getName(){
 		return fName;
 	}
 
+	@Override
 	public String getId(){
 		return fId;
 	}
