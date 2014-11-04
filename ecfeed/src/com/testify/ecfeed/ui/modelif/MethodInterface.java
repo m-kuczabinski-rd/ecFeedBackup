@@ -12,6 +12,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 
 import com.testify.ecfeed.adapter.IModelOperation;
+import com.testify.ecfeed.adapter.ITypeAdapterProvider;
 import com.testify.ecfeed.adapter.ModelOperationException;
 import com.testify.ecfeed.adapter.java.JavaUtils;
 import com.testify.ecfeed.adapter.operations.MethodOperationAddConstraint;
@@ -30,6 +31,7 @@ import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.ui.common.Constants;
 import com.testify.ecfeed.ui.common.EclipseModelBuilder;
 import com.testify.ecfeed.ui.common.Messages;
+import com.testify.ecfeed.ui.common.EclipseTypeAdapterProvider;
 import com.testify.ecfeed.ui.dialogs.AddTestCaseDialog;
 import com.testify.ecfeed.ui.dialogs.CalculateCoverageDialog;
 import com.testify.ecfeed.ui.dialogs.RenameTestSuiteDialog;
@@ -38,16 +40,18 @@ import com.testify.ecfeed.ui.dialogs.SelectCompatibleMethodDialog;
 public class MethodInterface extends GenericNodeInterface {
 
 	private MethodNode fTarget;
+	private ITypeAdapterProvider fAdapterProvider;
 
 	public MethodInterface(IModelUpdateContext updateContext) {
 		super(updateContext);
+		fAdapterProvider = new EclipseTypeAdapterProvider();
 	}
 
 	public void setTarget(MethodNode target){
 		super.setTarget(target);
 		fTarget = target;
 	}
-	
+
 	public MethodNode getTarget(){
 		return fTarget;
 	}
@@ -63,7 +67,7 @@ public class MethodInterface extends GenericNodeInterface {
 	public boolean convertTo(MethodNode method) {
 		return execute(new MethodOperationConvertTo(fTarget, method), Messages.DIALOG_CONVERT_METHOD_PROBLEM_TITLE);
 	}
-	
+
 	public CategoryNode addNewParameter() {
 		EclipseModelBuilder modelBuilder = new EclipseModelBuilder();
 		String name = generateNewParameterName(fTarget);
@@ -77,15 +81,15 @@ public class MethodInterface extends GenericNodeInterface {
 		}
 		return null;
 	}
-	
+
 	public boolean addNewParameter(CategoryNode parameter, int index) {
 		return execute(new MethodOperationAddParameter(fTarget, parameter, index), Messages.DIALOG_CONVERT_METHOD_PROBLEM_TITLE);
 	}
-	
+
 	public boolean removeParameters(Collection<CategoryNode> parameters, IModelUpdateContext context){
 		Set<ConstraintNode> constraints = fTarget.mentioningConstraints(parameters);
 		if(constraints.size() > 0 || fTarget.getTestCases().size() > 0){
-			if(MessageDialog.openConfirm(Display.getCurrent().getActiveShell(), 
+			if(MessageDialog.openConfirm(Display.getCurrent().getActiveShell(),
 					Messages.DIALOG_REMOVE_PARAMETERS_WARNING_TITLE, Messages.DIALOG_REMOVE_PARAMETERS_WARNING_MESSAGE) == false){
 				return false;
 			}
@@ -101,16 +105,16 @@ public class MethodInterface extends GenericNodeInterface {
 		}
 		return null;
 	}
-	
+
 	public boolean addNewConstraint(ConstraintNode constraint){
 		IModelOperation operation = new MethodOperationAddConstraint(fTarget, constraint, fTarget.getConstraintNodes().size());
 		return execute(operation, Messages.DIALOG_ADD_CONSTRAINT_PROBLEM_TITLE);
 	}
-	
+
 	public boolean removeConstraints(Collection<ConstraintNode> constraints){
 		return removeChildren(constraints, Messages.DIALOG_REMOVE_CONSTRAINTS_PROBLEM_TITLE);
 	}
-	
+
 	public TestCaseNode addTestCase() {
 		for(CategoryNode category : fTarget.getCategories()){
 			if(!category.isExpected() && category.getPartitions().isEmpty()){
@@ -118,7 +122,7 @@ public class MethodInterface extends GenericNodeInterface {
 				return null;
 			}
 		}
-		
+
 		AddTestCaseDialog dialog = new AddTestCaseDialog(Display.getCurrent().getActiveShell(), fTarget);
 		dialog.create();
 		if (dialog.open() == IDialogConstants.OK_ID) {
@@ -133,15 +137,15 @@ public class MethodInterface extends GenericNodeInterface {
 	}
 
 	public boolean addTestCase(TestCaseNode testCase) {
-		return execute(new MethodOperationAddTestCase(fTarget, testCase, fTarget.getTestCases().size()), Messages.DIALOG_ADD_TEST_CASE_PROBLEM_TITLE);
+		return execute(new MethodOperationAddTestCase(fTarget, testCase, fAdapterProvider, fTarget.getTestCases().size()), Messages.DIALOG_ADD_TEST_CASE_PROBLEM_TITLE);
 	}
 
 	public boolean removeTestCases(Collection<TestCaseNode> testCases) {
 		return removeChildren(testCases, Messages.DIALOG_REMOVE_TEST_CASES_PROBLEM_TITLE);
 	}
-	
+
 	public void renameSuite() {
-		RenameTestSuiteDialog dialog = 
+		RenameTestSuiteDialog dialog =
 				new RenameTestSuiteDialog(Display.getDefault().getActiveShell(), fTarget.getTestSuites());
 		dialog.create();
 		if (dialog.open() == Window.OK) {
@@ -153,12 +157,12 @@ public class MethodInterface extends GenericNodeInterface {
 
 	public void renameSuite(String oldName, String newName) {
 		try{
-			execute(new MethodOperationRenameTestCases(fTarget.getTestCases(oldName), newName), 
+			execute(new MethodOperationRenameTestCases(fTarget.getTestCases(oldName), newName),
 					Messages.DIALOG_RENAME_TEST_SUITE_PROBLEM);
 		}
 		catch(ModelOperationException e){
-			MessageDialog.openError(Display.getCurrent().getActiveShell(), 
-					Messages.DIALOG_RENAME_TEST_SUITE_PROBLEM, 
+			MessageDialog.openError(Display.getCurrent().getActiveShell(),
+					Messages.DIALOG_RENAME_TEST_SUITE_PROBLEM,
 					e.getMessage());
 		}
 	}
@@ -167,10 +171,10 @@ public class MethodInterface extends GenericNodeInterface {
 		TestSuiteGenerationSupport testGenerationSupport = new TestSuiteGenerationSupport(fTarget);
 		testGenerationSupport.proceed();
 		if(testGenerationSupport.hasData() == false) return false;
-		
+
 		String testSuiteName = testGenerationSupport.getTestSuiteName();
 		List<List<PartitionNode>> testData = testGenerationSupport.getGeneratedData();
-		
+
 		int dataLength = testData.size();
 		if(dataLength < 0 && (testGenerationSupport.wasCancelled() == false)){
 			MessageDialog.openInformation(Display.getDefault().getActiveShell(),
@@ -185,10 +189,10 @@ public class MethodInterface extends GenericNodeInterface {
 				return false;
 			}
 		}
-		IModelOperation operation = new MethodOperationAddTestSuite(fTarget, testSuiteName, testData);
+		IModelOperation operation = new MethodOperationAddTestSuite(fTarget, testSuiteName, testData, fAdapterProvider);
 		return execute(operation, Messages.DIALOG_ADD_TEST_SUITE_PROBLEM_TITLE);
 	}
-	
+
 	public void executeOnlineTests() {
 		OnlineTestRunningSupport runner = new OnlineTestRunningSupport();
 		runner.setTarget(fTarget);
@@ -199,7 +203,7 @@ public class MethodInterface extends GenericNodeInterface {
 		StaticTestExecutionSupport support = new StaticTestExecutionSupport(testCases);
 		support.proceed();
 	}
-	
+
 	public Collection<TestCaseNode> getTestCases(String testSuite){
 		return fTarget.getTestCases(testSuite);
 	}
@@ -229,7 +233,7 @@ public class MethodInterface extends GenericNodeInterface {
 		}
 		return compatibleMethods;
 	}
-	
+
 	public void openCoverageDialog(Object[] checkedElements, Object[] grayedElements) {
 		Shell activeShell = Display.getDefault().getActiveShell();
 		new CalculateCoverageDialog(activeShell, fTarget, checkedElements, grayedElements).open();

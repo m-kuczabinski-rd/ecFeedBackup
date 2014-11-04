@@ -28,7 +28,7 @@ import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.ui.common.Constants;
 import com.testify.ecfeed.ui.common.Messages;
-import com.testify.ecfeed.ui.common.TypeAdapterProvider;
+import com.testify.ecfeed.ui.common.EclipseTypeAdapterProvider;
 
 public class PartitionInterface extends PartitionedNodeInterface{
 
@@ -44,7 +44,7 @@ public class PartitionInterface extends PartitionedNodeInterface{
 	}
 	
 	public void setValue(String newValue){
-		IModelOperation operation = new PartitionOperationSetValue(fTarget, newValue, new TypeAdapterProvider()); 
+		IModelOperation operation = new PartitionOperationSetValue(fTarget, newValue, new EclipseTypeAdapterProvider()); 
 		execute(operation, Messages.DIALOG_SET_PARTITION_VALUE_PROBLEM_TITLE);
 	}
 

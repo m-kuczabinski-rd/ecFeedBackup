@@ -16,7 +16,7 @@ import com.testify.ecfeed.adapter.ITypeAdapter;
 import com.testify.ecfeed.adapter.ITypeAdapterProvider;
 import com.testify.ecfeed.adapter.java.JavaUtils;
 
-public class TypeAdapterProvider implements ITypeAdapterProvider{
+public class EclipseTypeAdapterProvider implements ITypeAdapterProvider{
 
 	private final String USER_TYPE = "USER_TYPE";
 	private final String[] TYPES_CONVERTABLE_TO_BOOLEAN = new String[]{

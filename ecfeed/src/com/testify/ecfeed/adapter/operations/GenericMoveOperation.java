@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Set;
 
 import com.testify.ecfeed.adapter.IModelOperation;
+import com.testify.ecfeed.adapter.ITypeAdapterProvider;
 import com.testify.ecfeed.adapter.ModelOperationException;
 import com.testify.ecfeed.model.GenericNode;
 import com.testify.ecfeed.model.MethodNode;
@@ -12,11 +13,11 @@ import com.testify.ecfeed.model.PartitionedNode;
 
 public class GenericMoveOperation extends BulkOperation {
 
-	public GenericMoveOperation(List<? extends GenericNode> moved, GenericNode newParent) throws ModelOperationException {
-		this(moved, newParent, -1);
+	public GenericMoveOperation(List<? extends GenericNode> moved, GenericNode newParent, ITypeAdapterProvider adapterProvider) throws ModelOperationException {
+		this(moved, newParent, adapterProvider, -1);
 	}
-	
-	public GenericMoveOperation(List<? extends GenericNode> moved, GenericNode newParent, int newIndex) throws ModelOperationException {
+
+	public GenericMoveOperation(List<? extends GenericNode> moved, GenericNode newParent, ITypeAdapterProvider adapterProvider, int newIndex) throws ModelOperationException {
 		super(OperationNames.MOVE, true);
 		Set<MethodNode> methodsInvolved = new HashSet<>();
 		try {
@@ -28,10 +29,10 @@ public class GenericMoveOperation extends BulkOperation {
 					}
 					addOperation((IModelOperation)node.getParent().accept(new FactoryRemoveChildOperation(node, false)));
 					if(newIndex != -1){
-						addOperation((IModelOperation)newParent.accept(new FactoryAddChildOperation(node, newIndex, false)));
+						addOperation((IModelOperation)newParent.accept(new FactoryAddChildOperation(node, newIndex, adapterProvider, false)));
 					}
 					else{
-						addOperation((IModelOperation)newParent.accept(new FactoryAddChildOperation(node, false)));
+						addOperation((IModelOperation)newParent.accept(new FactoryAddChildOperation(node, adapterProvider, false)));
 					}
 					for(MethodNode method : methodsInvolved){
 						addOperation(new MethodOperationMakeConsistent(method));
@@ -46,7 +47,7 @@ public class GenericMoveOperation extends BulkOperation {
 			throw new ModelOperationException(Messages.OPERATION_NOT_SUPPORTED_PROBLEM);
 		}
 	}
-	
+
 	protected boolean externalNodes(List<? extends GenericNode> moved, GenericNode newParent){
 		for(GenericNode node : moved){
 			if(node.getParent() == newParent){

@@ -3,33 +3,38 @@ package com.testify.ecfeed.ui.modelif;
 import java.util.List;
 
 import com.testify.ecfeed.adapter.IModelOperation;
+import com.testify.ecfeed.adapter.ITypeAdapterProvider;
 import com.testify.ecfeed.adapter.ModelOperationException;
 import com.testify.ecfeed.adapter.operations.FactoryShiftOperation;
 import com.testify.ecfeed.adapter.operations.GenericMoveOperation;
 import com.testify.ecfeed.adapter.operations.GenericRemoveNodesOperation;
 import com.testify.ecfeed.adapter.operations.GenericShiftOperation;
 import com.testify.ecfeed.model.GenericNode;
+import com.testify.ecfeed.ui.common.EclipseTypeAdapterProvider;
 import com.testify.ecfeed.ui.common.Messages;
 
 public class SelectionInterface extends OperationExecuter {
 
+	private ITypeAdapterProvider fAdapterProvider;
+
 	public SelectionInterface(IModelUpdateContext updateContext) {
 		super(updateContext);
+		fAdapterProvider = new EclipseTypeAdapterProvider();
 	}
 
 	private List<? extends GenericNode> fSelected;
-	
+
 	public void setTarget(List<GenericNode> target){
 		fSelected = target;
 	}
-	
+
 	public boolean delete(){
 		if(fSelected.size() > 0){
 			return execute(new GenericRemoveNodesOperation(fSelected, true), Messages.DIALOG_REMOVE_NODES_PROBLEM_TITLE);
 		}
 		return false;
 	}
-	
+
 	public boolean deleteEnabled(){
 		if(fSelected.size() == 0) return false;
 		GenericNode root = fSelected.get(0).getRoot();
@@ -38,7 +43,7 @@ public class SelectionInterface extends OperationExecuter {
 		}
 		return true;
 	}
-	
+
 	public boolean move(GenericNode newParent){
 		return move(newParent, -1);
 	}
@@ -47,17 +52,17 @@ public class SelectionInterface extends OperationExecuter {
 		try{
 			IModelOperation operation;
 			if(newIndex == -1){
-				operation = new GenericMoveOperation(fSelected, newParent);
+				operation = new GenericMoveOperation(fSelected, newParent, fAdapterProvider);
 			}
 			else{
-				operation = new GenericMoveOperation(fSelected, newParent, newIndex);
+				operation = new GenericMoveOperation(fSelected, newParent, fAdapterProvider, newIndex);
 			}
 			return execute(operation, Messages.DIALOG_MOVE_NODE_PROBLEM_TITLE);
 		}catch(ModelOperationException e){
 			return false;
 		}
 	}
-	
+
 	public boolean moveUpDown(boolean up) {
 		GenericNode parent = fSelected.get(0).getParent();
 		for(GenericNode node : fSelected){
@@ -71,9 +76,9 @@ public class SelectionInterface extends OperationExecuter {
 		}catch(Exception e){}
 		return false;
 	}
-	
+
 	public boolean moveUpDownEnabed(boolean up) {
-		
+
 		GenericNode parent = getCommonParent();
 		if(parent != null){
 			try {
@@ -100,10 +105,10 @@ public class SelectionInterface extends OperationExecuter {
 			if(node.getClass().equals(type) == false) return false;
 		}
 		return true;
-		
+
 	}
 
 	protected boolean executeMoveOperation(IModelOperation moveOperation) {
-		return execute(moveOperation, Messages.DIALOG_MOVE_NODE_PROBLEM_TITLE);	
+		return execute(moveOperation, Messages.DIALOG_MOVE_NODE_PROBLEM_TITLE);
 	}
 }

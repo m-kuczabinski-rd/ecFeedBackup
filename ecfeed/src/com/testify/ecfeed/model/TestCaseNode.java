@@ -1,11 +1,11 @@
 /*******************************************************************************
- * Copyright (c) 2013 Testify AS.                                                
- * All rights reserved. This program and the accompanying materials              
- * are made available under the terms of the Eclipse Public License v1.0         
- * which accompanies this distribution, and is available at                      
- * http://www.eclipse.org/legal/epl-v10.html                                     
- *                                                                               
- * Contributors:                                                                 
+ * Copyright (c) 2013 Testify AS.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
  *     Patryk Chamuczynski (p.chamuczynski(at)radytek.com) - initial implementation
  ******************************************************************************/
 
@@ -17,7 +17,7 @@ import java.util.List;
 
 public class TestCaseNode extends GenericNode {
 	List<PartitionNode> fTestData;
-	
+
 	@Override
 	public int getIndex(){
 		if(getMethod() == null){
@@ -33,16 +33,16 @@ public class TestCaseNode extends GenericNode {
 			methodName = getParent().getName();
 		}
 		String result = "[" + getName() + "]";
-				
+
 		if(methodName != null){
 			result += ": " + methodName + "(";
 			result += testDataString();
 			result += ")";
 		}
-		
+
 		return result;
 	}
-	
+
 	@Override
 	public TestCaseNode getCopy(){
 		List<PartitionNode> testdata = new ArrayList<>();
@@ -51,7 +51,7 @@ public class TestCaseNode extends GenericNode {
 		}
 		return new TestCaseNode(this.getName(), testdata);
 	}
-	
+
 	public TestCaseNode(String name, List<PartitionNode> testData) {
 		super(name);
 		fTestData = testData;
@@ -64,7 +64,7 @@ public class TestCaseNode extends GenericNode {
 	public List<PartitionNode> getTestData(){
 		return fTestData;
 	}
-	
+
 	public void replaceValue(int index, PartitionNode newValue) {
 		fTestData.set(index, newValue);
 	}
@@ -80,7 +80,7 @@ public class TestCaseNode extends GenericNode {
 
 	public String testDataString(){
 		String result = new String();
-		
+
 		for(int i = 0; i < fTestData.size(); i++){
 			PartitionNode partition = fTestData.get(i);
 			if(partition.getCategory().isExpected()){
@@ -95,7 +95,7 @@ public class TestCaseNode extends GenericNode {
 		}
 		return result;
 	}
-	
+
 	public static boolean validateTestSuiteName(String newName) {
 		if(newName.length() < 1 || newName.length() > 64) return false;
 		if(newName.matches("[ ]+.*")) return false;
@@ -118,7 +118,10 @@ public class TestCaseNode extends GenericNode {
 		for(int i = 0; i < categories.size(); i++){
 			CategoryNode category = categories.get(i);
 			if(category.isExpected()){
-
+				String value = getTestData().get(i).getValueString();
+				PartitionNode newChoice = new PartitionNode("@expected", value);
+				newChoice.setParent(category);
+				getTestData().set(i, newChoice);
 			} else{
 				PartitionNode original = getTestData().get(i);
 				PartitionNode newReference = category.getPartition(original.getQualifiedName());
@@ -130,28 +133,28 @@ public class TestCaseNode extends GenericNode {
 		}
 		return true;
 	}
-	
+
 	@Override
 	public boolean compare(GenericNode node){
 		if(node instanceof TestCaseNode == false){
 			return false;
 		}
-		
+
 		TestCaseNode compared = (TestCaseNode)node;
-		
+
 		if(getTestData().size() != compared.getTestData().size()){
 			return false;
 		}
-		
+
 		for(int i = 0; i < getTestData().size(); i++){
 			if(getTestData().get(i).compare(compared.getTestData().get(i)) == false){
 				return false;
 			}
 		}
-		
+
 		return super.compare(node);
 	}
-	
+
 	@Override
 	public Object accept(IModelVisitor visitor) throws Exception{
 		return visitor.visit(this);
@@ -169,8 +172,8 @@ public class TestCaseNode extends GenericNode {
 		}
 		return true;
 	}
-	
-	@Override 
+
+	@Override
 	public int getMaxIndex(){
 		if(getMethod() != null){
 			return getMethod().getTestCases().size();

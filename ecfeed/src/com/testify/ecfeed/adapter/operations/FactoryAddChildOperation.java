@@ -1,5 +1,6 @@
 package com.testify.ecfeed.adapter.operations;
 
+import com.testify.ecfeed.adapter.ITypeAdapterProvider;
 import com.testify.ecfeed.adapter.ModelOperationException;
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.ClassNode;
@@ -16,15 +17,17 @@ public class FactoryAddChildOperation implements IModelVisitor{
 	private GenericNode fChild;
 	private int fIndex;
 	private boolean fValidate;
+	private ITypeAdapterProvider fAdapterProvider;
 
-	public FactoryAddChildOperation(GenericNode child, int index, boolean validate) {
+	public FactoryAddChildOperation(GenericNode child, int index, ITypeAdapterProvider adapterProvider, boolean validate) {
 		fChild = child;
 		fIndex = index;
 		fValidate = validate;
+		fAdapterProvider = adapterProvider;
 	}
 
-	public FactoryAddChildOperation(GenericNode child, boolean validate) {
-		this(child, -1, validate);
+	public FactoryAddChildOperation(GenericNode child, ITypeAdapterProvider adapterProvider, boolean validate) {
+		this(child, -1, adapterProvider, validate);
 	}
 
 	@Override
@@ -65,9 +68,9 @@ public class FactoryAddChildOperation implements IModelVisitor{
 		}
 		if(fChild instanceof TestCaseNode){
 			if(fIndex == -1){
-				return new MethodOperationAddTestCase(node, (TestCaseNode)fChild);
+				return new MethodOperationAddTestCase(node, (TestCaseNode)fChild, fAdapterProvider);
 			}
-			return new MethodOperationAddTestCase(node, (TestCaseNode)fChild, fIndex);
+			return new MethodOperationAddTestCase(node, (TestCaseNode)fChild, fAdapterProvider, fIndex);
 		}
 		throw new ModelOperationException(Messages.OPERATION_NOT_SUPPORTED_PROBLEM);
 	}
@@ -103,5 +106,5 @@ public class FactoryAddChildOperation implements IModelVisitor{
 		}
 		throw new ModelOperationException(Messages.OPERATION_NOT_SUPPORTED_PROBLEM);
 	}
-	
+
 }

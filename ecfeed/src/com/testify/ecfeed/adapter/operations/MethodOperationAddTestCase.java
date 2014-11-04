@@ -1,26 +1,32 @@
 package com.testify.ecfeed.adapter.operations;
 
 import com.testify.ecfeed.adapter.IModelOperation;
+import com.testify.ecfeed.adapter.ITypeAdapter;
+import com.testify.ecfeed.adapter.ITypeAdapterProvider;
 import com.testify.ecfeed.adapter.ModelOperationException;
 import com.testify.ecfeed.adapter.java.Constants;
+import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.MethodNode;
+import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.TestCaseNode;
 
 public class MethodOperationAddTestCase extends AbstractModelOperation {
-	
+
 	private MethodNode fTarget;
 	private TestCaseNode fTestCase;
 	private int fIndex;
-	
-	public MethodOperationAddTestCase(MethodNode target, TestCaseNode testCase, int index) {
+	private ITypeAdapterProvider fAdapterProvider;
+
+	public MethodOperationAddTestCase(MethodNode target, TestCaseNode testCase, ITypeAdapterProvider adapterProvider, int index) {
 		super(OperationNames.ADD_TEST_CASE);
 		fTarget = target;
 		fTestCase = testCase;
 		fIndex = index;
+		fAdapterProvider = adapterProvider;
 	}
 
-	public MethodOperationAddTestCase(MethodNode target, TestCaseNode testCase) {
-		this(target, testCase, -1);
+	public MethodOperationAddTestCase(MethodNode target, TestCaseNode testCase, ITypeAdapterProvider adapterProvider) {
+		this(target, testCase, adapterProvider, -1);
 	}
 
 	@Override
@@ -34,9 +40,21 @@ public class MethodOperationAddTestCase extends AbstractModelOperation {
 		if(fTestCase.updateReferences(fTarget) == false){
 			throw new ModelOperationException(Messages.TEST_CASE_INCOMPATIBLE_WITH_METHOD);
 		}
-		else{
-			fTarget.addTestCase(fTestCase, fIndex);
+		//following must be done AFTER references are updated
+		for(PartitionNode choice : fTestCase.getTestData()){
+			CategoryNode parameter = choice.getCategory();
+			if(choice.getCategory().isExpected()){
+				String type = parameter.getType();
+				ITypeAdapter adapter = fAdapterProvider.getAdapter(type);
+				String newValue = adapter.convert(choice.getValueString());
+				if(newValue == null){
+					throw new ModelOperationException(Messages.TEST_CASE_DATA_INCOMPATIBLE_WITH_METHOD);
+				}
+				choice.setValueString(newValue);
+			}
 		}
+
+		fTarget.addTestCase(fTestCase, fIndex);
 		markModelUpdated();
 	}
 

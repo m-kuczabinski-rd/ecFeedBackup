@@ -19,7 +19,7 @@ import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.ui.common.EclipseModelBuilder;
 import com.testify.ecfeed.ui.common.Messages;
-import com.testify.ecfeed.ui.common.TypeAdapterProvider;
+import com.testify.ecfeed.ui.common.EclipseTypeAdapterProvider;
 
 public class CategoryInterface extends PartitionedNodeInterface {
 	
@@ -28,7 +28,7 @@ public class CategoryInterface extends PartitionedNodeInterface {
 	
 	public CategoryInterface(IModelUpdateContext updateContext) {
 		super(updateContext);
-		fAdapterProvider = new TypeAdapterProvider();
+		fAdapterProvider = new EclipseTypeAdapterProvider();
 	}
 
 	public void setTarget(CategoryNode target){
