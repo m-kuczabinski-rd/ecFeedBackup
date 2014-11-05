@@ -24,8 +24,8 @@ public class Messages {
 
 	public static final String DIALOG_TEST_SUITE_NAME_ERROR_MESSAGE = "Name of a test suite must be between 1 and 64 characters long.";
 	public static final String DIALOG_TEST_SUITE_NAME_ERROR_MESSAGE_NO_WHITESPACE = "Name of a test suite cannot consist of whitespace characters only.";
-	public static final String DIALOG_choice_VALUE_PROBLEM_TITLE = "Wrong choice value";
-	public static final String DIALOG_choice_VALUE_PROBLEM_MESSAGE(String value){
+	public static final String DIALOG_CHOICE_VALUE_PROBLEM_TITLE = "Wrong choice value";
+	public static final String DIALOG_CHOICE_VALUE_PROBLEM_MESSAGE(String value){
 		return "Value " + value + " is not valid for given category.\n" +
 				"choice value must fit to type and range of the variable " +
 				"represented by the choice, contain between 1 and 64 characters.\n" +
@@ -81,12 +81,12 @@ public class Messages {
 	public static final String DIALOG_ADD_STATEMENT_PROBLEM_TITLE = "Couldn't add statement";
 	public static final String DIALOG_REMOVE_STATEMENT_PROBLEM_TITLE = "Couldn't remove statement";
 	public static final String DIALOG_EDIT_STATEMENT_PROBLEM_TITLE = "Couldn't edit statement";
-	public static final String DIALOG_ADD_choice_PROBLEM_TITLE = "Couldn't add choice";
-	public static final String DIALOG_REMOVE_choice_TITLE = "Couldn't remove choice";
-	public static final String DIALOG_REMOVE_choiceS_PROBLEM_TITLE = "Couldn't remove some of requested patitions";
+	public static final String DIALOG_ADD_CHOICE_PROBLEM_TITLE = "Couldn't add choice";
+	public static final String DIALOG_REMOVE_CHOICE_TITLE = "Couldn't remove choice";
+	public static final String DIALOG_REMOVE_CHOICES_PROBLEM_TITLE = "Couldn't remove some of requested patitions";
 	public static final String DIALOG_RENAME_PAREMETER_PROBLEM_TITLE = "Couldn't rename parameter";
-	public static final String DIALOG_RENAME_choice_PROBLEM_TITLE = "Couldn't rename choice";
-	public static final String DIALOG_SET_choice_VALUE_PROBLEM_TITLE = "Couldn't change choice value";
+	public static final String DIALOG_RENAME_CHOICE_PROBLEM_TITLE = "Couldn't rename choice";
+	public static final String DIALOG_SET_CHOICE_VALUE_PROBLEM_TITLE = "Couldn't change choice value";
 	public static final String DIALOG_REMOVE_LABEL_PROBLEM_TITLE = "Couldn't remove label";
 	public static final String DIALOG_ADD_LABEL_PROBLEM_TITLE = "Cannot add label";
 	public static final String DIALOG_CHANGE_LABEL_PROBLEM_TITLE = "Cannot change label";
@@ -118,8 +118,8 @@ public class Messages {
 				+ " test cases. Adding this amount of data to the model may heavily affect tool's performance"
 				+ " and cause loss of data. Do you want to continue?";
 	}
-	public static final String DIALOG_REMOVE_choice_WARNING_TITLE = "Removing choice";
-	public static final String DIALOG_REMOVE_choice_WARNING_MESSAGE = "Removing choice will cause removing of all test cases and constraints referring to that choice";
+	public static final String DIALOG_REMOVE_CHOICE_WARNING_TITLE = "Removing choice";
+	public static final String DIALOG_REMOVE_CHOICE_WARNING_MESSAGE = "Removing choice will cause removing of all test cases and constraints referring to that choice";
 	public static final String DIALOG_REMOVE_LABELS_WARNING_TITLE = "Removing labels";
 	public static final String DIALOG_REMOVE_LABELS_WARNING_MESSAGE = "Removing labels will result in removing constraints that refer to the labels.";
 	public static final String DIALOG_RENAME_LABELS_ERROR_TITLE = "Could't rename label";

@@ -18,16 +18,16 @@ import com.testify.ecfeed.ui.common.Messages;
 public class PartitionedNodeInterface extends GenericNodeInterface {
 
 	private PartitionedNode fTarget;
-	
+
 	public PartitionedNodeInterface(IModelUpdateContext updateContext){
 		super(updateContext);
 	}
-	
+
 	public void setTarget(PartitionedNode target){
 		super.setTarget(target);
 		fTarget = target;
 	}
-	
+
 	public PartitionNode addNewPartition() {
 		String name = generatePartitionName();
 		String value = generateNewPartitionValue();
@@ -37,15 +37,15 @@ public class PartitionedNodeInterface extends GenericNodeInterface {
 		}
 		return null;
 	}
-	
+
 	public boolean addPartition(PartitionNode newPartition) {
-		IModelOperation operation = new GenericOperationAddPartition(fTarget, newPartition, fTarget.getPartitions().size(), true); 
-		return execute(operation, Messages.DIALOG_ADD_PARTITION_PROBLEM_TITLE);
+		IModelOperation operation = new GenericOperationAddPartition(fTarget, newPartition, fTarget.getPartitions().size(), true);
+		return execute(operation, Messages.DIALOG_ADD_CHOICE_PROBLEM_TITLE);
 	}
-	
+
 	public boolean removePartition(PartitionNode partition) {
 		IModelOperation operation = new GenericOperationRemovePartition(fTarget, partition, true);
-		return execute(operation, Messages.DIALOG_REMOVE_PARTITION_TITLE);
+		return execute(operation, Messages.DIALOG_REMOVE_CHOICE_TITLE);
 	}
 
 	public boolean removePartitions(Collection<PartitionNode> partitions) {
@@ -56,13 +56,13 @@ public class PartitionedNodeInterface extends GenericNodeInterface {
 			}
 		}
 		if(displayWarning){
-			if(MessageDialog.openConfirm(Display.getCurrent().getActiveShell(), 
-					Messages.DIALOG_REMOVE_PARTITION_WARNING_TITLE, 
-					Messages.DIALOG_REMOVE_PARTITION_WARNING_MESSAGE) == false){
+			if(MessageDialog.openConfirm(Display.getCurrent().getActiveShell(),
+					Messages.DIALOG_REMOVE_CHOICE_WARNING_TITLE,
+					Messages.DIALOG_REMOVE_CHOICE_WARNING_MESSAGE) == false){
 				return false;
 			}
 		}
-		return removeChildren(partitions, Messages.DIALOG_REMOVE_PARTITIONS_PROBLEM_TITLE);
+		return removeChildren(partitions, Messages.DIALOG_REMOVE_CHOICES_PROBLEM_TITLE);
 	}
 
 	protected String generateNewPartitionValue() {
@@ -72,7 +72,7 @@ public class PartitionedNodeInterface extends GenericNodeInterface {
 		if(isPrimitive() == false && builder.getSpecialValues(type).size() == 0){
 			int i = 0;
 			while(fTarget.getLeafPartitionValues().contains(value)){
-				value = builder.getDefaultExpectedValue(type) + i++; 
+				value = builder.getDefaultExpectedValue(type) + i++;
 			}
 		}
 		return value;
@@ -81,7 +81,7 @@ public class PartitionedNodeInterface extends GenericNodeInterface {
 	public boolean isPrimitive() {
 		return CategoryInterface.isPrimitive(fTarget.getCategory().getType());
 	}
-	
+
 	public boolean isUserType() {
 		return !isPrimitive();
 	}
@@ -102,7 +102,7 @@ public class PartitionedNodeInterface extends GenericNodeInterface {
 		String name = Constants.DEFAULT_NEW_PARTITION_NAME;
 		int i = 0;
 		while(fTarget.getPartitionNames().contains(name)){
-			name = Constants.DEFAULT_NEW_PARTITION_NAME + i++; 
+			name = Constants.DEFAULT_NEW_PARTITION_NAME + i++;
 		}
 		return name;
 	}

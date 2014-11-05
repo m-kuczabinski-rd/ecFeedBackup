@@ -22,8 +22,8 @@ import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.ui.common.EclipseImplementationStatusResolver;
-import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.common.EclipseTypeAdapterProvider;
+import com.testify.ecfeed.ui.common.Messages;
 
 public class GenericNodeInterface extends OperationExecuter{
 
@@ -65,7 +65,7 @@ public class GenericNodeInterface extends OperationExecuter{
 
 		@Override
 		public Object visit(PartitionNode node) throws Exception {
-			return Messages.DIALOG_RENAME_PARTITION_PROBLEM_TITLE;
+			return Messages.DIALOG_RENAME_CHOICE_PROBLEM_TITLE;
 		}
 
 	}

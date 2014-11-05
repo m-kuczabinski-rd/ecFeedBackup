@@ -1,11 +1,11 @@
 /*******************************************************************************
- * Copyright (c) 2013 Testify AS.                                                
- * All rights reserved. This program and the accompanying materials              
- * are made available under the terms of the Eclipse Public License v1.0         
- * which accompanies this distribution, and is available at                      
- * http://www.eclipse.org/legal/epl-v10.html                                     
- *                                                                               
- * Contributors:                                                                 
+ * Copyright (c) 2013 Testify AS.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
  *     Patryk Chamuczynski (p.chamuczynski(at)radytek.com) - initial implementation
  ******************************************************************************/
 
@@ -54,7 +54,7 @@ public class TestDataValueEditingSupport extends EditingSupport {
 	private CellEditor getComboCellEditor(PartitionNode partition) {
 		String type = partition.getCategory().getType();
 		EclipseModelBuilder builder = new EclipseModelBuilder();
-		
+
 		if (partition.getCategory().isExpected()) {
 			Set<String> expectedValues = new HashSet<String>();
 			for (String specialValue : builder.getSpecialValues(type)) {
@@ -104,12 +104,12 @@ public class TestDataValueEditingSupport extends EditingSupport {
 		PartitionNode newValue = null;
 		if(category.isExpected()){
 			String valueString = fComboCellEditor.getViewer().getCCombo().getText();
-			String type = category.getType(); 
+			String type = category.getType();
 			ITypeAdapter adapter = new EclipseTypeAdapterProvider().getAdapter(type);
 			if(adapter.convert(valueString) == null){
 				MessageDialog.openError(Display.getCurrent().getActiveShell(),
-						Messages.DIALOG_PARTITION_VALUE_PROBLEM_TITLE,
-						Messages.DIALOG_PARTITION_VALUE_PROBLEM_MESSAGE(valueString));
+						Messages.DIALOG_CHOICE_VALUE_PROBLEM_TITLE,
+						Messages.DIALOG_CHOICE_VALUE_PROBLEM_MESSAGE(valueString));
 				return;
 			}
 			else if(valueString.equals(current.getValueString()) == false){

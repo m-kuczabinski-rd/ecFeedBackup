@@ -1,11 +1,11 @@
 /*******************************************************************************
- * Copyright (c) 2013 Testify AS.                                                
- * All rights reserved. This program and the accompanying materials              
- * are made available under the terms of the Eclipse Public License v1.0         
- * which accompanies this distribution, and is available at                      
- * http://www.eclipse.org/legal/epl-v10.html                                     
- *                                                                               
- * Contributors:                                                                 
+ * Copyright (c) 2013 Testify AS.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
  *     Patryk Chamuczynski (p.chamuczynski(at)radytek.com) - initial implementation
  ******************************************************************************/
 
@@ -27,8 +27,8 @@ import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.ui.common.Constants;
-import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.common.EclipseTypeAdapterProvider;
+import com.testify.ecfeed.ui.common.Messages;
 
 public class PartitionInterface extends PartitionedNodeInterface{
 
@@ -42,10 +42,10 @@ public class PartitionInterface extends PartitionedNodeInterface{
 		super.setTarget(partition);
 		fTarget = partition;
 	}
-	
+
 	public void setValue(String newValue){
-		IModelOperation operation = new PartitionOperationSetValue(fTarget, newValue, new EclipseTypeAdapterProvider()); 
-		execute(operation, Messages.DIALOG_SET_PARTITION_VALUE_PROBLEM_TITLE);
+		IModelOperation operation = new PartitionOperationSetValue(fTarget, newValue, new EclipseTypeAdapterProvider());
+		execute(operation, Messages.DIALOG_SET_CHOICE_VALUE_PROBLEM_TITLE);
 	}
 
 	public String getValue() {
@@ -66,8 +66,8 @@ public class PartitionInterface extends PartitionedNodeInterface{
 			}
 		}
 		if(removeMentioningConstraints){
-			if(MessageDialog.openConfirm(Display.getCurrent().getActiveShell(), 
-					Messages.DIALOG_REMOVE_LABELS_WARNING_TITLE, 
+			if(MessageDialog.openConfirm(Display.getCurrent().getActiveShell(),
+					Messages.DIALOG_REMOVE_LABELS_WARNING_TITLE,
 					Messages.DIALOG_REMOVE_LABELS_WARNING_MESSAGE) == false){
 				return false;
 			}
@@ -107,19 +107,19 @@ public class PartitionInterface extends PartitionedNodeInterface{
 			return false;
 		}
 		if(fTarget.getInheritedLabels().contains(newValue)){
-			MessageDialog.openError(Display.getCurrent().getActiveShell(), 
-					Messages.DIALOG_RENAME_LABELS_ERROR_TITLE, 
+			MessageDialog.openError(Display.getCurrent().getActiveShell(),
+					Messages.DIALOG_RENAME_LABELS_ERROR_TITLE,
 					Messages.DIALOG_LABEL_IS_ALREADY_INHERITED);
 				return false;
 		}
 		if(fTarget.getLeafLabels().contains(newValue)){
-			if(MessageDialog.openConfirm(Display.getCurrent().getActiveShell(), 
-					Messages.DIALOG_RENAME_LABELS_WARNING_TITLE, 
+			if(MessageDialog.openConfirm(Display.getCurrent().getActiveShell(),
+					Messages.DIALOG_RENAME_LABELS_WARNING_TITLE,
 					Messages.DIALOG_DESCENDING_LABELS_WILL_BE_REMOVED_WARNING_TITLE) == false){
 				return false;
 			}
 		}
-		
+
 		IModelOperation operation = new PartitionOperationRenameLabel(fTarget, label, newValue);
 		return execute(operation, Messages.DIALOG_CHANGE_LABEL_PROBLEM_TITLE);
 	}
