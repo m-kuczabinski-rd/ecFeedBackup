@@ -24,12 +24,12 @@ public class Messages {
 
 	public static final String DIALOG_TEST_SUITE_NAME_ERROR_MESSAGE = "Name of a test suite must be between 1 and 64 characters long.";
 	public static final String DIALOG_TEST_SUITE_NAME_ERROR_MESSAGE_NO_WHITESPACE = "Name of a test suite cannot consist of whitespace characters only.";
-	public static final String DIALOG_PARTITION_VALUE_PROBLEM_TITLE = "Wrong partition value";
-	public static final String DIALOG_PARTITION_VALUE_PROBLEM_MESSAGE(String value){
+	public static final String DIALOG_choice_VALUE_PROBLEM_TITLE = "Wrong choice value";
+	public static final String DIALOG_choice_VALUE_PROBLEM_MESSAGE(String value){
 		return "Value " + value + " is not valid for given category.\n" +
-				"Partition value must fit to type and range of the variable " +
-				"represented by the partition, contain between 1 and 64 characters.\n" +
-				"Partitions of user defined type must follow Java enum defining rules.";
+				"choice value must fit to type and range of the variable " +
+				"represented by the choice, contain between 1 and 64 characters.\n" +
+				"choices of user defined type must follow Java enum defining rules.";
 	}
 	public static final String DIALOG_TEST_CLASS_SELECTION_TITLE = "Test class selection";
 	public static final String DIALOG_TEST_CLASS_SELECTION_MESSAGE = "Select class";
@@ -49,7 +49,7 @@ public class Messages {
 	public static final String DIALOG_GENERATE_TEST_SUITE_TITLE = "Generate test suite";
 	public static final String DIALOG_GENERATE_TEST_SUITE_MESSAGE = "Select test suite name and algorithm for test suite generation";
 	public static final String DIALOG_EXECUTE_ONLINE_TITLE = "Execute online test";
-	public static final String DIALOG_EXECUTE_ONLINE_MESSAGE = "Setup the test data generator and select which constraints and partitions shall be considered for generating test cases";
+	public static final String DIALOG_EXECUTE_ONLINE_MESSAGE = "Setup the test data generator and select which constraints and choices shall be considered for generating test cases";
 
 	//PROBLEM COMMUNICATES
 	public static final String DIALOG_RENAME_MODEL_PROBLEM_TITLE = "Couldn't rename model";
@@ -70,7 +70,7 @@ public class Messages {
 	public static final String DIALOG_ADD_CONSTRAINT_PROBLEM_TITLE = "Couldn't add constraint";
 	public static final String DIALOG_REMOVE_CONSTRAINTS_PROBLEM_TITLE = "Couldn't remove constraints";
 	public static final String DIALOG_ADD_TEST_CASE_PROBLEM_TITLE = "Cannot add test case";
-	public static final String DIALOG_TEST_CASE_WITH_EMPTY_CATEGORY_MESSAGE = "Some non-expected parameters have empty partition set.";
+	public static final String DIALOG_TEST_CASE_WITH_EMPTY_CATEGORY_MESSAGE = "Some non-expected parameters have empty choice set.";
 	public static final String DIALOG_RENAME_TEST_SUITE_PROBLEM = "Couldn't rename test cases";
 	public static final String DIALOG_REMOVE_TEST_CASES_PROBLEM_TITLE = "Couldn't remove some of requested test cases";
 	public static final String DIALOG_ADD_TEST_SUITE_PROBLEM_TITLE = "Couldn't add test cases";
@@ -81,12 +81,12 @@ public class Messages {
 	public static final String DIALOG_ADD_STATEMENT_PROBLEM_TITLE = "Couldn't add statement";
 	public static final String DIALOG_REMOVE_STATEMENT_PROBLEM_TITLE = "Couldn't remove statement";
 	public static final String DIALOG_EDIT_STATEMENT_PROBLEM_TITLE = "Couldn't edit statement";
-	public static final String DIALOG_ADD_PARTITION_PROBLEM_TITLE = "Couldn't add partition";
-	public static final String DIALOG_REMOVE_PARTITION_TITLE = "Couldn't remove partition";
-	public static final String DIALOG_REMOVE_PARTITIONS_PROBLEM_TITLE = "Couldn't remove some of requested patitions";
+	public static final String DIALOG_ADD_choice_PROBLEM_TITLE = "Couldn't add choice";
+	public static final String DIALOG_REMOVE_choice_TITLE = "Couldn't remove choice";
+	public static final String DIALOG_REMOVE_choiceS_PROBLEM_TITLE = "Couldn't remove some of requested patitions";
 	public static final String DIALOG_RENAME_PAREMETER_PROBLEM_TITLE = "Couldn't rename parameter";
-	public static final String DIALOG_RENAME_PARTITION_PROBLEM_TITLE = "Couldn't rename partition";
-	public static final String DIALOG_SET_PARTITION_VALUE_PROBLEM_TITLE = "Couldn't change partition value";
+	public static final String DIALOG_RENAME_choice_PROBLEM_TITLE = "Couldn't rename choice";
+	public static final String DIALOG_SET_choice_VALUE_PROBLEM_TITLE = "Couldn't change choice value";
 	public static final String DIALOG_REMOVE_LABEL_PROBLEM_TITLE = "Couldn't remove label";
 	public static final String DIALOG_ADD_LABEL_PROBLEM_TITLE = "Cannot add label";
 	public static final String DIALOG_CHANGE_LABEL_PROBLEM_TITLE = "Cannot change label";
@@ -118,25 +118,25 @@ public class Messages {
 				+ " test cases. Adding this amount of data to the model may heavily affect tool's performance"
 				+ " and cause loss of data. Do you want to continue?";
 	}
-	public static final String DIALOG_REMOVE_PARTITION_WARNING_TITLE = "Removing partition";
-	public static final String DIALOG_REMOVE_PARTITION_WARNING_MESSAGE = "Removing partition will cause removing of all test cases and constraints referring to that partition";
+	public static final String DIALOG_REMOVE_choice_WARNING_TITLE = "Removing choice";
+	public static final String DIALOG_REMOVE_choice_WARNING_MESSAGE = "Removing choice will cause removing of all test cases and constraints referring to that choice";
 	public static final String DIALOG_REMOVE_LABELS_WARNING_TITLE = "Removing labels";
 	public static final String DIALOG_REMOVE_LABELS_WARNING_MESSAGE = "Removing labels will result in removing constraints that refer to the labels.";
 	public static final String DIALOG_RENAME_LABELS_ERROR_TITLE = "Could't rename label";
-	public static final String DIALOG_LABEL_IS_ALREADY_INHERITED = "The label is already inherited from a parent partition";
+	public static final String DIALOG_LABEL_IS_ALREADY_INHERITED = "The label is already inherited from a parent choice";
 	public static final String DIALOG_RENAME_LABELS_WARNING_TITLE = "Renaming label";
 
 	//OTHER MESSAGES
 	public static final String EXECUTING_TEST_WITH_PARAMETERS = "Executing test function with generated parameters";
 	public static final String EXECUTING_TEST_WITH_NO_PARAMETERS = "Executing test function";
 
-	public static final String DIALOG_GENERATOR_INPUT_PROBLEM_MESSAGE = "At least one partition per category must be check";
-	public static final String DIALOG_GENERATOR_EXECUTABLE_INPUT_PROBLEM_MESSAGE = "At least one partition per category must be check. All checked categories must be implemented";
+	public static final String DIALOG_GENERATOR_INPUT_PROBLEM_MESSAGE = "At least one choice per category must be check";
+	public static final String DIALOG_GENERATOR_EXECUTABLE_INPUT_PROBLEM_MESSAGE = "At least one choice per category must be check. All checked categories must be implemented";
 	public static final String DIALOG_GENERATE_TEST_SUITES_SELECT_CONSTRAINTS_LABEL = "Select constraints considered when generating test suite";
 	public static final String DIALOG_GENERATE_TEST_SUITES_SELECT_CHOICES_LABEL = "Select which choices will be considered for generating test suite. "
 			+ "Each category must be represented by at least one choice.";
 	public static final String DIALOG_TEST_SUITE_NAME_PROBLEM_MESSAGE = "Entered test suite name not allowed";
-	public static final String DIALOG_DESCENDING_LABELS_WILL_BE_REMOVED_WARNING_TITLE = "Partitions below in the hierarchy are already labeled with this label. Changing the label will result in removing the labels from all that partitions";
+	public static final String DIALOG_DESCENDING_LABELS_WILL_BE_REMOVED_WARNING_TITLE = "choices below in the hierarchy are already labeled with this label. Changing the label will result in removing the labels from all that choices";
 	public static String DIALOG_UNSUCCESFUL_TEST_EXECUTION(int totalTestCases, int unsuccesfull) {
 		return String.valueOf(unsuccesfull) + " of " + totalTestCases + " test cases have met problems during execution.";
 	}
