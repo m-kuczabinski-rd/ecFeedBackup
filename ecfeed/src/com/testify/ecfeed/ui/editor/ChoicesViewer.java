@@ -12,6 +12,7 @@
 package com.testify.ecfeed.ui.editor;
 
 import java.util.List;
+import java.util.Set;
 
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.CellEditor;
@@ -29,6 +30,8 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.ui.forms.widgets.Section;
 
+import com.testify.ecfeed.adapter.java.JavaUtils;
+import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.PartitionedNode;
 import com.testify.ecfeed.ui.common.NodeNameColumnLabelProvider;
@@ -99,12 +102,18 @@ public class ChoicesViewer extends TableViewerSection {
 		@Override
 		protected CellEditor getCellEditor(Object element) {
 			PartitionNode node = (PartitionNode)element;
+			CategoryNode parameter = node.getCategory();
 			if(CategoryInterface.hasLimitedValuesSet(node.getCategory())){
 				fCellEditor.setActivationStyle(ComboBoxCellEditor.DROP_DOWN_ON_KEY_ACTIVATION);
 			} else {
 				fCellEditor.setActivationStyle(SWT.NONE);
 			}
 			List<String> items = CategoryInterface.getSpecialValues(node.getCategory().getType());
+			if(JavaUtils.isUserType(parameter.getType())){
+				Set<String> usedValues = parameter.getLeafPartitionValues();
+				usedValues.removeAll(items);
+				items.addAll(usedValues);
+			}
 			if(items.contains(node.getValueString()) == false){
 				items.add(node.getValueString());
 			}

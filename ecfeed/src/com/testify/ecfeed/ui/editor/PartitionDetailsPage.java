@@ -1,11 +1,11 @@
 /*******************************************************************************
- * Copyright (c) 2013 Testify AS.                                                   
- * All rights reserved. This program and the accompanying materials                 
- * are made available under the terms of the Eclipse Public License v1.0            
- * which accompanies this distribution, and is available at                         
- * http://www.eclipse.org/legal/epl-v10.html                                        
- *                                                                                  
- * Contributors:                                                                    
+ * Copyright (c) 2013 Testify AS.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
  *     Patryk Chamuczynski (p.chamuczynski(at)radytek.com) - initial implementation
  ******************************************************************************/
 
@@ -23,14 +23,15 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
 
+import com.testify.ecfeed.adapter.java.JavaUtils;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.ui.common.IFileInfoProvider;
 import com.testify.ecfeed.ui.modelif.CategoryInterface;
-import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 import com.testify.ecfeed.ui.modelif.ChoiceInterface;
+import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 
 public class PartitionDetailsPage extends BasicDetailsPage {
-	
+
 	private ChoicesViewer fChildrenViewer;
 	private PartitionLabelsViewer fLabelsViewer;
 	private Composite fAttributesComposite;
@@ -46,7 +47,7 @@ public class PartitionDetailsPage extends BasicDetailsPage {
 			fNameText.setText(fPartitionIf.getName());
 		}
 	}
-	
+
 	private class ValueComboListener extends AbstractSelectionAdapter{
 		@Override
 		public void widgetSelected(SelectionEvent e){
@@ -54,12 +55,12 @@ public class PartitionDetailsPage extends BasicDetailsPage {
 			fValueCombo.setText(fPartitionIf.getValue());
 		}
 	}
-	
+
 	public PartitionDetailsPage(ModelMasterSection masterSection, IModelUpdateContext updateContext, IFileInfoProvider fileInforProvider) {
 		super(masterSection, updateContext, fileInforProvider);
 		fPartitionIf = new ChoiceInterface(this);
 	}
-	
+
 	@Override
 	public void createContents(Composite parent){
 		super.createContents(parent);
@@ -67,17 +68,17 @@ public class PartitionDetailsPage extends BasicDetailsPage {
 		createNameValueEditor(getMainComposite());
 		addViewerSection(fChildrenViewer = new ChoicesViewer(this, this));
 		addViewerSection(fLabelsViewer = new PartitionLabelsViewer(this, this));
-		
+
 		getToolkit().paintBordersFor(getMainComposite());
 	}
-	
+
 	@Override
 	protected Composite createTextClientComposite(){
 		Composite textClient = super.createTextClientComposite();
 		createImplementerButton(textClient);
 		return textClient;
 	}
-	
+
 	@Override
 	public void refresh(){
 		super.refresh();
@@ -94,7 +95,7 @@ public class PartitionDetailsPage extends BasicDetailsPage {
 			refreshValueEditor();
 		}
 	}
-	
+
 	private void refreshValueEditor() {
 		String type = fPartitionIf.getCategory().getType();
 		if(fValueCombo != null && fValueCombo.isDisposed() == false){
@@ -107,6 +108,11 @@ public class PartitionDetailsPage extends BasicDetailsPage {
 		fValueCombo = new ComboViewer(fAttributesComposite, style).getCombo();
 		fValueCombo.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
 		Set<String> items = new LinkedHashSet<String>(CategoryInterface.getSpecialValues(type));
+		if(JavaUtils.isUserType(type)){
+			Set<String> usedValues = fPartitionIf.getCategory().getLeafPartitionValues();
+			usedValues.removeAll(items);
+			items.addAll(usedValues);
+		}
 		items.add(fPartitionIf.getValue());
 		fValueCombo.setItems(items.toArray(new String[]{}));
 		fValueCombo.setText(fPartitionIf.getValue());
@@ -120,12 +126,12 @@ public class PartitionDetailsPage extends BasicDetailsPage {
 		}
 		return null;
 	}
-	
+
 	private void createNameValueEditor(Composite parent) {
 		fAttributesComposite = getToolkit().createComposite(parent);
 		fAttributesComposite.setLayout(new GridLayout(2, false));
 		fAttributesComposite.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
-		
+
 		getToolkit().createLabel(fAttributesComposite, "Name");
 		fNameText = getToolkit().createText(fAttributesComposite, "", SWT.NONE);
 		fNameText.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
