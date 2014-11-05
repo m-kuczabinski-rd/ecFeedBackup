@@ -4,18 +4,18 @@ import com.testify.ecfeed.model.PartitionNode;
 
 public class PartitionValueParser {
 	private ModelClassLoader fLoader;
-	
+
 	public PartitionValueParser(ModelClassLoader loader){
 		fLoader = loader;
 	}
-	
+
 	public Object parseValue(PartitionNode partition){
 		if(partition.getCategory() != null){
 			return parseValue(partition.getValueString(), partition.getCategory().getType());
 		}
 		return null;
 	}
-	
+
 	public Object parseValue(String valueString, String typeName){
 		if(typeName == null || valueString == null){
 			return null;
@@ -40,7 +40,7 @@ public class PartitionValueParser {
 		case Constants.TYPE_NAME_STRING:
 			return parseStringValue(valueString);
 		default:
-			return parseUserTypeValue(valueString, typeName);	
+			return parseUserTypeValue(valueString, typeName);
 		}
 	}
 
@@ -192,6 +192,6 @@ public class PartitionValueParser {
 		}
 		return value;
 	}
-	
+
 
 }
