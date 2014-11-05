@@ -205,8 +205,8 @@ public class PartitionsViewer extends TableViewerSection {
 		fNameColumn.setEditingSupport(new PartitionNameEditingSupport());
 		fValueColumn.setEditingSupport(new PartitionValueEditingSupport(this));
 
-		getSection().setText("Partitions");
-		addButton("Add partition", new AddPartitionAdapter());
+		getSection().setText("Choices");
+		addButton("Add choice", new AddPartitionAdapter());
 		addButton("Remove selected", new ActionSelectionAdapter(new DeleteAction(getViewer(), this)));
 
 		addDoubleClickListener(new SelectNodeDoubleClickListener(sectionContext.getMasterSection()));
