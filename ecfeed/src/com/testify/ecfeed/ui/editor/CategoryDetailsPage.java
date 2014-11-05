@@ -34,7 +34,7 @@ public class CategoryDetailsPage extends BasicDetailsPage{
 	private Button fExpectedCheckbox;
 	private Combo fDefaultValueCombo;
 
-	private PartitionsViewer fPartitionsViewer;
+	private ChoicesViewer fPartitionsViewer;
 	
 	private CategoryInterface fCategoryIf;
 	
@@ -80,7 +80,7 @@ public class CategoryDetailsPage extends BasicDetailsPage{
 		super.createContents(parent);
 		
 		createAttributesComposite();
-		addForm(fPartitionsViewer = new PartitionsViewer(this, this));
+		addForm(fPartitionsViewer = new ChoicesViewer(this, this));
 
 		getToolkit().paintBordersFor(getMainComposite());
 	}

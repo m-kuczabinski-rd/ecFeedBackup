@@ -27,17 +27,17 @@ import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.ui.common.IFileInfoProvider;
 import com.testify.ecfeed.ui.modelif.CategoryInterface;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
-import com.testify.ecfeed.ui.modelif.PartitionInterface;
+import com.testify.ecfeed.ui.modelif.ChoiceInterface;
 
 public class PartitionDetailsPage extends BasicDetailsPage {
 	
-	private PartitionsViewer fChildrenViewer;
+	private ChoicesViewer fChildrenViewer;
 	private PartitionLabelsViewer fLabelsViewer;
 	private Composite fAttributesComposite;
 	private Text fNameText;
 	private Combo fValueCombo;
 
-	private PartitionInterface fPartitionIf;
+	private ChoiceInterface fPartitionIf;
 
 	private class NameTextListener extends AbstractSelectionAdapter{
 		@Override
@@ -57,7 +57,7 @@ public class PartitionDetailsPage extends BasicDetailsPage {
 	
 	public PartitionDetailsPage(ModelMasterSection masterSection, IModelUpdateContext updateContext, IFileInfoProvider fileInforProvider) {
 		super(masterSection, updateContext, fileInforProvider);
-		fPartitionIf = new PartitionInterface(this);
+		fPartitionIf = new ChoiceInterface(this);
 	}
 	
 	@Override
@@ -65,7 +65,7 @@ public class PartitionDetailsPage extends BasicDetailsPage {
 		super.createContents(parent);
 
 		createNameValueEditor(getMainComposite());
-		addViewerSection(fChildrenViewer = new PartitionsViewer(this, this));
+		addViewerSection(fChildrenViewer = new ChoicesViewer(this, this));
 		addViewerSection(fLabelsViewer = new PartitionLabelsViewer(this, this));
 		
 		getToolkit().paintBordersFor(getMainComposite());

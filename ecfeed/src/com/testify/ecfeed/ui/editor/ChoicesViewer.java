@@ -35,26 +35,26 @@ import com.testify.ecfeed.ui.common.NodeNameColumnLabelProvider;
 import com.testify.ecfeed.ui.editor.actions.DeleteAction;
 import com.testify.ecfeed.ui.editor.actions.ModelViewerActionProvider;
 import com.testify.ecfeed.ui.modelif.CategoryInterface;
+import com.testify.ecfeed.ui.modelif.ChoiceInterface;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 import com.testify.ecfeed.ui.modelif.ModelNodesTransfer;
-import com.testify.ecfeed.ui.modelif.PartitionInterface;
 import com.testify.ecfeed.ui.modelif.PartitionedNodeInterface;
 
-public class PartitionsViewer extends TableViewerSection {
+public class ChoicesViewer extends TableViewerSection {
 
 	private final static int STYLE = Section.EXPANDED | Section.TITLE_BAR;
 
 	private PartitionedNodeInterface fParentIf;
-	private PartitionInterface fTableItemIf;
+	private ChoiceInterface fTableItemIf;
 
 	private TableViewerColumn fNameColumn;
 	private TableViewerColumn fValueColumn;
 
-	private class PartitionNameEditingSupport extends EditingSupport{
+	private class ChoiceNameEditingSupport extends EditingSupport{
 
 		private TextCellEditor fNameCellEditor;
 
-		public PartitionNameEditingSupport() {
+		public ChoiceNameEditingSupport() {
 			super(getTableViewer());
 			fNameCellEditor = new TextCellEditor(getTable());
 		}
@@ -86,33 +86,10 @@ public class PartitionsViewer extends TableViewerSection {
 		}
 	}
 
-//	private class PartitionNameLabelProvider extends ColumnLabelProvider {
-//		@Override
-//		public String getText(Object element){
-//			if(element instanceof PartitionNode){
-//				return ((PartitionNode)element).getName();
-//			}
-//			return "";
-//		}
-//
-//		@Override
-//		public Color getForeground(Object element){
-//			if(element instanceof PartitionNode){
-//				PartitionNode partition = (PartitionNode)element;
-//				if(partition.isAbstract()){
-//					return ColorManager.getColor(ColorConstants.ABSTRACT_PARTITION);
-//				} else if (fTableItemIf.getImplementationStatus(partition) == EImplementationStatus.IMPLEMENTED) {
-//					return ColorManager.getColor(ColorConstants.ITEM_IMPLEMENTED);
-//				}
-//			}
-//			return null;
-//		}
-//	}
-
-	private class PartitionValueEditingSupport extends EditingSupport {
+	private class ChoiceValueEditingSupport extends EditingSupport {
 		private ComboBoxViewerCellEditor fCellEditor;
 
-		public PartitionValueEditingSupport(TableViewerSection viewer) {
+		public ChoiceValueEditingSupport(TableViewerSection viewer) {
 			super(viewer.getTableViewer());
 			fCellEditor = new ComboBoxViewerCellEditor(viewer.getTable(), SWT.TRAIL);
 			fCellEditor.setLabelProvider(new LabelProvider());
@@ -159,7 +136,7 @@ public class PartitionsViewer extends TableViewerSection {
 		}
 	}
 
-	private class PartitionValueLabelProvider extends ColumnLabelProvider {
+	private class ChoiceValueLabelProvider extends ColumnLabelProvider {
 
 		@Override
 		public String getText(Object element){
@@ -169,23 +146,9 @@ public class PartitionsViewer extends TableViewerSection {
 			}
 			return "";
 		}
-
-//		@Override
-//		public Color getForeground(Object element){
-//			if(element instanceof PartitionNode){
-//				PartitionNode partition = (PartitionNode)element;
-//				if(partition.isAbstract()){
-//					return ColorManager.getColor(ColorConstants.ABSTRACT_PARTITION);
-//				} else if (fTableItemIf.getImplementationStatus(partition) == EImplementationStatus.IMPLEMENTED) {
-//					return ColorManager.getColor(ColorConstants.ITEM_IMPLEMENTED);
-//				}
-//			}
-//			return null;
-//		}
-//
 	}
 
-	private class AddPartitionAdapter extends SelectionAdapter{
+	private class AddChoiceAdapter extends SelectionAdapter{
 
 		@Override
 		public void widgetSelected(SelectionEvent e){
@@ -196,17 +159,17 @@ public class PartitionsViewer extends TableViewerSection {
 		}
 	}
 
-	public PartitionsViewer(ISectionContext sectionContext, IModelUpdateContext updateContext) {
+	public ChoicesViewer(ISectionContext sectionContext, IModelUpdateContext updateContext) {
 		super(sectionContext, updateContext, STYLE);
 
 		fParentIf = new CategoryInterface(this);
-		fTableItemIf = new PartitionInterface(this);
+		fTableItemIf = new ChoiceInterface(this);
 
-		fNameColumn.setEditingSupport(new PartitionNameEditingSupport());
-		fValueColumn.setEditingSupport(new PartitionValueEditingSupport(this));
+		fNameColumn.setEditingSupport(new ChoiceNameEditingSupport());
+		fValueColumn.setEditingSupport(new ChoiceValueEditingSupport(this));
 
 		getSection().setText("Choices");
-		addButton("Add choice", new AddPartitionAdapter());
+		addButton("Add choice", new AddChoiceAdapter());
 		addButton("Remove selected", new ActionSelectionAdapter(new DeleteAction(getViewer(), this)));
 
 		addDoubleClickListener(new SelectNodeDoubleClickListener(sectionContext.getMasterSection()));
@@ -227,7 +190,6 @@ public class PartitionsViewer extends TableViewerSection {
 	@Override
 	protected void createTableColumns() {
 		fNameColumn = addColumn("Name", 150, new NodeNameColumnLabelProvider());
-//		fNameColumn = addColumn("Name", 150, new PartitionNameLabelProvider());
-		fValueColumn = addColumn("Value", 150, new PartitionValueLabelProvider());
+		fValueColumn = addColumn("Value", 150, new ChoiceValueLabelProvider());
 	}
 }

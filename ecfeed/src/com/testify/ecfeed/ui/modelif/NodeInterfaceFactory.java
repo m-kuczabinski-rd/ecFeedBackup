@@ -64,7 +64,7 @@ public class NodeInterfaceFactory{
 
 		@Override
 		public Object visit(PartitionNode node) throws Exception {
-			PartitionInterface nodeIf = new PartitionInterface(fContext);
+			ChoiceInterface nodeIf = new ChoiceInterface(fContext);
 			nodeIf.setTarget(node);
 			return nodeIf;
 		}

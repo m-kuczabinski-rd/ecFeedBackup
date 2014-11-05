@@ -30,11 +30,11 @@ import com.testify.ecfeed.ui.common.Constants;
 import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.common.EclipseTypeAdapterProvider;
 
-public class PartitionInterface extends PartitionedNodeInterface{
+public class ChoiceInterface extends PartitionedNodeInterface{
 
 	PartitionNode fTarget;
 
-	public PartitionInterface(IModelUpdateContext updateContext) {
+	public ChoiceInterface(IModelUpdateContext updateContext) {
 		super(updateContext);
 	}
 
