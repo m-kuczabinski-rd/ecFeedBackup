@@ -16,7 +16,7 @@ import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.ui.common.Constants;
 import com.testify.ecfeed.ui.common.EclipseModelBuilder;
 import com.testify.ecfeed.ui.common.Messages;
-import com.testify.ecfeed.ui.dialogs.TestClassSelectionDialog;
+import com.testify.ecfeed.ui.dialogs.TestClassImportDialog;
 
 public class RootInterface extends GenericNodeInterface {
 
@@ -30,7 +30,7 @@ public class RootInterface extends GenericNodeInterface {
 		super.setTarget(target);
 		fTarget = target;
 	}
-	
+
 	public RootNode getTarget() {
 		return fTarget;
 	}
@@ -38,7 +38,7 @@ public class RootInterface extends GenericNodeInterface {
 	public ClassNode addNewClass(){
 		return addNewClass(generateClassName());
 	}
-	
+
 	public ClassNode addNewClass(String className){
 		ClassNode addedClass = new ClassNode(className);
 		if(execute(new RootOperationAddNewClass(fTarget, addedClass, fTarget.getClasses().size()), Messages.DIALOG_ADD_NEW_CLASS_PROBLEM_TITLE)){
@@ -48,7 +48,7 @@ public class RootInterface extends GenericNodeInterface {
 	}
 
 	public ClassNode addImplementedClass(){
-		TestClassSelectionDialog dialog = new TestClassSelectionDialog(Display.getCurrent().getActiveShell());
+		TestClassImportDialog dialog = new TestClassImportDialog(Display.getCurrent().getActiveShell());
 
 		if (dialog.open() == IDialogConstants.OK_ID) {
 			IType selectedClass = (IType)dialog.getFirstResult();
@@ -62,8 +62,8 @@ public class RootInterface extends GenericNodeInterface {
 						return classModel;
 					}
 				} catch (ModelOperationException e) {
-					MessageDialog.openError(Display.getCurrent().getActiveShell(), 
-							Messages.DIALOG_ADD_NEW_CLASS_PROBLEM_TITLE, 
+					MessageDialog.openError(Display.getCurrent().getActiveShell(),
+							Messages.DIALOG_ADD_NEW_CLASS_PROBLEM_TITLE,
 							e.getMessage());
 				}
 			}
@@ -72,14 +72,14 @@ public class RootInterface extends GenericNodeInterface {
 	}
 
 	public boolean removeClasses(Collection<ClassNode> removedClasses){
-		if(MessageDialog.openConfirm(Display.getCurrent().getActiveShell(), 
-				Messages.DIALOG_REMOVE_CLASSES_TITLE, 
+		if(MessageDialog.openConfirm(Display.getCurrent().getActiveShell(),
+				Messages.DIALOG_REMOVE_CLASSES_TITLE,
 				Messages.DIALOG_REMOVE_CLASSES_MESSAGE)){
 			return removeChildren(removedClasses, Messages.DIALOG_REMOVE_CLASSES_PROBLEM_TITLE);
 		}
 		return false;
 	}
-	
+
 	public boolean addClasses(Collection<ClassNode> classes) {
 		IModelOperation operation = new RootOperationAddClasses(fTarget, classes, fTarget.getClasses().size());
 		return execute(operation, Messages.DIALOG_ADD_METHODS_PROBLEM_TITLE);

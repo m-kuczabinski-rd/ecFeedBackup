@@ -25,18 +25,18 @@ import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.dialogs.TestClassSelectionDialog;
 
 public class ClassInterface extends GenericNodeInterface {
-	
+
 	public ClassInterface(IModelUpdateContext updateContext) {
 		super(updateContext);
 	}
 
-	private ClassNode fTarget;	
-	
+	private ClassNode fTarget;
+
 	public void setTarget(ClassNode target){
 		super.setTarget(target);
 		fTarget = target;
 	}
-	
+
 	public ClassNode getTarget(){
 		return fTarget;
 	}
@@ -44,15 +44,15 @@ public class ClassInterface extends GenericNodeInterface {
 	public static String getQualifiedName(ClassNode classNode){
 		return classNode.getName();
 	}
-	
+
 	public static String getQualifiedName(String packageName, String localName){
 		return packageName + "." + localName;
 	}
-	
+
 	public String getQualifiedName(){
 		return getQualifiedName(fTarget);
 	}
-	
+
 	public String getLocalName(){
 		return getLocalName(fTarget);
 	}
@@ -79,8 +79,8 @@ public class ClassInterface extends GenericNodeInterface {
 			return false;
 		}
 		if(getImplementationStatus(fTarget) != EImplementationStatus.NOT_IMPLEMENTED){
-			if(MessageDialog.openConfirm(Display.getCurrent().getActiveShell(), 
-					Messages.DIALOG_RENAME_IMPLEMENTED_CLASS_TITLE, 
+			if(MessageDialog.openConfirm(Display.getCurrent().getActiveShell(),
+					Messages.DIALOG_RENAME_IMPLEMENTED_CLASS_TITLE,
 					Messages.DIALOG_RENAME_IMPLEMENTED_CLASS_MESSAGE) == false){
 				return false;
 			}
@@ -94,14 +94,14 @@ public class ClassInterface extends GenericNodeInterface {
 	}
 
 	public boolean setPackageName(String newPackageName){
-		String newQualifiedName = newPackageName + "." + getLocalName(); 
+		String newQualifiedName = newPackageName + "." + getLocalName();
 		return setQualifiedName(newQualifiedName);
 	}
 
 	public MethodNode addNewMethod(){
 		return addNewMethod(generateNewMethodName());
 	}
-	
+
 	public MethodNode addNewMethod(String name){
 		MethodNode method = new MethodNode(name);
 		if(addMethod(method)){
@@ -109,20 +109,20 @@ public class ClassInterface extends GenericNodeInterface {
 		}
 		return null;
 	}
-	
+
 	public boolean addMethods(Collection<MethodNode> methods){
 		IModelOperation operation = new ClassOperationAddMethods(fTarget, methods, fTarget.getMethods().size());
 		return execute(operation, Messages.DIALOG_ADD_METHODS_PROBLEM_TITLE);
 	}
-	
+
 	public boolean addMethod(MethodNode method){
 		IModelOperation operation = new ClassOperationAddMethod(fTarget, method, fTarget.getMethods().size());
 		return execute(operation, Messages.DIALOG_ADD_METHOD_PROBLEM_TITLE);
 	}
 
 	public boolean removeMethod(MethodNode method){
-		if(MessageDialog.openConfirm(Display.getCurrent().getActiveShell(), 
-				Messages.DIALOG_REMOVE_METHOD_TITLE, 
+		if(MessageDialog.openConfirm(Display.getCurrent().getActiveShell(),
+				Messages.DIALOG_REMOVE_METHOD_TITLE,
 				Messages.DIALOG_REMOVE_METHOD_MESSAGE)){
 			IModelOperation operation = new ClassOperationRemoveMethod(fTarget, method);
 			return execute(operation, Messages.DIALOG_REMOVE_METHOD_PROBLEM_TITLE);
@@ -137,8 +137,8 @@ public class ClassInterface extends GenericNodeInterface {
 		if(methods.size() == 1){
 			return removeMethod(new ArrayList<MethodNode>(methods).get(0));
 		}
-		else if(MessageDialog.openConfirm(Display.getCurrent().getActiveShell(), 
-					Messages.DIALOG_REMOVE_METHODS_TITLE, 
+		else if(MessageDialog.openConfirm(Display.getCurrent().getActiveShell(),
+					Messages.DIALOG_REMOVE_METHODS_TITLE,
 					Messages.DIALOG_REMOVE_METHODS_MESSAGE)){
 			return removeChildren(methods, Messages.DIALOG_REMOVE_METHODS_PROBLEM_TITLE);
 		}
@@ -159,7 +159,7 @@ public class ClassInterface extends GenericNodeInterface {
 		return otherMethods;
 	}
 
-	
+
 	public List<MethodNode> getOtherMethods(){
 		return getOtherMethods(fTarget);
 	}
@@ -175,7 +175,8 @@ public class ClassInterface extends GenericNodeInterface {
 
 	public void reassignClass() {
 		TestClassSelectionDialog dialog = new TestClassSelectionDialog(Display.getDefault().getActiveShell());
-		
+//		TestClassSelectionDialog dialog = new TestClassSelectionDialog(Display.getDefault().getActiveShell());
+
 		if (dialog.open() == IDialogConstants.OK_ID) {
 			IType selectedClass = (IType)dialog.getFirstResult();
 			String qualifiedName = selectedClass.getFullyQualifiedName();
