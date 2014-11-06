@@ -87,10 +87,13 @@ public class RootInterface extends GenericNodeInterface {
 
 	private String generateClassName() {
 		String className = Constants.DEFAULT_NEW_PACKAGE_NAME + "." + Constants.DEFAULT_NEW_CLASS_NAME;
-		int i = 0;
-		while(fTarget.getClassModel(className + String.valueOf(i)) != null){
-			i++;
+		if(fTarget.getClassModel(className) != null){
+			int i = 0;
+			while(fTarget.getClassModel(className + String.valueOf(i)) != null){
+				i++;
+			}
+			className = className + String.valueOf(i);
 		}
-		return className + String.valueOf(i);
+		return className;
 	}
 }

@@ -14,7 +14,7 @@ public class Constants {
 	public static final String DEFAULT_USER_TYPE_NAME = "default.UserType";
 	public static final String DEFAULT_NEW_TEST_SUITE_NAME = "default suite";
 	public static final String DEFAULT_NEW_CONSTRAINT_NAME = "constraint";
-	public static final String DEFAULT_NEW_PARTITION_NAME = "partition";
+	public static final String DEFAULT_NEW_PARTITION_NAME = "choice";
 	public static final String DEFAULT_NEW_PARTITION_LABEL = "label";
 
 	public static final String NULL_VALUE_STRING_REPRESENTATION = "/null";
@@ -34,7 +34,7 @@ public class Constants {
 	public static final String[] BYTE_SPECIAL_VALUES = INTEGER_SPECIAL_VALUES;
 	public static final String[] DOUBLE_SPECIAL_VALUES = FLOAT_SPECIAL_VALUES;
 
-	
+
 	public static final String DEFAULT_EXPECTED_NUMERIC_VALUE = "0";
 	public static final String DEFAULT_EXPECTED_FLOATING_POINT_VALUE = "0.0";
 	public static final String DEFAULT_EXPECTED_BOOLEAN_VALUE = BOOLEAN_FALSE_STRING_REPRESENTATION;

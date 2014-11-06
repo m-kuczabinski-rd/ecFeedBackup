@@ -18,14 +18,14 @@ import com.testify.ecfeed.model.TestCaseNode;
 public class CategoryOperationSetType extends BulkOperation{
 
 	private class SetTypeOperation extends AbstractModelOperation{
-		
+
 		private CategoryNode fTarget;
 		private String fNewType;
 		private String fCurrentType;
 		private String fOriginalDefaultValue;
 		private List<PartitionNode> fOriginalPartitions;
 		private List<TestCaseNode> fOriginalTestCases;
-		
+
 		private ITypeAdapterProvider fAdapterProvider;
 
 		private class ReverseOperation extends AbstractModelOperation{
@@ -47,9 +47,9 @@ public class CategoryOperationSetType extends BulkOperation{
 			public IModelOperation reverseOperation() {
 				return new SetTypeOperation(fTarget, fNewType, fAdapterProvider);
 			}
-			
+
 		}
-		
+
 		public SetTypeOperation(CategoryNode target, String newType, ITypeAdapterProvider adapterProvider) {
 			super(OperationNames.SET_TYPE);
 			fTarget = target;
@@ -60,19 +60,25 @@ public class CategoryOperationSetType extends BulkOperation{
 			fOriginalPartitions = target.getPartitions();
 			fOriginalTestCases = new ArrayList<>(target.getMethod().getTestCases());
 		}
-		
+
 		@Override
 		public void execute() throws ModelOperationException {
 			if(JavaUtils.isValidTypeName(fNewType) == false){
 				throw new ModelOperationException(Messages.CATEGORY_TYPE_REGEX_PROBLEM);
 			}
-			
+			MethodNode method = fTarget.getMethod();
+			List<String> parameterTypes = method.getCategoriesTypes();
+			parameterTypes.set(fTarget.getIndex(), fNewType);
+			if(method.getClassNode().getMethod(method.getName(), parameterTypes) != null){
+				throw new ModelOperationException(Messages.METHOD_SIGNATURE_DUPLICATE_PROBLEM);
+			}
+
 			ITypeAdapter adapter = fAdapterProvider.getAdapter(fNewType);
 			fTarget.setType(fNewType);
 
 			convertPartitionValues(fTarget, adapter);
 			removeDeadPartitions(fTarget);
-			
+
 			String defaultValue = adapter.convert(fTarget.getDefaultValue());
 			if(defaultValue == null){
 				if(fTarget.getLeafPartitions().size() > 0){
@@ -100,11 +106,11 @@ public class CategoryOperationSetType extends BulkOperation{
 			markModelUpdated();
 		}
 
-		@Override 
+		@Override
 		public IModelOperation reverseOperation(){
 			return new ReverseOperation();
 		}
-		
+
 		private void convertPartitionValues(PartitionedNode parent, ITypeAdapter adapter) {
 			for(PartitionNode p : parent.getPartitions()){
 				convertPartitionValue(p, adapter);
@@ -138,7 +144,7 @@ public class CategoryOperationSetType extends BulkOperation{
 				ITypeAdapter adapter = fAdapterProvider.getAdapter(fNewType);
 				while(tcIt.hasNext()){
 					PartitionNode expectedValue = tcIt.next().getTestData().get(fTarget.getIndex());
-					String newValue = adapter.convert(expectedValue.getValueString()); 
+					String newValue = adapter.convert(expectedValue.getValueString());
 					if(JavaUtils.isUserType(fNewType)){
 						if(fTarget.getLeafPartitionValues().contains(newValue) == false){
 							tcIt.remove();
@@ -172,7 +178,7 @@ public class CategoryOperationSetType extends BulkOperation{
 			return allChildrenDead;
 		}
 	}
-	
+
 	public CategoryOperationSetType(CategoryNode target, String newType, ITypeAdapterProvider adapterProvider) {
 		super(OperationNames.SET_TYPE, true);
 		addOperation(new SetTypeOperation(target, newType, adapterProvider));

@@ -9,6 +9,14 @@
 #     Patryk Chamuczynski (p.chamuczynski(at)radytek.com) - initial implementation
 #-------------------------------------------------------------------------------
 
+Version 1.7.0
+ - Automatic stub implementation
+ - Undo/Redo
+ - Drag and drop
+ - Improved copy and paste
+ - Improved context menu
+ - Multiselection in most viewers
+
 Version 1.6.0
  - Abstract models
  - Copy&Paste

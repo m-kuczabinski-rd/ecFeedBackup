@@ -65,9 +65,9 @@ public class ModelNodeDropListener extends ViewerDropAdapter{
 		public Object visit(PartitionNode node) throws Exception {
 			return NodeDnDBuffer.getInstance().getDraggedNodes().get(0) instanceof PartitionNode;
 		}
-		
+
 	}
-	
+
 	protected ModelNodeDropListener(Viewer viewer, IModelUpdateContext updateContext) {
 		super(viewer);
 		fUpdateContext = updateContext;
@@ -75,7 +75,7 @@ public class ModelNodeDropListener extends ViewerDropAdapter{
 
 	@Override
 	public boolean performDrop(Object data) {
-		List<GenericNode> dragged = NodeDnDBuffer.getInstance().getDraggedNodes(); 
+		List<GenericNode> dragged = NodeDnDBuffer.getInstance().getDraggedNodes();
 		SelectionInterface selectionIf = new SelectionInterface(fUpdateContext);
 		selectionIf.setTarget(dragged);
 		if((dragged.size() == 0) || (selectionIf.isSingleType() == false)) return false;
@@ -85,7 +85,7 @@ public class ModelNodeDropListener extends ViewerDropAdapter{
 			return false;
 		}
 		switch(getCurrentOperation()){
-		case DND.DROP_COPY: 
+		case DND.DROP_COPY:
 			GenericNodeInterface nodeIf = NodeInterfaceFactory.getNodeInterface(newParent, fUpdateContext);
 			return nodeIf.addChildren(NodeDnDBuffer.getInstance().getDraggedNodesCopy(), index);
 		case DND.DROP_MOVE:
@@ -109,7 +109,7 @@ public class ModelNodeDropListener extends ViewerDropAdapter{
 			return false;
 		}
 	}
-	
+
 	protected GenericNode determineNewParent(Object target, int location){
 		int position = determineLocation(getCurrentEvent());
 		if(target instanceof GenericNode == false) return null;
@@ -123,7 +123,7 @@ public class ModelNodeDropListener extends ViewerDropAdapter{
 		}
 		return null;
 	}
-	
+
 	protected int determineNewIndex(GenericNode target, int location){
 		int position = determineLocation(getCurrentEvent());
 		switch(position){
@@ -136,5 +136,5 @@ public class ModelNodeDropListener extends ViewerDropAdapter{
 		}
 		return -1;
 	}
-	
+
 }
