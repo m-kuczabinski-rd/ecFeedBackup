@@ -1,11 +1,11 @@
 /*******************************************************************************
- * Copyright (c) 2013 Testify AS.                                                
- * All rights reserved. This program and the accompanying materials              
- * are made available under the terms of the Eclipse Public License v1.0         
- * which accompanies this distribution, and is available at                      
- * http://www.eclipse.org/legal/epl-v10.html                                     
- *                                                                               
- * Contributors:                                                                 
+ * Copyright (c) 2013 Testify AS.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
  *     Patryk Chamuczynski (p.chamuczynski(at)radytek.com) - initial implementation
  ******************************************************************************/
 
@@ -42,10 +42,10 @@ import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.ui.common.ColorConstants;
 import com.testify.ecfeed.ui.common.ColorManager;
-import com.testify.ecfeed.ui.common.Messages;
-import com.testify.ecfeed.ui.common.ITestDataEditorListener;
-import com.testify.ecfeed.ui.common.TestDataValueEditingSupport;
 import com.testify.ecfeed.ui.common.Constants;
+import com.testify.ecfeed.ui.common.ITestDataEditorListener;
+import com.testify.ecfeed.ui.common.Messages;
+import com.testify.ecfeed.ui.common.TestDataValueEditingSupport;
 
 public class AddTestCaseDialog extends TitleAreaDialog implements ITestDataEditorListener {
 
@@ -83,7 +83,7 @@ public class AddTestCaseDialog extends TitleAreaDialog implements ITestDataEdito
 	}
 
 	private PartitionNode createAnonymuousPartition(CategoryNode parent) {
-		PartitionNode partition = new PartitionNode("@expected", parent.getDefaultValue()); 
+		PartitionNode partition = new PartitionNode("@expected", parent.getDefaultValue());
 		partition.setParent(parent);
 		return partition;
 	}
@@ -100,9 +100,9 @@ public class AddTestCaseDialog extends TitleAreaDialog implements ITestDataEdito
 		Composite container = new Composite(area, SWT.NONE);
 		container.setLayout(new GridLayout(1, false));
 		container.setLayoutData(new GridData(GridData.FILL_BOTH));
-		
+
 		createTestSuiteComposite(container);
-		
+
 		createTestDataViewer(container);
 
 		return area;
@@ -114,26 +114,26 @@ public class AddTestCaseDialog extends TitleAreaDialog implements ITestDataEdito
 		table.setLinesVisible(true);
 		table.setHeaderVisible(true);
 		table.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
-		
+
 		TableViewerColumn categoryViewerColumn = new TableViewerColumn(fTestDataViewer, SWT.NONE);
 		TableColumn categoryColumn = categoryViewerColumn.getColumn();
 		categoryColumn.setWidth(200);
 		categoryColumn.setText("Parameter");
 		categoryViewerColumn.setLabelProvider(new ColumnLabelProvider(){
-			@Override 
+			@Override
 			public String getText(Object element){
 				return ((PartitionNode)element).getParent().toString();
 			}
-			@Override 
+			@Override
 			public Color getForeground(Object element){
 				return getColor(element);
 			}
 		});
-		
+
 		TableViewerColumn partitionViewerColumn = new TableViewerColumn(fTestDataViewer, SWT.NONE);
 		TableColumn partitionColumn = partitionViewerColumn.getColumn();
 		partitionColumn.setWidth(150);
-		partitionColumn.setText("Partition");
+		partitionColumn.setText("Choice");
 		partitionViewerColumn.setLabelProvider(new ColumnLabelProvider(){
 			@Override
 			public String getText(Object element){
@@ -161,16 +161,16 @@ public class AddTestCaseDialog extends TitleAreaDialog implements ITestDataEdito
 		}
 		return null;
 	}
-	
+
 	private void createTestSuiteComposite(Composite container) {
 		Composite composite = new Composite(container, SWT.NONE);
 		composite.setLayout(new GridLayout(2, false));
 		composite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
-		
+
 		Label testSuiteLabel = new Label(composite, SWT.NONE);
 		testSuiteLabel.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 		testSuiteLabel.setText("Test suite");
-		
+
 		ComboViewer testSuiteViewer = new ComboViewer(composite, SWT.NONE);
 		fTestSuiteCombo = testSuiteViewer.getCombo();
 		fTestSuiteCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
@@ -201,7 +201,7 @@ public class AddTestCaseDialog extends TitleAreaDialog implements ITestDataEdito
 		fTestSuiteName = fTestSuiteCombo.getText();
 		super.okPressed();
 	}
-	
+
 	private void validateTestSuiteName() {
 		if(!TestCaseNode.validateTestSuiteName(fTestSuiteCombo.getText())){
 			setErrorMessage(Messages.DIALOG_TEST_SUITE_NAME_PROBLEM_MESSAGE);
@@ -224,11 +224,11 @@ public class AddTestCaseDialog extends TitleAreaDialog implements ITestDataEdito
 		fTestData.set(index, newValue);
 		fTestDataViewer.refresh();
 	}
-	
+
 	public String getTestSuite(){
 		return fTestSuiteName;
 	}
-	
+
 	public ArrayList<PartitionNode> getTestData(){
 		return fTestData;
 	}

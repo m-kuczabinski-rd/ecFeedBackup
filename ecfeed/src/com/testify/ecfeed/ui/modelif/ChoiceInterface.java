@@ -30,11 +30,11 @@ import com.testify.ecfeed.ui.common.Constants;
 import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.common.EclipseTypeAdapterProvider;
 
-public class PartitionInterface extends PartitionedNodeInterface{
+public class ChoiceInterface extends PartitionedNodeInterface{
 
 	PartitionNode fTarget;
 
-	public PartitionInterface(IModelUpdateContext updateContext) {
+	public ChoiceInterface(IModelUpdateContext updateContext) {
 		super(updateContext);
 	}
 
@@ -45,7 +45,7 @@ public class PartitionInterface extends PartitionedNodeInterface{
 	
 	public void setValue(String newValue){
 		IModelOperation operation = new PartitionOperationSetValue(fTarget, newValue, new EclipseTypeAdapterProvider()); 
-		execute(operation, Messages.DIALOG_SET_PARTITION_VALUE_PROBLEM_TITLE);
+		execute(operation, Messages.DIALOG_SET_CHOICE_VALUE_PROBLEM_TITLE);
 	}
 
 	public String getValue() {

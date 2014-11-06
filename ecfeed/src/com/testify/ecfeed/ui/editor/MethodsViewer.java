@@ -1,11 +1,11 @@
 /*******************************************************************************
- * Copyright (c) 2013 Testify AS.                                                   
- * All rights reserved. This program and the accompanying materials                 
- * are made available under the terms of the Eclipse Public License v1.0            
- * which accompanies this distribution, and is available at                         
- * http://www.eclipse.org/legal/epl-v10.html                                        
- *                                                                                  
- * Contributors:                                                                    
+ * Copyright (c) 2013 Testify AS.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
  *     Patryk Chamuczynski (p.chamuczynski(at)radytek.com) - initial implementation
  ******************************************************************************/
 
@@ -24,6 +24,7 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.ui.forms.widgets.Section;
 
 import com.testify.ecfeed.adapter.java.JavaUtils;
+import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.ui.common.NodeNameColumnLabelProvider;
@@ -41,7 +42,7 @@ public class MethodsViewer extends TableViewerSection {
 	private TableViewerColumn fMethodsColumn;
 	private ClassInterface fClassIf;
 	private MethodInterface fMethodIf;
-	
+
 	public class MethodNameEditingSupport extends EditingSupport{
 
 		private TextCellEditor fNameCellEditor;
@@ -92,9 +93,10 @@ public class MethodsViewer extends TableViewerSection {
 		public String getText(Object element){
 			List<String> argTypes = fMethodIf.getArgTypes((MethodNode)element);
 			List<String> argNames = fMethodIf.getArgNames((MethodNode)element);
+			List<CategoryNode> parameters = ((MethodNode)element).getCategories();
 			String result = "";
 			for(int i = 0; i < argTypes.size(); i++){
-				result += JavaUtils.getLocalName(argTypes.get(i)) + " " + argNames.get(i);
+				result += (parameters.get(i).isExpected()?"[e]":"") + JavaUtils.getLocalName(argTypes.get(i)) + " " + argNames.get(i);
 				if(i < argTypes.size() - 1){
 					result += ", ";
 				}
@@ -102,10 +104,10 @@ public class MethodsViewer extends TableViewerSection {
 			return result;
 		}
 	}
-	
+
 	public MethodsViewer(ISectionContext sectionContext, IModelUpdateContext updateContext) {
 		super(sectionContext, updateContext, STYLE);
-		
+
 		fClassIf = new ClassInterface(this);
 		fMethodIf = new MethodInterface(this);
 
@@ -129,7 +131,7 @@ public class MethodsViewer extends TableViewerSection {
 		fMethodsColumn = addColumn("Methods", 150, new NodeNameColumnLabelProvider());
 		addColumn("Arguments", 450, new MethodsArgsLabelProvider());
 	}
-	
+
 	@Override
 	protected boolean tableLinesVisible() {
 		return true;

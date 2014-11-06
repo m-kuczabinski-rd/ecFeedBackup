@@ -363,7 +363,7 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 		
 		Label selectPartitionsLabel = new Label(composite, SWT.WRAP);
 		selectPartitionsLabel.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
-		selectPartitionsLabel.setText(Messages.DIALOG_GENERATE_TEST_SUITES_SELECT_PARTITIONS_LABEL);
+		selectPartitionsLabel.setText(Messages.DIALOG_GENERATE_TEST_SUITES_SELECT_CHOICES_LABEL);
 		
 		createPartitionsViewer(composite);
 	}

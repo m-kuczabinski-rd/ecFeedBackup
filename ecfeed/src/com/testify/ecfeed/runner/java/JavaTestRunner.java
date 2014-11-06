@@ -5,6 +5,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.testify.ecfeed.adapter.java.Constants;
 import com.testify.ecfeed.adapter.java.JavaUtils;
 import com.testify.ecfeed.adapter.java.ModelClassLoader;
 import com.testify.ecfeed.adapter.java.PartitionValueParser;
@@ -20,11 +21,11 @@ public class JavaTestRunner {
 	private MethodNode fTarget;
 	private Class<?> fTestClass;
 	private Method fTestMethod;
-	
+
 	public JavaTestRunner(ModelClassLoader loader){
 		fLoader = loader;
 	}
-	
+
 	public void setTarget(MethodNode target) throws RunnerException{
 		fTarget = target;
 		ClassNode testClassModel = fTarget.getClassNode();
@@ -46,7 +47,7 @@ public class JavaTestRunner {
 			throw new RunnerException(Messages.CANNOT_INVOKE_TEST_METHOD(fTarget.toString(), testData.toString(), e.getMessage()));
 		}
 	}
-	
+
 	protected Method getTestMethod(Class<?> testClass, MethodNode methodModel) throws RunnerException {
 		for(Method method : testClass.getMethods()){
 			if(isModel(method, methodModel)){
@@ -63,14 +64,25 @@ public class JavaTestRunner {
 		for(Class<?> type : parameterTypes){
 			types.add(JavaUtils.getTypeName(type.getCanonicalName()));
 		}
-		return methodName.equals(methodModel.getName()) && types.equals(methodModel.getCategoriesTypes()); 
+		return methodName.equals(methodModel.getName()) && types.equals(methodModel.getCategoriesTypes());
 	}
 
-	protected Object[] getArguments(List<PartitionNode> testData) {
+	protected Object[] getArguments(List<PartitionNode> testData) throws RunnerException {
 		List<Object> args = new ArrayList<Object>();
 		PartitionValueParser parser = new PartitionValueParser(fLoader);
 		for(PartitionNode p : testData){
-			args.add(parser.parseValue(p));
+			Object value = parser.parseValue(p);
+			if(value == null){
+				String type = p.getCategory().getType();
+				//check if null value acceptable
+				if(JavaUtils.isString(type) || JavaUtils.isUserType(type)){
+					if(p.getValueString().equals(Constants.VALUE_REPRESENTATION_NULL) == false){
+						throw new RunnerException(Messages.CANNOT_PARSE_PARAMETER(type, p.getValueString()));
+					}
+				}
+			}
+
+			args.add(value);
 		}
 		return args.toArray();
 	}

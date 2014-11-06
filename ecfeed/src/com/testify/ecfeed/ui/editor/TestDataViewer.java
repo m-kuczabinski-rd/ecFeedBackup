@@ -1,11 +1,11 @@
 /*******************************************************************************
- * Copyright (c) 2013 Testify AS.                                                   
- * All rights reserved. This program and the accompanying materials                 
- * are made available under the terms of the Eclipse Public License v1.0            
- * which accompanies this distribution, and is available at                         
- * http://www.eclipse.org/legal/epl-v10.html                                        
- *                                                                                  
- * Contributors:                                                                    
+ * Copyright (c) 2013 Testify AS.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
  *     Patryk Chamuczynski (p.chamuczynski(at)radytek.com) - initial implementation
  ******************************************************************************/
 
@@ -15,11 +15,15 @@ import java.util.List;
 
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.ui.forms.widgets.Section;
 
+import com.testify.ecfeed.adapter.EImplementationStatus;
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.TestCaseNode;
+import com.testify.ecfeed.ui.common.ColorConstants;
+import com.testify.ecfeed.ui.common.ColorManager;
 import com.testify.ecfeed.ui.common.ITestDataEditorListener;
 import com.testify.ecfeed.ui.common.NodeViewerColumnLabelProvider;
 import com.testify.ecfeed.ui.common.TestDataValueEditingSupport;
@@ -32,7 +36,7 @@ public class TestDataViewer extends TableViewerSection implements ITestDataEdito
 	private final static int VIEWER_STYLE = SWT.BORDER;
 
 	private TestCaseInterface fTestCaseIf;
-	
+
 	public TestDataViewer(ISectionContext sectionContext, IModelUpdateContext updateContext) {
 		super(sectionContext, updateContext, STYLE);
 		fTestCaseIf = new TestCaseInterface(this);
@@ -48,8 +52,13 @@ public class TestDataViewer extends TableViewerSection implements ITestDataEdito
 				CategoryNode parent = testValue.getCategory();
 				return parent.toString();
 			}
+
+			@Override
+			public Color getForeground(Object element){
+				return getColor(element);
+			}
 		});
-		
+
 		TableViewerColumn valueColumn = addColumn("Value", 150, new NodeViewerColumnLabelProvider(){
 			@Override
 			public String getText(Object element){
@@ -59,11 +68,16 @@ public class TestDataViewer extends TableViewerSection implements ITestDataEdito
 				}
 				return testValue.toString();
 			}
+
+			@Override
+			public Color getForeground(Object element){
+				return getColor(element);
+			}
 		});
-		
+
 		valueColumn.setEditingSupport(new TestDataValueEditingSupport(getTableViewer(), null, this));
 	}
-	
+
 	public void setInput(TestCaseNode testCase){
 		List<PartitionNode> testData = testCase.getTestData();
 		super.setInput(testData);
@@ -74,9 +88,19 @@ public class TestDataViewer extends TableViewerSection implements ITestDataEdito
 	public void testDataChanged(int index, PartitionNode value) {
 		fTestCaseIf.updateTestData(index, value);
 	}
-	
+
 	@Override
 	protected int viewerStyle(){
 		return VIEWER_STYLE;
+	}
+
+	private Color getColor(Object element) {
+		if(element instanceof PartitionNode){
+			PartitionNode choice = (PartitionNode)element;
+			if(fTestCaseIf.getImplementationStatus(choice) == EImplementationStatus.IMPLEMENTED){
+				return ColorManager.getColor(ColorConstants.ITEM_IMPLEMENTED);
+			}
+		}
+		return null;
 	}
 }

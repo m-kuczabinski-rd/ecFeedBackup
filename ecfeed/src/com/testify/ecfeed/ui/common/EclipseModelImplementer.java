@@ -50,14 +50,14 @@ public class EclipseModelImplementer extends AbstractModelImplementer {
 		super(new EclipseImplementationStatusResolver());
 		fFileInfoProvider = fileInfoProvider;
 	}
-	
+
 	@Override
 	public boolean implement(GenericNode node){
 		refreshWorkspace();
 		boolean result = super.implement(node);
 		CachedImplementationStatusResolver.clearCache(node);
 		refreshWorkspace();
-		return result; 
+		return result;
 	}
 
 	@Override
@@ -66,7 +66,7 @@ public class EclipseModelImplementer extends AbstractModelImplementer {
 			implementParameterDefinition(node, node.getLeafPartitionValues());
 		}
 		else{
-			List<PartitionNode> unimplemented = unimplementedChoices(node.getLeafPartitions()); 
+			List<PartitionNode> unimplemented = unimplementedChoices(node.getLeafPartitions());
 			implementChoicesDefinitions(unimplemented);
 			for(PartitionNode choice : unimplemented){
 				CachedImplementationStatusResolver.clearCache(choice);
@@ -74,7 +74,7 @@ public class EclipseModelImplementer extends AbstractModelImplementer {
 		}
 		return true;
 	}
-	
+
 	@Override
 	protected boolean implement(PartitionNode node) throws CoreException{
 		CategoryNode parameter = node.getCategory();
@@ -190,7 +190,7 @@ public class EclipseModelImplementer extends AbstractModelImplementer {
 		}
 		return classDefinitionImplementable(node);
 	}
-	
+
 	@Override
 	protected boolean implementable(MethodNode node){
 		if(methodDefinitionImplemented(node)){
@@ -198,7 +198,7 @@ public class EclipseModelImplementer extends AbstractModelImplementer {
 		}
 		return methodDefinitionImplementable(node);
 	}
-	
+
 	@Override
 	protected boolean implementable(CategoryNode node){
 		if(parameterDefinitionImplemented(node)){
@@ -206,7 +206,7 @@ public class EclipseModelImplementer extends AbstractModelImplementer {
 		}
 		return parameterDefinitionImplementable(node);
 	}
-	
+
 	@Override
 	protected boolean implementable(PartitionNode node){
 		if(node.isAbstract()){
@@ -242,10 +242,10 @@ public class EclipseModelImplementer extends AbstractModelImplementer {
 				return false;
 			}
 		}
-		
-		return JavaUtils.isValidJavaIdentifier(node.getValueString()); 
+
+		return JavaUtils.isValidJavaIdentifier(node.getValueString());
 	}
-	
+
 	@Override
 	protected boolean classDefinitionImplemented(ClassNode node) {
 		try{
@@ -285,7 +285,7 @@ public class EclipseModelImplementer extends AbstractModelImplementer {
 	protected String classDefinitionContent(ClassNode node){
 		return "public class " + JavaUtils.getLocalName(node) + "{\n\n}";
 	}
-	
+
 	protected String methodDefinitionContent(MethodNode node){
 		String args = "";
 		String comment = "// TODO Auto-generated method stub";
@@ -310,7 +310,7 @@ public class EclipseModelImplementer extends AbstractModelImplementer {
 		}
 		return "public void " + node.getName() + "(" + args + "){\n\t" + comment + "\n\t" + content + "\n}";
 	}
-	
+
 	protected String enumDefinitionContent(CategoryNode node, Set<String> fields){
 		String fieldsDefinition = "";
 		if(fields != null){
@@ -319,10 +319,10 @@ public class EclipseModelImplementer extends AbstractModelImplementer {
 			}
 			fieldsDefinition = fieldsDefinition.substring(0, fieldsDefinition.length() - 2);
 		}
-		String result = "public enum " + JavaUtils.getLocalName(node.getType()) + "{\n\t" + fieldsDefinition + "\n}";  
+		String result = "public enum " + JavaUtils.getLocalName(node.getType()) + "{\n\t" + fieldsDefinition + "\n}";
 		return result;
 	}
-	
+
 	private boolean methodDefinitionImplementable(MethodNode node) {
 		if(classDefinitionImplemented(node.getClassNode()) == false){
 			if(classDefinitionImplementable(node.getClassNode()) == false){
@@ -354,7 +354,13 @@ public class EclipseModelImplementer extends AbstractModelImplementer {
 
 	private boolean parameterDefinitionImplementable(CategoryNode parameter) {
 		try {
-			return getJavaProject().findType(parameter.getType()) == null;
+			String type = parameter.getType();
+			if(JavaUtils.isPrimitive(type)){
+				return false;
+			}
+			else{
+				return getJavaProject().findType(type) == null;
+			}
 		}catch (CoreException e) {
 		}
 		return false;
@@ -400,11 +406,11 @@ public class EclipseModelImplementer extends AbstractModelImplementer {
 
 	private IJavaProject getJavaProject() throws CoreException{
 		if(fFileInfoProvider.getProject().hasNature(JavaCore.NATURE_ID)){
-			return JavaCore.create(fFileInfoProvider.getProject()); 
+			return JavaCore.create(fFileInfoProvider.getProject());
 		}
 		return null;
 	}
-	
+
 	private IPackageFragment getPackageFragment(String name) throws CoreException{
 		IPackageFragmentRoot packageFragmentRoot = getPackageFragmentRoot();
 		IPackageFragment packageFragment = packageFragmentRoot.getPackageFragment(name);
@@ -413,7 +419,7 @@ public class EclipseModelImplementer extends AbstractModelImplementer {
 		}
 		return packageFragment;
 	}
-	
+
 	private IPackageFragmentRoot getPackageFragmentRoot() throws CoreException{
 		IPackageFragmentRoot root = fFileInfoProvider.getPackageFragmentRoot();
 		if(root == null){
@@ -424,13 +430,13 @@ public class EclipseModelImplementer extends AbstractModelImplementer {
 		}
 		return root;
 	}
-	
+
 	private IPackageFragmentRoot getAnySourceFolder() throws CoreException {
 		if(fFileInfoProvider.getProject().hasNature(JavaCore.NATURE_ID)){
 			IJavaProject project = JavaCore.create(fFileInfoProvider.getProject());
 			for (IPackageFragmentRoot packageFragmentRoot: project.getPackageFragmentRoots()) {
 				if (packageFragmentRoot.getKind() == IPackageFragmentRoot.K_SOURCE) {
-					return packageFragmentRoot; 
+					return packageFragmentRoot;
 				}
 			}
 		}
@@ -452,11 +458,11 @@ public class EclipseModelImplementer extends AbstractModelImplementer {
 		IClasspathEntry[] entries = javaProject.getRawClasspath();
 		IClasspathEntry[] updated = new IClasspathEntry[entries.length + 1];
 		System.arraycopy(entries, 0, updated, 0, entries.length);
-		updated[entries.length] = JavaCore.newSourceEntry(root.getPath()); 
+		updated[entries.length] = JavaCore.newSourceEntry(root.getPath());
 		javaProject.setRawClasspath(updated, null);
 		return root;
 	}
-	
+
 	private List<PartitionNode> unimplementedChoices(List<PartitionNode> choices){
 		List<PartitionNode> unimplemented = new ArrayList<>();
 		for(PartitionNode choice : choices){

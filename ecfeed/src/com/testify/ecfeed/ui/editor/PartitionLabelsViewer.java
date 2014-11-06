@@ -38,13 +38,13 @@ import com.testify.ecfeed.ui.editor.actions.ModelModifyingAction;
 import com.testify.ecfeed.ui.editor.actions.NamedAction;
 import com.testify.ecfeed.ui.editor.actions.SelectAllAction;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
-import com.testify.ecfeed.ui.modelif.PartitionInterface;
+import com.testify.ecfeed.ui.modelif.ChoiceInterface;
 
 public class PartitionLabelsViewer extends TableViewerSection {
 	
 	private static final int STYLE = Section.TITLE_BAR | Section.EXPANDED;
 
-	private PartitionInterface fPartitionIf;
+	private ChoiceInterface fPartitionIf;
 
 	private static class LabelClipboard{
 		private static List<String> fLabels = new ArrayList<>();
@@ -211,7 +211,7 @@ public class PartitionLabelsViewer extends TableViewerSection {
 	public PartitionLabelsViewer(ISectionContext sectionContext, IModelUpdateContext updateContext) {
 		super(sectionContext, updateContext, STYLE);
 
-		fPartitionIf = new PartitionInterface(this);
+		fPartitionIf = new ChoiceInterface(this);
 		getSection().setText("Labels");
 		
 		addButton("Add label", new AddLabelAdapter());

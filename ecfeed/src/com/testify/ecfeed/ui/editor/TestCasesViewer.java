@@ -1,11 +1,11 @@
 /*******************************************************************************
- * Copyright (c) 2013 Testify AS.                                                   
- * All rights reserved. This program and the accompanying materials                 
- * are made available under the terms of the Eclipse Public License v1.0            
- * which accompanies this distribution, and is available at                         
- * http://www.eclipse.org/legal/epl-v10.html                                        
- *                                                                                  
- * Contributors:                                                                    
+ * Copyright (c) 2013 Testify AS.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
  *     Patryk Chamuczynski (p.chamuczynski(at)radytek.com) - initial implementation
  ******************************************************************************/
 
@@ -41,67 +41,67 @@ public class TestCasesViewer extends CheckboxTreeViewerSection {
 
 	private final static int STYLE = Section.EXPANDED | Section.TITLE_BAR;
 	private final static int VIEWER_STYLE = SWT.BORDER;
-	
+
 	private TestCasesViewerLabelProvider fLabelProvider;
 	private TestCasesViewerContentProvider fContentProvider;
 	private Button fExecuteSelectedButton;
 	private Button fGenerateSuiteButton;
 	private MethodInterface fMethodIf;
-	
+
 	private class AddTestCaseAdapter extends SelectionAdapter{
 		@Override
 		public void widgetSelected(SelectionEvent e){
 			fMethodIf.addTestCase();
 		}
 	}
-	
+
 	private class GenerateTestSuiteAdapter extends SelectionAdapter{
 		@Override
 		public void widgetSelected(SelectionEvent e){
 			fMethodIf.generateTestSuite();
 		}
 	}
-	
+
 	private class ExecuteStaticTestAdapter extends SelectionAdapter{
 		@Override
 		public void widgetSelected(SelectionEvent e){
 			fMethodIf.executeStaticTests(getCheckedTestCases());
 		}
 	}
-	
+
 	private class RenameSuiteAdapter extends SelectionAdapter{
 		@Override
 		public void widgetSelected(SelectionEvent e){
 			fMethodIf.renameSuite();
 		}
 	}
-	
+
 	private class RemoveSelectedAdapter extends SelectionAdapter{
 		@Override
 		public void widgetSelected(SelectionEvent e){
 			fMethodIf.removeTestCases(getCheckedTestCases());
 		}
 	}
-	
+
 	private class CalculateCoverageAdapter extends SelectionAdapter {
 		@Override
 		public void widgetSelected(SelectionEvent e) {
 			fMethodIf.openCoverageDialog(getCheckedElements(), getGrayedElements());
 		}
 	}
-	
+
 	public TestCasesViewer(ISectionContext sectionContext, IModelUpdateContext updateContext) {
 		super(sectionContext, updateContext, STYLE);
 		GridData gd = new GridData(SWT.FILL, SWT.FILL, true, true);
 		gd.minimumHeight = 250;
 		getSection().setLayoutData(gd);
-		
+
 		fMethodIf = new MethodInterface(this);
 
 		getCheckboxViewer().addCheckStateListener(new TreeCheckStateListener(getCheckboxViewer()));
 
 		getSection().setText("Test cases");
-		
+
 		addButton("Add test case", new AddTestCaseAdapter());
 		addButton("Rename suite", new RenameSuiteAdapter());
 		fGenerateSuiteButton = addButton("Generate test suite", new GenerateTestSuiteAdapter());
@@ -111,7 +111,7 @@ public class TestCasesViewer extends CheckboxTreeViewerSection {
 
 		addDoubleClickListener(new SelectNodeDoubleClickListener(sectionContext.getMasterSection()));
 	}
-	
+
 	@Override
 	public void refresh() {
 		fGenerateSuiteButton.setEnabled(getSelectedMethod().getCategories().size() > 0);
@@ -125,11 +125,11 @@ public class TestCasesViewer extends CheckboxTreeViewerSection {
 		fContentProvider.setMethod(method);
 		super.setInput(method);
 	}
-	
+
 	public MethodNode getSelectedMethod(){
 		return fMethodIf.getTarget();
 	}
-	
+
 	protected Collection<TestCaseNode> getCheckedTestCases() {
 		Collection<TestCaseNode> result = new HashSet<TestCaseNode>();
 		for(Object o : getCheckedElements()){
@@ -157,17 +157,17 @@ public class TestCasesViewer extends CheckboxTreeViewerSection {
 		});
 		return treeViewer;
 	}
-	
+
 	@Override
 	//Put buttons next to the viewer instead below
 	protected int buttonsPosition(){
 		return BUTTONS_ASIDE;
 	}
-	
+
 	@Override
 	protected IContentProvider viewerContentProvider() {
 		if(fContentProvider == null){
-			fContentProvider = new TestCasesViewerContentProvider(); 
+			fContentProvider = new TestCasesViewerContentProvider();
 		}
 		return fContentProvider;
 	}
@@ -179,20 +179,20 @@ public class TestCasesViewer extends CheckboxTreeViewerSection {
 		}
 		return fLabelProvider;
 	}
-	
+
 	@Override
 	protected int viewerStyle(){
 		return VIEWER_STYLE;
 	}
-	
+
 	private boolean executionEnabled(){
-		Collection<TestCaseNode> checked = getCheckedTestCases(); 
+		Collection<TestCaseNode> checked = getCheckedTestCases();
 		if(checked.size() == 0) return false;
 		if(fMethodIf.getImplementationStatus() == EImplementationStatus.NOT_IMPLEMENTED) return false;
 		for(TestCaseNode tc : checked){
-			if(fMethodIf.getImplementationStatus(tc) == EImplementationStatus.NOT_IMPLEMENTED) return false;
+			if(fMethodIf.getImplementationStatus(tc) != EImplementationStatus.IMPLEMENTED) return false;
 		}
 		return true;
 	}
-	
+
 }
