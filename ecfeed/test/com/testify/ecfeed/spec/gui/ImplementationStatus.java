@@ -27,6 +27,11 @@ public class ImplementationStatus{
 		System.out.println("implementedTestCaseTest(" + childrenStatus + ")");
 	}
 
+	public void implementedRootTest(EChildrenStatus childrenStatus){
+		// TODO Auto-generated method stub
+		System.out.println("implementedRootTest(" + childrenStatus + ")");
+	}
+
 
 }
 
