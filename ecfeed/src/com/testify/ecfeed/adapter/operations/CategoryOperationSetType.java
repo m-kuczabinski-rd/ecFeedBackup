@@ -148,12 +148,12 @@ public class CategoryOperationSetType extends BulkOperation{
 					if(JavaUtils.isUserType(fNewType)){
 						if(fTarget.getLeafPartitionValues().contains(newValue) == false){
 							tcIt.remove();
-							break;
+							continue;
 						}
 					}
 					if(newValue == null && adapter.isNullAllowed() == false){
 						tcIt.remove();
-						break;
+						continue;
 					}
 					else{
 						if(expectedValue.getValueString().equals(newValue) == false){

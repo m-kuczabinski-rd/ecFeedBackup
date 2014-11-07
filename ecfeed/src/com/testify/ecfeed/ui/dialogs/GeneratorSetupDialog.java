@@ -251,8 +251,8 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 				}
 			}
 		} else {
-			for(CategoryNode category: fMethod.getCategories()){
-				if(category.getPartitions().isEmpty()){
+			for(CategoryNode category: fMethod.getCategories() ){
+				if(category.getPartitions().isEmpty() && (category.isExpected() == false || JavaUtils.isUserType(category.getType()))){
 					setOkButton(false);
 					break;
 				}
