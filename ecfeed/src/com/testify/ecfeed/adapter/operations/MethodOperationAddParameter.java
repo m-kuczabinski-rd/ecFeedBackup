@@ -9,13 +9,13 @@ import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.TestCaseNode;
 
 public class MethodOperationAddParameter extends AbstractModelOperation {
-	
+
 	List<TestCaseNode> fRemovedTestCases;
 	MethodNode fTarget;
 	CategoryNode fParameter;
 	private int fNewIndex;
 	private int fCurrentIndex;
-	
+
 	private class ReverseOperation extends AbstractModelOperation{
 
 		public ReverseOperation() {
@@ -33,7 +33,7 @@ public class MethodOperationAddParameter extends AbstractModelOperation {
 		public IModelOperation reverseOperation() {
 			return new MethodOperationAddParameter(fTarget, fParameter, fCurrentIndex);
 		}
-		
+
 	}
 
 	public MethodOperationAddParameter(MethodNode target, CategoryNode parameter, int index) {
@@ -60,7 +60,7 @@ public class MethodOperationAddParameter extends AbstractModelOperation {
 		}
 		List<String> types = fTarget.getCategoriesTypes();
 		types.add(fParameter.getType());
-		if(fTarget.getClassNode().getMethod(parameterName, types) != null){
+		if(fTarget.getClassNode().getMethod(fTarget.getName(), types) != null){
 			throw new ModelOperationException(Messages.METHOD_SIGNATURE_DUPLICATE_PROBLEM);
 		}
 		fTarget.addCategory(fParameter, fNewIndex);
