@@ -1,6 +1,8 @@
 package com.testify.ecfeed.adapter.operations;
 
 import com.testify.ecfeed.adapter.IModelOperation;
+import com.testify.ecfeed.adapter.ITypeAdapter;
+import com.testify.ecfeed.adapter.ITypeAdapterProvider;
 import com.testify.ecfeed.adapter.ModelOperationException;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.PartitionedNode;
@@ -11,12 +13,14 @@ public class GenericOperationAddPartition extends BulkOperation {
 		private PartitionedNode fTarget;
 		private PartitionNode fPartition;
 		private int fIndex;
+		private ITypeAdapterProvider fAdapterProvider;
 
-		public AddPartitionOperation(PartitionedNode target, PartitionNode partition, int index) {
+		public AddPartitionOperation(PartitionedNode target, PartitionNode partition, ITypeAdapterProvider adapterProvider, int index) {
 			super(OperationNames.ADD_PARTITION);
 			fTarget = target;
 			fPartition = partition;
 			fIndex = index;
+			fAdapterProvider = adapterProvider;
 		}
 
 		@Override
@@ -33,6 +37,14 @@ public class GenericOperationAddPartition extends BulkOperation {
 			if(fIndex > fTarget.getPartitions().size()){
 				throw new ModelOperationException(Messages.TOO_HIGH_INDEX_PROBLEM);
 			}
+			if(fTarget.getCategory() != null){
+				String type = fTarget.getCategory().getType();
+				ITypeAdapter adapter = fAdapterProvider.getAdapter(type);
+				String newValue = adapter.convert(fPartition.getValueString());
+				if(newValue == null){
+					throw new ModelOperationException(Messages.PARTITION_VALUE_PROBLEM(newValue));
+				}
+			}
 			fTarget.addPartition(fPartition, fIndex);
 			markModelUpdated();
 		}
@@ -43,15 +55,15 @@ public class GenericOperationAddPartition extends BulkOperation {
 		}
 	}
 
-	public GenericOperationAddPartition(PartitionedNode target, PartitionNode partition, int index, boolean validate) {
+	public GenericOperationAddPartition(PartitionedNode target, PartitionNode partition, ITypeAdapterProvider adapterProvider, int index, boolean validate) {
 		super(OperationNames.ADD_PARTITION, true);
-		addOperation(new AddPartitionOperation(target, partition, index));
+		addOperation(new AddPartitionOperation(target, partition, adapterProvider, index));
 		if((target.getCategory().getMethod() != null) && validate){
 			addOperation(new MethodOperationMakeConsistent(target.getCategory().getMethod()));
 		}
 	}
 
-	public GenericOperationAddPartition(PartitionedNode target, PartitionNode partition, boolean validate) {
-		this(target, partition, -1, validate);
+	public GenericOperationAddPartition(PartitionedNode target, PartitionNode partition, ITypeAdapterProvider adapterProvider, boolean validate) {
+		this(target, partition, adapterProvider, -1, validate);
 	}
 }
