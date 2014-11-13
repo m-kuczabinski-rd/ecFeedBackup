@@ -4,6 +4,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.Path;
@@ -42,6 +43,7 @@ import com.testify.ecfeed.model.IRelationalStatement;
 import com.testify.ecfeed.model.IStatementVisitor;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.PartitionedCategoryStatement;
+import com.testify.ecfeed.model.PartitionedCategoryStatement.ICondition;
 import com.testify.ecfeed.model.PartitionedCategoryStatement.LabelCondition;
 import com.testify.ecfeed.model.PartitionedCategoryStatement.PartitionCondition;
 import com.testify.ecfeed.model.StatementArray;
@@ -60,7 +62,7 @@ public class ConstraintViewer extends TreeViewerSection {
 
 	private Button fAddStatementButton;
 	private Button fRemoveStatementButton;
-	
+
 	private Constraint fCurrentConstraint;
 	private BasicStatementInterface fStatementIf;
 	private BasicStatement fSelectedStatement;
@@ -105,9 +107,10 @@ public class ConstraintViewer extends TreeViewerSection {
 			return false;
 		}
 	}
-	
+
 	private class StatementViewerLabelProvider extends LabelProvider {
-		
+
+		@Override
 		public String getText(Object element){
 			if(element instanceof StatementArray){
 				return ((StatementArray)element).getOperator().toString();
@@ -117,7 +120,8 @@ public class ConstraintViewer extends TreeViewerSection {
 			}
 			return null;
 		}
-		
+
+		@Override
 		public Image getImage(Object element){
 			if(fCurrentConstraint != null){
 				if(element == fCurrentConstraint.getPremise()){
@@ -129,7 +133,7 @@ public class ConstraintViewer extends TreeViewerSection {
 			}
 			return null;
 		}
-		
+
 		private Image getImage(String file) {
 		    Bundle bundle = FrameworkUtil.getBundle(StatementViewerLabelProvider.class);
 		    URL url = FileLocator.find(bundle, new Path("icons/" + file), null);
@@ -140,26 +144,117 @@ public class ConstraintViewer extends TreeViewerSection {
 	}
 
 	private class StatementEditor extends Composite{
-		
+
 		private final String STATEMENT_FALSE = new StaticStatement(false).getLeftOperandName();
 		private final String STATEMENT_TRUE = new StaticStatement(true).getLeftOperandName();
 		private final String STATEMENT_AND = new StatementArray(EStatementOperator.AND).getLeftOperandName();
 		private final String STATEMENT_OR = new StatementArray(EStatementOperator.OR).getLeftOperandName();
 		private final String[] FIXED_STATEMENTS = {STATEMENT_FALSE, STATEMENT_TRUE, STATEMENT_OR, STATEMENT_AND};
-		
+
 		private final int STATEMENT_COMBO_WIDTH = 3;
 		private final int RELATION_COMBO_WIDTH = 1;
 		private final int CONDITION_COMBO_WIDTH = 4;
 		private final int TOTAL_EDITOR_WIDTH = STATEMENT_COMBO_WIDTH + RELATION_COMBO_WIDTH + CONDITION_COMBO_WIDTH;
-		
+
 		private Combo fStatementCombo;
 		private Combo fRelationCombo;
 		private Combo fConditionCombo;
 		private Composite fRightOperandComposite;
-		
+
 		private ConstraintNode fConstraint;
 		private ConstraintInterface fConstraintIf;
-		
+
+		private class AvailableConditionsProvider implements IStatementVisitor{
+
+			@Override
+			public Object visit(StaticStatement statement) throws Exception {
+				return new String[]{};
+			}
+
+			@Override
+			public Object visit(StatementArray statement) throws Exception {
+				return new String[]{};
+			}
+
+			@Override
+			public Object visit(ExpectedValueStatement statement)
+					throws Exception {
+				CategoryNode category  = statement.getCategory();
+				List<String> values = CategoryInterface.getSpecialValues(category.getType());
+				if(values.isEmpty()){
+					for(PartitionNode p : category.getLeafPartitions()){
+						values.add(p.getValueString());
+					}
+				}
+				return values.toArray(new String[]{});
+			}
+
+			@Override
+			public Object visit(PartitionedCategoryStatement statement)
+					throws Exception {
+				List<String> result = new ArrayList<String>();
+				CategoryNode category = statement.getCategory();
+
+				Set<PartitionNode> allPartitions = category.getAllPartitions();
+				Set<String> allLabels = category.getLeafLabels();
+				for(PartitionNode choice : allPartitions){
+					ICondition condition = new PartitionedCategoryStatement(category, EStatementRelation.EQUAL, choice).getCondition();
+					result.add(condition.toString());
+				}
+				for(String label : allLabels){
+					ICondition condition = new PartitionedCategoryStatement(category, EStatementRelation.EQUAL, label).getCondition();
+					result.add(condition.toString());
+				}
+				return result.toArray(new String[]{});
+			}
+
+			@Override
+			public Object visit(LabelCondition condition) throws Exception {
+				return new String[]{};
+			}
+
+			@Override
+			public Object visit(PartitionCondition condition) throws Exception {
+				return new String[]{};
+			}
+		}
+
+		private class CurrentConditionProvider implements IStatementVisitor{
+
+			@Override
+			public Object visit(StaticStatement statement) throws Exception {
+				return "";
+			}
+
+			@Override
+			public Object visit(StatementArray statement) throws Exception {
+				return "";
+			}
+
+			@Override
+			public Object visit(ExpectedValueStatement statement)
+					throws Exception {
+				return statement.getCondition().getValueString();
+			}
+
+			@Override
+			public Object visit(PartitionedCategoryStatement statement)
+					throws Exception {
+				return statement.getCondition().toString();
+			}
+
+			@Override
+			public Object visit(LabelCondition condition) throws Exception {
+				return "";
+			}
+
+			@Override
+			public Object visit(PartitionCondition condition) throws Exception {
+				return "";
+			}
+
+		}
+
 		private class ConditionComboListener implements SelectionListener{
 
 			@Override
@@ -169,16 +264,16 @@ public class ConstraintViewer extends TreeViewerSection {
 
 			@Override
 			public void widgetDefaultSelected(SelectionEvent e) {
-				applyNewValue();				
+				applyNewValue();
 			}
-			
+
 			protected void applyNewValue(){
 				fStatementIf.setConditionValue(fConditionCombo.getText());
 				fConditionCombo.setText(fStatementIf.getConditionValue());
 			}
 
 		}
-		
+
 		private class StatementComboListener implements SelectionListener{
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -231,7 +326,7 @@ public class ConstraintViewer extends TreeViewerSection {
 					PartitionNode condition = category.getPartitions().get(0);
 					return new PartitionedCategoryStatement(category, relation, condition);
 				}
-			
+
 				return null;
 			}
 		}
@@ -258,7 +353,7 @@ public class ConstraintViewer extends TreeViewerSection {
 				StatementEditor.this.redraw();
 				return null;
 			}
-		
+
 			@Override
 			public Object visit(StatementArray statement) throws Exception {
 				fRelationCombo.setVisible(false);
@@ -266,7 +361,7 @@ public class ConstraintViewer extends TreeViewerSection {
 				StatementEditor.this.redraw();
 				return null;
 			}
-		
+
 			@Override
 			public Object visit(ExpectedValueStatement statement) throws Exception {
 				disposeRightOperandComposite();
@@ -281,7 +376,7 @@ public class ConstraintViewer extends TreeViewerSection {
 				StatementEditor.this.layout();
 				return null;
 			}
-		
+
 			@Override
 			public Object visit(PartitionedCategoryStatement statement) throws Exception {
 				disposeRightOperandComposite();
@@ -291,21 +386,22 @@ public class ConstraintViewer extends TreeViewerSection {
 				StatementEditor.this.layout();
 				return null;
 			}
-		
+
 			@Override
 			public Object visit(LabelCondition condition) throws Exception {
 				return null;
 			}
+
 			@Override
 			public Object visit(PartitionCondition condition) throws Exception {
 				return null;
 			}
-		
+
 			private void disposeRightOperandComposite() {
 				if(fRightOperandComposite != null && fRightOperandComposite.isDisposed() == false){
 					fRightOperandComposite.dispose();
 				}
-				
+
 			}
 
 			private void prepareRelationalStatementEditor(IRelationalStatement statement, String[] items, String item) {
@@ -327,25 +423,6 @@ public class ConstraintViewer extends TreeViewerSection {
 				}
 				return relations.toArray(new String[]{});
 			}
-
-			private String[] availableConditions(ExpectedValueStatement statement) {
-				CategoryNode category  = statement.getCategory();
-				List<String> values = CategoryInterface.getSpecialValues(category.getType());
-				if(values.isEmpty()){
-					for(PartitionNode p : category.getLeafPartitions()){
-						values.add(p.getValueString());
-					}
-				}
-				return values.toArray(new String[]{});
-			}
-
-			private String[] availableConditions(PartitionedCategoryStatement statement) {
-				List<String> result = new ArrayList<String>();
-				CategoryNode category = statement.getCategory();
-				result.addAll(category.getAllPartitionNames());
-				result.addAll(category.getLeafLabels());
-				return result.toArray(new String[]{});
-			}
 		}
 
 		public StatementEditor(Composite parent) {
@@ -353,11 +430,11 @@ public class ConstraintViewer extends TreeViewerSection {
 			setLayout(new GridLayout(TOTAL_EDITOR_WIDTH, true));
 			setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 2, 1));
 			fConstraintIf = new ConstraintInterface(ConstraintViewer.this);
-			
+
 			createStatementCombo(this);
 			createRelationCombo(this);
 		}
-		
+
 		public void setInput(BasicStatement statement){
 			fStatementIf = StatementInterfaceFactory.getInterface(statement, ConstraintViewer.this);
 			fStatementCombo.setItems(statementComboItems(statement));
@@ -371,7 +448,27 @@ public class ConstraintViewer extends TreeViewerSection {
 			fConstraint = constraintNode;
 			fConstraintIf.setTarget(constraintNode);
 		}
-		
+
+		public void refreshConditionCombo(){
+			try {
+				if(fConditionCombo != null){
+					String[] items = availableConditions(fSelectedStatement);
+					String currentConditionText = (String)fSelectedStatement.accept(new CurrentConditionProvider());
+					fConditionCombo.setItems(items);
+					fConditionCombo.setText(currentConditionText);
+				}
+			} catch (Exception e) {
+			}
+		}
+
+		private String[] availableConditions(BasicStatement statement) {
+			try {
+				return (String[]) statement.accept(new AvailableConditionsProvider());
+			} catch (Exception e) {
+			}
+			return new String[]{};
+		}
+
 		private void createStatementCombo(Composite parent) {
 			fStatementCombo = new ComboViewer(parent).getCombo();
 			fStatementCombo.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, STATEMENT_COMBO_WIDTH, 1));
@@ -405,7 +502,7 @@ public class ConstraintViewer extends TreeViewerSection {
 	}
 
 	private class AddStatementAdapter extends SelectionAdapter{
-		@Override 
+		@Override
 		public void widgetSelected(SelectionEvent e){
 			BasicStatement statement = fStatementIf.addNewStatement();
 			if(statement != null){
@@ -415,12 +512,12 @@ public class ConstraintViewer extends TreeViewerSection {
 			}
 		}
 	}
-	
+
 	public class DeleteStatementAction extends ModelModifyingAction {
 		public DeleteStatementAction(IModelUpdateContext updateContext) {
 			super(GlobalActions.DELETE.getId(), GlobalActions.DELETE.getName(), getTreeViewer(), ConstraintViewer.this);
 		}
-		
+
 		@Override
 		public boolean isEnabled(){
 			return fSelectedStatement.getParent() != null;
@@ -476,7 +573,7 @@ public class ConstraintViewer extends TreeViewerSection {
 	protected IBaseLabelProvider viewerLabelProvider() {
 		return new StatementViewerLabelProvider();
 	}
-	
+
 	@Override
 	protected int buttonsPosition(){
 		return BUTTONS_ASIDE;
@@ -484,13 +581,14 @@ public class ConstraintViewer extends TreeViewerSection {
 
 	@Override
 	protected int viewerStyle(){
-		return VIEWER_STYLE; 
+		return VIEWER_STYLE;
 	}
-	
+
 	public void setInput(ConstraintNode constraintNode){
 		//Update the statement provider before setting input to get the correct images
 		fCurrentConstraint = constraintNode.getConstraint();
 		super.setInput(constraintNode.getConstraint());
+		fStatementEditor.refreshConditionCombo();
 		fStatementEditor.setConstraint(constraintNode);
 
 		getTreeViewer().expandAll();
