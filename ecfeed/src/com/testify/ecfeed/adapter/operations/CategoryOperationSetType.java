@@ -1,8 +1,10 @@
 package com.testify.ecfeed.adapter.operations;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import com.testify.ecfeed.adapter.IModelOperation;
 import com.testify.ecfeed.adapter.ITypeAdapter;
@@ -10,6 +12,7 @@ import com.testify.ecfeed.adapter.ITypeAdapterProvider;
 import com.testify.ecfeed.adapter.ModelOperationException;
 import com.testify.ecfeed.adapter.java.JavaUtils;
 import com.testify.ecfeed.model.CategoryNode;
+import com.testify.ecfeed.model.ConstraintNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.PartitionedNode;
@@ -24,7 +27,9 @@ public class CategoryOperationSetType extends BulkOperation{
 		private String fCurrentType;
 		private String fOriginalDefaultValue;
 		private List<PartitionNode> fOriginalPartitions;
+		private Map<PartitionNode, String> fOriginalValues;
 		private List<TestCaseNode> fOriginalTestCases;
+		private List<ConstraintNode> fOriginalConstraints;
 
 		private ITypeAdapterProvider fAdapterProvider;
 
@@ -39,13 +44,24 @@ public class CategoryOperationSetType extends BulkOperation{
 				fTarget.setType(fCurrentType);
 				fTarget.setDefaultValueString(fOriginalDefaultValue);
 				fTarget.replacePartitions(fOriginalPartitions);
+				revertPartitionValues(fTarget.getPartitions());
 				fTarget.getMethod().replaceTestCases(fOriginalTestCases);
+				fTarget.getMethod().replaceConstraints(fOriginalConstraints);
 				markModelUpdated();
 			}
 
 			@Override
 			public IModelOperation reverseOperation() {
 				return new SetTypeOperation(fTarget, fNewType, fAdapterProvider);
+			}
+
+			private void revertPartitionValues(List<PartitionNode> choices) {
+				for(PartitionNode choice : choices){
+					if(fOriginalValues.containsKey(choice)){
+						choice.setValueString(fOriginalValues.get(choice));
+					}
+					revertPartitionValues(choice.getPartitions());
+				}
 			}
 
 		}
@@ -56,13 +72,16 @@ public class CategoryOperationSetType extends BulkOperation{
 			fNewType = newType;
 			fCurrentType = target.getType();
 			fAdapterProvider = adapterProvider;
-			fOriginalDefaultValue = target.getDefaultValue();
-			fOriginalPartitions = target.getPartitions();
-			fOriginalTestCases = new ArrayList<>(target.getMethod().getTestCases());
 		}
 
 		@Override
 		public void execute() throws ModelOperationException {
+			fOriginalDefaultValue = fTarget.getDefaultValue();
+			fOriginalPartitions = new ArrayList<PartitionNode>(fTarget.getPartitions());
+			fOriginalValues = new HashMap<>();
+			fOriginalTestCases = new ArrayList<>(fTarget.getMethod().getTestCases());
+			fOriginalConstraints = new ArrayList<>(fTarget.getMethod().getConstraintNodes());
+
 			if(JavaUtils.isValidTypeName(fNewType) == false){
 				throw new ModelOperationException(Messages.CATEGORY_TYPE_REGEX_PROBLEM);
 			}
@@ -119,7 +138,9 @@ public class CategoryOperationSetType extends BulkOperation{
 		}
 
 		private void convertPartitionValue(PartitionNode p, ITypeAdapter adapter) {
-			p.setValueString(adapter.convert(p.getValueString()));
+			fOriginalValues.put(p, p.getValueString());
+			String newValue = adapter.convert(p.getValueString());
+			p.setValueString(newValue);
 		}
 
 		private void removeDeadPartitions(PartitionedNode parent) {
@@ -186,6 +207,4 @@ public class CategoryOperationSetType extends BulkOperation{
 			addOperation(new MethodOperationMakeConsistent(target.getMethod()));
 		}
 	}
-
-
 }
