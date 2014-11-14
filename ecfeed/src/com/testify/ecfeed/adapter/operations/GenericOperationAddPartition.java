@@ -37,14 +37,7 @@ public class GenericOperationAddPartition extends BulkOperation {
 			if(fIndex > fTarget.getPartitions().size()){
 				throw new ModelOperationException(Messages.TOO_HIGH_INDEX_PROBLEM);
 			}
-			if(fTarget.getCategory() != null){
-				String type = fTarget.getCategory().getType();
-				ITypeAdapter adapter = fAdapterProvider.getAdapter(type);
-				String newValue = adapter.convert(fPartition.getValueString());
-				if(newValue == null){
-					throw new ModelOperationException(Messages.PARTITION_VALUE_PROBLEM(newValue));
-				}
-			}
+			validateChoiceValue(fPartition);
 			fTarget.addPartition(fPartition, fIndex);
 			markModelUpdated();
 		}
@@ -52,6 +45,22 @@ public class GenericOperationAddPartition extends BulkOperation {
 		@Override
 		public IModelOperation reverseOperation() {
 			return new GenericOperationRemovePartition(fTarget, fPartition, false);
+		}
+
+		private void validateChoiceValue(PartitionNode choice) throws ModelOperationException{
+			if(choice.isAbstract() == false){
+				String type = fTarget.getCategory().getType();
+				ITypeAdapter adapter = fAdapterProvider.getAdapter(type);
+				String newValue = adapter.convert(choice.getValueString());
+				if(newValue == null){
+					throw new ModelOperationException(Messages.PARTITION_VALUE_PROBLEM(choice.getValueString()));
+				}
+			}
+			else{
+				for(PartitionNode child : choice.getPartitions()){
+					validateChoiceValue(child);
+				}
+			}
 		}
 	}
 
