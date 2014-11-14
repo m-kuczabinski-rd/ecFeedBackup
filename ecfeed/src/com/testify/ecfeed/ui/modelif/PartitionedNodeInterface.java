@@ -13,6 +13,7 @@ import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.PartitionedNode;
 import com.testify.ecfeed.ui.common.Constants;
 import com.testify.ecfeed.ui.common.EclipseModelBuilder;
+import com.testify.ecfeed.ui.common.EclipseTypeAdapterProvider;
 import com.testify.ecfeed.ui.common.Messages;
 
 public class PartitionedNodeInterface extends GenericNodeInterface {
@@ -39,7 +40,7 @@ public class PartitionedNodeInterface extends GenericNodeInterface {
 	}
 
 	public boolean addPartition(PartitionNode newPartition) {
-		IModelOperation operation = new GenericOperationAddPartition(fTarget, newPartition, fTarget.getPartitions().size(), true);
+		IModelOperation operation = new GenericOperationAddPartition(fTarget, newPartition, new EclipseTypeAdapterProvider(), fTarget.getPartitions().size(), true);
 		return execute(operation, Messages.DIALOG_ADD_CHOICE_PROBLEM_TITLE);
 	}
 

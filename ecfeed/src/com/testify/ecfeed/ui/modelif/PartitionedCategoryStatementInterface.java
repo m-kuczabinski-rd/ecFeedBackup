@@ -4,8 +4,8 @@ import com.testify.ecfeed.adapter.IModelOperation;
 import com.testify.ecfeed.adapter.operations.StatementOperationSetCondition;
 import com.testify.ecfeed.adapter.operations.StatementOperationSetRelation;
 import com.testify.ecfeed.model.CategoryNode;
-import com.testify.ecfeed.model.PartitionedCategoryStatement;
 import com.testify.ecfeed.model.EStatementRelation;
+import com.testify.ecfeed.model.PartitionedCategoryStatement;
 import com.testify.ecfeed.model.PartitionedCategoryStatement.ICondition;
 import com.testify.ecfeed.ui.common.Messages;
 
@@ -21,7 +21,7 @@ public class PartitionedCategoryStatementInterface extends BasicStatementInterfa
 		super.setTarget(target);
 		fTarget = target;
 	}
-	
+
 	@Override
 	public boolean setRelation(EStatementRelation relation) {
 		if(relation != fTarget.getRelation()){
@@ -40,6 +40,9 @@ public class PartitionedCategoryStatementInterface extends BasicStatementInterfa
 				newCondition = fTarget.new PartitionCondition(category.getPartition(text));
 			}
 			else{
+				if(text.contains("[label]")){
+					text = text.substring(0, text.indexOf("[label]"));
+				}
 				newCondition = fTarget.new LabelCondition(text);
 			}
 			IModelOperation operation = new StatementOperationSetCondition(fTarget, newCondition);
@@ -47,7 +50,7 @@ public class PartitionedCategoryStatementInterface extends BasicStatementInterfa
 		}
 		return false;
 	}
-	
+
 	@Override
 	public String getConditionValue() {
 		return fTarget.getConditionName();

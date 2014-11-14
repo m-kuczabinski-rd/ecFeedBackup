@@ -1,11 +1,11 @@
 /*******************************************************************************
- * Copyright (c) 2013 Testify AS.                                                
- * All rights reserved. This program and the accompanying materials              
- * are made available under the terms of the Eclipse Public License v1.0         
- * which accompanies this distribution, and is available at                      
- * http://www.eclipse.org/legal/epl-v10.html                                     
- *                                                                               
- * Contributors:                                                                 
+ * Copyright (c) 2013 Testify AS.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
  *     Patryk Chamuczynski (p.chamuczynski(at)radytek.com) - initial implementation
  ******************************************************************************/
 
@@ -57,52 +57,72 @@ public class XomAnalyser {
 	public RootNode parseRoot(Element element) throws ParserException{
 		assertNodeTag(element.getQualifiedName(), ROOT_NODE_NAME);
 		String name = getElementName(element);
-		
+
 		RootNode root = new RootNode(name);
-		
+
 		for(Element child : getIterableChildren(element)){
-			root.addClass(parseClass(child));
+			try{
+				root.addClass(parseClass(child));
+			}catch(ParserException e){
+				System.err.println("Exception: " + e.getMessage());
+			}
 		}
-		
+
 		return root;
 	}
-	
+
 	public ClassNode parseClass(Element element) throws ParserException{
 		assertNodeTag(element.getQualifiedName(), CLASS_NODE_NAME);
 		String name = getElementName(element);
-		
+
 		ClassNode _class = new ClassNode(name);
-		
+
 		for(Element child : getIterableChildren(element)){
-			_class.addMethod(parseMethod(child));
+			try{
+				_class.addMethod(parseMethod(child));
+			}catch(ParserException e){
+				System.err.println("Exception: " + e.getMessage());
+			}
 		}
-		
+
 		return _class;
 	}
 
 	public MethodNode parseMethod(Element element) throws ParserException{
 		assertNodeTag(element.getQualifiedName(), METHOD_NODE_NAME);
 		String name = getElementName(element);
-		
+
 		MethodNode method = new MethodNode(name);
-		
+
 		for(Element child : getIterableChildren(element)){
 			if(child.getLocalName() == Constants.CATEGORY_NODE_NAME){
-				method.addCategory(parseCategory(child));
+				try{
+					method.addCategory(parseCategory(child));
+				}catch(ParserException e){
+					System.err.println("Exception: " + e.getMessage());
+				}
 			}
-			
+
 			else if(child.getLocalName() == Constants.TEST_CASE_NODE_NAME){
+				try{
 				method.addTestCase(parseTestCase(child, method));
+				}catch(ParserException e){
+					System.err.println("Exception: " + e.getMessage());
+				}
 			}
 
 			else if(child.getLocalName() == Constants.CONSTRAINT_NODE_NAME){
+				try{
 				method.addConstraint(parseConstraint(child, method));
+				}catch(ParserException e){
+					System.err.println("Exception: " + e.getMessage());
+				}
 			}
 			else{
 				throw new ParserException(Messages.WRONG_CHILD_ELEMENT_TYPE(element, child.getLocalName()));
 			}
 		}
-		
+
 		return method;
 	}
 
@@ -117,11 +137,15 @@ public class XomAnalyser {
 			defaultValue = getAttributeValue(element, DEFAULT_EXPECTED_VALUE_ATTRIBUTE_NAME);
 		}
 		CategoryNode category = new CategoryNode(name, type, defaultValue, Boolean.parseBoolean(expected));
-		
+
 		for(Element child : getIterableChildren(element)){
-			category.addPartition(parsePartition(child));
+			try{
+				category.addPartition(parsePartition(child));
+			}catch(ParserException e){
+				System.err.println("Exception: " + e.getMessage());
+			}
 		}
-		
+
 		return category;
 	}
 
@@ -131,9 +155,9 @@ public class XomAnalyser {
 
 		List<Element> parameterElements = getIterableChildren(element);
 		List<CategoryNode> categories = method.getCategories();
-		
+
 		List<PartitionNode> testData = new ArrayList<PartitionNode>();
-		
+
 		if(categories.size() != parameterElements.size()){
 			throw new ParserException(Messages.WRONG_NUMBER_OF_TEST_PAREMETERS(name));
 		}
@@ -160,15 +184,14 @@ public class XomAnalyser {
 			}
 			testData.add(testValue);
 		}
-		
+
 		return new TestCaseNode(name, testData);
 	}
-	
+
 	public ConstraintNode parseConstraint(Element element, MethodNode method) throws ParserException{
 		assertNodeTag(element.getQualifiedName(), CONSTRAINT_NODE_NAME);
 		String name = getElementName(element);
-		
-		
+
 		BasicStatement premise = null;
 		BasicStatement consequence = null;
 		for(Element child : getIterableChildren(element)){
@@ -199,7 +222,7 @@ public class XomAnalyser {
 		}
 		return new ConstraintNode(name, new Constraint(premise, consequence));
 	}
-	
+
 	public BasicStatement parseStatement(Element element, MethodNode method) throws ParserException {
 		switch(element.getLocalName()){
 		case Constants.CONSTRAINT_PARTITION_STATEMENT_NODE_NAME:
@@ -228,7 +251,7 @@ public class XomAnalyser {
 		case Constants.STATEMENT_OPERATOR_AND_ATTRIBUTE_VALUE:
 			statementArray = new StatementArray(EStatementOperator.AND);
 			break;
-		default: 
+		default:
 			throw new ParserException(Messages.WRONG_STATEMENT_ARRAY_OPERATOR(method.getName(), operatorValue));
 		}
 		for(Element child : getIterableChildren(element)){
@@ -253,7 +276,7 @@ public class XomAnalyser {
 			throw new ParserException(Messages.WRONG_STATIC_STATEMENT_VALUE(valueString));
 		}
 	}
-	
+
 	public PartitionedCategoryStatement parsePartitionStatement(Element element, MethodNode method) throws ParserException {
 		assertNodeTag(element.getQualifiedName(), CONSTRAINT_PARTITION_STATEMENT_NODE_NAME);
 
@@ -267,11 +290,11 @@ public class XomAnalyser {
 		if(partition == null){
 			throw new ParserException(Messages.WRONG_PARTITION_NAME(partitionName, categoryName, method.getName()));
 		}
-	
+
 		String relationName = getAttributeValue(element, Constants.STATEMENT_RELATION_ATTRIBUTE_NAME);
 		EStatementRelation relation = getRelation(relationName);
-		
-		return new PartitionedCategoryStatement(category, relation, partition); 
+
+		return new PartitionedCategoryStatement(category, relation, partition);
 	}
 
 	public PartitionedCategoryStatement parseLabelStatement(Element element, MethodNode method) throws ParserException {
@@ -280,13 +303,13 @@ public class XomAnalyser {
 		String categoryName = getAttributeValue(element, Constants.STATEMENT_CATEGORY_ATTRIBUTE_NAME);
 		String label = getAttributeValue(element, Constants.STATEMENT_LABEL_ATTRIBUTE_NAME);
 		String relationName = getAttributeValue(element, Constants.STATEMENT_RELATION_ATTRIBUTE_NAME);
-		
+
 		CategoryNode category = method.getCategory(categoryName);
 		if(category == null || category.isExpected()){
 			throw new ParserException(Messages.WRONG_CATEGORY_NAME(categoryName, method.getName()));
 		}
 		EStatementRelation relation = getRelation(relationName);
-		
+
 		return new PartitionedCategoryStatement(category, relation, label);
 	}
 
@@ -301,7 +324,7 @@ public class XomAnalyser {
 		}
 		PartitionNode condition = new PartitionNode("expected", valueString);
 		condition.setParent(category);
-		
+
 		return new ExpectedValueStatement(category, condition);
 	}
 
@@ -309,12 +332,17 @@ public class XomAnalyser {
 		assertNodeTag(element.getQualifiedName(), PARTITION_NODE_NAME);
 		String name = getElementName(element);
 		String value = getAttributeValue(element, VALUE_ATTRIBUTE);
-		
+
 		PartitionNode partition = new PartitionNode(name, value);
-		
+
 		for(Element child : getIterableChildren(element)){
 			if(child.getLocalName() == Constants.PARTITION_NODE_NAME){
+				try{
 				partition.addPartition(parsePartition(child));
+				}catch(ParserException e){
+					System.err.println("Exception: " + e.getMessage());
+				}
+
 			}
 			if(child.getLocalName() == Constants.LABEL_NODE_NAME){
 				partition.addLabel(child.getAttributeValue(Constants.LABEL_ATTRIBUTE_NAME));
@@ -329,7 +357,7 @@ public class XomAnalyser {
 			throw new ParserException("Unexpected node name: " + qualifiedName + " instead of " + expectedName);
 		}
 	}
-	
+
 	protected List<Element> getIterableChildren(Element element){
 		ArrayList<Element> list = new ArrayList<Element>();
 		Elements children = element.getChildElements();

@@ -1,11 +1,11 @@
 /*******************************************************************************
- * Copyright (c) 2013 Testify AS.                                                   
- * All rights reserved. This program and the accompanying materials                 
- * are made available under the terms of the Eclipse Public License v1.0            
- * which accompanies this distribution, and is available at                         
- * http://www.eclipse.org/legal/epl-v10.html                                        
- *                                                                                  
- * Contributors:                                                                    
+ * Copyright (c) 2013 Testify AS.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
  *     Patryk Chamuczynski (p.chamuczynski(at)radytek.com) - initial implementation
  ******************************************************************************/
 
@@ -69,20 +69,20 @@ public class ModelMasterSection extends TreeViewerSection{
 	private final ModelMasterDetailsBlock fMasterDetailsBlock;
 	private IModelUpdateListener fUpdateListener;
 	private final Map<String, Image> fImages;
-	
-	
+
+
 	private class ModelWrapper{
 		private final RootNode fModel;
-		
+
 		public ModelWrapper(RootNode model){
 			fModel = model;
 		}
-		
+
 		public RootNode getModel(){
 			return fModel;
 		}
 	}
-	
+
 	private class UpdateListener implements IModelUpdateListener{
 		@Override
 		public void modelUpdated(AbstractFormPart source) {
@@ -98,7 +98,7 @@ public class ModelMasterSection extends TreeViewerSection{
 		@Override
 		public Object[] getElements(Object inputElement) {
 			if(inputElement instanceof ModelWrapper){
-				RootNode root = ((ModelWrapper)inputElement).getModel(); 
+				RootNode root = ((ModelWrapper)inputElement).getModel();
 				return new Object[]{root};
 			}
 			return getChildren(inputElement);
@@ -312,7 +312,7 @@ public class ModelMasterSection extends TreeViewerSection{
 				return icon;
 			}
 			int rbw = (idDecorator.width + x > idIcon.width) ? (idDecorator.width + x - idIcon.width) : idDecorator.width;
-			int rbh = (idDecorator.height + y > idIcon.height) ? (idDecorator.height + y - idIcon.height) : idDecorator.height;		
+			int rbh = (idDecorator.height + y > idIcon.height) ? (idDecorator.height + y - idIcon.height) : idDecorator.height;
 
 			int indexa = y*idIcon.scanlinePad + x;
 			int indexb = 0;
@@ -333,7 +333,7 @@ public class ModelMasterSection extends TreeViewerSection{
 			return new Image(Display.getDefault(), idIcon);
 		}
 	}
-	
+
 	protected class MasterViewerMenuListener extends ViewerMenuListener{
 		public MasterViewerMenuListener(Menu menu) {
 			super(menu);
@@ -353,22 +353,22 @@ public class ModelMasterSection extends TreeViewerSection{
 			super.populateMenu();
 		}
 	}
-	
+
 	public ModelMasterSection(ModelMasterDetailsBlock parentBlock) {
 		super(parentBlock.getMasterSectionContext(), parentBlock.getModelUpdateContext(), STYLE);
 		fMasterDetailsBlock = parentBlock;
 		fImages = new HashMap<String, Image>();
-		
+
 		setActionProvider(new ModelViewerActionProvider(getTreeViewer(), this, false));
-		
+
 		getTreeViewer().addDragSupport(DND.DROP_COPY|DND.DROP_MOVE, new Transfer[]{ModelNodesTransfer.getInstance()}, new ModelNodeDragListener(getTreeViewer()));
 		getTreeViewer().addDropSupport(DND.DROP_COPY|DND.DROP_MOVE, new Transfer[]{ModelNodesTransfer.getInstance()}, new ModelNodeDropListener(getTreeViewer(), this));
 	}
-	
+
 	public void setInput(RootNode model){
 		setInput(new ModelWrapper(model));
 	}
-	
+
 	@Override
 	public void refresh(){
 		super.refresh();
@@ -384,22 +384,22 @@ public class ModelMasterSection extends TreeViewerSection{
 		getSection().setText("Structure");
 		getTreeViewer().setAutoExpandLevel(AUTO_EXPAND_LEVEL);
 	}
-	
+
 	@Override
 	protected IContentProvider viewerContentProvider() {
 		return new ModelContentProvider();
 	}
-	
-	@Override 
+
+	@Override
 	protected IBaseLabelProvider viewerLabelProvider() {
 		return new DecoratingLabelProvider(new ModelLabelProvider(), new ModelLabelDecorator());
 	}
-	
-	@Override 
+
+	@Override
 	protected ViewerMenuListener getMenuListener(){
 		return new MasterViewerMenuListener(getMenu());
 	}
-	
+
 	@Override
 	public List<IModelUpdateListener> getUpdateListeners(){
 		if(fUpdateListener == null){
