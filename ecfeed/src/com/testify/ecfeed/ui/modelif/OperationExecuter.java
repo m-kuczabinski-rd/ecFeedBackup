@@ -20,17 +20,17 @@ import com.testify.ecfeed.adapter.IModelOperation;
 import com.testify.ecfeed.adapter.ModelOperationException;
 
 public class OperationExecuter {
-	
+
 	private IModelUpdateContext fUpdateContext;
 	private List<IModelUpdateListener> fUpdateListeners;
 	private IOperationHistory fOperationHistory;
-	
+
 	private class UndoableOperation extends AbstractOperation{
-		
+
 		private IModelOperation fOperation;
 		private String fErrorMessageTitle;
-		
-		
+
+
 		public UndoableOperation(IModelOperation operation, IUndoContext context, String errorMessageTitle){
 			super(operation.getName());
 			fOperation = operation;
@@ -66,10 +66,11 @@ public class OperationExecuter {
 				return Status.OK_STATUS;
 			} catch (ModelOperationException e) {
 				updateListeners();
-				MessageDialog.openError(Display.getCurrent().getActiveShell(), 
-						fErrorMessageTitle, 
+				MessageDialog.openError(Display.getCurrent().getActiveShell(),
+						fErrorMessageTitle,
 						e.getMessage());
-				return Status.CANCEL_STATUS;
+
+				return operation.modelUpdated()?Status.OK_STATUS:Status.CANCEL_STATUS;
 			}
 		}
 
@@ -87,7 +88,7 @@ public class OperationExecuter {
 		fUpdateContext = updateContext;
 		fUpdateListeners = updateContext.getUpdateListeners();
 	}
-	
+
 	protected boolean execute(IModelOperation operation, String errorMessageTitle){
 		try{
 			UndoableOperation action = new UndoableOperation(operation, getUpdateContext().getUndoContext(), errorMessageTitle);
@@ -96,11 +97,11 @@ public class OperationExecuter {
 		} catch (ExecutionException e) {}
 		return false;
 	}
-	
+
 	protected IModelUpdateContext getUpdateContext(){
 		return fUpdateContext;
 	}
-	
+
 	private AbstractFormPart getSourceForm(){
 		return getUpdateContext().getSourceForm();
 	}
