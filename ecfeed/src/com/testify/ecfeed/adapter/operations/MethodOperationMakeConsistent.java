@@ -15,7 +15,7 @@ public class MethodOperationMakeConsistent extends AbstractModelOperation {
 	private MethodNode fTarget;
 	private List<ConstraintNode> fOriginalConstraints;
 	private List<TestCaseNode> fOriginalTestCases;
-	
+
 	private class ReverseOperation extends AbstractModelOperation{
 
 		public ReverseOperation() {
@@ -33,16 +33,16 @@ public class MethodOperationMakeConsistent extends AbstractModelOperation {
 		public IModelOperation reverseOperation() {
 			return new MethodOperationMakeConsistent(fTarget);
 		}
-		
+
 	}
-	
+
 	public MethodOperationMakeConsistent(MethodNode target){
 		super(OperationNames.MAKE_CONSISTENT);
 		fTarget = target;
 		fOriginalConstraints = new ArrayList<ConstraintNode>(target.getConstraintNodes());
 		fOriginalTestCases = new ArrayList<TestCaseNode>(target.getTestCases());
 	}
-	
+
 	@Override
 	public void execute() throws ModelOperationException {
 		boolean modelUpdated = false;
