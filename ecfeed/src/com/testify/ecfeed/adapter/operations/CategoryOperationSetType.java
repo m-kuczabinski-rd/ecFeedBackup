@@ -12,10 +12,18 @@ import com.testify.ecfeed.adapter.ITypeAdapterProvider;
 import com.testify.ecfeed.adapter.ModelOperationException;
 import com.testify.ecfeed.adapter.java.JavaUtils;
 import com.testify.ecfeed.model.CategoryNode;
+import com.testify.ecfeed.model.Constraint;
 import com.testify.ecfeed.model.ConstraintNode;
+import com.testify.ecfeed.model.ExpectedValueStatement;
+import com.testify.ecfeed.model.IStatementVisitor;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
+import com.testify.ecfeed.model.PartitionedCategoryStatement;
+import com.testify.ecfeed.model.PartitionedCategoryStatement.LabelCondition;
+import com.testify.ecfeed.model.PartitionedCategoryStatement.PartitionCondition;
 import com.testify.ecfeed.model.PartitionedNode;
+import com.testify.ecfeed.model.StatementArray;
+import com.testify.ecfeed.model.StaticStatement;
 import com.testify.ecfeed.model.TestCaseNode;
 
 public class CategoryOperationSetType extends BulkOperation{
@@ -32,6 +40,43 @@ public class CategoryOperationSetType extends BulkOperation{
 		private List<ConstraintNode> fOriginalConstraints;
 
 		private ITypeAdapterProvider fAdapterProvider;
+
+		private class StatementAdapter implements IStatementVisitor{
+
+			@Override
+			public Object visit(StaticStatement statement) throws Exception {
+				return true;
+			}
+
+			@Override
+			public Object visit(StatementArray statement) throws Exception {
+				return true;
+			}
+
+			@Override
+			public Object visit(ExpectedValueStatement statement) throws Exception {
+				ITypeAdapter adapter = fAdapterProvider.getAdapter(fNewType);
+				String newValue = adapter.convert(statement.getCondition().getValueString());
+				statement.getCondition().setValueString(newValue);
+				return newValue != null && fTarget.getLeafPartitionValues().contains(newValue);
+			}
+
+			@Override
+			public Object visit(PartitionedCategoryStatement statement)
+					throws Exception {
+				return true;
+			}
+
+			@Override
+			public Object visit(LabelCondition condition) throws Exception {
+				return true;
+			}
+
+			@Override
+			public Object visit(PartitionCondition condition) throws Exception {
+				return true;
+			}
+		}
 
 		private class ReverseOperation extends AbstractModelOperation{
 
@@ -120,6 +165,7 @@ public class CategoryOperationSetType extends BulkOperation{
 			fTarget.setDefaultValueString(defaultValue);
 			if(fTarget.isExpected()){
 				adaptTestCases();
+				adaptConstraints();
 			}
 
 			markModelUpdated();
@@ -181,6 +227,23 @@ public class CategoryOperationSetType extends BulkOperation{
 							expectedValue.setValueString(newValue);
 						}
 					}
+				}
+			}
+		}
+
+		private void adaptConstraints() {
+			// TODO Auto-generated method stub
+			Iterator<ConstraintNode> it = fTarget.getMethod().getConstraintNodes().iterator();
+			while(it.hasNext()){
+				Constraint constraint = it.next().getConstraint();
+				IStatementVisitor statementAdapter = new StatementAdapter();
+				try{
+				if((boolean)constraint.getPremise().accept(statementAdapter) == false ||
+						(boolean)constraint.getConsequence().accept(statementAdapter) == false){
+					it.remove();
+				}
+				}catch(Exception e){
+					it.remove();
 				}
 			}
 		}
