@@ -11,6 +11,7 @@ import com.testify.ecfeed.adapter.ITypeAdapter;
 import com.testify.ecfeed.adapter.ITypeAdapterProvider;
 import com.testify.ecfeed.adapter.ModelOperationException;
 import com.testify.ecfeed.adapter.java.JavaUtils;
+import com.testify.ecfeed.model.BasicStatement;
 import com.testify.ecfeed.model.CategoryNode;
 import com.testify.ecfeed.model.Constraint;
 import com.testify.ecfeed.model.ConstraintNode;
@@ -38,6 +39,7 @@ public class CategoryOperationSetType extends BulkOperation{
 		private Map<PartitionNode, String> fOriginalValues;
 		private List<TestCaseNode> fOriginalTestCases;
 		private List<ConstraintNode> fOriginalConstraints;
+		private Map<BasicStatement, String> fOriginalStatementValues;
 
 		private ITypeAdapterProvider fAdapterProvider;
 
@@ -50,15 +52,31 @@ public class CategoryOperationSetType extends BulkOperation{
 
 			@Override
 			public Object visit(StatementArray statement) throws Exception {
-				return true;
+				boolean success = true;
+				for(BasicStatement child : statement.getChildren()){
+					try{
+						success &= (boolean)child.accept(this);
+					}catch(Exception e){
+						success = false;
+					}
+				}
+				return success;
 			}
 
 			@Override
 			public Object visit(ExpectedValueStatement statement) throws Exception {
+				boolean success = true;
 				ITypeAdapter adapter = fAdapterProvider.getAdapter(fNewType);
 				String newValue = adapter.convert(statement.getCondition().getValueString());
+				fOriginalStatementValues.put(statement, statement.getCondition().getValueString());
 				statement.getCondition().setValueString(newValue);
-				return newValue != null && fTarget.getLeafPartitionValues().contains(newValue);
+				if(JavaUtils.isUserType(fNewType)){
+					success = newValue != null && fTarget.getLeafPartitionValues().contains(newValue);
+				}
+				else{
+					success = newValue != null;
+				}
+				return success;
 			}
 
 			@Override
@@ -80,6 +98,51 @@ public class CategoryOperationSetType extends BulkOperation{
 
 		private class ReverseOperation extends AbstractModelOperation{
 
+			private class StatementValueRestorer implements IStatementVisitor{
+
+				@Override
+				public Object visit(StaticStatement statement) throws Exception {
+					return null;
+				}
+
+				@Override
+				public Object visit(StatementArray statement) throws Exception {
+					for(BasicStatement child : statement.getChildren()){
+						try{
+							child.accept(this);
+						}catch(Exception e){}
+					}
+					return null;
+				}
+
+				@Override
+				public Object visit(ExpectedValueStatement statement)
+						throws Exception {
+					if(fOriginalStatementValues.containsKey(statement)){
+						statement.getCondition().setValueString(fOriginalStatementValues.get(statement));
+					}
+					return null;
+				}
+
+				@Override
+				public Object visit(PartitionedCategoryStatement statement)
+						throws Exception {
+					return null;
+				}
+
+				@Override
+				public Object visit(LabelCondition condition) throws Exception {
+					return null;
+				}
+
+				@Override
+				public Object visit(PartitionCondition condition)
+						throws Exception {
+					return null;
+				}
+
+			}
+
 			public ReverseOperation() {
 				super(CategoryOperationSetType.this.getName());
 			}
@@ -92,12 +155,23 @@ public class CategoryOperationSetType extends BulkOperation{
 				revertPartitionValues(fTarget.getPartitions());
 				fTarget.getMethod().replaceTestCases(fOriginalTestCases);
 				fTarget.getMethod().replaceConstraints(fOriginalConstraints);
+				restoreConstraintValues();
 				markModelUpdated();
 			}
 
 			@Override
 			public IModelOperation reverseOperation() {
 				return new SetTypeOperation(fTarget, fNewType, fAdapterProvider);
+			}
+
+			private void restoreConstraintValues() {
+				IStatementVisitor valueRestorer = new StatementValueRestorer();
+				for(ConstraintNode constraint : fTarget.getMethod().getConstraintNodes()){
+					try{
+						constraint.getConstraint().getPremise().accept(valueRestorer);
+						constraint.getConstraint().getConsequence().accept(valueRestorer);
+					}catch(Exception e){}
+				}
 			}
 
 			private void revertPartitionValues(List<PartitionNode> choices) {
@@ -126,6 +200,7 @@ public class CategoryOperationSetType extends BulkOperation{
 			fOriginalValues = new HashMap<>();
 			fOriginalTestCases = new ArrayList<>(fTarget.getMethod().getTestCases());
 			fOriginalConstraints = new ArrayList<>(fTarget.getMethod().getConstraintNodes());
+			fOriginalStatementValues = new HashMap<>();
 
 			if(JavaUtils.isValidTypeName(fNewType) == false){
 				throw new ModelOperationException(Messages.CATEGORY_TYPE_REGEX_PROBLEM);
@@ -232,7 +307,7 @@ public class CategoryOperationSetType extends BulkOperation{
 		}
 
 		private void adaptConstraints() {
-			// TODO Auto-generated method stub
+			fOriginalStatementValues.clear();
 			Iterator<ConstraintNode> it = fTarget.getMethod().getConstraintNodes().iterator();
 			while(it.hasNext()){
 				Constraint constraint = it.next().getConstraint();
