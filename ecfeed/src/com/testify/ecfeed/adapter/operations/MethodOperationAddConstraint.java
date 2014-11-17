@@ -16,7 +16,7 @@ public class MethodOperationAddConstraint extends AbstractModelOperation {
 		super(OperationNames.ADD_CONSTRAINT);
 		fTarget = target;
 		fConstraint = constraint;
-		fIndex = index; 
+		fIndex = index;
 	}
 
 	public MethodOperationAddConstraint(MethodNode target, ConstraintNode constraint){
@@ -42,5 +42,5 @@ public class MethodOperationAddConstraint extends AbstractModelOperation {
 	public IModelOperation reverseOperation() {
 		return new MethodOperationRemoveConstraint(fTarget, fConstraint);
 	}
-	
+
 }

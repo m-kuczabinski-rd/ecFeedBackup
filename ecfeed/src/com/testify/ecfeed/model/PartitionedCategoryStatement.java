@@ -128,13 +128,13 @@ public class PartitionedCategoryStatement extends BasicStatement implements IRel
 		@Override
 		public boolean updateReferences(CategoryNode category){
 			PartitionNode condition = category.getPartition(fPartition.getQualifiedName());
-			if(condition != null && category.isExpected() == false){
-				if(category.getAllPartitionNames().contains(condition.getName())){
-					fPartition = condition;
-					return true;
-				};
+			if(condition != null){
+				fPartition = condition;
 			}
-			return false;
+			else{
+				return false;
+			}
+			return true;
 		}
 
 		@Override
