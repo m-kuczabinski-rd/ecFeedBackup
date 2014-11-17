@@ -249,15 +249,12 @@ public class PartitionedCategoryStatement extends BasicStatement implements IRel
 
 	@Override
 	public boolean updateReferences(MethodNode method){
-		System.out.println("trying to update...");
 		CategoryNode category = method.getCategory(fCategory.getName());
 		if(category != null && !category.isExpected()){
 			if(fCondition.updateReferences(category)){
 				fCategory = category;
-				System.out.println("succeed...");
 				return true;
 			}
-			System.out.println("failed...");
 		}
 		return false;
 	}
