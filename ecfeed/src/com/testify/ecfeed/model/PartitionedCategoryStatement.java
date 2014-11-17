@@ -131,6 +131,9 @@ public class PartitionedCategoryStatement extends BasicStatement implements IRel
 			if(condition != null){
 				fPartition = condition;
 			}
+			else{
+				return false;
+			}
 			return true;
 		}
 
