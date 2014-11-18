@@ -26,10 +26,10 @@ public class CopyNodeTest{
 	ClassNode fClass2;
 	MethodNode fMethod1;
 	MethodNode fMethod2;
-	CategoryNode fPartCat1;
-	CategoryNode fPartCat2;
-	CategoryNode fExCat1;
-	CategoryNode fExCat2;
+	ParameterNode fPartCat1;
+	ParameterNode fPartCat2;
+	ParameterNode fExCat1;
+	ParameterNode fExCat2;
 	PartitionNode fPartition1;
 	PartitionNode fPartition2;
 	PartitionNode fPartition3;
@@ -47,11 +47,11 @@ public class CopyNodeTest{
 		fClass2 = new ClassNode("com.testify.ecfeed.model.Class2");
 		fMethod1 = new MethodNode("firstMethod");
 		fMethod2 = new MethodNode("secondMethod");
-		fPartCat1 = new CategoryNode("pcat1", "type", "0", false);
-		fPartCat2 = new CategoryNode("pcat2", "type2", "0", false);
-		fExCat1 = new CategoryNode("ecat1", "type", "0", true);
+		fPartCat1 = new ParameterNode("pcat1", "type", "0", false);
+		fPartCat2 = new ParameterNode("pcat2", "type2", "0", false);
+		fExCat1 = new ParameterNode("ecat1", "type", "0", true);
 		fExCat1.setDefaultValueString("value1");
-		fExCat2 = new CategoryNode("ecat2", "type", "0", true);
+		fExCat2 = new ParameterNode("ecat2", "type", "0", true);
 		fExCat2.setDefaultValueString("value2");
 		fPartition1 = new PartitionNode("p1", "value1");
 		fPartition2 = new PartitionNode("p2", "value2");
@@ -125,7 +125,7 @@ public class CopyNodeTest{
 		testPartitionChildrenLabels(childcopy, fLabel1, fLabel2);
 	}
 
-	public void testPartitionedCategories(CategoryNode category, CategoryNode copy, String parentlabel, String childlabel){
+	public void testPartitionedCategories(ParameterNode category, ParameterNode copy, String parentlabel, String childlabel){
 		testNode(category, copy);
 		assertEquals(category.getChildren().size(), copy.getChildren().size());
 		assertEquals(category.getAllPartitionNames().size(), copy.getAllPartitionNames().size());
@@ -150,13 +150,13 @@ public class CopyNodeTest{
 
 	@Test
 	public void partitionedCategoryCopyTest(){
-		CategoryNode copy = fPartCat1.getCopy();
+		ParameterNode copy = fPartCat1.getCopy();
 		// categories copied properly?
 		testPartitionedCategories(fPartCat1, copy, fLabel1, fLabel2);
 		testParent(copy, fPartCat1.getParent(), true);
 	}
 
-	public void testExpectedCategories(CategoryNode category, CategoryNode copy){
+	public void testExpectedCategories(ParameterNode category, ParameterNode copy){
 		testNode(category, copy);
 //		PartitionNode partition = category.getDefaultValuePartition();
 //		PartitionNode partitioncopy = copy.getDefaultValuePartition();
@@ -166,7 +166,7 @@ public class CopyNodeTest{
 
 	@Test
 	public void expectedCategoryCopyTest(){
-		CategoryNode copy = fExCat1.getCopy();
+		ParameterNode copy = fExCat1.getCopy();
 		testExpectedCategories(fExCat1, copy);
 		testParent(copy, fExCat1.getParent(), true);
 	}
@@ -174,13 +174,13 @@ public class CopyNodeTest{
 	public void testMethods(MethodNode method, MethodNode copy, String parentlabel, String childlabel){
 		testNode(method, copy);
 		// Test partitioned category
-		CategoryNode partcat = method.getCategories(false).get(0);
-		CategoryNode copypartcat = copy.getCategory(partcat.getName());
+		ParameterNode partcat = method.getCategories(false).get(0);
+		ParameterNode copypartcat = copy.getCategory(partcat.getName());
 		testPartitionedCategories(partcat, copypartcat, parentlabel, childlabel);
 		testParent(copypartcat, copy, true);
 		// Test expected category
-		CategoryNode expcat = method.getCategories(true).get(0);
-		CategoryNode copyexpcat = copy.getCategory(expcat.getName());
+		ParameterNode expcat = method.getCategories(true).get(0);
+		ParameterNode copyexpcat = copy.getCategory(expcat.getName());
 		testExpectedCategories(fExCat1, copyexpcat);
 		testParent(copyexpcat, copy, true);
 	}

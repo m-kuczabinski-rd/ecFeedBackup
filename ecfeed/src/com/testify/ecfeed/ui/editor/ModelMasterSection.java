@@ -44,7 +44,7 @@ import org.eclipse.ui.forms.widgets.Section;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.FrameworkUtil;
 
-import com.testify.ecfeed.model.CategoryNode;
+import com.testify.ecfeed.model.ParameterNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.ConstraintNode;
 import com.testify.ecfeed.model.GenericNode;
@@ -57,7 +57,7 @@ import com.testify.ecfeed.ui.common.Constants;
 import com.testify.ecfeed.ui.editor.actions.AbstractAddChildAction;
 import com.testify.ecfeed.ui.editor.actions.AddChildActionFactory;
 import com.testify.ecfeed.ui.editor.actions.ModelViewerActionProvider;
-import com.testify.ecfeed.ui.modelif.CategoryInterface;
+import com.testify.ecfeed.ui.modelif.ParameterInterface;
 import com.testify.ecfeed.ui.modelif.GenericNodeInterface;
 import com.testify.ecfeed.ui.modelif.IModelUpdateListener;
 import com.testify.ecfeed.ui.modelif.ModelNodesTransfer;
@@ -122,9 +122,9 @@ public class ModelMasterSection extends TreeViewerSection{
 				return children.toArray();
 			}
 
-			if(parentElement instanceof CategoryNode){
-				CategoryNode category = (CategoryNode)parentElement;
-				if(category.isExpected() && CategoryInterface.isPrimitive(category.getType())){
+			if(parentElement instanceof ParameterNode){
+				ParameterNode category = (ParameterNode)parentElement;
+				if(category.isExpected() && ParameterInterface.isPrimitive(category.getType())){
 					return EMPTY_ARRAY;
 				}
 			}
@@ -156,8 +156,8 @@ public class ModelMasterSection extends TreeViewerSection{
 		@Override
 		public String getText(Object element){
 			if(element instanceof GenericNode){
-				if(element instanceof CategoryNode){
-					return ((CategoryNode)element).toShortString();
+				if(element instanceof ParameterNode){
+					return ((ParameterNode)element).toShortString();
 				}
 				return element.toString();
 			}
@@ -174,7 +174,7 @@ public class ModelMasterSection extends TreeViewerSection{
 				return getImageFromFile("method_node.png");
 			} else if(element instanceof TestCaseNode){
 				return getImageFromFile("test_case_node.png");
-			} else if (element instanceof CategoryNode){
+			} else if (element instanceof ParameterNode){
 				return getImageFromFile("category_node.png");
 			} else if (element instanceof ConstraintNode){
 				return getImageFromFile("constraint_node.png");
@@ -212,7 +212,7 @@ public class ModelMasterSection extends TreeViewerSection{
 			}
 
 			@Override
-			public Object visit(CategoryNode node) throws Exception {
+			public Object visit(ParameterNode node) throws Exception {
 				List<Image> decorations = new ArrayList<Image>();
 				decorations.add(implementationStatusDecoration(node));
 				if(node.isExpected()){

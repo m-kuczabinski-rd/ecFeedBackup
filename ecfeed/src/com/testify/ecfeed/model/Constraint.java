@@ -74,22 +74,22 @@ public class Constraint implements IConstraint<PartitionNode> {
 
 		@Override
 		public Object visit(StaticStatement statement) throws Exception {
-			return new HashSet<CategoryNode>();
+			return new HashSet<ParameterNode>();
 		}
 
 		@SuppressWarnings("unchecked")
 		@Override
 		public Object visit(StatementArray statement) throws Exception {
-			Set<CategoryNode> set = new HashSet<CategoryNode>();
+			Set<ParameterNode> set = new HashSet<ParameterNode>();
 			for(BasicStatement s : statement.getStatements()){
-				set.addAll((Set<CategoryNode>)s.accept(this));
+				set.addAll((Set<ParameterNode>)s.accept(this));
 			}
 			return set;
 		}
 
 		@Override
 		public Object visit(ExpectedValueStatement statement) throws Exception {
-			Set<CategoryNode> set = new HashSet<CategoryNode>();
+			Set<ParameterNode> set = new HashSet<ParameterNode>();
 			set.add(statement.getCategory());
 			return set;
 		}
@@ -102,13 +102,13 @@ public class Constraint implements IConstraint<PartitionNode> {
 
 		@Override
 		public Object visit(LabelCondition condition) throws Exception {
-			return new HashSet<CategoryNode>();
+			return new HashSet<ParameterNode>();
 		}
 
 		@Override
 		public Object visit(PartitionCondition condition) throws Exception {
-			Set<CategoryNode> set = new HashSet<CategoryNode>();
-			CategoryNode category = condition.getPartition().getCategory();
+			Set<ParameterNode> set = new HashSet<ParameterNode>();
+			ParameterNode category = condition.getPartition().getCategory();
 			if(category != null){
 				set.add(category);
 			}
@@ -118,10 +118,10 @@ public class Constraint implements IConstraint<PartitionNode> {
 	
 	private class ReferencedLabelsPrivider implements IStatementVisitor{
 		
-		private CategoryNode fCategory;
+		private ParameterNode fCategory;
 		private Set<String> EMPTY_SET = new HashSet<String>();
 		
-		public ReferencedLabelsPrivider(CategoryNode category){
+		public ReferencedLabelsPrivider(ParameterNode category){
 			fCategory = category;
 		}
 		
@@ -228,11 +228,11 @@ public class Constraint implements IConstraint<PartitionNode> {
 		fConsequence = consequence;
 	}
 	
-	public boolean mentions(CategoryNode category) {
+	public boolean mentions(ParameterNode category) {
 		return fPremise.mentions(category) || fConsequence.mentions(category);
 	}
 
-	public boolean mentions(CategoryNode category, String label) {
+	public boolean mentions(ParameterNode category, String label) {
 		return fPremise.mentions(category, label) || fConsequence.mentions(category, label);
 	}
 
@@ -265,19 +265,19 @@ public class Constraint implements IConstraint<PartitionNode> {
 	}
 
 	@SuppressWarnings("unchecked")
-	public Set<CategoryNode> getReferencedCategories() {
+	public Set<ParameterNode> getReferencedCategories() {
 		try{
-			Set<CategoryNode> referenced = (Set<CategoryNode>)fPremise.accept(new ReferencedCategoriesProvider());
-			referenced.addAll((Set<CategoryNode>)fConsequence.accept(new ReferencedCategoriesProvider()));
+			Set<ParameterNode> referenced = (Set<ParameterNode>)fPremise.accept(new ReferencedCategoriesProvider());
+			referenced.addAll((Set<ParameterNode>)fConsequence.accept(new ReferencedCategoriesProvider()));
 			return referenced;
 		}
 		catch(Exception e){
-			return new HashSet<CategoryNode>();
+			return new HashSet<ParameterNode>();
 		}
 	}
 
 	@SuppressWarnings("unchecked")
-	public Set<String> getReferencedLabels(CategoryNode category) {
+	public Set<String> getReferencedLabels(ParameterNode category) {
 		try{
 			Set<String> referenced = (Set<String>)fPremise.accept(new ReferencedLabelsPrivider(category));
 			referenced.addAll((Set<String>)fConsequence.accept(new ReferencedLabelsPrivider(category)));

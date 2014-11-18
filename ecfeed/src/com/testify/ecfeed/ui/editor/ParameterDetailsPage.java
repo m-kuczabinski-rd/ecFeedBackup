@@ -21,12 +21,12 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
 
-import com.testify.ecfeed.model.CategoryNode;
+import com.testify.ecfeed.model.ParameterNode;
 import com.testify.ecfeed.ui.common.IFileInfoProvider;
-import com.testify.ecfeed.ui.modelif.CategoryInterface;
+import com.testify.ecfeed.ui.modelif.ParameterInterface;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 
-public class CategoryDetailsPage extends BasicDetailsPage{
+public class ParameterDetailsPage extends BasicDetailsPage{
 
 	private Composite fAttributesComposite;
 	private Text fNameText;
@@ -36,7 +36,7 @@ public class CategoryDetailsPage extends BasicDetailsPage{
 
 	private ChoicesViewer fPartitionsViewer;
 
-	private CategoryInterface fCategoryIf;
+	private ParameterInterface fCategoryIf;
 
 	private class SetNameListener extends AbstractSelectionAdapter{
 		@Override
@@ -70,9 +70,9 @@ public class CategoryDetailsPage extends BasicDetailsPage{
 		}
 	}
 
-	public CategoryDetailsPage(ModelMasterSection masterSection, IModelUpdateContext updateContext, IFileInfoProvider fileInforProvider) {
+	public ParameterDetailsPage(ModelMasterSection masterSection, IModelUpdateContext updateContext, IFileInfoProvider fileInforProvider) {
 		super(masterSection, updateContext, fileInforProvider);
-		fCategoryIf = new CategoryInterface(this);
+		fCategoryIf = new ParameterInterface(this);
 	}
 
 	@Override
@@ -95,13 +95,13 @@ public class CategoryDetailsPage extends BasicDetailsPage{
 	@Override
 	public void refresh(){
 		super.refresh();
-		if(getSelectedElement() instanceof CategoryNode){
-			CategoryNode category = (CategoryNode)getSelectedElement();
+		if(getSelectedElement() instanceof ParameterNode){
+			ParameterNode category = (ParameterNode)getSelectedElement();
 			fCategoryIf.setTarget(category);
 
 			getMainSection().setText((category.isExpected()?"[e]":"") + category.toString());
 			fNameText.setText(category.getName());
-			fTypeCombo.setItems(CategoryInterface.supportedPrimitiveTypes());
+			fTypeCombo.setItems(ParameterInterface.supportedPrimitiveTypes());
 			fTypeCombo.setText(category.getType());
 			recreateDefaultValueCombo(category);
 			fExpectedCheckbox.setSelection(category.isExpected());
@@ -141,7 +141,7 @@ public class CategoryDetailsPage extends BasicDetailsPage{
 		fExpectedCheckbox.addSelectionListener(new SetExpectedListener());
 	}
 
-	private void recreateDefaultValueCombo(CategoryNode category) {
+	private void recreateDefaultValueCombo(ParameterNode category) {
 		if(fDefaultValueCombo != null && fDefaultValueCombo.isDisposed() == false){
 			fDefaultValueCombo.dispose();
 		}

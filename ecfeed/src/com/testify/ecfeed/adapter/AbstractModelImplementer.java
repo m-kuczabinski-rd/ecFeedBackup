@@ -2,7 +2,7 @@ package com.testify.ecfeed.adapter;
 
 import java.util.List;
 
-import com.testify.ecfeed.model.CategoryNode;
+import com.testify.ecfeed.model.ParameterNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.ConstraintNode;
 import com.testify.ecfeed.model.GenericNode;
@@ -35,7 +35,7 @@ public abstract class AbstractModelImplementer implements IModelImplementer {
 		}
 
 		@Override
-		public Object visit(CategoryNode node) throws Exception {
+		public Object visit(ParameterNode node) throws Exception {
 			return implementable(node); 
 		}
 
@@ -73,7 +73,7 @@ public abstract class AbstractModelImplementer implements IModelImplementer {
 		}
 
 		@Override
-		public Object visit(CategoryNode node) throws Exception {
+		public Object visit(ParameterNode node) throws Exception {
 			return implement(node);
 		}
 
@@ -105,7 +105,7 @@ public abstract class AbstractModelImplementer implements IModelImplementer {
 		if(type.equals(RootNode.class) ||
 			(type.equals(ClassNode.class))||
 			(type.equals(MethodNode.class))||
-			(type.equals(CategoryNode.class))||
+			(type.equals(ParameterNode.class))||
 			(type.equals(TestCaseNode.class))||
 			(type.equals(PartitionNode.class))
 		){
@@ -162,7 +162,7 @@ public abstract class AbstractModelImplementer implements IModelImplementer {
 		if(methodDefinitionImplemented(node) == false){
 			implementMethodDefinition(node);
 		}
-		for(CategoryNode parameter : node.getCategories()){
+		for(ParameterNode parameter : node.getCategories()){
 			if(implementable(parameter) && getImplementationStatus(parameter) != EImplementationStatus.IMPLEMENTED){
 				implement(parameter);
 			}
@@ -175,7 +175,7 @@ public abstract class AbstractModelImplementer implements IModelImplementer {
 		return true;
 	}
 
-	protected boolean implement(CategoryNode node) throws Exception{
+	protected boolean implement(ParameterNode node) throws Exception{
 		if(parameterDefinitionImplemented(node) == false){
 			implementParameterDefinition(node);
 		}
@@ -232,7 +232,7 @@ public abstract class AbstractModelImplementer implements IModelImplementer {
 		return hasImplementableNode(node.getCategories()) || hasImplementableNode(node.getTestCases());
 	}
 	
-	protected boolean implementable(CategoryNode node){
+	protected boolean implementable(ParameterNode node){
 		return hasImplementableNode(node.getPartitions());
 	}
 	protected boolean implementable(PartitionNode node){
@@ -254,10 +254,10 @@ public abstract class AbstractModelImplementer implements IModelImplementer {
 
 	protected abstract boolean classDefinitionImplemented(ClassNode node);
 	protected abstract boolean methodDefinitionImplemented(MethodNode node);
-	protected abstract boolean parameterDefinitionImplemented(CategoryNode node);
+	protected abstract boolean parameterDefinitionImplemented(ParameterNode node);
 	
 	protected abstract void implementClassDefinition(ClassNode node) throws Exception;
 	protected abstract void implementMethodDefinition(MethodNode node) throws Exception;
-	protected abstract void implementParameterDefinition(CategoryNode node) throws Exception;
+	protected abstract void implementParameterDefinition(ParameterNode node) throws Exception;
 	protected abstract void implementChoiceDefinition(PartitionNode node) throws Exception;
 }

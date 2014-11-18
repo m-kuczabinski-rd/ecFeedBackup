@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.testify.ecfeed.adapter.IModelOperation;
 import com.testify.ecfeed.adapter.ModelOperationException;
-import com.testify.ecfeed.model.CategoryNode;
+import com.testify.ecfeed.model.ParameterNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.TestCaseNode;
 
@@ -12,7 +12,7 @@ public class MethodOperationAddParameter extends AbstractModelOperation {
 
 	List<TestCaseNode> fRemovedTestCases;
 	MethodNode fTarget;
-	CategoryNode fParameter;
+	ParameterNode fParameter;
 	private int fNewIndex;
 	private int fCurrentIndex;
 
@@ -36,7 +36,7 @@ public class MethodOperationAddParameter extends AbstractModelOperation {
 
 	}
 
-	public MethodOperationAddParameter(MethodNode target, CategoryNode parameter, int index) {
+	public MethodOperationAddParameter(MethodNode target, ParameterNode parameter, int index) {
 		super(OperationNames.ADD_PARAMETER);
 		fRemovedTestCases = target.getTestCases();
 		fTarget = target;
@@ -45,7 +45,7 @@ public class MethodOperationAddParameter extends AbstractModelOperation {
 		fCurrentIndex = parameter.getIndex();
 	}
 
-	public MethodOperationAddParameter(MethodNode target, CategoryNode parameter) {
+	public MethodOperationAddParameter(MethodNode target, ParameterNode parameter) {
 		this(target, parameter, -1);
 	}
 

@@ -12,7 +12,7 @@
 package com.testify.ecfeed.testutils;
 
 import com.testify.ecfeed.model.BasicStatement;
-import com.testify.ecfeed.model.CategoryNode;
+import com.testify.ecfeed.model.ParameterNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.ConstraintNode;
 import com.testify.ecfeed.model.ExpectedValueStatement;
@@ -32,8 +32,8 @@ public class ModelStringifier {
 		if(node instanceof PartitionNode){
 			return stringify((PartitionNode)node, indent);
 		}
-		if(node instanceof CategoryNode){
-			return stringify((CategoryNode)node, indent);
+		if(node instanceof ParameterNode){
+			return stringify((ParameterNode)node, indent);
 		}
 		if(node instanceof MethodNode){
 			return stringify((MethodNode)node, indent);
@@ -95,7 +95,7 @@ public class ModelStringifier {
 	public String stringify(MethodNode m, int indent){
 		String result = intendentString(indent);
 		result += "Method " + m.toString();
-		for(CategoryNode child : m.getCategories()){
+		for(ParameterNode child : m.getCategories()){
 			result += "\n";
 			result += stringify(child, indent + 2);
 		}
@@ -111,7 +111,7 @@ public class ModelStringifier {
 		return result;
 	}
 	
-	public String stringify(CategoryNode c, int indent){
+	public String stringify(ParameterNode c, int indent){
 		String result = intendentString(indent);
 		result += "Category " + c.getName() + "[" + c.getType() + "], " + (c.isExpected() ? "expected" : "patitioned");
 		result += " default value: " + c.getDefaultValue(); 

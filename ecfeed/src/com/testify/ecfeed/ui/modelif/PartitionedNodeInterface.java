@@ -80,7 +80,7 @@ public class PartitionedNodeInterface extends GenericNodeInterface {
 	}
 
 	public boolean isPrimitive() {
-		return CategoryInterface.isPrimitive(fTarget.getCategory().getType());
+		return ParameterInterface.isPrimitive(fTarget.getCategory().getType());
 	}
 
 	public boolean isUserType() {
@@ -96,7 +96,7 @@ public class PartitionedNodeInterface extends GenericNodeInterface {
 	}
 
 	public  boolean isBoolean() {
-		return CategoryInterface.isBoolean(fTarget.getCategory().getType());
+		return ParameterInterface.isBoolean(fTarget.getCategory().getType());
 	}
 
 	protected String generatePartitionName(){

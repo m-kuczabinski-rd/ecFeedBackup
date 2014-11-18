@@ -36,7 +36,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 
-import com.testify.ecfeed.model.CategoryNode;
+import com.testify.ecfeed.model.ParameterNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.TestCaseNode;
@@ -65,8 +65,8 @@ public class AddTestCaseDialog extends TitleAreaDialog implements ITestDataEdito
 		setHelpAvailable(false);
 		setShellStyle(SWT.BORDER | SWT.RESIZE | SWT.TITLE | SWT.APPLICATION_MODAL);
 		fTestData = new ArrayList<PartitionNode>();
-		List<CategoryNode> categories = method.getCategories();
-		for(CategoryNode category : categories){
+		List<ParameterNode> categories = method.getCategories();
+		for(ParameterNode category : categories){
 			if(category.isExpected()){
 				fTestData.add(createAnonymuousPartition(category));
 			}
@@ -82,7 +82,7 @@ public class AddTestCaseDialog extends TitleAreaDialog implements ITestDataEdito
 		fMethod = method;
 	}
 
-	private PartitionNode createAnonymuousPartition(CategoryNode parent) {
+	private PartitionNode createAnonymuousPartition(ParameterNode parent) {
 		PartitionNode partition = new PartitionNode("@expected", parent.getDefaultValue());
 		partition.setParent(parent);
 		return partition;

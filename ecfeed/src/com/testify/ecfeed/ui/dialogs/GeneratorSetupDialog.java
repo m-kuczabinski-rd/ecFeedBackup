@@ -54,7 +54,7 @@ import com.testify.ecfeed.generators.api.GeneratorException;
 import com.testify.ecfeed.generators.api.IGenerator;
 import com.testify.ecfeed.generators.api.IGeneratorParameter;
 import com.testify.ecfeed.generators.api.IGeneratorParameter.TYPE;
-import com.testify.ecfeed.model.CategoryNode;
+import com.testify.ecfeed.model.ParameterNode;
 import com.testify.ecfeed.model.Constraint;
 import com.testify.ecfeed.model.ConstraintNode;
 import com.testify.ecfeed.model.GenericNode;
@@ -103,7 +103,7 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 		@Override
 		public void checkStateChanged(CheckStateChangedEvent event) {
 			super.checkStateChanged(event);
-			if(event.getElement() instanceof CategoryNode && ((CategoryNode)event.getElement()).isExpected()){
+			if(event.getElement() instanceof ParameterNode && ((ParameterNode)event.getElement()).isExpected()){
 				fCategoriesViewer.setChecked(event.getElement(), true);
 			}
 			else{
@@ -123,7 +123,7 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 		
 		public Object[] getChildren(Object element){
 			List<Object> children = new ArrayList<Object>();
-			if(element instanceof CategoryNode && ((CategoryNode)element).isExpected()){
+			if(element instanceof ParameterNode && ((ParameterNode)element).isExpected()){
 			}
 			else if(element instanceof PartitionedNode){
 				PartitionedNode parent = (PartitionedNode)element;
@@ -242,7 +242,7 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 		fOkButton = createButton(parent, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL,
 				true);
 		if(fGenerateExecutableContent){
-			for(CategoryNode category: fMethod.getCategories()){
+			for(ParameterNode category: fMethod.getCategories()){
 				EImplementationStatus categoryStatus = fStatusResolver.getImplementationStatus(category);
 				if((category.getPartitions().isEmpty() && (category.isExpected() == false || JavaUtils.isUserType(category.getType())))||
 						categoryStatus == EImplementationStatus.NOT_IMPLEMENTED){
@@ -251,7 +251,7 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 				}
 			}
 		} else {
-			for(CategoryNode category: fMethod.getCategories() ){
+			for(ParameterNode category: fMethod.getCategories() ){
 				if(category.getPartitions().isEmpty() && (category.isExpected() == false || JavaUtils.isUserType(category.getType()))){
 					setOkButton(false);
 					break;
@@ -377,7 +377,7 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 		fCategoriesViewer.getTree().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 		fCategoriesViewer.setInput(fMethod);
 		fCategoriesViewer.addCheckStateListener(new PartitionTreeCheckStateListener(fCategoriesViewer));
-		for(CategoryNode category : fMethod.getCategories()){
+		for(ParameterNode category : fMethod.getCategories()){
 			fCategoriesViewer.expandAll();
 			fCategoriesViewer.setSubtreeChecked(category, true);
 			fCategoriesViewer.collapseAll();
@@ -426,7 +426,7 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 	}
 
 	private boolean validateGeneratorInput(boolean onlyExecutable) {
-		for(CategoryNode category : fMethod.getCategories()){
+		for(ParameterNode category : fMethod.getCategories()){
 			boolean leafChecked = false;
 			if(category.isExpected()){
 				if(fCategoriesViewer.getChecked(category) == false){
@@ -654,7 +654,7 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 	}
 
 	private void saveAlgorithmInput() {
-		List<CategoryNode> categories = fMethod.getCategories();
+		List<ParameterNode> categories = fMethod.getCategories();
 		fAlgorithmInput = new ArrayList<List<PartitionNode>>();
 		for(int i = 0; i < categories.size(); i++){
 			List<PartitionNode> partitions = new ArrayList<PartitionNode>();
@@ -672,7 +672,7 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 		}
 	}
 
-	private PartitionNode expectedValuePartition(CategoryNode c){
+	private PartitionNode expectedValuePartition(ParameterNode c){
 		PartitionNode p = new PartitionNode("", c.getDefaultValue());
 		p.setParent(c);
 		return p;

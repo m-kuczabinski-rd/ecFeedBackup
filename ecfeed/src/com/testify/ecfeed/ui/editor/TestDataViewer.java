@@ -19,7 +19,7 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.ui.forms.widgets.Section;
 
 import com.testify.ecfeed.adapter.EImplementationStatus;
-import com.testify.ecfeed.model.CategoryNode;
+import com.testify.ecfeed.model.ParameterNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.ui.common.ColorConstants;
@@ -49,7 +49,7 @@ public class TestDataViewer extends TableViewerSection implements ITestDataEdito
 			@Override
 			public String getText(Object element){
 				PartitionNode testValue = (PartitionNode)element;
-				CategoryNode parent = testValue.getCategory();
+				ParameterNode parent = testValue.getCategory();
 				return parent.toString();
 			}
 

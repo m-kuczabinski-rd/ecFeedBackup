@@ -37,7 +37,7 @@ import com.testify.ecfeed.junit.annotations.Constraints;
 import com.testify.ecfeed.junit.annotations.EcModel;
 import com.testify.ecfeed.junit.annotations.Generator;
 import com.testify.ecfeed.junit.annotations.GeneratorParameter;
-import com.testify.ecfeed.model.CategoryNode;
+import com.testify.ecfeed.model.ParameterNode;
 import com.testify.ecfeed.model.ConstraintNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
@@ -274,7 +274,7 @@ public class OnlineRunnerTest extends StaticRunnerTest{
 	private List<List<PartitionNode>> referenceInput(RootNode model, FrameworkMethod method) throws RunnerException {
 		List<List<PartitionNode>> result = new ArrayList<List<PartitionNode>>();
 		MethodNode methodModel = getMethodModel(model, method);
-		for(CategoryNode category : methodModel.getCategories()){
+		for(ParameterNode category : methodModel.getCategories()){
 			result.add(category.getPartitions());
 		}
 		return result;

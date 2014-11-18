@@ -31,13 +31,13 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.ui.forms.widgets.Section;
 
 import com.testify.ecfeed.adapter.java.JavaUtils;
-import com.testify.ecfeed.model.CategoryNode;
+import com.testify.ecfeed.model.ParameterNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.PartitionedNode;
 import com.testify.ecfeed.ui.common.NodeNameColumnLabelProvider;
 import com.testify.ecfeed.ui.editor.actions.DeleteAction;
 import com.testify.ecfeed.ui.editor.actions.ModelViewerActionProvider;
-import com.testify.ecfeed.ui.modelif.CategoryInterface;
+import com.testify.ecfeed.ui.modelif.ParameterInterface;
 import com.testify.ecfeed.ui.modelif.ChoiceInterface;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 import com.testify.ecfeed.ui.modelif.ModelNodesTransfer;
@@ -102,13 +102,13 @@ public class ChoicesViewer extends TableViewerSection {
 		@Override
 		protected CellEditor getCellEditor(Object element) {
 			PartitionNode node = (PartitionNode)element;
-			CategoryNode parameter = node.getCategory();
-			if(CategoryInterface.hasLimitedValuesSet(node.getCategory())){
+			ParameterNode parameter = node.getCategory();
+			if(ParameterInterface.hasLimitedValuesSet(node.getCategory())){
 				fCellEditor.setActivationStyle(ComboBoxCellEditor.DROP_DOWN_ON_KEY_ACTIVATION);
 			} else {
 				fCellEditor.setActivationStyle(SWT.NONE);
 			}
-			List<String> items = CategoryInterface.getSpecialValues(node.getCategory().getType());
+			List<String> items = ParameterInterface.getSpecialValues(node.getCategory().getType());
 			if(JavaUtils.isUserType(parameter.getType())){
 				Set<String> usedValues = parameter.getLeafPartitionValues();
 				usedValues.removeAll(items);
@@ -118,7 +118,7 @@ public class ChoicesViewer extends TableViewerSection {
 				items.add(node.getValueString());
 			}
 			fCellEditor.setInput(items);
-			fCellEditor.getViewer().getCCombo().setEditable(CategoryInterface.isBoolean(node.getCategory().getType()) == false);
+			fCellEditor.getViewer().getCCombo().setEditable(ParameterInterface.isBoolean(node.getCategory().getType()) == false);
 			return fCellEditor;
 		}
 
@@ -171,7 +171,7 @@ public class ChoicesViewer extends TableViewerSection {
 	public ChoicesViewer(ISectionContext sectionContext, IModelUpdateContext updateContext) {
 		super(sectionContext, updateContext, STYLE);
 
-		fParentIf = new CategoryInterface(this);
+		fParentIf = new ParameterInterface(this);
 		fTableItemIf = new ChoiceInterface(this);
 
 		fNameColumn.setEditingSupport(new ChoiceNameEditingSupport());

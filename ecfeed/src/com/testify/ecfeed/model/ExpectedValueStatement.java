@@ -17,10 +17,10 @@ import com.testify.ecfeed.adapter.java.JavaUtils;
 
 public class ExpectedValueStatement extends BasicStatement implements IRelationalStatement{
 
-	CategoryNode fCategory;
+	ParameterNode fCategory;
 	PartitionNode fCondition;
 
-	public ExpectedValueStatement(CategoryNode category, PartitionNode condition) {
+	public ExpectedValueStatement(ParameterNode category, PartitionNode condition) {
 		fCategory = category;
 		fCondition = condition.getCopy();
 	}
@@ -31,7 +31,7 @@ public class ExpectedValueStatement extends BasicStatement implements IRelationa
 	}
 
 	@Override
-	public boolean mentions(CategoryNode category) {
+	public boolean mentions(ParameterNode category) {
 		return category == fCategory;
 	}
 
@@ -64,7 +64,7 @@ public class ExpectedValueStatement extends BasicStatement implements IRelationa
 	public void setRelation(EStatementRelation relation) {
 	}
 
-	public CategoryNode getCategory(){
+	public ParameterNode getCategory(){
 		return fCategory;
 	}
 
@@ -84,7 +84,7 @@ public class ExpectedValueStatement extends BasicStatement implements IRelationa
 
 	@Override
 	public boolean updateReferences(MethodNode method){
-		CategoryNode category = method.getCategory(fCategory.getName());
+		ParameterNode category = method.getCategory(fCategory.getName());
 		if(category != null && category.isExpected()){
 			fCategory = category;
 			fCondition.setParent(category);

@@ -21,7 +21,7 @@ import org.junit.Test;
 
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
-import com.testify.ecfeed.model.CategoryNode;
+import com.testify.ecfeed.model.ParameterNode;
 import com.testify.ecfeed.model.PartitionedCategoryStatement;
 import com.testify.ecfeed.model.EStatementRelation;
 
@@ -54,9 +54,9 @@ public class LabelStatementTest {
 		p21.addLabel("p21");
 		p22.addLabel("p22");
 		
-		CategoryNode c1 = new CategoryNode("c1", "type", "0", false);
+		ParameterNode c1 = new ParameterNode("c1", "type", "0", false);
 		c1.addPartition(p);
-		CategoryNode c2 = new CategoryNode("c2", "type", "0", false);
+		ParameterNode c2 = new ParameterNode("c2", "type", "0", false);
 		c2.addPartition(q);
 		
 		MethodNode method = new MethodNode("method");

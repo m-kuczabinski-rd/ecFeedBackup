@@ -26,7 +26,7 @@ import nu.xom.Serializer;
 import org.junit.Test;
 
 import com.testify.ecfeed.model.BasicStatement;
-import com.testify.ecfeed.model.CategoryNode;
+import com.testify.ecfeed.model.ParameterNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.ConstraintNode;
 import com.testify.ecfeed.model.ExpectedValueStatement;
@@ -101,10 +101,10 @@ public class XomParserTest {
 		for(String type : SUPPORTED_TYPES){
 			try{
 			for(boolean expected : new Boolean[]{true, false}){
-				CategoryNode c = fModelGenerator.generateCategory(type, expected, 3, 3, 3);
+				ParameterNode c = fModelGenerator.generateCategory(type, expected, 3, 3, 3);
 				Element element = (Element)c.accept(fConverter);
 				TRACE(element);
-					CategoryNode c1 = fParser.parseCategory(element); 
+					ParameterNode c1 = fParser.parseCategory(element); 
 					assertElementsEqual(c, c1);
 				}
 			}

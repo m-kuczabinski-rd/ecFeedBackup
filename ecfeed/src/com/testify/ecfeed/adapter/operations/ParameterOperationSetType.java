@@ -12,7 +12,7 @@ import com.testify.ecfeed.adapter.ITypeAdapterProvider;
 import com.testify.ecfeed.adapter.ModelOperationException;
 import com.testify.ecfeed.adapter.java.JavaUtils;
 import com.testify.ecfeed.model.BasicStatement;
-import com.testify.ecfeed.model.CategoryNode;
+import com.testify.ecfeed.model.ParameterNode;
 import com.testify.ecfeed.model.Constraint;
 import com.testify.ecfeed.model.ConstraintNode;
 import com.testify.ecfeed.model.ExpectedValueStatement;
@@ -27,11 +27,11 @@ import com.testify.ecfeed.model.StatementArray;
 import com.testify.ecfeed.model.StaticStatement;
 import com.testify.ecfeed.model.TestCaseNode;
 
-public class CategoryOperationSetType extends BulkOperation{
+public class ParameterOperationSetType extends BulkOperation{
 
 	private class SetTypeOperation extends AbstractModelOperation{
 
-		private CategoryNode fTarget;
+		private ParameterNode fTarget;
 		private String fNewType;
 		private String fCurrentType;
 		private String fOriginalDefaultValue;
@@ -144,7 +144,7 @@ public class CategoryOperationSetType extends BulkOperation{
 			}
 
 			public ReverseOperation() {
-				super(CategoryOperationSetType.this.getName());
+				super(ParameterOperationSetType.this.getName());
 			}
 
 			@Override
@@ -185,7 +185,7 @@ public class CategoryOperationSetType extends BulkOperation{
 
 		}
 
-		public SetTypeOperation(CategoryNode target, String newType, ITypeAdapterProvider adapterProvider) {
+		public SetTypeOperation(ParameterNode target, String newType, ITypeAdapterProvider adapterProvider) {
 			super(OperationNames.SET_TYPE);
 			fTarget = target;
 			fNewType = newType;
@@ -338,7 +338,7 @@ public class CategoryOperationSetType extends BulkOperation{
 		}
 	}
 
-	public CategoryOperationSetType(CategoryNode target, String newType, ITypeAdapterProvider adapterProvider) {
+	public ParameterOperationSetType(ParameterNode target, String newType, ITypeAdapterProvider adapterProvider) {
 		super(OperationNames.SET_TYPE, true);
 		addOperation(new SetTypeOperation(target, newType, adapterProvider));
 		if(target.getMethod() != null){

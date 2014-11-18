@@ -2,7 +2,7 @@ package com.testify.ecfeed.adapter;
 
 import java.util.List;
 
-import com.testify.ecfeed.model.CategoryNode;
+import com.testify.ecfeed.model.ParameterNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.ConstraintNode;
 import com.testify.ecfeed.model.GenericNode;
@@ -36,7 +36,7 @@ public abstract class AbstractImplementationStatusResolver implements
 		}
 
 		@Override
-		public Object visit(CategoryNode node) throws Exception {
+		public Object visit(ParameterNode node) throws Exception {
 			return implementationStatus(node);
 		}
 
@@ -116,7 +116,7 @@ public abstract class AbstractImplementationStatusResolver implements
 		return status;
 	}
 	
-	protected EImplementationStatus implementationStatus(CategoryNode category){
+	protected EImplementationStatus implementationStatus(ParameterNode category){
 		EImplementationStatus status = EImplementationStatus.IMPLEMENTED;
 		if(fPrimitiveTypeTester.isPrimitive(category.getType())){
 			if(category.getPartitions().size() == 0 && category.isExpected() == false)
@@ -151,7 +151,7 @@ public abstract class AbstractImplementationStatusResolver implements
 	protected EImplementationStatus implementationStatus(PartitionNode partition){
 		EImplementationStatus status = EImplementationStatus.IMPLEMENTED;
 		if(partition.isAbstract() == false){
-			CategoryNode parameter = partition.getCategory();
+			ParameterNode parameter = partition.getCategory();
 			if(parameter == null){
 				status = EImplementationStatus.NOT_IMPLEMENTED;
 			}

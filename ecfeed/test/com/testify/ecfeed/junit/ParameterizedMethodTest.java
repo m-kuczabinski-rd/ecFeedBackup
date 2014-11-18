@@ -27,7 +27,7 @@ import org.junit.runners.model.FrameworkMethod;
 
 import com.testify.ecfeed.adapter.java.ModelClassLoader;
 import com.testify.ecfeed.junit.ParameterizedMethod;
-import com.testify.ecfeed.model.CategoryNode;
+import com.testify.ecfeed.model.ParameterNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
@@ -72,7 +72,7 @@ public class ParameterizedMethodTest {
 		ClassNode classNode = new ClassNode(CLASS_NAME);
 		MethodNode methodNode = new MethodNode(ENUM_FUNCTION_UNDER_TEST_NAME);
 		classNode.addMethod(methodNode);
-		CategoryNode c = new CategoryNode("c", Enum.class.getCanonicalName(), "0", false);
+		ParameterNode c = new ParameterNode("c", Enum.class.getCanonicalName(), "0", false);
 		methodNode.addCategory(c);
 		fExecutedEnum = new ArrayList<Enum>();
 		
@@ -103,8 +103,8 @@ public class ParameterizedMethodTest {
 			ClassNode classNode = new ClassNode(CLASS_NAME);
 			MethodNode methodNode = new MethodNode(FUNCTION_UNDER_TEST_NAME);
 			classNode.addMethod(methodNode);
-			methodNode.addCategory(new CategoryNode("c1", "int", "0", false));
-			methodNode.addCategory(new CategoryNode("c1", "int", "0", false));
+			methodNode.addCategory(new ParameterNode("c1", "int", "0", false));
+			methodNode.addCategory(new ParameterNode("c1", "int", "0", false));
 
 			
 			fExecuted = new HashSet<List<Integer>>();

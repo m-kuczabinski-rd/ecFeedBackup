@@ -14,7 +14,7 @@ import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.swt.widgets.Display;
 
 import com.testify.ecfeed.generators.algorithms.Tuples;
-import com.testify.ecfeed.model.CategoryNode;
+import com.testify.ecfeed.model.ParameterNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.TestCaseNode;
 
@@ -24,7 +24,7 @@ public class CoverageCalculator {
 	private int[] fTuplesCovered;
 	private int[] fTotalWork;
 	private double[] fResults;
-	private List<CategoryNode> fCategories;
+	private List<ParameterNode> fCategories;
 
 	private List<List<PartitionNode>> fInput;
 	// The map of expected categories default values. Said values are used to replace unique values in algorithm.
@@ -36,7 +36,7 @@ public class CoverageCalculator {
 	// If user added test cases = true; else we are substracting tuples;
 	private boolean fAddingFlag;
 
-	public CoverageCalculator(List<CategoryNode> categories) {
+	public CoverageCalculator(List<ParameterNode> categories) {
 		fCategories = categories;
 		initialize();
 	}
@@ -175,7 +175,7 @@ public class CoverageCalculator {
 
 	private List<List<PartitionNode>> prepareInput() {
 		List<List<PartitionNode>> input = new ArrayList<List<PartitionNode>>();
-		for (CategoryNode cnode : fCategories) {
+		for (ParameterNode cnode : fCategories) {
 			List<PartitionNode> category = new ArrayList<PartitionNode>();
 			for (PartitionNode pnode : cnode.getLeafPartitions()) {
 				category.add(pnode);
@@ -188,7 +188,7 @@ public class CoverageCalculator {
 	private Map<Integer, PartitionNode> prepareExpectedPartitions() {
 		int n = 0;
 		Map<Integer, PartitionNode> expected = new HashMap<>();
-		for (CategoryNode cnode : fCategories) {
+		for (ParameterNode cnode : fCategories) {
 			if (cnode.isExpected()) {
 				PartitionNode p = new PartitionNode("", cnode.getDefaultValue());
 				p.setParent(cnode);

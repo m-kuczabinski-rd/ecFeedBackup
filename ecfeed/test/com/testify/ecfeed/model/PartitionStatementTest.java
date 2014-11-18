@@ -23,7 +23,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.testify.ecfeed.model.CategoryNode;
+import com.testify.ecfeed.model.ParameterNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.PartitionedCategoryStatement;
@@ -32,7 +32,7 @@ import com.testify.ecfeed.model.EStatementRelation;
 public class PartitionStatementTest {
 
 	private static MethodNode fMethod;
-	private static CategoryNode fCategory;
+	private static ParameterNode fCategory;
 	private static PartitionNode fPartition1;
 	private static PartitionNode fPartition2;
 	private static PartitionNode fPartition3;
@@ -118,7 +118,7 @@ public class PartitionStatementTest {
 	@BeforeClass
 	public static void prepareModel(){
 		fMethod = new MethodNode("method");
-		fCategory = new CategoryNode("category", "type", "0", false);
+		fCategory = new ParameterNode("category", "type", "0", false);
 		fPartition1 = new PartitionNode("partition1", null);
 		fPartition2 = new PartitionNode("partition2", null);
 		fPartition3 = new PartitionNode("partition3", null);
@@ -160,7 +160,7 @@ public class PartitionStatementTest {
 	@Test
 	public void testMentionsCategoryNode() {
 		PartitionedCategoryStatement statement = new PartitionedCategoryStatement(fCategory, EStatementRelation.EQUAL, fPartition2);
-		CategoryNode category = new CategoryNode("name", "type", "0", false);
+		ParameterNode category = new ParameterNode("name", "type", "0", false);
 		assertTrue(statement.mentions(fCategory));
 		assertFalse(statement.mentions(category));
 	}
@@ -179,8 +179,8 @@ public class PartitionStatementTest {
 
 	@Test
 	public void compareTest(){
-		CategoryNode c1 = new CategoryNode("name", "type", "0", true);
-		CategoryNode c2 = new CategoryNode("name", "type", "0", true);
+		ParameterNode c1 = new ParameterNode("name", "type", "0", true);
+		ParameterNode c2 = new ParameterNode("name", "type", "0", true);
 		
 		PartitionNode p1 = new PartitionNode("name", "value");
 		PartitionNode p2 = new PartitionNode("name", "value");

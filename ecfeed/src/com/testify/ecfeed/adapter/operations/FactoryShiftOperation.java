@@ -3,7 +3,7 @@ package com.testify.ecfeed.adapter.operations;
 import java.util.List;
 
 import com.testify.ecfeed.adapter.ModelOperationException;
-import com.testify.ecfeed.model.CategoryNode;
+import com.testify.ecfeed.model.ParameterNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.ConstraintNode;
 import com.testify.ecfeed.model.GenericNode;
@@ -43,8 +43,8 @@ public class FactoryShiftOperation{
 
 		@Override
 		public Object visit(MethodNode node) throws Exception {
-			if(fShifted.get(0) instanceof CategoryNode){
-				return new CategoryShiftOperation(node.getCategories(), fShifted, fUp);
+			if(fShifted.get(0) instanceof ParameterNode){
+				return new ParameterShiftOperation(node.getCategories(), fShifted, fUp);
 			}
 			if(fShifted.get(0) instanceof ConstraintNode){
 				return new GenericShiftOperation(node.getConstraintNodes(), fShifted, fUp);
@@ -56,7 +56,7 @@ public class FactoryShiftOperation{
 		}
 
 		@Override
-		public Object visit(CategoryNode node) throws Exception {
+		public Object visit(ParameterNode node) throws Exception {
 			if(fShifted.get(0) instanceof PartitionNode){
 				return new GenericShiftOperation(node.getPartitions(), fShifted, fUp);
 			}
@@ -110,8 +110,8 @@ public class FactoryShiftOperation{
 
 		@Override
 		public Object visit(MethodNode node) throws Exception {
-			if(fShifted.get(0) instanceof CategoryNode){
-				return new CategoryShiftOperation(node.getCategories(), fShifted, fShift);
+			if(fShifted.get(0) instanceof ParameterNode){
+				return new ParameterShiftOperation(node.getCategories(), fShifted, fShift);
 			}
 			if(fShifted.get(0) instanceof ConstraintNode){
 				return new GenericShiftOperation(node.getConstraintNodes(), fShifted, fShift);
@@ -123,7 +123,7 @@ public class FactoryShiftOperation{
 		}
 
 		@Override
-		public Object visit(CategoryNode node) throws Exception {
+		public Object visit(ParameterNode node) throws Exception {
 			if(fShifted.get(0) instanceof PartitionNode){
 				return new GenericShiftOperation(node.getPartitions(), fShifted, fShift);
 			}

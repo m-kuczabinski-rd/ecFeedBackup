@@ -69,11 +69,11 @@ public class ConstraintNode extends GenericNode{
 		return false;
 	}
 
-	public boolean mentions(CategoryNode category) {
+	public boolean mentions(ParameterNode category) {
 		return fConstraint.mentions(category);
 	}
 	
-	public boolean mentions(CategoryNode category, String label) {
+	public boolean mentions(ParameterNode category, String label) {
 		return fConstraint.mentions(category, label);
 	}
 	
@@ -117,7 +117,7 @@ public class ConstraintNode extends GenericNode{
 
 	public boolean isConsistent() {
 		for(PartitionNode p : getConstraint().getReferencedPartitions()){
-			CategoryNode c = p.getCategory();
+			ParameterNode c = p.getCategory();
 			if(c == null || c.getPartition(p.getQualifiedName()) == null){
 				return false;
 			}
@@ -125,7 +125,7 @@ public class ConstraintNode extends GenericNode{
 				return false;
 			}
 		}
-		for(CategoryNode c : getMethod().getCategories()){
+		for(ParameterNode c : getMethod().getCategories()){
 			for(String label : getConstraint().getReferencedLabels(c)){
 				if(c.getLeafLabels().contains(label) == false){
 					return false;

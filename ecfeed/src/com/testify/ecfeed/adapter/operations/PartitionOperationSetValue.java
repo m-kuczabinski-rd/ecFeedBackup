@@ -5,7 +5,7 @@ import com.testify.ecfeed.adapter.ITypeAdapterProvider;
 import com.testify.ecfeed.adapter.ModelOperationException;
 import com.testify.ecfeed.adapter.java.Constants;
 import com.testify.ecfeed.adapter.java.JavaUtils;
-import com.testify.ecfeed.model.CategoryNode;
+import com.testify.ecfeed.model.ParameterNode;
 import com.testify.ecfeed.model.PartitionNode;
 
 public class PartitionOperationSetValue extends AbstractModelOperation {
@@ -52,7 +52,7 @@ public class PartitionOperationSetValue extends AbstractModelOperation {
 			throw new ModelOperationException(Messages.PARTITION_VALUE_PROBLEM(fNewValue));
 		}
 		fTarget.setValueString(fNewValue);
-		CategoryNode category = fTarget.getCategory();
+		ParameterNode category = fTarget.getCategory();
 		if(category != null && JavaUtils.isUserType(category.getType())){
 			if(category.getLeafPartitionValues().contains(fOriginalDefaultValue) == false){
 				category.setDefaultValueString(fNewValue);

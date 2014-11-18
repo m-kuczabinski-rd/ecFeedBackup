@@ -37,7 +37,7 @@ import nu.xom.Elements;
 import nu.xom.Node;
 
 import com.testify.ecfeed.model.BasicStatement;
-import com.testify.ecfeed.model.CategoryNode;
+import com.testify.ecfeed.model.ParameterNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.Constraint;
 import com.testify.ecfeed.model.ConstraintNode;
@@ -126,7 +126,7 @@ public class XomAnalyser {
 		return method;
 	}
 
-	public CategoryNode parseCategory(Element element) throws ParserException{
+	public ParameterNode parseCategory(Element element) throws ParserException{
 		assertNodeTag(element.getQualifiedName(), CATEGORY_NODE_NAME);
 		String name = getElementName(element);
 		String type = getAttributeValue(element, TYPE_NAME_ATTRIBUTE);
@@ -136,7 +136,7 @@ public class XomAnalyser {
 			expected = getAttributeValue(element, CATEGORY_IS_EXPECTED_ATTRIBUTE_NAME);
 			defaultValue = getAttributeValue(element, DEFAULT_EXPECTED_VALUE_ATTRIBUTE_NAME);
 		}
-		CategoryNode category = new CategoryNode(name, type, defaultValue, Boolean.parseBoolean(expected));
+		ParameterNode category = new ParameterNode(name, type, defaultValue, Boolean.parseBoolean(expected));
 
 		for(Element child : getIterableChildren(element)){
 			try{
@@ -154,7 +154,7 @@ public class XomAnalyser {
 		String name = getAttributeValue(element, TEST_SUITE_NAME_ATTRIBUTE);
 
 		List<Element> parameterElements = getIterableChildren(element);
-		List<CategoryNode> categories = method.getCategories();
+		List<ParameterNode> categories = method.getCategories();
 
 		List<PartitionNode> testData = new ArrayList<PartitionNode>();
 
@@ -164,7 +164,7 @@ public class XomAnalyser {
 
 		for(int i = 0; i < parameterElements.size(); i++){
 			Element testParameterElement = parameterElements.get(i);
-			CategoryNode category = categories.get(i);
+			ParameterNode category = categories.get(i);
 			PartitionNode testValue = null;
 
 			if(testParameterElement.getLocalName().equals(Constants.TEST_PARAMETER_NODE_NAME)){
@@ -281,7 +281,7 @@ public class XomAnalyser {
 		assertNodeTag(element.getQualifiedName(), CONSTRAINT_PARTITION_STATEMENT_NODE_NAME);
 
 		String categoryName = getAttributeValue(element, Constants.STATEMENT_CATEGORY_ATTRIBUTE_NAME);
-		CategoryNode category = method.getCategory(categoryName);
+		ParameterNode category = method.getCategory(categoryName);
 		if(category == null || category.isExpected()){
 			throw new ParserException(Messages.WRONG_CATEGORY_NAME(categoryName, method.getName()));
 		}
@@ -304,7 +304,7 @@ public class XomAnalyser {
 		String label = getAttributeValue(element, Constants.STATEMENT_LABEL_ATTRIBUTE_NAME);
 		String relationName = getAttributeValue(element, Constants.STATEMENT_RELATION_ATTRIBUTE_NAME);
 
-		CategoryNode category = method.getCategory(categoryName);
+		ParameterNode category = method.getCategory(categoryName);
 		if(category == null || category.isExpected()){
 			throw new ParserException(Messages.WRONG_CATEGORY_NAME(categoryName, method.getName()));
 		}
@@ -318,7 +318,7 @@ public class XomAnalyser {
 
 		String categoryName = getAttributeValue(element, Constants.STATEMENT_CATEGORY_ATTRIBUTE_NAME);
 		String valueString = getAttributeValue(element, Constants.STATEMENT_EXPECTED_VALUE_ATTRIBUTE_NAME);
-		CategoryNode category = method.getCategory(categoryName);
+		ParameterNode category = method.getCategory(categoryName);
 		if(category == null || !category.isExpected()){
 			throw new ParserException(Messages.WRONG_CATEGORY_NAME(categoryName, method.getName()));
 		}

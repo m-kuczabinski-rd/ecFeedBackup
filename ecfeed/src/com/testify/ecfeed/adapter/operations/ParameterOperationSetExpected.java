@@ -7,15 +7,15 @@ import java.util.List;
 import com.testify.ecfeed.adapter.IModelOperation;
 import com.testify.ecfeed.adapter.ModelOperationException;
 import com.testify.ecfeed.adapter.java.JavaUtils;
-import com.testify.ecfeed.model.CategoryNode;
+import com.testify.ecfeed.model.ParameterNode;
 import com.testify.ecfeed.model.ConstraintNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.TestCaseNode;
 
-public class CategoryOperationSetExpected extends AbstractModelOperation {
+public class ParameterOperationSetExpected extends AbstractModelOperation {
 	
-	private CategoryNode fTarget;
+	private ParameterNode fTarget;
 	private boolean fExpected;
 	private List<TestCaseNode> fOriginalTestCases;
 	private List<ConstraintNode> fOriginalConstraints;
@@ -25,7 +25,7 @@ public class CategoryOperationSetExpected extends AbstractModelOperation {
 	private class ReverseOperation extends AbstractModelOperation{
 
 		public ReverseOperation() {
-			super(CategoryOperationSetExpected.this.getName());
+			super(ParameterOperationSetExpected.this.getName());
 		}
 
 		@Override
@@ -42,12 +42,12 @@ public class CategoryOperationSetExpected extends AbstractModelOperation {
 
 		@Override
 		public IModelOperation reverseOperation() {
-			return new CategoryOperationSetExpected(fTarget, fExpected);
+			return new ParameterOperationSetExpected(fTarget, fExpected);
 		}
 		
 	}
 	
-	public CategoryOperationSetExpected(CategoryNode target, boolean expected){
+	public ParameterOperationSetExpected(ParameterNode target, boolean expected){
 		super(OperationNames.SET_EXPECTED_STATUS);
 		fTarget = target;
 		fExpected = expected;
@@ -117,7 +117,7 @@ public class CategoryOperationSetExpected extends AbstractModelOperation {
 		return new ReverseOperation();
 	}
 	
-	protected CategoryNode getTarget(){
+	protected ParameterNode getTarget(){
 		return fTarget;
 	}
 	

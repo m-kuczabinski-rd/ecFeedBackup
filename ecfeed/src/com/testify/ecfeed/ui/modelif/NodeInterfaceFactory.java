@@ -1,6 +1,6 @@
 package com.testify.ecfeed.ui.modelif;
 
-import com.testify.ecfeed.model.CategoryNode;
+import com.testify.ecfeed.model.ParameterNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.ConstraintNode;
 import com.testify.ecfeed.model.GenericNode;
@@ -42,8 +42,8 @@ public class NodeInterfaceFactory{
 		}
 
 		@Override
-		public Object visit(CategoryNode node) throws Exception {
-			CategoryInterface nodeIf = new CategoryInterface(fContext);
+		public Object visit(ParameterNode node) throws Exception {
+			ParameterInterface nodeIf = new ParameterInterface(fContext);
 			nodeIf.setTarget(node);
 			return nodeIf;
 		}

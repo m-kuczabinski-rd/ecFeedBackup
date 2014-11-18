@@ -32,7 +32,7 @@ import com.testify.ecfeed.generators.RandomGenerator;
 import com.testify.ecfeed.generators.api.GeneratorException;
 import com.testify.ecfeed.generators.api.IConstraint;
 import com.testify.ecfeed.model.BasicStatement;
-import com.testify.ecfeed.model.CategoryNode;
+import com.testify.ecfeed.model.ParameterNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.Constraint;
 import com.testify.ecfeed.model.ConstraintNode;
@@ -111,7 +111,7 @@ public class XmlParserSerializerTest {
 			RootNode root = new RootNode("root");
 			ClassNode classNode = new ClassNode("classNode");
 			MethodNode method = new MethodNode("method");
-			CategoryNode category = new CategoryNode("category", com.testify.ecfeed.adapter.java.Constants.TYPE_NAME_STRING, "0", false);
+			ParameterNode category = new ParameterNode("category", com.testify.ecfeed.adapter.java.Constants.TYPE_NAME_STRING, "0", false);
 			PartitionNode partition = new PartitionNode("partition", "A                 B");
 			List<PartitionNode> testData = new ArrayList<PartitionNode>();
 			testData.add(partition);
@@ -146,10 +146,10 @@ public class XmlParserSerializerTest {
 			RootNode root = new RootNode("root");
 			ClassNode classNode = new ClassNode("classNode");
 			MethodNode method = new MethodNode("method");
-			CategoryNode partitionedCategory = 
-					new CategoryNode("partitionedCategory", com.testify.ecfeed.adapter.java.Constants.TYPE_NAME_STRING, "0", false);
-			CategoryNode expectedCategory = 
-					new CategoryNode("expectedCategory", com.testify.ecfeed.adapter.java.Constants.TYPE_NAME_CHAR, "0", true);
+			ParameterNode partitionedCategory = 
+					new ParameterNode("partitionedCategory", com.testify.ecfeed.adapter.java.Constants.TYPE_NAME_STRING, "0", false);
+			ParameterNode expectedCategory = 
+					new ParameterNode("expectedCategory", com.testify.ecfeed.adapter.java.Constants.TYPE_NAME_CHAR, "0", true);
 			expectedCategory.setDefaultValueString("d");
 			PartitionNode partition1 = new PartitionNode("partition", "p");
 			partition1.setParent(partitionedCategory);
@@ -224,8 +224,8 @@ public class XmlParserSerializerTest {
 	protected MethodNode createMethodNode(int numOfCategories,
 			int numOfExpCategories, int numOfConstraints, int numOfTestCases) {
 		MethodNode method = new MethodNode(randomName());
-		List<CategoryNode> partitionedCategories = createPartitionedCategories(numOfCategories);
-		List<CategoryNode> expectedCategories = createExpectedCategories(numOfExpCategories);
+		List<ParameterNode> partitionedCategories = createPartitionedCategories(numOfCategories);
+		List<ParameterNode> expectedCategories = createExpectedCategories(numOfExpCategories);
 		
 		for(int i = 0, j = 0; i < partitionedCategories.size() || j < expectedCategories.size();){
 			if(rand.nextBoolean() && i < partitionedCategories.size()){
@@ -251,33 +251,33 @@ public class XmlParserSerializerTest {
 		return method;
 	}
 
-	private List<CategoryNode> createPartitionedCategories(int numOfCategories) {
-		List<CategoryNode> categories = new ArrayList<CategoryNode>();
+	private List<ParameterNode> createPartitionedCategories(int numOfCategories) {
+		List<ParameterNode> categories = new ArrayList<ParameterNode>();
 		for(int i = 0; i < numOfCategories; i++){
 			categories.add(createPartitionedCategory(CATEGORY_TYPES[rand.nextInt(CATEGORY_TYPES.length)], rand.nextInt(MAX_PARTITIONS) + 1));
 		}
 		return categories;
 	}
 
-	private CategoryNode createPartitionedCategory(String type, int numOfPartitions) {
-		CategoryNode category = new CategoryNode(randomName(), type, "0", false);
+	private ParameterNode createPartitionedCategory(String type, int numOfPartitions) {
+		ParameterNode category = new ParameterNode(randomName(), type, "0", false);
 		for(int i = 0; i < numOfPartitions; i++){
 			category.addPartition(createPartition(type, 1));
 		}
 		return category;
 	}
 
-	private List<CategoryNode> createExpectedCategories(int numOfExpCategories) {
-		List<CategoryNode> categories = new ArrayList<CategoryNode>();
+	private List<ParameterNode> createExpectedCategories(int numOfExpCategories) {
+		List<ParameterNode> categories = new ArrayList<ParameterNode>();
 		for(int i = 0; i < numOfExpCategories; i++){
 			categories.add(createExpectedValueCategory(CATEGORY_TYPES[rand.nextInt(CATEGORY_TYPES.length)]));
 		}
 		return categories;
 	}
 
-	private CategoryNode createExpectedValueCategory(String type) {
+	private ParameterNode createExpectedValueCategory(String type) {
 		String defaultValue = createRandomValue(type);
-		CategoryNode category = new CategoryNode(randomName(), type, "0", true);
+		ParameterNode category = new ParameterNode(randomName(), type, "0", true);
 		category.setDefaultValueString(defaultValue);
 		return category;
 	}
@@ -344,8 +344,8 @@ public class XmlParserSerializerTest {
 	}
 
 
-	private List<ConstraintNode> createConstraints(List<CategoryNode> partitionedCategories, 
-			List<CategoryNode> expectedCategories, int numOfConstraints) {
+	private List<ConstraintNode> createConstraints(List<ParameterNode> partitionedCategories, 
+			List<ParameterNode> expectedCategories, int numOfConstraints) {
 		List<ConstraintNode> constraints = new ArrayList<ConstraintNode>();
 		for(int i = 0; i < numOfConstraints; ++i){
 			constraints.add(new ConstraintNode(randomName(), createConstraint(partitionedCategories, expectedCategories)));
@@ -353,8 +353,8 @@ public class XmlParserSerializerTest {
 		return constraints;
 	}
 
-	private Constraint createConstraint(List<CategoryNode> partitionedCategories, 
-			List<CategoryNode> expectedCategories) {
+	private Constraint createConstraint(List<ParameterNode> partitionedCategories, 
+			List<ParameterNode> expectedCategories) {
 		BasicStatement premise = createPartitionedStatement(partitionedCategories);
 		BasicStatement consequence = null;
 		while(consequence == null){
@@ -368,7 +368,7 @@ public class XmlParserSerializerTest {
 		return new Constraint(premise, consequence);
 	}
 
-	private BasicStatement createPartitionedStatement(List<CategoryNode> categories) {
+	private BasicStatement createPartitionedStatement(List<ParameterNode> categories) {
 		BasicStatement statement = null;
 		while(statement == null){
 			switch(rand.nextInt(3)){
@@ -387,8 +387,8 @@ public class XmlParserSerializerTest {
 		return statement;
 	}
 
-	private BasicStatement createLabelStatement(List<CategoryNode> categories) {
-		CategoryNode category = categories.get(rand.nextInt(categories.size()));
+	private BasicStatement createLabelStatement(List<ParameterNode> categories) {
+		ParameterNode category = categories.get(rand.nextInt(categories.size()));
 		Set<String> labels = category.getLeafLabels();
 		String label;
 		if(labels.size() > 0){
@@ -402,8 +402,8 @@ public class XmlParserSerializerTest {
 		return new PartitionedCategoryStatement(category, relation, label);
 	}
 
-	private BasicStatement createPartitionStatement(List<CategoryNode> categories) {
-		CategoryNode category = categories.get(rand.nextInt(categories.size()));
+	private BasicStatement createPartitionStatement(List<ParameterNode> categories) {
+		ParameterNode category = categories.get(rand.nextInt(categories.size()));
 		PartitionNode partition = new ArrayList<PartitionNode>(category.getLeafPartitions()).get(rand.nextInt(category.getPartitions().size()));
 		EStatementRelation relation = pickRelation();
 		return new PartitionedCategoryStatement(category, relation, partition);
@@ -419,23 +419,23 @@ public class XmlParserSerializerTest {
 		return relation;
 	}
 
-	private BasicStatement createExpectedStatement(List<CategoryNode> categories) {
+	private BasicStatement createExpectedStatement(List<ParameterNode> categories) {
 		if(categories.size() == 0) return null;
-		CategoryNode category = categories.get(rand.nextInt(categories.size()));
+		ParameterNode category = categories.get(rand.nextInt(categories.size()));
 		return new ExpectedValueStatement(category, new PartitionNode("default", createRandomValue(category.getType())));
 	}
 
-	private List<CategoryNode> getPartitionedCategories(List<? extends CategoryNode> categories) {
-		List<CategoryNode> result = new ArrayList<CategoryNode>();
-		for(CategoryNode category : categories){
-			if(category instanceof CategoryNode == false){
+	private List<ParameterNode> getPartitionedCategories(List<? extends ParameterNode> categories) {
+		List<ParameterNode> result = new ArrayList<ParameterNode>();
+		for(ParameterNode category : categories){
+			if(category instanceof ParameterNode == false){
 				result.add(category);
 			}
 		}
 		return result;
 	}
 
-	private BasicStatement createStatementArray(int levels, List<CategoryNode> categories) {
+	private BasicStatement createStatementArray(int levels, List<ParameterNode> categories) {
 		StatementArray array = new StatementArray(rand.nextBoolean()?EStatementOperator.AND:EStatementOperator.OR);
 		for(int i = 0; i < rand.nextInt(3) + 1; ++i){
 			if(levels > 0){
@@ -454,7 +454,7 @@ public class XmlParserSerializerTest {
 	}
 
 	private List<TestCaseNode> createTestCases(
-			List<CategoryNode> categories, int numOfTestCases) {
+			List<ParameterNode> categories, int numOfTestCases) {
 		List<TestCaseNode> result = new ArrayList<TestCaseNode>();
 		try {
 			List<IConstraint<PartitionNode>> constraints = new ArrayList<IConstraint<PartitionNode>>();
@@ -476,9 +476,9 @@ public class XmlParserSerializerTest {
 	}
 
 	private List<List<PartitionNode>> getGeneratorInput(
-			List<CategoryNode> categories) {
+			List<ParameterNode> categories) {
 		List<List<PartitionNode>> result = new ArrayList<List<PartitionNode>>();
-		for(CategoryNode category : categories){
+		for(ParameterNode category : categories){
 			result.add(category.getLeafPartitions());
 		}
 		return result;
@@ -522,12 +522,12 @@ public class XmlParserSerializerTest {
 		}
 	}
 
-	private void compareCategories(CategoryNode category1, CategoryNode category2) {
+	private void compareCategories(ParameterNode category1, ParameterNode category2) {
 		compareNames(category1.getName(), category2.getName());
 		compareNames(category1.getType(), category2.getType());
 		compareSizes(category1.getPartitions(), category2.getPartitions());
-		if(category1 instanceof CategoryNode || category2 instanceof CategoryNode){
-			if((category1 instanceof CategoryNode && category2 instanceof CategoryNode) == false){
+		if(category1 instanceof ParameterNode || category2 instanceof ParameterNode){
+			if((category1 instanceof ParameterNode && category2 instanceof ParameterNode) == false){
 				fail("Either both categories must be expected value or none");
 			}
 		}
@@ -647,7 +647,7 @@ public class XmlParserSerializerTest {
 			PartitionNode testValue1 = testCase1.getTestData().get(i);
 			PartitionNode testValue2 = testCase2.getTestData().get(i);
 			
-			if(testValue1.getCategory() instanceof CategoryNode){
+			if(testValue1.getCategory() instanceof ParameterNode){
 				compareValues(testValue1.getValueString(), testValue2.getValueString());
 			}
 			else{

@@ -111,12 +111,12 @@ public class TestCaseNode extends GenericNode {
 	}
 
 	public boolean updateReferences(MethodNode method){
-		List<CategoryNode> categories = method.getCategories();
+		List<ParameterNode> categories = method.getCategories();
 		if(categories.size() != getTestData().size())
 			return false;
 
 		for(int i = 0; i < categories.size(); i++){
-			CategoryNode category = categories.get(i);
+			ParameterNode category = categories.get(i);
 			if(category.isExpected()){
 				String value = getTestData().get(i).getValueString();
 				PartitionNode newChoice = new PartitionNode("@expected", value);
@@ -162,7 +162,7 @@ public class TestCaseNode extends GenericNode {
 
 	public boolean isConsistent() {
 		for(PartitionNode p : getTestData()){
-			CategoryNode category = p.getCategory();
+			ParameterNode category = p.getCategory();
 			if(category == null || (category.isExpected() == false && category.getPartition(p.getQualifiedName()) == null)){
 				return false;
 			}

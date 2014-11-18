@@ -14,7 +14,7 @@ import org.eclipse.jdt.core.Signature;
 
 import com.testify.ecfeed.adapter.ModelOperationException;
 import com.testify.ecfeed.adapter.java.JavaUtils;
-import com.testify.ecfeed.model.CategoryNode;
+import com.testify.ecfeed.model.ParameterNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
@@ -63,8 +63,8 @@ public class EclipseModelBuilder extends JavaModelAnalyser{
 		return methodNode;
 	}
 	
-	public CategoryNode buildCategoryModel(String name, String type, boolean expected){
-		CategoryNode category = new CategoryNode(name, type, getDefaultExpectedValue(type), expected);
+	public ParameterNode buildCategoryModel(String name, String type, boolean expected){
+		ParameterNode category = new ParameterNode(name, type, getDefaultExpectedValue(type), expected);
 		if(!expected){
 			List<PartitionNode> defaultPartitions = defaultPartitions(type);
 			for(PartitionNode partition : defaultPartitions){

@@ -15,7 +15,7 @@ import java.util.List;
 
 public class PartitionedCategoryStatement extends BasicStatement implements IRelationalStatement{
 
-	private CategoryNode fCategory;
+	private ParameterNode fCategory;
 	private EStatementRelation fRelation;
 	private ICondition fCondition;
 
@@ -24,7 +24,7 @@ public class PartitionedCategoryStatement extends BasicStatement implements IRel
 		public boolean evaluate(List<PartitionNode> values);
 		public boolean adapt(List<PartitionNode> values);
 		public ICondition getCopy();
-		public boolean updateReferences(CategoryNode category);
+		public boolean updateReferences(ParameterNode category);
 		public boolean compare(ICondition condition);
 		public Object accept(IStatementVisitor visitor) throws Exception;
 	}
@@ -56,7 +56,7 @@ public class PartitionedCategoryStatement extends BasicStatement implements IRel
 		}
 
 		@Override
-		public boolean updateReferences(CategoryNode category){
+		public boolean updateReferences(ParameterNode category){
 			return true;
 		}
 
@@ -126,7 +126,7 @@ public class PartitionedCategoryStatement extends BasicStatement implements IRel
 		}
 
 		@Override
-		public boolean updateReferences(CategoryNode category){
+		public boolean updateReferences(ParameterNode category){
 			PartitionNode condition = category.getPartition(fPartition.getQualifiedName());
 			if(condition != null){
 				fPartition = condition;
@@ -189,31 +189,31 @@ public class PartitionedCategoryStatement extends BasicStatement implements IRel
 
 	}
 
-	public PartitionedCategoryStatement(CategoryNode category, EStatementRelation relation, String labelCondition){
+	public PartitionedCategoryStatement(ParameterNode category, EStatementRelation relation, String labelCondition){
 		fCategory = category;
 		fRelation = relation;
 		fCondition = new LabelCondition(labelCondition);
 	}
 
-	public PartitionedCategoryStatement(CategoryNode category, EStatementRelation relation, PartitionNode partitionCondition){
+	public PartitionedCategoryStatement(ParameterNode category, EStatementRelation relation, PartitionNode partitionCondition){
 		fCategory = category;
 		fRelation = relation;
 		fCondition = new PartitionCondition(partitionCondition);
 	}
 
-	private PartitionedCategoryStatement(CategoryNode category, EStatementRelation relation, ICondition condition){
+	private PartitionedCategoryStatement(ParameterNode category, EStatementRelation relation, ICondition condition){
 		fCategory = category;
 		fRelation = relation;
 		fCondition = condition;
 	}
 
 	@Override
-	public boolean mentions(CategoryNode category){
+	public boolean mentions(ParameterNode category){
 		return getCategory() == category;
 	}
 
 	@Override
-	public boolean mentions(CategoryNode category, String label) {
+	public boolean mentions(ParameterNode category, String label) {
 		return getCategory() == category && getConditionValue().equals(label);
 	}
 
@@ -249,7 +249,7 @@ public class PartitionedCategoryStatement extends BasicStatement implements IRel
 
 	@Override
 	public boolean updateReferences(MethodNode method){
-		CategoryNode category = method.getCategory(fCategory.getName());
+		ParameterNode category = method.getCategory(fCategory.getName());
 		if(category != null && !category.isExpected()){
 			if(fCondition.updateReferences(category)){
 				fCategory = category;
@@ -259,7 +259,7 @@ public class PartitionedCategoryStatement extends BasicStatement implements IRel
 		return false;
 	}
 
-	public CategoryNode getCategory(){
+	public ParameterNode getCategory(){
 		return fCategory;
 	}
 
@@ -285,7 +285,7 @@ public class PartitionedCategoryStatement extends BasicStatement implements IRel
 		fCondition = new PartitionCondition(partition);
 	}
 
-	public void setCondition(CategoryNode category, PartitionNode partition){
+	public void setCondition(ParameterNode category, PartitionNode partition){
 		fCondition = new PartitionCondition(partition);
 	}
 

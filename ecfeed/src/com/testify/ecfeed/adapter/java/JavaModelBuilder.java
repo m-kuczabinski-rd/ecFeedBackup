@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import com.testify.ecfeed.adapter.ModelOperationException;
-import com.testify.ecfeed.model.CategoryNode;
+import com.testify.ecfeed.model.ParameterNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
@@ -55,10 +55,10 @@ public class JavaModelBuilder {
 		return methodNode;
 	}
 	
-	public CategoryNode buildCategoryModel(String name, Class<?>type, boolean expected){
+	public ParameterNode buildCategoryModel(String name, Class<?>type, boolean expected){
 		String typeName = JavaUtils.getTypeName(type.getName());
 		String defaultValue = getDefaultExpectedValueString(typeName);
-		CategoryNode category = new CategoryNode(name, typeName, defaultValue, expected);
+		ParameterNode category = new ParameterNode(name, typeName, defaultValue, expected);
 		category.setDefaultValueString(getDefaultExpectedValueString(typeName));
 		if(!expected){
 			List<PartitionNode> defaultPartitions = getDefaultPartitions(typeName);

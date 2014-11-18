@@ -13,13 +13,13 @@ package com.testify.ecfeed.model;
 
 import java.util.List;
 
-public class CategoryNode extends PartitionedNode{
+public class ParameterNode extends PartitionedNode{
 	
 	private String fType;
 	private boolean fExpected;
 	private String fDefaultValue;
 	
-	public CategoryNode(String name, String type, String defaultValue, boolean expected) {
+	public ParameterNode(String name, String type, String defaultValue, boolean expected) {
 		super(name);
 		fExpected = expected;
 		fType = type;
@@ -49,8 +49,8 @@ public class CategoryNode extends PartitionedNode{
 	}
 
 	@Override
-	public CategoryNode getCopy(){
-		CategoryNode category = new CategoryNode(getName(), getType(), getDefaultValue(), isExpected());
+	public ParameterNode getCopy(){
+		ParameterNode category = new ParameterNode(getName(), getType(), getDefaultValue(), isExpected());
 		category.setParent(this.getParent());
 		if(getDefaultValue() != null)
 			category.setDefaultValueString(getDefaultValue());
@@ -62,7 +62,7 @@ public class CategoryNode extends PartitionedNode{
 	}
 	
 	@Override
-	public CategoryNode getCategory() {
+	public ParameterNode getCategory() {
 		return this;
 	}
 	
@@ -113,10 +113,10 @@ public class CategoryNode extends PartitionedNode{
 
 	@Override
 	public boolean compare(GenericNode node){
-		if(node instanceof CategoryNode == false){
+		if(node instanceof ParameterNode == false){
 			return false;
 		}
-		CategoryNode comparedCategory = (CategoryNode)node;
+		ParameterNode comparedCategory = (ParameterNode)node;
 		
 		if(getType().equals(comparedCategory.getType()) == false){
 			return false;

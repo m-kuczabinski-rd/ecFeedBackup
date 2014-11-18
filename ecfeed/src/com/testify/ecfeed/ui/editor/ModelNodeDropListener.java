@@ -7,7 +7,7 @@ import org.eclipse.jface.viewers.ViewerDropAdapter;
 import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.TransferData;
 
-import com.testify.ecfeed.model.CategoryNode;
+import com.testify.ecfeed.model.ParameterNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.ConstraintNode;
 import com.testify.ecfeed.model.GenericNode;
@@ -40,14 +40,14 @@ public class ModelNodeDropListener extends ViewerDropAdapter{
 
 		@Override
 		public Object visit(MethodNode node) throws Exception {
-			boolean result = NodeDnDBuffer.getInstance().getDraggedNodes().get(0) instanceof CategoryNode;
+			boolean result = NodeDnDBuffer.getInstance().getDraggedNodes().get(0) instanceof ParameterNode;
 			result |= NodeDnDBuffer.getInstance().getDraggedNodes().get(0) instanceof ConstraintNode;
 			result |= NodeDnDBuffer.getInstance().getDraggedNodes().get(0) instanceof TestCaseNode;
 			return result;
 		}
 
 		@Override
-		public Object visit(CategoryNode node) throws Exception {
+		public Object visit(ParameterNode node) throws Exception {
 			return NodeDnDBuffer.getInstance().getDraggedNodes().get(0) instanceof PartitionNode;
 		}
 

@@ -13,7 +13,7 @@ import org.junit.Test;
 import com.testify.ecfeed.adapter.java.ModelClassLoader;
 import com.testify.ecfeed.adapter.java.PartitionValueParser;
 import com.testify.ecfeed.junit.AbstractFrameworkMethod;
-import com.testify.ecfeed.model.CategoryNode;
+import com.testify.ecfeed.model.ParameterNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.ui.common.Constants;
 
@@ -68,9 +68,9 @@ public class AbstractFrameworkMethodTest {
 	public void invokeTest() {
 		try {
 			Method method = this.getClass().getMethod(FUNCTION_UNDER_TEST_NAME, int.class, String.class, Enum.class);
-			CategoryNode intCategory = new CategoryNode("intCategory", "int", "0", false);
-			CategoryNode stringCategory = new CategoryNode("stringCategory", "String", "0", false);
-			CategoryNode enumCategory = new CategoryNode("enumCategory", Enum.class.getCanonicalName(), Enum.values()[0].name(), false);
+			ParameterNode intCategory = new ParameterNode("intCategory", "int", "0", false);
+			ParameterNode stringCategory = new ParameterNode("stringCategory", "String", "0", false);
+			ParameterNode enumCategory = new ParameterNode("enumCategory", Enum.class.getCanonicalName(), Enum.values()[0].name(), false);
 			PartitionValueParser parser = new PartitionValueParser(new ModelClassLoader(new URL[]{}, this.getClass().getClassLoader()));
 			
 			ModelClassLoader loader = new ModelClassLoader(new URL[]{}, this.getClass().getClassLoader());

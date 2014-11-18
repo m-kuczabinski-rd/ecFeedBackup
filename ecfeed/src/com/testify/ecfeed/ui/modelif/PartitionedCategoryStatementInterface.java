@@ -3,7 +3,7 @@ package com.testify.ecfeed.ui.modelif;
 import com.testify.ecfeed.adapter.IModelOperation;
 import com.testify.ecfeed.adapter.operations.StatementOperationSetCondition;
 import com.testify.ecfeed.adapter.operations.StatementOperationSetRelation;
-import com.testify.ecfeed.model.CategoryNode;
+import com.testify.ecfeed.model.ParameterNode;
 import com.testify.ecfeed.model.EStatementRelation;
 import com.testify.ecfeed.model.PartitionedCategoryStatement;
 import com.testify.ecfeed.model.PartitionedCategoryStatement.ICondition;
@@ -35,7 +35,7 @@ public class PartitionedCategoryStatementInterface extends BasicStatementInterfa
 	public boolean setConditionValue(String text) {
 		if(fTarget.getConditionName().equals(text) == false){
 			ICondition newCondition;
-			CategoryNode category = fTarget.getCategory();
+			ParameterNode category = fTarget.getCategory();
 			if(category.getPartition(text) != null){
 				newCondition = fTarget.new PartitionCondition(category.getPartition(text));
 			}

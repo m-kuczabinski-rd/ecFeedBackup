@@ -5,7 +5,7 @@ import com.testify.ecfeed.adapter.ITypeAdapter;
 import com.testify.ecfeed.adapter.ITypeAdapterProvider;
 import com.testify.ecfeed.adapter.ModelOperationException;
 import com.testify.ecfeed.adapter.java.Constants;
-import com.testify.ecfeed.model.CategoryNode;
+import com.testify.ecfeed.model.ParameterNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.TestCaseNode;
@@ -42,7 +42,7 @@ public class MethodOperationAddTestCase extends AbstractModelOperation {
 		}
 		//following must be done AFTER references are updated
 		for(PartitionNode choice : fTestCase.getTestData()){
-			CategoryNode parameter = choice.getCategory();
+			ParameterNode parameter = choice.getCategory();
 			if(choice.getCategory().isExpected()){
 				String type = parameter.getType();
 				ITypeAdapter adapter = fAdapterProvider.getAdapter(type);

@@ -1,6 +1,6 @@
 package com.testify.ecfeed.testutils;
 
-import com.testify.ecfeed.model.CategoryNode;
+import com.testify.ecfeed.model.ParameterNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.ConstraintNode;
 import com.testify.ecfeed.model.IModelVisitor;
@@ -31,7 +31,7 @@ public enum ENodeType {
 		}
 
 		@Override
-		public Object visit(CategoryNode node) throws Exception {
+		public Object visit(ParameterNode node) throws Exception {
 			return null;
 		}
 

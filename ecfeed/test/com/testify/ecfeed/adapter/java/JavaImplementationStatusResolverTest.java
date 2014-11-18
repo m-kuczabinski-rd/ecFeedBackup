@@ -18,7 +18,7 @@ import com.testify.ecfeed.junit.annotations.Constraints;
 import com.testify.ecfeed.junit.annotations.EcModel;
 import com.testify.ecfeed.junit.annotations.Generator;
 import com.testify.ecfeed.junit.annotations.expected;
-import com.testify.ecfeed.model.CategoryNode;
+import com.testify.ecfeed.model.ParameterNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.ConstraintNode;
 import com.testify.ecfeed.model.MethodNode;
@@ -108,7 +108,7 @@ public class JavaImplementationStatusResolverTest {
 	
 	@Test
 	public void primitiveChoiceStatusTest(ETypeName type){
-		CategoryNode parameter = new CategoryNode("parameter", type.getTypeName(), "0", false);
+		ParameterNode parameter = new ParameterNode("parameter", type.getTypeName(), "0", false);
 		EclipseModelBuilder builder = new EclipseModelBuilder();
 		for(PartitionNode choice : builder.defaultPartitions(type.getTypeName())){
 			parameter.addPartition(choice);
@@ -133,7 +133,7 @@ public class JavaImplementationStatusResolverTest {
 	@Test
 	public void parameterStatusTest(EParameterType type, boolean expected, int noOfChildren, EImplementedChildren implementedChoices, EImplementationStatus status){
 //		System.out.println("parameterStatusTest("  + type + ", " + expected + ", " + noOfChildren + ", " + status + ")");
-		CategoryNode parameter = createParameter(type, expected, noOfChildren, implementedChoices, status);
+		ParameterNode parameter = createParameter(type, expected, noOfChildren, implementedChoices, status);
 		EImplementationStatus resolvedStatus = fResolver.getImplementationStatus(parameter);
 		assertEquals(status, resolvedStatus);
 		
@@ -245,9 +245,9 @@ public class JavaImplementationStatusResolverTest {
 			_class.setName(ImplementedClass.class.getCanonicalName());
 		}
 		MethodNode method = null;
-		CategoryNode arg1 = null;
-		CategoryNode arg2 = null;
-		CategoryNode arg3 = null;
+		ParameterNode arg1 = null;
+		ParameterNode arg2 = null;
+		ParameterNode arg3 = null;
 		switch(signature){
 		case NO_PARAMETERS_NAME_IMPLEMENTED:
 			method = new MethodNode("implementedTestMethod");
@@ -257,27 +257,27 @@ public class JavaImplementationStatusResolverTest {
 			break;
 		case PARAMETERS_NAME_AND_PARAMETERS_IMPLEMENTED:
 			method = new MethodNode("implementedTestMethod");
-			arg1 = new CategoryNode("arg1", ImplementedUserType.class.getCanonicalName(), "", false);
-			arg2 = new CategoryNode("arg2", ImplementedUserType.class.getCanonicalName(), "", false);
-			arg3 = new CategoryNode("arg3", ImplementedUserType.class.getCanonicalName(), "", false);
+			arg1 = new ParameterNode("arg1", ImplementedUserType.class.getCanonicalName(), "", false);
+			arg2 = new ParameterNode("arg2", ImplementedUserType.class.getCanonicalName(), "", false);
+			arg3 = new ParameterNode("arg3", ImplementedUserType.class.getCanonicalName(), "", false);
 			break;
 		case PARAMETERS_NAME_IMPLEMENTED:
 			method = new MethodNode("implementedTestMethod");
-			arg1 = new CategoryNode("arg1", OtherImplementedUserType.class.getCanonicalName(), "", false);
-			arg2 = new CategoryNode("arg2", OtherImplementedUserType.class.getCanonicalName(), "", false);
-			arg3 = new CategoryNode("arg3", OtherImplementedUserType.class.getCanonicalName(), "", false);
+			arg1 = new ParameterNode("arg1", OtherImplementedUserType.class.getCanonicalName(), "", false);
+			arg2 = new ParameterNode("arg2", OtherImplementedUserType.class.getCanonicalName(), "", false);
+			arg3 = new ParameterNode("arg3", OtherImplementedUserType.class.getCanonicalName(), "", false);
 			break;
 		case PARAMETERS_NOTHING_IMPLEMENTED:
 			method = new MethodNode("notImplementedTestMethod");
-			arg1 = new CategoryNode("arg1", OtherImplementedUserType.class.getCanonicalName(), "", false);
-			arg2 = new CategoryNode("arg2", OtherImplementedUserType.class.getCanonicalName(), "", false);
-			arg3 = new CategoryNode("arg3", OtherImplementedUserType.class.getCanonicalName(), "", false);
+			arg1 = new ParameterNode("arg1", OtherImplementedUserType.class.getCanonicalName(), "", false);
+			arg2 = new ParameterNode("arg2", OtherImplementedUserType.class.getCanonicalName(), "", false);
+			arg3 = new ParameterNode("arg3", OtherImplementedUserType.class.getCanonicalName(), "", false);
 			break;
 		case PARAMETERS_TYPES_IMPLEMENTED:
 			method = new MethodNode("notImplementedTestMethod");
-			arg1 = new CategoryNode("arg1", ImplementedUserType.class.getCanonicalName(), "", false);
-			arg2 = new CategoryNode("arg2", ImplementedUserType.class.getCanonicalName(), "", false);
-			arg3 = new CategoryNode("arg3", ImplementedUserType.class.getCanonicalName(), "", false);
+			arg1 = new ParameterNode("arg1", ImplementedUserType.class.getCanonicalName(), "", false);
+			arg2 = new ParameterNode("arg2", ImplementedUserType.class.getCanonicalName(), "", false);
+			arg3 = new ParameterNode("arg3", ImplementedUserType.class.getCanonicalName(), "", false);
 			break;
 		}
 		
@@ -348,13 +348,13 @@ public class JavaImplementationStatusResolverTest {
 		List<PartitionNode> testData = new ArrayList<PartitionNode>();
 		for(int i = 0; i < noOfChoices; ++i){
 			if(implementedChoices == EImplementedChildren.ALL || (implementedChoices == EImplementedChildren.SOME && i == 1)){
-				CategoryNode category = new CategoryNode(String.valueOf(i), "int", "0", false);
+				ParameterNode category = new ParameterNode(String.valueOf(i), "int", "0", false);
 				PartitionNode choice = new PartitionNode(String.valueOf(i), String.valueOf(i));
 				category.addPartition(choice);
 				testData.add(choice);
 			}
 			else{
-				CategoryNode category = new CategoryNode(String.valueOf(i), "dummy", "0", false);
+				ParameterNode category = new ParameterNode(String.valueOf(i), "dummy", "0", false);
 				PartitionNode choice = new PartitionNode(String.valueOf(i), String.valueOf(i));
 				category.addPartition(choice);
 				testData.add(choice);
@@ -366,7 +366,7 @@ public class JavaImplementationStatusResolverTest {
 
 	@SuppressWarnings("incomplete-switch")
 	protected PartitionNode prepareChoice(boolean abstractChoice, boolean parameterImplemented, EImplementationStatus status){
-		CategoryNode parameter = createEmptyParameter(parameterImplemented); 
+		ParameterNode parameter = createEmptyParameter(parameterImplemented); 
 		PartitionNode choice = new PartitionNode("choice", "unimplemented value");
 		parameter.addPartition(choice);
 		if(abstractChoice == false){
@@ -393,13 +393,13 @@ public class JavaImplementationStatusResolverTest {
 		return choice;
 	}
 	
-	protected CategoryNode createEmptyParameter(boolean implemented){
+	protected ParameterNode createEmptyParameter(boolean implemented){
 		String type = implemented ? ImplementedUserType.class.getCanonicalName() : "UnimplementedType";
-		return new CategoryNode("parameter", type, "IRRELEVANT", false);
+		return new ParameterNode("parameter", type, "IRRELEVANT", false);
 	}
 	
-	protected CategoryNode createParameter(EParameterType type, boolean expected, int noOfChildren, EImplementedChildren implementedChoices, EImplementationStatus status){
-		CategoryNode parameter = new CategoryNode("name", "dummy", "dummy", expected);
+	protected ParameterNode createParameter(EParameterType type, boolean expected, int noOfChildren, EImplementedChildren implementedChoices, EImplementationStatus status){
+		ParameterNode parameter = new ParameterNode("name", "dummy", "dummy", expected);
 		switch(type){
 		case IMPLEMENTED_USER_TYPE:
 			parameter.setType(ImplementedUserType.class.getCanonicalName());

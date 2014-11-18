@@ -27,7 +27,7 @@ import org.eclipse.swt.widgets.Display;
 
 import com.testify.ecfeed.adapter.ITypeAdapter;
 import com.testify.ecfeed.adapter.java.JavaUtils;
-import com.testify.ecfeed.model.CategoryNode;
+import com.testify.ecfeed.model.ParameterNode;
 import com.testify.ecfeed.model.PartitionNode;
 
 public class TestDataValueEditingSupport extends EditingSupport {
@@ -99,7 +99,7 @@ public class TestDataValueEditingSupport extends EditingSupport {
 	@Override
 	protected void setValue(Object element, Object value) {
 		PartitionNode current = (PartitionNode)element;
-		CategoryNode category = current.getCategory();
+		ParameterNode category = current.getCategory();
 		int index = category.getIndex();
 		PartitionNode newValue = null;
 		if(category.isExpected()){

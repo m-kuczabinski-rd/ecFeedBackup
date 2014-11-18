@@ -24,7 +24,7 @@ import org.junit.Test;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.EStatementOperator;
 import com.testify.ecfeed.model.PartitionNode;
-import com.testify.ecfeed.model.CategoryNode;
+import com.testify.ecfeed.model.ParameterNode;
 import com.testify.ecfeed.model.PartitionedCategoryStatement;
 import com.testify.ecfeed.model.EStatementRelation;
 import com.testify.ecfeed.model.StatementArray;
@@ -33,11 +33,11 @@ import com.testify.ecfeed.model.StaticStatement;
 public class StatementArrayTest {
 
 	private static MethodNode fMethod;
-	private static CategoryNode fCategory1;
+	private static ParameterNode fCategory1;
 	private static PartitionNode fPartition11;
 	private static PartitionNode fPartition12;
 	private static PartitionNode fPartition13;
-	private static CategoryNode fCategory2;
+	private static ParameterNode fCategory2;
 	private static PartitionNode fPartition21;
 	private static PartitionNode fPartition22;
 	private static PartitionNode fPartition23;
@@ -45,14 +45,14 @@ public class StatementArrayTest {
 	@BeforeClass
 	public static void prepareModel(){
 		fMethod = new MethodNode("method");
-		fCategory1 = new CategoryNode("category", "type", "0", false);
+		fCategory1 = new ParameterNode("category", "type", "0", false);
 		fPartition11 = new PartitionNode("partition11", null);
 		fPartition12 = new PartitionNode("partition12", null);
 		fPartition13 = new PartitionNode("partition13", null);
 		fCategory1.addPartition(fPartition11);
 		fCategory1.addPartition(fPartition12);
 		fCategory1.addPartition(fPartition13);
-		fCategory2 = new CategoryNode("category", "type", "0", false);
+		fCategory2 = new ParameterNode("category", "type", "0", false);
 		fPartition21 = new PartitionNode("partition21", null);
 		fPartition22 = new PartitionNode("partition22", null);
 		fPartition23 = new PartitionNode("partition23", null);

@@ -28,7 +28,7 @@ public class PartitionNode extends PartitionedNode{
 	}
 
 	@Override
-	public CategoryNode getCategory() {
+	public ParameterNode getCategory() {
 		if(fParent != null){
 			return fParent.getCategory();
 		}

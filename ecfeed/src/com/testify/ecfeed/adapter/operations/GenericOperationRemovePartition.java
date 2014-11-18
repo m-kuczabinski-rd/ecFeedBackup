@@ -5,7 +5,7 @@ import java.util.Set;
 import com.testify.ecfeed.adapter.IModelOperation;
 import com.testify.ecfeed.adapter.ModelOperationException;
 import com.testify.ecfeed.adapter.java.JavaUtils;
-import com.testify.ecfeed.model.CategoryNode;
+import com.testify.ecfeed.model.ParameterNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.PartitionedNode;
 
@@ -49,7 +49,7 @@ public class GenericOperationRemovePartition extends BulkOperation {
 		@Override
 		public void execute() throws ModelOperationException {
 			fOriginalIndex = fPartition.getIndex();
-			CategoryNode category = fTarget.getCategory();
+			ParameterNode category = fTarget.getCategory();
 			if(category.isExpected() && JavaUtils.isPrimitive(category.getType()) == false && category.getPartitions().size() == 1 && category.getPartitions().get(0) == fPartition){
 				// We are removing the only partition of expected category. 
 				// The last category must represent the default expected value

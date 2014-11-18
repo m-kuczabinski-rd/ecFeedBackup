@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.StringTokenizer;
 
 import com.testify.ecfeed.adapter.operations.Messages;
-import com.testify.ecfeed.model.CategoryNode;
+import com.testify.ecfeed.model.ParameterNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.MethodNode;
 
@@ -140,7 +140,7 @@ public class JavaUtils {
 
 	public static List<String> getArgNames(MethodNode method) {
 		List<String> result = new ArrayList<String>();
-		for(CategoryNode c : method.getCategories()){
+		for(ParameterNode c : method.getCategories()){
 			result.add(c.getName());
 		}
 		return result;
@@ -148,7 +148,7 @@ public class JavaUtils {
 
 	public static List<String> getArgTypes(MethodNode method) {
 		List<String> result = new ArrayList<String>();
-		for(CategoryNode c : method.getCategories()){
+		for(ParameterNode c : method.getCategories()){
 			result.add(c.getType());
 		}
 		return result;

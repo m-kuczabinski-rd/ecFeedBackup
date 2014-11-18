@@ -21,7 +21,7 @@ import com.testify.ecfeed.adapter.operations.MethodOperationAddTestCase;
 import com.testify.ecfeed.adapter.operations.MethodOperationAddTestSuite;
 import com.testify.ecfeed.adapter.operations.MethodOperationConvertTo;
 import com.testify.ecfeed.adapter.operations.MethodOperationRenameTestCases;
-import com.testify.ecfeed.model.CategoryNode;
+import com.testify.ecfeed.model.ParameterNode;
 import com.testify.ecfeed.model.Constraint;
 import com.testify.ecfeed.model.ConstraintNode;
 import com.testify.ecfeed.model.MethodNode;
@@ -68,12 +68,12 @@ public class MethodInterface extends GenericNodeInterface {
 		return execute(new MethodOperationConvertTo(fTarget, method), Messages.DIALOG_CONVERT_METHOD_PROBLEM_TITLE);
 	}
 
-	public CategoryNode addNewParameter() {
+	public ParameterNode addNewParameter() {
 		EclipseModelBuilder modelBuilder = new EclipseModelBuilder();
 		String name = generateNewParameterName(fTarget);
 		String type = generateNewParameterType(fTarget);
 		String defaultValue = modelBuilder.getDefaultExpectedValue(type);
-		CategoryNode parameter = new CategoryNode(name, type, defaultValue, false);
+		ParameterNode parameter = new ParameterNode(name, type, defaultValue, false);
 		List<PartitionNode> defaultPartitions = modelBuilder.defaultPartitions(type);
 		parameter.addPartitions(defaultPartitions);
 		if(addNewParameter(parameter, fTarget.getCategories().size())){
@@ -82,11 +82,11 @@ public class MethodInterface extends GenericNodeInterface {
 		return null;
 	}
 
-	public boolean addNewParameter(CategoryNode parameter, int index) {
+	public boolean addNewParameter(ParameterNode parameter, int index) {
 		return execute(new MethodOperationAddParameter(fTarget, parameter, index), Messages.DIALOG_CONVERT_METHOD_PROBLEM_TITLE);
 	}
 
-	public boolean removeParameters(Collection<CategoryNode> parameters, IModelUpdateContext context){
+	public boolean removeParameters(Collection<ParameterNode> parameters, IModelUpdateContext context){
 		Set<ConstraintNode> constraints = fTarget.mentioningConstraints(parameters);
 		if(constraints.size() > 0 || fTarget.getTestCases().size() > 0){
 			if(MessageDialog.openConfirm(Display.getCurrent().getActiveShell(),
@@ -116,7 +116,7 @@ public class MethodInterface extends GenericNodeInterface {
 	}
 
 	public TestCaseNode addTestCase() {
-		for(CategoryNode category : fTarget.getCategories()){
+		for(ParameterNode category : fTarget.getCategories()){
 			if(!category.isExpected() && category.getPartitions().isEmpty()){
 				MessageDialog.openError(Display.getDefault().getActiveShell(), Messages.DIALOG_ADD_TEST_CASE_PROBLEM_TITLE, Messages.DIALOG_TEST_CASE_WITH_EMPTY_CATEGORY_MESSAGE);
 				return null;

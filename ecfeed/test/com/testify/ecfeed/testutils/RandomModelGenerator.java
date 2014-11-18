@@ -44,7 +44,7 @@ import nl.flotsam.xeger.Xeger;
 import org.junit.Test;
 
 import com.testify.ecfeed.model.BasicStatement;
-import com.testify.ecfeed.model.CategoryNode;
+import com.testify.ecfeed.model.ParameterNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.Constraint;
 import com.testify.ecfeed.model.ConstraintNode;
@@ -151,10 +151,10 @@ public class RandomModelGenerator {
 		return method;
 	}
 	
-	public CategoryNode generateCategory(String type, boolean expected, int partitionLevels, int partitions, int labels){
+	public ParameterNode generateCategory(String type, boolean expected, int partitionLevels, int partitions, int labels){
 		String name = generateString(REGEX_CATEGORY_NODE_NAME);
 		
-		CategoryNode category = new CategoryNode(name, type, randomPartitionValue(type), expected);
+		ParameterNode category = new ParameterNode(name, type, randomPartitionValue(type), expected);
 		
 		if(partitions > 0){
 			for(int i = 0; i < rand.nextInt(partitions) + 1; i++){
@@ -169,7 +169,7 @@ public class RandomModelGenerator {
 		String name = generateString(REGEX_TEST_CASE_NODE_NAME);
 		List<PartitionNode> testData = new ArrayList<PartitionNode>();
 		
-		for(CategoryNode c : method.getCategories()){
+		for(ParameterNode c : method.getCategories()){
 			if(c.isExpected()){
 				PartitionNode expectedValue = new PartitionNode("@expected", randomPartitionValue(c.getType()));
 				expectedValue.setParent(c);
@@ -225,21 +225,21 @@ public class RandomModelGenerator {
 	}
 
 	public PartitionedCategoryStatement generatePartitionedStatement(MethodNode method) {
-		List<CategoryNode> categories = new ArrayList<CategoryNode>();
+		List<ParameterNode> categories = new ArrayList<ParameterNode>();
 		
-		for(CategoryNode category : method.getCategories()){
+		for(ParameterNode category : method.getCategories()){
 			if(category.isExpected() == false && category.getPartitions().size() > 0){
 				categories.add(category);
 			}
 		}
 		
 		if(categories.size() == 0){
-			CategoryNode category = generateCategory(TYPE_NAME_INT, false, 0, 1, 1);
+			ParameterNode category = generateCategory(TYPE_NAME_INT, false, 0, 1, 1);
 			method.addCategory(category);
 			categories.add(category);
 		}
 		
-		CategoryNode category = categories.get(rand.nextInt(categories.size()));
+		ParameterNode category = categories.get(rand.nextInt(categories.size()));
 		EStatementRelation relation = rand.nextBoolean() ? EStatementRelation.EQUAL : EStatementRelation.NOT;
 		if(category.getPartitions().size() == 0){
 			PartitionNode partition = generatePartition(0, 0, 1, category.getType());
@@ -265,21 +265,21 @@ public class RandomModelGenerator {
 	}
 
 	public ExpectedValueStatement generateExpectedValueStatement(MethodNode method) {
-		List<CategoryNode> categories = new ArrayList<CategoryNode>();
+		List<ParameterNode> categories = new ArrayList<ParameterNode>();
 		
-		for(CategoryNode category : method.getCategories()){
+		for(ParameterNode category : method.getCategories()){
 			if(category.isExpected() == true){
 				categories.add(category);
 			}
 		}
 		
 		if(categories.size() == 0){
-			CategoryNode category = generateCategory(SUPPORTED_TYPES[rand.nextInt(SUPPORTED_TYPES.length)], true, 0, 1, 1);
+			ParameterNode category = generateCategory(SUPPORTED_TYPES[rand.nextInt(SUPPORTED_TYPES.length)], true, 0, 1, 1);
 			method.addCategory(category);
 			categories.add(category);
 		}
 		
-		CategoryNode category = categories.get(rand.nextInt(categories.size()));
+		ParameterNode category = categories.get(rand.nextInt(categories.size()));
 		
 		
 		String value = randomPartitionValue(category.getType());
@@ -300,8 +300,8 @@ public class RandomModelGenerator {
 			method.addCategory(generateCategory(TYPE_NAME_INT, false, 0, 1, 1));
 		}
 		
-		List<CategoryNode> categories = method.getCategories();
-		CategoryNode category = categories.get(rand.nextInt(categories.size()));
+		List<ParameterNode> categories = method.getCategories();
+		ParameterNode category = categories.get(rand.nextInt(categories.size()));
 		if(category.isExpected()){
 			return generateExpectedValueStatement(method);
 		}
@@ -479,7 +479,7 @@ public class RandomModelGenerator {
 				int partitions = rand.nextInt(MAX_PARTITIONS);
 				int labels = rand.nextInt(MAX_PARTITION_LABELS);
 				int levels = rand.nextInt(MAX_PARTITION_LEVELS);
-				CategoryNode c = generateCategory(type, expected, levels, partitions, labels);
+				ParameterNode c = generateCategory(type, expected, levels, partitions, labels);
 				System.out.println(fStringifier.stringify(c, 0));
 			}
 		}

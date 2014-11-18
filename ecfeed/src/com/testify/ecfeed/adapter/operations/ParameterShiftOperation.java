@@ -5,25 +5,25 @@ import java.util.List;
 
 import com.testify.ecfeed.adapter.IModelOperation;
 import com.testify.ecfeed.adapter.ModelOperationException;
-import com.testify.ecfeed.model.CategoryNode;
+import com.testify.ecfeed.model.ParameterNode;
 import com.testify.ecfeed.model.GenericNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.TestCaseNode;
 
-public class CategoryShiftOperation extends GenericShiftOperation {
+public class ParameterShiftOperation extends GenericShiftOperation {
 
-	private List<CategoryNode> fCategories;
+	private List<ParameterNode> fCategories;
 
-	public CategoryShiftOperation(List<CategoryNode> categories, GenericNode shifted, boolean up) {
+	public ParameterShiftOperation(List<ParameterNode> categories, GenericNode shifted, boolean up) {
 		this(categories, Arrays.asList(new GenericNode[]{shifted}), up);
 	}
 
-	public CategoryShiftOperation(List<CategoryNode> categories, List<? extends GenericNode> shifted, boolean up) {
+	public ParameterShiftOperation(List<ParameterNode> categories, List<? extends GenericNode> shifted, boolean up) {
 		this(categories, shifted, 0);
 		setShift(minAllowedShift(shifted, up));
 	}
 
-	public CategoryShiftOperation(List<CategoryNode> categories, List<? extends GenericNode> shifted, int shift) {
+	public ParameterShiftOperation(List<ParameterNode> categories, List<? extends GenericNode> shifted, int shift) {
 		super(categories, shifted, shift);
 		fCategories = categories;
 	}
@@ -43,14 +43,14 @@ public class CategoryShiftOperation extends GenericShiftOperation {
 
 	@Override 
 	public IModelOperation reverseOperation(){
-		return new CategoryShiftOperation(fCategories, getShiftedElements(), -getShift());
+		return new ParameterShiftOperation(fCategories, getShiftedElements(), -getShift());
 	}
 
 	@Override
 	protected boolean shiftAllowed(List<? extends GenericNode> shifted, int shift){
 		if(super.shiftAllowed(shifted, shift) == false) return false;
-		if(shifted.get(0) instanceof CategoryNode == false) return false;
-		MethodNode method = ((CategoryNode)shifted.get(0)).getMethod();
+		if(shifted.get(0) instanceof ParameterNode == false) return false;
+		MethodNode method = ((ParameterNode)shifted.get(0)).getMethod();
 		List<String> parameterTypes = method.getCategoriesTypes();
 		List<Integer> indices = indices(method.getCategories(), shifted);
 		shiftElements(parameterTypes, indices, shift);

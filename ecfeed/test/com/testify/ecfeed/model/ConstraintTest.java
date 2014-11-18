@@ -20,7 +20,7 @@ import java.util.List;
 import org.junit.Test;
 
 import com.testify.ecfeed.model.BasicStatement;
-import com.testify.ecfeed.model.CategoryNode;
+import com.testify.ecfeed.model.ParameterNode;
 import com.testify.ecfeed.model.Constraint;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.PartitionedCategoryStatement;
@@ -67,7 +67,7 @@ public class ConstraintTest {
 	@Test
 	public void testMentions() {
 		PartitionNode partition = new PartitionNode("partition", null);
-		CategoryNode category = new CategoryNode("category", "type", "0", false);
+		ParameterNode category = new ParameterNode("category", "type", "0", false);
 		category.addPartition(partition);
 
 		BasicStatement mentioningStatement = new PartitionedCategoryStatement(category, EStatementRelation.EQUAL, partition);

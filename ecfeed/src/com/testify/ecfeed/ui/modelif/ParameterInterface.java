@@ -11,27 +11,27 @@ import org.eclipse.swt.widgets.Display;
 import com.testify.ecfeed.adapter.IModelOperation;
 import com.testify.ecfeed.adapter.ITypeAdapterProvider;
 import com.testify.ecfeed.adapter.java.JavaUtils;
-import com.testify.ecfeed.adapter.operations.CategoryOperationSetDefaultValue;
-import com.testify.ecfeed.adapter.operations.CategoryOperationSetExpected;
-import com.testify.ecfeed.adapter.operations.CategoryOperationSetType;
-import com.testify.ecfeed.model.CategoryNode;
+import com.testify.ecfeed.adapter.operations.ParameterOperationSetDefaultValue;
+import com.testify.ecfeed.adapter.operations.ParameterOperationSetExpected;
+import com.testify.ecfeed.adapter.operations.ParameterOperationSetType;
+import com.testify.ecfeed.model.ParameterNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.ui.common.EclipseModelBuilder;
 import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.common.EclipseTypeAdapterProvider;
 
-public class CategoryInterface extends PartitionedNodeInterface {
+public class ParameterInterface extends PartitionedNodeInterface {
 	
-	private CategoryNode fTarget;
+	private ParameterNode fTarget;
 	private ITypeAdapterProvider fAdapterProvider;
 	
-	public CategoryInterface(IModelUpdateContext updateContext) {
+	public ParameterInterface(IModelUpdateContext updateContext) {
 		super(updateContext);
 		fAdapterProvider = new EclipseTypeAdapterProvider();
 	}
 
-	public void setTarget(CategoryNode target){
+	public void setTarget(ParameterNode target){
 		super.setTarget(target);
 		fTarget = target;
 	}
@@ -44,7 +44,7 @@ public class CategoryInterface extends PartitionedNodeInterface {
 		if(newType.equals(fTarget.getType())){
 			return false;
 		}
-		return execute(new CategoryOperationSetType(fTarget, newType, fAdapterProvider), Messages.DIALOG_RENAME_PAREMETER_PROBLEM_TITLE);
+		return execute(new ParameterOperationSetType(fTarget, newType, fAdapterProvider), Messages.DIALOG_RENAME_PAREMETER_PROBLEM_TITLE);
 	}
 	
 	public boolean setExpected(boolean expected){
@@ -72,14 +72,14 @@ public class CategoryInterface extends PartitionedNodeInterface {
 					}
 				}
 			}
-			return execute(new CategoryOperationSetExpected(fTarget, expected), Messages.DIALOG_SET_CATEGORY_EXPECTED_PROBLEM_TITLE);
+			return execute(new ParameterOperationSetExpected(fTarget, expected), Messages.DIALOG_SET_CATEGORY_EXPECTED_PROBLEM_TITLE);
 		}
 		return false;
 	}
 
 	public boolean setDefaultValue(String valueString) {
 		if(fTarget.getDefaultValue().equals(valueString) == false){
-			IModelOperation operation = new CategoryOperationSetDefaultValue(fTarget, valueString, fAdapterProvider.getAdapter(fTarget.getType()));
+			IModelOperation operation = new ParameterOperationSetDefaultValue(fTarget, valueString, fAdapterProvider.getAdapter(fTarget.getType()));
 			return execute(operation, Messages.DIALOG_SET_DEFAULT_VALUE_PROBLEM_TITLE);
 		}
 		return false;
@@ -89,7 +89,7 @@ public class CategoryInterface extends PartitionedNodeInterface {
 		return !isPrimitive(type) || isBoolean(type);
 	}
 
-	public static boolean hasLimitedValuesSet(CategoryNode category) {
+	public static boolean hasLimitedValuesSet(ParameterNode category) {
 		return hasLimitedValuesSet(category.getType());
 	}
 

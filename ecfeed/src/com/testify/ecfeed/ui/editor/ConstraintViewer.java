@@ -33,7 +33,7 @@ import org.osgi.framework.Bundle;
 import org.osgi.framework.FrameworkUtil;
 
 import com.testify.ecfeed.model.BasicStatement;
-import com.testify.ecfeed.model.CategoryNode;
+import com.testify.ecfeed.model.ParameterNode;
 import com.testify.ecfeed.model.Constraint;
 import com.testify.ecfeed.model.ConstraintNode;
 import com.testify.ecfeed.model.EStatementOperator;
@@ -50,7 +50,7 @@ import com.testify.ecfeed.model.StatementArray;
 import com.testify.ecfeed.model.StaticStatement;
 import com.testify.ecfeed.ui.editor.actions.ModelModifyingAction;
 import com.testify.ecfeed.ui.modelif.BasicStatementInterface;
-import com.testify.ecfeed.ui.modelif.CategoryInterface;
+import com.testify.ecfeed.ui.modelif.ParameterInterface;
 import com.testify.ecfeed.ui.modelif.ConstraintInterface;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 import com.testify.ecfeed.ui.modelif.StatementInterfaceFactory;
@@ -179,8 +179,8 @@ public class ConstraintViewer extends TreeViewerSection {
 			@Override
 			public Object visit(ExpectedValueStatement statement)
 					throws Exception {
-				CategoryNode category  = statement.getCategory();
-				List<String> values = CategoryInterface.getSpecialValues(category.getType());
+				ParameterNode category  = statement.getCategory();
+				List<String> values = ParameterInterface.getSpecialValues(category.getType());
 				if(values.isEmpty()){
 					for(PartitionNode p : category.getLeafPartitions()){
 						values.add(p.getValueString());
@@ -193,7 +193,7 @@ public class ConstraintViewer extends TreeViewerSection {
 			public Object visit(PartitionedCategoryStatement statement)
 					throws Exception {
 				List<String> result = new ArrayList<String>();
-				CategoryNode category = statement.getCategory();
+				ParameterNode category = statement.getCategory();
 
 				Set<PartitionNode> allPartitions = category.getAllPartitions();
 				Set<String> allLabels = category.getLeafLabels();
@@ -315,7 +315,7 @@ public class ConstraintViewer extends TreeViewerSection {
 				if(statementText.equals(STATEMENT_AND) || statementText.equals(STATEMENT_OR)){
 					return new StatementArray(EStatementOperator.getOperator(statementText));
 				}
-				CategoryNode category = fConstraint.getMethod().getCategory(statementText);
+				ParameterNode category = fConstraint.getMethod().getCategory(statementText);
 				EStatementRelation relation = EStatementRelation.EQUAL;
 				if(category != null && category.isExpected()){
 					PartitionNode condition = new PartitionNode("expected", category.getDefaultValue());
@@ -365,7 +365,7 @@ public class ConstraintViewer extends TreeViewerSection {
 			@Override
 			public Object visit(ExpectedValueStatement statement) throws Exception {
 				disposeRightOperandComposite();
-				if(CategoryInterface.hasLimitedValuesSet(statement.getCategory())){
+				if(ParameterInterface.hasLimitedValuesSet(statement.getCategory())){
 					fRightOperandComposite = fConditionCombo = new ComboViewer(StatementEditor.this).getCombo();
 				}
 				else{
@@ -485,7 +485,7 @@ public class ConstraintViewer extends TreeViewerSection {
 			List<String> items = new ArrayList<String>();
 			items.addAll(Arrays.asList(FIXED_STATEMENTS));
 			boolean consequence = fConstraint.getConstraint().getConsequence() == statement;
-			for(CategoryNode c : fConstraint.getMethod().getCategories()){
+			for(ParameterNode c : fConstraint.getMethod().getCategories()){
 				if(c.isExpected()){
 					if(consequence){
 						items.add(c.getName());

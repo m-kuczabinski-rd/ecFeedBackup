@@ -26,7 +26,7 @@ import org.eclipse.swt.widgets.Text;
 import com.testify.ecfeed.adapter.java.JavaUtils;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.ui.common.IFileInfoProvider;
-import com.testify.ecfeed.ui.modelif.CategoryInterface;
+import com.testify.ecfeed.ui.modelif.ParameterInterface;
 import com.testify.ecfeed.ui.modelif.ChoiceInterface;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 
@@ -102,12 +102,12 @@ public class PartitionDetailsPage extends BasicDetailsPage {
 			fValueCombo.dispose();
 		}
 		int style = SWT.DROP_DOWN;
-		if(CategoryInterface.isBoolean(type)){
+		if(ParameterInterface.isBoolean(type)){
 			style |= SWT.READ_ONLY;
 		}
 		fValueCombo = new ComboViewer(fAttributesComposite, style).getCombo();
 		fValueCombo.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
-		Set<String> items = new LinkedHashSet<String>(CategoryInterface.getSpecialValues(type));
+		Set<String> items = new LinkedHashSet<String>(ParameterInterface.getSpecialValues(type));
 		if(JavaUtils.isUserType(type)){
 			Set<String> usedValues = fPartitionIf.getCategory().getLeafPartitionValues();
 			usedValues.removeAll(items);

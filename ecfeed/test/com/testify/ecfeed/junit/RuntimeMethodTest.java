@@ -29,7 +29,7 @@ import com.testify.ecfeed.generators.api.GeneratorException;
 import com.testify.ecfeed.generators.api.IConstraint;
 import com.testify.ecfeed.generators.api.IGenerator;
 import com.testify.ecfeed.junit.RuntimeMethod;
-import com.testify.ecfeed.model.CategoryNode;
+import com.testify.ecfeed.model.ParameterNode;
 import com.testify.ecfeed.model.PartitionNode;
 
 public class RuntimeMethodTest {
@@ -98,7 +98,7 @@ public class RuntimeMethodTest {
 	}
 
 	private List<PartitionNode> generateCategory(int partitions) {
-		CategoryNode parent = new CategoryNode("Category", "int","0",  false);
+		ParameterNode parent = new ParameterNode("Category", "int","0",  false);
 		List<PartitionNode> category = new ArrayList<PartitionNode>();
 		for(int i = 0; i < partitions; i++){
 			PartitionNode partition = new PartitionNode(String.valueOf(i), String.valueOf(i));

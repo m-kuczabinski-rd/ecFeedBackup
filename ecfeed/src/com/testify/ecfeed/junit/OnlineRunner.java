@@ -35,7 +35,7 @@ import com.testify.ecfeed.junit.annotations.Generator;
 import com.testify.ecfeed.junit.annotations.GeneratorParameter;
 import com.testify.ecfeed.junit.annotations.GeneratorParameterNames;
 import com.testify.ecfeed.junit.annotations.GeneratorParameterValues;
-import com.testify.ecfeed.model.CategoryNode;
+import com.testify.ecfeed.model.ParameterNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.runner.Messages;
@@ -97,7 +97,7 @@ public class OnlineRunner extends AbstractJUnitRunner {
 
 	protected List<List<PartitionNode>> getInput(MethodNode methodModel) {
 		List<List<PartitionNode>> result = new ArrayList<List<PartitionNode>>();
-		for(CategoryNode category : methodModel.getCategories()){
+		for(ParameterNode category : methodModel.getCategories()){
 			if(category.isExpected()){
 				PartitionNode choice = new PartitionNode("expected", category.getDefaultValue());
 				choice.setParent(category);

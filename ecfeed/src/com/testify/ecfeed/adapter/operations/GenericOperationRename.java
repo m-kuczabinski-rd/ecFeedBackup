@@ -3,7 +3,7 @@ package com.testify.ecfeed.adapter.operations;
 import com.testify.ecfeed.adapter.IModelOperation;
 import com.testify.ecfeed.adapter.ModelOperationException;
 import com.testify.ecfeed.adapter.java.Constants;
-import com.testify.ecfeed.model.CategoryNode;
+import com.testify.ecfeed.model.ParameterNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.ConstraintNode;
 import com.testify.ecfeed.model.GenericNode;
@@ -38,7 +38,7 @@ public class GenericOperationRename extends AbstractModelOperation {
 		}
 
 		@Override
-		public Object visit(CategoryNode node) throws Exception {
+		public Object visit(ParameterNode node) throws Exception {
 			return Messages.CATEGORY_NAME_REGEX_PROBLEM;
 		}
 
@@ -76,7 +76,7 @@ public class GenericOperationRename extends AbstractModelOperation {
 		}
 
 		@Override
-		public Object visit(CategoryNode node) throws Exception {
+		public Object visit(ParameterNode node) throws Exception {
 			return Constants.REGEX_CATEGORY_NODE_NAME;
 		}
 

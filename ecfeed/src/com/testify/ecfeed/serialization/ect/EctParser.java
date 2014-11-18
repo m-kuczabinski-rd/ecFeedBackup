@@ -19,7 +19,7 @@ import nu.xom.Document;
 import nu.xom.ParsingException;
 
 import com.testify.ecfeed.model.BasicStatement;
-import com.testify.ecfeed.model.CategoryNode;
+import com.testify.ecfeed.model.ParameterNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.ConstraintNode;
 import com.testify.ecfeed.model.ExpectedValueStatement;
@@ -75,7 +75,7 @@ public class EctParser implements IModelParser {
 	}
 
 	@Override
-	public CategoryNode parseCategory(InputStream istream) throws ParserException {
+	public ParameterNode parseCategory(InputStream istream) throws ParserException {
 		try {
 			Document document = fBuilder.build(istream);
 			return fXomParser.parseCategory(document.getRootElement());

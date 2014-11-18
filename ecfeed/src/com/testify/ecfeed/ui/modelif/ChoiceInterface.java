@@ -23,7 +23,7 @@ import com.testify.ecfeed.adapter.operations.PartitionOperationAddLabels;
 import com.testify.ecfeed.adapter.operations.PartitionOperationRemoveLabels;
 import com.testify.ecfeed.adapter.operations.PartitionOperationRenameLabel;
 import com.testify.ecfeed.adapter.operations.PartitionOperationSetValue;
-import com.testify.ecfeed.model.CategoryNode;
+import com.testify.ecfeed.model.ParameterNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.ui.common.Constants;
@@ -52,7 +52,7 @@ public class ChoiceInterface extends PartitionedNodeInterface{
 		return fTarget.getValueString();
 	}
 
-	public CategoryNode getCategory() {
+	public ParameterNode getCategory() {
 		return fTarget.getCategory();
 	}
 

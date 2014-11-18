@@ -6,7 +6,7 @@ import java.util.List;
 import com.testify.ecfeed.adapter.IModelOperation;
 import com.testify.ecfeed.adapter.ModelOperationException;
 import com.testify.ecfeed.adapter.java.JavaUtils;
-import com.testify.ecfeed.model.CategoryNode;
+import com.testify.ecfeed.model.ParameterNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.ConstraintNode;
 import com.testify.ecfeed.model.GenericNode;
@@ -76,7 +76,7 @@ public class FactoryRenameOperation {
 
 		@Override
 		protected void verifyNewName(String newName) throws ModelOperationException {
-			CategoryNode target = (CategoryNode)getTarget();
+			ParameterNode target = (ParameterNode)getTarget();
 			if(JavaUtils.isJavaKeyword(newName)){
 				throw new ModelOperationException(Messages.CATEGORY_NAME_REGEX_PROBLEM);
 			}
@@ -129,7 +129,7 @@ public class FactoryRenameOperation {
 		}
 
 		@Override
-		public Object visit(CategoryNode node) throws Exception {
+		public Object visit(ParameterNode node) throws Exception {
 			return new CategoryOperationRename(node, fNewName);
 		}
 

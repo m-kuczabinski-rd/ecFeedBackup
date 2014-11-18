@@ -30,7 +30,7 @@ import com.testify.ecfeed.adapter.AbstractModelImplementer;
 import com.testify.ecfeed.adapter.CachedImplementationStatusResolver;
 import com.testify.ecfeed.adapter.EImplementationStatus;
 import com.testify.ecfeed.adapter.java.JavaUtils;
-import com.testify.ecfeed.model.CategoryNode;
+import com.testify.ecfeed.model.ParameterNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.ConstraintNode;
 import com.testify.ecfeed.model.GenericNode;
@@ -74,7 +74,7 @@ public abstract class ObsoleteEclipseModelImplementer extends AbstractModelImple
 			if(methodDefinitionImplemented(node) == false){
 				implementMethodDefinition(node);
 			}
-			for(CategoryNode parameter : node.getCategories()){
+			for(ParameterNode parameter : node.getCategories()){
 				if(implementable(parameter) && getImplementationStatus(parameter) != EImplementationStatus.IMPLEMENTED){
 					implement(parameter);
 				}
@@ -83,7 +83,7 @@ public abstract class ObsoleteEclipseModelImplementer extends AbstractModelImple
 		}
 
 		@Override
-		public Object visit(CategoryNode node) throws Exception {
+		public Object visit(ParameterNode node) throws Exception {
 			if(parameterDefinitionImplemented(node) == false){
 				implementParameterDefinition(node);
 			}
@@ -169,7 +169,7 @@ public abstract class ObsoleteEclipseModelImplementer extends AbstractModelImple
 		IType classType = getJavaProject().findType(JavaUtils.getQualifiedName(node.getClassNode()));
 		if(classType != null){
 			classType.createMethod(methodDefinitionContent(node), null, false, null);
-			for(CategoryNode parameter : node.getCategories()){
+			for(ParameterNode parameter : node.getCategories()){
 				String type = parameter.getType();
 				if(JavaUtils.isUserType(type)){
 					String packageName = JavaUtils.getPackageName(type);
@@ -183,7 +183,7 @@ public abstract class ObsoleteEclipseModelImplementer extends AbstractModelImple
 	}
 
 	@Override
-	protected void implementParameterDefinition(CategoryNode node) throws CoreException {
+	protected void implementParameterDefinition(ParameterNode node) throws CoreException {
 		String typeName = node.getType();
 		if(JavaUtils.isPrimitive(typeName)){
 			return;
@@ -274,7 +274,7 @@ public abstract class ObsoleteEclipseModelImplementer extends AbstractModelImple
 	}
 
 	@Override
-	protected boolean parameterDefinitionImplemented(CategoryNode node) {
+	protected boolean parameterDefinitionImplemented(ParameterNode node) {
 		return (getImplementationStatus(node) != EImplementationStatus.NOT_IMPLEMENTED);
 	}
 
@@ -294,7 +294,7 @@ public abstract class ObsoleteEclipseModelImplementer extends AbstractModelImple
 		String content = "System.out.println(\"" + node.getName() + "(\" + ";
 				
 		for(int i = 0; i < node.getCategories().size(); ++i){
-			CategoryNode parameter = node.getCategories().get(i);
+			ParameterNode parameter = node.getCategories().get(i);
 			args += JavaUtils.getLocalName(parameter.getType()) + " " + parameter.getName();
 			content += node.getCategories().get(i).getName();
 			if(i != node.getCategories().size() - 1){
@@ -306,7 +306,7 @@ public abstract class ObsoleteEclipseModelImplementer extends AbstractModelImple
 		return "public void " + node.getName() + "(" + args + "){\n\t" + comment + "\n\t" + content + "\n}";
 	}
 	
-	protected static String enumDefinitionContent(CategoryNode node){
+	protected static String enumDefinitionContent(ParameterNode node){
 		return "public enum " + JavaUtils.getLocalName(node.getType()) + "{\n\n}";
 	}
 	

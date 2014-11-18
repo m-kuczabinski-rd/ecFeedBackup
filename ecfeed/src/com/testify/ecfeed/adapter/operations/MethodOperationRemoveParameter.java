@@ -5,7 +5,7 @@ import java.util.List;
 
 import com.testify.ecfeed.adapter.IModelOperation;
 import com.testify.ecfeed.adapter.ModelOperationException;
-import com.testify.ecfeed.model.CategoryNode;
+import com.testify.ecfeed.model.ParameterNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.TestCaseNode;
 
@@ -14,7 +14,7 @@ public class MethodOperationRemoveParameter extends BulkOperation{
 	private class RemoveParameterOperation extends AbstractModelOperation{
 
 		private final MethodNode fTarget;
-		private final CategoryNode fParameter;
+		private final ParameterNode fParameter;
 		private int fOriginalIndex;
 		private final ArrayList<TestCaseNode> fOriginalTestCases;
 
@@ -38,7 +38,7 @@ public class MethodOperationRemoveParameter extends BulkOperation{
 			
 		}
 		
-		public RemoveParameterOperation(MethodNode target, CategoryNode parameter){
+		public RemoveParameterOperation(MethodNode target, ParameterNode parameter){
 			super(OperationNames.REMOVE_PARAMETER);
 			fTarget = target;
 			fParameter = parameter;
@@ -75,14 +75,14 @@ public class MethodOperationRemoveParameter extends BulkOperation{
 		}
 	}
 
-	public MethodOperationRemoveParameter(MethodNode target, CategoryNode parameter, boolean validate) {
+	public MethodOperationRemoveParameter(MethodNode target, ParameterNode parameter, boolean validate) {
 		super(OperationNames.REMOVE_PARAMETER, true);
 		addOperation(new RemoveParameterOperation(target, parameter));
 		if(validate){
 			addOperation(new MethodOperationMakeConsistent(target));
 		}
 	}
-	public MethodOperationRemoveParameter(MethodNode target, CategoryNode parameter) {
+	public MethodOperationRemoveParameter(MethodNode target, ParameterNode parameter) {
 		this(target, parameter, true);
 	}
 }

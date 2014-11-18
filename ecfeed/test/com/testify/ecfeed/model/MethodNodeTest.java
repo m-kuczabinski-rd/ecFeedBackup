@@ -26,8 +26,8 @@ public class MethodNodeTest {
 	@Test
 	public void testAddCategory(){
 		MethodNode method = new MethodNode("name");
-		CategoryNode category = new CategoryNode("category", "type1", "0", false);
-		CategoryNode expCat = new CategoryNode("expCat", "type2", "0", true);
+		ParameterNode category = new ParameterNode("category", "type1", "0", false);
+		ParameterNode expCat = new ParameterNode("expCat", "type2", "0", true);
 		assertEquals(0, method.getCategories().size());
 		method.addCategory(category);
 		assertEquals(1, method.getCategories().size());
@@ -128,8 +128,8 @@ public class MethodNodeTest {
 		TestCaseNode testCase = new TestCaseNode("test case", new ArrayList<PartitionNode>());
 		ConstraintNode constraint = new ConstraintNode("constraint", 
 				new Constraint(new StaticStatement(false), new StaticStatement(false)));
-		CategoryNode category = new CategoryNode("category", "type", "0", false);
-		CategoryNode expCat = new CategoryNode("expCat", "type", "0", true);
+		ParameterNode category = new ParameterNode("category", "type", "0", false);
+		ParameterNode expCat = new ParameterNode("expCat", "type", "0", true);
 		
 		assertEquals(0, method.getChildren().size());
 		assertFalse(method.hasChildren());
@@ -311,9 +311,9 @@ public class MethodNodeTest {
 	@Test
 	public void testGetExpectedCategoriesNames(){
 		MethodNode method = new MethodNode("name");
-		CategoryNode category = new CategoryNode("category", "type", "0", false);
-		CategoryNode expCat1 = new CategoryNode("expCat1", "type", "0", true);
-		CategoryNode expCat2 = new CategoryNode("expCat2", "type", "0", true);
+		ParameterNode category = new ParameterNode("category", "type", "0", false);
+		ParameterNode expCat1 = new ParameterNode("expCat1", "type", "0", true);
+		ParameterNode expCat2 = new ParameterNode("expCat2", "type", "0", true);
 		
 		method.addCategory(category);
 		method.addCategory(expCat1);
@@ -457,7 +457,7 @@ public class MethodNodeTest {
 	@Test 
 	public void testPartitionRemoved(){
 		MethodNode method = new MethodNode("method");
-		CategoryNode category = new CategoryNode("category", "type", "0", false);
+		ParameterNode category = new ParameterNode("category", "type", "0", false);
 		PartitionNode partition = new PartitionNode("partition", "value");
 		Constraint mentioningConstraint = new Constraint(new PartitionedCategoryStatement(category, EStatementRelation.EQUAL, partition), new StaticStatement(false));
 		Constraint notMentioningConstraint = new Constraint(new StaticStatement(false), new StaticStatement(false));
@@ -514,8 +514,8 @@ public class MethodNodeTest {
 		m2.setName("m1");
 		assertTrue(m1.compare(m2));
 		
-		CategoryNode c1 = new CategoryNode("c", "type", "0", true);
-		CategoryNode c2 = new CategoryNode("c", "type", "0", true);
+		ParameterNode c1 = new ParameterNode("c", "type", "0", true);
+		ParameterNode c2 = new ParameterNode("c", "type", "0", true);
 		
 		m1.addCategory(c1);
 		assertFalse(m1.compare(m2));

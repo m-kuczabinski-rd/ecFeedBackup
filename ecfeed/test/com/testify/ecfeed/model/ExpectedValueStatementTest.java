@@ -19,7 +19,7 @@ import java.util.List;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.testify.ecfeed.model.CategoryNode;
+import com.testify.ecfeed.model.ParameterNode;
 import com.testify.ecfeed.model.ExpectedValueStatement;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
@@ -27,9 +27,9 @@ import com.testify.ecfeed.model.PartitionNode;
 public class ExpectedValueStatementTest{
 	
 	private static MethodNode fMethod;
-	private static CategoryNode fExpCategory1;
-	private static CategoryNode fPartCategory1;
-	private static CategoryNode fPartCategory2;
+	private static ParameterNode fExpCategory1;
+	private static ParameterNode fPartCategory1;
+	private static ParameterNode fPartCategory2;
 	private static String fExpectedValue1;
 
 	
@@ -38,10 +38,10 @@ public class ExpectedValueStatementTest{
 		fMethod = new MethodNode("method");
 		fExpectedValue1 = "value1";
 
-		fExpCategory1 = new CategoryNode("category", "type","0",  true);
+		fExpCategory1 = new ParameterNode("category", "type","0",  true);
 		fExpCategory1.setDefaultValueString(fExpectedValue1);
-		fPartCategory1 = new CategoryNode("category", "type","0",  false);
-		fPartCategory2 = new CategoryNode("category", "type", "0", false);
+		fPartCategory1 = new ParameterNode("category", "type","0",  false);
+		fPartCategory2 = new ParameterNode("category", "type", "0", false);
 
 		fMethod.addCategory(fPartCategory1);
 		fMethod.addCategory(fExpCategory1);
@@ -67,8 +67,8 @@ public class ExpectedValueStatementTest{
 	
 	@Test
 	public void compareTest(){
-		CategoryNode c1 = new CategoryNode("c", "type", "0", true);
-		CategoryNode c2 = new CategoryNode("c", "type", "0", true);
+		ParameterNode c1 = new ParameterNode("c", "type", "0", true);
+		ParameterNode c2 = new ParameterNode("c", "type", "0", true);
 		
 		PartitionNode p1 = new PartitionNode("name", "value");
 		PartitionNode p2 = new PartitionNode("name", "value");

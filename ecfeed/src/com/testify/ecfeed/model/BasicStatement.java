@@ -69,11 +69,11 @@ public abstract class BasicStatement implements IStatement {
 		return false;
 	}
 
-	public boolean mentions(CategoryNode category) {
+	public boolean mentions(ParameterNode category) {
 		return false;
 	}
 
-	public boolean mentions(CategoryNode category, String label) {
+	public boolean mentions(ParameterNode category, String label) {
 		return false;
 	}
 

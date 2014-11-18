@@ -10,7 +10,7 @@ import java.util.Map;
 
 import com.testify.ecfeed.adapter.AbstractImplementationStatusResolver;
 import com.testify.ecfeed.adapter.EImplementationStatus;
-import com.testify.ecfeed.model.CategoryNode;
+import com.testify.ecfeed.model.ParameterNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.ConstraintNode;
 import com.testify.ecfeed.model.GenericNode;
@@ -43,7 +43,7 @@ public class JavaImplementationStatusResolver extends AbstractImplementationStat
 		}
 
 		@Override
-		public Object visit(CategoryNode node) throws Exception {
+		public Object visit(ParameterNode node) throws Exception {
 			return implementationStatus(node);
 		}
 
@@ -120,12 +120,12 @@ public class JavaImplementationStatusResolver extends AbstractImplementationStat
 			continue;
 		}
 		List<String> typeNames = getArgTypes(m);
-		List<CategoryNode> modelCategories = methodModel.getCategories();
+		List<ParameterNode> modelCategories = methodModel.getCategories();
 		if(typeNames.size() != methodModel.getCategories().size()){
 			continue;
 		}
 		List<String> modelTypeNames = new ArrayList<>();
-		for(CategoryNode parameter : modelCategories){
+		for(ParameterNode parameter : modelCategories){
 			modelTypeNames.add(parameter.getType());
 		}
 		if(modelTypeNames.equals(typeNames) == false){

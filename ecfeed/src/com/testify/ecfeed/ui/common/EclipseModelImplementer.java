@@ -36,7 +36,7 @@ import com.testify.ecfeed.adapter.AbstractModelImplementer;
 import com.testify.ecfeed.adapter.CachedImplementationStatusResolver;
 import com.testify.ecfeed.adapter.EImplementationStatus;
 import com.testify.ecfeed.adapter.java.JavaUtils;
-import com.testify.ecfeed.model.CategoryNode;
+import com.testify.ecfeed.model.ParameterNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.GenericNode;
 import com.testify.ecfeed.model.MethodNode;
@@ -61,7 +61,7 @@ public class EclipseModelImplementer extends AbstractModelImplementer {
 	}
 
 	@Override
-	protected boolean implement(CategoryNode node) throws CoreException{
+	protected boolean implement(ParameterNode node) throws CoreException{
 		if(parameterDefinitionImplemented(node) == false){
 			implementParameterDefinition(node, node.getLeafPartitionValues());
 		}
@@ -77,7 +77,7 @@ public class EclipseModelImplementer extends AbstractModelImplementer {
 
 	@Override
 	protected boolean implement(PartitionNode node) throws CoreException{
-		CategoryNode parameter = node.getCategory();
+		ParameterNode parameter = node.getCategory();
 		if(parameterDefinitionImplemented(parameter) == false){
 			if(parameterDefinitionImplementable(parameter)){
 				implementParameterDefinition(parameter, new HashSet<String>(Arrays.asList(new String[]{node.getValueString()})));
@@ -117,7 +117,7 @@ public class EclipseModelImplementer extends AbstractModelImplementer {
 		IType classType = getJavaProject().findType(JavaUtils.getQualifiedName(node.getClassNode()));
 		if(classType != null){
 			classType.createMethod(methodDefinitionContent(node), null, false, null);
-			for(CategoryNode parameter : node.getCategories()){
+			for(ParameterNode parameter : node.getCategories()){
 				String type = parameter.getType();
 				if(JavaUtils.isUserType(type)){
 					String packageName = JavaUtils.getPackageName(type);
@@ -130,11 +130,11 @@ public class EclipseModelImplementer extends AbstractModelImplementer {
 	}
 
 	@Override
-	protected void implementParameterDefinition(CategoryNode node) throws CoreException {
+	protected void implementParameterDefinition(ParameterNode node) throws CoreException {
 		implementParameterDefinition(node, null);
 	}
 
-	protected void implementParameterDefinition(CategoryNode node, Set<String> fields) throws CoreException {
+	protected void implementParameterDefinition(ParameterNode node, Set<String> fields) throws CoreException {
 		String typeName = node.getType();
 		if(JavaUtils.isPrimitive(typeName)){
 			return;
@@ -160,7 +160,7 @@ public class EclipseModelImplementer extends AbstractModelImplementer {
 	@SuppressWarnings("unchecked")
 	protected void implementChoicesDefinitions(List<PartitionNode> nodes) throws CoreException {
 		refreshWorkspace();
-		CategoryNode parent = getParameter(nodes);
+		ParameterNode parent = getParameter(nodes);
 		if(parent == null){
 			return;
 		}
@@ -200,7 +200,7 @@ public class EclipseModelImplementer extends AbstractModelImplementer {
 	}
 
 	@Override
-	protected boolean implementable(CategoryNode node){
+	protected boolean implementable(ParameterNode node){
 		if(parameterDefinitionImplemented(node)){
 			return hasImplementableNode(node.getPartitions());
 		}
@@ -274,7 +274,7 @@ public class EclipseModelImplementer extends AbstractModelImplementer {
 	}
 
 	@Override
-	protected boolean parameterDefinitionImplemented(CategoryNode node) {
+	protected boolean parameterDefinitionImplemented(ParameterNode node) {
 		try{
 			IType type = getJavaProject().findType(node.getType());
 			return (type != null) && type.isEnum();
@@ -294,7 +294,7 @@ public class EclipseModelImplementer extends AbstractModelImplementer {
 		if(node.getCategories().size() > 0){
 			content +=  "\" + ";
 			for(int i = 0; i < node.getCategories().size(); ++i){
-				CategoryNode parameter = node.getCategories().get(i);
+				ParameterNode parameter = node.getCategories().get(i);
 				args += JavaUtils.getLocalName(parameter.getType()) + " " + parameter.getName();
 				content += node.getCategories().get(i).getName();
 				if(i != node.getCategories().size() - 1){
@@ -311,7 +311,7 @@ public class EclipseModelImplementer extends AbstractModelImplementer {
 		return "public void " + node.getName() + "(" + args + "){\n\t" + comment + "\n\t" + content + "\n}";
 	}
 
-	protected String enumDefinitionContent(CategoryNode node, Set<String> fields){
+	protected String enumDefinitionContent(ParameterNode node, Set<String> fields){
 		String fieldsDefinition = "";
 		if(fields != null){
 			for(String field: fields){
@@ -352,7 +352,7 @@ public class EclipseModelImplementer extends AbstractModelImplementer {
 		return false;
 	}
 
-	private boolean parameterDefinitionImplementable(CategoryNode parameter) {
+	private boolean parameterDefinitionImplementable(ParameterNode parameter) {
 		try {
 			String type = parameter.getType();
 			if(JavaUtils.isPrimitive(type)){
@@ -473,11 +473,11 @@ public class EclipseModelImplementer extends AbstractModelImplementer {
 		return unimplemented;
 	}
 
-	private CategoryNode getParameter(List<PartitionNode> nodes) {
+	private ParameterNode getParameter(List<PartitionNode> nodes) {
 		if(nodes.size() == 0){
 			return null;
 		}
-		CategoryNode parameter = nodes.get(0).getCategory();
+		ParameterNode parameter = nodes.get(0).getCategory();
 		for(PartitionNode node : nodes){
 			if(node.getCategory() != parameter){
 				return null;
