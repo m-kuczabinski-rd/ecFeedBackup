@@ -37,7 +37,7 @@ import com.testify.ecfeed.junit.annotations.GeneratorParameterNames;
 import com.testify.ecfeed.junit.annotations.GeneratorParameterValues;
 import com.testify.ecfeed.model.ParameterNode;
 import com.testify.ecfeed.model.MethodNode;
-import com.testify.ecfeed.model.PartitionNode;
+import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.runner.Messages;
 import com.testify.ecfeed.runner.RunnerException;
 
@@ -59,9 +59,9 @@ public class OnlineRunner extends AbstractJUnitRunner {
 				if(methodModel == null){
 					continue;
 				}
-				IGenerator<PartitionNode> generator = getGenerator(method);
-				List<List<PartitionNode>> input = getInput(methodModel);
-				Collection<IConstraint<PartitionNode>> constraints = getConstraints(method, methodModel);
+				IGenerator<ChoiceNode> generator = getGenerator(method);
+				List<List<ChoiceNode>> input = getInput(methodModel);
+				Collection<IConstraint<ChoiceNode>> constraints = getConstraints(method, methodModel);
 				Map<String, Object> parameters = getGeneratorParameters(generator, method);
 				try {
 					generator.initialize(input, constraints, parameters);
@@ -74,10 +74,10 @@ public class OnlineRunner extends AbstractJUnitRunner {
 		return methods;
 	}
 
-	protected Collection<IConstraint<PartitionNode>> getConstraints(
+	protected Collection<IConstraint<ChoiceNode>> getConstraints(
 			FrameworkMethod method, MethodNode methodModel) {
 		Collection<String> constraintsNames = constraintsNames(method);
-		Collection<IConstraint<PartitionNode>> constraints = new HashSet<IConstraint<PartitionNode>>();
+		Collection<IConstraint<ChoiceNode>> constraints = new HashSet<IConstraint<ChoiceNode>>();
 
 		if(constraintsNames != null){
 			if(constraintsNames.contains(Constraints.ALL)){
@@ -95,13 +95,13 @@ public class OnlineRunner extends AbstractJUnitRunner {
 		return constraints;
 	}
 
-	protected List<List<PartitionNode>> getInput(MethodNode methodModel) {
-		List<List<PartitionNode>> result = new ArrayList<List<PartitionNode>>();
+	protected List<List<ChoiceNode>> getInput(MethodNode methodModel) {
+		List<List<ChoiceNode>> result = new ArrayList<List<ChoiceNode>>();
 		for(ParameterNode parameter : methodModel.getParameters()){
 			if(parameter.isExpected()){
-				PartitionNode choice = new PartitionNode("expected", parameter.getDefaultValue());
+				ChoiceNode choice = new ChoiceNode("expected", parameter.getDefaultValue());
 				choice.setParent(parameter);
-				result.add(Arrays.asList(new PartitionNode[]{choice}));
+				result.add(Arrays.asList(new ChoiceNode[]{choice}));
 			}
 			else{
 				result.add(parameter.getLeafPartitions());
@@ -110,8 +110,8 @@ public class OnlineRunner extends AbstractJUnitRunner {
 		return result;
 	}
 
-	protected IGenerator<PartitionNode> getGenerator(FrameworkMethod method) throws RunnerException {
-		IGenerator<PartitionNode> generator = getGenerator(method.getAnnotations());
+	protected IGenerator<ChoiceNode> getGenerator(FrameworkMethod method) throws RunnerException {
+		IGenerator<ChoiceNode> generator = getGenerator(method.getAnnotations());
 		if(generator == null){
 			generator = getGenerator(getTestClass().getAnnotations());
 		}
@@ -130,7 +130,7 @@ public class OnlineRunner extends AbstractJUnitRunner {
 	}
 
 	private Map<String, Object> getGeneratorParameters(
-			IGenerator<PartitionNode> generator, FrameworkMethod method) throws RunnerException {
+			IGenerator<ChoiceNode> generator, FrameworkMethod method) throws RunnerException {
 		List<IGeneratorParameter> parameters = generator.parameters();
 		Map<String, Object> result = new HashMap<String, Object>();
 		Map<String, String>	parsedParameters = parseParameters(method.getAnnotations());{
@@ -174,15 +174,15 @@ public class OnlineRunner extends AbstractJUnitRunner {
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	private IGenerator<PartitionNode> getGenerator(Annotation[] annotations) throws RunnerException{
-		IGenerator<PartitionNode> generator = null;
+	private IGenerator<ChoiceNode> getGenerator(Annotation[] annotations) throws RunnerException{
+		IGenerator<ChoiceNode> generator = null;
 		for(Annotation annotation : annotations){
 			if(annotation instanceof Generator){
 				try {
 					Class<? extends IGenerator> generatorClass = ((Generator)annotation).value();  
 					generatorClass.getTypeParameters();
 					Constructor<? extends IGenerator> constructor = generatorClass.getConstructor(new Class<?>[]{});
-					generator = (IGenerator<PartitionNode>)(constructor.newInstance(new Object[]{}));
+					generator = (IGenerator<ChoiceNode>)(constructor.newInstance(new Object[]{}));
 				} catch (Exception e) {
 					throw new RunnerException(Messages.CANNOT_INSTANTIATE_GENERATOR(e.getMessage()));
 				}

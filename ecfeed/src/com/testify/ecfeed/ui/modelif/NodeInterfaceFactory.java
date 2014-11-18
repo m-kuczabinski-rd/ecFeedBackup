@@ -6,7 +6,7 @@ import com.testify.ecfeed.model.ConstraintNode;
 import com.testify.ecfeed.model.GenericNode;
 import com.testify.ecfeed.model.IModelVisitor;
 import com.testify.ecfeed.model.MethodNode;
-import com.testify.ecfeed.model.PartitionNode;
+import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.TestCaseNode;
 
@@ -63,7 +63,7 @@ public class NodeInterfaceFactory{
 		}
 
 		@Override
-		public Object visit(PartitionNode node) throws Exception {
+		public Object visit(ChoiceNode node) throws Exception {
 			ChoiceInterface nodeIf = new ChoiceInterface(fContext);
 			nodeIf.setTarget(node);
 			return nodeIf;

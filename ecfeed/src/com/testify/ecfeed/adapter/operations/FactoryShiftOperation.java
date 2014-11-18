@@ -9,7 +9,7 @@ import com.testify.ecfeed.model.ConstraintNode;
 import com.testify.ecfeed.model.GenericNode;
 import com.testify.ecfeed.model.IModelVisitor;
 import com.testify.ecfeed.model.MethodNode;
-import com.testify.ecfeed.model.PartitionNode;
+import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.TestCaseNode;
 
@@ -57,7 +57,7 @@ public class FactoryShiftOperation{
 
 		@Override
 		public Object visit(ParameterNode node) throws Exception {
-			if(fShifted.get(0) instanceof PartitionNode){
+			if(fShifted.get(0) instanceof ChoiceNode){
 				return new GenericShiftOperation(node.getPartitions(), fShifted, fUp);
 			}
 			throw new ModelOperationException(Messages.OPERATION_NOT_SUPPORTED_PROBLEM);
@@ -74,8 +74,8 @@ public class FactoryShiftOperation{
 		}
 
 		@Override
-		public Object visit(PartitionNode node) throws Exception {
-			if(fShifted.get(0) instanceof PartitionNode){
+		public Object visit(ChoiceNode node) throws Exception {
+			if(fShifted.get(0) instanceof ChoiceNode){
 				return new GenericShiftOperation(node.getPartitions(), fShifted, fUp);
 			}
 			throw new ModelOperationException(Messages.OPERATION_NOT_SUPPORTED_PROBLEM);
@@ -124,7 +124,7 @@ public class FactoryShiftOperation{
 
 		@Override
 		public Object visit(ParameterNode node) throws Exception {
-			if(fShifted.get(0) instanceof PartitionNode){
+			if(fShifted.get(0) instanceof ChoiceNode){
 				return new GenericShiftOperation(node.getPartitions(), fShifted, fShift);
 			}
 			throw new ModelOperationException(Messages.OPERATION_NOT_SUPPORTED_PROBLEM);
@@ -141,8 +141,8 @@ public class FactoryShiftOperation{
 		}
 
 		@Override
-		public Object visit(PartitionNode node) throws Exception {
-			if(fShifted.get(0) instanceof PartitionNode){
+		public Object visit(ChoiceNode node) throws Exception {
+			if(fShifted.get(0) instanceof ChoiceNode){
 				return new GenericShiftOperation(node.getPartitions(), fShifted, fShift);
 			}
 			throw new ModelOperationException(Messages.OPERATION_NOT_SUPPORTED_PROBLEM);

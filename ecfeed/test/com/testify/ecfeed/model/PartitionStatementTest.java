@@ -25,7 +25,7 @@ import org.junit.Test;
 
 import com.testify.ecfeed.model.ParameterNode;
 import com.testify.ecfeed.model.MethodNode;
-import com.testify.ecfeed.model.PartitionNode;
+import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.model.PartitionedParameterStatement;
 import com.testify.ecfeed.model.EStatementRelation;
 
@@ -33,32 +33,32 @@ public class PartitionStatementTest {
 
 	private static MethodNode fMethod;
 	private static ParameterNode fParameter;
-	private static PartitionNode fPartition1;
-	private static PartitionNode fPartition2;
-	private static PartitionNode fPartition3;
-	private static List<PartitionNode> fList1;
-	private static List<PartitionNode> fList2;
-	private static List<PartitionNode> fList3;
+	private static ChoiceNode fPartition1;
+	private static ChoiceNode fPartition2;
+	private static ChoiceNode fPartition3;
+	private static List<ChoiceNode> fList1;
+	private static List<ChoiceNode> fList2;
+	private static List<ChoiceNode> fList3;
 
-	private PartitionNode fP1 = new PartitionNode("p1", "0");
-	private PartitionNode fP2 = new PartitionNode("p2", "0");
-	private PartitionNode fP3 = new PartitionNode("p3", "0");
+	private ChoiceNode fP1 = new ChoiceNode("p1", "0");
+	private ChoiceNode fP2 = new ChoiceNode("p2", "0");
+	private ChoiceNode fP3 = new ChoiceNode("p3", "0");
 
-	private PartitionNode fP11 = new PartitionNode("p11", "0");
-	private PartitionNode fP12 = new PartitionNode("p12", "0");
-	private PartitionNode fP13 = new PartitionNode("p13", "0");
+	private ChoiceNode fP11 = new ChoiceNode("p11", "0");
+	private ChoiceNode fP12 = new ChoiceNode("p12", "0");
+	private ChoiceNode fP13 = new ChoiceNode("p13", "0");
 
-	private PartitionNode fP21 = new PartitionNode("p21", "0");
-	private PartitionNode fP22 = new PartitionNode("p22", "0");
-	private PartitionNode fP23 = new PartitionNode("p23", "0");
+	private ChoiceNode fP21 = new ChoiceNode("p21", "0");
+	private ChoiceNode fP22 = new ChoiceNode("p22", "0");
+	private ChoiceNode fP23 = new ChoiceNode("p23", "0");
 
-	private PartitionNode fP221 = new PartitionNode("p21", "0");
-	private PartitionNode fP222 = new PartitionNode("p22", "0");
-	private PartitionNode fP223 = new PartitionNode("p23", "0");
+	private ChoiceNode fP221 = new ChoiceNode("p21", "0");
+	private ChoiceNode fP222 = new ChoiceNode("p22", "0");
+	private ChoiceNode fP223 = new ChoiceNode("p23", "0");
 
-	private PartitionNode fP31 = new PartitionNode("p31", "0");
-	private PartitionNode fP32 = new PartitionNode("p32", "0");
-	private PartitionNode fP33 = new PartitionNode("p33", "0");
+	private ChoiceNode fP31 = new ChoiceNode("p31", "0");
+	private ChoiceNode fP32 = new ChoiceNode("p32", "0");
+	private ChoiceNode fP33 = new ChoiceNode("p33", "0");
 
 	@Before
 	public void prepareStructure(){
@@ -89,49 +89,49 @@ public class PartitionStatementTest {
 	public void equalsTest(){
 		PartitionedParameterStatement statement = new PartitionedParameterStatement(fParameter, EStatementRelation.EQUAL, fP22);
 		
-		assertTrue(statement.evaluate(Arrays.asList(new PartitionNode[]{fP221})));
-		assertTrue(statement.evaluate(Arrays.asList(new PartitionNode[]{fP222})));
-		assertTrue(statement.evaluate(Arrays.asList(new PartitionNode[]{fP22})));
+		assertTrue(statement.evaluate(Arrays.asList(new ChoiceNode[]{fP221})));
+		assertTrue(statement.evaluate(Arrays.asList(new ChoiceNode[]{fP222})));
+		assertTrue(statement.evaluate(Arrays.asList(new ChoiceNode[]{fP22})));
 
-		assertFalse(statement.evaluate(Arrays.asList(new PartitionNode[]{fP2})));
-		assertFalse(statement.evaluate(Arrays.asList(new PartitionNode[]{fP1})));
-		assertFalse(statement.evaluate(Arrays.asList(new PartitionNode[]{fP3})));
-		assertFalse(statement.evaluate(Arrays.asList(new PartitionNode[]{fP13})));
-		assertFalse(statement.evaluate(Arrays.asList(new PartitionNode[]{fP33})));
+		assertFalse(statement.evaluate(Arrays.asList(new ChoiceNode[]{fP2})));
+		assertFalse(statement.evaluate(Arrays.asList(new ChoiceNode[]{fP1})));
+		assertFalse(statement.evaluate(Arrays.asList(new ChoiceNode[]{fP3})));
+		assertFalse(statement.evaluate(Arrays.asList(new ChoiceNode[]{fP13})));
+		assertFalse(statement.evaluate(Arrays.asList(new ChoiceNode[]{fP33})));
 	}
 
 	@Test 
 	public void notEqualsTest(){
 		PartitionedParameterStatement statement = new PartitionedParameterStatement(fParameter, EStatementRelation.NOT, fP22);
 		
-		assertFalse(statement.evaluate(Arrays.asList(new PartitionNode[]{fP221})));
-		assertFalse(statement.evaluate(Arrays.asList(new PartitionNode[]{fP222})));
-		assertFalse(statement.evaluate(Arrays.asList(new PartitionNode[]{fP22})));
+		assertFalse(statement.evaluate(Arrays.asList(new ChoiceNode[]{fP221})));
+		assertFalse(statement.evaluate(Arrays.asList(new ChoiceNode[]{fP222})));
+		assertFalse(statement.evaluate(Arrays.asList(new ChoiceNode[]{fP22})));
 
-		assertTrue(statement.evaluate(Arrays.asList(new PartitionNode[]{fP2})));
-		assertTrue(statement.evaluate(Arrays.asList(new PartitionNode[]{fP1})));
-		assertTrue(statement.evaluate(Arrays.asList(new PartitionNode[]{fP3})));
-		assertTrue(statement.evaluate(Arrays.asList(new PartitionNode[]{fP13})));
-		assertTrue(statement.evaluate(Arrays.asList(new PartitionNode[]{fP33})));
+		assertTrue(statement.evaluate(Arrays.asList(new ChoiceNode[]{fP2})));
+		assertTrue(statement.evaluate(Arrays.asList(new ChoiceNode[]{fP1})));
+		assertTrue(statement.evaluate(Arrays.asList(new ChoiceNode[]{fP3})));
+		assertTrue(statement.evaluate(Arrays.asList(new ChoiceNode[]{fP13})));
+		assertTrue(statement.evaluate(Arrays.asList(new ChoiceNode[]{fP33})));
 	}
 
 	@BeforeClass
 	public static void prepareModel(){
 		fMethod = new MethodNode("method");
 		fParameter = new ParameterNode("parameter", "type", "0", false);
-		fPartition1 = new PartitionNode("partition1", null);
-		fPartition2 = new PartitionNode("partition2", null);
-		fPartition3 = new PartitionNode("partition3", null);
+		fPartition1 = new ChoiceNode("partition1", null);
+		fPartition2 = new ChoiceNode("partition2", null);
+		fPartition3 = new ChoiceNode("partition3", null);
 		fParameter.addPartition(fPartition1);
 		fParameter.addPartition(fPartition2);
 		fParameter.addPartition(fPartition3);
 		fMethod.addParameter(fParameter);
 		
-		fList1 = new ArrayList<PartitionNode>();
+		fList1 = new ArrayList<ChoiceNode>();
 		fList1.add(fPartition1);
-		fList2 = new ArrayList<PartitionNode>();
+		fList2 = new ArrayList<ChoiceNode>();
 		fList2.add(fPartition2);
-		fList3 = new ArrayList<PartitionNode>();
+		fList3 = new ArrayList<ChoiceNode>();
 		fList3.add(fPartition3);
 	}
 	
@@ -182,8 +182,8 @@ public class PartitionStatementTest {
 		ParameterNode c1 = new ParameterNode("name", "type", "0", true);
 		ParameterNode c2 = new ParameterNode("name", "type", "0", true);
 		
-		PartitionNode p1 = new PartitionNode("name", "value");
-		PartitionNode p2 = new PartitionNode("name", "value");
+		ChoiceNode p1 = new ChoiceNode("name", "value");
+		ChoiceNode p2 = new ChoiceNode("name", "value");
 		
 		PartitionedParameterStatement s1 = new PartitionedParameterStatement(c1, EStatementRelation.NOT, p1);
 		PartitionedParameterStatement s2 = new PartitionedParameterStatement(c2, EStatementRelation.NOT, p2);

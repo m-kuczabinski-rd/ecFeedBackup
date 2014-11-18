@@ -181,16 +181,16 @@ public class MethodNode extends GenericNode {
 		return fConstraints;
 	}
 
-	public List<IConstraint<PartitionNode>> getAllConstraints(){
-		List<IConstraint<PartitionNode>> constraints = new ArrayList<IConstraint<PartitionNode>>();
+	public List<IConstraint<ChoiceNode>> getAllConstraints(){
+		List<IConstraint<ChoiceNode>> constraints = new ArrayList<IConstraint<ChoiceNode>>();
 		for(ConstraintNode node : fConstraints){
 			constraints.add(node.getConstraint());
 		}
 		return constraints;
 	}
 
-	public List<IConstraint<PartitionNode>> getConstraints(String name) {
-		List<IConstraint<PartitionNode>> constraints = new ArrayList<IConstraint<PartitionNode>>();
+	public List<IConstraint<ChoiceNode>> getConstraints(String name) {
+		List<IConstraint<ChoiceNode>> constraints = new ArrayList<IConstraint<ChoiceNode>>();
 		for(ConstraintNode node : fConstraints){
 			if(node.getName().equals(name)){
 				constraints.add(node.getConstraint());
@@ -258,7 +258,7 @@ public class MethodNode extends GenericNode {
 		}
 	}
 
-	public boolean isPartitionMentioned(PartitionNode partition){
+	public boolean isPartitionMentioned(ChoiceNode partition){
 		for(ConstraintNode constraint : fConstraints){
 			if(constraint.mentions(partition)){
 				return true;
@@ -300,7 +300,7 @@ public class MethodNode extends GenericNode {
 		return result;
 	}
 
-	public Set<ConstraintNode> mentioningConstraints(PartitionNode partition){
+	public Set<ConstraintNode> mentioningConstraints(ChoiceNode partition){
 		Set<ConstraintNode> result = new HashSet<ConstraintNode>();
 		for(ConstraintNode constraint : fConstraints){
 			if(constraint.mentions(partition)){
@@ -310,7 +310,7 @@ public class MethodNode extends GenericNode {
 		return result;
 	}
 
-	public List<TestCaseNode> mentioningTestCases(PartitionNode partition){
+	public List<TestCaseNode> mentioningTestCases(ChoiceNode partition){
 		List<TestCaseNode> result = new ArrayList<TestCaseNode>();
 		for(TestCaseNode testCase : fTestCases){
 			if(testCase.getTestData().contains(partition)){

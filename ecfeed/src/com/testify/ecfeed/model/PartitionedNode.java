@@ -7,11 +7,11 @@ import java.util.Set;
 
 public abstract class PartitionedNode extends GenericNode{
 
-	private List<PartitionNode> fPartitions;
+	private List<ChoiceNode> fPartitions;
 
 	public PartitionedNode(String name) {
 		super(name);
-		fPartitions = new ArrayList<PartitionNode>();
+		fPartitions = new ArrayList<ChoiceNode>();
 	}
 
 	public abstract ParameterNode getParameter();
@@ -21,24 +21,24 @@ public abstract class PartitionedNode extends GenericNode{
 		return fPartitions;
 	}
 
-	public List<PartitionNode> getPartitions() {
+	public List<ChoiceNode> getPartitions() {
 		return fPartitions;
 	}
 
-	public void addPartition(PartitionNode partition) {
+	public void addPartition(ChoiceNode partition) {
 		addPartition(partition, fPartitions.size());
 	}
 
-	public void addPartition(PartitionNode partition, int index) {
+	public void addPartition(ChoiceNode partition, int index) {
 			fPartitions.add(index, partition);
 			partition.setParent(this);
 	}
 
-	public PartitionNode getPartition(String qualifiedName) {
-		return (PartitionNode)getChild(qualifiedName);
+	public ChoiceNode getPartition(String qualifiedName) {
+		return (ChoiceNode)getChild(qualifiedName);
 	}
 
-	public boolean removePartition(PartitionNode partition) {
+	public boolean removePartition(ChoiceNode partition) {
 		if(fPartitions.contains(partition) && fPartitions.remove(partition)){
 			partition.setParent(null);
 			return true;
@@ -46,17 +46,17 @@ public abstract class PartitionedNode extends GenericNode{
 		return false;
 	}
 
-	public void replacePartitions(List<PartitionNode> newPartitions) {
+	public void replacePartitions(List<ChoiceNode> newPartitions) {
 		fPartitions.clear();
 		fPartitions.addAll(newPartitions);
-		for(PartitionNode p : newPartitions){
+		for(ChoiceNode p : newPartitions){
 			p.setParent(this);
 		}
 	}
 
-	public List<PartitionNode> getLeafPartitions() {
-		List<PartitionNode> result = new ArrayList<PartitionNode>();
-		for(PartitionNode p : fPartitions){
+	public List<ChoiceNode> getLeafPartitions() {
+		List<ChoiceNode> result = new ArrayList<ChoiceNode>();
+		for(ChoiceNode p : fPartitions){
 			if(p.isAbstract() == false){
 				result.add(p);
 			}
@@ -65,9 +65,9 @@ public abstract class PartitionedNode extends GenericNode{
 		return result;
 	}
 
-	public Set<PartitionNode> getAllPartitions() {
-		Set<PartitionNode> result = new LinkedHashSet<PartitionNode>();
-		for(PartitionNode p : fPartitions){
+	public Set<ChoiceNode> getAllPartitions() {
+		Set<ChoiceNode> result = new LinkedHashSet<ChoiceNode>();
+		for(ChoiceNode p : fPartitions){
 			result.add(p);
 			result.addAll(p.getAllPartitions());
 		}
@@ -76,7 +76,7 @@ public abstract class PartitionedNode extends GenericNode{
 
 	public Set<String> getAllPartitionNames() {
 		Set<String> result = new LinkedHashSet<String>();
-		for(PartitionNode p : fPartitions){
+		for(ChoiceNode p : fPartitions){
 			result.add(p.getQualifiedName());
 			result.addAll(p.getAllPartitionNames());
 		}
@@ -85,15 +85,15 @@ public abstract class PartitionedNode extends GenericNode{
 
 	public Set<String> getPartitionNames() {
 		Set<String> result = new LinkedHashSet<String>();
-		for(PartitionNode p : fPartitions){
+		for(ChoiceNode p : fPartitions){
 			result.add(p.getName());
 		}
 		return result;
 	}
 
-	public Set<PartitionNode> getLabeledPartitions(String label) {
-		Set<PartitionNode> result = new LinkedHashSet<PartitionNode>();
-		for(PartitionNode p : fPartitions){
+	public Set<ChoiceNode> getLabeledPartitions(String label) {
+		Set<ChoiceNode> result = new LinkedHashSet<ChoiceNode>();
+		for(ChoiceNode p : fPartitions){
 			if(p.getLabels().contains(label)){
 				result.add(p);
 			}
@@ -104,7 +104,7 @@ public abstract class PartitionedNode extends GenericNode{
 
 	public Set<String> getLeafLabels() {
 		Set<String> result = new LinkedHashSet<String>();
-		for(PartitionNode p : getLeafPartitions()){
+		for(ChoiceNode p : getLeafPartitions()){
 			result.addAll(p.getAllLabels());
 		}
 		return result;
@@ -112,7 +112,7 @@ public abstract class PartitionedNode extends GenericNode{
 
 	public Set<String> getLeafPartitionValues(){
 		Set<String> result = new LinkedHashSet<String>();
-		for(PartitionNode p : getLeafPartitions()){
+		for(ChoiceNode p : getLeafPartitions()){
 			result.add(p.getValueString());
 		}
 		return result;
@@ -120,7 +120,7 @@ public abstract class PartitionedNode extends GenericNode{
 
 	public Set<String> getLeafPartitionNames(){
 		Set<String> result = new LinkedHashSet<String>();
-		for(PartitionNode p : getLeafPartitions()){
+		for(ChoiceNode p : getLeafPartitions()){
 			result.add(p.getQualifiedName());
 		}
 		return result;

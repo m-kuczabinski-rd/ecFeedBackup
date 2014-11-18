@@ -14,8 +14,8 @@ package com.testify.ecfeed.model;
 import java.util.List;
 
 public interface IStatement{
-	public boolean evaluate(List<PartitionNode> values);
-	public boolean adapt(List<PartitionNode> values);
+	public boolean evaluate(List<ChoiceNode> values);
+	public boolean adapt(List<ChoiceNode> values);
 	public boolean compare(IStatement statement);
 	public Object accept(IStatementVisitor visitor) throws Exception;
 }

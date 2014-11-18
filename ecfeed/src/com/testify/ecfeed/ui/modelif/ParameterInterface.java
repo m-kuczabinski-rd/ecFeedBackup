@@ -16,7 +16,7 @@ import com.testify.ecfeed.adapter.operations.ParameterOperationSetExpected;
 import com.testify.ecfeed.adapter.operations.ParameterOperationSetType;
 import com.testify.ecfeed.model.ParameterNode;
 import com.testify.ecfeed.model.MethodNode;
-import com.testify.ecfeed.model.PartitionNode;
+import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.ui.common.EclipseModelBuilder;
 import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.common.EclipseTypeAdapterProvider;
@@ -128,7 +128,7 @@ public class ParameterInterface extends PartitionedNodeInterface {
 	public String[] defaultValueSuggestions(){
 		Set<String> items = new HashSet<String>(getSpecialValues());
 		if(JavaUtils.isPrimitive(getType()) == false){
-			for(PartitionNode p : fTarget.getLeafPartitions()){
+			for(ChoiceNode p : fTarget.getLeafPartitions()){
 				items.add(p.getValueString());
 			}
 			if(items.contains(fTarget.getDefaultValue())== false){

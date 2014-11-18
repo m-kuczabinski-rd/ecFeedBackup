@@ -16,7 +16,7 @@ import java.util.List;
 
 
 public class TestCaseNode extends GenericNode {
-	List<PartitionNode> fTestData;
+	List<ChoiceNode> fTestData;
 
 	@Override
 	public int getIndex(){
@@ -45,14 +45,14 @@ public class TestCaseNode extends GenericNode {
 
 	@Override
 	public TestCaseNode getCopy(){
-		List<PartitionNode> testdata = new ArrayList<>();
-		for(PartitionNode partition : fTestData){
+		List<ChoiceNode> testdata = new ArrayList<>();
+		for(ChoiceNode partition : fTestData){
 			testdata.add(partition);
 		}
 		return new TestCaseNode(this.getName(), testdata);
 	}
 
-	public TestCaseNode(String name, List<PartitionNode> testData) {
+	public TestCaseNode(String name, List<ChoiceNode> testData) {
 		super(name);
 		fTestData = testData;
 	}
@@ -61,16 +61,16 @@ public class TestCaseNode extends GenericNode {
 		return (MethodNode)getParent();
 	}
 
-	public List<PartitionNode> getTestData(){
+	public List<ChoiceNode> getTestData(){
 		return fTestData;
 	}
 
-	public void replaceValue(int index, PartitionNode newValue) {
+	public void replaceValue(int index, ChoiceNode newValue) {
 		fTestData.set(index, newValue);
 	}
 
-	public boolean mentions(PartitionNode partition) {
-		for(PartitionNode p : fTestData){
+	public boolean mentions(ChoiceNode partition) {
+		for(ChoiceNode p : fTestData){
 			if(p.is(partition)){
 				return true;
 			}
@@ -82,7 +82,7 @@ public class TestCaseNode extends GenericNode {
 		String result = new String();
 
 		for(int i = 0; i < fTestData.size(); i++){
-			PartitionNode partition = fTestData.get(i);
+			ChoiceNode partition = fTestData.get(i);
 			if(partition.getParameter().isExpected()){
 				result += "[e]" + partition.getValueString();
 			}
@@ -119,12 +119,12 @@ public class TestCaseNode extends GenericNode {
 			ParameterNode parameter = parameters.get(i);
 			if(parameter.isExpected()){
 				String value = getTestData().get(i).getValueString();
-				PartitionNode newChoice = new PartitionNode("@expected", value);
+				ChoiceNode newChoice = new ChoiceNode("@expected", value);
 				newChoice.setParent(parameter);
 				getTestData().set(i, newChoice);
 			} else{
-				PartitionNode original = getTestData().get(i);
-				PartitionNode newReference = parameter.getPartition(original.getQualifiedName());
+				ChoiceNode original = getTestData().get(i);
+				ChoiceNode newReference = parameter.getPartition(original.getQualifiedName());
 				if(newReference == null){
 					return false;
 				}
@@ -161,7 +161,7 @@ public class TestCaseNode extends GenericNode {
 	}
 
 	public boolean isConsistent() {
-		for(PartitionNode p : getTestData()){
+		for(ChoiceNode p : getTestData()){
 			ParameterNode parameter = p.getParameter();
 			if(parameter == null || (parameter.isExpected() == false && parameter.getPartition(p.getQualifiedName()) == null)){
 				return false;

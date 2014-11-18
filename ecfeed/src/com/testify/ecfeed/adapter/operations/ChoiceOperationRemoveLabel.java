@@ -2,17 +2,17 @@ package com.testify.ecfeed.adapter.operations;
 
 import com.testify.ecfeed.adapter.IModelOperation;
 import com.testify.ecfeed.adapter.ModelOperationException;
-import com.testify.ecfeed.model.PartitionNode;
+import com.testify.ecfeed.model.ChoiceNode;
 
-public class PartitionOperationRemoveLabel extends BulkOperation{
+public class ChoiceOperationRemoveLabel extends BulkOperation{
 
 	private class RemoveLabelOperation extends AbstractModelOperation{
 
-		private PartitionNode fTarget;
+		private ChoiceNode fTarget;
 		private String fLabel;
 
-		public RemoveLabelOperation(PartitionNode target, String label) {
-			super(PartitionOperationRemoveLabel.this.getName());
+		public RemoveLabelOperation(ChoiceNode target, String label) {
+			super(ChoiceOperationRemoveLabel.this.getName());
 			fTarget = target;
 			fLabel = label;
 		}
@@ -25,11 +25,11 @@ public class PartitionOperationRemoveLabel extends BulkOperation{
 
 		@Override
 		public IModelOperation reverseOperation() {
-			return new PartitionOperationAddLabel(fTarget, fLabel);
+			return new ChoiceOperationAddLabel(fTarget, fLabel);
 		}
 	}
 
-	public PartitionOperationRemoveLabel(PartitionNode target, String label) {
+	public ChoiceOperationRemoveLabel(ChoiceNode target, String label) {
 		super(OperationNames.REMOVE_PARTITION_LABEL, true);
 		addOperation(new RemoveLabelOperation(target, label));
 		if(target.getParameter().getMethod() != null){

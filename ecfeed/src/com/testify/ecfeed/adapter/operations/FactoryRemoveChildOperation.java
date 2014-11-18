@@ -6,7 +6,7 @@ import com.testify.ecfeed.model.ConstraintNode;
 import com.testify.ecfeed.model.GenericNode;
 import com.testify.ecfeed.model.IModelVisitor;
 import com.testify.ecfeed.model.MethodNode;
-import com.testify.ecfeed.model.PartitionNode;
+import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.TestCaseNode;
 
@@ -52,8 +52,8 @@ public class FactoryRemoveChildOperation implements IModelVisitor{
 
 	@Override
 	public Object visit(ParameterNode node) throws Exception {
-		if(fChild instanceof PartitionNode){
-			return new GenericOperationRemovePartition(node, (PartitionNode)fChild, fValidate);
+		if(fChild instanceof ChoiceNode){
+			return new GenericOperationRemovePartition(node, (ChoiceNode)fChild, fValidate);
 		}
 		return null;
 	}
@@ -69,9 +69,9 @@ public class FactoryRemoveChildOperation implements IModelVisitor{
 	}
 
 	@Override
-	public Object visit(PartitionNode node) throws Exception {
-		if(fChild instanceof PartitionNode){
-			return new GenericOperationRemovePartition(node, (PartitionNode)fChild, fValidate);
+	public Object visit(ChoiceNode node) throws Exception {
+		if(fChild instanceof ChoiceNode){
+			return new GenericOperationRemovePartition(node, (ChoiceNode)fChild, fValidate);
 		}
 		return null;
 	}

@@ -18,7 +18,7 @@ import com.testify.ecfeed.adapter.java.ModelClassLoader;
 import com.testify.ecfeed.generators.api.IConstraint;
 import com.testify.ecfeed.generators.api.IGenerator;
 import com.testify.ecfeed.model.MethodNode;
-import com.testify.ecfeed.model.PartitionNode;
+import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.runner.RunnerException;
 import com.testify.ecfeed.runner.java.JavaTestRunner;
 import com.testify.ecfeed.ui.common.EclipseLoaderProvider;
@@ -34,14 +34,14 @@ public class OnlineTestRunningSupport extends TestExecutionSupport{
 	
 	private class ExecuteRunnable implements IRunnableWithProgress{
 
-		private IGenerator<PartitionNode> fGenerator;
-		private List<List<PartitionNode>> fInput;
-		private Collection<IConstraint<PartitionNode>> fConstraints;
+		private IGenerator<ChoiceNode> fGenerator;
+		private List<List<ChoiceNode>> fInput;
+		private Collection<IConstraint<ChoiceNode>> fConstraints;
 		private Map<String, Object> fParameters;
 
-		ExecuteRunnable(IGenerator<PartitionNode> generator, 
-				List<List<PartitionNode>> input, 
-				Collection<IConstraint<PartitionNode>> constraints, 
+		ExecuteRunnable(IGenerator<ChoiceNode> generator, 
+				List<List<ChoiceNode>> input, 
+				Collection<IConstraint<ChoiceNode>> constraints, 
 				Map<String, Object> parameters){
 			fGenerator = generator;
 			fInput = input;
@@ -54,7 +54,7 @@ public class OnlineTestRunningSupport extends TestExecutionSupport{
 				throws InvocationTargetException, InterruptedException {
 			try{
 				fRunner.setTarget(fTarget);
-				List<PartitionNode> next;
+				List<ChoiceNode> next;
 				fGenerator.initialize(fInput, fConstraints, fParameters);
 				monitor.beginTask(Messages.EXECUTING_TEST_WITH_PARAMETERS, fGenerator.totalWork());
 				while((next = fGenerator.next()) != null && monitor.isCanceled() == false){
@@ -101,9 +101,9 @@ public class OnlineTestRunningSupport extends TestExecutionSupport{
 		if (fTarget.getParameters().size() > 0) {
 			ExecuteOnlineSetupDialog dialog = new ExecuteOnlineSetupDialog(Display.getCurrent().getActiveShell(), fTarget);
 			if(dialog.open() == IDialogConstants.OK_ID){
-				IGenerator<PartitionNode> selectedGenerator = dialog.getSelectedGenerator();
-				List<List<PartitionNode>> algorithmInput = dialog.getAlgorithmInput();
-				Collection<IConstraint<PartitionNode>> constraintList = new ArrayList<IConstraint<PartitionNode>>();
+				IGenerator<ChoiceNode> selectedGenerator = dialog.getSelectedGenerator();
+				List<List<ChoiceNode>> algorithmInput = dialog.getAlgorithmInput();
+				Collection<IConstraint<ChoiceNode>> constraintList = new ArrayList<IConstraint<ChoiceNode>>();
 				constraintList.addAll(dialog.getConstraints());
 				Map<String, Object> parameters = dialog.getGeneratorParameters();
 				
@@ -119,16 +119,16 @@ public class OnlineTestRunningSupport extends TestExecutionSupport{
 
 	private void executeSingleTest() {
 		try {
-			fRunner.runTestCase(new ArrayList<PartitionNode>());
+			fRunner.runTestCase(new ArrayList<ChoiceNode>());
 			MessageDialog.openInformation(null, "Test case executed correctly", "The execution of " + fTarget.toString() + " has been succesful");
 		} catch (RunnerException e) {
 			MessageDialog.openError(Display.getCurrent().getActiveShell(), Messages.DIALOG_TEST_EXECUTION_PROBLEM_TITLE, e.getMessage());
 		}
 	}
 
-	private void executeGeneratedTests(IGenerator<PartitionNode> generator,
-			List<List<PartitionNode>> input,
-			Collection<IConstraint<PartitionNode>> constraints,
+	private void executeGeneratedTests(IGenerator<ChoiceNode> generator,
+			List<List<ChoiceNode>> input,
+			Collection<IConstraint<ChoiceNode>> constraints,
 			Map<String, Object> parameters) {
 
 		GeneratorProgressMonitorDialog progressDialog = 

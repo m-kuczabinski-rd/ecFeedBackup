@@ -93,8 +93,8 @@ public class MethodNodeTest {
 	@Test
 	public void testAddTestCase(){
 		MethodNode method = new MethodNode("name");
-		TestCaseNode testCase1 = new TestCaseNode("suite 1", new ArrayList<PartitionNode>());
-		TestCaseNode testCase2 = new TestCaseNode("suite 2", new ArrayList<PartitionNode>());
+		TestCaseNode testCase1 = new TestCaseNode("suite 1", new ArrayList<ChoiceNode>());
+		TestCaseNode testCase2 = new TestCaseNode("suite 2", new ArrayList<ChoiceNode>());
 		assertEquals(0, method.getTestCases().size());
 		assertEquals(0, method.getTestCases("suite 1").size());
 		assertEquals(0, method.getTestCases("suite 2").size());
@@ -125,7 +125,7 @@ public class MethodNodeTest {
 	@Test
 	public void testGetChildren(){
 		MethodNode method = new MethodNode("name");
-		TestCaseNode testCase = new TestCaseNode("test case", new ArrayList<PartitionNode>());
+		TestCaseNode testCase = new TestCaseNode("test case", new ArrayList<ChoiceNode>());
 		ConstraintNode constraint = new ConstraintNode("constraint", 
 				new Constraint(new StaticStatement(false), new StaticStatement(false)));
 		ParameterNode parameter = new ParameterNode("parameter", "type", "0", false);
@@ -223,10 +223,10 @@ public class MethodNodeTest {
 	@Test
 	public void testRemoveTestCase(){
 		MethodNode method = new MethodNode("name");
-		TestCaseNode testCase1 = new TestCaseNode("name1", new ArrayList<PartitionNode>());
-		TestCaseNode testCase2 = new TestCaseNode("name1", new ArrayList<PartitionNode>());
-		TestCaseNode testCase3 = new TestCaseNode("name2", new ArrayList<PartitionNode>());
-		TestCaseNode testCase4 = new TestCaseNode("name2", new ArrayList<PartitionNode>());
+		TestCaseNode testCase1 = new TestCaseNode("name1", new ArrayList<ChoiceNode>());
+		TestCaseNode testCase2 = new TestCaseNode("name1", new ArrayList<ChoiceNode>());
+		TestCaseNode testCase3 = new TestCaseNode("name2", new ArrayList<ChoiceNode>());
+		TestCaseNode testCase4 = new TestCaseNode("name2", new ArrayList<ChoiceNode>());
 		
 		method.addTestCase(testCase1);
 		method.addTestCase(testCase2);
@@ -458,16 +458,16 @@ public class MethodNodeTest {
 	public void testPartitionRemoved(){
 		MethodNode method = new MethodNode("method");
 		ParameterNode parameter = new ParameterNode("parameter", "type", "0", false);
-		PartitionNode partition = new PartitionNode("partition", "value");
+		ChoiceNode partition = new ChoiceNode("partition", "value");
 		Constraint mentioningConstraint = new Constraint(new PartitionedParameterStatement(parameter, EStatementRelation.EQUAL, partition), new StaticStatement(false));
 		Constraint notMentioningConstraint = new Constraint(new StaticStatement(false), new StaticStatement(false));
 		ConstraintNode mentioningConstraintNode = new ConstraintNode("constraint", mentioningConstraint);
 		ConstraintNode notMentioningConstraintNode = new ConstraintNode("constraint", notMentioningConstraint);
-		List<PartitionNode> mentioningTestData = new ArrayList<PartitionNode>();
+		List<ChoiceNode> mentioningTestData = new ArrayList<ChoiceNode>();
 		mentioningTestData.add(partition);
 		TestCaseNode mentioningTestCaseNode = new TestCaseNode("name", mentioningTestData);
-		List<PartitionNode> notMentioningTestData = new ArrayList<PartitionNode>();
-		mentioningTestData.add(new PartitionNode("dummy", "0"));
+		List<ChoiceNode> notMentioningTestData = new ArrayList<ChoiceNode>();
+		mentioningTestData.add(new ChoiceNode("dummy", "0"));
 		TestCaseNode notMentioningTestCaseNode = new TestCaseNode("name", notMentioningTestData);
 
 		parameter.addPartition(partition);
@@ -552,8 +552,8 @@ public class MethodNodeTest {
 		MethodNode m1 = new MethodNode("m");
 		MethodNode m2 = new MethodNode("m");
 
-		TestCaseNode tc1 = new TestCaseNode("tc", new ArrayList<PartitionNode>());
-		TestCaseNode tc2 = new TestCaseNode("tc", new ArrayList<PartitionNode>());
+		TestCaseNode tc1 = new TestCaseNode("tc", new ArrayList<ChoiceNode>());
+		TestCaseNode tc2 = new TestCaseNode("tc", new ArrayList<ChoiceNode>());
 
 		m1.addTestCase(tc1);
 		assertFalse(m1.compare(m2));

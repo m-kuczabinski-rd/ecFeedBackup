@@ -29,7 +29,7 @@ import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.FontData;
 import org.eclipse.ui.forms.widgets.Section;
 
-import com.testify.ecfeed.model.PartitionNode;
+import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.ui.common.ColorConstants;
 import com.testify.ecfeed.ui.common.ColorManager;
 import com.testify.ecfeed.ui.editor.actions.ActionGroups;
@@ -227,7 +227,7 @@ public class PartitionLabelsViewer extends TableViewerSection {
 		labelColumn.setEditingSupport(new LabelEditingSupport(getTableViewer()));
 	}
 	
-	public void setInput(PartitionNode	partition){
+	public void setInput(ChoiceNode	partition){
 		fPartitionIf.setTarget(partition);
 		super.setInput(partition.getAllLabels());
 	}

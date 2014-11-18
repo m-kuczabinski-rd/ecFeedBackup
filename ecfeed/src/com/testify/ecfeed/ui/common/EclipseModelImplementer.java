@@ -40,7 +40,7 @@ import com.testify.ecfeed.model.ParameterNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.GenericNode;
 import com.testify.ecfeed.model.MethodNode;
-import com.testify.ecfeed.model.PartitionNode;
+import com.testify.ecfeed.model.ChoiceNode;
 
 public class EclipseModelImplementer extends AbstractModelImplementer {
 
@@ -66,9 +66,9 @@ public class EclipseModelImplementer extends AbstractModelImplementer {
 			implementParameterDefinition(node, node.getLeafPartitionValues());
 		}
 		else{
-			List<PartitionNode> unimplemented = unimplementedChoices(node.getLeafPartitions());
+			List<ChoiceNode> unimplemented = unimplementedChoices(node.getLeafPartitions());
 			implementChoicesDefinitions(unimplemented);
-			for(PartitionNode choice : unimplemented){
+			for(ChoiceNode choice : unimplemented){
 				CachedImplementationStatusResolver.clearCache(choice);
 			}
 		}
@@ -76,7 +76,7 @@ public class EclipseModelImplementer extends AbstractModelImplementer {
 	}
 
 	@Override
-	protected boolean implement(PartitionNode node) throws CoreException{
+	protected boolean implement(ChoiceNode node) throws CoreException{
 		ParameterNode parameter = node.getParameter();
 		if(parameterDefinitionImplemented(parameter) == false){
 			if(parameterDefinitionImplementable(parameter)){
@@ -92,7 +92,7 @@ public class EclipseModelImplementer extends AbstractModelImplementer {
 			}
 			else{
 				if(implementable(node) && getImplementationStatus(node) != EImplementationStatus.IMPLEMENTED){
-					implementChoicesDefinitions(Arrays.asList(new PartitionNode[]{node}));
+					implementChoicesDefinitions(Arrays.asList(new ChoiceNode[]{node}));
 				}
 			}
 		}
@@ -151,14 +151,14 @@ public class EclipseModelImplementer extends AbstractModelImplementer {
 	}
 
 	@Override
-	protected void implementChoiceDefinition(PartitionNode node) throws CoreException {
+	protected void implementChoiceDefinition(ChoiceNode node) throws CoreException {
 		if(implementable(node) && getImplementationStatus(node) != EImplementationStatus.IMPLEMENTED){
-			implementChoicesDefinitions(Arrays.asList(new PartitionNode[]{node}));
+			implementChoicesDefinitions(Arrays.asList(new ChoiceNode[]{node}));
 		}
 	}
 
 	@SuppressWarnings("unchecked")
-	protected void implementChoicesDefinitions(List<PartitionNode> nodes) throws CoreException {
+	protected void implementChoicesDefinitions(List<ChoiceNode> nodes) throws CoreException {
 		refreshWorkspace();
 		ParameterNode parent = getParameter(nodes);
 		if(parent == null){
@@ -172,7 +172,7 @@ public class EclipseModelImplementer extends AbstractModelImplementer {
 		CompilationUnit unit = getCompilationUnit(enumType);
 		EnumDeclaration enumDeclaration = getEnumDeclaration(unit, typeName);
 		if(enumDeclaration != null){
-			for(PartitionNode node : nodes){
+			for(ChoiceNode node : nodes){
 				EnumConstantDeclaration constant = unit.getAST().newEnumConstantDeclaration();
 				constant.setName(unit.getAST().newSimpleName(node.getValueString()));
 				enumDeclaration.enumConstants().add(constant);
@@ -208,7 +208,7 @@ public class EclipseModelImplementer extends AbstractModelImplementer {
 	}
 
 	@Override
-	protected boolean implementable(PartitionNode node){
+	protected boolean implementable(ChoiceNode node){
 		if(node.isAbstract()){
 			return hasImplementableNode(node.getPartitions());
 		}
@@ -463,9 +463,9 @@ public class EclipseModelImplementer extends AbstractModelImplementer {
 		return root;
 	}
 
-	private List<PartitionNode> unimplementedChoices(List<PartitionNode> choices){
-		List<PartitionNode> unimplemented = new ArrayList<>();
-		for(PartitionNode choice : choices){
+	private List<ChoiceNode> unimplementedChoices(List<ChoiceNode> choices){
+		List<ChoiceNode> unimplemented = new ArrayList<>();
+		for(ChoiceNode choice : choices){
 			if(implementable(choice) && getImplementationStatus(choice) != EImplementationStatus.IMPLEMENTED){
 				unimplemented.add(choice);
 			}
@@ -473,12 +473,12 @@ public class EclipseModelImplementer extends AbstractModelImplementer {
 		return unimplemented;
 	}
 
-	private ParameterNode getParameter(List<PartitionNode> nodes) {
+	private ParameterNode getParameter(List<ChoiceNode> nodes) {
 		if(nodes.size() == 0){
 			return null;
 		}
 		ParameterNode parameter = nodes.get(0).getParameter();
-		for(PartitionNode node : nodes){
+		for(ChoiceNode node : nodes){
 			if(node.getParameter() != parameter){
 				return null;
 			}

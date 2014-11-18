@@ -24,7 +24,7 @@ import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.ConstraintNode;
 import com.testify.ecfeed.model.ExpectedValueStatement;
 import com.testify.ecfeed.model.MethodNode;
-import com.testify.ecfeed.model.PartitionNode;
+import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.model.PartitionedParameterStatement;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.StatementArray;
@@ -87,7 +87,7 @@ public class EctParser implements IModelParser {
 	}
 
 	@Override
-	public PartitionNode parsePartition(InputStream istream) throws ParserException {
+	public ChoiceNode parsePartition(InputStream istream) throws ParserException {
 		try {
 			Document document = fBuilder.build(istream);
 			return fXomParser.parsePartition(document.getRootElement());

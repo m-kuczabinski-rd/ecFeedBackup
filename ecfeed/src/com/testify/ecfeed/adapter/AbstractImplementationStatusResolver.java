@@ -8,7 +8,7 @@ import com.testify.ecfeed.model.ConstraintNode;
 import com.testify.ecfeed.model.GenericNode;
 import com.testify.ecfeed.model.IModelVisitor;
 import com.testify.ecfeed.model.MethodNode;
-import com.testify.ecfeed.model.PartitionNode;
+import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.TestCaseNode;
 
@@ -51,7 +51,7 @@ public abstract class AbstractImplementationStatusResolver implements
 		}
 
 		@Override
-		public Object visit(PartitionNode node) throws Exception {
+		public Object visit(ChoiceNode node) throws Exception {
 			return implementationStatus(node);
 		}
 	}
@@ -148,7 +148,7 @@ public abstract class AbstractImplementationStatusResolver implements
 		return EImplementationStatus.IRRELEVANT;
 	}
 	
-	protected EImplementationStatus implementationStatus(PartitionNode partition){
+	protected EImplementationStatus implementationStatus(ChoiceNode partition){
 		EImplementationStatus status = EImplementationStatus.IMPLEMENTED;
 		if(partition.isAbstract() == false){
 			ParameterNode parameter = partition.getParameter();

@@ -59,7 +59,7 @@ import com.testify.ecfeed.model.Constraint;
 import com.testify.ecfeed.model.ConstraintNode;
 import com.testify.ecfeed.model.GenericNode;
 import com.testify.ecfeed.model.MethodNode;
-import com.testify.ecfeed.model.PartitionNode;
+import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.model.PartitionedNode;
 import com.testify.ecfeed.ui.common.Constants;
 import com.testify.ecfeed.ui.common.EclipseImplementationStatusResolver;
@@ -75,13 +75,13 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 	private String fTestSuiteName;
 	private CheckboxTreeViewer fParametersViewer;
 	private CheckboxTreeViewer fConstraintsViewer;
-	private List<List<PartitionNode>> fAlgorithmInput;
+	private List<List<ChoiceNode>> fAlgorithmInput;
 	private Collection<Constraint> fConstraints;
-	private IGenerator<PartitionNode> fSelectedGenerator;
+	private IGenerator<ChoiceNode> fSelectedGenerator;
 	private Map<String, Object> fParameters;
 	private Composite fParametersComposite;
 	private Composite fMainContainer;
-	private GeneratorFactory<PartitionNode> fGeneratorFactory; 
+	private GeneratorFactory<ChoiceNode> fGeneratorFactory; 
 	private int fContent;
 	private boolean fGenerateExecutableContent;
 	private IImplementationStatusResolver fStatusResolver;
@@ -131,7 +131,7 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 					children.addAll(parent.getPartitions());
 				}
 				else{
-					for(PartitionNode child : parent.getPartitions()){
+					for(ChoiceNode child : parent.getPartitions()){
 						if(fStatusResolver.getImplementationStatus(child) != EImplementationStatus.NOT_IMPLEMENTED){
 							children.add(child);
 						}
@@ -193,7 +193,7 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 		setHelpAvailable(false);
 		setShellStyle(SWT.BORDER | SWT.RESIZE | SWT.TITLE | SWT.APPLICATION_MODAL);
 		fMethod = method;
-		fGeneratorFactory = new GeneratorFactory<PartitionNode>();
+		fGeneratorFactory = new GeneratorFactory<ChoiceNode>();
 		fContent = content;
 		fTitle = title;
 		fMessage = message;
@@ -201,7 +201,7 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 		fStatusResolver = new EclipseImplementationStatusResolver();
 	}
 	
-	protected  List<List<PartitionNode>> algorithmInput(){
+	protected  List<List<ChoiceNode>> algorithmInput(){
 		return fAlgorithmInput;
 	}
 
@@ -213,7 +213,7 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 		return fTestSuiteName;
 	}
 
-	protected  IGenerator<PartitionNode> selectedGenerator() {
+	protected  IGenerator<ChoiceNode> selectedGenerator() {
 		return fSelectedGenerator;
 	}
 
@@ -434,7 +434,7 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 				}
 				continue;
 			}
-			for(PartitionNode leaf : parameter.getLeafPartitions()){
+			for(ChoiceNode leaf : parameter.getLeafPartitions()){
 				leafChecked |= fParametersViewer.getChecked(leaf);
 				EImplementationStatus status = fStatusResolver.getImplementationStatus(leaf);
 				if(status != EImplementationStatus.IMPLEMENTED && onlyExecutable){
@@ -478,7 +478,7 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 	}
 
 	private void createGeneratorViewer(final Composite parent) {
-		final GeneratorFactory<PartitionNode> generatorFactory = new GeneratorFactory<>();
+		final GeneratorFactory<ChoiceNode> generatorFactory = new GeneratorFactory<>();
 		ComboViewer generatorViewer = new ComboViewer(parent, SWT.READ_ONLY);
 		fGeneratorCombo = generatorViewer.getCombo();
 		fGeneratorCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
@@ -655,14 +655,14 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 
 	private void saveAlgorithmInput() {
 		List<ParameterNode> parameters = fMethod.getParameters();
-		fAlgorithmInput = new ArrayList<List<PartitionNode>>();
+		fAlgorithmInput = new ArrayList<List<ChoiceNode>>();
 		for(int i = 0; i < parameters.size(); i++){
-			List<PartitionNode> partitions = new ArrayList<PartitionNode>();
+			List<ChoiceNode> partitions = new ArrayList<ChoiceNode>();
 			if(parameters.get(i).isExpected()){
 				partitions.add(expectedValuePartition(parameters.get(i)));
 			}
 			else{
-				for(PartitionNode partition : parameters.get(i).getLeafPartitions()){
+				for(ChoiceNode partition : parameters.get(i).getLeafPartitions()){
 					if(fParametersViewer.getChecked(partition)){
 						partitions.add(partition);
 					}
@@ -672,8 +672,8 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 		}
 	}
 
-	private PartitionNode expectedValuePartition(ParameterNode c){
-		PartitionNode p = new PartitionNode("", c.getDefaultValue());
+	private ChoiceNode expectedValuePartition(ParameterNode c){
+		ChoiceNode p = new ChoiceNode("", c.getDefaultValue());
 		p.setParent(c);
 		return p;
 	}

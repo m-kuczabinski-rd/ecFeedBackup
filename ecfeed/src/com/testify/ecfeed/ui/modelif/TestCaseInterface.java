@@ -6,7 +6,7 @@ import java.util.Arrays;
 import com.testify.ecfeed.adapter.EImplementationStatus;
 import com.testify.ecfeed.adapter.IModelOperation;
 import com.testify.ecfeed.adapter.operations.TestCaseOperationUpdateTestData;
-import com.testify.ecfeed.model.PartitionNode;
+import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.ui.common.Messages;
 
@@ -41,7 +41,7 @@ public class TestCaseInterface extends GenericNodeInterface {
 		methodIf.executeStaticTests(new ArrayList<TestCaseNode>(Arrays.asList(new TestCaseNode[]{fTarget})));
 	}
 
-	public boolean updateTestData(int index, PartitionNode value) {
+	public boolean updateTestData(int index, ChoiceNode value) {
 		IModelOperation operation = new TestCaseOperationUpdateTestData(fTarget, index, value);
 		return execute(operation, Messages.DIALOG_UPDATE_TEST_DATA_PROBLEM_TITLE);
 	}

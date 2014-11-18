@@ -20,7 +20,7 @@ import org.eclipse.swt.widgets.Shell;
 import com.testify.ecfeed.generators.api.IGenerator;
 import com.testify.ecfeed.model.Constraint;
 import com.testify.ecfeed.model.MethodNode;
-import com.testify.ecfeed.model.PartitionNode;
+import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.ui.common.Messages;
 
 public class GenerateTestSuiteDialog extends GeneratorSetupDialog {
@@ -34,11 +34,11 @@ public class GenerateTestSuiteDialog extends GeneratorSetupDialog {
 				false);
 	}
 
-	public IGenerator<PartitionNode> getSelectedGenerator() {
+	public IGenerator<ChoiceNode> getSelectedGenerator() {
 		return super.selectedGenerator();
 	}
 
-	public List<List<PartitionNode>> getAlgorithmInput() {
+	public List<List<ChoiceNode>> getAlgorithmInput() {
 		return super.algorithmInput();
 	}
 

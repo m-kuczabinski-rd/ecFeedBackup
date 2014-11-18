@@ -22,7 +22,7 @@ import org.junit.Test;
 import com.testify.ecfeed.model.ParameterNode;
 import com.testify.ecfeed.model.ExpectedValueStatement;
 import com.testify.ecfeed.model.MethodNode;
-import com.testify.ecfeed.model.PartitionNode;
+import com.testify.ecfeed.model.ChoiceNode;
 
 public class ExpectedValueStatementTest{
 	
@@ -51,13 +51,13 @@ public class ExpectedValueStatementTest{
 	
 	@Test
 	public void testAdapt(){
-		PartitionNode partition1 = new PartitionNode("partition1", "");
-		PartitionNode statementPartition = new PartitionNode("exp_partition", "statement expected value");
+		ChoiceNode partition1 = new ChoiceNode("partition1", "");
+		ChoiceNode statementPartition = new ChoiceNode("exp_partition", "statement expected value");
 		ExpectedValueStatement testStatement = new ExpectedValueStatement(fExpParameter1, statementPartition);
 		
-		List<PartitionNode> testData = new ArrayList<>();
+		List<ChoiceNode> testData = new ArrayList<>();
 		testData.add(partition1);	
-		testData.add(new PartitionNode("", fExpParameter1.getDefaultValue()));
+		testData.add(new ChoiceNode("", fExpParameter1.getDefaultValue()));
 		testData.add(partition1);
 		
 		testStatement.adapt(testData);
@@ -70,8 +70,8 @@ public class ExpectedValueStatementTest{
 		ParameterNode c1 = new ParameterNode("c", "type", "0", true);
 		ParameterNode c2 = new ParameterNode("c", "type", "0", true);
 		
-		PartitionNode p1 = new PartitionNode("name", "value");
-		PartitionNode p2 = new PartitionNode("name", "value");
+		ChoiceNode p1 = new ChoiceNode("name", "value");
+		ChoiceNode p2 = new ChoiceNode("name", "value");
 		
 		ExpectedValueStatement s1 = new ExpectedValueStatement(c1, p1);
 		ExpectedValueStatement s2 = new ExpectedValueStatement(c2, p2);

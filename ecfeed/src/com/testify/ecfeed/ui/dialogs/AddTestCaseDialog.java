@@ -38,7 +38,7 @@ import org.eclipse.swt.widgets.TableColumn;
 
 import com.testify.ecfeed.model.ParameterNode;
 import com.testify.ecfeed.model.MethodNode;
-import com.testify.ecfeed.model.PartitionNode;
+import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.ui.common.ColorConstants;
 import com.testify.ecfeed.ui.common.ColorManager;
@@ -50,7 +50,7 @@ import com.testify.ecfeed.ui.common.TestDataValueEditingSupport;
 public class AddTestCaseDialog extends TitleAreaDialog implements ITestDataEditorListener {
 
 	private MethodNode fMethod;
-	private ArrayList<PartitionNode> fTestData;
+	private ArrayList<ChoiceNode> fTestData;
 	private String fTestSuiteName;
 	private Combo fTestSuiteCombo;
 	private Button fOkButton;
@@ -64,7 +64,7 @@ public class AddTestCaseDialog extends TitleAreaDialog implements ITestDataEdito
 		super(parentShell);
 		setHelpAvailable(false);
 		setShellStyle(SWT.BORDER | SWT.RESIZE | SWT.TITLE | SWT.APPLICATION_MODAL);
-		fTestData = new ArrayList<PartitionNode>();
+		fTestData = new ArrayList<ChoiceNode>();
 		List<ParameterNode> parameters = method.getParameters();
 		for(ParameterNode parameter : parameters){
 			if(parameter.isExpected()){
@@ -72,7 +72,7 @@ public class AddTestCaseDialog extends TitleAreaDialog implements ITestDataEdito
 			}
 			else{
 
-				PartitionNode testValue = parameter.getPartitions().get(0);
+				ChoiceNode testValue = parameter.getPartitions().get(0);
 				while(testValue.isAbstract()){
 					testValue = testValue.getPartitions().get(0);
 				}
@@ -82,8 +82,8 @@ public class AddTestCaseDialog extends TitleAreaDialog implements ITestDataEdito
 		fMethod = method;
 	}
 
-	private PartitionNode createAnonymuousPartition(ParameterNode parent) {
-		PartitionNode partition = new PartitionNode("@expected", parent.getDefaultValue());
+	private ChoiceNode createAnonymuousPartition(ParameterNode parent) {
+		ChoiceNode partition = new ChoiceNode("@expected", parent.getDefaultValue());
 		partition.setParent(parent);
 		return partition;
 	}
@@ -122,7 +122,7 @@ public class AddTestCaseDialog extends TitleAreaDialog implements ITestDataEdito
 		parameterViewerColumn.setLabelProvider(new ColumnLabelProvider(){
 			@Override
 			public String getText(Object element){
-				return ((PartitionNode)element).getParent().toString();
+				return ((ChoiceNode)element).getParent().toString();
 			}
 			@Override
 			public Color getForeground(Object element){
@@ -137,7 +137,7 @@ public class AddTestCaseDialog extends TitleAreaDialog implements ITestDataEdito
 		partitionViewerColumn.setLabelProvider(new ColumnLabelProvider(){
 			@Override
 			public String getText(Object element){
-				PartitionNode testValue = (PartitionNode)element;
+				ChoiceNode testValue = (ChoiceNode)element;
 				if(testValue.getParameter().isExpected()){
 					return testValue.getValueString();
 				}
@@ -155,7 +155,7 @@ public class AddTestCaseDialog extends TitleAreaDialog implements ITestDataEdito
 	}
 
 	private Color getColor(Object element){
-		PartitionNode partition = (PartitionNode)element;
+		ChoiceNode partition = (ChoiceNode)element;
 		if(partition.getParameter().isExpected()){
 			return ColorManager.getColor(ColorConstants.EXPECTED_VALUE_CATEGORY);
 		}
@@ -220,7 +220,7 @@ public class AddTestCaseDialog extends TitleAreaDialog implements ITestDataEdito
 	}
 
 	@Override
-	public void testDataChanged(int index, PartitionNode newValue) {
+	public void testDataChanged(int index, ChoiceNode newValue) {
 		fTestData.set(index, newValue);
 		fTestDataViewer.refresh();
 	}
@@ -229,7 +229,7 @@ public class AddTestCaseDialog extends TitleAreaDialog implements ITestDataEdito
 		return fTestSuiteName;
 	}
 
-	public ArrayList<PartitionNode> getTestData(){
+	public ArrayList<ChoiceNode> getTestData(){
 		return fTestData;
 	}
 }

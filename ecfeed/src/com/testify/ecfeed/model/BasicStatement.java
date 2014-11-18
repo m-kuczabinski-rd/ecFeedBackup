@@ -65,7 +65,7 @@ public abstract class BasicStatement implements IStatement {
 //		}
 	}
 
-	public boolean mentions(PartitionNode partition) {
+	public boolean mentions(ChoiceNode partition) {
 		return false;
 	}
 
@@ -78,7 +78,7 @@ public abstract class BasicStatement implements IStatement {
 	}
 
 	@Override
-	public boolean evaluate(List<PartitionNode> values) {
+	public boolean evaluate(List<ChoiceNode> values) {
 		return false;
 	}
 
@@ -91,7 +91,7 @@ public abstract class BasicStatement implements IStatement {
 	}
 	
 	@Override
-	public boolean adapt(List<PartitionNode> values){
+	public boolean adapt(List<ChoiceNode> values){
 		return false;
 	}
 	

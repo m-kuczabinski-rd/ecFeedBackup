@@ -19,7 +19,7 @@ import com.testify.ecfeed.generators.api.IConstraint;
 import com.testify.ecfeed.model.PartitionedParameterStatement.LabelCondition;
 import com.testify.ecfeed.model.PartitionedParameterStatement.PartitionCondition;
 
-public class Constraint implements IConstraint<PartitionNode> {
+public class Constraint implements IConstraint<ChoiceNode> {
 	
 	private final int ID;
 	private static int fLastId = 0;
@@ -32,22 +32,22 @@ public class Constraint implements IConstraint<PartitionNode> {
 
 		@Override
 		public Object visit(StaticStatement statement) throws Exception {
-			return new HashSet<PartitionNode>();
+			return new HashSet<ChoiceNode>();
 		}
 
 		@SuppressWarnings("unchecked")
 		@Override
 		public Object visit(StatementArray statement) throws Exception {
-			Set<PartitionNode> set = new HashSet<PartitionNode>();
+			Set<ChoiceNode> set = new HashSet<ChoiceNode>();
 			for(BasicStatement s : statement.getStatements()){
-				set.addAll((Set<PartitionNode>)s.accept(this));
+				set.addAll((Set<ChoiceNode>)s.accept(this));
 			}
 			return set;
 		}
 
 		@Override
 		public Object visit(ExpectedValueStatement statement) throws Exception {
-			return new HashSet<PartitionNode>();
+			return new HashSet<ChoiceNode>();
 		}
 
 		@Override
@@ -58,12 +58,12 @@ public class Constraint implements IConstraint<PartitionNode> {
 
 		@Override
 		public Object visit(LabelCondition condition) throws Exception {
-			return new HashSet<PartitionNode>();
+			return new HashSet<ChoiceNode>();
 		}
 
 		@Override
 		public Object visit(PartitionCondition condition) throws Exception {
-			Set<PartitionNode> set = new HashSet<PartitionNode>();
+			Set<ChoiceNode> set = new HashSet<ChoiceNode>();
 			set.add(condition.getPartition());
 			return set;
 		}
@@ -175,7 +175,7 @@ public class Constraint implements IConstraint<PartitionNode> {
 	}
 	
 	@Override
-	public boolean evaluate(List<PartitionNode> values) {
+	public boolean evaluate(List<ChoiceNode> values) {
 		if(fPremise == null) return true;
 		if(fPremise.evaluate(values) == true){
 			if(fConsequence == null) return false;
@@ -185,7 +185,7 @@ public class Constraint implements IConstraint<PartitionNode> {
 	}
 
 	@Override
-	public boolean adapt(List<PartitionNode> values){
+	public boolean adapt(List<ChoiceNode> values){
 		if(fPremise == null) return true;
 		if(fPremise.evaluate(values) == true){
 			return fConsequence.adapt(values);
@@ -236,7 +236,7 @@ public class Constraint implements IConstraint<PartitionNode> {
 		return fPremise.mentions(parameter, label) || fConsequence.mentions(parameter, label);
 	}
 
-	public boolean mentions(PartitionNode partition) {
+	public boolean mentions(ChoiceNode partition) {
 		return fPremise.mentions(partition) || fConsequence.mentions(partition);
 	}
 	
@@ -253,14 +253,14 @@ public class Constraint implements IConstraint<PartitionNode> {
 	}
 
 	@SuppressWarnings("unchecked")
-	public Set<PartitionNode> getReferencedPartitions() {
+	public Set<ChoiceNode> getReferencedPartitions() {
 		try{
-			Set<PartitionNode> referenced = (Set<PartitionNode>)fPremise.accept(new ReferencedPartitionsProvider());
-			referenced.addAll((Set<PartitionNode>)fConsequence.accept(new ReferencedPartitionsProvider()));
+			Set<ChoiceNode> referenced = (Set<ChoiceNode>)fPremise.accept(new ReferencedPartitionsProvider());
+			referenced.addAll((Set<ChoiceNode>)fConsequence.accept(new ReferencedPartitionsProvider()));
 			return referenced;
 		}
 		catch(Exception e){
-			return new HashSet<PartitionNode>();
+			return new HashSet<ChoiceNode>();
 		}
 	}
 

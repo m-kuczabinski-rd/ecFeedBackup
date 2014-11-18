@@ -11,10 +11,10 @@ import java.util.List;
 import org.junit.Test;
 
 import com.testify.ecfeed.adapter.java.ModelClassLoader;
-import com.testify.ecfeed.adapter.java.PartitionValueParser;
+import com.testify.ecfeed.adapter.java.ChoiceValueParser;
 import com.testify.ecfeed.junit.AbstractFrameworkMethod;
 import com.testify.ecfeed.model.ParameterNode;
-import com.testify.ecfeed.model.PartitionNode;
+import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.ui.common.Constants;
 
 public class AbstractFrameworkMethodTest {
@@ -71,19 +71,19 @@ public class AbstractFrameworkMethodTest {
 			ParameterNode intParameter = new ParameterNode("intParameter", "int", "0", false);
 			ParameterNode stringParameter = new ParameterNode("stringParameter", "String", "0", false);
 			ParameterNode enumParameter = new ParameterNode("enumParameter", Enum.class.getCanonicalName(), Enum.values()[0].name(), false);
-			PartitionValueParser parser = new PartitionValueParser(new ModelClassLoader(new URL[]{}, this.getClass().getClassLoader()));
+			ChoiceValueParser parser = new ChoiceValueParser(new ModelClassLoader(new URL[]{}, this.getClass().getClassLoader()));
 			
 			ModelClassLoader loader = new ModelClassLoader(new URL[]{}, this.getClass().getClassLoader());
 			AbstractFrameworkMethod frameworkMethod = new AbstractFrameworkMethod(method, loader);
 			for(String intArg : INT_ARGS){
 				for(String stringArg : STRING_ARGS){
 					for(String enumArg : ENUM_ARGS){
-						List<PartitionNode> args = new ArrayList<PartitionNode>();
-						PartitionNode intPartition = new PartitionNode(intArg, intArg);
+						List<ChoiceNode> args = new ArrayList<ChoiceNode>();
+						ChoiceNode intPartition = new ChoiceNode(intArg, intArg);
 						intParameter.addPartition(intPartition);
-						PartitionNode stringPartition = new PartitionNode(stringArg, stringArg);
+						ChoiceNode stringPartition = new ChoiceNode(stringArg, stringArg);
 						stringParameter.addPartition(stringPartition);
-						PartitionNode enumPartition = new PartitionNode(enumArg, enumArg);
+						ChoiceNode enumPartition = new ChoiceNode(enumArg, enumArg);
 						enumParameter.addPartition(enumPartition);
 						args.add(intPartition);
 						args.add(stringPartition);

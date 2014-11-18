@@ -18,5 +18,5 @@ public interface IModelVisitor {
 	public Object visit(ParameterNode node) throws Exception;
 	public Object visit(TestCaseNode node) throws Exception;
 	public Object visit(ConstraintNode node) throws Exception;
-	public Object visit(PartitionNode node) throws Exception;
+	public Object visit(ChoiceNode node) throws Exception;
 }

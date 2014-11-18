@@ -19,7 +19,7 @@ import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.ConstraintNode;
 import com.testify.ecfeed.model.ExpectedValueStatement;
 import com.testify.ecfeed.model.MethodNode;
-import com.testify.ecfeed.model.PartitionNode;
+import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.model.PartitionedParameterStatement;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.StatementArray;
@@ -31,7 +31,7 @@ public interface IModelParser {
 	public ClassNode parseClass(InputStream istream) throws ParserException;
 	public MethodNode parseMethod(InputStream istream) throws ParserException;
 	public ParameterNode parseParameter(InputStream istream) throws ParserException;
-	public PartitionNode parsePartition(InputStream istream) throws ParserException;
+	public ChoiceNode parsePartition(InputStream istream) throws ParserException;
 	public TestCaseNode parseTestCase(InputStream istream, MethodNode method) throws ParserException;
 	public ConstraintNode parseConstraint(InputStream istream, MethodNode method) throws ParserException;
 	public BasicStatement parseStatement(InputStream istream, MethodNode method) throws ParserException;

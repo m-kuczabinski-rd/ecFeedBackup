@@ -24,13 +24,13 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
 
 import com.testify.ecfeed.adapter.java.JavaUtils;
-import com.testify.ecfeed.model.PartitionNode;
+import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.ui.common.IFileInfoProvider;
 import com.testify.ecfeed.ui.modelif.ParameterInterface;
 import com.testify.ecfeed.ui.modelif.ChoiceInterface;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 
-public class PartitionDetailsPage extends BasicDetailsPage {
+public class ChoiceDetailsPage extends BasicDetailsPage {
 
 	private ChoicesViewer fChildrenViewer;
 	private PartitionLabelsViewer fLabelsViewer;
@@ -56,7 +56,7 @@ public class PartitionDetailsPage extends BasicDetailsPage {
 		}
 	}
 
-	public PartitionDetailsPage(ModelMasterSection masterSection, IModelUpdateContext updateContext, IFileInfoProvider fileInforProvider) {
+	public ChoiceDetailsPage(ModelMasterSection masterSection, IModelUpdateContext updateContext, IFileInfoProvider fileInforProvider) {
 		super(masterSection, updateContext, fileInforProvider);
 		fPartitionIf = new ChoiceInterface(this);
 	}
@@ -82,7 +82,7 @@ public class PartitionDetailsPage extends BasicDetailsPage {
 	@Override
 	public void refresh(){
 		super.refresh();
-		PartitionNode selectedPartition = getSelectedPartition();
+		ChoiceNode selectedPartition = getSelectedPartition();
 		if(selectedPartition != null){
 			fPartitionIf.setTarget(selectedPartition);
 
@@ -120,9 +120,9 @@ public class PartitionDetailsPage extends BasicDetailsPage {
 		fAttributesComposite.layout();
 	}
 
-	private PartitionNode getSelectedPartition(){
-		if(getSelectedElement() != null && getSelectedElement() instanceof PartitionNode) {
-			return (PartitionNode)getSelectedElement();
+	private ChoiceNode getSelectedPartition(){
+		if(getSelectedElement() != null && getSelectedElement() instanceof ChoiceNode) {
+			return (ChoiceNode)getSelectedElement();
 		}
 		return null;
 	}

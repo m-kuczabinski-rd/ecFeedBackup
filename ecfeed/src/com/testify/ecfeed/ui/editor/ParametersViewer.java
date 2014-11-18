@@ -32,7 +32,7 @@ import org.eclipse.ui.forms.widgets.Section;
 
 import com.testify.ecfeed.model.ParameterNode;
 import com.testify.ecfeed.model.MethodNode;
-import com.testify.ecfeed.model.PartitionNode;
+import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.ui.common.NodeNameColumnLabelProvider;
 import com.testify.ecfeed.ui.common.NodeViewerColumnLabelProvider;
 import com.testify.ecfeed.ui.editor.actions.DeleteAction;
@@ -206,7 +206,7 @@ public class ParametersViewer extends TableViewerSection{
 			if(expectedValues.contains(parameter.getDefaultValue()) == false){
 				expectedValues.add(parameter.getDefaultValue());
 			}
-			for(PartitionNode leaf : parameter.getLeafPartitions()){
+			for(ChoiceNode leaf : parameter.getLeafPartitions()){
 				if(!expectedValues.contains(leaf.getValueString())){
 					expectedValues.add(leaf.getValueString());
 				}

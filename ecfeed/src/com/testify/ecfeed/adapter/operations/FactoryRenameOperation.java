@@ -12,7 +12,7 @@ import com.testify.ecfeed.model.ConstraintNode;
 import com.testify.ecfeed.model.GenericNode;
 import com.testify.ecfeed.model.IModelVisitor;
 import com.testify.ecfeed.model.MethodNode;
-import com.testify.ecfeed.model.PartitionNode;
+import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.TestCaseNode;
 
@@ -88,13 +88,13 @@ public class FactoryRenameOperation {
 	
 	private static class PartitionOperationRename extends GenericOperationRename {
 
-		public PartitionOperationRename(PartitionNode target, String newName){
+		public PartitionOperationRename(ChoiceNode target, String newName){
 			super(target, newName);
 		}
 		
 		@Override
 		public IModelOperation reverseOperation() {
-			return new PartitionOperationRename((PartitionNode)getTarget(), getOriginalName());
+			return new PartitionOperationRename((ChoiceNode)getTarget(), getOriginalName());
 		}
 		
 		@Override
@@ -144,7 +144,7 @@ public class FactoryRenameOperation {
 		}
 
 		@Override
-		public Object visit(PartitionNode node) throws Exception {
+		public Object visit(ChoiceNode node) throws Exception {
 			return new PartitionOperationRename(node, fNewName);
 		}
 	}

@@ -4,24 +4,24 @@ import java.util.Set;
 
 import com.testify.ecfeed.adapter.IModelOperation;
 import com.testify.ecfeed.adapter.ModelOperationException;
-import com.testify.ecfeed.model.PartitionNode;
+import com.testify.ecfeed.model.ChoiceNode;
 
-public class PartitionOperationAddLabel extends AbstractModelOperation {
+public class ChoiceOperationAddLabel extends AbstractModelOperation {
 
-	private PartitionNode fTarget;
+	private ChoiceNode fTarget;
 	private String fLabel;
-	private Set<PartitionNode> fLabeledDescendants;
+	private Set<ChoiceNode> fLabeledDescendants;
 	
 	private class ReverseOperation extends AbstractModelOperation{
 
 		public ReverseOperation() {
-			super(PartitionOperationAddLabel.this.getName());
+			super(ChoiceOperationAddLabel.this.getName());
 		}
 
 		@Override
 		public void execute() throws ModelOperationException {
 			fTarget.removeLabel(fLabel);
-			for(PartitionNode p : fLabeledDescendants){
+			for(ChoiceNode p : fLabeledDescendants){
 				p.addLabel(fLabel);
 			}
 			markModelUpdated();
@@ -29,12 +29,12 @@ public class PartitionOperationAddLabel extends AbstractModelOperation {
 
 		@Override
 		public IModelOperation reverseOperation() {
-			return new PartitionOperationAddLabel(fTarget, fLabel);
+			return new ChoiceOperationAddLabel(fTarget, fLabel);
 		}
 		
 	}
 
-	public PartitionOperationAddLabel(PartitionNode target, String label){
+	public ChoiceOperationAddLabel(ChoiceNode target, String label){
 		super(OperationNames.ADD_PARTITION_LABEL);
 		fTarget = target;
 		fLabel = label;
@@ -44,7 +44,7 @@ public class PartitionOperationAddLabel extends AbstractModelOperation {
 	@Override
 	public void execute() throws ModelOperationException {
 		fTarget.addLabel(fLabel);
-		for(PartitionNode p : fLabeledDescendants){
+		for(ChoiceNode p : fLabeledDescendants){
 			p.removeLabel(fLabel);
 		}
 		markModelUpdated();

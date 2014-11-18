@@ -28,14 +28,14 @@ import org.eclipse.swt.widgets.Display;
 import com.testify.ecfeed.adapter.ITypeAdapter;
 import com.testify.ecfeed.adapter.java.JavaUtils;
 import com.testify.ecfeed.model.ParameterNode;
-import com.testify.ecfeed.model.PartitionNode;
+import com.testify.ecfeed.model.ChoiceNode;
 
 public class TestDataValueEditingSupport extends EditingSupport {
 	private final TableViewer fViewer;
 	private ComboBoxViewerCellEditor fComboCellEditor;
 	private ITestDataEditorListener fSetValueListener;
 
-	public TestDataValueEditingSupport(TableViewer viewer, List<PartitionNode> testData, ITestDataEditorListener setValueListener) {
+	public TestDataValueEditingSupport(TableViewer viewer, List<ChoiceNode> testData, ITestDataEditorListener setValueListener) {
 		super(viewer);
 		fViewer = viewer;
 		fSetValueListener = setValueListener;
@@ -47,11 +47,11 @@ public class TestDataValueEditingSupport extends EditingSupport {
 
 	@Override
 	protected CellEditor getCellEditor(Object element) {
-		PartitionNode partition = (PartitionNode)element;
+		ChoiceNode partition = (ChoiceNode)element;
 		return getComboCellEditor(partition);
 	}
 
-	private CellEditor getComboCellEditor(PartitionNode partition) {
+	private CellEditor getComboCellEditor(ChoiceNode partition) {
 		String type = partition.getParameter().getType();
 		EclipseModelBuilder builder = new EclipseModelBuilder();
 
@@ -89,7 +89,7 @@ public class TestDataValueEditingSupport extends EditingSupport {
 
 	@Override
 	protected Object getValue(Object element) {
-		PartitionNode partition = (PartitionNode)element;
+		ChoiceNode partition = (ChoiceNode)element;
 		if(partition.getParameter().isExpected()){
 			return partition.getValueString();
 		}
@@ -98,10 +98,10 @@ public class TestDataValueEditingSupport extends EditingSupport {
 
 	@Override
 	protected void setValue(Object element, Object value) {
-		PartitionNode current = (PartitionNode)element;
+		ChoiceNode current = (ChoiceNode)element;
 		ParameterNode parameter = current.getParameter();
 		int index = parameter.getIndex();
-		PartitionNode newValue = null;
+		ChoiceNode newValue = null;
 		if(parameter.isExpected()){
 			String valueString = fComboCellEditor.getViewer().getCCombo().getText();
 			String type = parameter.getType();
@@ -117,9 +117,9 @@ public class TestDataValueEditingSupport extends EditingSupport {
 				newValue.setValueString(valueString);
 			}
 		}
-		else if(value instanceof PartitionNode){
-			if((PartitionNode)value != current){
-				newValue = (PartitionNode)value;
+		else if(value instanceof ChoiceNode){
+			if((ChoiceNode)value != current){
+				newValue = (ChoiceNode)value;
 			}
 		}
 		if(newValue != null){

@@ -20,7 +20,7 @@ import java.util.List;
 import org.junit.Test;
 
 import com.testify.ecfeed.model.MethodNode;
-import com.testify.ecfeed.model.PartitionNode;
+import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.model.ParameterNode;
 import com.testify.ecfeed.model.PartitionedParameterStatement;
 import com.testify.ecfeed.model.EStatementRelation;
@@ -29,15 +29,15 @@ public class LabelStatementTest {
 	
 	@Test
 	public void evaluateTest(){
-		PartitionNode q = new PartitionNode("q", "0");
+		ChoiceNode q = new ChoiceNode("q", "0");
 		
-		PartitionNode p = new PartitionNode("p", "0");
-		PartitionNode p1 = new PartitionNode("p1", "0");
-		PartitionNode p2 = new PartitionNode("p2", "0");
-		PartitionNode p11 = new PartitionNode("p11", "0");
-		PartitionNode p12 = new PartitionNode("p12", "0");
-		PartitionNode p21 = new PartitionNode("p21", "0");
-		PartitionNode p22 = new PartitionNode("p22", "0");
+		ChoiceNode p = new ChoiceNode("p", "0");
+		ChoiceNode p1 = new ChoiceNode("p1", "0");
+		ChoiceNode p2 = new ChoiceNode("p2", "0");
+		ChoiceNode p11 = new ChoiceNode("p11", "0");
+		ChoiceNode p12 = new ChoiceNode("p12", "0");
+		ChoiceNode p21 = new ChoiceNode("p21", "0");
+		ChoiceNode p22 = new ChoiceNode("p22", "0");
 		
 		p.addPartition(p1);
 		p.addPartition(p2);
@@ -63,19 +63,19 @@ public class LabelStatementTest {
 		method.addParameter(c1);
 		method.addParameter(c2);
 
-		List<PartitionNode> pq = new ArrayList<PartitionNode>();
+		List<ChoiceNode> pq = new ArrayList<ChoiceNode>();
 		pq.add(p); pq.add(q);
 		
-		List<PartitionNode> p1q = new ArrayList<PartitionNode>();
+		List<ChoiceNode> p1q = new ArrayList<ChoiceNode>();
 		p1q.add(p1); p1q.add(q);
 		
-		List<PartitionNode> p2q = new ArrayList<PartitionNode>();
+		List<ChoiceNode> p2q = new ArrayList<ChoiceNode>();
 		p2q.add(p2); p2q.add(q);
 		
-		List<PartitionNode> p11q = new ArrayList<PartitionNode>();
+		List<ChoiceNode> p11q = new ArrayList<ChoiceNode>();
 		p11q.add(p11); p11q.add(q);
 		
-		List<PartitionNode> p21q = new ArrayList<PartitionNode>();
+		List<ChoiceNode> p21q = new ArrayList<ChoiceNode>();
 		p21q.add(p21); p21q.add(q);
 		
 		PartitionedParameterStatement pEqual = new PartitionedParameterStatement(c1, EStatementRelation.EQUAL, "p");

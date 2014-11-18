@@ -10,7 +10,7 @@ import com.testify.ecfeed.adapter.java.JavaUtils;
 import com.testify.ecfeed.model.ParameterNode;
 import com.testify.ecfeed.model.ConstraintNode;
 import com.testify.ecfeed.model.MethodNode;
-import com.testify.ecfeed.model.PartitionNode;
+import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.model.TestCaseNode;
 
 public class ParameterOperationSetExpected extends AbstractModelOperation {
@@ -19,7 +19,7 @@ public class ParameterOperationSetExpected extends AbstractModelOperation {
 	private boolean fExpected;
 	private List<TestCaseNode> fOriginalTestCases;
 	private List<ConstraintNode> fOriginalConstraints;
-	private List<PartitionNode> fOriginalPartitions;
+	private List<ChoiceNode> fOriginalPartitions;
 	private String fOriginalDefaultValue;
 	
 	private class ReverseOperation extends AbstractModelOperation{
@@ -59,7 +59,7 @@ public class ParameterOperationSetExpected extends AbstractModelOperation {
 			fOriginalConstraints = new ArrayList<ConstraintNode>();
 			fOriginalConstraints.addAll(method.getConstraintNodes());
 		}
-		fOriginalPartitions = new ArrayList<PartitionNode>();
+		fOriginalPartitions = new ArrayList<ChoiceNode>();
 		fOriginalPartitions.addAll(fTarget.getPartitions());
 		fOriginalDefaultValue = fTarget.getDefaultValue();
 	}
@@ -71,7 +71,7 @@ public class ParameterOperationSetExpected extends AbstractModelOperation {
 		if(fExpected && JavaUtils.hasLimitedValuesSet(type)){
 			boolean validDefaultValue = false;
 			String currentDefaultValue = fTarget.getDefaultValue();
-			for(PartitionNode leaf : fTarget.getLeafPartitions()){
+			for(ChoiceNode leaf : fTarget.getLeafPartitions()){
 				if(currentDefaultValue.equals(leaf.getValueString())){
 					validDefaultValue = true;
 					break;
@@ -79,10 +79,10 @@ public class ParameterOperationSetExpected extends AbstractModelOperation {
 			}
 			if(validDefaultValue == false){
 				if(fTarget.getLeafPartitions().size() > 0){
-					fTarget.setDefaultValueString(fTarget.getLeafPartitions().toArray(new PartitionNode[]{})[0].getValueString());
+					fTarget.setDefaultValueString(fTarget.getLeafPartitions().toArray(new ChoiceNode[]{})[0].getValueString());
 				}
 				else{
-					fTarget.addPartition(new PartitionNode("partition", currentDefaultValue));
+					fTarget.addPartition(new ChoiceNode("partition", currentDefaultValue));
 				}
 			}
 		}
@@ -94,7 +94,7 @@ public class ParameterOperationSetExpected extends AbstractModelOperation {
 			while(tcIt.hasNext()){
 				TestCaseNode testCase = tcIt.next();
 				if(fExpected){
-					PartitionNode p = new PartitionNode("expected", fTarget.getDefaultValue());
+					ChoiceNode p = new ChoiceNode("expected", fTarget.getDefaultValue());
 					p.setParent(fTarget);
 					testCase.getTestData().set(index, p.getCopy());
 				}

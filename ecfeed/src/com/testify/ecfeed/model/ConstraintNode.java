@@ -55,14 +55,14 @@ public class ConstraintNode extends GenericNode{
 		setParent(method);
 	}
 
-	public boolean evaluate(List<PartitionNode> values) {
+	public boolean evaluate(List<ChoiceNode> values) {
 		if(fConstraint != null){
 			return fConstraint.evaluate(values);
 		}
 		return false;
 	}
 
-	public boolean mentions(PartitionNode partition) {
+	public boolean mentions(ChoiceNode partition) {
 		if(fConstraint.mentions(partition)){
 			return true;
 		}
@@ -116,7 +116,7 @@ public class ConstraintNode extends GenericNode{
 	}
 
 	public boolean isConsistent() {
-		for(PartitionNode p : getConstraint().getReferencedPartitions()){
+		for(ChoiceNode p : getConstraint().getReferencedPartitions()){
 			ParameterNode c = p.getParameter();
 			if(c == null || c.getPartition(p.getQualifiedName()) == null){
 				return false;

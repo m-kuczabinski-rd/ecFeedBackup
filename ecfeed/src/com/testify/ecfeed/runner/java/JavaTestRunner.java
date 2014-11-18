@@ -8,10 +8,10 @@ import java.util.List;
 import com.testify.ecfeed.adapter.java.Constants;
 import com.testify.ecfeed.adapter.java.JavaUtils;
 import com.testify.ecfeed.adapter.java.ModelClassLoader;
-import com.testify.ecfeed.adapter.java.PartitionValueParser;
+import com.testify.ecfeed.adapter.java.ChoiceValueParser;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.MethodNode;
-import com.testify.ecfeed.model.PartitionNode;
+import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.runner.Messages;
 import com.testify.ecfeed.runner.RunnerException;
 
@@ -33,7 +33,7 @@ public class JavaTestRunner {
 		fTestMethod = getTestMethod(fTestClass, fTarget);
 	}
 
-	public void runTestCase(List<PartitionNode> testData) throws RunnerException{
+	public void runTestCase(List<ChoiceNode> testData) throws RunnerException{
 		validateTestData(testData);
 		try {
 			Object instance = fTestClass.newInstance();
@@ -67,10 +67,10 @@ public class JavaTestRunner {
 		return methodName.equals(methodModel.getName()) && types.equals(methodModel.getParametersTypes());
 	}
 
-	protected Object[] getArguments(List<PartitionNode> testData) throws RunnerException {
+	protected Object[] getArguments(List<ChoiceNode> testData) throws RunnerException {
 		List<Object> args = new ArrayList<Object>();
-		PartitionValueParser parser = new PartitionValueParser(fLoader);
-		for(PartitionNode p : testData){
+		ChoiceValueParser parser = new ChoiceValueParser(fLoader);
+		for(ChoiceNode p : testData){
 			Object value = parser.parseValue(p);
 			if(value == null){
 				String type = p.getParameter().getType();
@@ -87,9 +87,9 @@ public class JavaTestRunner {
 		return args.toArray();
 	}
 
-	private void validateTestData(List<PartitionNode> testData) throws RunnerException {
+	private void validateTestData(List<ChoiceNode> testData) throws RunnerException {
 		List<String> dataTypes = new ArrayList<String>();
-		for(PartitionNode parameter : testData){
+		for(ChoiceNode parameter : testData){
 			dataTypes.add(parameter.getParameter().getType());
 		}
 		if(dataTypes.equals(fTarget.getParametersTypes()) == false){

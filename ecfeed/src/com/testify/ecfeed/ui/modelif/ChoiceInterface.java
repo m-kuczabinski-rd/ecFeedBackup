@@ -18,33 +18,33 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
 
 import com.testify.ecfeed.adapter.IModelOperation;
-import com.testify.ecfeed.adapter.operations.PartitionOperationAddLabel;
-import com.testify.ecfeed.adapter.operations.PartitionOperationAddLabels;
-import com.testify.ecfeed.adapter.operations.PartitionOperationRemoveLabels;
-import com.testify.ecfeed.adapter.operations.PartitionOperationRenameLabel;
-import com.testify.ecfeed.adapter.operations.PartitionOperationSetValue;
+import com.testify.ecfeed.adapter.operations.ChoiceOperationAddLabel;
+import com.testify.ecfeed.adapter.operations.ChoiceOperationAddLabels;
+import com.testify.ecfeed.adapter.operations.ChoiceOperationRemoveLabels;
+import com.testify.ecfeed.adapter.operations.ChoiceOperationRenameLabel;
+import com.testify.ecfeed.adapter.operations.ChoiceOperationSetValue;
 import com.testify.ecfeed.model.ParameterNode;
 import com.testify.ecfeed.model.MethodNode;
-import com.testify.ecfeed.model.PartitionNode;
+import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.ui.common.Constants;
 import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.common.EclipseTypeAdapterProvider;
 
 public class ChoiceInterface extends PartitionedNodeInterface{
 
-	PartitionNode fTarget;
+	ChoiceNode fTarget;
 
 	public ChoiceInterface(IModelUpdateContext updateContext) {
 		super(updateContext);
 	}
 
-	public void setTarget(PartitionNode partition){
+	public void setTarget(ChoiceNode partition){
 		super.setTarget(partition);
 		fTarget = partition;
 	}
 	
 	public void setValue(String newValue){
-		IModelOperation operation = new PartitionOperationSetValue(fTarget, newValue, new EclipseTypeAdapterProvider()); 
+		IModelOperation operation = new ChoiceOperationSetValue(fTarget, newValue, new EclipseTypeAdapterProvider()); 
 		execute(operation, Messages.DIALOG_SET_CHOICE_VALUE_PROBLEM_TITLE);
 	}
 
@@ -72,7 +72,7 @@ public class ChoiceInterface extends PartitionedNodeInterface{
 				return false;
 			}
 		}
-		return execute(new PartitionOperationRemoveLabels(fTarget, labels), Messages.DIALOG_REMOVE_LABEL_PROBLEM_TITLE);
+		return execute(new ChoiceOperationRemoveLabels(fTarget, labels), Messages.DIALOG_REMOVE_LABEL_PROBLEM_TITLE);
 	}
 
 	public String addNewLabel() {
@@ -89,12 +89,12 @@ public class ChoiceInterface extends PartitionedNodeInterface{
 	}
 
 	public boolean addLabels(List<String> labels) {
-		IModelOperation operation = new PartitionOperationAddLabels(fTarget, labels);
+		IModelOperation operation = new ChoiceOperationAddLabels(fTarget, labels);
 		return execute(operation, Messages.DIALOG_ADD_LABEL_PROBLEM_TITLE);
 	}
 
 	public boolean addLabel(String newLabel) {
-		IModelOperation operation = new PartitionOperationAddLabel(fTarget, newLabel);
+		IModelOperation operation = new ChoiceOperationAddLabel(fTarget, newLabel);
 		return execute(operation, Messages.DIALOG_ADD_LABEL_PROBLEM_TITLE);
 	}
 
@@ -120,7 +120,7 @@ public class ChoiceInterface extends PartitionedNodeInterface{
 			}
 		}
 		
-		IModelOperation operation = new PartitionOperationRenameLabel(fTarget, label, newValue);
+		IModelOperation operation = new ChoiceOperationRenameLabel(fTarget, label, newValue);
 		return execute(operation, Messages.DIALOG_CHANGE_LABEL_PROBLEM_TITLE);
 	}
 }

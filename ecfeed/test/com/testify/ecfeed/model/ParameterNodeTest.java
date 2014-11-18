@@ -31,7 +31,7 @@ public class ParameterNodeTest{
 		
 		assertEquals(0, parameter.getPartitions().size());
 		
-		PartitionNode partition = new PartitionNode("partition", "0"); 
+		ChoiceNode partition = new ChoiceNode("partition", "0"); 
 		parameter.addPartition(partition);
 
 		assertEquals(1, parameter.getPartitions().size());
@@ -40,9 +40,9 @@ public class ParameterNodeTest{
 	@Test
 	public void getPartitionTest(){
 		ParameterNode parameter = new ParameterNode("parameter", "type", "0", false);
-		PartitionNode p = new PartitionNode("p", "0");
-		PartitionNode p1 = new PartitionNode("p1", "0");
-		PartitionNode p11 = new PartitionNode("p11", "0");
+		ChoiceNode p = new ChoiceNode("p", "0");
+		ChoiceNode p1 = new ChoiceNode("p1", "0");
+		ChoiceNode p11 = new ChoiceNode("p11", "0");
 		parameter.addPartition(p);
 		p.addPartition(p1);
 		p1.addPartition(p11);
@@ -58,12 +58,12 @@ public class ParameterNodeTest{
 	@Test
 	public void getPartitionsTest() {
 		ParameterNode parameter = new ParameterNode("parameter", "type", "0", false);
-		PartitionNode partition1 = new PartitionNode("partition1", "0"); 
-		PartitionNode partition2 = new PartitionNode("partition2", "0"); 
+		ChoiceNode partition1 = new ChoiceNode("partition1", "0"); 
+		ChoiceNode partition2 = new ChoiceNode("partition2", "0"); 
 		parameter.addPartition(partition1);
 		parameter.addPartition(partition2);
 		
-		List<PartitionNode> partitions = parameter.getPartitions();
+		List<ChoiceNode> partitions = parameter.getPartitions();
 		assertEquals(2, partitions.size());
 		assertTrue(partitions.contains(partition1));
 		assertTrue(partitions.contains(partition2));
@@ -72,8 +72,8 @@ public class ParameterNodeTest{
 	@Test
 	public void getChildrenTest() {
 		ParameterNode parameter = new ParameterNode("parameter", "type", "0", false);
-		PartitionNode partition1 = new PartitionNode("partition1", "0"); 
-		PartitionNode partition2 = new PartitionNode("partition2", "0"); 
+		ChoiceNode partition1 = new ChoiceNode("partition1", "0"); 
+		ChoiceNode partition2 = new ChoiceNode("partition2", "0"); 
 		parameter.addPartition(partition1);
 		parameter.addPartition(partition2);
 		
@@ -86,8 +86,8 @@ public class ParameterNodeTest{
 	@Test
 	public void getPartitionNames() {
 		ParameterNode parameter = new ParameterNode("parameter", "type", "0", false);
-		PartitionNode partition1 = new PartitionNode("partition1", "0"); 
-		PartitionNode partition2 = new PartitionNode("partition2", "0"); 
+		ChoiceNode partition1 = new ChoiceNode("partition1", "0"); 
+		ChoiceNode partition2 = new ChoiceNode("partition2", "0"); 
 		parameter.addPartition(partition1);
 		parameter.addPartition(partition2);
 		
@@ -99,10 +99,10 @@ public class ParameterNodeTest{
 	@Test
 	public void getLeafPartitionNamesTest() {
 		ParameterNode parameter = new ParameterNode("parameter", "type", "0", false);
-		PartitionNode p1 = new PartitionNode("p1", "0"); 
-		PartitionNode p11 = new PartitionNode("p11", "0"); 
-		PartitionNode p12 = new PartitionNode("p12", "0"); 
-		PartitionNode p2 = new PartitionNode("p2", "0");
+		ChoiceNode p1 = new ChoiceNode("p1", "0"); 
+		ChoiceNode p11 = new ChoiceNode("p11", "0"); 
+		ChoiceNode p12 = new ChoiceNode("p12", "0"); 
+		ChoiceNode p2 = new ChoiceNode("p2", "0");
 		p1.addPartition(p11);
 		p1.addPartition(p12);
 		parameter.addPartition(p1);
@@ -118,10 +118,10 @@ public class ParameterNodeTest{
 	@Test
 	public void getAllPartitionNamesTest(){
 		ParameterNode parameter = new ParameterNode("parameter", "type", "0", false);
-		PartitionNode p1 = new PartitionNode("p1", "0"); 
-		PartitionNode p11 = new PartitionNode("p11", "0"); 
-		PartitionNode p12 = new PartitionNode("p12", "0"); 
-		PartitionNode p2 = new PartitionNode("p2", "0");
+		ChoiceNode p1 = new ChoiceNode("p1", "0"); 
+		ChoiceNode p11 = new ChoiceNode("p11", "0"); 
+		ChoiceNode p12 = new ChoiceNode("p12", "0"); 
+		ChoiceNode p2 = new ChoiceNode("p2", "0");
 		p1.addPartition(p11);
 		p1.addPartition(p12);
 		parameter.addPartition(p1);
@@ -149,21 +149,21 @@ public class ParameterNodeTest{
 	public void getLeafPartitionsTest(){
 		ParameterNode parameter = new ParameterNode("parameter", "type", "0", false);
 		
-		PartitionNode p1 = new PartitionNode("p1", "0");
-		PartitionNode p2 = new PartitionNode("p1", "0");
-		PartitionNode p3 = new PartitionNode("p1", "0");
+		ChoiceNode p1 = new ChoiceNode("p1", "0");
+		ChoiceNode p2 = new ChoiceNode("p1", "0");
+		ChoiceNode p3 = new ChoiceNode("p1", "0");
 		
-		PartitionNode p21 = new PartitionNode("p21", "0");
-		PartitionNode p22 = new PartitionNode("p22", "0");
-		PartitionNode p23 = new PartitionNode("p23", "0");
+		ChoiceNode p21 = new ChoiceNode("p21", "0");
+		ChoiceNode p22 = new ChoiceNode("p22", "0");
+		ChoiceNode p23 = new ChoiceNode("p23", "0");
 
-		PartitionNode p31 = new PartitionNode("p31", "0");
-		PartitionNode p32 = new PartitionNode("p32", "0");
-		PartitionNode p33 = new PartitionNode("p33", "0");
+		ChoiceNode p31 = new ChoiceNode("p31", "0");
+		ChoiceNode p32 = new ChoiceNode("p32", "0");
+		ChoiceNode p33 = new ChoiceNode("p33", "0");
 
-		PartitionNode p321 = new PartitionNode("p321", "0");
-		PartitionNode p322 = new PartitionNode("p322", "0");
-		PartitionNode p323 = new PartitionNode("p323", "0");
+		ChoiceNode p321 = new ChoiceNode("p321", "0");
+		ChoiceNode p322 = new ChoiceNode("p322", "0");
+		ChoiceNode p323 = new ChoiceNode("p323", "0");
 		
 		parameter.addPartition(p1);
 		parameter.addPartition(p2);
@@ -195,22 +195,22 @@ public class ParameterNodeTest{
 	
 	@Test
 	public void getAllLabelsTest(){
-		PartitionNode p1 = new PartitionNode("p1", "0");
+		ChoiceNode p1 = new ChoiceNode("p1", "0");
 		p1.addLabel("l11");
 		p1.addLabel("l12");
-		PartitionNode p2 = new PartitionNode("p2", "0");
+		ChoiceNode p2 = new ChoiceNode("p2", "0");
 		p2.addLabel("l21");
 		p2.addLabel("l22");
-		PartitionNode p11 = new PartitionNode("p11", "0");
+		ChoiceNode p11 = new ChoiceNode("p11", "0");
 		p11.addLabel("l111");
 		p11.addLabel("l112");
-		PartitionNode p12 = new PartitionNode("p12", "0");
+		ChoiceNode p12 = new ChoiceNode("p12", "0");
 		p12.addLabel("l121");
 		p12.addLabel("l122");
-		PartitionNode p21 = new PartitionNode("p21", "0");
+		ChoiceNode p21 = new ChoiceNode("p21", "0");
 		p21.addLabel("l211");
 		p21.addLabel("l212");
-		PartitionNode p22 = new PartitionNode("p22", "0");
+		ChoiceNode p22 = new ChoiceNode("p22", "0");
 		p22.addLabel("l221");
 		p22.addLabel("l222");
 
@@ -311,8 +311,8 @@ public class ParameterNodeTest{
 		
 		assertTrue(c1.compare(c2));
 
-		PartitionNode p1 = new PartitionNode("p", "value");
-		PartitionNode p2 = new PartitionNode("p", "value");
+		ChoiceNode p1 = new ChoiceNode("p", "value");
+		ChoiceNode p2 = new ChoiceNode("p", "value");
 		
 		c1.addPartition(p1);
 		assertFalse(c1.compare(c2));
@@ -344,10 +344,10 @@ public class ParameterNodeTest{
 		c2.setDefaultValueString("cc");
 		assertTrue(c1.compare(c2));
 
-		c1.addPartition(new PartitionNode("p", "x"));
+		c1.addPartition(new ChoiceNode("p", "x"));
 		c1.setDefaultValueString("cc");
 		assertFalse(c1.compare(c2));
-		c2.addPartition(new PartitionNode("p1", "x"));
+		c2.addPartition(new ChoiceNode("p1", "x"));
 		assertFalse(c1.compare(c2));
 		c2.getPartition("p1").setName("p");
 		assertTrue(c1.compare(c2));

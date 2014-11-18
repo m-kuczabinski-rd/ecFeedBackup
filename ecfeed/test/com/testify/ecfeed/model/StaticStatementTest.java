@@ -18,14 +18,14 @@ import java.util.List;
 
 import org.junit.Test;
 
-import com.testify.ecfeed.model.PartitionNode;
+import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.model.StaticStatement;
 
 public class StaticStatementTest {
 
 	@Test
 	public void testEvaluate() {
-		List<PartitionNode> list = new ArrayList<PartitionNode>();
+		List<ChoiceNode> list = new ArrayList<ChoiceNode>();
 		
 		StaticStatement trueStatement = new StaticStatement(true);
 		assertTrue(trueStatement.evaluate(list));
@@ -35,7 +35,7 @@ public class StaticStatementTest {
 
 	@Test
 	public void testSetValue() {
-		List<PartitionNode> list = new ArrayList<PartitionNode>();
+		List<ChoiceNode> list = new ArrayList<ChoiceNode>();
 		
 		StaticStatement statement = new StaticStatement(true);
 		assertTrue(statement.evaluate(list));

@@ -20,7 +20,7 @@ import com.testify.ecfeed.junit.annotations.Generator;
 @Constraints(Constraints.ALL)
 public class PartitionValueParserTest{
 	
-	private PartitionValueParser fParser;
+	private ChoiceValueParser fParser;
 
 	public enum ImplementedType{
 		IMPLEMENTED
@@ -29,7 +29,7 @@ public class PartitionValueParserTest{
 	public PartitionValueParserTest() {
 		ClassLoader parentLoader = this.getClass().getClassLoader();
 		ModelClassLoader loader = new ModelClassLoader(new URL[]{}, parentLoader);
-		fParser =  new PartitionValueParser(loader);
+		fParser =  new ChoiceValueParser(loader);
 	}
 
 	@Test

@@ -21,8 +21,8 @@ public class PartitionedParameterStatement extends BasicStatement implements IRe
 
 	public interface ICondition{
 		public Object getCondition();
-		public boolean evaluate(List<PartitionNode> values);
-		public boolean adapt(List<PartitionNode> values);
+		public boolean evaluate(List<ChoiceNode> values);
+		public boolean adapt(List<ChoiceNode> values);
 		public ICondition getCopy();
 		public boolean updateReferences(ParameterNode parameter);
 		public boolean compare(ICondition condition);
@@ -46,7 +46,7 @@ public class PartitionedParameterStatement extends BasicStatement implements IRe
 		}
 
 		@Override
-		public boolean adapt(List<PartitionNode> values) {
+		public boolean adapt(List<ChoiceNode> values) {
 			return false;
 		}
 
@@ -66,7 +66,7 @@ public class PartitionedParameterStatement extends BasicStatement implements IRe
 		}
 
 		@Override
-		public boolean evaluate(List<PartitionNode> values){
+		public boolean evaluate(List<ChoiceNode> values){
 			if(getParameter().getMethod() == null){
 				return false;
 			}
@@ -100,13 +100,13 @@ public class PartitionedParameterStatement extends BasicStatement implements IRe
 	}
 
 	public class PartitionCondition implements ICondition{
-		private PartitionNode fPartition;
+		private ChoiceNode fPartition;
 
-		public PartitionCondition(PartitionNode partition){
+		public PartitionCondition(ChoiceNode partition){
 			fPartition = partition;
 		}
 
-		public PartitionNode getPartition() {
+		public ChoiceNode getPartition() {
 			return fPartition;
 		}
 
@@ -116,7 +116,7 @@ public class PartitionedParameterStatement extends BasicStatement implements IRe
 		}
 
 		@Override
-		public boolean adapt(List<PartitionNode> values) {
+		public boolean adapt(List<ChoiceNode> values) {
 			return false;
 		}
 
@@ -127,7 +127,7 @@ public class PartitionedParameterStatement extends BasicStatement implements IRe
 
 		@Override
 		public boolean updateReferences(ParameterNode parameter){
-			PartitionNode condition = parameter.getPartition(fPartition.getQualifiedName());
+			ChoiceNode condition = parameter.getPartition(fPartition.getQualifiedName());
 			if(condition != null){
 				fPartition = condition;
 			}
@@ -143,7 +143,7 @@ public class PartitionedParameterStatement extends BasicStatement implements IRe
 		}
 
 		@Override
-		public boolean evaluate(List<PartitionNode> values){
+		public boolean evaluate(List<ChoiceNode> values){
 			if(getParameter().getMethod() == null){
 				return false;
 			}
@@ -158,7 +158,7 @@ public class PartitionedParameterStatement extends BasicStatement implements IRe
 				return false;
 			}
 
-			PartitionNode partition = values.get(index);
+			ChoiceNode partition = values.get(index);
 
 			boolean isCondition = partition.is(fPartition);
 
@@ -179,7 +179,7 @@ public class PartitionedParameterStatement extends BasicStatement implements IRe
 			}
 			PartitionCondition compared = (PartitionCondition)condition;
 
-			return (fPartition.compare((PartitionNode)compared.getCondition()));
+			return (fPartition.compare((ChoiceNode)compared.getCondition()));
 		}
 
 		@Override
@@ -195,7 +195,7 @@ public class PartitionedParameterStatement extends BasicStatement implements IRe
 		fCondition = new LabelCondition(labelCondition);
 	}
 
-	public PartitionedParameterStatement(ParameterNode parameter, EStatementRelation relation, PartitionNode partitionCondition){
+	public PartitionedParameterStatement(ParameterNode parameter, EStatementRelation relation, ChoiceNode partitionCondition){
 		fParameter = parameter;
 		fRelation = relation;
 		fCondition = new PartitionCondition(partitionCondition);
@@ -218,12 +218,12 @@ public class PartitionedParameterStatement extends BasicStatement implements IRe
 	}
 
 	@Override
-	public boolean mentions(PartitionNode partition){
+	public boolean mentions(ChoiceNode partition){
 		return getConditionValue() == partition;
 	}
 
 	@Override
-	public boolean evaluate(List<PartitionNode> values){
+	public boolean evaluate(List<ChoiceNode> values){
 		return fCondition.evaluate(values);
 	}
 
@@ -281,11 +281,11 @@ public class PartitionedParameterStatement extends BasicStatement implements IRe
 		fCondition = new LabelCondition(label);
 	}
 
-	public void setCondition(PartitionNode partition){
+	public void setCondition(ChoiceNode partition){
 		fCondition = new PartitionCondition(partition);
 	}
 
-	public void setCondition(ParameterNode parameter, PartitionNode partition){
+	public void setCondition(ParameterNode parameter, ChoiceNode partition){
 		fCondition = new PartitionCondition(partition);
 	}
 

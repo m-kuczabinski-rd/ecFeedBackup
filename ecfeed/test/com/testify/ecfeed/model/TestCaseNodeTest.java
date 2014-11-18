@@ -24,14 +24,14 @@ public class TestCaseNodeTest {
 
 	@Test
 	public void compare(){
-		PartitionNode p1 = new PartitionNode("name", "value");
-		PartitionNode p2 = new PartitionNode("name", "value");
+		ChoiceNode p1 = new ChoiceNode("name", "value");
+		ChoiceNode p2 = new ChoiceNode("name", "value");
 		
-		List<PartitionNode> td1 = new ArrayList<PartitionNode>();
+		List<ChoiceNode> td1 = new ArrayList<ChoiceNode>();
 		td1.add(p1);
-		List<PartitionNode> td2 = new ArrayList<PartitionNode>();
+		List<ChoiceNode> td2 = new ArrayList<ChoiceNode>();
 		td2.add(p2);
-		List<PartitionNode> td3 = new ArrayList<PartitionNode>();
+		List<ChoiceNode> td3 = new ArrayList<ChoiceNode>();
 		
 		TestCaseNode tc1 = new TestCaseNode("name", td1);
 		TestCaseNode tc2 = new TestCaseNode("name", td2);

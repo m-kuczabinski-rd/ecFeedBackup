@@ -40,7 +40,7 @@ import com.testify.ecfeed.junit.annotations.GeneratorParameter;
 import com.testify.ecfeed.model.ParameterNode;
 import com.testify.ecfeed.model.ConstraintNode;
 import com.testify.ecfeed.model.MethodNode;
-import com.testify.ecfeed.model.PartitionNode;
+import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.runner.RunnerException;
 
@@ -57,8 +57,8 @@ public class OnlineRunnerTest extends StaticRunnerTest{
 
 	private static Set<List<String>> fExecuted;
 	
-	private final Collection<IConstraint<PartitionNode>> EMPTY_CONSTRAINTS = 
-			new ArrayList<IConstraint<PartitionNode>>();
+	private final Collection<IConstraint<ChoiceNode>> EMPTY_CONSTRAINTS = 
+			new ArrayList<IConstraint<ChoiceNode>>();
 
 	public static void executeTest(String arg1, String arg2, String arg3, String arg4){
 		if(fExecuted != null){
@@ -139,7 +139,7 @@ public class OnlineRunnerTest extends StaticRunnerTest{
 			Class<GlobalGeneratorTestClass> testClass = GlobalGeneratorTestClass.class;
 			OnlineRunner runner = new OnlineRunner(testClass);
 			for(FrameworkMethod method : runner.computeTestMethods()){
-				List<List<PartitionNode>> input = referenceInput(getModel(MODEL_PATH), method);
+				List<List<ChoiceNode>> input = referenceInput(getModel(MODEL_PATH), method);
 				Set<List<String>> referenceResult = computeReferenceResult(referenceNWiseGenerator(input, EMPTY_CONSTRAINTS, 2));
 				method.invokeExplosively(testClass.newInstance(), (Object[])null);
 				assertEquals(referenceResult, fExecuted);
@@ -156,7 +156,7 @@ public class OnlineRunnerTest extends StaticRunnerTest{
 			Class<OverridenGeneratorParameterTestClass> testClass = OverridenGeneratorParameterTestClass.class;
 			OnlineRunner runner = new OnlineRunner(testClass);
 			for(FrameworkMethod method : runner.computeTestMethods()){
-				List<List<PartitionNode>> input = referenceInput(getModel(MODEL_PATH), method);
+				List<List<ChoiceNode>> input = referenceInput(getModel(MODEL_PATH), method);
 				Set<List<String>> referenceResult = computeReferenceResult(referenceNWiseGenerator(input, EMPTY_CONSTRAINTS, 3));
 				method.invokeExplosively(testClass.newInstance(), (Object[])null);
 				assertEquals(referenceResult, fExecuted);
@@ -173,8 +173,8 @@ public class OnlineRunnerTest extends StaticRunnerTest{
 			Class<GlobalConstraintsTestClass> testClass = GlobalConstraintsTestClass.class;
 			OnlineRunner runner = new OnlineRunner(testClass);
 			for(FrameworkMethod method : runner.computeTestMethods()){
-				List<List<PartitionNode>> input = referenceInput(runner.getModel(), method);
-				Collection<IConstraint<PartitionNode>> constraints = getConstraints(runner.getModel(), method);
+				List<List<ChoiceNode>> input = referenceInput(runner.getModel(), method);
+				Collection<IConstraint<ChoiceNode>> constraints = getConstraints(runner.getModel(), method);
 				Set<List<String>> referenceResult = computeReferenceResult(referenceCartesianGenerator(input, constraints));
 				method.invokeExplosively(testClass.newInstance(), (Object[])null);
 				assertEquals(referenceResult, fExecuted);
@@ -191,8 +191,8 @@ public class OnlineRunnerTest extends StaticRunnerTest{
 			Class<OverridenConstraintsTestClass> testClass = OverridenConstraintsTestClass.class;
 			OnlineRunner runner = new OnlineRunner(testClass);
 			for(FrameworkMethod method : runner.computeTestMethods()){
-				List<List<PartitionNode>> input = referenceInput(runner.getModel(), method);
-				Collection<IConstraint<PartitionNode>> constraints = getConstraints(runner.getModel(), method, 
+				List<List<ChoiceNode>> input = referenceInput(runner.getModel(), method);
+				Collection<IConstraint<ChoiceNode>> constraints = getConstraints(runner.getModel(), method, 
 						OVERRIDING_CONSTRAINT_NAME);
 				Set<List<String>> referenceResult = computeReferenceResult(referenceCartesianGenerator(input, constraints));
 				method.invokeExplosively(testClass.newInstance(), (Object[])null);
@@ -210,8 +210,8 @@ public class OnlineRunnerTest extends StaticRunnerTest{
 			Class<NoConstraintsTestClass> testClass = NoConstraintsTestClass.class;
 			OnlineRunner runner = new OnlineRunner(testClass);
 			for(FrameworkMethod method : runner.computeTestMethods()){
-				List<List<PartitionNode>> input = referenceInput(runner.getModel(), method);
-				Collection<IConstraint<PartitionNode>> constraints = EMPTY_CONSTRAINTS;
+				List<List<ChoiceNode>> input = referenceInput(runner.getModel(), method);
+				Collection<IConstraint<ChoiceNode>> constraints = EMPTY_CONSTRAINTS;
 				Set<List<String>> referenceResult = computeReferenceResult(referenceCartesianGenerator(input, constraints));
 				method.invokeExplosively(testClass.newInstance(), (Object[])null);
 				assertEquals(referenceResult, fExecuted);
@@ -222,15 +222,15 @@ public class OnlineRunnerTest extends StaticRunnerTest{
 		}
 	}
 	
-	private Collection<IConstraint<PartitionNode>> getConstraints(
+	private Collection<IConstraint<ChoiceNode>> getConstraints(
 			RootNode model, FrameworkMethod method,
 			String name) throws RunnerException {
 		return getMethodModel(model, method).getConstraints(name);
 	}
 
-	protected Collection<IConstraint<PartitionNode>> getConstraints(
+	protected Collection<IConstraint<ChoiceNode>> getConstraints(
 			RootNode model, FrameworkMethod method) throws RunnerException {
-		Collection<IConstraint<PartitionNode>> result = new ArrayList<IConstraint<PartitionNode>>();
+		Collection<IConstraint<ChoiceNode>> result = new ArrayList<IConstraint<ChoiceNode>>();
 		MethodNode methodModel = getMethodModel(model, method);
 		for(ConstraintNode node : methodModel.getConstraintNodes()){
 			result.add(node.getConstraint());
@@ -239,12 +239,12 @@ public class OnlineRunnerTest extends StaticRunnerTest{
 	}
 
 	protected Set<List<String>> computeReferenceResult(
-			IGenerator<PartitionNode> initializedGenerator) throws GeneratorException {
+			IGenerator<ChoiceNode> initializedGenerator) throws GeneratorException {
 		Set<List<String>> result = new HashSet<List<String>>();
-		List<PartitionNode> next;
+		List<ChoiceNode> next;
 		while((next = initializedGenerator.next()) != null){
 			List<String> sample = new ArrayList<String>();
-			for(PartitionNode partition : next){
+			for(ChoiceNode partition : next){
 				sample.add((String)partition.getValueString());
 			}
 			result.add(sample);
@@ -252,27 +252,27 @@ public class OnlineRunnerTest extends StaticRunnerTest{
 		return result;
 	}
 
-	private IGenerator<PartitionNode> referenceCartesianGenerator(
-			List<List<PartitionNode>> input,
-			Collection<IConstraint<PartitionNode>> constraints) throws GeneratorException {
-		IGenerator<PartitionNode> generator = new CartesianProductGenerator<PartitionNode>();
+	private IGenerator<ChoiceNode> referenceCartesianGenerator(
+			List<List<ChoiceNode>> input,
+			Collection<IConstraint<ChoiceNode>> constraints) throws GeneratorException {
+		IGenerator<ChoiceNode> generator = new CartesianProductGenerator<ChoiceNode>();
 		generator.initialize(input, constraints, null);
 		return generator;
 	}
 
-	private NWiseGenerator<PartitionNode> referenceNWiseGenerator(
-			List<List<PartitionNode>> input, 
-			Collection<IConstraint<PartitionNode>> constraints, 
+	private NWiseGenerator<ChoiceNode> referenceNWiseGenerator(
+			List<List<ChoiceNode>> input, 
+			Collection<IConstraint<ChoiceNode>> constraints, 
 			int n) throws GeneratorException {
-		NWiseGenerator<PartitionNode> result = new NWiseGenerator<PartitionNode>();
+		NWiseGenerator<ChoiceNode> result = new NWiseGenerator<ChoiceNode>();
 		Map<String, Object> parameters = new HashMap<String, Object>();
 		parameters.put("N", n);
 		result.initialize(input, constraints, parameters);
 		return result;
 	}
 
-	private List<List<PartitionNode>> referenceInput(RootNode model, FrameworkMethod method) throws RunnerException {
-		List<List<PartitionNode>> result = new ArrayList<List<PartitionNode>>();
+	private List<List<ChoiceNode>> referenceInput(RootNode model, FrameworkMethod method) throws RunnerException {
+		List<List<ChoiceNode>> result = new ArrayList<List<ChoiceNode>>();
 		MethodNode methodModel = getMethodModel(model, method);
 		for(ParameterNode parameter : methodModel.getParameters()){
 			result.add(parameter.getPartitions());

@@ -1,7 +1,7 @@
 package com.testify.ecfeed.ui.modelif;
 
 import com.testify.ecfeed.adapter.IModelOperation;
-import com.testify.ecfeed.adapter.operations.PartitionOperationSetValue;
+import com.testify.ecfeed.adapter.operations.ChoiceOperationSetValue;
 import com.testify.ecfeed.adapter.operations.StatementOperationSetRelation;
 import com.testify.ecfeed.model.ExpectedValueStatement;
 import com.testify.ecfeed.model.EStatementRelation;
@@ -31,7 +31,7 @@ public class ExpectedValueStatementInterface extends BasicStatementInterface{
 
 	@Override
 	public boolean setConditionValue(String newValue) {
-		IModelOperation operation = new PartitionOperationSetValue(fTarget.getCondition(), newValue, new EclipseTypeAdapterProvider());
+		IModelOperation operation = new ChoiceOperationSetValue(fTarget.getCondition(), newValue, new EclipseTypeAdapterProvider());
 		return 	execute(operation, Messages.DIALOG_EDIT_STATEMENT_PROBLEM_TITLE);
 	}
 	

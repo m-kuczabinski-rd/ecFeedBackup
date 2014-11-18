@@ -30,9 +30,9 @@ public class CopyNodeTest{
 	ParameterNode fPartCat2;
 	ParameterNode fExCat1;
 	ParameterNode fExCat2;
-	PartitionNode fPartition1;
-	PartitionNode fPartition2;
-	PartitionNode fPartition3;
+	ChoiceNode fPartition1;
+	ChoiceNode fPartition2;
+	ChoiceNode fPartition3;
 
 	String fLabel1;
 	String fLabel2;
@@ -53,9 +53,9 @@ public class CopyNodeTest{
 		fExCat1.setDefaultValueString("value1");
 		fExCat2 = new ParameterNode("ecat2", "type", "0", true);
 		fExCat2.setDefaultValueString("value2");
-		fPartition1 = new PartitionNode("p1", "value1");
-		fPartition2 = new PartitionNode("p2", "value2");
-		fPartition3 = new PartitionNode("p3", "value3");
+		fPartition1 = new ChoiceNode("p1", "value1");
+		fPartition2 = new ChoiceNode("p2", "value2");
+		fPartition3 = new ChoiceNode("p3", "value3");
 		fLabel1 = "label1";
 		fLabel2 = "label2";
 
@@ -87,12 +87,12 @@ public class CopyNodeTest{
 			assertNotEquals(node.getParent(), parent);
 	}
 
-	public void testPartitions(PartitionNode partition, PartitionNode copy){
+	public void testPartitions(ChoiceNode partition, ChoiceNode copy){
 		testNode(partition, copy);
 		assertEquals(partition.getValueString(), copy.getValueString());
 	}
 
-	public void testPartitionLabels(PartitionNode partition, PartitionNode copy){
+	public void testPartitionLabels(ChoiceNode partition, ChoiceNode copy){
 		assertEquals(partition.getLabels().size(), copy.getLabels().size());
 		assertEquals(partition.getChildren().size(), copy.getChildren().size());
 		// contains all and no more labels?
@@ -100,7 +100,7 @@ public class CopyNodeTest{
 		assertTrue(partition.getLabels().containsAll(copy.getLabels()));
 	}
 
-	public void testPartitionChildrenLabels(PartitionNode childcopy, String parentlabel, String childlabel){
+	public void testPartitionChildrenLabels(ChoiceNode childcopy, String parentlabel, String childlabel){
 		assertTrue(childcopy.getLabels().contains(childlabel));
 		assertTrue(childcopy.getAllLabels().contains(parentlabel));
 	}
@@ -108,7 +108,7 @@ public class CopyNodeTest{
 	@Test
 	public void partitionCopyTest(){
 		// single partition copied properly?
-		PartitionNode copy = fPartition3.getCopy();
+		ChoiceNode copy = fPartition3.getCopy();
 		testPartitions(fPartition3, copy);
 		testParent(copy, fPartition3.getParent(), true);
 		// hierarchical partition copy tests
@@ -116,7 +116,7 @@ public class CopyNodeTest{
 		copy = fPartition1.getCopy();
 		testPartitionLabels(fPartition1, fPartition1.getCopy());
 		// children copied properly?
-		PartitionNode childcopy = (PartitionNode)copy.getChild(fPartition2.getName());
+		ChoiceNode childcopy = (ChoiceNode)copy.getChild(fPartition2.getName());
 		testPartitions(fPartition2, childcopy);
 		testParent(childcopy, copy, true);
 		testParent(fPartition2, childcopy.getParent(), false);
@@ -131,8 +131,8 @@ public class CopyNodeTest{
 		assertEquals(parameter.getAllPartitionNames().size(), copy.getAllPartitionNames().size());
 
 		// partitions copied properly?
-		PartitionNode partition = parameter.getPartitions().get(0);
-		PartitionNode partitioncopy = copy.getPartition(partition.getName());
+		ChoiceNode partition = parameter.getPartitions().get(0);
+		ChoiceNode partitioncopy = copy.getPartition(partition.getName());
 		testPartitions(partitioncopy, partition);
 		testParent(partitioncopy, copy, true);
 		// labels copied properly?
@@ -140,8 +140,8 @@ public class CopyNodeTest{
 		assertTrue(copy.getLeafLabels().contains(childlabel));
 		testPartitionLabels(partition, partitioncopy);
 		// children partitions copied properly?
-		PartitionNode partitionChild = partition.getPartitions().get(0);
-		PartitionNode partitioncopyChild = partitioncopy.getPartition(partitionChild.getName());
+		ChoiceNode partitionChild = partition.getPartitions().get(0);
+		ChoiceNode partitioncopyChild = partitioncopy.getPartition(partitionChild.getName());
 		testPartitions(partitioncopyChild, partitionChild);
 		testParent(partitioncopyChild, partitioncopy, true);
 		// children partition labels copied properly?

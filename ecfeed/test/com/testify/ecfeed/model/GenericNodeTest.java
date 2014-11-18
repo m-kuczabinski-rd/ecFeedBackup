@@ -81,8 +81,8 @@ public class GenericNodeTest{
 		ParameterNode expCat = new ParameterNode("name", "type", "0", true);
 		expCat.setDefaultValueString("0");
 		ConstraintNode constraint = new ConstraintNode("name", new Constraint(new StaticStatement(true), new StaticStatement(false)));
-		TestCaseNode testCase = new TestCaseNode("name", new ArrayList<PartitionNode>());
-		PartitionNode partition = new PartitionNode("name", "0");
+		TestCaseNode testCase = new TestCaseNode("name", new ArrayList<ChoiceNode>());
+		ChoiceNode partition = new ChoiceNode("name", "0");
 		
 		parameter.addPartition(partition);
 		method.addParameter(parameter);
@@ -138,8 +138,8 @@ public class GenericNodeTest{
 		ParameterNode expCat = new ParameterNode("name", "type", "0", true);
 		expCat.setDefaultValueString("0");
 		ConstraintNode constraint = new ConstraintNode("name", new Constraint(new StaticStatement(true), new StaticStatement(false)));
-		TestCaseNode testCase = new TestCaseNode("name", new ArrayList<PartitionNode>());
-		PartitionNode partition = new PartitionNode("name", "0");
+		TestCaseNode testCase = new TestCaseNode("name", new ArrayList<ChoiceNode>());
+		ChoiceNode partition = new ChoiceNode("name", "0");
 		
 		parameter.addPartition(partition);
 		method.addParameter(parameter);
@@ -168,9 +168,9 @@ public class GenericNodeTest{
 		ParameterNode expCat = new ParameterNode("expCat", "type", "0", true);
 		expCat.setDefaultValueString("0");
 		ConstraintNode constraint = new ConstraintNode("constraint", new Constraint(new StaticStatement(true), new StaticStatement(false)));
-		TestCaseNode testCase = new TestCaseNode("testCase", new ArrayList<PartitionNode>());
-		PartitionNode p = new PartitionNode("p", "0");
-		PartitionNode p1 = new PartitionNode("p1", "0");
+		TestCaseNode testCase = new TestCaseNode("testCase", new ArrayList<ChoiceNode>());
+		ChoiceNode p = new ChoiceNode("p", "0");
+		ChoiceNode p1 = new ChoiceNode("p1", "0");
 
 		p.addPartition(p1);
 		parameter.addPartition(p);
@@ -210,8 +210,8 @@ public class GenericNodeTest{
 	@Test
 	public void getSiblingTest(){
 		ParameterNode cat = new ParameterNode("cat", "type", "0", false);
-		PartitionNode p1 = new PartitionNode("p1", "0");
-		PartitionNode p2 = new PartitionNode("p2", "0");
+		ChoiceNode p1 = new ChoiceNode("p1", "0");
+		ChoiceNode p2 = new ChoiceNode("p2", "0");
 		
 		cat.addPartition(p1);
 		cat.addPartition(p2);

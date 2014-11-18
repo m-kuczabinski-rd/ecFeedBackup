@@ -18,9 +18,9 @@ import com.testify.ecfeed.adapter.java.JavaUtils;
 public class ExpectedValueStatement extends BasicStatement implements IRelationalStatement{
 
 	ParameterNode fParameter;
-	PartitionNode fCondition;
+	ChoiceNode fCondition;
 
-	public ExpectedValueStatement(ParameterNode parameter, PartitionNode condition) {
+	public ExpectedValueStatement(ParameterNode parameter, ChoiceNode condition) {
 		fParameter = parameter;
 		fCondition = condition.getCopy();
 	}
@@ -36,12 +36,12 @@ public class ExpectedValueStatement extends BasicStatement implements IRelationa
 	}
 
 	@Override
-	public boolean evaluate(List<PartitionNode> values) {
+	public boolean evaluate(List<ChoiceNode> values) {
 		return true;
 	}
 
 	@Override
-	public boolean adapt(List<PartitionNode> values){
+	public boolean adapt(List<ChoiceNode> values){
 		if(values == null) return true;
 		if(fParameter.getMethod() != null){
 			int index = fParameter.getMethod().getParameters().indexOf(fParameter);
@@ -68,7 +68,7 @@ public class ExpectedValueStatement extends BasicStatement implements IRelationa
 		return fParameter;
 	}
 
-	public PartitionNode getCondition(){
+	public ChoiceNode getCondition(){
 		return fCondition;
 	}
 
@@ -90,7 +90,7 @@ public class ExpectedValueStatement extends BasicStatement implements IRelationa
 			fCondition.setParent(parameter);
 			String type = parameter.getType();
 			if(JavaUtils.isUserType(type)){
-				PartitionNode choice = parameter.getPartition(fCondition.getQualifiedName());
+				ChoiceNode choice = parameter.getPartition(fCondition.getQualifiedName());
 				if(choice != null){
 					fCondition = choice;
 				}

@@ -15,7 +15,7 @@ import org.eclipse.swt.widgets.Display;
 
 import com.testify.ecfeed.generators.algorithms.Tuples;
 import com.testify.ecfeed.model.ParameterNode;
-import com.testify.ecfeed.model.PartitionNode;
+import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.model.TestCaseNode;
 
 public class CoverageCalculator {
@@ -26,13 +26,13 @@ public class CoverageCalculator {
 	private double[] fResults;
 	private List<ParameterNode> fParameters;
 
-	private List<List<PartitionNode>> fInput;
+	private List<List<ChoiceNode>> fInput;
 	// The map of expected parameters default values. Said values are used to replace unique values in algorithm.
-	private Map<Integer, PartitionNode> fExpectedPartitions;
+	private Map<Integer, ChoiceNode> fExpectedPartitions;
 	// The main map of covered tuples
-	private List<Map<List<PartitionNode>, Integer>> fTuples;
+	private List<Map<List<ChoiceNode>, Integer>> fTuples;
 	// Test cases and suites (de)selected recently;
-	private List<List<PartitionNode>> fCurrentlyChangedCases;
+	private List<List<ChoiceNode>> fCurrentlyChangedCases;
 	// If user added test cases = true; else we are substracting tuples;
 	private boolean fAddingFlag;
 
@@ -49,12 +49,12 @@ public class CoverageCalculator {
 		fResults = new double[N];
 		fCurrentlyChangedCases = new ArrayList<>();
 
-		fTuples = new ArrayList<Map<List<PartitionNode>, Integer>>();
+		fTuples = new ArrayList<Map<List<ChoiceNode>, Integer>>();
 		fExpectedPartitions = prepareExpectedPartitions();
 
 		for (int n = 0; n < fTotalWork.length; n++) {
 			fTotalWork[n] = calculateTotalTuples(fInput, n + 1, 100);
-			fTuples.add(new HashMap<List<PartitionNode>, Integer>());
+			fTuples.add(new HashMap<List<ChoiceNode>, Integer>());
 		}
 	}
 
@@ -66,18 +66,18 @@ public class CoverageCalculator {
 		@Override
 		public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 			int n = 0;
-			List<Map<List<PartitionNode>, Integer>> coveredTuples = new ArrayList<>();
+			List<Map<List<ChoiceNode>, Integer>> coveredTuples = new ArrayList<>();
 
 			monitor.beginTask("Calculating Coverage", fCurrentlyChangedCases.size() * N);
 
 			while (!monitor.isCanceled() && n < N) {
-				Map<List<PartitionNode>, Integer> mapForN = new HashMap<>();
-				for (List<PartitionNode> tcase : fCurrentlyChangedCases) {
+				Map<List<ChoiceNode>, Integer> mapForN = new HashMap<>();
+				for (List<ChoiceNode> tcase : fCurrentlyChangedCases) {
 					if (monitor.isCanceled()){
 						break;
 					}
-					Tuples<PartitionNode> tuples = new Tuples<PartitionNode>(tcase, n + 1);
-					for (List<PartitionNode> pnode : tuples.getAll()) {
+					Tuples<ChoiceNode> tuples = new Tuples<ChoiceNode>(tcase, n + 1);
+					for (List<ChoiceNode> pnode : tuples.getAll()) {
 						addTuplesToMap(mapForN, pnode);
 					}
 					monitor.worked(1);
@@ -90,7 +90,7 @@ public class CoverageCalculator {
 
 			n = 0;
 			if (!monitor.isCanceled()) {
-				for (Map<List<PartitionNode>, Integer> map : coveredTuples) {
+				for (Map<List<ChoiceNode>, Integer> map : coveredTuples) {
 					mergeOccurrenceMaps(fTuples.get(n), map, fAddingFlag);
 					fTuplesCovered[n] = fTuples.get(n).size();
 					fResults[n] = (((double) fTuplesCovered[n]) / ((double) fTotalWork[n])) * 100;
@@ -108,7 +108,7 @@ public class CoverageCalculator {
 		// CurrentlyChangedCases are null if deselection left no test cases selected, 
 		// hence we can just clear tuple map and set results to 0
 		if (fCurrentlyChangedCases == null) {
-			for (Map<List<PartitionNode>, Integer> tupleMap : fTuples) {
+			for (Map<List<ChoiceNode>, Integer> tupleMap : fTuples) {
 				tupleMap.clear();
 			}
 			// set results to zero
@@ -140,7 +140,7 @@ public class CoverageCalculator {
 
 	}
 	
-	private static void addTuplesToMap(Map<List<PartitionNode>, Integer> map, List<PartitionNode> tuple) {
+	private static void addTuplesToMap(Map<List<ChoiceNode>, Integer> map, List<ChoiceNode> tuple) {
 		if (!map.containsKey(tuple)) {
 			map.put(tuple, 1);
 		} else {
@@ -148,10 +148,10 @@ public class CoverageCalculator {
 		}
 	}
 
-	private static void mergeOccurrenceMaps(Map<List<PartitionNode>, Integer> targetMap, Map<List<PartitionNode>, Integer> sourceMap,
+	private static void mergeOccurrenceMaps(Map<List<ChoiceNode>, Integer> targetMap, Map<List<ChoiceNode>, Integer> sourceMap,
 			boolean isAdding) {
 		if (isAdding) {
-			for (List<PartitionNode> key : sourceMap.keySet()) {
+			for (List<ChoiceNode> key : sourceMap.keySet()) {
 				if (!targetMap.containsKey(key)) {
 					targetMap.put(key, sourceMap.get(key));
 				} else {
@@ -159,7 +159,7 @@ public class CoverageCalculator {
 				}
 			}
 		} else {
-			for (List<PartitionNode> key : sourceMap.keySet()) {
+			for (List<ChoiceNode> key : sourceMap.keySet()) {
 				if (!targetMap.containsKey(key)) {
 					System.err.println("Negative occurences...");
 				} else {
@@ -173,11 +173,11 @@ public class CoverageCalculator {
 		}
 	}
 
-	private List<List<PartitionNode>> prepareInput() {
-		List<List<PartitionNode>> input = new ArrayList<List<PartitionNode>>();
+	private List<List<ChoiceNode>> prepareInput() {
+		List<List<ChoiceNode>> input = new ArrayList<List<ChoiceNode>>();
 		for (ParameterNode cnode : fParameters) {
-			List<PartitionNode> parameter = new ArrayList<PartitionNode>();
-			for (PartitionNode pnode : cnode.getLeafPartitions()) {
+			List<ChoiceNode> parameter = new ArrayList<ChoiceNode>();
+			for (ChoiceNode pnode : cnode.getLeafPartitions()) {
 				parameter.add(pnode);
 			}
 			input.add(parameter);
@@ -185,12 +185,12 @@ public class CoverageCalculator {
 		return input;
 	}
 	
-	private Map<Integer, PartitionNode> prepareExpectedPartitions() {
+	private Map<Integer, ChoiceNode> prepareExpectedPartitions() {
 		int n = 0;
-		Map<Integer, PartitionNode> expected = new HashMap<>();
+		Map<Integer, ChoiceNode> expected = new HashMap<>();
 		for (ParameterNode cnode : fParameters) {
 			if (cnode.isExpected()) {
-				PartitionNode p = new PartitionNode("", cnode.getDefaultValue());
+				ChoiceNode p = new ChoiceNode("", cnode.getDefaultValue());
 				p.setParent(cnode);
 				expected.put(n, p);
 //				expected.put(n, cnode.getDefaultValuePartition());
@@ -200,21 +200,21 @@ public class CoverageCalculator {
 		return expected;
 	}
 
-	private List<List<PartitionNode>> prepareCasesToAdd(Collection<TestCaseNode> TestCases) {
-		List<List<PartitionNode>> cases = new ArrayList<>();
+	private List<List<ChoiceNode>> prepareCasesToAdd(Collection<TestCaseNode> TestCases) {
+		List<List<ChoiceNode>> cases = new ArrayList<>();
 		if (fExpectedPartitions.isEmpty()) {
 			for (TestCaseNode tcnode : TestCases) {
-				List<PartitionNode> partitions = new ArrayList<>();
-				for (PartitionNode pnode : tcnode.getTestData()) {
+				List<ChoiceNode> partitions = new ArrayList<>();
+				for (ChoiceNode pnode : tcnode.getTestData()) {
 					partitions.add(pnode);
 				}
 				cases.add(partitions);
 			}
 		} else {
 			for (TestCaseNode tcnode : TestCases) {
-				List<PartitionNode> partitions = new ArrayList<>();
+				List<ChoiceNode> partitions = new ArrayList<>();
 				int n = 0;
-				for (PartitionNode pnode : tcnode.getTestData()) {
+				for (ChoiceNode pnode : tcnode.getTestData()) {
 					if (fExpectedPartitions.containsKey(n)) {
 						partitions.add(fExpectedPartitions.get(n));
 					} else {
@@ -228,14 +228,14 @@ public class CoverageCalculator {
 		return cases;
 	}
 
-	private int calculateTotalTuples(List<List<PartitionNode>> input, int n, int coverage) {
+	private int calculateTotalTuples(List<List<ChoiceNode>> input, int n, int coverage) {
 		int totalWork = 0;
 
-		Tuples<List<PartitionNode>> tuples = new Tuples<List<PartitionNode>>(input, n);
+		Tuples<List<ChoiceNode>> tuples = new Tuples<List<ChoiceNode>>(input, n);
 		while (tuples.hasNext()) {
 			long combinations = 1;
-			List<List<PartitionNode>> tuple = tuples.next();
-			for (List<PartitionNode> parameter : tuple) {
+			List<List<ChoiceNode>> tuple = tuples.next();
+			for (List<ChoiceNode> parameter : tuple) {
 				combinations *= parameter.size();
 			}
 			totalWork += combinations;

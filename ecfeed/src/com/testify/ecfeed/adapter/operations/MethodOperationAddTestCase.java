@@ -7,7 +7,7 @@ import com.testify.ecfeed.adapter.ModelOperationException;
 import com.testify.ecfeed.adapter.java.Constants;
 import com.testify.ecfeed.model.ParameterNode;
 import com.testify.ecfeed.model.MethodNode;
-import com.testify.ecfeed.model.PartitionNode;
+import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.model.TestCaseNode;
 
 public class MethodOperationAddTestCase extends AbstractModelOperation {
@@ -41,7 +41,7 @@ public class MethodOperationAddTestCase extends AbstractModelOperation {
 			throw new ModelOperationException(Messages.TEST_CASE_INCOMPATIBLE_WITH_METHOD);
 		}
 		//following must be done AFTER references are updated
-		for(PartitionNode choice : fTestCase.getTestData()){
+		for(ChoiceNode choice : fTestCase.getTestData()){
 			ParameterNode parameter = choice.getParameter();
 			if(choice.getParameter().isExpected()){
 				String type = parameter.getType();

@@ -53,7 +53,7 @@ import com.testify.ecfeed.model.EStatementRelation;
 import com.testify.ecfeed.model.ExpectedValueStatement;
 import com.testify.ecfeed.model.GenericNode;
 import com.testify.ecfeed.model.MethodNode;
-import com.testify.ecfeed.model.PartitionNode;
+import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.model.PartitionedParameterStatement;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.StatementArray;
@@ -167,22 +167,22 @@ public class RandomModelGenerator {
 
 	public TestCaseNode generateTestCase(MethodNode method){
 		String name = generateString(REGEX_TEST_CASE_NODE_NAME);
-		List<PartitionNode> testData = new ArrayList<PartitionNode>();
+		List<ChoiceNode> testData = new ArrayList<ChoiceNode>();
 		
 		for(ParameterNode c : method.getParameters()){
 			if(c.isExpected()){
-				PartitionNode expectedValue = new PartitionNode("@expected", randomPartitionValue(c.getType()));
+				ChoiceNode expectedValue = new ChoiceNode("@expected", randomPartitionValue(c.getType()));
 				expectedValue.setParent(c);
 				testData.add(expectedValue);
 			}
 			else{
-				List<PartitionNode> partitions = c.getPartitions();
+				List<ChoiceNode> partitions = c.getPartitions();
 				if(partitions.size() == 0){
 					System.out.println("Empty parameter!");
 				}
-				PartitionNode p = c.getPartitions().get(rand.nextInt(partitions.size()));
+				ChoiceNode p = c.getPartitions().get(rand.nextInt(partitions.size()));
 				while(p.getPartitions().size() > 0){
-					List<PartitionNode> ppartitions = p.getPartitions();
+					List<ChoiceNode> ppartitions = p.getPartitions();
 					p = ppartitions.get(rand.nextInt(ppartitions.size()));
 				}
 				testData.add(p);
@@ -242,14 +242,14 @@ public class RandomModelGenerator {
 		ParameterNode parameter = parameters.get(rand.nextInt(parameters.size()));
 		EStatementRelation relation = rand.nextBoolean() ? EStatementRelation.EQUAL : EStatementRelation.NOT;
 		if(parameter.getPartitions().size() == 0){
-			PartitionNode partition = generatePartition(0, 0, 1, parameter.getType());
+			ChoiceNode partition = generatePartition(0, 0, 1, parameter.getType());
 			parameter.addPartition(partition);
 		}
 		
 		if(rand.nextBoolean()){
 			List<String> partitionNames = new ArrayList<String>(parameter.getAllPartitionNames());
 			String luckyPartitionName = partitionNames.get(rand.nextInt(partitionNames.size()));
-			PartitionNode condition = parameter.getPartition(luckyPartitionName);
+			ChoiceNode condition = parameter.getPartition(luckyPartitionName);
 			return new PartitionedParameterStatement(parameter, relation, condition);
 		}
 		else{
@@ -284,7 +284,7 @@ public class RandomModelGenerator {
 		
 		String value = randomPartitionValue(parameter.getType());
 		String name = generateString(REGEX_PARTITION_NODE_NAME);
-		return new ExpectedValueStatement(parameter, new PartitionNode(name, value));
+		return new ExpectedValueStatement(parameter, new ChoiceNode(name, value));
 	}
 
 	public StatementArray generateStatementArray(MethodNode method, int depth) {
@@ -308,12 +308,12 @@ public class RandomModelGenerator {
 		return generateStatement(method, MAX_STATEMENTS_DEPTH);
 	}
 
-	public PartitionNode generatePartition(int levels, int partitions, int labels, String type) {
+	public ChoiceNode generatePartition(int levels, int partitions, int labels, String type) {
 		String name = generateString(REGEX_PARTITION_NODE_NAME);
 		name = name.replaceAll(":", "_");
 		String value = randomPartitionValue(type);
 		
-		PartitionNode partition = new PartitionNode(name, value);
+		ChoiceNode partition = new ChoiceNode(name, value);
 		for(int i = 0; i < labels; i++){
 			String label = generateString(REGEX_PARTITION_LABEL);
 			partition.addLabel(label);
@@ -459,14 +459,14 @@ public class RandomModelGenerator {
 	public void testPartitionGeneration(){
 		System.out.println("Childless partitions:");
 		for(String type : new String[]{"String"}){
-			PartitionNode p0 = generatePartition(0, 0, 0, type);
+			ChoiceNode p0 = generatePartition(0, 0, 0, type);
 			System.out.println(type + " partition:" + p0);
 		}
 		
 		System.out.println("Hierarchic partitions:");
 		for(String type : SUPPORTED_TYPES){
 			System.out.println("Type: " + type);
-			PartitionNode p1 = generatePartition(MAX_PARTITION_LEVELS, MAX_PARTITIONS, MAX_PARTITION_LABELS, type);
+			ChoiceNode p1 = generatePartition(MAX_PARTITION_LEVELS, MAX_PARTITIONS, MAX_PARTITION_LABELS, type);
 			System.out.println(fStringifier.stringify(p1, 0));
 		}
 	}

@@ -17,29 +17,29 @@ import com.testify.ecfeed.generators.api.GeneratorException;
 import com.testify.ecfeed.generators.api.IConstraint;
 import com.testify.ecfeed.generators.api.IGenerator;
 import com.testify.ecfeed.model.MethodNode;
-import com.testify.ecfeed.model.PartitionNode;
+import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.ui.dialogs.GenerateTestSuiteDialog;
 import com.testify.ecfeed.ui.dialogs.GeneratorProgressMonitorDialog;
 
 public class TestSuiteGenerationSupport {
 
 	private boolean fCanceled;
-	private Collection<IConstraint<PartitionNode>> fSelectedConstraints;
+	private Collection<IConstraint<ChoiceNode>> fSelectedConstraints;
 	private MethodNode fTarget;
 	private String fTestSuiteName;
-	private List<List<PartitionNode>> fGeneratedData;
+	private List<List<ChoiceNode>> fGeneratedData;
 	private boolean fHasData;
 	
-	private class ExpectedValueReplacer implements IConstraint<PartitionNode>{
+	private class ExpectedValueReplacer implements IConstraint<ChoiceNode>{
 		
 		@Override
-		public boolean evaluate(List<PartitionNode> values) {
+		public boolean evaluate(List<ChoiceNode> values) {
 			return true;
 		}
 
 		@Override
-		public boolean adapt(List<PartitionNode> values) {
-			for(PartitionNode p : values){
+		public boolean adapt(List<ChoiceNode> values) {
+			for(ChoiceNode p : values){
 				if(p.getParameter().isExpected()){
 					values.set(p.getParameter().getIndex(), p.getCopy());
 				}
@@ -50,17 +50,17 @@ public class TestSuiteGenerationSupport {
 
 	private class GeneratorRunnable implements IRunnableWithProgress{
 
-		private IGenerator<PartitionNode> fGenerator;
-		private List<List<PartitionNode>> fGeneratedData;
-		private List<List<PartitionNode>> fInput;
-		private Collection<IConstraint<PartitionNode>> fConstraints;
+		private IGenerator<ChoiceNode> fGenerator;
+		private List<List<ChoiceNode>> fGeneratedData;
+		private List<List<ChoiceNode>> fInput;
+		private Collection<IConstraint<ChoiceNode>> fConstraints;
 		private Map<String, Object> fParameters;
 
-		GeneratorRunnable(IGenerator<PartitionNode> generator, 
-				List<List<PartitionNode>> input, 
-				Collection<IConstraint<PartitionNode>> constraints, 
+		GeneratorRunnable(IGenerator<ChoiceNode> generator, 
+				List<List<ChoiceNode>> input, 
+				Collection<IConstraint<ChoiceNode>> constraints, 
 				Map<String, Object> parameters, 
-				List<List<PartitionNode>> generated){
+				List<List<ChoiceNode>> generated){
 			fGenerator = generator;
 			fInput = input;
 			fConstraints = constraints;
@@ -71,7 +71,7 @@ public class TestSuiteGenerationSupport {
 		@Override
 		public void run(IProgressMonitor monitor)
 				throws InvocationTargetException, InterruptedException {
-			List<PartitionNode> next;
+			List<ChoiceNode> next;
 			try {
 				fGenerator.initialize(fInput, fConstraints, fParameters);
 				monitor.beginTask("Generating test data", fGenerator.totalWork());
@@ -99,12 +99,12 @@ public class TestSuiteGenerationSupport {
 	protected boolean generate(){
 		GenerateTestSuiteDialog dialog = new GenerateTestSuiteDialog(getActiveShell(), fTarget);
 		if(dialog.open() == IDialogConstants.OK_ID){
-			IGenerator<PartitionNode> selectedGenerator = dialog.getSelectedGenerator();
-			List<List<PartitionNode>> algorithmInput = dialog.getAlgorithmInput();
-			fSelectedConstraints = new ArrayList<IConstraint<PartitionNode>>();
+			IGenerator<ChoiceNode> selectedGenerator = dialog.getSelectedGenerator();
+			List<List<ChoiceNode>> algorithmInput = dialog.getAlgorithmInput();
+			fSelectedConstraints = new ArrayList<IConstraint<ChoiceNode>>();
 			fSelectedConstraints.addAll(dialog.getConstraints());
 			fSelectedConstraints.add(new ExpectedValueReplacer());
-			List<IConstraint<PartitionNode>> constraints = new ArrayList<IConstraint<PartitionNode>>();
+			List<IConstraint<ChoiceNode>> constraints = new ArrayList<IConstraint<ChoiceNode>>();
 			constraints.addAll(fSelectedConstraints);
 			fTestSuiteName = dialog.getTestSuiteName();
 			Map<String, Object> parameters = dialog.getGeneratorParameters();
@@ -114,7 +114,7 @@ public class TestSuiteGenerationSupport {
 		return false;
 	}
 
-	public List<List<PartitionNode>> getGeneratedData(){
+	public List<List<ChoiceNode>> getGeneratedData(){
 		return fGeneratedData;
 	}
 	
@@ -122,13 +122,13 @@ public class TestSuiteGenerationSupport {
 		return fTestSuiteName;
 	}
 	
-	private List<List<PartitionNode>> generateTestData(final IGenerator<PartitionNode> generator, 
-			final List<List<PartitionNode>> input, 
-			final Collection<IConstraint<PartitionNode>> constraints,
+	private List<List<ChoiceNode>> generateTestData(final IGenerator<ChoiceNode> generator, 
+			final List<List<ChoiceNode>> input, 
+			final Collection<IConstraint<ChoiceNode>> constraints,
 			final Map<String, Object> parameters) {
 
 		GeneratorProgressMonitorDialog progressDialog = new GeneratorProgressMonitorDialog(getActiveShell(), generator);
-		List<List<PartitionNode>> generated = new ArrayList<List<PartitionNode>>();
+		List<List<ChoiceNode>> generated = new ArrayList<List<ChoiceNode>>();
 		fCanceled = false;
 		try {
 			GeneratorRunnable runnable = new GeneratorRunnable(generator, input, constraints, parameters, generated);
@@ -149,7 +149,7 @@ public class TestSuiteGenerationSupport {
 		else{
 			//return empty set if the operation was canceled
 			//TODO add a decision dialog where user may choose whether to add generated data
-			return new ArrayList<List<PartitionNode>>();
+			return new ArrayList<List<ChoiceNode>>();
 		}
 	}
 

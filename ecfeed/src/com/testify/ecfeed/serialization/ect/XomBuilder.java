@@ -60,7 +60,7 @@ import com.testify.ecfeed.model.GenericNode;
 import com.testify.ecfeed.model.IModelVisitor;
 import com.testify.ecfeed.model.IStatementVisitor;
 import com.testify.ecfeed.model.MethodNode;
-import com.testify.ecfeed.model.PartitionNode;
+import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.model.PartitionedParameterStatement;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.StatementArray;
@@ -119,7 +119,7 @@ public class XomBuilder implements IModelVisitor, IStatementVisitor {
 		element.addAttribute(new Attribute(CATEGORY_IS_EXPECTED_ATTRIBUTE_NAME, Boolean.toString(node.isExpected())));
 		element.addAttribute(new Attribute(DEFAULT_EXPECTED_VALUE_ATTRIBUTE_NAME, node.getDefaultValue()));
 
-		for(PartitionNode child : node.getPartitions()){
+		for(ChoiceNode child : node.getPartitions()){
 			element.appendChild((Element)child.accept(this));
 		}
 	
@@ -130,7 +130,7 @@ public class XomBuilder implements IModelVisitor, IStatementVisitor {
 	public Object visit(TestCaseNode node) throws Exception {
 		Element element = new Element(TEST_CASE_NODE_NAME);
 		element.addAttribute(new Attribute(TEST_SUITE_NAME_ATTRIBUTE, node.getName()));
-		for(PartitionNode testParameter : node.getTestData()){
+		for(ChoiceNode testParameter : node.getTestData()){
 			if(testParameter.getParameter() != null && testParameter.getParameter().isExpected()){
 				Element expectedParameterElement = new Element(EXPECTED_PARAMETER_NODE_NAME);
 				Attribute expectedValueAttribute = new Attribute(VALUE_ATTRIBUTE_NAME, testParameter.getValueString());
@@ -168,7 +168,7 @@ public class XomBuilder implements IModelVisitor, IStatementVisitor {
 	}
 	
 	@Override
-	public Object visit(PartitionNode node) throws Exception {
+	public Object visit(ChoiceNode node) throws Exception {
 		Element element = createNamedElement(PARTITION_NODE_NAME, node);
 		String value = node.getValueString();
 		//remove disallowed XML characters
@@ -188,7 +188,7 @@ public class XomBuilder implements IModelVisitor, IStatementVisitor {
 			element.appendChild(labelElement);
 		}
 		
-		for(PartitionNode child : node.getPartitions()){
+		for(ChoiceNode child : node.getPartitions()){
 			element.appendChild((Element)child.accept(this));
 		}
 		
@@ -231,7 +231,7 @@ public class XomBuilder implements IModelVisitor, IStatementVisitor {
 	@Override
 	public Object visit(ExpectedValueStatement statement) throws Exception {
 		String parameterName = statement.getLeftOperandName();
-		PartitionNode condition = statement.getCondition();
+		ChoiceNode condition = statement.getCondition();
 		Attribute parameterAttribute = 
 				new Attribute(STATEMENT_CATEGORY_ATTRIBUTE_NAME, parameterName);
 		Attribute valueAttribute = 
@@ -270,7 +270,7 @@ public class XomBuilder implements IModelVisitor, IStatementVisitor {
 
 	@Override
 	public Object visit(PartitionCondition condition) throws Exception {
-		PartitionNode partition = condition.getPartition();
+		ChoiceNode partition = condition.getPartition();
 		Element element = new Element(CONSTRAINT_PARTITION_STATEMENT_NODE_NAME);
 		element.addAttribute(new Attribute(STATEMENT_PARTITION_ATTRIBUTE_NAME, partition.getQualifiedName()));
 		

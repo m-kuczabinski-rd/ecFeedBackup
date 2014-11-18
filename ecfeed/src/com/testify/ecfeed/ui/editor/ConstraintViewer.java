@@ -41,7 +41,7 @@ import com.testify.ecfeed.model.EStatementRelation;
 import com.testify.ecfeed.model.ExpectedValueStatement;
 import com.testify.ecfeed.model.IRelationalStatement;
 import com.testify.ecfeed.model.IStatementVisitor;
-import com.testify.ecfeed.model.PartitionNode;
+import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.model.PartitionedParameterStatement;
 import com.testify.ecfeed.model.PartitionedParameterStatement.ICondition;
 import com.testify.ecfeed.model.PartitionedParameterStatement.LabelCondition;
@@ -182,7 +182,7 @@ public class ConstraintViewer extends TreeViewerSection {
 				ParameterNode parameter  = statement.getParameter();
 				List<String> values = ParameterInterface.getSpecialValues(parameter.getType());
 				if(values.isEmpty()){
-					for(PartitionNode p : parameter.getLeafPartitions()){
+					for(ChoiceNode p : parameter.getLeafPartitions()){
 						values.add(p.getValueString());
 					}
 				}
@@ -195,9 +195,9 @@ public class ConstraintViewer extends TreeViewerSection {
 				List<String> result = new ArrayList<String>();
 				ParameterNode parameter = statement.getParameter();
 
-				Set<PartitionNode> allPartitions = parameter.getAllPartitions();
+				Set<ChoiceNode> allPartitions = parameter.getAllPartitions();
 				Set<String> allLabels = parameter.getLeafLabels();
-				for(PartitionNode choice : allPartitions){
+				for(ChoiceNode choice : allPartitions){
 					ICondition condition = new PartitionedParameterStatement(parameter, EStatementRelation.EQUAL, choice).getCondition();
 					result.add(condition.toString());
 				}
@@ -318,12 +318,12 @@ public class ConstraintViewer extends TreeViewerSection {
 				ParameterNode parameter = fConstraint.getMethod().getParameter(statementText);
 				EStatementRelation relation = EStatementRelation.EQUAL;
 				if(parameter != null && parameter.isExpected()){
-					PartitionNode condition = new PartitionNode("expected", parameter.getDefaultValue());
+					ChoiceNode condition = new ChoiceNode("expected", parameter.getDefaultValue());
 					condition.setParent(parameter);
 					return new ExpectedValueStatement(parameter, condition);
 				}
 				else if(parameter != null && parameter.getPartitions().size() > 0){
-					PartitionNode condition = parameter.getPartitions().get(0);
+					ChoiceNode condition = parameter.getPartitions().get(0);
 					return new PartitionedParameterStatement(parameter, relation, condition);
 				}
 

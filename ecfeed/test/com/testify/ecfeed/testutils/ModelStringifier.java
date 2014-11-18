@@ -18,7 +18,7 @@ import com.testify.ecfeed.model.ConstraintNode;
 import com.testify.ecfeed.model.ExpectedValueStatement;
 import com.testify.ecfeed.model.GenericNode;
 import com.testify.ecfeed.model.MethodNode;
-import com.testify.ecfeed.model.PartitionNode;
+import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.model.PartitionedParameterStatement;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.StatementArray;
@@ -29,8 +29,8 @@ import com.testify.ecfeed.model.PartitionedParameterStatement.PartitionCondition
 
 public class ModelStringifier {
 	public String stringify(GenericNode node, int indent){
-		if(node instanceof PartitionNode){
-			return stringify((PartitionNode)node, indent);
+		if(node instanceof ChoiceNode){
+			return stringify((ChoiceNode)node, indent);
 		}
 		if(node instanceof ParameterNode){
 			return stringify((ParameterNode)node, indent);
@@ -115,7 +115,7 @@ public class ModelStringifier {
 		String result = intendentString(indent);
 		result += "Parameter " + c.getName() + "[" + c.getType() + "], " + (c.isExpected() ? "expected" : "patitioned");
 		result += " default value: " + c.getDefaultValue(); 
-		for(PartitionNode child : c.getPartitions()){
+		for(ChoiceNode child : c.getPartitions()){
 			result += "\n";
 			result += stringify(child, indent + 2);
 		}
@@ -125,7 +125,7 @@ public class ModelStringifier {
 	public String stringify(TestCaseNode tc, int indent){
 		String result = intendentString(indent);
 		result += "Test case " + tc.toString() + "[";
-		for(PartitionNode p : tc.getTestData()){
+		for(ChoiceNode p : tc.getTestData()){
 			if(p.getParameter().isExpected()){
 				result += "[e]" + p.getValueString();
 			}
@@ -155,7 +155,7 @@ public class ModelStringifier {
 		return result;
 	}
 	
-	public String stringify(PartitionNode p, int indent){
+	public String stringify(ChoiceNode p, int indent){
 		String result = intendentString(indent);
 		result += "Partition ";
 		result += p.getName() + "[" + p.getValueString() + "]";
@@ -163,7 +163,7 @@ public class ModelStringifier {
 		for(String label : p.getLabels()){
 			result += label + " ";
 		}
-		for(PartitionNode child : p.getPartitions()){
+		for(ChoiceNode child : p.getPartitions()){
 			result += "\n";
 			result += stringify(child, indent + 2);
 		}

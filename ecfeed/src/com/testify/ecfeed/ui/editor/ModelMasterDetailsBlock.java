@@ -35,7 +35,7 @@ import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.ConstraintNode;
 import com.testify.ecfeed.model.GenericNode;
 import com.testify.ecfeed.model.MethodNode;
-import com.testify.ecfeed.model.PartitionNode;
+import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
@@ -172,7 +172,7 @@ public class ModelMasterDetailsBlock extends MasterDetailsBlock implements ISele
 		detailsPart.registerPage(ParameterNode.class, new ParameterDetailsPage(fMasterSection, fUpdateContext, fPage.getEditor()));
 		detailsPart.registerPage(TestCaseNode.class, new TestCaseDetailsPage(fMasterSection, fUpdateContext, fPage.getEditor()));
 		detailsPart.registerPage(ConstraintNode.class, new ConstraintDetailsPage(fMasterSection, fUpdateContext, fPage.getEditor()));
-		detailsPart.registerPage(PartitionNode.class, new PartitionDetailsPage(fMasterSection, fUpdateContext, fPage.getEditor()));
+		detailsPart.registerPage(ChoiceNode.class, new ChoiceDetailsPage(fMasterSection, fUpdateContext, fPage.getEditor()));
 
 		selectNode(getModel());
 	}

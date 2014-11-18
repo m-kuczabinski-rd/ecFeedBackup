@@ -18,22 +18,22 @@ import java.util.List;
 import com.testify.ecfeed.adapter.java.ModelClassLoader;
 import com.testify.ecfeed.generators.api.GeneratorException;
 import com.testify.ecfeed.generators.api.IGenerator;
-import com.testify.ecfeed.model.PartitionNode;
+import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.runner.Messages;
 import com.testify.ecfeed.runner.RunnerException;
 
 public class RuntimeMethod extends AbstractFrameworkMethod{
 
-	IGenerator<PartitionNode> fGenerator;
+	IGenerator<ChoiceNode> fGenerator;
 	
-	public RuntimeMethod(Method method, IGenerator<PartitionNode> initializedGenerator, ModelClassLoader loader) throws RunnerException{
+	public RuntimeMethod(Method method, IGenerator<ChoiceNode> initializedGenerator, ModelClassLoader loader) throws RunnerException{
 		super(method, loader);
 		fGenerator = initializedGenerator;
 	}
 
 	@Override
 	public Object invokeExplosively(Object target, Object... p) throws Throwable{
-		List<PartitionNode> next = new ArrayList<>();
+		List<ChoiceNode> next = new ArrayList<>();
 		try {
 			while((next = fGenerator.next()) !=null){
 				super.invoke(target, next);

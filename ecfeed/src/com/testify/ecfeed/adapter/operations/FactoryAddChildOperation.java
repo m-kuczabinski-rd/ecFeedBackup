@@ -8,7 +8,7 @@ import com.testify.ecfeed.model.ConstraintNode;
 import com.testify.ecfeed.model.GenericNode;
 import com.testify.ecfeed.model.IModelVisitor;
 import com.testify.ecfeed.model.MethodNode;
-import com.testify.ecfeed.model.PartitionNode;
+import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.TestCaseNode;
 
@@ -77,11 +77,11 @@ public class FactoryAddChildOperation implements IModelVisitor{
 
 	@Override
 	public Object visit(ParameterNode node) throws Exception {
-		if(fChild instanceof PartitionNode){
+		if(fChild instanceof ChoiceNode){
 			if(fIndex == -1){
-				return new GenericOperationAddPartition(node, (PartitionNode)fChild, fAdapterProvider, fValidate);
+				return new GenericOperationAddPartition(node, (ChoiceNode)fChild, fAdapterProvider, fValidate);
 			}
-			return new GenericOperationAddPartition(node, (PartitionNode)fChild, fAdapterProvider, fIndex, fValidate);
+			return new GenericOperationAddPartition(node, (ChoiceNode)fChild, fAdapterProvider, fIndex, fValidate);
 		}
 		throw new ModelOperationException(Messages.OPERATION_NOT_SUPPORTED_PROBLEM);
 	}
@@ -97,12 +97,12 @@ public class FactoryAddChildOperation implements IModelVisitor{
 	}
 
 	@Override
-	public Object visit(PartitionNode node) throws Exception {
-		if(fChild instanceof PartitionNode){
+	public Object visit(ChoiceNode node) throws Exception {
+		if(fChild instanceof ChoiceNode){
 			if(fIndex == -1){
-				return new GenericOperationAddPartition(node, (PartitionNode)fChild, fAdapterProvider, fValidate);
+				return new GenericOperationAddPartition(node, (ChoiceNode)fChild, fAdapterProvider, fValidate);
 			}
-			return new GenericOperationAddPartition(node, (PartitionNode)fChild, fAdapterProvider, fIndex, fValidate);
+			return new GenericOperationAddPartition(node, (ChoiceNode)fChild, fAdapterProvider, fIndex, fValidate);
 		}
 		throw new ModelOperationException(Messages.OPERATION_NOT_SUPPORTED_PROBLEM);
 	}

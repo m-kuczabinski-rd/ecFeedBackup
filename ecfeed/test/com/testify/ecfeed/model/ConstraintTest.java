@@ -22,7 +22,7 @@ import org.junit.Test;
 import com.testify.ecfeed.model.BasicStatement;
 import com.testify.ecfeed.model.ParameterNode;
 import com.testify.ecfeed.model.Constraint;
-import com.testify.ecfeed.model.PartitionNode;
+import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.model.PartitionedParameterStatement;
 import com.testify.ecfeed.model.EStatementRelation;
 import com.testify.ecfeed.model.StaticStatement;
@@ -32,7 +32,7 @@ public class ConstraintTest {
 	public void testEvaluate() {
 		BasicStatement trueStatement = new StaticStatement(true); 
 		BasicStatement falseStatement = new StaticStatement(false); 
-		List<PartitionNode> values = new ArrayList<PartitionNode>();
+		List<ChoiceNode> values = new ArrayList<ChoiceNode>();
 
 		assertTrue(new Constraint(falseStatement, falseStatement).evaluate(values));
 		assertTrue(new Constraint(falseStatement, trueStatement).evaluate(values));
@@ -66,7 +66,7 @@ public class ConstraintTest {
 
 	@Test
 	public void testMentions() {
-		PartitionNode partition = new PartitionNode("partition", null);
+		ChoiceNode partition = new ChoiceNode("partition", null);
 		ParameterNode parameter = new ParameterNode("parameter", "type", "0", false);
 		parameter.addPartition(partition);
 

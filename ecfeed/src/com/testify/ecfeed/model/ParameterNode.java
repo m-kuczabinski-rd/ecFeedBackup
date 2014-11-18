@@ -42,8 +42,8 @@ public class ParameterNode extends PartitionedNode{
 		return new String(getName() + ": " + getType());
 	}
 	
-	public void addPartitions(List<PartitionNode> partitions) {
-		for(PartitionNode p : partitions){
+	public void addPartitions(List<ChoiceNode> partitions) {
+		for(ChoiceNode p : partitions){
 			addPartition(p);
 		}
 	}
@@ -54,7 +54,7 @@ public class ParameterNode extends PartitionedNode{
 		parameter.setParent(this.getParent());
 		if(getDefaultValue() != null)
 			parameter.setDefaultValueString(getDefaultValue());
-		for(PartitionNode partition : getPartitions()){
+		for(ChoiceNode partition : getPartitions()){
 			parameter.addPartition(partition.getCopy());
 		}
 		parameter.setParent(getParent());

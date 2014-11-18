@@ -8,7 +8,7 @@ import com.testify.ecfeed.model.ConstraintNode;
 import com.testify.ecfeed.model.GenericNode;
 import com.testify.ecfeed.model.IModelVisitor;
 import com.testify.ecfeed.model.MethodNode;
-import com.testify.ecfeed.model.PartitionNode;
+import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.TestCaseNode;
 
@@ -50,7 +50,7 @@ public abstract class AbstractModelImplementer implements IModelImplementer {
 		}
 
 		@Override
-		public Object visit(PartitionNode node) throws Exception {
+		public Object visit(ChoiceNode node) throws Exception {
 			return implementable(node); 
 		}
 	}
@@ -88,7 +88,7 @@ public abstract class AbstractModelImplementer implements IModelImplementer {
 		}
 
 		@Override
-		public Object visit(PartitionNode node) throws Exception {
+		public Object visit(ChoiceNode node) throws Exception {
 			return implement(node);
 		}
 		
@@ -107,7 +107,7 @@ public abstract class AbstractModelImplementer implements IModelImplementer {
 			(type.equals(MethodNode.class))||
 			(type.equals(ParameterNode.class))||
 			(type.equals(TestCaseNode.class))||
-			(type.equals(PartitionNode.class))
+			(type.equals(ChoiceNode.class))
 		){
 			return true;
 		}
@@ -179,7 +179,7 @@ public abstract class AbstractModelImplementer implements IModelImplementer {
 		if(parameterDefinitionImplemented(node) == false){
 			implementParameterDefinition(node);
 		}
-		for(PartitionNode choice : node.getLeafPartitions()){
+		for(ChoiceNode choice : node.getLeafPartitions()){
 			if(implementable(choice) && getImplementationStatus(choice) != EImplementationStatus.IMPLEMENTED){
 				implement(choice);
 				CachedImplementationStatusResolver.clearCache(choice);
@@ -189,7 +189,7 @@ public abstract class AbstractModelImplementer implements IModelImplementer {
 	}
 
 	protected boolean implement(TestCaseNode node) throws Exception{
-		for(PartitionNode partition : node.getTestData()){
+		for(ChoiceNode partition : node.getTestData()){
 			if(implementable(partition) && getImplementationStatus(partition) != EImplementationStatus.IMPLEMENTED){
 				implement(partition);
 			}
@@ -201,12 +201,12 @@ public abstract class AbstractModelImplementer implements IModelImplementer {
 		return false;
 	}
 	
-	protected boolean implement(PartitionNode node) throws Exception{
+	protected boolean implement(ChoiceNode node) throws Exception{
 		if(parameterDefinitionImplemented(node.getParameter()) == false){
 			implementParameterDefinition(node.getParameter());
 		}
 		if(node.isAbstract()){
-			for(PartitionNode leaf : node.getLeafPartitions()){
+			for(ChoiceNode leaf : node.getLeafPartitions()){
 				if(implementable(leaf) && getImplementationStatus(leaf) != EImplementationStatus.IMPLEMENTED){
 					implement(leaf);
 				}
@@ -235,7 +235,7 @@ public abstract class AbstractModelImplementer implements IModelImplementer {
 	protected boolean implementable(ParameterNode node){
 		return hasImplementableNode(node.getPartitions());
 	}
-	protected boolean implementable(PartitionNode node){
+	protected boolean implementable(ChoiceNode node){
 		return hasImplementableNode(node.getPartitions());
 	}
 	
@@ -259,5 +259,5 @@ public abstract class AbstractModelImplementer implements IModelImplementer {
 	protected abstract void implementClassDefinition(ClassNode node) throws Exception;
 	protected abstract void implementMethodDefinition(MethodNode node) throws Exception;
 	protected abstract void implementParameterDefinition(ParameterNode node) throws Exception;
-	protected abstract void implementChoiceDefinition(PartitionNode node) throws Exception;
+	protected abstract void implementChoiceDefinition(ChoiceNode node) throws Exception;
 }

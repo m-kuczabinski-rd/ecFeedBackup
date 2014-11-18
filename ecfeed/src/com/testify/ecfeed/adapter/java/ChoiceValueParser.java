@@ -1,15 +1,15 @@
 package com.testify.ecfeed.adapter.java;
 
-import com.testify.ecfeed.model.PartitionNode;
+import com.testify.ecfeed.model.ChoiceNode;
 
-public class PartitionValueParser {
+public class ChoiceValueParser {
 	private ModelClassLoader fLoader;
 
-	public PartitionValueParser(ModelClassLoader loader){
+	public ChoiceValueParser(ModelClassLoader loader){
 		fLoader = loader;
 	}
 
-	public Object parseValue(PartitionNode partition){
+	public Object parseValue(ChoiceNode partition){
 		if(partition.getParameter() != null){
 			return parseValue(partition.getValueString(), partition.getParameter().getType());
 		}

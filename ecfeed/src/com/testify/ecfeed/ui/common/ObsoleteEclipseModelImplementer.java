@@ -36,7 +36,7 @@ import com.testify.ecfeed.model.ConstraintNode;
 import com.testify.ecfeed.model.GenericNode;
 import com.testify.ecfeed.model.IModelVisitor;
 import com.testify.ecfeed.model.MethodNode;
-import com.testify.ecfeed.model.PartitionNode;
+import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.TestCaseNode;
 
@@ -87,7 +87,7 @@ public abstract class ObsoleteEclipseModelImplementer extends AbstractModelImple
 			if(parameterDefinitionImplemented(node) == false){
 				implementParameterDefinition(node);
 			}
-			for(PartitionNode partition : node.getPartitions()){
+			for(ChoiceNode partition : node.getPartitions()){
 				if(implementable(partition) && getImplementationStatus(partition) != EImplementationStatus.IMPLEMENTED){
 					implement(partition);
 				}
@@ -97,7 +97,7 @@ public abstract class ObsoleteEclipseModelImplementer extends AbstractModelImple
 
 		@Override
 		public Object visit(TestCaseNode node) throws Exception {
-			for(PartitionNode partition : node.getTestData()){
+			for(ChoiceNode partition : node.getTestData()){
 				if(implementable(partition) && getImplementationStatus(partition) != EImplementationStatus.IMPLEMENTED){
 					implement(partition);
 				}
@@ -111,9 +111,9 @@ public abstract class ObsoleteEclipseModelImplementer extends AbstractModelImple
 		}
 
 		@Override
-		public Object visit(PartitionNode node) throws Exception {
+		public Object visit(ChoiceNode node) throws Exception {
 			if(node.isAbstract()){
-				for(PartitionNode partition : node.getPartitions()){
+				for(ChoiceNode partition : node.getPartitions()){
 					if(implementable(partition) && getImplementationStatus(partition) != EImplementationStatus.IMPLEMENTED){
 						implement(partition);
 					}
@@ -201,7 +201,7 @@ public abstract class ObsoleteEclipseModelImplementer extends AbstractModelImple
 	}
 
 	@SuppressWarnings("unchecked")
-	protected void implementPartitionDefinition(PartitionNode node) throws CoreException {
+	protected void implementPartitionDefinition(ChoiceNode node) throws CoreException {
 		if(node.getParameter() == null || JavaUtils.isPrimitive(node.getParameter().getType())){
 			return;
 		}

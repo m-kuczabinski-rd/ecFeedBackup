@@ -23,7 +23,7 @@ import org.junit.Test;
 
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.EStatementOperator;
-import com.testify.ecfeed.model.PartitionNode;
+import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.model.ParameterNode;
 import com.testify.ecfeed.model.PartitionedParameterStatement;
 import com.testify.ecfeed.model.EStatementRelation;
@@ -34,28 +34,28 @@ public class StatementArrayTest {
 
 	private static MethodNode fMethod;
 	private static ParameterNode fParameter1;
-	private static PartitionNode fPartition11;
-	private static PartitionNode fPartition12;
-	private static PartitionNode fPartition13;
+	private static ChoiceNode fPartition11;
+	private static ChoiceNode fPartition12;
+	private static ChoiceNode fPartition13;
 	private static ParameterNode fParameter2;
-	private static PartitionNode fPartition21;
-	private static PartitionNode fPartition22;
-	private static PartitionNode fPartition23;
+	private static ChoiceNode fPartition21;
+	private static ChoiceNode fPartition22;
+	private static ChoiceNode fPartition23;
 
 	@BeforeClass
 	public static void prepareModel(){
 		fMethod = new MethodNode("method");
 		fParameter1 = new ParameterNode("parameter", "type", "0", false);
-		fPartition11 = new PartitionNode("partition11", null);
-		fPartition12 = new PartitionNode("partition12", null);
-		fPartition13 = new PartitionNode("partition13", null);
+		fPartition11 = new ChoiceNode("partition11", null);
+		fPartition12 = new ChoiceNode("partition12", null);
+		fPartition13 = new ChoiceNode("partition13", null);
 		fParameter1.addPartition(fPartition11);
 		fParameter1.addPartition(fPartition12);
 		fParameter1.addPartition(fPartition13);
 		fParameter2 = new ParameterNode("parameter", "type", "0", false);
-		fPartition21 = new PartitionNode("partition21", null);
-		fPartition22 = new PartitionNode("partition22", null);
-		fPartition23 = new PartitionNode("partition23", null);
+		fPartition21 = new ChoiceNode("partition21", null);
+		fPartition22 = new ChoiceNode("partition22", null);
+		fPartition23 = new ChoiceNode("partition23", null);
 		fParameter2.addPartition(fPartition21);
 		fParameter2.addPartition(fPartition22);
 		fParameter2.addPartition(fPartition23);
@@ -75,19 +75,19 @@ public class StatementArrayTest {
 		arrayAnd.addStatement(statement1);
 		arrayAnd.addStatement(statement2);
 		
-		List<PartitionNode> bothFulfill = new ArrayList<PartitionNode>();
+		List<ChoiceNode> bothFulfill = new ArrayList<ChoiceNode>();
 		bothFulfill.add(fPartition11);
 		bothFulfill.add(fPartition21);
 		assertTrue(arrayOr.evaluate(bothFulfill));
 		assertTrue(arrayAnd.evaluate(bothFulfill));
 
-		List<PartitionNode> oneFulfills = new ArrayList<PartitionNode>();
+		List<ChoiceNode> oneFulfills = new ArrayList<ChoiceNode>();
 		oneFulfills.add(fPartition12);
 		oneFulfills.add(fPartition21);
 		assertTrue(arrayOr.evaluate(oneFulfills));
 		assertFalse(arrayAnd.evaluate(oneFulfills));
 
-		List<PartitionNode> noneFulfills = new ArrayList<PartitionNode>();
+		List<ChoiceNode> noneFulfills = new ArrayList<ChoiceNode>();
 		noneFulfills.add(fPartition12);
 		noneFulfills.add(fPartition22);
 		assertFalse(arrayOr.evaluate(noneFulfills));

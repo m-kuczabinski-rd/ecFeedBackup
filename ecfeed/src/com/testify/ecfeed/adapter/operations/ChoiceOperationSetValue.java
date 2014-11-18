@@ -6,21 +6,21 @@ import com.testify.ecfeed.adapter.ModelOperationException;
 import com.testify.ecfeed.adapter.java.Constants;
 import com.testify.ecfeed.adapter.java.JavaUtils;
 import com.testify.ecfeed.model.ParameterNode;
-import com.testify.ecfeed.model.PartitionNode;
+import com.testify.ecfeed.model.ChoiceNode;
 
-public class PartitionOperationSetValue extends AbstractModelOperation {
+public class ChoiceOperationSetValue extends AbstractModelOperation {
 
 	private String fNewValue;
 	private String fOriginalValue;
 	private String fOriginalDefaultValue;
-	private PartitionNode fTarget;
+	private ChoiceNode fTarget;
 	
 	private ITypeAdapterProvider fAdapterProvider;
 	
 	private class ReverseOperation extends AbstractModelOperation{
 
 		public ReverseOperation() {
-			super(PartitionOperationSetValue.this.getName());
+			super(ChoiceOperationSetValue.this.getName());
 		}
 
 		@Override
@@ -32,11 +32,11 @@ public class PartitionOperationSetValue extends AbstractModelOperation {
 
 		@Override
 		public IModelOperation reverseOperation() {
-			return new PartitionOperationSetValue(fTarget, fNewValue, fAdapterProvider);
+			return new ChoiceOperationSetValue(fTarget, fNewValue, fAdapterProvider);
 		}
 	}
 	
-	public PartitionOperationSetValue(PartitionNode target, String newValue, ITypeAdapterProvider adapterProvider){
+	public ChoiceOperationSetValue(ChoiceNode target, String newValue, ITypeAdapterProvider adapterProvider){
 		super(OperationNames.SET_PARTITION_VALUE);
 		fTarget = target;
 		fNewValue = newValue;

@@ -30,15 +30,15 @@ import com.testify.ecfeed.generators.api.IConstraint;
 import com.testify.ecfeed.generators.api.IGenerator;
 import com.testify.ecfeed.junit.RuntimeMethod;
 import com.testify.ecfeed.model.ParameterNode;
-import com.testify.ecfeed.model.PartitionNode;
+import com.testify.ecfeed.model.ChoiceNode;
 
 public class RuntimeMethodTest {
 
 	private Set<List<Integer>> fExecuted;
 	private final int MAX_PARTITIONS = 10;
 	
-	private final Collection<IConstraint<PartitionNode>> EMPTY_CONSTRAINTS = 
-			new ArrayList<IConstraint<PartitionNode>>();
+	private final Collection<IConstraint<ChoiceNode>> EMPTY_CONSTRAINTS = 
+			new ArrayList<IConstraint<ChoiceNode>>();
 	
 	public void functionUnderTest(int arg1, int arg2){
 		List<Integer> parameters = new ArrayList<Integer>();
@@ -55,8 +55,8 @@ public class RuntimeMethodTest {
 	}
 	
 	public void test(int parameters, int partitionsPerParameter) {
-		List<List<PartitionNode>> input = generateInput(parameters, partitionsPerParameter);
-		IGenerator<PartitionNode> generator = new CartesianProductGenerator<PartitionNode>();
+		List<List<ChoiceNode>> input = generateInput(parameters, partitionsPerParameter);
+		IGenerator<ChoiceNode> generator = new CartesianProductGenerator<ChoiceNode>();
 		try {
 			Method methodUnterTest = this.getClass().getMethod("functionUnderTest", int.class, int.class);
 			generator.initialize(input, EMPTY_CONSTRAINTS, null);
@@ -69,15 +69,15 @@ public class RuntimeMethodTest {
 		}
 	}
 
-	private Set<List<Integer>> referenceResult(List<List<PartitionNode>> input) {
+	private Set<List<Integer>> referenceResult(List<List<ChoiceNode>> input) {
 		Set<List<Integer>> result = new HashSet<List<Integer>>();
-		CartesianProductGenerator<PartitionNode> referenceGenerator = new CartesianProductGenerator<PartitionNode>();
+		CartesianProductGenerator<ChoiceNode> referenceGenerator = new CartesianProductGenerator<ChoiceNode>();
 		try {
 			referenceGenerator.initialize(input, EMPTY_CONSTRAINTS, null);
-			List<PartitionNode> next;
+			List<ChoiceNode> next;
 			while((next = referenceGenerator.next()) != null){
 				List<Integer> testCase = new ArrayList<Integer>();
-				for(PartitionNode parameter : next){
+				for(ChoiceNode parameter : next){
 					testCase.add(Integer.valueOf(parameter.getValueString()));
 				}
 				result.add(testCase);
@@ -88,20 +88,20 @@ public class RuntimeMethodTest {
 		return result;
 	}
 
-	private List<List<PartitionNode>> generateInput(int parameters,
+	private List<List<ChoiceNode>> generateInput(int parameters,
 			int partitions) {
-		List<List<PartitionNode>> input = new ArrayList<List<PartitionNode>>();
+		List<List<ChoiceNode>> input = new ArrayList<List<ChoiceNode>>();
 		for(int i = 0; i < parameters; ++i){
 			input.add(generateParameter(partitions));
 		}
 		return input;
 	}
 
-	private List<PartitionNode> generateParameter(int partitions) {
+	private List<ChoiceNode> generateParameter(int partitions) {
 		ParameterNode parent = new ParameterNode("Parameter", "int","0",  false);
-		List<PartitionNode> parameter = new ArrayList<PartitionNode>();
+		List<ChoiceNode> parameter = new ArrayList<ChoiceNode>();
 		for(int i = 0; i < partitions; i++){
-			PartitionNode partition = new PartitionNode(String.valueOf(i), String.valueOf(i));
+			ChoiceNode partition = new ChoiceNode(String.valueOf(i), String.valueOf(i));
 			partition.setParent(parent);
 			parameter.add(partition);
 		}

@@ -11,7 +11,7 @@ import com.testify.ecfeed.adapter.ModelOperationException;
 import com.testify.ecfeed.model.ParameterNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.MethodNode;
-import com.testify.ecfeed.model.PartitionNode;
+import com.testify.ecfeed.model.ChoiceNode;
 
 public class JavaModelBuilder {
 	
@@ -61,15 +61,15 @@ public class JavaModelBuilder {
 		ParameterNode parameter = new ParameterNode(name, typeName, defaultValue, expected);
 		parameter.setDefaultValueString(getDefaultExpectedValueString(typeName));
 		if(!expected){
-			List<PartitionNode> defaultPartitions = getDefaultPartitions(typeName);
-			for(PartitionNode partition : defaultPartitions){
+			List<ChoiceNode> defaultPartitions = getDefaultPartitions(typeName);
+			for(ChoiceNode partition : defaultPartitions){
 				parameter.addPartition(partition);
 			}
 		}
 		return parameter;
 	}
 
-	public List<PartitionNode> getDefaultPartitions(String typeSignature) {
+	public List<ChoiceNode> getDefaultPartitions(String typeSignature) {
 		switch(typeSignature){
 		case com.testify.ecfeed.adapter.java.Constants.TYPE_NAME_BOOLEAN:
 			return defaultBooleanPartitions();
@@ -94,12 +94,12 @@ public class JavaModelBuilder {
 		}
 	}
 
-	public ArrayList<PartitionNode> defaultEnumPartitions(String typeName) {
-		ArrayList<PartitionNode> partitions = new ArrayList<PartitionNode>();
+	public ArrayList<ChoiceNode> defaultEnumPartitions(String typeName) {
+		ArrayList<ChoiceNode> partitions = new ArrayList<ChoiceNode>();
 		Class<?> typeClass = fLoader.loadClass(typeName);
 		if (typeClass != null) {
 			for (Object object: typeClass.getEnumConstants()) {
-				partitions.add(new PartitionNode(object.toString(), ((Enum<?>)object).name()));
+				partitions.add(new ChoiceNode(object.toString(), ((Enum<?>)object).name()));
 			}
 		}
 		return partitions;
@@ -140,11 +140,11 @@ public class JavaModelBuilder {
 		return value;
 	}
 
-	protected List<PartitionNode> defaultBooleanPartitions() {
-		List<PartitionNode> partitions = new ArrayList<PartitionNode>();
+	protected List<ChoiceNode> defaultBooleanPartitions() {
+		List<ChoiceNode> partitions = new ArrayList<ChoiceNode>();
 		HashMap<String, String> values = predefinedBooleanValues();
 		for (String key : values.keySet()) {
-			partitions.add(new PartitionNode(key, values.get(key)));
+			partitions.add(new ChoiceNode(key, values.get(key)));
 		}
 		return partitions;
 	}
@@ -156,11 +156,11 @@ public class JavaModelBuilder {
 		return values;
 	}
 
-	protected List<PartitionNode> defaultIntegerPartitions() {
-		List<PartitionNode> partitions = new ArrayList<PartitionNode>();
+	protected List<ChoiceNode> defaultIntegerPartitions() {
+		List<ChoiceNode> partitions = new ArrayList<ChoiceNode>();
 		HashMap<String, String> values = predefinedIntegerValues();
 		for (String key : values.keySet()) {
-			partitions.add(new PartitionNode(key, values.get(key)));
+			partitions.add(new ChoiceNode(key, values.get(key)));
 		}
 		return partitions;
 	}
@@ -172,11 +172,11 @@ public class JavaModelBuilder {
 		return values;
 	}
 
-	protected List<PartitionNode> defaultFloatPartitions() {
-		List<PartitionNode> partitions = new ArrayList<PartitionNode>();
+	protected List<ChoiceNode> defaultFloatPartitions() {
+		List<ChoiceNode> partitions = new ArrayList<ChoiceNode>();
 		HashMap<String, String> values = predefinedFloatValues();
 		for (String key : values.keySet()) {
-			partitions.add(new PartitionNode(key, values.get(key)));
+			partitions.add(new ChoiceNode(key, values.get(key)));
 		}
 		return partitions;
 	}
@@ -190,11 +190,11 @@ public class JavaModelBuilder {
 		return values;
 	}
 
-	protected List<PartitionNode> defaultStringPartitions() {
-		List<PartitionNode> partitions = new ArrayList<PartitionNode>();
+	protected List<ChoiceNode> defaultStringPartitions() {
+		List<ChoiceNode> partitions = new ArrayList<ChoiceNode>();
 		HashMap<String, String> values = predefinedStringValues();
 		for (String key : values.keySet()) {
-			partitions.add(new PartitionNode(key, values.get(key)));
+			partitions.add(new ChoiceNode(key, values.get(key)));
 		}
 		return partitions;
 	}

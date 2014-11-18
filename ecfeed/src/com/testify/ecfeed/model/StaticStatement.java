@@ -37,7 +37,7 @@ public class StaticStatement extends BasicStatement {
 	}
 
 	@Override
-	public boolean evaluate(List<PartitionNode> values) {
+	public boolean evaluate(List<ChoiceNode> values) {
 		return fValue;
 	}
 

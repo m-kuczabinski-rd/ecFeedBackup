@@ -4,18 +4,18 @@ import com.testify.ecfeed.adapter.IModelOperation;
 import com.testify.ecfeed.adapter.ITypeAdapter;
 import com.testify.ecfeed.adapter.ITypeAdapterProvider;
 import com.testify.ecfeed.adapter.ModelOperationException;
-import com.testify.ecfeed.model.PartitionNode;
+import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.model.PartitionedNode;
 
 public class GenericOperationAddPartition extends BulkOperation {
 
 	private class AddPartitionOperation extends AbstractModelOperation{
 		private PartitionedNode fTarget;
-		private PartitionNode fPartition;
+		private ChoiceNode fPartition;
 		private int fIndex;
 		private ITypeAdapterProvider fAdapterProvider;
 
-		public AddPartitionOperation(PartitionedNode target, PartitionNode partition, ITypeAdapterProvider adapterProvider, int index) {
+		public AddPartitionOperation(PartitionedNode target, ChoiceNode partition, ITypeAdapterProvider adapterProvider, int index) {
 			super(OperationNames.ADD_PARTITION);
 			fTarget = target;
 			fPartition = partition;
@@ -47,7 +47,7 @@ public class GenericOperationAddPartition extends BulkOperation {
 			return new GenericOperationRemovePartition(fTarget, fPartition, false);
 		}
 
-		private void validateChoiceValue(PartitionNode choice) throws ModelOperationException{
+		private void validateChoiceValue(ChoiceNode choice) throws ModelOperationException{
 			if(choice.isAbstract() == false){
 				String type = fTarget.getParameter().getType();
 				ITypeAdapter adapter = fAdapterProvider.getAdapter(type);
@@ -57,14 +57,14 @@ public class GenericOperationAddPartition extends BulkOperation {
 				}
 			}
 			else{
-				for(PartitionNode child : choice.getPartitions()){
+				for(ChoiceNode child : choice.getPartitions()){
 					validateChoiceValue(child);
 				}
 			}
 		}
 	}
 
-	public GenericOperationAddPartition(PartitionedNode target, PartitionNode partition, ITypeAdapterProvider adapterProvider, int index, boolean validate) {
+	public GenericOperationAddPartition(PartitionedNode target, ChoiceNode partition, ITypeAdapterProvider adapterProvider, int index, boolean validate) {
 		super(OperationNames.ADD_PARTITION, true);
 		addOperation(new AddPartitionOperation(target, partition, adapterProvider, index));
 		if((target.getParameter().getMethod() != null) && validate){
@@ -72,7 +72,7 @@ public class GenericOperationAddPartition extends BulkOperation {
 		}
 	}
 
-	public GenericOperationAddPartition(PartitionedNode target, PartitionNode partition, ITypeAdapterProvider adapterProvider, boolean validate) {
+	public GenericOperationAddPartition(PartitionedNode target, ChoiceNode partition, ITypeAdapterProvider adapterProvider, boolean validate) {
 		this(target, partition, adapterProvider, -1, validate);
 	}
 }

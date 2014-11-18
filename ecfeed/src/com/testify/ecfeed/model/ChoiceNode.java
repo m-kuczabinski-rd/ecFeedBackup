@@ -15,13 +15,13 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
-public class PartitionNode extends PartitionedNode{
+public class ChoiceNode extends PartitionedNode{
 
 	private PartitionedNode fParent;
 	private String fValueString;
 	private Set<String> fLabels;
 	
-	public PartitionNode(String name, String value) {
+	public ChoiceNode(String name, String value) {
 		super(name);
 		fValueString = value;
 		fLabels = new LinkedHashSet<String>();
@@ -54,10 +54,10 @@ public class PartitionNode extends PartitionedNode{
 	}
 
 	@Override
-	public PartitionNode getCopy(){
-		PartitionNode copy = new PartitionNode(getName(), fValueString);
+	public ChoiceNode getCopy(){
+		ChoiceNode copy = new ChoiceNode(getName(), fValueString);
 		copy.setParent(fParent);
-		for(PartitionNode partition : getPartitions()){
+		for(ChoiceNode partition : getPartitions()){
 			copy.addPartition(partition.getCopy());
 		}
 		for(String label : fLabels){
@@ -124,7 +124,7 @@ public class PartitionNode extends PartitionedNode{
 		return getPartitions().size() != 0;
 	}
 	
-	public boolean is(PartitionNode partition){
+	public boolean is(ChoiceNode partition){
 		return (this == (partition)) || (parentPartition() != null ? parentPartition().is(partition) : false);
 	}
 	
@@ -137,11 +137,11 @@ public class PartitionNode extends PartitionedNode{
 	
 	@Override
 	public boolean compare(GenericNode node){
-		if(node instanceof PartitionNode == false){
+		if(node instanceof ChoiceNode == false){
 			return false;
 		}
 		
-		PartitionNode compared = (PartitionNode)node;
+		ChoiceNode compared = (ChoiceNode)node;
 		
 		if(getLabels().equals(compared.getLabels()) == false){
 			return false;
@@ -169,9 +169,9 @@ public class PartitionNode extends PartitionedNode{
 		return visitor.visit(this);
 	}
 
-	private PartitionNode parentPartition(){
+	private ChoiceNode parentPartition(){
 		if(fParent != null && fParent != getParameter()){
-			return (PartitionNode)fParent;
+			return (ChoiceNode)fParent;
 		}
 		return null;
 	}

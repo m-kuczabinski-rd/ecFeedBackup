@@ -54,7 +54,7 @@ public class StatementArray extends BasicStatement{
 	}
 	
 	@Override
-	public boolean mentions(PartitionNode partition){
+	public boolean mentions(ChoiceNode partition){
 		for(BasicStatement child : fStatements){
 			if(child.mentions(partition)){
 				return true;
@@ -74,7 +74,7 @@ public class StatementArray extends BasicStatement{
 	}
 
 	@Override
-	public boolean evaluate(List<PartitionNode> values) {
+	public boolean evaluate(List<ChoiceNode> values) {
 		if(fStatements.size() == 0){
 			return false;
 		}

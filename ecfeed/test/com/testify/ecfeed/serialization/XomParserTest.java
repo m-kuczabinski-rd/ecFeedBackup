@@ -32,7 +32,7 @@ import com.testify.ecfeed.model.ConstraintNode;
 import com.testify.ecfeed.model.ExpectedValueStatement;
 import com.testify.ecfeed.model.GenericNode;
 import com.testify.ecfeed.model.MethodNode;
-import com.testify.ecfeed.model.PartitionNode;
+import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.model.PartitionedParameterStatement;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.StatementArray;
@@ -154,10 +154,10 @@ public class XomParserTest {
 	public void parsePartitionTest(){
 		for(String type: SUPPORTED_TYPES){
 			try {
-				PartitionNode p = fModelGenerator.generatePartition(3, 3, 3, type);
+				ChoiceNode p = fModelGenerator.generatePartition(3, 3, 3, type);
 				Element element = (Element)p.accept(fConverter);
 				TRACE(element);
-				PartitionNode p1 = fParser.parsePartition(element);
+				ChoiceNode p1 = fParser.parsePartition(element);
 				assertElementsEqual(p, p1);
 			} catch (Exception e) {
 				fail("Unexpected exception: " + e.getMessage());

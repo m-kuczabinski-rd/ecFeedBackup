@@ -2,17 +2,17 @@ package com.testify.ecfeed.adapter.operations;
 
 import com.testify.ecfeed.adapter.IModelOperation;
 import com.testify.ecfeed.adapter.ModelOperationException;
-import com.testify.ecfeed.model.PartitionNode;
+import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.model.TestCaseNode;
 
 public class TestCaseOperationUpdateTestData extends AbstractModelOperation {
 	
-	private PartitionNode fNewValue;
-	private PartitionNode fPreviousValue;
+	private ChoiceNode fNewValue;
+	private ChoiceNode fPreviousValue;
 	private int fIndex;
 	private TestCaseNode fTarget;
 
-	public TestCaseOperationUpdateTestData(TestCaseNode target, int index, PartitionNode value) {
+	public TestCaseOperationUpdateTestData(TestCaseNode target, int index, ChoiceNode value) {
 		super(OperationNames.UPDATE_TEST_DATA);
 		fTarget = target;
 		fIndex = index;

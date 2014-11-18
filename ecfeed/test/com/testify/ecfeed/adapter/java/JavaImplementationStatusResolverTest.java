@@ -22,7 +22,7 @@ import com.testify.ecfeed.model.ParameterNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.ConstraintNode;
 import com.testify.ecfeed.model.MethodNode;
-import com.testify.ecfeed.model.PartitionNode;
+import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.testutils.ETypeName;
@@ -110,7 +110,7 @@ public class JavaImplementationStatusResolverTest {
 	public void primitiveChoiceStatusTest(ETypeName type){
 		ParameterNode parameter = new ParameterNode("parameter", type.getTypeName(), "0", false);
 		EclipseModelBuilder builder = new EclipseModelBuilder();
-		for(PartitionNode choice : builder.defaultPartitions(type.getTypeName())){
+		for(ChoiceNode choice : builder.defaultPartitions(type.getTypeName())){
 			parameter.addPartition(choice);
 			assertEquals(EImplementationStatus.IMPLEMENTED, fResolver.getImplementationStatus(choice));
 		}
@@ -125,7 +125,7 @@ public class JavaImplementationStatusResolverTest {
 			//invalid combination
 			return;
 		}
-		PartitionNode choice = prepareChoice(abstractChoice, parameterImplemented, status);
+		ChoiceNode choice = prepareChoice(abstractChoice, parameterImplemented, status);
 
 		assertEquals(status, fResolver.getImplementationStatus(choice));
 	}
@@ -283,9 +283,9 @@ public class JavaImplementationStatusResolverTest {
 		
 		switch(childrenStatus){
 		case ALL_IMPLEMENTED:
-			arg1.addPartition(new PartitionNode("choice 1", ImplementedUserType.IMPLEMENTED_VALUE.name()));
-			arg2.addPartition(new PartitionNode("choice 2", ImplementedUserType.IMPLEMENTED_VALUE.name()));
-			arg3.addPartition(new PartitionNode("choice 3", ImplementedUserType.IMPLEMENTED_VALUE.name()));
+			arg1.addPartition(new ChoiceNode("choice 1", ImplementedUserType.IMPLEMENTED_VALUE.name()));
+			arg2.addPartition(new ChoiceNode("choice 2", ImplementedUserType.IMPLEMENTED_VALUE.name()));
+			arg3.addPartition(new ChoiceNode("choice 3", ImplementedUserType.IMPLEMENTED_VALUE.name()));
 			break;
 		case ALL_NOT_IMPLEMENTED:
 			arg1.setType("UnimplementedType");
@@ -296,18 +296,18 @@ public class JavaImplementationStatusResolverTest {
 			//by default parameter with no choices is partly implemented
 			break;
 		case FULL_MIX:
-			arg1.addPartition(new PartitionNode("choice 1", ImplementedUserType.IMPLEMENTED_VALUE.name()));
+			arg1.addPartition(new ChoiceNode("choice 1", ImplementedUserType.IMPLEMENTED_VALUE.name()));
 			arg3.setType("UnimplementedType");
 			break;
 		case NO_CHILDREN:
 			break;
 		case SOME_IMPLEMENTED_REST_NOT_IMPLEMENTED:
-			arg1.addPartition(new PartitionNode("choice 1", ImplementedUserType.IMPLEMENTED_VALUE.name()));
+			arg1.addPartition(new ChoiceNode("choice 1", ImplementedUserType.IMPLEMENTED_VALUE.name()));
 			arg2.setType("UnimplementedType");
 			arg3.setType("UnimplementedType");
 			break;
 		case SOME_IMPLEMENTED_REST_PARTLY_IMPLEMENTED:
-			arg1.addPartition(new PartitionNode("choice 1", ImplementedUserType.IMPLEMENTED_VALUE.name()));
+			arg1.addPartition(new ChoiceNode("choice 1", ImplementedUserType.IMPLEMENTED_VALUE.name()));
 			break;
 		case SOME_PARTLY_IMPLEMENTED_REST_NOT_IMPLEMENTED:
 			arg2.setType("UnimplementedType");
@@ -345,17 +345,17 @@ public class JavaImplementationStatusResolverTest {
 	}
 
 	private TestCaseNode prepareTestCase(int noOfChoices, EImplementedChildren implementedChoices) {
-		List<PartitionNode> testData = new ArrayList<PartitionNode>();
+		List<ChoiceNode> testData = new ArrayList<ChoiceNode>();
 		for(int i = 0; i < noOfChoices; ++i){
 			if(implementedChoices == EImplementedChildren.ALL || (implementedChoices == EImplementedChildren.SOME && i == 1)){
 				ParameterNode parameter = new ParameterNode(String.valueOf(i), "int", "0", false);
-				PartitionNode choice = new PartitionNode(String.valueOf(i), String.valueOf(i));
+				ChoiceNode choice = new ChoiceNode(String.valueOf(i), String.valueOf(i));
 				parameter.addPartition(choice);
 				testData.add(choice);
 			}
 			else{
 				ParameterNode parameter = new ParameterNode(String.valueOf(i), "dummy", "0", false);
-				PartitionNode choice = new PartitionNode(String.valueOf(i), String.valueOf(i));
+				ChoiceNode choice = new ChoiceNode(String.valueOf(i), String.valueOf(i));
 				parameter.addPartition(choice);
 				testData.add(choice);
 			}
@@ -365,9 +365,9 @@ public class JavaImplementationStatusResolverTest {
 	}
 
 	@SuppressWarnings("incomplete-switch")
-	protected PartitionNode prepareChoice(boolean abstractChoice, boolean parameterImplemented, EImplementationStatus status){
+	protected ChoiceNode prepareChoice(boolean abstractChoice, boolean parameterImplemented, EImplementationStatus status){
 		ParameterNode parameter = createEmptyParameter(parameterImplemented); 
-		PartitionNode choice = new PartitionNode("choice", "unimplemented value");
+		ChoiceNode choice = new ChoiceNode("choice", "unimplemented value");
 		parameter.addPartition(choice);
 		if(abstractChoice == false){
 			if(status == EImplementationStatus.IMPLEMENTED){
@@ -375,8 +375,8 @@ public class JavaImplementationStatusResolverTest {
 			}
 		}
 		else{
-			PartitionNode child1 = new PartitionNode("child1", "unimplemented value");
-			PartitionNode child2 = new PartitionNode("child2", "unimplemented value");
+			ChoiceNode child1 = new ChoiceNode("child1", "unimplemented value");
+			ChoiceNode child2 = new ChoiceNode("child2", "unimplemented value");
 			choice.addPartition(child1);
 			choice.addPartition(child2);
 			switch(status){
@@ -413,13 +413,13 @@ public class JavaImplementationStatusResolverTest {
 
 		for(int i = 0; i < noOfChildren; i++){
 			if(type == EParameterType.PRIMITIVE){
-				parameter.addPartition(new PartitionNode(String.valueOf(i), String.valueOf(i)));
+				parameter.addPartition(new ChoiceNode(String.valueOf(i), String.valueOf(i)));
 			}
 			else if(implementedChoices == EImplementedChildren.NONE || (implementedChoices == EImplementedChildren.SOME && i == 0)){
-				parameter.addPartition(new PartitionNode(String.valueOf(i), "dummy"));
+				parameter.addPartition(new ChoiceNode(String.valueOf(i), "dummy"));
 			}
 			else{
-				parameter.addPartition(new PartitionNode(String.valueOf(i), ImplementedUserType.IMPLEMENTED_VALUE.name()));
+				parameter.addPartition(new ChoiceNode(String.valueOf(i), ImplementedUserType.IMPLEMENTED_VALUE.name()));
 			}
 		}
 		

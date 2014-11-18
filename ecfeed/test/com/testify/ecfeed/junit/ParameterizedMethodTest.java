@@ -30,7 +30,7 @@ import com.testify.ecfeed.junit.ParameterizedMethod;
 import com.testify.ecfeed.model.ParameterNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.MethodNode;
-import com.testify.ecfeed.model.PartitionNode;
+import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.model.TestCaseNode;
 
 public class ParameterizedMethodTest {
@@ -77,9 +77,9 @@ public class ParameterizedMethodTest {
 		fExecutedEnum = new ArrayList<Enum>();
 		
 		for(Enum v : Enum.values()){
-			PartitionNode p = new PartitionNode(v.name(), v.name());
+			ChoiceNode p = new ChoiceNode(v.name(), v.name());
 			c.addPartition(p);
-			List<PartitionNode> td = new ArrayList<>();
+			List<ChoiceNode> td = new ArrayList<>();
 			td.add(p);
 			methodNode.addTestCase(new TestCaseNode("", td));
 		}
@@ -127,9 +127,9 @@ public class ParameterizedMethodTest {
 	private Collection<TestCaseNode> generateTestCases(MethodNode method, int size) {
 		Random random = new Random();
 		for(int i = 0; i < size; i++){
-			List<PartitionNode> testData = new ArrayList<PartitionNode>();
+			List<ChoiceNode> testData = new ArrayList<ChoiceNode>();
 			for(int j = 0; j < method.getParameters().size(); j++){
-				PartitionNode partition = new PartitionNode("dummy", Integer.toString(random.nextInt()));
+				ChoiceNode partition = new ChoiceNode("dummy", Integer.toString(random.nextInt()));
 				partition.setParent(method.getParameters().get(j));
 				testData.add(partition);
 			}
@@ -144,7 +144,7 @@ public class ParameterizedMethodTest {
 		Set<List<Integer>> result = new HashSet<List<Integer>>();
 		for(TestCaseNode testCase : testSuite){
 			List<Integer> parameters = new ArrayList<Integer>();
-			for(PartitionNode parameter : testCase.getTestData()){
+			for(ChoiceNode parameter : testCase.getTestData()){
 				parameters.add(Integer.valueOf(parameter.getValueString()));
 			}
 			result.add(parameters);

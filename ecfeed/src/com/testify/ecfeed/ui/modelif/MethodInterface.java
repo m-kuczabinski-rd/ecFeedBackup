@@ -25,7 +25,7 @@ import com.testify.ecfeed.model.ParameterNode;
 import com.testify.ecfeed.model.Constraint;
 import com.testify.ecfeed.model.ConstraintNode;
 import com.testify.ecfeed.model.MethodNode;
-import com.testify.ecfeed.model.PartitionNode;
+import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.model.StaticStatement;
 import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.ui.common.Constants;
@@ -74,7 +74,7 @@ public class MethodInterface extends GenericNodeInterface {
 		String type = generateNewParameterType(fTarget);
 		String defaultValue = modelBuilder.getDefaultExpectedValue(type);
 		ParameterNode parameter = new ParameterNode(name, type, defaultValue, false);
-		List<PartitionNode> defaultPartitions = modelBuilder.defaultPartitions(type);
+		List<ChoiceNode> defaultPartitions = modelBuilder.defaultPartitions(type);
 		parameter.addPartitions(defaultPartitions);
 		if(addNewParameter(parameter, fTarget.getParameters().size())){
 			return parameter;
@@ -127,7 +127,7 @@ public class MethodInterface extends GenericNodeInterface {
 		dialog.create();
 		if (dialog.open() == IDialogConstants.OK_ID) {
 			String testSuite = dialog.getTestSuite();
-			List<PartitionNode> testData = dialog.getTestData();
+			List<ChoiceNode> testData = dialog.getTestData();
 			TestCaseNode testCase = new TestCaseNode(testSuite, testData);
 			if(addTestCase(testCase)){
 				return testCase;
@@ -173,7 +173,7 @@ public class MethodInterface extends GenericNodeInterface {
 		if(testGenerationSupport.hasData() == false) return false;
 
 		String testSuiteName = testGenerationSupport.getTestSuiteName();
-		List<List<PartitionNode>> testData = testGenerationSupport.getGeneratedData();
+		List<List<ChoiceNode>> testData = testGenerationSupport.getGeneratedData();
 
 		int dataLength = testData.size();
 		if(dataLength < 0 && (testGenerationSupport.wasCancelled() == false)){

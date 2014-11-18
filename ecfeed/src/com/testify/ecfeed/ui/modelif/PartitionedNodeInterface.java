@@ -9,7 +9,7 @@ import org.eclipse.swt.widgets.Display;
 import com.testify.ecfeed.adapter.IModelOperation;
 import com.testify.ecfeed.adapter.operations.GenericOperationAddPartition;
 import com.testify.ecfeed.adapter.operations.GenericOperationRemovePartition;
-import com.testify.ecfeed.model.PartitionNode;
+import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.model.PartitionedNode;
 import com.testify.ecfeed.ui.common.Constants;
 import com.testify.ecfeed.ui.common.EclipseModelBuilder;
@@ -29,29 +29,29 @@ public class PartitionedNodeInterface extends GenericNodeInterface {
 		fTarget = target;
 	}
 
-	public PartitionNode addNewPartition() {
+	public ChoiceNode addNewPartition() {
 		String name = generatePartitionName();
 		String value = generateNewPartitionValue();
-		PartitionNode newPartition = new PartitionNode(name, value);
+		ChoiceNode newPartition = new ChoiceNode(name, value);
 		if(addPartition(newPartition)){
 			return newPartition;
 		}
 		return null;
 	}
 
-	public boolean addPartition(PartitionNode newPartition) {
+	public boolean addPartition(ChoiceNode newPartition) {
 		IModelOperation operation = new GenericOperationAddPartition(fTarget, newPartition, new EclipseTypeAdapterProvider(), fTarget.getPartitions().size(), true);
 		return execute(operation, Messages.DIALOG_ADD_CHOICE_PROBLEM_TITLE);
 	}
 
-	public boolean removePartition(PartitionNode partition) {
+	public boolean removePartition(ChoiceNode partition) {
 		IModelOperation operation = new GenericOperationRemovePartition(fTarget, partition, true);
 		return execute(operation, Messages.DIALOG_REMOVE_CHOICE_TITLE);
 	}
 
-	public boolean removePartitions(Collection<PartitionNode> partitions) {
+	public boolean removePartitions(Collection<ChoiceNode> partitions) {
 		boolean displayWarning = false;
-		for(PartitionNode p : partitions){
+		for(ChoiceNode p : partitions){
 			if(fTarget.getParameter().getMethod().mentioningConstraints(p).size() > 0 || fTarget.getParameter().getMethod().mentioningTestCases(p).size() > 0){
 				displayWarning = true;
 			}

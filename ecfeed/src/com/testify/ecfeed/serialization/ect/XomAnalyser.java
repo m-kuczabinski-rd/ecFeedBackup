@@ -45,7 +45,7 @@ import com.testify.ecfeed.model.EStatementOperator;
 import com.testify.ecfeed.model.EStatementRelation;
 import com.testify.ecfeed.model.ExpectedValueStatement;
 import com.testify.ecfeed.model.MethodNode;
-import com.testify.ecfeed.model.PartitionNode;
+import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.model.PartitionedParameterStatement;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.StatementArray;
@@ -156,7 +156,7 @@ public class XomAnalyser {
 		List<Element> parameterElements = getIterableChildren(element);
 		List<ParameterNode> parameters = method.getParameters();
 
-		List<PartitionNode> testData = new ArrayList<PartitionNode>();
+		List<ChoiceNode> testData = new ArrayList<ChoiceNode>();
 
 		if(parameters.size() != parameterElements.size()){
 			throw new ParserException(Messages.WRONG_NUMBER_OF_TEST_PAREMETERS(name));
@@ -165,7 +165,7 @@ public class XomAnalyser {
 		for(int i = 0; i < parameterElements.size(); i++){
 			Element testParameterElement = parameterElements.get(i);
 			ParameterNode parameter = parameters.get(i);
-			PartitionNode testValue = null;
+			ChoiceNode testValue = null;
 
 			if(testParameterElement.getLocalName().equals(Constants.TEST_PARAMETER_NODE_NAME)){
 				String partitionName = getAttributeValue(testParameterElement, Constants.PARTITION_ATTRIBUTE_NAME);
@@ -179,7 +179,7 @@ public class XomAnalyser {
 				if(valueString == null){
 					throw new ParserException(Messages.MISSING_VALUE_ATTRIBUTE_IN_TEST_CASE_ELEMENT);
 				}
-				testValue = new PartitionNode(Constants.EXPECTED_VALUE_PARTITION_NAME, valueString);
+				testValue = new ChoiceNode(Constants.EXPECTED_VALUE_PARTITION_NAME, valueString);
 				testValue.setParent(parameter);
 			}
 			testData.add(testValue);
@@ -286,7 +286,7 @@ public class XomAnalyser {
 			throw new ParserException(Messages.WRONG_CATEGORY_NAME(parameterName, method.getName()));
 		}
 		String partitionName = getAttributeValue(element, Constants.STATEMENT_PARTITION_ATTRIBUTE_NAME);
-		PartitionNode partition = parameter.getPartition(partitionName);
+		ChoiceNode partition = parameter.getPartition(partitionName);
 		if(partition == null){
 			throw new ParserException(Messages.WRONG_PARTITION_NAME(partitionName, parameterName, method.getName()));
 		}
@@ -322,18 +322,18 @@ public class XomAnalyser {
 		if(parameter == null || !parameter.isExpected()){
 			throw new ParserException(Messages.WRONG_CATEGORY_NAME(parameterName, method.getName()));
 		}
-		PartitionNode condition = new PartitionNode("expected", valueString);
+		ChoiceNode condition = new ChoiceNode("expected", valueString);
 		condition.setParent(parameter);
 
 		return new ExpectedValueStatement(parameter, condition);
 	}
 
-	public PartitionNode parsePartition(Element element) throws ParserException{
+	public ChoiceNode parsePartition(Element element) throws ParserException{
 		assertNodeTag(element.getQualifiedName(), PARTITION_NODE_NAME);
 		String name = getElementName(element);
 		String value = getAttributeValue(element, VALUE_ATTRIBUTE);
 
-		PartitionNode partition = new PartitionNode(name, value);
+		ChoiceNode partition = new ChoiceNode(name, value);
 
 		for(Element child : getIterableChildren(element)){
 			if(child.getLocalName() == Constants.PARTITION_NODE_NAME){

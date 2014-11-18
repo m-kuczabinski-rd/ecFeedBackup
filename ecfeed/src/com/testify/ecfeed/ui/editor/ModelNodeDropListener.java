@@ -13,7 +13,7 @@ import com.testify.ecfeed.model.ConstraintNode;
 import com.testify.ecfeed.model.GenericNode;
 import com.testify.ecfeed.model.IModelVisitor;
 import com.testify.ecfeed.model.MethodNode;
-import com.testify.ecfeed.model.PartitionNode;
+import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.ui.modelif.GenericNodeInterface;
@@ -48,7 +48,7 @@ public class ModelNodeDropListener extends ViewerDropAdapter{
 
 		@Override
 		public Object visit(ParameterNode node) throws Exception {
-			return NodeDnDBuffer.getInstance().getDraggedNodes().get(0) instanceof PartitionNode;
+			return NodeDnDBuffer.getInstance().getDraggedNodes().get(0) instanceof ChoiceNode;
 		}
 
 		@Override
@@ -62,8 +62,8 @@ public class ModelNodeDropListener extends ViewerDropAdapter{
 		}
 
 		@Override
-		public Object visit(PartitionNode node) throws Exception {
-			return NodeDnDBuffer.getInstance().getDraggedNodes().get(0) instanceof PartitionNode;
+		public Object visit(ChoiceNode node) throws Exception {
+			return NodeDnDBuffer.getInstance().getDraggedNodes().get(0) instanceof ChoiceNode;
 		}
 
 	}

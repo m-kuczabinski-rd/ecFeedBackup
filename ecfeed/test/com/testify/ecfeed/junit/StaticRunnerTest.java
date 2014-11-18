@@ -34,7 +34,7 @@ import org.junit.runners.model.InitializationError;
 import com.testify.ecfeed.junit.annotations.EcModel;
 import com.testify.ecfeed.junit.annotations.TestSuites;
 import com.testify.ecfeed.model.MethodNode;
-import com.testify.ecfeed.model.PartitionNode;
+import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.runner.RunnerException;
@@ -143,7 +143,7 @@ public class StaticRunnerTest extends StaticRunner{
 	private void addTestCaseResult(TestCaseNode testCase,
 			Set<List<Integer>> target) {
 		List<Integer> result = new ArrayList<Integer>();
-		for(PartitionNode parameter : testCase.getTestData()){
+		for(ChoiceNode parameter : testCase.getTestData()){
 			result.add(Integer.valueOf(parameter.getValueString()));
 		}
 		target.add(result);

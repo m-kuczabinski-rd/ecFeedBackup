@@ -32,7 +32,7 @@ import org.eclipse.ui.forms.widgets.Section;
 
 import com.testify.ecfeed.adapter.java.JavaUtils;
 import com.testify.ecfeed.model.ParameterNode;
-import com.testify.ecfeed.model.PartitionNode;
+import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.model.PartitionedNode;
 import com.testify.ecfeed.ui.common.NodeNameColumnLabelProvider;
 import com.testify.ecfeed.ui.editor.actions.DeleteAction;
@@ -74,13 +74,13 @@ public class ChoicesViewer extends TableViewerSection {
 
 		@Override
 		protected Object getValue(Object element) {
-			return ((PartitionNode)element).getName();
+			return ((ChoiceNode)element).getName();
 		}
 
 		@Override
 		protected void setValue(Object element, Object value) {
 			String newName = (String)value;
-			PartitionNode partition = (PartitionNode)element;
+			ChoiceNode partition = (ChoiceNode)element;
 
 			if(newName.equals(partition.getName()) == false){
 				fTableItemIf.setTarget(partition);
@@ -101,7 +101,7 @@ public class ChoicesViewer extends TableViewerSection {
 
 		@Override
 		protected CellEditor getCellEditor(Object element) {
-			PartitionNode node = (PartitionNode)element;
+			ChoiceNode node = (ChoiceNode)element;
 			ParameterNode parameter = node.getParameter();
 			if(ParameterInterface.hasLimitedValuesSet(node.getParameter())){
 				fCellEditor.setActivationStyle(ComboBoxCellEditor.DROP_DOWN_ON_KEY_ACTIVATION);
@@ -124,12 +124,12 @@ public class ChoicesViewer extends TableViewerSection {
 
 		@Override
 		protected boolean canEdit(Object element) {
-			return ((PartitionNode)element).isAbstract() == false;
+			return ((ChoiceNode)element).isAbstract() == false;
 		}
 
 		@Override
 		protected Object getValue(Object element) {
-			return ((PartitionNode)element).getValueString();
+			return ((ChoiceNode)element).getValueString();
 		}
 
 		@Override
@@ -140,7 +140,7 @@ public class ChoicesViewer extends TableViewerSection {
 			} else if(value == null){
 				valueString = fCellEditor.getViewer().getCCombo().getText();
 			}
-			fTableItemIf.setTarget((PartitionNode)element);
+			fTableItemIf.setTarget((ChoiceNode)element);
 			fTableItemIf.setValue(valueString);
 		}
 	}
@@ -149,8 +149,8 @@ public class ChoicesViewer extends TableViewerSection {
 
 		@Override
 		public String getText(Object element){
-			if(element instanceof PartitionNode){
-				PartitionNode partition = (PartitionNode)element;
+			if(element instanceof ChoiceNode){
+				ChoiceNode partition = (ChoiceNode)element;
 				return partition.isAbstract()?"[ABSTRACT]":partition.getValueString();
 			}
 			return "";
@@ -161,7 +161,7 @@ public class ChoicesViewer extends TableViewerSection {
 
 		@Override
 		public void widgetSelected(SelectionEvent e){
-			PartitionNode added = fParentIf.addNewPartition();
+			ChoiceNode added = fParentIf.addNewPartition();
 			if(added != null){
 				getTable().setSelection(added.getIndex());
 			}

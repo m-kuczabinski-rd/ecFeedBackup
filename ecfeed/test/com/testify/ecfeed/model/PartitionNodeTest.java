@@ -26,7 +26,7 @@ import com.testify.ecfeed.testutils.RandomModelGenerator;
 public class PartitionNodeTest{
 	@Test
 	public void testValue() {
-		PartitionNode partition = new PartitionNode("name", "value");
+		ChoiceNode partition = new ChoiceNode("name", "value");
 		assertEquals("value", partition.getValueString());
 		partition.setValueString("new value");
 		assertEquals("new value", partition.getValueString());
@@ -37,9 +37,9 @@ public class PartitionNodeTest{
 	public void testGetParameter(){
 		MethodNode method = new MethodNode("method");
 		ParameterNode parameter = new ParameterNode("name", "type","0",  false);
-		PartitionNode p1 = new PartitionNode("p1", "0");
-		PartitionNode p11 = new PartitionNode("p11", "0");
-		PartitionNode p111 = new PartitionNode("p111", "0");
+		ChoiceNode p1 = new ChoiceNode("p1", "0");
+		ChoiceNode p11 = new ChoiceNode("p11", "0");
+		ChoiceNode p111 = new ChoiceNode("p111", "0");
 		
 		method.addParameter(parameter);
 		parameter.addPartition(p1);
@@ -61,9 +61,9 @@ public class PartitionNodeTest{
 	public void testLevel(){
 		MethodNode method = new MethodNode("method");
 		ParameterNode parameter = new ParameterNode("name", "type", "0", false);
-		PartitionNode p1 = new PartitionNode("p1", "0");
-		PartitionNode p11 = new PartitionNode("p11", "0");
-		PartitionNode p111 = new PartitionNode("p111", "0");
+		ChoiceNode p1 = new ChoiceNode("p1", "0");
+		ChoiceNode p11 = new ChoiceNode("p11", "0");
+		ChoiceNode p111 = new ChoiceNode("p111", "0");
 		
 		method.addParameter(parameter);
 		parameter.addPartition(p1);
@@ -144,23 +144,23 @@ public class PartitionNodeTest{
 	
 	@Test
 	public void getLeafsTest(){
-		PartitionNode p = new PartitionNode("p", "0");
+		ChoiceNode p = new ChoiceNode("p", "0");
 		
-		PartitionNode p1 = new PartitionNode("p1", "0");
-		PartitionNode p2 = new PartitionNode("p1", "0");
-		PartitionNode p3 = new PartitionNode("p1", "0");
+		ChoiceNode p1 = new ChoiceNode("p1", "0");
+		ChoiceNode p2 = new ChoiceNode("p1", "0");
+		ChoiceNode p3 = new ChoiceNode("p1", "0");
 		
-		PartitionNode p21 = new PartitionNode("p21", "0");
-		PartitionNode p22 = new PartitionNode("p22", "0");
-		PartitionNode p23 = new PartitionNode("p23", "0");
+		ChoiceNode p21 = new ChoiceNode("p21", "0");
+		ChoiceNode p22 = new ChoiceNode("p22", "0");
+		ChoiceNode p23 = new ChoiceNode("p23", "0");
 
-		PartitionNode p31 = new PartitionNode("p31", "0");
-		PartitionNode p32 = new PartitionNode("p32", "0");
-		PartitionNode p33 = new PartitionNode("p33", "0");
+		ChoiceNode p31 = new ChoiceNode("p31", "0");
+		ChoiceNode p32 = new ChoiceNode("p32", "0");
+		ChoiceNode p33 = new ChoiceNode("p33", "0");
 
-		PartitionNode p321 = new PartitionNode("p321", "0");
-		PartitionNode p322 = new PartitionNode("p322", "0");
-		PartitionNode p323 = new PartitionNode("p323", "0");
+		ChoiceNode p321 = new ChoiceNode("p321", "0");
+		ChoiceNode p322 = new ChoiceNode("p322", "0");
+		ChoiceNode p323 = new ChoiceNode("p323", "0");
 		
 		p.addPartition(p1);
 		p.addPartition(p2);
@@ -192,8 +192,8 @@ public class PartitionNodeTest{
 	
 	@Test
 	public void getQualifiedNameTest(){
-		PartitionNode p = new PartitionNode("p", "0");
-		PartitionNode q = new PartitionNode("q", "0");
+		ChoiceNode p = new ChoiceNode("p", "0");
+		ChoiceNode q = new ChoiceNode("q", "0");
 		
 		p.addPartition(q);
 		
@@ -202,13 +202,13 @@ public class PartitionNodeTest{
 	
 	@Test
 	public void getAllDescendantsTest(){
-		PartitionNode p = new PartitionNode("p", "0");
-		PartitionNode p1 = new PartitionNode("p1", "0");
-		PartitionNode p11 = new PartitionNode("p11", "0");
-		PartitionNode p12 = new PartitionNode("p12", "0");
-		PartitionNode p111 = new PartitionNode("p111", "0");
-		PartitionNode p112 = new PartitionNode("p112", "0");
-		PartitionNode p2 = new PartitionNode("p2", "0");
+		ChoiceNode p = new ChoiceNode("p", "0");
+		ChoiceNode p1 = new ChoiceNode("p1", "0");
+		ChoiceNode p11 = new ChoiceNode("p11", "0");
+		ChoiceNode p12 = new ChoiceNode("p12", "0");
+		ChoiceNode p111 = new ChoiceNode("p111", "0");
+		ChoiceNode p112 = new ChoiceNode("p112", "0");
+		ChoiceNode p2 = new ChoiceNode("p2", "0");
 		
 		p.addPartition(p1);
 		p.addPartition(p2);
@@ -229,11 +229,11 @@ public class PartitionNodeTest{
 	
 	@Test 
 	public void labelTest(){
-		PartitionNode p = new PartitionNode("p", "0");
-		PartitionNode p1 = new PartitionNode("p1", "0");
-		PartitionNode p2 = new PartitionNode("p2", "0");
-		PartitionNode p12 = new PartitionNode("p12", "0");
-		PartitionNode p11 = new PartitionNode("p11", "0");
+		ChoiceNode p = new ChoiceNode("p", "0");
+		ChoiceNode p1 = new ChoiceNode("p1", "0");
+		ChoiceNode p2 = new ChoiceNode("p2", "0");
+		ChoiceNode p12 = new ChoiceNode("p12", "0");
+		ChoiceNode p11 = new ChoiceNode("p11", "0");
 		
 		p.addPartition(p1);
 		p.addPartition(p2);
@@ -311,7 +311,7 @@ public class PartitionNodeTest{
 	public void compareSmokeTest(){
 		for(String type : SUPPORTED_TYPES){
 			
-			PartitionNode p = new RandomModelGenerator().generatePartition(3, 3, 3, type);
+			ChoiceNode p = new RandomModelGenerator().generatePartition(3, 3, 3, type);
 			assertElementsEqual(p, p);
 		}
 	}
@@ -319,8 +319,8 @@ public class PartitionNodeTest{
 	/*******************compare()***************************/
 	@Test
 	public void compareNameTest(){
-		PartitionNode p1 = new PartitionNode("p", "VALUE");
-		PartitionNode p2 = new PartitionNode("p", "VALUE");
+		ChoiceNode p1 = new ChoiceNode("p", "VALUE");
+		ChoiceNode p2 = new ChoiceNode("p", "VALUE");
 		
 		assertTrue(p1.compare(p2));
 		
@@ -332,8 +332,8 @@ public class PartitionNodeTest{
 	
 	@Test
 	public void compareValueTest(){
-		PartitionNode p1 = new PartitionNode("p", "VALUE");
-		PartitionNode p2 = new PartitionNode("p", "VALUE");
+		ChoiceNode p1 = new ChoiceNode("p", "VALUE");
+		ChoiceNode p2 = new ChoiceNode("p", "VALUE");
 		
 		assertTrue(p1.compare(p2));
 		
@@ -345,8 +345,8 @@ public class PartitionNodeTest{
 	
 	@Test
 	public void compareLabelsTest(){
-		PartitionNode p1 = new PartitionNode("p", "VALUE");
-		PartitionNode p2 = new PartitionNode("p", "VALUE");
+		ChoiceNode p1 = new ChoiceNode("p", "VALUE");
+		ChoiceNode p2 = new ChoiceNode("p", "VALUE");
 		
 		assertTrue(p1.compare(p2));
 
@@ -363,11 +363,11 @@ public class PartitionNodeTest{
 	
 	@Test
 	public void compareChildrenTest(){
-		PartitionNode p1 = new PartitionNode("p", "VALUE");
-		PartitionNode p2 = new PartitionNode("p", "VALUE");
+		ChoiceNode p1 = new ChoiceNode("p", "VALUE");
+		ChoiceNode p2 = new ChoiceNode("p", "VALUE");
 
-		PartitionNode p11 = new PartitionNode("p", "VALUE");
-		PartitionNode p21 = new PartitionNode("p", "VALUE");
+		ChoiceNode p11 = new ChoiceNode("p", "VALUE");
+		ChoiceNode p21 = new ChoiceNode("p", "VALUE");
 
 		assertTrue(p1.compare(p2));
 

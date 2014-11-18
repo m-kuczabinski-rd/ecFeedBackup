@@ -18,7 +18,7 @@ import com.testify.ecfeed.model.ConstraintNode;
 import com.testify.ecfeed.model.ExpectedValueStatement;
 import com.testify.ecfeed.model.IStatementVisitor;
 import com.testify.ecfeed.model.MethodNode;
-import com.testify.ecfeed.model.PartitionNode;
+import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.model.PartitionedParameterStatement;
 import com.testify.ecfeed.model.PartitionedParameterStatement.LabelCondition;
 import com.testify.ecfeed.model.PartitionedParameterStatement.PartitionCondition;
@@ -35,8 +35,8 @@ public class ParameterOperationSetType extends BulkOperation{
 		private String fNewType;
 		private String fCurrentType;
 		private String fOriginalDefaultValue;
-		private List<PartitionNode> fOriginalPartitions;
-		private Map<PartitionNode, String> fOriginalValues;
+		private List<ChoiceNode> fOriginalPartitions;
+		private Map<ChoiceNode, String> fOriginalValues;
 		private List<TestCaseNode> fOriginalTestCases;
 		private List<ConstraintNode> fOriginalConstraints;
 		private Map<BasicStatement, String> fOriginalStatementValues;
@@ -174,8 +174,8 @@ public class ParameterOperationSetType extends BulkOperation{
 				}
 			}
 
-			private void revertPartitionValues(List<PartitionNode> choices) {
-				for(PartitionNode choice : choices){
+			private void revertPartitionValues(List<ChoiceNode> choices) {
+				for(ChoiceNode choice : choices){
 					if(fOriginalValues.containsKey(choice)){
 						choice.setValueString(fOriginalValues.get(choice));
 					}
@@ -196,7 +196,7 @@ public class ParameterOperationSetType extends BulkOperation{
 		@Override
 		public void execute() throws ModelOperationException {
 			fOriginalDefaultValue = fTarget.getDefaultValue();
-			fOriginalPartitions = new ArrayList<PartitionNode>(fTarget.getPartitions());
+			fOriginalPartitions = new ArrayList<ChoiceNode>(fTarget.getPartitions());
 			fOriginalValues = new HashMap<>();
 			fOriginalTestCases = new ArrayList<>(fTarget.getMethod().getTestCases());
 			fOriginalConstraints = new ArrayList<>(fTarget.getMethod().getConstraintNodes());
@@ -221,7 +221,7 @@ public class ParameterOperationSetType extends BulkOperation{
 			String defaultValue = adapter.convert(fTarget.getDefaultValue());
 			if(defaultValue == null){
 				if(fTarget.getLeafPartitions().size() > 0){
-					defaultValue = fTarget.getLeafPartitions().toArray(new PartitionNode[]{})[0].getValueString();
+					defaultValue = fTarget.getLeafPartitions().toArray(new ChoiceNode[]{})[0].getValueString();
 				}
 				else{
 					defaultValue = adapter.defaultValue();
@@ -234,7 +234,7 @@ public class ParameterOperationSetType extends BulkOperation{
 					}
 				}
 				else{
-					fTarget.addPartition(new PartitionNode(defaultValue.toLowerCase(), defaultValue));
+					fTarget.addPartition(new ChoiceNode(defaultValue.toLowerCase(), defaultValue));
 				}
 			}
 			fTarget.setDefaultValueString(defaultValue);
@@ -252,21 +252,21 @@ public class ParameterOperationSetType extends BulkOperation{
 		}
 
 		private void convertPartitionValues(PartitionedNode parent, ITypeAdapter adapter) {
-			for(PartitionNode p : parent.getPartitions()){
+			for(ChoiceNode p : parent.getPartitions()){
 				convertPartitionValue(p, adapter);
 				convertPartitionValues(p, adapter);
 			}
 		}
 
-		private void convertPartitionValue(PartitionNode p, ITypeAdapter adapter) {
+		private void convertPartitionValue(ChoiceNode p, ITypeAdapter adapter) {
 			fOriginalValues.put(p, p.getValueString());
 			String newValue = adapter.convert(p.getValueString());
 			p.setValueString(newValue);
 		}
 
 		private void removeDeadPartitions(PartitionedNode parent) {
-			List<PartitionNode> toRemove = new ArrayList<PartitionNode>();
-			for(PartitionNode p : parent.getPartitions()){
+			List<ChoiceNode> toRemove = new ArrayList<ChoiceNode>();
+			for(ChoiceNode p : parent.getPartitions()){
 				if(isDead(p)){
 					toRemove.add(p);
 				}
@@ -274,7 +274,7 @@ public class ParameterOperationSetType extends BulkOperation{
 					removeDeadPartitions(p);
 				}
 			}
-			for(PartitionNode removed : toRemove){
+			for(ChoiceNode removed : toRemove){
 				parent.removePartition(removed);
 			}
 		}
@@ -285,7 +285,7 @@ public class ParameterOperationSetType extends BulkOperation{
 				Iterator<TestCaseNode> tcIt = method.getTestCases().iterator();
 				ITypeAdapter adapter = fAdapterProvider.getAdapter(fNewType);
 				while(tcIt.hasNext()){
-					PartitionNode expectedValue = tcIt.next().getTestData().get(fTarget.getIndex());
+					ChoiceNode expectedValue = tcIt.next().getTestData().get(fTarget.getIndex());
 					String newValue = adapter.convert(expectedValue.getValueString());
 					if(JavaUtils.isUserType(fNewType)){
 						if(fTarget.getLeafPartitionValues().contains(newValue) == false){
@@ -323,12 +323,12 @@ public class ParameterOperationSetType extends BulkOperation{
 			}
 		}
 
-		private boolean isDead(PartitionNode p) {
+		private boolean isDead(ChoiceNode p) {
 			if(p.isAbstract() == false){
 				return p.getValueString() == null;
 			}
 			boolean allChildrenDead = true;
-			for(PartitionNode child : p.getPartitions()){
+			for(ChoiceNode child : p.getPartitions()){
 				if(isDead(child) == false){
 					allChildrenDead = false;
 					break;

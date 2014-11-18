@@ -20,7 +20,7 @@ import org.eclipse.ui.forms.widgets.Section;
 
 import com.testify.ecfeed.adapter.EImplementationStatus;
 import com.testify.ecfeed.model.ParameterNode;
-import com.testify.ecfeed.model.PartitionNode;
+import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.ui.common.ColorConstants;
 import com.testify.ecfeed.ui.common.ColorManager;
@@ -48,7 +48,7 @@ public class TestDataViewer extends TableViewerSection implements ITestDataEdito
 		addColumn("Parameter", 150, new NodeViewerColumnLabelProvider(){
 			@Override
 			public String getText(Object element){
-				PartitionNode testValue = (PartitionNode)element;
+				ChoiceNode testValue = (ChoiceNode)element;
 				ParameterNode parent = testValue.getParameter();
 				return parent.toString();
 			}
@@ -62,7 +62,7 @@ public class TestDataViewer extends TableViewerSection implements ITestDataEdito
 		TableViewerColumn valueColumn = addColumn("Value", 150, new NodeViewerColumnLabelProvider(){
 			@Override
 			public String getText(Object element){
-				PartitionNode testValue = (PartitionNode)element;
+				ChoiceNode testValue = (ChoiceNode)element;
 				if(testValue.getParameter().isExpected()){
 					return testValue.getValueString();
 				}
@@ -79,13 +79,13 @@ public class TestDataViewer extends TableViewerSection implements ITestDataEdito
 	}
 
 	public void setInput(TestCaseNode testCase){
-		List<PartitionNode> testData = testCase.getTestData();
+		List<ChoiceNode> testData = testCase.getTestData();
 		super.setInput(testData);
 		fTestCaseIf.setTarget(testCase);
 	}
 
 	@Override
-	public void testDataChanged(int index, PartitionNode value) {
+	public void testDataChanged(int index, ChoiceNode value) {
 		fTestCaseIf.updateTestData(index, value);
 	}
 
@@ -95,8 +95,8 @@ public class TestDataViewer extends TableViewerSection implements ITestDataEdito
 	}
 
 	private Color getColor(Object element) {
-		if(element instanceof PartitionNode){
-			PartitionNode choice = (PartitionNode)element;
+		if(element instanceof ChoiceNode){
+			ChoiceNode choice = (ChoiceNode)element;
 			if(fTestCaseIf.getImplementationStatus(choice) == EImplementationStatus.IMPLEMENTED){
 				return ColorManager.getColor(ColorConstants.ITEM_IMPLEMENTED);
 			}

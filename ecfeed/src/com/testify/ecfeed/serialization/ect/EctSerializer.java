@@ -22,7 +22,7 @@ import com.testify.ecfeed.model.ParameterNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.ConstraintNode;
 import com.testify.ecfeed.model.MethodNode;
-import com.testify.ecfeed.model.PartitionNode;
+import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.serialization.IModelSerializer;
@@ -73,7 +73,7 @@ public class EctSerializer implements IModelSerializer{
 		return null;
 	}
 
-	public Object serialize(PartitionNode node) throws Exception {
+	public Object serialize(ChoiceNode node) throws Exception {
 		Element element = (Element)node.accept(fConverter);
 		writeDocument(element);
 		return null;
