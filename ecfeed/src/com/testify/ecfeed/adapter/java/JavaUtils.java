@@ -140,7 +140,7 @@ public class JavaUtils {
 
 	public static List<String> getArgNames(MethodNode method) {
 		List<String> result = new ArrayList<String>();
-		for(ParameterNode c : method.getCategories()){
+		for(ParameterNode c : method.getParameters()){
 			result.add(c.getName());
 		}
 		return result;
@@ -148,7 +148,7 @@ public class JavaUtils {
 
 	public static List<String> getArgTypes(MethodNode method) {
 		List<String> result = new ArrayList<String>();
-		for(ParameterNode c : method.getCategories()){
+		for(ParameterNode c : method.getParameters()){
 			result.add(c.getType());
 		}
 		return result;

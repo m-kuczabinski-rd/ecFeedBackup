@@ -19,9 +19,9 @@ import com.testify.ecfeed.model.ExpectedValueStatement;
 import com.testify.ecfeed.model.IStatementVisitor;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
-import com.testify.ecfeed.model.PartitionedCategoryStatement;
-import com.testify.ecfeed.model.PartitionedCategoryStatement.LabelCondition;
-import com.testify.ecfeed.model.PartitionedCategoryStatement.PartitionCondition;
+import com.testify.ecfeed.model.PartitionedParameterStatement;
+import com.testify.ecfeed.model.PartitionedParameterStatement.LabelCondition;
+import com.testify.ecfeed.model.PartitionedParameterStatement.PartitionCondition;
 import com.testify.ecfeed.model.PartitionedNode;
 import com.testify.ecfeed.model.StatementArray;
 import com.testify.ecfeed.model.StaticStatement;
@@ -80,7 +80,7 @@ public class ParameterOperationSetType extends BulkOperation{
 			}
 
 			@Override
-			public Object visit(PartitionedCategoryStatement statement)
+			public Object visit(PartitionedParameterStatement statement)
 					throws Exception {
 				return true;
 			}
@@ -125,7 +125,7 @@ public class ParameterOperationSetType extends BulkOperation{
 				}
 
 				@Override
-				public Object visit(PartitionedCategoryStatement statement)
+				public Object visit(PartitionedParameterStatement statement)
 						throws Exception {
 					return null;
 				}
@@ -206,7 +206,7 @@ public class ParameterOperationSetType extends BulkOperation{
 				throw new ModelOperationException(Messages.CATEGORY_TYPE_REGEX_PROBLEM);
 			}
 			MethodNode method = fTarget.getMethod();
-			List<String> parameterTypes = method.getCategoriesTypes();
+			List<String> parameterTypes = method.getParametersTypes();
 			parameterTypes.set(fTarget.getIndex(), fNewType);
 			if(method.getClassNode().getMethod(method.getName(), parameterTypes) != null){
 				throw new ModelOperationException(Messages.METHOD_SIGNATURE_DUPLICATE_PROBLEM);

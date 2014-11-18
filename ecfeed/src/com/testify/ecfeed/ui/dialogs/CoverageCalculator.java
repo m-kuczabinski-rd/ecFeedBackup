@@ -24,10 +24,10 @@ public class CoverageCalculator {
 	private int[] fTuplesCovered;
 	private int[] fTotalWork;
 	private double[] fResults;
-	private List<ParameterNode> fCategories;
+	private List<ParameterNode> fParameters;
 
 	private List<List<PartitionNode>> fInput;
-	// The map of expected categories default values. Said values are used to replace unique values in algorithm.
+	// The map of expected parameters default values. Said values are used to replace unique values in algorithm.
 	private Map<Integer, PartitionNode> fExpectedPartitions;
 	// The main map of covered tuples
 	private List<Map<List<PartitionNode>, Integer>> fTuples;
@@ -36,8 +36,8 @@ public class CoverageCalculator {
 	// If user added test cases = true; else we are substracting tuples;
 	private boolean fAddingFlag;
 
-	public CoverageCalculator(List<ParameterNode> categories) {
-		fCategories = categories;
+	public CoverageCalculator(List<ParameterNode> parameters) {
+		fParameters = parameters;
 		initialize();
 	}
 
@@ -175,12 +175,12 @@ public class CoverageCalculator {
 
 	private List<List<PartitionNode>> prepareInput() {
 		List<List<PartitionNode>> input = new ArrayList<List<PartitionNode>>();
-		for (ParameterNode cnode : fCategories) {
-			List<PartitionNode> category = new ArrayList<PartitionNode>();
+		for (ParameterNode cnode : fParameters) {
+			List<PartitionNode> parameter = new ArrayList<PartitionNode>();
 			for (PartitionNode pnode : cnode.getLeafPartitions()) {
-				category.add(pnode);
+				parameter.add(pnode);
 			}
-			input.add(category);
+			input.add(parameter);
 		}
 		return input;
 	}
@@ -188,7 +188,7 @@ public class CoverageCalculator {
 	private Map<Integer, PartitionNode> prepareExpectedPartitions() {
 		int n = 0;
 		Map<Integer, PartitionNode> expected = new HashMap<>();
-		for (ParameterNode cnode : fCategories) {
+		for (ParameterNode cnode : fParameters) {
 			if (cnode.isExpected()) {
 				PartitionNode p = new PartitionNode("", cnode.getDefaultValue());
 				p.setParent(cnode);
@@ -235,8 +235,8 @@ public class CoverageCalculator {
 		while (tuples.hasNext()) {
 			long combinations = 1;
 			List<List<PartitionNode>> tuple = tuples.next();
-			for (List<PartitionNode> category : tuple) {
-				combinations *= category.size();
+			for (List<PartitionNode> parameter : tuple) {
+				combinations *= parameter.size();
 			}
 			totalWork += combinations;
 		}

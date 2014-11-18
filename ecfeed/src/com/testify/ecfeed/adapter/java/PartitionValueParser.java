@@ -10,8 +10,8 @@ public class PartitionValueParser {
 	}
 
 	public Object parseValue(PartitionNode partition){
-		if(partition.getCategory() != null){
-			return parseValue(partition.getValueString(), partition.getCategory().getType());
+		if(partition.getParameter() != null){
+			return parseValue(partition.getValueString(), partition.getParameter().getType());
 		}
 		return null;
 	}

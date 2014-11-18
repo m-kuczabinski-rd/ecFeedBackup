@@ -63,19 +63,19 @@ public class GeneratorTestUtils{
 		List<List<String>> input = new ArrayList<List<String>>();
 		for(int i = 0; i < variables; i++){
 			String variableName = VARIABLE_NAMES[i];
-			List<String> category = new ArrayList<String>();
+			List<String> parameter = new ArrayList<String>();
 			for(int j = 1; j <= partitions; j++){
-				category.add(variableName + String.valueOf(j));
+				parameter.add(variableName + String.valueOf(j));
 			}
-			input.add(category);
+			input.add(parameter);
 		}
 		return input;
 	}
 	
 	public static List<Set<String>> referenceInput(List<List<String>> input){
 		List<Set<String>> referenceInput = new ArrayList<Set<String>>();
-		for(List<String> category : input){
-			referenceInput.add(new LinkedHashSet<String>(category));
+		for(List<String> parameter : input){
+			referenceInput.add(new LinkedHashSet<String>(parameter));
 		}
 		return referenceInput;
 	}
@@ -129,8 +129,8 @@ public class GeneratorTestUtils{
 		Random random = new Random();
 		Set<String> restrictedValues = new HashSet<String>();
 		for(int i = 0; i < restricted; i++){
-			List<String> constrainedCategory = inputDomain.get(random.nextInt(inputDomain.size()));
-			restrictedValues.add(constrainedCategory.get(random.nextInt(constrainedCategory.size())));
+			List<String> constrainedParameter = inputDomain.get(random.nextInt(inputDomain.size()));
+			restrictedValues.add(constrainedParameter.get(random.nextInt(constrainedParameter.size())));
 		}
 		return new Constraint(restrictedValues);
 	}

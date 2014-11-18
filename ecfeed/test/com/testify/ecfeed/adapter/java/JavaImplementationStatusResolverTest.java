@@ -315,9 +315,9 @@ public class JavaImplementationStatusResolverTest {
 			break;
 		}
 		if(childrenStatus != EChildrenStatus.NO_CHILDREN){
-			method.addCategory(arg1);
-			method.addCategory(arg2);
-			method.addCategory(arg3);
+			method.addParameter(arg1);
+			method.addParameter(arg2);
+			method.addParameter(arg3);
 		}
 
 		_class.addMethod(method);
@@ -348,15 +348,15 @@ public class JavaImplementationStatusResolverTest {
 		List<PartitionNode> testData = new ArrayList<PartitionNode>();
 		for(int i = 0; i < noOfChoices; ++i){
 			if(implementedChoices == EImplementedChildren.ALL || (implementedChoices == EImplementedChildren.SOME && i == 1)){
-				ParameterNode category = new ParameterNode(String.valueOf(i), "int", "0", false);
+				ParameterNode parameter = new ParameterNode(String.valueOf(i), "int", "0", false);
 				PartitionNode choice = new PartitionNode(String.valueOf(i), String.valueOf(i));
-				category.addPartition(choice);
+				parameter.addPartition(choice);
 				testData.add(choice);
 			}
 			else{
-				ParameterNode category = new ParameterNode(String.valueOf(i), "dummy", "0", false);
+				ParameterNode parameter = new ParameterNode(String.valueOf(i), "dummy", "0", false);
 				PartitionNode choice = new PartitionNode(String.valueOf(i), String.valueOf(i));
-				category.addPartition(choice);
+				parameter.addPartition(choice);
 				testData.add(choice);
 			}
 			

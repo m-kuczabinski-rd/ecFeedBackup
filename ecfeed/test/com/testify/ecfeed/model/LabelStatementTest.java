@@ -22,7 +22,7 @@ import org.junit.Test;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.ParameterNode;
-import com.testify.ecfeed.model.PartitionedCategoryStatement;
+import com.testify.ecfeed.model.PartitionedParameterStatement;
 import com.testify.ecfeed.model.EStatementRelation;
 
 public class LabelStatementTest {
@@ -60,8 +60,8 @@ public class LabelStatementTest {
 		c2.addPartition(q);
 		
 		MethodNode method = new MethodNode("method");
-		method.addCategory(c1);
-		method.addCategory(c2);
+		method.addParameter(c1);
+		method.addParameter(c2);
 
 		List<PartitionNode> pq = new ArrayList<PartitionNode>();
 		pq.add(p); pq.add(q);
@@ -78,14 +78,14 @@ public class LabelStatementTest {
 		List<PartitionNode> p21q = new ArrayList<PartitionNode>();
 		p21q.add(p21); p21q.add(q);
 		
-		PartitionedCategoryStatement pEqual = new PartitionedCategoryStatement(c1, EStatementRelation.EQUAL, "p");
-		PartitionedCategoryStatement pNotEqual = new PartitionedCategoryStatement(c1, EStatementRelation.NOT, "p");
+		PartitionedParameterStatement pEqual = new PartitionedParameterStatement(c1, EStatementRelation.EQUAL, "p");
+		PartitionedParameterStatement pNotEqual = new PartitionedParameterStatement(c1, EStatementRelation.NOT, "p");
 		
-		PartitionedCategoryStatement p1Equal = new PartitionedCategoryStatement(c1, EStatementRelation.EQUAL, "p1");
-		PartitionedCategoryStatement p1NotEqual = new PartitionedCategoryStatement(c1, EStatementRelation.NOT, "p1");
+		PartitionedParameterStatement p1Equal = new PartitionedParameterStatement(c1, EStatementRelation.EQUAL, "p1");
+		PartitionedParameterStatement p1NotEqual = new PartitionedParameterStatement(c1, EStatementRelation.NOT, "p1");
 		
-		PartitionedCategoryStatement p11Equal = new PartitionedCategoryStatement(c1, EStatementRelation.EQUAL, "p11");
-		PartitionedCategoryStatement p11NotEqual = new PartitionedCategoryStatement(c1, EStatementRelation.NOT, "p11");
+		PartitionedParameterStatement p11Equal = new PartitionedParameterStatement(c1, EStatementRelation.EQUAL, "p11");
+		PartitionedParameterStatement p11NotEqual = new PartitionedParameterStatement(c1, EStatementRelation.NOT, "p11");
 		
 		//Check that all pEqual statements evaluates to true for all vectors
 		assertTrue(pEqual.evaluate(pq));

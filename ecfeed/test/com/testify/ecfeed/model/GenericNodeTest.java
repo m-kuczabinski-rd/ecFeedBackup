@@ -77,16 +77,16 @@ public class GenericNodeTest{
 		RootNode root = new RootNode("root");
 		ClassNode classNode = new ClassNode("class");
 		MethodNode method = new MethodNode("method");
-		ParameterNode category = new ParameterNode("name", "type", "0", false);
+		ParameterNode parameter = new ParameterNode("name", "type", "0", false);
 		ParameterNode expCat = new ParameterNode("name", "type", "0", true);
 		expCat.setDefaultValueString("0");
 		ConstraintNode constraint = new ConstraintNode("name", new Constraint(new StaticStatement(true), new StaticStatement(false)));
 		TestCaseNode testCase = new TestCaseNode("name", new ArrayList<PartitionNode>());
 		PartitionNode partition = new PartitionNode("name", "0");
 		
-		category.addPartition(partition);
-		method.addCategory(category);
-		method.addCategory(expCat);
+		parameter.addPartition(partition);
+		method.addParameter(parameter);
+		method.addParameter(expCat);
 		method.addConstraint(constraint);
 		method.addTestCase(testCase);
 		classNode.addMethod(method);
@@ -95,7 +95,7 @@ public class GenericNodeTest{
 		assertEquals(root, root.getRoot());
 		assertEquals(root, classNode.getRoot());
 		assertEquals(root, method.getRoot());
-		assertEquals(root, category.getRoot());
+		assertEquals(root, parameter.getRoot());
 		assertEquals(root, expCat.getRoot());
 		assertEquals(root, constraint.getRoot());
 		assertEquals(root, testCase.getRoot());
@@ -134,16 +134,16 @@ public class GenericNodeTest{
 		RootNode root = new RootNode("root");
 		ClassNode classNode = new ClassNode("class");
 		MethodNode method = new MethodNode("method");
-		ParameterNode category = new ParameterNode("name", "type", "0", false);
+		ParameterNode parameter = new ParameterNode("name", "type", "0", false);
 		ParameterNode expCat = new ParameterNode("name", "type", "0", true);
 		expCat.setDefaultValueString("0");
 		ConstraintNode constraint = new ConstraintNode("name", new Constraint(new StaticStatement(true), new StaticStatement(false)));
 		TestCaseNode testCase = new TestCaseNode("name", new ArrayList<PartitionNode>());
 		PartitionNode partition = new PartitionNode("name", "0");
 		
-		category.addPartition(partition);
-		method.addCategory(category);
-		method.addCategory(expCat);
+		parameter.addPartition(partition);
+		method.addParameter(parameter);
+		method.addParameter(expCat);
 		method.addConstraint(constraint);
 		method.addTestCase(testCase);
 		classNode.addMethod(method);
@@ -155,7 +155,7 @@ public class GenericNodeTest{
 		assertEquals(1, constraint.subtreeSize());
 		assertEquals(1, testCase.subtreeSize());
 		assertEquals(1, expCat.subtreeSize());
-		assertEquals(2, category.subtreeSize());
+		assertEquals(2, parameter.subtreeSize());
 		assertEquals(1, partition.subtreeSize());
 	}
 	
@@ -164,7 +164,7 @@ public class GenericNodeTest{
 		RootNode root = new RootNode("root");
 		ClassNode classNode = new ClassNode("class");
 		MethodNode method = new MethodNode("method");
-		ParameterNode category = new ParameterNode("category", "type", "0", false);
+		ParameterNode parameter = new ParameterNode("parameter", "type", "0", false);
 		ParameterNode expCat = new ParameterNode("expCat", "type", "0", true);
 		expCat.setDefaultValueString("0");
 		ConstraintNode constraint = new ConstraintNode("constraint", new Constraint(new StaticStatement(true), new StaticStatement(false)));
@@ -173,9 +173,9 @@ public class GenericNodeTest{
 		PartitionNode p1 = new PartitionNode("p1", "0");
 
 		p.addPartition(p1);
-		category.addPartition(p);
-		method.addCategory(category);
-		method.addCategory(expCat);
+		parameter.addPartition(p);
+		method.addParameter(parameter);
+		method.addParameter(expCat);
 		method.addConstraint(constraint);
 		method.addTestCase(testCase);
 		classNode.addMethod(method);
@@ -184,9 +184,9 @@ public class GenericNodeTest{
 		assertEquals(classNode, root.getChild("class"));
 		assertEquals(method, root.getChild("class:method"));
 		assertEquals(method, classNode.getChild("method"));
-		assertEquals(category, root.getChild("class:method:category"));
-		assertEquals(category, classNode.getChild("method:category"));
-		assertEquals(category, method.getChild("category"));
+		assertEquals(parameter, root.getChild("class:method:parameter"));
+		assertEquals(parameter, classNode.getChild("method:parameter"));
+		assertEquals(parameter, method.getChild("parameter"));
 		assertEquals(expCat, root.getChild("class:method:expCat"));
 		assertEquals(expCat, classNode.getChild("method:expCat"));
 		assertEquals(expCat, method.getChild("expCat"));
@@ -196,14 +196,14 @@ public class GenericNodeTest{
 		assertEquals(testCase, root.getChild("class:method:testCase"));
 		assertEquals(testCase, classNode.getChild("method:testCase"));
 		assertEquals(testCase, method.getChild("testCase"));
-		assertEquals(p, root.getChild("class:method:category:p"));
-		assertEquals(p, classNode.getChild("method:category:p"));
-		assertEquals(p, method.getChild("category:p"));
-		assertEquals(p, category.getChild("p"));
-		assertEquals(p1, root.getChild("class:method:category:p:p1"));
-		assertEquals(p1, classNode.getChild("method:category:p:p1"));
-		assertEquals(p1, method.getChild("category:p:p1"));
-		assertEquals(p1, category.getChild("p:p1"));
+		assertEquals(p, root.getChild("class:method:parameter:p"));
+		assertEquals(p, classNode.getChild("method:parameter:p"));
+		assertEquals(p, method.getChild("parameter:p"));
+		assertEquals(p, parameter.getChild("p"));
+		assertEquals(p1, root.getChild("class:method:parameter:p:p1"));
+		assertEquals(p1, classNode.getChild("method:parameter:p:p1"));
+		assertEquals(p1, method.getChild("parameter:p:p1"));
+		assertEquals(p1, parameter.getChild("p:p1"));
 		assertEquals(p1, p.getChild("p1"));
 	}
 	

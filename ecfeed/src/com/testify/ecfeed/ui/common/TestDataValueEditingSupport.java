@@ -52,10 +52,10 @@ public class TestDataValueEditingSupport extends EditingSupport {
 	}
 
 	private CellEditor getComboCellEditor(PartitionNode partition) {
-		String type = partition.getCategory().getType();
+		String type = partition.getParameter().getType();
 		EclipseModelBuilder builder = new EclipseModelBuilder();
 
-		if (partition.getCategory().isExpected()) {
+		if (partition.getParameter().isExpected()) {
 			Set<String> expectedValues = new HashSet<String>();
 			for (String specialValue : builder.getSpecialValues(type)) {
 				expectedValues.add(specialValue);
@@ -75,7 +75,7 @@ public class TestDataValueEditingSupport extends EditingSupport {
 		} else {
 			fComboCellEditor.setActivationStyle(ComboBoxViewerCellEditor.DROP_DOWN_ON_KEY_ACTIVATION |
 					ComboBoxViewerCellEditor.DROP_DOWN_ON_MOUSE_ACTIVATION);
-			fComboCellEditor.setInput(partition.getCategory().getLeafPartitions());
+			fComboCellEditor.setInput(partition.getParameter().getLeafPartitions());
 			fComboCellEditor.getViewer().getCCombo().setEditable(false);
 			fComboCellEditor.setValue(partition);
 		}
@@ -90,7 +90,7 @@ public class TestDataValueEditingSupport extends EditingSupport {
 	@Override
 	protected Object getValue(Object element) {
 		PartitionNode partition = (PartitionNode)element;
-		if(partition.getCategory().isExpected()){
+		if(partition.getParameter().isExpected()){
 			return partition.getValueString();
 		}
 		return partition.toString();
@@ -99,12 +99,12 @@ public class TestDataValueEditingSupport extends EditingSupport {
 	@Override
 	protected void setValue(Object element, Object value) {
 		PartitionNode current = (PartitionNode)element;
-		ParameterNode category = current.getCategory();
-		int index = category.getIndex();
+		ParameterNode parameter = current.getParameter();
+		int index = parameter.getIndex();
 		PartitionNode newValue = null;
-		if(category.isExpected()){
+		if(parameter.isExpected()){
 			String valueString = fComboCellEditor.getViewer().getCCombo().getText();
-			String type = category.getType();
+			String type = parameter.getType();
 			ITypeAdapter adapter = new EclipseTypeAdapterProvider().getAdapter(type);
 			if(adapter.convert(valueString) == null){
 				MessageDialog.openError(Display.getCurrent().getActiveShell(),

@@ -24,30 +24,30 @@ import com.testify.ecfeed.testutils.RandomModelGenerator;
 
 public class MethodNodeTest {
 	@Test
-	public void testAddCategory(){
+	public void testAddParameter(){
 		MethodNode method = new MethodNode("name");
-		ParameterNode category = new ParameterNode("category", "type1", "0", false);
+		ParameterNode parameter = new ParameterNode("parameter", "type1", "0", false);
 		ParameterNode expCat = new ParameterNode("expCat", "type2", "0", true);
-		assertEquals(0, method.getCategories().size());
-		method.addCategory(category);
-		assertEquals(1, method.getCategories().size());
-		assertTrue(method.getCategories().contains(category));
-		method.addCategory(expCat);
-		assertEquals(2, method.getCategories().size());
-		assertTrue(method.getCategories().contains(expCat));
+		assertEquals(0, method.getParameters().size());
+		method.addParameter(parameter);
+		assertEquals(1, method.getParameters().size());
+		assertTrue(method.getParameters().contains(parameter));
+		method.addParameter(expCat);
+		assertEquals(2, method.getParameters().size());
+		assertTrue(method.getParameters().contains(expCat));
 		
-		assertEquals(1, method.getCategoriesNames(false).size());
-		assertTrue(method.getCategoriesNames(false).contains("category"));
+		assertEquals(1, method.getParametersNames(false).size());
+		assertTrue(method.getParametersNames(false).contains("parameter"));
 
-		assertEquals(1, method.getCategoriesNames(true).size());
-		assertTrue(method.getCategoriesNames(true).contains("expCat"));
+		assertEquals(1, method.getParametersNames(true).size());
+		assertTrue(method.getParametersNames(true).contains("expCat"));
 		
-		assertEquals(category, method.getCategory("category"));
-		assertEquals(expCat, method.getCategory("expCat"));
+		assertEquals(parameter, method.getParameter("parameter"));
+		assertEquals(expCat, method.getParameter("expCat"));
 		
-		assertEquals(2, method.getCategoriesTypes().size());
-		assertTrue(method.getCategoriesTypes().contains("type1"));
-		assertTrue(method.getCategoriesTypes().contains("type2"));
+		assertEquals(2, method.getParametersTypes().size());
+		assertTrue(method.getParametersTypes().contains("type1"));
+		assertTrue(method.getParametersTypes().contains("type2"));
 		
 	}
 	
@@ -128,23 +128,23 @@ public class MethodNodeTest {
 		TestCaseNode testCase = new TestCaseNode("test case", new ArrayList<PartitionNode>());
 		ConstraintNode constraint = new ConstraintNode("constraint", 
 				new Constraint(new StaticStatement(false), new StaticStatement(false)));
-		ParameterNode category = new ParameterNode("category", "type", "0", false);
+		ParameterNode parameter = new ParameterNode("parameter", "type", "0", false);
 		ParameterNode expCat = new ParameterNode("expCat", "type", "0", true);
 		
 		assertEquals(0, method.getChildren().size());
 		assertFalse(method.hasChildren());
-		method.addCategory(category);
-		method.addCategory(expCat);
+		method.addParameter(parameter);
+		method.addParameter(expCat);
 		method.addConstraint(constraint);
 		method.addTestCase(testCase);
 		
 		assertEquals(4, method.getChildren().size());
 		assertTrue(method.hasChildren());
-		assertTrue(method.getChildren().contains(category));
+		assertTrue(method.getChildren().contains(parameter));
 		assertTrue(method.getChildren().contains(expCat));
 		assertTrue(method.getChildren().contains(constraint));
 		assertTrue(method.getChildren().contains(testCase));
-		assertEquals(category, method.getChild("category"));
+		assertEquals(parameter, method.getChild("parameter"));
 		assertEquals(expCat, method.getChild("expCat"));
 		assertEquals(testCase, method.getChild("test case"));
 		assertEquals(constraint, method.getChild("constraint"));
@@ -154,9 +154,9 @@ public class MethodNodeTest {
 	public void moveChildTest(){
 //		MethodNode method = new MethodNode("name");
 //		
-//		CategoryNode category1 = new CategoryNode("name", "type", "0", false);
-//		CategoryNode category2 = new CategoryNode("name", "type", "0", false);
-//		CategoryNode category3 = new CategoryNode("name", "type", "0", false);
+//		ParameterNode parameter1 = new ParameterNode("name", "type", "0", false);
+//		ParameterNode parameter2 = new ParameterNode("name", "type", "0", false);
+//		ParameterNode parameter3 = new ParameterNode("name", "type", "0", false);
 //		
 //		TestCaseNode testCase1 = new TestCaseNode("test case", new ArrayList<PartitionNode>());
 //		TestCaseNode testCase2 = new TestCaseNode("test case", new ArrayList<PartitionNode>());
@@ -169,9 +169,9 @@ public class MethodNodeTest {
 //		ConstraintNode constraint3 = new ConstraintNode("constraint", 
 //				new Constraint(new StaticStatement(false), new StaticStatement(false)));
 //		
-//		method.addCategory(category1);
-//		method.addCategory(category2);
-//		method.addCategory(category3);
+//		method.addParameter(parameter1);
+//		method.addParameter(parameter2);
+//		method.addParameter(parameter3);
 //		
 //		method.addTestCase(testCase1);
 //		method.addTestCase(testCase2);
@@ -181,20 +181,20 @@ public class MethodNodeTest {
 //		method.addConstraint(constraint2);
 //		method.addConstraint(constraint3);
 //		
-//		int category2Index = method.getChildren().indexOf(category2);
+//		int parameter2Index = method.getChildren().indexOf(parameter2);
 //		int testCase2Index = method.getChildren().indexOf(testCase2);
 //		int constraint2Index = method.getChildren().indexOf(constraint2);
 //		
-//		method.moveChild(category2, true);
-//		assertEquals(category2Index - 1, method.getChildren().indexOf(category2));
-//		method.moveChild(category2, true); //category should not be moved further
-//		assertEquals(category2Index - 1, method.getChildren().indexOf(category2));
-//		method.moveChild(category2, false);
-//		assertEquals(category2Index, method.getChildren().indexOf(category2));
-//		method.moveChild(category2, false);
-//		assertEquals(category2Index + 1, method.getChildren().indexOf(category2));
-//		method.moveChild(category2, false); //category should not be moved further
-//		assertEquals(category2Index + 1, method.getChildren().indexOf(category2));
+//		method.moveChild(parameter2, true);
+//		assertEquals(parameter2Index - 1, method.getChildren().indexOf(parameter2));
+//		method.moveChild(parameter2, true); //parameter should not be moved further
+//		assertEquals(parameter2Index - 1, method.getChildren().indexOf(parameter2));
+//		method.moveChild(parameter2, false);
+//		assertEquals(parameter2Index, method.getChildren().indexOf(parameter2));
+//		method.moveChild(parameter2, false);
+//		assertEquals(parameter2Index + 1, method.getChildren().indexOf(parameter2));
+//		method.moveChild(parameter2, false); //parameter should not be moved further
+//		assertEquals(parameter2Index + 1, method.getChildren().indexOf(parameter2));
 //
 //		method.moveChild(testCase2, true);
 //		assertEquals(testCase2Index - 1, method.getChildren().indexOf(testCase2));
@@ -248,98 +248,98 @@ public class MethodNodeTest {
 	}
 	
 	@Test
-	public void removePartitionedCategoryTest(){
+	public void removePartitionedParameterTest(){
 //		MethodNode method = new MethodNode("method");
-//		CategoryNode category = new CategoryNode("category", "type", "0", false);
+//		ParameterNode parameter = new ParameterNode("parameter", "type", "0", false);
 //		PartitionNode partition = new PartitionNode("partition", "0");
-//		Constraint mentioningConstraint = new Constraint(new PartitionedCategoryStatement(category, Relation.EQUAL, partition), new StaticStatement(false));
+//		Constraint mentioningConstraint = new Constraint(new PartitionedParameterStatement(parameter, Relation.EQUAL, partition), new StaticStatement(false));
 //		Constraint notMentioningConstraint = new Constraint(new StaticStatement(false), new StaticStatement(false));
 //		ConstraintNode mentioningConstraintNode = new ConstraintNode("constraint", mentioningConstraint);
 //		ConstraintNode notMentioningConstraintNode = new ConstraintNode("constraint", notMentioningConstraint);
 //		TestCaseNode testCaseNode = new TestCaseNode("name", new ArrayList<PartitionNode>());
 //		
-//		category.addPartition(partition);
-//		method.addCategory(category);
+//		parameter.addPartition(partition);
+//		method.addParameter(parameter);
 //		method.addConstraint(notMentioningConstraintNode);
 //		method.addConstraint(mentioningConstraintNode);
 //		method.addTestCase(testCaseNode);
 //		
-//		assertTrue(method.getCategories().contains(category));
-//		assertTrue(method.getCategories(false).contains(category));
+//		assertTrue(method.getParameters().contains(parameter));
+//		assertTrue(method.getParameters(false).contains(parameter));
 //		assertTrue(method.getConstraintNodes().contains(mentioningConstraintNode));
 //		assertTrue(method.getConstraintNodes().contains(notMentioningConstraintNode));
 //		assertTrue(method.getTestCases().contains(testCaseNode));
 //
-//		assertTrue(method.removeCategory(category));
-//		assertFalse(method.getCategories().contains(category));
-//		assertFalse(method.getCategories(false).contains(category));
+//		assertTrue(method.removeParameter(parameter));
+//		assertFalse(method.getParameters().contains(parameter));
+//		assertFalse(method.getParameters(false).contains(parameter));
 //		assertFalse(method.getConstraintNodes().contains(mentioningConstraintNode));
 //		assertTrue(method.getConstraintNodes().contains(notMentioningConstraintNode));
 	}
 	
 	@Test
-	public void removeExpectedCategoryTest(){
+	public void removeExpectedParameterTest(){
 //		MethodNode method = new MethodNode("method");
-//		CategoryNode category = new CategoryNode("category", "type", "0", true);
-//		category.setDefaultValueString("value");
+//		ParameterNode parameter = new ParameterNode("parameter", "type", "0", true);
+//		parameter.setDefaultValueString("value");
 //		PartitionNode partition = new PartitionNode("partition", "value2");
-//		Constraint mentioningConstraint = new Constraint(new ExpectedValueStatement(category, partition), new StaticStatement(false));
+//		Constraint mentioningConstraint = new Constraint(new ExpectedValueStatement(parameter, partition), new StaticStatement(false));
 //		Constraint notMentioningConstraint = new Constraint(new StaticStatement(false), new StaticStatement(false));
 //		ConstraintNode mentioningConstraintNode = new ConstraintNode("constraint", mentioningConstraint);
 //		ConstraintNode notMentioningConstraintNode = new ConstraintNode("constraint", notMentioningConstraint);
 //		TestCaseNode testCaseNode = new TestCaseNode("name", new ArrayList<PartitionNode>());
 //		
-//		category.addPartition(partition);
-//		method.addCategory(category);
+//		parameter.addPartition(partition);
+//		method.addParameter(parameter);
 //		method.addConstraint(notMentioningConstraintNode);
 //		method.addConstraint(mentioningConstraintNode);
 //		method.addTestCase(testCaseNode);
 //		
-//		assertTrue(method.getCategories().contains(category));
-//		assertTrue(method.getCategories(true).contains(category));
+//		assertTrue(method.getParameters().contains(parameter));
+//		assertTrue(method.getParameters(true).contains(parameter));
 //		assertTrue(method.getConstraintNodes().contains(mentioningConstraintNode));
 //		assertTrue(method.getConstraintNodes().contains(notMentioningConstraintNode));
 //		assertTrue(method.getTestCases().contains(testCaseNode));
 //
-//		assertTrue(method.removeCategory(category));
-//		assertFalse(method.getCategories().contains(category));
-//		assertFalse(method.getCategories(true).contains(category));
+//		assertTrue(method.removeParameter(parameter));
+//		assertFalse(method.getParameters().contains(parameter));
+//		assertFalse(method.getParameters(true).contains(parameter));
 //		assertFalse(method.getConstraintNodes().contains(mentioningConstraintNode));
 //		assertTrue(method.getConstraintNodes().contains(notMentioningConstraintNode));
 	}
 
 	@Test
-	public void testGetExpectedCategoriesNames(){
+	public void testGetExpectedParametersNames(){
 		MethodNode method = new MethodNode("name");
-		ParameterNode category = new ParameterNode("category", "type", "0", false);
+		ParameterNode parameter = new ParameterNode("parameter", "type", "0", false);
 		ParameterNode expCat1 = new ParameterNode("expCat1", "type", "0", true);
 		ParameterNode expCat2 = new ParameterNode("expCat2", "type", "0", true);
 		
-		method.addCategory(category);
-		method.addCategory(expCat1);
-		method.addCategory(expCat2);
+		method.addParameter(parameter);
+		method.addParameter(expCat1);
+		method.addParameter(expCat2);
 		
-		assertEquals(3, method.getCategories().size());
-		assertTrue(method.getCategories().contains(category));
-		assertTrue(method.getCategories().contains(expCat1));
-		assertTrue(method.getCategories().contains(expCat2));
+		assertEquals(3, method.getParameters().size());
+		assertTrue(method.getParameters().contains(parameter));
+		assertTrue(method.getParameters().contains(expCat1));
+		assertTrue(method.getParameters().contains(expCat2));
 		
-		assertEquals(2,  method.getCategoriesNames(true).size());
-		assertTrue(method.getCategoriesNames(true).contains("expCat1"));
-		assertTrue(method.getCategoriesNames(true).contains("expCat2"));
+		assertEquals(2,  method.getParametersNames(true).size());
+		assertTrue(method.getParametersNames(true).contains("expCat1"));
+		assertTrue(method.getParametersNames(true).contains("expCat2"));
 		
-		method.removeCategory(expCat1);
-		assertEquals(1,  method.getCategoriesNames(true).size());
-		assertFalse(method.getCategoriesNames(true).contains("expCat1"));
-		assertTrue(method.getCategoriesNames(true).contains("expCat2"));
+		method.removeParameter(expCat1);
+		assertEquals(1,  method.getParametersNames(true).size());
+		assertFalse(method.getParametersNames(true).contains("expCat1"));
+		assertTrue(method.getParametersNames(true).contains("expCat2"));
 	}
 
 	@Test
-	public void testReplaceCategoryWithExpected(){
+	public void testReplaceParameterWithExpected(){
 //		MethodNode method = new MethodNode("method");
-//		CategoryNode category = new CategoryNode("category", "type","0",  false);
+//		ParameterNode parameter = new ParameterNode("parameter", "type","0",  false);
 //		PartitionNode partition = new PartitionNode("partition", "value");
-//		Constraint mentioningConstraint = new Constraint(new PartitionedCategoryStatement(category, Relation.EQUAL, partition), new StaticStatement(false));
+//		Constraint mentioningConstraint = new Constraint(new PartitionedParameterStatement(parameter, Relation.EQUAL, partition), new StaticStatement(false));
 //		Constraint notMentioningConstraint = new Constraint(new StaticStatement(false), new StaticStatement(false));
 //		ConstraintNode mentioningConstraintNode = new ConstraintNode("constraint", mentioningConstraint);
 //		ConstraintNode notMentioningConstraintNode = new ConstraintNode("constraint", notMentioningConstraint);
@@ -347,20 +347,20 @@ public class MethodNodeTest {
 //		testData.add(partition);
 //		TestCaseNode testCaseNode = new TestCaseNode("name", testData);
 //
-//		CategoryNode newExpCat = new CategoryNode("expCat", "type", "0", true);
+//		ParameterNode newExpCat = new ParameterNode("expCat", "type", "0", true);
 //		newExpCat.setDefaultValueString("expected value");
-//		category.addPartition(partition);
-//		method.addCategory(category);
+//		parameter.addPartition(partition);
+//		method.addParameter(parameter);
 //		method.addConstraint(notMentioningConstraintNode);
 //		method.addConstraint(mentioningConstraintNode);
 //		method.addTestCase(testCaseNode);
 //		
-//		method.replaceCategory(0, newExpCat);
+//		method.replaceParameter(0, newExpCat);
 //		
-//		assertFalse(method.getCategories().contains(category));
-//		assertFalse(method.getCategories(false).contains(category));
-//		assertTrue(method.getCategories().contains(newExpCat));
-//		assertTrue(method.getCategories(true).contains(newExpCat));
+//		assertFalse(method.getParameters().contains(parameter));
+//		assertFalse(method.getParameters(false).contains(parameter));
+//		assertTrue(method.getParameters().contains(newExpCat));
+//		assertTrue(method.getParameters(true).contains(newExpCat));
 //		assertTrue(method.getConstraintNodes().contains(notMentioningConstraintNode));
 //		assertFalse(method.getConstraintNodes().contains(mentioningConstraintNode));
 //		assertTrue(method.getTestCases().contains(testCaseNode));
@@ -368,11 +368,11 @@ public class MethodNodeTest {
 	}
 	
 	@Test
-	public void testReplaceCategoryWithPartitioned(){
+	public void testReplaceParameterWithPartitioned(){
 //		MethodNode method = new MethodNode("method");
-//		CategoryNode category = new CategoryNode("category", "type", "0", true);
+//		ParameterNode parameter = new ParameterNode("parameter", "type", "0", true);
 //		PartitionNode partition = new PartitionNode("partition", "value");
-//		Constraint mentioningConstraint = new Constraint(new ExpectedValueStatement(category, partition), new StaticStatement(false));
+//		Constraint mentioningConstraint = new Constraint(new ExpectedValueStatement(parameter, partition), new StaticStatement(false));
 //		Constraint notMentioningConstraint = new Constraint(new StaticStatement(false), new StaticStatement(false));
 //		ConstraintNode mentioningConstraintNode = new ConstraintNode("constraint", mentioningConstraint);
 //		ConstraintNode notMentioningConstraintNode = new ConstraintNode("constraint", notMentioningConstraint);
@@ -380,19 +380,19 @@ public class MethodNodeTest {
 //		testData.add(partition);
 //		TestCaseNode testCaseNode = new TestCaseNode("name", testData);
 //
-//		CategoryNode newCat = new CategoryNode("newCat", "type", "0", false);
-//		category.addPartition(partition);
-//		method.addCategory(category);
+//		ParameterNode newCat = new ParameterNode("newCat", "type", "0", false);
+//		parameter.addPartition(partition);
+//		method.addParameter(parameter);
 //		method.addConstraint(notMentioningConstraintNode);
 //		method.addConstraint(mentioningConstraintNode);
 //		method.addTestCase(testCaseNode);
 //		
-//		method.replaceCategory(0, newCat);
+//		method.replaceParameter(0, newCat);
 //		
-//		assertFalse(method.getCategories().contains(category));
-//		assertFalse(method.getCategories(true).contains(category));
-//		assertTrue(method.getCategories().contains(newCat));
-//		assertTrue(method.getCategories(false).contains(newCat));
+//		assertFalse(method.getParameters().contains(parameter));
+//		assertFalse(method.getParameters(true).contains(parameter));
+//		assertTrue(method.getParameters().contains(newCat));
+//		assertTrue(method.getParameters(false).contains(newCat));
 //		assertTrue(method.getConstraintNodes().contains(notMentioningConstraintNode));
 //		assertFalse(method.getConstraintNodes().contains(mentioningConstraintNode));
 //		assertEquals(0, method.getTestCases().size());
@@ -400,11 +400,11 @@ public class MethodNodeTest {
 	
 	//TODO move the test to different place
 //	@Test
-//	public void testChangeCategoryTypeToExpected(){
+//	public void testChangeParameterTypeToExpected(){
 //		MethodNode method = new MethodNode("method");
-//		CategoryNode category = new CategoryNode("category", "type", false);
+//		ParameterNode parameter = new ParameterNode("parameter", "type", false);
 //		PartitionNode partition = new PartitionNode("partition", "value");
-//		Constraint mentioningConstraint = new Constraint(new PartitionedCategoryStatement(category, Relation.EQUAL, partition), new StaticStatement(false));
+//		Constraint mentioningConstraint = new Constraint(new PartitionedParameterStatement(parameter, Relation.EQUAL, partition), new StaticStatement(false));
 //		Constraint notMentioningConstraint = new Constraint(new StaticStatement(false), new StaticStatement(false));
 //		ConstraintNode mentioningConstraintNode = new ConstraintNode("constraint", mentioningConstraint);
 //		ConstraintNode notMentioningConstraintNode = new ConstraintNode("constraint", notMentioningConstraint);
@@ -412,15 +412,15 @@ public class MethodNodeTest {
 //		testData.add(partition);
 //		TestCaseNode testCaseNode = new TestCaseNode("name", testData);
 //
-//		category.addPartition(partition);
-//		method.addCategory(category);
+//		parameter.addPartition(partition);
+//		method.addParameter(parameter);
 //		method.addConstraint(notMentioningConstraintNode);
 //		method.addConstraint(mentioningConstraintNode);
 //		method.addTestCase(testCaseNode);
 //		
-//		category.getMethod().changeCategoryExpectedStatus(category,true);
+//		parameter.getMethod().changeParameterExpectedStatus(parameter,true);
 //		
-//		assertTrue(method.getCategories().contains(category));
+//		assertTrue(method.getParameters().contains(parameter));
 //		assertTrue(method.getConstraintNodes().contains(notMentioningConstraintNode));
 //		assertFalse(method.getConstraintNodes().contains(mentioningConstraintNode));
 //		assertTrue(method.getTestCases().contains(testCaseNode));
@@ -428,11 +428,11 @@ public class MethodNodeTest {
 //	}
 	
 //	@Test
-//	public void testChangeCategoryTypeToPartitioned(){
+//	public void testChangeParameterTypeToPartitioned(){
 //		MethodNode method = new MethodNode("method");
-//		CategoryNode category = new CategoryNode("category", "type", true);
+//		ParameterNode parameter = new ParameterNode("parameter", "type", true);
 //		PartitionNode partition = new PartitionNode("partition", "value");
-//		Constraint mentioningConstraint = new Constraint(new ExpectedValueStatement(category, partition), new StaticStatement(false));
+//		Constraint mentioningConstraint = new Constraint(new ExpectedValueStatement(parameter, partition), new StaticStatement(false));
 //		Constraint notMentioningConstraint = new Constraint(new StaticStatement(false), new StaticStatement(false));
 //		ConstraintNode mentioningConstraintNode = new ConstraintNode("constraint", mentioningConstraint);
 //		ConstraintNode notMentioningConstraintNode = new ConstraintNode("constraint", notMentioningConstraint);
@@ -440,15 +440,15 @@ public class MethodNodeTest {
 //		testData.add(partition);
 //		TestCaseNode testCaseNode = new TestCaseNode("name", testData);
 //		
-//		category.addPartition(partition);
-//		method.addCategory(category);
+//		parameter.addPartition(partition);
+//		method.addParameter(parameter);
 //		method.addConstraint(notMentioningConstraintNode);
 //		method.addConstraint(mentioningConstraintNode);
 //		method.addTestCase(testCaseNode);
 //
-//		category.getMethod().changeCategoryExpectedStatus(category,false);
+//		parameter.getMethod().changeParameterExpectedStatus(parameter,false);
 //		
-//		assertTrue(method.getCategories().contains(category));
+//		assertTrue(method.getParameters().contains(parameter));
 //		assertTrue(method.getConstraintNodes().contains(notMentioningConstraintNode));
 //		assertFalse(method.getConstraintNodes().contains(mentioningConstraintNode));
 //		assertEquals(0, method.getTestCases().size());
@@ -457,9 +457,9 @@ public class MethodNodeTest {
 	@Test 
 	public void testPartitionRemoved(){
 		MethodNode method = new MethodNode("method");
-		ParameterNode category = new ParameterNode("category", "type", "0", false);
+		ParameterNode parameter = new ParameterNode("parameter", "type", "0", false);
 		PartitionNode partition = new PartitionNode("partition", "value");
-		Constraint mentioningConstraint = new Constraint(new PartitionedCategoryStatement(category, EStatementRelation.EQUAL, partition), new StaticStatement(false));
+		Constraint mentioningConstraint = new Constraint(new PartitionedParameterStatement(parameter, EStatementRelation.EQUAL, partition), new StaticStatement(false));
 		Constraint notMentioningConstraint = new Constraint(new StaticStatement(false), new StaticStatement(false));
 		ConstraintNode mentioningConstraintNode = new ConstraintNode("constraint", mentioningConstraint);
 		ConstraintNode notMentioningConstraintNode = new ConstraintNode("constraint", notMentioningConstraint);
@@ -470,8 +470,8 @@ public class MethodNodeTest {
 		mentioningTestData.add(new PartitionNode("dummy", "0"));
 		TestCaseNode notMentioningTestCaseNode = new TestCaseNode("name", notMentioningTestData);
 
-		category.addPartition(partition);
-		method.addCategory(category);
+		parameter.addPartition(partition);
+		method.addParameter(parameter);
 		method.addConstraint(notMentioningConstraintNode);
 		method.addConstraint(mentioningConstraintNode);
 		method.addTestCase(mentioningTestCaseNode);
@@ -482,7 +482,7 @@ public class MethodNodeTest {
 		assertTrue(method.getTestCases().contains(notMentioningTestCaseNode));
 		assertTrue(method.getTestCases().contains(mentioningTestCaseNode));
 		
-		category.removePartition(partition);
+		parameter.removePartition(partition);
 //		assertFalse(method.getConstraintNodes().contains(mentioningConstraintNode));
 //		assertTrue(method.getConstraintNodes().contains(notMentioningConstraintNode));
 //		assertTrue(method.getTestCases().contains(notMentioningTestCaseNode));
@@ -504,7 +504,7 @@ public class MethodNodeTest {
 	}
 
 	@Test
-	public void compareCategoriesTest(){
+	public void compareParametersTest(){
 		MethodNode m1 = new MethodNode("m");
 		MethodNode m2 = new MethodNode("m");
 		
@@ -517,9 +517,9 @@ public class MethodNodeTest {
 		ParameterNode c1 = new ParameterNode("c", "type", "0", true);
 		ParameterNode c2 = new ParameterNode("c", "type", "0", true);
 		
-		m1.addCategory(c1);
+		m1.addParameter(c1);
 		assertFalse(m1.compare(m2));
-		m2.addCategory(c2);
+		m2.addParameter(c2);
 		assertTrue(m1.compare(m2));
 		
 		c1.setName("c1");

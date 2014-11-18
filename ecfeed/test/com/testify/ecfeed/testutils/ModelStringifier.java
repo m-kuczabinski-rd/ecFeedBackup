@@ -19,13 +19,13 @@ import com.testify.ecfeed.model.ExpectedValueStatement;
 import com.testify.ecfeed.model.GenericNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
-import com.testify.ecfeed.model.PartitionedCategoryStatement;
+import com.testify.ecfeed.model.PartitionedParameterStatement;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.StatementArray;
 import com.testify.ecfeed.model.StaticStatement;
 import com.testify.ecfeed.model.TestCaseNode;
-import com.testify.ecfeed.model.PartitionedCategoryStatement.LabelCondition;
-import com.testify.ecfeed.model.PartitionedCategoryStatement.PartitionCondition;
+import com.testify.ecfeed.model.PartitionedParameterStatement.LabelCondition;
+import com.testify.ecfeed.model.PartitionedParameterStatement.PartitionCondition;
 
 public class ModelStringifier {
 	public String stringify(GenericNode node, int indent){
@@ -57,8 +57,8 @@ public class ModelStringifier {
 		if(statement instanceof StaticStatement){
 			return stringify((StaticStatement)statement, indent);
 		}
-		if(statement instanceof PartitionedCategoryStatement){
-			return stringify((PartitionedCategoryStatement)statement, indent);
+		if(statement instanceof PartitionedParameterStatement){
+			return stringify((PartitionedParameterStatement)statement, indent);
 		}
 		if(statement instanceof ExpectedValueStatement){
 			return stringify((ExpectedValueStatement)statement, indent);
@@ -95,7 +95,7 @@ public class ModelStringifier {
 	public String stringify(MethodNode m, int indent){
 		String result = intendentString(indent);
 		result += "Method " + m.toString();
-		for(ParameterNode child : m.getCategories()){
+		for(ParameterNode child : m.getParameters()){
 			result += "\n";
 			result += stringify(child, indent + 2);
 		}
@@ -113,7 +113,7 @@ public class ModelStringifier {
 	
 	public String stringify(ParameterNode c, int indent){
 		String result = intendentString(indent);
-		result += "Category " + c.getName() + "[" + c.getType() + "], " + (c.isExpected() ? "expected" : "patitioned");
+		result += "Parameter " + c.getName() + "[" + c.getType() + "], " + (c.isExpected() ? "expected" : "patitioned");
 		result += " default value: " + c.getDefaultValue(); 
 		for(PartitionNode child : c.getPartitions()){
 			result += "\n";
@@ -126,7 +126,7 @@ public class ModelStringifier {
 		String result = intendentString(indent);
 		result += "Test case " + tc.toString() + "[";
 		for(PartitionNode p : tc.getTestData()){
-			if(p.getCategory().isExpected()){
+			if(p.getParameter().isExpected()){
 				result += "[e]" + p.getValueString();
 			}
 			else{
@@ -176,7 +176,7 @@ public class ModelStringifier {
 		return result;
 	}
 	
-	public String stringify(PartitionedCategoryStatement s, int indent){
+	public String stringify(PartitionedParameterStatement s, int indent){
 		String result = intendentString(indent);
 		result += "Partitioned statement ";
 		if(s.getCondition() instanceof LabelCondition){
@@ -192,7 +192,7 @@ public class ModelStringifier {
 	public String stringify(ExpectedValueStatement s, int indent){
 		String result = intendentString(indent);
 		result += "Expected value statement ";
-		result += s.getCategory().getName() + "[" + s.getCategory().getType() + "] " + s.getRelation() + " " + s.getCondition().getValueString();
+		result += s.getParameter().getName() + "[" + s.getParameter().getType() + "] " + s.getRelation() + " " + s.getCondition().getValueString();
 		return result;
 	}
 

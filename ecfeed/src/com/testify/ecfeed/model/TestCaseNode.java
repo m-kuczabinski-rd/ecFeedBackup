@@ -83,7 +83,7 @@ public class TestCaseNode extends GenericNode {
 
 		for(int i = 0; i < fTestData.size(); i++){
 			PartitionNode partition = fTestData.get(i);
-			if(partition.getCategory().isExpected()){
+			if(partition.getParameter().isExpected()){
 				result += "[e]" + partition.getValueString();
 			}
 			else{
@@ -111,20 +111,20 @@ public class TestCaseNode extends GenericNode {
 	}
 
 	public boolean updateReferences(MethodNode method){
-		List<ParameterNode> categories = method.getCategories();
-		if(categories.size() != getTestData().size())
+		List<ParameterNode> parameters = method.getParameters();
+		if(parameters.size() != getTestData().size())
 			return false;
 
-		for(int i = 0; i < categories.size(); i++){
-			ParameterNode category = categories.get(i);
-			if(category.isExpected()){
+		for(int i = 0; i < parameters.size(); i++){
+			ParameterNode parameter = parameters.get(i);
+			if(parameter.isExpected()){
 				String value = getTestData().get(i).getValueString();
 				PartitionNode newChoice = new PartitionNode("@expected", value);
-				newChoice.setParent(category);
+				newChoice.setParent(parameter);
 				getTestData().set(i, newChoice);
 			} else{
 				PartitionNode original = getTestData().get(i);
-				PartitionNode newReference = category.getPartition(original.getQualifiedName());
+				PartitionNode newReference = parameter.getPartition(original.getQualifiedName());
 				if(newReference == null){
 					return false;
 				}
@@ -162,8 +162,8 @@ public class TestCaseNode extends GenericNode {
 
 	public boolean isConsistent() {
 		for(PartitionNode p : getTestData()){
-			ParameterNode category = p.getCategory();
-			if(category == null || (category.isExpected() == false && category.getPartition(p.getQualifiedName()) == null)){
+			ParameterNode parameter = p.getParameter();
+			if(parameter == null || (parameter.isExpected() == false && parameter.getPartition(p.getQualifiedName()) == null)){
 				return false;
 			}
 			if(p.isAbstract()){

@@ -52,7 +52,7 @@ public class PartitionedNodeInterface extends GenericNodeInterface {
 	public boolean removePartitions(Collection<PartitionNode> partitions) {
 		boolean displayWarning = false;
 		for(PartitionNode p : partitions){
-			if(fTarget.getCategory().getMethod().mentioningConstraints(p).size() > 0 || fTarget.getCategory().getMethod().mentioningTestCases(p).size() > 0){
+			if(fTarget.getParameter().getMethod().mentioningConstraints(p).size() > 0 || fTarget.getParameter().getMethod().mentioningTestCases(p).size() > 0){
 				displayWarning = true;
 			}
 		}
@@ -68,7 +68,7 @@ public class PartitionedNodeInterface extends GenericNodeInterface {
 
 	protected String generateNewPartitionValue() {
 		EclipseModelBuilder builder = new EclipseModelBuilder();
-		String type = fTarget.getCategory().getType();
+		String type = fTarget.getParameter().getType();
 		String value = builder.getDefaultExpectedValue(type);
 		if(isPrimitive() == false && builder.getSpecialValues(type).size() == 0){
 			int i = 0;
@@ -80,7 +80,7 @@ public class PartitionedNodeInterface extends GenericNodeInterface {
 	}
 
 	public boolean isPrimitive() {
-		return ParameterInterface.isPrimitive(fTarget.getCategory().getType());
+		return ParameterInterface.isPrimitive(fTarget.getParameter().getType());
 	}
 
 	public boolean isUserType() {
@@ -88,7 +88,7 @@ public class PartitionedNodeInterface extends GenericNodeInterface {
 	}
 
 	public List<String> getSpecialValues() {
-		return new EclipseModelBuilder().getSpecialValues(fTarget.getCategory().getType());
+		return new EclipseModelBuilder().getSpecialValues(fTarget.getParameter().getType());
 	}
 
 	public boolean hasLimitedValuesSet() {
@@ -96,7 +96,7 @@ public class PartitionedNodeInterface extends GenericNodeInterface {
 	}
 
 	public  boolean isBoolean() {
-		return ParameterInterface.isBoolean(fTarget.getCategory().getType());
+		return ParameterInterface.isBoolean(fTarget.getParameter().getType());
 	}
 
 	protected String generatePartitionName(){

@@ -54,14 +54,14 @@ public class ParametersViewer extends TableViewerSection{
 	private TableViewerColumn fExpectedColumn;
 	private TableViewerColumn fDefaultValueColumn;
 
-	private ParameterInterface fCategoryIf;
+	private ParameterInterface fParameterIf;
 	private MethodInterface fMethodIf;
 	
-	private class CategoryTypeEditingSupport extends EditingSupport {
+	private class ParameterTypeEditingSupport extends EditingSupport {
 
 		private ComboBoxCellEditor fCellEditor;
 
-		public CategoryTypeEditingSupport() {
+		public ParameterTypeEditingSupport() {
 			super(getTableViewer());
 		}
 
@@ -108,19 +108,19 @@ public class ParametersViewer extends TableViewerSection{
 			} else {
 				newType = ((CCombo)fCellEditor.getControl()).getText();
 			}
-			fCategoryIf.setTarget(node);
-			fCategoryIf.setType(newType);
+			fParameterIf.setTarget(node);
+			fParameterIf.setType(newType);
 
 			fCellEditor.setFocus();
 		}
 	}
 
 	
-	private class CategoryNameEditingSupport extends EditingSupport {
+	private class ParameterNameEditingSupport extends EditingSupport {
 
 		private TextCellEditor fNameCellEditor;
 
-		public CategoryNameEditingSupport() {
+		public ParameterNameEditingSupport() {
 			super(getTableViewer());
 			fNameCellEditor = new TextCellEditor(getTable());
 		}
@@ -142,8 +142,8 @@ public class ParametersViewer extends TableViewerSection{
 
 		@Override
 		protected void setValue(Object element, Object value) {
-			fCategoryIf.setTarget((ParameterNode)element);
-			fCategoryIf.setName((String)value);
+			fParameterIf.setTarget((ParameterNode)element);
+			fParameterIf.setName((String)value);
 		}
 	}
 
@@ -180,8 +180,8 @@ public class ParametersViewer extends TableViewerSection{
 		protected void setValue(Object element, Object value) {
 			ParameterNode node = (ParameterNode)element;
 			boolean expected = ((int)value == 0) ? true : false;
-			fCategoryIf.setTarget(node);
-			fCategoryIf.setExpected(expected);
+			fParameterIf.setTarget(node);
+			fParameterIf.setExpected(expected);
 			fCellEditor.setFocus();
 		}
 	}
@@ -198,25 +198,25 @@ public class ParametersViewer extends TableViewerSection{
 
 		@Override
 		protected CellEditor getCellEditor(Object element) {
-			ParameterNode category = (ParameterNode)element;
+			ParameterNode parameter = (ParameterNode)element;
 			ArrayList<String> expectedValues = new ArrayList<String>();
-			for(String value : ParameterInterface.getSpecialValues(category.getType())){
+			for(String value : ParameterInterface.getSpecialValues(parameter.getType())){
 				expectedValues.add(value);
 			}
-			if(expectedValues.contains(category.getDefaultValue()) == false){
-				expectedValues.add(category.getDefaultValue());
+			if(expectedValues.contains(parameter.getDefaultValue()) == false){
+				expectedValues.add(parameter.getDefaultValue());
 			}
-			for(PartitionNode leaf : category.getLeafPartitions()){
+			for(PartitionNode leaf : parameter.getLeafPartitions()){
 				if(!expectedValues.contains(leaf.getValueString())){
 					expectedValues.add(leaf.getValueString());
 				}
 			}
 
 			fComboCellEditor.setInput(expectedValues);
-			fComboCellEditor.setValue(category.getDefaultValue());
+			fComboCellEditor.setValue(parameter.getDefaultValue());
 
-			fCategoryIf.setTarget(category);
-			if(fCategoryIf.hasLimitedValuesSet()){
+			fParameterIf.setTarget(parameter);
+			if(fParameterIf.hasLimitedValuesSet()){
 				fComboCellEditor.getViewer().getCCombo().setEditable(false);
 			}
 			else{
@@ -239,15 +239,15 @@ public class ParametersViewer extends TableViewerSection{
 
 		@Override
 		protected void setValue(Object element, Object value) {
-			ParameterNode category = (ParameterNode)element;
+			ParameterNode parameter = (ParameterNode)element;
 			String valueString = null;
 			if(value instanceof String){
 				valueString = (String)value;
 			} else if(value == null){
 				valueString = fComboCellEditor.getViewer().getCCombo().getText();
 			}
-			fCategoryIf.setTarget(category);
-			fCategoryIf.setDefaultValue(valueString);
+			fParameterIf.setTarget(parameter);
+			fParameterIf.setDefaultValue(valueString);
 		}
 
 	}
@@ -265,7 +265,7 @@ public class ParametersViewer extends TableViewerSection{
 
 	public ParametersViewer(ISectionContext sectionContext, IModelUpdateContext updateContext) {
 		super(sectionContext, updateContext, STYLE);
-		fCategoryIf = new ParameterInterface(this);
+		fParameterIf = new ParameterInterface(this);
 		fMethodIf = new MethodInterface(this);
 
 		GridData gd = new GridData(SWT.FILL, SWT.FILL, true, true);
@@ -276,8 +276,8 @@ public class ParametersViewer extends TableViewerSection{
 		addButton("New parameter", new AddNewParameterAdapter());
 		addButton("Remove selected", new ActionSelectionAdapter(new DeleteAction(getViewer(), this)));
 
-		fNameColumn.setEditingSupport(new CategoryNameEditingSupport());
-		fTypeColumn.setEditingSupport(new CategoryTypeEditingSupport());
+		fNameColumn.setEditingSupport(new ParameterNameEditingSupport());
+		fTypeColumn.setEditingSupport(new ParameterTypeEditingSupport());
 		fExpectedColumn.setEditingSupport(new ExpectedValueEditingSupport());
 		fDefaultValueColumn.setEditingSupport(new DefaultValueEditingSupport());
 
@@ -310,8 +310,8 @@ public class ParametersViewer extends TableViewerSection{
 			@Override
 			public String getText(Object element){
 				if(element instanceof ParameterNode && ((ParameterNode)element).isExpected()){
-					ParameterNode category = (ParameterNode)element;
-					return category.getDefaultValue();
+					ParameterNode parameter = (ParameterNode)element;
+					return parameter.getDefaultValue();
 				}
 				return EMPTY_STRING ;
 			}
@@ -321,8 +321,8 @@ public class ParametersViewer extends TableViewerSection{
 	public void setInput(MethodNode method){
 		fMethodIf.setTarget(method);
 		fSelectedMethod = method;
-		showDefaultValueColumn(fSelectedMethod.getCategoriesNames(true).size() == 0);
-		super.setInput(method.getCategories());
+		showDefaultValueColumn(fSelectedMethod.getParametersNames(true).size() == 0);
+		super.setInput(method.getParameters());
 	}
 
 	private void showDefaultValueColumn(boolean show) {

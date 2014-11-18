@@ -73,7 +73,7 @@ public class ParameterizedMethodTest {
 		MethodNode methodNode = new MethodNode(ENUM_FUNCTION_UNDER_TEST_NAME);
 		classNode.addMethod(methodNode);
 		ParameterNode c = new ParameterNode("c", Enum.class.getCanonicalName(), "0", false);
-		methodNode.addCategory(c);
+		methodNode.addParameter(c);
 		fExecutedEnum = new ArrayList<Enum>();
 		
 		for(Enum v : Enum.values()){
@@ -103,8 +103,8 @@ public class ParameterizedMethodTest {
 			ClassNode classNode = new ClassNode(CLASS_NAME);
 			MethodNode methodNode = new MethodNode(FUNCTION_UNDER_TEST_NAME);
 			classNode.addMethod(methodNode);
-			methodNode.addCategory(new ParameterNode("c1", "int", "0", false));
-			methodNode.addCategory(new ParameterNode("c1", "int", "0", false));
+			methodNode.addParameter(new ParameterNode("c1", "int", "0", false));
+			methodNode.addParameter(new ParameterNode("c1", "int", "0", false));
 
 			
 			fExecuted = new HashSet<List<Integer>>();
@@ -128,9 +128,9 @@ public class ParameterizedMethodTest {
 		Random random = new Random();
 		for(int i = 0; i < size; i++){
 			List<PartitionNode> testData = new ArrayList<PartitionNode>();
-			for(int j = 0; j < method.getCategories().size(); j++){
+			for(int j = 0; j < method.getParameters().size(); j++){
 				PartitionNode partition = new PartitionNode("dummy", Integer.toString(random.nextInt()));
-				partition.setParent(method.getCategories().get(j));
+				partition.setParent(method.getParameters().get(j));
 				testData.add(partition);
 			}
 			TestCaseNode tc = new TestCaseNode("dummy", testData);

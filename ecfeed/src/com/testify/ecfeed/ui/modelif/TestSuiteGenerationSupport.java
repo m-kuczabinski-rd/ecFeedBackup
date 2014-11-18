@@ -40,8 +40,8 @@ public class TestSuiteGenerationSupport {
 		@Override
 		public boolean adapt(List<PartitionNode> values) {
 			for(PartitionNode p : values){
-				if(p.getCategory().isExpected()){
-					values.set(p.getCategory().getIndex(), p.getCopy());
+				if(p.getParameter().isExpected()){
+					values.set(p.getParameter().getIndex(), p.getCopy());
 				}
 			}
 			return true;

@@ -61,14 +61,14 @@ import com.testify.ecfeed.model.IModelVisitor;
 import com.testify.ecfeed.model.IStatementVisitor;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
-import com.testify.ecfeed.model.PartitionedCategoryStatement;
+import com.testify.ecfeed.model.PartitionedParameterStatement;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.StatementArray;
 import com.testify.ecfeed.model.StaticStatement;
 import com.testify.ecfeed.model.TestCaseNode;
-import com.testify.ecfeed.model.PartitionedCategoryStatement.ICondition;
-import com.testify.ecfeed.model.PartitionedCategoryStatement.LabelCondition;
-import com.testify.ecfeed.model.PartitionedCategoryStatement.PartitionCondition;
+import com.testify.ecfeed.model.PartitionedParameterStatement.ICondition;
+import com.testify.ecfeed.model.PartitionedParameterStatement.LabelCondition;
+import com.testify.ecfeed.model.PartitionedParameterStatement.PartitionCondition;
 
 public class XomBuilder implements IModelVisitor, IStatementVisitor {
 
@@ -97,8 +97,8 @@ public class XomBuilder implements IModelVisitor, IStatementVisitor {
 	public Object visit(MethodNode node) throws Exception {
 		Element element = createNamedElement(METHOD_NODE_NAME, node);
 		
-		for(ParameterNode category : node.getCategories()){
-			element.appendChild((Element)category.accept(this));
+		for(ParameterNode parameter : node.getParameters()){
+			element.appendChild((Element)parameter.accept(this));
 		}
 		
 		for(ConstraintNode constraint : node.getConstraintNodes()){
@@ -131,7 +131,7 @@ public class XomBuilder implements IModelVisitor, IStatementVisitor {
 		Element element = new Element(TEST_CASE_NODE_NAME);
 		element.addAttribute(new Attribute(TEST_SUITE_NAME_ATTRIBUTE, node.getName()));
 		for(PartitionNode testParameter : node.getTestData()){
-			if(testParameter.getCategory() != null && testParameter.getCategory().isExpected()){
+			if(testParameter.getParameter() != null && testParameter.getParameter().isExpected()){
 				Element expectedParameterElement = new Element(EXPECTED_PARAMETER_NODE_NAME);
 				Attribute expectedValueAttribute = new Attribute(VALUE_ATTRIBUTE_NAME, testParameter.getValueString());
 				expectedParameterElement.addAttribute(expectedValueAttribute);
@@ -230,32 +230,32 @@ public class XomBuilder implements IModelVisitor, IStatementVisitor {
 
 	@Override
 	public Object visit(ExpectedValueStatement statement) throws Exception {
-		String categoryName = statement.getLeftOperandName();
+		String parameterName = statement.getLeftOperandName();
 		PartitionNode condition = statement.getCondition();
-		Attribute categoryAttribute = 
-				new Attribute(STATEMENT_CATEGORY_ATTRIBUTE_NAME, categoryName);
+		Attribute parameterAttribute = 
+				new Attribute(STATEMENT_CATEGORY_ATTRIBUTE_NAME, parameterName);
 		Attribute valueAttribute = 
 				new Attribute(STATEMENT_EXPECTED_VALUE_ATTRIBUTE_NAME, condition.getValueString());
 		
 		Element statementElement = new Element(CONSTRAINT_EXPECTED_STATEMENT_NODE_NAME);
-		statementElement.addAttribute(categoryAttribute);
+		statementElement.addAttribute(parameterAttribute);
 		statementElement.addAttribute(valueAttribute);
 
 		return statementElement;
 	}
 
 	@Override
-	public Object visit(PartitionedCategoryStatement statement) throws Exception {
+	public Object visit(PartitionedParameterStatement statement) throws Exception {
 
-		String categoryName = statement.getCategory().getName();
-		Attribute categoryAttribute = 
-				new Attribute(STATEMENT_CATEGORY_ATTRIBUTE_NAME, categoryName);
+		String parameterName = statement.getParameter().getName();
+		Attribute parameterAttribute = 
+				new Attribute(STATEMENT_CATEGORY_ATTRIBUTE_NAME, parameterName);
 		Attribute relationAttribute = 
 				new Attribute(STATEMENT_RELATION_ATTRIBUTE_NAME, statement.getRelation().toString());
 		ICondition condition = statement.getCondition();
 		Element statementElement = (Element)condition.accept(this);
 		
-		statementElement.addAttribute(categoryAttribute);
+		statementElement.addAttribute(parameterAttribute);
 		statementElement.addAttribute(relationAttribute);
 		
 		return statementElement;

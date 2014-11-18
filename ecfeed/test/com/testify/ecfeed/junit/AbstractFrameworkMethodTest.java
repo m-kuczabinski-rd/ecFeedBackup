@@ -68,9 +68,9 @@ public class AbstractFrameworkMethodTest {
 	public void invokeTest() {
 		try {
 			Method method = this.getClass().getMethod(FUNCTION_UNDER_TEST_NAME, int.class, String.class, Enum.class);
-			ParameterNode intCategory = new ParameterNode("intCategory", "int", "0", false);
-			ParameterNode stringCategory = new ParameterNode("stringCategory", "String", "0", false);
-			ParameterNode enumCategory = new ParameterNode("enumCategory", Enum.class.getCanonicalName(), Enum.values()[0].name(), false);
+			ParameterNode intParameter = new ParameterNode("intParameter", "int", "0", false);
+			ParameterNode stringParameter = new ParameterNode("stringParameter", "String", "0", false);
+			ParameterNode enumParameter = new ParameterNode("enumParameter", Enum.class.getCanonicalName(), Enum.values()[0].name(), false);
 			PartitionValueParser parser = new PartitionValueParser(new ModelClassLoader(new URL[]{}, this.getClass().getClassLoader()));
 			
 			ModelClassLoader loader = new ModelClassLoader(new URL[]{}, this.getClass().getClassLoader());
@@ -80,11 +80,11 @@ public class AbstractFrameworkMethodTest {
 					for(String enumArg : ENUM_ARGS){
 						List<PartitionNode> args = new ArrayList<PartitionNode>();
 						PartitionNode intPartition = new PartitionNode(intArg, intArg);
-						intCategory.addPartition(intPartition);
+						intParameter.addPartition(intPartition);
 						PartitionNode stringPartition = new PartitionNode(stringArg, stringArg);
-						stringCategory.addPartition(stringPartition);
+						stringParameter.addPartition(stringPartition);
 						PartitionNode enumPartition = new PartitionNode(enumArg, enumArg);
-						enumCategory.addPartition(enumPartition);
+						enumParameter.addPartition(enumPartition);
 						args.add(intPartition);
 						args.add(stringPartition);
 						args.add(enumPartition);

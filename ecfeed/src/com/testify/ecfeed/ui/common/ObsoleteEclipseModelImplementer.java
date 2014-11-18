@@ -74,7 +74,7 @@ public abstract class ObsoleteEclipseModelImplementer extends AbstractModelImple
 			if(methodDefinitionImplemented(node) == false){
 				implementMethodDefinition(node);
 			}
-			for(ParameterNode parameter : node.getCategories()){
+			for(ParameterNode parameter : node.getParameters()){
 				if(implementable(parameter) && getImplementationStatus(parameter) != EImplementationStatus.IMPLEMENTED){
 					implement(parameter);
 				}
@@ -169,7 +169,7 @@ public abstract class ObsoleteEclipseModelImplementer extends AbstractModelImple
 		IType classType = getJavaProject().findType(JavaUtils.getQualifiedName(node.getClassNode()));
 		if(classType != null){
 			classType.createMethod(methodDefinitionContent(node), null, false, null);
-			for(ParameterNode parameter : node.getCategories()){
+			for(ParameterNode parameter : node.getParameters()){
 				String type = parameter.getType();
 				if(JavaUtils.isUserType(type)){
 					String packageName = JavaUtils.getPackageName(type);
@@ -202,15 +202,15 @@ public abstract class ObsoleteEclipseModelImplementer extends AbstractModelImple
 
 	@SuppressWarnings("unchecked")
 	protected void implementPartitionDefinition(PartitionNode node) throws CoreException {
-		if(node.getCategory() == null || JavaUtils.isPrimitive(node.getCategory().getType())){
+		if(node.getParameter() == null || JavaUtils.isPrimitive(node.getParameter().getType())){
 			return;
 		}
-		String typeName = node.getCategory().getType();
+		String typeName = node.getParameter().getType();
 		if(JavaUtils.isValidJavaIdentifier(node.getValueString()) == false){
 			return;
 		}
-		if(parameterDefinitionImplemented(node.getCategory()) == false){
-			implementParameterDefinition(node.getCategory());
+		if(parameterDefinitionImplemented(node.getParameter()) == false){
+			implementParameterDefinition(node.getParameter());
 		}
 		IType enumType = getJavaProject().findType(typeName);
 		if(enumType == null || enumType.isEnum() == false){
@@ -293,11 +293,11 @@ public abstract class ObsoleteEclipseModelImplementer extends AbstractModelImple
 		String comment = "// TODO Auto-generated method stub";
 		String content = "System.out.println(\"" + node.getName() + "(\" + ";
 				
-		for(int i = 0; i < node.getCategories().size(); ++i){
-			ParameterNode parameter = node.getCategories().get(i);
+		for(int i = 0; i < node.getParameters().size(); ++i){
+			ParameterNode parameter = node.getParameters().get(i);
 			args += JavaUtils.getLocalName(parameter.getType()) + " " + parameter.getName();
-			content += node.getCategories().get(i).getName();
-			if(i != node.getCategories().size() - 1){
+			content += node.getParameters().get(i).getName();
+			if(i != node.getParameters().size() - 1){
 				args += ", ";
 				content += " + \", \" + ";
 			}
@@ -410,43 +410,43 @@ public abstract class ObsoleteEclipseModelImplementer extends AbstractModelImple
 //		}
 //	}
 //
-//	private boolean parameterDefinitionImplemented(CategoryNode node) {
+//	private boolean parameterDefinitionImplemented(ParameterNode node) {
 //		return (getImplementationStatus(node) != EImplementationStatus.NOT_IMPLEMENTED);
 //	}
 //
 //
-//	private void implementParameterDefinition(CategoryNode node) {
+//	private void implementParameterDefinition(ParameterNode node) {
 //		String type = node.getType();
 //		if (implementable(node) && JavaUtils.isUserType(type)) {
 //			AbstractMap.SimpleEntry<IPath,CompilationUnit> unitPair = getCompilationUnitInstance(type);
-//			CompilationUnit categoryUnit = unitPair.getValue();
-//			if (categoryUnit != null) {
-//				implementClassDefinition(categoryUnit, type, false);
-//				writeCompilationUnit(categoryUnit, unitPair.getKey(), 0);
+//			CompilationUnit parameterUnit = unitPair.getValue();
+//			if (parameterUnit != null) {
+//				implementClassDefinition(parameterUnit, type, false);
+//				writeCompilationUnit(parameterUnit, unitPair.getKey(), 0);
 //			}
 //		}
 //	}
 //
 //	@SuppressWarnings("unchecked")
 //	private void implementPartitionDefinition(PartitionNode node) {
-//		String type = node.getCategory().getType();
+//		String type = node.getParameter().getType();
 //		String value = node.getValueString();
 //		
 //		if(JavaUtils.isUserType(type)){
 //			AbstractMap.SimpleEntry<IPath,CompilationUnit> unitPair = getCompilationUnitInstance(type);
-//			CompilationUnit categoryUnit = unitPair.getValue();
-//			EnumDeclaration categoryType = null;
-//			if (categoryUnit != null) {
-//				categoryType = (EnumDeclaration)getTypeInstance(categoryUnit, type, false);
-//				if (categoryType != null) {
+//			CompilationUnit parameterUnit = unitPair.getValue();
+//			EnumDeclaration parameterType = null;
+//			if (parameterUnit != null) {
+//				parameterType = (EnumDeclaration)getTypeInstance(parameterUnit, type, false);
+//				if (parameterType != null) {
 //					if (getImplementationStatus(node) != EImplementationStatus.IMPLEMENTED) {
-//						EnumConstantDeclaration constant = categoryUnit.getAST().newEnumConstantDeclaration();
-//						constant.setName(categoryUnit.getAST().newSimpleName(value));
-//						categoryType.enumConstants().add(constant);
+//						EnumConstantDeclaration constant = parameterUnit.getAST().newEnumConstantDeclaration();
+//						constant.setName(parameterUnit.getAST().newSimpleName(value));
+//						parameterType.enumConstants().add(constant);
 //
 //					}
 //				}
-//				writeCompilationUnit(categoryUnit, unitPair.getKey(), 0);
+//				writeCompilationUnit(parameterUnit, unitPair.getKey(), 0);
 //			}
 //		}
 //	}
@@ -674,7 +674,7 @@ public abstract class ObsoleteEclipseModelImplementer extends AbstractModelImple
 //		methodDeclaration.setName(unit.getAST().newSimpleName(method.getName()));
 //		methodDeclaration.setReturnType2(unit.getAST().newPrimitiveType(PrimitiveType.VOID));
 //
-//		for(CategoryNode parameter : method.getCategories()){
+//		for(ParameterNode parameter : method.getParameters()){
 //			String parameterName = parameter.getName();
 //			String parameterType = parameter.getType();
 //			SingleVariableDeclaration variableDeclaration = unit.getAST().newSingleVariableDeclaration();
@@ -710,22 +710,22 @@ public abstract class ObsoleteEclipseModelImplementer extends AbstractModelImple
 //		printlnInvocation.setName(unit.getAST().newSimpleName("println"));
 //
 //		Expression expression = null;
-//		if (method.getCategories().size() > 0) {
+//		if (method.getParameters().size() > 0) {
 //			StringLiteral literal = unit.getAST().newStringLiteral();
 //			literal.setLiteralValue(method.getName() + "(");
 //			expression = literal;
-//			for (int k = 0; k < method.getCategories().size(); ++k) {
+//			for (int k = 0; k < method.getParameters().size(); ++k) {
 //				Expression argExpression = null;
-//				if (k < method.getCategories().size() - 1) {
+//				if (k < method.getParameters().size() - 1) {
 //					InfixExpression plusExpression = unit.getAST().newInfixExpression();
 //					plusExpression.setOperator(InfixExpression.Operator.PLUS);
 //					literal = unit.getAST().newStringLiteral();
 //					literal.setLiteralValue(", ");
-//					plusExpression.setLeftOperand(unit.getAST().newSimpleName(method.getCategories().get(k).getName()));
+//					plusExpression.setLeftOperand(unit.getAST().newSimpleName(method.getParameters().get(k).getName()));
 //					plusExpression.setRightOperand(literal);
 //					argExpression = plusExpression;
 //				} else {
-//					argExpression = unit.getAST().newSimpleName(method.getCategories().get(k).getName());
+//					argExpression = unit.getAST().newSimpleName(method.getParameters().get(k).getName());
 //				}
 //
 //				InfixExpression newExpression = unit.getAST().newInfixExpression();

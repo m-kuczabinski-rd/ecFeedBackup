@@ -34,39 +34,39 @@ public class PartitionNodeTest{
 
 	
 	@Test
-	public void testGetCategory(){
+	public void testGetParameter(){
 		MethodNode method = new MethodNode("method");
-		ParameterNode category = new ParameterNode("name", "type","0",  false);
+		ParameterNode parameter = new ParameterNode("name", "type","0",  false);
 		PartitionNode p1 = new PartitionNode("p1", "0");
 		PartitionNode p11 = new PartitionNode("p11", "0");
 		PartitionNode p111 = new PartitionNode("p111", "0");
 		
-		method.addCategory(category);
-		category.addPartition(p1);
+		method.addParameter(parameter);
+		parameter.addPartition(p1);
 		p1.addPartition(p11);
 		p11.addPartition(p111);
 		
 		assertEquals(p11, p111.getParent());
 		assertEquals(p1, p11.getParent());
-		assertEquals(category, p1.getParent());
-		assertEquals(method, category.getParent());
+		assertEquals(parameter, p1.getParent());
+		assertEquals(method, parameter.getParent());
 		
-		assertEquals(category, p1.getCategory());
-		assertEquals(category, p11.getCategory());
-		assertEquals(category, p111.getCategory());
+		assertEquals(parameter, p1.getParameter());
+		assertEquals(parameter, p11.getParameter());
+		assertEquals(parameter, p111.getParameter());
 	}
 	
 	
 	@Test
 	public void testLevel(){
 		MethodNode method = new MethodNode("method");
-		ParameterNode category = new ParameterNode("name", "type", "0", false);
+		ParameterNode parameter = new ParameterNode("name", "type", "0", false);
 		PartitionNode p1 = new PartitionNode("p1", "0");
 		PartitionNode p11 = new PartitionNode("p11", "0");
 		PartitionNode p111 = new PartitionNode("p111", "0");
 		
-		method.addCategory(category);
-		category.addPartition(p1);
+		method.addParameter(parameter);
+		parameter.addPartition(p1);
 		p1.addPartition(p11);
 		p11.addPartition(p111);
 		

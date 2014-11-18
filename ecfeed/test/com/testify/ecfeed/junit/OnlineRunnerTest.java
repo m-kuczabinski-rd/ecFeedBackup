@@ -274,8 +274,8 @@ public class OnlineRunnerTest extends StaticRunnerTest{
 	private List<List<PartitionNode>> referenceInput(RootNode model, FrameworkMethod method) throws RunnerException {
 		List<List<PartitionNode>> result = new ArrayList<List<PartitionNode>>();
 		MethodNode methodModel = getMethodModel(model, method);
-		for(ParameterNode category : methodModel.getCategories()){
-			result.add(category.getPartitions());
+		for(ParameterNode parameter : methodModel.getParameters()){
+			result.add(parameter.getPartitions());
 		}
 		return result;
 	}

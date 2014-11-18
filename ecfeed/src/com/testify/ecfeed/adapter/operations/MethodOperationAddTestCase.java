@@ -42,8 +42,8 @@ public class MethodOperationAddTestCase extends AbstractModelOperation {
 		}
 		//following must be done AFTER references are updated
 		for(PartitionNode choice : fTestCase.getTestData()){
-			ParameterNode parameter = choice.getCategory();
-			if(choice.getCategory().isExpected()){
+			ParameterNode parameter = choice.getParameter();
+			if(choice.getParameter().isExpected()){
 				String type = parameter.getType();
 				ITypeAdapter adapter = fAdapterProvider.getAdapter(type);
 				String newValue = adapter.convert(choice.getValueString());

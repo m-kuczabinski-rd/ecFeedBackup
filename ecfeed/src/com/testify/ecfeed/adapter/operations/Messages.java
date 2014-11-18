@@ -2,7 +2,7 @@ package com.testify.ecfeed.adapter.operations;
 
 public class Messages {
 
-	public static final String PARTITION_NAME_NOT_UNIQUE_PROBLEM = "Partition name must be unique within a category or parent partition";
+	public static final String PARTITION_NAME_NOT_UNIQUE_PROBLEM = "Partition name must be unique within a parameter or parent partition";
 	public static final String PARTITION_NAME_REGEX_PROBLEM = "Partition name must contain between 1 and 64 characters and must not contain only white space characters";
 	public static final String PARTITION_VALUE_PROBLEM(String value){
 		return "Value " + value + " is not valid for given parameter.\n\n" +
@@ -37,7 +37,7 @@ public class Messages {
 	public static final String OPERATION_NOT_SUPPORTED_PROBLEM = "Operation not supported";
 	public static final String TEST_CASE_INCOMPATIBLE_WITH_METHOD = "Target method must have the same number of parameters and corresponding partition names as added test case.";
 	public static final String TEST_CASE_DATA_INCOMPATIBLE_WITH_METHOD = "One of expected value couln'd be converted to new type";
-	public static final String TEST_DATA_CATEGORY_MISMATCH_PROBLEM = "New test value has wrong parent category.";
+	public static final String TEST_DATA_CATEGORY_MISMATCH_PROBLEM = "New test value has wrong parent parameter.";
 	public static final String PARTITION_NAME_DUPLICATE_PROBLEM = "The partition with this name already exists";
 	public static final String EXPECTED_USER_TYPE_CATEGORY_LAST_PARTITION_PROBLEM = "User type expected parameters must have at least one partition. It's value will define the default expected value of the parameter";
 

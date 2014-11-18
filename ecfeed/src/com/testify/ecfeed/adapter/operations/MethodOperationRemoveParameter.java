@@ -26,7 +26,7 @@ public class MethodOperationRemoveParameter extends BulkOperation{
 
 			@Override
 			public void execute() throws ModelOperationException {
-				fTarget.addCategory(fParameter, fOriginalIndex);
+				fTarget.addParameter(fParameter, fOriginalIndex);
 				fTarget.replaceTestCases(fOriginalTestCases);
 				markModelUpdated();
 			}
@@ -52,7 +52,7 @@ public class MethodOperationRemoveParameter extends BulkOperation{
 				throw new ModelOperationException(Messages.METHOD_SIGNATURE_DUPLICATE_PROBLEM);
 			}
 			fOriginalIndex = fParameter.getIndex();
-			fTarget.removeCategory(fParameter);
+			fTarget.removeParameter(fParameter);
 			for(TestCaseNode tc : fTarget.getTestCases()){
 				tc.getTestData().remove(fOriginalIndex);
 			}
@@ -65,7 +65,7 @@ public class MethodOperationRemoveParameter extends BulkOperation{
 		}
 
 		private boolean validateNewSignature() {
-			List<String> types = fTarget.getCategoriesTypes();
+			List<String> types = fTarget.getParametersTypes();
 			int index = fParameter.getIndex();
 			types.remove(index);
 			if(fTarget.getClassNode().getMethod(fTarget.getName(), types) != null){

@@ -3,11 +3,11 @@ package com.testify.ecfeed.ui.modelif;
 import com.testify.ecfeed.model.BasicStatement;
 import com.testify.ecfeed.model.ExpectedValueStatement;
 import com.testify.ecfeed.model.IStatementVisitor;
-import com.testify.ecfeed.model.PartitionedCategoryStatement;
+import com.testify.ecfeed.model.PartitionedParameterStatement;
 import com.testify.ecfeed.model.StatementArray;
 import com.testify.ecfeed.model.StaticStatement;
-import com.testify.ecfeed.model.PartitionedCategoryStatement.LabelCondition;
-import com.testify.ecfeed.model.PartitionedCategoryStatement.PartitionCondition;
+import com.testify.ecfeed.model.PartitionedParameterStatement.LabelCondition;
+import com.testify.ecfeed.model.PartitionedParameterStatement.PartitionCondition;
 
 public class StatementInterfaceFactory{
 
@@ -41,9 +41,9 @@ public class StatementInterfaceFactory{
 		}
 
 		@Override
-		public Object visit(PartitionedCategoryStatement statement)
+		public Object visit(PartitionedParameterStatement statement)
 				throws Exception {
-			PartitionedCategoryStatementInterface statementIf = new PartitionedCategoryStatementInterface(fUpdateContext);
+			PartitionedParameterStatementInterface statementIf = new PartitionedParameterStatementInterface(fUpdateContext);
 			statementIf.setTarget(statement);
 			return statementIf;
 		}

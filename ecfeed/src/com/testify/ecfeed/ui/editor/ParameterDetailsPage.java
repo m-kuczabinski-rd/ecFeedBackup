@@ -36,43 +36,43 @@ public class ParameterDetailsPage extends BasicDetailsPage{
 
 	private ChoicesViewer fPartitionsViewer;
 
-	private ParameterInterface fCategoryIf;
+	private ParameterInterface fParameterIf;
 
 	private class SetNameListener extends AbstractSelectionAdapter{
 		@Override
 		public void widgetSelected(SelectionEvent e) {
-			fCategoryIf.setName(fNameText.getText());
-			fNameText.setText(fCategoryIf.getName());
+			fParameterIf.setName(fNameText.getText());
+			fNameText.setText(fParameterIf.getName());
 		}
 	}
 
 	private class SetTypeListener extends AbstractSelectionAdapter{
 		@Override
 		public void widgetSelected(SelectionEvent e) {
-			fCategoryIf.setType(fTypeCombo.getText());
-			fTypeCombo.setText(fCategoryIf.getType());
+			fParameterIf.setType(fTypeCombo.getText());
+			fTypeCombo.setText(fParameterIf.getType());
 		}
 	}
 
 	private class SetDefaultValueListener extends AbstractSelectionAdapter{
 		@Override
 		public void widgetSelected(SelectionEvent e) {
-			fCategoryIf.setDefaultValue(fDefaultValueCombo.getText());
-			fDefaultValueCombo.setText(fCategoryIf.getDefaultValue());
+			fParameterIf.setDefaultValue(fDefaultValueCombo.getText());
+			fDefaultValueCombo.setText(fParameterIf.getDefaultValue());
 		}
 	}
 
 	private class SetExpectedListener extends AbstractSelectionAdapter{
 		@Override
 		public void widgetSelected(SelectionEvent e) {
-			fCategoryIf.setExpected(fExpectedCheckbox.getSelection());
-			fExpectedCheckbox.setSelection(fCategoryIf.isExpected());
+			fParameterIf.setExpected(fExpectedCheckbox.getSelection());
+			fExpectedCheckbox.setSelection(fParameterIf.isExpected());
 		}
 	}
 
 	public ParameterDetailsPage(ModelMasterSection masterSection, IModelUpdateContext updateContext, IFileInfoProvider fileInforProvider) {
 		super(masterSection, updateContext, fileInforProvider);
-		fCategoryIf = new ParameterInterface(this);
+		fParameterIf = new ParameterInterface(this);
 	}
 
 	@Override
@@ -96,23 +96,23 @@ public class ParameterDetailsPage extends BasicDetailsPage{
 	public void refresh(){
 		super.refresh();
 		if(getSelectedElement() instanceof ParameterNode){
-			ParameterNode category = (ParameterNode)getSelectedElement();
-			fCategoryIf.setTarget(category);
+			ParameterNode parameter = (ParameterNode)getSelectedElement();
+			fParameterIf.setTarget(parameter);
 
-			getMainSection().setText((category.isExpected()?"[e]":"") + category.toString());
-			fNameText.setText(category.getName());
+			getMainSection().setText((parameter.isExpected()?"[e]":"") + parameter.toString());
+			fNameText.setText(parameter.getName());
 			fTypeCombo.setItems(ParameterInterface.supportedPrimitiveTypes());
-			fTypeCombo.setText(category.getType());
-			recreateDefaultValueCombo(category);
-			fExpectedCheckbox.setSelection(category.isExpected());
-			if(fCategoryIf.isExpected() && fCategoryIf.isPrimitive()){
+			fTypeCombo.setText(parameter.getType());
+			recreateDefaultValueCombo(parameter);
+			fExpectedCheckbox.setSelection(parameter.isExpected());
+			if(fParameterIf.isExpected() && fParameterIf.isPrimitive()){
 				fPartitionsViewer.setVisible(false);
 			}
 			else{
 				fPartitionsViewer.setVisible(true);
 			}
 
-			fPartitionsViewer.setInput(category);
+			fPartitionsViewer.setInput(parameter);
 		}
 	}
 
@@ -141,22 +141,22 @@ public class ParameterDetailsPage extends BasicDetailsPage{
 		fExpectedCheckbox.addSelectionListener(new SetExpectedListener());
 	}
 
-	private void recreateDefaultValueCombo(ParameterNode category) {
+	private void recreateDefaultValueCombo(ParameterNode parameter) {
 		if(fDefaultValueCombo != null && fDefaultValueCombo.isDisposed() == false){
 			fDefaultValueCombo.dispose();
 		}
-		if(fCategoryIf.hasLimitedValuesSet()){
+		if(fParameterIf.hasLimitedValuesSet()){
 			fDefaultValueCombo = new Combo(fAttributesComposite,SWT.DROP_DOWN | SWT.READ_ONLY);
 		}
 		else{
 			fDefaultValueCombo = new Combo(fAttributesComposite,SWT.DROP_DOWN);
 		}
 		fDefaultValueCombo.setLayoutData(new GridData(SWT.FILL,  SWT.CENTER, false, false));
-		fDefaultValueCombo.setItems(fCategoryIf.defaultValueSuggestions());
-		fDefaultValueCombo.setText(category.getDefaultValue());
+		fDefaultValueCombo.setItems(fParameterIf.defaultValueSuggestions());
+		fDefaultValueCombo.setText(parameter.getDefaultValue());
 		fDefaultValueCombo.addSelectionListener(new SetDefaultValueListener());
 
-		fDefaultValueCombo.setEnabled(category.isExpected());
+		fDefaultValueCombo.setEnabled(parameter.isExpected());
 
 		fAttributesComposite.layout();
 	}

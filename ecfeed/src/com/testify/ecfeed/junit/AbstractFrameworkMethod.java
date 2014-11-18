@@ -32,7 +32,7 @@ public class AbstractFrameworkMethod extends FrameworkMethod {
 	}
 
 	protected Object parsePartitionValue(PartitionNode partition) throws RunnerException{
-		String type = partition.getCategory().getType();
+		String type = partition.getParameter().getType();
 		Object value = fValueParser.parseValue(partition);
 		
 		if(JavaUtils.isString(type) || JavaUtils.isUserType(type)){

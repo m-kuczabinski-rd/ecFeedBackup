@@ -63,10 +63,10 @@ public class CopyNodeTest{
 		fRoot.addClass(fClass2);
 		fClass1.addMethod(fMethod1);
 		fClass2.addMethod(fMethod2);
-		fMethod1.addCategory(fPartCat1);
-		fMethod1.addCategory(fExCat1);
-		fMethod2.addCategory(fPartCat2);
-		fMethod2.addCategory(fExCat2);
+		fMethod1.addParameter(fPartCat1);
+		fMethod1.addParameter(fExCat1);
+		fMethod2.addParameter(fPartCat2);
+		fMethod2.addParameter(fExCat2);
 		fPartCat1.addPartition(fPartition1);
 		fPartCat2.addPartition(fPartition3);
 		fPartition1.addPartition(fPartition2);
@@ -125,13 +125,13 @@ public class CopyNodeTest{
 		testPartitionChildrenLabels(childcopy, fLabel1, fLabel2);
 	}
 
-	public void testPartitionedCategories(ParameterNode category, ParameterNode copy, String parentlabel, String childlabel){
-		testNode(category, copy);
-		assertEquals(category.getChildren().size(), copy.getChildren().size());
-		assertEquals(category.getAllPartitionNames().size(), copy.getAllPartitionNames().size());
+	public void testPartitionedParameters(ParameterNode parameter, ParameterNode copy, String parentlabel, String childlabel){
+		testNode(parameter, copy);
+		assertEquals(parameter.getChildren().size(), copy.getChildren().size());
+		assertEquals(parameter.getAllPartitionNames().size(), copy.getAllPartitionNames().size());
 
 		// partitions copied properly?
-		PartitionNode partition = category.getPartitions().get(0);
+		PartitionNode partition = parameter.getPartitions().get(0);
 		PartitionNode partitioncopy = copy.getPartition(partition.getName());
 		testPartitions(partitioncopy, partition);
 		testParent(partitioncopy, copy, true);
@@ -149,39 +149,39 @@ public class CopyNodeTest{
 	}
 
 	@Test
-	public void partitionedCategoryCopyTest(){
+	public void partitionedParameterCopyTest(){
 		ParameterNode copy = fPartCat1.getCopy();
-		// categories copied properly?
-		testPartitionedCategories(fPartCat1, copy, fLabel1, fLabel2);
+		// parameters copied properly?
+		testPartitionedParameters(fPartCat1, copy, fLabel1, fLabel2);
 		testParent(copy, fPartCat1.getParent(), true);
 	}
 
-	public void testExpectedCategories(ParameterNode category, ParameterNode copy){
-		testNode(category, copy);
-//		PartitionNode partition = category.getDefaultValuePartition();
+	public void testExpectedParameters(ParameterNode parameter, ParameterNode copy){
+		testNode(parameter, copy);
+//		PartitionNode partition = parameter.getDefaultValuePartition();
 //		PartitionNode partitioncopy = copy.getDefaultValuePartition();
 //		testPartitions(partition, partitioncopy);
 //		testParent(partition, partitioncopy.getParent(), false);
 	}
 
 	@Test
-	public void expectedCategoryCopyTest(){
+	public void expectedParameterCopyTest(){
 		ParameterNode copy = fExCat1.getCopy();
-		testExpectedCategories(fExCat1, copy);
+		testExpectedParameters(fExCat1, copy);
 		testParent(copy, fExCat1.getParent(), true);
 	}
 
 	public void testMethods(MethodNode method, MethodNode copy, String parentlabel, String childlabel){
 		testNode(method, copy);
-		// Test partitioned category
-		ParameterNode partcat = method.getCategories(false).get(0);
-		ParameterNode copypartcat = copy.getCategory(partcat.getName());
-		testPartitionedCategories(partcat, copypartcat, parentlabel, childlabel);
+		// Test partitioned parameter
+		ParameterNode partcat = method.getParameters(false).get(0);
+		ParameterNode copypartcat = copy.getParameter(partcat.getName());
+		testPartitionedParameters(partcat, copypartcat, parentlabel, childlabel);
 		testParent(copypartcat, copy, true);
-		// Test expected category
-		ParameterNode expcat = method.getCategories(true).get(0);
-		ParameterNode copyexpcat = copy.getCategory(expcat.getName());
-		testExpectedCategories(fExCat1, copyexpcat);
+		// Test expected parameter
+		ParameterNode expcat = method.getParameters(true).get(0);
+		ParameterNode copyexpcat = copy.getParameter(expcat.getName());
+		testExpectedParameters(fExCat1, copyexpcat);
 		testParent(copyexpcat, copy, true);
 	}
 
@@ -197,7 +197,7 @@ public class CopyNodeTest{
 		testNode(classnode, copy);
 
 		MethodNode method = classnode.getMethods().get(0);
-		MethodNode copymeth = copy.getMethod(method.getName(), method.getCategoriesTypes());
+		MethodNode copymeth = copy.getMethod(method.getName(), method.getParametersTypes());
 
 		testMethods(method, copymeth, parentlabel, childlabel);
 		testParent(copymeth, copy, true);

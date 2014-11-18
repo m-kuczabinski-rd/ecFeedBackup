@@ -54,8 +54,8 @@ public class RuntimeMethodTest {
 		}
 	}
 	
-	public void test(int categories, int partitionsPerCategory) {
-		List<List<PartitionNode>> input = generateInput(categories, partitionsPerCategory);
+	public void test(int parameters, int partitionsPerParameter) {
+		List<List<PartitionNode>> input = generateInput(parameters, partitionsPerParameter);
 		IGenerator<PartitionNode> generator = new CartesianProductGenerator<PartitionNode>();
 		try {
 			Method methodUnterTest = this.getClass().getMethod("functionUnderTest", int.class, int.class);
@@ -88,24 +88,24 @@ public class RuntimeMethodTest {
 		return result;
 	}
 
-	private List<List<PartitionNode>> generateInput(int categories,
+	private List<List<PartitionNode>> generateInput(int parameters,
 			int partitions) {
 		List<List<PartitionNode>> input = new ArrayList<List<PartitionNode>>();
-		for(int i = 0; i < categories; ++i){
-			input.add(generateCategory(partitions));
+		for(int i = 0; i < parameters; ++i){
+			input.add(generateParameter(partitions));
 		}
 		return input;
 	}
 
-	private List<PartitionNode> generateCategory(int partitions) {
-		ParameterNode parent = new ParameterNode("Category", "int","0",  false);
-		List<PartitionNode> category = new ArrayList<PartitionNode>();
+	private List<PartitionNode> generateParameter(int partitions) {
+		ParameterNode parent = new ParameterNode("Parameter", "int","0",  false);
+		List<PartitionNode> parameter = new ArrayList<PartitionNode>();
 		for(int i = 0; i < partitions; i++){
 			PartitionNode partition = new PartitionNode(String.valueOf(i), String.valueOf(i));
 			partition.setParent(parent);
-			category.add(partition);
+			parameter.add(partition);
 		}
-		return category;
+		return parameter;
 	}
 
 }

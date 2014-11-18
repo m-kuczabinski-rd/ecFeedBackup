@@ -64,9 +64,9 @@ public class StatementArray extends BasicStatement{
 	}
 
 	@Override
-	public boolean mentions(ParameterNode category){
+	public boolean mentions(ParameterNode parameter){
 		for(BasicStatement child : fStatements){
-			if(child.mentions(category)){
+			if(child.mentions(parameter)){
 				return true;
 			}
 		}

@@ -155,7 +155,7 @@ public class CalculateCoverageDialog extends TitleAreaDialog {
 		setHelpAvailable(false);
 		setShellStyle(SWT.BORDER | SWT.RESIZE | SWT.TITLE | SWT.APPLICATION_MODAL);
 		fMethod = method;
-		fCalculator = new CoverageCalculator(fMethod.getCategories());
+		fCalculator = new CoverageCalculator(fMethod.getParameters());
 		
 		fStatusResolver = new EclipseImplementationStatusResolver();
 		fInitChecked = checked;
@@ -348,6 +348,6 @@ public class CalculateCoverageDialog extends TitleAreaDialog {
 	}
 	
 	private int getN(){
-		return fMethod.getCategories().size();
+		return fMethod.getParameters().size();
 	}
 }

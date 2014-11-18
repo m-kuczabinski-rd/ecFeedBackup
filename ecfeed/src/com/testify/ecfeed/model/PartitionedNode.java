@@ -14,7 +14,7 @@ public abstract class PartitionedNode extends GenericNode{
 		fPartitions = new ArrayList<PartitionNode>();
 	}
 
-	public abstract ParameterNode getCategory();
+	public abstract ParameterNode getParameter();
 
 	@Override
 	public List<? extends GenericNode> getChildren(){

@@ -12,20 +12,20 @@ import com.testify.ecfeed.model.TestCaseNode;
 
 public class ParameterShiftOperation extends GenericShiftOperation {
 
-	private List<ParameterNode> fCategories;
+	private List<ParameterNode> fParameters;
 
-	public ParameterShiftOperation(List<ParameterNode> categories, GenericNode shifted, boolean up) {
-		this(categories, Arrays.asList(new GenericNode[]{shifted}), up);
+	public ParameterShiftOperation(List<ParameterNode> parameters, GenericNode shifted, boolean up) {
+		this(parameters, Arrays.asList(new GenericNode[]{shifted}), up);
 	}
 
-	public ParameterShiftOperation(List<ParameterNode> categories, List<? extends GenericNode> shifted, boolean up) {
-		this(categories, shifted, 0);
+	public ParameterShiftOperation(List<ParameterNode> parameters, List<? extends GenericNode> shifted, boolean up) {
+		this(parameters, shifted, 0);
 		setShift(minAllowedShift(shifted, up));
 	}
 
-	public ParameterShiftOperation(List<ParameterNode> categories, List<? extends GenericNode> shifted, int shift) {
-		super(categories, shifted, shift);
-		fCategories = categories;
+	public ParameterShiftOperation(List<ParameterNode> parameters, List<? extends GenericNode> shifted, int shift) {
+		super(parameters, shifted, shift);
+		fParameters = parameters;
 	}
 	
 	@Override
@@ -33,9 +33,9 @@ public class ParameterShiftOperation extends GenericShiftOperation {
 		if(shiftAllowed(getShiftedElements(), getShift()) == false){
 			throw new ModelOperationException(Messages.METHOD_SIGNATURE_DUPLICATE_PROBLEM);
 		}
-		MethodNode method = fCategories.get(0).getMethod();
-		List<Integer> indices = indices(fCategories, getShiftedElements());
-		shiftElements(fCategories, indices, getShift());
+		MethodNode method = fParameters.get(0).getMethod();
+		List<Integer> indices = indices(fParameters, getShiftedElements());
+		shiftElements(fParameters, indices, getShift());
 		for(TestCaseNode testCase : method.getTestCases()){
 			shiftElements(testCase.getTestData(), indices, getShift());
 		}
@@ -43,7 +43,7 @@ public class ParameterShiftOperation extends GenericShiftOperation {
 
 	@Override 
 	public IModelOperation reverseOperation(){
-		return new ParameterShiftOperation(fCategories, getShiftedElements(), -getShift());
+		return new ParameterShiftOperation(fParameters, getShiftedElements(), -getShift());
 	}
 
 	@Override
@@ -51,8 +51,8 @@ public class ParameterShiftOperation extends GenericShiftOperation {
 		if(super.shiftAllowed(shifted, shift) == false) return false;
 		if(shifted.get(0) instanceof ParameterNode == false) return false;
 		MethodNode method = ((ParameterNode)shifted.get(0)).getMethod();
-		List<String> parameterTypes = method.getCategoriesTypes();
-		List<Integer> indices = indices(method.getCategories(), shifted);
+		List<String> parameterTypes = method.getParametersTypes();
+		List<Integer> indices = indices(method.getParameters(), shifted);
 		shiftElements(parameterTypes, indices, shift);
 		MethodNode sibling = method.getClassNode().getMethod(method.getName(), parameterTypes);
 		if(sibling != null && sibling != method){

@@ -138,9 +138,9 @@ public class NWiseAlgorithmTest{
 
 	protected Set<List<String>> getAllTuples(List<List<String>> input, int n) throws GeneratorException{
 			Set<List<String>> result  = new HashSet<List<String>>();
-			Tuples<List<String>> categoryTuples = new Tuples<List<String>>(input, n);
-			while(categoryTuples.hasNext()){
-				List<List<String>> next = categoryTuples.next();
+			Tuples<List<String>> parameterTuples = new Tuples<List<String>>(input, n);
+			while(parameterTuples.hasNext()){
+				List<List<String>> next = parameterTuples.next();
 				CartesianProductGenerator<String> generator = new CartesianProductGenerator<String>();
 				generator.initialize(next, EMPTY_CONSTRAINTS, null);
 				List<String> tuple;

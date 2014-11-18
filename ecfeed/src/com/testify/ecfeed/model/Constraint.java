@@ -16,8 +16,8 @@ import java.util.List;
 import java.util.Set;
 
 import com.testify.ecfeed.generators.api.IConstraint;
-import com.testify.ecfeed.model.PartitionedCategoryStatement.LabelCondition;
-import com.testify.ecfeed.model.PartitionedCategoryStatement.PartitionCondition;
+import com.testify.ecfeed.model.PartitionedParameterStatement.LabelCondition;
+import com.testify.ecfeed.model.PartitionedParameterStatement.PartitionCondition;
 
 public class Constraint implements IConstraint<PartitionNode> {
 	
@@ -51,7 +51,7 @@ public class Constraint implements IConstraint<PartitionNode> {
 		}
 
 		@Override
-		public Object visit(PartitionedCategoryStatement statement)
+		public Object visit(PartitionedParameterStatement statement)
 				throws Exception {
 			return statement.getCondition().accept(this);
 		}
@@ -70,7 +70,7 @@ public class Constraint implements IConstraint<PartitionNode> {
 		
 	}
 	
-	private class ReferencedCategoriesProvider implements IStatementVisitor{
+	private class ReferencedParametersProvider implements IStatementVisitor{
 
 		@Override
 		public Object visit(StaticStatement statement) throws Exception {
@@ -90,12 +90,12 @@ public class Constraint implements IConstraint<PartitionNode> {
 		@Override
 		public Object visit(ExpectedValueStatement statement) throws Exception {
 			Set<ParameterNode> set = new HashSet<ParameterNode>();
-			set.add(statement.getCategory());
+			set.add(statement.getParameter());
 			return set;
 		}
 
 		@Override
-		public Object visit(PartitionedCategoryStatement statement)
+		public Object visit(PartitionedParameterStatement statement)
 				throws Exception {
 			return statement.getCondition().accept(this);
 		}
@@ -108,9 +108,9 @@ public class Constraint implements IConstraint<PartitionNode> {
 		@Override
 		public Object visit(PartitionCondition condition) throws Exception {
 			Set<ParameterNode> set = new HashSet<ParameterNode>();
-			ParameterNode category = condition.getPartition().getCategory();
-			if(category != null){
-				set.add(category);
+			ParameterNode parameter = condition.getPartition().getParameter();
+			if(parameter != null){
+				set.add(parameter);
 			}
 			return set;
 		}
@@ -118,11 +118,11 @@ public class Constraint implements IConstraint<PartitionNode> {
 	
 	private class ReferencedLabelsPrivider implements IStatementVisitor{
 		
-		private ParameterNode fCategory;
+		private ParameterNode fParameter;
 		private Set<String> EMPTY_SET = new HashSet<String>();
 		
-		public ReferencedLabelsPrivider(ParameterNode category){
-			fCategory = category;
+		public ReferencedLabelsPrivider(ParameterNode parameter){
+			fParameter = parameter;
 		}
 		
 		@Override
@@ -146,9 +146,9 @@ public class Constraint implements IConstraint<PartitionNode> {
 		}
 
 		@Override
-		public Object visit(PartitionedCategoryStatement statement)
+		public Object visit(PartitionedParameterStatement statement)
 				throws Exception {
-			if(fCategory == statement.getCategory()){
+			if(fParameter == statement.getParameter()){
 				return statement.getCondition().accept(this);
 			}
 			return EMPTY_SET;
@@ -228,12 +228,12 @@ public class Constraint implements IConstraint<PartitionNode> {
 		fConsequence = consequence;
 	}
 	
-	public boolean mentions(ParameterNode category) {
-		return fPremise.mentions(category) || fConsequence.mentions(category);
+	public boolean mentions(ParameterNode parameter) {
+		return fPremise.mentions(parameter) || fConsequence.mentions(parameter);
 	}
 
-	public boolean mentions(ParameterNode category, String label) {
-		return fPremise.mentions(category, label) || fConsequence.mentions(category, label);
+	public boolean mentions(ParameterNode parameter, String label) {
+		return fPremise.mentions(parameter, label) || fConsequence.mentions(parameter, label);
 	}
 
 	public boolean mentions(PartitionNode partition) {
@@ -265,10 +265,10 @@ public class Constraint implements IConstraint<PartitionNode> {
 	}
 
 	@SuppressWarnings("unchecked")
-	public Set<ParameterNode> getReferencedCategories() {
+	public Set<ParameterNode> getReferencedParameters() {
 		try{
-			Set<ParameterNode> referenced = (Set<ParameterNode>)fPremise.accept(new ReferencedCategoriesProvider());
-			referenced.addAll((Set<ParameterNode>)fConsequence.accept(new ReferencedCategoriesProvider()));
+			Set<ParameterNode> referenced = (Set<ParameterNode>)fPremise.accept(new ReferencedParametersProvider());
+			referenced.addAll((Set<ParameterNode>)fConsequence.accept(new ReferencedParametersProvider()));
 			return referenced;
 		}
 		catch(Exception e){
@@ -277,10 +277,10 @@ public class Constraint implements IConstraint<PartitionNode> {
 	}
 
 	@SuppressWarnings("unchecked")
-	public Set<String> getReferencedLabels(ParameterNode category) {
+	public Set<String> getReferencedLabels(ParameterNode parameter) {
 		try{
-			Set<String> referenced = (Set<String>)fPremise.accept(new ReferencedLabelsPrivider(category));
-			referenced.addAll((Set<String>)fConsequence.accept(new ReferencedLabelsPrivider(category)));
+			Set<String> referenced = (Set<String>)fPremise.accept(new ReferencedLabelsPrivider(parameter));
+			referenced.addAll((Set<String>)fConsequence.accept(new ReferencedLabelsPrivider(parameter)));
 			return referenced;
 		}
 		catch(Exception e){

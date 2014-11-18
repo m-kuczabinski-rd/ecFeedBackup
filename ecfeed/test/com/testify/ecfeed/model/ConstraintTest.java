@@ -23,7 +23,7 @@ import com.testify.ecfeed.model.BasicStatement;
 import com.testify.ecfeed.model.ParameterNode;
 import com.testify.ecfeed.model.Constraint;
 import com.testify.ecfeed.model.PartitionNode;
-import com.testify.ecfeed.model.PartitionedCategoryStatement;
+import com.testify.ecfeed.model.PartitionedParameterStatement;
 import com.testify.ecfeed.model.EStatementRelation;
 import com.testify.ecfeed.model.StaticStatement;
 
@@ -67,22 +67,22 @@ public class ConstraintTest {
 	@Test
 	public void testMentions() {
 		PartitionNode partition = new PartitionNode("partition", null);
-		ParameterNode category = new ParameterNode("category", "type", "0", false);
-		category.addPartition(partition);
+		ParameterNode parameter = new ParameterNode("parameter", "type", "0", false);
+		parameter.addPartition(partition);
 
-		BasicStatement mentioningStatement = new PartitionedCategoryStatement(category, EStatementRelation.EQUAL, partition);
+		BasicStatement mentioningStatement = new PartitionedParameterStatement(parameter, EStatementRelation.EQUAL, partition);
 		BasicStatement notMentioningStatement = new StaticStatement(false);
 		
-		assertTrue(new Constraint(mentioningStatement, notMentioningStatement).mentions(category));
+		assertTrue(new Constraint(mentioningStatement, notMentioningStatement).mentions(parameter));
 		assertTrue(new Constraint(mentioningStatement, notMentioningStatement).mentions(partition));
 		
-		assertTrue(new Constraint(notMentioningStatement, mentioningStatement).mentions(category));
+		assertTrue(new Constraint(notMentioningStatement, mentioningStatement).mentions(parameter));
 		assertTrue(new Constraint(notMentioningStatement, mentioningStatement).mentions(partition));
 		
-		assertTrue(new Constraint(mentioningStatement, mentioningStatement).mentions(category));
+		assertTrue(new Constraint(mentioningStatement, mentioningStatement).mentions(parameter));
 		assertTrue(new Constraint(mentioningStatement, mentioningStatement).mentions(partition));
 		
-		assertFalse(new Constraint(notMentioningStatement, notMentioningStatement).mentions(category));
+		assertFalse(new Constraint(notMentioningStatement, notMentioningStatement).mentions(parameter));
 		assertFalse(new Constraint(notMentioningStatement, notMentioningStatement).mentions(partition));
 		
 	}

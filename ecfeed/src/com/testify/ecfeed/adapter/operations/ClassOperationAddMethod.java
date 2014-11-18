@@ -32,7 +32,7 @@ public class ClassOperationAddMethod extends AbstractModelOperation{
 		if(fIndex == -1){
 			fIndex = fTarget.getMethods().size();
 		}
-		if(JavaUtils.validateNewMethodSignature(fTarget, fMethod.getName(), fMethod.getCategoriesTypes(), problems) == false){
+		if(JavaUtils.validateNewMethodSignature(fTarget, fMethod.getName(), fMethod.getParametersTypes(), problems) == false){
 			throw new ModelOperationException(JavaUtils.consolidate(problems));
 		}
 		if(fTarget.addMethod(fMethod, fIndex) == false){

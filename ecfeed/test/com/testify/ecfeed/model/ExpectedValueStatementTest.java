@@ -27,9 +27,9 @@ import com.testify.ecfeed.model.PartitionNode;
 public class ExpectedValueStatementTest{
 	
 	private static MethodNode fMethod;
-	private static ParameterNode fExpCategory1;
-	private static ParameterNode fPartCategory1;
-	private static ParameterNode fPartCategory2;
+	private static ParameterNode fExpParameter1;
+	private static ParameterNode fPartParameter1;
+	private static ParameterNode fPartParameter2;
 	private static String fExpectedValue1;
 
 	
@@ -38,14 +38,14 @@ public class ExpectedValueStatementTest{
 		fMethod = new MethodNode("method");
 		fExpectedValue1 = "value1";
 
-		fExpCategory1 = new ParameterNode("category", "type","0",  true);
-		fExpCategory1.setDefaultValueString(fExpectedValue1);
-		fPartCategory1 = new ParameterNode("category", "type","0",  false);
-		fPartCategory2 = new ParameterNode("category", "type", "0", false);
+		fExpParameter1 = new ParameterNode("parameter", "type","0",  true);
+		fExpParameter1.setDefaultValueString(fExpectedValue1);
+		fPartParameter1 = new ParameterNode("parameter", "type","0",  false);
+		fPartParameter2 = new ParameterNode("parameter", "type", "0", false);
 
-		fMethod.addCategory(fPartCategory1);
-		fMethod.addCategory(fExpCategory1);
-		fMethod.addCategory(fPartCategory2);
+		fMethod.addParameter(fPartParameter1);
+		fMethod.addParameter(fExpParameter1);
+		fMethod.addParameter(fPartParameter2);
 		
 	}
 	
@@ -53,11 +53,11 @@ public class ExpectedValueStatementTest{
 	public void testAdapt(){
 		PartitionNode partition1 = new PartitionNode("partition1", "");
 		PartitionNode statementPartition = new PartitionNode("exp_partition", "statement expected value");
-		ExpectedValueStatement testStatement = new ExpectedValueStatement(fExpCategory1, statementPartition);
+		ExpectedValueStatement testStatement = new ExpectedValueStatement(fExpParameter1, statementPartition);
 		
 		List<PartitionNode> testData = new ArrayList<>();
 		testData.add(partition1);	
-		testData.add(new PartitionNode("", fExpCategory1.getDefaultValue()));
+		testData.add(new PartitionNode("", fExpParameter1.getDefaultValue()));
 		testData.add(partition1);
 		
 		testStatement.adapt(testData);

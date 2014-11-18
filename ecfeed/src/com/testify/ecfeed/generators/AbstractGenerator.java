@@ -213,8 +213,8 @@ public class AbstractGenerator<E> implements IGenerator<E> {
 	}
 
 	private void validateInput(List<? extends List<E>> inputDomain) throws GeneratorException {
-		for(List<E> category : inputDomain){
-			if(category.size() == 0){
+		for(List<E> parameter : inputDomain){
+			if(parameter.size() == 0){
 				throw new GeneratorException("Generator input domain cannot contain empty vectors");
 			}
 		}

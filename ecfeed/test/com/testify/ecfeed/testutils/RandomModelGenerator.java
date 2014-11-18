@@ -54,7 +54,7 @@ import com.testify.ecfeed.model.ExpectedValueStatement;
 import com.testify.ecfeed.model.GenericNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
-import com.testify.ecfeed.model.PartitionedCategoryStatement;
+import com.testify.ecfeed.model.PartitionedParameterStatement;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.StatementArray;
 import com.testify.ecfeed.model.StaticStatement;
@@ -67,7 +67,7 @@ public class RandomModelGenerator {
 	
 	public int MAX_CLASSES = 3;
 	public int MAX_METHODS = 3;
-	public int MAX_CATEGORIES = 3;
+	public int MAX_PARAMETERS = 3;
 	public int MAX_CONSTRAINTS = 3;
 	public int MAX_TEST_CASES = 10;
 	public int MAX_PARTITIONS = 5;
@@ -83,15 +83,15 @@ public class RandomModelGenerator {
 		case CLASS:
 			return generateClass(MAX_METHODS);
 		case CONSTRAINT:
-			return generateMethod(MAX_CATEGORIES, MAX_CONSTRAINTS, 0).getConstraintNodes().get(rand.nextInt(MAX_CONSTRAINTS));
+			return generateMethod(MAX_PARAMETERS, MAX_CONSTRAINTS, 0).getConstraintNodes().get(rand.nextInt(MAX_CONSTRAINTS));
 		case METHOD:
-			return generateMethod(MAX_CATEGORIES, MAX_CONSTRAINTS, MAX_TEST_CASES);
+			return generateMethod(MAX_PARAMETERS, MAX_CONSTRAINTS, MAX_TEST_CASES);
 		case PARAMETER:
-			return generateCategory(randomType(true), rand.nextBoolean(), MAX_PARTITION_LEVELS, MAX_PARTITIONS, MAX_PARTITION_LABELS);
+			return generateParameter(randomType(true), rand.nextBoolean(), MAX_PARTITION_LEVELS, MAX_PARTITIONS, MAX_PARTITION_LABELS);
 		case PROJECT:
 			return generateModel(MAX_CLASSES);
 		case TEST_CASE:
-			return generateMethod(MAX_CATEGORIES, 0, MAX_TEST_CASES).getTestCases().get(rand.nextInt(MAX_TEST_CASES));
+			return generateMethod(MAX_PARAMETERS, 0, MAX_TEST_CASES).getTestCases().get(rand.nextInt(MAX_TEST_CASES));
 		}
 		return null;
 	}
@@ -116,26 +116,26 @@ public class RandomModelGenerator {
 		ClassNode _class = new ClassNode(name);
 		
 		for(int i = 0; i < methods; i++){
-			int categories = rand.nextInt(MAX_CATEGORIES);
+			int parameters = rand.nextInt(MAX_PARAMETERS);
 			int constraints = rand.nextInt(MAX_CONSTRAINTS);
 			int testCases = rand.nextInt(MAX_TEST_CASES);
 			
-			_class.addMethod(generateMethod(categories, constraints, testCases));
+			_class.addMethod(generateMethod(parameters, constraints, testCases));
 		}
 
 		return _class;
 	}
 
-	public MethodNode generateMethod(int categories, int constraints, int testCases){
+	public MethodNode generateMethod(int parameters, int constraints, int testCases){
 		String name = generateString(REGEX_METHOD_NODE_NAME);
 		
 		MethodNode method = new MethodNode(name);
 		
-		for(int i = 0; i < categories; i++){
+		for(int i = 0; i < parameters; i++){
 			boolean expected = rand.nextInt(4) < 3 ? false : true;
 			String type = randomType(true);
 			
-			method.addCategory(generateCategory(type, expected, 
+			method.addParameter(generateParameter(type, expected, 
 					rand.nextInt(MAX_PARTITION_LEVELS), rand.nextInt(MAX_PARTITIONS) + 1, 
 					rand.nextInt(MAX_PARTITION_LABELS)));
 		}
@@ -151,25 +151,25 @@ public class RandomModelGenerator {
 		return method;
 	}
 	
-	public ParameterNode generateCategory(String type, boolean expected, int partitionLevels, int partitions, int labels){
+	public ParameterNode generateParameter(String type, boolean expected, int partitionLevels, int partitions, int labels){
 		String name = generateString(REGEX_CATEGORY_NODE_NAME);
 		
-		ParameterNode category = new ParameterNode(name, type, randomPartitionValue(type), expected);
+		ParameterNode parameter = new ParameterNode(name, type, randomPartitionValue(type), expected);
 		
 		if(partitions > 0){
 			for(int i = 0; i < rand.nextInt(partitions) + 1; i++){
-				category.addPartition(generatePartition(partitionLevels, partitions, labels, type));
+				parameter.addPartition(generatePartition(partitionLevels, partitions, labels, type));
 			}
 		}
 
-		return category;
+		return parameter;
 	}
 
 	public TestCaseNode generateTestCase(MethodNode method){
 		String name = generateString(REGEX_TEST_CASE_NODE_NAME);
 		List<PartitionNode> testData = new ArrayList<PartitionNode>();
 		
-		for(ParameterNode c : method.getCategories()){
+		for(ParameterNode c : method.getParameters()){
 			if(c.isExpected()){
 				PartitionNode expectedValue = new PartitionNode("@expected", randomPartitionValue(c.getType()));
 				expectedValue.setParent(c);
@@ -178,7 +178,7 @@ public class RandomModelGenerator {
 			else{
 				List<PartitionNode> partitions = c.getPartitions();
 				if(partitions.size() == 0){
-					System.out.println("Empty category!");
+					System.out.println("Empty parameter!");
 				}
 				PartitionNode p = c.getPartitions().get(rand.nextInt(partitions.size()));
 				while(p.getPartitions().size() > 0){
@@ -224,67 +224,67 @@ public class RandomModelGenerator {
 		return new StaticStatement(rand.nextBoolean());
 	}
 
-	public PartitionedCategoryStatement generatePartitionedStatement(MethodNode method) {
-		List<ParameterNode> categories = new ArrayList<ParameterNode>();
+	public PartitionedParameterStatement generatePartitionedStatement(MethodNode method) {
+		List<ParameterNode> parameters = new ArrayList<ParameterNode>();
 		
-		for(ParameterNode category : method.getCategories()){
-			if(category.isExpected() == false && category.getPartitions().size() > 0){
-				categories.add(category);
+		for(ParameterNode parameter : method.getParameters()){
+			if(parameter.isExpected() == false && parameter.getPartitions().size() > 0){
+				parameters.add(parameter);
 			}
 		}
 		
-		if(categories.size() == 0){
-			ParameterNode category = generateCategory(TYPE_NAME_INT, false, 0, 1, 1);
-			method.addCategory(category);
-			categories.add(category);
+		if(parameters.size() == 0){
+			ParameterNode parameter = generateParameter(TYPE_NAME_INT, false, 0, 1, 1);
+			method.addParameter(parameter);
+			parameters.add(parameter);
 		}
 		
-		ParameterNode category = categories.get(rand.nextInt(categories.size()));
+		ParameterNode parameter = parameters.get(rand.nextInt(parameters.size()));
 		EStatementRelation relation = rand.nextBoolean() ? EStatementRelation.EQUAL : EStatementRelation.NOT;
-		if(category.getPartitions().size() == 0){
-			PartitionNode partition = generatePartition(0, 0, 1, category.getType());
-			category.addPartition(partition);
+		if(parameter.getPartitions().size() == 0){
+			PartitionNode partition = generatePartition(0, 0, 1, parameter.getType());
+			parameter.addPartition(partition);
 		}
 		
 		if(rand.nextBoolean()){
-			List<String> partitionNames = new ArrayList<String>(category.getAllPartitionNames());
+			List<String> partitionNames = new ArrayList<String>(parameter.getAllPartitionNames());
 			String luckyPartitionName = partitionNames.get(rand.nextInt(partitionNames.size()));
-			PartitionNode condition = category.getPartition(luckyPartitionName);
-			return new PartitionedCategoryStatement(category, relation, condition);
+			PartitionNode condition = parameter.getPartition(luckyPartitionName);
+			return new PartitionedParameterStatement(parameter, relation, condition);
 		}
 		else{
-			if(category.getLeafLabels().size() == 0){
-				category.getPartitions().get(0).addLabel(generateString(REGEX_PARTITION_LABEL));
+			if(parameter.getLeafLabels().size() == 0){
+				parameter.getPartitions().get(0).addLabel(generateString(REGEX_PARTITION_LABEL));
 			}
 			
-			Set<String>labels = category.getLeafLabels();
+			Set<String>labels = parameter.getLeafLabels();
 			
 			String label = labels.toArray(new String[]{})[rand.nextInt(labels.size())];
-			return new PartitionedCategoryStatement(category, relation, label);
+			return new PartitionedParameterStatement(parameter, relation, label);
 		}
 	}
 
 	public ExpectedValueStatement generateExpectedValueStatement(MethodNode method) {
-		List<ParameterNode> categories = new ArrayList<ParameterNode>();
+		List<ParameterNode> parameters = new ArrayList<ParameterNode>();
 		
-		for(ParameterNode category : method.getCategories()){
-			if(category.isExpected() == true){
-				categories.add(category);
+		for(ParameterNode parameter : method.getParameters()){
+			if(parameter.isExpected() == true){
+				parameters.add(parameter);
 			}
 		}
 		
-		if(categories.size() == 0){
-			ParameterNode category = generateCategory(SUPPORTED_TYPES[rand.nextInt(SUPPORTED_TYPES.length)], true, 0, 1, 1);
-			method.addCategory(category);
-			categories.add(category);
+		if(parameters.size() == 0){
+			ParameterNode parameter = generateParameter(SUPPORTED_TYPES[rand.nextInt(SUPPORTED_TYPES.length)], true, 0, 1, 1);
+			method.addParameter(parameter);
+			parameters.add(parameter);
 		}
 		
-		ParameterNode category = categories.get(rand.nextInt(categories.size()));
+		ParameterNode parameter = parameters.get(rand.nextInt(parameters.size()));
 		
 		
-		String value = randomPartitionValue(category.getType());
+		String value = randomPartitionValue(parameter.getType());
 		String name = generateString(REGEX_PARTITION_NODE_NAME);
-		return new ExpectedValueStatement(category, new PartitionNode(name, value));
+		return new ExpectedValueStatement(parameter, new PartitionNode(name, value));
 	}
 
 	public StatementArray generateStatementArray(MethodNode method, int depth) {
@@ -296,13 +296,13 @@ public class RandomModelGenerator {
 	}
 
 	public BasicStatement generateConsequence(MethodNode method) {
-		if(method.getCategories().size() == 0){
-			method.addCategory(generateCategory(TYPE_NAME_INT, false, 0, 1, 1));
+		if(method.getParameters().size() == 0){
+			method.addParameter(generateParameter(TYPE_NAME_INT, false, 0, 1, 1));
 		}
 		
-		List<ParameterNode> categories = method.getCategories();
-		ParameterNode category = categories.get(rand.nextInt(categories.size()));
-		if(category.isExpected()){
+		List<ParameterNode> parameters = method.getParameters();
+		ParameterNode parameter = parameters.get(rand.nextInt(parameters.size()));
+		if(parameter.isExpected()){
 			return generateExpectedValueStatement(method);
 		}
 		return generateStatement(method, MAX_STATEMENTS_DEPTH);
@@ -472,14 +472,14 @@ public class RandomModelGenerator {
 	}
 	
 //	@Test
-	public void testCategoryGenerator(){
+	public void testParameterGenerator(){
 		for(String type : SUPPORTED_TYPES){
 			for(boolean expected : new Boolean[]{true, false}){
 				System.out.println("Type: " + type);
 				int partitions = rand.nextInt(MAX_PARTITIONS);
 				int labels = rand.nextInt(MAX_PARTITION_LABELS);
 				int levels = rand.nextInt(MAX_PARTITION_LEVELS);
-				ParameterNode c = generateCategory(type, expected, levels, partitions, labels);
+				ParameterNode c = generateParameter(type, expected, levels, partitions, labels);
 				System.out.println(fStringifier.stringify(c, 0));
 			}
 		}
@@ -518,7 +518,7 @@ public class RandomModelGenerator {
 	public void testGeneratePartitionedStatement(){
 		for(int i = 0; i < 10; i++){
 			MethodNode m = generateMethod(10, 0, 0);
-			PartitionedCategoryStatement statement = generatePartitionedStatement(m);
+			PartitionedParameterStatement statement = generatePartitionedStatement(m);
 			System.out.println(fStringifier.stringify(statement, 0));
 		}
 	}

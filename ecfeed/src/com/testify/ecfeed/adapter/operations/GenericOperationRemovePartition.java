@@ -27,7 +27,7 @@ public class GenericOperationRemovePartition extends BulkOperation {
 			@Override
 			public void execute() throws ModelOperationException {
 				fTarget.addPartition(fPartition, fOriginalIndex);
-				fTarget.getCategory().setDefaultValueString(fOriginalDefaultValue);
+				fTarget.getParameter().setDefaultValueString(fOriginalDefaultValue);
 				markModelUpdated();
 			}
 
@@ -43,26 +43,26 @@ public class GenericOperationRemovePartition extends BulkOperation {
 			fTarget = target;
 			fPartition = partition;
 			fOriginalIndex = fPartition.getIndex();
-			fOriginalDefaultValue = target.getCategory().getDefaultValue();
+			fOriginalDefaultValue = target.getParameter().getDefaultValue();
 		}
 		
 		@Override
 		public void execute() throws ModelOperationException {
 			fOriginalIndex = fPartition.getIndex();
-			ParameterNode category = fTarget.getCategory();
-			if(category.isExpected() && JavaUtils.isPrimitive(category.getType()) == false && category.getPartitions().size() == 1 && category.getPartitions().get(0) == fPartition){
-				// We are removing the only partition of expected category. 
-				// The last category must represent the default expected value
+			ParameterNode parameter = fTarget.getParameter();
+			if(parameter.isExpected() && JavaUtils.isPrimitive(parameter.getType()) == false && parameter.getPartitions().size() == 1 && parameter.getPartitions().get(0) == fPartition){
+				// We are removing the only partition of expected parameter. 
+				// The last parameter must represent the default expected value
 				throw new ModelOperationException(Messages.EXPECTED_USER_TYPE_CATEGORY_LAST_PARTITION_PROBLEM);
 			}
 			fTarget.removePartition(fPartition);
-			if(category.isExpected() && fPartition.getValueString().equals(category.getDefaultValue())){
+			if(parameter.isExpected() && fPartition.getValueString().equals(parameter.getDefaultValue())){
 				// the value of removed partition is the same as default expected value
 				// Check if there are leaf partitions with the same value. If not, update the default value
-				Set<String> leafValues = category.getLeafPartitionValues();
-				if(leafValues.contains(category.getDefaultValue()) == false){
+				Set<String> leafValues = parameter.getLeafPartitionValues();
+				if(leafValues.contains(parameter.getDefaultValue()) == false){
 					if(leafValues.size() > 0){
-						category.setDefaultValueString(leafValues.toArray(new String[]{})[0]);
+						parameter.setDefaultValueString(leafValues.toArray(new String[]{})[0]);
 					}
 					else{
 						throw new ModelOperationException(Messages.UNEXPECTED_PROBLEM_WHILE_REMOVING_ELEMENT);
@@ -80,8 +80,8 @@ public class GenericOperationRemovePartition extends BulkOperation {
 	public GenericOperationRemovePartition(PartitionedNode target, PartitionNode partition, boolean validate) {
 		super(OperationNames.REMOVE_PARTITION, true);
 		addOperation(new RemovePartitionOperation(target, partition));
-		if((target.getCategory().getMethod() != null) && validate){
-			addOperation(new MethodOperationMakeConsistent(target.getCategory().getMethod()));
+		if((target.getParameter().getMethod() != null) && validate){
+			addOperation(new MethodOperationMakeConsistent(target.getParameter().getMethod()));
 		}
 	}
 }

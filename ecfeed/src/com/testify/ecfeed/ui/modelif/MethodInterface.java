@@ -76,7 +76,7 @@ public class MethodInterface extends GenericNodeInterface {
 		ParameterNode parameter = new ParameterNode(name, type, defaultValue, false);
 		List<PartitionNode> defaultPartitions = modelBuilder.defaultPartitions(type);
 		parameter.addPartitions(defaultPartitions);
-		if(addNewParameter(parameter, fTarget.getCategories().size())){
+		if(addNewParameter(parameter, fTarget.getParameters().size())){
 			return parameter;
 		}
 		return null;
@@ -116,8 +116,8 @@ public class MethodInterface extends GenericNodeInterface {
 	}
 
 	public TestCaseNode addTestCase() {
-		for(ParameterNode category : fTarget.getCategories()){
-			if(!category.isExpected() && category.getPartitions().isEmpty()){
+		for(ParameterNode parameter : fTarget.getParameters()){
+			if(!parameter.isExpected() && parameter.getPartitions().isEmpty()){
 				MessageDialog.openError(Display.getDefault().getActiveShell(), Messages.DIALOG_ADD_TEST_CASE_PROBLEM_TITLE, Messages.DIALOG_TEST_CASE_WITH_EMPTY_CATEGORY_MESSAGE);
 				return null;
 			}
@@ -227,7 +227,7 @@ public class MethodInterface extends GenericNodeInterface {
 	public List<MethodNode> getCompatibleMethods(){
 		List<MethodNode> compatibleMethods = new ArrayList<MethodNode>();
 		for(MethodNode m : ClassInterface.getOtherMethods(fTarget.getClassNode())){
-			if(m.getCategoriesTypes().equals(fTarget.getCategoriesTypes())){
+			if(m.getParametersTypes().equals(fTarget.getParametersTypes())){
 				compatibleMethods.add(m);
 			}
 		}
@@ -242,7 +242,7 @@ public class MethodInterface extends GenericNodeInterface {
 	private String generateNewParameterName(MethodNode method) {
 		int i = 0;
 		String name = Constants.DEFAULT_NEW_PARAMETER_NAME + i++;
-		while(method.getCategory(name) != null){
+		while(method.getParameter(name) != null){
 			name = Constants.DEFAULT_NEW_PARAMETER_NAME + i++;
 		}
 		return name;
@@ -250,7 +250,7 @@ public class MethodInterface extends GenericNodeInterface {
 
 	private String generateNewParameterType(MethodNode method) {
 		for(String type : JavaUtils.supportedPrimitiveTypes()){
-			List<String> newTypes = method.getCategoriesTypes();
+			List<String> newTypes = method.getParametersTypes();
 			newTypes.add(type);
 			if(method.getClassNode().getMethod(method.getName(), newTypes) == null){
 				return type;
@@ -259,7 +259,7 @@ public class MethodInterface extends GenericNodeInterface {
 		String type = Constants.DEFAULT_USER_TYPE_NAME;
 		int i = 0;
 		while(true){
-			List<String> newTypes = method.getCategoriesTypes();
+			List<String> newTypes = method.getParametersTypes();
 			newTypes.add(type);
 			if(method.getClassNode().getMethod(method.getName(), newTypes) == null){
 				break;

@@ -58,20 +58,20 @@ public class EclipseModelBuilder extends JavaModelAnalyser{
 		for(ILocalVariable parameter : method.getParameters()){
 			String typeName = getTypeName(method, parameter);
 			boolean expected = isAnnotated(parameter, "expected");
-			methodNode.addCategory(buildCategoryModel(parameter.getElementName(), typeName, expected));
+			methodNode.addParameter(buildParameterModel(parameter.getElementName(), typeName, expected));
 		}
 		return methodNode;
 	}
 	
-	public ParameterNode buildCategoryModel(String name, String type, boolean expected){
-		ParameterNode category = new ParameterNode(name, type, getDefaultExpectedValue(type), expected);
+	public ParameterNode buildParameterModel(String name, String type, boolean expected){
+		ParameterNode parameter = new ParameterNode(name, type, getDefaultExpectedValue(type), expected);
 		if(!expected){
 			List<PartitionNode> defaultPartitions = defaultPartitions(type);
 			for(PartitionNode partition : defaultPartitions){
-				category.addPartition(partition);
+				parameter.addPartition(partition);
 			}
 		}
-		return category;
+		return parameter;
 	}
 
 	public List<PartitionNode> defaultPartitions(String typeName) {

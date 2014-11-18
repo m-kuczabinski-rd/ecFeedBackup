@@ -31,7 +31,7 @@ public class ParameterNode extends PartitionedNode{
 		if(getMethod() == null){
 			return -1;
 		}
-		return getMethod().getCategories().indexOf(this);
+		return getMethod().getParameters().indexOf(this);
 	}
 
 	@Override
@@ -50,19 +50,19 @@ public class ParameterNode extends PartitionedNode{
 
 	@Override
 	public ParameterNode getCopy(){
-		ParameterNode category = new ParameterNode(getName(), getType(), getDefaultValue(), isExpected());
-		category.setParent(this.getParent());
+		ParameterNode parameter = new ParameterNode(getName(), getType(), getDefaultValue(), isExpected());
+		parameter.setParent(this.getParent());
 		if(getDefaultValue() != null)
-			category.setDefaultValueString(getDefaultValue());
+			parameter.setDefaultValueString(getDefaultValue());
 		for(PartitionNode partition : getPartitions()){
-			category.addPartition(partition.getCopy());
+			parameter.addPartition(partition.getCopy());
 		}
-		category.setParent(getParent());
-		return category;
+		parameter.setParent(getParent());
+		return parameter;
 	}
 	
 	@Override
-	public ParameterNode getCategory() {
+	public ParameterNode getParameter() {
 		return this;
 	}
 	
@@ -116,27 +116,27 @@ public class ParameterNode extends PartitionedNode{
 		if(node instanceof ParameterNode == false){
 			return false;
 		}
-		ParameterNode comparedCategory = (ParameterNode)node;
+		ParameterNode comparedParameter = (ParameterNode)node;
 		
-		if(getType().equals(comparedCategory.getType()) == false){
+		if(getType().equals(comparedParameter.getType()) == false){
 			return false;
 		}
 
-		if(isExpected() != comparedCategory.isExpected()){
+		if(isExpected() != comparedParameter.isExpected()){
 			return false;
 		}
 		
-		if(fDefaultValue.equals(comparedCategory.getDefaultValue()) == false){
+		if(fDefaultValue.equals(comparedParameter.getDefaultValue()) == false){
 			return false;
 		}
 
 		int partitionsCount = getPartitions().size();
-		if(partitionsCount != comparedCategory.getPartitions().size()){
+		if(partitionsCount != comparedParameter.getPartitions().size()){
 			return false;
 		}
 
 		for(int i = 0; i < partitionsCount; i++){
-			if(getPartitions().get(i).compare(comparedCategory.getPartitions().get(i)) == false){
+			if(getPartitions().get(i).compare(comparedParameter.getPartitions().get(i)) == false){
 				return false;
 			}
 		}
@@ -152,7 +152,7 @@ public class ParameterNode extends PartitionedNode{
 	@Override 
 	public int getMaxIndex(){
 		if(getMethod() != null){
-			return getMethod().getCategories().size();
+			return getMethod().getParameters().size();
 		}
 		return -1;
 	}

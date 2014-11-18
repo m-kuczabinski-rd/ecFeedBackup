@@ -44,7 +44,7 @@ public class FactoryShiftOperation{
 		@Override
 		public Object visit(MethodNode node) throws Exception {
 			if(fShifted.get(0) instanceof ParameterNode){
-				return new ParameterShiftOperation(node.getCategories(), fShifted, fUp);
+				return new ParameterShiftOperation(node.getParameters(), fShifted, fUp);
 			}
 			if(fShifted.get(0) instanceof ConstraintNode){
 				return new GenericShiftOperation(node.getConstraintNodes(), fShifted, fUp);
@@ -111,7 +111,7 @@ public class FactoryShiftOperation{
 		@Override
 		public Object visit(MethodNode node) throws Exception {
 			if(fShifted.get(0) instanceof ParameterNode){
-				return new ParameterShiftOperation(node.getCategories(), fShifted, fShift);
+				return new ParameterShiftOperation(node.getParameters(), fShifted, fShift);
 			}
 			if(fShifted.get(0) instanceof ConstraintNode){
 				return new GenericShiftOperation(node.getConstraintNodes(), fShifted, fShift);

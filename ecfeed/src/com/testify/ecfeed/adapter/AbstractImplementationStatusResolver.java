@@ -104,11 +104,11 @@ public abstract class AbstractImplementationStatusResolver implements
 		if(methodDefinitionImplemented(method) == false){
 			status = EImplementationStatus.NOT_IMPLEMENTED;
 		}
-		else if(method.getCategories().size() == 0){
+		else if(method.getParameters().size() == 0){
 			status = EImplementationStatus.IMPLEMENTED;
 		}
 		else{
-			EImplementationStatus childrenStatus = childrenStatus(method.getCategories()); 
+			EImplementationStatus childrenStatus = childrenStatus(method.getParameters()); 
 			if(childrenStatus != EImplementationStatus.IMPLEMENTED){
 				status = EImplementationStatus.PARTIALLY_IMPLEMENTED;
 			}
@@ -116,21 +116,21 @@ public abstract class AbstractImplementationStatusResolver implements
 		return status;
 	}
 	
-	protected EImplementationStatus implementationStatus(ParameterNode category){
+	protected EImplementationStatus implementationStatus(ParameterNode parameter){
 		EImplementationStatus status = EImplementationStatus.IMPLEMENTED;
-		if(fPrimitiveTypeTester.isPrimitive(category.getType())){
-			if(category.getPartitions().size() == 0 && category.isExpected() == false)
+		if(fPrimitiveTypeTester.isPrimitive(parameter.getType())){
+			if(parameter.getPartitions().size() == 0 && parameter.isExpected() == false)
 			status = EImplementationStatus.PARTIALLY_IMPLEMENTED;
 		}
 		else{
-			if(enumDefinitionImplemented(category.getType()) == false){
+			if(enumDefinitionImplemented(parameter.getType()) == false){
 				status = EImplementationStatus.NOT_IMPLEMENTED;
 			}
-			else if(category.getPartitions().size() == 0){
+			else if(parameter.getPartitions().size() == 0){
 				status = EImplementationStatus.PARTIALLY_IMPLEMENTED;
 			}
 			else{
-				EImplementationStatus childrenStatus = childrenStatus(category.getPartitions());
+				EImplementationStatus childrenStatus = childrenStatus(parameter.getPartitions());
 				if(childrenStatus != EImplementationStatus.IMPLEMENTED){
 					status = EImplementationStatus.PARTIALLY_IMPLEMENTED;
 				}
@@ -151,7 +151,7 @@ public abstract class AbstractImplementationStatusResolver implements
 	protected EImplementationStatus implementationStatus(PartitionNode partition){
 		EImplementationStatus status = EImplementationStatus.IMPLEMENTED;
 		if(partition.isAbstract() == false){
-			ParameterNode parameter = partition.getCategory();
+			ParameterNode parameter = partition.getParameter();
 			if(parameter == null){
 				status = EImplementationStatus.NOT_IMPLEMENTED;
 			}

@@ -111,7 +111,7 @@ public class ModelMasterSection extends TreeViewerSection{
 			if(parentElement instanceof MethodNode){
 				MethodNode method = (MethodNode)parentElement;
 				ArrayList<Object> children = new ArrayList<Object>();
-				children.addAll(method.getCategories());
+				children.addAll(method.getParameters());
 				children.addAll(method.getConstraintNodes());
 				for(String testSuite : method.getTestSuites()){
 					Collection<TestCaseNode> testCases = method.getTestCases(testSuite);
@@ -123,8 +123,8 @@ public class ModelMasterSection extends TreeViewerSection{
 			}
 
 			if(parentElement instanceof ParameterNode){
-				ParameterNode category = (ParameterNode)parentElement;
-				if(category.isExpected() && ParameterInterface.isPrimitive(category.getType())){
+				ParameterNode parameter = (ParameterNode)parentElement;
+				if(parameter.isExpected() && ParameterInterface.isPrimitive(parameter.getType())){
 					return EMPTY_ARRAY;
 				}
 			}
@@ -175,7 +175,7 @@ public class ModelMasterSection extends TreeViewerSection{
 			} else if(element instanceof TestCaseNode){
 				return getImageFromFile("test_case_node.png");
 			} else if (element instanceof ParameterNode){
-				return getImageFromFile("category_node.png");
+				return getImageFromFile("parameter_node.png");
 			} else if (element instanceof ConstraintNode){
 				return getImageFromFile("constraint_node.png");
 			} else if (element instanceof PartitionNode){

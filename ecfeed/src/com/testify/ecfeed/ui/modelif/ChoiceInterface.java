@@ -52,15 +52,15 @@ public class ChoiceInterface extends PartitionedNodeInterface{
 		return fTarget.getValueString();
 	}
 
-	public ParameterNode getCategory() {
-		return fTarget.getCategory();
+	public ParameterNode getParameter() {
+		return fTarget.getParameter();
 	}
 
 	public boolean removeLabels(Collection<String> labels) {
-		MethodNode method = fTarget.getCategory().getMethod();
+		MethodNode method = fTarget.getParameter().getMethod();
 		boolean removeMentioningConstraints = false;
 		for(String label : labels){
-			if(method.mentioningConstraints(fTarget.getCategory(), label).size() > 0 && fTarget.getCategory().getLabeledPartitions(label).size() == 1){
+			if(method.mentioningConstraints(fTarget.getParameter(), label).size() > 0 && fTarget.getParameter().getLabeledPartitions(label).size() == 1){
 				removeMentioningConstraints = true;
 				break;
 			}

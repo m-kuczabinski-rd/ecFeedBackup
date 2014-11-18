@@ -55,8 +55,8 @@ public class Messages {
 		return "Forbidden relation value in statement: " + relation;
 	}
 
-	public static String WRONG_CATEGORY_NAME(String categoryName, String methodName) {
-		return "Category " + categoryName + " does not exist in method " + methodName;
+	public static String WRONG_CATEGORY_NAME(String parameterName, String methodName) {
+		return "Parameter " + parameterName + " does not exist in method " + methodName;
 	}
 
 	public static String WRONG_PARTITION_NAME(String partitionName, String parameterName, String methodName) {
@@ -72,8 +72,8 @@ public class Messages {
 		return "Missing test value attribute in a test case in " + testSuiteName + " suite";
 	}
 
-	public static String PARTITION_DOES_NOT_EXIST(String categoryName, String partitionName) {
-		return "Partition " + partitionName + " is not defined for category " + categoryName;
+	public static String PARTITION_DOES_NOT_EXIST(String parameterName, String partitionName) {
+		return "Partition " + partitionName + " is not defined for parameter " + parameterName;
 	}
 	
 	public static final String MISSING_VALUE_ATTRIBUTE_IN_TEST_CASE_ELEMENT = "The expected test parameter element misses value attribute";

@@ -25,7 +25,7 @@ public class GenericMoveOperation extends BulkOperation {
 			if(externalNodes(moved, newParent)){
 				for(GenericNode node : moved){
 					if(node instanceof PartitionedNode){
-						methodsInvolved.add(((PartitionedNode)node).getCategory().getMethod());
+						methodsInvolved.add(((PartitionedNode)node).getParameter().getMethod());
 					}
 					addOperation((IModelOperation)node.getParent().accept(new FactoryRemoveChildOperation(node, false)));
 					if(newIndex != -1){

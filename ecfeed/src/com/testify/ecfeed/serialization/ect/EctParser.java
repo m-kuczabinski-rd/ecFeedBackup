@@ -25,7 +25,7 @@ import com.testify.ecfeed.model.ConstraintNode;
 import com.testify.ecfeed.model.ExpectedValueStatement;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
-import com.testify.ecfeed.model.PartitionedCategoryStatement;
+import com.testify.ecfeed.model.PartitionedParameterStatement;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.StatementArray;
 import com.testify.ecfeed.model.StaticStatement;
@@ -75,10 +75,10 @@ public class EctParser implements IModelParser {
 	}
 
 	@Override
-	public ParameterNode parseCategory(InputStream istream) throws ParserException {
+	public ParameterNode parseParameter(InputStream istream) throws ParserException {
 		try {
 			Document document = fBuilder.build(istream);
-			return fXomParser.parseCategory(document.getRootElement());
+			return fXomParser.parseParameter(document.getRootElement());
 		} catch (ParsingException e) {
 			throw new ParserException(Messages.PARSING_EXCEPTION(e));
 		} catch (IOException e) {
@@ -147,7 +147,7 @@ public class EctParser implements IModelParser {
 	}
 	
 	@Override
-	public PartitionedCategoryStatement parsePartitionedCategoryStatement(InputStream istream, MethodNode method) throws ParserException {
+	public PartitionedParameterStatement parsePartitionedParameterStatement(InputStream istream, MethodNode method) throws ParserException {
 		try {
 			Document document = fBuilder.build(istream);
 			return fXomParser.parsePartitionStatement(document.getRootElement(), method);

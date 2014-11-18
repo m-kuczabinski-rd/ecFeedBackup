@@ -5,19 +5,19 @@ import com.testify.ecfeed.adapter.operations.StatementOperationSetCondition;
 import com.testify.ecfeed.adapter.operations.StatementOperationSetRelation;
 import com.testify.ecfeed.model.ParameterNode;
 import com.testify.ecfeed.model.EStatementRelation;
-import com.testify.ecfeed.model.PartitionedCategoryStatement;
-import com.testify.ecfeed.model.PartitionedCategoryStatement.ICondition;
+import com.testify.ecfeed.model.PartitionedParameterStatement;
+import com.testify.ecfeed.model.PartitionedParameterStatement.ICondition;
 import com.testify.ecfeed.ui.common.Messages;
 
-public class PartitionedCategoryStatementInterface extends BasicStatementInterface{
+public class PartitionedParameterStatementInterface extends BasicStatementInterface{
 
-	private PartitionedCategoryStatement fTarget;
+	private PartitionedParameterStatement fTarget;
 
-	public PartitionedCategoryStatementInterface(IModelUpdateContext updateContext) {
+	public PartitionedParameterStatementInterface(IModelUpdateContext updateContext) {
 		super(updateContext);
 	}
 
-	public void setTarget(PartitionedCategoryStatement target){
+	public void setTarget(PartitionedParameterStatement target){
 		super.setTarget(target);
 		fTarget = target;
 	}
@@ -35,9 +35,9 @@ public class PartitionedCategoryStatementInterface extends BasicStatementInterfa
 	public boolean setConditionValue(String text) {
 		if(fTarget.getConditionName().equals(text) == false){
 			ICondition newCondition;
-			ParameterNode category = fTarget.getCategory();
-			if(category.getPartition(text) != null){
-				newCondition = fTarget.new PartitionCondition(category.getPartition(text));
+			ParameterNode parameter = fTarget.getParameter();
+			if(parameter.getPartition(text) != null){
+				newCondition = fTarget.new PartitionCondition(parameter.getPartition(text));
 			}
 			else{
 				if(text.contains("[label]")){

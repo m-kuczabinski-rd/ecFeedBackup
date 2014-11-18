@@ -114,7 +114,7 @@ public class TestCasesViewer extends CheckboxTreeViewerSection {
 
 	@Override
 	public void refresh() {
-		fGenerateSuiteButton.setEnabled(getSelectedMethod().getCategories().size() > 0);
+		fGenerateSuiteButton.setEnabled(getSelectedMethod().getParameters().size() > 0);
 		fExecuteSelectedButton.setEnabled(executionEnabled());
 		fLabelProvider.refresh();
 	}

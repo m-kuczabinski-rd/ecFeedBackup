@@ -57,21 +57,21 @@ public class FactoryRenameOperation {
 		protected void verifyNewName(String newName) throws ModelOperationException {
 			List<String> problems = new ArrayList<String>();
 			MethodNode target = (MethodNode)getTarget();
-			if(JavaUtils.validateNewMethodSignature(target.getClassNode(), getNewName(), target.getCategoriesTypes(), problems) == false){
+			if(JavaUtils.validateNewMethodSignature(target.getClassNode(), getNewName(), target.getParametersTypes(), problems) == false){
 				throw new ModelOperationException(JavaUtils.consolidate(problems));
 			}
 		}
 	}
 
-	private static class CategoryOperationRename extends GenericOperationRename {
+	private static class ParameterOperationRename extends GenericOperationRename {
 
-		public CategoryOperationRename(GenericNode target, String newName) {
+		public ParameterOperationRename(GenericNode target, String newName) {
 			super(target, newName);
 		}
 
 		@Override
 		public IModelOperation reverseOperation() {
-			return new CategoryOperationRename(getTarget(), getOriginalName());
+			return new ParameterOperationRename(getTarget(), getOriginalName());
 		}
 
 		@Override
@@ -80,7 +80,7 @@ public class FactoryRenameOperation {
 			if(JavaUtils.isJavaKeyword(newName)){
 				throw new ModelOperationException(Messages.CATEGORY_NAME_REGEX_PROBLEM);
 			}
-			if(target.getMethod().getCategory(newName) != null){
+			if(target.getMethod().getParameter(newName) != null){
 				throw new ModelOperationException(Messages.CATEGORY_NAME_DUPLICATE_PROBLEM);
 			}
 		}
@@ -130,7 +130,7 @@ public class FactoryRenameOperation {
 
 		@Override
 		public Object visit(ParameterNode node) throws Exception {
-			return new CategoryOperationRename(node, fNewName);
+			return new ParameterOperationRename(node, fNewName);
 		}
 
 		@Override

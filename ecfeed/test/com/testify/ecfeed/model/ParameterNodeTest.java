@@ -27,43 +27,43 @@ public class ParameterNodeTest{
 	
 	@Test
 	public void addPartitionTest() {
-		ParameterNode category = new ParameterNode("category", "type", "0", false);
+		ParameterNode parameter = new ParameterNode("parameter", "type", "0", false);
 		
-		assertEquals(0, category.getPartitions().size());
+		assertEquals(0, parameter.getPartitions().size());
 		
 		PartitionNode partition = new PartitionNode("partition", "0"); 
-		category.addPartition(partition);
+		parameter.addPartition(partition);
 
-		assertEquals(1, category.getPartitions().size());
+		assertEquals(1, parameter.getPartitions().size());
 	}
 	
 	@Test
 	public void getPartitionTest(){
-		ParameterNode category = new ParameterNode("category", "type", "0", false);
+		ParameterNode parameter = new ParameterNode("parameter", "type", "0", false);
 		PartitionNode p = new PartitionNode("p", "0");
 		PartitionNode p1 = new PartitionNode("p1", "0");
 		PartitionNode p11 = new PartitionNode("p11", "0");
-		category.addPartition(p);
+		parameter.addPartition(p);
 		p.addPartition(p1);
 		p1.addPartition(p11);
 		
-		assertEquals(p, category.getPartition("p"));
-		assertEquals(p1, category.getPartition("p:p1"));
-		assertEquals(p11, category.getPartition("p:p1:p11"));
-		assertEquals(null, category.getPartition("p1"));
-		assertEquals(null, category.getPartition("p11"));
-		assertEquals(null, category.getPartition("something"));
+		assertEquals(p, parameter.getPartition("p"));
+		assertEquals(p1, parameter.getPartition("p:p1"));
+		assertEquals(p11, parameter.getPartition("p:p1:p11"));
+		assertEquals(null, parameter.getPartition("p1"));
+		assertEquals(null, parameter.getPartition("p11"));
+		assertEquals(null, parameter.getPartition("something"));
 	}
 
 	@Test
 	public void getPartitionsTest() {
-		ParameterNode category = new ParameterNode("category", "type", "0", false);
+		ParameterNode parameter = new ParameterNode("parameter", "type", "0", false);
 		PartitionNode partition1 = new PartitionNode("partition1", "0"); 
 		PartitionNode partition2 = new PartitionNode("partition2", "0"); 
-		category.addPartition(partition1);
-		category.addPartition(partition2);
+		parameter.addPartition(partition1);
+		parameter.addPartition(partition2);
 		
-		List<PartitionNode> partitions = category.getPartitions();
+		List<PartitionNode> partitions = parameter.getPartitions();
 		assertEquals(2, partitions.size());
 		assertTrue(partitions.contains(partition1));
 		assertTrue(partitions.contains(partition2));
@@ -71,13 +71,13 @@ public class ParameterNodeTest{
 	
 	@Test
 	public void getChildrenTest() {
-		ParameterNode category = new ParameterNode("category", "type", "0", false);
+		ParameterNode parameter = new ParameterNode("parameter", "type", "0", false);
 		PartitionNode partition1 = new PartitionNode("partition1", "0"); 
 		PartitionNode partition2 = new PartitionNode("partition2", "0"); 
-		category.addPartition(partition1);
-		category.addPartition(partition2);
+		parameter.addPartition(partition1);
+		parameter.addPartition(partition2);
 		
-		List<? extends GenericNode> children = category.getChildren();
+		List<? extends GenericNode> children = parameter.getChildren();
 		assertEquals(2, children.size());
 		assertTrue(children.contains(partition1));
 		assertTrue(children.contains(partition2));
@@ -85,30 +85,30 @@ public class ParameterNodeTest{
 
 	@Test
 	public void getPartitionNames() {
-		ParameterNode category = new ParameterNode("category", "type", "0", false);
+		ParameterNode parameter = new ParameterNode("parameter", "type", "0", false);
 		PartitionNode partition1 = new PartitionNode("partition1", "0"); 
 		PartitionNode partition2 = new PartitionNode("partition2", "0"); 
-		category.addPartition(partition1);
-		category.addPartition(partition2);
+		parameter.addPartition(partition1);
+		parameter.addPartition(partition2);
 		
-		Set<String> partitionNames = category.getPartitionNames();
+		Set<String> partitionNames = parameter.getPartitionNames();
 		assertTrue(partitionNames.contains("partition1"));
 		assertTrue(partitionNames.contains("partition2"));
 	}
 
 	@Test
 	public void getLeafPartitionNamesTest() {
-		ParameterNode category = new ParameterNode("category", "type", "0", false);
+		ParameterNode parameter = new ParameterNode("parameter", "type", "0", false);
 		PartitionNode p1 = new PartitionNode("p1", "0"); 
 		PartitionNode p11 = new PartitionNode("p11", "0"); 
 		PartitionNode p12 = new PartitionNode("p12", "0"); 
 		PartitionNode p2 = new PartitionNode("p2", "0");
 		p1.addPartition(p11);
 		p1.addPartition(p12);
-		category.addPartition(p1);
-		category.addPartition(p2);
+		parameter.addPartition(p1);
+		parameter.addPartition(p2);
 		
-		Set<String> leafNames = category.getLeafPartitionNames();
+		Set<String> leafNames = parameter.getLeafPartitionNames();
 		assertTrue(leafNames.contains("p1:p11"));
 		assertTrue(leafNames.contains("p1:p12"));
 		assertTrue(leafNames.contains("p2"));
@@ -117,17 +117,17 @@ public class ParameterNodeTest{
 
 	@Test
 	public void getAllPartitionNamesTest(){
-		ParameterNode category = new ParameterNode("category", "type", "0", false);
+		ParameterNode parameter = new ParameterNode("parameter", "type", "0", false);
 		PartitionNode p1 = new PartitionNode("p1", "0"); 
 		PartitionNode p11 = new PartitionNode("p11", "0"); 
 		PartitionNode p12 = new PartitionNode("p12", "0"); 
 		PartitionNode p2 = new PartitionNode("p2", "0");
 		p1.addPartition(p11);
 		p1.addPartition(p12);
-		category.addPartition(p1);
-		category.addPartition(p2);
+		parameter.addPartition(p1);
+		parameter.addPartition(p2);
 		
-		Set<String> names = category.getAllPartitionNames();
+		Set<String> names = parameter.getAllPartitionNames();
 		
 		assertTrue(names.contains("p1"));
 		assertTrue(names.contains("p1:p11"));
@@ -139,15 +139,15 @@ public class ParameterNodeTest{
 	@Test
 	public void getMethodTest() {
 		MethodNode method = new MethodNode("method");
-		ParameterNode category = new ParameterNode("category", "type", "0", false);
-		method.addCategory(category);
+		ParameterNode parameter = new ParameterNode("parameter", "type", "0", false);
+		method.addParameter(parameter);
 		
-		assertEquals(method, category.getMethod());
+		assertEquals(method, parameter.getMethod());
 	}
 
 	@Test
 	public void getLeafPartitionsTest(){
-		ParameterNode category = new ParameterNode("category", "type", "0", false);
+		ParameterNode parameter = new ParameterNode("parameter", "type", "0", false);
 		
 		PartitionNode p1 = new PartitionNode("p1", "0");
 		PartitionNode p2 = new PartitionNode("p1", "0");
@@ -165,9 +165,9 @@ public class ParameterNodeTest{
 		PartitionNode p322 = new PartitionNode("p322", "0");
 		PartitionNode p323 = new PartitionNode("p323", "0");
 		
-		category.addPartition(p1);
-		category.addPartition(p2);
-		category.addPartition(p3);
+		parameter.addPartition(p1);
+		parameter.addPartition(p2);
+		parameter.addPartition(p3);
 		p2.addPartition(p21);
 		p2.addPartition(p22);
 		p2.addPartition(p23);
@@ -178,19 +178,19 @@ public class ParameterNodeTest{
 		p32.addPartition(p322);
 		p32.addPartition(p323);
 		
-		assertTrue(category.getLeafPartitions().contains(p1));
-		assertTrue(category.getLeafPartitions().contains(p21));
-		assertTrue(category.getLeafPartitions().contains(p22));
-		assertTrue(category.getLeafPartitions().contains(p23));
-		assertTrue(category.getLeafPartitions().contains(p31));
-		assertTrue(category.getLeafPartitions().contains(p321));
-		assertTrue(category.getLeafPartitions().contains(p322));
-		assertTrue(category.getLeafPartitions().contains(p323));
-		assertTrue(category.getLeafPartitions().contains(p33));
+		assertTrue(parameter.getLeafPartitions().contains(p1));
+		assertTrue(parameter.getLeafPartitions().contains(p21));
+		assertTrue(parameter.getLeafPartitions().contains(p22));
+		assertTrue(parameter.getLeafPartitions().contains(p23));
+		assertTrue(parameter.getLeafPartitions().contains(p31));
+		assertTrue(parameter.getLeafPartitions().contains(p321));
+		assertTrue(parameter.getLeafPartitions().contains(p322));
+		assertTrue(parameter.getLeafPartitions().contains(p323));
+		assertTrue(parameter.getLeafPartitions().contains(p33));
 		
-		assertFalse(category.getLeafPartitions().contains(p2));
-		assertFalse(category.getLeafPartitions().contains(p3));
-		assertFalse(category.getLeafPartitions().contains(p32));
+		assertFalse(parameter.getLeafPartitions().contains(p2));
+		assertFalse(parameter.getLeafPartitions().contains(p3));
+		assertFalse(parameter.getLeafPartitions().contains(p32));
 	}
 	
 	@Test
@@ -245,7 +245,7 @@ public class ParameterNodeTest{
 	public void compareSmokeTest(){
 		for(String type : SUPPORTED_TYPES){
 			for(Boolean expected : new Boolean[]{true, false}){
-				ParameterNode c = new RandomModelGenerator().generateCategory(type, expected, 3, 3, 3);
+				ParameterNode c = new RandomModelGenerator().generateParameter(type, expected, 3, 3, 3);
 				
 				assertTrue(c.compare(c));
 			}

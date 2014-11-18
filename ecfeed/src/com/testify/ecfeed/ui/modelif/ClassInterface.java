@@ -151,7 +151,7 @@ public class ClassInterface extends GenericNodeInterface {
 		try{
 			ClassNode completeModel = builder.buildClassModel(JavaUtils.getQualifiedName(target), false);
 			for(MethodNode method : completeModel.getMethods()){
-				if(target.getMethod(method.getName(), method.getCategoriesTypes()) == null){
+				if(target.getMethod(method.getName(), method.getParametersTypes()) == null){
 					otherMethods.add(method);
 				}
 			}

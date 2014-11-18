@@ -13,9 +13,9 @@ package com.testify.ecfeed.model;
 
 import java.util.List;
 
-public class PartitionedCategoryStatement extends BasicStatement implements IRelationalStatement{
+public class PartitionedParameterStatement extends BasicStatement implements IRelationalStatement{
 
-	private ParameterNode fCategory;
+	private ParameterNode fParameter;
 	private EStatementRelation fRelation;
 	private ICondition fCondition;
 
@@ -24,7 +24,7 @@ public class PartitionedCategoryStatement extends BasicStatement implements IRel
 		public boolean evaluate(List<PartitionNode> values);
 		public boolean adapt(List<PartitionNode> values);
 		public ICondition getCopy();
-		public boolean updateReferences(ParameterNode category);
+		public boolean updateReferences(ParameterNode parameter);
 		public boolean compare(ICondition condition);
 		public Object accept(IStatementVisitor visitor) throws Exception;
 	}
@@ -42,7 +42,7 @@ public class PartitionedCategoryStatement extends BasicStatement implements IRel
 
 		@Override
 		public String toString(){
-			return fLabel + (fCategory.getAllPartitionNames().contains(fLabel)?"[label]":"");
+			return fLabel + (fParameter.getAllPartitionNames().contains(fLabel)?"[label]":"");
 		}
 
 		@Override
@@ -56,7 +56,7 @@ public class PartitionedCategoryStatement extends BasicStatement implements IRel
 		}
 
 		@Override
-		public boolean updateReferences(ParameterNode category){
+		public boolean updateReferences(ParameterNode parameter){
 			return true;
 		}
 
@@ -67,10 +67,10 @@ public class PartitionedCategoryStatement extends BasicStatement implements IRel
 
 		@Override
 		public boolean evaluate(List<PartitionNode> values){
-			if(getCategory().getMethod() == null){
+			if(getParameter().getMethod() == null){
 				return false;
 			}
-			int index = getCategory().getMethod().getCategories().indexOf(getCategory());
+			int index = getParameter().getMethod().getParameters().indexOf(getParameter());
 			boolean containsLabel = values.get(index).getAllLabels().contains(fLabel);
 
 			switch (getRelation()){
@@ -126,8 +126,8 @@ public class PartitionedCategoryStatement extends BasicStatement implements IRel
 		}
 
 		@Override
-		public boolean updateReferences(ParameterNode category){
-			PartitionNode condition = category.getPartition(fPartition.getQualifiedName());
+		public boolean updateReferences(ParameterNode parameter){
+			PartitionNode condition = parameter.getPartition(fPartition.getQualifiedName());
 			if(condition != null){
 				fPartition = condition;
 			}
@@ -144,7 +144,7 @@ public class PartitionedCategoryStatement extends BasicStatement implements IRel
 
 		@Override
 		public boolean evaluate(List<PartitionNode> values){
-			if(getCategory().getMethod() == null){
+			if(getParameter().getMethod() == null){
 				return false;
 			}
 
@@ -152,7 +152,7 @@ public class PartitionedCategoryStatement extends BasicStatement implements IRel
 				return true;
 			}
 
-			int index = getCategory().getMethod().getCategories().indexOf(getCategory());
+			int index = getParameter().getMethod().getParameters().indexOf(getParameter());
 
 			if(values.size() < index + 1){
 				return false;
@@ -189,32 +189,32 @@ public class PartitionedCategoryStatement extends BasicStatement implements IRel
 
 	}
 
-	public PartitionedCategoryStatement(ParameterNode category, EStatementRelation relation, String labelCondition){
-		fCategory = category;
+	public PartitionedParameterStatement(ParameterNode parameter, EStatementRelation relation, String labelCondition){
+		fParameter = parameter;
 		fRelation = relation;
 		fCondition = new LabelCondition(labelCondition);
 	}
 
-	public PartitionedCategoryStatement(ParameterNode category, EStatementRelation relation, PartitionNode partitionCondition){
-		fCategory = category;
+	public PartitionedParameterStatement(ParameterNode parameter, EStatementRelation relation, PartitionNode partitionCondition){
+		fParameter = parameter;
 		fRelation = relation;
 		fCondition = new PartitionCondition(partitionCondition);
 	}
 
-	private PartitionedCategoryStatement(ParameterNode category, EStatementRelation relation, ICondition condition){
-		fCategory = category;
+	private PartitionedParameterStatement(ParameterNode parameter, EStatementRelation relation, ICondition condition){
+		fParameter = parameter;
 		fRelation = relation;
 		fCondition = condition;
 	}
 
 	@Override
-	public boolean mentions(ParameterNode category){
-		return getCategory() == category;
+	public boolean mentions(ParameterNode parameter){
+		return getParameter() == parameter;
 	}
 
 	@Override
-	public boolean mentions(ParameterNode category, String label) {
-		return getCategory() == category && getConditionValue().equals(label);
+	public boolean mentions(ParameterNode parameter, String label) {
+		return getParameter() == parameter && getConditionValue().equals(label);
 	}
 
 	@Override
@@ -229,7 +229,7 @@ public class PartitionedCategoryStatement extends BasicStatement implements IRel
 
 	@Override
 	public String getLeftOperandName() {
-		return getCategory().getName();
+		return getParameter().getName();
 	}
 
 	@Override
@@ -243,24 +243,24 @@ public class PartitionedCategoryStatement extends BasicStatement implements IRel
 	}
 
 	@Override
-	public PartitionedCategoryStatement getCopy(){
-		return new PartitionedCategoryStatement(fCategory, fRelation, fCondition.getCopy());
+	public PartitionedParameterStatement getCopy(){
+		return new PartitionedParameterStatement(fParameter, fRelation, fCondition.getCopy());
 	}
 
 	@Override
 	public boolean updateReferences(MethodNode method){
-		ParameterNode category = method.getCategory(fCategory.getName());
-		if(category != null && !category.isExpected()){
-			if(fCondition.updateReferences(category)){
-				fCategory = category;
+		ParameterNode parameter = method.getParameter(fParameter.getName());
+		if(parameter != null && !parameter.isExpected()){
+			if(fCondition.updateReferences(parameter)){
+				fParameter = parameter;
 				return true;
 			}
 		}
 		return false;
 	}
 
-	public ParameterNode getCategory(){
-		return fCategory;
+	public ParameterNode getParameter(){
+		return fParameter;
 	}
 
 	@Override
@@ -285,7 +285,7 @@ public class PartitionedCategoryStatement extends BasicStatement implements IRel
 		fCondition = new PartitionCondition(partition);
 	}
 
-	public void setCondition(ParameterNode category, PartitionNode partition){
+	public void setCondition(ParameterNode parameter, PartitionNode partition){
 		fCondition = new PartitionCondition(partition);
 	}
 
@@ -303,13 +303,13 @@ public class PartitionedCategoryStatement extends BasicStatement implements IRel
 
 	@Override
 	public boolean compare(IStatement statement){
-		if(statement instanceof PartitionedCategoryStatement == false){
+		if(statement instanceof PartitionedParameterStatement == false){
 			return false;
 		}
 
-		PartitionedCategoryStatement compared = (PartitionedCategoryStatement)statement;
+		PartitionedParameterStatement compared = (PartitionedParameterStatement)statement;
 
-		if(getCategory().getName().equals(compared.getCategory().getName()) == false){
+		if(getParameter().getName().equals(compared.getParameter().getName()) == false){
 			return false;
 		}
 

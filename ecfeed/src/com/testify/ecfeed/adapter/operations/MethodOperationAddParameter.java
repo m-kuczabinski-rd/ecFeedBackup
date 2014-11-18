@@ -24,7 +24,7 @@ public class MethodOperationAddParameter extends AbstractModelOperation {
 
 		@Override
 		public void execute() throws ModelOperationException {
-			fTarget.removeCategory(fParameter);
+			fTarget.removeParameter(fParameter);
 			fTarget.replaceTestCases(fRemovedTestCases);
 			markModelUpdated();
 		}
@@ -52,18 +52,18 @@ public class MethodOperationAddParameter extends AbstractModelOperation {
 	@Override
 	public void execute() throws ModelOperationException {
 		if(fNewIndex == -1){
-			fNewIndex = fTarget.getCategories().size();
+			fNewIndex = fTarget.getParameters().size();
 		}
 		String parameterName = fParameter.getName();
-		if(fTarget.getCategory(parameterName) != null){
+		if(fTarget.getParameter(parameterName) != null){
 			throw new ModelOperationException(Messages.CATEGORY_NAME_DUPLICATE_PROBLEM);
 		}
-		List<String> types = fTarget.getCategoriesTypes();
+		List<String> types = fTarget.getParametersTypes();
 		types.add(fParameter.getType());
 		if(fTarget.getClassNode().getMethod(fTarget.getName(), types) != null){
 			throw new ModelOperationException(Messages.METHOD_SIGNATURE_DUPLICATE_PROBLEM);
 		}
-		fTarget.addCategory(fParameter, fNewIndex);
+		fTarget.addParameter(fParameter, fNewIndex);
 		fTarget.removeTestCases();
 		markModelUpdated();
 	}

@@ -102,13 +102,13 @@ public class ChoicesViewer extends TableViewerSection {
 		@Override
 		protected CellEditor getCellEditor(Object element) {
 			PartitionNode node = (PartitionNode)element;
-			ParameterNode parameter = node.getCategory();
-			if(ParameterInterface.hasLimitedValuesSet(node.getCategory())){
+			ParameterNode parameter = node.getParameter();
+			if(ParameterInterface.hasLimitedValuesSet(node.getParameter())){
 				fCellEditor.setActivationStyle(ComboBoxCellEditor.DROP_DOWN_ON_KEY_ACTIVATION);
 			} else {
 				fCellEditor.setActivationStyle(SWT.NONE);
 			}
-			List<String> items = ParameterInterface.getSpecialValues(node.getCategory().getType());
+			List<String> items = ParameterInterface.getSpecialValues(node.getParameter().getType());
 			if(JavaUtils.isUserType(parameter.getType())){
 				Set<String> usedValues = parameter.getLeafPartitionValues();
 				usedValues.removeAll(items);
@@ -118,7 +118,7 @@ public class ChoicesViewer extends TableViewerSection {
 				items.add(node.getValueString());
 			}
 			fCellEditor.setInput(items);
-			fCellEditor.getViewer().getCCombo().setEditable(ParameterInterface.isBoolean(node.getCategory().getType()) == false);
+			fCellEditor.getViewer().getCCombo().setEditable(ParameterInterface.isBoolean(node.getParameter().getType()) == false);
 			return fCellEditor;
 		}
 

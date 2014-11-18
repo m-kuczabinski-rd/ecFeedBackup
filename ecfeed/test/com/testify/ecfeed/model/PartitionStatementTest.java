@@ -26,13 +26,13 @@ import org.junit.Test;
 import com.testify.ecfeed.model.ParameterNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
-import com.testify.ecfeed.model.PartitionedCategoryStatement;
+import com.testify.ecfeed.model.PartitionedParameterStatement;
 import com.testify.ecfeed.model.EStatementRelation;
 
 public class PartitionStatementTest {
 
 	private static MethodNode fMethod;
-	private static ParameterNode fCategory;
+	private static ParameterNode fParameter;
 	private static PartitionNode fPartition1;
 	private static PartitionNode fPartition2;
 	private static PartitionNode fPartition3;
@@ -78,16 +78,16 @@ public class PartitionStatementTest {
 		fP3.addPartition(fP32);
 		fP3.addPartition(fP33);
 
-		fCategory.addPartition(fP1);
-		fCategory.addPartition(fP2);
-		fCategory.addPartition(fP3);
+		fParameter.addPartition(fP1);
+		fParameter.addPartition(fP2);
+		fParameter.addPartition(fP3);
 		
-		fMethod.addCategory(fCategory);
+		fMethod.addParameter(fParameter);
 	}
 
 	@Test
 	public void equalsTest(){
-		PartitionedCategoryStatement statement = new PartitionedCategoryStatement(fCategory, EStatementRelation.EQUAL, fP22);
+		PartitionedParameterStatement statement = new PartitionedParameterStatement(fParameter, EStatementRelation.EQUAL, fP22);
 		
 		assertTrue(statement.evaluate(Arrays.asList(new PartitionNode[]{fP221})));
 		assertTrue(statement.evaluate(Arrays.asList(new PartitionNode[]{fP222})));
@@ -102,7 +102,7 @@ public class PartitionStatementTest {
 
 	@Test 
 	public void notEqualsTest(){
-		PartitionedCategoryStatement statement = new PartitionedCategoryStatement(fCategory, EStatementRelation.NOT, fP22);
+		PartitionedParameterStatement statement = new PartitionedParameterStatement(fParameter, EStatementRelation.NOT, fP22);
 		
 		assertFalse(statement.evaluate(Arrays.asList(new PartitionNode[]{fP221})));
 		assertFalse(statement.evaluate(Arrays.asList(new PartitionNode[]{fP222})));
@@ -118,14 +118,14 @@ public class PartitionStatementTest {
 	@BeforeClass
 	public static void prepareModel(){
 		fMethod = new MethodNode("method");
-		fCategory = new ParameterNode("category", "type", "0", false);
+		fParameter = new ParameterNode("parameter", "type", "0", false);
 		fPartition1 = new PartitionNode("partition1", null);
 		fPartition2 = new PartitionNode("partition2", null);
 		fPartition3 = new PartitionNode("partition3", null);
-		fCategory.addPartition(fPartition1);
-		fCategory.addPartition(fPartition2);
-		fCategory.addPartition(fPartition3);
-		fMethod.addCategory(fCategory);
+		fParameter.addPartition(fPartition1);
+		fParameter.addPartition(fPartition2);
+		fParameter.addPartition(fPartition3);
+		fMethod.addParameter(fParameter);
 		
 		fList1 = new ArrayList<PartitionNode>();
 		fList1.add(fPartition1);
@@ -139,12 +139,12 @@ public class PartitionStatementTest {
 	@Test
 	public void testEvaluate() {
 
-		PartitionedCategoryStatement statement1 = new PartitionedCategoryStatement(fCategory, EStatementRelation.EQUAL, fPartition2);
+		PartitionedParameterStatement statement1 = new PartitionedParameterStatement(fParameter, EStatementRelation.EQUAL, fPartition2);
 		assertFalse(statement1.evaluate(fList1));
 		assertTrue(statement1.evaluate(fList2));
 		assertFalse(statement1.evaluate(fList3));
 
-		PartitionedCategoryStatement statement4 = new PartitionedCategoryStatement(fCategory, EStatementRelation.NOT, fPartition2);
+		PartitionedParameterStatement statement4 = new PartitionedParameterStatement(fParameter, EStatementRelation.NOT, fPartition2);
 		assertTrue(statement4.evaluate(fList1));
 		assertFalse(statement4.evaluate(fList2));
 		assertTrue(statement4.evaluate(fList3));
@@ -152,28 +152,28 @@ public class PartitionStatementTest {
 
 	@Test
 	public void testMentionsPartitionNode() {
-		PartitionedCategoryStatement statement = new PartitionedCategoryStatement(fCategory, EStatementRelation.EQUAL, fPartition2);
+		PartitionedParameterStatement statement = new PartitionedParameterStatement(fParameter, EStatementRelation.EQUAL, fPartition2);
 		assertTrue(statement.mentions(fPartition2));
 		assertFalse(statement.mentions(fPartition1));
 	}
 
 	@Test
-	public void testMentionsCategoryNode() {
-		PartitionedCategoryStatement statement = new PartitionedCategoryStatement(fCategory, EStatementRelation.EQUAL, fPartition2);
-		ParameterNode category = new ParameterNode("name", "type", "0", false);
-		assertTrue(statement.mentions(fCategory));
-		assertFalse(statement.mentions(category));
+	public void testMentionsParameterNode() {
+		PartitionedParameterStatement statement = new PartitionedParameterStatement(fParameter, EStatementRelation.EQUAL, fPartition2);
+		ParameterNode parameter = new ParameterNode("name", "type", "0", false);
+		assertTrue(statement.mentions(fParameter));
+		assertFalse(statement.mentions(parameter));
 	}
 
 	@Test
 	public void testGetCondition() {
-		PartitionedCategoryStatement statement = new PartitionedCategoryStatement(fCategory, EStatementRelation.EQUAL, fPartition2);
+		PartitionedParameterStatement statement = new PartitionedParameterStatement(fParameter, EStatementRelation.EQUAL, fPartition2);
 		assertEquals(fPartition2, statement.getConditionValue());
 	}
 
 	@Test
 	public void testGetRelation() {
-		PartitionedCategoryStatement statement = new PartitionedCategoryStatement(fCategory, EStatementRelation.EQUAL, fPartition2);
+		PartitionedParameterStatement statement = new PartitionedParameterStatement(fParameter, EStatementRelation.EQUAL, fPartition2);
 		assertEquals(EStatementRelation.EQUAL, statement.getRelation());
 	}
 
@@ -185,8 +185,8 @@ public class PartitionStatementTest {
 		PartitionNode p1 = new PartitionNode("name", "value");
 		PartitionNode p2 = new PartitionNode("name", "value");
 		
-		PartitionedCategoryStatement s1 = new PartitionedCategoryStatement(c1, EStatementRelation.NOT, p1);
-		PartitionedCategoryStatement s2 = new PartitionedCategoryStatement(c2, EStatementRelation.NOT, p2);
+		PartitionedParameterStatement s1 = new PartitionedParameterStatement(c1, EStatementRelation.NOT, p1);
+		PartitionedParameterStatement s2 = new PartitionedParameterStatement(c2, EStatementRelation.NOT, p2);
 		
 		assertTrue(s1.compare(s2));
 		c1.setName("c1");

@@ -28,9 +28,9 @@ public class PartitionNode extends PartitionedNode{
 	}
 
 	@Override
-	public ParameterNode getCategory() {
+	public ParameterNode getParameter() {
 		if(fParent != null){
-			return fParent.getCategory();
+			return fParent.getParameter();
 		}
 		return null;
 	}
@@ -170,7 +170,7 @@ public class PartitionNode extends PartitionedNode{
 	}
 
 	private PartitionNode parentPartition(){
-		if(fParent != null && fParent != getCategory()){
+		if(fParent != null && fParent != getParameter()){
 			return (PartitionNode)fParent;
 		}
 		return null;

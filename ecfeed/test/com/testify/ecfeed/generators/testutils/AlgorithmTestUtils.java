@@ -14,8 +14,8 @@ public class AlgorithmTestUtils {
 		while (tuples.hasNext()) {
 			long combinations = 1;
 			List<List<String>> tuple = tuples.next();
-			for (List<String> category : tuple) {
-				combinations *= category.size();
+			for (List<String> parameter : tuple) {
+				combinations *= parameter.size();
 			}
 			totalWork += combinations;
 		}

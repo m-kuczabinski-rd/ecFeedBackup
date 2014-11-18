@@ -50,23 +50,23 @@ public class JavaModelBuilder {
 		Annotation[][] annotations = method.getParameterAnnotations();
 		for(int i = 0; i < parameterTypes.length; i++){
 			String name = "arg" + i;
-			methodNode.addCategory(buildCategoryModel(name, parameterTypes[i], isExpected(annotations[i])));
+			methodNode.addParameter(buildParameterModel(name, parameterTypes[i], isExpected(annotations[i])));
 		}
 		return methodNode;
 	}
 	
-	public ParameterNode buildCategoryModel(String name, Class<?>type, boolean expected){
+	public ParameterNode buildParameterModel(String name, Class<?>type, boolean expected){
 		String typeName = JavaUtils.getTypeName(type.getName());
 		String defaultValue = getDefaultExpectedValueString(typeName);
-		ParameterNode category = new ParameterNode(name, typeName, defaultValue, expected);
-		category.setDefaultValueString(getDefaultExpectedValueString(typeName));
+		ParameterNode parameter = new ParameterNode(name, typeName, defaultValue, expected);
+		parameter.setDefaultValueString(getDefaultExpectedValueString(typeName));
 		if(!expected){
 			List<PartitionNode> defaultPartitions = getDefaultPartitions(typeName);
 			for(PartitionNode partition : defaultPartitions){
-				category.addPartition(partition);
+				parameter.addPartition(partition);
 			}
 		}
-		return category;
+		return parameter;
 	}
 
 	public List<PartitionNode> getDefaultPartitions(String typeSignature) {

@@ -89,8 +89,8 @@ public class ParameterInterface extends PartitionedNodeInterface {
 		return !isPrimitive(type) || isBoolean(type);
 	}
 
-	public static boolean hasLimitedValuesSet(ParameterNode category) {
-		return hasLimitedValuesSet(category.getType());
+	public static boolean hasLimitedValuesSet(ParameterNode parameter) {
+		return hasLimitedValuesSet(parameter.getType());
 	}
 
 	public static boolean isPrimitive(String type) {

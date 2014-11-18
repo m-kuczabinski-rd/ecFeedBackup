@@ -97,7 +97,7 @@ public class PartitionDetailsPage extends BasicDetailsPage {
 	}
 
 	private void refreshValueEditor() {
-		String type = fPartitionIf.getCategory().getType();
+		String type = fPartitionIf.getParameter().getType();
 		if(fValueCombo != null && fValueCombo.isDisposed() == false){
 			fValueCombo.dispose();
 		}
@@ -109,7 +109,7 @@ public class PartitionDetailsPage extends BasicDetailsPage {
 		fValueCombo.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
 		Set<String> items = new LinkedHashSet<String>(ParameterInterface.getSpecialValues(type));
 		if(JavaUtils.isUserType(type)){
-			Set<String> usedValues = fPartitionIf.getCategory().getLeafPartitionValues();
+			Set<String> usedValues = fPartitionIf.getParameter().getLeafPartitionValues();
 			usedValues.removeAll(items);
 			items.addAll(usedValues);
 		}

@@ -13,8 +13,8 @@ public class AddChildTest {
 //		RandomModelGenerator modelGenerator = new RandomModelGenerator();
 //		GenericNode node = modelGenerator.generateNode(parentType);
 //		//special case - expected parameters of primitive type are not enabled 
-//		if(node instanceof CategoryNode){
-//			if(((CategoryNode)node).isExpected() && JavaUtils.isPrimitive(((CategoryNode) node).getType())){
+//		if(node instanceof ParameterNode){
+//			if(((ParameterNode)node).isExpected() && JavaUtils.isPrimitive(((ParameterNode) node).getType())){
 //				enabled = false;
 //			}
 //			else{

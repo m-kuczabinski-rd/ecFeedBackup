@@ -97,14 +97,14 @@ public class OnlineRunner extends AbstractJUnitRunner {
 
 	protected List<List<PartitionNode>> getInput(MethodNode methodModel) {
 		List<List<PartitionNode>> result = new ArrayList<List<PartitionNode>>();
-		for(ParameterNode category : methodModel.getCategories()){
-			if(category.isExpected()){
-				PartitionNode choice = new PartitionNode("expected", category.getDefaultValue());
-				choice.setParent(category);
+		for(ParameterNode parameter : methodModel.getParameters()){
+			if(parameter.isExpected()){
+				PartitionNode choice = new PartitionNode("expected", parameter.getDefaultValue());
+				choice.setParent(parameter);
 				result.add(Arrays.asList(new PartitionNode[]{choice}));
 			}
 			else{
-				result.add(category.getLeafPartitions());
+				result.add(parameter.getLeafPartitions());
 			}
 		}
 		return result;

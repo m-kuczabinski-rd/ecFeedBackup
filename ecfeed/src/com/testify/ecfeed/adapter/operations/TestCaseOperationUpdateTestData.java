@@ -22,7 +22,7 @@ public class TestCaseOperationUpdateTestData extends AbstractModelOperation {
 
 	@Override
 	public void execute() throws ModelOperationException {
-		if(fNewValue.getCategory() != fTarget.getTestData().get(fIndex).getCategory()){
+		if(fNewValue.getParameter() != fTarget.getTestData().get(fIndex).getParameter()){
 			throw new ModelOperationException(Messages.TEST_DATA_CATEGORY_MISMATCH_PROBLEM);
 		}
 		fTarget.getTestData().set(fIndex, fNewValue);

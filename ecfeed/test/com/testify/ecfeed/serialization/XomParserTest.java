@@ -33,7 +33,7 @@ import com.testify.ecfeed.model.ExpectedValueStatement;
 import com.testify.ecfeed.model.GenericNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
-import com.testify.ecfeed.model.PartitionedCategoryStatement;
+import com.testify.ecfeed.model.PartitionedParameterStatement;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.StatementArray;
 import com.testify.ecfeed.model.StaticStatement;
@@ -97,14 +97,14 @@ public class XomParserTest {
 	}
 	
 	@Test
-	public void parseCategoryTest(){
+	public void parseParameterTest(){
 		for(String type : SUPPORTED_TYPES){
 			try{
 			for(boolean expected : new Boolean[]{true, false}){
-				ParameterNode c = fModelGenerator.generateCategory(type, expected, 3, 3, 3);
+				ParameterNode c = fModelGenerator.generateParameter(type, expected, 3, 3, 3);
 				Element element = (Element)c.accept(fConverter);
 				TRACE(element);
-					ParameterNode c1 = fParser.parseCategory(element); 
+					ParameterNode c1 = fParser.parseParameter(element); 
 					assertElementsEqual(c, c1);
 				}
 			}
@@ -190,10 +190,10 @@ public class XomParserTest {
 		for(int i = 0; i < 10; i++){
 			try{
 				MethodNode m = fModelGenerator.generateMethod(5, 0, 0);
-				PartitionedCategoryStatement s = fModelGenerator.generatePartitionedStatement(m);
+				PartitionedParameterStatement s = fModelGenerator.generatePartitionedStatement(m);
 				Element element = (Element)s.accept(fConverter);
 				TRACE(element);
-				PartitionedCategoryStatement parsedS = null;
+				PartitionedParameterStatement parsedS = null;
 				switch(element.getLocalName()){
 				case Constants.CONSTRAINT_LABEL_STATEMENT_NODE_NAME:
 					parsedS = fParser.parseLabelStatement(element, m);

@@ -25,7 +25,7 @@ import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.EStatementOperator;
 import com.testify.ecfeed.model.PartitionNode;
 import com.testify.ecfeed.model.ParameterNode;
-import com.testify.ecfeed.model.PartitionedCategoryStatement;
+import com.testify.ecfeed.model.PartitionedParameterStatement;
 import com.testify.ecfeed.model.EStatementRelation;
 import com.testify.ecfeed.model.StatementArray;
 import com.testify.ecfeed.model.StaticStatement;
@@ -33,11 +33,11 @@ import com.testify.ecfeed.model.StaticStatement;
 public class StatementArrayTest {
 
 	private static MethodNode fMethod;
-	private static ParameterNode fCategory1;
+	private static ParameterNode fParameter1;
 	private static PartitionNode fPartition11;
 	private static PartitionNode fPartition12;
 	private static PartitionNode fPartition13;
-	private static ParameterNode fCategory2;
+	private static ParameterNode fParameter2;
 	private static PartitionNode fPartition21;
 	private static PartitionNode fPartition22;
 	private static PartitionNode fPartition23;
@@ -45,22 +45,22 @@ public class StatementArrayTest {
 	@BeforeClass
 	public static void prepareModel(){
 		fMethod = new MethodNode("method");
-		fCategory1 = new ParameterNode("category", "type", "0", false);
+		fParameter1 = new ParameterNode("parameter", "type", "0", false);
 		fPartition11 = new PartitionNode("partition11", null);
 		fPartition12 = new PartitionNode("partition12", null);
 		fPartition13 = new PartitionNode("partition13", null);
-		fCategory1.addPartition(fPartition11);
-		fCategory1.addPartition(fPartition12);
-		fCategory1.addPartition(fPartition13);
-		fCategory2 = new ParameterNode("category", "type", "0", false);
+		fParameter1.addPartition(fPartition11);
+		fParameter1.addPartition(fPartition12);
+		fParameter1.addPartition(fPartition13);
+		fParameter2 = new ParameterNode("parameter", "type", "0", false);
 		fPartition21 = new PartitionNode("partition21", null);
 		fPartition22 = new PartitionNode("partition22", null);
 		fPartition23 = new PartitionNode("partition23", null);
-		fCategory2.addPartition(fPartition21);
-		fCategory2.addPartition(fPartition22);
-		fCategory2.addPartition(fPartition23);
-		fMethod.addCategory(fCategory1);
-		fMethod.addCategory(fCategory2);
+		fParameter2.addPartition(fPartition21);
+		fParameter2.addPartition(fPartition22);
+		fParameter2.addPartition(fPartition23);
+		fMethod.addParameter(fParameter1);
+		fMethod.addParameter(fParameter2);
 	}
 	
 
@@ -68,8 +68,8 @@ public class StatementArrayTest {
 	public void testEvaluate() {
 		StatementArray arrayOr = new StatementArray(EStatementOperator.OR);
 		StatementArray arrayAnd = new StatementArray(EStatementOperator.AND);
-		PartitionedCategoryStatement statement1 = new PartitionedCategoryStatement(fCategory1, EStatementRelation.EQUAL, fPartition11);
-		PartitionedCategoryStatement statement2 = new PartitionedCategoryStatement(fCategory2, EStatementRelation.EQUAL, fPartition21);
+		PartitionedParameterStatement statement1 = new PartitionedParameterStatement(fParameter1, EStatementRelation.EQUAL, fPartition11);
+		PartitionedParameterStatement statement2 = new PartitionedParameterStatement(fParameter2, EStatementRelation.EQUAL, fPartition21);
 		arrayOr.addStatement(statement1);
 		arrayOr.addStatement(statement2);
 		arrayAnd.addStatement(statement1);
@@ -97,9 +97,9 @@ public class StatementArrayTest {
 	@Test
 	public void testGetChildren() {
 		StatementArray array = new StatementArray(EStatementOperator.OR);
-		PartitionedCategoryStatement statement1 = new PartitionedCategoryStatement(fCategory1, EStatementRelation.EQUAL, fPartition11);
-		PartitionedCategoryStatement statement2 = new PartitionedCategoryStatement(fCategory2, EStatementRelation.EQUAL, fPartition21);
-		PartitionedCategoryStatement statement3 = new PartitionedCategoryStatement(fCategory2, EStatementRelation.EQUAL, fPartition21);
+		PartitionedParameterStatement statement1 = new PartitionedParameterStatement(fParameter1, EStatementRelation.EQUAL, fPartition11);
+		PartitionedParameterStatement statement2 = new PartitionedParameterStatement(fParameter2, EStatementRelation.EQUAL, fPartition21);
+		PartitionedParameterStatement statement3 = new PartitionedParameterStatement(fParameter2, EStatementRelation.EQUAL, fPartition21);
 		array.addStatement(statement1);
 		array.addStatement(statement2);
 		
@@ -112,8 +112,8 @@ public class StatementArrayTest {
 	@Test
 	public void testMentionsPartitionNode() {
 		StatementArray array = new StatementArray(EStatementOperator.OR);
-		PartitionedCategoryStatement statement1 = new PartitionedCategoryStatement(fCategory1, EStatementRelation.EQUAL, fPartition11);
-		PartitionedCategoryStatement statement2 = new PartitionedCategoryStatement(fCategory2, EStatementRelation.EQUAL, fPartition21);
+		PartitionedParameterStatement statement1 = new PartitionedParameterStatement(fParameter1, EStatementRelation.EQUAL, fPartition11);
+		PartitionedParameterStatement statement2 = new PartitionedParameterStatement(fParameter2, EStatementRelation.EQUAL, fPartition21);
 		array.addStatement(statement1);
 		array.addStatement(statement2);
 		assertTrue(array.mentions(fPartition11));
@@ -121,19 +121,19 @@ public class StatementArrayTest {
 	}
 
 	@Test
-	public void testMentionsCategoryNode() {
+	public void testMentionsParameterNode() {
 		StatementArray array = new StatementArray(EStatementOperator.OR);
-		PartitionedCategoryStatement statement1 = new PartitionedCategoryStatement(fCategory1, EStatementRelation.EQUAL, fPartition11);
+		PartitionedParameterStatement statement1 = new PartitionedParameterStatement(fParameter1, EStatementRelation.EQUAL, fPartition11);
 		array.addStatement(statement1);
-		assertTrue(array.mentions(fPartition11.getCategory()));
-		assertFalse(array.mentions(fPartition21.getCategory()));
+		assertTrue(array.mentions(fPartition11.getParameter()));
+		assertFalse(array.mentions(fPartition21.getParameter()));
 	}
 
 	@Test
 	public void testSetOperator() {
 		StatementArray array = new StatementArray(EStatementOperator.OR);
-		PartitionedCategoryStatement statement1 = new PartitionedCategoryStatement(fCategory1, EStatementRelation.EQUAL, fPartition11);
-		PartitionedCategoryStatement statement2 = new PartitionedCategoryStatement(fCategory2, EStatementRelation.EQUAL, fPartition21);
+		PartitionedParameterStatement statement1 = new PartitionedParameterStatement(fParameter1, EStatementRelation.EQUAL, fPartition11);
+		PartitionedParameterStatement statement2 = new PartitionedParameterStatement(fParameter2, EStatementRelation.EQUAL, fPartition21);
 		array.addStatement(statement1);
 		array.addStatement(statement2);
 		assertEquals(EStatementOperator.OR, array.getOperator());
@@ -148,9 +148,9 @@ public class StatementArrayTest {
 	@Test
 	public void testReplaceChild() {
 		StatementArray array = new StatementArray(EStatementOperator.OR);
-		PartitionedCategoryStatement statement1 = new PartitionedCategoryStatement(fCategory1, EStatementRelation.EQUAL, fPartition11);
-		PartitionedCategoryStatement statement2 = new PartitionedCategoryStatement(fCategory1, EStatementRelation.EQUAL, fPartition12);
-		PartitionedCategoryStatement statement3 = new PartitionedCategoryStatement(fCategory1, EStatementRelation.EQUAL, fPartition13);
+		PartitionedParameterStatement statement1 = new PartitionedParameterStatement(fParameter1, EStatementRelation.EQUAL, fPartition11);
+		PartitionedParameterStatement statement2 = new PartitionedParameterStatement(fParameter1, EStatementRelation.EQUAL, fPartition12);
+		PartitionedParameterStatement statement3 = new PartitionedParameterStatement(fParameter1, EStatementRelation.EQUAL, fPartition13);
 		array.addStatement(statement1);
 		array.addStatement(statement2);
 		assertEquals(2, array.getChildren().size());
@@ -168,8 +168,8 @@ public class StatementArrayTest {
 	@Test
 	public void testRemoveChild() {
 		StatementArray array = new StatementArray(EStatementOperator.OR);
-		PartitionedCategoryStatement statement1 = new PartitionedCategoryStatement(fCategory1, EStatementRelation.EQUAL, fPartition11);
-		PartitionedCategoryStatement statement2 = new PartitionedCategoryStatement(fCategory1, EStatementRelation.EQUAL, fPartition12);
+		PartitionedParameterStatement statement1 = new PartitionedParameterStatement(fParameter1, EStatementRelation.EQUAL, fPartition11);
+		PartitionedParameterStatement statement2 = new PartitionedParameterStatement(fParameter1, EStatementRelation.EQUAL, fPartition12);
 		array.addStatement(statement1);
 		array.addStatement(statement2);
 		assertEquals(2, array.getChildren().size());

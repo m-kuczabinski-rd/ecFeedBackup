@@ -77,7 +77,7 @@ public class EclipseModelImplementer extends AbstractModelImplementer {
 
 	@Override
 	protected boolean implement(PartitionNode node) throws CoreException{
-		ParameterNode parameter = node.getCategory();
+		ParameterNode parameter = node.getParameter();
 		if(parameterDefinitionImplemented(parameter) == false){
 			if(parameterDefinitionImplementable(parameter)){
 				implementParameterDefinition(parameter, new HashSet<String>(Arrays.asList(new String[]{node.getValueString()})));
@@ -117,7 +117,7 @@ public class EclipseModelImplementer extends AbstractModelImplementer {
 		IType classType = getJavaProject().findType(JavaUtils.getQualifiedName(node.getClassNode()));
 		if(classType != null){
 			classType.createMethod(methodDefinitionContent(node), null, false, null);
-			for(ParameterNode parameter : node.getCategories()){
+			for(ParameterNode parameter : node.getParameters()){
 				String type = parameter.getType();
 				if(JavaUtils.isUserType(type)){
 					String packageName = JavaUtils.getPackageName(type);
@@ -194,7 +194,7 @@ public class EclipseModelImplementer extends AbstractModelImplementer {
 	@Override
 	protected boolean implementable(MethodNode node){
 		if(methodDefinitionImplemented(node)){
-			return hasImplementableNode(node.getCategories()) || hasImplementableNode(node.getTestCases());
+			return hasImplementableNode(node.getParameters()) || hasImplementableNode(node.getTestCases());
 		}
 		return methodDefinitionImplementable(node);
 	}
@@ -212,9 +212,9 @@ public class EclipseModelImplementer extends AbstractModelImplementer {
 		if(node.isAbstract()){
 			return hasImplementableNode(node.getPartitions());
 		}
-		if(parameterDefinitionImplemented(node.getCategory())){
+		if(parameterDefinitionImplemented(node.getParameter())){
 			try{
-				IType type = getJavaProject().findType(node.getCategory().getType());
+				IType type = getJavaProject().findType(node.getParameter().getType());
 				if(type.isEnum() == false){
 					return false;
 				}
@@ -238,7 +238,7 @@ public class EclipseModelImplementer extends AbstractModelImplementer {
 			}
 		}
 		else{
-			if(parameterDefinitionImplementable(node.getCategory()) == false){
+			if(parameterDefinitionImplementable(node.getParameter()) == false){
 				return false;
 			}
 		}
@@ -265,7 +265,7 @@ public class EclipseModelImplementer extends AbstractModelImplementer {
 			EclipseModelBuilder builder = new EclipseModelBuilder();
 			for(IMethod method : type.getMethods()){
 				MethodNode model = builder.buildMethodModel(method);
-				if(model != null && model.getName().equals(node.getName()) && model.getCategoriesTypes().equals(node.getCategoriesTypes())){
+				if(model != null && model.getName().equals(node.getName()) && model.getParametersTypes().equals(node.getParametersTypes())){
 					return true;
 				}
 			}
@@ -291,13 +291,13 @@ public class EclipseModelImplementer extends AbstractModelImplementer {
 		String comment = "// TODO Auto-generated method stub";
 		String content = "System.out.println(\"" + node.getName() + "(";
 
-		if(node.getCategories().size() > 0){
+		if(node.getParameters().size() > 0){
 			content +=  "\" + ";
-			for(int i = 0; i < node.getCategories().size(); ++i){
-				ParameterNode parameter = node.getCategories().get(i);
+			for(int i = 0; i < node.getParameters().size(); ++i){
+				ParameterNode parameter = node.getParameters().get(i);
 				args += JavaUtils.getLocalName(parameter.getType()) + " " + parameter.getName();
-				content += node.getCategories().get(i).getName();
-				if(i != node.getCategories().size() - 1){
+				content += node.getParameters().get(i).getName();
+				if(i != node.getParameters().size() - 1){
 					args += ", ";
 					content += " + \", \"";
 				}
@@ -335,7 +335,7 @@ public class EclipseModelImplementer extends AbstractModelImplementer {
 			if(type != null){
 				for(IMethod method : type.getMethods()){
 					MethodNode model = builder.buildMethodModel(method);
-					if(model.getName().equals(node.getName()) && model.getCategoriesTypes().equals(node.getCategoriesTypes())){
+					if(model.getName().equals(node.getName()) && model.getParametersTypes().equals(node.getParametersTypes())){
 						return hasImplementableNode(node.getChildren());
 					}
 				}
@@ -477,9 +477,9 @@ public class EclipseModelImplementer extends AbstractModelImplementer {
 		if(nodes.size() == 0){
 			return null;
 		}
-		ParameterNode parameter = nodes.get(0).getCategory();
+		ParameterNode parameter = nodes.get(0).getParameter();
 		for(PartitionNode node : nodes){
-			if(node.getCategory() != parameter){
+			if(node.getParameter() != parameter){
 				return null;
 			}
 		}

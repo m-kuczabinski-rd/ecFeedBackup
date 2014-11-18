@@ -26,7 +26,7 @@ public class PartitionOperationSetValue extends AbstractModelOperation {
 		@Override
 		public void execute() throws ModelOperationException {
 			fTarget.setValueString(fOriginalValue);
-			fTarget.getCategory().setDefaultValueString(fOriginalDefaultValue);
+			fTarget.getParameter().setDefaultValueString(fOriginalDefaultValue);
 			markModelUpdated();
 		}
 
@@ -41,21 +41,21 @@ public class PartitionOperationSetValue extends AbstractModelOperation {
 		fTarget = target;
 		fNewValue = newValue;
 		fOriginalValue = fTarget.getValueString();
-		fOriginalDefaultValue = fTarget.getCategory().getDefaultValue();
+		fOriginalDefaultValue = fTarget.getParameter().getDefaultValue();
 		
 		fAdapterProvider = adapterProvider;
 	}
 	
 	@Override
 	public void execute() throws ModelOperationException {
-		if(validatePartitionValue(fTarget.getCategory().getType(), fNewValue) == false){
+		if(validatePartitionValue(fTarget.getParameter().getType(), fNewValue) == false){
 			throw new ModelOperationException(Messages.PARTITION_VALUE_PROBLEM(fNewValue));
 		}
 		fTarget.setValueString(fNewValue);
-		ParameterNode category = fTarget.getCategory();
-		if(category != null && JavaUtils.isUserType(category.getType())){
-			if(category.getLeafPartitionValues().contains(fOriginalDefaultValue) == false){
-				category.setDefaultValueString(fNewValue);
+		ParameterNode parameter = fTarget.getParameter();
+		if(parameter != null && JavaUtils.isUserType(parameter.getType())){
+			if(parameter.getLeafPartitionValues().contains(fOriginalDefaultValue) == false){
+				parameter.setDefaultValueString(fNewValue);
 			}
 		}
 		markModelUpdated();

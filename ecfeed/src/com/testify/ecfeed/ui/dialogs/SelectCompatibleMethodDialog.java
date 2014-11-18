@@ -136,7 +136,7 @@ public class SelectCompatibleMethodDialog extends TitleAreaDialog {
 //	private List<MethodNode> getCompatibleMethods(){
 //		List<MethodNode> compatibleMethods = new ArrayList<MethodNode>();
 //		for(MethodNode m : ClassInterface.getOtherMethods(fRenamedMethod.getClassNode())){
-//			if(m.getCategoriesTypes().equals(fRenamedMethod.getCategoriesTypes())){
+//			if(m.getParametersTypes().equals(fRenamedMethod.getParametersTypes())){
 //				compatibleMethods.add(m);
 //			}
 //		}

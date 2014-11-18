@@ -50,7 +50,7 @@ public class EclipseImplementationStatusResolver extends CachedImplementationSta
 				for(ILocalVariable parameter : methodDef.getParameters()){
 					parameterTypes.add(fJavaModelAnalyser.getTypeName(methodDef, parameter));
 				}
-				if(parameterTypes.equals(method.getCategoriesTypes())){
+				if(parameterTypes.equals(method.getParametersTypes())){
 					return true;
 				}
 			}

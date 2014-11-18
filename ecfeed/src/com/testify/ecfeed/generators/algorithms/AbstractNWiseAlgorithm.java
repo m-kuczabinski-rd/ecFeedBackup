@@ -83,8 +83,8 @@ public abstract class AbstractNWiseAlgorithm<E> extends AbstractAlgorithm<E> imp
 		while(tuples.hasNext()){
 			long combinations = 1;
 			List<List<E>> tuple = tuples.next();
-			for(List<E> category : tuple){
-				combinations *= category.size();
+			for(List<E> parameter : tuple){
+				combinations *= parameter.size();
 			}
 			totalWork += combinations;
 		}

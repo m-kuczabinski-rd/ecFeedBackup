@@ -17,22 +17,22 @@ import com.testify.ecfeed.adapter.java.JavaUtils;
 
 public class ExpectedValueStatement extends BasicStatement implements IRelationalStatement{
 
-	ParameterNode fCategory;
+	ParameterNode fParameter;
 	PartitionNode fCondition;
 
-	public ExpectedValueStatement(ParameterNode category, PartitionNode condition) {
-		fCategory = category;
+	public ExpectedValueStatement(ParameterNode parameter, PartitionNode condition) {
+		fParameter = parameter;
 		fCondition = condition.getCopy();
 	}
 
 	@Override
 	public String getLeftOperandName() {
-		return fCategory.getName();
+		return fParameter.getName();
 	}
 
 	@Override
-	public boolean mentions(ParameterNode category) {
-		return category == fCategory;
+	public boolean mentions(ParameterNode parameter) {
+		return parameter == fParameter;
 	}
 
 	@Override
@@ -43,8 +43,8 @@ public class ExpectedValueStatement extends BasicStatement implements IRelationa
 	@Override
 	public boolean adapt(List<PartitionNode> values){
 		if(values == null) return true;
-		if(fCategory.getMethod() != null){
-			int index = fCategory.getMethod().getCategories().indexOf(fCategory);
+		if(fParameter.getMethod() != null){
+			int index = fParameter.getMethod().getParameters().indexOf(fParameter);
 			values.set(index, fCondition.getCopy());
 		}
 		return true;
@@ -64,8 +64,8 @@ public class ExpectedValueStatement extends BasicStatement implements IRelationa
 	public void setRelation(EStatementRelation relation) {
 	}
 
-	public ParameterNode getCategory(){
-		return fCategory;
+	public ParameterNode getParameter(){
+		return fParameter;
 	}
 
 	public PartitionNode getCondition(){
@@ -74,23 +74,23 @@ public class ExpectedValueStatement extends BasicStatement implements IRelationa
 
 	@Override
 	public String toString(){
-		return getCategory().getName() + getRelation().toString() + fCondition.getValueString();
+		return getParameter().getName() + getRelation().toString() + fCondition.getValueString();
 	}
 
 	@Override
 	public ExpectedValueStatement getCopy(){
-		return new ExpectedValueStatement(fCategory, fCondition.getCopy());
+		return new ExpectedValueStatement(fParameter, fCondition.getCopy());
 	}
 
 	@Override
 	public boolean updateReferences(MethodNode method){
-		ParameterNode category = method.getCategory(fCategory.getName());
-		if(category != null && category.isExpected()){
-			fCategory = category;
-			fCondition.setParent(category);
-			String type = category.getType();
+		ParameterNode parameter = method.getParameter(fParameter.getName());
+		if(parameter != null && parameter.isExpected()){
+			fParameter = parameter;
+			fCondition.setParent(parameter);
+			String type = parameter.getType();
 			if(JavaUtils.isUserType(type)){
-				PartitionNode choice = category.getPartition(fCondition.getQualifiedName());
+				PartitionNode choice = parameter.getPartition(fCondition.getQualifiedName());
 				if(choice != null){
 					fCondition = choice;
 				}
@@ -110,7 +110,7 @@ public class ExpectedValueStatement extends BasicStatement implements IRelationa
 		}
 
 		ExpectedValueStatement compared = (ExpectedValueStatement)statement;
-		if(getCategory().getName().equals(compared.getCategory().getName()) == false){
+		if(getParameter().getName().equals(compared.getParameter().getName()) == false){
 			return false;
 		}
 

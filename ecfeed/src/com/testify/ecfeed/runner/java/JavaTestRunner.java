@@ -64,7 +64,7 @@ public class JavaTestRunner {
 		for(Class<?> type : parameterTypes){
 			types.add(JavaUtils.getTypeName(type.getCanonicalName()));
 		}
-		return methodName.equals(methodModel.getName()) && types.equals(methodModel.getCategoriesTypes());
+		return methodName.equals(methodModel.getName()) && types.equals(methodModel.getParametersTypes());
 	}
 
 	protected Object[] getArguments(List<PartitionNode> testData) throws RunnerException {
@@ -73,7 +73,7 @@ public class JavaTestRunner {
 		for(PartitionNode p : testData){
 			Object value = parser.parseValue(p);
 			if(value == null){
-				String type = p.getCategory().getType();
+				String type = p.getParameter().getType();
 				//check if null value acceptable
 				if(JavaUtils.isString(type) || JavaUtils.isUserType(type)){
 					if(p.getValueString().equals(Constants.VALUE_REPRESENTATION_NULL) == false){
@@ -90,9 +90,9 @@ public class JavaTestRunner {
 	private void validateTestData(List<PartitionNode> testData) throws RunnerException {
 		List<String> dataTypes = new ArrayList<String>();
 		for(PartitionNode parameter : testData){
-			dataTypes.add(parameter.getCategory().getType());
+			dataTypes.add(parameter.getParameter().getType());
 		}
-		if(dataTypes.equals(fTarget.getCategoriesTypes()) == false){
+		if(dataTypes.equals(fTarget.getParametersTypes()) == false){
 			throw new RunnerException(Messages.WRONG_TEST_METHOD_SIGNATURE(fTarget.toString()));
 		}
 	}

@@ -49,7 +49,7 @@ public class GenericOperationAddPartition extends BulkOperation {
 
 		private void validateChoiceValue(PartitionNode choice) throws ModelOperationException{
 			if(choice.isAbstract() == false){
-				String type = fTarget.getCategory().getType();
+				String type = fTarget.getParameter().getType();
 				ITypeAdapter adapter = fAdapterProvider.getAdapter(type);
 				String newValue = adapter.convert(choice.getValueString());
 				if(newValue == null){
@@ -67,8 +67,8 @@ public class GenericOperationAddPartition extends BulkOperation {
 	public GenericOperationAddPartition(PartitionedNode target, PartitionNode partition, ITypeAdapterProvider adapterProvider, int index, boolean validate) {
 		super(OperationNames.ADD_PARTITION, true);
 		addOperation(new AddPartitionOperation(target, partition, adapterProvider, index));
-		if((target.getCategory().getMethod() != null) && validate){
-			addOperation(new MethodOperationMakeConsistent(target.getCategory().getMethod()));
+		if((target.getParameter().getMethod() != null) && validate){
+			addOperation(new MethodOperationMakeConsistent(target.getParameter().getMethod()));
 		}
 	}
 

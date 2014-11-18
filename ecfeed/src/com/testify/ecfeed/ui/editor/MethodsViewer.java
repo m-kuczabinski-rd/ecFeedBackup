@@ -93,7 +93,7 @@ public class MethodsViewer extends TableViewerSection {
 		public String getText(Object element){
 			List<String> argTypes = fMethodIf.getArgTypes((MethodNode)element);
 			List<String> argNames = fMethodIf.getArgNames((MethodNode)element);
-			List<ParameterNode> parameters = ((MethodNode)element).getCategories();
+			List<ParameterNode> parameters = ((MethodNode)element).getParameters();
 			String result = "";
 			for(int i = 0; i < argTypes.size(); i++){
 				result += (parameters.get(i).isExpected()?"[e]":"") + JavaUtils.getLocalName(argTypes.get(i)) + " " + argNames.get(i);

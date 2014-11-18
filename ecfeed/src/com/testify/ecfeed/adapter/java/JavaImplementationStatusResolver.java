@@ -120,12 +120,12 @@ public class JavaImplementationStatusResolver extends AbstractImplementationStat
 			continue;
 		}
 		List<String> typeNames = getArgTypes(m);
-		List<ParameterNode> modelCategories = methodModel.getCategories();
-		if(typeNames.size() != methodModel.getCategories().size()){
+		List<ParameterNode> modelParameters = methodModel.getParameters();
+		if(typeNames.size() != methodModel.getParameters().size()){
 			continue;
 		}
 		List<String> modelTypeNames = new ArrayList<>();
-		for(ParameterNode parameter : modelCategories){
+		for(ParameterNode parameter : modelParameters){
 			modelTypeNames.add(parameter.getType());
 		}
 		if(modelTypeNames.equals(typeNames) == false){

@@ -162,7 +162,7 @@ public abstract class AbstractModelImplementer implements IModelImplementer {
 		if(methodDefinitionImplemented(node) == false){
 			implementMethodDefinition(node);
 		}
-		for(ParameterNode parameter : node.getCategories()){
+		for(ParameterNode parameter : node.getParameters()){
 			if(implementable(parameter) && getImplementationStatus(parameter) != EImplementationStatus.IMPLEMENTED){
 				implement(parameter);
 			}
@@ -202,8 +202,8 @@ public abstract class AbstractModelImplementer implements IModelImplementer {
 	}
 	
 	protected boolean implement(PartitionNode node) throws Exception{
-		if(parameterDefinitionImplemented(node.getCategory()) == false){
-			implementParameterDefinition(node.getCategory());
+		if(parameterDefinitionImplemented(node.getParameter()) == false){
+			implementParameterDefinition(node.getParameter());
 		}
 		if(node.isAbstract()){
 			for(PartitionNode leaf : node.getLeafPartitions()){
@@ -229,7 +229,7 @@ public abstract class AbstractModelImplementer implements IModelImplementer {
 	}
 	
 	protected boolean implementable(MethodNode node){
-		return hasImplementableNode(node.getCategories()) || hasImplementableNode(node.getTestCases());
+		return hasImplementableNode(node.getParameters()) || hasImplementableNode(node.getTestCases());
 	}
 	
 	protected boolean implementable(ParameterNode node){

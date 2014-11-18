@@ -98,7 +98,7 @@ public class OnlineTestRunningSupport extends TestExecutionSupport{
 		PrintStream currentOut = System.out;
 		ConsoleManager.displayConsole();
 		ConsoleManager.redirectSystemOutputToStream(ConsoleManager.getOutputStream());
-		if (fTarget.getCategories().size() > 0) {
+		if (fTarget.getParameters().size() > 0) {
 			ExecuteOnlineSetupDialog dialog = new ExecuteOnlineSetupDialog(Display.getCurrent().getActiveShell(), fTarget);
 			if(dialog.open() == IDialogConstants.OK_ID){
 				IGenerator<PartitionNode> selectedGenerator = dialog.getSelectedGenerator();

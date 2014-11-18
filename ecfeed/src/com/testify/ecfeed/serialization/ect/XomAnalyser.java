@@ -46,7 +46,7 @@ import com.testify.ecfeed.model.EStatementRelation;
 import com.testify.ecfeed.model.ExpectedValueStatement;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.PartitionNode;
-import com.testify.ecfeed.model.PartitionedCategoryStatement;
+import com.testify.ecfeed.model.PartitionedParameterStatement;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.StatementArray;
 import com.testify.ecfeed.model.StaticStatement;
@@ -97,7 +97,7 @@ public class XomAnalyser {
 		for(Element child : getIterableChildren(element)){
 			if(child.getLocalName() == Constants.CATEGORY_NODE_NAME){
 				try{
-					method.addCategory(parseCategory(child));
+					method.addParameter(parseParameter(child));
 				}catch(ParserException e){
 					System.err.println("Exception: " + e.getMessage());
 				}
@@ -126,7 +126,7 @@ public class XomAnalyser {
 		return method;
 	}
 
-	public ParameterNode parseCategory(Element element) throws ParserException{
+	public ParameterNode parseParameter(Element element) throws ParserException{
 		assertNodeTag(element.getQualifiedName(), CATEGORY_NODE_NAME);
 		String name = getElementName(element);
 		String type = getAttributeValue(element, TYPE_NAME_ATTRIBUTE);
@@ -136,17 +136,17 @@ public class XomAnalyser {
 			expected = getAttributeValue(element, CATEGORY_IS_EXPECTED_ATTRIBUTE_NAME);
 			defaultValue = getAttributeValue(element, DEFAULT_EXPECTED_VALUE_ATTRIBUTE_NAME);
 		}
-		ParameterNode category = new ParameterNode(name, type, defaultValue, Boolean.parseBoolean(expected));
+		ParameterNode parameter = new ParameterNode(name, type, defaultValue, Boolean.parseBoolean(expected));
 
 		for(Element child : getIterableChildren(element)){
 			try{
-				category.addPartition(parsePartition(child));
+				parameter.addPartition(parsePartition(child));
 			}catch(ParserException e){
 				System.err.println("Exception: " + e.getMessage());
 			}
 		}
 
-		return category;
+		return parameter;
 	}
 
 	public TestCaseNode parseTestCase(Element element, MethodNode method) throws ParserException{
@@ -154,24 +154,24 @@ public class XomAnalyser {
 		String name = getAttributeValue(element, TEST_SUITE_NAME_ATTRIBUTE);
 
 		List<Element> parameterElements = getIterableChildren(element);
-		List<ParameterNode> categories = method.getCategories();
+		List<ParameterNode> parameters = method.getParameters();
 
 		List<PartitionNode> testData = new ArrayList<PartitionNode>();
 
-		if(categories.size() != parameterElements.size()){
+		if(parameters.size() != parameterElements.size()){
 			throw new ParserException(Messages.WRONG_NUMBER_OF_TEST_PAREMETERS(name));
 		}
 
 		for(int i = 0; i < parameterElements.size(); i++){
 			Element testParameterElement = parameterElements.get(i);
-			ParameterNode category = categories.get(i);
+			ParameterNode parameter = parameters.get(i);
 			PartitionNode testValue = null;
 
 			if(testParameterElement.getLocalName().equals(Constants.TEST_PARAMETER_NODE_NAME)){
 				String partitionName = getAttributeValue(testParameterElement, Constants.PARTITION_ATTRIBUTE_NAME);
-				testValue = category.getPartition(partitionName);
+				testValue = parameter.getPartition(partitionName);
 				if(testValue == null){
-					throw new ParserException(Messages.PARTITION_DOES_NOT_EXIST(category.getName(), partitionName));
+					throw new ParserException(Messages.PARTITION_DOES_NOT_EXIST(parameter.getName(), partitionName));
 				}
 			}
 			else if(testParameterElement.getLocalName().equals(Constants.EXPECTED_PARAMETER_NODE_NAME)){
@@ -180,7 +180,7 @@ public class XomAnalyser {
 					throw new ParserException(Messages.MISSING_VALUE_ATTRIBUTE_IN_TEST_CASE_ELEMENT);
 				}
 				testValue = new PartitionNode(Constants.EXPECTED_VALUE_PARTITION_NAME, valueString);
-				testValue.setParent(category);
+				testValue.setParent(parameter);
 			}
 			testData.add(testValue);
 		}
@@ -277,55 +277,55 @@ public class XomAnalyser {
 		}
 	}
 
-	public PartitionedCategoryStatement parsePartitionStatement(Element element, MethodNode method) throws ParserException {
+	public PartitionedParameterStatement parsePartitionStatement(Element element, MethodNode method) throws ParserException {
 		assertNodeTag(element.getQualifiedName(), CONSTRAINT_PARTITION_STATEMENT_NODE_NAME);
 
-		String categoryName = getAttributeValue(element, Constants.STATEMENT_CATEGORY_ATTRIBUTE_NAME);
-		ParameterNode category = method.getCategory(categoryName);
-		if(category == null || category.isExpected()){
-			throw new ParserException(Messages.WRONG_CATEGORY_NAME(categoryName, method.getName()));
+		String parameterName = getAttributeValue(element, Constants.STATEMENT_CATEGORY_ATTRIBUTE_NAME);
+		ParameterNode parameter = method.getParameter(parameterName);
+		if(parameter == null || parameter.isExpected()){
+			throw new ParserException(Messages.WRONG_CATEGORY_NAME(parameterName, method.getName()));
 		}
 		String partitionName = getAttributeValue(element, Constants.STATEMENT_PARTITION_ATTRIBUTE_NAME);
-		PartitionNode partition = category.getPartition(partitionName);
+		PartitionNode partition = parameter.getPartition(partitionName);
 		if(partition == null){
-			throw new ParserException(Messages.WRONG_PARTITION_NAME(partitionName, categoryName, method.getName()));
+			throw new ParserException(Messages.WRONG_PARTITION_NAME(partitionName, parameterName, method.getName()));
 		}
 
 		String relationName = getAttributeValue(element, Constants.STATEMENT_RELATION_ATTRIBUTE_NAME);
 		EStatementRelation relation = getRelation(relationName);
 
-		return new PartitionedCategoryStatement(category, relation, partition);
+		return new PartitionedParameterStatement(parameter, relation, partition);
 	}
 
-	public PartitionedCategoryStatement parseLabelStatement(Element element, MethodNode method) throws ParserException {
+	public PartitionedParameterStatement parseLabelStatement(Element element, MethodNode method) throws ParserException {
 		assertNodeTag(element.getQualifiedName(), CONSTRAINT_LABEL_STATEMENT_NODE_NAME);
 
-		String categoryName = getAttributeValue(element, Constants.STATEMENT_CATEGORY_ATTRIBUTE_NAME);
+		String parameterName = getAttributeValue(element, Constants.STATEMENT_CATEGORY_ATTRIBUTE_NAME);
 		String label = getAttributeValue(element, Constants.STATEMENT_LABEL_ATTRIBUTE_NAME);
 		String relationName = getAttributeValue(element, Constants.STATEMENT_RELATION_ATTRIBUTE_NAME);
 
-		ParameterNode category = method.getCategory(categoryName);
-		if(category == null || category.isExpected()){
-			throw new ParserException(Messages.WRONG_CATEGORY_NAME(categoryName, method.getName()));
+		ParameterNode parameter = method.getParameter(parameterName);
+		if(parameter == null || parameter.isExpected()){
+			throw new ParserException(Messages.WRONG_CATEGORY_NAME(parameterName, method.getName()));
 		}
 		EStatementRelation relation = getRelation(relationName);
 
-		return new PartitionedCategoryStatement(category, relation, label);
+		return new PartitionedParameterStatement(parameter, relation, label);
 	}
 
 	public ExpectedValueStatement parseExpectedValueStatement(Element element, MethodNode method) throws ParserException {
 		assertNodeTag(element.getQualifiedName(), CONSTRAINT_EXPECTED_STATEMENT_NODE_NAME);
 
-		String categoryName = getAttributeValue(element, Constants.STATEMENT_CATEGORY_ATTRIBUTE_NAME);
+		String parameterName = getAttributeValue(element, Constants.STATEMENT_CATEGORY_ATTRIBUTE_NAME);
 		String valueString = getAttributeValue(element, Constants.STATEMENT_EXPECTED_VALUE_ATTRIBUTE_NAME);
-		ParameterNode category = method.getCategory(categoryName);
-		if(category == null || !category.isExpected()){
-			throw new ParserException(Messages.WRONG_CATEGORY_NAME(categoryName, method.getName()));
+		ParameterNode parameter = method.getParameter(parameterName);
+		if(parameter == null || !parameter.isExpected()){
+			throw new ParserException(Messages.WRONG_CATEGORY_NAME(parameterName, method.getName()));
 		}
 		PartitionNode condition = new PartitionNode("expected", valueString);
-		condition.setParent(category);
+		condition.setParent(parameter);
 
-		return new ExpectedValueStatement(category, condition);
+		return new ExpectedValueStatement(parameter, condition);
 	}
 
 	public PartitionNode parsePartition(Element element) throws ParserException{

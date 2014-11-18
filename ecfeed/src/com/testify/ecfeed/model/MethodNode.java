@@ -1,11 +1,11 @@
 /*******************************************************************************
- * Copyright (c) 2013 Testify AS.                                                
- * All rights reserved. This program and the accompanying materials              
- * are made available under the terms of the Eclipse Public License v1.0         
- * which accompanies this distribution, and is available at                      
- * http://www.eclipse.org/legal/epl-v10.html                                     
- *                                                                               
- * Contributors:                                                                 
+ * Copyright (c) 2013 Testify AS.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
  *     Patryk Chamuczynski (p.chamuczynski(at)radytek.com) - initial implementation
  ******************************************************************************/
 
@@ -21,24 +21,24 @@ import java.util.Set;
 import com.testify.ecfeed.generators.api.IConstraint;
 
 public class MethodNode extends GenericNode {
-	private List<ParameterNode> fCategories;
+	private List<ParameterNode> fParameters;
 	private List<TestCaseNode> fTestCases;
 	private List<ConstraintNode> fConstraints;
-	
+
 	public MethodNode(String name){
 		super(name);
-		fCategories = new ArrayList<ParameterNode>();
+		fParameters = new ArrayList<ParameterNode>();
 		fTestCases = new ArrayList<TestCaseNode>();
 		fConstraints = new ArrayList<ConstraintNode>();
 	}
-	
+
 	@Override
 	public String toString(){
 		String result = new String(getName()) + "(";
-		List<String> types = getCategoriesShortTypes();
-		List<String> names = getCategoriesNames();
+		List<String> types = getParametersShortTypes();
+		List<String> names = getParametersNames();
 		for(int i = 0; i < types.size(); i++){
-			if(getCategories().get(i).isExpected()){
+			if(getParameters().get(i).isExpected()){
 				result += "[e]";
 			}
 			result += types.get(i);
@@ -53,53 +53,24 @@ public class MethodNode extends GenericNode {
 	@Override
 	public List<? extends GenericNode> getChildren(){
 		List<GenericNode> children = new ArrayList<GenericNode>();
-		children.addAll(fCategories);
+		children.addAll(fParameters);
 		children.addAll(fConstraints);
 		children.addAll(fTestCases);
-		
+
 		return children;
 	}
 
 	@Override
 	public boolean hasChildren(){
-		return(fCategories.size() != 0 || fConstraints.size() != 0 || fTestCases.size() != 0);
+		return(fParameters.size() != 0 || fConstraints.size() != 0 || fTestCases.size() != 0);
 	}
 
-//	@SuppressWarnings("rawtypes")
-//	@Override
-//	public boolean moveChild(GenericNode child, boolean moveUp){
-//		List childrenArray = null;
-//		if(child instanceof CategoryNode){
-//			childrenArray = fCategories;
-//		}
-//		if(child instanceof ConstraintNode){
-//			childrenArray = fConstraints;
-//		}
-//		if(child instanceof TestCaseNode){
-//			childrenArray = fTestCases;
-//		}
-//		if(childrenArray == null){
-//			return false;
-//		}
-//
-//		int childIndex = childrenArray.indexOf(child);
-//		if(moveUp && childIndex > 0){
-//			Collections.swap(childrenArray, childIndex, childIndex - 1);
-//			return true;
-//		}
-//		if(!moveUp && childIndex < childrenArray.size() - 1){
-//			Collections.swap(childrenArray, childIndex, childIndex + 1);
-//			return true;
-//		}
-//		return false;
-//	}
-//	
 	@Override
 	public MethodNode getCopy(){
 		MethodNode copy = new MethodNode(this.getName());
 
-		for(ParameterNode category : fCategories){
-			copy.addCategory(category.getCopy());
+		for(ParameterNode parameter : fParameters){
+			copy.addParameter(parameter.getCopy());
 		}
 
 		for(TestCaseNode testcase : fTestCases){
@@ -118,19 +89,19 @@ public class MethodNode extends GenericNode {
 		return copy;
 	}
 
-	public void addCategory(ParameterNode category){
-		addCategory(category, fCategories.size());
+	public void addParameter(ParameterNode parameter){
+		addParameter(parameter, fParameters.size());
 	}
 
-	public void addCategory(ParameterNode category, int index) {
-		fCategories.add(index, category);
-		category.setParent(this);
+	public void addParameter(ParameterNode parameter, int index) {
+		fParameters.add(index, parameter);
+		parameter.setParent(this);
 	}
 
 	public void addConstraint(ConstraintNode constraint) {
 		addConstraint(constraint, fConstraints.size());
 	}
-	
+
 	public void addConstraint(ConstraintNode constraint, int index) {
 		constraint.setParent(this);
 		fConstraints.add(index, constraint);
@@ -139,68 +110,68 @@ public class MethodNode extends GenericNode {
 	public void addTestCase(TestCaseNode testCase){
 		addTestCase(testCase, fTestCases.size());
 	}
-	
+
 	public void addTestCase(TestCaseNode testCase, int index){
 		fTestCases.add(index, testCase);
 		testCase.setParent(this);
 	}
-	
+
 	public ClassNode getClassNode() {
 		return (ClassNode)getParent();
 	}
 
-	public List<ParameterNode> getCategories(){
-		return fCategories;
+	public List<ParameterNode> getParameters(){
+		return fParameters;
 	}
 
-	public ParameterNode getCategory(String categoryName) {
-		for(ParameterNode category : fCategories){
-			if(category.getName().equals(categoryName)){
-				return category;
+	public ParameterNode getParameter(String parameterName) {
+		for(ParameterNode parameter : fParameters){
+			if(parameter.getName().equals(parameterName)){
+				return parameter;
 			}
 		}
 		return null;
 	}
-	
-	public List<ParameterNode> getCategories(boolean expected) {
-		ArrayList<ParameterNode> categories = new ArrayList<>();
-		for(ParameterNode category : fCategories){
-			if(category.isExpected() == expected){
-				categories.add(category);
+
+	public List<ParameterNode> getParameters(boolean expected) {
+		ArrayList<ParameterNode> parameters = new ArrayList<>();
+		for(ParameterNode parameter : fParameters){
+			if(parameter.isExpected() == expected){
+				parameters.add(parameter);
 			}
 		}
-		return categories;
+		return parameters;
 	}
 
-	public List<String> getCategoriesTypes() {
+	public List<String> getParametersTypes() {
 		List<String> types = new ArrayList<String>();
-		for(ParameterNode category : fCategories){
-			types.add(category.getType());
-		}
-		return types;
-	}
-	
-	public List<String> getCategoriesShortTypes() {
-		List<String> types = new ArrayList<String>();
-		for(ParameterNode category : fCategories){
-			types.add(category.getShortType());
+		for(ParameterNode parameter : fParameters){
+			types.add(parameter.getType());
 		}
 		return types;
 	}
 
-	public List<String> getCategoriesNames() {
+	public List<String> getParametersShortTypes() {
+		List<String> types = new ArrayList<String>();
+		for(ParameterNode parameter : fParameters){
+			types.add(parameter.getShortType());
+		}
+		return types;
+	}
+
+	public List<String> getParametersNames() {
 		List<String> names = new ArrayList<String>();
-		for(ParameterNode category : fCategories){
-			names.add(category.getName());
+		for(ParameterNode parameter : fParameters){
+			names.add(parameter.getName());
 		}
 		return names;
 	}
 
-	public ArrayList<String> getCategoriesNames(boolean expected) {
+	public ArrayList<String> getParametersNames(boolean expected) {
 		ArrayList<String> names = new ArrayList<String>();
-		for(ParameterNode category : fCategories){
-			if(category.isExpected() == expected){
-				names.add(category.getName());
+		for(ParameterNode parameter : fParameters){
+			if(parameter.isExpected() == expected){
+				names.add(parameter.getName());
 			}
 		}
 		return names;
@@ -239,7 +210,7 @@ public class MethodNode extends GenericNode {
 	public List<TestCaseNode> getTestCases(){
 		return fTestCases;
 	}
-	
+
 	public Collection<TestCaseNode> getTestCases(String testSuite) {
 		ArrayList<TestCaseNode> testCases = new ArrayList<TestCaseNode>();
 		for(TestCaseNode testCase : getTestCases()){
@@ -258,9 +229,9 @@ public class MethodNode extends GenericNode {
 		return testSuites;
 	}
 
-	public boolean removeCategory(ParameterNode category){
-		category.setParent(null);
-		return fCategories.remove(category);
+	public boolean removeParameter(ParameterNode parameter){
+		parameter.setParent(null);
+		return fParameters.remove(parameter);
 	}
 
 	public boolean removeTestCase(TestCaseNode testCase){
@@ -286,13 +257,13 @@ public class MethodNode extends GenericNode {
 			}
 		}
 	}
-	
+
 	public boolean isPartitionMentioned(PartitionNode partition){
 		for(ConstraintNode constraint : fConstraints){
 			if(constraint.mentions(partition)){
 				return true;
 			}
-		}	
+		}
 		for(TestCaseNode testCase: fTestCases){
 			if(testCase.mentions(partition)){
 				return true;
@@ -300,35 +271,35 @@ public class MethodNode extends GenericNode {
 		}
 		return false;
 	}
-	
-	public Set<ConstraintNode> mentioningConstraints(Collection<ParameterNode> categories){
+
+	public Set<ConstraintNode> mentioningConstraints(Collection<ParameterNode> parameters){
 		Set<ConstraintNode> result = new HashSet<ConstraintNode>();
-		for(ParameterNode category : categories){
-			result.addAll(mentioningConstraints(category));
+		for(ParameterNode parameter : parameters){
+			result.addAll(mentioningConstraints(parameter));
 		}
 		return result;
 	}
-	
-	public Set<ConstraintNode> mentioningConstraints(ParameterNode category){
+
+	public Set<ConstraintNode> mentioningConstraints(ParameterNode parameter){
 		Set<ConstraintNode> result = new HashSet<ConstraintNode>();
 		for(ConstraintNode constraint : fConstraints){
-			if(constraint.mentions(category)){
+			if(constraint.mentions(parameter)){
 				result.add(constraint);
 			}
 		}
 		return result;
 	}
-	
-	public Set<ConstraintNode> mentioningConstraints(ParameterNode category, String label){
+
+	public Set<ConstraintNode> mentioningConstraints(ParameterNode parameter, String label){
 		Set<ConstraintNode> result = new HashSet<ConstraintNode>();
 		for(ConstraintNode constraint : fConstraints){
-			if(constraint.mentions(category, label)){
+			if(constraint.mentions(parameter, label)){
 				result.add(constraint);
 			}
 		}
 		return result;
 	}
-	
+
 	public Set<ConstraintNode> mentioningConstraints(PartitionNode partition){
 		Set<ConstraintNode> result = new HashSet<ConstraintNode>();
 		for(ConstraintNode constraint : fConstraints){
@@ -338,7 +309,7 @@ public class MethodNode extends GenericNode {
 		}
 		return result;
 	}
-	
+
 	public List<TestCaseNode> mentioningTestCases(PartitionNode partition){
 		List<TestCaseNode> result = new ArrayList<TestCaseNode>();
 		for(TestCaseNode testCase : fTestCases){
@@ -348,10 +319,10 @@ public class MethodNode extends GenericNode {
 		}
 		return result;
 	}
-	
-	public boolean isCategoryMentioned(ParameterNode category){
+
+	public boolean isParameterMentioned(ParameterNode parameter){
 		for(ConstraintNode constraint : fConstraints){
-			if(constraint.mentions(category)){
+			if(constraint.mentions(parameter)){
 				return true;
 			}
 		}
@@ -360,79 +331,79 @@ public class MethodNode extends GenericNode {
 		}
 		return true;
 	}
-	
+
 	public void clearTestCases(){
 		fTestCases.clear();
 	}
 
 	public void replaceParameters(List<ParameterNode> parameters) {
-		fCategories.clear();
-		fCategories.addAll(parameters);
+		fParameters.clear();
+		fParameters.addAll(parameters);
 	}
 
 	public void replaceTestCases(List<TestCaseNode> testCases){
 		fTestCases.clear();
 		fTestCases.addAll(testCases);
 	}
-	
+
 	public void replaceConstraints(List<ConstraintNode> constraints){
 		fConstraints.clear();
 		fConstraints.addAll(constraints);
 	}
-	
+
 	public void clearConstraints(){
 		fConstraints.clear();
 	}
 
 	@Override
 	public int getMaxChildIndex(GenericNode potentialChild){
-		if(potentialChild instanceof ParameterNode) return getCategories().size();
+		if(potentialChild instanceof ParameterNode) return getParameters().size();
 		if(potentialChild instanceof ConstraintNode) return getConstraintNodes().size();
 		if(potentialChild instanceof TestCaseNode) return getTestCases().size();
 		return super.getMaxChildIndex(potentialChild);
 	}
-	
+
 	@Override
 	public Object accept(IModelVisitor visitor) throws Exception{
 		return visitor.visit(this);
 	}
-	
+
 	@Override
 	public boolean compare(GenericNode node){
 		if(node instanceof MethodNode == false){
 			return false;
 		}
-		
+
 		MethodNode comparedMethod = (MethodNode)node;
 
-		int categoriesCount = getCategories().size();
+		int parametersCount = getParameters().size();
 		int testCasesCount = getTestCases().size();
 		int constraintsCount = getConstraintNodes().size();
-		
-		if(categoriesCount != comparedMethod.getCategories().size() || 
+
+		if(parametersCount != comparedMethod.getParameters().size() ||
 				testCasesCount != comparedMethod.getTestCases().size() ||
 				constraintsCount != comparedMethod.getConstraintNodes().size()){
 			return false;
 		}
-		
-		for(int i = 0; i < categoriesCount; i++){
-			if(getCategories().get(i).compare(comparedMethod.getCategories().get(i)) == false){
+
+		for(int i = 0; i < parametersCount; i++){
+			if(getParameters().get(i).compare(comparedMethod.getParameters().get(i)) == false){
 				return false;
 			}
 		}
-		
+
 		for(int i = 0; i < testCasesCount; i++){
 			if(getTestCases().get(i).compare(comparedMethod.getTestCases().get(i)) == false){
 				return false;
 			}
 		}
-		
+
 		for(int i = 0; i < constraintsCount; i++){
 			if(getConstraintNodes().get(i).compare(comparedMethod.getConstraintNodes().get(i)) == false){
 				return false;
 			}
 		}
-		
+
 		return super.compare(node);
 	}
 }

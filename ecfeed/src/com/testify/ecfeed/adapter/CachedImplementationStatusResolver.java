@@ -62,7 +62,7 @@ public abstract class CachedImplementationStatusResolver extends
 		@Override
 		public Object visit(PartitionNode node) throws Exception {
 			fCache.remove(node);
-			for(TestCaseNode testCase : node.getCategory().getMethod().mentioningTestCases(node)){
+			for(TestCaseNode testCase : node.getParameter().getMethod().mentioningTestCases(node)){
 				fCache.remove(testCase);
 			}
 			return null;

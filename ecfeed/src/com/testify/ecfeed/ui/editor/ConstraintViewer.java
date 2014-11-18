@@ -42,10 +42,10 @@ import com.testify.ecfeed.model.ExpectedValueStatement;
 import com.testify.ecfeed.model.IRelationalStatement;
 import com.testify.ecfeed.model.IStatementVisitor;
 import com.testify.ecfeed.model.PartitionNode;
-import com.testify.ecfeed.model.PartitionedCategoryStatement;
-import com.testify.ecfeed.model.PartitionedCategoryStatement.ICondition;
-import com.testify.ecfeed.model.PartitionedCategoryStatement.LabelCondition;
-import com.testify.ecfeed.model.PartitionedCategoryStatement.PartitionCondition;
+import com.testify.ecfeed.model.PartitionedParameterStatement;
+import com.testify.ecfeed.model.PartitionedParameterStatement.ICondition;
+import com.testify.ecfeed.model.PartitionedParameterStatement.LabelCondition;
+import com.testify.ecfeed.model.PartitionedParameterStatement.PartitionCondition;
 import com.testify.ecfeed.model.StatementArray;
 import com.testify.ecfeed.model.StaticStatement;
 import com.testify.ecfeed.ui.editor.actions.ModelModifyingAction;
@@ -179,10 +179,10 @@ public class ConstraintViewer extends TreeViewerSection {
 			@Override
 			public Object visit(ExpectedValueStatement statement)
 					throws Exception {
-				ParameterNode category  = statement.getCategory();
-				List<String> values = ParameterInterface.getSpecialValues(category.getType());
+				ParameterNode parameter  = statement.getParameter();
+				List<String> values = ParameterInterface.getSpecialValues(parameter.getType());
 				if(values.isEmpty()){
-					for(PartitionNode p : category.getLeafPartitions()){
+					for(PartitionNode p : parameter.getLeafPartitions()){
 						values.add(p.getValueString());
 					}
 				}
@@ -190,19 +190,19 @@ public class ConstraintViewer extends TreeViewerSection {
 			}
 
 			@Override
-			public Object visit(PartitionedCategoryStatement statement)
+			public Object visit(PartitionedParameterStatement statement)
 					throws Exception {
 				List<String> result = new ArrayList<String>();
-				ParameterNode category = statement.getCategory();
+				ParameterNode parameter = statement.getParameter();
 
-				Set<PartitionNode> allPartitions = category.getAllPartitions();
-				Set<String> allLabels = category.getLeafLabels();
+				Set<PartitionNode> allPartitions = parameter.getAllPartitions();
+				Set<String> allLabels = parameter.getLeafLabels();
 				for(PartitionNode choice : allPartitions){
-					ICondition condition = new PartitionedCategoryStatement(category, EStatementRelation.EQUAL, choice).getCondition();
+					ICondition condition = new PartitionedParameterStatement(parameter, EStatementRelation.EQUAL, choice).getCondition();
 					result.add(condition.toString());
 				}
 				for(String label : allLabels){
-					ICondition condition = new PartitionedCategoryStatement(category, EStatementRelation.EQUAL, label).getCondition();
+					ICondition condition = new PartitionedParameterStatement(parameter, EStatementRelation.EQUAL, label).getCondition();
 					result.add(condition.toString());
 				}
 				return result.toArray(new String[]{});
@@ -238,7 +238,7 @@ public class ConstraintViewer extends TreeViewerSection {
 			}
 
 			@Override
-			public Object visit(PartitionedCategoryStatement statement)
+			public Object visit(PartitionedParameterStatement statement)
 					throws Exception {
 				return statement.getCondition().toString();
 			}
@@ -315,16 +315,16 @@ public class ConstraintViewer extends TreeViewerSection {
 				if(statementText.equals(STATEMENT_AND) || statementText.equals(STATEMENT_OR)){
 					return new StatementArray(EStatementOperator.getOperator(statementText));
 				}
-				ParameterNode category = fConstraint.getMethod().getCategory(statementText);
+				ParameterNode parameter = fConstraint.getMethod().getParameter(statementText);
 				EStatementRelation relation = EStatementRelation.EQUAL;
-				if(category != null && category.isExpected()){
-					PartitionNode condition = new PartitionNode("expected", category.getDefaultValue());
-					condition.setParent(category);
-					return new ExpectedValueStatement(category, condition);
+				if(parameter != null && parameter.isExpected()){
+					PartitionNode condition = new PartitionNode("expected", parameter.getDefaultValue());
+					condition.setParent(parameter);
+					return new ExpectedValueStatement(parameter, condition);
 				}
-				else if(category != null && category.getPartitions().size() > 0){
-					PartitionNode condition = category.getPartitions().get(0);
-					return new PartitionedCategoryStatement(category, relation, condition);
+				else if(parameter != null && parameter.getPartitions().size() > 0){
+					PartitionNode condition = parameter.getPartitions().get(0);
+					return new PartitionedParameterStatement(parameter, relation, condition);
 				}
 
 				return null;
@@ -365,7 +365,7 @@ public class ConstraintViewer extends TreeViewerSection {
 			@Override
 			public Object visit(ExpectedValueStatement statement) throws Exception {
 				disposeRightOperandComposite();
-				if(ParameterInterface.hasLimitedValuesSet(statement.getCategory())){
+				if(ParameterInterface.hasLimitedValuesSet(statement.getParameter())){
 					fRightOperandComposite = fConditionCombo = new ComboViewer(StatementEditor.this).getCombo();
 				}
 				else{
@@ -378,7 +378,7 @@ public class ConstraintViewer extends TreeViewerSection {
 			}
 
 			@Override
-			public Object visit(PartitionedCategoryStatement statement) throws Exception {
+			public Object visit(PartitionedParameterStatement statement) throws Exception {
 				disposeRightOperandComposite();
 				fRightOperandComposite = fConditionCombo = new ComboViewer(StatementEditor.this).getCombo();
 				prepareRelationalStatementEditor(statement, availableConditions(statement), statement.getCondition().toString());
@@ -485,7 +485,7 @@ public class ConstraintViewer extends TreeViewerSection {
 			List<String> items = new ArrayList<String>();
 			items.addAll(Arrays.asList(FIXED_STATEMENTS));
 			boolean consequence = fConstraint.getConstraint().getConsequence() == statement;
-			for(ParameterNode c : fConstraint.getMethod().getCategories()){
+			for(ParameterNode c : fConstraint.getMethod().getParameters()){
 				if(c.isExpected()){
 					if(consequence){
 						items.add(c.getName());

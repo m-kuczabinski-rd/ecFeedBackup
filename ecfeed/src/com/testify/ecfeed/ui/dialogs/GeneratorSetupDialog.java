@@ -73,7 +73,7 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 	private Button fOkButton;
 	private MethodNode fMethod;
 	private String fTestSuiteName;
-	private CheckboxTreeViewer fCategoriesViewer;
+	private CheckboxTreeViewer fParametersViewer;
 	private CheckboxTreeViewer fConstraintsViewer;
 	private List<List<PartitionNode>> fAlgorithmInput;
 	private Collection<Constraint> fConstraints;
@@ -104,7 +104,7 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 		public void checkStateChanged(CheckStateChangedEvent event) {
 			super.checkStateChanged(event);
 			if(event.getElement() instanceof ParameterNode && ((ParameterNode)event.getElement()).isExpected()){
-				fCategoriesViewer.setChecked(event.getElement(), true);
+				fParametersViewer.setChecked(event.getElement(), true);
 			}
 			else{
 				updateOkButton();
@@ -112,11 +112,11 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 		}
 	}
 	
-	private class CategoriesContentProvider extends TreeNodeContentProvider implements ITreeContentProvider{
+	private class ParametersContentProvider extends TreeNodeContentProvider implements ITreeContentProvider{
 		@Override
 		public Object[] getElements(Object input){
 			if(input instanceof MethodNode){
-				return ((MethodNode)input).getCategories().toArray();
+				return ((MethodNode)input).getParameters().toArray();
 			}
 			return null;
 		}
@@ -242,17 +242,17 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 		fOkButton = createButton(parent, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL,
 				true);
 		if(fGenerateExecutableContent){
-			for(ParameterNode category: fMethod.getCategories()){
-				EImplementationStatus categoryStatus = fStatusResolver.getImplementationStatus(category);
-				if((category.getPartitions().isEmpty() && (category.isExpected() == false || JavaUtils.isUserType(category.getType())))||
-						categoryStatus == EImplementationStatus.NOT_IMPLEMENTED){
+			for(ParameterNode parameter: fMethod.getParameters()){
+				EImplementationStatus parameterStatus = fStatusResolver.getImplementationStatus(parameter);
+				if((parameter.getPartitions().isEmpty() && (parameter.isExpected() == false || JavaUtils.isUserType(parameter.getType())))||
+						parameterStatus == EImplementationStatus.NOT_IMPLEMENTED){
 					setOkButton(false);
 					break;
 				}
 			}
 		} else {
-			for(ParameterNode category: fMethod.getCategories() ){
-				if(category.getPartitions().isEmpty() && (category.isExpected() == false || JavaUtils.isUserType(category.getType()))){
+			for(ParameterNode parameter: fMethod.getParameters() ){
+				if(parameter.getPartitions().isEmpty() && (parameter.isExpected() == false || JavaUtils.isUserType(parameter.getType()))){
 					setOkButton(false);
 					break;
 				}
@@ -371,16 +371,16 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 	private void createPartitionsViewer(Composite parent) {
 		final Tree tree = new Tree(parent, SWT.CHECK|SWT.BORDER);
 		tree.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, true, 1, 1));
-		fCategoriesViewer = new CheckboxTreeViewer(tree);
-		fCategoriesViewer.setContentProvider(new CategoriesContentProvider());
-		fCategoriesViewer.setLabelProvider(new NodeNameColumnLabelProvider());
-		fCategoriesViewer.getTree().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
-		fCategoriesViewer.setInput(fMethod);
-		fCategoriesViewer.addCheckStateListener(new PartitionTreeCheckStateListener(fCategoriesViewer));
-		for(ParameterNode category : fMethod.getCategories()){
-			fCategoriesViewer.expandAll();
-			fCategoriesViewer.setSubtreeChecked(category, true);
-			fCategoriesViewer.collapseAll();
+		fParametersViewer = new CheckboxTreeViewer(tree);
+		fParametersViewer.setContentProvider(new ParametersContentProvider());
+		fParametersViewer.setLabelProvider(new NodeNameColumnLabelProvider());
+		fParametersViewer.getTree().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+		fParametersViewer.setInput(fMethod);
+		fParametersViewer.addCheckStateListener(new PartitionTreeCheckStateListener(fParametersViewer));
+		for(ParameterNode parameter : fMethod.getParameters()){
+			fParametersViewer.expandAll();
+			fParametersViewer.setSubtreeChecked(parameter, true);
+			fParametersViewer.collapseAll();
 		}
 	}
 
@@ -426,16 +426,16 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 	}
 
 	private boolean validateGeneratorInput(boolean onlyExecutable) {
-		for(ParameterNode category : fMethod.getCategories()){
+		for(ParameterNode parameter : fMethod.getParameters()){
 			boolean leafChecked = false;
-			if(category.isExpected()){
-				if(fCategoriesViewer.getChecked(category) == false){
+			if(parameter.isExpected()){
+				if(fParametersViewer.getChecked(parameter) == false){
 					return false;
 				}
 				continue;
 			}
-			for(PartitionNode leaf : category.getLeafPartitions()){
-				leafChecked |= fCategoriesViewer.getChecked(leaf);
+			for(PartitionNode leaf : parameter.getLeafPartitions()){
+				leafChecked |= fParametersViewer.getChecked(leaf);
 				EImplementationStatus status = fStatusResolver.getImplementationStatus(leaf);
 				if(status != EImplementationStatus.IMPLEMENTED && onlyExecutable){
 					return false;
@@ -654,16 +654,16 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 	}
 
 	private void saveAlgorithmInput() {
-		List<ParameterNode> categories = fMethod.getCategories();
+		List<ParameterNode> parameters = fMethod.getParameters();
 		fAlgorithmInput = new ArrayList<List<PartitionNode>>();
-		for(int i = 0; i < categories.size(); i++){
+		for(int i = 0; i < parameters.size(); i++){
 			List<PartitionNode> partitions = new ArrayList<PartitionNode>();
-			if(categories.get(i).isExpected()){
-				partitions.add(expectedValuePartition(categories.get(i)));
+			if(parameters.get(i).isExpected()){
+				partitions.add(expectedValuePartition(parameters.get(i)));
 			}
 			else{
-				for(PartitionNode partition : categories.get(i).getLeafPartitions()){
-					if(fCategoriesViewer.getChecked(partition)){
+				for(PartitionNode partition : parameters.get(i).getLeafPartitions()){
+					if(fParametersViewer.getChecked(partition)){
 						partitions.add(partition);
 					}
 				}

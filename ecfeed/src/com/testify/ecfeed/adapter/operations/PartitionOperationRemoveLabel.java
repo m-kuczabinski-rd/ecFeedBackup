@@ -32,8 +32,8 @@ public class PartitionOperationRemoveLabel extends BulkOperation{
 	public PartitionOperationRemoveLabel(PartitionNode target, String label) {
 		super(OperationNames.REMOVE_PARTITION_LABEL, true);
 		addOperation(new RemoveLabelOperation(target, label));
-		if(target.getCategory().getMethod() != null){
-			addOperation(new MethodOperationMakeConsistent(target.getCategory().getMethod()));
+		if(target.getParameter().getMethod() != null){
+			addOperation(new MethodOperationMakeConsistent(target.getParameter().getMethod()));
 		}
 	}
 }

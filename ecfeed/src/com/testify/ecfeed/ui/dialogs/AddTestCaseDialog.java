@@ -65,14 +65,14 @@ public class AddTestCaseDialog extends TitleAreaDialog implements ITestDataEdito
 		setHelpAvailable(false);
 		setShellStyle(SWT.BORDER | SWT.RESIZE | SWT.TITLE | SWT.APPLICATION_MODAL);
 		fTestData = new ArrayList<PartitionNode>();
-		List<ParameterNode> categories = method.getCategories();
-		for(ParameterNode category : categories){
-			if(category.isExpected()){
-				fTestData.add(createAnonymuousPartition(category));
+		List<ParameterNode> parameters = method.getParameters();
+		for(ParameterNode parameter : parameters){
+			if(parameter.isExpected()){
+				fTestData.add(createAnonymuousPartition(parameter));
 			}
 			else{
 
-				PartitionNode testValue = category.getPartitions().get(0);
+				PartitionNode testValue = parameter.getPartitions().get(0);
 				while(testValue.isAbstract()){
 					testValue = testValue.getPartitions().get(0);
 				}
@@ -115,11 +115,11 @@ public class AddTestCaseDialog extends TitleAreaDialog implements ITestDataEdito
 		table.setHeaderVisible(true);
 		table.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 
-		TableViewerColumn categoryViewerColumn = new TableViewerColumn(fTestDataViewer, SWT.NONE);
-		TableColumn categoryColumn = categoryViewerColumn.getColumn();
-		categoryColumn.setWidth(200);
-		categoryColumn.setText("Parameter");
-		categoryViewerColumn.setLabelProvider(new ColumnLabelProvider(){
+		TableViewerColumn parameterViewerColumn = new TableViewerColumn(fTestDataViewer, SWT.NONE);
+		TableColumn parameterColumn = parameterViewerColumn.getColumn();
+		parameterColumn.setWidth(200);
+		parameterColumn.setText("Parameter");
+		parameterViewerColumn.setLabelProvider(new ColumnLabelProvider(){
 			@Override
 			public String getText(Object element){
 				return ((PartitionNode)element).getParent().toString();
@@ -138,7 +138,7 @@ public class AddTestCaseDialog extends TitleAreaDialog implements ITestDataEdito
 			@Override
 			public String getText(Object element){
 				PartitionNode testValue = (PartitionNode)element;
-				if(testValue.getCategory().isExpected()){
+				if(testValue.getParameter().isExpected()){
 					return testValue.getValueString();
 				}
 				return testValue.toString();
@@ -156,7 +156,7 @@ public class AddTestCaseDialog extends TitleAreaDialog implements ITestDataEdito
 
 	private Color getColor(Object element){
 		PartitionNode partition = (PartitionNode)element;
-		if(partition.getCategory().isExpected()){
+		if(partition.getParameter().isExpected()){
 			return ColorManager.getColor(ColorConstants.EXPECTED_VALUE_CATEGORY);
 		}
 		return null;

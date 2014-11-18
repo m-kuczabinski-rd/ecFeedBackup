@@ -49,7 +49,7 @@ public class TestDataViewer extends TableViewerSection implements ITestDataEdito
 			@Override
 			public String getText(Object element){
 				PartitionNode testValue = (PartitionNode)element;
-				ParameterNode parent = testValue.getCategory();
+				ParameterNode parent = testValue.getParameter();
 				return parent.toString();
 			}
 
@@ -63,7 +63,7 @@ public class TestDataViewer extends TableViewerSection implements ITestDataEdito
 			@Override
 			public String getText(Object element){
 				PartitionNode testValue = (PartitionNode)element;
-				if(testValue.getCategory().isExpected()){
+				if(testValue.getParameter().isExpected()){
 					return testValue.getValueString();
 				}
 				return testValue.toString();

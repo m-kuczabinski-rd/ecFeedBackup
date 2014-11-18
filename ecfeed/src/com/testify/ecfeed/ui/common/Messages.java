@@ -26,7 +26,7 @@ public class Messages {
 	public static final String DIALOG_TEST_SUITE_NAME_ERROR_MESSAGE_NO_WHITESPACE = "Name of a test suite cannot consist of whitespace characters only.";
 	public static final String DIALOG_CHOICE_VALUE_PROBLEM_TITLE = "Wrong choice value";
 	public static final String DIALOG_CHOICE_VALUE_PROBLEM_MESSAGE(String value){
-		return "Value " + value + " is not valid for given category.\n" +
+		return "Value " + value + " is not valid for given parameter.\n" +
 				"choice value must fit to type and range of the variable " +
 				"represented by the choice, contain between 1 and 64 characters.\n" +
 				"choices of user defined type must follow Java enum defining rules.";
@@ -64,8 +64,8 @@ public class Messages {
 	public static final String DIALOG_RENAME_METHOD_PROBLEM_TITLE = "Couldn't rename method";
 	public static final String DIALOG_CONVERT_METHOD_PROBLEM_TITLE = "Couldn't convert method";
 	public static final String DIALOG_UNEXPECTED_PROBLEM_WITH_TEST_EXECUTION = "Unexpected problem with test execution";
-	public static final String DIALOG_SET_CATEGORY_EXPECTED_PROBLEM_TITLE = "Couldn't change category expected status";
-	public static final String DIALOG_SET_DEFAULT_VALUE_PROBLEM_TITLE = "Couldn't change default value for category";
+	public static final String DIALOG_SET_CATEGORY_EXPECTED_PROBLEM_TITLE = "Couldn't change parameter expected status";
+	public static final String DIALOG_SET_DEFAULT_VALUE_PROBLEM_TITLE = "Couldn't change default value for parameter";
 	public static final String DIALOG_REMOVE_PARAMETERS_PROBLEM_TITLE = "Couldn't remove parameters";
 	public static final String DIALOG_ADD_CONSTRAINT_PROBLEM_TITLE = "Couldn't add constraint";
 	public static final String DIALOG_REMOVE_CONSTRAINTS_PROBLEM_TITLE = "Couldn't remove constraints";
@@ -130,11 +130,11 @@ public class Messages {
 	public static final String EXECUTING_TEST_WITH_PARAMETERS = "Executing test function with generated parameters";
 	public static final String EXECUTING_TEST_WITH_NO_PARAMETERS = "Executing test function";
 
-	public static final String DIALOG_GENERATOR_INPUT_PROBLEM_MESSAGE = "At least one choice per category must be check";
-	public static final String DIALOG_GENERATOR_EXECUTABLE_INPUT_PROBLEM_MESSAGE = "At least one choice per category must be check. All checked categories must be implemented";
+	public static final String DIALOG_GENERATOR_INPUT_PROBLEM_MESSAGE = "At least one choice per parameter must be check";
+	public static final String DIALOG_GENERATOR_EXECUTABLE_INPUT_PROBLEM_MESSAGE = "At least one choice per parameter must be check. All checked parameters must be implemented";
 	public static final String DIALOG_GENERATE_TEST_SUITES_SELECT_CONSTRAINTS_LABEL = "Select constraints considered when generating test suite";
 	public static final String DIALOG_GENERATE_TEST_SUITES_SELECT_CHOICES_LABEL = "Select which choices will be considered for generating test suite. "
-			+ "Each category must be represented by at least one choice.";
+			+ "Each parameter must be represented by at least one choice.";
 	public static final String DIALOG_TEST_SUITE_NAME_PROBLEM_MESSAGE = "Entered test suite name not allowed";
 	public static final String DIALOG_DESCENDING_LABELS_WILL_BE_REMOVED_WARNING_TITLE = "choices below in the hierarchy are already labeled with this label. Changing the label will result in removing the labels from all that choices";
 	public static String DIALOG_UNSUCCESFUL_TEST_EXECUTION(int totalTestCases, int unsuccesfull) {
