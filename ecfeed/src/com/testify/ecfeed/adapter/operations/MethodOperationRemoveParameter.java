@@ -42,7 +42,7 @@ public class MethodOperationRemoveParameter extends BulkOperation{
 			super(OperationNames.REMOVE_PARAMETER);
 			fTarget = target;
 			fParameter = parameter;
-			fOriginalTestCases = new ArrayList<TestCaseNode>(target.getTestCases());
+			fOriginalTestCases = new ArrayList<TestCaseNode>();
 			fOriginalIndex = parameter.getIndex();
 		}
 
@@ -51,11 +51,14 @@ public class MethodOperationRemoveParameter extends BulkOperation{
 			if(validateNewSignature() == false){
 				throw new ModelOperationException(Messages.METHOD_SIGNATURE_DUPLICATE_PROBLEM);
 			}
-			fOriginalIndex = fParameter.getIndex();
-			fTarget.removeCategory(fParameter);
+			fOriginalTestCases.clear();
+			for(TestCaseNode tcase : fTarget.getTestCases()){
+				fOriginalTestCases.add(tcase.getCopy(fTarget));
+			}
 			for(TestCaseNode tc : fTarget.getTestCases()){
 				tc.getTestData().remove(fOriginalIndex);
 			}
+			fTarget.removeCategory(fParameter);
 			markModelUpdated();
 		}
 
