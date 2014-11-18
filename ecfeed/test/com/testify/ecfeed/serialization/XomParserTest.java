@@ -33,7 +33,7 @@ import com.testify.ecfeed.model.ExpectedValueStatement;
 import com.testify.ecfeed.model.GenericNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.ChoiceNode;
-import com.testify.ecfeed.model.PartitionedParameterStatement;
+import com.testify.ecfeed.model.DecomposedParameterStatement;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.StatementArray;
 import com.testify.ecfeed.model.StaticStatement;
@@ -190,10 +190,10 @@ public class XomParserTest {
 		for(int i = 0; i < 10; i++){
 			try{
 				MethodNode m = fModelGenerator.generateMethod(5, 0, 0);
-				PartitionedParameterStatement s = fModelGenerator.generatePartitionedStatement(m);
+				DecomposedParameterStatement s = fModelGenerator.generatePartitionedStatement(m);
 				Element element = (Element)s.accept(fConverter);
 				TRACE(element);
-				PartitionedParameterStatement parsedS = null;
+				DecomposedParameterStatement parsedS = null;
 				switch(element.getLocalName()){
 				case Constants.CONSTRAINT_LABEL_STATEMENT_NODE_NAME:
 					parsedS = fParser.parseLabelStatement(element, m);

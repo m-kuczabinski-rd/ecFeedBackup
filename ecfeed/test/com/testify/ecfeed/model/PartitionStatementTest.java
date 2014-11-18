@@ -26,7 +26,7 @@ import org.junit.Test;
 import com.testify.ecfeed.model.ParameterNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.ChoiceNode;
-import com.testify.ecfeed.model.PartitionedParameterStatement;
+import com.testify.ecfeed.model.DecomposedParameterStatement;
 import com.testify.ecfeed.model.EStatementRelation;
 
 public class PartitionStatementTest {
@@ -87,7 +87,7 @@ public class PartitionStatementTest {
 
 	@Test
 	public void equalsTest(){
-		PartitionedParameterStatement statement = new PartitionedParameterStatement(fParameter, EStatementRelation.EQUAL, fP22);
+		DecomposedParameterStatement statement = new DecomposedParameterStatement(fParameter, EStatementRelation.EQUAL, fP22);
 		
 		assertTrue(statement.evaluate(Arrays.asList(new ChoiceNode[]{fP221})));
 		assertTrue(statement.evaluate(Arrays.asList(new ChoiceNode[]{fP222})));
@@ -102,7 +102,7 @@ public class PartitionStatementTest {
 
 	@Test 
 	public void notEqualsTest(){
-		PartitionedParameterStatement statement = new PartitionedParameterStatement(fParameter, EStatementRelation.NOT, fP22);
+		DecomposedParameterStatement statement = new DecomposedParameterStatement(fParameter, EStatementRelation.NOT, fP22);
 		
 		assertFalse(statement.evaluate(Arrays.asList(new ChoiceNode[]{fP221})));
 		assertFalse(statement.evaluate(Arrays.asList(new ChoiceNode[]{fP222})));
@@ -139,12 +139,12 @@ public class PartitionStatementTest {
 	@Test
 	public void testEvaluate() {
 
-		PartitionedParameterStatement statement1 = new PartitionedParameterStatement(fParameter, EStatementRelation.EQUAL, fPartition2);
+		DecomposedParameterStatement statement1 = new DecomposedParameterStatement(fParameter, EStatementRelation.EQUAL, fPartition2);
 		assertFalse(statement1.evaluate(fList1));
 		assertTrue(statement1.evaluate(fList2));
 		assertFalse(statement1.evaluate(fList3));
 
-		PartitionedParameterStatement statement4 = new PartitionedParameterStatement(fParameter, EStatementRelation.NOT, fPartition2);
+		DecomposedParameterStatement statement4 = new DecomposedParameterStatement(fParameter, EStatementRelation.NOT, fPartition2);
 		assertTrue(statement4.evaluate(fList1));
 		assertFalse(statement4.evaluate(fList2));
 		assertTrue(statement4.evaluate(fList3));
@@ -152,14 +152,14 @@ public class PartitionStatementTest {
 
 	@Test
 	public void testMentionsPartitionNode() {
-		PartitionedParameterStatement statement = new PartitionedParameterStatement(fParameter, EStatementRelation.EQUAL, fPartition2);
+		DecomposedParameterStatement statement = new DecomposedParameterStatement(fParameter, EStatementRelation.EQUAL, fPartition2);
 		assertTrue(statement.mentions(fPartition2));
 		assertFalse(statement.mentions(fPartition1));
 	}
 
 	@Test
 	public void testMentionsParameterNode() {
-		PartitionedParameterStatement statement = new PartitionedParameterStatement(fParameter, EStatementRelation.EQUAL, fPartition2);
+		DecomposedParameterStatement statement = new DecomposedParameterStatement(fParameter, EStatementRelation.EQUAL, fPartition2);
 		ParameterNode parameter = new ParameterNode("name", "type", "0", false);
 		assertTrue(statement.mentions(fParameter));
 		assertFalse(statement.mentions(parameter));
@@ -167,13 +167,13 @@ public class PartitionStatementTest {
 
 	@Test
 	public void testGetCondition() {
-		PartitionedParameterStatement statement = new PartitionedParameterStatement(fParameter, EStatementRelation.EQUAL, fPartition2);
+		DecomposedParameterStatement statement = new DecomposedParameterStatement(fParameter, EStatementRelation.EQUAL, fPartition2);
 		assertEquals(fPartition2, statement.getConditionValue());
 	}
 
 	@Test
 	public void testGetRelation() {
-		PartitionedParameterStatement statement = new PartitionedParameterStatement(fParameter, EStatementRelation.EQUAL, fPartition2);
+		DecomposedParameterStatement statement = new DecomposedParameterStatement(fParameter, EStatementRelation.EQUAL, fPartition2);
 		assertEquals(EStatementRelation.EQUAL, statement.getRelation());
 	}
 
@@ -185,8 +185,8 @@ public class PartitionStatementTest {
 		ChoiceNode p1 = new ChoiceNode("name", "value");
 		ChoiceNode p2 = new ChoiceNode("name", "value");
 		
-		PartitionedParameterStatement s1 = new PartitionedParameterStatement(c1, EStatementRelation.NOT, p1);
-		PartitionedParameterStatement s2 = new PartitionedParameterStatement(c2, EStatementRelation.NOT, p2);
+		DecomposedParameterStatement s1 = new DecomposedParameterStatement(c1, EStatementRelation.NOT, p1);
+		DecomposedParameterStatement s2 = new DecomposedParameterStatement(c2, EStatementRelation.NOT, p2);
 		
 		assertTrue(s1.compare(s2));
 		c1.setName("c1");

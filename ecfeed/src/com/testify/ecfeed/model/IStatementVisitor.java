@@ -11,14 +11,14 @@
 
 package com.testify.ecfeed.model;
 
-import com.testify.ecfeed.model.PartitionedParameterStatement.LabelCondition;
-import com.testify.ecfeed.model.PartitionedParameterStatement.PartitionCondition;
+import com.testify.ecfeed.model.DecomposedParameterStatement.LabelCondition;
+import com.testify.ecfeed.model.DecomposedParameterStatement.PartitionCondition;
 
 public interface IStatementVisitor {
 	public Object visit(StaticStatement statement) throws Exception;
 	public Object visit(StatementArray statement) throws Exception;
 	public Object visit(ExpectedValueStatement statement) throws Exception;
-	public Object visit(PartitionedParameterStatement statement) throws Exception;
+	public Object visit(DecomposedParameterStatement statement) throws Exception;
 	public Object visit(LabelCondition condition) throws Exception;
 	public Object visit(PartitionCondition condition) throws Exception;
 }

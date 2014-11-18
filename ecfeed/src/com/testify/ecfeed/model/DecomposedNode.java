@@ -5,11 +5,11 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
-public abstract class PartitionedNode extends GenericNode{
+public abstract class DecomposedNode extends GenericNode{
 
 	private List<ChoiceNode> fPartitions;
 
-	public PartitionedNode(String name) {
+	public DecomposedNode(String name) {
 		super(name);
 		fPartitions = new ArrayList<ChoiceNode>();
 	}

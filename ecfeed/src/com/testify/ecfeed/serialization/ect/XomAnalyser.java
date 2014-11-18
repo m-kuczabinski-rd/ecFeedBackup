@@ -46,7 +46,7 @@ import com.testify.ecfeed.model.EStatementRelation;
 import com.testify.ecfeed.model.ExpectedValueStatement;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.ChoiceNode;
-import com.testify.ecfeed.model.PartitionedParameterStatement;
+import com.testify.ecfeed.model.DecomposedParameterStatement;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.StatementArray;
 import com.testify.ecfeed.model.StaticStatement;
@@ -277,7 +277,7 @@ public class XomAnalyser {
 		}
 	}
 
-	public PartitionedParameterStatement parsePartitionStatement(Element element, MethodNode method) throws ParserException {
+	public DecomposedParameterStatement parsePartitionStatement(Element element, MethodNode method) throws ParserException {
 		assertNodeTag(element.getQualifiedName(), CONSTRAINT_PARTITION_STATEMENT_NODE_NAME);
 
 		String parameterName = getAttributeValue(element, Constants.STATEMENT_CATEGORY_ATTRIBUTE_NAME);
@@ -294,10 +294,10 @@ public class XomAnalyser {
 		String relationName = getAttributeValue(element, Constants.STATEMENT_RELATION_ATTRIBUTE_NAME);
 		EStatementRelation relation = getRelation(relationName);
 
-		return new PartitionedParameterStatement(parameter, relation, partition);
+		return new DecomposedParameterStatement(parameter, relation, partition);
 	}
 
-	public PartitionedParameterStatement parseLabelStatement(Element element, MethodNode method) throws ParserException {
+	public DecomposedParameterStatement parseLabelStatement(Element element, MethodNode method) throws ParserException {
 		assertNodeTag(element.getQualifiedName(), CONSTRAINT_LABEL_STATEMENT_NODE_NAME);
 
 		String parameterName = getAttributeValue(element, Constants.STATEMENT_CATEGORY_ATTRIBUTE_NAME);
@@ -310,7 +310,7 @@ public class XomAnalyser {
 		}
 		EStatementRelation relation = getRelation(relationName);
 
-		return new PartitionedParameterStatement(parameter, relation, label);
+		return new DecomposedParameterStatement(parameter, relation, label);
 	}
 
 	public ExpectedValueStatement parseExpectedValueStatement(Element element, MethodNode method) throws ParserException {

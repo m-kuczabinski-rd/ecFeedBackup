@@ -10,21 +10,21 @@ import com.testify.ecfeed.adapter.IModelOperation;
 import com.testify.ecfeed.adapter.operations.GenericOperationAddPartition;
 import com.testify.ecfeed.adapter.operations.GenericOperationRemovePartition;
 import com.testify.ecfeed.model.ChoiceNode;
-import com.testify.ecfeed.model.PartitionedNode;
+import com.testify.ecfeed.model.DecomposedNode;
 import com.testify.ecfeed.ui.common.Constants;
 import com.testify.ecfeed.ui.common.EclipseModelBuilder;
 import com.testify.ecfeed.ui.common.EclipseTypeAdapterProvider;
 import com.testify.ecfeed.ui.common.Messages;
 
-public class PartitionedNodeInterface extends GenericNodeInterface {
+public class DecomposedNodeInterface extends GenericNodeInterface {
 
-	private PartitionedNode fTarget;
+	private DecomposedNode fTarget;
 
-	public PartitionedNodeInterface(IModelUpdateContext updateContext){
+	public DecomposedNodeInterface(IModelUpdateContext updateContext){
 		super(updateContext);
 	}
 
-	public void setTarget(PartitionedNode target){
+	public void setTarget(DecomposedNode target){
 		super.setTarget(target);
 		fTarget = target;
 	}

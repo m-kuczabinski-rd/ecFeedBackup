@@ -54,7 +54,7 @@ import com.testify.ecfeed.model.ExpectedValueStatement;
 import com.testify.ecfeed.model.GenericNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.ChoiceNode;
-import com.testify.ecfeed.model.PartitionedParameterStatement;
+import com.testify.ecfeed.model.DecomposedParameterStatement;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.StatementArray;
 import com.testify.ecfeed.model.StaticStatement;
@@ -224,7 +224,7 @@ public class RandomModelGenerator {
 		return new StaticStatement(rand.nextBoolean());
 	}
 
-	public PartitionedParameterStatement generatePartitionedStatement(MethodNode method) {
+	public DecomposedParameterStatement generatePartitionedStatement(MethodNode method) {
 		List<ParameterNode> parameters = new ArrayList<ParameterNode>();
 		
 		for(ParameterNode parameter : method.getParameters()){
@@ -250,7 +250,7 @@ public class RandomModelGenerator {
 			List<String> partitionNames = new ArrayList<String>(parameter.getAllPartitionNames());
 			String luckyPartitionName = partitionNames.get(rand.nextInt(partitionNames.size()));
 			ChoiceNode condition = parameter.getPartition(luckyPartitionName);
-			return new PartitionedParameterStatement(parameter, relation, condition);
+			return new DecomposedParameterStatement(parameter, relation, condition);
 		}
 		else{
 			if(parameter.getLeafLabels().size() == 0){
@@ -260,7 +260,7 @@ public class RandomModelGenerator {
 			Set<String>labels = parameter.getLeafLabels();
 			
 			String label = labels.toArray(new String[]{})[rand.nextInt(labels.size())];
-			return new PartitionedParameterStatement(parameter, relation, label);
+			return new DecomposedParameterStatement(parameter, relation, label);
 		}
 	}
 
@@ -518,7 +518,7 @@ public class RandomModelGenerator {
 	public void testGeneratePartitionedStatement(){
 		for(int i = 0; i < 10; i++){
 			MethodNode m = generateMethod(10, 0, 0);
-			PartitionedParameterStatement statement = generatePartitionedStatement(m);
+			DecomposedParameterStatement statement = generatePartitionedStatement(m);
 			System.out.println(fStringifier.stringify(statement, 0));
 		}
 	}

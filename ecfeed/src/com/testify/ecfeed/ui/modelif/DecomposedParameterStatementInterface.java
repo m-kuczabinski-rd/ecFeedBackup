@@ -5,19 +5,19 @@ import com.testify.ecfeed.adapter.operations.StatementOperationSetCondition;
 import com.testify.ecfeed.adapter.operations.StatementOperationSetRelation;
 import com.testify.ecfeed.model.ParameterNode;
 import com.testify.ecfeed.model.EStatementRelation;
-import com.testify.ecfeed.model.PartitionedParameterStatement;
-import com.testify.ecfeed.model.PartitionedParameterStatement.ICondition;
+import com.testify.ecfeed.model.DecomposedParameterStatement;
+import com.testify.ecfeed.model.DecomposedParameterStatement.ICondition;
 import com.testify.ecfeed.ui.common.Messages;
 
-public class PartitionedParameterStatementInterface extends BasicStatementInterface{
+public class DecomposedParameterStatementInterface extends BasicStatementInterface{
 
-	private PartitionedParameterStatement fTarget;
+	private DecomposedParameterStatement fTarget;
 
-	public PartitionedParameterStatementInterface(IModelUpdateContext updateContext) {
+	public DecomposedParameterStatementInterface(IModelUpdateContext updateContext) {
 		super(updateContext);
 	}
 
-	public void setTarget(PartitionedParameterStatement target){
+	public void setTarget(DecomposedParameterStatement target){
 		super.setTarget(target);
 		fTarget = target;
 	}

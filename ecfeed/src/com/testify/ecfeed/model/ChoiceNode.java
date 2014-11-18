@@ -15,9 +15,9 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
-public class ChoiceNode extends PartitionedNode{
+public class ChoiceNode extends DecomposedNode{
 
-	private PartitionedNode fParent;
+	private DecomposedNode fParent;
 	private String fValueString;
 	private Set<String> fLabels;
 	
@@ -36,7 +36,7 @@ public class ChoiceNode extends PartitionedNode{
 	}
 
 	@Override
-	public PartitionedNode getParent(){
+	public DecomposedNode getParent(){
 		return fParent;
 	}
 
@@ -73,7 +73,7 @@ public class ChoiceNode extends PartitionedNode{
 		return getName();
 	}
 
-	public void setParent(PartitionedNode parent){
+	public void setParent(DecomposedNode parent){
 		super.setParent(parent);
 		fParent = parent;
 	}

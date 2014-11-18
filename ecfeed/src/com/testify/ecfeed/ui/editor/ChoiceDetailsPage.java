@@ -33,7 +33,7 @@ import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 public class ChoiceDetailsPage extends BasicDetailsPage {
 
 	private ChoicesViewer fChildrenViewer;
-	private PartitionLabelsViewer fLabelsViewer;
+	private ChoiceLabelsViewer fLabelsViewer;
 	private Composite fAttributesComposite;
 	private Text fNameText;
 	private Combo fValueCombo;
@@ -67,7 +67,7 @@ public class ChoiceDetailsPage extends BasicDetailsPage {
 
 		createNameValueEditor(getMainComposite());
 		addViewerSection(fChildrenViewer = new ChoicesViewer(this, this));
-		addViewerSection(fLabelsViewer = new PartitionLabelsViewer(this, this));
+		addViewerSection(fLabelsViewer = new ChoiceLabelsViewer(this, this));
 
 		getToolkit().paintBordersFor(getMainComposite());
 	}

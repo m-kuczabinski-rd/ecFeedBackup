@@ -459,7 +459,7 @@ public class MethodNodeTest {
 		MethodNode method = new MethodNode("method");
 		ParameterNode parameter = new ParameterNode("parameter", "type", "0", false);
 		ChoiceNode partition = new ChoiceNode("partition", "value");
-		Constraint mentioningConstraint = new Constraint(new PartitionedParameterStatement(parameter, EStatementRelation.EQUAL, partition), new StaticStatement(false));
+		Constraint mentioningConstraint = new Constraint(new DecomposedParameterStatement(parameter, EStatementRelation.EQUAL, partition), new StaticStatement(false));
 		Constraint notMentioningConstraint = new Constraint(new StaticStatement(false), new StaticStatement(false));
 		ConstraintNode mentioningConstraintNode = new ConstraintNode("constraint", mentioningConstraint);
 		ConstraintNode notMentioningConstraintNode = new ConstraintNode("constraint", notMentioningConstraint);

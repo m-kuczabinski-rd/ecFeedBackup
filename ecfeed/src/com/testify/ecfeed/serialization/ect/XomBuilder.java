@@ -61,14 +61,14 @@ import com.testify.ecfeed.model.IModelVisitor;
 import com.testify.ecfeed.model.IStatementVisitor;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.ChoiceNode;
-import com.testify.ecfeed.model.PartitionedParameterStatement;
+import com.testify.ecfeed.model.DecomposedParameterStatement;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.StatementArray;
 import com.testify.ecfeed.model.StaticStatement;
 import com.testify.ecfeed.model.TestCaseNode;
-import com.testify.ecfeed.model.PartitionedParameterStatement.ICondition;
-import com.testify.ecfeed.model.PartitionedParameterStatement.LabelCondition;
-import com.testify.ecfeed.model.PartitionedParameterStatement.PartitionCondition;
+import com.testify.ecfeed.model.DecomposedParameterStatement.ICondition;
+import com.testify.ecfeed.model.DecomposedParameterStatement.LabelCondition;
+import com.testify.ecfeed.model.DecomposedParameterStatement.PartitionCondition;
 
 public class XomBuilder implements IModelVisitor, IStatementVisitor {
 
@@ -245,7 +245,7 @@ public class XomBuilder implements IModelVisitor, IStatementVisitor {
 	}
 
 	@Override
-	public Object visit(PartitionedParameterStatement statement) throws Exception {
+	public Object visit(DecomposedParameterStatement statement) throws Exception {
 
 		String parameterName = statement.getParameter().getName();
 		Attribute parameterAttribute = 

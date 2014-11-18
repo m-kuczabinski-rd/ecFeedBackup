@@ -23,7 +23,7 @@ import org.junit.Test;
 
 import com.testify.ecfeed.testutils.RandomModelGenerator;
 
-public class PartitionNodeTest{
+public class ChoiceNodeTest{
 	@Test
 	public void testValue() {
 		ChoiceNode partition = new ChoiceNode("name", "value");

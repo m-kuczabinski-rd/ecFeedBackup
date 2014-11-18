@@ -25,7 +25,7 @@ import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.EStatementOperator;
 import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.model.ParameterNode;
-import com.testify.ecfeed.model.PartitionedParameterStatement;
+import com.testify.ecfeed.model.DecomposedParameterStatement;
 import com.testify.ecfeed.model.EStatementRelation;
 import com.testify.ecfeed.model.StatementArray;
 import com.testify.ecfeed.model.StaticStatement;
@@ -68,8 +68,8 @@ public class StatementArrayTest {
 	public void testEvaluate() {
 		StatementArray arrayOr = new StatementArray(EStatementOperator.OR);
 		StatementArray arrayAnd = new StatementArray(EStatementOperator.AND);
-		PartitionedParameterStatement statement1 = new PartitionedParameterStatement(fParameter1, EStatementRelation.EQUAL, fPartition11);
-		PartitionedParameterStatement statement2 = new PartitionedParameterStatement(fParameter2, EStatementRelation.EQUAL, fPartition21);
+		DecomposedParameterStatement statement1 = new DecomposedParameterStatement(fParameter1, EStatementRelation.EQUAL, fPartition11);
+		DecomposedParameterStatement statement2 = new DecomposedParameterStatement(fParameter2, EStatementRelation.EQUAL, fPartition21);
 		arrayOr.addStatement(statement1);
 		arrayOr.addStatement(statement2);
 		arrayAnd.addStatement(statement1);
@@ -97,9 +97,9 @@ public class StatementArrayTest {
 	@Test
 	public void testGetChildren() {
 		StatementArray array = new StatementArray(EStatementOperator.OR);
-		PartitionedParameterStatement statement1 = new PartitionedParameterStatement(fParameter1, EStatementRelation.EQUAL, fPartition11);
-		PartitionedParameterStatement statement2 = new PartitionedParameterStatement(fParameter2, EStatementRelation.EQUAL, fPartition21);
-		PartitionedParameterStatement statement3 = new PartitionedParameterStatement(fParameter2, EStatementRelation.EQUAL, fPartition21);
+		DecomposedParameterStatement statement1 = new DecomposedParameterStatement(fParameter1, EStatementRelation.EQUAL, fPartition11);
+		DecomposedParameterStatement statement2 = new DecomposedParameterStatement(fParameter2, EStatementRelation.EQUAL, fPartition21);
+		DecomposedParameterStatement statement3 = new DecomposedParameterStatement(fParameter2, EStatementRelation.EQUAL, fPartition21);
 		array.addStatement(statement1);
 		array.addStatement(statement2);
 		
@@ -112,8 +112,8 @@ public class StatementArrayTest {
 	@Test
 	public void testMentionsPartitionNode() {
 		StatementArray array = new StatementArray(EStatementOperator.OR);
-		PartitionedParameterStatement statement1 = new PartitionedParameterStatement(fParameter1, EStatementRelation.EQUAL, fPartition11);
-		PartitionedParameterStatement statement2 = new PartitionedParameterStatement(fParameter2, EStatementRelation.EQUAL, fPartition21);
+		DecomposedParameterStatement statement1 = new DecomposedParameterStatement(fParameter1, EStatementRelation.EQUAL, fPartition11);
+		DecomposedParameterStatement statement2 = new DecomposedParameterStatement(fParameter2, EStatementRelation.EQUAL, fPartition21);
 		array.addStatement(statement1);
 		array.addStatement(statement2);
 		assertTrue(array.mentions(fPartition11));
@@ -123,7 +123,7 @@ public class StatementArrayTest {
 	@Test
 	public void testMentionsParameterNode() {
 		StatementArray array = new StatementArray(EStatementOperator.OR);
-		PartitionedParameterStatement statement1 = new PartitionedParameterStatement(fParameter1, EStatementRelation.EQUAL, fPartition11);
+		DecomposedParameterStatement statement1 = new DecomposedParameterStatement(fParameter1, EStatementRelation.EQUAL, fPartition11);
 		array.addStatement(statement1);
 		assertTrue(array.mentions(fPartition11.getParameter()));
 		assertFalse(array.mentions(fPartition21.getParameter()));
@@ -132,8 +132,8 @@ public class StatementArrayTest {
 	@Test
 	public void testSetOperator() {
 		StatementArray array = new StatementArray(EStatementOperator.OR);
-		PartitionedParameterStatement statement1 = new PartitionedParameterStatement(fParameter1, EStatementRelation.EQUAL, fPartition11);
-		PartitionedParameterStatement statement2 = new PartitionedParameterStatement(fParameter2, EStatementRelation.EQUAL, fPartition21);
+		DecomposedParameterStatement statement1 = new DecomposedParameterStatement(fParameter1, EStatementRelation.EQUAL, fPartition11);
+		DecomposedParameterStatement statement2 = new DecomposedParameterStatement(fParameter2, EStatementRelation.EQUAL, fPartition21);
 		array.addStatement(statement1);
 		array.addStatement(statement2);
 		assertEquals(EStatementOperator.OR, array.getOperator());
@@ -148,9 +148,9 @@ public class StatementArrayTest {
 	@Test
 	public void testReplaceChild() {
 		StatementArray array = new StatementArray(EStatementOperator.OR);
-		PartitionedParameterStatement statement1 = new PartitionedParameterStatement(fParameter1, EStatementRelation.EQUAL, fPartition11);
-		PartitionedParameterStatement statement2 = new PartitionedParameterStatement(fParameter1, EStatementRelation.EQUAL, fPartition12);
-		PartitionedParameterStatement statement3 = new PartitionedParameterStatement(fParameter1, EStatementRelation.EQUAL, fPartition13);
+		DecomposedParameterStatement statement1 = new DecomposedParameterStatement(fParameter1, EStatementRelation.EQUAL, fPartition11);
+		DecomposedParameterStatement statement2 = new DecomposedParameterStatement(fParameter1, EStatementRelation.EQUAL, fPartition12);
+		DecomposedParameterStatement statement3 = new DecomposedParameterStatement(fParameter1, EStatementRelation.EQUAL, fPartition13);
 		array.addStatement(statement1);
 		array.addStatement(statement2);
 		assertEquals(2, array.getChildren().size());
@@ -168,8 +168,8 @@ public class StatementArrayTest {
 	@Test
 	public void testRemoveChild() {
 		StatementArray array = new StatementArray(EStatementOperator.OR);
-		PartitionedParameterStatement statement1 = new PartitionedParameterStatement(fParameter1, EStatementRelation.EQUAL, fPartition11);
-		PartitionedParameterStatement statement2 = new PartitionedParameterStatement(fParameter1, EStatementRelation.EQUAL, fPartition12);
+		DecomposedParameterStatement statement1 = new DecomposedParameterStatement(fParameter1, EStatementRelation.EQUAL, fPartition11);
+		DecomposedParameterStatement statement2 = new DecomposedParameterStatement(fParameter1, EStatementRelation.EQUAL, fPartition12);
 		array.addStatement(statement1);
 		array.addStatement(statement2);
 		assertEquals(2, array.getChildren().size());

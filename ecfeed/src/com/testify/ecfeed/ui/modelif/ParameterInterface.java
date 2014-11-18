@@ -21,7 +21,7 @@ import com.testify.ecfeed.ui.common.EclipseModelBuilder;
 import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.common.EclipseTypeAdapterProvider;
 
-public class ParameterInterface extends PartitionedNodeInterface {
+public class ParameterInterface extends DecomposedNodeInterface {
 	
 	private ParameterNode fTarget;
 	private ITypeAdapterProvider fAdapterProvider;

@@ -19,13 +19,13 @@ import com.testify.ecfeed.model.ExpectedValueStatement;
 import com.testify.ecfeed.model.GenericNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.ChoiceNode;
-import com.testify.ecfeed.model.PartitionedParameterStatement;
+import com.testify.ecfeed.model.DecomposedParameterStatement;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.StatementArray;
 import com.testify.ecfeed.model.StaticStatement;
 import com.testify.ecfeed.model.TestCaseNode;
-import com.testify.ecfeed.model.PartitionedParameterStatement.LabelCondition;
-import com.testify.ecfeed.model.PartitionedParameterStatement.PartitionCondition;
+import com.testify.ecfeed.model.DecomposedParameterStatement.LabelCondition;
+import com.testify.ecfeed.model.DecomposedParameterStatement.PartitionCondition;
 
 public class ModelStringifier {
 	public String stringify(GenericNode node, int indent){
@@ -57,8 +57,8 @@ public class ModelStringifier {
 		if(statement instanceof StaticStatement){
 			return stringify((StaticStatement)statement, indent);
 		}
-		if(statement instanceof PartitionedParameterStatement){
-			return stringify((PartitionedParameterStatement)statement, indent);
+		if(statement instanceof DecomposedParameterStatement){
+			return stringify((DecomposedParameterStatement)statement, indent);
 		}
 		if(statement instanceof ExpectedValueStatement){
 			return stringify((ExpectedValueStatement)statement, indent);
@@ -176,7 +176,7 @@ public class ModelStringifier {
 		return result;
 	}
 	
-	public String stringify(PartitionedParameterStatement s, int indent){
+	public String stringify(DecomposedParameterStatement s, int indent){
 		String result = intendentString(indent);
 		result += "Partitioned statement ";
 		if(s.getCondition() instanceof LabelCondition){

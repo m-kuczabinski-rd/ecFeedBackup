@@ -40,7 +40,7 @@ import com.testify.ecfeed.ui.editor.actions.SelectAllAction;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 import com.testify.ecfeed.ui.modelif.ChoiceInterface;
 
-public class PartitionLabelsViewer extends TableViewerSection {
+public class ChoiceLabelsViewer extends TableViewerSection {
 	
 	private static final int STYLE = Section.TITLE_BAR | Section.EXPANDED;
 
@@ -74,9 +74,9 @@ public class PartitionLabelsViewer extends TableViewerSection {
 		public LabelsViewerActionProvider(){
 			super();
 			addAction("edit", new LabelCopyAction());
-			addAction("edit", new CutAction(new LabelCopyAction(), new LabelDeleteAction(PartitionLabelsViewer.this)));
-			addAction("edit", new LabelPasteAction(PartitionLabelsViewer.this));
-			addAction("edit", new LabelDeleteAction(PartitionLabelsViewer.this));
+			addAction("edit", new CutAction(new LabelCopyAction(), new LabelDeleteAction(ChoiceLabelsViewer.this)));
+			addAction("edit", new LabelPasteAction(ChoiceLabelsViewer.this));
+			addAction("edit", new LabelDeleteAction(ChoiceLabelsViewer.this));
 			addAction("selection", new SelectAllAction(getTableViewer()));
 		}
 	}
@@ -208,7 +208,7 @@ public class PartitionLabelsViewer extends TableViewerSection {
 		}
 	}
 
-	public PartitionLabelsViewer(ISectionContext sectionContext, IModelUpdateContext updateContext) {
+	public ChoiceLabelsViewer(ISectionContext sectionContext, IModelUpdateContext updateContext) {
 		super(sectionContext, updateContext, STYLE);
 
 		fPartitionIf = new ChoiceInterface(this);

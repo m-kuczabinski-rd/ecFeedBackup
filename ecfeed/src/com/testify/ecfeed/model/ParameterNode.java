@@ -13,7 +13,7 @@ package com.testify.ecfeed.model;
 
 import java.util.List;
 
-public class ParameterNode extends PartitionedNode{
+public class ParameterNode extends DecomposedNode{
 	
 	private String fType;
 	private boolean fExpected;

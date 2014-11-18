@@ -13,7 +13,7 @@ package com.testify.ecfeed.model;
 
 import java.util.List;
 
-public class PartitionedParameterStatement extends BasicStatement implements IRelationalStatement{
+public class DecomposedParameterStatement extends BasicStatement implements IRelationalStatement{
 
 	private ParameterNode fParameter;
 	private EStatementRelation fRelation;
@@ -189,19 +189,19 @@ public class PartitionedParameterStatement extends BasicStatement implements IRe
 
 	}
 
-	public PartitionedParameterStatement(ParameterNode parameter, EStatementRelation relation, String labelCondition){
+	public DecomposedParameterStatement(ParameterNode parameter, EStatementRelation relation, String labelCondition){
 		fParameter = parameter;
 		fRelation = relation;
 		fCondition = new LabelCondition(labelCondition);
 	}
 
-	public PartitionedParameterStatement(ParameterNode parameter, EStatementRelation relation, ChoiceNode partitionCondition){
+	public DecomposedParameterStatement(ParameterNode parameter, EStatementRelation relation, ChoiceNode partitionCondition){
 		fParameter = parameter;
 		fRelation = relation;
 		fCondition = new PartitionCondition(partitionCondition);
 	}
 
-	private PartitionedParameterStatement(ParameterNode parameter, EStatementRelation relation, ICondition condition){
+	private DecomposedParameterStatement(ParameterNode parameter, EStatementRelation relation, ICondition condition){
 		fParameter = parameter;
 		fRelation = relation;
 		fCondition = condition;
@@ -243,8 +243,8 @@ public class PartitionedParameterStatement extends BasicStatement implements IRe
 	}
 
 	@Override
-	public PartitionedParameterStatement getCopy(){
-		return new PartitionedParameterStatement(fParameter, fRelation, fCondition.getCopy());
+	public DecomposedParameterStatement getCopy(){
+		return new DecomposedParameterStatement(fParameter, fRelation, fCondition.getCopy());
 	}
 
 	@Override
@@ -303,11 +303,11 @@ public class PartitionedParameterStatement extends BasicStatement implements IRe
 
 	@Override
 	public boolean compare(IStatement statement){
-		if(statement instanceof PartitionedParameterStatement == false){
+		if(statement instanceof DecomposedParameterStatement == false){
 			return false;
 		}
 
-		PartitionedParameterStatement compared = (PartitionedParameterStatement)statement;
+		DecomposedParameterStatement compared = (DecomposedParameterStatement)statement;
 
 		if(getParameter().getName().equals(compared.getParameter().getName()) == false){
 			return false;

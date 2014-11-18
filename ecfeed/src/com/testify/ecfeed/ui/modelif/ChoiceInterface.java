@@ -30,7 +30,7 @@ import com.testify.ecfeed.ui.common.Constants;
 import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.common.EclipseTypeAdapterProvider;
 
-public class ChoiceInterface extends PartitionedNodeInterface{
+public class ChoiceInterface extends DecomposedNodeInterface{
 
 	ChoiceNode fTarget;
 

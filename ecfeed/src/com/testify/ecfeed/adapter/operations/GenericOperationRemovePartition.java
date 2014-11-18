@@ -7,13 +7,13 @@ import com.testify.ecfeed.adapter.ModelOperationException;
 import com.testify.ecfeed.adapter.java.JavaUtils;
 import com.testify.ecfeed.model.ParameterNode;
 import com.testify.ecfeed.model.ChoiceNode;
-import com.testify.ecfeed.model.PartitionedNode;
+import com.testify.ecfeed.model.DecomposedNode;
 
 public class GenericOperationRemovePartition extends BulkOperation {
 
 	private class RemovePartitionOperation extends AbstractModelOperation{
 		
-		private PartitionedNode fTarget;
+		private DecomposedNode fTarget;
 		private ChoiceNode fPartition;
 		private String fOriginalDefaultValue;
 		private int fOriginalIndex;
@@ -38,7 +38,7 @@ public class GenericOperationRemovePartition extends BulkOperation {
 			
 		}
 		
-		public RemovePartitionOperation(PartitionedNode target, ChoiceNode partition){
+		public RemovePartitionOperation(DecomposedNode target, ChoiceNode partition){
 			super(OperationNames.REMOVE_PARTITION);
 			fTarget = target;
 			fPartition = partition;
@@ -77,7 +77,7 @@ public class GenericOperationRemovePartition extends BulkOperation {
 		}
 	}
 
-	public GenericOperationRemovePartition(PartitionedNode target, ChoiceNode partition, boolean validate) {
+	public GenericOperationRemovePartition(DecomposedNode target, ChoiceNode partition, boolean validate) {
 		super(OperationNames.REMOVE_PARTITION, true);
 		addOperation(new RemovePartitionOperation(target, partition));
 		if((target.getParameter().getMethod() != null) && validate){

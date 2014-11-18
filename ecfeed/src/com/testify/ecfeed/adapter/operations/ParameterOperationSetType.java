@@ -19,10 +19,10 @@ import com.testify.ecfeed.model.ExpectedValueStatement;
 import com.testify.ecfeed.model.IStatementVisitor;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.ChoiceNode;
-import com.testify.ecfeed.model.PartitionedParameterStatement;
-import com.testify.ecfeed.model.PartitionedParameterStatement.LabelCondition;
-import com.testify.ecfeed.model.PartitionedParameterStatement.PartitionCondition;
-import com.testify.ecfeed.model.PartitionedNode;
+import com.testify.ecfeed.model.DecomposedParameterStatement;
+import com.testify.ecfeed.model.DecomposedParameterStatement.LabelCondition;
+import com.testify.ecfeed.model.DecomposedParameterStatement.PartitionCondition;
+import com.testify.ecfeed.model.DecomposedNode;
 import com.testify.ecfeed.model.StatementArray;
 import com.testify.ecfeed.model.StaticStatement;
 import com.testify.ecfeed.model.TestCaseNode;
@@ -80,7 +80,7 @@ public class ParameterOperationSetType extends BulkOperation{
 			}
 
 			@Override
-			public Object visit(PartitionedParameterStatement statement)
+			public Object visit(DecomposedParameterStatement statement)
 					throws Exception {
 				return true;
 			}
@@ -125,7 +125,7 @@ public class ParameterOperationSetType extends BulkOperation{
 				}
 
 				@Override
-				public Object visit(PartitionedParameterStatement statement)
+				public Object visit(DecomposedParameterStatement statement)
 						throws Exception {
 					return null;
 				}
@@ -251,7 +251,7 @@ public class ParameterOperationSetType extends BulkOperation{
 			return new ReverseOperation();
 		}
 
-		private void convertPartitionValues(PartitionedNode parent, ITypeAdapter adapter) {
+		private void convertPartitionValues(DecomposedNode parent, ITypeAdapter adapter) {
 			for(ChoiceNode p : parent.getPartitions()){
 				convertPartitionValue(p, adapter);
 				convertPartitionValues(p, adapter);
@@ -264,7 +264,7 @@ public class ParameterOperationSetType extends BulkOperation{
 			p.setValueString(newValue);
 		}
 
-		private void removeDeadPartitions(PartitionedNode parent) {
+		private void removeDeadPartitions(DecomposedNode parent) {
 			List<ChoiceNode> toRemove = new ArrayList<ChoiceNode>();
 			for(ChoiceNode p : parent.getPartitions()){
 				if(isDead(p)){

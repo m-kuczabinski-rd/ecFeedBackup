@@ -41,7 +41,7 @@ import com.testify.ecfeed.model.ExpectedValueStatement;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.ParameterNode;
 import com.testify.ecfeed.model.ChoiceNode;
-import com.testify.ecfeed.model.PartitionedParameterStatement;
+import com.testify.ecfeed.model.DecomposedParameterStatement;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.StatementArray;
 import com.testify.ecfeed.model.StaticStatement;
@@ -161,9 +161,9 @@ public class XmlParserSerializerTest {
 			testData.add(partition2);
 			TestCaseNode testCase = new TestCaseNode("test", testData);
 			Constraint partitionConstraint = new Constraint(new StaticStatement(true),
-					new PartitionedParameterStatement(partitionedParameter, EStatementRelation.EQUAL, partition1));
+					new DecomposedParameterStatement(partitionedParameter, EStatementRelation.EQUAL, partition1));
 			Constraint labelConstraint = new Constraint(new StaticStatement(true),
-					new PartitionedParameterStatement(partitionedParameter, EStatementRelation.EQUAL, "label"));
+					new DecomposedParameterStatement(partitionedParameter, EStatementRelation.EQUAL, "label"));
 			Constraint expectedConstraint = new Constraint(new StaticStatement(true),
 					new ExpectedValueStatement(expectedParameter, new ChoiceNode("expected", "n")));
 			ConstraintNode partitionConstraintNode = new ConstraintNode("partition constraint", partitionConstraint);
@@ -399,14 +399,14 @@ public class XmlParserSerializerTest {
 			parameter.getPartitions().get(0).addLabel(label);
 		}
 		EStatementRelation relation = pickRelation();
-		return new PartitionedParameterStatement(parameter, relation, label);
+		return new DecomposedParameterStatement(parameter, relation, label);
 	}
 
 	private BasicStatement createPartitionStatement(List<ParameterNode> parameters) {
 		ParameterNode parameter = parameters.get(rand.nextInt(parameters.size()));
 		ChoiceNode partition = new ArrayList<ChoiceNode>(parameter.getLeafPartitions()).get(rand.nextInt(parameter.getPartitions().size()));
 		EStatementRelation relation = pickRelation();
-		return new PartitionedParameterStatement(parameter, relation, partition);
+		return new DecomposedParameterStatement(parameter, relation, partition);
 	}
 
 	private EStatementRelation pickRelation() {
@@ -581,8 +581,8 @@ public class XmlParserSerializerTest {
 		if(statement1 instanceof StaticStatement && statement2 instanceof StaticStatement){
 			compareStaticStatements((StaticStatement)statement1, (StaticStatement)statement2);
 		}
-		else if(statement1 instanceof PartitionedParameterStatement && statement2 instanceof PartitionedParameterStatement){
-			compareRelationStatements((PartitionedParameterStatement)statement1, (PartitionedParameterStatement)statement2);
+		else if(statement1 instanceof DecomposedParameterStatement && statement2 instanceof DecomposedParameterStatement){
+			compareRelationStatements((DecomposedParameterStatement)statement1, (DecomposedParameterStatement)statement2);
 		}
 		else if(statement1 instanceof StatementArray && statement2 instanceof StatementArray){
 			compareStatementArrays((StatementArray)statement1, (StatementArray)statement2);
@@ -601,7 +601,7 @@ public class XmlParserSerializerTest {
 		assertEquals(statement1.getCondition().getValueString(), statement2.getCondition().getValueString());
 	}
 
-	private void compareRelationStatements(PartitionedParameterStatement statement1, PartitionedParameterStatement statement2) {
+	private void compareRelationStatements(DecomposedParameterStatement statement1, DecomposedParameterStatement statement2) {
 		compareParameters(statement1.getParameter(), statement2.getParameter());
 		if((statement1.getRelation() != statement2.getRelation())){
 			fail("Compared statements have different relations: " +

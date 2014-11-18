@@ -5,17 +5,17 @@ import com.testify.ecfeed.adapter.ITypeAdapter;
 import com.testify.ecfeed.adapter.ITypeAdapterProvider;
 import com.testify.ecfeed.adapter.ModelOperationException;
 import com.testify.ecfeed.model.ChoiceNode;
-import com.testify.ecfeed.model.PartitionedNode;
+import com.testify.ecfeed.model.DecomposedNode;
 
 public class GenericOperationAddPartition extends BulkOperation {
 
 	private class AddPartitionOperation extends AbstractModelOperation{
-		private PartitionedNode fTarget;
+		private DecomposedNode fTarget;
 		private ChoiceNode fPartition;
 		private int fIndex;
 		private ITypeAdapterProvider fAdapterProvider;
 
-		public AddPartitionOperation(PartitionedNode target, ChoiceNode partition, ITypeAdapterProvider adapterProvider, int index) {
+		public AddPartitionOperation(DecomposedNode target, ChoiceNode partition, ITypeAdapterProvider adapterProvider, int index) {
 			super(OperationNames.ADD_PARTITION);
 			fTarget = target;
 			fPartition = partition;
@@ -64,7 +64,7 @@ public class GenericOperationAddPartition extends BulkOperation {
 		}
 	}
 
-	public GenericOperationAddPartition(PartitionedNode target, ChoiceNode partition, ITypeAdapterProvider adapterProvider, int index, boolean validate) {
+	public GenericOperationAddPartition(DecomposedNode target, ChoiceNode partition, ITypeAdapterProvider adapterProvider, int index, boolean validate) {
 		super(OperationNames.ADD_PARTITION, true);
 		addOperation(new AddPartitionOperation(target, partition, adapterProvider, index));
 		if((target.getParameter().getMethod() != null) && validate){
@@ -72,7 +72,7 @@ public class GenericOperationAddPartition extends BulkOperation {
 		}
 	}
 
-	public GenericOperationAddPartition(PartitionedNode target, ChoiceNode partition, ITypeAdapterProvider adapterProvider, boolean validate) {
+	public GenericOperationAddPartition(DecomposedNode target, ChoiceNode partition, ITypeAdapterProvider adapterProvider, boolean validate) {
 		this(target, partition, adapterProvider, -1, validate);
 	}
 }

@@ -18,7 +18,7 @@ import com.testify.ecfeed.junit.annotations.Generator;
 @EcModel("test/com.testify.ecfeed.adapter.java.ect")
 @Generator(CartesianProductGenerator.class)
 @Constraints(Constraints.ALL)
-public class PartitionValueParserTest{
+public class ChoiceValueParserTest{
 	
 	private ChoiceValueParser fParser;
 
@@ -26,7 +26,7 @@ public class PartitionValueParserTest{
 		IMPLEMENTED
 	}
 
-	public PartitionValueParserTest() {
+	public ChoiceValueParserTest() {
 		ClassLoader parentLoader = this.getClass().getClassLoader();
 		ModelClassLoader loader = new ModelClassLoader(new URL[]{}, parentLoader);
 		fParser =  new ChoiceValueParser(loader);
