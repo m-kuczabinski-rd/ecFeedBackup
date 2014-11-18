@@ -104,8 +104,10 @@ public class TestCaseNode extends GenericNode {
 
 	public TestCaseNode getCopy(MethodNode method){
 		TestCaseNode tcase = getCopy();
-		if(tcase.updateReferences(method))
+		if(tcase.updateReferences(method)){
+			tcase.setParent(method);
 			return tcase;
+		}
 		else
 			return null;
 	}
