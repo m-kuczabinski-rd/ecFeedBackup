@@ -11,18 +11,18 @@
 
 package com.testify.ecfeed.serialization.ect;
 
-import static com.testify.ecfeed.serialization.ect.Constants.CATEGORY_IS_EXPECTED_ATTRIBUTE_NAME;
-import static com.testify.ecfeed.serialization.ect.Constants.CATEGORY_NODE_NAME;
+import static com.testify.ecfeed.serialization.ect.Constants.PARAMETER_IS_EXPECTED_ATTRIBUTE_NAME;
+import static com.testify.ecfeed.serialization.ect.Constants.PARAMETER_NODE_NAME;
 import static com.testify.ecfeed.serialization.ect.Constants.CLASS_NODE_NAME;
 import static com.testify.ecfeed.serialization.ect.Constants.CONSTRAINT_EXPECTED_STATEMENT_NODE_NAME;
 import static com.testify.ecfeed.serialization.ect.Constants.CONSTRAINT_LABEL_STATEMENT_NODE_NAME;
 import static com.testify.ecfeed.serialization.ect.Constants.CONSTRAINT_NODE_NAME;
-import static com.testify.ecfeed.serialization.ect.Constants.CONSTRAINT_PARTITION_STATEMENT_NODE_NAME;
+import static com.testify.ecfeed.serialization.ect.Constants.CONSTRAINT_CHOICE_STATEMENT_NODE_NAME;
 import static com.testify.ecfeed.serialization.ect.Constants.CONSTRAINT_STATEMENT_ARRAY_NODE_NAME;
 import static com.testify.ecfeed.serialization.ect.Constants.CONSTRAINT_STATIC_STATEMENT_NODE_NAME;
 import static com.testify.ecfeed.serialization.ect.Constants.DEFAULT_EXPECTED_VALUE_ATTRIBUTE_NAME;
 import static com.testify.ecfeed.serialization.ect.Constants.METHOD_NODE_NAME;
-import static com.testify.ecfeed.serialization.ect.Constants.PARTITION_NODE_NAME;
+import static com.testify.ecfeed.serialization.ect.Constants.CHOICE_NODE_NAME;
 import static com.testify.ecfeed.serialization.ect.Constants.ROOT_NODE_NAME;
 import static com.testify.ecfeed.serialization.ect.Constants.TEST_CASE_NODE_NAME;
 import static com.testify.ecfeed.serialization.ect.Constants.TEST_SUITE_NAME_ATTRIBUTE;
@@ -95,7 +95,7 @@ public class XomAnalyser {
 		MethodNode method = new MethodNode(name);
 
 		for(Element child : getIterableChildren(element)){
-			if(child.getLocalName() == Constants.CATEGORY_NODE_NAME){
+			if(child.getLocalName() == Constants.PARAMETER_NODE_NAME){
 				try{
 					method.addParameter(parseParameter(child));
 				}catch(ParserException e){
@@ -127,13 +127,13 @@ public class XomAnalyser {
 	}
 
 	public ParameterNode parseParameter(Element element) throws ParserException{
-		assertNodeTag(element.getQualifiedName(), CATEGORY_NODE_NAME);
+		assertNodeTag(element.getQualifiedName(), PARAMETER_NODE_NAME);
 		String name = getElementName(element);
 		String type = getAttributeValue(element, TYPE_NAME_ATTRIBUTE);
 		String defaultValue = null;
 		String expected = String.valueOf(false);
-		if(element.getAttribute(CATEGORY_IS_EXPECTED_ATTRIBUTE_NAME) != null){
-			expected = getAttributeValue(element, CATEGORY_IS_EXPECTED_ATTRIBUTE_NAME);
+		if(element.getAttribute(PARAMETER_IS_EXPECTED_ATTRIBUTE_NAME) != null){
+			expected = getAttributeValue(element, PARAMETER_IS_EXPECTED_ATTRIBUTE_NAME);
 			defaultValue = getAttributeValue(element, DEFAULT_EXPECTED_VALUE_ATTRIBUTE_NAME);
 		}
 		ParameterNode parameter = new ParameterNode(name, type, defaultValue, Boolean.parseBoolean(expected));
@@ -168,7 +168,7 @@ public class XomAnalyser {
 			ChoiceNode testValue = null;
 
 			if(testParameterElement.getLocalName().equals(Constants.TEST_PARAMETER_NODE_NAME)){
-				String choiceName = getAttributeValue(testParameterElement, Constants.PARTITION_ATTRIBUTE_NAME);
+				String choiceName = getAttributeValue(testParameterElement, Constants.CHOICE_ATTRIBUTE_NAME);
 				testValue = parameter.getChoice(choiceName);
 				if(testValue == null){
 					throw new ParserException(Messages.PARTITION_DOES_NOT_EXIST(parameter.getName(), choiceName));
@@ -179,7 +179,7 @@ public class XomAnalyser {
 				if(valueString == null){
 					throw new ParserException(Messages.MISSING_VALUE_ATTRIBUTE_IN_TEST_CASE_ELEMENT);
 				}
-				testValue = new ChoiceNode(Constants.EXPECTED_VALUE_PARTITION_NAME, valueString);
+				testValue = new ChoiceNode(Constants.EXPECTED_VALUE_CHOICE_NAME, valueString);
 				testValue.setParent(parameter);
 			}
 			testData.add(testValue);
@@ -225,7 +225,7 @@ public class XomAnalyser {
 
 	public BasicStatement parseStatement(Element element, MethodNode method) throws ParserException {
 		switch(element.getLocalName()){
-		case Constants.CONSTRAINT_PARTITION_STATEMENT_NODE_NAME:
+		case Constants.CONSTRAINT_CHOICE_STATEMENT_NODE_NAME:
 			return parseChoiceStatement(element, method);
 		case Constants.CONSTRAINT_LABEL_STATEMENT_NODE_NAME:
 			return parseLabelStatement(element, method);
@@ -278,14 +278,14 @@ public class XomAnalyser {
 	}
 
 	public DecomposedParameterStatement parseChoiceStatement(Element element, MethodNode method) throws ParserException {
-		assertNodeTag(element.getQualifiedName(), CONSTRAINT_PARTITION_STATEMENT_NODE_NAME);
+		assertNodeTag(element.getQualifiedName(), CONSTRAINT_CHOICE_STATEMENT_NODE_NAME);
 
-		String parameterName = getAttributeValue(element, Constants.STATEMENT_CATEGORY_ATTRIBUTE_NAME);
+		String parameterName = getAttributeValue(element, Constants.STATEMENT_PARAMETER_ATTRIBUTE_NAME);
 		ParameterNode parameter = method.getParameter(parameterName);
 		if(parameter == null || parameter.isExpected()){
 			throw new ParserException(Messages.WRONG_CATEGORY_NAME(parameterName, method.getName()));
 		}
-		String choiceName = getAttributeValue(element, Constants.STATEMENT_PARTITION_ATTRIBUTE_NAME);
+		String choiceName = getAttributeValue(element, Constants.STATEMENT_CHOICE_ATTRIBUTE_NAME);
 		ChoiceNode choice = parameter.getChoice(choiceName);
 		if(choice == null){
 			throw new ParserException(Messages.WRONG_PARTITION_NAME(choiceName, parameterName, method.getName()));
@@ -300,7 +300,7 @@ public class XomAnalyser {
 	public DecomposedParameterStatement parseLabelStatement(Element element, MethodNode method) throws ParserException {
 		assertNodeTag(element.getQualifiedName(), CONSTRAINT_LABEL_STATEMENT_NODE_NAME);
 
-		String parameterName = getAttributeValue(element, Constants.STATEMENT_CATEGORY_ATTRIBUTE_NAME);
+		String parameterName = getAttributeValue(element, Constants.STATEMENT_PARAMETER_ATTRIBUTE_NAME);
 		String label = getAttributeValue(element, Constants.STATEMENT_LABEL_ATTRIBUTE_NAME);
 		String relationName = getAttributeValue(element, Constants.STATEMENT_RELATION_ATTRIBUTE_NAME);
 
@@ -316,7 +316,7 @@ public class XomAnalyser {
 	public ExpectedValueStatement parseExpectedValueStatement(Element element, MethodNode method) throws ParserException {
 		assertNodeTag(element.getQualifiedName(), CONSTRAINT_EXPECTED_STATEMENT_NODE_NAME);
 
-		String parameterName = getAttributeValue(element, Constants.STATEMENT_CATEGORY_ATTRIBUTE_NAME);
+		String parameterName = getAttributeValue(element, Constants.STATEMENT_PARAMETER_ATTRIBUTE_NAME);
 		String valueString = getAttributeValue(element, Constants.STATEMENT_EXPECTED_VALUE_ATTRIBUTE_NAME);
 		ParameterNode parameter = method.getParameter(parameterName);
 		if(parameter == null || !parameter.isExpected()){
@@ -329,14 +329,14 @@ public class XomAnalyser {
 	}
 
 	public ChoiceNode parseChoice(Element element) throws ParserException{
-		assertNodeTag(element.getQualifiedName(), PARTITION_NODE_NAME);
+		assertNodeTag(element.getQualifiedName(), CHOICE_NODE_NAME);
 		String name = getElementName(element);
 		String value = getAttributeValue(element, VALUE_ATTRIBUTE);
 
 		ChoiceNode choice = new ChoiceNode(name, value);
 
 		for(Element child : getIterableChildren(element)){
-			if(child.getLocalName() == Constants.PARTITION_NODE_NAME){
+			if(child.getLocalName() == Constants.CHOICE_NODE_NAME){
 				try{
 				choice.addChoice(parseChoice(child));
 				}catch(ParserException e){

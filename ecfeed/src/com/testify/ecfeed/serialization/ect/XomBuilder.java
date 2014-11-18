@@ -11,14 +11,14 @@
 
 package com.testify.ecfeed.serialization.ect;
 
-import static com.testify.ecfeed.serialization.ect.Constants.CATEGORY_IS_EXPECTED_ATTRIBUTE_NAME;
-import static com.testify.ecfeed.serialization.ect.Constants.CATEGORY_NODE_NAME;
+import static com.testify.ecfeed.serialization.ect.Constants.PARAMETER_IS_EXPECTED_ATTRIBUTE_NAME;
+import static com.testify.ecfeed.serialization.ect.Constants.PARAMETER_NODE_NAME;
 import static com.testify.ecfeed.serialization.ect.Constants.CLASS_NODE_NAME;
 import static com.testify.ecfeed.serialization.ect.Constants.CONSTRAINT_CONSEQUENCE_NODE_NAME;
 import static com.testify.ecfeed.serialization.ect.Constants.CONSTRAINT_EXPECTED_STATEMENT_NODE_NAME;
 import static com.testify.ecfeed.serialization.ect.Constants.CONSTRAINT_LABEL_STATEMENT_NODE_NAME;
 import static com.testify.ecfeed.serialization.ect.Constants.CONSTRAINT_NODE_NAME;
-import static com.testify.ecfeed.serialization.ect.Constants.CONSTRAINT_PARTITION_STATEMENT_NODE_NAME;
+import static com.testify.ecfeed.serialization.ect.Constants.CONSTRAINT_CHOICE_STATEMENT_NODE_NAME;
 import static com.testify.ecfeed.serialization.ect.Constants.CONSTRAINT_PREMISE_NODE_NAME;
 import static com.testify.ecfeed.serialization.ect.Constants.CONSTRAINT_STATEMENT_ARRAY_NODE_NAME;
 import static com.testify.ecfeed.serialization.ect.Constants.CONSTRAINT_STATIC_STATEMENT_NODE_NAME;
@@ -28,16 +28,16 @@ import static com.testify.ecfeed.serialization.ect.Constants.LABEL_ATTRIBUTE_NAM
 import static com.testify.ecfeed.serialization.ect.Constants.LABEL_NODE_NAME;
 import static com.testify.ecfeed.serialization.ect.Constants.METHOD_NODE_NAME;
 import static com.testify.ecfeed.serialization.ect.Constants.NODE_NAME_ATTRIBUTE;
-import static com.testify.ecfeed.serialization.ect.Constants.PARTITION_ATTRIBUTE_NAME;
-import static com.testify.ecfeed.serialization.ect.Constants.PARTITION_NODE_NAME;
+import static com.testify.ecfeed.serialization.ect.Constants.CHOICE_ATTRIBUTE_NAME;
+import static com.testify.ecfeed.serialization.ect.Constants.CHOICE_NODE_NAME;
 import static com.testify.ecfeed.serialization.ect.Constants.ROOT_NODE_NAME;
-import static com.testify.ecfeed.serialization.ect.Constants.STATEMENT_CATEGORY_ATTRIBUTE_NAME;
+import static com.testify.ecfeed.serialization.ect.Constants.STATEMENT_PARAMETER_ATTRIBUTE_NAME;
 import static com.testify.ecfeed.serialization.ect.Constants.STATEMENT_EXPECTED_VALUE_ATTRIBUTE_NAME;
 import static com.testify.ecfeed.serialization.ect.Constants.STATEMENT_LABEL_ATTRIBUTE_NAME;
 import static com.testify.ecfeed.serialization.ect.Constants.STATEMENT_OPERATOR_AND_ATTRIBUTE_VALUE;
 import static com.testify.ecfeed.serialization.ect.Constants.STATEMENT_OPERATOR_ATTRIBUTE_NAME;
 import static com.testify.ecfeed.serialization.ect.Constants.STATEMENT_OPERATOR_OR_ATTRIBUTE_VALUE;
-import static com.testify.ecfeed.serialization.ect.Constants.STATEMENT_PARTITION_ATTRIBUTE_NAME;
+import static com.testify.ecfeed.serialization.ect.Constants.STATEMENT_CHOICE_ATTRIBUTE_NAME;
 import static com.testify.ecfeed.serialization.ect.Constants.STATEMENT_RELATION_ATTRIBUTE_NAME;
 import static com.testify.ecfeed.serialization.ect.Constants.STATEMENT_STATIC_VALUE_ATTRIBUTE_NAME;
 import static com.testify.ecfeed.serialization.ect.Constants.STATIC_STATEMENT_FALSE_VALUE;
@@ -114,9 +114,9 @@ public class XomBuilder implements IModelVisitor, IStatementVisitor {
 	
 	@Override
 	public Object visit(ParameterNode node)  throws Exception {
-		Element element = createNamedElement(CATEGORY_NODE_NAME, node);
+		Element element = createNamedElement(PARAMETER_NODE_NAME, node);
 		element.addAttribute(new Attribute(TYPE_NAME_ATTRIBUTE, node.getType()));
-		element.addAttribute(new Attribute(CATEGORY_IS_EXPECTED_ATTRIBUTE_NAME, Boolean.toString(node.isExpected())));
+		element.addAttribute(new Attribute(PARAMETER_IS_EXPECTED_ATTRIBUTE_NAME, Boolean.toString(node.isExpected())));
 		element.addAttribute(new Attribute(DEFAULT_EXPECTED_VALUE_ATTRIBUTE_NAME, node.getDefaultValue()));
 
 		for(ChoiceNode child : node.getChoices()){
@@ -139,7 +139,7 @@ public class XomBuilder implements IModelVisitor, IStatementVisitor {
 			}
 			else{
 				Element testParameterElement = new Element(TEST_PARAMETER_NODE_NAME);
-				Attribute choiceNameAttribute = new Attribute(PARTITION_ATTRIBUTE_NAME, testParameter.getQualifiedName());
+				Attribute choiceNameAttribute = new Attribute(CHOICE_ATTRIBUTE_NAME, testParameter.getQualifiedName());
 				testParameterElement.addAttribute(choiceNameAttribute);
 				element.appendChild(testParameterElement);
 			}
@@ -169,7 +169,7 @@ public class XomBuilder implements IModelVisitor, IStatementVisitor {
 	
 	@Override
 	public Object visit(ChoiceNode node) throws Exception {
-		Element element = createNamedElement(PARTITION_NODE_NAME, node);
+		Element element = createNamedElement(CHOICE_NODE_NAME, node);
 		String value = node.getValueString();
 		//remove disallowed XML characters
 		String xml10pattern = "[^"
@@ -233,7 +233,7 @@ public class XomBuilder implements IModelVisitor, IStatementVisitor {
 		String parameterName = statement.getLeftOperandName();
 		ChoiceNode condition = statement.getCondition();
 		Attribute parameterAttribute = 
-				new Attribute(STATEMENT_CATEGORY_ATTRIBUTE_NAME, parameterName);
+				new Attribute(STATEMENT_PARAMETER_ATTRIBUTE_NAME, parameterName);
 		Attribute valueAttribute = 
 				new Attribute(STATEMENT_EXPECTED_VALUE_ATTRIBUTE_NAME, condition.getValueString());
 		
@@ -249,7 +249,7 @@ public class XomBuilder implements IModelVisitor, IStatementVisitor {
 
 		String parameterName = statement.getParameter().getName();
 		Attribute parameterAttribute = 
-				new Attribute(STATEMENT_CATEGORY_ATTRIBUTE_NAME, parameterName);
+				new Attribute(STATEMENT_PARAMETER_ATTRIBUTE_NAME, parameterName);
 		Attribute relationAttribute = 
 				new Attribute(STATEMENT_RELATION_ATTRIBUTE_NAME, statement.getRelation().toString());
 		ICondition condition = statement.getCondition();
@@ -271,8 +271,8 @@ public class XomBuilder implements IModelVisitor, IStatementVisitor {
 	@Override
 	public Object visit(ChoiceCondition condition) throws Exception {
 		ChoiceNode choice = condition.getChoice();
-		Element element = new Element(CONSTRAINT_PARTITION_STATEMENT_NODE_NAME);
-		element.addAttribute(new Attribute(STATEMENT_PARTITION_ATTRIBUTE_NAME, choice.getQualifiedName()));
+		Element element = new Element(CONSTRAINT_CHOICE_STATEMENT_NODE_NAME);
+		element.addAttribute(new Attribute(STATEMENT_CHOICE_ATTRIBUTE_NAME, choice.getQualifiedName()));
 		
 		return element;
 	}

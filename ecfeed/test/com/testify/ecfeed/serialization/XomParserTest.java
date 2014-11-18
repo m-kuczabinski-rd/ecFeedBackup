@@ -198,7 +198,7 @@ public class XomParserTest {
 				case Constants.CONSTRAINT_LABEL_STATEMENT_NODE_NAME:
 					parsedS = fParser.parseLabelStatement(element, m);
 					break;
-				case Constants.CONSTRAINT_PARTITION_STATEMENT_NODE_NAME:
+				case Constants.CONSTRAINT_CHOICE_STATEMENT_NODE_NAME:
 					parsedS = fParser.parseChoiceStatement(element, m);
 					break;
 				}					
