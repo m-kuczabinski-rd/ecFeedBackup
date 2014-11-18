@@ -132,6 +132,11 @@ public class ConstraintNode extends GenericNode{
 				}
 			}
 		}
+		for(CategoryNode c: getConstraint().getReferencedCategories()){
+			if(getMethod().getCategories().contains(c) == false){
+				return false;
+			}
+		}
 		return true;
 	}
 	
