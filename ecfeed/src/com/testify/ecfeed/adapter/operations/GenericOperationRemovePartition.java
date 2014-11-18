@@ -9,57 +9,57 @@ import com.testify.ecfeed.model.ParameterNode;
 import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.model.DecomposedNode;
 
-public class GenericOperationRemovePartition extends BulkOperation {
+public class GenericOperationRemoveChoice extends BulkOperation {
 
-	private class RemovePartitionOperation extends AbstractModelOperation{
+	private class RemoveChoiceOperation extends AbstractModelOperation{
 		
 		private DecomposedNode fTarget;
-		private ChoiceNode fPartition;
+		private ChoiceNode fChoice;
 		private String fOriginalDefaultValue;
 		private int fOriginalIndex;
 
 		private class ReverseOperation extends AbstractModelOperation{
 
 			public ReverseOperation() {
-				super(RemovePartitionOperation.this.getName());
+				super(RemoveChoiceOperation.this.getName());
 			}
 
 			@Override
 			public void execute() throws ModelOperationException {
-				fTarget.addPartition(fPartition, fOriginalIndex);
+				fTarget.addChoice(fChoice, fOriginalIndex);
 				fTarget.getParameter().setDefaultValueString(fOriginalDefaultValue);
 				markModelUpdated();
 			}
 
 			@Override
 			public IModelOperation reverseOperation() {
-				return new RemovePartitionOperation(fTarget, fPartition);
+				return new RemoveChoiceOperation(fTarget, fChoice);
 			}
 			
 		}
 		
-		public RemovePartitionOperation(DecomposedNode target, ChoiceNode partition){
+		public RemoveChoiceOperation(DecomposedNode target, ChoiceNode choice){
 			super(OperationNames.REMOVE_PARTITION);
 			fTarget = target;
-			fPartition = partition;
-			fOriginalIndex = fPartition.getIndex();
+			fChoice = choice;
+			fOriginalIndex = fChoice.getIndex();
 			fOriginalDefaultValue = target.getParameter().getDefaultValue();
 		}
 		
 		@Override
 		public void execute() throws ModelOperationException {
-			fOriginalIndex = fPartition.getIndex();
+			fOriginalIndex = fChoice.getIndex();
 			ParameterNode parameter = fTarget.getParameter();
-			if(parameter.isExpected() && JavaUtils.isPrimitive(parameter.getType()) == false && parameter.getPartitions().size() == 1 && parameter.getPartitions().get(0) == fPartition){
-				// We are removing the only partition of expected parameter. 
+			if(parameter.isExpected() && JavaUtils.isPrimitive(parameter.getType()) == false && parameter.getChoices().size() == 1 && parameter.getChoices().get(0) == fChoice){
+				// We are removing the only choice of expected parameter. 
 				// The last parameter must represent the default expected value
 				throw new ModelOperationException(Messages.EXPECTED_USER_TYPE_CATEGORY_LAST_PARTITION_PROBLEM);
 			}
-			fTarget.removePartition(fPartition);
-			if(parameter.isExpected() && fPartition.getValueString().equals(parameter.getDefaultValue())){
-				// the value of removed partition is the same as default expected value
-				// Check if there are leaf partitions with the same value. If not, update the default value
-				Set<String> leafValues = parameter.getLeafPartitionValues();
+			fTarget.removeChoice(fChoice);
+			if(parameter.isExpected() && fChoice.getValueString().equals(parameter.getDefaultValue())){
+				// the value of removed choice is the same as default expected value
+				// Check if there are leaf choices with the same value. If not, update the default value
+				Set<String> leafValues = parameter.getLeafChoiceValues();
 				if(leafValues.contains(parameter.getDefaultValue()) == false){
 					if(leafValues.size() > 0){
 						parameter.setDefaultValueString(leafValues.toArray(new String[]{})[0]);
@@ -77,9 +77,9 @@ public class GenericOperationRemovePartition extends BulkOperation {
 		}
 	}
 
-	public GenericOperationRemovePartition(DecomposedNode target, ChoiceNode partition, boolean validate) {
+	public GenericOperationRemoveChoice(DecomposedNode target, ChoiceNode choice, boolean validate) {
 		super(OperationNames.REMOVE_PARTITION, true);
-		addOperation(new RemovePartitionOperation(target, partition));
+		addOperation(new RemoveChoiceOperation(target, choice));
 		if((target.getParameter().getMethod() != null) && validate){
 			addOperation(new MethodOperationMakeConsistent(target.getParameter().getMethod()));
 		}

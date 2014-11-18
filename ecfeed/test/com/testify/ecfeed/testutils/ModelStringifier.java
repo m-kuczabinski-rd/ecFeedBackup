@@ -25,7 +25,7 @@ import com.testify.ecfeed.model.StatementArray;
 import com.testify.ecfeed.model.StaticStatement;
 import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.model.DecomposedParameterStatement.LabelCondition;
-import com.testify.ecfeed.model.DecomposedParameterStatement.PartitionCondition;
+import com.testify.ecfeed.model.DecomposedParameterStatement.ChoiceCondition;
 
 public class ModelStringifier {
 	public String stringify(GenericNode node, int indent){
@@ -115,7 +115,7 @@ public class ModelStringifier {
 		String result = intendentString(indent);
 		result += "Parameter " + c.getName() + "[" + c.getType() + "], " + (c.isExpected() ? "expected" : "patitioned");
 		result += " default value: " + c.getDefaultValue(); 
-		for(ChoiceNode child : c.getPartitions()){
+		for(ChoiceNode child : c.getChoices()){
 			result += "\n";
 			result += stringify(child, indent + 2);
 		}
@@ -157,13 +157,13 @@ public class ModelStringifier {
 	
 	public String stringify(ChoiceNode p, int indent){
 		String result = intendentString(indent);
-		result += "Partition ";
+		result += "Choice ";
 		result += p.getName() + "[" + p.getValueString() + "]";
 		result += ", Labels: ";
 		for(String label : p.getLabels()){
 			result += label + " ";
 		}
-		for(ChoiceNode child : p.getPartitions()){
+		for(ChoiceNode child : p.getChoices()){
 			result += "\n";
 			result += stringify(child, indent + 2);
 		}
@@ -178,12 +178,12 @@ public class ModelStringifier {
 	
 	public String stringify(DecomposedParameterStatement s, int indent){
 		String result = intendentString(indent);
-		result += "Partitioned statement ";
+		result += "Decomposed statement ";
 		if(s.getCondition() instanceof LabelCondition){
 			result += "[label] ";
 		}
-		else if(s.getCondition() instanceof PartitionCondition){
-			result += "[partition] ";
+		else if(s.getCondition() instanceof ChoiceCondition){
+			result += "[choice] ";
 		}
 		result += s.toString();
 		return result;

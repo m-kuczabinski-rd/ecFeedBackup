@@ -38,9 +38,9 @@ public class ChoiceInterface extends DecomposedNodeInterface{
 		super(updateContext);
 	}
 
-	public void setTarget(ChoiceNode partition){
-		super.setTarget(partition);
-		fTarget = partition;
+	public void setTarget(ChoiceNode choice){
+		super.setTarget(choice);
+		fTarget = choice;
 	}
 	
 	public void setValue(String newValue){
@@ -60,7 +60,7 @@ public class ChoiceInterface extends DecomposedNodeInterface{
 		MethodNode method = fTarget.getParameter().getMethod();
 		boolean removeMentioningConstraints = false;
 		for(String label : labels){
-			if(method.mentioningConstraints(fTarget.getParameter(), label).size() > 0 && fTarget.getParameter().getLabeledPartitions(label).size() == 1){
+			if(method.mentioningConstraints(fTarget.getParameter(), label).size() > 0 && fTarget.getParameter().getLabeledChoices(label).size() == 1){
 				removeMentioningConstraints = true;
 				break;
 			}

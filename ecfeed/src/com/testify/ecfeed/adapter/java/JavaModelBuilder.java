@@ -61,48 +61,48 @@ public class JavaModelBuilder {
 		ParameterNode parameter = new ParameterNode(name, typeName, defaultValue, expected);
 		parameter.setDefaultValueString(getDefaultExpectedValueString(typeName));
 		if(!expected){
-			List<ChoiceNode> defaultPartitions = getDefaultPartitions(typeName);
-			for(ChoiceNode partition : defaultPartitions){
-				parameter.addPartition(partition);
+			List<ChoiceNode> defaultChoices = getDefaultChoices(typeName);
+			for(ChoiceNode choice : defaultChoices){
+				parameter.addChoice(choice);
 			}
 		}
 		return parameter;
 	}
 
-	public List<ChoiceNode> getDefaultPartitions(String typeSignature) {
+	public List<ChoiceNode> getDefaultChoices(String typeSignature) {
 		switch(typeSignature){
 		case com.testify.ecfeed.adapter.java.Constants.TYPE_NAME_BOOLEAN:
-			return defaultBooleanPartitions();
+			return defaultBooleanChoices();
 		case com.testify.ecfeed.adapter.java.Constants.TYPE_NAME_BYTE:
-			return defaultIntegerPartitions();
+			return defaultIntegerChoices();
 		case com.testify.ecfeed.adapter.java.Constants.TYPE_NAME_CHAR:
-			return defaultIntegerPartitions();
+			return defaultIntegerChoices();
 		case com.testify.ecfeed.adapter.java.Constants.TYPE_NAME_DOUBLE:
-			return defaultFloatPartitions();
+			return defaultFloatChoices();
 		case com.testify.ecfeed.adapter.java.Constants.TYPE_NAME_FLOAT:
-			return defaultFloatPartitions();
+			return defaultFloatChoices();
 		case com.testify.ecfeed.adapter.java.Constants.TYPE_NAME_INT:
-			return defaultIntegerPartitions();
+			return defaultIntegerChoices();
 		case com.testify.ecfeed.adapter.java.Constants.TYPE_NAME_LONG:
-			return defaultIntegerPartitions();
+			return defaultIntegerChoices();
 		case com.testify.ecfeed.adapter.java.Constants.TYPE_NAME_SHORT:
-			return defaultIntegerPartitions();
+			return defaultIntegerChoices();
 		case com.testify.ecfeed.adapter.java.Constants.TYPE_NAME_STRING:
-			return defaultStringPartitions();
+			return defaultStringChoices();
 		default:
-			return defaultEnumPartitions(typeSignature);
+			return defaultEnumChoices(typeSignature);
 		}
 	}
 
-	public ArrayList<ChoiceNode> defaultEnumPartitions(String typeName) {
-		ArrayList<ChoiceNode> partitions = new ArrayList<ChoiceNode>();
+	public ArrayList<ChoiceNode> defaultEnumChoices(String typeName) {
+		ArrayList<ChoiceNode> choices = new ArrayList<ChoiceNode>();
 		Class<?> typeClass = fLoader.loadClass(typeName);
 		if (typeClass != null) {
 			for (Object object: typeClass.getEnumConstants()) {
-				partitions.add(new ChoiceNode(object.toString(), ((Enum<?>)object).name()));
+				choices.add(new ChoiceNode(object.toString(), ((Enum<?>)object).name()));
 			}
 		}
-		return partitions;
+		return choices;
 	}
 
 	protected String getDefaultExpectedValueString(String type) {
@@ -140,13 +140,13 @@ public class JavaModelBuilder {
 		return value;
 	}
 
-	protected List<ChoiceNode> defaultBooleanPartitions() {
-		List<ChoiceNode> partitions = new ArrayList<ChoiceNode>();
+	protected List<ChoiceNode> defaultBooleanChoices() {
+		List<ChoiceNode> choices = new ArrayList<ChoiceNode>();
 		HashMap<String, String> values = predefinedBooleanValues();
 		for (String key : values.keySet()) {
-			partitions.add(new ChoiceNode(key, values.get(key)));
+			choices.add(new ChoiceNode(key, values.get(key)));
 		}
-		return partitions;
+		return choices;
 	}
 
 	protected HashMap<String, String> predefinedBooleanValues() {
@@ -156,13 +156,13 @@ public class JavaModelBuilder {
 		return values;
 	}
 
-	protected List<ChoiceNode> defaultIntegerPartitions() {
-		List<ChoiceNode> partitions = new ArrayList<ChoiceNode>();
+	protected List<ChoiceNode> defaultIntegerChoices() {
+		List<ChoiceNode> choices = new ArrayList<ChoiceNode>();
 		HashMap<String, String> values = predefinedIntegerValues();
 		for (String key : values.keySet()) {
-			partitions.add(new ChoiceNode(key, values.get(key)));
+			choices.add(new ChoiceNode(key, values.get(key)));
 		}
-		return partitions;
+		return choices;
 	}
 
 	protected HashMap<String, String> predefinedIntegerValues() {
@@ -172,13 +172,13 @@ public class JavaModelBuilder {
 		return values;
 	}
 
-	protected List<ChoiceNode> defaultFloatPartitions() {
-		List<ChoiceNode> partitions = new ArrayList<ChoiceNode>();
+	protected List<ChoiceNode> defaultFloatChoices() {
+		List<ChoiceNode> choices = new ArrayList<ChoiceNode>();
 		HashMap<String, String> values = predefinedFloatValues();
 		for (String key : values.keySet()) {
-			partitions.add(new ChoiceNode(key, values.get(key)));
+			choices.add(new ChoiceNode(key, values.get(key)));
 		}
-		return partitions;
+		return choices;
 	}
 
 	protected HashMap<String, String> predefinedFloatValues() {
@@ -190,13 +190,13 @@ public class JavaModelBuilder {
 		return values;
 	}
 
-	protected List<ChoiceNode> defaultStringPartitions() {
-		List<ChoiceNode> partitions = new ArrayList<ChoiceNode>();
+	protected List<ChoiceNode> defaultStringChoices() {
+		List<ChoiceNode> choices = new ArrayList<ChoiceNode>();
 		HashMap<String, String> values = predefinedStringValues();
 		for (String key : values.keySet()) {
-			partitions.add(new ChoiceNode(key, values.get(key)));
+			choices.add(new ChoiceNode(key, values.get(key)));
 		}
-		return partitions;
+		return choices;
 	}
 
 	protected HashMap<String, String> predefinedStringValues() {

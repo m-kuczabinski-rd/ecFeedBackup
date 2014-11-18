@@ -37,10 +37,10 @@ public class CartesianProductTest {
 	@Test
 	public void testCorrectness() {
 		for (int variables : new int[] { 1, 2, 5 }) {
-			for (int partitions : new int[] { 1, 2, 5 }) {
+			for (int choices : new int[] { 1, 2, 5 }) {
 				try {
 					List<List<String>> input = GeneratorTestUtils.prepareInput(
-							variables, partitions);
+							variables, choices);
 					Set<List<String>> referenceSet = referenceSet(input);
 					ALGORITHM.initialize(input, EMPTY_CONSTRAINTS);
 					Set<List<String>> algorithmResult = GeneratorTestUtils
@@ -59,10 +59,10 @@ public class CartesianProductTest {
 	@Test
 	public void testCancel() {
 		for (int variables : new int[] { 1, 2, 5 }) {
-			for (int partitions : new int[] { 1, 2, 5 }) {
+			for (int choices : new int[] { 1, 2, 5 }) {
 				try {
 					List<List<String>> input = GeneratorTestUtils.prepareInput(
-							variables, partitions);
+							variables, choices);
 					ALGORITHM.initialize(input, EMPTY_CONSTRAINTS);
 
 					ALGORITHM.cancel();
@@ -82,9 +82,9 @@ public class CartesianProductTest {
 	public void testConstraints() {
 		try {
 			for (int noOfVariables = 1; noOfVariables <= MAX_VARIABLES; noOfVariables++) {
-				for (int partitionsPerVariable = 1; partitionsPerVariable <= MAX_PARTITIONS_PER_VARIABLE; partitionsPerVariable++) {
+				for (int choicesPerVariable = 1; choicesPerVariable <= MAX_PARTITIONS_PER_VARIABLE; choicesPerVariable++) {
 					List<List<String>> input = GeneratorTestUtils.prepareInput(
-							noOfVariables, partitionsPerVariable);
+							noOfVariables, choicesPerVariable);
 					Collection<IConstraint<String>> constraints = GeneratorTestUtils
 							.generateRandomConstraints(input);
 					Set<List<String>> referenceSet = referenceSet(input);

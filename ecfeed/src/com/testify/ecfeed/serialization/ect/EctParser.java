@@ -87,10 +87,10 @@ public class EctParser implements IModelParser {
 	}
 
 	@Override
-	public ChoiceNode parsePartition(InputStream istream) throws ParserException {
+	public ChoiceNode parseChoice(InputStream istream) throws ParserException {
 		try {
 			Document document = fBuilder.build(istream);
-			return fXomParser.parsePartition(document.getRootElement());
+			return fXomParser.parseChoice(document.getRootElement());
 		} catch (ParsingException e) {
 			throw new ParserException(Messages.PARSING_EXCEPTION(e));
 		} catch (IOException e) {
@@ -147,10 +147,10 @@ public class EctParser implements IModelParser {
 	}
 	
 	@Override
-	public DecomposedParameterStatement parsePartitionedParameterStatement(InputStream istream, MethodNode method) throws ParserException {
+	public DecomposedParameterStatement parseDecomposedParameterStatement(InputStream istream, MethodNode method) throws ParserException {
 		try {
 			Document document = fBuilder.build(istream);
-			return fXomParser.parsePartitionStatement(document.getRootElement(), method);
+			return fXomParser.parseChoiceStatement(document.getRootElement(), method);
 		} catch (ParsingException e) {
 			throw new ParserException(Messages.PARSING_EXCEPTION(e));
 		} catch (IOException e) {

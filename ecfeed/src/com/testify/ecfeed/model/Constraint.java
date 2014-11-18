@@ -17,7 +17,7 @@ import java.util.Set;
 
 import com.testify.ecfeed.generators.api.IConstraint;
 import com.testify.ecfeed.model.DecomposedParameterStatement.LabelCondition;
-import com.testify.ecfeed.model.DecomposedParameterStatement.PartitionCondition;
+import com.testify.ecfeed.model.DecomposedParameterStatement.ChoiceCondition;
 
 public class Constraint implements IConstraint<ChoiceNode> {
 	
@@ -28,7 +28,7 @@ public class Constraint implements IConstraint<ChoiceNode> {
 	private BasicStatement fConsequence; 
 
 	//TODO resign from the visitor pattern for better readability of the code
-	private class ReferencedPartitionsProvider implements IStatementVisitor{
+	private class ReferencedChoicesProvider implements IStatementVisitor{
 
 		@Override
 		public Object visit(StaticStatement statement) throws Exception {
@@ -62,9 +62,9 @@ public class Constraint implements IConstraint<ChoiceNode> {
 		}
 
 		@Override
-		public Object visit(PartitionCondition condition) throws Exception {
+		public Object visit(ChoiceCondition condition) throws Exception {
 			Set<ChoiceNode> set = new HashSet<ChoiceNode>();
-			set.add(condition.getPartition());
+			set.add(condition.getChoice());
 			return set;
 		}
 		
@@ -106,9 +106,9 @@ public class Constraint implements IConstraint<ChoiceNode> {
 		}
 
 		@Override
-		public Object visit(PartitionCondition condition) throws Exception {
+		public Object visit(ChoiceCondition condition) throws Exception {
 			Set<ParameterNode> set = new HashSet<ParameterNode>();
-			ParameterNode parameter = condition.getPartition().getParameter();
+			ParameterNode parameter = condition.getChoice().getParameter();
 			if(parameter != null){
 				set.add(parameter);
 			}
@@ -162,7 +162,7 @@ public class Constraint implements IConstraint<ChoiceNode> {
 		}
 
 		@Override
-		public Object visit(PartitionCondition condition) throws Exception {
+		public Object visit(ChoiceCondition condition) throws Exception {
 			return EMPTY_SET;
 		}
 		
@@ -236,8 +236,8 @@ public class Constraint implements IConstraint<ChoiceNode> {
 		return fPremise.mentions(parameter, label) || fConsequence.mentions(parameter, label);
 	}
 
-	public boolean mentions(ChoiceNode partition) {
-		return fPremise.mentions(partition) || fConsequence.mentions(partition);
+	public boolean mentions(ChoiceNode choice) {
+		return fPremise.mentions(choice) || fConsequence.mentions(choice);
 	}
 	
 	public Constraint getCopy(){
@@ -253,10 +253,10 @@ public class Constraint implements IConstraint<ChoiceNode> {
 	}
 
 	@SuppressWarnings("unchecked")
-	public Set<ChoiceNode> getReferencedPartitions() {
+	public Set<ChoiceNode> getReferencedChoices() {
 		try{
-			Set<ChoiceNode> referenced = (Set<ChoiceNode>)fPremise.accept(new ReferencedPartitionsProvider());
-			referenced.addAll((Set<ChoiceNode>)fConsequence.accept(new ReferencedPartitionsProvider()));
+			Set<ChoiceNode> referenced = (Set<ChoiceNode>)fPremise.accept(new ReferencedChoicesProvider());
+			referenced.addAll((Set<ChoiceNode>)fConsequence.accept(new ReferencedChoicesProvider()));
 			return referenced;
 		}
 		catch(Exception e){

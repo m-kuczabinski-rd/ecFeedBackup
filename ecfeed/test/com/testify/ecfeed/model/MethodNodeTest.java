@@ -158,9 +158,9 @@ public class MethodNodeTest {
 //		ParameterNode parameter2 = new ParameterNode("name", "type", "0", false);
 //		ParameterNode parameter3 = new ParameterNode("name", "type", "0", false);
 //		
-//		TestCaseNode testCase1 = new TestCaseNode("test case", new ArrayList<PartitionNode>());
-//		TestCaseNode testCase2 = new TestCaseNode("test case", new ArrayList<PartitionNode>());
-//		TestCaseNode testCase3 = new TestCaseNode("test case", new ArrayList<PartitionNode>());
+//		TestCaseNode testCase1 = new TestCaseNode("test case", new ArrayList<ChoiceNode>());
+//		TestCaseNode testCase2 = new TestCaseNode("test case", new ArrayList<ChoiceNode>());
+//		TestCaseNode testCase3 = new TestCaseNode("test case", new ArrayList<ChoiceNode>());
 //
 //		ConstraintNode constraint1 = new ConstraintNode("constraint", 
 //				new Constraint(new StaticStatement(false), new StaticStatement(false)));
@@ -248,17 +248,17 @@ public class MethodNodeTest {
 	}
 	
 	@Test
-	public void removePartitionedParameterTest(){
+	public void removeDecomposedParameterTest(){
 //		MethodNode method = new MethodNode("method");
 //		ParameterNode parameter = new ParameterNode("parameter", "type", "0", false);
-//		PartitionNode partition = new PartitionNode("partition", "0");
-//		Constraint mentioningConstraint = new Constraint(new PartitionedParameterStatement(parameter, Relation.EQUAL, partition), new StaticStatement(false));
+//		ChoiceNode choice = new ChoiceNode("choice", "0");
+//		Constraint mentioningConstraint = new Constraint(new DecomposedParameterStatement(parameter, Relation.EQUAL, choice), new StaticStatement(false));
 //		Constraint notMentioningConstraint = new Constraint(new StaticStatement(false), new StaticStatement(false));
 //		ConstraintNode mentioningConstraintNode = new ConstraintNode("constraint", mentioningConstraint);
 //		ConstraintNode notMentioningConstraintNode = new ConstraintNode("constraint", notMentioningConstraint);
-//		TestCaseNode testCaseNode = new TestCaseNode("name", new ArrayList<PartitionNode>());
+//		TestCaseNode testCaseNode = new TestCaseNode("name", new ArrayList<ChoiceNode>());
 //		
-//		parameter.addPartition(partition);
+//		parameter.addChoice(choice);
 //		method.addParameter(parameter);
 //		method.addConstraint(notMentioningConstraintNode);
 //		method.addConstraint(mentioningConstraintNode);
@@ -282,14 +282,14 @@ public class MethodNodeTest {
 //		MethodNode method = new MethodNode("method");
 //		ParameterNode parameter = new ParameterNode("parameter", "type", "0", true);
 //		parameter.setDefaultValueString("value");
-//		PartitionNode partition = new PartitionNode("partition", "value2");
-//		Constraint mentioningConstraint = new Constraint(new ExpectedValueStatement(parameter, partition), new StaticStatement(false));
+//		ChoiceNode choice = new ChoiceNode("choice", "value2");
+//		Constraint mentioningConstraint = new Constraint(new ExpectedValueStatement(parameter, choice), new StaticStatement(false));
 //		Constraint notMentioningConstraint = new Constraint(new StaticStatement(false), new StaticStatement(false));
 //		ConstraintNode mentioningConstraintNode = new ConstraintNode("constraint", mentioningConstraint);
 //		ConstraintNode notMentioningConstraintNode = new ConstraintNode("constraint", notMentioningConstraint);
-//		TestCaseNode testCaseNode = new TestCaseNode("name", new ArrayList<PartitionNode>());
+//		TestCaseNode testCaseNode = new TestCaseNode("name", new ArrayList<ChoiceNode>());
 //		
-//		parameter.addPartition(partition);
+//		parameter.addChoice(choice);
 //		method.addParameter(parameter);
 //		method.addConstraint(notMentioningConstraintNode);
 //		method.addConstraint(mentioningConstraintNode);
@@ -338,18 +338,18 @@ public class MethodNodeTest {
 	public void testReplaceParameterWithExpected(){
 //		MethodNode method = new MethodNode("method");
 //		ParameterNode parameter = new ParameterNode("parameter", "type","0",  false);
-//		PartitionNode partition = new PartitionNode("partition", "value");
-//		Constraint mentioningConstraint = new Constraint(new PartitionedParameterStatement(parameter, Relation.EQUAL, partition), new StaticStatement(false));
+//		ChoiceNode choice = new ChoiceNode("choice", "value");
+//		Constraint mentioningConstraint = new Constraint(new DecomposedParameterStatement(parameter, Relation.EQUAL, choice), new StaticStatement(false));
 //		Constraint notMentioningConstraint = new Constraint(new StaticStatement(false), new StaticStatement(false));
 //		ConstraintNode mentioningConstraintNode = new ConstraintNode("constraint", mentioningConstraint);
 //		ConstraintNode notMentioningConstraintNode = new ConstraintNode("constraint", notMentioningConstraint);
-//		List<PartitionNode> testData = new ArrayList<PartitionNode>();
-//		testData.add(partition);
+//		List<ChoiceNode> testData = new ArrayList<ChoiceNode>();
+//		testData.add(choice);
 //		TestCaseNode testCaseNode = new TestCaseNode("name", testData);
 //
 //		ParameterNode newExpCat = new ParameterNode("expCat", "type", "0", true);
 //		newExpCat.setDefaultValueString("expected value");
-//		parameter.addPartition(partition);
+//		parameter.addChoice(choice);
 //		method.addParameter(parameter);
 //		method.addConstraint(notMentioningConstraintNode);
 //		method.addConstraint(mentioningConstraintNode);
@@ -368,20 +368,20 @@ public class MethodNodeTest {
 	}
 	
 	@Test
-	public void testReplaceParameterWithPartitioned(){
+	public void testReplaceParameterWithDecomposed(){
 //		MethodNode method = new MethodNode("method");
 //		ParameterNode parameter = new ParameterNode("parameter", "type", "0", true);
-//		PartitionNode partition = new PartitionNode("partition", "value");
-//		Constraint mentioningConstraint = new Constraint(new ExpectedValueStatement(parameter, partition), new StaticStatement(false));
+//		ChoiceNode choice = new ChoiceNode("choice", "value");
+//		Constraint mentioningConstraint = new Constraint(new ExpectedValueStatement(parameter, choice), new StaticStatement(false));
 //		Constraint notMentioningConstraint = new Constraint(new StaticStatement(false), new StaticStatement(false));
 //		ConstraintNode mentioningConstraintNode = new ConstraintNode("constraint", mentioningConstraint);
 //		ConstraintNode notMentioningConstraintNode = new ConstraintNode("constraint", notMentioningConstraint);
-//		List<PartitionNode> testData = new ArrayList<PartitionNode>();
-//		testData.add(partition);
+//		List<ChoiceNode> testData = new ArrayList<ChoiceNode>();
+//		testData.add(choice);
 //		TestCaseNode testCaseNode = new TestCaseNode("name", testData);
 //
 //		ParameterNode newCat = new ParameterNode("newCat", "type", "0", false);
-//		parameter.addPartition(partition);
+//		parameter.addChoice(choice);
 //		method.addParameter(parameter);
 //		method.addConstraint(notMentioningConstraintNode);
 //		method.addConstraint(mentioningConstraintNode);
@@ -403,16 +403,16 @@ public class MethodNodeTest {
 //	public void testChangeParameterTypeToExpected(){
 //		MethodNode method = new MethodNode("method");
 //		ParameterNode parameter = new ParameterNode("parameter", "type", false);
-//		PartitionNode partition = new PartitionNode("partition", "value");
-//		Constraint mentioningConstraint = new Constraint(new PartitionedParameterStatement(parameter, Relation.EQUAL, partition), new StaticStatement(false));
+//		ChoiceNode choice = new ChoiceNode("choice", "value");
+//		Constraint mentioningConstraint = new Constraint(new DecomposedParameterStatement(parameter, Relation.EQUAL, choice), new StaticStatement(false));
 //		Constraint notMentioningConstraint = new Constraint(new StaticStatement(false), new StaticStatement(false));
 //		ConstraintNode mentioningConstraintNode = new ConstraintNode("constraint", mentioningConstraint);
 //		ConstraintNode notMentioningConstraintNode = new ConstraintNode("constraint", notMentioningConstraint);
-//		List<PartitionNode> testData = new ArrayList<PartitionNode>();
-//		testData.add(partition);
+//		List<ChoiceNode> testData = new ArrayList<ChoiceNode>();
+//		testData.add(choice);
 //		TestCaseNode testCaseNode = new TestCaseNode("name", testData);
 //
-//		parameter.addPartition(partition);
+//		parameter.addChoice(choice);
 //		method.addParameter(parameter);
 //		method.addConstraint(notMentioningConstraintNode);
 //		method.addConstraint(mentioningConstraintNode);
@@ -428,19 +428,19 @@ public class MethodNodeTest {
 //	}
 	
 //	@Test
-//	public void testChangeParameterTypeToPartitioned(){
+//	public void testChangeParameterTypeToDecomposed(){
 //		MethodNode method = new MethodNode("method");
 //		ParameterNode parameter = new ParameterNode("parameter", "type", true);
-//		PartitionNode partition = new PartitionNode("partition", "value");
-//		Constraint mentioningConstraint = new Constraint(new ExpectedValueStatement(parameter, partition), new StaticStatement(false));
+//		ChoiceNode choice = new ChoiceNode("choice", "value");
+//		Constraint mentioningConstraint = new Constraint(new ExpectedValueStatement(parameter, choice), new StaticStatement(false));
 //		Constraint notMentioningConstraint = new Constraint(new StaticStatement(false), new StaticStatement(false));
 //		ConstraintNode mentioningConstraintNode = new ConstraintNode("constraint", mentioningConstraint);
 //		ConstraintNode notMentioningConstraintNode = new ConstraintNode("constraint", notMentioningConstraint);
-//		List<PartitionNode> testData = new ArrayList<PartitionNode>();
-//		testData.add(partition);
+//		List<ChoiceNode> testData = new ArrayList<ChoiceNode>();
+//		testData.add(choice);
 //		TestCaseNode testCaseNode = new TestCaseNode("name", testData);
 //		
-//		parameter.addPartition(partition);
+//		parameter.addChoice(choice);
 //		method.addParameter(parameter);
 //		method.addConstraint(notMentioningConstraintNode);
 //		method.addConstraint(mentioningConstraintNode);
@@ -455,22 +455,22 @@ public class MethodNodeTest {
 //	}
 	
 	@Test 
-	public void testPartitionRemoved(){
+	public void testChoiceRemoved(){
 		MethodNode method = new MethodNode("method");
 		ParameterNode parameter = new ParameterNode("parameter", "type", "0", false);
-		ChoiceNode partition = new ChoiceNode("partition", "value");
-		Constraint mentioningConstraint = new Constraint(new DecomposedParameterStatement(parameter, EStatementRelation.EQUAL, partition), new StaticStatement(false));
+		ChoiceNode choice = new ChoiceNode("choice", "value");
+		Constraint mentioningConstraint = new Constraint(new DecomposedParameterStatement(parameter, EStatementRelation.EQUAL, choice), new StaticStatement(false));
 		Constraint notMentioningConstraint = new Constraint(new StaticStatement(false), new StaticStatement(false));
 		ConstraintNode mentioningConstraintNode = new ConstraintNode("constraint", mentioningConstraint);
 		ConstraintNode notMentioningConstraintNode = new ConstraintNode("constraint", notMentioningConstraint);
 		List<ChoiceNode> mentioningTestData = new ArrayList<ChoiceNode>();
-		mentioningTestData.add(partition);
+		mentioningTestData.add(choice);
 		TestCaseNode mentioningTestCaseNode = new TestCaseNode("name", mentioningTestData);
 		List<ChoiceNode> notMentioningTestData = new ArrayList<ChoiceNode>();
 		mentioningTestData.add(new ChoiceNode("dummy", "0"));
 		TestCaseNode notMentioningTestCaseNode = new TestCaseNode("name", notMentioningTestData);
 
-		parameter.addPartition(partition);
+		parameter.addChoice(choice);
 		method.addParameter(parameter);
 		method.addConstraint(notMentioningConstraintNode);
 		method.addConstraint(mentioningConstraintNode);
@@ -482,7 +482,7 @@ public class MethodNodeTest {
 		assertTrue(method.getTestCases().contains(notMentioningTestCaseNode));
 		assertTrue(method.getTestCases().contains(mentioningTestCaseNode));
 		
-		parameter.removePartition(partition);
+		parameter.removeChoice(choice);
 //		assertFalse(method.getConstraintNodes().contains(mentioningConstraintNode));
 //		assertTrue(method.getConstraintNodes().contains(notMentioningConstraintNode));
 //		assertTrue(method.getTestCases().contains(notMentioningTestCaseNode));

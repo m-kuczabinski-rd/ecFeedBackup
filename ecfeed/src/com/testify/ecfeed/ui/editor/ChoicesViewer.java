@@ -80,10 +80,10 @@ public class ChoicesViewer extends TableViewerSection {
 		@Override
 		protected void setValue(Object element, Object value) {
 			String newName = (String)value;
-			ChoiceNode partition = (ChoiceNode)element;
+			ChoiceNode choice = (ChoiceNode)element;
 
-			if(newName.equals(partition.getName()) == false){
-				fTableItemIf.setTarget(partition);
+			if(newName.equals(choice.getName()) == false){
+				fTableItemIf.setTarget(choice);
 				fTableItemIf.setName(newName);
 			}
 		}
@@ -110,7 +110,7 @@ public class ChoicesViewer extends TableViewerSection {
 			}
 			List<String> items = ParameterInterface.getSpecialValues(node.getParameter().getType());
 			if(JavaUtils.isUserType(parameter.getType())){
-				Set<String> usedValues = parameter.getLeafPartitionValues();
+				Set<String> usedValues = parameter.getLeafChoiceValues();
 				usedValues.removeAll(items);
 				items.addAll(usedValues);
 			}
@@ -150,8 +150,8 @@ public class ChoicesViewer extends TableViewerSection {
 		@Override
 		public String getText(Object element){
 			if(element instanceof ChoiceNode){
-				ChoiceNode partition = (ChoiceNode)element;
-				return partition.isAbstract()?"[ABSTRACT]":partition.getValueString();
+				ChoiceNode choice = (ChoiceNode)element;
+				return choice.isAbstract()?"[ABSTRACT]":choice.getValueString();
 			}
 			return "";
 		}
@@ -161,7 +161,7 @@ public class ChoicesViewer extends TableViewerSection {
 
 		@Override
 		public void widgetSelected(SelectionEvent e){
-			ChoiceNode added = fParentIf.addNewPartition();
+			ChoiceNode added = fParentIf.addNewChoice();
 			if(added != null){
 				getTable().setSelection(added.getIndex());
 			}
@@ -188,7 +188,7 @@ public class ChoicesViewer extends TableViewerSection {
 	}
 
 	public void setInput(DecomposedNode parent){
-		super.setInput(parent.getPartitions());
+		super.setInput(parent.getChoices());
 		fParentIf.setTarget(parent);
 	}
 

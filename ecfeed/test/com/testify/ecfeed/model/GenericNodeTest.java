@@ -82,9 +82,9 @@ public class GenericNodeTest{
 		expCat.setDefaultValueString("0");
 		ConstraintNode constraint = new ConstraintNode("name", new Constraint(new StaticStatement(true), new StaticStatement(false)));
 		TestCaseNode testCase = new TestCaseNode("name", new ArrayList<ChoiceNode>());
-		ChoiceNode partition = new ChoiceNode("name", "0");
+		ChoiceNode choice = new ChoiceNode("name", "0");
 		
-		parameter.addPartition(partition);
+		parameter.addChoice(choice);
 		method.addParameter(parameter);
 		method.addParameter(expCat);
 		method.addConstraint(constraint);
@@ -99,7 +99,7 @@ public class GenericNodeTest{
 		assertEquals(root, expCat.getRoot());
 		assertEquals(root, constraint.getRoot());
 		assertEquals(root, testCase.getRoot());
-		assertEquals(root, partition.getRoot());
+		assertEquals(root, choice.getRoot());
 	}
 
 	@Test
@@ -139,9 +139,9 @@ public class GenericNodeTest{
 		expCat.setDefaultValueString("0");
 		ConstraintNode constraint = new ConstraintNode("name", new Constraint(new StaticStatement(true), new StaticStatement(false)));
 		TestCaseNode testCase = new TestCaseNode("name", new ArrayList<ChoiceNode>());
-		ChoiceNode partition = new ChoiceNode("name", "0");
+		ChoiceNode choice = new ChoiceNode("name", "0");
 		
-		parameter.addPartition(partition);
+		parameter.addChoice(choice);
 		method.addParameter(parameter);
 		method.addParameter(expCat);
 		method.addConstraint(constraint);
@@ -156,7 +156,7 @@ public class GenericNodeTest{
 		assertEquals(1, testCase.subtreeSize());
 		assertEquals(1, expCat.subtreeSize());
 		assertEquals(2, parameter.subtreeSize());
-		assertEquals(1, partition.subtreeSize());
+		assertEquals(1, choice.subtreeSize());
 	}
 	
 	@Test
@@ -172,8 +172,8 @@ public class GenericNodeTest{
 		ChoiceNode p = new ChoiceNode("p", "0");
 		ChoiceNode p1 = new ChoiceNode("p1", "0");
 
-		p.addPartition(p1);
-		parameter.addPartition(p);
+		p.addChoice(p1);
+		parameter.addChoice(p);
 		method.addParameter(parameter);
 		method.addParameter(expCat);
 		method.addConstraint(constraint);
@@ -213,8 +213,8 @@ public class GenericNodeTest{
 		ChoiceNode p1 = new ChoiceNode("p1", "0");
 		ChoiceNode p2 = new ChoiceNode("p2", "0");
 		
-		cat.addPartition(p1);
-		cat.addPartition(p2);
+		cat.addChoice(p1);
+		cat.addChoice(p2);
 		
 		assertTrue(p1.hasSibling("p2"));
 		assertFalse(p1.hasSibling("p1"));

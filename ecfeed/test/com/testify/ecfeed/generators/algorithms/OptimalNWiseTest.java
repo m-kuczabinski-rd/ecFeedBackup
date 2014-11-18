@@ -48,9 +48,9 @@ public class OptimalNWiseTest extends NWiseAlgorithmTest {
 	public void testSize() {
 		try {
 			for (int variables : new int[] { 1, 2, 5 }) {
-				for (int partitions : new int[] { 1, 2, 5 }) {
+				for (int choices : new int[] { 1, 2, 5 }) {
 					for (int n = 1; n <= variables; n++) {
-						List<List<String>> input = GeneratorTestUtils.prepareInput(variables, partitions);
+						List<List<String>> input = GeneratorTestUtils.prepareInput(variables, choices);
 						Collection<IConstraint<String>> constraints = EMPTY_CONSTRAINTS;
 						IAlgorithm<String> algorithm = new OptimalNWiseAlgorithm<String>(n, 100);
 

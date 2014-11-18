@@ -206,7 +206,7 @@ public class ParametersViewer extends TableViewerSection{
 			if(expectedValues.contains(parameter.getDefaultValue()) == false){
 				expectedValues.add(parameter.getDefaultValue());
 			}
-			for(ChoiceNode leaf : parameter.getLeafPartitions()){
+			for(ChoiceNode leaf : parameter.getLeafChoices()){
 				if(!expectedValues.contains(leaf.getValueString())){
 					expectedValues.add(leaf.getValueString());
 				}

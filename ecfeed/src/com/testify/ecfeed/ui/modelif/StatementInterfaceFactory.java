@@ -7,7 +7,7 @@ import com.testify.ecfeed.model.DecomposedParameterStatement;
 import com.testify.ecfeed.model.StatementArray;
 import com.testify.ecfeed.model.StaticStatement;
 import com.testify.ecfeed.model.DecomposedParameterStatement.LabelCondition;
-import com.testify.ecfeed.model.DecomposedParameterStatement.PartitionCondition;
+import com.testify.ecfeed.model.DecomposedParameterStatement.ChoiceCondition;
 
 public class StatementInterfaceFactory{
 
@@ -54,7 +54,7 @@ public class StatementInterfaceFactory{
 		}
 
 		@Override
-		public Object visit(PartitionCondition condition) throws Exception {
+		public Object visit(ChoiceCondition condition) throws Exception {
 			return null;
 		}
 	}

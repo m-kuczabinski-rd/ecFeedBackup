@@ -74,8 +74,8 @@ public class MethodInterface extends GenericNodeInterface {
 		String type = generateNewParameterType(fTarget);
 		String defaultValue = modelBuilder.getDefaultExpectedValue(type);
 		ParameterNode parameter = new ParameterNode(name, type, defaultValue, false);
-		List<ChoiceNode> defaultPartitions = modelBuilder.defaultPartitions(type);
-		parameter.addPartitions(defaultPartitions);
+		List<ChoiceNode> defaultChoices = modelBuilder.defaultChoices(type);
+		parameter.addChoices(defaultChoices);
 		if(addNewParameter(parameter, fTarget.getParameters().size())){
 			return parameter;
 		}
@@ -117,7 +117,7 @@ public class MethodInterface extends GenericNodeInterface {
 
 	public TestCaseNode addTestCase() {
 		for(ParameterNode parameter : fTarget.getParameters()){
-			if(!parameter.isExpected() && parameter.getPartitions().isEmpty()){
+			if(!parameter.isExpected() && parameter.getChoices().isEmpty()){
 				MessageDialog.openError(Display.getDefault().getActiveShell(), Messages.DIALOG_ADD_TEST_CASE_PROBLEM_TITLE, Messages.DIALOG_TEST_CASE_WITH_EMPTY_CATEGORY_MESSAGE);
 				return null;
 			}

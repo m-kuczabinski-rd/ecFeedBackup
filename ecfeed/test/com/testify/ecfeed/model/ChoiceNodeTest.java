@@ -26,10 +26,10 @@ import com.testify.ecfeed.testutils.RandomModelGenerator;
 public class ChoiceNodeTest{
 	@Test
 	public void testValue() {
-		ChoiceNode partition = new ChoiceNode("name", "value");
-		assertEquals("value", partition.getValueString());
-		partition.setValueString("new value");
-		assertEquals("new value", partition.getValueString());
+		ChoiceNode choice = new ChoiceNode("name", "value");
+		assertEquals("value", choice.getValueString());
+		choice.setValueString("new value");
+		assertEquals("new value", choice.getValueString());
 	}
 
 	
@@ -42,9 +42,9 @@ public class ChoiceNodeTest{
 		ChoiceNode p111 = new ChoiceNode("p111", "0");
 		
 		method.addParameter(parameter);
-		parameter.addPartition(p1);
-		p1.addPartition(p11);
-		p11.addPartition(p111);
+		parameter.addChoice(p1);
+		p1.addChoice(p11);
+		p11.addChoice(p111);
 		
 		assertEquals(p11, p111.getParent());
 		assertEquals(p1, p11.getParent());
@@ -66,9 +66,9 @@ public class ChoiceNodeTest{
 		ChoiceNode p111 = new ChoiceNode("p111", "0");
 		
 		method.addParameter(parameter);
-		parameter.addPartition(p1);
-		p1.addPartition(p11);
-		p11.addPartition(p111);
+		parameter.addChoice(p1);
+		p1.addChoice(p11);
+		p11.addChoice(p111);
 		
 		assertEquals(0, p1.level());
 		assertEquals(1, p11.level());
@@ -77,20 +77,20 @@ public class ChoiceNodeTest{
 	
 //	@Test
 //	public void isAncestorTest(){
-//		PartitionNode p = new PartitionNode("p", "0");
-//		PartitionNode p1 = new PartitionNode("p1", "0");
-//		PartitionNode p2 = new PartitionNode("p2", "0");
-//		PartitionNode p11 = new PartitionNode("p1", "0");
-//		PartitionNode p12 = new PartitionNode("p2", "0");
-//		PartitionNode p21 = new PartitionNode("p1", "0");
-//		PartitionNode p22 = new PartitionNode("p2", "0");
+//		ChoiceNode p = new ChoiceNode("p", "0");
+//		ChoiceNode p1 = new ChoiceNode("p1", "0");
+//		ChoiceNode p2 = new ChoiceNode("p2", "0");
+//		ChoiceNode p11 = new ChoiceNode("p1", "0");
+//		ChoiceNode p12 = new ChoiceNode("p2", "0");
+//		ChoiceNode p21 = new ChoiceNode("p1", "0");
+//		ChoiceNode p22 = new ChoiceNode("p2", "0");
 //		
-//		p.addPartition(p1);
-//		p.addPartition(p2);
-//		p1.addPartition(p11);
-//		p1.addPartition(p12);
-//		p2.addPartition(p21);
-//		p2.addPartition(p22);
+//		p.addChoice(p1);
+//		p.addChoice(p2);
+//		p1.addChoice(p11);
+//		p1.addChoice(p12);
+//		p2.addChoice(p21);
+//		p2.addChoice(p22);
 //		
 //		assertTrue(p.isAncestor(p1));
 //		assertTrue(p.isAncestor(p2));
@@ -119,20 +119,20 @@ public class ChoiceNodeTest{
 	
 //	@Test
 //	public void isDescendantTest(){
-//		PartitionNode p = new PartitionNode("p", "0");
-//		PartitionNode p1 = new PartitionNode("p1", "0");
-//		PartitionNode p2 = new PartitionNode("p2", "0");
-//		PartitionNode p11 = new PartitionNode("p1", "0");
-//		PartitionNode p12 = new PartitionNode("p2", "0");
-//		PartitionNode p21 = new PartitionNode("p1", "0");
-//		PartitionNode p22 = new PartitionNode("p2", "0");
+//		ChoiceNode p = new ChoiceNode("p", "0");
+//		ChoiceNode p1 = new ChoiceNode("p1", "0");
+//		ChoiceNode p2 = new ChoiceNode("p2", "0");
+//		ChoiceNode p11 = new ChoiceNode("p1", "0");
+//		ChoiceNode p12 = new ChoiceNode("p2", "0");
+//		ChoiceNode p21 = new ChoiceNode("p1", "0");
+//		ChoiceNode p22 = new ChoiceNode("p2", "0");
 //		
-//		p.addPartition(p1);
-//		p.addPartition(p2);
-//		p1.addPartition(p11);
-//		p1.addPartition(p12);
-//		p2.addPartition(p21);
-//		p2.addPartition(p22);
+//		p.addChoice(p1);
+//		p.addChoice(p2);
+//		p1.addChoice(p11);
+//		p1.addChoice(p12);
+//		p2.addChoice(p21);
+//		p2.addChoice(p22);
 //		
 //		assertTrue(p11.isDescendant(p1));
 //		assertTrue(p11.isDescendant(p));
@@ -162,32 +162,32 @@ public class ChoiceNodeTest{
 		ChoiceNode p322 = new ChoiceNode("p322", "0");
 		ChoiceNode p323 = new ChoiceNode("p323", "0");
 		
-		p.addPartition(p1);
-		p.addPartition(p2);
-		p.addPartition(p3);
-		p2.addPartition(p21);
-		p2.addPartition(p22);
-		p2.addPartition(p23);
-		p3.addPartition(p31);
-		p3.addPartition(p32);
-		p3.addPartition(p33);
-		p32.addPartition(p321);
-		p32.addPartition(p322);
-		p32.addPartition(p323);
+		p.addChoice(p1);
+		p.addChoice(p2);
+		p.addChoice(p3);
+		p2.addChoice(p21);
+		p2.addChoice(p22);
+		p2.addChoice(p23);
+		p3.addChoice(p31);
+		p3.addChoice(p32);
+		p3.addChoice(p33);
+		p32.addChoice(p321);
+		p32.addChoice(p322);
+		p32.addChoice(p323);
 		
-		assertTrue(p.getLeafPartitions().contains(p1));
-		assertTrue(p.getLeafPartitions().contains(p21));
-		assertTrue(p.getLeafPartitions().contains(p22));
-		assertTrue(p.getLeafPartitions().contains(p23));
-		assertTrue(p.getLeafPartitions().contains(p31));
-		assertTrue(p.getLeafPartitions().contains(p321));
-		assertTrue(p.getLeafPartitions().contains(p322));
-		assertTrue(p.getLeafPartitions().contains(p323));
-		assertTrue(p.getLeafPartitions().contains(p33));
+		assertTrue(p.getLeafChoices().contains(p1));
+		assertTrue(p.getLeafChoices().contains(p21));
+		assertTrue(p.getLeafChoices().contains(p22));
+		assertTrue(p.getLeafChoices().contains(p23));
+		assertTrue(p.getLeafChoices().contains(p31));
+		assertTrue(p.getLeafChoices().contains(p321));
+		assertTrue(p.getLeafChoices().contains(p322));
+		assertTrue(p.getLeafChoices().contains(p323));
+		assertTrue(p.getLeafChoices().contains(p33));
 		
-		assertFalse(p.getLeafPartitions().contains(p2));
-		assertFalse(p.getLeafPartitions().contains(p3));
-		assertFalse(p.getLeafPartitions().contains(p32));
+		assertFalse(p.getLeafChoices().contains(p2));
+		assertFalse(p.getLeafChoices().contains(p3));
+		assertFalse(p.getLeafChoices().contains(p32));
 	}
 	
 	@Test
@@ -195,7 +195,7 @@ public class ChoiceNodeTest{
 		ChoiceNode p = new ChoiceNode("p", "0");
 		ChoiceNode q = new ChoiceNode("q", "0");
 		
-		p.addPartition(q);
+		p.addChoice(q);
 		
 		assertEquals(p.getName() + ":" + q.getName(), q.getQualifiedName());
 	}
@@ -210,14 +210,14 @@ public class ChoiceNodeTest{
 		ChoiceNode p112 = new ChoiceNode("p112", "0");
 		ChoiceNode p2 = new ChoiceNode("p2", "0");
 		
-		p.addPartition(p1);
-		p.addPartition(p2);
-		p1.addPartition(p11);
-		p1.addPartition(p12);
-		p11.addPartition(p111);
-		p11.addPartition(p112);
+		p.addChoice(p1);
+		p.addChoice(p2);
+		p1.addChoice(p11);
+		p1.addChoice(p12);
+		p11.addChoice(p111);
+		p11.addChoice(p112);
 		
-		Set<String> names = p.getAllPartitionNames();
+		Set<String> names = p.getAllChoiceNames();
 		assertTrue(names.contains("p:p1"));
 		assertTrue(names.contains("p:p1:p11"));
 		assertTrue(names.contains("p:p1:p12"));
@@ -235,10 +235,10 @@ public class ChoiceNodeTest{
 		ChoiceNode p12 = new ChoiceNode("p12", "0");
 		ChoiceNode p11 = new ChoiceNode("p11", "0");
 		
-		p.addPartition(p1);
-		p.addPartition(p2);
-		p1.addPartition(p11);
-		p1.addPartition(p12);
+		p.addChoice(p1);
+		p.addChoice(p2);
+		p1.addChoice(p11);
+		p1.addChoice(p12);
 		
 		assertTrue(p.addLabel("pLabel.0"));
 		assertTrue(p.addLabel("pLabel.1"));
@@ -311,7 +311,7 @@ public class ChoiceNodeTest{
 	public void compareSmokeTest(){
 		for(String type : SUPPORTED_TYPES){
 			
-			ChoiceNode p = new RandomModelGenerator().generatePartition(3, 3, 3, type);
+			ChoiceNode p = new RandomModelGenerator().generateChoice(3, 3, 3, type);
 			assertElementsEqual(p, p);
 		}
 	}
@@ -371,9 +371,9 @@ public class ChoiceNodeTest{
 
 		assertTrue(p1.compare(p2));
 
-		p1.addPartition(p11);
+		p1.addChoice(p11);
 		assertFalse(p1.compare(p2));
-		p2.addPartition(p21);
+		p2.addChoice(p21);
 		assertTrue(p1.compare(p2));
 		
 		p11.setName("p11");

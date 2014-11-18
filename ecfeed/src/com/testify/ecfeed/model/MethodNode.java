@@ -258,14 +258,14 @@ public class MethodNode extends GenericNode {
 		}
 	}
 
-	public boolean isPartitionMentioned(ChoiceNode partition){
+	public boolean isChoiceMentioned(ChoiceNode choice){
 		for(ConstraintNode constraint : fConstraints){
-			if(constraint.mentions(partition)){
+			if(constraint.mentions(choice)){
 				return true;
 			}
 		}
 		for(TestCaseNode testCase: fTestCases){
-			if(testCase.mentions(partition)){
+			if(testCase.mentions(choice)){
 				return true;
 			}
 		}
@@ -300,20 +300,20 @@ public class MethodNode extends GenericNode {
 		return result;
 	}
 
-	public Set<ConstraintNode> mentioningConstraints(ChoiceNode partition){
+	public Set<ConstraintNode> mentioningConstraints(ChoiceNode choice){
 		Set<ConstraintNode> result = new HashSet<ConstraintNode>();
 		for(ConstraintNode constraint : fConstraints){
-			if(constraint.mentions(partition)){
+			if(constraint.mentions(choice)){
 				result.add(constraint);
 			}
 		}
 		return result;
 	}
 
-	public List<TestCaseNode> mentioningTestCases(ChoiceNode partition){
+	public List<TestCaseNode> mentioningTestCases(ChoiceNode choice){
 		List<TestCaseNode> result = new ArrayList<TestCaseNode>();
 		for(TestCaseNode testCase : fTestCases){
-			if(testCase.getTestData().contains(partition)){
+			if(testCase.getTestData().contains(choice)){
 				result.add(testCase);
 			}
 		}

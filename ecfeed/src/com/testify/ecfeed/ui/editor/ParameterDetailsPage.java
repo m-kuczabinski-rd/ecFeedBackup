@@ -34,7 +34,7 @@ public class ParameterDetailsPage extends BasicDetailsPage{
 	private Button fExpectedCheckbox;
 	private Combo fDefaultValueCombo;
 
-	private ChoicesViewer fPartitionsViewer;
+	private ChoicesViewer fChoicesViewer;
 
 	private ParameterInterface fParameterIf;
 
@@ -80,7 +80,7 @@ public class ParameterDetailsPage extends BasicDetailsPage{
 		super.createContents(parent);
 
 		createAttributesComposite();
-		addForm(fPartitionsViewer = new ChoicesViewer(this, this));
+		addForm(fChoicesViewer = new ChoicesViewer(this, this));
 
 		getToolkit().paintBordersFor(getMainComposite());
 	}
@@ -106,13 +106,13 @@ public class ParameterDetailsPage extends BasicDetailsPage{
 			recreateDefaultValueCombo(parameter);
 			fExpectedCheckbox.setSelection(parameter.isExpected());
 			if(fParameterIf.isExpected() && fParameterIf.isPrimitive()){
-				fPartitionsViewer.setVisible(false);
+				fChoicesViewer.setVisible(false);
 			}
 			else{
-				fPartitionsViewer.setVisible(true);
+				fChoicesViewer.setVisible(true);
 			}
 
-			fPartitionsViewer.setInput(parameter);
+			fChoicesViewer.setInput(parameter);
 		}
 	}
 

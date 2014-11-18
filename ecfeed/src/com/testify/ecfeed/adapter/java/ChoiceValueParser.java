@@ -9,9 +9,9 @@ public class ChoiceValueParser {
 		fLoader = loader;
 	}
 
-	public Object parseValue(ChoiceNode partition){
-		if(partition.getParameter() != null){
-			return parseValue(partition.getValueString(), partition.getParameter().getType());
+	public Object parseValue(ChoiceNode choice){
+		if(choice.getParameter() != null){
+			return parseValue(choice.getValueString(), choice.getParameter().getType());
 		}
 		return null;
 	}

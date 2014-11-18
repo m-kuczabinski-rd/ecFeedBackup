@@ -12,7 +12,7 @@
 package com.testify.ecfeed.model;
 
 import com.testify.ecfeed.model.DecomposedParameterStatement.LabelCondition;
-import com.testify.ecfeed.model.DecomposedParameterStatement.PartitionCondition;
+import com.testify.ecfeed.model.DecomposedParameterStatement.ChoiceCondition;
 
 public interface IStatementVisitor {
 	public Object visit(StaticStatement statement) throws Exception;
@@ -20,5 +20,5 @@ public interface IStatementVisitor {
 	public Object visit(ExpectedValueStatement statement) throws Exception;
 	public Object visit(DecomposedParameterStatement statement) throws Exception;
 	public Object visit(LabelCondition condition) throws Exception;
-	public Object visit(PartitionCondition condition) throws Exception;
+	public Object visit(ChoiceCondition condition) throws Exception;
 }

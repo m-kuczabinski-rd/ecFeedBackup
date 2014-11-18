@@ -54,8 +54,8 @@ public class RuntimeMethodTest {
 		}
 	}
 	
-	public void test(int parameters, int partitionsPerParameter) {
-		List<List<ChoiceNode>> input = generateInput(parameters, partitionsPerParameter);
+	public void test(int parameters, int choicesPerParameter) {
+		List<List<ChoiceNode>> input = generateInput(parameters, choicesPerParameter);
 		IGenerator<ChoiceNode> generator = new CartesianProductGenerator<ChoiceNode>();
 		try {
 			Method methodUnterTest = this.getClass().getMethod("functionUnderTest", int.class, int.class);
@@ -89,21 +89,21 @@ public class RuntimeMethodTest {
 	}
 
 	private List<List<ChoiceNode>> generateInput(int parameters,
-			int partitions) {
+			int choices) {
 		List<List<ChoiceNode>> input = new ArrayList<List<ChoiceNode>>();
 		for(int i = 0; i < parameters; ++i){
-			input.add(generateParameter(partitions));
+			input.add(generateParameter(choices));
 		}
 		return input;
 	}
 
-	private List<ChoiceNode> generateParameter(int partitions) {
+	private List<ChoiceNode> generateParameter(int choices) {
 		ParameterNode parent = new ParameterNode("Parameter", "int","0",  false);
 		List<ChoiceNode> parameter = new ArrayList<ChoiceNode>();
-		for(int i = 0; i < partitions; i++){
-			ChoiceNode partition = new ChoiceNode(String.valueOf(i), String.valueOf(i));
-			partition.setParent(parent);
-			parameter.add(partition);
+		for(int i = 0; i < choices; i++){
+			ChoiceNode choice = new ChoiceNode(String.valueOf(i), String.valueOf(i));
+			choice.setParent(parent);
+			parameter.add(choice);
 		}
 		return parameter;
 	}

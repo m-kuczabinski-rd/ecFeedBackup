@@ -65,7 +65,7 @@ public abstract class BasicStatement implements IStatement {
 //		}
 	}
 
-	public boolean mentions(ChoiceNode partition) {
+	public boolean mentions(ChoiceNode choice) {
 		return false;
 	}
 

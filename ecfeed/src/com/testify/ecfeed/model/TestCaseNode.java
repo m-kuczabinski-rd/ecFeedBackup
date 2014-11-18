@@ -46,8 +46,8 @@ public class TestCaseNode extends GenericNode {
 	@Override
 	public TestCaseNode getCopy(){
 		List<ChoiceNode> testdata = new ArrayList<>();
-		for(ChoiceNode partition : fTestData){
-			testdata.add(partition);
+		for(ChoiceNode choice : fTestData){
+			testdata.add(choice);
 		}
 		return new TestCaseNode(this.getName(), testdata);
 	}
@@ -69,9 +69,9 @@ public class TestCaseNode extends GenericNode {
 		fTestData.set(index, newValue);
 	}
 
-	public boolean mentions(ChoiceNode partition) {
+	public boolean mentions(ChoiceNode choice) {
 		for(ChoiceNode p : fTestData){
-			if(p.is(partition)){
+			if(p.is(choice)){
 				return true;
 			}
 		}
@@ -82,12 +82,12 @@ public class TestCaseNode extends GenericNode {
 		String result = new String();
 
 		for(int i = 0; i < fTestData.size(); i++){
-			ChoiceNode partition = fTestData.get(i);
-			if(partition.getParameter().isExpected()){
-				result += "[e]" + partition.getValueString();
+			ChoiceNode choice = fTestData.get(i);
+			if(choice.getParameter().isExpected()){
+				result += "[e]" + choice.getValueString();
 			}
 			else{
-				result += partition.getQualifiedName();
+				result += choice.getQualifiedName();
 			}
 			if(i < fTestData.size() - 1){
 				result += ", ";
@@ -124,7 +124,7 @@ public class TestCaseNode extends GenericNode {
 				getTestData().set(i, newChoice);
 			} else{
 				ChoiceNode original = getTestData().get(i);
-				ChoiceNode newReference = parameter.getPartition(original.getQualifiedName());
+				ChoiceNode newReference = parameter.getChoice(original.getQualifiedName());
 				if(newReference == null){
 					return false;
 				}
@@ -163,7 +163,7 @@ public class TestCaseNode extends GenericNode {
 	public boolean isConsistent() {
 		for(ChoiceNode p : getTestData()){
 			ParameterNode parameter = p.getParameter();
-			if(parameter == null || (parameter.isExpected() == false && parameter.getPartition(p.getQualifiedName()) == null)){
+			if(parameter == null || (parameter.isExpected() == false && parameter.getChoice(p.getQualifiedName()) == null)){
 				return false;
 			}
 			if(p.isAbstract()){

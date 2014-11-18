@@ -44,7 +44,7 @@ public class ChoiceLabelsViewer extends TableViewerSection {
 	
 	private static final int STYLE = Section.TITLE_BAR | Section.EXPANDED;
 
-	private ChoiceInterface fPartitionIf;
+	private ChoiceInterface fChoiceIf;
 
 	private static class LabelClipboard{
 		private static List<String> fLabels = new ArrayList<>();
@@ -109,7 +109,7 @@ public class ChoiceLabelsViewer extends TableViewerSection {
 		
 		@Override
 		public void run(){
-			fPartitionIf.addLabels(LabelClipboard.getContentCopy());
+			fChoiceIf.addLabels(LabelClipboard.getContentCopy());
 		}
 	}
 
@@ -121,7 +121,7 @@ public class ChoiceLabelsViewer extends TableViewerSection {
 		@Override
 		public boolean isEnabled(){
 			for(String label : getSelectedLabels()){
-				if(fPartitionIf.isLabelInherited(label) == false){
+				if(fChoiceIf.isLabelInherited(label) == false){
 					return true;
 				}
 			}
@@ -130,14 +130,14 @@ public class ChoiceLabelsViewer extends TableViewerSection {
 		
 		@Override
 		public void run(){
-			fPartitionIf.removeLabels(getSelectedLabels());
+			fChoiceIf.removeLabels(getSelectedLabels());
 		}
 	}
 
 	private class AddLabelAdapter extends SelectionAdapter{
 		@Override
 		public void widgetSelected(SelectionEvent e){
-			String newLabel = fPartitionIf.addNewLabel();
+			String newLabel = fChoiceIf.addNewLabel();
 			if(newLabel != null){
 				getTableViewer().editElement(newLabel, 0);
 			}
@@ -159,7 +159,7 @@ public class ChoiceLabelsViewer extends TableViewerSection {
 
 		@Override
 		protected boolean canEdit(Object element) {
-			return fPartitionIf.isLabelInherited((String)element) == false;
+			return fChoiceIf.isLabelInherited((String)element) == false;
 		}
 
 		@Override
@@ -169,7 +169,7 @@ public class ChoiceLabelsViewer extends TableViewerSection {
 
 		@Override
 		protected void setValue(Object element, Object value) {
-			fPartitionIf.renameLabel((String)element, (String)value);
+			fChoiceIf.renameLabel((String)element, (String)value);
 		}
 	}
 
@@ -183,7 +183,7 @@ public class ChoiceLabelsViewer extends TableViewerSection {
 		public Color getForeground(Object element){
 			if(element instanceof String){
 				String label = (String)element;
-				if(fPartitionIf.isLabelInherited(label)){
+				if(fChoiceIf.isLabelInherited(label)){
 					return ColorManager.getColor(ColorConstants.INHERITED_LABEL_FOREGROUND);
 				}
 			}
@@ -194,7 +194,7 @@ public class ChoiceLabelsViewer extends TableViewerSection {
 		public Font getFont(Object element){
 			if(element instanceof String){
 				String label = (String)element;
-				if(fPartitionIf.isLabelInherited(label)){
+				if(fChoiceIf.isLabelInherited(label)){
 					Font font = getTable().getFont();
 					FontData currentFontData = font.getFontData()[0];
 					FontData fd = new FontData();
@@ -211,7 +211,7 @@ public class ChoiceLabelsViewer extends TableViewerSection {
 	public ChoiceLabelsViewer(ISectionContext sectionContext, IModelUpdateContext updateContext) {
 		super(sectionContext, updateContext, STYLE);
 
-		fPartitionIf = new ChoiceInterface(this);
+		fChoiceIf = new ChoiceInterface(this);
 		getSection().setText("Labels");
 		
 		addButton("Add label", new AddLabelAdapter());
@@ -227,9 +227,9 @@ public class ChoiceLabelsViewer extends TableViewerSection {
 		labelColumn.setEditingSupport(new LabelEditingSupport(getTableViewer()));
 	}
 	
-	public void setInput(ChoiceNode	partition){
-		fPartitionIf.setTarget(partition);
-		super.setInput(partition.getAllLabels());
+	public void setInput(ChoiceNode	choice){
+		fChoiceIf.setTarget(choice);
+		super.setInput(choice.getAllLabels());
 	}
 
 	@SuppressWarnings("unchecked")

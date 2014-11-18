@@ -51,18 +51,18 @@ public class ExpectedValueStatementTest{
 	
 	@Test
 	public void testAdapt(){
-		ChoiceNode partition1 = new ChoiceNode("partition1", "");
-		ChoiceNode statementPartition = new ChoiceNode("exp_partition", "statement expected value");
-		ExpectedValueStatement testStatement = new ExpectedValueStatement(fExpParameter1, statementPartition);
+		ChoiceNode choice1 = new ChoiceNode("choice1", "");
+		ChoiceNode statementChoice = new ChoiceNode("exp_choice", "statement expected value");
+		ExpectedValueStatement testStatement = new ExpectedValueStatement(fExpParameter1, statementChoice);
 		
 		List<ChoiceNode> testData = new ArrayList<>();
-		testData.add(partition1);	
+		testData.add(choice1);	
 		testData.add(new ChoiceNode("", fExpParameter1.getDefaultValue()));
-		testData.add(partition1);
+		testData.add(choice1);
 		
 		testStatement.adapt(testData);
 		
-		assertTrue(testData.get(1).getValueString().equals(statementPartition.getValueString()));
+		assertTrue(testData.get(1).getValueString().equals(statementChoice.getValueString()));
 	}
 	
 	@Test

@@ -90,7 +90,7 @@ public class ExpectedValueStatement extends BasicStatement implements IRelationa
 			fCondition.setParent(parameter);
 			String type = parameter.getType();
 			if(JavaUtils.isUserType(type)){
-				ChoiceNode choice = parameter.getPartition(fCondition.getQualifiedName());
+				ChoiceNode choice = parameter.getChoice(fCondition.getQualifiedName());
 				if(choice != null){
 					fCondition = choice;
 				}

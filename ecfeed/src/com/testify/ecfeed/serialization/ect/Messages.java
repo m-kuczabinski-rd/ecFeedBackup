@@ -59,8 +59,8 @@ public class Messages {
 		return "Parameter " + parameterName + " does not exist in method " + methodName;
 	}
 
-	public static String WRONG_PARTITION_NAME(String partitionName, String parameterName, String methodName) {
-		return "Partition " + partitionName + " does not exist for parameter " + parameterName + " in method " + methodName;
+	public static String WRONG_PARTITION_NAME(String choiceName, String parameterName, String methodName) {
+		return "Choice " + choiceName + " does not exist for parameter " + parameterName + " in method " + methodName;
 	}
 
 	public static String WRONG_NUMBER_OF_TEST_PAREMETERS(String testSuiteName){
@@ -72,8 +72,8 @@ public class Messages {
 		return "Missing test value attribute in a test case in " + testSuiteName + " suite";
 	}
 
-	public static String PARTITION_DOES_NOT_EXIST(String parameterName, String partitionName) {
-		return "Partition " + partitionName + " is not defined for parameter " + parameterName;
+	public static String PARTITION_DOES_NOT_EXIST(String parameterName, String choiceName) {
+		return "Choice " + choiceName + " is not defined for parameter " + parameterName;
 	}
 	
 	public static final String MISSING_VALUE_ATTRIBUTE_IN_TEST_CASE_ELEMENT = "The expected test parameter element misses value attribute";

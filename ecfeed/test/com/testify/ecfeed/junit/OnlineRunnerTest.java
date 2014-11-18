@@ -244,8 +244,8 @@ public class OnlineRunnerTest extends StaticRunnerTest{
 		List<ChoiceNode> next;
 		while((next = initializedGenerator.next()) != null){
 			List<String> sample = new ArrayList<String>();
-			for(ChoiceNode partition : next){
-				sample.add((String)partition.getValueString());
+			for(ChoiceNode choice : next){
+				sample.add((String)choice.getValueString());
 			}
 			result.add(sample);
 		}
@@ -275,7 +275,7 @@ public class OnlineRunnerTest extends StaticRunnerTest{
 		List<List<ChoiceNode>> result = new ArrayList<List<ChoiceNode>>();
 		MethodNode methodModel = getMethodModel(model, method);
 		for(ParameterNode parameter : methodModel.getParameters()){
-			result.add(parameter.getPartitions());
+			result.add(parameter.getChoices());
 		}
 		return result;
 	}

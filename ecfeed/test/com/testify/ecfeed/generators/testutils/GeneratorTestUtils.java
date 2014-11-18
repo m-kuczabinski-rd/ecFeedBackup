@@ -59,12 +59,12 @@ public class GeneratorTestUtils{
 			"k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "aa", "ab", 
 			"ac", "ad", "ae", "af", "ag", "ah", "ai", "aj", "ak", "al", "am", "an", "ao", "ap", "aq"};
 	
-	public static List<List<String>> prepareInput(int variables, int partitions){
+	public static List<List<String>> prepareInput(int variables, int choices){
 		List<List<String>> input = new ArrayList<List<String>>();
 		for(int i = 0; i < variables; i++){
 			String variableName = VARIABLE_NAMES[i];
 			List<String> parameter = new ArrayList<String>();
-			for(int j = 1; j <= partitions; j++){
+			for(int j = 1; j <= choices; j++){
 				parameter.add(variableName + String.valueOf(j));
 			}
 			input.add(parameter);

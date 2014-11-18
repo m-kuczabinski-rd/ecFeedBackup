@@ -39,15 +39,15 @@ public class RandomAlgorithmTest {
 	@Test
 	public void uniformityTest(){
 		for(int variables = 1; variables <= MAX_VARIABLES; variables++){
-			for(int partitions = 1; partitions <= MAX_PARTITIONS_PER_VARIABLE; partitions++){
-				uniformityTest(variables, partitions);
+			for(int choices = 1; choices <= MAX_PARTITIONS_PER_VARIABLE; choices++){
+				uniformityTest(variables, choices);
 			}
 		}
 	}
 	
-	protected void uniformityTest(int variables, int partitions) {
+	protected void uniformityTest(int variables, int choices) {
 		Map<List<String>, Long> histogram = new HashMap<List<String>, Long>();
-		List<List<String>> input = GeneratorTestUtils.prepareInput(variables, partitions);
+		List<List<String>> input = GeneratorTestUtils.prepareInput(variables, choices);
 		IAlgorithm<String> algorithm = new RandomAlgorithm<String>((int)(SAMPLE_SIZE), true);
 		try {
 			algorithm.initialize(input, EMPTY_CONSTRAINTS());
@@ -81,15 +81,15 @@ public class RandomAlgorithmTest {
 	@Test
 	public void duplicatesTest(){
 		for(int variables : new int[]{1, 2, 5}){
-		for(int partitions : new int[]{1, 2, 5}){
-				duplicatesTest(variables, partitions);
+		for(int choices : new int[]{1, 2, 5}){
+				duplicatesTest(variables, choices);
 		}
 		}
 	}
 
-	private void duplicatesTest(int variables, int partitions) {
+	private void duplicatesTest(int variables, int choices) {
 		Map<List<String>, Long> histogram = new HashMap<List<String>, Long>();
-		List<List<String>> input = GeneratorTestUtils.prepareInput(variables, partitions);
+		List<List<String>> input = GeneratorTestUtils.prepareInput(variables, choices);
 		RandomAlgorithm<String> algorithm = new RandomAlgorithm<String>(SAMPLE_SIZE, false);
 		try {
 			algorithm.initialize(input, EMPTY_CONSTRAINTS());
@@ -108,8 +108,8 @@ public class RandomAlgorithmTest {
 		
 //		make sure that each value was chosen, given that the number of samples is higher than
 //		number of possible results
-		if(SAMPLE_SIZE > Math.pow(partitions, variables)){
-			assertEquals((int)Math.pow(partitions, variables), histogram.size());
+		if(SAMPLE_SIZE > Math.pow(choices, variables)){
+			assertEquals((int)Math.pow(choices, variables), histogram.size());
 		}
 		
 //		check if no value was chosen more than once

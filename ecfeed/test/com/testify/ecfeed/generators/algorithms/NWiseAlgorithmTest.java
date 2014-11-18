@@ -36,9 +36,9 @@ public class NWiseAlgorithmTest{
 	@SuppressWarnings("rawtypes")
 	protected void testCorrectness(Class<? extends IAlgorithm> algorithmUnderTestClass) {
 		for(int numOfVariables : new int[]{1, 2, 5}){
-		for(int partitionsPerVariable : new int[]{1, 2, 5}){
+		for(int choicesPerVariable : new int[]{1, 2, 5}){
 			for(int n = 1; n <= numOfVariables; n++){
-				List<List<String>> input = GeneratorTestUtils.prepareInput(numOfVariables, partitionsPerVariable);
+				List<List<String>> input = GeneratorTestUtils.prepareInput(numOfVariables, choicesPerVariable);
 				try{
 					IAlgorithm<String> algorithmUnderTest = getAlgorithm(algorithmUnderTestClass, n);
 					algorithmUnderTest.initialize(input, EMPTY_CONSTRAINTS);
@@ -56,9 +56,9 @@ public class NWiseAlgorithmTest{
 	@SuppressWarnings("rawtypes")
 	protected void testConstraints(Class<? extends IAlgorithm> algorithmUnderTestClass){
 		for(int numOfVariables : new int[]{1, 2, 5}){
-		for(int partitionsPerVariable : new int[]{1, 2, 5}){
+		for(int choicesPerVariable : new int[]{1, 2, 5}){
 			for(int n = 1; n <= numOfVariables; n++){
-				List<List<String>> input = GeneratorTestUtils.prepareInput(numOfVariables, partitionsPerVariable);
+				List<List<String>> input = GeneratorTestUtils.prepareInput(numOfVariables, choicesPerVariable);
 				Collection<IConstraint<String>> constraints = GeneratorTestUtils.generateRandomConstraints(input);
 				try {
 					IAlgorithm<String> algorithmUnderTest = getAlgorithm(algorithmUnderTestClass, n);

@@ -47,21 +47,21 @@ public class TestDataValueEditingSupport extends EditingSupport {
 
 	@Override
 	protected CellEditor getCellEditor(Object element) {
-		ChoiceNode partition = (ChoiceNode)element;
-		return getComboCellEditor(partition);
+		ChoiceNode choice = (ChoiceNode)element;
+		return getComboCellEditor(choice);
 	}
 
-	private CellEditor getComboCellEditor(ChoiceNode partition) {
-		String type = partition.getParameter().getType();
+	private CellEditor getComboCellEditor(ChoiceNode choice) {
+		String type = choice.getParameter().getType();
 		EclipseModelBuilder builder = new EclipseModelBuilder();
 
-		if (partition.getParameter().isExpected()) {
+		if (choice.getParameter().isExpected()) {
 			Set<String> expectedValues = new HashSet<String>();
 			for (String specialValue : builder.getSpecialValues(type)) {
 				expectedValues.add(specialValue);
 			}
-			if (expectedValues.contains(partition.getValueString()) == false) {
-				expectedValues.add(partition.getValueString());
+			if (expectedValues.contains(choice.getValueString()) == false) {
+				expectedValues.add(choice.getValueString());
 			}
 			fComboCellEditor.setInput(expectedValues);
 
@@ -75,9 +75,9 @@ public class TestDataValueEditingSupport extends EditingSupport {
 		} else {
 			fComboCellEditor.setActivationStyle(ComboBoxViewerCellEditor.DROP_DOWN_ON_KEY_ACTIVATION |
 					ComboBoxViewerCellEditor.DROP_DOWN_ON_MOUSE_ACTIVATION);
-			fComboCellEditor.setInput(partition.getParameter().getLeafPartitions());
+			fComboCellEditor.setInput(choice.getParameter().getLeafChoices());
 			fComboCellEditor.getViewer().getCCombo().setEditable(false);
-			fComboCellEditor.setValue(partition);
+			fComboCellEditor.setValue(choice);
 		}
 		return fComboCellEditor;
 	}
@@ -89,11 +89,11 @@ public class TestDataValueEditingSupport extends EditingSupport {
 
 	@Override
 	protected Object getValue(Object element) {
-		ChoiceNode partition = (ChoiceNode)element;
-		if(partition.getParameter().isExpected()){
-			return partition.getValueString();
+		ChoiceNode choice = (ChoiceNode)element;
+		if(choice.getParameter().isExpected()){
+			return choice.getValueString();
 		}
-		return partition.toString();
+		return choice.toString();
 	}
 
 	@Override

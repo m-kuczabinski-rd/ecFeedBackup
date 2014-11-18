@@ -85,7 +85,7 @@ public class TestCasesViewerLabelProvider extends LabelProvider implements IColo
 	}
 
 	private void updateExecutableTable() {
-		Map<ChoiceNode, EImplementationStatus> partitionStatusMap = new HashMap<ChoiceNode, EImplementationStatus>();
+		Map<ChoiceNode, EImplementationStatus> choiceStatusMap = new HashMap<ChoiceNode, EImplementationStatus>();
 		fExecutableTestSuites.clear();
 		fTestCasesStatusMap.clear();
 		for(String testSuite : fMethod.getTestSuites()){
@@ -99,10 +99,10 @@ public class TestCasesViewerLabelProvider extends LabelProvider implements IColo
 					fExecutableTestSuites.put(name, 0);
 				}
 				for(ChoiceNode p : tc.getTestData()){
-					EImplementationStatus status = partitionStatusMap.get(p);
+					EImplementationStatus status = choiceStatusMap.get(p);
 					if(status == null){
 						status = fStatusResolver.getImplementationStatus(p);
-						partitionStatusMap.put(p, status);
+						choiceStatusMap.put(p, status);
 					}
 					if(status != EImplementationStatus.IMPLEMENTED){
 						executable = false;

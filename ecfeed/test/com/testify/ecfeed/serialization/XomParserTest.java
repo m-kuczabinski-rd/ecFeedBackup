@@ -151,13 +151,13 @@ public class XomParserTest {
 	}
 	
 	@Test
-	public void parsePartitionTest(){
+	public void parseChoiceTest(){
 		for(String type: SUPPORTED_TYPES){
 			try {
-				ChoiceNode p = fModelGenerator.generatePartition(3, 3, 3, type);
+				ChoiceNode p = fModelGenerator.generateChoice(3, 3, 3, type);
 				Element element = (Element)p.accept(fConverter);
 				TRACE(element);
-				ChoiceNode p1 = fParser.parsePartition(element);
+				ChoiceNode p1 = fParser.parseChoice(element);
 				assertElementsEqual(p, p1);
 			} catch (Exception e) {
 				fail("Unexpected exception: " + e.getMessage());
@@ -186,11 +186,11 @@ public class XomParserTest {
 	}
 	
 	@Test 
-	public void parsePartitionStatementTest(){
+	public void parseChoiceStatementTest(){
 		for(int i = 0; i < 10; i++){
 			try{
 				MethodNode m = fModelGenerator.generateMethod(5, 0, 0);
-				DecomposedParameterStatement s = fModelGenerator.generatePartitionedStatement(m);
+				DecomposedParameterStatement s = fModelGenerator.generateDecomposedStatement(m);
 				Element element = (Element)s.accept(fConverter);
 				TRACE(element);
 				DecomposedParameterStatement parsedS = null;
@@ -199,7 +199,7 @@ public class XomParserTest {
 					parsedS = fParser.parseLabelStatement(element, m);
 					break;
 				case Constants.CONSTRAINT_PARTITION_STATEMENT_NODE_NAME:
-					parsedS = fParser.parsePartitionStatement(element, m);
+					parsedS = fParser.parseChoiceStatement(element, m);
 					break;
 				}					
 

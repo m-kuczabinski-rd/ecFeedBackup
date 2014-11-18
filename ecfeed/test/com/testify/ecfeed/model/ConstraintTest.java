@@ -66,24 +66,24 @@ public class ConstraintTest {
 
 	@Test
 	public void testMentions() {
-		ChoiceNode partition = new ChoiceNode("partition", null);
+		ChoiceNode choice = new ChoiceNode("choice", null);
 		ParameterNode parameter = new ParameterNode("parameter", "type", "0", false);
-		parameter.addPartition(partition);
+		parameter.addChoice(choice);
 
-		BasicStatement mentioningStatement = new DecomposedParameterStatement(parameter, EStatementRelation.EQUAL, partition);
+		BasicStatement mentioningStatement = new DecomposedParameterStatement(parameter, EStatementRelation.EQUAL, choice);
 		BasicStatement notMentioningStatement = new StaticStatement(false);
 		
 		assertTrue(new Constraint(mentioningStatement, notMentioningStatement).mentions(parameter));
-		assertTrue(new Constraint(mentioningStatement, notMentioningStatement).mentions(partition));
+		assertTrue(new Constraint(mentioningStatement, notMentioningStatement).mentions(choice));
 		
 		assertTrue(new Constraint(notMentioningStatement, mentioningStatement).mentions(parameter));
-		assertTrue(new Constraint(notMentioningStatement, mentioningStatement).mentions(partition));
+		assertTrue(new Constraint(notMentioningStatement, mentioningStatement).mentions(choice));
 		
 		assertTrue(new Constraint(mentioningStatement, mentioningStatement).mentions(parameter));
-		assertTrue(new Constraint(mentioningStatement, mentioningStatement).mentions(partition));
+		assertTrue(new Constraint(mentioningStatement, mentioningStatement).mentions(choice));
 		
 		assertFalse(new Constraint(notMentioningStatement, notMentioningStatement).mentions(parameter));
-		assertFalse(new Constraint(notMentioningStatement, notMentioningStatement).mentions(partition));
+		assertFalse(new Constraint(notMentioningStatement, notMentioningStatement).mentions(choice));
 		
 	}
 

@@ -42,7 +42,7 @@ public class ChoiceNode extends DecomposedNode{
 
 	@Override
 	public List<? extends GenericNode> getChildren(){
-		return getPartitions();
+		return getChoices();
 	}
 
 	@Override
@@ -57,8 +57,8 @@ public class ChoiceNode extends DecomposedNode{
 	public ChoiceNode getCopy(){
 		ChoiceNode copy = new ChoiceNode(getName(), fValueString);
 		copy.setParent(fParent);
-		for(ChoiceNode partition : getPartitions()){
-			copy.addPartition(partition.getCopy());
+		for(ChoiceNode choice : getChoices()){
+			copy.addChoice(choice.getCopy());
 		}
 		for(String label : fLabels){
 			copy.addLabel(label);
@@ -67,8 +67,8 @@ public class ChoiceNode extends DecomposedNode{
 	}
 
 	public String getQualifiedName(){
-		if(parentPartition() != null){
-			return parentPartition().getQualifiedName() + ":" + getName();
+		if(parentChoice() != null){
+			return parentChoice().getQualifiedName() + ":" + getName();
 		}
 		return getName();
 	}
@@ -114,25 +114,25 @@ public class ChoiceNode extends DecomposedNode{
 	}
 	
 	public Set<String> getInheritedLabels(){
-		if(parentPartition() != null){
-			return parentPartition().getAllLabels();
+		if(parentChoice() != null){
+			return parentChoice().getAllLabels();
 		}
 		return new LinkedHashSet<String>();
 	}
 
 	public boolean isAbstract(){
-		return getPartitions().size() != 0;
+		return getChoices().size() != 0;
 	}
 	
-	public boolean is(ChoiceNode partition){
-		return (this == (partition)) || (parentPartition() != null ? parentPartition().is(partition) : false);
+	public boolean is(ChoiceNode choice){
+		return (this == (choice)) || (parentChoice() != null ? parentChoice().is(choice) : false);
 	}
 	
 	public int level(){
-		if(parentPartition() == null){
+		if(parentChoice() == null){
 			return 0;
 		}
-		return parentPartition().level() + 1;
+		return parentChoice().level() + 1;
 	}
 	
 	@Override
@@ -151,12 +151,12 @@ public class ChoiceNode extends DecomposedNode{
 			return false;
 		}
 		
-		if(getPartitions().size() != compared.getPartitions().size()){
+		if(getChoices().size() != compared.getChoices().size()){
 			return false;
 		}
 		
-		for(int i = 0; i < getPartitions().size(); i++){
-			if(getPartitions().get(i).compare(compared.getPartitions().get(i)) == false){
+		for(int i = 0; i < getChoices().size(); i++){
+			if(getChoices().get(i).compare(compared.getChoices().get(i)) == false){
 				return false;
 			}
 		}
@@ -169,7 +169,7 @@ public class ChoiceNode extends DecomposedNode{
 		return visitor.visit(this);
 	}
 
-	private ChoiceNode parentPartition(){
+	private ChoiceNode parentChoice(){
 		if(fParent != null && fParent != getParameter()){
 			return (ChoiceNode)fParent;
 		}

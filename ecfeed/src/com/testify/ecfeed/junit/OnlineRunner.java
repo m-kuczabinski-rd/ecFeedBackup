@@ -104,7 +104,7 @@ public class OnlineRunner extends AbstractJUnitRunner {
 				result.add(Arrays.asList(new ChoiceNode[]{choice}));
 			}
 			else{
-				result.add(parameter.getLeafPartitions());
+				result.add(parameter.getLeafChoices());
 			}
 		}
 		return result;

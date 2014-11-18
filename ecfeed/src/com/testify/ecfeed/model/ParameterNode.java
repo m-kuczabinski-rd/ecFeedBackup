@@ -42,9 +42,9 @@ public class ParameterNode extends DecomposedNode{
 		return new String(getName() + ": " + getType());
 	}
 	
-	public void addPartitions(List<ChoiceNode> partitions) {
-		for(ChoiceNode p : partitions){
-			addPartition(p);
+	public void addChoices(List<ChoiceNode> choices) {
+		for(ChoiceNode p : choices){
+			addChoice(p);
 		}
 	}
 
@@ -54,8 +54,8 @@ public class ParameterNode extends DecomposedNode{
 		parameter.setParent(this.getParent());
 		if(getDefaultValue() != null)
 			parameter.setDefaultValueString(getDefaultValue());
-		for(ChoiceNode partition : getPartitions()){
-			parameter.addPartition(partition.getCopy());
+		for(ChoiceNode choice : getChoices()){
+			parameter.addChoice(choice.getCopy());
 		}
 		parameter.setParent(getParent());
 		return parameter;
@@ -130,13 +130,13 @@ public class ParameterNode extends DecomposedNode{
 			return false;
 		}
 
-		int partitionsCount = getPartitions().size();
-		if(partitionsCount != comparedParameter.getPartitions().size()){
+		int choicesCount = getChoices().size();
+		if(choicesCount != comparedParameter.getChoices().size()){
 			return false;
 		}
 
-		for(int i = 0; i < partitionsCount; i++){
-			if(getPartitions().get(i).compare(comparedParameter.getPartitions().get(i)) == false){
+		for(int i = 0; i < choicesCount; i++){
+			if(getChoices().get(i).compare(comparedParameter.getChoices().get(i)) == false){
 				return false;
 			}
 		}

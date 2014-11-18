@@ -36,8 +36,8 @@ public class DecomposedParameterStatementInterface extends BasicStatementInterfa
 		if(fTarget.getConditionName().equals(text) == false){
 			ICondition newCondition;
 			ParameterNode parameter = fTarget.getParameter();
-			if(parameter.getPartition(text) != null){
-				newCondition = fTarget.new PartitionCondition(parameter.getPartition(text));
+			if(parameter.getChoice(text) != null){
+				newCondition = fTarget.new ChoiceCondition(parameter.getChoice(text));
 			}
 			else{
 				if(text.contains("[label]")){

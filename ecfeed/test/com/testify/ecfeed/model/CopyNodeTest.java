@@ -30,9 +30,9 @@ public class CopyNodeTest{
 	ParameterNode fPartCat2;
 	ParameterNode fExCat1;
 	ParameterNode fExCat2;
-	ChoiceNode fPartition1;
-	ChoiceNode fPartition2;
-	ChoiceNode fPartition3;
+	ChoiceNode fChoice1;
+	ChoiceNode fChoice2;
+	ChoiceNode fChoice3;
 
 	String fLabel1;
 	String fLabel2;
@@ -53,9 +53,9 @@ public class CopyNodeTest{
 		fExCat1.setDefaultValueString("value1");
 		fExCat2 = new ParameterNode("ecat2", "type", "0", true);
 		fExCat2.setDefaultValueString("value2");
-		fPartition1 = new ChoiceNode("p1", "value1");
-		fPartition2 = new ChoiceNode("p2", "value2");
-		fPartition3 = new ChoiceNode("p3", "value3");
+		fChoice1 = new ChoiceNode("p1", "value1");
+		fChoice2 = new ChoiceNode("p2", "value2");
+		fChoice3 = new ChoiceNode("p3", "value3");
 		fLabel1 = "label1";
 		fLabel2 = "label2";
 
@@ -67,11 +67,11 @@ public class CopyNodeTest{
 		fMethod1.addParameter(fExCat1);
 		fMethod2.addParameter(fPartCat2);
 		fMethod2.addParameter(fExCat2);
-		fPartCat1.addPartition(fPartition1);
-		fPartCat2.addPartition(fPartition3);
-		fPartition1.addPartition(fPartition2);
-		fPartition1.addLabel(fLabel1);
-		fPartition2.addLabel(fLabel2);
+		fPartCat1.addChoice(fChoice1);
+		fPartCat2.addChoice(fChoice3);
+		fChoice1.addChoice(fChoice2);
+		fChoice1.addLabel(fLabel1);
+		fChoice2.addLabel(fLabel2);
 	}
 
 	public void testNode(GenericNode node, GenericNode copy){
@@ -87,81 +87,81 @@ public class CopyNodeTest{
 			assertNotEquals(node.getParent(), parent);
 	}
 
-	public void testPartitions(ChoiceNode partition, ChoiceNode copy){
-		testNode(partition, copy);
-		assertEquals(partition.getValueString(), copy.getValueString());
+	public void testChoices(ChoiceNode choice, ChoiceNode copy){
+		testNode(choice, copy);
+		assertEquals(choice.getValueString(), copy.getValueString());
 	}
 
-	public void testPartitionLabels(ChoiceNode partition, ChoiceNode copy){
-		assertEquals(partition.getLabels().size(), copy.getLabels().size());
-		assertEquals(partition.getChildren().size(), copy.getChildren().size());
+	public void testChoiceLabels(ChoiceNode choice, ChoiceNode copy){
+		assertEquals(choice.getLabels().size(), copy.getLabels().size());
+		assertEquals(choice.getChildren().size(), copy.getChildren().size());
 		// contains all and no more labels?
-		assertTrue(copy.getLabels().containsAll(partition.getLabels()));
-		assertTrue(partition.getLabels().containsAll(copy.getLabels()));
+		assertTrue(copy.getLabels().containsAll(choice.getLabels()));
+		assertTrue(choice.getLabels().containsAll(copy.getLabels()));
 	}
 
-	public void testPartitionChildrenLabels(ChoiceNode childcopy, String parentlabel, String childlabel){
+	public void testChoiceChildrenLabels(ChoiceNode childcopy, String parentlabel, String childlabel){
 		assertTrue(childcopy.getLabels().contains(childlabel));
 		assertTrue(childcopy.getAllLabels().contains(parentlabel));
 	}
 
 	@Test
-	public void partitionCopyTest(){
-		// single partition copied properly?
-		ChoiceNode copy = fPartition3.getCopy();
-		testPartitions(fPartition3, copy);
-		testParent(copy, fPartition3.getParent(), true);
-		// hierarchical partition copy tests
+	public void choiceCopyTest(){
+		// single choice copied properly?
+		ChoiceNode copy = fChoice3.getCopy();
+		testChoices(fChoice3, copy);
+		testParent(copy, fChoice3.getParent(), true);
+		// hierarchical choice copy tests
 		// labels copied properly?
-		copy = fPartition1.getCopy();
-		testPartitionLabels(fPartition1, fPartition1.getCopy());
+		copy = fChoice1.getCopy();
+		testChoiceLabels(fChoice1, fChoice1.getCopy());
 		// children copied properly?
-		ChoiceNode childcopy = (ChoiceNode)copy.getChild(fPartition2.getName());
-		testPartitions(fPartition2, childcopy);
+		ChoiceNode childcopy = (ChoiceNode)copy.getChild(fChoice2.getName());
+		testChoices(fChoice2, childcopy);
 		testParent(childcopy, copy, true);
-		testParent(fPartition2, childcopy.getParent(), false);
+		testParent(fChoice2, childcopy.getParent(), false);
 
 		// children labels copied properly?
-		testPartitionChildrenLabels(childcopy, fLabel1, fLabel2);
+		testChoiceChildrenLabels(childcopy, fLabel1, fLabel2);
 	}
 
-	public void testPartitionedParameters(ParameterNode parameter, ParameterNode copy, String parentlabel, String childlabel){
+	public void testDecomposedParameters(ParameterNode parameter, ParameterNode copy, String parentlabel, String childlabel){
 		testNode(parameter, copy);
 		assertEquals(parameter.getChildren().size(), copy.getChildren().size());
-		assertEquals(parameter.getAllPartitionNames().size(), copy.getAllPartitionNames().size());
+		assertEquals(parameter.getAllChoiceNames().size(), copy.getAllChoiceNames().size());
 
-		// partitions copied properly?
-		ChoiceNode partition = parameter.getPartitions().get(0);
-		ChoiceNode partitioncopy = copy.getPartition(partition.getName());
-		testPartitions(partitioncopy, partition);
-		testParent(partitioncopy, copy, true);
+		// choices copied properly?
+		ChoiceNode choice = parameter.getChoices().get(0);
+		ChoiceNode choicecopy = copy.getChoice(choice.getName());
+		testChoices(choicecopy, choice);
+		testParent(choicecopy, copy, true);
 		// labels copied properly?
 		assertTrue(copy.getLeafLabels().contains(parentlabel));
 		assertTrue(copy.getLeafLabels().contains(childlabel));
-		testPartitionLabels(partition, partitioncopy);
-		// children partitions copied properly?
-		ChoiceNode partitionChild = partition.getPartitions().get(0);
-		ChoiceNode partitioncopyChild = partitioncopy.getPartition(partitionChild.getName());
-		testPartitions(partitioncopyChild, partitionChild);
-		testParent(partitioncopyChild, partitioncopy, true);
-		// children partition labels copied properly?
-		testPartitionChildrenLabels(partitioncopyChild, parentlabel, childlabel);
+		testChoiceLabels(choice, choicecopy);
+		// children choices copied properly?
+		ChoiceNode choiceChild = choice.getChoices().get(0);
+		ChoiceNode choicecopyChild = choicecopy.getChoice(choiceChild.getName());
+		testChoices(choicecopyChild, choiceChild);
+		testParent(choicecopyChild, choicecopy, true);
+		// children choice labels copied properly?
+		testChoiceChildrenLabels(choicecopyChild, parentlabel, childlabel);
 	}
 
 	@Test
-	public void partitionedParameterCopyTest(){
+	public void decomposedParameterCopyTest(){
 		ParameterNode copy = fPartCat1.getCopy();
 		// parameters copied properly?
-		testPartitionedParameters(fPartCat1, copy, fLabel1, fLabel2);
+		testDecomposedParameters(fPartCat1, copy, fLabel1, fLabel2);
 		testParent(copy, fPartCat1.getParent(), true);
 	}
 
 	public void testExpectedParameters(ParameterNode parameter, ParameterNode copy){
 		testNode(parameter, copy);
-//		PartitionNode partition = parameter.getDefaultValuePartition();
-//		PartitionNode partitioncopy = copy.getDefaultValuePartition();
-//		testPartitions(partition, partitioncopy);
-//		testParent(partition, partitioncopy.getParent(), false);
+//		ChoiceNode choice = parameter.getDefaultValueChoice();
+//		ChoiceNode choicecopy = copy.getDefaultValueChoice();
+//		testChoices(choice, choicecopy);
+//		testParent(choice, choicecopy.getParent(), false);
 	}
 
 	@Test
@@ -173,10 +173,10 @@ public class CopyNodeTest{
 
 	public void testMethods(MethodNode method, MethodNode copy, String parentlabel, String childlabel){
 		testNode(method, copy);
-		// Test partitioned parameter
+		// Test decomposed parameter
 		ParameterNode partcat = method.getParameters(false).get(0);
 		ParameterNode copypartcat = copy.getParameter(partcat.getName());
-		testPartitionedParameters(partcat, copypartcat, parentlabel, childlabel);
+		testDecomposedParameters(partcat, copypartcat, parentlabel, childlabel);
 		testParent(copypartcat, copy, true);
 		// Test expected parameter
 		ParameterNode expcat = method.getParameters(true).get(0);

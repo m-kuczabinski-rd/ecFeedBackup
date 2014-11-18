@@ -42,7 +42,7 @@ public class DecomposedParameterStatement extends BasicStatement implements IRel
 
 		@Override
 		public String toString(){
-			return fLabel + (fParameter.getAllPartitionNames().contains(fLabel)?"[label]":"");
+			return fLabel + (fParameter.getAllChoiceNames().contains(fLabel)?"[label]":"");
 		}
 
 		@Override
@@ -99,20 +99,20 @@ public class DecomposedParameterStatement extends BasicStatement implements IRel
 		}
 	}
 
-	public class PartitionCondition implements ICondition{
-		private ChoiceNode fPartition;
+	public class ChoiceCondition implements ICondition{
+		private ChoiceNode fChoice;
 
-		public PartitionCondition(ChoiceNode partition){
-			fPartition = partition;
+		public ChoiceCondition(ChoiceNode choice){
+			fChoice = choice;
 		}
 
-		public ChoiceNode getPartition() {
-			return fPartition;
+		public ChoiceNode getChoice() {
+			return fChoice;
 		}
 
 		@Override
 		public String toString(){
-			return fPartition.getQualifiedName();
+			return fChoice.getQualifiedName();
 		}
 
 		@Override
@@ -121,15 +121,15 @@ public class DecomposedParameterStatement extends BasicStatement implements IRel
 		}
 
 		@Override
-		public PartitionCondition getCopy(){
-			return new PartitionCondition(fPartition.getCopy());
+		public ChoiceCondition getCopy(){
+			return new ChoiceCondition(fChoice.getCopy());
 		}
 
 		@Override
 		public boolean updateReferences(ParameterNode parameter){
-			ChoiceNode condition = parameter.getPartition(fPartition.getQualifiedName());
+			ChoiceNode condition = parameter.getChoice(fChoice.getQualifiedName());
 			if(condition != null){
-				fPartition = condition;
+				fChoice = condition;
 			}
 			else{
 				return false;
@@ -139,7 +139,7 @@ public class DecomposedParameterStatement extends BasicStatement implements IRel
 
 		@Override
 		public Object getCondition(){
-			return fPartition;
+			return fChoice;
 		}
 
 		@Override
@@ -158,9 +158,9 @@ public class DecomposedParameterStatement extends BasicStatement implements IRel
 				return false;
 			}
 
-			ChoiceNode partition = values.get(index);
+			ChoiceNode choice = values.get(index);
 
-			boolean isCondition = partition.is(fPartition);
+			boolean isCondition = choice.is(fChoice);
 
 			switch (getRelation()){
 			case EQUAL:
@@ -174,12 +174,12 @@ public class DecomposedParameterStatement extends BasicStatement implements IRel
 
 		@Override
 		public boolean compare(ICondition condition){
-			if(condition instanceof PartitionCondition == false){
+			if(condition instanceof ChoiceCondition == false){
 				return false;
 			}
-			PartitionCondition compared = (PartitionCondition)condition;
+			ChoiceCondition compared = (ChoiceCondition)condition;
 
-			return (fPartition.compare((ChoiceNode)compared.getCondition()));
+			return (fChoice.compare((ChoiceNode)compared.getCondition()));
 		}
 
 		@Override
@@ -195,10 +195,10 @@ public class DecomposedParameterStatement extends BasicStatement implements IRel
 		fCondition = new LabelCondition(labelCondition);
 	}
 
-	public DecomposedParameterStatement(ParameterNode parameter, EStatementRelation relation, ChoiceNode partitionCondition){
+	public DecomposedParameterStatement(ParameterNode parameter, EStatementRelation relation, ChoiceNode choiceCondition){
 		fParameter = parameter;
 		fRelation = relation;
-		fCondition = new PartitionCondition(partitionCondition);
+		fCondition = new ChoiceCondition(choiceCondition);
 	}
 
 	private DecomposedParameterStatement(ParameterNode parameter, EStatementRelation relation, ICondition condition){
@@ -218,8 +218,8 @@ public class DecomposedParameterStatement extends BasicStatement implements IRel
 	}
 
 	@Override
-	public boolean mentions(ChoiceNode partition){
-		return getConditionValue() == partition;
+	public boolean mentions(ChoiceNode choice){
+		return getConditionValue() == choice;
 	}
 
 	@Override
@@ -281,12 +281,12 @@ public class DecomposedParameterStatement extends BasicStatement implements IRel
 		fCondition = new LabelCondition(label);
 	}
 
-	public void setCondition(ChoiceNode partition){
-		fCondition = new PartitionCondition(partition);
+	public void setCondition(ChoiceNode choice){
+		fCondition = new ChoiceCondition(choice);
 	}
 
-	public void setCondition(ParameterNode parameter, ChoiceNode partition){
-		fCondition = new PartitionCondition(partition);
+	public void setCondition(ParameterNode parameter, ChoiceNode choice){
+		fCondition = new ChoiceCondition(choice);
 	}
 
 	public ICondition getCondition(){

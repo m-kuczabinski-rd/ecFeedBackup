@@ -26,23 +26,23 @@ public class AbstractFrameworkMethod extends FrameworkMethod {
 	protected void invoke(Object target, List<ChoiceNode> args) throws RunnerException, Throwable{
 		List<Object> parameters = new ArrayList<Object>();
 		for(ChoiceNode p : args){
-			parameters.add(parsePartitionValue(p));
+			parameters.add(parseChoiceValue(p));
 		}
 		super.invokeExplosively(target, parameters.toArray());
 	}
 
-	protected Object parsePartitionValue(ChoiceNode partition) throws RunnerException{
-		String type = partition.getParameter().getType();
-		Object value = fValueParser.parseValue(partition);
+	protected Object parseChoiceValue(ChoiceNode choice) throws RunnerException{
+		String type = choice.getParameter().getType();
+		Object value = fValueParser.parseValue(choice);
 		
 		if(JavaUtils.isString(type) || JavaUtils.isUserType(type)){
 			//null value acceptable
-			if(partition.getValueString().equals(Constants.VALUE_REPRESENTATION_NULL)){
+			if(choice.getValueString().equals(Constants.VALUE_REPRESENTATION_NULL)){
 				return null;
 			}
 		}
 		if(value == null){
-			throw new RunnerException(Messages.CANNOT_PARSE_PARAMETER(type, partition.getValueString()));
+			throw new RunnerException(Messages.CANNOT_PARSE_PARAMETER(type, choice.getValueString()));
 		}
 		return value;
 	}

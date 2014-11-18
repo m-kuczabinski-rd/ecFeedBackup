@@ -68,7 +68,7 @@ import com.testify.ecfeed.model.StaticStatement;
 import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.model.DecomposedParameterStatement.ICondition;
 import com.testify.ecfeed.model.DecomposedParameterStatement.LabelCondition;
-import com.testify.ecfeed.model.DecomposedParameterStatement.PartitionCondition;
+import com.testify.ecfeed.model.DecomposedParameterStatement.ChoiceCondition;
 
 public class XomBuilder implements IModelVisitor, IStatementVisitor {
 
@@ -119,7 +119,7 @@ public class XomBuilder implements IModelVisitor, IStatementVisitor {
 		element.addAttribute(new Attribute(CATEGORY_IS_EXPECTED_ATTRIBUTE_NAME, Boolean.toString(node.isExpected())));
 		element.addAttribute(new Attribute(DEFAULT_EXPECTED_VALUE_ATTRIBUTE_NAME, node.getDefaultValue()));
 
-		for(ChoiceNode child : node.getPartitions()){
+		for(ChoiceNode child : node.getChoices()){
 			element.appendChild((Element)child.accept(this));
 		}
 	
@@ -139,8 +139,8 @@ public class XomBuilder implements IModelVisitor, IStatementVisitor {
 			}
 			else{
 				Element testParameterElement = new Element(TEST_PARAMETER_NODE_NAME);
-				Attribute partitionNameAttribute = new Attribute(PARTITION_ATTRIBUTE_NAME, testParameter.getQualifiedName());
-				testParameterElement.addAttribute(partitionNameAttribute);
+				Attribute choiceNameAttribute = new Attribute(PARTITION_ATTRIBUTE_NAME, testParameter.getQualifiedName());
+				testParameterElement.addAttribute(choiceNameAttribute);
 				element.appendChild(testParameterElement);
 			}
 		}
@@ -188,7 +188,7 @@ public class XomBuilder implements IModelVisitor, IStatementVisitor {
 			element.appendChild(labelElement);
 		}
 		
-		for(ChoiceNode child : node.getPartitions()){
+		for(ChoiceNode child : node.getChoices()){
 			element.appendChild((Element)child.accept(this));
 		}
 		
@@ -269,10 +269,10 @@ public class XomBuilder implements IModelVisitor, IStatementVisitor {
 	}
 
 	@Override
-	public Object visit(PartitionCondition condition) throws Exception {
-		ChoiceNode partition = condition.getPartition();
+	public Object visit(ChoiceCondition condition) throws Exception {
+		ChoiceNode choice = condition.getChoice();
 		Element element = new Element(CONSTRAINT_PARTITION_STATEMENT_NODE_NAME);
-		element.addAttribute(new Attribute(STATEMENT_PARTITION_ATTRIBUTE_NAME, partition.getQualifiedName()));
+		element.addAttribute(new Attribute(STATEMENT_PARTITION_ATTRIBUTE_NAME, choice.getQualifiedName()));
 		
 		return element;
 	}

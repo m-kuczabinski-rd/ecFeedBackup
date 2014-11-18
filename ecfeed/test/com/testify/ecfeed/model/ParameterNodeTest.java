@@ -26,89 +26,89 @@ import com.testify.ecfeed.testutils.RandomModelGenerator;
 public class ParameterNodeTest{
 	
 	@Test
-	public void addPartitionTest() {
+	public void addChoiceTest() {
 		ParameterNode parameter = new ParameterNode("parameter", "type", "0", false);
 		
-		assertEquals(0, parameter.getPartitions().size());
+		assertEquals(0, parameter.getChoices().size());
 		
-		ChoiceNode partition = new ChoiceNode("partition", "0"); 
-		parameter.addPartition(partition);
+		ChoiceNode choice = new ChoiceNode("choice", "0"); 
+		parameter.addChoice(choice);
 
-		assertEquals(1, parameter.getPartitions().size());
+		assertEquals(1, parameter.getChoices().size());
 	}
 	
 	@Test
-	public void getPartitionTest(){
+	public void getChoiceTest(){
 		ParameterNode parameter = new ParameterNode("parameter", "type", "0", false);
 		ChoiceNode p = new ChoiceNode("p", "0");
 		ChoiceNode p1 = new ChoiceNode("p1", "0");
 		ChoiceNode p11 = new ChoiceNode("p11", "0");
-		parameter.addPartition(p);
-		p.addPartition(p1);
-		p1.addPartition(p11);
+		parameter.addChoice(p);
+		p.addChoice(p1);
+		p1.addChoice(p11);
 		
-		assertEquals(p, parameter.getPartition("p"));
-		assertEquals(p1, parameter.getPartition("p:p1"));
-		assertEquals(p11, parameter.getPartition("p:p1:p11"));
-		assertEquals(null, parameter.getPartition("p1"));
-		assertEquals(null, parameter.getPartition("p11"));
-		assertEquals(null, parameter.getPartition("something"));
+		assertEquals(p, parameter.getChoice("p"));
+		assertEquals(p1, parameter.getChoice("p:p1"));
+		assertEquals(p11, parameter.getChoice("p:p1:p11"));
+		assertEquals(null, parameter.getChoice("p1"));
+		assertEquals(null, parameter.getChoice("p11"));
+		assertEquals(null, parameter.getChoice("something"));
 	}
 
 	@Test
-	public void getPartitionsTest() {
+	public void getChoicesTest() {
 		ParameterNode parameter = new ParameterNode("parameter", "type", "0", false);
-		ChoiceNode partition1 = new ChoiceNode("partition1", "0"); 
-		ChoiceNode partition2 = new ChoiceNode("partition2", "0"); 
-		parameter.addPartition(partition1);
-		parameter.addPartition(partition2);
+		ChoiceNode choice1 = new ChoiceNode("choice1", "0"); 
+		ChoiceNode choice2 = new ChoiceNode("choice2", "0"); 
+		parameter.addChoice(choice1);
+		parameter.addChoice(choice2);
 		
-		List<ChoiceNode> partitions = parameter.getPartitions();
-		assertEquals(2, partitions.size());
-		assertTrue(partitions.contains(partition1));
-		assertTrue(partitions.contains(partition2));
+		List<ChoiceNode> choices = parameter.getChoices();
+		assertEquals(2, choices.size());
+		assertTrue(choices.contains(choice1));
+		assertTrue(choices.contains(choice2));
 	}
 	
 	@Test
 	public void getChildrenTest() {
 		ParameterNode parameter = new ParameterNode("parameter", "type", "0", false);
-		ChoiceNode partition1 = new ChoiceNode("partition1", "0"); 
-		ChoiceNode partition2 = new ChoiceNode("partition2", "0"); 
-		parameter.addPartition(partition1);
-		parameter.addPartition(partition2);
+		ChoiceNode choice1 = new ChoiceNode("choice1", "0"); 
+		ChoiceNode choice2 = new ChoiceNode("choice2", "0"); 
+		parameter.addChoice(choice1);
+		parameter.addChoice(choice2);
 		
 		List<? extends GenericNode> children = parameter.getChildren();
 		assertEquals(2, children.size());
-		assertTrue(children.contains(partition1));
-		assertTrue(children.contains(partition2));
+		assertTrue(children.contains(choice1));
+		assertTrue(children.contains(choice2));
 	}
 
 	@Test
-	public void getPartitionNames() {
+	public void getChoiceNames() {
 		ParameterNode parameter = new ParameterNode("parameter", "type", "0", false);
-		ChoiceNode partition1 = new ChoiceNode("partition1", "0"); 
-		ChoiceNode partition2 = new ChoiceNode("partition2", "0"); 
-		parameter.addPartition(partition1);
-		parameter.addPartition(partition2);
+		ChoiceNode choice1 = new ChoiceNode("choice1", "0"); 
+		ChoiceNode choice2 = new ChoiceNode("choice2", "0"); 
+		parameter.addChoice(choice1);
+		parameter.addChoice(choice2);
 		
-		Set<String> partitionNames = parameter.getPartitionNames();
-		assertTrue(partitionNames.contains("partition1"));
-		assertTrue(partitionNames.contains("partition2"));
+		Set<String> choiceNames = parameter.getChoiceNames();
+		assertTrue(choiceNames.contains("choice1"));
+		assertTrue(choiceNames.contains("choice2"));
 	}
 
 	@Test
-	public void getLeafPartitionNamesTest() {
+	public void getLeafChoiceNamesTest() {
 		ParameterNode parameter = new ParameterNode("parameter", "type", "0", false);
 		ChoiceNode p1 = new ChoiceNode("p1", "0"); 
 		ChoiceNode p11 = new ChoiceNode("p11", "0"); 
 		ChoiceNode p12 = new ChoiceNode("p12", "0"); 
 		ChoiceNode p2 = new ChoiceNode("p2", "0");
-		p1.addPartition(p11);
-		p1.addPartition(p12);
-		parameter.addPartition(p1);
-		parameter.addPartition(p2);
+		p1.addChoice(p11);
+		p1.addChoice(p12);
+		parameter.addChoice(p1);
+		parameter.addChoice(p2);
 		
-		Set<String> leafNames = parameter.getLeafPartitionNames();
+		Set<String> leafNames = parameter.getLeafChoiceNames();
 		assertTrue(leafNames.contains("p1:p11"));
 		assertTrue(leafNames.contains("p1:p12"));
 		assertTrue(leafNames.contains("p2"));
@@ -116,18 +116,18 @@ public class ParameterNodeTest{
 	}
 
 	@Test
-	public void getAllPartitionNamesTest(){
+	public void getAllChoiceNamesTest(){
 		ParameterNode parameter = new ParameterNode("parameter", "type", "0", false);
 		ChoiceNode p1 = new ChoiceNode("p1", "0"); 
 		ChoiceNode p11 = new ChoiceNode("p11", "0"); 
 		ChoiceNode p12 = new ChoiceNode("p12", "0"); 
 		ChoiceNode p2 = new ChoiceNode("p2", "0");
-		p1.addPartition(p11);
-		p1.addPartition(p12);
-		parameter.addPartition(p1);
-		parameter.addPartition(p2);
+		p1.addChoice(p11);
+		p1.addChoice(p12);
+		parameter.addChoice(p1);
+		parameter.addChoice(p2);
 		
-		Set<String> names = parameter.getAllPartitionNames();
+		Set<String> names = parameter.getAllChoiceNames();
 		
 		assertTrue(names.contains("p1"));
 		assertTrue(names.contains("p1:p11"));
@@ -146,7 +146,7 @@ public class ParameterNodeTest{
 	}
 
 	@Test
-	public void getLeafPartitionsTest(){
+	public void getLeafChoicesTest(){
 		ParameterNode parameter = new ParameterNode("parameter", "type", "0", false);
 		
 		ChoiceNode p1 = new ChoiceNode("p1", "0");
@@ -165,32 +165,32 @@ public class ParameterNodeTest{
 		ChoiceNode p322 = new ChoiceNode("p322", "0");
 		ChoiceNode p323 = new ChoiceNode("p323", "0");
 		
-		parameter.addPartition(p1);
-		parameter.addPartition(p2);
-		parameter.addPartition(p3);
-		p2.addPartition(p21);
-		p2.addPartition(p22);
-		p2.addPartition(p23);
-		p3.addPartition(p31);
-		p3.addPartition(p32);
-		p3.addPartition(p33);
-		p32.addPartition(p321);
-		p32.addPartition(p322);
-		p32.addPartition(p323);
+		parameter.addChoice(p1);
+		parameter.addChoice(p2);
+		parameter.addChoice(p3);
+		p2.addChoice(p21);
+		p2.addChoice(p22);
+		p2.addChoice(p23);
+		p3.addChoice(p31);
+		p3.addChoice(p32);
+		p3.addChoice(p33);
+		p32.addChoice(p321);
+		p32.addChoice(p322);
+		p32.addChoice(p323);
 		
-		assertTrue(parameter.getLeafPartitions().contains(p1));
-		assertTrue(parameter.getLeafPartitions().contains(p21));
-		assertTrue(parameter.getLeafPartitions().contains(p22));
-		assertTrue(parameter.getLeafPartitions().contains(p23));
-		assertTrue(parameter.getLeafPartitions().contains(p31));
-		assertTrue(parameter.getLeafPartitions().contains(p321));
-		assertTrue(parameter.getLeafPartitions().contains(p322));
-		assertTrue(parameter.getLeafPartitions().contains(p323));
-		assertTrue(parameter.getLeafPartitions().contains(p33));
+		assertTrue(parameter.getLeafChoices().contains(p1));
+		assertTrue(parameter.getLeafChoices().contains(p21));
+		assertTrue(parameter.getLeafChoices().contains(p22));
+		assertTrue(parameter.getLeafChoices().contains(p23));
+		assertTrue(parameter.getLeafChoices().contains(p31));
+		assertTrue(parameter.getLeafChoices().contains(p321));
+		assertTrue(parameter.getLeafChoices().contains(p322));
+		assertTrue(parameter.getLeafChoices().contains(p323));
+		assertTrue(parameter.getLeafChoices().contains(p33));
 		
-		assertFalse(parameter.getLeafPartitions().contains(p2));
-		assertFalse(parameter.getLeafPartitions().contains(p3));
-		assertFalse(parameter.getLeafPartitions().contains(p32));
+		assertFalse(parameter.getLeafChoices().contains(p2));
+		assertFalse(parameter.getLeafChoices().contains(p3));
+		assertFalse(parameter.getLeafChoices().contains(p32));
 	}
 	
 	@Test
@@ -214,14 +214,14 @@ public class ParameterNodeTest{
 		p22.addLabel("l221");
 		p22.addLabel("l222");
 
-		p1.addPartition(p11);
-		p1.addPartition(p12);
-		p2.addPartition(p21);
-		p2.addPartition(p22);
+		p1.addChoice(p11);
+		p1.addChoice(p12);
+		p2.addChoice(p21);
+		p2.addChoice(p22);
 		
 		ParameterNode c = new ParameterNode("c", "type", "0", false);
-		c.addPartition(p1);
-		c.addPartition(p2);
+		c.addChoice(p1);
+		c.addChoice(p2);
 		
 		Set<String> labels = c.getLeafLabels();
 		
@@ -305,7 +305,7 @@ public class ParameterNodeTest{
 	}
 	
 	@Test
-	public void comparePartitionsTest(){
+	public void compareChoicesTest(){
 		ParameterNode c1 = new ParameterNode("c", "type", "0", true);
 		ParameterNode c2 = new ParameterNode("c", "type", "0", true);
 		
@@ -314,9 +314,9 @@ public class ParameterNodeTest{
 		ChoiceNode p1 = new ChoiceNode("p", "value");
 		ChoiceNode p2 = new ChoiceNode("p", "value");
 		
-		c1.addPartition(p1);
+		c1.addChoice(p1);
 		assertFalse(c1.compare(c2));
-		c2.addPartition(p2);
+		c2.addChoice(p2);
 		assertTrue(c1.compare(c2));
 		
 		p1.setName("p1");
@@ -344,12 +344,12 @@ public class ParameterNodeTest{
 		c2.setDefaultValueString("cc");
 		assertTrue(c1.compare(c2));
 
-		c1.addPartition(new ChoiceNode("p", "x"));
+		c1.addChoice(new ChoiceNode("p", "x"));
 		c1.setDefaultValueString("cc");
 		assertFalse(c1.compare(c2));
-		c2.addPartition(new ChoiceNode("p1", "x"));
+		c2.addChoice(new ChoiceNode("p1", "x"));
 		assertFalse(c1.compare(c2));
-		c2.getPartition("p1").setName("p");
+		c2.getChoice("p1").setName("p");
 		assertTrue(c1.compare(c2));
 	}
 }

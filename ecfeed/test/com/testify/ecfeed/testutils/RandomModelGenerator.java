@@ -79,7 +79,7 @@ public class RandomModelGenerator {
 	public GenericNode generateNode(ENodeType type){
 		switch(type){
 		case CHOICE:
-			return generatePartition(MAX_PARTITION_LEVELS, MAX_PARTITIONS, MAX_PARTITION_LABELS, randomType(true));
+			return generateChoice(MAX_PARTITION_LEVELS, MAX_PARTITIONS, MAX_PARTITION_LABELS, randomType(true));
 		case CLASS:
 			return generateClass(MAX_METHODS);
 		case CONSTRAINT:
@@ -151,14 +151,14 @@ public class RandomModelGenerator {
 		return method;
 	}
 	
-	public ParameterNode generateParameter(String type, boolean expected, int partitionLevels, int partitions, int labels){
+	public ParameterNode generateParameter(String type, boolean expected, int choiceLevels, int choices, int labels){
 		String name = generateString(REGEX_CATEGORY_NODE_NAME);
 		
-		ParameterNode parameter = new ParameterNode(name, type, randomPartitionValue(type), expected);
+		ParameterNode parameter = new ParameterNode(name, type, randomChoiceValue(type), expected);
 		
-		if(partitions > 0){
-			for(int i = 0; i < rand.nextInt(partitions) + 1; i++){
-				parameter.addPartition(generatePartition(partitionLevels, partitions, labels, type));
+		if(choices > 0){
+			for(int i = 0; i < rand.nextInt(choices) + 1; i++){
+				parameter.addChoice(generateChoice(choiceLevels, choices, labels, type));
 			}
 		}
 
@@ -171,19 +171,19 @@ public class RandomModelGenerator {
 		
 		for(ParameterNode c : method.getParameters()){
 			if(c.isExpected()){
-				ChoiceNode expectedValue = new ChoiceNode("@expected", randomPartitionValue(c.getType()));
+				ChoiceNode expectedValue = new ChoiceNode("@expected", randomChoiceValue(c.getType()));
 				expectedValue.setParent(c);
 				testData.add(expectedValue);
 			}
 			else{
-				List<ChoiceNode> partitions = c.getPartitions();
-				if(partitions.size() == 0){
+				List<ChoiceNode> choices = c.getChoices();
+				if(choices.size() == 0){
 					System.out.println("Empty parameter!");
 				}
-				ChoiceNode p = c.getPartitions().get(rand.nextInt(partitions.size()));
-				while(p.getPartitions().size() > 0){
-					List<ChoiceNode> ppartitions = p.getPartitions();
-					p = ppartitions.get(rand.nextInt(ppartitions.size()));
+				ChoiceNode p = c.getChoices().get(rand.nextInt(choices.size()));
+				while(p.getChoices().size() > 0){
+					List<ChoiceNode> pchoices = p.getChoices();
+					p = pchoices.get(rand.nextInt(pchoices.size()));
 				}
 				testData.add(p);
 			}
@@ -210,7 +210,7 @@ public class RandomModelGenerator {
 			return generateStaticStatement();
 		case 1:
 		case 2:
-			return generatePartitionedStatement(method);
+			return generateDecomposedStatement(method);
 		case 3:
 		case 4:
 			if(maxDepth > 0){
@@ -224,11 +224,11 @@ public class RandomModelGenerator {
 		return new StaticStatement(rand.nextBoolean());
 	}
 
-	public DecomposedParameterStatement generatePartitionedStatement(MethodNode method) {
+	public DecomposedParameterStatement generateDecomposedStatement(MethodNode method) {
 		List<ParameterNode> parameters = new ArrayList<ParameterNode>();
 		
 		for(ParameterNode parameter : method.getParameters()){
-			if(parameter.isExpected() == false && parameter.getPartitions().size() > 0){
+			if(parameter.isExpected() == false && parameter.getChoices().size() > 0){
 				parameters.add(parameter);
 			}
 		}
@@ -241,20 +241,20 @@ public class RandomModelGenerator {
 		
 		ParameterNode parameter = parameters.get(rand.nextInt(parameters.size()));
 		EStatementRelation relation = rand.nextBoolean() ? EStatementRelation.EQUAL : EStatementRelation.NOT;
-		if(parameter.getPartitions().size() == 0){
-			ChoiceNode partition = generatePartition(0, 0, 1, parameter.getType());
-			parameter.addPartition(partition);
+		if(parameter.getChoices().size() == 0){
+			ChoiceNode choice = generateChoice(0, 0, 1, parameter.getType());
+			parameter.addChoice(choice);
 		}
 		
 		if(rand.nextBoolean()){
-			List<String> partitionNames = new ArrayList<String>(parameter.getAllPartitionNames());
-			String luckyPartitionName = partitionNames.get(rand.nextInt(partitionNames.size()));
-			ChoiceNode condition = parameter.getPartition(luckyPartitionName);
+			List<String> choiceNames = new ArrayList<String>(parameter.getAllChoiceNames());
+			String luckyChoiceName = choiceNames.get(rand.nextInt(choiceNames.size()));
+			ChoiceNode condition = parameter.getChoice(luckyChoiceName);
 			return new DecomposedParameterStatement(parameter, relation, condition);
 		}
 		else{
 			if(parameter.getLeafLabels().size() == 0){
-				parameter.getPartitions().get(0).addLabel(generateString(REGEX_PARTITION_LABEL));
+				parameter.getChoices().get(0).addLabel(generateString(REGEX_PARTITION_LABEL));
 			}
 			
 			Set<String>labels = parameter.getLeafLabels();
@@ -282,7 +282,7 @@ public class RandomModelGenerator {
 		ParameterNode parameter = parameters.get(rand.nextInt(parameters.size()));
 		
 		
-		String value = randomPartitionValue(parameter.getType());
+		String value = randomChoiceValue(parameter.getType());
 		String name = generateString(REGEX_PARTITION_NODE_NAME);
 		return new ExpectedValueStatement(parameter, new ChoiceNode(name, value));
 	}
@@ -308,24 +308,24 @@ public class RandomModelGenerator {
 		return generateStatement(method, MAX_STATEMENTS_DEPTH);
 	}
 
-	public ChoiceNode generatePartition(int levels, int partitions, int labels, String type) {
+	public ChoiceNode generateChoice(int levels, int choices, int labels, String type) {
 		String name = generateString(REGEX_PARTITION_NODE_NAME);
 		name = name.replaceAll(":", "_");
-		String value = randomPartitionValue(type);
+		String value = randomChoiceValue(type);
 		
-		ChoiceNode partition = new ChoiceNode(name, value);
+		ChoiceNode choice = new ChoiceNode(name, value);
 		for(int i = 0; i < labels; i++){
 			String label = generateString(REGEX_PARTITION_LABEL);
-			partition.addLabel(label);
+			choice.addLabel(label);
 		}
 		
 		if(levels > 0){
-			for(int i = 0; i < partitions; i++){
-				partition.addPartition(generatePartition(levels - 1, partitions, labels, type));
+			for(int i = 0; i < choices; i++){
+				choice.addChoice(generateChoice(levels - 1, choices, labels, type));
 			}
 		}
 		
-		return partition;
+		return choice;
 	}
 
 	public String randomType(boolean includeUserType){
@@ -338,7 +338,7 @@ public class RandomModelGenerator {
 		return generateString(REGEX_CATEGORY_TYPE_NAME);
 	}
 	
-	private String randomPartitionValue(String type){
+	private String randomChoiceValue(String type){
 		switch(type){
 		case TYPE_NAME_BOOLEAN:
 			return randomBooleanValue();
@@ -456,17 +456,17 @@ public class RandomModelGenerator {
 	}
 	
 //	@Test
-	public void testPartitionGeneration(){
-		System.out.println("Childless partitions:");
+	public void testChoiceGeneration(){
+		System.out.println("Childless choices:");
 		for(String type : new String[]{"String"}){
-			ChoiceNode p0 = generatePartition(0, 0, 0, type);
-			System.out.println(type + " partition:" + p0);
+			ChoiceNode p0 = generateChoice(0, 0, 0, type);
+			System.out.println(type + " choice:" + p0);
 		}
 		
-		System.out.println("Hierarchic partitions:");
+		System.out.println("Hierarchic choices:");
 		for(String type : SUPPORTED_TYPES){
 			System.out.println("Type: " + type);
-			ChoiceNode p1 = generatePartition(MAX_PARTITION_LEVELS, MAX_PARTITIONS, MAX_PARTITION_LABELS, type);
+			ChoiceNode p1 = generateChoice(MAX_PARTITION_LEVELS, MAX_PARTITIONS, MAX_PARTITION_LABELS, type);
 			System.out.println(fStringifier.stringify(p1, 0));
 		}
 	}
@@ -476,10 +476,10 @@ public class RandomModelGenerator {
 		for(String type : SUPPORTED_TYPES){
 			for(boolean expected : new Boolean[]{true, false}){
 				System.out.println("Type: " + type);
-				int partitions = rand.nextInt(MAX_PARTITIONS);
+				int choices = rand.nextInt(MAX_PARTITIONS);
 				int labels = rand.nextInt(MAX_PARTITION_LABELS);
 				int levels = rand.nextInt(MAX_PARTITION_LEVELS);
-				ParameterNode c = generateParameter(type, expected, levels, partitions, labels);
+				ParameterNode c = generateParameter(type, expected, levels, choices, labels);
 				System.out.println(fStringifier.stringify(c, 0));
 			}
 		}
@@ -515,10 +515,10 @@ public class RandomModelGenerator {
 	}
 	
 //	@Test
-	public void testGeneratePartitionedStatement(){
+	public void testGenerateDecomposedStatement(){
 		for(int i = 0; i < 10; i++){
 			MethodNode m = generateMethod(10, 0, 0);
-			DecomposedParameterStatement statement = generatePartitionedStatement(m);
+			DecomposedParameterStatement statement = generateDecomposedStatement(m);
 			System.out.println(fStringifier.stringify(statement, 0));
 		}
 	}

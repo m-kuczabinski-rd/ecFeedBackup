@@ -39,12 +39,12 @@ public class LabelStatementTest {
 		ChoiceNode p21 = new ChoiceNode("p21", "0");
 		ChoiceNode p22 = new ChoiceNode("p22", "0");
 		
-		p.addPartition(p1);
-		p.addPartition(p2);
-		p1.addPartition(p11);
-		p1.addPartition(p12);
-		p2.addPartition(p21);
-		p2.addPartition(p22);
+		p.addChoice(p1);
+		p.addChoice(p2);
+		p1.addChoice(p11);
+		p1.addChoice(p12);
+		p2.addChoice(p21);
+		p2.addChoice(p22);
 		
 		p.addLabel("p");
 		p1.addLabel("p1");
@@ -55,9 +55,9 @@ public class LabelStatementTest {
 		p22.addLabel("p22");
 		
 		ParameterNode c1 = new ParameterNode("c1", "type", "0", false);
-		c1.addPartition(p);
+		c1.addChoice(p);
 		ParameterNode c2 = new ParameterNode("c2", "type", "0", false);
-		c2.addPartition(q);
+		c2.addChoice(q);
 		
 		MethodNode method = new MethodNode("method");
 		method.addParameter(c1);

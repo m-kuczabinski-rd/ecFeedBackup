@@ -24,14 +24,14 @@ public abstract class AbstractAddChildAction extends ModelModifyingAction{
 	protected final static String ADD_METHOD_ACTION_NAME = "Add method";
 	protected final static String ADD_PARAMETER_ACTION_NAME = "Add parameter";
 	protected final static String ADD_TEST_CASE_ACTION_NAME = "Add test case";
-	protected final static String ADD_PARTITION_ACTION_NAME = "Add partition";
+	protected final static String ADD_PARTITION_ACTION_NAME = "Add choice";
 	protected final static String ADD_CONSTRAINT_ACTION_NAME = "Add constraint";
 
 	protected final static String ADD_CLASS_ACTION_ID = "addClass";
 	protected final static String ADD_METHOD_ACTION_ID = "addMethod";
 	protected final static String ADD_PARAMETER_ACTION_ID = "addParameter";
 	protected final static String ADD_TEST_CASE_ACTION_ID = "addTestCase";
-	protected final static String ADD_PARTITION_ACTION_ID = "addPartition";
+	protected final static String ADD_PARTITION_ACTION_ID = "addChoice";
 	protected final static String ADD_CONSTRAINT_ACTION_ID = "addConstraint";
 
 	private StructuredViewer fViewer;
@@ -61,7 +61,7 @@ public abstract class AbstractAddChildAction extends ModelModifyingAction{
 		public Object visit(ParameterNode node) throws Exception {
 			ParameterInterface parameterIf = new ParameterInterface(getUpdateContext());
 			parameterIf.setTarget(node);
-			return parameterIf.addNewPartition();
+			return parameterIf.addNewChoice();
 		}
 
 		@Override
@@ -78,7 +78,7 @@ public abstract class AbstractAddChildAction extends ModelModifyingAction{
 		public Object visit(ChoiceNode node) throws Exception {
 			ParameterInterface parameterIf = new ParameterInterface(getUpdateContext());
 			parameterIf.setTarget(node);
-			return parameterIf.addNewPartition();
+			return parameterIf.addNewChoice();
 		}
 	}
 	

@@ -78,7 +78,7 @@ public class ParameterizedMethodTest {
 		
 		for(Enum v : Enum.values()){
 			ChoiceNode p = new ChoiceNode(v.name(), v.name());
-			c.addPartition(p);
+			c.addChoice(p);
 			List<ChoiceNode> td = new ArrayList<>();
 			td.add(p);
 			methodNode.addTestCase(new TestCaseNode("", td));
@@ -129,9 +129,9 @@ public class ParameterizedMethodTest {
 		for(int i = 0; i < size; i++){
 			List<ChoiceNode> testData = new ArrayList<ChoiceNode>();
 			for(int j = 0; j < method.getParameters().size(); j++){
-				ChoiceNode partition = new ChoiceNode("dummy", Integer.toString(random.nextInt()));
-				partition.setParent(method.getParameters().get(j));
-				testData.add(partition);
+				ChoiceNode choice = new ChoiceNode("dummy", Integer.toString(random.nextInt()));
+				choice.setParent(method.getParameters().get(j));
+				testData.add(choice);
 			}
 			TestCaseNode tc = new TestCaseNode("dummy", testData);
 			method.addTestCase(tc);

@@ -87,9 +87,9 @@ public abstract class ObsoleteEclipseModelImplementer extends AbstractModelImple
 			if(parameterDefinitionImplemented(node) == false){
 				implementParameterDefinition(node);
 			}
-			for(ChoiceNode partition : node.getPartitions()){
-				if(implementable(partition) && getImplementationStatus(partition) != EImplementationStatus.IMPLEMENTED){
-					implement(partition);
+			for(ChoiceNode choice : node.getChoices()){
+				if(implementable(choice) && getImplementationStatus(choice) != EImplementationStatus.IMPLEMENTED){
+					implement(choice);
 				}
 			}
 			return null;
@@ -97,9 +97,9 @@ public abstract class ObsoleteEclipseModelImplementer extends AbstractModelImple
 
 		@Override
 		public Object visit(TestCaseNode node) throws Exception {
-			for(ChoiceNode partition : node.getTestData()){
-				if(implementable(partition) && getImplementationStatus(partition) != EImplementationStatus.IMPLEMENTED){
-					implement(partition);
+			for(ChoiceNode choice : node.getTestData()){
+				if(implementable(choice) && getImplementationStatus(choice) != EImplementationStatus.IMPLEMENTED){
+					implement(choice);
 				}
 			}
 			return null;
@@ -113,15 +113,15 @@ public abstract class ObsoleteEclipseModelImplementer extends AbstractModelImple
 		@Override
 		public Object visit(ChoiceNode node) throws Exception {
 			if(node.isAbstract()){
-				for(ChoiceNode partition : node.getPartitions()){
-					if(implementable(partition) && getImplementationStatus(partition) != EImplementationStatus.IMPLEMENTED){
-						implement(partition);
+				for(ChoiceNode choice : node.getChoices()){
+					if(implementable(choice) && getImplementationStatus(choice) != EImplementationStatus.IMPLEMENTED){
+						implement(choice);
 					}
 				}
 			}
 			else{
 				if(implementable(node) && getImplementationStatus(node) != EImplementationStatus.IMPLEMENTED){
-					implementPartitionDefinition(node);
+					implementChoiceDefinition(node);
 				}
 			}
 			return null;
@@ -201,7 +201,7 @@ public abstract class ObsoleteEclipseModelImplementer extends AbstractModelImple
 	}
 
 	@SuppressWarnings("unchecked")
-	protected void implementPartitionDefinition(ChoiceNode node) throws CoreException {
+	protected void implementChoiceDefinition(ChoiceNode node) throws CoreException {
 		if(node.getParameter() == null || JavaUtils.isPrimitive(node.getParameter().getType())){
 			return;
 		}
@@ -428,7 +428,7 @@ public abstract class ObsoleteEclipseModelImplementer extends AbstractModelImple
 //	}
 //
 //	@SuppressWarnings("unchecked")
-//	private void implementPartitionDefinition(PartitionNode node) {
+//	private void implementChoiceDefinition(ChoiceNode node) {
 //		String type = node.getParameter().getType();
 //		String value = node.getValueString();
 //		

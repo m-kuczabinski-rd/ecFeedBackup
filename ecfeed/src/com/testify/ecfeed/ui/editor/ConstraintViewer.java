@@ -45,7 +45,7 @@ import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.model.DecomposedParameterStatement;
 import com.testify.ecfeed.model.DecomposedParameterStatement.ICondition;
 import com.testify.ecfeed.model.DecomposedParameterStatement.LabelCondition;
-import com.testify.ecfeed.model.DecomposedParameterStatement.PartitionCondition;
+import com.testify.ecfeed.model.DecomposedParameterStatement.ChoiceCondition;
 import com.testify.ecfeed.model.StatementArray;
 import com.testify.ecfeed.model.StaticStatement;
 import com.testify.ecfeed.ui.editor.actions.ModelModifyingAction;
@@ -182,7 +182,7 @@ public class ConstraintViewer extends TreeViewerSection {
 				ParameterNode parameter  = statement.getParameter();
 				List<String> values = ParameterInterface.getSpecialValues(parameter.getType());
 				if(values.isEmpty()){
-					for(ChoiceNode p : parameter.getLeafPartitions()){
+					for(ChoiceNode p : parameter.getLeafChoices()){
 						values.add(p.getValueString());
 					}
 				}
@@ -195,9 +195,9 @@ public class ConstraintViewer extends TreeViewerSection {
 				List<String> result = new ArrayList<String>();
 				ParameterNode parameter = statement.getParameter();
 
-				Set<ChoiceNode> allPartitions = parameter.getAllPartitions();
+				Set<ChoiceNode> allChoices = parameter.getAllChoices();
 				Set<String> allLabels = parameter.getLeafLabels();
-				for(ChoiceNode choice : allPartitions){
+				for(ChoiceNode choice : allChoices){
 					ICondition condition = new DecomposedParameterStatement(parameter, EStatementRelation.EQUAL, choice).getCondition();
 					result.add(condition.toString());
 				}
@@ -214,7 +214,7 @@ public class ConstraintViewer extends TreeViewerSection {
 			}
 
 			@Override
-			public Object visit(PartitionCondition condition) throws Exception {
+			public Object visit(ChoiceCondition condition) throws Exception {
 				return new String[]{};
 			}
 		}
@@ -249,7 +249,7 @@ public class ConstraintViewer extends TreeViewerSection {
 			}
 
 			@Override
-			public Object visit(PartitionCondition condition) throws Exception {
+			public Object visit(ChoiceCondition condition) throws Exception {
 				return "";
 			}
 
@@ -322,8 +322,8 @@ public class ConstraintViewer extends TreeViewerSection {
 					condition.setParent(parameter);
 					return new ExpectedValueStatement(parameter, condition);
 				}
-				else if(parameter != null && parameter.getPartitions().size() > 0){
-					ChoiceNode condition = parameter.getPartitions().get(0);
+				else if(parameter != null && parameter.getChoices().size() > 0){
+					ChoiceNode condition = parameter.getChoices().get(0);
 					return new DecomposedParameterStatement(parameter, relation, condition);
 				}
 
@@ -393,7 +393,7 @@ public class ConstraintViewer extends TreeViewerSection {
 			}
 
 			@Override
-			public Object visit(PartitionCondition condition) throws Exception {
+			public Object visit(ChoiceCondition condition) throws Exception {
 				return null;
 			}
 
@@ -492,7 +492,7 @@ public class ConstraintViewer extends TreeViewerSection {
 					}
 				}
 				else{
-					if(c.getPartitions().size() > 0){
+					if(c.getChoices().size() > 0){
 						items.add(c.getName());
 					}
 				}

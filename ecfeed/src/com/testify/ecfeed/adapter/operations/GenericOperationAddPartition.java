@@ -7,18 +7,18 @@ import com.testify.ecfeed.adapter.ModelOperationException;
 import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.model.DecomposedNode;
 
-public class GenericOperationAddPartition extends BulkOperation {
+public class GenericOperationAddChoice extends BulkOperation {
 
-	private class AddPartitionOperation extends AbstractModelOperation{
+	private class AddChoiceOperation extends AbstractModelOperation{
 		private DecomposedNode fTarget;
-		private ChoiceNode fPartition;
+		private ChoiceNode fChoice;
 		private int fIndex;
 		private ITypeAdapterProvider fAdapterProvider;
 
-		public AddPartitionOperation(DecomposedNode target, ChoiceNode partition, ITypeAdapterProvider adapterProvider, int index) {
+		public AddChoiceOperation(DecomposedNode target, ChoiceNode choice, ITypeAdapterProvider adapterProvider, int index) {
 			super(OperationNames.ADD_PARTITION);
 			fTarget = target;
-			fPartition = partition;
+			fChoice = choice;
 			fIndex = index;
 			fAdapterProvider = adapterProvider;
 		}
@@ -26,25 +26,25 @@ public class GenericOperationAddPartition extends BulkOperation {
 		@Override
 		public void execute() throws ModelOperationException {
 			if(fIndex == -1){
-				fIndex = fTarget.getPartitions().size();
+				fIndex = fTarget.getChoices().size();
 			}
-			if(fTarget.getPartitionNames().contains(fPartition.getName())){
+			if(fTarget.getChoiceNames().contains(fChoice.getName())){
 				throw new ModelOperationException(Messages.PARTITION_NAME_DUPLICATE_PROBLEM);
 			}
 			if(fIndex < 0){
 				throw new ModelOperationException(Messages.NEGATIVE_INDEX_PROBLEM);
 			}
-			if(fIndex > fTarget.getPartitions().size()){
+			if(fIndex > fTarget.getChoices().size()){
 				throw new ModelOperationException(Messages.TOO_HIGH_INDEX_PROBLEM);
 			}
-			validateChoiceValue(fPartition);
-			fTarget.addPartition(fPartition, fIndex);
+			validateChoiceValue(fChoice);
+			fTarget.addChoice(fChoice, fIndex);
 			markModelUpdated();
 		}
 
 		@Override
 		public IModelOperation reverseOperation() {
-			return new GenericOperationRemovePartition(fTarget, fPartition, false);
+			return new GenericOperationRemoveChoice(fTarget, fChoice, false);
 		}
 
 		private void validateChoiceValue(ChoiceNode choice) throws ModelOperationException{
@@ -57,22 +57,22 @@ public class GenericOperationAddPartition extends BulkOperation {
 				}
 			}
 			else{
-				for(ChoiceNode child : choice.getPartitions()){
+				for(ChoiceNode child : choice.getChoices()){
 					validateChoiceValue(child);
 				}
 			}
 		}
 	}
 
-	public GenericOperationAddPartition(DecomposedNode target, ChoiceNode partition, ITypeAdapterProvider adapterProvider, int index, boolean validate) {
+	public GenericOperationAddChoice(DecomposedNode target, ChoiceNode choice, ITypeAdapterProvider adapterProvider, int index, boolean validate) {
 		super(OperationNames.ADD_PARTITION, true);
-		addOperation(new AddPartitionOperation(target, partition, adapterProvider, index));
+		addOperation(new AddChoiceOperation(target, choice, adapterProvider, index));
 		if((target.getParameter().getMethod() != null) && validate){
 			addOperation(new MethodOperationMakeConsistent(target.getParameter().getMethod()));
 		}
 	}
 
-	public GenericOperationAddPartition(DecomposedNode target, ChoiceNode partition, ITypeAdapterProvider adapterProvider, boolean validate) {
-		this(target, partition, adapterProvider, -1, validate);
+	public GenericOperationAddChoice(DecomposedNode target, ChoiceNode choice, ITypeAdapterProvider adapterProvider, boolean validate) {
+		this(target, choice, adapterProvider, -1, validate);
 	}
 }

@@ -79,21 +79,21 @@ public class AbstractFrameworkMethodTest {
 				for(String stringArg : STRING_ARGS){
 					for(String enumArg : ENUM_ARGS){
 						List<ChoiceNode> args = new ArrayList<ChoiceNode>();
-						ChoiceNode intPartition = new ChoiceNode(intArg, intArg);
-						intParameter.addPartition(intPartition);
-						ChoiceNode stringPartition = new ChoiceNode(stringArg, stringArg);
-						stringParameter.addPartition(stringPartition);
-						ChoiceNode enumPartition = new ChoiceNode(enumArg, enumArg);
-						enumParameter.addPartition(enumPartition);
-						args.add(intPartition);
-						args.add(stringPartition);
-						args.add(enumPartition);
+						ChoiceNode intChoice = new ChoiceNode(intArg, intArg);
+						intParameter.addChoice(intChoice);
+						ChoiceNode stringChoice = new ChoiceNode(stringArg, stringArg);
+						stringParameter.addChoice(stringChoice);
+						ChoiceNode enumChoice = new ChoiceNode(enumArg, enumArg);
+						enumParameter.addChoice(enumChoice);
+						args.add(intChoice);
+						args.add(stringChoice);
+						args.add(enumChoice);
 						
 						frameworkMethod.invoke(this, args);
 						
-						assertEquals(fResult.arg1, parser.parseValue(intPartition));
-						assertEquals(fResult.arg2, parser.parseValue(stringPartition));
-						assertEquals(fResult.arg3, parser.parseValue(enumPartition));
+						assertEquals(fResult.arg1, parser.parseValue(intChoice));
+						assertEquals(fResult.arg2, parser.parseValue(stringChoice));
+						assertEquals(fResult.arg3, parser.parseValue(enumChoice));
 					}
 				}
 			}

@@ -179,7 +179,7 @@ public class ModelMasterSection extends TreeViewerSection{
 			} else if (element instanceof ConstraintNode){
 				return getImageFromFile("constraint_node.png");
 			} else if (element instanceof ChoiceNode){
-				return getImageFromFile("partition_node.png");
+				return getImageFromFile("choice_node.png");
 			}
 			return getImageFromFile("sample.png");
 		}

@@ -7,8 +7,8 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
 
 import com.testify.ecfeed.adapter.IModelOperation;
-import com.testify.ecfeed.adapter.operations.GenericOperationAddPartition;
-import com.testify.ecfeed.adapter.operations.GenericOperationRemovePartition;
+import com.testify.ecfeed.adapter.operations.GenericOperationAddChoice;
+import com.testify.ecfeed.adapter.operations.GenericOperationRemoveChoice;
 import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.model.DecomposedNode;
 import com.testify.ecfeed.ui.common.Constants;
@@ -29,29 +29,29 @@ public class DecomposedNodeInterface extends GenericNodeInterface {
 		fTarget = target;
 	}
 
-	public ChoiceNode addNewPartition() {
-		String name = generatePartitionName();
-		String value = generateNewPartitionValue();
-		ChoiceNode newPartition = new ChoiceNode(name, value);
-		if(addPartition(newPartition)){
-			return newPartition;
+	public ChoiceNode addNewChoice() {
+		String name = generateChoiceName();
+		String value = generateNewChoiceValue();
+		ChoiceNode newChoice = new ChoiceNode(name, value);
+		if(addChoice(newChoice)){
+			return newChoice;
 		}
 		return null;
 	}
 
-	public boolean addPartition(ChoiceNode newPartition) {
-		IModelOperation operation = new GenericOperationAddPartition(fTarget, newPartition, new EclipseTypeAdapterProvider(), fTarget.getPartitions().size(), true);
+	public boolean addChoice(ChoiceNode newChoice) {
+		IModelOperation operation = new GenericOperationAddChoice(fTarget, newChoice, new EclipseTypeAdapterProvider(), fTarget.getChoices().size(), true);
 		return execute(operation, Messages.DIALOG_ADD_CHOICE_PROBLEM_TITLE);
 	}
 
-	public boolean removePartition(ChoiceNode partition) {
-		IModelOperation operation = new GenericOperationRemovePartition(fTarget, partition, true);
+	public boolean removeChoice(ChoiceNode choice) {
+		IModelOperation operation = new GenericOperationRemoveChoice(fTarget, choice, true);
 		return execute(operation, Messages.DIALOG_REMOVE_CHOICE_TITLE);
 	}
 
-	public boolean removePartitions(Collection<ChoiceNode> partitions) {
+	public boolean removeChoices(Collection<ChoiceNode> choices) {
 		boolean displayWarning = false;
-		for(ChoiceNode p : partitions){
+		for(ChoiceNode p : choices){
 			if(fTarget.getParameter().getMethod().mentioningConstraints(p).size() > 0 || fTarget.getParameter().getMethod().mentioningTestCases(p).size() > 0){
 				displayWarning = true;
 			}
@@ -63,16 +63,16 @@ public class DecomposedNodeInterface extends GenericNodeInterface {
 				return false;
 			}
 		}
-		return removeChildren(partitions, Messages.DIALOG_REMOVE_CHOICES_PROBLEM_TITLE);
+		return removeChildren(choices, Messages.DIALOG_REMOVE_CHOICES_PROBLEM_TITLE);
 	}
 
-	protected String generateNewPartitionValue() {
+	protected String generateNewChoiceValue() {
 		EclipseModelBuilder builder = new EclipseModelBuilder();
 		String type = fTarget.getParameter().getType();
 		String value = builder.getDefaultExpectedValue(type);
 		if(isPrimitive() == false && builder.getSpecialValues(type).size() == 0){
 			int i = 0;
-			while(fTarget.getLeafPartitionValues().contains(value)){
+			while(fTarget.getLeafChoiceValues().contains(value)){
 				value = builder.getDefaultExpectedValue(type) + i++;
 			}
 		}
@@ -99,10 +99,10 @@ public class DecomposedNodeInterface extends GenericNodeInterface {
 		return ParameterInterface.isBoolean(fTarget.getParameter().getType());
 	}
 
-	protected String generatePartitionName(){
+	protected String generateChoiceName(){
 		String name = Constants.DEFAULT_NEW_PARTITION_NAME;
 		int i = 0;
-		while(fTarget.getPartitionNames().contains(name)){
+		while(fTarget.getChoiceNames().contains(name)){
 			name = Constants.DEFAULT_NEW_PARTITION_NAME + i++;
 		}
 		return name;

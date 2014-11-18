@@ -62,8 +62,8 @@ public class ConstraintNode extends GenericNode{
 		return false;
 	}
 
-	public boolean mentions(ChoiceNode partition) {
-		if(fConstraint.mentions(partition)){
+	public boolean mentions(ChoiceNode choice) {
+		if(fConstraint.mentions(choice)){
 			return true;
 		}
 		return false;
@@ -116,9 +116,9 @@ public class ConstraintNode extends GenericNode{
 	}
 
 	public boolean isConsistent() {
-		for(ChoiceNode p : getConstraint().getReferencedPartitions()){
+		for(ChoiceNode p : getConstraint().getReferencedChoices()){
 			ParameterNode c = p.getParameter();
-			if(c == null || c.getPartition(p.getQualifiedName()) == null){
+			if(c == null || c.getChoice(p.getQualifiedName()) == null){
 				return false;
 			}
 			if((c.getMethod() == null) || (c.getMethod().getParameters().contains(c) == false)){

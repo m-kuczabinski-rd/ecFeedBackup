@@ -79,9 +79,9 @@ public class FactoryAddChildOperation implements IModelVisitor{
 	public Object visit(ParameterNode node) throws Exception {
 		if(fChild instanceof ChoiceNode){
 			if(fIndex == -1){
-				return new GenericOperationAddPartition(node, (ChoiceNode)fChild, fAdapterProvider, fValidate);
+				return new GenericOperationAddChoice(node, (ChoiceNode)fChild, fAdapterProvider, fValidate);
 			}
-			return new GenericOperationAddPartition(node, (ChoiceNode)fChild, fAdapterProvider, fIndex, fValidate);
+			return new GenericOperationAddChoice(node, (ChoiceNode)fChild, fAdapterProvider, fIndex, fValidate);
 		}
 		throw new ModelOperationException(Messages.OPERATION_NOT_SUPPORTED_PROBLEM);
 	}
@@ -100,9 +100,9 @@ public class FactoryAddChildOperation implements IModelVisitor{
 	public Object visit(ChoiceNode node) throws Exception {
 		if(fChild instanceof ChoiceNode){
 			if(fIndex == -1){
-				return new GenericOperationAddPartition(node, (ChoiceNode)fChild, fAdapterProvider, fValidate);
+				return new GenericOperationAddChoice(node, (ChoiceNode)fChild, fAdapterProvider, fValidate);
 			}
-			return new GenericOperationAddPartition(node, (ChoiceNode)fChild, fAdapterProvider, fIndex, fValidate);
+			return new GenericOperationAddChoice(node, (ChoiceNode)fChild, fAdapterProvider, fIndex, fValidate);
 		}
 		throw new ModelOperationException(Messages.OPERATION_NOT_SUPPORTED_PROBLEM);
 	}

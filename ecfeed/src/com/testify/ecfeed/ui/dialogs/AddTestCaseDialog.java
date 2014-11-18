@@ -68,13 +68,13 @@ public class AddTestCaseDialog extends TitleAreaDialog implements ITestDataEdito
 		List<ParameterNode> parameters = method.getParameters();
 		for(ParameterNode parameter : parameters){
 			if(parameter.isExpected()){
-				fTestData.add(createAnonymuousPartition(parameter));
+				fTestData.add(createAnonymuousChoice(parameter));
 			}
 			else{
 
-				ChoiceNode testValue = parameter.getPartitions().get(0);
+				ChoiceNode testValue = parameter.getChoices().get(0);
 				while(testValue.isAbstract()){
-					testValue = testValue.getPartitions().get(0);
+					testValue = testValue.getChoices().get(0);
 				}
 				fTestData.add(testValue);
 			}
@@ -82,10 +82,10 @@ public class AddTestCaseDialog extends TitleAreaDialog implements ITestDataEdito
 		fMethod = method;
 	}
 
-	private ChoiceNode createAnonymuousPartition(ParameterNode parent) {
-		ChoiceNode partition = new ChoiceNode("@expected", parent.getDefaultValue());
-		partition.setParent(parent);
-		return partition;
+	private ChoiceNode createAnonymuousChoice(ParameterNode parent) {
+		ChoiceNode choice = new ChoiceNode("@expected", parent.getDefaultValue());
+		choice.setParent(parent);
+		return choice;
 	}
 
 	/**
@@ -130,11 +130,11 @@ public class AddTestCaseDialog extends TitleAreaDialog implements ITestDataEdito
 			}
 		});
 
-		TableViewerColumn partitionViewerColumn = new TableViewerColumn(fTestDataViewer, SWT.NONE);
-		TableColumn partitionColumn = partitionViewerColumn.getColumn();
-		partitionColumn.setWidth(150);
-		partitionColumn.setText("Choice");
-		partitionViewerColumn.setLabelProvider(new ColumnLabelProvider(){
+		TableViewerColumn choiceViewerColumn = new TableViewerColumn(fTestDataViewer, SWT.NONE);
+		TableColumn choiceColumn = choiceViewerColumn.getColumn();
+		choiceColumn.setWidth(150);
+		choiceColumn.setText("Choice");
+		choiceViewerColumn.setLabelProvider(new ColumnLabelProvider(){
 			@Override
 			public String getText(Object element){
 				ChoiceNode testValue = (ChoiceNode)element;
@@ -148,15 +148,15 @@ public class AddTestCaseDialog extends TitleAreaDialog implements ITestDataEdito
 				return getColor(element);
 			}
 		});
-		partitionViewerColumn.setEditingSupport(new TestDataValueEditingSupport(fTestDataViewer, fTestData, this));
+		choiceViewerColumn.setEditingSupport(new TestDataValueEditingSupport(fTestDataViewer, fTestData, this));
 
 		fTestDataViewer.setContentProvider(new ArrayContentProvider());
 		fTestDataViewer.setInput(fTestData);
 	}
 
 	private Color getColor(Object element){
-		ChoiceNode partition = (ChoiceNode)element;
-		if(partition.getParameter().isExpected()){
+		ChoiceNode choice = (ChoiceNode)element;
+		if(choice.getParameter().isExpected()){
 			return ColorManager.getColor(ColorConstants.EXPECTED_VALUE_CATEGORY);
 		}
 		return null;

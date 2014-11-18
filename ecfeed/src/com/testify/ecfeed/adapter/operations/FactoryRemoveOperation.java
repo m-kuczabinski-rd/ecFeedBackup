@@ -76,7 +76,7 @@ public class FactoryRemoveOperation {
 
 		@Override
 		public Object visit(ChoiceNode node) throws Exception {
-			return new GenericOperationRemovePartition(node.getParent(), node, fValidate);
+			return new GenericOperationRemoveChoice(node.getParent(), node, fValidate);
 		}
 	}
 	

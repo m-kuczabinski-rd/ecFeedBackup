@@ -106,21 +106,21 @@ public class XmlParserSerializerTest {
 	}
 
 	@Test
-	public void parsePartitionTest(){
+	public void parseChoiceTest(){
 		try{
 			RootNode root = new RootNode("root");
 			ClassNode classNode = new ClassNode("classNode");
 			MethodNode method = new MethodNode("method");
 			ParameterNode parameter = new ParameterNode("parameter", com.testify.ecfeed.adapter.java.Constants.TYPE_NAME_STRING, "0", false);
-			ChoiceNode partition = new ChoiceNode("partition", "A                 B");
+			ChoiceNode choice = new ChoiceNode("choice", "A                 B");
 			List<ChoiceNode> testData = new ArrayList<ChoiceNode>();
-			testData.add(partition);
+			testData.add(choice);
 			TestCaseNode testCase = new TestCaseNode("test", testData);
 
 			root.addClass(classNode);
 			classNode.addMethod(method);
 			method.addParameter(parameter);
-			parameter.addPartition(partition);
+			parameter.addChoice(choice);
 			method.addTestCase(testCase);
 
 			ByteArrayOutputStream ostream = new ByteArrayOutputStream();
@@ -146,38 +146,38 @@ public class XmlParserSerializerTest {
 			RootNode root = new RootNode("root");
 			ClassNode classNode = new ClassNode("classNode");
 			MethodNode method = new MethodNode("method");
-			ParameterNode partitionedParameter =
-					new ParameterNode("partitionedParameter", com.testify.ecfeed.adapter.java.Constants.TYPE_NAME_STRING, "0", false);
+			ParameterNode decomposedParameter =
+					new ParameterNode("decomposedParameter", com.testify.ecfeed.adapter.java.Constants.TYPE_NAME_STRING, "0", false);
 			ParameterNode expectedParameter =
 					new ParameterNode("expectedParameter", com.testify.ecfeed.adapter.java.Constants.TYPE_NAME_CHAR, "0", true);
 			expectedParameter.setDefaultValueString("d");
-			ChoiceNode partition1 = new ChoiceNode("partition", "p");
-			partition1.setParent(partitionedParameter);
-			ChoiceNode partition2 = new ChoiceNode("expected", "s");
-			partition2.setParent(expectedParameter);
+			ChoiceNode choice1 = new ChoiceNode("choice", "p");
+			choice1.setParent(decomposedParameter);
+			ChoiceNode choice2 = new ChoiceNode("expected", "s");
+			choice2.setParent(expectedParameter);
 
 			List<ChoiceNode> testData = new ArrayList<ChoiceNode>();
-			testData.add(partition1);
-			testData.add(partition2);
+			testData.add(choice1);
+			testData.add(choice2);
 			TestCaseNode testCase = new TestCaseNode("test", testData);
-			Constraint partitionConstraint = new Constraint(new StaticStatement(true),
-					new DecomposedParameterStatement(partitionedParameter, EStatementRelation.EQUAL, partition1));
+			Constraint choiceConstraint = new Constraint(new StaticStatement(true),
+					new DecomposedParameterStatement(decomposedParameter, EStatementRelation.EQUAL, choice1));
 			Constraint labelConstraint = new Constraint(new StaticStatement(true),
-					new DecomposedParameterStatement(partitionedParameter, EStatementRelation.EQUAL, "label"));
+					new DecomposedParameterStatement(decomposedParameter, EStatementRelation.EQUAL, "label"));
 			Constraint expectedConstraint = new Constraint(new StaticStatement(true),
 					new ExpectedValueStatement(expectedParameter, new ChoiceNode("expected", "n")));
-			ConstraintNode partitionConstraintNode = new ConstraintNode("partition constraint", partitionConstraint);
+			ConstraintNode choiceConstraintNode = new ConstraintNode("choice constraint", choiceConstraint);
 			ConstraintNode labelConstraintNode = new ConstraintNode("label constraint", labelConstraint);
 			ConstraintNode expectedConstraintNode = new ConstraintNode("expected constraint", expectedConstraint);
 
 			root.addClass(classNode);
 			classNode.addMethod(method);
-			method.addParameter(partitionedParameter);
+			method.addParameter(decomposedParameter);
 			method.addParameter(expectedParameter);
-			partitionedParameter.addPartition(partition1);
+			decomposedParameter.addChoice(choice1);
 			method.addTestCase(testCase);
 			method.addConstraint(labelConstraintNode);
-			method.addConstraint(partitionConstraintNode);
+			method.addConstraint(choiceConstraintNode);
 			method.addConstraint(expectedConstraintNode);
 
 			ByteArrayOutputStream ostream = new ByteArrayOutputStream();
@@ -224,12 +224,12 @@ public class XmlParserSerializerTest {
 	protected MethodNode createMethodNode(int numOfParameters,
 			int numOfExpParameters, int numOfConstraints, int numOfTestCases) {
 		MethodNode method = new MethodNode(randomName());
-		List<ParameterNode> partitionedParameters = createPartitionedParameters(numOfParameters);
+		List<ParameterNode> decomposedParameters = createDecomposedParameters(numOfParameters);
 		List<ParameterNode> expectedParameters = createExpectedParameters(numOfExpParameters);
 
-		for(int i = 0, j = 0; i < partitionedParameters.size() || j < expectedParameters.size();){
-			if(rand.nextBoolean() && i < partitionedParameters.size()){
-				method.addParameter(partitionedParameters.get(i));
+		for(int i = 0, j = 0; i < decomposedParameters.size() || j < expectedParameters.size();){
+			if(rand.nextBoolean() && i < decomposedParameters.size()){
+				method.addParameter(decomposedParameters.get(i));
 				++i;
 			}
 			else if (j < expectedParameters.size()){
@@ -238,7 +238,7 @@ public class XmlParserSerializerTest {
 			}
 		}
 
-		List<ConstraintNode> constraints = createConstraints(partitionedParameters, expectedParameters, numOfConstraints);
+		List<ConstraintNode> constraints = createConstraints(decomposedParameters, expectedParameters, numOfConstraints);
 		List<TestCaseNode> testCases = createTestCases(method.getParameters(), numOfTestCases);
 
 		for(ConstraintNode constraint : constraints){
@@ -251,18 +251,18 @@ public class XmlParserSerializerTest {
 		return method;
 	}
 
-	private List<ParameterNode> createPartitionedParameters(int numOfParameters) {
+	private List<ParameterNode> createDecomposedParameters(int numOfParameters) {
 		List<ParameterNode> parameters = new ArrayList<ParameterNode>();
 		for(int i = 0; i < numOfParameters; i++){
-			parameters.add(createPartitionedParameter(CATEGORY_TYPES[rand.nextInt(CATEGORY_TYPES.length)], rand.nextInt(MAX_PARTITIONS) + 1));
+			parameters.add(createDecomposedParameter(CATEGORY_TYPES[rand.nextInt(CATEGORY_TYPES.length)], rand.nextInt(MAX_PARTITIONS) + 1));
 		}
 		return parameters;
 	}
 
-	private ParameterNode createPartitionedParameter(String type, int numOfPartitions) {
+	private ParameterNode createDecomposedParameter(String type, int numOfChoices) {
 		ParameterNode parameter = new ParameterNode(randomName(), type, "0", false);
-		for(int i = 0; i < numOfPartitions; i++){
-			parameter.addPartition(createPartition(type, 1));
+		for(int i = 0; i < numOfChoices; i++){
+			parameter.addChoice(createChoice(type, 1));
 		}
 		return parameter;
 	}
@@ -327,39 +327,39 @@ public class XmlParserSerializerTest {
 		return result;
 	}
 
-	private ChoiceNode createPartition(String type, int level) {
+	private ChoiceNode createChoice(String type, int level) {
 		String value = createRandomValue(type);
-		ChoiceNode partition = new ChoiceNode(randomName(), value);
+		ChoiceNode choice = new ChoiceNode(randomName(), value);
 		for(int i = 0; i < rand.nextInt(MAX_PARTITION_LABELS); i++){
-			partition.addLabel(generateRandomString(10));
+			choice.addLabel(generateRandomString(10));
 		}
 		boolean createChildren = rand.nextBoolean();
 		int numOfChildren = rand.nextInt(MAX_PARTITIONS);
 		if(createChildren && level <= MAX_PARTITION_LEVELS){
 			for(int i = 0; i < numOfChildren; i++){
-				partition.addPartition(createPartition(type, level + 1));
+				choice.addChoice(createChoice(type, level + 1));
 			}
 		}
-		return partition;
+		return choice;
 	}
 
 
-	private List<ConstraintNode> createConstraints(List<ParameterNode> partitionedParameters,
+	private List<ConstraintNode> createConstraints(List<ParameterNode> decomposedParameters,
 			List<ParameterNode> expectedParameters, int numOfConstraints) {
 		List<ConstraintNode> constraints = new ArrayList<ConstraintNode>();
 		for(int i = 0; i < numOfConstraints; ++i){
-			constraints.add(new ConstraintNode(randomName(), createConstraint(partitionedParameters, expectedParameters)));
+			constraints.add(new ConstraintNode(randomName(), createConstraint(decomposedParameters, expectedParameters)));
 		}
 		return constraints;
 	}
 
-	private Constraint createConstraint(List<ParameterNode> partitionedParameters,
+	private Constraint createConstraint(List<ParameterNode> decomposedParameters,
 			List<ParameterNode> expectedParameters) {
-		BasicStatement premise = createPartitionedStatement(partitionedParameters);
+		BasicStatement premise = createDecomposedStatement(decomposedParameters);
 		BasicStatement consequence = null;
 		while(consequence == null){
 			if(rand.nextBoolean()){
-				consequence = createPartitionedStatement(partitionedParameters);
+				consequence = createDecomposedStatement(decomposedParameters);
 			}
 			else{
 				consequence = createExpectedStatement(expectedParameters);
@@ -368,15 +368,15 @@ public class XmlParserSerializerTest {
 		return new Constraint(premise, consequence);
 	}
 
-	private BasicStatement createPartitionedStatement(List<ParameterNode> parameters) {
+	private BasicStatement createDecomposedStatement(List<ParameterNode> parameters) {
 		BasicStatement statement = null;
 		while(statement == null){
 			switch(rand.nextInt(3)){
 			case 0: statement = new StaticStatement(rand.nextBoolean());
-			case 1: if(getPartitionedParameters(parameters).size() > 0){
+			case 1: if(getDecomposedParameters(parameters).size() > 0){
 				switch(rand.nextInt(2)){
 				case 0:
-					statement = createPartitionStatement(parameters);
+					statement = createChoiceStatement(parameters);
 				case 1:
 					statement = createLabelStatement(parameters);
 				}
@@ -396,17 +396,17 @@ public class XmlParserSerializerTest {
 		}
 		else{
 			label = "SomeLabel";
-			parameter.getPartitions().get(0).addLabel(label);
+			parameter.getChoices().get(0).addLabel(label);
 		}
 		EStatementRelation relation = pickRelation();
 		return new DecomposedParameterStatement(parameter, relation, label);
 	}
 
-	private BasicStatement createPartitionStatement(List<ParameterNode> parameters) {
+	private BasicStatement createChoiceStatement(List<ParameterNode> parameters) {
 		ParameterNode parameter = parameters.get(rand.nextInt(parameters.size()));
-		ChoiceNode partition = new ArrayList<ChoiceNode>(parameter.getLeafPartitions()).get(rand.nextInt(parameter.getPartitions().size()));
+		ChoiceNode choice = new ArrayList<ChoiceNode>(parameter.getLeafChoices()).get(rand.nextInt(parameter.getChoices().size()));
 		EStatementRelation relation = pickRelation();
-		return new DecomposedParameterStatement(parameter, relation, partition);
+		return new DecomposedParameterStatement(parameter, relation, choice);
 	}
 
 	private EStatementRelation pickRelation() {
@@ -425,7 +425,7 @@ public class XmlParserSerializerTest {
 		return new ExpectedValueStatement(parameter, new ChoiceNode("default", createRandomValue(parameter.getType())));
 	}
 
-	private List<ParameterNode> getPartitionedParameters(List<? extends ParameterNode> parameters) {
+	private List<ParameterNode> getDecomposedParameters(List<? extends ParameterNode> parameters) {
 		List<ParameterNode> result = new ArrayList<ParameterNode>();
 		for(ParameterNode parameter : parameters){
 			if(parameter instanceof ParameterNode == false){
@@ -442,8 +442,8 @@ public class XmlParserSerializerTest {
 				array.addStatement(createStatementArray(levels - 1, parameters));
 			}
 			else{
-				if(rand.nextBoolean() && getPartitionedParameters(parameters).size() > 0){
-					array.addStatement(createPartitionStatement(parameters));
+				if(rand.nextBoolean() && getDecomposedParameters(parameters).size() > 0){
+					array.addStatement(createChoiceStatement(parameters));
 				}
 				else{
 					array.addStatement(new StaticStatement(rand.nextBoolean()));
@@ -479,7 +479,7 @@ public class XmlParserSerializerTest {
 			List<ParameterNode> parameters) {
 		List<List<ChoiceNode>> result = new ArrayList<List<ChoiceNode>>();
 		for(ParameterNode parameter : parameters){
-			result.add(parameter.getLeafPartitions());
+			result.add(parameter.getLeafChoices());
 		}
 		return result;
 	}
@@ -525,24 +525,24 @@ public class XmlParserSerializerTest {
 	private void compareParameters(ParameterNode parameter1, ParameterNode parameter2) {
 		compareNames(parameter1.getName(), parameter2.getName());
 		compareNames(parameter1.getType(), parameter2.getType());
-		compareSizes(parameter1.getPartitions(), parameter2.getPartitions());
+		compareSizes(parameter1.getChoices(), parameter2.getChoices());
 		if(parameter1 instanceof ParameterNode || parameter2 instanceof ParameterNode){
 			if((parameter1 instanceof ParameterNode && parameter2 instanceof ParameterNode) == false){
 				fail("Either both parameters must be expected value or none");
 			}
 		}
-		for(int i = 0; i < parameter1.getPartitions().size(); ++i){
-			comparePartitions(parameter1.getPartitions().get(i), parameter2.getPartitions().get(i));
+		for(int i = 0; i < parameter1.getChoices().size(); ++i){
+			compareChoices(parameter1.getChoices().get(i), parameter2.getChoices().get(i));
 		}
 	}
 
-	private void comparePartitions(ChoiceNode partition1, ChoiceNode partition2) {
-		compareNames(partition1.getName(), partition2.getName());
-		compareValues(partition1.getValueString(),partition2.getValueString());
-		compareLabels(partition1.getLabels(), partition2.getLabels());
-		assertEquals(partition1.getPartitions().size(), partition2.getPartitions().size());
-		for(int i = 0; i < partition1.getPartitions().size(); i++){
-			comparePartitions(partition1.getPartitions().get(i), partition2.getPartitions().get(i));
+	private void compareChoices(ChoiceNode choice1, ChoiceNode choice2) {
+		compareNames(choice1.getName(), choice2.getName());
+		compareValues(choice1.getValueString(),choice2.getValueString());
+		compareLabels(choice1.getLabels(), choice2.getLabels());
+		assertEquals(choice1.getChoices().size(), choice2.getChoices().size());
+		for(int i = 0; i < choice1.getChoices().size(); i++){
+			compareChoices(choice1.getChoices().get(i), choice2.getChoices().get(i));
 		}
 	}
 
@@ -617,7 +617,7 @@ public class XmlParserSerializerTest {
 			}
 		}
 		else if(condition instanceof ChoiceNode && condition2 instanceof ChoiceNode){
-			comparePartitions((ChoiceNode)condition, (ChoiceNode)condition2);
+			compareChoices((ChoiceNode)condition, (ChoiceNode)condition2);
 		}
 		else{
 			fail("Unknown or not same types of compared conditions");
@@ -651,7 +651,7 @@ public class XmlParserSerializerTest {
 				compareValues(testValue1.getValueString(), testValue2.getValueString());
 			}
 			else{
-				comparePartitions(testCase1.getTestData().get(i),testCase2.getTestData().get(i));
+				compareChoices(testCase1.getTestData().get(i),testCase2.getTestData().get(i));
 			}
 		}
 	}

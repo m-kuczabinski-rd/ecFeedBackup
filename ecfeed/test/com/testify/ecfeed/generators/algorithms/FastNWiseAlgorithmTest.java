@@ -42,8 +42,8 @@ public class FastNWiseAlgorithmTest extends NWiseAlgorithmTest {
 	@Test
 	public void testSpeed(){
 		for(int variables : new int[]{1, 2, 5}){
-		for(int partitions : new int[]{1, 2, 5}){
-			List<List<String>> input = GeneratorTestUtils.prepareInput(variables, partitions);
+		for(int choices : new int[]{1, 2, 5}){
+			List<List<String>> input = GeneratorTestUtils.prepareInput(variables, choices);
 			for(int n = 1; n <= variables; n++){
 				testSpeed(input, n);
 			}

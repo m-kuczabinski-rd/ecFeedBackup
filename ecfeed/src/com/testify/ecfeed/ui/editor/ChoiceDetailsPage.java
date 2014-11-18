@@ -38,27 +38,27 @@ public class ChoiceDetailsPage extends BasicDetailsPage {
 	private Text fNameText;
 	private Combo fValueCombo;
 
-	private ChoiceInterface fPartitionIf;
+	private ChoiceInterface fChoiceIf;
 
 	private class NameTextListener extends AbstractSelectionAdapter{
 		@Override
 		public void widgetSelected(SelectionEvent e){
-			fPartitionIf.setName(fNameText.getText());
-			fNameText.setText(fPartitionIf.getName());
+			fChoiceIf.setName(fNameText.getText());
+			fNameText.setText(fChoiceIf.getName());
 		}
 	}
 
 	private class ValueComboListener extends AbstractSelectionAdapter{
 		@Override
 		public void widgetSelected(SelectionEvent e){
-			fPartitionIf.setValue(fValueCombo.getText());
-			fValueCombo.setText(fPartitionIf.getValue());
+			fChoiceIf.setValue(fValueCombo.getText());
+			fValueCombo.setText(fChoiceIf.getValue());
 		}
 	}
 
 	public ChoiceDetailsPage(ModelMasterSection masterSection, IModelUpdateContext updateContext, IFileInfoProvider fileInforProvider) {
 		super(masterSection, updateContext, fileInforProvider);
-		fPartitionIf = new ChoiceInterface(this);
+		fChoiceIf = new ChoiceInterface(this);
 	}
 
 	@Override
@@ -82,22 +82,22 @@ public class ChoiceDetailsPage extends BasicDetailsPage {
 	@Override
 	public void refresh(){
 		super.refresh();
-		ChoiceNode selectedPartition = getSelectedPartition();
-		if(selectedPartition != null){
-			fPartitionIf.setTarget(selectedPartition);
+		ChoiceNode selectedChoice = getSelectedChoice();
+		if(selectedChoice != null){
+			fChoiceIf.setTarget(selectedChoice);
 
-			String title = getSelectedPartition().toString();
+			String title = getSelectedChoice().toString();
 			getMainSection().setText(title);
 
-			fChildrenViewer.setInput(selectedPartition);
-			fLabelsViewer.setInput(selectedPartition);
-			fNameText.setText(selectedPartition.getName());
+			fChildrenViewer.setInput(selectedChoice);
+			fLabelsViewer.setInput(selectedChoice);
+			fNameText.setText(selectedChoice.getName());
 			refreshValueEditor();
 		}
 	}
 
 	private void refreshValueEditor() {
-		String type = fPartitionIf.getParameter().getType();
+		String type = fChoiceIf.getParameter().getType();
 		if(fValueCombo != null && fValueCombo.isDisposed() == false){
 			fValueCombo.dispose();
 		}
@@ -109,18 +109,18 @@ public class ChoiceDetailsPage extends BasicDetailsPage {
 		fValueCombo.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
 		Set<String> items = new LinkedHashSet<String>(ParameterInterface.getSpecialValues(type));
 		if(JavaUtils.isUserType(type)){
-			Set<String> usedValues = fPartitionIf.getParameter().getLeafPartitionValues();
+			Set<String> usedValues = fChoiceIf.getParameter().getLeafChoiceValues();
 			usedValues.removeAll(items);
 			items.addAll(usedValues);
 		}
-		items.add(fPartitionIf.getValue());
+		items.add(fChoiceIf.getValue());
 		fValueCombo.setItems(items.toArray(new String[]{}));
-		fValueCombo.setText(fPartitionIf.getValue());
+		fValueCombo.setText(fChoiceIf.getValue());
 		fValueCombo.addSelectionListener(new ValueComboListener());
 		fAttributesComposite.layout();
 	}
 
-	private ChoiceNode getSelectedPartition(){
+	private ChoiceNode getSelectedChoice(){
 		if(getSelectedElement() != null && getSelectedElement() instanceof ChoiceNode) {
 			return (ChoiceNode)getSelectedElement();
 		}

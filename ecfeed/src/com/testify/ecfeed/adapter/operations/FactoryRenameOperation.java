@@ -86,15 +86,15 @@ public class FactoryRenameOperation {
 		}
 	}
 	
-	private static class PartitionOperationRename extends GenericOperationRename {
+	private static class ChoiceOperationRename extends GenericOperationRename {
 
-		public PartitionOperationRename(ChoiceNode target, String newName){
+		public ChoiceOperationRename(ChoiceNode target, String newName){
 			super(target, newName);
 		}
 		
 		@Override
 		public IModelOperation reverseOperation() {
-			return new PartitionOperationRename((ChoiceNode)getTarget(), getOriginalName());
+			return new ChoiceOperationRename((ChoiceNode)getTarget(), getOriginalName());
 		}
 		
 		@Override
@@ -145,7 +145,7 @@ public class FactoryRenameOperation {
 
 		@Override
 		public Object visit(ChoiceNode node) throws Exception {
-			return new PartitionOperationRename(node, fNewName);
+			return new ChoiceOperationRename(node, fNewName);
 		}
 	}
 	

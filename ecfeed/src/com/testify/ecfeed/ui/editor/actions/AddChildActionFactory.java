@@ -92,8 +92,8 @@ public class AddChildActionFactory {
 		}
 	}
 	
-	private class AddPartitionAction extends AbstractAddChildAction{
-		public AddPartitionAction(){
+	private class AddChoiceAction extends AbstractAddChildAction{
+		public AddChoiceAction(){
 			super(ADD_PARTITION_ACTION_ID, ADD_PARTITION_ACTION_NAME, fViewer, fContext);
 		}
 	}
@@ -126,7 +126,7 @@ public class AddChildActionFactory {
 		@Override
 		public Object visit(ParameterNode node) throws Exception {
 			return Arrays.asList(new AbstractAddChildAction[]{
-					new AddPartitionAction()
+					new AddChoiceAction()
 			});
 		}
 
@@ -143,7 +143,7 @@ public class AddChildActionFactory {
 		@Override
 		public Object visit(ChoiceNode node) throws Exception {
 			return Arrays.asList(new AbstractAddChildAction[]{
-					new AddPartitionAction()
+					new AddChoiceAction()
 			});
 		}
 	}

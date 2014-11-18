@@ -31,12 +31,12 @@ public interface IModelParser {
 	public ClassNode parseClass(InputStream istream) throws ParserException;
 	public MethodNode parseMethod(InputStream istream) throws ParserException;
 	public ParameterNode parseParameter(InputStream istream) throws ParserException;
-	public ChoiceNode parsePartition(InputStream istream) throws ParserException;
+	public ChoiceNode parseChoice(InputStream istream) throws ParserException;
 	public TestCaseNode parseTestCase(InputStream istream, MethodNode method) throws ParserException;
 	public ConstraintNode parseConstraint(InputStream istream, MethodNode method) throws ParserException;
 	public BasicStatement parseStatement(InputStream istream, MethodNode method) throws ParserException;
 	public StaticStatement parseStaticStatement(InputStream istream) throws ParserException;
-	public DecomposedParameterStatement parsePartitionedParameterStatement(InputStream istream, MethodNode method) throws ParserException;
+	public DecomposedParameterStatement parseDecomposedParameterStatement(InputStream istream, MethodNode method) throws ParserException;
 	public ExpectedValueStatement parseExpectedValueStatement(InputStream istream, MethodNode method) throws ParserException;
 	public StatementArray parseStatementArray(InputStream istream, MethodNode method) throws ParserException;
 }

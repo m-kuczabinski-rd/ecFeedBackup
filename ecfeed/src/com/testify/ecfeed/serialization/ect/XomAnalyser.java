@@ -140,7 +140,7 @@ public class XomAnalyser {
 
 		for(Element child : getIterableChildren(element)){
 			try{
-				parameter.addPartition(parsePartition(child));
+				parameter.addChoice(parseChoice(child));
 			}catch(ParserException e){
 				System.err.println("Exception: " + e.getMessage());
 			}
@@ -168,10 +168,10 @@ public class XomAnalyser {
 			ChoiceNode testValue = null;
 
 			if(testParameterElement.getLocalName().equals(Constants.TEST_PARAMETER_NODE_NAME)){
-				String partitionName = getAttributeValue(testParameterElement, Constants.PARTITION_ATTRIBUTE_NAME);
-				testValue = parameter.getPartition(partitionName);
+				String choiceName = getAttributeValue(testParameterElement, Constants.PARTITION_ATTRIBUTE_NAME);
+				testValue = parameter.getChoice(choiceName);
 				if(testValue == null){
-					throw new ParserException(Messages.PARTITION_DOES_NOT_EXIST(parameter.getName(), partitionName));
+					throw new ParserException(Messages.PARTITION_DOES_NOT_EXIST(parameter.getName(), choiceName));
 				}
 			}
 			else if(testParameterElement.getLocalName().equals(Constants.EXPECTED_PARAMETER_NODE_NAME)){
@@ -226,7 +226,7 @@ public class XomAnalyser {
 	public BasicStatement parseStatement(Element element, MethodNode method) throws ParserException {
 		switch(element.getLocalName()){
 		case Constants.CONSTRAINT_PARTITION_STATEMENT_NODE_NAME:
-			return parsePartitionStatement(element, method);
+			return parseChoiceStatement(element, method);
 		case Constants.CONSTRAINT_LABEL_STATEMENT_NODE_NAME:
 			return parseLabelStatement(element, method);
 		case Constants.CONSTRAINT_STATEMENT_ARRAY_NODE_NAME:
@@ -277,7 +277,7 @@ public class XomAnalyser {
 		}
 	}
 
-	public DecomposedParameterStatement parsePartitionStatement(Element element, MethodNode method) throws ParserException {
+	public DecomposedParameterStatement parseChoiceStatement(Element element, MethodNode method) throws ParserException {
 		assertNodeTag(element.getQualifiedName(), CONSTRAINT_PARTITION_STATEMENT_NODE_NAME);
 
 		String parameterName = getAttributeValue(element, Constants.STATEMENT_CATEGORY_ATTRIBUTE_NAME);
@@ -285,16 +285,16 @@ public class XomAnalyser {
 		if(parameter == null || parameter.isExpected()){
 			throw new ParserException(Messages.WRONG_CATEGORY_NAME(parameterName, method.getName()));
 		}
-		String partitionName = getAttributeValue(element, Constants.STATEMENT_PARTITION_ATTRIBUTE_NAME);
-		ChoiceNode partition = parameter.getPartition(partitionName);
-		if(partition == null){
-			throw new ParserException(Messages.WRONG_PARTITION_NAME(partitionName, parameterName, method.getName()));
+		String choiceName = getAttributeValue(element, Constants.STATEMENT_PARTITION_ATTRIBUTE_NAME);
+		ChoiceNode choice = parameter.getChoice(choiceName);
+		if(choice == null){
+			throw new ParserException(Messages.WRONG_PARTITION_NAME(choiceName, parameterName, method.getName()));
 		}
 
 		String relationName = getAttributeValue(element, Constants.STATEMENT_RELATION_ATTRIBUTE_NAME);
 		EStatementRelation relation = getRelation(relationName);
 
-		return new DecomposedParameterStatement(parameter, relation, partition);
+		return new DecomposedParameterStatement(parameter, relation, choice);
 	}
 
 	public DecomposedParameterStatement parseLabelStatement(Element element, MethodNode method) throws ParserException {
@@ -328,28 +328,28 @@ public class XomAnalyser {
 		return new ExpectedValueStatement(parameter, condition);
 	}
 
-	public ChoiceNode parsePartition(Element element) throws ParserException{
+	public ChoiceNode parseChoice(Element element) throws ParserException{
 		assertNodeTag(element.getQualifiedName(), PARTITION_NODE_NAME);
 		String name = getElementName(element);
 		String value = getAttributeValue(element, VALUE_ATTRIBUTE);
 
-		ChoiceNode partition = new ChoiceNode(name, value);
+		ChoiceNode choice = new ChoiceNode(name, value);
 
 		for(Element child : getIterableChildren(element)){
 			if(child.getLocalName() == Constants.PARTITION_NODE_NAME){
 				try{
-				partition.addPartition(parsePartition(child));
+				choice.addChoice(parseChoice(child));
 				}catch(ParserException e){
 					System.err.println("Exception: " + e.getMessage());
 				}
 
 			}
 			if(child.getLocalName() == Constants.LABEL_NODE_NAME){
-				partition.addLabel(child.getAttributeValue(Constants.LABEL_ATTRIBUTE_NAME));
+				choice.addLabel(child.getAttributeValue(Constants.LABEL_ATTRIBUTE_NAME));
 			}
 		}
 
-		return partition;
+		return choice;
 	}
 
 	private void assertNodeTag(String qualifiedName, String expectedName) throws ParserException {

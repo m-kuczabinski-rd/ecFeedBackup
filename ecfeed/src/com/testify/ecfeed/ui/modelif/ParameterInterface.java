@@ -128,7 +128,7 @@ public class ParameterInterface extends DecomposedNodeInterface {
 	public String[] defaultValueSuggestions(){
 		Set<String> items = new HashSet<String>(getSpecialValues());
 		if(JavaUtils.isPrimitive(getType()) == false){
-			for(ChoiceNode p : fTarget.getLeafPartitions()){
+			for(ChoiceNode p : fTarget.getLeafChoices()){
 				items.add(p.getValueString());
 			}
 			if(items.contains(fTarget.getDefaultValue())== false){

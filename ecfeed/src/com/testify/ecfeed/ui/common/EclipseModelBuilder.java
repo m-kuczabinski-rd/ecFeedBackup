@@ -66,22 +66,22 @@ public class EclipseModelBuilder extends JavaModelAnalyser{
 	public ParameterNode buildParameterModel(String name, String type, boolean expected){
 		ParameterNode parameter = new ParameterNode(name, type, getDefaultExpectedValue(type), expected);
 		if(!expected){
-			List<ChoiceNode> defaultPartitions = defaultPartitions(type);
-			for(ChoiceNode partition : defaultPartitions){
-				parameter.addPartition(partition);
+			List<ChoiceNode> defaultChoices = defaultChoices(type);
+			for(ChoiceNode choice : defaultChoices){
+				parameter.addChoice(choice);
 			}
 		}
 		return parameter;
 	}
 
-	public List<ChoiceNode> defaultPartitions(String typeName) {
-		List<ChoiceNode> partitions = new ArrayList<ChoiceNode>();
+	public List<ChoiceNode> defaultChoices(String typeName) {
+		List<ChoiceNode> choices = new ArrayList<ChoiceNode>();
 		for(String value : getSpecialValues(typeName)){
 			String name = value.toLowerCase();
 			name = name.replace("_", " ");
-			partitions.add(new ChoiceNode(name, value));
+			choices.add(new ChoiceNode(name, value));
 		}
-		return partitions;
+		return choices;
 	}
 
 	public List<String> getSpecialValues(String typeName) {
@@ -171,13 +171,13 @@ public class EclipseModelBuilder extends JavaModelAnalyser{
 	}
 
 
-	protected ArrayList<ChoiceNode> defaultBooleanPartitions() {
-		ArrayList<ChoiceNode> partitions = new ArrayList<ChoiceNode>();
+	protected ArrayList<ChoiceNode> defaultBooleanChoices() {
+		ArrayList<ChoiceNode> choices = new ArrayList<ChoiceNode>();
 		HashMap<String, String> values = predefinedBooleanValues();
 		for (String key : values.keySet()) {
-			partitions.add(new ChoiceNode(key, values.get(key)));
+			choices.add(new ChoiceNode(key, values.get(key)));
 		}
-		return partitions;
+		return choices;
 	}
 
 	protected HashMap<String, String> predefinedBooleanValues() {
@@ -187,13 +187,13 @@ public class EclipseModelBuilder extends JavaModelAnalyser{
 		return values;
 	}
 
-	protected ArrayList<ChoiceNode> defaultIntegerPartitions() {
-		ArrayList<ChoiceNode> partitions = new ArrayList<ChoiceNode>();
+	protected ArrayList<ChoiceNode> defaultIntegerChoices() {
+		ArrayList<ChoiceNode> choices = new ArrayList<ChoiceNode>();
 		HashMap<String, String> values = predefinedIntegerValues();
 		for (String key : values.keySet()) {
-			partitions.add(new ChoiceNode(key, values.get(key)));
+			choices.add(new ChoiceNode(key, values.get(key)));
 		}
-		return partitions;
+		return choices;
 	}
 
 	protected HashMap<String, String> predefinedIntegerValues() {
@@ -203,13 +203,13 @@ public class EclipseModelBuilder extends JavaModelAnalyser{
 		return values;
 	}
 
-	protected ArrayList<ChoiceNode> defaultFloatPartitions() {
-		ArrayList<ChoiceNode> partitions = new ArrayList<ChoiceNode>();
+	protected ArrayList<ChoiceNode> defaultFloatChoices() {
+		ArrayList<ChoiceNode> choices = new ArrayList<ChoiceNode>();
 		HashMap<String, String> values = predefinedFloatValues();
 		for (String key : values.keySet()) {
-			partitions.add(new ChoiceNode(key, values.get(key)));
+			choices.add(new ChoiceNode(key, values.get(key)));
 		}
-		return partitions;
+		return choices;
 	}
 
 	protected HashMap<String, String> predefinedFloatValues() {
@@ -221,13 +221,13 @@ public class EclipseModelBuilder extends JavaModelAnalyser{
 		return values;
 	}
 
-	protected ArrayList<ChoiceNode> defaultStringPartitions() {
-		ArrayList<ChoiceNode> partitions = new ArrayList<ChoiceNode>();
+	protected ArrayList<ChoiceNode> defaultStringChoices() {
+		ArrayList<ChoiceNode> choices = new ArrayList<ChoiceNode>();
 		HashMap<String, String> values = predefinedStringValues();
 		for (String key : values.keySet()) {
-			partitions.add(new ChoiceNode(key, values.get(key)));
+			choices.add(new ChoiceNode(key, values.get(key)));
 		}
-		return partitions;
+		return choices;
 	}
 
 	protected HashMap<String, String> predefinedStringValues() {

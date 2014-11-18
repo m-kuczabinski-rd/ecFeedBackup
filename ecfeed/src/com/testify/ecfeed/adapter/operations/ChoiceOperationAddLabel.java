@@ -38,7 +38,7 @@ public class ChoiceOperationAddLabel extends AbstractModelOperation {
 		super(OperationNames.ADD_PARTITION_LABEL);
 		fTarget = target;
 		fLabel = label;
-		fLabeledDescendants = target.getLabeledPartitions(fLabel);
+		fLabeledDescendants = target.getLabeledChoices(fLabel);
 	}
 	
 	@Override

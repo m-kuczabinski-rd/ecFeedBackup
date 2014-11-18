@@ -28,7 +28,7 @@ public class CoverageCalculator {
 
 	private List<List<ChoiceNode>> fInput;
 	// The map of expected parameters default values. Said values are used to replace unique values in algorithm.
-	private Map<Integer, ChoiceNode> fExpectedPartitions;
+	private Map<Integer, ChoiceNode> fExpectedChoices;
 	// The main map of covered tuples
 	private List<Map<List<ChoiceNode>, Integer>> fTuples;
 	// Test cases and suites (de)selected recently;
@@ -50,7 +50,7 @@ public class CoverageCalculator {
 		fCurrentlyChangedCases = new ArrayList<>();
 
 		fTuples = new ArrayList<Map<List<ChoiceNode>, Integer>>();
-		fExpectedPartitions = prepareExpectedPartitions();
+		fExpectedChoices = prepareExpectedChoices();
 
 		for (int n = 0; n < fTotalWork.length; n++) {
 			fTotalWork[n] = calculateTotalTuples(fInput, n + 1, 100);
@@ -177,7 +177,7 @@ public class CoverageCalculator {
 		List<List<ChoiceNode>> input = new ArrayList<List<ChoiceNode>>();
 		for (ParameterNode cnode : fParameters) {
 			List<ChoiceNode> parameter = new ArrayList<ChoiceNode>();
-			for (ChoiceNode pnode : cnode.getLeafPartitions()) {
+			for (ChoiceNode pnode : cnode.getLeafChoices()) {
 				parameter.add(pnode);
 			}
 			input.add(parameter);
@@ -185,7 +185,7 @@ public class CoverageCalculator {
 		return input;
 	}
 	
-	private Map<Integer, ChoiceNode> prepareExpectedPartitions() {
+	private Map<Integer, ChoiceNode> prepareExpectedChoices() {
 		int n = 0;
 		Map<Integer, ChoiceNode> expected = new HashMap<>();
 		for (ParameterNode cnode : fParameters) {
@@ -193,7 +193,7 @@ public class CoverageCalculator {
 				ChoiceNode p = new ChoiceNode("", cnode.getDefaultValue());
 				p.setParent(cnode);
 				expected.put(n, p);
-//				expected.put(n, cnode.getDefaultValuePartition());
+//				expected.put(n, cnode.getDefaultValueChoice());
 			}
 			n++;
 		}
@@ -202,27 +202,27 @@ public class CoverageCalculator {
 
 	private List<List<ChoiceNode>> prepareCasesToAdd(Collection<TestCaseNode> TestCases) {
 		List<List<ChoiceNode>> cases = new ArrayList<>();
-		if (fExpectedPartitions.isEmpty()) {
+		if (fExpectedChoices.isEmpty()) {
 			for (TestCaseNode tcnode : TestCases) {
-				List<ChoiceNode> partitions = new ArrayList<>();
+				List<ChoiceNode> choices = new ArrayList<>();
 				for (ChoiceNode pnode : tcnode.getTestData()) {
-					partitions.add(pnode);
+					choices.add(pnode);
 				}
-				cases.add(partitions);
+				cases.add(choices);
 			}
 		} else {
 			for (TestCaseNode tcnode : TestCases) {
-				List<ChoiceNode> partitions = new ArrayList<>();
+				List<ChoiceNode> choices = new ArrayList<>();
 				int n = 0;
 				for (ChoiceNode pnode : tcnode.getTestData()) {
-					if (fExpectedPartitions.containsKey(n)) {
-						partitions.add(fExpectedPartitions.get(n));
+					if (fExpectedChoices.containsKey(n)) {
+						choices.add(fExpectedChoices.get(n));
 					} else {
-						partitions.add(pnode);
+						choices.add(pnode);
 					}
 					n++;
 				}
-				cases.add(partitions);
+				cases.add(choices);
 			}
 		}
 		return cases;

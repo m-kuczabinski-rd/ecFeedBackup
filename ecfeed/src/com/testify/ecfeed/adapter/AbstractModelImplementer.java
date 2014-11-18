@@ -179,7 +179,7 @@ public abstract class AbstractModelImplementer implements IModelImplementer {
 		if(parameterDefinitionImplemented(node) == false){
 			implementParameterDefinition(node);
 		}
-		for(ChoiceNode choice : node.getLeafPartitions()){
+		for(ChoiceNode choice : node.getLeafChoices()){
 			if(implementable(choice) && getImplementationStatus(choice) != EImplementationStatus.IMPLEMENTED){
 				implement(choice);
 				CachedImplementationStatusResolver.clearCache(choice);
@@ -189,9 +189,9 @@ public abstract class AbstractModelImplementer implements IModelImplementer {
 	}
 
 	protected boolean implement(TestCaseNode node) throws Exception{
-		for(ChoiceNode partition : node.getTestData()){
-			if(implementable(partition) && getImplementationStatus(partition) != EImplementationStatus.IMPLEMENTED){
-				implement(partition);
+		for(ChoiceNode choice : node.getTestData()){
+			if(implementable(choice) && getImplementationStatus(choice) != EImplementationStatus.IMPLEMENTED){
+				implement(choice);
 			}
 		}
 		return true;
@@ -206,7 +206,7 @@ public abstract class AbstractModelImplementer implements IModelImplementer {
 			implementParameterDefinition(node.getParameter());
 		}
 		if(node.isAbstract()){
-			for(ChoiceNode leaf : node.getLeafPartitions()){
+			for(ChoiceNode leaf : node.getLeafChoices()){
 				if(implementable(leaf) && getImplementationStatus(leaf) != EImplementationStatus.IMPLEMENTED){
 					implement(leaf);
 				}
@@ -233,10 +233,10 @@ public abstract class AbstractModelImplementer implements IModelImplementer {
 	}
 	
 	protected boolean implementable(ParameterNode node){
-		return hasImplementableNode(node.getPartitions());
+		return hasImplementableNode(node.getChoices());
 	}
 	protected boolean implementable(ChoiceNode node){
-		return hasImplementableNode(node.getPartitions());
+		return hasImplementableNode(node.getChoices());
 	}
 	
 	protected boolean implementable(TestCaseNode node){

@@ -19,7 +19,7 @@ public class ParameterOperationSetExpected extends AbstractModelOperation {
 	private boolean fExpected;
 	private List<TestCaseNode> fOriginalTestCases;
 	private List<ConstraintNode> fOriginalConstraints;
-	private List<ChoiceNode> fOriginalPartitions;
+	private List<ChoiceNode> fOriginalChoices;
 	private String fOriginalDefaultValue;
 	
 	private class ReverseOperation extends AbstractModelOperation{
@@ -35,7 +35,7 @@ public class ParameterOperationSetExpected extends AbstractModelOperation {
 				fTarget.getMethod().replaceConstraints(fOriginalConstraints);
 				fTarget.getMethod().replaceTestCases(fOriginalTestCases);
 			}
-			fTarget.replacePartitions(fOriginalPartitions);
+			fTarget.replaceChoices(fOriginalChoices);
 			fTarget.setDefaultValueString(fOriginalDefaultValue);
 			markModelUpdated();
 		}
@@ -59,8 +59,8 @@ public class ParameterOperationSetExpected extends AbstractModelOperation {
 			fOriginalConstraints = new ArrayList<ConstraintNode>();
 			fOriginalConstraints.addAll(method.getConstraintNodes());
 		}
-		fOriginalPartitions = new ArrayList<ChoiceNode>();
-		fOriginalPartitions.addAll(fTarget.getPartitions());
+		fOriginalChoices = new ArrayList<ChoiceNode>();
+		fOriginalChoices.addAll(fTarget.getChoices());
 		fOriginalDefaultValue = fTarget.getDefaultValue();
 	}
 
@@ -71,18 +71,18 @@ public class ParameterOperationSetExpected extends AbstractModelOperation {
 		if(fExpected && JavaUtils.hasLimitedValuesSet(type)){
 			boolean validDefaultValue = false;
 			String currentDefaultValue = fTarget.getDefaultValue();
-			for(ChoiceNode leaf : fTarget.getLeafPartitions()){
+			for(ChoiceNode leaf : fTarget.getLeafChoices()){
 				if(currentDefaultValue.equals(leaf.getValueString())){
 					validDefaultValue = true;
 					break;
 				}
 			}
 			if(validDefaultValue == false){
-				if(fTarget.getLeafPartitions().size() > 0){
-					fTarget.setDefaultValueString(fTarget.getLeafPartitions().toArray(new ChoiceNode[]{})[0].getValueString());
+				if(fTarget.getLeafChoices().size() > 0){
+					fTarget.setDefaultValueString(fTarget.getLeafChoices().toArray(new ChoiceNode[]{})[0].getValueString());
 				}
 				else{
-					fTarget.addPartition(new ChoiceNode("partition", currentDefaultValue));
+					fTarget.addChoice(new ChoiceNode("choice", currentDefaultValue));
 				}
 			}
 		}

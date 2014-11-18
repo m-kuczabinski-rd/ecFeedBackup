@@ -58,7 +58,7 @@ public class FactoryShiftOperation{
 		@Override
 		public Object visit(ParameterNode node) throws Exception {
 			if(fShifted.get(0) instanceof ChoiceNode){
-				return new GenericShiftOperation(node.getPartitions(), fShifted, fUp);
+				return new GenericShiftOperation(node.getChoices(), fShifted, fUp);
 			}
 			throw new ModelOperationException(Messages.OPERATION_NOT_SUPPORTED_PROBLEM);
 		}
@@ -76,7 +76,7 @@ public class FactoryShiftOperation{
 		@Override
 		public Object visit(ChoiceNode node) throws Exception {
 			if(fShifted.get(0) instanceof ChoiceNode){
-				return new GenericShiftOperation(node.getPartitions(), fShifted, fUp);
+				return new GenericShiftOperation(node.getChoices(), fShifted, fUp);
 			}
 			throw new ModelOperationException(Messages.OPERATION_NOT_SUPPORTED_PROBLEM);
 		}
@@ -125,7 +125,7 @@ public class FactoryShiftOperation{
 		@Override
 		public Object visit(ParameterNode node) throws Exception {
 			if(fShifted.get(0) instanceof ChoiceNode){
-				return new GenericShiftOperation(node.getPartitions(), fShifted, fShift);
+				return new GenericShiftOperation(node.getChoices(), fShifted, fShift);
 			}
 			throw new ModelOperationException(Messages.OPERATION_NOT_SUPPORTED_PROBLEM);
 		}
@@ -143,7 +143,7 @@ public class FactoryShiftOperation{
 		@Override
 		public Object visit(ChoiceNode node) throws Exception {
 			if(fShifted.get(0) instanceof ChoiceNode){
-				return new GenericShiftOperation(node.getPartitions(), fShifted, fShift);
+				return new GenericShiftOperation(node.getChoices(), fShifted, fShift);
 			}
 			throw new ModelOperationException(Messages.OPERATION_NOT_SUPPORTED_PROBLEM);
 		}

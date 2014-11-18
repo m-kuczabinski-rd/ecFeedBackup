@@ -52,12 +52,12 @@ public class AdaptiveRandomAlgorithmTest {
 	@Test
 	public  void candidatesCountDuplicatesTest() {
 		for(int parameters : new int[]{1, 2, 5}){
-		for(int partitions : new int[]{1, 2, 5}){
+		for(int choices : new int[]{1, 2, 5}){
 		for(int candidatesCount : new int[]{10, 100}){
 		for(int steps : new int[]{0, 1, 10, 100}){
 			try {
-//				System.out.println("parameters: " + parameters + ", partitions: " + partitions + ", candidatesCount: " + candidatesCount + ", steps: " + steps);
-				List<List<String>> input = GeneratorTestUtils.prepareInput(parameters, partitions);
+//				System.out.println("parameters: " + parameters + ", choices: " + choices + ", candidatesCount: " + candidatesCount + ", steps: " + steps);
+				List<List<String>> input = GeneratorTestUtils.prepareInput(parameters, choices);
 				AdaptiveRandomAlgorithm<String> algorithm = 
 						new AdaptiveRandomAlgorithm<String>(0, candidatesCount, Integer.MAX_VALUE, true);
 				algorithm.initialize(input, EMPTY_CONSTRAINTS);
@@ -79,11 +79,11 @@ public class AdaptiveRandomAlgorithmTest {
 	@Test
 	public void candidatesCountNoDuplicatesTest() {
 		for(int parameters : new int[]{1, 2, 5}){
-		for(int partitions : new int[]{1, 2, 5}){
+		for(int choices : new int[]{1, 2, 5}){
 		for(int candidatesCount : new int[]{1, 10, 100}){
 		for(int steps : new int[]{0, 1, 10, 100}){
 			try {
-				List<List<String>> input = GeneratorTestUtils.prepareInput(parameters, partitions);
+				List<List<String>> input = GeneratorTestUtils.prepareInput(parameters, choices);
 				AdaptiveRandomAlgorithm<String> algorithm = 
 						new AdaptiveRandomAlgorithm<String>(0, candidatesCount, Integer.MAX_VALUE, false);
 				algorithm.initialize(input, EMPTY_CONSTRAINTS);
@@ -105,11 +105,11 @@ public class AdaptiveRandomAlgorithmTest {
 	@Test
 	public void candidatesUniformityTest() {
 		for(int parameters : new int[]{1, 2, 5}){
-		for(int partitions : new int[]{1, 2, 5}){
+		for(int choices : new int[]{1, 2, 5}){
 		for(int candidatesCount : new int[]{1, 10, 100}){
 		for(int steps : new int[]{0, 1, 10, 100, 1000}){
 			try {
-				List<List<String>> input = GeneratorTestUtils.prepareInput(parameters, partitions);
+				List<List<String>> input = GeneratorTestUtils.prepareInput(parameters, choices);
 				AdaptiveRandomAlgorithm<String> algorithm = 
 						new AdaptiveRandomAlgorithm<String>(0, candidatesCount, Integer.MAX_VALUE, true);
 				algorithm.initialize(input, EMPTY_CONSTRAINTS);
@@ -121,7 +121,7 @@ public class AdaptiveRandomAlgorithmTest {
 				if(sampleUniform(candidates, input) == false){
 					fail("Failed uniformity test for:\n"
 							+ " parameters = " + parameters 
-							+ "\npartitions = " + partitions
+							+ "\nchoices = " + choices
 							+ "\ncandidatesCount = " + candidatesCount
 							+ "\nsteps = " + steps);
 				}
@@ -137,10 +137,10 @@ public class AdaptiveRandomAlgorithmTest {
 	@Test
 	public void candidatesNoDuplicatesTest() {
 		for(int parameters : new int[]{1, 2, 5}){
-		for(int partitions : new int[]{1, 2, 5}){
+		for(int choices : new int[]{1, 2, 5}){
 		for(int candidatesCount : new int[]{1, 10, 100, 1000}){
 			try {
-				List<List<String>> input = GeneratorTestUtils.prepareInput(parameters, partitions);
+				List<List<String>> input = GeneratorTestUtils.prepareInput(parameters, choices);
 				AdaptiveRandomAlgorithm<String> algorithm = 
 						new AdaptiveRandomAlgorithm<String>(0, candidatesCount, Integer.MAX_VALUE, false);
 				algorithm.initialize(input, EMPTY_CONSTRAINTS);
@@ -165,10 +165,10 @@ public class AdaptiveRandomAlgorithmTest {
 	@Test
 	public void candidatesDuplicatesTest() {
 		for(int parameters : new int[]{1, 2, 5}){
-		for(int partitions : new int[]{1, 2, 5}){
+		for(int choices : new int[]{1, 2, 5}){
 		for(int candidatesCount : new int[]{1, 10, 100, 1000}){
 			try {
-				List<List<String>> input = GeneratorTestUtils.prepareInput(parameters, partitions);
+				List<List<String>> input = GeneratorTestUtils.prepareInput(parameters, choices);
 				AdaptiveRandomAlgorithm<String> algorithm = 
 						new AdaptiveRandomAlgorithm<String>(0, candidatesCount, Integer.MAX_VALUE, true);
 				algorithm.initialize(input, EMPTY_CONSTRAINTS);
@@ -190,11 +190,11 @@ public class AdaptiveRandomAlgorithmTest {
 		for(int length : new int[]{10000}){
 		for(boolean duplicates : new boolean[]{true, false}){
 		for(int parameters : new int[]{1, 2, 5}){
-		for(int partitions : new int[]{1, 2, 5}){
+		for(int choices : new int[]{1, 2, 5}){
 			try{
 				AdaptiveRandomAlgorithm<String> algorithm = 
 						new AdaptiveRandomAlgorithm<String>(historySize, candidatesSize, length, duplicates);
-				algorithm.initialize(GeneratorTestUtils.prepareInput(parameters, partitions), EMPTY_CONSTRAINTS);
+				algorithm.initialize(GeneratorTestUtils.prepareInput(parameters, choices), EMPTY_CONSTRAINTS);
 
 				List<List<String>> candidates = algorithm.getCandidates(); 
 				List<List<String>> history = algorithm.getCandidates();

@@ -94,9 +94,9 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 	public final static int TEST_SUITE_NAME_COMPOSITE = 1 << 2;
 	public final static int GENERATOR_SELECTION_COMPOSITE = 1 << 3;
 	
-	private class PartitionTreeCheckStateListener extends TreeCheckStateListener{
+	private class ChoiceTreeCheckStateListener extends TreeCheckStateListener{
 
-		public PartitionTreeCheckStateListener(CheckboxTreeViewer treeViewer) {
+		public ChoiceTreeCheckStateListener(CheckboxTreeViewer treeViewer) {
 			super(treeViewer);
 		}
 
@@ -128,10 +128,10 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 			else if(element instanceof DecomposedNode){
 				DecomposedNode parent = (DecomposedNode)element;
 				if(fGenerateExecutableContent == false){
-					children.addAll(parent.getPartitions());
+					children.addAll(parent.getChoices());
 				}
 				else{
-					for(ChoiceNode child : parent.getPartitions()){
+					for(ChoiceNode child : parent.getChoices()){
 						if(fStatusResolver.getImplementationStatus(child) != EImplementationStatus.NOT_IMPLEMENTED){
 							children.add(child);
 						}
@@ -244,7 +244,7 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 		if(fGenerateExecutableContent){
 			for(ParameterNode parameter: fMethod.getParameters()){
 				EImplementationStatus parameterStatus = fStatusResolver.getImplementationStatus(parameter);
-				if((parameter.getPartitions().isEmpty() && (parameter.isExpected() == false || JavaUtils.isUserType(parameter.getType())))||
+				if((parameter.getChoices().isEmpty() && (parameter.isExpected() == false || JavaUtils.isUserType(parameter.getType())))||
 						parameterStatus == EImplementationStatus.NOT_IMPLEMENTED){
 					setOkButton(false);
 					break;
@@ -252,7 +252,7 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 			}
 		} else {
 			for(ParameterNode parameter: fMethod.getParameters() ){
-				if(parameter.getPartitions().isEmpty() && (parameter.isExpected() == false || JavaUtils.isUserType(parameter.getType()))){
+				if(parameter.getChoices().isEmpty() && (parameter.isExpected() == false || JavaUtils.isUserType(parameter.getType()))){
 					setOkButton(false);
 					break;
 				}
@@ -277,7 +277,7 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 		}
 		
 		if((fContent & PARTITIONS_COMPOSITE) > 0){
-			createPartitionsComposite(fMainContainer);
+			createChoicesComposite(fMainContainer);
 		}
 		
 		if((fContent & TEST_SUITE_NAME_COMPOSITE) > 0){
@@ -356,19 +356,19 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 		});
 	}
 
-	private void createPartitionsComposite(Composite parent) {
+	private void createChoicesComposite(Composite parent) {
 		Composite composite = new Composite(parent, SWT.NONE);
 		composite.setLayout(new GridLayout(1, false));
 		composite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 		
-		Label selectPartitionsLabel = new Label(composite, SWT.WRAP);
-		selectPartitionsLabel.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
-		selectPartitionsLabel.setText(Messages.DIALOG_GENERATE_TEST_SUITES_SELECT_CHOICES_LABEL);
+		Label selectChoicesLabel = new Label(composite, SWT.WRAP);
+		selectChoicesLabel.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
+		selectChoicesLabel.setText(Messages.DIALOG_GENERATE_TEST_SUITES_SELECT_CHOICES_LABEL);
 		
-		createPartitionsViewer(composite);
+		createChoicesViewer(composite);
 	}
 
-	private void createPartitionsViewer(Composite parent) {
+	private void createChoicesViewer(Composite parent) {
 		final Tree tree = new Tree(parent, SWT.CHECK|SWT.BORDER);
 		tree.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, true, 1, 1));
 		fParametersViewer = new CheckboxTreeViewer(tree);
@@ -376,7 +376,7 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 		fParametersViewer.setLabelProvider(new NodeNameColumnLabelProvider());
 		fParametersViewer.getTree().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 		fParametersViewer.setInput(fMethod);
-		fParametersViewer.addCheckStateListener(new PartitionTreeCheckStateListener(fParametersViewer));
+		fParametersViewer.addCheckStateListener(new ChoiceTreeCheckStateListener(fParametersViewer));
 		for(ParameterNode parameter : fMethod.getParameters()){
 			fParametersViewer.expandAll();
 			fParametersViewer.setSubtreeChecked(parameter, true);
@@ -434,7 +434,7 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 				}
 				continue;
 			}
-			for(ChoiceNode leaf : parameter.getLeafPartitions()){
+			for(ChoiceNode leaf : parameter.getLeafChoices()){
 				leafChecked |= fParametersViewer.getChecked(leaf);
 				EImplementationStatus status = fStatusResolver.getImplementationStatus(leaf);
 				if(status != EImplementationStatus.IMPLEMENTED && onlyExecutable){
@@ -657,22 +657,22 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 		List<ParameterNode> parameters = fMethod.getParameters();
 		fAlgorithmInput = new ArrayList<List<ChoiceNode>>();
 		for(int i = 0; i < parameters.size(); i++){
-			List<ChoiceNode> partitions = new ArrayList<ChoiceNode>();
+			List<ChoiceNode> choices = new ArrayList<ChoiceNode>();
 			if(parameters.get(i).isExpected()){
-				partitions.add(expectedValuePartition(parameters.get(i)));
+				choices.add(expectedValueChoice(parameters.get(i)));
 			}
 			else{
-				for(ChoiceNode partition : parameters.get(i).getLeafPartitions()){
-					if(fParametersViewer.getChecked(partition)){
-						partitions.add(partition);
+				for(ChoiceNode choice : parameters.get(i).getLeafChoices()){
+					if(fParametersViewer.getChecked(choice)){
+						choices.add(choice);
 					}
 				}
 			}
-			fAlgorithmInput.add(partitions);
+			fAlgorithmInput.add(choices);
 		}
 	}
 
-	private ChoiceNode expectedValuePartition(ParameterNode c){
+	private ChoiceNode expectedValueChoice(ParameterNode c){
 		ChoiceNode p = new ChoiceNode("", c.getDefaultValue());
 		p.setParent(c);
 		return p;

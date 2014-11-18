@@ -7,120 +7,120 @@ import java.util.Set;
 
 public abstract class DecomposedNode extends GenericNode{
 
-	private List<ChoiceNode> fPartitions;
+	private List<ChoiceNode> fChoices;
 
 	public DecomposedNode(String name) {
 		super(name);
-		fPartitions = new ArrayList<ChoiceNode>();
+		fChoices = new ArrayList<ChoiceNode>();
 	}
 
 	public abstract ParameterNode getParameter();
 
 	@Override
 	public List<? extends GenericNode> getChildren(){
-		return fPartitions;
+		return fChoices;
 	}
 
-	public List<ChoiceNode> getPartitions() {
-		return fPartitions;
+	public List<ChoiceNode> getChoices() {
+		return fChoices;
 	}
 
-	public void addPartition(ChoiceNode partition) {
-		addPartition(partition, fPartitions.size());
+	public void addChoice(ChoiceNode choice) {
+		addChoice(choice, fChoices.size());
 	}
 
-	public void addPartition(ChoiceNode partition, int index) {
-			fPartitions.add(index, partition);
-			partition.setParent(this);
+	public void addChoice(ChoiceNode choice, int index) {
+			fChoices.add(index, choice);
+			choice.setParent(this);
 	}
 
-	public ChoiceNode getPartition(String qualifiedName) {
+	public ChoiceNode getChoice(String qualifiedName) {
 		return (ChoiceNode)getChild(qualifiedName);
 	}
 
-	public boolean removePartition(ChoiceNode partition) {
-		if(fPartitions.contains(partition) && fPartitions.remove(partition)){
-			partition.setParent(null);
+	public boolean removeChoice(ChoiceNode choice) {
+		if(fChoices.contains(choice) && fChoices.remove(choice)){
+			choice.setParent(null);
 			return true;
 		}
 		return false;
 	}
 
-	public void replacePartitions(List<ChoiceNode> newPartitions) {
-		fPartitions.clear();
-		fPartitions.addAll(newPartitions);
-		for(ChoiceNode p : newPartitions){
+	public void replaceChoices(List<ChoiceNode> newChoices) {
+		fChoices.clear();
+		fChoices.addAll(newChoices);
+		for(ChoiceNode p : newChoices){
 			p.setParent(this);
 		}
 	}
 
-	public List<ChoiceNode> getLeafPartitions() {
+	public List<ChoiceNode> getLeafChoices() {
 		List<ChoiceNode> result = new ArrayList<ChoiceNode>();
-		for(ChoiceNode p : fPartitions){
+		for(ChoiceNode p : fChoices){
 			if(p.isAbstract() == false){
 				result.add(p);
 			}
-			result.addAll(p.getLeafPartitions());
+			result.addAll(p.getLeafChoices());
 		}
 		return result;
 	}
 
-	public Set<ChoiceNode> getAllPartitions() {
+	public Set<ChoiceNode> getAllChoices() {
 		Set<ChoiceNode> result = new LinkedHashSet<ChoiceNode>();
-		for(ChoiceNode p : fPartitions){
+		for(ChoiceNode p : fChoices){
 			result.add(p);
-			result.addAll(p.getAllPartitions());
+			result.addAll(p.getAllChoices());
 		}
 		return result;
 	}
 
-	public Set<String> getAllPartitionNames() {
+	public Set<String> getAllChoiceNames() {
 		Set<String> result = new LinkedHashSet<String>();
-		for(ChoiceNode p : fPartitions){
+		for(ChoiceNode p : fChoices){
 			result.add(p.getQualifiedName());
-			result.addAll(p.getAllPartitionNames());
+			result.addAll(p.getAllChoiceNames());
 		}
 		return result;
 	}
 
-	public Set<String> getPartitionNames() {
+	public Set<String> getChoiceNames() {
 		Set<String> result = new LinkedHashSet<String>();
-		for(ChoiceNode p : fPartitions){
+		for(ChoiceNode p : fChoices){
 			result.add(p.getName());
 		}
 		return result;
 	}
 
-	public Set<ChoiceNode> getLabeledPartitions(String label) {
+	public Set<ChoiceNode> getLabeledChoices(String label) {
 		Set<ChoiceNode> result = new LinkedHashSet<ChoiceNode>();
-		for(ChoiceNode p : fPartitions){
+		for(ChoiceNode p : fChoices){
 			if(p.getLabels().contains(label)){
 				result.add(p);
 			}
-			result.addAll(p.getLabeledPartitions(label));
+			result.addAll(p.getLabeledChoices(label));
 		}
 		return result;
 	}
 
 	public Set<String> getLeafLabels() {
 		Set<String> result = new LinkedHashSet<String>();
-		for(ChoiceNode p : getLeafPartitions()){
+		for(ChoiceNode p : getLeafChoices()){
 			result.addAll(p.getAllLabels());
 		}
 		return result;
 	}
 
-	public Set<String> getLeafPartitionValues(){
+	public Set<String> getLeafChoiceValues(){
 		Set<String> result = new LinkedHashSet<String>();
-		for(ChoiceNode p : getLeafPartitions()){
+		for(ChoiceNode p : getLeafChoices()){
 			result.add(p.getValueString());
 		}
 		return result;
 	}
 
-	public Set<String> getLeafPartitionNames(){
+	public Set<String> getLeafChoiceNames(){
 		Set<String> result = new LinkedHashSet<String>();
-		for(ChoiceNode p : getLeafPartitions()){
+		for(ChoiceNode p : getLeafChoices()){
 			result.add(p.getQualifiedName());
 		}
 		return result;

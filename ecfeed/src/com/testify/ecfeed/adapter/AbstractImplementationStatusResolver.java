@@ -119,18 +119,18 @@ public abstract class AbstractImplementationStatusResolver implements
 	protected EImplementationStatus implementationStatus(ParameterNode parameter){
 		EImplementationStatus status = EImplementationStatus.IMPLEMENTED;
 		if(fPrimitiveTypeTester.isPrimitive(parameter.getType())){
-			if(parameter.getPartitions().size() == 0 && parameter.isExpected() == false)
+			if(parameter.getChoices().size() == 0 && parameter.isExpected() == false)
 			status = EImplementationStatus.PARTIALLY_IMPLEMENTED;
 		}
 		else{
 			if(enumDefinitionImplemented(parameter.getType()) == false){
 				status = EImplementationStatus.NOT_IMPLEMENTED;
 			}
-			else if(parameter.getPartitions().size() == 0){
+			else if(parameter.getChoices().size() == 0){
 				status = EImplementationStatus.PARTIALLY_IMPLEMENTED;
 			}
 			else{
-				EImplementationStatus childrenStatus = childrenStatus(parameter.getPartitions());
+				EImplementationStatus childrenStatus = childrenStatus(parameter.getChoices());
 				if(childrenStatus != EImplementationStatus.IMPLEMENTED){
 					status = EImplementationStatus.PARTIALLY_IMPLEMENTED;
 				}
@@ -148,10 +148,10 @@ public abstract class AbstractImplementationStatusResolver implements
 		return EImplementationStatus.IRRELEVANT;
 	}
 	
-	protected EImplementationStatus implementationStatus(ChoiceNode partition){
+	protected EImplementationStatus implementationStatus(ChoiceNode choice){
 		EImplementationStatus status = EImplementationStatus.IMPLEMENTED;
-		if(partition.isAbstract() == false){
-			ParameterNode parameter = partition.getParameter();
+		if(choice.isAbstract() == false){
+			ParameterNode parameter = choice.getParameter();
 			if(parameter == null){
 				status = EImplementationStatus.NOT_IMPLEMENTED;
 			}
@@ -161,7 +161,7 @@ public abstract class AbstractImplementationStatusResolver implements
 					status = EImplementationStatus.IMPLEMENTED;
 				}
 				else{
-					if(enumValueImplemented(type, partition.getValueString())){
+					if(enumValueImplemented(type, choice.getValueString())){
 						status = EImplementationStatus.IMPLEMENTED;
 					}
 					else{
@@ -171,7 +171,7 @@ public abstract class AbstractImplementationStatusResolver implements
 			}
 		}
 		else{
-			status = childrenStatus(partition.getPartitions());
+			status = childrenStatus(choice.getChoices());
 		}
 		return status;
 	}

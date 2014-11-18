@@ -29,13 +29,13 @@ import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.model.DecomposedParameterStatement;
 import com.testify.ecfeed.model.EStatementRelation;
 
-public class PartitionStatementTest {
+public class ChoiceStatementTest {
 
 	private static MethodNode fMethod;
 	private static ParameterNode fParameter;
-	private static ChoiceNode fPartition1;
-	private static ChoiceNode fPartition2;
-	private static ChoiceNode fPartition3;
+	private static ChoiceNode fChoice1;
+	private static ChoiceNode fChoice2;
+	private static ChoiceNode fChoice3;
 	private static List<ChoiceNode> fList1;
 	private static List<ChoiceNode> fList2;
 	private static List<ChoiceNode> fList3;
@@ -62,25 +62,25 @@ public class PartitionStatementTest {
 
 	@Before
 	public void prepareStructure(){
-		fP1.addPartition(fP11);
-		fP1.addPartition(fP12);
-		fP1.addPartition(fP13);
+		fP1.addChoice(fP11);
+		fP1.addChoice(fP12);
+		fP1.addChoice(fP13);
 
-		fP2.addPartition(fP21);
-		fP2.addPartition(fP22);
-		fP2.addPartition(fP23);
+		fP2.addChoice(fP21);
+		fP2.addChoice(fP22);
+		fP2.addChoice(fP23);
 
-		fP22.addPartition(fP221);
-		fP22.addPartition(fP222);
-		fP22.addPartition(fP223);
+		fP22.addChoice(fP221);
+		fP22.addChoice(fP222);
+		fP22.addChoice(fP223);
 
-		fP3.addPartition(fP31);
-		fP3.addPartition(fP32);
-		fP3.addPartition(fP33);
+		fP3.addChoice(fP31);
+		fP3.addChoice(fP32);
+		fP3.addChoice(fP33);
 
-		fParameter.addPartition(fP1);
-		fParameter.addPartition(fP2);
-		fParameter.addPartition(fP3);
+		fParameter.addChoice(fP1);
+		fParameter.addChoice(fP2);
+		fParameter.addChoice(fP3);
 		
 		fMethod.addParameter(fParameter);
 	}
@@ -119,47 +119,47 @@ public class PartitionStatementTest {
 	public static void prepareModel(){
 		fMethod = new MethodNode("method");
 		fParameter = new ParameterNode("parameter", "type", "0", false);
-		fPartition1 = new ChoiceNode("partition1", null);
-		fPartition2 = new ChoiceNode("partition2", null);
-		fPartition3 = new ChoiceNode("partition3", null);
-		fParameter.addPartition(fPartition1);
-		fParameter.addPartition(fPartition2);
-		fParameter.addPartition(fPartition3);
+		fChoice1 = new ChoiceNode("choice1", null);
+		fChoice2 = new ChoiceNode("choice2", null);
+		fChoice3 = new ChoiceNode("choice3", null);
+		fParameter.addChoice(fChoice1);
+		fParameter.addChoice(fChoice2);
+		fParameter.addChoice(fChoice3);
 		fMethod.addParameter(fParameter);
 		
 		fList1 = new ArrayList<ChoiceNode>();
-		fList1.add(fPartition1);
+		fList1.add(fChoice1);
 		fList2 = new ArrayList<ChoiceNode>();
-		fList2.add(fPartition2);
+		fList2.add(fChoice2);
 		fList3 = new ArrayList<ChoiceNode>();
-		fList3.add(fPartition3);
+		fList3.add(fChoice3);
 	}
 	
 	
 	@Test
 	public void testEvaluate() {
 
-		DecomposedParameterStatement statement1 = new DecomposedParameterStatement(fParameter, EStatementRelation.EQUAL, fPartition2);
+		DecomposedParameterStatement statement1 = new DecomposedParameterStatement(fParameter, EStatementRelation.EQUAL, fChoice2);
 		assertFalse(statement1.evaluate(fList1));
 		assertTrue(statement1.evaluate(fList2));
 		assertFalse(statement1.evaluate(fList3));
 
-		DecomposedParameterStatement statement4 = new DecomposedParameterStatement(fParameter, EStatementRelation.NOT, fPartition2);
+		DecomposedParameterStatement statement4 = new DecomposedParameterStatement(fParameter, EStatementRelation.NOT, fChoice2);
 		assertTrue(statement4.evaluate(fList1));
 		assertFalse(statement4.evaluate(fList2));
 		assertTrue(statement4.evaluate(fList3));
 }
 
 	@Test
-	public void testMentionsPartitionNode() {
-		DecomposedParameterStatement statement = new DecomposedParameterStatement(fParameter, EStatementRelation.EQUAL, fPartition2);
-		assertTrue(statement.mentions(fPartition2));
-		assertFalse(statement.mentions(fPartition1));
+	public void testMentionsChoiceNode() {
+		DecomposedParameterStatement statement = new DecomposedParameterStatement(fParameter, EStatementRelation.EQUAL, fChoice2);
+		assertTrue(statement.mentions(fChoice2));
+		assertFalse(statement.mentions(fChoice1));
 	}
 
 	@Test
 	public void testMentionsParameterNode() {
-		DecomposedParameterStatement statement = new DecomposedParameterStatement(fParameter, EStatementRelation.EQUAL, fPartition2);
+		DecomposedParameterStatement statement = new DecomposedParameterStatement(fParameter, EStatementRelation.EQUAL, fChoice2);
 		ParameterNode parameter = new ParameterNode("name", "type", "0", false);
 		assertTrue(statement.mentions(fParameter));
 		assertFalse(statement.mentions(parameter));
@@ -167,13 +167,13 @@ public class PartitionStatementTest {
 
 	@Test
 	public void testGetCondition() {
-		DecomposedParameterStatement statement = new DecomposedParameterStatement(fParameter, EStatementRelation.EQUAL, fPartition2);
-		assertEquals(fPartition2, statement.getConditionValue());
+		DecomposedParameterStatement statement = new DecomposedParameterStatement(fParameter, EStatementRelation.EQUAL, fChoice2);
+		assertEquals(fChoice2, statement.getConditionValue());
 	}
 
 	@Test
 	public void testGetRelation() {
-		DecomposedParameterStatement statement = new DecomposedParameterStatement(fParameter, EStatementRelation.EQUAL, fPartition2);
+		DecomposedParameterStatement statement = new DecomposedParameterStatement(fParameter, EStatementRelation.EQUAL, fChoice2);
 		assertEquals(EStatementRelation.EQUAL, statement.getRelation());
 	}
 

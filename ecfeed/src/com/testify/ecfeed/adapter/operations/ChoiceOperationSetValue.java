@@ -48,13 +48,13 @@ public class ChoiceOperationSetValue extends AbstractModelOperation {
 	
 	@Override
 	public void execute() throws ModelOperationException {
-		if(validatePartitionValue(fTarget.getParameter().getType(), fNewValue) == false){
+		if(validateChoiceValue(fTarget.getParameter().getType(), fNewValue) == false){
 			throw new ModelOperationException(Messages.PARTITION_VALUE_PROBLEM(fNewValue));
 		}
 		fTarget.setValueString(fNewValue);
 		ParameterNode parameter = fTarget.getParameter();
 		if(parameter != null && JavaUtils.isUserType(parameter.getType())){
-			if(parameter.getLeafPartitionValues().contains(fOriginalDefaultValue) == false){
+			if(parameter.getLeafChoiceValues().contains(fOriginalDefaultValue) == false){
 				parameter.setDefaultValueString(fNewValue);
 			}
 		}
@@ -71,7 +71,7 @@ public class ChoiceOperationSetValue extends AbstractModelOperation {
 		return "setValue[" + fTarget + "](" + fNewValue + ")"; 
 	}
 
-	private boolean validatePartitionValue(String type, String value) {
+	private boolean validateChoiceValue(String type, String value) {
 		if (value.length() > Constants.MAX_PARTITION_VALUE_STRING_LENGTH) return false;
 
 		return fAdapterProvider.getAdapter(type).convert(value) != null;

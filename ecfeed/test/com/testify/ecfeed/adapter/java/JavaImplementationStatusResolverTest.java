@@ -110,8 +110,8 @@ public class JavaImplementationStatusResolverTest {
 	public void primitiveChoiceStatusTest(ETypeName type){
 		ParameterNode parameter = new ParameterNode("parameter", type.getTypeName(), "0", false);
 		EclipseModelBuilder builder = new EclipseModelBuilder();
-		for(ChoiceNode choice : builder.defaultPartitions(type.getTypeName())){
-			parameter.addPartition(choice);
+		for(ChoiceNode choice : builder.defaultChoices(type.getTypeName())){
+			parameter.addChoice(choice);
 			assertEquals(EImplementationStatus.IMPLEMENTED, fResolver.getImplementationStatus(choice));
 		}
 	}
@@ -283,9 +283,9 @@ public class JavaImplementationStatusResolverTest {
 		
 		switch(childrenStatus){
 		case ALL_IMPLEMENTED:
-			arg1.addPartition(new ChoiceNode("choice 1", ImplementedUserType.IMPLEMENTED_VALUE.name()));
-			arg2.addPartition(new ChoiceNode("choice 2", ImplementedUserType.IMPLEMENTED_VALUE.name()));
-			arg3.addPartition(new ChoiceNode("choice 3", ImplementedUserType.IMPLEMENTED_VALUE.name()));
+			arg1.addChoice(new ChoiceNode("choice 1", ImplementedUserType.IMPLEMENTED_VALUE.name()));
+			arg2.addChoice(new ChoiceNode("choice 2", ImplementedUserType.IMPLEMENTED_VALUE.name()));
+			arg3.addChoice(new ChoiceNode("choice 3", ImplementedUserType.IMPLEMENTED_VALUE.name()));
 			break;
 		case ALL_NOT_IMPLEMENTED:
 			arg1.setType("UnimplementedType");
@@ -296,18 +296,18 @@ public class JavaImplementationStatusResolverTest {
 			//by default parameter with no choices is partly implemented
 			break;
 		case FULL_MIX:
-			arg1.addPartition(new ChoiceNode("choice 1", ImplementedUserType.IMPLEMENTED_VALUE.name()));
+			arg1.addChoice(new ChoiceNode("choice 1", ImplementedUserType.IMPLEMENTED_VALUE.name()));
 			arg3.setType("UnimplementedType");
 			break;
 		case NO_CHILDREN:
 			break;
 		case SOME_IMPLEMENTED_REST_NOT_IMPLEMENTED:
-			arg1.addPartition(new ChoiceNode("choice 1", ImplementedUserType.IMPLEMENTED_VALUE.name()));
+			arg1.addChoice(new ChoiceNode("choice 1", ImplementedUserType.IMPLEMENTED_VALUE.name()));
 			arg2.setType("UnimplementedType");
 			arg3.setType("UnimplementedType");
 			break;
 		case SOME_IMPLEMENTED_REST_PARTLY_IMPLEMENTED:
-			arg1.addPartition(new ChoiceNode("choice 1", ImplementedUserType.IMPLEMENTED_VALUE.name()));
+			arg1.addChoice(new ChoiceNode("choice 1", ImplementedUserType.IMPLEMENTED_VALUE.name()));
 			break;
 		case SOME_PARTLY_IMPLEMENTED_REST_NOT_IMPLEMENTED:
 			arg2.setType("UnimplementedType");
@@ -350,13 +350,13 @@ public class JavaImplementationStatusResolverTest {
 			if(implementedChoices == EImplementedChildren.ALL || (implementedChoices == EImplementedChildren.SOME && i == 1)){
 				ParameterNode parameter = new ParameterNode(String.valueOf(i), "int", "0", false);
 				ChoiceNode choice = new ChoiceNode(String.valueOf(i), String.valueOf(i));
-				parameter.addPartition(choice);
+				parameter.addChoice(choice);
 				testData.add(choice);
 			}
 			else{
 				ParameterNode parameter = new ParameterNode(String.valueOf(i), "dummy", "0", false);
 				ChoiceNode choice = new ChoiceNode(String.valueOf(i), String.valueOf(i));
-				parameter.addPartition(choice);
+				parameter.addChoice(choice);
 				testData.add(choice);
 			}
 			
@@ -368,7 +368,7 @@ public class JavaImplementationStatusResolverTest {
 	protected ChoiceNode prepareChoice(boolean abstractChoice, boolean parameterImplemented, EImplementationStatus status){
 		ParameterNode parameter = createEmptyParameter(parameterImplemented); 
 		ChoiceNode choice = new ChoiceNode("choice", "unimplemented value");
-		parameter.addPartition(choice);
+		parameter.addChoice(choice);
 		if(abstractChoice == false){
 			if(status == EImplementationStatus.IMPLEMENTED){
 				choice.setValueString(ImplementedUserType.IMPLEMENTED_VALUE.name());
@@ -377,8 +377,8 @@ public class JavaImplementationStatusResolverTest {
 		else{
 			ChoiceNode child1 = new ChoiceNode("child1", "unimplemented value");
 			ChoiceNode child2 = new ChoiceNode("child2", "unimplemented value");
-			choice.addPartition(child1);
-			choice.addPartition(child2);
+			choice.addChoice(child1);
+			choice.addChoice(child2);
 			switch(status){
 			case IMPLEMENTED:
 				child1.setValueString(ImplementedUserType.IMPLEMENTED_VALUE.name());
@@ -413,13 +413,13 @@ public class JavaImplementationStatusResolverTest {
 
 		for(int i = 0; i < noOfChildren; i++){
 			if(type == EParameterType.PRIMITIVE){
-				parameter.addPartition(new ChoiceNode(String.valueOf(i), String.valueOf(i)));
+				parameter.addChoice(new ChoiceNode(String.valueOf(i), String.valueOf(i)));
 			}
 			else if(implementedChoices == EImplementedChildren.NONE || (implementedChoices == EImplementedChildren.SOME && i == 0)){
-				parameter.addPartition(new ChoiceNode(String.valueOf(i), "dummy"));
+				parameter.addChoice(new ChoiceNode(String.valueOf(i), "dummy"));
 			}
 			else{
-				parameter.addPartition(new ChoiceNode(String.valueOf(i), ImplementedUserType.IMPLEMENTED_VALUE.name()));
+				parameter.addChoice(new ChoiceNode(String.valueOf(i), ImplementedUserType.IMPLEMENTED_VALUE.name()));
 			}
 		}
 		

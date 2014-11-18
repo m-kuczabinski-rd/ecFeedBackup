@@ -63,10 +63,10 @@ public class EclipseModelImplementer extends AbstractModelImplementer {
 	@Override
 	protected boolean implement(ParameterNode node) throws CoreException{
 		if(parameterDefinitionImplemented(node) == false){
-			implementParameterDefinition(node, node.getLeafPartitionValues());
+			implementParameterDefinition(node, node.getLeafChoiceValues());
 		}
 		else{
-			List<ChoiceNode> unimplemented = unimplementedChoices(node.getLeafPartitions());
+			List<ChoiceNode> unimplemented = unimplementedChoices(node.getLeafChoices());
 			implementChoicesDefinitions(unimplemented);
 			for(ChoiceNode choice : unimplemented){
 				CachedImplementationStatusResolver.clearCache(choice);
@@ -88,7 +88,7 @@ public class EclipseModelImplementer extends AbstractModelImplementer {
 		}
 		else{
 			if(node.isAbstract()){
-				implementChoicesDefinitions(unimplementedChoices(node.getLeafPartitions()));
+				implementChoicesDefinitions(unimplementedChoices(node.getLeafChoices()));
 			}
 			else{
 				if(implementable(node) && getImplementationStatus(node) != EImplementationStatus.IMPLEMENTED){
@@ -202,7 +202,7 @@ public class EclipseModelImplementer extends AbstractModelImplementer {
 	@Override
 	protected boolean implementable(ParameterNode node){
 		if(parameterDefinitionImplemented(node)){
-			return hasImplementableNode(node.getPartitions());
+			return hasImplementableNode(node.getChoices());
 		}
 		return parameterDefinitionImplementable(node);
 	}
@@ -210,7 +210,7 @@ public class EclipseModelImplementer extends AbstractModelImplementer {
 	@Override
 	protected boolean implementable(ChoiceNode node){
 		if(node.isAbstract()){
-			return hasImplementableNode(node.getPartitions());
+			return hasImplementableNode(node.getChoices());
 		}
 		if(parameterDefinitionImplemented(node.getParameter())){
 			try{

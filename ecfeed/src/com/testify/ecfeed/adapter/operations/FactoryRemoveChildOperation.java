@@ -53,7 +53,7 @@ public class FactoryRemoveChildOperation implements IModelVisitor{
 	@Override
 	public Object visit(ParameterNode node) throws Exception {
 		if(fChild instanceof ChoiceNode){
-			return new GenericOperationRemovePartition(node, (ChoiceNode)fChild, fValidate);
+			return new GenericOperationRemoveChoice(node, (ChoiceNode)fChild, fValidate);
 		}
 		return null;
 	}
@@ -71,7 +71,7 @@ public class FactoryRemoveChildOperation implements IModelVisitor{
 	@Override
 	public Object visit(ChoiceNode node) throws Exception {
 		if(fChild instanceof ChoiceNode){
-			return new GenericOperationRemovePartition(node, (ChoiceNode)fChild, fValidate);
+			return new GenericOperationRemoveChoice(node, (ChoiceNode)fChild, fValidate);
 		}
 		return null;
 	}
