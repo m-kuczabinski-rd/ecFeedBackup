@@ -94,23 +94,6 @@ public class ParameterNode extends DecomposedNode{
 		fExpected = isexpected;
 	}
 
-//	public String toShortString(){
-//		if(fExpected){
-//			return toString();
-//		}
-//
-//		return new String(getName() + ": " + getShortType());
-//	}
-//
-//	public String getShortType(){
-//		String type = fType;
-//		int lastindex = type.lastIndexOf(".");
-//		if(!(lastindex == -1 || lastindex >= type.length())){
-//			type = type.substring(lastindex + 1);
-//		}
-//		return new String(type);
-//	}
-
 	@Override
 	public boolean compare(AbstractNode node){
 		if(node instanceof ParameterNode == false){
