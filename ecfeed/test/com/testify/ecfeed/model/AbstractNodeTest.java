@@ -22,9 +22,9 @@ import org.junit.Test;
 
 public class AbstractNodeTest{
 	
-	private class GenericNodeImpl extends AbstractNode{
+	private class AbstractNodeImpl extends AbstractNode{
 
-		public GenericNodeImpl(String name) {
+		public AbstractNodeImpl(String name) {
 			super(name);
 		}
 
@@ -42,15 +42,15 @@ public class AbstractNodeTest{
 	
 	@Test
 	public void testId(){
-		AbstractNode node1 = new GenericNodeImpl("name");
-		AbstractNode node2 = new GenericNodeImpl("name");
+		AbstractNode node1 = new AbstractNodeImpl("name");
+		AbstractNode node2 = new AbstractNodeImpl("name");
 		
 		assertNotEquals(node1.getId(), node2.getId());
 	}
 	
 	@Test
 	public void testName() {
-		AbstractNode node = new GenericNodeImpl("name");
+		AbstractNode node = new AbstractNodeImpl("name");
 		assertEquals("name", node.getName());
 		node.setName("new name");
 		assertEquals("new name", node.getName());
@@ -58,8 +58,8 @@ public class AbstractNodeTest{
 
 	@Test
 	public void testParent(){
-		AbstractNode parent = new GenericNodeImpl("parent");
-		AbstractNode child = new GenericNodeImpl("child");
+		AbstractNode parent = new AbstractNodeImpl("parent");
+		AbstractNode child = new AbstractNodeImpl("child");
 		
 		assertEquals(null, child.getParent());
 		child.setParent(parent);
@@ -68,7 +68,7 @@ public class AbstractNodeTest{
 		
 	@Test
 	public void testHasChildren(){
-		AbstractNode node = new GenericNodeImpl("name");
+		AbstractNode node = new AbstractNodeImpl("name");
 		assertFalse(node.hasChildren());
 	}
 	
@@ -104,8 +104,8 @@ public class AbstractNodeTest{
 
 	@Test
 	public void testEquals(){
-		AbstractNode node1 = new GenericNodeImpl("name");
-		AbstractNode node2 = new GenericNodeImpl("name");
+		AbstractNode node1 = new AbstractNodeImpl("name");
+		AbstractNode node2 = new AbstractNodeImpl("name");
 		
 		assertNotEquals(node1, node2);
 		assertEquals(node1, node1);
@@ -227,8 +227,8 @@ public class AbstractNodeTest{
 	
 	@Test
 	public void compareTest(){
-		AbstractNode n1 = new GenericNodeImpl("n");
-		AbstractNode n2 = new GenericNodeImpl("n");
+		AbstractNode n1 = new AbstractNodeImpl("n");
+		AbstractNode n2 = new AbstractNodeImpl("n");
 		
 		assertTrue(n1.compare(n2));
 
