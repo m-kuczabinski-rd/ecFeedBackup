@@ -4,8 +4,8 @@ import java.util.List;
 
 import com.testify.ecfeed.adapter.IModelOperation;
 import com.testify.ecfeed.adapter.ModelOperationException;
-import com.testify.ecfeed.model.ParameterNode;
 import com.testify.ecfeed.model.MethodNode;
+import com.testify.ecfeed.model.ParameterNode;
 import com.testify.ecfeed.model.TestCaseNode;
 
 public class MethodOperationAddParameter extends AbstractModelOperation {
@@ -56,10 +56,10 @@ public class MethodOperationAddParameter extends AbstractModelOperation {
 		}
 		String parameterName = fParameter.getName();
 		if(fTarget.getParameter(parameterName) != null){
-			throw new ModelOperationException(Messages.CATEGORY_NAME_DUPLICATE_PROBLEM);
+			throw new ModelOperationException(Messages.PARAMETER_NAME_DUPLICATE_PROBLEM);
 		}
 		List<String> types = fTarget.getParametersTypes();
-		types.add(fParameter.getType());
+		types.add(fNewIndex, fParameter.getType());
 		if(fTarget.getClassNode().getMethod(fTarget.getName(), types) != null){
 			throw new ModelOperationException(Messages.METHOD_SIGNATURE_DUPLICATE_PROBLEM);
 		}
