@@ -28,10 +28,18 @@ public class ParameterNode extends DecomposedNode{
 
 	@Override
 	public int getIndex(){
-		if(getMethod() == null){
+		if(getKeeper() == null){
 			return -1;
 		}
-		return getMethod().getParameters().indexOf(this);
+		return getKeeper().getParameters().indexOf(this);
+	}
+
+	@Override
+	public int getMaxIndex(){
+		if(getKeeper() != null){
+			return getKeeper().getParameters().size();
+		}
+		return -1;
 	}
 
 	@Override
@@ -76,6 +84,10 @@ public class ParameterNode extends DecomposedNode{
 
 	public MethodNode getMethod() {
 		return (MethodNode)getParent();
+	}
+
+	public ParameterKeeperNode getKeeper(){
+		return (ParameterKeeperNode)getParent();
 	}
 
 	public String getDefaultValue() {
@@ -130,13 +142,5 @@ public class ParameterNode extends DecomposedNode{
 	@Override
 	public Object accept(IModelVisitor visitor) throws Exception {
 		return visitor.visit(this);
-	}
-
-	@Override
-	public int getMaxIndex(){
-		if(getMethod() != null){
-			return getMethod().getParameters().size();
-		}
-		return -1;
 	}
 }
