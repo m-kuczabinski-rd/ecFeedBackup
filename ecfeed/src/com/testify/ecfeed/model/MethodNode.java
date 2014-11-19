@@ -21,13 +21,12 @@ import java.util.Set;
 import com.testify.ecfeed.generators.api.IConstraint;
 
 public class MethodNode extends ParameterKeeperNode {
-	private List<ParameterNode> fParameters;
+
 	private List<TestCaseNode> fTestCases;
 	private List<ConstraintNode> fConstraints;
 
 	public MethodNode(String name){
 		super(name);
-		fParameters = new ArrayList<ParameterNode>();
 		fTestCases = new ArrayList<TestCaseNode>();
 		fConstraints = new ArrayList<ConstraintNode>();
 	}
@@ -53,7 +52,7 @@ public class MethodNode extends ParameterKeeperNode {
 	@Override
 	public List<? extends AbstractNode> getChildren(){
 		List<AbstractNode> children = new ArrayList<AbstractNode>();
-		children.addAll(fParameters);
+		children.addAll(getParameters());
 		children.addAll(fConstraints);
 		children.addAll(fTestCases);
 
@@ -62,14 +61,14 @@ public class MethodNode extends ParameterKeeperNode {
 
 	@Override
 	public boolean hasChildren(){
-		return(fParameters.size() != 0 || fConstraints.size() != 0 || fTestCases.size() != 0);
+		return(getParameters().size() != 0 || fConstraints.size() != 0 || fTestCases.size() != 0);
 	}
 
 	@Override
 	public MethodNode getCopy(){
 		MethodNode copy = new MethodNode(this.getName());
 
-		for(ParameterNode parameter : fParameters){
+		for(ParameterNode parameter : getParameters()){
 			copy.addParameter(parameter.getCopy());
 		}
 
@@ -87,15 +86,6 @@ public class MethodNode extends ParameterKeeperNode {
 
 		copy.setParent(getParent());
 		return copy;
-	}
-
-	public void addParameter(ParameterNode parameter){
-		addParameter(parameter, fParameters.size());
-	}
-
-	public void addParameter(ParameterNode parameter, int index) {
-		fParameters.add(index, parameter);
-		parameter.setParent(this);
 	}
 
 	public void addConstraint(ConstraintNode constraint) {
@@ -120,62 +110,6 @@ public class MethodNode extends ParameterKeeperNode {
 		return (ClassNode)getParent();
 	}
 
-	public List<ParameterNode> getParameters(){
-		return fParameters;
-	}
-
-	public ParameterNode getParameter(String parameterName) {
-		for(ParameterNode parameter : fParameters){
-			if(parameter.getName().equals(parameterName)){
-				return parameter;
-			}
-		}
-		return null;
-	}
-
-	public List<ParameterNode> getParameters(boolean expected) {
-		ArrayList<ParameterNode> parameters = new ArrayList<>();
-		for(ParameterNode parameter : fParameters){
-			if(parameter.isExpected() == expected){
-				parameters.add(parameter);
-			}
-		}
-		return parameters;
-	}
-
-	public List<String> getParametersTypes() {
-		List<String> types = new ArrayList<String>();
-		for(ParameterNode parameter : fParameters){
-			types.add(parameter.getType());
-		}
-		return types;
-	}
-
-	public List<String> getParametersShortTypes() {
-		List<String> types = new ArrayList<String>();
-		for(ParameterNode parameter : fParameters){
-			types.add(parameter.getShortType());
-		}
-		return types;
-	}
-
-	public List<String> getParametersNames() {
-		List<String> names = new ArrayList<String>();
-		for(ParameterNode parameter : fParameters){
-			names.add(parameter.getName());
-		}
-		return names;
-	}
-
-	public ArrayList<String> getParametersNames(boolean expected) {
-		ArrayList<String> names = new ArrayList<String>();
-		for(ParameterNode parameter : fParameters){
-			if(parameter.isExpected() == expected){
-				names.add(parameter.getName());
-			}
-		}
-		return names;
-	}
 
 	public List<ConstraintNode> getConstraintNodes(){
 		return fConstraints;
@@ -227,11 +161,6 @@ public class MethodNode extends ParameterKeeperNode {
 			testSuites.add(testCase.getName());
 		}
 		return testSuites;
-	}
-
-	public boolean removeParameter(ParameterNode parameter){
-		parameter.setParent(null);
-		return fParameters.remove(parameter);
 	}
 
 	public boolean removeTestCase(TestCaseNode testCase){
@@ -336,11 +265,6 @@ public class MethodNode extends ParameterKeeperNode {
 		fTestCases.clear();
 	}
 
-	public void replaceParameters(List<ParameterNode> parameters) {
-		fParameters.clear();
-		fParameters.addAll(parameters);
-	}
-
 	public void replaceTestCases(List<TestCaseNode> testCases){
 		fTestCases.clear();
 		fTestCases.addAll(testCases);
@@ -376,20 +300,12 @@ public class MethodNode extends ParameterKeeperNode {
 
 		MethodNode comparedMethod = (MethodNode)node;
 
-		int parametersCount = getParameters().size();
 		int testCasesCount = getTestCases().size();
 		int constraintsCount = getConstraintNodes().size();
 
-		if(parametersCount != comparedMethod.getParameters().size() ||
-				testCasesCount != comparedMethod.getTestCases().size() ||
+		if(testCasesCount != comparedMethod.getTestCases().size() ||
 				constraintsCount != comparedMethod.getConstraintNodes().size()){
 			return false;
-		}
-
-		for(int i = 0; i < parametersCount; i++){
-			if(getParameters().get(i).compare(comparedMethod.getParameters().get(i)) == false){
-				return false;
-			}
 		}
 
 		for(int i = 0; i < testCasesCount; i++){
