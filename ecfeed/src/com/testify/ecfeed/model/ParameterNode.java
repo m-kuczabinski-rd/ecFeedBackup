@@ -1,11 +1,11 @@
 /*******************************************************************************
- * Copyright (c) 2013 Testify AS.                                                
- * All rights reserved. This program and the accompanying materials              
- * are made available under the terms of the Eclipse Public License v1.0         
- * which accompanies this distribution, and is available at                      
- * http://www.eclipse.org/legal/epl-v10.html                                     
- *                                                                               
- * Contributors:                                                                 
+ * Copyright (c) 2013 Testify AS.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
  *     Patryk Chamuczynski (p.chamuczynski(at)radytek.com) - initial implementation
  ******************************************************************************/
 
@@ -14,18 +14,18 @@ package com.testify.ecfeed.model;
 import java.util.List;
 
 public class ParameterNode extends DecomposedNode{
-	
+
 	private String fType;
 	private boolean fExpected;
 	private String fDefaultValue;
-	
+
 	public ParameterNode(String name, String type, String defaultValue, boolean expected) {
 		super(name);
 		fExpected = expected;
 		fType = type;
 		fDefaultValue = defaultValue;
 	}
-	
+
 	@Override
 	public int getIndex(){
 		if(getMethod() == null){
@@ -41,7 +41,7 @@ public class ParameterNode extends DecomposedNode{
 		}
 		return new String(getName() + ": " + getType());
 	}
-	
+
 	public void addChoices(List<ChoiceNode> choices) {
 		for(ChoiceNode p : choices){
 			addChoice(p);
@@ -60,12 +60,12 @@ public class ParameterNode extends DecomposedNode{
 		parameter.setParent(getParent());
 		return parameter;
 	}
-	
+
 	@Override
 	public ParameterNode getParameter() {
 		return this;
 	}
-	
+
 	public String getType() {
 		return fType;
 	}
@@ -85,31 +85,31 @@ public class ParameterNode extends DecomposedNode{
 	public void setDefaultValueString(String value) {
 		fDefaultValue = value;
 	}
-	
+
 	public boolean isExpected(){
 		return fExpected;
 	}
-	
+
 	public void setExpected(boolean isexpected){
 		fExpected = isexpected;
 	}
-	
-	public String toShortString(){
-		if(fExpected){
-			return toString();
-		}
 
-		return new String(getName() + ": " + getShortType());
-	}
-	
-	public String getShortType(){
-		String type = fType;
-		int lastindex = type.lastIndexOf(".");
-		if(!(lastindex == -1 || lastindex >= type.length())){
-			type = type.substring(lastindex + 1);
-		}
-		return new String(type);
-	}
+//	public String toShortString(){
+//		if(fExpected){
+//			return toString();
+//		}
+//
+//		return new String(getName() + ": " + getShortType());
+//	}
+//
+//	public String getShortType(){
+//		String type = fType;
+//		int lastindex = type.lastIndexOf(".");
+//		if(!(lastindex == -1 || lastindex >= type.length())){
+//			type = type.substring(lastindex + 1);
+//		}
+//		return new String(type);
+//	}
 
 	@Override
 	public boolean compare(AbstractNode node){
@@ -117,7 +117,7 @@ public class ParameterNode extends DecomposedNode{
 			return false;
 		}
 		ParameterNode comparedParameter = (ParameterNode)node;
-		
+
 		if(getType().equals(comparedParameter.getType()) == false){
 			return false;
 		}
@@ -125,7 +125,7 @@ public class ParameterNode extends DecomposedNode{
 		if(isExpected() != comparedParameter.isExpected()){
 			return false;
 		}
-		
+
 		if(fDefaultValue.equals(comparedParameter.getDefaultValue()) == false){
 			return false;
 		}
@@ -149,7 +149,7 @@ public class ParameterNode extends DecomposedNode{
 		return visitor.visit(this);
 	}
 
-	@Override 
+	@Override
 	public int getMaxIndex(){
 		if(getMethod() != null){
 			return getMethod().getParameters().size();

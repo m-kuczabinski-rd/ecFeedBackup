@@ -57,7 +57,7 @@ public class RootNode extends ParameterKeeperNode {
 
 	public ClassNode getClassModel(String name) {
 		for(ClassNode childClass : getClasses()){
-			if(childClass.getQualifiedName().equals(name)){
+			if(childClass.getName().equals(name)){
 				return childClass;
 			}
 		}

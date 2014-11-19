@@ -44,23 +44,24 @@ import org.eclipse.ui.forms.widgets.Section;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.FrameworkUtil;
 
-import com.testify.ecfeed.model.ParameterNode;
+import com.testify.ecfeed.adapter.java.JavaUtils;
+import com.testify.ecfeed.model.AbstractNode;
+import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.ConstraintNode;
-import com.testify.ecfeed.model.AbstractNode;
 import com.testify.ecfeed.model.IModelVisitor;
 import com.testify.ecfeed.model.MethodNode;
-import com.testify.ecfeed.model.ChoiceNode;
+import com.testify.ecfeed.model.ParameterNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.ui.common.Constants;
 import com.testify.ecfeed.ui.editor.actions.AbstractAddChildAction;
 import com.testify.ecfeed.ui.editor.actions.AddChildActionFactory;
 import com.testify.ecfeed.ui.editor.actions.ModelViewerActionProvider;
-import com.testify.ecfeed.ui.modelif.ParameterInterface;
 import com.testify.ecfeed.ui.modelif.AbstractNodeInterface;
 import com.testify.ecfeed.ui.modelif.IModelUpdateListener;
 import com.testify.ecfeed.ui.modelif.ModelNodesTransfer;
+import com.testify.ecfeed.ui.modelif.ParameterInterface;
 
 public class ModelMasterSection extends TreeViewerSection{
 	private static final int STYLE = Section.EXPANDED | Section.TITLE_BAR;
@@ -153,33 +154,99 @@ public class ModelMasterSection extends TreeViewerSection{
 
 	private class ModelLabelProvider extends LabelProvider {
 
+		private class TextProvider implements IModelVisitor{
+
+			@Override
+			public Object visit(RootNode node) throws Exception {
+				return node.toString();
+			}
+
+			@Override
+			public Object visit(ClassNode node) throws Exception {
+				return node.toString();
+			}
+
+			@Override
+			public Object visit(MethodNode node) throws Exception {
+				return JavaUtils.simplifiedToString(node);
+			}
+
+			@Override
+			public Object visit(ParameterNode node) throws Exception {
+				return JavaUtils.simplifiedToString(node);
+			}
+
+			@Override
+			public Object visit(TestCaseNode node) throws Exception {
+				return node.toString();
+			}
+
+			@Override
+			public Object visit(ConstraintNode node) throws Exception {
+				return node.toString();
+			}
+
+			@Override
+			public Object visit(ChoiceNode node) throws Exception {
+				return node.toString();
+			}
+		}
+
+		private class ImageProvider implements IModelVisitor{
+
+			@Override
+			public Object visit(RootNode node) throws Exception {
+				return getImageFromFile("root_node.png");
+			}
+
+			@Override
+			public Object visit(ClassNode node) throws Exception {
+				return getImageFromFile("class_node.png");
+			}
+
+			@Override
+			public Object visit(MethodNode node) throws Exception {
+				return getImageFromFile("method_node.png");
+			}
+
+			@Override
+			public Object visit(ParameterNode node) throws Exception {
+				return getImageFromFile("parameter_node.png");
+			}
+
+			@Override
+			public Object visit(TestCaseNode node) throws Exception {
+				return getImageFromFile("test_case_node.png");
+			}
+
+			@Override
+			public Object visit(ConstraintNode node) throws Exception {
+				return getImageFromFile("constraint_node.png");
+			}
+
+			@Override
+			public Object visit(ChoiceNode node) throws Exception {
+				return getImageFromFile("choice_node.png");
+			}
+
+		}
+
 		@Override
 		public String getText(Object element){
 			if(element instanceof AbstractNode){
-				if(element instanceof ParameterNode){
-					return ((ParameterNode)element).toShortString();
-				}
-				return element.toString();
+				try{
+					return (String)((AbstractNode)element).accept(new TextProvider());
+				}catch(Exception e){}
 			}
 			return null;
 		}
 
 		@Override
 		public Image getImage(Object element){
-			if (element instanceof RootNode){
-				return getImageFromFile("root_node.png");
-			} else if (element instanceof ClassNode){
-				return getImageFromFile("class_node.png");
-			} else if (element instanceof MethodNode){
-				return getImageFromFile("method_node.png");
-			} else if(element instanceof TestCaseNode){
-				return getImageFromFile("test_case_node.png");
-			} else if (element instanceof ParameterNode){
-				return getImageFromFile("parameter_node.png");
-			} else if (element instanceof ConstraintNode){
-				return getImageFromFile("constraint_node.png");
-			} else if (element instanceof ChoiceNode){
-				return getImageFromFile("choice_node.png");
+			if(element instanceof AbstractNode){
+				try{
+					return (Image)((AbstractNode)element).accept(new ImageProvider());
+				}catch(Exception e){}
 			}
 			return getImageFromFile("sample.png");
 		}

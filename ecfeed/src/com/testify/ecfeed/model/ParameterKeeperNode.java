@@ -52,14 +52,6 @@ public abstract class ParameterKeeperNode extends AbstractNode {
 		return types;
 	}
 
-	public List<String> getParametersShortTypes() {
-		List<String> types = new ArrayList<String>();
-		for(ParameterNode parameter : fParameters){
-			types.add(parameter.getShortType());
-		}
-		return types;
-	}
-
 	public List<String> getParametersNames() {
 		List<String> names = new ArrayList<String>();
 		for(ParameterNode parameter : fParameters){

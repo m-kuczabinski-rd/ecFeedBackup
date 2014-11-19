@@ -1,11 +1,11 @@
 /*******************************************************************************
- * Copyright (c) 2013 Testify AS.                                                   
- * All rights reserved. This program and the accompanying materials                 
- * are made available under the terms of the Eclipse Public License v1.0            
- * which accompanies this distribution, and is available at                         
- * http://www.eclipse.org/legal/epl-v10.html                                        
- *                                                                                  
- * Contributors:                                                                    
+ * Copyright (c) 2013 Testify AS.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
  *     Patryk Chamuczynski (p.chamuczynski(at)radytek.com) - initial implementation
  ******************************************************************************/
 
@@ -20,13 +20,14 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.ui.forms.widgets.Section;
 
+import com.testify.ecfeed.adapter.java.JavaUtils;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.ui.modelif.ClassInterface;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 
 public class OtherMethodsViewer extends CheckboxTableViewerSection {
-	
+
 	private final static int STYLE = Section.TITLE_BAR | Section.EXPANDED;
 	private final static int VIEWER_STYLE = SWT.BORDER;
 
@@ -38,30 +39,30 @@ public class OtherMethodsViewer extends CheckboxTableViewerSection {
 			fClassIf.addMethods(getSelectedMethods());
 		}
 	}
-	
+
 	public OtherMethodsViewer(ISectionContext sectionContext, IModelUpdateContext updateContext) {
 		super(sectionContext, updateContext, STYLE);
 		fClassIf = new ClassInterface(this);
 		addButton("Add selected", new AddSelectedAdapter());
 	}
-	
+
 	public void setInput(ClassNode classNode){
 		fClassIf.setTarget(classNode);
-		setText("Other methods in " + classNode.getLocalName());
+		setText("Other methods in " + JavaUtils.getLocalName(classNode));
 		super.setInput(fClassIf.getOtherMethods());
 	}
-	
+
 	public void setVisible(boolean visible) {
 		GridData gd = (GridData)getSection().getLayoutData();
 		gd.exclude = !visible;
 		getSection().setLayoutData(gd);
 		getSection().setVisible(visible);
 	}
-	
+
 	public int getItemsCount(){
 		return fClassIf.getOtherMethods().size();
 	}
-	
+
 	public List<MethodNode> getSelectedMethods(){
 		List<MethodNode> methods = new ArrayList<MethodNode>();
 		for(Object object : getCheckboxViewer().getCheckedElements()){
@@ -71,7 +72,7 @@ public class OtherMethodsViewer extends CheckboxTableViewerSection {
 		}
 		return methods;
 	}
-	
+
 	@Override
 	protected void createTableColumns() {
 	}

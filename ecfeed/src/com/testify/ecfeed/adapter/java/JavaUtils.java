@@ -8,12 +8,12 @@ import java.util.List;
 import java.util.StringTokenizer;
 
 import com.testify.ecfeed.adapter.operations.Messages;
-import com.testify.ecfeed.model.ParameterNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.MethodNode;
+import com.testify.ecfeed.model.ParameterNode;
 
 public class JavaUtils {
-	
+
 	public static boolean isValidTypeName(String name){
 		if(name == null) return false;
 		if(isPrimitive(name)) return true;
@@ -31,7 +31,7 @@ public class JavaUtils {
 	public static boolean isJavaKeyword(String word){
 		return Arrays.asList(Constants.JAVA_KEYWORDS).contains(word);
 	}
-	
+
 	public static String[] javaKeywords(){
 		return Constants.JAVA_KEYWORDS;
 	}
@@ -39,19 +39,19 @@ public class JavaUtils {
 	public static boolean isPrimitive(String typeName){
 		return Arrays.asList(Constants.SUPPORTED_PRIMITIVE_TYPES).contains(typeName);
 	}
-	
+
 	public static boolean isUserType(String typeName){
 		return isPrimitive(typeName) == false;
 	}
-	
+
 	public static boolean isString(String typeName){
 		return typeName.equals(Constants.TYPE_NAME_STRING);
 	}
-	
+
 	public static boolean isBoolean(String typeName){
 		return typeName.equals(Constants.TYPE_NAME_BOOLEAN);
 	}
-	
+
 	public static String getTypeName(String cannonicalName) {
 		if(cannonicalName.equals(boolean.class.getName())){
 			return Constants.TYPE_NAME_BOOLEAN;
@@ -80,10 +80,10 @@ public class JavaUtils {
 		if(cannonicalName.equals(String.class.getName())){
 			return Constants.TYPE_NAME_STRING;
 		}
-	
+
 		return cannonicalName;
 	}
-	
+
 	public static String consolidate(Collection<String> strings){
 		String consolidated = "";
 		for(String string : strings){
@@ -91,7 +91,7 @@ public class JavaUtils {
 		}
 		return consolidated;
 	}
-	
+
 	public static List<String> enumValuesNames(URLClassLoader loader, String enumTypeName){
 		List<String> values = new ArrayList<String>();
 		try {
@@ -105,15 +105,15 @@ public class JavaUtils {
 		}
 		return values;
 	}
-	
+
 	public static String[] supportedPrimitiveTypes(){
 		return Constants.SUPPORTED_PRIMITIVE_TYPES;
 	}
 
 	public static boolean isValidJavaIdentifier(String value) {
-		return (value.matches(Constants.REGEX_JAVA_IDENTIFIER) && isJavaKeyword(value) == false); 
+		return (value.matches(Constants.REGEX_JAVA_IDENTIFIER) && isJavaKeyword(value) == false);
 	}
-	
+
 	public static String getBooleanTypeName(){
 		return Constants.TYPE_NAME_BOOLEAN;
 	}
@@ -129,7 +129,7 @@ public class JavaUtils {
 	public static boolean isValidConstraintName(String name) {
 		return name.matches(Constants.REGEX_CONSTRAINT_NODE_NAME);
 	}
-	
+
 	public static boolean hasLimitedValuesSet(String type){
 		return isPrimitive(type) == false || type.equals(getBooleanTypeName());
 	}
@@ -187,6 +187,23 @@ public class JavaUtils {
 		return (lastDotIndex == -1)? "" : qualifiedName.substring(0, lastDotIndex);
 	}
 
+	public static String simplifiedToString(ParameterNode parameter){
+		String result = parameter.toString();
+		String type = parameter.getType();
+		result.replace(type, JavaUtils.getLocalName(type));
+		return result;
+	}
+
+	public static String simplifiedToString(MethodNode method){
+		String result = method.toString();
+		for(ParameterNode parameter : method.getParameters()){
+			String type = parameter.getType();
+			String newType = JavaUtils.getLocalName(type);
+			result = result.replaceAll(type, newType);
+		}
+		return result;
+	}
+
 	public static String getQualifiedName(ClassNode classNode){
 		return classNode.getName();
 	}
@@ -199,7 +216,7 @@ public class JavaUtils {
 		return validateNewMethodSignature(parent, methodName, argTypes, null);
 	}
 
-	public static boolean validateNewMethodSignature(ClassNode parent, String methodName, 
+	public static boolean validateNewMethodSignature(ClassNode parent, String methodName,
 			List<String> argTypes, List<String> problems){
 		boolean valid = JavaUtils.validateMethodName(methodName, problems);
 		if(parent.getMethod(methodName, argTypes) != null){

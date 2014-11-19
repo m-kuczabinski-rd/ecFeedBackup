@@ -7,25 +7,25 @@ import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.RootNode;
 
 public class RootOperationAddNewClass extends AbstractModelOperation {
-	
+
 	private RootNode fTarget;
 	private ClassNode fAddedClass;
 	private int fIndex;
-	
+
 	public RootOperationAddNewClass(RootNode target, ClassNode addedClass, int index) {
 		super(OperationNames.ADD_CLASS);
 		fTarget = target;
 		fAddedClass = addedClass;
 		fIndex = index;
 	}
-	
+
 	public RootOperationAddNewClass(RootNode target, ClassNode addedClass) {
 		this(target, addedClass, -1);
 	}
-	
+
 	@Override
 	public void execute() throws ModelOperationException {
-		String name = fAddedClass.getQualifiedName(); 
+		String name = fAddedClass.getName();
 		if(fIndex == -1){
 			fIndex = fTarget.getClasses().size();
 		}

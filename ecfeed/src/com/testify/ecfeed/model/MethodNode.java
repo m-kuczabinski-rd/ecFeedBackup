@@ -34,7 +34,7 @@ public class MethodNode extends ParameterKeeperNode {
 	@Override
 	public String toString(){
 		String result = new String(getName()) + "(";
-		List<String> types = getParametersShortTypes();
+		List<String> types = getParametersTypes();
 		List<String> names = getParametersNames();
 		for(int i = 0; i < types.size(); i++){
 			if(getParameters().get(i).isExpected()){

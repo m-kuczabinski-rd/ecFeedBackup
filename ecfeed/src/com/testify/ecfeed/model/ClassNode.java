@@ -25,13 +25,8 @@ public class ClassNode extends ParameterKeeperNode {
 	}
 
 	@Override
-	public String toString(){
-		return getLocalName();
-	}
-
-	@Override
 	public ClassNode getCopy(){
-		ClassNode copy = new ClassNode(getQualifiedName());
+		ClassNode copy = new ClassNode(getName());
 		for(MethodNode method : fMethods){
 			copy.addMethod(method.getCopy());
 		}
@@ -47,14 +42,6 @@ public class ClassNode extends ParameterKeeperNode {
 	public ClassNode(String qualifiedName) {
 		super(qualifiedName);
 		fMethods = new ArrayList<MethodNode>();
-	}
-
-	public String getLocalName(){
-		return getLocalName(getName());
-	}
-
-	public String getQualifiedName() {
-		return super.getName();
 	}
 
 	public boolean addMethod(MethodNode method) {
@@ -97,11 +84,6 @@ public class ClassNode extends ParameterKeeperNode {
 			suites.addAll(method.getTestSuites());
 		}
 		return suites;
-	}
-
-	private String getLocalName(String qualifiedName){
-		int lastDotIndex = qualifiedName.lastIndexOf('.');
-		return (lastDotIndex == -1)?qualifiedName: qualifiedName.substring(lastDotIndex + 1);
 	}
 
 	@Override
