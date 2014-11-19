@@ -16,11 +16,11 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class ClassNode extends GenericNode {
+public class ClassNode extends AbstractNode {
 	private List<MethodNode> fMethods;
 	
 	@Override
-	public List<? extends GenericNode> getChildren(){
+	public List<? extends AbstractNode> getChildren(){
 		return fMethods;
 	}
 
@@ -110,7 +110,7 @@ public class ClassNode extends GenericNode {
 	}
 	
 	@Override
-	public boolean compare(GenericNode node){
+	public boolean compare(AbstractNode node){
 		if(node instanceof ClassNode == false){
 			return false;
 		}

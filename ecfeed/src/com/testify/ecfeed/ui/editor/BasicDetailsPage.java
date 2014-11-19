@@ -35,7 +35,7 @@ import org.eclipse.ui.forms.widgets.Section;
 import com.testify.ecfeed.adapter.EImplementationStatus;
 import com.testify.ecfeed.adapter.IModelImplementer;
 import com.testify.ecfeed.adapter.ModelOperationManager;
-import com.testify.ecfeed.model.GenericNode;
+import com.testify.ecfeed.model.AbstractNode;
 import com.testify.ecfeed.ui.common.EclipseModelImplementer;
 import com.testify.ecfeed.ui.common.IFileInfoProvider;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
@@ -51,7 +51,7 @@ public abstract class BasicDetailsPage implements IDetailsPage, IModelUpdateList
 	private List<ViewerSection> fViewerSections;
 	private ModelMasterSection fMasterSection;
 	private IModelUpdateContext fModelUpdateContext;
-	private GenericNode fSelectedNode;
+	private AbstractNode fSelectedNode;
 	private IModelImplementer fImplementer;
 	private Button fImplementButton;
 	
@@ -72,7 +72,7 @@ public abstract class BasicDetailsPage implements IDetailsPage, IModelUpdateList
 	
 	@Override
 	public void selectionChanged(IFormPart part, ISelection selection) {
-		fSelectedNode = (GenericNode)fMasterSection.getSelectedElement();
+		fSelectedNode = (AbstractNode)fMasterSection.getSelectedElement();
 	}
 
 	@Override
@@ -110,7 +110,7 @@ public abstract class BasicDetailsPage implements IDetailsPage, IModelUpdateList
 	
 	@Override
 	public void refresh(){
-		fSelectedNode = (GenericNode)fMasterSection.getSelectedElement();
+		fSelectedNode = (AbstractNode)fMasterSection.getSelectedElement();
 		refreshTextClient();
 	}
 

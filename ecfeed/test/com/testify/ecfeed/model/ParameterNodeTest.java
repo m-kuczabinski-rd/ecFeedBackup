@@ -77,7 +77,7 @@ public class ParameterNodeTest{
 		parameter.addChoice(choice1);
 		parameter.addChoice(choice2);
 		
-		List<? extends GenericNode> children = parameter.getChildren();
+		List<? extends AbstractNode> children = parameter.getChildren();
 		assertEquals(2, children.size());
 		assertTrue(children.contains(choice1));
 		assertTrue(children.contains(choice2));

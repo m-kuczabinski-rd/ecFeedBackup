@@ -7,24 +7,24 @@ import java.util.List;
 
 import com.testify.ecfeed.adapter.IModelOperation;
 import com.testify.ecfeed.adapter.ModelOperationException;
-import com.testify.ecfeed.model.GenericNode;
+import com.testify.ecfeed.model.AbstractNode;
 
 public class GenericShiftOperation extends AbstractModelOperation {
 
-	private List<? extends GenericNode> fShifted;
+	private List<? extends AbstractNode> fShifted;
 	private int fShift;
-	private List<? extends GenericNode> fCollection;
+	private List<? extends AbstractNode> fCollection;
 
-	public GenericShiftOperation(List<? extends GenericNode> collection, GenericNode shifted, boolean up){
-		this(collection, Arrays.asList(new GenericNode[]{shifted}), up);
+	public GenericShiftOperation(List<? extends AbstractNode> collection, AbstractNode shifted, boolean up){
+		this(collection, Arrays.asList(new AbstractNode[]{shifted}), up);
 	}
 
-	public GenericShiftOperation(List<? extends GenericNode> collection, List<? extends GenericNode> shifted, boolean up){
+	public GenericShiftOperation(List<? extends AbstractNode> collection, List<? extends AbstractNode> shifted, boolean up){
 		this(collection, shifted, 0);
 		fShift = minAllowedShift(shifted, up);
 	}
 
-	public GenericShiftOperation(List<? extends GenericNode> collection, List<? extends GenericNode> shifted, int shift){
+	public GenericShiftOperation(List<? extends AbstractNode> collection, List<? extends AbstractNode> shifted, int shift){
 		super(OperationNames.MOVE);
 		shift = shiftAllowed(shifted, shift) ? shift : 0;
 		fShifted = new ArrayList<>(shifted);
@@ -47,11 +47,11 @@ public class GenericShiftOperation extends AbstractModelOperation {
 		return fShift;
 	}
 
-	protected List<? extends GenericNode> getCollection(){
+	protected List<? extends AbstractNode> getCollection(){
 		return fCollection;
 	}
 
-	protected List<? extends GenericNode> getShiftedElements(){
+	protected List<? extends AbstractNode> getShiftedElements(){
 		return fShifted;
 	}
 
@@ -59,15 +59,15 @@ public class GenericShiftOperation extends AbstractModelOperation {
 		fShift = shift;
 	}
 	
-	protected int minAllowedShift(List<? extends GenericNode> shifted, boolean up){
+	protected int minAllowedShift(List<? extends AbstractNode> shifted, boolean up){
 		int shift = up ? -1 : 1;
 		return shiftAllowed(shifted, shift) ? shift : 0; 
 	}
 
-	protected boolean haveSameParent(List<? extends GenericNode> shifted) {
+	protected boolean haveSameParent(List<? extends AbstractNode> shifted) {
 		if(shifted.size() == 0)return true;
-		GenericNode parent = shifted.get(0).getParent();
-		for(GenericNode node : shifted){
+		AbstractNode parent = shifted.get(0).getParent();
+		for(AbstractNode node : shifted){
 			if(node.getParent() != parent){
 				return false;
 			}
@@ -75,10 +75,10 @@ public class GenericShiftOperation extends AbstractModelOperation {
 		return true;
 	}
 
-	protected boolean areInstancesOfSameClass(List<? extends GenericNode> shifted) {
+	protected boolean areInstancesOfSameClass(List<? extends AbstractNode> shifted) {
 		if(shifted.size() == 0) return true;
 		Class<?> _class = shifted.get(0).getClass();
-		for(GenericNode node : shifted){
+		for(AbstractNode node : shifted){
 			if(node.getClass().equals(_class) == false){
 				return false;
 			}
@@ -86,7 +86,7 @@ public class GenericShiftOperation extends AbstractModelOperation {
 		return true;
 	}
 	
-	protected GenericNode borderNode(List<? extends GenericNode> nodes, int shift){
+	protected AbstractNode borderNode(List<? extends AbstractNode> nodes, int shift){
 		return shift < 0 ? minIndexNode(nodes) : maxIndexNode(nodes);
 	}
 	
@@ -117,7 +117,7 @@ public class GenericShiftOperation extends AbstractModelOperation {
 		Collections.rotate(rotated, rotation);
 	}
 
-	protected boolean shiftAllowed(List<? extends GenericNode> shifted, int shift){
+	protected boolean shiftAllowed(List<? extends AbstractNode> shifted, int shift){
 		if(areInstancesOfSameClass(shifted) == false){
 			return false;
 		}
@@ -131,19 +131,19 @@ public class GenericShiftOperation extends AbstractModelOperation {
 		return newIndex >= 0 && newIndex < shifted.get(0).getMaxIndex();
 	}
 
-	private GenericNode minIndexNode(List<? extends GenericNode> nodes){
+	private AbstractNode minIndexNode(List<? extends AbstractNode> nodes){
 		if(nodes.size() == 0) return null;
-		GenericNode minIndexNode = nodes.get(0);
-		for(GenericNode node : nodes){
+		AbstractNode minIndexNode = nodes.get(0);
+		for(AbstractNode node : nodes){
 			minIndexNode = node.getIndex() < minIndexNode.getIndex() ? node : minIndexNode; 
 		}
 		return minIndexNode;
 	}
 
-	private GenericNode maxIndexNode(List<? extends GenericNode> nodes){
+	private AbstractNode maxIndexNode(List<? extends AbstractNode> nodes){
 		if(nodes.size() == 0) return null;
-		GenericNode maxIndexNode = nodes.get(0);
-		for(GenericNode node : nodes){
+		AbstractNode maxIndexNode = nodes.get(0);
+		for(AbstractNode node : nodes){
 			maxIndexNode = node.getIndex() > maxIndexNode.getIndex() ? node : maxIndexNode; 
 		}
 		return maxIndexNode;

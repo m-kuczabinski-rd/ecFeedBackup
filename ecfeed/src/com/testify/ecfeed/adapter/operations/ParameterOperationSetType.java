@@ -11,7 +11,7 @@ import com.testify.ecfeed.adapter.ITypeAdapter;
 import com.testify.ecfeed.adapter.ITypeAdapterProvider;
 import com.testify.ecfeed.adapter.ModelOperationException;
 import com.testify.ecfeed.adapter.java.JavaUtils;
-import com.testify.ecfeed.model.BasicStatement;
+import com.testify.ecfeed.model.AbstractStatement;
 import com.testify.ecfeed.model.ParameterNode;
 import com.testify.ecfeed.model.Constraint;
 import com.testify.ecfeed.model.ConstraintNode;
@@ -39,7 +39,7 @@ public class ParameterOperationSetType extends BulkOperation{
 		private Map<ChoiceNode, String> fOriginalValues;
 		private List<TestCaseNode> fOriginalTestCases;
 		private List<ConstraintNode> fOriginalConstraints;
-		private Map<BasicStatement, String> fOriginalStatementValues;
+		private Map<AbstractStatement, String> fOriginalStatementValues;
 
 		private ITypeAdapterProvider fAdapterProvider;
 
@@ -53,7 +53,7 @@ public class ParameterOperationSetType extends BulkOperation{
 			@Override
 			public Object visit(StatementArray statement) throws Exception {
 				boolean success = true;
-				for(BasicStatement child : statement.getChildren()){
+				for(AbstractStatement child : statement.getChildren()){
 					try{
 						success &= (boolean)child.accept(this);
 					}catch(Exception e){
@@ -107,7 +107,7 @@ public class ParameterOperationSetType extends BulkOperation{
 
 				@Override
 				public Object visit(StatementArray statement) throws Exception {
-					for(BasicStatement child : statement.getChildren()){
+					for(AbstractStatement child : statement.getChildren()){
 						try{
 							child.accept(this);
 						}catch(Exception e){}

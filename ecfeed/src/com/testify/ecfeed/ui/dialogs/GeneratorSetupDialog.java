@@ -57,7 +57,7 @@ import com.testify.ecfeed.generators.api.IGeneratorParameter.TYPE;
 import com.testify.ecfeed.model.ParameterNode;
 import com.testify.ecfeed.model.Constraint;
 import com.testify.ecfeed.model.ConstraintNode;
-import com.testify.ecfeed.model.GenericNode;
+import com.testify.ecfeed.model.AbstractNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.model.DecomposedNode;
@@ -143,8 +143,8 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 		
 		@Override
 		public Object getParent(Object element){
-			if(element instanceof GenericNode){
-				return ((GenericNode)element).getParent();
+			if(element instanceof AbstractNode){
+				return ((AbstractNode)element).getParent();
 			}
 			return null;
 		}

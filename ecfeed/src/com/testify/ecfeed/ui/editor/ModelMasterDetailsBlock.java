@@ -33,7 +33,7 @@ import com.testify.ecfeed.adapter.ModelOperationManager;
 import com.testify.ecfeed.model.ParameterNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.ConstraintNode;
-import com.testify.ecfeed.model.GenericNode;
+import com.testify.ecfeed.model.AbstractNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.model.RootNode;
@@ -121,7 +121,7 @@ public class ModelMasterDetailsBlock extends MasterDetailsBlock implements ISele
 		fUpdateContext = new ModelUpdateContext();
 	}
 
-	public void selectNode(GenericNode node){
+	public void selectNode(AbstractNode node){
 		fMasterSection.selectElement(node);
 	}
 

@@ -7,7 +7,7 @@ import com.testify.ecfeed.adapter.java.JavaUtils;
 import com.testify.ecfeed.model.ParameterNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.ConstraintNode;
-import com.testify.ecfeed.model.GenericNode;
+import com.testify.ecfeed.model.AbstractNode;
 import com.testify.ecfeed.model.IModelVisitor;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.ChoiceNode;
@@ -144,13 +144,13 @@ public abstract class AbstractAddChildAction extends ModelModifyingAction{
 	public void run(){
 		try{
 			if (getSelectedNodes().size() == 1){
-				select((GenericNode)getSelectedNodes().get(0).accept(new AddChildVisitor()));
+				select((AbstractNode)getSelectedNodes().get(0).accept(new AddChildVisitor()));
 			}
 		}
 		catch(Exception e){}
 	}
 	
-	protected void select(GenericNode node){
+	protected void select(AbstractNode node){
 		if(fViewer != null){
 			fViewer.setSelection(new StructuredSelection(node));
 		}

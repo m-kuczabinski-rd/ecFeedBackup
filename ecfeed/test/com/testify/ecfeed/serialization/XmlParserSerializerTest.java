@@ -31,7 +31,7 @@ import org.junit.Test;
 import com.testify.ecfeed.generators.RandomGenerator;
 import com.testify.ecfeed.generators.api.GeneratorException;
 import com.testify.ecfeed.generators.api.IConstraint;
-import com.testify.ecfeed.model.BasicStatement;
+import com.testify.ecfeed.model.AbstractStatement;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.Constraint;
 import com.testify.ecfeed.model.ConstraintNode;
@@ -355,8 +355,8 @@ public class XmlParserSerializerTest {
 
 	private Constraint createConstraint(List<ParameterNode> decomposedParameters,
 			List<ParameterNode> expectedParameters) {
-		BasicStatement premise = createDecomposedStatement(decomposedParameters);
-		BasicStatement consequence = null;
+		AbstractStatement premise = createDecomposedStatement(decomposedParameters);
+		AbstractStatement consequence = null;
 		while(consequence == null){
 			if(rand.nextBoolean()){
 				consequence = createDecomposedStatement(decomposedParameters);
@@ -368,8 +368,8 @@ public class XmlParserSerializerTest {
 		return new Constraint(premise, consequence);
 	}
 
-	private BasicStatement createDecomposedStatement(List<ParameterNode> parameters) {
-		BasicStatement statement = null;
+	private AbstractStatement createDecomposedStatement(List<ParameterNode> parameters) {
+		AbstractStatement statement = null;
 		while(statement == null){
 			switch(rand.nextInt(3)){
 			case 0: statement = new StaticStatement(rand.nextBoolean());
@@ -387,7 +387,7 @@ public class XmlParserSerializerTest {
 		return statement;
 	}
 
-	private BasicStatement createLabelStatement(List<ParameterNode> parameters) {
+	private AbstractStatement createLabelStatement(List<ParameterNode> parameters) {
 		ParameterNode parameter = parameters.get(rand.nextInt(parameters.size()));
 		Set<String> labels = parameter.getLeafLabels();
 		String label;
@@ -402,7 +402,7 @@ public class XmlParserSerializerTest {
 		return new DecomposedParameterStatement(parameter, relation, label);
 	}
 
-	private BasicStatement createChoiceStatement(List<ParameterNode> parameters) {
+	private AbstractStatement createChoiceStatement(List<ParameterNode> parameters) {
 		ParameterNode parameter = parameters.get(rand.nextInt(parameters.size()));
 		ChoiceNode choice = new ArrayList<ChoiceNode>(parameter.getLeafChoices()).get(rand.nextInt(parameter.getChoices().size()));
 		EStatementRelation relation = pickRelation();
@@ -419,7 +419,7 @@ public class XmlParserSerializerTest {
 		return relation;
 	}
 
-	private BasicStatement createExpectedStatement(List<ParameterNode> parameters) {
+	private AbstractStatement createExpectedStatement(List<ParameterNode> parameters) {
 		if(parameters.size() == 0) return null;
 		ParameterNode parameter = parameters.get(rand.nextInt(parameters.size()));
 		return new ExpectedValueStatement(parameter, new ChoiceNode("default", createRandomValue(parameter.getType())));
@@ -435,7 +435,7 @@ public class XmlParserSerializerTest {
 		return result;
 	}
 
-	private BasicStatement createStatementArray(int levels, List<ParameterNode> parameters) {
+	private AbstractStatement createStatementArray(int levels, List<ParameterNode> parameters) {
 		StatementArray array = new StatementArray(rand.nextBoolean()?EStatementOperator.AND:EStatementOperator.OR);
 		for(int i = 0; i < rand.nextInt(3) + 1; ++i){
 			if(levels > 0){
@@ -577,7 +577,7 @@ public class XmlParserSerializerTest {
 		compareBasicStatements(constraint1.getConsequence(), constraint2.getConsequence());
 	}
 
-	private void compareBasicStatements(BasicStatement statement1, BasicStatement statement2) {
+	private void compareBasicStatements(AbstractStatement statement1, AbstractStatement statement2) {
 		if(statement1 instanceof StaticStatement && statement2 instanceof StaticStatement){
 			compareStaticStatements((StaticStatement)statement1, (StaticStatement)statement2);
 		}

@@ -3,8 +3,8 @@ package com.testify.ecfeed.ui.editor.actions;
 import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.TreeViewer;
 
-import com.testify.ecfeed.model.GenericNode;
-import com.testify.ecfeed.ui.modelif.GenericNodeInterface;
+import com.testify.ecfeed.model.AbstractNode;
+import com.testify.ecfeed.ui.modelif.AbstractNodeInterface;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 import com.testify.ecfeed.ui.modelif.NodeClipboard;
 import com.testify.ecfeed.ui.modelif.NodeInterfaceFactory;
@@ -35,7 +35,7 @@ public class PasteAction extends ModelModifyingAction {
 	@Override
 	public boolean isEnabled(){
 		if(getSelectedNodes().size() != 1) return false;
-		GenericNodeInterface nodeIf = NodeInterfaceFactory.getNodeInterface(getSelectedNodes().get(0), getUpdateContext()); 
+		AbstractNodeInterface nodeIf = NodeInterfaceFactory.getNodeInterface(getSelectedNodes().get(0), getUpdateContext()); 
 		if (fIndex != -1){
 			return nodeIf.pasteEnabled(NodeClipboard.getContent(), fIndex);
 		}
@@ -44,8 +44,8 @@ public class PasteAction extends ModelModifyingAction {
 	
 	@Override
 	public void run(){
-		GenericNode parent = getSelectedNodes().get(0);
-		GenericNodeInterface parentIf = NodeInterfaceFactory.getNodeInterface(parent, getUpdateContext()); 
+		AbstractNode parent = getSelectedNodes().get(0);
+		AbstractNodeInterface parentIf = NodeInterfaceFactory.getNodeInterface(parent, getUpdateContext()); 
 		parentIf.addChildren(NodeClipboard.getContentCopy());
 		if(fTreeViewer != null){
 			fTreeViewer.expandToLevel(parent, 1);

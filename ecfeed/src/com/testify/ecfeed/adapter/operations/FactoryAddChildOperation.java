@@ -5,7 +5,7 @@ import com.testify.ecfeed.adapter.ModelOperationException;
 import com.testify.ecfeed.model.ParameterNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.ConstraintNode;
-import com.testify.ecfeed.model.GenericNode;
+import com.testify.ecfeed.model.AbstractNode;
 import com.testify.ecfeed.model.IModelVisitor;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.ChoiceNode;
@@ -14,19 +14,19 @@ import com.testify.ecfeed.model.TestCaseNode;
 
 public class FactoryAddChildOperation implements IModelVisitor{
 
-	private GenericNode fChild;
+	private AbstractNode fChild;
 	private int fIndex;
 	private boolean fValidate;
 	private ITypeAdapterProvider fAdapterProvider;
 
-	public FactoryAddChildOperation(GenericNode child, int index, ITypeAdapterProvider adapterProvider, boolean validate) {
+	public FactoryAddChildOperation(AbstractNode child, int index, ITypeAdapterProvider adapterProvider, boolean validate) {
 		fChild = child;
 		fIndex = index;
 		fValidate = validate;
 		fAdapterProvider = adapterProvider;
 	}
 
-	public FactoryAddChildOperation(GenericNode child, ITypeAdapterProvider adapterProvider, boolean validate) {
+	public FactoryAddChildOperation(AbstractNode child, ITypeAdapterProvider adapterProvider, boolean validate) {
 		this(child, -1, adapterProvider, validate);
 	}
 

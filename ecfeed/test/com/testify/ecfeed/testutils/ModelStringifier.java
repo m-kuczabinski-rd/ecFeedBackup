@@ -11,12 +11,12 @@
 
 package com.testify.ecfeed.testutils;
 
-import com.testify.ecfeed.model.BasicStatement;
+import com.testify.ecfeed.model.AbstractStatement;
 import com.testify.ecfeed.model.ParameterNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.ConstraintNode;
 import com.testify.ecfeed.model.ExpectedValueStatement;
-import com.testify.ecfeed.model.GenericNode;
+import com.testify.ecfeed.model.AbstractNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.model.DecomposedParameterStatement;
@@ -28,7 +28,7 @@ import com.testify.ecfeed.model.DecomposedParameterStatement.LabelCondition;
 import com.testify.ecfeed.model.DecomposedParameterStatement.ChoiceCondition;
 
 public class ModelStringifier {
-	public String stringify(GenericNode node, int indent){
+	public String stringify(AbstractNode node, int indent){
 		if(node instanceof ChoiceNode){
 			return stringify((ChoiceNode)node, indent);
 		}
@@ -53,7 +53,7 @@ public class ModelStringifier {
 		return null;
 	}
 
-	public String stringify(BasicStatement statement, int indent){
+	public String stringify(AbstractStatement statement, int indent){
 		if(statement instanceof StaticStatement){
 			return stringify((StaticStatement)statement, indent);
 		}
@@ -199,7 +199,7 @@ public class ModelStringifier {
 	public String stringify(StatementArray s, int indent){
 		String result = intendentString(indent);
 		result += "Statement array " + s.getOperator();
-		for(BasicStatement child : s.getChildren()){
+		for(AbstractStatement child : s.getChildren()){
 			result += "\n" + stringify(child, indent + 2);
 		}
 		return result;

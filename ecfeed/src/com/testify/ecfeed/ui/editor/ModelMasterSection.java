@@ -47,7 +47,7 @@ import org.osgi.framework.FrameworkUtil;
 import com.testify.ecfeed.model.ParameterNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.ConstraintNode;
-import com.testify.ecfeed.model.GenericNode;
+import com.testify.ecfeed.model.AbstractNode;
 import com.testify.ecfeed.model.IModelVisitor;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.ChoiceNode;
@@ -58,7 +58,7 @@ import com.testify.ecfeed.ui.editor.actions.AbstractAddChildAction;
 import com.testify.ecfeed.ui.editor.actions.AddChildActionFactory;
 import com.testify.ecfeed.ui.editor.actions.ModelViewerActionProvider;
 import com.testify.ecfeed.ui.modelif.ParameterInterface;
-import com.testify.ecfeed.ui.modelif.GenericNodeInterface;
+import com.testify.ecfeed.ui.modelif.AbstractNodeInterface;
 import com.testify.ecfeed.ui.modelif.IModelUpdateListener;
 import com.testify.ecfeed.ui.modelif.ModelNodesTransfer;
 
@@ -128,8 +128,8 @@ public class ModelMasterSection extends TreeViewerSection{
 					return EMPTY_ARRAY;
 				}
 			}
-			if(parentElement instanceof GenericNode){
-				GenericNode node = (GenericNode)parentElement;
+			if(parentElement instanceof AbstractNode){
+				AbstractNode node = (AbstractNode)parentElement;
 				if(node.getChildren().size() < Constants.MAX_DISPLAYED_CHILDREN_PER_NODE){
 					return node.getChildren().toArray();
 				}
@@ -139,8 +139,8 @@ public class ModelMasterSection extends TreeViewerSection{
 
 		@Override
 		public Object getParent(Object element) {
-			if(element instanceof GenericNode){
-				return ((GenericNode)element).getParent();
+			if(element instanceof AbstractNode){
+				return ((AbstractNode)element).getParent();
 			}
 			return null;
 		}
@@ -155,7 +155,7 @@ public class ModelMasterSection extends TreeViewerSection{
 
 		@Override
 		public String getText(Object element){
-			if(element instanceof GenericNode){
+			if(element instanceof AbstractNode){
 				if(element instanceof ParameterNode){
 					return ((ParameterNode)element).toShortString();
 				}
@@ -190,10 +190,10 @@ public class ModelMasterSection extends TreeViewerSection{
 		Map<List<Image>, Image> fFusedImages;
 
 		private class DecorationProvider implements IModelVisitor{
-			GenericNodeInterface fNodeInterface;
+			AbstractNodeInterface fNodeInterface;
 
 			public DecorationProvider(){
-				fNodeInterface = new GenericNodeInterface(ModelMasterSection.this);
+				fNodeInterface = new AbstractNodeInterface(ModelMasterSection.this);
 			}
 
 			@Override
@@ -241,7 +241,7 @@ public class ModelMasterSection extends TreeViewerSection{
 				return decorations;
 			}
 
-			private Image implementationStatusDecoration(GenericNode node) {
+			private Image implementationStatusDecoration(AbstractNode node) {
 				switch (fNodeInterface.getImplementationStatus(node)){
 				case IMPLEMENTED:
 					return getImageFromFile("implemented.png");
@@ -263,9 +263,9 @@ public class ModelMasterSection extends TreeViewerSection{
 		@SuppressWarnings("unchecked")
 		@Override
 		public Image decorateImage(Image image, Object element) {
-			if(element instanceof GenericNode){
+			if(element instanceof AbstractNode){
 				try{
-					List<Image> decorations = (List<Image>)((GenericNode)element).accept(new DecorationProvider());
+					List<Image> decorations = (List<Image>)((AbstractNode)element).accept(new DecorationProvider());
 					List<Image> all = new ArrayList<Image>(decorations);
 					all.add(0, image);
 					if(fFusedImages.containsKey(all) == false){
@@ -341,7 +341,7 @@ public class ModelMasterSection extends TreeViewerSection{
 
 		@Override
 		protected void populateMenu(){
-			List<GenericNode> selected = getSelectedNodes();
+			List<AbstractNode> selected = getSelectedNodes();
 			if(selected.size() == 1){
 				AddChildActionFactory factory = new AddChildActionFactory(getTreeViewer(), ModelMasterSection.this);
 				List<AbstractAddChildAction> actions = factory.getPossibleActions(selected.get(0));

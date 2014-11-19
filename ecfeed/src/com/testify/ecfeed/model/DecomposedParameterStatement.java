@@ -13,7 +13,7 @@ package com.testify.ecfeed.model;
 
 import java.util.List;
 
-public class DecomposedParameterStatement extends BasicStatement implements IRelationalStatement{
+public class DecomposedParameterStatement extends AbstractStatement implements IRelationalStatement{
 
 	private ParameterNode fParameter;
 	private EStatementRelation fRelation;

@@ -6,7 +6,7 @@ import com.testify.ecfeed.adapter.ModelOperationException;
 import com.testify.ecfeed.model.ParameterNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.ConstraintNode;
-import com.testify.ecfeed.model.GenericNode;
+import com.testify.ecfeed.model.AbstractNode;
 import com.testify.ecfeed.model.IModelVisitor;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.ChoiceNode;
@@ -17,10 +17,10 @@ public class FactoryShiftOperation{
 
 	private static class MoveUpDownOperationProvider implements IModelVisitor{
 		
-		private List<? extends GenericNode> fShifted;
+		private List<? extends AbstractNode> fShifted;
 		private boolean fUp;
 
-		public MoveUpDownOperationProvider(List<? extends GenericNode> shifted, boolean up){
+		public MoveUpDownOperationProvider(List<? extends AbstractNode> shifted, boolean up){
 			fShifted = shifted;
 			fUp = up;
 		}
@@ -84,10 +84,10 @@ public class FactoryShiftOperation{
 
 	private static class ShiftToIndexOperationProvider implements IModelVisitor{
 		
-		private List<? extends GenericNode> fShifted;
+		private List<? extends AbstractNode> fShifted;
 		private int fShift;
 
-		public ShiftToIndexOperationProvider(List<? extends GenericNode> shifted, int index){
+		public ShiftToIndexOperationProvider(List<? extends AbstractNode> shifted, int index){
 			fShifted = shifted;
 			fShift = calculateShift(shifted, index);
 		}
@@ -149,18 +149,18 @@ public class FactoryShiftOperation{
 		}
 	}
 
-	public static GenericShiftOperation getShiftOperation(List<? extends GenericNode> shifted, boolean up) throws ModelOperationException{
-		GenericNode parent = getParent(shifted);
+	public static GenericShiftOperation getShiftOperation(List<? extends AbstractNode> shifted, boolean up) throws ModelOperationException{
+		AbstractNode parent = getParent(shifted);
 		return getShiftOperation(parent, shifted, new MoveUpDownOperationProvider(shifted, up));
 	}
 
-	public static GenericShiftOperation getShiftOperation(List<? extends GenericNode> shifted, int newIndex) throws ModelOperationException{
-		GenericNode parent = getParent(shifted);
+	public static GenericShiftOperation getShiftOperation(List<? extends AbstractNode> shifted, int newIndex) throws ModelOperationException{
+		AbstractNode parent = getParent(shifted);
 		return getShiftOperation(parent, shifted, new ShiftToIndexOperationProvider(shifted, newIndex));
 	}
 
 	
-	private static GenericShiftOperation getShiftOperation(GenericNode parent, List<? extends GenericNode> shifted, IModelVisitor provider) throws ModelOperationException{
+	private static GenericShiftOperation getShiftOperation(AbstractNode parent, List<? extends AbstractNode> shifted, IModelVisitor provider) throws ModelOperationException{
 		if(parent == null && haveTheSameType(shifted) == false){
 			throw new ModelOperationException(Messages.OPERATION_NOT_SUPPORTED_PROBLEM);
 		}
@@ -172,7 +172,7 @@ public class FactoryShiftOperation{
 		}
 	}
 
-	private static int calculateShift(List<? extends GenericNode> shifted, int newIndex) {
+	private static int calculateShift(List<? extends AbstractNode> shifted, int newIndex) {
 		int shift = newIndex - minIndexNode(shifted).getIndex(); 
 		if(minIndexNode(shifted).getIndex() < newIndex){
 			shift -= 1;
@@ -180,20 +180,20 @@ public class FactoryShiftOperation{
 		return shift;
 	}
 
-	private static GenericNode minIndexNode(List<? extends GenericNode> nodes){
-		GenericNode minIndexNode = nodes.get(0);
-		for(GenericNode node : nodes){
+	private static AbstractNode minIndexNode(List<? extends AbstractNode> nodes){
+		AbstractNode minIndexNode = nodes.get(0);
+		for(AbstractNode node : nodes){
 			minIndexNode = node.getIndex() < minIndexNode.getIndex() ? node : minIndexNode; 
 		}
 		return minIndexNode;
 	}
 
-	private static boolean haveTheSameType(List<? extends GenericNode> shifted) {
+	private static boolean haveTheSameType(List<? extends AbstractNode> shifted) {
 		if(shifted.size() == 0){
 			return false;
 		}
 		Class<?> _class = shifted.get(0).getClass();
-		for(GenericNode node : shifted){
+		for(AbstractNode node : shifted){
 			if(node.getClass().equals(_class) == false){
 				return false;
 			}
@@ -201,16 +201,16 @@ public class FactoryShiftOperation{
 		return true;
 	}
 
-	private static GenericNode getParent(List<? extends GenericNode> nodes) {
+	private static AbstractNode getParent(List<? extends AbstractNode> nodes) {
 		if(nodes.size() == 0){
 			return null;
 		}
-		GenericNode parent = nodes.get(0).getParent();
+		AbstractNode parent = nodes.get(0).getParent();
 		if(parent == null){
 			return null;
 		}
 		
-		for(GenericNode node : nodes){
+		for(AbstractNode node : nodes){
 			if(node.getParent() != parent){
 				return null;
 			}

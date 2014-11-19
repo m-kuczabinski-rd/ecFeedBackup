@@ -13,12 +13,12 @@ package com.testify.ecfeed.model;
 
 import java.util.List;
 
-public abstract class BasicStatement implements IStatement {
-	BasicStatement fParent = null;
+public abstract class AbstractStatement implements IStatement {
+	AbstractStatement fParent = null;
 	private static int fLastId = 0;
 	private final int fId;
 	
-	public BasicStatement(){
+	public AbstractStatement(){
 		fId = fLastId++;
 	}
 	
@@ -28,21 +28,21 @@ public abstract class BasicStatement implements IStatement {
 
 	public abstract String getLeftOperandName();
 	
-	public BasicStatement getParent() {
+	public AbstractStatement getParent() {
 		return fParent;
 	}
 
-	void setParent(BasicStatement parent) {
+	void setParent(AbstractStatement parent) {
 		fParent = parent;
 	}
 
-	public List<BasicStatement> getChildren(){
+	public List<AbstractStatement> getChildren(){
 		return null;
 	}
 
-	public void replaceChild(BasicStatement oldStatement, 
-			BasicStatement newStatement) {
-		List<BasicStatement> children = getChildren();
+	public void replaceChild(AbstractStatement oldStatement, 
+			AbstractStatement newStatement) {
+		List<AbstractStatement> children = getChildren();
 		if(children != null){
 			int index = children.indexOf(oldStatement);
 			if(index != -1){
@@ -59,7 +59,7 @@ public abstract class BasicStatement implements IStatement {
 //		}
 //	}
 	
-	public void addStatement(BasicStatement statement){
+	public void addStatement(AbstractStatement statement){
 //		if(getParent() != null){
 //			getParent().addStatement(statement);
 //		}
@@ -84,10 +84,10 @@ public abstract class BasicStatement implements IStatement {
 
 	@Override
 	public boolean equals(Object obj){
-		if(obj instanceof BasicStatement == false){
+		if(obj instanceof AbstractStatement == false){
 			return false;
 		}
-		return fId == ((BasicStatement)obj).getId();
+		return fId == ((AbstractStatement)obj).getId();
 	}
 	
 	@Override
@@ -95,7 +95,7 @@ public abstract class BasicStatement implements IStatement {
 		return false;
 	}
 	
-	public abstract BasicStatement getCopy();
+	public abstract AbstractStatement getCopy();
 	
 	public abstract boolean updateReferences(MethodNode method);
 }

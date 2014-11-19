@@ -43,7 +43,7 @@ import nl.flotsam.xeger.Xeger;
 
 import org.junit.Test;
 
-import com.testify.ecfeed.model.BasicStatement;
+import com.testify.ecfeed.model.AbstractStatement;
 import com.testify.ecfeed.model.ParameterNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.Constraint;
@@ -51,7 +51,7 @@ import com.testify.ecfeed.model.ConstraintNode;
 import com.testify.ecfeed.model.EStatementOperator;
 import com.testify.ecfeed.model.EStatementRelation;
 import com.testify.ecfeed.model.ExpectedValueStatement;
-import com.testify.ecfeed.model.GenericNode;
+import com.testify.ecfeed.model.AbstractNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.model.DecomposedParameterStatement;
@@ -76,7 +76,7 @@ public class RandomModelGenerator {
 	public int MAX_STATEMENTS = 5;
 	public int MAX_STATEMENTS_DEPTH = 3;
 	
-	public GenericNode generateNode(ENodeType type){
+	public AbstractNode generateNode(ENodeType type){
 		switch(type){
 		case CHOICE:
 			return generateChoice(MAX_PARTITION_LEVELS, MAX_PARTITIONS, MAX_PARTITION_LABELS, randomType(true));
@@ -200,11 +200,11 @@ public class RandomModelGenerator {
 		return new ConstraintNode(name, constraint);
 	}
 	
-	public BasicStatement generatePremise(MethodNode method) {
+	public AbstractStatement generatePremise(MethodNode method) {
 		return generateStatement(method, MAX_STATEMENTS_DEPTH);
 	}
 
-	public BasicStatement generateStatement(MethodNode method, int maxDepth) {
+	public AbstractStatement generateStatement(MethodNode method, int maxDepth) {
 		switch(rand.nextInt(5)){
 		case 0:
 			return generateStaticStatement();
@@ -295,7 +295,7 @@ public class RandomModelGenerator {
 		return statement;
 	}
 
-	public BasicStatement generateConsequence(MethodNode method) {
+	public AbstractStatement generateConsequence(MethodNode method) {
 		if(method.getParameters().size() == 0){
 			method.addParameter(generateParameter(TYPE_NAME_INT, false, 0, 1, 1));
 		}

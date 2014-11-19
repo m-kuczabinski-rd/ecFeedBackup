@@ -1,10 +1,10 @@
 package com.testify.ecfeed.adapter;
 
-import com.testify.ecfeed.model.GenericNode;
+import com.testify.ecfeed.model.AbstractNode;
 
 public interface IModelImplementer {
-	public boolean implementable(Class<? extends GenericNode> type);
-	public boolean implementable(GenericNode node);
-	public boolean implement(GenericNode node);
-	public EImplementationStatus getImplementationStatus(GenericNode node);
+	public boolean implementable(Class<? extends AbstractNode> type);
+	public boolean implementable(AbstractNode node);
+	public boolean implement(AbstractNode node);
+	public EImplementationStatus getImplementationStatus(AbstractNode node);
 }

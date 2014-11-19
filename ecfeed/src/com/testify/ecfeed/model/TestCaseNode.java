@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class TestCaseNode extends GenericNode {
+public class TestCaseNode extends AbstractNode {
 	List<ChoiceNode> fTestData;
 
 	@Override
@@ -137,7 +137,7 @@ public class TestCaseNode extends GenericNode {
 	}
 
 	@Override
-	public boolean compare(GenericNode node){
+	public boolean compare(AbstractNode node){
 		if(node instanceof TestCaseNode == false){
 			return false;
 		}

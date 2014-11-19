@@ -9,7 +9,7 @@ import com.testify.ecfeed.model.DecomposedParameterStatement;
 import com.testify.ecfeed.model.DecomposedParameterStatement.ICondition;
 import com.testify.ecfeed.ui.common.Messages;
 
-public class DecomposedParameterStatementInterface extends BasicStatementInterface{
+public class DecomposedParameterStatementInterface extends AbstractStatementInterface{
 
 	private DecomposedParameterStatement fTarget;
 

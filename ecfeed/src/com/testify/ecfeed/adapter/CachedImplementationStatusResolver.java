@@ -7,7 +7,7 @@ import com.testify.ecfeed.adapter.java.JavaPrimitiveTypePredicate;
 import com.testify.ecfeed.model.ParameterNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.ConstraintNode;
-import com.testify.ecfeed.model.GenericNode;
+import com.testify.ecfeed.model.AbstractNode;
 import com.testify.ecfeed.model.IModelVisitor;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.ChoiceNode;
@@ -18,7 +18,7 @@ import com.testify.ecfeed.model.TestCaseNode;
 public abstract class CachedImplementationStatusResolver extends
 		AbstractImplementationStatusResolver {
 
-	private static Map<GenericNode, EImplementationStatus> fCache = new HashMap<>();
+	private static Map<AbstractNode, EImplementationStatus> fCache = new HashMap<>();
 	private static CacheCleaner fCacheCleaner = new CacheCleaner();
 	
 	private static class CacheCleaner implements IModelVisitor{
@@ -76,7 +76,7 @@ public abstract class CachedImplementationStatusResolver extends
 	}
 	
 	@Override
-	public EImplementationStatus getImplementationStatus(GenericNode node){
+	public EImplementationStatus getImplementationStatus(AbstractNode node){
 		EImplementationStatus status = fCache.get(node);
 		if(status == null){
 			status = super.getImplementationStatus(node);
@@ -85,7 +85,7 @@ public abstract class CachedImplementationStatusResolver extends
 		return status;
 	}
 	
-	public static void clearCache(GenericNode node){
+	public static void clearCache(AbstractNode node){
 		if(node != null){
 			try{
 				node.accept(fCacheCleaner);
@@ -94,7 +94,7 @@ public abstract class CachedImplementationStatusResolver extends
 		}
 	}
 	
-	public void updateCache(GenericNode node, EImplementationStatus status){
+	public void updateCache(AbstractNode node, EImplementationStatus status){
 		fCache.put(node, status);
 		if(node != null && node.getParent() != null){
 			clearCache(node.getParent());

@@ -4,17 +4,17 @@ import java.util.Collection;
 
 import com.testify.ecfeed.adapter.IModelOperation;
 import com.testify.ecfeed.adapter.ITypeAdapterProvider;
-import com.testify.ecfeed.model.GenericNode;
+import com.testify.ecfeed.model.AbstractNode;
 
 public class GenericAddChildrenOperation extends BulkOperation {
 
-	public GenericAddChildrenOperation(GenericNode target, Collection<? extends GenericNode> children, ITypeAdapterProvider adapterProvider, boolean validate) {
+	public GenericAddChildrenOperation(AbstractNode target, Collection<? extends AbstractNode> children, ITypeAdapterProvider adapterProvider, boolean validate) {
 		this(target, children, -1, adapterProvider, validate);
 	}
 
-	public GenericAddChildrenOperation(GenericNode target, Collection<? extends GenericNode> children, int index, ITypeAdapterProvider adapterProvider, boolean validate) {
+	public GenericAddChildrenOperation(AbstractNode target, Collection<? extends AbstractNode> children, int index, ITypeAdapterProvider adapterProvider, boolean validate) {
 		super(OperationNames.ADD_CHILDREN, false);
-		for(GenericNode child : children){
+		for(AbstractNode child : children){
 			IModelOperation operation;
 			try {
 				if(index != -1){

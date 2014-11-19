@@ -37,7 +37,7 @@ import com.testify.ecfeed.ui.dialogs.CalculateCoverageDialog;
 import com.testify.ecfeed.ui.dialogs.RenameTestSuiteDialog;
 import com.testify.ecfeed.ui.dialogs.SelectCompatibleMethodDialog;
 
-public class MethodInterface extends GenericNodeInterface {
+public class MethodInterface extends AbstractNodeInterface {
 
 	private MethodNode fTarget;
 	private ITypeAdapterProvider fAdapterProvider;

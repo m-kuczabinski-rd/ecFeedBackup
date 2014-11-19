@@ -9,7 +9,7 @@ import com.testify.ecfeed.adapter.java.JavaUtils;
 import com.testify.ecfeed.model.ParameterNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.ConstraintNode;
-import com.testify.ecfeed.model.GenericNode;
+import com.testify.ecfeed.model.AbstractNode;
 import com.testify.ecfeed.model.IModelVisitor;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.ChoiceNode;
@@ -20,7 +20,7 @@ public class FactoryRenameOperation {
 
 	private static class ClassOperationRename extends GenericOperationRename {
 
-		public ClassOperationRename(GenericNode target, String newName) {
+		public ClassOperationRename(AbstractNode target, String newName) {
 			super(target, newName);
 		}
 
@@ -65,7 +65,7 @@ public class FactoryRenameOperation {
 
 	private static class ParameterOperationRename extends GenericOperationRename {
 
-		public ParameterOperationRename(GenericNode target, String newName) {
+		public ParameterOperationRename(AbstractNode target, String newName) {
 			super(target, newName);
 		}
 
@@ -149,7 +149,7 @@ public class FactoryRenameOperation {
 		}
 	}
 	
-	public static IModelOperation getRenameOperation(GenericNode target, String newName){
+	public static IModelOperation getRenameOperation(AbstractNode target, String newName){
 		try{
 			return (IModelOperation)target.accept(new RenameOperationProvider(newName));
 		}catch(Exception e){}

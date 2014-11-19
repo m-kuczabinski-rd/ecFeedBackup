@@ -24,7 +24,7 @@ import com.testify.ecfeed.ui.common.EclipseModelBuilder;
 import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.dialogs.TestClassSelectionDialog;
 
-public class ClassInterface extends GenericNodeInterface {
+public class ClassInterface extends AbstractNodeInterface {
 
 	public ClassInterface(IModelUpdateContext updateContext) {
 		super(updateContext);

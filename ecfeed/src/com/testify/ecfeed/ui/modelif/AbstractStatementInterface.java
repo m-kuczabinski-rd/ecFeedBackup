@@ -1,19 +1,19 @@
 package com.testify.ecfeed.ui.modelif;
 
-import com.testify.ecfeed.model.BasicStatement;
+import com.testify.ecfeed.model.AbstractStatement;
 import com.testify.ecfeed.model.EStatementOperator;
 import com.testify.ecfeed.model.EStatementRelation;
 import com.testify.ecfeed.model.StaticStatement;
 
-public class BasicStatementInterface extends OperationExecuter {
+public class AbstractStatementInterface extends OperationExecuter {
 	
-	BasicStatement fTarget;
+	AbstractStatement fTarget;
 	
-	public BasicStatementInterface(IModelUpdateContext updateContext) {
+	public AbstractStatementInterface(IModelUpdateContext updateContext) {
 		super(updateContext);
 	}
 	
-	public void setTarget(BasicStatement target){
+	public void setTarget(AbstractStatement target){
 		fTarget = target;
 	}
 	
@@ -24,28 +24,28 @@ public class BasicStatementInterface extends OperationExecuter {
 		return false;
 	}
 	
-	public boolean removeChild(BasicStatement child){
+	public boolean removeChild(AbstractStatement child){
 		return false;
 	}
 	
 	
-	public BasicStatement addNewStatement(){
-		BasicStatement statement = new StaticStatement(true);
+	public AbstractStatement addNewStatement(){
+		AbstractStatement statement = new StaticStatement(true);
 		if(addStatement(statement)){
 			return statement;
 		}
 		return null;
 	}
 	
-	public boolean addStatement(BasicStatement statement){
+	public boolean addStatement(AbstractStatement statement){
 		if(fTarget.getParent() != null){
 			return getParentInterface().addStatement(statement);
 		}
 		return false;
 	}
 	
-	public BasicStatementInterface getParentInterface(){
-		BasicStatement parent = fTarget.getParent();
+	public AbstractStatementInterface getParentInterface(){
+		AbstractStatement parent = fTarget.getParent();
 		if(parent != null){
 			return StatementInterfaceFactory.getInterface(parent, getUpdateContext());
 		}
@@ -72,7 +72,7 @@ public class BasicStatementInterface extends OperationExecuter {
 		return null;
 	}
 
-	public boolean replaceChild(BasicStatement child, BasicStatement newStatement) {
+	public boolean replaceChild(AbstractStatement child, AbstractStatement newStatement) {
 		return false;
 	}
 }

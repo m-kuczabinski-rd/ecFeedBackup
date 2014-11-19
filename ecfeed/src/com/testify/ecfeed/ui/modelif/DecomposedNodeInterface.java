@@ -16,7 +16,7 @@ import com.testify.ecfeed.ui.common.EclipseModelBuilder;
 import com.testify.ecfeed.ui.common.EclipseTypeAdapterProvider;
 import com.testify.ecfeed.ui.common.Messages;
 
-public class DecomposedNodeInterface extends GenericNodeInterface {
+public class DecomposedNodeInterface extends AbstractNodeInterface {
 
 	private DecomposedNode fTarget;
 

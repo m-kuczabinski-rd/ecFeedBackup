@@ -2,16 +2,16 @@ package com.testify.ecfeed.adapter.operations;
 
 import com.testify.ecfeed.adapter.IModelOperation;
 import com.testify.ecfeed.adapter.ModelOperationException;
-import com.testify.ecfeed.model.BasicStatement;
+import com.testify.ecfeed.model.AbstractStatement;
 import com.testify.ecfeed.model.StatementArray;
 
 public class StatementOperationRemoveStatement extends AbstractModelOperation {
 
 	private StatementArray fTarget;
-	private BasicStatement fStatement;
+	private AbstractStatement fStatement;
 	private int fIndex;
 
-	public StatementOperationRemoveStatement(StatementArray target, BasicStatement statement){
+	public StatementOperationRemoveStatement(StatementArray target, AbstractStatement statement){
 		super(OperationNames.REMOVE_STATEMENT);
 		fTarget = target;
 		fStatement = statement;

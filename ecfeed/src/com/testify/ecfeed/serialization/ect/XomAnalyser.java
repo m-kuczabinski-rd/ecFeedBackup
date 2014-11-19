@@ -36,7 +36,7 @@ import nu.xom.Element;
 import nu.xom.Elements;
 import nu.xom.Node;
 
-import com.testify.ecfeed.model.BasicStatement;
+import com.testify.ecfeed.model.AbstractStatement;
 import com.testify.ecfeed.model.ParameterNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.Constraint;
@@ -192,8 +192,8 @@ public class XomAnalyser {
 		assertNodeTag(element.getQualifiedName(), CONSTRAINT_NODE_NAME);
 		String name = getElementName(element);
 
-		BasicStatement premise = null;
-		BasicStatement consequence = null;
+		AbstractStatement premise = null;
+		AbstractStatement consequence = null;
 		for(Element child : getIterableChildren(element)){
 			if(child.getLocalName().equals(Constants.CONSTRAINT_PREMISE_NODE_NAME)){
 				if(getIterableChildren(child).size() == 1){
@@ -223,7 +223,7 @@ public class XomAnalyser {
 		return new ConstraintNode(name, new Constraint(premise, consequence));
 	}
 
-	public BasicStatement parseStatement(Element element, MethodNode method) throws ParserException {
+	public AbstractStatement parseStatement(Element element, MethodNode method) throws ParserException {
 		switch(element.getLocalName()){
 		case Constants.CONSTRAINT_CHOICE_STATEMENT_NODE_NAME:
 			return parseChoiceStatement(element, method);
@@ -255,7 +255,7 @@ public class XomAnalyser {
 			throw new ParserException(Messages.WRONG_STATEMENT_ARRAY_OPERATOR(method.getName(), operatorValue));
 		}
 		for(Element child : getIterableChildren(element)){
-			BasicStatement childStatement = parseStatement(child, method);
+			AbstractStatement childStatement = parseStatement(child, method);
 			if(childStatement != null){
 				statementArray.addStatement(childStatement);
 			}

@@ -19,22 +19,22 @@ import java.util.List;
 
 import org.junit.Test;
 
-import com.testify.ecfeed.model.BasicStatement;
+import com.testify.ecfeed.model.AbstractStatement;
 import com.testify.ecfeed.model.IStatement;
 import com.testify.ecfeed.model.IStatementVisitor;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.EStatementOperator;
 import com.testify.ecfeed.model.StatementArray;
 
-public class BasicStatementTest {
+public class AbstractStatementTest {
 
-	private class StatementImplementation extends BasicStatement{
+	private class StatementImplementation extends AbstractStatement{
 		@Override
 		public String getLeftOperandName() {
 			return null;
 		}
 		@Override
-		public BasicStatement getCopy(){
+		public AbstractStatement getCopy(){
 			return null;
 		}
 		@Override
@@ -53,8 +53,8 @@ public class BasicStatementTest {
 	
 	@Test
 	public void testParent() {
-		BasicStatement statement1 = new StatementImplementation();
-		BasicStatement statement2 = new StatementImplementation();
+		AbstractStatement statement1 = new StatementImplementation();
+		AbstractStatement statement2 = new StatementImplementation();
 		
 		statement2.setParent(statement1);
 		assertEquals(statement1, statement2.getParent());
@@ -63,13 +63,13 @@ public class BasicStatementTest {
 	@Test
 	public void testGetChildren() {
 		StatementArray array = new StatementArray(EStatementOperator.AND);
-		BasicStatement statement2 = new StatementImplementation();
-		BasicStatement statement3 = new StatementImplementation();
+		AbstractStatement statement2 = new StatementImplementation();
+		AbstractStatement statement3 = new StatementImplementation();
 
 		array.addStatement(statement2);
 		array.addStatement(statement3);
 		
-		List<BasicStatement> children = array.getChildren();
+		List<AbstractStatement> children = array.getChildren();
 		assertEquals(2, children.size());
 		assertTrue(children.contains(statement2));
 		assertTrue(children.contains(statement3));
@@ -78,11 +78,11 @@ public class BasicStatementTest {
 	@Test
 	public void testReplaceChild() {
 		StatementArray array = new StatementArray(EStatementOperator.AND);
-		BasicStatement statement2 = new StatementImplementation();
-		BasicStatement statement3 = new StatementImplementation();
+		AbstractStatement statement2 = new StatementImplementation();
+		AbstractStatement statement3 = new StatementImplementation();
 
 		array.addStatement(statement2);
-		List<BasicStatement> children = array.getChildren();
+		List<AbstractStatement> children = array.getChildren();
 		assertEquals(1, children.size());
 		assertTrue(children.contains(statement2));
 		
@@ -95,12 +95,12 @@ public class BasicStatementTest {
 	@Test
 	public void testRemoveChild() {
 		StatementArray array = new StatementArray(EStatementOperator.AND);
-		BasicStatement statement2 = new StatementImplementation();
-		BasicStatement statement3 = new StatementImplementation();
+		AbstractStatement statement2 = new StatementImplementation();
+		AbstractStatement statement3 = new StatementImplementation();
 
 		array.addStatement(statement2);
 		array.addStatement(statement3);
-		List<BasicStatement> children = array.getChildren();
+		List<AbstractStatement> children = array.getChildren();
 		assertEquals(2, children.size());
 		assertTrue(children.contains(statement2));
 		assertTrue(children.contains(statement3));

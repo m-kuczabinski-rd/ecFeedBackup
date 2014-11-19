@@ -13,7 +13,7 @@ package com.testify.ecfeed.model;
 
 import java.util.List;
 
-public class StaticStatement extends BasicStatement {
+public class StaticStatement extends AbstractStatement {
 
 	public static final String STATIC_STATEMENT_TRUE_VALUE = "true";
 	public static final String STATIC_STATEMENT_FALSE_VALUE = "false";

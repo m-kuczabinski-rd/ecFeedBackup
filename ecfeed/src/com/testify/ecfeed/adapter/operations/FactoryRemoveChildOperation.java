@@ -3,7 +3,7 @@ package com.testify.ecfeed.adapter.operations;
 import com.testify.ecfeed.model.ParameterNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.ConstraintNode;
-import com.testify.ecfeed.model.GenericNode;
+import com.testify.ecfeed.model.AbstractNode;
 import com.testify.ecfeed.model.IModelVisitor;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.ChoiceNode;
@@ -12,10 +12,10 @@ import com.testify.ecfeed.model.TestCaseNode;
 
 public class FactoryRemoveChildOperation implements IModelVisitor{
 
-	private GenericNode fChild;
+	private AbstractNode fChild;
 	private boolean fValidate;
 
-	public FactoryRemoveChildOperation(GenericNode child, boolean validate) {
+	public FactoryRemoveChildOperation(AbstractNode child, boolean validate) {
 		fChild = child;
 		fValidate = validate;
 	}

@@ -20,7 +20,7 @@ import java.util.Set;
 
 import com.testify.ecfeed.generators.api.IConstraint;
 
-public class MethodNode extends GenericNode {
+public class MethodNode extends AbstractNode {
 	private List<ParameterNode> fParameters;
 	private List<TestCaseNode> fTestCases;
 	private List<ConstraintNode> fConstraints;
@@ -51,8 +51,8 @@ public class MethodNode extends GenericNode {
 	}
 
 	@Override
-	public List<? extends GenericNode> getChildren(){
-		List<GenericNode> children = new ArrayList<GenericNode>();
+	public List<? extends AbstractNode> getChildren(){
+		List<AbstractNode> children = new ArrayList<AbstractNode>();
 		children.addAll(fParameters);
 		children.addAll(fConstraints);
 		children.addAll(fTestCases);
@@ -356,7 +356,7 @@ public class MethodNode extends GenericNode {
 	}
 
 	@Override
-	public int getMaxChildIndex(GenericNode potentialChild){
+	public int getMaxChildIndex(AbstractNode potentialChild){
 		if(potentialChild instanceof ParameterNode) return getParameters().size();
 		if(potentialChild instanceof ConstraintNode) return getConstraintNodes().size();
 		if(potentialChild instanceof TestCaseNode) return getTestCases().size();
@@ -369,7 +369,7 @@ public class MethodNode extends GenericNode {
 	}
 
 	@Override
-	public boolean compare(GenericNode node){
+	public boolean compare(AbstractNode node){
 		if(node instanceof MethodNode == false){
 			return false;
 		}

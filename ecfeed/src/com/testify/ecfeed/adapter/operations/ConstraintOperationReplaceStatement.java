@@ -2,17 +2,17 @@ package com.testify.ecfeed.adapter.operations;
 
 import com.testify.ecfeed.adapter.IModelOperation;
 import com.testify.ecfeed.adapter.ModelOperationException;
-import com.testify.ecfeed.model.BasicStatement;
+import com.testify.ecfeed.model.AbstractStatement;
 import com.testify.ecfeed.model.Constraint;
 import com.testify.ecfeed.model.ConstraintNode;
 
 public class ConstraintOperationReplaceStatement extends AbstractModelOperation{
 
-	private BasicStatement fNewStatement;
-	private BasicStatement fCurrentStatement;
+	private AbstractStatement fNewStatement;
+	private AbstractStatement fCurrentStatement;
 	private ConstraintNode fTarget;
 
-	public ConstraintOperationReplaceStatement(ConstraintNode target, BasicStatement current, BasicStatement newStatement) {
+	public ConstraintOperationReplaceStatement(ConstraintNode target, AbstractStatement current, AbstractStatement newStatement) {
 		super(OperationNames.REPLACE_STATEMENT);
 		fTarget = target;
 		fCurrentStatement = current;

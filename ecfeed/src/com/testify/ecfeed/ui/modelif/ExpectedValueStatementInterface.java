@@ -8,7 +8,7 @@ import com.testify.ecfeed.model.EStatementRelation;
 import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.common.EclipseTypeAdapterProvider;
 
-public class ExpectedValueStatementInterface extends BasicStatementInterface{
+public class ExpectedValueStatementInterface extends AbstractStatementInterface{
 
 	ExpectedValueStatement fTarget;
 

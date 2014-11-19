@@ -112,7 +112,7 @@ public class ParameterNode extends DecomposedNode{
 	}
 
 	@Override
-	public boolean compare(GenericNode node){
+	public boolean compare(AbstractNode node){
 		if(node instanceof ParameterNode == false){
 			return false;
 		}

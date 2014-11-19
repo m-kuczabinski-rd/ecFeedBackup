@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.eclipse.jface.viewers.ISelectionProvider;
 
-import com.testify.ecfeed.model.GenericNode;
+import com.testify.ecfeed.model.AbstractNode;
 import com.testify.ecfeed.ui.modelif.NodeSelectionUtils;
 
 public abstract class ModelSelectionAction extends NamedAction {
@@ -16,7 +16,7 @@ public abstract class ModelSelectionAction extends NamedAction {
 		fSelectionUtils = new NodeSelectionUtils(selectionProvider);
 	}
 	
-	protected List<GenericNode> getSelectedNodes(){
+	protected List<AbstractNode> getSelectedNodes(){
 		return getSelectionUtils().getSelectedNodes();
 	}
 

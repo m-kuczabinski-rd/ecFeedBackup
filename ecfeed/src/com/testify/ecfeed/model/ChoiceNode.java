@@ -41,7 +41,7 @@ public class ChoiceNode extends DecomposedNode{
 	}
 
 	@Override
-	public List<? extends GenericNode> getChildren(){
+	public List<? extends AbstractNode> getChildren(){
 		return getChoices();
 	}
 
@@ -136,7 +136,7 @@ public class ChoiceNode extends DecomposedNode{
 	}
 	
 	@Override
-	public boolean compare(GenericNode node){
+	public boolean compare(AbstractNode node){
 		if(node instanceof ChoiceNode == false){
 			return false;
 		}
