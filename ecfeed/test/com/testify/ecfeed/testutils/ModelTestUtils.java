@@ -1,11 +1,11 @@
 /*******************************************************************************
- * Copyright (c) 2014 Testify AS.                                                
- * All rights reserved. This program and the accompanying materials              
- * are made available under the terms of the Eclipse Public License v1.0         
- * which accompanies this distribution, and is available at                      
- * http://www.eclipse.org/legal/epl-v10.html                                     
- *                                                                               
- * Contributors:                                                                 
+ * Copyright (c) 2014 Testify AS.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
  *     Patryk Chamuczynski (p.chamuczynski(at)radytek.com) - initial implementation
  ******************************************************************************/
 
@@ -13,15 +13,39 @@ package com.testify.ecfeed.testutils;
 
 import static org.junit.Assert.fail;
 
+import java.util.ArrayList;
+
 import com.testify.ecfeed.model.AbstractNode;
+import com.testify.ecfeed.model.ChoiceNode;
+import com.testify.ecfeed.model.ClassNode;
+import com.testify.ecfeed.model.Constraint;
+import com.testify.ecfeed.model.ConstraintNode;
+import com.testify.ecfeed.model.MethodNode;
+import com.testify.ecfeed.model.ParameterNode;
+import com.testify.ecfeed.model.RootNode;
+import com.testify.ecfeed.model.StaticStatement;
+import com.testify.ecfeed.model.TestCaseNode;
 
 public class ModelTestUtils {
-	
+
 	public static void assertElementsEqual(AbstractNode n, AbstractNode n1) {
 		ModelStringifier stringifier = new ModelStringifier();
 		if(n.compare(n1) == false){
 			fail("Parsed element differs from original\n" + stringifier.stringify(n, 0) + "\n" + stringifier.stringify(n1, 0));
 		}
+	}
+
+	public static AbstractNode getNode(ENodeType type, String name){
+		switch(type){
+		case CHOICE: return new ChoiceNode(name, "value");
+		case CLASS: return new ClassNode(name);
+		case CONSTRAINT: return new ConstraintNode(name, new Constraint(new StaticStatement(true), new StaticStatement(true)));
+		case METHOD: return new MethodNode(name);
+		case PARAMETER: return new ParameterNode(name, "int", "0", false);
+		case PROJECT: return new RootNode(name);
+		case TEST_CASE: return new TestCaseNode(name, new ArrayList<ChoiceNode>());
+		}
+		return null;
 	}
 
 }
