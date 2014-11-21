@@ -8,7 +8,7 @@ import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.ConstraintNode;
 import com.testify.ecfeed.model.IModelVisitor;
 import com.testify.ecfeed.model.MethodNode;
-import com.testify.ecfeed.model.ParameterNode;
+import com.testify.ecfeed.model.MethodParameterNode;
 import com.testify.ecfeed.model.ParametersParentNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.TestCaseNode;
@@ -61,7 +61,7 @@ public class FactoryRemoveOperation {
 		}
 
 		@Override
-		public Object visit(ParameterNode node) throws Exception {
+		public Object visit(MethodParameterNode node) throws Exception {
 			ParametersParentNode parent = node.getParametersParent();
 			if(parent == null){
 				return new UnsupportedModelOperation();

@@ -12,7 +12,7 @@ import com.testify.ecfeed.adapter.operations.FactoryShiftOperation;
 import com.testify.ecfeed.adapter.operations.GenericAddChildrenOperation;
 import com.testify.ecfeed.adapter.operations.GenericRemoveNodesOperation;
 import com.testify.ecfeed.adapter.operations.GenericShiftOperation;
-import com.testify.ecfeed.model.ParameterNode;
+import com.testify.ecfeed.model.MethodParameterNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.ConstraintNode;
 import com.testify.ecfeed.model.AbstractNode;
@@ -49,7 +49,7 @@ public class AbstractNodeInterface extends OperationExecuter{
 		}
 
 		@Override
-		public Object visit(ParameterNode node) throws Exception {
+		public Object visit(MethodParameterNode node) throws Exception {
 			return Messages.DIALOG_RENAME_PAREMETER_PROBLEM_TITLE;
 		}
 

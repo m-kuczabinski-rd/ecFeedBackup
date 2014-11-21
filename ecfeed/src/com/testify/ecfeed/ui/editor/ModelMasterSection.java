@@ -51,7 +51,7 @@ import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.ConstraintNode;
 import com.testify.ecfeed.model.IModelVisitor;
 import com.testify.ecfeed.model.MethodNode;
-import com.testify.ecfeed.model.ParameterNode;
+import com.testify.ecfeed.model.MethodParameterNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.ui.common.Constants;
@@ -123,8 +123,8 @@ public class ModelMasterSection extends TreeViewerSection{
 				return children.toArray();
 			}
 
-			if(parentElement instanceof ParameterNode){
-				ParameterNode parameter = (ParameterNode)parentElement;
+			if(parentElement instanceof MethodParameterNode){
+				MethodParameterNode parameter = (MethodParameterNode)parentElement;
 				if(parameter.isExpected() && ParameterInterface.isPrimitive(parameter.getType())){
 					return EMPTY_ARRAY;
 				}
@@ -172,7 +172,7 @@ public class ModelMasterSection extends TreeViewerSection{
 			}
 
 			@Override
-			public Object visit(ParameterNode node) throws Exception {
+			public Object visit(MethodParameterNode node) throws Exception {
 				return JavaUtils.simplifiedToString(node);
 			}
 
@@ -210,7 +210,7 @@ public class ModelMasterSection extends TreeViewerSection{
 			}
 
 			@Override
-			public Object visit(ParameterNode node) throws Exception {
+			public Object visit(MethodParameterNode node) throws Exception {
 				return getImageFromFile("parameter_node.png");
 			}
 
@@ -279,7 +279,7 @@ public class ModelMasterSection extends TreeViewerSection{
 			}
 
 			@Override
-			public Object visit(ParameterNode node) throws Exception {
+			public Object visit(MethodParameterNode node) throws Exception {
 				List<Image> decorations = new ArrayList<Image>();
 				decorations.add(implementationStatusDecoration(node));
 				if(node.isExpected()){

@@ -69,11 +69,11 @@ public class ConstraintNode extends AbstractNode{
 		return false;
 	}
 
-	public boolean mentions(ParameterNode parameter) {
+	public boolean mentions(MethodParameterNode parameter) {
 		return fConstraint.mentions(parameter);
 	}
 
-	public boolean mentions(ParameterNode parameter, String label) {
+	public boolean mentions(MethodParameterNode parameter, String label) {
 		return fConstraint.mentions(parameter, label);
 	}
 
@@ -117,7 +117,7 @@ public class ConstraintNode extends AbstractNode{
 
 	public boolean isConsistent() {
 		for(ChoiceNode p : getConstraint().getReferencedChoices()){
-			ParameterNode c = p.getParameter();
+			MethodParameterNode c = p.getParameter();
 			if(c == null || c.getChoice(p.getQualifiedName()) == null){
 				return false;
 			}
@@ -125,14 +125,14 @@ public class ConstraintNode extends AbstractNode{
 				return false;
 			}
 		}
-		for(ParameterNode c : getMethod().getParameters()){
+		for(MethodParameterNode c : getMethod().getParameters()){
 			for(String label : getConstraint().getReferencedLabels(c)){
 				if(c.getLeafLabels().contains(label) == false){
 					return false;
 				}
 			}
 		}
-		for(ParameterNode c: getConstraint().getReferencedParameters()){
+		for(MethodParameterNode c: getConstraint().getReferencedParameters()){
 			if(getMethod().getParameters().contains(c) == false){
 				return false;
 			}

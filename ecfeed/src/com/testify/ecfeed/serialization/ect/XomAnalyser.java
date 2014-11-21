@@ -37,7 +37,7 @@ import nu.xom.Elements;
 import nu.xom.Node;
 
 import com.testify.ecfeed.model.AbstractStatement;
-import com.testify.ecfeed.model.ParameterNode;
+import com.testify.ecfeed.model.MethodParameterNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.Constraint;
 import com.testify.ecfeed.model.ConstraintNode;
@@ -126,7 +126,7 @@ public class XomAnalyser {
 		return method;
 	}
 
-	public ParameterNode parseParameter(Element element) throws ParserException{
+	public MethodParameterNode parseParameter(Element element) throws ParserException{
 		assertNodeTag(element.getQualifiedName(), PARAMETER_NODE_NAME);
 		String name = getElementName(element);
 		String type = getAttributeValue(element, TYPE_NAME_ATTRIBUTE);
@@ -136,7 +136,7 @@ public class XomAnalyser {
 			expected = getAttributeValue(element, PARAMETER_IS_EXPECTED_ATTRIBUTE_NAME);
 			defaultValue = getAttributeValue(element, DEFAULT_EXPECTED_VALUE_ATTRIBUTE_NAME);
 		}
-		ParameterNode parameter = new ParameterNode(name, type, defaultValue, Boolean.parseBoolean(expected));
+		MethodParameterNode parameter = new MethodParameterNode(name, type, defaultValue, Boolean.parseBoolean(expected));
 
 		for(Element child : getIterableChildren(element)){
 			try{
@@ -154,7 +154,7 @@ public class XomAnalyser {
 		String name = getAttributeValue(element, TEST_SUITE_NAME_ATTRIBUTE);
 
 		List<Element> parameterElements = getIterableChildren(element);
-		List<ParameterNode> parameters = method.getParameters();
+		List<MethodParameterNode> parameters = method.getParameters();
 
 		List<ChoiceNode> testData = new ArrayList<ChoiceNode>();
 
@@ -164,7 +164,7 @@ public class XomAnalyser {
 
 		for(int i = 0; i < parameterElements.size(); i++){
 			Element testParameterElement = parameterElements.get(i);
-			ParameterNode parameter = parameters.get(i);
+			MethodParameterNode parameter = parameters.get(i);
 			ChoiceNode testValue = null;
 
 			if(testParameterElement.getLocalName().equals(Constants.TEST_PARAMETER_NODE_NAME)){
@@ -281,7 +281,7 @@ public class XomAnalyser {
 		assertNodeTag(element.getQualifiedName(), CONSTRAINT_CHOICE_STATEMENT_NODE_NAME);
 
 		String parameterName = getAttributeValue(element, Constants.STATEMENT_PARAMETER_ATTRIBUTE_NAME);
-		ParameterNode parameter = method.getParameter(parameterName);
+		MethodParameterNode parameter = method.getParameter(parameterName);
 		if(parameter == null || parameter.isExpected()){
 			throw new ParserException(Messages.WRONG_CATEGORY_NAME(parameterName, method.getName()));
 		}
@@ -304,7 +304,7 @@ public class XomAnalyser {
 		String label = getAttributeValue(element, Constants.STATEMENT_LABEL_ATTRIBUTE_NAME);
 		String relationName = getAttributeValue(element, Constants.STATEMENT_RELATION_ATTRIBUTE_NAME);
 
-		ParameterNode parameter = method.getParameter(parameterName);
+		MethodParameterNode parameter = method.getParameter(parameterName);
 		if(parameter == null || parameter.isExpected()){
 			throw new ParserException(Messages.WRONG_CATEGORY_NAME(parameterName, method.getName()));
 		}
@@ -318,7 +318,7 @@ public class XomAnalyser {
 
 		String parameterName = getAttributeValue(element, Constants.STATEMENT_PARAMETER_ATTRIBUTE_NAME);
 		String valueString = getAttributeValue(element, Constants.STATEMENT_EXPECTED_VALUE_ATTRIBUTE_NAME);
-		ParameterNode parameter = method.getParameter(parameterName);
+		MethodParameterNode parameter = method.getParameter(parameterName);
 		if(parameter == null || !parameter.isExpected()){
 			throw new ParserException(Messages.WRONG_CATEGORY_NAME(parameterName, method.getName()));
 		}

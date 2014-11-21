@@ -19,7 +19,7 @@ import java.util.List;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.testify.ecfeed.model.ParameterNode;
+import com.testify.ecfeed.model.MethodParameterNode;
 import com.testify.ecfeed.model.ExpectedValueStatement;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.ChoiceNode;
@@ -27,9 +27,9 @@ import com.testify.ecfeed.model.ChoiceNode;
 public class ExpectedValueStatementTest{
 	
 	private static MethodNode fMethod;
-	private static ParameterNode fExpParameter1;
-	private static ParameterNode fPartParameter1;
-	private static ParameterNode fPartParameter2;
+	private static MethodParameterNode fExpParameter1;
+	private static MethodParameterNode fPartParameter1;
+	private static MethodParameterNode fPartParameter2;
 	private static String fExpectedValue1;
 
 	
@@ -38,10 +38,10 @@ public class ExpectedValueStatementTest{
 		fMethod = new MethodNode("method");
 		fExpectedValue1 = "value1";
 
-		fExpParameter1 = new ParameterNode("parameter", "type","0",  true);
+		fExpParameter1 = new MethodParameterNode("parameter", "type","0",  true);
 		fExpParameter1.setDefaultValueString(fExpectedValue1);
-		fPartParameter1 = new ParameterNode("parameter", "type","0",  false);
-		fPartParameter2 = new ParameterNode("parameter", "type", "0", false);
+		fPartParameter1 = new MethodParameterNode("parameter", "type","0",  false);
+		fPartParameter2 = new MethodParameterNode("parameter", "type", "0", false);
 
 		fMethod.addParameter(fPartParameter1);
 		fMethod.addParameter(fExpParameter1);
@@ -67,8 +67,8 @@ public class ExpectedValueStatementTest{
 	
 	@Test
 	public void compareTest(){
-		ParameterNode c1 = new ParameterNode("c", "type", "0", true);
-		ParameterNode c2 = new ParameterNode("c", "type", "0", true);
+		MethodParameterNode c1 = new MethodParameterNode("c", "type", "0", true);
+		MethodParameterNode c2 = new MethodParameterNode("c", "type", "0", true);
 		
 		ChoiceNode p1 = new ChoiceNode("name", "value");
 		ChoiceNode p2 = new ChoiceNode("name", "value");

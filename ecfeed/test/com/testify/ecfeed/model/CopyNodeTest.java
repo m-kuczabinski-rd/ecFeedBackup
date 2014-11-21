@@ -26,10 +26,10 @@ public class CopyNodeTest{
 	ClassNode fClass2;
 	MethodNode fMethod1;
 	MethodNode fMethod2;
-	ParameterNode fPartCat1;
-	ParameterNode fPartCat2;
-	ParameterNode fExCat1;
-	ParameterNode fExCat2;
+	MethodParameterNode fPartCat1;
+	MethodParameterNode fPartCat2;
+	MethodParameterNode fExCat1;
+	MethodParameterNode fExCat2;
 	ChoiceNode fChoice1;
 	ChoiceNode fChoice2;
 	ChoiceNode fChoice3;
@@ -47,11 +47,11 @@ public class CopyNodeTest{
 		fClass2 = new ClassNode("com.testify.ecfeed.model.Class2");
 		fMethod1 = new MethodNode("firstMethod");
 		fMethod2 = new MethodNode("secondMethod");
-		fPartCat1 = new ParameterNode("pcat1", "type", "0", false);
-		fPartCat2 = new ParameterNode("pcat2", "type2", "0", false);
-		fExCat1 = new ParameterNode("ecat1", "type", "0", true);
+		fPartCat1 = new MethodParameterNode("pcat1", "type", "0", false);
+		fPartCat2 = new MethodParameterNode("pcat2", "type2", "0", false);
+		fExCat1 = new MethodParameterNode("ecat1", "type", "0", true);
 		fExCat1.setDefaultValueString("value1");
-		fExCat2 = new ParameterNode("ecat2", "type", "0", true);
+		fExCat2 = new MethodParameterNode("ecat2", "type", "0", true);
 		fExCat2.setDefaultValueString("value2");
 		fChoice1 = new ChoiceNode("p1", "value1");
 		fChoice2 = new ChoiceNode("p2", "value2");
@@ -125,7 +125,7 @@ public class CopyNodeTest{
 		testChoiceChildrenLabels(childcopy, fLabel1, fLabel2);
 	}
 
-	public void testChoicesParentParameters(ParameterNode parameter, ParameterNode copy, String parentlabel, String childlabel){
+	public void testChoicesParentParameters(MethodParameterNode parameter, MethodParameterNode copy, String parentlabel, String childlabel){
 		testNode(parameter, copy);
 		assertEquals(parameter.getChildren().size(), copy.getChildren().size());
 		assertEquals(parameter.getAllChoiceNames().size(), copy.getAllChoiceNames().size());
@@ -150,13 +150,13 @@ public class CopyNodeTest{
 
 	@Test
 	public void choicesParentParameterCopyTest(){
-		ParameterNode copy = fPartCat1.getCopy();
+		MethodParameterNode copy = fPartCat1.getCopy();
 		// parameters copied properly?
 		testChoicesParentParameters(fPartCat1, copy, fLabel1, fLabel2);
 		testParent(copy, fPartCat1.getParent(), true);
 	}
 
-	public void testExpectedParameters(ParameterNode parameter, ParameterNode copy){
+	public void testExpectedParameters(MethodParameterNode parameter, MethodParameterNode copy){
 		testNode(parameter, copy);
 //		ChoiceNode choice = parameter.getDefaultValueChoice();
 //		ChoiceNode choicecopy = copy.getDefaultValueChoice();
@@ -166,7 +166,7 @@ public class CopyNodeTest{
 
 	@Test
 	public void expectedParameterCopyTest(){
-		ParameterNode copy = fExCat1.getCopy();
+		MethodParameterNode copy = fExCat1.getCopy();
 		testExpectedParameters(fExCat1, copy);
 		testParent(copy, fExCat1.getParent(), true);
 	}
@@ -174,13 +174,13 @@ public class CopyNodeTest{
 	public void testMethods(MethodNode method, MethodNode copy, String parentlabel, String childlabel){
 		testNode(method, copy);
 		// Test choices parent parameter
-		ParameterNode partcat = method.getParameters(false).get(0);
-		ParameterNode copypartcat = copy.getParameter(partcat.getName());
+		MethodParameterNode partcat = method.getParameters(false).get(0);
+		MethodParameterNode copypartcat = copy.getParameter(partcat.getName());
 		testChoicesParentParameters(partcat, copypartcat, parentlabel, childlabel);
 		testParent(copypartcat, copy, true);
 		// Test expected parameter
-		ParameterNode expcat = method.getParameters(true).get(0);
-		ParameterNode copyexpcat = copy.getParameter(expcat.getName());
+		MethodParameterNode expcat = method.getParameters(true).get(0);
+		MethodParameterNode copyexpcat = copy.getParameter(expcat.getName());
 		testExpectedParameters(fExCat1, copyexpcat);
 		testParent(copyexpcat, copy, true);
 	}

@@ -17,10 +17,10 @@ import com.testify.ecfeed.adapter.java.JavaUtils;
 
 public class ExpectedValueStatement extends AbstractStatement implements IRelationalStatement{
 
-	ParameterNode fParameter;
+	MethodParameterNode fParameter;
 	ChoiceNode fCondition;
 
-	public ExpectedValueStatement(ParameterNode parameter, ChoiceNode condition) {
+	public ExpectedValueStatement(MethodParameterNode parameter, ChoiceNode condition) {
 		fParameter = parameter;
 		fCondition = condition.getCopy();
 	}
@@ -31,7 +31,7 @@ public class ExpectedValueStatement extends AbstractStatement implements IRelati
 	}
 
 	@Override
-	public boolean mentions(ParameterNode parameter) {
+	public boolean mentions(MethodParameterNode parameter) {
 		return parameter == fParameter;
 	}
 
@@ -64,7 +64,7 @@ public class ExpectedValueStatement extends AbstractStatement implements IRelati
 	public void setRelation(EStatementRelation relation) {
 	}
 
-	public ParameterNode getParameter(){
+	public MethodParameterNode getParameter(){
 		return fParameter;
 	}
 
@@ -84,7 +84,7 @@ public class ExpectedValueStatement extends AbstractStatement implements IRelati
 
 	@Override
 	public boolean updateReferences(MethodNode method){
-		ParameterNode parameter = method.getParameter(fParameter.getName());
+		MethodParameterNode parameter = method.getParameter(fParameter.getName());
 		if(parameter != null && parameter.isExpected()){
 			fParameter = parameter;
 			fCondition.setParent(parameter);

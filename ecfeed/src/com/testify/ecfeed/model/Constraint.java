@@ -74,22 +74,22 @@ public class Constraint implements IConstraint<ChoiceNode> {
 
 		@Override
 		public Object visit(StaticStatement statement) throws Exception {
-			return new HashSet<ParameterNode>();
+			return new HashSet<MethodParameterNode>();
 		}
 
 		@SuppressWarnings("unchecked")
 		@Override
 		public Object visit(StatementArray statement) throws Exception {
-			Set<ParameterNode> set = new HashSet<ParameterNode>();
+			Set<MethodParameterNode> set = new HashSet<MethodParameterNode>();
 			for(AbstractStatement s : statement.getStatements()){
-				set.addAll((Set<ParameterNode>)s.accept(this));
+				set.addAll((Set<MethodParameterNode>)s.accept(this));
 			}
 			return set;
 		}
 
 		@Override
 		public Object visit(ExpectedValueStatement statement) throws Exception {
-			Set<ParameterNode> set = new HashSet<ParameterNode>();
+			Set<MethodParameterNode> set = new HashSet<MethodParameterNode>();
 			set.add(statement.getParameter());
 			return set;
 		}
@@ -102,13 +102,13 @@ public class Constraint implements IConstraint<ChoiceNode> {
 
 		@Override
 		public Object visit(LabelCondition condition) throws Exception {
-			return new HashSet<ParameterNode>();
+			return new HashSet<MethodParameterNode>();
 		}
 
 		@Override
 		public Object visit(ChoiceCondition condition) throws Exception {
-			Set<ParameterNode> set = new HashSet<ParameterNode>();
-			ParameterNode parameter = condition.getChoice().getParameter();
+			Set<MethodParameterNode> set = new HashSet<MethodParameterNode>();
+			MethodParameterNode parameter = condition.getChoice().getParameter();
 			if(parameter != null){
 				set.add(parameter);
 			}
@@ -118,10 +118,10 @@ public class Constraint implements IConstraint<ChoiceNode> {
 	
 	private class ReferencedLabelsPrivider implements IStatementVisitor{
 		
-		private ParameterNode fParameter;
+		private MethodParameterNode fParameter;
 		private Set<String> EMPTY_SET = new HashSet<String>();
 		
-		public ReferencedLabelsPrivider(ParameterNode parameter){
+		public ReferencedLabelsPrivider(MethodParameterNode parameter){
 			fParameter = parameter;
 		}
 		
@@ -228,11 +228,11 @@ public class Constraint implements IConstraint<ChoiceNode> {
 		fConsequence = consequence;
 	}
 	
-	public boolean mentions(ParameterNode parameter) {
+	public boolean mentions(MethodParameterNode parameter) {
 		return fPremise.mentions(parameter) || fConsequence.mentions(parameter);
 	}
 
-	public boolean mentions(ParameterNode parameter, String label) {
+	public boolean mentions(MethodParameterNode parameter, String label) {
 		return fPremise.mentions(parameter, label) || fConsequence.mentions(parameter, label);
 	}
 
@@ -265,19 +265,19 @@ public class Constraint implements IConstraint<ChoiceNode> {
 	}
 
 	@SuppressWarnings("unchecked")
-	public Set<ParameterNode> getReferencedParameters() {
+	public Set<MethodParameterNode> getReferencedParameters() {
 		try{
-			Set<ParameterNode> referenced = (Set<ParameterNode>)fPremise.accept(new ReferencedParametersProvider());
-			referenced.addAll((Set<ParameterNode>)fConsequence.accept(new ReferencedParametersProvider()));
+			Set<MethodParameterNode> referenced = (Set<MethodParameterNode>)fPremise.accept(new ReferencedParametersProvider());
+			referenced.addAll((Set<MethodParameterNode>)fConsequence.accept(new ReferencedParametersProvider()));
 			return referenced;
 		}
 		catch(Exception e){
-			return new HashSet<ParameterNode>();
+			return new HashSet<MethodParameterNode>();
 		}
 	}
 
 	@SuppressWarnings("unchecked")
-	public Set<String> getReferencedLabels(ParameterNode parameter) {
+	public Set<String> getReferencedLabels(MethodParameterNode parameter) {
 		try{
 			Set<String> referenced = (Set<String>)fPremise.accept(new ReferencedLabelsPrivider(parameter));
 			referenced.addAll((Set<String>)fConsequence.accept(new ReferencedLabelsPrivider(parameter)));

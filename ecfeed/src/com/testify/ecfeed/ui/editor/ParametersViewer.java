@@ -30,7 +30,7 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.ui.forms.widgets.Section;
 
-import com.testify.ecfeed.model.ParameterNode;
+import com.testify.ecfeed.model.MethodParameterNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.ui.common.NodeNameColumnLabelProvider;
@@ -81,7 +81,7 @@ public class ParametersViewer extends TableViewerSection{
 
 		@Override
 		protected Object getValue(Object element) {
-			ParameterNode node = (ParameterNode)element;
+			MethodParameterNode node = (MethodParameterNode)element;
 			String [] items = fCellEditor.getItems();
 			ArrayList<String> newItems = new ArrayList<String>();
 
@@ -99,7 +99,7 @@ public class ParametersViewer extends TableViewerSection{
 
 		@Override
 		protected void setValue(Object element, Object value) {
-			ParameterNode node = (ParameterNode)element;
+			MethodParameterNode node = (MethodParameterNode)element;
 			String newType = null;
 			int index = (int)value;
 
@@ -137,12 +137,12 @@ public class ParametersViewer extends TableViewerSection{
 
 		@Override
 		protected Object getValue(Object element) {
-			return ((ParameterNode)element).getName();
+			return ((MethodParameterNode)element).getName();
 		}
 
 		@Override
 		protected void setValue(Object element, Object value) {
-			fParameterIf.setTarget((ParameterNode)element);
+			fParameterIf.setTarget((MethodParameterNode)element);
 			fParameterIf.setName((String)value);
 		}
 	}
@@ -172,13 +172,13 @@ public class ParametersViewer extends TableViewerSection{
 
 		@Override
 		protected Object getValue(Object element) {
-			ParameterNode node = (ParameterNode)element;
+			MethodParameterNode node = (MethodParameterNode)element;
 			return (node.isExpected() ? 0 : 1);
 		}
 
 		@Override
 		protected void setValue(Object element, Object value) {
-			ParameterNode node = (ParameterNode)element;
+			MethodParameterNode node = (MethodParameterNode)element;
 			boolean expected = ((int)value == 0) ? true : false;
 			fParameterIf.setTarget(node);
 			fParameterIf.setExpected(expected);
@@ -198,7 +198,7 @@ public class ParametersViewer extends TableViewerSection{
 
 		@Override
 		protected CellEditor getCellEditor(Object element) {
-			ParameterNode parameter = (ParameterNode)element;
+			MethodParameterNode parameter = (MethodParameterNode)element;
 			ArrayList<String> expectedValues = new ArrayList<String>();
 			for(String value : ParameterInterface.getSpecialValues(parameter.getType())){
 				expectedValues.add(value);
@@ -229,17 +229,17 @@ public class ParametersViewer extends TableViewerSection{
 
 		@Override
 		protected boolean canEdit(Object element) {
-			return (element instanceof ParameterNode && ((ParameterNode)element).isExpected());
+			return (element instanceof MethodParameterNode && ((MethodParameterNode)element).isExpected());
 		}
 
 		@Override
 		protected Object getValue(Object element) {
-			return ((ParameterNode)element).getDefaultValue();
+			return ((MethodParameterNode)element).getDefaultValue();
 		}
 
 		@Override
 		protected void setValue(Object element, Object value) {
-			ParameterNode parameter = (ParameterNode)element;
+			MethodParameterNode parameter = (MethodParameterNode)element;
 			String valueString = null;
 			if(value instanceof String){
 				valueString = (String)value;
@@ -255,7 +255,7 @@ public class ParametersViewer extends TableViewerSection{
 	private class AddNewParameterAdapter extends SelectionAdapter {
 		@Override
 		public void widgetSelected(SelectionEvent e) {
-			ParameterNode addedParameter = fMethodIf.addNewParameter();
+			MethodParameterNode addedParameter = fMethodIf.addNewParameter();
 			if(addedParameter != null){
 				selectElement(addedParameter);
 				fNameColumn.getViewer().editElement(addedParameter, 0);			
@@ -294,14 +294,14 @@ public class ParametersViewer extends TableViewerSection{
 		fTypeColumn = addColumn("Type", 150, new NodeViewerColumnLabelProvider(){
 			@Override
 			public String getText(Object element){
-				return ((ParameterNode)element).getType();
+				return ((MethodParameterNode)element).getType();
 			}
 		});
 		
 		fExpectedColumn = addColumn("Expected", 150, new NodeViewerColumnLabelProvider(){
 			@Override
 			public String getText(Object element) {
-				ParameterNode node = (ParameterNode)element;
+				MethodParameterNode node = (MethodParameterNode)element;
 				return (node.isExpected() ? "Yes" : "No");
 			}
 		});
@@ -309,8 +309,8 @@ public class ParametersViewer extends TableViewerSection{
 		fDefaultValueColumn = addColumn("Default value", 150, new NodeViewerColumnLabelProvider(){
 			@Override
 			public String getText(Object element){
-				if(element instanceof ParameterNode && ((ParameterNode)element).isExpected()){
-					ParameterNode parameter = (ParameterNode)element;
+				if(element instanceof MethodParameterNode && ((MethodParameterNode)element).isExpected()){
+					MethodParameterNode parameter = (MethodParameterNode)element;
 					return parameter.getDefaultValue();
 				}
 				return EMPTY_STRING ;

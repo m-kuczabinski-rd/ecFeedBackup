@@ -20,7 +20,7 @@ import java.util.List;
 import org.junit.Test;
 
 import com.testify.ecfeed.model.AbstractStatement;
-import com.testify.ecfeed.model.ParameterNode;
+import com.testify.ecfeed.model.MethodParameterNode;
 import com.testify.ecfeed.model.Constraint;
 import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.model.ChoicesParentStatement;
@@ -67,7 +67,7 @@ public class ConstraintTest {
 	@Test
 	public void testMentions() {
 		ChoiceNode choice = new ChoiceNode("choice", null);
-		ParameterNode parameter = new ParameterNode("parameter", "type", "0", false);
+		MethodParameterNode parameter = new MethodParameterNode("parameter", "type", "0", false);
 		parameter.addChoice(choice);
 
 		AbstractStatement mentioningStatement = new ChoicesParentStatement(parameter, EStatementRelation.EQUAL, choice);

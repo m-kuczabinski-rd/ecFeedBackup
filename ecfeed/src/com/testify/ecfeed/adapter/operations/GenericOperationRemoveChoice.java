@@ -5,7 +5,7 @@ import java.util.Set;
 import com.testify.ecfeed.adapter.IModelOperation;
 import com.testify.ecfeed.adapter.ModelOperationException;
 import com.testify.ecfeed.adapter.java.JavaUtils;
-import com.testify.ecfeed.model.ParameterNode;
+import com.testify.ecfeed.model.MethodParameterNode;
 import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.model.ChoicesParentNode;
 
@@ -49,7 +49,7 @@ public class GenericOperationRemoveChoice extends BulkOperation {
 		@Override
 		public void execute() throws ModelOperationException {
 			fOriginalIndex = fChoice.getIndex();
-			ParameterNode parameter = fTarget.getParameter();
+			MethodParameterNode parameter = fTarget.getParameter();
 			if(parameter.isExpected() && JavaUtils.isPrimitive(parameter.getType()) == false && parameter.getChoices().size() == 1 && parameter.getChoices().get(0) == fChoice){
 				// We are removing the only choice of expected parameter. 
 				// The last parameter must represent the default expected value

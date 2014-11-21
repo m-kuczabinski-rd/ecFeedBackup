@@ -35,7 +35,7 @@ import com.testify.ecfeed.junit.annotations.Generator;
 import com.testify.ecfeed.junit.annotations.GeneratorParameter;
 import com.testify.ecfeed.junit.annotations.GeneratorParameterNames;
 import com.testify.ecfeed.junit.annotations.GeneratorParameterValues;
-import com.testify.ecfeed.model.ParameterNode;
+import com.testify.ecfeed.model.MethodParameterNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.runner.Messages;
@@ -97,7 +97,7 @@ public class OnlineRunner extends AbstractJUnitRunner {
 
 	protected List<List<ChoiceNode>> getInput(MethodNode methodModel) {
 		List<List<ChoiceNode>> result = new ArrayList<List<ChoiceNode>>();
-		for(ParameterNode parameter : methodModel.getParameters()){
+		for(MethodParameterNode parameter : methodModel.getParameters()){
 			if(parameter.isExpected()){
 				ChoiceNode choice = new ChoiceNode("expected", parameter.getDefaultValue());
 				choice.setParent(parameter);

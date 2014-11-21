@@ -6,14 +6,14 @@ import java.util.List;
 import com.testify.ecfeed.adapter.IModelOperation;
 import com.testify.ecfeed.adapter.ModelOperationException;
 import com.testify.ecfeed.model.MethodNode;
-import com.testify.ecfeed.model.ParameterNode;
+import com.testify.ecfeed.model.MethodParameterNode;
 import com.testify.ecfeed.model.TestCaseNode;
 
 public class MethodOperationAddParameter extends GenericOperationAddParameter {
 
 	List<TestCaseNode> fRemovedTestCases;
 	MethodNode fTarget;
-	ParameterNode fParameter;
+	MethodParameterNode fParameter;
 	private int fNewIndex;
 
 	private class MethodReverseOperation extends ReverseOperation{
@@ -35,7 +35,7 @@ public class MethodOperationAddParameter extends GenericOperationAddParameter {
 
 	}
 
-	public MethodOperationAddParameter(MethodNode target, ParameterNode parameter, int index) {
+	public MethodOperationAddParameter(MethodNode target, MethodParameterNode parameter, int index) {
 		super(target, parameter, index);
 		fRemovedTestCases = new ArrayList<TestCaseNode>(target.getTestCases());
 		fTarget = target;
@@ -43,7 +43,7 @@ public class MethodOperationAddParameter extends GenericOperationAddParameter {
 		fNewIndex = index != -1 ? index : target.getParameters().size();
 	}
 
-	public MethodOperationAddParameter(MethodNode target, ParameterNode parameter) {
+	public MethodOperationAddParameter(MethodNode target, MethodParameterNode parameter) {
 		this(target, parameter, -1);
 	}
 

@@ -31,7 +31,7 @@ import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.ConstraintNode;
 import com.testify.ecfeed.model.ExpectedValueStatement;
 import com.testify.ecfeed.model.MethodNode;
-import com.testify.ecfeed.model.ParameterNode;
+import com.testify.ecfeed.model.MethodParameterNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.StatementArray;
 import com.testify.ecfeed.model.StaticStatement;
@@ -99,10 +99,10 @@ public class XomParserTest {
 		for(String type : SUPPORTED_TYPES){
 			try{
 			for(boolean expected : new Boolean[]{true, false}){
-				ParameterNode c = fModelGenerator.generateParameter(type, expected, 3, 3, 3);
+				MethodParameterNode c = fModelGenerator.generateParameter(type, expected, 3, 3, 3);
 				Element element = (Element)c.accept(fConverter);
 				TRACE(element);
-					ParameterNode c1 = fParser.parseParameter(element);
+					MethodParameterNode c1 = fParser.parseParameter(element);
 					assertElementsEqual(c, c1);
 				}
 			}

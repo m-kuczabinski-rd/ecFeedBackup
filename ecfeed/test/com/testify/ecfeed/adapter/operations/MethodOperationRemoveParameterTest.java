@@ -27,7 +27,7 @@ import com.testify.ecfeed.model.ConstraintNode;
 import com.testify.ecfeed.model.EStatementRelation;
 import com.testify.ecfeed.model.ExpectedValueStatement;
 import com.testify.ecfeed.model.MethodNode;
-import com.testify.ecfeed.model.ParameterNode;
+import com.testify.ecfeed.model.MethodParameterNode;
 import com.testify.ecfeed.model.StaticStatement;
 import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.testutils.ModelTestUtils;
@@ -51,19 +51,19 @@ public class MethodOperationRemoveParameterTest{
 		ModelOperationManager operationManager = new ModelOperationManager();
 
 		for(int i = 0; i < 3; i++){
-			similarMethod.addParameter(new ParameterNode("arg" + i, "int", "0", false));
+			similarMethod.addParameter(new MethodParameterNode("arg" + i, "int", "0", false));
 			if(i < 2){
-				targetMethod.addParameter(new ParameterNode("arg" + i, "int", "0", false));
+				targetMethod.addParameter(new MethodParameterNode("arg" + i, "int", "0", false));
 			}
 			else{
 				String type = sameParameterTypes?"int":"float";
 				String name = sameParameterNames?"arg"+i:"differentName";
-				targetMethod.addParameter(new ParameterNode(name, type, "0", false));
+				targetMethod.addParameter(new MethodParameterNode(name, type, "0", false));
 			}
 
 		}
 
-		ParameterNode removed = new ParameterNode("removed", "String", "xxx", false);
+		MethodParameterNode removed = new MethodParameterNode("removed", "String", "xxx", false);
 		targetMethod.addParameter(removed);
 
 		try{
@@ -85,12 +85,12 @@ public class MethodOperationRemoveParameterTest{
 		MethodNode target = new MethodNode("target");
 		classNode.addMethod(target);
 
-		ParameterNode removedParameter = new ParameterNode("removed", "int", "0", removedParameterExpected);
+		MethodParameterNode removedParameter = new MethodParameterNode("removed", "int", "0", removedParameterExpected);
 		ChoiceNode removedChoice = new ChoiceNode("removed1", "5");
 		removedParameter.addChoice(removedChoice);
 		target.addParameter(removedParameter);
 
-		ParameterNode notRemovedParameter = new ParameterNode("notRemoved", "int", "0", false);
+		MethodParameterNode notRemovedParameter = new MethodParameterNode("notRemoved", "int", "0", false);
 		ChoiceNode notRemovedChoice = new ChoiceNode("choice", "5");
 		notRemovedParameter.addChoice(notRemovedChoice);
 		target.addParameter(notRemovedParameter);

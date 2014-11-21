@@ -2,7 +2,7 @@ package com.testify.ecfeed.adapter;
 
 import java.util.List;
 
-import com.testify.ecfeed.model.ParameterNode;
+import com.testify.ecfeed.model.MethodParameterNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.ConstraintNode;
 import com.testify.ecfeed.model.AbstractNode;
@@ -36,7 +36,7 @@ public abstract class AbstractImplementationStatusResolver implements
 		}
 
 		@Override
-		public Object visit(ParameterNode node) throws Exception {
+		public Object visit(MethodParameterNode node) throws Exception {
 			return implementationStatus(node);
 		}
 
@@ -116,7 +116,7 @@ public abstract class AbstractImplementationStatusResolver implements
 		return status;
 	}
 	
-	protected EImplementationStatus implementationStatus(ParameterNode parameter){
+	protected EImplementationStatus implementationStatus(MethodParameterNode parameter){
 		EImplementationStatus status = EImplementationStatus.IMPLEMENTED;
 		if(fPrimitiveTypeTester.isPrimitive(parameter.getType())){
 			if(parameter.getChoices().size() == 0 && parameter.isExpected() == false)
@@ -151,7 +151,7 @@ public abstract class AbstractImplementationStatusResolver implements
 	protected EImplementationStatus implementationStatus(ChoiceNode choice){
 		EImplementationStatus status = EImplementationStatus.IMPLEMENTED;
 		if(choice.isAbstract() == false){
-			ParameterNode parameter = choice.getParameter();
+			MethodParameterNode parameter = choice.getParameter();
 			if(parameter == null){
 				status = EImplementationStatus.NOT_IMPLEMENTED;
 			}

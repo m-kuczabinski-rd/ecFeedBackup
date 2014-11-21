@@ -36,7 +36,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 
-import com.testify.ecfeed.model.ParameterNode;
+import com.testify.ecfeed.model.MethodParameterNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.model.TestCaseNode;
@@ -65,8 +65,8 @@ public class AddTestCaseDialog extends TitleAreaDialog implements ITestDataEdito
 		setHelpAvailable(false);
 		setShellStyle(SWT.BORDER | SWT.RESIZE | SWT.TITLE | SWT.APPLICATION_MODAL);
 		fTestData = new ArrayList<ChoiceNode>();
-		List<ParameterNode> parameters = method.getParameters();
-		for(ParameterNode parameter : parameters){
+		List<MethodParameterNode> parameters = method.getParameters();
+		for(MethodParameterNode parameter : parameters){
 			if(parameter.isExpected()){
 				fTestData.add(createAnonymuousChoice(parameter));
 			}
@@ -82,7 +82,7 @@ public class AddTestCaseDialog extends TitleAreaDialog implements ITestDataEdito
 		fMethod = method;
 	}
 
-	private ChoiceNode createAnonymuousChoice(ParameterNode parent) {
+	private ChoiceNode createAnonymuousChoice(MethodParameterNode parent) {
 		ChoiceNode choice = new ChoiceNode("@expected", parent.getDefaultValue());
 		choice.setParent(parent);
 		return choice;

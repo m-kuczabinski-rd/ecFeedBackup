@@ -60,7 +60,7 @@ public class ClassNode extends ParametersParentNode {
 	public MethodNode getMethod(String name, List<String> argTypes) {
 		for(MethodNode methodNode : getMethods()){
 			List<String> args = new ArrayList<String>();
-			for(ParameterNode arg : methodNode.getParameters()){
+			for(MethodParameterNode arg : methodNode.getParameters()){
 				args.add(arg.getType());
 			}
 			if(methodNode.getName().equals(name) && args.equals(argTypes)){

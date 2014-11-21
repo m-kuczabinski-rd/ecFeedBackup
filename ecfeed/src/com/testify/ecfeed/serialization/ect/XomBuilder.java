@@ -52,7 +52,7 @@ import nu.xom.Attribute;
 import nu.xom.Element;
 
 import com.testify.ecfeed.model.AbstractStatement;
-import com.testify.ecfeed.model.ParameterNode;
+import com.testify.ecfeed.model.MethodParameterNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.ConstraintNode;
 import com.testify.ecfeed.model.ExpectedValueStatement;
@@ -97,7 +97,7 @@ public class XomBuilder implements IModelVisitor, IStatementVisitor {
 	public Object visit(MethodNode node) throws Exception {
 		Element element = createNamedElement(METHOD_NODE_NAME, node);
 		
-		for(ParameterNode parameter : node.getParameters()){
+		for(MethodParameterNode parameter : node.getParameters()){
 			element.appendChild((Element)parameter.accept(this));
 		}
 		
@@ -113,7 +113,7 @@ public class XomBuilder implements IModelVisitor, IStatementVisitor {
 	}
 	
 	@Override
-	public Object visit(ParameterNode node)  throws Exception {
+	public Object visit(MethodParameterNode node)  throws Exception {
 		Element element = createNamedElement(PARAMETER_NODE_NAME, node);
 		element.addAttribute(new Attribute(TYPE_NAME_ATTRIBUTE, node.getType()));
 		element.addAttribute(new Attribute(PARAMETER_IS_EXPECTED_ATTRIBUTE_NAME, Boolean.toString(node.isExpected())));

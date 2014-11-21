@@ -31,7 +31,7 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.ui.forms.widgets.Section;
 
 import com.testify.ecfeed.adapter.java.JavaUtils;
-import com.testify.ecfeed.model.ParameterNode;
+import com.testify.ecfeed.model.MethodParameterNode;
 import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.model.ChoicesParentNode;
 import com.testify.ecfeed.ui.common.NodeNameColumnLabelProvider;
@@ -102,7 +102,7 @@ public class ChoicesViewer extends TableViewerSection {
 		@Override
 		protected CellEditor getCellEditor(Object element) {
 			ChoiceNode node = (ChoiceNode)element;
-			ParameterNode parameter = node.getParameter();
+			MethodParameterNode parameter = node.getParameter();
 			if(ParameterInterface.hasLimitedValuesSet(node.getParameter())){
 				fCellEditor.setActivationStyle(ComboBoxCellEditor.DROP_DOWN_ON_KEY_ACTIVATION);
 			} else {

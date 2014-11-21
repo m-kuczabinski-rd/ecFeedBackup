@@ -23,7 +23,7 @@ import com.testify.ecfeed.adapter.operations.ChoiceOperationAddLabels;
 import com.testify.ecfeed.adapter.operations.ChoiceOperationRemoveLabels;
 import com.testify.ecfeed.adapter.operations.ChoiceOperationRenameLabel;
 import com.testify.ecfeed.adapter.operations.ChoiceOperationSetValue;
-import com.testify.ecfeed.model.ParameterNode;
+import com.testify.ecfeed.model.MethodParameterNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.ui.common.Constants;
@@ -52,7 +52,7 @@ public class ChoiceInterface extends ChoicesParentNodeInterface{
 		return fTarget.getValueString();
 	}
 
-	public ParameterNode getParameter() {
+	public MethodParameterNode getParameter() {
 		return fTarget.getParameter();
 	}
 

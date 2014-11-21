@@ -26,8 +26,8 @@ public class MethodNodeTest {
 	@Test
 	public void testAddParameter(){
 		MethodNode method = new MethodNode("name");
-		ParameterNode parameter = new ParameterNode("parameter", "type1", "0", false);
-		ParameterNode expCat = new ParameterNode("expCat", "type2", "0", true);
+		MethodParameterNode parameter = new MethodParameterNode("parameter", "type1", "0", false);
+		MethodParameterNode expCat = new MethodParameterNode("expCat", "type2", "0", true);
 		assertEquals(0, method.getParameters().size());
 		method.addParameter(parameter);
 		assertEquals(1, method.getParameters().size());
@@ -128,8 +128,8 @@ public class MethodNodeTest {
 		TestCaseNode testCase = new TestCaseNode("test case", new ArrayList<ChoiceNode>());
 		ConstraintNode constraint = new ConstraintNode("constraint",
 				new Constraint(new StaticStatement(false), new StaticStatement(false)));
-		ParameterNode parameter = new ParameterNode("parameter", "type", "0", false);
-		ParameterNode expCat = new ParameterNode("expCat", "type", "0", true);
+		MethodParameterNode parameter = new MethodParameterNode("parameter", "type", "0", false);
+		MethodParameterNode expCat = new MethodParameterNode("expCat", "type", "0", true);
 
 		assertEquals(0, method.getChildren().size());
 		assertFalse(method.hasChildren());
@@ -311,9 +311,9 @@ public class MethodNodeTest {
 	@Test
 	public void testGetExpectedParametersNames(){
 		MethodNode method = new MethodNode("name");
-		ParameterNode parameter = new ParameterNode("parameter", "type", "0", false);
-		ParameterNode expCat1 = new ParameterNode("expCat1", "type", "0", true);
-		ParameterNode expCat2 = new ParameterNode("expCat2", "type", "0", true);
+		MethodParameterNode parameter = new MethodParameterNode("parameter", "type", "0", false);
+		MethodParameterNode expCat1 = new MethodParameterNode("expCat1", "type", "0", true);
+		MethodParameterNode expCat2 = new MethodParameterNode("expCat2", "type", "0", true);
 
 		method.addParameter(parameter);
 		method.addParameter(expCat1);
@@ -457,7 +457,7 @@ public class MethodNodeTest {
 	@Test
 	public void testChoiceRemoved(){
 		MethodNode method = new MethodNode("method");
-		ParameterNode parameter = new ParameterNode("parameter", "type", "0", false);
+		MethodParameterNode parameter = new MethodParameterNode("parameter", "type", "0", false);
 		ChoiceNode choice = new ChoiceNode("choice", "value");
 		Constraint mentioningConstraint = new Constraint(new ChoicesParentStatement(parameter, EStatementRelation.EQUAL, choice), new StaticStatement(false));
 		Constraint notMentioningConstraint = new Constraint(new StaticStatement(false), new StaticStatement(false));
@@ -514,8 +514,8 @@ public class MethodNodeTest {
 		m2.setName("m1");
 		assertTrue(m1.compare(m2));
 
-		ParameterNode c1 = new ParameterNode("c", "type", "0", true);
-		ParameterNode c2 = new ParameterNode("c", "type", "0", true);
+		MethodParameterNode c1 = new MethodParameterNode("c", "type", "0", true);
+		MethodParameterNode c2 = new MethodParameterNode("c", "type", "0", true);
 
 		m1.addParameter(c1);
 		assertFalse(m1.compare(m2));

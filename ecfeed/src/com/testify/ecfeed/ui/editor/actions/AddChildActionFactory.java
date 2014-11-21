@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.eclipse.jface.viewers.StructuredViewer;
 
-import com.testify.ecfeed.model.ParameterNode;
+import com.testify.ecfeed.model.MethodParameterNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.ConstraintNode;
 import com.testify.ecfeed.model.AbstractNode;
@@ -124,7 +124,7 @@ public class AddChildActionFactory {
 		}
 
 		@Override
-		public Object visit(ParameterNode node) throws Exception {
+		public Object visit(MethodParameterNode node) throws Exception {
 			return Arrays.asList(new AbstractAddChildAction[]{
 					new AddChoiceAction()
 			});

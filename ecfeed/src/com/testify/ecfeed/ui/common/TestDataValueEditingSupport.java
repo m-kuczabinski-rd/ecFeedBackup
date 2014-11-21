@@ -27,7 +27,7 @@ import org.eclipse.swt.widgets.Display;
 
 import com.testify.ecfeed.adapter.ITypeAdapter;
 import com.testify.ecfeed.adapter.java.JavaUtils;
-import com.testify.ecfeed.model.ParameterNode;
+import com.testify.ecfeed.model.MethodParameterNode;
 import com.testify.ecfeed.model.ChoiceNode;
 
 public class TestDataValueEditingSupport extends EditingSupport {
@@ -99,7 +99,7 @@ public class TestDataValueEditingSupport extends EditingSupport {
 	@Override
 	protected void setValue(Object element, Object value) {
 		ChoiceNode current = (ChoiceNode)element;
-		ParameterNode parameter = current.getParameter();
+		MethodParameterNode parameter = current.getParameter();
 		int index = parameter.getIndex();
 		ChoiceNode newValue = null;
 		if(parameter.isExpected()){

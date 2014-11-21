@@ -36,7 +36,7 @@ public class ChoiceNodeTest{
 	@Test
 	public void testGetParameter(){
 		MethodNode method = new MethodNode("method");
-		ParameterNode parameter = new ParameterNode("name", "type","0",  false);
+		MethodParameterNode parameter = new MethodParameterNode("name", "type","0",  false);
 		ChoiceNode p1 = new ChoiceNode("p1", "0");
 		ChoiceNode p11 = new ChoiceNode("p11", "0");
 		ChoiceNode p111 = new ChoiceNode("p111", "0");
@@ -60,7 +60,7 @@ public class ChoiceNodeTest{
 	@Test
 	public void testLevel(){
 		MethodNode method = new MethodNode("method");
-		ParameterNode parameter = new ParameterNode("name", "type", "0", false);
+		MethodParameterNode parameter = new MethodParameterNode("name", "type", "0", false);
 		ChoiceNode p1 = new ChoiceNode("p1", "0");
 		ChoiceNode p11 = new ChoiceNode("p11", "0");
 		ChoiceNode p111 = new ChoiceNode("p111", "0");

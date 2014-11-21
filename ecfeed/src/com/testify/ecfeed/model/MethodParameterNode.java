@@ -12,12 +12,12 @@
 package com.testify.ecfeed.model;
 
 
-public class ParameterNode extends AbstractParameterNode{
+public class MethodParameterNode extends AbstractParameterNode{
 
 	private boolean fExpected;
 	private String fDefaultValue;
 
-	public ParameterNode(String name, String type, String defaultValue, boolean expected) {
+	public MethodParameterNode(String name, String type, String defaultValue, boolean expected) {
 		super(name, type);
 		fExpected = expected;
 		fDefaultValue = defaultValue;
@@ -32,8 +32,8 @@ public class ParameterNode extends AbstractParameterNode{
 	}
 
 	@Override
-	public ParameterNode getCopy(){
-		ParameterNode parameter = new ParameterNode(getName(), getType(), getDefaultValue(), isExpected());
+	public MethodParameterNode getCopy(){
+		MethodParameterNode parameter = new MethodParameterNode(getName(), getType(), getDefaultValue(), isExpected());
 		parameter.setParent(this.getParent());
 		if(getDefaultValue() != null)
 			parameter.setDefaultValueString(getDefaultValue());
@@ -45,7 +45,7 @@ public class ParameterNode extends AbstractParameterNode{
 	}
 
 	@Override
-	public ParameterNode getParameter() {
+	public MethodParameterNode getParameter() {
 		return this;
 	}
 
@@ -71,10 +71,10 @@ public class ParameterNode extends AbstractParameterNode{
 
 	@Override
 	public boolean compare(AbstractNode node){
-		if(node instanceof ParameterNode == false){
+		if(node instanceof MethodParameterNode == false){
 			return false;
 		}
-		ParameterNode comparedParameter = (ParameterNode)node;
+		MethodParameterNode comparedParameter = (MethodParameterNode)node;
 
 		if(getType().equals(comparedParameter.getType()) == false){
 			return false;

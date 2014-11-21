@@ -21,7 +21,7 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
 
-import com.testify.ecfeed.model.ParameterNode;
+import com.testify.ecfeed.model.MethodParameterNode;
 import com.testify.ecfeed.ui.common.IFileInfoProvider;
 import com.testify.ecfeed.ui.modelif.ParameterInterface;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
@@ -95,8 +95,8 @@ public class ParameterDetailsPage extends BasicDetailsPage{
 	@Override
 	public void refresh(){
 		super.refresh();
-		if(getSelectedElement() instanceof ParameterNode){
-			ParameterNode parameter = (ParameterNode)getSelectedElement();
+		if(getSelectedElement() instanceof MethodParameterNode){
+			MethodParameterNode parameter = (MethodParameterNode)getSelectedElement();
 			fParameterIf.setTarget(parameter);
 
 			getMainSection().setText((parameter.isExpected()?"[e]":"") + parameter.toString());
@@ -141,7 +141,7 @@ public class ParameterDetailsPage extends BasicDetailsPage{
 		fExpectedCheckbox.addSelectionListener(new SetExpectedListener());
 	}
 
-	private void recreateDefaultValueCombo(ParameterNode parameter) {
+	private void recreateDefaultValueCombo(MethodParameterNode parameter) {
 		if(fDefaultValueCombo != null && fDefaultValueCombo.isDisposed() == false){
 			fDefaultValueCombo.dispose();
 		}

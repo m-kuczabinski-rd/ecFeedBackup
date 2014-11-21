@@ -3,7 +3,7 @@ package com.testify.ecfeed.ui.modelif;
 import com.testify.ecfeed.adapter.IModelOperation;
 import com.testify.ecfeed.adapter.operations.StatementOperationSetCondition;
 import com.testify.ecfeed.adapter.operations.StatementOperationSetRelation;
-import com.testify.ecfeed.model.ParameterNode;
+import com.testify.ecfeed.model.MethodParameterNode;
 import com.testify.ecfeed.model.EStatementRelation;
 import com.testify.ecfeed.model.ChoicesParentStatement;
 import com.testify.ecfeed.model.ChoicesParentStatement.ICondition;
@@ -35,7 +35,7 @@ public class ChoicesParentStatementInterface extends AbstractStatementInterface{
 	public boolean setConditionValue(String text) {
 		if(fTarget.getConditionName().equals(text) == false){
 			ICondition newCondition;
-			ParameterNode parameter = fTarget.getParameter();
+			MethodParameterNode parameter = fTarget.getParameter();
 			if(parameter.getChoice(text) != null){
 				newCondition = fTarget.new ChoiceCondition(parameter.getChoice(text));
 			}

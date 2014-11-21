@@ -25,7 +25,7 @@ import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.model.Constraint;
 import com.testify.ecfeed.model.ConstraintNode;
 import com.testify.ecfeed.model.MethodNode;
-import com.testify.ecfeed.model.ParameterNode;
+import com.testify.ecfeed.model.MethodParameterNode;
 import com.testify.ecfeed.model.StaticStatement;
 import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.ui.common.Constants;
@@ -69,12 +69,12 @@ public class MethodInterface extends ParametersParentInterface {
 	}
 
 	@Override
-	public boolean addParameter(ParameterNode parameter, int index) {
+	public boolean addParameter(MethodParameterNode parameter, int index) {
 		return execute(new MethodOperationAddParameter(fTarget, parameter, index), Messages.DIALOG_CONVERT_METHOD_PROBLEM_TITLE);
 	}
 
 	@Override
-	public boolean removeParameters(Collection<ParameterNode> parameters, IModelUpdateContext context){
+	public boolean removeParameters(Collection<MethodParameterNode> parameters, IModelUpdateContext context){
 		Set<ConstraintNode> constraints = fTarget.mentioningConstraints(parameters);
 		if(constraints.size() > 0 || fTarget.getTestCases().size() > 0){
 			if(MessageDialog.openConfirm(Display.getCurrent().getActiveShell(),
@@ -104,7 +104,7 @@ public class MethodInterface extends ParametersParentInterface {
 	}
 
 	public TestCaseNode addTestCase() {
-		for(ParameterNode parameter : fTarget.getParameters()){
+		for(MethodParameterNode parameter : fTarget.getParameters()){
 			if(!parameter.isExpected() && parameter.getChoices().isEmpty()){
 				MessageDialog.openError(Display.getDefault().getActiveShell(), Messages.DIALOG_ADD_TEST_CASE_PROBLEM_TITLE, Messages.DIALOG_TEST_CASE_WITH_EMPTY_CATEGORY_MESSAGE);
 				return null;

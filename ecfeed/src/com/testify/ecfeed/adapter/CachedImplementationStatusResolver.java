@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.testify.ecfeed.adapter.java.JavaPrimitiveTypePredicate;
-import com.testify.ecfeed.model.ParameterNode;
+import com.testify.ecfeed.model.MethodParameterNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.ConstraintNode;
 import com.testify.ecfeed.model.AbstractNode;
@@ -42,7 +42,7 @@ public abstract class CachedImplementationStatusResolver extends
 		}
 
 		@Override
-		public Object visit(ParameterNode node) throws Exception {
+		public Object visit(MethodParameterNode node) throws Exception {
 			fCache.remove(node);
 			return null;
 		}

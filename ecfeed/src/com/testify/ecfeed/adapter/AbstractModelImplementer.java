@@ -2,7 +2,7 @@ package com.testify.ecfeed.adapter;
 
 import java.util.List;
 
-import com.testify.ecfeed.model.ParameterNode;
+import com.testify.ecfeed.model.MethodParameterNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.ConstraintNode;
 import com.testify.ecfeed.model.AbstractNode;
@@ -35,7 +35,7 @@ public abstract class AbstractModelImplementer implements IModelImplementer {
 		}
 
 		@Override
-		public Object visit(ParameterNode node) throws Exception {
+		public Object visit(MethodParameterNode node) throws Exception {
 			return implementable(node); 
 		}
 
@@ -73,7 +73,7 @@ public abstract class AbstractModelImplementer implements IModelImplementer {
 		}
 
 		@Override
-		public Object visit(ParameterNode node) throws Exception {
+		public Object visit(MethodParameterNode node) throws Exception {
 			return implement(node);
 		}
 
@@ -105,7 +105,7 @@ public abstract class AbstractModelImplementer implements IModelImplementer {
 		if(type.equals(RootNode.class) ||
 			(type.equals(ClassNode.class))||
 			(type.equals(MethodNode.class))||
-			(type.equals(ParameterNode.class))||
+			(type.equals(MethodParameterNode.class))||
 			(type.equals(TestCaseNode.class))||
 			(type.equals(ChoiceNode.class))
 		){
@@ -162,7 +162,7 @@ public abstract class AbstractModelImplementer implements IModelImplementer {
 		if(methodDefinitionImplemented(node) == false){
 			implementMethodDefinition(node);
 		}
-		for(ParameterNode parameter : node.getParameters()){
+		for(MethodParameterNode parameter : node.getParameters()){
 			if(implementable(parameter) && getImplementationStatus(parameter) != EImplementationStatus.IMPLEMENTED){
 				implement(parameter);
 			}
@@ -175,7 +175,7 @@ public abstract class AbstractModelImplementer implements IModelImplementer {
 		return true;
 	}
 
-	protected boolean implement(ParameterNode node) throws Exception{
+	protected boolean implement(MethodParameterNode node) throws Exception{
 		if(parameterDefinitionImplemented(node) == false){
 			implementParameterDefinition(node);
 		}
@@ -232,7 +232,7 @@ public abstract class AbstractModelImplementer implements IModelImplementer {
 		return hasImplementableNode(node.getParameters()) || hasImplementableNode(node.getTestCases());
 	}
 	
-	protected boolean implementable(ParameterNode node){
+	protected boolean implementable(MethodParameterNode node){
 		return hasImplementableNode(node.getChoices());
 	}
 	protected boolean implementable(ChoiceNode node){
@@ -254,10 +254,10 @@ public abstract class AbstractModelImplementer implements IModelImplementer {
 
 	protected abstract boolean classDefinitionImplemented(ClassNode node);
 	protected abstract boolean methodDefinitionImplemented(MethodNode node);
-	protected abstract boolean parameterDefinitionImplemented(ParameterNode node);
+	protected abstract boolean parameterDefinitionImplemented(MethodParameterNode node);
 	
 	protected abstract void implementClassDefinition(ClassNode node) throws Exception;
 	protected abstract void implementMethodDefinition(MethodNode node) throws Exception;
-	protected abstract void implementParameterDefinition(ParameterNode node) throws Exception;
+	protected abstract void implementParameterDefinition(MethodParameterNode node) throws Exception;
 	protected abstract void implementChoiceDefinition(ChoiceNode node) throws Exception;
 }

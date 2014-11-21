@@ -14,7 +14,7 @@ public abstract class ChoicesParentNode extends AbstractNode{
 		fChoices = new ArrayList<ChoiceNode>();
 	}
 
-	public abstract ParameterNode getParameter();
+	public abstract MethodParameterNode getParameter();
 
 	@Override
 	public List<? extends AbstractNode> getChildren(){

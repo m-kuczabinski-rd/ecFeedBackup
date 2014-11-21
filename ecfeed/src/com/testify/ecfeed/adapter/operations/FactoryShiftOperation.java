@@ -3,7 +3,7 @@ package com.testify.ecfeed.adapter.operations;
 import java.util.List;
 
 import com.testify.ecfeed.adapter.ModelOperationException;
-import com.testify.ecfeed.model.ParameterNode;
+import com.testify.ecfeed.model.MethodParameterNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.ConstraintNode;
 import com.testify.ecfeed.model.AbstractNode;
@@ -43,7 +43,7 @@ public class FactoryShiftOperation{
 
 		@Override
 		public Object visit(MethodNode node) throws Exception {
-			if(fShifted.get(0) instanceof ParameterNode){
+			if(fShifted.get(0) instanceof MethodParameterNode){
 				return new ParameterShiftOperation(node.getParameters(), fShifted, fUp);
 			}
 			if(fShifted.get(0) instanceof ConstraintNode){
@@ -56,7 +56,7 @@ public class FactoryShiftOperation{
 		}
 
 		@Override
-		public Object visit(ParameterNode node) throws Exception {
+		public Object visit(MethodParameterNode node) throws Exception {
 			if(fShifted.get(0) instanceof ChoiceNode){
 				return new GenericShiftOperation(node.getChoices(), fShifted, fUp);
 			}
@@ -110,7 +110,7 @@ public class FactoryShiftOperation{
 
 		@Override
 		public Object visit(MethodNode node) throws Exception {
-			if(fShifted.get(0) instanceof ParameterNode){
+			if(fShifted.get(0) instanceof MethodParameterNode){
 				return new ParameterShiftOperation(node.getParameters(), fShifted, fShift);
 			}
 			if(fShifted.get(0) instanceof ConstraintNode){
@@ -123,7 +123,7 @@ public class FactoryShiftOperation{
 		}
 
 		@Override
-		public Object visit(ParameterNode node) throws Exception {
+		public Object visit(MethodParameterNode node) throws Exception {
 			if(fShifted.get(0) instanceof ChoiceNode){
 				return new GenericShiftOperation(node.getChoices(), fShifted, fShift);
 			}

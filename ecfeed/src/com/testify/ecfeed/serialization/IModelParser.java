@@ -14,7 +14,7 @@ package com.testify.ecfeed.serialization;
 import java.io.InputStream;
 
 import com.testify.ecfeed.model.AbstractStatement;
-import com.testify.ecfeed.model.ParameterNode;
+import com.testify.ecfeed.model.MethodParameterNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.ConstraintNode;
 import com.testify.ecfeed.model.ExpectedValueStatement;
@@ -30,7 +30,7 @@ public interface IModelParser {
 	public RootNode parseModel(InputStream istream) throws ParserException;
 	public ClassNode parseClass(InputStream istream) throws ParserException;
 	public MethodNode parseMethod(InputStream istream) throws ParserException;
-	public ParameterNode parseParameter(InputStream istream) throws ParserException;
+	public MethodParameterNode parseParameter(InputStream istream) throws ParserException;
 	public ChoiceNode parseChoice(InputStream istream) throws ParserException;
 	public TestCaseNode parseTestCase(InputStream istream, MethodNode method) throws ParserException;
 	public ConstraintNode parseConstraint(InputStream istream, MethodNode method) throws ParserException;

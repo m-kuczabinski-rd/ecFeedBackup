@@ -113,12 +113,12 @@ public class TestCaseNode extends AbstractNode {
 	}
 
 	public boolean updateReferences(MethodNode method){
-		List<ParameterNode> parameters = method.getParameters();
+		List<MethodParameterNode> parameters = method.getParameters();
 		if(parameters.size() != getTestData().size())
 			return false;
 
 		for(int i = 0; i < parameters.size(); i++){
-			ParameterNode parameter = parameters.get(i);
+			MethodParameterNode parameter = parameters.get(i);
 			if(parameter.isExpected()){
 				String value = getTestData().get(i).getValueString();
 				ChoiceNode newChoice = new ChoiceNode("@expected", value);
@@ -164,7 +164,7 @@ public class TestCaseNode extends AbstractNode {
 
 	public boolean isConsistent() {
 		for(ChoiceNode p : getTestData()){
-			ParameterNode parameter = p.getParameter();
+			MethodParameterNode parameter = p.getParameter();
 			if(parameter == null || (parameter.isExpected() == false && parameter.getChoice(p.getQualifiedName()) == null)){
 				return false;
 			}

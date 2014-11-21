@@ -33,7 +33,7 @@ import org.osgi.framework.Bundle;
 import org.osgi.framework.FrameworkUtil;
 
 import com.testify.ecfeed.model.AbstractStatement;
-import com.testify.ecfeed.model.ParameterNode;
+import com.testify.ecfeed.model.MethodParameterNode;
 import com.testify.ecfeed.model.Constraint;
 import com.testify.ecfeed.model.ConstraintNode;
 import com.testify.ecfeed.model.EStatementOperator;
@@ -179,7 +179,7 @@ public class ConstraintViewer extends TreeViewerSection {
 			@Override
 			public Object visit(ExpectedValueStatement statement)
 					throws Exception {
-				ParameterNode parameter  = statement.getParameter();
+				MethodParameterNode parameter  = statement.getParameter();
 				List<String> values = ParameterInterface.getSpecialValues(parameter.getType());
 				if(values.isEmpty()){
 					for(ChoiceNode p : parameter.getLeafChoices()){
@@ -193,7 +193,7 @@ public class ConstraintViewer extends TreeViewerSection {
 			public Object visit(ChoicesParentStatement statement)
 					throws Exception {
 				List<String> result = new ArrayList<String>();
-				ParameterNode parameter = statement.getParameter();
+				MethodParameterNode parameter = statement.getParameter();
 
 				Set<ChoiceNode> allChoices = parameter.getAllChoices();
 				Set<String> allLabels = parameter.getLeafLabels();
@@ -315,7 +315,7 @@ public class ConstraintViewer extends TreeViewerSection {
 				if(statementText.equals(STATEMENT_AND) || statementText.equals(STATEMENT_OR)){
 					return new StatementArray(EStatementOperator.getOperator(statementText));
 				}
-				ParameterNode parameter = fConstraint.getMethod().getParameter(statementText);
+				MethodParameterNode parameter = fConstraint.getMethod().getParameter(statementText);
 				EStatementRelation relation = EStatementRelation.EQUAL;
 				if(parameter != null && parameter.isExpected()){
 					ChoiceNode condition = new ChoiceNode("expected", parameter.getDefaultValue());
@@ -485,7 +485,7 @@ public class ConstraintViewer extends TreeViewerSection {
 			List<String> items = new ArrayList<String>();
 			items.addAll(Arrays.asList(FIXED_STATEMENTS));
 			boolean consequence = fConstraint.getConstraint().getConsequence() == statement;
-			for(ParameterNode c : fConstraint.getMethod().getParameters()){
+			for(MethodParameterNode c : fConstraint.getMethod().getParameters()){
 				if(c.isExpected()){
 					if(consequence){
 						items.add(c.getName());

@@ -1,6 +1,6 @@
 package com.testify.ecfeed.adapter.operations;
 
-import com.testify.ecfeed.model.ParameterNode;
+import com.testify.ecfeed.model.MethodParameterNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.ConstraintNode;
 import com.testify.ecfeed.model.AbstractNode;
@@ -38,8 +38,8 @@ public class FactoryRemoveChildOperation implements IModelVisitor{
 
 	@Override
 	public Object visit(MethodNode node) throws Exception {
-		if(fChild instanceof ParameterNode){
-			return new MethodOperationRemoveParameter(node, (ParameterNode)fChild);
+		if(fChild instanceof MethodParameterNode){
+			return new MethodOperationRemoveParameter(node, (MethodParameterNode)fChild);
 		}
 		if(fChild instanceof ConstraintNode){
 			return new MethodOperationRemoveConstraint(node, (ConstraintNode)fChild);
@@ -51,7 +51,7 @@ public class FactoryRemoveChildOperation implements IModelVisitor{
 	}
 
 	@Override
-	public Object visit(ParameterNode node) throws Exception {
+	public Object visit(MethodParameterNode node) throws Exception {
 		if(fChild instanceof ChoiceNode){
 			return new GenericOperationRemoveChoice(node, (ChoiceNode)fChild, fValidate);
 		}

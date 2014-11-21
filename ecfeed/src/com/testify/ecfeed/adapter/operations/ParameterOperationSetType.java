@@ -12,7 +12,7 @@ import com.testify.ecfeed.adapter.ITypeAdapterProvider;
 import com.testify.ecfeed.adapter.ModelOperationException;
 import com.testify.ecfeed.adapter.java.JavaUtils;
 import com.testify.ecfeed.model.AbstractStatement;
-import com.testify.ecfeed.model.ParameterNode;
+import com.testify.ecfeed.model.MethodParameterNode;
 import com.testify.ecfeed.model.Constraint;
 import com.testify.ecfeed.model.ConstraintNode;
 import com.testify.ecfeed.model.ExpectedValueStatement;
@@ -31,7 +31,7 @@ public class ParameterOperationSetType extends BulkOperation{
 
 	private class SetTypeOperation extends AbstractModelOperation{
 
-		private ParameterNode fTarget;
+		private MethodParameterNode fTarget;
 		private String fNewType;
 		private String fCurrentType;
 		private String fOriginalDefaultValue;
@@ -185,7 +185,7 @@ public class ParameterOperationSetType extends BulkOperation{
 
 		}
 
-		public SetTypeOperation(ParameterNode target, String newType, ITypeAdapterProvider adapterProvider) {
+		public SetTypeOperation(MethodParameterNode target, String newType, ITypeAdapterProvider adapterProvider) {
 			super(OperationNames.SET_TYPE);
 			fTarget = target;
 			fNewType = newType;
@@ -338,7 +338,7 @@ public class ParameterOperationSetType extends BulkOperation{
 		}
 	}
 
-	public ParameterOperationSetType(ParameterNode target, String newType, ITypeAdapterProvider adapterProvider) {
+	public ParameterOperationSetType(MethodParameterNode target, String newType, ITypeAdapterProvider adapterProvider) {
 		super(OperationNames.SET_TYPE, true);
 		addOperation(new SetTypeOperation(target, newType, adapterProvider));
 		if(target.getMethod() != null){

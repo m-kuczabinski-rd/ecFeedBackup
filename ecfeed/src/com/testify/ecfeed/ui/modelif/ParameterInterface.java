@@ -14,7 +14,7 @@ import com.testify.ecfeed.adapter.java.JavaUtils;
 import com.testify.ecfeed.adapter.operations.ParameterOperationSetDefaultValue;
 import com.testify.ecfeed.adapter.operations.ParameterOperationSetExpected;
 import com.testify.ecfeed.adapter.operations.ParameterOperationSetType;
-import com.testify.ecfeed.model.ParameterNode;
+import com.testify.ecfeed.model.MethodParameterNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.ui.common.EclipseModelBuilder;
@@ -23,7 +23,7 @@ import com.testify.ecfeed.ui.common.EclipseTypeAdapterProvider;
 
 public class ParameterInterface extends ChoicesParentNodeInterface {
 	
-	private ParameterNode fTarget;
+	private MethodParameterNode fTarget;
 	private ITypeAdapterProvider fAdapterProvider;
 	
 	public ParameterInterface(IModelUpdateContext updateContext) {
@@ -31,7 +31,7 @@ public class ParameterInterface extends ChoicesParentNodeInterface {
 		fAdapterProvider = new EclipseTypeAdapterProvider();
 	}
 
-	public void setTarget(ParameterNode target){
+	public void setTarget(MethodParameterNode target){
 		super.setTarget(target);
 		fTarget = target;
 	}
@@ -89,7 +89,7 @@ public class ParameterInterface extends ChoicesParentNodeInterface {
 		return !isPrimitive(type) || isBoolean(type);
 	}
 
-	public static boolean hasLimitedValuesSet(ParameterNode parameter) {
+	public static boolean hasLimitedValuesSet(MethodParameterNode parameter) {
 		return hasLimitedValuesSet(parameter.getType());
 	}
 

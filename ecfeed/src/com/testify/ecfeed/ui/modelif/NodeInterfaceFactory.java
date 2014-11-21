@@ -1,6 +1,6 @@
 package com.testify.ecfeed.ui.modelif;
 
-import com.testify.ecfeed.model.ParameterNode;
+import com.testify.ecfeed.model.MethodParameterNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.ConstraintNode;
 import com.testify.ecfeed.model.AbstractNode;
@@ -42,7 +42,7 @@ public class NodeInterfaceFactory{
 		}
 
 		@Override
-		public Object visit(ParameterNode node) throws Exception {
+		public Object visit(MethodParameterNode node) throws Exception {
 			ParameterInterface nodeIf = new ParameterInterface(fContext);
 			nodeIf.setTarget(node);
 			return nodeIf;

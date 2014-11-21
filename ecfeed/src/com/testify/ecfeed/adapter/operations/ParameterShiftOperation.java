@@ -5,25 +5,25 @@ import java.util.List;
 
 import com.testify.ecfeed.adapter.IModelOperation;
 import com.testify.ecfeed.adapter.ModelOperationException;
-import com.testify.ecfeed.model.ParameterNode;
+import com.testify.ecfeed.model.MethodParameterNode;
 import com.testify.ecfeed.model.AbstractNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.TestCaseNode;
 
 public class ParameterShiftOperation extends GenericShiftOperation {
 
-	private List<ParameterNode> fParameters;
+	private List<MethodParameterNode> fParameters;
 
-	public ParameterShiftOperation(List<ParameterNode> parameters, AbstractNode shifted, boolean up) {
+	public ParameterShiftOperation(List<MethodParameterNode> parameters, AbstractNode shifted, boolean up) {
 		this(parameters, Arrays.asList(new AbstractNode[]{shifted}), up);
 	}
 
-	public ParameterShiftOperation(List<ParameterNode> parameters, List<? extends AbstractNode> shifted, boolean up) {
+	public ParameterShiftOperation(List<MethodParameterNode> parameters, List<? extends AbstractNode> shifted, boolean up) {
 		this(parameters, shifted, 0);
 		setShift(minAllowedShift(shifted, up));
 	}
 
-	public ParameterShiftOperation(List<ParameterNode> parameters, List<? extends AbstractNode> shifted, int shift) {
+	public ParameterShiftOperation(List<MethodParameterNode> parameters, List<? extends AbstractNode> shifted, int shift) {
 		super(parameters, shifted, shift);
 		fParameters = parameters;
 	}
@@ -49,8 +49,8 @@ public class ParameterShiftOperation extends GenericShiftOperation {
 	@Override
 	protected boolean shiftAllowed(List<? extends AbstractNode> shifted, int shift){
 		if(super.shiftAllowed(shifted, shift) == false) return false;
-		if(shifted.get(0) instanceof ParameterNode == false) return false;
-		MethodNode method = ((ParameterNode)shifted.get(0)).getMethod();
+		if(shifted.get(0) instanceof MethodParameterNode == false) return false;
+		MethodNode method = ((MethodParameterNode)shifted.get(0)).getMethod();
 		List<String> parameterTypes = method.getParametersTypes();
 		List<Integer> indices = indices(method.getParameters(), shifted);
 		shiftElements(parameterTypes, indices, shift);

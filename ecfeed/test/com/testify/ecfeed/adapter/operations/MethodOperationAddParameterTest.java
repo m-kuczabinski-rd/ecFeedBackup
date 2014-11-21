@@ -21,7 +21,7 @@ import com.testify.ecfeed.junit.annotations.Generator;
 import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.MethodNode;
-import com.testify.ecfeed.model.ParameterNode;
+import com.testify.ecfeed.model.MethodParameterNode;
 import com.testify.ecfeed.model.TestCaseNode;
 
 
@@ -35,12 +35,12 @@ public class MethodOperationAddParameterTest{
 	public void testMethodWithTestCases(){
 		ClassNode classNode = new ClassNode("TestClass");
 		MethodNode parentMethod = new MethodNode("testMethod");
-		ParameterNode normalParameter = new ParameterNode("normalParameter", "int", "0", false);
+		MethodParameterNode normalParameter = new MethodParameterNode("normalParameter", "int", "0", false);
 		ChoiceNode choice1 = new ChoiceNode("choice1", "0");
 		ChoiceNode choice2 = new ChoiceNode("choice2", "5");
 		normalParameter.addChoice(choice1);
 		normalParameter.addChoice(choice2);
-		ParameterNode expectedParameter = new ParameterNode("expectedParameter", "int", "0", false);
+		MethodParameterNode expectedParameter = new MethodParameterNode("expectedParameter", "int", "0", false);
 		ChoiceNode expectedChoice1 = new ChoiceNode("choice1", "4");
 		ChoiceNode expectedChoice2 = new ChoiceNode("choice1", "7");
 		expectedChoice1.setParent(expectedParameter);
@@ -57,7 +57,7 @@ public class MethodOperationAddParameterTest{
 		parentMethod.addTestCase(testCase4);
 		classNode.addMethod(parentMethod);
 
-		ParameterNode parameter = new ParameterNode("parameter", "int", "0", false);
+		MethodParameterNode parameter = new MethodParameterNode("parameter", "int", "0", false);
 		ModelOperationManager operationManager = new ModelOperationManager();
 		IModelOperation operation = new MethodOperationAddParameter(parentMethod, parameter, 1);
 
@@ -107,20 +107,20 @@ public class MethodOperationAddParameterTest{
 		ClassNode classNode = new ClassNode("TestClass");
 		MethodNode existingMethod = new MethodNode(existingMethodName);
 		for(int i = 0; i < existingParameterNames.length; ++i){
-			existingMethod.addParameter(new ParameterNode(existingParameterNames[i], existingParameterTypes[i], "0", false));
+			existingMethod.addParameter(new MethodParameterNode(existingParameterNames[i], existingParameterTypes[i], "0", false));
 		}
 		classNode.addMethod(existingMethod);
 
 		String methodName = sameName?existingMethodName:"notExistingMethodName";
 		MethodNode targetMethod = new MethodNode(methodName);
 		for(int i = 0; i < existingParameterNames.length - 1; ++i){
-			targetMethod.addParameter(new ParameterNode(existingParameterNames[i], existingParameterTypes[i], "0", false));
+			targetMethod.addParameter(new MethodParameterNode(existingParameterNames[i], existingParameterTypes[i], "0", false));
 		}
 		classNode.addMethod(targetMethod);
 
 		String newParameterName = sameArgNames?existingParameterNames[existingParameterNames.length - 1]:"notExistingArgName";
 		String newParameterType = sameArgTypes?existingParameterTypes[existingParameterTypes.length - 1]:"float";
-		ParameterNode newArg = new ParameterNode(newParameterName, newParameterType, "0", false);
+		MethodParameterNode newArg = new MethodParameterNode(newParameterName, newParameterType, "0", false);
 
 		ModelOperationManager operationManager = new ModelOperationManager();
 		IModelOperation operation = new MethodOperationAddParameter(targetMethod, newArg);

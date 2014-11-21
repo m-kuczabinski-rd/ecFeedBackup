@@ -37,7 +37,7 @@ import com.testify.ecfeed.junit.annotations.Constraints;
 import com.testify.ecfeed.junit.annotations.EcModel;
 import com.testify.ecfeed.junit.annotations.Generator;
 import com.testify.ecfeed.junit.annotations.GeneratorParameter;
-import com.testify.ecfeed.model.ParameterNode;
+import com.testify.ecfeed.model.MethodParameterNode;
 import com.testify.ecfeed.model.ConstraintNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.ChoiceNode;
@@ -274,7 +274,7 @@ public class OnlineRunnerTest extends StaticRunnerTest{
 	private List<List<ChoiceNode>> referenceInput(RootNode model, FrameworkMethod method) throws RunnerException {
 		List<List<ChoiceNode>> result = new ArrayList<List<ChoiceNode>>();
 		MethodNode methodModel = getMethodModel(model, method);
-		for(ParameterNode parameter : methodModel.getParameters()){
+		for(MethodParameterNode parameter : methodModel.getParameters()){
 			result.add(parameter.getChoices());
 		}
 		return result;

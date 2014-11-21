@@ -18,7 +18,7 @@ import nu.xom.Document;
 import nu.xom.Element;
 import nu.xom.Serializer;
 
-import com.testify.ecfeed.model.ParameterNode;
+import com.testify.ecfeed.model.MethodParameterNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.ConstraintNode;
 import com.testify.ecfeed.model.MethodNode;
@@ -55,7 +55,7 @@ public class EctSerializer implements IModelSerializer{
 		return null;
 	}
 
-	public Object serialize(ParameterNode node) throws Exception {
+	public Object serialize(MethodParameterNode node) throws Exception {
 		Element element = (Element)node.accept(fConverter);
 		writeDocument(element);
 		return null;

@@ -24,7 +24,7 @@ import org.junit.Test;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.EStatementOperator;
 import com.testify.ecfeed.model.ChoiceNode;
-import com.testify.ecfeed.model.ParameterNode;
+import com.testify.ecfeed.model.MethodParameterNode;
 import com.testify.ecfeed.model.ChoicesParentStatement;
 import com.testify.ecfeed.model.EStatementRelation;
 import com.testify.ecfeed.model.StatementArray;
@@ -33,11 +33,11 @@ import com.testify.ecfeed.model.StaticStatement;
 public class StatementArrayTest {
 
 	private static MethodNode fMethod;
-	private static ParameterNode fParameter1;
+	private static MethodParameterNode fParameter1;
 	private static ChoiceNode fChoice11;
 	private static ChoiceNode fChoice12;
 	private static ChoiceNode fChoice13;
-	private static ParameterNode fParameter2;
+	private static MethodParameterNode fParameter2;
 	private static ChoiceNode fChoice21;
 	private static ChoiceNode fChoice22;
 	private static ChoiceNode fChoice23;
@@ -45,14 +45,14 @@ public class StatementArrayTest {
 	@BeforeClass
 	public static void prepareModel(){
 		fMethod = new MethodNode("method");
-		fParameter1 = new ParameterNode("parameter", "type", "0", false);
+		fParameter1 = new MethodParameterNode("parameter", "type", "0", false);
 		fChoice11 = new ChoiceNode("choice11", null);
 		fChoice12 = new ChoiceNode("choice12", null);
 		fChoice13 = new ChoiceNode("choice13", null);
 		fParameter1.addChoice(fChoice11);
 		fParameter1.addChoice(fChoice12);
 		fParameter1.addChoice(fChoice13);
-		fParameter2 = new ParameterNode("parameter", "type", "0", false);
+		fParameter2 = new MethodParameterNode("parameter", "type", "0", false);
 		fChoice21 = new ChoiceNode("choice21", null);
 		fChoice22 = new ChoiceNode("choice22", null);
 		fChoice23 = new ChoiceNode("choice23", null);

@@ -54,7 +54,7 @@ import com.testify.ecfeed.generators.api.GeneratorException;
 import com.testify.ecfeed.generators.api.IGenerator;
 import com.testify.ecfeed.generators.api.IGeneratorParameter;
 import com.testify.ecfeed.generators.api.IGeneratorParameter.TYPE;
-import com.testify.ecfeed.model.ParameterNode;
+import com.testify.ecfeed.model.MethodParameterNode;
 import com.testify.ecfeed.model.Constraint;
 import com.testify.ecfeed.model.ConstraintNode;
 import com.testify.ecfeed.model.AbstractNode;
@@ -103,7 +103,7 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 		@Override
 		public void checkStateChanged(CheckStateChangedEvent event) {
 			super.checkStateChanged(event);
-			if(event.getElement() instanceof ParameterNode && ((ParameterNode)event.getElement()).isExpected()){
+			if(event.getElement() instanceof MethodParameterNode && ((MethodParameterNode)event.getElement()).isExpected()){
 				fParametersViewer.setChecked(event.getElement(), true);
 			}
 			else{
@@ -123,7 +123,7 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 		
 		public Object[] getChildren(Object element){
 			List<Object> children = new ArrayList<Object>();
-			if(element instanceof ParameterNode && ((ParameterNode)element).isExpected()){
+			if(element instanceof MethodParameterNode && ((MethodParameterNode)element).isExpected()){
 			}
 			else if(element instanceof ChoicesParentNode){
 				ChoicesParentNode parent = (ChoicesParentNode)element;
@@ -242,7 +242,7 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 		fOkButton = createButton(parent, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL,
 				true);
 		if(fGenerateExecutableContent){
-			for(ParameterNode parameter: fMethod.getParameters()){
+			for(MethodParameterNode parameter: fMethod.getParameters()){
 				EImplementationStatus parameterStatus = fStatusResolver.getImplementationStatus(parameter);
 				if((parameter.getChoices().isEmpty() && (parameter.isExpected() == false || JavaUtils.isUserType(parameter.getType())))||
 						parameterStatus == EImplementationStatus.NOT_IMPLEMENTED){
@@ -251,7 +251,7 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 				}
 			}
 		} else {
-			for(ParameterNode parameter: fMethod.getParameters() ){
+			for(MethodParameterNode parameter: fMethod.getParameters() ){
 				if(parameter.getChoices().isEmpty() && (parameter.isExpected() == false || JavaUtils.isUserType(parameter.getType()))){
 					setOkButton(false);
 					break;
@@ -377,7 +377,7 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 		fParametersViewer.getTree().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 		fParametersViewer.setInput(fMethod);
 		fParametersViewer.addCheckStateListener(new ChoiceTreeCheckStateListener(fParametersViewer));
-		for(ParameterNode parameter : fMethod.getParameters()){
+		for(MethodParameterNode parameter : fMethod.getParameters()){
 			fParametersViewer.expandAll();
 			fParametersViewer.setSubtreeChecked(parameter, true);
 			fParametersViewer.collapseAll();
@@ -426,7 +426,7 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 	}
 
 	private boolean validateGeneratorInput(boolean onlyExecutable) {
-		for(ParameterNode parameter : fMethod.getParameters()){
+		for(MethodParameterNode parameter : fMethod.getParameters()){
 			boolean leafChecked = false;
 			if(parameter.isExpected()){
 				if(fParametersViewer.getChecked(parameter) == false){
@@ -654,7 +654,7 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 	}
 
 	private void saveAlgorithmInput() {
-		List<ParameterNode> parameters = fMethod.getParameters();
+		List<MethodParameterNode> parameters = fMethod.getParameters();
 		fAlgorithmInput = new ArrayList<List<ChoiceNode>>();
 		for(int i = 0; i < parameters.size(); i++){
 			List<ChoiceNode> choices = new ArrayList<ChoiceNode>();
@@ -672,7 +672,7 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 		}
 	}
 
-	private ChoiceNode expectedValueChoice(ParameterNode c){
+	private ChoiceNode expectedValueChoice(MethodParameterNode c){
 		ChoiceNode p = new ChoiceNode("", c.getDefaultValue());
 		p.setParent(c);
 		return p;

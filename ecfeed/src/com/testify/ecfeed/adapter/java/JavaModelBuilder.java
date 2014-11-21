@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import com.testify.ecfeed.adapter.ModelOperationException;
-import com.testify.ecfeed.model.ParameterNode;
+import com.testify.ecfeed.model.MethodParameterNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.ChoiceNode;
@@ -55,10 +55,10 @@ public class JavaModelBuilder {
 		return methodNode;
 	}
 	
-	public ParameterNode buildParameterModel(String name, Class<?>type, boolean expected){
+	public MethodParameterNode buildParameterModel(String name, Class<?>type, boolean expected){
 		String typeName = JavaUtils.getTypeName(type.getName());
 		String defaultValue = getDefaultExpectedValueString(typeName);
-		ParameterNode parameter = new ParameterNode(name, typeName, defaultValue, expected);
+		MethodParameterNode parameter = new MethodParameterNode(name, typeName, defaultValue, expected);
 		parameter.setDefaultValueString(getDefaultExpectedValueString(typeName));
 		if(!expected){
 			List<ChoiceNode> defaultChoices = getDefaultChoices(typeName);

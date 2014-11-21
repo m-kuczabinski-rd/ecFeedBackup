@@ -68,7 +68,7 @@ public class MethodNode extends ParametersParentNode {
 	public MethodNode getCopy(){
 		MethodNode copy = new MethodNode(this.getName());
 
-		for(ParameterNode parameter : getParameters()){
+		for(MethodParameterNode parameter : getParameters()){
 			copy.addParameter(parameter.getCopy());
 		}
 
@@ -201,15 +201,15 @@ public class MethodNode extends ParametersParentNode {
 		return false;
 	}
 
-	public Set<ConstraintNode> mentioningConstraints(Collection<ParameterNode> parameters){
+	public Set<ConstraintNode> mentioningConstraints(Collection<MethodParameterNode> parameters){
 		Set<ConstraintNode> result = new HashSet<ConstraintNode>();
-		for(ParameterNode parameter : parameters){
+		for(MethodParameterNode parameter : parameters){
 			result.addAll(mentioningConstraints(parameter));
 		}
 		return result;
 	}
 
-	public Set<ConstraintNode> mentioningConstraints(ParameterNode parameter){
+	public Set<ConstraintNode> mentioningConstraints(MethodParameterNode parameter){
 		Set<ConstraintNode> result = new HashSet<ConstraintNode>();
 		for(ConstraintNode constraint : fConstraints){
 			if(constraint.mentions(parameter)){
@@ -219,7 +219,7 @@ public class MethodNode extends ParametersParentNode {
 		return result;
 	}
 
-	public Set<ConstraintNode> mentioningConstraints(ParameterNode parameter, String label){
+	public Set<ConstraintNode> mentioningConstraints(MethodParameterNode parameter, String label){
 		Set<ConstraintNode> result = new HashSet<ConstraintNode>();
 		for(ConstraintNode constraint : fConstraints){
 			if(constraint.mentions(parameter, label)){
@@ -249,7 +249,7 @@ public class MethodNode extends ParametersParentNode {
 		return result;
 	}
 
-	public boolean isParameterMentioned(ParameterNode parameter){
+	public boolean isParameterMentioned(MethodParameterNode parameter){
 		for(ConstraintNode constraint : fConstraints){
 			if(constraint.mentions(parameter)){
 				return true;
@@ -281,7 +281,7 @@ public class MethodNode extends ParametersParentNode {
 
 	@Override
 	public int getMaxChildIndex(AbstractNode potentialChild){
-		if(potentialChild instanceof ParameterNode) return getParameters().size();
+		if(potentialChild instanceof MethodParameterNode) return getParameters().size();
 		if(potentialChild instanceof ConstraintNode) return getConstraintNodes().size();
 		if(potentialChild instanceof TestCaseNode) return getTestCases().size();
 		return super.getMaxChildIndex(potentialChild);

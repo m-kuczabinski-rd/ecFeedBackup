@@ -44,7 +44,7 @@ import nl.flotsam.xeger.Xeger;
 import org.junit.Test;
 
 import com.testify.ecfeed.model.AbstractStatement;
-import com.testify.ecfeed.model.ParameterNode;
+import com.testify.ecfeed.model.MethodParameterNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.Constraint;
 import com.testify.ecfeed.model.ConstraintNode;
@@ -151,10 +151,10 @@ public class RandomModelGenerator {
 		return method;
 	}
 	
-	public ParameterNode generateParameter(String type, boolean expected, int choiceLevels, int choices, int labels){
+	public MethodParameterNode generateParameter(String type, boolean expected, int choiceLevels, int choices, int labels){
 		String name = generateString(REGEX_CATEGORY_NODE_NAME);
 		
-		ParameterNode parameter = new ParameterNode(name, type, randomChoiceValue(type), expected);
+		MethodParameterNode parameter = new MethodParameterNode(name, type, randomChoiceValue(type), expected);
 		
 		if(choices > 0){
 			for(int i = 0; i < rand.nextInt(choices) + 1; i++){
@@ -169,7 +169,7 @@ public class RandomModelGenerator {
 		String name = generateString(REGEX_TEST_CASE_NODE_NAME);
 		List<ChoiceNode> testData = new ArrayList<ChoiceNode>();
 		
-		for(ParameterNode c : method.getParameters()){
+		for(MethodParameterNode c : method.getParameters()){
 			if(c.isExpected()){
 				ChoiceNode expectedValue = new ChoiceNode("@expected", randomChoiceValue(c.getType()));
 				expectedValue.setParent(c);
@@ -225,21 +225,21 @@ public class RandomModelGenerator {
 	}
 
 	public ChoicesParentStatement generateChoicesParentStatement(MethodNode method) {
-		List<ParameterNode> parameters = new ArrayList<ParameterNode>();
+		List<MethodParameterNode> parameters = new ArrayList<MethodParameterNode>();
 		
-		for(ParameterNode parameter : method.getParameters()){
+		for(MethodParameterNode parameter : method.getParameters()){
 			if(parameter.isExpected() == false && parameter.getChoices().size() > 0){
 				parameters.add(parameter);
 			}
 		}
 		
 		if(parameters.size() == 0){
-			ParameterNode parameter = generateParameter(TYPE_NAME_INT, false, 0, 1, 1);
+			MethodParameterNode parameter = generateParameter(TYPE_NAME_INT, false, 0, 1, 1);
 			method.addParameter(parameter);
 			parameters.add(parameter);
 		}
 		
-		ParameterNode parameter = parameters.get(rand.nextInt(parameters.size()));
+		MethodParameterNode parameter = parameters.get(rand.nextInt(parameters.size()));
 		EStatementRelation relation = rand.nextBoolean() ? EStatementRelation.EQUAL : EStatementRelation.NOT;
 		if(parameter.getChoices().size() == 0){
 			ChoiceNode choice = generateChoice(0, 0, 1, parameter.getType());
@@ -265,21 +265,21 @@ public class RandomModelGenerator {
 	}
 
 	public ExpectedValueStatement generateExpectedValueStatement(MethodNode method) {
-		List<ParameterNode> parameters = new ArrayList<ParameterNode>();
+		List<MethodParameterNode> parameters = new ArrayList<MethodParameterNode>();
 		
-		for(ParameterNode parameter : method.getParameters()){
+		for(MethodParameterNode parameter : method.getParameters()){
 			if(parameter.isExpected() == true){
 				parameters.add(parameter);
 			}
 		}
 		
 		if(parameters.size() == 0){
-			ParameterNode parameter = generateParameter(SUPPORTED_TYPES[rand.nextInt(SUPPORTED_TYPES.length)], true, 0, 1, 1);
+			MethodParameterNode parameter = generateParameter(SUPPORTED_TYPES[rand.nextInt(SUPPORTED_TYPES.length)], true, 0, 1, 1);
 			method.addParameter(parameter);
 			parameters.add(parameter);
 		}
 		
-		ParameterNode parameter = parameters.get(rand.nextInt(parameters.size()));
+		MethodParameterNode parameter = parameters.get(rand.nextInt(parameters.size()));
 		
 		
 		String value = randomChoiceValue(parameter.getType());
@@ -300,8 +300,8 @@ public class RandomModelGenerator {
 			method.addParameter(generateParameter(TYPE_NAME_INT, false, 0, 1, 1));
 		}
 		
-		List<ParameterNode> parameters = method.getParameters();
-		ParameterNode parameter = parameters.get(rand.nextInt(parameters.size()));
+		List<MethodParameterNode> parameters = method.getParameters();
+		MethodParameterNode parameter = parameters.get(rand.nextInt(parameters.size()));
 		if(parameter.isExpected()){
 			return generateExpectedValueStatement(method);
 		}
@@ -479,7 +479,7 @@ public class RandomModelGenerator {
 				int choices = rand.nextInt(MAX_PARTITIONS);
 				int labels = rand.nextInt(MAX_PARTITION_LABELS);
 				int levels = rand.nextInt(MAX_PARTITION_LEVELS);
-				ParameterNode c = generateParameter(type, expected, levels, choices, labels);
+				MethodParameterNode c = generateParameter(type, expected, levels, choices, labels);
 				System.out.println(fStringifier.stringify(c, 0));
 			}
 		}

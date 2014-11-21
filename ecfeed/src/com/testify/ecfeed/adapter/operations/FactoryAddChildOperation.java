@@ -2,7 +2,7 @@ package com.testify.ecfeed.adapter.operations;
 
 import com.testify.ecfeed.adapter.ITypeAdapterProvider;
 import com.testify.ecfeed.adapter.ModelOperationException;
-import com.testify.ecfeed.model.ParameterNode;
+import com.testify.ecfeed.model.MethodParameterNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.ConstraintNode;
 import com.testify.ecfeed.model.AbstractNode;
@@ -54,11 +54,11 @@ public class FactoryAddChildOperation implements IModelVisitor{
 
 	@Override
 	public Object visit(MethodNode node) throws Exception {
-		if(fChild instanceof ParameterNode){
+		if(fChild instanceof MethodParameterNode){
 			if(fIndex == -1){
-				return new MethodOperationAddParameter(node, (ParameterNode)fChild);
+				return new MethodOperationAddParameter(node, (MethodParameterNode)fChild);
 			}
-			return new MethodOperationAddParameter(node, (ParameterNode)fChild, fIndex);
+			return new MethodOperationAddParameter(node, (MethodParameterNode)fChild, fIndex);
 		}
 		if(fChild instanceof ConstraintNode){
 			if(fIndex == -1){
@@ -76,7 +76,7 @@ public class FactoryAddChildOperation implements IModelVisitor{
 	}
 
 	@Override
-	public Object visit(ParameterNode node) throws Exception {
+	public Object visit(MethodParameterNode node) throws Exception {
 		if(fChild instanceof ChoiceNode){
 			if(fIndex == -1){
 				return new GenericOperationAddChoice(node, (ChoiceNode)fChild, fAdapterProvider, fValidate);

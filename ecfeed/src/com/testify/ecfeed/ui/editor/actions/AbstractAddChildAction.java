@@ -4,7 +4,7 @@ import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.StructuredViewer;
 
 import com.testify.ecfeed.adapter.java.JavaUtils;
-import com.testify.ecfeed.model.ParameterNode;
+import com.testify.ecfeed.model.MethodParameterNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.ConstraintNode;
 import com.testify.ecfeed.model.AbstractNode;
@@ -58,7 +58,7 @@ public abstract class AbstractAddChildAction extends ModelModifyingAction{
 		}
 
 		@Override
-		public Object visit(ParameterNode node) throws Exception {
+		public Object visit(MethodParameterNode node) throws Exception {
 			ParameterInterface parameterIf = new ParameterInterface(getUpdateContext());
 			parameterIf.setTarget(node);
 			return parameterIf.addNewChoice();
@@ -100,7 +100,7 @@ public abstract class AbstractAddChildAction extends ModelModifyingAction{
 		}
 
 		@Override
-		public Object visit(ParameterNode node) throws Exception {
+		public Object visit(MethodParameterNode node) throws Exception {
 			if(node.isExpected() == false || JavaUtils.isUserType(node.getType())){
 				return true;
 			}

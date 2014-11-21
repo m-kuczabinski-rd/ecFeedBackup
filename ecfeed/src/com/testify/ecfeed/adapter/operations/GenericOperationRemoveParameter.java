@@ -3,15 +3,15 @@ package com.testify.ecfeed.adapter.operations;
 import com.testify.ecfeed.adapter.IModelOperation;
 import com.testify.ecfeed.adapter.ModelOperationException;
 import com.testify.ecfeed.model.ParametersParentNode;
-import com.testify.ecfeed.model.ParameterNode;
+import com.testify.ecfeed.model.MethodParameterNode;
 
 public class GenericOperationRemoveParameter extends AbstractModelOperation{
 
 	private ParametersParentNode fTarget;
-	private ParameterNode fParameter;
+	private MethodParameterNode fParameter;
 	private int fOriginalIndex;
 
-	public GenericOperationRemoveParameter(ParametersParentNode target, ParameterNode parameter) {
+	public GenericOperationRemoveParameter(ParametersParentNode target, MethodParameterNode parameter) {
 		super(OperationNames.REMOVE_PARAMETER);
 		fTarget = target;
 		fParameter = parameter;
@@ -32,7 +32,7 @@ public class GenericOperationRemoveParameter extends AbstractModelOperation{
 		return fTarget;
 	}
 
-	protected ParameterNode getParameter(){
+	protected MethodParameterNode getParameter(){
 		return fParameter;
 	}
 

@@ -21,7 +21,7 @@ import com.testify.ecfeed.junit.annotations.Constraints;
 import com.testify.ecfeed.junit.annotations.EcModel;
 import com.testify.ecfeed.junit.annotations.Generator;
 import com.testify.ecfeed.model.ParametersParentNode;
-import com.testify.ecfeed.model.ParameterNode;
+import com.testify.ecfeed.model.MethodParameterNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.testutils.ENodeType;
 
@@ -40,17 +40,17 @@ public class GenericOperationAddParameterTest{
 //		success = true;
 //
 		ParametersParentNode parent = getParent(parentType);
-		parent.addParameter(new ParameterNode("arg1", "int", "0", false));
-		parent.addParameter(new ParameterNode("arg2", "int", "0", false));
-		parent.addParameter(new ParameterNode("arg3", "int", "0", false));
-		parent.addParameter(new ParameterNode("arg4", "int", "0", false));
-		parent.addParameter(new ParameterNode("arg5", "int", "0", false));
+		parent.addParameter(new MethodParameterNode("arg1", "int", "0", false));
+		parent.addParameter(new MethodParameterNode("arg2", "int", "0", false));
+		parent.addParameter(new MethodParameterNode("arg3", "int", "0", false));
+		parent.addParameter(new MethodParameterNode("arg4", "int", "0", false));
+		parent.addParameter(new MethodParameterNode("arg5", "int", "0", false));
 
 		int index = getIndex(indexValue, parent);
 
 		String name = nameExists?"arg1":"newArg";
 
-		ParameterNode parameter = new ParameterNode(name, "int", "0", false);
+		MethodParameterNode parameter = new MethodParameterNode(name, "int", "0", false);
 
 		IModelOperation operation;
 		if(indexValue == EIndexValue.NO_VALUE){
@@ -76,17 +76,17 @@ public class GenericOperationAddParameterTest{
 	@Test
 	public void undoRedoTest(ENodeType parentType, EIndexValue indexValue){
 		ParametersParentNode parent = getParent(parentType);
-		parent.addParameter(new ParameterNode("arg1", "int", "0", false));
-		parent.addParameter(new ParameterNode("arg2", "int", "0", false));
-		parent.addParameter(new ParameterNode("arg3", "int", "0", false));
-		parent.addParameter(new ParameterNode("arg4", "int", "0", false));
-		parent.addParameter(new ParameterNode("arg5", "int", "0", false));
+		parent.addParameter(new MethodParameterNode("arg1", "int", "0", false));
+		parent.addParameter(new MethodParameterNode("arg2", "int", "0", false));
+		parent.addParameter(new MethodParameterNode("arg3", "int", "0", false));
+		parent.addParameter(new MethodParameterNode("arg4", "int", "0", false));
+		parent.addParameter(new MethodParameterNode("arg5", "int", "0", false));
 		int index = getIndex(indexValue, parent);
 
 		ModelOperationManager opManager = new ModelOperationManager();
 		IModelOperation operation;
 
-		ParameterNode parameter = new ParameterNode("arg", "int", "0", false);
+		MethodParameterNode parameter = new MethodParameterNode("arg", "int", "0", false);
 
 		if(indexValue != EIndexValue.NO_VALUE){
 			operation = new GenericOperationAddParameter(parent, parameter, index);
@@ -118,12 +118,12 @@ public class GenericOperationAddParameterTest{
 		int numOfOperations = 10;
 		ParametersParentNode parent = getParent(parentType);
 		ModelOperationManager operationManager = new ModelOperationManager();
-		List<ParameterNode> parameters = new ArrayList<>();
+		List<MethodParameterNode> parameters = new ArrayList<>();
 		List<Integer> indices = new ArrayList<>();
 		try{
 			for(int i = 0; i < numOfOperations; ++i){
 				int index = rand.nextInt(parent.getParameters().size() + 1);
-				ParameterNode parameter = new ParameterNode("arg" + i, "int", "0", rand.nextBoolean());
+				MethodParameterNode parameter = new MethodParameterNode("arg" + i, "int", "0", rand.nextBoolean());
 				IModelOperation operation = new GenericOperationAddParameter(parent, parameter, index);
 				operationManager.execute(operation);
 				assertTrue(parent.getParameters().contains(parameter));

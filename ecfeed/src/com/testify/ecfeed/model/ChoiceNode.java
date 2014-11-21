@@ -28,7 +28,7 @@ public class ChoiceNode extends ChoicesParentNode{
 	}
 
 	@Override
-	public ParameterNode getParameter() {
+	public MethodParameterNode getParameter() {
 		if(fParent != null){
 			return fParent.getParameter();
 		}

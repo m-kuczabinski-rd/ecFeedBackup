@@ -23,7 +23,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.testify.ecfeed.model.ParameterNode;
+import com.testify.ecfeed.model.MethodParameterNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.model.ChoicesParentStatement;
@@ -32,7 +32,7 @@ import com.testify.ecfeed.model.EStatementRelation;
 public class ChoiceStatementTest {
 
 	private static MethodNode fMethod;
-	private static ParameterNode fParameter;
+	private static MethodParameterNode fParameter;
 	private static ChoiceNode fChoice1;
 	private static ChoiceNode fChoice2;
 	private static ChoiceNode fChoice3;
@@ -118,7 +118,7 @@ public class ChoiceStatementTest {
 	@BeforeClass
 	public static void prepareModel(){
 		fMethod = new MethodNode("method");
-		fParameter = new ParameterNode("parameter", "type", "0", false);
+		fParameter = new MethodParameterNode("parameter", "type", "0", false);
 		fChoice1 = new ChoiceNode("choice1", null);
 		fChoice2 = new ChoiceNode("choice2", null);
 		fChoice3 = new ChoiceNode("choice3", null);
@@ -160,7 +160,7 @@ public class ChoiceStatementTest {
 	@Test
 	public void testMentionsParameterNode() {
 		ChoicesParentStatement statement = new ChoicesParentStatement(fParameter, EStatementRelation.EQUAL, fChoice2);
-		ParameterNode parameter = new ParameterNode("name", "type", "0", false);
+		MethodParameterNode parameter = new MethodParameterNode("name", "type", "0", false);
 		assertTrue(statement.mentions(fParameter));
 		assertFalse(statement.mentions(parameter));
 	}
@@ -179,8 +179,8 @@ public class ChoiceStatementTest {
 
 	@Test
 	public void compareTest(){
-		ParameterNode c1 = new ParameterNode("name", "type", "0", true);
-		ParameterNode c2 = new ParameterNode("name", "type", "0", true);
+		MethodParameterNode c1 = new MethodParameterNode("name", "type", "0", true);
+		MethodParameterNode c2 = new MethodParameterNode("name", "type", "0", true);
 		
 		ChoiceNode p1 = new ChoiceNode("name", "value");
 		ChoiceNode p2 = new ChoiceNode("name", "value");
