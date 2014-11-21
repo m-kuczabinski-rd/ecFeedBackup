@@ -20,10 +20,10 @@ import com.testify.ecfeed.junit.annotations.EcModel;
 import com.testify.ecfeed.junit.annotations.Generator;
 import com.testify.ecfeed.model.AbstractStatement;
 import com.testify.ecfeed.model.ChoiceNode;
+import com.testify.ecfeed.model.ChoicesParentStatement;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.Constraint;
 import com.testify.ecfeed.model.ConstraintNode;
-import com.testify.ecfeed.model.DecomposedParameterStatement;
 import com.testify.ecfeed.model.EStatementRelation;
 import com.testify.ecfeed.model.ExpectedValueStatement;
 import com.testify.ecfeed.model.MethodNode;
@@ -118,7 +118,7 @@ public class MethodOperationRemoveParameterTest{
 			consequence = new ExpectedValueStatement(removedParameter, condition);
 		}
 		else{
-			consequence = new DecomposedParameterStatement(removedParameter, EStatementRelation.EQUAL, removedChoice);
+			consequence = new ChoicesParentStatement(removedParameter, EStatementRelation.EQUAL, removedChoice);
 		}
 		ConstraintNode removedConstraint = new ConstraintNode("removed constraint", new Constraint(new StaticStatement(true), consequence));
 		target.addConstraint(dummyConstraint);

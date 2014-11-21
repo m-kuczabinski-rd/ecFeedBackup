@@ -42,10 +42,10 @@ import com.testify.ecfeed.model.ExpectedValueStatement;
 import com.testify.ecfeed.model.IRelationalStatement;
 import com.testify.ecfeed.model.IStatementVisitor;
 import com.testify.ecfeed.model.ChoiceNode;
-import com.testify.ecfeed.model.DecomposedParameterStatement;
-import com.testify.ecfeed.model.DecomposedParameterStatement.ICondition;
-import com.testify.ecfeed.model.DecomposedParameterStatement.LabelCondition;
-import com.testify.ecfeed.model.DecomposedParameterStatement.ChoiceCondition;
+import com.testify.ecfeed.model.ChoicesParentStatement;
+import com.testify.ecfeed.model.ChoicesParentStatement.ICondition;
+import com.testify.ecfeed.model.ChoicesParentStatement.LabelCondition;
+import com.testify.ecfeed.model.ChoicesParentStatement.ChoiceCondition;
 import com.testify.ecfeed.model.StatementArray;
 import com.testify.ecfeed.model.StaticStatement;
 import com.testify.ecfeed.ui.editor.actions.ModelModifyingAction;
@@ -190,7 +190,7 @@ public class ConstraintViewer extends TreeViewerSection {
 			}
 
 			@Override
-			public Object visit(DecomposedParameterStatement statement)
+			public Object visit(ChoicesParentStatement statement)
 					throws Exception {
 				List<String> result = new ArrayList<String>();
 				ParameterNode parameter = statement.getParameter();
@@ -198,11 +198,11 @@ public class ConstraintViewer extends TreeViewerSection {
 				Set<ChoiceNode> allChoices = parameter.getAllChoices();
 				Set<String> allLabels = parameter.getLeafLabels();
 				for(ChoiceNode choice : allChoices){
-					ICondition condition = new DecomposedParameterStatement(parameter, EStatementRelation.EQUAL, choice).getCondition();
+					ICondition condition = new ChoicesParentStatement(parameter, EStatementRelation.EQUAL, choice).getCondition();
 					result.add(condition.toString());
 				}
 				for(String label : allLabels){
-					ICondition condition = new DecomposedParameterStatement(parameter, EStatementRelation.EQUAL, label).getCondition();
+					ICondition condition = new ChoicesParentStatement(parameter, EStatementRelation.EQUAL, label).getCondition();
 					result.add(condition.toString());
 				}
 				return result.toArray(new String[]{});
@@ -238,7 +238,7 @@ public class ConstraintViewer extends TreeViewerSection {
 			}
 
 			@Override
-			public Object visit(DecomposedParameterStatement statement)
+			public Object visit(ChoicesParentStatement statement)
 					throws Exception {
 				return statement.getCondition().toString();
 			}
@@ -324,7 +324,7 @@ public class ConstraintViewer extends TreeViewerSection {
 				}
 				else if(parameter != null && parameter.getChoices().size() > 0){
 					ChoiceNode condition = parameter.getChoices().get(0);
-					return new DecomposedParameterStatement(parameter, relation, condition);
+					return new ChoicesParentStatement(parameter, relation, condition);
 				}
 
 				return null;
@@ -378,7 +378,7 @@ public class ConstraintViewer extends TreeViewerSection {
 			}
 
 			@Override
-			public Object visit(DecomposedParameterStatement statement) throws Exception {
+			public Object visit(ChoicesParentStatement statement) throws Exception {
 				disposeRightOperandComposite();
 				fRightOperandComposite = fConditionCombo = new ComboViewer(StatementEditor.this).getCombo();
 				prepareRelationalStatementEditor(statement, availableConditions(statement), statement.getCondition().toString());

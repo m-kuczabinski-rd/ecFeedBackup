@@ -7,13 +7,13 @@ import com.testify.ecfeed.adapter.ModelOperationException;
 import com.testify.ecfeed.adapter.java.JavaUtils;
 import com.testify.ecfeed.model.ParameterNode;
 import com.testify.ecfeed.model.ChoiceNode;
-import com.testify.ecfeed.model.DecomposedNode;
+import com.testify.ecfeed.model.ChoicesParentNode;
 
 public class GenericOperationRemoveChoice extends BulkOperation {
 
 	private class RemoveChoiceOperation extends AbstractModelOperation{
 		
-		private DecomposedNode fTarget;
+		private ChoicesParentNode fTarget;
 		private ChoiceNode fChoice;
 		private String fOriginalDefaultValue;
 		private int fOriginalIndex;
@@ -38,7 +38,7 @@ public class GenericOperationRemoveChoice extends BulkOperation {
 			
 		}
 		
-		public RemoveChoiceOperation(DecomposedNode target, ChoiceNode choice){
+		public RemoveChoiceOperation(ChoicesParentNode target, ChoiceNode choice){
 			super(OperationNames.REMOVE_PARTITION);
 			fTarget = target;
 			fChoice = choice;
@@ -77,7 +77,7 @@ public class GenericOperationRemoveChoice extends BulkOperation {
 		}
 	}
 
-	public GenericOperationRemoveChoice(DecomposedNode target, ChoiceNode choice, boolean validate) {
+	public GenericOperationRemoveChoice(ChoicesParentNode target, ChoiceNode choice, boolean validate) {
 		super(OperationNames.REMOVE_PARTITION, true);
 		addOperation(new RemoveChoiceOperation(target, choice));
 		if((target.getParameter().getMethod() != null) && validate){

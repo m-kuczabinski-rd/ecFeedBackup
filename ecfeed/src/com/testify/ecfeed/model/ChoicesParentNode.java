@@ -5,11 +5,11 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
-public abstract class DecomposedNode extends AbstractNode{
+public abstract class ChoicesParentNode extends AbstractNode{
 
 	private List<ChoiceNode> fChoices;
 
-	public DecomposedNode(String name) {
+	public ChoicesParentNode(String name) {
 		super(name);
 		fChoices = new ArrayList<ChoiceNode>();
 	}

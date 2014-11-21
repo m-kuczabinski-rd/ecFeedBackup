@@ -5,17 +5,17 @@ import com.testify.ecfeed.adapter.ITypeAdapter;
 import com.testify.ecfeed.adapter.ITypeAdapterProvider;
 import com.testify.ecfeed.adapter.ModelOperationException;
 import com.testify.ecfeed.model.ChoiceNode;
-import com.testify.ecfeed.model.DecomposedNode;
+import com.testify.ecfeed.model.ChoicesParentNode;
 
 public class GenericOperationAddChoice extends BulkOperation {
 
 	private class AddChoiceOperation extends AbstractModelOperation{
-		private DecomposedNode fTarget;
+		private ChoicesParentNode fTarget;
 		private ChoiceNode fChoice;
 		private int fIndex;
 		private ITypeAdapterProvider fAdapterProvider;
 
-		public AddChoiceOperation(DecomposedNode target, ChoiceNode choice, ITypeAdapterProvider adapterProvider, int index) {
+		public AddChoiceOperation(ChoicesParentNode target, ChoiceNode choice, ITypeAdapterProvider adapterProvider, int index) {
 			super(OperationNames.ADD_PARTITION);
 			fTarget = target;
 			fChoice = choice;
@@ -64,7 +64,7 @@ public class GenericOperationAddChoice extends BulkOperation {
 		}
 	}
 
-	public GenericOperationAddChoice(DecomposedNode target, ChoiceNode choice, ITypeAdapterProvider adapterProvider, int index, boolean validate) {
+	public GenericOperationAddChoice(ChoicesParentNode target, ChoiceNode choice, ITypeAdapterProvider adapterProvider, int index, boolean validate) {
 		super(OperationNames.ADD_PARTITION, true);
 		addOperation(new AddChoiceOperation(target, choice, adapterProvider, index));
 		if((target.getParameter().getMethod() != null) && validate){
@@ -72,7 +72,7 @@ public class GenericOperationAddChoice extends BulkOperation {
 		}
 	}
 
-	public GenericOperationAddChoice(DecomposedNode target, ChoiceNode choice, ITypeAdapterProvider adapterProvider, boolean validate) {
+	public GenericOperationAddChoice(ChoicesParentNode target, ChoiceNode choice, ITypeAdapterProvider adapterProvider, boolean validate) {
 		this(target, choice, adapterProvider, -1, validate);
 	}
 }

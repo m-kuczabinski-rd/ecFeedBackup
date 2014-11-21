@@ -16,8 +16,8 @@ import java.util.List;
 import java.util.Set;
 
 import com.testify.ecfeed.generators.api.IConstraint;
-import com.testify.ecfeed.model.DecomposedParameterStatement.LabelCondition;
-import com.testify.ecfeed.model.DecomposedParameterStatement.ChoiceCondition;
+import com.testify.ecfeed.model.ChoicesParentStatement.LabelCondition;
+import com.testify.ecfeed.model.ChoicesParentStatement.ChoiceCondition;
 
 public class Constraint implements IConstraint<ChoiceNode> {
 	
@@ -51,7 +51,7 @@ public class Constraint implements IConstraint<ChoiceNode> {
 		}
 
 		@Override
-		public Object visit(DecomposedParameterStatement statement)
+		public Object visit(ChoicesParentStatement statement)
 				throws Exception {
 			return statement.getCondition().accept(this);
 		}
@@ -95,7 +95,7 @@ public class Constraint implements IConstraint<ChoiceNode> {
 		}
 
 		@Override
-		public Object visit(DecomposedParameterStatement statement)
+		public Object visit(ChoicesParentStatement statement)
 				throws Exception {
 			return statement.getCondition().accept(this);
 		}
@@ -146,7 +146,7 @@ public class Constraint implements IConstraint<ChoiceNode> {
 		}
 
 		@Override
-		public Object visit(DecomposedParameterStatement statement)
+		public Object visit(ChoicesParentStatement statement)
 				throws Exception {
 			if(fParameter == statement.getParameter()){
 				return statement.getCondition().accept(this);

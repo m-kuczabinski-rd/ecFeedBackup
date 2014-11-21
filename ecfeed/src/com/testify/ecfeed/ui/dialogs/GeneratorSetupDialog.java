@@ -60,7 +60,7 @@ import com.testify.ecfeed.model.ConstraintNode;
 import com.testify.ecfeed.model.AbstractNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.ChoiceNode;
-import com.testify.ecfeed.model.DecomposedNode;
+import com.testify.ecfeed.model.ChoicesParentNode;
 import com.testify.ecfeed.ui.common.Constants;
 import com.testify.ecfeed.ui.common.EclipseImplementationStatusResolver;
 import com.testify.ecfeed.ui.common.Messages;
@@ -125,8 +125,8 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 			List<Object> children = new ArrayList<Object>();
 			if(element instanceof ParameterNode && ((ParameterNode)element).isExpected()){
 			}
-			else if(element instanceof DecomposedNode){
-				DecomposedNode parent = (DecomposedNode)element;
+			else if(element instanceof ChoicesParentNode){
+				ChoicesParentNode parent = (ChoicesParentNode)element;
 				if(fGenerateExecutableContent == false){
 					children.addAll(parent.getChoices());
 				}

@@ -10,21 +10,21 @@ import com.testify.ecfeed.adapter.IModelOperation;
 import com.testify.ecfeed.adapter.operations.GenericOperationAddChoice;
 import com.testify.ecfeed.adapter.operations.GenericOperationRemoveChoice;
 import com.testify.ecfeed.model.ChoiceNode;
-import com.testify.ecfeed.model.DecomposedNode;
+import com.testify.ecfeed.model.ChoicesParentNode;
 import com.testify.ecfeed.ui.common.Constants;
 import com.testify.ecfeed.ui.common.EclipseModelBuilder;
 import com.testify.ecfeed.ui.common.EclipseTypeAdapterProvider;
 import com.testify.ecfeed.ui.common.Messages;
 
-public class DecomposedNodeInterface extends AbstractNodeInterface {
+public class ChoicesParentNodeInterface extends AbstractNodeInterface {
 
-	private DecomposedNode fTarget;
+	private ChoicesParentNode fTarget;
 
-	public DecomposedNodeInterface(IModelUpdateContext updateContext){
+	public ChoicesParentNodeInterface(IModelUpdateContext updateContext){
 		super(updateContext);
 	}
 
-	public void setTarget(DecomposedNode target){
+	public void setTarget(ChoicesParentNode target){
 		super.setTarget(target);
 		fTarget = target;
 	}

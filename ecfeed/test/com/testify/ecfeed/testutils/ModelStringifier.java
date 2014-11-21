@@ -14,11 +14,11 @@ package com.testify.ecfeed.testutils;
 import com.testify.ecfeed.model.AbstractNode;
 import com.testify.ecfeed.model.AbstractStatement;
 import com.testify.ecfeed.model.ChoiceNode;
+import com.testify.ecfeed.model.ChoicesParentStatement;
+import com.testify.ecfeed.model.ChoicesParentStatement.ChoiceCondition;
+import com.testify.ecfeed.model.ChoicesParentStatement.LabelCondition;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.ConstraintNode;
-import com.testify.ecfeed.model.DecomposedParameterStatement;
-import com.testify.ecfeed.model.DecomposedParameterStatement.ChoiceCondition;
-import com.testify.ecfeed.model.DecomposedParameterStatement.LabelCondition;
 import com.testify.ecfeed.model.ExpectedValueStatement;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.ParameterNode;
@@ -57,8 +57,8 @@ public class ModelStringifier {
 		if(statement instanceof StaticStatement){
 			return stringify((StaticStatement)statement, indent);
 		}
-		if(statement instanceof DecomposedParameterStatement){
-			return stringify((DecomposedParameterStatement)statement, indent);
+		if(statement instanceof ChoicesParentStatement){
+			return stringify((ChoicesParentStatement)statement, indent);
 		}
 		if(statement instanceof ExpectedValueStatement){
 			return stringify((ExpectedValueStatement)statement, indent);
@@ -176,9 +176,9 @@ public class ModelStringifier {
 		return result;
 	}
 
-	public String stringify(DecomposedParameterStatement s, int indent){
+	public String stringify(ChoicesParentStatement s, int indent){
 		String result = intendentString(indent);
-		result += "Decomposed statement ";
+		result += "Choices parent statement ";
 		if(s.getCondition() instanceof LabelCondition){
 			result += "[label] ";
 		}
