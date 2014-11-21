@@ -20,7 +20,7 @@ import java.util.Set;
 
 import com.testify.ecfeed.generators.api.IConstraint;
 
-public class MethodNode extends ParameterKeeperNode {
+public class MethodNode extends ParametersParentNode {
 
 	private List<TestCaseNode> fTestCases;
 	private List<ConstraintNode> fConstraints;

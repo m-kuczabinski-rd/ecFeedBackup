@@ -16,7 +16,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class ClassNode extends ParameterKeeperNode {
+public class ClassNode extends ParametersParentNode {
 	private List<MethodNode> fMethods;
 
 	@Override

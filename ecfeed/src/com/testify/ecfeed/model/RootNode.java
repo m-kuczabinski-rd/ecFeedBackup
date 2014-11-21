@@ -14,7 +14,7 @@ package com.testify.ecfeed.model;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RootNode extends ParameterKeeperNode {
+public class RootNode extends ParametersParentNode {
 	public List<ClassNode> fClasses;
 
 	@Override

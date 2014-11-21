@@ -3,11 +3,11 @@ package com.testify.ecfeed.model;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class ParameterKeeperNode extends AbstractNode {
+public abstract class ParametersParentNode extends AbstractNode {
 
 	private List<ParameterNode> fParameters;
 
-	public ParameterKeeperNode(String name) {
+	public ParametersParentNode(String name) {
 		super(name);
 		fParameters = new ArrayList<ParameterNode>();
 	}
@@ -82,15 +82,15 @@ public abstract class ParameterKeeperNode extends AbstractNode {
 
 	@Override
 	public boolean compare(AbstractNode node){
-		if(node instanceof ParameterKeeperNode == false){
+		if(node instanceof ParametersParentNode == false){
 			return false;
 		}
-		ParameterKeeperNode comparedKeeper = (ParameterKeeperNode)node;
-		if(getParameters().size() != comparedKeeper.getParameters().size()){
+		ParametersParentNode comparedParent = (ParametersParentNode)node;
+		if(getParameters().size() != comparedParent.getParameters().size()){
 			return false;
 		}
 		for(int i = 0; i < getParameters().size(); ++i){
-			if(getParameters().get(i).compare(comparedKeeper.getParameters().get(i)) == false){
+			if(getParameters().get(i).compare(comparedParent.getParameters().get(i)) == false){
 				return false;
 			}
 		}

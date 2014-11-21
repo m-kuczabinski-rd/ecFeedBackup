@@ -28,16 +28,16 @@ public class ParameterNode extends ChoicesParentNode{
 
 	@Override
 	public int getIndex(){
-		if(getKeeper() == null){
+		if(getParametersParent() == null){
 			return -1;
 		}
-		return getKeeper().getParameters().indexOf(this);
+		return getParametersParent().getParameters().indexOf(this);
 	}
 
 	@Override
 	public int getMaxIndex(){
-		if(getKeeper() != null){
-			return getKeeper().getParameters().size();
+		if(getParametersParent() != null){
+			return getParametersParent().getParameters().size();
 		}
 		return -1;
 	}
@@ -86,8 +86,8 @@ public class ParameterNode extends ChoicesParentNode{
 		return (MethodNode)getParent();
 	}
 
-	public ParameterKeeperNode getKeeper(){
-		return (ParameterKeeperNode)getParent();
+	public ParametersParentNode getParametersParent(){
+		return (ParametersParentNode)getParent();
 	}
 
 	public String getDefaultValue() {

@@ -20,7 +20,7 @@ import com.testify.ecfeed.junit.OnlineRunner;
 import com.testify.ecfeed.junit.annotations.Constraints;
 import com.testify.ecfeed.junit.annotations.EcModel;
 import com.testify.ecfeed.junit.annotations.Generator;
-import com.testify.ecfeed.model.ParameterKeeperNode;
+import com.testify.ecfeed.model.ParametersParentNode;
 import com.testify.ecfeed.model.ParameterNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.testutils.ENodeType;
@@ -39,7 +39,7 @@ public class GenericOperationAddParameterTest{
 //		nameExists = false;
 //		success = true;
 //
-		ParameterKeeperNode parent = getParent(parentType);
+		ParametersParentNode parent = getParent(parentType);
 		parent.addParameter(new ParameterNode("arg1", "int", "0", false));
 		parent.addParameter(new ParameterNode("arg2", "int", "0", false));
 		parent.addParameter(new ParameterNode("arg3", "int", "0", false));
@@ -75,7 +75,7 @@ public class GenericOperationAddParameterTest{
 
 	@Test
 	public void undoRedoTest(ENodeType parentType, EIndexValue indexValue){
-		ParameterKeeperNode parent = getParent(parentType);
+		ParametersParentNode parent = getParent(parentType);
 		parent.addParameter(new ParameterNode("arg1", "int", "0", false));
 		parent.addParameter(new ParameterNode("arg2", "int", "0", false));
 		parent.addParameter(new ParameterNode("arg3", "int", "0", false));
@@ -116,7 +116,7 @@ public class GenericOperationAddParameterTest{
 	public void randomSeriesTest(ENodeType parentType){
 		Random rand = new Random();
 		int numOfOperations = 10;
-		ParameterKeeperNode parent = getParent(parentType);
+		ParametersParentNode parent = getParent(parentType);
 		ModelOperationManager operationManager = new ModelOperationManager();
 		List<ParameterNode> parameters = new ArrayList<>();
 		List<Integer> indices = new ArrayList<>();
@@ -148,7 +148,7 @@ public class GenericOperationAddParameterTest{
 		}
 	}
 
-	private ParameterKeeperNode getParent(ENodeType parentType) {
+	private ParametersParentNode getParent(ENodeType parentType) {
 		switch(parentType){
 		case PROJECT: return new RootNode("Project");
 		case CLASS: return new RootNode("Class");
@@ -157,7 +157,7 @@ public class GenericOperationAddParameterTest{
 		}
 	}
 
-	private int getIndex(EIndexValue indexValue, ParameterKeeperNode parent) {
+	private int getIndex(EIndexValue indexValue, ParametersParentNode parent) {
 		int index = 0;
 		switch(indexValue){
 		case BEYOND_LENGTH:

@@ -20,7 +20,7 @@ import com.testify.ecfeed.junit.OnlineRunner;
 import com.testify.ecfeed.junit.annotations.Constraints;
 import com.testify.ecfeed.junit.annotations.EcModel;
 import com.testify.ecfeed.junit.annotations.Generator;
-import com.testify.ecfeed.model.ParameterKeeperNode;
+import com.testify.ecfeed.model.ParametersParentNode;
 import com.testify.ecfeed.model.ParameterNode;
 import com.testify.ecfeed.testutils.ENodeType;
 import com.testify.ecfeed.testutils.ModelTestUtils;
@@ -34,7 +34,7 @@ public class GenericOperationRemoveParameterTest{
 	@Test
 	public void seriesTest(ENodeType parentType){
 		Random rand = new Random();
-		ParameterKeeperNode parent = (ParameterKeeperNode)ModelTestUtils.getNode(parentType, "parent");
+		ParametersParentNode parent = (ParametersParentNode)ModelTestUtils.getNode(parentType, "parent");
 		int numOfOperations = 10;
 		List<ParameterNode> removedParameters = new ArrayList<>();
 		List<Integer> removedIndices = new ArrayList<>();
