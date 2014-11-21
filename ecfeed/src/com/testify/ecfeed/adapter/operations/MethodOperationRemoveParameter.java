@@ -46,7 +46,6 @@ public class MethodOperationRemoveParameter extends BulkOperation{
 			}
 			fOriginalTestCases.clear();
 			for(TestCaseNode tcase : getMethodTarget().getTestCases()){
-				MethodNode methodTarget = getMethodTarget();
 				fOriginalTestCases.add(tcase.getCopy(getMethodTarget()));
 			}
 			for(TestCaseNode tc : getMethodTarget().getTestCases()){
