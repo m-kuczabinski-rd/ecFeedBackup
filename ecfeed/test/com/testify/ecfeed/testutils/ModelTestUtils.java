@@ -14,6 +14,8 @@ package com.testify.ecfeed.testutils;
 import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 import com.testify.ecfeed.model.AbstractNode;
 import com.testify.ecfeed.model.ChoiceNode;
@@ -32,6 +34,19 @@ public class ModelTestUtils {
 		ModelStringifier stringifier = new ModelStringifier();
 		if(n.compare(n1) == false){
 			fail("Parsed element differs from original\n" + stringifier.stringify(n, 0) + "\n" + stringifier.stringify(n1, 0));
+		}
+	}
+
+	public static void assertCollectionsEqual(Collection<? extends AbstractNode> col1, Collection<? extends AbstractNode> col2){
+		if(col1.size() != col2.size()){
+			fail("Parsed collection differs from original\n" + col1 + "\n" + col2);
+		}
+		List<AbstractNode> l1 = new ArrayList<>(col1);
+		List<AbstractNode> l2 = new ArrayList<>(col2);
+		for(int i = 0; i < col1.size(); ++i){
+			if(l1.get(i).compare(l2.get(i)) == false){
+				fail("Parsed collection differs from original at element " + i +"\n" + l1.get(i) + "\n" + l2.get(i));
+			}
 		}
 	}
 
