@@ -29,7 +29,6 @@ import com.testify.ecfeed.model.ParameterNode;
 import com.testify.ecfeed.model.StaticStatement;
 import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.ui.common.Constants;
-import com.testify.ecfeed.ui.common.EclipseModelBuilder;
 import com.testify.ecfeed.ui.common.EclipseTypeAdapterProvider;
 import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.dialogs.AddTestCaseDialog;
@@ -70,24 +69,11 @@ public class MethodInterface extends ParametersParentInterface {
 	}
 
 	@Override
-	public ParameterNode addNewParameter() {
-		EclipseModelBuilder modelBuilder = new EclipseModelBuilder();
-		String name = generateNewParameterName();
-		String type = generateNewParameterType();
-		String defaultValue = modelBuilder.getDefaultExpectedValue(type);
-		ParameterNode parameter = new ParameterNode(name, type, defaultValue, false);
-		List<ChoiceNode> defaultChoices = modelBuilder.defaultChoices(type);
-		parameter.addChoices(defaultChoices);
-		if(addParameter(parameter, fTarget.getParameters().size())){
-			return parameter;
-		}
-		return null;
-	}
-
 	public boolean addParameter(ParameterNode parameter, int index) {
 		return execute(new MethodOperationAddParameter(fTarget, parameter, index), Messages.DIALOG_CONVERT_METHOD_PROBLEM_TITLE);
 	}
 
+	@Override
 	public boolean removeParameters(Collection<ParameterNode> parameters, IModelUpdateContext context){
 		Set<ConstraintNode> constraints = fTarget.mentioningConstraints(parameters);
 		if(constraints.size() > 0 || fTarget.getTestCases().size() > 0){
