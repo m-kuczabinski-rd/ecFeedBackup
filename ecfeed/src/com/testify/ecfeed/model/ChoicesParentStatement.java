@@ -13,7 +13,7 @@ package com.testify.ecfeed.model;
 
 import java.util.List;
 
-public class DecomposedParameterStatement extends BasicStatement implements IRelationalStatement{
+public class ChoicesParentStatement extends AbstractStatement implements IRelationalStatement{
 
 	private ParameterNode fParameter;
 	private EStatementRelation fRelation;
@@ -189,19 +189,19 @@ public class DecomposedParameterStatement extends BasicStatement implements IRel
 
 	}
 
-	public DecomposedParameterStatement(ParameterNode parameter, EStatementRelation relation, String labelCondition){
+	public ChoicesParentStatement(ParameterNode parameter, EStatementRelation relation, String labelCondition){
 		fParameter = parameter;
 		fRelation = relation;
 		fCondition = new LabelCondition(labelCondition);
 	}
 
-	public DecomposedParameterStatement(ParameterNode parameter, EStatementRelation relation, ChoiceNode choiceCondition){
+	public ChoicesParentStatement(ParameterNode parameter, EStatementRelation relation, ChoiceNode choiceCondition){
 		fParameter = parameter;
 		fRelation = relation;
 		fCondition = new ChoiceCondition(choiceCondition);
 	}
 
-	private DecomposedParameterStatement(ParameterNode parameter, EStatementRelation relation, ICondition condition){
+	private ChoicesParentStatement(ParameterNode parameter, EStatementRelation relation, ICondition condition){
 		fParameter = parameter;
 		fRelation = relation;
 		fCondition = condition;
@@ -243,8 +243,8 @@ public class DecomposedParameterStatement extends BasicStatement implements IRel
 	}
 
 	@Override
-	public DecomposedParameterStatement getCopy(){
-		return new DecomposedParameterStatement(fParameter, fRelation, fCondition.getCopy());
+	public ChoicesParentStatement getCopy(){
+		return new ChoicesParentStatement(fParameter, fRelation, fCondition.getCopy());
 	}
 
 	@Override
@@ -303,11 +303,11 @@ public class DecomposedParameterStatement extends BasicStatement implements IRel
 
 	@Override
 	public boolean compare(IStatement statement){
-		if(statement instanceof DecomposedParameterStatement == false){
+		if(statement instanceof ChoicesParentStatement == false){
 			return false;
 		}
 
-		DecomposedParameterStatement compared = (DecomposedParameterStatement)statement;
+		ChoicesParentStatement compared = (ChoicesParentStatement)statement;
 
 		if(getParameter().getName().equals(compared.getParameter().getName()) == false){
 			return false;

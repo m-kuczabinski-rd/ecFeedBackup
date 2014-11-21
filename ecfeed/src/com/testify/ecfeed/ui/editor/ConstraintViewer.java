@@ -32,7 +32,7 @@ import org.eclipse.ui.forms.widgets.Section;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.FrameworkUtil;
 
-import com.testify.ecfeed.model.BasicStatement;
+import com.testify.ecfeed.model.AbstractStatement;
 import com.testify.ecfeed.model.ParameterNode;
 import com.testify.ecfeed.model.Constraint;
 import com.testify.ecfeed.model.ConstraintNode;
@@ -42,14 +42,14 @@ import com.testify.ecfeed.model.ExpectedValueStatement;
 import com.testify.ecfeed.model.IRelationalStatement;
 import com.testify.ecfeed.model.IStatementVisitor;
 import com.testify.ecfeed.model.ChoiceNode;
-import com.testify.ecfeed.model.DecomposedParameterStatement;
-import com.testify.ecfeed.model.DecomposedParameterStatement.ICondition;
-import com.testify.ecfeed.model.DecomposedParameterStatement.LabelCondition;
-import com.testify.ecfeed.model.DecomposedParameterStatement.ChoiceCondition;
+import com.testify.ecfeed.model.ChoicesParentStatement;
+import com.testify.ecfeed.model.ChoicesParentStatement.ICondition;
+import com.testify.ecfeed.model.ChoicesParentStatement.LabelCondition;
+import com.testify.ecfeed.model.ChoicesParentStatement.ChoiceCondition;
 import com.testify.ecfeed.model.StatementArray;
 import com.testify.ecfeed.model.StaticStatement;
 import com.testify.ecfeed.ui.editor.actions.ModelModifyingAction;
-import com.testify.ecfeed.ui.modelif.BasicStatementInterface;
+import com.testify.ecfeed.ui.modelif.AbstractStatementInterface;
 import com.testify.ecfeed.ui.modelif.ParameterInterface;
 import com.testify.ecfeed.ui.modelif.ConstraintInterface;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
@@ -64,8 +64,8 @@ public class ConstraintViewer extends TreeViewerSection {
 	private Button fRemoveStatementButton;
 
 	private Constraint fCurrentConstraint;
-	private BasicStatementInterface fStatementIf;
-	private BasicStatement fSelectedStatement;
+	private AbstractStatementInterface fStatementIf;
+	private AbstractStatement fSelectedStatement;
 
 	private StatementEditor fStatementEditor;
 
@@ -83,16 +83,16 @@ public class ConstraintViewer extends TreeViewerSection {
 
 		@Override
 		public Object[] getChildren(Object parentElement) {
-			if(parentElement instanceof BasicStatement){
-				return ((BasicStatement)parentElement).getChildren().toArray();
+			if(parentElement instanceof AbstractStatement){
+				return ((AbstractStatement)parentElement).getChildren().toArray();
 			}
 			return EMPTY_ARRAY;
 		}
 
 		@Override
 		public Object getParent(Object element) {
-			if(element instanceof BasicStatement){
-				return ((BasicStatement)element).getParent();
+			if(element instanceof AbstractStatement){
+				return ((AbstractStatement)element).getParent();
 			}
 			return null;
 		}
@@ -101,7 +101,7 @@ public class ConstraintViewer extends TreeViewerSection {
 		public boolean hasChildren(Object element) {
 			if(element instanceof StatementArray){
 				StatementArray statementArray = (StatementArray)element;
-				List<BasicStatement> children = statementArray.getChildren();
+				List<AbstractStatement> children = statementArray.getChildren();
 				return (children.size() > 0);
 			}
 			return false;
@@ -115,8 +115,8 @@ public class ConstraintViewer extends TreeViewerSection {
 			if(element instanceof StatementArray){
 				return ((StatementArray)element).getOperator().toString();
 			}
-			else if(element instanceof BasicStatement){
-				return ((BasicStatement)element).toString();
+			else if(element instanceof AbstractStatement){
+				return ((AbstractStatement)element).toString();
 			}
 			return null;
 		}
@@ -190,7 +190,7 @@ public class ConstraintViewer extends TreeViewerSection {
 			}
 
 			@Override
-			public Object visit(DecomposedParameterStatement statement)
+			public Object visit(ChoicesParentStatement statement)
 					throws Exception {
 				List<String> result = new ArrayList<String>();
 				ParameterNode parameter = statement.getParameter();
@@ -198,11 +198,11 @@ public class ConstraintViewer extends TreeViewerSection {
 				Set<ChoiceNode> allChoices = parameter.getAllChoices();
 				Set<String> allLabels = parameter.getLeafLabels();
 				for(ChoiceNode choice : allChoices){
-					ICondition condition = new DecomposedParameterStatement(parameter, EStatementRelation.EQUAL, choice).getCondition();
+					ICondition condition = new ChoicesParentStatement(parameter, EStatementRelation.EQUAL, choice).getCondition();
 					result.add(condition.toString());
 				}
 				for(String label : allLabels){
-					ICondition condition = new DecomposedParameterStatement(parameter, EStatementRelation.EQUAL, label).getCondition();
+					ICondition condition = new ChoicesParentStatement(parameter, EStatementRelation.EQUAL, label).getCondition();
 					result.add(condition.toString());
 				}
 				return result.toArray(new String[]{});
@@ -238,7 +238,7 @@ public class ConstraintViewer extends TreeViewerSection {
 			}
 
 			@Override
-			public Object visit(DecomposedParameterStatement statement)
+			public Object visit(ChoicesParentStatement statement)
 					throws Exception {
 				return statement.getCondition().toString();
 			}
@@ -284,9 +284,9 @@ public class ConstraintViewer extends TreeViewerSection {
 					}
 				}
 				else{
-					BasicStatement statement = buildStatement();
+					AbstractStatement statement = buildStatement();
 					if(statement != null){
-						BasicStatementInterface parentIf = fStatementIf.getParentInterface();
+						AbstractStatementInterface parentIf = fStatementIf.getParentInterface();
 						boolean result = false;
 						if(parentIf != null){
 							result = parentIf.replaceChild(fSelectedStatement, statement);
@@ -307,7 +307,7 @@ public class ConstraintViewer extends TreeViewerSection {
 				widgetSelected(e);
 			}
 
-			private BasicStatement buildStatement() {
+			private AbstractStatement buildStatement() {
 				String statementText = fStatementCombo.getText();
 				if(statementText.equals(STATEMENT_TRUE) || statementText.equals(STATEMENT_FALSE)){
 					return new StaticStatement(Boolean.parseBoolean(statementText));
@@ -324,7 +324,7 @@ public class ConstraintViewer extends TreeViewerSection {
 				}
 				else if(parameter != null && parameter.getChoices().size() > 0){
 					ChoiceNode condition = parameter.getChoices().get(0);
-					return new DecomposedParameterStatement(parameter, relation, condition);
+					return new ChoicesParentStatement(parameter, relation, condition);
 				}
 
 				return null;
@@ -378,7 +378,7 @@ public class ConstraintViewer extends TreeViewerSection {
 			}
 
 			@Override
-			public Object visit(DecomposedParameterStatement statement) throws Exception {
+			public Object visit(ChoicesParentStatement statement) throws Exception {
 				disposeRightOperandComposite();
 				fRightOperandComposite = fConditionCombo = new ComboViewer(StatementEditor.this).getCombo();
 				prepareRelationalStatementEditor(statement, availableConditions(statement), statement.getCondition().toString());
@@ -435,7 +435,7 @@ public class ConstraintViewer extends TreeViewerSection {
 			createRelationCombo(this);
 		}
 
-		public void setInput(BasicStatement statement){
+		public void setInput(AbstractStatement statement){
 			fStatementIf = StatementInterfaceFactory.getInterface(statement, ConstraintViewer.this);
 			fStatementCombo.setItems(statementComboItems(statement));
 			fStatementCombo.setText(statement.getLeftOperandName());
@@ -461,7 +461,7 @@ public class ConstraintViewer extends TreeViewerSection {
 			}
 		}
 
-		private String[] availableConditions(BasicStatement statement) {
+		private String[] availableConditions(AbstractStatement statement) {
 			try {
 				return (String[]) statement.accept(new AvailableConditionsProvider());
 			} catch (Exception e) {
@@ -481,7 +481,7 @@ public class ConstraintViewer extends TreeViewerSection {
 			fRelationCombo.addSelectionListener(new RelationComboListener());
 		}
 
-		private String[] statementComboItems(BasicStatement statement){
+		private String[] statementComboItems(AbstractStatement statement){
 			List<String> items = new ArrayList<String>();
 			items.addAll(Arrays.asList(FIXED_STATEMENTS));
 			boolean consequence = fConstraint.getConstraint().getConsequence() == statement;
@@ -504,7 +504,7 @@ public class ConstraintViewer extends TreeViewerSection {
 	private class AddStatementAdapter extends SelectionAdapter{
 		@Override
 		public void widgetSelected(SelectionEvent e){
-			BasicStatement statement = fStatementIf.addNewStatement();
+			AbstractStatement statement = fStatementIf.addNewStatement();
 			if(statement != null){
 			//modelUpdated must be called before to refresh viewer before selecting the newly added statement
 				getTreeViewer().expandToLevel(statement, 1);
@@ -525,7 +525,7 @@ public class ConstraintViewer extends TreeViewerSection {
 
 		@Override
 		public void run(){
-			BasicStatement parent = fSelectedStatement.getParent();
+			AbstractStatement parent = fSelectedStatement.getParent();
 			if(parent != null && fStatementIf.getParentInterface().removeChild(fSelectedStatement)){
 				getViewer().setSelection(new StructuredSelection(parent));
 			}
@@ -536,7 +536,7 @@ public class ConstraintViewer extends TreeViewerSection {
 
 		@Override
 		public void selectionChanged(SelectionChangedEvent event) {
-			BasicStatement statement = (BasicStatement)((StructuredSelection)event.getSelection()).getFirstElement();
+			AbstractStatement statement = (AbstractStatement)((StructuredSelection)event.getSelection()).getFirstElement();
 			if(statement != null){
 				fSelectedStatement = statement;
 				fStatementEditor.setInput(statement);
@@ -544,7 +544,7 @@ public class ConstraintViewer extends TreeViewerSection {
 			}
 		}
 
-		private void updateSideButtons(BasicStatement selectedStatement) {
+		private void updateSideButtons(AbstractStatement selectedStatement) {
 			boolean enableAddStatementButton = (selectedStatement instanceof StatementArray || selectedStatement.getParent() != null);
 			boolean enableRemoveStatementButton = (selectedStatement.getParent() != null);
 			fAddStatementButton.setEnabled(enableAddStatementButton);

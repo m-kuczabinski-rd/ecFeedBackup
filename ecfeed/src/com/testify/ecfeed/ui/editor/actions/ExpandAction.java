@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.eclipse.jface.viewers.TreeViewer;
 
-import com.testify.ecfeed.model.GenericNode;
+import com.testify.ecfeed.model.AbstractNode;
 
 public class ExpandAction extends ModelSelectionAction {
 
@@ -18,8 +18,8 @@ public class ExpandAction extends ModelSelectionAction {
 	@Override
 	public boolean isEnabled(){
 		boolean enabled = false;
-		List<GenericNode> nodes = getSelectedNodes();
-		for(GenericNode node : nodes){
+		List<AbstractNode> nodes = getSelectedNodes();
+		for(AbstractNode node : nodes){
 			if((fViewer.isExpandable(node)) && (getBranchExpandedState(node, fViewer) == false)){
 				enabled = true;
 			}
@@ -29,15 +29,15 @@ public class ExpandAction extends ModelSelectionAction {
 	
 	@Override
 	public void run(){
-		for(GenericNode node : getSelectedNodes()){
+		for(AbstractNode node : getSelectedNodes()){
 			fViewer.expandToLevel(node, TreeViewer.ALL_LEVELS);
 		}
 	}
 	
-	protected boolean getBranchExpandedState(GenericNode branchRoot, TreeViewer viewer){
+	protected boolean getBranchExpandedState(AbstractNode branchRoot, TreeViewer viewer){
  		if(branchRoot.getChildren().size() == 0) return true;
 		if(viewer.getExpandedState(branchRoot) == false) return false;
-		for(GenericNode child : branchRoot.getChildren()){
+		for(AbstractNode child : branchRoot.getChildren()){
 			if(getBranchExpandedState(child, viewer) == false) return false;
 		}
 		return true;

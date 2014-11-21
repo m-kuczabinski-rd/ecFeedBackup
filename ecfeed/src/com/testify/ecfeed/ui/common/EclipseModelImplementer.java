@@ -38,7 +38,7 @@ import com.testify.ecfeed.adapter.EImplementationStatus;
 import com.testify.ecfeed.adapter.java.JavaUtils;
 import com.testify.ecfeed.model.ParameterNode;
 import com.testify.ecfeed.model.ClassNode;
-import com.testify.ecfeed.model.GenericNode;
+import com.testify.ecfeed.model.AbstractNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.ChoiceNode;
 
@@ -52,7 +52,7 @@ public class EclipseModelImplementer extends AbstractModelImplementer {
 	}
 
 	@Override
-	public boolean implement(GenericNode node){
+	public boolean implement(AbstractNode node){
 		refreshWorkspace();
 		boolean result = super.implement(node);
 		CachedImplementationStatusResolver.clearCache(node);

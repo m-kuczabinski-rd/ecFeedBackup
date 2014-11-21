@@ -15,9 +15,9 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
-public class ChoiceNode extends DecomposedNode{
+public class ChoiceNode extends ChoicesParentNode{
 
-	private DecomposedNode fParent;
+	private ChoicesParentNode fParent;
 	private String fValueString;
 	private Set<String> fLabels;
 	
@@ -36,12 +36,12 @@ public class ChoiceNode extends DecomposedNode{
 	}
 
 	@Override
-	public DecomposedNode getParent(){
+	public ChoicesParentNode getParent(){
 		return fParent;
 	}
 
 	@Override
-	public List<? extends GenericNode> getChildren(){
+	public List<? extends AbstractNode> getChildren(){
 		return getChoices();
 	}
 
@@ -73,7 +73,7 @@ public class ChoiceNode extends DecomposedNode{
 		return getName();
 	}
 
-	public void setParent(DecomposedNode parent){
+	public void setParent(ChoicesParentNode parent){
 		super.setParent(parent);
 		fParent = parent;
 	}
@@ -136,7 +136,7 @@ public class ChoiceNode extends DecomposedNode{
 	}
 	
 	@Override
-	public boolean compare(GenericNode node){
+	public boolean compare(AbstractNode node){
 		if(node instanceof ChoiceNode == false){
 			return false;
 		}

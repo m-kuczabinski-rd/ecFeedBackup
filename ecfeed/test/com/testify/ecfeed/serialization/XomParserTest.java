@@ -25,15 +25,15 @@ import nu.xom.Serializer;
 
 import org.junit.Test;
 
-import com.testify.ecfeed.model.BasicStatement;
+import com.testify.ecfeed.model.AbstractStatement;
 import com.testify.ecfeed.model.ParameterNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.ConstraintNode;
 import com.testify.ecfeed.model.ExpectedValueStatement;
-import com.testify.ecfeed.model.GenericNode;
+import com.testify.ecfeed.model.AbstractNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.ChoiceNode;
-import com.testify.ecfeed.model.DecomposedParameterStatement;
+import com.testify.ecfeed.model.ChoicesParentStatement;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.StatementArray;
 import com.testify.ecfeed.model.StaticStatement;
@@ -190,10 +190,10 @@ public class XomParserTest {
 		for(int i = 0; i < 10; i++){
 			try{
 				MethodNode m = fModelGenerator.generateMethod(5, 0, 0);
-				DecomposedParameterStatement s = fModelGenerator.generateDecomposedStatement(m);
+				ChoicesParentStatement s = fModelGenerator.generateChoicesParentStatement(m);
 				Element element = (Element)s.accept(fConverter);
 				TRACE(element);
-				DecomposedParameterStatement parsedS = null;
+				ChoicesParentStatement parsedS = null;
 				switch(element.getLocalName()){
 				case Constants.CONSTRAINT_LABEL_STATEMENT_NODE_NAME:
 					parsedS = fParser.parseLabelStatement(element, m);
@@ -275,14 +275,14 @@ public class XomParserTest {
 	
 	}
 
-	private void assertStatementsEqual(BasicStatement s1, BasicStatement s2) {
+	private void assertStatementsEqual(AbstractStatement s1, AbstractStatement s2) {
 		if(s1.compare(s2) == false){
 			fail("Parsed statement\n" + fStringifier.stringify(s1, 0) + "\ndiffers from original\n" + fStringifier.stringify(s2, 0));
 		}
 		
 	}
 
-	private void assertElementsEqual(GenericNode n, GenericNode n1) {
+	private void assertElementsEqual(AbstractNode n, AbstractNode n1) {
 		if(n.compare(n1) == false){
 			fail("Parsed element differs from original\n" + fStringifier.stringify(n, 0) + "\n" + fStringifier.stringify(n1, 0));
 		}

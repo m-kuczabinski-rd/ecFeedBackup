@@ -31,7 +31,9 @@ import org.junit.Test;
 import com.testify.ecfeed.generators.RandomGenerator;
 import com.testify.ecfeed.generators.api.GeneratorException;
 import com.testify.ecfeed.generators.api.IConstraint;
-import com.testify.ecfeed.model.BasicStatement;
+import com.testify.ecfeed.model.AbstractStatement;
+import com.testify.ecfeed.model.ChoiceNode;
+import com.testify.ecfeed.model.ChoicesParentStatement;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.Constraint;
 import com.testify.ecfeed.model.ConstraintNode;
@@ -40,8 +42,6 @@ import com.testify.ecfeed.model.EStatementRelation;
 import com.testify.ecfeed.model.ExpectedValueStatement;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.ParameterNode;
-import com.testify.ecfeed.model.ChoiceNode;
-import com.testify.ecfeed.model.DecomposedParameterStatement;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.StatementArray;
 import com.testify.ecfeed.model.StaticStatement;
@@ -146,13 +146,13 @@ public class XmlParserSerializerTest {
 			RootNode root = new RootNode("root");
 			ClassNode classNode = new ClassNode("classNode");
 			MethodNode method = new MethodNode("method");
-			ParameterNode decomposedParameter =
-					new ParameterNode("decomposedParameter", com.testify.ecfeed.adapter.java.Constants.TYPE_NAME_STRING, "0", false);
+			ParameterNode choicesParentParameter =
+					new ParameterNode("choicesParentParameter", com.testify.ecfeed.adapter.java.Constants.TYPE_NAME_STRING, "0", false);
 			ParameterNode expectedParameter =
 					new ParameterNode("expectedParameter", com.testify.ecfeed.adapter.java.Constants.TYPE_NAME_CHAR, "0", true);
 			expectedParameter.setDefaultValueString("d");
 			ChoiceNode choice1 = new ChoiceNode("choice", "p");
-			choice1.setParent(decomposedParameter);
+			choice1.setParent(choicesParentParameter);
 			ChoiceNode choice2 = new ChoiceNode("expected", "s");
 			choice2.setParent(expectedParameter);
 
@@ -161,9 +161,9 @@ public class XmlParserSerializerTest {
 			testData.add(choice2);
 			TestCaseNode testCase = new TestCaseNode("test", testData);
 			Constraint choiceConstraint = new Constraint(new StaticStatement(true),
-					new DecomposedParameterStatement(decomposedParameter, EStatementRelation.EQUAL, choice1));
+					new ChoicesParentStatement(choicesParentParameter, EStatementRelation.EQUAL, choice1));
 			Constraint labelConstraint = new Constraint(new StaticStatement(true),
-					new DecomposedParameterStatement(decomposedParameter, EStatementRelation.EQUAL, "label"));
+					new ChoicesParentStatement(choicesParentParameter, EStatementRelation.EQUAL, "label"));
 			Constraint expectedConstraint = new Constraint(new StaticStatement(true),
 					new ExpectedValueStatement(expectedParameter, new ChoiceNode("expected", "n")));
 			ConstraintNode choiceConstraintNode = new ConstraintNode("choice constraint", choiceConstraint);
@@ -172,9 +172,9 @@ public class XmlParserSerializerTest {
 
 			root.addClass(classNode);
 			classNode.addMethod(method);
-			method.addParameter(decomposedParameter);
+			method.addParameter(choicesParentParameter);
 			method.addParameter(expectedParameter);
-			decomposedParameter.addChoice(choice1);
+			choicesParentParameter.addChoice(choice1);
 			method.addTestCase(testCase);
 			method.addConstraint(labelConstraintNode);
 			method.addConstraint(choiceConstraintNode);
@@ -224,12 +224,12 @@ public class XmlParserSerializerTest {
 	protected MethodNode createMethodNode(int numOfParameters,
 			int numOfExpParameters, int numOfConstraints, int numOfTestCases) {
 		MethodNode method = new MethodNode(randomName());
-		List<ParameterNode> decomposedParameters = createDecomposedParameters(numOfParameters);
+		List<ParameterNode> choicesParentParameters = createChoicesParentParameters(numOfParameters);
 		List<ParameterNode> expectedParameters = createExpectedParameters(numOfExpParameters);
 
-		for(int i = 0, j = 0; i < decomposedParameters.size() || j < expectedParameters.size();){
-			if(rand.nextBoolean() && i < decomposedParameters.size()){
-				method.addParameter(decomposedParameters.get(i));
+		for(int i = 0, j = 0; i < choicesParentParameters.size() || j < expectedParameters.size();){
+			if(rand.nextBoolean() && i < choicesParentParameters.size()){
+				method.addParameter(choicesParentParameters.get(i));
 				++i;
 			}
 			else if (j < expectedParameters.size()){
@@ -238,7 +238,7 @@ public class XmlParserSerializerTest {
 			}
 		}
 
-		List<ConstraintNode> constraints = createConstraints(decomposedParameters, expectedParameters, numOfConstraints);
+		List<ConstraintNode> constraints = createConstraints(choicesParentParameters, expectedParameters, numOfConstraints);
 		List<TestCaseNode> testCases = createTestCases(method.getParameters(), numOfTestCases);
 
 		for(ConstraintNode constraint : constraints){
@@ -251,15 +251,15 @@ public class XmlParserSerializerTest {
 		return method;
 	}
 
-	private List<ParameterNode> createDecomposedParameters(int numOfParameters) {
+	private List<ParameterNode> createChoicesParentParameters(int numOfParameters) {
 		List<ParameterNode> parameters = new ArrayList<ParameterNode>();
 		for(int i = 0; i < numOfParameters; i++){
-			parameters.add(createDecomposedParameter(CATEGORY_TYPES[rand.nextInt(CATEGORY_TYPES.length)], rand.nextInt(MAX_PARTITIONS) + 1));
+			parameters.add(createChoicesParentParameter(CATEGORY_TYPES[rand.nextInt(CATEGORY_TYPES.length)], rand.nextInt(MAX_PARTITIONS) + 1));
 		}
 		return parameters;
 	}
 
-	private ParameterNode createDecomposedParameter(String type, int numOfChoices) {
+	private ParameterNode createChoicesParentParameter(String type, int numOfChoices) {
 		ParameterNode parameter = new ParameterNode(randomName(), type, "0", false);
 		for(int i = 0; i < numOfChoices; i++){
 			parameter.addChoice(createChoice(type, 1));
@@ -344,22 +344,22 @@ public class XmlParserSerializerTest {
 	}
 
 
-	private List<ConstraintNode> createConstraints(List<ParameterNode> decomposedParameters,
+	private List<ConstraintNode> createConstraints(List<ParameterNode> choicesParentParameters,
 			List<ParameterNode> expectedParameters, int numOfConstraints) {
 		List<ConstraintNode> constraints = new ArrayList<ConstraintNode>();
 		for(int i = 0; i < numOfConstraints; ++i){
-			constraints.add(new ConstraintNode(randomName(), createConstraint(decomposedParameters, expectedParameters)));
+			constraints.add(new ConstraintNode(randomName(), createConstraint(choicesParentParameters, expectedParameters)));
 		}
 		return constraints;
 	}
 
-	private Constraint createConstraint(List<ParameterNode> decomposedParameters,
+	private Constraint createConstraint(List<ParameterNode> choicesParentParameters,
 			List<ParameterNode> expectedParameters) {
-		BasicStatement premise = createDecomposedStatement(decomposedParameters);
-		BasicStatement consequence = null;
+		AbstractStatement premise = createChoicesParentStatement(choicesParentParameters);
+		AbstractStatement consequence = null;
 		while(consequence == null){
 			if(rand.nextBoolean()){
-				consequence = createDecomposedStatement(decomposedParameters);
+				consequence = createChoicesParentStatement(choicesParentParameters);
 			}
 			else{
 				consequence = createExpectedStatement(expectedParameters);
@@ -368,12 +368,12 @@ public class XmlParserSerializerTest {
 		return new Constraint(premise, consequence);
 	}
 
-	private BasicStatement createDecomposedStatement(List<ParameterNode> parameters) {
-		BasicStatement statement = null;
+	private AbstractStatement createChoicesParentStatement(List<ParameterNode> parameters) {
+		AbstractStatement statement = null;
 		while(statement == null){
 			switch(rand.nextInt(3)){
 			case 0: statement = new StaticStatement(rand.nextBoolean());
-			case 1: if(getDecomposedParameters(parameters).size() > 0){
+			case 1: if(getChoicesParentParameters(parameters).size() > 0){
 				switch(rand.nextInt(2)){
 				case 0:
 					statement = createChoiceStatement(parameters);
@@ -387,7 +387,7 @@ public class XmlParserSerializerTest {
 		return statement;
 	}
 
-	private BasicStatement createLabelStatement(List<ParameterNode> parameters) {
+	private AbstractStatement createLabelStatement(List<ParameterNode> parameters) {
 		ParameterNode parameter = parameters.get(rand.nextInt(parameters.size()));
 		Set<String> labels = parameter.getLeafLabels();
 		String label;
@@ -399,14 +399,14 @@ public class XmlParserSerializerTest {
 			parameter.getChoices().get(0).addLabel(label);
 		}
 		EStatementRelation relation = pickRelation();
-		return new DecomposedParameterStatement(parameter, relation, label);
+		return new ChoicesParentStatement(parameter, relation, label);
 	}
 
-	private BasicStatement createChoiceStatement(List<ParameterNode> parameters) {
+	private AbstractStatement createChoiceStatement(List<ParameterNode> parameters) {
 		ParameterNode parameter = parameters.get(rand.nextInt(parameters.size()));
 		ChoiceNode choice = new ArrayList<ChoiceNode>(parameter.getLeafChoices()).get(rand.nextInt(parameter.getChoices().size()));
 		EStatementRelation relation = pickRelation();
-		return new DecomposedParameterStatement(parameter, relation, choice);
+		return new ChoicesParentStatement(parameter, relation, choice);
 	}
 
 	private EStatementRelation pickRelation() {
@@ -419,13 +419,13 @@ public class XmlParserSerializerTest {
 		return relation;
 	}
 
-	private BasicStatement createExpectedStatement(List<ParameterNode> parameters) {
+	private AbstractStatement createExpectedStatement(List<ParameterNode> parameters) {
 		if(parameters.size() == 0) return null;
 		ParameterNode parameter = parameters.get(rand.nextInt(parameters.size()));
 		return new ExpectedValueStatement(parameter, new ChoiceNode("default", createRandomValue(parameter.getType())));
 	}
 
-	private List<ParameterNode> getDecomposedParameters(List<? extends ParameterNode> parameters) {
+	private List<ParameterNode> getChoicesParentParameters(List<? extends ParameterNode> parameters) {
 		List<ParameterNode> result = new ArrayList<ParameterNode>();
 		for(ParameterNode parameter : parameters){
 			if(parameter instanceof ParameterNode == false){
@@ -435,14 +435,14 @@ public class XmlParserSerializerTest {
 		return result;
 	}
 
-	private BasicStatement createStatementArray(int levels, List<ParameterNode> parameters) {
+	private AbstractStatement createStatementArray(int levels, List<ParameterNode> parameters) {
 		StatementArray array = new StatementArray(rand.nextBoolean()?EStatementOperator.AND:EStatementOperator.OR);
 		for(int i = 0; i < rand.nextInt(3) + 1; ++i){
 			if(levels > 0){
 				array.addStatement(createStatementArray(levels - 1, parameters));
 			}
 			else{
-				if(rand.nextBoolean() && getDecomposedParameters(parameters).size() > 0){
+				if(rand.nextBoolean() && getChoicesParentParameters(parameters).size() > 0){
 					array.addStatement(createChoiceStatement(parameters));
 				}
 				else{
@@ -577,12 +577,12 @@ public class XmlParserSerializerTest {
 		compareBasicStatements(constraint1.getConsequence(), constraint2.getConsequence());
 	}
 
-	private void compareBasicStatements(BasicStatement statement1, BasicStatement statement2) {
+	private void compareBasicStatements(AbstractStatement statement1, AbstractStatement statement2) {
 		if(statement1 instanceof StaticStatement && statement2 instanceof StaticStatement){
 			compareStaticStatements((StaticStatement)statement1, (StaticStatement)statement2);
 		}
-		else if(statement1 instanceof DecomposedParameterStatement && statement2 instanceof DecomposedParameterStatement){
-			compareRelationStatements((DecomposedParameterStatement)statement1, (DecomposedParameterStatement)statement2);
+		else if(statement1 instanceof ChoicesParentStatement && statement2 instanceof ChoicesParentStatement){
+			compareRelationStatements((ChoicesParentStatement)statement1, (ChoicesParentStatement)statement2);
 		}
 		else if(statement1 instanceof StatementArray && statement2 instanceof StatementArray){
 			compareStatementArrays((StatementArray)statement1, (StatementArray)statement2);
@@ -601,7 +601,7 @@ public class XmlParserSerializerTest {
 		assertEquals(statement1.getCondition().getValueString(), statement2.getCondition().getValueString());
 	}
 
-	private void compareRelationStatements(DecomposedParameterStatement statement1, DecomposedParameterStatement statement2) {
+	private void compareRelationStatements(ChoicesParentStatement statement1, ChoicesParentStatement statement2) {
 		compareParameters(statement1.getParameter(), statement2.getParameter());
 		if((statement1.getRelation() != statement2.getRelation())){
 			fail("Compared statements have different relations: " +

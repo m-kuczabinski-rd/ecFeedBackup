@@ -43,7 +43,7 @@ import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.ui.actions.ActionFactory;
 
-import com.testify.ecfeed.model.GenericNode;
+import com.testify.ecfeed.model.AbstractNode;
 import com.testify.ecfeed.ui.editor.actions.IActionProvider;
 import com.testify.ecfeed.ui.editor.actions.NamedAction;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
@@ -204,11 +204,11 @@ public abstract class ViewerSection extends BasicSection implements ISelectionPr
     	return (IStructuredSelection)fViewer.getSelection();
     }
 
-    public List<GenericNode> getSelectedNodes(){
-    	List<GenericNode> result = new ArrayList<>();
+    public List<AbstractNode> getSelectedNodes(){
+    	List<AbstractNode> result = new ArrayList<>();
 		for(Object o : getSelection().toList()){
-    		if(o instanceof GenericNode){
-    			result .add((GenericNode)o);
+    		if(o instanceof AbstractNode){
+    			result .add((AbstractNode)o);
     		}
     	}
     	return result;

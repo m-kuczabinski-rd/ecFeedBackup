@@ -36,7 +36,7 @@ import nu.xom.Element;
 import nu.xom.Elements;
 import nu.xom.Node;
 
-import com.testify.ecfeed.model.BasicStatement;
+import com.testify.ecfeed.model.AbstractStatement;
 import com.testify.ecfeed.model.ParameterNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.Constraint;
@@ -46,7 +46,7 @@ import com.testify.ecfeed.model.EStatementRelation;
 import com.testify.ecfeed.model.ExpectedValueStatement;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.ChoiceNode;
-import com.testify.ecfeed.model.DecomposedParameterStatement;
+import com.testify.ecfeed.model.ChoicesParentStatement;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.StatementArray;
 import com.testify.ecfeed.model.StaticStatement;
@@ -192,8 +192,8 @@ public class XomAnalyser {
 		assertNodeTag(element.getQualifiedName(), CONSTRAINT_NODE_NAME);
 		String name = getElementName(element);
 
-		BasicStatement premise = null;
-		BasicStatement consequence = null;
+		AbstractStatement premise = null;
+		AbstractStatement consequence = null;
 		for(Element child : getIterableChildren(element)){
 			if(child.getLocalName().equals(Constants.CONSTRAINT_PREMISE_NODE_NAME)){
 				if(getIterableChildren(child).size() == 1){
@@ -223,7 +223,7 @@ public class XomAnalyser {
 		return new ConstraintNode(name, new Constraint(premise, consequence));
 	}
 
-	public BasicStatement parseStatement(Element element, MethodNode method) throws ParserException {
+	public AbstractStatement parseStatement(Element element, MethodNode method) throws ParserException {
 		switch(element.getLocalName()){
 		case Constants.CONSTRAINT_CHOICE_STATEMENT_NODE_NAME:
 			return parseChoiceStatement(element, method);
@@ -255,7 +255,7 @@ public class XomAnalyser {
 			throw new ParserException(Messages.WRONG_STATEMENT_ARRAY_OPERATOR(method.getName(), operatorValue));
 		}
 		for(Element child : getIterableChildren(element)){
-			BasicStatement childStatement = parseStatement(child, method);
+			AbstractStatement childStatement = parseStatement(child, method);
 			if(childStatement != null){
 				statementArray.addStatement(childStatement);
 			}
@@ -277,7 +277,7 @@ public class XomAnalyser {
 		}
 	}
 
-	public DecomposedParameterStatement parseChoiceStatement(Element element, MethodNode method) throws ParserException {
+	public ChoicesParentStatement parseChoiceStatement(Element element, MethodNode method) throws ParserException {
 		assertNodeTag(element.getQualifiedName(), CONSTRAINT_CHOICE_STATEMENT_NODE_NAME);
 
 		String parameterName = getAttributeValue(element, Constants.STATEMENT_PARAMETER_ATTRIBUTE_NAME);
@@ -294,10 +294,10 @@ public class XomAnalyser {
 		String relationName = getAttributeValue(element, Constants.STATEMENT_RELATION_ATTRIBUTE_NAME);
 		EStatementRelation relation = getRelation(relationName);
 
-		return new DecomposedParameterStatement(parameter, relation, choice);
+		return new ChoicesParentStatement(parameter, relation, choice);
 	}
 
-	public DecomposedParameterStatement parseLabelStatement(Element element, MethodNode method) throws ParserException {
+	public ChoicesParentStatement parseLabelStatement(Element element, MethodNode method) throws ParserException {
 		assertNodeTag(element.getQualifiedName(), CONSTRAINT_LABEL_STATEMENT_NODE_NAME);
 
 		String parameterName = getAttributeValue(element, Constants.STATEMENT_PARAMETER_ATTRIBUTE_NAME);
@@ -310,7 +310,7 @@ public class XomAnalyser {
 		}
 		EStatementRelation relation = getRelation(relationName);
 
-		return new DecomposedParameterStatement(parameter, relation, label);
+		return new ChoicesParentStatement(parameter, relation, label);
 	}
 
 	public ExpectedValueStatement parseExpectedValueStatement(Element element, MethodNode method) throws ParserException {

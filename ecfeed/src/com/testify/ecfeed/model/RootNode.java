@@ -14,11 +14,11 @@ package com.testify.ecfeed.model;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RootNode extends GenericNode {
+public class RootNode extends AbstractNode {
 	public List<ClassNode> fClasses;
 
 	@Override
-	public List<? extends GenericNode> getChildren(){
+	public List<? extends AbstractNode> getChildren(){
 		return fClasses;
 	}
 	
@@ -69,7 +69,7 @@ public class RootNode extends GenericNode {
 	}
 
 	@Override
-	public boolean compare(GenericNode node){
+	public boolean compare(AbstractNode node){
 		if(node instanceof RootNode == false){
 			return false;
 		}

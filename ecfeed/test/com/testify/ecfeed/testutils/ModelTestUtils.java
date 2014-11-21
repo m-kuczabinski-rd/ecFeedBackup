@@ -13,11 +13,11 @@ package com.testify.ecfeed.testutils;
 
 import static org.junit.Assert.fail;
 
-import com.testify.ecfeed.model.GenericNode;
+import com.testify.ecfeed.model.AbstractNode;
 
 public class ModelTestUtils {
 	
-	public static void assertElementsEqual(GenericNode n, GenericNode n1) {
+	public static void assertElementsEqual(AbstractNode n, AbstractNode n1) {
 		ModelStringifier stringifier = new ModelStringifier();
 		if(n.compare(n1) == false){
 			fail("Parsed element differs from original\n" + stringifier.stringify(n, 0) + "\n" + stringifier.stringify(n1, 0));

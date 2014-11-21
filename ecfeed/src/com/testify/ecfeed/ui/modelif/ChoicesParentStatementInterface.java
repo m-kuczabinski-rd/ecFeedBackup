@@ -5,19 +5,19 @@ import com.testify.ecfeed.adapter.operations.StatementOperationSetCondition;
 import com.testify.ecfeed.adapter.operations.StatementOperationSetRelation;
 import com.testify.ecfeed.model.ParameterNode;
 import com.testify.ecfeed.model.EStatementRelation;
-import com.testify.ecfeed.model.DecomposedParameterStatement;
-import com.testify.ecfeed.model.DecomposedParameterStatement.ICondition;
+import com.testify.ecfeed.model.ChoicesParentStatement;
+import com.testify.ecfeed.model.ChoicesParentStatement.ICondition;
 import com.testify.ecfeed.ui.common.Messages;
 
-public class DecomposedParameterStatementInterface extends BasicStatementInterface{
+public class ChoicesParentStatementInterface extends AbstractStatementInterface{
 
-	private DecomposedParameterStatement fTarget;
+	private ChoicesParentStatement fTarget;
 
-	public DecomposedParameterStatementInterface(IModelUpdateContext updateContext) {
+	public ChoicesParentStatementInterface(IModelUpdateContext updateContext) {
 		super(updateContext);
 	}
 
-	public void setTarget(DecomposedParameterStatement target){
+	public void setTarget(ChoicesParentStatement target){
 		super.setTarget(target);
 		fTarget = target;
 	}

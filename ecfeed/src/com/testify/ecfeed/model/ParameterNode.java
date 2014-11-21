@@ -13,7 +13,7 @@ package com.testify.ecfeed.model;
 
 import java.util.List;
 
-public class ParameterNode extends DecomposedNode{
+public class ParameterNode extends ChoicesParentNode{
 	
 	private String fType;
 	private boolean fExpected;
@@ -112,7 +112,7 @@ public class ParameterNode extends DecomposedNode{
 	}
 
 	@Override
-	public boolean compare(GenericNode node){
+	public boolean compare(AbstractNode node){
 		if(node instanceof ParameterNode == false){
 			return false;
 		}

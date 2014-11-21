@@ -8,7 +8,7 @@ import org.eclipse.jface.viewers.StructuredViewer;
 import com.testify.ecfeed.model.ParameterNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.ConstraintNode;
-import com.testify.ecfeed.model.GenericNode;
+import com.testify.ecfeed.model.AbstractNode;
 import com.testify.ecfeed.model.IModelVisitor;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.ChoiceNode;
@@ -44,14 +44,14 @@ public class AddChildActionFactory {
 
 		@Override
 		public boolean isEnabled(){
-			List<GenericNode> nodes = getSelectedNodes();
+			List<AbstractNode> nodes = getSelectedNodes();
 			if(nodes.size() != 1) return false;
 			if(nodes.get(0) instanceof MethodNode == false) return false;
 			return true;
 		}
 		
 		protected MethodInterface getParentInterface(){
-			List<GenericNode> nodes = getSelectedNodes();
+			List<AbstractNode> nodes = getSelectedNodes();
 			if(nodes.size() != 1) return null;
 			if(nodes.get(0) instanceof MethodNode == false) return null;
 			fParentIf.setTarget((MethodNode)nodes.get(0));
@@ -155,7 +155,7 @@ public class AddChildActionFactory {
 			
 	
 	@SuppressWarnings("unchecked")
-	public List<AbstractAddChildAction> getPossibleActions(GenericNode parent){
+	public List<AbstractAddChildAction> getPossibleActions(AbstractNode parent){
 		try{
 			return (List<AbstractAddChildAction>)parent.accept(new AddNewChilActionProvider());
 		}catch(Exception e){}

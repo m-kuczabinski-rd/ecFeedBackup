@@ -15,14 +15,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public abstract class GenericNode{
+public abstract class AbstractNode{
 	private String fName;
-	private GenericNode fParent;
+	private AbstractNode fParent;
 	private final int fId;
 	private static int fLastId = 0;
-	protected final List<GenericNode> EMPTY_CHILDREN_ARRAY = new ArrayList<GenericNode>();
+	protected final List<AbstractNode> EMPTY_CHILDREN_ARRAY = new ArrayList<AbstractNode>();
 
-	public GenericNode(String name){
+	public AbstractNode(String name){
 		fId = ++fLastId;
 		this.fName = name;
 	}
@@ -46,11 +46,11 @@ public abstract class GenericNode{
 		fName = name;
 	}
 	
-	public void setParent(GenericNode newParent) {
+	public void setParent(AbstractNode newParent) {
 		fParent = newParent;
 	}
 
-	public List<? extends GenericNode> getChildren() {
+	public List<? extends AbstractNode> getChildren() {
 		return EMPTY_CHILDREN_ARRAY;
 	}
 	
@@ -61,9 +61,9 @@ public abstract class GenericNode{
 		return false;
 	}
 	
-	public List<GenericNode> getAncestors(){
-		List<GenericNode> ancestors;
-		GenericNode parent = getParent();
+	public List<AbstractNode> getAncestors(){
+		List<AbstractNode> ancestors;
+		AbstractNode parent = getParent();
 		if(parent != null){
 			ancestors = parent.getAncestors();
 			ancestors.add(parent);
@@ -74,31 +74,31 @@ public abstract class GenericNode{
 		return ancestors;
 	}
 	
-	public GenericNode getParent(){
+	public AbstractNode getParent(){
 		return fParent;
 	}
 	
-	public GenericNode getRoot(){
+	public AbstractNode getRoot(){
 		if(getParent() == null){
 			return this;
 		}
 		return getParent().getRoot();
 	}
 
-	public GenericNode getChild(String qualifiedName) {
+	public AbstractNode getChild(String qualifiedName) {
 		String[] tokens = qualifiedName.split(":");
 		if(tokens.length == 0){
 			return null;
 		}
 		if(tokens.length == 1){
-			for(GenericNode child : getChildren()){
+			for(AbstractNode child : getChildren()){
 				if(child.getName().equals(tokens[0])){
 					return child;
 				}
 			}
 		}
 		else{
-			GenericNode nextChild = getChild(tokens[0]);
+			AbstractNode nextChild = getChild(tokens[0]);
 			if(nextChild == null) return null;
 			tokens = Arrays.copyOfRange(tokens, 1, tokens.length);
 			String newName = qualifiedName.substring(qualifiedName.indexOf(":") + 1);
@@ -107,9 +107,9 @@ public abstract class GenericNode{
 		return null;
 	}
 
-	public GenericNode getSibling(String name){
+	public AbstractNode getSibling(String name){
 		if(getParent() == null) return null;
-		for(GenericNode sibling : getParent().getChildren()){
+		for(AbstractNode sibling : getParent().getChildren()){
 			if(sibling.getName().equals(name) && sibling != this){
 				return sibling;
 			}
@@ -123,7 +123,7 @@ public abstract class GenericNode{
 	
 	public int subtreeSize(){
 		int size = 1;
-		for(GenericNode child : getChildren()){
+		for(AbstractNode child : getChildren()){
 			size += child.subtreeSize();
 		}
 		return size;
@@ -134,13 +134,13 @@ public abstract class GenericNode{
 	}
 
 	public boolean equals(Object obj){
-		if(obj instanceof GenericNode){
-			return ((GenericNode)obj).getId() == fId;
+		if(obj instanceof AbstractNode){
+			return ((AbstractNode)obj).getId() == fId;
 		}
 		return false;
 	}
 	
-	public boolean compare(GenericNode node){
+	public boolean compare(AbstractNode node){
 		return getName().equals(node.getName());
 	}
 
@@ -151,10 +151,10 @@ public abstract class GenericNode{
 		return -1;
 	}
 	
-	public abstract GenericNode getCopy();
+	public abstract AbstractNode getCopy();
 	public abstract Object accept(IModelVisitor visitor) throws Exception;
 
-	public int getMaxChildIndex(GenericNode potentialChild) {
+	public int getMaxChildIndex(AbstractNode potentialChild) {
 		return getChildren().size();
 	}
 }

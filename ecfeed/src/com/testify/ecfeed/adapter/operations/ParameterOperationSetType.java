@@ -11,7 +11,7 @@ import com.testify.ecfeed.adapter.ITypeAdapter;
 import com.testify.ecfeed.adapter.ITypeAdapterProvider;
 import com.testify.ecfeed.adapter.ModelOperationException;
 import com.testify.ecfeed.adapter.java.JavaUtils;
-import com.testify.ecfeed.model.BasicStatement;
+import com.testify.ecfeed.model.AbstractStatement;
 import com.testify.ecfeed.model.ParameterNode;
 import com.testify.ecfeed.model.Constraint;
 import com.testify.ecfeed.model.ConstraintNode;
@@ -19,10 +19,10 @@ import com.testify.ecfeed.model.ExpectedValueStatement;
 import com.testify.ecfeed.model.IStatementVisitor;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.ChoiceNode;
-import com.testify.ecfeed.model.DecomposedParameterStatement;
-import com.testify.ecfeed.model.DecomposedParameterStatement.LabelCondition;
-import com.testify.ecfeed.model.DecomposedParameterStatement.ChoiceCondition;
-import com.testify.ecfeed.model.DecomposedNode;
+import com.testify.ecfeed.model.ChoicesParentStatement;
+import com.testify.ecfeed.model.ChoicesParentStatement.LabelCondition;
+import com.testify.ecfeed.model.ChoicesParentStatement.ChoiceCondition;
+import com.testify.ecfeed.model.ChoicesParentNode;
 import com.testify.ecfeed.model.StatementArray;
 import com.testify.ecfeed.model.StaticStatement;
 import com.testify.ecfeed.model.TestCaseNode;
@@ -39,7 +39,7 @@ public class ParameterOperationSetType extends BulkOperation{
 		private Map<ChoiceNode, String> fOriginalValues;
 		private List<TestCaseNode> fOriginalTestCases;
 		private List<ConstraintNode> fOriginalConstraints;
-		private Map<BasicStatement, String> fOriginalStatementValues;
+		private Map<AbstractStatement, String> fOriginalStatementValues;
 
 		private ITypeAdapterProvider fAdapterProvider;
 
@@ -53,7 +53,7 @@ public class ParameterOperationSetType extends BulkOperation{
 			@Override
 			public Object visit(StatementArray statement) throws Exception {
 				boolean success = true;
-				for(BasicStatement child : statement.getChildren()){
+				for(AbstractStatement child : statement.getChildren()){
 					try{
 						success &= (boolean)child.accept(this);
 					}catch(Exception e){
@@ -80,7 +80,7 @@ public class ParameterOperationSetType extends BulkOperation{
 			}
 
 			@Override
-			public Object visit(DecomposedParameterStatement statement)
+			public Object visit(ChoicesParentStatement statement)
 					throws Exception {
 				return true;
 			}
@@ -107,7 +107,7 @@ public class ParameterOperationSetType extends BulkOperation{
 
 				@Override
 				public Object visit(StatementArray statement) throws Exception {
-					for(BasicStatement child : statement.getChildren()){
+					for(AbstractStatement child : statement.getChildren()){
 						try{
 							child.accept(this);
 						}catch(Exception e){}
@@ -125,7 +125,7 @@ public class ParameterOperationSetType extends BulkOperation{
 				}
 
 				@Override
-				public Object visit(DecomposedParameterStatement statement)
+				public Object visit(ChoicesParentStatement statement)
 						throws Exception {
 					return null;
 				}
@@ -251,7 +251,7 @@ public class ParameterOperationSetType extends BulkOperation{
 			return new ReverseOperation();
 		}
 
-		private void convertChoiceValues(DecomposedNode parent, ITypeAdapter adapter) {
+		private void convertChoiceValues(ChoicesParentNode parent, ITypeAdapter adapter) {
 			for(ChoiceNode p : parent.getChoices()){
 				convertChoiceValue(p, adapter);
 				convertChoiceValues(p, adapter);
@@ -264,7 +264,7 @@ public class ParameterOperationSetType extends BulkOperation{
 			p.setValueString(newValue);
 		}
 
-		private void removeDeadChoices(DecomposedNode parent) {
+		private void removeDeadChoices(ChoicesParentNode parent) {
 			List<ChoiceNode> toRemove = new ArrayList<ChoiceNode>();
 			for(ChoiceNode p : parent.getChoices()){
 				if(isDead(p)){

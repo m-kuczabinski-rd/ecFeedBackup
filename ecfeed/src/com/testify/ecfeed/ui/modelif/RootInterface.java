@@ -18,7 +18,7 @@ import com.testify.ecfeed.ui.common.EclipseModelBuilder;
 import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.dialogs.TestClassImportDialog;
 
-public class RootInterface extends GenericNodeInterface {
+public class RootInterface extends AbstractNodeInterface {
 
 	private RootNode fTarget;
 

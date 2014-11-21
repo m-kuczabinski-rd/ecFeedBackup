@@ -33,7 +33,7 @@ import com.testify.ecfeed.adapter.java.JavaUtils;
 import com.testify.ecfeed.model.ParameterNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.ConstraintNode;
-import com.testify.ecfeed.model.GenericNode;
+import com.testify.ecfeed.model.AbstractNode;
 import com.testify.ecfeed.model.IModelVisitor;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.ChoiceNode;
@@ -135,7 +135,7 @@ public abstract class ObsoleteEclipseModelImplementer extends AbstractModelImple
 	}
 
 	@Override
-	public boolean implement(GenericNode node) {
+	public boolean implement(AbstractNode node) {
 		//TODO Unit tests. Need to be implemented as a separate eclipse plugin to have access to workspace resources
 		try{
 			refreshWorkspace();

@@ -15,7 +15,7 @@ import java.util.List;
 
 import com.testify.ecfeed.adapter.java.JavaUtils;
 
-public class ExpectedValueStatement extends BasicStatement implements IRelationalStatement{
+public class ExpectedValueStatement extends AbstractStatement implements IRelationalStatement{
 
 	ParameterNode fParameter;
 	ChoiceNode fCondition;

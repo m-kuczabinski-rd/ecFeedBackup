@@ -2,16 +2,16 @@ package com.testify.ecfeed.adapter.operations;
 
 import com.testify.ecfeed.adapter.IModelOperation;
 import com.testify.ecfeed.adapter.ModelOperationException;
-import com.testify.ecfeed.model.DecomposedParameterStatement;
-import com.testify.ecfeed.model.DecomposedParameterStatement.ICondition;
+import com.testify.ecfeed.model.ChoicesParentStatement;
+import com.testify.ecfeed.model.ChoicesParentStatement.ICondition;
 
 public class StatementOperationSetCondition extends AbstractModelOperation {
 
-	private DecomposedParameterStatement fTarget;
+	private ChoicesParentStatement fTarget;
 	private ICondition fCurrentCondition;
 	private ICondition fNewCondition;
 
-	public StatementOperationSetCondition(DecomposedParameterStatement target, ICondition condition) {
+	public StatementOperationSetCondition(ChoicesParentStatement target, ICondition condition) {
 		super(OperationNames.SET_STATEMENT_CONDITION);
 		fTarget = target;
 		fNewCondition = condition;

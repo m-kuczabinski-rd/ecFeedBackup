@@ -5,7 +5,7 @@ import java.util.List;
 import com.testify.ecfeed.model.ParameterNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.ConstraintNode;
-import com.testify.ecfeed.model.GenericNode;
+import com.testify.ecfeed.model.AbstractNode;
 import com.testify.ecfeed.model.IModelVisitor;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.ChoiceNode;
@@ -101,7 +101,7 @@ public abstract class AbstractModelImplementer implements IModelImplementer {
 	}
 	
 	@Override
-	public boolean implementable(Class<? extends GenericNode> type){
+	public boolean implementable(Class<? extends AbstractNode> type){
 		if(type.equals(RootNode.class) ||
 			(type.equals(ClassNode.class))||
 			(type.equals(MethodNode.class))||
@@ -115,7 +115,7 @@ public abstract class AbstractModelImplementer implements IModelImplementer {
 	}
 
 	@Override
-	public boolean implementable(GenericNode node) {
+	public boolean implementable(AbstractNode node) {
 		try{
 			return (boolean)node.accept(fImplementableVisitor);
 		}catch(Exception e){}
@@ -123,7 +123,7 @@ public abstract class AbstractModelImplementer implements IModelImplementer {
 	}
 
 	@Override
-	public boolean implement(GenericNode node) {
+	public boolean implement(AbstractNode node) {
 		try{
 			if(implementable(node)){
 				return (boolean)node.accept(fNodeImplementerVisitor);
@@ -133,7 +133,7 @@ public abstract class AbstractModelImplementer implements IModelImplementer {
 	}
 
 	@Override
-	public EImplementationStatus getImplementationStatus(GenericNode node) {
+	public EImplementationStatus getImplementationStatus(AbstractNode node) {
 		return fStatusResolver.getImplementationStatus(node);
 	}
 
@@ -243,8 +243,8 @@ public abstract class AbstractModelImplementer implements IModelImplementer {
 		return hasImplementableNode(node.getTestData());
 	}
 	
-	protected boolean hasImplementableNode(List<? extends GenericNode> nodes){
-		for(GenericNode node : nodes){
+	protected boolean hasImplementableNode(List<? extends AbstractNode> nodes){
+		for(AbstractNode node : nodes){
 			if(implementable(node)){
 				return true;
 			}

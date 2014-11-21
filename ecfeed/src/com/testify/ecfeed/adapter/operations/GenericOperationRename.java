@@ -6,7 +6,7 @@ import com.testify.ecfeed.adapter.java.Constants;
 import com.testify.ecfeed.model.ParameterNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.ConstraintNode;
-import com.testify.ecfeed.model.GenericNode;
+import com.testify.ecfeed.model.AbstractNode;
 import com.testify.ecfeed.model.IModelVisitor;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.ChoiceNode;
@@ -15,7 +15,7 @@ import com.testify.ecfeed.model.TestCaseNode;
 
 public class GenericOperationRename extends AbstractModelOperation {
 
-	private GenericNode fTarget;
+	private AbstractNode fTarget;
 	private String fNewName;
 	private String fOriginalName;
 	private String fNameRegex;
@@ -96,7 +96,7 @@ public class GenericOperationRename extends AbstractModelOperation {
 		}
 	}
 	
-	public GenericOperationRename(GenericNode target, String newName){
+	public GenericOperationRename(AbstractNode target, String newName){
 		super(OperationNames.RENAME);
 		fTarget = target;
 		fNewName = newName;
@@ -117,7 +117,7 @@ public class GenericOperationRename extends AbstractModelOperation {
 		return new GenericOperationRename(getTarget(), getOriginalName());
 	}
 
-	protected GenericNode getTarget(){
+	protected AbstractNode getTarget(){
 		return fTarget;
 	}
 	
@@ -138,7 +138,7 @@ public class GenericOperationRename extends AbstractModelOperation {
 		}
 	}
 
-	private String getNameRegex(GenericNode target) {
+	private String getNameRegex(AbstractNode target) {
 		try{
 			return (String)fTarget.accept(new NameRegexProvider());
 		}catch(Exception e){}

@@ -10,7 +10,7 @@ import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.ui.common.Messages;
 
-public class TestCaseInterface extends GenericNodeInterface {
+public class TestCaseInterface extends AbstractNodeInterface {
 
 	private TestCaseNode fTarget;
 

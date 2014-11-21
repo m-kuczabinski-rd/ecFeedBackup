@@ -18,14 +18,14 @@ import nu.xom.Builder;
 import nu.xom.Document;
 import nu.xom.ParsingException;
 
-import com.testify.ecfeed.model.BasicStatement;
+import com.testify.ecfeed.model.AbstractStatement;
 import com.testify.ecfeed.model.ParameterNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.ConstraintNode;
 import com.testify.ecfeed.model.ExpectedValueStatement;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.ChoiceNode;
-import com.testify.ecfeed.model.DecomposedParameterStatement;
+import com.testify.ecfeed.model.ChoicesParentStatement;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.StatementArray;
 import com.testify.ecfeed.model.StaticStatement;
@@ -123,7 +123,7 @@ public class EctParser implements IModelParser {
 	}
 
 	@Override
-	public BasicStatement parseStatement(InputStream istream, MethodNode method) throws ParserException {
+	public AbstractStatement parseStatement(InputStream istream, MethodNode method) throws ParserException {
 		try {
 			Document document = fBuilder.build(istream);
 			return fXomParser.parseStatement(document.getRootElement(), method);
@@ -147,7 +147,7 @@ public class EctParser implements IModelParser {
 	}
 	
 	@Override
-	public DecomposedParameterStatement parseDecomposedParameterStatement(InputStream istream, MethodNode method) throws ParserException {
+	public ChoicesParentStatement parseChoicesParentStatement(InputStream istream, MethodNode method) throws ParserException {
 		try {
 			Document document = fBuilder.build(istream);
 			return fXomParser.parseChoiceStatement(document.getRootElement(), method);

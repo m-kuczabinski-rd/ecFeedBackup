@@ -14,12 +14,12 @@ package com.testify.ecfeed.model;
 import java.util.ArrayList;
 import java.util.List;
 
-public class StatementArray extends BasicStatement{
+public class StatementArray extends AbstractStatement{
 	private EStatementOperator fOperator;
-	private List<BasicStatement> fStatements;
+	private List<AbstractStatement> fStatements;
 	
 	public StatementArray(EStatementOperator operator){
-		fStatements = new ArrayList<BasicStatement>();
+		fStatements = new ArrayList<AbstractStatement>();
 		fOperator = operator;
 	}
 
@@ -35,27 +35,27 @@ public class StatementArray extends BasicStatement{
 		fOperator = operator;
 	}
 
-	public void addStatement(BasicStatement statement, int index){
+	public void addStatement(AbstractStatement statement, int index){
 		fStatements.add(index, statement);
 		statement.setParent(this);
 	}
 	
-	public void addStatement(BasicStatement statement){
+	public void addStatement(AbstractStatement statement){
 		addStatement(statement, fStatements.size());
 	}
 	
 	@Override
-	public List<BasicStatement> getChildren(){
+	public List<AbstractStatement> getChildren(){
 		return fStatements;
 	}
 	
-	public boolean removeChild(BasicStatement child){
+	public boolean removeChild(AbstractStatement child){
 		return getChildren().remove(child);
 	}
 	
 	@Override
 	public boolean mentions(ChoiceNode choice){
-		for(BasicStatement child : fStatements){
+		for(AbstractStatement child : fStatements){
 			if(child.mentions(choice)){
 				return true;
 			}
@@ -65,7 +65,7 @@ public class StatementArray extends BasicStatement{
 
 	@Override
 	public boolean mentions(ParameterNode parameter){
-		for(BasicStatement child : fStatements){
+		for(AbstractStatement child : fStatements){
 			if(child.mentions(parameter)){
 				return true;
 			}
@@ -119,7 +119,7 @@ public class StatementArray extends BasicStatement{
 	@Override
 	public StatementArray getCopy(){
 		StatementArray copy = new StatementArray(fOperator);
-		for(BasicStatement statement: fStatements){
+		for(AbstractStatement statement: fStatements){
 			copy.addStatement(statement.getCopy());
 		}
 		return copy;
@@ -127,13 +127,13 @@ public class StatementArray extends BasicStatement{
 	
 	@Override
 	public boolean updateReferences(MethodNode method){
-		for(BasicStatement statement: fStatements){
+		for(AbstractStatement statement: fStatements){
 			if(!statement.updateReferences(method)) return false;
 		}
 		return true;
 	}
 	
-	List<BasicStatement> getStatements(){
+	List<AbstractStatement> getStatements(){
 		return fStatements;
 	}
 	

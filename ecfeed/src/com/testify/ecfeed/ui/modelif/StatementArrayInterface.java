@@ -5,12 +5,12 @@ import com.testify.ecfeed.adapter.operations.StatementOperationAddStatement;
 import com.testify.ecfeed.adapter.operations.StatementOperationChangeOperator;
 import com.testify.ecfeed.adapter.operations.StatementOperationRemoveStatement;
 import com.testify.ecfeed.adapter.operations.StatementOperationReplaceChild;
-import com.testify.ecfeed.model.BasicStatement;
+import com.testify.ecfeed.model.AbstractStatement;
 import com.testify.ecfeed.model.EStatementOperator;
 import com.testify.ecfeed.model.StatementArray;
 import com.testify.ecfeed.ui.common.Messages;
 
-public class StatementArrayInterface extends BasicStatementInterface{
+public class StatementArrayInterface extends AbstractStatementInterface{
 
 	private StatementArray fTarget;
 
@@ -24,12 +24,12 @@ public class StatementArrayInterface extends BasicStatementInterface{
 	}
 	
 	@Override
-	public boolean addStatement(BasicStatement statement){
+	public boolean addStatement(AbstractStatement statement){
 		IModelOperation operation = new StatementOperationAddStatement(fTarget, statement, fTarget.getChildren().size()); 
 		return execute(operation, Messages.DIALOG_ADD_STATEMENT_PROBLEM_TITLE);
 	}
 	
-	public boolean removeChild(BasicStatement child){
+	public boolean removeChild(AbstractStatement child){
 		IModelOperation operation = new StatementOperationRemoveStatement(fTarget, child); 
 		return execute(operation, Messages.DIALOG_REMOVE_STATEMENT_PROBLEM_TITLE);
 	}
@@ -49,7 +49,7 @@ public class StatementArrayInterface extends BasicStatementInterface{
 	}
 
 	@Override
-	public boolean replaceChild(BasicStatement child, BasicStatement newStatement) {
+	public boolean replaceChild(AbstractStatement child, AbstractStatement newStatement) {
 		if(child != newStatement){
 			IModelOperation operation = new StatementOperationReplaceChild(fTarget, child, newStatement);
 			return execute(operation, Messages.DIALOG_ADD_STATEMENT_PROBLEM_TITLE);

@@ -33,7 +33,7 @@ import org.eclipse.ui.forms.widgets.Section;
 import com.testify.ecfeed.adapter.java.JavaUtils;
 import com.testify.ecfeed.model.ParameterNode;
 import com.testify.ecfeed.model.ChoiceNode;
-import com.testify.ecfeed.model.DecomposedNode;
+import com.testify.ecfeed.model.ChoicesParentNode;
 import com.testify.ecfeed.ui.common.NodeNameColumnLabelProvider;
 import com.testify.ecfeed.ui.editor.actions.DeleteAction;
 import com.testify.ecfeed.ui.editor.actions.ModelViewerActionProvider;
@@ -41,13 +41,13 @@ import com.testify.ecfeed.ui.modelif.ParameterInterface;
 import com.testify.ecfeed.ui.modelif.ChoiceInterface;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 import com.testify.ecfeed.ui.modelif.ModelNodesTransfer;
-import com.testify.ecfeed.ui.modelif.DecomposedNodeInterface;
+import com.testify.ecfeed.ui.modelif.ChoicesParentNodeInterface;
 
 public class ChoicesViewer extends TableViewerSection {
 
 	private final static int STYLE = Section.EXPANDED | Section.TITLE_BAR;
 
-	private DecomposedNodeInterface fParentIf;
+	private ChoicesParentNodeInterface fParentIf;
 	private ChoiceInterface fTableItemIf;
 
 	private TableViewerColumn fNameColumn;
@@ -187,7 +187,7 @@ public class ChoicesViewer extends TableViewerSection {
 		getViewer().addDropSupport(DND.DROP_COPY|DND.DROP_MOVE, new Transfer[]{ModelNodesTransfer.getInstance()}, new ModelNodeDropListener(getViewer(), this));
 	}
 
-	public void setInput(DecomposedNode parent){
+	public void setInput(ChoicesParentNode parent){
 		super.setInput(parent.getChoices());
 		fParentIf.setTarget(parent);
 	}

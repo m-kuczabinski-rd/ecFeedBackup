@@ -2,16 +2,16 @@ package com.testify.ecfeed.adapter.operations;
 
 import com.testify.ecfeed.adapter.IModelOperation;
 import com.testify.ecfeed.adapter.ModelOperationException;
-import com.testify.ecfeed.model.BasicStatement;
+import com.testify.ecfeed.model.AbstractStatement;
 import com.testify.ecfeed.model.StatementArray;
 
 public class StatementOperationReplaceChild extends AbstractModelOperation {
 
-	private BasicStatement fNewChild;
-	private BasicStatement fCurrentChild;
+	private AbstractStatement fNewChild;
+	private AbstractStatement fCurrentChild;
 	private StatementArray fTarget;
 
-	public StatementOperationReplaceChild(StatementArray target, BasicStatement child, BasicStatement newStatement) {
+	public StatementOperationReplaceChild(StatementArray target, AbstractStatement child, AbstractStatement newStatement) {
 		super(OperationNames.REPLACE_STATEMENT);
 		fTarget = target;
 		fCurrentChild = child;

@@ -5,7 +5,7 @@ import java.util.List;
 import com.testify.ecfeed.model.ParameterNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.ConstraintNode;
-import com.testify.ecfeed.model.GenericNode;
+import com.testify.ecfeed.model.AbstractNode;
 import com.testify.ecfeed.model.IModelVisitor;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.ChoiceNode;
@@ -62,7 +62,7 @@ public abstract class AbstractImplementationStatusResolver implements
 	}
 	
 	@Override
-	public EImplementationStatus getImplementationStatus(GenericNode node) {
+	public EImplementationStatus getImplementationStatus(AbstractNode node) {
 		try{
 			EImplementationStatus status = (EImplementationStatus)node.accept(fStatusResolver); 
 			return status;
@@ -176,11 +176,11 @@ public abstract class AbstractImplementationStatusResolver implements
 		return status;
 	}
 
-	protected EImplementationStatus childrenStatus(List<? extends GenericNode> children){
+	protected EImplementationStatus childrenStatus(List<? extends AbstractNode> children){
 		int size = children.size();
 		int implementedChildren = 0;
 		int notImplementedChildren = 0;
-		for(GenericNode child : children){
+		for(AbstractNode child : children){
 			EImplementationStatus status = getImplementationStatus(child);
 			if(status == EImplementationStatus.IMPLEMENTED) ++implementedChildren;
 			if(status == EImplementationStatus.NOT_IMPLEMENTED) ++notImplementedChildren;

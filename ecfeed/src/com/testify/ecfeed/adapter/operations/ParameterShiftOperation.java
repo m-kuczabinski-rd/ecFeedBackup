@@ -6,7 +6,7 @@ import java.util.List;
 import com.testify.ecfeed.adapter.IModelOperation;
 import com.testify.ecfeed.adapter.ModelOperationException;
 import com.testify.ecfeed.model.ParameterNode;
-import com.testify.ecfeed.model.GenericNode;
+import com.testify.ecfeed.model.AbstractNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.TestCaseNode;
 
@@ -14,16 +14,16 @@ public class ParameterShiftOperation extends GenericShiftOperation {
 
 	private List<ParameterNode> fParameters;
 
-	public ParameterShiftOperation(List<ParameterNode> parameters, GenericNode shifted, boolean up) {
-		this(parameters, Arrays.asList(new GenericNode[]{shifted}), up);
+	public ParameterShiftOperation(List<ParameterNode> parameters, AbstractNode shifted, boolean up) {
+		this(parameters, Arrays.asList(new AbstractNode[]{shifted}), up);
 	}
 
-	public ParameterShiftOperation(List<ParameterNode> parameters, List<? extends GenericNode> shifted, boolean up) {
+	public ParameterShiftOperation(List<ParameterNode> parameters, List<? extends AbstractNode> shifted, boolean up) {
 		this(parameters, shifted, 0);
 		setShift(minAllowedShift(shifted, up));
 	}
 
-	public ParameterShiftOperation(List<ParameterNode> parameters, List<? extends GenericNode> shifted, int shift) {
+	public ParameterShiftOperation(List<ParameterNode> parameters, List<? extends AbstractNode> shifted, int shift) {
 		super(parameters, shifted, shift);
 		fParameters = parameters;
 	}
@@ -47,7 +47,7 @@ public class ParameterShiftOperation extends GenericShiftOperation {
 	}
 
 	@Override
-	protected boolean shiftAllowed(List<? extends GenericNode> shifted, int shift){
+	protected boolean shiftAllowed(List<? extends AbstractNode> shifted, int shift){
 		if(super.shiftAllowed(shifted, shift) == false) return false;
 		if(shifted.get(0) instanceof ParameterNode == false) return false;
 		MethodNode method = ((ParameterNode)shifted.get(0)).getMethod();
@@ -62,7 +62,7 @@ public class ParameterShiftOperation extends GenericShiftOperation {
 	}
 
 	@Override
-	protected int minAllowedShift(List<? extends GenericNode> shifted, boolean up){
+	protected int minAllowedShift(List<? extends AbstractNode> shifted, boolean up){
 		int shift = up ? -1 : 1;
 		while(shiftAllowed(shifted, shift) == false){
 			shift += up ? -1 : 1;

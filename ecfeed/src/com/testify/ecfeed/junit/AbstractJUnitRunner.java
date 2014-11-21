@@ -21,7 +21,7 @@ import com.testify.ecfeed.adapter.java.JavaImplementationStatusResolver;
 import com.testify.ecfeed.adapter.java.ModelClassLoader;
 import com.testify.ecfeed.junit.annotations.EcModel;
 import com.testify.ecfeed.model.ClassNode;
-import com.testify.ecfeed.model.GenericNode;
+import com.testify.ecfeed.model.AbstractNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.runner.Messages;
@@ -85,7 +85,7 @@ public abstract class AbstractJUnitRunner extends BlockJUnit4ClassRunner {
 		return classModel.getMethod(methodName, getParameterTypes(method.getMethod().getParameterTypes()));
 	}
 	
-	protected EImplementationStatus implementationStatus(GenericNode node){
+	protected EImplementationStatus implementationStatus(AbstractNode node){
 		return getImplementationStatusResolver().getImplementationStatus(node);
 	}
 	

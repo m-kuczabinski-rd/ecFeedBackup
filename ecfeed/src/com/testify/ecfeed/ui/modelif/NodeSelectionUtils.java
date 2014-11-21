@@ -6,7 +6,7 @@ import java.util.List;
 import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
 
-import com.testify.ecfeed.model.GenericNode;
+import com.testify.ecfeed.model.AbstractNode;
 
 public class NodeSelectionUtils {
 	
@@ -23,31 +23,31 @@ public class NodeSelectionUtils {
 	}
 	
 	public boolean isSelectionSibling(){
-		List<GenericNode> nodes = getSelectedNodes();
+		List<AbstractNode> nodes = getSelectedNodes();
 		if(nodes.isEmpty()) return false;
-		GenericNode parent = nodes.get(0).getParent();
-		for(GenericNode node : nodes){
+		AbstractNode parent = nodes.get(0).getParent();
+		for(AbstractNode node : nodes){
 			if(node.getParent() != parent) return false;
 		}
 		return true;
 	}
 	
 	public boolean isSelectionSingleType(){
-		List<GenericNode> nodes = getSelectedNodes();
+		List<AbstractNode> nodes = getSelectedNodes();
 		if(nodes.isEmpty()) return false;
 		Class<?> type = nodes.get(0).getClass();
-		for(GenericNode node : nodes){
+		for(AbstractNode node : nodes){
 			if(node.getClass().equals(type) == false) return false;
 		}
 		return true;
 	}
 
-	public List<GenericNode> getSelectedNodes() {
-		List<GenericNode> result = new ArrayList<>();
+	public List<AbstractNode> getSelectedNodes() {
+		List<AbstractNode> result = new ArrayList<>();
 		IStructuredSelection selection = (IStructuredSelection)fSelectionProvider.getSelection();
 		for(Object o : selection.toList()){
-			if(o instanceof GenericNode){
-				result.add((GenericNode)o);
+			if(o instanceof AbstractNode){
+				result.add((AbstractNode)o);
 			}
 		}
 		return result;

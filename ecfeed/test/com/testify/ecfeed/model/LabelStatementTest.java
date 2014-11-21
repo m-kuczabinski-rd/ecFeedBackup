@@ -22,7 +22,7 @@ import org.junit.Test;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.model.ParameterNode;
-import com.testify.ecfeed.model.DecomposedParameterStatement;
+import com.testify.ecfeed.model.ChoicesParentStatement;
 import com.testify.ecfeed.model.EStatementRelation;
 
 public class LabelStatementTest {
@@ -78,14 +78,14 @@ public class LabelStatementTest {
 		List<ChoiceNode> p21q = new ArrayList<ChoiceNode>();
 		p21q.add(p21); p21q.add(q);
 		
-		DecomposedParameterStatement pEqual = new DecomposedParameterStatement(c1, EStatementRelation.EQUAL, "p");
-		DecomposedParameterStatement pNotEqual = new DecomposedParameterStatement(c1, EStatementRelation.NOT, "p");
+		ChoicesParentStatement pEqual = new ChoicesParentStatement(c1, EStatementRelation.EQUAL, "p");
+		ChoicesParentStatement pNotEqual = new ChoicesParentStatement(c1, EStatementRelation.NOT, "p");
 		
-		DecomposedParameterStatement p1Equal = new DecomposedParameterStatement(c1, EStatementRelation.EQUAL, "p1");
-		DecomposedParameterStatement p1NotEqual = new DecomposedParameterStatement(c1, EStatementRelation.NOT, "p1");
+		ChoicesParentStatement p1Equal = new ChoicesParentStatement(c1, EStatementRelation.EQUAL, "p1");
+		ChoicesParentStatement p1NotEqual = new ChoicesParentStatement(c1, EStatementRelation.NOT, "p1");
 		
-		DecomposedParameterStatement p11Equal = new DecomposedParameterStatement(c1, EStatementRelation.EQUAL, "p11");
-		DecomposedParameterStatement p11NotEqual = new DecomposedParameterStatement(c1, EStatementRelation.NOT, "p11");
+		ChoicesParentStatement p11Equal = new ChoicesParentStatement(c1, EStatementRelation.EQUAL, "p11");
+		ChoicesParentStatement p11NotEqual = new ChoicesParentStatement(c1, EStatementRelation.NOT, "p11");
 		
 		//Check that all pEqual statements evaluates to true for all vectors
 		assertTrue(pEqual.evaluate(pq));

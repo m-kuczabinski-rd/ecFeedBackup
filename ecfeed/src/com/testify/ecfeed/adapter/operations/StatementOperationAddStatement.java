@@ -2,16 +2,16 @@ package com.testify.ecfeed.adapter.operations;
 
 import com.testify.ecfeed.adapter.IModelOperation;
 import com.testify.ecfeed.adapter.ModelOperationException;
-import com.testify.ecfeed.model.BasicStatement;
+import com.testify.ecfeed.model.AbstractStatement;
 import com.testify.ecfeed.model.StatementArray;
 
 public class StatementOperationAddStatement extends AbstractModelOperation {
 
-	private BasicStatement fStatement;
+	private AbstractStatement fStatement;
 	private StatementArray fTarget;
 	private int fIndex;
 
-	public StatementOperationAddStatement(StatementArray parent, BasicStatement statement, int index) {
+	public StatementOperationAddStatement(StatementArray parent, AbstractStatement statement, int index) {
 		super(OperationNames.ADD_STATEMENT);
 		fTarget = parent;
 		fStatement = statement;

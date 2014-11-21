@@ -10,13 +10,13 @@ import org.eclipse.swt.dnd.TransferData;
 import com.testify.ecfeed.model.ParameterNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.ConstraintNode;
-import com.testify.ecfeed.model.GenericNode;
+import com.testify.ecfeed.model.AbstractNode;
 import com.testify.ecfeed.model.IModelVisitor;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.TestCaseNode;
-import com.testify.ecfeed.ui.modelif.GenericNodeInterface;
+import com.testify.ecfeed.ui.modelif.AbstractNodeInterface;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 import com.testify.ecfeed.ui.modelif.NodeDnDBuffer;
 import com.testify.ecfeed.ui.modelif.NodeInterfaceFactory;
@@ -75,18 +75,18 @@ public class ModelNodeDropListener extends ViewerDropAdapter{
 
 	@Override
 	public boolean performDrop(Object data) {
-		List<GenericNode> dragged = NodeDnDBuffer.getInstance().getDraggedNodes();
+		List<AbstractNode> dragged = NodeDnDBuffer.getInstance().getDraggedNodes();
 		SelectionInterface selectionIf = new SelectionInterface(fUpdateContext);
 		selectionIf.setTarget(dragged);
 		if((dragged.size() == 0) || (selectionIf.isSingleType() == false)) return false;
-		GenericNode newParent = determineNewParent(getCurrentTarget(), getCurrentLocation());
-		int index = determineNewIndex((GenericNode)getCurrentTarget(), getCurrentLocation());
+		AbstractNode newParent = determineNewParent(getCurrentTarget(), getCurrentLocation());
+		int index = determineNewIndex((AbstractNode)getCurrentTarget(), getCurrentLocation());
 		if(newParent == null || index < 0 || index > newParent.getMaxChildIndex(dragged.get(0))){
 			return false;
 		}
 		switch(getCurrentOperation()){
 		case DND.DROP_COPY:
-			GenericNodeInterface nodeIf = NodeInterfaceFactory.getNodeInterface(newParent, fUpdateContext);
+			AbstractNodeInterface nodeIf = NodeInterfaceFactory.getNodeInterface(newParent, fUpdateContext);
 			return nodeIf.addChildren(NodeDnDBuffer.getInstance().getDraggedNodesCopy(), index);
 		case DND.DROP_MOVE:
 			return selectionIf.move(newParent, index);
@@ -97,9 +97,9 @@ public class ModelNodeDropListener extends ViewerDropAdapter{
 
 	@Override
 	public boolean validateDrop(Object target, int operation, TransferData transferType) {
-		GenericNode parent = determineNewParent(target, getCurrentLocation());
+		AbstractNode parent = determineNewParent(target, getCurrentLocation());
 		SelectionInterface selectionIf = new SelectionInterface(fUpdateContext);
-		List<GenericNode>dragged = NodeDnDBuffer.getInstance().getDraggedNodes();
+		List<AbstractNode>dragged = NodeDnDBuffer.getInstance().getDraggedNodes();
 		selectionIf.setTarget(dragged);
 		if(dragged.size() == 0) return false;
 		if(selectionIf.isSingleType() == false) return false;
@@ -110,10 +110,10 @@ public class ModelNodeDropListener extends ViewerDropAdapter{
 		}
 	}
 
-	protected GenericNode determineNewParent(Object target, int location){
+	protected AbstractNode determineNewParent(Object target, int location){
 		int position = determineLocation(getCurrentEvent());
-		if(target instanceof GenericNode == false) return null;
-		GenericNode parent = (GenericNode)target;
+		if(target instanceof AbstractNode == false) return null;
+		AbstractNode parent = (AbstractNode)target;
 		switch(position){
 		case LOCATION_ON:
 			return parent;
@@ -124,7 +124,7 @@ public class ModelNodeDropListener extends ViewerDropAdapter{
 		return null;
 	}
 
-	protected int determineNewIndex(GenericNode target, int location){
+	protected int determineNewIndex(AbstractNode target, int location){
 		int position = determineLocation(getCurrentEvent());
 		switch(position){
 		case LOCATION_ON:

@@ -1,13 +1,13 @@
 package com.testify.ecfeed.ui.modelif;
 
-import com.testify.ecfeed.model.BasicStatement;
+import com.testify.ecfeed.model.AbstractStatement;
 import com.testify.ecfeed.model.ExpectedValueStatement;
 import com.testify.ecfeed.model.IStatementVisitor;
-import com.testify.ecfeed.model.DecomposedParameterStatement;
+import com.testify.ecfeed.model.ChoicesParentStatement;
 import com.testify.ecfeed.model.StatementArray;
 import com.testify.ecfeed.model.StaticStatement;
-import com.testify.ecfeed.model.DecomposedParameterStatement.LabelCondition;
-import com.testify.ecfeed.model.DecomposedParameterStatement.ChoiceCondition;
+import com.testify.ecfeed.model.ChoicesParentStatement.LabelCondition;
+import com.testify.ecfeed.model.ChoicesParentStatement.ChoiceCondition;
 
 public class StatementInterfaceFactory{
 
@@ -41,9 +41,9 @@ public class StatementInterfaceFactory{
 		}
 
 		@Override
-		public Object visit(DecomposedParameterStatement statement)
+		public Object visit(ChoicesParentStatement statement)
 				throws Exception {
-			DecomposedParameterStatementInterface statementIf = new DecomposedParameterStatementInterface(fUpdateContext);
+			ChoicesParentStatementInterface statementIf = new ChoicesParentStatementInterface(fUpdateContext);
 			statementIf.setTarget(statement);
 			return statementIf;
 		}
@@ -59,11 +59,11 @@ public class StatementInterfaceFactory{
 		}
 	}
 
-	public static BasicStatementInterface getInterface(BasicStatement statement, IModelUpdateContext updateContext){
+	public static AbstractStatementInterface getInterface(AbstractStatement statement, IModelUpdateContext updateContext){
 		try {
-			return (BasicStatementInterface) statement.accept(new InterfaceProvider(updateContext));
+			return (AbstractStatementInterface) statement.accept(new InterfaceProvider(updateContext));
 		} catch (Exception e) {
-			return new BasicStatementInterface(updateContext);
+			return new AbstractStatementInterface(updateContext);
 		}
 	}
 }

@@ -25,7 +25,7 @@ import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.EStatementOperator;
 import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.model.ParameterNode;
-import com.testify.ecfeed.model.DecomposedParameterStatement;
+import com.testify.ecfeed.model.ChoicesParentStatement;
 import com.testify.ecfeed.model.EStatementRelation;
 import com.testify.ecfeed.model.StatementArray;
 import com.testify.ecfeed.model.StaticStatement;
@@ -68,8 +68,8 @@ public class StatementArrayTest {
 	public void testEvaluate() {
 		StatementArray arrayOr = new StatementArray(EStatementOperator.OR);
 		StatementArray arrayAnd = new StatementArray(EStatementOperator.AND);
-		DecomposedParameterStatement statement1 = new DecomposedParameterStatement(fParameter1, EStatementRelation.EQUAL, fChoice11);
-		DecomposedParameterStatement statement2 = new DecomposedParameterStatement(fParameter2, EStatementRelation.EQUAL, fChoice21);
+		ChoicesParentStatement statement1 = new ChoicesParentStatement(fParameter1, EStatementRelation.EQUAL, fChoice11);
+		ChoicesParentStatement statement2 = new ChoicesParentStatement(fParameter2, EStatementRelation.EQUAL, fChoice21);
 		arrayOr.addStatement(statement1);
 		arrayOr.addStatement(statement2);
 		arrayAnd.addStatement(statement1);
@@ -97,9 +97,9 @@ public class StatementArrayTest {
 	@Test
 	public void testGetChildren() {
 		StatementArray array = new StatementArray(EStatementOperator.OR);
-		DecomposedParameterStatement statement1 = new DecomposedParameterStatement(fParameter1, EStatementRelation.EQUAL, fChoice11);
-		DecomposedParameterStatement statement2 = new DecomposedParameterStatement(fParameter2, EStatementRelation.EQUAL, fChoice21);
-		DecomposedParameterStatement statement3 = new DecomposedParameterStatement(fParameter2, EStatementRelation.EQUAL, fChoice21);
+		ChoicesParentStatement statement1 = new ChoicesParentStatement(fParameter1, EStatementRelation.EQUAL, fChoice11);
+		ChoicesParentStatement statement2 = new ChoicesParentStatement(fParameter2, EStatementRelation.EQUAL, fChoice21);
+		ChoicesParentStatement statement3 = new ChoicesParentStatement(fParameter2, EStatementRelation.EQUAL, fChoice21);
 		array.addStatement(statement1);
 		array.addStatement(statement2);
 		
@@ -112,8 +112,8 @@ public class StatementArrayTest {
 	@Test
 	public void testMentionsChoiceNode() {
 		StatementArray array = new StatementArray(EStatementOperator.OR);
-		DecomposedParameterStatement statement1 = new DecomposedParameterStatement(fParameter1, EStatementRelation.EQUAL, fChoice11);
-		DecomposedParameterStatement statement2 = new DecomposedParameterStatement(fParameter2, EStatementRelation.EQUAL, fChoice21);
+		ChoicesParentStatement statement1 = new ChoicesParentStatement(fParameter1, EStatementRelation.EQUAL, fChoice11);
+		ChoicesParentStatement statement2 = new ChoicesParentStatement(fParameter2, EStatementRelation.EQUAL, fChoice21);
 		array.addStatement(statement1);
 		array.addStatement(statement2);
 		assertTrue(array.mentions(fChoice11));
@@ -123,7 +123,7 @@ public class StatementArrayTest {
 	@Test
 	public void testMentionsParameterNode() {
 		StatementArray array = new StatementArray(EStatementOperator.OR);
-		DecomposedParameterStatement statement1 = new DecomposedParameterStatement(fParameter1, EStatementRelation.EQUAL, fChoice11);
+		ChoicesParentStatement statement1 = new ChoicesParentStatement(fParameter1, EStatementRelation.EQUAL, fChoice11);
 		array.addStatement(statement1);
 		assertTrue(array.mentions(fChoice11.getParameter()));
 		assertFalse(array.mentions(fChoice21.getParameter()));
@@ -132,8 +132,8 @@ public class StatementArrayTest {
 	@Test
 	public void testSetOperator() {
 		StatementArray array = new StatementArray(EStatementOperator.OR);
-		DecomposedParameterStatement statement1 = new DecomposedParameterStatement(fParameter1, EStatementRelation.EQUAL, fChoice11);
-		DecomposedParameterStatement statement2 = new DecomposedParameterStatement(fParameter2, EStatementRelation.EQUAL, fChoice21);
+		ChoicesParentStatement statement1 = new ChoicesParentStatement(fParameter1, EStatementRelation.EQUAL, fChoice11);
+		ChoicesParentStatement statement2 = new ChoicesParentStatement(fParameter2, EStatementRelation.EQUAL, fChoice21);
 		array.addStatement(statement1);
 		array.addStatement(statement2);
 		assertEquals(EStatementOperator.OR, array.getOperator());
@@ -148,9 +148,9 @@ public class StatementArrayTest {
 	@Test
 	public void testReplaceChild() {
 		StatementArray array = new StatementArray(EStatementOperator.OR);
-		DecomposedParameterStatement statement1 = new DecomposedParameterStatement(fParameter1, EStatementRelation.EQUAL, fChoice11);
-		DecomposedParameterStatement statement2 = new DecomposedParameterStatement(fParameter1, EStatementRelation.EQUAL, fChoice12);
-		DecomposedParameterStatement statement3 = new DecomposedParameterStatement(fParameter1, EStatementRelation.EQUAL, fChoice13);
+		ChoicesParentStatement statement1 = new ChoicesParentStatement(fParameter1, EStatementRelation.EQUAL, fChoice11);
+		ChoicesParentStatement statement2 = new ChoicesParentStatement(fParameter1, EStatementRelation.EQUAL, fChoice12);
+		ChoicesParentStatement statement3 = new ChoicesParentStatement(fParameter1, EStatementRelation.EQUAL, fChoice13);
 		array.addStatement(statement1);
 		array.addStatement(statement2);
 		assertEquals(2, array.getChildren().size());
@@ -168,8 +168,8 @@ public class StatementArrayTest {
 	@Test
 	public void testRemoveChild() {
 		StatementArray array = new StatementArray(EStatementOperator.OR);
-		DecomposedParameterStatement statement1 = new DecomposedParameterStatement(fParameter1, EStatementRelation.EQUAL, fChoice11);
-		DecomposedParameterStatement statement2 = new DecomposedParameterStatement(fParameter1, EStatementRelation.EQUAL, fChoice12);
+		ChoicesParentStatement statement1 = new ChoicesParentStatement(fParameter1, EStatementRelation.EQUAL, fChoice11);
+		ChoicesParentStatement statement2 = new ChoicesParentStatement(fParameter1, EStatementRelation.EQUAL, fChoice12);
 		array.addStatement(statement1);
 		array.addStatement(statement2);
 		assertEquals(2, array.getChildren().size());

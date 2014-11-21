@@ -13,7 +13,7 @@ import com.testify.ecfeed.adapter.EImplementationStatus;
 import com.testify.ecfeed.model.ParameterNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.ConstraintNode;
-import com.testify.ecfeed.model.GenericNode;
+import com.testify.ecfeed.model.AbstractNode;
 import com.testify.ecfeed.model.IModelVisitor;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.ChoiceNode;
@@ -71,17 +71,17 @@ public class JavaImplementationStatusResolver extends AbstractImplementationStat
 	}
 
 	@Override
-	public EImplementationStatus getImplementationStatus(GenericNode node){
+	public EImplementationStatus getImplementationStatus(AbstractNode node){
 		fLoadedClasses.clear();
 		return super.getImplementationStatus(node);
 	}
 	
 	@Override
-	protected EImplementationStatus childrenStatus(List<? extends GenericNode> children){
+	protected EImplementationStatus childrenStatus(List<? extends AbstractNode> children){
 		int size = children.size();
 		int implementedChildren = 0;
 		int notImplementedChildren = 0;
-		for(GenericNode child : children){
+		for(AbstractNode child : children){
 			// do not use the public getImplementationStatus() function to avoid flushing cache
 			EImplementationStatus status = implementationStatus(child);
 			if(status == EImplementationStatus.IMPLEMENTED) ++implementedChildren;
@@ -155,7 +155,7 @@ public class JavaImplementationStatusResolver extends AbstractImplementationStat
 		return false;
 	}
 
-	private EImplementationStatus implementationStatus(GenericNode node) {
+	private EImplementationStatus implementationStatus(AbstractNode node) {
 		try {
 			return (EImplementationStatus)node.accept(fStatusVisitor);
 		} catch (Exception e) {}

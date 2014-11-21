@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.eclipse.jface.viewers.TreeViewer;
 
-import com.testify.ecfeed.model.GenericNode;
+import com.testify.ecfeed.model.AbstractNode;
 
 
 public class CollapseAction extends ModelSelectionAction {
@@ -19,8 +19,8 @@ public class CollapseAction extends ModelSelectionAction {
 	@Override
 	public boolean isEnabled(){
 		boolean enabled = false;
-		List<GenericNode> nodes = getSelectedNodes();
-		for(GenericNode node : nodes){
+		List<AbstractNode> nodes = getSelectedNodes();
+		for(AbstractNode node : nodes){
 			if(fViewer.getExpandedState(node)){
 				enabled = true;
 			}
@@ -30,7 +30,7 @@ public class CollapseAction extends ModelSelectionAction {
 	
 	@Override
 	public void run(){
-		for(GenericNode node : getSelectedNodes()){
+		for(AbstractNode node : getSelectedNodes()){
 			fViewer.collapseToLevel(node, TreeViewer.ALL_LEVELS);
 		}
 	}

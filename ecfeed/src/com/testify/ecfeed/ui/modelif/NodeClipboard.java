@@ -15,40 +15,40 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import com.testify.ecfeed.model.GenericNode;
+import com.testify.ecfeed.model.AbstractNode;
 
 public class NodeClipboard{
 
-	private static List<GenericNode> fClipboardNodes = new ArrayList<>();
+	private static List<AbstractNode> fClipboardNodes = new ArrayList<>();
 
-	public static List<GenericNode> getContent(){
+	public static List<AbstractNode> getContent(){
 		return fClipboardNodes;
 	}
 	
-	public static List<GenericNode> getContentCopy(){
-		List<GenericNode> copy = new ArrayList<GenericNode>();
-		for(GenericNode node : fClipboardNodes){
+	public static List<AbstractNode> getContentCopy(){
+		List<AbstractNode> copy = new ArrayList<AbstractNode>();
+		for(AbstractNode node : fClipboardNodes){
 			copy.add(node.getCopy());
 		}
 		return copy;
 	}
 	
-	public static void setContent(GenericNode node){
+	public static void setContent(AbstractNode node){
 		fClipboardNodes.clear();
 		fClipboardNodes.add(node.getCopy());
 	}
 	
-	public static void setContent(List<GenericNode> nodes){
+	public static void setContent(List<AbstractNode> nodes){
 		fClipboardNodes.clear();
-		for(GenericNode node : nodes){
+		for(AbstractNode node : nodes){
 			if(isPredecessorInCollection(node, nodes) == false){
 				fClipboardNodes.add(node.getCopy());
 			}
 		}
 	}
 	
-	private static boolean isPredecessorInCollection(GenericNode node, Collection<GenericNode> nodes) {
-		GenericNode predecessor = node.getParent();
+	private static boolean isPredecessorInCollection(AbstractNode node, Collection<AbstractNode> nodes) {
+		AbstractNode predecessor = node.getParent();
 		while(predecessor != null){
 			if(nodes.contains(predecessor)){
 				return true;

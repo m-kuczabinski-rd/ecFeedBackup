@@ -13,7 +13,7 @@ package com.testify.ecfeed.model;
 
 import java.util.List;
 
-public class ConstraintNode extends GenericNode{
+public class ConstraintNode extends AbstractNode{
 
 	private Constraint fConstraint;
 
@@ -94,7 +94,7 @@ public class ConstraintNode extends GenericNode{
 	}
 
 	@Override
-	public boolean compare(GenericNode node){
+	public boolean compare(AbstractNode node){
 		if(node instanceof ConstraintNode == false){
 			return false;
 		}

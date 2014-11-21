@@ -15,7 +15,7 @@ import com.testify.ecfeed.adapter.operations.GenericShiftOperation;
 import com.testify.ecfeed.model.ParameterNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.ConstraintNode;
-import com.testify.ecfeed.model.GenericNode;
+import com.testify.ecfeed.model.AbstractNode;
 import com.testify.ecfeed.model.IModelVisitor;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.ChoiceNode;
@@ -25,9 +25,9 @@ import com.testify.ecfeed.ui.common.EclipseImplementationStatusResolver;
 import com.testify.ecfeed.ui.common.EclipseTypeAdapterProvider;
 import com.testify.ecfeed.ui.common.Messages;
 
-public class GenericNodeInterface extends OperationExecuter{
+public class AbstractNodeInterface extends OperationExecuter{
 
-	private GenericNode fTarget;
+	private AbstractNode fTarget;
 	private EclipseImplementationStatusResolver fStatusResolver;
 	private ITypeAdapterProvider fAdapterProvider;
 
@@ -70,17 +70,17 @@ public class GenericNodeInterface extends OperationExecuter{
 
 	}
 
-	public GenericNodeInterface(IModelUpdateContext updateContext) {
+	public AbstractNodeInterface(IModelUpdateContext updateContext) {
 		super(updateContext);
 		fStatusResolver = new EclipseImplementationStatusResolver();
 		fAdapterProvider = new EclipseTypeAdapterProvider();
 	}
 
-	public void setTarget(GenericNode target){
+	public void setTarget(AbstractNode target){
 		fTarget = target;
 	}
 
-	public EImplementationStatus getImplementationStatus(GenericNode node){
+	public EImplementationStatus getImplementationStatus(AbstractNode node){
 		return fStatusResolver.getImplementationStatus(node);
 	}
 
@@ -111,20 +111,20 @@ public class GenericNodeInterface extends OperationExecuter{
 		return execute(FactoryRemoveOperation.getRemoveOperation(fTarget, true), Messages.DIALOG_REMOVE_NODE_PROBLEM_TITLE);
 	}
 
-	public boolean removeChildren(Collection<? extends GenericNode> children, String message){
+	public boolean removeChildren(Collection<? extends AbstractNode> children, String message){
 		if(children == null || children.size() == 0) return false;
-		for(GenericNode node : children){
+		for(AbstractNode node : children){
 			if(node.getParent() != fTarget) return false;
 		}
 		return execute(new GenericRemoveNodesOperation(children, true), message);
 	}
 
-	public boolean addChildren(Collection<? extends GenericNode> children){
+	public boolean addChildren(Collection<? extends AbstractNode> children){
 		IModelOperation operation = new GenericAddChildrenOperation(fTarget, children, fAdapterProvider, true);
 		return execute(operation, Messages.DIALOG_ADD_CHILDREN_PROBLEM_TITLE);
 	}
 
-	public boolean addChildren(Collection<? extends GenericNode> children, int index){
+	public boolean addChildren(Collection<? extends AbstractNode> children, int index){
 		IModelOperation operation;
 		if(index == -1){
 			operation = new GenericAddChildrenOperation(fTarget, children, fAdapterProvider, true);
@@ -135,19 +135,19 @@ public class GenericNodeInterface extends OperationExecuter{
 		return execute(operation, Messages.DIALOG_ADD_CHILDREN_PROBLEM_TITLE);
 	}
 
-	public boolean pasteEnabled(Collection<? extends GenericNode> pasted){
+	public boolean pasteEnabled(Collection<? extends AbstractNode> pasted){
 		GenericAddChildrenOperation operation = new GenericAddChildrenOperation(fTarget, pasted, fAdapterProvider, true);
 		return operation.enabled();
 	}
 
-	public boolean pasteEnabled(Collection<? extends GenericNode> pasted, int index){
+	public boolean pasteEnabled(Collection<? extends AbstractNode> pasted, int index){
 		GenericAddChildrenOperation operation = new GenericAddChildrenOperation(fTarget, pasted, index, fAdapterProvider, true);
 		return operation.enabled();
 	}
 
 	public boolean moveUpDown(boolean up) {
 		try{
-			GenericShiftOperation operation = FactoryShiftOperation.getShiftOperation(Arrays.asList(new GenericNode[]{fTarget}), up);
+			GenericShiftOperation operation = FactoryShiftOperation.getShiftOperation(Arrays.asList(new AbstractNode[]{fTarget}), up);
 			if(operation.getShift() > 0){
 				return executeMoveOperation(operation);
 			}

@@ -5,11 +5,11 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
-public abstract class DecomposedNode extends GenericNode{
+public abstract class ChoicesParentNode extends AbstractNode{
 
 	private List<ChoiceNode> fChoices;
 
-	public DecomposedNode(String name) {
+	public ChoicesParentNode(String name) {
 		super(name);
 		fChoices = new ArrayList<ChoiceNode>();
 	}
@@ -17,7 +17,7 @@ public abstract class DecomposedNode extends GenericNode{
 	public abstract ParameterNode getParameter();
 
 	@Override
-	public List<? extends GenericNode> getChildren(){
+	public List<? extends AbstractNode> getChildren(){
 		return fChoices;
 	}
 

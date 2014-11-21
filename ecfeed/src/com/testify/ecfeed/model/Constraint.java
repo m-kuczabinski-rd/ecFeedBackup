@@ -16,16 +16,16 @@ import java.util.List;
 import java.util.Set;
 
 import com.testify.ecfeed.generators.api.IConstraint;
-import com.testify.ecfeed.model.DecomposedParameterStatement.LabelCondition;
-import com.testify.ecfeed.model.DecomposedParameterStatement.ChoiceCondition;
+import com.testify.ecfeed.model.ChoicesParentStatement.LabelCondition;
+import com.testify.ecfeed.model.ChoicesParentStatement.ChoiceCondition;
 
 public class Constraint implements IConstraint<ChoiceNode> {
 	
 	private final int ID;
 	private static int fLastId = 0;
 
-	private BasicStatement fPremise;
-	private BasicStatement fConsequence; 
+	private AbstractStatement fPremise;
+	private AbstractStatement fConsequence; 
 
 	//TODO resign from the visitor pattern for better readability of the code
 	private class ReferencedChoicesProvider implements IStatementVisitor{
@@ -39,7 +39,7 @@ public class Constraint implements IConstraint<ChoiceNode> {
 		@Override
 		public Object visit(StatementArray statement) throws Exception {
 			Set<ChoiceNode> set = new HashSet<ChoiceNode>();
-			for(BasicStatement s : statement.getStatements()){
+			for(AbstractStatement s : statement.getStatements()){
 				set.addAll((Set<ChoiceNode>)s.accept(this));
 			}
 			return set;
@@ -51,7 +51,7 @@ public class Constraint implements IConstraint<ChoiceNode> {
 		}
 
 		@Override
-		public Object visit(DecomposedParameterStatement statement)
+		public Object visit(ChoicesParentStatement statement)
 				throws Exception {
 			return statement.getCondition().accept(this);
 		}
@@ -81,7 +81,7 @@ public class Constraint implements IConstraint<ChoiceNode> {
 		@Override
 		public Object visit(StatementArray statement) throws Exception {
 			Set<ParameterNode> set = new HashSet<ParameterNode>();
-			for(BasicStatement s : statement.getStatements()){
+			for(AbstractStatement s : statement.getStatements()){
 				set.addAll((Set<ParameterNode>)s.accept(this));
 			}
 			return set;
@@ -95,7 +95,7 @@ public class Constraint implements IConstraint<ChoiceNode> {
 		}
 
 		@Override
-		public Object visit(DecomposedParameterStatement statement)
+		public Object visit(ChoicesParentStatement statement)
 				throws Exception {
 			return statement.getCondition().accept(this);
 		}
@@ -134,7 +134,7 @@ public class Constraint implements IConstraint<ChoiceNode> {
 		@Override
 		public Object visit(StatementArray statement) throws Exception {
 			Set<String> set = new HashSet<String>();
-			for(BasicStatement s : statement.getStatements()){
+			for(AbstractStatement s : statement.getStatements()){
 				set.addAll((Set<String>)s.accept(this));
 			}
 			return set;
@@ -146,7 +146,7 @@ public class Constraint implements IConstraint<ChoiceNode> {
 		}
 
 		@Override
-		public Object visit(DecomposedParameterStatement statement)
+		public Object visit(ChoicesParentStatement statement)
 				throws Exception {
 			if(fParameter == statement.getParameter()){
 				return statement.getCondition().accept(this);
@@ -168,7 +168,7 @@ public class Constraint implements IConstraint<ChoiceNode> {
 		
 	}
 	
-	public Constraint(BasicStatement premise, BasicStatement consequence){
+	public Constraint(AbstractStatement premise, AbstractStatement consequence){
 		ID = fLastId++;
 		fPremise = premise;
 		fConsequence = consequence;
@@ -212,19 +212,19 @@ public class Constraint implements IConstraint<ChoiceNode> {
 		return ID;
 	}
 	
-	public BasicStatement getPremise(){
+	public AbstractStatement getPremise(){
 		return fPremise;
 	}
 	
-	public BasicStatement getConsequence(){
+	public AbstractStatement getConsequence(){
 		return fConsequence;
 	}
 
-	public void setPremise(BasicStatement statement){
+	public void setPremise(AbstractStatement statement){
 		fPremise = statement;
 	}
 	
-	public void setConsequence(BasicStatement consequence){
+	public void setConsequence(AbstractStatement consequence){
 		fConsequence = consequence;
 	}
 	
@@ -241,8 +241,8 @@ public class Constraint implements IConstraint<ChoiceNode> {
 	}
 	
 	public Constraint getCopy(){
-		BasicStatement premise = fPremise.getCopy();
-		BasicStatement consequence = fConsequence.getCopy();
+		AbstractStatement premise = fPremise.getCopy();
+		AbstractStatement consequence = fConsequence.getCopy();
 		return new Constraint(premise, consequence);
 	}
 

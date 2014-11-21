@@ -3,7 +3,7 @@ package com.testify.ecfeed.ui.modelif;
 import com.testify.ecfeed.model.ParameterNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.ConstraintNode;
-import com.testify.ecfeed.model.GenericNode;
+import com.testify.ecfeed.model.AbstractNode;
 import com.testify.ecfeed.model.IModelVisitor;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.ChoiceNode;
@@ -70,12 +70,12 @@ public class NodeInterfaceFactory{
 		}
 	}
 	
-	public static GenericNodeInterface getNodeInterface(GenericNode node, IModelUpdateContext context){
+	public static AbstractNodeInterface getNodeInterface(AbstractNode node, IModelUpdateContext context){
 		try{
-			return (GenericNodeInterface)node.accept(new InterfaceProvider(context));
+			return (AbstractNodeInterface)node.accept(new InterfaceProvider(context));
 		}
 		catch(Exception e){}
-		GenericNodeInterface nodeIf = new GenericNodeInterface(context);
+		AbstractNodeInterface nodeIf = new AbstractNodeInterface(context);
 		nodeIf.setTarget(node);
 		return nodeIf;
 	}

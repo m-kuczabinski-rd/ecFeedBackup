@@ -51,24 +51,24 @@ import static com.testify.ecfeed.serialization.ect.Constants.VALUE_ATTRIBUTE_NAM
 import nu.xom.Attribute;
 import nu.xom.Element;
 
-import com.testify.ecfeed.model.BasicStatement;
+import com.testify.ecfeed.model.AbstractStatement;
 import com.testify.ecfeed.model.ParameterNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.ConstraintNode;
 import com.testify.ecfeed.model.ExpectedValueStatement;
-import com.testify.ecfeed.model.GenericNode;
+import com.testify.ecfeed.model.AbstractNode;
 import com.testify.ecfeed.model.IModelVisitor;
 import com.testify.ecfeed.model.IStatementVisitor;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.ChoiceNode;
-import com.testify.ecfeed.model.DecomposedParameterStatement;
+import com.testify.ecfeed.model.ChoicesParentStatement;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.StatementArray;
 import com.testify.ecfeed.model.StaticStatement;
 import com.testify.ecfeed.model.TestCaseNode;
-import com.testify.ecfeed.model.DecomposedParameterStatement.ICondition;
-import com.testify.ecfeed.model.DecomposedParameterStatement.LabelCondition;
-import com.testify.ecfeed.model.DecomposedParameterStatement.ChoiceCondition;
+import com.testify.ecfeed.model.ChoicesParentStatement.ICondition;
+import com.testify.ecfeed.model.ChoicesParentStatement.LabelCondition;
+import com.testify.ecfeed.model.ChoicesParentStatement.ChoiceCondition;
 
 public class XomBuilder implements IModelVisitor, IStatementVisitor {
 
@@ -151,8 +151,8 @@ public class XomBuilder implements IModelVisitor, IStatementVisitor {
 	@Override
 	public Object visit(ConstraintNode node) throws Exception{
 		Element element = createNamedElement(CONSTRAINT_NODE_NAME, node);
-		BasicStatement premise = node.getConstraint().getPremise();
-		BasicStatement consequence = node.getConstraint().getConsequence();
+		AbstractStatement premise = node.getConstraint().getPremise();
+		AbstractStatement consequence = node.getConstraint().getConsequence();
 		
 		
 		Element premiseElement = new Element(CONSTRAINT_PREMISE_NODE_NAME);
@@ -222,7 +222,7 @@ public class XomBuilder implements IModelVisitor, IStatementVisitor {
 		}
 		element.addAttribute(operatorAttribute);
 		
-		for(BasicStatement child : statement.getChildren()){
+		for(AbstractStatement child : statement.getChildren()){
 			element.appendChild((Element)child.accept(this));
 		}
 		return element;
@@ -245,7 +245,7 @@ public class XomBuilder implements IModelVisitor, IStatementVisitor {
 	}
 
 	@Override
-	public Object visit(DecomposedParameterStatement statement) throws Exception {
+	public Object visit(ChoicesParentStatement statement) throws Exception {
 
 		String parameterName = statement.getParameter().getName();
 		Attribute parameterAttribute = 
@@ -277,7 +277,7 @@ public class XomBuilder implements IModelVisitor, IStatementVisitor {
 		return element;
 	}
 
-	private Element createNamedElement(String nodeTag, GenericNode node){
+	private Element createNamedElement(String nodeTag, AbstractNode node){
 		Element element = new Element(nodeTag);
 		Attribute nameAttr = new Attribute(NODE_NAME_ATTRIBUTE, node.getName());
 		element.addAttribute(nameAttr);

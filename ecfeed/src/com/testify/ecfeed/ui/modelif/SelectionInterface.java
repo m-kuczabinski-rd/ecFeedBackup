@@ -9,7 +9,7 @@ import com.testify.ecfeed.adapter.operations.FactoryShiftOperation;
 import com.testify.ecfeed.adapter.operations.GenericMoveOperation;
 import com.testify.ecfeed.adapter.operations.GenericRemoveNodesOperation;
 import com.testify.ecfeed.adapter.operations.GenericShiftOperation;
-import com.testify.ecfeed.model.GenericNode;
+import com.testify.ecfeed.model.AbstractNode;
 import com.testify.ecfeed.ui.common.EclipseTypeAdapterProvider;
 import com.testify.ecfeed.ui.common.Messages;
 
@@ -22,9 +22,9 @@ public class SelectionInterface extends OperationExecuter {
 		fAdapterProvider = new EclipseTypeAdapterProvider();
 	}
 
-	private List<? extends GenericNode> fSelected;
+	private List<? extends AbstractNode> fSelected;
 
-	public void setTarget(List<GenericNode> target){
+	public void setTarget(List<AbstractNode> target){
 		fSelected = target;
 	}
 
@@ -37,18 +37,18 @@ public class SelectionInterface extends OperationExecuter {
 
 	public boolean deleteEnabled(){
 		if(fSelected.size() == 0) return false;
-		GenericNode root = fSelected.get(0).getRoot();
-		for(GenericNode selected : fSelected){
+		AbstractNode root = fSelected.get(0).getRoot();
+		for(AbstractNode selected : fSelected){
 			if(selected == root) return false;
 		}
 		return true;
 	}
 
-	public boolean move(GenericNode newParent){
+	public boolean move(AbstractNode newParent){
 		return move(newParent, -1);
 	}
 
-	public boolean move(GenericNode newParent, int newIndex){
+	public boolean move(AbstractNode newParent, int newIndex){
 		try{
 			IModelOperation operation;
 			if(newIndex == -1){
@@ -64,8 +64,8 @@ public class SelectionInterface extends OperationExecuter {
 	}
 
 	public boolean moveUpDown(boolean up) {
-		GenericNode parent = fSelected.get(0).getParent();
-		for(GenericNode node : fSelected){
+		AbstractNode parent = fSelected.get(0).getParent();
+		for(AbstractNode node : fSelected){
 			if(node.getParent() != parent){
 				return false;
 			}
@@ -79,7 +79,7 @@ public class SelectionInterface extends OperationExecuter {
 
 	public boolean moveUpDownEnabed(boolean up) {
 
-		GenericNode parent = getCommonParent();
+		AbstractNode parent = getCommonParent();
 		if(parent != null){
 			try {
 				GenericShiftOperation operation = FactoryShiftOperation.getShiftOperation(fSelected, up);
@@ -89,10 +89,10 @@ public class SelectionInterface extends OperationExecuter {
 		return false;
 	}
 
-	public GenericNode getCommonParent() {
+	public AbstractNode getCommonParent() {
 		if(fSelected == null || fSelected.size() == 0) return null;
-		GenericNode parent = fSelected.get(0).getParent();
-		for(GenericNode node : fSelected){
+		AbstractNode parent = fSelected.get(0).getParent();
+		for(AbstractNode node : fSelected){
 			if(node.getParent() != parent) return null;
 		}
 		return parent;
@@ -101,7 +101,7 @@ public class SelectionInterface extends OperationExecuter {
 	public boolean isSingleType(){
 		if(fSelected == null || fSelected.size() == 0) return false;
 		Class<?> type = fSelected.get(0).getClass();
-		for(GenericNode node : fSelected){
+		for(AbstractNode node : fSelected){
 			if(node.getClass().equals(type) == false) return false;
 		}
 		return true;

@@ -5,7 +5,7 @@ import com.testify.ecfeed.adapter.ModelOperationException;
 import com.testify.ecfeed.model.ParameterNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.ConstraintNode;
-import com.testify.ecfeed.model.GenericNode;
+import com.testify.ecfeed.model.AbstractNode;
 import com.testify.ecfeed.model.IModelVisitor;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.ChoiceNode;
@@ -80,7 +80,7 @@ public class FactoryRemoveOperation {
 		}
 	}
 	
-	public static IModelOperation getRemoveOperation(GenericNode node, boolean validate){
+	public static IModelOperation getRemoveOperation(AbstractNode node, boolean validate){
 		try {
 			return (IModelOperation)node.accept(new RemoveOperationVisitor(validate));
 		} catch (Exception e) {

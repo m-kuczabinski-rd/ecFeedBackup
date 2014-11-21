@@ -1,11 +1,11 @@
 /*******************************************************************************
- * Copyright (c) 2014 Testify AS.                                                
- * All rights reserved. This program and the accompanying materials              
- * are made available under the terms of the Eclipse Public License v1.0         
- * which accompanies this distribution, and is available at                      
- * http://www.eclipse.org/legal/epl-v10.html                                     
- *                                                                               
- * Contributors:                                                                 
+ * Copyright (c) 2014 Testify AS.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
  *     Patryk Chamuczynski (p.chamuczynski(at)radytek.com) - initial implementation
  ******************************************************************************/
 
@@ -74,13 +74,13 @@ public class CopyNodeTest{
 		fChoice2.addLabel(fLabel2);
 	}
 
-	public void testNode(GenericNode node, GenericNode copy){
+	public void testNode(AbstractNode node, AbstractNode copy){
 		assertTrue(node.getClass().isInstance(copy));
 		assertNotEquals(node, copy);
 		assertEquals(node.getName(), copy.getName());
 	}
 
-	public void testParent(GenericNode node, GenericNode parent, boolean isParent){
+	public void testParent(AbstractNode node, AbstractNode parent, boolean isParent){
 		if(isParent)
 			assertEquals(node.getParent(), parent);
 		else
@@ -125,7 +125,7 @@ public class CopyNodeTest{
 		testChoiceChildrenLabels(childcopy, fLabel1, fLabel2);
 	}
 
-	public void testDecomposedParameters(ParameterNode parameter, ParameterNode copy, String parentlabel, String childlabel){
+	public void testChoicesParentParameters(ParameterNode parameter, ParameterNode copy, String parentlabel, String childlabel){
 		testNode(parameter, copy);
 		assertEquals(parameter.getChildren().size(), copy.getChildren().size());
 		assertEquals(parameter.getAllChoiceNames().size(), copy.getAllChoiceNames().size());
@@ -149,10 +149,10 @@ public class CopyNodeTest{
 	}
 
 	@Test
-	public void decomposedParameterCopyTest(){
+	public void choicesParentParameterCopyTest(){
 		ParameterNode copy = fPartCat1.getCopy();
 		// parameters copied properly?
-		testDecomposedParameters(fPartCat1, copy, fLabel1, fLabel2);
+		testChoicesParentParameters(fPartCat1, copy, fLabel1, fLabel2);
 		testParent(copy, fPartCat1.getParent(), true);
 	}
 
@@ -173,10 +173,10 @@ public class CopyNodeTest{
 
 	public void testMethods(MethodNode method, MethodNode copy, String parentlabel, String childlabel){
 		testNode(method, copy);
-		// Test decomposed parameter
+		// Test choices parent parameter
 		ParameterNode partcat = method.getParameters(false).get(0);
 		ParameterNode copypartcat = copy.getParameter(partcat.getName());
-		testDecomposedParameters(partcat, copypartcat, parentlabel, childlabel);
+		testChoicesParentParameters(partcat, copypartcat, parentlabel, childlabel);
 		testParent(copypartcat, copy, true);
 		// Test expected parameter
 		ParameterNode expcat = method.getParameters(true).get(0);
@@ -188,7 +188,7 @@ public class CopyNodeTest{
 	@Test
 	public void methodCopyTest(){
 		MethodNode copy = fMethod1.getCopy();
-		if(copy == null)System.out.println("COPY!!!");	
+		if(copy == null)System.out.println("COPY!!!");
 		testMethods(fMethod1, copy, fLabel1, fLabel2);
 		testParent(fMethod1, copy.getParent(), true);
 	}
