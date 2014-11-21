@@ -2,18 +2,19 @@ package com.testify.ecfeed.adapter.operations;
 
 import com.testify.ecfeed.adapter.IModelOperation;
 import com.testify.ecfeed.adapter.ModelOperationException;
-import com.testify.ecfeed.model.ParameterNode;
+import com.testify.ecfeed.model.AbstractNode;
+import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.ConstraintNode;
-import com.testify.ecfeed.model.AbstractNode;
 import com.testify.ecfeed.model.IModelVisitor;
 import com.testify.ecfeed.model.MethodNode;
-import com.testify.ecfeed.model.ChoiceNode;
+import com.testify.ecfeed.model.ParameterNode;
+import com.testify.ecfeed.model.ParametersParentNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.TestCaseNode;
 
 public class FactoryRemoveOperation {
-	
+
 	private static class UnsupportedModelOperation implements IModelOperation{
 		@Override
 		public void execute() throws ModelOperationException {
@@ -35,15 +36,15 @@ public class FactoryRemoveOperation {
 			return "";
 		}
 	}
-	
+
 	private static class RemoveOperationVisitor implements IModelVisitor{
 
 		private boolean fValidate;
-		
+
 		public RemoveOperationVisitor(boolean validate){
 			fValidate = validate;
 		}
-		
+
 		@Override
 		public Object visit(RootNode node) throws Exception {
 			return new UnsupportedModelOperation();
@@ -61,7 +62,16 @@ public class FactoryRemoveOperation {
 
 		@Override
 		public Object visit(ParameterNode node) throws Exception {
-			return new MethodOperationRemoveParameter(node.getMethod(), node, fValidate);
+			ParametersParentNode parent = node.getParametersParent();
+			if(parent == null){
+				return new UnsupportedModelOperation();
+			}
+			else if(parent instanceof MethodNode){
+				return new MethodOperationRemoveParameter((MethodNode)parent, node, fValidate);
+			}
+			else{
+				return new GenericOperationRemoveParameter(parent, node);
+			}
 		}
 
 		@Override
@@ -79,7 +89,7 @@ public class FactoryRemoveOperation {
 			return new GenericOperationRemoveChoice(node.getParent(), node, fValidate);
 		}
 	}
-	
+
 	public static IModelOperation getRemoveOperation(AbstractNode node, boolean validate){
 		try {
 			return (IModelOperation)node.accept(new RemoveOperationVisitor(validate));

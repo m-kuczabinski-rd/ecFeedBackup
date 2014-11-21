@@ -21,23 +21,23 @@ import com.testify.ecfeed.adapter.operations.MethodOperationAddTestCase;
 import com.testify.ecfeed.adapter.operations.MethodOperationAddTestSuite;
 import com.testify.ecfeed.adapter.operations.MethodOperationConvertTo;
 import com.testify.ecfeed.adapter.operations.MethodOperationRenameTestCases;
-import com.testify.ecfeed.model.ParameterNode;
+import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.model.Constraint;
 import com.testify.ecfeed.model.ConstraintNode;
 import com.testify.ecfeed.model.MethodNode;
-import com.testify.ecfeed.model.ChoiceNode;
+import com.testify.ecfeed.model.ParameterNode;
 import com.testify.ecfeed.model.StaticStatement;
 import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.ui.common.Constants;
 import com.testify.ecfeed.ui.common.EclipseModelBuilder;
-import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.common.EclipseTypeAdapterProvider;
+import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.dialogs.AddTestCaseDialog;
 import com.testify.ecfeed.ui.dialogs.CalculateCoverageDialog;
 import com.testify.ecfeed.ui.dialogs.RenameTestSuiteDialog;
 import com.testify.ecfeed.ui.dialogs.SelectCompatibleMethodDialog;
 
-public class MethodInterface extends AbstractNodeInterface {
+public class MethodInterface extends ParametersParentInterface {
 
 	private MethodNode fTarget;
 	private ITypeAdapterProvider fAdapterProvider;
@@ -52,6 +52,7 @@ public class MethodInterface extends AbstractNodeInterface {
 		fTarget = target;
 	}
 
+	@Override
 	public MethodNode getTarget(){
 		return fTarget;
 	}
@@ -68,21 +69,22 @@ public class MethodInterface extends AbstractNodeInterface {
 		return execute(new MethodOperationConvertTo(fTarget, method), Messages.DIALOG_CONVERT_METHOD_PROBLEM_TITLE);
 	}
 
-	public ParameterNode addNewParameter() {
+	@Override
+	public ParameterNode addParameterParameter() {
 		EclipseModelBuilder modelBuilder = new EclipseModelBuilder();
-		String name = generateNewParameterName(fTarget);
-		String type = generateNewParameterType(fTarget);
+		String name = generateNewParameterName();
+		String type = generateNewParameterType();
 		String defaultValue = modelBuilder.getDefaultExpectedValue(type);
 		ParameterNode parameter = new ParameterNode(name, type, defaultValue, false);
 		List<ChoiceNode> defaultChoices = modelBuilder.defaultChoices(type);
 		parameter.addChoices(defaultChoices);
-		if(addNewParameter(parameter, fTarget.getParameters().size())){
+		if(addParameter(parameter, fTarget.getParameters().size())){
 			return parameter;
 		}
 		return null;
 	}
 
-	public boolean addNewParameter(ParameterNode parameter, int index) {
+	public boolean addParameter(ParameterNode parameter, int index) {
 		return execute(new MethodOperationAddParameter(fTarget, parameter, index), Messages.DIALOG_CONVERT_METHOD_PROBLEM_TITLE);
 	}
 
@@ -239,29 +241,31 @@ public class MethodInterface extends AbstractNodeInterface {
 		new CalculateCoverageDialog(activeShell, fTarget, checkedElements, grayedElements).open();
 	}
 
-	private String generateNewParameterName(MethodNode method) {
+	@Override
+	protected String generateNewParameterName() {
 		int i = 0;
 		String name = Constants.DEFAULT_NEW_PARAMETER_NAME + i++;
-		while(method.getParameter(name) != null){
+		while(fTarget.getParameter(name) != null){
 			name = Constants.DEFAULT_NEW_PARAMETER_NAME + i++;
 		}
 		return name;
 	}
 
-	private String generateNewParameterType(MethodNode method) {
+	@Override
+	protected String generateNewParameterType() {
 		for(String type : JavaUtils.supportedPrimitiveTypes()){
-			List<String> newTypes = method.getParametersTypes();
+			List<String> newTypes = fTarget.getParametersTypes();
 			newTypes.add(type);
-			if(method.getClassNode().getMethod(method.getName(), newTypes) == null){
+			if(fTarget.getClassNode().getMethod(fTarget.getName(), newTypes) == null){
 				return type;
 			}
 		}
 		String type = Constants.DEFAULT_USER_TYPE_NAME;
 		int i = 0;
 		while(true){
-			List<String> newTypes = method.getParametersTypes();
+			List<String> newTypes = fTarget.getParametersTypes();
 			newTypes.add(type);
-			if(method.getClassNode().getMethod(method.getName(), newTypes) == null){
+			if(fTarget.getClassNode().getMethod(fTarget.getName(), newTypes) == null){
 				break;
 			}
 			else{
