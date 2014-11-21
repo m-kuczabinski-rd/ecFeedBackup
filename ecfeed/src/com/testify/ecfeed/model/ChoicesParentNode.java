@@ -34,6 +34,12 @@ public abstract class ChoicesParentNode extends AbstractNode{
 			choice.setParent(this);
 	}
 
+	public void addChoices(List<ChoiceNode> choices) {
+		for(ChoiceNode p : choices){
+			addChoice(p);
+		}
+	}
+
 	public ChoiceNode getChoice(String qualifiedName) {
 		return (ChoiceNode)getChild(qualifiedName);
 	}

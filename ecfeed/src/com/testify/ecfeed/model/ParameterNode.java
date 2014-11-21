@@ -11,35 +11,16 @@
 
 package com.testify.ecfeed.model;
 
-import java.util.List;
 
-public class ParameterNode extends ChoicesParentNode{
+public class ParameterNode extends AbstractParameterNode{
 
-	private String fType;
 	private boolean fExpected;
 	private String fDefaultValue;
 
 	public ParameterNode(String name, String type, String defaultValue, boolean expected) {
-		super(name);
+		super(name, type);
 		fExpected = expected;
-		fType = type;
 		fDefaultValue = defaultValue;
-	}
-
-	@Override
-	public int getIndex(){
-		if(getParametersParent() == null){
-			return -1;
-		}
-		return getParametersParent().getParameters().indexOf(this);
-	}
-
-	@Override
-	public int getMaxIndex(){
-		if(getParametersParent() != null){
-			return getParametersParent().getParameters().size();
-		}
-		return -1;
 	}
 
 	@Override
@@ -48,12 +29,6 @@ public class ParameterNode extends ChoicesParentNode{
 			return super.toString() + "(" + getDefaultValue() + "): " + getType();
 		}
 		return new String(getName() + ": " + getType());
-	}
-
-	public void addChoices(List<ChoiceNode> choices) {
-		for(ChoiceNode p : choices){
-			addChoice(p);
-		}
 	}
 
 	@Override
@@ -74,20 +49,8 @@ public class ParameterNode extends ChoicesParentNode{
 		return this;
 	}
 
-	public String getType() {
-		return fType;
-	}
-
-	public void setType(String type) {
-		fType = type;
-	}
-
 	public MethodNode getMethod() {
 		return (MethodNode)getParent();
-	}
-
-	public ParametersParentNode getParametersParent(){
-		return (ParametersParentNode)getParent();
 	}
 
 	public String getDefaultValue() {
