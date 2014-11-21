@@ -19,7 +19,7 @@ import com.testify.ecfeed.junit.annotations.Generator;
 @Generator(CartesianProductGenerator.class)
 @Constraints(Constraints.ALL)
 public class ChoiceValueParserTest{
-	
+
 	private ChoiceValueParser fParser;
 
 	public enum ImplementedType{
@@ -147,7 +147,7 @@ public class ChoiceValueParserTest{
 
 	@Test
 	public void parseUserTypeTest(String valueString, String type, boolean parsedCorrectly){
-		System.out.println("parseUserTypeTest(" + valueString + ", " + type + ", " + parsedCorrectly + ")");
+//		System.out.println("parseUserTypeTest(" + valueString + ", " + type + ", " + parsedCorrectly + ")");
 
 		Object parsed = fParser.parseValue(valueString, type);
 		if(parsedCorrectly){
@@ -156,7 +156,7 @@ public class ChoiceValueParserTest{
 		else{
 			assertEquals(null, parsed);
 		}
-		
+
 	}
 
 }
