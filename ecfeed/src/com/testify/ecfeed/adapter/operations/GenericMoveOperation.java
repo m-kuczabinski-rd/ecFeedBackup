@@ -9,7 +9,7 @@ import com.testify.ecfeed.adapter.ITypeAdapterProvider;
 import com.testify.ecfeed.adapter.ModelOperationException;
 import com.testify.ecfeed.model.AbstractNode;
 import com.testify.ecfeed.model.MethodNode;
-import com.testify.ecfeed.model.DecomposedNode;
+import com.testify.ecfeed.model.ChoicesParentNode;
 
 public class GenericMoveOperation extends BulkOperation {
 
@@ -24,8 +24,8 @@ public class GenericMoveOperation extends BulkOperation {
 			//all nodes have parents other than newParent
 			if(externalNodes(moved, newParent)){
 				for(AbstractNode node : moved){
-					if(node instanceof DecomposedNode){
-						methodsInvolved.add(((DecomposedNode)node).getParameter().getMethod());
+					if(node instanceof ChoicesParentNode){
+						methodsInvolved.add(((ChoicesParentNode)node).getParameter().getMethod());
 					}
 					addOperation((IModelOperation)node.getParent().accept(new FactoryRemoveChildOperation(node, false)));
 					if(newIndex != -1){

@@ -11,14 +11,14 @@
 
 package com.testify.ecfeed.model;
 
-import com.testify.ecfeed.model.DecomposedParameterStatement.LabelCondition;
-import com.testify.ecfeed.model.DecomposedParameterStatement.ChoiceCondition;
+import com.testify.ecfeed.model.ChoicesParentStatement.LabelCondition;
+import com.testify.ecfeed.model.ChoicesParentStatement.ChoiceCondition;
 
 public interface IStatementVisitor {
 	public Object visit(StaticStatement statement) throws Exception;
 	public Object visit(StatementArray statement) throws Exception;
 	public Object visit(ExpectedValueStatement statement) throws Exception;
-	public Object visit(DecomposedParameterStatement statement) throws Exception;
+	public Object visit(ChoicesParentStatement statement) throws Exception;
 	public Object visit(LabelCondition condition) throws Exception;
 	public Object visit(ChoiceCondition condition) throws Exception;
 }

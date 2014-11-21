@@ -54,7 +54,7 @@ import com.testify.ecfeed.model.ExpectedValueStatement;
 import com.testify.ecfeed.model.AbstractNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.ChoiceNode;
-import com.testify.ecfeed.model.DecomposedParameterStatement;
+import com.testify.ecfeed.model.ChoicesParentStatement;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.StatementArray;
 import com.testify.ecfeed.model.StaticStatement;
@@ -210,7 +210,7 @@ public class RandomModelGenerator {
 			return generateStaticStatement();
 		case 1:
 		case 2:
-			return generateDecomposedStatement(method);
+			return generateChoicesParentStatement(method);
 		case 3:
 		case 4:
 			if(maxDepth > 0){
@@ -224,7 +224,7 @@ public class RandomModelGenerator {
 		return new StaticStatement(rand.nextBoolean());
 	}
 
-	public DecomposedParameterStatement generateDecomposedStatement(MethodNode method) {
+	public ChoicesParentStatement generateChoicesParentStatement(MethodNode method) {
 		List<ParameterNode> parameters = new ArrayList<ParameterNode>();
 		
 		for(ParameterNode parameter : method.getParameters()){
@@ -250,7 +250,7 @@ public class RandomModelGenerator {
 			List<String> choiceNames = new ArrayList<String>(parameter.getAllChoiceNames());
 			String luckyChoiceName = choiceNames.get(rand.nextInt(choiceNames.size()));
 			ChoiceNode condition = parameter.getChoice(luckyChoiceName);
-			return new DecomposedParameterStatement(parameter, relation, condition);
+			return new ChoicesParentStatement(parameter, relation, condition);
 		}
 		else{
 			if(parameter.getLeafLabels().size() == 0){
@@ -260,7 +260,7 @@ public class RandomModelGenerator {
 			Set<String>labels = parameter.getLeafLabels();
 			
 			String label = labels.toArray(new String[]{})[rand.nextInt(labels.size())];
-			return new DecomposedParameterStatement(parameter, relation, label);
+			return new ChoicesParentStatement(parameter, relation, label);
 		}
 	}
 
@@ -515,10 +515,10 @@ public class RandomModelGenerator {
 	}
 	
 //	@Test
-	public void testGenerateDecomposedStatement(){
+	public void testGenerateChoicesParentStatement(){
 		for(int i = 0; i < 10; i++){
 			MethodNode m = generateMethod(10, 0, 0);
-			DecomposedParameterStatement statement = generateDecomposedStatement(m);
+			ChoicesParentStatement statement = generateChoicesParentStatement(m);
 			System.out.println(fStringifier.stringify(statement, 0));
 		}
 	}

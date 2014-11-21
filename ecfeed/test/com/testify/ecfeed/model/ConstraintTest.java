@@ -23,7 +23,7 @@ import com.testify.ecfeed.model.AbstractStatement;
 import com.testify.ecfeed.model.ParameterNode;
 import com.testify.ecfeed.model.Constraint;
 import com.testify.ecfeed.model.ChoiceNode;
-import com.testify.ecfeed.model.DecomposedParameterStatement;
+import com.testify.ecfeed.model.ChoicesParentStatement;
 import com.testify.ecfeed.model.EStatementRelation;
 import com.testify.ecfeed.model.StaticStatement;
 
@@ -70,7 +70,7 @@ public class ConstraintTest {
 		ParameterNode parameter = new ParameterNode("parameter", "type", "0", false);
 		parameter.addChoice(choice);
 
-		AbstractStatement mentioningStatement = new DecomposedParameterStatement(parameter, EStatementRelation.EQUAL, choice);
+		AbstractStatement mentioningStatement = new ChoicesParentStatement(parameter, EStatementRelation.EQUAL, choice);
 		AbstractStatement notMentioningStatement = new StaticStatement(false);
 		
 		assertTrue(new Constraint(mentioningStatement, notMentioningStatement).mentions(parameter));
