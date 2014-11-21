@@ -26,7 +26,7 @@ public class ParametersParentInterface extends AbstractNodeInterface {
 		return fTarget;
 	}
 
-	public ParameterNode addParameterParameter() {
+	public ParameterNode addNewParameter() {
 		EclipseModelBuilder modelBuilder = new EclipseModelBuilder();
 		String name = generateNewParameterName();
 		String type = generateNewParameterType();

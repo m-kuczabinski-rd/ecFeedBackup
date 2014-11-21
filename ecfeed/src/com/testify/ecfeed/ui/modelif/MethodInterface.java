@@ -70,7 +70,7 @@ public class MethodInterface extends ParametersParentInterface {
 	}
 
 	@Override
-	public ParameterNode addParameterParameter() {
+	public ParameterNode addNewParameter() {
 		EclipseModelBuilder modelBuilder = new EclipseModelBuilder();
 		String name = generateNewParameterName();
 		String type = generateNewParameterType();

@@ -255,7 +255,7 @@ public class ParametersViewer extends TableViewerSection{
 	private class AddNewParameterAdapter extends SelectionAdapter {
 		@Override
 		public void widgetSelected(SelectionEvent e) {
-			ParameterNode addedParameter = fMethodIf.addParameterParameter();
+			ParameterNode addedParameter = fMethodIf.addNewParameter();
 			if(addedParameter != null){
 				selectElement(addedParameter);
 				fNameColumn.getViewer().editElement(addedParameter, 0);			

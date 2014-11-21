@@ -66,7 +66,7 @@ public class AddChildActionFactory {
 
 		@Override
 		public void run() {
-			select(getParentInterface().addParameterParameter());
+			select(getParentInterface().addNewParameter());
 		}
 	}
 	
