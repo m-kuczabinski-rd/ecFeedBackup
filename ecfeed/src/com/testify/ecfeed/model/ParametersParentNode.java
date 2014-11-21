@@ -94,6 +94,6 @@ public abstract class ParametersParentNode extends AbstractNode {
 				return false;
 			}
 		}
-		return true;
+		return super.compare(node);
 	}
 }
