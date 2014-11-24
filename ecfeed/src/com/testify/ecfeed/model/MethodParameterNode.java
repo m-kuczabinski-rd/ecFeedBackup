@@ -11,16 +11,22 @@
 
 package com.testify.ecfeed.model;
 
+import java.util.List;
+
 
 public class MethodParameterNode extends AbstractParameterNode{
 
 	private boolean fExpected;
 	private String fDefaultValue;
+	private boolean fLinked;
+	private GlobalParameterNode fLink;
 
 	public MethodParameterNode(String name, String type, String defaultValue, boolean expected) {
 		super(name, type);
 		fExpected = expected;
 		fDefaultValue = defaultValue;
+		fLinked = false;
+		fLink = null;
 	}
 
 	@Override
@@ -37,7 +43,7 @@ public class MethodParameterNode extends AbstractParameterNode{
 		parameter.setParent(this.getParent());
 		if(getDefaultValue() != null)
 			parameter.setDefaultValueString(getDefaultValue());
-		for(ChoiceNode choice : getChoices()){
+		for(ChoiceNode choice : fChoices){
 			parameter.addChoice(choice.getCopy());
 		}
 		parameter.setParent(getParent());
@@ -47,6 +53,22 @@ public class MethodParameterNode extends AbstractParameterNode{
 	@Override
 	public MethodParameterNode getParameter() {
 		return this;
+	}
+
+	@Override
+	public String getType(){
+		if(isLinked() && fLink != null){
+			return fLink.getType();
+		}
+		return super.getType();
+	}
+
+	@Override
+	public List<ChoiceNode> getChoices(){
+		if(isLinked() && fLink != null){
+			return fLink.getChoices();
+		}
+		return super.getChoices();
 	}
 
 	public MethodNode getMethod() {
@@ -69,6 +91,22 @@ public class MethodParameterNode extends AbstractParameterNode{
 		fExpected = isexpected;
 	}
 
+	public boolean isLinked() {
+		return fLinked;
+	}
+
+	public void setLinked(boolean fLinked) {
+		this.fLinked = fLinked;
+	}
+
+	public GlobalParameterNode getLink() {
+		return fLink;
+	}
+
+	public void setLink(GlobalParameterNode fLink) {
+		this.fLink = fLink;
+	}
+
 	@Override
 	public boolean compare(AbstractNode node){
 		if(node instanceof MethodParameterNode == false){
@@ -88,8 +126,8 @@ public class MethodParameterNode extends AbstractParameterNode{
 			return false;
 		}
 
-		int choicesCount = getChoices().size();
-		if(choicesCount != comparedParameter.getChoices().size()){
+		int choicesCount = fChoices.size();
+		if(choicesCount != comparedParameter.fChoices.size()){
 			return false;
 		}
 
