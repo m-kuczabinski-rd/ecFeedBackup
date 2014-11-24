@@ -16,11 +16,11 @@ import com.testify.ecfeed.ui.common.EclipseModelBuilder;
 import com.testify.ecfeed.ui.common.EclipseTypeAdapterProvider;
 import com.testify.ecfeed.ui.common.Messages;
 
-public class ChoicesParentNodeInterface extends AbstractNodeInterface {
+public class ChoicesParentInterface extends AbstractNodeInterface {
 
 	private ChoicesParentNode fTarget;
 
-	public ChoicesParentNodeInterface(IModelUpdateContext updateContext){
+	public ChoicesParentInterface(IModelUpdateContext updateContext){
 		super(updateContext);
 	}
 

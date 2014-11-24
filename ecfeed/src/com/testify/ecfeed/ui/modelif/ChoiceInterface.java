@@ -30,7 +30,7 @@ import com.testify.ecfeed.ui.common.Constants;
 import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.common.EclipseTypeAdapterProvider;
 
-public class ChoiceInterface extends ChoicesParentNodeInterface{
+public class ChoiceInterface extends ChoicesParentInterface{
 
 	ChoiceNode fTarget;
 

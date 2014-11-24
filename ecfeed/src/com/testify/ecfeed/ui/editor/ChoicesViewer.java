@@ -41,13 +41,13 @@ import com.testify.ecfeed.ui.modelif.ParameterInterface;
 import com.testify.ecfeed.ui.modelif.ChoiceInterface;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 import com.testify.ecfeed.ui.modelif.ModelNodesTransfer;
-import com.testify.ecfeed.ui.modelif.ChoicesParentNodeInterface;
+import com.testify.ecfeed.ui.modelif.ChoicesParentInterface;
 
 public class ChoicesViewer extends TableViewerSection {
 
 	private final static int STYLE = Section.EXPANDED | Section.TITLE_BAR;
 
-	private ChoicesParentNodeInterface fParentIf;
+	private ChoicesParentInterface fParentIf;
 	private ChoiceInterface fTableItemIf;
 
 	private TableViewerColumn fNameColumn;
