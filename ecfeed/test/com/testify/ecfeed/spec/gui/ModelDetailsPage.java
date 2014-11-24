@@ -52,5 +52,18 @@ public class ModelDetailsPage{
 		System.out.println("addImplementedTypewiseTest(" + isExpected + ")");
 	}
 
+	public void addNewClassTest(boolean duplicate){
+		// TODO Auto-generated method stub
+		System.out.println("addNewClassTest(" + duplicate + ")");
+	}
+
+	/*
+	 * We use only few constants of ESelectionType here, since all classes are of same type and parent;
+	 */
+	public void removeSelectedClassesTest(ESelectionType selectionType){
+		// TODO Auto-generated method stub
+		System.out.println("removeSelectedClassesTest(" + selectionType + ")");
+	}
+
 }
 
