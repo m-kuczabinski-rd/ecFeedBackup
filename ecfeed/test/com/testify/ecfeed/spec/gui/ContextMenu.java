@@ -4,6 +4,7 @@ import com.testify.ecfeed.testutils.ENodeType;
 
 public class ContextMenu{
 
+	// possible only if single node is selected.
 	public void addChildTest(ENodeType nodeType, ESelectionType selectionType){
 		// TODO Auto-generated method stub
 		System.out.println("addChildTest(" + nodeType + ", " + selectionType + ")");
@@ -14,7 +15,7 @@ public class ContextMenu{
 		System.out.println("copyTest(" + sourceType + ", " + selectionType + ")");
 	}
 
-	public void pasteSelectionPossibilityTest(ESelectionType selectionType, ENodeType targetType){
+	public void pasteSelectionPossibilityTest(ENodeType targetType, ESelectionType selectionType){
 		// TODO Auto-generated method stub
 		System.out.println("pasteSelectionPossibilityTest(" + selectionType + ", " + targetType + ")");
 	}
@@ -59,9 +60,15 @@ public class ContextMenu{
 		System.out.println("pasteNodesTest(" + sourceType + ")");
 	}
 
+	// nodes have to be of the same type, but don't have to be of same parent
 	public void cutTest(ENodeType nodeType, ESelectionType selectionType){
 		// TODO Auto-generated method stub
 		System.out.println("cutTest(" + nodeType + ", " + selectionType + ")");
+	}
+
+	public void deleteTest(ENodeType nodeType){
+		// TODO Auto-generated method stub
+		System.out.println("deleteTest(" + nodeType + ")");
 	}
 
 }
