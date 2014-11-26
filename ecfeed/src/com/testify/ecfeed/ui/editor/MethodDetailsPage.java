@@ -32,7 +32,7 @@ public class MethodDetailsPage extends BasicDetailsPage {
 	private Text fMethodNameText;
 	private Button fTestOnlineButton;
 	private Button fBrowseButton;
-	private ParametersViewer fParemetersSection;
+	private MethodParametersViewer fParemetersSection;
 	private ConstraintsListViewer fConstraintsSection;
 	private TestCasesViewer fTestCasesSection;
 
@@ -74,7 +74,7 @@ public class MethodDetailsPage extends BasicDetailsPage {
 		super.createContents(parent);
 
 		createNameTextComposite();
-		addViewerSection(fParemetersSection = new ParametersViewer(this, this));
+		addViewerSection(fParemetersSection = new MethodParametersViewer(this, this));
 		addViewerSection(fConstraintsSection = new ConstraintsListViewer(this, this));
 		addViewerSection(fTestCasesSection = new TestCasesViewer(this, this));
 

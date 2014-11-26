@@ -1,14 +1,3 @@
-/*******************************************************************************
- * Copyright (c) 2013 Testify AS.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
- *
- * Contributors:
- *     Patryk Chamuczynski (p.chamuczynski(at)radytek.com) - initial implementation
- ******************************************************************************/
-
 package com.testify.ecfeed.ui.editor;
 
 import java.util.ArrayList;
@@ -20,132 +9,32 @@ import org.eclipse.jface.viewers.ComboBoxViewerCellEditor;
 import org.eclipse.jface.viewers.EditingSupport;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.TableViewerColumn;
-import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.CCombo;
-import org.eclipse.swt.dnd.DND;
-import org.eclipse.swt.dnd.Transfer;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.layout.GridData;
 import org.eclipse.ui.forms.widgets.Section;
 
+import com.testify.ecfeed.adapter.java.JavaUtils;
 import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.MethodParameterNode;
-import com.testify.ecfeed.ui.common.NodeNameColumnLabelProvider;
 import com.testify.ecfeed.ui.common.NodeViewerColumnLabelProvider;
-import com.testify.ecfeed.ui.editor.actions.DeleteAction;
-import com.testify.ecfeed.ui.editor.actions.ModelViewerActionProvider;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 import com.testify.ecfeed.ui.modelif.MethodInterface;
-import com.testify.ecfeed.ui.modelif.ModelNodesTransfer;
 import com.testify.ecfeed.ui.modelif.ParameterInterface;
+import com.testify.ecfeed.ui.modelif.ParametersParentInterface;
 
-public class ParametersViewer extends TableViewerSection{
+
+public class MethodParametersViewer extends AbstractParametersViewer {
 
 	private final static int STYLE = Section.EXPANDED | Section.TITLE_BAR;
 	private final String EMPTY_STRING = "";
 
 	private MethodNode fSelectedMethod;
 
-	private TableViewerColumn fNameColumn;
-	private TableViewerColumn fTypeColumn;
 	private TableViewerColumn fExpectedColumn;
 	private TableViewerColumn fDefaultValueColumn;
 
 	private ParameterInterface fParameterIf;
 	private MethodInterface fMethodIf;
-
-	private class ParameterTypeEditingSupport extends EditingSupport {
-
-		private ComboBoxCellEditor fCellEditor;
-
-		public ParameterTypeEditingSupport() {
-			super(getTableViewer());
-		}
-
-		@Override
-		protected CellEditor getCellEditor(Object element) {
-			if(fCellEditor == null){
-				fCellEditor = new ComboBoxCellEditor(getTable(), ParameterInterface.supportedPrimitiveTypes());
-				fCellEditor.setActivationStyle(ComboBoxCellEditor.DROP_DOWN_ON_KEY_ACTIVATION);
-			}
-			return fCellEditor;
-		}
-
-		@Override
-		protected boolean canEdit(Object element) {
-			return true;
-		}
-
-		@Override
-		protected Object getValue(Object element) {
-			MethodParameterNode node = (MethodParameterNode)element;
-			String [] items = fCellEditor.getItems();
-			ArrayList<String> newItems = new ArrayList<String>();
-
-			for (int i = 0; i < items.length; ++i) {
-				newItems.add(items[i]);
-				if (items[i].equals(node.getType())) {
-					return i;
-				}
-			}
-
-			newItems.add(node.getType());
-			fCellEditor.setItems(newItems.toArray(items));
-			return (newItems.size() - 1);
-		}
-
-		@Override
-		protected void setValue(Object element, Object value) {
-			MethodParameterNode node = (MethodParameterNode)element;
-			String newType = null;
-			int index = (int)value;
-
-			if (index >= 0) {
-				newType = fCellEditor.getItems()[index];
-			} else {
-				newType = ((CCombo)fCellEditor.getControl()).getText();
-			}
-			fParameterIf.setTarget(node);
-			fParameterIf.setType(newType);
-
-			fCellEditor.setFocus();
-		}
-	}
-
-
-	private class ParameterNameEditingSupport extends EditingSupport {
-
-		private TextCellEditor fNameCellEditor;
-
-		public ParameterNameEditingSupport() {
-			super(getTableViewer());
-			fNameCellEditor = new TextCellEditor(getTable());
-		}
-
-		@Override
-		protected CellEditor getCellEditor(Object element) {
-			return fNameCellEditor;
-		}
-
-		@Override
-		protected boolean canEdit(Object element) {
-			return true;
-		}
-
-		@Override
-		protected Object getValue(Object element) {
-			return ((MethodParameterNode)element).getName();
-		}
-
-		@Override
-		protected void setValue(Object element, Object value) {
-			fParameterIf.setTarget((MethodParameterNode)element);
-			fParameterIf.setName((String)value);
-		}
-	}
 
 	private class ExpectedValueEditingSupport extends EditingSupport {
 
@@ -167,7 +56,8 @@ public class ParametersViewer extends TableViewerSection{
 
 		@Override
 		protected boolean canEdit(Object element) {
-			return true;
+			MethodParameterNode parameter = (MethodParameterNode)element;
+			return parameter.isLinked() == false || JavaUtils.isUserType(parameter.getType());
 		}
 
 		@Override
@@ -252,52 +142,25 @@ public class ParametersViewer extends TableViewerSection{
 
 	}
 
-	private class AddNewParameterAdapter extends SelectionAdapter {
-		@Override
-		public void widgetSelected(SelectionEvent e) {
-			MethodParameterNode addedParameter = fMethodIf.addNewParameter();
-			if(addedParameter != null){
-				selectElement(addedParameter);
-				fNameColumn.getViewer().editElement(addedParameter, 0);
-			}
-		}
-	}
-
-	public ParametersViewer(ISectionContext sectionContext, IModelUpdateContext updateContext) {
+	public MethodParametersViewer(ISectionContext sectionContext, IModelUpdateContext updateContext) {
 		super(sectionContext, updateContext, STYLE);
 		fParameterIf = new ParameterInterface(this);
-		fMethodIf = new MethodInterface(this);
-
-		GridData gd = new GridData(SWT.FILL, SWT.FILL, true, true);
-		gd.minimumHeight = 250;
-		getSection().setLayoutData(gd);
 
 		getSection().setText("Parameters");
-		addButton("New parameter", new AddNewParameterAdapter());
-		addButton("Remove selected", new ActionSelectionAdapter(new DeleteAction(getViewer(), this)));
-
-		fNameColumn.setEditingSupport(new ParameterNameEditingSupport());
-		fTypeColumn.setEditingSupport(new ParameterTypeEditingSupport());
 		fExpectedColumn.setEditingSupport(new ExpectedValueEditingSupport());
 		fDefaultValueColumn.setEditingSupport(new DefaultValueEditingSupport());
+	}
 
-		addDoubleClickListener(new SelectNodeDoubleClickListener(sectionContext.getMasterSection()));
-		setActionProvider(new ModelViewerActionProvider(getTableViewer(), this));
-		getViewer().addDragSupport(DND.DROP_COPY|DND.DROP_MOVE, new Transfer[]{ModelNodesTransfer.getInstance()}, new ModelNodeDragListener(getViewer()));
-		getViewer().addDropSupport(DND.DROP_COPY|DND.DROP_MOVE, new Transfer[]{ModelNodesTransfer.getInstance()}, new ModelNodeDropListener(getViewer(), this));
+	private MethodInterface getMethodInterface() {
+		if(fMethodIf == null){
+			fMethodIf = new MethodInterface(this);
+		}
+		return fMethodIf;
 	}
 
 	@Override
 	protected void createTableColumns() {
-		fNameColumn = addColumn("Name", 150, new NodeNameColumnLabelProvider());
-
-		fTypeColumn = addColumn("Type", 150, new NodeViewerColumnLabelProvider(){
-			@Override
-			public String getText(Object element){
-				return ((MethodParameterNode)element).getType();
-			}
-		});
-
+		super.createTableColumns();
 		fExpectedColumn = addColumn("Expected", 150, new NodeViewerColumnLabelProvider(){
 			@Override
 			public String getText(Object element) {
@@ -319,10 +182,10 @@ public class ParametersViewer extends TableViewerSection{
 	}
 
 	public void setInput(MethodNode method){
-		fMethodIf.setTarget(method);
+		getMethodInterface().setTarget(method);
 		fSelectedMethod = method;
 		showDefaultValueColumn(fSelectedMethod.getParametersNames(true).size() == 0);
-		super.setInput(method.getParameters());
+		super.setInput(method);
 	}
 
 	private void showDefaultValueColumn(boolean show) {
@@ -334,5 +197,10 @@ public class ParametersViewer extends TableViewerSection{
 			fDefaultValueColumn.getColumn().setWidth(150);
 			fDefaultValueColumn.getColumn().setResizable(true);
 		}
+	}
+
+	@Override
+	protected ParametersParentInterface getParametersParentInterface() {
+		return getMethodInterface();
 	}
 }
