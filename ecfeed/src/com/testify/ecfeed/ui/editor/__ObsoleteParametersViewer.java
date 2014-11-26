@@ -42,7 +42,7 @@ import com.testify.ecfeed.ui.modelif.MethodInterface;
 import com.testify.ecfeed.ui.modelif.ModelNodesTransfer;
 import com.testify.ecfeed.ui.modelif.ParameterInterface;
 
-public class ParametersViewer extends TableViewerSection{
+public class __ObsoleteParametersViewer extends TableViewerSection{
 
 	private final static int STYLE = Section.EXPANDED | Section.TITLE_BAR;
 	private final String EMPTY_STRING = "";
@@ -263,7 +263,7 @@ public class ParametersViewer extends TableViewerSection{
 		}
 	}
 
-	public ParametersViewer(ISectionContext sectionContext, IModelUpdateContext updateContext) {
+	public __ObsoleteParametersViewer(ISectionContext sectionContext, IModelUpdateContext updateContext) {
 		super(sectionContext, updateContext, STYLE);
 		fParameterIf = new ParameterInterface(this);
 		fMethodIf = new MethodInterface(this);
