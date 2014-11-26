@@ -95,7 +95,9 @@ public class JavaModelAnalyser {
 
 	public boolean isVoid(IMethod method){
 		try {
-			return method.getReturnType().equals(Signature.SIG_VOID);
+			return 
+					! method.getElementName().equals(method.getParent().getElementName())
+					&& method.getReturnType().equals(Signature.SIG_VOID);
 		} catch (JavaModelException e) {}
 		return false;
 	}
