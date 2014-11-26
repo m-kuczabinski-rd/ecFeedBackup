@@ -108,8 +108,12 @@ public class AbstractParameterOperationSetTypeTest{
 		ChoiceNode choice1 = new ChoiceNode("choice1", convertableValue);
 		ChoiceNode choice11 = new ChoiceNode("choice1.1", convertableValue);
 		ChoiceNode choice12 = new ChoiceNode("choice1.2", notConvertableValue);
+		ChoiceNode choice121 = new ChoiceNode("choice1.2.1", notConvertableValue);
+		ChoiceNode choice122 = new ChoiceNode("choice1.2.1", convertableValue);
 		choice1.addChoice(choice11);
 		choice1.addChoice(choice12);
+		choice12.addChoice(choice121);
+		choice12.addChoice(choice122);
 		ChoiceNode choice2 = new ChoiceNode("choice2", convertableValue);
 		ChoiceNode choice21 = new ChoiceNode("choice2.1", notConvertableValue);
 		ChoiceNode choice22 = new ChoiceNode("choice2.2", notConvertableValue);
@@ -127,7 +131,8 @@ public class AbstractParameterOperationSetTypeTest{
 			assertEquals(convertableValue, choice11.getValueString());
 			assertFalse(parameter.getChoices().contains(choice2));
 			assertTrue(choice1.getChoices().contains(choice11));
-			assertFalse(choice1.getChoices().contains(choice12));
+			assertTrue(choice1.getChoices().contains(choice12));
+			assertTrue(choice12.getValueString() != null);
 
 			fOperationManager.undo();
 			assertEquals("String", parameter.getType());
@@ -150,7 +155,7 @@ public class AbstractParameterOperationSetTypeTest{
 			assertEquals(convertableValue, choice11.getValueString());
 			assertFalse(parameter.getChoices().contains(choice2));
 			assertTrue(choice1.getChoices().contains(choice11));
-			assertFalse(choice1.getChoices().contains(choice12));
+			assertTrue(choice1.getChoices().contains(choice12));
 		}catch(ModelOperationException e){
 			fail("Unexpected exception: " + e.getMessage());
 		}
