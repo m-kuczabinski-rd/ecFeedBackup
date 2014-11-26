@@ -82,14 +82,8 @@ public class AbstractParameterOperationSetType extends AbstractModelOperation {
 			throw new ModelOperationException(Messages.CATEGORY_TYPE_REGEX_PROBLEM);
 		}
 
-//		ITypeAdapter adapter = fAdapterProvider.getAdapter(fNewType);
 		fTarget.setType(fNewType);
 		adaptChoices(fTarget);
-
-//
-//		convertChoiceValues(fTarget, adapter);
-//		convertAbstractNodesValues(fTarget, adapter);
-//		removeDeadChoices(fTarget);
 	}
 
 	@Override
@@ -110,35 +104,9 @@ public class AbstractParameterOperationSetType extends AbstractModelOperation {
 			saveValues(choice.getChoices());
 		}
 	}
-//
-//	private void convertAbstractNodesValues(ChoicesParentNode parent, ITypeAdapter adapter) {
-//		for(ChoiceNode choice : parent.getChoices()){
-//			if(choice.isAbstract()){
-//				String value = adapter.convert(choice.getValueString());
-//				if(value == null){
-//					value = adapter.defaultValue();
-//				}
-//				if(choice.getValueString().equals(value) == false){
-//					choice.setValueString(value);
-//				}
-//			}
-//			convertAbstractNodesValues(choice, adapter);
-//		}
-//	}
-//
-//	private void convertChoiceValues(ChoicesParentNode parent, ITypeAdapter adapter) {
-//		for(ChoiceNode p : parent.getChoices()){
-//			convertChoiceValue(p, adapter);
-//			convertChoiceValues(p, adapter);
-//		}
-//	}
-//
-//	private void convertChoiceValue(ChoiceNode p, ITypeAdapter adapter) {
-//		fOriginalValues.put(p, p.getValueString());
-//		String newValue = adapter.convert(p.getValueString());
-//		p.setValueString(newValue);
-//	}
 
+	// removed choices that cannot be converted and parents of only non-convertable choices.
+	// convert values of remaining choices.
 	private void adaptChoices(ChoicesParentNode parent){
 		Iterator<ChoiceNode> it = parent.getChoices().iterator();
 		ITypeAdapter adapter = fAdapterProvider.getAdapter(fNewType);
@@ -168,35 +136,4 @@ public class AbstractParameterOperationSetType extends AbstractModelOperation {
 
 		}
 	}
-
-//	private void removeDeadChoices(ChoicesParentNode parent) {
-//		List<ChoiceNode> toRemove = new ArrayList<ChoiceNode>();
-//		for(ChoiceNode p : parent.getChoices()){
-//			if(isDead(p)){
-//				toRemove.add(p);
-//			}
-//			else{
-//				removeDeadChoices(p);
-//			}
-//		}
-//		for(ChoiceNode removed : toRemove){
-//			parent.removeChoice(removed);
-//		}
-//	}
-//
-//	private boolean isDead(ChoiceNode p) {
-//		if(p.isAbstract() == false){
-//			return p.getValueString() == null;
-//		}
-//		else{
-//			boolean allChildrenDead = true;
-//			for(ChoiceNode child : p.getChoices()){
-//				if(isDead(child) == false){
-//					allChildrenDead = false;
-//					break;
-//				}
-//			}
-//			return allChildrenDead;
-//		}
-//	}
 }
