@@ -119,7 +119,6 @@ public class AbstractParameterOperationSetType extends AbstractModelOperation {
 				}else{
 					String newValue = adapter.convert(choice.getValueString());
 					if(newValue == null){
-						fOriginalValues.put(choice, choice.getValueString());
 						newValue = adapter.defaultValue();
 					}
 					choice.setValueString(newValue);
@@ -129,7 +128,6 @@ public class AbstractParameterOperationSetType extends AbstractModelOperation {
 				if(newValue == null){
 					it.remove();
 				}else{
-					fOriginalValues.put(choice, choice.getValueString());
 					choice.setValueString(newValue);
 				}
 			}
