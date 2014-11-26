@@ -61,6 +61,13 @@ public class TestCaseNode extends AbstractNode {
 		return (MethodNode)getParent();
 	}
 
+	public MethodParameterNode getMethodParameter(ChoiceNode choice){
+		if(getTestData().contains(choice)){
+			return getMethod().getMethodParameters().get(getTestData().indexOf(choice));
+		}
+		return null;
+	}
+
 	public List<ChoiceNode> getTestData(){
 		return fTestData;
 	}
@@ -83,7 +90,7 @@ public class TestCaseNode extends AbstractNode {
 
 		for(int i = 0; i < fTestData.size(); i++){
 			ChoiceNode choice = fTestData.get(i);
-			if(choice.getParameter().isExpected()){
+			if(getMethodParameter(choice).isExpected()){
 				result += "[e]" + choice.getValueString();
 			}
 			else{
@@ -113,15 +120,16 @@ public class TestCaseNode extends AbstractNode {
 	}
 
 	public boolean updateReferences(MethodNode method){
-		List<MethodParameterNode> parameters = method.getParameters();
+		List<MethodParameterNode> parameters = method.getMethodParameters();
 		if(parameters.size() != getTestData().size())
 			return false;
 
 		for(int i = 0; i < parameters.size(); i++){
 			MethodParameterNode parameter = parameters.get(i);
 			if(parameter.isExpected()){
+				String name = getTestData().get(i).getName();
 				String value = getTestData().get(i).getValueString();
-				ChoiceNode newChoice = new ChoiceNode("@expected", value);
+				ChoiceNode newChoice = new ChoiceNode(name, value);
 				newChoice.setParent(parameter);
 				getTestData().set(i, newChoice);
 			} else{
@@ -163,12 +171,12 @@ public class TestCaseNode extends AbstractNode {
 	}
 
 	public boolean isConsistent() {
-		for(ChoiceNode p : getTestData()){
-			MethodParameterNode parameter = p.getParameter();
-			if(parameter == null || (parameter.isExpected() == false && parameter.getChoice(p.getQualifiedName()) == null)){
+		for(ChoiceNode choice : getTestData()){
+			MethodParameterNode parameter = getMethodParameter(choice);
+			if(parameter == null || (parameter.isExpected() == false && parameter.getChoice(choice.getQualifiedName()) == null)){
 				return false;
 			}
-			if(p.isAbstract()){
+			if(choice.isAbstract()){
 				return false;
 			}
 		}

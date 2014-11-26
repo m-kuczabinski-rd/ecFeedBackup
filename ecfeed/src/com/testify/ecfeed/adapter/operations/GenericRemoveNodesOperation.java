@@ -5,13 +5,14 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
+import com.testify.ecfeed.adapter.ITypeAdapterProvider;
 import com.testify.ecfeed.model.AbstractNode;
 
 public class GenericRemoveNodesOperation extends BulkOperation {
 
 	private Set<AbstractNode> fRemoved;
-	
-	public GenericRemoveNodesOperation(Collection<? extends AbstractNode> nodes, boolean validate){
+
+	public GenericRemoveNodesOperation(Collection<? extends AbstractNode> nodes, ITypeAdapterProvider adapterProvider, boolean validate){
 		super(OperationNames.REMOVE_NODES, false);
 		fRemoved = new HashSet<>(nodes);
 		Iterator<AbstractNode> it = fRemoved.iterator();
@@ -24,10 +25,10 @@ public class GenericRemoveNodesOperation extends BulkOperation {
 				}
 			}
 		}
-		
-		
+
+
 		for(AbstractNode node : fRemoved){
-			addOperation(FactoryRemoveOperation.getRemoveOperation(node, validate));
+			addOperation(FactoryRemoveOperation.getRemoveOperation(node, adapterProvider, validate));
 		}
 	}
 }

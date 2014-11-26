@@ -1,12 +1,14 @@
 package com.testify.ecfeed.adapter.operations;
 
-import com.testify.ecfeed.model.MethodParameterNode;
+import com.testify.ecfeed.adapter.ITypeAdapterProvider;
+import com.testify.ecfeed.model.AbstractNode;
+import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.ConstraintNode;
-import com.testify.ecfeed.model.AbstractNode;
+import com.testify.ecfeed.model.GlobalParameterNode;
 import com.testify.ecfeed.model.IModelVisitor;
 import com.testify.ecfeed.model.MethodNode;
-import com.testify.ecfeed.model.ChoiceNode;
+import com.testify.ecfeed.model.MethodParameterNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.TestCaseNode;
 
@@ -14,8 +16,9 @@ public class FactoryRemoveChildOperation implements IModelVisitor{
 
 	private AbstractNode fChild;
 	private boolean fValidate;
+	private ITypeAdapterProvider fAdapterProvider;
 
-	public FactoryRemoveChildOperation(AbstractNode child, boolean validate) {
+	public FactoryRemoveChildOperation(AbstractNode child, ITypeAdapterProvider adapterProvider, boolean validate) {
 		fChild = child;
 		fValidate = validate;
 	}
@@ -53,7 +56,15 @@ public class FactoryRemoveChildOperation implements IModelVisitor{
 	@Override
 	public Object visit(MethodParameterNode node) throws Exception {
 		if(fChild instanceof ChoiceNode){
-			return new GenericOperationRemoveChoice(node, (ChoiceNode)fChild, fValidate);
+			return new GenericOperationRemoveChoice(node, (ChoiceNode)fChild, fAdapterProvider, fValidate);
+		}
+		return null;
+	}
+
+	@Override
+	public Object visit(GlobalParameterNode node) throws Exception {
+		if(fChild instanceof ChoiceNode){
+			return new GenericOperationRemoveChoice(node, (ChoiceNode)fChild, fAdapterProvider, fValidate);
 		}
 		return null;
 	}
@@ -71,9 +82,9 @@ public class FactoryRemoveChildOperation implements IModelVisitor{
 	@Override
 	public Object visit(ChoiceNode node) throws Exception {
 		if(fChild instanceof ChoiceNode){
-			return new GenericOperationRemoveChoice(node, (ChoiceNode)fChild, fValidate);
+			return new GenericOperationRemoveChoice(node, (ChoiceNode)fChild, fAdapterProvider, fValidate);
 		}
 		return null;
 	}
-	
+
 }

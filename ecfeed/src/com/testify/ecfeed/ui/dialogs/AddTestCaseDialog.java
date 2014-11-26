@@ -36,9 +36,9 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 
-import com.testify.ecfeed.model.MethodParameterNode;
-import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.ChoiceNode;
+import com.testify.ecfeed.model.MethodNode;
+import com.testify.ecfeed.model.MethodParameterNode;
 import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.ui.common.ColorConstants;
 import com.testify.ecfeed.ui.common.ColorManager;
@@ -65,7 +65,7 @@ public class AddTestCaseDialog extends TitleAreaDialog implements ITestDataEdito
 		setHelpAvailable(false);
 		setShellStyle(SWT.BORDER | SWT.RESIZE | SWT.TITLE | SWT.APPLICATION_MODAL);
 		fTestData = new ArrayList<ChoiceNode>();
-		List<MethodParameterNode> parameters = method.getParameters();
+		List<MethodParameterNode> parameters = method.getMethodParameters();
 		for(MethodParameterNode parameter : parameters){
 			if(parameter.isExpected()){
 				fTestData.add(createAnonymuousChoice(parameter));
@@ -138,7 +138,8 @@ public class AddTestCaseDialog extends TitleAreaDialog implements ITestDataEdito
 			@Override
 			public String getText(Object element){
 				ChoiceNode testValue = (ChoiceNode)element;
-				if(testValue.getParameter().isExpected()){
+				MethodParameterNode parameter = fMethod.getMethodParameters().get(fTestData.indexOf(testValue));
+				if(parameter.isExpected()){
 					return testValue.getValueString();
 				}
 				return testValue.toString();
@@ -148,7 +149,7 @@ public class AddTestCaseDialog extends TitleAreaDialog implements ITestDataEdito
 				return getColor(element);
 			}
 		});
-		choiceViewerColumn.setEditingSupport(new TestDataValueEditingSupport(fTestDataViewer, fTestData, this));
+		choiceViewerColumn.setEditingSupport(new TestDataValueEditingSupport(fMethod, fTestDataViewer, fTestData, this));
 
 		fTestDataViewer.setContentProvider(new ArrayContentProvider());
 		fTestDataViewer.setInput(fTestData);
@@ -156,7 +157,8 @@ public class AddTestCaseDialog extends TitleAreaDialog implements ITestDataEdito
 
 	private Color getColor(Object element){
 		ChoiceNode choice = (ChoiceNode)element;
-		if(choice.getParameter().isExpected()){
+		MethodParameterNode parameter = fMethod.getMethodParameters().get(fTestData.indexOf(choice));
+		if(parameter.isExpected()){
 			return ColorManager.getColor(ColorConstants.EXPECTED_VALUE_CATEGORY);
 		}
 		return null;

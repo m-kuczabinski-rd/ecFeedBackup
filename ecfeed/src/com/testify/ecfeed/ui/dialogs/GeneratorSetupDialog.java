@@ -1,11 +1,11 @@
 /*******************************************************************************
- * Copyright (c) 2013 Testify AS.                                                
- * All rights reserved. This program and the accompanying materials              
- * are made available under the terms of the Eclipse Public License v1.0         
- * which accompanies this distribution, and is available at                      
- * http://www.eclipse.org/legal/epl-v10.html                                     
- *                                                                               
- * Contributors:                                                                 
+ * Copyright (c) 2013 Testify AS.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
  *     Patryk Chamuczynski (p.chamuczynski(at)radytek.com) - initial implementation
  ******************************************************************************/
 
@@ -54,13 +54,13 @@ import com.testify.ecfeed.generators.api.GeneratorException;
 import com.testify.ecfeed.generators.api.IGenerator;
 import com.testify.ecfeed.generators.api.IGeneratorParameter;
 import com.testify.ecfeed.generators.api.IGeneratorParameter.TYPE;
-import com.testify.ecfeed.model.MethodParameterNode;
-import com.testify.ecfeed.model.Constraint;
-import com.testify.ecfeed.model.ConstraintNode;
 import com.testify.ecfeed.model.AbstractNode;
-import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.model.ChoicesParentNode;
+import com.testify.ecfeed.model.Constraint;
+import com.testify.ecfeed.model.ConstraintNode;
+import com.testify.ecfeed.model.MethodNode;
+import com.testify.ecfeed.model.MethodParameterNode;
 import com.testify.ecfeed.ui.common.Constants;
 import com.testify.ecfeed.ui.common.EclipseImplementationStatusResolver;
 import com.testify.ecfeed.ui.common.Messages;
@@ -81,19 +81,19 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 	private Map<String, Object> fParameters;
 	private Composite fParametersComposite;
 	private Composite fMainContainer;
-	private GeneratorFactory<ChoiceNode> fGeneratorFactory; 
+	private GeneratorFactory<ChoiceNode> fGeneratorFactory;
 	private int fContent;
 	private boolean fGenerateExecutableContent;
 	private IImplementationStatusResolver fStatusResolver;
-	
+
 	private final String fTitle;
 	private final String fMessage;
-	
+
 	public final static int CONSTRAINTS_COMPOSITE = 1;
 	public final static int PARTITIONS_COMPOSITE = 1 << 1;
 	public final static int TEST_SUITE_NAME_COMPOSITE = 1 << 2;
 	public final static int GENERATOR_SELECTION_COMPOSITE = 1 << 3;
-	
+
 	private class ChoiceTreeCheckStateListener extends TreeCheckStateListener{
 
 		public ChoiceTreeCheckStateListener(CheckboxTreeViewer treeViewer) {
@@ -111,7 +111,7 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 			}
 		}
 	}
-	
+
 	private class ParametersContentProvider extends TreeNodeContentProvider implements ITreeContentProvider{
 		@Override
 		public Object[] getElements(Object input){
@@ -120,7 +120,8 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 			}
 			return null;
 		}
-		
+
+		@Override
 		public Object[] getChildren(Object element){
 			List<Object> children = new ArrayList<Object>();
 			if(element instanceof MethodParameterNode && ((MethodParameterNode)element).isExpected()){
@@ -140,7 +141,7 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 			}
 			return children.toArray();
 		}
-		
+
 		@Override
 		public Object getParent(Object element){
 			if(element instanceof AbstractNode){
@@ -148,16 +149,16 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 			}
 			return null;
 		}
-		
+
 		@Override
 		public boolean hasChildren(Object element){
 			return getChildren(element).length > 0;
 		}
 	}
-	
+
 	private class ConstraintsViewerContentProvider extends TreeNodeContentProvider implements ITreeContentProvider{
 		private final Object[] EMPTY_ARRAY = new Object[]{};
-		
+
 		@Override
 		public Object[] getElements(Object input){
 			if(input instanceof MethodNode){
@@ -165,15 +166,16 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 			}
 			return EMPTY_ARRAY;
 		}
-		
+
+		@Override
 		public Object[] getChildren(Object element){
 			if(element instanceof String){
-				Object[] result = fMethod.getConstraints((String)element).toArray(); 
+				Object[] result = fMethod.getConstraints((String)element).toArray();
 				return result;
 			}
 			return EMPTY_ARRAY;
 		}
-		
+
 		@Override
 		public Object getParent(Object element){
 			if(element instanceof ConstraintNode){
@@ -181,13 +183,13 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 			}
 			return null;
 		}
-		
+
 		@Override
 		public boolean hasChildren(Object element){
 			return getChildren(element).length > 0;
 		}
 	}
-	
+
 	public GeneratorSetupDialog(Shell parentShell, MethodNode method, int content, String title, String message, boolean generateExecutables) {
 		super(parentShell);
 		setHelpAvailable(false);
@@ -200,7 +202,7 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 		fGenerateExecutableContent = generateExecutables;
 		fStatusResolver = new EclipseImplementationStatusResolver();
 	}
-	
+
 	protected  List<List<ChoiceNode>> algorithmInput(){
 		return fAlgorithmInput;
 	}
@@ -242,7 +244,7 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 		fOkButton = createButton(parent, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL,
 				true);
 		if(fGenerateExecutableContent){
-			for(MethodParameterNode parameter: fMethod.getParameters()){
+			for(MethodParameterNode parameter: fMethod.getMethodParameters()){
 				EImplementationStatus parameterStatus = fStatusResolver.getImplementationStatus(parameter);
 				if((parameter.getChoices().isEmpty() && (parameter.isExpected() == false || JavaUtils.isUserType(parameter.getType())))||
 						parameterStatus == EImplementationStatus.NOT_IMPLEMENTED){
@@ -251,14 +253,14 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 				}
 			}
 		} else {
-			for(MethodParameterNode parameter: fMethod.getParameters() ){
+			for(MethodParameterNode parameter: fMethod.getMethodParameters() ){
 				if(parameter.getChoices().isEmpty() && (parameter.isExpected() == false || JavaUtils.isUserType(parameter.getType()))){
 					setOkButton(false);
 					break;
 				}
 			}
 		}
-		
+
 		createButton(parent, IDialogConstants.CANCEL_ID,
 				IDialogConstants.CANCEL_LABEL, false);
 	}
@@ -271,22 +273,22 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 		fMainContainer = new Composite(area, SWT.NONE);
 		fMainContainer.setLayout(new GridLayout(1, false));
 		fMainContainer.setLayoutData(new GridData(GridData.FILL_BOTH));
-		
+
 		if((fContent & CONSTRAINTS_COMPOSITE) > 0){
 			createConstraintsComposite(fMainContainer);
 		}
-		
+
 		if((fContent & PARTITIONS_COMPOSITE) > 0){
 			createChoicesComposite(fMainContainer);
 		}
-		
+
 		if((fContent & TEST_SUITE_NAME_COMPOSITE) > 0){
 			createTestSuiteComposite(fMainContainer);
 		}
-		
+
 		if((fContent & GENERATOR_SELECTION_COMPOSITE) > 0){
 			createGeneratorSelectionComposite(fMainContainer);
-		}		
+		}
 		return area;
 	}
 
@@ -294,12 +296,12 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 		Composite composite = new Composite(parent, SWT.NONE);
 		composite.setLayout(new GridLayout(1, false));
 		composite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
-		
+
 		Label selectConstraintsLabel = new Label(composite, SWT.NONE);
 		selectConstraintsLabel.setText(Messages.DIALOG_GENERATE_TEST_SUITES_SELECT_CONSTRAINTS_LABEL);
-		
+
 		createConstraintsViewer(composite);
-		
+
 		createConstraintsButtons(composite);
 	}
 
@@ -343,7 +345,7 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 				}
 			}
 		});
-		
+
 		Button uncheckAllButton = new Button(buttonsComposite, SWT.NONE);
 		uncheckAllButton.setText("Uncheck all");
 		uncheckAllButton.addSelectionListener(new SelectionAdapter() {
@@ -360,11 +362,11 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 		Composite composite = new Composite(parent, SWT.NONE);
 		composite.setLayout(new GridLayout(1, false));
 		composite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
-		
+
 		Label selectChoicesLabel = new Label(composite, SWT.WRAP);
 		selectChoicesLabel.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
 		selectChoicesLabel.setText(Messages.DIALOG_GENERATE_TEST_SUITES_SELECT_CHOICES_LABEL);
-		
+
 		createChoicesViewer(composite);
 	}
 
@@ -377,7 +379,7 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 		fParametersViewer.getTree().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 		fParametersViewer.setInput(fMethod);
 		fParametersViewer.addCheckStateListener(new ChoiceTreeCheckStateListener(fParametersViewer));
-		for(MethodParameterNode parameter : fMethod.getParameters()){
+		for(MethodParameterNode parameter : fMethod.getMethodParameters()){
 			fParametersViewer.expandAll();
 			fParametersViewer.setSubtreeChecked(parameter, true);
 			fParametersViewer.collapseAll();
@@ -388,11 +390,11 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 		Composite composite = new Composite(container, SWT.NONE);
 		composite.setLayout(new GridLayout(2, false));
 		composite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
-		
+
 		Label testSuiteLabel = new Label(composite, SWT.NONE);
 		testSuiteLabel.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 		testSuiteLabel.setText("Test suite");
-		
+
 		ComboViewer testSuiteViewer = new ComboViewer(composite, SWT.NONE);
 		fTestSuiteCombo = testSuiteViewer.getCombo();
 		fTestSuiteCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
@@ -426,7 +428,7 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 	}
 
 	private boolean validateGeneratorInput(boolean onlyExecutable) {
-		for(MethodParameterNode parameter : fMethod.getParameters()){
+		for(MethodParameterNode parameter : fMethod.getMethodParameters()){
 			boolean leafChecked = false;
 			if(parameter.isExpected()){
 				if(fParametersViewer.getChecked(parameter) == false){
@@ -458,7 +460,7 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 		}
 		return testSuiteValid;
 	}
-	
+
 	private void setOkButton(boolean enabled) {
 		if(fOkButton != null && !fOkButton.isDisposed()){
 			fOkButton.setEnabled(enabled);
@@ -469,11 +471,11 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 		Composite generatorComposite = new Composite(container, SWT.NONE);
 		generatorComposite.setLayout(new GridLayout(2, false));
 		generatorComposite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
-		
+
 		Label generatorLabel = new Label(generatorComposite, SWT.NONE);
 		generatorLabel.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
 		generatorLabel.setText("Generator");
-		
+
 		createGeneratorViewer(generatorComposite);
 	}
 
@@ -586,7 +588,7 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 		combo.setText(definition.defaultValue().toString());
 		combo.addModifyListener(listener);
 	}
-	
+
 	private String[] allowedValuesItems(IGeneratorParameter definition) {
 		List<String> values = new ArrayList<String>();
 		for(Object value : definition.allowedValues()){
@@ -624,8 +626,8 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 		spinner.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
 		int factor = (int) Math.pow(10, FLOAT_DECIMAL_PLACES);
 		int defaultValue = (int)Math.round((double)definition.defaultValue() * factor);
-		int minValue = (int)Math.round((double)definition.getMin() * factor);
-		int maxValue = (int)Math.round((double)definition.getMax());
+		int minValue = (int)Math.round(definition.getMin() * factor);
+		int maxValue = (int)Math.round(definition.getMax());
 		spinner.setValues(defaultValue, minValue, maxValue, FLOAT_DECIMAL_PLACES, 1, 100);
 	}
 
@@ -649,12 +651,12 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 				constraints.add((Constraint)obj);
 			}
 		}
-		
+
 		fConstraints = constraints;
 	}
 
 	private void saveAlgorithmInput() {
-		List<MethodParameterNode> parameters = fMethod.getParameters();
+		List<MethodParameterNode> parameters = fMethod.getMethodParameters();
 		fAlgorithmInput = new ArrayList<List<ChoiceNode>>();
 		for(int i = 0; i < parameters.size(); i++){
 			List<ChoiceNode> choices = new ArrayList<ChoiceNode>();

@@ -104,7 +104,7 @@ public class MethodInterface extends ParametersParentInterface {
 	}
 
 	public TestCaseNode addTestCase() {
-		for(MethodParameterNode parameter : fTarget.getParameters()){
+		for(MethodParameterNode parameter : fTarget.getMethodParameters()){
 			if(!parameter.isExpected() && parameter.getChoices().isEmpty()){
 				MessageDialog.openError(Display.getDefault().getActiveShell(), Messages.DIALOG_ADD_TEST_CASE_PROBLEM_TITLE, Messages.DIALOG_TEST_CASE_WITH_EMPTY_CATEGORY_MESSAGE);
 				return null;

@@ -7,13 +7,14 @@ import org.eclipse.jface.viewers.ViewerDropAdapter;
 import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.TransferData;
 
-import com.testify.ecfeed.model.MethodParameterNode;
+import com.testify.ecfeed.model.AbstractNode;
+import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.ConstraintNode;
-import com.testify.ecfeed.model.AbstractNode;
+import com.testify.ecfeed.model.GlobalParameterNode;
 import com.testify.ecfeed.model.IModelVisitor;
 import com.testify.ecfeed.model.MethodNode;
-import com.testify.ecfeed.model.ChoiceNode;
+import com.testify.ecfeed.model.MethodParameterNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.ui.modelif.AbstractNodeInterface;
@@ -48,6 +49,11 @@ public class ModelNodeDropListener extends ViewerDropAdapter{
 
 		@Override
 		public Object visit(MethodParameterNode node) throws Exception {
+			return NodeDnDBuffer.getInstance().getDraggedNodes().get(0) instanceof ChoiceNode;
+		}
+
+		@Override
+		public Object visit(GlobalParameterNode node) throws Exception {
 			return NodeDnDBuffer.getInstance().getDraggedNodes().get(0) instanceof ChoiceNode;
 		}
 

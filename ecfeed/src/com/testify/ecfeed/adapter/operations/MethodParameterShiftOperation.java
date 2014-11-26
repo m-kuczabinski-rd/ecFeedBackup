@@ -10,20 +10,20 @@ import com.testify.ecfeed.model.AbstractNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.TestCaseNode;
 
-public class ParameterShiftOperation extends GenericShiftOperation {
+public class MethodParameterShiftOperation extends GenericShiftOperation {
 
 	private List<MethodParameterNode> fParameters;
 
-	public ParameterShiftOperation(List<MethodParameterNode> parameters, AbstractNode shifted, boolean up) {
+	public MethodParameterShiftOperation(List<MethodParameterNode> parameters, AbstractNode shifted, boolean up) {
 		this(parameters, Arrays.asList(new AbstractNode[]{shifted}), up);
 	}
 
-	public ParameterShiftOperation(List<MethodParameterNode> parameters, List<? extends AbstractNode> shifted, boolean up) {
+	public MethodParameterShiftOperation(List<MethodParameterNode> parameters, List<? extends AbstractNode> shifted, boolean up) {
 		this(parameters, shifted, 0);
 		setShift(minAllowedShift(shifted, up));
 	}
 
-	public ParameterShiftOperation(List<MethodParameterNode> parameters, List<? extends AbstractNode> shifted, int shift) {
+	public MethodParameterShiftOperation(List<MethodParameterNode> parameters, List<? extends AbstractNode> shifted, int shift) {
 		super(parameters, shifted, shift);
 		fParameters = parameters;
 	}
@@ -43,7 +43,7 @@ public class ParameterShiftOperation extends GenericShiftOperation {
 
 	@Override 
 	public IModelOperation reverseOperation(){
-		return new ParameterShiftOperation(fParameters, getShiftedElements(), -getShift());
+		return new MethodParameterShiftOperation(fParameters, getShiftedElements(), -getShift());
 	}
 
 	@Override

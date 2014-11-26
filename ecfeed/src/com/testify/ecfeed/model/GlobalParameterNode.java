@@ -1,5 +1,8 @@
 package com.testify.ecfeed.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class GlobalParameterNode extends AbstractParameterNode {
 
 	public GlobalParameterNode(String name, String type) {
@@ -7,12 +10,7 @@ public class GlobalParameterNode extends AbstractParameterNode {
 	}
 
 	@Override
-	public MethodParameterNode getParameter() {
-		return null;
-	}
-
-	@Override
-	public AbstractNode getCopy() {
+	public GlobalParameterNode getCopy() {
 		GlobalParameterNode copy = new GlobalParameterNode(getName(), getType());
 		for(ChoiceNode choice : getChoices()){
 			copy.addChoice(choice.getCopy());
@@ -21,10 +19,25 @@ public class GlobalParameterNode extends AbstractParameterNode {
 	}
 
 	@Override
-	public Object accept(IModelVisitor visitor) throws Exception {
-		//adapt once the visitor is extended
-		return visitor.visit((MethodParameterNode)null);
+	public List<MethodNode> getMethods() {
+		return getParametersParent().getMethods(getParameter());
 	}
 
+	public List<MethodParameterNode> getLinkers(){
+		List<MethodParameterNode> result = new ArrayList<>();
+		for(MethodNode method : getMethods()){
+			result.addAll(method.getLinkers(this));
+		}
+		return result;
+	}
 
+	@Override
+	public Object accept(IParameterVisitor visitor) throws Exception {
+		return visitor.visit(this);
+	}
+
+	@Override
+	public Object accept(IModelVisitor visitor) throws Exception {
+		return visitor.visit(this);
+	}
 }

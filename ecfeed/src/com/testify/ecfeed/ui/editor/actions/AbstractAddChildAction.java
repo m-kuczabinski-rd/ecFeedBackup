@@ -4,22 +4,25 @@ import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.StructuredViewer;
 
 import com.testify.ecfeed.adapter.java.JavaUtils;
-import com.testify.ecfeed.model.MethodParameterNode;
+import com.testify.ecfeed.model.AbstractNode;
+import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.ConstraintNode;
-import com.testify.ecfeed.model.AbstractNode;
+import com.testify.ecfeed.model.GlobalParameterNode;
 import com.testify.ecfeed.model.IModelVisitor;
 import com.testify.ecfeed.model.MethodNode;
-import com.testify.ecfeed.model.ChoiceNode;
+import com.testify.ecfeed.model.MethodParameterNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.TestCaseNode;
-import com.testify.ecfeed.ui.modelif.ParameterInterface;
 import com.testify.ecfeed.ui.modelif.ClassInterface;
+import com.testify.ecfeed.ui.modelif.GlobalParameterInterface;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
+import com.testify.ecfeed.ui.modelif.MethodParameterInterface;
+import com.testify.ecfeed.ui.modelif.ParameterInterface;
 import com.testify.ecfeed.ui.modelif.RootInterface;
 
 public abstract class AbstractAddChildAction extends ModelModifyingAction{
-	
+
 	protected final static String ADD_CLASS_ACTION_NAME = "Add class";
 	protected final static String ADD_METHOD_ACTION_NAME = "Add method";
 	protected final static String ADD_PARAMETER_ACTION_NAME = "Add parameter";
@@ -59,7 +62,14 @@ public abstract class AbstractAddChildAction extends ModelModifyingAction{
 
 		@Override
 		public Object visit(MethodParameterNode node) throws Exception {
-			ParameterInterface parameterIf = new ParameterInterface(getUpdateContext());
+			MethodParameterInterface parameterIf = new MethodParameterInterface(getUpdateContext());
+			parameterIf.setTarget(node);
+			return parameterIf.addNewChoice();
+		}
+
+		@Override
+		public Object visit(GlobalParameterNode node) throws Exception {
+			GlobalParameterInterface parameterIf = new GlobalParameterInterface(getUpdateContext());
 			parameterIf.setTarget(node);
 			return parameterIf.addNewChoice();
 		}
@@ -81,7 +91,7 @@ public abstract class AbstractAddChildAction extends ModelModifyingAction{
 			return parameterIf.addNewChoice();
 		}
 	}
-	
+
 	private class ActionEnabledResolver implements IModelVisitor{
 
 		@Override
@@ -108,6 +118,11 @@ public abstract class AbstractAddChildAction extends ModelModifyingAction{
 		}
 
 		@Override
+		public Object visit(GlobalParameterNode node) throws Exception {
+			return true;
+		}
+
+		@Override
 		public Object visit(TestCaseNode node) throws Exception {
 			return false;
 		}
@@ -121,9 +136,9 @@ public abstract class AbstractAddChildAction extends ModelModifyingAction{
 		public Object visit(ChoiceNode node) throws Exception {
 			return true;
 		}
-		
+
 	}
-	
+
 	public AbstractAddChildAction(String id, String name, StructuredViewer viewer, IModelUpdateContext updateContext) {
 		super(id, name, viewer, updateContext);
 		fViewer = viewer;
@@ -149,7 +164,7 @@ public abstract class AbstractAddChildAction extends ModelModifyingAction{
 		}
 		catch(Exception e){}
 	}
-	
+
 	protected void select(AbstractNode node){
 		if(fViewer != null){
 			fViewer.setSelection(new StructuredSelection(node));

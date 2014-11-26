@@ -5,28 +5,28 @@ import java.util.List;
 
 public abstract class ParametersParentNode extends AbstractNode {
 
-	private List<MethodParameterNode> fParameters;
+	private List<AbstractParameterNode> fParameters;
 
 	public ParametersParentNode(String name) {
 		super(name);
-		fParameters = new ArrayList<MethodParameterNode>();
+		fParameters = new ArrayList<AbstractParameterNode>();
 	}
 
-	public void addParameter(MethodParameterNode parameter){
+	public void addParameter(AbstractParameterNode parameter){
 		addParameter(parameter, fParameters.size());
 	}
 
-	public void addParameter(MethodParameterNode parameter, int index) {
+	public void addParameter(AbstractParameterNode parameter, int index) {
 		fParameters.add(index, parameter);
 		parameter.setParent(this);
 	}
 
-	public List<MethodParameterNode> getParameters(){
+	public List<AbstractParameterNode> getParameters(){
 		return fParameters;
 	}
 
-	public MethodParameterNode getParameter(String parameterName) {
-		for(MethodParameterNode parameter : fParameters){
+	public AbstractParameterNode getParameter(String parameterName) {
+		for(AbstractParameterNode parameter : fParameters){
 			if(parameter.getName().equals(parameterName)){
 				return parameter;
 			}
@@ -34,19 +34,9 @@ public abstract class ParametersParentNode extends AbstractNode {
 		return null;
 	}
 
-	public List<MethodParameterNode> getParameters(boolean expected) {
-		ArrayList<MethodParameterNode> parameters = new ArrayList<>();
-		for(MethodParameterNode parameter : fParameters){
-			if(parameter.isExpected() == expected){
-				parameters.add(parameter);
-			}
-		}
-		return parameters;
-	}
-
 	public List<String> getParametersTypes() {
 		List<String> types = new ArrayList<String>();
-		for(MethodParameterNode parameter : fParameters){
+		for(AbstractParameterNode parameter : fParameters){
 			types.add(parameter.getType());
 		}
 		return types;
@@ -54,28 +44,18 @@ public abstract class ParametersParentNode extends AbstractNode {
 
 	public List<String> getParametersNames() {
 		List<String> names = new ArrayList<String>();
-		for(MethodParameterNode parameter : fParameters){
+		for(AbstractParameterNode parameter : fParameters){
 			names.add(parameter.getName());
 		}
 		return names;
 	}
 
-	public ArrayList<String> getParametersNames(boolean expected) {
-		ArrayList<String> names = new ArrayList<String>();
-		for(MethodParameterNode parameter : fParameters){
-			if(parameter.isExpected() == expected){
-				names.add(parameter.getName());
-			}
-		}
-		return names;
-	}
-
-	public boolean removeParameter(MethodParameterNode parameter){
+	public boolean removeParameter(AbstractParameterNode parameter){
 		parameter.setParent(null);
 		return fParameters.remove(parameter);
 	}
 
-	public void replaceParameters(List<MethodParameterNode> parameters) {
+	public void replaceParameters(List<AbstractParameterNode> parameters) {
 		fParameters.clear();
 		fParameters.addAll(parameters);
 	}
@@ -96,4 +76,6 @@ public abstract class ParametersParentNode extends AbstractNode {
 		}
 		return super.compare(node);
 	}
+
+	public abstract List<MethodNode> getMethods(AbstractParameterNode parameter);
 }

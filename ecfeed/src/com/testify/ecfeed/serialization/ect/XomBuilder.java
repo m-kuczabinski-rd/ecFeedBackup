@@ -1,24 +1,24 @@
 /*******************************************************************************
- * Copyright (c) 2013 Testify AS.                                                
- * All rights reserved. This program and the accompanying materials              
- * are made available under the terms of the Eclipse Public License v1.0         
- * which accompanies this distribution, and is available at                      
- * http://www.eclipse.org/legal/epl-v10.html                                     
- *                                                                               
- * Contributors:                                                                 
+ * Copyright (c) 2013 Testify AS.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
  *     Patryk Chamuczynski (p.chamuczynski(at)radytek.com) - initial implementation
  ******************************************************************************/
 
 package com.testify.ecfeed.serialization.ect;
 
-import static com.testify.ecfeed.serialization.ect.Constants.PARAMETER_IS_EXPECTED_ATTRIBUTE_NAME;
-import static com.testify.ecfeed.serialization.ect.Constants.PARAMETER_NODE_NAME;
+import static com.testify.ecfeed.serialization.ect.Constants.CHOICE_ATTRIBUTE_NAME;
+import static com.testify.ecfeed.serialization.ect.Constants.CHOICE_NODE_NAME;
 import static com.testify.ecfeed.serialization.ect.Constants.CLASS_NODE_NAME;
+import static com.testify.ecfeed.serialization.ect.Constants.CONSTRAINT_CHOICE_STATEMENT_NODE_NAME;
 import static com.testify.ecfeed.serialization.ect.Constants.CONSTRAINT_CONSEQUENCE_NODE_NAME;
 import static com.testify.ecfeed.serialization.ect.Constants.CONSTRAINT_EXPECTED_STATEMENT_NODE_NAME;
 import static com.testify.ecfeed.serialization.ect.Constants.CONSTRAINT_LABEL_STATEMENT_NODE_NAME;
 import static com.testify.ecfeed.serialization.ect.Constants.CONSTRAINT_NODE_NAME;
-import static com.testify.ecfeed.serialization.ect.Constants.CONSTRAINT_CHOICE_STATEMENT_NODE_NAME;
 import static com.testify.ecfeed.serialization.ect.Constants.CONSTRAINT_PREMISE_NODE_NAME;
 import static com.testify.ecfeed.serialization.ect.Constants.CONSTRAINT_STATEMENT_ARRAY_NODE_NAME;
 import static com.testify.ecfeed.serialization.ect.Constants.CONSTRAINT_STATIC_STATEMENT_NODE_NAME;
@@ -28,16 +28,16 @@ import static com.testify.ecfeed.serialization.ect.Constants.LABEL_ATTRIBUTE_NAM
 import static com.testify.ecfeed.serialization.ect.Constants.LABEL_NODE_NAME;
 import static com.testify.ecfeed.serialization.ect.Constants.METHOD_NODE_NAME;
 import static com.testify.ecfeed.serialization.ect.Constants.NODE_NAME_ATTRIBUTE;
-import static com.testify.ecfeed.serialization.ect.Constants.CHOICE_ATTRIBUTE_NAME;
-import static com.testify.ecfeed.serialization.ect.Constants.CHOICE_NODE_NAME;
+import static com.testify.ecfeed.serialization.ect.Constants.PARAMETER_IS_EXPECTED_ATTRIBUTE_NAME;
+import static com.testify.ecfeed.serialization.ect.Constants.PARAMETER_NODE_NAME;
 import static com.testify.ecfeed.serialization.ect.Constants.ROOT_NODE_NAME;
-import static com.testify.ecfeed.serialization.ect.Constants.STATEMENT_PARAMETER_ATTRIBUTE_NAME;
+import static com.testify.ecfeed.serialization.ect.Constants.STATEMENT_CHOICE_ATTRIBUTE_NAME;
 import static com.testify.ecfeed.serialization.ect.Constants.STATEMENT_EXPECTED_VALUE_ATTRIBUTE_NAME;
 import static com.testify.ecfeed.serialization.ect.Constants.STATEMENT_LABEL_ATTRIBUTE_NAME;
 import static com.testify.ecfeed.serialization.ect.Constants.STATEMENT_OPERATOR_AND_ATTRIBUTE_VALUE;
 import static com.testify.ecfeed.serialization.ect.Constants.STATEMENT_OPERATOR_ATTRIBUTE_NAME;
 import static com.testify.ecfeed.serialization.ect.Constants.STATEMENT_OPERATOR_OR_ATTRIBUTE_VALUE;
-import static com.testify.ecfeed.serialization.ect.Constants.STATEMENT_CHOICE_ATTRIBUTE_NAME;
+import static com.testify.ecfeed.serialization.ect.Constants.STATEMENT_PARAMETER_ATTRIBUTE_NAME;
 import static com.testify.ecfeed.serialization.ect.Constants.STATEMENT_RELATION_ATTRIBUTE_NAME;
 import static com.testify.ecfeed.serialization.ect.Constants.STATEMENT_STATIC_VALUE_ATTRIBUTE_NAME;
 import static com.testify.ecfeed.serialization.ect.Constants.STATIC_STATEMENT_FALSE_VALUE;
@@ -51,42 +51,43 @@ import static com.testify.ecfeed.serialization.ect.Constants.VALUE_ATTRIBUTE_NAM
 import nu.xom.Attribute;
 import nu.xom.Element;
 
+import com.testify.ecfeed.model.AbstractNode;
 import com.testify.ecfeed.model.AbstractStatement;
-import com.testify.ecfeed.model.MethodParameterNode;
+import com.testify.ecfeed.model.ChoiceNode;
+import com.testify.ecfeed.model.ChoicesParentStatement;
+import com.testify.ecfeed.model.ChoicesParentStatement.ChoiceCondition;
+import com.testify.ecfeed.model.ChoicesParentStatement.ICondition;
+import com.testify.ecfeed.model.ChoicesParentStatement.LabelCondition;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.ConstraintNode;
 import com.testify.ecfeed.model.ExpectedValueStatement;
-import com.testify.ecfeed.model.AbstractNode;
+import com.testify.ecfeed.model.GlobalParameterNode;
 import com.testify.ecfeed.model.IModelVisitor;
 import com.testify.ecfeed.model.IStatementVisitor;
 import com.testify.ecfeed.model.MethodNode;
-import com.testify.ecfeed.model.ChoiceNode;
-import com.testify.ecfeed.model.ChoicesParentStatement;
+import com.testify.ecfeed.model.MethodParameterNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.StatementArray;
 import com.testify.ecfeed.model.StaticStatement;
 import com.testify.ecfeed.model.TestCaseNode;
-import com.testify.ecfeed.model.ChoicesParentStatement.ICondition;
-import com.testify.ecfeed.model.ChoicesParentStatement.LabelCondition;
-import com.testify.ecfeed.model.ChoicesParentStatement.ChoiceCondition;
 
 public class XomBuilder implements IModelVisitor, IStatementVisitor {
 
 	@Override
 	public Object visit(RootNode node) throws Exception{
-		Element element = createNamedElement(ROOT_NODE_NAME, node); 
-				
+		Element element = createNamedElement(ROOT_NODE_NAME, node);
+
 		for(ClassNode _class : node.getClasses()){
 			element.appendChild((Element)visit(_class));
 		}
-		
+
 		return element;
 	}
 
 	@Override
 	public Object visit(ClassNode node) throws Exception {
 		Element element = createNamedElement(CLASS_NODE_NAME, node);
-		
+
 		for(MethodNode method : node.getMethods()){
 			element.appendChild((Element)visit(method));
 		}
@@ -96,22 +97,22 @@ public class XomBuilder implements IModelVisitor, IStatementVisitor {
 	@Override
 	public Object visit(MethodNode node) throws Exception {
 		Element element = createNamedElement(METHOD_NODE_NAME, node);
-		
-		for(MethodParameterNode parameter : node.getParameters()){
+
+		for(MethodParameterNode parameter : node.getMethodParameters()){
 			element.appendChild((Element)parameter.accept(this));
 		}
-		
+
 		for(ConstraintNode constraint : node.getConstraintNodes()){
 			element.appendChild((Element)constraint.accept(this));
 		}
-		
+
 		for(TestCaseNode testCase : node.getTestCases()){
 			element.appendChild((Element)testCase.accept(this));
 		}
-		
+
 		return element;
 	}
-	
+
 	@Override
 	public Object visit(MethodParameterNode node)  throws Exception {
 		Element element = createNamedElement(PARAMETER_NODE_NAME, node);
@@ -122,16 +123,28 @@ public class XomBuilder implements IModelVisitor, IStatementVisitor {
 		for(ChoiceNode child : node.getChoices()){
 			element.appendChild((Element)child.accept(this));
 		}
-	
+
 		return element;
 	}
-	
+
+	@Override
+	public Object visit(GlobalParameterNode node) throws Exception {
+		Element element = createNamedElement(PARAMETER_NODE_NAME, node);
+		element.addAttribute(new Attribute(TYPE_NAME_ATTRIBUTE, node.getType()));
+
+		for(ChoiceNode child : node.getChoices()){
+			element.appendChild((Element)child.accept(this));
+		}
+
+		return element;
+	}
+
 	@Override
 	public Object visit(TestCaseNode node) throws Exception {
 		Element element = new Element(TEST_CASE_NODE_NAME);
 		element.addAttribute(new Attribute(TEST_SUITE_NAME_ATTRIBUTE, node.getName()));
 		for(ChoiceNode testParameter : node.getTestData()){
-			if(testParameter.getParameter() != null && testParameter.getParameter().isExpected()){
+			if(testParameter.getParameter() != null && node.getMethodParameter(testParameter).isExpected()){
 				Element expectedParameterElement = new Element(EXPECTED_PARAMETER_NODE_NAME);
 				Attribute expectedValueAttribute = new Attribute(VALUE_ATTRIBUTE_NAME, testParameter.getValueString());
 				expectedParameterElement.addAttribute(expectedValueAttribute);
@@ -144,7 +157,7 @@ public class XomBuilder implements IModelVisitor, IStatementVisitor {
 				element.appendChild(testParameterElement);
 			}
 		}
-	
+
 		return element;
 	}
 
@@ -153,20 +166,20 @@ public class XomBuilder implements IModelVisitor, IStatementVisitor {
 		Element element = createNamedElement(CONSTRAINT_NODE_NAME, node);
 		AbstractStatement premise = node.getConstraint().getPremise();
 		AbstractStatement consequence = node.getConstraint().getConsequence();
-		
-		
+
+
 		Element premiseElement = new Element(CONSTRAINT_PREMISE_NODE_NAME);
 		premiseElement.appendChild((Element)premise.accept(this));
-		
+
 		Element consequenceElement = new Element(CONSTRAINT_CONSEQUENCE_NODE_NAME);
 		consequenceElement.appendChild((Element)consequence.accept(this));
-		
+
 		element.appendChild(premiseElement);
 		element.appendChild(consequenceElement);
 
 		return element;
 	}
-	
+
 	@Override
 	public Object visit(ChoiceNode node) throws Exception {
 		Element element = createNamedElement(CHOICE_NODE_NAME, node);
@@ -181,17 +194,17 @@ public class XomBuilder implements IModelVisitor, IStatementVisitor {
 		String legalValue = value.replaceAll(xml10pattern, "");
 
 		element.addAttribute(new Attribute(VALUE_ATTRIBUTE, legalValue));
-		
+
 		for(String label : node.getLabels()){
 			Element labelElement = new Element(LABEL_NODE_NAME);
 			labelElement.addAttribute(new Attribute(LABEL_ATTRIBUTE_NAME, label));
 			element.appendChild(labelElement);
 		}
-		
+
 		for(ChoiceNode child : node.getChoices()){
 			element.appendChild((Element)child.accept(this));
 		}
-		
+
 		return element;
 	}
 
@@ -202,7 +215,7 @@ public class XomBuilder implements IModelVisitor, IStatementVisitor {
 		String attrValue = statement.getValue()?STATIC_STATEMENT_TRUE_VALUE:
 							STATIC_STATEMENT_FALSE_VALUE;
 		statementElement.addAttribute(new Attribute(attrName, attrValue));
-		
+
 		return statementElement;
 	}
 
@@ -212,16 +225,16 @@ public class XomBuilder implements IModelVisitor, IStatementVisitor {
 		Attribute operatorAttribute = null;
 		switch(statement.getOperator()){
 		case AND:
-			operatorAttribute = new Attribute(STATEMENT_OPERATOR_ATTRIBUTE_NAME, 
+			operatorAttribute = new Attribute(STATEMENT_OPERATOR_ATTRIBUTE_NAME,
 					STATEMENT_OPERATOR_AND_ATTRIBUTE_VALUE);
 			break;
 		case OR:
-			operatorAttribute = new Attribute(STATEMENT_OPERATOR_ATTRIBUTE_NAME, 
+			operatorAttribute = new Attribute(STATEMENT_OPERATOR_ATTRIBUTE_NAME,
 					STATEMENT_OPERATOR_OR_ATTRIBUTE_VALUE);
 			break;
 		}
 		element.addAttribute(operatorAttribute);
-		
+
 		for(AbstractStatement child : statement.getChildren()){
 			element.appendChild((Element)child.accept(this));
 		}
@@ -232,11 +245,11 @@ public class XomBuilder implements IModelVisitor, IStatementVisitor {
 	public Object visit(ExpectedValueStatement statement) throws Exception {
 		String parameterName = statement.getLeftOperandName();
 		ChoiceNode condition = statement.getCondition();
-		Attribute parameterAttribute = 
+		Attribute parameterAttribute =
 				new Attribute(STATEMENT_PARAMETER_ATTRIBUTE_NAME, parameterName);
-		Attribute valueAttribute = 
+		Attribute valueAttribute =
 				new Attribute(STATEMENT_EXPECTED_VALUE_ATTRIBUTE_NAME, condition.getValueString());
-		
+
 		Element statementElement = new Element(CONSTRAINT_EXPECTED_STATEMENT_NODE_NAME);
 		statementElement.addAttribute(parameterAttribute);
 		statementElement.addAttribute(valueAttribute);
@@ -248,16 +261,16 @@ public class XomBuilder implements IModelVisitor, IStatementVisitor {
 	public Object visit(ChoicesParentStatement statement) throws Exception {
 
 		String parameterName = statement.getParameter().getName();
-		Attribute parameterAttribute = 
+		Attribute parameterAttribute =
 				new Attribute(STATEMENT_PARAMETER_ATTRIBUTE_NAME, parameterName);
-		Attribute relationAttribute = 
+		Attribute relationAttribute =
 				new Attribute(STATEMENT_RELATION_ATTRIBUTE_NAME, statement.getRelation().toString());
 		ICondition condition = statement.getCondition();
 		Element statementElement = (Element)condition.accept(this);
-		
+
 		statementElement.addAttribute(parameterAttribute);
 		statementElement.addAttribute(relationAttribute);
-		
+
 		return statementElement;
 	}
 
@@ -273,7 +286,7 @@ public class XomBuilder implements IModelVisitor, IStatementVisitor {
 		ChoiceNode choice = condition.getChoice();
 		Element element = new Element(CONSTRAINT_CHOICE_STATEMENT_NODE_NAME);
 		element.addAttribute(new Attribute(STATEMENT_CHOICE_ATTRIBUTE_NAME, choice.getQualifiedName()));
-		
+
 		return element;
 	}
 
@@ -283,5 +296,5 @@ public class XomBuilder implements IModelVisitor, IStatementVisitor {
 		element.addAttribute(nameAttr);
 		return element;
 	}
-	
+
 }

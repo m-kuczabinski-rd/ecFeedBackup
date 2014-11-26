@@ -1,15 +1,16 @@
 package com.testify.ecfeed.adapter.operations;
 
 import com.testify.ecfeed.adapter.IModelOperation;
+import com.testify.ecfeed.adapter.ITypeAdapterProvider;
 import com.testify.ecfeed.adapter.ModelOperationException;
 import com.testify.ecfeed.model.AbstractNode;
 import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.ConstraintNode;
+import com.testify.ecfeed.model.GlobalParameterNode;
 import com.testify.ecfeed.model.IModelVisitor;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.MethodParameterNode;
-import com.testify.ecfeed.model.ParametersParentNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.TestCaseNode;
 
@@ -40,9 +41,11 @@ public class FactoryRemoveOperation {
 	private static class RemoveOperationVisitor implements IModelVisitor{
 
 		private boolean fValidate;
+		private ITypeAdapterProvider fAdapterProvider;
 
-		public RemoveOperationVisitor(boolean validate){
+		public RemoveOperationVisitor(ITypeAdapterProvider adapterProvider, boolean validate){
 			fValidate = validate;
+			fAdapterProvider = adapterProvider;
 		}
 
 		@Override
@@ -62,16 +65,12 @@ public class FactoryRemoveOperation {
 
 		@Override
 		public Object visit(MethodParameterNode node) throws Exception {
-			ParametersParentNode parent = node.getParametersParent();
-			if(parent == null){
-				return new UnsupportedModelOperation();
-			}
-			else if(parent instanceof MethodNode){
-				return new MethodOperationRemoveParameter((MethodNode)parent, node, fValidate);
-			}
-			else{
-				return new GenericOperationRemoveParameter(parent, node);
-			}
+			return new MethodOperationRemoveParameter(node.getMethod(), node, fValidate);
+		}
+
+		@Override
+		public Object visit(GlobalParameterNode node) throws Exception {
+			return new GenericOperationRemoveParameter(node.getParametersParent(), node);
 		}
 
 		@Override
@@ -86,13 +85,13 @@ public class FactoryRemoveOperation {
 
 		@Override
 		public Object visit(ChoiceNode node) throws Exception {
-			return new GenericOperationRemoveChoice(node.getParent(), node, fValidate);
+			return new GenericOperationRemoveChoice(node.getParent(), node, fAdapterProvider, fValidate);
 		}
 	}
 
-	public static IModelOperation getRemoveOperation(AbstractNode node, boolean validate){
+	public static IModelOperation getRemoveOperation(AbstractNode node, ITypeAdapterProvider adapterProvider, boolean validate){
 		try {
-			return (IModelOperation)node.accept(new RemoveOperationVisitor(validate));
+			return (IModelOperation)node.accept(new RemoveOperationVisitor(adapterProvider, validate));
 		} catch (Exception e) {
 			return new UnsupportedModelOperation();
 		}

@@ -249,7 +249,7 @@ public class ChoicesParentStatement extends AbstractStatement implements IRelati
 
 	@Override
 	public boolean updateReferences(MethodNode method){
-		MethodParameterNode parameter = method.getParameter(fParameter.getName());
+		MethodParameterNode parameter = (MethodParameterNode)method.getParameter(fParameter.getName());
 		if(parameter != null && !parameter.isExpected()){
 			if(fCondition.updateReferences(parameter)){
 				fParameter = parameter;

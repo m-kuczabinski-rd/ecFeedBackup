@@ -6,6 +6,7 @@ import com.testify.ecfeed.adapter.ITypeAdapterProvider;
 import com.testify.ecfeed.adapter.ModelOperationException;
 import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.model.ChoicesParentNode;
+import com.testify.ecfeed.model.MethodNode;
 
 public class GenericOperationAddChoice extends BulkOperation {
 
@@ -44,7 +45,7 @@ public class GenericOperationAddChoice extends BulkOperation {
 
 		@Override
 		public IModelOperation reverseOperation() {
-			return new GenericOperationRemoveChoice(fTarget, fChoice, false);
+			return new GenericOperationRemoveChoice(fTarget, fChoice, fAdapterProvider, false);
 		}
 
 		private void validateChoiceValue(ChoiceNode choice) throws ModelOperationException{
@@ -67,8 +68,9 @@ public class GenericOperationAddChoice extends BulkOperation {
 	public GenericOperationAddChoice(ChoicesParentNode target, ChoiceNode choice, ITypeAdapterProvider adapterProvider, int index, boolean validate) {
 		super(OperationNames.ADD_PARTITION, true);
 		addOperation(new AddChoiceOperation(target, choice, adapterProvider, index));
-		if((target.getParameter().getMethod() != null) && validate){
-			addOperation(new MethodOperationMakeConsistent(target.getParameter().getMethod()));
+		for(MethodNode method : target.getParameter().getMethods())
+		if((method != null) && validate){
+			addOperation(new MethodOperationMakeConsistent(method));
 		}
 	}
 

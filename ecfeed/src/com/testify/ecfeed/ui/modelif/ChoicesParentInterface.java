@@ -11,6 +11,7 @@ import com.testify.ecfeed.adapter.operations.GenericOperationAddChoice;
 import com.testify.ecfeed.adapter.operations.GenericOperationRemoveChoice;
 import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.model.ChoicesParentNode;
+import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.ui.common.Constants;
 import com.testify.ecfeed.ui.common.EclipseModelBuilder;
 import com.testify.ecfeed.ui.common.EclipseTypeAdapterProvider;
@@ -45,15 +46,17 @@ public class ChoicesParentInterface extends AbstractNodeInterface {
 	}
 
 	public boolean removeChoice(ChoiceNode choice) {
-		IModelOperation operation = new GenericOperationRemoveChoice(fTarget, choice, true);
+		IModelOperation operation = new GenericOperationRemoveChoice(fTarget, choice, getAdapterProvider(), true);
 		return execute(operation, Messages.DIALOG_REMOVE_CHOICE_TITLE);
 	}
 
 	public boolean removeChoices(Collection<ChoiceNode> choices) {
 		boolean displayWarning = false;
-		for(ChoiceNode p : choices){
-			if(fTarget.getParameter().getMethod().mentioningConstraints(p).size() > 0 || fTarget.getParameter().getMethod().mentioningTestCases(p).size() > 0){
-				displayWarning = true;
+		for(MethodNode method : fTarget.getParameter().getMethods()){
+			for(ChoiceNode p : choices){
+				if(method.mentioningConstraints(p).size() > 0 || method.mentioningTestCases(p).size() > 0){
+					displayWarning = true;
+				}
 			}
 		}
 		if(displayWarning){

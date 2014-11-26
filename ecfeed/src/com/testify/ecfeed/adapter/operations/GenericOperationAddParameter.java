@@ -2,22 +2,22 @@ package com.testify.ecfeed.adapter.operations;
 
 import com.testify.ecfeed.adapter.IModelOperation;
 import com.testify.ecfeed.adapter.ModelOperationException;
+import com.testify.ecfeed.model.AbstractParameterNode;
 import com.testify.ecfeed.model.ParametersParentNode;
-import com.testify.ecfeed.model.MethodParameterNode;
 
 public class GenericOperationAddParameter extends AbstractModelOperation {
 
 	private ParametersParentNode fTarget;
-	private MethodParameterNode fParameter;
+	private AbstractParameterNode fParameter;
 	private int fNewIndex;
 
 	protected class ReverseOperation extends AbstractModelOperation{
 
 		private int fOriginalIndex;
-		private MethodParameterNode fReversedParameter;
+		private AbstractParameterNode fReversedParameter;
 		private ParametersParentNode fReversedTarget;
 
-		public ReverseOperation(ParametersParentNode target, MethodParameterNode parameter) {
+		public ReverseOperation(ParametersParentNode target, AbstractParameterNode parameter) {
 			super("reverse " + OperationNames.ADD_PARAMETER);
 			fReversedTarget = target;
 			fReversedParameter = parameter;
@@ -36,14 +36,14 @@ public class GenericOperationAddParameter extends AbstractModelOperation {
 		}
 	}
 
-	public GenericOperationAddParameter(ParametersParentNode target, MethodParameterNode parameter, int index) {
+	public GenericOperationAddParameter(ParametersParentNode target, AbstractParameterNode parameter, int index) {
 		super(OperationNames.ADD_PARAMETER);
 		fTarget = target;
 		fParameter = parameter;
 		fNewIndex = (index == -1)? target.getParameters().size() : index;
 	}
 
-	public GenericOperationAddParameter(ParametersParentNode target, MethodParameterNode parameter) {
+	public GenericOperationAddParameter(ParametersParentNode target, AbstractParameterNode parameter) {
 		this(target, parameter, -1);
 	}
 

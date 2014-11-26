@@ -95,7 +95,7 @@ public class ModelStringifier {
 	public String stringify(MethodNode m, int indent){
 		String result = intendentString(indent);
 		result += "Method " + m.toString();
-		for(MethodParameterNode child : m.getParameters()){
+		for(MethodParameterNode child : m.getMethodParameters()){
 			result += "\n";
 			result += stringify(child, indent + 2);
 		}
@@ -125,12 +125,13 @@ public class ModelStringifier {
 	public String stringify(TestCaseNode tc, int indent){
 		String result = intendentString(indent);
 		result += "Test case " + tc.toString() + "[";
-		for(ChoiceNode p : tc.getTestData()){
-			if(p.getParameter().isExpected()){
-				result += "[e]" + p.getValueString();
+		for(ChoiceNode choice : tc.getTestData()){
+			MethodParameterNode parameter = tc.getMethodParameter(choice);
+			if(parameter.isExpected()){
+				result += "[e]" + choice.getValueString();
 			}
 			else{
-				result += p.getQualifiedName();
+				result += choice.getQualifiedName();
 			}
 			result += " ";
 		}

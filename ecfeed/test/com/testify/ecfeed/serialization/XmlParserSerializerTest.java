@@ -239,7 +239,7 @@ public class XmlParserSerializerTest {
 		}
 
 		List<ConstraintNode> constraints = createConstraints(choicesParentParameters, expectedParameters, numOfConstraints);
-		List<TestCaseNode> testCases = createTestCases(method.getParameters(), numOfTestCases);
+		List<TestCaseNode> testCases = createTestCases(method.getMethodParameters(), numOfTestCases);
 
 		for(ConstraintNode constraint : constraints){
 			method.addConstraint(constraint);
@@ -512,7 +512,7 @@ public class XmlParserSerializerTest {
 		compareSizes(method1.getTestCases(), method2.getTestCases());
 
 		for(int i =0; i < method1.getParameters().size(); ++i){
-			compareParameters(method1.getParameters().get(i), method2.getParameters().get(i));
+			compareParameters(method1.getMethodParameters().get(i), method2.getMethodParameters().get(i));
 		}
 		for(int i =0; i < method1.getConstraintNodes().size(); ++i){
 			compareConstraintNodes(method1.getConstraintNodes().get(i), method2.getConstraintNodes().get(i));

@@ -116,24 +116,28 @@ public class ConstraintNode extends AbstractNode{
 	}
 
 	public boolean isConsistent() {
-		for(ChoiceNode p : getConstraint().getReferencedChoices()){
-			MethodParameterNode c = p.getParameter();
-			if(c == null || c.getChoice(p.getQualifiedName()) == null){
+		for(ChoiceNode choice : getConstraint().getReferencedChoices()){
+			AbstractParameterNode parameter = choice.getParameter();
+			if(parameter == null || parameter.getChoice(choice.getQualifiedName()) == null){
 				return false;
 			}
-			if((c.getMethod() == null) || (c.getMethod().getParameters().contains(c) == false)){
+			//check if the choices parent parameter is still part of the method
+			if(parameter.getMethods().contains(getMethod()) == false){
 				return false;
 			}
+//			if((parameter.getMethod() == null) || (parameter.getMethod().getParameters().contains(parameter) == false)){
+//				return false;
+//			}
 		}
-		for(MethodParameterNode c : getMethod().getParameters()){
-			for(String label : getConstraint().getReferencedLabels(c)){
-				if(c.getLeafLabels().contains(label) == false){
+		for(MethodParameterNode parameter : getMethod().getMethodParameters()){
+			for(String label : getConstraint().getReferencedLabels(parameter)){
+				if(parameter.getLeafLabels().contains(label) == false){
 					return false;
 				}
 			}
 		}
-		for(MethodParameterNode c: getConstraint().getReferencedParameters()){
-			if(getMethod().getParameters().contains(c) == false){
+		for(AbstractParameterNode parameter : getConstraint().getReferencedParameters()){
+			if(getMethod().getParameters().contains(parameter) == false){
 				return false;
 			}
 		}
@@ -147,5 +151,4 @@ public class ConstraintNode extends AbstractNode{
 		}
 		return -1;
 	}
-
 }

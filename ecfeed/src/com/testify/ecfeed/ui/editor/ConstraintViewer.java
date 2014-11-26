@@ -33,7 +33,11 @@ import org.osgi.framework.Bundle;
 import org.osgi.framework.FrameworkUtil;
 
 import com.testify.ecfeed.model.AbstractStatement;
-import com.testify.ecfeed.model.MethodParameterNode;
+import com.testify.ecfeed.model.ChoiceNode;
+import com.testify.ecfeed.model.ChoicesParentStatement;
+import com.testify.ecfeed.model.ChoicesParentStatement.ChoiceCondition;
+import com.testify.ecfeed.model.ChoicesParentStatement.ICondition;
+import com.testify.ecfeed.model.ChoicesParentStatement.LabelCondition;
 import com.testify.ecfeed.model.Constraint;
 import com.testify.ecfeed.model.ConstraintNode;
 import com.testify.ecfeed.model.EStatementOperator;
@@ -41,18 +45,14 @@ import com.testify.ecfeed.model.EStatementRelation;
 import com.testify.ecfeed.model.ExpectedValueStatement;
 import com.testify.ecfeed.model.IRelationalStatement;
 import com.testify.ecfeed.model.IStatementVisitor;
-import com.testify.ecfeed.model.ChoiceNode;
-import com.testify.ecfeed.model.ChoicesParentStatement;
-import com.testify.ecfeed.model.ChoicesParentStatement.ICondition;
-import com.testify.ecfeed.model.ChoicesParentStatement.LabelCondition;
-import com.testify.ecfeed.model.ChoicesParentStatement.ChoiceCondition;
+import com.testify.ecfeed.model.MethodParameterNode;
 import com.testify.ecfeed.model.StatementArray;
 import com.testify.ecfeed.model.StaticStatement;
 import com.testify.ecfeed.ui.editor.actions.ModelModifyingAction;
 import com.testify.ecfeed.ui.modelif.AbstractStatementInterface;
-import com.testify.ecfeed.ui.modelif.ParameterInterface;
 import com.testify.ecfeed.ui.modelif.ConstraintInterface;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
+import com.testify.ecfeed.ui.modelif.ParameterInterface;
 import com.testify.ecfeed.ui.modelif.StatementInterfaceFactory;
 
 public class ConstraintViewer extends TreeViewerSection {
@@ -315,7 +315,7 @@ public class ConstraintViewer extends TreeViewerSection {
 				if(statementText.equals(STATEMENT_AND) || statementText.equals(STATEMENT_OR)){
 					return new StatementArray(EStatementOperator.getOperator(statementText));
 				}
-				MethodParameterNode parameter = fConstraint.getMethod().getParameter(statementText);
+				MethodParameterNode parameter = fConstraint.getMethod().getMethodParameter(statementText);
 				EStatementRelation relation = EStatementRelation.EQUAL;
 				if(parameter != null && parameter.isExpected()){
 					ChoiceNode condition = new ChoiceNode("expected", parameter.getDefaultValue());
@@ -485,7 +485,7 @@ public class ConstraintViewer extends TreeViewerSection {
 			List<String> items = new ArrayList<String>();
 			items.addAll(Arrays.asList(FIXED_STATEMENTS));
 			boolean consequence = fConstraint.getConstraint().getConsequence() == statement;
-			for(MethodParameterNode c : fConstraint.getMethod().getParameters()){
+			for(MethodParameterNode c : fConstraint.getMethod().getMethodParameters()){
 				if(c.isExpected()){
 					if(consequence){
 						items.add(c.getName());

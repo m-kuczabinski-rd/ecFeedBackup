@@ -1,11 +1,11 @@
 /*******************************************************************************
- * Copyright (c) 2013 Testify AS.                                                
- * All rights reserved. This program and the accompanying materials              
- * are made available under the terms of the Eclipse Public License v1.0         
- * which accompanies this distribution, and is available at                      
- * http://www.eclipse.org/legal/epl-v10.html                                     
- *                                                                               
- * Contributors:                                                                 
+ * Copyright (c) 2013 Testify AS.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
  *     Patryk Chamuczynski (p.chamuczynski(at)radytek.com) - initial implementation
  ******************************************************************************/
 
@@ -37,10 +37,10 @@ import com.testify.ecfeed.junit.annotations.Constraints;
 import com.testify.ecfeed.junit.annotations.EcModel;
 import com.testify.ecfeed.junit.annotations.Generator;
 import com.testify.ecfeed.junit.annotations.GeneratorParameter;
-import com.testify.ecfeed.model.MethodParameterNode;
+import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.model.ConstraintNode;
 import com.testify.ecfeed.model.MethodNode;
-import com.testify.ecfeed.model.ChoiceNode;
+import com.testify.ecfeed.model.MethodParameterNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.runner.RunnerException;
 
@@ -56,8 +56,8 @@ public class OnlineRunnerTest extends StaticRunnerTest{
 	protected final static String OVERRIDING_CONSTRAINT_NAME = "constraint";
 
 	private static Set<List<String>> fExecuted;
-	
-	private final Collection<IConstraint<ChoiceNode>> EMPTY_CONSTRAINTS = 
+
+	private final Collection<IConstraint<ChoiceNode>> EMPTY_CONSTRAINTS =
 			new ArrayList<IConstraint<ChoiceNode>>();
 
 	public static void executeTest(String arg1, String arg2, String arg3, String arg4){
@@ -81,7 +81,7 @@ public class OnlineRunnerTest extends StaticRunnerTest{
 			executeTest(arg1, arg2, arg3, arg4);
 		}
 	}
-	
+
 	@RunWith(OnlineRunner.class)
 	@Generator(NWiseGenerator.class)
 	@GeneratorParameter(name = "N", value = "2")
@@ -94,7 +94,7 @@ public class OnlineRunnerTest extends StaticRunnerTest{
 			executeTest(arg1, arg2, arg3, arg4);
 		}
 	}
-	
+
 	@RunWith(OnlineRunner.class)
 	@Generator(CartesianProductGenerator.class)
 	@EcModel(MODEL_PATH)
@@ -105,7 +105,7 @@ public class OnlineRunnerTest extends StaticRunnerTest{
 			executeTest(arg1, arg2, arg3, arg4);
 		}
 	}
-	
+
 	@RunWith(OnlineRunner.class)
 	@Generator(CartesianProductGenerator.class)
 	@EcModel(MODEL_PATH)
@@ -117,7 +117,7 @@ public class OnlineRunnerTest extends StaticRunnerTest{
 			executeTest(arg1, arg2, arg3, arg4);
 		}
 	}
-	
+
 	@RunWith(OnlineRunner.class)
 	@Generator(CartesianProductGenerator.class)
 	@EcModel(MODEL_PATH)
@@ -127,12 +127,12 @@ public class OnlineRunnerTest extends StaticRunnerTest{
 			executeTest(arg1, arg2, arg3, arg4);
 		}
 	}
-	
+
 	@Before
 	public void clearResult(){
 		fExecuted.clear();
 	}
-	
+
 	@Test
 	public void testGlobalGenerator() {
 		try{
@@ -149,7 +149,7 @@ public class OnlineRunnerTest extends StaticRunnerTest{
 			fail("Unexpected exception: " + e.getMessage());
 		}
 	}
-	
+
 	@Test
 	public void testOverridenParameters(){
 		try{
@@ -192,7 +192,7 @@ public class OnlineRunnerTest extends StaticRunnerTest{
 			OnlineRunner runner = new OnlineRunner(testClass);
 			for(FrameworkMethod method : runner.computeTestMethods()){
 				List<List<ChoiceNode>> input = referenceInput(runner.getModel(), method);
-				Collection<IConstraint<ChoiceNode>> constraints = getConstraints(runner.getModel(), method, 
+				Collection<IConstraint<ChoiceNode>> constraints = getConstraints(runner.getModel(), method,
 						OVERRIDING_CONSTRAINT_NAME);
 				Set<List<String>> referenceResult = computeReferenceResult(referenceCartesianGenerator(input, constraints));
 				method.invokeExplosively(testClass.newInstance(), (Object[])null);
@@ -203,7 +203,7 @@ public class OnlineRunnerTest extends StaticRunnerTest{
 			fail("Unexpected exception: " + e.getMessage());
 		}
 	}
-	
+
 	@Test
 	public void testNoConstraints(){
 		try{
@@ -221,7 +221,7 @@ public class OnlineRunnerTest extends StaticRunnerTest{
 			fail("Unexpected exception: " + e.getMessage());
 		}
 	}
-	
+
 	private Collection<IConstraint<ChoiceNode>> getConstraints(
 			RootNode model, FrameworkMethod method,
 			String name) throws RunnerException {
@@ -245,7 +245,7 @@ public class OnlineRunnerTest extends StaticRunnerTest{
 		while((next = initializedGenerator.next()) != null){
 			List<String> sample = new ArrayList<String>();
 			for(ChoiceNode choice : next){
-				sample.add((String)choice.getValueString());
+				sample.add(choice.getValueString());
 			}
 			result.add(sample);
 		}
@@ -261,8 +261,8 @@ public class OnlineRunnerTest extends StaticRunnerTest{
 	}
 
 	private NWiseGenerator<ChoiceNode> referenceNWiseGenerator(
-			List<List<ChoiceNode>> input, 
-			Collection<IConstraint<ChoiceNode>> constraints, 
+			List<List<ChoiceNode>> input,
+			Collection<IConstraint<ChoiceNode>> constraints,
 			int n) throws GeneratorException {
 		NWiseGenerator<ChoiceNode> result = new NWiseGenerator<ChoiceNode>();
 		Map<String, Object> parameters = new HashMap<String, Object>();
@@ -274,7 +274,7 @@ public class OnlineRunnerTest extends StaticRunnerTest{
 	private List<List<ChoiceNode>> referenceInput(RootNode model, FrameworkMethod method) throws RunnerException {
 		List<List<ChoiceNode>> result = new ArrayList<List<ChoiceNode>>();
 		MethodNode methodModel = getMethodModel(model, method);
-		for(MethodParameterNode parameter : methodModel.getParameters()){
+		for(MethodParameterNode parameter : methodModel.getMethodParameters()){
 			result.add(parameter.getChoices());
 		}
 		return result;

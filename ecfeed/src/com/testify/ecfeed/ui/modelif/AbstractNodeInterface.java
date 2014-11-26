@@ -12,13 +12,14 @@ import com.testify.ecfeed.adapter.operations.FactoryShiftOperation;
 import com.testify.ecfeed.adapter.operations.GenericAddChildrenOperation;
 import com.testify.ecfeed.adapter.operations.GenericRemoveNodesOperation;
 import com.testify.ecfeed.adapter.operations.GenericShiftOperation;
-import com.testify.ecfeed.model.MethodParameterNode;
+import com.testify.ecfeed.model.AbstractNode;
+import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.ConstraintNode;
-import com.testify.ecfeed.model.AbstractNode;
+import com.testify.ecfeed.model.GlobalParameterNode;
 import com.testify.ecfeed.model.IModelVisitor;
 import com.testify.ecfeed.model.MethodNode;
-import com.testify.ecfeed.model.ChoiceNode;
+import com.testify.ecfeed.model.MethodParameterNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.ui.common.EclipseImplementationStatusResolver;
@@ -50,6 +51,11 @@ public class AbstractNodeInterface extends OperationExecuter{
 
 		@Override
 		public Object visit(MethodParameterNode node) throws Exception {
+			return Messages.DIALOG_RENAME_PAREMETER_PROBLEM_TITLE;
+		}
+
+		@Override
+		public Object visit(GlobalParameterNode node) throws Exception {
 			return Messages.DIALOG_RENAME_PAREMETER_PROBLEM_TITLE;
 		}
 
@@ -108,7 +114,7 @@ public class AbstractNodeInterface extends OperationExecuter{
 	}
 
 	public boolean remove(){
-		return execute(FactoryRemoveOperation.getRemoveOperation(fTarget, true), Messages.DIALOG_REMOVE_NODE_PROBLEM_TITLE);
+		return execute(FactoryRemoveOperation.getRemoveOperation(fTarget, fAdapterProvider, true), Messages.DIALOG_REMOVE_NODE_PROBLEM_TITLE);
 	}
 
 	public boolean removeChildren(Collection<? extends AbstractNode> children, String message){
@@ -116,7 +122,7 @@ public class AbstractNodeInterface extends OperationExecuter{
 		for(AbstractNode node : children){
 			if(node.getParent() != fTarget) return false;
 		}
-		return execute(new GenericRemoveNodesOperation(children, true), message);
+		return execute(new GenericRemoveNodesOperation(children, fAdapterProvider, true), message);
 	}
 
 	public boolean addChildren(Collection<? extends AbstractNode> children){
@@ -157,5 +163,9 @@ public class AbstractNodeInterface extends OperationExecuter{
 
 	protected boolean executeMoveOperation(IModelOperation moveOperation) {
 		return execute(moveOperation, Messages.DIALOG_MOVE_NODE_PROBLEM_TITLE);
+	}
+
+	protected ITypeAdapterProvider getAdapterProvider(){
+		return fAdapterProvider;
 	}
 }

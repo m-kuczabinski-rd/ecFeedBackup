@@ -11,18 +11,18 @@
 
 package com.testify.ecfeed.serialization.ect;
 
-import static com.testify.ecfeed.serialization.ect.Constants.PARAMETER_IS_EXPECTED_ATTRIBUTE_NAME;
-import static com.testify.ecfeed.serialization.ect.Constants.PARAMETER_NODE_NAME;
+import static com.testify.ecfeed.serialization.ect.Constants.CHOICE_NODE_NAME;
 import static com.testify.ecfeed.serialization.ect.Constants.CLASS_NODE_NAME;
+import static com.testify.ecfeed.serialization.ect.Constants.CONSTRAINT_CHOICE_STATEMENT_NODE_NAME;
 import static com.testify.ecfeed.serialization.ect.Constants.CONSTRAINT_EXPECTED_STATEMENT_NODE_NAME;
 import static com.testify.ecfeed.serialization.ect.Constants.CONSTRAINT_LABEL_STATEMENT_NODE_NAME;
 import static com.testify.ecfeed.serialization.ect.Constants.CONSTRAINT_NODE_NAME;
-import static com.testify.ecfeed.serialization.ect.Constants.CONSTRAINT_CHOICE_STATEMENT_NODE_NAME;
 import static com.testify.ecfeed.serialization.ect.Constants.CONSTRAINT_STATEMENT_ARRAY_NODE_NAME;
 import static com.testify.ecfeed.serialization.ect.Constants.CONSTRAINT_STATIC_STATEMENT_NODE_NAME;
 import static com.testify.ecfeed.serialization.ect.Constants.DEFAULT_EXPECTED_VALUE_ATTRIBUTE_NAME;
 import static com.testify.ecfeed.serialization.ect.Constants.METHOD_NODE_NAME;
-import static com.testify.ecfeed.serialization.ect.Constants.CHOICE_NODE_NAME;
+import static com.testify.ecfeed.serialization.ect.Constants.PARAMETER_IS_EXPECTED_ATTRIBUTE_NAME;
+import static com.testify.ecfeed.serialization.ect.Constants.PARAMETER_NODE_NAME;
 import static com.testify.ecfeed.serialization.ect.Constants.ROOT_NODE_NAME;
 import static com.testify.ecfeed.serialization.ect.Constants.TEST_CASE_NODE_NAME;
 import static com.testify.ecfeed.serialization.ect.Constants.TEST_SUITE_NAME_ATTRIBUTE;
@@ -37,7 +37,8 @@ import nu.xom.Elements;
 import nu.xom.Node;
 
 import com.testify.ecfeed.model.AbstractStatement;
-import com.testify.ecfeed.model.MethodParameterNode;
+import com.testify.ecfeed.model.ChoiceNode;
+import com.testify.ecfeed.model.ChoicesParentStatement;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.Constraint;
 import com.testify.ecfeed.model.ConstraintNode;
@@ -45,8 +46,7 @@ import com.testify.ecfeed.model.EStatementOperator;
 import com.testify.ecfeed.model.EStatementRelation;
 import com.testify.ecfeed.model.ExpectedValueStatement;
 import com.testify.ecfeed.model.MethodNode;
-import com.testify.ecfeed.model.ChoiceNode;
-import com.testify.ecfeed.model.ChoicesParentStatement;
+import com.testify.ecfeed.model.MethodParameterNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.StatementArray;
 import com.testify.ecfeed.model.StaticStatement;
@@ -154,7 +154,7 @@ public class XomAnalyser {
 		String name = getAttributeValue(element, TEST_SUITE_NAME_ATTRIBUTE);
 
 		List<Element> parameterElements = getIterableChildren(element);
-		List<MethodParameterNode> parameters = method.getParameters();
+		List<MethodParameterNode> parameters = method.getMethodParameters();
 
 		List<ChoiceNode> testData = new ArrayList<ChoiceNode>();
 
@@ -281,7 +281,7 @@ public class XomAnalyser {
 		assertNodeTag(element.getQualifiedName(), CONSTRAINT_CHOICE_STATEMENT_NODE_NAME);
 
 		String parameterName = getAttributeValue(element, Constants.STATEMENT_PARAMETER_ATTRIBUTE_NAME);
-		MethodParameterNode parameter = method.getParameter(parameterName);
+		MethodParameterNode parameter = (MethodParameterNode)method.getParameter(parameterName);
 		if(parameter == null || parameter.isExpected()){
 			throw new ParserException(Messages.WRONG_CATEGORY_NAME(parameterName, method.getName()));
 		}
@@ -304,7 +304,7 @@ public class XomAnalyser {
 		String label = getAttributeValue(element, Constants.STATEMENT_LABEL_ATTRIBUTE_NAME);
 		String relationName = getAttributeValue(element, Constants.STATEMENT_RELATION_ATTRIBUTE_NAME);
 
-		MethodParameterNode parameter = method.getParameter(parameterName);
+		MethodParameterNode parameter = method.getMethodParameter(parameterName);
 		if(parameter == null || parameter.isExpected()){
 			throw new ParserException(Messages.WRONG_CATEGORY_NAME(parameterName, method.getName()));
 		}
@@ -318,7 +318,7 @@ public class XomAnalyser {
 
 		String parameterName = getAttributeValue(element, Constants.STATEMENT_PARAMETER_ATTRIBUTE_NAME);
 		String valueString = getAttributeValue(element, Constants.STATEMENT_EXPECTED_VALUE_ATTRIBUTE_NAME);
-		MethodParameterNode parameter = method.getParameter(parameterName);
+		MethodParameterNode parameter = method.getMethodParameter(parameterName);
 		if(parameter == null || !parameter.isExpected()){
 			throw new ParserException(Messages.WRONG_CATEGORY_NAME(parameterName, method.getName()));
 		}

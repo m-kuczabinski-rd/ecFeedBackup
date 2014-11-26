@@ -20,8 +20,8 @@ import com.testify.ecfeed.junit.OnlineRunner;
 import com.testify.ecfeed.junit.annotations.Constraints;
 import com.testify.ecfeed.junit.annotations.EcModel;
 import com.testify.ecfeed.junit.annotations.Generator;
-import com.testify.ecfeed.model.ParametersParentNode;
 import com.testify.ecfeed.model.MethodParameterNode;
+import com.testify.ecfeed.model.ParametersParentNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.testutils.ENodeType;
 
@@ -40,6 +40,7 @@ public class GenericOperationAddParameterTest{
 //		success = true;
 //
 		ParametersParentNode parent = getParent(parentType);
+
 		parent.addParameter(new MethodParameterNode("arg1", "int", "0", false));
 		parent.addParameter(new MethodParameterNode("arg2", "int", "0", false));
 		parent.addParameter(new MethodParameterNode("arg3", "int", "0", false));

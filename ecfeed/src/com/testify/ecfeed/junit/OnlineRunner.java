@@ -1,11 +1,11 @@
 /*******************************************************************************
- * Copyright (c) 2013 Testify AS.                                                
- * All rights reserved. This program and the accompanying materials              
- * are made available under the terms of the Eclipse Public License v1.0         
- * which accompanies this distribution, and is available at                      
- * http://www.eclipse.org/legal/epl-v10.html                                     
- *                                                                               
- * Contributors:                                                                 
+ * Copyright (c) 2013 Testify AS.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
  *     Patryk Chamuczynski (p.chamuczynski(at)radytek.com) - initial implementation
  ******************************************************************************/
 
@@ -35,9 +35,9 @@ import com.testify.ecfeed.junit.annotations.Generator;
 import com.testify.ecfeed.junit.annotations.GeneratorParameter;
 import com.testify.ecfeed.junit.annotations.GeneratorParameterNames;
 import com.testify.ecfeed.junit.annotations.GeneratorParameterValues;
-import com.testify.ecfeed.model.MethodParameterNode;
-import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.ChoiceNode;
+import com.testify.ecfeed.model.MethodNode;
+import com.testify.ecfeed.model.MethodParameterNode;
 import com.testify.ecfeed.runner.Messages;
 import com.testify.ecfeed.runner.RunnerException;
 
@@ -46,7 +46,7 @@ public class OnlineRunner extends AbstractJUnitRunner {
 	public OnlineRunner(Class<?> klass) throws InitializationError {
 		super(klass);
 	}
-	
+
 	@Override
 	protected List<FrameworkMethod> generateTestMethods() throws RunnerException {
 		List<FrameworkMethod> methods = new ArrayList<FrameworkMethod>();
@@ -91,13 +91,13 @@ public class OnlineRunner extends AbstractJUnitRunner {
 				constraints.addAll(methodModel.getConstraints(name));
 			}
 		}
-		
+
 		return constraints;
 	}
 
 	protected List<List<ChoiceNode>> getInput(MethodNode methodModel) {
 		List<List<ChoiceNode>> result = new ArrayList<List<ChoiceNode>>();
-		for(MethodParameterNode parameter : methodModel.getParameters()){
+		for(MethodParameterNode parameter : methodModel.getMethodParameters()){
 			if(parameter.isExpected()){
 				ChoiceNode choice = new ChoiceNode("expected", parameter.getDefaultValue());
 				choice.setParent(parameter);
@@ -163,7 +163,7 @@ public class OnlineRunner extends AbstractJUnitRunner {
 				case INTEGER:
 					return Integer.parseInt(valueString);
 				case STRING:
-					return (String)valueString;
+					return valueString;
 				}
 			}
 			catch(Throwable e){
@@ -179,10 +179,10 @@ public class OnlineRunner extends AbstractJUnitRunner {
 		for(Annotation annotation : annotations){
 			if(annotation instanceof Generator){
 				try {
-					Class<? extends IGenerator> generatorClass = ((Generator)annotation).value();  
+					Class<? extends IGenerator> generatorClass = ((Generator)annotation).value();
 					generatorClass.getTypeParameters();
 					Constructor<? extends IGenerator> constructor = generatorClass.getConstructor(new Class<?>[]{});
-					generator = (IGenerator<ChoiceNode>)(constructor.newInstance(new Object[]{}));
+					generator = (constructor.newInstance(new Object[]{}));
 				} catch (Exception e) {
 					throw new RunnerException(Messages.CANNOT_INSTANTIATE_GENERATOR(e.getMessage()));
 				}
@@ -215,7 +215,7 @@ public class OnlineRunner extends AbstractJUnitRunner {
 			for(int i = 0; i < parameterNames.length; i++){
 				result.put(parameterNames[i], parameterValues[i]);
 			}
-		} 
+		}
 		else if(parameterNames != null || parameterValues != null){
 			throw new RunnerException(Messages.MISSING_PARAMETERS_ANNOTATION);
 		}

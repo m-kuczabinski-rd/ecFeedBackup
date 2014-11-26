@@ -31,17 +31,17 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.ui.forms.widgets.Section;
 
 import com.testify.ecfeed.adapter.java.JavaUtils;
-import com.testify.ecfeed.model.MethodParameterNode;
+import com.testify.ecfeed.model.AbstractParameterNode;
 import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.model.ChoicesParentNode;
 import com.testify.ecfeed.ui.common.NodeNameColumnLabelProvider;
 import com.testify.ecfeed.ui.editor.actions.DeleteAction;
 import com.testify.ecfeed.ui.editor.actions.ModelViewerActionProvider;
-import com.testify.ecfeed.ui.modelif.ParameterInterface;
 import com.testify.ecfeed.ui.modelif.ChoiceInterface;
+import com.testify.ecfeed.ui.modelif.ChoicesParentInterface;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 import com.testify.ecfeed.ui.modelif.ModelNodesTransfer;
-import com.testify.ecfeed.ui.modelif.ChoicesParentInterface;
+import com.testify.ecfeed.ui.modelif.ParameterInterface;
 
 public class ChoicesViewer extends TableViewerSection {
 
@@ -102,7 +102,7 @@ public class ChoicesViewer extends TableViewerSection {
 		@Override
 		protected CellEditor getCellEditor(Object element) {
 			ChoiceNode node = (ChoiceNode)element;
-			MethodParameterNode parameter = node.getParameter();
+			AbstractParameterNode parameter = node.getParameter();
 			if(ParameterInterface.hasLimitedValuesSet(node.getParameter())){
 				fCellEditor.setActivationStyle(ComboBoxCellEditor.DROP_DOWN_ON_KEY_ACTIVATION);
 			} else {

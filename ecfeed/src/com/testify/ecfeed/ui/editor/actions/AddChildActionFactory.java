@@ -5,13 +5,14 @@ import java.util.List;
 
 import org.eclipse.jface.viewers.StructuredViewer;
 
-import com.testify.ecfeed.model.MethodParameterNode;
+import com.testify.ecfeed.model.AbstractNode;
+import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.ConstraintNode;
-import com.testify.ecfeed.model.AbstractNode;
+import com.testify.ecfeed.model.GlobalParameterNode;
 import com.testify.ecfeed.model.IModelVisitor;
 import com.testify.ecfeed.model.MethodNode;
-import com.testify.ecfeed.model.ChoiceNode;
+import com.testify.ecfeed.model.MethodParameterNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
@@ -27,13 +28,13 @@ public class AddChildActionFactory {
 			super(ADD_CLASS_ACTION_ID, ADD_CLASS_ACTION_NAME, fViewer, fContext);
 		}
 	}
-	
+
 	private class AddMethodAction extends AbstractAddChildAction{
 		public AddMethodAction(){
 			super(ADD_METHOD_ACTION_ID, ADD_METHOD_ACTION_NAME, fViewer, fContext);
 		}
 	}
-	
+
 	private abstract class AddMethodChildAction extends AbstractAddChildAction{
 		private MethodInterface fParentIf;
 
@@ -49,7 +50,7 @@ public class AddChildActionFactory {
 			if(nodes.get(0) instanceof MethodNode == false) return false;
 			return true;
 		}
-		
+
 		protected MethodInterface getParentInterface(){
 			List<AbstractNode> nodes = getSelectedNodes();
 			if(nodes.size() != 1) return null;
@@ -58,7 +59,7 @@ public class AddChildActionFactory {
 			return fParentIf;
 		}
 	}
-	
+
 	private class AddParameterAction extends AddMethodChildAction{
 		public AddParameterAction() {
 			super(ADD_PARAMETER_ACTION_ID, ADD_PARAMETER_ACTION_NAME);
@@ -69,7 +70,7 @@ public class AddChildActionFactory {
 			select(getParentInterface().addNewParameter());
 		}
 	}
-	
+
 	private class AddConstraintAction extends AddMethodChildAction{
 		public AddConstraintAction() {
 			super(ADD_CONSTRAINT_ACTION_ID, ADD_CONSTRAINT_ACTION_NAME);
@@ -80,7 +81,7 @@ public class AddChildActionFactory {
 			select(getParentInterface().addNewConstraint());
 		}
 	}
-	
+
 	private class AddTestCaseAction extends AddMethodChildAction{
 		public AddTestCaseAction() {
 			super(ADD_TEST_CASE_ACTION_ID, ADD_TEST_CASE_ACTION_NAME);
@@ -91,13 +92,13 @@ public class AddChildActionFactory {
 			select(getParentInterface().addTestCase());
 		}
 	}
-	
+
 	private class AddChoiceAction extends AbstractAddChildAction{
 		public AddChoiceAction(){
 			super(ADD_PARTITION_ACTION_ID, ADD_PARTITION_ACTION_NAME, fViewer, fContext);
 		}
 	}
-	
+
 	private class AddNewChilActionProvider implements IModelVisitor{
 
 		@Override
@@ -131,6 +132,13 @@ public class AddChildActionFactory {
 		}
 
 		@Override
+		public Object visit(GlobalParameterNode node) throws Exception {
+			return Arrays.asList(new AbstractAddChildAction[]{
+					new AddChoiceAction()
+			});
+		}
+
+		@Override
 		public Object visit(TestCaseNode node) throws Exception {
 			return Arrays.asList(new AbstractAddChildAction[]{});
 		}
@@ -152,8 +160,8 @@ public class AddChildActionFactory {
 		fContext = context;
 		fViewer = viewer;
 	}
-			
-	
+
+
 	@SuppressWarnings("unchecked")
 	public List<AbstractAddChildAction> getPossibleActions(AbstractNode parent){
 		try{

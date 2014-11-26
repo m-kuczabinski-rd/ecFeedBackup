@@ -1,11 +1,11 @@
 /*******************************************************************************
- * Copyright (c) 2013 Testify AS.                                                
- * All rights reserved. This program and the accompanying materials              
- * are made available under the terms of the Eclipse Public License v1.0         
- * which accompanies this distribution, and is available at                      
- * http://www.eclipse.org/legal/epl-v10.html                                     
- *                                                                               
- * Contributors:                                                                 
+ * Copyright (c) 2013 Testify AS.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
  *     Patryk Chamuczynski (p.chamuczynski(at)radytek.com) - initial implementation
  ******************************************************************************/
 
@@ -23,12 +23,13 @@ import com.testify.ecfeed.adapter.operations.ChoiceOperationAddLabels;
 import com.testify.ecfeed.adapter.operations.ChoiceOperationRemoveLabels;
 import com.testify.ecfeed.adapter.operations.ChoiceOperationRenameLabel;
 import com.testify.ecfeed.adapter.operations.ChoiceOperationSetValue;
-import com.testify.ecfeed.model.MethodParameterNode;
-import com.testify.ecfeed.model.MethodNode;
+import com.testify.ecfeed.model.AbstractParameterNode;
 import com.testify.ecfeed.model.ChoiceNode;
+import com.testify.ecfeed.model.MethodNode;
+import com.testify.ecfeed.model.MethodParameterNode;
 import com.testify.ecfeed.ui.common.Constants;
-import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.common.EclipseTypeAdapterProvider;
+import com.testify.ecfeed.ui.common.Messages;
 
 public class ChoiceInterface extends ChoicesParentInterface{
 
@@ -42,9 +43,9 @@ public class ChoiceInterface extends ChoicesParentInterface{
 		super.setTarget(choice);
 		fTarget = choice;
 	}
-	
+
 	public void setValue(String newValue){
-		IModelOperation operation = new ChoiceOperationSetValue(fTarget, newValue, new EclipseTypeAdapterProvider()); 
+		IModelOperation operation = new ChoiceOperationSetValue(fTarget, newValue, new EclipseTypeAdapterProvider());
 		execute(operation, Messages.DIALOG_SET_CHOICE_VALUE_PROBLEM_TITLE);
 	}
 
@@ -52,22 +53,23 @@ public class ChoiceInterface extends ChoicesParentInterface{
 		return fTarget.getValueString();
 	}
 
-	public MethodParameterNode getParameter() {
+	public AbstractParameterNode getParameter() {
 		return fTarget.getParameter();
 	}
 
 	public boolean removeLabels(Collection<String> labels) {
-		MethodNode method = fTarget.getParameter().getMethod();
 		boolean removeMentioningConstraints = false;
-		for(String label : labels){
-			if(method.mentioningConstraints(fTarget.getParameter(), label).size() > 0 && fTarget.getParameter().getLabeledChoices(label).size() == 1){
-				removeMentioningConstraints = true;
-				break;
+		for(MethodNode method : fTarget.getParameter().getMethods()){
+			for(String label : labels){
+				if(method.mentioningConstraints((MethodParameterNode)fTarget.getParameter(), label).size() > 0 && fTarget.getParameter().getLabeledChoices(label).size() == 1){
+					removeMentioningConstraints = true;
+					break;
+				}
 			}
 		}
 		if(removeMentioningConstraints){
-			if(MessageDialog.openConfirm(Display.getCurrent().getActiveShell(), 
-					Messages.DIALOG_REMOVE_LABELS_WARNING_TITLE, 
+			if(MessageDialog.openConfirm(Display.getCurrent().getActiveShell(),
+					Messages.DIALOG_REMOVE_LABELS_WARNING_TITLE,
 					Messages.DIALOG_REMOVE_LABELS_WARNING_MESSAGE) == false){
 				return false;
 			}
@@ -107,19 +109,19 @@ public class ChoiceInterface extends ChoicesParentInterface{
 			return false;
 		}
 		if(fTarget.getInheritedLabels().contains(newValue)){
-			MessageDialog.openError(Display.getCurrent().getActiveShell(), 
-					Messages.DIALOG_RENAME_LABELS_ERROR_TITLE, 
+			MessageDialog.openError(Display.getCurrent().getActiveShell(),
+					Messages.DIALOG_RENAME_LABELS_ERROR_TITLE,
 					Messages.DIALOG_LABEL_IS_ALREADY_INHERITED);
 				return false;
 		}
 		if(fTarget.getLeafLabels().contains(newValue)){
-			if(MessageDialog.openConfirm(Display.getCurrent().getActiveShell(), 
-					Messages.DIALOG_RENAME_LABELS_WARNING_TITLE, 
+			if(MessageDialog.openConfirm(Display.getCurrent().getActiveShell(),
+					Messages.DIALOG_RENAME_LABELS_WARNING_TITLE,
 					Messages.DIALOG_DESCENDING_LABELS_WILL_BE_REMOVED_WARNING_TITLE) == false){
 				return false;
 			}
 		}
-		
+
 		IModelOperation operation = new ChoiceOperationRenameLabel(fTarget, label, newValue);
 		return execute(operation, Messages.DIALOG_CHANGE_LABEL_PROBLEM_TITLE);
 	}

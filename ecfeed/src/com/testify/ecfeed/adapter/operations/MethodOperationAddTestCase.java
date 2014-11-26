@@ -5,9 +5,9 @@ import com.testify.ecfeed.adapter.ITypeAdapter;
 import com.testify.ecfeed.adapter.ITypeAdapterProvider;
 import com.testify.ecfeed.adapter.ModelOperationException;
 import com.testify.ecfeed.adapter.java.Constants;
-import com.testify.ecfeed.model.MethodParameterNode;
-import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.ChoiceNode;
+import com.testify.ecfeed.model.MethodNode;
+import com.testify.ecfeed.model.MethodParameterNode;
 import com.testify.ecfeed.model.TestCaseNode;
 
 public class MethodOperationAddTestCase extends AbstractModelOperation {
@@ -42,8 +42,8 @@ public class MethodOperationAddTestCase extends AbstractModelOperation {
 		}
 		//following must be done AFTER references are updated
 		for(ChoiceNode choice : fTestCase.getTestData()){
-			MethodParameterNode parameter = choice.getParameter();
-			if(choice.getParameter().isExpected()){
+			MethodParameterNode parameter = fTestCase.getMethodParameter(choice);
+			if(parameter.isExpected()){
 				String type = parameter.getType();
 				ITypeAdapter adapter = fAdapterProvider.getAdapter(type);
 				String newValue = adapter.convert(choice.getValueString());

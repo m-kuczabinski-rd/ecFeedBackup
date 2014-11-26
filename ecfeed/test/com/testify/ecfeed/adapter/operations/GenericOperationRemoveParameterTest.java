@@ -20,8 +20,9 @@ import com.testify.ecfeed.junit.OnlineRunner;
 import com.testify.ecfeed.junit.annotations.Constraints;
 import com.testify.ecfeed.junit.annotations.EcModel;
 import com.testify.ecfeed.junit.annotations.Generator;
-import com.testify.ecfeed.model.ParametersParentNode;
+import com.testify.ecfeed.model.AbstractParameterNode;
 import com.testify.ecfeed.model.MethodParameterNode;
+import com.testify.ecfeed.model.ParametersParentNode;
 import com.testify.ecfeed.testutils.ENodeType;
 import com.testify.ecfeed.testutils.ModelTestUtils;
 
@@ -36,7 +37,7 @@ public class GenericOperationRemoveParameterTest{
 		Random rand = new Random();
 		ParametersParentNode parent = (ParametersParentNode)ModelTestUtils.getNode(parentType, "parent");
 		int numOfOperations = 10;
-		List<MethodParameterNode> removedParameters = new ArrayList<>();
+		List<AbstractParameterNode> removedParameters = new ArrayList<>();
 		List<Integer> removedIndices = new ArrayList<>();
 		ModelOperationManager operationManager = new ModelOperationManager();
 
@@ -48,7 +49,7 @@ public class GenericOperationRemoveParameterTest{
 		try{
 			for(int i = 0; i < numOfOperations; ++i){
 				int index = rand.nextInt(parent.getParameters().size());
-				MethodParameterNode removed = parent.getParameters().get(index);
+				AbstractParameterNode removed = parent.getParameters().get(index);
 				removedParameters.add(removed);
 				removedIndices.add(index);
 				IModelOperation operation = new GenericOperationRemoveParameter(parent, removed);

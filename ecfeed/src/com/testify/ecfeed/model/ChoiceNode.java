@@ -1,11 +1,11 @@
 /*******************************************************************************
- * Copyright (c) 2013 Testify AS.                                                
- * All rights reserved. This program and the accompanying materials              
- * are made available under the terms of the Eclipse Public License v1.0         
- * which accompanies this distribution, and is available at                      
- * http://www.eclipse.org/legal/epl-v10.html                                     
- *                                                                               
- * Contributors:                                                                 
+ * Copyright (c) 2013 Testify AS.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
  *     Patryk Chamuczynski (p.chamuczynski(at)radytek.com) - initial implementation
  ******************************************************************************/
 
@@ -20,7 +20,7 @@ public class ChoiceNode extends ChoicesParentNode{
 	private ChoicesParentNode fParent;
 	private String fValueString;
 	private Set<String> fLabels;
-	
+
 	public ChoiceNode(String name, String value) {
 		super(name);
 		fValueString = value;
@@ -28,7 +28,7 @@ public class ChoiceNode extends ChoicesParentNode{
 	}
 
 	@Override
-	public MethodParameterNode getParameter() {
+	public AbstractParameterNode getParameter() {
 		if(fParent != null){
 			return fParent.getParameter();
 		}
@@ -77,7 +77,7 @@ public class ChoiceNode extends ChoicesParentNode{
 		super.setParent(parent);
 		fParent = parent;
 	}
-	
+
 	public String getValueString() {
 		return fValueString;
 	}
@@ -85,15 +85,15 @@ public class ChoiceNode extends ChoicesParentNode{
 	public void setValueString(String value) {
 		fValueString = value;
 	}
-	
+
 	public boolean addLabel(String label){
 		return fLabels.add(label);
 	}
-	
+
 	public boolean removeLabel(String label){
 		return fLabels.remove(label);
 	}
-	
+
 	public Set<String> getLabels(){
 		return fLabels;
 	}
@@ -105,14 +105,14 @@ public class ChoiceNode extends ChoicesParentNode{
 		}
 		return super.getLeafLabels();
 	}
-	
+
 
 	public Set<String> getAllLabels(){
 		Set<String> allLabels = getInheritedLabels();
 		allLabels.addAll(fLabels);
 		return allLabels;
 	}
-	
+
 	public Set<String> getInheritedLabels(){
 		if(parentChoice() != null){
 			return parentChoice().getAllLabels();
@@ -123,44 +123,44 @@ public class ChoiceNode extends ChoicesParentNode{
 	public boolean isAbstract(){
 		return getChoices().size() != 0;
 	}
-	
+
 	public boolean is(ChoiceNode choice){
 		return (this == (choice)) || (parentChoice() != null ? parentChoice().is(choice) : false);
 	}
-	
+
 	public int level(){
 		if(parentChoice() == null){
 			return 0;
 		}
 		return parentChoice().level() + 1;
 	}
-	
+
 	@Override
 	public boolean compare(AbstractNode node){
 		if(node instanceof ChoiceNode == false){
 			return false;
 		}
-		
+
 		ChoiceNode compared = (ChoiceNode)node;
-		
+
 		if(getLabels().equals(compared.getLabels()) == false){
 			return false;
 		}
-		
+
 		if(getValueString().equals(compared.getValueString()) == false){
 			return false;
 		}
-		
+
 		if(getChoices().size() != compared.getChoices().size()){
 			return false;
 		}
-		
+
 		for(int i = 0; i < getChoices().size(); i++){
 			if(getChoices().get(i).compare(compared.getChoices().get(i)) == false){
 				return false;
 			}
 		}
-		
+
 		return super.compare(node);
 	}
 

@@ -1,5 +1,7 @@
 package com.testify.ecfeed.model;
 
+import java.util.List;
+
 public abstract class AbstractParameterNode extends ChoicesParentNode {
 
 	private String fType;
@@ -7,6 +9,11 @@ public abstract class AbstractParameterNode extends ChoicesParentNode {
 	public AbstractParameterNode(String name, String type) {
 		super(name);
 		fType = type;
+	}
+
+	@Override
+	public AbstractParameterNode getParameter() {
+		return this;
 	}
 
 	public ParametersParentNode getParametersParent(){
@@ -36,5 +43,8 @@ public abstract class AbstractParameterNode extends ChoicesParentNode {
 	public void setType(String type) {
 		fType = type;
 	}
+
+	public abstract List<MethodNode> getMethods();
+	public abstract Object accept(IParameterVisitor visitor) throws Exception;
 
 }

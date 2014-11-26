@@ -30,7 +30,7 @@ public class SelectionInterface extends OperationExecuter {
 
 	public boolean delete(){
 		if(fSelected.size() > 0){
-			return execute(new GenericRemoveNodesOperation(fSelected, true), Messages.DIALOG_REMOVE_NODES_PROBLEM_TITLE);
+			return execute(new GenericRemoveNodesOperation(fSelected, fAdapterProvider, true), Messages.DIALOG_REMOVE_NODES_PROBLEM_TITLE);
 		}
 		return false;
 	}

@@ -12,6 +12,7 @@
 package com.testify.ecfeed.model;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -37,7 +38,7 @@ public class MethodNode extends ParametersParentNode {
 		List<String> types = getParametersTypes();
 		List<String> names = getParametersNames();
 		for(int i = 0; i < types.size(); i++){
-			if(getParameters().get(i).isExpected()){
+			if(getMethodParameters().get(i).isExpected()){
 				result += "[e]";
 			}
 			result += types.get(i);
@@ -68,7 +69,7 @@ public class MethodNode extends ParametersParentNode {
 	public MethodNode getCopy(){
 		MethodNode copy = new MethodNode(this.getName());
 
-		for(MethodParameterNode parameter : getParameters()){
+		for(MethodParameterNode parameter : getMethodParameters()){
 			copy.addParameter(parameter.getCopy());
 		}
 
@@ -110,6 +111,19 @@ public class MethodNode extends ParametersParentNode {
 		return (ClassNode)getParent();
 	}
 
+	public MethodParameterNode getMethodParameter(String name){
+		return (MethodParameterNode)getParameter(name);
+	}
+
+	public ArrayList<String> getParametersNames(boolean expected) {
+		ArrayList<String> names = new ArrayList<String>();
+		for(MethodParameterNode parameter : getMethodParameters()){
+			if(parameter.isExpected() == expected){
+				names.add(parameter.getName());
+			}
+		}
+		return names;
+	}
 
 	public List<ConstraintNode> getConstraintNodes(){
 		return fConstraints;
@@ -322,4 +336,48 @@ public class MethodNode extends ParametersParentNode {
 
 		return super.compare(node);
 	}
+
+	@Override
+	public List<MethodNode> getMethods(AbstractParameterNode parameter) {
+		return Arrays.asList(new MethodNode[]{this});
+	}
+
+	public List<MethodParameterNode> getLinkers(GlobalParameterNode globalParameter){
+		List<MethodParameterNode> result = new ArrayList<MethodParameterNode>();
+		for(MethodParameterNode localParameter : getMethodParameters()){
+			if(localParameter.isLinked() && localParameter.getLink() == globalParameter){
+				result.add(localParameter);
+			}
+		}
+		return result;
+	}
+
+	public List<MethodParameterNode> getMethodParameters() {
+		List<MethodParameterNode> result = new ArrayList<>();
+		for(AbstractParameterNode parameter : getParameters()){
+			result.add((MethodParameterNode)parameter);
+		}
+		return result;
+	}
+
+	public List<MethodParameterNode> getMethodParameters(boolean expected) {
+		List<MethodParameterNode> result = new ArrayList<>();
+		for(MethodParameterNode parameter : getMethodParameters()){
+			if(parameter.isExpected()){
+				result.add(parameter);
+			}
+		}
+		return result;
+	}
+
+	public MethodParameterNode getMethodParameter(ChoiceNode choice){
+		AbstractParameterNode parameter = choice.getParameter();
+		for(MethodParameterNode methodParameter : getMethodParameters()){
+			if(methodParameter == parameter || methodParameter.getLink() == parameter){
+				return methodParameter;
+			}
+		}
+		return null;
+	}
+
 }

@@ -20,7 +20,7 @@ public abstract class ChoicesParentNode extends AbstractNode{
 		return fChoices;
 	}
 
-	public abstract MethodParameterNode getParameter();
+	public abstract AbstractParameterNode getParameter();
 
 	public void addChoice(ChoiceNode choice) {
 		addChoice(choice, fChoices.size());

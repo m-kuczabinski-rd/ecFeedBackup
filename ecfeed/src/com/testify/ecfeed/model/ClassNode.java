@@ -16,7 +16,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class ClassNode extends ParametersParentNode {
+public class ClassNode extends GlobalParametersParentNode {
 	private List<MethodNode> fMethods;
 
 	@Override
@@ -27,6 +27,9 @@ public class ClassNode extends ParametersParentNode {
 	@Override
 	public ClassNode getCopy(){
 		ClassNode copy = new ClassNode(getName());
+		for(GlobalParameterNode parameter : getGlobalParameters()){
+			copy.addParameter((GlobalParameterNode)parameter.getCopy());
+		}
 		for(MethodNode method : fMethods){
 			copy.addMethod(method.getCopy());
 		}
@@ -60,7 +63,7 @@ public class ClassNode extends ParametersParentNode {
 	public MethodNode getMethod(String name, List<String> argTypes) {
 		for(MethodNode methodNode : getMethods()){
 			List<String> args = new ArrayList<String>();
-			for(MethodParameterNode arg : methodNode.getParameters()){
+			for(AbstractParameterNode arg : methodNode.getParameters()){
 				args.add(arg.getType());
 			}
 			if(methodNode.getName().equals(name) && args.equals(argTypes)){
@@ -110,5 +113,16 @@ public class ClassNode extends ParametersParentNode {
 		}
 
 		return super.compare(node);
+	}
+
+	@Override
+	public List<MethodNode> getMethods(AbstractParameterNode parameter) {
+		List<MethodNode> result = new ArrayList<MethodNode>();
+		for(MethodNode method : getMethods()){
+			if(method.getParameters().contains(parameter)){
+				result.add(method);
+			}
+		}
+		return result;
 	}
 }

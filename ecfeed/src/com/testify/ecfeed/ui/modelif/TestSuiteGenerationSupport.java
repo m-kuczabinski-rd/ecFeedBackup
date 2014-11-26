@@ -16,8 +16,9 @@ import org.eclipse.swt.widgets.Shell;
 import com.testify.ecfeed.generators.api.GeneratorException;
 import com.testify.ecfeed.generators.api.IConstraint;
 import com.testify.ecfeed.generators.api.IGenerator;
-import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.ChoiceNode;
+import com.testify.ecfeed.model.MethodNode;
+import com.testify.ecfeed.model.MethodParameterNode;
 import com.testify.ecfeed.ui.dialogs.GenerateTestSuiteDialog;
 import com.testify.ecfeed.ui.dialogs.GeneratorProgressMonitorDialog;
 
@@ -29,9 +30,9 @@ public class TestSuiteGenerationSupport {
 	private String fTestSuiteName;
 	private List<List<ChoiceNode>> fGeneratedData;
 	private boolean fHasData;
-	
+
 	private class ExpectedValueReplacer implements IConstraint<ChoiceNode>{
-		
+
 		@Override
 		public boolean evaluate(List<ChoiceNode> values) {
 			return true;
@@ -40,7 +41,8 @@ public class TestSuiteGenerationSupport {
 		@Override
 		public boolean adapt(List<ChoiceNode> values) {
 			for(ChoiceNode p : values){
-				if(p.getParameter().isExpected()){
+				MethodParameterNode parameter = fTarget.getMethodParameters().get(values.indexOf(p));
+				if(parameter.isExpected()){
 					values.set(p.getParameter().getIndex(), p.getCopy());
 				}
 			}
@@ -56,10 +58,10 @@ public class TestSuiteGenerationSupport {
 		private Collection<IConstraint<ChoiceNode>> fConstraints;
 		private Map<String, Object> fParameters;
 
-		GeneratorRunnable(IGenerator<ChoiceNode> generator, 
-				List<List<ChoiceNode>> input, 
-				Collection<IConstraint<ChoiceNode>> constraints, 
-				Map<String, Object> parameters, 
+		GeneratorRunnable(IGenerator<ChoiceNode> generator,
+				List<List<ChoiceNode>> input,
+				Collection<IConstraint<ChoiceNode>> constraints,
+				Map<String, Object> parameters,
 				List<List<ChoiceNode>> generated){
 			fGenerator = generator;
 			fInput = input;
@@ -67,7 +69,7 @@ public class TestSuiteGenerationSupport {
 			fParameters = parameters;
 			fGeneratedData = generated;
 		}
-		
+
 		@Override
 		public void run(IProgressMonitor monitor)
 				throws InvocationTargetException, InterruptedException {
@@ -84,18 +86,18 @@ public class TestSuiteGenerationSupport {
 				throw new InvocationTargetException(e, e.getMessage());
 			}
 		}
-		
+
 	}
-	
+
 	public TestSuiteGenerationSupport(MethodNode target) {
 		fTarget = target;
 		fHasData = false;
 	}
-	
+
 	public void proceed(){
 		fHasData = generate() && !fCanceled;
 	}
-	
+
 	protected boolean generate(){
 		GenerateTestSuiteDialog dialog = new GenerateTestSuiteDialog(getActiveShell(), fTarget);
 		if(dialog.open() == IDialogConstants.OK_ID){
@@ -117,13 +119,13 @@ public class TestSuiteGenerationSupport {
 	public List<List<ChoiceNode>> getGeneratedData(){
 		return fGeneratedData;
 	}
-	
+
 	public String getTestSuiteName(){
 		return fTestSuiteName;
 	}
-	
-	private List<List<ChoiceNode>> generateTestData(final IGenerator<ChoiceNode> generator, 
-			final List<List<ChoiceNode>> input, 
+
+	private List<List<ChoiceNode>> generateTestData(final IGenerator<ChoiceNode> generator,
+			final List<List<ChoiceNode>> input,
 			final Collection<IConstraint<ChoiceNode>> constraints,
 			final Map<String, Object> parameters) {
 
@@ -160,7 +162,7 @@ public class TestSuiteGenerationSupport {
 	public boolean wasCancelled() {
 		return fCanceled;
 	}
-	
+
 	public boolean hasData(){
 		return fHasData;
 	}

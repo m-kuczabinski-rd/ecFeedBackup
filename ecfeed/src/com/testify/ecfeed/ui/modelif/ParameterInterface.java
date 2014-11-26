@@ -1,34 +1,27 @@
 package com.testify.ecfeed.ui.modelif;
 
-import java.util.Arrays;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
 
 import com.testify.ecfeed.adapter.IModelOperation;
-import com.testify.ecfeed.adapter.ITypeAdapterProvider;
 import com.testify.ecfeed.adapter.java.JavaUtils;
 import com.testify.ecfeed.adapter.operations.ParameterOperationSetDefaultValue;
 import com.testify.ecfeed.adapter.operations.ParameterOperationSetExpected;
-import com.testify.ecfeed.adapter.operations.ParameterOperationSetType;
-import com.testify.ecfeed.model.MethodParameterNode;
-import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.ChoiceNode;
+import com.testify.ecfeed.model.MethodNode;
+import com.testify.ecfeed.model.MethodParameterNode;
 import com.testify.ecfeed.ui.common.EclipseModelBuilder;
 import com.testify.ecfeed.ui.common.Messages;
-import com.testify.ecfeed.ui.common.EclipseTypeAdapterProvider;
 
-public class ParameterInterface extends ChoicesParentInterface {
-	
+public class ParameterInterface extends AbstractParameterInterface {
+
 	private MethodParameterNode fTarget;
-	private ITypeAdapterProvider fAdapterProvider;
-	
+
 	public ParameterInterface(IModelUpdateContext updateContext) {
 		super(updateContext);
-		fAdapterProvider = new EclipseTypeAdapterProvider();
 	}
 
 	public void setTarget(MethodParameterNode target){
@@ -36,17 +29,18 @@ public class ParameterInterface extends ChoicesParentInterface {
 		fTarget = target;
 	}
 
+	public String getDefaultValue() {
+		return fTarget.getDefaultValue();
+	}
+
 	public String getDefaultValue(String type) {
 		return new EclipseModelBuilder().getDefaultExpectedValue(type);
 	}
 
-	public boolean setType(String newType) {
-		if(newType.equals(fTarget.getType())){
-			return false;
-		}
-		return execute(new ParameterOperationSetType(fTarget, newType, fAdapterProvider), Messages.DIALOG_RENAME_PAREMETER_PROBLEM_TITLE);
+	public boolean isExpected() {
+		return fTarget.isExpected();
 	}
-	
+
 	public boolean setExpected(boolean expected){
 		if(expected != fTarget.isExpected()){
 			MethodNode method = fTarget.getMethod();
@@ -66,7 +60,7 @@ public class ParameterInterface extends ChoicesParentInterface {
 					if(constraints){
 						message += Messages.DIALOG_SET_CATEGORY_EXPECTED_CONSTRAINTS_REMOVED;
 					}
-					if(MessageDialog.openConfirm(Display.getCurrent().getActiveShell(), 
+					if(MessageDialog.openConfirm(Display.getCurrent().getActiveShell(),
 							Messages.DIALOG_SET_CATEGORY_EXPECTED_WARNING_TITLE, message) == false){
 						return false;
 					}
@@ -79,52 +73,12 @@ public class ParameterInterface extends ChoicesParentInterface {
 
 	public boolean setDefaultValue(String valueString) {
 		if(fTarget.getDefaultValue().equals(valueString) == false){
-			IModelOperation operation = new ParameterOperationSetDefaultValue(fTarget, valueString, fAdapterProvider.getAdapter(fTarget.getType()));
+			IModelOperation operation = new ParameterOperationSetDefaultValue(fTarget, valueString, getTypeAdapterProvider().getAdapter(fTarget.getType()));
 			return execute(operation, Messages.DIALOG_SET_DEFAULT_VALUE_PROBLEM_TITLE);
 		}
 		return false;
 	}
 
-	public static boolean hasLimitedValuesSet(String type) {
-		return !isPrimitive(type) || isBoolean(type);
-	}
-
-	public static boolean hasLimitedValuesSet(MethodParameterNode parameter) {
-		return hasLimitedValuesSet(parameter.getType());
-	}
-
-	public static boolean isPrimitive(String type) {
-		return Arrays.asList(JavaUtils.supportedPrimitiveTypes()).contains(type);
-	}
-	
-	public static boolean isUserType(String type) {
-		return !isPrimitive(type);
-	}
-	
-	public static boolean isBoolean(String type){
-		return type.equals(JavaUtils.getBooleanTypeName());
-	}
-
-	public static List<String> getSpecialValues(String type) {
-		return new EclipseModelBuilder().getSpecialValues(type);
-	}
-
-	public String getType() {
-		return fTarget.getType();
-	}
-
-	public static String[] supportedPrimitiveTypes() {
-		return JavaUtils.supportedPrimitiveTypes();
-	}
-
-	public String getDefaultValue() {
-		return fTarget.getDefaultValue();
-	}
-
-	public boolean isExpected() {
-		return fTarget.isExpected();
-	}
-	
 	public String[] defaultValueSuggestions(){
 		Set<String> items = new HashSet<String>(getSpecialValues());
 		if(JavaUtils.isPrimitive(getType()) == false){

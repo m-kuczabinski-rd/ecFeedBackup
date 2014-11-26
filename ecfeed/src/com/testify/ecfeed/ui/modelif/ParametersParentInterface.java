@@ -19,6 +19,7 @@ public class ParametersParentInterface extends AbstractNodeInterface {
 	}
 
 	public void setTarget(ParametersParentNode target){
+		super.setTarget(target);
 		fTarget = target;
 	}
 

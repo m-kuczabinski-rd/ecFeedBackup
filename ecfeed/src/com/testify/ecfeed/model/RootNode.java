@@ -14,7 +14,7 @@ package com.testify.ecfeed.model;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RootNode extends ParametersParentNode {
+public class RootNode extends GlobalParametersParentNode {
 	public List<ClassNode> fClasses;
 
 	@Override
@@ -25,6 +25,10 @@ public class RootNode extends ParametersParentNode {
 	@Override
 	public RootNode getCopy(){
 		RootNode copy = new RootNode(this.getName());
+
+		for(GlobalParameterNode parameter : getGlobalParameters()){
+			copy.addParameter((GlobalParameterNode)parameter.getCopy());
+		}
 
 		for(ClassNode classnode : fClasses){
 			copy.addClass(classnode.getCopy());
@@ -91,6 +95,15 @@ public class RootNode extends ParametersParentNode {
 	@Override
 	public Object accept(IModelVisitor visitor) throws Exception{
 		return visitor.visit(this);
+	}
+
+	@Override
+	public List<MethodNode> getMethods(AbstractParameterNode parameter) {
+		List<MethodNode> result = new ArrayList<>();
+		for(ClassNode classNode : getClasses()){
+			result.addAll(classNode.getMethods(parameter));
+		}
+		return result;
 	}
 
 }

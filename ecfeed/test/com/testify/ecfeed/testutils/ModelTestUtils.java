@@ -22,6 +22,7 @@ import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.Constraint;
 import com.testify.ecfeed.model.ConstraintNode;
+import com.testify.ecfeed.model.GlobalParameterNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.MethodParameterNode;
 import com.testify.ecfeed.model.RootNode;
@@ -57,6 +58,8 @@ public class ModelTestUtils {
 		case CONSTRAINT: return new ConstraintNode(name, new Constraint(new StaticStatement(true), new StaticStatement(true)));
 		case METHOD: return new MethodNode(name);
 		case PARAMETER: return new MethodParameterNode(name, "int", "0", false);
+		case METHOD_PARAMETER: return new MethodParameterNode(name, "int", "0", false);
+		case GLOBAL_PARAMETER: return new GlobalParameterNode(name, "int");
 		case PROJECT: return new RootNode(name);
 		case TEST_CASE: return new TestCaseNode(name, new ArrayList<ChoiceNode>());
 		}

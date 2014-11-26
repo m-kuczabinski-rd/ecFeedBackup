@@ -6,13 +6,14 @@ import java.util.List;
 import com.testify.ecfeed.adapter.IModelOperation;
 import com.testify.ecfeed.adapter.ModelOperationException;
 import com.testify.ecfeed.adapter.java.JavaUtils;
-import com.testify.ecfeed.model.MethodParameterNode;
+import com.testify.ecfeed.model.AbstractNode;
+import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.ConstraintNode;
-import com.testify.ecfeed.model.AbstractNode;
+import com.testify.ecfeed.model.GlobalParameterNode;
 import com.testify.ecfeed.model.IModelVisitor;
 import com.testify.ecfeed.model.MethodNode;
-import com.testify.ecfeed.model.ChoiceNode;
+import com.testify.ecfeed.model.MethodParameterNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.TestCaseNode;
 
@@ -41,9 +42,9 @@ public class FactoryRenameOperation {
 			}
 		}
 	}
-	
+
 	private static class MethodOperationRename extends GenericOperationRename {
-		
+
 		public MethodOperationRename(MethodNode target, String newName){
 			super(target, newName);
 		}
@@ -85,18 +86,18 @@ public class FactoryRenameOperation {
 			}
 		}
 	}
-	
+
 	private static class ChoiceOperationRename extends GenericOperationRename {
 
 		public ChoiceOperationRename(ChoiceNode target, String newName){
 			super(target, newName);
 		}
-		
+
 		@Override
 		public IModelOperation reverseOperation() {
 			return new ChoiceOperationRename((ChoiceNode)getTarget(), getOriginalName());
 		}
-		
+
 		@Override
 		protected void verifyNewName(String newName)throws ModelOperationException{
 			if(getTarget().getSibling(getNewName()) != null){
@@ -104,7 +105,7 @@ public class FactoryRenameOperation {
 			}
 		}
 	}
-	
+
 	private static class RenameOperationProvider implements IModelVisitor{
 
 		private String fNewName;
@@ -134,6 +135,11 @@ public class FactoryRenameOperation {
 		}
 
 		@Override
+		public Object visit(GlobalParameterNode node) throws Exception {
+			return new ParameterOperationRename(node, fNewName);
+		}
+
+		@Override
 		public Object visit(TestCaseNode node) throws Exception {
 			return new GenericOperationRename(node, fNewName);
 		}
@@ -148,7 +154,7 @@ public class FactoryRenameOperation {
 			return new ChoiceOperationRename(node, fNewName);
 		}
 	}
-	
+
 	public static IModelOperation getRenameOperation(AbstractNode target, String newName){
 		try{
 			return (IModelOperation)target.accept(new RenameOperationProvider(newName));

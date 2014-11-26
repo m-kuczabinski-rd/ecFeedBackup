@@ -11,6 +11,7 @@
 
 package com.testify.ecfeed.model;
 
+import java.util.Arrays;
 import java.util.List;
 
 
@@ -51,11 +52,6 @@ public class MethodParameterNode extends AbstractParameterNode{
 	}
 
 	@Override
-	public MethodParameterNode getParameter() {
-		return this;
-	}
-
-	@Override
 	public String getType(){
 		if(isLinked() && fLink != null){
 			return fLink.getType();
@@ -69,6 +65,11 @@ public class MethodParameterNode extends AbstractParameterNode{
 			return fLink.getChoices();
 		}
 		return super.getChoices();
+	}
+
+	@Override
+	public List<MethodNode> getMethods() {
+		return Arrays.asList(new MethodNode[]{getMethod()});
 	}
 
 	public MethodNode getMethod() {
@@ -142,6 +143,10 @@ public class MethodParameterNode extends AbstractParameterNode{
 
 	@Override
 	public Object accept(IModelVisitor visitor) throws Exception {
+		return visitor.visit(this);
+	}
+
+	public Object accept(IParameterVisitor visitor) throws Exception {
 		return visitor.visit(this);
 	}
 }

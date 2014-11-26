@@ -1,11 +1,11 @@
 /*******************************************************************************
- * Copyright (c) 2013 Testify AS.                                                
- * All rights reserved. This program and the accompanying materials              
- * are made available under the terms of the Eclipse Public License v1.0         
- * which accompanies this distribution, and is available at                      
- * http://www.eclipse.org/legal/epl-v10.html                                     
- *                                                                               
- * Contributors:                                                                 
+ * Copyright (c) 2013 Testify AS.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
  *     Patryk Chamuczynski (p.chamuczynski(at)radytek.com) - initial implementation
  ******************************************************************************/
 
@@ -16,16 +16,16 @@ import java.util.List;
 import java.util.Set;
 
 import com.testify.ecfeed.generators.api.IConstraint;
-import com.testify.ecfeed.model.ChoicesParentStatement.LabelCondition;
 import com.testify.ecfeed.model.ChoicesParentStatement.ChoiceCondition;
+import com.testify.ecfeed.model.ChoicesParentStatement.LabelCondition;
 
 public class Constraint implements IConstraint<ChoiceNode> {
-	
+
 	private final int ID;
 	private static int fLastId = 0;
 
 	private AbstractStatement fPremise;
-	private AbstractStatement fConsequence; 
+	private AbstractStatement fConsequence;
 
 	//TODO resign from the visitor pattern for better readability of the code
 	private class ReferencedChoicesProvider implements IStatementVisitor{
@@ -67,9 +67,9 @@ public class Constraint implements IConstraint<ChoiceNode> {
 			set.add(condition.getChoice());
 			return set;
 		}
-		
+
 	}
-	
+
 	private class ReferencedParametersProvider implements IStatementVisitor{
 
 		@Override
@@ -89,7 +89,7 @@ public class Constraint implements IConstraint<ChoiceNode> {
 
 		@Override
 		public Object visit(ExpectedValueStatement statement) throws Exception {
-			Set<MethodParameterNode> set = new HashSet<MethodParameterNode>();
+			Set<AbstractParameterNode> set = new HashSet<AbstractParameterNode>();
 			set.add(statement.getParameter());
 			return set;
 		}
@@ -107,24 +107,24 @@ public class Constraint implements IConstraint<ChoiceNode> {
 
 		@Override
 		public Object visit(ChoiceCondition condition) throws Exception {
-			Set<MethodParameterNode> set = new HashSet<MethodParameterNode>();
-			MethodParameterNode parameter = condition.getChoice().getParameter();
+			Set<AbstractParameterNode> set = new HashSet<AbstractParameterNode>();
+			AbstractParameterNode parameter = condition.getChoice().getParameter();
 			if(parameter != null){
 				set.add(parameter);
 			}
 			return set;
 		}
 	}
-	
+
 	private class ReferencedLabelsPrivider implements IStatementVisitor{
-		
+
 		private MethodParameterNode fParameter;
 		private Set<String> EMPTY_SET = new HashSet<String>();
-		
+
 		public ReferencedLabelsPrivider(MethodParameterNode parameter){
 			fParameter = parameter;
 		}
-		
+
 		@Override
 		public Object visit(StaticStatement statement) throws Exception {
 			return EMPTY_SET;
@@ -165,15 +165,15 @@ public class Constraint implements IConstraint<ChoiceNode> {
 		public Object visit(ChoiceCondition condition) throws Exception {
 			return EMPTY_SET;
 		}
-		
+
 	}
-	
+
 	public Constraint(AbstractStatement premise, AbstractStatement consequence){
 		ID = fLastId++;
 		fPremise = premise;
 		fConsequence = consequence;
 	}
-	
+
 	@Override
 	public boolean evaluate(List<ChoiceNode> values) {
 		if(fPremise == null) return true;
@@ -189,7 +189,7 @@ public class Constraint implements IConstraint<ChoiceNode> {
 		if(fPremise == null) return true;
 		if(fPremise.evaluate(values) == true){
 			return fConsequence.adapt(values);
-		}		
+		}
 		return true;
 	}
 
@@ -211,11 +211,11 @@ public class Constraint implements IConstraint<ChoiceNode> {
 	public int getId(){
 		return ID;
 	}
-	
+
 	public AbstractStatement getPremise(){
 		return fPremise;
 	}
-	
+
 	public AbstractStatement getConsequence(){
 		return fConsequence;
 	}
@@ -223,11 +223,11 @@ public class Constraint implements IConstraint<ChoiceNode> {
 	public void setPremise(AbstractStatement statement){
 		fPremise = statement;
 	}
-	
+
 	public void setConsequence(AbstractStatement consequence){
 		fConsequence = consequence;
 	}
-	
+
 	public boolean mentions(MethodParameterNode parameter) {
 		return fPremise.mentions(parameter) || fConsequence.mentions(parameter);
 	}
@@ -239,7 +239,7 @@ public class Constraint implements IConstraint<ChoiceNode> {
 	public boolean mentions(ChoiceNode choice) {
 		return fPremise.mentions(choice) || fConsequence.mentions(choice);
 	}
-	
+
 	public Constraint getCopy(){
 		AbstractStatement premise = fPremise.getCopy();
 		AbstractStatement consequence = fConsequence.getCopy();
@@ -265,14 +265,14 @@ public class Constraint implements IConstraint<ChoiceNode> {
 	}
 
 	@SuppressWarnings("unchecked")
-	public Set<MethodParameterNode> getReferencedParameters() {
+	public Set<AbstractParameterNode> getReferencedParameters() {
 		try{
-			Set<MethodParameterNode> referenced = (Set<MethodParameterNode>)fPremise.accept(new ReferencedParametersProvider());
-			referenced.addAll((Set<MethodParameterNode>)fConsequence.accept(new ReferencedParametersProvider()));
+			Set<AbstractParameterNode> referenced = (Set<AbstractParameterNode>)fPremise.accept(new ReferencedParametersProvider());
+			referenced.addAll((Set<AbstractParameterNode>)fConsequence.accept(new ReferencedParametersProvider()));
 			return referenced;
 		}
 		catch(Exception e){
-			return new HashSet<MethodParameterNode>();
+			return new HashSet<AbstractParameterNode>();
 		}
 	}
 

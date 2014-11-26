@@ -2,11 +2,11 @@ package com.testify.ecfeed.adapter.operations;
 
 import com.testify.ecfeed.adapter.IModelOperation;
 import com.testify.ecfeed.adapter.ModelOperationException;
-import com.testify.ecfeed.model.MethodParameterNode;
 import com.testify.ecfeed.model.MethodNode;
+import com.testify.ecfeed.model.MethodParameterNode;
 
 public class MethodOperationConvertTo extends AbstractModelOperation {
-	
+
 	private MethodNode fTarget;
 	private MethodNode fSource;
 
@@ -27,9 +27,9 @@ public class MethodOperationConvertTo extends AbstractModelOperation {
 
 		fTarget.setName(fSource.getName());
 		for(int i = 0; i < fTarget.getParameters().size(); i++){
-			MethodParameterNode targetParameter = fTarget.getParameters().get(i);
-			MethodParameterNode sourceParameter = fSource.getParameters().get(i);
-			
+			MethodParameterNode targetParameter = fTarget.getMethodParameters().get(i);
+			MethodParameterNode sourceParameter = fSource.getMethodParameters().get(i);
+
 			targetParameter.setName(sourceParameter.getName());
 			targetParameter.setExpected(sourceParameter.isExpected());
 		}

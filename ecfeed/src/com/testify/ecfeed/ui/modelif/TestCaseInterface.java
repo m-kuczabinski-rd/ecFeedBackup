@@ -18,11 +18,19 @@ public class TestCaseInterface extends AbstractNodeInterface {
 		super(updateContext);
 	}
 
+	public TestCaseNode getTarget() {
+		return fTarget;
+	}
+
 	public void setTarget(TestCaseNode target){
 		super.setTarget(target);
 		fTarget = target;
 	}
-	
+
+	public boolean isExpected(ChoiceNode testValue) {
+		return fTarget.getMethodParameter(testValue).isExpected();
+	}
+
 	public boolean isExecutable(TestCaseNode tc){
 		MethodInterface mIf = new MethodInterface(getUpdateContext());
 		if(tc.getMethod() == null) return false;
@@ -35,7 +43,7 @@ public class TestCaseInterface extends AbstractNodeInterface {
 	public boolean isExecutable(){
 		return isExecutable(fTarget);
 	}
-	
+
 	public void execute() {
 		MethodInterface methodIf = new MethodInterface(getUpdateContext());
 		methodIf.executeStaticTests(new ArrayList<TestCaseNode>(Arrays.asList(new TestCaseNode[]{fTarget})));

@@ -27,18 +27,21 @@ import org.eclipse.swt.widgets.Display;
 
 import com.testify.ecfeed.adapter.ITypeAdapter;
 import com.testify.ecfeed.adapter.java.JavaUtils;
-import com.testify.ecfeed.model.MethodParameterNode;
 import com.testify.ecfeed.model.ChoiceNode;
+import com.testify.ecfeed.model.MethodNode;
+import com.testify.ecfeed.model.MethodParameterNode;
 
 public class TestDataValueEditingSupport extends EditingSupport {
 	private final TableViewer fViewer;
 	private ComboBoxViewerCellEditor fComboCellEditor;
 	private ITestDataEditorListener fSetValueListener;
+	private MethodNode fMethod;
 
-	public TestDataValueEditingSupport(TableViewer viewer, List<ChoiceNode> testData, ITestDataEditorListener setValueListener) {
+	public TestDataValueEditingSupport(MethodNode method, TableViewer viewer, List<ChoiceNode> testData, ITestDataEditorListener setValueListener) {
 		super(viewer);
 		fViewer = viewer;
 		fSetValueListener = setValueListener;
+		fMethod = method;
 
 		fComboCellEditor = new ComboBoxViewerCellEditor(fViewer.getTable(), SWT.TRAIL);
 		fComboCellEditor.setLabelProvider(new LabelProvider());
@@ -55,7 +58,7 @@ public class TestDataValueEditingSupport extends EditingSupport {
 		String type = choice.getParameter().getType();
 		EclipseModelBuilder builder = new EclipseModelBuilder();
 
-		if (choice.getParameter().isExpected()) {
+		if (fMethod.getMethodParameter(choice).isExpected()) {
 			Set<String> expectedValues = new HashSet<String>();
 			for (String specialValue : builder.getSpecialValues(type)) {
 				expectedValues.add(specialValue);
@@ -90,7 +93,7 @@ public class TestDataValueEditingSupport extends EditingSupport {
 	@Override
 	protected Object getValue(Object element) {
 		ChoiceNode choice = (ChoiceNode)element;
-		if(choice.getParameter().isExpected()){
+		if(fMethod.getMethodParameter(choice).isExpected()){
 			return choice.getValueString();
 		}
 		return choice.toString();
@@ -99,7 +102,7 @@ public class TestDataValueEditingSupport extends EditingSupport {
 	@Override
 	protected void setValue(Object element, Object value) {
 		ChoiceNode current = (ChoiceNode)element;
-		MethodParameterNode parameter = current.getParameter();
+		MethodParameterNode parameter = fMethod.getMethodParameter(current);
 		int index = parameter.getIndex();
 		ChoiceNode newValue = null;
 		if(parameter.isExpected()){

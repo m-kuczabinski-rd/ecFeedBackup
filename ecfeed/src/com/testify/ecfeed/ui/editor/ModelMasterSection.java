@@ -49,6 +49,7 @@ import com.testify.ecfeed.model.AbstractNode;
 import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.ConstraintNode;
+import com.testify.ecfeed.model.GlobalParameterNode;
 import com.testify.ecfeed.model.IModelVisitor;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.MethodParameterNode;
@@ -177,6 +178,11 @@ public class ModelMasterSection extends TreeViewerSection{
 			}
 
 			@Override
+			public Object visit(GlobalParameterNode node) throws Exception {
+				return JavaUtils.simplifiedToString(node);
+			}
+
+			@Override
 			public Object visit(TestCaseNode node) throws Exception {
 				return node.toString();
 			}
@@ -211,6 +217,11 @@ public class ModelMasterSection extends TreeViewerSection{
 
 			@Override
 			public Object visit(MethodParameterNode node) throws Exception {
+				return getImageFromFile("parameter_node.png");
+			}
+
+			@Override
+			public Object visit(GlobalParameterNode node) throws Exception {
 				return getImageFromFile("parameter_node.png");
 			}
 
@@ -285,6 +296,13 @@ public class ModelMasterSection extends TreeViewerSection{
 				if(node.isExpected()){
 					decorations.add(getImageFromFile("expected.png"));
 				}
+				return decorations;
+			}
+
+			@Override
+			public Object visit(GlobalParameterNode node) throws Exception {
+				List<Image> decorations = new ArrayList<Image>();
+				decorations.add(implementationStatusDecoration(node));
 				return decorations;
 			}
 

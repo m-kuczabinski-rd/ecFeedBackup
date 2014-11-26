@@ -1,0 +1,161 @@
+package com.testify.ecfeed.adapter.operations;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
+import java.util.List;
+
+import org.junit.Test;
+import org.junit.runner.RunWith;
+
+import com.testify.ecfeed.adapter.IModelOperation;
+import com.testify.ecfeed.adapter.ITypeAdapterProvider;
+import com.testify.ecfeed.adapter.ModelOperationException;
+import com.testify.ecfeed.adapter.ModelOperationManager;
+import com.testify.ecfeed.generators.CartesianProductGenerator;
+import com.testify.ecfeed.junit.OnlineRunner;
+import com.testify.ecfeed.junit.annotations.Constraints;
+import com.testify.ecfeed.junit.annotations.EcModel;
+import com.testify.ecfeed.junit.annotations.Generator;
+import com.testify.ecfeed.model.AbstractNode;
+import com.testify.ecfeed.model.AbstractParameterNode;
+import com.testify.ecfeed.model.ChoiceNode;
+import com.testify.ecfeed.model.IModelVisitor;
+import com.testify.ecfeed.model.IParameterVisitor;
+import com.testify.ecfeed.model.MethodNode;
+import com.testify.ecfeed.ui.common.EclipseTypeAdapterProvider;
+
+
+@RunWith(OnlineRunner.class)
+@Generator(CartesianProductGenerator.class)
+@EcModel("test/com.testify.ecfeed.adapter.operations.ect")
+@Constraints(Constraints.ALL)
+public class AbstractParameterOperationSetTypeTest{
+
+	private ModelOperationManager fOperationManager;
+	private ITypeAdapterProvider fAdapterProvider = new EclipseTypeAdapterProvider();
+
+	private class AbstractParameterNodeImp extends AbstractParameterNode{
+
+		public AbstractParameterNodeImp(String name, String type) {
+			super(name, type);
+		}
+
+		@Override
+		public AbstractParameterNode getParameter() {
+			return this;
+		}
+
+		@Override
+		public AbstractNode getCopy() {
+			return null;
+		}
+
+		@Override
+		public Object accept(IModelVisitor visitor) throws Exception {
+			return null;
+		}
+
+		@Override
+		public List<MethodNode> getMethods() {
+			return null;
+		}
+
+		@Override
+		public Object accept(IParameterVisitor visitor) throws Exception {
+			return null;
+		}
+
+	}
+
+	@Test
+	public void typeNameTest(String currentTypeName, String newTypeName, boolean exceptionExpected){
+		AbstractParameterNode parameter = new AbstractParameterNodeImp("parameter", currentTypeName);
+		fOperationManager = new ModelOperationManager();
+		IModelOperation operation = new AbstractParameterOperationSetType(parameter, newTypeName, fAdapterProvider);
+		try{
+			fOperationManager.execute(operation);
+			if(exceptionExpected){
+				fail("Exception expected");
+			}
+			assertEquals(newTypeName, parameter.getType());
+
+			fOperationManager.undo();
+			assertEquals(currentTypeName, parameter.getType());
+			fOperationManager.redo();
+			assertEquals(newTypeName, parameter.getType());
+			fOperationManager.undo();
+			assertEquals(currentTypeName, parameter.getType());
+			fOperationManager.redo();
+			assertEquals(newTypeName, parameter.getType());
+		}catch(ModelOperationException e){
+			if(exceptionExpected == false){
+				fail("Unexception exception: " + e.getMessage());
+			}
+			assertEquals(currentTypeName, parameter.getType());
+		}
+	}
+
+	@Test
+	public void choicesConsistanceTest(){
+		fOperationManager = new ModelOperationManager();
+		String convertableValue = "0";
+		String notConvertableValue = "not convertable";
+
+		AbstractParameterNode parameter = new AbstractParameterNodeImp("parameter", "String");
+		ChoiceNode choice1 = new ChoiceNode("choice1", convertableValue);
+		ChoiceNode choice11 = new ChoiceNode("choice1.1", convertableValue);
+		ChoiceNode choice12 = new ChoiceNode("choice1.2", notConvertableValue);
+		choice1.addChoice(choice11);
+		choice1.addChoice(choice12);
+		ChoiceNode choice2 = new ChoiceNode("choice2", convertableValue);
+		ChoiceNode choice21 = new ChoiceNode("choice2.1", notConvertableValue);
+		ChoiceNode choice22 = new ChoiceNode("choice2.2", notConvertableValue);
+		choice2.addChoice(choice21);
+		choice2.addChoice(choice22);
+		parameter.addChoice(choice1);
+		parameter.addChoice(choice2);
+
+		IModelOperation operation = new AbstractParameterOperationSetType(parameter, "int", fAdapterProvider);
+
+		try{
+			fOperationManager.execute(operation);
+			assertEquals("int", parameter.getType());
+			assertTrue(parameter.getChoices().contains(choice1));
+			assertEquals(convertableValue, choice11.getValueString());
+			assertFalse(parameter.getChoices().contains(choice2));
+			assertTrue(choice1.getChoices().contains(choice11));
+			assertFalse(choice1.getChoices().contains(choice12));
+
+			fOperationManager.undo();
+			assertEquals("String", parameter.getType());
+			assertTrue(parameter.getChoices().contains(choice1));
+			assertTrue(parameter.getChoices().contains(choice2));
+			assertTrue(choice1.getChoices().contains(choice11));
+			assertTrue(choice1.getChoices().contains(choice12));
+			assertTrue(choice2.getChoices().contains(choice21));
+			assertTrue(choice2.getChoices().contains(choice22));
+			assertEquals(convertableValue, choice1.getValueString());
+			assertEquals(convertableValue, choice11.getValueString());
+			assertEquals(notConvertableValue, choice12.getValueString());
+			assertEquals(convertableValue, choice2.getValueString());
+			assertEquals(notConvertableValue, choice21.getValueString());
+			assertEquals(notConvertableValue, choice22.getValueString());
+
+			fOperationManager.redo();
+			assertEquals("int", parameter.getType());
+			assertTrue(parameter.getChoices().contains(choice1));
+			assertEquals(convertableValue, choice11.getValueString());
+			assertFalse(parameter.getChoices().contains(choice2));
+			assertTrue(choice1.getChoices().contains(choice11));
+			assertFalse(choice1.getChoices().contains(choice12));
+		}catch(ModelOperationException e){
+			fail("Unexpected exception: " + e.getMessage());
+		}
+
+	}
+
+}
+

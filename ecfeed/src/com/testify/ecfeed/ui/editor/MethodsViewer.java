@@ -24,9 +24,9 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.ui.forms.widgets.Section;
 
 import com.testify.ecfeed.adapter.java.JavaUtils;
-import com.testify.ecfeed.model.MethodParameterNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.MethodNode;
+import com.testify.ecfeed.model.MethodParameterNode;
 import com.testify.ecfeed.ui.common.NodeNameColumnLabelProvider;
 import com.testify.ecfeed.ui.common.NodeViewerColumnLabelProvider;
 import com.testify.ecfeed.ui.editor.actions.DeleteAction;
@@ -93,7 +93,7 @@ public class MethodsViewer extends TableViewerSection {
 		public String getText(Object element){
 			List<String> argTypes = fMethodIf.getArgTypes((MethodNode)element);
 			List<String> argNames = fMethodIf.getArgNames((MethodNode)element);
-			List<MethodParameterNode> parameters = ((MethodNode)element).getParameters();
+			List<MethodParameterNode> parameters = ((MethodNode)element).getMethodParameters();
 			String result = "";
 			for(int i = 0; i < argTypes.size(); i++){
 				result += (parameters.get(i).isExpected()?"[e]":"") + JavaUtils.getLocalName(argTypes.get(i)) + " " + argNames.get(i);

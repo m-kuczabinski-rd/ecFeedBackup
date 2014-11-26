@@ -36,11 +36,12 @@ import com.testify.ecfeed.adapter.AbstractModelImplementer;
 import com.testify.ecfeed.adapter.CachedImplementationStatusResolver;
 import com.testify.ecfeed.adapter.EImplementationStatus;
 import com.testify.ecfeed.adapter.java.JavaUtils;
-import com.testify.ecfeed.model.MethodParameterNode;
-import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.AbstractNode;
-import com.testify.ecfeed.model.MethodNode;
+import com.testify.ecfeed.model.AbstractParameterNode;
 import com.testify.ecfeed.model.ChoiceNode;
+import com.testify.ecfeed.model.ClassNode;
+import com.testify.ecfeed.model.MethodNode;
+import com.testify.ecfeed.model.MethodParameterNode;
 
 public class EclipseModelImplementer extends AbstractModelImplementer {
 
@@ -61,7 +62,7 @@ public class EclipseModelImplementer extends AbstractModelImplementer {
 	}
 
 	@Override
-	protected boolean implement(MethodParameterNode node) throws CoreException{
+	protected boolean implement(AbstractParameterNode node) throws CoreException{
 		if(parameterDefinitionImplemented(node) == false){
 			implementParameterDefinition(node, node.getLeafChoiceValues());
 		}
@@ -77,7 +78,7 @@ public class EclipseModelImplementer extends AbstractModelImplementer {
 
 	@Override
 	protected boolean implement(ChoiceNode node) throws CoreException{
-		MethodParameterNode parameter = node.getParameter();
+		AbstractParameterNode parameter = node.getParameter();
 		if(parameterDefinitionImplemented(parameter) == false){
 			if(parameterDefinitionImplementable(parameter)){
 				implementParameterDefinition(parameter, new HashSet<String>(Arrays.asList(new String[]{node.getValueString()})));
@@ -117,7 +118,7 @@ public class EclipseModelImplementer extends AbstractModelImplementer {
 		IType classType = getJavaProject().findType(JavaUtils.getQualifiedName(node.getClassNode()));
 		if(classType != null){
 			classType.createMethod(methodDefinitionContent(node), null, false, null);
-			for(MethodParameterNode parameter : node.getParameters()){
+			for(AbstractParameterNode parameter : node.getParameters()){
 				String type = parameter.getType();
 				if(JavaUtils.isUserType(type)){
 					String packageName = JavaUtils.getPackageName(type);
@@ -130,11 +131,11 @@ public class EclipseModelImplementer extends AbstractModelImplementer {
 	}
 
 	@Override
-	protected void implementParameterDefinition(MethodParameterNode node) throws CoreException {
+	protected void implementParameterDefinition(AbstractParameterNode node) throws CoreException {
 		implementParameterDefinition(node, null);
 	}
 
-	protected void implementParameterDefinition(MethodParameterNode node, Set<String> fields) throws CoreException {
+	protected void implementParameterDefinition(AbstractParameterNode node, Set<String> fields) throws CoreException {
 		String typeName = node.getType();
 		if(JavaUtils.isPrimitive(typeName)){
 			return;
@@ -160,7 +161,7 @@ public class EclipseModelImplementer extends AbstractModelImplementer {
 	@SuppressWarnings("unchecked")
 	protected void implementChoicesDefinitions(List<ChoiceNode> nodes) throws CoreException {
 		refreshWorkspace();
-		MethodParameterNode parent = getParameter(nodes);
+		AbstractParameterNode parent = getParameter(nodes);
 		if(parent == null){
 			return;
 		}
@@ -274,7 +275,7 @@ public class EclipseModelImplementer extends AbstractModelImplementer {
 	}
 
 	@Override
-	protected boolean parameterDefinitionImplemented(MethodParameterNode node) {
+	protected boolean parameterDefinitionImplemented(AbstractParameterNode node) {
 		try{
 			IType type = getJavaProject().findType(node.getType());
 			return (type != null) && type.isEnum();
@@ -294,7 +295,7 @@ public class EclipseModelImplementer extends AbstractModelImplementer {
 		if(node.getParameters().size() > 0){
 			content +=  "\" + ";
 			for(int i = 0; i < node.getParameters().size(); ++i){
-				MethodParameterNode parameter = node.getParameters().get(i);
+				AbstractParameterNode parameter = node.getParameters().get(i);
 				args += JavaUtils.getLocalName(parameter.getType()) + " " + parameter.getName();
 				content += node.getParameters().get(i).getName();
 				if(i != node.getParameters().size() - 1){
@@ -311,7 +312,7 @@ public class EclipseModelImplementer extends AbstractModelImplementer {
 		return "public void " + node.getName() + "(" + args + "){\n\t" + comment + "\n\t" + content + "\n}";
 	}
 
-	protected String enumDefinitionContent(MethodParameterNode node, Set<String> fields){
+	protected String enumDefinitionContent(AbstractParameterNode node, Set<String> fields){
 		String fieldsDefinition = "";
 		if(fields != null){
 			for(String field: fields){
@@ -352,7 +353,7 @@ public class EclipseModelImplementer extends AbstractModelImplementer {
 		return false;
 	}
 
-	private boolean parameterDefinitionImplementable(MethodParameterNode parameter) {
+	private boolean parameterDefinitionImplementable(AbstractParameterNode parameter) {
 		try {
 			String type = parameter.getType();
 			if(JavaUtils.isPrimitive(type)){
@@ -473,11 +474,11 @@ public class EclipseModelImplementer extends AbstractModelImplementer {
 		return unimplemented;
 	}
 
-	private MethodParameterNode getParameter(List<ChoiceNode> nodes) {
+	private AbstractParameterNode getParameter(List<ChoiceNode> nodes) {
 		if(nodes.size() == 0){
 			return null;
 		}
-		MethodParameterNode parameter = nodes.get(0).getParameter();
+		AbstractParameterNode parameter = nodes.get(0).getParameter();
 		for(ChoiceNode node : nodes){
 			if(node.getParameter() != parameter){
 				return null;

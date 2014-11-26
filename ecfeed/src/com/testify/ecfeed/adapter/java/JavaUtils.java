@@ -8,9 +8,9 @@ import java.util.List;
 import java.util.StringTokenizer;
 
 import com.testify.ecfeed.adapter.operations.Messages;
+import com.testify.ecfeed.model.AbstractParameterNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.MethodNode;
-import com.testify.ecfeed.model.MethodParameterNode;
 
 public class JavaUtils {
 
@@ -140,16 +140,16 @@ public class JavaUtils {
 
 	public static List<String> getArgNames(MethodNode method) {
 		List<String> result = new ArrayList<String>();
-		for(MethodParameterNode c : method.getParameters()){
-			result.add(c.getName());
+		for(AbstractParameterNode parameter : method.getParameters()){
+			result.add(parameter.getName());
 		}
 		return result;
 	}
 
 	public static List<String> getArgTypes(MethodNode method) {
 		List<String> result = new ArrayList<String>();
-		for(MethodParameterNode c : method.getParameters()){
-			result.add(c.getType());
+		for(AbstractParameterNode parameter : method.getParameters()){
+			result.add(parameter.getType());
 		}
 		return result;
 	}
@@ -187,7 +187,7 @@ public class JavaUtils {
 		return (lastDotIndex == -1)? "" : qualifiedName.substring(0, lastDotIndex);
 	}
 
-	public static String simplifiedToString(MethodParameterNode parameter){
+	public static String simplifiedToString(AbstractParameterNode parameter){
 		String result = parameter.toString();
 		String type = parameter.getType();
 		result.replace(type, JavaUtils.getLocalName(type));
@@ -196,7 +196,7 @@ public class JavaUtils {
 
 	public static String simplifiedToString(MethodNode method){
 		String result = method.toString();
-		for(MethodParameterNode parameter : method.getParameters()){
+		for(AbstractParameterNode parameter : method.getParameters()){
 			String type = parameter.getType();
 			String newType = JavaUtils.getLocalName(type);
 			result = result.replaceAll(type, newType);
