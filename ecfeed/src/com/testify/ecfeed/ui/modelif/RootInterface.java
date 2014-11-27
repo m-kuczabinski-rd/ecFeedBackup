@@ -18,7 +18,7 @@ import com.testify.ecfeed.ui.common.EclipseModelBuilder;
 import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.dialogs.TestClassImportDialog;
 
-public class RootInterface extends AbstractNodeInterface {
+public class RootInterface extends GlobalParametersParentInterface {
 
 	private RootNode fTarget;
 
@@ -31,6 +31,7 @@ public class RootInterface extends AbstractNodeInterface {
 		fTarget = target;
 	}
 
+	@Override
 	public RootNode getTarget() {
 		return fTarget;
 	}

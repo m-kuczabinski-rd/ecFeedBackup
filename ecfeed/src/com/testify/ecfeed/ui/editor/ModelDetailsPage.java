@@ -1,11 +1,11 @@
 /*******************************************************************************
- * Copyright (c) 2013 Testify AS.                                                   
- * All rights reserved. This program and the accompanying materials                 
- * are made available under the terms of the Eclipse Public License v1.0            
- * which accompanies this distribution, and is available at                         
- * http://www.eclipse.org/legal/epl-v10.html                                        
- *                                                                                  
- * Contributors:                                                                    
+ * Copyright (c) 2013 Testify AS.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
  *     Patryk Chamuczynski (p.chamuczynski(at)radytek.com) - initial implementation
  ******************************************************************************/
 
@@ -28,9 +28,9 @@ import com.testify.ecfeed.ui.modelif.RootInterface;
 public class ModelDetailsPage extends BasicDetailsPage {
 
 	private ClassViewer fClassesSection;
+	private GlobalParametersViewer fParametersSection;
 	private Text fModelNameText;
 	private RootInterface fRootIf;
-	
 	private class SetNameAdapter extends AbstractSelectionAdapter{
 		@Override
 		public void widgetSelected(SelectionEvent e) {
@@ -38,7 +38,7 @@ public class ModelDetailsPage extends BasicDetailsPage {
 			fModelNameText.setText(fRootIf.getName());
 		}
 	}
-	
+
 	public ModelDetailsPage(ModelMasterSection masterSection, IModelUpdateContext updateContext, IFileInfoProvider fileInforProvider) {
 		super(masterSection, updateContext, fileInforProvider);
 		fRootIf = new RootInterface(this);
@@ -51,6 +51,7 @@ public class ModelDetailsPage extends BasicDetailsPage {
 
 		createModelNameEdit(getMainComposite());
 		addViewerSection(fClassesSection = new ClassViewer(this, this));
+		addViewerSection(fParametersSection = new GlobalParametersViewer(this, this));
 
 		getToolkit().paintBordersFor(getMainComposite());
 	}
@@ -80,9 +81,10 @@ public class ModelDetailsPage extends BasicDetailsPage {
 			fRootIf.setTarget((RootNode)getSelectedElement());
 			fModelNameText.setText(fRootIf.getName());
 			fClassesSection.setInput(fRootIf.getTarget());
+			fParametersSection.setInput(fRootIf.getTarget());
 		}
 	}
-	
+
 	@Override
 	public void selectionChanged(IFormPart part, ISelection selection) {
 		super.selectionChanged(part, selection);

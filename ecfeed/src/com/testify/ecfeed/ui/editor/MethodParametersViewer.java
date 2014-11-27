@@ -151,13 +151,6 @@ public class MethodParametersViewer extends AbstractParametersViewer {
 		fDefaultValueColumn.setEditingSupport(new DefaultValueEditingSupport());
 	}
 
-	private MethodInterface getMethodInterface() {
-		if(fMethodIf == null){
-			fMethodIf = new MethodInterface(this);
-		}
-		return fMethodIf;
-	}
-
 	@Override
 	protected void createTableColumns() {
 		super.createTableColumns();
@@ -182,9 +175,9 @@ public class MethodParametersViewer extends AbstractParametersViewer {
 	}
 
 	public void setInput(MethodNode method){
-		getMethodInterface().setTarget(method);
 		fSelectedMethod = method;
 		showDefaultValueColumn(fSelectedMethod.getParametersNames(true).size() == 0);
+		getMethodIf().setTarget(method);
 		super.setInput(method);
 	}
 
@@ -201,6 +194,13 @@ public class MethodParametersViewer extends AbstractParametersViewer {
 
 	@Override
 	protected ParametersParentInterface getParametersParentInterface() {
-		return getMethodInterface();
+		return getMethodIf();
+	}
+
+	protected MethodInterface getMethodIf() {
+		if(fMethodIf == null){
+			fMethodIf = new MethodInterface(this);
+		}
+		return fMethodIf;
 	}
 }

@@ -16,7 +16,6 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 
 import com.testify.ecfeed.model.AbstractParameterNode;
-import com.testify.ecfeed.model.MethodParameterNode;
 import com.testify.ecfeed.model.ParametersParentNode;
 import com.testify.ecfeed.ui.common.NodeNameColumnLabelProvider;
 import com.testify.ecfeed.ui.common.NodeViewerColumnLabelProvider;
@@ -60,7 +59,7 @@ public abstract class AbstractParametersViewer extends TableViewerSection {
 
 		@Override
 		protected Object getValue(Object element) {
-			MethodParameterNode node = (MethodParameterNode)element;
+			AbstractParameterNode node = (AbstractParameterNode)element;
 			String [] items = fCellEditor.getItems();
 			ArrayList<String> newItems = new ArrayList<String>();
 
@@ -78,7 +77,7 @@ public abstract class AbstractParametersViewer extends TableViewerSection {
 
 		@Override
 		protected void setValue(Object element, Object value) {
-			MethodParameterNode node = (MethodParameterNode)element;
+			AbstractParameterNode node = (AbstractParameterNode)element;
 			String newType = null;
 			int index = (int)value;
 
@@ -116,12 +115,12 @@ public abstract class AbstractParametersViewer extends TableViewerSection {
 
 		@Override
 		protected Object getValue(Object element) {
-			return ((MethodParameterNode)element).getName();
+			return ((AbstractParameterNode)element).getName();
 		}
 
 		@Override
 		protected void setValue(Object element, Object value) {
-			fParameterIf.setTarget((MethodParameterNode)element);
+			fParameterIf.setTarget((AbstractParameterNode)element);
 			fParameterIf.setName((String)value);
 		}
 	}

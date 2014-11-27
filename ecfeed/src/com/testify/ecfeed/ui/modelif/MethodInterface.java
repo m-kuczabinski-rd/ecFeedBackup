@@ -29,6 +29,7 @@ import com.testify.ecfeed.model.MethodParameterNode;
 import com.testify.ecfeed.model.StaticStatement;
 import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.ui.common.Constants;
+import com.testify.ecfeed.ui.common.EclipseModelBuilder;
 import com.testify.ecfeed.ui.common.EclipseTypeAdapterProvider;
 import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.dialogs.AddTestCaseDialog;
@@ -69,12 +70,25 @@ public class MethodInterface extends ParametersParentInterface {
 	}
 
 	@Override
+	public MethodParameterNode addNewParameter() {
+		EclipseModelBuilder modelBuilder = new EclipseModelBuilder();
+		String name = generateNewParameterName();
+		String type = generateNewParameterType();
+		String defaultValue = modelBuilder.getDefaultExpectedValue(type);
+		MethodParameterNode parameter = new MethodParameterNode(name, type, defaultValue, false);
+		List<ChoiceNode> defaultChoices = modelBuilder.defaultChoices(type);
+		parameter.addChoices(defaultChoices);
+		if(addParameter(parameter, fTarget.getParameters().size())){
+			return parameter;
+		}
+		return null;
+	}
+
 	public boolean addParameter(MethodParameterNode parameter, int index) {
 		return execute(new MethodOperationAddParameter(fTarget, parameter, index), Messages.DIALOG_CONVERT_METHOD_PROBLEM_TITLE);
 	}
 
-	@Override
-	public boolean removeParameters(Collection<MethodParameterNode> parameters, IModelUpdateContext context){
+	public boolean removeMethodParameters(Collection<MethodParameterNode> parameters){
 		Set<ConstraintNode> constraints = fTarget.mentioningConstraints(parameters);
 		if(constraints.size() > 0 || fTarget.getTestCases().size() > 0){
 			if(MessageDialog.openConfirm(Display.getCurrent().getActiveShell(),
@@ -82,7 +96,7 @@ public class MethodInterface extends ParametersParentInterface {
 				return false;
 			}
 		}
-		return super.removeChildren(parameters, Messages.DIALOG_REMOVE_PARAMETERS_PROBLEM_TITLE);
+		return super.removeParameters(parameters);
 	}
 
 	public ConstraintNode addNewConstraint(){
@@ -225,16 +239,6 @@ public class MethodInterface extends ParametersParentInterface {
 	public void openCoverageDialog(Object[] checkedElements, Object[] grayedElements) {
 		Shell activeShell = Display.getDefault().getActiveShell();
 		new CalculateCoverageDialog(activeShell, fTarget, checkedElements, grayedElements).open();
-	}
-
-	@Override
-	protected String generateNewParameterName() {
-		int i = 0;
-		String name = Constants.DEFAULT_NEW_PARAMETER_NAME + i++;
-		while(fTarget.getParameter(name) != null){
-			name = Constants.DEFAULT_NEW_PARAMETER_NAME + i++;
-		}
-		return name;
 	}
 
 	@Override

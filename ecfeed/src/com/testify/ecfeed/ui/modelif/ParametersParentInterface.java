@@ -1,16 +1,15 @@
 package com.testify.ecfeed.ui.modelif;
 
 import java.util.Collection;
-import java.util.List;
 
+import com.testify.ecfeed.adapter.java.JavaUtils;
 import com.testify.ecfeed.adapter.operations.GenericOperationAddParameter;
-import com.testify.ecfeed.model.ChoiceNode;
-import com.testify.ecfeed.model.MethodParameterNode;
+import com.testify.ecfeed.model.AbstractParameterNode;
 import com.testify.ecfeed.model.ParametersParentNode;
-import com.testify.ecfeed.ui.common.EclipseModelBuilder;
+import com.testify.ecfeed.ui.common.Constants;
 import com.testify.ecfeed.ui.common.Messages;
 
-public class ParametersParentInterface extends AbstractNodeInterface {
+public abstract class ParametersParentInterface extends AbstractNodeInterface {
 
 	private ParametersParentNode fTarget;
 
@@ -27,34 +26,26 @@ public class ParametersParentInterface extends AbstractNodeInterface {
 		return fTarget;
 	}
 
-	public MethodParameterNode addNewParameter() {
-		EclipseModelBuilder modelBuilder = new EclipseModelBuilder();
-		String name = generateNewParameterName();
-		String type = generateNewParameterType();
-		String defaultValue = modelBuilder.getDefaultExpectedValue(type);
-		MethodParameterNode parameter = new MethodParameterNode(name, type, defaultValue, false);
-		List<ChoiceNode> defaultChoices = modelBuilder.defaultChoices(type);
-		parameter.addChoices(defaultChoices);
-		if(addParameter(parameter, fTarget.getParameters().size())){
-			return parameter;
-		}
-		return null;
-	}
+	public abstract AbstractParameterNode addNewParameter();
 
-	public boolean addParameter(MethodParameterNode parameter, int index) {
+	public boolean addParameter(AbstractParameterNode parameter, int index) {
 		return execute(new GenericOperationAddParameter(fTarget, parameter, index), Messages.DIALOG_CONVERT_METHOD_PROBLEM_TITLE);
 	}
 
-	public boolean removeParameters(Collection<MethodParameterNode> parameters, IModelUpdateContext context){
+	protected boolean removeParameters(Collection<? extends AbstractParameterNode> parameters){
 		return super.removeChildren(parameters, Messages.DIALOG_REMOVE_PARAMETERS_PROBLEM_TITLE);
 	}
 
 	protected String generateNewParameterType() {
-		return null;
+		return JavaUtils.supportedPrimitiveTypes()[0];
 	}
 
 	protected String generateNewParameterName() {
-		return null;
+		int i = 0;
+		String name = Constants.DEFAULT_NEW_PARAMETER_NAME + i++;
+		while(fTarget.getParameter(name) != null){
+			name = Constants.DEFAULT_NEW_PARAMETER_NAME + i++;
+		}
+		return name;
 	}
-
 }
