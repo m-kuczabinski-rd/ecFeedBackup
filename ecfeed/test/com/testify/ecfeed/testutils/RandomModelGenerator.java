@@ -39,8 +39,6 @@ import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
-import nl.flotsam.xeger.Xeger;
-
 import org.junit.Test;
 
 import com.testify.ecfeed.model.AbstractNode;
@@ -62,6 +60,7 @@ import com.testify.ecfeed.model.TestCaseNode;
 
 public class RandomModelGenerator {
 
+	private static int id = 0;
 	private Random rand = new Random();
 	private ModelStringifier fStringifier = new ModelStringifier();
 
@@ -193,7 +192,9 @@ public class RandomModelGenerator {
 			}
 		}
 
-		return new TestCaseNode(name, testData);
+		TestCaseNode result = new TestCaseNode(name, testData);
+		method.addTestCase(result);
+		return result;
 	}
 
 	public ConstraintNode generateConstraint(MethodNode method){
@@ -445,10 +446,10 @@ public class RandomModelGenerator {
 	}
 
 	private String generateString(String regex){
-//		return "name" + id++;
+		return "name" + id++;
 
-		Xeger generator = new Xeger(regex);
-		return generator.generate();
+//		Xeger generator = new Xeger(regex);
+//		return generator.generate();
 	}
 
 	//DEBUG

@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class RootNode extends GlobalParametersParentNode {
-	public List<ClassNode> fClasses;
+	private List<ClassNode> fClasses;
 
 	@Override
 	public List<? extends AbstractNode> getChildren(){
@@ -27,7 +27,7 @@ public class RootNode extends GlobalParametersParentNode {
 		RootNode copy = new RootNode(this.getName());
 
 		for(GlobalParameterNode parameter : getGlobalParameters()){
-			copy.addParameter((GlobalParameterNode)parameter.getCopy());
+			copy.addParameter(parameter.getCopy());
 		}
 
 		for(ClassNode classnode : fClasses){

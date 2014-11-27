@@ -23,6 +23,8 @@ import nu.xom.Document;
 import nu.xom.Element;
 import nu.xom.Serializer;
 
+import org.junit.Test;
+
 import com.testify.ecfeed.model.AbstractNode;
 import com.testify.ecfeed.model.AbstractStatement;
 import com.testify.ecfeed.model.ChoiceNode;
@@ -52,7 +54,7 @@ public class XomParserTest {
 	ModelStringifier fStringifier = new ModelStringifier();
 	Random rand = new Random();
 
-//	@Test
+	@Test
 	public void parseRootTest(){
 		try {
 			RootNode r = fModelGenerator.generateModel(3);
@@ -65,7 +67,7 @@ public class XomParserTest {
 		}
 	}
 
-//	@Test
+	@Test
 	public void parseClassTest(){
 		try {
 			ClassNode _class = fModelGenerator.generateClass(3);
@@ -78,7 +80,7 @@ public class XomParserTest {
 		}
 	}
 
-//	@Test
+	@Test
 	public void parseMethodTest(){
 		for(int i = 0; i < 10; i++){
 			try{
@@ -94,7 +96,7 @@ public class XomParserTest {
 		}
 	}
 
-//	@Test
+	@Test
 	public void parseParameterTest(){
 		for(String type : SUPPORTED_TYPES){
 			try{
@@ -102,7 +104,7 @@ public class XomParserTest {
 				MethodParameterNode c = fModelGenerator.generateParameter(type, expected, 3, 3, 3);
 				Element element = (Element)c.accept(fConverter);
 				TRACE(element);
-					MethodParameterNode c1 = fParser.parseParameter(element);
+					MethodParameterNode c1 = fParser.parseMethodParameter(element);
 					assertElementsEqual(c, c1);
 				}
 			}
@@ -112,7 +114,7 @@ public class XomParserTest {
 		}
 	}
 
-//	@Test
+	@Test
 	public void parseTestCaseTest(){
 		for(int i = 0; i < 10; i++){
 			MethodNode m = fModelGenerator.generateMethod(5, 0, 0);
@@ -130,7 +132,7 @@ public class XomParserTest {
 		}
 	}
 
-//	@Test
+	@Test
 	public void parseConstraintTest(){
 		for(int i = 0; i < 10; i++){
 			MethodNode m = fModelGenerator.generateMethod(3, 0, 0);
@@ -148,7 +150,7 @@ public class XomParserTest {
 		}
 	}
 
-//	@Test
+	@Test
 	public void parseChoiceTest(){
 		for(String type: SUPPORTED_TYPES){
 			try {
@@ -163,7 +165,7 @@ public class XomParserTest {
 		}
 	}
 
-//	@Test
+	@Test
 	public void parseStaticStatementTest(){
 		StaticStatement trueStatement = new StaticStatement(true);
 		StaticStatement falseStatement = new StaticStatement(false);
@@ -183,7 +185,7 @@ public class XomParserTest {
 		}
 	}
 
-//	@Test
+	@Test
 	public void parseChoiceStatementTest(){
 		for(int i = 0; i < 10; i++){
 			try{
@@ -208,7 +210,7 @@ public class XomParserTest {
 		}
 	}
 
-//	@Test
+	@Test
 	public void parseExpectedValueStatementTest(){
 		for(int i = 0; i < 10; i++){
 			try{
@@ -224,7 +226,7 @@ public class XomParserTest {
 		}
 	}
 
-//	@Test
+	@Test
 	public void parseStatementArrayTest(){
 		try{
 			MethodNode m = fModelGenerator.generateMethod(10, 0, 0);
@@ -239,7 +241,7 @@ public class XomParserTest {
 
 	}
 
-//	@Test
+	@Test
 	public void assertTypeTest(){
 		try{
 			RootNode root = fModelGenerator.generateModel(3);

@@ -52,6 +52,7 @@ import nu.xom.Attribute;
 import nu.xom.Element;
 
 import com.testify.ecfeed.model.AbstractNode;
+import com.testify.ecfeed.model.AbstractParameterNode;
 import com.testify.ecfeed.model.AbstractStatement;
 import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.model.ChoicesParentStatement;
@@ -81,6 +82,10 @@ public class XomBuilder implements IModelVisitor, IStatementVisitor {
 			element.appendChild((Element)visit(_class));
 		}
 
+		for(GlobalParameterNode parameter : node.getGlobalParameters()){
+			element.appendChild((Element)visit(parameter));
+		}
+
 		return element;
 	}
 
@@ -91,6 +96,11 @@ public class XomBuilder implements IModelVisitor, IStatementVisitor {
 		for(MethodNode method : node.getMethods()){
 			element.appendChild((Element)visit(method));
 		}
+
+		for(GlobalParameterNode parameter : node.getGlobalParameters()){
+			element.appendChild((Element)visit(parameter));
+		}
+
 		return element;
 	}
 
@@ -115,27 +125,34 @@ public class XomBuilder implements IModelVisitor, IStatementVisitor {
 
 	@Override
 	public Object visit(MethodParameterNode node)  throws Exception {
-		Element element = createNamedElement(PARAMETER_NODE_NAME, node);
-		element.addAttribute(new Attribute(TYPE_NAME_ATTRIBUTE, node.getType()));
+		Element element = serializeAbstractParameter(node);
 		element.addAttribute(new Attribute(PARAMETER_IS_EXPECTED_ATTRIBUTE_NAME, Boolean.toString(node.isExpected())));
 		element.addAttribute(new Attribute(DEFAULT_EXPECTED_VALUE_ATTRIBUTE_NAME, node.getDefaultValue()));
 
-		for(ChoiceNode child : node.getChoices()){
-			element.appendChild((Element)child.accept(this));
-		}
-
+//		Element element = createNamedElement(PARAMETER_NODE_NAME, node);
+//		element.addAttribute(new Attribute(TYPE_NAME_ATTRIBUTE, node.getType()));
+//		element.addAttribute(new Attribute(PARAMETER_IS_EXPECTED_ATTRIBUTE_NAME, Boolean.toString(node.isExpected())));
+//		element.addAttribute(new Attribute(DEFAULT_EXPECTED_VALUE_ATTRIBUTE_NAME, node.getDefaultValue()));
+//
+//		for(ChoiceNode child : node.getChoices()){
+//			element.appendChild((Element)child.accept(this));
+//		}
+//
 		return element;
 	}
 
 	@Override
 	public Object visit(GlobalParameterNode node) throws Exception {
-		Element element = createNamedElement(PARAMETER_NODE_NAME, node);
-		element.addAttribute(new Attribute(TYPE_NAME_ATTRIBUTE, node.getType()));
+		return serializeAbstractParameter(node);
+	}
 
-		for(ChoiceNode child : node.getChoices()){
+	protected Element serializeAbstractParameter(AbstractParameterNode parameter) throws Exception{
+		Element element = createNamedElement(PARAMETER_NODE_NAME, parameter);
+		element.addAttribute(new Attribute(TYPE_NAME_ATTRIBUTE, parameter.getType()));
+
+		for(ChoiceNode child : parameter.getChoices()){
 			element.appendChild((Element)child.accept(this));
 		}
-
 		return element;
 	}
 

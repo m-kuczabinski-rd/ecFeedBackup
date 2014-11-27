@@ -45,6 +45,7 @@ import com.testify.ecfeed.model.ConstraintNode;
 import com.testify.ecfeed.model.EStatementOperator;
 import com.testify.ecfeed.model.EStatementRelation;
 import com.testify.ecfeed.model.ExpectedValueStatement;
+import com.testify.ecfeed.model.GlobalParameterNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.MethodParameterNode;
 import com.testify.ecfeed.model.RootNode;
@@ -61,10 +62,19 @@ public class XomAnalyser {
 		RootNode root = new RootNode(name);
 
 		for(Element child : getIterableChildren(element)){
-			try{
-				root.addClass(parseClass(child));
-			}catch(ParserException e){
-				System.err.println("Exception: " + e.getMessage());
+			if(child.getLocalName() == Constants.CLASS_NODE_NAME){
+				try{
+					root.addClass(parseClass(child));
+				}catch(ParserException e){
+					System.err.println("Exception: " + e.getMessage());
+				}
+			}
+			if(child.getLocalName() == Constants.PARAMETER_NODE_NAME){
+				try{
+					root.addParameter(parseGlobalParameter(child));
+				}catch(ParserException e){
+					System.err.println("Exception: " + e.getMessage());
+				}
 			}
 		}
 
@@ -78,10 +88,19 @@ public class XomAnalyser {
 		ClassNode _class = new ClassNode(name);
 
 		for(Element child : getIterableChildren(element)){
-			try{
-				_class.addMethod(parseMethod(child));
-			}catch(ParserException e){
-				System.err.println("Exception: " + e.getMessage());
+			if(child.getLocalName() == Constants.METHOD_NODE_NAME){
+				try{
+					_class.addMethod(parseMethod(child));
+				}catch(ParserException e){
+					System.err.println("Exception: " + e.getMessage());
+				}
+			}
+			if(child.getLocalName() == Constants.PARAMETER_NODE_NAME){
+				try{
+					_class.addParameter(parseGlobalParameter(child));
+				}catch(ParserException e){
+					System.err.println("Exception: " + e.getMessage());
+				}
 			}
 		}
 
@@ -97,7 +116,7 @@ public class XomAnalyser {
 		for(Element child : getIterableChildren(element)){
 			if(child.getLocalName() == Constants.PARAMETER_NODE_NAME){
 				try{
-					method.addParameter(parseParameter(child));
+					method.addParameter(parseMethodParameter(child));
 				}catch(ParserException e){
 					System.err.println("Exception: " + e.getMessage());
 				}
@@ -126,7 +145,7 @@ public class XomAnalyser {
 		return method;
 	}
 
-	public MethodParameterNode parseParameter(Element element) throws ParserException{
+	public MethodParameterNode parseMethodParameter(Element element) throws ParserException{
 		assertNodeTag(element.getQualifiedName(), PARAMETER_NODE_NAME);
 		String name = getElementName(element);
 		String type = getAttributeValue(element, TYPE_NAME_ATTRIBUTE);
@@ -146,6 +165,22 @@ public class XomAnalyser {
 			}
 		}
 
+		return parameter;
+	}
+
+	public GlobalParameterNode parseGlobalParameter(Element element) throws ParserException{
+		assertNodeTag(element.getQualifiedName(), PARAMETER_NODE_NAME);
+		String name = getElementName(element);
+		String type = getAttributeValue(element, TYPE_NAME_ATTRIBUTE);
+		GlobalParameterNode parameter = new GlobalParameterNode(name, type);
+
+		for(Element child : getIterableChildren(element)){
+			try{
+				parameter.addChoice(parseChoice(child));
+			}catch(ParserException e){
+				System.err.println("Exception: " + e.getMessage());
+			}
+		}
 		return parameter;
 	}
 
