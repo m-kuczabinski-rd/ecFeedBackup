@@ -64,15 +64,34 @@ public class FactoryRenameOperation {
 		}
 	}
 
-	private static class ParameterOperationRename extends GenericOperationRename {
+	private static class GlobalParameterOperationRename extends GenericOperationRename {
 
-		public ParameterOperationRename(AbstractNode target, String newName) {
+		public GlobalParameterOperationRename(AbstractNode target, String newName) {
 			super(target, newName);
 		}
 
 		@Override
 		public IModelOperation reverseOperation() {
-			return new ParameterOperationRename(getTarget(), getOriginalName());
+			return new GlobalParameterOperationRename(getTarget(), getOriginalName());
+		}
+
+		@Override
+		protected void verifyNewName(String newName) throws ModelOperationException {
+			if(JavaUtils.isJavaKeyword(newName)){
+				throw new ModelOperationException(Messages.CATEGORY_NAME_REGEX_PROBLEM);
+			}
+		}
+	}
+
+	private static class MethodParameterOperationRename extends GenericOperationRename {
+
+		public MethodParameterOperationRename(AbstractNode target, String newName) {
+			super(target, newName);
+		}
+
+		@Override
+		public IModelOperation reverseOperation() {
+			return new MethodParameterOperationRename(getTarget(), getOriginalName());
 		}
 
 		@Override
@@ -131,12 +150,12 @@ public class FactoryRenameOperation {
 
 		@Override
 		public Object visit(MethodParameterNode node) throws Exception {
-			return new ParameterOperationRename(node, fNewName);
+			return new MethodParameterOperationRename(node, fNewName);
 		}
 
 		@Override
 		public Object visit(GlobalParameterNode node) throws Exception {
-			return new ParameterOperationRename(node, fNewName);
+			return new GlobalParameterOperationRename(node, fNewName);
 		}
 
 		@Override

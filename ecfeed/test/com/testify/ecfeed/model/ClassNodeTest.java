@@ -129,5 +129,20 @@ public class ClassNodeTest extends ClassNode {
 
 		m2.setName("m1");
 		assertTrue(c1.compare(c2));
+
+		GlobalParameterNode parameter1 = new GlobalParameterNode("parameter1", "int");
+		c1.addParameter(parameter1);
+		assertFalse(c1.compare(c2));
+		GlobalParameterNode parameter2 = new GlobalParameterNode("parameter1", "int");
+		c2.addParameter(parameter2);
+		assertTrue(c1.compare(c2));
+		parameter1.setName("newName");
+		assertFalse(c1.compare(c2));
+		parameter2.setName("newName");
+		assertTrue(c1.compare(c2));
+		parameter1.setType("float");
+		assertFalse(c1.compare(c2));
+		parameter2.setType("float");
+		assertTrue(c1.compare(c2));
 	}
 }

@@ -21,14 +21,16 @@ public class ClassNode extends GlobalParametersParentNode {
 
 	@Override
 	public List<? extends AbstractNode> getChildren(){
-		return fMethods;
+		List<AbstractNode> children = new ArrayList<AbstractNode>(super.getChildren());
+		children.addAll(fMethods);
+		return children;
 	}
 
 	@Override
 	public ClassNode getCopy(){
 		ClassNode copy = new ClassNode(getName());
 		for(GlobalParameterNode parameter : getGlobalParameters()){
-			copy.addParameter((GlobalParameterNode)parameter.getCopy());
+			copy.addParameter(parameter.getCopy());
 		}
 		for(MethodNode method : fMethods){
 			copy.addMethod(method.getCopy());

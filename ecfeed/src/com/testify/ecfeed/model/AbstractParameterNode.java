@@ -44,6 +44,18 @@ public abstract class AbstractParameterNode extends ChoicesParentNode {
 		fType = type;
 	}
 
+	@Override
+	public boolean compare(AbstractNode compared){
+		if(compared instanceof AbstractParameterNode == false){
+			return false;
+		}
+		AbstractParameterNode comparedParameter = (AbstractParameterNode)compared;
+		if(comparedParameter.getType().equals(fType) == false){
+			return false;
+		}
+		return super.compare(compared);
+	}
+
 	public abstract List<MethodNode> getMethods();
 	public abstract Object accept(IParameterVisitor visitor) throws Exception;
 

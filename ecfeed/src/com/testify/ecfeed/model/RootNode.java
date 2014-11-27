@@ -19,7 +19,9 @@ public class RootNode extends GlobalParametersParentNode {
 
 	@Override
 	public List<? extends AbstractNode> getChildren(){
-		return fClasses;
+		List<AbstractNode> children = new ArrayList<AbstractNode>(super.getChildren());
+		children.addAll(fClasses);
+		return children;
 	}
 
 	@Override

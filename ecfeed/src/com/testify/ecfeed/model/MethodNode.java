@@ -52,8 +52,7 @@ public class MethodNode extends ParametersParentNode {
 
 	@Override
 	public List<? extends AbstractNode> getChildren(){
-		List<AbstractNode> children = new ArrayList<AbstractNode>();
-		children.addAll(getParameters());
+		List<AbstractNode> children = new ArrayList<AbstractNode>(super.getChildren());
 		children.addAll(fConstraints);
 		children.addAll(fTestCases);
 

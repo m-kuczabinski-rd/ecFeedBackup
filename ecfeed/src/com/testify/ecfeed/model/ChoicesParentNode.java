@@ -20,6 +20,24 @@ public abstract class ChoicesParentNode extends AbstractNode{
 		return fChoices;
 	}
 
+	@Override
+	public boolean compare(AbstractNode node){
+		if(node instanceof ChoicesParentNode == false){
+			return false;
+		}
+		ChoicesParentNode comparedChoiceParent = (ChoicesParentNode)node;
+		if(getChoices().size() != comparedChoiceParent.getChoices().size()){
+			return false;
+		}
+
+		for(int i = 0; i < getChoices().size(); i++){
+			if(getChoices().get(i).compare(comparedChoiceParent.getChoices().get(i)) == false){
+				return false;
+			}
+		}
+		return super.compare(node);
+	}
+
 	public abstract AbstractParameterNode getParameter();
 
 	public void addChoice(ChoiceNode choice) {

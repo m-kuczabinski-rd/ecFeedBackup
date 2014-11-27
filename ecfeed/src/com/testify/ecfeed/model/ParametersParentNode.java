@@ -61,6 +61,11 @@ public abstract class ParametersParentNode extends AbstractNode {
 	}
 
 	@Override
+	public List<? extends AbstractNode> getChildren(){
+		return fParameters;
+	}
+
+	@Override
 	public boolean compare(AbstractNode node){
 		if(node instanceof ParametersParentNode == false){
 			return false;

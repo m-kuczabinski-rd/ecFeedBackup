@@ -72,6 +72,10 @@ public class MethodParameterNode extends AbstractParameterNode{
 		return Arrays.asList(new MethodNode[]{getMethod()});
 	}
 
+	public List<ChoiceNode> getOwnChoices(){
+		return super.getChoices();
+	}
+
 	public MethodNode getMethod() {
 		return (MethodNode)getParent();
 	}
@@ -146,6 +150,7 @@ public class MethodParameterNode extends AbstractParameterNode{
 		return visitor.visit(this);
 	}
 
+	@Override
 	public Object accept(IParameterVisitor visitor) throws Exception {
 		return visitor.visit(this);
 	}
