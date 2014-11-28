@@ -1,6 +1,8 @@
 package com.testify.ecfeed.ui.modelif;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -11,8 +13,11 @@ import com.testify.ecfeed.adapter.java.JavaUtils;
 import com.testify.ecfeed.adapter.operations.ParameterOperationSetDefaultValue;
 import com.testify.ecfeed.adapter.operations.ParameterOperationSetExpected;
 import com.testify.ecfeed.model.ChoiceNode;
+import com.testify.ecfeed.model.GlobalParameterNode;
+import com.testify.ecfeed.model.GlobalParametersParentNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.MethodParameterNode;
+import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.ui.common.Messages;
 
 public class MethodParameterInterface extends AbstractParameterInterface {
@@ -85,6 +90,44 @@ public class MethodParameterInterface extends AbstractParameterInterface {
 			}
 		}
 		return items.toArray(new String[]{});
+	}
+
+	public void setLinked(boolean linked) {
+		fTarget.setLinked(linked);
+		System.out.println(fTarget + " is now " + (linked ? "":" not ") + "linked");
+	}
+
+	public boolean isLinked() {
+		return fTarget.isLinked();
+	}
+
+	public void setLink(GlobalParameterNode link) {
+		fTarget.setLink(link);
+		System.out.println(fTarget + " is now linked to " + link);
+	}
+
+
+	public GlobalParameterNode getGlobalParameter(String path) {
+		String className = path.substring(0, path.indexOf(":"));
+		String parameterName = path.substring(path.indexOf(":") + 1);
+		GlobalParametersParentNode parametersParent;
+		if(className.length() > 0){
+			parametersParent = (RootNode)fTarget.getRoot();
+		}else{
+			parametersParent = fTarget.getMethod().getClassNode();
+		}
+		return parametersParent.getGlobalParameter(parameterName);
+	}
+
+	public GlobalParameterNode getLink() {
+		return fTarget.getLink();
+	}
+
+	public List<GlobalParameterNode> getAvailableLinks() {
+		List<GlobalParameterNode> result = new ArrayList<GlobalParameterNode>();
+		result.addAll(((RootNode)fTarget.getRoot()).getGlobalParameters());
+		result.addAll(fTarget.getMethod().getClassNode().getGlobalParameters());
+		return result;
 	}
 
 }

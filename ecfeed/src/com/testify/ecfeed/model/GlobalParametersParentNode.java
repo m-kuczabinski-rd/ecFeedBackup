@@ -17,4 +17,8 @@ public abstract class GlobalParametersParentNode extends ParametersParentNode {
 		return result;
 	}
 
+	public GlobalParameterNode getGlobalParameter(String parameterName) {
+		return (GlobalParameterNode)getParameter(parameterName);
+	}
+
 }

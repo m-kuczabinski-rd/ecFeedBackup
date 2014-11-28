@@ -40,4 +40,11 @@ public class GlobalParameterNode extends AbstractParameterNode {
 	public Object accept(IModelVisitor visitor) throws Exception {
 		return visitor.visit(this);
 	}
+
+	public String getQualifiedName() {
+		if(getParent() == getRoot()){
+			return getName();
+		}
+		return getParent().getName() + ":" + getName();
+	}
 }

@@ -108,8 +108,8 @@ public class MethodParameterNode extends AbstractParameterNode{
 		return fLink;
 	}
 
-	public void setLink(GlobalParameterNode fLink) {
-		this.fLink = fLink;
+	public void setLink(GlobalParameterNode link) {
+		this.fLink = link;
 	}
 
 	@Override
