@@ -23,8 +23,8 @@ import org.eclipse.swt.widgets.Text;
 
 import com.testify.ecfeed.model.MethodParameterNode;
 import com.testify.ecfeed.ui.common.IFileInfoProvider;
-import com.testify.ecfeed.ui.modelif.ParameterInterface;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
+import com.testify.ecfeed.ui.modelif.ParameterInterface;
 
 public class ParameterDetailsPage extends BasicDetailsPage{
 
