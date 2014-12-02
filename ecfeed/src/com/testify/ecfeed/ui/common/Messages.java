@@ -88,12 +88,14 @@ public class Messages {
 	public static final String DIALOG_RENAME_CHOICE_PROBLEM_TITLE = "Couldn't rename choice";
 	public static final String DIALOG_SET_CHOICE_VALUE_PROBLEM_TITLE = "Couldn't change choice value";
 	public static final String DIALOG_REMOVE_LABEL_PROBLEM_TITLE = "Couldn't remove label";
-	public static final String DIALOG_ADD_LABEL_PROBLEM_TITLE = "Cannot add label";
-	public static final String DIALOG_CHANGE_LABEL_PROBLEM_TITLE = "Cannot change label";
-	public static final String DIALOG_REMOVE_NODE_PROBLEM_TITLE = "Connot remove element";
-	public static final String DIALOG_REMOVE_NODES_PROBLEM_TITLE = "Connot remove elements";
-	public static final String DIALOG_ADD_CHILDREN_PROBLEM_TITLE = "Cannot add children elements";
+	public static final String DIALOG_ADD_LABEL_PROBLEM_TITLE = "Couldn't add label";
+	public static final String DIALOG_CHANGE_LABEL_PROBLEM_TITLE = "Couldn't change label";
+	public static final String DIALOG_REMOVE_NODE_PROBLEM_TITLE = "Couldn't remove element";
+	public static final String DIALOG_REMOVE_NODES_PROBLEM_TITLE = "Couldn't remove elements";
+	public static final String DIALOG_ADD_CHILDREN_PROBLEM_TITLE = "Couldn't add children elements";
 	public static final String DIALOG_RENAME_CONSTRAINT_PROBLEM_TITLE = "Cannot rename constraint";
+	public static final String DIALOG_SET_PARAMETER_LINKED_PROBLEM_TITLE = "Couldn't set the parameter linked";
+	public static final String DIALOG_SET_PARAMETER_LINK_PROBLEM_TITLE = "Couldn't set global parameter link";
 
 	//CONFIRMATIONS AND WARNINGS
 	public static final String DIALOG_REMOVE_CLASSES_TITLE = "Remove classes";
@@ -137,6 +139,7 @@ public class Messages {
 			+ "Each parameter must be represented by at least one choice.";
 	public static final String DIALOG_TEST_SUITE_NAME_PROBLEM_MESSAGE = "Entered test suite name not allowed";
 	public static final String DIALOG_DESCENDING_LABELS_WILL_BE_REMOVED_WARNING_TITLE = "choices below in the hierarchy are already labeled with this label. Changing the label will result in removing the labels from all that choices";
+
 	public static String DIALOG_UNSUCCESFUL_TEST_EXECUTION(int totalTestCases, int unsuccesfull) {
 		return String.valueOf(unsuccesfull) + " of " + totalTestCases + " test cases have met problems during execution.";
 	}

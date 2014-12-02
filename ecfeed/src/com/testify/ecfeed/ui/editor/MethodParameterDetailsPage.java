@@ -59,7 +59,9 @@ public class MethodParameterDetailsPage extends AbstractParameterDetailsPage {
 	private class SetLinkListener extends AbstractSelectionAdapter{
 		@Override
 		public void widgetSelected(SelectionEvent e) {
-			fParameterIf.setLink(fParameterIf.getGlobalParameter(linkPath(fLinkCombo.getText())));
+			String linkPath = linkPath(fLinkCombo.getText());
+			GlobalParameterNode link = fParameterIf.getGlobalParameter(linkPath);
+			fParameterIf.setLink(link);
 			fLinkCombo.setText(linkName(fParameterIf.getLink()));
 		}
 	}
@@ -119,17 +121,23 @@ public class MethodParameterDetailsPage extends AbstractParameterDetailsPage {
 			MethodParameterNode parameter = (MethodParameterNode)getSelectedElement();
 			fParameterIf.setTarget(parameter);
 
+			getTypeCombo().setEnabled(typeComboEnabled());
+
 			getMainSection().setText((parameter.isExpected()?"[e]":"") + parameter.toString());
 			fExpectedCheckbox.setSelection(parameter.isExpected());
+
+			fExpectedCheckbox.setEnabled(expectedCheckboxEnabled());
+
 			recreateDefaultValueCombo(parameter);
 			fLinkedCheckbox.setSelection(parameter.isLinked());
+			fLinkedCheckbox.setEnabled(linkedCheckboxEnabled());
 			fLinkCombo.setItems(availableLinks().toArray(new String[]{}));
+
+			if(parameter.getLink() == null && fParameterIf.getAvailableLinks().size() > 0){
+				parameter.setLink(fParameterIf.getAvailableLinks().get(0));
+			}
 			if(parameter.getLink() != null){
 				fLinkCombo.setText(linkName(parameter.getLink()));
-			}
-			else{
-				fLinkCombo.add(NOT_LINKED);
-				fLinkCombo.setText(NOT_LINKED);
 			}
 			fLinkCombo.setEnabled(fParameterIf.isLinked());
 
@@ -139,7 +147,24 @@ public class MethodParameterDetailsPage extends AbstractParameterDetailsPage {
 			else{
 				getChoicesViewer().setVisible(true);
 			}
+			getChoicesViewer().setEditEnabled(choicesViewerEnabled());
 		}
+	}
+
+	private boolean choicesViewerEnabled() {
+		return fParameterIf.isLinked() == false;
+	}
+
+	private boolean typeComboEnabled() {
+		return fParameterIf.isLinked() == false;
+	}
+
+	private boolean linkedCheckboxEnabled() {
+		return availableLinks().size() > 0;
+	}
+
+	private boolean expectedCheckboxEnabled(){
+		return fParameterIf.isLinked() == false || fParameterIf.isUserType();
 	}
 
 	private void recreateDefaultValueCombo(MethodParameterNode parameter) {

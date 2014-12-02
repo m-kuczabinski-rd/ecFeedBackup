@@ -104,5 +104,9 @@ public abstract class AbstractParameterDetailsPage extends BasicDetailsPage {
 		return fChoicesViewer;
 	}
 
+	protected Combo getTypeCombo(){
+		return fTypeCombo;
+	}
+
 	protected abstract AbstractParameterInterface getParameterIf();
 }

@@ -28,6 +28,7 @@ import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.ui.forms.widgets.Section;
 
 import com.testify.ecfeed.adapter.java.JavaUtils;
@@ -53,13 +54,22 @@ public class ChoicesViewer extends TableViewerSection {
 	private TableViewerColumn fNameColumn;
 	private TableViewerColumn fValueColumn;
 
+	private ChoiceNameEditingSupport fNameEditingSupport;
+	private ChoiceValueEditingSupport fValueEditingSupport;
+
+	private Button fRemoveSelectedButton;
+
+	private Button fAddChoicesButton;
+
 	private class ChoiceNameEditingSupport extends EditingSupport{
 
 		private TextCellEditor fNameCellEditor;
+		private boolean fEnabled;
 
 		public ChoiceNameEditingSupport() {
 			super(getTableViewer());
 			fNameCellEditor = new TextCellEditor(getTable());
+			fEnabled = true;
 		}
 
 		@Override
@@ -69,7 +79,7 @@ public class ChoicesViewer extends TableViewerSection {
 
 		@Override
 		protected boolean canEdit(Object element) {
-			return true;
+			return fEnabled;
 		}
 
 		@Override
@@ -87,13 +97,19 @@ public class ChoicesViewer extends TableViewerSection {
 				fTableItemIf.setName(newName);
 			}
 		}
+
+		public void setEnabled(boolean enabled){
+			fEnabled = enabled;
+		}
 	}
 
 	private class ChoiceValueEditingSupport extends EditingSupport {
 		private ComboBoxViewerCellEditor fCellEditor;
+		private boolean fEnabled;
 
 		public ChoiceValueEditingSupport(TableViewerSection viewer) {
 			super(viewer.getTableViewer());
+			fEnabled = true;
 			fCellEditor = new ComboBoxViewerCellEditor(viewer.getTable(), SWT.TRAIL);
 			fCellEditor.setLabelProvider(new LabelProvider());
 			fCellEditor.setContentProvider(new ArrayContentProvider());
@@ -124,7 +140,7 @@ public class ChoicesViewer extends TableViewerSection {
 
 		@Override
 		protected boolean canEdit(Object element) {
-			return ((ChoiceNode)element).isAbstract() == false;
+			return fEnabled && (((ChoiceNode)element).isAbstract() == false);
 		}
 
 		@Override
@@ -142,6 +158,10 @@ public class ChoicesViewer extends TableViewerSection {
 			}
 			fTableItemIf.setTarget((ChoiceNode)element);
 			fTableItemIf.setValue(valueString);
+		}
+
+		public void setEnabled(boolean enabled){
+			fEnabled = enabled;
 		}
 	}
 
@@ -174,12 +194,15 @@ public class ChoicesViewer extends TableViewerSection {
 		fParentIf = new ParameterInterface(this);
 		fTableItemIf = new ChoiceInterface(this);
 
-		fNameColumn.setEditingSupport(new ChoiceNameEditingSupport());
-		fValueColumn.setEditingSupport(new ChoiceValueEditingSupport(this));
+		fNameEditingSupport = new ChoiceNameEditingSupport();
+		fValueEditingSupport = new ChoiceValueEditingSupport(this);
+
+		fNameColumn.setEditingSupport(fNameEditingSupport);
+		fValueColumn.setEditingSupport(fValueEditingSupport);
 
 		getSection().setText("Choices");
-		addButton("Add choice", new AddChoiceAdapter());
-		addButton("Remove selected", new ActionSelectionAdapter(new DeleteAction(getViewer(), this)));
+		fAddChoicesButton = addButton("Add choice", new AddChoiceAdapter());
+		fRemoveSelectedButton = addButton("Remove selected", new ActionSelectionAdapter(new DeleteAction(getViewer(), this)));
 
 		addDoubleClickListener(new SelectNodeDoubleClickListener(sectionContext.getMasterSection()));
 		setActionProvider(new ModelViewerActionProvider(getTableViewer(), this));
@@ -200,5 +223,12 @@ public class ChoicesViewer extends TableViewerSection {
 	protected void createTableColumns() {
 		fNameColumn = addColumn("Name", 150, new NodeNameColumnLabelProvider());
 		fValueColumn = addColumn("Value", 150, new ChoiceValueLabelProvider());
+	}
+
+	public void setEditEnabled(boolean enabled) {
+		fNameEditingSupport.setEnabled(enabled);
+		fValueEditingSupport.setEnabled(enabled);
+		fAddChoicesButton.setEnabled(enabled);
+		fRemoveSelectedButton.setEnabled(enabled);
 	}
 }

@@ -40,4 +40,6 @@ public interface OperationNames {
 	public static final String REMOVE_CLASS = "Remove class";
 	public static final String ADD_STATEMENT = "Add statement";
 	public static final String UPDATE_TEST_DATA = "Update test data";
+	public static final String SET_LINKED = "Set linked";
+	public static final String SET_LINK = "Set link";
 }

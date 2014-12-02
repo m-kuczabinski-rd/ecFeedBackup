@@ -10,6 +10,8 @@ import org.eclipse.swt.widgets.Display;
 
 import com.testify.ecfeed.adapter.IModelOperation;
 import com.testify.ecfeed.adapter.java.JavaUtils;
+import com.testify.ecfeed.adapter.operations.MethodParameterOperationSetLink;
+import com.testify.ecfeed.adapter.operations.MethodParameterOperationSetLinked;
 import com.testify.ecfeed.adapter.operations.ParameterOperationSetDefaultValue;
 import com.testify.ecfeed.adapter.operations.ParameterOperationSetExpected;
 import com.testify.ecfeed.model.ChoiceNode;
@@ -92,29 +94,34 @@ public class MethodParameterInterface extends AbstractParameterInterface {
 		return items.toArray(new String[]{});
 	}
 
-	public void setLinked(boolean linked) {
-		fTarget.setLinked(linked);
-		System.out.println(fTarget + " is now " + (linked ? "":" not ") + "linked");
+	public boolean setLinked(boolean linked) {
+		IModelOperation operation = new MethodParameterOperationSetLinked(fTarget, linked);
+		return execute(operation, Messages.DIALOG_SET_PARAMETER_LINKED_PROBLEM_TITLE);
 	}
 
 	public boolean isLinked() {
 		return fTarget.isLinked();
 	}
 
-	public void setLink(GlobalParameterNode link) {
-		fTarget.setLink(link);
-		System.out.println(fTarget + " is now linked to " + link);
+	public boolean setLink(GlobalParameterNode link) {
+		IModelOperation operation = new MethodParameterOperationSetLink(fTarget, link);
+		return execute(operation, Messages.DIALOG_SET_PARAMETER_LINK_PROBLEM_TITLE);
 	}
 
 
 	public GlobalParameterNode getGlobalParameter(String path) {
-		String className = path.substring(0, path.indexOf(":"));
-		String parameterName = path.substring(path.indexOf(":") + 1);
+		String parameterName = path;
 		GlobalParametersParentNode parametersParent;
-		if(className.length() > 0){
-			parametersParent = (RootNode)fTarget.getRoot();
-		}else{
+		if(path.indexOf(":") != -1){
+			String parentName = path.substring(0, path.indexOf(":"));
+			parameterName = path.substring(path.indexOf(":") + 1);
 			parametersParent = fTarget.getMethod().getClassNode();
+			if(parametersParent.getName().equals(parentName) == false){
+				return null;
+			}
+		}
+		else{
+			parametersParent = (RootNode)fTarget.getRoot();
 		}
 		return parametersParent.getGlobalParameter(parameterName);
 	}
