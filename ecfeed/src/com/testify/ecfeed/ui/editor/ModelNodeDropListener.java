@@ -26,6 +26,7 @@ import com.testify.ecfeed.ui.modelif.SelectionInterface;
 public class ModelNodeDropListener extends ViewerDropAdapter{
 
 	private final IModelUpdateContext fUpdateContext;
+	private boolean fEnabled;
 
 	private class DropValidator implements IModelVisitor{
 
@@ -77,10 +78,12 @@ public class ModelNodeDropListener extends ViewerDropAdapter{
 	protected ModelNodeDropListener(Viewer viewer, IModelUpdateContext updateContext) {
 		super(viewer);
 		fUpdateContext = updateContext;
+		fEnabled = true;
 	}
 
 	@Override
 	public boolean performDrop(Object data) {
+		if(fEnabled == false) return false;
 		List<AbstractNode> dragged = NodeDnDBuffer.getInstance().getDraggedNodes();
 		SelectionInterface selectionIf = new SelectionInterface(fUpdateContext);
 		selectionIf.setTarget(dragged);
@@ -103,6 +106,7 @@ public class ModelNodeDropListener extends ViewerDropAdapter{
 
 	@Override
 	public boolean validateDrop(Object target, int operation, TransferData transferType) {
+		if(fEnabled == false) return false;
 		AbstractNode parent = determineNewParent(target, getCurrentLocation());
 		SelectionInterface selectionIf = new SelectionInterface(fUpdateContext);
 		List<AbstractNode>dragged = NodeDnDBuffer.getInstance().getDraggedNodes();
@@ -143,4 +147,7 @@ public class ModelNodeDropListener extends ViewerDropAdapter{
 		return -1;
 	}
 
+	public void setEnabled(boolean enabled){
+		fEnabled = enabled;
+	}
 }

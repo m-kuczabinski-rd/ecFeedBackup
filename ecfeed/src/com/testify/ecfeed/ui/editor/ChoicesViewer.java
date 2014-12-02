@@ -37,6 +37,7 @@ import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.model.ChoicesParentNode;
 import com.testify.ecfeed.ui.common.NodeNameColumnLabelProvider;
 import com.testify.ecfeed.ui.editor.actions.DeleteAction;
+import com.testify.ecfeed.ui.editor.actions.IActionProvider;
 import com.testify.ecfeed.ui.editor.actions.ModelViewerActionProvider;
 import com.testify.ecfeed.ui.modelif.ChoiceInterface;
 import com.testify.ecfeed.ui.modelif.ChoicesParentInterface;
@@ -60,6 +61,10 @@ public class ChoicesViewer extends TableViewerSection {
 	private Button fRemoveSelectedButton;
 
 	private Button fAddChoicesButton;
+
+	private ModelNodeDropListener fDropListener;
+
+	private IActionProvider fActionProvider;
 
 	private class ChoiceNameEditingSupport extends EditingSupport{
 
@@ -205,9 +210,11 @@ public class ChoicesViewer extends TableViewerSection {
 		fRemoveSelectedButton = addButton("Remove selected", new ActionSelectionAdapter(new DeleteAction(getViewer(), this)));
 
 		addDoubleClickListener(new SelectNodeDoubleClickListener(sectionContext.getMasterSection()));
-		setActionProvider(new ModelViewerActionProvider(getTableViewer(), this));
+		fActionProvider = new ModelViewerActionProvider(getTableViewer(), this);
+		setActionProvider(fActionProvider);
 		getViewer().addDragSupport(DND.DROP_COPY|DND.DROP_MOVE, new Transfer[]{ModelNodesTransfer.getInstance()}, new ModelNodeDragListener(getViewer()));
-		getViewer().addDropSupport(DND.DROP_COPY|DND.DROP_MOVE, new Transfer[]{ModelNodesTransfer.getInstance()}, new ModelNodeDropListener(getViewer(), this));
+		fDropListener = new ModelNodeDropListener(getViewer(), this);
+		getViewer().addDropSupport(DND.DROP_COPY|DND.DROP_MOVE, new Transfer[]{ModelNodesTransfer.getInstance()}, fDropListener);
 	}
 
 	public void setInput(ChoicesParentNode parent){
@@ -230,5 +237,11 @@ public class ChoicesViewer extends TableViewerSection {
 		fValueEditingSupport.setEnabled(enabled);
 		fAddChoicesButton.setEnabled(enabled);
 		fRemoveSelectedButton.setEnabled(enabled);
+		fDropListener.setEnabled(enabled);
+		if(enabled){
+			setActionProvider(fActionProvider);
+		}else{
+			setActionProvider(null);
+		}
 	}
 }
