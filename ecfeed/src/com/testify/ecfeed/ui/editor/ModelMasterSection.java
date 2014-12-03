@@ -459,6 +459,7 @@ public class ModelMasterSection extends TreeViewerSection{
 
 	public void setInput(RootNode model){
 		setInput(new ModelWrapper(model));
+		collapseGlobalParameters();
 	}
 
 	@Override
@@ -498,6 +499,12 @@ public class ModelMasterSection extends TreeViewerSection{
 			fUpdateListener = new UpdateListener();
 		}
 		return Arrays.asList(new IModelUpdateListener[]{fUpdateListener});
+	}
+
+	private void collapseGlobalParameters() {
+		for(GlobalParameterNode parameter : ((ModelWrapper)getViewer().getInput()).getModel().getGlobalParameters()){
+			getTreeViewer().collapseToLevel(parameter, 1);
+		}
 	}
 
 	private Image getImageFromFile(String file) {
