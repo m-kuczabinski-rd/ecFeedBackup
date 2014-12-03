@@ -118,6 +118,7 @@ public abstract class AbstractModelImplementer implements IModelImplementer {
 			(type.equals(ClassNode.class))||
 			(type.equals(MethodNode.class))||
 			(type.equals(MethodParameterNode.class))||
+			(type.equals(GlobalParameterNode.class))||
 			(type.equals(TestCaseNode.class))||
 			(type.equals(ChoiceNode.class))
 		){
@@ -245,6 +246,10 @@ public abstract class AbstractModelImplementer implements IModelImplementer {
 	}
 
 	protected boolean implementable(MethodParameterNode node){
+		return hasImplementableNode(node.getChoices());
+	}
+
+	protected boolean implementable(GlobalParameterNode node){
 		return hasImplementableNode(node.getChoices());
 	}
 

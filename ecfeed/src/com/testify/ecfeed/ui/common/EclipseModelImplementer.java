@@ -40,6 +40,7 @@ import com.testify.ecfeed.model.AbstractNode;
 import com.testify.ecfeed.model.AbstractParameterNode;
 import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.model.ClassNode;
+import com.testify.ecfeed.model.GlobalParameterNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.MethodParameterNode;
 
@@ -202,6 +203,14 @@ public class EclipseModelImplementer extends AbstractModelImplementer {
 
 	@Override
 	protected boolean implementable(MethodParameterNode node){
+		if(parameterDefinitionImplemented(node)){
+			return hasImplementableNode(node.getChoices());
+		}
+		return parameterDefinitionImplementable(node);
+	}
+
+	@Override
+	protected boolean implementable(GlobalParameterNode node){
 		if(parameterDefinitionImplemented(node)){
 			return hasImplementableNode(node.getChoices());
 		}
