@@ -129,6 +129,9 @@ public class ModelMasterSection extends TreeViewerSection{
 				if(parameter.isExpected() && ParameterInterface.isPrimitive(parameter.getType())){
 					return EMPTY_ARRAY;
 				}
+				if(parameter.isLinked()){
+					return EMPTY_ARRAY;
+				}
 			}
 			if(parentElement instanceof AbstractNode){
 				AbstractNode node = (AbstractNode)parentElement;
@@ -174,7 +177,11 @@ public class ModelMasterSection extends TreeViewerSection{
 
 			@Override
 			public Object visit(MethodParameterNode node) throws Exception {
-				return JavaUtils.simplifiedToString(node);
+				String result = JavaUtils.simplifiedToString(node);
+				if(node.isLinked()){
+					result += "[LINKED]->" + node.getLink().getPath();
+				}
+				return result;
 			}
 
 			@Override

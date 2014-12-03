@@ -23,6 +23,13 @@ public class GlobalParameterNode extends AbstractParameterNode {
 		return getParametersParent().getMethods(getParameter());
 	}
 
+	public String getPath(){
+		if(getParent() == getRoot()){
+			return getName();
+		}
+		return getParent().getName() + ":" + getName();
+	}
+
 	public List<MethodParameterNode> getLinkers(){
 		List<MethodParameterNode> result = new ArrayList<>();
 		for(MethodNode method : getMethods()){
