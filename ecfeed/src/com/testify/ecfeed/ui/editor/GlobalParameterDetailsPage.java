@@ -1,5 +1,6 @@
 package com.testify.ecfeed.ui.editor;
 
+import com.testify.ecfeed.model.GlobalParameterNode;
 import com.testify.ecfeed.ui.common.IFileInfoProvider;
 import com.testify.ecfeed.ui.modelif.AbstractParameterInterface;
 import com.testify.ecfeed.ui.modelif.GlobalParameterInterface;
@@ -22,4 +23,13 @@ public class GlobalParameterDetailsPage extends AbstractParameterDetailsPage {
 		return fParameterIf;
 	}
 
+	@Override
+	public void refresh(){
+		super.refresh();
+		if(getSelectedElement() instanceof GlobalParameterNode){
+			GlobalParameterNode parameter = (GlobalParameterNode)getSelectedElement();
+			fParameterIf.setTarget(parameter);
+			getMainSection().setText(parameter.getQualifiedName() + ": " + parameter.getType());
+		}
+	}
 }

@@ -9,7 +9,7 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
 
-import com.testify.ecfeed.model.MethodParameterNode;
+import com.testify.ecfeed.model.AbstractParameterNode;
 import com.testify.ecfeed.ui.common.IFileInfoProvider;
 import com.testify.ecfeed.ui.modelif.AbstractParameterInterface;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
@@ -63,11 +63,11 @@ public abstract class AbstractParameterDetailsPage extends BasicDetailsPage {
 	@Override
 	public void refresh(){
 		super.refresh();
-		if(getSelectedElement() instanceof MethodParameterNode){
-			MethodParameterNode parameter = (MethodParameterNode)getSelectedElement();
+		if(getSelectedElement() instanceof AbstractParameterNode){
+			AbstractParameterNode parameter = (AbstractParameterNode)getSelectedElement();
 			getParameterIf().setTarget(parameter);
 
-			getMainSection().setText((parameter.isExpected()?"[e]":"") + parameter.toString());
+			getMainSection().setText(parameter.toString());
 			fNameText.setText(parameter.getName());
 			fTypeCombo.setItems(ParameterInterface.supportedPrimitiveTypes());
 			fTypeCombo.setText(parameter.getType());

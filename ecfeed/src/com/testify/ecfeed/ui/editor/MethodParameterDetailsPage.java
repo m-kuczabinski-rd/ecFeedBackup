@@ -121,6 +121,8 @@ public class MethodParameterDetailsPage extends AbstractParameterDetailsPage {
 			MethodParameterNode parameter = (MethodParameterNode)getSelectedElement();
 			fParameterIf.setTarget(parameter);
 
+			getMainSection().setText((parameter.isExpected()?"[e]":"") + parameter.toString());
+
 			getTypeCombo().setEnabled(typeComboEnabled());
 
 			getMainSection().setText((parameter.isExpected()?"[e]":"") + parameter.toString());

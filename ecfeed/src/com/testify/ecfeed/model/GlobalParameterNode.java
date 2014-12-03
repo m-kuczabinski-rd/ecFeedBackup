@@ -47,4 +47,9 @@ public class GlobalParameterNode extends AbstractParameterNode {
 		}
 		return getParent().getName() + ":" + getName();
 	}
+
+	@Override
+	public String toString(){
+		return getName() + ": " + getType();
+	}
 }
