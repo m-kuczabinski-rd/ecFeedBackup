@@ -303,6 +303,9 @@ public class ModelMasterSection extends TreeViewerSection{
 				if(node.isExpected()){
 					decorations.add(getImageFromFile("expected.png"));
 				}
+				if(node.isLinked()){
+					decorations.add(getImageFromFile("linked.png"));
+				}
 				return decorations;
 			}
 
