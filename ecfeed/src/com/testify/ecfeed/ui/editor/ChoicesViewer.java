@@ -63,6 +63,7 @@ public class ChoicesViewer extends TableViewerSection {
 	private Button fAddChoicesButton;
 
 	private ModelNodeDropListener fDropListener;
+	private ModelNodeDragListener fDragListener;
 
 	private IActionProvider fActionProvider;
 
@@ -212,8 +213,9 @@ public class ChoicesViewer extends TableViewerSection {
 		addDoubleClickListener(new SelectNodeDoubleClickListener(sectionContext.getMasterSection()));
 		fActionProvider = new ModelViewerActionProvider(getTableViewer(), this);
 		setActionProvider(fActionProvider);
-		getViewer().addDragSupport(DND.DROP_COPY|DND.DROP_MOVE, new Transfer[]{ModelNodesTransfer.getInstance()}, new ModelNodeDragListener(getViewer()));
+		fDragListener = new ModelNodeDragListener(getViewer());
 		fDropListener = new ModelNodeDropListener(getViewer(), this);
+		getViewer().addDragSupport(DND.DROP_COPY|DND.DROP_MOVE, new Transfer[]{ModelNodesTransfer.getInstance()}, fDragListener);
 		getViewer().addDropSupport(DND.DROP_COPY|DND.DROP_MOVE, new Transfer[]{ModelNodesTransfer.getInstance()}, fDropListener);
 	}
 
@@ -237,6 +239,7 @@ public class ChoicesViewer extends TableViewerSection {
 		fValueEditingSupport.setEnabled(enabled);
 		fAddChoicesButton.setEnabled(enabled);
 		fRemoveSelectedButton.setEnabled(enabled);
+		fDragListener.setEnabled(enabled);
 		fDropListener.setEnabled(enabled);
 		if(enabled){
 			setActionProvider(fActionProvider);

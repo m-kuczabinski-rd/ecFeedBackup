@@ -11,15 +11,17 @@ public class ModelNodeDragListener implements DragSourceListener {
 
 	private NodeSelectionUtils fSelectionToolbox;
 	private NodeDnDBuffer fDnDBuffer;
-	
+	private boolean fEnabled;
+
 	ModelNodeDragListener(ISelectionProvider selectionProvider){
 		fSelectionToolbox = new NodeSelectionUtils(selectionProvider);
 		fDnDBuffer = NodeDnDBuffer.getInstance();
+		fEnabled = true;
 	}
-	
+
 	@Override
 	public void dragStart(DragSourceEvent event) {
-		if(fSelectionToolbox.isSelectionSingleType() == false){
+		if((fEnabled == false) || (fSelectionToolbox.isSelectionSingleType() == false)){
 			event.doit = false;
 		}
 		else{
@@ -34,5 +36,9 @@ public class ModelNodeDragListener implements DragSourceListener {
 	@Override
 	public void dragFinished(DragSourceEvent event) {
 		fDnDBuffer.clear();
+	}
+
+	public void setEnabled(boolean enabled){
+		fEnabled = enabled;
 	}
 }
