@@ -160,7 +160,7 @@ public class MethodParameterDetailsPage extends AbstractParameterDetailsPage {
 	}
 
 	private boolean linkedCheckboxEnabled() {
-		return availableLinks().size() > 0;
+		return availableLinks().size() > 0 && (fParameterIf.isExpected() == false);
 	}
 
 	private boolean expectedCheckboxEnabled(){

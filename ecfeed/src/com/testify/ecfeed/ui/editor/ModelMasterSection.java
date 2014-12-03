@@ -179,7 +179,7 @@ public class ModelMasterSection extends TreeViewerSection{
 			public Object visit(MethodParameterNode node) throws Exception {
 				String result = JavaUtils.simplifiedToString(node);
 				if(node.isLinked()){
-					result += "[LINKED]->" + node.getLink().getPath();
+					result += "[LINKED]->" + node.getLink().getQualifiedName();
 				}
 				return result;
 			}
