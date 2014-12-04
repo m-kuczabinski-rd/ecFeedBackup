@@ -151,6 +151,11 @@ public abstract class AbstractModelImplementer implements IModelImplementer {
 	}
 
 	protected boolean implement(RootNode node) throws Exception{
+		for(GlobalParameterNode parameter : node.getGlobalParameters()){
+			if(implementable(parameter) && getImplementationStatus(parameter) != EImplementationStatus.IMPLEMENTED){
+				implement(parameter);
+			}
+		}
 		for(ClassNode classNode : node.getClasses()){
 			if(implementable(classNode) && getImplementationStatus(classNode) != EImplementationStatus.IMPLEMENTED){
 				implement(classNode);
@@ -162,6 +167,11 @@ public abstract class AbstractModelImplementer implements IModelImplementer {
 	protected boolean implement(ClassNode node) throws Exception{
 		if(classDefinitionImplemented(node) == false){
 			implementClassDefinition(node);
+		}
+		for(GlobalParameterNode parameter : node.getGlobalParameters()){
+			if(implementable(parameter) && getImplementationStatus(parameter) != EImplementationStatus.IMPLEMENTED){
+				implement(parameter);
+			}
 		}
 		for(MethodNode method : node.getMethods()){
 			if(implementable(method) && getImplementationStatus(method) != EImplementationStatus.IMPLEMENTED){
