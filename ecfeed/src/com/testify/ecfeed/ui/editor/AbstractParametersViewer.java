@@ -159,7 +159,7 @@ public abstract class AbstractParametersViewer extends TableViewerSection {
 
 	@Override
 	protected void createTableColumns() {
-		fNameColumn = addColumn("Name", 150, new NodeNameColumnLabelProvider());
+		fNameColumn = addColumn("Name", 100, new NodeNameColumnLabelProvider());
 		fTypeColumn = addColumn("Type", 150, new NodeViewerColumnLabelProvider(){
 			@Override
 			public String getText(Object element){

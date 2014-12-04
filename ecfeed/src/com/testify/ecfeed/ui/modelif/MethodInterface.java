@@ -24,6 +24,7 @@ import com.testify.ecfeed.adapter.operations.MethodOperationRenameTestCases;
 import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.model.Constraint;
 import com.testify.ecfeed.model.ConstraintNode;
+import com.testify.ecfeed.model.GlobalParameterNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.MethodParameterNode;
 import com.testify.ecfeed.model.StaticStatement;
@@ -263,5 +264,9 @@ public class MethodInterface extends ParametersParentInterface {
 			}
 		}
 		return type;
+	}
+
+	public List<GlobalParameterNode> getAvailableGlobalParameters() {
+		return fTarget.getAvailableGlobalParameters();
 	}
 }

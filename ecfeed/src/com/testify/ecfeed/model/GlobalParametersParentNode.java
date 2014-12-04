@@ -17,6 +17,25 @@ public abstract class GlobalParametersParentNode extends ParametersParentNode {
 		return result;
 	}
 
+	public List<GlobalParameterNode> getAvailableGlobalParameters() {
+		List<GlobalParameterNode> result = getAvailableGlobalParameters(getParent());
+		result.addAll(getGlobalParameters());
+		return result;
+	}
+
+	private List<GlobalParameterNode> getAvailableGlobalParameters(AbstractNode parent) {
+		if(parent == null){
+			return new ArrayList<GlobalParameterNode>();
+		}
+		else if(parent instanceof GlobalParametersParentNode){
+			return ((GlobalParametersParentNode)parent).getAvailableGlobalParameters();
+		}else if(parent.getParent() != null){
+			return getAvailableGlobalParameters(parent.getParent());
+		}else{
+			return new ArrayList<GlobalParameterNode>();
+		}
+	}
+
 	public GlobalParameterNode getGlobalParameter(String parameterName) {
 		return (GlobalParameterNode)getParameter(parameterName);
 	}
