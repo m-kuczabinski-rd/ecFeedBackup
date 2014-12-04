@@ -121,8 +121,11 @@ public class ClassNode extends GlobalParametersParentNode {
 	public List<MethodNode> getMethods(AbstractParameterNode parameter) {
 		List<MethodNode> result = new ArrayList<MethodNode>();
 		for(MethodNode method : getMethods()){
-			if(method.getParameters().contains(parameter)){
-				result.add(method);
+			for(MethodParameterNode methodParameter : method.getMethodParameters()){
+				if(methodParameter.isLinked() && methodParameter.getLink() == parameter){
+					result.add(method);
+					break;
+				}
 			}
 		}
 		return result;
