@@ -12,14 +12,14 @@ public class TestCasesViewerContentProvider extends TreeNodeContentProvider impl
 	public final Object[] EMPTY_ARRAY = new Object[] {};
 
 	private MethodNode fMethodNode;
-	
+
 	public TestCasesViewerContentProvider(){
 	}
-	
+
 	public TestCasesViewerContentProvider(MethodNode target){
 		fMethodNode = target;
 	}
-	
+
 	@Override
 	public Object[] getElements(Object inputElement){
 		if(inputElement instanceof MethodNode){
@@ -51,7 +51,7 @@ public class TestCasesViewerContentProvider extends TreeNodeContentProvider impl
 	public boolean hasChildren(Object element){
 		return getChildren(element).length > 0;
 	}
-	
+
 	public void setMethod(MethodNode method){
 		fMethodNode = method;
 	}
