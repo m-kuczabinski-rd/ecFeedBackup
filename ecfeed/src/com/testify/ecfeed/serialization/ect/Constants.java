@@ -36,6 +36,8 @@ public class Constants {
 	public static final String TYPE_NAME_ATTRIBUTE = "type";
 	public static final String DEFAULT_EXPECTED_VALUE_ATTRIBUTE_NAME = "expected";
 	public static final String PARAMETER_IS_EXPECTED_ATTRIBUTE_NAME = "isExpected";
+	public static final String PARAMETER_IS_LINKED_ATTRIBUTE_NAME = "linked";
+	public static final String PARAMETER_LINK_ATTRIBUTE_NAME = "link";
 	public static final String VALUE_ATTRIBUTE = "value";
 	public static final String NULL_VALUE_STRING_REPRESENTATION = "/null";
 	public static final String TEST_SUITE_NAME_ATTRIBUTE = "testSuite";

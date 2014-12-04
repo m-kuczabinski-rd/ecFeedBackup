@@ -29,6 +29,8 @@ import static com.testify.ecfeed.serialization.ect.Constants.LABEL_NODE_NAME;
 import static com.testify.ecfeed.serialization.ect.Constants.METHOD_NODE_NAME;
 import static com.testify.ecfeed.serialization.ect.Constants.NODE_NAME_ATTRIBUTE;
 import static com.testify.ecfeed.serialization.ect.Constants.PARAMETER_IS_EXPECTED_ATTRIBUTE_NAME;
+import static com.testify.ecfeed.serialization.ect.Constants.PARAMETER_IS_LINKED_ATTRIBUTE_NAME;
+import static com.testify.ecfeed.serialization.ect.Constants.PARAMETER_LINK_ATTRIBUTE_NAME;
 import static com.testify.ecfeed.serialization.ect.Constants.PARAMETER_NODE_NAME;
 import static com.testify.ecfeed.serialization.ect.Constants.ROOT_NODE_NAME;
 import static com.testify.ecfeed.serialization.ect.Constants.STATEMENT_CHOICE_ATTRIBUTE_NAME;
@@ -128,22 +130,16 @@ public class XomBuilder implements IModelVisitor, IStatementVisitor {
 		Element element = serializeAbstractParameter(node);
 		element.addAttribute(new Attribute(PARAMETER_IS_EXPECTED_ATTRIBUTE_NAME, Boolean.toString(node.isExpected())));
 		element.addAttribute(new Attribute(DEFAULT_EXPECTED_VALUE_ATTRIBUTE_NAME, node.getDefaultValue()));
+		element.addAttribute(new Attribute(PARAMETER_IS_LINKED_ATTRIBUTE_NAME, Boolean.toString(node.isLinked())));
+		element.addAttribute(new Attribute(PARAMETER_LINK_ATTRIBUTE_NAME, node.getLink().getQualifiedName()));
 
-//		Element element = createNamedElement(PARAMETER_NODE_NAME, node);
-//		element.addAttribute(new Attribute(TYPE_NAME_ATTRIBUTE, node.getType()));
-//		element.addAttribute(new Attribute(PARAMETER_IS_EXPECTED_ATTRIBUTE_NAME, Boolean.toString(node.isExpected())));
-//		element.addAttribute(new Attribute(DEFAULT_EXPECTED_VALUE_ATTRIBUTE_NAME, node.getDefaultValue()));
-//
-//		for(ChoiceNode child : node.getChoices()){
-//			element.appendChild((Element)child.accept(this));
-//		}
-//
 		return element;
 	}
 
 	@Override
 	public Object visit(GlobalParameterNode node) throws Exception {
-		return serializeAbstractParameter(node);
+		Element element = serializeAbstractParameter(node);
+		return element;
 	}
 
 	protected Element serializeAbstractParameter(AbstractParameterNode parameter) throws Exception{
