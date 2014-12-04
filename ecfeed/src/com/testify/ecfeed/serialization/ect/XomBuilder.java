@@ -127,7 +127,9 @@ public class XomBuilder implements IModelVisitor, IStatementVisitor {
 
 	@Override
 	public Object visit(MethodParameterNode node)  throws Exception {
-		Element element = serializeAbstractParameter(node);
+		Element element = createNamedElement(PARAMETER_NODE_NAME, node);
+		element.addAttribute(new Attribute(TYPE_NAME_ATTRIBUTE, node.getRealType()));
+
 		element.addAttribute(new Attribute(PARAMETER_IS_EXPECTED_ATTRIBUTE_NAME, Boolean.toString(node.isExpected())));
 		element.addAttribute(new Attribute(DEFAULT_EXPECTED_VALUE_ATTRIBUTE_NAME, node.getDefaultValue()));
 		element.addAttribute(new Attribute(PARAMETER_IS_LINKED_ATTRIBUTE_NAME, Boolean.toString(node.isLinked())));
@@ -135,12 +137,21 @@ public class XomBuilder implements IModelVisitor, IStatementVisitor {
 			element.addAttribute(new Attribute(PARAMETER_LINK_ATTRIBUTE_NAME, node.getLink().getQualifiedName()));
 		}
 
+		for(ChoiceNode child : node.getRealChoices()){
+			element.appendChild((Element)child.accept(this));
+		}
+
 		return element;
 	}
 
 	@Override
 	public Object visit(GlobalParameterNode node) throws Exception {
-		Element element = serializeAbstractParameter(node);
+		Element element = createNamedElement(PARAMETER_NODE_NAME, node);
+		element.addAttribute(new Attribute(TYPE_NAME_ATTRIBUTE, node.getType()));
+
+		for(ChoiceNode child : node.getChoices()){
+			element.appendChild((Element)child.accept(this));
+		}
 		return element;
 	}
 

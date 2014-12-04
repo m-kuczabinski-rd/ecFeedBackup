@@ -59,11 +59,19 @@ public class MethodParameterNode extends AbstractParameterNode{
 		return super.getType();
 	}
 
+	public String getRealType() {
+		return super.getType();
+	}
+
 	@Override
 	public List<ChoiceNode> getChoices(){
 		if(isLinked() && fLink != null){
 			return fLink.getChoices();
 		}
+		return super.getChoices();
+	}
+
+	public List<ChoiceNode> getRealChoices() {
 		return super.getChoices();
 	}
 
