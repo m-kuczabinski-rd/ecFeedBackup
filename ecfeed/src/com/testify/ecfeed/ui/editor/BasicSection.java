@@ -159,6 +159,13 @@ public abstract class BasicSection extends SectionPart implements IModelUpdateCo
 		return this;
 	}
 
+	public void setVisible(boolean visible) {
+		GridData gd = (GridData)getSection().getLayoutData();
+		gd.exclude = !visible;
+		getSection().setLayoutData(gd);
+		getSection().setVisible(visible);
+	}
+
 	@Override
 	public IUndoContext getUndoContext(){
 		return fUpdateContext.getUndoContext();

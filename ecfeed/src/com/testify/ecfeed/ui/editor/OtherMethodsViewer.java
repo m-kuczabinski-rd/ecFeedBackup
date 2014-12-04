@@ -17,7 +17,6 @@ import java.util.List;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.layout.GridData;
 import org.eclipse.ui.forms.widgets.Section;
 
 import com.testify.ecfeed.adapter.java.JavaUtils;
@@ -50,13 +49,6 @@ public class OtherMethodsViewer extends CheckboxTableViewerSection {
 		fClassIf.setTarget(classNode);
 		setText("Other methods in " + JavaUtils.getLocalName(classNode));
 		super.setInput(fClassIf.getOtherMethods());
-	}
-
-	public void setVisible(boolean visible) {
-		GridData gd = (GridData)getSection().getLayoutData();
-		gd.exclude = !visible;
-		getSection().setLayoutData(gd);
-		getSection().setVisible(visible);
 	}
 
 	public int getItemsCount(){

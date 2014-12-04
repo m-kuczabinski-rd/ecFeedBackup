@@ -41,6 +41,10 @@ public class GlobalParameterDetailsPage extends AbstractParameterDetailsPage {
 			fParameterIf.setTarget(parameter);
 			getMainSection().setText(parameter.getQualifiedName() + ": " + parameter.getType());
 			fLinkingMethodsViewer.setInput(parameter);
+			fLinkingMethodsViewer.setVisible(fParameterIf.getLinkers().size() > 0);
+
+			getMainSection().layout();
+
 		}
 	}
 }
