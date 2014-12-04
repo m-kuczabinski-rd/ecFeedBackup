@@ -313,6 +313,7 @@ public class ModelMasterSection extends TreeViewerSection{
 			public Object visit(GlobalParameterNode node) throws Exception {
 				List<Image> decorations = new ArrayList<Image>();
 				decorations.add(implementationStatusDecoration(node));
+				decorations.add(getImageFromFile("global.png"));
 				return decorations;
 			}
 
