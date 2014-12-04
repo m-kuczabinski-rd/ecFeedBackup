@@ -23,6 +23,15 @@ public abstract class GlobalParametersParentNode extends ParametersParentNode {
 		return result;
 	}
 
+	public GlobalParameterNode findGlobalParameter(String qualifiedName){
+		for(GlobalParameterNode parameter : getAvailableGlobalParameters()){
+			if(parameter.getQualifiedName().equals(qualifiedName)){
+				return parameter;
+			}
+		}
+		return null;
+	}
+
 	private List<GlobalParameterNode> getAvailableGlobalParameters(AbstractNode parent) {
 		if(parent == null){
 			return new ArrayList<GlobalParameterNode>();
@@ -37,7 +46,17 @@ public abstract class GlobalParametersParentNode extends ParametersParentNode {
 	}
 
 	public GlobalParameterNode getGlobalParameter(String parameterName) {
-		return (GlobalParameterNode)getParameter(parameterName);
+		if(getParameter(parameterName) != null){
+			return (GlobalParameterNode)getParameter(parameterName);
+		}
+		return null;
 	}
 
+	protected String getParentName(String qualifiedName){
+		return qualifiedName.substring(0, qualifiedName.indexOf(":"));
+	}
+
+	protected String getParameterName(String qualifiedName){
+		return qualifiedName.substring(qualifiedName.indexOf(":") + 1, qualifiedName.length());
+	}
 }

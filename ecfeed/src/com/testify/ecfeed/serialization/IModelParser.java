@@ -31,7 +31,7 @@ public interface IModelParser {
 	public RootNode parseModel(InputStream istream) throws ParserException;
 	public ClassNode parseClass(InputStream istream) throws ParserException;
 	public MethodNode parseMethod(InputStream istream) throws ParserException;
-	public MethodParameterNode parseMethodParameter(InputStream istream) throws ParserException;
+	public MethodParameterNode parseMethodParameter(InputStream istream, MethodNode method) throws ParserException;
 	public GlobalParameterNode parseGlobalParameter(InputStream istream) throws ParserException;
 	public ChoiceNode parseChoice(InputStream istream) throws ParserException;
 	public TestCaseNode parseTestCase(InputStream istream, MethodNode method) throws ParserException;

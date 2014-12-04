@@ -55,7 +55,7 @@ public class EctParser implements IModelParser {
 	public ClassNode parseClass(InputStream istream) throws ParserException {
 		try {
 			Document document = fBuilder.build(istream);
-			return fXomParser.parseClass(document.getRootElement());
+			return fXomParser.parseClass(document.getRootElement(), null);
 		} catch (ParsingException e) {
 			throw new ParserException(Messages.PARSING_EXCEPTION(e));
 		} catch (IOException e) {
@@ -67,7 +67,7 @@ public class EctParser implements IModelParser {
 	public MethodNode parseMethod(InputStream istream) throws ParserException {
 		try {
 			Document document = fBuilder.build(istream);
-			return fXomParser.parseMethod(document.getRootElement());
+			return fXomParser.parseMethod(document.getRootElement(), null);
 		} catch (ParsingException e) {
 			throw new ParserException(Messages.PARSING_EXCEPTION(e));
 		} catch (IOException e) {
@@ -88,10 +88,10 @@ public class EctParser implements IModelParser {
 	}
 
 	@Override
-	public MethodParameterNode parseMethodParameter(InputStream istream) throws ParserException {
+	public MethodParameterNode parseMethodParameter(InputStream istream, MethodNode method) throws ParserException {
 		try {
 			Document document = fBuilder.build(istream);
-			return fXomParser.parseMethodParameter(document.getRootElement());
+			return fXomParser.parseMethodParameter(document.getRootElement(), method);
 		} catch (ParsingException e) {
 			throw new ParserException(Messages.PARSING_EXCEPTION(e));
 		} catch (IOException e) {

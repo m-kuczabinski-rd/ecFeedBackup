@@ -198,6 +198,12 @@ public class XmlParserSerializerTest {
 		}
 	}
 
+
+	@Test
+	public void parseMethodParameterTest(){
+
+	}
+
 	protected RootNode createRootNode(int classes) {
 		RootNode root = new RootNode(randomName());
 		for(int i = 0; i < classes; ++i){

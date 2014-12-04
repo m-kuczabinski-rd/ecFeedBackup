@@ -73,7 +73,7 @@ public class XomParserTest {
 			ClassNode _class = fModelGenerator.generateClass(3);
 			Element element = (Element)_class.accept(fConverter);
 			TRACE(element);
-			ClassNode parsedClass = fParser.parseClass(element);
+			ClassNode parsedClass = fParser.parseClass(element, null);
 			assertElementsEqual(_class, parsedClass);
 		} catch (Exception e) {
 			fail("Unexpected exception: " + e.getMessage());
@@ -87,7 +87,7 @@ public class XomParserTest {
 				MethodNode m = fModelGenerator.generateMethod(5, 5, 5);
 				Element element = (Element)m.accept(fConverter);
 				TRACE(element);
-				MethodNode m1 = fParser.parseMethod(element);
+				MethodNode m1 = fParser.parseMethod(element, null);
 				assertElementsEqual(m, m1);
 			}
 			catch (Exception e) {
@@ -101,10 +101,12 @@ public class XomParserTest {
 		for(String type : SUPPORTED_TYPES){
 			try{
 			for(boolean expected : new Boolean[]{true, false}){
+				MethodNode m = new MethodNode("method");
 				MethodParameterNode c = fModelGenerator.generateParameter(type, expected, 3, 3, 3);
+				m.addParameter(c);
 				Element element = (Element)c.accept(fConverter);
 				TRACE(element);
-					MethodParameterNode c1 = fParser.parseMethodParameter(element);
+					MethodParameterNode c1 = fParser.parseMethodParameter(element, m);
 					assertElementsEqual(c, c1);
 				}
 			}
@@ -253,13 +255,13 @@ public class XomParserTest {
 			fParser.parseRoot(rootElement);
 
 			try {
-				fParser.parseClass(classElement);
+				fParser.parseClass(classElement, null);
 			} catch (Exception e) {
 				fail("Unexpected exception: " + e.getMessage());
 			}
 
 			try {
-				fParser.parseClass(rootElement);
+				fParser.parseClass(rootElement, null);
 				fail("exception expected");
 			} catch (Exception e) {
 			}

@@ -22,6 +22,8 @@ import static com.testify.ecfeed.serialization.ect.Constants.CONSTRAINT_STATIC_S
 import static com.testify.ecfeed.serialization.ect.Constants.DEFAULT_EXPECTED_VALUE_ATTRIBUTE_NAME;
 import static com.testify.ecfeed.serialization.ect.Constants.METHOD_NODE_NAME;
 import static com.testify.ecfeed.serialization.ect.Constants.PARAMETER_IS_EXPECTED_ATTRIBUTE_NAME;
+import static com.testify.ecfeed.serialization.ect.Constants.PARAMETER_IS_LINKED_ATTRIBUTE_NAME;
+import static com.testify.ecfeed.serialization.ect.Constants.PARAMETER_LINK_ATTRIBUTE_NAME;
 import static com.testify.ecfeed.serialization.ect.Constants.PARAMETER_NODE_NAME;
 import static com.testify.ecfeed.serialization.ect.Constants.ROOT_NODE_NAME;
 import static com.testify.ecfeed.serialization.ect.Constants.TEST_CASE_NODE_NAME;
@@ -30,6 +32,7 @@ import static com.testify.ecfeed.serialization.ect.Constants.TYPE_NAME_ATTRIBUTE
 import static com.testify.ecfeed.serialization.ect.Constants.VALUE_ATTRIBUTE;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import nu.xom.Element;
@@ -61,62 +64,63 @@ public class XomAnalyser {
 
 		RootNode root = new RootNode(name);
 
-		for(Element child : getIterableChildren(element)){
-			if(child.getLocalName() == Constants.CLASS_NODE_NAME){
-				try{
-					root.addClass(parseClass(child));
-				}catch(ParserException e){
-					System.err.println("Exception: " + e.getMessage());
-				}
-			}
-			if(child.getLocalName() == Constants.PARAMETER_NODE_NAME){
+		//parameters must be parsed before classes
+		for(Element child : getIterableChildren(element, Constants.PARAMETER_NODE_NAME)){
 				try{
 					root.addParameter(parseGlobalParameter(child));
 				}catch(ParserException e){
 					System.err.println("Exception: " + e.getMessage());
-				}
+			}
+		}
+		for(Element child : getIterableChildren(element, Constants.CLASS_NODE_NAME)){
+			try{
+				root.addClass(parseClass(child, root));
+			}catch(ParserException e){
+				System.err.println("Exception: " + e.getMessage());
 			}
 		}
 
 		return root;
 	}
 
-	public ClassNode parseClass(Element element) throws ParserException{
+	public ClassNode parseClass(Element element, RootNode parent) throws ParserException{
 		assertNodeTag(element.getQualifiedName(), CLASS_NODE_NAME);
 		String name = getElementName(element);
 
 		ClassNode _class = new ClassNode(name);
+		//we need to do it here, so the backward search for global parameters will work
+		_class.setParent(parent);
 
-		for(Element child : getIterableChildren(element)){
-			if(child.getLocalName() == Constants.METHOD_NODE_NAME){
-				try{
-					_class.addMethod(parseMethod(child));
-				}catch(ParserException e){
-					System.err.println("Exception: " + e.getMessage());
-				}
+		//parameters must be parsed before classes
+		for(Element child : getIterableChildren(element, Constants.PARAMETER_NODE_NAME)){
+			try{
+				_class.addParameter(parseGlobalParameter(child));
+			}catch(ParserException e){
+				System.err.println("Exception: " + e.getMessage());
 			}
-			if(child.getLocalName() == Constants.PARAMETER_NODE_NAME){
-				try{
-					_class.addParameter(parseGlobalParameter(child));
-				}catch(ParserException e){
-					System.err.println("Exception: " + e.getMessage());
-				}
+		}
+		for(Element child : getIterableChildren(element, Constants.METHOD_NODE_NAME)){
+			try{
+				_class.addMethod(parseMethod(child, _class));
+			}catch(ParserException e){
+				System.err.println("Exception: " + e.getMessage());
 			}
 		}
 
 		return _class;
 	}
 
-	public MethodNode parseMethod(Element element) throws ParserException{
+	public MethodNode parseMethod(Element element, ClassNode parent) throws ParserException{
 		assertNodeTag(element.getQualifiedName(), METHOD_NODE_NAME);
 		String name = getElementName(element);
 
 		MethodNode method = new MethodNode(name);
+		method.setParent(parent);
 
 		for(Element child : getIterableChildren(element)){
 			if(child.getLocalName() == Constants.PARAMETER_NODE_NAME){
 				try{
-					method.addParameter(parseMethodParameter(child));
+					method.addParameter(parseMethodParameter(child, method));
 				}catch(ParserException e){
 					System.err.println("Exception: " + e.getMessage());
 				}
@@ -145,7 +149,7 @@ public class XomAnalyser {
 		return method;
 	}
 
-	public MethodParameterNode parseMethodParameter(Element element) throws ParserException{
+	public MethodParameterNode parseMethodParameter(Element element, MethodNode method) throws ParserException{
 		assertNodeTag(element.getQualifiedName(), PARAMETER_NODE_NAME);
 		String name = getElementName(element);
 		String type = getAttributeValue(element, TYPE_NAME_ATTRIBUTE);
@@ -156,6 +160,24 @@ public class XomAnalyser {
 			defaultValue = getAttributeValue(element, DEFAULT_EXPECTED_VALUE_ATTRIBUTE_NAME);
 		}
 		MethodParameterNode parameter = new MethodParameterNode(name, type, defaultValue, Boolean.parseBoolean(expected));
+
+		if(element.getAttribute(PARAMETER_IS_LINKED_ATTRIBUTE_NAME) != null){
+			boolean linked = Boolean.parseBoolean(getAttributeValue(element, PARAMETER_IS_LINKED_ATTRIBUTE_NAME));
+			parameter.setLinked(linked);
+		}
+
+		if(element.getAttribute(PARAMETER_LINK_ATTRIBUTE_NAME) != null && method != null && method.getClassNode() != null){
+			String linkPath = getAttributeValue(element, PARAMETER_LINK_ATTRIBUTE_NAME);
+			GlobalParameterNode link = method.getClassNode().findGlobalParameter(linkPath);
+			if(link != null){
+				parameter.setLink(link);
+			}
+			else{
+				parameter.setLinked(false);
+			}
+		}else{
+			parameter.setLinked(false);
+		}
 
 		for(Element child : getIterableChildren(element)){
 			try{
@@ -403,6 +425,17 @@ public class XomAnalyser {
 			}
 		}
 		return list;
+	}
+
+	protected List<Element> getIterableChildren(Element element, String name){
+		List<Element> elements = getIterableChildren(element);
+		Iterator<Element> it = elements.iterator();
+		while(it.hasNext()){
+			if(it.next().getLocalName().equals(name) == false){
+				it.remove();
+			}
+		}
+		return elements;
 	}
 
 	protected String getElementName(Element element) throws ParserException {
