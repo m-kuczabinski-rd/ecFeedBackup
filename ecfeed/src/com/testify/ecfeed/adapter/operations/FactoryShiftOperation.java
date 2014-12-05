@@ -31,11 +31,17 @@ public class FactoryShiftOperation{
 			if(fShifted.get(0) instanceof ClassNode){
 				return new GenericShiftOperation(node.getClasses(), fShifted, fUp);
 			}
+			if(fShifted.get(0) instanceof GlobalParameterNode){
+				return new GenericShiftOperation(node.getParameters(), fShifted, fUp);
+			}
 			throw new ModelOperationException(Messages.OPERATION_NOT_SUPPORTED_PROBLEM);
 		}
 
 		@Override
 		public Object visit(ClassNode node) throws Exception {
+			if(fShifted.get(0) instanceof GlobalParameterNode){
+				return new GenericShiftOperation(node.getParameters(), fShifted, fUp);
+			}
 			if(fShifted.get(0) instanceof MethodNode){
 				return new GenericShiftOperation(node.getMethods(), fShifted, fUp);
 			}
@@ -106,6 +112,9 @@ public class FactoryShiftOperation{
 			if(fShifted.get(0) instanceof ClassNode){
 				return new GenericShiftOperation(node.getClasses(), fShifted, fShift);
 			}
+			if(fShifted.get(0) instanceof GlobalParameterNode){
+				return new GenericShiftOperation(node.getParameters(), fShifted, fShift);
+			}
 			throw new ModelOperationException(Messages.OPERATION_NOT_SUPPORTED_PROBLEM);
 		}
 
@@ -113,6 +122,9 @@ public class FactoryShiftOperation{
 		public Object visit(ClassNode node) throws Exception {
 			if(fShifted.get(0) instanceof MethodNode){
 				return new GenericShiftOperation(node.getMethods(), fShifted, fShift);
+			}
+			if(fShifted.get(0) instanceof GlobalParameterNode){
+				return new GenericShiftOperation(node.getParameters(), fShifted, fShift);
 			}
 			throw new ModelOperationException(Messages.OPERATION_NOT_SUPPORTED_PROBLEM);
 		}
@@ -178,7 +190,7 @@ public class FactoryShiftOperation{
 
 
 	private static GenericShiftOperation getShiftOperation(AbstractNode parent, List<? extends AbstractNode> shifted, IModelVisitor provider) throws ModelOperationException{
-		if(parent == null && haveTheSameType(shifted) == false){
+		if(parent == null || haveTheSameType(shifted) == false){
 			throw new ModelOperationException(Messages.OPERATION_NOT_SUPPORTED_PROBLEM);
 		}
 		try{
