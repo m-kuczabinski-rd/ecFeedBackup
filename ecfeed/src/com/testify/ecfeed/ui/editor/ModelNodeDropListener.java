@@ -44,7 +44,7 @@ public class ModelNodeDropListener extends ViewerDropAdapter{
 			boolean result = false;
 			result |= NodeDnDBuffer.getInstance().getDraggedNodes().get(0) instanceof ClassNode;
 			result |= (NodeDnDBuffer.getInstance().getDraggedNodes().get(0) instanceof GlobalParameterNode) && ((fOperation & (DND.DROP_COPY | DND.DROP_MOVE)) != 0);
-			result |= (NodeDnDBuffer.getInstance().getDraggedNodes().get(0) instanceof MethodParameterNode) && (fOperation == (DND.DROP_MOVE));
+			result |= (NodeDnDBuffer.getInstance().getDraggedNodes().get(0) instanceof MethodParameterNode) && ((fOperation & (DND.DROP_COPY | DND.DROP_MOVE)) != 0);
 			return result;
 		}
 
@@ -53,7 +53,7 @@ public class ModelNodeDropListener extends ViewerDropAdapter{
 			boolean result = false;
 			result |= NodeDnDBuffer.getInstance().getDraggedNodes().get(0) instanceof MethodNode;
 			result |= (NodeDnDBuffer.getInstance().getDraggedNodes().get(0) instanceof GlobalParameterNode) && ((fOperation & (DND.DROP_COPY | DND.DROP_MOVE)) != 0);
-			result |= (NodeDnDBuffer.getInstance().getDraggedNodes().get(0) instanceof MethodParameterNode) && (fOperation == (DND.DROP_MOVE));
+			result |= (NodeDnDBuffer.getInstance().getDraggedNodes().get(0) instanceof MethodParameterNode) && ((fOperation & (DND.DROP_COPY | DND.DROP_MOVE)) != 0);
 			return result;
 		}
 
