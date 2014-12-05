@@ -1,5 +1,6 @@
 package com.testify.ecfeed.ui.editor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.jface.viewers.Viewer;
@@ -8,6 +9,7 @@ import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.TransferData;
 
 import com.testify.ecfeed.model.AbstractNode;
+import com.testify.ecfeed.model.AbstractParameterNode;
 import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.ConstraintNode;
@@ -17,6 +19,7 @@ import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.MethodParameterNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.TestCaseNode;
+import com.testify.ecfeed.ui.common.EclipseModelBuilder;
 import com.testify.ecfeed.ui.modelif.AbstractNodeInterface;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 import com.testify.ecfeed.ui.modelif.NodeDnDBuffer;
@@ -30,32 +33,56 @@ public class ModelNodeDropListener extends ViewerDropAdapter{
 
 	private class DropValidator implements IModelVisitor{
 
+		private int fOperation;
+
+		public DropValidator(int operation) {
+			fOperation = operation;
+		}
+
 		@Override
 		public Object visit(RootNode node) throws Exception {
-			return NodeDnDBuffer.getInstance().getDraggedNodes().get(0) instanceof ClassNode;
+			boolean result = false;
+			result |= NodeDnDBuffer.getInstance().getDraggedNodes().get(0) instanceof ClassNode;
+			result |= (NodeDnDBuffer.getInstance().getDraggedNodes().get(0) instanceof GlobalParameterNode) && ((fOperation & (DND.DROP_COPY | DND.DROP_MOVE)) != 0);
+			result |= (NodeDnDBuffer.getInstance().getDraggedNodes().get(0) instanceof MethodParameterNode) && (fOperation == (DND.DROP_MOVE));
+			return result;
 		}
 
 		@Override
 		public Object visit(ClassNode node) throws Exception {
-			return NodeDnDBuffer.getInstance().getDraggedNodes().get(0) instanceof MethodNode;
+			boolean result = false;
+			result |= NodeDnDBuffer.getInstance().getDraggedNodes().get(0) instanceof MethodNode;
+			result |= (NodeDnDBuffer.getInstance().getDraggedNodes().get(0) instanceof GlobalParameterNode) && ((fOperation & (DND.DROP_COPY | DND.DROP_MOVE)) != 0);
+			result |= (NodeDnDBuffer.getInstance().getDraggedNodes().get(0) instanceof MethodParameterNode) && (fOperation == (DND.DROP_MOVE));
+			return result;
 		}
 
 		@Override
 		public Object visit(MethodNode node) throws Exception {
-			boolean result = NodeDnDBuffer.getInstance().getDraggedNodes().get(0) instanceof MethodParameterNode;
-			result |= NodeDnDBuffer.getInstance().getDraggedNodes().get(0) instanceof ConstraintNode;
-			result |= NodeDnDBuffer.getInstance().getDraggedNodes().get(0) instanceof TestCaseNode;
+			boolean result = NodeDnDBuffer.getInstance().getDraggedNodes().get(0) instanceof MethodParameterNode && fOperation != DND.DROP_LINK;
+			if(NodeDnDBuffer.getInstance().getDraggedNodes().get(0) instanceof GlobalParameterNode){
+				if(fOperation == DND.DROP_LINK){
+					for(AbstractNode dragged : NodeDnDBuffer.getInstance().getDraggedNodes()){
+						if(node.getAncestors().contains(dragged.getParent()) == false){
+							return false;
+						}
+					}
+				}
+				result = true;
+			}
+			result |= NodeDnDBuffer.getInstance().getDraggedNodes().get(0) instanceof ConstraintNode && fOperation != DND.DROP_LINK;
+			result |= NodeDnDBuffer.getInstance().getDraggedNodes().get(0) instanceof TestCaseNode && fOperation != DND.DROP_LINK;
 			return result;
 		}
 
 		@Override
 		public Object visit(MethodParameterNode node) throws Exception {
-			return NodeDnDBuffer.getInstance().getDraggedNodes().get(0) instanceof ChoiceNode;
+			return NodeDnDBuffer.getInstance().getDraggedNodes().get(0) instanceof ChoiceNode && fOperation != DND.DROP_LINK;
 		}
 
 		@Override
 		public Object visit(GlobalParameterNode node) throws Exception {
-			return NodeDnDBuffer.getInstance().getDraggedNodes().get(0) instanceof ChoiceNode;
+			return NodeDnDBuffer.getInstance().getDraggedNodes().get(0) instanceof ChoiceNode && fOperation != DND.DROP_LINK;
 		}
 
 		@Override
@@ -70,9 +97,155 @@ public class ModelNodeDropListener extends ViewerDropAdapter{
 
 		@Override
 		public Object visit(ChoiceNode node) throws Exception {
-			return NodeDnDBuffer.getInstance().getDraggedNodes().get(0) instanceof ChoiceNode;
+			return NodeDnDBuffer.getInstance().getDraggedNodes().get(0) instanceof ChoiceNode && fOperation != DND.DROP_LINK;
 		}
 
+	}
+
+	private class CopyHandler implements IModelVisitor{
+
+		private int fIndex;
+
+		public CopyHandler(int index) {
+			fIndex = index;
+		}
+
+		@Override
+		public Object visit(RootNode node) throws Exception {
+			AbstractNodeInterface nodeIf = NodeInterfaceFactory.getNodeInterface(node, fUpdateContext);
+			List<AbstractNode> children;
+			if(NodeDnDBuffer.getInstance().getDraggedNodes().get(0) instanceof MethodParameterNode){
+				children = new ArrayList<AbstractNode>();
+				for(AbstractNode dragged : NodeDnDBuffer.getInstance().getDraggedNodes()){
+					children.add(new GlobalParameterNode((AbstractParameterNode)dragged));
+				}
+			}else{
+				children = NodeDnDBuffer.getInstance().getDraggedNodesCopy();
+			}
+			return nodeIf.addChildren(children, fIndex);
+		}
+
+		@Override
+		public Object visit(ClassNode node) throws Exception {
+			AbstractNodeInterface nodeIf = NodeInterfaceFactory.getNodeInterface(node, fUpdateContext);
+			List<AbstractNode> children;
+			if(NodeDnDBuffer.getInstance().getDraggedNodes().get(0) instanceof MethodParameterNode){
+				children = new ArrayList<AbstractNode>();
+				for(AbstractNode dragged : NodeDnDBuffer.getInstance().getDraggedNodes()){
+					children.add(new GlobalParameterNode((AbstractParameterNode)dragged));
+				}
+			}else{
+				children = NodeDnDBuffer.getInstance().getDraggedNodesCopy();
+			}
+			return nodeIf.addChildren(children, fIndex);
+		}
+
+		@Override
+		public Object visit(MethodNode node) throws Exception {
+			AbstractNodeInterface nodeIf = NodeInterfaceFactory.getNodeInterface(node, fUpdateContext);
+			List<AbstractNode> children;
+			if(NodeDnDBuffer.getInstance().getDraggedNodes().get(0) instanceof GlobalParameterNode){
+				children = new ArrayList<AbstractNode>();
+				for(AbstractNode dragged : NodeDnDBuffer.getInstance().getDraggedNodes()){
+					GlobalParameterNode source = (GlobalParameterNode)dragged;
+					String defaultValue = new EclipseModelBuilder().getDefaultExpectedValue(source.getType());
+					children.add(new MethodParameterNode((AbstractParameterNode)dragged, defaultValue, false));
+				}
+			}else{
+				children = NodeDnDBuffer.getInstance().getDraggedNodesCopy();
+			}
+			return nodeIf.addChildren(children, fIndex);
+		}
+
+		@Override
+		public Object visit(MethodParameterNode node) throws Exception {
+			AbstractNodeInterface nodeIf = NodeInterfaceFactory.getNodeInterface(node, fUpdateContext);
+			return nodeIf.addChildren(NodeDnDBuffer.getInstance().getDraggedNodesCopy(), fIndex);
+		}
+
+		@Override
+		public Object visit(GlobalParameterNode node) throws Exception {
+			AbstractNodeInterface nodeIf = NodeInterfaceFactory.getNodeInterface(node, fUpdateContext);
+			return nodeIf.addChildren(NodeDnDBuffer.getInstance().getDraggedNodesCopy(), fIndex);
+		}
+
+		@Override
+		public Object visit(TestCaseNode node) throws Exception {
+			return false;
+		}
+
+		@Override
+		public Object visit(ConstraintNode node) throws Exception {
+			return false;
+		}
+
+		@Override
+		public Object visit(ChoiceNode node) throws Exception {
+			AbstractNodeInterface nodeIf = NodeInterfaceFactory.getNodeInterface(node, fUpdateContext);
+			return nodeIf.addChildren(NodeDnDBuffer.getInstance().getDraggedNodesCopy(), fIndex);
+		}
+
+	}
+
+	private class LinkHandler implements IModelVisitor{
+
+		private int fIndex;
+
+		public LinkHandler(int index) {
+			fIndex = index;
+		}
+
+		@Override
+		public Object visit(RootNode node) throws Exception {
+			return false;
+		}
+
+		@Override
+		public Object visit(ClassNode node) throws Exception {
+			return false;
+		}
+
+		@Override
+		public Object visit(MethodNode node) throws Exception {
+			AbstractNodeInterface nodeIf = NodeInterfaceFactory.getNodeInterface(node, fUpdateContext);
+			List<AbstractNode> children;
+			if(NodeDnDBuffer.getInstance().getDraggedNodes().get(0) instanceof GlobalParameterNode){
+				children = new ArrayList<AbstractNode>();
+				for(AbstractNode dragged : NodeDnDBuffer.getInstance().getDraggedNodes()){
+					GlobalParameterNode source = (GlobalParameterNode)dragged;
+					String defaultValue = new EclipseModelBuilder().getDefaultExpectedValue(source.getType());
+					children.add(new MethodParameterNode((AbstractParameterNode)dragged, defaultValue, false, true, source));
+				}
+			}else{
+				children = NodeDnDBuffer.getInstance().getDraggedNodesCopy();
+			}
+			return nodeIf.addChildren(children, fIndex);
+		}
+
+		@Override
+		public Object visit(MethodParameterNode node) throws Exception {
+			return false;
+		}
+
+		@Override
+		public Object visit(GlobalParameterNode node) throws Exception {
+			return false;
+		}
+
+		@Override
+		public Object visit(TestCaseNode node) throws Exception {
+			return false;
+		}
+
+		@Override
+		public Object visit(ConstraintNode node) throws Exception {
+			return false;
+		}
+
+		@Override
+		public Object visit(ChoiceNode node) throws Exception {
+			return false;
+		}
 	}
 
 	protected ModelNodeDropListener(Viewer viewer, IModelUpdateContext updateContext) {
@@ -95,10 +268,19 @@ public class ModelNodeDropListener extends ViewerDropAdapter{
 		}
 		switch(getCurrentOperation()){
 		case DND.DROP_COPY:
-			AbstractNodeInterface nodeIf = NodeInterfaceFactory.getNodeInterface(newParent, fUpdateContext);
-			return nodeIf.addChildren(NodeDnDBuffer.getInstance().getDraggedNodesCopy(), index);
+			try{
+				return (boolean)newParent.accept(new CopyHandler(index));
+			}catch(Exception e){
+				return false;
+			}
 		case DND.DROP_MOVE:
 			return selectionIf.move(newParent, index);
+		case DND.DROP_LINK:
+			try{
+				return (boolean)newParent.accept(new LinkHandler(index));
+			}catch(Exception e){
+				return false;
+			}
 		default:
 			return false;
 		}
@@ -114,7 +296,7 @@ public class ModelNodeDropListener extends ViewerDropAdapter{
 		if(dragged.size() == 0) return false;
 		if(selectionIf.isSingleType() == false) return false;
 		try {
-			return (boolean)parent.accept(new DropValidator());
+			return (boolean)parent.accept(new DropValidator(operation));
 		} catch (Exception e) {
 			return false;
 		}

@@ -22,12 +22,24 @@ public class MethodParameterNode extends AbstractParameterNode{
 	private boolean fLinked;
 	private GlobalParameterNode fLink;
 
-	public MethodParameterNode(String name, String type, String defaultValue, boolean expected) {
+	public MethodParameterNode(String name, String type, String defaultValue, boolean expected, boolean linked, GlobalParameterNode link) {
 		super(name, type);
 		fExpected = expected;
 		fDefaultValue = defaultValue;
-		fLinked = false;
-		fLink = null;
+		fLinked = linked;
+		fLink = link;
+	}
+
+	public MethodParameterNode(String name, String type, String defaultValue, boolean expected) {
+		this(name, type, defaultValue, expected, false, null);
+	}
+
+	public MethodParameterNode(AbstractParameterNode source, String defaultValue, boolean expected, boolean linked, GlobalParameterNode link) {
+		this(source.getName(), source.getType(), defaultValue, expected, linked, link);
+	}
+
+	public MethodParameterNode(AbstractParameterNode source, String defaultValue, boolean expected) {
+		this(source, defaultValue, expected, false, null);
 	}
 
 	@Override

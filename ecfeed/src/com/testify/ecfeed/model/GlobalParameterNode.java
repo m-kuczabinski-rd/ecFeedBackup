@@ -9,6 +9,14 @@ public class GlobalParameterNode extends AbstractParameterNode {
 		super(name, type);
 	}
 
+	//copy constructor creating a global parameter instance from other types, eg. MethodParameterNode
+	public GlobalParameterNode(AbstractParameterNode source) {
+		this(source.getName(), source.getType());
+		for(ChoiceNode choice : source.getChoices()){
+			addChoice(choice.getCopy());
+		}
+	}
+
 	@Override
 	public GlobalParameterNode getCopy() {
 		GlobalParameterNode copy = new GlobalParameterNode(getName(), getType());

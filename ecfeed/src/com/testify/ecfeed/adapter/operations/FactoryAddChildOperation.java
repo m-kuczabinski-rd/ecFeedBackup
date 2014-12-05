@@ -3,6 +3,7 @@ package com.testify.ecfeed.adapter.operations;
 import com.testify.ecfeed.adapter.ITypeAdapterProvider;
 import com.testify.ecfeed.adapter.ModelOperationException;
 import com.testify.ecfeed.model.AbstractNode;
+import com.testify.ecfeed.model.AbstractParameterNode;
 import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.ConstraintNode;
@@ -38,6 +39,12 @@ public class FactoryAddChildOperation implements IModelVisitor{
 				return new RootOperationAddNewClass(node, (ClassNode)fChild);
 			}
 			return new RootOperationAddNewClass(node, (ClassNode)fChild, fIndex);
+		}else if(fChild instanceof AbstractParameterNode){
+			GlobalParameterNode globalParameter = new GlobalParameterNode((AbstractParameterNode)fChild);
+			if(fIndex == -1){
+				return new GenericOperationAddParameter(node, globalParameter);
+			}
+			return new GenericOperationAddParameter(node, globalParameter, fIndex);
 		}
 		throw new ModelOperationException(Messages.OPERATION_NOT_SUPPORTED_PROBLEM);
 	}
@@ -49,6 +56,11 @@ public class FactoryAddChildOperation implements IModelVisitor{
 				return new ClassOperationAddMethod(node, (MethodNode)fChild);
 			}
 			return new ClassOperationAddMethod(node, (MethodNode)fChild, fIndex);
+		}else if(fChild instanceof GlobalParameterNode){
+			if(fIndex == -1){
+				return new GenericOperationAddParameter(node, (GlobalParameterNode)fChild);
+			}
+			return new GenericOperationAddParameter(node, (GlobalParameterNode)fChild, fIndex);
 		}
 		throw new ModelOperationException(Messages.OPERATION_NOT_SUPPORTED_PROBLEM);
 	}

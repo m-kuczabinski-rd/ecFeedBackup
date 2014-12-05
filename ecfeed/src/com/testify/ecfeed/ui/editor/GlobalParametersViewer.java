@@ -1,10 +1,13 @@
 package com.testify.ecfeed.ui.editor;
 
+import org.eclipse.swt.dnd.DND;
+import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.ui.forms.widgets.Section;
 
 import com.testify.ecfeed.model.GlobalParametersParentNode;
 import com.testify.ecfeed.ui.modelif.GlobalParametersParentInterface;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
+import com.testify.ecfeed.ui.modelif.ModelNodesTransfer;
 import com.testify.ecfeed.ui.modelif.ParametersParentInterface;
 
 public class GlobalParametersViewer extends AbstractParametersViewer {
@@ -16,6 +19,7 @@ public class GlobalParametersViewer extends AbstractParametersViewer {
 	public GlobalParametersViewer(ISectionContext sectionContext, IModelUpdateContext updateContext) {
 		super(sectionContext, updateContext, STYLE);
 		getSection().setText("Global parameters");
+		getViewer().addDragSupport(DND.DROP_COPY|DND.DROP_MOVE|DND.DROP_LINK, new Transfer[]{ModelNodesTransfer.getInstance()}, new ModelNodeDragListener(getViewer()));
 	}
 
 	@Override
