@@ -36,10 +36,11 @@ public class TestDataViewer extends TableViewerSection implements ITestDataEdito
 	private final static int VIEWER_STYLE = SWT.BORDER;
 
 	private TestCaseInterface fTestCaseIf;
+	private TestDataValueEditingSupport fValueEditingSupport;
 
 	public TestDataViewer(ISectionContext sectionContext, IModelUpdateContext updateContext) {
 		super(sectionContext, updateContext, STYLE);
-		fTestCaseIf = new TestCaseInterface(this);
+		getTestCaseInterface();
 		getSection().setText("Test data");
 	}
 
@@ -74,14 +75,23 @@ public class TestDataViewer extends TableViewerSection implements ITestDataEdito
 				return getColor(element);
 			}
 		});
+		fValueEditingSupport = new TestDataValueEditingSupport(null, getTableViewer(), null, this);
+		valueColumn.setEditingSupport(fValueEditingSupport);
+	}
 
-		valueColumn.setEditingSupport(new TestDataValueEditingSupport(fTestCaseIf.getTarget().getMethod(), getTableViewer(), null, this));
+	protected TestCaseInterface getTestCaseInterface() {
+		if(fTestCaseIf == null){
+			fTestCaseIf = new TestCaseInterface(this);
+		}
+		return fTestCaseIf;
 	}
 
 	public void setInput(TestCaseNode testCase){
 		List<ChoiceNode> testData = testCase.getTestData();
-		super.setInput(testData);
+		fValueEditingSupport.setMethod(testCase.getMethod());
 		fTestCaseIf.setTarget(testCase);
+		//target and data support must be updated prior to calling super
+		super.setInput(testData);
 	}
 
 	@Override

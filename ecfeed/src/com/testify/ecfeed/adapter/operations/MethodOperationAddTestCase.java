@@ -41,6 +41,7 @@ public class MethodOperationAddTestCase extends AbstractModelOperation {
 			throw new ModelOperationException(Messages.TEST_CASE_INCOMPATIBLE_WITH_METHOD);
 		}
 		//following must be done AFTER references are updated
+		fTestCase.setParent(fTarget);
 		for(ChoiceNode choice : fTestCase.getTestData()){
 			MethodParameterNode parameter = fTestCase.getMethodParameter(choice);
 			if(parameter.isExpected()){

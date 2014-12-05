@@ -63,7 +63,8 @@ public class TestCaseNode extends AbstractNode {
 
 	public MethodParameterNode getMethodParameter(ChoiceNode choice){
 		if(getTestData().contains(choice)){
-			return getMethod().getMethodParameters().get(getTestData().indexOf(choice));
+			int index = getTestData().indexOf(choice);
+			return getMethod().getMethodParameters().get(index);
 		}
 		return null;
 	}

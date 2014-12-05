@@ -129,4 +129,8 @@ public class TestDataValueEditingSupport extends EditingSupport {
 			fSetValueListener.testDataChanged(index, newValue);
 		}
 	}
+
+	public void setMethod(MethodNode method) {
+		fMethod = method;
+	}
 }
