@@ -68,6 +68,7 @@ public class ModelNodeDropListener extends ViewerDropAdapter{
 						}
 					}
 				}
+				System.out.println("true");
 				result = true;
 			}
 			result |= NodeDnDBuffer.getInstance().getDraggedNodes().get(0) instanceof ConstraintNode && fOperation != DND.DROP_LINK;

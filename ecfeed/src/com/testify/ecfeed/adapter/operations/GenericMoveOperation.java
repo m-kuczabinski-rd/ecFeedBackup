@@ -9,7 +9,9 @@ import com.testify.ecfeed.adapter.ITypeAdapterProvider;
 import com.testify.ecfeed.adapter.ModelOperationException;
 import com.testify.ecfeed.model.AbstractNode;
 import com.testify.ecfeed.model.ChoicesParentNode;
+import com.testify.ecfeed.model.GlobalParameterNode;
 import com.testify.ecfeed.model.MethodNode;
+import com.testify.ecfeed.model.MethodParameterNode;
 
 public class GenericMoveOperation extends BulkOperation {
 
@@ -28,6 +30,10 @@ public class GenericMoveOperation extends BulkOperation {
 						methodsInvolved.addAll(((ChoicesParentNode)node).getParameter().getMethods());
 					}
 					addOperation((IModelOperation)node.getParent().accept(new FactoryRemoveChildOperation(node, adapterProvider, false)));
+					if(node instanceof GlobalParameterNode && newParent instanceof MethodNode){
+						GlobalParameterNode parameter = (GlobalParameterNode)node;
+						node = new MethodParameterNode(parameter, adapterProvider.getAdapter(parameter.getType()).defaultValue(), false);
+					}
 					if(newIndex != -1){
 						addOperation((IModelOperation)newParent.accept(new FactoryAddChildOperation(node, newIndex, adapterProvider, false)));
 					}

@@ -2,6 +2,7 @@ package com.testify.ecfeed.adapter.operations;
 
 import com.testify.ecfeed.adapter.ITypeAdapterProvider;
 import com.testify.ecfeed.model.AbstractNode;
+import com.testify.ecfeed.model.AbstractParameterNode;
 import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.ConstraintNode;
@@ -28,6 +29,9 @@ public class FactoryRemoveChildOperation implements IModelVisitor{
 		if(fChild instanceof ClassNode){
 			return new RootOperationRemoveClass(node, (ClassNode)fChild);
 		}
+		if(fChild instanceof GlobalParameterNode){
+			return new GenericOperationRemoveParameter(node, (AbstractParameterNode)fChild);
+		}
 		return null;
 	}
 
@@ -35,6 +39,9 @@ public class FactoryRemoveChildOperation implements IModelVisitor{
 	public Object visit(ClassNode node) throws Exception {
 		if(fChild instanceof MethodNode){
 			return new ClassOperationRemoveMethod(node, (MethodNode)fChild);
+		}
+		if(fChild instanceof GlobalParameterNode){
+			return new GenericOperationRemoveParameter(node, (AbstractParameterNode)fChild);
 		}
 		return null;
 	}

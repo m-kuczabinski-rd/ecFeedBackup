@@ -44,6 +44,13 @@ public class ClassNode extends GlobalParametersParentNode {
 		return (RootNode) getParent();
 	}
 
+	@Override
+	public int getMaxChildIndex(AbstractNode potentialChild){
+		if(potentialChild instanceof GlobalParameterNode) return getParameters().size();
+		if(potentialChild instanceof MethodNode) return getMethods().size();
+		return super.getMaxChildIndex(potentialChild);
+	}
+
 	public ClassNode(String qualifiedName) {
 		super(qualifiedName);
 		fMethods = new ArrayList<MethodNode>();
