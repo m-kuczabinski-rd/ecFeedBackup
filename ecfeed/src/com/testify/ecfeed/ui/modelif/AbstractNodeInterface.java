@@ -142,12 +142,16 @@ public class AbstractNodeInterface extends OperationExecuter{
 	}
 
 	public boolean pasteEnabled(Collection<? extends AbstractNode> pasted){
-		GenericAddChildrenOperation operation = new GenericAddChildrenOperation(fTarget, pasted, fAdapterProvider, true);
-		return operation.enabled();
+		return pasteEnabled(pasted, -1);
 	}
 
 	public boolean pasteEnabled(Collection<? extends AbstractNode> pasted, int index){
-		GenericAddChildrenOperation operation = new GenericAddChildrenOperation(fTarget, pasted, index, fAdapterProvider, true);
+		GenericAddChildrenOperation operation;
+		if(index == -1){
+			operation = new GenericAddChildrenOperation(fTarget, pasted, fAdapterProvider, true);
+		}else{
+			operation = new GenericAddChildrenOperation(fTarget, pasted, index, fAdapterProvider, true);
+		}
 		return operation.enabled();
 	}
 

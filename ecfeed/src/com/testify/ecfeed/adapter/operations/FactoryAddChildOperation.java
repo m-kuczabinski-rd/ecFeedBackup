@@ -40,6 +40,8 @@ public class FactoryAddChildOperation implements IModelVisitor{
 			}
 			return new RootOperationAddNewClass(node, (ClassNode)fChild, fIndex);
 		}else if(fChild instanceof AbstractParameterNode){
+			//It might be problematic that we actually add a copy of the requested node, so the option to add
+			//a MethodParameterNode to GlobalParameterParent (and vice versa) might be removed
 			GlobalParameterNode globalParameter = new GlobalParameterNode((AbstractParameterNode)fChild);
 			if(fIndex == -1){
 				return new GenericOperationAddParameter(node, globalParameter);
@@ -67,6 +69,15 @@ public class FactoryAddChildOperation implements IModelVisitor{
 
 	@Override
 	public Object visit(MethodNode node) throws Exception {
+		if(fChild instanceof GlobalParameterNode){
+			GlobalParameterNode globalParameter = (GlobalParameterNode)fChild;
+			String defaultValue = fAdapterProvider.getAdapter(globalParameter.getType()).defaultValue();
+			MethodParameterNode parameter = new MethodParameterNode(globalParameter, defaultValue, false);
+			if(fIndex == -1){
+				return new MethodOperationAddParameter(node,parameter);
+			}
+			return new MethodOperationAddParameter(node, parameter, fIndex);
+		}
 		if(fChild instanceof MethodParameterNode){
 			if(fIndex == -1){
 				return new MethodOperationAddParameter(node, (MethodParameterNode)fChild);
