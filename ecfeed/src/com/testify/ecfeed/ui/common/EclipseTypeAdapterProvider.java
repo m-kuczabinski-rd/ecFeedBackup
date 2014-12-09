@@ -49,8 +49,6 @@ public class EclipseTypeAdapterProvider implements ITypeAdapterProvider{
 	};
 	private final String[] TYPES_CONVERTABLE_TO_CHAR = new String[]{
 			TYPE_NAME_STRING, 
-			TYPE_NAME_INT, 
-			TYPE_NAME_LONG, 
 			TYPE_NAME_SHORT, 
 			TYPE_NAME_BYTE,
 	};
