@@ -323,7 +323,7 @@ public class EclipseModelImplementer extends AbstractModelImplementer {
 
 	protected String enumDefinitionContent(AbstractParameterNode node, Set<String> fields){
 		String fieldsDefinition = "";
-		if(fields != null){
+		if(fields != null && fields.size() > 0){
 			for(String field: fields){
 				fieldsDefinition += field + ", ";
 			}
