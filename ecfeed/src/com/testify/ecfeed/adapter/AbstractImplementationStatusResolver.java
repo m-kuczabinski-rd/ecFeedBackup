@@ -124,13 +124,9 @@ public abstract class AbstractImplementationStatusResolver implements
 	}
 
 	protected EImplementationStatus implementationStatus(MethodParameterNode parameter){
-		EImplementationStatus status = EImplementationStatus.IMPLEMENTED;
-		if(fPrimitiveTypeTester.isPrimitive(parameter.getType())){
-			if(parameter.getChoices().size() == 0 && parameter.isExpected() == false)
-			status = EImplementationStatus.PARTIALLY_IMPLEMENTED;
-		}
-		else{
-			return implementationStatus((AbstractParameterNode)parameter);
+		EImplementationStatus status = implementationStatus((AbstractParameterNode)parameter);
+		if(fPrimitiveTypeTester.isPrimitive(parameter.getType()) && parameter.isExpected()){
+			status = EImplementationStatus.IMPLEMENTED;
 		}
 		return status;
 	}
@@ -141,16 +137,23 @@ public abstract class AbstractImplementationStatusResolver implements
 
 	protected EImplementationStatus implementationStatus(AbstractParameterNode parameter){
 		EImplementationStatus status = EImplementationStatus.IMPLEMENTED;
-		if(enumDefinitionImplemented(parameter.getType()) == false){
-			status = EImplementationStatus.NOT_IMPLEMENTED;
-		}
-		else if(parameter.getChoices().size() == 0){
-			status = EImplementationStatus.PARTIALLY_IMPLEMENTED;
-		}
-		else{
-			EImplementationStatus childrenStatus = childrenStatus(parameter.getChoices());
-			if(childrenStatus != EImplementationStatus.IMPLEMENTED){
+		if(fPrimitiveTypeTester.isPrimitive(parameter.getType()) == true){
+			if(parameter.getChoices().size() == 0){
 				status = EImplementationStatus.PARTIALLY_IMPLEMENTED;
+			}
+		}else{
+			if(enumDefinitionImplemented(parameter.getType()) == false){
+				status = EImplementationStatus.NOT_IMPLEMENTED;
+			}else{
+				if(parameter.getChoices().size() == 0){
+					status = EImplementationStatus.PARTIALLY_IMPLEMENTED;
+				}else{
+					for(ChoiceNode choice : parameter.getChoices()){
+						if(implementationStatus(choice) != EImplementationStatus.IMPLEMENTED){
+							status = EImplementationStatus.PARTIALLY_IMPLEMENTED;
+						}
+					}
+				}
 			}
 		}
 		return status;
