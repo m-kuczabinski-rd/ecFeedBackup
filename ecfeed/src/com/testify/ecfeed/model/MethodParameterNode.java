@@ -36,6 +36,7 @@ public class MethodParameterNode extends AbstractParameterNode{
 
 	public MethodParameterNode(AbstractParameterNode source, String defaultValue, boolean expected, boolean linked, GlobalParameterNode link) {
 		this(source.getName(), source.getType(), defaultValue, expected, linked, link);
+		addChoices(source.getChoices());
 	}
 
 	public MethodParameterNode(AbstractParameterNode source, String defaultValue, boolean expected) {

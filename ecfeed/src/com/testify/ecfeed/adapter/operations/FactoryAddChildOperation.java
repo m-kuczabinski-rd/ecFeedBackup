@@ -58,11 +58,12 @@ public class FactoryAddChildOperation implements IModelVisitor{
 				return new ClassOperationAddMethod(node, (MethodNode)fChild);
 			}
 			return new ClassOperationAddMethod(node, (MethodNode)fChild, fIndex);
-		}else if(fChild instanceof GlobalParameterNode){
+		}else if(fChild instanceof AbstractParameterNode){
+			GlobalParameterNode globalParameter = new GlobalParameterNode((AbstractParameterNode)fChild);
 			if(fIndex == -1){
-				return new GenericOperationAddParameter(node, (GlobalParameterNode)fChild);
+				return new GenericOperationAddParameter(node, globalParameter);
 			}
-			return new GenericOperationAddParameter(node, (GlobalParameterNode)fChild, fIndex);
+			return new GenericOperationAddParameter(node, globalParameter, fIndex);
 		}
 		throw new ModelOperationException(Messages.OPERATION_NOT_SUPPORTED_PROBLEM);
 	}
@@ -73,6 +74,7 @@ public class FactoryAddChildOperation implements IModelVisitor{
 			GlobalParameterNode globalParameter = (GlobalParameterNode)fChild;
 			String defaultValue = fAdapterProvider.getAdapter(globalParameter.getType()).defaultValue();
 			MethodParameterNode parameter = new MethodParameterNode(globalParameter, defaultValue, false);
+
 			if(fIndex == -1){
 				return new MethodOperationAddParameter(node,parameter);
 			}
