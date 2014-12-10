@@ -14,25 +14,25 @@ import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.MethodParameterNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.TestCaseNode;
-import com.testify.ecfeed.ui.modelif.ClassInterface;
 import com.testify.ecfeed.ui.modelif.GlobalParameterInterface;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 import com.testify.ecfeed.ui.modelif.MethodParameterInterface;
 import com.testify.ecfeed.ui.modelif.ParameterInterface;
-import com.testify.ecfeed.ui.modelif.RootInterface;
 
 public abstract class AbstractAddChildAction extends ModelModifyingAction{
 
 	protected final static String ADD_CLASS_ACTION_NAME = "Add class";
 	protected final static String ADD_METHOD_ACTION_NAME = "Add method";
-	protected final static String ADD_PARAMETER_ACTION_NAME = "Add parameter";
+	protected final static String ADD_METHOD_PARAMETER_ACTION_NAME = "Add parameter";
+	protected final static String ADD_GLOBAL_PARAMETER_ACTION_NAME = "Add global parameter";
 	protected final static String ADD_TEST_CASE_ACTION_NAME = "Add test case";
 	protected final static String ADD_PARTITION_ACTION_NAME = "Add choice";
 	protected final static String ADD_CONSTRAINT_ACTION_NAME = "Add constraint";
 
 	protected final static String ADD_CLASS_ACTION_ID = "addClass";
 	protected final static String ADD_METHOD_ACTION_ID = "addMethod";
-	protected final static String ADD_PARAMETER_ACTION_ID = "addParameter";
+	protected final static String ADD_GLOBAL_PARAMETER_ACTION_ID = "addGlobalParameter";
+	protected final static String ADD_METHOD_PARAMETER_ACTION_ID = "addMethodParameter";
 	protected final static String ADD_TEST_CASE_ACTION_ID = "addTestCase";
 	protected final static String ADD_PARTITION_ACTION_ID = "addChoice";
 	protected final static String ADD_CONSTRAINT_ACTION_ID = "addConstraint";
@@ -43,16 +43,18 @@ public abstract class AbstractAddChildAction extends ModelModifyingAction{
 
 		@Override
 		public Object visit(RootNode node) throws Exception {
-			RootInterface rootIf = new RootInterface(getUpdateContext());
-			rootIf.setTarget(node);
-			return rootIf.addNewClass();
+//			RootInterface rootIf = new RootInterface(getUpdateContext());
+//			rootIf.setTarget(node);
+//			return rootIf.addNewClass();
+			return null;
 		}
 
 		@Override
 		public Object visit(ClassNode node) throws Exception {
-			ClassInterface classIf = new ClassInterface(getUpdateContext());
-			classIf.setTarget(node);
-			return classIf.addNewMethod();
+//			ClassInterface classIf = new ClassInterface(getUpdateContext());
+//			classIf.setTarget(node);
+//			return classIf.addNewMethod();
+			return null;
 		}
 
 		@Override
