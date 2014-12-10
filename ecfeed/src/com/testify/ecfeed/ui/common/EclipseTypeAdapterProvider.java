@@ -51,6 +51,7 @@ public class EclipseTypeAdapterProvider implements ITypeAdapterProvider{
 			TYPE_NAME_STRING, 
 			TYPE_NAME_SHORT, 
 			TYPE_NAME_BYTE,
+			TYPE_NAME_INT
 	};
 
 	private class BooleanTypeAdapter implements ITypeAdapter{
@@ -286,7 +287,11 @@ public class EclipseTypeAdapterProvider implements ITypeAdapterProvider{
 					result = String.valueOf(Integer.parseInt(value));
 				}
 				catch(NumberFormatException e){
-					result = null;
+					if(value.length() == 1){
+						result = Integer.toString((int)value.charAt(0));
+					} else {
+						result = null;
+					}
 				}
 			}
 			return result;
