@@ -224,6 +224,7 @@ public class ChoicesViewer extends TableViewerSection {
 		fParentIf.setTarget(parent);
 	}
 
+	@Override
 	public void setVisible(boolean visible){
 		this.getSection().setVisible(visible);
 	}

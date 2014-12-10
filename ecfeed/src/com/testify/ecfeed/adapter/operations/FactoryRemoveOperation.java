@@ -8,6 +8,7 @@ import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.ConstraintNode;
 import com.testify.ecfeed.model.GlobalParameterNode;
+import com.testify.ecfeed.model.GlobalParametersParentNode;
 import com.testify.ecfeed.model.IModelVisitor;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.MethodParameterNode;
@@ -70,7 +71,7 @@ public class FactoryRemoveOperation {
 
 		@Override
 		public Object visit(GlobalParameterNode node) throws Exception {
-			return new GenericOperationRemoveParameter(node.getParametersParent(), node);
+			return new GenericOperationRemoveGlobalParameter((GlobalParametersParentNode)node.getParametersParent(), node);
 		}
 
 		@Override

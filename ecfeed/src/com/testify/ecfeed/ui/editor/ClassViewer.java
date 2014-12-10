@@ -1,11 +1,11 @@
 /*******************************************************************************
- * Copyright (c) 2013 Testify AS.                                                   
- * All rights reserved. This program and the accompanying materials                 
- * are made available under the terms of the Eclipse Public License v1.0            
- * which accompanies this distribution, and is available at                         
- * http://www.eclipse.org/legal/epl-v10.html                                        
- *                                                                                  
- * Contributors:                                                                    
+ * Copyright (c) 2013 Testify AS.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
  *     Patryk Chamuczynski (p.chamuczynski(at)radytek.com) - initial implementation
  ******************************************************************************/
 
@@ -104,7 +104,7 @@ public class ClassViewer extends TableViewerSection {
 		}
 	}
 
-	
+
 	private class AddImplementedClassAdapter extends SelectionAdapter {
 		@Override
 		public void widgetSelected(SelectionEvent e) {
@@ -115,7 +115,7 @@ public class ClassViewer extends TableViewerSection {
 			}
 		}
 	}
-	
+
 	private class AddNewClassAdapter extends SelectionAdapter {
 		@Override
 		public void widgetSelected(SelectionEvent e) {
@@ -147,17 +147,17 @@ public class ClassViewer extends TableViewerSection {
 
 		fRootIf = new RootInterface(this);
 		fClassIf = new ClassInterface(this);
-		
+
 		setText("Classes");
 		addButton("Add implemented class", new AddImplementedClassAdapter());
 		addButton("New test class", new AddNewClassAdapter());
 		addButton("Remove selected", new ActionSelectionAdapter(new DeleteAction(getViewer(), this)));
-		
+
 		addDoubleClickListener(new SelectNodeDoubleClickListener(parent.getMasterSection()));
 		setActionProvider(new ModelViewerActionProvider(getTableViewer(), this));
 		getViewer().addDragSupport(DND.DROP_COPY|DND.DROP_MOVE, new Transfer[]{ModelNodesTransfer.getInstance()}, new ModelNodeDragListener(getViewer()));
 	}
-	
+
 	@Override
 	protected void createTableColumns(){
 		fNameColumn = addColumn("Class", 150, new ClassViewerColumnLabelProvider(){
@@ -166,7 +166,7 @@ public class ClassViewer extends TableViewerSection {
 				return ClassInterface.getLocalName((ClassNode)element);
 			}
 		});
-		
+
 		fPackageNameColumn = addColumn("Package", 150, new ClassViewerColumnLabelProvider(){
 			@Override
 			public String getText(Object element){
@@ -174,12 +174,12 @@ public class ClassViewer extends TableViewerSection {
 			}
 		});
 	}
-	
+
 	public void setInput(RootNode model){
 		super.setInput(model.getClasses());
 		fRootIf.setTarget(model);
 	}
-	
+
 	private ClassInterface classIf(){
 		if(fClassIf == null){
 			fClassIf = new ClassInterface(this);

@@ -347,13 +347,17 @@ public abstract class ViewerSection extends BasicSection implements ISelectionPr
 
 	@Override
 	protected void setActionProvider(IActionProvider provider){
+		setActionProvider(provider, true);
+	}
+
+	protected void setActionProvider(IActionProvider provider, boolean addDeleteAction){
 		super.setActionProvider(provider);
 		fMenu = new Menu(fViewer.getControl());
 		fViewer.getControl().setMenu(fMenu);
 		fMenu.addMenuListener(getMenuListener());
 
 		if(provider != null){
-			if(provider.getAction(ActionFactory.DELETE.getId()) != null){
+			if(addDeleteAction && provider.getAction(ActionFactory.DELETE.getId()) != null){
 				fKeyListsners.add(addKeyListener(SWT.DEL, SWT.NONE, provider.getAction(ActionFactory.DELETE.getId())));
 			}
 

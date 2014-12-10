@@ -12,7 +12,7 @@ public class GenericOperationRemoveParameter extends AbstractModelOperation{
 	private int fOriginalIndex;
 
 	public GenericOperationRemoveParameter(ParametersParentNode target, AbstractParameterNode parameter) {
-		super(OperationNames.REMOVE_PARAMETER);
+		super(OperationNames.REMOVE_METHOD_PARAMETER);
 		fTarget = target;
 		fParameter = parameter;
 	}
@@ -21,6 +21,7 @@ public class GenericOperationRemoveParameter extends AbstractModelOperation{
 	public void execute() throws ModelOperationException {
 		fOriginalIndex = fTarget.getParameters().indexOf(fParameter);
 		fTarget.removeParameter(fParameter);
+		markModelUpdated();
 	}
 
 	@Override
