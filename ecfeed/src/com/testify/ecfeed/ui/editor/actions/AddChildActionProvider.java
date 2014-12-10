@@ -5,24 +5,29 @@ import java.util.List;
 
 import org.eclipse.jface.viewers.StructuredViewer;
 
+import com.testify.ecfeed.adapter.java.JavaUtils;
 import com.testify.ecfeed.model.AbstractNode;
+import com.testify.ecfeed.model.AbstractParameterNode;
 import com.testify.ecfeed.model.ChoiceNode;
+import com.testify.ecfeed.model.ChoicesParentNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.ConstraintNode;
 import com.testify.ecfeed.model.GlobalParameterNode;
 import com.testify.ecfeed.model.GlobalParametersParentNode;
 import com.testify.ecfeed.model.IModelVisitor;
+import com.testify.ecfeed.model.IParameterVisitor;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.MethodParameterNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.TestCaseNode;
+import com.testify.ecfeed.ui.modelif.ChoicesParentInterface;
 import com.testify.ecfeed.ui.modelif.ClassInterface;
 import com.testify.ecfeed.ui.modelif.GlobalParametersParentInterface;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 import com.testify.ecfeed.ui.modelif.MethodInterface;
 import com.testify.ecfeed.ui.modelif.RootInterface;
 
-public class AddChildActionFactory {
+public class AddChildActionProvider {
 
 	private StructuredViewer fViewer;
 	private IModelUpdateContext fContext;
@@ -31,7 +36,7 @@ public class AddChildActionFactory {
 		private GlobalParametersParentInterface fParentIf;
 
 		public AddGlobalParameterAction() {
-			super(ADD_METHOD_PARAMETER_ACTION_ID, ADD_METHOD_PARAMETER_ACTION_NAME, fViewer, fContext);
+			super(ADD_GLOBAL_PARAMETER_ACTION_ID, ADD_GLOBAL_PARAMETER_ACTION_NAME, fViewer, fContext);
 			fParentIf = new GlobalParametersParentInterface(fContext);
 		}
 
@@ -42,6 +47,7 @@ public class AddChildActionFactory {
 			}
 		}
 
+		@Override
 		protected GlobalParametersParentInterface getParentInterface(){
 			List<AbstractNode> nodes = getSelectedNodes();
 			if(nodes.size() != 1) return null;
@@ -60,6 +66,7 @@ public class AddChildActionFactory {
 			fParentIf = new RootInterface(fContext);
 		}
 
+		@Override
 		protected RootInterface getParentInterface(){
 			List<AbstractNode> nodes = getSelectedNodes();
 			if(nodes.size() != 1) return null;
@@ -84,6 +91,7 @@ public class AddChildActionFactory {
 			fParentIf = new ClassInterface(fContext);
 		}
 
+		@Override
 		protected ClassInterface getParentInterface(){
 			List<AbstractNode> nodes = getSelectedNodes();
 			if(nodes.size() != 1) return null;
@@ -109,13 +117,6 @@ public class AddChildActionFactory {
 		}
 
 		@Override
-		public boolean isEnabled(){
-			List<AbstractNode> nodes = getSelectedNodes();
-			if(nodes.size() != 1) return false;
-			if(nodes.get(0) instanceof MethodNode == false) return false;
-			return true;
-		}
-
 		protected MethodInterface getParentInterface(){
 			List<AbstractNode> nodes = getSelectedNodes();
 			if(nodes.size() != 1) return null;
@@ -159,8 +160,51 @@ public class AddChildActionFactory {
 	}
 
 	private class AddChoiceAction extends AbstractAddChildAction{
+		private ChoicesParentInterface fParentIf;
+
+		private class EnableVisitor implements IParameterVisitor{
+
+			@Override
+			public Object visit(MethodParameterNode node) throws Exception {
+				return (node.isLinked() == false) && (node.isExpected() == false || JavaUtils.isUserType(node.getType()));
+			}
+
+			@Override
+			public Object visit(GlobalParameterNode node) throws Exception {
+				return true;
+			}
+
+		}
+
 		public AddChoiceAction(){
 			super(ADD_PARTITION_ACTION_ID, ADD_PARTITION_ACTION_NAME, fViewer, fContext);
+			fParentIf = new ChoicesParentInterface(fContext);
+		}
+
+		@Override
+		protected ChoicesParentInterface getParentInterface(){
+			List<AbstractNode> nodes = getSelectedNodes();
+			if(nodes.size() != 1) return null;
+			if(nodes.get(0) instanceof ChoicesParentNode == false) return null;
+			fParentIf.setTarget((ChoicesParentNode)nodes.get(0));
+			return fParentIf;
+		}
+
+		@Override
+		public void run(){
+			select(fParentIf.addNewChoice());
+		}
+
+		@Override
+		public boolean isEnabled(){
+			if(super.isEnabled() == false) return false;
+
+			ChoicesParentNode target = (ChoicesParentNode)getSelectedNodes().get(0);
+			AbstractParameterNode parameter = target.getParameter();
+			try{
+			return (boolean)parameter.accept(new EnableVisitor());
+			}catch(Exception e){}
+			return false;
 		}
 	}
 
@@ -223,7 +267,7 @@ public class AddChildActionFactory {
 		}
 	}
 
-	public AddChildActionFactory(StructuredViewer viewer, IModelUpdateContext context){
+	public AddChildActionProvider(StructuredViewer viewer, IModelUpdateContext context){
 		fContext = context;
 		fViewer = viewer;
 	}

@@ -57,7 +57,7 @@ import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.ui.common.Constants;
 import com.testify.ecfeed.ui.editor.actions.AbstractAddChildAction;
-import com.testify.ecfeed.ui.editor.actions.AddChildActionFactory;
+import com.testify.ecfeed.ui.editor.actions.AddChildActionProvider;
 import com.testify.ecfeed.ui.editor.actions.ModelViewerActionProvider;
 import com.testify.ecfeed.ui.modelif.AbstractNodeInterface;
 import com.testify.ecfeed.ui.modelif.IModelUpdateListener;
@@ -439,8 +439,8 @@ public class ModelMasterSection extends TreeViewerSection{
 		protected void populateMenu(){
 			List<AbstractNode> selected = getSelectedNodes();
 			if(selected.size() == 1){
-				AddChildActionFactory factory = new AddChildActionFactory(getTreeViewer(), ModelMasterSection.this);
-				List<AbstractAddChildAction> actions = factory.getPossibleActions(selected.get(0));
+				AddChildActionProvider actionProvider = new AddChildActionProvider(getTreeViewer(), ModelMasterSection.this);
+				List<AbstractAddChildAction> actions = actionProvider.getPossibleActions(selected.get(0));
 				for(AbstractAddChildAction action : actions){
 					addMenuItem(action.getName(), action);
 				}
