@@ -264,7 +264,10 @@ public class EclipseTypeAdapterProvider implements ITypeAdapterProvider{
 				}
 				catch(NumberFormatException e){
 					if(value.length() == 1){
-						result = Integer.toString((int)value.charAt(0));
+						int charValue = (int)value.charAt(0);
+						if((charValue > Byte.MAX_VALUE) == false){
+							result = Integer.toString(charValue);
+						}
 					} else {
 						result = null;
 					}
@@ -316,7 +319,10 @@ public class EclipseTypeAdapterProvider implements ITypeAdapterProvider{
 				}
 				catch(NumberFormatException e){
 					if(value.length() == 1){
-						result = Integer.toString((int)value.charAt(0));
+						int charValue = (int)value.charAt(0);
+						if((charValue > Short.MAX_VALUE) == false){
+							result = Integer.toString(charValue);
+						}
 					} else {
 						result = null;
 					}
