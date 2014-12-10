@@ -222,7 +222,7 @@ public class JavaUtils {
 		if(parent.getMethod(methodName, argTypes) != null){
 			valid = false;
 			if(problems != null){
-				problems.add(Messages.METHOD_SIGNATURE_DUPLICATE_PROBLEM);
+				problems.add(Messages.METHOD_SIGNATURE_DUPLICATE_PROBLEM(parent.getName(), methodName));
 			}
 		}
 		return valid;

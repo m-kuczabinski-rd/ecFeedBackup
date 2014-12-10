@@ -5,9 +5,9 @@ import java.util.List;
 
 import com.testify.ecfeed.adapter.IModelOperation;
 import com.testify.ecfeed.adapter.ModelOperationException;
-import com.testify.ecfeed.model.MethodParameterNode;
 import com.testify.ecfeed.model.AbstractNode;
 import com.testify.ecfeed.model.MethodNode;
+import com.testify.ecfeed.model.MethodParameterNode;
 import com.testify.ecfeed.model.TestCaseNode;
 
 public class MethodParameterShiftOperation extends GenericShiftOperation {
@@ -27,13 +27,13 @@ public class MethodParameterShiftOperation extends GenericShiftOperation {
 		super(parameters, shifted, shift);
 		fParameters = parameters;
 	}
-	
+
 	@Override
 	public void execute() throws ModelOperationException {
-		if(shiftAllowed(getShiftedElements(), getShift()) == false){
-			throw new ModelOperationException(Messages.METHOD_SIGNATURE_DUPLICATE_PROBLEM);
-		}
 		MethodNode method = fParameters.get(0).getMethod();
+		if(shiftAllowed(getShiftedElements(), getShift()) == false){
+			throw new ModelOperationException(Messages.METHOD_SIGNATURE_DUPLICATE_PROBLEM(method.getClassNode().getName(), method.getName()));
+		}
 		List<Integer> indices = indices(fParameters, getShiftedElements());
 		shiftElements(fParameters, indices, getShift());
 		for(TestCaseNode testCase : method.getTestCases()){
@@ -41,7 +41,7 @@ public class MethodParameterShiftOperation extends GenericShiftOperation {
 		}
 	}
 
-	@Override 
+	@Override
 	public IModelOperation reverseOperation(){
 		return new MethodParameterShiftOperation(fParameters, getShiftedElements(), -getShift());
 	}
@@ -66,12 +66,12 @@ public class MethodParameterShiftOperation extends GenericShiftOperation {
 		int shift = up ? -1 : 1;
 		while(shiftAllowed(shifted, shift) == false){
 			shift += up ? -1 : 1;
-			int borderIndex = (borderNode(shifted, shift) != null) ? borderNode(shifted, shift).getIndex() + shift : -1; 
+			int borderIndex = (borderNode(shifted, shift) != null) ? borderNode(shifted, shift).getIndex() + shift : -1;
 			if(borderIndex < 0 || borderIndex >= borderNode(shifted, shift).getMaxIndex()){
 				return 0;
 			}
 		}
 		return shift;
 	}
-	
+
 }

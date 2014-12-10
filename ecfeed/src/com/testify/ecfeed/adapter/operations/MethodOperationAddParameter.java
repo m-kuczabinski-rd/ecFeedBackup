@@ -52,7 +52,9 @@ public class MethodOperationAddParameter extends GenericOperationAddParameter {
 		List<String> types = fTarget.getParametersTypes();
 		types.add(fNewIndex, fParameter.getType());
 		if(fTarget.getClassNode() != null && fTarget.getClassNode().getMethod(fTarget.getName(), types) != null){
-			throw new ModelOperationException(Messages.METHOD_SIGNATURE_DUPLICATE_PROBLEM);
+			String className = fTarget.getClassNode().getName();
+			String methodName =  fTarget.getClassNode().getMethod(fTarget.getName(), types).getName();
+			throw new ModelOperationException(Messages.METHOD_SIGNATURE_DUPLICATE_PROBLEM(className, methodName));
 		}
 		fTarget.removeTestCases();
 		super.execute();
