@@ -33,7 +33,7 @@ public class AbstractParameterOperationSetType extends AbstractModelOperation {
 		@Override
 		public void execute() throws ModelOperationException {
 			restoreOriginalChoices(fTarget);
-			restoreOriginalValues(fTarget.getChoices());
+			restoreOriginalValues(fTarget);
 			fTarget.setType(fCurrentType);
 		}
 
@@ -42,19 +42,19 @@ public class AbstractParameterOperationSetType extends AbstractModelOperation {
 			return new AbstractParameterOperationSetType(fTarget, fNewType, fAdapterProvider);
 		}
 
-		private void restoreOriginalChoices(ChoicesParentNode parent) {
-			parent.replaceChoices(fOriginalChoices.get(parent));
-			for(ChoiceNode child : parent.getChoices()){
+		protected void restoreOriginalChoices(ChoicesParentNode parent) {
+			parent.replaceChoices(getOriginalChoices().get(parent));
+			for(ChoiceNode child : getChoices(parent)){
 				restoreOriginalChoices(child);
 			}
 		}
 
-		private void restoreOriginalValues(List<ChoiceNode> choices) {
-			for(ChoiceNode choice : choices){
-				if(fOriginalValues.containsKey(choice)){
-					choice.setValueString(fOriginalValues.get(choice));
+		protected void restoreOriginalValues(ChoicesParentNode parent) {
+			for(ChoiceNode choice : getChoices(parent)){
+				if(getOriginalValues().containsKey(choice)){
+					choice.setValueString(getOriginalValues().get(choice));
 				}
-				restoreOriginalValues(choice.getChoices());
+				restoreOriginalValues(choice);
 			}
 		}
 
@@ -72,11 +72,11 @@ public class AbstractParameterOperationSetType extends AbstractModelOperation {
 	@Override
 	public void execute() throws ModelOperationException {
 		fCurrentType = fTarget.getType();
-		fOriginalChoices.clear();
-		fOriginalValues.clear();
+		getOriginalChoices().clear();
+		getOriginalValues().clear();
 
 		saveChoices(fTarget);
-		saveValues(fTarget.getChoices());
+		saveValues(fTarget);
 
 		if(JavaUtils.isValidTypeName(fNewType) == false){
 			throw new ModelOperationException(Messages.CATEGORY_TYPE_REGEX_PROBLEM);
@@ -92,29 +92,29 @@ public class AbstractParameterOperationSetType extends AbstractModelOperation {
 	}
 
 	protected void saveChoices(ChoicesParentNode parent){
-		fOriginalChoices.put(parent, new ArrayList<ChoiceNode>(parent.getChoices()));
-		for(ChoiceNode child : parent.getChoices()){
+		getOriginalChoices().put(parent, new ArrayList<ChoiceNode>(getChoices(parent)));
+		for(ChoiceNode child : getChoices(parent)){
 			saveChoices(child);
 		}
 	}
 
-	protected void saveValues(List<ChoiceNode> choices) {
-		for(ChoiceNode choice : choices){
-			fOriginalValues.put(choice, choice.getValueString());
-			saveValues(choice.getChoices());
+	protected void saveValues(ChoicesParentNode parent) {
+		for(ChoiceNode choice : getChoices(parent)){
+			getOriginalValues().put(choice, choice.getValueString());
+			saveValues(choice);
 		}
 	}
 
 	// removed choices that cannot be converted and parents of only non-convertable choices.
 	// convert values of remaining choices.
 	private void adaptChoices(ChoicesParentNode parent){
-		Iterator<ChoiceNode> it = parent.getChoices().iterator();
+		Iterator<ChoiceNode> it = getChoices(parent).iterator();
 		ITypeAdapter adapter = fAdapterProvider.getAdapter(fNewType);
 		while(it.hasNext()){
 			ChoiceNode choice = it.next();
 			if(choice.isAbstract()){
 				adaptChoices(choice);
-				if(choice.getChoices().isEmpty()){
+				if(getChoices(choice).isEmpty()){
 					it.remove();
 				}else{
 					String newValue = adapter.convert(choice.getValueString());
@@ -131,7 +131,27 @@ public class AbstractParameterOperationSetType extends AbstractModelOperation {
 					choice.setValueString(newValue);
 				}
 			}
-
 		}
 	}
+
+	protected Map<ChoicesParentNode, List<ChoiceNode>> getOriginalChoices(){
+		return fOriginalChoices;
+	}
+
+	protected Map<ChoiceNode, String> getOriginalValues(){
+		return fOriginalValues;
+	}
+
+	protected List<ChoiceNode> getChoices(ChoicesParentNode parent){
+		return parent.getChoices();
+	}
+
+	protected ITypeAdapterProvider getAdapterProvider(){
+		return fAdapterProvider;
+	}
+
+	protected String getNewType(){
+		return fNewType;
+	}
+
 }

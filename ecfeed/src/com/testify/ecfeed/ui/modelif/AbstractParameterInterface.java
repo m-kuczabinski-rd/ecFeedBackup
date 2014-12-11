@@ -5,13 +5,11 @@ import java.util.List;
 
 import com.testify.ecfeed.adapter.ITypeAdapterProvider;
 import com.testify.ecfeed.adapter.java.JavaUtils;
-import com.testify.ecfeed.adapter.operations.AbstractParameterOperationSetType;
 import com.testify.ecfeed.model.AbstractParameterNode;
 import com.testify.ecfeed.ui.common.EclipseModelBuilder;
 import com.testify.ecfeed.ui.common.EclipseTypeAdapterProvider;
-import com.testify.ecfeed.ui.common.Messages;
 
-public class AbstractParameterInterface extends ChoicesParentInterface {
+public abstract class AbstractParameterInterface extends ChoicesParentInterface {
 
 	private AbstractParameterNode fTarget;
 	private ITypeAdapterProvider fAdapterProvider;
@@ -26,12 +24,12 @@ public class AbstractParameterInterface extends ChoicesParentInterface {
 		fTarget = target;
 	}
 
-	public boolean setType(String newType) {
-		if(newType.equals(fTarget.getType())){
-			return false;
-		}
-		return execute(new AbstractParameterOperationSetType(fTarget, newType, fAdapterProvider), Messages.DIALOG_RENAME_PAREMETER_PROBLEM_TITLE);
-	}
+	public abstract boolean setType(String newType);
+//		if(newType.equals(fTarget.getType())){
+//			return false;
+//		}
+//		return execute(new AbstractParameterOperationSetType(fTarget, newType, fAdapterProvider), Messages.DIALOG_RENAME_PAREMETER_PROBLEM_TITLE);
+//	}
 
 	protected ITypeAdapterProvider getTypeAdapterProvider(){
 		return fAdapterProvider;

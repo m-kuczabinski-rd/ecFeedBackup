@@ -21,7 +21,6 @@ import com.testify.ecfeed.ui.editor.actions.DeleteAction;
 import com.testify.ecfeed.ui.editor.actions.ModelViewerActionProvider;
 import com.testify.ecfeed.ui.modelif.AbstractParameterInterface;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
-import com.testify.ecfeed.ui.modelif.ParameterInterface;
 import com.testify.ecfeed.ui.modelif.ParametersParentInterface;
 
 public abstract class AbstractParametersViewer extends TableViewerSection {
@@ -29,10 +28,9 @@ public abstract class AbstractParametersViewer extends TableViewerSection {
 	private TableViewerColumn fNameColumn;
 	private TableViewerColumn fTypeColumn;
 
-	private AbstractParameterInterface fParameterIf;
 	private ParametersParentInterface fParentIf;
 
-	private class ParameterTypeEditingSupport extends EditingSupport {
+	protected class ParameterTypeEditingSupport extends EditingSupport {
 
 		private ComboBoxCellEditor fCellEditor;
 
@@ -43,7 +41,7 @@ public abstract class AbstractParametersViewer extends TableViewerSection {
 		@Override
 		protected CellEditor getCellEditor(Object element) {
 			if(fCellEditor == null){
-				fCellEditor = new ComboBoxCellEditor(getTable(), ParameterInterface.supportedPrimitiveTypes());
+				fCellEditor = new ComboBoxCellEditor(getTable(), AbstractParameterInterface.supportedPrimitiveTypes());
 				fCellEditor.setActivationStyle(ComboBoxCellEditor.DROP_DOWN_ON_KEY_ACTIVATION);
 			}
 			return fCellEditor;
@@ -83,8 +81,8 @@ public abstract class AbstractParametersViewer extends TableViewerSection {
 			} else {
 				newType = ((CCombo)fCellEditor.getControl()).getText();
 			}
-			fParameterIf.setTarget(node);
-			fParameterIf.setType(newType);
+			getParameterInterface().setTarget(node);
+			getParameterInterface().setType(newType);
 
 			fCellEditor.setFocus();
 		}
@@ -117,8 +115,8 @@ public abstract class AbstractParametersViewer extends TableViewerSection {
 
 		@Override
 		protected void setValue(Object element, Object value) {
-			fParameterIf.setTarget((AbstractParameterNode)element);
-			fParameterIf.setName((String)value);
+			getParameterInterface().setTarget((AbstractParameterNode)element);
+			getParameterInterface().setName((String)value);
 		}
 	}
 
@@ -135,7 +133,6 @@ public abstract class AbstractParametersViewer extends TableViewerSection {
 
 	public AbstractParametersViewer(ISectionContext sectionContext, IModelUpdateContext updateContext, int STYLE) {
 		super(sectionContext, updateContext, STYLE);
-		fParameterIf = new ParameterInterface(this);
 		fParentIf = getParametersParentInterface();
 
 		GridData gd = new GridData(SWT.FILL, SWT.FILL, true, true);
@@ -146,12 +143,10 @@ public abstract class AbstractParametersViewer extends TableViewerSection {
 		addButton("Remove selected", new ActionSelectionAdapter(new DeleteAction(getViewer(), this)));
 
 		fNameColumn.setEditingSupport(new ParameterNameEditingSupport());
-		fTypeColumn.setEditingSupport(new ParameterTypeEditingSupport());
+		fTypeColumn.setEditingSupport(getParameterTypeEditingSupport());
 
 		addDoubleClickListener(new SelectNodeDoubleClickListener(sectionContext.getMasterSection()));
 		setActionProvider(new ModelViewerActionProvider(getTableViewer(), this));
-//		getViewer().addDragSupport(DND.DROP_COPY|DND.DROP_MOVE, new Transfer[]{ModelNodesTransfer.getInstance()}, new ModelNodeDragListener(getViewer()));
-//		getViewer().addDropSupport(DND.DROP_COPY|DND.DROP_MOVE, new Transfer[]{ModelNodesTransfer.getInstance()}, new ModelNodeDropListener(getViewer(), this));
 	}
 
 	@Override
@@ -170,5 +165,10 @@ public abstract class AbstractParametersViewer extends TableViewerSection {
 		super.setInput(parent.getParameters());
 	}
 
+	protected EditingSupport getParameterTypeEditingSupport() {
+		return new ParameterTypeEditingSupport();
+	}
+
 	protected abstract ParametersParentInterface getParametersParentInterface();
+	protected abstract AbstractParameterInterface getParameterInterface();
 }

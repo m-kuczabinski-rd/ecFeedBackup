@@ -157,4 +157,6 @@ public abstract class ChoicesParentNode extends AbstractNode{
 		}
 		return result;
 	}
+
+	public abstract Object accept(IChoicesParentVisitor visitor) throws Exception;
 }

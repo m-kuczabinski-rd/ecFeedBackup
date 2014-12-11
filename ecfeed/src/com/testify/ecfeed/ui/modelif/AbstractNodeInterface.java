@@ -172,4 +172,9 @@ public class AbstractNodeInterface extends OperationExecuter{
 	protected ITypeAdapterProvider getAdapterProvider(){
 		return fAdapterProvider;
 	}
+
+	protected AbstractNode getTarget(){
+		return fTarget;
+	}
+
 }

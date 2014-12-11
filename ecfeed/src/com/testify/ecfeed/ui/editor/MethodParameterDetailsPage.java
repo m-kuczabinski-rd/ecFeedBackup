@@ -21,8 +21,6 @@ import com.testify.ecfeed.ui.modelif.MethodParameterInterface;
 
 public class MethodParameterDetailsPage extends AbstractParameterDetailsPage {
 
-	private final String NOT_LINKED = "NOT LINKED";
-
 	private MethodParameterInterface fParameterIf;
 	private Button fExpectedCheckbox;
 	private Combo fDefaultValueCombo;
@@ -51,8 +49,6 @@ public class MethodParameterDetailsPage extends AbstractParameterDetailsPage {
 		public void widgetSelected(SelectionEvent e) {
 			fParameterIf.setLinked(fLinkedCheckbox.getSelection());
 			fLinkedCheckbox.setSelection(fParameterIf.isLinked());
-			GlobalParameterNode link = fParameterIf.getLink();
-			fLinkCombo.setText(link != null ? link.toString() : NOT_LINKED);
 		}
 	}
 
@@ -135,9 +131,9 @@ public class MethodParameterDetailsPage extends AbstractParameterDetailsPage {
 			fLinkedCheckbox.setEnabled(linkedCheckboxEnabled());
 			fLinkCombo.setItems(availableLinks().toArray(new String[]{}));
 
-			if(parameter.getLink() == null && fParameterIf.getAvailableLinks().size() > 0){
-				parameter.setLink(fParameterIf.getAvailableLinks().get(0));
-			}
+//			if(parameter.getLink() == null && fParameterIf.getAvailableLinks().size() > 0){
+//				parameter.setLink(fParameterIf.getAvailableLinks().get(0));
+//			}
 			if(parameter.getLink() != null){
 				fLinkCombo.setText(linkName(parameter.getLink()));
 			}

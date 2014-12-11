@@ -40,5 +40,6 @@ public class Messages {
 	public static final String TEST_DATA_CATEGORY_MISMATCH_PROBLEM = "New test value has wrong parent parameter.";
 	public static final String PARTITION_NAME_DUPLICATE_PROBLEM = "The choice with this name already exists";
 	public static final String EXPECTED_USER_TYPE_CATEGORY_LAST_PARTITION_PROBLEM = "User type expected parameters must have at least one choice. It's value will define the default expected value of the parameter";
+	public static final String LINK_NOT_SET_PROBLEM = "The link to global parameter is not defined";
 
 }

@@ -180,6 +180,11 @@ public class MethodParameterNode extends AbstractParameterNode{
 	}
 
 	@Override
+	public Object accept(IChoicesParentVisitor visitor) throws Exception{
+		return visitor.visit(this);
+	}
+
+	@Override
 	public Object accept(IParameterVisitor visitor) throws Exception {
 		return visitor.visit(this);
 	}

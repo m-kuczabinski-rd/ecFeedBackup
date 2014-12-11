@@ -83,7 +83,7 @@ public class ChoicesParentInterface extends AbstractNodeInterface {
 	}
 
 	public boolean isPrimitive() {
-		return ParameterInterface.isPrimitive(fTarget.getParameter().getType());
+		return AbstractParameterInterface.isPrimitive(fTarget.getParameter().getType());
 	}
 
 	public boolean isUserType() {
@@ -99,7 +99,7 @@ public class ChoicesParentInterface extends AbstractNodeInterface {
 	}
 
 	public  boolean isBoolean() {
-		return ParameterInterface.isBoolean(fTarget.getParameter().getType());
+		return AbstractParameterInterface.isBoolean(fTarget.getParameter().getType());
 	}
 
 	protected String generateChoiceName(){

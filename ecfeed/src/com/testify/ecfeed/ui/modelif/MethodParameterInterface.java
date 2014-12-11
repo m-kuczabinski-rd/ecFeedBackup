@@ -12,8 +12,10 @@ import com.testify.ecfeed.adapter.IModelOperation;
 import com.testify.ecfeed.adapter.java.JavaUtils;
 import com.testify.ecfeed.adapter.operations.MethodParameterOperationSetLink;
 import com.testify.ecfeed.adapter.operations.MethodParameterOperationSetLinked;
+import com.testify.ecfeed.adapter.operations.MethodParameterOperationSetType;
 import com.testify.ecfeed.adapter.operations.ParameterOperationSetDefaultValue;
 import com.testify.ecfeed.adapter.operations.ParameterOperationSetExpected;
+import com.testify.ecfeed.model.AbstractParameterNode;
 import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.model.GlobalParameterNode;
 import com.testify.ecfeed.model.GlobalParametersParentNode;
@@ -30,9 +32,10 @@ public class MethodParameterInterface extends AbstractParameterInterface {
 		super(updateContext);
 	}
 
-	public void setTarget(MethodParameterNode target){
+	@Override
+	public void setTarget(AbstractParameterNode target){
 		super.setTarget(target);
-		fTarget = target;
+		fTarget = (MethodParameterNode)target;
 	}
 
 	public boolean isExpected() {
@@ -95,7 +98,46 @@ public class MethodParameterInterface extends AbstractParameterInterface {
 	}
 
 	public boolean setLinked(boolean linked) {
-		IModelOperation operation = new MethodParameterOperationSetLinked(fTarget, linked);
+		MethodParameterOperationSetLinked operation = new MethodParameterOperationSetLinked(fTarget, linked);
+		MethodNode method = fTarget.getMethod();
+		List<String> types = method.getParametersTypes();
+		if(linked){
+			//check the type of the link. If it causes collision, set different link
+			boolean newLinkNecessary = false;
+			if(fTarget.getLink() == null){
+				newLinkNecessary = true;
+			}else{
+				String linkType = fTarget.getLink().getType();
+				types.set(fTarget.getIndex(), linkType);
+				if(method.getClassNode().getMethod(method.getName(), types) != null && (method.getClassNode().getMethod(method.getName(), types) != method)){
+					newLinkNecessary = true;
+				}
+			}
+			if(newLinkNecessary){
+				boolean linkFound = false;
+				for(GlobalParameterNode link : getAvailableLinks()){
+					types.set(fTarget.getIndex(), link.getType());
+					if(method.getClassNode().getMethod(method.getName(), types) == null){
+						operation.addOperation(0, new MethodParameterOperationSetLink(fTarget, link));
+						linkFound = true;
+						break;
+					}
+				}
+				if(linkFound == false){
+					MessageDialog.openError(Display.getCurrent().getActiveShell(), Messages.DIALOG_SET_PARAMETER_LINKED_PROBLEM_TITLE, Messages.DIALOG_NO_VALID_LINK_AVAILABLE_PROBLEM_MESSAGE);
+					return false;
+				}
+			}
+		}else{
+			//check the type of the unlinked parameter. If it causes collision, set new type
+			String type = fTarget.getRealType();
+			types.set(fTarget.getIndex(), type);
+			if(method.getClassNode().getMethod(method.getName(), types) != null && method.getClassNode().getMethod(method.getName(), types) != method){
+				type = fTarget.getType();
+				operation.addOperation(0, new MethodParameterOperationSetType(fTarget, type, getAdapterProvider()));
+			}
+		}
+
 		return execute(operation, Messages.DIALOG_SET_PARAMETER_LINKED_PROBLEM_TITLE);
 	}
 
@@ -137,4 +179,11 @@ public class MethodParameterInterface extends AbstractParameterInterface {
 		return result;
 	}
 
+	@Override
+	public boolean setType(String newType) {
+		if(newType.equals(fTarget.getType())){
+			return false;
+		}
+		return execute(new MethodParameterOperationSetType(fTarget, newType, getAdapterProvider()), Messages.DIALOG_RENAME_PAREMETER_PROBLEM_TITLE);
+	}
 }

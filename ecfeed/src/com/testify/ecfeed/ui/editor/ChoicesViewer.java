@@ -39,11 +39,11 @@ import com.testify.ecfeed.ui.common.NodeNameColumnLabelProvider;
 import com.testify.ecfeed.ui.editor.actions.DeleteAction;
 import com.testify.ecfeed.ui.editor.actions.IActionProvider;
 import com.testify.ecfeed.ui.editor.actions.ModelViewerActionProvider;
+import com.testify.ecfeed.ui.modelif.AbstractParameterInterface;
 import com.testify.ecfeed.ui.modelif.ChoiceInterface;
 import com.testify.ecfeed.ui.modelif.ChoicesParentInterface;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 import com.testify.ecfeed.ui.modelif.ModelNodesTransfer;
-import com.testify.ecfeed.ui.modelif.ParameterInterface;
 
 public class ChoicesViewer extends TableViewerSection {
 
@@ -125,12 +125,12 @@ public class ChoicesViewer extends TableViewerSection {
 		protected CellEditor getCellEditor(Object element) {
 			ChoiceNode node = (ChoiceNode)element;
 			AbstractParameterNode parameter = node.getParameter();
-			if(ParameterInterface.hasLimitedValuesSet(node.getParameter())){
+			if(AbstractParameterInterface.hasLimitedValuesSet(node.getParameter())){
 				fCellEditor.setActivationStyle(ComboBoxCellEditor.DROP_DOWN_ON_KEY_ACTIVATION);
 			} else {
 				fCellEditor.setActivationStyle(SWT.NONE);
 			}
-			List<String> items = ParameterInterface.getSpecialValues(node.getParameter().getType());
+			List<String> items = AbstractParameterInterface.getSpecialValues(node.getParameter().getType());
 			if(JavaUtils.isUserType(parameter.getType())){
 				Set<String> usedValues = parameter.getLeafChoiceValues();
 				usedValues.removeAll(items);
@@ -140,7 +140,7 @@ public class ChoicesViewer extends TableViewerSection {
 				items.add(node.getValueString());
 			}
 			fCellEditor.setInput(items);
-			fCellEditor.getViewer().getCCombo().setEditable(ParameterInterface.isBoolean(node.getParameter().getType()) == false);
+			fCellEditor.getViewer().getCCombo().setEditable(AbstractParameterInterface.isBoolean(node.getParameter().getType()) == false);
 			return fCellEditor;
 		}
 
@@ -197,7 +197,7 @@ public class ChoicesViewer extends TableViewerSection {
 	public ChoicesViewer(ISectionContext sectionContext, IModelUpdateContext updateContext) {
 		super(sectionContext, updateContext, STYLE);
 
-		fParentIf = new ParameterInterface(this);
+		fParentIf = new ChoicesParentInterface(this);
 		fTableItemIf = new ChoiceInterface(this);
 
 		fNameEditingSupport = new ChoiceNameEditingSupport();

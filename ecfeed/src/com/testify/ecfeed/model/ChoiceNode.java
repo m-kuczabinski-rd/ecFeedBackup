@@ -169,6 +169,11 @@ public class ChoiceNode extends ChoicesParentNode{
 		return visitor.visit(this);
 	}
 
+	@Override
+	public Object accept(IChoicesParentVisitor visitor) throws Exception{
+		return visitor.visit(this);
+	}
+
 	private ChoiceNode parentChoice(){
 		if(fParent != null && fParent != getParameter()){
 			return (ChoiceNode)fParent;

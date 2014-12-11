@@ -60,9 +60,9 @@ import com.testify.ecfeed.ui.editor.actions.AbstractAddChildAction;
 import com.testify.ecfeed.ui.editor.actions.AddChildActionProvider;
 import com.testify.ecfeed.ui.editor.actions.ModelViewerActionProvider;
 import com.testify.ecfeed.ui.modelif.AbstractNodeInterface;
+import com.testify.ecfeed.ui.modelif.AbstractParameterInterface;
 import com.testify.ecfeed.ui.modelif.IModelUpdateListener;
 import com.testify.ecfeed.ui.modelif.ModelNodesTransfer;
-import com.testify.ecfeed.ui.modelif.ParameterInterface;
 
 public class ModelMasterSection extends TreeViewerSection{
 	private static final int STYLE = Section.EXPANDED | Section.TITLE_BAR;
@@ -126,7 +126,7 @@ public class ModelMasterSection extends TreeViewerSection{
 
 			if(parentElement instanceof MethodParameterNode){
 				MethodParameterNode parameter = (MethodParameterNode)parentElement;
-				if(parameter.isExpected() && ParameterInterface.isPrimitive(parameter.getType())){
+				if(parameter.isExpected() && AbstractParameterInterface.isPrimitive(parameter.getType())){
 					return EMPTY_ARRAY;
 				}
 				if(parameter.isLinked()){

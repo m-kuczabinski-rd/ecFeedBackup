@@ -13,7 +13,6 @@ import com.testify.ecfeed.model.AbstractParameterNode;
 import com.testify.ecfeed.ui.common.IFileInfoProvider;
 import com.testify.ecfeed.ui.modelif.AbstractParameterInterface;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
-import com.testify.ecfeed.ui.modelif.ParameterInterface;
 
 public abstract class AbstractParameterDetailsPage extends BasicDetailsPage {
 
@@ -69,7 +68,7 @@ public abstract class AbstractParameterDetailsPage extends BasicDetailsPage {
 
 			getMainSection().setText(parameter.toString());
 			fNameText.setText(parameter.getName());
-			fTypeCombo.setItems(ParameterInterface.supportedPrimitiveTypes());
+			fTypeCombo.setItems(AbstractParameterInterface.supportedPrimitiveTypes());
 			fTypeCombo.setText(parameter.getType());
 
 			fChoicesViewer.setInput(parameter);

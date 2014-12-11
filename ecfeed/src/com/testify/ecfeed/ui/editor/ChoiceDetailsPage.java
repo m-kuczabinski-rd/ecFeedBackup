@@ -26,7 +26,7 @@ import org.eclipse.swt.widgets.Text;
 import com.testify.ecfeed.adapter.java.JavaUtils;
 import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.ui.common.IFileInfoProvider;
-import com.testify.ecfeed.ui.modelif.ParameterInterface;
+import com.testify.ecfeed.ui.modelif.AbstractParameterInterface;
 import com.testify.ecfeed.ui.modelif.ChoiceInterface;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 
@@ -102,12 +102,12 @@ public class ChoiceDetailsPage extends BasicDetailsPage {
 			fValueCombo.dispose();
 		}
 		int style = SWT.DROP_DOWN;
-		if(ParameterInterface.isBoolean(type)){
+		if(AbstractParameterInterface.isBoolean(type)){
 			style |= SWT.READ_ONLY;
 		}
 		fValueCombo = new ComboViewer(fAttributesComposite, style).getCombo();
 		fValueCombo.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
-		Set<String> items = new LinkedHashSet<String>(ParameterInterface.getSpecialValues(type));
+		Set<String> items = new LinkedHashSet<String>(AbstractParameterInterface.getSpecialValues(type));
 		if(JavaUtils.isUserType(type)){
 			Set<String> usedValues = fChoiceIf.getParameter().getLeafChoiceValues();
 			usedValues.removeAll(items);

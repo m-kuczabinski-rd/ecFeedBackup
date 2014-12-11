@@ -1,16 +1,15 @@
 package com.testify.ecfeed.ui.editor;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
-import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ComboBoxCellEditor;
-import org.eclipse.jface.viewers.ComboBoxViewerCellEditor;
 import org.eclipse.jface.viewers.EditingSupport;
-import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.ui.forms.widgets.Section;
@@ -21,11 +20,11 @@ import com.testify.ecfeed.model.GlobalParameterNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.MethodParameterNode;
 import com.testify.ecfeed.ui.common.NodeViewerColumnLabelProvider;
+import com.testify.ecfeed.ui.modelif.AbstractParameterInterface;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 import com.testify.ecfeed.ui.modelif.MethodInterface;
 import com.testify.ecfeed.ui.modelif.MethodParameterInterface;
 import com.testify.ecfeed.ui.modelif.ModelNodesTransfer;
-import com.testify.ecfeed.ui.modelif.ParameterInterface;
 import com.testify.ecfeed.ui.modelif.ParametersParentInterface;
 
 
@@ -43,6 +42,14 @@ public class MethodParametersViewer extends AbstractParametersViewer {
 	private TableViewerColumn fLinkColumn;
 	private MethodParameterInterface fParameterIf;
 	private MethodInterface fMethodIf;
+
+	protected class MethodParameterTypeEditingSupport extends AbstractParametersViewer.ParameterTypeEditingSupport{
+		@Override
+		protected boolean canEdit(Object element) {
+			return ((MethodParameterNode)element).isLinked() == false;
+		}
+	}
+
 	private class ExpectedValueEditingSupport extends EditingSupport {
 
 		private final String[] EDITOR_ITEMS = {"Yes", "No"};
@@ -84,43 +91,35 @@ public class MethodParametersViewer extends AbstractParametersViewer {
 	}
 
 	private class DefaultValueEditingSupport extends EditingSupport {
-		private ComboBoxViewerCellEditor fComboCellEditor;
+		private ComboBoxCellEditor fComboCellEditor;
 
 		public DefaultValueEditingSupport() {
 			super(getTableViewer());
-			fComboCellEditor = new ComboBoxViewerCellEditor(getTable(), SWT.TRAIL);
-			fComboCellEditor.setLabelProvider(new LabelProvider());
-			fComboCellEditor.setContentProvider(new ArrayContentProvider());
 		}
 
 		@Override
 		protected CellEditor getCellEditor(Object element) {
 			MethodParameterNode parameter = (MethodParameterNode)element;
-			ArrayList<String> expectedValues = new ArrayList<String>();
-			for(String value : ParameterInterface.getSpecialValues(parameter.getType())){
-				expectedValues.add(value);
-			}
+			ArrayList<String> expectedValues = new ArrayList<String>(AbstractParameterInterface.getSpecialValues(parameter.getType()));
 			if(expectedValues.contains(parameter.getDefaultValue()) == false){
 				expectedValues.add(parameter.getDefaultValue());
 			}
-			for(ChoiceNode leaf : parameter.getLeafChoices()){
-				if(!expectedValues.contains(leaf.getValueString())){
-					expectedValues.add(leaf.getValueString());
+			if(JavaUtils.isUserType(parameter.getType())){
+				for(ChoiceNode leaf : parameter.getLeafChoices()){
+					if(!expectedValues.contains(leaf.getValueString())){
+						expectedValues.add(leaf.getValueString());
+					}
 				}
 			}
 
-			fComboCellEditor.setInput(expectedValues);
-			fComboCellEditor.setValue(parameter.getDefaultValue());
-
 			fParameterIf.setTarget(parameter);
 			if(fParameterIf.hasLimitedValuesSet()){
-				fComboCellEditor.getViewer().getCCombo().setEditable(false);
+				fComboCellEditor = new ComboBoxCellEditor(getTable(), expectedValues.toArray(new String[]{}), SWT.READ_ONLY);
 			}
 			else{
-				fComboCellEditor.setActivationStyle(ComboBoxViewerCellEditor.DROP_DOWN_ON_KEY_ACTIVATION
-						| ComboBoxViewerCellEditor.DROP_DOWN_ON_MOUSE_ACTIVATION);
-				fComboCellEditor.getViewer().getCCombo().setEditable(true);
+				fComboCellEditor = new ComboBoxCellEditor(getTable(), expectedValues.toArray(new String[]{}), SWT.NONE);
 			}
+
 			return fComboCellEditor;
 		}
 
@@ -131,17 +130,22 @@ public class MethodParametersViewer extends AbstractParametersViewer {
 
 		@Override
 		protected Object getValue(Object element) {
-			return ((MethodParameterNode)element).getDefaultValue();
+			MethodParameterNode parameter = (MethodParameterNode)element;
+			String defaultValue = parameter.getDefaultValue();
+			String[] items = fComboCellEditor.getItems();
+			return Arrays.asList(items).indexOf(defaultValue);
+
+//			return ((MethodParameterNode)element).getDefaultValue();
 		}
 
 		@Override
 		protected void setValue(Object element, Object value) {
 			MethodParameterNode parameter = (MethodParameterNode)element;
 			String valueString = null;
-			if(value instanceof String){
-				valueString = (String)value;
-			} else if(value == null){
-				valueString = fComboCellEditor.getViewer().getCCombo().getText();
+			if((int)value >= 0){
+				valueString = fComboCellEditor.getItems()[(int)value];
+			} else{
+				valueString = ((CCombo)fComboCellEditor.getControl()).getText();
 			}
 			fParameterIf.setTarget(parameter);
 			fParameterIf.setDefaultValue(valueString);
@@ -223,7 +227,7 @@ public class MethodParametersViewer extends AbstractParametersViewer {
 
 	public MethodParametersViewer(ISectionContext sectionContext, IModelUpdateContext updateContext) {
 		super(sectionContext, updateContext, STYLE);
-		fParameterIf = new MethodParameterInterface(this);
+		fParameterIf = (MethodParameterInterface)getParameterInterface();
 
 		getSection().setText("Parameters");
 		fExpectedColumn.setEditingSupport(new ExpectedValueEditingSupport());
@@ -295,5 +299,18 @@ public class MethodParametersViewer extends AbstractParametersViewer {
 			fMethodIf = new MethodInterface(this);
 		}
 		return fMethodIf;
+	}
+
+	@Override
+	protected AbstractParameterInterface getParameterInterface() {
+		if(fParameterIf == null){
+			fParameterIf = new MethodParameterInterface(this);
+		}
+		return fParameterIf;
+	}
+
+	@Override
+	protected EditingSupport getParameterTypeEditingSupport() {
+		return new MethodParameterTypeEditingSupport();
 	}
 }

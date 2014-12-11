@@ -49,8 +49,13 @@ public class GlobalParameterNode extends AbstractParameterNode {
 		return visitor.visit(this);
 	}
 
+	@Override
+	public Object accept(IChoicesParentVisitor visitor) throws Exception{
+		return visitor.visit(this);
+	}
+
 	public String getQualifiedName() {
-		if(getParent() == getRoot()){
+		if(getParent() == getRoot() || getParent() == null){
 			return getName();
 		}
 		return getParent().getName() + ":" + getName();

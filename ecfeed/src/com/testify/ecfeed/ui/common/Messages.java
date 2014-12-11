@@ -140,6 +140,8 @@ public class Messages {
 	public static final String DIALOG_TEST_SUITE_NAME_PROBLEM_MESSAGE = "Entered test suite name not allowed";
 	public static final String DIALOG_DESCENDING_LABELS_WILL_BE_REMOVED_WARNING_TITLE = "choices below in the hierarchy are already labeled with this label. Changing the label will result in removing the labels from all that choices";
 
+	public static final String DIALOG_NO_VALID_LINK_AVAILABLE_PROBLEM_MESSAGE = "There is no link available that can be assigned to parameter which does not cause method signature duplicate problem.";
+
 	public static String DIALOG_UNSUCCESFUL_TEST_EXECUTION(int totalTestCases, int unsuccesfull) {
 		return String.valueOf(unsuccesfull) + " of " + totalTestCases + " test cases have met problems during execution.";
 	}

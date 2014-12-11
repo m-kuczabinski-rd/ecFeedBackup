@@ -5,6 +5,8 @@ import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.ui.forms.widgets.Section;
 
 import com.testify.ecfeed.model.GlobalParametersParentNode;
+import com.testify.ecfeed.ui.modelif.AbstractParameterInterface;
+import com.testify.ecfeed.ui.modelif.GlobalParameterInterface;
 import com.testify.ecfeed.ui.modelif.GlobalParametersParentInterface;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 import com.testify.ecfeed.ui.modelif.ModelNodesTransfer;
@@ -15,6 +17,7 @@ public class GlobalParametersViewer extends AbstractParametersViewer {
 	private final static int STYLE = Section.EXPANDED | Section.TITLE_BAR;
 
 	private GlobalParametersParentInterface fParentIf;
+	private GlobalParameterInterface fParameterIf;
 
 	public GlobalParametersViewer(ISectionContext sectionContext, IModelUpdateContext updateContext) {
 		super(sectionContext, updateContext, STYLE);
@@ -37,6 +40,14 @@ public class GlobalParametersViewer extends AbstractParametersViewer {
 	public void setInput(GlobalParametersParentNode input){
 		fParentIf.setTarget(input);
 		super.setInput(input);
+	}
+
+	@Override
+	protected AbstractParameterInterface getParameterInterface() {
+		if(fParameterIf == null){
+			fParameterIf = new GlobalParameterInterface(this);
+		}
+		return fParameterIf;
 	}
 
 }

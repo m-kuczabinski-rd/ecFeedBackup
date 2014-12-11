@@ -22,6 +22,7 @@ import com.testify.ecfeed.junit.annotations.Generator;
 import com.testify.ecfeed.model.AbstractNode;
 import com.testify.ecfeed.model.AbstractParameterNode;
 import com.testify.ecfeed.model.ChoiceNode;
+import com.testify.ecfeed.model.IChoicesParentVisitor;
 import com.testify.ecfeed.model.IModelVisitor;
 import com.testify.ecfeed.model.IParameterVisitor;
 import com.testify.ecfeed.model.MethodNode;
@@ -65,6 +66,11 @@ public class AbstractParameterOperationSetTypeTest{
 
 		@Override
 		public Object accept(IParameterVisitor visitor) throws Exception {
+			return null;
+		}
+
+		@Override
+		public Object accept(IChoicesParentVisitor visitor) throws Exception {
 			return null;
 		}
 

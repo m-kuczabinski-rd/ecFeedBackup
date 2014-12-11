@@ -49,10 +49,10 @@ import com.testify.ecfeed.model.MethodParameterNode;
 import com.testify.ecfeed.model.StatementArray;
 import com.testify.ecfeed.model.StaticStatement;
 import com.testify.ecfeed.ui.editor.actions.ModelModifyingAction;
+import com.testify.ecfeed.ui.modelif.AbstractParameterInterface;
 import com.testify.ecfeed.ui.modelif.AbstractStatementInterface;
 import com.testify.ecfeed.ui.modelif.ConstraintInterface;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
-import com.testify.ecfeed.ui.modelif.ParameterInterface;
 import com.testify.ecfeed.ui.modelif.StatementInterfaceFactory;
 
 public class ConstraintViewer extends TreeViewerSection {
@@ -180,7 +180,7 @@ public class ConstraintViewer extends TreeViewerSection {
 			public Object visit(ExpectedValueStatement statement)
 					throws Exception {
 				MethodParameterNode parameter  = statement.getParameter();
-				List<String> values = ParameterInterface.getSpecialValues(parameter.getType());
+				List<String> values = AbstractParameterInterface.getSpecialValues(parameter.getType());
 				if(values.isEmpty()){
 					for(ChoiceNode p : parameter.getLeafChoices()){
 						values.add(p.getValueString());
@@ -365,7 +365,7 @@ public class ConstraintViewer extends TreeViewerSection {
 			@Override
 			public Object visit(ExpectedValueStatement statement) throws Exception {
 				disposeRightOperandComposite();
-				if(ParameterInterface.hasLimitedValuesSet(statement.getParameter())){
+				if(AbstractParameterInterface.hasLimitedValuesSet(statement.getParameter())){
 					fRightOperandComposite = fConditionCombo = new ComboViewer(StatementEditor.this).getCombo();
 				}
 				else{
