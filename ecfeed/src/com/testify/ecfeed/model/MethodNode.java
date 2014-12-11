@@ -351,7 +351,7 @@ public class MethodNode extends ParametersParentNode {
 		return result;
 	}
 
-	public List<MethodParameterNode> getMethodParameters() {
+	public final List<MethodParameterNode> getMethodParameters() {
 		List<MethodParameterNode> result = new ArrayList<>();
 		for(AbstractParameterNode parameter : getParameters()){
 			result.add((MethodParameterNode)parameter);
