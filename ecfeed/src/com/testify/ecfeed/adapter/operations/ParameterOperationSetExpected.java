@@ -7,7 +7,7 @@ import java.util.List;
 import com.testify.ecfeed.adapter.IModelOperation;
 import com.testify.ecfeed.adapter.ModelOperationException;
 import com.testify.ecfeed.adapter.java.JavaUtils;
-import com.testify.ecfeed.model.ParameterNode;
+import com.testify.ecfeed.model.MethodParameterNode;
 import com.testify.ecfeed.model.ConstraintNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.ChoiceNode;
@@ -15,7 +15,7 @@ import com.testify.ecfeed.model.TestCaseNode;
 
 public class ParameterOperationSetExpected extends AbstractModelOperation {
 	
-	private ParameterNode fTarget;
+	private MethodParameterNode fTarget;
 	private boolean fExpected;
 	private List<TestCaseNode> fOriginalTestCases;
 	private List<ConstraintNode> fOriginalConstraints;
@@ -47,7 +47,7 @@ public class ParameterOperationSetExpected extends AbstractModelOperation {
 		
 	}
 	
-	public ParameterOperationSetExpected(ParameterNode target, boolean expected){
+	public ParameterOperationSetExpected(MethodParameterNode target, boolean expected){
 		super(OperationNames.SET_EXPECTED_STATUS);
 		fTarget = target;
 		fExpected = expected;
@@ -117,7 +117,7 @@ public class ParameterOperationSetExpected extends AbstractModelOperation {
 		return new ReverseOperation();
 	}
 	
-	protected ParameterNode getTarget(){
+	protected MethodParameterNode getTarget(){
 		return fTarget;
 	}
 	

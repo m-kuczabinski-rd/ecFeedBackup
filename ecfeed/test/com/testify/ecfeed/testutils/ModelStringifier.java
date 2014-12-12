@@ -21,7 +21,7 @@ import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.ConstraintNode;
 import com.testify.ecfeed.model.ExpectedValueStatement;
 import com.testify.ecfeed.model.MethodNode;
-import com.testify.ecfeed.model.ParameterNode;
+import com.testify.ecfeed.model.MethodParameterNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.StatementArray;
 import com.testify.ecfeed.model.StaticStatement;
@@ -32,8 +32,8 @@ public class ModelStringifier {
 		if(node instanceof ChoiceNode){
 			return stringify((ChoiceNode)node, indent);
 		}
-		if(node instanceof ParameterNode){
-			return stringify((ParameterNode)node, indent);
+		if(node instanceof MethodParameterNode){
+			return stringify((MethodParameterNode)node, indent);
 		}
 		if(node instanceof MethodNode){
 			return stringify((MethodNode)node, indent);
@@ -83,7 +83,7 @@ public class ModelStringifier {
 
 	public String stringify(ClassNode c, int indent){
 		String result = intendentString(indent);
-		result += "Class " + c.getQualifiedName();
+		result += "Class " + c.getName();
 
 		for(MethodNode m : c.getMethods()){
 			result += "\n" + stringify(m, indent + 2);
@@ -95,7 +95,7 @@ public class ModelStringifier {
 	public String stringify(MethodNode m, int indent){
 		String result = intendentString(indent);
 		result += "Method " + m.toString();
-		for(ParameterNode child : m.getParameters()){
+		for(MethodParameterNode child : m.getMethodParameters()){
 			result += "\n";
 			result += stringify(child, indent + 2);
 		}
@@ -111,7 +111,7 @@ public class ModelStringifier {
 		return result;
 	}
 
-	public String stringify(ParameterNode c, int indent){
+	public String stringify(MethodParameterNode c, int indent){
 		String result = intendentString(indent);
 		result += "Parameter " + c.getName() + "[" + c.getType() + "], " + (c.isExpected() ? "expected" : "patitioned");
 		result += " default value: " + c.getDefaultValue();
@@ -125,12 +125,13 @@ public class ModelStringifier {
 	public String stringify(TestCaseNode tc, int indent){
 		String result = intendentString(indent);
 		result += "Test case " + tc.toString() + "[";
-		for(ChoiceNode p : tc.getTestData()){
-			if(p.getParameter().isExpected()){
-				result += "[e]" + p.getValueString();
+		for(ChoiceNode choice : tc.getTestData()){
+			MethodParameterNode parameter = tc.getMethodParameter(choice);
+			if(parameter.isExpected()){
+				result += "[e]" + choice.getValueString();
 			}
 			else{
-				result += p.getQualifiedName();
+				result += choice.getQualifiedName();
 			}
 			result += " ";
 		}

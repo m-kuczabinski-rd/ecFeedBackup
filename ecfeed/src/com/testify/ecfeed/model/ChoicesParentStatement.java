@@ -15,7 +15,7 @@ import java.util.List;
 
 public class ChoicesParentStatement extends AbstractStatement implements IRelationalStatement{
 
-	private ParameterNode fParameter;
+	private MethodParameterNode fParameter;
 	private EStatementRelation fRelation;
 	private ICondition fCondition;
 
@@ -24,7 +24,7 @@ public class ChoicesParentStatement extends AbstractStatement implements IRelati
 		public boolean evaluate(List<ChoiceNode> values);
 		public boolean adapt(List<ChoiceNode> values);
 		public ICondition getCopy();
-		public boolean updateReferences(ParameterNode parameter);
+		public boolean updateReferences(MethodParameterNode parameter);
 		public boolean compare(ICondition condition);
 		public Object accept(IStatementVisitor visitor) throws Exception;
 	}
@@ -56,7 +56,7 @@ public class ChoicesParentStatement extends AbstractStatement implements IRelati
 		}
 
 		@Override
-		public boolean updateReferences(ParameterNode parameter){
+		public boolean updateReferences(MethodParameterNode parameter){
 			return true;
 		}
 
@@ -126,7 +126,7 @@ public class ChoicesParentStatement extends AbstractStatement implements IRelati
 		}
 
 		@Override
-		public boolean updateReferences(ParameterNode parameter){
+		public boolean updateReferences(MethodParameterNode parameter){
 			ChoiceNode condition = parameter.getChoice(fChoice.getQualifiedName());
 			if(condition != null){
 				fChoice = condition;
@@ -189,31 +189,31 @@ public class ChoicesParentStatement extends AbstractStatement implements IRelati
 
 	}
 
-	public ChoicesParentStatement(ParameterNode parameter, EStatementRelation relation, String labelCondition){
+	public ChoicesParentStatement(MethodParameterNode parameter, EStatementRelation relation, String labelCondition){
 		fParameter = parameter;
 		fRelation = relation;
 		fCondition = new LabelCondition(labelCondition);
 	}
 
-	public ChoicesParentStatement(ParameterNode parameter, EStatementRelation relation, ChoiceNode choiceCondition){
+	public ChoicesParentStatement(MethodParameterNode parameter, EStatementRelation relation, ChoiceNode choiceCondition){
 		fParameter = parameter;
 		fRelation = relation;
 		fCondition = new ChoiceCondition(choiceCondition);
 	}
 
-	private ChoicesParentStatement(ParameterNode parameter, EStatementRelation relation, ICondition condition){
+	private ChoicesParentStatement(MethodParameterNode parameter, EStatementRelation relation, ICondition condition){
 		fParameter = parameter;
 		fRelation = relation;
 		fCondition = condition;
 	}
 
 	@Override
-	public boolean mentions(ParameterNode parameter){
+	public boolean mentions(MethodParameterNode parameter){
 		return getParameter() == parameter;
 	}
 
 	@Override
-	public boolean mentions(ParameterNode parameter, String label) {
+	public boolean mentions(MethodParameterNode parameter, String label) {
 		return getParameter() == parameter && getConditionValue().equals(label);
 	}
 
@@ -249,7 +249,7 @@ public class ChoicesParentStatement extends AbstractStatement implements IRelati
 
 	@Override
 	public boolean updateReferences(MethodNode method){
-		ParameterNode parameter = method.getParameter(fParameter.getName());
+		MethodParameterNode parameter = (MethodParameterNode)method.getParameter(fParameter.getName());
 		if(parameter != null && !parameter.isExpected()){
 			if(fCondition.updateReferences(parameter)){
 				fParameter = parameter;
@@ -259,7 +259,7 @@ public class ChoicesParentStatement extends AbstractStatement implements IRelati
 		return false;
 	}
 
-	public ParameterNode getParameter(){
+	public MethodParameterNode getParameter(){
 		return fParameter;
 	}
 
@@ -285,7 +285,7 @@ public class ChoicesParentStatement extends AbstractStatement implements IRelati
 		fCondition = new ChoiceCondition(choice);
 	}
 
-	public void setCondition(ParameterNode parameter, ChoiceNode choice){
+	public void setCondition(MethodParameterNode parameter, ChoiceNode choice){
 		fCondition = new ChoiceCondition(choice);
 	}
 

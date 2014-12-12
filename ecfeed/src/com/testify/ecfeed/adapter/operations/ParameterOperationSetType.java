@@ -12,17 +12,17 @@ import com.testify.ecfeed.adapter.ITypeAdapterProvider;
 import com.testify.ecfeed.adapter.ModelOperationException;
 import com.testify.ecfeed.adapter.java.JavaUtils;
 import com.testify.ecfeed.model.AbstractStatement;
-import com.testify.ecfeed.model.ParameterNode;
+import com.testify.ecfeed.model.ChoiceNode;
+import com.testify.ecfeed.model.ChoicesParentNode;
+import com.testify.ecfeed.model.ChoicesParentStatement;
+import com.testify.ecfeed.model.ChoicesParentStatement.ChoiceCondition;
+import com.testify.ecfeed.model.ChoicesParentStatement.LabelCondition;
 import com.testify.ecfeed.model.Constraint;
 import com.testify.ecfeed.model.ConstraintNode;
 import com.testify.ecfeed.model.ExpectedValueStatement;
 import com.testify.ecfeed.model.IStatementVisitor;
 import com.testify.ecfeed.model.MethodNode;
-import com.testify.ecfeed.model.ChoiceNode;
-import com.testify.ecfeed.model.ChoicesParentStatement;
-import com.testify.ecfeed.model.ChoicesParentStatement.LabelCondition;
-import com.testify.ecfeed.model.ChoicesParentStatement.ChoiceCondition;
-import com.testify.ecfeed.model.ChoicesParentNode;
+import com.testify.ecfeed.model.MethodParameterNode;
 import com.testify.ecfeed.model.StatementArray;
 import com.testify.ecfeed.model.StaticStatement;
 import com.testify.ecfeed.model.TestCaseNode;
@@ -31,7 +31,7 @@ public class ParameterOperationSetType extends BulkOperation{
 
 	private class SetTypeOperation extends AbstractModelOperation{
 
-		private ParameterNode fTarget;
+		private MethodParameterNode fTarget;
 		private String fNewType;
 		private String fCurrentType;
 		private String fOriginalDefaultValue;
@@ -185,7 +185,7 @@ public class ParameterOperationSetType extends BulkOperation{
 
 		}
 
-		public SetTypeOperation(ParameterNode target, String newType, ITypeAdapterProvider adapterProvider) {
+		public SetTypeOperation(MethodParameterNode target, String newType, ITypeAdapterProvider adapterProvider) {
 			super(OperationNames.SET_TYPE);
 			fTarget = target;
 			fNewType = newType;
@@ -209,7 +209,7 @@ public class ParameterOperationSetType extends BulkOperation{
 			List<String> parameterTypes = method.getParametersTypes();
 			parameterTypes.set(fTarget.getIndex(), fNewType);
 			if(method.getClassNode().getMethod(method.getName(), parameterTypes) != null){
-				throw new ModelOperationException(Messages.METHOD_SIGNATURE_DUPLICATE_PROBLEM);
+				throw new ModelOperationException(Messages.METHOD_SIGNATURE_DUPLICATE_PROBLEM(method.getClassNode().getName(), method.getName()));
 			}
 
 			ITypeAdapter adapter = fAdapterProvider.getAdapter(fNewType);
@@ -338,7 +338,7 @@ public class ParameterOperationSetType extends BulkOperation{
 		}
 	}
 
-	public ParameterOperationSetType(ParameterNode target, String newType, ITypeAdapterProvider adapterProvider) {
+	public ParameterOperationSetType(MethodParameterNode target, String newType, ITypeAdapterProvider adapterProvider) {
 		super(OperationNames.SET_TYPE, true);
 		addOperation(new SetTypeOperation(target, newType, adapterProvider));
 		if(target.getMethod() != null){

@@ -28,38 +28,54 @@ import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.ui.forms.widgets.Section;
 
 import com.testify.ecfeed.adapter.java.JavaUtils;
-import com.testify.ecfeed.model.ParameterNode;
+import com.testify.ecfeed.model.AbstractParameterNode;
 import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.model.ChoicesParentNode;
 import com.testify.ecfeed.ui.common.NodeNameColumnLabelProvider;
 import com.testify.ecfeed.ui.editor.actions.DeleteAction;
+import com.testify.ecfeed.ui.editor.actions.IActionProvider;
 import com.testify.ecfeed.ui.editor.actions.ModelViewerActionProvider;
-import com.testify.ecfeed.ui.modelif.ParameterInterface;
+import com.testify.ecfeed.ui.modelif.AbstractParameterInterface;
 import com.testify.ecfeed.ui.modelif.ChoiceInterface;
+import com.testify.ecfeed.ui.modelif.ChoicesParentInterface;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 import com.testify.ecfeed.ui.modelif.ModelNodesTransfer;
-import com.testify.ecfeed.ui.modelif.ChoicesParentNodeInterface;
 
 public class ChoicesViewer extends TableViewerSection {
 
 	private final static int STYLE = Section.EXPANDED | Section.TITLE_BAR;
 
-	private ChoicesParentNodeInterface fParentIf;
+	private ChoicesParentInterface fParentIf;
 	private ChoiceInterface fTableItemIf;
 
 	private TableViewerColumn fNameColumn;
 	private TableViewerColumn fValueColumn;
 
+	private ChoiceNameEditingSupport fNameEditingSupport;
+	private ChoiceValueEditingSupport fValueEditingSupport;
+
+	private Button fRemoveSelectedButton;
+
+	private Button fAddChoicesButton;
+
+	private ModelNodeDropListener fDropListener;
+	private ModelNodeDragListener fDragListener;
+
+	private IActionProvider fActionProvider;
+
 	private class ChoiceNameEditingSupport extends EditingSupport{
 
 		private TextCellEditor fNameCellEditor;
+		private boolean fEnabled;
 
 		public ChoiceNameEditingSupport() {
 			super(getTableViewer());
 			fNameCellEditor = new TextCellEditor(getTable());
+			fEnabled = true;
 		}
 
 		@Override
@@ -69,7 +85,7 @@ public class ChoicesViewer extends TableViewerSection {
 
 		@Override
 		protected boolean canEdit(Object element) {
-			return true;
+			return fEnabled;
 		}
 
 		@Override
@@ -87,13 +103,19 @@ public class ChoicesViewer extends TableViewerSection {
 				fTableItemIf.setName(newName);
 			}
 		}
+
+		public void setEnabled(boolean enabled){
+			fEnabled = enabled;
+		}
 	}
 
 	private class ChoiceValueEditingSupport extends EditingSupport {
 		private ComboBoxViewerCellEditor fCellEditor;
+		private boolean fEnabled;
 
 		public ChoiceValueEditingSupport(TableViewerSection viewer) {
 			super(viewer.getTableViewer());
+			fEnabled = true;
 			fCellEditor = new ComboBoxViewerCellEditor(viewer.getTable(), SWT.TRAIL);
 			fCellEditor.setLabelProvider(new LabelProvider());
 			fCellEditor.setContentProvider(new ArrayContentProvider());
@@ -102,13 +124,13 @@ public class ChoicesViewer extends TableViewerSection {
 		@Override
 		protected CellEditor getCellEditor(Object element) {
 			ChoiceNode node = (ChoiceNode)element;
-			ParameterNode parameter = node.getParameter();
-			if(ParameterInterface.hasLimitedValuesSet(node.getParameter())){
+			AbstractParameterNode parameter = node.getParameter();
+			if(AbstractParameterInterface.hasLimitedValuesSet(node.getParameter())){
 				fCellEditor.setActivationStyle(ComboBoxCellEditor.DROP_DOWN_ON_KEY_ACTIVATION);
 			} else {
 				fCellEditor.setActivationStyle(SWT.NONE);
 			}
-			List<String> items = ParameterInterface.getSpecialValues(node.getParameter().getType());
+			List<String> items = AbstractParameterInterface.getSpecialValues(node.getParameter().getType());
 			if(JavaUtils.isUserType(parameter.getType())){
 				Set<String> usedValues = parameter.getLeafChoiceValues();
 				usedValues.removeAll(items);
@@ -118,13 +140,13 @@ public class ChoicesViewer extends TableViewerSection {
 				items.add(node.getValueString());
 			}
 			fCellEditor.setInput(items);
-			fCellEditor.getViewer().getCCombo().setEditable(ParameterInterface.isBoolean(node.getParameter().getType()) == false);
+			fCellEditor.getViewer().getCCombo().setEditable(AbstractParameterInterface.isBoolean(node.getParameter().getType()) == false);
 			return fCellEditor;
 		}
 
 		@Override
 		protected boolean canEdit(Object element) {
-			return ((ChoiceNode)element).isAbstract() == false;
+			return fEnabled && (((ChoiceNode)element).isAbstract() == false);
 		}
 
 		@Override
@@ -142,6 +164,10 @@ public class ChoicesViewer extends TableViewerSection {
 			}
 			fTableItemIf.setTarget((ChoiceNode)element);
 			fTableItemIf.setValue(valueString);
+		}
+
+		public void setEnabled(boolean enabled){
+			fEnabled = enabled;
 		}
 	}
 
@@ -171,20 +197,26 @@ public class ChoicesViewer extends TableViewerSection {
 	public ChoicesViewer(ISectionContext sectionContext, IModelUpdateContext updateContext) {
 		super(sectionContext, updateContext, STYLE);
 
-		fParentIf = new ParameterInterface(this);
+		fParentIf = new ChoicesParentInterface(this);
 		fTableItemIf = new ChoiceInterface(this);
 
-		fNameColumn.setEditingSupport(new ChoiceNameEditingSupport());
-		fValueColumn.setEditingSupport(new ChoiceValueEditingSupport(this));
+		fNameEditingSupport = new ChoiceNameEditingSupport();
+		fValueEditingSupport = new ChoiceValueEditingSupport(this);
+
+		fNameColumn.setEditingSupport(fNameEditingSupport);
+		fValueColumn.setEditingSupport(fValueEditingSupport);
 
 		getSection().setText("Choices");
-		addButton("Add choice", new AddChoiceAdapter());
-		addButton("Remove selected", new ActionSelectionAdapter(new DeleteAction(getViewer(), this)));
+		fAddChoicesButton = addButton("Add choice", new AddChoiceAdapter());
+		fRemoveSelectedButton = addButton("Remove selected", new ActionSelectionAdapter(new DeleteAction(getViewer(), this)));
 
 		addDoubleClickListener(new SelectNodeDoubleClickListener(sectionContext.getMasterSection()));
-		setActionProvider(new ModelViewerActionProvider(getTableViewer(), this));
-		getViewer().addDragSupport(DND.DROP_COPY|DND.DROP_MOVE, new Transfer[]{ModelNodesTransfer.getInstance()}, new ModelNodeDragListener(getViewer()));
-		getViewer().addDropSupport(DND.DROP_COPY|DND.DROP_MOVE, new Transfer[]{ModelNodesTransfer.getInstance()}, new ModelNodeDropListener(getViewer(), this));
+		fActionProvider = new ModelViewerActionProvider(getTableViewer(), this);
+		setActionProvider(fActionProvider);
+		fDragListener = new ModelNodeDragListener(getViewer());
+		fDropListener = new ModelNodeDropListener(getViewer(), this);
+		getViewer().addDragSupport(DND.DROP_COPY|DND.DROP_MOVE, new Transfer[]{ModelNodesTransfer.getInstance()}, fDragListener);
+		getViewer().addDropSupport(DND.DROP_COPY|DND.DROP_MOVE, new Transfer[]{ModelNodesTransfer.getInstance()}, fDropListener);
 	}
 
 	public void setInput(ChoicesParentNode parent){
@@ -192,6 +224,7 @@ public class ChoicesViewer extends TableViewerSection {
 		fParentIf.setTarget(parent);
 	}
 
+	@Override
 	public void setVisible(boolean visible){
 		this.getSection().setVisible(visible);
 	}
@@ -200,5 +233,19 @@ public class ChoicesViewer extends TableViewerSection {
 	protected void createTableColumns() {
 		fNameColumn = addColumn("Name", 150, new NodeNameColumnLabelProvider());
 		fValueColumn = addColumn("Value", 150, new ChoiceValueLabelProvider());
+	}
+
+	public void setEditEnabled(boolean enabled) {
+		fNameEditingSupport.setEnabled(enabled);
+		fValueEditingSupport.setEnabled(enabled);
+		fAddChoicesButton.setEnabled(enabled);
+		fRemoveSelectedButton.setEnabled(enabled);
+		fDragListener.setEnabled(enabled);
+		fDropListener.setEnabled(enabled);
+		if(enabled){
+			setActionProvider(fActionProvider);
+		}else{
+			setActionProvider(null);
+		}
 	}
 }

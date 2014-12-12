@@ -19,7 +19,7 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.ui.forms.widgets.Section;
 
 import com.testify.ecfeed.adapter.EImplementationStatus;
-import com.testify.ecfeed.model.ParameterNode;
+import com.testify.ecfeed.model.AbstractParameterNode;
 import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.ui.common.ColorConstants;
@@ -36,10 +36,11 @@ public class TestDataViewer extends TableViewerSection implements ITestDataEdito
 	private final static int VIEWER_STYLE = SWT.BORDER;
 
 	private TestCaseInterface fTestCaseIf;
+	private TestDataValueEditingSupport fValueEditingSupport;
 
 	public TestDataViewer(ISectionContext sectionContext, IModelUpdateContext updateContext) {
 		super(sectionContext, updateContext, STYLE);
-		fTestCaseIf = new TestCaseInterface(this);
+		getTestCaseInterface();
 		getSection().setText("Test data");
 	}
 
@@ -49,7 +50,7 @@ public class TestDataViewer extends TableViewerSection implements ITestDataEdito
 			@Override
 			public String getText(Object element){
 				ChoiceNode testValue = (ChoiceNode)element;
-				ParameterNode parent = testValue.getParameter();
+				AbstractParameterNode parent = testValue.getParameter();
 				return parent.toString();
 			}
 
@@ -63,7 +64,7 @@ public class TestDataViewer extends TableViewerSection implements ITestDataEdito
 			@Override
 			public String getText(Object element){
 				ChoiceNode testValue = (ChoiceNode)element;
-				if(testValue.getParameter().isExpected()){
+				if(fTestCaseIf.isExpected(testValue)){
 					return testValue.getValueString();
 				}
 				return testValue.toString();
@@ -74,14 +75,23 @@ public class TestDataViewer extends TableViewerSection implements ITestDataEdito
 				return getColor(element);
 			}
 		});
+		fValueEditingSupport = new TestDataValueEditingSupport(null, getTableViewer(), null, this);
+		valueColumn.setEditingSupport(fValueEditingSupport);
+	}
 
-		valueColumn.setEditingSupport(new TestDataValueEditingSupport(getTableViewer(), null, this));
+	protected TestCaseInterface getTestCaseInterface() {
+		if(fTestCaseIf == null){
+			fTestCaseIf = new TestCaseInterface(this);
+		}
+		return fTestCaseIf;
 	}
 
 	public void setInput(TestCaseNode testCase){
 		List<ChoiceNode> testData = testCase.getTestData();
-		super.setInput(testData);
+		fValueEditingSupport.setMethod(testCase.getMethod());
 		fTestCaseIf.setTarget(testCase);
+		//target and data support must be updated prior to calling super
+		super.setInput(testData);
 	}
 
 	@Override

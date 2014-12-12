@@ -10,13 +10,14 @@ import java.util.Map;
 
 import com.testify.ecfeed.adapter.AbstractImplementationStatusResolver;
 import com.testify.ecfeed.adapter.EImplementationStatus;
-import com.testify.ecfeed.model.ParameterNode;
+import com.testify.ecfeed.model.AbstractNode;
+import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.ConstraintNode;
-import com.testify.ecfeed.model.AbstractNode;
+import com.testify.ecfeed.model.GlobalParameterNode;
 import com.testify.ecfeed.model.IModelVisitor;
 import com.testify.ecfeed.model.MethodNode;
-import com.testify.ecfeed.model.ChoiceNode;
+import com.testify.ecfeed.model.MethodParameterNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.TestCaseNode;
 
@@ -24,7 +25,7 @@ public class JavaImplementationStatusResolver extends AbstractImplementationStat
 	private ModelClassLoader fLoader;
 	private Map<String, Class<?>> fLoadedClasses;
 	private InternalStatusResolver fStatusVisitor;
-	
+
 	private class InternalStatusResolver implements IModelVisitor{
 
 		@Override
@@ -43,7 +44,12 @@ public class JavaImplementationStatusResolver extends AbstractImplementationStat
 		}
 
 		@Override
-		public Object visit(ParameterNode node) throws Exception {
+		public Object visit(MethodParameterNode node) throws Exception {
+			return implementationStatus(node);
+		}
+
+		@Override
+		public Object visit(GlobalParameterNode node) throws Exception {
 			return implementationStatus(node);
 		}
 
@@ -62,7 +68,7 @@ public class JavaImplementationStatusResolver extends AbstractImplementationStat
 			return implementationStatus(node);
 		}
 	}
-	
+
 	public JavaImplementationStatusResolver(ILoaderProvider loaderProvider){
 		super(new JavaPrimitiveTypePredicate());
 		fLoader = loaderProvider.getLoader(true, null);
@@ -75,7 +81,7 @@ public class JavaImplementationStatusResolver extends AbstractImplementationStat
 		fLoadedClasses.clear();
 		return super.getImplementationStatus(node);
 	}
-	
+
 	@Override
 	protected EImplementationStatus childrenStatus(List<? extends AbstractNode> children){
 		int size = children.size();
@@ -96,7 +102,7 @@ public class JavaImplementationStatusResolver extends AbstractImplementationStat
 		return EImplementationStatus.PARTIALLY_IMPLEMENTED;
 	}
 
-	
+
 	@Override
 	protected boolean classDefinitionImplemented(String qualifiedName) {
 		Class<?> classDefinition = loadClass(qualifiedName);
@@ -120,12 +126,12 @@ public class JavaImplementationStatusResolver extends AbstractImplementationStat
 			continue;
 		}
 		List<String> typeNames = getArgTypes(m);
-		List<ParameterNode> modelParameters = methodModel.getParameters();
+		List<MethodParameterNode> modelParameters = methodModel.getMethodParameters();
 		if(typeNames.size() != methodModel.getParameters().size()){
 			continue;
 		}
 		List<String> modelTypeNames = new ArrayList<>();
-		for(ParameterNode parameter : modelParameters){
+		for(MethodParameterNode parameter : modelParameters){
 			modelTypeNames.add(parameter.getType());
 		}
 		if(modelTypeNames.equals(typeNames) == false){
@@ -177,5 +183,5 @@ public class JavaImplementationStatusResolver extends AbstractImplementationStat
 		}
 		return fLoadedClasses.get(name);
 	}
-	
+
 }

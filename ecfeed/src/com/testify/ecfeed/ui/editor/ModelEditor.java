@@ -1,11 +1,11 @@
 /*******************************************************************************
- * Copyright (c) 2013 Testify AS.                                                
- * All rights reserved. This program and the accompanying materials              
- * are made available under the terms of the Eclipse Public License v1.0         
- * which accompanies this distribution, and is available at                      
- * http://www.eclipse.org/legal/epl-v10.html                                     
- *                                                                               
- * Contributors:                                                                 
+ * Copyright (c) 2013 Testify AS.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
  *     Patryk Chamuczynski (p.chamuczynski(at)radytek.com) - initial implementation
  ******************************************************************************/
 
@@ -54,7 +54,7 @@ import com.testify.ecfeed.serialization.ect.EctSerializer;
 import com.testify.ecfeed.ui.common.IFileInfoProvider;
 
 public class ModelEditor extends FormEditor implements IFileInfoProvider{
-	
+
 	private RootNode fModel;
 	private ModelPage fModelPage;
 	private ModelOperationManager fModelManager;
@@ -88,9 +88,12 @@ public class ModelEditor extends FormEditor implements IFileInfoProvider{
 				case IResourceDelta.CHANGED:
 					if (!Display.getDefault().isDisposed()) {
 						Display.getDefault().asyncExec(new Runnable() {
+							@Override
 							public void run() {
 								CachedImplementationStatusResolver.clearCache();
-								fModelPage.getMasterBlock().getMasterSection().refresh();
+								if(fModelPage.getMasterBlock().getMasterSection() != null){
+									fModelPage.getMasterBlock().getMasterSection().refresh();
+								}
 								if(fModelPage.getMasterBlock().getCurrentPage() != null){
 									fModelPage.getMasterBlock().getCurrentPage().refresh();
 								}
@@ -119,7 +122,7 @@ public class ModelEditor extends FormEditor implements IFileInfoProvider{
 		}
 		return fModel;
 	}
-	
+
 	private RootNode createModel() {
 		RootNode root = null;
 		IEditorInput input = getEditorInput();
@@ -150,13 +153,13 @@ public class ModelEditor extends FormEditor implements IFileInfoProvider{
 					null, e.getStatus());
 		}
 	}
-	
+
 	@Override
 	public void doSave(IProgressMonitor monitor) {
 		IFile file = ((FileEditorInput)getEditorInput()).getFile();
 		saveEditor(file, monitor);
 	}
-	
+
 	@Override
 	public void doSaveAs() {
 		SaveAsDialog dialog = new SaveAsDialog(Display.getDefault().getActiveShell());
@@ -174,7 +177,7 @@ public class ModelEditor extends FormEditor implements IFileInfoProvider{
 			setPartName(file.getName());
 		}
 	}
-	
+
 	private void saveEditor(IFile file, IProgressMonitor monitor){
 		try{
 			FileOutputStream fout = new FileOutputStream(file.getLocation().toOSString());
@@ -185,11 +188,11 @@ public class ModelEditor extends FormEditor implements IFileInfoProvider{
 			firePropertyChange(PROP_DIRTY);
 		}
 		catch(Exception e){
-			MessageDialog.openError(Display.getCurrent().getActiveShell(), 
+			MessageDialog.openError(Display.getCurrent().getActiveShell(),
 					"Error", "Couldn't write the file:" + e.getMessage());
 		}
 	}
-	
+
 	private void refreshWorkspace(IProgressMonitor monitor) throws CoreException {
 		for(IResource resource : ResourcesPlugin.getWorkspace().getRoot().getProjects()){
 			resource.refreshLocal(IResource.DEPTH_INFINITE, monitor);
@@ -200,12 +203,12 @@ public class ModelEditor extends FormEditor implements IFileInfoProvider{
 		setActivePage(0);
 		IDE.gotoMarker(getEditor(0), marker);
 	}
-	
+
 	@Override
 	public boolean isSaveAsAllowed() {
 		return true;
 	}
-	
+
 	@Override
 	public void commitPages(boolean onSave){
 		super.commitPages(onSave);
@@ -219,7 +222,8 @@ public class ModelEditor extends FormEditor implements IFileInfoProvider{
 			fModelPage.getMasterBlock().getCurrentPage().refresh();
 		}
 	}
-	
+
+	@Override
 	public IFile getFile(){
 		IEditorInput input = getEditorInput();
 		if (input instanceof FileEditorInput){
@@ -227,7 +231,8 @@ public class ModelEditor extends FormEditor implements IFileInfoProvider{
 		}
 		return null;
 	}
-	
+
+	@Override
 	public IProject getProject() {
 		IFile file = getFile();
 		if (file != null){
@@ -236,15 +241,17 @@ public class ModelEditor extends FormEditor implements IFileInfoProvider{
 		return null;
 	}
 
+	@Override
 	public IPath getPath(){
 		IFile file = getFile();
 		if (file != null){
-			IPath path = file.getFullPath(); 
+			IPath path = file.getFullPath();
 			return path;
 		}
 		return null;
 	}
-	
+
+	@Override
 	public IPackageFragmentRoot getPackageFragmentRoot() {
 		try {
 			if(getProject().hasNature(JavaCore.NATURE_ID)){
@@ -262,7 +269,7 @@ public class ModelEditor extends FormEditor implements IFileInfoProvider{
 		}
 		return null;
 	}
-	
+
 	public ModelOperationManager getModelOperationManager(){
 		return fModelManager;
 	}

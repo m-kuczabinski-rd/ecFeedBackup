@@ -1,11 +1,11 @@
 /*******************************************************************************
- * Copyright (c) 2013 Testify AS.                                                
- * All rights reserved. This program and the accompanying materials              
- * are made available under the terms of the Eclipse Public License v1.0         
- * which accompanies this distribution, and is available at                      
- * http://www.eclipse.org/legal/epl-v10.html                                     
- *                                                                               
- * Contributors:                                                                 
+ * Copyright (c) 2013 Testify AS.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
  *     Patryk Chamuczynski (p.chamuczynski(at)radytek.com) - initial implementation
  ******************************************************************************/
 
@@ -16,32 +16,39 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class ClassNode extends AbstractNode {
+public class ClassNode extends GlobalParametersParentNode {
 	private List<MethodNode> fMethods;
-	
+
 	@Override
 	public List<? extends AbstractNode> getChildren(){
-		return fMethods;
+		List<AbstractNode> children = new ArrayList<AbstractNode>(super.getChildren());
+		children.addAll(fMethods);
+		return children;
 	}
 
 	@Override
-	public String toString(){
-		return getLocalName();
-	}
-	
-	@Override
 	public ClassNode getCopy(){
-		ClassNode copy = new ClassNode(getQualifiedName());
+		ClassNode copy = new ClassNode(getName());
+		for(GlobalParameterNode parameter : getGlobalParameters()){
+			copy.addParameter(parameter.getCopy());
+		}
 		for(MethodNode method : fMethods){
 			copy.addMethod(method.getCopy());
 		}
 		copy.setParent(getParent());
 		return copy;
 	}
-	
+
 	@Override
 	public RootNode getRoot(){
 		return (RootNode) getParent();
+	}
+
+	@Override
+	public int getMaxChildIndex(AbstractNode potentialChild){
+		if(potentialChild instanceof GlobalParameterNode) return getParameters().size();
+		if(potentialChild instanceof MethodNode) return getMethods().size();
+		return super.getMaxChildIndex(potentialChild);
 	}
 
 	public ClassNode(String qualifiedName) {
@@ -49,18 +56,10 @@ public class ClassNode extends AbstractNode {
 		fMethods = new ArrayList<MethodNode>();
 	}
 
-	public String getLocalName(){
-		return getLocalName(getName());
-	}
-
-	public String getQualifiedName() {
-		return super.getName();
-	}
-	
 	public boolean addMethod(MethodNode method) {
 		return addMethod(method, fMethods.size());
 	}
-	
+
 	public boolean addMethod(MethodNode method, int index) {
 		if(index >= 0 && index <= fMethods.size()){
 			fMethods.add(index, method);
@@ -69,11 +68,11 @@ public class ClassNode extends AbstractNode {
 		}
 		return false;
 	}
-	
+
 	public MethodNode getMethod(String name, List<String> argTypes) {
 		for(MethodNode methodNode : getMethods()){
 			List<String> args = new ArrayList<String>();
-			for(ParameterNode arg : methodNode.getParameters()){
+			for(AbstractParameterNode arg : methodNode.getParameters()){
 				args.add(arg.getType());
 			}
 			if(methodNode.getName().equals(name) && args.equals(argTypes)){
@@ -86,7 +85,7 @@ public class ClassNode extends AbstractNode {
 	public List<MethodNode> getMethods() {
 		return fMethods;
 	}
-	
+
 	public boolean removeMethod(MethodNode method) {
 		return fMethods.remove(method);
 	}
@@ -99,16 +98,11 @@ public class ClassNode extends AbstractNode {
 		return suites;
 	}
 
-	private String getLocalName(String qualifiedName){
-		int lastDotIndex = qualifiedName.lastIndexOf('.');
-		return (lastDotIndex == -1)?qualifiedName: qualifiedName.substring(lastDotIndex + 1);
-	}
-
 	@Override
 	public Object accept(IModelVisitor visitor) throws Exception {
 		return visitor.visit(this);
 	}
-	
+
 	@Override
 	public boolean compare(AbstractNode node){
 		if(node instanceof ClassNode == false){
@@ -116,17 +110,31 @@ public class ClassNode extends AbstractNode {
 		}
 		ClassNode compared = (ClassNode) node;
 		List<MethodNode> comparedMethods = compared.getMethods();
-		
+
 		if(getMethods().size() != comparedMethods.size()){
 			return false;
 		}
-		
+
 		for(int i = 0; i < comparedMethods.size(); i++){
 			if(getMethods().get(i).compare(comparedMethods.get(i)) == false){
 				return false;
 			}
 		}
-		
+
 		return super.compare(node);
+	}
+
+	@Override
+	public List<MethodNode> getMethods(AbstractParameterNode parameter) {
+		List<MethodNode> result = new ArrayList<MethodNode>();
+		for(MethodNode method : getMethods()){
+			for(MethodParameterNode methodParameter : method.getMethodParameters()){
+				if(methodParameter.isLinked() && methodParameter.getLink() == parameter){
+					result.add(method);
+					break;
+				}
+			}
+		}
+		return result;
 	}
 }

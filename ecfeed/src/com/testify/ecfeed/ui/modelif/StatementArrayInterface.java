@@ -12,32 +12,26 @@ import com.testify.ecfeed.ui.common.Messages;
 
 public class StatementArrayInterface extends AbstractStatementInterface{
 
-	private StatementArray fTarget;
-
 	public StatementArrayInterface(IModelUpdateContext updateContext) {
 		super(updateContext);
 	}
 
-	public void setTarget(StatementArray target){
-		super.setTarget(target);
-		fTarget = target;
-	}
-	
 	@Override
 	public boolean addStatement(AbstractStatement statement){
-		IModelOperation operation = new StatementOperationAddStatement(fTarget, statement, fTarget.getChildren().size()); 
+		IModelOperation operation = new StatementOperationAddStatement(getTarget(), statement, getTarget().getChildren().size());
 		return execute(operation, Messages.DIALOG_ADD_STATEMENT_PROBLEM_TITLE);
 	}
-	
+
+	@Override
 	public boolean removeChild(AbstractStatement child){
-		IModelOperation operation = new StatementOperationRemoveStatement(fTarget, child); 
+		IModelOperation operation = new StatementOperationRemoveStatement(getTarget(), child);
 		return execute(operation, Messages.DIALOG_REMOVE_STATEMENT_PROBLEM_TITLE);
 	}
 
 	@Override
 	public boolean setOperator(EStatementOperator operator) {
-		if(operator != fTarget.getOperator()){
-			IModelOperation operation = new StatementOperationChangeOperator(fTarget, operator); 
+		if(operator != getTarget().getOperator()){
+			IModelOperation operation = new StatementOperationChangeOperator(getTarget(), operator);
 			return execute(operation, Messages.DIALOG_EDIT_STATEMENT_PROBLEM_TITLE);
 		}
 		return false;
@@ -45,15 +39,20 @@ public class StatementArrayInterface extends AbstractStatementInterface{
 
 	@Override
 	public EStatementOperator getOperator() {
-		return fTarget.getOperator();
+		return getTarget().getOperator();
 	}
 
 	@Override
 	public boolean replaceChild(AbstractStatement child, AbstractStatement newStatement) {
 		if(child != newStatement){
-			IModelOperation operation = new StatementOperationReplaceChild(fTarget, child, newStatement);
+			IModelOperation operation = new StatementOperationReplaceChild(getTarget(), child, newStatement);
 			return execute(operation, Messages.DIALOG_ADD_STATEMENT_PROBLEM_TITLE);
 		}
 		return false;
+	}
+
+	@Override
+	protected StatementArray getTarget(){
+		return (StatementArray)super.getTarget();
 	}
 }

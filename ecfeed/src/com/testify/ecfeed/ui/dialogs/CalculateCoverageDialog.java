@@ -1,13 +1,13 @@
 package com.testify.ecfeed.ui.dialogs;
 
 /*******************************************************************************
- * Copyright (c) 2014 Testify AS.                                                
- * All rights reserved. This program and the accompanying materials              
- * are made available under the terms of the Eclipse Public License v1.0         
- * which accompanies this distribution, and is available at                      
- * http://www.eclipse.org/legal/epl-v10.html                                     
- *                                                                               
- * Contributors:                                                                 
+ * Copyright (c) 2014 Testify AS.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
  *     Michal Gluszko (m.gluszko(at)radytek.com) - initial implementation
  ******************************************************************************/
 
@@ -68,12 +68,12 @@ public class CalculateCoverageDialog extends TitleAreaDialog {
 	private class CoverageTreeViewerListener extends TreeCheckStateListener {
 		// saved tree state
 		Object fTreeState[];
-	
+
 		public CoverageTreeViewerListener(CheckboxTreeViewer treeViewer) {
 			super(treeViewer);
 			fTreeState = new Object[0];
 		}
-	
+
 		@Override
 		public void checkStateChanged(CheckStateChangedEvent event) {
 			super.checkStateChanged(event);
@@ -81,7 +81,7 @@ public class CalculateCoverageDialog extends TitleAreaDialog {
 			Object element = event.getElement();
 			boolean checked = event.getChecked();
 			Set<TestCaseNode> checkedTestCases;
-			
+
 			if(fTestCasesViewer.getCheckedElements().length == 0){
 				checkedTestCases = null;
 			} else {
@@ -90,7 +90,7 @@ public class CalculateCoverageDialog extends TitleAreaDialog {
 
 			applyCheckedTestCases(checkedTestCases, checked);
 		}
-		
+
 		public void applyCheckedTestCases(Collection<TestCaseNode> checkedTestCases,
 				boolean checked){
 			fCalculator.setCurrentChangedCases(checkedTestCases, checked);
@@ -102,10 +102,10 @@ public class CalculateCoverageDialog extends TitleAreaDialog {
 				revertLastTreeChange();
 			}
 		}
-		
+
 		private Set<TestCaseNode> getCheckedTestCases(Object element, boolean checked){
 			Set<TestCaseNode> testCases = new HashSet<>();
-			
+
 			if (checked) {
 				// TestSuite
 				if (element instanceof String) {
@@ -122,7 +122,7 @@ public class CalculateCoverageDialog extends TitleAreaDialog {
 				// TestSuite
 				if (element instanceof String) {
 					String testSuiteName = (String) element;
-	
+
 					// if test suite was grayed add all test cases of that suite
 					// that were checked
 					for (Object tcase : fTreeState) {
@@ -147,7 +147,7 @@ public class CalculateCoverageDialog extends TitleAreaDialog {
 		private void revertLastTreeChange() {
 			getViewer().setCheckedElements(fTreeState);
 		}
-	
+
 	}
 
 	public CalculateCoverageDialog(Shell parentShell, MethodNode method, Object[] checked, Object[] grayed) {
@@ -155,13 +155,13 @@ public class CalculateCoverageDialog extends TitleAreaDialog {
 		setHelpAvailable(false);
 		setShellStyle(SWT.BORDER | SWT.RESIZE | SWT.TITLE | SWT.APPLICATION_MODAL);
 		fMethod = method;
-		fCalculator = new CoverageCalculator(fMethod.getParameters());
-		
+		fCalculator = new CoverageCalculator(fMethod.getMethodParameters());
+
 		fStatusResolver = new EclipseImplementationStatusResolver();
 		fInitChecked = checked;
 		fInitGrayed = grayed;
 	}
-	
+
 	@Override
 	public Point getInitialSize() {
 		return new Point(600, 800);
@@ -184,12 +184,13 @@ public class CalculateCoverageDialog extends TitleAreaDialog {
 
 		createTestCaseComposite(mainContainer);
 		createCoverageGraphComposite(mainContainer);
-		
+
 		setInitialSelection(fTestCasesViewer, fInitChecked, fInitGrayed);
-		
+
 		//Draw bar graph. Possible change for a timer with slight delay if tests prove current solution insufficient in some cases.
 		Display.getDefault().asyncExec(new Runnable() {
-		    public void run() {
+		    @Override
+			public void run() {
 		    	drawBarGraph();
 		    }
 		});
@@ -201,9 +202,9 @@ public class CalculateCoverageDialog extends TitleAreaDialog {
 			Object[] checked, Object[] grayed) {
 		viewer.setCheckedElements(checked);
 		viewer.setGrayedElements(grayed);
-		
+
 		Set<TestCaseNode> testCases = new HashSet<>();
-		
+
 		for(Object element : checked){
 			//if the element is non grayed test suite name
 			if(element instanceof String && Arrays.asList(grayed).contains(element) == false){
@@ -213,7 +214,7 @@ public class CalculateCoverageDialog extends TitleAreaDialog {
 				testCases.add((TestCaseNode)element);
 			}
 		}
-		
+
 		fCheckStateListener.applyCheckedTestCases(testCases, true);
 	}
 
@@ -239,7 +240,7 @@ public class CalculateCoverageDialog extends TitleAreaDialog {
 		fTestCasesViewer.setLabelProvider(new TestCasesViewerLabelProvider(fStatusResolver, fMethod));
 		fTestCasesViewer.getTree().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 		fTestCasesViewer.setInput(fMethod);
-		
+
 		fCheckStateListener = new CoverageTreeViewerListener(fTestCasesViewer);
 		fTestCasesViewer.addCheckStateListener(fCheckStateListener);
 	}
@@ -265,6 +266,7 @@ public class CalculateCoverageDialog extends TitleAreaDialog {
 		scrolled.setContent(composite);
 		final ScrollBar vBar = scrolled.getVerticalBar();
 		SelectionListener listener = new SelectionAdapter() {
+			@Override
 			public void widgetSelected(SelectionEvent e) {
 				drawBarGraph();
 			}
@@ -283,16 +285,17 @@ public class CalculateCoverageDialog extends TitleAreaDialog {
 		}
 
 		parent.getParent().addListener(SWT.Resize, new Listener() {
+			@Override
 			public void handleEvent(Event e) {
 				drawBarGraph();
 			}
 		});
 	}
 
-	
+
 	private void drawBarGraph() {
 		double[] coverage = fCalculator.getCoverage();
-		
+
 		if (getN() == coverage.length) {
 			for (int n = 0; n < getN(); n++) {
 				Display display = Display.getCurrent();
@@ -313,7 +316,7 @@ public class CalculateCoverageDialog extends TitleAreaDialog {
 				Color lightBlue = new Color(display, 96, 128, 255);
 
 				double widthunit = (double) width / 100;
-				int fontsize = (int) (height / 4);
+				int fontsize = height / 4;
 				Font font = new Font(display, display.getSystemFont().getFontData()[0].getName(), fontsize, 1);
 				gc.setFont(font);
 
@@ -331,22 +334,22 @@ public class CalculateCoverageDialog extends TitleAreaDialog {
 				gc.fillGradientRectangle(0, topbarborder, (int) (coverage[n] * widthunit), bottomborder - topbarborder, false);
 				gc.setLineWidth(linewidth);
 				gc.setForeground(display.getSystemColor(SWT.COLOR_BLACK));
-				gc.drawLine(linewidth, bottomborder, (int) width - linewidth, bottomborder);
+				gc.drawLine(linewidth, bottomborder, width - linewidth, bottomborder);
 				gc.drawLine(linewidth / 2, topbarborder, linewidth / 2, bottomborder);
-				gc.drawLine((int) (width) - linewidth / 2, topbarborder, (int) (width) - linewidth / 2, bottomborder);
+				gc.drawLine((width) - linewidth / 2, topbarborder, (width) - linewidth / 2, bottomborder);
 
 				DecimalFormat df = new DecimalFormat("#.00");
 				String nlabel = "N= " + (n + 1);
 				String percentvalue = df.format(coverage[n]) + "%";
 				gc.drawString(nlabel, 10, topborder, true);
-				gc.drawString(percentvalue, (width / 2) - fontspacing, (int) (topbarborder), true);
+				gc.drawString(percentvalue, (width / 2) - fontspacing, (topbarborder), true);
 				font.dispose();
 				outworldTeal.dispose();
 				gc.dispose();
 			}
 		}
 	}
-	
+
 	private int getN(){
 		return fMethod.getParameters().size();
 	}

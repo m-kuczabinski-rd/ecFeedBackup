@@ -3,16 +3,16 @@ package com.testify.ecfeed.adapter.operations;
 import com.testify.ecfeed.adapter.IModelOperation;
 import com.testify.ecfeed.adapter.ITypeAdapter;
 import com.testify.ecfeed.adapter.ModelOperationException;
-import com.testify.ecfeed.model.ParameterNode;
+import com.testify.ecfeed.model.MethodParameterNode;
 
 public class ParameterOperationSetDefaultValue extends AbstractModelOperation {
 
-	private ParameterNode fTarget;
+	private MethodParameterNode fTarget;
 	private ITypeAdapter fTypeAdapter;
 	private String fNewValue;
 	private String fOriginalValue;
 
-	public ParameterOperationSetDefaultValue(ParameterNode target, String newValue, ITypeAdapter typeAdapter) {
+	public ParameterOperationSetDefaultValue(MethodParameterNode target, String newValue, ITypeAdapter typeAdapter) {
 		super(OperationNames.SET_DEFAULT_VALUE);
 		fTarget = target;
 		fNewValue = newValue;

@@ -1,11 +1,11 @@
 /*******************************************************************************
- * Copyright (c) 2013 Testify AS.                                                   
- * All rights reserved. This program and the accompanying materials                 
- * are made available under the terms of the Eclipse Public License v1.0            
- * which accompanies this distribution, and is available at                         
- * http://www.eclipse.org/legal/epl-v10.html                                        
- *                                                                                  
- * Contributors:                                                                    
+ * Copyright (c) 2013 Testify AS.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
  *     Patryk Chamuczynski (p.chamuczynski(at)radytek.com) - initial implementation
  ******************************************************************************/
 
@@ -31,14 +31,15 @@ public class ClassDetailsPage extends BasicDetailsPage {
 	private Text fClassNameText;
 	private Text fPackageNameText;
 	private ClassInterface fClassIf;
-	
+	private GlobalParametersViewer fGlobalParametersSection;
+
 	private class BrowseClassesAdapter extends AbstractSelectionAdapter{
 		@Override
 		public void widgetSelected(SelectionEvent e){
 			fClassIf.reassignClass();
 		}
 	}
-	
+
 	private class ClassNameTextAdapter extends AbstractSelectionAdapter{
 		@Override
 		public void widgetSelected(SelectionEvent e) {
@@ -46,7 +47,7 @@ public class ClassDetailsPage extends BasicDetailsPage {
 			fClassNameText.setText(fClassIf.getLocalName());
 		}
 	}
-	
+
 	private class PackageNameTextAdapter extends AbstractSelectionAdapter{
 		@Override
 		public void widgetSelected(SelectionEvent e) {
@@ -54,7 +55,7 @@ public class ClassDetailsPage extends BasicDetailsPage {
 			fPackageNameText.setText(fClassIf.getPackageName());
 		}
 	}
-	
+
 	public ClassDetailsPage(ModelMasterSection masterSection, IModelUpdateContext updateContext, IFileInfoProvider fileInforProvider) {
 		super(masterSection, updateContext, fileInforProvider);
 		fClassIf = new ClassInterface(this);
@@ -66,8 +67,9 @@ public class ClassDetailsPage extends BasicDetailsPage {
 
 		createQualifiedNameComposite(getMainComposite());
 		addViewerSection(fMethodsSection = new MethodsViewer(this, this));
+		addViewerSection(fGlobalParametersSection = new GlobalParametersViewer(this, this));
 		addViewerSection(fOtherMethodsSection = new OtherMethodsViewer(this, this));
-		
+
 		getToolkit().paintBordersFor(getMainComposite());
 	}
 
@@ -77,13 +79,13 @@ public class ClassDetailsPage extends BasicDetailsPage {
 		createImplementerButton(textClient);
 		return textClient;
 	}
-	
+
 	private void createQualifiedNameComposite(Composite parent) {
 		Composite composite = getToolkit().createComposite(parent);
 		composite.setLayout(new GridLayout(2, false));
 		composite.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
 		Composite textComposite = getToolkit().createComposite(composite);
-		
+
 		textComposite.setLayout(new GridLayout(2, false));
 		textComposite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 		Composite buttonsComposite = getToolkit().createComposite(composite);
@@ -122,7 +124,8 @@ public class ClassDetailsPage extends BasicDetailsPage {
 	public void refresh(){
 		super.refresh();
 		if(getSelectedElement() instanceof ClassNode){
-			fClassIf.setTarget((ClassNode)getSelectedElement());
+			ClassNode selectedClass = (ClassNode)getSelectedElement();
+			fClassIf.setTarget(selectedClass);
 			String title = fClassIf.getQualifiedName();
 			//Remove implementation status for performance reasons
 //			String title = fClassIf.getQualifiedName() + " [" + fClassIf.getImplementationStatus() + "]";
@@ -130,8 +133,9 @@ public class ClassDetailsPage extends BasicDetailsPage {
 			fClassNameText.setText(fClassIf.getLocalName());
 			fPackageNameText.setText(fClassIf.getPackageName());
 
-			fMethodsSection.setInput(fClassIf.getTarget());
-			fOtherMethodsSection.setInput(fClassIf.getTarget());
+			fMethodsSection.setInput(selectedClass);
+			fGlobalParametersSection.setInput(selectedClass);
+			fOtherMethodsSection.setInput(selectedClass);
 			fOtherMethodsSection.setVisible(fOtherMethodsSection.getItemsCount() > 0);
 
 			getMainSection().layout();

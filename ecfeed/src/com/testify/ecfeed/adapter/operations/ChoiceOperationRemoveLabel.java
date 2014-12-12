@@ -3,6 +3,7 @@ package com.testify.ecfeed.adapter.operations;
 import com.testify.ecfeed.adapter.IModelOperation;
 import com.testify.ecfeed.adapter.ModelOperationException;
 import com.testify.ecfeed.model.ChoiceNode;
+import com.testify.ecfeed.model.MethodNode;
 
 public class ChoiceOperationRemoveLabel extends BulkOperation{
 
@@ -32,8 +33,9 @@ public class ChoiceOperationRemoveLabel extends BulkOperation{
 	public ChoiceOperationRemoveLabel(ChoiceNode target, String label) {
 		super(OperationNames.REMOVE_PARTITION_LABEL, true);
 		addOperation(new RemoveLabelOperation(target, label));
-		if(target.getParameter().getMethod() != null){
-			addOperation(new MethodOperationMakeConsistent(target.getParameter().getMethod()));
+		for(MethodNode method : target.getParameter().getMethods())
+		if(method != null){
+			addOperation(new MethodOperationMakeConsistent(method));
 		}
 	}
 }

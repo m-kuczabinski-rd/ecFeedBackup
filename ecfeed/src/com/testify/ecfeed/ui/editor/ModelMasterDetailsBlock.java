@@ -1,11 +1,11 @@
 /*******************************************************************************
- * Copyright (c) 2013 Testify AS.                                                   
- * All rights reserved. This program and the accompanying materials                 
- * are made available under the terms of the Eclipse Public License v1.0            
- * which accompanies this distribution, and is available at                         
- * http://www.eclipse.org/legal/epl-v10.html                                        
- *                                                                                  
- * Contributors:                                                                    
+ * Copyright (c) 2013 Testify AS.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
  *     Patryk Chamuczynski (p.chamuczynski(at)radytek.com) - initial implementation
  ******************************************************************************/
 
@@ -30,12 +30,13 @@ import org.eclipse.ui.operations.RedoActionHandler;
 import org.eclipse.ui.operations.UndoActionHandler;
 
 import com.testify.ecfeed.adapter.ModelOperationManager;
-import com.testify.ecfeed.model.ParameterNode;
+import com.testify.ecfeed.model.AbstractNode;
+import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.ConstraintNode;
-import com.testify.ecfeed.model.AbstractNode;
+import com.testify.ecfeed.model.GlobalParameterNode;
 import com.testify.ecfeed.model.MethodNode;
-import com.testify.ecfeed.model.ChoiceNode;
+import com.testify.ecfeed.model.MethodParameterNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
@@ -48,7 +49,7 @@ public class ModelMasterDetailsBlock extends MasterDetailsBlock implements ISele
 	private ModelPage fPage;
 	private FormToolkit fToolkit;
 	private ModelUpdateContext fUpdateContext;
-	
+
 	private class ModelUpdateContext implements IModelUpdateContext{
 
 		@Override
@@ -68,10 +69,10 @@ public class ModelMasterDetailsBlock extends MasterDetailsBlock implements ISele
 
 		@Override
 		public IUndoContext getUndoContext() {
-			return getPage().getEditor().getUndoContext();		
+			return getPage().getEditor().getUndoContext();
 		}
 	}
-	
+
 	private class MasterSectionContext implements ISectionContext{
 
 		@Override
@@ -88,16 +89,16 @@ public class ModelMasterDetailsBlock extends MasterDetailsBlock implements ISele
 		public FormToolkit getToolkit() {
 			return fToolkit;
 		}
-		
+
 	}
-	
+
 	private class GenericToolbarAction extends Action{
 		private final String fActionId;
-		
+
 		public GenericToolbarAction(String id){
 			fActionId = id;
 		}
-		
+
 		@Override
 		public boolean isEnabled(){
 			Action action = getFocusedSection().getAction(fActionId);
@@ -115,7 +116,7 @@ public class ModelMasterDetailsBlock extends MasterDetailsBlock implements ISele
 			}
 		}
 	}
-	
+
 	public ModelMasterDetailsBlock(ModelPage modelPage) {
 		fPage = modelPage;
 		fUpdateContext = new ModelUpdateContext();
@@ -125,6 +126,7 @@ public class ModelMasterDetailsBlock extends MasterDetailsBlock implements ISele
 		fMasterSection.selectElement(node);
 	}
 
+	@Override
 	public ModelMasterSection getMasterSection(){
 		return fMasterSection;
 	}
@@ -153,7 +155,7 @@ public class ModelMasterDetailsBlock extends MasterDetailsBlock implements ISele
 		}
 		return fMasterSectionContext;
 	}
-	
+
 	@Override
 	protected void createMasterPart(IManagedForm managedForm, Composite parent) {
 		fToolkit = managedForm.getToolkit();
@@ -169,7 +171,8 @@ public class ModelMasterDetailsBlock extends MasterDetailsBlock implements ISele
 		detailsPart.registerPage(RootNode.class, new ModelDetailsPage(fMasterSection, fUpdateContext, fPage.getEditor()));
 		detailsPart.registerPage(ClassNode.class, new ClassDetailsPage(fMasterSection, fUpdateContext, fPage.getEditor()));
 		detailsPart.registerPage(MethodNode.class, new MethodDetailsPage(fMasterSection, fUpdateContext, fPage.getEditor()));
-		detailsPart.registerPage(ParameterNode.class, new ParameterDetailsPage(fMasterSection, fUpdateContext, fPage.getEditor()));
+		detailsPart.registerPage(MethodParameterNode.class, new MethodParameterDetailsPage(fMasterSection, fUpdateContext, fPage.getEditor()));
+		detailsPart.registerPage(GlobalParameterNode.class, new GlobalParameterDetailsPage(fMasterSection, fUpdateContext, fPage.getEditor()));
 		detailsPart.registerPage(TestCaseNode.class, new TestCaseDetailsPage(fMasterSection, fUpdateContext, fPage.getEditor()));
 		detailsPart.registerPage(ConstraintNode.class, new ConstraintDetailsPage(fMasterSection, fUpdateContext, fPage.getEditor()));
 		detailsPart.registerPage(ChoiceNode.class, new ChoiceDetailsPage(fMasterSection, fUpdateContext, fPage.getEditor()));
@@ -180,7 +183,7 @@ public class ModelMasterDetailsBlock extends MasterDetailsBlock implements ISele
 	@Override
 	protected void createToolBarActions(IManagedForm managedForm) {
 		IActionBars actionBars = fPage.getEditorSite().getActionBars();
-		
+
 		actionBars.setGlobalActionHandler(ActionFactory.UNDO.getId(), new UndoActionHandler(fPage.getEditorSite(), fUpdateContext.getUndoContext()));
 		actionBars.setGlobalActionHandler(ActionFactory.REDO.getId(), new RedoActionHandler(fPage.getEditorSite(), fUpdateContext.getUndoContext()));
 		actionBars.setGlobalActionHandler(ActionFactory.COPY.getId(), new GenericToolbarAction(ActionFactory.COPY.getId()));
@@ -189,7 +192,7 @@ public class ModelMasterDetailsBlock extends MasterDetailsBlock implements ISele
 		actionBars.setGlobalActionHandler(ActionFactory.DELETE.getId(), new GenericToolbarAction(ActionFactory.DELETE.getId()));
 		actionBars.setGlobalActionHandler(ActionFactory.SELECT_ALL.getId(), new GenericToolbarAction(ActionFactory.SELECT_ALL.getId()));
 	}
-	
+
 	protected BasicSection getFocusedSection(){
 		if(fMasterSection.getViewer().getControl().isFocusControl()){
 			return fMasterSection;

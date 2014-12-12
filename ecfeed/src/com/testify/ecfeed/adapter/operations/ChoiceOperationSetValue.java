@@ -5,8 +5,11 @@ import com.testify.ecfeed.adapter.ITypeAdapterProvider;
 import com.testify.ecfeed.adapter.ModelOperationException;
 import com.testify.ecfeed.adapter.java.Constants;
 import com.testify.ecfeed.adapter.java.JavaUtils;
-import com.testify.ecfeed.model.ParameterNode;
+import com.testify.ecfeed.model.AbstractParameterNode;
 import com.testify.ecfeed.model.ChoiceNode;
+import com.testify.ecfeed.model.GlobalParameterNode;
+import com.testify.ecfeed.model.IParameterVisitor;
+import com.testify.ecfeed.model.MethodParameterNode;
 
 public class ChoiceOperationSetValue extends AbstractModelOperation {
 
@@ -14,10 +17,45 @@ public class ChoiceOperationSetValue extends AbstractModelOperation {
 	private String fOriginalValue;
 	private String fOriginalDefaultValue;
 	private ChoiceNode fTarget;
-	
+
 	private ITypeAdapterProvider fAdapterProvider;
-	
+
+	private class ParameterAdapter implements IParameterVisitor{
+
+		@Override
+		public Object visit(MethodParameterNode parameter) throws Exception {
+			fOriginalDefaultValue = parameter.getDefaultValue();
+			if(parameter != null && JavaUtils.isUserType(parameter.getType())){
+				if(parameter.getLeafChoiceValues().contains(parameter.getDefaultValue()) == false){
+					parameter.setDefaultValueString(fNewValue);
+				}
+			}
+			return null;
+		}
+
+		@Override
+		public Object visit(GlobalParameterNode node) throws Exception {
+			return null;
+		}
+
+	}
+
 	private class ReverseOperation extends AbstractModelOperation{
+
+		private class ReverseParameterAdapter implements IParameterVisitor{
+
+			@Override
+			public Object visit(MethodParameterNode parameter) throws Exception {
+				parameter.setDefaultValueString(fOriginalDefaultValue);
+				return null;
+			}
+
+			@Override
+			public Object visit(GlobalParameterNode parameter) throws Exception {
+				return null;
+			}
+
+		}
 
 		public ReverseOperation() {
 			super(ChoiceOperationSetValue.this.getName());
@@ -26,8 +64,14 @@ public class ChoiceOperationSetValue extends AbstractModelOperation {
 		@Override
 		public void execute() throws ModelOperationException {
 			fTarget.setValueString(fOriginalValue);
-			fTarget.getParameter().setDefaultValueString(fOriginalDefaultValue);
+			adaptParameter(fTarget.getParameter());
 			markModelUpdated();
+		}
+
+		private void adaptParameter(AbstractParameterNode parameter) {
+			try{
+				parameter.accept(new ReverseParameterAdapter());
+			}catch(Exception e){}
 		}
 
 		@Override
@@ -35,31 +79,30 @@ public class ChoiceOperationSetValue extends AbstractModelOperation {
 			return new ChoiceOperationSetValue(fTarget, fNewValue, fAdapterProvider);
 		}
 	}
-	
+
 	public ChoiceOperationSetValue(ChoiceNode target, String newValue, ITypeAdapterProvider adapterProvider){
 		super(OperationNames.SET_PARTITION_VALUE);
 		fTarget = target;
 		fNewValue = newValue;
 		fOriginalValue = fTarget.getValueString();
-		fOriginalDefaultValue = fTarget.getParameter().getDefaultValue();
-		
 		fAdapterProvider = adapterProvider;
 	}
-	
+
 	@Override
 	public void execute() throws ModelOperationException {
 		String convertedValue = validateChoiceValue(fTarget.getParameter().getType(), fNewValue);
 		if(convertedValue == null){
 			throw new ModelOperationException(Messages.PARTITION_VALUE_PROBLEM(fNewValue));
 		}
-		fTarget.setValueString(convertedValue);
-		ParameterNode parameter = fTarget.getParameter();
-		if(parameter != null && JavaUtils.isUserType(parameter.getType())){
-			if(parameter.getLeafChoiceValues().contains(fOriginalDefaultValue) == false){
-				parameter.setDefaultValueString(fNewValue);
-			}
-		}
+		fTarget.setValueString(fNewValue);
+		adaptParameter(fTarget.getParameter());
 		markModelUpdated();
+	}
+
+	private void adaptParameter(AbstractParameterNode parameter) {
+		try{
+			parameter.accept(new ParameterAdapter());
+		}catch(Exception e){}
 	}
 
 	@Override
@@ -69,7 +112,7 @@ public class ChoiceOperationSetValue extends AbstractModelOperation {
 
 	@Override
 	public String toString(){
-		return "setValue[" + fTarget + "](" + fNewValue + ")"; 
+		return "setValue[" + fTarget + "](" + fNewValue + ")";
 	}
 
 	private String validateChoiceValue(String type, String value) {

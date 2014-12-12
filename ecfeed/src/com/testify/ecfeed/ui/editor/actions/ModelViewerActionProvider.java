@@ -8,13 +8,13 @@ import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 
 
 public class ModelViewerActionProvider extends ActionGroups {
-	
+
 	public ModelViewerActionProvider(TreeViewer viewer, IModelUpdateContext context, boolean selectRoot) {
 		addEditActions(viewer, context);
 		addViewerActions(viewer, context, selectRoot);
 		addMoveActions(viewer, context);
 	}
-	
+
 	public ModelViewerActionProvider(TableViewer viewer, IModelUpdateContext context) {
 		addEditActions(viewer, context);
 		addViewerActions(viewer);
@@ -28,7 +28,7 @@ public class ModelViewerActionProvider extends ActionGroups {
 		addAction("edit", new PasteAction(selectionProvider, context));
 		addAction("edit", deleteAction);
 	}
-	
+
 	private void addMoveActions(ISelectionProvider selectionProvider, IModelUpdateContext context){
 		addAction("move", new MoveUpDownAction(true, selectionProvider, context));
 		addAction("move", new MoveUpDownAction(false, selectionProvider, context));

@@ -11,18 +11,20 @@
 
 package com.testify.ecfeed.serialization.ect;
 
-import static com.testify.ecfeed.serialization.ect.Constants.PARAMETER_IS_EXPECTED_ATTRIBUTE_NAME;
-import static com.testify.ecfeed.serialization.ect.Constants.PARAMETER_NODE_NAME;
+import static com.testify.ecfeed.serialization.ect.Constants.CHOICE_NODE_NAME;
 import static com.testify.ecfeed.serialization.ect.Constants.CLASS_NODE_NAME;
+import static com.testify.ecfeed.serialization.ect.Constants.CONSTRAINT_CHOICE_STATEMENT_NODE_NAME;
 import static com.testify.ecfeed.serialization.ect.Constants.CONSTRAINT_EXPECTED_STATEMENT_NODE_NAME;
 import static com.testify.ecfeed.serialization.ect.Constants.CONSTRAINT_LABEL_STATEMENT_NODE_NAME;
 import static com.testify.ecfeed.serialization.ect.Constants.CONSTRAINT_NODE_NAME;
-import static com.testify.ecfeed.serialization.ect.Constants.CONSTRAINT_CHOICE_STATEMENT_NODE_NAME;
 import static com.testify.ecfeed.serialization.ect.Constants.CONSTRAINT_STATEMENT_ARRAY_NODE_NAME;
 import static com.testify.ecfeed.serialization.ect.Constants.CONSTRAINT_STATIC_STATEMENT_NODE_NAME;
 import static com.testify.ecfeed.serialization.ect.Constants.DEFAULT_EXPECTED_VALUE_ATTRIBUTE_NAME;
 import static com.testify.ecfeed.serialization.ect.Constants.METHOD_NODE_NAME;
-import static com.testify.ecfeed.serialization.ect.Constants.CHOICE_NODE_NAME;
+import static com.testify.ecfeed.serialization.ect.Constants.PARAMETER_IS_EXPECTED_ATTRIBUTE_NAME;
+import static com.testify.ecfeed.serialization.ect.Constants.PARAMETER_IS_LINKED_ATTRIBUTE_NAME;
+import static com.testify.ecfeed.serialization.ect.Constants.PARAMETER_LINK_ATTRIBUTE_NAME;
+import static com.testify.ecfeed.serialization.ect.Constants.PARAMETER_NODE_NAME;
 import static com.testify.ecfeed.serialization.ect.Constants.ROOT_NODE_NAME;
 import static com.testify.ecfeed.serialization.ect.Constants.TEST_CASE_NODE_NAME;
 import static com.testify.ecfeed.serialization.ect.Constants.TEST_SUITE_NAME_ATTRIBUTE;
@@ -30,6 +32,7 @@ import static com.testify.ecfeed.serialization.ect.Constants.TYPE_NAME_ATTRIBUTE
 import static com.testify.ecfeed.serialization.ect.Constants.VALUE_ATTRIBUTE;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import nu.xom.Element;
@@ -37,16 +40,17 @@ import nu.xom.Elements;
 import nu.xom.Node;
 
 import com.testify.ecfeed.model.AbstractStatement;
-import com.testify.ecfeed.model.ParameterNode;
+import com.testify.ecfeed.model.ChoiceNode;
+import com.testify.ecfeed.model.ChoicesParentStatement;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.Constraint;
 import com.testify.ecfeed.model.ConstraintNode;
 import com.testify.ecfeed.model.EStatementOperator;
 import com.testify.ecfeed.model.EStatementRelation;
 import com.testify.ecfeed.model.ExpectedValueStatement;
+import com.testify.ecfeed.model.GlobalParameterNode;
 import com.testify.ecfeed.model.MethodNode;
-import com.testify.ecfeed.model.ChoiceNode;
-import com.testify.ecfeed.model.ChoicesParentStatement;
+import com.testify.ecfeed.model.MethodParameterNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.StatementArray;
 import com.testify.ecfeed.model.StaticStatement;
@@ -60,9 +64,17 @@ public class XomAnalyser {
 
 		RootNode root = new RootNode(name);
 
-		for(Element child : getIterableChildren(element)){
+		//parameters must be parsed before classes
+		for(Element child : getIterableChildren(element, Constants.PARAMETER_NODE_NAME)){
+				try{
+					root.addParameter(parseGlobalParameter(child));
+				}catch(ParserException e){
+					System.err.println("Exception: " + e.getMessage());
+			}
+		}
+		for(Element child : getIterableChildren(element, Constants.CLASS_NODE_NAME)){
 			try{
-				root.addClass(parseClass(child));
+				root.addClass(parseClass(child, root));
 			}catch(ParserException e){
 				System.err.println("Exception: " + e.getMessage());
 			}
@@ -71,15 +83,25 @@ public class XomAnalyser {
 		return root;
 	}
 
-	public ClassNode parseClass(Element element) throws ParserException{
+	public ClassNode parseClass(Element element, RootNode parent) throws ParserException{
 		assertNodeTag(element.getQualifiedName(), CLASS_NODE_NAME);
 		String name = getElementName(element);
 
 		ClassNode _class = new ClassNode(name);
+		//we need to do it here, so the backward search for global parameters will work
+		_class.setParent(parent);
 
-		for(Element child : getIterableChildren(element)){
+		//parameters must be parsed before classes
+		for(Element child : getIterableChildren(element, Constants.PARAMETER_NODE_NAME)){
 			try{
-				_class.addMethod(parseMethod(child));
+				_class.addParameter(parseGlobalParameter(child));
+			}catch(ParserException e){
+				System.err.println("Exception: " + e.getMessage());
+			}
+		}
+		for(Element child : getIterableChildren(element, Constants.METHOD_NODE_NAME)){
+			try{
+				_class.addMethod(parseMethod(child, _class));
 			}catch(ParserException e){
 				System.err.println("Exception: " + e.getMessage());
 			}
@@ -88,16 +110,17 @@ public class XomAnalyser {
 		return _class;
 	}
 
-	public MethodNode parseMethod(Element element) throws ParserException{
+	public MethodNode parseMethod(Element element, ClassNode parent) throws ParserException{
 		assertNodeTag(element.getQualifiedName(), METHOD_NODE_NAME);
 		String name = getElementName(element);
 
 		MethodNode method = new MethodNode(name);
+		method.setParent(parent);
 
 		for(Element child : getIterableChildren(element)){
 			if(child.getLocalName() == Constants.PARAMETER_NODE_NAME){
 				try{
-					method.addParameter(parseParameter(child));
+					method.addParameter(parseMethodParameter(child, method));
 				}catch(ParserException e){
 					System.err.println("Exception: " + e.getMessage());
 				}
@@ -126,7 +149,7 @@ public class XomAnalyser {
 		return method;
 	}
 
-	public ParameterNode parseParameter(Element element) throws ParserException{
+	public MethodParameterNode parseMethodParameter(Element element, MethodNode method) throws ParserException{
 		assertNodeTag(element.getQualifiedName(), PARAMETER_NODE_NAME);
 		String name = getElementName(element);
 		String type = getAttributeValue(element, TYPE_NAME_ATTRIBUTE);
@@ -136,7 +159,25 @@ public class XomAnalyser {
 			expected = getAttributeValue(element, PARAMETER_IS_EXPECTED_ATTRIBUTE_NAME);
 			defaultValue = getAttributeValue(element, DEFAULT_EXPECTED_VALUE_ATTRIBUTE_NAME);
 		}
-		ParameterNode parameter = new ParameterNode(name, type, defaultValue, Boolean.parseBoolean(expected));
+		MethodParameterNode parameter = new MethodParameterNode(name, type, defaultValue, Boolean.parseBoolean(expected));
+
+		if(element.getAttribute(PARAMETER_IS_LINKED_ATTRIBUTE_NAME) != null){
+			boolean linked = Boolean.parseBoolean(getAttributeValue(element, PARAMETER_IS_LINKED_ATTRIBUTE_NAME));
+			parameter.setLinked(linked);
+		}
+
+		if(element.getAttribute(PARAMETER_LINK_ATTRIBUTE_NAME) != null && method != null && method.getClassNode() != null){
+			String linkPath = getAttributeValue(element, PARAMETER_LINK_ATTRIBUTE_NAME);
+			GlobalParameterNode link = method.getClassNode().findGlobalParameter(linkPath);
+			if(link != null){
+				parameter.setLink(link);
+			}
+			else{
+				parameter.setLinked(false);
+			}
+		}else{
+			parameter.setLinked(false);
+		}
 
 		for(Element child : getIterableChildren(element)){
 			try{
@@ -149,12 +190,28 @@ public class XomAnalyser {
 		return parameter;
 	}
 
+	public GlobalParameterNode parseGlobalParameter(Element element) throws ParserException{
+		assertNodeTag(element.getQualifiedName(), PARAMETER_NODE_NAME);
+		String name = getElementName(element);
+		String type = getAttributeValue(element, TYPE_NAME_ATTRIBUTE);
+		GlobalParameterNode parameter = new GlobalParameterNode(name, type);
+
+		for(Element child : getIterableChildren(element)){
+			try{
+				parameter.addChoice(parseChoice(child));
+			}catch(ParserException e){
+				System.err.println("Exception: " + e.getMessage());
+			}
+		}
+		return parameter;
+	}
+
 	public TestCaseNode parseTestCase(Element element, MethodNode method) throws ParserException{
 		assertNodeTag(element.getQualifiedName(), TEST_CASE_NODE_NAME);
 		String name = getAttributeValue(element, TEST_SUITE_NAME_ATTRIBUTE);
 
 		List<Element> parameterElements = getIterableChildren(element);
-		List<ParameterNode> parameters = method.getParameters();
+		List<MethodParameterNode> parameters = method.getMethodParameters();
 
 		List<ChoiceNode> testData = new ArrayList<ChoiceNode>();
 
@@ -164,7 +221,7 @@ public class XomAnalyser {
 
 		for(int i = 0; i < parameterElements.size(); i++){
 			Element testParameterElement = parameterElements.get(i);
-			ParameterNode parameter = parameters.get(i);
+			MethodParameterNode parameter = parameters.get(i);
 			ChoiceNode testValue = null;
 
 			if(testParameterElement.getLocalName().equals(Constants.TEST_PARAMETER_NODE_NAME)){
@@ -281,7 +338,7 @@ public class XomAnalyser {
 		assertNodeTag(element.getQualifiedName(), CONSTRAINT_CHOICE_STATEMENT_NODE_NAME);
 
 		String parameterName = getAttributeValue(element, Constants.STATEMENT_PARAMETER_ATTRIBUTE_NAME);
-		ParameterNode parameter = method.getParameter(parameterName);
+		MethodParameterNode parameter = (MethodParameterNode)method.getParameter(parameterName);
 		if(parameter == null || parameter.isExpected()){
 			throw new ParserException(Messages.WRONG_CATEGORY_NAME(parameterName, method.getName()));
 		}
@@ -304,7 +361,7 @@ public class XomAnalyser {
 		String label = getAttributeValue(element, Constants.STATEMENT_LABEL_ATTRIBUTE_NAME);
 		String relationName = getAttributeValue(element, Constants.STATEMENT_RELATION_ATTRIBUTE_NAME);
 
-		ParameterNode parameter = method.getParameter(parameterName);
+		MethodParameterNode parameter = method.getMethodParameter(parameterName);
 		if(parameter == null || parameter.isExpected()){
 			throw new ParserException(Messages.WRONG_CATEGORY_NAME(parameterName, method.getName()));
 		}
@@ -318,7 +375,7 @@ public class XomAnalyser {
 
 		String parameterName = getAttributeValue(element, Constants.STATEMENT_PARAMETER_ATTRIBUTE_NAME);
 		String valueString = getAttributeValue(element, Constants.STATEMENT_EXPECTED_VALUE_ATTRIBUTE_NAME);
-		ParameterNode parameter = method.getParameter(parameterName);
+		MethodParameterNode parameter = method.getMethodParameter(parameterName);
 		if(parameter == null || !parameter.isExpected()){
 			throw new ParserException(Messages.WRONG_CATEGORY_NAME(parameterName, method.getName()));
 		}
@@ -368,6 +425,17 @@ public class XomAnalyser {
 			}
 		}
 		return list;
+	}
+
+	protected List<Element> getIterableChildren(Element element, String name){
+		List<Element> elements = getIterableChildren(element);
+		Iterator<Element> it = elements.iterator();
+		while(it.hasNext()){
+			if(it.next().getLocalName().equals(name) == false){
+				it.remove();
+			}
+		}
+		return elements;
 	}
 
 	protected String getElementName(Element element) throws ParserException {

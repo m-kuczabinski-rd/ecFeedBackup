@@ -6,13 +6,14 @@ import java.util.List;
 import com.testify.ecfeed.adapter.IModelOperation;
 import com.testify.ecfeed.adapter.ModelOperationException;
 import com.testify.ecfeed.adapter.java.JavaUtils;
-import com.testify.ecfeed.model.ParameterNode;
+import com.testify.ecfeed.model.AbstractNode;
+import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.ConstraintNode;
-import com.testify.ecfeed.model.AbstractNode;
+import com.testify.ecfeed.model.GlobalParameterNode;
 import com.testify.ecfeed.model.IModelVisitor;
 import com.testify.ecfeed.model.MethodNode;
-import com.testify.ecfeed.model.ChoiceNode;
+import com.testify.ecfeed.model.MethodParameterNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.TestCaseNode;
 
@@ -41,9 +42,9 @@ public class FactoryRenameOperation {
 			}
 		}
 	}
-	
+
 	private static class MethodOperationRename extends GenericOperationRename {
-		
+
 		public MethodOperationRename(MethodNode target, String newName){
 			super(target, newName);
 		}
@@ -63,20 +64,39 @@ public class FactoryRenameOperation {
 		}
 	}
 
-	private static class ParameterOperationRename extends GenericOperationRename {
+	private static class GlobalParameterOperationRename extends GenericOperationRename {
 
-		public ParameterOperationRename(AbstractNode target, String newName) {
+		public GlobalParameterOperationRename(AbstractNode target, String newName) {
 			super(target, newName);
 		}
 
 		@Override
 		public IModelOperation reverseOperation() {
-			return new ParameterOperationRename(getTarget(), getOriginalName());
+			return new GlobalParameterOperationRename(getTarget(), getOriginalName());
 		}
 
 		@Override
 		protected void verifyNewName(String newName) throws ModelOperationException {
-			ParameterNode target = (ParameterNode)getTarget();
+			if(JavaUtils.isJavaKeyword(newName)){
+				throw new ModelOperationException(Messages.CATEGORY_NAME_REGEX_PROBLEM);
+			}
+		}
+	}
+
+	private static class MethodParameterOperationRename extends GenericOperationRename {
+
+		public MethodParameterOperationRename(AbstractNode target, String newName) {
+			super(target, newName);
+		}
+
+		@Override
+		public IModelOperation reverseOperation() {
+			return new MethodParameterOperationRename(getTarget(), getOriginalName());
+		}
+
+		@Override
+		protected void verifyNewName(String newName) throws ModelOperationException {
+			MethodParameterNode target = (MethodParameterNode)getTarget();
 			if(JavaUtils.isJavaKeyword(newName)){
 				throw new ModelOperationException(Messages.CATEGORY_NAME_REGEX_PROBLEM);
 			}
@@ -85,18 +105,18 @@ public class FactoryRenameOperation {
 			}
 		}
 	}
-	
+
 	private static class ChoiceOperationRename extends GenericOperationRename {
 
 		public ChoiceOperationRename(ChoiceNode target, String newName){
 			super(target, newName);
 		}
-		
+
 		@Override
 		public IModelOperation reverseOperation() {
 			return new ChoiceOperationRename((ChoiceNode)getTarget(), getOriginalName());
 		}
-		
+
 		@Override
 		protected void verifyNewName(String newName)throws ModelOperationException{
 			if(getTarget().getSibling(getNewName()) != null){
@@ -104,7 +124,7 @@ public class FactoryRenameOperation {
 			}
 		}
 	}
-	
+
 	private static class RenameOperationProvider implements IModelVisitor{
 
 		private String fNewName;
@@ -129,8 +149,13 @@ public class FactoryRenameOperation {
 		}
 
 		@Override
-		public Object visit(ParameterNode node) throws Exception {
-			return new ParameterOperationRename(node, fNewName);
+		public Object visit(MethodParameterNode node) throws Exception {
+			return new MethodParameterOperationRename(node, fNewName);
+		}
+
+		@Override
+		public Object visit(GlobalParameterNode node) throws Exception {
+			return new GlobalParameterOperationRename(node, fNewName);
 		}
 
 		@Override
@@ -148,7 +173,7 @@ public class FactoryRenameOperation {
 			return new ChoiceOperationRename(node, fNewName);
 		}
 	}
-	
+
 	public static IModelOperation getRenameOperation(AbstractNode target, String newName){
 		try{
 			return (IModelOperation)target.accept(new RenameOperationProvider(newName));

@@ -3,13 +3,14 @@ package com.testify.ecfeed.adapter.operations;
 import com.testify.ecfeed.adapter.IModelOperation;
 import com.testify.ecfeed.adapter.ModelOperationException;
 import com.testify.ecfeed.adapter.java.Constants;
-import com.testify.ecfeed.model.ParameterNode;
+import com.testify.ecfeed.model.AbstractNode;
+import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.ConstraintNode;
-import com.testify.ecfeed.model.AbstractNode;
+import com.testify.ecfeed.model.GlobalParameterNode;
 import com.testify.ecfeed.model.IModelVisitor;
 import com.testify.ecfeed.model.MethodNode;
-import com.testify.ecfeed.model.ChoiceNode;
+import com.testify.ecfeed.model.MethodParameterNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.TestCaseNode;
 
@@ -38,7 +39,12 @@ public class GenericOperationRename extends AbstractModelOperation {
 		}
 
 		@Override
-		public Object visit(ParameterNode node) throws Exception {
+		public Object visit(MethodParameterNode node) throws Exception {
+			return Messages.CATEGORY_NAME_REGEX_PROBLEM;
+		}
+
+		@Override
+		public Object visit(GlobalParameterNode node) throws Exception {
 			return Messages.CATEGORY_NAME_REGEX_PROBLEM;
 		}
 
@@ -57,7 +63,7 @@ public class GenericOperationRename extends AbstractModelOperation {
 			return Messages.PARTITION_NAME_REGEX_PROBLEM;
 		}
 	}
-	
+
 	private class NameRegexProvider implements IModelVisitor{
 
 		@Override
@@ -76,7 +82,12 @@ public class GenericOperationRename extends AbstractModelOperation {
 		}
 
 		@Override
-		public Object visit(ParameterNode node) throws Exception {
+		public Object visit(MethodParameterNode node) throws Exception {
+			return Constants.REGEX_CATEGORY_NODE_NAME;
+		}
+
+		@Override
+		public Object visit(GlobalParameterNode node) throws Exception {
 			return Constants.REGEX_CATEGORY_NODE_NAME;
 		}
 
@@ -95,7 +106,7 @@ public class GenericOperationRename extends AbstractModelOperation {
 			return Constants.REGEX_PARTITION_NODE_NAME;
 		}
 	}
-	
+
 	public GenericOperationRename(AbstractNode target, String newName){
 		super(OperationNames.RENAME);
 		fTarget = target;
@@ -103,7 +114,7 @@ public class GenericOperationRename extends AbstractModelOperation {
 		fOriginalName = target.getName();
 		fNameRegex = getNameRegex(target);
 	}
-	
+
 	@Override
 	public void execute() throws ModelOperationException{
 		verifyNameWithRegex();
@@ -120,18 +131,18 @@ public class GenericOperationRename extends AbstractModelOperation {
 	protected AbstractNode getTarget(){
 		return fTarget;
 	}
-	
+
 	protected String getOriginalName(){
 		return fOriginalName;
 	}
-	
+
 	protected String getNewName(){
 		return fNewName;
 	}
-	
+
 	protected void verifyNewName(String newName) throws ModelOperationException{
 	}
-	
+
 	protected void verifyNameWithRegex() throws ModelOperationException{
 		if(fNewName.matches(fNameRegex) == false){
 			throw new ModelOperationException(getRegexProblemMessage());

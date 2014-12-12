@@ -21,7 +21,7 @@ import org.junit.Test;
 
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.ChoiceNode;
-import com.testify.ecfeed.model.ParameterNode;
+import com.testify.ecfeed.model.MethodParameterNode;
 import com.testify.ecfeed.model.ChoicesParentStatement;
 import com.testify.ecfeed.model.EStatementRelation;
 
@@ -54,9 +54,9 @@ public class LabelStatementTest {
 		p21.addLabel("p21");
 		p22.addLabel("p22");
 		
-		ParameterNode c1 = new ParameterNode("c1", "type", "0", false);
+		MethodParameterNode c1 = new MethodParameterNode("c1", "type", "0", false);
 		c1.addChoice(p);
-		ParameterNode c2 = new ParameterNode("c2", "type", "0", false);
+		MethodParameterNode c2 = new MethodParameterNode("c2", "type", "0", false);
 		c2.addChoice(q);
 		
 		MethodNode method = new MethodNode("method");

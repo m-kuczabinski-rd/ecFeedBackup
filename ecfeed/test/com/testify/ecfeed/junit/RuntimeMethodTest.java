@@ -29,7 +29,7 @@ import com.testify.ecfeed.generators.api.GeneratorException;
 import com.testify.ecfeed.generators.api.IConstraint;
 import com.testify.ecfeed.generators.api.IGenerator;
 import com.testify.ecfeed.junit.RuntimeMethod;
-import com.testify.ecfeed.model.ParameterNode;
+import com.testify.ecfeed.model.MethodParameterNode;
 import com.testify.ecfeed.model.ChoiceNode;
 
 public class RuntimeMethodTest {
@@ -98,7 +98,7 @@ public class RuntimeMethodTest {
 	}
 
 	private List<ChoiceNode> generateParameter(int choices) {
-		ParameterNode parent = new ParameterNode("Parameter", "int","0",  false);
+		MethodParameterNode parent = new MethodParameterNode("Parameter", "int","0",  false);
 		List<ChoiceNode> parameter = new ArrayList<ChoiceNode>();
 		for(int i = 0; i < choices; i++){
 			ChoiceNode choice = new ChoiceNode(String.valueOf(i), String.valueOf(i));

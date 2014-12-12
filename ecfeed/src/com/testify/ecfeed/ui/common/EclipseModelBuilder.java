@@ -14,7 +14,7 @@ import org.eclipse.jdt.core.Signature;
 
 import com.testify.ecfeed.adapter.ModelOperationException;
 import com.testify.ecfeed.adapter.java.JavaUtils;
-import com.testify.ecfeed.model.ParameterNode;
+import com.testify.ecfeed.model.MethodParameterNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.ChoiceNode;
@@ -63,8 +63,8 @@ public class EclipseModelBuilder extends JavaModelAnalyser{
 		return methodNode;
 	}
 	
-	public ParameterNode buildParameterModel(String name, String type, boolean expected){
-		ParameterNode parameter = new ParameterNode(name, type, getDefaultExpectedValue(type), expected);
+	public MethodParameterNode buildParameterModel(String name, String type, boolean expected){
+		MethodParameterNode parameter = new MethodParameterNode(name, type, getDefaultExpectedValue(type), expected);
 		if(!expected){
 			List<ChoiceNode> defaultChoices = defaultChoices(type);
 			for(ChoiceNode choice : defaultChoices){

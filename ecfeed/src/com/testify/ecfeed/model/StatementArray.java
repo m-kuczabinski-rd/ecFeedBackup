@@ -64,7 +64,7 @@ public class StatementArray extends AbstractStatement{
 	}
 
 	@Override
-	public boolean mentions(ParameterNode parameter){
+	public boolean mentions(MethodParameterNode parameter){
 		for(AbstractStatement child : fStatements){
 			if(child.mentions(parameter)){
 				return true;

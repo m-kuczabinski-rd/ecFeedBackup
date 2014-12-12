@@ -11,22 +11,21 @@ import com.testify.ecfeed.adapter.operations.GenericOperationAddChoice;
 import com.testify.ecfeed.adapter.operations.GenericOperationRemoveChoice;
 import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.model.ChoicesParentNode;
+import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.ui.common.Constants;
 import com.testify.ecfeed.ui.common.EclipseModelBuilder;
 import com.testify.ecfeed.ui.common.EclipseTypeAdapterProvider;
 import com.testify.ecfeed.ui.common.Messages;
 
-public class ChoicesParentNodeInterface extends AbstractNodeInterface {
+public class ChoicesParentInterface extends AbstractNodeInterface {
 
-	private ChoicesParentNode fTarget;
-
-	public ChoicesParentNodeInterface(IModelUpdateContext updateContext){
+	public ChoicesParentInterface(IModelUpdateContext updateContext){
 		super(updateContext);
 	}
 
-	public void setTarget(ChoicesParentNode target){
-		super.setTarget(target);
-		fTarget = target;
+	@Override
+	protected ChoicesParentNode getTarget(){
+		return (ChoicesParentNode)super.getTarget();
 	}
 
 	public ChoiceNode addNewChoice() {
@@ -40,20 +39,22 @@ public class ChoicesParentNodeInterface extends AbstractNodeInterface {
 	}
 
 	public boolean addChoice(ChoiceNode newChoice) {
-		IModelOperation operation = new GenericOperationAddChoice(fTarget, newChoice, new EclipseTypeAdapterProvider(), fTarget.getChoices().size(), true);
+		IModelOperation operation = new GenericOperationAddChoice(getTarget(), newChoice, new EclipseTypeAdapterProvider(), getTarget().getChoices().size(), true);
 		return execute(operation, Messages.DIALOG_ADD_CHOICE_PROBLEM_TITLE);
 	}
 
 	public boolean removeChoice(ChoiceNode choice) {
-		IModelOperation operation = new GenericOperationRemoveChoice(fTarget, choice, true);
+		IModelOperation operation = new GenericOperationRemoveChoice(getTarget(), choice, getAdapterProvider(), true);
 		return execute(operation, Messages.DIALOG_REMOVE_CHOICE_TITLE);
 	}
 
 	public boolean removeChoices(Collection<ChoiceNode> choices) {
 		boolean displayWarning = false;
-		for(ChoiceNode p : choices){
-			if(fTarget.getParameter().getMethod().mentioningConstraints(p).size() > 0 || fTarget.getParameter().getMethod().mentioningTestCases(p).size() > 0){
-				displayWarning = true;
+		for(MethodNode method : getTarget().getParameter().getMethods()){
+			for(ChoiceNode p : choices){
+				if(method.mentioningConstraints(p).size() > 0 || method.mentioningTestCases(p).size() > 0){
+					displayWarning = true;
+				}
 			}
 		}
 		if(displayWarning){
@@ -68,11 +69,11 @@ public class ChoicesParentNodeInterface extends AbstractNodeInterface {
 
 	protected String generateNewChoiceValue() {
 		EclipseModelBuilder builder = new EclipseModelBuilder();
-		String type = fTarget.getParameter().getType();
+		String type = getTarget().getParameter().getType();
 		String value = builder.getDefaultExpectedValue(type);
 		if(isPrimitive() == false && builder.getSpecialValues(type).size() == 0){
 			int i = 0;
-			while(fTarget.getLeafChoiceValues().contains(value)){
+			while(getTarget().getLeafChoiceValues().contains(value)){
 				value = builder.getDefaultExpectedValue(type) + i++;
 			}
 		}
@@ -80,7 +81,7 @@ public class ChoicesParentNodeInterface extends AbstractNodeInterface {
 	}
 
 	public boolean isPrimitive() {
-		return ParameterInterface.isPrimitive(fTarget.getParameter().getType());
+		return AbstractParameterInterface.isPrimitive(getTarget().getParameter().getType());
 	}
 
 	public boolean isUserType() {
@@ -88,7 +89,7 @@ public class ChoicesParentNodeInterface extends AbstractNodeInterface {
 	}
 
 	public List<String> getSpecialValues() {
-		return new EclipseModelBuilder().getSpecialValues(fTarget.getParameter().getType());
+		return new EclipseModelBuilder().getSpecialValues(getTarget().getParameter().getType());
 	}
 
 	public boolean hasLimitedValuesSet() {
@@ -96,13 +97,13 @@ public class ChoicesParentNodeInterface extends AbstractNodeInterface {
 	}
 
 	public  boolean isBoolean() {
-		return ParameterInterface.isBoolean(fTarget.getParameter().getType());
+		return AbstractParameterInterface.isBoolean(getTarget().getParameter().getType());
 	}
 
 	protected String generateChoiceName(){
 		String name = Constants.DEFAULT_NEW_PARTITION_NAME;
 		int i = 0;
-		while(fTarget.getChoiceNames().contains(name)){
+		while(getTarget().getChoiceNames().contains(name)){
 			name = Constants.DEFAULT_NEW_PARTITION_NAME + i++;
 		}
 		return name;

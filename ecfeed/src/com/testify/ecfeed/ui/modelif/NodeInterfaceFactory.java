@@ -1,19 +1,20 @@
 package com.testify.ecfeed.ui.modelif;
 
-import com.testify.ecfeed.model.ParameterNode;
+import com.testify.ecfeed.model.AbstractNode;
+import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.ConstraintNode;
-import com.testify.ecfeed.model.AbstractNode;
+import com.testify.ecfeed.model.GlobalParameterNode;
 import com.testify.ecfeed.model.IModelVisitor;
 import com.testify.ecfeed.model.MethodNode;
-import com.testify.ecfeed.model.ChoiceNode;
+import com.testify.ecfeed.model.MethodParameterNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.TestCaseNode;
 
 public class NodeInterfaceFactory{
 
 	private static class InterfaceProvider  implements IModelVisitor {
-		
+
 		private IModelUpdateContext fContext;
 
 		public InterfaceProvider(IModelUpdateContext context) {
@@ -42,8 +43,15 @@ public class NodeInterfaceFactory{
 		}
 
 		@Override
-		public Object visit(ParameterNode node) throws Exception {
-			ParameterInterface nodeIf = new ParameterInterface(fContext);
+		public Object visit(MethodParameterNode node) throws Exception {
+			AbstractParameterInterface nodeIf = new MethodParameterInterface(fContext);
+			nodeIf.setTarget(node);
+			return nodeIf;
+		}
+
+		@Override
+		public Object visit(GlobalParameterNode node) throws Exception {
+			AbstractParameterInterface nodeIf = new GlobalParameterInterface(fContext);
 			nodeIf.setTarget(node);
 			return nodeIf;
 		}
@@ -69,7 +77,7 @@ public class NodeInterfaceFactory{
 			return nodeIf;
 		}
 	}
-	
+
 	public static AbstractNodeInterface getNodeInterface(AbstractNode node, IModelUpdateContext context){
 		try{
 			return (AbstractNodeInterface)node.accept(new InterfaceProvider(context));

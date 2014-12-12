@@ -30,15 +30,9 @@ public class ClassInterface extends AbstractNodeInterface {
 		super(updateContext);
 	}
 
-	private ClassNode fTarget;
-
-	public void setTarget(ClassNode target){
-		super.setTarget(target);
-		fTarget = target;
-	}
-
-	public ClassNode getTarget(){
-		return fTarget;
+	@Override
+	protected ClassNode getTarget(){
+		return (ClassNode)super.getTarget();
 	}
 
 	public static String getQualifiedName(ClassNode classNode){
@@ -50,11 +44,11 @@ public class ClassInterface extends AbstractNodeInterface {
 	}
 
 	public String getQualifiedName(){
-		return getQualifiedName(fTarget);
+		return getQualifiedName(getTarget());
 	}
 
 	public String getLocalName(){
-		return getLocalName(fTarget);
+		return getLocalName(getTarget());
 	}
 
 	public static String getLocalName(ClassNode classNode){
@@ -66,7 +60,7 @@ public class ClassInterface extends AbstractNodeInterface {
 	}
 
 	public String getPackageName(){
-		return getPackageName(fTarget);
+		return getPackageName(getTarget());
 	}
 
 	@Override
@@ -78,14 +72,14 @@ public class ClassInterface extends AbstractNodeInterface {
 		if(newName.equals(getQualifiedName())){
 			return false;
 		}
-		if(getImplementationStatus(fTarget) != EImplementationStatus.NOT_IMPLEMENTED){
+		if(getImplementationStatus(getTarget()) != EImplementationStatus.NOT_IMPLEMENTED){
 			if(MessageDialog.openConfirm(Display.getCurrent().getActiveShell(),
 					Messages.DIALOG_RENAME_IMPLEMENTED_CLASS_TITLE,
 					Messages.DIALOG_RENAME_IMPLEMENTED_CLASS_MESSAGE) == false){
 				return false;
 			}
 		}
-		return execute(FactoryRenameOperation.getRenameOperation(fTarget, newName), Messages.DIALOG_RENAME_CLASS_PROBLEM_TITLE);
+		return execute(FactoryRenameOperation.getRenameOperation(getTarget(), newName), Messages.DIALOG_RENAME_CLASS_PROBLEM_TITLE);
 	}
 
 	public boolean setLocalName(String newLocalName){
@@ -111,12 +105,12 @@ public class ClassInterface extends AbstractNodeInterface {
 	}
 
 	public boolean addMethods(Collection<MethodNode> methods){
-		IModelOperation operation = new ClassOperationAddMethods(fTarget, methods, fTarget.getMethods().size());
+		IModelOperation operation = new ClassOperationAddMethods(getTarget(), methods, getTarget().getMethods().size());
 		return execute(operation, Messages.DIALOG_ADD_METHODS_PROBLEM_TITLE);
 	}
 
 	public boolean addMethod(MethodNode method){
-		IModelOperation operation = new ClassOperationAddMethod(fTarget, method, fTarget.getMethods().size());
+		IModelOperation operation = new ClassOperationAddMethod(getTarget(), method, getTarget().getMethods().size());
 		return execute(operation, Messages.DIALOG_ADD_METHOD_PROBLEM_TITLE);
 	}
 
@@ -124,7 +118,7 @@ public class ClassInterface extends AbstractNodeInterface {
 		if(MessageDialog.openConfirm(Display.getCurrent().getActiveShell(),
 				Messages.DIALOG_REMOVE_METHOD_TITLE,
 				Messages.DIALOG_REMOVE_METHOD_MESSAGE)){
-			IModelOperation operation = new ClassOperationRemoveMethod(fTarget, method);
+			IModelOperation operation = new ClassOperationRemoveMethod(getTarget(), method);
 			return execute(operation, Messages.DIALOG_REMOVE_METHOD_PROBLEM_TITLE);
 		}
 		return false;
@@ -161,13 +155,13 @@ public class ClassInterface extends AbstractNodeInterface {
 
 
 	public List<MethodNode> getOtherMethods(){
-		return getOtherMethods(fTarget);
+		return getOtherMethods(getTarget());
 	}
 
 	private String generateNewMethodName() {
 		String name = Constants.DEFAULT_NEW_METHOD_NAME;
 		int i = 0;
-		while(fTarget.getMethod(name, new ArrayList<String>()) != null){
+		while(getTarget().getMethod(name, new ArrayList<String>()) != null){
 			name = Constants.DEFAULT_NEW_METHOD_NAME + i++;
 		}
 		return name;
@@ -175,7 +169,6 @@ public class ClassInterface extends AbstractNodeInterface {
 
 	public void reassignClass() {
 		TestClassSelectionDialog dialog = new TestClassSelectionDialog(Display.getDefault().getActiveShell());
-//		TestClassSelectionDialog dialog = new TestClassSelectionDialog(Display.getDefault().getActiveShell());
 
 		if (dialog.open() == IDialogConstants.OK_ID) {
 			IType selectedClass = (IType)dialog.getFirstResult();

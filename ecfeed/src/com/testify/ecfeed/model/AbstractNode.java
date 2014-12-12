@@ -1,11 +1,11 @@
 /*******************************************************************************
- * Copyright (c) 2013 Testify AS.                                                
- * All rights reserved. This program and the accompanying materials              
- * are made available under the terms of the Eclipse Public License v1.0         
- * which accompanies this distribution, and is available at                      
- * http://www.eclipse.org/legal/epl-v10.html                                     
- *                                                                               
- * Contributors:                                                                 
+ * Copyright (c) 2013 Testify AS.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
  *     Patryk Chamuczynski (p.chamuczynski(at)radytek.com) - initial implementation
  ******************************************************************************/
 
@@ -13,6 +13,7 @@ package com.testify.ecfeed.model;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 public abstract class AbstractNode{
@@ -26,18 +27,26 @@ public abstract class AbstractNode{
 		fId = ++fLastId;
 		this.fName = name;
 	}
-	
+
 	public int getId(){
 		return fId;
 	}
-	
+
 	public int getIndex(){
 		if(getParent() == null){
 			return -1;
 		}
 		return getParent().getChildren().indexOf(this);
 	}
-	
+
+	public static List<String> getNames(Collection<AbstractNode> nodes){
+		List<String> result = new ArrayList<String>();
+		for(AbstractNode node : nodes){
+			result.add(node.getName());
+		}
+		return result;
+	}
+
 	public String getName() {
 		return fName;
 	}
@@ -45,7 +54,7 @@ public abstract class AbstractNode{
 	public void setName(String name) {
 		fName = name;
 	}
-	
+
 	public void setParent(AbstractNode newParent) {
 		fParent = newParent;
 	}
@@ -53,14 +62,14 @@ public abstract class AbstractNode{
 	public List<? extends AbstractNode> getChildren() {
 		return EMPTY_CHILDREN_ARRAY;
 	}
-	
+
 	public boolean hasChildren(){
 		if(getChildren() != null){
 			return (getChildren().size() > 0);
 		}
 		return false;
 	}
-	
+
 	public List<AbstractNode> getAncestors(){
 		List<AbstractNode> ancestors;
 		AbstractNode parent = getParent();
@@ -73,11 +82,11 @@ public abstract class AbstractNode{
 		}
 		return ancestors;
 	}
-	
+
 	public AbstractNode getParent(){
 		return fParent;
 	}
-	
+
 	public AbstractNode getRoot(){
 		if(getParent() == null){
 			return this;
@@ -116,11 +125,11 @@ public abstract class AbstractNode{
 		}
 		return null;
 	}
-	
+
 	public boolean hasSibling(String name){
 		return getSibling(name) != null;
 	}
-	
+
 	public int subtreeSize(){
 		int size = 1;
 		for(AbstractNode child : getChildren()){
@@ -129,17 +138,19 @@ public abstract class AbstractNode{
 		return size;
 	}
 
+	@Override
 	public String toString(){
 		return getName();
 	}
 
+	@Override
 	public boolean equals(Object obj){
 		if(obj instanceof AbstractNode){
 			return ((AbstractNode)obj).getId() == fId;
 		}
 		return false;
 	}
-	
+
 	public boolean compare(AbstractNode node){
 		return getName().equals(node.getName());
 	}
@@ -150,7 +161,7 @@ public abstract class AbstractNode{
 		}
 		return -1;
 	}
-	
+
 	public abstract AbstractNode getCopy();
 	public abstract Object accept(IModelVisitor visitor) throws Exception;
 

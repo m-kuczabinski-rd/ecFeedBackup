@@ -44,21 +44,23 @@ import org.eclipse.ui.forms.widgets.Section;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.FrameworkUtil;
 
-import com.testify.ecfeed.model.ParameterNode;
+import com.testify.ecfeed.adapter.java.JavaUtils;
+import com.testify.ecfeed.model.AbstractNode;
+import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.ConstraintNode;
-import com.testify.ecfeed.model.AbstractNode;
+import com.testify.ecfeed.model.GlobalParameterNode;
 import com.testify.ecfeed.model.IModelVisitor;
 import com.testify.ecfeed.model.MethodNode;
-import com.testify.ecfeed.model.ChoiceNode;
+import com.testify.ecfeed.model.MethodParameterNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.ui.common.Constants;
 import com.testify.ecfeed.ui.editor.actions.AbstractAddChildAction;
-import com.testify.ecfeed.ui.editor.actions.AddChildActionFactory;
+import com.testify.ecfeed.ui.editor.actions.AddChildActionProvider;
 import com.testify.ecfeed.ui.editor.actions.ModelViewerActionProvider;
-import com.testify.ecfeed.ui.modelif.ParameterInterface;
 import com.testify.ecfeed.ui.modelif.AbstractNodeInterface;
+import com.testify.ecfeed.ui.modelif.AbstractParameterInterface;
 import com.testify.ecfeed.ui.modelif.IModelUpdateListener;
 import com.testify.ecfeed.ui.modelif.ModelNodesTransfer;
 
@@ -122,9 +124,12 @@ public class ModelMasterSection extends TreeViewerSection{
 				return children.toArray();
 			}
 
-			if(parentElement instanceof ParameterNode){
-				ParameterNode parameter = (ParameterNode)parentElement;
-				if(parameter.isExpected() && ParameterInterface.isPrimitive(parameter.getType())){
+			if(parentElement instanceof MethodParameterNode){
+				MethodParameterNode parameter = (MethodParameterNode)parentElement;
+				if(parameter.isExpected() && AbstractParameterInterface.isPrimitive(parameter.getType())){
+					return EMPTY_ARRAY;
+				}
+				if(parameter.isLinked()){
 					return EMPTY_ARRAY;
 				}
 			}
@@ -153,33 +158,113 @@ public class ModelMasterSection extends TreeViewerSection{
 
 	private class ModelLabelProvider extends LabelProvider {
 
+		private class TextProvider implements IModelVisitor{
+
+			@Override
+			public Object visit(RootNode node) throws Exception {
+				return node.toString();
+			}
+
+			@Override
+			public Object visit(ClassNode node) throws Exception {
+				return node.toString();
+			}
+
+			@Override
+			public Object visit(MethodNode node) throws Exception {
+				return JavaUtils.simplifiedToString(node);
+			}
+
+			@Override
+			public Object visit(MethodParameterNode node) throws Exception {
+				String result = JavaUtils.simplifiedToString(node);
+				if(node.isLinked()){
+					result += "[LINKED]->" + node.getLink().getQualifiedName();
+				}
+				return result;
+			}
+
+			@Override
+			public Object visit(GlobalParameterNode node) throws Exception {
+				return JavaUtils.simplifiedToString(node);
+			}
+
+			@Override
+			public Object visit(TestCaseNode node) throws Exception {
+				return node.toString();
+			}
+
+			@Override
+			public Object visit(ConstraintNode node) throws Exception {
+				return node.toString();
+			}
+
+			@Override
+			public Object visit(ChoiceNode node) throws Exception {
+				return node.toString();
+			}
+		}
+
+		private class ImageProvider implements IModelVisitor{
+
+			@Override
+			public Object visit(RootNode node) throws Exception {
+				return getImageFromFile("root_node.png");
+			}
+
+			@Override
+			public Object visit(ClassNode node) throws Exception {
+				return getImageFromFile("class_node.png");
+			}
+
+			@Override
+			public Object visit(MethodNode node) throws Exception {
+				return getImageFromFile("method_node.png");
+			}
+
+			@Override
+			public Object visit(MethodParameterNode node) throws Exception {
+				return getImageFromFile("parameter_node.png");
+			}
+
+			@Override
+			public Object visit(GlobalParameterNode node) throws Exception {
+				return getImageFromFile("parameter_node.png");
+			}
+
+			@Override
+			public Object visit(TestCaseNode node) throws Exception {
+				return getImageFromFile("test_case_node.png");
+			}
+
+			@Override
+			public Object visit(ConstraintNode node) throws Exception {
+				return getImageFromFile("constraint_node.png");
+			}
+
+			@Override
+			public Object visit(ChoiceNode node) throws Exception {
+				return getImageFromFile("choice_node.png");
+			}
+
+		}
+
 		@Override
 		public String getText(Object element){
 			if(element instanceof AbstractNode){
-				if(element instanceof ParameterNode){
-					return ((ParameterNode)element).toShortString();
-				}
-				return element.toString();
+				try{
+					return (String)((AbstractNode)element).accept(new TextProvider());
+				}catch(Exception e){}
 			}
 			return null;
 		}
 
 		@Override
 		public Image getImage(Object element){
-			if (element instanceof RootNode){
-				return getImageFromFile("root_node.png");
-			} else if (element instanceof ClassNode){
-				return getImageFromFile("class_node.png");
-			} else if (element instanceof MethodNode){
-				return getImageFromFile("method_node.png");
-			} else if(element instanceof TestCaseNode){
-				return getImageFromFile("test_case_node.png");
-			} else if (element instanceof ParameterNode){
-				return getImageFromFile("parameter_node.png");
-			} else if (element instanceof ConstraintNode){
-				return getImageFromFile("constraint_node.png");
-			} else if (element instanceof ChoiceNode){
-				return getImageFromFile("choice_node.png");
+			if(element instanceof AbstractNode){
+				try{
+					return (Image)((AbstractNode)element).accept(new ImageProvider());
+				}catch(Exception e){}
 			}
 			return getImageFromFile("sample.png");
 		}
@@ -212,12 +297,23 @@ public class ModelMasterSection extends TreeViewerSection{
 			}
 
 			@Override
-			public Object visit(ParameterNode node) throws Exception {
+			public Object visit(MethodParameterNode node) throws Exception {
 				List<Image> decorations = new ArrayList<Image>();
 				decorations.add(implementationStatusDecoration(node));
 				if(node.isExpected()){
 					decorations.add(getImageFromFile("expected.png"));
 				}
+				if(node.isLinked()){
+					decorations.add(getImageFromFile("linked.png"));
+				}
+				return decorations;
+			}
+
+			@Override
+			public Object visit(GlobalParameterNode node) throws Exception {
+				List<Image> decorations = new ArrayList<Image>();
+				decorations.add(implementationStatusDecoration(node));
+				decorations.add(getImageFromFile("global.png"));
 				return decorations;
 			}
 
@@ -343,8 +439,8 @@ public class ModelMasterSection extends TreeViewerSection{
 		protected void populateMenu(){
 			List<AbstractNode> selected = getSelectedNodes();
 			if(selected.size() == 1){
-				AddChildActionFactory factory = new AddChildActionFactory(getTreeViewer(), ModelMasterSection.this);
-				List<AbstractAddChildAction> actions = factory.getPossibleActions(selected.get(0));
+				AddChildActionProvider actionProvider = new AddChildActionProvider(getTreeViewer(), ModelMasterSection.this);
+				List<AbstractAddChildAction> actions = actionProvider.getPossibleActions(selected.get(0));
 				for(AbstractAddChildAction action : actions){
 					addMenuItem(action.getName(), action);
 				}
@@ -359,14 +455,15 @@ public class ModelMasterSection extends TreeViewerSection{
 		fMasterDetailsBlock = parentBlock;
 		fImages = new HashMap<String, Image>();
 
-		setActionProvider(new ModelViewerActionProvider(getTreeViewer(), this, false));
+		setActionProvider(new ModelViewerActionProvider(getTreeViewer(), this, false), false);
 
-		getTreeViewer().addDragSupport(DND.DROP_COPY|DND.DROP_MOVE, new Transfer[]{ModelNodesTransfer.getInstance()}, new ModelNodeDragListener(getTreeViewer()));
-		getTreeViewer().addDropSupport(DND.DROP_COPY|DND.DROP_MOVE, new Transfer[]{ModelNodesTransfer.getInstance()}, new ModelNodeDropListener(getTreeViewer(), this));
+		getTreeViewer().addDragSupport(DND.DROP_COPY|DND.DROP_MOVE|DND.DROP_LINK, new Transfer[]{ModelNodesTransfer.getInstance()}, new ModelNodeDragListener(getTreeViewer()));
+		getTreeViewer().addDropSupport(DND.DROP_COPY|DND.DROP_MOVE|DND.DROP_LINK, new Transfer[]{ModelNodesTransfer.getInstance()}, new ModelNodeDropListener(getTreeViewer(), this));
 	}
 
 	public void setInput(RootNode model){
 		setInput(new ModelWrapper(model));
+		collapseGlobalParameters();
 	}
 
 	@Override
@@ -406,6 +503,12 @@ public class ModelMasterSection extends TreeViewerSection{
 			fUpdateListener = new UpdateListener();
 		}
 		return Arrays.asList(new IModelUpdateListener[]{fUpdateListener});
+	}
+
+	private void collapseGlobalParameters() {
+		for(GlobalParameterNode parameter : ((ModelWrapper)getViewer().getInput()).getModel().getGlobalParameters()){
+			getTreeViewer().collapseToLevel(parameter, 1);
+		}
 	}
 
 	private Image getImageFromFile(String file) {

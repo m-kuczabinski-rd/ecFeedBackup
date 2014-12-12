@@ -69,11 +69,11 @@ public abstract class AbstractStatement implements IStatement {
 		return false;
 	}
 
-	public boolean mentions(ParameterNode parameter) {
+	public boolean mentions(MethodParameterNode parameter) {
 		return false;
 	}
 
-	public boolean mentions(ParameterNode parameter, String label) {
+	public boolean mentions(MethodParameterNode parameter, String label) {
 		return false;
 	}
 

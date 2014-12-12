@@ -13,7 +13,7 @@ import org.junit.Test;
 import com.testify.ecfeed.adapter.java.ModelClassLoader;
 import com.testify.ecfeed.adapter.java.ChoiceValueParser;
 import com.testify.ecfeed.junit.AbstractFrameworkMethod;
-import com.testify.ecfeed.model.ParameterNode;
+import com.testify.ecfeed.model.MethodParameterNode;
 import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.ui.common.Constants;
 
@@ -68,9 +68,9 @@ public class AbstractFrameworkMethodTest {
 	public void invokeTest() {
 		try {
 			Method method = this.getClass().getMethod(FUNCTION_UNDER_TEST_NAME, int.class, String.class, Enum.class);
-			ParameterNode intParameter = new ParameterNode("intParameter", "int", "0", false);
-			ParameterNode stringParameter = new ParameterNode("stringParameter", "String", "0", false);
-			ParameterNode enumParameter = new ParameterNode("enumParameter", Enum.class.getCanonicalName(), Enum.values()[0].name(), false);
+			MethodParameterNode intParameter = new MethodParameterNode("intParameter", "int", "0", false);
+			MethodParameterNode stringParameter = new MethodParameterNode("stringParameter", "String", "0", false);
+			MethodParameterNode enumParameter = new MethodParameterNode("enumParameter", Enum.class.getCanonicalName(), Enum.values()[0].name(), false);
 			ChoiceValueParser parser = new ChoiceValueParser(new ModelClassLoader(new URL[]{}, this.getClass().getClassLoader()));
 			
 			ModelClassLoader loader = new ModelClassLoader(new URL[]{}, this.getClass().getClassLoader());

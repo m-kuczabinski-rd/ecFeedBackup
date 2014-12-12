@@ -12,8 +12,10 @@
 package com.testify.ecfeed.ui.editor;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.viewers.IBaseLabelProvider;
@@ -29,6 +31,7 @@ import org.eclipse.jface.viewers.StructuredViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
+import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.events.MenuEvent;
 import org.eclipse.swt.events.MenuListener;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -60,6 +63,7 @@ public abstract class ViewerSection extends BasicSection implements ISelectionPr
 	private StructuredViewer fViewer;
 	private Composite fViewerComposite;
 	private Menu fMenu;
+	private Set<KeyListener> fKeyListsners;
 
 	protected class ViewerKeyAdapter extends KeyAdapter{
 		private int fKeyCode;
@@ -136,13 +140,15 @@ public abstract class ViewerSection extends BasicSection implements ISelectionPr
 
 		protected void populateMenu() {
 			IActionProvider provider = getActionProvider();
-			Iterator<String> groupIt = provider.getGroups().iterator();
-			while(groupIt.hasNext()){
-				for(NamedAction action : provider.getActions(groupIt.next())){
-					addMenuItem(action.getName(), action);
-				}
-				if(groupIt.hasNext()){
-					new MenuItem(fMenu, SWT.SEPARATOR);
+			if(provider != null){
+				Iterator<String> groupIt = provider.getGroups().iterator();
+				while(groupIt.hasNext()){
+					for(NamedAction action : provider.getActions(groupIt.next())){
+						addMenuItem(action.getName(), action);
+					}
+					if(groupIt.hasNext()){
+						new MenuItem(fMenu, SWT.SEPARATOR);
+					}
 				}
 			}
 		}
@@ -160,6 +166,7 @@ public abstract class ViewerSection extends BasicSection implements ISelectionPr
 	public ViewerSection(ISectionContext sectionContext, IModelUpdateContext updateContext, int style) {
 		super(sectionContext, updateContext, style);
 		fSelectedElements = new ArrayList<>();
+		fKeyListsners = new HashSet<KeyListener>();
 	}
 
 	@Override
@@ -332,27 +339,42 @@ public abstract class ViewerSection extends BasicSection implements ISelectionPr
 		return fViewerComposite;
 	}
 
-	protected void addKeyListener(int keyCode, int modifier, Action action){
-		fViewer.getControl().addKeyListener(new ViewerKeyAdapter(keyCode, modifier, action));
+	protected KeyListener addKeyListener(int keyCode, int modifier, Action action){
+		ViewerKeyAdapter adapter = new ViewerKeyAdapter(keyCode, modifier, action);
+		fViewer.getControl().addKeyListener(adapter);
+		return adapter;
 	}
 
 	@Override
 	protected void setActionProvider(IActionProvider provider){
+		setActionProvider(provider, true);
+	}
+
+	protected void setActionProvider(IActionProvider provider, boolean addDeleteAction){
 		super.setActionProvider(provider);
 		fMenu = new Menu(fViewer.getControl());
 		fViewer.getControl().setMenu(fMenu);
 		fMenu.addMenuListener(getMenuListener());
 
-		if(provider.getAction(ActionFactory.DELETE.getId()) != null){
-			addKeyListener(SWT.DEL, SWT.NONE, provider.getAction(ActionFactory.DELETE.getId()));
-		}
+		if(provider != null){
+			if(addDeleteAction && provider.getAction(ActionFactory.DELETE.getId()) != null){
+				fKeyListsners.add(addKeyListener(SWT.DEL, SWT.NONE, provider.getAction(ActionFactory.DELETE.getId())));
+			}
 
-		if(provider.getAction(NamedAction.MOVE_UP_ACTION_ID) != null){
-			addKeyListener(SWT.ARROW_UP, SWT.ALT, provider.getAction(NamedAction.MOVE_UP_ACTION_ID));
-		}
+			if(provider.getAction(NamedAction.MOVE_UP_ACTION_ID) != null){
+				fKeyListsners.add(addKeyListener(SWT.ARROW_UP, SWT.ALT, provider.getAction(NamedAction.MOVE_UP_ACTION_ID)));
+			}
 
-		if(provider.getAction(NamedAction.MOVE_DOWN_ACTION_ID) != null){
-			addKeyListener(SWT.ARROW_DOWN, SWT.ALT, provider.getAction(NamedAction.MOVE_DOWN_ACTION_ID));
+			if(provider.getAction(NamedAction.MOVE_DOWN_ACTION_ID) != null){
+				fKeyListsners.add(addKeyListener(SWT.ARROW_DOWN, SWT.ALT, provider.getAction(NamedAction.MOVE_DOWN_ACTION_ID)));
+			}
+		}
+		else{
+			Iterator<KeyListener> it = fKeyListsners.iterator();
+			while(it.hasNext()){
+				fViewer.getControl().removeKeyListener(it.next());
+				it.remove();
+			}
 		}
 	}
 

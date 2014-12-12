@@ -5,13 +5,13 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.testify.ecfeed.adapter.java.ChoiceValueParser;
 import com.testify.ecfeed.adapter.java.Constants;
 import com.testify.ecfeed.adapter.java.JavaUtils;
 import com.testify.ecfeed.adapter.java.ModelClassLoader;
-import com.testify.ecfeed.adapter.java.ChoiceValueParser;
+import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.MethodNode;
-import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.runner.Messages;
 import com.testify.ecfeed.runner.RunnerException;
 
@@ -29,7 +29,7 @@ public class JavaTestRunner {
 	public void setTarget(MethodNode target) throws RunnerException{
 		fTarget = target;
 		ClassNode testClassModel = fTarget.getClassNode();
-		fTestClass = getTestClass(testClassModel.getQualifiedName());
+		fTestClass = getTestClass(testClassModel.getName());
 		fTestMethod = getTestMethod(fTestClass, fTarget);
 	}
 

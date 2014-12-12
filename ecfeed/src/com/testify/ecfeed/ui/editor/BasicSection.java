@@ -1,11 +1,11 @@
 /*******************************************************************************
- * Copyright (c) 2013 Testify AS.                                                   
- * All rights reserved. This program and the accompanying materials                 
- * are made available under the terms of the Eclipse Public License v1.0            
- * which accompanies this distribution, and is available at                         
- * http://www.eclipse.org/legal/epl-v10.html                                        
- *                                                                                  
- * Contributors:                                                                    
+ * Copyright (c) 2013 Testify AS.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
  *     Patryk Chamuczynski (p.chamuczynski(at)radytek.com) - initial implementation
  ******************************************************************************/
 
@@ -50,7 +50,7 @@ public abstract class BasicSection extends SectionPart implements IModelUpdateCo
 		public SelectNodeDoubleClickListener(ModelMasterSection masterSection){
 			fMasterSection = masterSection;
 		}
-		
+
 		@Override
 		public void doubleClick(DoubleClickEvent event) {
 			if(event.getSelection() instanceof IStructuredSelection){
@@ -61,7 +61,7 @@ public abstract class BasicSection extends SectionPart implements IModelUpdateCo
 			}
 		}
 	}
-	
+
 	public BasicSection(ISectionContext sectionContext, IModelUpdateContext updateContext, int style){
 		super(sectionContext.getSectionComposite(), sectionContext.getToolkit(), style);
 		fSectionContext = sectionContext;
@@ -87,13 +87,13 @@ public abstract class BasicSection extends SectionPart implements IModelUpdateCo
 	protected Composite getClientComposite(){
 		return fClientComposite;
 	}
-	
+
 	protected void createContent(){
 		getSection().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 		fTextClient = createTextClient();
 		fClientComposite = createClientComposite();
 	}
-	
+
 	protected Composite createClientComposite() {
 		Composite client = getToolkit().createComposite(getSection());
 		client.setLayout(clientLayout());
@@ -121,59 +121,66 @@ public abstract class BasicSection extends SectionPart implements IModelUpdateCo
 
 	protected void updateTextClient() {
 	}
-	
+
 	protected Shell getActiveShell(){
 		return Display.getCurrent().getActiveShell();
 	}
-	
+
 	protected void modelUpdated(){
 		for(IModelUpdateListener listener : fUpdateContext.getUpdateListeners()){
 			listener.modelUpdated(this);
 		}
 	}
-	
+
 //	protected void setModelUpdateListener(IModelUpdateListener listener){
 //		fModelUpdateListener = listener;
 //	}
-//	
+//
 //	protected void setOperationManager(ModelOperationManager operationManager){
 //		fOperationManager = operationManager;
 //	}
-//	
+//
 	public Action getAction(String actionId) {
 		if(fActionProvider != null){
 			return fActionProvider.getAction(actionId);
 		}
 		return null;
 	}
-	
+
 	protected void setActionProvider(IActionProvider provider){
 		fActionProvider = provider;
 	}
-	
+
 	protected IActionProvider getActionProvider(){
 		return fActionProvider;
 	}
-	
-//	protected IModelUpdateContext getUpdateContext(){
-//		return this;
-//	}
-//	
+
+	protected IModelUpdateContext getUpdateContext(){
+		return this;
+	}
+
+	public void setVisible(boolean visible) {
+		GridData gd = (GridData)getSection().getLayoutData();
+		gd.exclude = !visible;
+		getSection().setLayoutData(gd);
+		getSection().setVisible(visible);
+	}
+
 	@Override
 	public IUndoContext getUndoContext(){
 		return fUpdateContext.getUndoContext();
 	}
-	
+
 	@Override
 	public ModelOperationManager getOperationManager(){
 		return fUpdateContext.getOperationManager();
 	}
-	
-	@Override 
+
+	@Override
 	public List<IModelUpdateListener> getUpdateListeners(){
 		return fUpdateContext.getUpdateListeners();
 	}
-	
+
 	@Override
 	public AbstractFormPart getSourceForm(){
 		return this;

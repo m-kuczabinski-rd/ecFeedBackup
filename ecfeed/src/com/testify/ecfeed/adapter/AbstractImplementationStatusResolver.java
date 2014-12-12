@@ -2,13 +2,15 @@ package com.testify.ecfeed.adapter;
 
 import java.util.List;
 
-import com.testify.ecfeed.model.ParameterNode;
+import com.testify.ecfeed.model.AbstractNode;
+import com.testify.ecfeed.model.AbstractParameterNode;
+import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.ConstraintNode;
-import com.testify.ecfeed.model.AbstractNode;
+import com.testify.ecfeed.model.GlobalParameterNode;
 import com.testify.ecfeed.model.IModelVisitor;
 import com.testify.ecfeed.model.MethodNode;
-import com.testify.ecfeed.model.ChoiceNode;
+import com.testify.ecfeed.model.MethodParameterNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.TestCaseNode;
 
@@ -17,7 +19,7 @@ public abstract class AbstractImplementationStatusResolver implements
 
 	private StatusResolver fStatusResolver;
 	private IPrimitiveTypePredicate fPrimitiveTypeTester;
-	
+
 	private class StatusResolver implements IModelVisitor{
 
 		@Override
@@ -36,7 +38,12 @@ public abstract class AbstractImplementationStatusResolver implements
 		}
 
 		@Override
-		public Object visit(ParameterNode node) throws Exception {
+		public Object visit(MethodParameterNode node) throws Exception {
+			return implementationStatus(node);
+		}
+
+		@Override
+		public Object visit(GlobalParameterNode node) throws Exception {
 			return implementationStatus(node);
 		}
 
@@ -55,16 +62,16 @@ public abstract class AbstractImplementationStatusResolver implements
 			return implementationStatus(node);
 		}
 	}
-	
+
 	public AbstractImplementationStatusResolver(IPrimitiveTypePredicate primitiveTypeTester){
 		fStatusResolver = new StatusResolver();
 		fPrimitiveTypeTester = primitiveTypeTester;
 	}
-	
+
 	@Override
 	public EImplementationStatus getImplementationStatus(AbstractNode node) {
 		try{
-			EImplementationStatus status = (EImplementationStatus)node.accept(fStatusResolver); 
+			EImplementationStatus status = (EImplementationStatus)node.accept(fStatusResolver);
 			return status;
 		}
 		catch(Exception e){}
@@ -74,14 +81,14 @@ public abstract class AbstractImplementationStatusResolver implements
 	protected EImplementationStatus implementationStatus(RootNode project){
 		EImplementationStatus status = EImplementationStatus.IMPLEMENTED;
 		if(project.getClasses().size() != 0){
-			EImplementationStatus childrenStatus = childrenStatus(project.getClasses()); 
+			EImplementationStatus childrenStatus = childrenStatus(project.getClasses());
 			if(childrenStatus != EImplementationStatus.IMPLEMENTED){
 				status = EImplementationStatus.PARTIALLY_IMPLEMENTED;
 			}
 		}
 		return status;
 	}
-	
+
 	protected EImplementationStatus implementationStatus(ClassNode classNode){
 		EImplementationStatus status = EImplementationStatus.IMPLEMENTED;
 		if(classDefinitionImplemented(classNode.getName()) == false){
@@ -108,31 +115,44 @@ public abstract class AbstractImplementationStatusResolver implements
 			status = EImplementationStatus.IMPLEMENTED;
 		}
 		else{
-			EImplementationStatus childrenStatus = childrenStatus(method.getParameters()); 
+			EImplementationStatus childrenStatus = childrenStatus(method.getParameters());
 			if(childrenStatus != EImplementationStatus.IMPLEMENTED){
 				status = EImplementationStatus.PARTIALLY_IMPLEMENTED;
 			}
 		}
 		return status;
 	}
-	
-	protected EImplementationStatus implementationStatus(ParameterNode parameter){
-		EImplementationStatus status = EImplementationStatus.IMPLEMENTED;
-		if(fPrimitiveTypeTester.isPrimitive(parameter.getType())){
-			if(parameter.getChoices().size() == 0 && parameter.isExpected() == false)
-			status = EImplementationStatus.PARTIALLY_IMPLEMENTED;
+
+	protected EImplementationStatus implementationStatus(MethodParameterNode parameter){
+		EImplementationStatus status = implementationStatus((AbstractParameterNode)parameter);
+		if(fPrimitiveTypeTester.isPrimitive(parameter.getType()) && parameter.isExpected()){
+			status = EImplementationStatus.IMPLEMENTED;
 		}
-		else{
-			if(enumDefinitionImplemented(parameter.getType()) == false){
-				status = EImplementationStatus.NOT_IMPLEMENTED;
-			}
-			else if(parameter.getChoices().size() == 0){
+		return status;
+	}
+
+	protected EImplementationStatus implementationStatus(GlobalParameterNode parameter){
+		return implementationStatus((AbstractParameterNode)parameter);
+	}
+
+	protected EImplementationStatus implementationStatus(AbstractParameterNode parameter){
+		EImplementationStatus status = EImplementationStatus.IMPLEMENTED;
+		if(fPrimitiveTypeTester.isPrimitive(parameter.getType()) == true){
+			if(parameter.getChoices().size() == 0){
 				status = EImplementationStatus.PARTIALLY_IMPLEMENTED;
 			}
-			else{
-				EImplementationStatus childrenStatus = childrenStatus(parameter.getChoices());
-				if(childrenStatus != EImplementationStatus.IMPLEMENTED){
+		}else{
+			if(enumDefinitionImplemented(parameter.getType()) == false){
+				status = EImplementationStatus.NOT_IMPLEMENTED;
+			}else{
+				if(parameter.getChoices().size() == 0){
 					status = EImplementationStatus.PARTIALLY_IMPLEMENTED;
+				}else{
+					for(ChoiceNode choice : parameter.getChoices()){
+						if(implementationStatus(choice) != EImplementationStatus.IMPLEMENTED){
+							status = EImplementationStatus.PARTIALLY_IMPLEMENTED;
+						}
+					}
 				}
 			}
 		}
@@ -147,11 +167,11 @@ public abstract class AbstractImplementationStatusResolver implements
 	protected EImplementationStatus implementationStatus(ConstraintNode constraint){
 		return EImplementationStatus.IRRELEVANT;
 	}
-	
+
 	protected EImplementationStatus implementationStatus(ChoiceNode choice){
 		EImplementationStatus status = EImplementationStatus.IMPLEMENTED;
 		if(choice.isAbstract() == false){
-			ParameterNode parameter = choice.getParameter();
+			AbstractParameterNode parameter = choice.getParameter();
 			if(parameter == null){
 				status = EImplementationStatus.NOT_IMPLEMENTED;
 			}

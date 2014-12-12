@@ -77,8 +77,8 @@ public class AbstractNodeTest{
 		RootNode root = new RootNode("root");
 		ClassNode classNode = new ClassNode("class");
 		MethodNode method = new MethodNode("method");
-		ParameterNode parameter = new ParameterNode("name", "type", "0", false);
-		ParameterNode expCat = new ParameterNode("name", "type", "0", true);
+		MethodParameterNode parameter = new MethodParameterNode("name", "type", "0", false);
+		MethodParameterNode expCat = new MethodParameterNode("name", "type", "0", true);
 		expCat.setDefaultValueString("0");
 		ConstraintNode constraint = new ConstraintNode("name", new Constraint(new StaticStatement(true), new StaticStatement(false)));
 		TestCaseNode testCase = new TestCaseNode("name", new ArrayList<ChoiceNode>());
@@ -134,8 +134,8 @@ public class AbstractNodeTest{
 		RootNode root = new RootNode("root");
 		ClassNode classNode = new ClassNode("class");
 		MethodNode method = new MethodNode("method");
-		ParameterNode parameter = new ParameterNode("name", "type", "0", false);
-		ParameterNode expCat = new ParameterNode("name", "type", "0", true);
+		MethodParameterNode parameter = new MethodParameterNode("name", "type", "0", false);
+		MethodParameterNode expCat = new MethodParameterNode("name", "type", "0", true);
 		expCat.setDefaultValueString("0");
 		ConstraintNode constraint = new ConstraintNode("name", new Constraint(new StaticStatement(true), new StaticStatement(false)));
 		TestCaseNode testCase = new TestCaseNode("name", new ArrayList<ChoiceNode>());
@@ -164,8 +164,8 @@ public class AbstractNodeTest{
 		RootNode root = new RootNode("root");
 		ClassNode classNode = new ClassNode("class");
 		MethodNode method = new MethodNode("method");
-		ParameterNode parameter = new ParameterNode("parameter", "type", "0", false);
-		ParameterNode expCat = new ParameterNode("expCat", "type", "0", true);
+		MethodParameterNode parameter = new MethodParameterNode("parameter", "type", "0", false);
+		MethodParameterNode expCat = new MethodParameterNode("expCat", "type", "0", true);
 		expCat.setDefaultValueString("0");
 		ConstraintNode constraint = new ConstraintNode("constraint", new Constraint(new StaticStatement(true), new StaticStatement(false)));
 		TestCaseNode testCase = new TestCaseNode("testCase", new ArrayList<ChoiceNode>());
@@ -209,7 +209,7 @@ public class AbstractNodeTest{
 	
 	@Test
 	public void getSiblingTest(){
-		ParameterNode cat = new ParameterNode("cat", "type", "0", false);
+		MethodParameterNode cat = new MethodParameterNode("cat", "type", "0", false);
 		ChoiceNode p1 = new ChoiceNode("p1", "0");
 		ChoiceNode p2 = new ChoiceNode("p2", "0");
 		

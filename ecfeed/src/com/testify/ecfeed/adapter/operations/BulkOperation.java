@@ -15,16 +15,16 @@ public class BulkOperation extends AbstractModelOperation{
 	// either all operation or none. if false, all operations are executed
 	// otherwise after first error the reverse operation is called
 	private final boolean fAtomic;
-	private final List<ICheckOperation> fCheckOperations; 
-	
+	private final List<ICheckOperation> fCheckOperations;
+
 	protected interface ICheckOperation{
 		public void check() throws ModelOperationException;
 	}
-	
+
 	public BulkOperation(String name, boolean atomic) {
 		this(name, new ArrayList<IModelOperation>(), atomic);
 	}
-	
+
 	public BulkOperation(String name, List<IModelOperation> operations, boolean atomic) {
 		super(name);
 		fOperations = operations;
@@ -32,15 +32,15 @@ public class BulkOperation extends AbstractModelOperation{
 		fCheckOperations = new ArrayList<ICheckOperation>();
 		fAtomic = atomic;
 	}
-	
+
 	protected void addOperation(IModelOperation operation) {
 		fOperations.add(operation);
 	}
-	
+
 	protected void addCheckOperation(ICheckOperation operation){
 		fCheckOperations.add(operation);
 	}
-	
+
 	@Override
 	public void execute() throws ModelOperationException {
 		Set<String> errors = new HashSet<String>();
@@ -79,8 +79,8 @@ public class BulkOperation extends AbstractModelOperation{
 	public IModelOperation reverseOperation(){
 		return new BulkOperation("reverse " + getName(), reverseOperations(), fAtomic);
 	}
-	
-	
+
+
 	protected List<IModelOperation> operations(){
 		return fOperations;
 	}

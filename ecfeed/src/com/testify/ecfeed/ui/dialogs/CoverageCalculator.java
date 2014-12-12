@@ -14,7 +14,7 @@ import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.swt.widgets.Display;
 
 import com.testify.ecfeed.generators.algorithms.Tuples;
-import com.testify.ecfeed.model.ParameterNode;
+import com.testify.ecfeed.model.MethodParameterNode;
 import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.model.TestCaseNode;
 
@@ -24,7 +24,7 @@ public class CoverageCalculator {
 	private int[] fTuplesCovered;
 	private int[] fTotalWork;
 	private double[] fResults;
-	private List<ParameterNode> fParameters;
+	private List<MethodParameterNode> fParameters;
 
 	private List<List<ChoiceNode>> fInput;
 	// The map of expected parameters default values. Said values are used to replace unique values in algorithm.
@@ -36,7 +36,7 @@ public class CoverageCalculator {
 	// If user added test cases = true; else we are substracting tuples;
 	private boolean fAddingFlag;
 
-	public CoverageCalculator(List<ParameterNode> parameters) {
+	public CoverageCalculator(List<MethodParameterNode> parameters) {
 		fParameters = parameters;
 		initialize();
 	}
@@ -175,7 +175,7 @@ public class CoverageCalculator {
 
 	private List<List<ChoiceNode>> prepareInput() {
 		List<List<ChoiceNode>> input = new ArrayList<List<ChoiceNode>>();
-		for (ParameterNode cnode : fParameters) {
+		for (MethodParameterNode cnode : fParameters) {
 			List<ChoiceNode> parameter = new ArrayList<ChoiceNode>();
 			if(cnode.isExpected()){
 				parameter.add(new ChoiceNode("expected", cnode.getDefaultValue()));
@@ -192,7 +192,7 @@ public class CoverageCalculator {
 	private Map<Integer, ChoiceNode> prepareExpectedChoices() {
 		int n = 0;
 		Map<Integer, ChoiceNode> expected = new HashMap<>();
-		for (ParameterNode cnode : fParameters) {
+		for (MethodParameterNode cnode : fParameters) {
 			if (cnode.isExpected()) {
 				ChoiceNode p = new ChoiceNode("", cnode.getDefaultValue());
 				p.setParent(cnode);

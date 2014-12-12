@@ -2,13 +2,15 @@ package com.testify.ecfeed.adapter.operations;
 
 import com.testify.ecfeed.adapter.ITypeAdapterProvider;
 import com.testify.ecfeed.adapter.ModelOperationException;
-import com.testify.ecfeed.model.ParameterNode;
+import com.testify.ecfeed.model.AbstractNode;
+import com.testify.ecfeed.model.AbstractParameterNode;
+import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.ConstraintNode;
-import com.testify.ecfeed.model.AbstractNode;
+import com.testify.ecfeed.model.GlobalParameterNode;
 import com.testify.ecfeed.model.IModelVisitor;
 import com.testify.ecfeed.model.MethodNode;
-import com.testify.ecfeed.model.ChoiceNode;
+import com.testify.ecfeed.model.MethodParameterNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.TestCaseNode;
 
@@ -37,6 +39,14 @@ public class FactoryAddChildOperation implements IModelVisitor{
 				return new RootOperationAddNewClass(node, (ClassNode)fChild);
 			}
 			return new RootOperationAddNewClass(node, (ClassNode)fChild, fIndex);
+		}else if(fChild instanceof AbstractParameterNode){
+			//It might be problematic that we actually add a copy of the requested node, so the option to add
+			//a MethodParameterNode to GlobalParameterParent (and vice versa) might be removed
+			GlobalParameterNode globalParameter = new GlobalParameterNode((AbstractParameterNode)fChild);
+			if(fIndex == -1){
+				return new GenericOperationAddParameter(node, globalParameter);
+			}
+			return new GenericOperationAddParameter(node, globalParameter, fIndex);
 		}
 		throw new ModelOperationException(Messages.OPERATION_NOT_SUPPORTED_PROBLEM);
 	}
@@ -48,17 +58,33 @@ public class FactoryAddChildOperation implements IModelVisitor{
 				return new ClassOperationAddMethod(node, (MethodNode)fChild);
 			}
 			return new ClassOperationAddMethod(node, (MethodNode)fChild, fIndex);
+		}else if(fChild instanceof AbstractParameterNode){
+			GlobalParameterNode globalParameter = new GlobalParameterNode((AbstractParameterNode)fChild);
+			if(fIndex == -1){
+				return new GenericOperationAddParameter(node, globalParameter);
+			}
+			return new GenericOperationAddParameter(node, globalParameter, fIndex);
 		}
 		throw new ModelOperationException(Messages.OPERATION_NOT_SUPPORTED_PROBLEM);
 	}
 
 	@Override
 	public Object visit(MethodNode node) throws Exception {
-		if(fChild instanceof ParameterNode){
+		if(fChild instanceof GlobalParameterNode){
+			GlobalParameterNode globalParameter = (GlobalParameterNode)fChild;
+			String defaultValue = fAdapterProvider.getAdapter(globalParameter.getType()).defaultValue();
+			MethodParameterNode parameter = new MethodParameterNode(globalParameter, defaultValue, false);
+
 			if(fIndex == -1){
-				return new MethodOperationAddParameter(node, (ParameterNode)fChild);
+				return new MethodOperationAddParameter(node,parameter);
 			}
-			return new MethodOperationAddParameter(node, (ParameterNode)fChild, fIndex);
+			return new MethodOperationAddParameter(node, parameter, fIndex);
+		}
+		if(fChild instanceof MethodParameterNode){
+			if(fIndex == -1){
+				return new MethodOperationAddParameter(node, (MethodParameterNode)fChild);
+			}
+			return new MethodOperationAddParameter(node, (MethodParameterNode)fChild, fIndex);
 		}
 		if(fChild instanceof ConstraintNode){
 			if(fIndex == -1){
@@ -76,7 +102,18 @@ public class FactoryAddChildOperation implements IModelVisitor{
 	}
 
 	@Override
-	public Object visit(ParameterNode node) throws Exception {
+	public Object visit(MethodParameterNode node) throws Exception {
+		if(fChild instanceof ChoiceNode){
+			if(fIndex == -1){
+				return new GenericOperationAddChoice(node, (ChoiceNode)fChild, fAdapterProvider, fValidate);
+			}
+			return new GenericOperationAddChoice(node, (ChoiceNode)fChild, fAdapterProvider, fIndex, fValidate);
+		}
+		throw new ModelOperationException(Messages.OPERATION_NOT_SUPPORTED_PROBLEM);
+	}
+
+	@Override
+	public Object visit(GlobalParameterNode node) throws Exception {
 		if(fChild instanceof ChoiceNode){
 			if(fIndex == -1){
 				return new GenericOperationAddChoice(node, (ChoiceNode)fChild, fAdapterProvider, fValidate);

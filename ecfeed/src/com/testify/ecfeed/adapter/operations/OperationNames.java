@@ -26,7 +26,8 @@ public interface OperationNames {
 	public static final String CONVERT_METHOD = "Convert method";
 	public static final String MAKE_CONSISTENT = "Make method consistent";
 	public static final String REMOVE_CONSTRAINT = "Remove constraint";
-	public static final String REMOVE_PARAMETER = "Remove parameter";
+	public static final String REMOVE_METHOD_PARAMETER = "Remove method parameter";
+	public static final String REMOVE_GLOBAL_PARAMETER = "Remove global parameter";
 	public static final String REMOVE_TEST_CASE = "Remove test case";
 	public static final String RENAME_TEST_CASE = "Rename test case";
 	public static final String ADD_PARTITION_LABEL = "Add choice label";
@@ -40,4 +41,6 @@ public interface OperationNames {
 	public static final String REMOVE_CLASS = "Remove class";
 	public static final String ADD_STATEMENT = "Add statement";
 	public static final String UPDATE_TEST_DATA = "Update test data";
+	public static final String SET_LINKED = "Set linked";
+	public static final String SET_LINK = "Set link";
 }

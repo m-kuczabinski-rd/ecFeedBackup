@@ -18,21 +18,15 @@ import com.testify.ecfeed.ui.common.EclipseModelBuilder;
 import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.dialogs.TestClassImportDialog;
 
-public class RootInterface extends AbstractNodeInterface {
-
-	private RootNode fTarget;
+public class RootInterface extends GlobalParametersParentInterface {
 
 	public RootInterface(IModelUpdateContext updateContext) {
 		super(updateContext);
 	}
 
-	public void setTarget(RootNode target){
-		super.setTarget(target);
-		fTarget = target;
-	}
-
-	public RootNode getTarget() {
-		return fTarget;
+	@Override
+	protected RootNode getTarget() {
+		return (RootNode)super.getTarget();
 	}
 
 	public ClassNode addNewClass(){
@@ -41,7 +35,7 @@ public class RootInterface extends AbstractNodeInterface {
 
 	public ClassNode addNewClass(String className){
 		ClassNode addedClass = new ClassNode(className);
-		if(execute(new RootOperationAddNewClass(fTarget, addedClass, fTarget.getClasses().size()), Messages.DIALOG_ADD_NEW_CLASS_PROBLEM_TITLE)){
+		if(execute(new RootOperationAddNewClass(getTarget(), addedClass, getTarget().getClasses().size()), Messages.DIALOG_ADD_NEW_CLASS_PROBLEM_TITLE)){
 			return addedClass;
 		}
 		return null;
@@ -58,7 +52,7 @@ public class RootInterface extends AbstractNodeInterface {
 				ClassNode classModel;
 				try {
 					classModel = new EclipseModelBuilder().buildClassModel(selectedClass, testOnly);
-					if(execute(new RootOperationAddNewClass(fTarget, classModel, fTarget.getClasses().size()), Messages.DIALOG_ADD_NEW_CLASS_PROBLEM_TITLE)){
+					if(execute(new RootOperationAddNewClass(getTarget(), classModel, getTarget().getClasses().size()), Messages.DIALOG_ADD_NEW_CLASS_PROBLEM_TITLE)){
 						return classModel;
 					}
 				} catch (ModelOperationException e) {
@@ -81,15 +75,15 @@ public class RootInterface extends AbstractNodeInterface {
 	}
 
 	public boolean addClasses(Collection<ClassNode> classes) {
-		IModelOperation operation = new RootOperationAddClasses(fTarget, classes, fTarget.getClasses().size());
+		IModelOperation operation = new RootOperationAddClasses(getTarget(), classes, getTarget().getClasses().size());
 		return execute(operation, Messages.DIALOG_ADD_METHODS_PROBLEM_TITLE);
 	}
 
 	private String generateClassName() {
 		String className = Constants.DEFAULT_NEW_PACKAGE_NAME + "." + Constants.DEFAULT_NEW_CLASS_NAME;
-		if(fTarget.getClassModel(className) != null){
+		if(getTarget().getClassModel(className) != null){
 			int i = 0;
-			while(fTarget.getClassModel(className + String.valueOf(i)) != null){
+			while(getTarget().getClassModel(className + String.valueOf(i)) != null){
 				i++;
 			}
 			className = className + String.valueOf(i);
