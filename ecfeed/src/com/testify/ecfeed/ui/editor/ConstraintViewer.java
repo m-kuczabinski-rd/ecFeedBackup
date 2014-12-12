@@ -3,7 +3,9 @@ package com.testify.ecfeed.ui.editor;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.core.runtime.FileLocator;
@@ -110,6 +112,12 @@ public class ConstraintViewer extends TreeViewerSection {
 
 	private class StatementViewerLabelProvider extends LabelProvider {
 
+		private Map<String, Image> fImages;
+
+		public StatementViewerLabelProvider(){
+			fImages = new HashMap<>();
+		}
+
 		@Override
 		public String getText(Object element){
 			if(element instanceof StatementArray){
@@ -135,10 +143,13 @@ public class ConstraintViewer extends TreeViewerSection {
 		}
 
 		private Image getImage(String file) {
-		    Bundle bundle = FrameworkUtil.getBundle(StatementViewerLabelProvider.class);
-		    URL url = FileLocator.find(bundle, new Path("icons/" + file), null);
-		    ImageDescriptor image = ImageDescriptor.createFromURL(url);
-		    return image.createImage();
+			if(fImages.containsKey(file) == false){
+				Bundle bundle = FrameworkUtil.getBundle(StatementViewerLabelProvider.class);
+				URL url = FileLocator.find(bundle, new Path("icons/" + file), null);
+				ImageDescriptor image = ImageDescriptor.createFromURL(url);
+				fImages.put(file, image.createImage());
+			}
+			return fImages.get(file);
 		  }
 
 	}
