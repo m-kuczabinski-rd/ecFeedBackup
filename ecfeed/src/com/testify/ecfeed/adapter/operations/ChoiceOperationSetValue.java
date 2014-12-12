@@ -90,7 +90,8 @@ public class ChoiceOperationSetValue extends AbstractModelOperation {
 
 	@Override
 	public void execute() throws ModelOperationException {
-		if(validateChoiceValue(fTarget.getParameter().getType(), fNewValue) == false){
+		String convertedValue = validateChoiceValue(fTarget.getParameter().getType(), fNewValue);
+		if(convertedValue == null){
 			throw new ModelOperationException(Messages.PARTITION_VALUE_PROBLEM(fNewValue));
 		}
 		fTarget.setValueString(fNewValue);
@@ -114,9 +115,9 @@ public class ChoiceOperationSetValue extends AbstractModelOperation {
 		return "setValue[" + fTarget + "](" + fNewValue + ")";
 	}
 
-	private boolean validateChoiceValue(String type, String value) {
-		if (value.length() > Constants.MAX_PARTITION_VALUE_STRING_LENGTH) return false;
+	private String validateChoiceValue(String type, String value) {
+		if (value.length() > Constants.MAX_PARTITION_VALUE_STRING_LENGTH) return null;
 
-		return fAdapterProvider.getAdapter(type).convert(value) != null;
+		return fAdapterProvider.getAdapter(type).convert(value);
 	}
 }

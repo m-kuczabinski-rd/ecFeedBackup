@@ -22,10 +22,11 @@ public class ParameterOperationSetDefaultValue extends AbstractModelOperation {
 
 	@Override
 	public void execute() throws ModelOperationException {
-		if(fTypeAdapter.convert(fNewValue) == null){
+		String convertedValue = fTypeAdapter.convert(fNewValue);
+		if(convertedValue == null){
 			throw new ModelOperationException(Messages.CATEGORY_DEFAULT_VALUE_REGEX_PROBLEM);
 		}
-		fTarget.setDefaultValueString(fNewValue);
+		fTarget.setDefaultValueString(convertedValue);
 		markModelUpdated();
 	}
 

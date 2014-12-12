@@ -177,8 +177,12 @@ public class CoverageCalculator {
 		List<List<ChoiceNode>> input = new ArrayList<List<ChoiceNode>>();
 		for (MethodParameterNode cnode : fParameters) {
 			List<ChoiceNode> parameter = new ArrayList<ChoiceNode>();
-			for (ChoiceNode pnode : cnode.getLeafChoices()) {
-				parameter.add(pnode);
+			if(cnode.isExpected()){
+				parameter.add(new ChoiceNode("expected", cnode.getDefaultValue()));
+			} else {
+				for (ChoiceNode pnode : cnode.getLeafChoices()) {
+					parameter.add(pnode);
+				}
 			}
 			input.add(parameter);
 		}

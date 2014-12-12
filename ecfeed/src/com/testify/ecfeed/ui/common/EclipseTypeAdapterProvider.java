@@ -29,7 +29,8 @@ public class EclipseTypeAdapterProvider implements ITypeAdapterProvider{
 			TYPE_NAME_LONG, 
 			TYPE_NAME_SHORT, 
 			TYPE_NAME_STRING, 
-			TYPE_NAME_BYTE
+			TYPE_NAME_BYTE, 
+			TYPE_NAME_CHAR
 	};
 	private final String[] TYPES_CONVERTABLE_TO_STRING = new String[]{
 			TYPE_NAME_INT, 
@@ -47,7 +48,10 @@ public class EclipseTypeAdapterProvider implements ITypeAdapterProvider{
 			TYPE_NAME_STRING 
 	};
 	private final String[] TYPES_CONVERTABLE_TO_CHAR = new String[]{
-			TYPE_NAME_STRING 
+			TYPE_NAME_STRING, 
+			TYPE_NAME_SHORT, 
+			TYPE_NAME_BYTE,
+			TYPE_NAME_INT
 	};
 
 	private class BooleanTypeAdapter implements ITypeAdapter{
@@ -132,11 +136,25 @@ public class EclipseTypeAdapterProvider implements ITypeAdapterProvider{
 			return Arrays.asList(TYPES_CONVERTABLE_TO_CHAR).contains(type);
 		}
 
-		public String convert(String value){
+		public String convert(String value){			
 			if(value.length() == 1){
-				byte firstByte = value.getBytes()[0]; 
-				return String.valueOf(firstByte);
+				return value;
 			}
+			
+			String avalue = value;
+			if(value.length() > 1 && value.charAt(0) == '\\'){
+				avalue = value.substring(1);
+			}
+			
+			try{
+				int number = Integer.parseInt(avalue);
+				return  String.valueOf(Character.toChars(number));
+			} 
+			catch(NumberFormatException e){
+			}
+			catch(IllegalArgumentException i){	
+			}
+				
 			return null;
 		}
 
@@ -246,7 +264,14 @@ public class EclipseTypeAdapterProvider implements ITypeAdapterProvider{
 					result = String.valueOf(Byte.parseByte(value));
 				}
 				catch(NumberFormatException e){
-					result = null;
+					if(value.length() == 1){
+						int charValue = (int)value.charAt(0);
+						if((charValue > Byte.MAX_VALUE) == false){
+							result = Integer.toString(charValue);
+						}
+					} else {
+						result = null;
+					}
 				}
 			}
 			return result;
@@ -262,7 +287,11 @@ public class EclipseTypeAdapterProvider implements ITypeAdapterProvider{
 					result = String.valueOf(Integer.parseInt(value));
 				}
 				catch(NumberFormatException e){
-					result = null;
+					if(value.length() == 1){
+						result = Integer.toString((int)value.charAt(0));
+					} else {
+						result = null;
+					}
 				}
 			}
 			return result;
@@ -294,7 +323,14 @@ public class EclipseTypeAdapterProvider implements ITypeAdapterProvider{
 					result = String.valueOf(Short.parseShort(value));
 				}
 				catch(NumberFormatException e){
-					result = null;
+					if(value.length() == 1){
+						int charValue = (int)value.charAt(0);
+						if((charValue > Short.MAX_VALUE) == false){
+							result = Integer.toString(charValue);
+						}
+					} else {
+						result = null;
+					}
 				}
 			}
 			return result;

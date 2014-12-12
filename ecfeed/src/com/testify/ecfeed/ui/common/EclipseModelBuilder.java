@@ -91,6 +91,7 @@ public class EclipseModelBuilder extends JavaModelAnalyser{
 			result.addAll(Arrays.asList(Constants.BOOLEAN_SPECIAL_VALUES));
 			break;
 		case com.testify.ecfeed.adapter.java.Constants.TYPE_NAME_CHAR:
+			result.addAll(Arrays.asList(Constants.DEFAULT_EXPECTED_CHAR_VALUE));
 			break;
 		case com.testify.ecfeed.adapter.java.Constants.TYPE_NAME_BYTE:
 		case com.testify.ecfeed.adapter.java.Constants.TYPE_NAME_INT:

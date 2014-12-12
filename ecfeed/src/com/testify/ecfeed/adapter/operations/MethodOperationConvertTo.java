@@ -33,7 +33,6 @@ public class MethodOperationConvertTo extends AbstractModelOperation {
 			MethodParameterNode sourceParameter = fSource.getMethodParameters().get(i);
 
 			targetParameter.setName(sourceParameter.getName());
-			targetParameter.setExpected(sourceParameter.isExpected());
 		}
 		markModelUpdated();
 	}
