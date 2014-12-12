@@ -6,29 +6,33 @@ import com.testify.ecfeed.model.EStatementRelation;
 import com.testify.ecfeed.model.StaticStatement;
 
 public class AbstractStatementInterface extends OperationExecuter {
-	
+
 	AbstractStatement fTarget;
-	
+
 	public AbstractStatementInterface(IModelUpdateContext updateContext) {
 		super(updateContext);
 	}
-	
+
 	public void setTarget(AbstractStatement target){
 		fTarget = target;
 	}
-	
+
+	protected AbstractStatement getTarget(){
+		return fTarget;
+	}
+
 	public boolean remove(){
 		if(fTarget.getParent() != null){
 			return getParentInterface().removeChild(fTarget);
 		}
 		return false;
 	}
-	
+
 	public boolean removeChild(AbstractStatement child){
 		return false;
 	}
-	
-	
+
+
 	public AbstractStatement addNewStatement(){
 		AbstractStatement statement = new StaticStatement(true);
 		if(addStatement(statement)){
@@ -36,14 +40,14 @@ public class AbstractStatementInterface extends OperationExecuter {
 		}
 		return null;
 	}
-	
+
 	public boolean addStatement(AbstractStatement statement){
 		if(fTarget.getParent() != null){
 			return getParentInterface().addStatement(statement);
 		}
 		return false;
 	}
-	
+
 	public AbstractStatementInterface getParentInterface(){
 		AbstractStatement parent = fTarget.getParent();
 		if(parent != null){
