@@ -18,19 +18,12 @@ import com.testify.ecfeed.ui.common.Messages;
 
 public abstract class ParameterInterface extends AbstractParameterInterface {
 
-	private MethodParameterNode fTarget;
-
 	public ParameterInterface(IModelUpdateContext updateContext) {
 		super(updateContext);
 	}
 
-	public void setTarget(MethodParameterNode target){
-		super.setTarget(target);
-		fTarget = target;
-	}
-
 	public String getDefaultValue() {
-		return fTarget.getDefaultValue();
+		return getTarget().getDefaultValue();
 	}
 
 	public String getDefaultValue(String type) {
@@ -38,15 +31,15 @@ public abstract class ParameterInterface extends AbstractParameterInterface {
 	}
 
 	public boolean isExpected() {
-		return fTarget.isExpected();
+		return getTarget().isExpected();
 	}
 
 	public boolean setExpected(boolean expected){
-		if(expected != fTarget.isExpected()){
-			MethodNode method = fTarget.getMethod();
+		if(expected != getTarget().isExpected()){
+			MethodNode method = getTarget().getMethod();
 			if(method != null){
 				boolean testCases = method.getTestCases().size() > 0;
-				boolean constraints = method.mentioningConstraints(fTarget).size() > 0;
+				boolean constraints = method.mentioningConstraints(getTarget()).size() > 0;
 				if(testCases || constraints){
 					String message = "";
 					if(testCases){
@@ -66,14 +59,14 @@ public abstract class ParameterInterface extends AbstractParameterInterface {
 					}
 				}
 			}
-			return execute(new ParameterOperationSetExpected(fTarget, expected), Messages.DIALOG_SET_CATEGORY_EXPECTED_PROBLEM_TITLE);
+			return execute(new ParameterOperationSetExpected(getTarget(), expected), Messages.DIALOG_SET_CATEGORY_EXPECTED_PROBLEM_TITLE);
 		}
 		return false;
 	}
 
 	public boolean setDefaultValue(String valueString) {
-		if(fTarget.getDefaultValue().equals(valueString) == false){
-			IModelOperation operation = new ParameterOperationSetDefaultValue(fTarget, valueString, getTypeAdapterProvider().getAdapter(fTarget.getType()));
+		if(getTarget().getDefaultValue().equals(valueString) == false){
+			IModelOperation operation = new ParameterOperationSetDefaultValue(getTarget(), valueString, getTypeAdapterProvider().getAdapter(getTarget().getType()));
 			return execute(operation, Messages.DIALOG_SET_DEFAULT_VALUE_PROBLEM_TITLE);
 		}
 		return false;
@@ -82,13 +75,19 @@ public abstract class ParameterInterface extends AbstractParameterInterface {
 	public String[] defaultValueSuggestions(){
 		Set<String> items = new HashSet<String>(getSpecialValues());
 		if(JavaUtils.isPrimitive(getType()) == false){
-			for(ChoiceNode p : fTarget.getLeafChoices()){
+			for(ChoiceNode p : getTarget().getLeafChoices()){
 				items.add(p.getValueString());
 			}
-			if(items.contains(fTarget.getDefaultValue())== false){
-				items.add(fTarget.getDefaultValue());
+			if(items.contains(getTarget().getDefaultValue())== false){
+				items.add(getTarget().getDefaultValue());
 			}
 		}
 		return items.toArray(new String[]{});
 	}
+
+	@Override
+	protected MethodParameterNode getTarget(){
+		return (MethodParameterNode)super.getTarget();
+	}
+
 }

@@ -8,23 +8,21 @@ import com.testify.ecfeed.ui.common.Messages;
 
 public class ConstraintInterface extends AbstractNodeInterface {
 
-	private ConstraintNode fTarget;
-
 	public ConstraintInterface(IModelUpdateContext updateContext) {
 		super(updateContext);
 	}
 
-	public void setTarget(ConstraintNode target){
-		fTarget = target;
-		super.setTarget(target);
+	@Override
+	protected ConstraintNode getTarget(){
+		return (ConstraintNode)super.getTarget();
 	}
 
 	public boolean replaceStatement(AbstractStatement current, AbstractStatement newStatement) {
 		if(current != newStatement){
-			IModelOperation operation = new ConstraintOperationReplaceStatement(fTarget, current, newStatement);
+			IModelOperation operation = new ConstraintOperationReplaceStatement(getTarget(), current, newStatement);
 			return execute(operation, Messages.DIALOG_REMOVE_TEST_CASES_PROBLEM_TITLE);
 		}
 		return false;
 	}
-	
+
 }

@@ -65,10 +65,6 @@ public class MethodDetailsPage extends BasicDetailsPage {
 		fMethodIf = new MethodInterface(this);
 	}
 
-	public MethodNode getSelectedMethod() {
-		return fMethodIf.getTarget();
-	}
-
 	@Override
 	public void createContents(Composite parent){
 		super.createContents(parent);

@@ -11,25 +11,14 @@ import com.testify.ecfeed.ui.common.Messages;
 
 public abstract class ParametersParentInterface extends AbstractNodeInterface {
 
-	private ParametersParentNode fTarget;
-
 	public ParametersParentInterface(IModelUpdateContext updateContext) {
 		super(updateContext);
-	}
-
-	public void setTarget(ParametersParentNode target){
-		super.setTarget(target);
-		fTarget = target;
-	}
-
-	public ParametersParentNode getTarget(){
-		return fTarget;
 	}
 
 	public abstract AbstractParameterNode addNewParameter();
 
 	public boolean addParameter(AbstractParameterNode parameter, int index) {
-		return execute(new GenericOperationAddParameter(fTarget, parameter, index), Messages.DIALOG_CONVERT_METHOD_PROBLEM_TITLE);
+		return execute(new GenericOperationAddParameter(getTarget(), parameter, index), Messages.DIALOG_CONVERT_METHOD_PROBLEM_TITLE);
 	}
 
 	protected boolean removeParameters(Collection<? extends AbstractParameterNode> parameters){
@@ -43,9 +32,14 @@ public abstract class ParametersParentInterface extends AbstractNodeInterface {
 	protected String generateNewParameterName() {
 		int i = 0;
 		String name = Constants.DEFAULT_NEW_PARAMETER_NAME + i++;
-		while(fTarget.getParameter(name) != null){
+		while(getTarget().getParameter(name) != null){
 			name = Constants.DEFAULT_NEW_PARAMETER_NAME + i++;
 		}
 		return name;
+	}
+
+	@Override
+	protected ParametersParentNode getTarget(){
+		return (ParametersParentNode)super.getTarget();
 	}
 }

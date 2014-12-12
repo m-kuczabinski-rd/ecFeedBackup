@@ -124,7 +124,8 @@ public class ClassDetailsPage extends BasicDetailsPage {
 	public void refresh(){
 		super.refresh();
 		if(getSelectedElement() instanceof ClassNode){
-			fClassIf.setTarget((ClassNode)getSelectedElement());
+			ClassNode selectedClass = (ClassNode)getSelectedElement();
+			fClassIf.setTarget(selectedClass);
 			String title = fClassIf.getQualifiedName();
 			//Remove implementation status for performance reasons
 //			String title = fClassIf.getQualifiedName() + " [" + fClassIf.getImplementationStatus() + "]";
@@ -132,9 +133,9 @@ public class ClassDetailsPage extends BasicDetailsPage {
 			fClassNameText.setText(fClassIf.getLocalName());
 			fPackageNameText.setText(fClassIf.getPackageName());
 
-			fMethodsSection.setInput(fClassIf.getTarget());
-			fGlobalParametersSection.setInput(fClassIf.getTarget());
-			fOtherMethodsSection.setInput(fClassIf.getTarget());
+			fMethodsSection.setInput(selectedClass);
+			fGlobalParametersSection.setInput(selectedClass);
+			fOtherMethodsSection.setInput(selectedClass);
 			fOtherMethodsSection.setVisible(fOtherMethodsSection.getItemsCount() > 0);
 
 			getMainSection().layout();

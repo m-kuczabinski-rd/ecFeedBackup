@@ -78,10 +78,11 @@ public class ModelDetailsPage extends BasicDetailsPage {
 	public void refresh() {
 		super.refresh();
 		if(getSelectedElement() instanceof RootNode){
-			fRootIf.setTarget((RootNode)getSelectedElement());
-			fModelNameText.setText(fRootIf.getName());
-			fClassesSection.setInput(fRootIf.getTarget());
-			fParametersSection.setInput(fRootIf.getTarget());
+			RootNode selectedRoot = (RootNode)getSelectedElement();
+			fRootIf.setTarget(selectedRoot);
+			fModelNameText.setText(selectedRoot.getName());
+			fClassesSection.setInput(selectedRoot);
+			fParametersSection.setInput(selectedRoot);
 		}
 	}
 

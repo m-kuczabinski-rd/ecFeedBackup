@@ -12,23 +12,17 @@ import com.testify.ecfeed.ui.common.Messages;
 
 public class TestCaseInterface extends AbstractNodeInterface {
 
-	private TestCaseNode fTarget;
-
 	public TestCaseInterface(IModelUpdateContext updateContext) {
 		super(updateContext);
 	}
 
-	public TestCaseNode getTarget() {
-		return fTarget;
-	}
-
-	public void setTarget(TestCaseNode target){
-		super.setTarget(target);
-		fTarget = target;
+	@Override
+	protected TestCaseNode getTarget() {
+		return (TestCaseNode)super.getTarget();
 	}
 
 	public boolean isExpected(ChoiceNode testValue) {
-		return fTarget.getMethodParameter(testValue).isExpected();
+		return getTarget().getMethodParameter(testValue).isExpected();
 	}
 
 	public boolean isExecutable(TestCaseNode tc){
@@ -41,16 +35,16 @@ public class TestCaseInterface extends AbstractNodeInterface {
 	}
 
 	public boolean isExecutable(){
-		return isExecutable(fTarget);
+		return isExecutable(getTarget());
 	}
 
 	public void execute() {
 		MethodInterface methodIf = new MethodInterface(getUpdateContext());
-		methodIf.executeStaticTests(new ArrayList<TestCaseNode>(Arrays.asList(new TestCaseNode[]{fTarget})));
+		methodIf.executeStaticTests(new ArrayList<TestCaseNode>(Arrays.asList(new TestCaseNode[]{getTarget()})));
 	}
 
 	public boolean updateTestData(int index, ChoiceNode value) {
-		IModelOperation operation = new TestCaseOperationUpdateTestData(fTarget, index, value);
+		IModelOperation operation = new TestCaseOperationUpdateTestData(getTarget(), index, value);
 		return execute(operation, Messages.DIALOG_UPDATE_TEST_DATA_PROBLEM_TITLE);
 	}
 }

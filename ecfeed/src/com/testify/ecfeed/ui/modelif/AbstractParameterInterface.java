@@ -11,7 +11,6 @@ import com.testify.ecfeed.ui.common.EclipseTypeAdapterProvider;
 
 public abstract class AbstractParameterInterface extends ChoicesParentInterface {
 
-	private AbstractParameterNode fTarget;
 	private ITypeAdapterProvider fAdapterProvider;
 
 	public AbstractParameterInterface(IModelUpdateContext updateContext) {
@@ -19,24 +18,14 @@ public abstract class AbstractParameterInterface extends ChoicesParentInterface 
 		fAdapterProvider = new EclipseTypeAdapterProvider();
 	}
 
-	public void setTarget(AbstractParameterNode target){
-		super.setTarget(target);
-		fTarget = target;
-	}
-
 	public abstract boolean setType(String newType);
-//		if(newType.equals(fTarget.getType())){
-//			return false;
-//		}
-//		return execute(new AbstractParameterOperationSetType(fTarget, newType, fAdapterProvider), Messages.DIALOG_RENAME_PAREMETER_PROBLEM_TITLE);
-//	}
 
 	protected ITypeAdapterProvider getTypeAdapterProvider(){
 		return fAdapterProvider;
 	}
 
 	public String getType() {
-		return fTarget.getType();
+		return getTarget().getType();
 	}
 
 	public static boolean hasLimitedValuesSet(String type) {
@@ -66,4 +55,10 @@ public abstract class AbstractParameterInterface extends ChoicesParentInterface 
 	public static String[] supportedPrimitiveTypes() {
 		return JavaUtils.supportedPrimitiveTypes();
 	}
+
+	@Override
+	protected AbstractParameterNode getTarget(){
+		return (AbstractParameterNode)super.getTarget();
+	}
+
 }

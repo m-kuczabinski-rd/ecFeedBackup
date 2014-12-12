@@ -47,6 +47,7 @@ public class TestCasesViewer extends CheckboxTreeViewerSection {
 	private Button fExecuteSelectedButton;
 	private Button fGenerateSuiteButton;
 	private MethodInterface fMethodIf;
+	private MethodNode fParentMethod;
 
 	private class AddTestCaseAdapter extends SelectionAdapter{
 		@Override
@@ -120,14 +121,11 @@ public class TestCasesViewer extends CheckboxTreeViewerSection {
 	}
 
 	public void setInput(MethodNode method){
+		fParentMethod = method;
 		fMethodIf.setTarget(method);
 		fLabelProvider.setMethod(method);
 		fContentProvider.setMethod(method);
 		super.setInput(method);
-	}
-
-	public MethodNode getSelectedMethod(){
-		return fMethodIf.getTarget();
 	}
 
 	protected Collection<TestCaseNode> getCheckedTestCases() {
@@ -137,7 +135,7 @@ public class TestCasesViewer extends CheckboxTreeViewerSection {
 				result.add((TestCaseNode)o);
 			}
 			if(o instanceof String && getCheckboxViewer().getGrayed(o) == false){
-				result.addAll(fMethodIf.getTarget().getTestCases((String)o));
+				result.addAll(getSelectedMethod().getTestCases((String)o));
 			}
 		}
 		return result;
@@ -183,6 +181,10 @@ public class TestCasesViewer extends CheckboxTreeViewerSection {
 	@Override
 	protected int viewerStyle(){
 		return VIEWER_STYLE;
+	}
+
+	private MethodNode getSelectedMethod(){
+		return fParentMethod;
 	}
 
 	private boolean executionEnabled(){
