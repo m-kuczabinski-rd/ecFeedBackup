@@ -367,7 +367,7 @@ public class EclipseModelImplementer extends AbstractModelImplementer {
 	}
 
 	private CompilationUnit getCompilationUnit(IType type) throws CoreException{
-		final ASTParser parser = ASTParser.newParser(AST.JLS8);
+		final ASTParser parser = ASTParser.newParser(AST.JLS4);
 		parser.setKind(ASTParser.K_COMPILATION_UNIT);
 		parser.setSource(type.getCompilationUnit());
 		CompilationUnit unit = (CompilationUnit)parser.createAST(null);
