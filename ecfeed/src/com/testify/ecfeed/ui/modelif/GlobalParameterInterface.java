@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.testify.ecfeed.adapter.ITypeAdapterProvider;
 import com.testify.ecfeed.adapter.operations.GlobalParameterOperationSetType;
+import com.testify.ecfeed.model.AbstractParameterNode;
 import com.testify.ecfeed.model.GlobalParameterNode;
 import com.testify.ecfeed.model.MethodParameterNode;
 import com.testify.ecfeed.ui.common.EclipseTypeAdapterProvider;
@@ -19,8 +20,9 @@ public class GlobalParameterInterface extends AbstractParameterInterface {
 		fAdapterProvider = new EclipseTypeAdapterProvider();
 	}
 
-	public void setTarget(GlobalParameterNode target){
-		fTarget = target;
+	@Override
+	public void setTarget(AbstractParameterNode target){
+		fTarget = (GlobalParameterNode)target;
 		super.setTarget(target);
 	}
 
