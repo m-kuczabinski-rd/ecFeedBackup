@@ -132,14 +132,6 @@ public abstract class BasicSection extends SectionPart implements IModelUpdateCo
 		}
 	}
 
-//	protected void setModelUpdateListener(IModelUpdateListener listener){
-//		fModelUpdateListener = listener;
-//	}
-//
-//	protected void setOperationManager(ModelOperationManager operationManager){
-//		fOperationManager = operationManager;
-//	}
-//
 	public Action getAction(String actionId) {
 		if(fActionProvider != null){
 			return fActionProvider.getAction(actionId);
