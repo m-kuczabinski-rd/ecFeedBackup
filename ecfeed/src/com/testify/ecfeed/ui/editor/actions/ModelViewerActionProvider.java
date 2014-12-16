@@ -36,8 +36,6 @@ public class ModelViewerActionProvider extends ActionGroups {
 
 	private void addViewerActions(TreeViewer viewer, IModelUpdateContext context, boolean selectRoot){
 		addAction("viewer", new SelectAllAction(viewer, selectRoot));
-//		addAction("viewer", new ExpandAction(viewer));
-//		addAction("viewer", new CollapseAction(viewer));
 		addAction("viewer", new ExpandCollapseAction(viewer));
 	}
 
