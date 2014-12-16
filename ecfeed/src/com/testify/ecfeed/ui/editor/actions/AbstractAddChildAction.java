@@ -38,7 +38,7 @@ public abstract class AbstractAddChildAction extends ModelModifyingAction{
 	}
 
 	protected void select(AbstractNode node){
-		if(fViewer != null){
+		if(fViewer != null && node != null){
 			fViewer.setSelection(new StructuredSelection(node));
 		}
 	}
