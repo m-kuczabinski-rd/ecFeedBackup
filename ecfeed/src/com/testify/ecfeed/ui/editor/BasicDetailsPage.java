@@ -1,47 +1,93 @@
 /*******************************************************************************
- * Copyright (c) 2013 Testify AS.                                                   
- * All rights reserved. This program and the accompanying materials                 
- * are made available under the terms of the Eclipse Public License v1.0            
- * which accompanies this distribution, and is available at                         
- * http://www.eclipse.org/legal/epl-v10.html                                        
- *                                                                                  
- * Contributors:                                                                    
+ * Copyright (c) 2013 Testify AS.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
  *     Patryk Chamuczynski (p.chamuczynski(at)radytek.com) - initial implementation
  ******************************************************************************/
 
 package com.testify.ecfeed.ui.editor;
 
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import org.eclipse.core.commands.operations.IUndoContext;
+import org.eclipse.core.runtime.FileLocator;
+import org.eclipse.core.runtime.Path;
+import org.eclipse.jface.action.IContributionItem;
+import org.eclipse.jface.action.ToolBarManager;
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Cursor;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.ui.forms.AbstractFormPart;
 import org.eclipse.ui.forms.IDetailsPage;
 import org.eclipse.ui.forms.IFormPart;
 import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Section;
+import org.osgi.framework.Bundle;
+import org.osgi.framework.FrameworkUtil;
 
-import com.testify.ecfeed.adapter.EImplementationStatus;
 import com.testify.ecfeed.adapter.IModelImplementer;
 import com.testify.ecfeed.adapter.ModelOperationManager;
 import com.testify.ecfeed.model.AbstractNode;
 import com.testify.ecfeed.ui.common.EclipseModelImplementer;
 import com.testify.ecfeed.ui.common.IFileInfoProvider;
+import com.testify.ecfeed.ui.editor.actions.GoToImplementationAction;
+import com.testify.ecfeed.ui.editor.actions.ImplementAction;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 import com.testify.ecfeed.ui.modelif.IModelUpdateListener;
 
 public abstract class BasicDetailsPage implements IDetailsPage, IModelUpdateListener, ISectionContext, IModelUpdateContext{
+
+	private static final int MAIN_SECTION_STYLE = Section.EXPANDED | Section.TITLE_BAR;
+
+	protected class ImplementToolbarAction extends ImplementAction{
+
+		public ImplementToolbarAction() {
+			super(null, BasicDetailsPage.this, fImplementer);
+			setToolTipText("Implement node");
+			Bundle bundle = FrameworkUtil.getBundle(this.getClass());
+			URL url = FileLocator.find(bundle, new Path("icons/implement.png"), null);
+			ImageDescriptor imageDsc = ImageDescriptor.createFromURL(url);
+			setImageDescriptor(imageDsc);
+		}
+
+		@Override
+		protected List<AbstractNode> getSelectedNodes(){
+			return Arrays.asList(new AbstractNode[]{fSelectedNode});
+		}
+	}
+
+	protected class GoToImplementationToolbarAction extends GoToImplementationAction{
+
+		public GoToImplementationToolbarAction() {
+			super(null);
+			setToolTipText("Go to node's implementation");
+			Bundle bundle = FrameworkUtil.getBundle(this.getClass());
+			URL url = FileLocator.find(bundle, new Path("icons/goto_impl.png"), null);
+			ImageDescriptor imageDsc = ImageDescriptor.createFromURL(url);
+			setImageDescriptor(imageDsc);
+		}
+
+		@Override
+		protected List<AbstractNode> getSelectedNodes(){
+			return Arrays.asList(new AbstractNode[]{fSelectedNode});
+		}
+	}
 
 	private Section fMainSection;
 	private Composite fMainComposite;
@@ -54,8 +100,7 @@ public abstract class BasicDetailsPage implements IDetailsPage, IModelUpdateList
 	private AbstractNode fSelectedNode;
 	private IModelImplementer fImplementer;
 	private Button fImplementButton;
-	
-	private static final int MAIN_SECTION_STYLE = Section.EXPANDED | Section.TITLE_BAR;
+	private ToolBarManager fToolBarManager;
 
 	public BasicDetailsPage(ModelMasterSection masterSection, IModelUpdateContext updateContext, IFileInfoProvider fileInforProvider){
 		fMasterSection = masterSection;
@@ -64,12 +109,12 @@ public abstract class BasicDetailsPage implements IDetailsPage, IModelUpdateList
 		fModelUpdateContext = updateContext;
 		fImplementer = new EclipseModelImplementer(fileInforProvider);
 	}
-	
+
 	@Override
 	public void initialize(IManagedForm form) {
 		fManagedForm = form;
 	}
-	
+
 	@Override
 	public void selectionChanged(IFormPart part, ISelection selection) {
 		fSelectedNode = (AbstractNode)fMasterSection.getSelectedElement();
@@ -83,31 +128,39 @@ public abstract class BasicDetailsPage implements IDetailsPage, IModelUpdateList
 		fMainSection.setTextClient(textClient);
 
 		getToolkit().adapt(getMainSection());
-		
+
 		fMainComposite = getToolkit().createComposite(getMainSection(), SWT.NONE);
 		fMainComposite.setLayout(new GridLayout(1, false));
 		getToolkit().adapt(fMainComposite);
 		getMainSection().setClient(fMainComposite);
 	}
-	
-	protected Composite createTextClientComposite() {
-		Composite client = getToolkit().createComposite(fMainSection);
-		client.setLayout(new FillLayout());
-		return client;
+
+	protected ToolBar createToolBar(Section section) {
+		fToolBarManager = new ToolBarManager(SWT.FLAT);
+		ToolBar toolbar = fToolBarManager.createControl(section);
+		final Cursor handCursor = Display.getCurrent().getSystemCursor(SWT.CURSOR_HAND);
+		toolbar.setCursor(handCursor);
+		fToolBarManager.update(true);
+		return toolbar;
 	}
 
-	protected Button createImplementerButton(Composite parent){
-		fImplementButton = getToolkit().createButton(parent, "Implement", SWT.NONE);
-		fImplementButton.addSelectionListener(new AbstractSelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				fImplementer.implement(fSelectedNode);
-				getMasterSection().refresh();
-			}
-		});
-		return fImplementButton;
+	protected ToolBarManager getToolBarManager(){
+		return fToolBarManager;
 	}
-	
+
+	protected Composite createTextClientComposite() {
+		ToolBar toolbar = createToolBar(fMainSection);
+		addToolbarActions();
+		return toolbar;
+	}
+
+	protected void addToolbarActions(){
+		if(fImplementer.implementable(getNodeType())){
+			getToolBarManager().add(new GoToImplementationToolbarAction());
+			getToolBarManager().add(new ImplementToolbarAction());
+		}
+	}
+
 	@Override
 	public void refresh(){
 		fSelectedNode = (AbstractNode)fMasterSection.getSelectedElement();
@@ -118,14 +171,10 @@ public abstract class BasicDetailsPage implements IDetailsPage, IModelUpdateList
 		if(fSelectedNode == null){
 			fImplementButton.setEnabled(false);
 		}
-		else if(fImplementButton != null && fImplementButton.isDisposed() == false){
-			EImplementationStatus status = fImplementer.getImplementationStatus(fSelectedNode);
-			boolean implementable = fImplementer.implementable(fSelectedNode);
-			if((status != EImplementationStatus.IMPLEMENTED) && implementable){
-				fImplementButton.setEnabled(true);
-			}
-			else{
-				fImplementButton.setEnabled(false);
+		else if(fToolBarManager != null){
+			fToolBarManager.update(true);
+			for(IContributionItem item : fToolBarManager.getItems()){
+				item.update();
 			}
 		}
 	}
@@ -173,14 +222,16 @@ public abstract class BasicDetailsPage implements IDetailsPage, IModelUpdateList
 		return false;
 	}
 
+	@Override
 	public FormToolkit getToolkit(){
 		return fManagedForm.getToolkit();
 	}
-	
+
 	protected Section getMainSection(){
 		return fMainSection;
 	}
 
+	@Override
 	public ModelMasterSection getMasterSection(){
 		return fMasterSection;
 	}
@@ -189,16 +240,16 @@ public abstract class BasicDetailsPage implements IDetailsPage, IModelUpdateList
 		fForms.add(form);
 		form.initialize(getManagedForm());
 	}
-	
+
 	protected void addViewerSection(ViewerSection section){
 		addForm(section);
 		fViewerSections.add(section);
 	}
-	
+
 	protected Object getSelectedElement(){
 		return getMasterSection().getSelectedElement();
 	}
-	
+
 	protected IManagedForm getManagedForm(){
 		return fManagedForm;
 	}
@@ -206,7 +257,8 @@ public abstract class BasicDetailsPage implements IDetailsPage, IModelUpdateList
 	protected Composite getMainComposite(){
 		return fMainComposite;
 	}
-	
+
+	@Override
 	public void modelUpdated(AbstractFormPart source){
 		if(source != null){
 			source.markDirty();
@@ -219,11 +271,11 @@ public abstract class BasicDetailsPage implements IDetailsPage, IModelUpdateList
 		}
 		refresh();
 	}
-	
+
 	protected Shell getActiveShell(){
 		return Display.getCurrent().getActiveShell();
 	}
-	
+
 	public BasicSection getFocusedViewerSection(){
 		for(ViewerSection section : fViewerSections){
 			if(section.getViewer().getControl().isFocusControl()){
@@ -232,24 +284,31 @@ public abstract class BasicDetailsPage implements IDetailsPage, IModelUpdateList
 		}
 		return null;
 	}
-	
+
+	@Override
 	public Composite getSectionComposite(){
 		return fMainComposite;
 	}
-	
+
+	@Override
 	public ModelOperationManager getOperationManager(){
 		return fModelUpdateContext.getOperationManager();
 	}
-	
+
+	@Override
 	public AbstractFormPart getSourceForm(){
 		return null;
 	}
 
+	@Override
 	public List<IModelUpdateListener> getUpdateListeners(){
 		return Arrays.asList(new IModelUpdateListener[]{this});
 	}
-	
+
+	@Override
 	public IUndoContext getUndoContext(){
 		return fModelUpdateContext.getUndoContext();
 	}
+
+	abstract protected Class<? extends AbstractNode> getNodeType();
 }

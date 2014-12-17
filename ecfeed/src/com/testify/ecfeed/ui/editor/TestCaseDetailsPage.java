@@ -1,11 +1,11 @@
 /*******************************************************************************
- * Copyright (c) 2013 Testify AS.                                                   
- * All rights reserved. This program and the accompanying materials                 
- * are made available under the terms of the Eclipse Public License v1.0            
- * which accompanies this distribution, and is available at                         
- * http://www.eclipse.org/legal/epl-v10.html                                        
- *                                                                                  
- * Contributors:                                                                    
+ * Copyright (c) 2013 Testify AS.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
  *     Patryk Chamuczynski (p.chamuczynski(at)radytek.com) - initial implementation
  ******************************************************************************/
 
@@ -21,6 +21,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 
+import com.testify.ecfeed.model.AbstractNode;
 import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.ui.common.IFileInfoProvider;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
@@ -32,7 +33,7 @@ public class TestCaseDetailsPage extends BasicDetailsPage {
 	private TestDataViewer fTestDataViewer;
 
 	private TestCaseInterface fTestCaseIf;
-	
+
 	private class RenameTestCaseAdapter extends AbstractSelectionAdapter{
 		@Override
 		public void widgetSelected(SelectionEvent e){
@@ -51,11 +52,10 @@ public class TestCaseDetailsPage extends BasicDetailsPage {
 		createTestSuiteEdit(getMainComposite());
 		addViewerSection(fTestDataViewer = new TestDataViewer(this, this));
 	}
-	
+
 	@Override
 	protected Composite createTextClientComposite(){
 		Composite textClient = super.createTextClientComposite();
-		createImplementerButton(textClient);
 		return textClient;
 	}
 
@@ -78,11 +78,11 @@ public class TestCaseDetailsPage extends BasicDetailsPage {
 		composite.setLayout(new GridLayout(3, false));
 		composite.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
 		getToolkit().createLabel(composite, "Test suite: ");
-		
+
 		fTestSuiteNameCombo = new ComboViewer(composite, SWT.NONE).getCombo();
 		fTestSuiteNameCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		fTestSuiteNameCombo.addSelectionListener(new RenameTestCaseAdapter());
-		 
+
 		Button executeButton = getToolkit().createButton(composite, "Execute", SWT.NONE);
 		executeButton.addSelectionListener(new SelectionAdapter() {
 			@Override
@@ -91,5 +91,10 @@ public class TestCaseDetailsPage extends BasicDetailsPage {
 			}
 		});
 		getToolkit().paintBordersFor(fTestSuiteNameCombo);
+	}
+
+	@Override
+	protected Class<? extends AbstractNode> getNodeType() {
+		return TestCaseNode.class;
 	}
 }

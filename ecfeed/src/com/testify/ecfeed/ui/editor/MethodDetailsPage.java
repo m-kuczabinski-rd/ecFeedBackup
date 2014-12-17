@@ -22,6 +22,7 @@ import org.eclipse.swt.widgets.Text;
 
 import com.testify.ecfeed.adapter.EImplementationStatus;
 import com.testify.ecfeed.adapter.java.JavaUtils;
+import com.testify.ecfeed.model.AbstractNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.ui.common.IFileInfoProvider;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
@@ -80,7 +81,6 @@ public class MethodDetailsPage extends BasicDetailsPage {
 	@Override
 	protected Composite createTextClientComposite(){
 		Composite textClient = super.createTextClientComposite();
-		createImplementerButton(textClient);
 		return textClient;
 	}
 
@@ -122,4 +122,10 @@ public class MethodDetailsPage extends BasicDetailsPage {
 					fMethodIf.getCompatibleMethods().isEmpty() == false);
 		}
 	}
+
+	@Override
+	protected Class<? extends AbstractNode> getNodeType() {
+		return MethodNode.class;
+	}
+
 }

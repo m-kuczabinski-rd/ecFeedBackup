@@ -55,7 +55,6 @@ public abstract class AbstractParameterDetailsPage extends BasicDetailsPage {
 	@Override
 	protected Composite createTextClientComposite(){
 		Composite textClient = super.createTextClientComposite();
-		createImplementerButton(textClient);
 		return textClient;
 	}
 

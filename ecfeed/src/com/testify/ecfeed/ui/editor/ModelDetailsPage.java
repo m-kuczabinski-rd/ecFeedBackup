@@ -20,6 +20,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.IFormPart;
 
+import com.testify.ecfeed.model.AbstractNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.ui.common.IFileInfoProvider;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
@@ -59,7 +60,6 @@ public class ModelDetailsPage extends BasicDetailsPage {
 	@Override
 	protected Composite createTextClientComposite(){
 		Composite textClient = super.createTextClientComposite();
-		createImplementerButton(textClient);
 		return textClient;
 	}
 
@@ -92,6 +92,11 @@ public class ModelDetailsPage extends BasicDetailsPage {
 		if(getSelectedElement() instanceof RootNode){
 			fRootIf.setTarget((RootNode)getSelectedElement());
 		}
+	}
+
+	@Override
+	protected Class<? extends AbstractNode> getNodeType() {
+		return RootNode.class;
 	}
 
 }

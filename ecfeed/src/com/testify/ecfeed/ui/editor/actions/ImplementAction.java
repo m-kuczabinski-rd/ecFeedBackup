@@ -26,7 +26,7 @@ public class ImplementAction extends ModelModifyingAction {
 	@Override
 	public boolean isEnabled(){
 		for(AbstractNode node : getSelectedNodes()){
-			if(fImplementer.implementable(node) == true && fImplementer.getImplementationStatus(node) != EImplementationStatus.IMPLEMENTED){
+			if(fImplementer.implementable(node) == true && (fImplementer.getImplementationStatus(node) != EImplementationStatus.IMPLEMENTED)){
 				return true;
 			}
 		}

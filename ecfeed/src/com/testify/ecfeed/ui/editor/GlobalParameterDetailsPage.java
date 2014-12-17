@@ -2,6 +2,7 @@ package com.testify.ecfeed.ui.editor;
 
 import org.eclipse.swt.widgets.Composite;
 
+import com.testify.ecfeed.model.AbstractNode;
 import com.testify.ecfeed.model.GlobalParameterNode;
 import com.testify.ecfeed.ui.common.IFileInfoProvider;
 import com.testify.ecfeed.ui.modelif.AbstractParameterInterface;
@@ -46,5 +47,10 @@ public class GlobalParameterDetailsPage extends AbstractParameterDetailsPage {
 			getMainSection().layout();
 
 		}
+	}
+
+	@Override
+	protected Class<? extends AbstractNode> getNodeType() {
+		return GlobalParameterNode.class;
 	}
 }

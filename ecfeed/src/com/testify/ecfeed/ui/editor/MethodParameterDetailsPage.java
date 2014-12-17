@@ -12,6 +12,7 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 
 import com.testify.ecfeed.adapter.java.JavaUtils;
+import com.testify.ecfeed.model.AbstractNode;
 import com.testify.ecfeed.model.GlobalParameterNode;
 import com.testify.ecfeed.model.MethodParameterNode;
 import com.testify.ecfeed.ui.common.IFileInfoProvider;
@@ -199,5 +200,10 @@ public class MethodParameterDetailsPage extends AbstractParameterDetailsPage {
 
 	private String linkPath(String linkName){
 		return linkName.substring(0, linkName.indexOf(" "));
+	}
+
+	@Override
+	protected Class<? extends AbstractNode> getNodeType() {
+		return MethodParameterNode.class;
 	}
 }

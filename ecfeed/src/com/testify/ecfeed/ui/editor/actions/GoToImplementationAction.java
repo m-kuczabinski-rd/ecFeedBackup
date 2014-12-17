@@ -3,13 +3,12 @@ package com.testify.ecfeed.ui.editor.actions;
 import org.eclipse.jface.viewers.ISelectionProvider;
 
 import com.testify.ecfeed.model.AbstractNode;
-import com.testify.ecfeed.ui.common.IFileInfoProvider;
 import com.testify.ecfeed.ui.modelif.AbstractNodeInterface;
 import com.testify.ecfeed.ui.modelif.NodeInterfaceFactory;
 
 public class GoToImplementationAction extends ModelSelectionAction {
 
-	public GoToImplementationAction(ISelectionProvider selectionProvider, IFileInfoProvider fileInfoProvider) {
+	public GoToImplementationAction(ISelectionProvider selectionProvider) {
 		super("goToImpl", "Go to implementation", selectionProvider);
 	}
 
