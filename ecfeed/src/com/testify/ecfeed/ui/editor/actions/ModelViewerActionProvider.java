@@ -1,22 +1,40 @@
 package com.testify.ecfeed.ui.editor.actions;
 
 import org.eclipse.jface.viewers.ISelectionProvider;
+import org.eclipse.jface.viewers.StructuredViewer;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TreeViewer;
 
+import com.testify.ecfeed.adapter.IModelImplementer;
+import com.testify.ecfeed.ui.common.EclipseModelImplementer;
+import com.testify.ecfeed.ui.common.IFileInfoProvider;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 
 
 public class ModelViewerActionProvider extends ActionGroups {
 
 	public ModelViewerActionProvider(TreeViewer viewer, IModelUpdateContext context, boolean selectRoot) {
+		this(viewer, context, null, selectRoot);
+	}
+
+	public ModelViewerActionProvider(TreeViewer viewer, IModelUpdateContext context, IFileInfoProvider infoProfider, boolean selectRoot) {
 		addEditActions(viewer, context);
+		if(infoProfider != null){
+			addImplementationActions(viewer, context, infoProfider);
+		}
 		addViewerActions(viewer, context, selectRoot);
 		addMoveActions(viewer, context);
 	}
 
 	public ModelViewerActionProvider(TableViewer viewer, IModelUpdateContext context) {
+		this(viewer, context, null);
+	}
+
+	public ModelViewerActionProvider(TableViewer viewer, IModelUpdateContext context, IFileInfoProvider infoProvider) {
 		addEditActions(viewer, context);
+		if(infoProvider != null){
+			addImplementationActions(viewer, context, infoProvider);
+		}
 		addViewerActions(viewer);
 		addMoveActions(viewer, context);
 	}
@@ -27,6 +45,12 @@ public class ModelViewerActionProvider extends ActionGroups {
 		addAction("edit", new CutAction(new CopyAction(selectionProvider), deleteAction));
 		addAction("edit", new PasteAction(selectionProvider, context));
 		addAction("edit", deleteAction);
+	}
+
+	private void addImplementationActions(StructuredViewer viewer, IModelUpdateContext context, IFileInfoProvider fileInfoProvider) {
+		IModelImplementer implementer = new EclipseModelImplementer(fileInfoProvider);
+		addAction("implement", new ImplementAction(viewer, context, implementer));
+		addAction("implement", new GoToImplementationAction(viewer, fileInfoProvider));
 	}
 
 	private void addMoveActions(ISelectionProvider selectionProvider, IModelUpdateContext context){

@@ -52,7 +52,7 @@ public class AddChildActionProvider {
 			List<AbstractNode> nodes = getSelectedNodes();
 			if(nodes.size() != 1) return null;
 			if(nodes.get(0) instanceof GlobalParametersParentNode == false) return null;
-			fParentIf.setTarget((GlobalParametersParentNode)nodes.get(0));
+			fParentIf.setTarget(nodes.get(0));
 			return fParentIf;
 		}
 
@@ -71,7 +71,7 @@ public class AddChildActionProvider {
 			List<AbstractNode> nodes = getSelectedNodes();
 			if(nodes.size() != 1) return null;
 			if(nodes.get(0) instanceof RootNode == false) return null;
-			fParentIf.setTarget((RootNode)nodes.get(0));
+			fParentIf.setTarget(nodes.get(0));
 			return fParentIf;
 		}
 
@@ -96,7 +96,7 @@ public class AddChildActionProvider {
 			List<AbstractNode> nodes = getSelectedNodes();
 			if(nodes.size() != 1) return null;
 			if(nodes.get(0) instanceof ClassNode == false) return null;
-			fParentIf.setTarget((ClassNode)nodes.get(0));
+			fParentIf.setTarget(nodes.get(0));
 			return fParentIf;
 		}
 
@@ -121,7 +121,7 @@ public class AddChildActionProvider {
 			List<AbstractNode> nodes = getSelectedNodes();
 			if(nodes.size() != 1) return null;
 			if(nodes.get(0) instanceof MethodNode == false) return null;
-			fParentIf.setTarget((MethodNode)nodes.get(0));
+			fParentIf.setTarget(nodes.get(0));
 			return fParentIf;
 		}
 	}
@@ -159,6 +159,17 @@ public class AddChildActionProvider {
 		}
 	}
 
+	private class AddTestSuiteAction extends AddMethodChildAction{
+		public AddTestSuiteAction() {
+			super(ADD_TEST_SUITE_ACTION_ID, ADD_TEST_SUITE_ACTION_NAME);
+		}
+
+		@Override
+		public void run() {
+			getParentInterface().generateTestSuite();
+		}
+	}
+
 	private class AddChoiceAction extends AbstractAddChildAction{
 		private ChoicesParentInterface fParentIf;
 
@@ -186,7 +197,7 @@ public class AddChildActionProvider {
 			List<AbstractNode> nodes = getSelectedNodes();
 			if(nodes.size() != 1) return null;
 			if(nodes.get(0) instanceof ChoicesParentNode == false) return null;
-			fParentIf.setTarget((ChoicesParentNode)nodes.get(0));
+			fParentIf.setTarget(nodes.get(0));
 			return fParentIf;
 		}
 
@@ -231,7 +242,8 @@ public class AddChildActionProvider {
 			return Arrays.asList(new AbstractAddChildAction[]{
 					new AddMethodParameterAction(),
 					new AddConstraintAction(),
-					new AddTestCaseAction()
+					new AddTestCaseAction(),
+					new AddTestSuiteAction()
 			});
 		}
 

@@ -1,5 +1,8 @@
 package com.testify.ecfeed.ui.common;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.jdt.core.Flags;
@@ -12,6 +15,8 @@ import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.core.Signature;
+
+import com.testify.ecfeed.model.MethodNode;
 
 public class JavaModelAnalyser {
 
@@ -58,6 +63,27 @@ public class JavaModelAnalyser {
 		return null;
 	}
 
+	public IMethod getIMethod(MethodNode method) {
+		IType parentType = getIType(method.getClassNode().getName());
+
+		try {
+			for(IMethod methodDef : parentType.getMethods()){
+				if(methodDef.getElementName().equals(method.getName()) == false ||
+						methodDef.getReturnType().equals(Signature.SIG_VOID) == false){
+					continue;
+				}
+				List<String> parameterTypes = new ArrayList<>();
+				for(ILocalVariable parameter : methodDef.getParameters()){
+					parameterTypes.add(getTypeName(methodDef, parameter));
+				}
+				if(parameterTypes.equals(method.getParametersTypes())){
+					return methodDef;
+				}
+			}
+		} catch (JavaModelException e) {}
+		return null;
+	}
+
 	public boolean isAnnotated(ILocalVariable parameter, String annotationType){
 		try{
 			IAnnotation[] annotations = parameter.getAnnotations();
@@ -85,7 +111,7 @@ public class JavaModelAnalyser {
 	public boolean isPublicVoid(IMethod method){
 		return isPublic(method) && isVoid(method);
 	}
-	
+
 	public boolean isPublic(IMethod method){
 		try {
 			return Flags.isPublic(method.getFlags());
@@ -95,15 +121,15 @@ public class JavaModelAnalyser {
 
 	public boolean isVoid(IMethod method){
 		try {
-			return 
+			return
 					! method.getElementName().equals(method.getParent().getElementName())
 					&& method.getReturnType().equals(Signature.SIG_VOID);
 		} catch (JavaModelException e) {}
 		return false;
 	}
-	
+
 	public String getTypeName(IMethod method, ILocalVariable parameter){
-		String typeSignaure = parameter.getTypeSignature(); 
+		String typeSignaure = parameter.getTypeSignature();
 		switch(typeSignaure){
 		case Signature.SIG_BOOLEAN:
 			return com.testify.ecfeed.adapter.java.Constants.TYPE_NAME_BOOLEAN;
@@ -163,7 +189,7 @@ public class JavaModelAnalyser {
 				else{
 					qualifiedName = importDeclaration.getElementName().replaceFirst("\\*", variableTypeName);
 				}
-				IType type = getIType(qualifiedName); 
+				IType type = getIType(qualifiedName);
 				if(type != null && type.getElementName().equals(variableTypeName)){
 					return type;
 				}

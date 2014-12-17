@@ -14,6 +14,7 @@ public abstract class AbstractAddChildAction extends ModelModifyingAction{
 	protected final static String ADD_METHOD_PARAMETER_ACTION_NAME = "Add parameter";
 	protected final static String ADD_GLOBAL_PARAMETER_ACTION_NAME = "Add global parameter";
 	protected final static String ADD_TEST_CASE_ACTION_NAME = "Add test case";
+	protected final static String ADD_TEST_SUITE_ACTION_NAME = "Generate test suite";
 	protected final static String ADD_PARTITION_ACTION_NAME = "Add choice";
 	protected final static String ADD_CONSTRAINT_ACTION_NAME = "Add constraint";
 
@@ -22,6 +23,7 @@ public abstract class AbstractAddChildAction extends ModelModifyingAction{
 	protected final static String ADD_GLOBAL_PARAMETER_ACTION_ID = "addGlobalParameter";
 	protected final static String ADD_METHOD_PARAMETER_ACTION_ID = "addMethodParameter";
 	protected final static String ADD_TEST_CASE_ACTION_ID = "addTestCase";
+	protected final static String ADD_TEST_SUITE_ACTION_ID = "addTestCase";
 	protected final static String ADD_PARTITION_ACTION_ID = "addChoice";
 	protected final static String ADD_CONSTRAINT_ACTION_ID = "addConstraint";
 
