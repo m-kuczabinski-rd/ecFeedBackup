@@ -46,6 +46,7 @@ import org.osgi.framework.FrameworkUtil;
 import com.testify.ecfeed.adapter.IModelImplementer;
 import com.testify.ecfeed.adapter.ModelOperationManager;
 import com.testify.ecfeed.model.AbstractNode;
+import com.testify.ecfeed.ui.common.Constants;
 import com.testify.ecfeed.ui.common.EclipseModelImplementer;
 import com.testify.ecfeed.ui.common.IFileInfoProvider;
 import com.testify.ecfeed.ui.editor.actions.GoToImplementationAction;
@@ -62,7 +63,7 @@ public abstract class BasicDetailsPage implements IDetailsPage, IModelUpdateList
 		public ImplementToolbarAction() {
 			super(null, BasicDetailsPage.this, fImplementer);
 			setToolTipText("Implement node");
-			setImageDescriptor(getImage("icons/implement.png"));
+			setImageDescriptor(getIconDescription("implement.png"));
 		}
 
 		@Override
@@ -76,7 +77,7 @@ public abstract class BasicDetailsPage implements IDetailsPage, IModelUpdateList
 		public GoToImplementationToolbarAction() {
 			super(null);
 			setToolTipText("Go to node's implementation");
-			setImageDescriptor(getImage("icons/goto_impl.png"));
+			setImageDescriptor(getIconDescription("goto_impl.png"));
 		}
 
 		@Override
@@ -308,7 +309,8 @@ public abstract class BasicDetailsPage implements IDetailsPage, IModelUpdateList
 		return fModelUpdateContext.getUndoContext();
 	}
 
-	protected ImageDescriptor getImage(String path) {
+	protected ImageDescriptor getIconDescription(String fileName) {
+		String path = Constants.ICONS_FOLDER_NAME + "/" + fileName;
 		if(fImages.containsKey(path) == false){
 			Bundle bundle = FrameworkUtil.getBundle(this.getClass());
 			URL url = FileLocator.find(bundle, new Path(path), null);

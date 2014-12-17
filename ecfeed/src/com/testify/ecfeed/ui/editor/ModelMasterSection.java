@@ -515,7 +515,7 @@ public class ModelMasterSection extends TreeViewerSection{
 		Image image = fImages.get(file);
 		if(image == null){
 			Bundle bundle = FrameworkUtil.getBundle(this.getClass());
-			URL url = FileLocator.find(bundle, new Path("icons/" + file), null);
+			URL url = FileLocator.find(bundle, new Path(Constants.ICONS_FOLDER_NAME + "/" + file), null);
 			ImageDescriptor imageDsc = ImageDescriptor.createFromURL(url);
 			image = imageDsc.createImage();
 			fImages.put(file, image);

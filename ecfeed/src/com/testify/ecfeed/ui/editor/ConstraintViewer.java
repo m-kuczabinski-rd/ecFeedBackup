@@ -50,6 +50,7 @@ import com.testify.ecfeed.model.IStatementVisitor;
 import com.testify.ecfeed.model.MethodParameterNode;
 import com.testify.ecfeed.model.StatementArray;
 import com.testify.ecfeed.model.StaticStatement;
+import com.testify.ecfeed.ui.common.Constants;
 import com.testify.ecfeed.ui.editor.actions.ModelModifyingAction;
 import com.testify.ecfeed.ui.modelif.AbstractParameterInterface;
 import com.testify.ecfeed.ui.modelif.AbstractStatementInterface;
@@ -145,7 +146,7 @@ public class ConstraintViewer extends TreeViewerSection {
 		private Image getImage(String file) {
 			if(fImages.containsKey(file) == false){
 				Bundle bundle = FrameworkUtil.getBundle(StatementViewerLabelProvider.class);
-				URL url = FileLocator.find(bundle, new Path("icons/" + file), null);
+				URL url = FileLocator.find(bundle, new Path(Constants.ICONS_FOLDER_NAME + "/" + file), null);
 				ImageDescriptor image = ImageDescriptor.createFromURL(url);
 				fImages.put(file, image.createImage());
 			}

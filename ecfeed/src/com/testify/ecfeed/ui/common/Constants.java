@@ -3,6 +3,8 @@ package com.testify.ecfeed.ui.common;
 public class Constants {
 	public static final String ECT_EDITOR_ID = "com.testify.ecfeed.ui.EctEditor";
 
+	public static final String ICONS_FOLDER_NAME = "icons";
+
 	public static final String EQUIVALENCE_CLASS_FILE_EXTENSION = "ect";
 	public static final String DEFAULT_NEW_ECT_MODEL_NAME = "newEct";
 	public static final String DEFAULT_NEW_ECT_FILE_NAME = DEFAULT_NEW_ECT_MODEL_NAME + "." + EQUIVALENCE_CLASS_FILE_EXTENSION;
