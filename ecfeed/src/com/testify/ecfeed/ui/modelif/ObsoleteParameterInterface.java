@@ -16,9 +16,9 @@ import com.testify.ecfeed.model.MethodParameterNode;
 import com.testify.ecfeed.ui.common.EclipseModelBuilder;
 import com.testify.ecfeed.ui.common.Messages;
 
-public abstract class ParameterInterface extends AbstractParameterInterface {
+public abstract class ObsoleteParameterInterface extends AbstractParameterInterface {
 
-	public ParameterInterface(IModelUpdateContext updateContext) {
+	public ObsoleteParameterInterface(IModelUpdateContext updateContext) {
 		super(updateContext);
 	}
 

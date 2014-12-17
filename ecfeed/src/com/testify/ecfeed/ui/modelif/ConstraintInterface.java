@@ -25,4 +25,8 @@ public class ConstraintInterface extends AbstractNodeInterface {
 		return false;
 	}
 
+	@Override
+	public boolean goToImplementationEnabled(){
+		return false;
+	}
 }

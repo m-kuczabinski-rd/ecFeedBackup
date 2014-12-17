@@ -47,4 +47,9 @@ public class TestCaseInterface extends AbstractNodeInterface {
 		IModelOperation operation = new TestCaseOperationUpdateTestData(getTarget(), index, value);
 		return execute(operation, Messages.DIALOG_UPDATE_TEST_DATA_PROBLEM_TITLE);
 	}
+
+	@Override
+	public boolean goToImplementationEnabled(){
+		return false;
+	}
 }

@@ -18,6 +18,7 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
 
 import com.testify.ecfeed.adapter.IModelOperation;
+import com.testify.ecfeed.adapter.java.JavaUtils;
 import com.testify.ecfeed.adapter.operations.ChoiceOperationAddLabel;
 import com.testify.ecfeed.adapter.operations.ChoiceOperationAddLabels;
 import com.testify.ecfeed.adapter.operations.ChoiceOperationRemoveLabels;
@@ -117,6 +118,17 @@ public class ChoiceInterface extends ChoicesParentInterface{
 
 		IModelOperation operation = new ChoiceOperationRenameLabel(getTarget(), label, newValue);
 		return execute(operation, Messages.DIALOG_CHANGE_LABEL_PROBLEM_TITLE);
+	}
+
+	@Override
+	public boolean goToImplementationEnabled(){
+		if(JavaUtils.isPrimitive(getTarget().getParameter().getType())){
+			return false;
+		}
+		if(getTarget().isAbstract() == false){
+			return false;
+		}
+		return super.goToImplementationEnabled();
 	}
 
 	@Override

@@ -57,8 +57,15 @@ public abstract class AbstractParameterInterface extends ChoicesParentInterface 
 	}
 
 	@Override
+	public boolean goToImplementationEnabled(){
+		if(JavaUtils.isUserType(getTarget().getType()) == false){
+			return false;
+		}
+		return super.goToImplementationEnabled();
+	}
+
+	@Override
 	protected AbstractParameterNode getTarget(){
 		return (AbstractParameterNode)super.getTarget();
 	}
-
 }

@@ -25,52 +25,54 @@ import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.ui.common.EclipseImplementationStatusResolver;
 import com.testify.ecfeed.ui.common.IFileInfoProvider;
 import com.testify.ecfeed.ui.common.JavaModelAnalyser;
+import com.testify.ecfeed.ui.modelif.AbstractNodeInterface;
+import com.testify.ecfeed.ui.modelif.NodeInterfaceFactory;
 
 public class GoToImplementationAction extends ModelSelectionAction {
 
-	private class GoToActionEnabled implements IModelVisitor{
-
-		@Override
-		public Object visit(MethodParameterNode node) throws Exception {
-			return JavaUtils.isUserType(node.getType());
-		}
-
-		@Override
-		public Object visit(GlobalParameterNode node) throws Exception {
-			return JavaUtils.isUserType(node.getType());
-		}
-
-		@Override
-		public Object visit(RootNode node) throws Exception {
-			return false;
-		}
-
-		@Override
-		public Object visit(ClassNode node) throws Exception {
-			return true;
-		}
-
-		@Override
-		public Object visit(MethodNode node) throws Exception {
-			return true;
-		}
-
-		@Override
-		public Object visit(TestCaseNode node) throws Exception {
-			return false;
-		}
-
-		@Override
-		public Object visit(ConstraintNode node) throws Exception {
-			return false;
-		}
-
-		@Override
-		public Object visit(ChoiceNode node) throws Exception {
-			return JavaUtils.isUserType(node.getParameter().getType()) && node.isAbstract() == false;
-		}
-
-	}
+//	private class GoToActionEnabled implements IModelVisitor{
+//
+//		@Override
+//		public Object visit(MethodParameterNode node) throws Exception {
+//			return JavaUtils.isUserType(node.getType());
+//		}
+//
+//		@Override
+//		public Object visit(GlobalParameterNode node) throws Exception {
+//			return JavaUtils.isUserType(node.getType());
+//		}
+//
+//		@Override
+//		public Object visit(RootNode node) throws Exception {
+//			return false;
+//		}
+//
+//		@Override
+//		public Object visit(ClassNode node) throws Exception {
+//			return true;
+//		}
+//
+//		@Override
+//		public Object visit(MethodNode node) throws Exception {
+//			return true;
+//		}
+//
+//		@Override
+//		public Object visit(TestCaseNode node) throws Exception {
+//			return false;
+//		}
+//
+//		@Override
+//		public Object visit(ConstraintNode node) throws Exception {
+//			return false;
+//		}
+//
+//		@Override
+//		public Object visit(ChoiceNode node) throws Exception {
+//			return JavaUtils.isUserType(node.getParameter().getType()) && node.isAbstract() == false;
+//		}
+//
+//	}
 
 	private class GoToImplementationHandler implements IModelVisitor{
 
@@ -174,10 +176,8 @@ public class GoToImplementationAction extends ModelSelectionAction {
 		if(fStatusResolver.getImplementationStatus(node) == EImplementationStatus.NOT_IMPLEMENTED){
 			return false;
 		}
-		try{
-			return (boolean)node.accept(new GoToActionEnabled());
-		}catch(Exception e){}
-		return false;
+		AbstractNodeInterface nodeIf = NodeInterfaceFactory.getNodeInterface(node, null);
+		return nodeIf.goToImplementationEnabled();
 	}
 
 }

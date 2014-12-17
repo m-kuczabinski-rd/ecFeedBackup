@@ -90,4 +90,9 @@ public class RootInterface extends GlobalParametersParentInterface {
 		}
 		return className;
 	}
+
+	@Override
+	public boolean goToImplementationEnabled(){
+		return false;
+	}
 }
