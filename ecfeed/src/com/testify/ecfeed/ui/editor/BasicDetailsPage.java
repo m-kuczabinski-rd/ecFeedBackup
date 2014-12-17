@@ -60,10 +60,7 @@ public abstract class BasicDetailsPage implements IDetailsPage, IModelUpdateList
 		public ImplementToolbarAction() {
 			super(null, BasicDetailsPage.this, fImplementer);
 			setToolTipText("Implement node");
-			Bundle bundle = FrameworkUtil.getBundle(this.getClass());
-			URL url = FileLocator.find(bundle, new Path("icons/implement.png"), null);
-			ImageDescriptor imageDsc = ImageDescriptor.createFromURL(url);
-			setImageDescriptor(imageDsc);
+			setImageDescriptor(getImage("icons/implement.png"));
 		}
 
 		@Override
@@ -77,10 +74,7 @@ public abstract class BasicDetailsPage implements IDetailsPage, IModelUpdateList
 		public GoToImplementationToolbarAction() {
 			super(null);
 			setToolTipText("Go to node's implementation");
-			Bundle bundle = FrameworkUtil.getBundle(this.getClass());
-			URL url = FileLocator.find(bundle, new Path("icons/goto_impl.png"), null);
-			ImageDescriptor imageDsc = ImageDescriptor.createFromURL(url);
-			setImageDescriptor(imageDsc);
+			setImageDescriptor(getImage("icons/goto_impl.png"));
 		}
 
 		@Override
@@ -308,6 +302,13 @@ public abstract class BasicDetailsPage implements IDetailsPage, IModelUpdateList
 	@Override
 	public IUndoContext getUndoContext(){
 		return fModelUpdateContext.getUndoContext();
+	}
+
+	protected ImageDescriptor getImage(String path) {
+		Bundle bundle = FrameworkUtil.getBundle(this.getClass());
+		URL url = FileLocator.find(bundle, new Path(path), null);
+		ImageDescriptor imageDsc = ImageDescriptor.createFromURL(url);
+		return imageDsc;
 	}
 
 	abstract protected Class<? extends AbstractNode> getNodeType();
