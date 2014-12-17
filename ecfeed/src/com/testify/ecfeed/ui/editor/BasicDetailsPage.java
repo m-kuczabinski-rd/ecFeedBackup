@@ -14,7 +14,9 @@ package com.testify.ecfeed.ui.editor;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.core.commands.operations.IUndoContext;
 import org.eclipse.core.runtime.FileLocator;
@@ -95,6 +97,7 @@ public abstract class BasicDetailsPage implements IDetailsPage, IModelUpdateList
 	private IModelImplementer fImplementer;
 	private Button fImplementButton;
 	private ToolBarManager fToolBarManager;
+	private Map<String, ImageDescriptor> fImages;
 
 	public BasicDetailsPage(ModelMasterSection masterSection, IModelUpdateContext updateContext, IFileInfoProvider fileInforProvider){
 		fMasterSection = masterSection;
@@ -102,6 +105,7 @@ public abstract class BasicDetailsPage implements IDetailsPage, IModelUpdateList
 		fViewerSections = new ArrayList<ViewerSection>();
 		fModelUpdateContext = updateContext;
 		fImplementer = new EclipseModelImplementer(fileInforProvider);
+		fImages = new HashMap<>();
 	}
 
 	@Override
@@ -305,10 +309,12 @@ public abstract class BasicDetailsPage implements IDetailsPage, IModelUpdateList
 	}
 
 	protected ImageDescriptor getImage(String path) {
-		Bundle bundle = FrameworkUtil.getBundle(this.getClass());
-		URL url = FileLocator.find(bundle, new Path(path), null);
-		ImageDescriptor imageDsc = ImageDescriptor.createFromURL(url);
-		return imageDsc;
+		if(fImages.containsKey(path) == false){
+			Bundle bundle = FrameworkUtil.getBundle(this.getClass());
+			URL url = FileLocator.find(bundle, new Path(path), null);
+			fImages.put(path, ImageDescriptor.createFromURL(url));
+		}
+		return fImages.get(path);
 	}
 
 	abstract protected Class<? extends AbstractNode> getNodeType();
