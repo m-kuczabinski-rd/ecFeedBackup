@@ -85,8 +85,10 @@ public class OperationExecuter {
 
 	public OperationExecuter(IModelUpdateContext updateContext){
 		fOperationHistory = OperationHistoryFactory.getOperationHistory();
-		fUpdateContext = updateContext;
-		fUpdateListeners = updateContext.getUpdateListeners();
+		if(updateContext != null){
+			fUpdateContext = updateContext;
+			fUpdateListeners = updateContext.getUpdateListeners();
+		}
 	}
 
 	protected boolean execute(IModelOperation operation, String errorMessageTitle){
