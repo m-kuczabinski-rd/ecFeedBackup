@@ -14,6 +14,9 @@ package com.testify.ecfeed.ui.modelif;
 import java.util.Collection;
 import java.util.List;
 
+import org.eclipse.jdt.core.IField;
+import org.eclipse.jdt.core.IType;
+import org.eclipse.jdt.ui.JavaUI;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
 
@@ -30,6 +33,7 @@ import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.MethodParameterNode;
 import com.testify.ecfeed.ui.common.Constants;
 import com.testify.ecfeed.ui.common.EclipseTypeAdapterProvider;
+import com.testify.ecfeed.ui.common.JavaModelAnalyser;
 import com.testify.ecfeed.ui.common.Messages;
 
 public class ChoiceInterface extends ChoicesParentInterface{
@@ -129,6 +133,21 @@ public class ChoiceInterface extends ChoicesParentInterface{
 			return false;
 		}
 		return super.goToImplementationEnabled();
+	}
+
+	@Override
+	public void goToImplementation(){
+		try{
+			IType type = new JavaModelAnalyser().getIType(getParameter().getType());
+			if(type != null && getTarget().isAbstract() == false){
+				for(IField field : type.getFields()){
+					if(field.getElementName().equals(getTarget().getValueString())){
+						JavaUI.openInEditor(field);
+						break;
+					}
+				}
+			}
+		}catch(Exception e){}
 	}
 
 	@Override

@@ -3,11 +3,15 @@ package com.testify.ecfeed.ui.modelif;
 import java.util.Arrays;
 import java.util.List;
 
+import org.eclipse.jdt.core.IType;
+import org.eclipse.jdt.ui.JavaUI;
+
 import com.testify.ecfeed.adapter.ITypeAdapterProvider;
 import com.testify.ecfeed.adapter.java.JavaUtils;
 import com.testify.ecfeed.model.AbstractParameterNode;
 import com.testify.ecfeed.ui.common.EclipseModelBuilder;
 import com.testify.ecfeed.ui.common.EclipseTypeAdapterProvider;
+import com.testify.ecfeed.ui.common.JavaModelAnalyser;
 
 public abstract class AbstractParameterInterface extends ChoicesParentInterface {
 
@@ -62,6 +66,18 @@ public abstract class AbstractParameterInterface extends ChoicesParentInterface 
 			return false;
 		}
 		return super.goToImplementationEnabled();
+	}
+
+	@Override
+	public void goToImplementation(){
+		if(JavaUtils.isUserType(getTarget().getType())){
+			IType type = new JavaModelAnalyser().getIType(getType());
+			if(type != null){
+				try {
+					JavaUI.openInEditor(type);
+				} catch (Exception e) {}
+			}
+		}
 	}
 
 	@Override

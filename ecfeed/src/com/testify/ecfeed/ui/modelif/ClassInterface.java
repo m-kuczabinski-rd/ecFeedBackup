@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.jdt.core.IType;
+import org.eclipse.jdt.ui.JavaUI;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
@@ -21,6 +22,7 @@ import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.ui.common.Constants;
 import com.testify.ecfeed.ui.common.EclipseModelBuilder;
+import com.testify.ecfeed.ui.common.JavaModelAnalyser;
 import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.dialogs.TestClassSelectionDialog;
 
@@ -28,11 +30,6 @@ public class ClassInterface extends AbstractNodeInterface {
 
 	public ClassInterface(IModelUpdateContext updateContext) {
 		super(updateContext);
-	}
-
-	@Override
-	protected ClassNode getTarget(){
-		return (ClassNode)super.getTarget();
 	}
 
 	public static String getQualifiedName(ClassNode classNode){
@@ -158,15 +155,6 @@ public class ClassInterface extends AbstractNodeInterface {
 		return getOtherMethods(getTarget());
 	}
 
-	private String generateNewMethodName() {
-		String name = Constants.DEFAULT_NEW_METHOD_NAME;
-		int i = 0;
-		while(getTarget().getMethod(name, new ArrayList<String>()) != null){
-			name = Constants.DEFAULT_NEW_METHOD_NAME + i++;
-		}
-		return name;
-	}
-
 	public void reassignClass() {
 		TestClassSelectionDialog dialog = new TestClassSelectionDialog(Display.getDefault().getActiveShell());
 
@@ -175,5 +163,29 @@ public class ClassInterface extends AbstractNodeInterface {
 			String qualifiedName = selectedClass.getFullyQualifiedName();
 			setQualifiedName(qualifiedName);
 		}
+	}
+
+	@Override
+	public void goToImplementation(){
+		IType type = new JavaModelAnalyser().getIType(getQualifiedName());
+		if(type != null){
+			try{
+				JavaUI.openInEditor(type);
+			}catch(Exception e){}
+		}
+	}
+
+	@Override
+	protected ClassNode getTarget(){
+		return (ClassNode)super.getTarget();
+	}
+
+	private String generateNewMethodName() {
+		String name = Constants.DEFAULT_NEW_METHOD_NAME;
+		int i = 0;
+		while(getTarget().getMethod(name, new ArrayList<String>()) != null){
+			name = Constants.DEFAULT_NEW_METHOD_NAME + i++;
+		}
+		return name;
 	}
 }
