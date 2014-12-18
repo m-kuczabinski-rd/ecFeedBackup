@@ -36,9 +36,6 @@ public abstract class AbstractParameterInterface extends ChoicesParentInterface 
 		if (dialog.open() == IDialogConstants.OK_ID) {
 			IType selectedEnum = (IType)dialog.getFirstResult();
 			String newType = selectedEnum.getFullyQualifiedName();
-			if(newType.equals(getTarget().getType())){
-				return false;
-			}
 			List<ChoiceNode> defaultChoices = new EclipseModelBuilder().defaultChoices(newType);
 			IModelOperation operation = new AbstractParameterOperationSetTypeWithChoices(setTypeOperation(newType), getTarget(), newType, defaultChoices, getAdapterProvider());
 			return execute(operation, Messages.DIALOG_SET_PARAMETER_TYPE_PROBLEM_TITLE);
