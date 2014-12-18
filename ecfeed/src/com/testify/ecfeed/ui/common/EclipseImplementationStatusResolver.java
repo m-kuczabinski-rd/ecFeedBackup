@@ -10,16 +10,13 @@ import com.testify.ecfeed.model.MethodNode;
 
 public class EclipseImplementationStatusResolver extends CachedImplementationStatusResolver{
 
-	private JavaModelAnalyser fJavaModelAnalyser;
-
 	public EclipseImplementationStatusResolver(){
 		super(new JavaPrimitiveTypePredicate());
-		fJavaModelAnalyser = new JavaModelAnalyser();
 	}
 
 	@Override
 	protected boolean classDefinitionImplemented(String qualifiedName) {
-		IType type = fJavaModelAnalyser.getIType(qualifiedName);
+		IType type = JavaModelAnalyser.getIType(qualifiedName);
 		try {
 			return  type != null && type.isClass();
 		} catch (JavaModelException e) {}
@@ -28,12 +25,12 @@ public class EclipseImplementationStatusResolver extends CachedImplementationSta
 
 	@Override
 	protected boolean methodDefinitionImplemented(MethodNode method) {
-		return fJavaModelAnalyser.getIMethod(method) != null;
+		return JavaModelAnalyser.getIMethod(method) != null;
 	}
 
 	@Override
 	protected boolean enumDefinitionImplemented(String qualifiedName) {
-		IType type = fJavaModelAnalyser.getIType(qualifiedName);
+		IType type = JavaModelAnalyser.getIType(qualifiedName);
 		try {
 			return  type != null && type.isEnum();
 		} catch (JavaModelException e) {}
@@ -42,7 +39,7 @@ public class EclipseImplementationStatusResolver extends CachedImplementationSta
 
 	@Override
 	protected boolean enumValueImplemented(String qualifiedName, String value) {
-		IType type = fJavaModelAnalyser.getIType(qualifiedName);
+		IType type = JavaModelAnalyser.getIType(qualifiedName);
 		try {
 			if(type == null || type.isEnum() == false){
 				return false;

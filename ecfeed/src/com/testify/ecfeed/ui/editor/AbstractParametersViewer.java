@@ -1,6 +1,8 @@
 package com.testify.ecfeed.ui.editor;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ComboBoxCellEditor;
@@ -25,6 +27,8 @@ import com.testify.ecfeed.ui.modelif.ParametersParentInterface;
 
 public abstract class AbstractParametersViewer extends TableViewerSection {
 
+	private final String BROWSE_PARAMETER_TYPE_STRING = "Browse...";
+
 	private TableViewerColumn fNameColumn;
 	private TableViewerColumn fTypeColumn;
 
@@ -41,7 +45,9 @@ public abstract class AbstractParametersViewer extends TableViewerSection {
 		@Override
 		protected CellEditor getCellEditor(Object element) {
 			if(fCellEditor == null){
-				fCellEditor = new ComboBoxCellEditor(getTable(), AbstractParameterInterface.supportedPrimitiveTypes());
+				List<String> items = new ArrayList<String>(Arrays.asList(AbstractParameterInterface.supportedPrimitiveTypes()));
+				items.add(BROWSE_PARAMETER_TYPE_STRING);
+				fCellEditor = new ComboBoxCellEditor(getTable(), items.toArray(new String[]{}));
 				fCellEditor.setActivationStyle(ComboBoxCellEditor.DROP_DOWN_ON_KEY_ACTIVATION);
 			}
 			return fCellEditor;
@@ -65,9 +71,9 @@ public abstract class AbstractParametersViewer extends TableViewerSection {
 				}
 			}
 
-			newItems.add(node.getType());
+			newItems.add(newItems.size() - 1, node.getType());
 			fCellEditor.setItems(newItems.toArray(items));
-			return (newItems.size() - 1);
+			return (newItems.size() - 2);
 		}
 
 		@Override
@@ -81,8 +87,14 @@ public abstract class AbstractParametersViewer extends TableViewerSection {
 			} else {
 				newType = ((CCombo)fCellEditor.getControl()).getText();
 			}
-			getParameterInterface().setTarget(node);
-			getParameterInterface().setType(newType);
+			if(newType.equals(BROWSE_PARAMETER_TYPE_STRING)){
+				getParameterInterface().setTarget(node);
+				getParameterInterface().importType();
+			}
+			else{
+				getParameterInterface().setTarget(node);
+				getParameterInterface().setType(newType);
+			}
 
 			fCellEditor.setFocus();
 		}

@@ -138,7 +138,7 @@ public class ChoiceInterface extends ChoicesParentInterface{
 	@Override
 	public void goToImplementation(){
 		try{
-			IType type = new JavaModelAnalyser().getIType(getParameter().getType());
+			IType type = JavaModelAnalyser.getIType(getParameter().getType());
 			if(type != null && getTarget().isAbstract() == false){
 				for(IField field : type.getFields()){
 					if(field.getElementName().equals(getTarget().getValueString())){

@@ -240,7 +240,7 @@ public class MethodInterface extends ParametersParentInterface {
 
 	@Override
 	public void goToImplementation(){
-		IMethod method = new JavaModelAnalyser().getIMethod(getTarget());
+		IMethod method = JavaModelAnalyser.getIMethod(getTarget());
 		if(method != null){
 			try{
 				JavaUI.openInEditor(method);

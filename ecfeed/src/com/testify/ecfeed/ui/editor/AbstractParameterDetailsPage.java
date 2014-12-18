@@ -5,6 +5,7 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
@@ -20,6 +21,7 @@ public abstract class AbstractParameterDetailsPage extends BasicDetailsPage {
 	private Text fNameText;
 	private Combo fTypeCombo;
 	private ChoicesViewer fChoicesViewer;
+	private Button fBrowseUserTypeButton;
 
 	private class SetNameListener extends AbstractSelectionAdapter{
 		@Override
@@ -35,6 +37,16 @@ public abstract class AbstractParameterDetailsPage extends BasicDetailsPage {
 			getParameterIf().setType(fTypeCombo.getText());
 			fTypeCombo.setText(getParameterIf().getType());
 		}
+	}
+
+	private class BrowseTypeSelectionListener extends AbstractSelectionAdapter{
+
+		@Override
+		public void widgetSelected(SelectionEvent e) {
+			getParameterIf().importType();
+			fTypeCombo.setText(getParameterIf().getType());
+		}
+
 	}
 
 	public AbstractParameterDetailsPage(ModelMasterSection masterSection,
@@ -76,12 +88,12 @@ public abstract class AbstractParameterDetailsPage extends BasicDetailsPage {
 
 	protected Composite createAttributesComposite(){
 		fAttributesComposite = getToolkit().createComposite(getMainComposite());
-		fAttributesComposite.setLayout(new GridLayout(2, false));
+		fAttributesComposite.setLayout(new GridLayout(3, false));
 		fAttributesComposite.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
 
 		getToolkit().createLabel(fAttributesComposite, "Parameter name: ", SWT.NONE);
 		fNameText = getToolkit().createText(fAttributesComposite, "",SWT.NONE);
-		fNameText.setLayoutData(new GridData(SWT.FILL,  SWT.CENTER, true, false));
+		fNameText.setLayoutData(new GridData(SWT.FILL,  SWT.CENTER, true, false, 2, 1));
 		SelectionListener nameListener = new SetNameListener();
 		fNameText.addSelectionListener(nameListener);
 
@@ -89,6 +101,8 @@ public abstract class AbstractParameterDetailsPage extends BasicDetailsPage {
 		fTypeCombo = new Combo(fAttributesComposite,SWT.DROP_DOWN);
 		fTypeCombo.setLayoutData(new GridData(SWT.FILL,  SWT.CENTER, true, false));
 		fTypeCombo.addSelectionListener(new SetTypeListener());
+		fBrowseUserTypeButton = getToolkit().createButton(fAttributesComposite, "Browse...", SWT.NONE);
+		fBrowseUserTypeButton.addSelectionListener(new BrowseTypeSelectionListener());
 
 		getToolkit().paintBordersFor(fAttributesComposite);
 		return fAttributesComposite;

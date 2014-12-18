@@ -69,7 +69,7 @@ public class MethodParameterInterface extends AbstractParameterInterface {
 
 	public boolean setDefaultValue(String valueString) {
 		if(getTarget().getDefaultValue().equals(valueString) == false){
-			IModelOperation operation = new ParameterOperationSetDefaultValue(getTarget(), valueString, getTypeAdapterProvider().getAdapter(getTarget().getType()));
+			IModelOperation operation = new ParameterOperationSetDefaultValue(getTarget(), valueString, getAdapterProvider().getAdapter(getTarget().getType()));
 			return execute(operation, Messages.DIALOG_SET_DEFAULT_VALUE_PROBLEM_TITLE);
 		}
 		return false;
@@ -171,16 +171,13 @@ public class MethodParameterInterface extends AbstractParameterInterface {
 	}
 
 	@Override
-	public boolean setType(String newType) {
-		if(newType.equals(getTarget().getType())){
-			return false;
-		}
-		return execute(new MethodParameterOperationSetType(getTarget(), newType, getAdapterProvider()), Messages.DIALOG_RENAME_PAREMETER_PROBLEM_TITLE);
+	protected MethodParameterNode getTarget(){
+		return (MethodParameterNode)super.getTarget();
 	}
 
 	@Override
-	protected MethodParameterNode getTarget(){
-		return (MethodParameterNode)super.getTarget();
+	protected IModelOperation setTypeOperation(String type) {
+		return new MethodParameterOperationSetType(getTarget(), type, getAdapterProvider());
 	}
 
 }

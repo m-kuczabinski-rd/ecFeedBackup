@@ -30,10 +30,8 @@ public class TestClassSelectionDialog extends ElementTreeSelectionDialog {
     		if(selection[0] instanceof IType == false){
     			return ERROR;
     		}
-
     		return OK;
 		}
-
     }
 
     protected static class TypeContentProvider extends StandardJavaElementContentProvider{

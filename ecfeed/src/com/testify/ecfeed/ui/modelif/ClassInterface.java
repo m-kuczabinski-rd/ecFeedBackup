@@ -167,7 +167,7 @@ public class ClassInterface extends AbstractNodeInterface {
 
 	@Override
 	public void goToImplementation(){
-		IType type = new JavaModelAnalyser().getIType(getQualifiedName());
+		IType type = JavaModelAnalyser.getIType(getQualifiedName());
 		if(type != null){
 			try{
 				JavaUI.openInEditor(type);
