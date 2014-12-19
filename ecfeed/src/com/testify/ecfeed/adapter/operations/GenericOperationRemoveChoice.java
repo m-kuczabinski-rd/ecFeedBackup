@@ -149,7 +149,9 @@ public class GenericOperationRemoveChoice extends BulkOperation {
 
 		private void validateOperation() throws ModelOperationException {
 			try{
-				fTarget.getParameter().accept(new OperationValidator());
+				if(fTarget.getParameter() != null){
+					fTarget.getParameter().accept(new OperationValidator());
+				}
 			}catch(Exception e){
 				throw (ModelOperationException)e;
 			}

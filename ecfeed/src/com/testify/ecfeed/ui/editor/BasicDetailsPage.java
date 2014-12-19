@@ -167,7 +167,7 @@ public abstract class BasicDetailsPage implements IDetailsPage, IModelUpdateList
 	}
 
 	protected void refreshTextClient(){
-		if(fSelectedNode == null){
+		if(fSelectedNode == null && fImplementButton != null){
 			fImplementButton.setEnabled(false);
 		}
 		else if(fToolBarManager != null){
