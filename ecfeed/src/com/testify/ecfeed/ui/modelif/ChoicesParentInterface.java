@@ -9,6 +9,7 @@ import org.eclipse.swt.widgets.Display;
 import com.testify.ecfeed.adapter.IModelOperation;
 import com.testify.ecfeed.adapter.operations.GenericOperationAddChoice;
 import com.testify.ecfeed.adapter.operations.GenericOperationRemoveChoice;
+import com.testify.ecfeed.model.AbstractParameterNode;
 import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.model.ChoicesParentNode;
 import com.testify.ecfeed.model.MethodNode;
@@ -23,9 +24,8 @@ public class ChoicesParentInterface extends AbstractNodeInterface {
 		super(updateContext);
 	}
 
-	@Override
-	protected ChoicesParentNode getTarget(){
-		return (ChoicesParentNode)super.getTarget();
+	public AbstractParameterNode getParameter() {
+		return getTarget().getParameter();
 	}
 
 	public ChoiceNode addNewChoice() {
@@ -67,19 +67,6 @@ public class ChoicesParentInterface extends AbstractNodeInterface {
 		return removeChildren(choices, Messages.DIALOG_REMOVE_CHOICES_PROBLEM_TITLE);
 	}
 
-	protected String generateNewChoiceValue() {
-		EclipseModelBuilder builder = new EclipseModelBuilder();
-		String type = getTarget().getParameter().getType();
-		String value = builder.getDefaultExpectedValue(type);
-		if(isPrimitive() == false && builder.getSpecialValues(type).size() == 0){
-			int i = 0;
-			while(getTarget().getLeafChoiceValues().contains(value)){
-				value = builder.getDefaultExpectedValue(type) + i++;
-			}
-		}
-		return value;
-	}
-
 	public boolean isPrimitive() {
 		return AbstractParameterInterface.isPrimitive(getTarget().getParameter().getType());
 	}
@@ -98,6 +85,24 @@ public class ChoicesParentInterface extends AbstractNodeInterface {
 
 	public  boolean isBoolean() {
 		return AbstractParameterInterface.isBoolean(getTarget().getParameter().getType());
+	}
+
+	@Override
+	protected ChoicesParentNode getTarget(){
+		return (ChoicesParentNode)super.getTarget();
+	}
+
+	protected String generateNewChoiceValue() {
+		EclipseModelBuilder builder = new EclipseModelBuilder();
+		String type = getTarget().getParameter().getType();
+		String value = builder.getDefaultExpectedValue(type);
+		if(isPrimitive() == false && builder.getSpecialValues(type).size() == 0){
+			int i = 0;
+			while(getTarget().getLeafChoiceValues().contains(value)){
+				value = builder.getDefaultExpectedValue(type) + i++;
+			}
+		}
+		return value;
 	}
 
 	protected String generateChoiceName(){

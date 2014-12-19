@@ -11,7 +11,7 @@ import org.eclipse.swt.widgets.Display;
 import com.testify.ecfeed.adapter.IModelOperation;
 import com.testify.ecfeed.adapter.java.JavaUtils;
 import com.testify.ecfeed.adapter.operations.AbstractParameterOperationSetType;
-import com.testify.ecfeed.adapter.operations.AbstractParameterOperationSetTypeWithChoices;
+import com.testify.ecfeed.adapter.operations.ReplaceChoicesOperation;
 import com.testify.ecfeed.model.AbstractParameterNode;
 import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.ui.common.EclipseModelBuilder;
@@ -36,11 +36,17 @@ public abstract class AbstractParameterInterface extends ChoicesParentInterface 
 		if (dialog.open() == IDialogConstants.OK_ID) {
 			IType selectedEnum = (IType)dialog.getFirstResult();
 			String newType = selectedEnum.getFullyQualifiedName();
-			List<ChoiceNode> defaultChoices = new EclipseModelBuilder().defaultChoices(newType);
-			IModelOperation operation = new AbstractParameterOperationSetTypeWithChoices(setTypeOperation(newType), getTarget(), newType, defaultChoices, getAdapterProvider());
+			IModelOperation operation = setTypeOperation(newType);
 			return execute(operation, Messages.DIALOG_SET_PARAMETER_TYPE_PROBLEM_TITLE);
 		}
 		return false;
+	}
+
+	public boolean resetChoicesToDefault(){
+		String type = getTarget().getType();
+		List<ChoiceNode> defaultChoices = new EclipseModelBuilder().defaultChoices(type);
+		IModelOperation operation = new ReplaceChoicesOperation(getTarget(), defaultChoices, getAdapterProvider());
+		return execute(operation, Messages.DIALOG_RESET_CHOICES_PROBLEM_TITLE);
 	}
 
 	public static boolean hasLimitedValuesSet(String type) {

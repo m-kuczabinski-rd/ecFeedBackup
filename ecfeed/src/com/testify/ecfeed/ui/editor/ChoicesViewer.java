@@ -44,6 +44,7 @@ import com.testify.ecfeed.ui.modelif.ChoiceInterface;
 import com.testify.ecfeed.ui.modelif.ChoicesParentInterface;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 import com.testify.ecfeed.ui.modelif.ModelNodesTransfer;
+import com.testify.ecfeed.ui.modelif.NodeInterfaceFactory;
 
 public class ChoicesViewer extends TableViewerSection {
 
@@ -66,6 +67,10 @@ public class ChoicesViewer extends TableViewerSection {
 	private ModelNodeDragListener fDragListener;
 
 	private IActionProvider fActionProvider;
+
+	private Button fReplaceWithDefaultButton;
+
+	private ChoicesParentNode fSelectedParent;
 
 	private class ChoiceNameEditingSupport extends EditingSupport{
 
@@ -194,6 +199,16 @@ public class ChoicesViewer extends TableViewerSection {
 		}
 	}
 
+	private class ReplaceWithDefaultAdapter extends AbstractSelectionAdapter{
+		@Override
+		public void widgetSelected(SelectionEvent e) {
+			if(fSelectedParent == fSelectedParent.getParameter()){
+				AbstractParameterInterface parameterIf = (AbstractParameterInterface)NodeInterfaceFactory.getNodeInterface(fSelectedParent, ChoicesViewer.this);
+				parameterIf.resetChoicesToDefault();
+			}
+		}
+	}
+
 	public ChoicesViewer(ISectionContext sectionContext, IModelUpdateContext updateContext) {
 		super(sectionContext, updateContext, STYLE);
 
@@ -209,6 +224,7 @@ public class ChoicesViewer extends TableViewerSection {
 		getSection().setText("Choices");
 		fAddChoicesButton = addButton("Add choice", new AddChoiceAdapter());
 		fRemoveSelectedButton = addButton("Remove selected", new ActionSelectionAdapter(new DeleteAction(getViewer(), this)));
+		fReplaceWithDefaultButton = addButton("Replace with default", new ReplaceWithDefaultAdapter());
 
 		addDoubleClickListener(new SelectNodeDoubleClickListener(sectionContext.getMasterSection()));
 		fActionProvider = new ModelViewerActionProvider(getTableViewer(), this);
@@ -221,7 +237,13 @@ public class ChoicesViewer extends TableViewerSection {
 
 	public void setInput(ChoicesParentNode parent){
 		super.setInput(parent.getChoices());
+		fSelectedParent = parent;
 		fParentIf.setTarget(parent);
+		if(parent == parent.getParameter()){
+			fReplaceWithDefaultButton.setVisible(true);
+		}else{
+			fReplaceWithDefaultButton.setVisible(false);
+		}
 	}
 
 	@Override
