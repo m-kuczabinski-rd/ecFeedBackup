@@ -1,5 +1,8 @@
 package com.testify.ecfeed.ui.common;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.jdt.core.Flags;
@@ -13,9 +16,11 @@ import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.core.Signature;
 
+import com.testify.ecfeed.model.MethodNode;
+
 public class JavaModelAnalyser {
 
-	public IType getVariableType(String signature){
+	public static IType getVariableType(String signature){
 		for(IProject project : ResourcesPlugin.getWorkspace().getRoot().getProjects()){
 			IJavaProject javaProject = JavaCore.create(project);
 			String qualifiedName = Signature.toString(signature);
@@ -27,7 +32,7 @@ public class JavaModelAnalyser {
 		return null;
 	}
 
-	public IType getVariableType(IMethod method, ILocalVariable var){
+	public static IType getVariableType(IMethod method, ILocalVariable var){
 		IType type = getLocalVariableType(method, var);
 		if(type == null){
 			type = getPackageVariableType(method, var);
@@ -38,7 +43,7 @@ public class JavaModelAnalyser {
 		return type;
 	}
 
-	public boolean isEnumType(IMethod method, ILocalVariable var) {
+	public static boolean isEnumType(IMethod method, ILocalVariable var) {
 		IType type = getVariableType(method, var);
 		try {
 			return type != null && type.isEnum();
@@ -47,7 +52,7 @@ public class JavaModelAnalyser {
 		}
 	}
 
-	public IType getIType(String qualifiedName) {
+	public static IType getIType(String qualifiedName) {
 		try {
 			for(IJavaProject project : JavaCore.create(ResourcesPlugin.getWorkspace().getRoot()).getJavaProjects()){
 				if(project.findType(qualifiedName) != null){
@@ -58,7 +63,28 @@ public class JavaModelAnalyser {
 		return null;
 	}
 
-	public boolean isAnnotated(ILocalVariable parameter, String annotationType){
+	public static IMethod getIMethod(MethodNode method) {
+		IType parentType = getIType(method.getClassNode().getName());
+
+		try {
+			for(IMethod methodDef : parentType.getMethods()){
+				if(methodDef.getElementName().equals(method.getName()) == false ||
+						methodDef.getReturnType().equals(Signature.SIG_VOID) == false){
+					continue;
+				}
+				List<String> parameterTypes = new ArrayList<>();
+				for(ILocalVariable parameter : methodDef.getParameters()){
+					parameterTypes.add(getTypeName(methodDef, parameter));
+				}
+				if(parameterTypes.equals(method.getParametersTypes())){
+					return methodDef;
+				}
+			}
+		} catch (JavaModelException e) {}
+		return null;
+	}
+
+	public static boolean isAnnotated(ILocalVariable parameter, String annotationType){
 		try{
 			IAnnotation[] annotations = parameter.getAnnotations();
 			for(IAnnotation annotation : annotations){
@@ -70,7 +96,7 @@ public class JavaModelAnalyser {
 		return false;
 	}
 
-	public boolean isAnnotated(IMethod method, String name){
+	public static boolean isAnnotated(IMethod method, String name){
 		try{
 			IAnnotation[] annotations = method.getAnnotations();
 			for(IAnnotation annotation : annotations){
@@ -82,28 +108,55 @@ public class JavaModelAnalyser {
 		return false;
 	}
 
-	public boolean isPublicVoid(IMethod method){
+	public static boolean isPublicVoid(IMethod method){
 		return isPublic(method) && isVoid(method);
 	}
-	
-	public boolean isPublic(IMethod method){
+
+	public static boolean isPublic(IMethod method){
 		try {
 			return Flags.isPublic(method.getFlags());
 		} catch (JavaModelException e) {}
 		return false;
 	}
 
-	public boolean isVoid(IMethod method){
+	public static boolean isVoid(IMethod method){
 		try {
-			return 
+			return
 					! method.getElementName().equals(method.getParent().getElementName())
 					&& method.getReturnType().equals(Signature.SIG_VOID);
 		} catch (JavaModelException e) {}
 		return false;
 	}
-	
-	public String getTypeName(IMethod method, ILocalVariable parameter){
-		String typeSignaure = parameter.getTypeSignature(); 
+
+	public static boolean hasParameterlessConstructor(IType type){
+		try{
+			for(IMethod constructor : getConstructors(type)){
+				if(constructor.getParameters().length == 0){
+					return true;
+				}
+			}
+		}catch(JavaModelException e){}
+		return false;
+	}
+
+	public static boolean hasConstructor(IType type){
+		return getConstructors(type).size() > 0;
+	}
+
+	public static List<IMethod> getConstructors(IType type){
+		List<IMethod> result = new ArrayList<IMethod>();
+		try{
+		for(IMethod method : type.getMethods()){
+			if(method.isConstructor()){
+				result.add(method);
+			}
+		}
+		}catch(JavaModelException e){}
+		return result;
+	}
+
+	public static String getTypeName(IMethod method, ILocalVariable parameter){
+		String typeSignaure = parameter.getTypeSignature();
 		switch(typeSignaure){
 		case Signature.SIG_BOOLEAN:
 			return com.testify.ecfeed.adapter.java.Constants.TYPE_NAME_BOOLEAN;
@@ -129,7 +182,7 @@ public class JavaModelAnalyser {
 	}
 
 
-	protected IType getLocalVariableType(IMethod method, ILocalVariable var){
+	protected static IType getLocalVariableType(IMethod method, ILocalVariable var){
 		try {
 			IType declaringType = method.getDeclaringType();
 			String variableTypeName = Signature.toString(var.getTypeSignature());
@@ -143,7 +196,7 @@ public class JavaModelAnalyser {
 		return null;
 	}
 
-	protected IType getPackageVariableType(IMethod method, ILocalVariable var){
+	protected static IType getPackageVariableType(IMethod method, ILocalVariable var){
 		IType declaringType = method.getDeclaringType();
 		String packageName = declaringType.getPackageFragment().getElementName();
 		String variableTypeName = Signature.toString(var.getTypeSignature());
@@ -152,7 +205,7 @@ public class JavaModelAnalyser {
 		return type;
 	}
 
-	protected IType getImportedVariableType(IMethod method, ILocalVariable var) {
+	protected static IType getImportedVariableType(IMethod method, ILocalVariable var) {
 		String variableTypeName = Signature.toString(var.getTypeSignature());
 		try {
 			for(IImportDeclaration importDeclaration : method.getDeclaringType().getCompilationUnit().getImports()){
@@ -163,7 +216,7 @@ public class JavaModelAnalyser {
 				else{
 					qualifiedName = importDeclaration.getElementName().replaceFirst("\\*", variableTypeName);
 				}
-				IType type = getIType(qualifiedName); 
+				IType type = getIType(qualifiedName);
 				if(type != null && type.getElementName().equals(variableTypeName)){
 					return type;
 				}

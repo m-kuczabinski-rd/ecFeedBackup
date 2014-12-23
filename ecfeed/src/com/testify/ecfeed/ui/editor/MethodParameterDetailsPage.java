@@ -12,6 +12,7 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 
 import com.testify.ecfeed.adapter.java.JavaUtils;
+import com.testify.ecfeed.model.AbstractNode;
 import com.testify.ecfeed.model.GlobalParameterNode;
 import com.testify.ecfeed.model.MethodParameterNode;
 import com.testify.ecfeed.ui.common.IFileInfoProvider;
@@ -82,7 +83,10 @@ public class MethodParameterDetailsPage extends AbstractParameterDetailsPage {
 		Composite attributesComposite = super.createAttributesComposite();
 
 		GridData checkboxGridData = new GridData(SWT.FILL,  SWT.CENTER, true, false);
-		checkboxGridData.horizontalSpan = 2;
+		checkboxGridData.horizontalSpan = 3;
+
+		GridData comboGridData = new GridData(SWT.FILL,  SWT.CENTER, true, false);
+		comboGridData.horizontalSpan = 2;
 
 		fExpectedCheckbox = getToolkit().createButton(attributesComposite, "Expected", SWT.CHECK);
 		fExpectedCheckbox.setLayoutData(checkboxGridData);
@@ -94,7 +98,7 @@ public class MethodParameterDetailsPage extends AbstractParameterDetailsPage {
 		gl.marginHeight = 0;
 		gl.marginWidth = 0;
 		fDefaultValueComboComposite.setLayout(gl);
-		fDefaultValueComboComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
+		fDefaultValueComboComposite.setLayoutData(comboGridData);
 
 		fLinkedCheckbox = getToolkit().createButton(attributesComposite, "Linked", SWT.CHECK);
 		fLinkedCheckbox.setLayoutData(checkboxGridData);
@@ -103,7 +107,7 @@ public class MethodParameterDetailsPage extends AbstractParameterDetailsPage {
 		getToolkit().createLabel(attributesComposite, "Parameter link: ", SWT.NONE);
 
 		fLinkCombo = new Combo(attributesComposite,SWT.DROP_DOWN|SWT.READ_ONLY);
-		fLinkCombo.setLayoutData(new GridData(SWT.FILL,  SWT.CENTER, true, false));
+		fLinkCombo.setLayoutData(comboGridData);
 		fLinkCombo.addSelectionListener(new SetLinkListener());
 
 		return attributesComposite;
@@ -199,5 +203,10 @@ public class MethodParameterDetailsPage extends AbstractParameterDetailsPage {
 
 	private String linkPath(String linkName){
 		return linkName.substring(0, linkName.indexOf(" "));
+	}
+
+	@Override
+	protected Class<? extends AbstractNode> getNodeType() {
+		return MethodParameterNode.class;
 	}
 }

@@ -5,6 +5,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
+import org.eclipse.jdt.core.IMethod;
+import org.eclipse.jdt.ui.JavaUI;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.window.Window;
@@ -32,6 +34,7 @@ import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.ui.common.Constants;
 import com.testify.ecfeed.ui.common.EclipseModelBuilder;
 import com.testify.ecfeed.ui.common.EclipseTypeAdapterProvider;
+import com.testify.ecfeed.ui.common.JavaModelAnalyser;
 import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.dialogs.AddTestCaseDialog;
 import com.testify.ecfeed.ui.dialogs.CalculateCoverageDialog;
@@ -45,11 +48,6 @@ public class MethodInterface extends ParametersParentInterface {
 	public MethodInterface(IModelUpdateContext updateContext) {
 		super(updateContext);
 		fAdapterProvider = new EclipseTypeAdapterProvider();
-	}
-
-	@Override
-	protected MethodNode getTarget(){
-		return (MethodNode)super.getTarget();
 	}
 
 	public List<String> getArgTypes(MethodNode method) {
@@ -236,6 +234,25 @@ public class MethodInterface extends ParametersParentInterface {
 		new CalculateCoverageDialog(activeShell, getTarget(), checkedElements, grayedElements).open();
 	}
 
+	public List<GlobalParameterNode> getAvailableGlobalParameters() {
+		return getTarget().getAvailableGlobalParameters();
+	}
+
+	@Override
+	public void goToImplementation(){
+		IMethod method = JavaModelAnalyser.getIMethod(getTarget());
+		if(method != null){
+			try{
+				JavaUI.openInEditor(method);
+			}catch(Exception e){}
+		}
+	}
+
+	@Override
+	protected MethodNode getTarget(){
+		return (MethodNode)super.getTarget();
+	}
+
 	@Override
 	protected String generateNewParameterType() {
 		for(String type : JavaUtils.supportedPrimitiveTypes()){
@@ -258,9 +275,5 @@ public class MethodInterface extends ParametersParentInterface {
 			}
 		}
 		return type;
-	}
-
-	public List<GlobalParameterNode> getAvailableGlobalParameters() {
-		return getTarget().getAvailableGlobalParameters();
 	}
 }

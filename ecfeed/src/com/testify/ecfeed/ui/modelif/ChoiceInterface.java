@@ -14,10 +14,14 @@ package com.testify.ecfeed.ui.modelif;
 import java.util.Collection;
 import java.util.List;
 
+import org.eclipse.jdt.core.IField;
+import org.eclipse.jdt.core.IType;
+import org.eclipse.jdt.ui.JavaUI;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
 
 import com.testify.ecfeed.adapter.IModelOperation;
+import com.testify.ecfeed.adapter.java.JavaUtils;
 import com.testify.ecfeed.adapter.operations.ChoiceOperationAddLabel;
 import com.testify.ecfeed.adapter.operations.ChoiceOperationAddLabels;
 import com.testify.ecfeed.adapter.operations.ChoiceOperationRemoveLabels;
@@ -29,6 +33,7 @@ import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.MethodParameterNode;
 import com.testify.ecfeed.ui.common.Constants;
 import com.testify.ecfeed.ui.common.EclipseTypeAdapterProvider;
+import com.testify.ecfeed.ui.common.JavaModelAnalyser;
 import com.testify.ecfeed.ui.common.Messages;
 
 public class ChoiceInterface extends ChoicesParentInterface{
@@ -117,6 +122,32 @@ public class ChoiceInterface extends ChoicesParentInterface{
 
 		IModelOperation operation = new ChoiceOperationRenameLabel(getTarget(), label, newValue);
 		return execute(operation, Messages.DIALOG_CHANGE_LABEL_PROBLEM_TITLE);
+	}
+
+	@Override
+	public boolean goToImplementationEnabled(){
+		if(JavaUtils.isPrimitive(getTarget().getParameter().getType())){
+			return false;
+		}
+		if(getTarget().isAbstract() == false){
+			return false;
+		}
+		return super.goToImplementationEnabled();
+	}
+
+	@Override
+	public void goToImplementation(){
+		try{
+			IType type = JavaModelAnalyser.getIType(getParameter().getType());
+			if(type != null && getTarget().isAbstract() == false){
+				for(IField field : type.getFields()){
+					if(field.getElementName().equals(getTarget().getValueString())){
+						JavaUI.openInEditor(field);
+						break;
+					}
+				}
+			}
+		}catch(Exception e){}
 	}
 
 	@Override

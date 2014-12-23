@@ -177,4 +177,11 @@ public class AbstractNodeInterface extends OperationExecuter{
 		return fTarget;
 	}
 
+	public boolean goToImplementationEnabled(){
+		return getImplementationStatus() != EImplementationStatus.NOT_IMPLEMENTED;
+	}
+
+	public void goToImplementation(){
+
+	}
 }

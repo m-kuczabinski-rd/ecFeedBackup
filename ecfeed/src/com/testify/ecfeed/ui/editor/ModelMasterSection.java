@@ -455,7 +455,7 @@ public class ModelMasterSection extends TreeViewerSection{
 		fMasterDetailsBlock = parentBlock;
 		fImages = new HashMap<String, Image>();
 
-		setActionProvider(new ModelViewerActionProvider(getTreeViewer(), this, false), false);
+		setActionProvider(new ModelViewerActionProvider(getTreeViewer(), this, parentBlock.getPage().getEditor(), false), false);
 
 		getTreeViewer().addDragSupport(DND.DROP_COPY|DND.DROP_MOVE|DND.DROP_LINK, new Transfer[]{ModelNodesTransfer.getInstance()}, new ModelNodeDragListener(getTreeViewer()));
 		getTreeViewer().addDropSupport(DND.DROP_COPY|DND.DROP_MOVE|DND.DROP_LINK, new Transfer[]{ModelNodesTransfer.getInstance()}, new ModelNodeDropListener(getTreeViewer(), this));
@@ -515,7 +515,7 @@ public class ModelMasterSection extends TreeViewerSection{
 		Image image = fImages.get(file);
 		if(image == null){
 			Bundle bundle = FrameworkUtil.getBundle(this.getClass());
-			URL url = FileLocator.find(bundle, new Path("icons/" + file), null);
+			URL url = FileLocator.find(bundle, new Path(Constants.ICONS_FOLDER_NAME + "/" + file), null);
 			ImageDescriptor imageDsc = ImageDescriptor.createFromURL(url);
 			image = imageDsc.createImage();
 			fImages.put(file, image);

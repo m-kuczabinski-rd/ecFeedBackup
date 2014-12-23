@@ -57,14 +57,14 @@ public class TestDataValueEditingSupport extends EditingSupport {
 	private CellEditor getComboCellEditor(ChoiceNode choice) {
 		String type = choice.getParameter().getType();
 		EclipseModelBuilder builder = new EclipseModelBuilder();
-
-		if (fMethod.getMethodParameter(choice).isExpected()) {
-			Set<String> expectedValues = new HashSet<String>();
-			for (String specialValue : builder.getSpecialValues(type)) {
-				expectedValues.add(specialValue);
-			}
+		MethodParameterNode parameter = fMethod.getMethodParameter(choice);
+		if (parameter.isExpected()) {
+			Set<String> expectedValues = new HashSet<String>(builder.getSpecialValues(type));
 			if (expectedValues.contains(choice.getValueString()) == false) {
 				expectedValues.add(choice.getValueString());
+			}
+			if(JavaUtils.isUserType(parameter.getType())){
+				expectedValues.addAll(parameter.getLeafChoiceValues());
 			}
 			fComboCellEditor.setInput(expectedValues);
 

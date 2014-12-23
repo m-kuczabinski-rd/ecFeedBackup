@@ -30,7 +30,7 @@ public class GenericOperationAddChoice extends BulkOperation {
 				fIndex = fTarget.getChoices().size();
 			}
 			if(fTarget.getChoiceNames().contains(fChoice.getName())){
-				throw new ModelOperationException(Messages.PARTITION_NAME_DUPLICATE_PROBLEM);
+				throw new ModelOperationException(Messages.CHOICE_NAME_DUPLICATE_PROBLEM(fTarget.getName(), fChoice.getName()));
 			}
 			if(fIndex < 0){
 				throw new ModelOperationException(Messages.NEGATIVE_INDEX_PROBLEM);

@@ -19,6 +19,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
 
+import com.testify.ecfeed.model.AbstractNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.ui.common.IFileInfoProvider;
 import com.testify.ecfeed.ui.modelif.ClassInterface;
@@ -76,7 +77,6 @@ public class ClassDetailsPage extends BasicDetailsPage {
 	@Override
 	protected Composite createTextClientComposite(){
 		Composite textClient = super.createTextClientComposite();
-		createImplementerButton(textClient);
 		return textClient;
 	}
 
@@ -140,5 +140,10 @@ public class ClassDetailsPage extends BasicDetailsPage {
 
 			getMainSection().layout();
 		}
+	}
+
+	@Override
+	protected Class<? extends AbstractNode> getNodeType() {
+		return ClassNode.class;
 	}
 }

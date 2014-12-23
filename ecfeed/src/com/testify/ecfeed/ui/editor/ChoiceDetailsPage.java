@@ -24,6 +24,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
 
 import com.testify.ecfeed.adapter.java.JavaUtils;
+import com.testify.ecfeed.model.AbstractNode;
 import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.ui.common.IFileInfoProvider;
 import com.testify.ecfeed.ui.modelif.AbstractParameterInterface;
@@ -74,9 +75,8 @@ public class ChoiceDetailsPage extends BasicDetailsPage {
 
 	@Override
 	protected Composite createTextClientComposite(){
-		Composite textClient = super.createTextClientComposite();
-		createImplementerButton(textClient);
-		return textClient;
+		Composite client = super.createTextClientComposite();
+		return client;
 	}
 
 	@Override
@@ -139,5 +139,10 @@ public class ChoiceDetailsPage extends BasicDetailsPage {
 
 		getToolkit().createLabel(fAttributesComposite, "Value");
 		getToolkit().paintBordersFor(fAttributesComposite);
+	}
+
+	@Override
+	protected Class<? extends AbstractNode> getNodeType() {
+		return ChoiceNode.class;
 	}
 }
