@@ -1,5 +1,6 @@
 package com.testify.ecfeed.ui.modelif;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -103,7 +104,13 @@ public class ChoicesParentInterface extends AbstractNodeInterface {
 	protected String generateChoiceName(){
 		String name = Constants.DEFAULT_NEW_PARTITION_NAME;
 		int i = 0;
-		while(getTarget().getChoiceNames().contains(name)){
+		
+		ArrayList<String> choiceNames = new ArrayList<>();
+		for(ChoiceNode choice: getTarget().getChoices()){
+			choiceNames.add(choice.getName());
+		}
+		
+		while(choiceNames.contains(name)){
 			name = Constants.DEFAULT_NEW_PARTITION_NAME + i++;
 		}
 		return name;

@@ -201,5 +201,50 @@ public class TestMethodDetailsPage{
 		System.out.println("GenerateSuiteGeneratorComboText(" + generatorType + ")");
 	}
 
+	/*
+	 * Standard viewer selection test.
+	 */
+	public void removeSelectedCasesTest(ESelectionType selectionType){
+		// TODO Auto-generated method stub
+		System.out.println("removeSelectedCasesTest(" + selectionType + ")");
+	}
+
+	/*
+	 * If isImplemented is false, at least one selected test case is not implemented
+	 */
+	public void executeSelectedTest(ESelectionType selectionType, boolean isImplemented){
+		// TODO Auto-generated method stub
+		System.out.println("executeSelectedTest(" + selectionType + ", " + isImplemented + ")");
+	}
+
+	/*
+	 * Generate choices and, for them, constraints and test cases. Test if:
+	 * - conversion TO expected:
+	 * 	- default value for type is correct
+	 * 	- mentioning constraints are removed
+	 * 	- values are replaced by default values in test cases
+	 *  - boolean has true/false values available
+	 *  
+	 * - conversion FROM expected:
+	 * 	- mentioning constraints are removed
+	 * 	- test cases are removed
+	 * 	- choices are again available no matter the type
+	 */
+	public void changeParametersExpectedStatusTest(boolean toExpected, ETypeName type, String defaultValues){
+		// TODO Auto-generated method stub
+		System.out.println("changeParametersExpectedStatusTest(" + toExpected + ")");
+	}
+	
+	/* As above, but when changing TO expected:
+	 * 	- user type keeps it's partitions, which are available for selection AND:
+	 * 		- in case it has choices defined the first available is set as default value
+	 * 		- in case it has no choices, but is implemented, one of the existing values is picked
+	 * 		- if it has no choices and is not implemented, the default value is "VALUE"
+	 */
+	public void changeUserTypeParameterExpectedStatus(boolean toExpected, boolean hasChoices, boolean isImplemented){
+		// TODO Auto-generated method stub
+		System.out.println("changeUserTypeParameterExpectedStatus(" + toExpected + ", " + hasChoices + ", " + isImplemented + ")");
+	}
+
 }
 
