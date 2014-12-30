@@ -4,11 +4,11 @@ import com.testify.ecfeed.testutils.ETypeName;
 
 public class TestMethodDetailsPage{
 
-	public void renameMethodTest(String new_name, boolean isValid){
+	public void renameMethodTest(String newName, boolean duplicate, boolean isValid){
 		// TODO Auto-generated method stub
-		System.out.println("renameMethodTest(" + new_name + ", " + isValid + ")");
+		System.out.println("renameMethodTest(" + newName + ", " + duplicate + ", " + isValid + ")");
 	}
-
+	
 	public void implementMethodTest(boolean isMethodImplemented, boolean hasUserType, boolean isClassImplemented){
 		// TODO Auto-generated method stub
 		System.out.println("implementMethodTest(" + isMethodImplemented + ", " + hasUserType + ", " + isClassImplemented + ")");
@@ -80,6 +80,40 @@ public class TestMethodDetailsPage{
 	public void changeParameterTypeTest(ETypeName oldType, ETypeName newType, String originalValue, boolean isExpected, boolean isConvertable){
 		// TODO Auto-generated method stub
 		System.out.println("changeParameterTypeTest(" + oldType + ", " + newType + ", " + originalValue + ", " + isExpected + ", " + isConvertable + ")");
+	}
+	
+	/*
+	 * Generate choices and, for them, constraints and test cases. Test if:
+	 * - conversion TO expected:
+	 * 	- default value for type is correct
+	 * 	- mentioning constraints are removed
+	 * 	- values are replaced by default values in test cases
+	 *  - boolean has true/false values available
+	 *  
+	 * - conversion FROM expected:
+	 * 	- mentioning constraints are removed
+	 * 	- test cases are removed
+	 * 	- choices are again available no matter the type
+	 */
+	public void changeParametersExpectedStatusTest(boolean toExpected, ETypeName type, String defaultValues){
+		// TODO Auto-generated method stub
+		System.out.println("changeParametersExpectedStatusTest(" + toExpected + ")");
+	}
+	
+	/* As above, but when changing TO expected:
+	 * 	- user type keeps it's partitions, which are available for selection AND:
+	 * 		- in case it has choices defined the first available is set as default value
+	 * 		- in case it has no choices, but is implemented, one of the existing values is picked
+	 * 		- if it has no choices and is not implemented, the default value is "VALUE"
+	 */
+	public void changeUserTypeParameterExpectedStatus(boolean toExpected, boolean hasChoices, boolean isImplemented){
+		// TODO Auto-generated method stub
+		System.out.println("changeUserTypeParameterExpectedStatus(" + toExpected + ", " + hasChoices + ", " + isImplemented + ")");
+	}
+	
+	public void changeParametersNameTest(String newName, boolean duplicate, boolean isValid){
+		// TODO Auto-generated method stub
+		System.out.println("changeParametersNameTest(" + newName + ", " + duplicate + ", " + isValid + ")");
 	}
 
 	public void removeSelectedConstraints(ESelectionType selectionType){
@@ -216,35 +250,7 @@ public class TestMethodDetailsPage{
 		// TODO Auto-generated method stub
 		System.out.println("executeSelectedTest(" + selectionType + ", " + isImplemented + ")");
 	}
-
-	/*
-	 * Generate choices and, for them, constraints and test cases. Test if:
-	 * - conversion TO expected:
-	 * 	- default value for type is correct
-	 * 	- mentioning constraints are removed
-	 * 	- values are replaced by default values in test cases
-	 *  - boolean has true/false values available
-	 *  
-	 * - conversion FROM expected:
-	 * 	- mentioning constraints are removed
-	 * 	- test cases are removed
-	 * 	- choices are again available no matter the type
-	 */
-	public void changeParametersExpectedStatusTest(boolean toExpected, ETypeName type, String defaultValues){
-		// TODO Auto-generated method stub
-		System.out.println("changeParametersExpectedStatusTest(" + toExpected + ")");
-	}
 	
-	/* As above, but when changing TO expected:
-	 * 	- user type keeps it's partitions, which are available for selection AND:
-	 * 		- in case it has choices defined the first available is set as default value
-	 * 		- in case it has no choices, but is implemented, one of the existing values is picked
-	 * 		- if it has no choices and is not implemented, the default value is "VALUE"
-	 */
-	public void changeUserTypeParameterExpectedStatus(boolean toExpected, boolean hasChoices, boolean isImplemented){
-		// TODO Auto-generated method stub
-		System.out.println("changeUserTypeParameterExpectedStatus(" + toExpected + ", " + hasChoices + ", " + isImplemented + ")");
-	}
 
 }
 
