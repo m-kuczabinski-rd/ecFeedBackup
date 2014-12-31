@@ -1,6 +1,5 @@
 package com.testify.ecfeed.spec.gui;
 
-import com.testify.ecfeed.junit.annotations.expected;
 
 public class TestConstraintDetailsPage{
 	
