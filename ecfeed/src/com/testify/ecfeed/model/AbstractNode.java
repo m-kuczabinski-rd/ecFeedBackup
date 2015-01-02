@@ -19,6 +19,7 @@ import java.util.List;
 public abstract class AbstractNode{
 	private String fName;
 	private AbstractNode fParent;
+	private String fDescription;
 	private final int fId;
 	private static int fLastId = 0;
 	protected final List<AbstractNode> EMPTY_CHILDREN_ARRAY = new ArrayList<AbstractNode>();
@@ -57,6 +58,14 @@ public abstract class AbstractNode{
 
 	public void setParent(AbstractNode newParent) {
 		fParent = newParent;
+	}
+
+	public void setDescription(String desc){
+		fDescription = desc;
+	}
+
+	public String getDescription(){
+		return fDescription;
 	}
 
 	public List<? extends AbstractNode> getChildren() {

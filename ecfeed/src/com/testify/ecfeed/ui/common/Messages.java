@@ -52,6 +52,8 @@ public class Messages {
 	public static final String DIALOG_GENERATE_TEST_SUITE_MESSAGE = "Select test suite name and algorithm for test suite generation";
 	public static final String DIALOG_EXECUTE_ONLINE_TITLE = "Execute online test";
 	public static final String DIALOG_EXECUTE_ONLINE_MESSAGE = "Setup the test data generator and select which constraints and choices shall be considered for generating test cases";
+	public static final String DIALOG_EDIT_COMMENTS_TITLE = "Edit element's comments";
+	public static final String DIALOG_EDIT_COMMENTS_MESSAGE = "Enter element's comments in plain text";
 
 	//PROBLEM COMMUNICATES
 	public static final String DIALOG_RENAME_MODEL_PROBLEM_TITLE = "Couldn't rename model";
@@ -100,6 +102,7 @@ public class Messages {
 	public static final String DIALOG_SET_PARAMETER_LINK_PROBLEM_TITLE = "Couldn't set global parameter link";
 	public static final String DIALOG_SET_PARAMETER_TYPE_PROBLEM_TITLE = "Couldn't set parameter's type";
 	public static final String DIALOG_RESET_CHOICES_PROBLEM_TITLE = "Couldn't reset choices to default";
+	public static final String DIALOG_SET_COMMENTS_PROBLEM_TITLE = "Cannot set comments";
 
 	//CONFIRMATIONS AND WARNINGS
 	public static final String DIALOG_REMOVE_CLASSES_TITLE = "Remove classes";

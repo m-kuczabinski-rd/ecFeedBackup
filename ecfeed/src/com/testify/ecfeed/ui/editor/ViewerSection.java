@@ -38,8 +38,6 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.layout.RowLayout;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Layout;
 import org.eclipse.swt.widgets.Menu;
@@ -51,15 +49,15 @@ import com.testify.ecfeed.ui.editor.actions.IActionProvider;
 import com.testify.ecfeed.ui.editor.actions.NamedAction;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 
-public abstract class ViewerSection extends BasicSection implements ISelectionProvider{
-	public static final int BUTTONS_ASIDE = 1;
-	public static final int BUTTONS_BELOW = 2;
+/**
+ * Section with a main StructuredViewer composite and buttons below or aside
+ */
+public abstract class ViewerSection extends ButtonsCompositeSection implements ISelectionProvider{
 
 	private final int VIEWER_STYLE = SWT.BORDER | SWT.MULTI;
 
 	private List<Object> fSelectedElements;
 
-	private Composite fButtonsComposite;
 	private StructuredViewer fViewer;
 	private Composite fViewerComposite;
 	private Menu fMenu;
@@ -234,34 +232,12 @@ public abstract class ViewerSection extends BasicSection implements ISelectionPr
 	@Override
 	protected Composite createClientComposite() {
 		Composite client = super.createClientComposite();
-		createViewerComposite(client);
-		fButtonsComposite = createButtonsComposite(client);
+		createViewer();
 		return client;
 	}
 
-	@Override
-	protected Layout clientLayout() {
-		GridLayout layout = new GridLayout(buttonsPosition() == BUTTONS_BELOW?1:2, false);
-		return layout;
-	}
-
-	/*
-	 * Indicates whether optional buttons are located below (default)
-	 * or on the right side of the viewer
-	 */
-	protected int buttonsPosition() {
-		return BUTTONS_BELOW;
-	}
-
-	protected int viewerStyle(){
-		return VIEWER_STYLE;
-	}
-
-	protected Composite createViewerComposite(Composite parent) {
-		fViewerComposite = getToolkit().createComposite(parent);
-		fViewerComposite.setLayout(new GridLayout(1, false));
-		fViewerComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
-		fViewer = createViewer(fViewerComposite, viewerStyle());
+	protected void createViewer() {
+		fViewer = createViewer(getMainControlComposite(), viewerStyle());
 		fViewer.setContentProvider(viewerContentProvider());
 		fViewer.setLabelProvider(viewerLabelProvider());
 		createViewerColumns();
@@ -273,55 +249,16 @@ public abstract class ViewerSection extends BasicSection implements ISelectionPr
 				fSelectedElements = ((IStructuredSelection)event.getSelection()).toList();
 			}
 		});
-
-		return fViewerComposite;
 	}
 
-	protected Composite createButtonsComposite(Composite parent) {
-		Composite buttonsComposite = getToolkit().createComposite(parent);
-		buttonsComposite.setLayout(buttonsCompositeLayout());
-		if(buttonsCompositeLayoutData() != null){
-			buttonsComposite.setLayoutData(buttonsCompositeLayoutData());
-		}
-		return buttonsComposite;
+	@Override
+	protected Layout clientLayout() {
+		GridLayout layout = new GridLayout(buttonsPosition() == BUTTONS_BELOW?1:2, false);
+		return layout;
 	}
 
-	protected Layout buttonsCompositeLayout() {
-		if(buttonsPosition() == BUTTONS_BELOW){
-			RowLayout rl = new RowLayout();
-			rl.pack = false;
-			return rl;
-		}
-		else{
-			return new GridLayout(1, false);
-		}
-	}
-
-	protected Object buttonsCompositeLayoutData() {
-		if(buttonsPosition() == BUTTONS_BELOW){
-			return new GridData(SWT.FILL, SWT.TOP, true, false);
-		}
-		else{
-			return new GridData(SWT.FILL, SWT.TOP, false, true);
-		}
-	}
-
-	protected Button addButton(String text, SelectionAdapter adapter){
-		Button button = getToolkit().createButton(fButtonsComposite, text, SWT.NONE);
-		if(adapter != null){
-			button.addSelectionListener(adapter);
-		}
-		if(buttonLayoutData() != null){
-			button.setLayoutData(buttonLayoutData());
-		}
-		return button;
-	}
-
-	protected Object buttonLayoutData() {
-		if(buttonsPosition() == BUTTONS_ASIDE){
-			return new GridData(SWT.FILL,  SWT.TOP, true, false);
-		}
-		return null;
+	protected int viewerStyle(){
+		return VIEWER_STYLE;
 	}
 
 	protected void addDoubleClickListener(IDoubleClickListener listener){

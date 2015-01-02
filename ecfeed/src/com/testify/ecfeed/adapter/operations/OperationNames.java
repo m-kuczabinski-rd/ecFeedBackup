@@ -43,4 +43,5 @@ public interface OperationNames {
 	public static final String UPDATE_TEST_DATA = "Update test data";
 	public static final String SET_LINKED = "Set linked";
 	public static final String SET_LINK = "Set link";
+	public static final String SET_COMMENTS = "Set comments";
 }

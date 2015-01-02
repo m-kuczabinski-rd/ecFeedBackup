@@ -32,6 +32,8 @@ public class ModelDetailsPage extends BasicDetailsPage {
 	private GlobalParametersViewer fParametersSection;
 	private Text fModelNameText;
 	private RootInterface fRootIf;
+	private SingleTextCommentsSection fComments;
+
 	private class SetNameAdapter extends AbstractSelectionAdapter{
 		@Override
 		public void widgetSelected(SelectionEvent e) {
@@ -51,6 +53,7 @@ public class ModelDetailsPage extends BasicDetailsPage {
 		getMainSection().setText("Model details");
 
 		createModelNameEdit(getMainComposite());
+		addForm(fComments = new SingleTextCommentsSection(this, this));
 		addViewerSection(fClassesSection = new ClassViewer(this, this));
 		addViewerSection(fParametersSection = new GlobalParametersViewer(this, this));
 
@@ -83,6 +86,7 @@ public class ModelDetailsPage extends BasicDetailsPage {
 			fModelNameText.setText(selectedRoot.getName());
 			fClassesSection.setInput(selectedRoot);
 			fParametersSection.setInput(selectedRoot);
+			fComments.setInput(selectedRoot);
 		}
 	}
 

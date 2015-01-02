@@ -3,6 +3,9 @@ package com.testify.ecfeed.ui.modelif;
 import java.util.Arrays;
 import java.util.Collection;
 
+import org.eclipse.jface.dialogs.IDialogConstants;
+import org.eclipse.swt.widgets.Display;
+
 import com.testify.ecfeed.adapter.EImplementationStatus;
 import com.testify.ecfeed.adapter.IModelOperation;
 import com.testify.ecfeed.adapter.ITypeAdapterProvider;
@@ -11,6 +14,7 @@ import com.testify.ecfeed.adapter.operations.FactoryRenameOperation;
 import com.testify.ecfeed.adapter.operations.FactoryShiftOperation;
 import com.testify.ecfeed.adapter.operations.GenericAddChildrenOperation;
 import com.testify.ecfeed.adapter.operations.GenericRemoveNodesOperation;
+import com.testify.ecfeed.adapter.operations.GenericSetCommentsOperation;
 import com.testify.ecfeed.adapter.operations.GenericShiftOperation;
 import com.testify.ecfeed.model.AbstractNode;
 import com.testify.ecfeed.model.ChoiceNode;
@@ -25,6 +29,7 @@ import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.ui.common.EclipseImplementationStatusResolver;
 import com.testify.ecfeed.ui.common.EclipseTypeAdapterProvider;
 import com.testify.ecfeed.ui.common.Messages;
+import com.testify.ecfeed.ui.dialogs.TextAreaDialog;
 
 public class AbstractNodeInterface extends OperationExecuter{
 
@@ -111,6 +116,29 @@ public class AbstractNodeInterface extends OperationExecuter{
 			problemTitle = (String)fTarget.accept(new RenameParameterProblemTitleProvider());
 		}catch(Exception e){}
 		return execute(FactoryRenameOperation.getRenameOperation(fTarget, newName), problemTitle);
+	}
+
+	public boolean editComments() {
+		TextAreaDialog dialog = new TextAreaDialog(Display.getCurrent().getActiveShell(),
+				Messages.DIALOG_EDIT_COMMENTS_TITLE, Messages.DIALOG_EDIT_COMMENTS_MESSAGE, getComments());
+		if(dialog.open() == IDialogConstants.OK_ID){
+			return setComments(dialog.getText());
+		}
+		return false;
+	}
+
+	public boolean setComments(String comments){
+		if(comments.equals(getComments())){
+			return false;
+		}
+		return execute(new GenericSetCommentsOperation(fTarget, comments), Messages.DIALOG_SET_COMMENTS_PROBLEM_TITLE);
+	}
+
+	public String getComments() {
+		if(fTarget.getDescription() != null){
+			return fTarget.getDescription();
+		}
+		return "";
 	}
 
 	public boolean remove(){
