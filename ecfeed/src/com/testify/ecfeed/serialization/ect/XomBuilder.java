@@ -11,9 +11,11 @@
 
 package com.testify.ecfeed.serialization.ect;
 
+import static com.testify.ecfeed.serialization.ect.Constants.BASIC_COMMENTS_BLOCK_TAG_NAME;
 import static com.testify.ecfeed.serialization.ect.Constants.CHOICE_ATTRIBUTE_NAME;
 import static com.testify.ecfeed.serialization.ect.Constants.CHOICE_NODE_NAME;
 import static com.testify.ecfeed.serialization.ect.Constants.CLASS_NODE_NAME;
+import static com.testify.ecfeed.serialization.ect.Constants.COMMENTS_BLOCK_TAG_NAME;
 import static com.testify.ecfeed.serialization.ect.Constants.CONSTRAINT_CHOICE_STATEMENT_NODE_NAME;
 import static com.testify.ecfeed.serialization.ect.Constants.CONSTRAINT_CONSEQUENCE_NODE_NAME;
 import static com.testify.ecfeed.serialization.ect.Constants.CONSTRAINT_EXPECTED_STATEMENT_NODE_NAME;
@@ -54,7 +56,6 @@ import nu.xom.Attribute;
 import nu.xom.Element;
 
 import com.testify.ecfeed.model.AbstractNode;
-import com.testify.ecfeed.model.AbstractParameterNode;
 import com.testify.ecfeed.model.AbstractStatement;
 import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.model.ChoicesParentStatement;
@@ -78,7 +79,7 @@ public class XomBuilder implements IModelVisitor, IStatementVisitor {
 
 	@Override
 	public Object visit(RootNode node) throws Exception{
-		Element element = createNamedElement(ROOT_NODE_NAME, node);
+		Element element = createAbstractElement(ROOT_NODE_NAME, node);
 
 		for(ClassNode _class : node.getClasses()){
 			element.appendChild((Element)visit(_class));
@@ -93,7 +94,7 @@ public class XomBuilder implements IModelVisitor, IStatementVisitor {
 
 	@Override
 	public Object visit(ClassNode node) throws Exception {
-		Element element = createNamedElement(CLASS_NODE_NAME, node);
+		Element element = createAbstractElement(CLASS_NODE_NAME, node);
 
 		for(MethodNode method : node.getMethods()){
 			element.appendChild((Element)visit(method));
@@ -108,7 +109,7 @@ public class XomBuilder implements IModelVisitor, IStatementVisitor {
 
 	@Override
 	public Object visit(MethodNode node) throws Exception {
-		Element element = createNamedElement(METHOD_NODE_NAME, node);
+		Element element = createAbstractElement(METHOD_NODE_NAME, node);
 
 		for(MethodParameterNode parameter : node.getMethodParameters()){
 			element.appendChild((Element)parameter.accept(this));
@@ -127,7 +128,7 @@ public class XomBuilder implements IModelVisitor, IStatementVisitor {
 
 	@Override
 	public Object visit(MethodParameterNode node)  throws Exception {
-		Element element = createNamedElement(PARAMETER_NODE_NAME, node);
+		Element element = createAbstractElement(PARAMETER_NODE_NAME, node);
 		element.addAttribute(new Attribute(TYPE_NAME_ATTRIBUTE, node.getRealType()));
 
 		element.addAttribute(new Attribute(PARAMETER_IS_EXPECTED_ATTRIBUTE_NAME, Boolean.toString(node.isExpected())));
@@ -146,20 +147,10 @@ public class XomBuilder implements IModelVisitor, IStatementVisitor {
 
 	@Override
 	public Object visit(GlobalParameterNode node) throws Exception {
-		Element element = createNamedElement(PARAMETER_NODE_NAME, node);
+		Element element = createAbstractElement(PARAMETER_NODE_NAME, node);
 		element.addAttribute(new Attribute(TYPE_NAME_ATTRIBUTE, node.getType()));
 
 		for(ChoiceNode child : node.getChoices()){
-			element.appendChild((Element)child.accept(this));
-		}
-		return element;
-	}
-
-	protected Element serializeAbstractParameter(AbstractParameterNode parameter) throws Exception{
-		Element element = createNamedElement(PARAMETER_NODE_NAME, parameter);
-		element.addAttribute(new Attribute(TYPE_NAME_ATTRIBUTE, parameter.getType()));
-
-		for(ChoiceNode child : parameter.getChoices()){
 			element.appendChild((Element)child.accept(this));
 		}
 		return element;
@@ -169,6 +160,7 @@ public class XomBuilder implements IModelVisitor, IStatementVisitor {
 	public Object visit(TestCaseNode node) throws Exception {
 		Element element = new Element(TEST_CASE_NODE_NAME);
 		element.addAttribute(new Attribute(TEST_SUITE_NAME_ATTRIBUTE, node.getName()));
+		appendComments(element, node);
 		for(ChoiceNode testParameter : node.getTestData()){
 			if(testParameter.getParameter() != null && node.getMethodParameter(testParameter).isExpected()){
 				Element expectedParameterElement = new Element(EXPECTED_PARAMETER_NODE_NAME);
@@ -189,7 +181,7 @@ public class XomBuilder implements IModelVisitor, IStatementVisitor {
 
 	@Override
 	public Object visit(ConstraintNode node) throws Exception{
-		Element element = createNamedElement(CONSTRAINT_NODE_NAME, node);
+		Element element = createAbstractElement(CONSTRAINT_NODE_NAME, node);
 		AbstractStatement premise = node.getConstraint().getPremise();
 		AbstractStatement consequence = node.getConstraint().getConsequence();
 
@@ -208,7 +200,7 @@ public class XomBuilder implements IModelVisitor, IStatementVisitor {
 
 	@Override
 	public Object visit(ChoiceNode node) throws Exception {
-		Element element = createNamedElement(CHOICE_NODE_NAME, node);
+		Element element = createAbstractElement(CHOICE_NODE_NAME, node);
 		String value = node.getValueString();
 		//remove disallowed XML characters
 		String xml10pattern = "[^"
@@ -316,11 +308,24 @@ public class XomBuilder implements IModelVisitor, IStatementVisitor {
 		return element;
 	}
 
-	private Element createNamedElement(String nodeTag, AbstractNode node){
+	private Element createAbstractElement(String nodeTag, AbstractNode node){
 		Element element = new Element(nodeTag);
 		Attribute nameAttr = new Attribute(NODE_NAME_ATTRIBUTE, node.getName());
 		element.addAttribute(nameAttr);
+		appendComments(element, node);
 		return element;
+	}
+
+	private Element appendComments(Element element, AbstractNode node) {
+		if(node.getDescription() != null){
+			Element commentsBlock = new Element(COMMENTS_BLOCK_TAG_NAME);
+			Element basicComments = new Element(BASIC_COMMENTS_BLOCK_TAG_NAME);
+			basicComments.appendChild(node.getDescription());
+			commentsBlock.appendChild(basicComments);
+			element.appendChild(commentsBlock);
+			return commentsBlock;
+		}
+		return null;
 	}
 
 }

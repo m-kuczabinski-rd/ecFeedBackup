@@ -63,6 +63,7 @@ public class XomAnalyser {
 		String name = getElementName(element);
 
 		RootNode root = new RootNode(name);
+		root.setDescription(parseComments(element));
 
 		//parameters must be parsed before classes
 		for(Element child : getIterableChildren(element, Constants.PARAMETER_NODE_NAME)){
@@ -88,6 +89,7 @@ public class XomAnalyser {
 		String name = getElementName(element);
 
 		ClassNode _class = new ClassNode(name);
+		_class.setDescription(parseComments(element));
 		//we need to do it here, so the backward search for global parameters will work
 		_class.setParent(parent);
 
@@ -117,34 +119,31 @@ public class XomAnalyser {
 		MethodNode method = new MethodNode(name);
 		method.setParent(parent);
 
-		for(Element child : getIterableChildren(element)){
-			if(child.getLocalName() == Constants.PARAMETER_NODE_NAME){
-				try{
-					method.addParameter(parseMethodParameter(child, method));
-				}catch(ParserException e){
-					System.err.println("Exception: " + e.getMessage());
-				}
-			}
-
-			else if(child.getLocalName() == Constants.TEST_CASE_NODE_NAME){
-				try{
-				method.addTestCase(parseTestCase(child, method));
-				}catch(ParserException e){
-					System.err.println("Exception: " + e.getMessage());
-				}
-			}
-
-			else if(child.getLocalName() == Constants.CONSTRAINT_NODE_NAME){
-				try{
-				method.addConstraint(parseConstraint(child, method));
-				}catch(ParserException e){
-					System.err.println("Exception: " + e.getMessage());
-				}
-			}
-			else{
-				throw new ParserException(Messages.WRONG_CHILD_ELEMENT_TYPE(element, child.getLocalName()));
+		for(Element child : getIterableChildren(element, Constants.PARAMETER_NODE_NAME)){
+			try{
+				method.addParameter(parseMethodParameter(child, method));
+			}catch(ParserException e){
+				System.err.println("Exception: " + e.getMessage());
 			}
 		}
+
+		for(Element child : getIterableChildren(element, Constants.TEST_CASE_NODE_NAME)){
+			try{
+				method.addTestCase(parseTestCase(child, method));
+			}catch(ParserException e){
+				System.err.println("Exception: " + e.getMessage());
+			}
+		}
+
+		for(Element child : getIterableChildren(element, Constants.CONSTRAINT_NODE_NAME)){
+			try{
+				method.addConstraint(parseConstraint(child, method));
+			}catch(ParserException e){
+				System.err.println("Exception: " + e.getMessage());
+			}
+		}
+
+		method.setDescription(parseComments(element));
 
 		return method;
 	}
@@ -187,6 +186,8 @@ public class XomAnalyser {
 			}
 		}
 
+		parameter.setDescription(parseComments(element));
+
 		return parameter;
 	}
 
@@ -203,6 +204,9 @@ public class XomAnalyser {
 				System.err.println("Exception: " + e.getMessage());
 			}
 		}
+
+		parameter.setDescription(parseComments(element));
+
 		return parameter;
 	}
 
@@ -242,7 +246,9 @@ public class XomAnalyser {
 			testData.add(testValue);
 		}
 
-		return new TestCaseNode(name, testData);
+		TestCaseNode testCase = new TestCaseNode(name, testData);
+		testCase.setDescription(parseComments(element));
+		return testCase;
 	}
 
 	public ConstraintNode parseConstraint(Element element, MethodNode method) throws ParserException{
@@ -277,7 +283,12 @@ public class XomAnalyser {
 		if(premise == null || consequence == null){
 			throw new ParserException(Messages.MALFORMED_CONSTRAINT_NODE_DEFINITION(method.getName(), name));
 		}
-		return new ConstraintNode(name, new Constraint(premise, consequence));
+
+		ConstraintNode constraint = new ConstraintNode(name, new Constraint(premise, consequence));
+
+		constraint.setDescription(parseComments(element));
+
+		return constraint;
 	}
 
 	public AbstractStatement parseStatement(Element element, MethodNode method) throws ParserException {
@@ -468,6 +479,17 @@ public class XomAnalyser {
 			throw new ParserException(Messages.WRONG_OR_MISSING_RELATION_FORMAT(relationName));
 		}
 		return relation;
+	}
+
+	protected String parseComments(Element element) {
+		if(element.getChildElements(Constants.COMMENTS_BLOCK_TAG_NAME).size() > 0){
+			Element comments = element.getChildElements(Constants.COMMENTS_BLOCK_TAG_NAME).get(0);
+			if(comments.getChildElements(Constants.BASIC_COMMENTS_BLOCK_TAG_NAME).size() > 0){
+				Element basicComments = comments.getChildElements(Constants.BASIC_COMMENTS_BLOCK_TAG_NAME).get(0);
+				return basicComments.getValue();
+			}
+		}
+		return null;
 	}
 
 }

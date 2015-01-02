@@ -30,6 +30,8 @@ public class Constants {
 	public static final String CONSTRAINT_STATIC_STATEMENT_NODE_NAME = "StaticStatement";
 	public static final String CONSTRAINT_STATEMENT_ARRAY_NODE_NAME = "StatementArray";
 	public static final String CONSTRAINT_EXPECTED_STATEMENT_NODE_NAME = "ExpectedValueStatement";
+	public static final String COMMENTS_BLOCK_TAG_NAME = "Comments";
+	public static final String BASIC_COMMENTS_BLOCK_TAG_NAME = "BasicComments";
 
 	public static final String NODE_NAME_ATTRIBUTE = "name";
 	public static final String QUALIFIED_NAME_ATTRIBUTE = "qualifiedName";
