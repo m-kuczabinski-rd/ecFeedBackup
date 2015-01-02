@@ -22,6 +22,7 @@ public abstract class AbstractParameterDetailsPage extends BasicDetailsPage {
 	private Combo fTypeCombo;
 	private ChoicesViewer fChoicesViewer;
 	private Button fBrowseUserTypeButton;
+	private SingleTextCommentsSection fCommentsSection;
 
 	private class SetNameListener extends AbstractSelectionAdapter{
 		@Override
@@ -59,6 +60,7 @@ public abstract class AbstractParameterDetailsPage extends BasicDetailsPage {
 		super.createContents(parent);
 
 		createAttributesComposite();
+		addForm(fCommentsSection = new SingleTextCommentsSection(this, this));
 		addForm(fChoicesViewer = new ChoicesViewer(this, this));
 
 		getToolkit().paintBordersFor(getMainComposite());
@@ -82,6 +84,7 @@ public abstract class AbstractParameterDetailsPage extends BasicDetailsPage {
 			fTypeCombo.setItems(AbstractParameterInterface.supportedPrimitiveTypes());
 			fTypeCombo.setText(parameter.getType());
 
+			fCommentsSection.setInput(parameter);
 			fChoicesViewer.setInput(parameter);
 		}
 	}

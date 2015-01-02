@@ -33,6 +33,7 @@ public class TestCaseDetailsPage extends BasicDetailsPage {
 	private TestDataViewer fTestDataViewer;
 
 	private TestCaseInterface fTestCaseIf;
+	private SingleTextCommentsSection fCommentsSection;
 
 	private class RenameTestCaseAdapter extends AbstractSelectionAdapter{
 		@Override
@@ -50,6 +51,7 @@ public class TestCaseDetailsPage extends BasicDetailsPage {
 	public void createContents(Composite parent) {
 		super.createContents(parent);
 		createTestSuiteEdit(getMainComposite());
+		addForm(fCommentsSection = new SingleTextCommentsSection(this, this));
 		addViewerSection(fTestDataViewer = new TestDataViewer(this, this));
 	}
 
@@ -65,6 +67,7 @@ public class TestCaseDetailsPage extends BasicDetailsPage {
 		if(getSelectedElement() instanceof TestCaseNode){
 			TestCaseNode testCase = (TestCaseNode)getSelectedElement();
 			fTestCaseIf.setTarget(testCase);
+			fCommentsSection.setInput(testCase);
 
 			getMainSection().setText(testCase.toString());
 			fTestSuiteNameCombo.setItems(testCase.getMethod().getTestSuites().toArray(new String[]{}));

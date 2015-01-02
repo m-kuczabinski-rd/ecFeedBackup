@@ -30,6 +30,7 @@ public class ConstraintDetailsPage extends BasicDetailsPage {
 	private Combo fNameCombo;
 	private ConstraintInterface fConstraintIf;
 	private ConstraintViewer fConstraintViewer;
+	private SingleTextCommentsSection fCommentsSection;
 
 	private class ConstraintNameListener extends AbstractSelectionAdapter{
 		@Override
@@ -48,6 +49,7 @@ public class ConstraintDetailsPage extends BasicDetailsPage {
 	public void createContents(Composite parent){
 		super.createContents(parent);
 		createConstraintNameEdit(getMainComposite());
+		addForm(fCommentsSection = new SingleTextCommentsSection(this, this));
 		addViewerSection(fConstraintViewer = new ConstraintViewer(this, this));
 	}
 
@@ -70,6 +72,7 @@ public class ConstraintDetailsPage extends BasicDetailsPage {
 			fNameCombo.setItems(constraint.getMethod().getConstraintsNames().toArray(new String[]{}));
 			fNameCombo.setText(constraint.getName());
 			fConstraintViewer.setInput(constraint);
+			fCommentsSection.setInput(constraint);
 			fConstraintIf.setTarget(constraint);
 		}
 	}

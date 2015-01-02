@@ -38,6 +38,7 @@ public class MethodDetailsPage extends BasicDetailsPage {
 	private TestCasesViewer fTestCasesSection;
 
 	private MethodInterface fMethodIf;
+	private SingleTextCommentsSection fCommentsSection;
 
 	private class OnlineTestAdapter extends SelectionAdapter{
 		@Override
@@ -71,6 +72,7 @@ public class MethodDetailsPage extends BasicDetailsPage {
 		super.createContents(parent);
 
 		createNameTextComposite();
+		addForm(fCommentsSection = new SingleTextCommentsSection(this, this));
 		addViewerSection(fParemetersSection = new MethodParametersViewer(this, this));
 		addViewerSection(fConstraintsSection = new ConstraintsListViewer(this, this));
 		addViewerSection(fTestCasesSection = new TestCasesViewer(this, this));
@@ -114,6 +116,7 @@ public class MethodDetailsPage extends BasicDetailsPage {
 			fParemetersSection.setInput(selectedMethod);
 			fConstraintsSection.setInput(selectedMethod);
 			fTestCasesSection.setInput(selectedMethod);
+			fCommentsSection.setInput(selectedMethod);
 			fMethodNameText.setText(fMethodIf.getName());
 
 			EImplementationStatus parentStatus = fMethodIf.getImplementationStatus(selectedMethod.getClassNode());
