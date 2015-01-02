@@ -13,7 +13,7 @@ import org.eclipse.ui.forms.widgets.Section;
 import com.testify.ecfeed.model.AbstractNode;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 
-public class TabFolderSection extends BasicSection {
+public class TabFolderCommentsSection extends BasicSection {
 
 	private final static int STYLE = Section.TITLE_BAR | Section.COMPACT | Section.TWISTIE;
 
@@ -35,7 +35,7 @@ public class TabFolderSection extends BasicSection {
 		}
 	}
 
-	public TabFolderSection(ISectionContext sectionContext, IModelUpdateContext updateContext, String title) {
+	public TabFolderCommentsSection(ISectionContext sectionContext, IModelUpdateContext updateContext, String title) {
 		super(sectionContext, updateContext, STYLE);
 		GridData gd = new GridData(SWT.FILL, SWT.FILL, true, false);
 		getSection().setLayoutData(gd);
