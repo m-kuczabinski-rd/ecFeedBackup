@@ -50,6 +50,6 @@ public class SingleTextCommentsSection extends AbstractCommentsSection {
 	@Override
 	public void setInput(AbstractNode input){
 		super.setInput(input);
-		fCommentsText.setText(getTargetIf().getComments());
+		refresh();
 	}
 }

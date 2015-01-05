@@ -31,6 +31,7 @@ public class JavaDocCommentsSection extends TabFolderCommentsSection {
 	public void refresh(){
 		super.refresh();
 		fCommentsText.setText(getTargetIf().getComments());
+		getEditButton().setText(fCommentsText.getText().length() > 0 ? "Edit comment" : "Add comment");
 	}
 
 	@Override
