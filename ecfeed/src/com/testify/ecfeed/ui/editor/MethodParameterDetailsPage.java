@@ -135,9 +135,6 @@ public class MethodParameterDetailsPage extends AbstractParameterDetailsPage {
 			fLinkedCheckbox.setEnabled(linkedCheckboxEnabled());
 			fLinkCombo.setItems(availableLinks().toArray(new String[]{}));
 
-//			if(parameter.getLink() == null && fParameterIf.getAvailableLinks().size() > 0){
-//				parameter.setLink(fParameterIf.getAvailableLinks().get(0));
-//			}
 			if(parameter.getLink() != null){
 				fLinkCombo.setText(linkName(parameter.getLink()));
 			}
@@ -209,4 +206,10 @@ public class MethodParameterDetailsPage extends AbstractParameterDetailsPage {
 	protected Class<? extends AbstractNode> getNodeType() {
 		return MethodParameterNode.class;
 	}
+
+	@Override
+	protected AbstractParameterCommentsSection getParameterCommentsSection(ISectionContext sectionContext, IModelUpdateContext updateContext) {
+		return new MethodParameterCommentsSection(sectionContext, updateContext);
+	}
+
 }

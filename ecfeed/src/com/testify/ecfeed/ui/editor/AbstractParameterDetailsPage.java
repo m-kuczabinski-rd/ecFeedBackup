@@ -22,7 +22,7 @@ public abstract class AbstractParameterDetailsPage extends BasicDetailsPage {
 	private Combo fTypeCombo;
 	private ChoicesViewer fChoicesViewer;
 	private Button fBrowseUserTypeButton;
-	private SingleTextCommentsSection fCommentsSection;
+	private AbstractParameterCommentsSection fCommentsSection;
 
 	private class SetNameListener extends AbstractSelectionAdapter{
 		@Override
@@ -60,7 +60,7 @@ public abstract class AbstractParameterDetailsPage extends BasicDetailsPage {
 		super.createContents(parent);
 
 		createAttributesComposite();
-		addForm(fCommentsSection = new SingleTextCommentsSection(this, this));
+		addForm(fCommentsSection = getParameterCommentsSection(this, this));
 		addForm(fChoicesViewer = new ChoicesViewer(this, this));
 
 		getToolkit().paintBordersFor(getMainComposite());
@@ -124,4 +124,6 @@ public abstract class AbstractParameterDetailsPage extends BasicDetailsPage {
 	}
 
 	protected abstract AbstractParameterInterface getParameterIf();
+
+	protected abstract AbstractParameterCommentsSection getParameterCommentsSection(ISectionContext sectionContext, IModelUpdateContext updateContext);
 }

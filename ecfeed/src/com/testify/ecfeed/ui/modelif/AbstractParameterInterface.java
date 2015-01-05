@@ -11,6 +11,7 @@ import org.eclipse.swt.widgets.Display;
 import com.testify.ecfeed.adapter.IModelOperation;
 import com.testify.ecfeed.adapter.java.JavaUtils;
 import com.testify.ecfeed.adapter.operations.AbstractParameterOperationSetType;
+import com.testify.ecfeed.adapter.operations.ParameterSetTypeCommentsOperation;
 import com.testify.ecfeed.adapter.operations.ReplaceChoicesOperation;
 import com.testify.ecfeed.model.AbstractParameterNode;
 import com.testify.ecfeed.model.ChoiceNode;
@@ -18,6 +19,7 @@ import com.testify.ecfeed.ui.common.EclipseModelBuilder;
 import com.testify.ecfeed.ui.common.JavaModelAnalyser;
 import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.dialogs.TestClassSelectionDialog;
+import com.testify.ecfeed.ui.dialogs.TextAreaDialog;
 import com.testify.ecfeed.ui.dialogs.UserTypeSelectionDialog;
 
 public abstract class AbstractParameterInterface extends ChoicesParentInterface {
@@ -28,6 +30,19 @@ public abstract class AbstractParameterInterface extends ChoicesParentInterface 
 
 	public String getType() {
 		return getTarget().getType();
+	}
+
+	public String getTypeComments() {
+		return getTarget().getTypeComments() != null ? getTarget().getTypeComments() : "";
+	}
+
+	public boolean editTypeComments() {
+		TextAreaDialog dialog = new TextAreaDialog(Display.getCurrent().getActiveShell(),
+				Messages.DIALOG_EDIT_COMMENTS_TITLE, Messages.DIALOG_EDIT_COMMENTS_MESSAGE, getTypeComments());
+		if(dialog.open() == IDialogConstants.OK_ID){
+			return execute(new ParameterSetTypeCommentsOperation(getTarget(), dialog.getText()), Messages.DIALOG_EDIT_COMMENTS_TITLE);
+		}
+		return false;
 	}
 
 	public boolean importType(){

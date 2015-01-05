@@ -53,4 +53,9 @@ public class GlobalParameterDetailsPage extends AbstractParameterDetailsPage {
 	protected Class<? extends AbstractNode> getNodeType() {
 		return GlobalParameterNode.class;
 	}
+
+	@Override
+	protected AbstractParameterCommentsSection getParameterCommentsSection(ISectionContext sectionContext, IModelUpdateContext updateContext) {
+		return new GlobalParameterCommentsSection(sectionContext, updateContext);
+	}
 }

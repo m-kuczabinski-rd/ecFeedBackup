@@ -5,6 +5,7 @@ import java.util.List;
 public abstract class AbstractParameterNode extends ChoicesParentNode {
 
 	private String fType;
+	private String fTypeComments;
 
 	public AbstractParameterNode(String name, String type) {
 		super(name);
@@ -42,6 +43,14 @@ public abstract class AbstractParameterNode extends ChoicesParentNode {
 
 	public void setType(String type) {
 		fType = type;
+	}
+
+	public String getTypeComments() {
+		return fTypeComments;
+	}
+
+	public void setTypeComments(String comments){
+		fTypeComments = comments;
 	}
 
 	@Override

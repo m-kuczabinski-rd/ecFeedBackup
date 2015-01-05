@@ -1,55 +1,37 @@
 package com.testify.ecfeed.ui.editor;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.ui.forms.widgets.Section;
 
-import com.testify.ecfeed.model.AbstractNode;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 
-public class TabFolderCommentsSection extends BasicSection {
+public class TabFolderCommentsSection extends AbstractCommentsSection {
 
-	private final static int STYLE = Section.TITLE_BAR | Section.COMPACT | Section.TWISTIE;
-
-	private TabFolder fTabFolder;
-
-	private AbstractNode fSelectedNode;
-
-	protected class DescriptionTextModifyListener extends AbstractSelectionAdapter{
-
-		private Text fSource;
-
-		public DescriptionTextModifyListener(Text source){
-			fSource = source;
-		}
-
+	private class TabFolderSelectionListsner extends AbstractSelectionAdapter{
 		@Override
 		public void widgetSelected(SelectionEvent e) {
-			getSelectedNode().setDescription(fSource.getText());
+			refreshEditButton();
 		}
 	}
 
-	public TabFolderCommentsSection(ISectionContext sectionContext, IModelUpdateContext updateContext, String title) {
-		super(sectionContext, updateContext, STYLE);
+	private TabFolder fTabFolder;
+	private Map<TabItem, Boolean> fEditableIndicator;
+
+	public TabFolderCommentsSection(ISectionContext sectionContext, IModelUpdateContext updateContext) {
+		super(sectionContext, updateContext);
 		GridData gd = new GridData(SWT.FILL, SWT.FILL, true, false);
 		getSection().setLayoutData(gd);
-		getSection().setText(title);
-	}
-
-	@Override
-	protected Composite createClientComposite() {
-		Composite client = super.createClientComposite();
-		fTabFolder = new TabFolder(client, SWT.BOTTOM);
-		GridData gd = new GridData(SWT.FILL, SWT.FILL, true, false);
-		gd.heightHint = 100;
-		fTabFolder.setLayoutData(gd);
-		return client;
+		fEditableIndicator = new HashMap<TabItem, Boolean>();
 	}
 
 	protected TabFolder getTabFolder(){
@@ -62,19 +44,41 @@ public class TabFolderCommentsSection extends BasicSection {
 		item.setControl(control);
 	}
 
-	protected Text addTextTab(String title){
-		Text text = getToolkit().createText(getTabFolder(), "", SWT.WRAP | SWT.V_SCROLL | SWT.MULTI);
+	protected Text addTextTab(String title, boolean editable){
+		Text text = getToolkit().createText(getTabFolder(), "", SWT.WRAP | SWT.V_SCROLL | SWT.MULTI | SWT.READ_ONLY);
+		text.setBackground(Display.getCurrent().getSystemColor(SWT.COLOR_TITLE_INACTIVE_BACKGROUND));
 		TabItem item = new TabItem(fTabFolder, SWT.NONE);
 		item.setText(title);
 		item.setControl(text);
+		fEditableIndicator.put(item, editable);
 		return text;
 	}
 
-	public void setInput(AbstractNode input){
-		fSelectedNode = input;
+	@Override
+	public void refresh(){
+		super.refresh();
+		refreshEditButton();
 	}
 
-	protected AbstractNode getSelectedNode(){
-		return fSelectedNode;
+	private void refreshEditButton() {
+		int selectedTabIndex = fTabFolder.getSelectionIndex();
+		TabItem selectedItem = fTabFolder.getItem(selectedTabIndex);
+		if(selectedTabIndex != -1 && fEditableIndicator.get(selectedItem) != null){
+			getEditButton().setEnabled(fEditableIndicator.get(selectedItem));
+		}
+	}
+
+	@Override
+	protected Control createCommentsControl(Composite parent) {
+		fTabFolder = new TabFolder(getMainControlComposite(), SWT.BOTTOM);
+		fTabFolder.addSelectionListener(new TabFolderSelectionListsner());
+		GridData gd = new GridData(SWT.FILL, SWT.FILL, true, false);
+		gd.heightHint = 100;
+		fTabFolder.setLayoutData(gd);
+		return fTabFolder;
+	}
+
+	protected TabItem getActiveItem(){
+		return fTabFolder.getItem(fTabFolder.getSelectionIndex());
 	}
 }
