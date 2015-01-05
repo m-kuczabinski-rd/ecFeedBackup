@@ -72,6 +72,14 @@ public class MethodParameterNode extends AbstractParameterNode{
 		return super.getType();
 	}
 
+	@Override
+	public String getTypeComments() {
+		if(isLinked() && fLink != null){
+			return fLink.getTypeComments();
+		}
+		return super.getTypeComments();
+	}
+
 	public String getRealType() {
 		return super.getType();
 	}

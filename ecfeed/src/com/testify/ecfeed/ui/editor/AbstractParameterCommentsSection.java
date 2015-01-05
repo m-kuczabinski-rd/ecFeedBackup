@@ -12,7 +12,7 @@ public abstract class AbstractParameterCommentsSection extends TabFolderComments
 	private Text fParameterCommentsText;
 	private Text fTypeCommentsText;
 
-	private class EditButtonListener extends AbstractSelectionAdapter{
+	protected class EditButtonListener extends AbstractSelectionAdapter{
 		@Override
 		public void widgetSelected(SelectionEvent e) {
 			if(getActiveItem().getControl() == fParameterCommentsText){
