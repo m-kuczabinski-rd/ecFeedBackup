@@ -178,7 +178,7 @@ public class XomAnalyser {
 			parameter.setLinked(false);
 		}
 
-		for(Element child : getIterableChildren(element)){
+		for(Element child : getIterableChildren(element, CHOICE_NODE_NAME)){
 			try{
 				parameter.addChoice(parseChoice(child));
 			}catch(ParserException e){
@@ -197,7 +197,7 @@ public class XomAnalyser {
 		String type = getAttributeValue(element, TYPE_NAME_ATTRIBUTE);
 		GlobalParameterNode parameter = new GlobalParameterNode(name, type);
 
-		for(Element child : getIterableChildren(element)){
+		for(Element child : getIterableChildren(element, CHOICE_NODE_NAME)){
 			try{
 				parameter.addChoice(parseChoice(child));
 			}catch(ParserException e){
@@ -257,7 +257,12 @@ public class XomAnalyser {
 
 		AbstractStatement premise = null;
 		AbstractStatement consequence = null;
-		for(Element child : getIterableChildren(element)){
+
+		if((getIterableChildren(element, Constants.CONSTRAINT_PREMISE_NODE_NAME).size() != 1) ||
+			(getIterableChildren(element, Constants.CONSTRAINT_CONSEQUENCE_NODE_NAME).size() != 1)){
+			throw new ParserException(Messages.MALFORMED_CONSTRAINT_NODE_DEFINITION(method.getName(), name));
+		}
+		for(Element child : getIterableChildren(element, Constants.CONSTRAINT_PREMISE_NODE_NAME)){
 			if(child.getLocalName().equals(Constants.CONSTRAINT_PREMISE_NODE_NAME)){
 				if(getIterableChildren(child).size() == 1){
 					//there is only one statement per premise or consequence that is either
@@ -268,7 +273,9 @@ public class XomAnalyser {
 					throw new ParserException(Messages.MALFORMED_CONSTRAINT_NODE_DEFINITION(method.getName(), name));
 				}
 			}
-			else if(child.getLocalName().equals(Constants.CONSTRAINT_CONSEQUENCE_NODE_NAME)){
+		}
+		for(Element child : getIterableChildren(element, Constants.CONSTRAINT_CONSEQUENCE_NODE_NAME)){
+			if(child.getLocalName().equals(Constants.CONSTRAINT_CONSEQUENCE_NODE_NAME)){
 				if(getIterableChildren(child).size() == 1){
 					consequence = parseStatement(child.getChildElements().get(0), method);
 				}
