@@ -1,12 +1,13 @@
 package com.testify.ecfeed.ui.editor;
 
+import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Text;
 
 import com.testify.ecfeed.model.AbstractNode;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 
-public class JavaDocCommentsSection extends TabFolderCommentsSection {
+public abstract class JavaDocCommentsSection extends TabFolderCommentsSection {
 
 	private class TabFolderEditButtonListener extends AbstractSelectionAdapter{
 		@Override
@@ -39,4 +40,18 @@ public class JavaDocCommentsSection extends TabFolderCommentsSection {
 		super.setInput(input);
 		refresh();
 	}
+
+	@Override
+	protected void createCommentsButtons() {
+		super.createCommentsButtons();
+		addButton("Export to javadoc", getExportAdapter());
+		addButton("Import from javadoc", getImportAdapter());
+	}
+
+	protected Text getJavaDocText(){
+		return fJavadocText;
+	}
+
+	protected abstract SelectionAdapter getExportAdapter();
+	protected abstract SelectionAdapter getImportAdapter();
 }
