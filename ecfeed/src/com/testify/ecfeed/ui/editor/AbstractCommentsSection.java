@@ -5,9 +5,11 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.forms.widgets.Section;
 
 import com.testify.ecfeed.model.AbstractNode;
+import com.testify.ecfeed.ui.modelif.AbstractNodeInterface;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 
 public abstract class AbstractCommentsSection extends ButtonsCompositeSection {
@@ -18,6 +20,7 @@ public abstract class AbstractCommentsSection extends ButtonsCompositeSection {
 	private Button fEditButton;
 
 	private AbstractNode fTarget;
+	private AbstractNodeInterface fTargetIf;
 
 	public AbstractCommentsSection(ISectionContext sectionContext,
 			IModelUpdateContext updateContext) {
@@ -25,23 +28,19 @@ public abstract class AbstractCommentsSection extends ButtonsCompositeSection {
 		GridData gd = new GridData(SWT.FILL, SWT.FILL, true, false);
 		getSection().setLayoutData(gd);
 		getSection().setText(SECTION_TITLE);
-	}
-
-	@Override
-	protected void createContent(){
-		super.createContent();
+		fTargetIf = new AbstractNodeInterface(getUpdateContext());
 	}
 
 	@Override
 	protected Composite createClientComposite() {
 		Composite client = super.createClientComposite();
-		createCommentsComposite();
+		createCommentsControl(getMainControlComposite());
 		createCommentsButtons();
 		return client;
 	}
 
 	protected void createCommentsButtons() {
-		fEditButton = addButton("Edit", null);
+		fEditButton = addButton("Edit comments", null);
 	}
 
 	protected void addEditListener(SelectionAdapter listener){
@@ -50,6 +49,7 @@ public abstract class AbstractCommentsSection extends ButtonsCompositeSection {
 
 	protected void setInput(AbstractNode input){
 		fTarget = input;
+		fTargetIf.setTarget(input);
 	}
 
 	protected AbstractNode getTarget(){
@@ -60,5 +60,9 @@ public abstract class AbstractCommentsSection extends ButtonsCompositeSection {
 		return fEditButton;
 	}
 
-	protected abstract void createCommentsComposite();
+	protected AbstractNodeInterface getTargetIf(){
+		return fTargetIf;
+	}
+
+	protected abstract Control createCommentsControl(Composite parent);
 }
