@@ -14,7 +14,7 @@ public class ChoiceCommentsSection extends JavaDocCommentsSection {
 
 	@Override
 	public void refresh(){
-		getJavaDocText().setText(JavaDocAnalyser.getJavaDoc((ChoiceNode)getTarget()).replace("\t", ""));
+		getJavaDocText().setText(JavaDocAnalyser.getJavaDoc((ChoiceNode)getTarget()));
 	}
 
 	@Override

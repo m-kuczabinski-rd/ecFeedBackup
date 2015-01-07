@@ -50,6 +50,7 @@ public abstract class AbstractCommentsSection extends ButtonsCompositeSection {
 	protected void setInput(AbstractNode input){
 		fTarget = input;
 		fTargetIf.setTarget(input);
+		refresh();
 	}
 
 	protected AbstractNode getTarget(){
