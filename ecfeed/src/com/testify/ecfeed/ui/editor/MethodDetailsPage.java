@@ -38,7 +38,7 @@ public class MethodDetailsPage extends BasicDetailsPage {
 	private TestCasesViewer fTestCasesSection;
 
 	private MethodInterface fMethodIf;
-	private AbstractCommentsSection fCommentsSection;
+	private MethodCommentsSection fCommentsSection;
 
 	private class OnlineTestAdapter extends SelectionAdapter{
 		@Override
@@ -72,7 +72,7 @@ public class MethodDetailsPage extends BasicDetailsPage {
 		super.createContents(parent);
 
 		createNameTextComposite();
-		addForm(fCommentsSection = new SingleTextCommentsSection(this, this));
+		addForm(fCommentsSection = new MethodCommentsSection(this, this));
 //		addForm(fCommentsSection = new JavaDocCommentsSection(this, this));
 		addViewerSection(fParemetersSection = new MethodParametersViewer(this, this));
 		addViewerSection(fConstraintsSection = new ConstraintsListViewer(this, this));

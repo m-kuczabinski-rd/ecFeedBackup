@@ -40,7 +40,7 @@ public class ChoiceDetailsPage extends BasicDetailsPage {
 	private Combo fValueCombo;
 
 	private ChoiceInterface fChoiceIf;
-	private SingleTextCommentsSection fCommentsSection;
+	private AbstractCommentsSection fCommentsSection;
 
 	private class NameTextListener extends AbstractSelectionAdapter{
 		@Override
@@ -68,7 +68,7 @@ public class ChoiceDetailsPage extends BasicDetailsPage {
 		super.createContents(parent);
 
 		createNameValueEditor(getMainComposite());
-		addForm(fCommentsSection = new SingleTextCommentsSection(this, this));
+		addForm(fCommentsSection = new ChoiceCommentsSection(this, this));
 		addViewerSection(fChildrenViewer = new ChoicesViewer(this, this));
 		addViewerSection(fLabelsViewer = new ChoiceLabelsViewer(this, this));
 
