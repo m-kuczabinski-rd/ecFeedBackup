@@ -51,6 +51,7 @@ public class ChoiceInterface extends ChoicesParentInterface{
 		return getTarget().getValueString();
 	}
 
+	@Override
 	public AbstractParameterNode getParameter() {
 		return getTarget().getParameter();
 	}
@@ -129,7 +130,7 @@ public class ChoiceInterface extends ChoicesParentInterface{
 		if(JavaUtils.isPrimitive(getTarget().getParameter().getType())){
 			return false;
 		}
-		if(getTarget().isAbstract() == false){
+		if(getTarget().isAbstract()){
 			return false;
 		}
 		return super.goToImplementationEnabled();
