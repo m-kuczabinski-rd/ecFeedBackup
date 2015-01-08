@@ -40,8 +40,6 @@ public abstract class AbstractCommentsSection extends ButtonsCompositeSection {
 		ToolBar toolBar = createToolBar(getMainControlComposite());
 		getToolBarManager().update(true);
 		toolBar.setBackground(Display.getCurrent().getSystemColor(SWT.COLOR_TITLE_INACTIVE_BACKGROUND));
-		toolBar.setVisible(true);
-		toolBar.layout();
 		createCommentsControl(getMainControlComposite());
 		createCommentsButtons();
 		return client;
