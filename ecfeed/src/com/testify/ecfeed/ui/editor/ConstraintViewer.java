@@ -1,16 +1,10 @@
 package com.testify.ecfeed.ui.editor;
 
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
-import org.eclipse.core.runtime.FileLocator;
-import org.eclipse.core.runtime.Path;
-import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.jface.viewers.IBaseLabelProvider;
 import org.eclipse.jface.viewers.IContentProvider;
@@ -31,8 +25,6 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.forms.widgets.Section;
-import org.osgi.framework.Bundle;
-import org.osgi.framework.FrameworkUtil;
 
 import com.testify.ecfeed.model.AbstractStatement;
 import com.testify.ecfeed.model.ChoiceNode;
@@ -50,7 +42,7 @@ import com.testify.ecfeed.model.IStatementVisitor;
 import com.testify.ecfeed.model.MethodParameterNode;
 import com.testify.ecfeed.model.StatementArray;
 import com.testify.ecfeed.model.StaticStatement;
-import com.testify.ecfeed.ui.common.Constants;
+import com.testify.ecfeed.ui.common.ImageManager;
 import com.testify.ecfeed.ui.editor.actions.ModelModifyingAction;
 import com.testify.ecfeed.ui.modelif.AbstractParameterInterface;
 import com.testify.ecfeed.ui.modelif.AbstractStatementInterface;
@@ -113,12 +105,6 @@ public class ConstraintViewer extends TreeViewerSection {
 
 	private class StatementViewerLabelProvider extends LabelProvider {
 
-		private Map<String, Image> fImages;
-
-		public StatementViewerLabelProvider(){
-			fImages = new HashMap<>();
-		}
-
 		@Override
 		public String getText(Object element){
 			if(element instanceof StatementArray){
@@ -144,15 +130,8 @@ public class ConstraintViewer extends TreeViewerSection {
 		}
 
 		private Image getImage(String file) {
-			if(fImages.containsKey(file) == false){
-				Bundle bundle = FrameworkUtil.getBundle(StatementViewerLabelProvider.class);
-				URL url = FileLocator.find(bundle, new Path(Constants.ICONS_FOLDER_NAME + "/" + file), null);
-				ImageDescriptor image = ImageDescriptor.createFromURL(url);
-				fImages.put(file, image.createImage());
-			}
-			return fImages.get(file);
-		  }
-
+			return ImageManager.getInstance().getImage(file);
+		}
 	}
 
 	private class StatementEditor extends Composite{

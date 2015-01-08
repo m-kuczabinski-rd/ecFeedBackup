@@ -11,7 +11,6 @@
 
 package com.testify.ecfeed.ui.editor;
 
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -19,9 +18,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.core.runtime.FileLocator;
-import org.eclipse.core.runtime.Path;
-import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.DecoratingLabelProvider;
 import org.eclipse.jface.viewers.IBaseLabelProvider;
 import org.eclipse.jface.viewers.IContentProvider;
@@ -41,8 +37,6 @@ import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.ui.forms.AbstractFormPart;
 import org.eclipse.ui.forms.IDetailsPage;
 import org.eclipse.ui.forms.widgets.Section;
-import org.osgi.framework.Bundle;
-import org.osgi.framework.FrameworkUtil;
 
 import com.testify.ecfeed.adapter.java.JavaUtils;
 import com.testify.ecfeed.model.AbstractNode;
@@ -56,6 +50,7 @@ import com.testify.ecfeed.model.MethodParameterNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.ui.common.Constants;
+import com.testify.ecfeed.ui.common.ImageManager;
 import com.testify.ecfeed.ui.editor.actions.AbstractAddChildAction;
 import com.testify.ecfeed.ui.editor.actions.AddChildActionProvider;
 import com.testify.ecfeed.ui.editor.actions.ModelViewerActionProvider;
@@ -70,8 +65,6 @@ public class ModelMasterSection extends TreeViewerSection{
 
 	private final ModelMasterDetailsBlock fMasterDetailsBlock;
 	private IModelUpdateListener fUpdateListener;
-	private final Map<String, Image> fImages;
-
 
 	private class ModelWrapper{
 		private final RootNode fModel;
@@ -453,7 +446,6 @@ public class ModelMasterSection extends TreeViewerSection{
 	public ModelMasterSection(ModelMasterDetailsBlock parentBlock) {
 		super(parentBlock.getMasterSectionContext(), parentBlock.getModelUpdateContext(), STYLE);
 		fMasterDetailsBlock = parentBlock;
-		fImages = new HashMap<String, Image>();
 
 		setActionProvider(new ModelViewerActionProvider(getTreeViewer(), this, parentBlock.getPage().getEditor(), false), false);
 
@@ -512,14 +504,6 @@ public class ModelMasterSection extends TreeViewerSection{
 	}
 
 	private Image getImageFromFile(String file) {
-		Image image = fImages.get(file);
-		if(image == null){
-			Bundle bundle = FrameworkUtil.getBundle(this.getClass());
-			URL url = FileLocator.find(bundle, new Path(Constants.ICONS_FOLDER_NAME + "/" + file), null);
-			ImageDescriptor imageDsc = ImageDescriptor.createFromURL(url);
-			image = imageDsc.createImage();
-			fImages.put(file, image);
-		}
-		return image;
+		return ImageManager.getInstance().getImage(file);
 	}
 }

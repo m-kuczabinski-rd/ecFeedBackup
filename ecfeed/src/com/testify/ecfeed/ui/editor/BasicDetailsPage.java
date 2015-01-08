@@ -11,16 +11,11 @@
 
 package com.testify.ecfeed.ui.editor;
 
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.eclipse.core.commands.operations.IUndoContext;
-import org.eclipse.core.runtime.FileLocator;
-import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.action.IContributionItem;
 import org.eclipse.jface.action.ToolBarManager;
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -40,15 +35,13 @@ import org.eclipse.ui.forms.IFormPart;
 import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Section;
-import org.osgi.framework.Bundle;
-import org.osgi.framework.FrameworkUtil;
 
 import com.testify.ecfeed.adapter.IModelImplementer;
 import com.testify.ecfeed.adapter.ModelOperationManager;
 import com.testify.ecfeed.model.AbstractNode;
-import com.testify.ecfeed.ui.common.Constants;
 import com.testify.ecfeed.ui.common.EclipseModelImplementer;
 import com.testify.ecfeed.ui.common.IFileInfoProvider;
+import com.testify.ecfeed.ui.common.ImageManager;
 import com.testify.ecfeed.ui.editor.actions.GoToImplementationAction;
 import com.testify.ecfeed.ui.editor.actions.ImplementAction;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
@@ -98,7 +91,6 @@ public abstract class BasicDetailsPage implements IDetailsPage, IModelUpdateList
 	private IModelImplementer fImplementer;
 	private Button fImplementButton;
 	private ToolBarManager fToolBarManager;
-	private Map<String, ImageDescriptor> fImages;
 
 	public BasicDetailsPage(ModelMasterSection masterSection, IModelUpdateContext updateContext, IFileInfoProvider fileInforProvider){
 		fMasterSection = masterSection;
@@ -106,7 +98,6 @@ public abstract class BasicDetailsPage implements IDetailsPage, IModelUpdateList
 		fViewerSections = new ArrayList<ViewerSection>();
 		fModelUpdateContext = updateContext;
 		fImplementer = new EclipseModelImplementer(fileInforProvider);
-		fImages = new HashMap<>();
 	}
 
 	@Override
@@ -310,13 +301,7 @@ public abstract class BasicDetailsPage implements IDetailsPage, IModelUpdateList
 	}
 
 	protected ImageDescriptor getIconDescription(String fileName) {
-		String path = Constants.ICONS_FOLDER_NAME + "/" + fileName;
-		if(fImages.containsKey(path) == false){
-			Bundle bundle = FrameworkUtil.getBundle(this.getClass());
-			URL url = FileLocator.find(bundle, new Path(path), null);
-			fImages.put(path, ImageDescriptor.createFromURL(url));
-		}
-		return fImages.get(path);
+		return ImageManager.getInstance().getImageDescriptor(fileName);
 	}
 
 	abstract protected Class<? extends AbstractNode> getNodeType();
