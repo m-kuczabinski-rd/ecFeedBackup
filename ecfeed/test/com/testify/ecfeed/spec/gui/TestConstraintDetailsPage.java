@@ -1,6 +1,7 @@
 package com.testify.ecfeed.spec.gui;
 
 
+
 public class TestConstraintDetailsPage{
 	
 	public enum EGeneratorCheckHelper{
@@ -45,6 +46,22 @@ public class TestConstraintDetailsPage{
 	public void constraintEvaluationTest(EStatementType statement, boolean statementValue){
 		// TODO Auto-generated method stub
 		System.out.println("constraintEvaluationTest()");
+	}
+
+	/*
+	 * Ignore it, it is just a model for constraintGeneratorInfluenceTest
+	 */
+	public void CGITmodel(EGeneratorCheckHelper testCaseStatus){
+		// TODO Auto-generated method stub
+		System.out.println("CGITmodel(" + testCaseStatus + ")");
+	}
+
+	/*
+	 * Ignore it, it is just a model for constraintEvaluationTest
+	 */
+	public void CETmodel(EStatementType statement, boolean statementValue){
+		// TODO Auto-generated method stub
+		System.out.println("CETmodel(" + statement + ", " + statementValue + ")");
 	}
 
 
