@@ -47,9 +47,7 @@ public abstract class JavaDocCommentsSection extends TabFolderCommentsSection {
 
 		@Override
 		public void run(){
-			String comments = JavaDocAnalyser.importJavadoc(getTarget());
-			if(comments != null){
-				getTargetIf().setComments(comments);
+			if(getTargetIf().importJavadocComments()){
 				getTabFolder().setSelection(getTabFolder().indexOf(getCommentsItem()));
 			}
 		}

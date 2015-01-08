@@ -175,7 +175,7 @@ public class JavaDocAnalyser {
 				javadoc = removeTrailingWhitespaces(javadoc);
 				return javadoc;
 			}
-			return EMPTY_STRING;
+			return null;
 		}
 
 	}
@@ -256,7 +256,7 @@ public class JavaDocAnalyser {
 		if(JavaUtils.isUserType(node.getType())){
 			return getJavadoc(JavaModelAnalyser.getIType(node.getType()));
 		}
-		return EMPTY_STRING;
+		return null;
 	}
 
 	public static String addJavadocFormatting(String input){
@@ -353,6 +353,6 @@ public class JavaDocAnalyser {
 				}
 			} catch (JavaModelException e) {}
 		}
-		return EMPTY_STRING;
+		return null;
 	}
 }

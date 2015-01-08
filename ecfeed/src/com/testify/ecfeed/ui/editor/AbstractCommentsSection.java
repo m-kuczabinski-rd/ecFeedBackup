@@ -11,6 +11,7 @@ import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.ui.forms.widgets.Section;
 
 import com.testify.ecfeed.model.AbstractNode;
+import com.testify.ecfeed.ui.editor.actions.NamedAction;
 import com.testify.ecfeed.ui.modelif.AbstractNodeInterface;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 
@@ -18,6 +19,18 @@ public abstract class AbstractCommentsSection extends ButtonsCompositeSection {
 
 	private final static int STYLE = Section.TITLE_BAR | Section.COMPACT | Section.TWISTIE;
 	private final static String SECTION_TITLE = "Comments";
+
+	protected class ImportAllCommentsAction extends NamedAction{
+
+		public ImportAllCommentsAction() {
+			super(JAVADOC_IMPORT_ACTION_ID, JAVADOC_IMPORT_ACTION_NAME);
+		}
+
+		@Override
+		public void run(){
+			getTargetIf().importAllJavadocComments();
+		}
+	}
 
 	private Button fEditButton;
 

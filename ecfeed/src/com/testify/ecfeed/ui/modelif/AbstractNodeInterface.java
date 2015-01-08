@@ -30,6 +30,7 @@ import com.testify.ecfeed.ui.common.EclipseImplementationStatusResolver;
 import com.testify.ecfeed.ui.common.EclipseTypeAdapterProvider;
 import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.dialogs.TextAreaDialog;
+import com.testify.ecfeed.ui.javadoc.JavaDocAnalyser;
 
 public class AbstractNodeInterface extends OperationExecuter{
 
@@ -211,5 +212,14 @@ public class AbstractNodeInterface extends OperationExecuter{
 
 	public void goToImplementation(){
 
+	}
+
+	public boolean importJavadocComments() {
+		return setComments(JavaDocAnalyser.importJavadoc(getTarget()));
+	}
+
+	public boolean importAllJavadocComments() {
+		setComments(JavaDocAnalyser.importJavadoc(getTarget()));
+		return true;
 	}
 }
