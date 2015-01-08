@@ -1,6 +1,10 @@
 package com.testify.ecfeed.ui.editor;
 
-import com.testify.ecfeed.ui.javadoc.JavaDocAnalyser;
+import java.util.Arrays;
+import java.util.List;
+
+import org.eclipse.jface.action.Action;
+
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 
 public class ChoiceCommentsSection extends JavaDocCommentsSection {
@@ -10,7 +14,7 @@ public class ChoiceCommentsSection extends JavaDocCommentsSection {
 	}
 
 	@Override
-	public void refresh(){
-		getJavaDocText().setText(JavaDocAnalyser.importJavadoc(getTarget()));
+	protected List<Action> toolBarActions(){
+		return Arrays.asList(new Action[]{new ImportJavaDocAction(), new ExportJavaDocAction()});
 	}
 }

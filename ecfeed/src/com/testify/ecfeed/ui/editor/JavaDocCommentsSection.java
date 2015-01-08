@@ -4,6 +4,7 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.TabItem;
 import org.eclipse.swt.widgets.Text;
 
+import com.testify.ecfeed.model.AbstractNode;
 import com.testify.ecfeed.ui.editor.actions.NamedAction;
 import com.testify.ecfeed.ui.javadoc.JavaDocAnalyser;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
@@ -46,7 +47,7 @@ public abstract class JavaDocCommentsSection extends TabFolderCommentsSection {
 
 		@Override
 		public void run(){
-			String comments = JavaDocAnalyser.removeJavadocFormating(JavaDocAnalyser.importJavadoc(getTarget()));
+			String comments = JavaDocAnalyser.importJavadoc(getTarget());
 			if(comments != null){
 				getTargetIf().setComments(comments);
 				getTabFolder().setSelection(getTabFolder().indexOf(getCommentsItem()));
@@ -72,8 +73,14 @@ public abstract class JavaDocCommentsSection extends TabFolderCommentsSection {
 	public void refresh(){
 		super.refresh();
 		getCommentsText().setText(getTargetIf().getComments());
-		getJavaDocText().setText(JavaDocAnalyser.importJavadoc(getTarget()));
+		getJavaDocText().setText(JavaDocAnalyser.getJavadoc(getTarget()));
 		getEditButton().setText(getCommentsText().getText().length() > 0 ? "Edit comment" : "Add comment");
+	}
+
+	@Override
+	protected void setInput(AbstractNode input) {
+		super.setInput(input);
+		refresh();
 	}
 
 	protected TabItem getCommentsItem(){

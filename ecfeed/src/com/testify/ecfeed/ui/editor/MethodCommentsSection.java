@@ -1,7 +1,10 @@
 package com.testify.ecfeed.ui.editor;
 
-import com.testify.ecfeed.model.MethodNode;
-import com.testify.ecfeed.ui.javadoc.JavaDocAnalyser;
+import java.util.Arrays;
+import java.util.List;
+
+import org.eclipse.jface.action.Action;
+
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 
 public class MethodCommentsSection extends JavaDocCommentsSection {
@@ -11,13 +14,8 @@ public class MethodCommentsSection extends JavaDocCommentsSection {
 	}
 
 	@Override
-	public void refresh(){
-		super.refresh();
-		getJavaDocText().setText(JavaDocAnalyser.importJavadoc(getTarget()));
+	protected List<Action> toolBarActions(){
+		return Arrays.asList(new Action[]{new ImportJavaDocAction(), new ExportJavaDocAction()});
 	}
 
-	public void setInput(MethodNode input){
-		super.setInput(input);
-		refresh();
-	}
 }

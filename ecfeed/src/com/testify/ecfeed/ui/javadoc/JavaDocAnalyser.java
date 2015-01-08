@@ -38,7 +38,7 @@ public class JavaDocAnalyser {
 	private final static String LAST_COMMENT_LINE = "*/";
 	private final static String COMMENT_LINE_PREXIF = "* ";
 
-	private static class JavadocImporter implements IModelVisitor{
+	private static class JavadocFetcher implements IModelVisitor{
 
 		@Override
 		public Object visit(MethodParameterNode node) throws Exception {
@@ -79,7 +79,7 @@ public class JavaDocAnalyser {
 
 		@Override
 		public Object visit(MethodNode node) throws Exception {
-			return(getJavadoc(JavaModelAnalyser.getIMethod(node)));
+			return getJavadoc(JavaModelAnalyser.getIMethod(node));
 		}
 
 		@Override
@@ -104,6 +104,77 @@ public class JavaDocAnalyser {
 					}
 				}
 			}catch(JavaModelException e){}
+			return EMPTY_STRING;
+		}
+
+	}
+
+	private static class JavadocImporter implements IModelVisitor{
+
+		@Override
+		public Object visit(MethodParameterNode node) throws Exception {
+			String methodDoc = getJavadoc(JavaModelAnalyser.getIMethod(node.getMethod()));
+
+			String searchedTag = "@param " + node.getName();
+			int startIndex = methodDoc.indexOf(searchedTag);
+			int endIndex = methodDoc.indexOf("@", startIndex + 1);
+			if(endIndex == -1){
+				endIndex = methodDoc.length() - 1;
+			}
+
+			while(methodDoc.charAt(startIndex) != '\n' && methodDoc.charAt(startIndex) != '*'){
+				--startIndex;
+			}
+			while(methodDoc.charAt(endIndex) != '\n'){
+				--endIndex;
+			}
+			methodDoc = methodDoc.substring(startIndex, endIndex);
+
+			return methodDoc;
+		}
+
+		@Override
+		public Object visit(GlobalParameterNode node) throws Exception {
+			return null;
+		}
+
+		@Override
+		public Object visit(RootNode node) throws Exception {
+			return null;
+		}
+
+		@Override
+		public Object visit(ClassNode node) throws Exception {
+			return removeTrailingWhitespaces(removeJavadocFormating(getJavadoc(node)));
+		}
+
+		@Override
+		public Object visit(MethodNode node) throws Exception {
+			String javadoc = getJavadoc(JavaModelAnalyser.getIMethod(node));
+			javadoc = removeJavadocFormating(javadoc);
+			javadoc = getDescriptionBlock(javadoc);
+			javadoc = removeTrailingWhitespaces(javadoc);
+			return javadoc;
+		}
+
+		@Override
+		public Object visit(TestCaseNode node) throws Exception {
+			return null;
+		}
+
+		@Override
+		public Object visit(ConstraintNode node) throws Exception {
+			return null;
+		}
+
+		@Override
+		public Object visit(ChoiceNode node) throws Exception {
+			String javadoc = getJavadoc(node);
+			if(javadoc != null){
+				javadoc = removeJavadocFormating(javadoc);
+				javadoc = removeTrailingWhitespaces(javadoc);
+				return javadoc;
+			}
 			return EMPTY_STRING;
 		}
 
@@ -207,6 +278,13 @@ public class JavaDocAnalyser {
 		return null;
 	}
 
+	public static String getJavadoc(AbstractNode node){
+		try{
+			return (String)node.accept(new JavadocFetcher());
+		}catch (Exception e){}
+		return null;
+	}
+
 	public static String importJavadoc(AbstractNode node) {
 		try{
 			return (String)node.accept(new JavadocImporter());
@@ -234,6 +312,27 @@ public class JavaDocAnalyser {
 			return output;
 		}catch(IOException e){}
 		return input;
+	}
+
+	private static String getDescriptionBlock(String input){
+		input = removeJavadocFormating(input);
+		BufferedReader reader = new BufferedReader(new StringReader(input));
+		try{
+			String output = "";
+			String line;
+			while((line = reader.readLine()) != null){
+				if(line.matches("\\s*@.*")){
+					break;
+				}
+				output+= line + "\n";
+			}
+			return output;
+		}catch(IOException e){}
+		return input;
+	}
+
+	private static String removeTrailingWhitespaces(String input){
+		return input.replaceAll("\\s*\\z", EMPTY_STRING);
 	}
 
 	private static String getJavadoc(IMember member){
