@@ -1,7 +1,7 @@
 package com.testify.ecfeed.ui.editor;
 
-import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.widgets.TabItem;
 import org.eclipse.swt.widgets.Text;
 
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
@@ -15,14 +15,14 @@ public abstract class JavaDocCommentsSection extends TabFolderCommentsSection {
 		}
 	}
 
-	private Text fCommentsText;
-	private Text fJavadocText;
+	private TabItem fCommentsTab;
+	private TabItem fJavadocTab;
 
 	public JavaDocCommentsSection(ISectionContext sectionContext, IModelUpdateContext updateContext) {
 		super(sectionContext, updateContext);
 
-		fCommentsText = addTextTab("Comments", true);
-		fJavadocText = addTextTab("JavaDoc", false);
+		fCommentsTab = addTextTab("Comments", true);
+		fJavadocTab = addTextTab("JavaDoc", false);
 
 		addEditListener(new TabFolderEditButtonListener());
 	}
@@ -30,14 +30,23 @@ public abstract class JavaDocCommentsSection extends TabFolderCommentsSection {
 	@Override
 	public void refresh(){
 		super.refresh();
-		fCommentsText.setText(getTargetIf().getComments());
-		getEditButton().setText(fCommentsText.getText().length() > 0 ? "Edit comment" : "Add comment");
+		getCommentsText().setText(getTargetIf().getComments());
+		getEditButton().setText(getCommentsText().getText().length() > 0 ? "Edit comment" : "Add comment");
+	}
+
+	protected TabItem getCommentsItem(){
+		return fCommentsTab;
+	}
+
+	protected TabItem getJavaDocItem(){
+		return fJavadocTab;
 	}
 
 	protected Text getJavaDocText(){
-		return fJavadocText;
+		return getTextFromTabItem(fJavadocTab);
 	}
 
-	protected abstract SelectionAdapter getExportAdapter();
-	protected abstract SelectionAdapter getImportAdapter();
+	protected Text getCommentsText(){
+		return getTextFromTabItem(fCommentsTab);
+	}
 }

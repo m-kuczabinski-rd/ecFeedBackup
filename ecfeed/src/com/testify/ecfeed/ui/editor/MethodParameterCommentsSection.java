@@ -1,9 +1,8 @@
 package com.testify.ecfeed.ui.editor;
 
-import org.eclipse.swt.widgets.Text;
+import org.eclipse.swt.widgets.TabItem;
 
 import com.testify.ecfeed.model.AbstractParameterNode;
-import com.testify.ecfeed.model.MethodParameterNode;
 import com.testify.ecfeed.ui.javadoc.JavaDocAnalyser;
 import com.testify.ecfeed.ui.modelif.AbstractParameterInterface;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
@@ -13,15 +12,15 @@ public class MethodParameterCommentsSection extends AbstractParameterCommentsSec
 
 	private MethodParameterInterface fTargetIf;
 
-	private Text fParameterJavadocText;
-	private Text fTypeJavadocText;
+	private TabItem fParameterJavadocTab;
+	private TabItem fTypeJavadocTab;
 
 	public MethodParameterCommentsSection(ISectionContext sectionContext,
 			IModelUpdateContext updateContext) {
 		super(sectionContext, updateContext);
 
-		fParameterJavadocText = addTextTab("Parameter javadoc", false);
-		fTypeJavadocText = addTextTab("Type javadoc", false);
+		fParameterJavadocTab = addTextTab("Parameter javadoc", false);
+		fTypeJavadocTab = addTextTab("Type javadoc", false);
 	}
 
 	@Override
@@ -35,7 +34,7 @@ public class MethodParameterCommentsSection extends AbstractParameterCommentsSec
 	@Override
 	public void refresh(){
 		super.refresh();
-		fParameterJavadocText.setText(JavaDocAnalyser.getJavaDoc((MethodParameterNode)getTarget()));
-		fTypeJavadocText.setText(JavaDocAnalyser.getTypeJavaDoc((AbstractParameterNode)getTarget()));
+		getTextFromTabItem(fParameterJavadocTab).setText(JavaDocAnalyser.importJavadoc(getTarget()));
+		getTextFromTabItem(fTypeJavadocTab).setText(JavaDocAnalyser.importTypeJavaDoc((AbstractParameterNode)getTarget()));
 	}
 }

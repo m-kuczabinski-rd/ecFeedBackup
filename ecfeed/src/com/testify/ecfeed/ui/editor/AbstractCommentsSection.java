@@ -6,6 +6,8 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.ui.forms.widgets.Section;
 
 import com.testify.ecfeed.model.AbstractNode;
@@ -29,11 +31,17 @@ public abstract class AbstractCommentsSection extends ButtonsCompositeSection {
 		getSection().setLayoutData(gd);
 		getSection().setText(SECTION_TITLE);
 		fTargetIf = new AbstractNodeInterface(getUpdateContext());
+		getSection().layout();
 	}
 
 	@Override
 	protected Composite createClientComposite() {
 		Composite client = super.createClientComposite();
+		ToolBar toolBar = createToolBar(getMainControlComposite());
+		getToolBarManager().update(true);
+		toolBar.setBackground(Display.getCurrent().getSystemColor(SWT.COLOR_TITLE_INACTIVE_BACKGROUND));
+		toolBar.setVisible(true);
+		toolBar.layout();
 		createCommentsControl(getMainControlComposite());
 		createCommentsButtons();
 		return client;
@@ -50,7 +58,6 @@ public abstract class AbstractCommentsSection extends ButtonsCompositeSection {
 	protected void setInput(AbstractNode input){
 		fTarget = input;
 		fTargetIf.setTarget(input);
-		refresh();
 	}
 
 	protected AbstractNode getTarget(){

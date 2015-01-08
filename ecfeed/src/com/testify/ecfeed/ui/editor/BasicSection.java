@@ -11,14 +11,23 @@
 
 package com.testify.ecfeed.ui.editor;
 
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.core.commands.operations.IUndoContext;
+import org.eclipse.core.runtime.FileLocator;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.action.Action;
+import org.eclipse.jface.action.ToolBarManager;
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -26,12 +35,16 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Layout;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.ui.forms.AbstractFormPart;
 import org.eclipse.ui.forms.SectionPart;
 import org.eclipse.ui.forms.widgets.FormToolkit;
+import org.osgi.framework.Bundle;
+import org.osgi.framework.FrameworkUtil;
 
 import com.testify.ecfeed.adapter.ModelOperationManager;
 import com.testify.ecfeed.model.AbstractNode;
+import com.testify.ecfeed.ui.common.Constants;
 import com.testify.ecfeed.ui.editor.actions.IActionProvider;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 import com.testify.ecfeed.ui.modelif.IModelUpdateListener;
@@ -42,6 +55,8 @@ public abstract class BasicSection extends SectionPart implements IModelUpdateCo
 	private IActionProvider fActionProvider;
 	private IModelUpdateContext fUpdateContext;
 	private ISectionContext fSectionContext;
+	private ToolBarManager fToolBarManager;
+	private Map<String, ImageDescriptor> fImages;
 
 	protected class SelectNodeDoubleClickListener implements IDoubleClickListener {
 
@@ -64,6 +79,7 @@ public abstract class BasicSection extends SectionPart implements IModelUpdateCo
 
 	public BasicSection(ISectionContext sectionContext, IModelUpdateContext updateContext, int style){
 		super(sectionContext.getSectionComposite(), sectionContext.getToolkit(), style);
+		fImages = new HashMap<String, ImageDescriptor>();
 		fSectionContext = sectionContext;
 		fUpdateContext = updateContext;
 		createContent();
@@ -107,7 +123,28 @@ public abstract class BasicSection extends SectionPart implements IModelUpdateCo
 	}
 
 	protected Control createTextClient() {
-		return null;
+		Composite textClient = getToolkit().createComposite(getSection());
+		textClient.setLayout(new FillLayout());
+		getSection().setTextClient(fTextClient);
+		return textClient;
+	}
+
+	protected ToolBar createToolBar(Composite parent) {
+		ToolBar toolbar = getToolBarManager().createControl(parent);
+		toolbar.setCursor(Display.getCurrent().getSystemCursor(SWT.CURSOR_HAND));
+		fToolBarManager.update(true);
+		addToolbarActions();
+		return toolbar;
+	}
+
+	protected void addToolbarActions(){
+		for(Action action : toolBarActions()){
+			getToolBarManager().add(action);
+		}
+	}
+
+	protected List<Action> toolBarActions(){
+		return new ArrayList<Action>();
 	}
 
 	protected Layout clientLayout() {
@@ -132,6 +169,13 @@ public abstract class BasicSection extends SectionPart implements IModelUpdateCo
 		}
 	}
 
+	protected ToolBarManager getToolBarManager(){
+		if(fToolBarManager == null){
+			fToolBarManager = new ToolBarManager();
+		}
+		return fToolBarManager;
+	}
+
 	public Action getAction(String actionId) {
 		if(fActionProvider != null){
 			return fActionProvider.getAction(actionId);
@@ -149,6 +193,16 @@ public abstract class BasicSection extends SectionPart implements IModelUpdateCo
 
 	protected IModelUpdateContext getUpdateContext(){
 		return this;
+	}
+
+	protected ImageDescriptor getIconDescription(String fileName) {
+		String path = Constants.ICONS_FOLDER_NAME + "/" + fileName;
+		if(fImages.containsKey(path) == false){
+			Bundle bundle = FrameworkUtil.getBundle(this.getClass());
+			URL url = FileLocator.find(bundle, new Path(path), null);
+			fImages.put(path, ImageDescriptor.createFromURL(url));
+		}
+		return fImages.get(path);
 	}
 
 	public void setVisible(boolean visible) {

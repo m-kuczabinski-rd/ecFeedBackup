@@ -26,12 +26,14 @@ public class TabFolderCommentsSection extends AbstractCommentsSection {
 
 	private TabFolder fTabFolder;
 	private Map<TabItem, Boolean> fEditableIndicator;
+	private Map<TabItem, Text> fTextItems;
 
 	public TabFolderCommentsSection(ISectionContext sectionContext, IModelUpdateContext updateContext) {
 		super(sectionContext, updateContext);
 		GridData gd = new GridData(SWT.FILL, SWT.FILL, true, false);
 		getSection().setLayoutData(gd);
 		fEditableIndicator = new HashMap<TabItem, Boolean>();
+		fTextItems = new HashMap<TabItem, Text>();
 	}
 
 	protected TabFolder getTabFolder(){
@@ -44,14 +46,15 @@ public class TabFolderCommentsSection extends AbstractCommentsSection {
 		item.setControl(control);
 	}
 
-	protected Text addTextTab(String title, boolean editable){
+	protected TabItem addTextTab(String title, boolean editable){
 		Text text = getToolkit().createText(getTabFolder(), "", SWT.WRAP | SWT.V_SCROLL | SWT.MULTI | SWT.READ_ONLY);
 		text.setBackground(Display.getCurrent().getSystemColor(SWT.COLOR_TITLE_INACTIVE_BACKGROUND));
 		TabItem item = new TabItem(fTabFolder, SWT.NONE);
 		item.setText(title);
 		item.setControl(text);
 		fEditableIndicator.put(item, editable);
-		return text;
+		fTextItems.put(item, text);
+		return item;
 	}
 
 	@Override
@@ -80,5 +83,9 @@ public class TabFolderCommentsSection extends AbstractCommentsSection {
 
 	protected TabItem getActiveItem(){
 		return fTabFolder.getItem(fTabFolder.getSelectionIndex());
+	}
+
+	protected Text getTextFromTabItem(TabItem item){
+		return fTextItems.get(item);
 	}
 }

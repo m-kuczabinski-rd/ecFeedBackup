@@ -1,6 +1,6 @@
 package com.testify.ecfeed.ui.editor;
 
-import org.eclipse.swt.widgets.Text;
+import org.eclipse.swt.widgets.TabItem;
 
 import com.testify.ecfeed.model.AbstractParameterNode;
 import com.testify.ecfeed.ui.javadoc.JavaDocAnalyser;
@@ -11,11 +11,11 @@ import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 public class GlobalParameterCommentsSection extends AbstractParameterCommentsSection {
 
 	private GlobalParameterInterface fTargetIf;
-	private Text fTypeJavadocText;
+	private TabItem fTypeJavadocTab;
 
 	public GlobalParameterCommentsSection(ISectionContext sectionContext, IModelUpdateContext updateContext) {
 		super(sectionContext, updateContext);
-		fTypeJavadocText = addTextTab("Type javadoc", false);
+		fTypeJavadocTab = addTextTab("Type javadoc", false);
 	}
 
 	@Override
@@ -29,7 +29,7 @@ public class GlobalParameterCommentsSection extends AbstractParameterCommentsSec
 	@Override
 	public void refresh(){
 		super.refresh();
-		fTypeJavadocText.setText(JavaDocAnalyser.getTypeJavaDoc((AbstractParameterNode)getTarget()));
+		fTypeJavadocTab.setText(JavaDocAnalyser.importTypeJavaDoc((AbstractParameterNode)getTarget()));
 	}
 
 }
