@@ -28,7 +28,7 @@ public abstract class JavaDocCommentsSection extends TabFolderCommentsSection {
 
 		@Override
 		public void run(){
-			String comments = JavaDocAnalyser.removeJavadocFormating(JavaDocAnalyser.importJavadoc(getTarget()));
+			String comments = getTarget().getDescription();
 			if(comments != null){
 				JavaDocAnalyser.exportJavadoc(getTarget());
 				refresh();

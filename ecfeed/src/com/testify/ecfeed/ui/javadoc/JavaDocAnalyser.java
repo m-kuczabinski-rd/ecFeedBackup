@@ -252,13 +252,12 @@ public class JavaDocAnalyser {
 		}
 	}
 
-	public static String importTypeJavaDoc(AbstractParameterNode node){
+	public static String getTypeJavadoc(AbstractParameterNode node){
 		if(JavaUtils.isUserType(node.getType())){
 			return getJavadoc(JavaModelAnalyser.getIType(node.getType()));
 		}
 		return EMPTY_STRING;
 	}
-
 
 	public static String addJavadocFormatting(String input){
 		return addJavadocFormatting(input, EMPTY_STRING);
@@ -292,13 +291,20 @@ public class JavaDocAnalyser {
 		return null;
 	}
 
+	public static String importTypeJavadoc(AbstractParameterNode node) {
+		String javadoc = getTypeJavadoc(node);
+		javadoc = removeJavadocFormating(javadoc);
+		javadoc = removeTrailingWhitespaces(javadoc);
+		return javadoc;
+	}
+
 	public static void exportJavadoc(AbstractNode node){
 		try{
 			node.accept(new JavadocExporter());
 		}catch(Exception e){}
 	}
 
-	public static String removeJavadocFormating(String input){
+	private static String removeJavadocFormating(String input){
 		BufferedReader reader = new BufferedReader(new StringReader(input));
 		try{
 			String output = "";

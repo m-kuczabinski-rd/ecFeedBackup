@@ -35,6 +35,6 @@ public class MethodParameterCommentsSection extends AbstractParameterCommentsSec
 	public void refresh(){
 		super.refresh();
 		getTextFromTabItem(fParameterJavadocTab).setText(JavaDocAnalyser.importJavadoc(getTarget()));
-		getTextFromTabItem(fTypeJavadocTab).setText(JavaDocAnalyser.importTypeJavaDoc((AbstractParameterNode)getTarget()));
+		getTextFromTabItem(fTypeJavadocTab).setText(JavaDocAnalyser.getTypeJavadoc((AbstractParameterNode)getTarget()));
 	}
 }

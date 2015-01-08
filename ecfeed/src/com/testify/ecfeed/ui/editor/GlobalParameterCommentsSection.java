@@ -29,7 +29,7 @@ public class GlobalParameterCommentsSection extends AbstractParameterCommentsSec
 	@Override
 	public void refresh(){
 		super.refresh();
-		getTextFromTabItem(fTypeJavadocTab).setText(JavaDocAnalyser.importTypeJavaDoc((AbstractParameterNode)getTarget()));
+		getTextFromTabItem(fTypeJavadocTab).setText(JavaDocAnalyser.getTypeJavadoc((AbstractParameterNode)getTarget()));
 	}
 
 }

@@ -19,6 +19,8 @@ public class NamedAction extends Action {
 	public static final String EXPAND_COLLAPSE_ACTION_ID = "expand/collapse";
 	public static final String JAVADOC_EXPORT_ACTION_ID = "javadoc.export";
 	public static final String JAVADOC_IMPORT_ACTION_ID = "javadoc.import";
+	public static final String JAVADOC_EXPORT_TYPE_ACTION_ID = "javadoc.exportType";
+	public static final String JAVADOC_IMPORT_TYPE_ACTION_ID = "javadoc.importType";
 
 	public static final String COPY_ACTION_NAME = "Copy\tCtrl+C";
 	public static final String CUT_ACTION_NAME = "Cut\tCtrl+X";
@@ -34,6 +36,8 @@ public class NamedAction extends Action {
 	public static final String EXPAND_COLLAPSE_ACTION_NAME = "Expand/Collapse\tSpace";
 	public static final String JAVADOC_EXPORT_ACTION_NAME = "Export javadoc";
 	public static final String JAVADOC_IMPORT_ACTION_NAME = "Import javadoc";
+	public static final String JAVADOC_EXPORT_TYPE_ACTION_NAME = "javadoc.exportType";
+	public static final String JAVADOC_IMPORT_TYPE_ACTION_NAME = "javadoc.importType";
 
 	protected enum GlobalActions{
 		COPY(COPY_ACTION_ID, COPY_ACTION_NAME),

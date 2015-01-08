@@ -45,6 +45,13 @@ public abstract class AbstractParameterInterface extends ChoicesParentInterface 
 		return false;
 	}
 
+	public boolean setTypeComments(String comments){
+		if(comments.equals(getTarget().getTypeComments()) == false){
+			return execute(new ParameterSetTypeCommentsOperation(getTarget(), comments), Messages.DIALOG_EDIT_COMMENTS_TITLE);
+		}
+		return false;
+	}
+
 	public boolean importType(){
 		TestClassSelectionDialog dialog = new UserTypeSelectionDialog(Display.getDefault().getActiveShell());
 
