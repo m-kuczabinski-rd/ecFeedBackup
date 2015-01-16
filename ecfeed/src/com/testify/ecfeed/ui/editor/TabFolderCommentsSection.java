@@ -15,7 +15,7 @@ import org.eclipse.swt.widgets.Text;
 
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 
-public class TabFolderCommentsSection extends AbstractCommentsSection {
+public abstract class TabFolderCommentsSection extends AbstractCommentsSection {
 
 	private class TabFolderSelectionListsner extends AbstractSelectionAdapter{
 		@Override
@@ -75,8 +75,8 @@ public class TabFolderCommentsSection extends AbstractCommentsSection {
 	protected Control createCommentsControl(Composite parent) {
 		fTabFolder = new TabFolder(getMainControlComposite(), SWT.BOTTOM);
 		fTabFolder.addSelectionListener(new TabFolderSelectionListsner());
-		GridData gd = new GridData(SWT.FILL, SWT.FILL, true, false);
-		gd.heightHint = 100;
+		GridData gd = new GridData(SWT.FILL, SWT.FILL, true, true);
+		gd.heightHint = 150;
 		fTabFolder.setLayoutData(gd);
 		return fTabFolder;
 	}

@@ -16,6 +16,7 @@ import com.testify.ecfeed.adapter.operations.ReplaceChoicesOperation;
 import com.testify.ecfeed.model.AbstractParameterNode;
 import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.ui.common.EclipseModelBuilder;
+import com.testify.ecfeed.ui.common.JavaDocSupport;
 import com.testify.ecfeed.ui.common.JavaModelAnalyser;
 import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.dialogs.TestClassSelectionDialog;
@@ -46,7 +47,7 @@ public abstract class AbstractParameterInterface extends ChoicesParentInterface 
 	}
 
 	public boolean setTypeComments(String comments){
-		if(comments.equals(getTarget().getTypeComments()) == false){
+		if(comments != null && comments.equals(getTarget().getTypeComments()) == false){
 			return execute(new ParameterSetTypeCommentsOperation(getTarget(), comments), Messages.DIALOG_EDIT_COMMENTS_TITLE);
 		}
 		return false;
@@ -134,4 +135,23 @@ public abstract class AbstractParameterInterface extends ChoicesParentInterface 
 	protected IModelOperation setTypeOperation(String type) {
 		return new AbstractParameterOperationSetType(getTarget(), type, getAdapterProvider());
 	}
+
+	public boolean importTypeJavadocComments() {
+		return setTypeComments(JavaDocSupport.importTypeJavadoc(getTarget()));
+	}
+
+	public void exportTypeJavadocComments() {
+		JavaDocSupport.exportTypeJavadoc(getTarget());
+	}
+
+	@Override
+	protected List<IModelOperation> getImportAllJavadocCommentsOperations(){
+		List<IModelOperation> result = super.getImportAllJavadocCommentsOperations();
+		String typeJavadoc = JavaDocSupport.importTypeJavadoc(getTarget());
+		if(typeJavadoc != null && typeJavadoc.equals(getTypeComments()) == false){
+			result.add(new ParameterSetTypeCommentsOperation(getTarget(), typeJavadoc));
+		}
+		return result;
+	}
+
 }

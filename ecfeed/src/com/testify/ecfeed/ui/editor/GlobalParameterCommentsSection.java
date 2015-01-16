@@ -2,8 +2,7 @@ package com.testify.ecfeed.ui.editor;
 
 import org.eclipse.swt.widgets.TabItem;
 
-import com.testify.ecfeed.model.AbstractParameterNode;
-import com.testify.ecfeed.ui.javadoc.JavaDocAnalyser;
+import com.testify.ecfeed.ui.common.JavaDocSupport;
 import com.testify.ecfeed.ui.modelif.AbstractParameterInterface;
 import com.testify.ecfeed.ui.modelif.GlobalParameterInterface;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
@@ -29,7 +28,8 @@ public class GlobalParameterCommentsSection extends AbstractParameterCommentsSec
 	@Override
 	public void refresh(){
 		super.refresh();
-		getTextFromTabItem(fTypeJavadocTab).setText(JavaDocAnalyser.getTypeJavadoc((AbstractParameterNode)getTarget()));
+		String javadoc = JavaDocSupport.getTypeJavadoc(getTarget());
+		getTextFromTabItem(fTypeJavadocTab).setText(javadoc != null ? javadoc : "");
 	}
 
 }

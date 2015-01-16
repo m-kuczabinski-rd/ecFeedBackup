@@ -162,7 +162,7 @@ public abstract class BasicSection extends SectionPart implements IModelUpdateCo
 
 	protected ToolBarManager getToolBarManager(){
 		if(fToolBarManager == null){
-			fToolBarManager = new ToolBarManager();
+			fToolBarManager = new ToolBarManager(SWT.RIGHT);
 		}
 		return fToolBarManager;
 	}

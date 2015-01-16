@@ -59,7 +59,11 @@ public class ButtonsCompositeSection extends BasicSection {
 	}
 
 	protected Button addButton(String text, SelectionAdapter adapter){
-		Button button = getToolkit().createButton(fButtonsComposite, text, SWT.NONE);
+		return addButton(text, adapter, SWT.NONE);
+	}
+
+	protected Button addButton(String text, SelectionAdapter adapter, int style){
+		Button button = getToolkit().createButton(fButtonsComposite, text, style);
 		if(adapter != null){
 			button.addSelectionListener(adapter);
 		}
@@ -112,4 +116,11 @@ public class ButtonsCompositeSection extends BasicSection {
 	protected int buttonsPosition() {
 		return BUTTONS_BELOW;
 	}
+
+	@Override
+	protected Layout clientLayout() {
+		GridLayout layout = new GridLayout(buttonsPosition() == BUTTONS_BELOW?1:2, false);
+		return layout;
+	}
+
 }

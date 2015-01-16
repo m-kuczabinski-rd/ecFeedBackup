@@ -37,9 +37,7 @@ import org.eclipse.swt.events.MenuListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Layout;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.ui.actions.ActionFactory;
@@ -249,12 +247,6 @@ public abstract class ViewerSection extends ButtonsCompositeSection implements I
 				fSelectedElements = ((IStructuredSelection)event.getSelection()).toList();
 			}
 		});
-	}
-
-	@Override
-	protected Layout clientLayout() {
-		GridLayout layout = new GridLayout(buttonsPosition() == BUTTONS_BELOW?1:2, false);
-		return layout;
 	}
 
 	protected int viewerStyle(){

@@ -33,8 +33,8 @@ public class SingleTextCommentsSection extends AbstractCommentsSection {
 	@Override
 	protected Control createCommentsControl(Composite parent){
 		fCommentsText = getToolkit().createText(parent, "", TEXT_STYLE);
-		GridData gd = new GridData(SWT.FILL, SWT.FILL, true, false);
-		gd.heightHint = 100;
+		GridData gd = new GridData(SWT.FILL, SWT.FILL, true, true);
+		gd.heightHint = 150;
 		fCommentsText.setLayoutData(gd);
 		fCommentsText.setBackground(Display.getCurrent().getSystemColor(SWT.COLOR_TITLE_INACTIVE_BACKGROUND));
 		return fCommentsText;
@@ -43,7 +43,9 @@ public class SingleTextCommentsSection extends AbstractCommentsSection {
 	@Override
 	public void refresh(){
 		super.refresh();
-		getEditButton().setText(fCommentsText.getText().length() > 0 ? "Edit comment" : "Add comment");
+		if(getEditButton() != null){
+			getEditButton().setText(fCommentsText.getText().length() > 0 ? "Edit comments" : "Add comments");
+		}
 		fCommentsText.setText(getTargetIf().getComments());
 	}
 
@@ -52,4 +54,10 @@ public class SingleTextCommentsSection extends AbstractCommentsSection {
 		super.setInput(input);
 		refresh();
 	}
+
+	@Override
+	protected boolean commentsExportable(){
+		return false;
+	}
+
 }

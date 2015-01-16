@@ -1,7 +1,9 @@
 package com.testify.ecfeed.ui.modelif;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.swt.widgets.Display;
@@ -9,6 +11,7 @@ import org.eclipse.swt.widgets.Display;
 import com.testify.ecfeed.adapter.EImplementationStatus;
 import com.testify.ecfeed.adapter.IModelOperation;
 import com.testify.ecfeed.adapter.ITypeAdapterProvider;
+import com.testify.ecfeed.adapter.operations.BulkOperation;
 import com.testify.ecfeed.adapter.operations.FactoryRemoveOperation;
 import com.testify.ecfeed.adapter.operations.FactoryRenameOperation;
 import com.testify.ecfeed.adapter.operations.FactoryShiftOperation;
@@ -16,6 +19,7 @@ import com.testify.ecfeed.adapter.operations.GenericAddChildrenOperation;
 import com.testify.ecfeed.adapter.operations.GenericRemoveNodesOperation;
 import com.testify.ecfeed.adapter.operations.GenericSetCommentsOperation;
 import com.testify.ecfeed.adapter.operations.GenericShiftOperation;
+import com.testify.ecfeed.adapter.operations.OperationNames;
 import com.testify.ecfeed.model.AbstractNode;
 import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.model.ClassNode;
@@ -28,9 +32,9 @@ import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.ui.common.EclipseImplementationStatusResolver;
 import com.testify.ecfeed.ui.common.EclipseTypeAdapterProvider;
+import com.testify.ecfeed.ui.common.JavaDocSupport;
 import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.dialogs.TextAreaDialog;
-import com.testify.ecfeed.ui.javadoc.JavaDocAnalyser;
 
 public class AbstractNodeInterface extends OperationExecuter{
 
@@ -215,11 +219,41 @@ public class AbstractNodeInterface extends OperationExecuter{
 	}
 
 	public boolean importJavadocComments() {
-		return setComments(JavaDocAnalyser.importJavadoc(getTarget()));
+		String comments = JavaDocSupport.importJavadoc(getTarget());
+		if(comments != null){
+			return setComments(comments);
+		}
+		return false;
+	}
+
+	public void exportCommentsToJavadoc(String comments) {
+		JavaDocSupport.exportJavadoc(getTarget());
 	}
 
 	public boolean importAllJavadocComments() {
-		setComments(JavaDocAnalyser.importJavadoc(getTarget()));
+		List<IModelOperation> operations = getImportAllJavadocCommentsOperations();
+		if(operations.size() > 0){
+			IModelOperation operation = new BulkOperation(OperationNames.SET_COMMENTS, operations, false);
+			return execute(operation, Messages.DIALOG_SET_COMMENTS_PROBLEM_TITLE);
+		}
+		return false;
+	}
+
+	public boolean exportAllComments() {
 		return true;
 	}
+
+	protected List<IModelOperation> getImportAllJavadocCommentsOperations(){
+		List<IModelOperation> result = new ArrayList<IModelOperation>();
+		String javadoc = JavaDocSupport.importJavadoc(getTarget());
+		if(javadoc != null && getComments() != javadoc){
+			result.add(new GenericSetCommentsOperation(fTarget, javadoc));
+		}
+		for(AbstractNode child : getTarget().getChildren()){
+			AbstractNodeInterface childIf = NodeInterfaceFactory.getNodeInterface(child, getUpdateContext());
+			result.addAll(childIf.getImportAllJavadocCommentsOperations());
+		}
+		return result;
+	}
+
 }

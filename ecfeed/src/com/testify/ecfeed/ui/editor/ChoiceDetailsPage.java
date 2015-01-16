@@ -68,7 +68,7 @@ public class ChoiceDetailsPage extends BasicDetailsPage {
 		super.createContents(parent);
 
 		createNameValueEditor(getMainComposite());
-		addForm(fCommentsSection = new ChoiceCommentsSection(this, this));
+		addForm(fCommentsSection = new JavaDocCommentsSection(this, this));
 		addViewerSection(fChildrenViewer = new ChoicesViewer(this, this));
 		addViewerSection(fLabelsViewer = new ChoiceLabelsViewer(this, this));
 

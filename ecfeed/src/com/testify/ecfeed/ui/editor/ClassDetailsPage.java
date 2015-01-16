@@ -33,7 +33,7 @@ public class ClassDetailsPage extends BasicDetailsPage {
 	private Text fPackageNameText;
 	private ClassInterface fClassIf;
 	private GlobalParametersViewer fGlobalParametersSection;
-	private ClassCommentsSection fCommentsSection;
+	private JavaDocCommentsSection fCommentsSection;
 
 	private class BrowseClassesAdapter extends AbstractSelectionAdapter{
 		@Override
@@ -68,7 +68,7 @@ public class ClassDetailsPage extends BasicDetailsPage {
 		super.createContents(parent);
 
 		createQualifiedNameComposite(getMainComposite());
-		addForm(fCommentsSection = new ClassCommentsSection(this, this));
+		addForm(fCommentsSection = new JavaDocCommentsSection(this, this));
 		addViewerSection(fMethodsSection = new MethodsViewer(this, this));
 		addViewerSection(fGlobalParametersSection = new GlobalParametersViewer(this, this));
 		addViewerSection(fOtherMethodsSection = new OtherMethodsViewer(this, this));

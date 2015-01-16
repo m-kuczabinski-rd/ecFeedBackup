@@ -117,7 +117,6 @@ public class MethodParameterDetailsPage extends AbstractParameterDetailsPage {
 	public void refresh(){
 		super.refresh();
 		if(getSelectedElement() instanceof MethodParameterNode){
-			super.refresh();
 			MethodParameterNode parameter = (MethodParameterNode)getSelectedElement();
 			fParameterIf.setTarget(parameter);
 

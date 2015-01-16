@@ -53,7 +53,7 @@ public class ModelDetailsPage extends BasicDetailsPage {
 		getMainSection().setText("Model details");
 
 		createModelNameEdit(getMainComposite());
-		addForm(fComments = new SingleTextCommentsSection(this, this));
+		addForm(fComments = new ModelCommentsSection(this, this));
 		addViewerSection(fClassesSection = new ClassViewer(this, this));
 		addViewerSection(fParametersSection = new GlobalParametersViewer(this, this));
 

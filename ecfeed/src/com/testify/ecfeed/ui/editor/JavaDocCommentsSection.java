@@ -1,15 +1,16 @@
 package com.testify.ecfeed.ui.editor;
 
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.TabItem;
 import org.eclipse.swt.widgets.Text;
 
 import com.testify.ecfeed.model.AbstractNode;
-import com.testify.ecfeed.ui.editor.actions.NamedAction;
-import com.testify.ecfeed.ui.javadoc.JavaDocAnalyser;
+import com.testify.ecfeed.ui.common.JavaDocSupport;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 
-public abstract class JavaDocCommentsSection extends TabFolderCommentsSection {
+public class JavaDocCommentsSection extends TabFolderCommentsSection {
 
 	private class TabFolderEditButtonListener extends AbstractSelectionAdapter{
 		@Override
@@ -18,42 +19,24 @@ public abstract class JavaDocCommentsSection extends TabFolderCommentsSection {
 		}
 	}
 
-	protected class ExportJavaDocAction extends NamedAction{
-
-		public ExportJavaDocAction() {
-			super("javadoc.export", "Export Javadoc");
-			setToolTipText("Export element's comments to source's javadoc");
-			setImageDescriptor(getIconDescription("class_node.png"));
-		}
-
+	protected class ExportSelectionAdapter extends AbstractSelectionAdapter{
 		@Override
-		public void run(){
+		public void widgetSelected(SelectionEvent e) {
 			String comments = getTarget().getDescription();
 			if(comments != null){
-				JavaDocAnalyser.exportJavadoc(getTarget());
-				refresh();
+				getTargetIf().exportCommentsToJavadoc(comments);
 				getTabFolder().setSelection(getTabFolder().indexOf(getJavaDocItem()));
 			}
 		}
 	}
 
-	protected class ImportJavaDocAction extends NamedAction{
-
-		public ImportJavaDocAction() {
-			super("javadoc.import", "Import Javadoc");
-			setToolTipText("Import element's comments from source's javadoc");
-			setImageDescriptor(getIconDescription("implement.png"));
-		}
-
+	protected class ImportSelectionAdapter extends AbstractSelectionAdapter{
 		@Override
-		public void run(){
-			if(getTargetIf().importJavadocComments()){
-				getTabFolder().setSelection(getTabFolder().indexOf(getCommentsItem()));
-			}
+		public void widgetSelected(SelectionEvent e) {
+			getTargetIf().importJavadocComments();
+			getTabFolder().setSelection(getTabFolder().indexOf(getCommentsItem()));
 		}
 	}
-
-
 
 	private TabItem fCommentsTab;
 	private TabItem fJavadocTab;
@@ -68,10 +51,17 @@ public abstract class JavaDocCommentsSection extends TabFolderCommentsSection {
 	}
 
 	@Override
+	protected void createCommentsButtons(boolean exportable) {
+		super.createCommentsButtons(exportable);
+	}
+
+	@Override
 	public void refresh(){
 		super.refresh();
-		getCommentsText().setText(getTargetIf().getComments());
-		getJavaDocText().setText(JavaDocAnalyser.getJavadoc(getTarget()));
+		String comments = getTargetIf().getComments();
+		getCommentsText().setText(comments != null ? comments : "");
+		String javadoc = JavaDocSupport.getJavadoc(getTarget());
+		getJavaDocText().setText(javadoc != null ? javadoc : "");
 		getEditButton().setText(getCommentsText().getText().length() > 0 ? "Edit comment" : "Add comment");
 	}
 
@@ -96,4 +86,29 @@ public abstract class JavaDocCommentsSection extends TabFolderCommentsSection {
 	protected Text getCommentsText(){
 		return getTextFromTabItem(fCommentsTab);
 	}
+
+	@Override
+	protected boolean commentsExportable(){
+		return true;
+	}
+
+	@Override
+	protected void createExportMenuItems() {
+		MenuItem exportItem = new MenuItem(getExportButtonMenu(), SWT.NONE);
+		exportItem.setText("Export comments of this element");
+		exportItem.addSelectionListener(new ExportSelectionAdapter());
+		MenuItem exportAllItem = new MenuItem(getExportButtonMenu(), SWT.NONE);
+		exportAllItem.setText("Export comments of entire subtree");
+	}
+
+	@Override
+	protected void createImportMenuItems() {
+		MenuItem importItem = new MenuItem(getImportButtonMenu(), SWT.NONE);
+		importItem.setText("Import comments of this element");
+		importItem.addSelectionListener(new ImportSelectionAdapter());
+		MenuItem importAllItem = new MenuItem(getImportButtonMenu(), SWT.NONE);
+		importAllItem.setText("Import comments for entire subtree");
+	}
+
+
 }

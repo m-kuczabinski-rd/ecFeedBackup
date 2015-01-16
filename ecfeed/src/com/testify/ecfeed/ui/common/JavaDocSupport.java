@@ -1,4 +1,4 @@
-package com.testify.ecfeed.ui.javadoc;
+package com.testify.ecfeed.ui.common;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -7,6 +7,7 @@ import java.io.StringReader;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IField;
 import org.eclipse.jdt.core.IMember;
+import org.eclipse.jdt.core.IMethod;
 import org.eclipse.jdt.core.ISourceRange;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaModelException;
@@ -26,9 +27,8 @@ import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.MethodParameterNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.TestCaseNode;
-import com.testify.ecfeed.ui.common.JavaModelAnalyser;
 
-public class JavaDocAnalyser {
+public class JavaDocSupport {
 
 	private final static String EMPTY_STRING = "";
 	private final static String FIRST_COMMENT_LINE_REGEX = "\\s*/\\*\\*";
@@ -38,7 +38,7 @@ public class JavaDocAnalyser {
 	private final static String LAST_COMMENT_LINE = "*/";
 	private final static String COMMENT_LINE_PREXIF = "* ";
 
-	private static class JavadocFetcher implements IModelVisitor{
+	private static class JavadocReader implements IModelVisitor{
 
 		@Override
 		public Object visit(MethodParameterNode node) throws Exception {
@@ -113,24 +113,11 @@ public class JavaDocAnalyser {
 
 		@Override
 		public Object visit(MethodParameterNode node) throws Exception {
-			String methodDoc = getJavadoc(JavaModelAnalyser.getIMethod(node.getMethod()));
-
-			String searchedTag = "@param " + node.getName();
-			int startIndex = methodDoc.indexOf(searchedTag);
-			int endIndex = methodDoc.indexOf("@", startIndex + 1);
-			if(endIndex == -1){
-				endIndex = methodDoc.length() - 1;
-			}
-
-			while(methodDoc.charAt(startIndex) != '\n' && methodDoc.charAt(startIndex) != '*'){
-				--startIndex;
-			}
-			while(methodDoc.charAt(endIndex) != '\n'){
-				--endIndex;
-			}
-			methodDoc = methodDoc.substring(startIndex, endIndex);
-
-			return methodDoc;
+			String javadoc = getJavadoc(node);
+			String tag = "@param "  + node.getName();
+			int beginning = javadoc.indexOf(tag);
+			String imported = javadoc.substring(beginning + tag.length(), javadoc.length());
+			return imported;
 		}
 
 		@Override
@@ -184,6 +171,27 @@ public class JavaDocAnalyser {
 
 		@Override
 		public Object visit(MethodParameterNode node) throws Exception {
+			IMethod method = JavaModelAnalyser.getIMethod(node.getMethod());
+			ICompilationUnit unit = method.getCompilationUnit();
+			String currentJavadoc = getJavadoc(node);
+			String newJavadoc = "* @param " + node.getName() + " " + node.getDescription();
+			String source = unit.getSource();
+
+			TextEdit edit = null;
+			if(currentJavadoc != null){
+				int offset = source.indexOf(currentJavadoc);
+				int length = currentJavadoc.length();
+				edit = new ReplaceEdit(offset, length, newJavadoc);
+			}else {
+				String methodJavadoc = getJavadoc(node.getMethod());
+				if(methodJavadoc == null){
+					exportJavadoc(node.getMethod());
+				}
+				int offset = source.indexOf(methodJavadoc) + methodJavadoc.length();
+				edit = new InsertEdit(offset, newJavadoc);
+			}
+			unit.applyTextEdit(edit, null);
+			unit.save(null, false);
 			return null;
 		}
 
@@ -200,26 +208,21 @@ public class JavaDocAnalyser {
 		@Override
 		public Object visit(ClassNode node) throws Exception {
 			IType type = JavaModelAnalyser.getIType(node.getName());
-			ISourceRange currentJavaDocRange = type.getJavadocRange();
-			TextEdit edit = null;
-			if(currentJavaDocRange != null){
-				String javadoc = addJavadocFormatting(node.getDescription());
-				edit = new ReplaceEdit(currentJavaDocRange.getOffset(), currentJavaDocRange.getLength(), javadoc);
-			}
-			else if(type.getSourceRange().getOffset() >= 0){
-				String indent = getIndent(type);
-				String javadoc = addJavadocFormatting(node.getDescription(), indent);
-				edit = new InsertEdit(type.getSourceRange().getOffset(), javadoc + "\n" + indent);
-			}
-			if(edit != null){
-				type.getCompilationUnit().applyTextEdit(edit, null);
-				type.getCompilationUnit().save(null, false);
-			}
+			exportJavadoc(type, node.getDescription());
 			return null;
 		}
 
 		@Override
 		public Object visit(MethodNode node) throws Exception {
+			IMethod method = JavaModelAnalyser.getIMethod(node);
+			String javadoc = node.getDescription();
+			if(node.getParameters().size() > 0){
+				javadoc +="\n\n";
+				for(MethodParameterNode parameter : node.getMethodParameters()){
+					javadoc += "@param " + parameter.getName() + " " + parameter.getDescription() + "\n";
+				}
+			}
+			exportJavadoc(method, javadoc);
 			return null;
 		}
 
@@ -235,19 +238,16 @@ public class JavaDocAnalyser {
 
 		@Override
 		public Object visit(ChoiceNode node) throws Exception {
-			return null;
-		}
-
-		private String getIndent(IType type) {
-			try{
-				ISourceRange range = type.getSourceRange();
-				String source = type.getCompilationUnit().getSource();
-				int begin = range.getOffset();
-				while(begin >= 0 && source.charAt(begin) != '\n'){
-					--begin;
+			if(node.isAbstract() == false){
+				IType type = JavaModelAnalyser.getIType(node.getParameter().getType());
+				if(type != null && type.isEnum()){
+					for(IField field : type.getFields()){
+						if(field.isEnumConstant() && field.getElementName().equals(node.getValueString())){
+							exportJavadoc(field, node.getDescription());
+						}
+					}
 				}
-				return source.substring(begin + 1, range.getOffset());
-			}catch(JavaModelException e){}
+			}
 			return null;
 		}
 	}
@@ -279,7 +279,7 @@ public class JavaDocAnalyser {
 
 	public static String getJavadoc(AbstractNode node){
 		try{
-			return (String)node.accept(new JavadocFetcher());
+			return (String)node.accept(new JavadocReader());
 		}catch (Exception e){}
 		return null;
 	}
@@ -298,6 +298,15 @@ public class JavaDocAnalyser {
 		return javadoc;
 	}
 
+	public static void exportTypeJavadoc(AbstractParameterNode node){
+		if(JavaUtils.isUserType(node.getType())){
+			IType type = JavaModelAnalyser.getIType(node.getType());
+			try{
+				exportJavadoc(type, node.getTypeComments());
+			}catch(JavaModelException e){}
+		}
+	}
+
 	public static void exportJavadoc(AbstractNode node){
 		try{
 			node.accept(new JavadocExporter());
@@ -305,18 +314,20 @@ public class JavaDocAnalyser {
 	}
 
 	private static String removeJavadocFormating(String input){
-		BufferedReader reader = new BufferedReader(new StringReader(input));
-		try{
-			String output = "";
-			String line;
-			while((line = reader.readLine()) != null){
-				if(line.matches(FIRST_COMMENT_LINE_REGEX) == false && line.matches(LAST_COMMENT_LINE_REGEX) == false){
-					line = line.replaceAll(COMMENT_LINE_PREFIX_REGEX, "");
-					output+= line + "\n";
+		if(input != null){
+			BufferedReader reader = new BufferedReader(new StringReader(input));
+			try{
+				String output = "";
+				String line;
+				while((line = reader.readLine()) != null){
+					if(line.matches(FIRST_COMMENT_LINE_REGEX) == false && line.matches(LAST_COMMENT_LINE_REGEX) == false){
+						line = line.replaceAll(COMMENT_LINE_PREFIX_REGEX, "");
+						output+= line + "\n";
+					}
 				}
-			}
-			return output;
-		}catch(IOException e){}
+				return output;
+			}catch(IOException e){}
+		}
 		return input;
 	}
 
@@ -338,7 +349,10 @@ public class JavaDocAnalyser {
 	}
 
 	private static String removeTrailingWhitespaces(String input){
-		return input.replaceAll("\\s*\\z", EMPTY_STRING);
+		if(input != null){
+			return input.replaceAll("\\s*\\z", EMPTY_STRING);
+		}
+		return null;
 	}
 
 	private static String getJavadoc(IMember member){
@@ -354,5 +368,56 @@ public class JavaDocAnalyser {
 			} catch (JavaModelException e) {}
 		}
 		return null;
+	}
+
+	private static void exportJavadoc(IMember member, String comments) throws JavaModelException {
+		if(member != null){
+			ISourceRange currentJavaDocRange = member.getJavadocRange();
+			TextEdit edit = null;
+			String indent = getIndent(member);
+			if(currentJavaDocRange != null){
+				String javadoc = addJavadocFormatting(comments, indent);
+				edit = new ReplaceEdit(currentJavaDocRange.getOffset(), currentJavaDocRange.getLength(), javadoc);
+			}else if(member.getSourceRange().getOffset() >= 0){
+				boolean moveToNewLine = false;
+				if(indent.matches("\\s*") == false){
+					indent = trimIndent(indent);
+					moveToNewLine = true;
+				}
+				String javadoc = addJavadocFormatting(comments, indent);
+				String comment = javadoc + "\n" + indent;
+				if(moveToNewLine){
+					comment = "\n" + indent + comment;
+				}
+				edit = new InsertEdit(member.getSourceRange().getOffset(), comment);
+			}
+			if(edit != null){
+				member.getCompilationUnit().applyTextEdit(edit, null);
+				member.getCompilationUnit().save(null, false);
+			}
+		}
+	}
+
+	private static String getIndent(IMember member) {
+		try{
+			ISourceRange range = member.getSourceRange();
+			String source = member.getCompilationUnit().getSource();
+			int begin = range.getOffset();
+			while(begin >= 0 && source.charAt(begin) != '\n'){
+				--begin;
+			}
+			String indent = source.substring(begin + 1, range.getOffset());
+			return indent;
+		}catch(JavaModelException e){}
+		return null;
+	}
+
+	private static String trimIndent(String indent){
+		int end = 0;
+		while(indent.substring(0, end).matches("\\s*")){
+			++end;
+		}
+		indent = indent.substring(0, end > 0 ? end - 1 : 0);
+		return indent;
 	}
 }

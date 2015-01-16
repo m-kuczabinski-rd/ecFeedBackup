@@ -148,6 +148,13 @@ public class Messages {
 	public static final String DIALOG_DESCENDING_LABELS_WILL_BE_REMOVED_WARNING_TITLE = "choices below in the hierarchy are already labeled with this label. Changing the label will result in removing the labels from all that choices";
 	public static final String DIALOG_NO_VALID_LINK_AVAILABLE_PROBLEM_MESSAGE = "There is no link available that can be assigned to parameter which does not cause method signature duplicate problem.";
 
+
+	public static final String TOOLTIP_EDIT_COMMENTS = "Edit comment";
+	public static final String TOOLTIP_EXPORT_SUBTREE_COMMENTS_TO_JAVADOC = "Export all comments in the subtree to sources as javadoc";
+	public static final String TOOLTIP_IMPORT_SUBTREE_COMMENTS_FROM_JAVADOC = "Import comments from javadoc of all subtree nodes' sources";
+	public static final String TOOLTIP_EXPORT_CLASS_COMMENTS = "Export comments to class sources as javadoc";
+	public static final String TOOLTIP_IMPORT_CLASS_COMMENTS_FROM_JAVADOC = "Import comments from class sources javadoc";
+
 	public static String DIALOG_UNSUCCESFUL_TEST_EXECUTION(int totalTestCases, int unsuccesfull) {
 		return String.valueOf(unsuccesfull) + " of " + totalTestCases + " test cases have met problems during execution.";
 	}
