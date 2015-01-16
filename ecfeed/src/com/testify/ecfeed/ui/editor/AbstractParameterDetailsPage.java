@@ -21,7 +21,7 @@ public abstract class AbstractParameterDetailsPage extends BasicDetailsPage {
 	private Text fNameText;
 	private Combo fTypeCombo;
 	private ChoicesViewer fChoicesViewer;
-	private Button fBrowseUserTypeButton;
+	protected Button fBrowseUserTypeButton;
 
 	private class SetNameListener extends AbstractSelectionAdapter{
 		@Override
@@ -81,7 +81,6 @@ public abstract class AbstractParameterDetailsPage extends BasicDetailsPage {
 			fNameText.setText(parameter.getName());
 			fTypeCombo.setItems(AbstractParameterInterface.supportedPrimitiveTypes());
 			fTypeCombo.setText(parameter.getType());
-
 			fChoicesViewer.setInput(parameter);
 		}
 	}
