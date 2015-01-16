@@ -20,7 +20,7 @@ public abstract class AbstractParameterDetailsPage extends BasicDetailsPage {
 	private Composite fAttributesComposite;
 	private Text fNameText;
 	private Combo fTypeCombo;
-	private ChoicesViewer fChoicesViewer;
+	protected ChoicesViewer fChoicesViewer;
 	protected Button fBrowseUserTypeButton;
 
 	private class SetNameListener extends AbstractSelectionAdapter{
