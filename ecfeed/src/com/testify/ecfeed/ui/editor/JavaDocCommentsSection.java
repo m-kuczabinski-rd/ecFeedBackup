@@ -16,6 +16,7 @@ public class JavaDocCommentsSection extends TabFolderCommentsSection {
 		@Override
 		public void widgetSelected(SelectionEvent e) {
 			getTargetIf().editComments();
+			getTabFolder().setSelection(getTabFolder().indexOf(getCommentsItem()));
 		}
 	}
 

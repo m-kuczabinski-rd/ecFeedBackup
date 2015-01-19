@@ -63,12 +63,12 @@ public abstract class TabFolderCommentsSection extends AbstractCommentsSection {
 		refreshEditButton();
 	}
 
-	private void refreshEditButton() {
-		int selectedTabIndex = fTabFolder.getSelectionIndex();
-		TabItem selectedItem = fTabFolder.getItem(selectedTabIndex);
-		if(selectedTabIndex != -1 && fEditableIndicator.get(selectedItem) != null){
-			getEditButton().setEnabled(fEditableIndicator.get(selectedItem));
-		}
+	protected void refreshEditButton() {
+//		int selectedTabIndex = fTabFolder.getSelectionIndex();
+//		TabItem selectedItem = fTabFolder.getItem(selectedTabIndex);
+//		if(selectedTabIndex != -1 && fEditableIndicator.get(selectedItem) != null){
+//			getEditButton().setEnabled(fEditableIndicator.get(selectedItem));
+//		}
 	}
 
 	@Override
