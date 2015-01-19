@@ -11,6 +11,7 @@ import org.eclipse.jdt.core.IMethod;
 import org.eclipse.jdt.core.ISourceRange;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaModelException;
+import org.eclipse.text.edits.DeleteEdit;
 import org.eclipse.text.edits.InsertEdit;
 import org.eclipse.text.edits.ReplaceEdit;
 import org.eclipse.text.edits.TextEdit;
@@ -244,6 +245,7 @@ public class JavaDocSupport {
 					for(IField field : type.getFields()){
 						if(field.isEnumConstant() && field.getElementName().equals(node.getValueString())){
 							exportJavadoc(field, node.getDescription());
+							return null;
 						}
 					}
 				}
@@ -372,29 +374,50 @@ public class JavaDocSupport {
 
 	private static void exportJavadoc(IMember member, String comments) throws JavaModelException {
 		if(member != null){
-			ISourceRange currentJavaDocRange = member.getJavadocRange();
-			TextEdit edit = null;
-			String indent = getIndent(member);
-			if(currentJavaDocRange != null){
-				String javadoc = addJavadocFormatting(comments, indent);
-				edit = new ReplaceEdit(currentJavaDocRange.getOffset(), currentJavaDocRange.getLength(), javadoc);
-			}else if(member.getSourceRange().getOffset() >= 0){
-				boolean moveToNewLine = false;
-				if(indent.matches("\\s*") == false){
-					indent = trimIndent(indent);
-					moveToNewLine = true;
+			if(comments == null || comments.length() == 0){
+				removeJavadoc(member);
+			}else{
+				ISourceRange currentJavaDocRange = member.getJavadocRange();
+				TextEdit edit = null;
+				String indent = getIndent(member);
+				if(currentJavaDocRange != null){
+					String javadoc = addJavadocFormatting(comments, indent);
+					edit = new ReplaceEdit(currentJavaDocRange.getOffset(), currentJavaDocRange.getLength(), javadoc);
+				}else if(member.getSourceRange().getOffset() >= 0){
+					boolean moveToNewLine = false;
+					if(indent.matches("\\s*") == false){
+						indent = trimIndent(indent);
+						moveToNewLine = true;
+					}
+					String javadoc = addJavadocFormatting(comments, indent);
+					String comment = javadoc + "\n" + indent;
+					if(moveToNewLine){
+						comment = "\n" + indent + comment;
+					}
+					edit = new InsertEdit(member.getSourceRange().getOffset(), comment);
 				}
-				String javadoc = addJavadocFormatting(comments, indent);
-				String comment = javadoc + "\n" + indent;
-				if(moveToNewLine){
-					comment = "\n" + indent + comment;
+				if(edit != null){
+					ICompilationUnit unit = member.getCompilationUnit();
+					unit.applyTextEdit(edit, null);
+					unit.commitWorkingCopy(true, null);
 				}
-				edit = new InsertEdit(member.getSourceRange().getOffset(), comment);
 			}
-			if(edit != null){
-				member.getCompilationUnit().applyTextEdit(edit, null);
-				member.getCompilationUnit().save(null, false);
+		}
+	}
+
+	private static void removeJavadoc(IMember member) throws JavaModelException{
+		ISourceRange currentJavaDocRange = member.getJavadocRange();
+		if(currentJavaDocRange != null){
+			ICompilationUnit unit = member.getCompilationUnit();
+			String source = unit.getSource();
+			int offset = currentJavaDocRange.getOffset();
+			int length = currentJavaDocRange.getLength();
+			while(((Character)source.charAt(offset + length)).toString().matches("\\s")){
+				++length;
 			}
+
+			unit.applyTextEdit(new DeleteEdit(offset, length), null);
+			unit.commitWorkingCopy(false, null);
 		}
 	}
 

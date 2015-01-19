@@ -23,10 +23,8 @@ public class JavaDocCommentsSection extends TabFolderCommentsSection {
 		@Override
 		public void widgetSelected(SelectionEvent e) {
 			String comments = getTarget().getDescription();
-			if(comments != null){
-				getTargetIf().exportCommentsToJavadoc(comments);
-				getTabFolder().setSelection(getTabFolder().indexOf(getJavaDocItem()));
-			}
+			getTargetIf().exportCommentsToJavadoc(comments);
+			getTabFolder().setSelection(getTabFolder().indexOf(getJavaDocItem()));
 		}
 	}
 
@@ -48,11 +46,6 @@ public class JavaDocCommentsSection extends TabFolderCommentsSection {
 		fJavadocTab = addTextTab("JavaDoc", false);
 
 		addEditListener(new TabFolderEditButtonListener());
-	}
-
-	@Override
-	protected void createCommentsButtons(boolean exportable) {
-		super.createCommentsButtons(exportable);
 	}
 
 	@Override
