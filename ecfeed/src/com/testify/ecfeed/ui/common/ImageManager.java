@@ -41,7 +41,7 @@ public class ImageManager {
 		if(image == null){
 			fImages.put(fileName, getImageDescriptor(fileName).createImage());
 		}
-		return image;
+		return fImages.get(fileName);
 	}
 
 	private ImageManager(){
