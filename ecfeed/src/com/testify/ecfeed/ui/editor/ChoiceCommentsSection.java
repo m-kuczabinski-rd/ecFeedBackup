@@ -50,7 +50,7 @@ public class ChoiceCommentsSection extends JavaDocCommentsSection {
 	}
 
 	private void updateExportImportButtons() {
-		boolean importExportEnabled = getTargetIf().commentsExportable();
+		boolean importExportEnabled = getTargetIf().commentsImportExportEnabled();
 		fExportButton.setEnabled(importExportEnabled);
 		fImportButton.setEnabled(importExportEnabled);
 		getJavaDocText().setEnabled(importExportEnabled);

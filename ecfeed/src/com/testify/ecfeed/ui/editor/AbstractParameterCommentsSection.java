@@ -82,7 +82,7 @@ public abstract class AbstractParameterCommentsSection extends TabFolderComments
 			getTextFromTabItem(fTypeCommentsTab).setText("");
 		}
 
-		boolean importExportEnabled = getTargetIf().commentsExportable();
+		boolean importExportEnabled = getTargetIf().commentsImportExportEnabled();
 		getExportButton().setEnabled(importExportEnabled);
 		getImportButton().setEnabled(importExportEnabled);
 	}

@@ -110,6 +110,17 @@ public abstract class AbstractCommentsSection extends ButtonsCompositeSection {
 		refresh();
 	}
 
+	@Override
+	public void refresh(){
+		boolean importExportEnabled = importExportEnabled();
+		if(getExportButton() != null && getExportButton().isDisposed() == false){
+			getExportButton().setEnabled(importExportEnabled);
+		}
+		if(getImportButton() != null && getImportButton().isDisposed() == false){
+			getImportButton().setEnabled(importExportEnabled);
+		}
+	}
+
 	protected AbstractNode getTarget(){
 		return fTarget;
 	}
@@ -141,6 +152,10 @@ public abstract class AbstractCommentsSection extends ButtonsCompositeSection {
 
 	protected Menu getImportButtonMenu(){
 		return fImportButtonMenu;
+	}
+
+	protected boolean importExportEnabled(){
+		return getTargetIf().commentsImportExportEnabled();
 	}
 
 	protected abstract boolean commentsExportable();
