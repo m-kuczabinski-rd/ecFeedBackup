@@ -4,8 +4,6 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Listener;
 
-import com.testify.ecfeed.adapter.EImplementationStatus;
-import com.testify.ecfeed.adapter.java.JavaUtils;
 import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
@@ -52,7 +50,7 @@ public class ChoiceCommentsSection extends JavaDocCommentsSection {
 	}
 
 	private void updateExportImportButtons() {
-		boolean importExportEnabled = importExportEnabled();
+		boolean importExportEnabled = getTargetIf().commentsExportable();
 		fExportButton.setEnabled(importExportEnabled);
 		fImportButton.setEnabled(importExportEnabled);
 		getJavaDocText().setEnabled(importExportEnabled);
@@ -79,14 +77,5 @@ public class ChoiceCommentsSection extends JavaDocCommentsSection {
 		for(Listener listener : button.getListeners(SWT.Selection)){
 			button.removeListener(SWT.Selection, listener);
 		}
-	}
-
-	private boolean importExportEnabled(){
-		if(JavaUtils.isPrimitive(getTarget().getParameter().getType())){
-			return false;
-		}else if(getTargetIf().getImplementationStatus() == EImplementationStatus.NOT_IMPLEMENTED){
-			return false;
-		}
-		return true;
 	}
 }

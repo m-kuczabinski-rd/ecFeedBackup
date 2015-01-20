@@ -73,10 +73,18 @@ public abstract class AbstractParameterCommentsSection extends TabFolderComments
 		super.refresh();
 		if(getTargetIf().getComments() != null){
 			getTextFromTabItem(fParameterCommentsTab).setText(getTargetIf().getComments());
+		}else{
+			getTextFromTabItem(fParameterCommentsTab).setText("");
 		}
 		if(getTargetIf().getTypeComments() != null){
 			getTextFromTabItem(fTypeCommentsTab).setText(getTargetIf().getTypeComments());
+		}else{
+			getTextFromTabItem(fTypeCommentsTab).setText("");
 		}
+
+		boolean importExportEnabled = getTargetIf().commentsExportable();
+		getExportButton().setEnabled(importExportEnabled);
+		getImportButton().setEnabled(importExportEnabled);
 	}
 
 	public void setInput(AbstractParameterNode input){

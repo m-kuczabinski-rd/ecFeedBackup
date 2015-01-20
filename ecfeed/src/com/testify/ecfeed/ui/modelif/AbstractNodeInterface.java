@@ -256,4 +256,7 @@ public class AbstractNodeInterface extends OperationExecuter{
 		return result;
 	}
 
+	public boolean commentsExportable(){
+		return getImplementationStatus() != EImplementationStatus.NOT_IMPLEMENTED;
+	}
 }

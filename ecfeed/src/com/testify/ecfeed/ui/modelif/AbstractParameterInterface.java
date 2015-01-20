@@ -154,4 +154,10 @@ public abstract class AbstractParameterInterface extends ChoicesParentInterface 
 		return result;
 	}
 
+	@Override
+	public boolean commentsExportable(){
+		return super.commentsExportable() && JavaUtils.isUserType(getType());
+	}
+
+
 }

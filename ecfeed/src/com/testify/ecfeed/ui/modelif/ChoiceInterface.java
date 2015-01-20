@@ -20,6 +20,7 @@ import org.eclipse.jdt.ui.JavaUI;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
 
+import com.testify.ecfeed.adapter.EImplementationStatus;
 import com.testify.ecfeed.adapter.IModelOperation;
 import com.testify.ecfeed.adapter.java.JavaUtils;
 import com.testify.ecfeed.adapter.operations.ChoiceOperationAddLabel;
@@ -156,4 +157,8 @@ public class ChoiceInterface extends ChoicesParentInterface{
 		return (ChoiceNode)super.getTarget();
 	}
 
+	@Override
+	public boolean commentsExportable(){
+		return super.commentsExportable() && getImplementationStatus() != EImplementationStatus.NOT_IMPLEMENTED;
+	}
 }
