@@ -1,5 +1,6 @@
 package com.testify.ecfeed.ui.modelif;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -11,6 +12,7 @@ import org.eclipse.swt.widgets.Display;
 import com.testify.ecfeed.adapter.IModelOperation;
 import com.testify.ecfeed.adapter.java.JavaUtils;
 import com.testify.ecfeed.adapter.operations.AbstractParameterOperationSetType;
+import com.testify.ecfeed.adapter.operations.BulkOperation;
 import com.testify.ecfeed.adapter.operations.ParameterSetTypeCommentsOperation;
 import com.testify.ecfeed.adapter.operations.ReplaceChoicesOperation;
 import com.testify.ecfeed.model.AbstractParameterNode;
@@ -41,7 +43,7 @@ public abstract class AbstractParameterInterface extends ChoicesParentInterface 
 		TextAreaDialog dialog = new TextAreaDialog(Display.getCurrent().getActiveShell(),
 				Messages.DIALOG_EDIT_COMMENTS_TITLE, Messages.DIALOG_EDIT_COMMENTS_MESSAGE, getTypeComments());
 		if(dialog.open() == IDialogConstants.OK_ID){
-			return execute(new ParameterSetTypeCommentsOperation(getTarget(), dialog.getText()), Messages.DIALOG_EDIT_COMMENTS_TITLE);
+			return execute(new ParameterSetTypeCommentsOperation(getTarget(), dialog.getText()), Messages.DIALOG_SET_COMMENTS_PROBLEM_TITLE);
 		}
 		return false;
 	}
@@ -140,8 +142,32 @@ public abstract class AbstractParameterInterface extends ChoicesParentInterface 
 		return setTypeComments(JavaDocSupport.importTypeJavadoc(getTarget()));
 	}
 
+	public void importFullTypeJavadocComments() {
+		IModelOperation operation = new BulkOperation("Import javadoc", getFullTypeImportOperations(), false);
+		execute(operation, Messages.DIALOG_SET_COMMENTS_PROBLEM_TITLE);
+	}
+
+	protected List<IModelOperation> getFullTypeImportOperations(){
+		List<IModelOperation> result = new ArrayList<IModelOperation>();
+		String typeJavadoc = JavaDocSupport.importTypeJavadoc(getTarget());
+		result.add(new ParameterSetTypeCommentsOperation(getTarget(), typeJavadoc));
+		for(ChoiceNode choice : getTarget().getChoices()){
+			AbstractNodeInterface nodeIf = NodeInterfaceFactory.getNodeInterface(choice, getUpdateContext());
+			result.addAll(nodeIf.getImportAllJavadocCommentsOperations());
+		}
+		return result;
+	}
+
 	public void exportTypeJavadocComments() {
 		JavaDocSupport.exportTypeJavadoc(getTarget());
+	}
+
+	public void exportFullTypeJavadocComments() {
+		exportTypeJavadocComments();
+		for(ChoiceNode choice : getTarget().getChoices()){
+			ChoiceInterface choiceIf = (ChoiceInterface)NodeInterfaceFactory.getNodeInterface(choice, getUpdateContext());
+			choiceIf.exportAllComments();
+		}
 	}
 
 	@Override
@@ -158,6 +184,4 @@ public abstract class AbstractParameterInterface extends ChoicesParentInterface 
 	public boolean commentsImportExportEnabled(){
 		return super.commentsImportExportEnabled() && JavaUtils.isUserType(getType());
 	}
-
-
 }

@@ -240,6 +240,11 @@ public class AbstractNodeInterface extends OperationExecuter{
 	}
 
 	public boolean exportAllComments() {
+		exportCommentsToJavadoc(getComments());
+		for(AbstractNode child : getTarget().getChildren()){
+			AbstractNodeInterface nodeIf = NodeInterfaceFactory.getNodeInterface(child, getUpdateContext());
+			nodeIf.exportAllComments();
+		}
 		return true;
 	}
 

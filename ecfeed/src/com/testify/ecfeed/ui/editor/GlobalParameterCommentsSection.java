@@ -1,8 +1,5 @@
 package com.testify.ecfeed.ui.editor;
 
-import org.eclipse.swt.widgets.TabItem;
-
-import com.testify.ecfeed.ui.common.JavaDocSupport;
 import com.testify.ecfeed.ui.modelif.AbstractParameterInterface;
 import com.testify.ecfeed.ui.modelif.GlobalParameterInterface;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
@@ -10,11 +7,9 @@ import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 public class GlobalParameterCommentsSection extends AbstractParameterCommentsSection {
 
 	private GlobalParameterInterface fTargetIf;
-	private TabItem fTypeJavadocTab;
 
 	public GlobalParameterCommentsSection(ISectionContext sectionContext, IModelUpdateContext updateContext) {
 		super(sectionContext, updateContext);
-		fTypeJavadocTab = addTextTab("Type javadoc", false);
 	}
 
 	@Override
@@ -23,13 +18,6 @@ public class GlobalParameterCommentsSection extends AbstractParameterCommentsSec
 			fTargetIf = new GlobalParameterInterface(getUpdateContext());
 		}
 		return fTargetIf;
-	}
-
-	@Override
-	public void refresh(){
-		super.refresh();
-		String javadoc = JavaDocSupport.getTypeJavadoc(getTarget());
-		getTextFromTabItem(fTypeJavadocTab).setText(javadoc != null ? javadoc : "");
 	}
 
 }
