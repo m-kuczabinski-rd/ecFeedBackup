@@ -44,10 +44,14 @@ public abstract class TabFolderCommentsSection extends AbstractCommentsSection {
 		item.setControl(control);
 	}
 
-	protected TabItem addTextTab(String title, boolean editable){
+	protected TabItem addTextTab(String title){
+		return addTextTab(title, fTabFolder.getItemCount());
+	}
+
+	protected TabItem addTextTab(String title, int index){
 		Text text = getToolkit().createText(getTabFolder(), "", SWT.WRAP | SWT.V_SCROLL | SWT.MULTI | SWT.READ_ONLY);
 		text.setBackground(Display.getCurrent().getSystemColor(SWT.COLOR_TITLE_INACTIVE_BACKGROUND));
-		TabItem item = new TabItem(fTabFolder, SWT.NONE);
+		TabItem item = new TabItem(fTabFolder, SWT.NONE, index);
 		item.setText(title);
 		item.setControl(text);
 		fTextItems.put(item, text);

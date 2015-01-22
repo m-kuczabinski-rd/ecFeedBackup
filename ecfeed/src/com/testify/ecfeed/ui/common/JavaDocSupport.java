@@ -172,27 +172,30 @@ public class JavaDocSupport {
 
 		@Override
 		public Object visit(MethodParameterNode node) throws Exception {
-			IMethod method = JavaModelAnalyser.getIMethod(node.getMethod());
-			ICompilationUnit unit = method.getCompilationUnit();
-			String currentJavadoc = getJavadoc(node);
-			String newJavadoc = "* @param " + node.getName() + " " + node.getDescription();
-			String source = unit.getSource();
-
-			TextEdit edit = null;
-			if(currentJavadoc != null){
-				int offset = source.indexOf(currentJavadoc);
-				int length = currentJavadoc.length();
-				edit = new ReplaceEdit(offset, length, newJavadoc);
-			}else {
-				String methodJavadoc = getJavadoc(node.getMethod());
-				if(methodJavadoc == null){
-					exportJavadoc(node.getMethod());
-				}
-				int offset = source.indexOf(methodJavadoc) + methodJavadoc.length();
-				edit = new InsertEdit(offset, newJavadoc);
-			}
-			unit.applyTextEdit(edit, null);
-			unit.save(null, false);
+			exportJavadoc(node.getMethod());
+//			IMethod method = JavaModelAnalyser.getIMethod(node.getMethod());
+//			ICompilationUnit unit = method.getCompilationUnit();
+//			String currentJavadoc = getJavadoc(node);
+//			String newComments = node.getDescription() != null ? node.getDescription() : "";
+//			String newJavadoc = "* @param " + node.getName() + " " + newComments;
+//			String source = unit.getSource();
+//
+//			TextEdit edit = null;
+//			if(currentJavadoc != null){
+//				int offset = source.indexOf("* @param " + node.getName());
+//				int length = currentJavadoc.length();
+//				edit = new ReplaceEdit(offset, length, newJavadoc);
+//			}else {
+//				String methodJavadoc = getJavadoc(node.getMethod());
+//				if(methodJavadoc == null){
+//					exportJavadoc(node.getMethod());
+//				}
+//				int offset = source.indexOf(methodJavadoc) + methodJavadoc.length();
+//				edit = new InsertEdit(offset, newJavadoc);
+//			}
+//			unit.becomeWorkingCopy(null);
+//			unit.applyTextEdit(edit, null);
+//			unit.commitWorkingCopy(false, null);
 			return null;
 		}
 
@@ -216,11 +219,14 @@ public class JavaDocSupport {
 		@Override
 		public Object visit(MethodNode node) throws Exception {
 			IMethod method = JavaModelAnalyser.getIMethod(node);
-			String javadoc = node.getDescription();
+			String javadoc = node.getDescription() != null ? node.getDescription() : "";
 			if(node.getParameters().size() > 0){
-				javadoc +="\n\n";
+				if(javadoc.equals("") == false){
+					javadoc +="\n\n";
+				}
 				for(MethodParameterNode parameter : node.getMethodParameters()){
-					javadoc += "@param " + parameter.getName() + " " + parameter.getDescription() + "\n";
+					String parameterComments = parameter.getDescription() != null ? parameter.getDescription() : "";
+					javadoc += "@param " + parameter.getName() + " " + parameterComments + "\n";
 				}
 			}
 			exportJavadoc(method, javadoc);

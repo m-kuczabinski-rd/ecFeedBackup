@@ -179,9 +179,4 @@ public abstract class AbstractParameterInterface extends ChoicesParentInterface 
 		}
 		return result;
 	}
-
-	@Override
-	public boolean commentsImportExportEnabled(){
-		return super.commentsImportExportEnabled() && JavaUtils.isUserType(getType());
-	}
 }

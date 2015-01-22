@@ -1,12 +1,16 @@
 package com.testify.ecfeed.ui.editor;
 
+import java.util.Arrays;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.TabItem;
 
+import com.testify.ecfeed.adapter.EImplementationStatus;
+import com.testify.ecfeed.adapter.java.JavaUtils;
+import com.testify.ecfeed.model.MethodParameterNode;
 import com.testify.ecfeed.ui.common.JavaDocSupport;
-import com.testify.ecfeed.ui.modelif.AbstractParameterInterface;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 import com.testify.ecfeed.ui.modelif.MethodParameterInterface;
 
@@ -15,7 +19,13 @@ public class MethodParameterCommentsSection extends AbstractParameterCommentsSec
 	private MethodParameterInterface fTargetIf;
 
 	private TabItem fParameterJavadocTab;
-	private TabItem fTypeJavadocTab;
+
+	private MenuItem fExporAllItem;
+	private MenuItem fExportParameterCommentsItem;
+	private MenuItem fExportTypeCommentsItem;
+	private MenuItem fImportAllItem;
+	private MenuItem fImportParameterCommentsItem;
+	private MenuItem fImportTypeCommentsItem;
 
 	protected class ImportParameterCommentsSelectionAdapter extends AbstractSelectionAdapter{
 		@Override
@@ -33,20 +43,42 @@ public class MethodParameterCommentsSection extends AbstractParameterCommentsSec
 		}
 	}
 
+	protected class ExportAllParameterCommentsSelectionAdapter extends ExportAllSelectionAdapter{
+		@Override
+		public void widgetSelected(SelectionEvent e) {
+			super.widgetSelected(e);
+			getTabFolder().setSelection(getTabFolder().indexOf(fParameterJavadocTab));
+		}
+	}
+
+	protected class ImportAllParameterCommentsSelectionAdapter extends ImportAllSelectionAdapter{
+		@Override
+		public void widgetSelected(SelectionEvent e) {
+			super.widgetSelected(e);
+			getTabFolder().setSelection(getTabFolder().indexOf(getParameterCommentsTab()));
+		}
+	}
+
+
 	public MethodParameterCommentsSection(ISectionContext sectionContext,
 			IModelUpdateContext updateContext) {
 		super(sectionContext, updateContext);
 
-		fParameterJavadocTab = addTextTab("Parameter javadoc", false);
-		fTypeJavadocTab = addTextTab("Type javadoc", false);
+		int typeJavadocTabIndex = Arrays.asList(getTabFolder().getItems()).indexOf(getTypeJavadocTab());
+		fParameterJavadocTab = addTextTab("Parameter javadoc", typeJavadocTabIndex);
 	}
 
 	@Override
-	protected AbstractParameterInterface getTargetIf() {
+	protected MethodParameterInterface getTargetIf() {
 		if(fTargetIf == null){
 			fTargetIf = new MethodParameterInterface(getUpdateContext());
 		}
 		return fTargetIf;
+	}
+
+	@Override
+	public MethodParameterNode getTarget(){
+		return (MethodParameterNode)super.getTarget();
 	}
 
 	@Override
@@ -58,32 +90,49 @@ public class MethodParameterCommentsSection extends AbstractParameterCommentsSec
 			getTextFromTabItem(fParameterJavadocTab).setText("");
 		}
 		if(JavaDocSupport.getTypeJavadoc(getTarget()) != null){
-			getTextFromTabItem(fTypeJavadocTab).setText(JavaDocSupport.getTypeJavadoc(getTarget()));
+			getTextFromTabItem(getTypeJavadocTab()).setText(JavaDocSupport.getTypeJavadoc(getTarget()));
 		}else{
-			getTextFromTabItem(fTypeJavadocTab).setText("");
+			getTextFromTabItem(getTypeJavadocTab()).setText("");
 		}
+		refreshMenuItems();
+	}
+
+	private void refreshMenuItems() {
+		EImplementationStatus methodStatus = getTargetIf().getImplementationStatus(getTarget().getMethod());
+		boolean parameterCommentsExportEnabled = methodStatus != EImplementationStatus.NOT_IMPLEMENTED;
+		boolean typeCommentsExportEnabled = JavaUtils.isUserType(getTarget().getType()) && getTargetIf().getImplementationStatus() != EImplementationStatus.NOT_IMPLEMENTED;
+		fExportParameterCommentsItem.setEnabled(parameterCommentsExportEnabled);
+		fImportParameterCommentsItem.setEnabled(parameterCommentsExportEnabled);
+		fExportTypeCommentsItem.setEnabled(typeCommentsExportEnabled);
+		fImportTypeCommentsItem.setEnabled(typeCommentsExportEnabled);
+		fExporAllItem.setEnabled(typeCommentsExportEnabled || parameterCommentsExportEnabled);
+		fImportAllItem.setEnabled(typeCommentsExportEnabled || parameterCommentsExportEnabled);
 	}
 
 	@Override
 	protected void createExportMenuItems() {
-		MenuItem exportParameterAndTypeCommentsItem = new MenuItem(getExportButtonMenu(), SWT.NONE, 0);
-		exportParameterAndTypeCommentsItem.setText("Export parameter and type comments with choices");
-		MenuItem exportParameterCommentsItem = new MenuItem(getExportButtonMenu(), SWT.NONE, 1);
-		exportParameterCommentsItem.setText("Export only parameter comments");
-		exportParameterCommentsItem.addSelectionListener(new ExportParameterCommentsSelectionAdapter());
-		MenuItem exportTypeCommentsItem = new MenuItem(getExportButtonMenu(), SWT.NONE, 1);
-		exportTypeCommentsItem.setText("Export only type comments");
+		fExporAllItem = new MenuItem(getExportButtonMenu(), SWT.NONE, 0);
+		fExporAllItem.setText("Export all");
+		fExporAllItem.addSelectionListener(new ExportAllParameterCommentsSelectionAdapter());
+		fExportParameterCommentsItem = new MenuItem(getExportButtonMenu(), SWT.NONE, 1);
+		fExportParameterCommentsItem.setText("Export method comments");
+		fExportParameterCommentsItem.addSelectionListener(new ExportParameterCommentsSelectionAdapter());
+		fExportTypeCommentsItem = new MenuItem(getExportButtonMenu(), SWT.NONE, 1);
+		fExportTypeCommentsItem.setText("Export only type comments");
+		fExportTypeCommentsItem.addSelectionListener(new ExportFullTypeSelectionAdapter());
 	}
 
 	@Override
 	protected void createImportMenuItems() {
-		MenuItem importParameterAndTypeCommentsItem = new MenuItem(getImportButtonMenu(), SWT.NONE, 0);
-		importParameterAndTypeCommentsItem.setText("Import parameter and type comments with choices");
-		MenuItem importParameterCommentsItem = new MenuItem(getImportButtonMenu(), SWT.NONE, 1);
-		importParameterCommentsItem.setText("Import only parameter comments");
-		importParameterCommentsItem.addSelectionListener(new ImportParameterCommentsSelectionAdapter());
-		MenuItem importTypeCommentsItem = new MenuItem(getImportButtonMenu(), SWT.NONE, 1);
-		importTypeCommentsItem.setText("Import only type comments");
+		fImportAllItem = new MenuItem(getImportButtonMenu(), SWT.NONE, 0);
+		fImportAllItem.setText("Import all");
+		fImportAllItem.addSelectionListener(new ImportAllParameterCommentsSelectionAdapter());
+		fImportParameterCommentsItem = new MenuItem(getImportButtonMenu(), SWT.NONE, 1);
+		fImportParameterCommentsItem.setText("Import only parameter comments");
+		fImportParameterCommentsItem.addSelectionListener(new ImportParameterCommentsSelectionAdapter());
+		fImportTypeCommentsItem = new MenuItem(getImportButtonMenu(), SWT.NONE, 1);
+		fImportTypeCommentsItem.setText("Import only type comments");
+		fImportTypeCommentsItem.addSelectionListener(new ImportFullTypeSelectionAdapter());
 	}
 
 }

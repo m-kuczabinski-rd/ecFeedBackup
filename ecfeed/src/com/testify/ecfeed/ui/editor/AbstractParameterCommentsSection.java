@@ -64,9 +64,9 @@ public abstract class AbstractParameterCommentsSection extends TabFolderComments
 	public AbstractParameterCommentsSection(ISectionContext sectionContext, IModelUpdateContext updateContext) {
 		super(sectionContext, updateContext);
 
-		fParameterCommentsTab = addTextTab("Parameter", true);
-		fTypeCommentsTab = addTextTab("Type", true);
-		fTypeJavadocTab = addTextTab("Type javadoc", false);
+		fParameterCommentsTab = addTextTab("Parameter");
+		fTypeCommentsTab = addTextTab("Type");
+		fTypeJavadocTab = addTextTab("Type javadoc");
 
 		addEditListener(new EditButtonListener());
 	}

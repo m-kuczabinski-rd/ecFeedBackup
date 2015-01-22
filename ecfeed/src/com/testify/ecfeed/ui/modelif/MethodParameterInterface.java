@@ -8,6 +8,7 @@ import java.util.Set;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
 
+import com.testify.ecfeed.adapter.EImplementationStatus;
 import com.testify.ecfeed.adapter.IModelOperation;
 import com.testify.ecfeed.adapter.java.JavaUtils;
 import com.testify.ecfeed.adapter.operations.MethodParameterOperationSetLink;
@@ -180,4 +181,21 @@ public class MethodParameterInterface extends AbstractParameterInterface {
 		return new MethodParameterOperationSetType(getTarget(), type, getAdapterProvider());
 	}
 
+	@Override
+	public boolean commentsImportExportEnabled(){
+		if(getImplementationStatus(getTarget().getMethod()) != EImplementationStatus.NOT_IMPLEMENTED){
+			return true;
+		}
+		if(getImplementationStatus() != EImplementationStatus.NOT_IMPLEMENTED){
+			return true;
+		}
+		return false;
+	}
+
+	@Override
+	public boolean exportAllComments(){
+		boolean result = super.exportAllComments();
+		exportTypeJavadocComments();
+		return result;
+	}
 }

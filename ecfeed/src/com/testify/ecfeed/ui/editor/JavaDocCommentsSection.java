@@ -43,8 +43,8 @@ public class JavaDocCommentsSection extends TabFolderCommentsSection {
 	public JavaDocCommentsSection(ISectionContext sectionContext, IModelUpdateContext updateContext) {
 		super(sectionContext, updateContext);
 
-		fCommentsTab = addTextTab("Comments", true);
-		fJavadocTab = addTextTab("JavaDoc", false);
+		fCommentsTab = addTextTab("Comments");
+		fJavadocTab = addTextTab("JavaDoc");
 
 		addEditListener(new TabFolderEditButtonListener());
 	}
