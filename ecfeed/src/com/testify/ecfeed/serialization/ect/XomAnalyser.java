@@ -409,6 +409,7 @@ public class XomAnalyser {
 		String value = getAttributeValue(element, VALUE_ATTRIBUTE);
 
 		ChoiceNode choice = new ChoiceNode(name, value);
+		choice.setDescription(parseComments(element));
 
 		for(Element child : getIterableChildren(element)){
 			if(child.getLocalName() == Constants.CHOICE_NODE_NAME){
