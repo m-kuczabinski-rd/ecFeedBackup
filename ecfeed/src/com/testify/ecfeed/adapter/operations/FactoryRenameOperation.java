@@ -77,8 +77,12 @@ public class FactoryRenameOperation {
 
 		@Override
 		protected void verifyNewName(String newName) throws ModelOperationException {
+			GlobalParameterNode target = (GlobalParameterNode) getTarget();
 			if(JavaUtils.isJavaKeyword(newName)){
 				throw new ModelOperationException(Messages.CATEGORY_NAME_REGEX_PROBLEM);
+			}
+			if(target.getParametersParent().getParameter(newName) != null){
+				throw new ModelOperationException(Messages.CATEGORY_NAME_DUPLICATE_PROBLEM);
 			}
 		}
 	}
