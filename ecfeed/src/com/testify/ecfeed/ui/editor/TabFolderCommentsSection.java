@@ -25,14 +25,12 @@ public abstract class TabFolderCommentsSection extends AbstractCommentsSection {
 	}
 
 	private TabFolder fTabFolder;
-	private Map<TabItem, Boolean> fEditableIndicator;
 	private Map<TabItem, Text> fTextItems;
 
 	public TabFolderCommentsSection(ISectionContext sectionContext, IModelUpdateContext updateContext) {
 		super(sectionContext, updateContext);
 		GridData gd = new GridData(SWT.FILL, SWT.FILL, true, false);
 		getSection().setLayoutData(gd);
-		fEditableIndicator = new HashMap<TabItem, Boolean>();
 		fTextItems = new HashMap<TabItem, Text>();
 	}
 
@@ -52,7 +50,6 @@ public abstract class TabFolderCommentsSection extends AbstractCommentsSection {
 		TabItem item = new TabItem(fTabFolder, SWT.NONE);
 		item.setText(title);
 		item.setControl(text);
-		fEditableIndicator.put(item, editable);
 		fTextItems.put(item, text);
 		return item;
 	}
@@ -64,11 +61,6 @@ public abstract class TabFolderCommentsSection extends AbstractCommentsSection {
 	}
 
 	protected void refreshEditButton() {
-//		int selectedTabIndex = fTabFolder.getSelectionIndex();
-//		TabItem selectedItem = fTabFolder.getItem(selectedTabIndex);
-//		if(selectedTabIndex != -1 && fEditableIndicator.get(selectedItem) != null){
-//			getEditButton().setEnabled(fEditableIndicator.get(selectedItem));
-//		}
 	}
 
 	@Override
