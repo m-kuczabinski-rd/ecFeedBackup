@@ -37,6 +37,22 @@ public class JavaDocCommentsSection extends TabFolderCommentsSection {
 		}
 	}
 
+	protected class JavadocExportAllSelectionAdapter extends ExportAllSelectionAdapter{
+		@Override
+		public void widgetSelected(SelectionEvent e) {
+			super.widgetSelected(e);
+			getTabFolder().setSelection(getTabFolder().indexOf(getJavaDocItem()));
+		}
+	}
+
+	protected class JavadocImportAllSelectionAdapter extends ImportAllSelectionAdapter{
+		@Override
+		public void widgetSelected(SelectionEvent e) {
+			getTargetIf().importAllJavadocComments();
+			getTabFolder().setSelection(getTabFolder().indexOf(getCommentsItem()));
+		}
+	}
+
 	private TabItem fCommentsTab;
 	private TabItem fJavadocTab;
 
@@ -88,20 +104,22 @@ public class JavaDocCommentsSection extends TabFolderCommentsSection {
 
 	@Override
 	protected void createExportMenuItems() {
-		MenuItem exportItem = new MenuItem(getExportButtonMenu(), SWT.NONE);
-		exportItem.setText("Export comments of this element");
-		exportItem.addSelectionListener(new ExportSelectionAdapter());
 		MenuItem exportAllItem = new MenuItem(getExportButtonMenu(), SWT.NONE);
-		exportAllItem.setText("Export comments of entire subtree");
+		exportAllItem.setText("Export all");
+		exportAllItem.addSelectionListener(new JavadocExportAllSelectionAdapter());
+		MenuItem exportItem = new MenuItem(getExportButtonMenu(), SWT.NONE);
+		exportItem.setText("Export comments of this element only");
+		exportItem.addSelectionListener(new ExportSelectionAdapter());
 	}
 
 	@Override
 	protected void createImportMenuItems() {
-		MenuItem importItem = new MenuItem(getImportButtonMenu(), SWT.NONE);
-		importItem.setText("Import comments of this element");
-		importItem.addSelectionListener(new ImportSelectionAdapter());
 		MenuItem importAllItem = new MenuItem(getImportButtonMenu(), SWT.NONE);
-		importAllItem.setText("Import comments for entire subtree");
+		importAllItem.setText("Import all");
+		importAllItem.addSelectionListener(new JavadocImportAllSelectionAdapter());
+		MenuItem importItem = new MenuItem(getImportButtonMenu(), SWT.NONE);
+		importItem.setText("Import comments of this element only");
+		importItem.addSelectionListener(new ImportSelectionAdapter());
 	}
 
 
