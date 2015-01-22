@@ -398,8 +398,11 @@ public class JavaDocSupport {
 				}
 				if(edit != null){
 					ICompilationUnit unit = member.getCompilationUnit();
-					unit.applyTextEdit(edit, null);
-					unit.commitWorkingCopy(true, null);
+					if(unit != null){
+						unit.becomeWorkingCopy(null);
+						unit.applyTextEdit(edit, null);
+						unit.commitWorkingCopy(true, null);
+					}
 				}
 			}
 		}
