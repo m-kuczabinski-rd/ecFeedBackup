@@ -376,6 +376,7 @@ public class EclipseModelImplementer extends AbstractModelImplementer {
 		return false;
 	}
 
+	@SuppressWarnings("deprecation")
 	private CompilationUnit getCompilationUnit(IType type) throws CoreException{
 		final ASTParser parser = ASTParser.newParser(AST.JLS4);
 		parser.setKind(ASTParser.K_COMPILATION_UNIT);
