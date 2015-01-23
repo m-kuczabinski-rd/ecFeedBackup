@@ -48,4 +48,24 @@ public class TestParameterDetailsPage{
 		System.out.println("changeChoiceValueTest(" + type + ", " + newValue + ", " + isExpected + ", " + isConvertable + ")");
 	}
 
+	/*
+	 * Test adding at least 3 in a row to ensure names are properly changed to not duplicate.
+	 */
+	public void addChoiceTest(){
+		// TODO Auto-generated method stub
+		System.out.println("addChoiceTest()");
+	}
+
+
+	public void removeSelectedChoicesTest(ESelectionType selectionType){
+		// TODO Auto-generated method stub
+		System.out.println("removeSelectedChoicesTest(" + selectionType + ")");
+	}
+
+
+	public void changeChoiceNameTest(String newName, boolean isDuplicate, boolean validation){
+		// TODO Auto-generated method stub
+		System.out.println("changeChoiceNameTest(" + newName + ", " + isDuplicate + ", " + validation + ")");
+	}
+
 }

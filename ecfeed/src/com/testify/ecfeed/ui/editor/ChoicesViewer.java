@@ -271,4 +271,8 @@ public class ChoicesViewer extends TableViewerSection {
 			setActionProvider(null);
 		}
 	}
+	
+	public void setReplaceButtonEnabled(boolean isEnabled){
+		fReplaceWithDefaultButton.setEnabled(isEnabled);
+	}
 }
