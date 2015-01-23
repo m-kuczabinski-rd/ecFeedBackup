@@ -13,6 +13,7 @@ import org.junit.runner.RunWith;
 import com.testify.ecfeed.adapter.IModelOperation;
 import com.testify.ecfeed.adapter.ModelOperationException;
 import com.testify.ecfeed.adapter.ModelOperationManager;
+import com.testify.ecfeed.adapter.java.JavaPrimitiveTypePredicate;
 import com.testify.ecfeed.generators.CartesianProductGenerator;
 import com.testify.ecfeed.junit.OnlineRunner;
 import com.testify.ecfeed.junit.annotations.Constraints;
@@ -115,7 +116,7 @@ public class MethodOperationRemoveParameterTest{
 		if(removedParameterExpected){
 			ChoiceNode condition = new ChoiceNode("int", "7");
 			condition.setParent(removedParameter);
-			consequence = new ExpectedValueStatement(removedParameter, condition);
+			consequence = new ExpectedValueStatement(removedParameter, condition, new JavaPrimitiveTypePredicate());
 		}
 		else{
 			consequence = new ChoicesParentStatement(removedParameter, EStatementRelation.EQUAL, removedChoice);

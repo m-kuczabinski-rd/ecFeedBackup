@@ -39,6 +39,7 @@ import nu.xom.Element;
 import nu.xom.Elements;
 import nu.xom.Node;
 
+import com.testify.ecfeed.adapter.java.JavaPrimitiveTypePredicate;
 import com.testify.ecfeed.model.AbstractStatement;
 import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.model.ChoicesParentStatement;
@@ -400,7 +401,7 @@ public class XomAnalyser {
 		ChoiceNode condition = new ChoiceNode("expected", valueString);
 		condition.setParent(parameter);
 
-		return new ExpectedValueStatement(parameter, condition);
+		return new ExpectedValueStatement(parameter, condition, new JavaPrimitiveTypePredicate());
 	}
 
 	public ChoiceNode parseChoice(Element element) throws ParserException{

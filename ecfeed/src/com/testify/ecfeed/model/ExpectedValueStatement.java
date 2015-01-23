@@ -13,16 +13,16 @@ package com.testify.ecfeed.model;
 
 import java.util.List;
 
-import com.testify.ecfeed.adapter.java.JavaUtils;
-
 public class ExpectedValueStatement extends AbstractStatement implements IRelationalStatement{
 
 	MethodParameterNode fParameter;
 	ChoiceNode fCondition;
+	private IPrimitiveTypePredicate fPredicate;
 
-	public ExpectedValueStatement(MethodParameterNode parameter, ChoiceNode condition) {
+	public ExpectedValueStatement(MethodParameterNode parameter, ChoiceNode condition, IPrimitiveTypePredicate predicate) {
 		fParameter = parameter;
 		fCondition = condition.getCopy();
+		fPredicate = predicate;
 	}
 
 	@Override
@@ -79,7 +79,7 @@ public class ExpectedValueStatement extends AbstractStatement implements IRelati
 
 	@Override
 	public ExpectedValueStatement getCopy(){
-		return new ExpectedValueStatement(fParameter, fCondition.getCopy());
+		return new ExpectedValueStatement(fParameter, fCondition.getCopy(), fPredicate);
 	}
 
 	@Override
@@ -89,7 +89,8 @@ public class ExpectedValueStatement extends AbstractStatement implements IRelati
 			fParameter = parameter;
 			fCondition.setParent(parameter);
 			String type = parameter.getType();
-			if(JavaUtils.isUserType(type)){
+			//TODO remove reference to JavaUtils
+			if(fPredicate.isPrimitive(type) == false){
 				ChoiceNode choice = parameter.getChoice(fCondition.getQualifiedName());
 				if(choice != null){
 					fCondition = choice;

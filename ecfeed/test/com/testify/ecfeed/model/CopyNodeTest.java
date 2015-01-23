@@ -17,6 +17,8 @@ import java.util.Arrays;
 
 import org.junit.Test;
 
+import com.testify.ecfeed.adapter.java.JavaPrimitiveTypePredicate;
+
 
 public class CopyNodeTest{
 
@@ -138,7 +140,7 @@ public class CopyNodeTest{
 		premise.addStatement(new StaticStatement(true));
 		premise.addStatement(new ChoicesParentStatement(par1, EStatementRelation.EQUAL, choice1));
 		premise.addStatement(new ChoicesParentStatement(par1, EStatementRelation.NOT, "label"));
-		ExpectedValueStatement consequence = new ExpectedValueStatement(par2, expectedChoice);
+		ExpectedValueStatement consequence = new ExpectedValueStatement(par2, expectedChoice, new JavaPrimitiveTypePredicate());
 
 		ConstraintNode constraint = new ConstraintNode("constraint", new Constraint(premise, consequence));
 		method.addConstraint(constraint);
@@ -238,7 +240,7 @@ public class CopyNodeTest{
 		ChoiceNode choice = new ChoiceNode("expected", "876");
 		choice.setParent(parameter);
 
-		ExpectedValueStatement statement = new ExpectedValueStatement(parameter, choice);
+		ExpectedValueStatement statement = new ExpectedValueStatement(parameter, choice, new JavaPrimitiveTypePredicate());
 		ExpectedValueStatement copy = statement.getCopy();
 		assertTrue(statement.compare(copy));
 	}

@@ -41,6 +41,7 @@ import java.util.Set;
 
 import org.junit.Test;
 
+import com.testify.ecfeed.adapter.java.JavaPrimitiveTypePredicate;
 import com.testify.ecfeed.model.AbstractNode;
 import com.testify.ecfeed.model.AbstractStatement;
 import com.testify.ecfeed.model.ChoiceNode;
@@ -289,7 +290,7 @@ public class RandomModelGenerator {
 
 		String value = randomChoiceValue(parameter.getType());
 		String name = generateString(REGEX_PARTITION_NODE_NAME);
-		return new ExpectedValueStatement(parameter, new ChoiceNode(name, value));
+		return new ExpectedValueStatement(parameter, new ChoiceNode(name, value), new JavaPrimitiveTypePredicate());
 	}
 
 	public StatementArray generateStatementArray(MethodNode method, int depth) {

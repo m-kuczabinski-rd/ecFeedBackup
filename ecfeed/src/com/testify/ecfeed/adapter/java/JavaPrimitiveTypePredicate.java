@@ -1,6 +1,6 @@
 package com.testify.ecfeed.adapter.java;
 
-import com.testify.ecfeed.adapter.IPrimitiveTypePredicate;
+import com.testify.ecfeed.model.IPrimitiveTypePredicate;
 
 public class JavaPrimitiveTypePredicate implements IPrimitiveTypePredicate{
 	@Override

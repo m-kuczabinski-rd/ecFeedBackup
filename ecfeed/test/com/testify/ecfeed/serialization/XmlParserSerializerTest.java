@@ -28,6 +28,7 @@ import java.util.Set;
 
 import org.junit.Test;
 
+import com.testify.ecfeed.adapter.java.JavaPrimitiveTypePredicate;
 import com.testify.ecfeed.generators.RandomGenerator;
 import com.testify.ecfeed.generators.api.GeneratorException;
 import com.testify.ecfeed.generators.api.IConstraint;
@@ -165,7 +166,7 @@ public class XmlParserSerializerTest {
 			Constraint labelConstraint = new Constraint(new StaticStatement(true),
 					new ChoicesParentStatement(choicesParentParameter, EStatementRelation.EQUAL, "label"));
 			Constraint expectedConstraint = new Constraint(new StaticStatement(true),
-					new ExpectedValueStatement(expectedParameter, new ChoiceNode("expected", "n")));
+					new ExpectedValueStatement(expectedParameter, new ChoiceNode("expected", "n"), new JavaPrimitiveTypePredicate()));
 			ConstraintNode choiceConstraintNode = new ConstraintNode("choice constraint", choiceConstraint);
 			ConstraintNode labelConstraintNode = new ConstraintNode("label constraint", labelConstraint);
 			ConstraintNode expectedConstraintNode = new ConstraintNode("expected constraint", expectedConstraint);
@@ -428,7 +429,7 @@ public class XmlParserSerializerTest {
 	private AbstractStatement createExpectedStatement(List<MethodParameterNode> parameters) {
 		if(parameters.size() == 0) return null;
 		MethodParameterNode parameter = parameters.get(rand.nextInt(parameters.size()));
-		return new ExpectedValueStatement(parameter, new ChoiceNode("default", createRandomValue(parameter.getType())));
+		return new ExpectedValueStatement(parameter, new ChoiceNode("default", createRandomValue(parameter.getType())), new JavaPrimitiveTypePredicate());
 	}
 
 	private List<MethodParameterNode> getChoicesParentParameters(List<? extends MethodParameterNode> parameters) {

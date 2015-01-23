@@ -26,6 +26,7 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.forms.widgets.Section;
 
+import com.testify.ecfeed.adapter.java.JavaPrimitiveTypePredicate;
 import com.testify.ecfeed.model.AbstractStatement;
 import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.model.ChoicesParentStatement;
@@ -311,7 +312,7 @@ public class ConstraintViewer extends TreeViewerSection {
 				if(parameter != null && parameter.isExpected()){
 					ChoiceNode condition = new ChoiceNode("expected", parameter.getDefaultValue());
 					condition.setParent(parameter);
-					return new ExpectedValueStatement(parameter, condition);
+					return new ExpectedValueStatement(parameter, condition, new JavaPrimitiveTypePredicate());
 				}
 				else if(parameter != null && parameter.getChoices().size() > 0){
 					ChoiceNode condition = parameter.getChoices().get(0);
