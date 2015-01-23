@@ -31,6 +31,7 @@ public class TestCaseDetailsPage extends BasicDetailsPage {
 
 	private Combo fTestSuiteNameCombo;
 	private TestDataViewer fTestDataViewer;
+	private Button fExecuteButton;
 
 	private TestCaseInterface fTestCaseIf;
 	private SingleTextCommentsSection fCommentsSection;
@@ -73,6 +74,7 @@ public class TestCaseDetailsPage extends BasicDetailsPage {
 			fTestSuiteNameCombo.setItems(testCase.getMethod().getTestSuites().toArray(new String[]{}));
 			fTestSuiteNameCombo.setText(testCase.getName());
 			fTestDataViewer.setInput(testCase);
+			fExecuteButton.setEnabled(fTestCaseIf.isExecutable());
 		}
 	}
 
@@ -86,8 +88,8 @@ public class TestCaseDetailsPage extends BasicDetailsPage {
 		fTestSuiteNameCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		fTestSuiteNameCombo.addSelectionListener(new RenameTestCaseAdapter());
 
-		Button executeButton = getToolkit().createButton(composite, "Execute", SWT.NONE);
-		executeButton.addSelectionListener(new SelectionAdapter() {
+		fExecuteButton = getToolkit().createButton(composite, "Execute", SWT.NONE);
+		fExecuteButton.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e){
 				fTestCaseIf.execute();

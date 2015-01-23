@@ -262,6 +262,7 @@ public class ChoicesViewer extends TableViewerSection {
 		fValueEditingSupport.setEnabled(enabled);
 		fAddChoicesButton.setEnabled(enabled);
 		fRemoveSelectedButton.setEnabled(enabled);
+		fReplaceWithDefaultButton.setEnabled(enabled);
 		fDragListener.setEnabled(enabled);
 		fDropListener.setEnabled(enabled);
 		if(enabled){
@@ -269,5 +270,9 @@ public class ChoicesViewer extends TableViewerSection {
 		}else{
 			setActionProvider(null);
 		}
+	}
+	
+	public void setReplaceButtonEnabled(boolean isEnabled){
+		fReplaceWithDefaultButton.setEnabled(isEnabled);
 	}
 }

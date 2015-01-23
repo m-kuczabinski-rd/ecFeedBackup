@@ -11,11 +11,6 @@ public class TestClassDetailsPage{
 		System.out.println("implementClassTest()");
 	}
 
-	public void changeNameTest(String new_name){
-		// TODO Auto-generated method stub
-		System.out.println("changeNameTest(" + new_name + ")");
-	}
-
 	public void changePackageTest(String new_package_name){
 		// TODO Auto-generated method stub
 		System.out.println("changePackageTest(" + new_package_name + ")");
@@ -36,11 +31,6 @@ public class TestClassDetailsPage{
 		System.out.println("reassignClassTest()");
 	}
 
-	public void renameMethodTest(String new_name){
-		// TODO Auto-generated method stub
-		System.out.println("renameMethodTest(" + new_name + ")");
-	}
-
 	public void addNewMethod(boolean duplicate){
 		// TODO Auto-generated method stub
 		System.out.println("addNewMethod(" + duplicate + ")");
@@ -54,6 +44,21 @@ public class TestClassDetailsPage{
 	public void OtherMethodsViewerTest(boolean doesMethodExist, boolean doesReturnVoid, boolean isConstructor, boolean isParameterless){
 		// TODO Auto-generated method stub
 		System.out.println("OtherMethodsViewerTest(" + doesMethodExist + ", " + doesReturnVoid + ", " + isConstructor + ", " + isParameterless + ")");
+	}
+	
+	public void OtherMethodsViewerTest2(boolean doesMethodExist, boolean doesReturnVoid, boolean isConstructor, boolean isParameterless){
+		// TODO Auto-generated method stub
+		System.out.println("OtherMethodsViewerTest(" + doesMethodExist + ", " + doesReturnVoid + ", " + isConstructor + ", " + isParameterless + ")");
+	}
+
+	public void renameMethodTest(String new_name, boolean isValid){
+		// TODO Auto-generated method stub
+		System.out.println("renameMethodTest(" + new_name + ", " + isValid + ")");
+	}
+
+	public void renameClassTest(String new_name, boolean isValid){
+		// TODO Auto-generated method stub
+		System.out.println("renameClassTest(" + new_name + ", " + isValid + ")");
 	}
 
 }

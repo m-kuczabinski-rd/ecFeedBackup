@@ -116,6 +116,11 @@ public class ConstraintNode extends AbstractNode{
 	}
 
 	public boolean isConsistent() {
+		for(AbstractParameterNode parameter : getConstraint().getReferencedParameters()){
+			if(getMethod().getParameters().contains(parameter) == false){
+				return false;
+			}
+		}
 		for(ChoiceNode choice : getConstraint().getReferencedChoices()){
 			AbstractParameterNode parameter = choice.getParameter();
 			if(parameter == null || parameter.getChoice(choice.getQualifiedName()) == null){
@@ -129,16 +134,12 @@ public class ConstraintNode extends AbstractNode{
 //				return false;
 //			}
 		}
+
 		for(MethodParameterNode parameter : getMethod().getMethodParameters()){
 			for(String label : getConstraint().getReferencedLabels(parameter)){
 				if(parameter.getLeafLabels().contains(label) == false){
 					return false;
 				}
-			}
-		}
-		for(AbstractParameterNode parameter : getConstraint().getReferencedParameters()){
-			if(getMethod().getParameters().contains(parameter) == false){
-				return false;
 			}
 		}
 		return true;
