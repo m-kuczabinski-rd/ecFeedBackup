@@ -1,8 +1,11 @@
 package com.testify.ecfeed.adapter.operations;
 
+import java.util.List;
+
 import com.testify.ecfeed.adapter.IModelOperation;
 import com.testify.ecfeed.adapter.ModelOperationException;
 import com.testify.ecfeed.model.GlobalParameterNode;
+import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.MethodParameterNode;
 
 public class MethodParameterOperationSetLink extends BulkOperation {
@@ -37,6 +40,13 @@ public class MethodParameterOperationSetLink extends BulkOperation {
 
 		@Override
 		public void execute() throws ModelOperationException {
+			MethodNode method = fTarget.getMethod();
+			List<String> types = method.getParametersTypes();
+			types.set(fTarget.getIndex(), fNewLink.getType());
+			if(method.getClassNode().getMethod(method.getName(), types) != null && method.getClassNode().getMethod(method.getName(), types) != method){
+				throw new ModelOperationException(Messages.METHOD_SIGNATURE_DUPLICATE_PROBLEM(method.getClassNode().getName(), method.getName()));
+			}
+			
 			fCurrentLink = fTarget.getLink();
 			fTarget.setLink(fNewLink);
 		}
