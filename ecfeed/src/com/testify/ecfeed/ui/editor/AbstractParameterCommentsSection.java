@@ -73,22 +73,22 @@ public abstract class AbstractParameterCommentsSection extends TabFolderComments
 
 	@Override
 	protected void createExportMenuItems() {
-		MenuItem exportTypeItem = new MenuItem(getExportButtonMenu(), SWT.NONE);
-		exportTypeItem.setText("Export type comments");
-		exportTypeItem.addSelectionListener(new ExportTypeSelectionAdapter());
 		MenuItem exportAllItem = new MenuItem(getExportButtonMenu(), SWT.NONE);
-		exportAllItem.setText("Export type and choices comments");
+		exportAllItem.setText("Export type comments with choices");
 		exportAllItem.addSelectionListener(new ExportFullTypeSelectionAdapter());
+		MenuItem exportTypeItem = new MenuItem(getExportButtonMenu(), SWT.NONE);
+		exportTypeItem.setText("Export only type comments");
+		exportTypeItem.addSelectionListener(new ExportTypeSelectionAdapter());
 	}
 
 	@Override
 	protected void createImportMenuItems() {
-		MenuItem importTypeItem = new MenuItem(getImportButtonMenu(), SWT.NONE);
-		importTypeItem.setText("Import type comments");
-		importTypeItem.addSelectionListener(new ImportTypeSelectionAdapter());
 		MenuItem importAllItem = new MenuItem(getImportButtonMenu(), SWT.NONE);
 		importAllItem.setText("Import type and choices comments");
 		importAllItem.addSelectionListener(new ImportFullTypeSelectionAdapter());
+		MenuItem importTypeItem = new MenuItem(getImportButtonMenu(), SWT.NONE);
+		importTypeItem.setText("Import only type comments");
+		importTypeItem.addSelectionListener(new ImportTypeSelectionAdapter());
 	}
 
 	@Override
