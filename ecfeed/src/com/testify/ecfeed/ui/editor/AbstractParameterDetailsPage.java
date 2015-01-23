@@ -126,4 +126,8 @@ public abstract class AbstractParameterDetailsPage extends BasicDetailsPage {
 	protected abstract AbstractParameterInterface getParameterIf();
 
 	protected abstract AbstractParameterCommentsSection getParameterCommentsSection(ISectionContext sectionContext, IModelUpdateContext updateContext);
+
+	protected Button getBrowseUserTypeButton() {
+		return fBrowseUserTypeButton;
+	}
 }
