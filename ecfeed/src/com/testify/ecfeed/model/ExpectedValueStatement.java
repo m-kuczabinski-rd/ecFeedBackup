@@ -126,4 +126,8 @@ public class ExpectedValueStatement extends AbstractStatement implements IRelati
 	public Object accept(IStatementVisitor visitor) throws Exception {
 		return visitor.visit(this);
 	}
+
+	public boolean isParameterPrimitive(){
+		return fPredicate.isPrimitive(fParameter.getType());
+	}
 }

@@ -15,7 +15,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import com.testify.ecfeed.adapter.java.JavaUtils;
 import com.testify.ecfeed.generators.api.IConstraint;
 import com.testify.ecfeed.model.ChoicesParentStatement.ChoiceCondition;
 import com.testify.ecfeed.model.ChoicesParentStatement.LabelCondition;
@@ -49,8 +48,7 @@ public class Constraint implements IConstraint<ChoiceNode> {
 		@Override
 		public Object visit(ExpectedValueStatement statement) throws Exception {
 			Set<ChoiceNode> result = new HashSet<>();
-			String type = statement.getParameter().getType();
-			if(JavaUtils.isUserType(type)){
+			if(statement.isParameterPrimitive()){
 				result.add(statement.getCondition());
 			}
 			return result;
