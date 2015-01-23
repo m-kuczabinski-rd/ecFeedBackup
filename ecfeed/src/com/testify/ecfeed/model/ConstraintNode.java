@@ -116,12 +116,17 @@ public class ConstraintNode extends AbstractNode{
 	}
 
 	public boolean isConsistent() {
+		for(AbstractParameterNode parameter : getConstraint().getReferencedParameters()){
+			if(getMethod().getParameters().contains(parameter) == false){
+				return false;
+			}
+		}
 		for(ChoiceNode choice : getConstraint().getReferencedChoices()){
 			AbstractParameterNode parameter = choice.getParameter();
 			if(parameter == null || parameter.getChoice(choice.getQualifiedName()) == null){
 				return false;
 			}
-			//check if the choices parent parameter is still part of the method			
+			//check if the choices parent parameter is still part of the method
 			if(parameter.getMethods().contains(getMethod()) == false){
 				return false;
 			}
@@ -129,7 +134,7 @@ public class ConstraintNode extends AbstractNode{
 //				return false;
 //			}
 		}
-		
+
 		for(MethodParameterNode parameter : getMethod().getMethodParameters()){
 			for(String label : getConstraint().getReferencedLabels(parameter)){
 				if(parameter.getLeafLabels().contains(label) == false){
