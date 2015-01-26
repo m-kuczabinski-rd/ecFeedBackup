@@ -20,6 +20,9 @@ public class Messages {
 	public static final String MISSING_PARENT_PROBLEM = "Missing current or new parent of moved class";
 	public static final String METHOD_NAME_REGEX_PROBLEM = "The method name should fulfill all rules for naming method in Java";
 	public static final String METHOD_SIGNATURE_DUPLICATE_PROBLEM(String className, String methodName){return "The class " + className + " already contains model of a method " + methodName + " with identical signature";}
+	public static final String METHOD_GLOBAL_PARAMETER_SIGNATURE_DUPLICATE_PROBLEM(String className, String methodName, String types1, String types2){
+		return "This action would result in duplicate methods in class:\n" + className + "\nmethods:\n" + methodName + types1 + "\n" + methodName + types2; 
+	}
 	public static final String UNEXPECTED_PROBLEM_WHILE_ADDING_ELEMENT = "Element could not be added to the model";
 	public static final String UNEXPECTED_PROBLEM_WHILE_REMOVING_ELEMENT = "Element could not be removed from the model";
 	public static final String METHODS_INCOMPATIBLE_PROBLEM = "The converted methods do not have the same parameter count and types";
