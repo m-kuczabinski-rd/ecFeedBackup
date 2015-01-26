@@ -11,11 +11,9 @@ import com.testify.ecfeed.ui.common.JavaDocSupport;
 import com.testify.ecfeed.ui.modelif.AbstractParameterInterface;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 
-public abstract class AbstractParameterCommentsSection extends TabFolderCommentsSection {
+public abstract class AbstractParameterCommentsSection extends JavaDocCommentsSection {
 
 	private TabItem fParameterCommentsTab;
-	private TabItem fTypeCommentsTab;
-	private TabItem fTypeJavadocTab;
 
 	protected class ImportTypeSelectionAdapter extends AbstractSelectionAdapter{
 		@Override
@@ -55,7 +53,7 @@ public abstract class AbstractParameterCommentsSection extends TabFolderComments
 			if(getActiveItem() == fParameterCommentsTab){
 				getTargetIf().editComments();
 			}
-			else if(getActiveItem() == fTypeCommentsTab || getActiveItem() == fTypeJavadocTab){
+			else if(getActiveItem() == getTypeCommentsTab() || getActiveItem() == getTypeJavadocTab()){
 				getTargetIf().editTypeComments();
 			}
 		}
@@ -64,9 +62,9 @@ public abstract class AbstractParameterCommentsSection extends TabFolderComments
 	public AbstractParameterCommentsSection(ISectionContext sectionContext, IModelUpdateContext updateContext) {
 		super(sectionContext, updateContext);
 
-		fParameterCommentsTab = addTextTab("Parameter");
-		fTypeCommentsTab = addTextTab("Type");
-		fTypeJavadocTab = addTextTab("Type javadoc");
+		fParameterCommentsTab = addTextTab("Parameter", 0);
+		getTypeCommentsTab().setText("Type");
+		getTypeJavadocTab().setText("Type javadoc");
 
 		addEditListener(new EditButtonListener());
 	}
@@ -96,7 +94,7 @@ public abstract class AbstractParameterCommentsSection extends TabFolderComments
 		super.refresh();
 
 		String javadoc = JavaDocSupport.getTypeJavadoc(getTarget());
-		getTextFromTabItem(fTypeJavadocTab).setText(javadoc != null ? javadoc : "");
+		getTextFromTabItem(getTypeJavadocTab()).setText(javadoc != null ? javadoc : "");
 
 		if(getTargetIf().getComments() != null){
 			getTextFromTabItem(fParameterCommentsTab).setText(getTargetIf().getComments());
@@ -104,9 +102,9 @@ public abstract class AbstractParameterCommentsSection extends TabFolderComments
 			getTextFromTabItem(fParameterCommentsTab).setText("");
 		}
 		if(getTargetIf().getTypeComments() != null){
-			getTextFromTabItem(fTypeCommentsTab).setText(getTargetIf().getTypeComments());
+			getTextFromTabItem(getTypeCommentsTab()).setText(getTargetIf().getTypeComments());
 		}else{
-			getTextFromTabItem(fTypeCommentsTab).setText("");
+			getTextFromTabItem(getTypeCommentsTab()).setText("");
 		}
 
 		boolean importExportEnabled = getTargetIf().commentsImportExportEnabled();
@@ -129,11 +127,11 @@ public abstract class AbstractParameterCommentsSection extends TabFolderComments
 	}
 
 	protected TabItem getTypeCommentsTab(){
-		return fTypeCommentsTab;
+		return getCommentsItem();
 	}
 
 	protected TabItem getTypeJavadocTab(){
-		return fTypeJavadocTab;
+		return getJavaDocItem();
 	}
 
 	@Override

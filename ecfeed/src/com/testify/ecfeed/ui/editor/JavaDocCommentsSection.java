@@ -23,8 +23,7 @@ public class JavaDocCommentsSection extends TabFolderCommentsSection {
 	protected class ExportSelectionAdapter extends AbstractSelectionAdapter{
 		@Override
 		public void widgetSelected(SelectionEvent e) {
-			String comments = getTarget().getDescription();
-			getTargetIf().exportCommentsToJavadoc(comments);
+			getTargetIf().exportCommentsToJavadoc(getTargetIf().getComments());
 			getTabFolder().setSelection(getTabFolder().indexOf(getJavaDocItem()));
 		}
 	}
