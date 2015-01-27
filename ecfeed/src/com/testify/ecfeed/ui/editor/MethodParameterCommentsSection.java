@@ -69,14 +69,6 @@ public class MethodParameterCommentsSection extends AbstractParameterCommentsSec
 	}
 
 	@Override
-	protected MethodParameterInterface getTargetIf() {
-		if(fTargetIf == null){
-			fTargetIf = new MethodParameterInterface(getUpdateContext());
-		}
-		return fTargetIf;
-	}
-
-	@Override
 	public MethodParameterNode getTarget(){
 		return (MethodParameterNode)super.getTarget();
 	}
@@ -97,16 +89,12 @@ public class MethodParameterCommentsSection extends AbstractParameterCommentsSec
 		refreshMenuItems();
 	}
 
-	private void refreshMenuItems() {
-		EImplementationStatus methodStatus = getTargetIf().getImplementationStatus(getTarget().getMethod());
-		boolean parameterCommentsExportEnabled = methodStatus != EImplementationStatus.NOT_IMPLEMENTED;
-		boolean typeCommentsExportEnabled = JavaUtils.isUserType(getTarget().getType()) && getTargetIf().getImplementationStatus() != EImplementationStatus.NOT_IMPLEMENTED;
-		fExportParameterCommentsItem.setEnabled(parameterCommentsExportEnabled);
-		fImportParameterCommentsItem.setEnabled(parameterCommentsExportEnabled);
-		fExportTypeCommentsItem.setEnabled(typeCommentsExportEnabled);
-		fImportTypeCommentsItem.setEnabled(typeCommentsExportEnabled);
-		fExportAllItem.setEnabled(typeCommentsExportEnabled || parameterCommentsExportEnabled);
-		fImportAllItem.setEnabled(typeCommentsExportEnabled || parameterCommentsExportEnabled);
+	@Override
+	protected MethodParameterInterface getTargetIf() {
+		if(fTargetIf == null){
+			fTargetIf = new MethodParameterInterface(getUpdateContext());
+		}
+		return fTargetIf;
 	}
 
 	@Override
@@ -133,6 +121,18 @@ public class MethodParameterCommentsSection extends AbstractParameterCommentsSec
 		fImportTypeCommentsItem = new MenuItem(getImportButtonMenu(), SWT.NONE, 1);
 		fImportTypeCommentsItem.setText("Import only type comments");
 		fImportTypeCommentsItem.addSelectionListener(new ImportFullTypeSelectionAdapter());
+	}
+
+	private void refreshMenuItems() {
+		EImplementationStatus methodStatus = getTargetIf().getImplementationStatus(getTarget().getMethod());
+		boolean parameterCommentsExportEnabled = methodStatus != EImplementationStatus.NOT_IMPLEMENTED;
+		boolean typeCommentsExportEnabled = JavaUtils.isUserType(getTarget().getType()) && getTargetIf().getImplementationStatus() != EImplementationStatus.NOT_IMPLEMENTED;
+		fExportParameterCommentsItem.setEnabled(parameterCommentsExportEnabled);
+		fImportParameterCommentsItem.setEnabled(parameterCommentsExportEnabled);
+		fExportTypeCommentsItem.setEnabled(typeCommentsExportEnabled);
+		fImportTypeCommentsItem.setEnabled(typeCommentsExportEnabled);
+		fExportAllItem.setEnabled(typeCommentsExportEnabled || parameterCommentsExportEnabled);
+		fImportAllItem.setEnabled(typeCommentsExportEnabled || parameterCommentsExportEnabled);
 	}
 
 }
