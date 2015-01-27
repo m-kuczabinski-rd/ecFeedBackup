@@ -1,6 +1,7 @@
 package com.testify.ecfeed.ui.editor;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Text;
@@ -18,14 +19,15 @@ public class SingleTextCommentsSection extends AbstractCommentsSection {
 	}
 
 	@Override
-	protected Composite createClientComposite() {
-		Composite composite = super.createClientComposite();
-
-		fCommentsText = getToolkit().createText(getTabFolder(), "", TEXT_STYLE);
+	public Composite createMainControlComposite(Composite parent){
+		//overriding tab folder creation
+		fCommentsText = getToolkit().createText(parent, "", TEXT_STYLE);
+		GridData gd = new GridData(SWT.FILL, SWT.FILL, true, false);
+		gd.heightHint = 150;
+		fCommentsText.setLayoutData(gd);
 		fCommentsText.setBackground(Display.getCurrent().getSystemColor(SWT.COLOR_TITLE_INACTIVE_BACKGROUND));
-		addTabItem(fCommentsText, "Comments");
 
-		return composite;
+		return parent;
 	}
 
 	@Override
