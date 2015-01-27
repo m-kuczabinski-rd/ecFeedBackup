@@ -69,6 +69,39 @@ public abstract class AbstractParameterCommentsSection extends JavaDocCommentsSe
 	}
 
 	@Override
+	public void refresh(){
+		super.refresh();
+	
+		String javadoc = JavaDocSupport.getTypeJavadoc(getTarget());
+		getTextFromTabItem(getTypeJavadocTab()).setText(javadoc != null ? javadoc : "");
+	
+		if(getTargetIf().getComments() != null){
+			getTextFromTabItem(fParameterCommentsTab).setText(getTargetIf().getComments());
+		}else{
+			getTextFromTabItem(fParameterCommentsTab).setText("");
+		}
+		if(getTargetIf().getTypeComments() != null){
+			getTextFromTabItem(getTypeCommentsTab()).setText(getTargetIf().getTypeComments());
+		}else{
+			getTextFromTabItem(getTypeCommentsTab()).setText("");
+		}
+	
+		boolean importExportEnabled = getTargetIf().commentsImportExportEnabled();
+		getExportButton().setEnabled(importExportEnabled);
+		getImportButton().setEnabled(importExportEnabled);
+	}
+
+	@Override
+	public AbstractParameterNode getTarget(){
+		return (AbstractParameterNode)super.getTarget();
+	}
+
+	public void setInput(AbstractParameterNode input){
+		super.setInput(input);
+		getTargetIf().setTarget(input);
+	}
+
+	@Override
 	protected void createExportMenuItems() {
 		MenuItem exportAllItem = new MenuItem(getExportButtonMenu(), SWT.NONE);
 		exportAllItem.setText("Export type and choices comments");
@@ -89,54 +122,6 @@ public abstract class AbstractParameterCommentsSection extends JavaDocCommentsSe
 	}
 
 	@Override
-	public void refresh(){
-		super.refresh();
-
-		String javadoc = JavaDocSupport.getTypeJavadoc(getTarget());
-		getTextFromTabItem(getTypeJavadocTab()).setText(javadoc != null ? javadoc : "");
-
-		if(getTargetIf().getComments() != null){
-			getTextFromTabItem(fParameterCommentsTab).setText(getTargetIf().getComments());
-		}else{
-			getTextFromTabItem(fParameterCommentsTab).setText("");
-		}
-		if(getTargetIf().getTypeComments() != null){
-			getTextFromTabItem(getTypeCommentsTab()).setText(getTargetIf().getTypeComments());
-		}else{
-			getTextFromTabItem(getTypeCommentsTab()).setText("");
-		}
-
-		boolean importExportEnabled = getTargetIf().commentsImportExportEnabled();
-		getExportButton().setEnabled(importExportEnabled);
-		getImportButton().setEnabled(importExportEnabled);
-	}
-
-	public void setInput(AbstractParameterNode input){
-		super.setInput(input);
-		getTargetIf().setTarget(input);
-	}
-
-	@Override
-	public AbstractParameterNode getTarget(){
-		return (AbstractParameterNode)super.getTarget();
-	}
-
-	protected TabItem getParameterCommentsTab(){
-		return fParameterCommentsTab;
-	}
-
-	protected TabItem getTypeCommentsTab(){
-		return getCommentsItem();
-	}
-
-	protected TabItem getTypeJavadocTab(){
-		return getJavaDocItem();
-	}
-
-	@Override
-	protected abstract AbstractParameterInterface getTargetIf();
-
-	@Override
 	protected void refreshEditButton() {
 		TabItem activeItem = getActiveItem();
 		boolean enabled = true;
@@ -146,7 +131,7 @@ public abstract class AbstractParameterCommentsSection extends JavaDocCommentsSe
 			}
 		}
 		getEditButton().setEnabled(enabled);
-
+	
 		AbstractParameterInterface targetIf = getTargetIf();
 		String editButtonText;
 		if(getActiveItem() == getTypeCommentsTab() || getActiveItem() == getTypeJavadocTab()){
@@ -169,5 +154,20 @@ public abstract class AbstractParameterCommentsSection extends JavaDocCommentsSe
 	protected SelectionAdapter createEditButtonSelectionAdapter(){
 		return new EditButtonListener();
 	}
+
+	protected TabItem getParameterCommentsTab(){
+		return fParameterCommentsTab;
+	}
+
+	protected TabItem getTypeCommentsTab(){
+		return getCommentsItem();
+	}
+
+	protected TabItem getTypeJavadocTab(){
+		return getJavaDocItem();
+	}
+
+	@Override
+	protected abstract AbstractParameterInterface getTargetIf();
 
 }
