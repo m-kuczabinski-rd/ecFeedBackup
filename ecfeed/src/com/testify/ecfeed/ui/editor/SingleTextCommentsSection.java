@@ -26,11 +26,6 @@ public class SingleTextCommentsSection extends AbstractCommentsSection {
 		addTabItem(fCommentsText, "Comments");
 
 		return composite;
-//
-//		GridData gd = new GridData(SWT.FILL, SWT.FILL, true, true);
-//		gd.heightHint = 150;
-//		fCommentsText.setLayoutData(gd);
-//		return fCommentsText;
 	}
 
 	@Override
