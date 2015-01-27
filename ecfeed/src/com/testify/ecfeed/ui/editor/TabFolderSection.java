@@ -19,23 +19,6 @@ public abstract class TabFolderSection extends ButtonsCompositeSection {
 		getSection().setLayoutData(gd);
 	}
 
-	protected TabFolder getTabFolder(){
-		return fTabFolder;
-	}
-
-	protected void addTabItem(Control control, String title){
-		TabItem item = new TabItem(fTabFolder, SWT.NONE);
-		item.setText(title);
-		item.setControl(control);
-	}
-
-	protected TabItem addTabItem(Control control, String title, int index){
-		TabItem item = new TabItem(fTabFolder, SWT.NONE, index);
-		item.setText(title);
-		item.setControl(control);
-		return item;
-	}
-
 	@Override
 	protected Composite createMainControlComposite(Composite parent) {
 		Composite composite = super.createMainControlComposite(parent);
@@ -44,6 +27,21 @@ public abstract class TabFolderSection extends ButtonsCompositeSection {
 		gd.heightHint = 150;
 		fTabFolder.setLayoutData(gd);
 		return composite;
+	}
+
+	protected TabFolder getTabFolder(){
+		return fTabFolder;
+	}
+
+	protected TabItem addTabItem(Control control, String title){
+		return addTabItem(control, title, fTabFolder.getItems().length);
+	}
+
+	protected TabItem addTabItem(Control control, String title, int index){
+		TabItem item = new TabItem(fTabFolder, SWT.NONE, index);
+		item.setText(title);
+		item.setControl(control);
+		return item;
 	}
 
 	protected TabItem getActiveItem(){
