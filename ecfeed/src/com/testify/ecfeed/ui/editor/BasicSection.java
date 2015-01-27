@@ -96,7 +96,9 @@ public abstract class BasicSection extends SectionPart implements IModelUpdateCo
 	}
 
 	protected void createContent(){
-		getSection().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+		GridData gd = new GridData(SWT.FILL, SWT.FILL, true, true);
+		gd.heightHint = 150;
+		getSection().setLayoutData(gd);
 		fTextClient = createTextClient();
 		fClientComposite = createClientComposite();
 	}

@@ -54,6 +54,7 @@ public class ButtonsCompositeSection extends BasicSection {
 		gl.marginWidth = 0;
 		fMainControlComposite.setLayout(gl);
 		GridData gd = new GridData(SWT.FILL, SWT.FILL, true, true);
+		gd.heightHint = 150;
 		fMainControlComposite.setLayoutData(gd);
 		return fMainControlComposite;
 	}
