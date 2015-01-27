@@ -146,6 +146,23 @@ public abstract class AbstractParameterCommentsSection extends JavaDocCommentsSe
 			}
 		}
 		getEditButton().setEnabled(enabled);
+
+		AbstractParameterInterface targetIf = getTargetIf();
+		String editButtonText;
+		if(getActiveItem() == getTypeCommentsTab() || getActiveItem() == getTypeJavadocTab()){
+			if(targetIf.getTypeComments() != null && targetIf.getTypeComments().length() > 0){
+				editButtonText = "Edit type comments";
+			}else{
+				editButtonText = "Add type comments";
+			}
+		}else{
+			if(targetIf.getComments() != null && targetIf.getComments().length() > 0){
+				editButtonText = "Edit parameter comments";
+			}else{
+				editButtonText = "Add parameter comments";
+			}
+		}
+		getEditButton().setText(editButtonText);
 	}
 
 	@Override

@@ -70,6 +70,10 @@ public abstract class AbstractCommentsSection extends ButtonsCompositeSection {
 
 	@Override
 	public void refresh(){
+		refreshEditButton();
+	}
+
+	protected void refreshEditButton(){
 		if(getTargetIf() != null && getTargetIf().getComments() != null && getTargetIf().getComments().length() > 0){
 			getEditButton().setText("Edit comments");
 		}else{

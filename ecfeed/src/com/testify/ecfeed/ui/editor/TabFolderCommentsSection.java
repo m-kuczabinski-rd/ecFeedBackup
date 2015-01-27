@@ -59,15 +59,6 @@ public abstract class TabFolderCommentsSection extends AbstractCommentsSection {
 	}
 
 	@Override
-	public void refresh(){
-		super.refresh();
-		refreshEditButton();
-	}
-
-	protected void refreshEditButton() {
-	}
-
-	@Override
 	protected Control createCommentsControl(Composite parent) {
 		fTabFolder = new TabFolder(getMainControlComposite(), SWT.BOTTOM);
 		fTabFolder.addSelectionListener(new TabFolderSelectionListsner());
