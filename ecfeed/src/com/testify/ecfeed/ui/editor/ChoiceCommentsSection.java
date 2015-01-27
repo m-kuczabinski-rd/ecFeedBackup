@@ -1,16 +1,13 @@
 package com.testify.ecfeed.ui.editor;
 
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.events.SelectionListener;
 
 import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 
 public class ChoiceCommentsSection extends JavaDocCommentsSection {
-
-	private Button fImportButton;
-	private Button fExportButton;
 
 	protected class ChoiceImportSelectionAdapter extends AbstractSelectionAdapter{
 		@Override
@@ -39,17 +36,18 @@ public class ChoiceCommentsSection extends JavaDocCommentsSection {
 	}
 
 	@Override
-	protected boolean commentsExportable(){
-		return false;
+	protected void createCommentsButtons() {
+		super.createCommentsButtons();
 	}
 
 	@Override
-	protected void createCommentsButtons(boolean exportable) {
-		super.createCommentsButtons(exportable);
-		fExportButton = addButton("Export", null);
-		fExportButton.addSelectionListener(new ChoiceExportSelectionAdapter());
-		fImportButton = addButton("Import", null);
-		fImportButton.addSelectionListener(new ChoiceImportSelectionAdapter());
+	protected SelectionListener createExportButtonSelectionListener(){
+		return new ChoiceExportSelectionAdapter();
+	}
+
+	@Override
+	protected SelectionListener createImportButtonSelectionListener(){
+		return new ChoiceImportSelectionAdapter();
 	}
 
 	@Override
@@ -65,31 +63,19 @@ public class ChoiceCommentsSection extends JavaDocCommentsSection {
 
 	private void updateExportImportButtons() {
 		boolean importExportEnabled = getTargetIf().commentsImportExportEnabled();
-		fExportButton.setEnabled(importExportEnabled);
-		fImportButton.setEnabled(importExportEnabled);
+		getExportButton().setEnabled(importExportEnabled);
+		getImportButton().setEnabled(importExportEnabled);
 		getJavaDocText().setEnabled(importExportEnabled);
-//		removeSelectionListeners(fExportButton);
-//		removeSelectionListeners(fImportButton);
 		if(getTarget().isAbstract()){
-			fExportButton.setText("Export all");
-			fExportButton.setToolTipText(Messages.TOOLTIP_EXPORT_CHOICE_SUBTREE_COMMENTS_TO_JAVADOC);
-//			fExportButton.addSelectionListener(fExportAllSelectionAdapter);
-			fImportButton.setText("Import all");
-			fImportButton.setToolTipText(Messages.TOOLTIP_IMPORT_CHOICE_SUBTREE_COMMENTS_FROM_JAVADOC);
-//			fImportButton.addSelectionListener(fImportAllSelectionAdapter);
+			getExportButton().setText("Export all");
+			getExportButton().setToolTipText(Messages.TOOLTIP_EXPORT_CHOICE_SUBTREE_COMMENTS_TO_JAVADOC);
+			getImportButton().setText("Import all");
+			getImportButton().setToolTipText(Messages.TOOLTIP_IMPORT_CHOICE_SUBTREE_COMMENTS_FROM_JAVADOC);
 		}else{
-			fExportButton.setText("Export");
-			fExportButton.setToolTipText(Messages.TOOLTIP_EXPORT_CHOICE_COMMENTS_TO_JAVADOC);
-//			fExportButton.addSelectionListener(fExportSelectionAdapter);
-			fImportButton.setText("Import");
-			fImportButton.setToolTipText(Messages.TOOLTIP_IMPORT_CHOICE_COMMENTS_FROM_JAVADOC);
-//			fImportButton.addSelectionListener(fImportSelectionAdapter);
+			getExportButton().setText("Export");
+			getExportButton().setToolTipText(Messages.TOOLTIP_EXPORT_CHOICE_COMMENTS_TO_JAVADOC);
+			getImportButton().setText("Import");
+			getImportButton().setToolTipText(Messages.TOOLTIP_IMPORT_CHOICE_COMMENTS_FROM_JAVADOC);
 		}
 	}
-//
-//	private void removeSelectionListeners(Button button) {
-//		for(Listener listener : button.getListeners(SWT.Selection)){
-//			button.removeListener(SWT.Selection, listener);
-//		}
-//	}
 }

@@ -1,6 +1,7 @@
 package com.testify.ecfeed.ui.editor;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.TabItem;
@@ -65,14 +66,12 @@ public abstract class AbstractParameterCommentsSection extends JavaDocCommentsSe
 		fParameterCommentsTab = addTextTab("Parameter", 0);
 		getTypeCommentsTab().setText("Type");
 		getTypeJavadocTab().setText("Type javadoc");
-
-		addEditListener(new EditButtonListener());
 	}
 
 	@Override
 	protected void createExportMenuItems() {
 		MenuItem exportAllItem = new MenuItem(getExportButtonMenu(), SWT.NONE);
-		exportAllItem.setText("Export type comments with choices");
+		exportAllItem.setText("Export type and choices comments");
 		exportAllItem.addSelectionListener(new ExportFullTypeSelectionAdapter());
 		MenuItem exportTypeItem = new MenuItem(getExportButtonMenu(), SWT.NONE);
 		exportTypeItem.setText("Export only type comments");
@@ -138,11 +137,6 @@ public abstract class AbstractParameterCommentsSection extends JavaDocCommentsSe
 	protected abstract AbstractParameterInterface getTargetIf();
 
 	@Override
-	protected boolean commentsExportable(){
-		return true;
-	}
-
-	@Override
 	protected void refreshEditButton() {
 		TabItem activeItem = getActiveItem();
 		boolean enabled = true;
@@ -153,4 +147,10 @@ public abstract class AbstractParameterCommentsSection extends JavaDocCommentsSe
 		}
 		getEditButton().setEnabled(enabled);
 	}
+
+	@Override
+	protected SelectionAdapter createEditButtonSelectionAdapter(){
+		return new EditButtonListener();
+	}
+
 }

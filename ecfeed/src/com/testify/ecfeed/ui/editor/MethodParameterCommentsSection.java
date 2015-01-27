@@ -20,7 +20,7 @@ public class MethodParameterCommentsSection extends AbstractParameterCommentsSec
 
 	private TabItem fParameterJavadocTab;
 
-	private MenuItem fExporAllItem;
+	private MenuItem fExportAllItem;
 	private MenuItem fExportParameterCommentsItem;
 	private MenuItem fExportTypeCommentsItem;
 	private MenuItem fImportAllItem;
@@ -43,18 +43,18 @@ public class MethodParameterCommentsSection extends AbstractParameterCommentsSec
 		}
 	}
 
-	protected class ExportAllParameterCommentsSelectionAdapter extends ExportAllSelectionAdapter{
+	protected class ExportAllParameterCommentsSelectionAdapter extends AbstractSelectionAdapter{
 		@Override
 		public void widgetSelected(SelectionEvent e) {
-			super.widgetSelected(e);
+			getTargetIf().exportAllComments();
 			getTabFolder().setSelection(getTabFolder().indexOf(fParameterJavadocTab));
 		}
 	}
 
-	protected class ImportAllParameterCommentsSelectionAdapter extends ImportAllSelectionAdapter{
+	protected class ImportAllParameterCommentsSelectionAdapter extends AbstractSelectionAdapter{
 		@Override
 		public void widgetSelected(SelectionEvent e) {
-			super.widgetSelected(e);
+			getTargetIf().importAllJavadocComments();
 			getTabFolder().setSelection(getTabFolder().indexOf(getParameterCommentsTab()));
 		}
 	}
@@ -105,15 +105,15 @@ public class MethodParameterCommentsSection extends AbstractParameterCommentsSec
 		fImportParameterCommentsItem.setEnabled(parameterCommentsExportEnabled);
 		fExportTypeCommentsItem.setEnabled(typeCommentsExportEnabled);
 		fImportTypeCommentsItem.setEnabled(typeCommentsExportEnabled);
-		fExporAllItem.setEnabled(typeCommentsExportEnabled || parameterCommentsExportEnabled);
+		fExportAllItem.setEnabled(typeCommentsExportEnabled || parameterCommentsExportEnabled);
 		fImportAllItem.setEnabled(typeCommentsExportEnabled || parameterCommentsExportEnabled);
 	}
 
 	@Override
 	protected void createExportMenuItems() {
-		fExporAllItem = new MenuItem(getExportButtonMenu(), SWT.NONE, 0);
-		fExporAllItem.setText("Export all");
-		fExporAllItem.addSelectionListener(new ExportAllParameterCommentsSelectionAdapter());
+		fExportAllItem = new MenuItem(getExportButtonMenu(), SWT.NONE, 0);
+		fExportAllItem.setText("Export all");
+		fExportAllItem.addSelectionListener(new ExportAllParameterCommentsSelectionAdapter());
 		fExportParameterCommentsItem = new MenuItem(getExportButtonMenu(), SWT.NONE, 1);
 		fExportParameterCommentsItem.setText("Export method comments");
 		fExportParameterCommentsItem.addSelectionListener(new ExportParameterCommentsSelectionAdapter());
