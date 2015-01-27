@@ -71,10 +71,10 @@ public abstract class AbstractParameterCommentsSection extends JavaDocCommentsSe
 	@Override
 	public void refresh(){
 		super.refresh();
-	
+
 		String javadoc = JavaDocSupport.getTypeJavadoc(getTarget());
 		getTextFromTabItem(getTypeJavadocTab()).setText(javadoc != null ? javadoc : "");
-	
+
 		if(getTargetIf().getComments() != null){
 			getTextFromTabItem(fParameterCommentsTab).setText(getTargetIf().getComments());
 		}else{
@@ -85,7 +85,7 @@ public abstract class AbstractParameterCommentsSection extends JavaDocCommentsSe
 		}else{
 			getTextFromTabItem(getTypeCommentsTab()).setText("");
 		}
-	
+
 		boolean importExportEnabled = getTargetIf().commentsImportExportEnabled();
 		getExportButton().setEnabled(importExportEnabled);
 		getImportButton().setEnabled(importExportEnabled);
@@ -131,7 +131,7 @@ public abstract class AbstractParameterCommentsSection extends JavaDocCommentsSe
 			}
 		}
 		getEditButton().setEnabled(enabled);
-	
+
 		AbstractParameterInterface targetIf = getTargetIf();
 		String editButtonText;
 		if(getActiveItem() == getTypeCommentsTab() || getActiveItem() == getTypeJavadocTab()){
@@ -142,12 +142,13 @@ public abstract class AbstractParameterCommentsSection extends JavaDocCommentsSe
 			}
 		}else{
 			if(targetIf.getComments() != null && targetIf.getComments().length() > 0){
-				editButtonText = "Edit parameter comments";
+				editButtonText = "Edit comments";
 			}else{
-				editButtonText = "Add parameter comments";
+				editButtonText = "Add comments";
 			}
 		}
 		getEditButton().setText(editButtonText);
+		getButtonsComposite().layout();
 	}
 
 	@Override
