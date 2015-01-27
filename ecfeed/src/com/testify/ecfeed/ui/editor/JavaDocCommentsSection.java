@@ -16,7 +16,7 @@ import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 
 public class JavaDocCommentsSection extends AbstractCommentsSection {
 
-	private class TabFolderEditButtonListener extends AbstractSelectionAdapter{
+	private class JavadocEditButtonListener extends AbstractSelectionAdapter{
 		@Override
 		public void widgetSelected(SelectionEvent e) {
 			getTargetIf().editComments();
@@ -24,7 +24,7 @@ public class JavaDocCommentsSection extends AbstractCommentsSection {
 		}
 	}
 
-	protected class ExportSelectionAdapter extends AbstractSelectionAdapter{
+	protected class JavadocExportSelectionAdapter extends AbstractSelectionAdapter{
 		@Override
 		public void widgetSelected(SelectionEvent e) {
 			getTargetIf().exportCommentsToJavadoc(getTargetIf().getComments());
@@ -32,7 +32,7 @@ public class JavaDocCommentsSection extends AbstractCommentsSection {
 		}
 	}
 
-	protected class ImportSelectionAdapter extends AbstractSelectionAdapter{
+	protected class JavadocImportSelectionAdapter extends AbstractSelectionAdapter{
 		@Override
 		public void widgetSelected(SelectionEvent e) {
 			getTargetIf().importJavadocComments();
@@ -102,12 +102,12 @@ public class JavaDocCommentsSection extends AbstractCommentsSection {
 		return fJavadocTab;
 	}
 
-	protected Text getJavaDocText(){
-		return getTextFromTabItem(fJavadocTab);
-	}
-
 	protected Text getCommentsText(){
 		return getTextFromTabItem(fCommentsTab);
+	}
+
+	protected Text getJavaDocText(){
+		return getTextFromTabItem(fJavadocTab);
 	}
 
 	@Override
@@ -158,7 +158,7 @@ public class JavaDocCommentsSection extends AbstractCommentsSection {
 		exportAllItem.addSelectionListener(new JavadocExportAllSelectionAdapter());
 		MenuItem exportItem = new MenuItem(getExportButtonMenu(), SWT.NONE);
 		exportItem.setText("Export comments of this element only");
-		exportItem.addSelectionListener(new ExportSelectionAdapter());
+		exportItem.addSelectionListener(new JavadocExportSelectionAdapter());
 	}
 
 	protected void createImportMenuItems() {
@@ -167,7 +167,7 @@ public class JavaDocCommentsSection extends AbstractCommentsSection {
 		importAllItem.addSelectionListener(new JavadocImportAllSelectionAdapter());
 		MenuItem importItem = new MenuItem(getImportButtonMenu(), SWT.NONE);
 		importItem.setText("Import comments of this element only");
-		importItem.addSelectionListener(new ImportSelectionAdapter());
+		importItem.addSelectionListener(new JavadocImportSelectionAdapter());
 	}
 
 	protected boolean importExportEnabled(){
@@ -184,6 +184,6 @@ public class JavaDocCommentsSection extends AbstractCommentsSection {
 
 	@Override
 	protected SelectionAdapter createEditButtonSelectionAdapter(){
-		return new TabFolderEditButtonListener();
+		return new JavadocEditButtonListener();
 	}
 }
