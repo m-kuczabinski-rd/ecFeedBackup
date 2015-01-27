@@ -1,5 +1,8 @@
 package com.testify.ecfeed.ui.editor;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -7,7 +10,9 @@ import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.TabItem;
+import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.widgets.Section;
 
 import com.testify.ecfeed.model.AbstractNode;
@@ -15,10 +20,17 @@ import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.modelif.AbstractNodeInterface;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 
-public abstract class AbstractCommentsSection extends ButtonsCompositeSection {
+public abstract class AbstractCommentsSection extends TabFolderSection {
 
 	private final static int STYLE = Section.TITLE_BAR | Section.COMPACT | Section.TWISTIE;
 	private final static String SECTION_TITLE = "Comments";
+
+	private class TabFolderSelectionListsner extends AbstractSelectionAdapter{
+		@Override
+		public void widgetSelected(SelectionEvent e) {
+			refreshEditButton();
+		}
+	}
 
 	private class EditCommentsAdapter extends SelectionAdapter{
 		@Override
@@ -27,14 +39,19 @@ public abstract class AbstractCommentsSection extends ButtonsCompositeSection {
 		}
 	}
 
-
 	private Button fEditButton;
 
 	private AbstractNode fTarget;
 	private AbstractNodeInterface fTargetIf;
 
+	private Map<TabItem, Text> fTextItems;
+
 	public AbstractCommentsSection(ISectionContext sectionContext, IModelUpdateContext updateContext) {
 		super(sectionContext, updateContext, STYLE);
+
+		getTabFolder().addSelectionListener(new TabFolderSelectionListsner());
+		fTextItems = new HashMap<TabItem, Text>();
+
 		GridData gd = new GridData(SWT.FILL, SWT.FILL, true, false);
 		getSection().setLayoutData(gd);
 		getSection().setText(SECTION_TITLE);
@@ -45,7 +62,6 @@ public abstract class AbstractCommentsSection extends ButtonsCompositeSection {
 	@Override
 	protected Composite createClientComposite() {
 		Composite client = super.createClientComposite();
-		createCommentsControl(getMainControlComposite());
 		createCommentsButtons();
 		return client;
 	}
@@ -102,5 +118,19 @@ public abstract class AbstractCommentsSection extends ButtonsCompositeSection {
 		return new EditCommentsAdapter();
 	}
 
-	protected abstract Control createCommentsControl(Composite parent);
+	protected TabItem addTextTab(String title){
+		return addTextTab(title, getTabFolder().getItemCount());
+	}
+
+	protected TabItem addTextTab(String title, int index){
+		Text text = getToolkit().createText(getTabFolder(), "", SWT.WRAP | SWT.V_SCROLL | SWT.MULTI | SWT.READ_ONLY);
+		text.setBackground(Display.getCurrent().getSystemColor(SWT.COLOR_TITLE_INACTIVE_BACKGROUND));
+		TabItem item = addTabItem(text, title, index);
+		fTextItems.put(item, text);
+		return item;
+	}
+
+	protected Text getTextFromTabItem(TabItem item){
+		return fTextItems.get(item);
+	}
 }

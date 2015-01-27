@@ -14,7 +14,7 @@ import com.testify.ecfeed.model.AbstractNode;
 import com.testify.ecfeed.ui.common.JavaDocSupport;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 
-public class JavaDocCommentsSection extends TabFolderCommentsSection {
+public class JavaDocCommentsSection extends AbstractCommentsSection {
 
 	private class TabFolderEditButtonListener extends AbstractSelectionAdapter{
 		@Override
