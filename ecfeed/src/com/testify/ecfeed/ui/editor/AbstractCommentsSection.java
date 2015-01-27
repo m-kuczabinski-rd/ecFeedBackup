@@ -49,14 +49,21 @@ public abstract class AbstractCommentsSection extends TabFolderSection {
 	public AbstractCommentsSection(ISectionContext sectionContext, IModelUpdateContext updateContext) {
 		super(sectionContext, updateContext, STYLE);
 
-		getTabFolder().addSelectionListener(new TabFolderSelectionListsner());
+		if(getTabFolder() != null){
+			getTabFolder().addSelectionListener(new TabFolderSelectionListsner());
+		}
+
 		fTextItems = new HashMap<TabItem, Text>();
 
 		GridData gd = new GridData(SWT.FILL, SWT.FILL, true, false);
 		getSection().setLayoutData(gd);
 		getSection().setText(SECTION_TITLE);
-		fTargetIf = new AbstractNodeInterface(getUpdateContext());
 		getSection().layout();
+	}
+
+	@Override
+	public void refresh(){
+		refreshEditButton();
 	}
 
 	@Override
@@ -66,27 +73,21 @@ public abstract class AbstractCommentsSection extends TabFolderSection {
 		return client;
 	}
 
+	@Override
+	protected int buttonsPosition() {
+		return BUTTONS_BELOW;
+	}
+
 	protected void createCommentsButtons() {
 		fEditButton = addButton("Edit comments", null);
 		fEditButton.setToolTipText(Messages.TOOLTIP_EDIT_COMMENTS);
 		fEditButton.addSelectionListener(createEditButtonSelectionAdapter());
 	}
 
-	protected void addEditListener(SelectionAdapter listener){
-		if(fEditButton != null){
-			fEditButton.addSelectionListener(listener);
-		}
-	}
-
 	protected void setInput(AbstractNode input){
 		fTarget = input;
 		getTargetIf().setTarget(input);
 		refresh();
-	}
-
-	@Override
-	public void refresh(){
-		refreshEditButton();
 	}
 
 	protected void refreshEditButton(){
@@ -106,12 +107,10 @@ public abstract class AbstractCommentsSection extends TabFolderSection {
 	}
 
 	protected AbstractNodeInterface getTargetIf(){
+		if(fTargetIf == null){
+			fTargetIf = new AbstractNodeInterface(getUpdateContext());
+		}
 		return fTargetIf;
-	}
-
-	@Override
-	protected int buttonsPosition() {
-		return BUTTONS_BELOW;
 	}
 
 	protected SelectionListener createEditButtonSelectionAdapter(){
