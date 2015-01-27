@@ -6,7 +6,7 @@ import org.eclipse.swt.widgets.Button;
 import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 
-public class ModelCommentsSection extends SingleTextCommentsSection {
+public class ExportableSingleTextCommentsSection extends SingleTextCommentsSection {
 
 	private class ExportAllSelectionAdapter extends AbstractSelectionAdapter{
 		@Override
@@ -25,7 +25,7 @@ public class ModelCommentsSection extends SingleTextCommentsSection {
 	private Button fExportButton;
 	private Button fImportButton;
 
-	public ModelCommentsSection(ISectionContext sectionContext, IModelUpdateContext updateContext) {
+	public ExportableSingleTextCommentsSection(ISectionContext sectionContext, IModelUpdateContext updateContext) {
 		super(sectionContext, updateContext);
 	}
 
