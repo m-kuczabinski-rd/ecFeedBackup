@@ -2,7 +2,7 @@
 <feature
       id="com.testify.ecfeed.feature"
       label="ecFeed"
-      version="1.7.0.qualifier">
+      version="1.8.0.qualifier">
 
    <description url="https://github.com/testify-no/ecFeed">
       Test data generator and jUnit test execution framework based
