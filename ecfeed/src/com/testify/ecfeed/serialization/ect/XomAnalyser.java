@@ -188,6 +188,9 @@ public class XomAnalyser {
 		}
 
 		parameter.setDescription(parseComments(element));
+		if(parameter.isLinked() == false){
+			parameter.setTypeComments(parseTypeComments(element));
+		}
 
 		return parameter;
 	}
@@ -207,6 +210,7 @@ public class XomAnalyser {
 		}
 
 		parameter.setDescription(parseComments(element));
+		parameter.setTypeComments(parseTypeComments(element));
 
 		return parameter;
 	}
@@ -496,6 +500,17 @@ public class XomAnalyser {
 			if(comments.getChildElements(Constants.BASIC_COMMENTS_BLOCK_TAG_NAME).size() > 0){
 				Element basicComments = comments.getChildElements(Constants.BASIC_COMMENTS_BLOCK_TAG_NAME).get(0);
 				return basicComments.getValue();
+			}
+		}
+		return null;
+	}
+
+	protected String parseTypeComments(Element element){
+		if(element.getChildElements(Constants.COMMENTS_BLOCK_TAG_NAME).size() > 0){
+			Element comments = element.getChildElements(Constants.COMMENTS_BLOCK_TAG_NAME).get(0);
+			if(comments.getChildElements(Constants.TYPE_COMMENTS_BLOCK_TAG_NAME).size() > 0){
+				Element typeComments = comments.getChildElements(Constants.TYPE_COMMENTS_BLOCK_TAG_NAME).get(0);
+				return typeComments.getValue();
 			}
 		}
 		return null;

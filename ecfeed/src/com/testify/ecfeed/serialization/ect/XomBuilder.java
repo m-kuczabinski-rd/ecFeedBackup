@@ -49,13 +49,16 @@ import static com.testify.ecfeed.serialization.ect.Constants.STATIC_STATEMENT_TR
 import static com.testify.ecfeed.serialization.ect.Constants.TEST_CASE_NODE_NAME;
 import static com.testify.ecfeed.serialization.ect.Constants.TEST_PARAMETER_NODE_NAME;
 import static com.testify.ecfeed.serialization.ect.Constants.TEST_SUITE_NAME_ATTRIBUTE;
+import static com.testify.ecfeed.serialization.ect.Constants.TYPE_COMMENTS_BLOCK_TAG_NAME;
 import static com.testify.ecfeed.serialization.ect.Constants.TYPE_NAME_ATTRIBUTE;
 import static com.testify.ecfeed.serialization.ect.Constants.VALUE_ATTRIBUTE;
 import static com.testify.ecfeed.serialization.ect.Constants.VALUE_ATTRIBUTE_NAME;
 import nu.xom.Attribute;
 import nu.xom.Element;
+import nu.xom.Elements;
 
 import com.testify.ecfeed.model.AbstractNode;
+import com.testify.ecfeed.model.AbstractParameterNode;
 import com.testify.ecfeed.model.AbstractStatement;
 import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.model.ChoicesParentStatement;
@@ -129,6 +132,9 @@ public class XomBuilder implements IModelVisitor, IStatementVisitor {
 	@Override
 	public Object visit(MethodParameterNode node)  throws Exception {
 		Element element = createAbstractElement(PARAMETER_NODE_NAME, node);
+
+		appendTypeComments(element, node);
+
 		element.addAttribute(new Attribute(TYPE_NAME_ATTRIBUTE, node.getRealType()));
 
 		element.addAttribute(new Attribute(PARAMETER_IS_EXPECTED_ATTRIBUTE_NAME, Boolean.toString(node.isExpected())));
@@ -148,6 +154,7 @@ public class XomBuilder implements IModelVisitor, IStatementVisitor {
 	@Override
 	public Object visit(GlobalParameterNode node) throws Exception {
 		Element element = createAbstractElement(PARAMETER_NODE_NAME, node);
+		appendTypeComments(element, node);
 		element.addAttribute(new Attribute(TYPE_NAME_ATTRIBUTE, node.getType()));
 
 		for(ChoiceNode child : node.getChoices()){
@@ -326,6 +333,27 @@ public class XomBuilder implements IModelVisitor, IStatementVisitor {
 			return commentsBlock;
 		}
 		return null;
+	}
+
+	private void appendTypeComments(Element element, MethodParameterNode node) {
+		if(node.isLinked() == false){
+			appendTypeComments(element, (AbstractParameterNode)node);
+		}
+	}
+
+	private void appendTypeComments(Element element, AbstractParameterNode node) {
+		Elements commentsElement = element.getChildElements(COMMENTS_BLOCK_TAG_NAME);
+		Element commentElement;
+		if(commentsElement.size() > 0){
+			 commentElement = commentsElement.get(0);
+		}else{
+			commentElement = new Element(COMMENTS_BLOCK_TAG_NAME);
+			element.appendChild(commentElement);
+		}
+
+		Element typeComments = new Element(TYPE_COMMENTS_BLOCK_TAG_NAME);
+		typeComments.appendChild(node.getTypeComments());
+		commentElement.appendChild(typeComments);
 	}
 
 }
