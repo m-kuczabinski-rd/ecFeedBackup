@@ -198,4 +198,9 @@ public class MethodParameterInterface extends AbstractParameterInterface {
 		exportTypeJavadocComments();
 		return result;
 	}
+
+	@Override
+	public boolean importTypeCommentsEnabled(){
+		return getTarget().isLinked() == false;
+	}
 }

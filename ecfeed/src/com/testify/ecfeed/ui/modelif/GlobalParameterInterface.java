@@ -32,4 +32,10 @@ public class GlobalParameterInterface extends AbstractParameterInterface {
 	public boolean commentsImportExportEnabled(){
 		return super.commentsImportExportEnabled() && JavaUtils.isUserType(getType());
 	}
+
+	@Override
+	public boolean importTypeCommentsEnabled(){
+		return true;
+	}
+
 }

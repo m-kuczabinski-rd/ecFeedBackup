@@ -174,9 +174,11 @@ public abstract class AbstractParameterInterface extends ChoicesParentInterface 
 	protected List<IModelOperation> getImportAllJavadocCommentsOperations(){
 		List<IModelOperation> result = super.getImportAllJavadocCommentsOperations();
 		String typeJavadoc = JavaDocSupport.importTypeJavadoc(getTarget());
-		if(typeJavadoc != null && typeJavadoc.equals(getTypeComments()) == false){
+		if(typeJavadoc != null && typeJavadoc.equals(getTypeComments()) == false && importTypeCommentsEnabled()){
 			result.add(new ParameterSetTypeCommentsOperation(getTarget(), typeJavadoc));
 		}
 		return result;
 	}
+
+	public abstract boolean importTypeCommentsEnabled();
 }

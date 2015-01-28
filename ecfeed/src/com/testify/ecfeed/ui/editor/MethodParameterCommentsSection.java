@@ -126,20 +126,23 @@ public class MethodParameterCommentsSection extends AbstractParameterCommentsSec
 	private void refreshMenuItems() {
 		EImplementationStatus methodStatus = getTargetIf().getImplementationStatus(getTarget().getMethod());
 		boolean parameterCommentsExportEnabled = methodStatus != EImplementationStatus.NOT_IMPLEMENTED;
-		boolean typeCommentsExportEnabled = JavaUtils.isUserType(getTarget().getType()) && getTargetIf().getImplementationStatus() != EImplementationStatus.NOT_IMPLEMENTED;
+		boolean typeCommentsExportEnabled = JavaUtils.isUserType(getTarget().getType()) && getTargetIf().getImplementationStatus() != EImplementationStatus.NOT_IMPLEMENTED && getTarget().isLinked() == false;
 		fExportParameterCommentsItem.setEnabled(parameterCommentsExportEnabled);
 		fImportParameterCommentsItem.setEnabled(parameterCommentsExportEnabled);
 		fExportTypeCommentsItem.setEnabled(typeCommentsExportEnabled);
 		fImportTypeCommentsItem.setEnabled(typeCommentsExportEnabled);
-		fExportAllItem.setEnabled(typeCommentsExportEnabled || parameterCommentsExportEnabled);
-		fImportAllItem.setEnabled(typeCommentsExportEnabled || parameterCommentsExportEnabled);
+		fExportAllItem.setEnabled(typeCommentsExportEnabled && parameterCommentsExportEnabled);
+		fImportAllItem.setEnabled(typeCommentsExportEnabled && parameterCommentsExportEnabled);
 	}
 
 	@Override
 	protected void refreshEditButton() {
 		super.refreshEditButton();
-		if(getTarget().isLinked()){
-			getEditButton().setEnabled(false);
+		TabItem item = getActiveItem();
+		if(item == getTypeCommentsTab() || item == getTypeJavadocTab()){
+			if(getTarget().isLinked()){
+				getEditButton().setEnabled(false);
+			}
 		}
 	}
 

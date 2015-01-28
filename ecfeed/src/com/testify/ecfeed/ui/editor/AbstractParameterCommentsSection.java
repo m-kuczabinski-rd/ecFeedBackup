@@ -1,9 +1,7 @@
 package com.testify.ecfeed.ui.editor;
 
-import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.TabItem;
 
 import com.testify.ecfeed.adapter.java.JavaUtils;
@@ -99,26 +97,6 @@ public abstract class AbstractParameterCommentsSection extends JavaDocCommentsSe
 	public void setInput(AbstractParameterNode input){
 		super.setInput(input);
 		getTargetIf().setTarget(input);
-	}
-
-	@Override
-	protected void createExportMenuItems() {
-		MenuItem exportAllItem = new MenuItem(getExportButtonMenu(), SWT.NONE);
-		exportAllItem.setText("Export type and choices comments");
-		exportAllItem.addSelectionListener(new ExportFullTypeSelectionAdapter());
-		MenuItem exportTypeItem = new MenuItem(getExportButtonMenu(), SWT.NONE);
-		exportTypeItem.setText("Export only type comments");
-		exportTypeItem.addSelectionListener(new ExportTypeSelectionAdapter());
-	}
-
-	@Override
-	protected void createImportMenuItems() {
-		MenuItem importAllItem = new MenuItem(getImportButtonMenu(), SWT.NONE);
-		importAllItem.setText("Import type and choices comments");
-		importAllItem.addSelectionListener(new ImportFullTypeSelectionAdapter());
-		MenuItem importTypeItem = new MenuItem(getImportButtonMenu(), SWT.NONE);
-		importTypeItem.setText("Import only type comments");
-		importTypeItem.addSelectionListener(new ImportTypeSelectionAdapter());
 	}
 
 	@Override
