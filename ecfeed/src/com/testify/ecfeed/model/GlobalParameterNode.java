@@ -1,7 +1,9 @@
 package com.testify.ecfeed.model;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class GlobalParameterNode extends AbstractParameterNode {
 
@@ -64,5 +66,27 @@ public class GlobalParameterNode extends AbstractParameterNode {
 	@Override
 	public String toString(){
 		return getName() + ": " + getType();
+	}
+
+	@Override
+	public Set<ConstraintNode> mentioningConstraints() {
+		Set<ConstraintNode> result = new HashSet<ConstraintNode>();
+		for(MethodParameterNode parameter : getLinkers()){
+			result.addAll(parameter.mentioningConstraints());
+		}
+		return result;
+	}
+
+	@Override
+	public Set<ConstraintNode> mentioningConstraints(String label){
+		Set<ConstraintNode> result = new HashSet<ConstraintNode>();
+		for(MethodParameterNode parameter : getLinkers()){
+			for(ConstraintNode constraint : parameter.mentioningConstraints()){
+				if(constraint.mentions(parameter, label)){
+					result.add(constraint);
+				}
+			}
+		}
+		return result;
 	}
 }

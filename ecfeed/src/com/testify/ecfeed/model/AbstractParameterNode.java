@@ -1,6 +1,7 @@
 package com.testify.ecfeed.model;
 
 import java.util.List;
+import java.util.Set;
 
 public abstract class AbstractParameterNode extends ChoicesParentNode {
 
@@ -67,5 +68,8 @@ public abstract class AbstractParameterNode extends ChoicesParentNode {
 
 	public abstract List<MethodNode> getMethods();
 	public abstract Object accept(IParameterVisitor visitor) throws Exception;
+
+	public abstract Set<ConstraintNode> mentioningConstraints();
+	public abstract Set<ConstraintNode> mentioningConstraints(String label);
 
 }

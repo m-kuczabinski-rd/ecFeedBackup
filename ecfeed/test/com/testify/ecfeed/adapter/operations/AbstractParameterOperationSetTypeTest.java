@@ -6,6 +6,7 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.util.List;
+import java.util.Set;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -22,6 +23,7 @@ import com.testify.ecfeed.junit.annotations.Generator;
 import com.testify.ecfeed.model.AbstractNode;
 import com.testify.ecfeed.model.AbstractParameterNode;
 import com.testify.ecfeed.model.ChoiceNode;
+import com.testify.ecfeed.model.ConstraintNode;
 import com.testify.ecfeed.model.IChoicesParentVisitor;
 import com.testify.ecfeed.model.IModelVisitor;
 import com.testify.ecfeed.model.IParameterVisitor;
@@ -71,6 +73,18 @@ public class AbstractParameterOperationSetTypeTest{
 
 		@Override
 		public Object accept(IChoicesParentVisitor visitor) throws Exception {
+			return null;
+		}
+
+		@Override
+		public Set<ConstraintNode> mentioningConstraints() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		@Override
+		public Set<ConstraintNode> mentioningConstraints(String label) {
+			// TODO Auto-generated method stub
 			return null;
 		}
 

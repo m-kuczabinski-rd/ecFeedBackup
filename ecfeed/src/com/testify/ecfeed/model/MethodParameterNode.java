@@ -13,6 +13,7 @@ package com.testify.ecfeed.model;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 
 
 public class MethodParameterNode extends AbstractParameterNode{
@@ -196,4 +197,16 @@ public class MethodParameterNode extends AbstractParameterNode{
 	public Object accept(IParameterVisitor visitor) throws Exception {
 		return visitor.visit(this);
 	}
+
+	@Override
+	public Set<ConstraintNode> mentioningConstraints(){
+		return getMethod().mentioningConstraints(this);
+	}
+
+	@Override
+	public Set<ConstraintNode> mentioningConstraints(String label){
+		return getMethod().mentioningConstraints(this, label);
+	}
+
+
 }

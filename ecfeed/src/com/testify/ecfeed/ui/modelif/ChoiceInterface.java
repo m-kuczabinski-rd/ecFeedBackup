@@ -30,8 +30,6 @@ import com.testify.ecfeed.adapter.operations.ChoiceOperationRenameLabel;
 import com.testify.ecfeed.adapter.operations.ChoiceOperationSetValue;
 import com.testify.ecfeed.model.AbstractParameterNode;
 import com.testify.ecfeed.model.ChoiceNode;
-import com.testify.ecfeed.model.MethodNode;
-import com.testify.ecfeed.model.MethodParameterNode;
 import com.testify.ecfeed.ui.common.Constants;
 import com.testify.ecfeed.ui.common.EclipseTypeAdapterProvider;
 import com.testify.ecfeed.ui.common.JavaModelAnalyser;
@@ -59,16 +57,13 @@ public class ChoiceInterface extends ChoicesParentInterface{
 
 	public boolean removeLabels(Collection<String> labels) {
 		boolean removeMentioningConstraints = false;
-		for(MethodNode method : getTarget().getParameter().getMethods()){
-			for(String label : labels){
-				if(method.mentioningConstraints((MethodParameterNode)getTarget().getParameter(), label).size() > 0 && getTarget().getParameter().getLabeledChoices(label).size() == 1){
-					removeMentioningConstraints = true;
-					break;
-				}
+		for(String label : labels){
+			if(getTarget().getParameter().mentioningConstraints(label).size() > 0 && getTarget().getParameter().getLabeledChoices(label).size() == 1){
+				removeMentioningConstraints = true;
 			}
 		}
 		if(removeMentioningConstraints){
-			if(MessageDialog.openConfirm(Display.getCurrent().getActiveShell(),
+				if(MessageDialog.openConfirm(Display.getCurrent().getActiveShell(),
 					Messages.DIALOG_REMOVE_LABELS_WARNING_TITLE,
 					Messages.DIALOG_REMOVE_LABELS_WARNING_MESSAGE) == false){
 				return false;
