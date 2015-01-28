@@ -16,6 +16,7 @@ public class ChoiceCommentsSection extends JavaDocCommentsSection {
 				getTargetIf().importAllJavadocComments();
 			}else{
 				getTargetIf().importJavadocComments();
+				getTabFolder().setSelection(getTabFolder().indexOf(getCommentsItem()));
 			}
 		}
 	}
@@ -27,6 +28,7 @@ public class ChoiceCommentsSection extends JavaDocCommentsSection {
 				getTargetIf().exportAllComments();
 			}else{
 				getTargetIf().exportCommentsToJavadoc(getTarget().getDescription());
+				getTabFolder().setSelection(getTabFolder().indexOf(getJavaDocItem()));
 			}
 		}
 	}
