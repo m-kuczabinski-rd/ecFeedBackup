@@ -135,4 +135,12 @@ public class MethodParameterCommentsSection extends AbstractParameterCommentsSec
 		fImportAllItem.setEnabled(typeCommentsExportEnabled || parameterCommentsExportEnabled);
 	}
 
+	@Override
+	protected void refreshEditButton() {
+		super.refreshEditButton();
+		if(getTarget().isLinked()){
+			getEditButton().setEnabled(false);
+		}
+	}
+
 }
