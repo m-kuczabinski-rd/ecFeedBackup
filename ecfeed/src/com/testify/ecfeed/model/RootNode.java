@@ -27,6 +27,7 @@ public class RootNode extends GlobalParametersParentNode {
 	@Override
 	public int getMaxChildIndex(AbstractNode potentialChild){
 		if(potentialChild instanceof AbstractParameterNode) return getParameters().size();
+		if(potentialChild instanceof MethodParameterNode) return getParameters().size();
 		if(potentialChild instanceof ClassNode) return getClasses().size();
 		return super.getMaxChildIndex(potentialChild);
 	}
