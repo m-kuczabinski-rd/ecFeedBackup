@@ -14,6 +14,7 @@ import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.ConstraintNode;
 import com.testify.ecfeed.model.GlobalParameterNode;
+import com.testify.ecfeed.model.GlobalParametersParentNode;
 import com.testify.ecfeed.model.IModelVisitor;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.MethodParameterNode;
@@ -21,6 +22,7 @@ import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.ui.common.EclipseModelBuilder;
 import com.testify.ecfeed.ui.modelif.AbstractNodeInterface;
+import com.testify.ecfeed.ui.modelif.GlobalParametersParentInterface;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 import com.testify.ecfeed.ui.modelif.NodeDnDBuffer;
 import com.testify.ecfeed.ui.modelif.NodeInterfaceFactory;
@@ -44,7 +46,7 @@ public class ModelNodeDropListener extends ViewerDropAdapter{
 			boolean result = false;
 			result |= NodeDnDBuffer.getInstance().getDraggedNodes().get(0) instanceof ClassNode;
 			result |= (NodeDnDBuffer.getInstance().getDraggedNodes().get(0) instanceof GlobalParameterNode) && ((fOperation & (DND.DROP_COPY | DND.DROP_MOVE)) != 0);
-			result |= (NodeDnDBuffer.getInstance().getDraggedNodes().get(0) instanceof MethodParameterNode) && ((fOperation & (DND.DROP_COPY | DND.DROP_MOVE)) != 0);
+			result |= (NodeDnDBuffer.getInstance().getDraggedNodes().get(0) instanceof MethodParameterNode) && ((fOperation & (DND.DROP_COPY | DND.DROP_MOVE | DND.DROP_LINK)) != 0);
 			return result;
 		}
 
@@ -53,7 +55,7 @@ public class ModelNodeDropListener extends ViewerDropAdapter{
 			boolean result = false;
 			result |= NodeDnDBuffer.getInstance().getDraggedNodes().get(0) instanceof MethodNode;
 			result |= (NodeDnDBuffer.getInstance().getDraggedNodes().get(0) instanceof GlobalParameterNode) && ((fOperation & (DND.DROP_COPY | DND.DROP_MOVE)) != 0);
-			result |= (NodeDnDBuffer.getInstance().getDraggedNodes().get(0) instanceof MethodParameterNode) && ((fOperation & (DND.DROP_COPY | DND.DROP_MOVE)) != 0);
+			result |= (NodeDnDBuffer.getInstance().getDraggedNodes().get(0) instanceof MethodParameterNode) && ((fOperation & (DND.DROP_COPY | DND.DROP_MOVE | DND.DROP_LINK)) != 0);
 			return result;
 		}
 
@@ -197,11 +199,17 @@ public class ModelNodeDropListener extends ViewerDropAdapter{
 
 		@Override
 		public Object visit(RootNode node) throws Exception {
+			if(NodeDnDBuffer.getInstance().getDraggedNodes().get(0) instanceof MethodParameterNode){
+				return replaceParametersWithLinks(node, NodeDnDBuffer.getInstance().getDraggedNodes());
+			}
 			return false;
 		}
 
 		@Override
 		public Object visit(ClassNode node) throws Exception {
+			if(NodeDnDBuffer.getInstance().getDraggedNodes().get(0) instanceof MethodParameterNode){
+				return replaceParametersWithLinks(node, NodeDnDBuffer.getInstance().getDraggedNodes());
+			}
 			return false;
 		}
 
@@ -245,6 +253,19 @@ public class ModelNodeDropListener extends ViewerDropAdapter{
 		@Override
 		public Object visit(ChoiceNode node) throws Exception {
 			return false;
+		}
+
+		private Object replaceParametersWithLinks(GlobalParametersParentNode newParent, List<AbstractNode> originals) {
+			List<MethodParameterNode> originalParameters = new ArrayList<MethodParameterNode>();
+			for(AbstractNode node : originals){
+				if(node instanceof MethodParameterNode){
+					originalParameters.add((MethodParameterNode)node);
+				}else{
+					return false;
+				}
+			}
+			GlobalParametersParentInterface parentIf = (GlobalParametersParentInterface)NodeInterfaceFactory.getNodeInterface(newParent, fUpdateContext);
+			return parentIf.replaceMethodParametersWithGlobal(originalParameters);
 		}
 	}
 

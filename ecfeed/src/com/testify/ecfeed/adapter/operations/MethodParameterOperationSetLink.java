@@ -43,10 +43,10 @@ public class MethodParameterOperationSetLink extends BulkOperation {
 			MethodNode method = fTarget.getMethod();
 			List<String> types = method.getParametersTypes();
 			types.set(fTarget.getIndex(), fNewLink.getType());
-			if(method.getClassNode().getMethod(method.getName(), types) != null && method.getClassNode().getMethod(method.getName(), types) != method){
+			if(method.checkDuplicate(fTarget.getIndex(), fNewLink.getType())){
 				throw new ModelOperationException(Messages.METHOD_SIGNATURE_DUPLICATE_PROBLEM(method.getClassNode().getName(), method.getName()));
 			}
-			
+
 			fCurrentLink = fTarget.getLink();
 			fTarget.setLink(fNewLink);
 		}

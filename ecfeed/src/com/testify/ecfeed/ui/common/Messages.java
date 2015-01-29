@@ -103,6 +103,7 @@ public class Messages {
 	public static final String DIALOG_SET_PARAMETER_TYPE_PROBLEM_TITLE = "Couldn't set parameter's type";
 	public static final String DIALOG_RESET_CHOICES_PROBLEM_TITLE = "Couldn't reset choices to default";
 	public static final String DIALOG_SET_COMMENTS_PROBLEM_TITLE = "Cannot set comments";
+	public static final String DIALOG_REPLACE_PARAMETERS_WITH_LINKS_TITLE = "Cannot replace parameters with links";
 
 	//CONFIRMATIONS AND WARNINGS
 	public static final String DIALOG_REMOVE_CLASSES_TITLE = "Remove classes";

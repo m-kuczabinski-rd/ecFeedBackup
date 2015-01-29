@@ -44,4 +44,6 @@ public interface OperationNames {
 	public static final String SET_LINKED = "Set linked";
 	public static final String SET_LINK = "Set link";
 	public static final String SET_COMMENTS = "Set comments";
+	public static final String REPLACE_PARAMETERS = "Replace method parameters with links";
+	public static final String REPLACE_PARAMETER_WITH_LINK = "Replace parameter with link";
 }

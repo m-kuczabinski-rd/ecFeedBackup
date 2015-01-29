@@ -26,7 +26,7 @@ import com.testify.ecfeed.ui.common.JavaModelAnalyser;
 import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.dialogs.TestClassSelectionDialog;
 
-public class ClassInterface extends AbstractNodeInterface {
+public class ClassInterface extends GlobalParametersParentInterface {
 
 	public ClassInterface(IModelUpdateContext updateContext) {
 		super(updateContext);
