@@ -88,6 +88,22 @@ public class MethodNode extends ParametersParentNode {
 		return copy;
 	}
 
+	public MethodNode getSibling(List<String> argTypes){
+		ClassNode parent = getClassNode();
+		if(parent == null) return null;
+		MethodNode sibling = parent.getMethod(getName(), argTypes);
+		if(sibling == null || sibling == this){
+			return null;
+		}
+		return sibling;
+	}
+
+	public boolean checkDuplicate(int index, String newType){
+		List<String> argTypes = getParametersTypes();
+		argTypes.set(index, newType);
+		return getSibling(argTypes) != null;
+	}
+
 	public void addConstraint(ConstraintNode constraint) {
 		addConstraint(constraint, fConstraints.size());
 	}

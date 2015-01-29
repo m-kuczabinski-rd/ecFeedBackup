@@ -44,22 +44,55 @@ public class MethodParameterOperationSetLinked extends BulkOperation{
 
 		@Override
 		public void execute() throws ModelOperationException {
+			MethodNode method = fTarget.getMethod();
 			String newType;
 			if(fLinked){
 				if(fTarget.getLink() == null){
 					throw new ModelOperationException(Messages.LINK_NOT_SET_PROBLEM);
 				}
 				newType = fTarget.getLink().getType();
-			}else{
-				newType = fTarget.getType();
+			}
+			else{
+				newType = fTarget.getRealType();
 			}
 
-			MethodNode method = fTarget.getMethod();
-			List<String> types = method.getParametersTypes();
-			types.set(fTarget.getIndex(), newType);
-			if(method.getClassNode().getMethod(method.getName(), types) != null && method.getClassNode().getMethod(method.getName(), types) != method){
+			if(method.checkDuplicate(fTarget.getIndex(), newType)){
 				throw new ModelOperationException(Messages.METHOD_SIGNATURE_DUPLICATE_PROBLEM(method.getClassNode().getName(), method.getName()));
 			}
+//			if(fLinked){
+//				GlobalParameterNode link = fTarget.getLink();
+//				if(link == null || method.checkDuplicate(fTarget.getIndex(), link.getType())){
+//					GlobalParameterNode newLink = setNewLink();
+//					if(newLink == null){
+//						throw new ModelOperationException(Messages.METHOD_SIGNATURE_DUPLICATE_PROBLEM(method.getClassNode().getName(), method.getName()));
+//					}
+//					fTarget.setLink(newLink);
+//				}
+//			}
+//
+//
+//				//check if the link is still part of the model
+//				GlobalParametersParentNode parent = link.getParametersParent();
+//				if(link == null || parent == null || parent.getParameters().contains(link) == false){
+//					GlobalParameterNode newLink = null;
+//					for(GlobalParameterNode newLinkCandidate : fTarget.getMethod().getAvailableGlobalParameters()){
+//						if(checkSignatureConflict(method, fTarget.getIndex(), newLinkCandidate.getType()) == false){
+//							newLink = newLinkCandidate;
+//							break;
+//						}
+//					}
+//					System.out.println("Dupa");
+//				}
+//				newType = link.getType();
+//			}else{
+//				newType = fTarget.getType();
+//			}
+//
+//			List<String> types = method.getParametersTypes();
+//			types.set(fTarget.getIndex(), newType);
+//			if(method.getClassNode().getMethod(method.getName(), types) != null && method.getClassNode().getMethod(method.getName(), types) != method){
+//				throw new ModelOperationException(Messages.METHOD_SIGNATURE_DUPLICATE_PROBLEM(method.getClassNode().getName(), method.getName()));
+//			}
 			fTarget.setLinked(fLinked);
 			fOriginalTestCases = new ArrayList<>(method.getTestCases());
 			method.removeTestCases();

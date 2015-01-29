@@ -69,6 +69,11 @@ public class GlobalParameterNode extends AbstractParameterNode {
 	}
 
 	@Override
+	public GlobalParametersParentNode getParametersParent(){
+		return (GlobalParametersParentNode)getParent();
+	}
+
+	@Override
 	public Set<ConstraintNode> mentioningConstraints() {
 		Set<ConstraintNode> result = new HashSet<ConstraintNode>();
 		for(MethodParameterNode parameter : getLinkers()){

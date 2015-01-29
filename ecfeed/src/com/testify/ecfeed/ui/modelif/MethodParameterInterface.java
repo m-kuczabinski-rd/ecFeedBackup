@@ -92,41 +92,19 @@ public class MethodParameterInterface extends AbstractParameterInterface {
 	public boolean setLinked(boolean linked) {
 		MethodParameterOperationSetLinked operation = new MethodParameterOperationSetLinked(getTarget(), linked);
 		MethodNode method = getTarget().getMethod();
-		List<String> types = method.getParametersTypes();
 		if(linked){
-			//check the type of the link. If it causes collision, set different link
-			boolean newLinkNecessary = false;
-			if(getTarget().getLink() == null){
-				newLinkNecessary = true;
-			}else{
-				String linkType = getTarget().getLink().getType();
-				types.set(getTarget().getIndex(), linkType);
-				if(method.getClassNode().getMethod(method.getName(), types) != null && (method.getClassNode().getMethod(method.getName(), types) != method)){
-					newLinkNecessary = true;
-				}
-			}
-			if(newLinkNecessary){
-				boolean linkFound = false;
-				for(GlobalParameterNode link : getAvailableLinks()){
-					types.set(getTarget().getIndex(), link.getType());
-					if(method.getClassNode().getMethod(method.getName(), types) == null){
-						operation.addOperation(0, new MethodParameterOperationSetLink(getTarget(), link));
-						linkFound = true;
-						break;
-					}
-				}
-				if(linkFound == false){
+			GlobalParameterNode link = getTarget().getLink();
+			if(link == null || method.checkDuplicate(getTarget().getIndex(), link.getType())){
+				GlobalParameterNode newLink = findNewLink();
+				if(newLink == null){
 					MessageDialog.openError(Display.getCurrent().getActiveShell(), Messages.DIALOG_SET_PARAMETER_LINKED_PROBLEM_TITLE, Messages.DIALOG_NO_VALID_LINK_AVAILABLE_PROBLEM_MESSAGE);
-					return false;
 				}
+				operation.addOperation(0, new MethodParameterOperationSetLink(getTarget(), newLink));
 			}
 		}else{
 			//check the type of the unlinked parameter. If it causes collision, set new type
-			String type = getTarget().getRealType();
-			types.set(getTarget().getIndex(), type);
-			if(method.getClassNode().getMethod(method.getName(), types) != null && method.getClassNode().getMethod(method.getName(), types) != method){
-				type = getTarget().getType();
-				operation.addOperation(0, new MethodParameterOperationSetType(getTarget(), type, getAdapterProvider()));
+			if(method.checkDuplicate(getTarget().getIndex(), getTarget().getRealType())){
+				operation.addOperation(0, new MethodParameterOperationSetType(getTarget(), getTarget().getType(), getAdapterProvider()));
 			}
 		}
 
@@ -203,4 +181,16 @@ public class MethodParameterInterface extends AbstractParameterInterface {
 	public boolean importTypeCommentsEnabled(){
 		return getTarget().isLinked() == false;
 	}
+
+	private GlobalParameterNode findNewLink() {
+		MethodNode method = getTarget().getMethod();
+		int index = getTarget().getIndex();
+		for(GlobalParameterNode parameter : method.getAvailableGlobalParameters()){
+			if(method.checkDuplicate(index, parameter.getType()) == false){
+				return parameter;
+			}
+		}
+		return null;
+	}
+
 }
