@@ -94,7 +94,7 @@ public class MethodParameterInterface extends AbstractParameterInterface {
 		MethodNode method = getTarget().getMethod();
 		if(linked){
 			GlobalParameterNode link = getTarget().getLink();
-			if(link == null || method.checkDuplicate(getTarget().getIndex(), link.getType())){
+			if(link == null || method.getAvailableGlobalParameters().contains(link) == false || method.checkDuplicate(getTarget().getIndex(), link.getType())){
 				GlobalParameterNode newLink = findNewLink();
 				if(newLink == null){
 					MessageDialog.openError(Display.getCurrent().getActiveShell(), Messages.DIALOG_SET_PARAMETER_LINKED_PROBLEM_TITLE, Messages.DIALOG_NO_VALID_LINK_AVAILABLE_PROBLEM_MESSAGE);
