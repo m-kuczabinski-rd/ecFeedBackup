@@ -140,7 +140,7 @@ public class AbstractNodeInterface extends OperationExecuter{
 	}
 
 	public String getComments() {
-		if(fTarget.getDescription() != null){
+		if(fTarget != null && fTarget.getDescription() != null){
 			return fTarget.getDescription();
 		}
 		return "";
