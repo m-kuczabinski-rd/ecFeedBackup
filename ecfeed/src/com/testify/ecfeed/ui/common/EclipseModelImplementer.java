@@ -109,6 +109,8 @@ public class EclipseModelImplementer extends AbstractModelImplementer {
 		IPackageFragment packageFragment = getPackageFragment(packageName);
 		ICompilationUnit unit = packageFragment.getCompilationUnit(unitName);
 		unit.createType(classDefinitionContent(node), null, false, null);
+		unit.becomeWorkingCopy(null);
+		unit.commitWorkingCopy(true, null);
 	}
 
 	@Override
@@ -129,6 +131,9 @@ public class EclipseModelImplementer extends AbstractModelImplementer {
 				}
 			}
 		}
+		ICompilationUnit unit = classType.getCompilationUnit();
+		unit.becomeWorkingCopy(null);
+		unit.commitWorkingCopy(true, null);
 	}
 
 	@Override
@@ -150,6 +155,8 @@ public class EclipseModelImplementer extends AbstractModelImplementer {
 		IPackageFragment packageFragment = getPackageFragment(packageName);
 		ICompilationUnit unit = packageFragment.getCompilationUnit(unitName);
 		unit.createType(enumDefinitionContent(node, fields), null, false, null);
+		unit.becomeWorkingCopy(null);
+		unit.commitWorkingCopy(true, null);
 	}
 
 	@Override
@@ -171,6 +178,7 @@ public class EclipseModelImplementer extends AbstractModelImplementer {
 			implementParameterDefinition(parent);
 		}
 		IType enumType = getJavaProject().findType(typeName);
+		ICompilationUnit iUnit = enumType.getCompilationUnit();
 		CompilationUnit unit = getCompilationUnit(enumType);
 		EnumDeclaration enumDeclaration = getEnumDeclaration(unit, typeName);
 		if(enumDeclaration != null){
@@ -182,6 +190,8 @@ public class EclipseModelImplementer extends AbstractModelImplementer {
 			saveChanges(unit, enumType.getResource().getLocation());
 		}
 		enumType.getResource().refreshLocal(IResource.DEPTH_ONE, null);
+		iUnit.becomeWorkingCopy(null);
+		iUnit.commitWorkingCopy(true, null);
 		refreshWorkspace();
 	}
 
