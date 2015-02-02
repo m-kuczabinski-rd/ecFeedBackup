@@ -117,7 +117,15 @@ public class ConstraintNode extends AbstractNode{
 
 	public boolean isConsistent() {
 		for(AbstractParameterNode parameter : getConstraint().getReferencedParameters()){
-			if(getMethod().getParameters().contains(parameter) == false){
+			boolean isLinked = false;
+			for(AbstractParameterNode param : getMethod().getParameters()){
+				MethodParameterNode methodParam = (MethodParameterNode) param;
+				if(methodParam.getLink().equals(parameter)){
+					isLinked = true;
+					break;
+				}
+			}
+			if(!isLinked && getMethod().getParameters().contains(parameter) == false){
 				return false;
 			}
 		}
