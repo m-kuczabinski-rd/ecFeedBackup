@@ -41,34 +41,41 @@ public class CoverageCalculator {
 	// The map of expected parameters default values. Said values are used to replace unique values in algorithm.
 	private Map<Integer, ChoiceNode> fExpectedChoices;
 	// The main map of covered tuples
-	private List<Map<List<ChoiceNode>, Integer>> fTuples;
+	private List<Map<List<OrderedChoice>, Integer>> fTuples;
 	// Test cases and suites (de)selected recently;
 	private List<List<ChoiceNode>> fCurrentlyChangedCases;
 	// If user added test cases = true; else we are substracting tuples;
 	private boolean fAddingFlag;
-
-	public CoverageCalculator(List<MethodParameterNode> parameters) {
-		fParameters = parameters;
-		initialize();
-	}
-
-	private void initialize() {
-		fInput = prepareInput();
-		N = fInput.size();
-		fTuplesCovered = new int[N];
-		fTotalWork = new int[N];
-		fResults = new double[N];
-		fCurrentlyChangedCases = new ArrayList<>();
-
-		fTuples = new ArrayList<Map<List<ChoiceNode>, Integer>>();
-		fExpectedChoices = prepareExpectedChoices();
-
-		for (int n = 0; n < fTotalWork.length; n++) {
-			fTotalWork[n] = calculateTotalTuples(fInput, n + 1, 100);
-			fTuples.add(new HashMap<List<ChoiceNode>, Integer>());
+	
+	
+	/*
+	 * Introducing OrderedChoice to differentiate between equal choices in different parameters
+	 * (Occuring when two parameters link the same global parameter)
+	 */
+	private class OrderedChoice{
+		int fIndex;
+		ChoiceNode fChoice;
+		
+		public OrderedChoice(int index, ChoiceNode choice){
+			fIndex = index;
+			fChoice = choice;
+		}
+		
+		@Override
+		public int hashCode(){
+			int hash = 7;
+			hash = 31 * hash + fIndex;
+			hash = 31 * hash + (fChoice == null ? 0 : fChoice.hashCode());
+			return hash;
+		}
+		
+		@Override
+		public boolean equals(Object obj){
+			if((obj == null) || (obj.getClass() != this.getClass())) return false;
+			OrderedChoice choice = (OrderedChoice)obj;
+			return ((choice.fIndex == this.fIndex) && choice.fChoice.equals(this.fChoice));
 		}
 	}
-
 	
 	private class CalculatorRunnable implements IRunnableWithProgress {
 		private boolean isCanceled;
@@ -77,18 +84,23 @@ public class CoverageCalculator {
 		@Override
 		public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 			int n = 0;
-			List<Map<List<ChoiceNode>, Integer>> coveredTuples = new ArrayList<>();
+			List<Map<List<OrderedChoice>, Integer>> coveredTuples = new ArrayList<>();
 
 			monitor.beginTask("Calculating Coverage", fCurrentlyChangedCases.size() * N);
 
 			while (!monitor.isCanceled() && n < N) {
-				Map<List<ChoiceNode>, Integer> mapForN = new HashMap<>();
-				for (List<ChoiceNode> tcase : fCurrentlyChangedCases) {
+				Map<List<OrderedChoice>, Integer> mapForN = new HashMap<>();
+
+				ArrayList<List<OrderedChoice>> convertedCases = new ArrayList<>();
+				for(List<ChoiceNode> tcase: fCurrentlyChangedCases){
+					convertedCases.add(convertToOrdered(tcase));
+				}
+				for (List<OrderedChoice> converted: convertedCases) {
 					if (monitor.isCanceled()){
 						break;
 					}
-					Tuples<ChoiceNode> tuples = new Tuples<ChoiceNode>(tcase, n + 1);
-					for (List<ChoiceNode> pnode : tuples.getAll()) {
+					Tuples<OrderedChoice> tuples = new Tuples<OrderedChoice>(converted, n + 1);
+					for (List<OrderedChoice> pnode : tuples.getAll()) {
 						addTuplesToMap(mapForN, pnode);
 					}
 					monitor.worked(1);
@@ -101,7 +113,7 @@ public class CoverageCalculator {
 
 			n = 0;
 			if (!monitor.isCanceled()) {
-				for (Map<List<ChoiceNode>, Integer> map : coveredTuples) {
+				for (Map<List<OrderedChoice>, Integer> map : coveredTuples) {
 					mergeOccurrenceMaps(fTuples.get(n), map, fAddingFlag);
 					fTuplesCovered[n] = fTuples.get(n).size();
 					fResults[n] = (((double) fTuplesCovered[n]) / ((double) fTotalWork[n])) * 100;
@@ -113,13 +125,17 @@ public class CoverageCalculator {
 			monitor.done();
 		}
 	}
-	
+
+	public CoverageCalculator(List<MethodParameterNode> parameters) {
+		fParameters = parameters;
+		initialize();
+	}
 
 	public boolean calculateCoverage() {
 		// CurrentlyChangedCases are null if deselection left no test cases selected, 
 		// hence we can just clear tuple map and set results to 0
 		if (fCurrentlyChangedCases == null) {
-			for (Map<List<ChoiceNode>, Integer> tupleMap : fTuples) {
+			for (Map<List<OrderedChoice>, Integer> tupleMap : fTuples) {
 				tupleMap.clear();
 			}
 			// set results to zero
@@ -151,7 +167,42 @@ public class CoverageCalculator {
 
 	}
 	
-	private static void addTuplesToMap(Map<List<ChoiceNode>, Integer> map, List<ChoiceNode> tuple) {
+	public void resetResults() {
+		for (int i = 0; i < fResults.length; i++) {
+			fResults[i] = 0;
+		}
+	}	
+	
+	public double[] getCoverage(){
+		return fResults;
+	}
+	
+	public void setCurrentChangedCases(Collection<TestCaseNode> testCases, boolean isAdding) {
+		fAddingFlag = isAdding;
+		if (testCases == null)
+			fCurrentlyChangedCases = null;
+		else
+			fCurrentlyChangedCases = prepareCasesToAdd(testCases);
+	}
+	
+	private void initialize() {
+		fInput = prepareInput();
+		N = fInput.size();
+		fTuplesCovered = new int[N];
+		fTotalWork = new int[N];
+		fResults = new double[N];
+		fCurrentlyChangedCases = new ArrayList<>();
+
+		fTuples = new ArrayList<Map<List<OrderedChoice>, Integer>>();
+		fExpectedChoices = prepareExpectedChoices();
+
+		for (int n = 0; n < fTotalWork.length; n++) {
+			fTotalWork[n] = calculateTotalTuples(fInput, n + 1, 100);
+			fTuples.add(new HashMap<List<OrderedChoice>, Integer>());
+		}
+	}
+	
+	private static void addTuplesToMap(Map<List<OrderedChoice>, Integer> map, List<OrderedChoice> tuple) {
 		if (!map.containsKey(tuple)) {
 			map.put(tuple, 1);
 		} else {
@@ -159,10 +210,10 @@ public class CoverageCalculator {
 		}
 	}
 
-	private static void mergeOccurrenceMaps(Map<List<ChoiceNode>, Integer> targetMap, Map<List<ChoiceNode>, Integer> sourceMap,
+	private static void mergeOccurrenceMaps(Map<List<OrderedChoice>, Integer> targetMap, Map<List<OrderedChoice>, Integer> sourceMap,
 			boolean isAdding) {
 		if (isAdding) {
-			for (List<ChoiceNode> key : sourceMap.keySet()) {
+			for (List<OrderedChoice> key : sourceMap.keySet()) {
 				if (!targetMap.containsKey(key)) {
 					targetMap.put(key, sourceMap.get(key));
 				} else {
@@ -170,7 +221,7 @@ public class CoverageCalculator {
 				}
 			}
 		} else {
-			for (List<ChoiceNode> key : sourceMap.keySet()) {
+			for (List<OrderedChoice> key : sourceMap.keySet()) {
 				if (!targetMap.containsKey(key)) {
 					System.err.println("Negative occurences...");
 				} else {
@@ -245,7 +296,7 @@ public class CoverageCalculator {
 
 	private int calculateTotalTuples(List<List<ChoiceNode>> input, int n, int coverage) {
 		int totalWork = 0;
-
+		
 		Tuples<List<ChoiceNode>> tuples = new Tuples<List<ChoiceNode>>(input, n);
 		while (tuples.hasNext()) {
 			long combinations = 1;
@@ -255,26 +306,17 @@ public class CoverageCalculator {
 			}
 			totalWork += combinations;
 		}
-
 		return (int) Math.ceil(((double) (coverage * totalWork)) / 100);
 	}
-
-	// Getters & Setters
-	public void resetResults() {
-		for (int i = 0; i < fResults.length; i++) {
-			fResults[i] = 0;
+	
+	private List<OrderedChoice> convertToOrdered(List<ChoiceNode> choices){
+		ArrayList<OrderedChoice> ordered = new ArrayList<>();
+		int i = 0;
+		for(ChoiceNode choice: choices){
+			ordered.add(new OrderedChoice(i, choice));
+			i++;
 		}
+		return ordered;
 	}
-	
-	public double[] getCoverage(){
-		return fResults;
-	}
-	
-	public void setCurrentChangedCases(Collection<TestCaseNode> testCases, boolean isAdding) {
-		fAddingFlag = isAdding;
-		if (testCases == null)
-			fCurrentlyChangedCases = null;
-		else
-			fCurrentlyChangedCases = prepareCasesToAdd(testCases);
-	}
+
 }
