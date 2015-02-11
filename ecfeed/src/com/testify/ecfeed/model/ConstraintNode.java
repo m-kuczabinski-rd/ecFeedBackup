@@ -120,7 +120,7 @@ public class ConstraintNode extends AbstractNode{
 			boolean isLinked = false;
 			for(AbstractParameterNode param : getMethod().getParameters()){
 				MethodParameterNode methodParam = (MethodParameterNode) param;
-				if(methodParam.getLink().equals(parameter)){
+				if(methodParam.isLinked() && methodParam.getLink().equals(parameter)){
 					isLinked = true;
 					break;
 				}
