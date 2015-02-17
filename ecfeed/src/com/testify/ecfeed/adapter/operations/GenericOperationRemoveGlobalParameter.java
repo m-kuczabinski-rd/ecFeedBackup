@@ -24,5 +24,13 @@ public class GenericOperationRemoveGlobalParameter extends BulkOperation {
 		}
 		addOperation(new GenericOperationRemoveParameter(target, parameter));
 	}
+	
+	public GenericOperationRemoveGlobalParameter(GlobalParametersParentNode target, GlobalParameterNode parameter, boolean ignoreDuplicates) {
+		super(OperationNames.REMOVE_GLOBAL_PARAMETER, true);
+		for(MethodParameterNode linker : parameter.getLinkers()){
+			addOperation(new MethodOperationRemoveParameter(linker.getMethod(), linker, true, ignoreDuplicates));
+		}
+		addOperation(new GenericOperationRemoveParameter(target, parameter));
+	}
 
 }

@@ -26,6 +26,7 @@ public class MethodOperationRemoveParameter extends BulkOperation{
 	private class RemoveMethodParameterOperation extends GenericOperationRemoveParameter{
 
 		private List<TestCaseNode> fOriginalTestCases;
+		private boolean fIgnoreDuplicates;
 
 		private class ReverseOperation extends AbstractReverseOperation{
 			public ReverseOperation() {
@@ -49,10 +50,15 @@ public class MethodOperationRemoveParameter extends BulkOperation{
 			super(target, parameter);
 			fOriginalTestCases = new ArrayList<>();
 		}
+		
+		public RemoveMethodParameterOperation(MethodNode target, MethodParameterNode parameter, boolean ignoreDuplicates){
+			this(target, parameter);
+			fIgnoreDuplicates = ignoreDuplicates;
+		}
 
 		@Override
 		public void execute() throws ModelOperationException{
-			if(validateNewSignature() == false){
+			if(!fIgnoreDuplicates && validateNewSignature() == false){
 				String className = getTarget().getParent().getName();
 				String methodName = getTarget().getName();
 				throw new ModelOperationException(Messages.METHOD_SIGNATURE_DUPLICATE_PROBLEM(className, methodName));
@@ -94,4 +100,13 @@ public class MethodOperationRemoveParameter extends BulkOperation{
 	public MethodOperationRemoveParameter(MethodNode target, MethodParameterNode parameter) {
 		this(target, parameter, true);
 	}
+	
+	public MethodOperationRemoveParameter(MethodNode target, MethodParameterNode parameter, boolean validate, boolean ignoreDuplicates){
+		super(OperationNames.REMOVE_METHOD_PARAMETER, true);
+		addOperation(new RemoveMethodParameterOperation(target, parameter, ignoreDuplicates));
+		if(validate){
+			addOperation(new MethodOperationMakeConsistent(target));
+		}
+	}
+	
 }
