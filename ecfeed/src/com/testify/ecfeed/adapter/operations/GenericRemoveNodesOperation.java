@@ -69,6 +69,7 @@ public class GenericRemoveNodesOperation extends BulkOperation {
 		 */
 		HashMap<ClassNode, HashMap<String, HashMap<MethodNode, List<String>>>> duplicatesMap = new HashMap<>();
 		HashMap<MethodNode, List<AbstractParameterNode>> parameterMap = new HashMap<>();
+		//HashMap
 		ArrayList<ClassNode> classes = new ArrayList<>();
 		ArrayList<MethodNode> methods = new ArrayList<>();
 		ArrayList<MethodParameterNode> params = new ArrayList<>();
@@ -112,14 +113,7 @@ public class GenericRemoveNodesOperation extends BulkOperation {
 			}
 			addOperation(FactoryRemoveOperation.getRemoveOperation(choice, adapterProvider, validate));
 		}
-		// removing constraints first, to prevent redo paradox
-		for(ConstraintNode constraint : constraints){
-			addOperation(FactoryRemoveOperation.getRemoveOperation(constraint, adapterProvider, validate));
-		}
-		// removing test cases, to prevent redo paradox
-		for(TestCaseNode tcase : testcases){
-			addOperation(FactoryRemoveOperation.getRemoveOperation(tcase, adapterProvider, validate));
-		}
+
 		// leaving this in case of any further nodes being added
 		for(AbstractNode node : others){
 			addOperation(FactoryRemoveOperation.getRemoveOperation(node, adapterProvider, validate));
@@ -147,6 +141,8 @@ public class GenericRemoveNodesOperation extends BulkOperation {
 				}
 			}
 			if(!isDependent){
+				//remove mentioning constraints from the list to avoid duplicates
+				eliminateMentioningConstraints(global, constraints);
 				addOperation(FactoryRemoveOperation.getRemoveOperation(global, adapterProvider, validate));
 				globalItr.remove();
 				/*
@@ -177,6 +173,8 @@ public class GenericRemoveNodesOperation extends BulkOperation {
 				}
 				parameterMap.get(method).add(param);
 			} else{
+				//remove mentioning constraints from the list to avoid duplicates
+				eliminateMentioningConstraints(param, constraints);
 				addOperation(FactoryRemoveOperation.getRemoveOperation(param, adapterProvider, validate));
 				paramItr.remove();
 			}
@@ -220,6 +218,8 @@ public class GenericRemoveNodesOperation extends BulkOperation {
 					for(MethodNode method : methodSet){
 						if(parameterMap.containsKey(method)){
 							for(AbstractParameterNode node : parameterMap.get(method)){
+								//remove mentioning constraints from the list to avoid duplicates
+								eliminateMentioningConstraints(node, constraints);
 								addOperation(FactoryRemoveOperation.getRemoveOperation(node, adapterProvider, validate));
 							}
 						}
@@ -230,17 +230,27 @@ public class GenericRemoveNodesOperation extends BulkOperation {
 					for(MethodNode method : methodSet){
 						if(parameterMap.containsKey(method)){
 							for(AbstractParameterNode node : parameterMap.get(method)){
+								//remove mentioning constraints from the list to avoid duplicates
+								eliminateMentioningConstraints(node, constraints);
 								if(node instanceof MethodParameterNode){
 									addOperation(new MethodOperationRemoveParameter(method, (MethodParameterNode)node, validate, true));
 								} else if(node instanceof GlobalParameterNode){
-									GlobalParameterNode global = (GlobalParameterNode)node;
-									addOperation(new GenericOperationRemoveGlobalParameter(global.getParametersParent(), global, true));
+									addOperation(new GenericOperationRemoveGlobalParameter(((GlobalParameterNode)node).getParametersParent(), (GlobalParameterNode)node, true));
 								}
 							}
 						}
 					}
 				}
 			}
+		}
+		
+		// removing constraints first, to prevent redo paradox
+		for(ConstraintNode constraint : constraints){
+			addOperation(FactoryRemoveOperation.getRemoveOperation(constraint, adapterProvider, validate));
+		}
+		// removing test cases, to prevent redo paradox
+		for(TestCaseNode tcase : testcases){
+			addOperation(FactoryRemoveOperation.getRemoveOperation(tcase, adapterProvider, validate));
 		}
 
 	}
@@ -267,6 +277,26 @@ public class GenericRemoveNodesOperation extends BulkOperation {
 			}
 		}
 		return hasDuplicate;
+	}
+	
+	private void eliminateMentioningConstraints(AbstractNode node, HashSet<ConstraintNode> constraints){
+		if(node instanceof ChoiceNode){
+			Iterator<ConstraintNode> itr = constraints.iterator();
+			while(itr.hasNext()){
+				ConstraintNode constraint = itr.next();
+				if(constraint.mentions((ChoiceNode)node)){
+					itr.remove();
+				}
+			}
+		} else if(node instanceof AbstractParameterNode){
+			Iterator<ConstraintNode> itr = constraints.iterator();
+			while(itr.hasNext()){
+				ConstraintNode constraint = itr.next();
+				if(constraint.mentions((AbstractParameterNode)node)){
+					itr.remove();
+				}
+			}
+		}
 	}
 
 }

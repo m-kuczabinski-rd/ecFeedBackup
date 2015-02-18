@@ -72,6 +72,19 @@ public class ConstraintNode extends AbstractNode{
 	public boolean mentions(MethodParameterNode parameter) {
 		return fConstraint.mentions(parameter);
 	}
+	
+	public boolean mentions(AbstractParameterNode parameter) {
+		if(parameter instanceof MethodParameterNode){
+			MethodParameterNode param = (MethodParameterNode)parameter;
+			return fConstraint.mentions(param);
+		} else if(parameter instanceof GlobalParameterNode){
+			GlobalParameterNode global = (GlobalParameterNode)parameter;
+			for(MethodParameterNode methodParam: global.getLinkers()){
+				return fConstraint.mentions(methodParam);
+			}
+		}
+		return false;
+	}
 
 	public boolean mentions(MethodParameterNode parameter, String label) {
 		return fConstraint.mentions(parameter, label);
@@ -116,7 +129,7 @@ public class ConstraintNode extends AbstractNode{
 	}
 
 	public boolean isConsistent() {
-		for(AbstractParameterNode parameter : getConstraint().getReferencedParameters()){
+		for(AbstractParameterNode parameter : getConstraint().getReferencedParameters()){ // wow it really does point to global instead of pointing to method param WHICH would then point to global, if linked...
 			boolean isLinked = false;
 			for(AbstractParameterNode param : getMethod().getParameters()){
 				MethodParameterNode methodParam = (MethodParameterNode) param;
@@ -138,9 +151,8 @@ public class ConstraintNode extends AbstractNode{
 			if(parameter.getMethods().contains(getMethod()) == false){
 				return false;
 			}
-//			if((parameter.getMethod() == null) || (parameter.getMethod().getParameters().contains(parameter) == false)){
-//				return false;
-//			}
+			// of course 2nd parameter is linked, so... Also, above 2nd parameter passed equals because it points to same link...
+			// looks like we have to check by name or something?
 		}
 
 		for(MethodParameterNode parameter : getMethod().getMethodParameters()){
