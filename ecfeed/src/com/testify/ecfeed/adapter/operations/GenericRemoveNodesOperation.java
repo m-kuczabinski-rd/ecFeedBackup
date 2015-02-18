@@ -48,28 +48,12 @@ public class GenericRemoveNodesOperation extends BulkOperation {
 			}
 		}
 		prepareOperations(adapterProvider, validate);
-//		for(AbstractNode node : fRemoved){
-//			addOperation(FactoryRemoveOperation.getRemoveOperation(node, adapterProvider, validate));
-//		}
 		return;
-		
 	}
 	
-	/*
-	 * persisting problems:
-	 * removing parameter and referencing constraint still doubles constraint upon undo and causes potential null pointer after undo-redo;
-	 * removing global parameter which could lead to duplicate methods (but didn't) results in null pointer in some absurd  place (set linked).
-	 */
 	private void prepareOperations(ITypeAdapterProvider adapterProvider, boolean validate){
-		/*
-		 * make full image of changes then check if signature (name and param
-		 * types) after change have duplicate in class. of course if 2 or more
-		 * changed methods reference the same class - first check, if they
-		 * aren't duplicate of each other.
-		 */
 		HashMap<ClassNode, HashMap<String, HashMap<MethodNode, List<String>>>> duplicatesMap = new HashMap<>();
 		HashMap<MethodNode, List<AbstractParameterNode>> parameterMap = new HashMap<>();
-		//HashMap
 		ArrayList<ClassNode> classes = new ArrayList<>();
 		ArrayList<MethodNode> methods = new ArrayList<>();
 		ArrayList<MethodParameterNode> params = new ArrayList<>();
@@ -102,18 +86,22 @@ public class GenericRemoveNodesOperation extends BulkOperation {
 		for(ClassNode clazz : classes){
 			addOperation(FactoryRemoveOperation.getRemoveOperation(clazz, adapterProvider, validate));
 		}
-		// removing choices
+		// removing choices and deleting connected constraints/test cases from their respective to-remove lists beforehand
 		for(ChoiceNode choice : choices){
-			Iterator<ConstraintNode> itr = constraints.iterator();
-			while(itr.hasNext()){
-				ConstraintNode constraint = itr.next();
-				if(constraint.mentions(choice)){
-					itr.remove();
+			eliminateMentioningConstraints(choice, constraints);
+			Iterator<TestCaseNode> tcaseItr = testcases.iterator();
+			while(tcaseItr.hasNext()){
+				TestCaseNode tcase = tcaseItr.next();
+				if(tcase.mentions(choice)){
+					tcaseItr.remove();
 				}
 			}
 			addOperation(FactoryRemoveOperation.getRemoveOperation(choice, adapterProvider, validate));
 		}
-
+		// removing test cases
+		for(TestCaseNode tcase : testcases){
+			addOperation(FactoryRemoveOperation.getRemoveOperation(tcase, adapterProvider, validate));
+		}
 		// leaving this in case of any further nodes being added
 		for(AbstractNode node : others){
 			addOperation(FactoryRemoveOperation.getRemoveOperation(node, adapterProvider, validate));
@@ -179,16 +167,13 @@ public class GenericRemoveNodesOperation extends BulkOperation {
 				paramItr.remove();
 			}
 		}
-		/*
-		 * Removing methods - information for model map has been already taken
-		 */
+		//Removing methods - information for model map has been already taken
 		Iterator<MethodNode> methodItr = methods.iterator();
 		while(methodItr.hasNext()){
 			MethodNode method = methodItr.next();
 				addOperation(FactoryRemoveOperation.getRemoveOperation(method, adapterProvider, validate));
 				methodItr.remove();
 		}
-
 		// Detect duplicates
 		Iterator<ClassNode> classItr = duplicatesMap.keySet().iterator();
 		while(classItr.hasNext()){
@@ -243,15 +228,11 @@ public class GenericRemoveNodesOperation extends BulkOperation {
 				}
 			}
 		}
-		
-		// removing constraints first, to prevent redo paradox
+		// removing remaining constraints
 		for(ConstraintNode constraint : constraints){
 			addOperation(FactoryRemoveOperation.getRemoveOperation(constraint, adapterProvider, validate));
 		}
-		// removing test cases, to prevent redo paradox
-		for(TestCaseNode tcase : testcases){
-			addOperation(FactoryRemoveOperation.getRemoveOperation(tcase, adapterProvider, validate));
-		}
+
 
 	}
 
