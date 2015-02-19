@@ -12,7 +12,7 @@ public class TestConstraintDetailsPage{
 		STATIC, AND, OR, CHOICE_IS, CHOICE_IS_NOT, LABEL_IS, LABEL_IS_NOT
 	}
 
-	/*
+	/**
 	 * It will require switch - every enum const represents one case which must be covered separately.
 	 * I left "CGITmodel" method in the model, which shows how it should be tested - it is just presentation of results.
 	 * Basically we need to create method like in presentation and test if results are correct for certain constraints used
