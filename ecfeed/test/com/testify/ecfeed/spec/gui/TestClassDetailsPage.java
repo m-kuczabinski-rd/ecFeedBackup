@@ -45,11 +45,6 @@ public class TestClassDetailsPage{
 		// TODO Auto-generated method stub
 		System.out.println("OtherMethodsViewerTest(" + doesMethodExist + ", " + doesReturnVoid + ", " + isConstructor + ", " + isParameterless + ")");
 	}
-	
-	public void OtherMethodsViewerTest2(boolean doesMethodExist, boolean doesReturnVoid, boolean isConstructor, boolean isParameterless){
-		// TODO Auto-generated method stub
-		System.out.println("OtherMethodsViewerTest(" + doesMethodExist + ", " + doesReturnVoid + ", " + isConstructor + ", " + isParameterless + ")");
-	}
 
 	public void renameMethodTest(String new_name, boolean isValid){
 		// TODO Auto-generated method stub
