@@ -14,14 +14,15 @@ package com.testify.ecfeed.adapter.operations;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 
 import com.testify.ecfeed.adapter.IModelOperation;
 import com.testify.ecfeed.adapter.ModelOperationException;
 import com.testify.ecfeed.adapter.java.JavaUtils;
-import com.testify.ecfeed.model.MethodParameterNode;
+import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.model.ConstraintNode;
 import com.testify.ecfeed.model.MethodNode;
-import com.testify.ecfeed.model.ChoiceNode;
+import com.testify.ecfeed.model.MethodParameterNode;
 import com.testify.ecfeed.model.TestCaseNode;
 
 public class ParameterOperationSetExpected extends AbstractModelOperation {
@@ -101,13 +102,16 @@ public class ParameterOperationSetExpected extends AbstractModelOperation {
 		MethodNode method = fTarget.getMethod(); 
 		if(method != null){
 			int index = fTarget.getIndex();
-			Iterator<TestCaseNode> tcIt = method.getTestCases().iterator();
+			ListIterator<TestCaseNode> tcIt = method.getTestCases().listIterator();
 			while(tcIt.hasNext()){
 				TestCaseNode testCase = tcIt.next();
 				if(fExpected){
 					ChoiceNode p = new ChoiceNode("expected", fTarget.getDefaultValue());
 					p.setParent(fTarget);
-					testCase.getTestData().set(index, p.getCopy());
+					TestCaseNode newTestCase = testCase.getCopy();
+					newTestCase.setParent(method);
+					newTestCase.getTestData().set(index, p.getCopy());
+					tcIt.set(newTestCase);
 				}
 				else{
 					tcIt.remove();
