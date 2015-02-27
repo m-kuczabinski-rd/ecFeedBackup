@@ -9,6 +9,9 @@
 #     Patryk Chamuczynski (p.chamuczynski(at)radytek.com) - initial implementation
 #-------------------------------------------------------------------------------
 
+Version 1.8.2
+ - bugfixes
+
 Version 1.8.0
  - Global parameters
  - Model documentation
