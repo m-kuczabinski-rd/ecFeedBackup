@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site>
-   <feature url="features/com.testify.ecfeed.feature_1.8.0.qualifier.jar" id="com.testify.ecfeed.feature" version="1.8.0.qualifier">
+   <bundle id="com.testify.ecfeed" version="1.8.2.qualifier">
       <category name="com.testify.ecfeed"/>
-   </feature>
+   </bundle>
    <category-def name="com.testify.ecfeed" label="ecFeed">
       <description>
          Test data generator and jUnit test execution framework based on equivalence class model.
