@@ -8,11 +8,11 @@ class ValueHolder<T> {
 		value = initialValue;
 	}
 	
-	public void set(T newValue) {
+	public void setValue(T newValue) {
 		value = newValue;
 	}
 	
-	public T get() {
+	public T getValue() {
 		return value;
 	}
 }
@@ -40,13 +40,30 @@ public class WhiteCharConverter {
 	private static final String BACKSLASH_STR = "\\";
 	private static final String DBL_BACKSLASH_STR = "\\\\";
 	private static final String BACKSLASH_S_STR = "\\s";
+	private static final String NEWLINE_STR = "\n";
+	private static final String BACKSLASH_N_STR = "\\n";
+	private static final String SPACE_STR = " ";
+	private static final String BACKSLASH_T_STR = "\\t";
+	private static final String TAB_STR = "\t";
+	
 	
 	public static String encode(String value) {
 		
-		String result1 = value.replace(BACKSLASH_STR, DBL_BACKSLASH_STR);
-		String result2 = result1.replace(" ", BACKSLASH_S_STR);
+		System.out.println("XYX encode 01 - value: |" + value + "| length: " + value.length());
 		
-		return result2;		
+		String result1 = value.replace(BACKSLASH_STR, DBL_BACKSLASH_STR);
+		System.out.println("XYX encode 02 - value: |" + result1 + "| length: " + result1.length());
+		
+		String result2 = result1.replace(NEWLINE_STR, BACKSLASH_N_STR); 
+		System.out.println("XYX encode 03 - value: |" + result2 + "| length: " + result2.length());
+		
+		String result3 = result2.replace(TAB_STR, BACKSLASH_T_STR); 
+		System.out.println("XYX encode 03 - value: |" + result2 + "| length: " + result2.length());
+		
+		String result4 = result3.replace(SPACE_STR, BACKSLASH_S_STR);
+		System.out.println("XYX encode 04 - value: |" + result3 + "| length: " + result3.length());
+		
+		return result4;		
 	}
 		
 	public static String decode(String value) {
@@ -73,10 +90,10 @@ public class WhiteCharConverter {
 		
 		if (isSpecialItemAt(index, builder, item, decodedItem)) {
 			
-			System.out.println("XYX decodeItemAt 02 - special item - item: " + item.get() + " decoded item:" + decodedItem.get());
+			System.out.println("XYX decodeItemAt 02 - special item - item: " + item.getValue() + " decoded item:" + decodedItem.getValue());
 			System.out.println("XYX decodeItemAt 03 - builder: |" + builder.toString() + "|");
 			
-			replaceAt(index, item.get(), decodedItem.get(), builder);
+			replaceAt(index, item.getValue(), decodedItem.getValue(), builder);
 			
 			System.out.println("XYX decodeItemAt 04 - builder: |" + builder.toString() + "|");
 		}
@@ -92,9 +109,17 @@ public class WhiteCharConverter {
 			return true;
 		}
 		
-		if (getItemWithDecodeDefAt(index, BACKSLASH_S_STR, " ", builder, outItem, outDecodedItem)) {
+		if (getItemWithDecodeDefAt(index, BACKSLASH_S_STR, SPACE_STR, builder, outItem, outDecodedItem)) {
 			return true;
 		}
+		
+		if (getItemWithDecodeDefAt(index, BACKSLASH_N_STR, NEWLINE_STR, builder, outItem, outDecodedItem)) {
+			return true;
+		}
+		
+		if (getItemWithDecodeDefAt(index, BACKSLASH_T_STR, TAB_STR, builder, outItem, outDecodedItem)) {
+			return true;
+		}		
 		
 		return false;
 	}
@@ -109,8 +134,8 @@ public class WhiteCharConverter {
 		
 		if (builder.indexOf(item, index) == index ) {
 			
-			outItem.set(item);
-			outDecodedItem.set(decodedItem);
+			outItem.setValue(item);
+			outDecodedItem.setValue(decodedItem);
 			return true;
 		}
 		
