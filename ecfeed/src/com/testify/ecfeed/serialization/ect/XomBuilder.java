@@ -328,7 +328,7 @@ public class XomBuilder implements IModelVisitor, IStatementVisitor {
 		if(node.getDescription() != null){
 			Element commentsBlock = new Element(COMMENTS_BLOCK_TAG_NAME);
 			Element basicComments = new Element(BASIC_COMMENTS_BLOCK_TAG_NAME);
-			basicComments.appendChild(node.getDescription());
+			basicComments.appendChild(WhiteCharConverter.encode(node.getDescription()));
 			commentsBlock.appendChild(basicComments);
 			element.appendChild(commentsBlock);
 			return commentsBlock;

@@ -503,7 +503,7 @@ public class XomAnalyser {
 			Element comments = element.getChildElements(Constants.COMMENTS_BLOCK_TAG_NAME).get(0);
 			if(comments.getChildElements(Constants.BASIC_COMMENTS_BLOCK_TAG_NAME).size() > 0){
 				Element basicComments = comments.getChildElements(Constants.BASIC_COMMENTS_BLOCK_TAG_NAME).get(0);
-				return basicComments.getValue();
+				return WhiteCharConverter.decode(basicComments.getValue());
 			}
 		}
 		return null;
