@@ -57,6 +57,7 @@ import com.testify.ecfeed.model.StatementArray;
 import com.testify.ecfeed.model.StaticStatement;
 import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.serialization.ParserException;
+import com.testify.ecfeed.serialization.WhiteCharConverter;
 
 public class XomAnalyser {
 	public RootNode parseRoot(Element element) throws ParserException{
@@ -475,7 +476,10 @@ public class XomAnalyser {
 		if(value == null){
 			throw new ParserException(Messages.MISSING_ATTRIBUTE(element, attributeName));
 		}
-		return value;
+		
+		return WhiteCharConverter.decode(value);
+		//return value.replace('.', ' ');
+		//return value;
 	}
 
 	protected EStatementRelation getRelation(String relationName) throws ParserException{
