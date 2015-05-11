@@ -35,91 +35,103 @@ class StringHolder extends ValueHolder<String> {
 	}
 }
 
-public class WhiteCharConverter {
+class EncodeDecodeItem {
+	public String decoded;
+	public String encoded;
+	
+	EncodeDecodeItem(String decoded, String encoded) {
+		this.decoded = decoded;
+		this.encoded = encoded;
+	}
+}
+
+class EncodeDecodeTab {
 	
 	private static final String BACKSLASH_STR = "\\";
 	private static final String DBL_BACKSLASH_STR = "\\\\";
-	private static final String BACKSLASH_S_STR = "\\s";
+	
 	private static final String NEWLINE_STR = "\n";
 	private static final String BACKSLASH_N_STR = "\\n";
-	private static final String SPACE_STR = " ";
-	private static final String BACKSLASH_T_STR = "\\t";
+	
 	private static final String TAB_STR = "\t";
+	private static final String BACKSLASH_T_STR = "\\t";
 	
+	private static final String SPACE_STR = " ";
+	private static final String BACKSLASH_S_STR = "\\s";
 	
+	private EncodeDecodeItem[] tab = {
+		new EncodeDecodeItem(BACKSLASH_STR, DBL_BACKSLASH_STR),
+		new EncodeDecodeItem(NEWLINE_STR, BACKSLASH_N_STR),
+		new EncodeDecodeItem(TAB_STR, BACKSLASH_T_STR),
+		new EncodeDecodeItem(SPACE_STR, BACKSLASH_S_STR) 
+	};
+	
+	public int length() {
+		return tab.length;
+	}
+	
+	public EncodeDecodeItem itemAt(int index) {
+		return tab[index];
+	}
+}
+
+public class WhiteCharConverter {
+
 	public static String encode(String value) {
 		
-		System.out.println("XYX encode 01 - value: |" + value + "| length: " + value.length());
+		String str = value;
+		EncodeDecodeTab tab = new EncodeDecodeTab();
 		
-		String result1 = value.replace(BACKSLASH_STR, DBL_BACKSLASH_STR);
-		System.out.println("XYX encode 02 - value: |" + result1 + "| length: " + result1.length());
+		for(int cnt = 0; cnt < tab.length(); cnt++) {
+			str = str.replace(tab.itemAt(cnt).decoded, tab.itemAt(cnt).encoded);
+		}
 		
-		String result2 = result1.replace(NEWLINE_STR, BACKSLASH_N_STR); 
-		System.out.println("XYX encode 03 - value: |" + result2 + "| length: " + result2.length());
-		
-		String result3 = result2.replace(TAB_STR, BACKSLASH_T_STR); 
-		System.out.println("XYX encode 03 - value: |" + result2 + "| length: " + result2.length());
-		
-		String result4 = result3.replace(SPACE_STR, BACKSLASH_S_STR);
-		System.out.println("XYX encode 04 - value: |" + result3 + "| length: " + result3.length());
-		
-		return result4;		
+		return str;
 	}
 		
 	public static String decode(String value) {
 
-		System.out.println("XYX decode - value: |" + value + "| length: " + value.length());
-		
+		EncodeDecodeTab encodeDecodeTab = new EncodeDecodeTab();
 		StringBuilder builder = new StringBuilder(value);
 		
 		for(int index = 0; index < builder.length(); index = index + 1) {
-			decodeItemAt(index, builder);
+			decodeItemAt(index, encodeDecodeTab, builder);
 		}
-		
-		System.out.println("XYX decode - result: |" + builder.toString() + "|");
 		
 		return builder.toString();
 	}
 	
-	private static void decodeItemAt(int index, StringBuilder builder) {
+	private static void decodeItemAt(
+								int index, 
+								EncodeDecodeTab encodeDecodeTab, 
+								StringBuilder builder) {
 		
 		StringHolder item = new StringHolder();
 		StringHolder decodedItem = new StringHolder();
 		
-		System.out.println("XYX decodeItemAt 01 - index: " + index + "-----------------------");
-		
-		if (isSpecialItemAt(index, builder, item, decodedItem)) {
-			
-			System.out.println("XYX decodeItemAt 02 - special item - item: " + item.getValue() + " decoded item:" + decodedItem.getValue());
-			System.out.println("XYX decodeItemAt 03 - builder: |" + builder.toString() + "|");
-			
+		if (isSpecialItemAt(index, encodeDecodeTab, builder, item, decodedItem)) {
 			replaceAt(index, item.getValue(), decodedItem.getValue(), builder);
-			
-			System.out.println("XYX decodeItemAt 04 - builder: |" + builder.toString() + "|");
 		}
 	}
 	
 	private static boolean isSpecialItemAt(
-									int index, 
+									int index,
+									EncodeDecodeTab encodeDecodeTab,
 									StringBuilder builder, 
 									StringHolder outItem, 
 									StringHolder outDecodedItem) {
-		
-		if (getItemWithDecodeDefAt(index, DBL_BACKSLASH_STR, BACKSLASH_STR, builder, outItem, outDecodedItem)) {
-			return true;
+
+		for(int cnt = 0; cnt < encodeDecodeTab.length(); cnt++) {
+			if (getItemWithDecodeDefAt(
+									index, 
+									encodeDecodeTab.itemAt(cnt).encoded, 
+									encodeDecodeTab.itemAt(cnt).decoded,
+									builder, 
+									outItem, 
+									outDecodedItem)) {
+				return true;
+			}
 		}
-		
-		if (getItemWithDecodeDefAt(index, BACKSLASH_S_STR, SPACE_STR, builder, outItem, outDecodedItem)) {
-			return true;
-		}
-		
-		if (getItemWithDecodeDefAt(index, BACKSLASH_N_STR, NEWLINE_STR, builder, outItem, outDecodedItem)) {
-			return true;
-		}
-		
-		if (getItemWithDecodeDefAt(index, BACKSLASH_T_STR, TAB_STR, builder, outItem, outDecodedItem)) {
-			return true;
-		}		
 		
 		return false;
 	}
