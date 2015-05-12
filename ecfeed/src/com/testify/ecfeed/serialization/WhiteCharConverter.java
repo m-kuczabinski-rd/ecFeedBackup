@@ -80,6 +80,9 @@ public class WhiteCharConverter {
 	SpecialItems specialItems = new SpecialItems();
 
 	public String encode(String value) {
+
+		if (value == null)
+			return null;
 		
 		String str = value;
 		
@@ -91,6 +94,9 @@ public class WhiteCharConverter {
 	}
 		
 	public String decode(String value) {
+		
+		if (value == null)
+			return null;
 
 		SpecialItems specialItems = new SpecialItems();
 		StringBuilder builder = new StringBuilder(value);

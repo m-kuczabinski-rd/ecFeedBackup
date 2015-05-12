@@ -430,7 +430,7 @@ public class XomAnalyser {
 
 			}
 			if(child.getLocalName() == Constants.LABEL_NODE_NAME){
-				choice.addLabel(child.getAttributeValue(Constants.LABEL_ATTRIBUTE_NAME));
+				choice.addLabel(whiteCharConverter.decode(child.getAttributeValue(Constants.LABEL_ATTRIBUTE_NAME)));
 			}
 		}
 
@@ -471,7 +471,7 @@ public class XomAnalyser {
 		if(name == null){
 			throw new ParserException(Messages.MISSING_ATTRIBUTE(element, Constants.NODE_NAME_ATTRIBUTE));
 		}
-		return name;
+		return whiteCharConverter.decode(name);
 	}
 
 	protected String getAttributeValue(Element element, String attributeName) throws ParserException{

@@ -9,6 +9,16 @@ public class WhiteCharConverterTest {
 	WhiteCharConverter whiteCharConverter = new WhiteCharConverter();
 	
 	@Test
+	public void encodeNullTest(){
+		assertEquals(null, whiteCharConverter.encode(null));
+	}
+	
+	@Test
+	public void decodeNullTest(){
+		assertEquals(null, whiteCharConverter.decode(null));
+	}	
+	
+	@Test
 	public void encodeEmptyTest(){
 		assertEquals("", whiteCharConverter.encode(""));
 	}
