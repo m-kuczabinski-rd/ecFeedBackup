@@ -60,6 +60,9 @@ import com.testify.ecfeed.serialization.ParserException;
 import com.testify.ecfeed.serialization.WhiteCharConverter;
 
 public class XomAnalyser {
+	
+	private WhiteCharConverter whiteCharConverter = new WhiteCharConverter();
+	
 	public RootNode parseRoot(Element element) throws ParserException{
 		assertNodeTag(element.getQualifiedName(), ROOT_NODE_NAME);
 		String name = getElementName(element);
@@ -472,14 +475,13 @@ public class XomAnalyser {
 	}
 
 	protected String getAttributeValue(Element element, String attributeName) throws ParserException{
+		
 		String value = element.getAttributeValue(attributeName);
 		if(value == null){
 			throw new ParserException(Messages.MISSING_ATTRIBUTE(element, attributeName));
 		}
 		
-		return WhiteCharConverter.decode(value);
-		//return value.replace('.', ' ');
-		//return value;
+		return whiteCharConverter.decode(value);
 	}
 
 	protected EStatementRelation getRelation(String relationName) throws ParserException{
@@ -503,7 +505,7 @@ public class XomAnalyser {
 			Element comments = element.getChildElements(Constants.COMMENTS_BLOCK_TAG_NAME).get(0);
 			if(comments.getChildElements(Constants.BASIC_COMMENTS_BLOCK_TAG_NAME).size() > 0){
 				Element basicComments = comments.getChildElements(Constants.BASIC_COMMENTS_BLOCK_TAG_NAME).get(0);
-				return WhiteCharConverter.decode(basicComments.getValue());
+				return whiteCharConverter.decode(basicComments.getValue());
 			}
 		}
 		return null;

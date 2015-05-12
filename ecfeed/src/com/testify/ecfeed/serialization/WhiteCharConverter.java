@@ -35,126 +35,117 @@ class StringHolder extends ValueHolder<String> {
 	}
 }
 
-class EncodeDecodeItem {
-	public String decoded;
-	public String encoded;
-	
-	EncodeDecodeItem(String decoded, String encoded) {
-		this.decoded = decoded;
-		this.encoded = encoded;
-	}
-}
-
-class EncodeDecodeTab {
-	
-	private static final String BACKSLASH_STR = "\\";
-	private static final String DBL_BACKSLASH_STR = "\\\\";
-	
-	private static final String NEWLINE_STR = "\n";
-	private static final String BACKSLASH_N_STR = "\\n";
-	
-	private static final String TAB_STR = "\t";
-	private static final String BACKSLASH_T_STR = "\\t";
-	
-	private static final String SPACE_STR = " ";
-	private static final String BACKSLASH_S_STR = "\\s";
-	
-	private EncodeDecodeItem[] tab = {
-		new EncodeDecodeItem(BACKSLASH_STR, DBL_BACKSLASH_STR),
-		new EncodeDecodeItem(NEWLINE_STR, BACKSLASH_N_STR),
-		new EncodeDecodeItem(TAB_STR, BACKSLASH_T_STR),
-		new EncodeDecodeItem(SPACE_STR, BACKSLASH_S_STR) 
-	};
-	
-	public int length() {
-		return tab.length;
-	}
-	
-	public EncodeDecodeItem itemAt(int index) {
-		return tab[index];
-	}
-}
-
 public class WhiteCharConverter {
+	
+	class SpecialItem {
+		public String decoded;
+		public String encoded;
+		
+		SpecialItem(String decoded, String encoded) {
+			this.decoded = decoded;
+			this.encoded = encoded;
+		}
+	}
+	
+	class SpecialItems {
+		
+		private static final String BACKSLASH_STR = "\\";
+		private static final String DBL_BACKSLASH_STR = "\\\\";
+		
+		private static final String NEWLINE_STR = "\n";
+		private static final String BACKSLASH_N_STR = "\\n";
+		
+		private static final String TAB_STR = "\t";
+		private static final String BACKSLASH_T_STR = "\\t";
+		
+		private static final String SPACE_STR = " ";
+		private static final String BACKSLASH_S_STR = "\\s";
+		
+		private SpecialItem[] tab = {
+			new SpecialItem(BACKSLASH_STR, DBL_BACKSLASH_STR),
+			new SpecialItem(NEWLINE_STR, BACKSLASH_N_STR),
+			new SpecialItem(TAB_STR, BACKSLASH_T_STR),
+			new SpecialItem(SPACE_STR, BACKSLASH_S_STR) 
+		};
+		
+		public int length() {
+			return tab.length;
+		}
+		
+		public SpecialItem itemAt(int index) {
+			return tab[index];
+		}
+	}
+	
+	SpecialItems specialItems = new SpecialItems();
 
-	public static String encode(String value) {
+	public String encode(String value) {
 		
 		String str = value;
-		EncodeDecodeTab tab = new EncodeDecodeTab();
 		
-		for(int cnt = 0; cnt < tab.length(); cnt++) {
-			str = str.replace(tab.itemAt(cnt).decoded, tab.itemAt(cnt).encoded);
+		for(int cnt = 0; cnt < specialItems.length(); cnt++) {
+			str = str.replace(specialItems.itemAt(cnt).decoded, specialItems.itemAt(cnt).encoded);
 		}
 		
 		return str;
 	}
 		
-	public static String decode(String value) {
+	public String decode(String value) {
 
-		EncodeDecodeTab encodeDecodeTab = new EncodeDecodeTab();
+		SpecialItems specialItems = new SpecialItems();
 		StringBuilder builder = new StringBuilder(value);
 		
 		for(int index = 0; index < builder.length(); index = index + 1) {
-			decodeItemAt(index, encodeDecodeTab, builder);
+			decodeItemAt(index, specialItems, builder);
 		}
 		
 		return builder.toString();
 	}
 	
-	private static void decodeItemAt(
-								int index, 
-								EncodeDecodeTab encodeDecodeTab, 
-								StringBuilder builder) {
+	private void decodeItemAt(
+							int index, 
+							SpecialItems specialItems, 
+							StringBuilder builder) {
 		
 		StringHolder item = new StringHolder();
 		StringHolder decodedItem = new StringHolder();
 		
-		if (isSpecialItemAt(index, encodeDecodeTab, builder, item, decodedItem)) {
+		if (isSpecialItemAt(index, specialItems, builder, item, decodedItem)) {
 			replaceAt(index, item.getValue(), decodedItem.getValue(), builder);
 		}
 	}
 	
-	private static boolean isSpecialItemAt(
-									int index,
-									EncodeDecodeTab encodeDecodeTab,
-									StringBuilder builder, 
-									StringHolder outItem, 
-									StringHolder outDecodedItem) {
+	private boolean isSpecialItemAt(
+								int index,
+								SpecialItems specialItems,
+								StringBuilder builder, 
+								StringHolder outItem, 
+								StringHolder outDecodedItem) {
 
-		for(int cnt = 0; cnt < encodeDecodeTab.length(); cnt++) {
-			if (getItemWithDecodeDefAt(
-									index, 
-									encodeDecodeTab.itemAt(cnt).encoded, 
-									encodeDecodeTab.itemAt(cnt).decoded,
-									builder, 
-									outItem, 
-									outDecodedItem)) {
+		for(int cnt = 0; cnt < specialItems.length(); cnt++) {
+			
+			SpecialItem specialItem = specialItems.itemAt(cnt);
+			
+			if (isItemAt(index, specialItem.encoded, builder)) {
+				outItem.setValue(specialItem.encoded);
+				outDecodedItem.setValue(specialItem.decoded);
 				return true;
-			}
+			}			
 		}
 		
 		return false;
 	}
 	
-	private static boolean getItemWithDecodeDefAt(
-								int index,
-								String item,
-								String decodedItem,
-								StringBuilder builder,
-								StringHolder outItem, 
-								StringHolder outDecodedItem) {
+	private boolean isItemAt(int index, String item, StringBuilder builder) {
 		
 		if (builder.indexOf(item, index) == index ) {
-			
-			outItem.setValue(item);
-			outDecodedItem.setValue(decodedItem);
 			return true;
 		}
 		
 		return false;
 	}
 	
-	public static void replaceAt(
+	private void replaceAt(
 			int startIndex, 
 			String oldString, 
 			String newString, 
