@@ -39,6 +39,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.dialogs.SaveAsDialog;
+//import org.eclipse.ui.editors.text.TextEditor;
 import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.part.FileEditorInput;
@@ -57,6 +58,7 @@ public class ModelEditor extends FormEditor implements IFileInfoProvider{
 
 	private RootNode fModel;
 	private ModelPage fModelPage;
+	private ModelXmlPage fModelXmlPage;	
 	private ModelOperationManager fModelManager;
 
 	private ObjectUndoContext fUndoContext;
@@ -146,6 +148,7 @@ public class ModelEditor extends FormEditor implements IFileInfoProvider{
 		try {
 			setPartName(getEditorInput().getName());
 			addPage(fModelPage = new ModelPage(this));
+			addPage(fModelXmlPage = new ModelXmlPage(this));
 
 		} catch (PartInitException e) {
 			ErrorDialog.openError(getSite().getShell(),
@@ -153,7 +156,7 @@ public class ModelEditor extends FormEditor implements IFileInfoProvider{
 					null, e.getStatus());
 		}
 	}
-
+	
 	@Override
 	public void doSave(IProgressMonitor monitor) {
 		IFile file = ((FileEditorInput)getEditorInput()).getFile();
