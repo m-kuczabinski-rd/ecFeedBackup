@@ -148,9 +148,9 @@ public class ModelEditor extends FormEditor implements IFileInfoProvider{
 			addPage(fModelPage = new ModelPage(this));
 			
 			// XML page 
-			IEditorInput editorInput = new ModelEditorXmlPageInput();
+			IEditorInput editorInput = new ModelXmlViewerPageInput();
 			setPartName(getEditorInput().getName());
-			ModelEditorXmlTextEd editor = new ModelEditorXmlTextEd();
+			ModelXmlViewerTextEditor editor = new ModelXmlViewerTextEditor();
 			
 			int index = addPage(editor, editorInput);
 			setPageText(index, editor.getTitle());
