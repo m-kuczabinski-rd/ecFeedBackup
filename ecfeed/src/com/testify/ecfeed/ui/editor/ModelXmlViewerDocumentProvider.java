@@ -14,7 +14,7 @@ public class ModelXmlViewerDocumentProvider extends AbstractDocumentProvider {
 
 	private Shell fShell;
 	private Object fDocumentElement;
-	static int counter = 0;
+	private String fContent;
 	
 	
 	ModelXmlViewerDocumentProvider(Shell shell) {
@@ -24,8 +24,7 @@ public class ModelXmlViewerDocumentProvider extends AbstractDocumentProvider {
 	@Override
 	protected IDocument createDocument(Object element) throws CoreException {
 		fDocumentElement = element;
-		String testContents = "XML CONTENTS:" + counter++; 
-		return new Document(testContents);
+		return new Document(fContent);
 	}
 
 	@Override
@@ -44,8 +43,9 @@ public class ModelXmlViewerDocumentProvider extends AbstractDocumentProvider {
 		return null;
 	}
 	
-	public void refreshDocument() {
+	public void refreshDocument(String newContent) {
 		try {
+			fContent = newContent;
 			super.doResetDocument(fDocumentElement, null);
 		} catch (CoreException e) {
 			ErrorDialog.openError(fShell,

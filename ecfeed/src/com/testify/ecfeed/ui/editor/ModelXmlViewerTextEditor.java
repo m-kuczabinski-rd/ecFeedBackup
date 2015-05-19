@@ -15,8 +15,8 @@ public class ModelXmlViewerTextEditor extends TextEditor {
 		super.setDocumentProvider((IDocumentProvider)fDocumentProvider);
 	}
 	
-	public void refreshContents() {
-		fDocumentProvider.refreshDocument();
+	public void refreshContent(String newContent) {
+		fDocumentProvider.refreshDocument(newContent);
 	}
 	
 }

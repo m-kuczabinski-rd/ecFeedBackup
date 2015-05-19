@@ -11,6 +11,7 @@
 
 package com.testify.ecfeed.ui.editor;
 
+import java.io.ByteArrayOutputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 
@@ -171,8 +172,19 @@ public class ModelEditor extends FormEditor implements IFileInfoProvider{
 	protected void pageChange(int newPageIndex) {
 		super.pageChange(newPageIndex);
 		
+		ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+		
 		if (newPageIndex == fXmlViewerPageIndex) {
-			fTextEditor.refreshContents();
+			try{
+				IModelSerializer serializer = new EctSerializer(outputStream);
+				serializer.serialize(fModel);
+			}
+			catch(Exception e){
+				MessageDialog.openError(Display.getCurrent().getActiveShell(),
+						"Error", "Could not serialize the file:" + e.getMessage());
+			}			
+			
+			fTextEditor.refreshContent(outputStream.toString());
 		}
 	}
 	
