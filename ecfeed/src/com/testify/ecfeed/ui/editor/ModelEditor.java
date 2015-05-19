@@ -58,8 +58,10 @@ public class ModelEditor extends FormEditor implements IFileInfoProvider{
 	private RootNode fModel;
 	private ModelPage fModelPage;
 	private ModelOperationManager fModelManager;
-
 	private ObjectUndoContext fUndoContext;
+	private ModelXmlViewerTextEditor fTextEditor;
+	private int fXmlViewerPageIndex;
+	
 
 	private class ResourceChangeReporter implements IResourceChangeListener {
 		@Override
@@ -147,18 +149,30 @@ public class ModelEditor extends FormEditor implements IFileInfoProvider{
 			setPartName(getEditorInput().getName());
 			addPage(fModelPage = new ModelPage(this));
 			
-			// XML page 
-			IEditorInput editorInput = new ModelXmlViewerPageInput();
-			setPartName(getEditorInput().getName());
-			ModelXmlViewerTextEditor editor = new ModelXmlViewerTextEditor();
-			
-			int index = addPage(editor, editorInput);
-			setPageText(index, editor.getTitle());
+			addXmlViewerPage();
 
 		} catch (PartInitException e) {
 			ErrorDialog.openError(getSite().getShell(),
 					"Error creating nested text editor",
 					null, e.getStatus());
+		}
+	}
+	
+	private void addXmlViewerPage() throws PartInitException {
+		IEditorInput editorInput = new ModelXmlViewerPageInput();
+		setPartName(getEditorInput().getName());
+		fTextEditor = new ModelXmlViewerTextEditor(getSite().getShell());
+		
+		fXmlViewerPageIndex = addPage(fTextEditor, editorInput);
+		setPageText(fXmlViewerPageIndex, fTextEditor.getTitle());
+	}
+	
+	@Override
+	protected void pageChange(int newPageIndex) {
+		super.pageChange(newPageIndex);
+		
+		if (newPageIndex == fXmlViewerPageIndex) {
+			fTextEditor.refreshContents();
 		}
 	}
 	

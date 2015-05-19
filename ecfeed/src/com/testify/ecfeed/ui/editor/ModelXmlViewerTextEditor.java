@@ -1,13 +1,22 @@
 package com.testify.ecfeed.ui.editor;
 
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.editors.text.TextEditor;
 import org.eclipse.ui.texteditor.IDocumentProvider;
 
 
 public class ModelXmlViewerTextEditor extends TextEditor {
 
-	ModelXmlViewerTextEditor()
+	private ModelXmlViewerDocumentProvider fDocumentProvider;
+	
+	ModelXmlViewerTextEditor(Shell shell)
 	{
-		super.setDocumentProvider((IDocumentProvider)new ModelXmlViewerDocumentProvider());
+		fDocumentProvider = new ModelXmlViewerDocumentProvider(shell);
+		super.setDocumentProvider((IDocumentProvider)fDocumentProvider);
 	}
+	
+	public void refreshContents() {
+		fDocumentProvider.refreshDocument();
+	}
+	
 }
