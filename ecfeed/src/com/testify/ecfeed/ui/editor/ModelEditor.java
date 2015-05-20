@@ -63,6 +63,8 @@ public class ModelEditor extends FormEditor implements IFileInfoProvider{
 	private ModelXmlViewerTextEditor fTextEditor;
 	private int fXmlViewerPageIndex;
 	
+	private static final int maxSubtreeSize = 10000;
+	
 
 	private class ResourceChangeReporter implements IResourceChangeListener {
 		@Override
@@ -172,20 +174,29 @@ public class ModelEditor extends FormEditor implements IFileInfoProvider{
 	protected void pageChange(int newPageIndex) {
 		super.pageChange(newPageIndex);
 		
-		ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-		
 		if (newPageIndex == fXmlViewerPageIndex) {
-			try{
-				IModelSerializer serializer = new EctSerializer(outputStream);
-				serializer.serialize(fModel);
-			}
-			catch(Exception e){
-				MessageDialog.openError(Display.getCurrent().getActiveShell(),
-						"Error", "Could not serialize the file:" + e.getMessage());
-			}			
-			
-			fTextEditor.refreshContent(outputStream.toString());
+			refreshXmlViewerPage();
 		}
+	}
+	
+	private void refreshXmlViewerPage() {
+		if (fModel.subtreeSize() > maxSubtreeSize) {
+			fTextEditor.refreshContent("\n  Warning. Model exceeds " + maxSubtreeSize + " items. It can not be displayed." );
+			return;
+		}
+		
+		ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+		IModelSerializer serializer = new EctSerializer(outputStream);
+
+		try{
+			serializer.serialize(fModel);
+		}
+		catch(Exception e){
+			MessageDialog.openError(Display.getCurrent().getActiveShell(),
+					"Error", "Could not serialize the file:" + e.getMessage());
+		}			
+		
+		fTextEditor.refreshContent(outputStream.toString());
 	}
 	
 	@Override
