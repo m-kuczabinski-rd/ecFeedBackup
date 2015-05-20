@@ -81,7 +81,7 @@ import com.testify.ecfeed.serialization.WhiteCharConverter;
 
 public class XomBuilder implements IModelVisitor, IStatementVisitor {
 
-	private WhiteCharConverter whiteCharConverter = new WhiteCharConverter();
+	private WhiteCharConverter fWhiteCharConverter = new WhiteCharConverter();
 	
 	@Override
 	public Object visit(RootNode node) throws Exception{
@@ -331,7 +331,7 @@ public class XomBuilder implements IModelVisitor, IStatementVisitor {
 			Element commentsBlock = new Element(COMMENTS_BLOCK_TAG_NAME);
 			Element basicComments = new Element(BASIC_COMMENTS_BLOCK_TAG_NAME);
 			
-			basicComments.appendChild(whiteCharConverter.encode(node.getDescription()));
+			basicComments.appendChild(fWhiteCharConverter.encode(node.getDescription()));
 			commentsBlock.appendChild(basicComments);
 			element.appendChild(commentsBlock);
 			return commentsBlock;
@@ -357,12 +357,12 @@ public class XomBuilder implements IModelVisitor, IStatementVisitor {
 
 		Element typeComments = new Element(TYPE_COMMENTS_BLOCK_TAG_NAME);
 		
-		typeComments.appendChild(whiteCharConverter.encode(node.getTypeComments()));
+		typeComments.appendChild(fWhiteCharConverter.encode(node.getTypeComments()));
 		commentElement.appendChild(typeComments);
 	}
 	
 	private void encodeAndAddAttribute(Element element, Attribute attribute) {
-		attribute.setValue(whiteCharConverter.encode(attribute.getValue()));
+		attribute.setValue(fWhiteCharConverter.encode(attribute.getValue()));
 		element.addAttribute(attribute);
 	}
 }

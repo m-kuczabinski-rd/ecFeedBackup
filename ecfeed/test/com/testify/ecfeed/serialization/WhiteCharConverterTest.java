@@ -6,32 +6,32 @@ import org.junit.Test;
 
 public class WhiteCharConverterTest {
 
-	WhiteCharConverter whiteCharConverter = new WhiteCharConverter();
+	WhiteCharConverter fWhiteCharConverter = new WhiteCharConverter();
 	
 	@Test
 	public void encodeNullTest(){
-		assertEquals(null, whiteCharConverter.encode(null));
+		assertEquals(null, fWhiteCharConverter.encode(null));
 	}
 	
 	@Test
 	public void decodeNullTest(){
-		assertEquals(null, whiteCharConverter.decode(null));
+		assertEquals(null, fWhiteCharConverter.decode(null));
 	}	
 	
 	@Test
 	public void encodeEmptyTest(){
-		assertEquals("", whiteCharConverter.encode(""));
+		assertEquals("", fWhiteCharConverter.encode(""));
 	}
 	
 	@Test
 	public void decodeEmptyTest(){
-		assertEquals("", whiteCharConverter.decode(""));
+		assertEquals("", fWhiteCharConverter.decode(""));
 	}	
 	
 	@Test
 	public void encodeSingleSpaceTest(){
 		// encode: space -> \s
-		String result = whiteCharConverter.encode(" ");
+		String result = fWhiteCharConverter.encode(" ");
 		assertEquals(2, result.length());
 		assertEquals("\\s", result);
 	}
@@ -39,58 +39,58 @@ public class WhiteCharConverterTest {
 	@Test
 	public void decodeSingleSpaceTest(){
 		// decode: \s -> space
-		assertEquals(" ", whiteCharConverter.decode("\\s"));
+		assertEquals(" ", fWhiteCharConverter.decode("\\s"));
 	}
 	
 	@Test
 	public void encodeMultipleSpacesTest(){
-		assertEquals("\\s\\sA\\sB\\s\\s\\sC\\s\\s", whiteCharConverter.encode("  A B   C  "));
+		assertEquals("\\s\\sA\\sB\\s\\s\\sC\\s\\s", fWhiteCharConverter.encode("  A B   C  "));
 	}
 	
 	@Test
 	public void decodeMultipleSpacesTest(){
-		assertEquals("  A B   C  ", whiteCharConverter.decode("\\s\\sA\\sB\\s\\s\\sC\\s\\s"));
+		assertEquals("  A B   C  ", fWhiteCharConverter.decode("\\s\\sA\\sB\\s\\s\\sC\\s\\s"));
 	}	
 	
 	@Test
 	public void encodeSequenceWithSTest(){
 		// encode: \s -> \\s
-		assertEquals("\\\\s", whiteCharConverter.encode("\\s"));
+		assertEquals("\\\\s", fWhiteCharConverter.encode("\\s"));
 	}	
 	
 	@Test
 	public void decodeSequenceWithSTest(){
 		// decode: \\s -> \s
-		assertEquals("\\s", whiteCharConverter.decode("\\\\s"));
+		assertEquals("\\s", fWhiteCharConverter.decode("\\\\s"));
 	}	
 	
 	public void encodeSequenceWith2BackslashesAndSTest(){
 		// encode: \\s -> \\\\s
-		assertEquals("\\\\\\\\s", whiteCharConverter.encode("\\\\s"));
+		assertEquals("\\\\\\\\s", fWhiteCharConverter.encode("\\\\s"));
 	}	
 	
 	@Test
 	public void decodeSequenceWith2BackslashesAndSTest(){
 		// decode: \\\\s -> \\s
-		assertEquals("\\\\s", whiteCharConverter.decode("\\\\\\\\s"));
+		assertEquals("\\\\s", fWhiteCharConverter.decode("\\\\\\\\s"));
 	}
 	
 	@Test
 	public void encodeSequenceWithBackslashAndSpaceTest(){
 		// encode: \_  -> \\\s
-		assertEquals("\\\\\\s", whiteCharConverter.encode("\\ "));
+		assertEquals("\\\\\\s", fWhiteCharConverter.encode("\\ "));
 	}	
 	
 	@Test
 	public void decodeSequenceWithBackslashAndSpaceTest(){
 		// decode: \\\s -> \_
-		assertEquals("\\ ", whiteCharConverter.decode("\\\\\\s"));
+		assertEquals("\\ ", fWhiteCharConverter.decode("\\\\\\s"));
 	}	
 	
 	@Test
 	public void encodeNewlineTest(){
 		// encode: \n (newline) -> \n (string of two characters)
-		String result = whiteCharConverter.encode("\n");
+		String result = fWhiteCharConverter.encode("\n");
 		assertEquals(2, result.length());
 		assertEquals("\\n", result);
 	}	
@@ -98,67 +98,67 @@ public class WhiteCharConverterTest {
 	@Test
 	public void decodeNewlineTest(){
 		// encode: \n (string of two characters) -> \n (newline)
-		assertEquals("\n", whiteCharConverter.decode("\\n"));
+		assertEquals("\n", fWhiteCharConverter.decode("\\n"));
 	}	
 	
 	@Test
 	public void encodeTextInTwoLinesTest(){
-		assertEquals("abc\\ndef", whiteCharConverter.encode("abc\ndef"));
+		assertEquals("abc\\ndef", fWhiteCharConverter.encode("abc\ndef"));
 	}	
 	
 	@Test
 	public void decodeTextInTwoLinesTest(){
-		assertEquals("abc\ndef", whiteCharConverter.decode("abc\\ndef"));
+		assertEquals("abc\ndef", fWhiteCharConverter.decode("abc\\ndef"));
 	}
 	
 	@Test
 	public void encodeTextWithSeparatedLinesTest(){
-		assertEquals("abc\\ndef", whiteCharConverter.encode("abc\ndef"));
+		assertEquals("abc\\ndef", fWhiteCharConverter.encode("abc\ndef"));
 	}	
 	
 	@Test
 	public void decodeTextWithSeparatedLinesTest(){
-		assertEquals("abc\n\n\ndef", whiteCharConverter.decode("abc\\n\\n\\ndef"));
+		assertEquals("abc\n\n\ndef", fWhiteCharConverter.decode("abc\\n\\n\\ndef"));
 	}
 	
 	@Test
 	public void encodeTextWithSpacesAndNewlinesTest(){
-		assertEquals("\\s\\n\\s", whiteCharConverter.encode(" \n "));
+		assertEquals("\\s\\n\\s", fWhiteCharConverter.encode(" \n "));
 	}	
 	
 	@Test
 	public void decodeTextWithSpacesAndNewlinesTest(){
-		assertEquals(" \n ", whiteCharConverter.decode("\\s\\n\\s"));
+		assertEquals(" \n ", fWhiteCharConverter.decode("\\s\\n\\s"));
 	}
 	
 	@Test
 	public void encodeTabTest(){
-		assertEquals("\\t", whiteCharConverter.encode("\t"));
+		assertEquals("\\t", fWhiteCharConverter.encode("\t"));
 	}	
 	
 	@Test
 	public void decodeTabTest(){
-		assertEquals("\t", whiteCharConverter.decode("\\t"));
+		assertEquals("\t", fWhiteCharConverter.decode("\\t"));
 	}
 	
 	@Test
 	public void encodeMultipleTabsTest(){
-		assertEquals("\\t\\t\\t", whiteCharConverter.encode("\t\t\t"));
+		assertEquals("\\t\\t\\t", fWhiteCharConverter.encode("\t\t\t"));
 	}	
 	
 	@Test
 	public void decodeMultipleTabsTest(){
-		assertEquals("\t\t\t", whiteCharConverter.decode("\\t\\t\\t"));
+		assertEquals("\t\t\t", fWhiteCharConverter.decode("\\t\\t\\t"));
 	}
 	
 	
 	@Test
 	public void encodeMixedSequenceTest(){
-		assertEquals("\\s\\n\\t\\s\\t\\n\\s", whiteCharConverter.encode(" \n\t \t\n "));
+		assertEquals("\\s\\n\\t\\s\\t\\n\\s", fWhiteCharConverter.encode(" \n\t \t\n "));
 	}	
 	
 	@Test
 	public void decodeMixedSequenceTest(){
-		assertEquals(" \n\t \t\n ", whiteCharConverter.decode("\\s\\n\\t\\s\\t\\n\\s"));
+		assertEquals(" \n\t \t\n ", fWhiteCharConverter.decode("\\s\\n\\t\\s\\t\\n\\s"));
 	}	
 }

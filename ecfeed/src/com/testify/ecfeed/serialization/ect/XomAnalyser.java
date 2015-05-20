@@ -61,7 +61,7 @@ import com.testify.ecfeed.serialization.WhiteCharConverter;
 
 public class XomAnalyser {
 	
-	private WhiteCharConverter whiteCharConverter = new WhiteCharConverter();
+	private WhiteCharConverter fWhiteCharConverter = new WhiteCharConverter();
 	
 	public RootNode parseRoot(Element element) throws ParserException{
 		assertNodeTag(element.getQualifiedName(), ROOT_NODE_NAME);
@@ -430,7 +430,7 @@ public class XomAnalyser {
 
 			}
 			if(child.getLocalName() == Constants.LABEL_NODE_NAME){
-				choice.addLabel(whiteCharConverter.decode(child.getAttributeValue(Constants.LABEL_ATTRIBUTE_NAME)));
+				choice.addLabel(fWhiteCharConverter.decode(child.getAttributeValue(Constants.LABEL_ATTRIBUTE_NAME)));
 			}
 		}
 
@@ -471,7 +471,7 @@ public class XomAnalyser {
 		if(name == null){
 			throw new ParserException(Messages.MISSING_ATTRIBUTE(element, Constants.NODE_NAME_ATTRIBUTE));
 		}
-		return whiteCharConverter.decode(name);
+		return fWhiteCharConverter.decode(name);
 	}
 
 	protected String getAttributeValue(Element element, String attributeName) throws ParserException{
@@ -481,7 +481,7 @@ public class XomAnalyser {
 			throw new ParserException(Messages.MISSING_ATTRIBUTE(element, attributeName));
 		}
 		
-		return whiteCharConverter.decode(value);
+		return fWhiteCharConverter.decode(value);
 	}
 
 	protected EStatementRelation getRelation(String relationName) throws ParserException{
@@ -505,7 +505,7 @@ public class XomAnalyser {
 			Element comments = element.getChildElements(Constants.COMMENTS_BLOCK_TAG_NAME).get(0);
 			if(comments.getChildElements(Constants.BASIC_COMMENTS_BLOCK_TAG_NAME).size() > 0){
 				Element basicComments = comments.getChildElements(Constants.BASIC_COMMENTS_BLOCK_TAG_NAME).get(0);
-				return whiteCharConverter.decode(basicComments.getValue());
+				return fWhiteCharConverter.decode(basicComments.getValue());
 			}
 		}
 		return null;
