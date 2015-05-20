@@ -56,14 +56,13 @@ import com.testify.ecfeed.ui.common.IFileInfoProvider;
 
 public class ModelEditor extends FormEditor implements IFileInfoProvider{
 
+	private static final int MAX_SUBTREE_SIZE = 10000;	
 	private RootNode fModel;
 	private ModelPage fModelPage;
 	private ModelOperationManager fModelManager;
 	private ObjectUndoContext fUndoContext;
-	private ModelXmlViewerTextEditor fTextEditor;
-	private int fXmlViewerPageIndex;
-	
-	private static final int maxSubtreeSize = 10000;
+	private ModelXmlViewerTextEditor fXmlViewerPageEditor;
+	private int fXmlViewerPageEditorIndex = -1;
 	
 
 	private class ResourceChangeReporter implements IResourceChangeListener {
@@ -164,27 +163,30 @@ public class ModelEditor extends FormEditor implements IFileInfoProvider{
 	private void addXmlViewerPage() throws PartInitException {
 		IEditorInput editorInput = new ModelXmlViewerPageInput();
 		setPartName(getEditorInput().getName());
-		fTextEditor = new ModelXmlViewerTextEditor(getSite().getShell());
+		fXmlViewerPageEditor = new ModelXmlViewerTextEditor(getSite().getShell());
 		
-		fXmlViewerPageIndex = addPage(fTextEditor, editorInput);
-		setPageText(fXmlViewerPageIndex, fTextEditor.getTitle());
+		fXmlViewerPageEditorIndex = addPage(fXmlViewerPageEditor, editorInput);
+		setPageText(fXmlViewerPageEditorIndex, fXmlViewerPageEditor.getTitle());
 	}
 	
 	@Override
 	protected void pageChange(int newPageIndex) {
 		super.pageChange(newPageIndex);
 		
-		if (newPageIndex == fXmlViewerPageIndex) {
-			refreshXmlViewerPage();
+		if (newPageIndex != fXmlViewerPageEditorIndex)
+			return;
+		
+		if (fModel.subtreeSize() <= MAX_SUBTREE_SIZE) {
+			refreshXmlViewerPageWithSerializedModel();
+		}
+		else {
+			fXmlViewerPageEditor.refreshContent("\n  Warning. Model exceeds " 
+					+ MAX_SUBTREE_SIZE + " items. It can not be displayed." );
 		}
 	}
 	
-	private void refreshXmlViewerPage() {
-		if (fModel.subtreeSize() > maxSubtreeSize) {
-			fTextEditor.refreshContent("\n  Warning. Model exceeds " + maxSubtreeSize + " items. It can not be displayed." );
-			return;
-		}
-		
+	private void refreshXmlViewerPageWithSerializedModel()
+	{
 		ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 		IModelSerializer serializer = new EctSerializer(outputStream);
 
@@ -196,7 +198,7 @@ public class ModelEditor extends FormEditor implements IFileInfoProvider{
 					"Error", "Could not serialize the file:" + e.getMessage());
 		}			
 		
-		fTextEditor.refreshContent(outputStream.toString());
+		fXmlViewerPageEditor.refreshContent(outputStream.toString());
 	}
 	
 	@Override
