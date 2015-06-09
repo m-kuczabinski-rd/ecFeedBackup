@@ -42,6 +42,8 @@ import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.MethodParameterNode;
 import com.testify.ecfeed.model.StaticStatement;
 import com.testify.ecfeed.model.TestCaseNode;
+import com.testify.ecfeed.runner.java.JUnitTestMethodInvoker;
+import com.testify.ecfeed.runner.java.TestMethodInvoker;
 import com.testify.ecfeed.ui.common.Constants;
 import com.testify.ecfeed.ui.common.EclipseModelBuilder;
 import com.testify.ecfeed.ui.common.EclipseTypeAdapterProvider;
@@ -200,14 +202,23 @@ public class MethodInterface extends ParametersParentInterface {
 	}
 
 	public void executeOnlineTests() {
-		OnlineTestRunningSupport runner = new OnlineTestRunningSupport();
+		OnlineTestRunningSupport runner 
+			= new OnlineTestRunningSupport(createTestMethodInvoker());
 		runner.setTarget(getTarget());
 		runner.proceed();
 	}
 
 	public void executeStaticTests(Collection<TestCaseNode> testCases) {
-		StaticTestExecutionSupport support = new StaticTestExecutionSupport(testCases);
+		StaticTestExecutionSupport support 
+			= new StaticTestExecutionSupport(testCases, createTestMethodInvoker());
 		support.proceed();
+	}
+	
+	private TestMethodInvoker createTestMethodInvoker()
+	{
+		// TODO - XYX if android then create AndroidTestMethodInvoker else JunitTestMethodInvoker
+		
+		return new JUnitTestMethodInvoker();
 	}
 
 	public Collection<TestCaseNode> getTestCases(String testSuite){

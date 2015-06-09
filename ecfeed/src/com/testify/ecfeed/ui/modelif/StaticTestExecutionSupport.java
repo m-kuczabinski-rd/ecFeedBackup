@@ -28,6 +28,7 @@ import com.testify.ecfeed.adapter.java.ModelClassLoader;
 import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.runner.RunnerException;
 import com.testify.ecfeed.runner.java.JavaTestRunner;
+import com.testify.ecfeed.runner.java.TestMethodInvoker;
 import com.testify.ecfeed.ui.common.EclipseLoaderProvider;
 import com.testify.ecfeed.ui.common.Messages;
 
@@ -59,13 +60,14 @@ public class StaticTestExecutionSupport extends TestExecutionSupport{
 		}
 	}
 	
-	public StaticTestExecutionSupport(Collection<TestCaseNode> testCases){
+	public StaticTestExecutionSupport(Collection<TestCaseNode> testCases, TestMethodInvoker testMethodInvoker){
 		super();
 		ILoaderProvider loaderProvider = new EclipseLoaderProvider();
 		ModelClassLoader loader = loaderProvider.getLoader(true, null);
-		fRunner = new JavaTestRunner(loader);
+		fRunner = new JavaTestRunner(loader, testMethodInvoker);
 		fTestCases = testCases;
 		fFailedTests = new ArrayList<>();
+		
 	}
 	
 	public void proceed(){

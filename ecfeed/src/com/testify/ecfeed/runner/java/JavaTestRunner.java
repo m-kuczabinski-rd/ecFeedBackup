@@ -11,7 +11,6 @@
 
 package com.testify.ecfeed.runner.java;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,9 +31,11 @@ public class JavaTestRunner {
 	private MethodNode fTarget;
 	private Class<?> fTestClass;
 	private Method fTestMethod;
+	private TestMethodInvoker fTestMethodInvoker;
 
-	public JavaTestRunner(ModelClassLoader loader){
+	public JavaTestRunner(ModelClassLoader loader, TestMethodInvoker testMethodInvoker){
 		fLoader = loader;
+		fTestMethodInvoker = testMethodInvoker; 
 	}
 
 	public void setTarget(MethodNode target) throws RunnerException{
@@ -46,17 +47,28 @@ public class JavaTestRunner {
 
 	public void runTestCase(List<ChoiceNode> testData) throws RunnerException{
 		validateTestData(testData);
+
+		System.out.println("running testcase with TestMethodInvoker");
+		Object instance = null;
 		try {
-			Object instance = fTestClass.newInstance();
-			Object[] arguments = getArguments(testData);
-			fTestMethod.invoke(instance, arguments);
-		}catch(InvocationTargetException e){
-//			throw new RunnerException(Messages.TEST_METHOD_INVOCATION_EXCEPTION(fTarget.toString(), testData.toString(), e.getTargetException().toString()));
-			throw new RunnerException(fTarget.getName() + testData.toString() + ": " + e.getTargetException().toString());
-		} catch (IllegalAccessException | IllegalArgumentException | InstantiationException e) {
-			e.printStackTrace();
+			instance = fTestClass.newInstance();
+		} catch (InstantiationException | IllegalAccessException e) {
 			throw new RunnerException(Messages.CANNOT_INVOKE_TEST_METHOD(fTarget.toString(), testData.toString(), e.getMessage()));
 		}
+		
+		Object[] arguments = getArguments(testData);
+		fTestMethodInvoker.invoke(fTestMethod, instance, arguments, fTarget, testData);
+		
+//		try {
+//			Object instance = fTestClass.newInstance();
+//			Object[] arguments = getArguments(testData);
+//			fTestMethod.invoke(instance, arguments);
+//		}catch(InvocationTargetException e){
+//			throw new RunnerException(fTarget.getName() + testData.toString() + ": " + e.getTargetException().toString());
+//		} catch (IllegalAccessException | IllegalArgumentException | InstantiationException e) {
+//			e.printStackTrace();
+//			throw new RunnerException(Messages.CANNOT_INVOKE_TEST_METHOD(fTarget.toString(), testData.toString(), e.getMessage()));
+//		}
 	}
 
 	protected Method getTestMethod(Class<?> testClass, MethodNode methodModel) throws RunnerException {
