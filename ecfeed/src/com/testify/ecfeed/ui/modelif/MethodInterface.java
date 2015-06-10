@@ -42,7 +42,7 @@ import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.MethodParameterNode;
 import com.testify.ecfeed.model.StaticStatement;
 import com.testify.ecfeed.model.TestCaseNode;
-import com.testify.ecfeed.runner.java.JUnitTestMethodInvoker;
+import com.testify.ecfeed.runner.java.AndroidTestMethodInvoker;
 import com.testify.ecfeed.runner.java.TestMethodInvoker;
 import com.testify.ecfeed.ui.common.Constants;
 import com.testify.ecfeed.ui.common.EclipseModelBuilder;
@@ -217,8 +217,8 @@ public class MethodInterface extends ParametersParentInterface {
 	private TestMethodInvoker createTestMethodInvoker()
 	{
 		// TODO - XYX if android then create AndroidTestMethodInvoker else JunitTestMethodInvoker
-		
-		return new JUnitTestMethodInvoker();
+		// return new JUnitTestMethodInvoker();
+		return new AndroidTestMethodInvoker();
 	}
 
 	public Collection<TestCaseNode> getTestCases(String testSuite){

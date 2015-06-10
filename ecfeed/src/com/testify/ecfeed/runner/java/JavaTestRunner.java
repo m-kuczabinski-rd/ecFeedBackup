@@ -48,7 +48,6 @@ public class JavaTestRunner {
 	public void runTestCase(List<ChoiceNode> testData) throws RunnerException{
 		validateTestData(testData);
 
-		System.out.println("running testcase with TestMethodInvoker");
 		Object instance = null;
 		try {
 			instance = fTestClass.newInstance();
