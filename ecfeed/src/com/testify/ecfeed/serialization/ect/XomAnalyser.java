@@ -91,13 +91,8 @@ public class XomAnalyser {
 		
 		String name = getElementName(element);
 		String androidRunner = element.getAttributeValue(ANDROID_RUNNER_ATTRIBUTE_NAME);
-		ClassNode _class = null;
 		
-		if (androidRunner == null) {
-			_class = new ClassNode(name, androidRunner);
-		} else {
-			_class = new ClassNode(name);
-		}
+		ClassNode _class = new ClassNode(name, androidRunner);
 		
 		_class.setDescription(parseComments(element));
 		//we need to do it here, so the backward search for global parameters will work
