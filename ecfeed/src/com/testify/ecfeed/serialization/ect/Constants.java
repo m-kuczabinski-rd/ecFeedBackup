@@ -57,6 +57,7 @@ public class Constants {
 	public static final String STATEMENT_OPERATOR_AND_ATTRIBUTE_VALUE = "and";
 	public static final String STATEMENT_OPERATOR_OR_ATTRIBUTE_VALUE = "or";
 	public static final String STATEMENT_EXPECTED_VALUE_ATTRIBUTE_NAME = "value";
+	public static final String ANDROID_RUNNER_ATTRIBUTE_NAME = "androidRunner";
 
 	public static final String STATIC_STATEMENT_TRUE_VALUE = "true";
 	public static final String STATIC_STATEMENT_FALSE_VALUE = "false";

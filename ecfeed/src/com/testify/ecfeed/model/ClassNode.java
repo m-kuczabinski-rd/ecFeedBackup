@@ -17,6 +17,8 @@ import java.util.List;
 import java.util.Set;
 
 public class ClassNode extends GlobalParametersParentNode {
+	
+	private String fAndroidRunner;
 	private List<MethodNode> fMethods;
 
 	@Override
@@ -53,8 +55,17 @@ public class ClassNode extends GlobalParametersParentNode {
 	}
 
 	public ClassNode(String qualifiedName) {
+		this(qualifiedName, null);
+	}
+	
+	public ClassNode(String qualifiedName, String androidRunner) {
 		super(qualifiedName);
+		fAndroidRunner = androidRunner;
 		fMethods = new ArrayList<MethodNode>();
+	}
+	
+	public String getAndroidRunner() {
+		return fAndroidRunner;
 	}
 
 	public boolean addMethod(MethodNode method) {

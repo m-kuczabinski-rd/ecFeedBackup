@@ -53,6 +53,8 @@ import static com.testify.ecfeed.serialization.ect.Constants.TYPE_COMMENTS_BLOCK
 import static com.testify.ecfeed.serialization.ect.Constants.TYPE_NAME_ATTRIBUTE;
 import static com.testify.ecfeed.serialization.ect.Constants.VALUE_ATTRIBUTE;
 import static com.testify.ecfeed.serialization.ect.Constants.VALUE_ATTRIBUTE_NAME;
+import static com.testify.ecfeed.serialization.ect.Constants.ANDROID_RUNNER_ATTRIBUTE_NAME;
+
 import nu.xom.Attribute;
 import nu.xom.Element;
 import nu.xom.Elements;
@@ -98,6 +100,12 @@ public class XomBuilder implements IModelVisitor, IStatementVisitor {
 	@Override
 	public Object visit(ClassNode node) throws Exception {
 		Element element = createAbstractElement(CLASS_NODE_NAME, node);
+		
+		String androidRunner = node.getAndroidRunner();
+		
+		if (androidRunner!=null) {
+			element.addAttribute(new Attribute(ANDROID_RUNNER_ATTRIBUTE_NAME, node.getAndroidRunner()));
+		}
 
 		for(MethodNode method : node.getMethods()){
 			element.appendChild((Element)visit(method));

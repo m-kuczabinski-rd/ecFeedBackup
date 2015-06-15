@@ -30,6 +30,7 @@ import static com.testify.ecfeed.serialization.ect.Constants.TEST_CASE_NODE_NAME
 import static com.testify.ecfeed.serialization.ect.Constants.TEST_SUITE_NAME_ATTRIBUTE;
 import static com.testify.ecfeed.serialization.ect.Constants.TYPE_NAME_ATTRIBUTE;
 import static com.testify.ecfeed.serialization.ect.Constants.VALUE_ATTRIBUTE;
+import static com.testify.ecfeed.serialization.ect.Constants.ANDROID_RUNNER_ATTRIBUTE_NAME;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -87,9 +88,17 @@ public class XomAnalyser {
 
 	public ClassNode parseClass(Element element, RootNode parent) throws ParserException{
 		assertNodeTag(element.getQualifiedName(), CLASS_NODE_NAME);
+		
 		String name = getElementName(element);
-
-		ClassNode _class = new ClassNode(name);
+		String androidRunner = element.getAttributeValue(ANDROID_RUNNER_ATTRIBUTE_NAME);
+		ClassNode _class = null;
+		
+		if (androidRunner == null) {
+			_class = new ClassNode(name, androidRunner);
+		} else {
+			_class = new ClassNode(name);
+		}
+		
 		_class.setDescription(parseComments(element));
 		//we need to do it here, so the backward search for global parameters will work
 		_class.setParent(parent);
