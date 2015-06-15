@@ -31,6 +31,7 @@ public class ClassDetailsPage extends BasicDetailsPage {
 	private OtherMethodsViewer fOtherMethodsSection;
 	private Text fClassNameText;
 	private Text fPackageNameText;
+	private Text fAndroidRunner;
 	private ClassInterface fClassIf;
 	private GlobalParametersViewer fGlobalParametersSection;
 	private JavaDocCommentsSection fCommentsSection;
@@ -96,6 +97,7 @@ public class ClassDetailsPage extends BasicDetailsPage {
 
 		createPackageNameText(textComposite);
 		createClassNameText(textComposite);
+		createAndroidRunnerText(textComposite);
 
 		createBrowseButton(buttonsComposite);
 
@@ -115,6 +117,13 @@ public class ClassDetailsPage extends BasicDetailsPage {
 		fClassNameText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 		fClassNameText.addSelectionListener(new ClassNameTextAdapter());
 	}
+	
+	private void createAndroidRunnerText(Composite textComposite) {
+		getToolkit().createLabel(textComposite, "Android runner");
+		fAndroidRunner = getToolkit().createText(textComposite, null, SWT.NONE);
+		fAndroidRunner.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
+//		fAndroidRunner.addSelectionListener(new ClassNameTextAdapter()); TODO
+	}	
 
 	private void createBrowseButton(Composite buttonsComposite) {
 		Button browseButton = getToolkit().createButton(buttonsComposite, "Browse...", SWT.NONE);

@@ -43,6 +43,7 @@ import com.testify.ecfeed.model.MethodParameterNode;
 import com.testify.ecfeed.model.StaticStatement;
 import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.runner.java.AndroidTestMethodInvoker;
+import com.testify.ecfeed.runner.java.JUnitTestMethodInvoker;
 import com.testify.ecfeed.runner.java.TestMethodInvoker;
 import com.testify.ecfeed.ui.common.Constants;
 import com.testify.ecfeed.ui.common.EclipseModelBuilder;
@@ -57,6 +58,7 @@ import com.testify.ecfeed.ui.dialogs.SelectCompatibleMethodDialog;
 public class MethodInterface extends ParametersParentInterface {
 
 	private ITypeAdapterProvider fAdapterProvider;
+	private String fAndroidRunner;
 
 	public MethodInterface(IModelUpdateContext updateContext) {
 		super(updateContext);
@@ -201,14 +203,18 @@ public class MethodInterface extends ParametersParentInterface {
 		return execute(operation, Messages.DIALOG_ADD_TEST_SUITE_PROBLEM_TITLE);
 	}
 
-	public void executeOnlineTests() {
+	public void executeOnlineTests(String androidRunner) {
+		fAndroidRunner = androidRunner;
+		
 		OnlineTestRunningSupport runner 
 			= new OnlineTestRunningSupport(createTestMethodInvoker());
 		runner.setTarget(getTarget());
 		runner.proceed();
 	}
 
-	public void executeStaticTests(Collection<TestCaseNode> testCases) {
+	public void executeStaticTests(Collection<TestCaseNode> testCases, String androidRunner) {
+		fAndroidRunner = androidRunner;
+		
 		StaticTestExecutionSupport support 
 			= new StaticTestExecutionSupport(testCases, createTestMethodInvoker());
 		support.proceed();
@@ -216,9 +222,11 @@ public class MethodInterface extends ParametersParentInterface {
 	
 	private TestMethodInvoker createTestMethodInvoker()
 	{
-		// TODO - XYX if android then create AndroidTestMethodInvoker else JunitTestMethodInvoker
-		// return new JUnitTestMethodInvoker();
-		return new AndroidTestMethodInvoker();
+		if (fAndroidRunner.isEmpty()) {
+			return new JUnitTestMethodInvoker();
+		}
+			
+		return new AndroidTestMethodInvoker(fAndroidRunner);
 	}
 
 	public Collection<TestCaseNode> getTestCases(String testSuite){

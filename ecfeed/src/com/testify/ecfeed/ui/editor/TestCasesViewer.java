@@ -66,7 +66,9 @@ public class TestCasesViewer extends CheckboxTreeViewerSection {
 	private class ExecuteStaticTestAdapter extends SelectionAdapter{
 		@Override
 		public void widgetSelected(SelectionEvent e){
-			fMethodIf.executeStaticTests(getCheckedTestCases());
+			fMethodIf.executeStaticTests(
+						getCheckedTestCases(), 
+						"com.mamlambo.article.simplecalc.test/.EctTestRunner"); // TODO
 		}
 	}
 

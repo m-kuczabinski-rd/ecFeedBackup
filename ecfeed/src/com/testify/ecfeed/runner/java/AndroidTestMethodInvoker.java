@@ -13,6 +13,12 @@ import com.testify.ecfeed.runner.RunnerException;
 
 public class AndroidTestMethodInvoker implements TestMethodInvoker {
 	
+	private String fTestRunner = null;
+	
+	public AndroidTestMethodInvoker(String testRunner) {
+		fTestRunner = testRunner;
+	}
+	
 	@Override
 	public void invoke(Method testMethod, Object instance, Object[] arguments,
 			MethodNode fTarget, List<ChoiceNode> testData)
@@ -42,10 +48,7 @@ public class AndroidTestMethodInvoker implements TestMethodInvoker {
 			"-e",
 			"ecFeed",
 			className + ", " + functionName + ", " + testParams,
-			"com.mamlambo.article.simplecalc.test/.EctTestRunner", // TODO
-			"-e",
-			"class",
-			className);
+			fTestRunner);
 		
     	Process process = null;
 		try {
