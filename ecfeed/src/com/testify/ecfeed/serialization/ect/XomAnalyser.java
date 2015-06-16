@@ -90,7 +90,11 @@ public class XomAnalyser {
 		assertNodeTag(element.getQualifiedName(), CLASS_NODE_NAME);
 		
 		String name = getElementName(element);
+		
 		String androidRunner = element.getAttributeValue(ANDROID_RUNNER_ATTRIBUTE_NAME);
+		if (androidRunner != null && androidRunner.isEmpty()) {
+			androidRunner = null;
+		}
 		
 		ClassNode _class = new ClassNode(name, androidRunner);
 		

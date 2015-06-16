@@ -103,8 +103,12 @@ public class XomBuilder implements IModelVisitor, IStatementVisitor {
 		
 		String androidRunner = node.getAndroidRunner();
 		
+		if (androidRunner != null && androidRunner.isEmpty()) {
+			androidRunner = null;
+		}
+		
 		if (androidRunner!=null) {
-			element.addAttribute(new Attribute(ANDROID_RUNNER_ATTRIBUTE_NAME, node.getAndroidRunner()));
+			element.addAttribute(new Attribute(ANDROID_RUNNER_ATTRIBUTE_NAME, androidRunner));
 		}
 
 		for(MethodNode method : node.getMethods()){

@@ -54,10 +54,9 @@ public class EctSerializerTest {
 			fail("Unexpected exception: " + e.getMessage());
 		}
 	}
-
-	@Test
-	public void classSerializerTest(){
-		ClassNode classNode = new ClassNode("com.example.TestClass");
+	
+	private void classSerializerTest(String androidRunner){
+		ClassNode classNode = new ClassNode("com.example.TestClass", androidRunner);
 		classNode.addMethod(new MethodNode("testMethod1"));
 		classNode.addMethod(new MethodNode("testMethod2"));
 		classNode.addParameter(new GlobalParameterNode("parameter1", "int"));
@@ -77,6 +76,16 @@ public class EctSerializerTest {
 			fail("Unexpected exception: " + e.getMessage());
 		}
 	}
+	
+	@Test
+	public void classSerializerTestWithAndroidRunner(){
+		classSerializerTest("com.example.AndroidRunner");
+	}
+	
+	@Test
+	public void classSerializerTestWithoutAndroidRunner(){
+		classSerializerTest(null);
+	}	
 
 	@Test
 	public void wrongTypeStreamTest(){
