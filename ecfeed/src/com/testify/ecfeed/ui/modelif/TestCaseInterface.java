@@ -52,8 +52,7 @@ public class TestCaseInterface extends AbstractNodeInterface {
 	public void execute() {
 		MethodInterface methodIf = new MethodInterface(getUpdateContext());
 		methodIf.executeStaticTests(
-					new ArrayList<TestCaseNode>(Arrays.asList(new TestCaseNode[]{getTarget()})),
-					"com.mamlambo.article.simplecalc.test/.EctTestRunner"); // TODO
+					new ArrayList<TestCaseNode>(Arrays.asList(new TestCaseNode[]{getTarget()})));
 	}
 
 	public boolean updateTestData(int index, ChoiceNode value) {

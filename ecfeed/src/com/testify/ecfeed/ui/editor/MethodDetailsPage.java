@@ -43,7 +43,7 @@ public class MethodDetailsPage extends BasicDetailsPage {
 	private class OnlineTestAdapter extends SelectionAdapter{
 		@Override
 		public void widgetSelected(SelectionEvent e){
-			fMethodIf.executeOnlineTests("com.mamlambo.article.simplecalc.test/.EctTestRunner"); // TODO
+			fMethodIf.executeOnlineTests();
 		}
 	}
 
