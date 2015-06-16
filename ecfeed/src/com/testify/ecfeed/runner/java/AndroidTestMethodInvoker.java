@@ -9,6 +9,7 @@ import java.util.List;
 
 import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.model.MethodNode;
+import com.testify.ecfeed.runner.Messages;
 import com.testify.ecfeed.runner.RunnerException;
 
 public class AndroidTestMethodInvoker implements TestMethodInvoker {
@@ -24,20 +25,30 @@ public class AndroidTestMethodInvoker implements TestMethodInvoker {
 			MethodNode fTarget, List<ChoiceNode> testData)
 			throws RunnerException {
 		
-		invokeRemotely(
-			"com.mamlambo.article.simplecalc.test.EctTest", // TODO - instance.getClass().getName(),
-			testMethod.getName(),
-			createParameters(testMethod, arguments));
+		try {
+			invokeRemotely(
+				"com.mamlambo.article.simplecalc.test.EctTest", // TODO - instance.getClass().getName(),
+				testMethod.getName(),
+				createParameters(testMethod, arguments));
+		} catch (RunnerException e) {
+			throw new RunnerException(
+					Messages.CANNOT_INVOKE_TEST_METHOD(fTarget.toString(), testData.toString(), e.getMessage()));
+		}
 	}
 	
 	private void invokeRemotely(String className, String functionName, String testParams) throws RunnerException {
+		
+        System.out.println();
+        System.out.println(Messages.LAUNCHING_ANDROID_INSTRUMENTATION());
+		
     	Process process = startProcess(className, functionName, testParams); 
     	logOutput(process);
     	waitFor(process);
+    	
+        System.out.println(Messages.ANDROID_INSTRUMENTATION_FINISHED());    	
 	}
 	
 	private Process startProcess(String className, String functionName, String testParams) throws RunnerException {
-		
     	ProcessBuilder pb 
 		= new ProcessBuilder(
 			"adb", 
@@ -53,35 +64,35 @@ public class AndroidTestMethodInvoker implements TestMethodInvoker {
     	Process process = null;
 		try {
 			process = pb.start();
-		} catch (IOException e1) {
-			throw new RunnerException("Can not start process."); // TODO
+		} catch (IOException e) {
+			throw new RunnerException(
+						Messages.CANNOT_START_ANDROID_INSTRUMENTATION_PROCESS("adb am shell instrument", e.getMessage()));
 		}
 
 		return process;
 	}
 	
 	private void logOutput(Process process) throws RunnerException {
+		
 		InputStream is = process.getInputStream();
     	InputStreamReader isr = new InputStreamReader(is);
     	BufferedReader br = new BufferedReader(isr);
-    	String line;
         
-        System.out.println("\nWriting output:");
+    	String line;
         try {
 			while ((line = br.readLine()) != null) {
 			  System.out.println(line);      
 			}
 		} catch (IOException e) {
-			throw new RunnerException("IOException occured."); // TODO
+			throw new RunnerException(Messages.IO_EXCEPITON_OCCURED(e.getMessage()));
 		}
-        System.out.println("Program terminated.");
 	}
 	
 	private void waitFor(Process process) throws RunnerException {
         try {
 			process.waitFor();
 		} catch (InterruptedException e) {
-			throw new RunnerException("Interrupted exception."); // TODO
+			throw new RunnerException(Messages.INTERRUPTED_EXCEPTION_OCCURED(e.getMessage()));
 		}
 	}
 	
@@ -89,24 +100,37 @@ public class AndroidTestMethodInvoker implements TestMethodInvoker {
 		
 		Class<?>[] paramTypes = testMethod.getParameterTypes();
 		
-		if (paramTypes.length != arguments.length) {
-			throw new RunnerException("Invalid number of parameters and arguments."); // TODO
-		}
+		checkParamsAndArgs(paramTypes.length, arguments.length);
 		
+		return createParamsWithArgsStr(paramTypes, arguments);
+	}
+	
+	private void checkParamsAndArgs(int params, int args) throws RunnerException {
+		if (params != args) {
+			throw new RunnerException(Messages.INVALID_NUMBER_OF_PARAMS_ARGS(params, args)); 
+		}		
+	}
+	
+	private String createParamsWithArgsStr(Class<?>[] paramTypes, Object[] arguments) {
+		final String PARAM_SEPARATOR = ", ";
 		String result = "";
 		
 		for(int index = 0; index < paramTypes.length; index++) {
 			result = result + createParamWithArg(paramTypes[index], arguments[index]);
 			
 			if (index < paramTypes.length - 1) {
-				result = result + ", ";
+				result = result + PARAM_SEPARATOR;
 			}
 		}
 		
-		return result;
+		return result;		
 	}
 	
 	private String createParamWithArg(Class<?> paramType, Object argument) {
-		return paramType.getName() + "[" + argument.toString() + "]"; 
+		final String ARG_BEG_MARKER = "[";
+		final String ARG_END_MARKER = "]";
+		
+		return paramType.getName() + ARG_BEG_MARKER + argument.toString() + ARG_END_MARKER; 
 	}
 }
+

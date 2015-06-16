@@ -53,5 +53,17 @@ public class Messages {
 	{return "Exception caught during invoking test method:\n" + method + "\nwith following parameters set:\n" + testCase /*+ "\n\n"*/ + message + "\n";}
 	public static String CANNOT_PARSE_PARAMETER(String parameterType, String parameterValue)
 	{return "Cannot parse value " + parameterValue + " for type " + parameterType;}
+	public static String CANNOT_START_ANDROID_INSTRUMENTATION_PROCESS(String processName, String message)
+	{return "Can not start android instrumentation process: " + processName + " cause: " + message;}
+	public static String LAUNCHING_ANDROID_INSTRUMENTATION()
+	{return "Launching android instrumetation...";}
+	public static String IO_EXCEPITON_OCCURED(String message)
+	{return "IOException occured: " + message;}	
+	public static String ANDROID_INSTRUMENTATION_FINISHED()
+	{return "Android instrumentation finished.";}		
+	public static String INTERRUPTED_EXCEPTION_OCCURED(String message)
+	{return "Interrupted exception occured: " + message;}	
+	public static String INVALID_NUMBER_OF_PARAMS_ARGS(int parameters, int arguments)
+	{return "Invalid number of parameters (" + parameters + ") and arguments (" + arguments + ")";}	
 	
 }
