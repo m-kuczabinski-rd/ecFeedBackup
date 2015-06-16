@@ -57,4 +57,5 @@ public interface OperationNames {
 	public static final String SET_COMMENTS = "Set comments";
 	public static final String REPLACE_PARAMETERS = "Replace method parameters with links";
 	public static final String REPLACE_PARAMETER_WITH_LINK = "Replace parameter with link";
+	public static final String SET_ANDROID_RUNNER = "Set android runner";
 }

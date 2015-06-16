@@ -104,6 +104,7 @@ public class Messages {
 	public static final String DIALOG_RESET_CHOICES_PROBLEM_TITLE = "Couldn't reset choices to default";
 	public static final String DIALOG_SET_COMMENTS_PROBLEM_TITLE = "Cannot set comments";
 	public static final String DIALOG_REPLACE_PARAMETERS_WITH_LINKS_TITLE = "Cannot replace parameters with links";
+	public static final String DIALOG_ANDROID_RUNNER_SET_PROBLEM_TITLE = "Couldn't set android runner";
 
 	//CONFIRMATIONS AND WARNINGS
 	public static final String DIALOG_REMOVE_CLASSES_TITLE = "Remove classes";

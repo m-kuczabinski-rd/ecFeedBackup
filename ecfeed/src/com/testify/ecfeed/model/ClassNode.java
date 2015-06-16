@@ -67,6 +67,10 @@ public class ClassNode extends GlobalParametersParentNode {
 	public String getAndroidRunner() {
 		return fAndroidRunner;
 	}
+	
+	public void setAndroidRunner(String androidRunner) {
+		fAndroidRunner = androidRunner;
+	}	
 
 	public boolean addMethod(MethodNode method) {
 		return addMethod(method, fMethods.size());

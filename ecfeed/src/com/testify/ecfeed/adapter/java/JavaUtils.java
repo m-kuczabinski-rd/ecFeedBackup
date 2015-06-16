@@ -197,7 +197,7 @@ public class JavaUtils {
 		int lastDotIndex = qualifiedName.lastIndexOf('.');
 		return (lastDotIndex == -1)? "" : qualifiedName.substring(0, lastDotIndex);
 	}
-
+	
 	public static String simplifiedToString(AbstractParameterNode parameter){
 		String result = parameter.toString();
 		String type = parameter.getType();
