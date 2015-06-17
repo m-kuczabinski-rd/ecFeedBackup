@@ -58,7 +58,7 @@ public class ClassDetailsPage extends BasicDetailsPage {
 			fPackageNameText.setText(fClassIf.getPackageName());
 		}
 	}
-	
+
 	private class AndroidRunnerTextAdapter extends AbstractSelectionAdapter{
 		@Override
 		public void widgetSelected(SelectionEvent e) {
@@ -66,7 +66,7 @@ public class ClassDetailsPage extends BasicDetailsPage {
 			if (androidRunner != null && androidRunner.isEmpty()) {
 				androidRunner = null;
 			}
-			
+
 			fClassIf.setAndroidRunner(androidRunner);
 		}
 	}
@@ -110,7 +110,7 @@ public class ClassDetailsPage extends BasicDetailsPage {
 		createPackageNameText(textComposite);
 		createClassNameText(textComposite);
 		createBrowseButton(buttonsComposite);
-		
+
 		createAndroidRunnerText(textComposite);
 
 		getToolkit().paintBordersFor(textComposite);
@@ -129,7 +129,7 @@ public class ClassDetailsPage extends BasicDetailsPage {
 		fClassNameText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 		fClassNameText.addSelectionListener(new ClassNameTextAdapter());
 	}
-	
+
 	private void createAndroidRunnerText(Composite textComposite) {
 		getToolkit().createLabel(textComposite, "Android runner");
 		fAndroidRunner = getToolkit().createText(textComposite, null, SWT.NONE);
@@ -151,11 +151,11 @@ public class ClassDetailsPage extends BasicDetailsPage {
 			fClassIf.setTarget(selectedClass);
 			String title = fClassIf.getQualifiedName();
 			//Remove implementation status for performance reasons
-//			String title = fClassIf.getQualifiedName() + " [" + fClassIf.getImplementationStatus() + "]";
+			//			String title = fClassIf.getQualifiedName() + " [" + fClassIf.getImplementationStatus() + "]";
 			getMainSection().setText(title);
 			fClassNameText.setText(fClassIf.getLocalName());
 			fPackageNameText.setText(fClassIf.getPackageName());
-			
+
 			String androidRunner = fClassIf.getAndroidRunner();
 			if (androidRunner == null) {
 				androidRunner = "";

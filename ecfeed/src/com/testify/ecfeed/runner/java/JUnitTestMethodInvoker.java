@@ -18,7 +18,7 @@ public class JUnitTestMethodInvoker implements TestMethodInvoker {
 			MethodNode fTarget, 
 			List<ChoiceNode> testData) throws RunnerException {
 		try {
-		fTestMethod.invoke(instance, arguments);
+			fTestMethod.invoke(instance, arguments);
 		} catch (InvocationTargetException e) {
 			throw new RunnerException(fTarget.getName() + testData.toString() + ": " + e.getTargetException().toString());
 		} catch (IllegalAccessException | IllegalArgumentException e) {

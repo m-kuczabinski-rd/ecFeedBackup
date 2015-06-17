@@ -71,7 +71,7 @@ public class ClassInterface extends GlobalParametersParentInterface {
 	public String getPackageName(){
 		return getPackageName(getTarget());
 	}
-	
+
 	public String getAndroidRunner(){
 		return getTarget().getAndroidRunner();
 	}
@@ -104,12 +104,12 @@ public class ClassInterface extends GlobalParametersParentInterface {
 		String newQualifiedName = newPackageName + "." + getLocalName();
 		return setQualifiedName(newQualifiedName);
 	}
-	
+
 	public boolean setAndroidRunner(String androidRunner) {
 		IModelOperation operation = new ClassOperationSetAndroidRunner(getTarget(), androidRunner);
 		return execute(operation, Messages.DIALOG_ANDROID_RUNNER_SET_PROBLEM_TITLE);
 	}	
-	
+
 	public MethodNode addNewMethod(){
 		return addNewMethod(generateNewMethodName());
 	}
@@ -121,7 +121,7 @@ public class ClassInterface extends GlobalParametersParentInterface {
 		}
 		return null;
 	}
-	
+
 	public boolean addMethods(Collection<MethodNode> methods){
 		IModelOperation operation = new ClassOperationAddMethods(getTarget(), methods, getTarget().getMethods().size());
 		return execute(operation, Messages.DIALOG_ADD_METHODS_PROBLEM_TITLE);
@@ -150,8 +150,8 @@ public class ClassInterface extends GlobalParametersParentInterface {
 			return removeMethod(new ArrayList<MethodNode>(methods).get(0));
 		}
 		else if(MessageDialog.openConfirm(Display.getCurrent().getActiveShell(),
-					Messages.DIALOG_REMOVE_METHODS_TITLE,
-					Messages.DIALOG_REMOVE_METHODS_MESSAGE)){
+				Messages.DIALOG_REMOVE_METHODS_TITLE,
+				Messages.DIALOG_REMOVE_METHODS_MESSAGE)){
 			return removeChildren(methods, Messages.DIALOG_REMOVE_METHODS_PROBLEM_TITLE);
 		}
 		return false;

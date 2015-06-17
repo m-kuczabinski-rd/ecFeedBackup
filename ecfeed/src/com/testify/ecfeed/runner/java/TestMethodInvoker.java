@@ -9,8 +9,8 @@ import com.testify.ecfeed.runner.RunnerException;
 
 public interface TestMethodInvoker {
 	void invoke(Method fTestMethod, 
-				Object instance, 
-				Object[] arguments, 
-				MethodNode fTarget, 
-				List<ChoiceNode> testData) throws RunnerException;
+			Object instance, 
+			Object[] arguments, 
+			MethodNode fTarget, 
+			List<ChoiceNode> testData) throws RunnerException;
 }
