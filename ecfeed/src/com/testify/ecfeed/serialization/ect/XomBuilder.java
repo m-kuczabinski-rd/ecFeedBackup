@@ -53,6 +53,7 @@ import static com.testify.ecfeed.serialization.ect.Constants.TYPE_COMMENTS_BLOCK
 import static com.testify.ecfeed.serialization.ect.Constants.TYPE_NAME_ATTRIBUTE;
 import static com.testify.ecfeed.serialization.ect.Constants.VALUE_ATTRIBUTE;
 import static com.testify.ecfeed.serialization.ect.Constants.VALUE_ATTRIBUTE_NAME;
+import static com.testify.ecfeed.serialization.ect.Constants.PARAMETER_IS_RUN_ON_ANDROID_ATTRIBUTE_NAME;
 import static com.testify.ecfeed.serialization.ect.Constants.ANDROID_RUNNER_ATTRIBUTE_NAME;
 
 import nu.xom.Attribute;
@@ -98,28 +99,49 @@ public class XomBuilder implements IModelVisitor, IStatementVisitor {
 	}
 
 	@Override
-	public Object visit(ClassNode node) throws Exception {
-		Element element = createAbstractElement(CLASS_NODE_NAME, node);
-		
-		String androidRunner = node.getAndroidRunner();
-		
-		if (androidRunner != null && androidRunner.isEmpty()) {
-			androidRunner = null;
-		}
-		
-		if (androidRunner!=null) {
-			element.addAttribute(new Attribute(ANDROID_RUNNER_ATTRIBUTE_NAME, androidRunner));
-		}
+	public Object visit(ClassNode classNode) throws Exception {
+		Element element = createAbstractElement(CLASS_NODE_NAME, classNode);
 
-		for(MethodNode method : node.getMethods()){
+		addAndroidAttributes(classNode, element);
+
+		for(MethodNode method : classNode.getMethods()){
 			element.appendChild((Element)visit(method));
 		}
 
-		for(GlobalParameterNode parameter : node.getGlobalParameters()){
+		for(GlobalParameterNode parameter : classNode.getGlobalParameters()){
 			element.appendChild((Element)visit(parameter));
 		}
 
 		return element;
+	}
+
+	private void addAndroidAttributes(ClassNode classNode, Element element) {
+
+		boolean runOnAndroid = classNode.getRunOnAndroid();
+
+		element.addAttribute(
+				new Attribute(
+						PARAMETER_IS_RUN_ON_ANDROID_ATTRIBUTE_NAME,  
+						Boolean.toString(runOnAndroid)));
+
+		String androidRunner = classNode.getAndroidRunner();
+
+		if (!runOnAndroid && isEmptyOrNull(androidRunner)) {
+			return;
+		}
+
+		if (androidRunner == null) {
+			androidRunner = "";
+		}
+
+		element.addAttribute(new Attribute(ANDROID_RUNNER_ATTRIBUTE_NAME, androidRunner));
+	}
+
+	private boolean isEmptyOrNull(String str) {
+		if (str == null) {
+			return true;
+		}
+		return str.isEmpty(); 
 	}
 
 	@Override
@@ -223,11 +245,11 @@ public class XomBuilder implements IModelVisitor, IStatementVisitor {
 		String value = node.getValueString();
 		//remove disallowed XML characters
 		String xml10pattern = "[^"
-                + "\u0009\r\n"
-                + "\u0020-\uD7FF"
-                + "\uE000-\uFFFD"
-                + "\ud800\udc00-\udbff\udfff"
-                + "]";
+				+ "\u0009\r\n"
+				+ "\u0020-\uD7FF"
+				+ "\uE000-\uFFFD"
+				+ "\ud800\udc00-\udbff\udfff"
+				+ "]";
 		String legalValue = value.replaceAll(xml10pattern, "");
 
 		element.addAttribute(new Attribute(VALUE_ATTRIBUTE, legalValue));
@@ -250,7 +272,7 @@ public class XomBuilder implements IModelVisitor, IStatementVisitor {
 		Element statementElement = new Element(CONSTRAINT_STATIC_STATEMENT_NODE_NAME);
 		String attrName = STATEMENT_STATIC_VALUE_ATTRIBUTE_NAME;
 		String attrValue = statement.getValue()?STATIC_STATEMENT_TRUE_VALUE:
-							STATIC_STATEMENT_FALSE_VALUE;
+			STATIC_STATEMENT_FALSE_VALUE;
 		statementElement.addAttribute(new Attribute(attrName, attrValue));
 
 		return statementElement;
@@ -313,9 +335,9 @@ public class XomBuilder implements IModelVisitor, IStatementVisitor {
 
 	@Override
 	public Object visit(LabelCondition condition) throws Exception {
-			Element element = new Element(CONSTRAINT_LABEL_STATEMENT_NODE_NAME);
-			element.addAttribute(new Attribute(STATEMENT_LABEL_ATTRIBUTE_NAME, condition.getLabel()));
-			return element;
+		Element element = new Element(CONSTRAINT_LABEL_STATEMENT_NODE_NAME);
+		element.addAttribute(new Attribute(STATEMENT_LABEL_ATTRIBUTE_NAME, condition.getLabel()));
+		return element;
 	}
 
 	@Override
@@ -357,7 +379,7 @@ public class XomBuilder implements IModelVisitor, IStatementVisitor {
 		Elements commentsElement = element.getChildElements(COMMENTS_BLOCK_TAG_NAME);
 		Element commentElement;
 		if(commentsElement.size() > 0){
-			 commentElement = commentsElement.get(0);
+			commentElement = commentsElement.get(0);
 		}else{
 			commentElement = new Element(COMMENTS_BLOCK_TAG_NAME);
 			element.appendChild(commentElement);

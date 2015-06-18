@@ -29,6 +29,7 @@ import com.testify.ecfeed.adapter.operations.ClassOperationAddMethod;
 import com.testify.ecfeed.adapter.operations.ClassOperationAddMethods;
 import com.testify.ecfeed.adapter.operations.ClassOperationRemoveMethod;
 import com.testify.ecfeed.adapter.operations.ClassOperationSetAndroidRunner;
+import com.testify.ecfeed.adapter.operations.ClassOperationSetRunOnAndroid;
 import com.testify.ecfeed.adapter.operations.FactoryRenameOperation;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.MethodNode;
@@ -72,6 +73,10 @@ public class ClassInterface extends GlobalParametersParentInterface {
 		return getPackageName(getTarget());
 	}
 
+	public boolean getRunOnAndroid(){
+		return getTarget().getRunOnAndroid();
+	}
+
 	public String getAndroidRunner(){
 		return getTarget().getAndroidRunner();
 	}
@@ -105,10 +110,15 @@ public class ClassInterface extends GlobalParametersParentInterface {
 		return setQualifiedName(newQualifiedName);
 	}
 
+	public boolean setRunOnAndroid(boolean runOnAndroid) {
+		IModelOperation operation = new ClassOperationSetRunOnAndroid(getTarget(), runOnAndroid);
+		return execute(operation, Messages.DIALOG_ANDROID_RUNNER_SET_PROBLEM_TITLE);
+	}
+
 	public boolean setAndroidRunner(String androidRunner) {
 		IModelOperation operation = new ClassOperationSetAndroidRunner(getTarget(), androidRunner);
 		return execute(operation, Messages.DIALOG_ANDROID_RUNNER_SET_PROBLEM_TITLE);
-	}	
+	}
 
 	public MethodNode addNewMethod(){
 		return addNewMethod(generateNewMethodName());

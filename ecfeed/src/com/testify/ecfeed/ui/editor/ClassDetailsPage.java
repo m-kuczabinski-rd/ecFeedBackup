@@ -17,6 +17,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
 import com.testify.ecfeed.model.AbstractNode;
@@ -31,7 +32,9 @@ public class ClassDetailsPage extends BasicDetailsPage {
 	private OtherMethodsViewer fOtherMethodsSection;
 	private Text fClassNameText;
 	private Text fPackageNameText;
-	private Text fAndroidRunner;
+	private Button fRunOnAndroidCheckbox;
+	private Label fAndroidRunnerLabel;
+	private Text fAndroidRunnerText;
 	private ClassInterface fClassIf;
 	private GlobalParametersViewer fGlobalParametersSection;
 	private JavaDocCommentsSection fCommentsSection;
@@ -59,10 +62,19 @@ public class ClassDetailsPage extends BasicDetailsPage {
 		}
 	}
 
+	private class RunOnAndroidCheckBoxAdapter extends AbstractSelectionAdapter{
+		@Override
+		public void widgetSelected(SelectionEvent e) {
+			fClassIf.setRunOnAndroid(fRunOnAndroidCheckbox.getSelection());
+			refresh();
+		}
+	}
+
 	private class AndroidRunnerTextAdapter extends AbstractSelectionAdapter{
 		@Override
 		public void widgetSelected(SelectionEvent e) {
-			String androidRunner = fAndroidRunner.getText();
+			String androidRunner = fAndroidRunnerText.getText();
+
 			if (androidRunner != null && androidRunner.isEmpty()) {
 				androidRunner = null;
 			}
@@ -111,6 +123,7 @@ public class ClassDetailsPage extends BasicDetailsPage {
 		createClassNameText(textComposite);
 		createBrowseButton(buttonsComposite);
 
+		createRunOnAndroidCheckBox(textComposite);
 		createAndroidRunnerText(textComposite);
 
 		getToolkit().paintBordersFor(textComposite);
@@ -130,11 +143,20 @@ public class ClassDetailsPage extends BasicDetailsPage {
 		fClassNameText.addSelectionListener(new ClassNameTextAdapter());
 	}
 
+	private void createRunOnAndroidCheckBox(Composite composite) {
+		GridData checkboxGridData = new GridData(SWT.FILL,  SWT.CENTER, true, false);
+		checkboxGridData.horizontalSpan = 3;
+
+		fRunOnAndroidCheckbox = getToolkit().createButton(composite, "Run on Android", SWT.CHECK);
+		fRunOnAndroidCheckbox.setLayoutData(checkboxGridData);
+		fRunOnAndroidCheckbox.addSelectionListener(new RunOnAndroidCheckBoxAdapter());
+	}
+
 	private void createAndroidRunnerText(Composite textComposite) {
-		getToolkit().createLabel(textComposite, "Android runner");
-		fAndroidRunner = getToolkit().createText(textComposite, null, SWT.NONE);
-		fAndroidRunner.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
-		fAndroidRunner.addSelectionListener(new AndroidRunnerTextAdapter());
+		fAndroidRunnerLabel = getToolkit().createLabel(textComposite, "Android runner");
+		fAndroidRunnerText = getToolkit().createText(textComposite, null, SWT.NONE);
+		fAndroidRunnerText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
+		fAndroidRunnerText.addSelectionListener(new AndroidRunnerTextAdapter());
 	}	
 
 	private void createBrowseButton(Composite buttonsComposite) {
@@ -156,11 +178,17 @@ public class ClassDetailsPage extends BasicDetailsPage {
 			fClassNameText.setText(fClassIf.getLocalName());
 			fPackageNameText.setText(fClassIf.getPackageName());
 
+			boolean runOnAndroid = fClassIf.getRunOnAndroid(); 
+			fRunOnAndroidCheckbox.setSelection(runOnAndroid);
+
+			fAndroidRunnerLabel.setEnabled(runOnAndroid);
+			fAndroidRunnerText.setEnabled(runOnAndroid);
+
 			String androidRunner = fClassIf.getAndroidRunner();
 			if (androidRunner == null) {
 				androidRunner = "";
 			}
-			fAndroidRunner.setText(androidRunner);
+			fAndroidRunnerText.setText(androidRunner);
 
 			fMethodsSection.setInput(selectedClass);
 			fGlobalParametersSection.setInput(selectedClass);

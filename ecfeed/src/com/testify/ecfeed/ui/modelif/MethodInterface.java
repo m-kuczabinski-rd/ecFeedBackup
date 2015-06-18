@@ -188,8 +188,8 @@ public class MethodInterface extends ParametersParentInterface {
 		int dataLength = testData.size();
 		if(dataLength < 0 && (testGenerationSupport.wasCancelled() == false)){
 			MessageDialog.openInformation(Display.getDefault().getActiveShell(),
-			Messages.DIALOG_ADD_TEST_SUITE_PROBLEM_TITLE,
-			Messages.DIALOG_EMPTY_TEST_SUITE_GENERATED_MESSAGE);
+					Messages.DIALOG_ADD_TEST_SUITE_PROBLEM_TITLE,
+					Messages.DIALOG_EMPTY_TEST_SUITE_GENERATED_MESSAGE);
 			return false;
 		}
 		if(testData.size() > Constants.TEST_SUITE_SIZE_WARNING_LIMIT){
@@ -204,30 +204,65 @@ public class MethodInterface extends ParametersParentInterface {
 	}
 
 	public void executeOnlineTests() {
+		if (!isValidClassConfiguration())
+			return;
+
 		OnlineTestRunningSupport runner 
-			= new OnlineTestRunningSupport(createTestMethodInvoker());
+		= new OnlineTestRunningSupport(createTestMethodInvoker());
 		runner.setTarget(getTarget());
 		runner.proceed();
 	}
 
 	public void executeStaticTests(Collection<TestCaseNode> testCases) {
+		if (!isValidClassConfiguration())
+			return;
+
 		StaticTestExecutionSupport support 
-			= new StaticTestExecutionSupport(testCases, createTestMethodInvoker());
+		= new StaticTestExecutionSupport(testCases, createTestMethodInvoker());
 		support.proceed();
 	}
-	
+
+	private boolean isValidClassConfiguration() {
+		ClassNode classNode = (ClassNode) getTarget().getParent();
+
+		if (classNode.getRunOnAndroid() && emptyAndroidRunner(classNode)) {
+			MessageDialog.openError(
+					Display.getDefault().getActiveShell(), 
+					Messages.DIALOG_MISSING_ANDROID_RUNNER_TITLE,
+					Messages.DIALOG_MISSING_ANDROID_RUNNER_INFO(classNode.getName()));
+			return false;
+		}
+
+		return true;
+	}
+
 	private TestMethodInvoker createTestMethodInvoker()
 	{
 		ClassNode classNode = (ClassNode)getTarget().getParent();
 		String androidRunner = classNode.getAndroidRunner();
-		
-		if (androidRunner == null || (androidRunner != null && androidRunner.isEmpty())) {
+
+		if (emptyAndroidRunner(androidRunner)) {
 			return new JUnitTestMethodInvoker();
 		}
-			
 		return new AndroidTestMethodInvoker(androidRunner);
 	}
-	
+
+	private boolean emptyAndroidRunner(ClassNode classNode) {
+		String androidRunner = classNode.getAndroidRunner();
+		return emptyAndroidRunner(androidRunner);
+	}
+
+	private boolean emptyAndroidRunner(String androidRunner) {
+
+		if (androidRunner == null)
+			return true;
+
+		if (androidRunner.isEmpty())
+			return true;
+
+		return false;
+	}
+
 	public Collection<TestCaseNode> getTestCases(String testSuite){
 		return getTarget().getTestCases(testSuite);
 	}

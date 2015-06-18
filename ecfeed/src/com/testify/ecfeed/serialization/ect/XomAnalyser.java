@@ -30,6 +30,7 @@ import static com.testify.ecfeed.serialization.ect.Constants.TEST_CASE_NODE_NAME
 import static com.testify.ecfeed.serialization.ect.Constants.TEST_SUITE_NAME_ATTRIBUTE;
 import static com.testify.ecfeed.serialization.ect.Constants.TYPE_NAME_ATTRIBUTE;
 import static com.testify.ecfeed.serialization.ect.Constants.VALUE_ATTRIBUTE;
+import static com.testify.ecfeed.serialization.ect.Constants.PARAMETER_IS_RUN_ON_ANDROID_ATTRIBUTE_NAME;
 import static com.testify.ecfeed.serialization.ect.Constants.ANDROID_RUNNER_ATTRIBUTE_NAME;
 
 import java.util.ArrayList;
@@ -69,10 +70,10 @@ public class XomAnalyser {
 
 		//parameters must be parsed before classes
 		for(Element child : getIterableChildren(element, Constants.PARAMETER_NODE_NAME)){
-				try{
-					root.addParameter(parseGlobalParameter(child));
-				}catch(ParserException e){
-					System.err.println("Exception: " + e.getMessage());
+			try{
+				root.addParameter(parseGlobalParameter(child));
+			}catch(ParserException e){
+				System.err.println("Exception: " + e.getMessage());
 			}
 		}
 		for(Element child : getIterableChildren(element, Constants.CLASS_NODE_NAME)){
@@ -88,16 +89,16 @@ public class XomAnalyser {
 
 	public ClassNode parseClass(Element element, RootNode parent) throws ParserException{
 		assertNodeTag(element.getQualifiedName(), CLASS_NODE_NAME);
-		
+
 		String name = getElementName(element);
-		
+
+		boolean runOnAndroid = Boolean.parseBoolean(
+				element.getAttributeValue(PARAMETER_IS_RUN_ON_ANDROID_ATTRIBUTE_NAME));
+
 		String androidRunner = element.getAttributeValue(ANDROID_RUNNER_ATTRIBUTE_NAME);
-		if (androidRunner != null && androidRunner.isEmpty()) {
-			androidRunner = null;
-		}
-		
-		ClassNode _class = new ClassNode(name, androidRunner);
-		
+
+		ClassNode _class = new ClassNode(name, runOnAndroid, androidRunner);
+
 		_class.setDescription(parseComments(element));
 		//we need to do it here, so the backward search for global parameters will work
 		_class.setParent(parent);
@@ -163,6 +164,7 @@ public class XomAnalyser {
 		String type = getAttributeValue(element, TYPE_NAME_ATTRIBUTE);
 		String defaultValue = null;
 		String expected = String.valueOf(false);
+
 		if(element.getAttribute(PARAMETER_IS_EXPECTED_ATTRIBUTE_NAME) != null){
 			expected = getAttributeValue(element, PARAMETER_IS_EXPECTED_ATTRIBUTE_NAME);
 			defaultValue = getAttributeValue(element, DEFAULT_EXPECTED_VALUE_ATTRIBUTE_NAME);
@@ -272,7 +274,7 @@ public class XomAnalyser {
 		AbstractStatement consequence = null;
 
 		if((getIterableChildren(element, Constants.CONSTRAINT_PREMISE_NODE_NAME).size() != 1) ||
-			(getIterableChildren(element, Constants.CONSTRAINT_CONSEQUENCE_NODE_NAME).size() != 1)){
+				(getIterableChildren(element, Constants.CONSTRAINT_CONSEQUENCE_NODE_NAME).size() != 1)){
 			throw new ParserException(Messages.MALFORMED_CONSTRAINT_NODE_DEFINITION(method.getName(), name));
 		}
 		for(Element child : getIterableChildren(element, Constants.CONSTRAINT_PREMISE_NODE_NAME)){
@@ -427,7 +429,7 @@ public class XomAnalyser {
 		for(Element child : getIterableChildren(element)){
 			if(child.getLocalName() == Constants.CHOICE_NODE_NAME){
 				try{
-				choice.addChoice(parseChoice(child));
+					choice.addChoice(parseChoice(child));
 				}catch(ParserException e){
 					System.err.println("Exception: " + e.getMessage());
 				}
