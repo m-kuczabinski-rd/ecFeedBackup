@@ -27,7 +27,7 @@ public class AndroidTestMethodInvoker implements TestMethodInvoker {
 
 		try {
 			invokeRemotely(
-					"com.mamlambo.article.simplecalc.test.EctTest", // TODO - instance.getClass().getName(),
+					instance.getClass().getName(),
 					testMethod.getName(),
 					createParameters(testMethod, arguments));
 		} catch (RunnerException e) {
