@@ -42,7 +42,7 @@ public class AndroidTestMethodInvoker implements TestMethodInvoker {
 		System.out.println(Messages.LAUNCHING_ANDROID_INSTRUMENTATION());
 
 		Process process = startProcess(className, functionName, testParams); 
-		logOutput(process);
+		logOutputAndCountFailures(process);
 		waitFor(process);
 		System.out.println("Exit code:" + process.exitValue());
 
@@ -73,7 +73,7 @@ public class AndroidTestMethodInvoker implements TestMethodInvoker {
 		return process;
 	}
 
-	private void logOutput(Process process) throws RunnerException {
+	private void logOutputAndCountFailures(Process process) throws RunnerException {
 
 		InputStream is = process.getInputStream();
 		InputStreamReader isr = new InputStreamReader(is);
@@ -81,25 +81,28 @@ public class AndroidTestMethodInvoker implements TestMethodInvoker {
 
 		boolean testFailed = false;
 		String line;
+		String errorMessage = "";
 		try {
 			while ((line = br.readLine()) != null) {
 				System.out.println(line);
-				
+
 				if (isTestFailedLine(line)) {
 					testFailed = true;
 				}
+
+				errorMessage = errorMessage + line + "\n";
 			}
 		} catch (IOException e) {
 			throw new RunnerException(Messages.IO_EXCEPITON_OCCURED(e.getMessage()));
 		}
-		
+
 		if (testFailed) {
-			throw new RunnerException("Test unsuccesful.");
+			throw new RunnerException("Test unsuccesful:\n" + errorMessage);
 		}
 	}
-	
+
 	public boolean isTestFailedLine(String line) {
-		
+
 		if (line.isEmpty()) {
 			return false;
 		}
@@ -116,28 +119,28 @@ public class AndroidTestMethodInvoker implements TestMethodInvoker {
 	}
 
 	private int getProblemItemsCount(String line, String itemName) {
-		
+
 		String item = itemName + ":";
-		
+
 		int index = line.indexOf(item); 
 		if (index == -1) {
 			return 0;
 		}
 		return getCounter(line, index + item.length());
 	}
-	
+
 	private int getCounter(String line, int startIndex) {
-		
+
 		int digitBeg = getDigitBegIndex(line, startIndex);
 		if (digitBeg == -1) {
 			return 0;
 		}
-		
+
 		int digitEnd = getDigitEndIndex(line, digitBeg);
 		if (digitEnd == -1) {
 			return 0;
 		}
-		
+
 		String digit = line.substring(digitBeg, digitEnd);
 		try {
 			return Integer.decode(digit);
@@ -145,33 +148,33 @@ public class AndroidTestMethodInvoker implements TestMethodInvoker {
 			return 0;
 		}
 	}
-	
+
 	private int getDigitBegIndex(String line, int startIndex) {
 
 		for(int index = startIndex; index < line.length(); index++) {
 			Character ch = line.charAt(index);
-			
+
 			if (Character.isDigit(ch)) {
 				return index;
 			}
 		}
 		return -1;
 	}
-	
+
 	private int getDigitEndIndex(String line, int startIndex) {
 
 		int index = -1;
-		
+
 		for(index = startIndex; index < line.length(); index++) {
 			Character ch = line.charAt(index);
-			
+
 			if (!Character.isDigit(ch)) {
 				return index;
 			}
 		}
 		return index;
 	}
-	
+
 	private void waitFor(Process process) throws RunnerException {
 		try {
 			process.waitFor();
