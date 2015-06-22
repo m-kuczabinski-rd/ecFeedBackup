@@ -6,10 +6,11 @@ import java.util.List;
 
 import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.model.MethodNode;
+import com.testify.ecfeed.runner.ITestMethodInvoker;
 import com.testify.ecfeed.runner.Messages;
 import com.testify.ecfeed.runner.RunnerException;
 
-public class JUnitTestMethodInvoker implements TestMethodInvoker {
+public class JUnitTestMethodInvoker implements ITestMethodInvoker {
 
 	@Override
 	public void invoke(Method fTestMethod, 

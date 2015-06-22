@@ -26,9 +26,9 @@ import org.eclipse.swt.widgets.Display;
 import com.testify.ecfeed.adapter.java.ILoaderProvider;
 import com.testify.ecfeed.adapter.java.ModelClassLoader;
 import com.testify.ecfeed.model.TestCaseNode;
+import com.testify.ecfeed.runner.ITestMethodInvoker;
+import com.testify.ecfeed.runner.JavaTestRunner;
 import com.testify.ecfeed.runner.RunnerException;
-import com.testify.ecfeed.runner.java.JavaTestRunner;
-import com.testify.ecfeed.runner.java.TestMethodInvoker;
 import com.testify.ecfeed.ui.common.EclipseLoaderProvider;
 import com.testify.ecfeed.ui.common.Messages;
 
@@ -60,7 +60,7 @@ public class StaticTestExecutionSupport extends TestExecutionSupport{
 		}
 	}
 	
-	public StaticTestExecutionSupport(Collection<TestCaseNode> testCases, TestMethodInvoker testMethodInvoker){
+	public StaticTestExecutionSupport(Collection<TestCaseNode> testCases, ITestMethodInvoker testMethodInvoker){
 		super();
 		ILoaderProvider loaderProvider = new EclipseLoaderProvider();
 		ModelClassLoader loader = loaderProvider.getLoader(true, null);

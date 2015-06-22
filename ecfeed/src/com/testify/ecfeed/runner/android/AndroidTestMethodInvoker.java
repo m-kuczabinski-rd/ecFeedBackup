@@ -1,4 +1,4 @@
-package com.testify.ecfeed.runner.java;
+package com.testify.ecfeed.runner.android;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -9,10 +9,11 @@ import java.util.List;
 
 import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.model.MethodNode;
+import com.testify.ecfeed.runner.ITestMethodInvoker;
 import com.testify.ecfeed.runner.Messages;
 import com.testify.ecfeed.runner.RunnerException;
 
-public class AndroidTestMethodInvoker implements TestMethodInvoker {
+public class AndroidTestMethodInvoker implements ITestMethodInvoker {
 
 	private String fTestRunner = null;
 
@@ -36,12 +37,19 @@ public class AndroidTestMethodInvoker implements TestMethodInvoker {
 		}
 	}
 
-	private void invokeRemotely(String className, String functionName, String testParams) throws RunnerException {
+	public void invoke(String className, Method testMethod, Object[] arguments) throws RunnerException {
+		invokeRemotely(
+				className,
+				testMethod.getName(),
+				createParameters(testMethod, arguments));
+	}
+	
+	private void invokeRemotely(String className, String functionName, String arguments) throws RunnerException {
 
 		System.out.println();
 		System.out.println(Messages.LAUNCHING_ANDROID_INSTRUMENTATION());
 
-		Process process = startProcess(className, functionName, testParams); 
+		Process process = startProcess(className, functionName, arguments); 
 		logOutputAndCountFailures(process);
 		waitFor(process);
 		System.out.println("Exit code:" + process.exitValue());
@@ -49,7 +57,7 @@ public class AndroidTestMethodInvoker implements TestMethodInvoker {
 		System.out.println(Messages.ANDROID_INSTRUMENTATION_FINISHED());    	
 	}
 
-	private Process startProcess(String className, String functionName, String testParams) throws RunnerException {
+	private Process startProcess(String className, String functionName, String arguments) throws RunnerException {
 		ProcessBuilder pb 
 		= new ProcessBuilder(
 				"adb", 
@@ -59,7 +67,7 @@ public class AndroidTestMethodInvoker implements TestMethodInvoker {
 				"-w",        			
 				"-e",
 				"ecFeed",
-				className + ", " + functionName + ", " + testParams,
+				className + ", " + functionName + ", " + arguments,
 				fTestRunner);
 
 		Process process = null;

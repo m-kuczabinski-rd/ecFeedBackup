@@ -9,7 +9,7 @@
  *     Patryk Chamuczynski (p.chamuczynski(at)radytek.com) - initial implementation
  ******************************************************************************/
 
-package com.testify.ecfeed.runner.java;
+package com.testify.ecfeed.runner;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -22,8 +22,6 @@ import com.testify.ecfeed.adapter.java.ModelClassLoader;
 import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.MethodNode;
-import com.testify.ecfeed.runner.Messages;
-import com.testify.ecfeed.runner.RunnerException;
 
 public class JavaTestRunner {
 
@@ -31,9 +29,9 @@ public class JavaTestRunner {
 	private MethodNode fTarget;
 	private Class<?> fTestClass;
 	private Method fTestMethod;
-	private TestMethodInvoker fTestMethodInvoker;
+	private ITestMethodInvoker fTestMethodInvoker;
 
-	public JavaTestRunner(ModelClassLoader loader, TestMethodInvoker testMethodInvoker){
+	public JavaTestRunner(ModelClassLoader loader, ITestMethodInvoker testMethodInvoker){
 		fLoader = loader;
 		fTestMethodInvoker = testMethodInvoker; 
 	}

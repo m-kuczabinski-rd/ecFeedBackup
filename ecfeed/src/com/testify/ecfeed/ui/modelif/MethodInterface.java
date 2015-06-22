@@ -43,9 +43,9 @@ import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.MethodParameterNode;
 import com.testify.ecfeed.model.StaticStatement;
 import com.testify.ecfeed.model.TestCaseNode;
-import com.testify.ecfeed.runner.java.AndroidTestMethodInvoker;
+import com.testify.ecfeed.runner.ITestMethodInvoker;
+import com.testify.ecfeed.runner.android.AndroidTestMethodInvoker;
 import com.testify.ecfeed.runner.java.JUnitTestMethodInvoker;
-import com.testify.ecfeed.runner.java.TestMethodInvoker;
 import com.testify.ecfeed.ui.common.Constants;
 import com.testify.ecfeed.ui.common.EclipseModelBuilder;
 import com.testify.ecfeed.ui.common.EclipseTypeAdapterProvider;
@@ -236,7 +236,7 @@ public class MethodInterface extends ParametersParentInterface {
 		return true;
 	}
 
-	private TestMethodInvoker createTestMethodInvoker()
+	private ITestMethodInvoker createTestMethodInvoker()
 	{
 		ClassNode classNode = (ClassNode)getTarget().getParent();
 		String androidRunner = classNode.getAndroidRunner();

@@ -73,7 +73,7 @@ public class OnlineRunner extends AbstractJUnitRunner {
 		}
 		return methods;
 	}
-
+	
 	protected Collection<IConstraint<ChoiceNode>> getConstraints(
 			FrameworkMethod method, MethodNode methodModel) {
 		Collection<String> constraintsNames = constraintsNames(method);

@@ -30,9 +30,9 @@ import com.testify.ecfeed.generators.api.IConstraint;
 import com.testify.ecfeed.generators.api.IGenerator;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.ChoiceNode;
+import com.testify.ecfeed.runner.ITestMethodInvoker;
+import com.testify.ecfeed.runner.JavaTestRunner;
 import com.testify.ecfeed.runner.RunnerException;
-import com.testify.ecfeed.runner.java.JavaTestRunner;
-import com.testify.ecfeed.runner.java.TestMethodInvoker;
 import com.testify.ecfeed.ui.common.EclipseLoaderProvider;
 import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.dialogs.ExecuteOnlineSetupDialog;
@@ -85,12 +85,12 @@ public class OnlineTestRunningSupport extends TestExecutionSupport{
 		}
 	}
 	
-	public OnlineTestRunningSupport(MethodNode target, TestMethodInvoker testMethodInvoker){
+	public OnlineTestRunningSupport(MethodNode target, ITestMethodInvoker testMethodInvoker){
 		this(testMethodInvoker);
 		setTarget(target);
 	}
 	
-	public OnlineTestRunningSupport(TestMethodInvoker testMethodInvoker) {
+	public OnlineTestRunningSupport(ITestMethodInvoker testMethodInvoker) {
 		ILoaderProvider loaderProvider = new EclipseLoaderProvider();
 		ModelClassLoader loader = loaderProvider.getLoader(true, null);
 		fRunner = new JavaTestRunner(loader, testMethodInvoker);
