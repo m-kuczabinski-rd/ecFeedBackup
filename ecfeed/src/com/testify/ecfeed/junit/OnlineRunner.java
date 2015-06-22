@@ -36,6 +36,7 @@ import com.testify.ecfeed.junit.annotations.GeneratorParameter;
 import com.testify.ecfeed.junit.annotations.GeneratorParameterNames;
 import com.testify.ecfeed.junit.annotations.GeneratorParameterValues;
 import com.testify.ecfeed.model.ChoiceNode;
+import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.MethodParameterNode;
 import com.testify.ecfeed.runner.Messages;
@@ -49,31 +50,49 @@ public class OnlineRunner extends AbstractJUnitRunner {
 
 	@Override
 	protected List<FrameworkMethod> generateTestMethods() throws RunnerException {
-		List<FrameworkMethod> methods = new ArrayList<FrameworkMethod>();
-		for(FrameworkMethod method : getTestClass().getAnnotatedMethods(Test.class)){
-			if(method.getMethod().getParameterTypes().length == 0){
+		List<FrameworkMethod> frameworkMethods = new ArrayList<FrameworkMethod>();
+		for(FrameworkMethod frameworkMethod : getTestClass().getAnnotatedMethods(Test.class)){
+			if(frameworkMethod.getMethod().getParameterTypes().length == 0){
 				//standard jUnit test
-				methods.add(method);
+				frameworkMethods.add(frameworkMethod);
 			} else{
-				MethodNode methodModel = getMethodModel(getModel(), method);
-				if(methodModel == null){
+				MethodNode methodNode = getMethodModel(getModel(), frameworkMethod);
+				if(methodNode == null){
 					continue;
 				}
-				IGenerator<ChoiceNode> generator = getGenerator(method);
-				List<List<ChoiceNode>> input = getInput(methodModel);
-				Collection<IConstraint<ChoiceNode>> constraints = getConstraints(method, methodModel);
-				Map<String, Object> parameters = getGeneratorParameters(generator, method);
+				IGenerator<ChoiceNode> generator = getGenerator(frameworkMethod);
+				List<List<ChoiceNode>> input = getInput(methodNode);
+				Collection<IConstraint<ChoiceNode>> constraints = getConstraints(frameworkMethod, methodNode);
+				Map<String, Object> parameters = getGeneratorParameters(generator, frameworkMethod);
 				try {
 					generator.initialize(input, constraints, parameters);
 				} catch (GeneratorException e) {
 					throw new RunnerException(Messages.GENERATOR_INITIALIZATION_PROBLEM(e.getMessage()));
 				}
-				methods.add(new RuntimeMethod(method.getMethod(), generator, getLoader()));
+
+				addFrameworkMethod(methodNode, frameworkMethod, generator, frameworkMethods);
 			}
 		}
-		return methods;
+		return frameworkMethods;
 	}
-	
+
+	private void addFrameworkMethod(MethodNode methodNode,
+			FrameworkMethod frameworkMethod,
+			IGenerator<ChoiceNode> generator,
+			List<FrameworkMethod> frameworkMethods) throws RunnerException {
+		ClassNode classNode = (ClassNode)methodNode.getParent();
+
+		if (classNode.getRunOnAndroid()) {
+			frameworkMethods.add(
+					new AndroidRuntimeMethod(
+							frameworkMethod.getMethod(), 
+							generator, getLoader(), 
+							classNode.getAndroidRunner()));
+		} else {
+			frameworkMethods.add(new JavaRuntimeMethod(frameworkMethod.getMethod(), generator, getLoader()));
+		}		
+	}
+
 	protected Collection<IConstraint<ChoiceNode>> getConstraints(
 			FrameworkMethod method, MethodNode methodModel) {
 		Collection<String> constraintsNames = constraintsNames(method);

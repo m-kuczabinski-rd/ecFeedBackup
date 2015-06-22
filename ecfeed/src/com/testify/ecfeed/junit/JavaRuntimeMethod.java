@@ -22,11 +22,11 @@ import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.runner.Messages;
 import com.testify.ecfeed.runner.RunnerException;
 
-public class RuntimeMethod extends AbstractFrameworkMethod{
+public class JavaRuntimeMethod extends AbstractFrameworkMethod{
 
 	IGenerator<ChoiceNode> fGenerator;
 	
-	public RuntimeMethod(Method method, IGenerator<ChoiceNode> initializedGenerator, ModelClassLoader loader) throws RunnerException{
+	public JavaRuntimeMethod(Method method, IGenerator<ChoiceNode> initializedGenerator, ModelClassLoader loader) throws RunnerException{
 		super(method, loader);
 		fGenerator = initializedGenerator;
 	}

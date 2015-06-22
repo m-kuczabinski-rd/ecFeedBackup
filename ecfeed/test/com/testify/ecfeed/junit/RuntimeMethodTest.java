@@ -59,7 +59,7 @@ public class RuntimeMethodTest {
 		try {
 			Method methodUnterTest = this.getClass().getMethod("functionUnderTest", int.class, int.class);
 			generator.initialize(input, EMPTY_CONSTRAINTS, null);
-			RuntimeMethod testedMethod = new RuntimeMethod(methodUnterTest, generator, new ModelClassLoader(new URL[]{}, this.getClass().getClassLoader()));
+			JavaRuntimeMethod testedMethod = new JavaRuntimeMethod(methodUnterTest, generator, new ModelClassLoader(new URL[]{}, this.getClass().getClassLoader()));
 			fExecuted = new HashSet<List<Integer>>();
 			testedMethod.invokeExplosively(this, (Object[])null);
 			assertEquals(referenceResult(input), fExecuted);
