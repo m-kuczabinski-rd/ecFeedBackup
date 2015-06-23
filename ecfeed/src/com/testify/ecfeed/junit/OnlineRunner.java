@@ -13,6 +13,7 @@ package com.testify.ecfeed.junit;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -39,8 +40,10 @@ import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.MethodParameterNode;
+import com.testify.ecfeed.runner.ITestMethodInvoker;
 import com.testify.ecfeed.runner.Messages;
 import com.testify.ecfeed.runner.RunnerException;
+import com.testify.ecfeed.runner.android.AndroidTestMethodInvoker;
 
 public class OnlineRunner extends AbstractJUnitRunner {
 
@@ -70,26 +73,25 @@ public class OnlineRunner extends AbstractJUnitRunner {
 					throw new RunnerException(Messages.GENERATOR_INITIALIZATION_PROBLEM(e.getMessage()));
 				}
 
-				addFrameworkMethod(methodNode, frameworkMethod, generator, frameworkMethods);
+				addFrameworkMethod(methodNode, frameworkMethod.getMethod(), generator, frameworkMethods);
 			}
 		}
 		return frameworkMethods;
 	}
 
-	private void addFrameworkMethod(MethodNode methodNode,
-			FrameworkMethod frameworkMethod,
+	private void addFrameworkMethod(
+			MethodNode methodNode,
+			Method method,
 			IGenerator<ChoiceNode> generator,
 			List<FrameworkMethod> frameworkMethods) throws RunnerException {
+
 		ClassNode classNode = (ClassNode)methodNode.getParent();
 
 		if (classNode.getRunOnAndroid()) {
-			frameworkMethods.add(
-					new AndroidRuntimeMethod(
-							frameworkMethod.getMethod(), 
-							generator, getLoader(), 
-							classNode.getAndroidRunner()));
+			ITestMethodInvoker invoker = new AndroidTestMethodInvoker(classNode.getAndroidRunner());
+			frameworkMethods.add(new AndroidRuntimeMethod(method, generator, getLoader(), invoker));
 		} else {
-			frameworkMethods.add(new JavaRuntimeMethod(frameworkMethod.getMethod(), generator, getLoader()));
+			frameworkMethods.add(new JavaRuntimeMethod(method, generator, getLoader()));
 		}		
 	}
 

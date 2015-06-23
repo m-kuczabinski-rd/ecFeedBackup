@@ -38,8 +38,8 @@ public class JavaTestRunner {
 
 	public void setTarget(MethodNode target) throws RunnerException{
 		fTarget = target;
-		ClassNode testClassModel = fTarget.getClassNode();
-		fTestClass = getTestClass(testClassModel.getName());
+		ClassNode classNode = fTarget.getClassNode();
+		fTestClass = getTestClass(classNode.getName());
 		fTestMethod = getTestMethod(fTestClass, fTarget);
 	}
 
@@ -54,7 +54,7 @@ public class JavaTestRunner {
 		}
 
 		Object[] arguments = getArguments(testData);
-		fTestMethodInvoker.invoke(fTestMethod, instance, arguments, fTarget, testData);
+		fTestMethodInvoker.invoke(fTestMethod, instance, arguments, testData.toString());
 	}
 
 	protected Method getTestMethod(Class<?> testClass, MethodNode methodModel) throws RunnerException {

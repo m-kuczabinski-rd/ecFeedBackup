@@ -19,24 +19,24 @@ import com.testify.ecfeed.adapter.java.ModelClassLoader;
 import com.testify.ecfeed.generators.api.GeneratorException;
 import com.testify.ecfeed.generators.api.IGenerator;
 import com.testify.ecfeed.model.ChoiceNode;
+import com.testify.ecfeed.runner.ITestMethodInvoker;
 import com.testify.ecfeed.runner.Messages;
 import com.testify.ecfeed.runner.RunnerException;
-import com.testify.ecfeed.runner.android.AndroidTestMethodInvoker;
 
 public class AndroidRuntimeMethod extends AbstractFrameworkMethod{
 
-	IGenerator<ChoiceNode> fGenerator;
-	AndroidTestMethodInvoker fAndroidInvoker;
+	private IGenerator<ChoiceNode> fGenerator;
+	private ITestMethodInvoker fMethodInvoker;
 
 	public AndroidRuntimeMethod(
-			Method method, 
+			Method method,
 			IGenerator<ChoiceNode> generator, 
 			ModelClassLoader loader,
-			String testRunner
+			ITestMethodInvoker methodInvoker
 			) throws RunnerException{
 		super(method, loader);
 		fGenerator = generator;
-		fAndroidInvoker = new AndroidTestMethodInvoker(testRunner);
+		fMethodInvoker = methodInvoker;
 	}
 
 	@Override
@@ -46,17 +46,17 @@ public class AndroidRuntimeMethod extends AbstractFrameworkMethod{
 
 		try {
 			while((next = fGenerator.next()) !=null){
-				invokeRemotely(target, next);
+				fMethodInvoker.invoke(
+						getMethod(), 
+						target, 
+						choiceListToParamArray(next), 
+						next.toString());		
 			}
 		} catch (GeneratorException e) {
 			throw new RunnerException(Messages.RUNNER_EXCEPTION(e.getMessage()));
 		}
 
 		return null;
-	}
-
-	private void invokeRemotely(Object target, List<ChoiceNode> arguments) throws RunnerException {
-		fAndroidInvoker.invoke(target.getClass().getName(), getMethod(), choiceListToParamArray(arguments));
 	}
 
 }

@@ -47,8 +47,8 @@ public class Messages {
 	{return "Couldn't load class " + name;}
 	public static final String METHOD_NOT_FOUND(String name) 
 	{return "Method " + name + " does not exist in loaded test class";}
-	public static String CANNOT_INVOKE_TEST_METHOD(String method, String testCase, String message)
-	{return "Problems with invoking test method " + method + " with following parameters set: " + testCase + "\n" + message;}
+	public static String CANNOT_INVOKE_TEST_METHOD(String method, String parameters, String message)
+	{return "Problems with invoking test method " + method + " with following parameters set: " + parameters + "\n" + message;}
 	public static String TEST_METHOD_INVOCATION_EXCEPTION(String method, String testCase, String message)
 	{return "Exception caught during invoking test method:\n" + method + "\nwith following parameters set:\n" + testCase /*+ "\n\n"*/ + message + "\n";}
 	public static String CANNOT_PARSE_PARAMETER(String parameterType, String parameterValue)

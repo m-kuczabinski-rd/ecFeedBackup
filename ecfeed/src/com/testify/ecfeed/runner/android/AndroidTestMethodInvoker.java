@@ -13,10 +13,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.Method;
-import java.util.List;
 
-import com.testify.ecfeed.model.ChoiceNode;
-import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.runner.ITestMethodInvoker;
 import com.testify.ecfeed.runner.Messages;
 import com.testify.ecfeed.runner.RunnerException;
@@ -30,10 +27,11 @@ public class AndroidTestMethodInvoker implements ITestMethodInvoker {
 	}
 
 	@Override
-	public void invoke(Method testMethod, Object instance, Object[] arguments,
-			MethodNode fTarget, List<ChoiceNode> testData)
-					throws RunnerException {
-
+	public void invoke(
+			Method testMethod, 
+			Object instance, 
+			Object[] arguments,
+			String argumentsDescription) throws RunnerException {
 		try {
 			invokeRemotely(
 					instance.getClass().getName(),
@@ -41,7 +39,7 @@ public class AndroidTestMethodInvoker implements ITestMethodInvoker {
 					createParameters(testMethod, arguments));
 		} catch (RunnerException e) {
 			throw new RunnerException(
-					Messages.CANNOT_INVOKE_TEST_METHOD(fTarget.toString(), testData.toString(), e.getMessage()));
+					Messages.CANNOT_INVOKE_TEST_METHOD(testMethod.getName(), argumentsDescription, e.getMessage()));
 		}
 	}
 
@@ -51,7 +49,7 @@ public class AndroidTestMethodInvoker implements ITestMethodInvoker {
 				testMethod.getName(),
 				createParameters(testMethod, arguments));
 	}
-	
+
 	private void invokeRemotely(String className, String functionName, String arguments) throws RunnerException {
 
 		System.out.println();

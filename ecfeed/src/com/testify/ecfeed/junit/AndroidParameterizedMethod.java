@@ -10,35 +10,37 @@ package com.testify.ecfeed.junit;
 
 import java.lang.reflect.Method;
 import java.util.Collection;
-import java.util.List;
 
 import com.testify.ecfeed.adapter.java.ModelClassLoader;
-import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.model.TestCaseNode;
+import com.testify.ecfeed.runner.ITestMethodInvoker;
 import com.testify.ecfeed.runner.Messages;
-import com.testify.ecfeed.runner.RunnerException;
-import com.testify.ecfeed.runner.android.AndroidTestMethodInvoker;
 
 public class AndroidParameterizedMethod extends AbstractFrameworkMethod {
 
 	private Collection<TestCaseNode> fTestCases;
-	AndroidTestMethodInvoker fAndroidInvoker;
+	private ITestMethodInvoker fMethodInvoker;
 
 	public AndroidParameterizedMethod(
-			Method method, 
+			Method method,
 			Collection<TestCaseNode> testCases, 
 			ModelClassLoader loader, 
-			String testRunner) {
+			ITestMethodInvoker methodInvoker) {
 		super(method, loader);
 		fTestCases = testCases;
-		fAndroidInvoker = new AndroidTestMethodInvoker(testRunner);
+		fMethodInvoker = methodInvoker;
 	}
 
 	@Override
 	public Object invokeExplosively(Object target, Object... notUsed) throws Throwable{
 		for(TestCaseNode testCase : fTestCases){
 			try{
-				invokeRemotely(target, testCase.getTestData());
+				fMethodInvoker.invoke(
+						getMethod(), 
+						target, 
+						choiceListToParamArray(testCase.getTestData()), 
+						testCase.getTestData().toString());
+
 			}catch (Throwable e){
 				throw new Exception(Messages.RUNNER_EXCEPTION(e.getMessage()), e);
 			}
@@ -46,7 +48,4 @@ public class AndroidParameterizedMethod extends AbstractFrameworkMethod {
 		return null;
 	}
 
-	private void invokeRemotely(Object target, List<ChoiceNode> arguments) throws RunnerException {
-		fAndroidInvoker.invoke(target.getClass().getName(), getMethod(), choiceListToParamArray(arguments));
-	}
 }
