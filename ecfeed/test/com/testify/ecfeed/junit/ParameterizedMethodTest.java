@@ -26,7 +26,7 @@ import org.junit.Test;
 import org.junit.runners.model.FrameworkMethod;
 
 import com.testify.ecfeed.adapter.java.ModelClassLoader;
-import com.testify.ecfeed.junit.ParameterizedMethod;
+import com.testify.ecfeed.junit.JavaParameterizedMethod;
 import com.testify.ecfeed.model.MethodParameterNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.MethodNode;
@@ -86,7 +86,7 @@ public class ParameterizedMethodTest {
 
 		try{
 			Method methodUnterTest = this.getClass().getMethod(ENUM_FUNCTION_UNDER_TEST_NAME, Enum.class);
-			FrameworkMethod m = new ParameterizedMethod(methodUnterTest, methodNode.getTestCases(), loader);
+			FrameworkMethod m = new JavaParameterizedMethod(methodUnterTest, methodNode.getTestCases(), loader);
 			m.invokeExplosively(this, new Object[]{});
 			for(Enum v : Enum.values()){
 				assertTrue(fExecutedEnum.contains(v));
@@ -112,7 +112,7 @@ public class ParameterizedMethodTest {
 			Collection<TestCaseNode> testSuite = generateTestCases(methodNode, testSuiteSize);
 			Set<List<Integer>> referenceResult = generateReferenceResult(testSuite);
 			
-			FrameworkMethod m = new ParameterizedMethod(methodUnterTest, testSuite, loader);
+			FrameworkMethod m = new JavaParameterizedMethod(methodUnterTest, testSuite, loader);
 			m.invokeExplosively(this, new Object[]{});
 			
 			assertEquals(referenceResult, fExecuted);

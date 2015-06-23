@@ -26,6 +26,7 @@ import org.junit.runners.model.InitializationError;
 
 import com.testify.ecfeed.adapter.EImplementationStatus;
 import com.testify.ecfeed.junit.annotations.TestSuites;
+import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.runner.RunnerException;
@@ -38,20 +39,43 @@ public class StaticRunner extends AbstractJUnitRunner {
 
 	@Override
 	protected List<FrameworkMethod> generateTestMethods() throws RunnerException {
-		List<FrameworkMethod> methods = new ArrayList<FrameworkMethod>();
-		for(FrameworkMethod method : getTestClass().getAnnotatedMethods(Test.class)){
-			if(method.getMethod().getParameterTypes().length == 0){
+		List<FrameworkMethod> frameworkMethods = new ArrayList<FrameworkMethod>();
+		for(FrameworkMethod frameworkMethod : getTestClass().getAnnotatedMethods(Test.class)){
+			if(frameworkMethod.getMethod().getParameterTypes().length == 0){
 				//standard jUnit test
-				methods.add(method);
+				frameworkMethods.add(frameworkMethod);
 			} else{
-				MethodNode methodModel = getMethodModel(getModel(), method);
-				if(methodModel == null){
+				MethodNode methodNode = getMethodModel(getModel(), frameworkMethod);
+				if(methodNode == null){
 					continue;
 				}
-				methods.add(new ParameterizedMethod(method.getMethod(), getTestCases(methodModel, getTestSuites(method)), getLoader()));
+				addFrameworkMethod(methodNode, frameworkMethod, frameworkMethods);
 			}
 		}
-		return methods;
+		return frameworkMethods;
+	}
+
+	private void addFrameworkMethod(MethodNode methodNode,
+			FrameworkMethod frameworkMethod,
+			List<FrameworkMethod> frameworkMethods) throws RunnerException {
+
+		ClassNode classNode = (ClassNode)methodNode.getParent();
+
+		if (classNode.getRunOnAndroid()) {
+			frameworkMethods.add(
+					new AndroidParameterizedMethod(
+							frameworkMethod.getMethod(), 
+							getTestCases(methodNode, getTestSuites(frameworkMethod)), 
+							getLoader(), 
+							classNode.getAndroidRunner()));
+		}
+		else {
+			frameworkMethods.add(
+					new JavaParameterizedMethod(
+							frameworkMethod.getMethod(), 
+							getTestCases(methodNode, getTestSuites(frameworkMethod)), 
+							getLoader()));
+		}
 	}
 
 	protected Set<String> getTestSuites(FrameworkMethod method) throws RunnerException{

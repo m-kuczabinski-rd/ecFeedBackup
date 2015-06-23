@@ -12,37 +12,29 @@
 package com.testify.ecfeed.junit;
 
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Collection;
 
 import com.testify.ecfeed.adapter.java.ModelClassLoader;
-import com.testify.ecfeed.generators.api.GeneratorException;
-import com.testify.ecfeed.generators.api.IGenerator;
-import com.testify.ecfeed.model.ChoiceNode;
+import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.runner.Messages;
-import com.testify.ecfeed.runner.RunnerException;
 
-public class JavaRuntimeMethod extends AbstractFrameworkMethod{
+public class JavaParameterizedMethod extends AbstractFrameworkMethod {
 
-	IGenerator<ChoiceNode> fGenerator;
+	private Collection<TestCaseNode> fTestCases;
 
-	public JavaRuntimeMethod(Method method, IGenerator<ChoiceNode> initializedGenerator, ModelClassLoader loader) throws RunnerException{
+	public JavaParameterizedMethod(Method method, Collection<TestCaseNode> testCases, ModelClassLoader loader) {
 		super(method, loader);
-		fGenerator = initializedGenerator;
+		fTestCases = testCases;
 	}
 
 	@Override
-	public Object invokeExplosively(Object target, Object... p) throws Throwable{
-		List<ChoiceNode> next = new ArrayList<>();
-		try {
-			while((next = fGenerator.next()) !=null){
-				super.invoke(target, next);
+	public Object invokeExplosively(Object target, Object... parameters) throws Throwable{
+		for(TestCaseNode testCase : fTestCases){
+			try{
+				super.invoke(target, testCase.getTestData());
+			}catch (Throwable e){
+				throw new Exception(Messages.RUNNER_EXCEPTION(e.getMessage()), e);
 			}
-		} catch (GeneratorException e) {
-			throw new RunnerException(Messages.RUNNER_EXCEPTION(e.getMessage()));
-		} catch (Throwable e){
-			String message = getName() + "(" + next.toString() + "): " + e.getMessage();
-			throw new Exception(message, e);
 		}
 		return null;
 	}
