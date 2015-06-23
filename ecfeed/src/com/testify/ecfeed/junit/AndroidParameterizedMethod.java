@@ -22,7 +22,7 @@ import com.testify.ecfeed.runner.android.AndroidTestMethodInvoker;
 public class AndroidParameterizedMethod extends AbstractFrameworkMethod {
 
 	private Collection<TestCaseNode> fTestCases;
-	private String fTestRunner = null;
+	AndroidTestMethodInvoker fAndroidInvoker;
 
 	public AndroidParameterizedMethod(
 			Method method, 
@@ -31,7 +31,7 @@ public class AndroidParameterizedMethod extends AbstractFrameworkMethod {
 			String testRunner) {
 		super(method, loader);
 		fTestCases = testCases;
-		fTestRunner = testRunner;
+		fAndroidInvoker = new AndroidTestMethodInvoker(testRunner);
 	}
 
 	@Override
@@ -47,7 +47,6 @@ public class AndroidParameterizedMethod extends AbstractFrameworkMethod {
 	}
 
 	private void invokeRemotely(Object target, List<ChoiceNode> arguments) throws RunnerException {
-		AndroidTestMethodInvoker androidInvoker = new AndroidTestMethodInvoker(fTestRunner);
-		androidInvoker.invoke(target.getClass().getName(), getMethod(), choiceListToParamArray(arguments));
+		fAndroidInvoker.invoke(target.getClass().getName(), getMethod(), choiceListToParamArray(arguments));
 	}
 }

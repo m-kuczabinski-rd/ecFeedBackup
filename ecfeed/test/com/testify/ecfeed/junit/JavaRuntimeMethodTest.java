@@ -31,7 +31,7 @@ import com.testify.ecfeed.generators.api.IGenerator;
 import com.testify.ecfeed.model.MethodParameterNode;
 import com.testify.ecfeed.model.ChoiceNode;
 
-public class RuntimeMethodTest {
+public class JavaRuntimeMethodTest {
 
 	private Set<List<Integer>> fExecuted;
 	private final int MAX_PARTITIONS = 10;

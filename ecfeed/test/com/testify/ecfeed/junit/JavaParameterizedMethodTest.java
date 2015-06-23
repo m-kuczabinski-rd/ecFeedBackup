@@ -33,7 +33,7 @@ import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.model.TestCaseNode;
 
-public class ParameterizedMethodTest {
+public class JavaParameterizedMethodTest {
 
 	public enum Enum{
 		VALUE1, VALUE2, VALUE3;

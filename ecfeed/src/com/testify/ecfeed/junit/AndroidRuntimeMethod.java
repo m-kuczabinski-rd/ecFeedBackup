@@ -26,7 +26,7 @@ import com.testify.ecfeed.runner.android.AndroidTestMethodInvoker;
 public class AndroidRuntimeMethod extends AbstractFrameworkMethod{
 
 	IGenerator<ChoiceNode> fGenerator;
-	private String fTestRunner = null;
+	AndroidTestMethodInvoker fAndroidInvoker;
 
 	public AndroidRuntimeMethod(
 			Method method, 
@@ -36,7 +36,7 @@ public class AndroidRuntimeMethod extends AbstractFrameworkMethod{
 			) throws RunnerException{
 		super(method, loader);
 		fGenerator = generator;
-		fTestRunner = testRunner;
+		fAndroidInvoker = new AndroidTestMethodInvoker(testRunner);
 	}
 
 	@Override
@@ -56,8 +56,7 @@ public class AndroidRuntimeMethod extends AbstractFrameworkMethod{
 	}
 
 	private void invokeRemotely(Object target, List<ChoiceNode> arguments) throws RunnerException {
-		AndroidTestMethodInvoker androidInvoker = new AndroidTestMethodInvoker(fTestRunner);
-		androidInvoker.invoke(target.getClass().getName(), getMethod(), choiceListToParamArray(arguments));
+		fAndroidInvoker.invoke(target.getClass().getName(), getMethod(), choiceListToParamArray(arguments));
 	}
 
 }
