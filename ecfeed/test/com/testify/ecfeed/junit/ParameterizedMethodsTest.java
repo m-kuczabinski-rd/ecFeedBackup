@@ -60,14 +60,14 @@ public class ParameterizedMethodsTest {
 	}
 
 	@Test
-	public void javaMethodTestExecution(){
+	public void javaMethodTest(){
 		for(int i = 1; i <= MAX_TEST_SUITE_SIZE; i++){
 			test(false, i);
 		}
 	}
-	
+
 	@Test
-	public void androidMethodTestExecution(){
+	public void androidMethodTest(){
 		for(int i = 1; i <= MAX_TEST_SUITE_SIZE; i++){
 			test(true, i);
 		}
@@ -94,7 +94,7 @@ public class ParameterizedMethodsTest {
 
 		try{
 			Method methodUnterTest = this.getClass().getMethod(ENUM_FUNCTION_UNDER_TEST_NAME, Enum.class);
-			
+
 			FrameworkMethod m = createParametrizedMethod(false, methodUnterTest, methodNode.getTestCases(), loader);
 			m.invokeExplosively(this, new Object[]{});
 			for(Enum v : Enum.values()){
@@ -105,7 +105,7 @@ public class ParameterizedMethodsTest {
 		}
 	}
 
-	public void test(boolean androidTest, int testSuiteSize) {
+	public void test(boolean isAndroidTest, int testSuiteSize) {
 		try {
 			ModelClassLoader loader = new ModelClassLoader(new URL[]{}, this.getClass().getClassLoader());
 
@@ -121,7 +121,7 @@ public class ParameterizedMethodsTest {
 			Collection<TestCaseNode> testCases = generateTestCases(methodNode, testSuiteSize);
 			Set<List<Integer>> referenceResult = generateReferenceResult(testCases);
 
-			FrameworkMethod m = createParametrizedMethod(androidTest, methodUnterTest, testCases, loader);
+			FrameworkMethod m = createParametrizedMethod(isAndroidTest, methodUnterTest, testCases, loader);
 			m.invokeExplosively(this, new Object[]{});
 
 			assertEquals(referenceResult, fExecuted);
@@ -133,13 +133,13 @@ public class ParameterizedMethodsTest {
 		}
 	}
 
-	FrameworkMethod createParametrizedMethod(
-			boolean androidTest,
+	private FrameworkMethod createParametrizedMethod(
+			boolean isAndroidTest,
 			Method methodUnterTest, 
 			Collection<TestCaseNode> testCases, 
 			ModelClassLoader loader) {
 
-		if (androidTest) {
+		if (isAndroidTest) {
 			return new JavaParameterizedMethod(methodUnterTest, testCases, loader);
 		} else {
 			return new AndroidParameterizedMethod(methodUnterTest, testCases, loader, new JUnitTestMethodInvoker());

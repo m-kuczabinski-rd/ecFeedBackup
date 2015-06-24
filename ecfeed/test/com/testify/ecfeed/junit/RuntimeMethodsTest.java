@@ -49,20 +49,20 @@ public class RuntimeMethodsTest {
 	}
 
 	@Test
-	public void JavaConformanceTest(){
+	public void javaMethodTest(){
 		for(int j = 1; j <= MAX_PARTITIONS; ++j){
 			test(false, 2, j);
 		}
 	}
 
 	@Test
-	public void AndroidConformanceTest(){
+	public void androidMethodTest(){
 		for(int j = 1; j <= MAX_PARTITIONS; ++j){
 			test(true, 2, j);
 		}
 	}	
 
-	public void test(boolean androidTest, int parameters, int choicesPerParameter) {
+	public void test(boolean isAndroidTest, int parameters, int choicesPerParameter) {
 		List<List<ChoiceNode>> input = generateInput(parameters, choicesPerParameter);
 		IGenerator<ChoiceNode> generator = new CartesianProductGenerator<ChoiceNode>();
 		try {
@@ -70,7 +70,7 @@ public class RuntimeMethodsTest {
 			generator.initialize(input, EMPTY_CONSTRAINTS, null);
 
 			AbstractFrameworkMethod testedMethod =
-					createFrameworkMethod(androidTest, methodUnterTest, generator);
+					createFrameworkMethod(isAndroidTest, methodUnterTest, generator);
 
 			fExecuted = new HashSet<List<Integer>>();
 			testedMethod.invokeExplosively(this, (Object[])null);
@@ -81,11 +81,11 @@ public class RuntimeMethodsTest {
 	}
 
 	private AbstractFrameworkMethod createFrameworkMethod(
-			boolean androidTest, 
+			boolean isAndroidTest, 
 			Method methodUnterTest, 
 			IGenerator<ChoiceNode> generator) throws RunnerException {
 
-		if (androidTest) { 
+		if (isAndroidTest) { 
 			return new JavaRuntimeMethod(
 					methodUnterTest, 
 					generator, 
