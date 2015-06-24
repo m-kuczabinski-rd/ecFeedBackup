@@ -30,15 +30,17 @@ import com.testify.ecfeed.generators.api.IConstraint;
 import com.testify.ecfeed.generators.api.IGenerator;
 import com.testify.ecfeed.model.MethodParameterNode;
 import com.testify.ecfeed.model.ChoiceNode;
+import com.testify.ecfeed.runner.RunnerException;
+import com.testify.ecfeed.runner.java.JUnitTestMethodInvoker;
 
-public class JavaRuntimeMethodTest {
+public class RuntimeMethodsTest {
 
 	private Set<List<Integer>> fExecuted;
 	private final int MAX_PARTITIONS = 10;
-	
+
 	private final Collection<IConstraint<ChoiceNode>> EMPTY_CONSTRAINTS = 
 			new ArrayList<IConstraint<ChoiceNode>>();
-	
+
 	public void functionUnderTest(int arg1, int arg2){
 		List<Integer> parameters = new ArrayList<Integer>();
 		parameters.add(arg1);
@@ -47,24 +49,53 @@ public class JavaRuntimeMethodTest {
 	}
 
 	@Test
-	public void conformanceTest(){
+	public void JavaConformanceTest(){
 		for(int j = 1; j <= MAX_PARTITIONS; ++j){
-			test(2, j);
+			test(false, 2, j);
 		}
 	}
-	
-	public void test(int parameters, int choicesPerParameter) {
+
+	@Test
+	public void AndroidConformanceTest(){
+		for(int j = 1; j <= MAX_PARTITIONS; ++j){
+			test(true, 2, j);
+		}
+	}	
+
+	public void test(boolean androidTest, int parameters, int choicesPerParameter) {
 		List<List<ChoiceNode>> input = generateInput(parameters, choicesPerParameter);
 		IGenerator<ChoiceNode> generator = new CartesianProductGenerator<ChoiceNode>();
 		try {
 			Method methodUnterTest = this.getClass().getMethod("functionUnderTest", int.class, int.class);
 			generator.initialize(input, EMPTY_CONSTRAINTS, null);
-			JavaRuntimeMethod testedMethod = new JavaRuntimeMethod(methodUnterTest, generator, new ModelClassLoader(new URL[]{}, this.getClass().getClassLoader()));
+
+			AbstractFrameworkMethod testedMethod =
+					createFrameworkMethod(androidTest, methodUnterTest, generator);
+
 			fExecuted = new HashSet<List<Integer>>();
 			testedMethod.invokeExplosively(this, (Object[])null);
 			assertEquals(referenceResult(input), fExecuted);
 		} catch (Throwable e) {
 			fail("Unexpected exception: " + e.getMessage());
+		}
+	}
+
+	private AbstractFrameworkMethod createFrameworkMethod(
+			boolean androidTest, 
+			Method methodUnterTest, 
+			IGenerator<ChoiceNode> generator) throws RunnerException {
+
+		if (androidTest) { 
+			return new JavaRuntimeMethod(
+					methodUnterTest, 
+					generator, 
+					new ModelClassLoader(new URL[]{}, this.getClass().getClassLoader()));
+		} else {
+			return new AndroidRuntimeMethod(
+					methodUnterTest, 
+					generator, 
+					new ModelClassLoader(new URL[]{}, this.getClass().getClassLoader()), 
+					new JUnitTestMethodInvoker());
 		}
 	}
 
