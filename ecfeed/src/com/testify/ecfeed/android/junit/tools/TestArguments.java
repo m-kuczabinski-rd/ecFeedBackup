@@ -11,12 +11,12 @@ package com.testify.ecfeed.android.junit.tools;
 public final class TestArguments {
 	
 	private static TestArguments fInstance = null;
-	String fArguments;
+	String fArguments = null;
 	
 	private TestArguments() {
 	}
 	
-	public static TestArguments getInstance() {
+	private static TestArguments getInstance() {
 		if(fInstance == null) {
 			fInstance = new TestArguments(); 
 		}
@@ -24,15 +24,19 @@ public final class TestArguments {
 		return fInstance;
 	}
 	
-	public void setArguments(String params) {
+	private void setArgs(String params) {
 		fArguments = params;
 	}
 
-	public String getArguments() {
+	private String getArgs() {
 		return fArguments;
 	}
 	
-	public static void prepare(String testArguments) {
-		getInstance().setArguments(testArguments);
+	public static void set(String testArguments) {
+		getInstance().setArgs(testArguments);
 	}
+	
+	public static String get() {
+		return getInstance().getArgs();
+	}	
 }

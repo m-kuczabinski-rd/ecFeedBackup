@@ -16,17 +16,17 @@ class ErrorInvalidTestArguments {
 public class TestHelper {
 	
 	public static void invokeTestMethod(Object target, ILogger logger) {
-		TestParserInvoker invoker = new TestParserInvoker(logger); 
-		invoker.invoke(target, TestArguments.getInstance().getArguments());
+		ArgParserInvoker invoker = new ArgParserInvoker(logger); 
+		invoker.invoke(target, TestArguments.get());
 	}
 	
 	public static void prepareTestArguments(String testArguments) {
-		TestArguments.prepare(testArguments);
+		TestArguments.set(testArguments);
 	}
 	
 	public static Class<?> getClassUnderTest(ILogger loger) {
 		
-		String arguments = TestArguments.getInstance().getArguments();
+		String arguments = TestArguments.get();
 		
 		if (arguments == null || arguments.isEmpty()) {
 			loger.log("There are no arguments required for test.");

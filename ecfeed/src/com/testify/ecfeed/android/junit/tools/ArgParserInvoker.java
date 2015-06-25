@@ -14,14 +14,14 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public class TestParserInvoker {
+public class ArgParserInvoker {
 
 	static final String ARG_START_TAG = "[";
 	static final String ARG_END_TAG = "]";
 
 	private ILogger fLogger;
 
-	TestParserInvoker(ILogger logger) {
+	ArgParserInvoker(ILogger logger) {
 		fLogger = logger;
 	}
 
@@ -73,7 +73,7 @@ public class TestParserInvoker {
 			= createInvokeErrorDescription(internalException.getMessage(), object, method, arguments);
 
 			fLogger.log("ASSERTION FAILED: " + description);
-			junit.framework.Assert.fail(description);
+			throw new junit.framework.AssertionFailedError(description);
 		}
 
 		logAndThrow(createInvokeErrorDescription(exception.getCause().getMessage(), object, method, arguments));
