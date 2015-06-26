@@ -19,19 +19,47 @@ public class ArgParserInvoker {
 	static final String ARG_START_TAG = "[";
 	static final String ARG_END_TAG = "]";
 
+	public enum ErrorCode {
+	    NO_TEST_ARGUMENTS,
+	    INVALID_ARGUMENT,
+	    NO_CLASS_DESCRIPTION,
+	    NO_CLASS_FOR_TYPE,
+	    NO_METHOD_DESCRIPTION,
+	    NO_CLASS_FOR_USER_TYPE,
+	    NO_METHOD_PARAMETERS,
+	    NO_PUBLIC_METHOD,
+	    NO_ARGUMENT_START_TAG,
+	    NO_ARGUMENT_END_TAG,
+	    NO_CLASS_FOR_ENUM_TYPE,
+	}
+	
 	private ILogger fLogger;
+	private boolean fWithErrorCodes;
 
 	ArgParserInvoker(ILogger logger) {
 		fLogger = logger;
 	}
 
 	public void invoke(Object object, String testArguments) {
+		invoke(object, testArguments, false);
+	}
+	
+	public void invokeWithErrorCodes(Object object, String testArguments) {
+		invoke(object, testArguments, true);
+	}	
+	
+	private void invoke(Object object, String testArguments, boolean withErrorCodes) {
+		
+		fWithErrorCodes = withErrorCodes;
 
-		if(testArguments == null) {
-			logAndThrow("Error. Can not invoke test method. No test arguments.");
+		if(testArguments == null || testArguments.isEmpty()) {
+			logAndThrow(
+					createFormattedErrorMessage(
+							ErrorCode.NO_TEST_ARGUMENTS, 
+							"Error. Can not invoke test method. No test arguments."));
 			return;
 		}
-
+		
 		String methodName = null;
 		Method method = null;
 		Object[] arguments = null;
@@ -49,7 +77,7 @@ public class ArgParserInvoker {
 			arguments = createMethodArguments(paramsWithArgs);
 
 		} catch (RuntimeException exc) {
-			logAndThrow("Error while parsing parameters. Cause:" + exc.getMessage());
+			logAndThrow("Error while parsing parameters. Cause: " + exc.getMessage());
 			return;
 		}
 
@@ -121,7 +149,13 @@ public class ArgParserInvoker {
 				break;
 			}
 
-			result.add(arguments.substring(startPos, indexOfSeparator).trim());
+			String argument = arguments.substring(startPos, indexOfSeparator).trim();
+			
+			if (argument == null || argument.isEmpty()) {
+				break;
+			}
+				
+			result.add(argument);
 			startPos = indexOfSeparator + 1;
 		}
 
@@ -132,7 +166,7 @@ public class ArgParserInvoker {
 	private Class<?> createClass(Iterator<String> argsIterator) throws RuntimeException{
 
 		if (!argsIterator.hasNext()) {
-			throw new RuntimeException("No class description in parameter ecFeed");
+			throwRuntimeException(ErrorCode.NO_CLASS_DESCRIPTION, "No class description in parameter ecFeed");
 		}
 
 		String className = argsIterator.next();
@@ -142,7 +176,7 @@ public class ArgParserInvoker {
 		try {
 			theClass = Class.forName(className);
 		} catch (ClassNotFoundException e) {
-			throw new RuntimeException("No class for type:" + className);
+			throwRuntimeException(ErrorCode.NO_CLASS_FOR_TYPE, "No class for type:" + className);
 		}
 
 		return theClass;
@@ -150,10 +184,16 @@ public class ArgParserInvoker {
 
 	private String createMethodName(Iterator<String> argsIterator) throws RuntimeException {
 		if (!argsIterator.hasNext()) {
-			throw new RuntimeException("No method description in parameter ecFeed");
+			throwRuntimeException(ErrorCode.NO_METHOD_DESCRIPTION, "No method description.");
+		}
+		
+		String methodName = argsIterator.next(); 
+		
+		if (methodName == null || methodName.isEmpty()) {
+			throwRuntimeException(ErrorCode.NO_METHOD_DESCRIPTION, "No method description.");
 		}
 
-		return argsIterator.next();
+		return methodName;
 	}
 
 	private List<ParamTypeWithArg> createParamsWithArgs(Iterator<String> argsIterator) throws RuntimeException {
@@ -212,7 +252,8 @@ public class ArgParserInvoker {
 			try {
 				return Class.forName(classNameToDollarFormat(parameter));
 			} catch (ClassNotFoundException e) {
-				throw new RuntimeException("No class for user type:" + parameter);
+				throwRuntimeException(ErrorCode.NO_CLASS_FOR_USER_TYPE, "No class for user type:" + parameter);
+				return Object.class;
 			}
 		}
 	}
@@ -222,6 +263,10 @@ public class ArgParserInvoker {
 			Class<?> theClass, 
 			String methodName) throws RuntimeException {
 
+		if (paramsWithArgs.isEmpty()) {
+			throwRuntimeException(ErrorCode.NO_METHOD_PARAMETERS, "Method parameters are missing from test arguments.");
+		}
+			
 		Class<?>[] parameters = createMethodParameters(paramsWithArgs);
 
 		Method method = null;
@@ -229,8 +274,10 @@ public class ArgParserInvoker {
 		try {
 			method = theClass.getMethod(methodName, parameters);
 		} catch (NoSuchMethodException exc1) {
-			throw new RuntimeException("In class: " + theClass.getName() +
-					" there is no method: " + methodName +  
+			throwRuntimeException(
+					ErrorCode.NO_PUBLIC_METHOD,
+					"In class: " + theClass.getName() +
+					" there is no public method: " + methodName +  
 					"(" + createDescrOfParameters(parameters) + ")");
 		}
 
@@ -267,7 +314,7 @@ public class ArgParserInvoker {
 		int endPos = paramWithArgument.indexOf(ARG_START_TAG);
 
 		if (endPos == -1) {
-			throw new RuntimeException("Argument start tag:" + ARG_START_TAG + " not found.");
+			throwRuntimeException(ErrorCode.NO_ARGUMENT_START_TAG, "Argument start tag:" + ARG_START_TAG + " not found.");
 		}
 
 		return paramWithArgument.substring(0, endPos);
@@ -278,13 +325,13 @@ public class ArgParserInvoker {
 		int startPos = paramWithArgument.indexOf(ARG_START_TAG);
 
 		if (startPos == -1) {
-			throw new RuntimeException("Argument start tag:" + ARG_START_TAG + " not found.");
+			throwRuntimeException(ErrorCode.NO_ARGUMENT_START_TAG, "Argument start tag:" + ARG_START_TAG + " not found.");
 		}
 
 		int endPos = paramWithArgument.indexOf(ARG_END_TAG);
 
 		if (endPos == -1) {
-			throw new RuntimeException("Argument end tag:" + ARG_END_TAG + " not found.");
+			throwRuntimeException(ErrorCode.NO_ARGUMENT_END_TAG, "Argument end tag:" + ARG_END_TAG + " not found.");
 		}
 
 		return paramWithArgument.substring(startPos + 1, endPos);
@@ -429,11 +476,11 @@ public class ArgParserInvoker {
 
 		private Object convertEnum() throws RuntimeException {
 
-			Class<?> theClass;
+			Class<?> theClass = null;
 			try {
 				theClass = Class.forName(classNameToDollarFormat(fParameterType));
 			} catch (ClassNotFoundException e) {
-				throw new RuntimeException("Class not found for enum type:" + fParameterType);
+				throwRuntimeException(ErrorCode.NO_CLASS_FOR_ENUM_TYPE, "Class not found for enum type:" + fParameterType);
 			}
 
 			for (Object enumConstant : theClass.getEnumConstants()) {
@@ -447,8 +494,20 @@ public class ArgParserInvoker {
 		}
 
 		private void throwConversionException() throws RuntimeException {
-			throw new RuntimeException("Invalid argument:" + fArgumentStr + " of type:" + fParameterType);
+			throwRuntimeException(ErrorCode.INVALID_ARGUMENT, "Invalid argument:" + fArgumentStr + " of type:" + fParameterType);
 		}
+	}
+	
+	private void throwRuntimeException(ErrorCode errorCode, String message) {
+		throw new RuntimeException(createFormattedErrorMessage(errorCode, message));
+	}
+	
+	private String createFormattedErrorMessage(ErrorCode errorCode, String message) {
+		if (fWithErrorCodes) {
+			message = "ERROR_CODE: " + errorCode.toString() + ". " + message;
+		}
+		
+		return message;
 	}
 }
 
