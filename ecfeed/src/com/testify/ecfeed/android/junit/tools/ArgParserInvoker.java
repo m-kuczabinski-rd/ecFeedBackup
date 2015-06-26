@@ -20,19 +20,19 @@ public class ArgParserInvoker {
 	static final String ARG_END_TAG = "]";
 
 	public enum ErrorCode {
-	    NO_TEST_ARGUMENTS,
-	    INVALID_ARGUMENT,
-	    NO_CLASS_DESCRIPTION,
-	    NO_CLASS_FOR_TYPE,
-	    NO_METHOD_DESCRIPTION,
-	    NO_CLASS_FOR_USER_TYPE,
-	    NO_METHOD_PARAMETERS,
-	    NO_PUBLIC_METHOD,
-	    NO_ARGUMENT_START_TAG,
-	    NO_ARGUMENT_END_TAG,
-	    NO_CLASS_FOR_ENUM_TYPE,
+		NO_TEST_ARGUMENTS,
+		INVALID_ARGUMENT,
+		NO_CLASS_DESCRIPTION,
+		NO_CLASS_FOR_TYPE,
+		NO_METHOD_DESCRIPTION,
+		NO_CLASS_FOR_USER_TYPE,
+		NO_METHOD_PARAMETERS,
+		NO_PUBLIC_METHOD,
+		NO_ARGUMENT_START_TAG,
+		NO_ARGUMENT_END_TAG,
+		NO_CLASS_FOR_ENUM_TYPE,
 	}
-	
+
 	private ILogger fLogger;
 	private boolean fWithErrorCodes;
 
@@ -43,13 +43,13 @@ public class ArgParserInvoker {
 	public void invoke(Object object, String testArguments) {
 		invoke(object, testArguments, false);
 	}
-	
+
 	public void invokeWithErrorCodes(Object object, String testArguments) {
 		invoke(object, testArguments, true);
 	}	
-	
+
 	private void invoke(Object object, String testArguments, boolean withErrorCodes) {
-		
+
 		fWithErrorCodes = withErrorCodes;
 
 		if(testArguments == null || testArguments.isEmpty()) {
@@ -59,7 +59,7 @@ public class ArgParserInvoker {
 							"Error. Can not invoke test method. No test arguments."));
 			return;
 		}
-		
+
 		String methodName = null;
 		Method method = null;
 		Object[] arguments = null;
@@ -83,7 +83,7 @@ public class ArgParserInvoker {
 
 		invokeMethod(object, method, arguments);
 	}
-	
+
 	private void invokeMethod(Object object, Method method, Object[] arguments) {
 		try {
 			method.invoke(object, arguments);
@@ -106,7 +106,7 @@ public class ArgParserInvoker {
 
 		logAndThrow(createInvokeErrorDescription(exception.getCause().getMessage(), object, method, arguments));
 	}
-	
+
 	private void logAndThrow(String message) {
 		fLogger.log(message);
 		throw new RuntimeException(message);
@@ -150,11 +150,11 @@ public class ArgParserInvoker {
 			}
 
 			String argument = arguments.substring(startPos, indexOfSeparator).trim();
-			
+
 			if (argument == null || argument.isEmpty()) {
 				break;
 			}
-				
+
 			result.add(argument);
 			startPos = indexOfSeparator + 1;
 		}
@@ -186,9 +186,9 @@ public class ArgParserInvoker {
 		if (!argsIterator.hasNext()) {
 			throwRuntimeException(ErrorCode.NO_METHOD_DESCRIPTION, "No method description.");
 		}
-		
+
 		String methodName = argsIterator.next(); 
-		
+
 		if (methodName == null || methodName.isEmpty()) {
 			throwRuntimeException(ErrorCode.NO_METHOD_DESCRIPTION, "No method description.");
 		}
@@ -266,7 +266,7 @@ public class ArgParserInvoker {
 		if (paramsWithArgs.isEmpty()) {
 			throwRuntimeException(ErrorCode.NO_METHOD_PARAMETERS, "Method parameters are missing from test arguments.");
 		}
-			
+
 		Class<?>[] parameters = createMethodParameters(paramsWithArgs);
 
 		Method method = null;
@@ -497,16 +497,16 @@ public class ArgParserInvoker {
 			throwRuntimeException(ErrorCode.INVALID_ARGUMENT, "Invalid argument:" + fArgumentStr + " of type:" + fParameterType);
 		}
 	}
-	
+
 	private void throwRuntimeException(ErrorCode errorCode, String message) {
 		throw new RuntimeException(createFormattedErrorMessage(errorCode, message));
 	}
-	
+
 	private String createFormattedErrorMessage(ErrorCode errorCode, String message) {
 		if (fWithErrorCodes) {
 			message = "ERROR_CODE: " + errorCode.toString() + ". " + message;
 		}
-		
+
 		return message;
 	}
 }
