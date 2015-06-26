@@ -8,13 +8,12 @@
 
 package com.testify.ecfeed.android.junit.tools;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public class ArgParserInvoker {
+public class ArgParser {
 
 	static final String ARG_START_TAG = "[";
 	static final String ARG_END_TAG = "]";
@@ -36,19 +35,19 @@ public class ArgParserInvoker {
 	private ILogger fLogger;
 	private boolean fWithErrorCodes;
 
-	ArgParserInvoker(ILogger logger) {
+	ArgParser(ILogger logger) {
 		fLogger = logger;
 	}
 
-	public void invoke(Object object, String testArguments) {
-		invoke(object, testArguments, false);
+	public Invocable createMethodToInvoke(Object object, String testArguments) {
+		return createMethodToInvoke(object, testArguments, false);
 	}
 
-	public void invokeWithErrorCodes(Object object, String testArguments) {
-		invoke(object, testArguments, true);
+	public Invocable createMethodToInvokeWithErrorCodes(Object object, String testArguments) {
+		return createMethodToInvoke(object, testArguments, true);
 	}	
 
-	private void invoke(Object object, String testArguments, boolean withErrorCodes) {
+	private Invocable createMethodToInvoke(Object object, String testArguments, boolean withErrorCodes) {
 
 		fWithErrorCodes = withErrorCodes;
 
@@ -57,7 +56,7 @@ public class ArgParserInvoker {
 					createFormattedErrorMessage(
 							ErrorCode.NO_TEST_ARGUMENTS, 
 							"Error. Can not invoke test method. No test arguments."));
-			return;
+			return null;
 		}
 
 		String methodName = null;
@@ -78,61 +77,15 @@ public class ArgParserInvoker {
 
 		} catch (RuntimeException exc) {
 			logAndThrow("Error while parsing parameters. Cause: " + exc.getMessage());
-			return;
+			return null;
 		}
 
-		invokeMethod(object, method, arguments);
-	}
-
-	private void invokeMethod(Object object, Method method, Object[] arguments) {
-		try {
-			method.invoke(object, arguments);
-		} catch (RuntimeException | IllegalAccessException | InvocationTargetException exception) {
-			handleException(exception, object, method, arguments);
-		}
-	}
-
-	private void handleException(Exception exception, Object object, Method method, Object[] arguments) {
-		Throwable internalException = exception.getCause();
-
-		if (internalException instanceof junit.framework.AssertionFailedError)
-		{
-			String description 
-			= createInvokeErrorDescription(internalException.getMessage(), object, method, arguments);
-
-			fLogger.log("ASSERTION FAILED: " + description);
-			throw new junit.framework.AssertionFailedError(description);
-		}
-
-		logAndThrow(createInvokeErrorDescription(exception.getCause().getMessage(), object, method, arguments));
+		return new Invocable(object, method, arguments);
 	}
 
 	private void logAndThrow(String message) {
 		fLogger.log(message);
 		throw new RuntimeException(message);
-	}
-
-	private String createInvokeErrorDescription(
-			String internalExceptionMessage, 
-			Object object, 
-			Method method, 
-			Object[] arguments) {
-		return internalExceptionMessage
-				+ "\n"
-				+ "\t class: " + object.getClass().getName() + "\n"
-				+ "\t method: " + method.getName() + "\n"
-				+ "\t arguments:"
-				+ createArgumentsDescription(arguments); 
-	}
-
-	private String createArgumentsDescription(Object[] arguments) {
-		String result = "";
-
-		for (Object argument : arguments) {
-			result = result + "\n\t  <" + argument.toString() + ">";
-		}
-
-		return result;
 	}
 
 	private List<String> createArgList(String arguments) {

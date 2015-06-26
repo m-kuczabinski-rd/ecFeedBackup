@@ -8,10 +8,12 @@
 
 package com.testify.ecfeed.android.junit.tools;
 
-import com.testify.ecfeed.android.junit.tools.ArgParserInvoker;
+import com.testify.ecfeed.android.junit.tools.ArgParser;
 
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.fail;
 
 import org.junit.Before;
@@ -19,27 +21,29 @@ import org.junit.Test;
 
 class LoggerStub implements ILogger {
 
-	ArgParserInvokerTest fArgParserInvokerTest;
+	ArgParserTest fArgParserInvokerTest;
 
-	LoggerStub(ArgParserInvokerTest argParserInvokerTest) {
+	LoggerStub(ArgParserTest argParserInvokerTest) {
 		fArgParserInvokerTest = argParserInvokerTest;
 	}
 
 	@Override
 	public void log(String message) {
 		fArgParserInvokerTest.setErrorMessage(message);
-		System.out.println(message);
+		//		System.out.println(message);
 	}
 }
 
-public class ArgParserInvokerTest{
+public class ArgParserTest{
 
-	final String CLASS_NAME = "com.testify.ecfeed.android.junit.tools.ArgParserInvokerTest";
+	final String CLASS_NAME = "com.testify.ecfeed.android.junit.tools.ArgParserTest";
 	final String METHOD_NAME_INT = "stubMethodInt";
 
-	private ArgParserInvoker fArgParserInvoker = null;
+	private ArgParser fArgParserInvoker = null;
+	private MethodInvoker fMethodInvoker = null;
 	private boolean fWasInvoked = false;
 	private String fErrorMessage = null;
+
 
 	public void stubMethodInt(int arg) {
 		fWasInvoked = true;
@@ -51,87 +55,98 @@ public class ArgParserInvokerTest{
 
 	@Before
 	public void setUp() {
+
+		LoggerStub loggerStub = new LoggerStub(this);  
+		fArgParserInvoker = new ArgParser(loggerStub);
+		fMethodInvoker = new MethodInvoker(loggerStub);
+
 		fWasInvoked = false;
-		fArgParserInvoker = new ArgParserInvoker(new LoggerStub(this));
 	}
 
 	@Test
 	public void shouldReportErrorWhenNoTestArguments(){
-		invokeWithError("", ArgParserInvoker.ErrorCode.NO_TEST_ARGUMENTS);
+		invokeWithError("", ArgParser.ErrorCode.NO_TEST_ARGUMENTS);
 	}
 
 	@Test
 	public void shouldReportErrorWhenNoClass(){
-		invokeWithError("DummyClass", ArgParserInvoker.ErrorCode.NO_CLASS_FOR_TYPE);
+		invokeWithError("DummyClass", ArgParser.ErrorCode.NO_CLASS_FOR_TYPE);
 	}
 
 	@Test
 	public void shouldReportErrorWhenNoMethodDescription(){
-		invokeWithError(CLASS_NAME, ArgParserInvoker.ErrorCode.NO_METHOD_DESCRIPTION);
+		invokeWithError(CLASS_NAME, ArgParser.ErrorCode.NO_METHOD_DESCRIPTION);
 	}
 
 	@Test
 	public void shouldReportErrorWhenNoMethodDescription2(){
-		invokeWithError(CLASS_NAME + ", ", ArgParserInvoker.ErrorCode.NO_METHOD_DESCRIPTION);
+		invokeWithError(CLASS_NAME + ", ", ArgParser.ErrorCode.NO_METHOD_DESCRIPTION);
 	}	
 
 	@Test
 	public void shouldReportErrorWhenNoMethod(){
 		invokeWithError(
 				joinParams(CLASS_NAME, "dummyMethod", "int[1]"), 
-				ArgParserInvoker.ErrorCode.NO_PUBLIC_METHOD);
+				ArgParser.ErrorCode.NO_PUBLIC_METHOD);
 	}	
 
 	@Test
 	public void shouldReportErrorWhenNoParam(){
 		invokeWithError(
 				joinParams(CLASS_NAME, METHOD_NAME_INT), 
-				ArgParserInvoker.ErrorCode.NO_METHOD_PARAMETERS);
+				ArgParser.ErrorCode.NO_METHOD_PARAMETERS);
 	}
 
 	@Test
 	public void shouldReportErrorWhenNoOpeningBracket(){
 		invokeWithError(
 				joinParams(CLASS_NAME, METHOD_NAME_INT, "int"), 
-				ArgParserInvoker.ErrorCode.NO_ARGUMENT_START_TAG);
+				ArgParser.ErrorCode.NO_ARGUMENT_START_TAG);
 	}	
 
 	@Test
 	public void shouldReportErrorWhenNoClosingBracket(){
 		invokeWithError(
 				joinParams(CLASS_NAME, METHOD_NAME_INT, "int[0"), 
-				ArgParserInvoker.ErrorCode.NO_ARGUMENT_END_TAG);
+				ArgParser.ErrorCode.NO_ARGUMENT_END_TAG);
 	}
 
 	@Test
 	public void shouldReportErrorWhenInvalidType(){
 		invokeWithError(
 				joinParams(CLASS_NAME, METHOD_NAME_INT, "abc[x]"), 
-				ArgParserInvoker.ErrorCode.NO_CLASS_FOR_USER_TYPE);
+				ArgParser.ErrorCode.NO_CLASS_FOR_USER_TYPE);
 	}	
 
 	@Test
 	public void shouldReportErrorWhenInvalidArgument(){
 		invokeWithError(
 				joinParams(CLASS_NAME, METHOD_NAME_INT, "int[abc]"), 
-				ArgParserInvoker.ErrorCode.INVALID_ARGUMENT);
+				ArgParser.ErrorCode.INVALID_ARGUMENT);
 	}
 
 	@Test
 	public void shouldInvokeForIntParam(){
-		invokeWithSuccess("stubMethodInt, int[0]");
+		invokeWithSuccess(joinParams(CLASS_NAME, METHOD_NAME_INT, "int[0]"));
 	}
 
-
-
 	private void invokeWithSuccess(String params) {
-		fArgParserInvoker.invoke(this, "com.testify.ecfeed.android.junit.tools.ArgParserInvokerTest, " + params);
+		Invocable invokee 
+		= fArgParserInvoker.createMethodToInvoke(
+				this, 
+				params);
+		assertNotNull(invokee);
+
+		fMethodInvoker.invokeMethod(invokee);
 		assertTrue(fWasInvoked);
 	}
 
-	private void invokeWithError(String params, ArgParserInvoker.ErrorCode errorCode) {
+	private void invokeWithError(String params, ArgParser.ErrorCode errorCode) {
+
+		Invocable invokee = null;
+
 		try {
-			fArgParserInvoker.invokeWithErrorCodes(this, params);
+			invokee = fArgParserInvoker.createMethodToInvokeWithErrorCodes(this, params);
 
 		} catch (RuntimeException exception) {
 
@@ -140,6 +155,9 @@ public class ArgParserInvokerTest{
 			if (!errorCodeInErrorMessage(errorCodeStr)) {
 				fail("Required message: " + errorCodeStr + " was not logged");
 			}
+
+			assertNull(invokee);
+
 			assertFalse(fWasInvoked);
 			return;
 		}
