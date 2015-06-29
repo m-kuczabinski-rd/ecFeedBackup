@@ -39,7 +39,7 @@ public class ArgParserTest{
 	final String CLASS_NAME = "com.testify.ecfeed.android.junit.tools.ArgParserTest";
 	final String METHOD_NAME_INT = "stubMethodInt";
 
-	private ArgParser fArgParserInvoker = null;
+	private ArgParser fArgParser = null;
 	private MethodInvoker fMethodInvoker = null;
 	private boolean fWasInvoked = false;
 	private String fErrorMessage = null;
@@ -57,15 +57,17 @@ public class ArgParserTest{
 	public void setUp() {
 
 		LoggerStub loggerStub = new LoggerStub(this);  
-		fArgParserInvoker = new ArgParser(loggerStub);
+		fArgParser = new ArgParser(loggerStub);
 		fMethodInvoker = new MethodInvoker(loggerStub);
 
 		fWasInvoked = false;
 	}
 
 	@Test
-	public void shouldReportErrorWhenNoTestArguments(){
-		invokeWithError("", ArgParser.ErrorCode.NO_TEST_ARGUMENTS);
+	public void shouldReportNoErrorWhenNoTestArguments(){
+		Invocable invokee = fArgParser.createMethodToInvoke(this, "");
+		assertNull(invokee);
+
 	}
 
 	@Test
@@ -132,7 +134,7 @@ public class ArgParserTest{
 
 	private void invokeWithSuccess(String params) {
 		Invocable invokee 
-		= fArgParserInvoker.createMethodToInvoke(
+		= fArgParser.createMethodToInvoke(
 				this, 
 				params);
 		assertNotNull(invokee);
@@ -146,7 +148,7 @@ public class ArgParserTest{
 		Invocable invokee = null;
 
 		try {
-			invokee = fArgParserInvoker.createMethodToInvokeWithErrorCodes(this, params);
+			invokee = fArgParser.createMethodToInvokeWithErrorCodes(this, params);
 
 		} catch (RuntimeException exception) {
 

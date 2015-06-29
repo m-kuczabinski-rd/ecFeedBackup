@@ -52,10 +52,10 @@ public class ArgParser {
 		fWithErrorCodes = withErrorCodes;
 
 		if(testArguments == null || testArguments.isEmpty()) {
-			logAndThrow(
+			fLogger.log(
 					createFormattedErrorMessage(
 							ErrorCode.NO_TEST_ARGUMENTS, 
-							"Error. Can not invoke test method. No test arguments."));
+							"Warning. No arguments for the test. "));
 			return null;
 		}
 

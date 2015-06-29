@@ -70,10 +70,17 @@ public class AndroidTestMethodInvoker implements ITestMethodInvoker {
 				"shell",
 				"am",
 				"instrument",
-				"-w",        			
+
+				"-w",
+
+				"-e",
+				"class",
+				className + "#" + "test", // test is a generated method
+
 				"-e",
 				"ecFeed",
 				className + ", " + functionName + ", " + arguments,
+
 				fTestRunner);
 
 		Process process = null;
