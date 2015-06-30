@@ -63,7 +63,7 @@ public class AndroidTestMethodInvoker implements ITestMethodInvoker {
 		System.out.println(Messages.ANDROID_INSTRUMENTATION_FINISHED());    	
 	}
 
-	private Process startProcess(String className, String functionName, String arguments) throws RunnerException {
+	private Process startProcess(String className, String methodName, String arguments) throws RunnerException {
 		ProcessBuilder pb 
 		= new ProcessBuilder(
 				"adb", 
@@ -75,11 +75,11 @@ public class AndroidTestMethodInvoker implements ITestMethodInvoker {
 
 				"-e",
 				"class",
-				className + "#" + "test", // test is a generated method
+				className + "#" + "ecFeedTest",
 
 				"-e",
 				"ecFeed",
-				className + ", " + functionName + ", " + arguments,
+				className + ", " + methodName + ", " + arguments,
 
 				fTestRunner);
 
