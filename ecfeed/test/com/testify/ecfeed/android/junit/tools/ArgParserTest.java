@@ -51,8 +51,6 @@ public class ArgParserTest{
 	final String METHOD_NAME_LONG_SHORT_BYTE = "stubMethodLongShortByte";
 	final String METHOD_NAME_DOUBLE_FLOAT_CHAR_STRING = "stubMethodDoubleFloatCharString";
 
-
-
 	enum UserEnum {
 		ONE,
 		TWO
