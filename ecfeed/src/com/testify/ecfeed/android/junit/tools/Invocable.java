@@ -8,21 +8,21 @@ public class Invocable {
 	private Method fMethod;
 	private Object[] fArguments;
 
-	Invocable(Object object, Method method, Object[] arguments) {
+	public Invocable(Object object, Method method, Object[] arguments) {
 		fObject = object;
 		fMethod = method;
 		fArguments = arguments;
 	}
 
-	Object getObject() {
+	public Object getObject() {
 		return fObject;
 	}
 
-	Method getMethod() {
+	public Method getMethod() {
 		return fMethod;
 	}
 
-	Object[] getArguments() {
+	public Object[] getArguments() {
 		return fArguments;
 	}
 }
