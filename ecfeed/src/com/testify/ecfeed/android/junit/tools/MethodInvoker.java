@@ -57,7 +57,7 @@ public class MethodInvoker implements IMethodInvoker {
 				+ createArgumentsDescription(arguments); 
 	}
 
-	private String createArgumentsDescription(Object[] arguments) { // TODO - REMOVE COPY
+	private String createArgumentsDescription(Object[] arguments) {
 		String result = "";
 
 		for (Object argument : arguments) {
