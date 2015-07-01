@@ -10,21 +10,26 @@ import com.testify.ecfeed.runner.RunnerException;
 public class JUnitTestMethodInvoker implements ITestMethodInvoker {
 
 	@Override
+	public boolean isRemote() {
+		return false;
+	}
+
+	@Override
 	public void invoke(
-			Method fTestMethod, 
-			Object instance, 
+			Method testMethod, 
+			String className, 
+			Object instance,
 			Object[] arguments, 
-			String argumentsDescription
-			) throws RunnerException {
+			String argumentsDescription) throws RunnerException {
 		try {
-			fTestMethod.invoke(instance, arguments);
+			testMethod.invoke(instance, arguments);
 		} catch (InvocationTargetException e) {
 			throw new RunnerException(
-					fTestMethod.getName() + " " + argumentsDescription + ": " + e.getTargetException().toString());
+					testMethod.getName() + " " + argumentsDescription + ": " + e.getTargetException().toString());
 		} catch (IllegalAccessException | IllegalArgumentException e) {
 			e.printStackTrace();
 			throw new RunnerException(
-					Messages.CANNOT_INVOKE_TEST_METHOD(fTestMethod.getName(), argumentsDescription, e.getMessage()));
+					Messages.CANNOT_INVOKE_TEST_METHOD(testMethod.getName(), argumentsDescription, e.getMessage()));
 		}
 	}
 }

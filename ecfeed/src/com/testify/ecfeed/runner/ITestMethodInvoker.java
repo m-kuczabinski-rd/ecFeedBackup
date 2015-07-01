@@ -11,8 +11,13 @@ package com.testify.ecfeed.runner;
 import java.lang.reflect.Method;
 
 public interface ITestMethodInvoker {
-	void invoke(Method fTestMethod, 
-			Object instance, 
+	
+	boolean isRemote();
+	
+	void invoke(
+			Method testMethod,
+			String className,
+			Object instance,
 			Object[] arguments, 
 			String argumentsDescription
 			) throws RunnerException;

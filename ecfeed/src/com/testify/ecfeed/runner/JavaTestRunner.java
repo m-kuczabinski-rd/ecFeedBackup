@@ -44,19 +44,28 @@ public class JavaTestRunner {
 	}
 
 	public void runTestCase(List<ChoiceNode> testData) throws RunnerException{
+
 		validateTestData(testData);
 
 		Object instance = null;
-		try {
-			instance = fTestClass.newInstance();
-		} catch (InstantiationException | IllegalAccessException e) {
-			throw new RunnerException(Messages.CANNOT_INVOKE_TEST_METHOD(fTarget.toString(), testData.toString(), e.getMessage()));
+		
+		if (!fTestMethodInvoker.isRemote())	{
+			try {
+				instance = fTestClass.newInstance();
+			} catch (InstantiationException | IllegalAccessException e) {
+				throw new RunnerException(
+						Messages.CANNOT_INVOKE_TEST_METHOD(
+								fTarget.toString(), 
+								testData.toString(), 
+								e.getMessage()));
+			}
 		}
 
+		String className = fTestClass.getName();
 		Object[] arguments = getArguments(testData);
-		fTestMethodInvoker.invoke(fTestMethod, instance, arguments, testData.toString());
+		fTestMethodInvoker.invoke(fTestMethod, className, instance, arguments, testData.toString());
 	}
-
+	
 	protected Method getTestMethod(Class<?> testClass, MethodNode methodModel) throws RunnerException {
 		for(Method method : testClass.getMethods()){
 			if(isModel(method, methodModel)){

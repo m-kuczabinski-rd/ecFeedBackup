@@ -27,14 +27,21 @@ public class AndroidTestMethodInvoker implements ITestMethodInvoker {
 	}
 
 	@Override
+	public boolean isRemote() {
+		return true;
+	}
+
+	@Override
 	public void invoke(
 			Method testMethod, 
-			Object instance, 
-			Object[] arguments,
-			String argumentsDescription) throws RunnerException {
+			String className, 
+			Object instance,
+			Object[] arguments, 
+			String argumentsDescription)
+					throws RunnerException {
 		try {
 			invokeRemotely(
-					instance.getClass().getName(),
+					className,
 					testMethod.getName(),
 					createParameters(testMethod, arguments));
 		} catch (RunnerException e) {
