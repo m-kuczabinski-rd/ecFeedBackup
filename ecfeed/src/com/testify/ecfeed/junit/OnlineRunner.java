@@ -76,6 +76,7 @@ public class OnlineRunner extends AbstractJUnitRunner {
 				addFrameworkMethod(methodNode, frameworkMethod.getMethod(), generator, frameworkMethods);
 			}
 		}
+
 		return frameworkMethods;
 	}
 
@@ -89,7 +90,9 @@ public class OnlineRunner extends AbstractJUnitRunner {
 
 		if (classNode.getRunOnAndroid()) {
 			ITestMethodInvoker invoker = new AndroidTestMethodInvoker(classNode.getAndroidRunner());
-			frameworkMethods.add(new AndroidRuntimeMethod(method, generator, getLoader(), invoker));
+
+			String className = getTestClass().getName();
+			frameworkMethods.add(new AndroidRuntimeMethod(className, method, generator, getLoader(), invoker));
 		} else {
 			frameworkMethods.add(new JavaRuntimeMethod(method, generator, getLoader()));
 		}		

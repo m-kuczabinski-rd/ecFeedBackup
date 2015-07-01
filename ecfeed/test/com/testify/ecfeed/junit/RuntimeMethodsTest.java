@@ -69,8 +69,9 @@ public class RuntimeMethodsTest {
 			Method methodUnterTest = this.getClass().getMethod("functionUnderTest", int.class, int.class);
 			generator.initialize(input, EMPTY_CONSTRAINTS, null);
 
+			String className = this.getClass().getName();
 			AbstractFrameworkMethod testedMethod =
-					createFrameworkMethod(isAndroidTest, methodUnterTest, generator);
+					createFrameworkMethod(isAndroidTest, className, methodUnterTest, generator);
 
 			fExecuted = new HashSet<List<Integer>>();
 			testedMethod.invokeExplosively(this, (Object[])null);
@@ -82,6 +83,7 @@ public class RuntimeMethodsTest {
 
 	private AbstractFrameworkMethod createFrameworkMethod(
 			boolean isAndroidTest, 
+			String className,
 			Method methodUnterTest, 
 			IGenerator<ChoiceNode> generator) throws RunnerException {
 
@@ -92,6 +94,7 @@ public class RuntimeMethodsTest {
 					new ModelClassLoader(new URL[]{}, this.getClass().getClassLoader()));
 		} else {
 			return new AndroidRuntimeMethod(
+					className,
 					methodUnterTest, 
 					generator, 
 					new ModelClassLoader(new URL[]{}, this.getClass().getClassLoader()), 

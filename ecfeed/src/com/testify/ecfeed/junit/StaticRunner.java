@@ -52,9 +52,11 @@ public class StaticRunner extends AbstractJUnitRunner {
 				if(methodNode == null){
 					continue;
 				}
+
 				addFrameworkMethod(methodNode, frameworkMethod, frameworkMethods);
 			}
 		}
+
 		return frameworkMethods;
 	}
 
@@ -68,7 +70,9 @@ public class StaticRunner extends AbstractJUnitRunner {
 
 		if (classNode.getRunOnAndroid()) {
 			ITestMethodInvoker invoker = new AndroidTestMethodInvoker(classNode.getAndroidRunner());
-			frameworkMethods.add(new AndroidParameterizedMethod(method, testCases, getLoader(), invoker));
+
+			String className = getTestClass().getName();
+			frameworkMethods.add(new AndroidParameterizedMethod(className, method, testCases, getLoader(), invoker));
 		}
 		else {
 			frameworkMethods.add(new JavaParameterizedMethod(method, testCases, getLoader()));

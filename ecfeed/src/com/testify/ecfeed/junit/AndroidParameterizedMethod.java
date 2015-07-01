@@ -20,13 +20,16 @@ public class AndroidParameterizedMethod extends AbstractFrameworkMethod {
 
 	private Collection<TestCaseNode> fTestCases;
 	private ITestMethodInvoker fMethodInvoker;
+	private String fClassName;
 
 	public AndroidParameterizedMethod(
+			String className,
 			Method method,
 			Collection<TestCaseNode> testCases, 
 			ModelClassLoader loader, 
 			ITestMethodInvoker methodInvoker) {
 		super(method, loader);
+		fClassName = className;
 		fTestCases = testCases;
 		fMethodInvoker = methodInvoker;
 	}
@@ -37,7 +40,7 @@ public class AndroidParameterizedMethod extends AbstractFrameworkMethod {
 			try{
 				fMethodInvoker.invoke(
 						getMethod(), 
-						"", // TODO
+						fClassName,
 						target, 
 						choiceListToParamArray(testCase.getTestData()), 
 						testCase.getTestData().toString());

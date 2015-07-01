@@ -71,7 +71,8 @@ public class AndroidTestMethodInvoker implements ITestMethodInvoker {
 	}
 
 	private Process startProcess(String className, String methodName, String arguments) throws RunnerException {
-		ProcessBuilder pb 
+
+		ProcessBuilder pb
 		= new ProcessBuilder(
 				"adb", 
 				"shell",

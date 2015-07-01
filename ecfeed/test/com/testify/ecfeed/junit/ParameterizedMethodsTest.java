@@ -95,7 +95,7 @@ public class ParameterizedMethodsTest {
 		try{
 			Method methodUnterTest = this.getClass().getMethod(ENUM_FUNCTION_UNDER_TEST_NAME, Enum.class);
 
-			FrameworkMethod m = createParametrizedMethod(false, methodUnterTest, methodNode.getTestCases(), loader);
+			FrameworkMethod m = createParametrizedMethod(false, this.getClass().getName(), methodUnterTest, methodNode.getTestCases(), loader);
 			m.invokeExplosively(this, new Object[]{});
 			for(Enum v : Enum.values()){
 				assertTrue(fExecutedEnum.contains(v));
@@ -121,7 +121,7 @@ public class ParameterizedMethodsTest {
 			Collection<TestCaseNode> testCases = generateTestCases(methodNode, testSuiteSize);
 			Set<List<Integer>> referenceResult = generateReferenceResult(testCases);
 
-			FrameworkMethod m = createParametrizedMethod(isAndroidTest, methodUnterTest, testCases, loader);
+			FrameworkMethod m = createParametrizedMethod(isAndroidTest, this.getClass().getName(), methodUnterTest, testCases, loader);
 			m.invokeExplosively(this, new Object[]{});
 
 			assertEquals(referenceResult, fExecuted);
@@ -135,6 +135,7 @@ public class ParameterizedMethodsTest {
 
 	private FrameworkMethod createParametrizedMethod(
 			boolean isAndroidTest,
+			String className,
 			Method methodUnterTest, 
 			Collection<TestCaseNode> testCases, 
 			ModelClassLoader loader) {
@@ -142,7 +143,7 @@ public class ParameterizedMethodsTest {
 		if (isAndroidTest) {
 			return new JavaParameterizedMethod(methodUnterTest, testCases, loader);
 		} else {
-			return new AndroidParameterizedMethod(methodUnterTest, testCases, loader, new JUnitTestMethodInvoker());
+			return new AndroidParameterizedMethod(className, methodUnterTest, testCases, loader, new JUnitTestMethodInvoker());
 		}
 	}
 

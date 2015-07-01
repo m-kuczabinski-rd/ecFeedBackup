@@ -27,14 +27,17 @@ public class AndroidRuntimeMethod extends AbstractFrameworkMethod{
 
 	private IGenerator<ChoiceNode> fGenerator;
 	private ITestMethodInvoker fMethodInvoker;
+	private String fClassName;
 
 	public AndroidRuntimeMethod(
+			String className,
 			Method method,
 			IGenerator<ChoiceNode> generator, 
 			ModelClassLoader loader,
 			ITestMethodInvoker methodInvoker
 			) throws RunnerException{
 		super(method, loader);
+		fClassName = className;
 		fGenerator = generator;
 		fMethodInvoker = methodInvoker;
 	}
@@ -48,7 +51,7 @@ public class AndroidRuntimeMethod extends AbstractFrameworkMethod{
 			while((next = fGenerator.next()) !=null){
 				fMethodInvoker.invoke(
 						getMethod(), 
-						"", // TODO
+						fClassName,
 						target, 
 						choiceListToParamArray(next), 
 						next.toString());		
