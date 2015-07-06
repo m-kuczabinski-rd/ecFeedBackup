@@ -65,7 +65,20 @@ public class ClassDetailsPage extends BasicDetailsPage {
 	private class RunOnAndroidCheckBoxAdapter extends AbstractSelectionAdapter{
 		@Override
 		public void widgetSelected(SelectionEvent e) {
-			fClassIf.setRunOnAndroid(fRunOnAndroidCheckbox.getSelection());
+			
+			boolean selection = fRunOnAndroidCheckbox.getSelection();
+			fClassIf.setRunOnAndroid(selection);
+			
+			if (selection) {
+				String androidRunner = fClassIf.getAndroidRunner();
+				
+				if (androidRunner == null || androidRunner.isEmpty()) {
+					fClassIf.setAndroidRunner(
+							ClassDetailsPagePrompter.getDefaultAndroidRunner(
+									fClassIf.getPackageName()));
+				}
+			}
+			
 			refresh();
 		}
 	}
