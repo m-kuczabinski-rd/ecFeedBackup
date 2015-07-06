@@ -11,6 +11,7 @@
 
 package com.testify.ecfeed.ui.editor;
 
+import org.eclipse.core.resources.IProject;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
@@ -28,6 +29,7 @@ import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 
 public class ClassDetailsPage extends BasicDetailsPage {
 
+	private IFileInfoProvider fFileInforProvider;
 	private MethodsViewer fMethodsSection;
 	private OtherMethodsViewer fOtherMethodsSection;
 	private Text fClassNameText;
@@ -65,20 +67,23 @@ public class ClassDetailsPage extends BasicDetailsPage {
 	private class RunOnAndroidCheckBoxAdapter extends AbstractSelectionAdapter{
 		@Override
 		public void widgetSelected(SelectionEvent e) {
-			
+
 			boolean selection = fRunOnAndroidCheckbox.getSelection();
 			fClassIf.setRunOnAndroid(selection);
-			
+
 			if (selection) {
 				String androidRunner = fClassIf.getAndroidRunner();
-				
+
 				if (androidRunner == null || androidRunner.isEmpty()) {
+
+					IProject currentProject = fFileInforProvider.getProject();
+					String projectPath =  currentProject.getLocation().toOSString();
+
 					fClassIf.setAndroidRunner(
-							ClassDetailsPagePrompter.getDefaultAndroidRunner(
-									fClassIf.getPackageName()));
+							ClassDetailsPagePrompter.getDefaultAndroidRunner(projectPath));
 				}
 			}
-			
+
 			refresh();
 		}
 	}
@@ -98,6 +103,7 @@ public class ClassDetailsPage extends BasicDetailsPage {
 
 	public ClassDetailsPage(ModelMasterSection masterSection, IModelUpdateContext updateContext, IFileInfoProvider fileInforProvider) {
 		super(masterSection, updateContext, fileInforProvider);
+		fFileInforProvider = fileInforProvider;
 		fClassIf = new ClassInterface(this);
 	}
 
