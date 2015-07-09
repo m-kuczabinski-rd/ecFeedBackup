@@ -6,7 +6,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 
-package com.testify.ecfeed.ui.editor;
+package com.testify.ecfeed.android.project;
 
 import java.io.File;
 import java.io.IOException;
@@ -21,33 +21,29 @@ import nu.xom.Builder;
 import nu.xom.Document;
 import nu.xom.ParsingException;
 
-class ReadDefaultRunnerOperation implements IRunnableWithProgress{
+class ReadPackageOperation implements IRunnableWithProgress{
 
-	final static String fEcFeedTestRunner = "EcFeedTestRunner";
 	private String fProjectPath;
-	private String fRunner = null;
+	private String fPackageName = null;
 
-	ReadDefaultRunnerOperation(String projectPath){
+	ReadPackageOperation(String projectPath){
 		fProjectPath = projectPath;
 	}
 
 	@Override
-	public void run(IProgressMonitor monitor)
-			throws InvocationTargetException, InterruptedException {
-
-		monitor.beginTask("Looking for appropriate runner...", 1);
-		fRunner = getDefaultRunner();
+	public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
+		monitor.beginTask("Looking for package name...", 1);
+		fPackageName = readPackageName();
 		monitor.worked(1);
 		monitor.done();
 	}
 
-	public String getRunner() {
-		return fRunner;
+	public String getPackageName() {
+		return fPackageName;
 	}
 
-	private String getDefaultRunner() {
+	private String readPackageName() {
 
-		final String ecFeedTestRunner = "com.testify.ecfeed.android.junit.EcFeedTestRunner";
 		Builder builder = new Builder();
 		Document document = null;
 
@@ -58,17 +54,15 @@ class ReadDefaultRunnerOperation implements IRunnableWithProgress{
 			return "";
 		}
 
-		String packageName = document.getRootElement().getAttributeValue("package");
-
-		return packageName + "/" + ecFeedTestRunner;
+		return document.getRootElement().getAttributeValue("package");
 	}
 }
 
-public class ClassDetailsPagePrompter {
+public class AndroidManifestReader {
 
-	public static String getDefaultAndroidRunner(String projectPath) {
+	public static String readPackageName(String projectPath) {
 
-		ReadDefaultRunnerOperation operation = new ReadDefaultRunnerOperation(projectPath);
+		ReadPackageOperation operation = new ReadPackageOperation(projectPath);
 
 		try {
 			ProgressMonitorDialog progressDialog = 
@@ -80,6 +74,6 @@ public class ClassDetailsPagePrompter {
 			return null;
 		}
 
-		return operation.getRunner();
+		return operation.getPackageName();
 	}
 }

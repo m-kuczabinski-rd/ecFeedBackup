@@ -29,6 +29,7 @@ import com.testify.ecfeed.ui.modelif.TestCaseInterface;
 
 public class TestCaseDetailsPage extends BasicDetailsPage {
 
+	private IFileInfoProvider fFileInfoProvider;
 	private Combo fTestSuiteNameCombo;
 	private TestDataViewer fTestDataViewer;
 	private Button fExecuteButton;
@@ -43,17 +44,21 @@ public class TestCaseDetailsPage extends BasicDetailsPage {
 			fTestSuiteNameCombo.setText(fTestCaseIf.getName());
 		}
 	}
-	public TestCaseDetailsPage(ModelMasterSection masterSection, IModelUpdateContext updateContext, IFileInfoProvider fileInforProvider) {
-		super(masterSection, updateContext, fileInforProvider);
-		fTestCaseIf = new TestCaseInterface(this);
+	public TestCaseDetailsPage(
+			ModelMasterSection masterSection, 
+			IModelUpdateContext updateContext, 
+			IFileInfoProvider fileInfoProvider) {
+		super(masterSection, updateContext, fileInfoProvider);
+		fFileInfoProvider = fileInfoProvider;
+		fTestCaseIf = new TestCaseInterface(this, fileInfoProvider);
 	}
 
 	@Override
 	public void createContents(Composite parent) {
 		super.createContents(parent);
 		createTestSuiteEdit(getMainComposite());
-		addForm(fCommentsSection = new SingleTextCommentsSection(this, this));
-		addViewerSection(fTestDataViewer = new TestDataViewer(this, this));
+		addForm(fCommentsSection = new SingleTextCommentsSection(this, this, fFileInfoProvider));
+		addViewerSection(fTestDataViewer = new TestDataViewer(this, this, fFileInfoProvider));
 	}
 
 	@Override

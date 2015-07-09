@@ -20,12 +20,13 @@ import com.testify.ecfeed.model.GlobalParameterNode;
 import com.testify.ecfeed.model.GlobalParametersParentNode;
 import com.testify.ecfeed.model.MethodParameterNode;
 import com.testify.ecfeed.ui.common.EclipseModelBuilder;
+import com.testify.ecfeed.ui.common.IFileInfoProvider;
 import com.testify.ecfeed.ui.common.Messages;
 
 public class GlobalParametersParentInterface extends ParametersParentInterface {
 
-	public GlobalParametersParentInterface(IModelUpdateContext updateContext) {
-		super(updateContext);
+	public GlobalParametersParentInterface(IModelUpdateContext updateContext, IFileInfoProvider fileInfoProvider) {
+		super(updateContext, fileInfoProvider);
 	}
 
 	@Override

@@ -28,6 +28,7 @@ import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 
 public abstract class AbstractParameterDetailsPage extends BasicDetailsPage {
 
+	private IFileInfoProvider fFileInfoProvider;
 	private Composite fAttributesComposite;
 	private Text fNameText;
 	private Combo fTypeCombo;
@@ -62,8 +63,9 @@ public abstract class AbstractParameterDetailsPage extends BasicDetailsPage {
 	}
 
 	public AbstractParameterDetailsPage(ModelMasterSection masterSection,
-			IModelUpdateContext updateContext, IFileInfoProvider fileInforProvider) {
-		super(masterSection, updateContext, fileInforProvider);
+			IModelUpdateContext updateContext, IFileInfoProvider fileInfoProvider) {
+		super(masterSection, updateContext, fileInfoProvider);
+		fFileInfoProvider = fileInfoProvider;
 	}
 
 	@Override
@@ -72,7 +74,7 @@ public abstract class AbstractParameterDetailsPage extends BasicDetailsPage {
 
 		createAttributesComposite();
 		addForm(fCommentsSection = getParameterCommentsSection(this, this));
-		addForm(fChoicesViewer = new ChoicesViewer(this, this));
+		addForm(fChoicesViewer = new ChoicesViewer(this, this, fFileInfoProvider));
 
 		getToolkit().paintBordersFor(getMainComposite());
 	}

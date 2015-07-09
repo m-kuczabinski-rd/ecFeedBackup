@@ -31,6 +31,7 @@ import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.MethodParameterNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.TestCaseNode;
+import com.testify.ecfeed.ui.common.IFileInfoProvider;
 import com.testify.ecfeed.ui.modelif.ChoicesParentInterface;
 import com.testify.ecfeed.ui.modelif.ClassInterface;
 import com.testify.ecfeed.ui.modelif.GlobalParametersParentInterface;
@@ -42,13 +43,14 @@ public class AddChildActionProvider {
 
 	private StructuredViewer fViewer;
 	private IModelUpdateContext fContext;
+	private IFileInfoProvider fFileInfoProvider;
 
 	private class AddGlobalParameterAction extends AbstractAddChildAction{
 		private GlobalParametersParentInterface fParentIf;
 
 		public AddGlobalParameterAction() {
 			super(ADD_GLOBAL_PARAMETER_ACTION_ID, ADD_GLOBAL_PARAMETER_ACTION_NAME, fViewer, fContext);
-			fParentIf = new GlobalParametersParentInterface(fContext);
+			fParentIf = new GlobalParametersParentInterface(fContext, fFileInfoProvider);
 		}
 
 		@Override
@@ -74,7 +76,7 @@ public class AddChildActionProvider {
 
 		public AddClassAction(){
 			super(ADD_CLASS_ACTION_ID, ADD_CLASS_ACTION_NAME, fViewer, fContext);
-			fParentIf = new RootInterface(fContext);
+			fParentIf = new RootInterface(fContext, fFileInfoProvider);
 		}
 
 		@Override
@@ -99,7 +101,7 @@ public class AddChildActionProvider {
 
 		public AddMethodAction(){
 			super(ADD_METHOD_ACTION_ID, ADD_METHOD_ACTION_NAME, fViewer, fContext);
-			fParentIf = new ClassInterface(fContext);
+			fParentIf = new ClassInterface(fContext, fFileInfoProvider);
 		}
 
 		@Override
@@ -124,7 +126,7 @@ public class AddChildActionProvider {
 
 		public AddMethodChildAction(String id, String name) {
 			super(id, name, fViewer, fContext);
-			fParentIf = new MethodInterface(fContext);
+			fParentIf = new MethodInterface(fContext, fFileInfoProvider);
 		}
 
 		@Override
@@ -198,9 +200,9 @@ public class AddChildActionProvider {
 
 		}
 
-		public AddChoiceAction(){
+		public AddChoiceAction(IFileInfoProvider fileInfoProvider){
 			super(ADD_PARTITION_ACTION_ID, ADD_PARTITION_ACTION_NAME, fViewer, fContext);
-			fParentIf = new ChoicesParentInterface(fContext);
+			fParentIf = new ChoicesParentInterface(fContext, fileInfoProvider);
 		}
 
 		@Override
@@ -261,14 +263,14 @@ public class AddChildActionProvider {
 		@Override
 		public Object visit(MethodParameterNode node) throws Exception {
 			return Arrays.asList(new AbstractAddChildAction[]{
-					new AddChoiceAction()
+					new AddChoiceAction(fFileInfoProvider)
 			});
 		}
 
 		@Override
 		public Object visit(GlobalParameterNode node) throws Exception {
 			return Arrays.asList(new AbstractAddChildAction[]{
-					new AddChoiceAction()
+					new AddChoiceAction(fFileInfoProvider)
 			});
 		}
 
@@ -285,12 +287,16 @@ public class AddChildActionProvider {
 		@Override
 		public Object visit(ChoiceNode node) throws Exception {
 			return Arrays.asList(new AbstractAddChildAction[]{
-					new AddChoiceAction()
+					new AddChoiceAction(fFileInfoProvider)
 			});
 		}
 	}
 
-	public AddChildActionProvider(StructuredViewer viewer, IModelUpdateContext context){
+	public AddChildActionProvider(
+			StructuredViewer viewer, 
+			IModelUpdateContext context, 
+			IFileInfoProvider fileInfoProvider){
+		fFileInfoProvider = fileInfoProvider;
 		fContext = context;
 		fViewer = viewer;
 	}

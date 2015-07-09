@@ -145,7 +145,7 @@ public class ModelEditor extends FormEditor implements IFileInfoProvider{
 	protected void addPages() {
 		try {
 			setPartName(getEditorInput().getName());
-			addPage(fModelPage = new ModelPage(this));
+			addPage(fModelPage = new ModelPage(this, this));
 
 		} catch (PartInitException e) {
 			ErrorDialog.openError(getSite().getShell(),

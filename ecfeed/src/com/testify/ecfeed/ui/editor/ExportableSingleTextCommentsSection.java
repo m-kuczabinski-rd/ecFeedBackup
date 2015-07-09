@@ -14,6 +14,7 @@ package com.testify.ecfeed.ui.editor;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Button;
 
+import com.testify.ecfeed.ui.common.IFileInfoProvider;
 import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 
@@ -36,8 +37,11 @@ public class ExportableSingleTextCommentsSection extends SingleTextCommentsSecti
 	private Button fExportButton;
 	private Button fImportButton;
 
-	public ExportableSingleTextCommentsSection(ISectionContext sectionContext, IModelUpdateContext updateContext) {
-		super(sectionContext, updateContext);
+	public ExportableSingleTextCommentsSection(
+			ISectionContext sectionContext, 
+			IModelUpdateContext updateContext,
+			IFileInfoProvider fileInfoProvider) {
+		super(sectionContext, updateContext, fileInfoProvider);
 	}
 
 	@Override

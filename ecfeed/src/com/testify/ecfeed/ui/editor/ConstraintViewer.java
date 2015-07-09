@@ -54,6 +54,7 @@ import com.testify.ecfeed.model.IStatementVisitor;
 import com.testify.ecfeed.model.MethodParameterNode;
 import com.testify.ecfeed.model.StatementArray;
 import com.testify.ecfeed.model.StaticStatement;
+import com.testify.ecfeed.ui.common.IFileInfoProvider;
 import com.testify.ecfeed.ui.common.ImageManager;
 import com.testify.ecfeed.ui.editor.actions.ModelModifyingAction;
 import com.testify.ecfeed.ui.modelif.AbstractParameterInterface;
@@ -166,6 +167,7 @@ public class ConstraintViewer extends TreeViewerSection {
 
 		private ConstraintNode fConstraint;
 		private ConstraintInterface fConstraintIf;
+		private IFileInfoProvider fFileInfoProvider;
 
 		private class AvailableConditionsProvider implements IStatementVisitor{
 
@@ -349,6 +351,10 @@ public class ConstraintViewer extends TreeViewerSection {
 		}
 
 		private class EditorBuilder implements IStatementVisitor{
+			
+			public EditorBuilder(IFileInfoProvider fileInfoProvider) {
+				fFileInfoProvider = fileInfoProvider;
+			}
 			@Override
 			public Object visit(StaticStatement statement) throws Exception {
 				fRelationCombo.setVisible(false);
@@ -432,7 +438,7 @@ public class ConstraintViewer extends TreeViewerSection {
 			super(parent, SWT.NONE);
 			setLayout(new GridLayout(TOTAL_EDITOR_WIDTH, true));
 			setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 2, 1));
-			fConstraintIf = new ConstraintInterface(ConstraintViewer.this);
+			fConstraintIf = new ConstraintInterface(ConstraintViewer.this, fFileInfoProvider);
 
 			createStatementCombo(this);
 			createRelationCombo(this);
@@ -443,7 +449,7 @@ public class ConstraintViewer extends TreeViewerSection {
 			fStatementCombo.setItems(statementComboItems(statement));
 			fStatementCombo.setText(statement.getLeftOperandName());
 			try{
-				statement.accept(new EditorBuilder());
+				statement.accept(new EditorBuilder(fFileInfoProvider));
 			}catch(Exception e){}
 		}
 

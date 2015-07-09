@@ -31,6 +31,7 @@ import org.eclipse.ui.forms.widgets.Section;
 import com.testify.ecfeed.adapter.EImplementationStatus;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.TestCaseNode;
+import com.testify.ecfeed.ui.common.IFileInfoProvider;
 import com.testify.ecfeed.ui.common.TestCasesViewerContentProvider;
 import com.testify.ecfeed.ui.common.TestCasesViewerLabelProvider;
 import com.testify.ecfeed.ui.common.TreeCheckStateListener;
@@ -42,6 +43,7 @@ public class TestCasesViewer extends CheckboxTreeViewerSection {
 	private final static int STYLE = Section.EXPANDED | Section.TITLE_BAR;
 	private final static int VIEWER_STYLE = SWT.BORDER;
 
+	private IFileInfoProvider fFileInfoProvider;
 	private TestCasesViewerLabelProvider fLabelProvider;
 	private TestCasesViewerContentProvider fContentProvider;
 	private Button fExecuteSelectedButton;
@@ -66,7 +68,7 @@ public class TestCasesViewer extends CheckboxTreeViewerSection {
 	private class ExecuteStaticTestAdapter extends SelectionAdapter{
 		@Override
 		public void widgetSelected(SelectionEvent e){
-			fMethodIf.executeStaticTests(getCheckedTestCases());
+			fMethodIf.executeStaticTests(getCheckedTestCases(), fFileInfoProvider);
 		}
 	}
 
@@ -91,13 +93,18 @@ public class TestCasesViewer extends CheckboxTreeViewerSection {
 		}
 	}
 
-	public TestCasesViewer(ISectionContext sectionContext, IModelUpdateContext updateContext) {
+	public TestCasesViewer(
+			ISectionContext sectionContext, 
+			IModelUpdateContext updateContext,
+			IFileInfoProvider fileInfoProvider) {
 		super(sectionContext, updateContext, STYLE);
+		fFileInfoProvider = fileInfoProvider;
+		
 		GridData gd = new GridData(SWT.FILL, SWT.FILL, true, true);
 		gd.minimumHeight = 250;
 		getSection().setLayoutData(gd);
 
-		fMethodIf = new MethodInterface(this);
+		fMethodIf = new MethodInterface(this, fileInfoProvider);
 
 		getCheckboxViewer().addCheckStateListener(new TreeCheckStateListener(getCheckboxViewer()));
 

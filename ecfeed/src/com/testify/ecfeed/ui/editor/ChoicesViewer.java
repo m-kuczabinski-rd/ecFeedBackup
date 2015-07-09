@@ -35,6 +35,7 @@ import com.testify.ecfeed.adapter.java.JavaUtils;
 import com.testify.ecfeed.model.AbstractParameterNode;
 import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.model.ChoicesParentNode;
+import com.testify.ecfeed.ui.common.IFileInfoProvider;
 import com.testify.ecfeed.ui.common.NodeNameColumnLabelProvider;
 import com.testify.ecfeed.ui.editor.actions.DeleteAction;
 import com.testify.ecfeed.ui.editor.actions.IActionProvider;
@@ -50,6 +51,8 @@ public class ChoicesViewer extends TableViewerSection {
 
 	private final static int STYLE = Section.EXPANDED | Section.TITLE_BAR;
 
+	public IFileInfoProvider fFileInfoProvider;
+	
 	private ChoicesParentInterface fParentIf;
 	private ChoiceInterface fTableItemIf;
 
@@ -72,6 +75,7 @@ public class ChoicesViewer extends TableViewerSection {
 
 	private ChoicesParentNode fSelectedParent;
 
+	
 	private class ChoiceNameEditingSupport extends EditingSupport{
 
 		private TextCellEditor fNameCellEditor;
@@ -200,20 +204,28 @@ public class ChoicesViewer extends TableViewerSection {
 	}
 
 	private class ReplaceWithDefaultAdapter extends AbstractSelectionAdapter{
+		
 		@Override
 		public void widgetSelected(SelectionEvent e) {
 			if(fSelectedParent == fSelectedParent.getParameter()){
-				AbstractParameterInterface parameterIf = (AbstractParameterInterface)NodeInterfaceFactory.getNodeInterface(fSelectedParent, ChoicesViewer.this);
+				AbstractParameterInterface parameterIf 
+					= (AbstractParameterInterface)NodeInterfaceFactory.getNodeInterface(
+							fSelectedParent, ChoicesViewer.this, fFileInfoProvider);
 				parameterIf.resetChoicesToDefault();
 			}
 		}
 	}
 
-	public ChoicesViewer(ISectionContext sectionContext, IModelUpdateContext updateContext) {
+	public ChoicesViewer(
+			ISectionContext sectionContext, 
+			IModelUpdateContext updateContext, 
+			IFileInfoProvider fileInfoProvider) {
 		super(sectionContext, updateContext, STYLE);
+		
+		fFileInfoProvider = fileInfoProvider;
 
-		fParentIf = new ChoicesParentInterface(this);
-		fTableItemIf = new ChoiceInterface(this);
+		fParentIf = new ChoicesParentInterface(this, fileInfoProvider);
+		fTableItemIf = new ChoiceInterface(this, fFileInfoProvider);
 
 		fNameEditingSupport = new ChoiceNameEditingSupport();
 		fValueEditingSupport = new ChoiceValueEditingSupport(this);
@@ -230,7 +242,7 @@ public class ChoicesViewer extends TableViewerSection {
 		fActionProvider = new ModelViewerActionProvider(getTableViewer(), this);
 		setActionProvider(fActionProvider);
 		fDragListener = new ModelNodeDragListener(getViewer());
-		fDropListener = new ModelNodeDropListener(getViewer(), this);
+		fDropListener = new ModelNodeDropListener(getViewer(), this, fFileInfoProvider);
 		getViewer().addDragSupport(DND.DROP_COPY|DND.DROP_MOVE, new Transfer[]{ModelNodesTransfer.getInstance()}, fDragListener);
 		getViewer().addDropSupport(DND.DROP_COPY|DND.DROP_MOVE, new Transfer[]{ModelNodesTransfer.getInstance()}, fDropListener);
 	}

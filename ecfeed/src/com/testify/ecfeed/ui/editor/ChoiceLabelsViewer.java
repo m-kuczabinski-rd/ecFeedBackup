@@ -32,6 +32,7 @@ import org.eclipse.ui.forms.widgets.Section;
 import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.ui.common.ColorConstants;
 import com.testify.ecfeed.ui.common.ColorManager;
+import com.testify.ecfeed.ui.common.IFileInfoProvider;
 import com.testify.ecfeed.ui.editor.actions.ActionGroups;
 import com.testify.ecfeed.ui.editor.actions.CutAction;
 import com.testify.ecfeed.ui.editor.actions.ModelModifyingAction;
@@ -208,10 +209,10 @@ public class ChoiceLabelsViewer extends TableViewerSection {
 		}
 	}
 
-	public ChoiceLabelsViewer(ISectionContext sectionContext, IModelUpdateContext updateContext) {
+	public ChoiceLabelsViewer(ISectionContext sectionContext, IModelUpdateContext updateContext, IFileInfoProvider fileInfoProvider) {
 		super(sectionContext, updateContext, STYLE);
 
-		fChoiceIf = new ChoiceInterface(this);
+		fChoiceIf = new ChoiceInterface(this, fileInfoProvider);
 		getSection().setText("Labels");
 		
 		addButton("Add label", new AddLabelAdapter());

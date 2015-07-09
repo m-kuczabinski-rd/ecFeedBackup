@@ -21,12 +21,14 @@ import org.eclipse.swt.widgets.TabItem;
 import com.testify.ecfeed.adapter.EImplementationStatus;
 import com.testify.ecfeed.adapter.java.JavaUtils;
 import com.testify.ecfeed.model.MethodParameterNode;
+import com.testify.ecfeed.ui.common.IFileInfoProvider;
 import com.testify.ecfeed.ui.common.JavaDocSupport;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 import com.testify.ecfeed.ui.modelif.MethodParameterInterface;
 
 public class MethodParameterCommentsSection extends AbstractParameterCommentsSection {
 
+	private IFileInfoProvider fFileInfoProvider;
 	private MethodParameterInterface fTargetIf;
 
 	private TabItem fParameterJavadocTab;
@@ -71,9 +73,12 @@ public class MethodParameterCommentsSection extends AbstractParameterCommentsSec
 	}
 
 
-	public MethodParameterCommentsSection(ISectionContext sectionContext,
-			IModelUpdateContext updateContext) {
-		super(sectionContext, updateContext);
+	public MethodParameterCommentsSection(
+			ISectionContext sectionContext,
+			IModelUpdateContext updateContext,
+			IFileInfoProvider fileInfoProvider) {
+		super(sectionContext, updateContext, fileInfoProvider);
+		fFileInfoProvider = fileInfoProvider;
 
 		int typeJavadocTabIndex = Arrays.asList(getTabFolder().getItems()).indexOf(getTypeJavadocTab());
 		fParameterJavadocTab = addTextTab("Parameter javadoc", typeJavadocTabIndex);
@@ -103,7 +108,7 @@ public class MethodParameterCommentsSection extends AbstractParameterCommentsSec
 	@Override
 	protected MethodParameterInterface getTargetIf() {
 		if(fTargetIf == null){
-			fTargetIf = new MethodParameterInterface(getUpdateContext());
+			fTargetIf = new MethodParameterInterface(getUpdateContext(), fFileInfoProvider);
 		}
 		return fTargetIf;
 	}

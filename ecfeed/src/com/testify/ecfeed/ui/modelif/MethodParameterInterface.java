@@ -33,12 +33,13 @@ import com.testify.ecfeed.model.GlobalParametersParentNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.MethodParameterNode;
 import com.testify.ecfeed.model.RootNode;
+import com.testify.ecfeed.ui.common.IFileInfoProvider;
 import com.testify.ecfeed.ui.common.Messages;
 
 public class MethodParameterInterface extends AbstractParameterInterface {
 
-	public MethodParameterInterface(IModelUpdateContext updateContext) {
-		super(updateContext);
+	public MethodParameterInterface(IModelUpdateContext updateContext, IFileInfoProvider fileInfoProvider) {
+		super(updateContext, fileInfoProvider);
 	}
 
 	public boolean isExpected() {

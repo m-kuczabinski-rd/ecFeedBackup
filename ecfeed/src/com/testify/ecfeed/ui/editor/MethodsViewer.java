@@ -27,6 +27,7 @@ import com.testify.ecfeed.adapter.java.JavaUtils;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.MethodParameterNode;
+import com.testify.ecfeed.ui.common.IFileInfoProvider;
 import com.testify.ecfeed.ui.common.NodeNameColumnLabelProvider;
 import com.testify.ecfeed.ui.common.NodeViewerColumnLabelProvider;
 import com.testify.ecfeed.ui.editor.actions.DeleteAction;
@@ -105,11 +106,14 @@ public class MethodsViewer extends TableViewerSection {
 		}
 	}
 
-	public MethodsViewer(ISectionContext sectionContext, IModelUpdateContext updateContext) {
+	public MethodsViewer(
+			ISectionContext sectionContext, 
+			IModelUpdateContext updateContext, 
+			IFileInfoProvider fileInfoProvider) {
 		super(sectionContext, updateContext, STYLE);
 
-		fClassIf = new ClassInterface(this);
-		fMethodIf = new MethodInterface(this);
+		fClassIf = new ClassInterface(this, fileInfoProvider);
+		fMethodIf = new MethodInterface(this, fileInfoProvider);
 
 		fMethodsColumn.setEditingSupport(new MethodNameEditingSupport());
 

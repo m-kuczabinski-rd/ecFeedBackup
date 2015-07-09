@@ -33,6 +33,7 @@ import com.testify.ecfeed.ui.modelif.MethodParameterInterface;
 
 public class MethodParameterDetailsPage extends AbstractParameterDetailsPage {
 
+	private IFileInfoProvider fFileInfoProvider;
 	private MethodParameterInterface fParameterIf;
 	private Button fExpectedCheckbox;
 	private Combo fDefaultValueCombo;
@@ -76,15 +77,16 @@ public class MethodParameterDetailsPage extends AbstractParameterDetailsPage {
 
 
 	public MethodParameterDetailsPage(ModelMasterSection masterSection, IModelUpdateContext updateContext,
-			IFileInfoProvider fileInforProvider) {
-		super(masterSection, updateContext, fileInforProvider);
+			IFileInfoProvider fileInfoProvider) {
+		super(masterSection, updateContext, fileInfoProvider);
+		fFileInfoProvider = fileInfoProvider;
 		getParameterIf();
 	}
 
 	@Override
 	protected AbstractParameterInterface getParameterIf() {
 		if(fParameterIf == null){
-			fParameterIf = new MethodParameterInterface(this);
+			fParameterIf = new MethodParameterInterface(this, fFileInfoProvider);
 		}
 		return fParameterIf;
 	}
@@ -223,7 +225,7 @@ public class MethodParameterDetailsPage extends AbstractParameterDetailsPage {
 
 	@Override
 	protected AbstractParameterCommentsSection getParameterCommentsSection(ISectionContext sectionContext, IModelUpdateContext updateContext) {
-		return new MethodParameterCommentsSection(sectionContext, updateContext);
+		return new MethodParameterCommentsSection(sectionContext, updateContext, fFileInfoProvider);
 	}
 
 }

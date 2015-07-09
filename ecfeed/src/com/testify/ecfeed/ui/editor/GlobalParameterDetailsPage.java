@@ -22,11 +22,13 @@ import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 
 public class GlobalParameterDetailsPage extends AbstractParameterDetailsPage {
 
+	private IFileInfoProvider fFileInfoProvider;
 	private GlobalParameterInterface fParameterIf;
 	private LinkingMethodsViewer fLinkingMethodsViewer;
 
-	public GlobalParameterDetailsPage(ModelMasterSection masterSection, IModelUpdateContext updateContext, IFileInfoProvider fileInforProvider) {
-		super(masterSection, updateContext, fileInforProvider);
+	public GlobalParameterDetailsPage(ModelMasterSection masterSection, IModelUpdateContext updateContext, IFileInfoProvider fileInfoProvider) {
+		super(masterSection, updateContext, fileInfoProvider);
+		fFileInfoProvider = fileInfoProvider;
 		getParameterIf();
 	}
 
@@ -40,7 +42,7 @@ public class GlobalParameterDetailsPage extends AbstractParameterDetailsPage {
 	@Override
 	protected AbstractParameterInterface getParameterIf() {
 		if(fParameterIf == null){
-			fParameterIf = new GlobalParameterInterface(this);
+			fParameterIf = new GlobalParameterInterface(this, fFileInfoProvider);
 		}
 		return fParameterIf;
 	}
@@ -66,7 +68,9 @@ public class GlobalParameterDetailsPage extends AbstractParameterDetailsPage {
 	}
 
 	@Override
-	protected AbstractParameterCommentsSection getParameterCommentsSection(ISectionContext sectionContext, IModelUpdateContext updateContext) {
-		return new GlobalParameterCommentsSection(sectionContext, updateContext);
+	protected AbstractParameterCommentsSection getParameterCommentsSection(
+			ISectionContext sectionContext, 
+			IModelUpdateContext updateContext) {
+		return new GlobalParameterCommentsSection(sectionContext, updateContext, fFileInfoProvider);
 	}
 }

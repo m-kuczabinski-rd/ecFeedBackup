@@ -11,7 +11,6 @@
 
 package com.testify.ecfeed.ui.editor;
 
-import org.eclipse.core.resources.IProject;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
@@ -29,7 +28,7 @@ import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 
 public class ClassDetailsPage extends BasicDetailsPage {
 
-	private IFileInfoProvider fFileInforProvider;
+	private IFileInfoProvider fFileInfoProvider;
 	private MethodsViewer fMethodsSection;
 	private OtherMethodsViewer fOtherMethodsSection;
 	private Text fClassNameText;
@@ -68,6 +67,8 @@ public class ClassDetailsPage extends BasicDetailsPage {
 		@Override
 		public void widgetSelected(SelectionEvent e) {
 
+			final String defaultAndroidRunner  = "com.testify.ecfeed.android.junit.EcFeedTestRunner";
+			
 			boolean selection = fRunOnAndroidCheckbox.getSelection();
 			fClassIf.setRunOnAndroid(selection);
 
@@ -75,12 +76,7 @@ public class ClassDetailsPage extends BasicDetailsPage {
 				String androidRunner = fClassIf.getAndroidRunner();
 
 				if (androidRunner == null || androidRunner.isEmpty()) {
-
-					IProject currentProject = fFileInforProvider.getProject();
-					String projectPath =  currentProject.getLocation().toOSString();
-
-					fClassIf.setAndroidRunner(
-							ClassDetailsPagePrompter.getDefaultAndroidRunner(projectPath));
+					fClassIf.setAndroidRunner(defaultAndroidRunner);
 				}
 			}
 
@@ -101,10 +97,10 @@ public class ClassDetailsPage extends BasicDetailsPage {
 		}
 	}
 
-	public ClassDetailsPage(ModelMasterSection masterSection, IModelUpdateContext updateContext, IFileInfoProvider fileInforProvider) {
-		super(masterSection, updateContext, fileInforProvider);
-		fFileInforProvider = fileInforProvider;
-		fClassIf = new ClassInterface(this);
+	public ClassDetailsPage(ModelMasterSection masterSection, IModelUpdateContext updateContext, IFileInfoProvider fileInfoProvider) {
+		super(masterSection, updateContext, fileInfoProvider);
+		fFileInfoProvider = fileInfoProvider;
+		fClassIf = new ClassInterface(this, fFileInfoProvider);
 	}
 
 	@Override
@@ -112,10 +108,10 @@ public class ClassDetailsPage extends BasicDetailsPage {
 		super.createContents(parent);
 
 		createQualifiedNameComposite(getMainComposite());
-		addForm(fCommentsSection = new JavaDocCommentsSection(this, this));
-		addViewerSection(fMethodsSection = new MethodsViewer(this, this));
-		addViewerSection(fGlobalParametersSection = new GlobalParametersViewer(this, this));
-		addViewerSection(fOtherMethodsSection = new OtherMethodsViewer(this, this));
+		addForm(fCommentsSection = new JavaDocCommentsSection(this, this, fFileInfoProvider));
+		addViewerSection(fMethodsSection = new MethodsViewer(this, this, fFileInfoProvider));
+		addViewerSection(fGlobalParametersSection = new GlobalParametersViewer(this, this, fFileInfoProvider));
+		addViewerSection(fOtherMethodsSection = new OtherMethodsViewer(this, this, fFileInfoProvider));
 
 		getToolkit().paintBordersFor(getMainComposite());
 	}

@@ -30,6 +30,7 @@ import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.model.GlobalParameterNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.MethodParameterNode;
+import com.testify.ecfeed.ui.common.IFileInfoProvider;
 import com.testify.ecfeed.ui.common.NodeViewerColumnLabelProvider;
 import com.testify.ecfeed.ui.modelif.AbstractParameterInterface;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
@@ -53,6 +54,7 @@ public class MethodParametersViewer extends AbstractParametersViewer {
 	private TableViewerColumn fLinkColumn;
 	private MethodParameterInterface fParameterIf;
 	private MethodInterface fMethodIf;
+	private IFileInfoProvider fFileInfoProvider;
 
 	protected class MethodParameterTypeEditingSupport extends AbstractParametersViewer.ParameterTypeEditingSupport{
 		@Override
@@ -236,8 +238,12 @@ public class MethodParametersViewer extends AbstractParametersViewer {
 
 	}
 
-	public MethodParametersViewer(ISectionContext sectionContext, IModelUpdateContext updateContext) {
+	public MethodParametersViewer(
+			ISectionContext sectionContext, 
+			IModelUpdateContext updateContext, 
+			IFileInfoProvider fileInfoProvider) {
 		super(sectionContext, updateContext, STYLE);
+		fFileInfoProvider = fileInfoProvider;
 		fParameterIf = (MethodParameterInterface)getParameterInterface();
 
 		getSection().setText("Parameters");
@@ -307,7 +313,7 @@ public class MethodParametersViewer extends AbstractParametersViewer {
 
 	protected MethodInterface getMethodIf() {
 		if(fMethodIf == null){
-			fMethodIf = new MethodInterface(this);
+			fMethodIf = new MethodInterface(this, fFileInfoProvider);
 		}
 		return fMethodIf;
 	}
@@ -315,7 +321,7 @@ public class MethodParametersViewer extends AbstractParametersViewer {
 	@Override
 	protected AbstractParameterInterface getParameterInterface() {
 		if(fParameterIf == null){
-			fParameterIf = new MethodParameterInterface(this);
+			fParameterIf = new MethodParameterInterface(this, fFileInfoProvider);
 		}
 		return fParameterIf;
 	}

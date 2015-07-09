@@ -35,14 +35,15 @@ import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.ui.common.Constants;
 import com.testify.ecfeed.ui.common.EclipseModelBuilder;
+import com.testify.ecfeed.ui.common.IFileInfoProvider;
 import com.testify.ecfeed.ui.common.JavaModelAnalyser;
 import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.dialogs.TestClassSelectionDialog;
 
 public class ClassInterface extends GlobalParametersParentInterface {
 
-	public ClassInterface(IModelUpdateContext updateContext) {
-		super(updateContext);
+	public ClassInterface(IModelUpdateContext updateContext, IFileInfoProvider fileInfoProvider) {
+		super(updateContext, fileInfoProvider);
 	}
 
 	public static String getQualifiedName(ClassNode classNode){

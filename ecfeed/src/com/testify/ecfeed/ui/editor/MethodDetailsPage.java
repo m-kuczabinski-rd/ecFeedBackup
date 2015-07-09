@@ -30,6 +30,7 @@ import com.testify.ecfeed.ui.modelif.MethodInterface;
 
 public class MethodDetailsPage extends BasicDetailsPage {
 
+	private IFileInfoProvider fFileInfoProvider;
 	private Text fMethodNameText;
 	private Button fTestOnlineButton;
 	private Button fBrowseButton;
@@ -43,7 +44,7 @@ public class MethodDetailsPage extends BasicDetailsPage {
 	private class OnlineTestAdapter extends SelectionAdapter{
 		@Override
 		public void widgetSelected(SelectionEvent e){
-			fMethodIf.executeOnlineTests();
+			fMethodIf.executeOnlineTests(fFileInfoProvider);
 		}
 	}
 
@@ -62,9 +63,10 @@ public class MethodDetailsPage extends BasicDetailsPage {
 		}
 	}
 
-	public MethodDetailsPage(ModelMasterSection masterSection, IModelUpdateContext updateContext, IFileInfoProvider fileInforProvider) {
-		super(masterSection, updateContext, fileInforProvider);
-		fMethodIf = new MethodInterface(this);
+	public MethodDetailsPage(ModelMasterSection masterSection, IModelUpdateContext updateContext, IFileInfoProvider fileInfoProvider) {
+		super(masterSection, updateContext, fileInfoProvider);
+		fFileInfoProvider = fileInfoProvider;
+		fMethodIf = new MethodInterface(this, fileInfoProvider);
 	}
 
 	@Override
@@ -72,10 +74,10 @@ public class MethodDetailsPage extends BasicDetailsPage {
 		super.createContents(parent);
 
 		createNameTextComposite();
-		addForm(fCommentsSection = new JavaDocCommentsSection(this, this));
-		addViewerSection(fParemetersSection = new MethodParametersViewer(this, this));
-		addViewerSection(fConstraintsSection = new ConstraintsListViewer(this, this));
-		addViewerSection(fTestCasesSection = new TestCasesViewer(this, this));
+		addForm(fCommentsSection = new JavaDocCommentsSection(this, this, fFileInfoProvider));
+		addViewerSection(fParemetersSection = new MethodParametersViewer(this, this, fFileInfoProvider));
+		addViewerSection(fConstraintsSection = new ConstraintsListViewer(this, this, fFileInfoProvider));
+		addViewerSection(fTestCasesSection = new TestCasesViewer(this, this, fFileInfoProvider));
 
 		getToolkit().paintBordersFor(getMainComposite());
 	}

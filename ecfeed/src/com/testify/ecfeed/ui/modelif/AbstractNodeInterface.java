@@ -43,12 +43,14 @@ import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.ui.common.EclipseImplementationStatusResolver;
 import com.testify.ecfeed.ui.common.EclipseTypeAdapterProvider;
+import com.testify.ecfeed.ui.common.IFileInfoProvider;
 import com.testify.ecfeed.ui.common.JavaDocSupport;
 import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.dialogs.TextAreaDialog;
 
 public class AbstractNodeInterface extends OperationExecuter{
 
+	private IFileInfoProvider fFileInfoProvider;
 	private AbstractNode fTarget;
 	private EclipseImplementationStatusResolver fStatusResolver;
 	private ITypeAdapterProvider fAdapterProvider;
@@ -97,8 +99,9 @@ public class AbstractNodeInterface extends OperationExecuter{
 
 	}
 
-	public AbstractNodeInterface(IModelUpdateContext updateContext) {
+	public AbstractNodeInterface(IModelUpdateContext updateContext, IFileInfoProvider fileInfoProvider) {
 		super(updateContext);
+		fFileInfoProvider = fileInfoProvider;
 		fStatusResolver = new EclipseImplementationStatusResolver();
 		fAdapterProvider = new EclipseTypeAdapterProvider();
 	}
@@ -253,7 +256,8 @@ public class AbstractNodeInterface extends OperationExecuter{
 	public boolean exportAllComments() {
 		exportCommentsToJavadoc(getComments());
 		for(AbstractNode child : getTarget().getChildren()){
-			AbstractNodeInterface nodeIf = NodeInterfaceFactory.getNodeInterface(child, getUpdateContext());
+			AbstractNodeInterface nodeIf = 
+					NodeInterfaceFactory.getNodeInterface(child, getUpdateContext(), fFileInfoProvider);
 			nodeIf.exportAllComments();
 		}
 		return true;
@@ -266,7 +270,8 @@ public class AbstractNodeInterface extends OperationExecuter{
 			result.add(new GenericSetCommentsOperation(fTarget, javadoc));
 		}
 		for(AbstractNode child : getTarget().getChildren()){
-			AbstractNodeInterface childIf = NodeInterfaceFactory.getNodeInterface(child, getUpdateContext());
+			AbstractNodeInterface childIf = 
+					NodeInterfaceFactory.getNodeInterface(child, getUpdateContext(), fFileInfoProvider);
 			result.addAll(childIf.getImportAllJavadocCommentsOperations());
 		}
 		return result;

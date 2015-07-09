@@ -29,7 +29,7 @@ public class GoToImplementationAction extends ModelSelectionAction {
 			return;
 		}
 		AbstractNode node = getSelectedNodes().get(0);
-		AbstractNodeInterface nodeIf = NodeInterfaceFactory.getNodeInterface(node, null);
+		AbstractNodeInterface nodeIf = NodeInterfaceFactory.getNodeInterface(node, null, null);
 		nodeIf.goToImplementation();
 	}
 
@@ -38,7 +38,7 @@ public class GoToImplementationAction extends ModelSelectionAction {
 		if(getSelectedNodes().size() != 1){
 			return false;
 		}
-		AbstractNodeInterface nodeIf = NodeInterfaceFactory.getNodeInterface(getSelectedNodes().get(0), null);
+		AbstractNodeInterface nodeIf = NodeInterfaceFactory.getNodeInterface(getSelectedNodes().get(0), null, null);
 		return nodeIf.goToImplementationEnabled();
 	}
 

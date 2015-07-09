@@ -32,13 +32,14 @@ import com.testify.ecfeed.model.AbstractParameterNode;
 import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.ui.common.Constants;
 import com.testify.ecfeed.ui.common.EclipseTypeAdapterProvider;
+import com.testify.ecfeed.ui.common.IFileInfoProvider;
 import com.testify.ecfeed.ui.common.JavaModelAnalyser;
 import com.testify.ecfeed.ui.common.Messages;
 
 public class ChoiceInterface extends ChoicesParentInterface{
 
-	public ChoiceInterface(IModelUpdateContext updateContext) {
-		super(updateContext);
+	public ChoiceInterface(IModelUpdateContext updateContext, IFileInfoProvider fileInfoProvider) {
+		super(updateContext, fileInfoProvider);
 	}
 
 	public void setValue(String newValue){

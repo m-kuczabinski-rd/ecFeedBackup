@@ -39,6 +39,7 @@ import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.MethodParameterNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.TestCaseNode;
+import com.testify.ecfeed.ui.common.IFileInfoProvider;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 import com.testify.ecfeed.ui.modelif.IModelUpdateListener;
 
@@ -49,6 +50,7 @@ public class ModelMasterDetailsBlock extends MasterDetailsBlock implements ISele
 	private ModelPage fPage;
 	private FormToolkit fToolkit;
 	private ModelUpdateContext fUpdateContext;
+	private IFileInfoProvider fFileInfoProvider;
 
 	private class ModelUpdateContext implements IModelUpdateContext{
 
@@ -117,9 +119,10 @@ public class ModelMasterDetailsBlock extends MasterDetailsBlock implements ISele
 		}
 	}
 
-	public ModelMasterDetailsBlock(ModelPage modelPage) {
+	public ModelMasterDetailsBlock(ModelPage modelPage, IFileInfoProvider fileInfoProvider) {
 		fPage = modelPage;
 		fUpdateContext = new ModelUpdateContext();
+		fFileInfoProvider = fileInfoProvider;
 	}
 
 	public void selectNode(AbstractNode node){
@@ -160,7 +163,7 @@ public class ModelMasterDetailsBlock extends MasterDetailsBlock implements ISele
 	protected void createMasterPart(IManagedForm managedForm, Composite parent) {
 		fToolkit = managedForm.getToolkit();
 
-		fMasterSection = new ModelMasterSection(this);
+		fMasterSection = new ModelMasterSection(this, fFileInfoProvider);
 		fMasterSection.initialize(managedForm);
 		fMasterSection.addSelectionChangedListener(this);
 		fMasterSection.setInput(getModel());

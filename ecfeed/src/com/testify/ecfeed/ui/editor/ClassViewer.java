@@ -29,6 +29,7 @@ import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.ui.common.ColorConstants;
 import com.testify.ecfeed.ui.common.ColorManager;
+import com.testify.ecfeed.ui.common.IFileInfoProvider;
 import com.testify.ecfeed.ui.editor.actions.DeleteAction;
 import com.testify.ecfeed.ui.editor.actions.ModelViewerActionProvider;
 import com.testify.ecfeed.ui.modelif.ClassInterface;
@@ -44,6 +45,8 @@ public class ClassViewer extends TableViewerSection {
 	private ClassInterface fClassIf;
 
 	private TableViewerColumn fPackageNameColumn;
+
+	private IFileInfoProvider fFileInfoProvider;
 
 
 	private abstract class ClassNameEditingSupport extends EditingSupport{
@@ -139,14 +142,18 @@ public class ClassViewer extends TableViewerSection {
 		}
 	}
 
-	public ClassViewer(ISectionContext parent, IModelUpdateContext updateContext) {
+	public ClassViewer(
+			ISectionContext parent, 
+			IModelUpdateContext updateContext, 
+			IFileInfoProvider fileInfoProvider) {
 		super(parent, updateContext, STYLE);
 
+		fFileInfoProvider = fileInfoProvider; 
 		fNameColumn.setEditingSupport(new LocalNameEditingSupport());
 		fPackageNameColumn.setEditingSupport(new PackageNameEditingSupport());
 
-		fRootIf = new RootInterface(this);
-		fClassIf = new ClassInterface(this);
+		fRootIf = new RootInterface(this, fileInfoProvider);
+		fClassIf = new ClassInterface(this, fileInfoProvider);
 
 		setText("Classes");
 		addButton("Add implemented class", new AddImplementedClassAdapter());
@@ -182,7 +189,7 @@ public class ClassViewer extends TableViewerSection {
 
 	private ClassInterface classIf(){
 		if(fClassIf == null){
-			fClassIf = new ClassInterface(this);
+			fClassIf = new ClassInterface(this, fFileInfoProvider);
 		}
 		return fClassIf;
 	}

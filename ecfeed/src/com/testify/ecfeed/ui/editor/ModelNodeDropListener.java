@@ -32,6 +32,7 @@ import com.testify.ecfeed.model.MethodParameterNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.ui.common.EclipseModelBuilder;
+import com.testify.ecfeed.ui.common.IFileInfoProvider;
 import com.testify.ecfeed.ui.modelif.AbstractNodeInterface;
 import com.testify.ecfeed.ui.modelif.GlobalParametersParentInterface;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
@@ -42,6 +43,7 @@ import com.testify.ecfeed.ui.modelif.SelectionInterface;
 public class ModelNodeDropListener extends ViewerDropAdapter{
 
 	private final IModelUpdateContext fUpdateContext;
+	IFileInfoProvider fFileInfoProvider;
 	private boolean fEnabled;
 
 	private class DropValidator implements IModelVisitor{
@@ -125,7 +127,7 @@ public class ModelNodeDropListener extends ViewerDropAdapter{
 
 		@Override
 		public Object visit(RootNode node) throws Exception {
-			AbstractNodeInterface nodeIf = NodeInterfaceFactory.getNodeInterface(node, fUpdateContext);
+			AbstractNodeInterface nodeIf = NodeInterfaceFactory.getNodeInterface(node, fUpdateContext, fFileInfoProvider);
 			List<AbstractNode> children;
 			if(NodeDnDBuffer.getInstance().getDraggedNodes().get(0) instanceof MethodParameterNode){
 				children = new ArrayList<AbstractNode>();
@@ -140,7 +142,7 @@ public class ModelNodeDropListener extends ViewerDropAdapter{
 
 		@Override
 		public Object visit(ClassNode node) throws Exception {
-			AbstractNodeInterface nodeIf = NodeInterfaceFactory.getNodeInterface(node, fUpdateContext);
+			AbstractNodeInterface nodeIf = NodeInterfaceFactory.getNodeInterface(node, fUpdateContext, fFileInfoProvider);
 			List<AbstractNode> children;
 			if(NodeDnDBuffer.getInstance().getDraggedNodes().get(0) instanceof MethodParameterNode){
 				children = new ArrayList<AbstractNode>();
@@ -155,7 +157,7 @@ public class ModelNodeDropListener extends ViewerDropAdapter{
 
 		@Override
 		public Object visit(MethodNode node) throws Exception {
-			AbstractNodeInterface nodeIf = NodeInterfaceFactory.getNodeInterface(node, fUpdateContext);
+			AbstractNodeInterface nodeIf = NodeInterfaceFactory.getNodeInterface(node, fUpdateContext, fFileInfoProvider);
 			List<AbstractNode> children;
 			if(NodeDnDBuffer.getInstance().getDraggedNodes().get(0) instanceof GlobalParameterNode){
 				children = new ArrayList<AbstractNode>();
@@ -172,13 +174,13 @@ public class ModelNodeDropListener extends ViewerDropAdapter{
 
 		@Override
 		public Object visit(MethodParameterNode node) throws Exception {
-			AbstractNodeInterface nodeIf = NodeInterfaceFactory.getNodeInterface(node, fUpdateContext);
+			AbstractNodeInterface nodeIf = NodeInterfaceFactory.getNodeInterface(node, fUpdateContext, fFileInfoProvider);
 			return nodeIf.addChildren(NodeDnDBuffer.getInstance().getDraggedNodesCopy(), fIndex);
 		}
 
 		@Override
 		public Object visit(GlobalParameterNode node) throws Exception {
-			AbstractNodeInterface nodeIf = NodeInterfaceFactory.getNodeInterface(node, fUpdateContext);
+			AbstractNodeInterface nodeIf = NodeInterfaceFactory.getNodeInterface(node, fUpdateContext, fFileInfoProvider);
 			return nodeIf.addChildren(NodeDnDBuffer.getInstance().getDraggedNodesCopy(), fIndex);
 		}
 
@@ -194,7 +196,7 @@ public class ModelNodeDropListener extends ViewerDropAdapter{
 
 		@Override
 		public Object visit(ChoiceNode node) throws Exception {
-			AbstractNodeInterface nodeIf = NodeInterfaceFactory.getNodeInterface(node, fUpdateContext);
+			AbstractNodeInterface nodeIf = NodeInterfaceFactory.getNodeInterface(node, fUpdateContext, fFileInfoProvider);
 			return nodeIf.addChildren(NodeDnDBuffer.getInstance().getDraggedNodesCopy(), fIndex);
 		}
 
@@ -202,10 +204,12 @@ public class ModelNodeDropListener extends ViewerDropAdapter{
 
 	private class LinkHandler implements IModelVisitor{
 
+		IFileInfoProvider fFileInfoProvider;
 		private int fIndex;
 
-		public LinkHandler(int index) {
+		public LinkHandler(int index, IFileInfoProvider fileInfoProvider) {
 			fIndex = index;
+			fFileInfoProvider = fileInfoProvider;
 		}
 
 		@Override
@@ -226,7 +230,7 @@ public class ModelNodeDropListener extends ViewerDropAdapter{
 
 		@Override
 		public Object visit(MethodNode node) throws Exception {
-			AbstractNodeInterface nodeIf = NodeInterfaceFactory.getNodeInterface(node, fUpdateContext);
+			AbstractNodeInterface nodeIf = NodeInterfaceFactory.getNodeInterface(node, fUpdateContext, fFileInfoProvider);
 			List<AbstractNode> children;
 			if(NodeDnDBuffer.getInstance().getDraggedNodes().get(0) instanceof GlobalParameterNode){
 				children = new ArrayList<AbstractNode>();
@@ -275,14 +279,19 @@ public class ModelNodeDropListener extends ViewerDropAdapter{
 					return false;
 				}
 			}
-			GlobalParametersParentInterface parentIf = (GlobalParametersParentInterface)NodeInterfaceFactory.getNodeInterface(newParent, fUpdateContext);
+			GlobalParametersParentInterface parentIf = 
+					(GlobalParametersParentInterface)NodeInterfaceFactory.getNodeInterface(
+							newParent, fUpdateContext, fFileInfoProvider);
 			return parentIf.replaceMethodParametersWithGlobal(originalParameters);
 		}
 	}
 
-	protected ModelNodeDropListener(Viewer viewer, IModelUpdateContext updateContext) {
+	protected ModelNodeDropListener(Viewer viewer, 
+			IModelUpdateContext updateContext, 
+			IFileInfoProvider fileInfoProvider) {
 		super(viewer);
 		fUpdateContext = updateContext;
+		fFileInfoProvider = fileInfoProvider;
 		fEnabled = true;
 	}
 
@@ -309,7 +318,7 @@ public class ModelNodeDropListener extends ViewerDropAdapter{
 			return selectionIf.move(newParent, index);
 		case DND.DROP_LINK:
 			try{
-				return (boolean)newParent.accept(new LinkHandler(index));
+				return (boolean)newParent.accept(new LinkHandler(index, fFileInfoProvider));
 			}catch(Exception e){
 				return false;
 			}

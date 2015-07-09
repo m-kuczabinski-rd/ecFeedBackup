@@ -34,6 +34,7 @@ import com.testify.ecfeed.adapter.operations.MethodOperationAddTestCase;
 import com.testify.ecfeed.adapter.operations.MethodOperationAddTestSuite;
 import com.testify.ecfeed.adapter.operations.MethodOperationConvertTo;
 import com.testify.ecfeed.adapter.operations.MethodOperationRenameTestCases;
+import com.testify.ecfeed.android.project.AndroidManifestReader;
 import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.Constraint;
@@ -49,6 +50,7 @@ import com.testify.ecfeed.runner.java.JUnitTestMethodInvoker;
 import com.testify.ecfeed.ui.common.Constants;
 import com.testify.ecfeed.ui.common.EclipseModelBuilder;
 import com.testify.ecfeed.ui.common.EclipseTypeAdapterProvider;
+import com.testify.ecfeed.ui.common.IFileInfoProvider;
 import com.testify.ecfeed.ui.common.JavaModelAnalyser;
 import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.dialogs.AddTestCaseDialog;
@@ -60,8 +62,8 @@ public class MethodInterface extends ParametersParentInterface {
 
 	private ITypeAdapterProvider fAdapterProvider;
 
-	public MethodInterface(IModelUpdateContext updateContext) {
-		super(updateContext);
+	public MethodInterface(IModelUpdateContext updateContext, IFileInfoProvider fileInfoProvider) {
+		super(updateContext, fileInfoProvider);
 		fAdapterProvider = new EclipseTypeAdapterProvider();
 	}
 
@@ -203,22 +205,22 @@ public class MethodInterface extends ParametersParentInterface {
 		return execute(operation, Messages.DIALOG_ADD_TEST_SUITE_PROBLEM_TITLE);
 	}
 
-	public void executeOnlineTests() {
+	public void executeOnlineTests(IFileInfoProvider fileInfoProvider) {
 		if (!isValidClassConfiguration())
 			return;
 
 		OnlineTestRunningSupport runner 
-		= new OnlineTestRunningSupport(createTestMethodInvoker());
+		= new OnlineTestRunningSupport(createTestMethodInvoker(fileInfoProvider));
 		runner.setTarget(getTarget());
 		runner.proceed();
 	}
 
-	public void executeStaticTests(Collection<TestCaseNode> testCases) {
+	public void executeStaticTests(Collection<TestCaseNode> testCases, IFileInfoProvider fileInfoProvider) {
 		if (!isValidClassConfiguration())
 			return;
 
 		StaticTestExecutionSupport support 
-		= new StaticTestExecutionSupport(testCases, createTestMethodInvoker());
+		= new StaticTestExecutionSupport(testCases, createTestMethodInvoker(fileInfoProvider));
 		support.proceed();
 	}
 
@@ -236,15 +238,29 @@ public class MethodInterface extends ParametersParentInterface {
 		return true;
 	}
 
-	private ITestMethodInvoker createTestMethodInvoker()
+	private ITestMethodInvoker createTestMethodInvoker(IFileInfoProvider fileInfoProvider)
 	{
 		ClassNode classNode = (ClassNode)getTarget().getParent();
-		String androidRunner = classNode.getAndroidRunner();
 
-		if (emptyAndroidRunner(androidRunner)) {
+		if (!classNode.getRunOnAndroid()) {
 			return new JUnitTestMethodInvoker();
 		}
+		
+		String projectPath = fileInfoProvider.getProject().getLocation().toOSString();
+		String androidRunner = createAndroidRunnerName(projectPath, classNode.getAndroidRunner());
+				
 		return new AndroidTestMethodInvoker(androidRunner);
+	}
+	
+	private String createAndroidRunnerName(String projectPath, String androidRunnerFromClassNode) {
+		
+		String packageName = AndroidManifestReader.readPackageName(projectPath);
+		
+		if (packageName == null || packageName.isEmpty()) {
+			return androidRunnerFromClassNode;
+		}
+		
+		return packageName + "/" + androidRunnerFromClassNode;
 	}
 
 	private boolean emptyAndroidRunner(ClassNode classNode) {

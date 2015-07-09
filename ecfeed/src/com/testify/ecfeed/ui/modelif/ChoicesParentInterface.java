@@ -28,12 +28,13 @@ import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.ui.common.Constants;
 import com.testify.ecfeed.ui.common.EclipseModelBuilder;
 import com.testify.ecfeed.ui.common.EclipseTypeAdapterProvider;
+import com.testify.ecfeed.ui.common.IFileInfoProvider;
 import com.testify.ecfeed.ui.common.Messages;
 
 public class ChoicesParentInterface extends AbstractNodeInterface {
 
-	public ChoicesParentInterface(IModelUpdateContext updateContext){
-		super(updateContext);
+	public ChoicesParentInterface(IModelUpdateContext updateContext, IFileInfoProvider fileInfoProvider){
+		super(updateContext, fileInfoProvider);
 	}
 
 	public AbstractParameterNode getParameter() {

@@ -31,6 +31,7 @@ public class ConstraintDetailsPage extends BasicDetailsPage {
 	private ConstraintInterface fConstraintIf;
 	private ConstraintViewer fConstraintViewer;
 	private SingleTextCommentsSection fCommentsSection;
+	private IFileInfoProvider fFileInfoProvider;
 
 	private class ConstraintNameListener extends AbstractSelectionAdapter{
 		@Override
@@ -40,16 +41,20 @@ public class ConstraintDetailsPage extends BasicDetailsPage {
 		}
 	}
 
-	public ConstraintDetailsPage(ModelMasterSection masterSection, IModelUpdateContext updateContext, IFileInfoProvider fileInforProvider){
-		super(masterSection, updateContext, fileInforProvider);
-		fConstraintIf = new ConstraintInterface(this);
+	public ConstraintDetailsPage(
+			ModelMasterSection masterSection, 
+			IModelUpdateContext updateContext, 
+			IFileInfoProvider fileInfoProvider){
+		super(masterSection, updateContext, fileInfoProvider);
+		fFileInfoProvider = fileInfoProvider;
+		fConstraintIf = new ConstraintInterface(this, fileInfoProvider);
 	}
 
 	@Override
 	public void createContents(Composite parent){
 		super.createContents(parent);
 		createConstraintNameEdit(getMainComposite());
-		addForm(fCommentsSection = new SingleTextCommentsSection(this, this));
+		addForm(fCommentsSection = new SingleTextCommentsSection(this, this, fFileInfoProvider));
 		addViewerSection(fConstraintViewer = new ConstraintViewer(this, this));
 	}
 

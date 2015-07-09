@@ -15,6 +15,7 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 
 import com.testify.ecfeed.model.ChoiceNode;
+import com.testify.ecfeed.ui.common.IFileInfoProvider;
 import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 
@@ -44,8 +45,11 @@ public class ChoiceCommentsSection extends JavaDocCommentsSection {
 		}
 	}
 
-	public ChoiceCommentsSection(ISectionContext sectionContext, IModelUpdateContext updateContext) {
-		super(sectionContext, updateContext);
+	public ChoiceCommentsSection(
+			ISectionContext sectionContext, 
+			IModelUpdateContext updateContext,
+			IFileInfoProvider fileInfoProvider) {
+		super(sectionContext, updateContext, fileInfoProvider);
 	}
 
 	@Override

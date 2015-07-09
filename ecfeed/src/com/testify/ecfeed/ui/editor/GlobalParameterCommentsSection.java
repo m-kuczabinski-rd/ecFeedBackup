@@ -13,16 +13,22 @@ package com.testify.ecfeed.ui.editor;
 
 import org.eclipse.swt.events.SelectionListener;
 
+import com.testify.ecfeed.ui.common.IFileInfoProvider;
 import com.testify.ecfeed.ui.modelif.AbstractParameterInterface;
 import com.testify.ecfeed.ui.modelif.GlobalParameterInterface;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 
 public class GlobalParameterCommentsSection extends AbstractParameterCommentsSection {
 
+	private IFileInfoProvider fFileInfoProvider;
 	private GlobalParameterInterface fTargetIf;
 
-	public GlobalParameterCommentsSection(ISectionContext sectionContext, IModelUpdateContext updateContext) {
-		super(sectionContext, updateContext);
+	public GlobalParameterCommentsSection(
+			ISectionContext sectionContext, 
+			IModelUpdateContext updateContext, 
+			IFileInfoProvider fileInfoProvider) {
+		super(sectionContext, updateContext, fileInfoProvider);
+		fFileInfoProvider = fileInfoProvider;
 		getExportButton().setText("Export type comments");
 		getImportButton().setText("Import type comments");
 	}
@@ -30,7 +36,7 @@ public class GlobalParameterCommentsSection extends AbstractParameterCommentsSec
 	@Override
 	protected AbstractParameterInterface getTargetIf() {
 		if(fTargetIf == null){
-			fTargetIf = new GlobalParameterInterface(getUpdateContext());
+			fTargetIf = new GlobalParameterInterface(getUpdateContext(), fFileInfoProvider);
 		}
 		return fTargetIf;
 	}

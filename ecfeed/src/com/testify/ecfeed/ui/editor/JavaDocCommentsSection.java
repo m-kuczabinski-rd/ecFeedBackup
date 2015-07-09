@@ -22,6 +22,7 @@ import org.eclipse.swt.widgets.TabItem;
 import org.eclipse.swt.widgets.Text;
 
 import com.testify.ecfeed.model.AbstractNode;
+import com.testify.ecfeed.ui.common.IFileInfoProvider;
 import com.testify.ecfeed.ui.common.JavaDocSupport;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 
@@ -74,8 +75,11 @@ public class JavaDocCommentsSection extends AbstractCommentsSection {
 	private Menu fExportButtonMenu;
 	private Menu fImportButtonMenu;
 
-	public JavaDocCommentsSection(ISectionContext sectionContext, IModelUpdateContext updateContext) {
-		super(sectionContext, updateContext);
+	public JavaDocCommentsSection(
+			ISectionContext sectionContext, 
+			IModelUpdateContext updateContext, 
+			IFileInfoProvider fileInfoProvider) {
+		super(sectionContext, updateContext, fileInfoProvider);
 
 		fCommentsTab = addTextTab("Comments");
 		fJavadocTab = addTextTab("JavaDoc");

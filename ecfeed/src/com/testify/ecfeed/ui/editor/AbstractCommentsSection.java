@@ -27,6 +27,7 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.widgets.Section;
 
 import com.testify.ecfeed.model.AbstractNode;
+import com.testify.ecfeed.ui.common.IFileInfoProvider;
 import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.modelif.AbstractNodeInterface;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
@@ -50,6 +51,8 @@ public abstract class AbstractCommentsSection extends TabFolderSection {
 		}
 	}
 
+	private IFileInfoProvider fFileInfoProvider;
+	
 	private Button fEditButton;
 
 	private AbstractNode fTarget;
@@ -57,8 +60,12 @@ public abstract class AbstractCommentsSection extends TabFolderSection {
 
 	private Map<TabItem, Text> fTextItems;
 
-	public AbstractCommentsSection(ISectionContext sectionContext, IModelUpdateContext updateContext) {
+	public AbstractCommentsSection(
+			ISectionContext sectionContext, 
+			IModelUpdateContext updateContext,
+			IFileInfoProvider fileInfoProvider) {
 		super(sectionContext, updateContext, STYLE);
+		fFileInfoProvider = fileInfoProvider;
 
 		if(getTabFolder() != null){
 			getTabFolder().addSelectionListener(new TabFolderSelectionListsner());
@@ -119,7 +126,7 @@ public abstract class AbstractCommentsSection extends TabFolderSection {
 
 	protected AbstractNodeInterface getTargetIf(){
 		if(fTargetIf == null){
-			fTargetIf = new AbstractNodeInterface(getUpdateContext());
+			fTargetIf = new AbstractNodeInterface(getUpdateContext(), fFileInfoProvider);
 		}
 		return fTargetIf;
 	}

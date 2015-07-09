@@ -17,6 +17,7 @@ import org.eclipse.swt.widgets.TabItem;
 
 import com.testify.ecfeed.adapter.java.JavaUtils;
 import com.testify.ecfeed.model.AbstractParameterNode;
+import com.testify.ecfeed.ui.common.IFileInfoProvider;
 import com.testify.ecfeed.ui.common.JavaDocSupport;
 import com.testify.ecfeed.ui.modelif.AbstractParameterInterface;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
@@ -69,8 +70,11 @@ public abstract class AbstractParameterCommentsSection extends JavaDocCommentsSe
 		}
 	}
 
-	public AbstractParameterCommentsSection(ISectionContext sectionContext, IModelUpdateContext updateContext) {
-		super(sectionContext, updateContext);
+	public AbstractParameterCommentsSection(
+			ISectionContext sectionContext, 
+			IModelUpdateContext updateContext,
+			IFileInfoProvider fileInfoProvider) {
+		super(sectionContext, updateContext, fileInfoProvider);
 
 		fParameterCommentsTab = addTextTab("Parameter", 0);
 		getTypeCommentsTab().setText("Type");

@@ -25,6 +25,7 @@ import org.eclipse.ui.forms.widgets.Section;
 
 import com.testify.ecfeed.model.ConstraintNode;
 import com.testify.ecfeed.model.MethodNode;
+import com.testify.ecfeed.ui.common.IFileInfoProvider;
 import com.testify.ecfeed.ui.common.NodeNameColumnLabelProvider;
 import com.testify.ecfeed.ui.common.NodeViewerColumnLabelProvider;
 import com.testify.ecfeed.ui.editor.actions.DeleteAction;
@@ -86,7 +87,10 @@ public class ConstraintsListViewer extends TableViewerSection {
 		}
 	}
 	
-	public ConstraintsListViewer(ISectionContext sectionContext, IModelUpdateContext updateContext){
+	public ConstraintsListViewer(
+			ISectionContext sectionContext, 
+			IModelUpdateContext updateContext, 
+			IFileInfoProvider fileInfoProvider){
 		super(sectionContext, updateContext, STYLE);
 		GridData gd = new GridData(SWT.FILL, SWT.FILL, true, true);
 		gd.minimumHeight = 250;
@@ -94,8 +98,8 @@ public class ConstraintsListViewer extends TableViewerSection {
 		
 		getSection().setText("Constraints");
 		
-		fMethodInterface = new MethodInterface(this);
-		fConstraintIf = new ConstraintInterface(this);
+		fMethodInterface = new MethodInterface(this, fileInfoProvider);
+		fConstraintIf = new ConstraintInterface(this, fileInfoProvider);
 		
 		fNameColumn.setEditingSupport(new ConstraintNameEditingSupport());
 

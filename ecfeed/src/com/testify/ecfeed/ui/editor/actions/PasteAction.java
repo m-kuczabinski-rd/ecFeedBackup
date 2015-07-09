@@ -15,6 +15,7 @@ import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.TreeViewer;
 
 import com.testify.ecfeed.model.AbstractNode;
+import com.testify.ecfeed.ui.common.IFileInfoProvider;
 import com.testify.ecfeed.ui.modelif.AbstractNodeInterface;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 import com.testify.ecfeed.ui.modelif.NodeClipboard;
@@ -22,31 +23,51 @@ import com.testify.ecfeed.ui.modelif.NodeInterfaceFactory;
 
 public class PasteAction extends ModelModifyingAction {
 
+	IFileInfoProvider fFileInfoProvider;
 	private TreeViewer fTreeViewer;
 	private int fIndex;
 
-	public PasteAction(ISelectionProvider selectionProvider, IModelUpdateContext updateContext) {
-		this(-1, selectionProvider, updateContext);
+	public PasteAction(
+			ISelectionProvider selectionProvider, 
+			IModelUpdateContext updateContext,
+			IFileInfoProvider fileInfoProvider) {
+		this(-1, selectionProvider, updateContext, fileInfoProvider);
 	}
 	
-	public PasteAction(int index, ISelectionProvider selectionProvider, IModelUpdateContext updateContext) {
+	public PasteAction(
+			int index, 
+			ISelectionProvider selectionProvider, 
+			IModelUpdateContext updateContext,
+			IFileInfoProvider fileInfoProvider) {
 		super(GlobalActions.PASTE.getId(), GlobalActions.PASTE.getName(), selectionProvider, updateContext);
 		fIndex = index;
+		fFileInfoProvider = fileInfoProvider;
 	}
 	
-	public PasteAction(TreeViewer treeViewer, IModelUpdateContext updateContext) {
-		this(-1, treeViewer, updateContext);
+	public PasteAction(
+			TreeViewer treeViewer, 
+			IModelUpdateContext updateContext,
+			IFileInfoProvider fileInfoProvider) {
+		this(-1, treeViewer, updateContext, fileInfoProvider);
 	}
 
-	public PasteAction(int index, TreeViewer treeViewer, IModelUpdateContext updateContext) {
-		this(index, (ISelectionProvider)treeViewer, updateContext);
+	public PasteAction(
+			int index, 
+			TreeViewer treeViewer, 
+			IModelUpdateContext updateContext,
+			IFileInfoProvider fileInfoProvider) {
+		this(index, (ISelectionProvider)treeViewer, updateContext, fileInfoProvider);
 		fTreeViewer = treeViewer;
 	}
 
 	@Override
 	public boolean isEnabled(){
 		if(getSelectedNodes().size() != 1) return false;
-		AbstractNodeInterface nodeIf = NodeInterfaceFactory.getNodeInterface(getSelectedNodes().get(0), getUpdateContext()); 
+		AbstractNodeInterface nodeIf = 
+				NodeInterfaceFactory.getNodeInterface(
+						getSelectedNodes().get(0), 
+						getUpdateContext(), 
+						fFileInfoProvider);
 		if (fIndex != -1){
 			return nodeIf.pasteEnabled(NodeClipboard.getContent(), fIndex);
 		}
@@ -56,7 +77,8 @@ public class PasteAction extends ModelModifyingAction {
 	@Override
 	public void run(){
 		AbstractNode parent = getSelectedNodes().get(0);
-		AbstractNodeInterface parentIf = NodeInterfaceFactory.getNodeInterface(parent, getUpdateContext()); 
+		AbstractNodeInterface parentIf = 
+				NodeInterfaceFactory.getNodeInterface(parent, getUpdateContext(), fFileInfoProvider); 
 		parentIf.addChildren(NodeClipboard.getContentCopy());
 		if(fTreeViewer != null){
 			fTreeViewer.expandToLevel(parent, 1);
