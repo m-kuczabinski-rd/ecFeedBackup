@@ -19,10 +19,7 @@ import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.ui.JavaUI;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.jface.viewers.LabelProvider;
-import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.ui.dialogs.ElementListSelectionDialog;
 
 import com.testify.ecfeed.adapter.EImplementationStatus;
 import com.testify.ecfeed.adapter.IModelOperation;
@@ -202,32 +199,11 @@ public class ClassInterface extends GlobalParametersParentInterface {
 		}
 	}
 
-	public String selectAndroidRunner(String projectPath) {
-
-		String[] runners = createRunnersArray(projectPath);
-
-		if (runners == null) {
-			return "";
-		}
-
-		ElementListSelectionDialog dialog = createRunnersSelectionDialog(runners);
-
-		String result = null;
-
-		if (dialog.open() == Window.OK) {
-			result = (String)dialog.getFirstResult();
-		}
-
-		return result;
-	}	
-
-	private String[] createRunnersArray(String projectPath) {
+	public List<String> createRunnerList(String projectPath) {
 
 		List<String> runnerList = new AndroidManifestReader(projectPath).getRunners();
 		addDefaultRunner(runnerList);
-
-		String[] runnerArray = new String[runnerList.size()];
-		return runnerList.toArray(runnerArray);
+		return runnerList;
 	}
 
 	private void addDefaultRunner(List<String> runnerList) {
@@ -239,22 +215,6 @@ public class ClassInterface extends GlobalParametersParentInterface {
 		}
 
 		runnerList.add(0, runner);
-	}
-
-	ElementListSelectionDialog createRunnersSelectionDialog(String[] elementsToDisplay) {
-
-		ElementListSelectionDialog dialog = 
-				new ElementListSelectionDialog(Display.getDefault().getActiveShell(), new LabelProvider());
-
-		dialog.setElements(elementsToDisplay);
-
-		dialog.setMultipleSelection(false);
-		dialog.setIgnoreCase(true);
-		dialog.setAllowDuplicates(false);
-		dialog.setMessage("Select an Android runner");
-		dialog.setTitle("Android runner selection");
-
-		return dialog;
 	}
 
 	@Override

@@ -11,11 +11,16 @@
 
 package com.testify.ecfeed.ui.editor;
 
+import java.util.List;
+
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.FocusEvent;
+import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
@@ -35,7 +40,7 @@ public class ClassDetailsPage extends BasicDetailsPage {
 	private Text fPackageNameText;
 	private Button fRunOnAndroidCheckbox;
 	private Label fAndroidRunnerLabel;
-	private Text fAndroidRunnerText;
+	private Combo fAndroidRunnerCombo;
 	private ClassInterface fClassIf;
 	private GlobalParametersViewer fGlobalParametersSection;
 	private JavaDocCommentsSection fCommentsSection;
@@ -47,17 +52,26 @@ public class ClassDetailsPage extends BasicDetailsPage {
 		}
 	}
 
-	private class BrowseRunnersAdapter extends AbstractSelectionAdapter{
+	private class AndroidRunnerComboSelectionListener extends AbstractSelectionAdapter{
 		@Override
 		public void widgetSelected(SelectionEvent e){
 
-			String projectPath = fFileInfoProvider.getProject().getLocation().toOSString();
-			String androidRunner = fClassIf.selectAndroidRunner(projectPath);
+			fClassIf.setAndroidRunner(fAndroidRunnerCombo.getText());
 
-			if (androidRunner != null) {
-				fAndroidRunnerText.setText(androidRunner);
-				fClassIf.setAndroidRunner(androidRunner);
-			}
+			String androidRunner = fClassIf.getAndroidRunner();
+			fAndroidRunnerCombo.setText(androidRunner);
+		}
+	}	
+
+	private class AndroidRunnerComboFocusListener implements FocusListener{
+
+		@Override
+		public void focusGained(FocusEvent e) {
+			refreshAndroidRunnerCombo();
+		}
+
+		@Override
+		public void focusLost(FocusEvent e) {
 		}
 	}	
 
@@ -95,19 +109,6 @@ public class ClassDetailsPage extends BasicDetailsPage {
 			}
 
 			refresh();
-		}
-	}
-
-	private class AndroidRunnerTextAdapter extends AbstractSelectionAdapter{
-		@Override
-		public void widgetSelected(SelectionEvent e) {
-			String androidRunner = fAndroidRunnerText.getText();
-
-			if (androidRunner != null && androidRunner.isEmpty()) {
-				androidRunner = null;
-			}
-
-			fClassIf.setAndroidRunner(androidRunner);
 		}
 	}
 
@@ -157,7 +158,7 @@ public class ClassDetailsPage extends BasicDetailsPage {
 		createPackageNameText(textComposite);
 		createClassNameText(textComposite);
 		createRunOnAndroidCheckBox(textComposite);
-		createAndroidRunnerText(textComposite);
+		createAndroidRunnerCombo(textComposite);
 
 		getToolkit().paintBordersFor(textComposite);
 	}
@@ -185,12 +186,36 @@ public class ClassDetailsPage extends BasicDetailsPage {
 		fRunOnAndroidCheckbox.addSelectionListener(new RunOnAndroidCheckBoxAdapter());
 	}
 
-	private void createAndroidRunnerText(Composite textComposite) {
+	private void createAndroidRunnerCombo(Composite textComposite) {
 		fAndroidRunnerLabel = getToolkit().createLabel(textComposite, "Android runner");
-		fAndroidRunnerText = getToolkit().createText(textComposite, null, SWT.NONE);
-		fAndroidRunnerText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
-		fAndroidRunnerText.addSelectionListener(new AndroidRunnerTextAdapter());
+
+		fAndroidRunnerCombo = new Combo(textComposite, SWT.DROP_DOWN);
+		fAndroidRunnerCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
+		fAndroidRunnerCombo.addFocusListener(new AndroidRunnerComboFocusListener());
+		fAndroidRunnerCombo.addSelectionListener(new AndroidRunnerComboSelectionListener());
+		fillAndroidRunnerCombo();
 	}	
+
+	private void refreshAndroidRunnerCombo() {
+
+		String currentRunner = fAndroidRunnerCombo.getText();
+
+		fAndroidRunnerCombo.removeAll();
+		fillAndroidRunnerCombo();
+
+		fAndroidRunnerCombo.setText(currentRunner);
+	}
+
+	private void fillAndroidRunnerCombo() {
+		List<String> runnerList = createRunnerList();		
+		String[] runnerArray = new String[runnerList.size()];
+		fAndroidRunnerCombo.setItems(runnerList.toArray(runnerArray));
+	}
+
+	private List<String> createRunnerList() {
+		String projectPath = fFileInfoProvider.getProject().getLocation().toOSString();
+		return fClassIf.createRunnerList(projectPath);
+	}
 
 	private void createControlsOfButtonsComposite(Composite buttonsComposite) {
 
@@ -200,8 +225,6 @@ public class ClassDetailsPage extends BasicDetailsPage {
 
 		createEmptyLabel(buttonsComposite);
 		createClassBrowseButton(buttonsComposite);
-		createEmptyLabel(buttonsComposite);
-		createRunnerBrowseButton(buttonsComposite);
 	}
 
 	private void createEmptyLabel(Composite buttonsComposite) {
@@ -211,12 +234,6 @@ public class ClassDetailsPage extends BasicDetailsPage {
 	private void createClassBrowseButton(Composite buttonsComposite) {
 		Button browseButton = getToolkit().createButton(buttonsComposite, "Browse...", SWT.NONE);
 		browseButton.addSelectionListener(new BrowseClassesAdapter());
-		browseButton.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false));
-	}
-
-	private void createRunnerBrowseButton(Composite buttonsComposite) {
-		Button browseButton = getToolkit().createButton(buttonsComposite, "Browse..", SWT.NONE);
-		browseButton.addSelectionListener(new BrowseRunnersAdapter());
 		browseButton.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false));
 	}
 
@@ -237,13 +254,15 @@ public class ClassDetailsPage extends BasicDetailsPage {
 			fRunOnAndroidCheckbox.setSelection(runOnAndroid);
 
 			fAndroidRunnerLabel.setEnabled(runOnAndroid);
-			fAndroidRunnerText.setEnabled(runOnAndroid);
+			fAndroidRunnerCombo.setEnabled(runOnAndroid);
 
 			String androidRunner = fClassIf.getAndroidRunner();
+
 			if (androidRunner == null) {
 				androidRunner = "";
 			}
-			fAndroidRunnerText.setText(androidRunner);
+
+			fAndroidRunnerCombo.setText(androidRunner);
 
 			fMethodsSection.setInput(selectedClass);
 			fGlobalParametersSection.setInput(selectedClass);

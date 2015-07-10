@@ -52,7 +52,7 @@ public class ChoicesViewer extends TableViewerSection {
 	private final static int STYLE = Section.EXPANDED | Section.TITLE_BAR;
 
 	public IFileInfoProvider fFileInfoProvider;
-	
+
 	private ChoicesParentInterface fParentIf;
 	private ChoiceInterface fTableItemIf;
 
@@ -75,7 +75,7 @@ public class ChoicesViewer extends TableViewerSection {
 
 	private ChoicesParentNode fSelectedParent;
 
-	
+
 	private class ChoiceNameEditingSupport extends EditingSupport{
 
 		private TextCellEditor fNameCellEditor;
@@ -204,13 +204,13 @@ public class ChoicesViewer extends TableViewerSection {
 	}
 
 	private class ReplaceWithDefaultAdapter extends AbstractSelectionAdapter{
-		
+
 		@Override
 		public void widgetSelected(SelectionEvent e) {
 			if(fSelectedParent == fSelectedParent.getParameter()){
 				AbstractParameterInterface parameterIf 
-					= (AbstractParameterInterface)NodeInterfaceFactory.getNodeInterface(
-							fSelectedParent, ChoicesViewer.this, fFileInfoProvider);
+				= (AbstractParameterInterface)NodeInterfaceFactory.getNodeInterface(
+						fSelectedParent, ChoicesViewer.this, fFileInfoProvider);
 				parameterIf.resetChoicesToDefault();
 			}
 		}
@@ -221,7 +221,7 @@ public class ChoicesViewer extends TableViewerSection {
 			IModelUpdateContext updateContext, 
 			IFileInfoProvider fileInfoProvider) {
 		super(sectionContext, updateContext, STYLE);
-		
+
 		fFileInfoProvider = fileInfoProvider;
 
 		fParentIf = new ChoicesParentInterface(this, fileInfoProvider);
@@ -283,7 +283,7 @@ public class ChoicesViewer extends TableViewerSection {
 			setActionProvider(null);
 		}
 	}
-	
+
 	public void setReplaceButtonEnabled(boolean isEnabled){
 		fReplaceWithDefaultButton.setEnabled(isEnabled);
 	}
