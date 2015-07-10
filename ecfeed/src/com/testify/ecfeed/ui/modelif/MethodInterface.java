@@ -245,21 +245,21 @@ public class MethodInterface extends ParametersParentInterface {
 		if (!classNode.getRunOnAndroid()) {
 			return new JUnitTestMethodInvoker();
 		}
-		
+
 		String projectPath = fileInfoProvider.getProject().getLocation().toOSString();
 		String androidRunner = createAndroidRunnerName(projectPath, classNode.getAndroidRunner());
-				
+
 		return new AndroidTestMethodInvoker(androidRunner);
 	}
-	
+
 	private String createAndroidRunnerName(String projectPath, String androidRunnerFromClassNode) {
-		
-		String packageName = AndroidManifestReader.readPackageName(projectPath);
-		
+
+		String packageName = new AndroidManifestReader(projectPath).getPackageName();
+
 		if (packageName == null || packageName.isEmpty()) {
 			return androidRunnerFromClassNode;
 		}
-		
+
 		return packageName + "/" + androidRunnerFromClassNode;
 	}
 

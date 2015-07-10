@@ -47,6 +47,20 @@ public class ClassDetailsPage extends BasicDetailsPage {
 		}
 	}
 
+	private class BrowseRunnersAdapter extends AbstractSelectionAdapter{
+		@Override
+		public void widgetSelected(SelectionEvent e){
+
+			String projectPath = fFileInfoProvider.getProject().getLocation().toOSString();
+			String androidRunner = fClassIf.selectAndroidRunner(projectPath);
+
+			if (androidRunner != null) {
+				fAndroidRunnerText.setText(androidRunner);
+				fClassIf.setAndroidRunner(androidRunner);
+			}
+		}
+	}	
+
 	private class ClassNameTextAdapter extends AbstractSelectionAdapter{
 		@Override
 		public void widgetSelected(SelectionEvent e) {
@@ -68,7 +82,7 @@ public class ClassDetailsPage extends BasicDetailsPage {
 		public void widgetSelected(SelectionEvent e) {
 
 			final String defaultAndroidRunner  = "com.testify.ecfeed.android.junit.EcFeedTestRunner";
-			
+
 			boolean selection = fRunOnAndroidCheckbox.getSelection();
 			fClassIf.setRunOnAndroid(selection);
 
@@ -107,7 +121,7 @@ public class ClassDetailsPage extends BasicDetailsPage {
 	public void createContents(Composite parent){
 		super.createContents(parent);
 
-		createQualifiedNameComposite(getMainComposite());
+		createBasicParametersComposite(getMainComposite());
 		addForm(fCommentsSection = new JavaDocCommentsSection(this, this, fFileInfoProvider));
 		addViewerSection(fMethodsSection = new MethodsViewer(this, this, fFileInfoProvider));
 		addViewerSection(fGlobalParametersSection = new GlobalParametersViewer(this, this, fFileInfoProvider));
@@ -122,22 +136,26 @@ public class ClassDetailsPage extends BasicDetailsPage {
 		return textClient;
 	}
 
-	private void createQualifiedNameComposite(Composite parent) {
-		Composite composite = getToolkit().createComposite(parent);
-		composite.setLayout(new GridLayout(2, false));
-		composite.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
-		Composite textComposite = getToolkit().createComposite(composite);
+	private void createBasicParametersComposite(Composite parent) {
+
+		Composite mainComposite = getToolkit().createComposite(parent);
+		mainComposite.setLayout(new GridLayout(2, false));
+		mainComposite.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
+
+		Composite textComposite = getToolkit().createComposite(mainComposite);
+		createControlsOfTextComposite(textComposite);
+
+		Composite buttonsComposite = getToolkit().createComposite(mainComposite);
+		createControlsOfButtonsComposite(buttonsComposite);
+	}
+
+	private void createControlsOfTextComposite(Composite textComposite) {
 
 		textComposite.setLayout(new GridLayout(2, false));
 		textComposite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
-		Composite buttonsComposite = getToolkit().createComposite(composite);
-		buttonsComposite.setLayout(new GridLayout(1, false));
-		buttonsComposite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false));
 
 		createPackageNameText(textComposite);
 		createClassNameText(textComposite);
-		createBrowseButton(buttonsComposite);
-
 		createRunOnAndroidCheckBox(textComposite);
 		createAndroidRunnerText(textComposite);
 
@@ -160,7 +178,7 @@ public class ClassDetailsPage extends BasicDetailsPage {
 
 	private void createRunOnAndroidCheckBox(Composite composite) {
 		GridData checkboxGridData = new GridData(SWT.FILL,  SWT.CENTER, true, false);
-		checkboxGridData.horizontalSpan = 3;
+		checkboxGridData.horizontalSpan = 2;
 
 		fRunOnAndroidCheckbox = getToolkit().createButton(composite, "Run on Android", SWT.CHECK);
 		fRunOnAndroidCheckbox.setLayoutData(checkboxGridData);
@@ -174,9 +192,31 @@ public class ClassDetailsPage extends BasicDetailsPage {
 		fAndroidRunnerText.addSelectionListener(new AndroidRunnerTextAdapter());
 	}	
 
-	private void createBrowseButton(Composite buttonsComposite) {
+	private void createControlsOfButtonsComposite(Composite buttonsComposite) {
+
+		buttonsComposite.setLayout(new GridLayout(1, false));
+		GridData gridData = new GridData(SWT.FILL, SWT.TOP, false, false);
+		buttonsComposite.setLayoutData(gridData);
+
+		createEmptyLabel(buttonsComposite);
+		createClassBrowseButton(buttonsComposite);
+		createEmptyLabel(buttonsComposite);
+		createRunnerBrowseButton(buttonsComposite);
+	}
+
+	private void createEmptyLabel(Composite buttonsComposite) {
+		getToolkit().createLabel(buttonsComposite, "");
+	}	
+
+	private void createClassBrowseButton(Composite buttonsComposite) {
 		Button browseButton = getToolkit().createButton(buttonsComposite, "Browse...", SWT.NONE);
 		browseButton.addSelectionListener(new BrowseClassesAdapter());
+		browseButton.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false));
+	}
+
+	private void createRunnerBrowseButton(Composite buttonsComposite) {
+		Button browseButton = getToolkit().createButton(buttonsComposite, "Browse..", SWT.NONE);
+		browseButton.addSelectionListener(new BrowseRunnersAdapter());
 		browseButton.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false));
 	}
 

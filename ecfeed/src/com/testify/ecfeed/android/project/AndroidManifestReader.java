@@ -10,25 +10,88 @@ package com.testify.ecfeed.android.project;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
+import nu.xom.Attribute;
 import nu.xom.Builder;
 import nu.xom.Document;
+import nu.xom.Element;
+import nu.xom.Elements;
 import nu.xom.ParsingException;
 
 public class AndroidManifestReader {
 
-	public static String readPackageName(String projectPath) {
+	Document fDocument;
+
+	public AndroidManifestReader(String projectPath) {
 
 		Builder builder = new Builder();
-		Document document = null;
 
 		try {
-			document = builder.build(projectPath + File.separator + "AndroidManifest.xml");
+			fDocument = builder.build(projectPath + File.separator + "AndroidManifest.xml");
 		} catch (ParsingException | IOException e) {
-			System.out.println("Invalid AndroidManifest.xml");
+		}
+	}
+
+	public String getPackageName() {
+
+		if(fDocument == null) {
 			return "";
 		}
 
-		return document.getRootElement().getAttributeValue("package");
+		return fDocument.getRootElement().getAttributeValue("package");
+	}
+
+	public List<String> getRunners() {
+
+		List<String> runnerList = new ArrayList<String>();
+
+		if(fDocument == null) {
+			return runnerList;
+		}
+
+		addRunnersFromManifest(runnerList);
+		return runnerList;
+	}	
+
+	private void addRunnersFromManifest(List<String> runnerList) {
+
+		Elements children = fDocument.getRootElement().getChildElements();
+
+		for(int index = 0; index < children.size(); index++) {
+			addRunnerConditionally(children.get(index), runnerList);
+		}
+	}
+
+	private void addRunnerConditionally(Element element, List<String> runnerList) {
+
+		String nodeName = element.getQualifiedName();
+
+		final String instrumentationTag = "instrumentation";
+		if (!nodeName.equals(instrumentationTag))
+			return;
+
+		String runnerName = getRunnerFromAttributes(element);
+
+		if (runnerName == null) {
+			return;
+		}
+
+		runnerList.add(runnerName);
+	}
+
+	String getRunnerFromAttributes(Element element) {
+
+		int attributeCount = element.getAttributeCount();
+
+		for (int index = 0; index < attributeCount; index++) {
+
+			Attribute attribute = element.getAttribute(index);
+			if (attribute.getQualifiedName().equals("android:name")) {
+				return attribute.getValue();
+			}
+		}
+		return null;
 	}
 }
