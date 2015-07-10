@@ -18,7 +18,6 @@ public class SimpleRunner extends Runner {
 	Description fDescription;
 	
 	public SimpleRunner(Class<?> testClass) {
-		System.out.println("Simple runner - constructor: " + testClass.getName());
 		fDescription = Description.createTestDescription(testClass, testClass.getName()); 
 	}
 
@@ -29,7 +28,6 @@ public class SimpleRunner extends Runner {
 
 	@Override
 	public void run(RunNotifier runNotifier) {
-		System.out.println("Simple runner - run");
 		runNotifier.fireTestStarted(fDescription);
 		runNotifier.fireTestFinished(fDescription);
 	}
