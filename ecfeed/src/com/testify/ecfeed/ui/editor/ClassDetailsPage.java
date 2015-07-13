@@ -13,6 +13,7 @@ package com.testify.ecfeed.ui.editor;
 
 import java.util.List;
 
+import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.FocusListener;
@@ -40,12 +41,12 @@ public class ClassDetailsPage extends BasicDetailsPage {
 	private Text fPackageNameText;
 	private Button fRunOnAndroidCheckbox;
 	private Label fAndroidRunnerLabel;
-	private Combo fAndroidRunnerCombo;
+	private Combo fAndroidRunnerCombo;	
 	private ClassInterface fClassIf;
 	private GlobalParametersViewer fGlobalParametersSection;
 	private JavaDocCommentsSection fCommentsSection;
 
-	private class BrowseClassesAdapter extends AbstractSelectionAdapter{
+	private class BrowseClassesSelectionListener extends AbstractSelectionAdapter{
 		@Override
 		public void widgetSelected(SelectionEvent e){
 			fClassIf.reassignClass();
@@ -75,7 +76,7 @@ public class ClassDetailsPage extends BasicDetailsPage {
 		}
 	}	
 
-	private class ClassNameTextAdapter extends AbstractSelectionAdapter{
+	private class ClassNameSelectionListener extends AbstractSelectionAdapter{
 		@Override
 		public void widgetSelected(SelectionEvent e) {
 			fClassIf.setLocalName(fClassNameText.getText());
@@ -83,7 +84,7 @@ public class ClassDetailsPage extends BasicDetailsPage {
 		}
 	}
 
-	private class PackageNameTextAdapter extends AbstractSelectionAdapter{
+	private class PackageNameSelectionListener extends AbstractSelectionAdapter{
 		@Override
 		public void widgetSelected(SelectionEvent e) {
 			fClassIf.setPackageName(fPackageNameText.getText());
@@ -140,61 +141,82 @@ public class ClassDetailsPage extends BasicDetailsPage {
 	private void createBasicParametersComposite(Composite parent) {
 
 		Composite mainComposite = getToolkit().createComposite(parent);
-		mainComposite.setLayout(new GridLayout(2, false));
+		mainComposite.setLayout(new GridLayout(1, false));
 		mainComposite.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
 
-		Composite textComposite = getToolkit().createComposite(mainComposite);
-		createControlsOfTextComposite(textComposite);
+		Composite packageAndClassComposite = getToolkit().createComposite(mainComposite);
+		initAndFillClassComposite(packageAndClassComposite);
 
-		Composite buttonsComposite = getToolkit().createComposite(mainComposite);
-		createControlsOfButtonsComposite(buttonsComposite);
+		Composite androidComposite = getToolkit().createComposite(mainComposite);
+		initAndFillAndroidComposite(androidComposite);
 	}
 
-	private void createControlsOfTextComposite(Composite textComposite) {
+	private void initAndFillClassComposite(Composite composite) {
 
-		textComposite.setLayout(new GridLayout(2, false));
-		textComposite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
+		composite.setLayout(new GridLayout(3, false));
+		composite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 
-		createPackageNameText(textComposite);
-		createClassNameText(textComposite);
-		createRunOnAndroidCheckBox(textComposite);
-		createAndroidRunnerCombo(textComposite);
+		// row 1
 
-		getToolkit().paintBordersFor(textComposite);
-	}
+		// col 1 label 
+		getToolkit().createLabel(composite, "Package name");
 
-	private void createPackageNameText(Composite textComposite) {
-		getToolkit().createLabel(textComposite, "Package name");
-		fPackageNameText = getToolkit().createText(textComposite, null, SWT.NONE);
+		// col 2 packageName
+		fPackageNameText = getToolkit().createText(composite, null, SWT.NONE);
 		fPackageNameText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
-		fPackageNameText.addSelectionListener(new PackageNameTextAdapter());
-	}
+		fPackageNameText.addSelectionListener(new PackageNameSelectionListener());
 
-	private void createClassNameText(Composite textComposite) {
-		getToolkit().createLabel(textComposite, "Class name");
-		fClassNameText = getToolkit().createText(textComposite, null, SWT.NONE);
+		// col 3 empty
+		getToolkit().createLabel(composite, ""); // TODO
+
+
+		// row 2
+
+		// col 1 label
+		getToolkit().createLabel(composite, "Class name");
+
+		// col 2 className
+		fClassNameText = getToolkit().createText(composite, null, SWT.NONE);
 		fClassNameText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
-		fClassNameText.addSelectionListener(new ClassNameTextAdapter());
+		fClassNameText.addSelectionListener(new ClassNameSelectionListener());
+
+		// col 3 browse button
+		Button browseButton = getToolkit().createButton(composite, "Browse...", SWT.NONE);
+		browseButton.addSelectionListener(new BrowseClassesSelectionListener());
+		browseButton.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false));		
+
+		getToolkit().paintBordersFor(composite);
 	}
 
-	private void createRunOnAndroidCheckBox(Composite composite) {
+	private void initAndFillAndroidComposite(Composite composite) {
+
+		composite.setLayout(new GridLayout(2, false));
+		composite.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
+
+		// row 1
+
+		// col 1 and 2
+		fRunOnAndroidCheckbox = getToolkit().createButton(composite, "Run on Android", SWT.CHECK);
+
 		GridData checkboxGridData = new GridData(SWT.FILL,  SWT.CENTER, true, false);
 		checkboxGridData.horizontalSpan = 2;
-
-		fRunOnAndroidCheckbox = getToolkit().createButton(composite, "Run on Android", SWT.CHECK);
 		fRunOnAndroidCheckbox.setLayoutData(checkboxGridData);
 		fRunOnAndroidCheckbox.addSelectionListener(new RunOnAndroidCheckBoxAdapter());
-	}
 
-	private void createAndroidRunnerCombo(Composite textComposite) {
-		fAndroidRunnerLabel = getToolkit().createLabel(textComposite, "Android runner");
 
-		fAndroidRunnerCombo = new Combo(textComposite, SWT.DROP_DOWN);
+		// row 2
+
+		// col 1 - label
+		fAndroidRunnerLabel = getToolkit().createLabel(composite, "Android runner");
+
+		// col 2 - runner combo
+		fAndroidRunnerCombo = new ComboViewer(composite, SWT.NONE).getCombo();
 		fAndroidRunnerCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 		fAndroidRunnerCombo.addFocusListener(new AndroidRunnerComboFocusListener());
 		fAndroidRunnerCombo.addSelectionListener(new AndroidRunnerComboSelectionListener());
+
 		fillAndroidRunnerCombo();
-	}	
+	}
 
 	private void refreshAndroidRunnerCombo() {
 
@@ -215,26 +237,6 @@ public class ClassDetailsPage extends BasicDetailsPage {
 	private List<String> createRunnerList() {
 		String projectPath = fFileInfoProvider.getProject().getLocation().toOSString();
 		return fClassIf.createRunnerList(projectPath);
-	}
-
-	private void createControlsOfButtonsComposite(Composite buttonsComposite) {
-
-		buttonsComposite.setLayout(new GridLayout(1, false));
-		GridData gridData = new GridData(SWT.FILL, SWT.TOP, false, false);
-		buttonsComposite.setLayoutData(gridData);
-
-		createEmptyLabel(buttonsComposite);
-		createClassBrowseButton(buttonsComposite);
-	}
-
-	private void createEmptyLabel(Composite buttonsComposite) {
-		getToolkit().createLabel(buttonsComposite, "");
-	}	
-
-	private void createClassBrowseButton(Composite buttonsComposite) {
-		Button browseButton = getToolkit().createButton(buttonsComposite, "Browse...", SWT.NONE);
-		browseButton.addSelectionListener(new BrowseClassesAdapter());
-		browseButton.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false));
 	}
 
 	@Override
