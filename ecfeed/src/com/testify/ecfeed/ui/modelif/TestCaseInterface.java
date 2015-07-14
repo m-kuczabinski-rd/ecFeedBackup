@@ -18,6 +18,7 @@ import com.testify.ecfeed.adapter.EImplementationStatus;
 import com.testify.ecfeed.adapter.IModelOperation;
 import com.testify.ecfeed.adapter.operations.TestCaseOperationUpdateTestData;
 import com.testify.ecfeed.model.ChoiceNode;
+import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.ui.common.IFileInfoProvider;
 import com.testify.ecfeed.ui.common.Messages;
@@ -25,7 +26,7 @@ import com.testify.ecfeed.ui.common.Messages;
 public class TestCaseInterface extends AbstractNodeInterface {
 
 	private IFileInfoProvider fFileInfoProvider;
-	
+
 	public TestCaseInterface(IModelUpdateContext updateContext, IFileInfoProvider fileInfoProvider) {
 		super(updateContext, fileInfoProvider);
 		fFileInfoProvider = fileInfoProvider;
@@ -53,11 +54,15 @@ public class TestCaseInterface extends AbstractNodeInterface {
 		return isExecutable(getTarget());
 	}
 
-	public void execute() {
+	public void executeStaticTest() {
 		MethodInterface methodIf = new MethodInterface(getUpdateContext(), fFileInfoProvider);
-		
+
+		TestCaseNode testCaseNode = getTarget();
+		MethodNode methodNode = (MethodNode)testCaseNode.getParent();
+		methodIf.setTarget(methodNode);
+
 		methodIf.executeStaticTests(
-					new ArrayList<TestCaseNode>(Arrays.asList(new TestCaseNode[]{getTarget()})), fFileInfoProvider);
+				new ArrayList<TestCaseNode>(Arrays.asList(new TestCaseNode[]{getTarget()})), fFileInfoProvider);
 	}
 
 	public boolean updateTestData(int index, ChoiceNode value) {

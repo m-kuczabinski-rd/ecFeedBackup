@@ -216,16 +216,18 @@ public class MethodInterface extends ParametersParentInterface {
 	}
 
 	public void executeStaticTests(Collection<TestCaseNode> testCases, IFileInfoProvider fileInfoProvider) {
+
 		if (!isValidClassConfiguration())
 			return;
 
-		StaticTestExecutionSupport support 
-		= new StaticTestExecutionSupport(testCases, createTestMethodInvoker(fileInfoProvider));
+		StaticTestExecutionSupport support = 
+				new StaticTestExecutionSupport(testCases, createTestMethodInvoker(fileInfoProvider));
 		support.proceed();
 	}
 
 	private boolean isValidClassConfiguration() {
-		ClassNode classNode = (ClassNode) getTarget().getParent();
+
+		ClassNode classNode = (ClassNode)getTarget().getParent();
 
 		if (classNode.getRunOnAndroid() && emptyAndroidRunner(classNode)) {
 			MessageDialog.openError(

@@ -97,7 +97,7 @@ public class TestCaseDetailsPage extends BasicDetailsPage {
 		fExecuteButton.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e){
-				fTestCaseIf.execute();
+				fTestCaseIf.executeStaticTest();
 			}
 		});
 		getToolkit().paintBordersFor(fTestSuiteNameCombo);
