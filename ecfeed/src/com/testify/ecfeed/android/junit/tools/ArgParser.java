@@ -74,7 +74,6 @@ public class ArgParser {
 
 			method = createMethod(paramsWithArgs, theClass, methodName);
 			arguments = createMethodArguments(paramsWithArgs);
-
 		} catch (RuntimeException exc) {
 			logAndThrow("Error while parsing parameters. Cause: " + exc.getMessage());
 			return null;
@@ -89,6 +88,7 @@ public class ArgParser {
 	}
 
 	private List<String> createArgList(String arguments) {
+
 		List<String> result = new ArrayList<String>();
 
 		final String SEPARATOR = ","; 
@@ -112,7 +112,12 @@ public class ArgParser {
 			startPos = indexOfSeparator + 1;
 		}
 
-		result.add(arguments.substring(startPos).trim());
+		String arg = arguments.substring(startPos).trim();
+
+		if (!arg.isEmpty()) {
+			result.add(arg);
+		}
+
 		return result;
 	}
 
@@ -150,8 +155,8 @@ public class ArgParser {
 	}
 
 	private List<ParamTypeWithArg> createParamsWithArgs(Iterator<String> argsIterator) throws RuntimeException {
-		List<ParamTypeWithArg> result = new ArrayList<ParamTypeWithArg>();
 
+		List<ParamTypeWithArg> result = new ArrayList<ParamTypeWithArg>();
 		Iterator<String> iterator = argsIterator;
 
 		while(iterator.hasNext()) {
@@ -168,8 +173,13 @@ public class ArgParser {
 	}
 
 	private Class<?>[] createMethodParameters(final List<ParamTypeWithArg> paramsWithArgs) throws RuntimeException {
+
 		int paramCount = paramsWithArgs.size();
 		Class<?>[] outParameters = new Class[paramCount];
+
+		if (paramCount == 0) {
+			return outParameters;
+		}
 
 		int index = 0;
 		for (ParamTypeWithArg paramWithArg: paramsWithArgs)
@@ -216,16 +226,15 @@ public class ArgParser {
 			Class<?> theClass, 
 			String methodName) throws RuntimeException {
 
-		if (paramsWithArgs.isEmpty()) {
-			throwRuntimeException(ErrorCode.NO_METHOD_PARAMETERS, "Method parameters are missing from test arguments.");
-		}
-
 		Class<?>[] parameters = createMethodParameters(paramsWithArgs);
-
 		Method method = null;
 
 		try {
-			method = theClass.getMethod(methodName, parameters);
+			if (parameters.length == 0) {
+				method = theClass.getMethod(methodName);
+			} else {
+				method = theClass.getMethod(methodName, parameters);
+			}
 		} catch (NoSuchMethodException exc1) {
 			throwRuntimeException(
 					ErrorCode.NO_PUBLIC_METHOD,

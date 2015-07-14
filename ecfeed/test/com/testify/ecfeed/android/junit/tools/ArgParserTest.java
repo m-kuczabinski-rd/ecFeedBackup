@@ -37,6 +37,7 @@ class LoggerStub implements ILogger {
 public class ArgParserTest{
 
 	final String CLASS_NAME = "com.testify.ecfeed.android.junit.tools.ArgParserTest";
+	final String METHOD_NAME = "stubMethod";
 	final String METHOD_NAME_INT = "stubMethodInt";
 	final String METHOD_NAME_BOOLEAN = "stubMethodBoolean";
 	final String METHOD_NAME_LONG = "stubMethodLong";
@@ -61,6 +62,10 @@ public class ArgParserTest{
 	private boolean fWasInvoked = false;
 	private String fErrorMessage = null;
 
+
+	public void stubMethod() {
+		fWasInvoked = true;
+	}
 
 	public void stubMethodInt(int arg) {
 		fWasInvoked = true;
@@ -155,13 +160,6 @@ public class ArgParserTest{
 	}	
 
 	@Test
-	public void shouldReportErrorWhenNoParam(){
-		invokeWithError(
-				joinParams(CLASS_NAME, METHOD_NAME_INT), 
-				ArgParser.ErrorCode.NO_METHOD_PARAMETERS);
-	}
-
-	@Test
 	public void shouldReportErrorWhenNoOpeningBracket(){
 		invokeWithError(
 				joinParams(CLASS_NAME, METHOD_NAME_INT, "int"), 
@@ -187,6 +185,11 @@ public class ArgParserTest{
 		invokeWithError(
 				joinParams(CLASS_NAME, METHOD_NAME_INT, "int[abc]"), 
 				ArgParser.ErrorCode.INVALID_ARGUMENT);
+	}
+
+	@Test
+	public void shouldInvokeWhenNoParam(){
+		invokeWithSuccess(joinParams(CLASS_NAME, METHOD_NAME));
 	}
 
 	@Test

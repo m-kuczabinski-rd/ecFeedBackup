@@ -70,7 +70,13 @@ public class AndroidTestMethodInvoker implements ITestMethodInvoker {
 		System.out.println(Messages.ANDROID_INSTRUMENTATION_FINISHED());    	
 	}
 
-	private Process startProcess(String className, String methodName, String arguments) throws RunnerException {
+	private Process startProcess(String className, String methodName, String methodArgsAndParams) throws RunnerException {
+
+		String ecFeedParam = className + ", " + methodName;
+
+		if (!methodArgsAndParams.isEmpty()) {
+			ecFeedParam = ecFeedParam + ", " + methodArgsAndParams;
+		}
 
 		ProcessBuilder pb
 		= new ProcessBuilder(
@@ -87,7 +93,7 @@ public class AndroidTestMethodInvoker implements ITestMethodInvoker {
 
 				"-e",
 				"ecFeed",
-				className + ", " + methodName + ", " + arguments,
+				ecFeedParam,
 
 				fTestRunner);
 
