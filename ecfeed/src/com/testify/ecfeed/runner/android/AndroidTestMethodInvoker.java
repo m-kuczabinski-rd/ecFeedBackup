@@ -121,7 +121,7 @@ public class AndroidTestMethodInvoker implements ITestMethodInvoker {
 			while ((line = br.readLine()) != null) {
 				System.out.println(line);
 
-				if (isTestFailedLine(line)) {
+				if (isInstrumentationError(line) || isTestFailedLine(line)) {
 					testFailed = true;
 				}
 
@@ -136,7 +136,21 @@ public class AndroidTestMethodInvoker implements ITestMethodInvoker {
 		}
 	}
 
-	public boolean isTestFailedLine(String line) {
+	private boolean isInstrumentationError(String line) {
+
+		if (line.isEmpty()) {
+			return false;
+		}
+		if (line.indexOf("INSTRUMENTATION_STATUS:") == -1) {
+			return false;
+		}
+		if (line.indexOf("Error") == -1) {
+			return false;
+		}
+		return true;
+	}
+
+	private boolean isTestFailedLine(String line) {
 
 		if (line.isEmpty()) {
 			return false;
