@@ -17,6 +17,7 @@ import java.lang.reflect.Method;
 import com.testify.ecfeed.runner.ITestMethodInvoker;
 import com.testify.ecfeed.runner.Messages;
 import com.testify.ecfeed.runner.RunnerException;
+import com.testify.ecfeed.utils.StringHelper;
 
 public class AndroidTestMethodInvoker implements ITestMethodInvoker {
 
@@ -119,13 +120,14 @@ public class AndroidTestMethodInvoker implements ITestMethodInvoker {
 		String errorMessage = "";
 		try {
 			while ((line = br.readLine()) != null) {
-				System.out.println(line);
-
-				if (isInstrumentationError(line) || isTestFailedLine(line)) {
+				if (isInstrumentationErrorLine(line) || isTestFailedLine(line)) {
 					testFailed = true;
 				}
 
-				errorMessage = errorMessage + line + "\n";
+				if (!isStackLine(line) && !StringHelper.isTrimmedEmpty(line)) {
+					System.out.println("\t" + line);
+					errorMessage = errorMessage + "\t" + line + "\n";
+				}
 			}
 		} catch (IOException e) {
 			throw new RunnerException(Messages.IO_EXCEPITON_OCCURED(e.getMessage()));
@@ -136,7 +138,21 @@ public class AndroidTestMethodInvoker implements ITestMethodInvoker {
 		}
 	}
 
-	private boolean isInstrumentationError(String line) {
+	private boolean isStackLine(String line) {
+		String trimmedLine = line.trim();
+
+		if (!trimmedLine.startsWith("at ")) {
+			return false;
+		}
+
+		if (!trimmedLine.contains("java")) {
+			return false;
+		}
+
+		return true;
+	}
+
+	private boolean isInstrumentationErrorLine(String line) {
 
 		if (line.isEmpty()) {
 			return false;
