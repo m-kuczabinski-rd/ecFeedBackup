@@ -42,8 +42,7 @@ public class OnlineTestRunningSupport extends TestExecutionSupport{
 
 	private MethodNode fTarget;
 	private JavaTestRunner fRunner;
-	private int fExecutedTestCases;
-	
+
 	private class ExecuteRunnable implements IRunnableWithProgress{
 
 		private IGenerator<ChoiceNode> fGenerator;
@@ -60,41 +59,42 @@ public class OnlineTestRunningSupport extends TestExecutionSupport{
 			fConstraints = constraints;
 			fParameters = parameters;
 		}
-		
+
 		@Override
-		public void run(IProgressMonitor monitor)
+		public void run(IProgressMonitor progressMonitor)
 				throws InvocationTargetException, InterruptedException {
 			try{
+				setProgressMonitor(progressMonitor);
 				fRunner.setTarget(fTarget);
 				List<ChoiceNode> next;
 				fGenerator.initialize(fInput, fConstraints, fParameters);
-				monitor.beginTask(Messages.EXECUTING_TEST_WITH_PARAMETERS, fGenerator.totalWork());
-				while((next = fGenerator.next()) != null && monitor.isCanceled() == false){
-					++fExecutedTestCases;
+				beginTestExecution(fGenerator.totalWork());
+
+				while((next = fGenerator.next()) != null && progressMonitor.isCanceled() == false){
 					try{
+						setTestProgressMessage();
 						fRunner.runTestCase(next);
 					} catch(RunnerException e){
 						addFailedTest(e);
 					}
-					monitor.worked(fGenerator.workProgress());
+					addExecutedTest(fGenerator.workProgress());
 				}
-				monitor.done();
+				progressMonitor.done();
 			} catch (Throwable e) {
 				throw new InvocationTargetException(e, e.getMessage());
 			}
 		}
 	}
-	
+
 	public OnlineTestRunningSupport(MethodNode target, ITestMethodInvoker testMethodInvoker){
 		this(testMethodInvoker);
 		setTarget(target);
 	}
-	
+
 	public OnlineTestRunningSupport(ITestMethodInvoker testMethodInvoker) {
 		ILoaderProvider loaderProvider = new EclipseLoaderProvider();
 		ModelClassLoader loader = loaderProvider.getLoader(true, null);
 		fRunner = new JavaTestRunner(loader, testMethodInvoker);
-		fExecutedTestCases = 0;
 	}
 
 	public void setTarget(MethodNode target) {
@@ -118,10 +118,9 @@ public class OnlineTestRunningSupport extends TestExecutionSupport{
 				Collection<IConstraint<ChoiceNode>> constraintList = new ArrayList<IConstraint<ChoiceNode>>();
 				constraintList.addAll(dialog.getConstraints());
 				Map<String, Object> parameters = dialog.getGeneratorParameters();
-				
-				fExecutedTestCases = 0;
+
 				executeGeneratedTests(selectedGenerator, algorithmInput, constraintList, parameters);
-				displayTestStatusDialog(fExecutedTestCases);
+				displayTestStatusDialog();
 			}
 		} else {
 			executeSingleTest();

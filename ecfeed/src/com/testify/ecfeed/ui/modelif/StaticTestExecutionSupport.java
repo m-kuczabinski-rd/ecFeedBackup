@@ -33,33 +33,37 @@ import com.testify.ecfeed.ui.common.EclipseLoaderProvider;
 import com.testify.ecfeed.ui.common.Messages;
 
 public class StaticTestExecutionSupport extends TestExecutionSupport{
-	
+
 	private Collection<TestCaseNode> fTestCases;
 	private JavaTestRunner fRunner;
 	private List<TestCaseNode> fFailedTests;
-	
+
 	private class ExecuteRunnable implements IRunnableWithProgress{
 
 		@Override
-		public void run(IProgressMonitor monitor)
+		public void run(IProgressMonitor progressMonitor)
 				throws InvocationTargetException, InterruptedException {
+
+			setProgressMonitor(progressMonitor);
 			fFailedTests.clear();
-			monitor.beginTask(Messages.EXECUTING_TEST_WITH_PARAMETERS, fTestCases.size());
+			beginTestExecution(fTestCases.size());
+
 			for(TestCaseNode testCase : fTestCases){
-				if(monitor.isCanceled() == false){
+				if(progressMonitor.isCanceled() == false){
 					try {
+						setTestProgressMessage();
 						fRunner.setTarget(testCase.getMethod());
 						fRunner.runTestCase(testCase.getTestData());
 					} catch (RunnerException e) {
 						addFailedTest(e);
 					}
-					monitor.worked(1);
+					addExecutedTest(1);
 				}
 			}
-			monitor.done();
+			progressMonitor.done();
 		}
 	}
-	
+
 	public StaticTestExecutionSupport(Collection<TestCaseNode> testCases, ITestMethodInvoker testMethodInvoker){
 		super();
 		ILoaderProvider loaderProvider = new EclipseLoaderProvider();
@@ -67,9 +71,9 @@ public class StaticTestExecutionSupport extends TestExecutionSupport{
 		fRunner = new JavaTestRunner(loader, testMethodInvoker);
 		fTestCases = testCases;
 		fFailedTests = new ArrayList<>();
-		
+
 	}
-	
+
 	public void proceed(){
 		PrintStream currentOut = System.out;
 		ConsoleManager.displayConsole();
@@ -91,7 +95,7 @@ public class StaticTestExecutionSupport extends TestExecutionSupport{
 			}
 			MessageDialog.openError(Display.getCurrent().getActiveShell(), Messages.DIALOG_TEST_EXECUTION_REPORT_TITLE, message);
 		}
-		displayTestStatusDialog(fTestCases.size());
+		displayTestStatusDialog();
 
 		System.setOut(currentOut);
 	}
