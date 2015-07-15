@@ -66,7 +66,6 @@ public class AndroidTestMethodInvoker implements ITestMethodInvoker {
 		Process process = startProcess(className, functionName, arguments); 
 		logOutputAndCountFailures(process);
 		waitFor(process);
-		System.out.println("Exit code:" + process.exitValue());
 
 		System.out.println(Messages.ANDROID_INSTRUMENTATION_FINISHED());    	
 	}
@@ -124,7 +123,7 @@ public class AndroidTestMethodInvoker implements ITestMethodInvoker {
 					testFailed = true;
 				}
 
-				if (!isStackLine(line) && !StringHelper.isTrimmedEmpty(line)) {
+				if (!isIgnoredLine(line)) {
 					System.out.println("\t" + line);
 					errorMessage = errorMessage + "\t" + line + "\n";
 				}
@@ -134,18 +133,47 @@ public class AndroidTestMethodInvoker implements ITestMethodInvoker {
 		}
 
 		if (testFailed) {
-			throw new RunnerException("Test unsuccesful:\n" + errorMessage);
+			throw new RunnerException(errorMessage);
 		}
 	}
 
-	private boolean isStackLine(String line) {
-		String trimmedLine = line.trim();
+	private boolean isIgnoredLine(String line) {
 
-		if (!trimmedLine.startsWith("at ")) {
+		String trimmedLine = line.trim();
+		
+		if (trimmedLine.isEmpty()) {
+			return true;
+		}
+
+		if (isStackLine(trimmedLine)) {
+			return true;
+		}
+		
+		if (trimmedLine.contains("Test results for EcFeedTestRunner")) {
+			return true;
+		}
+		
+		if (trimmedLine.contains("FAILURES!!!")) {
+			return true;
+		}		
+		
+		if (trimmedLine.contains("Tests run:")) {
+			return true;
+		}		
+		
+		if (trimmedLine.contains("Exit code:")) {
+			return true;
+		}		
+		
+		return false;
+	}
+
+	private boolean isStackLine(String line) {
+		if (!line.startsWith("at ")) {
 			return false;
 		}
 
-		if (!trimmedLine.contains("java")) {
+		if (!line.contains("java")) {
 			return false;
 		}
 
