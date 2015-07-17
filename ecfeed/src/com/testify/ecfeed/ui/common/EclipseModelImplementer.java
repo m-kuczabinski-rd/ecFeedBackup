@@ -21,17 +21,13 @@ import org.eclipse.core.filebuffers.FileBuffers;
 import org.eclipse.core.filebuffers.ITextFileBuffer;
 import org.eclipse.core.filebuffers.ITextFileBufferManager;
 import org.eclipse.core.filebuffers.LocationKind;
-import org.eclipse.core.resources.IFolder;
-import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
-import org.eclipse.jdt.core.IClasspathEntry;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IMethod;
 import org.eclipse.jdt.core.IPackageFragment;
-import org.eclipse.jdt.core.IPackageFragmentRoot;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.dom.AST;
@@ -117,7 +113,8 @@ public class EclipseModelImplementer extends AbstractModelImplementer {
 		String packageName = JavaUtils.getPackageName(node.getName());
 		String className = JavaUtils.getLocalName(node.getName());
 		String unitName = className + ".java";
-		IPackageFragment packageFragment = getPackageFragment(packageName);
+		IPackageFragment packageFragment = 
+				EclipsePackageFragmentGetter.getPackageFragment(packageName, fFileInfoProvider);
 		ICompilationUnit unit = packageFragment.getCompilationUnit(unitName);
 		unit.createType(classDefinitionContent(node), null, false, null);
 		unit.becomeWorkingCopy(null);
@@ -163,7 +160,9 @@ public class EclipseModelImplementer extends AbstractModelImplementer {
 		String packageName = JavaUtils.getPackageName(typeName);
 		String localName = JavaUtils.getLocalName(typeName);
 		String unitName = localName + ".java";
-		IPackageFragment packageFragment = getPackageFragment(packageName);
+		//		IPackageFragment packageFragment = getPackageFragment(packageName);
+		IPackageFragment packageFragment = 
+				EclipsePackageFragmentGetter.getPackageFragment(packageName, fFileInfoProvider);
 		ICompilationUnit unit = packageFragment.getCompilationUnit(unitName);
 		unit.createType(enumDefinitionContent(node, fields), null, false, null);
 		unit.becomeWorkingCopy(null);
@@ -441,58 +440,6 @@ public class EclipseModelImplementer extends AbstractModelImplementer {
 			return JavaCore.create(fFileInfoProvider.getProject());
 		}
 		return null;
-	}
-
-	private IPackageFragment getPackageFragment(String name) throws CoreException{
-		IPackageFragmentRoot packageFragmentRoot = getPackageFragmentRoot();
-		IPackageFragment packageFragment = packageFragmentRoot.getPackageFragment(name);
-		if(packageFragment.exists() == false){
-			packageFragment = packageFragmentRoot.createPackageFragment(name, false, null);
-		}
-		return packageFragment;
-	}
-
-	private IPackageFragmentRoot getPackageFragmentRoot() throws CoreException{
-		IPackageFragmentRoot root = fFileInfoProvider.getPackageFragmentRoot();
-		if(root == null){
-			root = getAnySourceFolder();
-		}
-		if(root == null){
-			root = createNewSourceFolder("src");
-		}
-		return root;
-	}
-
-	private IPackageFragmentRoot getAnySourceFolder() throws CoreException {
-		if(fFileInfoProvider.getProject().hasNature(JavaCore.NATURE_ID)){
-			IJavaProject project = JavaCore.create(fFileInfoProvider.getProject());
-			for (IPackageFragmentRoot packageFragmentRoot: project.getPackageFragmentRoots()) {
-				if (packageFragmentRoot.getKind() == IPackageFragmentRoot.K_SOURCE) {
-					return packageFragmentRoot;
-				}
-			}
-		}
-		return null;
-	}
-
-	private IPackageFragmentRoot createNewSourceFolder(String name) throws CoreException {
-		IProject project = fFileInfoProvider.getProject();
-		IJavaProject javaProject = JavaCore.create(project);
-		IFolder srcFolder = project.getFolder(name);
-		int i = 0;
-		while(srcFolder.exists()){
-			String newName = name + i++;
-			srcFolder = project.getFolder(newName);
-		}
-		srcFolder.create(false, true, null);
-		IPackageFragmentRoot root = javaProject.getPackageFragmentRoot(srcFolder);
-
-		IClasspathEntry[] entries = javaProject.getRawClasspath();
-		IClasspathEntry[] updated = new IClasspathEntry[entries.length + 1];
-		System.arraycopy(entries, 0, updated, 0, entries.length);
-		updated[entries.length] = JavaCore.newSourceEntry(root.getPath());
-		javaProject.setRawClasspath(updated, null);
-		return root;
 	}
 
 	private List<ChoiceNode> unimplementedChoices(List<ChoiceNode> choices){

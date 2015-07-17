@@ -17,7 +17,6 @@ import java.lang.reflect.Method;
 import com.testify.ecfeed.runner.ITestMethodInvoker;
 import com.testify.ecfeed.runner.Messages;
 import com.testify.ecfeed.runner.RunnerException;
-import com.testify.ecfeed.utils.StringHelper;
 
 public class AndroidTestMethodInvoker implements ITestMethodInvoker {
 
