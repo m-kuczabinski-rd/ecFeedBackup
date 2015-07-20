@@ -9,20 +9,25 @@ import org.eclipse.jdt.core.JavaModelException;
 public abstract class EclipseSimpleClassImplementer {
 
 	IFileInfoProvider fFileInfoProvider;
+	String fTestingAppPackage;
+	String fTestingAppClass;
 
-	public EclipseSimpleClassImplementer(IFileInfoProvider fileInfoProvider) {
-		fFileInfoProvider = fileInfoProvider;	
+	public EclipseSimpleClassImplementer(
+			IFileInfoProvider fileInfoProvider, 
+			String testingAppPackage, 
+			String testingAppClass) {
+		fFileInfoProvider = fileInfoProvider;
+		fTestingAppPackage = testingAppPackage;
+		fTestingAppClass = testingAppClass;
 	}
 
-	abstract protected String getPackageName();
-	abstract protected String getClassName();
 	abstract protected void createUnitContent(ICompilationUnit unit) throws JavaModelException;
 
 	public void implementContent() throws CoreException {
-		String unitName = getClassName() + ".java";
+		String unitName = fTestingAppClass + ".java";
 
 		IPackageFragment packageFragment = 
-				EclipsePackageFragmentGetter.getPackageFragment(getPackageName(), fFileInfoProvider);
+				EclipsePackageFragmentGetter.getPackageFragment(filePackage(), fFileInfoProvider);
 		ICompilationUnit unit = packageFragment.getCompilationUnit(unitName);
 
 		createUnitContent(unit);
@@ -32,16 +37,23 @@ public abstract class EclipseSimpleClassImplementer {
 	}
 
 	public boolean classDefinitionImplemented() {
-		return classDefinitionImplemented(getPackageName(), getClassName());
+		return classDefinitionImplemented(filePackage(), fTestingAppClass);
 	}
 
 	private boolean classDefinitionImplemented(String packageName, String className) {
 
 		String qualifiedName = packageName + "." + className;
+
 		IType type = JavaModelAnalyser.getIType(qualifiedName);
 		try {
 			return  type != null && type.isClass();
-		} catch (JavaModelException e) {}
+		} catch (JavaModelException e) {
+		}
+
 		return false;
+	}
+
+	private String filePackage() {
+		return fTestingAppPackage  + "ecFeed.android";
 	}
 }

@@ -5,19 +5,9 @@ import org.eclipse.jdt.core.JavaModelException;
 
 public class EclipseLoggerClassImplementer extends EclipseSimpleClassImplementer {
 
-	public EclipseLoggerClassImplementer(IFileInfoProvider fileInfoProvider) {
-		super(fileInfoProvider);
+	public EclipseLoggerClassImplementer(IFileInfoProvider fileInfoProvider, String testingAppPackage) {
+		super(fileInfoProvider, testingAppPackage, "Logger");
 	}
-
-	@ Override
-	protected String getPackageName() {
-		return "com.testify.ecfeed.android.junit";
-	}
-
-	@ Override
-	protected String getClassName() {
-		return "Logger";
-	}	
 
 	@ Override
 	protected void createUnitContent(ICompilationUnit unit) throws JavaModelException {
