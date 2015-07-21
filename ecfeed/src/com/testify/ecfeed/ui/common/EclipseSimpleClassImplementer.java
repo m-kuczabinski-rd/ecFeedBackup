@@ -14,11 +14,14 @@ import org.eclipse.jdt.core.IPackageFragment;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaModelException;
 
+import com.testify.ecfeed.utils.PackageClassHelper;
+
 public abstract class EclipseSimpleClassImplementer {
 
-	IFileInfoProvider fFileInfoProvider;
-	String fTestingAppPackage;
-	String fTestingAppClass;
+	private IFileInfoProvider fFileInfoProvider;
+	private String fTestingAppPackage;
+	private String fTestingAppSourceFilesPackage;
+	private String fTestingAppClass;
 
 	public EclipseSimpleClassImplementer(
 			IFileInfoProvider fileInfoProvider, 
@@ -26,16 +29,20 @@ public abstract class EclipseSimpleClassImplementer {
 			String testingAppClass) {
 		fFileInfoProvider = fileInfoProvider;
 		fTestingAppPackage = testingAppPackage;
+		fTestingAppSourceFilesPackage = fTestingAppPackage  + "ecFeed.android";
 		fTestingAppClass = testingAppClass;
 	}
 
 	abstract protected void createUnitContent(ICompilationUnit unit) throws JavaModelException;
 
 	public void implementContent() throws CoreException {
+
 		String unitName = fTestingAppClass + ".java";
 
 		IPackageFragment packageFragment = 
-				EclipsePackageFragmentGetter.getPackageFragment(filePackage(), fFileInfoProvider);
+				EclipsePackageFragmentGetter.getPackageFragment(
+						fTestingAppSourceFilesPackage, fFileInfoProvider);
+
 		ICompilationUnit unit = packageFragment.getCompilationUnit(unitName);
 
 		createUnitContent(unit);
@@ -45,23 +52,54 @@ public abstract class EclipseSimpleClassImplementer {
 	}
 
 	public boolean contentImplemented() {
-		return contentImplemented(filePackage(), fTestingAppClass);
+		return classImplemented(null);
 	}
 
-	private boolean contentImplemented(String packageName, String className) {
+	protected boolean classImplemented(String superclassName) {
 
-		String qualifiedName = packageName + "." + className;
+		IType type = getTestingClassType();
 
-		IType type = JavaModelAnalyser.getIType(qualifiedName);
-		try {
-			return  type != null && type.isClass();
-		} catch (JavaModelException e) {
+		if (type == null) {
+			return false;
 		}
 
-		return false;
+		if (!isClass(type)) {
+			return false;
+		}
+
+		if (superclassName != null && superclassName != getSuperclassName(type)) {
+			return false;
+		}
+
+		return true;
 	}
 
-	private String filePackage() {
-		return fTestingAppPackage  + "ecFeed.android";
+	private IType getTestingClassType() {
+
+		return JavaModelAnalyser.getIType(
+				PackageClassHelper.createQualifiedName(
+						fTestingAppSourceFilesPackage, fTestingAppClass));
+	}	
+
+	private boolean isClass(IType type) {
+
+		try {
+			if (type.isClass()) {
+				return true;
+			}
+		} catch (JavaModelException e) {
+			return false;
+		}
+
+		return true;
+	}
+
+	private String getSuperclassName(IType type) {
+
+		try {
+			return type.getSuperclassName();
+		} catch (JavaModelException e) {
+			return null;
+		}
 	}
 }

@@ -11,6 +11,8 @@ package com.testify.ecfeed.ui.common;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.JavaModelException;
 
+import com.testify.ecfeed.utils.PackageClassHelper;
+
 public class EclipseRunnerClassImplementer extends EclipseSimpleClassImplementer {
 
 	String fBaseRunner;
@@ -20,12 +22,14 @@ public class EclipseRunnerClassImplementer extends EclipseSimpleClassImplementer
 			String testingAppPackage,
 			String baseRunnerPackage,
 			String baseRunnerClass) {
+
 		super(fileInfoProvider, testingAppPackage, "EcFeedTestRunner");
-		fBaseRunner = baseRunnerPackage;
+		fBaseRunner = PackageClassHelper.createQualifiedName(baseRunnerPackage, baseRunnerClass); 
 	}
 
 	@ Override
 	protected void createUnitContent(ICompilationUnit unit) throws JavaModelException {
+
 		unit.createType(getClassContent(), null, false, null);
 		unit.createImport("android.os.Bundle", null, null);
 		unit.createImport("android.test.InstrumentationTestRunner", null, null);
@@ -42,5 +46,10 @@ public class EclipseRunnerClassImplementer extends EclipseSimpleClassImplementer
 				"\tsuper.onCreate(arguments)" +
 				"\t}\n" + 
 				"}\n";
+	}
+
+	@Override
+	public boolean contentImplemented() {
+		return classImplemented(fBaseRunner);
 	}
 }

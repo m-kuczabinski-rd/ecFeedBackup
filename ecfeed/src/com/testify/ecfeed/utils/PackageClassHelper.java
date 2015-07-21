@@ -9,15 +9,20 @@
 package com.testify.ecfeed.utils;
 
 public class PackageClassHelper {
+
 	public static String getPackage(String packageWithClass) {
 
 		int separatorPosition = packageWithClass.lastIndexOf(".");
 		return packageWithClass.substring(0, separatorPosition);
-
 	}
+
 	public static String getClass(String packageWithClass) {
 
 		int separatorPosition = packageWithClass.lastIndexOf(".");
 		return packageWithClass.substring(separatorPosition+1);
-	}	
+	}
+
+	public static String createQualifiedName(String thePackage, String name) {
+		return thePackage + "." + name;
+	}
 }
