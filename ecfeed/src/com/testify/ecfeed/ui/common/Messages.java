@@ -104,7 +104,7 @@ public class Messages {
 	public static final String DIALOG_RESET_CHOICES_PROBLEM_TITLE = "Couldn't reset choices to default";
 	public static final String DIALOG_SET_COMMENTS_PROBLEM_TITLE = "Cannot set comments";
 	public static final String DIALOG_REPLACE_PARAMETERS_WITH_LINKS_TITLE = "Cannot replace parameters with links";
-	public static final String DIALOG_ANDROID_RUNNER_SET_PROBLEM_TITLE = "Couldn't set android runner";
+	public static final String DIALOG_ANDROID_RUNNER_SET_PROBLEM_TITLE = "Couldn't set Android base runner";
 	public static final String DIALOG_RUN_ON_ANDROID_SET_PROBLEM_TITLE = "Couldn't set run on android flag";
 
 	//CONFIRMATIONS AND WARNINGS
@@ -130,9 +130,9 @@ public class Messages {
 				+ " test cases. Adding this amount of data to the model may heavily affect tool's performance"
 				+ " and cause loss of data. Do you want to continue?";
 	}
-	public static final String DIALOG_MISSING_ANDROID_RUNNER_TITLE = "Missing android runner";
+	public static final String DIALOG_MISSING_ANDROID_RUNNER_TITLE = "Missing Android base runner";
 	public static final String DIALOG_MISSING_ANDROID_RUNNER_INFO(String className) {
-		return "The class: " + className +  " is configured to run on Android device but Android runner is not supplied.";
+		return "The class: " + className +  " is configured to run on Android device but Android base runner is not supplied.";
 	}
 	public static final String DIALOG_REMOVE_CHOICE_WARNING_TITLE = "Removing choice";
 	public static final String DIALOG_REMOVE_CHOICE_WARNING_MESSAGE = "Removing choice will cause removing of all test cases and constraints referring to that choice";

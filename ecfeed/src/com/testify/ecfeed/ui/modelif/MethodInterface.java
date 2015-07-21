@@ -34,7 +34,7 @@ import com.testify.ecfeed.adapter.operations.MethodOperationAddTestCase;
 import com.testify.ecfeed.adapter.operations.MethodOperationAddTestSuite;
 import com.testify.ecfeed.adapter.operations.MethodOperationConvertTo;
 import com.testify.ecfeed.adapter.operations.MethodOperationRenameTestCases;
-import com.testify.ecfeed.android.project.AndroidManifestReader;
+import com.testify.ecfeed.android.project.AndroidManifestAccessor;
 import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.Constraint;
@@ -57,6 +57,7 @@ import com.testify.ecfeed.ui.dialogs.AddTestCaseDialog;
 import com.testify.ecfeed.ui.dialogs.CalculateCoverageDialog;
 import com.testify.ecfeed.ui.dialogs.RenameTestSuiteDialog;
 import com.testify.ecfeed.ui.dialogs.SelectCompatibleMethodDialog;
+import com.testify.ecfeed.utils.ProjectHelper;
 
 public class MethodInterface extends ParametersParentInterface {
 
@@ -248,15 +249,15 @@ public class MethodInterface extends ParametersParentInterface {
 			return new JUnitTestMethodInvoker();
 		}
 
-		String projectPath = fileInfoProvider.getProject().getLocation().toOSString();
-		String androidRunner = createAndroidRunnerName(projectPath, classNode.getAndroidRunner());
+		String projectPath = ProjectHelper.getProjectPath(fileInfoProvider);
+		String androidRunner = createAndroidRunnerName(projectPath, classNode.getAndroidBaseRunner());
 
 		return new AndroidTestMethodInvoker(androidRunner);
 	}
 
 	private String createAndroidRunnerName(String projectPath, String androidRunnerFromClassNode) {
 
-		String packageName = new AndroidManifestReader(projectPath).getPackageName();
+		String packageName = new AndroidManifestAccessor(projectPath).getTestingAppPackage();
 
 		if (packageName == null || packageName.isEmpty()) {
 			return androidRunnerFromClassNode;
@@ -266,7 +267,7 @@ public class MethodInterface extends ParametersParentInterface {
 	}
 
 	private boolean emptyAndroidRunner(ClassNode classNode) {
-		String androidRunner = classNode.getAndroidRunner();
+		String androidRunner = classNode.getAndroidBaseRunner();
 		return emptyAndroidRunner(androidRunner);
 	}
 

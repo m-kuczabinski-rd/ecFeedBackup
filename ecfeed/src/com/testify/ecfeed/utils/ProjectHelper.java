@@ -8,9 +8,11 @@
 
 package com.testify.ecfeed.utils;
 
-public class StringHelper {
+import com.testify.ecfeed.ui.common.IFileInfoProvider;
 
-	public static boolean isTrimmedEmpty(String str) {
-		return str.trim().isEmpty();
+public class ProjectHelper {
+
+	public static String getProjectPath(IFileInfoProvider fileInfoProvider) {
+		return fileInfoProvider.getProject().getLocation().toOSString();
 	}
 }

@@ -19,7 +19,7 @@ import java.util.Set;
 public class ClassNode extends GlobalParametersParentNode {
 
 	private boolean fRunOnAndroid;
-	private String fAndroidRunner;
+	private String fAndroidBaseRunner;
 	private List<MethodNode> fMethods;
 
 	@Override
@@ -62,16 +62,16 @@ public class ClassNode extends GlobalParametersParentNode {
 	public ClassNode(String qualifiedName, boolean runOnAndroid, String androidRunner) {
 		super(qualifiedName);
 		fRunOnAndroid = runOnAndroid;
-		fAndroidRunner = androidRunner;
+		fAndroidBaseRunner = androidRunner;
 		fMethods = new ArrayList<MethodNode>();
 	}
 
-	public String getAndroidRunner() {
-		return fAndroidRunner;
+	public String getAndroidBaseRunner() {
+		return fAndroidBaseRunner;
 	}
 
-	public void setAndroidRunner(String androidRunner) {
-		fAndroidRunner = androidRunner;
+	public void setAndroidBaseRunner(String androidBaseRunner) {
+		fAndroidBaseRunner = androidBaseRunner;
 	}	
 
 	public boolean getRunOnAndroid() {

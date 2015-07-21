@@ -31,6 +31,7 @@ import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.ui.common.IFileInfoProvider;
 import com.testify.ecfeed.ui.modelif.ClassInterface;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
+import com.testify.ecfeed.utils.ProjectHelper;
 
 public class ClassDetailsPage extends BasicDetailsPage {
 
@@ -207,7 +208,7 @@ public class ClassDetailsPage extends BasicDetailsPage {
 		// row 2
 
 		// col 1 - label
-		fAndroidRunnerLabel = getToolkit().createLabel(composite, "Android runner");
+		fAndroidRunnerLabel = getToolkit().createLabel(composite, "Base runner");
 
 		// col 2 - runner combo
 		fAndroidRunnerCombo = new ComboViewer(composite, SWT.NONE).getCombo();
@@ -235,7 +236,7 @@ public class ClassDetailsPage extends BasicDetailsPage {
 	}
 
 	private List<String> createRunnerList() {
-		String projectPath = fFileInfoProvider.getProject().getLocation().toOSString();
+		String projectPath = ProjectHelper.getProjectPath(fFileInfoProvider);
 		return fClassIf.createRunnerList(projectPath);
 	}
 

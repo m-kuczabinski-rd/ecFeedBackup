@@ -8,9 +8,16 @@
 
 package com.testify.ecfeed.utils;
 
-public class StringHelper {
+public class PackageClassHelper {
+	public static String getPackage(String packageWithClass) {
 
-	public static boolean isTrimmedEmpty(String str) {
-		return str.trim().isEmpty();
+		int separatorPosition = packageWithClass.lastIndexOf(".");
+		return packageWithClass.substring(0, separatorPosition);
+
 	}
+	public static String getClass(String packageWithClass) {
+
+		int separatorPosition = packageWithClass.lastIndexOf(".");
+		return packageWithClass.substring(separatorPosition+1);
+	}	
 }

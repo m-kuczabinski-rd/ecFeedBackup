@@ -69,7 +69,7 @@ public class StaticRunner extends AbstractJUnitRunner {
 		Collection<TestCaseNode> testCases = getTestCases(methodNode, getTestSuites(frameworkMethod));
 
 		if (classNode.getRunOnAndroid()) {
-			ITestMethodInvoker invoker = new AndroidTestMethodInvoker(classNode.getAndroidRunner());
+			ITestMethodInvoker invoker = new AndroidTestMethodInvoker(classNode.getAndroidBaseRunner());
 
 			String className = getTestClass().getName();
 			frameworkMethods.add(new AndroidParameterizedMethod(className, method, testCases, getLoader(), invoker));

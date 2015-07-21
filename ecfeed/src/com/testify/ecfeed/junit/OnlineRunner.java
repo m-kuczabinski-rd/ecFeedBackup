@@ -89,7 +89,7 @@ public class OnlineRunner extends AbstractJUnitRunner {
 		ClassNode classNode = (ClassNode)methodNode.getParent();
 
 		if (classNode.getRunOnAndroid()) {
-			ITestMethodInvoker invoker = new AndroidTestMethodInvoker(classNode.getAndroidRunner());
+			ITestMethodInvoker invoker = new AndroidTestMethodInvoker(classNode.getAndroidBaseRunner());
 
 			String className = getTestClass().getName();
 			frameworkMethods.add(new AndroidRuntimeMethod(className, method, generator, getLoader(), invoker));

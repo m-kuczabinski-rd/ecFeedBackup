@@ -11,7 +11,7 @@ public class ClassOperationSetRunOnAndroid extends AbstractModelOperation {
 	private boolean fOriginalValue;
 
 	public ClassOperationSetRunOnAndroid(ClassNode target, boolean newValue) {
-		super(OperationNames.SET_ANDROID_RUNNER);
+		super(OperationNames.SET_ANDROID_BASE_RUNNER);
 		fTarget = target;
 		fNewValue = newValue;
 		fOriginalValue = target.getRunOnAndroid();

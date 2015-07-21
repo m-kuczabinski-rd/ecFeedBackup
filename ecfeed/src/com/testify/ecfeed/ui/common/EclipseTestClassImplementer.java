@@ -1,3 +1,11 @@
+/*******************************************************************************
+ * Copyright (c) 2015 Testify AS.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ ******************************************************************************/
+
 package com.testify.ecfeed.ui.common;
 
 import org.eclipse.jdt.core.ICompilationUnit;
@@ -5,9 +13,9 @@ import org.eclipse.jdt.core.JavaModelException;
 
 public class EclipseTestClassImplementer extends EclipseSimpleClassImplementer {
 
-	String fTestingAppSuperClass; 	// e.g. ActivityInstrumentationTestCase2
-	String fTestedAppPackage;		// e.g. com.mamlambo.article.simplecalc
-	String fTestedAppMainActivity;  // e.g. MainActivity
+	String fTestingAppSuperClass;
+	String fTestedAppPackage;
+	String fTestedAppMainActivity;
 
 	public EclipseTestClassImplementer(
 			IFileInfoProvider fileInfoProvider, 

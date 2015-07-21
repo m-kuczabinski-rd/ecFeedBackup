@@ -1,3 +1,11 @@
+/*******************************************************************************
+ * Copyright (c) 2015 Testify AS.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ ******************************************************************************/
+
 package com.testify.ecfeed.ui.common;
 
 import org.eclipse.jdt.core.ICompilationUnit;
@@ -5,8 +13,15 @@ import org.eclipse.jdt.core.JavaModelException;
 
 public class EclipseRunnerClassImplementer extends EclipseSimpleClassImplementer {
 
-	public EclipseRunnerClassImplementer(IFileInfoProvider fileInfoProvider, String testingAppPackage) {
+	String fBaseRunner;
+
+	public EclipseRunnerClassImplementer(
+			IFileInfoProvider fileInfoProvider, 
+			String testingAppPackage,
+			String baseRunnerPackage,
+			String baseRunnerClass) {
 		super(fileInfoProvider, testingAppPackage, "EcFeedTestRunner");
+		fBaseRunner = baseRunnerPackage;
 	}
 
 	@ Override
@@ -19,7 +34,7 @@ public class EclipseRunnerClassImplementer extends EclipseSimpleClassImplementer
 
 	private String getClassContent() {
 		return
-				"public class EcFeedTestRunner extends InstrumentationTestRunner {\n" +
+				"public class EcFeedTestRunner extends " + fBaseRunner + " {\n" + 
 				"\n" +
 				"\t@Override" +
 				"\tpublic void onCreate(Bundle arguments) {\n" + 

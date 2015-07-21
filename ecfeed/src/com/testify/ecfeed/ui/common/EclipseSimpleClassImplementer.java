@@ -1,3 +1,11 @@
+/*******************************************************************************
+ * Copyright (c) 2015 Testify AS.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ ******************************************************************************/
+
 package com.testify.ecfeed.ui.common;
 
 import org.eclipse.core.runtime.CoreException;
@@ -36,11 +44,11 @@ public abstract class EclipseSimpleClassImplementer {
 		unit.commitWorkingCopy(true, null);
 	}
 
-	public boolean classDefinitionImplemented() {
-		return classDefinitionImplemented(filePackage(), fTestingAppClass);
+	public boolean contentImplemented() {
+		return contentImplemented(filePackage(), fTestingAppClass);
 	}
 
-	private boolean classDefinitionImplemented(String packageName, String className) {
+	private boolean contentImplemented(String packageName, String className) {
 
 		String qualifiedName = packageName + "." + className;
 

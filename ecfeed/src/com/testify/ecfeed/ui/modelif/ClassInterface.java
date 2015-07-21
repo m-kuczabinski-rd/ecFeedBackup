@@ -28,11 +28,11 @@ import com.testify.ecfeed.adapter.java.JavaUtils;
 import com.testify.ecfeed.adapter.operations.ClassOperationAddMethod;
 import com.testify.ecfeed.adapter.operations.ClassOperationAddMethods;
 import com.testify.ecfeed.adapter.operations.ClassOperationRemoveMethod;
-import com.testify.ecfeed.adapter.operations.ClassOperationSetAndroidRunner;
+import com.testify.ecfeed.adapter.operations.ClassOperationSetAndroidBaseRunner;
 import com.testify.ecfeed.adapter.operations.ClassOperationSetRunOnAndroid;
 import com.testify.ecfeed.adapter.operations.FactoryRenameOperation;
 import com.testify.ecfeed.android.DefaulAndroidRunner;
-import com.testify.ecfeed.android.project.AndroidManifestReader;
+import com.testify.ecfeed.android.project.AndroidManifestAccessor;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.ui.common.Constants;
@@ -81,7 +81,7 @@ public class ClassInterface extends GlobalParametersParentInterface {
 	}
 
 	public String getAndroidRunner(){
-		return getTarget().getAndroidRunner();
+		return getTarget().getAndroidBaseRunner();
 	}
 
 	@Override
@@ -119,7 +119,7 @@ public class ClassInterface extends GlobalParametersParentInterface {
 	}
 
 	public boolean setAndroidRunner(String androidRunner) {
-		IModelOperation operation = new ClassOperationSetAndroidRunner(getTarget(), androidRunner);
+		IModelOperation operation = new ClassOperationSetAndroidBaseRunner(getTarget(), androidRunner);
 		return execute(operation, Messages.DIALOG_ANDROID_RUNNER_SET_PROBLEM_TITLE);
 	}
 
@@ -201,7 +201,7 @@ public class ClassInterface extends GlobalParametersParentInterface {
 
 	public List<String> createRunnerList(String projectPath) {
 
-		List<String> runnerList = new AndroidManifestReader(projectPath).getRunners();
+		List<String> runnerList = new AndroidManifestAccessor(projectPath).getRunnerNames();
 		addDefaultRunner(runnerList);
 		return runnerList;
 	}

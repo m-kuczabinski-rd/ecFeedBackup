@@ -124,7 +124,7 @@ public class XomBuilder implements IModelVisitor, IStatementVisitor {
 						PARAMETER_IS_RUN_ON_ANDROID_ATTRIBUTE_NAME,  
 						Boolean.toString(runOnAndroid)));
 
-		String androidRunner = classNode.getAndroidRunner();
+		String androidRunner = classNode.getAndroidBaseRunner();
 
 		if (!runOnAndroid && isEmptyOrNull(androidRunner)) {
 			return;
