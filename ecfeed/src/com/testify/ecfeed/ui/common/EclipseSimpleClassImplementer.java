@@ -29,14 +29,13 @@ public abstract class EclipseSimpleClassImplementer {
 			String testingAppClass) {
 		fFileInfoProvider = fileInfoProvider;
 		fTestingAppPackage = testingAppPackage;
-		fTestingAppSourceFilesPackage = fTestingAppPackage  + "ecFeed.android";
+		fTestingAppSourceFilesPackage = fTestingAppPackage  + ".ecFeed.android";
 		fTestingAppClass = testingAppClass;
 	}
 
 	abstract protected void createUnitContent(ICompilationUnit unit) throws JavaModelException;
 
 	public void implementContent() throws CoreException {
-
 		String unitName = fTestingAppClass + ".java";
 
 		IPackageFragment packageFragment = 
@@ -44,9 +43,7 @@ public abstract class EclipseSimpleClassImplementer {
 						fTestingAppSourceFilesPackage, fFileInfoProvider);
 
 		ICompilationUnit unit = packageFragment.getCompilationUnit(unitName);
-
 		createUnitContent(unit);
-
 		unit.becomeWorkingCopy(null);
 		unit.commitWorkingCopy(true, null);
 	}
@@ -67,8 +64,11 @@ public abstract class EclipseSimpleClassImplementer {
 			return false;
 		}
 
-		if (superclassName != null && superclassName != getSuperclassName(type)) {
-			return false;
+		if (superclassName != null) {
+			String implementedSuperClass = getSuperclassName(type); 
+			if(superclassName != implementedSuperClass) {
+				return false;
+			}
 		}
 
 		return true;
@@ -76,9 +76,10 @@ public abstract class EclipseSimpleClassImplementer {
 
 	private IType getTestingClassType() {
 
-		return JavaModelAnalyser.getIType(
-				PackageClassHelper.createQualifiedName(
-						fTestingAppSourceFilesPackage, fTestingAppClass));
+		String classType = 
+				PackageClassHelper.createQualifiedName(fTestingAppSourceFilesPackage, fTestingAppClass); 
+
+		return JavaModelAnalyser.getIType(classType);
 	}	
 
 	private boolean isClass(IType type) {

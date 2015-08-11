@@ -9,6 +9,8 @@
 package com.testify.ecfeed.ui.common;
 
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.swt.widgets.Display;
 
 import com.testify.ecfeed.android.project.AndroidManifestAccessor;
 import com.testify.ecfeed.model.ClassNode;
@@ -71,8 +73,12 @@ public class EclipseEctImplementerForClassNode {
 			ClassNode classNode, 
 			AndroidManifestAccessor androidManifestReader) {
 
-		String testingAppClass = classNode.getClass().getName(); 
-		String testedAppPackage = androidManifestReader.getDefaultTestedAppPackage();  
+		String testingAppClass = "EcFeedTest";
+		String testedAppPackage = androidManifestReader.getDefaultTestedAppPackage();
+
+		if (testedAppPackage == null) {
+			throw new RuntimeException(Messages.DEFAULT_PACKAGE_NOT_SET_IN_ANDROID_MANIFEST);
+		}
 
 		fTestClassImplementer = 
 				new	EclipseTestClassImplementer(
@@ -84,8 +90,19 @@ public class EclipseEctImplementerForClassNode {
 						"MainActivity");
 	}
 
-	void implementContent() throws CoreException {
+	void implementContent() {
+		try {
+			implementContentIntr();
+		} catch (CoreException e) {
+			MessageDialog.openError(
+					Display.getDefault().getActiveShell(), 
+					Messages.CAN_NOT_IMPLEMENT_SOURCE_FOR_CLASS, 
+					e.getMessage());			
 
+		}
+	}
+
+	void implementContentIntr() throws CoreException {
 		if (!fLoggerClassImplementer.contentImplemented()) {
 			fLoggerClassImplementer.implementContent();
 		}
@@ -94,14 +111,13 @@ public class EclipseEctImplementerForClassNode {
 		}
 		if (!fTestClassImplementer.contentImplemented()) {
 			fTestClassImplementer.implementContent();
-		}		
+		}
 		if (!fAndroidManifestImplementer.contentImplemented()) {
 			fAndroidManifestImplementer.implementContent();
 		}
 	}
 
 	boolean contentImplemented() {
-
 		if (!fLoggerClassImplementer.contentImplemented()) {
 			return false;
 		}

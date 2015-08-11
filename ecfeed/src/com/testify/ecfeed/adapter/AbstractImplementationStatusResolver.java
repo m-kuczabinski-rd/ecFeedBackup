@@ -103,6 +103,7 @@ public abstract class AbstractImplementationStatusResolver implements
 
 	protected EImplementationStatus implementationStatus(ClassNode classNode){
 		EImplementationStatus status = EImplementationStatus.IMPLEMENTED;
+		
 		if(classDefinitionImplemented(classNode.getName()) == false){
 			status = EImplementationStatus.NOT_IMPLEMENTED;
 		}

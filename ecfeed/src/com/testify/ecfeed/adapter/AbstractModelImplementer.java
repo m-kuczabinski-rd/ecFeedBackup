@@ -176,6 +176,11 @@ public abstract class AbstractModelImplementer implements IModelImplementer {
 	}
 
 	protected boolean implement(ClassNode node) throws Exception{
+		
+		if(node.getRunOnAndroid() && !androidCodeImplemented(node)) {
+			implementAndroidCode(node);
+		}
+		
 		if(classDefinitionImplemented(node) == false){
 			implementClassDefinition(node);
 		}
@@ -291,10 +296,12 @@ public abstract class AbstractModelImplementer implements IModelImplementer {
 		return false;
 	}
 
+	protected abstract boolean androidCodeImplemented(ClassNode node);
 	protected abstract boolean classDefinitionImplemented(ClassNode node);
 	protected abstract boolean methodDefinitionImplemented(MethodNode node);
 	protected abstract boolean parameterDefinitionImplemented(AbstractParameterNode node);
 
+	protected abstract void implementAndroidCode(ClassNode node);
 	protected abstract void implementClassDefinition(ClassNode node) throws Exception;
 	protected abstract void implementMethodDefinition(MethodNode node) throws Exception;
 	protected abstract void implementParameterDefinition(AbstractParameterNode node) throws Exception;

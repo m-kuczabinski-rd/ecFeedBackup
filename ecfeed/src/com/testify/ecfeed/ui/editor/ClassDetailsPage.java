@@ -11,8 +11,6 @@
 
 package com.testify.ecfeed.ui.editor;
 
-import java.util.List;
-
 import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.FocusEvent;
@@ -31,7 +29,6 @@ import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.ui.common.IFileInfoProvider;
 import com.testify.ecfeed.ui.modelif.ClassInterface;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
-import com.testify.ecfeed.utils.ProjectHelper;
 
 public class ClassDetailsPage extends BasicDetailsPage {
 
@@ -230,15 +227,13 @@ public class ClassDetailsPage extends BasicDetailsPage {
 	}
 
 	private void fillAndroidRunnerCombo() {
-		List<String> runnerList = createRunnerList();		
-		String[] runnerArray = new String[runnerList.size()];
-		fAndroidRunnerCombo.setItems(runnerList.toArray(runnerArray));
+		// TODO - different algorithm for base runners - not actual runners
 	}
 
-	private List<String> createRunnerList() {
-		String projectPath = ProjectHelper.getProjectPath(fFileInfoProvider);
-		return fClassIf.createRunnerList(projectPath);
-	}
+//	private List<String> createRunnerList() {
+//		String projectPath = ProjectHelper.getProjectPath(fFileInfoProvider);
+//		return fClassIf.createRunnerList(projectPath);
+//	}
 
 	@Override
 	public void refresh(){

@@ -65,7 +65,11 @@ public class Messages {
 	{return "Interrupted exception occured: " + message;}	
 	public static String INVALID_NUMBER_OF_PARAMS_ARGS(int parameters, int arguments)
 	{return "Invalid number of parameters (" + parameters + ") and arguments (" + arguments + ")";}
-	public static String INVALID_ANDROID_MANIFEST_NO_ROOT()
-	{return "Invalid Android manifest. No root node found.";}	
+	public static String CAN_NOT_READ_ANDROID_MANIFEST(String file)
+	{return "Can not read Android Manifest from file: " + file;}	
+	public static String CAN_NOT_OPEN_ANDROID_MANIFEST(String file)
+	{return "Can not open Android Manifest file: " + file;}	
+	public static String CAN_NOT_SERIALIZE_TO_ANDROID_MANIFEST(String file)
+	{return "Can not serialize data to Android Manifest file: " + file;}	
 
 }

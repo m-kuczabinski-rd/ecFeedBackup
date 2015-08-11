@@ -33,7 +33,6 @@ public class EclipseTestClassImplementer extends EclipseSimpleClassImplementer {
 	@ Override
 	protected void createUnitContent(ICompilationUnit unit) throws JavaModelException {
 		unit.createType(getClassContent(), null, false, null);
-
 		unit.createImport("android.test." + fTestingAppSuperClass, null, null);
 		unit.createImport("com.testify.ecfeed.android.junit.tools.TestHelper", null, null);
 		unit.createImport(fTestedAppPackage + "." + fTestedAppMainActivity, null, null);

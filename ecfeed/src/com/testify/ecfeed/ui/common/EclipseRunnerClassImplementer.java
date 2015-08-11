@@ -16,6 +16,7 @@ import com.testify.ecfeed.utils.PackageClassHelper;
 public class EclipseRunnerClassImplementer extends EclipseSimpleClassImplementer {
 
 	String fBaseRunner;
+	String fBaseRunnerClass;
 
 	public EclipseRunnerClassImplementer(
 			IFileInfoProvider fileInfoProvider, 
@@ -24,6 +25,7 @@ public class EclipseRunnerClassImplementer extends EclipseSimpleClassImplementer
 			String baseRunnerClass) {
 
 		super(fileInfoProvider, testingAppPackage, "EcFeedTestRunner");
+		fBaseRunnerClass = baseRunnerClass; 
 		fBaseRunner = PackageClassHelper.createQualifiedName(baseRunnerPackage, baseRunnerClass); 
 	}
 
@@ -38,12 +40,12 @@ public class EclipseRunnerClassImplementer extends EclipseSimpleClassImplementer
 
 	private String getClassContent() {
 		return
-				"public class EcFeedTestRunner extends " + fBaseRunner + " {\n" + 
+				"public class EcFeedTestRunner extends " + fBaseRunnerClass + " {\n" + 
 				"\n" +
-				"\t@Override" +
+				"\t@Override\n" +
 				"\tpublic void onCreate(Bundle arguments) {\n" + 
-				"\tTestHelper.prepareTestArguments(arguments.getString(\"ecFeed\"))n" +
-				"\tsuper.onCreate(arguments)" +
+				"\tTestHelper.prepareTestArguments(arguments.getString(\"ecFeed\"));\n" +
+				"\tsuper.onCreate(arguments);\n" +
 				"\t}\n" + 
 				"}\n";
 	}
