@@ -17,12 +17,24 @@ import org.eclipse.jdt.core.JavaModelException;
 
 import com.testify.ecfeed.adapter.CachedImplementationStatusResolver;
 import com.testify.ecfeed.adapter.java.JavaPrimitiveTypePredicate;
+import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.MethodNode;
 
 public class EclipseImplementationStatusResolver extends CachedImplementationStatusResolver{
 
-	public EclipseImplementationStatusResolver(){
+	IFileInfoProvider fFileInfoProvider;
+
+	public EclipseImplementationStatusResolver(IFileInfoProvider fileInfoProvider){
 		super(new JavaPrimitiveTypePredicate());
+		fFileInfoProvider = fileInfoProvider;
+	}
+
+	@Override
+	protected boolean androidCodeImplemented(ClassNode classNode) {
+		EclipseEctImplementerForClassNode implementer = 
+				new EclipseEctImplementerForClassNode(fFileInfoProvider, classNode);
+
+		return implementer.contentImplemented();
 	}
 
 	@Override

@@ -14,19 +14,21 @@ import com.testify.ecfeed.utils.ProjectHelper;
 public class EclipseAndroidManifestImplementer {
 
 	AndroidManifestAccessor fManifestAccessor;
+	String fEcFeedTestRunner;
 
 	public EclipseAndroidManifestImplementer(IFileInfoProvider fileInfoProvider) {
 		fManifestAccessor =
 				new AndroidManifestAccessor(ProjectHelper.getProjectPath(fileInfoProvider));
+		fEcFeedTestRunner = fManifestAccessor.getTestingAppPackage() + ".ecFeed.android" + ".EcFeedTestRunner";
 	}
 
 	public boolean contentImplemented() {
-		return fManifestAccessor.containsRunner("com.testify.ecfeed.android.junit.EcFeedTestRunner");
+		return fManifestAccessor.containsRunner(fEcFeedTestRunner);
 	}
 
 	public void implementContent() {
 		fManifestAccessor.supplementRunner(
-				"com.testify.ecfeed.android.junit.EcFeedTestRunner",
+				fEcFeedTestRunner,
 				fManifestAccessor.getDefaultTestedAppPackage());
 	}
 }

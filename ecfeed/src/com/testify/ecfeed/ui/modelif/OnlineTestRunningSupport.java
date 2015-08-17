@@ -34,6 +34,7 @@ import com.testify.ecfeed.runner.ITestMethodInvoker;
 import com.testify.ecfeed.runner.JavaTestRunner;
 import com.testify.ecfeed.runner.RunnerException;
 import com.testify.ecfeed.ui.common.EclipseLoaderProvider;
+import com.testify.ecfeed.ui.common.IFileInfoProvider;
 import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.dialogs.ExecuteOnlineSetupDialog;
 import com.testify.ecfeed.ui.dialogs.GeneratorProgressMonitorDialog;
@@ -42,6 +43,7 @@ public class OnlineTestRunningSupport extends TestExecutionSupport{
 
 	private MethodNode fTarget;
 	private JavaTestRunner fRunner;
+	private IFileInfoProvider fFileInfoProvider;
 
 	private class ExecuteRunnable implements IRunnableWithProgress{
 
@@ -86,15 +88,16 @@ public class OnlineTestRunningSupport extends TestExecutionSupport{
 		}
 	}
 
-	public OnlineTestRunningSupport(MethodNode target, ITestMethodInvoker testMethodInvoker){
-		this(testMethodInvoker);
+	public OnlineTestRunningSupport(MethodNode target, ITestMethodInvoker testMethodInvoker, IFileInfoProvider fileInfoProvider){
+		this(testMethodInvoker, fileInfoProvider);
 		setTarget(target);
 	}
 
-	public OnlineTestRunningSupport(ITestMethodInvoker testMethodInvoker) {
+	public OnlineTestRunningSupport(ITestMethodInvoker testMethodInvoker, IFileInfoProvider fileInfoProvider) {
 		ILoaderProvider loaderProvider = new EclipseLoaderProvider();
 		ModelClassLoader loader = loaderProvider.getLoader(true, null);
 		fRunner = new JavaTestRunner(loader, testMethodInvoker);
+		fFileInfoProvider = fileInfoProvider;
 	}
 
 	public void setTarget(MethodNode target) {
@@ -111,7 +114,8 @@ public class OnlineTestRunningSupport extends TestExecutionSupport{
 		ConsoleManager.displayConsole();
 		ConsoleManager.redirectSystemOutputToStream(ConsoleManager.getOutputStream());
 		if (fTarget.getParameters().size() > 0) {
-			ExecuteOnlineSetupDialog dialog = new ExecuteOnlineSetupDialog(Display.getCurrent().getActiveShell(), fTarget);
+			ExecuteOnlineSetupDialog dialog = 
+					new ExecuteOnlineSetupDialog(Display.getCurrent().getActiveShell(), fTarget, fFileInfoProvider);
 			if(dialog.open() == IDialogConstants.OK_ID){
 				IGenerator<ChoiceNode> selectedGenerator = dialog.getSelectedGenerator();
 				List<List<ChoiceNode>> algorithmInput = dialog.getAlgorithmInput();

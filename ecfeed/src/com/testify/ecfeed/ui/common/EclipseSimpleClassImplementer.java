@@ -53,24 +53,21 @@ public abstract class EclipseSimpleClassImplementer {
 	}
 
 	protected boolean classImplemented(String superclassName) {
-
 		IType type = getTestingClassType();
 
 		if (type == null) {
 			return false;
 		}
-
 		if (!isClass(type)) {
 			return false;
 		}
-
 		if (superclassName != null) {
-			String implementedSuperClass = getSuperclassName(type); 
-			if(superclassName != implementedSuperClass) {
+			String implementedSuperClass = getSuperclassName(type);
+
+			if(!superclassName.endsWith(implementedSuperClass)) {
 				return false;
 			}
 		}
-
 		return true;
 	}
 

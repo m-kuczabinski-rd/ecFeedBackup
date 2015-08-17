@@ -30,18 +30,21 @@ public class TestCasesViewerLabelProvider extends LabelProvider implements IColo
 	private Map<TestCaseNode, Boolean> fTestCasesStatusMap;
 	MethodNode fMethod;
 	private IImplementationStatusResolver fStatusResolver;
-	
-	public TestCasesViewerLabelProvider(){
+
+	public TestCasesViewerLabelProvider(IFileInfoProvider fileInfoProvider){
 		fExecutableTestSuites = new HashMap<String, Integer>();
 		fTestCasesStatusMap = new HashMap<TestCaseNode, Boolean>();
-		fStatusResolver = new EclipseImplementationStatusResolver();
+		fStatusResolver = new EclipseImplementationStatusResolver(fileInfoProvider);
 	}
-	
-	public TestCasesViewerLabelProvider(IImplementationStatusResolver statusResolver, MethodNode method){
-		this();
+
+	public TestCasesViewerLabelProvider(
+			IImplementationStatusResolver statusResolver, 
+			MethodNode method, 
+			IFileInfoProvider fileInfoProvider){
+		this(fileInfoProvider);
 		fMethod = method;
 	}
-	
+
 	@Override
 	public String getText(Object element) {
 		if (element instanceof String) {
@@ -90,7 +93,7 @@ public class TestCasesViewerLabelProvider extends LabelProvider implements IColo
 		fMethod = method;
 		refresh();
 	}
-	
+
 	public void refresh(){
 		updateExecutableTable();
 	}

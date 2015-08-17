@@ -102,7 +102,7 @@ public class AbstractNodeInterface extends OperationExecuter{
 	public AbstractNodeInterface(IModelUpdateContext updateContext, IFileInfoProvider fileInfoProvider) {
 		super(updateContext);
 		fFileInfoProvider = fileInfoProvider;
-		fStatusResolver = new EclipseImplementationStatusResolver();
+		fStatusResolver = new EclipseImplementationStatusResolver(fileInfoProvider);
 		fAdapterProvider = new EclipseTypeAdapterProvider();
 	}
 

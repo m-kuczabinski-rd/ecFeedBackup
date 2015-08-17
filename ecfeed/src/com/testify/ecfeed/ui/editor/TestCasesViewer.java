@@ -87,9 +87,15 @@ public class TestCasesViewer extends CheckboxTreeViewerSection {
 	}
 
 	private class CalculateCoverageAdapter extends SelectionAdapter {
+
+		private IFileInfoProvider fFileInfoProvider;
+
+		CalculateCoverageAdapter(IFileInfoProvider fileInfoProvider) {
+			fFileInfoProvider = fileInfoProvider;
+		}
 		@Override
 		public void widgetSelected(SelectionEvent e) {
-			fMethodIf.openCoverageDialog(getCheckedElements(), getGrayedElements());
+			fMethodIf.openCoverageDialog(getCheckedElements(), getGrayedElements(), fFileInfoProvider);
 		}
 	}
 
@@ -99,7 +105,7 @@ public class TestCasesViewer extends CheckboxTreeViewerSection {
 			IFileInfoProvider fileInfoProvider) {
 		super(sectionContext, updateContext, STYLE);
 		fFileInfoProvider = fileInfoProvider;
-		
+
 		GridData gd = new GridData(SWT.FILL, SWT.FILL, true, true);
 		gd.minimumHeight = 250;
 		getSection().setLayoutData(gd);
@@ -113,7 +119,7 @@ public class TestCasesViewer extends CheckboxTreeViewerSection {
 		addButton("Add test case", new AddTestCaseAdapter());
 		addButton("Rename suite", new RenameSuiteAdapter());
 		fGenerateSuiteButton = addButton("Generate test suite", new GenerateTestSuiteAdapter());
-		addButton("Calculate coverage", new CalculateCoverageAdapter());
+		addButton("Calculate coverage", new CalculateCoverageAdapter(fileInfoProvider));
 		addButton("Remove selected", new RemoveSelectedAdapter());
 		fExecuteSelectedButton = addButton("Execute selected", new ExecuteStaticTestAdapter());
 
@@ -180,7 +186,7 @@ public class TestCasesViewer extends CheckboxTreeViewerSection {
 	@Override
 	protected IBaseLabelProvider viewerLabelProvider() {
 		if(fLabelProvider == null){
-			fLabelProvider = new TestCasesViewerLabelProvider();
+			fLabelProvider = new TestCasesViewerLabelProvider(fFileInfoProvider);
 		}
 		return fLabelProvider;
 	}

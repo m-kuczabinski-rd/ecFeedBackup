@@ -58,7 +58,7 @@ public class EclipseModelImplementer extends AbstractModelImplementer {
 	private final IFileInfoProvider fFileInfoProvider;
 
 	public EclipseModelImplementer(IFileInfoProvider fileInfoProvider) {
-		super(new EclipseImplementationStatusResolver());
+		super(new EclipseImplementationStatusResolver(fileInfoProvider));
 		fFileInfoProvider = fileInfoProvider;
 	}
 
@@ -221,6 +221,9 @@ public class EclipseModelImplementer extends AbstractModelImplementer {
 
 	@Override
 	protected boolean implementable(ClassNode node){
+		if(!androidCodeImplemented(node)) {
+			return true;
+		}
 		if(classDefinitionImplemented(node)){
 			return hasImplementableNode(node.getMethods());
 		}

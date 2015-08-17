@@ -113,6 +113,10 @@ public class JavaImplementationStatusResolver extends AbstractImplementationStat
 		return EImplementationStatus.PARTIALLY_IMPLEMENTED;
 	}
 
+	@Override
+	protected boolean androidCodeImplemented(ClassNode classNode) {
+		return false;
+	}
 
 	@Override
 	protected boolean classDefinitionImplemented(String qualifiedName) {
@@ -122,36 +126,36 @@ public class JavaImplementationStatusResolver extends AbstractImplementationStat
 
 	@Override
 	protected boolean methodDefinitionImplemented(MethodNode methodModel){
-	Class<?> parentClass = loadClass(JavaUtils.getQualifiedName(methodModel.getClassNode()));
-	if(parentClass == null){
+		Class<?> parentClass = loadClass(JavaUtils.getQualifiedName(methodModel.getClassNode()));
+		if(parentClass == null){
+			return false;
+		}
+		for(Method m : parentClass.getMethods()){
+			if(m.getReturnType().equals(Void.TYPE) == false){
+				continue;
+			}
+			if(Modifier.isPublic(m.getModifiers()) == false){
+				continue;
+			}
+			if(m.getName().equals(methodModel.getName()) == false){
+				continue;
+			}
+			List<String> typeNames = getArgTypes(m);
+			List<MethodParameterNode> modelParameters = methodModel.getMethodParameters();
+			if(typeNames.size() != methodModel.getParameters().size()){
+				continue;
+			}
+			List<String> modelTypeNames = new ArrayList<>();
+			for(MethodParameterNode parameter : modelParameters){
+				modelTypeNames.add(parameter.getType());
+			}
+			if(modelTypeNames.equals(typeNames) == false){
+				continue;
+			}
+			return true;
+		}
 		return false;
 	}
-	for(Method m : parentClass.getMethods()){
-		if(m.getReturnType().equals(Void.TYPE) == false){
-			continue;
-		}
-		if(Modifier.isPublic(m.getModifiers()) == false){
-			continue;
-		}
-		if(m.getName().equals(methodModel.getName()) == false){
-			continue;
-		}
-		List<String> typeNames = getArgTypes(m);
-		List<MethodParameterNode> modelParameters = methodModel.getMethodParameters();
-		if(typeNames.size() != methodModel.getParameters().size()){
-			continue;
-		}
-		List<String> modelTypeNames = new ArrayList<>();
-		for(MethodParameterNode parameter : modelParameters){
-			modelTypeNames.add(parameter.getType());
-		}
-		if(modelTypeNames.equals(typeNames) == false){
-			continue;
-		}
-		return true;
-	}
-	return false;
-}
 
 	@Override
 	protected boolean enumDefinitionImplemented(String qualifiedName) {
@@ -194,5 +198,4 @@ public class JavaImplementationStatusResolver extends AbstractImplementationStat
 		}
 		return fLoadedClasses.get(name);
 	}
-
 }

@@ -27,7 +27,7 @@ import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.TestCaseNode;
 
 public abstract class AbstractImplementationStatusResolver implements
-		IImplementationStatusResolver {
+IImplementationStatusResolver {
 
 	private StatusResolver fStatusResolver;
 	private IPrimitiveTypePredicate fPrimitiveTypeTester;
@@ -102,21 +102,24 @@ public abstract class AbstractImplementationStatusResolver implements
 	}
 
 	protected EImplementationStatus implementationStatus(ClassNode classNode){
-		EImplementationStatus status = EImplementationStatus.IMPLEMENTED;
-		
-		if(classDefinitionImplemented(classNode.getName()) == false){
-			status = EImplementationStatus.NOT_IMPLEMENTED;
+		if (classNode.getRunOnAndroid() && !androidCodeImplemented(classNode)) {
+			return EImplementationStatus.NOT_IMPLEMENTED;
 		}
-		else if(classNode.getMethods().size() == 0){
-			status = EImplementationStatus.IMPLEMENTED;
+
+		if(!classDefinitionImplemented(classNode.getName())){
+			return EImplementationStatus.NOT_IMPLEMENTED;
 		}
-		else{
-			EImplementationStatus childrenStatus = childrenStatus(classNode.getMethods());
-			if(childrenStatus != EImplementationStatus.IMPLEMENTED){
-				status = EImplementationStatus.PARTIALLY_IMPLEMENTED;
-			}
+
+		if(classNode.getMethods().isEmpty()){
+			return EImplementationStatus.IMPLEMENTED;
 		}
-		return status;
+
+		EImplementationStatus childrenStatus = childrenStatus(classNode.getMethods());
+		if(childrenStatus == EImplementationStatus.IMPLEMENTED){
+			return EImplementationStatus.IMPLEMENTED;
+		}
+
+		return EImplementationStatus.PARTIALLY_IMPLEMENTED;
 	}
 
 	protected EImplementationStatus implementationStatus(MethodNode method){
@@ -227,6 +230,7 @@ public abstract class AbstractImplementationStatusResolver implements
 		return EImplementationStatus.PARTIALLY_IMPLEMENTED;
 	}
 
+	protected abstract boolean androidCodeImplemented(ClassNode classNode);
 	protected abstract boolean classDefinitionImplemented(String qualifiedName);
 	protected abstract boolean methodDefinitionImplemented(MethodNode method);
 	protected abstract boolean enumDefinitionImplemented(String qualifiedName);

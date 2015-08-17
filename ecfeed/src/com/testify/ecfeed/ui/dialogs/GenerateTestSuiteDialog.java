@@ -21,17 +21,19 @@ import com.testify.ecfeed.generators.api.IGenerator;
 import com.testify.ecfeed.model.Constraint;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.ChoiceNode;
+import com.testify.ecfeed.ui.common.IFileInfoProvider;
 import com.testify.ecfeed.ui.common.Messages;
 
 public class GenerateTestSuiteDialog extends GeneratorSetupDialog {
 	private static final int CONTENT = CONSTRAINTS_COMPOSITE | PARTITIONS_COMPOSITE |
 			TEST_SUITE_NAME_COMPOSITE | GENERATOR_SELECTION_COMPOSITE;
 
-	public GenerateTestSuiteDialog(Shell parentShell, MethodNode method) {
+	public GenerateTestSuiteDialog(Shell parentShell, MethodNode method, IFileInfoProvider fileInfoProvider) {
 		super(parentShell, method, CONTENT, 
 				Messages.DIALOG_GENERATE_TEST_SUITE_TITLE, 
 				Messages.DIALOG_GENERATE_TEST_SUITE_MESSAGE,
-				false);
+				false,
+				fileInfoProvider);
 	}
 
 	public IGenerator<ChoiceNode> getSelectedGenerator() {

@@ -200,9 +200,8 @@ public class AndroidManifestAccessor {
 			Element element = children.get(index);
 
 			if (isInstrumentationNode(element)) {
-				return;
+				addRunnerName(element, runnerNames);
 			}
-			addRunnerName(element, runnerNames);
 		}
 	}
 

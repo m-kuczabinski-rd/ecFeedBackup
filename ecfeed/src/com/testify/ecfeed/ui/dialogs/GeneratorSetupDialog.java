@@ -63,6 +63,7 @@ import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.MethodParameterNode;
 import com.testify.ecfeed.ui.common.Constants;
 import com.testify.ecfeed.ui.common.EclipseImplementationStatusResolver;
+import com.testify.ecfeed.ui.common.IFileInfoProvider;
 import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.common.NodeNameColumnLabelProvider;
 import com.testify.ecfeed.ui.common.TreeCheckStateListener;
@@ -190,7 +191,14 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 		}
 	}
 
-	public GeneratorSetupDialog(Shell parentShell, MethodNode method, int content, String title, String message, boolean generateExecutables) {
+	public GeneratorSetupDialog(
+			Shell parentShell, 
+			MethodNode method, 
+			int content, 
+			String title, 
+			String message, 
+			boolean generateExecutables,
+			IFileInfoProvider fileInfoProvider) {
 		super(parentShell);
 		setHelpAvailable(false);
 		setShellStyle(SWT.BORDER | SWT.RESIZE | SWT.TITLE | SWT.APPLICATION_MODAL);
@@ -200,7 +208,7 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 		fTitle = title;
 		fMessage = message;
 		fGenerateExecutableContent = generateExecutables;
-		fStatusResolver = new EclipseImplementationStatusResolver();
+		fStatusResolver = new EclipseImplementationStatusResolver(fileInfoProvider);
 	}
 
 	protected  List<List<ChoiceNode>> algorithmInput(){

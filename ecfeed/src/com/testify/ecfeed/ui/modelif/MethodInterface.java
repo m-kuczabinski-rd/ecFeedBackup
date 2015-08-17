@@ -61,10 +61,12 @@ import com.testify.ecfeed.utils.ProjectHelper;
 
 public class MethodInterface extends ParametersParentInterface {
 
+	private IFileInfoProvider fFileInfoProvider;
 	private ITypeAdapterProvider fAdapterProvider;
 
 	public MethodInterface(IModelUpdateContext updateContext, IFileInfoProvider fileInfoProvider) {
 		super(updateContext, fileInfoProvider);
+		fFileInfoProvider = fileInfoProvider;
 		fAdapterProvider = new EclipseTypeAdapterProvider();
 	}
 
@@ -181,7 +183,8 @@ public class MethodInterface extends ParametersParentInterface {
 	}
 
 	public boolean generateTestSuite(){
-		TestSuiteGenerationSupport testGenerationSupport = new TestSuiteGenerationSupport(getTarget());
+		TestSuiteGenerationSupport testGenerationSupport = 
+				new TestSuiteGenerationSupport(getTarget(), fFileInfoProvider);
 		testGenerationSupport.proceed();
 		if(testGenerationSupport.hasData() == false) return false;
 
@@ -211,7 +214,7 @@ public class MethodInterface extends ParametersParentInterface {
 			return;
 
 		OnlineTestRunningSupport runner 
-		= new OnlineTestRunningSupport(createTestMethodInvoker(fileInfoProvider));
+		= new OnlineTestRunningSupport(createTestMethodInvoker(fileInfoProvider), fileInfoProvider);
 		runner.setTarget(getTarget());
 		runner.proceed();
 	}
@@ -312,9 +315,12 @@ public class MethodInterface extends ParametersParentInterface {
 		return compatibleMethods;
 	}
 
-	public void openCoverageDialog(Object[] checkedElements, Object[] grayedElements) {
+	public void openCoverageDialog(
+			Object[] checkedElements, 
+			Object[] grayedElements, 
+			IFileInfoProvider fileInfoProvider) {
 		Shell activeShell = Display.getDefault().getActiveShell();
-		new CalculateCoverageDialog(activeShell, getTarget(), checkedElements, grayedElements).open();
+		new CalculateCoverageDialog(activeShell, getTarget(), checkedElements, grayedElements, fileInfoProvider).open();
 	}
 
 	public List<GlobalParameterNode> getAvailableGlobalParameters() {

@@ -30,6 +30,7 @@ import com.testify.ecfeed.generators.api.IGenerator;
 import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.MethodParameterNode;
+import com.testify.ecfeed.ui.common.IFileInfoProvider;
 import com.testify.ecfeed.ui.dialogs.GenerateTestSuiteDialog;
 import com.testify.ecfeed.ui.dialogs.GeneratorProgressMonitorDialog;
 
@@ -38,6 +39,7 @@ public class TestSuiteGenerationSupport {
 	private boolean fCanceled;
 	private Collection<IConstraint<ChoiceNode>> fSelectedConstraints;
 	private MethodNode fTarget;
+	IFileInfoProvider fFileInfoProvider;
 	private String fTestSuiteName;
 	private List<List<ChoiceNode>> fGeneratedData;
 	private boolean fHasData;
@@ -100,8 +102,9 @@ public class TestSuiteGenerationSupport {
 
 	}
 
-	public TestSuiteGenerationSupport(MethodNode target) {
+	public TestSuiteGenerationSupport(MethodNode target, IFileInfoProvider fileInfoProvider) {
 		fTarget = target;
+		fFileInfoProvider = fileInfoProvider;
 		fHasData = false;
 	}
 
@@ -110,7 +113,7 @@ public class TestSuiteGenerationSupport {
 	}
 
 	protected boolean generate(){
-		GenerateTestSuiteDialog dialog = new GenerateTestSuiteDialog(getActiveShell(), fTarget);
+		GenerateTestSuiteDialog dialog = new GenerateTestSuiteDialog(getActiveShell(), fTarget, fFileInfoProvider);
 		if(dialog.open() == IDialogConstants.OK_ID){
 			IGenerator<ChoiceNode> selectedGenerator = dialog.getSelectedGenerator();
 			List<List<ChoiceNode>> algorithmInput = dialog.getAlgorithmInput();
