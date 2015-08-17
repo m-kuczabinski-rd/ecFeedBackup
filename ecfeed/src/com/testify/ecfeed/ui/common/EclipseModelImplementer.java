@@ -232,6 +232,10 @@ public class EclipseModelImplementer extends AbstractModelImplementer {
 
 	@Override
 	protected boolean implementable(MethodNode node){
+		ClassNode classNode = node.getClassNode();
+		if(!androidCodeImplemented(classNode)) {
+			return true;
+		}		
 		if(methodDefinitionImplemented(node)){
 			return hasImplementableNode(node.getParameters()) || hasImplementableNode(node.getTestCases());
 		}

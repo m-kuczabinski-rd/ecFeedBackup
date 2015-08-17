@@ -123,20 +123,21 @@ IImplementationStatusResolver {
 	}
 
 	protected EImplementationStatus implementationStatus(MethodNode method){
-		EImplementationStatus status = EImplementationStatus.IMPLEMENTED;
+		ClassNode classNode = method.getClassNode();
+		if (classNode.getRunOnAndroid() && !androidCodeImplemented(classNode)) {
+			return EImplementationStatus.NOT_IMPLEMENTED;
+		}
 		if(methodDefinitionImplemented(method) == false){
-			status = EImplementationStatus.NOT_IMPLEMENTED;
+			return EImplementationStatus.NOT_IMPLEMENTED;
 		}
-		else if(method.getParameters().size() == 0){
-			status = EImplementationStatus.IMPLEMENTED;
+		if(method.getParameters().size() == 0){
+			return EImplementationStatus.IMPLEMENTED;
 		}
-		else{
-			EImplementationStatus childrenStatus = childrenStatus(method.getParameters());
-			if(childrenStatus != EImplementationStatus.IMPLEMENTED){
-				status = EImplementationStatus.PARTIALLY_IMPLEMENTED;
-			}
+		EImplementationStatus childrenStatus = childrenStatus(method.getParameters());
+		if(childrenStatus != EImplementationStatus.IMPLEMENTED){
+			return EImplementationStatus.PARTIALLY_IMPLEMENTED;
 		}
-		return status;
+		return EImplementationStatus.IMPLEMENTED;
 	}
 
 	protected EImplementationStatus implementationStatus(MethodParameterNode parameter){

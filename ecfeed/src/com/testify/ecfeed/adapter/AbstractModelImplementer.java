@@ -126,13 +126,13 @@ public abstract class AbstractModelImplementer implements IModelImplementer {
 	@Override
 	public boolean implementable(Class<? extends AbstractNode> type){
 		if(type.equals(RootNode.class) ||
-			(type.equals(ClassNode.class))||
-			(type.equals(MethodNode.class))||
-			(type.equals(MethodParameterNode.class))||
-			(type.equals(GlobalParameterNode.class))||
-			(type.equals(TestCaseNode.class))||
-			(type.equals(ChoiceNode.class))
-		){
+				(type.equals(ClassNode.class))||
+				(type.equals(MethodNode.class))||
+				(type.equals(MethodParameterNode.class))||
+				(type.equals(GlobalParameterNode.class))||
+				(type.equals(TestCaseNode.class))||
+				(type.equals(ChoiceNode.class))
+				){
 			return true;
 		}
 		return false;
@@ -176,11 +176,10 @@ public abstract class AbstractModelImplementer implements IModelImplementer {
 	}
 
 	protected boolean implement(ClassNode node) throws Exception{
-		
 		if(node.getRunOnAndroid() && !androidCodeImplemented(node)) {
 			implementAndroidCode(node);
 		}
-		
+
 		if(classDefinitionImplemented(node) == false){
 			implementClassDefinition(node);
 		}
@@ -198,6 +197,10 @@ public abstract class AbstractModelImplementer implements IModelImplementer {
 	}
 
 	protected boolean implement(MethodNode node) throws Exception{
+		ClassNode classNode = node.getClassNode();
+		if(classNode.getRunOnAndroid() && !androidCodeImplemented(classNode)) {
+			implementAndroidCode(classNode);
+		}
 		if(methodDefinitionImplemented(node) == false){
 			implementMethodDefinition(node);
 		}
