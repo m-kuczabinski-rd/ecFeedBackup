@@ -11,6 +11,7 @@ package com.testify.ecfeed.ui.common;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.JavaModelException;
 
+import com.testify.ecfeed.android.AndroidRunnerHelper;
 import com.testify.ecfeed.utils.PackageClassHelper;
 
 public class EclipseRunnerClassImplementer extends EclipseSimpleClassImplementer {
@@ -23,7 +24,7 @@ public class EclipseRunnerClassImplementer extends EclipseSimpleClassImplementer
 			String baseRunnerPackage,
 			String baseRunnerClass) {
 
-		super(fileInfoProvider, testingAppPackage, "EcFeedTestRunner");
+		super(fileInfoProvider, testingAppPackage, AndroidRunnerHelper.getEcFeedTestRunnerName());
 		fBaseRunner = PackageClassHelper.createQualifiedName(baseRunnerPackage, baseRunnerClass); 
 	}
 
@@ -37,7 +38,7 @@ public class EclipseRunnerClassImplementer extends EclipseSimpleClassImplementer
 
 	private String getClassContent() {
 		return
-				"public class EcFeedTestRunner extends " + fBaseRunner + " {\n" + 
+				"public class "+ AndroidRunnerHelper.getEcFeedTestRunnerName() + " extends " + fBaseRunner + " {\n" + 
 				"\n" +
 				"\t@Override\n" +
 				"\tpublic void onCreate(Bundle arguments) {\n" + 

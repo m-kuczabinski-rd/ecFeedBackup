@@ -14,6 +14,7 @@ import org.eclipse.jdt.core.IPackageFragment;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaModelException;
 
+import com.testify.ecfeed.android.AndroidRunnerHelper;
 import com.testify.ecfeed.utils.PackageClassHelper;
 
 public abstract class EclipseSimpleClassImplementer {
@@ -29,7 +30,8 @@ public abstract class EclipseSimpleClassImplementer {
 			String testingAppClass) {
 		fFileInfoProvider = fileInfoProvider;
 		fTestingAppPackage = testingAppPackage;
-		fTestingAppSourceFilesPackage = fTestingAppPackage  + ".ecFeed.android";
+		fTestingAppSourceFilesPackage = 
+				fTestingAppPackage  + "." + AndroidRunnerHelper.getEcFeedTestRunnerPrefix();
 		fTestingAppClass = testingAppClass;
 	}
 

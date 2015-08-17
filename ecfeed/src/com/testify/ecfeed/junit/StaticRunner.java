@@ -27,12 +27,9 @@ import org.junit.runners.model.InitializationError;
 
 import com.testify.ecfeed.adapter.EImplementationStatus;
 import com.testify.ecfeed.junit.annotations.TestSuites;
-import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.TestCaseNode;
-import com.testify.ecfeed.runner.ITestMethodInvoker;
 import com.testify.ecfeed.runner.RunnerException;
-import com.testify.ecfeed.runner.android.AndroidTestMethodInvoker;
 
 public class StaticRunner extends AbstractJUnitRunner {
 
@@ -64,19 +61,10 @@ public class StaticRunner extends AbstractJUnitRunner {
 			FrameworkMethod frameworkMethod,
 			List<FrameworkMethod> frameworkMethods) throws RunnerException {
 
-		ClassNode classNode = (ClassNode)methodNode.getParent();
 		Method method = frameworkMethod.getMethod();
 		Collection<TestCaseNode> testCases = getTestCases(methodNode, getTestSuites(frameworkMethod));
 
-		if (classNode.getRunOnAndroid()) {
-			ITestMethodInvoker invoker = new AndroidTestMethodInvoker(classNode.getAndroidBaseRunner());
-
-			String className = getTestClass().getName();
-			frameworkMethods.add(new AndroidParameterizedMethod(className, method, testCases, getLoader(), invoker));
-		}
-		else {
-			frameworkMethods.add(new JavaParameterizedMethod(method, testCases, getLoader()));
-		}
+		frameworkMethods.add(new JavaParameterizedMethod(method, testCases, getLoader()));
 	}
 
 	protected Set<String> getTestSuites(FrameworkMethod method) throws RunnerException{

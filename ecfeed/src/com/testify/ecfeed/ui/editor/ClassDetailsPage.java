@@ -24,6 +24,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
+import com.testify.ecfeed.android.AndroidRunnerHelper;
 import com.testify.ecfeed.model.AbstractNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.ui.common.IFileInfoProvider;
@@ -55,7 +56,7 @@ public class ClassDetailsPage extends BasicDetailsPage {
 		@Override
 		public void widgetSelected(SelectionEvent e){
 
-			fClassIf.setAndroidRunner(fAndroidRunnerCombo.getText());
+			fClassIf.setBaseAndroidRunner(fAndroidRunnerCombo.getText());
 
 			String androidRunner = fClassIf.getAndroidRunner();
 			fAndroidRunnerCombo.setText(androidRunner);
@@ -94,7 +95,7 @@ public class ClassDetailsPage extends BasicDetailsPage {
 		@Override
 		public void widgetSelected(SelectionEvent e) {
 
-			final String defaultAndroidRunner  = "com.testify.ecfeed.android.junit.EcFeedTestRunner";
+			final String defaultBaseAndroidRunner  = AndroidRunnerHelper.getDefaultBaseAndroidRunnerName();
 
 			boolean selection = fRunOnAndroidCheckbox.getSelection();
 			fClassIf.setRunOnAndroid(selection);
@@ -103,7 +104,7 @@ public class ClassDetailsPage extends BasicDetailsPage {
 				String androidRunner = fClassIf.getAndroidRunner();
 
 				if (androidRunner == null || androidRunner.isEmpty()) {
-					fClassIf.setAndroidRunner(defaultAndroidRunner);
+					fClassIf.setBaseAndroidRunner(defaultBaseAndroidRunner);
 				}
 			}
 
@@ -230,10 +231,10 @@ public class ClassDetailsPage extends BasicDetailsPage {
 		// TODO - different algorithm for base runners - not actual runners
 	}
 
-//	private List<String> createRunnerList() {
-//		String projectPath = ProjectHelper.getProjectPath(fFileInfoProvider);
-//		return fClassIf.createRunnerList(projectPath);
-//	}
+	//	private List<String> createRunnerList() {
+	//		String projectPath = ProjectHelper.getProjectPath(fFileInfoProvider);
+	//		return fClassIf.createRunnerList(projectPath);
+	//	}
 
 	@Override
 	public void refresh(){

@@ -14,13 +14,14 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.Method;
 
+import com.testify.ecfeed.android.AndroidRunnerHelper;
 import com.testify.ecfeed.runner.ITestMethodInvoker;
 import com.testify.ecfeed.runner.Messages;
 import com.testify.ecfeed.runner.RunnerException;
 
 public class AndroidTestMethodInvoker implements ITestMethodInvoker {
 
-	private String fTestRunner = null;
+	private String fTestRunner;
 
 	public AndroidTestMethodInvoker(String testRunner) {
 		fTestRunner = testRunner;
@@ -139,7 +140,7 @@ public class AndroidTestMethodInvoker implements ITestMethodInvoker {
 	private boolean isIgnoredLine(String line) {
 
 		String trimmedLine = line.trim();
-		
+
 		if (trimmedLine.isEmpty()) {
 			return true;
 		}
@@ -147,23 +148,23 @@ public class AndroidTestMethodInvoker implements ITestMethodInvoker {
 		if (isStackLine(trimmedLine)) {
 			return true;
 		}
-		
-		if (trimmedLine.contains("Test results for EcFeedTestRunner")) {
+
+		if (trimmedLine.contains("Test results for " + AndroidRunnerHelper.getEcFeedTestRunnerName())) {
 			return true;
 		}
-		
+
 		if (trimmedLine.contains("FAILURES!!!")) {
 			return true;
 		}		
-		
+
 		if (trimmedLine.contains("Tests run:")) {
 			return true;
 		}		
-		
+
 		if (trimmedLine.contains("Exit code:")) {
 			return true;
 		}		
-		
+
 		return false;
 	}
 

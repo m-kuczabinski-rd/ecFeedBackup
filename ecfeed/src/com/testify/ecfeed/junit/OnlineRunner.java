@@ -37,13 +37,10 @@ import com.testify.ecfeed.junit.annotations.GeneratorParameter;
 import com.testify.ecfeed.junit.annotations.GeneratorParameterNames;
 import com.testify.ecfeed.junit.annotations.GeneratorParameterValues;
 import com.testify.ecfeed.model.ChoiceNode;
-import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.MethodParameterNode;
-import com.testify.ecfeed.runner.ITestMethodInvoker;
 import com.testify.ecfeed.runner.Messages;
 import com.testify.ecfeed.runner.RunnerException;
-import com.testify.ecfeed.runner.android.AndroidTestMethodInvoker;
 
 public class OnlineRunner extends AbstractJUnitRunner {
 
@@ -73,29 +70,11 @@ public class OnlineRunner extends AbstractJUnitRunner {
 					throw new RunnerException(Messages.GENERATOR_INITIALIZATION_PROBLEM(e.getMessage()));
 				}
 
-				addFrameworkMethod(methodNode, frameworkMethod.getMethod(), generator, frameworkMethods);
+				frameworkMethods.add(new JavaRuntimeMethod(frameworkMethod.getMethod(), generator, getLoader()));
 			}
 		}
 
 		return frameworkMethods;
-	}
-
-	private void addFrameworkMethod(
-			MethodNode methodNode,
-			Method method,
-			IGenerator<ChoiceNode> generator,
-			List<FrameworkMethod> frameworkMethods) throws RunnerException {
-
-		ClassNode classNode = (ClassNode)methodNode.getParent();
-
-		if (classNode.getRunOnAndroid()) {
-			ITestMethodInvoker invoker = new AndroidTestMethodInvoker(classNode.getAndroidBaseRunner());
-
-			String className = getTestClass().getName();
-			frameworkMethods.add(new AndroidRuntimeMethod(className, method, generator, getLoader(), invoker));
-		} else {
-			frameworkMethods.add(new JavaRuntimeMethod(method, generator, getLoader()));
-		}		
 	}
 
 	protected Collection<IConstraint<ChoiceNode>> getConstraints(

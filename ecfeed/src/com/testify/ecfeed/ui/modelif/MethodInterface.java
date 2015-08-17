@@ -34,7 +34,7 @@ import com.testify.ecfeed.adapter.operations.MethodOperationAddTestCase;
 import com.testify.ecfeed.adapter.operations.MethodOperationAddTestSuite;
 import com.testify.ecfeed.adapter.operations.MethodOperationConvertTo;
 import com.testify.ecfeed.adapter.operations.MethodOperationRenameTestCases;
-import com.testify.ecfeed.android.project.AndroidManifestAccessor;
+import com.testify.ecfeed.android.AndroidRunnerHelper;
 import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.Constraint;
@@ -253,20 +253,9 @@ public class MethodInterface extends ParametersParentInterface {
 		}
 
 		String projectPath = ProjectHelper.getProjectPath(fileInfoProvider);
-		String androidRunner = createAndroidRunnerName(projectPath, classNode.getAndroidBaseRunner());
+		String androidRunner = AndroidRunnerHelper.createAndroidRunnerName(projectPath);
 
 		return new AndroidTestMethodInvoker(androidRunner);
-	}
-
-	private String createAndroidRunnerName(String projectPath, String androidRunnerFromClassNode) {
-
-		String packageName = new AndroidManifestAccessor(projectPath).getTestingAppPackage();
-
-		if (packageName == null || packageName.isEmpty()) {
-			return androidRunnerFromClassNode;
-		}
-
-		return packageName + "/" + androidRunnerFromClassNode;
 	}
 
 	private boolean emptyAndroidRunner(ClassNode classNode) {

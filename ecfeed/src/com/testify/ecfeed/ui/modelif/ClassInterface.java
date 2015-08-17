@@ -31,7 +31,7 @@ import com.testify.ecfeed.adapter.operations.ClassOperationRemoveMethod;
 import com.testify.ecfeed.adapter.operations.ClassOperationSetAndroidBaseRunner;
 import com.testify.ecfeed.adapter.operations.ClassOperationSetRunOnAndroid;
 import com.testify.ecfeed.adapter.operations.FactoryRenameOperation;
-import com.testify.ecfeed.android.DefaulAndroidRunner;
+import com.testify.ecfeed.android.AndroidRunnerHelper;
 import com.testify.ecfeed.android.project.AndroidManifestAccessor;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.MethodNode;
@@ -118,7 +118,7 @@ public class ClassInterface extends GlobalParametersParentInterface {
 		return execute(operation, Messages.DIALOG_ANDROID_RUNNER_SET_PROBLEM_TITLE);
 	}
 
-	public boolean setAndroidRunner(String androidRunner) {
+	public boolean setBaseAndroidRunner(String androidRunner) {
 		IModelOperation operation = new ClassOperationSetAndroidBaseRunner(getTarget(), androidRunner);
 		return execute(operation, Messages.DIALOG_ANDROID_RUNNER_SET_PROBLEM_TITLE);
 	}
@@ -208,7 +208,7 @@ public class ClassInterface extends GlobalParametersParentInterface {
 
 	private void addDefaultRunner(List<String> runnerList) {
 
-		String runner = DefaulAndroidRunner.getName();
+		String runner = AndroidRunnerHelper.getDefaultBaseAndroidRunnerName();
 
 		if (runnerList.contains(runner)) {
 			return;
