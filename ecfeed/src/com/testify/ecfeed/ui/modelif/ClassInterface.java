@@ -200,21 +200,11 @@ public class ClassInterface extends GlobalParametersParentInterface {
 	}
 
 	public List<String> createRunnerList(String projectPath) {
+		List<String> runners = new AndroidManifestAccessor(projectPath).getRunnerNames();
+		String ecFeedTestRunner = AndroidRunnerHelper.createAndroidRunnerName(projectPath);
 
-		List<String> runnerList = new AndroidManifestAccessor(projectPath).getRunnerNames();
-		addDefaultRunner(runnerList);
-		return runnerList;
-	}
-
-	private void addDefaultRunner(List<String> runnerList) {
-
-		String runner = AndroidRunnerHelper.getDefaultBaseAndroidRunnerName();
-
-		if (runnerList.contains(runner)) {
-			return;
-		}
-
-		runnerList.add(0, runner);
+		runners.remove(ecFeedTestRunner);
+		return runners;
 	}
 
 	@Override

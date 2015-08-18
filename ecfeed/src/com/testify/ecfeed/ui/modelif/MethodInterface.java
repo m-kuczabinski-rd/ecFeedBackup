@@ -253,7 +253,7 @@ public class MethodInterface extends ParametersParentInterface {
 		}
 
 		String projectPath = ProjectHelper.getProjectPath(fileInfoProvider);
-		String androidRunner = AndroidRunnerHelper.createAndroidRunnerName(projectPath);
+		String androidRunner = AndroidRunnerHelper.createFullAndroidRunnerName(projectPath);
 
 		return new AndroidTestMethodInvoker(androidRunner);
 	}
