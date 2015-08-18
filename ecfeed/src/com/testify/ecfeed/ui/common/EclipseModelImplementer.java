@@ -41,7 +41,7 @@ import org.eclipse.jface.text.IDocument;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.text.edits.TextEdit;
 
-import com.testify.ecfeed.adapter.AbstractModelImplementer;
+import com.testify.ecfeed.adapter.AbstractJavaModelImplementer;
 import com.testify.ecfeed.adapter.CachedImplementationStatusResolver;
 import com.testify.ecfeed.adapter.EImplementationStatus;
 import com.testify.ecfeed.adapter.java.JavaUtils;
@@ -53,7 +53,7 @@ import com.testify.ecfeed.model.GlobalParameterNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.MethodParameterNode;
 
-public class EclipseModelImplementer extends AbstractModelImplementer {
+public class EclipseModelImplementer extends AbstractJavaModelImplementer {
 
 	private final IFileInfoProvider fFileInfoProvider;
 

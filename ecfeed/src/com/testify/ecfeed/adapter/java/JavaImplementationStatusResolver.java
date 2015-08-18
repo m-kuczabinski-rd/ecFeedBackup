@@ -114,11 +114,6 @@ public class JavaImplementationStatusResolver extends AbstractImplementationStat
 	}
 
 	@Override
-	protected boolean androidCodeImplemented(ClassNode classNode) {
-		return false;
-	}
-
-	@Override
 	protected boolean classDefinitionImplemented(String qualifiedName) {
 		Class<?> classDefinition = loadClass(qualifiedName);
 		return classDefinition != null && classDefinition.isInterface() == false && classDefinition.isEnum() == false && classDefinition.isAnnotation() == false;

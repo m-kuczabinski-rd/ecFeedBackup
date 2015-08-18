@@ -102,10 +102,6 @@ IImplementationStatusResolver {
 	}
 
 	protected EImplementationStatus implementationStatus(ClassNode classNode){
-		if (classNode.getRunOnAndroid() && !androidCodeImplemented(classNode)) {
-			return EImplementationStatus.NOT_IMPLEMENTED;
-		}
-
 		if(!classDefinitionImplemented(classNode.getName())){
 			return EImplementationStatus.NOT_IMPLEMENTED;
 		}
@@ -123,10 +119,6 @@ IImplementationStatusResolver {
 	}
 
 	protected EImplementationStatus implementationStatus(MethodNode method){
-		ClassNode classNode = method.getClassNode();
-		if (classNode.getRunOnAndroid() && !androidCodeImplemented(classNode)) {
-			return EImplementationStatus.NOT_IMPLEMENTED;
-		}
 		if(methodDefinitionImplemented(method) == false){
 			return EImplementationStatus.NOT_IMPLEMENTED;
 		}
@@ -231,7 +223,6 @@ IImplementationStatusResolver {
 		return EImplementationStatus.PARTIALLY_IMPLEMENTED;
 	}
 
-	protected abstract boolean androidCodeImplemented(ClassNode classNode);
 	protected abstract boolean classDefinitionImplemented(String qualifiedName);
 	protected abstract boolean methodDefinitionImplemented(MethodNode method);
 	protected abstract boolean enumDefinitionImplemented(String qualifiedName);

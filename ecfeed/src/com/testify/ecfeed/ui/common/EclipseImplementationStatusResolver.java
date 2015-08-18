@@ -15,12 +15,11 @@ import org.eclipse.jdt.core.IField;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaModelException;
 
-import com.testify.ecfeed.adapter.CachedImplementationStatusResolver;
 import com.testify.ecfeed.adapter.java.JavaPrimitiveTypePredicate;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.MethodNode;
 
-public class EclipseImplementationStatusResolver extends CachedImplementationStatusResolver{
+public class EclipseImplementationStatusResolver extends AbstractJavaImplementationStatusResolver{
 
 	IFileInfoProvider fFileInfoProvider;
 
