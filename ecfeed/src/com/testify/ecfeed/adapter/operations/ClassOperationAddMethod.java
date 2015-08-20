@@ -44,10 +44,10 @@ public class ClassOperationAddMethod extends AbstractModelOperation{
 			fIndex = fTarget.getMethods().size();
 		}
 		if(JavaUtils.validateNewMethodSignature(fTarget, fMethod.getName(), fMethod.getParametersTypes(), problems) == false){
-			throw new ModelOperationException(JavaUtils.consolidate(problems));
+			ModelOperationException.report(JavaUtils.consolidate(problems));
 		}
 		if(fTarget.addMethod(fMethod, fIndex) == false){
-			throw new ModelOperationException(Messages.UNEXPECTED_PROBLEM_WHILE_ADDING_ELEMENT);
+			ModelOperationException.report(Messages.UNEXPECTED_PROBLEM_WHILE_ADDING_ELEMENT);
 		}
 		markModelUpdated();
 	}

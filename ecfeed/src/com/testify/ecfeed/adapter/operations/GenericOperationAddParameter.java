@@ -63,13 +63,13 @@ public class GenericOperationAddParameter extends AbstractModelOperation {
 	public void execute() throws ModelOperationException {
 		String parameterName = fParameter.getName();
 		if(fNewIndex < 0){
-			throw new ModelOperationException(Messages.NEGATIVE_INDEX_PROBLEM);
+			ModelOperationException.report(Messages.NEGATIVE_INDEX_PROBLEM);
 		}
 		if(fNewIndex > fTarget.getParameters().size()){
-			throw new ModelOperationException(Messages.TOO_HIGH_INDEX_PROBLEM);
+			ModelOperationException.report(Messages.TOO_HIGH_INDEX_PROBLEM);
 		}
 		if(fTarget.getParameter(parameterName) != null){
-			throw new ModelOperationException(Messages.CATEGORY_NAME_DUPLICATE_PROBLEM);
+			ModelOperationException.report(Messages.CATEGORY_NAME_DUPLICATE_PROBLEM);
 		}
 		fTarget.addParameter(fParameter, fNewIndex);
 		markModelUpdated();

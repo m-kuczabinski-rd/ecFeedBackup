@@ -16,6 +16,7 @@ import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaModelException;
 
 import com.testify.ecfeed.adapter.java.JavaPrimitiveTypePredicate;
+import com.testify.ecfeed.generators.api.EcException;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.utils.SystemLogger;
@@ -30,7 +31,7 @@ public class EclipseImplementationStatusResolver extends AbstractJavaImplementat
 	}
 
 	@Override
-	protected boolean androidCodeImplemented(ClassNode classNode) {
+	protected boolean androidCodeImplemented(ClassNode classNode) throws EcException {
 		EclipseEctImplementerForClassNode implementer = 
 				new EclipseEctImplementerForClassNode(fFileInfoProvider, classNode);
 		

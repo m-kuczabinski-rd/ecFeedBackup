@@ -10,6 +10,7 @@ package com.testify.ecfeed.ui.common;
 
 import com.testify.ecfeed.adapter.CachedImplementationStatusResolver;
 import com.testify.ecfeed.adapter.EImplementationStatus;
+import com.testify.ecfeed.generators.api.EcException;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.IPrimitiveTypePredicate;
 import com.testify.ecfeed.model.MethodNode;
@@ -21,16 +22,16 @@ public abstract class AbstractJavaImplementationStatusResolver extends CachedImp
 		super(primitiveTypePredicate);
 	}
 
-	protected abstract boolean androidCodeImplemented(ClassNode classNode);
+	protected abstract boolean androidCodeImplemented(ClassNode classNode) throws EcException;
 
-	protected EImplementationStatus implementationStatus(ClassNode classNode){
+	protected EImplementationStatus implementationStatus(ClassNode classNode) throws EcException{
 		if (classNode.getRunOnAndroid() && !androidCodeImplemented(classNode)) {
 			return EImplementationStatus.NOT_IMPLEMENTED;
 		}
 		return super.implementationStatus(classNode);
 	}
 
-	protected EImplementationStatus implementationStatus(MethodNode method){
+	protected EImplementationStatus implementationStatus(MethodNode method) throws EcException{
 		ClassNode classNode = method.getClassNode();
 
 		if (classNode.getRunOnAndroid() && !androidCodeImplemented(classNode)) {

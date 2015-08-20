@@ -235,7 +235,7 @@ public class XomAnalyser {
 		List<ChoiceNode> testData = new ArrayList<ChoiceNode>();
 
 		if(parameters.size() != parameterElements.size()){
-			throw new ParserException(Messages.WRONG_NUMBER_OF_TEST_PAREMETERS(name));
+			ParserException.report(Messages.WRONG_NUMBER_OF_TEST_PAREMETERS(name));
 		}
 
 		for(int i = 0; i < parameterElements.size(); i++){
@@ -247,13 +247,13 @@ public class XomAnalyser {
 				String choiceName = getAttributeValue(testParameterElement, Constants.CHOICE_ATTRIBUTE_NAME);
 				testValue = parameter.getChoice(choiceName);
 				if(testValue == null){
-					throw new ParserException(Messages.PARTITION_DOES_NOT_EXIST(parameter.getName(), choiceName));
+					ParserException.report(Messages.PARTITION_DOES_NOT_EXIST(parameter.getName(), choiceName));
 				}
 			}
 			else if(testParameterElement.getLocalName().equals(Constants.EXPECTED_PARAMETER_NODE_NAME)){
 				String valueString = getAttributeValue(testParameterElement, Constants.VALUE_ATTRIBUTE_NAME);
 				if(valueString == null){
-					throw new ParserException(Messages.MISSING_VALUE_ATTRIBUTE_IN_TEST_CASE_ELEMENT);
+					ParserException.report(Messages.MISSING_VALUE_ATTRIBUTE_IN_TEST_CASE_ELEMENT);
 				}
 				testValue = new ChoiceNode(Constants.EXPECTED_VALUE_CHOICE_NAME, valueString);
 				testValue.setParent(parameter);
@@ -275,7 +275,7 @@ public class XomAnalyser {
 
 		if((getIterableChildren(element, Constants.CONSTRAINT_PREMISE_NODE_NAME).size() != 1) ||
 				(getIterableChildren(element, Constants.CONSTRAINT_CONSEQUENCE_NODE_NAME).size() != 1)){
-			throw new ParserException(Messages.MALFORMED_CONSTRAINT_NODE_DEFINITION(method.getName(), name));
+			ParserException.report(Messages.MALFORMED_CONSTRAINT_NODE_DEFINITION(method.getName(), name));
 		}
 		for(Element child : getIterableChildren(element, Constants.CONSTRAINT_PREMISE_NODE_NAME)){
 			if(child.getLocalName().equals(Constants.CONSTRAINT_PREMISE_NODE_NAME)){
@@ -285,7 +285,7 @@ public class XomAnalyser {
 					premise = parseStatement(child.getChildElements().get(0), method);
 				}
 				else{
-					throw new ParserException(Messages.MALFORMED_CONSTRAINT_NODE_DEFINITION(method.getName(), name));
+					ParserException.report(Messages.MALFORMED_CONSTRAINT_NODE_DEFINITION(method.getName(), name));
 				}
 			}
 		}
@@ -295,15 +295,15 @@ public class XomAnalyser {
 					consequence = parseStatement(child.getChildElements().get(0), method);
 				}
 				else{
-					throw new ParserException(Messages.MALFORMED_CONSTRAINT_NODE_DEFINITION(method.getName(), name));
+					ParserException.report(Messages.MALFORMED_CONSTRAINT_NODE_DEFINITION(method.getName(), name));
 				}
 			}
 			else{
-				throw new ParserException(Messages.MALFORMED_CONSTRAINT_NODE_DEFINITION(method.getName(), name));
+				ParserException.report(Messages.MALFORMED_CONSTRAINT_NODE_DEFINITION(method.getName(), name));
 			}
 		}
 		if(premise == null || consequence == null){
-			throw new ParserException(Messages.MALFORMED_CONSTRAINT_NODE_DEFINITION(method.getName(), name));
+			ParserException.report(Messages.MALFORMED_CONSTRAINT_NODE_DEFINITION(method.getName(), name));
 		}
 
 		ConstraintNode constraint = new ConstraintNode(name, new Constraint(premise, consequence));
@@ -342,7 +342,7 @@ public class XomAnalyser {
 			statementArray = new StatementArray(EStatementOperator.AND);
 			break;
 		default:
-			throw new ParserException(Messages.WRONG_STATEMENT_ARRAY_OPERATOR(method.getName(), operatorValue));
+			ParserException.report(Messages.WRONG_STATEMENT_ARRAY_OPERATOR(method.getName(), operatorValue));
 		}
 		for(Element child : getIterableChildren(element)){
 			AbstractStatement childStatement = parseStatement(child, method);
@@ -363,7 +363,8 @@ public class XomAnalyser {
 		case Constants.STATIC_STATEMENT_FALSE_VALUE:
 			return new StaticStatement(false);
 		default:
-			throw new ParserException(Messages.WRONG_STATIC_STATEMENT_VALUE(valueString));
+			ParserException.report(Messages.WRONG_STATIC_STATEMENT_VALUE(valueString));
+			return new StaticStatement(false);
 		}
 	}
 
@@ -373,12 +374,12 @@ public class XomAnalyser {
 		String parameterName = getAttributeValue(element, Constants.STATEMENT_PARAMETER_ATTRIBUTE_NAME);
 		MethodParameterNode parameter = (MethodParameterNode)method.getParameter(parameterName);
 		if(parameter == null || parameter.isExpected()){
-			throw new ParserException(Messages.WRONG_CATEGORY_NAME(parameterName, method.getName()));
+			ParserException.report(Messages.WRONG_CATEGORY_NAME(parameterName, method.getName()));
 		}
 		String choiceName = getAttributeValue(element, Constants.STATEMENT_CHOICE_ATTRIBUTE_NAME);
 		ChoiceNode choice = parameter.getChoice(choiceName);
 		if(choice == null){
-			throw new ParserException(Messages.WRONG_PARTITION_NAME(choiceName, parameterName, method.getName()));
+			ParserException.report(Messages.WRONG_PARTITION_NAME(choiceName, parameterName, method.getName()));
 		}
 
 		String relationName = getAttributeValue(element, Constants.STATEMENT_RELATION_ATTRIBUTE_NAME);
@@ -396,7 +397,7 @@ public class XomAnalyser {
 
 		MethodParameterNode parameter = method.getMethodParameter(parameterName);
 		if(parameter == null || parameter.isExpected()){
-			throw new ParserException(Messages.WRONG_CATEGORY_NAME(parameterName, method.getName()));
+			ParserException.report(Messages.WRONG_CATEGORY_NAME(parameterName, method.getName()));
 		}
 		EStatementRelation relation = getRelation(relationName);
 
@@ -410,7 +411,7 @@ public class XomAnalyser {
 		String valueString = getAttributeValue(element, Constants.STATEMENT_EXPECTED_VALUE_ATTRIBUTE_NAME);
 		MethodParameterNode parameter = method.getMethodParameter(parameterName);
 		if(parameter == null || !parameter.isExpected()){
-			throw new ParserException(Messages.WRONG_CATEGORY_NAME(parameterName, method.getName()));
+			ParserException.report(Messages.WRONG_CATEGORY_NAME(parameterName, method.getName()));
 		}
 		ChoiceNode condition = new ChoiceNode("expected", valueString);
 		condition.setParent(parameter);
@@ -445,7 +446,7 @@ public class XomAnalyser {
 
 	private void assertNodeTag(String qualifiedName, String expectedName) throws ParserException {
 		if(qualifiedName.equals(expectedName) == false){
-			throw new ParserException("Unexpected node name: " + qualifiedName + " instead of " + expectedName);
+			ParserException.report("Unexpected node name: " + qualifiedName + " instead of " + expectedName);
 		}
 	}
 
@@ -475,7 +476,7 @@ public class XomAnalyser {
 	protected String getElementName(Element element) throws ParserException {
 		String name = element.getAttributeValue(Constants.NODE_NAME_ATTRIBUTE);
 		if(name == null){
-			throw new ParserException(Messages.MISSING_ATTRIBUTE(element, Constants.NODE_NAME_ATTRIBUTE));
+			ParserException.report(Messages.MISSING_ATTRIBUTE(element, Constants.NODE_NAME_ATTRIBUTE));
 		}
 		return name;
 	}
@@ -483,7 +484,7 @@ public class XomAnalyser {
 	protected String getAttributeValue(Element element, String attributeName) throws ParserException{
 		String value = element.getAttributeValue(attributeName);
 		if(value == null){
-			throw new ParserException(Messages.MISSING_ATTRIBUTE(element, attributeName));
+			ParserException.report(Messages.MISSING_ATTRIBUTE(element, attributeName));
 		}
 		return value;
 	}
@@ -499,7 +500,7 @@ public class XomAnalyser {
 			relation = EStatementRelation.NOT;
 			break;
 		default:
-			throw new ParserException(Messages.WRONG_OR_MISSING_RELATION_FORMAT(relationName));
+			ParserException.report(Messages.WRONG_OR_MISSING_RELATION_FORMAT(relationName));
 		}
 		return relation;
 	}

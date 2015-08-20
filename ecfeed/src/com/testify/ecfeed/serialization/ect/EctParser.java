@@ -45,9 +45,11 @@ public class EctParser implements IModelParser {
 			Document document = fBuilder.build(istream);
 			return fXomParser.parseRoot(document.getRootElement());
 		} catch (ParsingException e) {
-			throw new ParserException(Messages.PARSING_EXCEPTION(e));
+			ParserException.report(Messages.PARSING_EXCEPTION(e));
+			return null;
 		} catch (IOException e) {
-			throw new ParserException(Messages.IO_EXCEPTION(e));
+			ParserException.report(Messages.IO_EXCEPTION(e));
+			return null;
 		}
 	}
 
@@ -57,9 +59,11 @@ public class EctParser implements IModelParser {
 			Document document = fBuilder.build(istream);
 			return fXomParser.parseClass(document.getRootElement(), null);
 		} catch (ParsingException e) {
-			throw new ParserException(Messages.PARSING_EXCEPTION(e));
+			ParserException.report(Messages.PARSING_EXCEPTION(e));
+			return null;
 		} catch (IOException e) {
-			throw new ParserException(Messages.IO_EXCEPTION(e));
+			ParserException.report(Messages.IO_EXCEPTION(e));
+			return null;
 		}
 	}
 
@@ -69,9 +73,11 @@ public class EctParser implements IModelParser {
 			Document document = fBuilder.build(istream);
 			return fXomParser.parseMethod(document.getRootElement(), null);
 		} catch (ParsingException e) {
-			throw new ParserException(Messages.PARSING_EXCEPTION(e));
+			ParserException.report(Messages.PARSING_EXCEPTION(e));
+			return null;
 		} catch (IOException e) {
-			throw new ParserException(Messages.IO_EXCEPTION(e));
+			ParserException.report(Messages.IO_EXCEPTION(e));
+			return null;
 		}
 	}
 
@@ -81,9 +87,11 @@ public class EctParser implements IModelParser {
 			Document document = fBuilder.build(istream);
 			return fXomParser.parseGlobalParameter(document.getRootElement());
 		} catch (ParsingException e) {
-			throw new ParserException(Messages.PARSING_EXCEPTION(e));
+			ParserException.report(Messages.PARSING_EXCEPTION(e));
+			return null;
 		} catch (IOException e) {
-			throw new ParserException(Messages.IO_EXCEPTION(e));
+			ParserException.report(Messages.IO_EXCEPTION(e));
+			return null;
 		}
 	}
 
@@ -93,9 +101,11 @@ public class EctParser implements IModelParser {
 			Document document = fBuilder.build(istream);
 			return fXomParser.parseMethodParameter(document.getRootElement(), method);
 		} catch (ParsingException e) {
-			throw new ParserException(Messages.PARSING_EXCEPTION(e));
+			ParserException.report(Messages.PARSING_EXCEPTION(e));
+			return null;
 		} catch (IOException e) {
-			throw new ParserException(Messages.IO_EXCEPTION(e));
+			ParserException.report(Messages.IO_EXCEPTION(e));
+			return null;
 		}
 	}
 
@@ -105,9 +115,11 @@ public class EctParser implements IModelParser {
 			Document document = fBuilder.build(istream);
 			return fXomParser.parseChoice(document.getRootElement());
 		} catch (ParsingException e) {
-			throw new ParserException(Messages.PARSING_EXCEPTION(e));
+			ParserException.report(Messages.PARSING_EXCEPTION(e));
+			return null;
 		} catch (IOException e) {
-			throw new ParserException(Messages.IO_EXCEPTION(e));
+			ParserException.report(Messages.IO_EXCEPTION(e));
+			return null;
 		}
 	}
 
@@ -117,9 +129,11 @@ public class EctParser implements IModelParser {
 			Document document = fBuilder.build(istream);
 			return fXomParser.parseTestCase(document.getRootElement(), method);
 		} catch (ParsingException e) {
-			throw new ParserException(Messages.PARSING_EXCEPTION(e));
+			ParserException.report(Messages.PARSING_EXCEPTION(e));
+			return null;
 		} catch (IOException e) {
-			throw new ParserException(Messages.IO_EXCEPTION(e));
+			ParserException.report(Messages.IO_EXCEPTION(e));
+			return null;
 		}
 	}
 
@@ -129,9 +143,11 @@ public class EctParser implements IModelParser {
 			Document document = fBuilder.build(istream);
 			return fXomParser.parseConstraint(document.getRootElement(), method);
 		} catch (ParsingException e) {
-			throw new ParserException(Messages.PARSING_EXCEPTION(e));
+			ParserException.report(Messages.PARSING_EXCEPTION(e));
+			return null;
 		} catch (IOException e) {
-			throw new ParserException(Messages.IO_EXCEPTION(e));
+			ParserException.report(Messages.IO_EXCEPTION(e));
+			return null;
 		}
 	}
 
@@ -141,9 +157,11 @@ public class EctParser implements IModelParser {
 			Document document = fBuilder.build(istream);
 			return fXomParser.parseStatement(document.getRootElement(), method);
 		} catch (ParsingException e) {
-			throw new ParserException(Messages.PARSING_EXCEPTION(e));
+			ParserException.report(Messages.PARSING_EXCEPTION(e));
+			return null;
 		} catch (IOException e) {
-			throw new ParserException(Messages.IO_EXCEPTION(e));
+			ParserException.report(Messages.IO_EXCEPTION(e));
+			return null;
 		}
 	}
 
@@ -153,9 +171,11 @@ public class EctParser implements IModelParser {
 			Document document = fBuilder.build(istream);
 			return fXomParser.parseStaticStatement(document.getRootElement());
 		} catch (ParsingException e) {
-			throw new ParserException(Messages.PARSING_EXCEPTION(e));
+			ParserException.report(Messages.PARSING_EXCEPTION(e));
+			return null;
 		} catch (IOException e) {
-			throw new ParserException(Messages.IO_EXCEPTION(e));
+			ParserException.report(Messages.IO_EXCEPTION(e));
+			return null;
 		}
 	}
 
@@ -165,9 +185,11 @@ public class EctParser implements IModelParser {
 			Document document = fBuilder.build(istream);
 			return fXomParser.parseChoiceStatement(document.getRootElement(), method);
 		} catch (ParsingException e) {
-			throw new ParserException(Messages.PARSING_EXCEPTION(e));
+			ParserException.report(Messages.PARSING_EXCEPTION(e));
+			return null;
 		} catch (IOException e) {
-			throw new ParserException(Messages.IO_EXCEPTION(e));
+			ParserException.report(Messages.IO_EXCEPTION(e));
+			return null;
 		}
 	}
 
@@ -177,9 +199,11 @@ public class EctParser implements IModelParser {
 			Document document = fBuilder.build(istream);
 			return fXomParser.parseExpectedValueStatement(document.getRootElement(), method);
 		} catch (ParsingException e) {
-			throw new ParserException(Messages.PARSING_EXCEPTION(e));
+			ParserException.report(Messages.PARSING_EXCEPTION(e));
+			return new ExpectedValueStatement(null, null, null);
 		} catch (IOException e) {
-			throw new ParserException(Messages.IO_EXCEPTION(e));
+			ParserException.report(Messages.IO_EXCEPTION(e));
+			return new ExpectedValueStatement(null, null, null);
 		}
 	}
 
@@ -189,9 +213,11 @@ public class EctParser implements IModelParser {
 			Document document = fBuilder.build(istream);
 			return fXomParser.parseStatementArray(document.getRootElement(), method);
 		} catch (ParsingException e) {
-			throw new ParserException(Messages.PARSING_EXCEPTION(e));
+			ParserException.report(Messages.PARSING_EXCEPTION(e));
+			return new StatementArray(null);
 		} catch (IOException e) {
-			throw new ParserException(Messages.IO_EXCEPTION(e));
+			ParserException.report(Messages.IO_EXCEPTION(e));
+			return new StatementArray(null);
 		}
 	}
 }

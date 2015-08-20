@@ -24,11 +24,11 @@ public class JUnitTestMethodInvoker implements ITestMethodInvoker {
 		try {
 			testMethod.invoke(instance, arguments);
 		} catch (InvocationTargetException e) {
-			throw new RunnerException(
+			RunnerException.report(
 					testMethod.getName() + " " + argumentsDescription + ": " + e.getTargetException().toString());
 		} catch (IllegalAccessException | IllegalArgumentException e) {
 			e.printStackTrace();
-			throw new RunnerException(
+			RunnerException.report(
 					Messages.CANNOT_INVOKE_TEST_METHOD(testMethod.getName(), argumentsDescription, e.getMessage()));
 		}
 	}

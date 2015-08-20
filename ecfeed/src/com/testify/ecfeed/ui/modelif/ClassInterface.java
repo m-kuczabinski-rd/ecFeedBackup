@@ -33,6 +33,7 @@ import com.testify.ecfeed.adapter.operations.ClassOperationSetRunOnAndroid;
 import com.testify.ecfeed.adapter.operations.FactoryRenameOperation;
 import com.testify.ecfeed.android.AndroidRunnerHelper;
 import com.testify.ecfeed.android.project.AndroidManifestAccessor;
+import com.testify.ecfeed.generators.api.EcException;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.ui.common.Constants;
@@ -200,7 +201,7 @@ public class ClassInterface extends GlobalParametersParentInterface {
 		}
 	}
 
-	public List<String> createRunnerList(String projectPath) {
+	public List<String> createRunnerList(String projectPath) throws EcException {
 		List<String> runners = new AndroidManifestAccessor(projectPath).getRunnerNames();
 		String ecFeedTestRunner = AndroidRunnerHelper.createAndroidRunnerName(projectPath);
 

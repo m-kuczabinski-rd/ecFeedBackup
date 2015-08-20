@@ -91,7 +91,7 @@ public abstract class AbstractJUnitRunner extends BlockJUnit4ClassRunner {
 		String parentClassName = method.getMethod().getDeclaringClass().getName();
 		ClassNode classModel = rootNode.getClassModel(parentClassName);
 		if(classModel == null){
-			throw new RunnerException(Messages.CLASS_NOT_FOUND_IN_THE_MODEL(parentClassName));
+			RunnerException.report(Messages.CLASS_NOT_FOUND_IN_THE_MODEL(parentClassName));
 		}
 		return classModel.getMethod(methodName, getParameterTypes(method.getMethod().getParameterTypes()));
 	}
@@ -126,9 +126,11 @@ public abstract class AbstractJUnitRunner extends BlockJUnit4ClassRunner {
 			istream = new FileInputStream(new File(ectFilePath));
 			return parser.parseModel(istream);
 		} catch (FileNotFoundException e) {
-			throw new RunnerException(Messages.CANNOT_FIND_MODEL);
+			RunnerException.report(Messages.CANNOT_FIND_MODEL);
+			return null;
 		} catch (ParserException e) {
-			throw new RunnerException(Messages.CANNOT_PARSE_MODEL(e.getMessage()));
+			RunnerException.report(Messages.CANNOT_PARSE_MODEL(e.getMessage()));
+			return null;
 		}
 	}
 
@@ -146,7 +148,8 @@ public abstract class AbstractJUnitRunner extends BlockJUnit4ClassRunner {
 				return ((EcModel)annotation).value();
 			}
 		}
-		throw new RunnerException(Messages.CANNOT_FIND_MODEL);
+		RunnerException.report(Messages.CANNOT_FIND_MODEL);
+		return null;
 	}
 	
 	private ArrayList<String> getParameterTypes(Class<?>[] parameterTypes) {

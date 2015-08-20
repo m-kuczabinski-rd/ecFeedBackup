@@ -39,7 +39,8 @@ public class GeneratorFactory<E> {
 		try {
 			return fAvailableGenerators.get(name).newInstance();
 		} catch (Exception e) {
-			throw new GeneratorException("Cannot instantiate " + name + ": " + e);
+			GeneratorException.report("Cannot instantiate " + name + ": " + e);
+			return null;
 		}
 	}
 

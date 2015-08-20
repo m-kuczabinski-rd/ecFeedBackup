@@ -8,6 +8,7 @@
 
 package com.testify.ecfeed.adapter;
 
+import com.testify.ecfeed.generators.api.EcException;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.MethodNode;
 
@@ -18,7 +19,7 @@ public abstract class AbstractJavaModelImplementer extends AbstractModelImplemen
 		super(statusResolver);
 	}
 
-	protected abstract boolean androidCodeImplemented(ClassNode node);
+	protected abstract boolean androidCodeImplemented(ClassNode node) throws EcException;
 	protected abstract void implementAndroidCode(ClassNode node);
 
 	protected boolean implement(ClassNode node) throws Exception{

@@ -8,13 +8,15 @@
 
 package com.testify.ecfeed.ui.common;
 
+import com.testify.ecfeed.generators.api.EcException;
+
 
 public class EclipseProjectHelper {
 
-	public static String getProjectPath(IFileInfoProvider fileInfoProvider) {
+	public static String getProjectPath(IFileInfoProvider fileInfoProvider) throws EcException {
 
 		if (fileInfoProvider == null) {
-			throw new RuntimeException(Messages.EXCEPTION_FILE_INFO_PROVIDER_NOT_NULL);
+			EcException.report(Messages.EXCEPTION_FILE_INFO_PROVIDER_NOT_NULL);
 		}
 
 		return fileInfoProvider.getProject().getLocation().toOSString();

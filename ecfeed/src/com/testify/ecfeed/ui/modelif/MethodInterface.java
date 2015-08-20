@@ -35,6 +35,7 @@ import com.testify.ecfeed.adapter.operations.MethodOperationAddTestSuite;
 import com.testify.ecfeed.adapter.operations.MethodOperationConvertTo;
 import com.testify.ecfeed.adapter.operations.MethodOperationRenameTestCases;
 import com.testify.ecfeed.android.AndroidRunnerHelper;
+import com.testify.ecfeed.generators.api.EcException;
 import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.Constraint;
@@ -210,17 +211,17 @@ public class MethodInterface extends ParametersParentInterface {
 		return execute(operation, Messages.DIALOG_ADD_TEST_SUITE_PROBLEM_TITLE);
 	}
 
-	public void executeOnlineTests(IFileInfoProvider fileInfoProvider) {
+	public void executeOnlineTests(IFileInfoProvider fileInfoProvider) throws EcException {
 		if (!isValidClassConfiguration())
 			return;
 
-		OnlineTestRunningSupport runner 
-		= new OnlineTestRunningSupport(createTestMethodInvoker(fileInfoProvider), fileInfoProvider);
+		OnlineTestRunningSupport runner = 
+				new OnlineTestRunningSupport(createTestMethodInvoker(fileInfoProvider), fileInfoProvider);
 		runner.setTarget(getTarget());
 		runner.proceed();
 	}
 
-	public void executeStaticTests(Collection<TestCaseNode> testCases, IFileInfoProvider fileInfoProvider) {
+	public void executeStaticTests(Collection<TestCaseNode> testCases, IFileInfoProvider fileInfoProvider) throws EcException {
 
 		if (!isValidClassConfiguration())
 			return;
@@ -245,7 +246,7 @@ public class MethodInterface extends ParametersParentInterface {
 		return true;
 	}
 
-	private ITestMethodInvoker createTestMethodInvoker(IFileInfoProvider fileInfoProvider)
+	private ITestMethodInvoker createTestMethodInvoker(IFileInfoProvider fileInfoProvider) throws EcException
 	{
 		ClassNode classNode = (ClassNode)getTarget().getParent();
 

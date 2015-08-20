@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.testify.ecfeed.adapter.java.ModelClassLoader;
+import com.testify.ecfeed.generators.api.EcException;
 import com.testify.ecfeed.generators.api.GeneratorException;
 import com.testify.ecfeed.generators.api.IGenerator;
 import com.testify.ecfeed.model.ChoiceNode;
@@ -39,10 +40,10 @@ public class JavaRuntimeMethod extends AbstractFrameworkMethod{
 				super.invoke(target, next);
 			}
 		} catch (GeneratorException e) {
-			throw new RunnerException(Messages.RUNNER_EXCEPTION(e.getMessage()));
+			RunnerException.report(Messages.RUNNER_EXCEPTION(e.getMessage()));
 		} catch (Throwable e){
 			String message = getName() + "(" + next.toString() + "): " + e.getMessage();
-			throw new Exception(message, e);
+			EcException.report(message, e);
 		}
 		return null;
 	}

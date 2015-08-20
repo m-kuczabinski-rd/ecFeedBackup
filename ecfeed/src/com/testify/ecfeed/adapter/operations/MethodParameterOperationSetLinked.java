@@ -59,7 +59,7 @@ public class MethodParameterOperationSetLinked extends BulkOperation{
 			String newType;
 			if(fLinked){
 				if(fTarget.getLink() == null){
-					throw new ModelOperationException(Messages.LINK_NOT_SET_PROBLEM);
+					ModelOperationException.report(Messages.LINK_NOT_SET_PROBLEM);
 				}
 				newType = fTarget.getLink().getType();
 			}
@@ -68,14 +68,14 @@ public class MethodParameterOperationSetLinked extends BulkOperation{
 			}
 
 			if(method.checkDuplicate(fTarget.getIndex(), newType)){
-				throw new ModelOperationException(Messages.METHOD_SIGNATURE_DUPLICATE_PROBLEM(method.getClassNode().getName(), method.getName()));
+				ModelOperationException.report(Messages.METHOD_SIGNATURE_DUPLICATE_PROBLEM(method.getClassNode().getName(), method.getName()));
 			}
 //			if(fLinked){
 //				GlobalParameterNode link = fTarget.getLink();
 //				if(link == null || method.checkDuplicate(fTarget.getIndex(), link.getType())){
 //					GlobalParameterNode newLink = setNewLink();
 //					if(newLink == null){
-//						throw new ModelOperationException(Messages.METHOD_SIGNATURE_DUPLICATE_PROBLEM(method.getClassNode().getName(), method.getName()));
+//						ModelOperationException.report(Messages.METHOD_SIGNATURE_DUPLICATE_PROBLEM(method.getClassNode().getName(), method.getName()));
 //					}
 //					fTarget.setLink(newLink);
 //				}
@@ -102,7 +102,7 @@ public class MethodParameterOperationSetLinked extends BulkOperation{
 //			List<String> types = method.getParametersTypes();
 //			types.set(fTarget.getIndex(), newType);
 //			if(method.getClassNode().getMethod(method.getName(), types) != null && method.getClassNode().getMethod(method.getName(), types) != method){
-//				throw new ModelOperationException(Messages.METHOD_SIGNATURE_DUPLICATE_PROBLEM(method.getClassNode().getName(), method.getName()));
+//				ModelOperationException.report(Messages.METHOD_SIGNATURE_DUPLICATE_PROBLEM(method.getClassNode().getName(), method.getName()));
 //			}
 			fTarget.setLinked(fLinked);
 			fOriginalTestCases = new ArrayList<>(method.getTestCases());

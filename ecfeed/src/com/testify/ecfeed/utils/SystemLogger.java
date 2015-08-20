@@ -10,10 +10,19 @@ package com.testify.ecfeed.utils;
 
 public class SystemLogger {
 
-	private static final int ONE_LEVEL_DOWN_ON_STACK = 1;
+	private static final String EC_FEED_ERROR = "ECFEEDERR"; 
+	private static final int ONE_LEVEL_DOWN_ON_STACK = 1;  // level1: logCatch
+	private static final int TWO_LEVELS_DOWN_ON_STACK = 2; // level1: logThrow, level2 SomeException.report
 
+	public static void logThrow(String message) {
+		logLine( EC_FEED_ERROR + ": Exception thrown");
+		logLine("\tMessage: " + message);
+		StackTraceElement element = new Throwable().getStackTrace()[TWO_LEVELS_DOWN_ON_STACK];
+		printStackTraceElement(element);
+	}
+	
 	public static void logCatch(String message) {
-		logLine("ECFEEDERR: Exception caught");
+		logLine(EC_FEED_ERROR + ": Exception caught");
 		logLine("\tMessage: " + message);
 		StackTraceElement element = new Throwable().getStackTrace()[ONE_LEVEL_DOWN_ON_STACK];
 		printStackTraceElement(element);

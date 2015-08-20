@@ -46,7 +46,7 @@ public class AndroidTestMethodInvoker implements ITestMethodInvoker {
 					testMethod.getName(),
 					createParameters(testMethod, arguments));
 		} catch (RunnerException e) {
-			throw new RunnerException(
+			RunnerException.report(
 					Messages.CANNOT_INVOKE_TEST_METHOD(testMethod.getName(), argumentsDescription, e.getMessage()));
 		}
 	}
@@ -101,7 +101,7 @@ public class AndroidTestMethodInvoker implements ITestMethodInvoker {
 		try {
 			process = pb.start();
 		} catch (IOException e) {
-			throw new RunnerException(
+			RunnerException.report(
 					Messages.CANNOT_START_ANDROID_INSTRUMENTATION_PROCESS("adb am shell instrument", e.getMessage()));
 		}
 
@@ -129,11 +129,11 @@ public class AndroidTestMethodInvoker implements ITestMethodInvoker {
 				}
 			}
 		} catch (IOException e) {
-			throw new RunnerException(Messages.IO_EXCEPITON_OCCURED(e.getMessage()));
+			RunnerException.report(Messages.IO_EXCEPITON_OCCURED(e.getMessage()));
 		}
 
 		if (testFailed) {
-			throw new RunnerException(errorMessage);
+			RunnerException.report(errorMessage);
 		}
 	}
 
@@ -272,7 +272,7 @@ public class AndroidTestMethodInvoker implements ITestMethodInvoker {
 		try {
 			process.waitFor();
 		} catch (InterruptedException e) {
-			throw new RunnerException(Messages.INTERRUPTED_EXCEPTION_OCCURED(e.getMessage()));
+			RunnerException.report(Messages.INTERRUPTED_EXCEPTION_OCCURED(e.getMessage()));
 		}
 	}
 
@@ -287,7 +287,7 @@ public class AndroidTestMethodInvoker implements ITestMethodInvoker {
 
 	private void checkParamsAndArgs(int params, int args) throws RunnerException {
 		if (params != args) {
-			throw new RunnerException(Messages.INVALID_NUMBER_OF_PARAMS_ARGS(params, args)); 
+			RunnerException.report(Messages.INVALID_NUMBER_OF_PARAMS_ARGS(params, args)); 
 		}		
 	}
 

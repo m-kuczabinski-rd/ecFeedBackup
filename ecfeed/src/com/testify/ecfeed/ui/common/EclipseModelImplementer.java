@@ -45,6 +45,7 @@ import com.testify.ecfeed.adapter.AbstractJavaModelImplementer;
 import com.testify.ecfeed.adapter.CachedImplementationStatusResolver;
 import com.testify.ecfeed.adapter.EImplementationStatus;
 import com.testify.ecfeed.adapter.java.JavaUtils;
+import com.testify.ecfeed.generators.api.EcException;
 import com.testify.ecfeed.model.AbstractNode;
 import com.testify.ecfeed.model.AbstractParameterNode;
 import com.testify.ecfeed.model.ChoiceNode;
@@ -73,7 +74,7 @@ public class EclipseModelImplementer extends AbstractJavaModelImplementer {
 	}
 
 	@Override
-	protected boolean implement(AbstractParameterNode node) throws CoreException{
+	protected boolean implement(AbstractParameterNode node) throws CoreException, EcException{
 		if(parameterDefinitionImplemented(node) == false){
 			implementParameterDefinition(node, node.getLeafChoiceValues());
 		}
@@ -88,7 +89,7 @@ public class EclipseModelImplementer extends AbstractJavaModelImplementer {
 	}
 
 	@Override
-	protected boolean implement(ChoiceNode node) throws CoreException{
+	protected boolean implement(ChoiceNode node) throws CoreException, EcException{
 		AbstractParameterNode parameter = node.getParameter();
 		if(parameterDefinitionImplemented(parameter) == false){
 			if(parameterDefinitionImplementable(parameter)){
@@ -124,7 +125,7 @@ public class EclipseModelImplementer extends AbstractJavaModelImplementer {
 	}
 
 	@Override
-	protected void implementClassDefinition(ClassNode node) throws CoreException {
+	protected void implementClassDefinition(ClassNode node) throws CoreException, EcException {
 		String packageName = JavaUtils.getPackageName(node.getName());
 		String className = JavaUtils.getLocalName(node.getName());
 		String unitName = className + ".java";
@@ -137,7 +138,7 @@ public class EclipseModelImplementer extends AbstractJavaModelImplementer {
 	}
 
 	@Override
-	protected void implementMethodDefinition(MethodNode node) throws CoreException {
+	protected void implementMethodDefinition(MethodNode node) throws CoreException, EcException {
 		if(classDefinitionImplemented(node.getClassNode()) == false){
 			implementClassDefinition(node.getClassNode());
 		}
@@ -160,11 +161,11 @@ public class EclipseModelImplementer extends AbstractJavaModelImplementer {
 	}
 
 	@Override
-	protected void implementParameterDefinition(AbstractParameterNode node) throws CoreException {
+	protected void implementParameterDefinition(AbstractParameterNode node) throws CoreException, EcException {
 		implementParameterDefinition(node, null);
 	}
 
-	protected void implementParameterDefinition(AbstractParameterNode node, Set<String> fields) throws CoreException {
+	protected void implementParameterDefinition(AbstractParameterNode node, Set<String> fields) throws CoreException, EcException {
 		String typeName = node.getType();
 		if(JavaUtils.isPrimitive(typeName)){
 			return;
@@ -185,14 +186,14 @@ public class EclipseModelImplementer extends AbstractJavaModelImplementer {
 	}
 
 	@Override
-	protected void implementChoiceDefinition(ChoiceNode node) throws CoreException {
+	protected void implementChoiceDefinition(ChoiceNode node) throws CoreException, EcException {
 		if(implementable(node) && getImplementationStatus(node) != EImplementationStatus.IMPLEMENTED){
 			implementChoicesDefinitions(Arrays.asList(new ChoiceNode[]{node}));
 		}
 	}
 
 	@SuppressWarnings("unchecked")
-	protected void implementChoicesDefinitions(List<ChoiceNode> nodes) throws CoreException {
+	protected void implementChoicesDefinitions(List<ChoiceNode> nodes) throws CoreException, EcException {
 		refreshWorkspace();
 		AbstractParameterNode parent = getParameter(nodes);
 		if(parent == null){
@@ -221,7 +222,7 @@ public class EclipseModelImplementer extends AbstractJavaModelImplementer {
 	}
 
 	@Override
-	protected boolean implementable(ClassNode node){
+	protected boolean implementable(ClassNode node) throws EcException{
 		if(!androidCodeImplemented(node)) {
 			return true;
 		}
@@ -232,7 +233,7 @@ public class EclipseModelImplementer extends AbstractJavaModelImplementer {
 	}
 
 	@Override
-	protected boolean implementable(MethodNode node){
+	protected boolean implementable(MethodNode node) throws EcException{
 		ClassNode classNode = node.getClassNode();
 		if(!androidCodeImplemented(classNode)) {
 			return true;
@@ -299,8 +300,7 @@ public class EclipseModelImplementer extends AbstractJavaModelImplementer {
 	}
 
 	@Override
-	protected boolean androidCodeImplemented(ClassNode classNode) {
-
+	protected boolean androidCodeImplemented(ClassNode classNode) throws EcException {
 		return (new EclipseEctImplementerForClassNode(fFileInfoProvider, classNode)).contentImplemented();
 	}
 

@@ -33,7 +33,7 @@ public class ClassOperationRemoveMethod extends AbstractModelOperation {
 	public void execute() throws ModelOperationException {
 		fCurrentIndex = fMethod.getIndex();
 		if(fTarget.removeMethod(fMethod) == false){
-			throw new ModelOperationException(Messages.UNEXPECTED_PROBLEM_WHILE_REMOVING_ELEMENT);
+			ModelOperationException.report(Messages.UNEXPECTED_PROBLEM_WHILE_REMOVING_ELEMENT);
 		}
 		markModelUpdated();
 	}

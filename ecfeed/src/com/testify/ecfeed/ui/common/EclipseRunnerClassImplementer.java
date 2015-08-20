@@ -12,6 +12,7 @@ import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.JavaModelException;
 
 import com.testify.ecfeed.android.AndroidRunnerHelper;
+import com.testify.ecfeed.generators.api.EcException;
 
 public class EclipseRunnerClassImplementer extends EclipseSimpleClassImplementer {
 
@@ -20,7 +21,7 @@ public class EclipseRunnerClassImplementer extends EclipseSimpleClassImplementer
 	public EclipseRunnerClassImplementer(
 			IFileInfoProvider fileInfoProvider, 
 			String testingAppPackage,
-			String baseRunner) {
+			String baseRunner) throws EcException {
 
 		super(fileInfoProvider, testingAppPackage, AndroidRunnerHelper.getEcFeedTestRunnerName());
 		fBaseRunner = baseRunner;

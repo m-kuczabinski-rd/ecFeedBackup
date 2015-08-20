@@ -13,6 +13,7 @@ package com.testify.ecfeed.adapter;
 
 import java.util.List;
 
+import com.testify.ecfeed.generators.api.EcException;
 import com.testify.ecfeed.model.AbstractNode;
 import com.testify.ecfeed.model.AbstractParameterNode;
 import com.testify.ecfeed.model.ChoiceNode;
@@ -101,7 +102,7 @@ IImplementationStatusResolver {
 		return status;
 	}
 
-	protected EImplementationStatus implementationStatus(ClassNode classNode){
+	protected EImplementationStatus implementationStatus(ClassNode classNode) throws EcException {
 		if(!classDefinitionImplemented(classNode.getName())){
 			return EImplementationStatus.NOT_IMPLEMENTED;
 		}
@@ -118,7 +119,7 @@ IImplementationStatusResolver {
 		return EImplementationStatus.PARTIALLY_IMPLEMENTED;
 	}
 
-	protected EImplementationStatus implementationStatus(MethodNode method){
+	protected EImplementationStatus implementationStatus(MethodNode method) throws EcException {
 		if(methodDefinitionImplemented(method) == false){
 			return EImplementationStatus.NOT_IMPLEMENTED;
 		}

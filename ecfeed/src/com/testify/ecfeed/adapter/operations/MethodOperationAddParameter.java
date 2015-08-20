@@ -65,7 +65,7 @@ public class MethodOperationAddParameter extends GenericOperationAddParameter {
 		if(fTarget.getClassNode() != null && fTarget.getClassNode().getMethod(fTarget.getName(), types) != null){
 			String className = fTarget.getClassNode().getName();
 			String methodName =  fTarget.getClassNode().getMethod(fTarget.getName(), types).getName();
-			throw new ModelOperationException(Messages.METHOD_SIGNATURE_DUPLICATE_PROBLEM(className, methodName));
+			ModelOperationException.report(Messages.METHOD_SIGNATURE_DUPLICATE_PROBLEM(className, methodName));
 		}
 		fTarget.removeTestCases();
 		super.execute();

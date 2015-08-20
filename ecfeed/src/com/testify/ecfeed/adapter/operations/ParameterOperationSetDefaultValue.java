@@ -35,7 +35,7 @@ public class ParameterOperationSetDefaultValue extends AbstractModelOperation {
 	public void execute() throws ModelOperationException {
 		String convertedValue = fTypeAdapter.convert(fNewValue);
 		if(convertedValue == null){
-			throw new ModelOperationException(Messages.CATEGORY_DEFAULT_VALUE_REGEX_PROBLEM);
+			ModelOperationException.report(Messages.CATEGORY_DEFAULT_VALUE_REGEX_PROBLEM);
 		}
 		fTarget.setDefaultValueString(convertedValue);
 		markModelUpdated();

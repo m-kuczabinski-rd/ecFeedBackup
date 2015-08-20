@@ -11,9 +11,11 @@ package com.testify.ecfeed.ui.common;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.JavaModelException;
 
+import com.testify.ecfeed.generators.api.EcException;
+
 public class EclipseLoggerClassImplementer extends EclipseSimpleClassImplementer {
 
-	public EclipseLoggerClassImplementer(IFileInfoProvider fileInfoProvider, String testingAppPackage) {
+	public EclipseLoggerClassImplementer(IFileInfoProvider fileInfoProvider, String testingAppPackage) throws EcException {
 		super(fileInfoProvider, testingAppPackage, "Logger");
 	}
 

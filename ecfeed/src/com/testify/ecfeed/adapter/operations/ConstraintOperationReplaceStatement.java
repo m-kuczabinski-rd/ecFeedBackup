@@ -40,7 +40,7 @@ public class ConstraintOperationReplaceStatement extends AbstractModelOperation{
 			constraint.setConsequence(fNewStatement);
 		}
 		else{
-			throw new ModelOperationException(Messages.TARGET_STATEMENT_NOT_FOUND_PROBLEM);
+			ModelOperationException.report(Messages.TARGET_STATEMENT_NOT_FOUND_PROBLEM);
 		}
 		markModelUpdated();
 	}

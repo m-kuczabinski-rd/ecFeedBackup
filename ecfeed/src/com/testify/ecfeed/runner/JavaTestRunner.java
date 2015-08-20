@@ -53,7 +53,7 @@ public class JavaTestRunner {
 			try {
 				instance = fTestClass.newInstance();
 			} catch (InstantiationException | IllegalAccessException e) {
-				throw new RunnerException(
+				RunnerException.report(
 						Messages.CANNOT_INVOKE_TEST_METHOD(
 								fTarget.toString(), 
 								testData.toString(), 
@@ -72,7 +72,8 @@ public class JavaTestRunner {
 				return method;
 			}
 		}
-		throw new RunnerException(Messages.METHOD_NOT_FOUND(methodModel.toString()));
+		RunnerException.report(Messages.METHOD_NOT_FOUND(methodModel.toString()));
+		return null;
 	}
 
 	protected boolean isModel(Method method, MethodNode methodModel) {
@@ -95,7 +96,7 @@ public class JavaTestRunner {
 				//check if null value acceptable
 				if(JavaUtils.isString(type) || JavaUtils.isUserType(type)){
 					if(p.getValueString().equals(Constants.VALUE_REPRESENTATION_NULL) == false){
-						throw new RunnerException(Messages.CANNOT_PARSE_PARAMETER(type, p.getValueString()));
+						RunnerException.report(Messages.CANNOT_PARSE_PARAMETER(type, p.getValueString()));
 					}
 				}
 			}
@@ -111,14 +112,14 @@ public class JavaTestRunner {
 			dataTypes.add(parameter.getParameter().getType());
 		}
 		if(dataTypes.equals(fTarget.getParametersTypes()) == false){
-			throw new RunnerException(Messages.WRONG_TEST_METHOD_SIGNATURE(fTarget.toString()));
+			RunnerException.report(Messages.WRONG_TEST_METHOD_SIGNATURE(fTarget.toString()));
 		}
 	}
 
 	private Class<?> getTestClass(String qualifiedName) throws RunnerException {
 		Class<?> testClass = fLoader.loadClass(qualifiedName);
 		if(testClass == null){
-			throw new RunnerException(Messages.CANNOT_LOAD_CLASS(qualifiedName));
+			RunnerException.report(Messages.CANNOT_LOAD_CLASS(qualifiedName));
 		}
 		return testClass;
 	}

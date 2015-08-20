@@ -31,7 +31,7 @@ public class FactoryRemoveOperation {
 	private static class UnsupportedModelOperation implements IModelOperation{
 		@Override
 		public void execute() throws ModelOperationException {
-			throw new ModelOperationException(Messages.OPERATION_NOT_SUPPORTED_PROBLEM);
+			ModelOperationException.report(Messages.OPERATION_NOT_SUPPORTED_PROBLEM);
 		}
 
 		@Override

@@ -13,6 +13,7 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
 
 import com.testify.ecfeed.android.project.AndroidManifestAccessor;
+import com.testify.ecfeed.generators.api.EcException;
 import com.testify.ecfeed.model.ClassNode;
 
 public class EclipseEctImplementerForClassNode {
@@ -24,7 +25,7 @@ public class EclipseEctImplementerForClassNode {
 
 	EclipseEctImplementerForClassNode(
 			IFileInfoProvider fileInfoProvider,
-			ClassNode classNode) {
+			ClassNode classNode) throws EcException {
 
 		String projectPath = EclipseProjectHelper.getProjectPath(fileInfoProvider);
 
@@ -39,14 +40,14 @@ public class EclipseEctImplementerForClassNode {
 		createAndroidManifestImplementer(fileInfoProvider);
 	}
 
-	private void createAndroidManifestImplementer(IFileInfoProvider fileInfoProvider) {
+	private void createAndroidManifestImplementer(IFileInfoProvider fileInfoProvider) throws EcException {
 		fAndroidManifestImplementer =
 				new EclipseAndroidManifestImplementer(fileInfoProvider);
 	}
 
 	private void createLoggerClassImplementer(
 			IFileInfoProvider fileInfoProvider, 
-			String testingAppPackage) {
+			String testingAppPackage) throws EcException {
 
 		fLoggerClassImplementer = 
 				new	EclipseLoggerClassImplementer(fileInfoProvider, testingAppPackage);
@@ -55,7 +56,7 @@ public class EclipseEctImplementerForClassNode {
 	private void createRunnerClassImplementer(
 			IFileInfoProvider fileInfoProvider,
 			String testingAppPackage,
-			ClassNode classNode) {
+			ClassNode classNode) throws EcException {
 
 		String baseRunner = classNode.getAndroidBaseRunner();
 
@@ -70,13 +71,13 @@ public class EclipseEctImplementerForClassNode {
 			IFileInfoProvider fileInfoProvider,
 			String testingAppPackage,
 			ClassNode classNode, 
-			AndroidManifestAccessor androidManifestReader) {
+			AndroidManifestAccessor androidManifestReader) throws EcException {
 
 		String testingAppClass = "EcFeedTest";
 		String testedAppPackage = androidManifestReader.getDefaultTestedAppPackage();
 
 		if (testedAppPackage == null) {
-			throw new RuntimeException(Messages.DEFAULT_PACKAGE_NOT_SET_IN_ANDROID_MANIFEST);
+			EcException.report(Messages.DEFAULT_PACKAGE_NOT_SET_IN_ANDROID_MANIFEST);
 		}
 
 		fTestClassImplementer = 
@@ -92,7 +93,7 @@ public class EclipseEctImplementerForClassNode {
 	void implementContent() {
 		try {
 			implementContentIntr();
-		} catch (CoreException e) {
+		} catch (CoreException | EcException e) {
 			MessageDialog.openError(
 					Display.getDefault().getActiveShell(), 
 					Messages.CAN_NOT_IMPLEMENT_SOURCE_FOR_CLASS, 
@@ -101,7 +102,7 @@ public class EclipseEctImplementerForClassNode {
 		}
 	}
 
-	void implementContentIntr() throws CoreException {
+	void implementContentIntr() throws CoreException, EcException {
 		if (!fLoggerClassImplementer.contentImplemented()) {
 			fLoggerClassImplementer.implementContent();
 		}

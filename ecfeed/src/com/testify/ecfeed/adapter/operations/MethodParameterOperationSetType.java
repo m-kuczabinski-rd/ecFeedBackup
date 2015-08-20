@@ -209,7 +209,7 @@ public class MethodParameterOperationSetType extends BulkOperation {
 			List<String> types = method.getParametersTypes();
 			types.set(fTarget.getIndex(), getNewType());
 			if(method.getClassNode().getMethod(method.getName(), types) != null && method.getClassNode().getMethod(method.getName(), types) != method){
-				throw new ModelOperationException(Messages.METHOD_SIGNATURE_DUPLICATE_PROBLEM(method.getClassNode().getName(), method.getName()));
+				ModelOperationException.report(Messages.METHOD_SIGNATURE_DUPLICATE_PROBLEM(method.getClassNode().getName(), method.getName()));
 			}
 			
 			super.execute();

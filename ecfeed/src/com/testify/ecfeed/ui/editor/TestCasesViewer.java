@@ -37,6 +37,7 @@ import com.testify.ecfeed.ui.common.TestCasesViewerLabelProvider;
 import com.testify.ecfeed.ui.common.TreeCheckStateListener;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 import com.testify.ecfeed.ui.modelif.MethodInterface;
+import com.testify.ecfeed.utils.SystemLogger;
 
 public class TestCasesViewer extends CheckboxTreeViewerSection {
 
@@ -67,8 +68,14 @@ public class TestCasesViewer extends CheckboxTreeViewerSection {
 
 	private class ExecuteStaticTestAdapter extends SelectionAdapter{
 		@Override
-		public void widgetSelected(SelectionEvent e){
-			fMethodIf.executeStaticTests(getCheckedTestCases(), fFileInfoProvider);
+		public void widgetSelected(SelectionEvent event){
+			
+			try {
+				fMethodIf.executeStaticTests(getCheckedTestCases(), fFileInfoProvider);
+			}
+			catch (Exception e){
+				SystemLogger.logCatch(e.getMessage());
+			}
 		}
 	}
 

@@ -46,10 +46,10 @@ public class MethodOperationAddTestCase extends AbstractModelOperation {
 			fIndex = fTarget.getTestCases().size();
 		}
 		if(fTestCase.getName().matches(Constants.REGEX_TEST_CASE_NODE_NAME) == false){
-			throw new ModelOperationException(Messages.TEST_CASE_NAME_REGEX_PROBLEM);
+			ModelOperationException.report(Messages.TEST_CASE_NAME_REGEX_PROBLEM);
 		}
 		if(fTestCase.updateReferences(fTarget) == false){
-			throw new ModelOperationException(Messages.TEST_CASE_INCOMPATIBLE_WITH_METHOD);
+			ModelOperationException.report(Messages.TEST_CASE_INCOMPATIBLE_WITH_METHOD);
 		}
 		//following must be done AFTER references are updated
 		fTestCase.setParent(fTarget);
@@ -60,7 +60,7 @@ public class MethodOperationAddTestCase extends AbstractModelOperation {
 				ITypeAdapter adapter = fAdapterProvider.getAdapter(type);
 				String newValue = adapter.convert(choice.getValueString());
 				if(newValue == null){
-					throw new ModelOperationException(Messages.TEST_CASE_DATA_INCOMPATIBLE_WITH_METHOD);
+					ModelOperationException.report(Messages.TEST_CASE_DATA_INCOMPATIBLE_WITH_METHOD);
 				}
 				choice.setValueString(newValue);
 			}

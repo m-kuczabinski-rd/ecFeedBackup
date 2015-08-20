@@ -104,7 +104,7 @@ public class ChoiceOperationSetValue extends AbstractModelOperation {
 	public void execute() throws ModelOperationException {
 		String convertedValue = validateChoiceValue(fTarget.getParameter().getType(), fNewValue);
 		if(convertedValue == null){
-			throw new ModelOperationException(Messages.PARTITION_VALUE_PROBLEM(fNewValue));
+			ModelOperationException.report(Messages.PARTITION_VALUE_PROBLEM(fNewValue));
 		}
 		fTarget.setValueString(convertedValue);
 		adaptParameter(fTarget.getParameter());

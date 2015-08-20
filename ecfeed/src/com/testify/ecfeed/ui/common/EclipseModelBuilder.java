@@ -38,7 +38,8 @@ public class EclipseModelBuilder extends JavaModelAnalyser{
 		if(type != null){
 			return buildClassModel(type, testOnly);
 		}
-		throw new ModelOperationException(Messages.EXCEPTION_TYPE_DOES_NOT_EXIST_IN_THE_PROJECT);
+		ModelOperationException.report(Messages.EXCEPTION_TYPE_DOES_NOT_EXIST_IN_THE_PROJECT);
+		return null;
 	}
 	
 	
@@ -61,7 +62,8 @@ public class EclipseModelBuilder extends JavaModelAnalyser{
 			return classNode;
 		}
 		catch(Throwable e){
-			throw new ModelOperationException(Messages.EXCEPTION_CLASS_IMPORT(type.getElementName()));
+			ModelOperationException.report(Messages.EXCEPTION_CLASS_IMPORT(type.getElementName()));
+			return null;
 		}
 	}
 	

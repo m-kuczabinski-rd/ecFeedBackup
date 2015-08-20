@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.testify.ecfeed.generators.api.EcException;
 import com.testify.ecfeed.runner.Messages;
 
 import nu.xom.Attribute;
@@ -59,14 +60,14 @@ public class AndroidManifestAccessor {
 	private Document fDocument;
 	private Element fRoot;
 
-	public AndroidManifestAccessor(String projectPath) {
+	public AndroidManifestAccessor(String projectPath) throws EcException {
 		Builder builder = new Builder();
 
 		try {
 			fManifestPath = projectPath + File.separator + "AndroidManifest.xml";
 			fDocument = builder.build(fManifestPath);
 		} catch (ParsingException | IOException e) {
-			throw new RuntimeException(e.getMessage());
+			EcException.report(e.getMessage());
 		}
 
 		fRoot = fDocument.getRootElement();
@@ -130,7 +131,7 @@ public class AndroidManifestAccessor {
 		return false;
 	}
 
-	public void supplementRunner(String runnerName, String targetPackage) {
+	public void supplementRunner(String runnerName, String targetPackage) throws EcException {
 		if (containsRunner(runnerName, targetPackage)) {
 			return;
 		}
@@ -174,21 +175,21 @@ public class AndroidManifestAccessor {
 		return lastInstrumentationIndex;
 	}
 
-	private void writeDocument() {
+	private void writeDocument() throws EcException {
 		File file = new File(fManifestPath);
 
 		FileOutputStream stream = null;
 		try {
 			stream = new FileOutputStream(file);
 		} catch (FileNotFoundException e) {
-			throw new RuntimeException(Messages.CAN_NOT_OPEN_ANDROID_MANIFEST(fManifestPath));
+			EcException.report(Messages.CAN_NOT_OPEN_ANDROID_MANIFEST(fManifestPath));
 		}  
 
 		Serializer serializer = new Serializer(stream);
 		try {
 			serializer.write(fDocument);
 		} catch (IOException e) {
-			throw new RuntimeException(Messages.CAN_NOT_SERIALIZE_TO_ANDROID_MANIFEST(fManifestPath));
+			EcException.report(Messages.CAN_NOT_SERIALIZE_TO_ANDROID_MANIFEST(fManifestPath));
 		}		
 	}
 

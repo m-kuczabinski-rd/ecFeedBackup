@@ -11,14 +11,21 @@
 
 package com.testify.ecfeed.generators.api;
 
-public class GeneratorException extends Exception {
+import com.testify.ecfeed.utils.SystemLogger;
 
-	public GeneratorException(String message) {
-		super(message);
-	}
+public class GeneratorException extends Exception {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 7963877928833442039L;
+	
+	private GeneratorException(String message) {
+		super(message);
+	}
+	
+	public static void report(String message) throws GeneratorException {
+		SystemLogger.logThrow(message);
+		throw new GeneratorException(message);
+	}	
 }

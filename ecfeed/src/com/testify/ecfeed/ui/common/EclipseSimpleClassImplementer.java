@@ -15,6 +15,7 @@ import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaModelException;
 
 import com.testify.ecfeed.android.AndroidRunnerHelper;
+import com.testify.ecfeed.generators.api.EcException;
 import com.testify.ecfeed.utils.PackageClassHelper;
 
 public abstract class EclipseSimpleClassImplementer {
@@ -27,10 +28,10 @@ public abstract class EclipseSimpleClassImplementer {
 	public EclipseSimpleClassImplementer(
 			IFileInfoProvider fileInfoProvider, 
 			String testingAppPackage, 
-			String testingAppClass) {
+			String testingAppClass) throws EcException {
 
 		if (fileInfoProvider == null) {
-			throw new RuntimeException(Messages.EXCEPTION_FILE_INFO_PROVIDER_NOT_NULL);
+			EcException.report(Messages.EXCEPTION_FILE_INFO_PROVIDER_NOT_NULL);
 		}
 
 		fFileInfoProvider = fileInfoProvider;
@@ -42,7 +43,7 @@ public abstract class EclipseSimpleClassImplementer {
 
 	abstract protected void createUnitContent(ICompilationUnit unit) throws JavaModelException;
 
-	public void implementContent() throws CoreException {
+	public void implementContent() throws CoreException, EcException {
 		String unitName = fTestingAppClass + ".java";
 
 		IPackageFragment packageFragment = 

@@ -41,13 +41,13 @@ public class GenericOperationAddChoice extends BulkOperation {
 				fIndex = fTarget.getChoices().size();
 			}
 			if(fTarget.getChoiceNames().contains(fChoice.getName())){
-				throw new ModelOperationException(Messages.CHOICE_NAME_DUPLICATE_PROBLEM(fTarget.getName(), fChoice.getName()));
+				ModelOperationException.report(Messages.CHOICE_NAME_DUPLICATE_PROBLEM(fTarget.getName(), fChoice.getName()));
 			}
 			if(fIndex < 0){
-				throw new ModelOperationException(Messages.NEGATIVE_INDEX_PROBLEM);
+				ModelOperationException.report(Messages.NEGATIVE_INDEX_PROBLEM);
 			}
 			if(fIndex > fTarget.getChoices().size()){
-				throw new ModelOperationException(Messages.TOO_HIGH_INDEX_PROBLEM);
+				ModelOperationException.report(Messages.TOO_HIGH_INDEX_PROBLEM);
 			}
 			validateChoiceValue(fChoice);
 			fTarget.addChoice(fChoice, fIndex);
@@ -65,7 +65,7 @@ public class GenericOperationAddChoice extends BulkOperation {
 				ITypeAdapter adapter = fAdapterProvider.getAdapter(type);
 				String newValue = adapter.convert(choice.getValueString());
 				if(newValue == null){
-					throw new ModelOperationException(Messages.PARTITION_VALUE_PROBLEM(choice.getValueString()));
+					ModelOperationException.report(Messages.PARTITION_VALUE_PROBLEM(choice.getValueString()));
 				}
 			}
 			else{

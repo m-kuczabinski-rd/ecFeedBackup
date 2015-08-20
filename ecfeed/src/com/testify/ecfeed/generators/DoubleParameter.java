@@ -32,7 +32,7 @@ public class DoubleParameter extends AbstractParameter {
 		fDefaultValue = defaultValue;
 		fAllowedValues = allowedValues;
 		if(!Arrays.asList(fAllowedValues).contains(fDefaultValue)){
-			throw new GeneratorException("Inconsistent parameter definition");
+			GeneratorException.report("Inconsistent parameter definition");
 		}
 	}
 
@@ -42,7 +42,7 @@ public class DoubleParameter extends AbstractParameter {
 		fMinValue = min;
 		fMaxValue = max;
 		if(fDefaultValue <= fMinValue || fDefaultValue >= fMaxValue){
-			throw new GeneratorException("Inconsistent parameter definition");
+			GeneratorException.report("Inconsistent parameter definition");
 		}
 	}
 

@@ -84,7 +84,7 @@ public class GenericOperationRemoveChoice extends BulkOperation {
 				if(parameter.isExpected() && JavaUtils.isPrimitive(parameter.getType()) == false && parameter.getChoices().size() == 1 && parameter.getChoices().get(0) == fChoice){
 					// We are removing the only choice of expected parameter.
 					// The last parameter must represent the default expected value
-					throw new ModelOperationException(Messages.EXPECTED_USER_TYPE_CATEGORY_LAST_PARTITION_PROBLEM);
+					ModelOperationException.report(Messages.EXPECTED_USER_TYPE_CATEGORY_LAST_PARTITION_PROBLEM);
 				}
 				return null;
 			}
@@ -109,7 +109,7 @@ public class GenericOperationRemoveChoice extends BulkOperation {
 							parameter.setDefaultValueString(leafValues.toArray(new String[]{})[0]);
 						}
 						else{
-							throw new ModelOperationException(Messages.UNEXPECTED_PROBLEM_WHILE_REMOVING_ELEMENT);
+							ModelOperationException.report(Messages.UNEXPECTED_PROBLEM_WHILE_REMOVING_ELEMENT);
 						}
 					}
 				}

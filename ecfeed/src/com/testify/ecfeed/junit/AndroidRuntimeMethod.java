@@ -57,7 +57,7 @@ public class AndroidRuntimeMethod extends AbstractFrameworkMethod{
 						next.toString());		
 			}
 		} catch (GeneratorException e) {
-			throw new RunnerException(Messages.RUNNER_EXCEPTION(e.getMessage()));
+			RunnerException.report(Messages.RUNNER_EXCEPTION(e.getMessage()));
 		}
 
 		return null;

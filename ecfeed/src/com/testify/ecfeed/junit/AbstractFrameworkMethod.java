@@ -57,7 +57,7 @@ public class AbstractFrameworkMethod extends FrameworkMethod {
 			}
 		}
 		if(value == null){
-			throw new RunnerException(Messages.CANNOT_PARSE_PARAMETER(type, choice.getValueString()));
+			RunnerException.report(Messages.CANNOT_PARSE_PARAMETER(type, choice.getValueString()));
 		}
 		return value;
 	}

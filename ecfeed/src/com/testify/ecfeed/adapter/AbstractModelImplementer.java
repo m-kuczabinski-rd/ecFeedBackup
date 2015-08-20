@@ -13,6 +13,7 @@ package com.testify.ecfeed.adapter;
 
 import java.util.List;
 
+import com.testify.ecfeed.generators.api.EcException;
 import com.testify.ecfeed.model.AbstractNode;
 import com.testify.ecfeed.model.AbstractParameterNode;
 import com.testify.ecfeed.model.ChoiceNode;
@@ -259,11 +260,11 @@ public abstract class AbstractModelImplementer implements IModelImplementer {
 		return hasImplementableNode(node.getClasses());
 	}
 
-	protected boolean implementable(ClassNode node){
+	protected boolean implementable(ClassNode node) throws EcException {
 		return hasImplementableNode(node.getMethods());
 	}
 
-	protected boolean implementable(MethodNode node){
+	protected boolean implementable(MethodNode node) throws EcException {
 		return hasImplementableNode(node.getParameters()) || hasImplementableNode(node.getTestCases());
 	}
 

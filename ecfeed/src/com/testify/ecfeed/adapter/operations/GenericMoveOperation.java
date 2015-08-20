@@ -61,7 +61,7 @@ public class GenericMoveOperation extends BulkOperation {
 				addOperation(operation);
 			}
 		} catch (Exception e) {
-			throw new ModelOperationException(Messages.OPERATION_NOT_SUPPORTED_PROBLEM);
+			ModelOperationException.report(Messages.OPERATION_NOT_SUPPORTED_PROBLEM);
 		}
 	}
 

@@ -22,11 +22,13 @@ import org.eclipse.swt.widgets.Text;
 
 import com.testify.ecfeed.adapter.EImplementationStatus;
 import com.testify.ecfeed.adapter.java.JavaUtils;
+import com.testify.ecfeed.generators.api.EcException;
 import com.testify.ecfeed.model.AbstractNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.ui.common.IFileInfoProvider;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 import com.testify.ecfeed.ui.modelif.MethodInterface;
+import com.testify.ecfeed.utils.SystemLogger;
 
 public class MethodDetailsPage extends BasicDetailsPage {
 
@@ -43,8 +45,12 @@ public class MethodDetailsPage extends BasicDetailsPage {
 
 	private class OnlineTestAdapter extends SelectionAdapter{
 		@Override
-		public void widgetSelected(SelectionEvent e){
-			fMethodIf.executeOnlineTests(fFileInfoProvider);
+		public void widgetSelected(SelectionEvent ev){
+			try {
+				fMethodIf.executeOnlineTests(fFileInfoProvider);
+			} catch (EcException e) {
+				SystemLogger.logCatch(e.getMessage());
+			}
 		}
 	}
 

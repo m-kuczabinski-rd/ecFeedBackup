@@ -33,7 +33,7 @@ public abstract class AbstractAlgorithm<E> implements IAlgorithm<E> {
 			Collection<IConstraint<E>> constraints)
 			throws GeneratorException {
 		if(input == null || constraints == null){
-			throw new GeneratorException("input or constraints of algorithm cannot be null");
+			GeneratorException.report("input or constraints of algorithm cannot be null");
 		}
 		fInput = input;
 		fConstraints = constraints;

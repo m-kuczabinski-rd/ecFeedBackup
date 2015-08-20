@@ -27,12 +27,14 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
 import com.testify.ecfeed.android.AndroidRunnerHelper;
+import com.testify.ecfeed.generators.api.EcException;
 import com.testify.ecfeed.model.AbstractNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.ui.common.IFileInfoProvider;
 import com.testify.ecfeed.ui.common.EclipseProjectHelper;
 import com.testify.ecfeed.ui.modelif.ClassInterface;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
+import com.testify.ecfeed.utils.SystemLogger;
 
 public class ClassDetailsPage extends BasicDetailsPage {
 
@@ -231,11 +233,17 @@ public class ClassDetailsPage extends BasicDetailsPage {
 	}
 
 	private void fillAndroidRunnerCombo() {
-		String projectPath = EclipseProjectHelper.getProjectPath(fFileInfoProvider);
-		List<String> runners = fClassIf.createRunnerList(projectPath);
+		String projectPath = null;
+		try {
+			projectPath = EclipseProjectHelper.getProjectPath(fFileInfoProvider);
 
-		for(String runner : runners) {
-			fAndroidRunnerCombo.add(runner);
+			List<String> runners = fClassIf.createRunnerList(projectPath);
+
+			for(String runner : runners) {
+				fAndroidRunnerCombo.add(runner);
+			}			
+		} catch (EcException e) {
+			SystemLogger.logCatch(e.getMessage());
 		}
 	}
 

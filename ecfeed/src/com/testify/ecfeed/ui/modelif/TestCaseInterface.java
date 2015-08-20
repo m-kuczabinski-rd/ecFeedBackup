@@ -17,6 +17,7 @@ import java.util.Arrays;
 import com.testify.ecfeed.adapter.EImplementationStatus;
 import com.testify.ecfeed.adapter.IModelOperation;
 import com.testify.ecfeed.adapter.operations.TestCaseOperationUpdateTestData;
+import com.testify.ecfeed.generators.api.EcException;
 import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.TestCaseNode;
@@ -54,7 +55,7 @@ public class TestCaseInterface extends AbstractNodeInterface {
 		return isExecutable(getTarget());
 	}
 
-	public void executeStaticTest() {
+	public void executeStaticTest() throws EcException {
 		MethodInterface methodIf = new MethodInterface(getUpdateContext(), fFileInfoProvider);
 
 		TestCaseNode testCaseNode = getTarget();

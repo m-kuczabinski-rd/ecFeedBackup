@@ -66,7 +66,7 @@ public class OnlineRunner extends AbstractJUnitRunner {
 				try {
 					generator.initialize(input, constraints, parameters);
 				} catch (GeneratorException e) {
-					throw new RunnerException(Messages.GENERATOR_INITIALIZATION_PROBLEM(e.getMessage()));
+					RunnerException.report(Messages.GENERATOR_INITIALIZATION_PROBLEM(e.getMessage()));
 				}
 
 				frameworkMethods.add(new JavaRuntimeMethod(frameworkMethod.getMethod(), generator, getLoader()));
@@ -118,7 +118,7 @@ public class OnlineRunner extends AbstractJUnitRunner {
 			generator = getGenerator(getTestClass().getAnnotations());
 		}
 		if(generator == null){
-			throw new RunnerException(Messages.NO_VALID_GENERATOR(method.getName()));
+			RunnerException.report(Messages.NO_VALID_GENERATOR(method.getName()));
 		}
 		return generator;
 	}
@@ -143,7 +143,7 @@ public class OnlineRunner extends AbstractJUnitRunner {
 		for(IGeneratorParameter parameter : parameters){
 			Object value = getParameterValue(parameter, parsedParameters);
 			if(value == null && parameter.isRequired()){
-				throw new RunnerException(Messages.MISSING_REQUIRED_PARAMETER(parameter.getName()));
+				RunnerException.report(Messages.MISSING_REQUIRED_PARAMETER(parameter.getName()));
 			}
 			else if(value != null){
 				result.put(parameter.getName(), value);
@@ -169,7 +169,7 @@ public class OnlineRunner extends AbstractJUnitRunner {
 				}
 			}
 			catch(Throwable e){
-				throw new RunnerException(Messages.WRONG_PARAMETER_TYPE(parameter.getName(), e.getMessage()));
+				RunnerException.report(Messages.WRONG_PARAMETER_TYPE(parameter.getName(), e.getMessage()));
 			}
 		}
 		return null;
@@ -186,7 +186,7 @@ public class OnlineRunner extends AbstractJUnitRunner {
 					Constructor<? extends IGenerator> constructor = generatorClass.getConstructor(new Class<?>[]{});
 					generator = (constructor.newInstance(new Object[]{}));
 				} catch (Exception e) {
-					throw new RunnerException(Messages.CANNOT_INSTANTIATE_GENERATOR(e.getMessage()));
+					RunnerException.report(Messages.CANNOT_INSTANTIATE_GENERATOR(e.getMessage()));
 				}
 			}
 		}
@@ -212,14 +212,14 @@ public class OnlineRunner extends AbstractJUnitRunner {
 		}
 		if(parameterNames != null && parameterValues != null){
 			if(parameterNames.length != parameterValues.length){
-				throw new RunnerException(Messages.PARAMETERS_ANNOTATION_LENGTH_ERROR);
+				RunnerException.report(Messages.PARAMETERS_ANNOTATION_LENGTH_ERROR);
 			}
 			for(int i = 0; i < parameterNames.length; i++){
 				result.put(parameterNames[i], parameterValues[i]);
 			}
 		}
 		else if(parameterNames != null || parameterValues != null){
-			throw new RunnerException(Messages.MISSING_PARAMETERS_ANNOTATION);
+			RunnerException.report(Messages.MISSING_PARAMETERS_ANNOTATION);
 		}
 		return result;
 	}

@@ -32,7 +32,7 @@ public class StatementOperationReplaceChild extends AbstractModelOperation {
 	@Override
 	public void execute() throws ModelOperationException {
 		if(fTarget == null){
-			throw new ModelOperationException(Messages.NULL_POINTER_TARGET);
+			ModelOperationException.report(Messages.NULL_POINTER_TARGET);
 		}
 		fTarget.replaceChild(fCurrentChild, fNewChild);
 		markModelUpdated();

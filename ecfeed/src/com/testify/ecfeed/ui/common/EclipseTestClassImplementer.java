@@ -11,6 +11,8 @@ package com.testify.ecfeed.ui.common;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.JavaModelException;
 
+import com.testify.ecfeed.generators.api.EcException;
+
 public class EclipseTestClassImplementer extends EclipseSimpleClassImplementer {
 
 	String fTestingAppSuperClass;
@@ -23,7 +25,7 @@ public class EclipseTestClassImplementer extends EclipseSimpleClassImplementer {
 			String testingAppClass,
 			String testingAppSuperClass,
 			String testedAppPackage,
-			String testedAppMainActivity) {
+			String testedAppMainActivity) throws EcException {
 		super(fileInfoProvider, testingAppPackage, testingAppClass);
 		fTestingAppSuperClass = testingAppSuperClass;
 		fTestedAppPackage = testedAppPackage;

@@ -34,7 +34,7 @@ public class StatementOperationSetRelation extends AbstractModelOperation {
 	@Override
 	public void execute() throws ModelOperationException {
 		if(Arrays.asList(fTarget.getAvailableRelations()).contains(fNewRelation) == false){
-			throw new ModelOperationException(Messages.DIALOG_UNALLOWED_RELATION_MESSAGE);
+			ModelOperationException.report(Messages.DIALOG_UNALLOWED_RELATION_MESSAGE);
 		}
 		fTarget.setRelation(fNewRelation);
 		markModelUpdated();

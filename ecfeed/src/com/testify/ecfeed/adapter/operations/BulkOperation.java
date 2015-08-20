@@ -82,7 +82,7 @@ public class BulkOperation extends AbstractModelOperation{
 			for(String error : errors){
 				message += "\n" + error;
 			}
-			throw new ModelOperationException(message);
+			ModelOperationException.report(message);
 		}
 	}
 

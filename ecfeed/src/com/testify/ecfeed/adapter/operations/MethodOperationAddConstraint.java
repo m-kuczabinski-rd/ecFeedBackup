@@ -40,10 +40,10 @@ public class MethodOperationAddConstraint extends AbstractModelOperation {
 			fIndex = fTarget.getConstraintNodes().size();
 		}
 		if(fConstraint.getName().matches(Constants.REGEX_CONSTRAINT_NODE_NAME) == false){
-			throw new ModelOperationException(Messages.CONSTRAINT_NAME_REGEX_PROBLEM);
+			ModelOperationException.report(Messages.CONSTRAINT_NAME_REGEX_PROBLEM);
 		}
 		if(fConstraint.updateReferences(fTarget) == false){
-			throw new ModelOperationException(Messages.INCOMPATIBLE_CONSTRAINT_PROBLEM);
+			ModelOperationException.report(Messages.INCOMPATIBLE_CONSTRAINT_PROBLEM);
 		}
 		fTarget.addConstraint(fConstraint, fIndex);
 		markModelUpdated();

@@ -4,28 +4,34 @@
  * are made available under the terms of the Eclipse Public License v1.0         
  * which accompanies this distribution, and is available at                      
  * http://www.eclipse.org/legal/epl-v10.html                                     
- *                                                                               
- * Contributors:                                                                 
- *     Patryk Chamuczynski (p.chamuczynski(at)radytek.com) - initial implementation
  ******************************************************************************/
 
-package com.testify.ecfeed.serialization;
+package com.testify.ecfeed.generators.api;
 
 import com.testify.ecfeed.utils.SystemLogger;
 
-public class ParserException extends Exception {
+public class EcException extends Exception {
 
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 5386419314543963856L;
+	private static final long serialVersionUID = -2866617803127770757L;
 
-	private ParserException(String message) {
+	private EcException(String message) {
 		super(message);
 	}
 	
-	public static void report(String message) throws ParserException {
+	private EcException(String message, Throwable chainedThrowable) {
+		super(message, chainedThrowable);
+	}	
+	
+	public static void report(String message) throws EcException {
 		SystemLogger.logThrow(message);
-		throw new ParserException(message);
-	}
+		throw new EcException(message);
+	}	
+	
+	public static void report(String message, Throwable throwable) throws EcException {
+		SystemLogger.logThrow(message);
+		throw new EcException(message, throwable);
+	}	
 }
