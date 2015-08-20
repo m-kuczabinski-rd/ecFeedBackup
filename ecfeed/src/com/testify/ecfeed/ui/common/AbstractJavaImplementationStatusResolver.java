@@ -32,9 +32,11 @@ public abstract class AbstractJavaImplementationStatusResolver extends CachedImp
 
 	protected EImplementationStatus implementationStatus(MethodNode method){
 		ClassNode classNode = method.getClassNode();
+
 		if (classNode.getRunOnAndroid() && !androidCodeImplemented(classNode)) {
 			return EImplementationStatus.NOT_IMPLEMENTED;
 		}
+
 		return super.implementationStatus(method);
 	}
 }

@@ -13,9 +13,9 @@ public class EclipsePackageFragmentGetter {
 
 	public static IPackageFragment getPackageFragment(
 			String name, 
-			IFileInfoProvider fFileInfoProvider) throws CoreException {
+			IFileInfoProvider fileInfoProvider) throws CoreException {
 
-		IPackageFragmentRoot packageFragmentRoot = getPackageFragmentRoot(fFileInfoProvider);
+		IPackageFragmentRoot packageFragmentRoot = getPackageFragmentRoot(fileInfoProvider);
 		IPackageFragment packageFragment = packageFragmentRoot.getPackageFragment(name);
 
 		if(packageFragment.exists() == false){
@@ -25,15 +25,19 @@ public class EclipsePackageFragmentGetter {
 	}
 
 	private static IPackageFragmentRoot getPackageFragmentRoot(
-			IFileInfoProvider fFileInfoProvider) throws CoreException{
+			IFileInfoProvider fileInfoProvider) throws CoreException{
 
-		IPackageFragmentRoot root = fFileInfoProvider.getPackageFragmentRoot();
+		if (fileInfoProvider == null) {
+			throw new RuntimeException(Messages.EXCEPTION_FILE_INFO_PROVIDER_NOT_NULL);
+		}
+
+		IPackageFragmentRoot root = fileInfoProvider.getPackageFragmentRoot();
 
 		if(root == null){
-			root = getAnySourceFolder(fFileInfoProvider);
+			root = getAnySourceFolder(fileInfoProvider);
 		}
 		if(root == null){
-			root = createNewSourceFolder("src", fFileInfoProvider);
+			root = createNewSourceFolder("src", fileInfoProvider);
 		}
 
 		return root;

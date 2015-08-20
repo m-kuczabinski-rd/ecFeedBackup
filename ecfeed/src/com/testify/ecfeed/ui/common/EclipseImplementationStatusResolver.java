@@ -32,7 +32,7 @@ public class EclipseImplementationStatusResolver extends AbstractJavaImplementat
 	protected boolean androidCodeImplemented(ClassNode classNode) {
 		EclipseEctImplementerForClassNode implementer = 
 				new EclipseEctImplementerForClassNode(fFileInfoProvider, classNode);
-
+		
 		return implementer.contentImplemented();
 	}
 
@@ -40,7 +40,7 @@ public class EclipseImplementationStatusResolver extends AbstractJavaImplementat
 	protected boolean classDefinitionImplemented(String qualifiedName) {
 		IType type = JavaModelAnalyser.getIType(qualifiedName);
 		try {
-			return  type != null && type.isClass();
+			return type != null && type.isClass();
 		} catch (JavaModelException e) {}
 		return false;
 	}

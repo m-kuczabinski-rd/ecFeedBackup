@@ -175,6 +175,7 @@ public class CalculateCoverageDialog extends TitleAreaDialog {
 		fFileInfoProvider = fileInfoProvider;
 		fMethod = method;
 		fCalculator = new CoverageCalculator(fMethod.getMethodParameters());
+
 		fStatusResolver = new EclipseImplementationStatusResolver(fileInfoProvider);
 		fInitChecked = checked;
 		fInitGrayed = grayed;

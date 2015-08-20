@@ -28,8 +28,7 @@ import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.TestCaseNode;
 
 
-public abstract class CachedImplementationStatusResolver extends
-		AbstractImplementationStatusResolver {
+public abstract class CachedImplementationStatusResolver extends AbstractImplementationStatusResolver {
 
 	private static Map<AbstractNode, EImplementationStatus> fCache = new HashMap<>();
 	private static CacheCleaner fCacheCleaner = new CacheCleaner();
@@ -102,10 +101,12 @@ public abstract class CachedImplementationStatusResolver extends
 	@Override
 	public EImplementationStatus getImplementationStatus(AbstractNode node){
 		EImplementationStatus status = fCache.get(node);
+
 		if(status == null){
 			status = super.getImplementationStatus(node);
 			updateCache(node, status);
 		}
+
 		return status;
 	}
 

@@ -6,13 +6,17 @@
  * http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 
-package com.testify.ecfeed.utils;
+package com.testify.ecfeed.ui.common;
 
-import com.testify.ecfeed.ui.common.IFileInfoProvider;
 
-public class ProjectHelper {
+public class EclipseProjectHelper {
 
 	public static String getProjectPath(IFileInfoProvider fileInfoProvider) {
+
+		if (fileInfoProvider == null) {
+			throw new RuntimeException(Messages.EXCEPTION_FILE_INFO_PROVIDER_NOT_NULL);
+		}
+
 		return fileInfoProvider.getProject().getLocation().toOSString();
 	}
 }

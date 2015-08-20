@@ -83,8 +83,7 @@ IImplementationStatusResolver {
 	@Override
 	public EImplementationStatus getImplementationStatus(AbstractNode node) {
 		try{
-			EImplementationStatus status = (EImplementationStatus)node.accept(fStatusResolver);
-			return status;
+			return (EImplementationStatus)node.accept(fStatusResolver);
 		}
 		catch(Exception e){}
 		return EImplementationStatus.NOT_IMPLEMENTED;
@@ -126,9 +125,11 @@ IImplementationStatusResolver {
 			return EImplementationStatus.IMPLEMENTED;
 		}
 		EImplementationStatus childrenStatus = childrenStatus(method.getParameters());
+
 		if(childrenStatus != EImplementationStatus.IMPLEMENTED){
 			return EImplementationStatus.PARTIALLY_IMPLEMENTED;
 		}
+
 		return EImplementationStatus.IMPLEMENTED;
 	}
 
@@ -209,11 +210,19 @@ IImplementationStatusResolver {
 		int size = children.size();
 		int implementedChildren = 0;
 		int notImplementedChildren = 0;
+
 		for(AbstractNode child : children){
+
 			EImplementationStatus status = getImplementationStatus(child);
-			if(status == EImplementationStatus.IMPLEMENTED) ++implementedChildren;
-			if(status == EImplementationStatus.NOT_IMPLEMENTED) ++notImplementedChildren;
+
+			if(status == EImplementationStatus.IMPLEMENTED) { 
+				++implementedChildren;
+			}
+			if(status == EImplementationStatus.NOT_IMPLEMENTED) {
+				++notImplementedChildren;
+			}
 		}
+
 		if(implementedChildren == size){
 			return EImplementationStatus.IMPLEMENTED;
 		}

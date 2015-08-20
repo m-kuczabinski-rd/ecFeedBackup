@@ -299,6 +299,7 @@ public class EclipseModelImplementer extends AbstractJavaModelImplementer {
 
 	@Override
 	protected boolean androidCodeImplemented(ClassNode classNode) {
+
 		return (new EclipseEctImplementerForClassNode(fFileInfoProvider, classNode)).contentImplemented();
 	}
 

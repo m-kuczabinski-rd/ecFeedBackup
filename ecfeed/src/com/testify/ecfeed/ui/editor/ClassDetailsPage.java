@@ -30,9 +30,9 @@ import com.testify.ecfeed.android.AndroidRunnerHelper;
 import com.testify.ecfeed.model.AbstractNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.ui.common.IFileInfoProvider;
+import com.testify.ecfeed.ui.common.EclipseProjectHelper;
 import com.testify.ecfeed.ui.modelif.ClassInterface;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
-import com.testify.ecfeed.utils.ProjectHelper;
 
 public class ClassDetailsPage extends BasicDetailsPage {
 
@@ -231,7 +231,7 @@ public class ClassDetailsPage extends BasicDetailsPage {
 	}
 
 	private void fillAndroidRunnerCombo() {
-		String projectPath = ProjectHelper.getProjectPath(fFileInfoProvider);
+		String projectPath = EclipseProjectHelper.getProjectPath(fFileInfoProvider);
 		List<String> runners = fClassIf.createRunnerList(projectPath);
 
 		for(String runner : runners) {

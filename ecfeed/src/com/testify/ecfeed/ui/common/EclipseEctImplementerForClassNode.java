@@ -14,8 +14,6 @@ import org.eclipse.swt.widgets.Display;
 
 import com.testify.ecfeed.android.project.AndroidManifestAccessor;
 import com.testify.ecfeed.model.ClassNode;
-import com.testify.ecfeed.utils.PackageClassHelper;
-import com.testify.ecfeed.utils.ProjectHelper;
 
 public class EclipseEctImplementerForClassNode {
 
@@ -28,8 +26,10 @@ public class EclipseEctImplementerForClassNode {
 			IFileInfoProvider fileInfoProvider,
 			ClassNode classNode) {
 
+		String projectPath = EclipseProjectHelper.getProjectPath(fileInfoProvider);
+
 		AndroidManifestAccessor androidManifestReader = 
-				new AndroidManifestAccessor(ProjectHelper.getProjectPath(fileInfoProvider));
+				new AndroidManifestAccessor(projectPath);
 
 		String testingAppPackage = androidManifestReader.getTestingAppPackage();
 
@@ -63,8 +63,7 @@ public class EclipseEctImplementerForClassNode {
 				new EclipseRunnerClassImplementer(
 						fileInfoProvider, 
 						testingAppPackage,
-						PackageClassHelper.getPackage(baseRunner),
-						PackageClassHelper.getClass(baseRunner));
+						baseRunner);
 	}
 
 	private void createTestClassImplementer(

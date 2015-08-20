@@ -28,6 +28,11 @@ public abstract class EclipseSimpleClassImplementer {
 			IFileInfoProvider fileInfoProvider, 
 			String testingAppPackage, 
 			String testingAppClass) {
+
+		if (fileInfoProvider == null) {
+			throw new RuntimeException(Messages.EXCEPTION_FILE_INFO_PROVIDER_NOT_NULL);
+		}
+
 		fFileInfoProvider = fileInfoProvider;
 		fTestingAppPackage = testingAppPackage;
 		fTestingAppSourceFilesPackage = 

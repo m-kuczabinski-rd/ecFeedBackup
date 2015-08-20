@@ -53,11 +53,11 @@ import com.testify.ecfeed.ui.common.EclipseTypeAdapterProvider;
 import com.testify.ecfeed.ui.common.IFileInfoProvider;
 import com.testify.ecfeed.ui.common.JavaModelAnalyser;
 import com.testify.ecfeed.ui.common.Messages;
+import com.testify.ecfeed.ui.common.EclipseProjectHelper;
 import com.testify.ecfeed.ui.dialogs.AddTestCaseDialog;
 import com.testify.ecfeed.ui.dialogs.CalculateCoverageDialog;
 import com.testify.ecfeed.ui.dialogs.RenameTestSuiteDialog;
 import com.testify.ecfeed.ui.dialogs.SelectCompatibleMethodDialog;
-import com.testify.ecfeed.utils.ProjectHelper;
 
 public class MethodInterface extends ParametersParentInterface {
 
@@ -252,7 +252,7 @@ public class MethodInterface extends ParametersParentInterface {
 			return new JUnitTestMethodInvoker();
 		}
 
-		String projectPath = ProjectHelper.getProjectPath(fileInfoProvider);
+		String projectPath = EclipseProjectHelper.getProjectPath(fileInfoProvider);
 		String androidRunner = AndroidRunnerHelper.createFullAndroidRunnerName(projectPath);
 
 		return new AndroidTestMethodInvoker(androidRunner);

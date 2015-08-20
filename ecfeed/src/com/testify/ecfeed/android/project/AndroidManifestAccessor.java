@@ -61,13 +61,12 @@ public class AndroidManifestAccessor {
 
 	public AndroidManifestAccessor(String projectPath) {
 		Builder builder = new Builder();
+
 		try {
 			fManifestPath = projectPath + File.separator + "AndroidManifest.xml";
 			fDocument = builder.build(fManifestPath);
 		} catch (ParsingException | IOException e) {
-		}
-		if (fDocument == null) {
-			throw new RuntimeException(Messages.CAN_NOT_READ_ANDROID_MANIFEST(fManifestPath));
+			throw new RuntimeException(e.getMessage());
 		}
 
 		fRoot = fDocument.getRootElement();
