@@ -38,6 +38,7 @@ import com.testify.ecfeed.ui.modelif.GlobalParametersParentInterface;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 import com.testify.ecfeed.ui.modelif.MethodInterface;
 import com.testify.ecfeed.ui.modelif.RootInterface;
+import com.testify.ecfeed.utils.SystemLogger;
 
 public class AddChildActionProvider {
 
@@ -227,7 +228,7 @@ public class AddChildActionProvider {
 			AbstractParameterNode parameter = target.getParameter();
 			try{
 			return (boolean)parameter.accept(new EnableVisitor());
-			}catch(Exception e){}
+			}catch(Exception e){SystemLogger.logCatch(e.getMessage());}
 			return false;
 		}
 	}

@@ -29,6 +29,7 @@ import org.eclipse.ui.forms.AbstractFormPart;
 import com.testify.ecfeed.adapter.CachedImplementationStatusResolver;
 import com.testify.ecfeed.adapter.IModelOperation;
 import com.testify.ecfeed.adapter.ModelOperationException;
+import com.testify.ecfeed.utils.SystemLogger;
 
 public class OperationExecuter {
 
@@ -107,7 +108,7 @@ public class OperationExecuter {
 			UndoableOperation action = new UndoableOperation(operation, getUpdateContext().getUndoContext(), errorMessageTitle);
 			fOperationHistory.execute(action, null, null);
 			return true;
-		} catch (ExecutionException e) {}
+		} catch (ExecutionException e) {SystemLogger.logCatch(e.getMessage());}
 		return false;
 	}
 

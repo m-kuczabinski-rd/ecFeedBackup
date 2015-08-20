@@ -24,6 +24,7 @@ import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.MethodParameterNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.TestCaseNode;
+import com.testify.ecfeed.utils.SystemLogger;
 
 public class GenericOperationRename extends AbstractModelOperation {
 
@@ -163,14 +164,14 @@ public class GenericOperationRename extends AbstractModelOperation {
 	private String getNameRegex(AbstractNode target) {
 		try{
 			return (String)fTarget.accept(new NameRegexProvider());
-		}catch(Exception e){}
+		}catch(Exception e){SystemLogger.logCatch(e.getMessage());}
 		return "*";
 	}
 
 	private String getRegexProblemMessage(){
 		try{
 			return (String)fTarget.accept(new RegexProblemMessageProvider());
-		}catch(Exception e){}
+		}catch(Exception e){SystemLogger.logCatch(e.getMessage());}
 		return "";
 	}
 }

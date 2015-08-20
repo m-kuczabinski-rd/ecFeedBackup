@@ -62,6 +62,7 @@ import com.testify.ecfeed.ui.modelif.AbstractStatementInterface;
 import com.testify.ecfeed.ui.modelif.ConstraintInterface;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 import com.testify.ecfeed.ui.modelif.StatementInterfaceFactory;
+import com.testify.ecfeed.utils.SystemLogger;
 
 public class ConstraintViewer extends TreeViewerSection {
 
@@ -450,7 +451,7 @@ public class ConstraintViewer extends TreeViewerSection {
 			fStatementCombo.setText(statement.getLeftOperandName());
 			try{
 				statement.accept(new EditorBuilder(fFileInfoProvider));
-			}catch(Exception e){}
+			}catch(Exception e){SystemLogger.logCatch(e.getMessage());}
 		}
 
 		public void setConstraint(ConstraintNode constraintNode) {

@@ -47,6 +47,7 @@ import com.testify.ecfeed.ui.common.IFileInfoProvider;
 import com.testify.ecfeed.ui.common.JavaDocSupport;
 import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.dialogs.TextAreaDialog;
+import com.testify.ecfeed.utils.SystemLogger;
 
 public class AbstractNodeInterface extends OperationExecuter{
 
@@ -133,7 +134,7 @@ public class AbstractNodeInterface extends OperationExecuter{
 		String problemTitle = "";
 		try{
 			problemTitle = (String)fTarget.accept(new RenameParameterProblemTitleProvider());
-		}catch(Exception e){}
+		}catch(Exception e){SystemLogger.logCatch(e.getMessage());}
 		return execute(FactoryRenameOperation.getRenameOperation(fTarget, newName), problemTitle);
 	}
 
@@ -208,7 +209,7 @@ public class AbstractNodeInterface extends OperationExecuter{
 			if(operation.getShift() > 0){
 				return executeMoveOperation(operation);
 			}
-		}catch(Exception e){}
+		}catch(Exception e){SystemLogger.logCatch(e.getMessage());}
 		return false;
 	}
 

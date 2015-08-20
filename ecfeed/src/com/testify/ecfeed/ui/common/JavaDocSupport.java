@@ -39,6 +39,7 @@ import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.MethodParameterNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.TestCaseNode;
+import com.testify.ecfeed.utils.SystemLogger;
 
 public class JavaDocSupport {
 
@@ -115,7 +116,7 @@ public class JavaDocSupport {
 						}
 					}
 				}
-			}catch(JavaModelException e){}
+			}catch(JavaModelException e){SystemLogger.logCatch(e.getMessage());}
 			return EMPTY_STRING;
 		}
 
@@ -292,21 +293,21 @@ public class JavaDocSupport {
 			}
 			output += indent + LAST_COMMENT_LINE;
 			return output;
-		}catch(IOException e){}
+		}catch(IOException e){SystemLogger.logCatch(e.getMessage());}
 		return null;
 	}
 
 	public static String getJavadoc(AbstractNode node){
 		try{
 			return (String)node.accept(new JavadocReader());
-		}catch (Exception e){}
+		}catch (Exception e){SystemLogger.logCatch(e.getMessage());}
 		return null;
 	}
 
 	public static String importJavadoc(AbstractNode node) {
 		try{
 			return (String)node.accept(new JavadocImporter());
-		}catch (Exception e){}
+		}catch (Exception e){SystemLogger.logCatch(e.getMessage());}
 		return null;
 	}
 
@@ -322,14 +323,14 @@ public class JavaDocSupport {
 			IType type = JavaModelAnalyser.getIType(node.getType());
 			try{
 				exportJavadoc(type, node.getTypeComments());
-			}catch(JavaModelException e){}
+			}catch(JavaModelException e){SystemLogger.logCatch(e.getMessage());}
 		}
 	}
 
 	public static void exportJavadoc(AbstractNode node){
 		try{
 			node.accept(new JavadocExporter());
-		}catch(Exception e){}
+		}catch(Exception e){SystemLogger.logCatch(e.getMessage());}
 	}
 
 	private static String removeJavadocFormating(String input){
@@ -345,7 +346,7 @@ public class JavaDocSupport {
 					}
 				}
 				return output;
-			}catch(IOException e){}
+			}catch(IOException e){SystemLogger.logCatch(e.getMessage());}
 		}
 		return input;
 	}
@@ -363,7 +364,7 @@ public class JavaDocSupport {
 				output+= line + "\n";
 			}
 			return output;
-		}catch(IOException e){}
+		}catch(IOException e){SystemLogger.logCatch(e.getMessage());}
 		return input;
 	}
 
@@ -384,7 +385,7 @@ public class JavaDocSupport {
 					String trimmed = raw.replaceAll("\\n\\s*\\*", EMPTY_STRING + "\n*");
 					return trimmed;
 				}
-			} catch (JavaModelException e) {}
+			} catch (JavaModelException e) {SystemLogger.logCatch(e.getMessage());}
 		}
 		return null;
 	}
@@ -451,7 +452,7 @@ public class JavaDocSupport {
 			}
 			String indent = source.substring(begin + 1, range.getOffset());
 			return indent;
-		}catch(JavaModelException e){}
+		}catch(JavaModelException e){SystemLogger.logCatch(e.getMessage());}
 		return null;
 	}
 

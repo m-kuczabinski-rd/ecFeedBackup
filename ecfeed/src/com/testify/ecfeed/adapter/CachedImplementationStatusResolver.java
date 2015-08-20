@@ -26,6 +26,7 @@ import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.MethodParameterNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.TestCaseNode;
+import com.testify.ecfeed.utils.SystemLogger;
 
 
 public abstract class CachedImplementationStatusResolver extends AbstractImplementationStatusResolver {
@@ -114,7 +115,7 @@ public abstract class CachedImplementationStatusResolver extends AbstractImpleme
 		if(node != null){
 			try{
 				node.accept(fCacheCleaner);
-			}catch(Exception e){}
+			}catch(Exception e){SystemLogger.logCatch(e.getMessage());}
 			clearCache(node.getParent());
 		}
 	}

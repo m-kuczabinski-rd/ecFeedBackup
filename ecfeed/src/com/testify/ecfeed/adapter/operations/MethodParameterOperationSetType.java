@@ -39,6 +39,7 @@ import com.testify.ecfeed.model.MethodParameterNode;
 import com.testify.ecfeed.model.StatementArray;
 import com.testify.ecfeed.model.StaticStatement;
 import com.testify.ecfeed.model.TestCaseNode;
+import com.testify.ecfeed.utils.SystemLogger;
 
 public class MethodParameterOperationSetType extends BulkOperation {
 
@@ -135,7 +136,7 @@ public class MethodParameterOperationSetType extends BulkOperation {
 					for(AbstractStatement child : statement.getChildren()){
 						try{
 							child.accept(this);
-						}catch(Exception e){}
+						}catch(Exception e){SystemLogger.logCatch(e.getMessage());}
 					}
 					return null;
 				}
@@ -188,7 +189,7 @@ public class MethodParameterOperationSetType extends BulkOperation {
 					try{
 						constraint.getConstraint().getPremise().accept(valueRestorer);
 						constraint.getConstraint().getConsequence().accept(valueRestorer);
-					}catch(Exception e){}
+					}catch(Exception e){SystemLogger.logCatch(e.getMessage());}
 				}
 			}
 
@@ -233,7 +234,7 @@ public class MethodParameterOperationSetType extends BulkOperation {
 		protected List<ChoiceNode> getChoices(ChoicesParentNode parent){
 			try{
 				return (List<ChoiceNode>)parent.accept(new RealChoicesProvider());
-			}catch(Exception e){}
+			}catch(Exception e){SystemLogger.logCatch(e.getMessage());}
 			return null;
 		}
 

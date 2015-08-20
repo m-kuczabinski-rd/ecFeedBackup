@@ -27,6 +27,7 @@ import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.MethodParameterNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.TestCaseNode;
+import com.testify.ecfeed.utils.SystemLogger;
 
 public class FactoryRenameOperation {
 
@@ -192,7 +193,7 @@ public class FactoryRenameOperation {
 	public static IModelOperation getRenameOperation(AbstractNode target, String newName){
 		try{
 			return (IModelOperation)target.accept(new RenameOperationProvider(newName));
-		}catch(Exception e){}
+		}catch(Exception e){SystemLogger.logCatch(e.getMessage());}
 		return null;
 	}
 }

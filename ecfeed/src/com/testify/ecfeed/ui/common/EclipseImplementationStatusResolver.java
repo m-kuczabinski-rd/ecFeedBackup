@@ -18,6 +18,7 @@ import org.eclipse.jdt.core.JavaModelException;
 import com.testify.ecfeed.adapter.java.JavaPrimitiveTypePredicate;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.MethodNode;
+import com.testify.ecfeed.utils.SystemLogger;
 
 public class EclipseImplementationStatusResolver extends AbstractJavaImplementationStatusResolver{
 
@@ -41,7 +42,7 @@ public class EclipseImplementationStatusResolver extends AbstractJavaImplementat
 		IType type = JavaModelAnalyser.getIType(qualifiedName);
 		try {
 			return type != null && type.isClass();
-		} catch (JavaModelException e) {}
+		} catch (JavaModelException e) {SystemLogger.logCatch(e.getMessage());}
 		return false;
 	}
 
@@ -55,7 +56,7 @@ public class EclipseImplementationStatusResolver extends AbstractJavaImplementat
 		IType type = JavaModelAnalyser.getIType(qualifiedName);
 		try {
 			return  type != null && type.isEnum();
-		} catch (JavaModelException e) {}
+		} catch (JavaModelException e) {SystemLogger.logCatch(e.getMessage());}
 		return false;
 	}
 
@@ -71,7 +72,7 @@ public class EclipseImplementationStatusResolver extends AbstractJavaImplementat
 					return true;
 				}
 			}
-		} catch (JavaModelException e) {}
+		} catch (JavaModelException e) {SystemLogger.logCatch(e.getMessage());}
 		return false;
 	}
 }

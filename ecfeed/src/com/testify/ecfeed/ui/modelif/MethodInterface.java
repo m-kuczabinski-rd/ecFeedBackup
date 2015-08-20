@@ -58,6 +58,7 @@ import com.testify.ecfeed.ui.dialogs.AddTestCaseDialog;
 import com.testify.ecfeed.ui.dialogs.CalculateCoverageDialog;
 import com.testify.ecfeed.ui.dialogs.RenameTestSuiteDialog;
 import com.testify.ecfeed.ui.dialogs.SelectCompatibleMethodDialog;
+import com.testify.ecfeed.utils.SystemLogger;
 
 public class MethodInterface extends ParametersParentInterface {
 
@@ -322,7 +323,7 @@ public class MethodInterface extends ParametersParentInterface {
 		if(method != null){
 			try{
 				JavaUI.openInEditor(method);
-			}catch(Exception e){}
+			}catch(Exception e){SystemLogger.logCatch(e.getMessage());}
 		}
 	}
 

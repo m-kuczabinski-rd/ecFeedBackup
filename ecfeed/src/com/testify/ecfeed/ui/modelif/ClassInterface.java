@@ -41,6 +41,7 @@ import com.testify.ecfeed.ui.common.IFileInfoProvider;
 import com.testify.ecfeed.ui.common.JavaModelAnalyser;
 import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.dialogs.TestClassSelectionDialog;
+import com.testify.ecfeed.utils.SystemLogger;
 
 public class ClassInterface extends GlobalParametersParentInterface {
 
@@ -180,7 +181,7 @@ public class ClassInterface extends GlobalParametersParentInterface {
 					otherMethods.add(method);
 				}
 			}
-		}catch (ModelOperationException e){}
+		}catch (ModelOperationException e){SystemLogger.logCatch(e.getMessage());}
 		return otherMethods;
 	}
 
@@ -213,7 +214,7 @@ public class ClassInterface extends GlobalParametersParentInterface {
 		if(type != null){
 			try{
 				JavaUI.openInEditor(type);
-			}catch(Exception e){}
+			}catch(Exception e){SystemLogger.logCatch(e.getMessage());}
 		}
 	}
 

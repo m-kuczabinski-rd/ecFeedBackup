@@ -28,6 +28,7 @@ import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.core.Signature;
 
 import com.testify.ecfeed.model.MethodNode;
+import com.testify.ecfeed.utils.SystemLogger;
 
 public class JavaModelAnalyser {
 
@@ -70,7 +71,7 @@ public class JavaModelAnalyser {
 					return project.findType(qualifiedName);
 				}
 			}
-		} catch (JavaModelException e) {}
+		} catch (JavaModelException e) {SystemLogger.logCatch(e.getMessage());}
 		return null;
 	}
 
@@ -91,7 +92,7 @@ public class JavaModelAnalyser {
 					return methodDef;
 				}
 			}
-		} catch (JavaModelException e) {}
+		} catch (JavaModelException e) {SystemLogger.logCatch(e.getMessage());}
 		return null;
 	}
 
@@ -103,7 +104,7 @@ public class JavaModelAnalyser {
 					return true;
 				}
 			}
-		}catch(JavaModelException e){}
+		}catch(JavaModelException e){SystemLogger.logCatch(e.getMessage());}
 		return false;
 	}
 
@@ -115,7 +116,7 @@ public class JavaModelAnalyser {
 					return true;
 				}
 			}
-		}catch(JavaModelException e){}
+		}catch(JavaModelException e){SystemLogger.logCatch(e.getMessage());}
 		return false;
 	}
 
@@ -126,7 +127,7 @@ public class JavaModelAnalyser {
 	public static boolean isPublic(IMethod method){
 		try {
 			return Flags.isPublic(method.getFlags());
-		} catch (JavaModelException e) {}
+		} catch (JavaModelException e) {SystemLogger.logCatch(e.getMessage());}
 		return false;
 	}
 
@@ -135,7 +136,7 @@ public class JavaModelAnalyser {
 			return
 					! method.getElementName().equals(method.getParent().getElementName())
 					&& method.getReturnType().equals(Signature.SIG_VOID);
-		} catch (JavaModelException e) {}
+		} catch (JavaModelException e) {SystemLogger.logCatch(e.getMessage());}
 		return false;
 	}
 
@@ -146,7 +147,7 @@ public class JavaModelAnalyser {
 					return true;
 				}
 			}
-		}catch(JavaModelException e){}
+		}catch(JavaModelException e){SystemLogger.logCatch(e.getMessage());}
 		return false;
 	}
 
@@ -162,7 +163,7 @@ public class JavaModelAnalyser {
 				result.add(method);
 			}
 		}
-		}catch(JavaModelException e){}
+		}catch(JavaModelException e){SystemLogger.logCatch(e.getMessage());}
 		return result;
 	}
 

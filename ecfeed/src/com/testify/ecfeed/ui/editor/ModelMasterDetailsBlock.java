@@ -42,6 +42,7 @@ import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.ui.common.IFileInfoProvider;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 import com.testify.ecfeed.ui.modelif.IModelUpdateListener;
+import com.testify.ecfeed.utils.SystemLogger;
 
 public class ModelMasterDetailsBlock extends MasterDetailsBlock implements ISelectionChangedListener, ISectionContext{
 
@@ -138,7 +139,7 @@ public class ModelMasterDetailsBlock extends MasterDetailsBlock implements ISele
 		if(detailsPart != null){
 			try{
 				return (BasicDetailsPage)detailsPart.getCurrentPage();
-			}catch(SWTException e){}
+			}catch(SWTException e){SystemLogger.logCatch(e.getMessage());}
 		}
 		return null;
 	}

@@ -36,6 +36,7 @@ import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.dialogs.TestClassSelectionDialog;
 import com.testify.ecfeed.ui.dialogs.TextAreaDialog;
 import com.testify.ecfeed.ui.dialogs.UserTypeSelectionDialog;
+import com.testify.ecfeed.utils.SystemLogger;
 
 public abstract class AbstractParameterInterface extends ChoicesParentInterface {
 	
@@ -132,7 +133,7 @@ public abstract class AbstractParameterInterface extends ChoicesParentInterface 
 			if(type != null){
 				try {
 					JavaUI.openInEditor(type);
-				} catch (Exception e) {}
+				} catch (Exception e) {SystemLogger.logCatch(e.getMessage());}
 			}
 		}
 	}

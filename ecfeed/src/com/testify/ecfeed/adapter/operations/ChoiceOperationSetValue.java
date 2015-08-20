@@ -21,6 +21,7 @@ import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.model.GlobalParameterNode;
 import com.testify.ecfeed.model.IParameterVisitor;
 import com.testify.ecfeed.model.MethodParameterNode;
+import com.testify.ecfeed.utils.SystemLogger;
 
 public class ChoiceOperationSetValue extends AbstractModelOperation {
 
@@ -82,7 +83,7 @@ public class ChoiceOperationSetValue extends AbstractModelOperation {
 		private void adaptParameter(AbstractParameterNode parameter) {
 			try{
 				parameter.accept(new ReverseParameterAdapter());
-			}catch(Exception e){}
+			}catch(Exception e){SystemLogger.logCatch(e.getMessage());}
 		}
 
 		@Override
@@ -113,7 +114,7 @@ public class ChoiceOperationSetValue extends AbstractModelOperation {
 	private void adaptParameter(AbstractParameterNode parameter) {
 		try{
 			parameter.accept(new ParameterAdapter());
-		}catch(Exception e){}
+		}catch(Exception e){SystemLogger.logCatch(e.getMessage());}
 	}
 
 	@Override

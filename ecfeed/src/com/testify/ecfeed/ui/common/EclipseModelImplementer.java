@@ -52,6 +52,7 @@ import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.GlobalParameterNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.MethodParameterNode;
+import com.testify.ecfeed.utils.SystemLogger;
 
 public class EclipseModelImplementer extends AbstractJavaModelImplementer {
 
@@ -308,7 +309,7 @@ public class EclipseModelImplementer extends AbstractJavaModelImplementer {
 		try{
 			IType type = getJavaProject().findType(node.getName());
 			return (type != null) && type.isClass();
-		}catch(CoreException e){}
+		}catch(CoreException e){SystemLogger.logCatch(e.getMessage());}
 		return false;
 	}
 
@@ -326,7 +327,7 @@ public class EclipseModelImplementer extends AbstractJavaModelImplementer {
 					return true;
 				}
 			}
-		}catch(CoreException e){}
+		}catch(CoreException e){SystemLogger.logCatch(e.getMessage());}
 		return false;
 	}
 
@@ -335,7 +336,7 @@ public class EclipseModelImplementer extends AbstractJavaModelImplementer {
 		try{
 			IType type = getJavaProject().findType(node.getType());
 			return (type != null) && type.isEnum();
-		}catch(CoreException e){}
+		}catch(CoreException e){SystemLogger.logCatch(e.getMessage());}
 		return false;
 	}
 
@@ -398,14 +399,14 @@ public class EclipseModelImplementer extends AbstractJavaModelImplementer {
 				}
 			}
 			return true;
-		}catch(CoreException e){}
+		}catch(CoreException e){SystemLogger.logCatch(e.getMessage());}
 		return false;
 	}
 
 	private boolean classDefinitionImplementable(ClassNode node) {
 		try{
 			return getJavaProject().findType(node.getName()) == null;
-		}catch(CoreException e){}
+		}catch(CoreException e){SystemLogger.logCatch(e.getMessage());}
 		return false;
 	}
 

@@ -24,6 +24,7 @@ import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.MethodParameterNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.TestCaseNode;
+import com.testify.ecfeed.utils.SystemLogger;
 
 public abstract class AbstractModelImplementer implements IModelImplementer {
 
@@ -142,7 +143,7 @@ public abstract class AbstractModelImplementer implements IModelImplementer {
 	public boolean implementable(AbstractNode node) {
 		try{
 			return (boolean)node.accept(fImplementableVisitor);
-		}catch(Exception e){}
+		}catch(Exception e){SystemLogger.logCatch(e.getMessage());}
 		return false;
 	}
 
@@ -152,7 +153,7 @@ public abstract class AbstractModelImplementer implements IModelImplementer {
 			if(implementable(node)){
 				return (boolean)node.accept(fNodeImplementerVisitor);
 			}
-		}catch(Exception e){}
+		}catch(Exception e){SystemLogger.logCatch(e.getMessage());}
 		return false;
 	}
 

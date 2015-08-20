@@ -25,6 +25,7 @@ import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.MethodParameterNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.TestCaseNode;
+import com.testify.ecfeed.utils.SystemLogger;
 
 public abstract class AbstractImplementationStatusResolver implements
 IImplementationStatusResolver {
@@ -85,7 +86,7 @@ IImplementationStatusResolver {
 		try{
 			return (EImplementationStatus)node.accept(fStatusResolver);
 		}
-		catch(Exception e){}
+		catch(Exception e){SystemLogger.logCatch(e.getMessage());}
 		return EImplementationStatus.NOT_IMPLEMENTED;
 	}
 

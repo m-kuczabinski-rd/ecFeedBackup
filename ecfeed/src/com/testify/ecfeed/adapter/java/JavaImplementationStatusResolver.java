@@ -31,6 +31,7 @@ import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.MethodParameterNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.TestCaseNode;
+import com.testify.ecfeed.utils.SystemLogger;
 
 public class JavaImplementationStatusResolver extends AbstractImplementationStatusResolver{
 	private ModelClassLoader fLoader;
@@ -174,7 +175,7 @@ public class JavaImplementationStatusResolver extends AbstractImplementationStat
 	private EImplementationStatus implementationStatus(AbstractNode node) {
 		try {
 			return (EImplementationStatus)node.accept(fStatusVisitor);
-		} catch (Exception e) {}
+		} catch (Exception e) {SystemLogger.logCatch(e.getMessage());}
 		return EImplementationStatus.NOT_IMPLEMENTED;
 	}
 

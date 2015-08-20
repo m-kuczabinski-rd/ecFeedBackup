@@ -22,6 +22,7 @@ import com.testify.ecfeed.model.MethodParameterNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.ui.common.IFileInfoProvider;
+import com.testify.ecfeed.utils.SystemLogger;
 
 public class NodeInterfaceFactory{
 
@@ -99,7 +100,7 @@ public class NodeInterfaceFactory{
 		try{
 			return (AbstractNodeInterface)node.accept(new InterfaceProvider(context, fileInfoProvider));
 		}
-		catch(Exception e){}
+		catch(Exception e){SystemLogger.logCatch(e.getMessage());}
 		AbstractNodeInterface nodeIf = new AbstractNodeInterface(context, fileInfoProvider);
 		nodeIf.setTarget(node);
 		return nodeIf;

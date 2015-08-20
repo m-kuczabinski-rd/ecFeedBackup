@@ -19,6 +19,7 @@ import org.eclipse.ui.dialogs.ISelectionStatusValidator;
 
 import com.testify.ecfeed.ui.common.JavaModelAnalyser;
 import com.testify.ecfeed.ui.common.Messages;
+import com.testify.ecfeed.utils.SystemLogger;
 
 public class UserTypeSelectionDialog extends TestClassSelectionDialog {
 
@@ -44,7 +45,7 @@ public class UserTypeSelectionDialog extends TestClassSelectionDialog {
 					return ERROR;
 				}
 				return OK;
-			}catch(Exception e){}
+			}catch(Exception e){SystemLogger.logCatch(e.getMessage());}
 			return ERROR;
 		}
     }

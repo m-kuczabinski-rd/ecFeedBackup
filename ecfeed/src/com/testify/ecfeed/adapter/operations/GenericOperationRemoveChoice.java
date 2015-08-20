@@ -24,6 +24,7 @@ import com.testify.ecfeed.model.GlobalParameterNode;
 import com.testify.ecfeed.model.IParameterVisitor;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.MethodParameterNode;
+import com.testify.ecfeed.utils.SystemLogger;
 
 public class GenericOperationRemoveChoice extends BulkOperation {
 
@@ -71,7 +72,7 @@ public class GenericOperationRemoveChoice extends BulkOperation {
 			private void reverseAdaptParameter() {
 				try{
 					fTarget.getParameter().accept(new ReverseParameterAdapter());
-				}catch(Exception e){}
+				}catch(Exception e){SystemLogger.logCatch(e.getMessage());}
 			}
 
 		}
@@ -155,7 +156,7 @@ public class GenericOperationRemoveChoice extends BulkOperation {
 		private void adaptParameter() {
 			try{
 				fTarget.getParameter().accept(new ParameterAdapter());
-			}catch(Exception e){}
+			}catch(Exception e){SystemLogger.logCatch(e.getMessage());}
 		}
 
 		private void validateOperation() throws ModelOperationException {

@@ -35,6 +35,7 @@ import com.testify.ecfeed.ui.common.EclipseTypeAdapterProvider;
 import com.testify.ecfeed.ui.common.IFileInfoProvider;
 import com.testify.ecfeed.ui.common.JavaModelAnalyser;
 import com.testify.ecfeed.ui.common.Messages;
+import com.testify.ecfeed.utils.SystemLogger;
 
 public class ChoiceInterface extends ChoicesParentInterface{
 
@@ -145,7 +146,7 @@ public class ChoiceInterface extends ChoicesParentInterface{
 					}
 				}
 			}
-		}catch(Exception e){}
+		}catch(Exception e){SystemLogger.logCatch(e.getMessage());}
 	}
 
 	@Override

@@ -59,6 +59,7 @@ import com.testify.ecfeed.ui.modelif.AbstractNodeInterface;
 import com.testify.ecfeed.ui.modelif.AbstractParameterInterface;
 import com.testify.ecfeed.ui.modelif.IModelUpdateListener;
 import com.testify.ecfeed.ui.modelif.ModelNodesTransfer;
+import com.testify.ecfeed.utils.SystemLogger;
 
 public class ModelMasterSection extends TreeViewerSection{
 	private static final int STYLE = Section.EXPANDED | Section.TITLE_BAR;
@@ -249,7 +250,7 @@ public class ModelMasterSection extends TreeViewerSection{
 			if(element instanceof AbstractNode){
 				try{
 					return (String)((AbstractNode)element).accept(new TextProvider());
-				}catch(Exception e){}
+				}catch(Exception e){SystemLogger.logCatch(e.getMessage());}
 			}
 			return null;
 		}
@@ -259,7 +260,7 @@ public class ModelMasterSection extends TreeViewerSection{
 			if(element instanceof AbstractNode){
 				try{
 					return (Image)((AbstractNode)element).accept(new ImageProvider());
-				}catch(Exception e){}
+				}catch(Exception e){SystemLogger.logCatch(e.getMessage());}
 			}
 			return getImageFromFile("sample.png");
 		}
@@ -370,7 +371,7 @@ public class ModelMasterSection extends TreeViewerSection{
 						fFusedImages.put(decorations, decorated);
 					}
 					return fFusedImages.get(decorations);
-				}catch(Exception e){}
+				}catch(Exception e){SystemLogger.logCatch(e.getMessage());}
 			}
 			return image;
 		}

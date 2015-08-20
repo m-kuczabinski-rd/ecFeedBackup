@@ -29,6 +29,7 @@ import com.testify.ecfeed.model.MethodParameterNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.ChoiceNode;
+import com.testify.ecfeed.utils.SystemLogger;
 
 public class EclipseModelBuilder extends JavaModelAnalyser{
 	
@@ -53,7 +54,7 @@ public class EclipseModelBuilder extends JavaModelAnalyser{
 							if(methodModel != null){
 								classNode.addMethod(methodModel);
 							}
-						} catch(Throwable e){}
+						} catch(Throwable e){SystemLogger.logCatch(e.getMessage());}
 					}
 				}
 			}
@@ -164,10 +165,10 @@ public class EclipseModelBuilder extends JavaModelAnalyser{
 							}
 						}
 					}
-				} catch (JavaModelException e) {}
+				} catch (JavaModelException e) {SystemLogger.logCatch(e.getMessage());}
 				return result;
 			}
-		} catch (JavaModelException e) {}
+		} catch (JavaModelException e) {SystemLogger.logCatch(e.getMessage());}
 		return new ArrayList<String>();
 	}
 
