@@ -186,6 +186,7 @@ public class AndroidManifestAccessor {
 		}  
 
 		Serializer serializer = new Serializer(stream);
+		serializer.setIndent(4);
 		try {
 			serializer.write(fDocument);
 		} catch (IOException e) {
