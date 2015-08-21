@@ -31,7 +31,7 @@ import com.testify.ecfeed.adapter.operations.ClassOperationRemoveMethod;
 import com.testify.ecfeed.adapter.operations.ClassOperationSetAndroidBaseRunner;
 import com.testify.ecfeed.adapter.operations.ClassOperationSetRunOnAndroid;
 import com.testify.ecfeed.adapter.operations.FactoryRenameOperation;
-import com.testify.ecfeed.android.AndroidRunnerHelper;
+import com.testify.ecfeed.android.AndroidBaseRunnerHelper;
 import com.testify.ecfeed.android.project.AndroidManifestAccessor;
 import com.testify.ecfeed.generators.api.EcException;
 import com.testify.ecfeed.model.ClassNode;
@@ -82,7 +82,7 @@ public class ClassInterface extends GlobalParametersParentInterface {
 		return getTarget().getRunOnAndroid();
 	}
 
-	public String getAndroidRunner(){
+	public String getAndroidBaseRunner(){
 		return getTarget().getAndroidBaseRunner();
 	}
 
@@ -120,8 +120,8 @@ public class ClassInterface extends GlobalParametersParentInterface {
 		return execute(operation, Messages.DIALOG_ANDROID_RUNNER_SET_PROBLEM_TITLE);
 	}
 
-	public boolean setBaseAndroidRunner(String androidRunner) {
-		IModelOperation operation = new ClassOperationSetAndroidBaseRunner(getTarget(), androidRunner);
+	public boolean setAndroidBaseRunner(String androidBaseRunner) {
+		IModelOperation operation = new ClassOperationSetAndroidBaseRunner(getTarget(), androidBaseRunner);
 		return execute(operation, Messages.DIALOG_ANDROID_RUNNER_SET_PROBLEM_TITLE);
 	}
 
@@ -203,7 +203,7 @@ public class ClassInterface extends GlobalParametersParentInterface {
 
 	public List<String> createRunnerList(String projectPath) throws EcException {
 		List<String> runners = new AndroidManifestAccessor(projectPath).getRunnerNames();
-		String ecFeedTestRunner = AndroidRunnerHelper.createAndroidRunnerName(projectPath);
+		String ecFeedTestRunner = AndroidBaseRunnerHelper.createAndroidBaseRunnerName(projectPath);
 
 		runners.remove(ecFeedTestRunner);
 		return runners;

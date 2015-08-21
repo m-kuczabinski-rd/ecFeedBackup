@@ -26,7 +26,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
-import com.testify.ecfeed.android.AndroidRunnerHelper;
+import com.testify.ecfeed.android.AndroidBaseRunnerHelper;
 import com.testify.ecfeed.generators.api.EcException;
 import com.testify.ecfeed.model.AbstractNode;
 import com.testify.ecfeed.model.ClassNode;
@@ -44,8 +44,8 @@ public class ClassDetailsPage extends BasicDetailsPage {
 	private Text fClassNameText;
 	private Text fPackageNameText;
 	private Button fRunOnAndroidCheckbox;
-	private Label fAndroidRunnerLabel;
-	private Combo fAndroidRunnerCombo;	
+	private Label fAndroidBaseRunnerLabel;
+	private Combo fAndroidBaseRunnerCombo;	
 	private ClassInterface fClassIf;
 	private GlobalParametersViewer fGlobalParametersSection;
 	private JavaDocCommentsSection fCommentsSection;
@@ -57,22 +57,22 @@ public class ClassDetailsPage extends BasicDetailsPage {
 		}
 	}
 
-	private class AndroidRunnerComboSelectionListener extends AbstractSelectionAdapter{
+	private class AndroidBaseRunnerComboSelectionListener extends AbstractSelectionAdapter{
 		@Override
 		public void widgetSelected(SelectionEvent e){
 
-			fClassIf.setBaseAndroidRunner(fAndroidRunnerCombo.getText());
+			fClassIf.setAndroidBaseRunner(fAndroidBaseRunnerCombo.getText());
 
-			String androidRunner = fClassIf.getAndroidRunner();
-			fAndroidRunnerCombo.setText(androidRunner);
+			String androidBaseRunner = fClassIf.getAndroidBaseRunner();
+			fAndroidBaseRunnerCombo.setText(androidBaseRunner);
 		}
 	}	
 
-	private class AndroidRunnerComboFocusListener implements FocusListener{
+	private class AndroidBaseRunnerComboFocusListener implements FocusListener{
 
 		@Override
 		public void focusGained(FocusEvent e) {
-			refreshAndroidRunnerCombo();
+			refreshAndroidBaseRunnerCombo();
 		}
 
 		@Override
@@ -100,16 +100,17 @@ public class ClassDetailsPage extends BasicDetailsPage {
 		@Override
 		public void widgetSelected(SelectionEvent e) {
 
-			final String defaultBaseAndroidRunner  = AndroidRunnerHelper.getDefaultBaseAndroidRunnerName();
+			final String defaultBaseAndroidBaseRunner = 
+					AndroidBaseRunnerHelper.getDefaultAndroidBaseRunnerName();
 
 			boolean selection = fRunOnAndroidCheckbox.getSelection();
 			fClassIf.setRunOnAndroid(selection);
 
 			if (selection) {
-				String androidRunner = fClassIf.getAndroidRunner();
+				String androidBaseRunner = fClassIf.getAndroidBaseRunner();
 
-				if (androidRunner == null || androidRunner.isEmpty()) {
-					fClassIf.setBaseAndroidRunner(defaultBaseAndroidRunner);
+				if (androidBaseRunner == null || androidBaseRunner.isEmpty()) {
+					fClassIf.setAndroidBaseRunner(defaultBaseAndroidBaseRunner);
 				}
 			}
 
@@ -211,28 +212,28 @@ public class ClassDetailsPage extends BasicDetailsPage {
 		// row 2
 
 		// col 1 - label
-		fAndroidRunnerLabel = getToolkit().createLabel(composite, "Base runner");
+		fAndroidBaseRunnerLabel = getToolkit().createLabel(composite, "Base runner");
 
 		// col 2 - runner combo
-		fAndroidRunnerCombo = new ComboViewer(composite, SWT.NONE).getCombo();
-		fAndroidRunnerCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
-		fAndroidRunnerCombo.addFocusListener(new AndroidRunnerComboFocusListener());
-		fAndroidRunnerCombo.addSelectionListener(new AndroidRunnerComboSelectionListener());
+		fAndroidBaseRunnerCombo = new ComboViewer(composite, SWT.NONE).getCombo();
+		fAndroidBaseRunnerCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
+		fAndroidBaseRunnerCombo.addFocusListener(new AndroidBaseRunnerComboFocusListener());
+		fAndroidBaseRunnerCombo.addSelectionListener(new AndroidBaseRunnerComboSelectionListener());
 
-		fillAndroidRunnerCombo();
+		fillAndroidBaseRunnerCombo();
 	}
 
-	private void refreshAndroidRunnerCombo() {
+	private void refreshAndroidBaseRunnerCombo() {
 
-		String currentRunner = fAndroidRunnerCombo.getText();
+		String currentRunner = fAndroidBaseRunnerCombo.getText();
 
-		fAndroidRunnerCombo.removeAll();
-		fillAndroidRunnerCombo();
+		fAndroidBaseRunnerCombo.removeAll();
+		fillAndroidBaseRunnerCombo();
 
-		fAndroidRunnerCombo.setText(currentRunner);
+		fAndroidBaseRunnerCombo.setText(currentRunner);
 	}
 
-	private void fillAndroidRunnerCombo() {
+	private void fillAndroidBaseRunnerCombo() {
 		String projectPath = null;
 		try {
 			projectPath = EclipseProjectHelper.getProjectPath(fFileInfoProvider);
@@ -240,7 +241,7 @@ public class ClassDetailsPage extends BasicDetailsPage {
 			List<String> runners = fClassIf.createRunnerList(projectPath);
 
 			for(String runner : runners) {
-				fAndroidRunnerCombo.add(runner);
+				fAndroidBaseRunnerCombo.add(runner);
 			}			
 		} catch (EcException e) {
 			SystemLogger.logCatch(e.getMessage());
@@ -263,16 +264,16 @@ public class ClassDetailsPage extends BasicDetailsPage {
 			boolean runOnAndroid = fClassIf.getRunOnAndroid(); 
 			fRunOnAndroidCheckbox.setSelection(runOnAndroid);
 
-			fAndroidRunnerLabel.setEnabled(runOnAndroid);
-			fAndroidRunnerCombo.setEnabled(runOnAndroid);
+			fAndroidBaseRunnerLabel.setEnabled(runOnAndroid);
+			fAndroidBaseRunnerCombo.setEnabled(runOnAndroid);
 
-			String androidRunner = fClassIf.getAndroidRunner();
+			String androidBaseRunner = fClassIf.getAndroidBaseRunner();
 
-			if (androidRunner == null) {
-				androidRunner = "";
+			if (androidBaseRunner == null) {
+				androidBaseRunner = "";
 			}
 
-			fAndroidRunnerCombo.setText(androidRunner);
+			fAndroidBaseRunnerCombo.setText(androidBaseRunner);
 
 			fMethodsSection.setInput(selectedClass);
 			fGlobalParametersSection.setInput(selectedClass);

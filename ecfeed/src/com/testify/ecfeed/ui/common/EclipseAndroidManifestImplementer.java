@@ -8,7 +8,7 @@
 
 package com.testify.ecfeed.ui.common;
 
-import com.testify.ecfeed.android.AndroidRunnerHelper;
+import com.testify.ecfeed.android.AndroidBaseRunnerHelper;
 import com.testify.ecfeed.android.project.AndroidManifestAccessor;
 import com.testify.ecfeed.generators.api.EcException;
 
@@ -22,8 +22,8 @@ public class EclipseAndroidManifestImplementer {
 				new AndroidManifestAccessor(EclipseProjectHelper.getProjectPath(fileInfoProvider));
 		fEcFeedTestRunner = 
 				fManifestAccessor.getTestingAppPackage() + 
-				"." + AndroidRunnerHelper.getEcFeedTestRunnerPrefix() + "." + 
-				AndroidRunnerHelper.getEcFeedTestRunnerName();
+				"." + AndroidBaseRunnerHelper.getEcFeedTestRunnerPrefix() + "." + 
+				AndroidBaseRunnerHelper.getEcFeedTestRunnerName();
 	}
 
 	public boolean contentImplemented() {

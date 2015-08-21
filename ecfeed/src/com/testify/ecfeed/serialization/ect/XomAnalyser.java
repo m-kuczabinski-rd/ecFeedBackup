@@ -95,9 +95,9 @@ public class XomAnalyser {
 		boolean runOnAndroid = Boolean.parseBoolean(
 				element.getAttributeValue(PARAMETER_IS_RUN_ON_ANDROID_ATTRIBUTE_NAME));
 
-		String androidRunner = element.getAttributeValue(ANDROID_RUNNER_ATTRIBUTE_NAME);
+		String androidBaseRunner = element.getAttributeValue(ANDROID_RUNNER_ATTRIBUTE_NAME);
 
-		ClassNode _class = new ClassNode(name, runOnAndroid, androidRunner);
+		ClassNode _class = new ClassNode(name, runOnAndroid, androidBaseRunner);
 
 		_class.setDescription(parseComments(element));
 		//we need to do it here, so the backward search for global parameters will work

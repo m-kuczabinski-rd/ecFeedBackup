@@ -9,6 +9,16 @@
 package com.testify.ecfeed.utils;
 
 public class StringHelper {
+	
+	public static boolean isNullOrEmpty(String str) {
+		if (str == null) {
+			return true;
+		}
+		if (str.isEmpty()) {
+			return true;
+		}
+		return false;
+	}
 
 	public static boolean isTrimmedEmpty(String str) {
 		return str.trim().isEmpty();

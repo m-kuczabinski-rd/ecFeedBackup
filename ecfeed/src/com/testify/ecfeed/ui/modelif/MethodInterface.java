@@ -34,7 +34,7 @@ import com.testify.ecfeed.adapter.operations.MethodOperationAddTestCase;
 import com.testify.ecfeed.adapter.operations.MethodOperationAddTestSuite;
 import com.testify.ecfeed.adapter.operations.MethodOperationConvertTo;
 import com.testify.ecfeed.adapter.operations.MethodOperationRenameTestCases;
-import com.testify.ecfeed.android.AndroidRunnerHelper;
+import com.testify.ecfeed.android.AndroidBaseRunnerHelper;
 import com.testify.ecfeed.generators.api.EcException;
 import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.model.ClassNode;
@@ -59,6 +59,7 @@ import com.testify.ecfeed.ui.dialogs.AddTestCaseDialog;
 import com.testify.ecfeed.ui.dialogs.CalculateCoverageDialog;
 import com.testify.ecfeed.ui.dialogs.RenameTestSuiteDialog;
 import com.testify.ecfeed.ui.dialogs.SelectCompatibleMethodDialog;
+import com.testify.ecfeed.utils.StringHelper;
 import com.testify.ecfeed.utils.SystemLogger;
 
 public class MethodInterface extends ParametersParentInterface {
@@ -235,7 +236,7 @@ public class MethodInterface extends ParametersParentInterface {
 
 		ClassNode classNode = (ClassNode)getTarget().getParent();
 
-		if (classNode.getRunOnAndroid() && emptyAndroidRunner(classNode)) {
+		if (classNode.getRunOnAndroid() && emptyAndroidBaseRunner(classNode)) {
 			MessageDialog.openError(
 					Display.getDefault().getActiveShell(), 
 					Messages.DIALOG_MISSING_ANDROID_RUNNER_TITLE,
@@ -255,25 +256,14 @@ public class MethodInterface extends ParametersParentInterface {
 		}
 
 		String projectPath = EclipseProjectHelper.getProjectPath(fileInfoProvider);
-		String androidRunner = AndroidRunnerHelper.createFullAndroidRunnerName(projectPath);
+		String androidBaseRunner = AndroidBaseRunnerHelper.createFullAndroidBaseRunnerName(projectPath);
 
-		return new AndroidTestMethodInvoker(androidRunner);
+		return new AndroidTestMethodInvoker(androidBaseRunner);
 	}
 
-	private boolean emptyAndroidRunner(ClassNode classNode) {
-		String androidRunner = classNode.getAndroidBaseRunner();
-		return emptyAndroidRunner(androidRunner);
-	}
-
-	private boolean emptyAndroidRunner(String androidRunner) {
-
-		if (androidRunner == null)
-			return true;
-
-		if (androidRunner.isEmpty())
-			return true;
-
-		return false;
+	private boolean emptyAndroidBaseRunner(ClassNode classNode) {
+		String androidBaseRunner = classNode.getAndroidBaseRunner();
+		return StringHelper.isNullOrEmpty(androidBaseRunner);
 	}
 
 	public Collection<TestCaseNode> getTestCases(String testSuite){

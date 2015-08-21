@@ -55,7 +55,6 @@ import static com.testify.ecfeed.serialization.ect.Constants.VALUE_ATTRIBUTE;
 import static com.testify.ecfeed.serialization.ect.Constants.VALUE_ATTRIBUTE_NAME;
 import static com.testify.ecfeed.serialization.ect.Constants.PARAMETER_IS_RUN_ON_ANDROID_ATTRIBUTE_NAME;
 import static com.testify.ecfeed.serialization.ect.Constants.ANDROID_RUNNER_ATTRIBUTE_NAME;
-
 import nu.xom.Attribute;
 import nu.xom.Element;
 import nu.xom.Elements;
@@ -80,6 +79,7 @@ import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.StatementArray;
 import com.testify.ecfeed.model.StaticStatement;
 import com.testify.ecfeed.model.TestCaseNode;
+import com.testify.ecfeed.utils.StringHelper;
 
 public class XomBuilder implements IModelVisitor, IStatementVisitor {
 
@@ -124,24 +124,17 @@ public class XomBuilder implements IModelVisitor, IStatementVisitor {
 						PARAMETER_IS_RUN_ON_ANDROID_ATTRIBUTE_NAME,  
 						Boolean.toString(runOnAndroid)));
 
-		String androidRunner = classNode.getAndroidBaseRunner();
+		String androidBaseRunner = classNode.getAndroidBaseRunner();
 
-		if (!runOnAndroid && isEmptyOrNull(androidRunner)) {
+		if (!runOnAndroid && StringHelper.isNullOrEmpty(androidBaseRunner)) {
 			return;
 		}
 
-		if (androidRunner == null) {
-			androidRunner = "";
+		if (androidBaseRunner == null) {
+			androidBaseRunner = "";
 		}
 
-		element.addAttribute(new Attribute(ANDROID_RUNNER_ATTRIBUTE_NAME, androidRunner));
-	}
-
-	private boolean isEmptyOrNull(String str) {
-		if (str == null) {
-			return true;
-		}
-		return str.isEmpty(); 
+		element.addAttribute(new Attribute(ANDROID_RUNNER_ATTRIBUTE_NAME, androidBaseRunner));
 	}
 
 	@Override

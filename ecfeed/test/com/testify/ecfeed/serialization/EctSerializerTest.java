@@ -55,8 +55,8 @@ public class EctSerializerTest {
 		}
 	}
 
-	private void classSerializerTest(boolean runOnAndroid, String androidRunner){
-		ClassNode classNode = new ClassNode("com.example.TestClass", runOnAndroid, androidRunner);
+	private void classSerializerTest(boolean runOnAndroid, String androidBaseRunner){
+		ClassNode classNode = new ClassNode("com.example.TestClass", runOnAndroid, androidBaseRunner);
 		classNode.addMethod(new MethodNode("testMethod1"));
 		classNode.addMethod(new MethodNode("testMethod2"));
 		classNode.addParameter(new GlobalParameterNode("parameter1", "int"));
@@ -78,12 +78,12 @@ public class EctSerializerTest {
 	}
 
 	@Test
-	public void classSerializerTestWithAndroidRunner(){
-		classSerializerTest(true, "com.example.AndroidRunner");
+	public void classSerializerTestWithAndroidBaseRunner(){
+		classSerializerTest(true, "com.example.AndroidBaseRunner");
 	}
 
 	@Test
-	public void classSerializerTestWithoutAndroidRunner(){
+	public void classSerializerTestWithoutAndroidBaseRunner(){
 		classSerializerTest(false, null);
 	}	
 

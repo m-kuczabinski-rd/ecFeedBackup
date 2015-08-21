@@ -14,7 +14,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.Method;
 
-import com.testify.ecfeed.android.AndroidRunnerHelper;
+import com.testify.ecfeed.android.AndroidBaseRunnerHelper;
 import com.testify.ecfeed.runner.ITestMethodInvoker;
 import com.testify.ecfeed.runner.Messages;
 import com.testify.ecfeed.runner.RunnerException;
@@ -149,7 +149,7 @@ public class AndroidTestMethodInvoker implements ITestMethodInvoker {
 			return true;
 		}
 
-		if (trimmedLine.contains("Test results for " + AndroidRunnerHelper.getEcFeedTestRunnerName())) {
+		if (trimmedLine.contains("Test results for " + AndroidBaseRunnerHelper.getEcFeedTestRunnerName())) {
 			return true;
 		}
 

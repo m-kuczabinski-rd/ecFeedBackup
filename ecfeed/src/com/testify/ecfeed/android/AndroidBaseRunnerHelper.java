@@ -3,9 +3,9 @@ package com.testify.ecfeed.android;
 import com.testify.ecfeed.android.project.AndroidManifestAccessor;
 import com.testify.ecfeed.generators.api.EcException;
 
-public class AndroidRunnerHelper {
+public class AndroidBaseRunnerHelper {
 
-	public static String getDefaultBaseAndroidRunnerName() {
+	public static String getDefaultAndroidBaseRunnerName() {
 		return "android.test.InstrumentationTestRunner";
 	}
 
@@ -17,7 +17,7 @@ public class AndroidRunnerHelper {
 		return "ecFeed.android";
 	}
 
-	public static String createFullAndroidRunnerName(String projectPath) throws EcException {
+	public static String createFullAndroidBaseRunnerName(String projectPath) throws EcException {
 		String testingAppPackage = getTestingAppPackage(projectPath);
 
 		if (testingAppPackage == null) {
@@ -27,7 +27,7 @@ public class AndroidRunnerHelper {
 		return testingAppPackage + "/" + qualifiedRunnerName(testingAppPackage); 
 	}
 
-	public static String createAndroidRunnerName(String projectPath) throws EcException {
+	public static String createAndroidBaseRunnerName(String projectPath) throws EcException {
 		String testingAppPackage = getTestingAppPackage(projectPath);
 
 		if (testingAppPackage == null) {

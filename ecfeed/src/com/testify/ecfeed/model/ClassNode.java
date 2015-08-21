@@ -59,10 +59,10 @@ public class ClassNode extends GlobalParametersParentNode {
 		this(qualifiedName, false, null);
 	}
 
-	public ClassNode(String qualifiedName, boolean runOnAndroid, String androidRunner) {
+	public ClassNode(String qualifiedName, boolean runOnAndroid, String androidBaseRunner) {
 		super(qualifiedName);
 		fRunOnAndroid = runOnAndroid;
-		fAndroidBaseRunner = androidRunner;
+		fAndroidBaseRunner = androidBaseRunner;
 		fMethods = new ArrayList<MethodNode>();
 	}
 
