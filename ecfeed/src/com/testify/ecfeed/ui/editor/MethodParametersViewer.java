@@ -148,7 +148,7 @@ public class MethodParametersViewer extends AbstractParametersViewer {
 			String[] items = fComboCellEditor.getItems();
 			return Arrays.asList(items).indexOf(defaultValue);
 
-//			return ((MethodParameterNode)element).getDefaultValue();
+			//			return ((MethodParameterNode)element).getDefaultValue();
 		}
 
 		@Override
@@ -242,9 +242,9 @@ public class MethodParametersViewer extends AbstractParametersViewer {
 			ISectionContext sectionContext, 
 			IModelUpdateContext updateContext, 
 			IFileInfoProvider fileInfoProvider) {
-		super(sectionContext, updateContext, STYLE);
+		super(sectionContext, updateContext, fileInfoProvider, STYLE);
 		fFileInfoProvider = fileInfoProvider;
-		fParameterIf = (MethodParameterInterface)getParameterInterface();
+		fParameterIf = (MethodParameterInterface)getParameterInterface(fileInfoProvider);
 
 		getSection().setText("Parameters");
 		fExpectedColumn.setEditingSupport(new ExpectedValueEditingSupport());
@@ -307,7 +307,7 @@ public class MethodParametersViewer extends AbstractParametersViewer {
 	}
 
 	@Override
-	protected ParametersParentInterface getParametersParentInterface() {
+	protected ParametersParentInterface getParametersParentInterface(IFileInfoProvider fileInfoProvider) {
 		return getMethodIf();
 	}
 
@@ -319,7 +319,7 @@ public class MethodParametersViewer extends AbstractParametersViewer {
 	}
 
 	@Override
-	protected AbstractParameterInterface getParameterInterface() {
+	protected AbstractParameterInterface getParameterInterface(IFileInfoProvider fileInfoProvider) {
 		if(fParameterIf == null){
 			fParameterIf = new MethodParameterInterface(this, fFileInfoProvider);
 		}

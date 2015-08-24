@@ -68,7 +68,7 @@ public abstract class BasicDetailsPage implements IDetailsPage, IModelUpdateList
 	protected class GoToImplementationToolbarAction extends GoToImplementationAction{
 
 		public GoToImplementationToolbarAction() {
-			super(null);
+			super(null, fFileInforProvider);
 			setToolTipText("Go to node's implementation");
 			setImageDescriptor(getIconDescription("goto_impl.png"));
 		}
@@ -89,15 +89,20 @@ public abstract class BasicDetailsPage implements IDetailsPage, IModelUpdateList
 	private IModelUpdateContext fModelUpdateContext;
 	private AbstractNode fSelectedNode;
 	private IModelImplementer fImplementer;
+	private IFileInfoProvider fFileInforProvider;
 	private Button fImplementButton;
 	private ToolBarManager fToolBarManager;
 
-	public BasicDetailsPage(ModelMasterSection masterSection, IModelUpdateContext updateContext, IFileInfoProvider fileInforProvider){
+	public BasicDetailsPage(
+			ModelMasterSection masterSection, 
+			IModelUpdateContext updateContext, 
+			IFileInfoProvider fileInforProvider){
 		fMasterSection = masterSection;
 		fForms = new ArrayList<IFormPart>();
 		fViewerSections = new ArrayList<ViewerSection>();
 		fModelUpdateContext = updateContext;
 		fImplementer = new EclipseModelImplementer(fileInforProvider);
+		fFileInforProvider = fileInforProvider;
 	}
 
 	@Override

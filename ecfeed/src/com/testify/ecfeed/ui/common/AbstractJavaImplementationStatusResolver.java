@@ -17,27 +17,33 @@ import com.testify.ecfeed.model.MethodNode;
 
 public abstract class AbstractJavaImplementationStatusResolver extends CachedImplementationStatusResolver{
 
+	boolean fIsAndroidProject;
+
 	public AbstractJavaImplementationStatusResolver(
-			IPrimitiveTypePredicate primitiveTypePredicate) {
+			IPrimitiveTypePredicate primitiveTypePredicate, boolean isAndroidProject) {
 		super(primitiveTypePredicate);
+		fIsAndroidProject = isAndroidProject;
 	}
 
 	protected abstract boolean androidCodeImplemented(ClassNode classNode) throws EcException;
 
 	protected EImplementationStatus implementationStatus(ClassNode classNode) throws EcException{
-		if (classNode.getRunOnAndroid() && !androidCodeImplemented(classNode)) {
-			return EImplementationStatus.NOT_IMPLEMENTED;
+		if(fIsAndroidProject) {
+			if (classNode.getRunOnAndroid() && !androidCodeImplemented(classNode)) {
+				return EImplementationStatus.NOT_IMPLEMENTED;
+			}			
 		}
 		return super.implementationStatus(classNode);
 	}
 
 	protected EImplementationStatus implementationStatus(MethodNode method) throws EcException{
-		ClassNode classNode = method.getClassNode();
+		if(fIsAndroidProject) {
+			ClassNode classNode = method.getClassNode();
 
-		if (classNode.getRunOnAndroid() && !androidCodeImplemented(classNode)) {
-			return EImplementationStatus.NOT_IMPLEMENTED;
+			if (classNode.getRunOnAndroid() && !androidCodeImplemented(classNode)) {
+				return EImplementationStatus.NOT_IMPLEMENTED;
+			}
 		}
-
 		return super.implementationStatus(method);
 	}
 }

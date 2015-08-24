@@ -60,7 +60,9 @@ public class ModelDetailsPage extends BasicDetailsPage {
 		createModelNameEdit(getMainComposite());
 		addForm(fComments = new ExportableSingleTextCommentsSection(this, this, fFileInfoProvider));
 		addViewerSection(fClassesSection = new ClassViewer(this, this, fFileInfoProvider));
-		addViewerSection(fParametersSection = new GlobalParametersViewer(this, this, fFileInfoProvider));
+
+		fParametersSection = new GlobalParametersViewer(this, this, fFileInfoProvider);
+		addViewerSection(fParametersSection);
 
 		getToolkit().paintBordersFor(getMainComposite());
 	}

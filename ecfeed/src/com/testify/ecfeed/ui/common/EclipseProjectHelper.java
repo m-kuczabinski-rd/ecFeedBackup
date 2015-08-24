@@ -8,8 +8,9 @@
 
 package com.testify.ecfeed.ui.common;
 
+import com.testify.ecfeed.android.project.AndroidManifestAccessor;
 import com.testify.ecfeed.generators.api.EcException;
-
+import com.testify.ecfeed.utils.SystemLogger;
 
 public class EclipseProjectHelper {
 
@@ -21,4 +22,20 @@ public class EclipseProjectHelper {
 
 		return fileInfoProvider.getProject().getLocation().toOSString();
 	}
+
+	public static boolean isAndroidProject(IFileInfoProvider fileInfoProvider) {
+		String projectPath = null;
+
+		try {
+			projectPath = EclipseProjectHelper.getProjectPath(fileInfoProvider);
+		} catch (Exception e){
+			SystemLogger.logCatch(e.getMessage());
+			return false;
+		}
+
+		if(AndroidManifestAccessor.androidManifestExists(projectPath)) {
+			return true;
+		}
+		return false;
+	}	
 }

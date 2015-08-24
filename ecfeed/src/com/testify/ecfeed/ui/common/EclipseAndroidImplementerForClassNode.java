@@ -16,14 +16,14 @@ import com.testify.ecfeed.android.project.AndroidManifestAccessor;
 import com.testify.ecfeed.generators.api.EcException;
 import com.testify.ecfeed.model.ClassNode;
 
-public class EclipseEctImplementerForClassNode {
+public class EclipseAndroidImplementerForClassNode {
 
 	EclipseLoggerClassImplementer fLoggerClassImplementer;
 	EclipseRunnerClassImplementer fRunnerClassImplementer;
 	EclipseTestClassImplementer fTestClassImplementer;
 	EclipseAndroidManifestImplementer fAndroidManifestImplementer; 
 
-	EclipseEctImplementerForClassNode(
+	EclipseAndroidImplementerForClassNode(
 			IFileInfoProvider fileInfoProvider,
 			ClassNode classNode) throws EcException {
 

@@ -27,8 +27,6 @@ import com.testify.ecfeed.ui.modelif.ParametersParentInterface;
 public class GlobalParametersViewer extends AbstractParametersViewer {
 
 	private final static int STYLE = Section.EXPANDED | Section.TITLE_BAR;
-
-	private IFileInfoProvider fFileInfoProvider;
 	private GlobalParametersParentInterface fParentIf;
 	private GlobalParameterInterface fParameterIf;
 
@@ -36,20 +34,20 @@ public class GlobalParametersViewer extends AbstractParametersViewer {
 			ISectionContext sectionContext, 
 			IModelUpdateContext updateContext,
 			IFileInfoProvider fileInfoProvider) {
-		super(sectionContext, updateContext, STYLE);
-		fFileInfoProvider = fileInfoProvider;
+		super(sectionContext, updateContext, fileInfoProvider, STYLE);
+
 		getSection().setText("Global parameters");
 		getViewer().addDragSupport(DND.DROP_COPY|DND.DROP_MOVE|DND.DROP_LINK, new Transfer[]{ModelNodesTransfer.getInstance()}, new ModelNodeDragListener(getViewer()));
 	}
 
 	@Override
-	protected ParametersParentInterface getParametersParentInterface() {
-		return getGlobalParametersParentIf();
+	protected ParametersParentInterface getParametersParentInterface(IFileInfoProvider fileInfoProvider) {
+		return getGlobalParametersParentIf(fileInfoProvider);
 	}
 
-	protected ParametersParentInterface getGlobalParametersParentIf() {
+	protected ParametersParentInterface getGlobalParametersParentIf(IFileInfoProvider fileInfoProvider) {
 		if(fParentIf == null){
-			fParentIf = new GlobalParametersParentInterface(this, fFileInfoProvider);
+			fParentIf = new GlobalParametersParentInterface(this, fileInfoProvider);
 		}
 		return fParentIf;
 	}
@@ -60,9 +58,9 @@ public class GlobalParametersViewer extends AbstractParametersViewer {
 	}
 
 	@Override
-	protected AbstractParameterInterface getParameterInterface() {
+	protected AbstractParameterInterface getParameterInterface(IFileInfoProvider fileInfoProvider) {
 		if(fParameterIf == null){
-			fParameterIf = new GlobalParameterInterface(this, fFileInfoProvider);
+			fParameterIf = new GlobalParameterInterface(this, fileInfoProvider);
 		}
 		return fParameterIf;
 	}

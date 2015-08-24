@@ -26,15 +26,15 @@ public class EclipseImplementationStatusResolver extends AbstractJavaImplementat
 	IFileInfoProvider fFileInfoProvider;
 
 	public EclipseImplementationStatusResolver(IFileInfoProvider fileInfoProvider){
-		super(new JavaPrimitiveTypePredicate());
+		super(new JavaPrimitiveTypePredicate(), EclipseProjectHelper.isAndroidProject(fileInfoProvider));
 		fFileInfoProvider = fileInfoProvider;
 	}
 
 	@Override
 	protected boolean androidCodeImplemented(ClassNode classNode) throws EcException {
-		EclipseEctImplementerForClassNode implementer = 
-				new EclipseEctImplementerForClassNode(fFileInfoProvider, classNode);
-		
+		EclipseAndroidImplementerForClassNode implementer = 
+				new EclipseAndroidImplementerForClassNode(fFileInfoProvider, classNode);
+
 		return implementer.contentImplemented();
 	}
 

@@ -38,6 +38,7 @@ import com.testify.ecfeed.utils.SystemLogger;
 
 public class ClassDetailsPage extends BasicDetailsPage {
 
+	private boolean fIsAndroidProject;
 	private IFileInfoProvider fFileInfoProvider;
 	private MethodsViewer fMethodsSection;
 	private OtherMethodsViewer fOtherMethodsSection;
@@ -121,6 +122,7 @@ public class ClassDetailsPage extends BasicDetailsPage {
 	public ClassDetailsPage(ModelMasterSection masterSection, IModelUpdateContext updateContext, IFileInfoProvider fileInfoProvider) {
 		super(masterSection, updateContext, fileInfoProvider);
 		fFileInfoProvider = fileInfoProvider;
+		fIsAndroidProject = EclipseProjectHelper.isAndroidProject(fFileInfoProvider);
 		fClassIf = new ClassInterface(this, fFileInfoProvider);
 	}
 
@@ -152,8 +154,10 @@ public class ClassDetailsPage extends BasicDetailsPage {
 		Composite packageAndClassComposite = getToolkit().createComposite(mainComposite);
 		initAndFillClassComposite(packageAndClassComposite);
 
-		Composite androidComposite = getToolkit().createComposite(mainComposite);
-		initAndFillAndroidComposite(androidComposite);
+		if (fIsAndroidProject) {
+			Composite androidComposite = getToolkit().createComposite(mainComposite);
+			initAndFillAndroidComposite(androidComposite);
+		}
 	}
 
 	private void initAndFillClassComposite(Composite composite) {
@@ -172,7 +176,7 @@ public class ClassDetailsPage extends BasicDetailsPage {
 		fPackageNameText.addSelectionListener(new PackageNameSelectionListener());
 
 		// col 3 empty
-		getToolkit().createLabel(composite, ""); // TODO
+		getToolkit().createLabel(composite, "");
 
 
 		// row 2
@@ -194,7 +198,6 @@ public class ClassDetailsPage extends BasicDetailsPage {
 	}
 
 	private void initAndFillAndroidComposite(Composite composite) {
-
 		composite.setLayout(new GridLayout(2, false));
 		composite.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
 
@@ -207,7 +210,6 @@ public class ClassDetailsPage extends BasicDetailsPage {
 		checkboxGridData.horizontalSpan = 2;
 		fRunOnAndroidCheckbox.setLayoutData(checkboxGridData);
 		fRunOnAndroidCheckbox.addSelectionListener(new RunOnAndroidCheckBoxAdapter());
-
 
 		// row 2
 
@@ -261,19 +263,9 @@ public class ClassDetailsPage extends BasicDetailsPage {
 			fClassNameText.setText(fClassIf.getLocalName());
 			fPackageNameText.setText(fClassIf.getPackageName());
 
-			boolean runOnAndroid = fClassIf.getRunOnAndroid(); 
-			fRunOnAndroidCheckbox.setSelection(runOnAndroid);
-
-			fAndroidBaseRunnerLabel.setEnabled(runOnAndroid);
-			fAndroidBaseRunnerCombo.setEnabled(runOnAndroid);
-
-			String androidBaseRunner = fClassIf.getAndroidBaseRunner();
-
-			if (androidBaseRunner == null) {
-				androidBaseRunner = "";
+			if (fIsAndroidProject) {
+				refreshAndroid();
 			}
-
-			fAndroidBaseRunnerCombo.setText(androidBaseRunner);
 
 			fMethodsSection.setInput(selectedClass);
 			fGlobalParametersSection.setInput(selectedClass);
@@ -283,6 +275,22 @@ public class ClassDetailsPage extends BasicDetailsPage {
 
 			getMainSection().layout();
 		}
+	}
+
+	private void refreshAndroid() {
+		boolean runOnAndroid = fClassIf.getRunOnAndroid(); 
+		fRunOnAndroidCheckbox.setSelection(runOnAndroid);
+
+		fAndroidBaseRunnerLabel.setEnabled(runOnAndroid);
+		fAndroidBaseRunnerCombo.setEnabled(runOnAndroid);
+
+		String androidBaseRunner = fClassIf.getAndroidBaseRunner();
+
+		if (androidBaseRunner == null) {
+			androidBaseRunner = "";
+		}
+
+		fAndroidBaseRunnerCombo.setText(androidBaseRunner);
 	}
 
 	@Override

@@ -72,7 +72,7 @@ public class ModelViewerActionProvider extends ActionGroups {
 	private void addImplementationActions(StructuredViewer viewer, IModelUpdateContext context, IFileInfoProvider fileInfoProvider) {
 		IModelImplementer implementer = new EclipseModelImplementer(fileInfoProvider);
 		addAction("implement", new ImplementAction(viewer, context, implementer));
-		addAction("implement", new GoToImplementationAction(viewer));
+		addAction("implement", new GoToImplementationAction(viewer, fileInfoProvider));
 	}
 
 	private void addMoveActions(ISelectionProvider selectionProvider, IModelUpdateContext context){

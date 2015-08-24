@@ -28,6 +28,7 @@ import org.eclipse.swt.layout.GridData;
 
 import com.testify.ecfeed.model.AbstractParameterNode;
 import com.testify.ecfeed.model.ParametersParentNode;
+import com.testify.ecfeed.ui.common.IFileInfoProvider;
 import com.testify.ecfeed.ui.common.NodeNameColumnLabelProvider;
 import com.testify.ecfeed.ui.common.NodeViewerColumnLabelProvider;
 import com.testify.ecfeed.ui.editor.actions.DeleteAction;
@@ -44,6 +45,7 @@ public abstract class AbstractParametersViewer extends TableViewerSection {
 	private TableViewerColumn fTypeColumn;
 
 	private ParametersParentInterface fParentIf;
+	private IFileInfoProvider fFileInfoProvider;
 
 	protected class ParameterTypeEditingSupport extends EditingSupport {
 
@@ -99,12 +101,12 @@ public abstract class AbstractParametersViewer extends TableViewerSection {
 				newType = ((CCombo)fCellEditor.getControl()).getText();
 			}
 			if(newType.equals(BROWSE_PARAMETER_TYPE_STRING)){
-				getParameterInterface().setTarget(node);
-				getParameterInterface().importType();
+				getParameterInterface(fFileInfoProvider).setTarget(node);
+				getParameterInterface(fFileInfoProvider).importType();
 			}
 			else{
-				getParameterInterface().setTarget(node);
-				getParameterInterface().setType(newType);
+				getParameterInterface(fFileInfoProvider).setTarget(node);
+				getParameterInterface(fFileInfoProvider).setType(newType);
 			}
 
 			fCellEditor.setFocus();
@@ -138,8 +140,8 @@ public abstract class AbstractParametersViewer extends TableViewerSection {
 
 		@Override
 		protected void setValue(Object element, Object value) {
-			getParameterInterface().setTarget((AbstractParameterNode)element);
-			getParameterInterface().setName((String)value);
+			getParameterInterface(fFileInfoProvider).setTarget((AbstractParameterNode)element);
+			getParameterInterface(fFileInfoProvider).setName((String)value);
 		}
 	}
 
@@ -154,9 +156,14 @@ public abstract class AbstractParametersViewer extends TableViewerSection {
 		}
 	}
 
-	public AbstractParametersViewer(ISectionContext sectionContext, IModelUpdateContext updateContext, int STYLE) {
+	public AbstractParametersViewer(
+			ISectionContext sectionContext, 
+			IModelUpdateContext updateContext,
+			IFileInfoProvider fileInfoProvider,
+			int STYLE) {
 		super(sectionContext, updateContext, STYLE);
-		fParentIf = getParametersParentInterface();
+		fParentIf = getParametersParentInterface(fileInfoProvider);
+		fFileInfoProvider = fileInfoProvider;
 
 		GridData gd = new GridData(SWT.FILL, SWT.FILL, true, true);
 		gd.minimumHeight = 250;
@@ -192,6 +199,6 @@ public abstract class AbstractParametersViewer extends TableViewerSection {
 		return new ParameterTypeEditingSupport();
 	}
 
-	protected abstract ParametersParentInterface getParametersParentInterface();
-	protected abstract AbstractParameterInterface getParameterInterface();
+	protected abstract ParametersParentInterface getParametersParentInterface(IFileInfoProvider fileInfoProvider);
+	protected abstract AbstractParameterInterface getParameterInterface(IFileInfoProvider fileInfoProvider);
 }

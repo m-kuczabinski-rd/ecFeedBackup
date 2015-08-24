@@ -17,6 +17,7 @@ import java.util.List;
 
 import com.testify.ecfeed.generators.api.EcException;
 import com.testify.ecfeed.runner.Messages;
+import com.testify.ecfeed.utils.DiskFileHelper;
 
 import nu.xom.Attribute;
 import nu.xom.Builder;
@@ -60,17 +61,30 @@ public class AndroidManifestAccessor {
 	private Document fDocument;
 	private Element fRoot;
 
+	public static boolean androidManifestExists(String projectPath) {
+		String manifestPath = createQualifiedName(projectPath);
+
+		if(DiskFileHelper.fileExists(manifestPath)) {
+			return true;
+		}
+		return false;
+	}
+
 	public AndroidManifestAccessor(String projectPath) throws EcException {
 		Builder builder = new Builder();
 
 		try {
-			fManifestPath = projectPath + File.separator + "AndroidManifest.xml";
+			fManifestPath = createQualifiedName(projectPath);
 			fDocument = builder.build(fManifestPath);
 		} catch (ParsingException | IOException e) {
 			EcException.report(e.getMessage());
 		}
 
 		fRoot = fDocument.getRootElement();
+	}
+
+	private static String createQualifiedName(String projectPath) {
+		return projectPath + File.separator + "AndroidManifest.xml"; 
 	}
 
 	public String getTestingAppPackage() {
