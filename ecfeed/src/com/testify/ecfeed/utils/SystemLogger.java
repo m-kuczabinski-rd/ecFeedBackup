@@ -16,26 +16,56 @@ public class SystemLogger {
 
 	public static void logThrow(String message) {
 		logLine( EC_FEED_ERROR + ": Exception thrown");
-		logLine("\tMessage: " + message);
-		StackTraceElement element = new Throwable().getStackTrace()[TWO_LEVELS_DOWN_ON_STACK];
-		printStackTraceElement(element);
-	}
-	
-	public static void logCatch(String message) {
-		logLine(EC_FEED_ERROR + ": Exception caught");
-		logLine("\tMessage: " + message);
-		StackTraceElement element = new Throwable().getStackTrace()[ONE_LEVEL_DOWN_ON_STACK];
-		printStackTraceElement(element);
+		logIndentedLine("Message: " + message);
+
+		StackTraceElement[] stackElements = new Throwable().getStackTrace(); 
+		StackTraceElement currentElement = stackElements[TWO_LEVELS_DOWN_ON_STACK];
+		logCurrentStackElement(currentElement);
+		logStack(stackElements);
 	}
 
-	private static void printStackTraceElement(StackTraceElement element) {
-		logLine("\tFile: " + element.getFileName());
-		logLine("\tClass: " + element.getClassName());
-		logLine("\tMethod: " + element.getMethodName());
-		logLine("\tline: " + element.getLineNumber());		
+	public static void logCatch(String message) {
+		logLine(EC_FEED_ERROR + ": Exception caught");
+		logIndentedLine("Message: " + message);
+		StackTraceElement element = new Throwable().getStackTrace()[ONE_LEVEL_DOWN_ON_STACK];
+		logCurrentStackElement(element);
 	}
+
+	private static void logCurrentStackElement(StackTraceElement element) {
+		logIndentedLine("File: " + element.getFileName());
+		logIndentedLine("Class: " + element.getClassName());
+		logIndentedLine("Method: " + element.getMethodName());
+		logIndentedLine("Line: " + element.getLineNumber());		
+	}
+
+	private static void logStack(StackTraceElement[] stackElements) {
+		logIndentedLine("Stack:");
+		for (StackTraceElement element : stackElements) {
+			logStackElement(element);
+		}
+		logEmptyLine();
+	}
+
+	private static void logStackElement(StackTraceElement element) {
+		logIndented2Line(
+				"Class: " + element.getClassName() + ", " + 
+						"Method: " + element.getMethodName() + ", " +
+						"Line: " + element.getLineNumber());
+	}
+
+	private static void logIndentedLine(String line) {
+		System.out.println("\t" + line);
+	}
+
+	private static void logIndented2Line(String line) {
+		System.out.println("\t\t" + line);
+	}	
 
 	private static void logLine(String line) {
 		System.out.println(line);
 	}
+
+	private static void logEmptyLine() {
+		System.out.println("");
+	}	
 }
