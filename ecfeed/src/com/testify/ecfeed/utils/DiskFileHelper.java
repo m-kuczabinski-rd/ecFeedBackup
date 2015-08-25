@@ -19,6 +19,9 @@ public class DiskFileHelper {
 			return true;
 		}
 		return false;
+	}
 
+	public static String joinPathWithFile(String path, String file) {
+		return path + File.separator + file; 
 	}
 }

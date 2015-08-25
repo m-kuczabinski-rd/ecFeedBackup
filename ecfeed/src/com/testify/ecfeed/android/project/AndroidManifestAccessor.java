@@ -48,14 +48,20 @@ public class AndroidManifestAccessor {
 			}
 			if (!fTargetPackage.equals(runner.fTargetPackage)) {
 				return false;
-			}			
+			}
 			return true;
 		}
-	}	
+	}
 
-	final String ATTRIBUTE_NAMESPACE = "android"; 
-	final String ATTRIBUTE_NAME = "name";
-	final String ATTRIBUTE_TARGET_PACKAGE = "targetPackage";
+	private static final String ATTRIBUTE_ANDROID = "android";
+	private static final String ATTRIBUTE_NAME = "name";
+	private static final String ATTRIBUTE_TARGET_PACKAGE = "targetPackage";
+	private static final String ATTRIBUTE_PACKAGE = "package";
+	private static final String ATTRIBUTE_VERSION_CODE = "versionCode";
+	private static final String ATTRIBUTE_VERSION_NAME = "versionName";
+	private static final String ATTRIBUTE_SEPARATOR = ":";
+	private static final String NODE_NAME_INSTRUMENTATION = "instrumentation";
+	private static final String ANDROID_MANIFEST_FILE = "AndroidManifest.xml";
 
 	private String fManifestPath;
 	private Document fDocument;
@@ -75,6 +81,7 @@ public class AndroidManifestAccessor {
 
 		try {
 			fManifestPath = createQualifiedName(projectPath);
+
 			fDocument = builder.build(fManifestPath);
 		} catch (ParsingException | IOException e) {
 			EcException.report(e.getMessage());
@@ -84,24 +91,25 @@ public class AndroidManifestAccessor {
 	}
 
 	private static String createQualifiedName(String projectPath) {
-		return projectPath + File.separator + "AndroidManifest.xml"; 
+		return DiskFileHelper.joinPathWithFile(projectPath, ANDROID_MANIFEST_FILE);
 	}
 
 	public String getTestingAppPackage() {
-		return fRoot.getAttributeValue("package");
+		return fRoot.getAttributeValue(ATTRIBUTE_PACKAGE);
 	}
 
 	public String getDefaultTestedAppPackage() {
 		Elements children = fRoot.getChildElements();
 
-		for(int index = 0; index < children.size(); index++) {
+		for (int index = 0; index < children.size(); index++) {
 			Element element = children.get(index);
 
-			if (!isInstrumentationNode(element)) {
+			if(!isInstrumentationNode(element)) {
 				continue;
 			}
 
-			return getQualifiedAttribute(element, ATTRIBUTE_NAMESPACE, ATTRIBUTE_TARGET_PACKAGE);
+			return getQualifiedAttribute(element, ATTRIBUTE_ANDROID,
+					ATTRIBUTE_TARGET_PACKAGE);
 		}
 		return null;
 	}
@@ -109,23 +117,23 @@ public class AndroidManifestAccessor {
 	public List<String> getRunnerNames() {
 		List<String> names = new ArrayList<String>();
 
-		if(fDocument == null) {
+		if (fDocument == null) {
 			return names;
 		}
 
 		addRunnerNamesFromManifest(names);
 		return names;
-	}	
+	}
 
 	public List<Runner> getRunners() {
 		List<Runner> runners = new ArrayList<Runner>();
 
-		if(fDocument == null) {
+		if (fDocument == null) {
 			return runners;
 		}
 		addRunnersFromManifest(runners);
 		return runners;
-	}	
+	}
 
 	public boolean containsRunner(String runnerName) {
 		List<String> names = getRunnerNames();
@@ -145,33 +153,38 @@ public class AndroidManifestAccessor {
 		return false;
 	}
 
-	public void supplementRunner(String runnerName, String targetPackage) throws EcException {
+	public void supplementRunner(String runnerName, String targetPackage)
+			throws EcException {
 		if (containsRunner(runnerName, targetPackage)) {
 			return;
 		}
 
-		Element newRunnerElement = new Element("instrumentation");
+		Element newRunnerElement = new Element(NODE_NAME_INSTRUMENTATION);
 		String namespaceURI = getNamespaceURI();
 
-		addAttributeTo(newRunnerElement, namespaceURI, ATTRIBUTE_NAME, runnerName);
-		addAttributeTo(newRunnerElement, namespaceURI, ATTRIBUTE_TARGET_PACKAGE, targetPackage);
+		addAttributeTo(newRunnerElement, namespaceURI, ATTRIBUTE_NAME,
+				runnerName);
+		addAttributeTo(newRunnerElement, namespaceURI,
+				ATTRIBUTE_TARGET_PACKAGE, targetPackage);
 
-		fRoot.insertChild(newRunnerElement, getLastInstrumentationNodeIndex() + 1);
+		fRoot.insertChild(newRunnerElement,
+				getLastInstrumentationNodeIndex() + 1);
 		writeDocument();
 	}
 
 	private String getNamespaceURI() {
-		String attributeURI = getAttributeURI(fRoot, ATTRIBUTE_NAMESPACE, "versionCode");
+		String attributeURI = getAttributeURI(fRoot, ATTRIBUTE_ANDROID, ATTRIBUTE_VERSION_CODE);
 
 		if (attributeURI != null) {
 			return attributeURI; 
 		}
 
-		return getAttributeURI(fRoot, ATTRIBUTE_NAMESPACE, "versionName");
+		return getAttributeURI(fRoot, ATTRIBUTE_ANDROID, ATTRIBUTE_VERSION_NAME);
 	}
 
-	private void addAttributeTo(Element element, String namespaceURI, String name, String value) {
-		Attribute attr = new Attribute(ATTRIBUTE_NAMESPACE + ":" + name, namespaceURI, value);
+	private void addAttributeTo(Element element, String namespaceURI,
+			String name, String value) {
+		Attribute attr = new Attribute(ATTRIBUTE_ANDROID + ATTRIBUTE_SEPARATOR + name, namespaceURI, value);
 		element.addAttribute(attr);
 	}
 
@@ -179,7 +192,7 @@ public class AndroidManifestAccessor {
 		int lastInstrumentationIndex = -1;
 		Elements children = fRoot.getChildElements();
 
-		for(int index = 0; index < children.size(); index++) {
+		for (int index = 0; index < children.size(); index++) {
 			Element element = children.get(index);
 
 			if (isInstrumentationNode(element)) {
@@ -196,22 +209,24 @@ public class AndroidManifestAccessor {
 		try {
 			stream = new FileOutputStream(file);
 		} catch (FileNotFoundException e) {
-			EcException.report(Messages.CAN_NOT_OPEN_ANDROID_MANIFEST(fManifestPath));
-		}  
+			EcException.report(Messages
+					.CAN_NOT_OPEN_ANDROID_MANIFEST(fManifestPath));
+		}
 
 		Serializer serializer = new Serializer(stream);
 		serializer.setIndent(4);
 		try {
 			serializer.write(fDocument);
 		} catch (IOException e) {
-			EcException.report(Messages.CAN_NOT_SERIALIZE_TO_ANDROID_MANIFEST(fManifestPath));
-		}		
+			EcException.report(Messages
+					.CAN_NOT_SERIALIZE_TO_ANDROID_MANIFEST(fManifestPath));
+		}
 	}
 
 	private void addRunnerNamesFromManifest(List<String> runnerNames) {
 		Elements children = fRoot.getChildElements();
 
-		for(int index = 0; index < children.size(); index++) {
+		for (int index = 0; index < children.size(); index++) {
 			Element element = children.get(index);
 
 			if (isInstrumentationNode(element)) {
@@ -221,7 +236,8 @@ public class AndroidManifestAccessor {
 	}
 
 	private void addRunnerName(Element element, List<String> runnerNames) {
-		String runnerName = getQualifiedAttribute(element, ATTRIBUTE_NAMESPACE, ATTRIBUTE_NAME);
+		String runnerName = 
+				getQualifiedAttribute(element, ATTRIBUTE_ANDROID, ATTRIBUTE_NAME);
 
 		if (runnerName == null) {
 			return;
@@ -232,18 +248,20 @@ public class AndroidManifestAccessor {
 	private void addRunnersFromManifest(List<Runner> runners) {
 		Elements children = fRoot.getChildElements();
 
-		for(int index = 0; index < children.size(); index++) {
+		for (int index = 0; index < children.size(); index++) {
 			Element element = children.get(index);
 
 			if (isInstrumentationNode(element)) {
 				addRunner(element, runners);
 			}
 		}
-	}	
+	}
 
 	private void addRunner(Element element, List<Runner> runners) {
-		String runnerName = getQualifiedAttribute(element, ATTRIBUTE_NAMESPACE, ATTRIBUTE_NAME);
-		String targetPackage = getQualifiedAttribute(element, ATTRIBUTE_NAMESPACE, ATTRIBUTE_TARGET_PACKAGE);
+		String runnerName = 
+				getQualifiedAttribute(element, ATTRIBUTE_ANDROID, ATTRIBUTE_NAME);
+		String targetPackage = 
+				getQualifiedAttribute(element, ATTRIBUTE_ANDROID, ATTRIBUTE_TARGET_PACKAGE);
 
 		if (runnerName == null || targetPackage == null) {
 			return;
@@ -254,13 +272,14 @@ public class AndroidManifestAccessor {
 	private boolean isInstrumentationNode(Element element) {
 		String nodeName = element.getQualifiedName();
 
-		if (nodeName.equals("instrumentation")){
+		if (nodeName.equals(NODE_NAME_INSTRUMENTATION)) {
 			return true;
 		}
 		return false;
 	}
 
-	private String getQualifiedAttribute(Element element, String namespace, String name) {
+	private String getQualifiedAttribute(Element element, String namespace,
+			String name) {
 		int attributeCount = element.getAttributeCount();
 
 		for (int index = 0; index < attributeCount; index++) {
@@ -281,24 +300,21 @@ public class AndroidManifestAccessor {
 
 			if (hasCompatibleName(attribute, namespace, name)) {
 				return attribute.getNamespaceURI();
-			}			
+			}
 		}
 		return null;
 	}
 
 	private boolean hasCompatibleName(Attribute attribute, String namespace, String name) {
 		String namespacePrefix = attribute.getNamespacePrefix();
-
 		if (!namespace.equals(namespacePrefix)) {
 			return false;
 		}
 
 		String localName = attribute.getLocalName();
-
 		if (!localName.equals(name)) {
 			return false;
 		}
-
 		return true;
 	}
 }
