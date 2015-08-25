@@ -11,6 +11,7 @@ package com.testify.ecfeed.utils;
 public class SystemLogger {
 
 	private static final String EC_FEED_ERROR = "ECFEEDERR"; 
+	private static final String EC_FEED_INFO = "ECFEEDINF";
 	private static final int ONE_LEVEL_DOWN_ON_STACK = 1;  // level1: logCatch
 	private static final int TWO_LEVELS_DOWN_ON_STACK = 2; // level1: logThrow, level2 SomeException.report
 
@@ -36,6 +37,14 @@ public class SystemLogger {
 		logIndentedLine("Class: " + element.getClassName());
 		logIndentedLine("Method: " + element.getMethodName());
 		logIndentedLine("Line: " + element.getLineNumber());		
+	}
+
+	public static void logInfoWithStack(String message) {
+		logLine(EC_FEED_INFO + ": " + message);
+		StackTraceElement[] stackElements = new Throwable().getStackTrace();
+		StackTraceElement element = stackElements[ONE_LEVEL_DOWN_ON_STACK];
+		logCurrentStackElement(element);
+		logStack(stackElements);
 	}
 
 	private static void logStack(StackTraceElement[] stackElements) {

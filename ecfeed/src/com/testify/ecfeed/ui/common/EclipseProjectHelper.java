@@ -28,8 +28,13 @@ public class EclipseProjectHelper {
 	private static boolean fWasCalculated = false;
 	private static boolean fIsAndroidProject = false;
 
-	public static String getProjectPath(IFileInfoProvider fileInfoProvider) throws EcException {
+	private static void checkFileInfoProvider(IFileInfoProvider fileInfoProvider) {
+		if (fileInfoProvider == null) {
+			SystemLogger.logInfoWithStack(Messages.EXCEPTION_FILE_INFO_PROVIDER_NOT_NULL);
+		}
+	}
 
+	public static String getProjectPath(IFileInfoProvider fileInfoProvider) throws EcException {
 		if (fileInfoProvider == null) {
 			EcException.report(Messages.EXCEPTION_FILE_INFO_PROVIDER_NOT_NULL);
 		}
@@ -38,18 +43,28 @@ public class EclipseProjectHelper {
 	}
 
 	public static boolean isAndroidProject(IFileInfoProvider fileInfoProvider) {
+		checkFileInfoProvider(fileInfoProvider); 
+
 		if(fWasCalculated) {
 			return fIsAndroidProject;
 		}
-		if(isAndroidProjectDevelopmentHook(fileInfoProvider)
-				|| calculateFlagIsAndroidProject(fileInfoProvider)) {
-			fIsAndroidProject = true;
+
+		try {
+			if(isAndroidProjectDevelopmentHook(fileInfoProvider)
+					|| calculateFlagIsAndroidProject(fileInfoProvider)) {
+				fIsAndroidProject = true;
+			}
+		} catch (EcException e) {
+			SystemLogger.logCatch(e.getMessage());
 		}
+
 		fWasCalculated = true;
 		return fIsAndroidProject;
 	}
 
-	public static boolean isAndroidProjectDevelopmentHook(IFileInfoProvider fileInfoProvider) {
+	public static boolean isAndroidProjectDevelopmentHook(IFileInfoProvider fileInfoProvider) throws EcException {
+		checkFileInfoProvider(fileInfoProvider);
+
 		String projectPath = null;
 		try {
 			projectPath = EclipseProjectHelper.getProjectPath(fileInfoProvider);
@@ -65,7 +80,9 @@ public class EclipseProjectHelper {
 		return false;
 	}
 
-	private static boolean calculateFlagIsAndroidProject(IFileInfoProvider fileInfoProvider) {
+	private static boolean calculateFlagIsAndroidProject(IFileInfoProvider fileInfoProvider) throws EcException {
+		checkFileInfoProvider(fileInfoProvider);
+
 		IProject project = fileInfoProvider.getProject();
 
 		Map<QualifiedName, String> properties = null;
