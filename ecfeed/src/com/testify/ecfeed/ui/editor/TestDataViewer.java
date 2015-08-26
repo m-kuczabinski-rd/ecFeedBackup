@@ -44,7 +44,7 @@ public class TestDataViewer extends TableViewerSection implements ITestDataEdito
 			ISectionContext sectionContext, 
 			IModelUpdateContext updateContext, 
 			IFileInfoProvider fileInfoProvider) {
-		super(sectionContext, updateContext, STYLE);
+		super(sectionContext, updateContext, fileInfoProvider, STYLE);
 		fFileInfoProvider = fileInfoProvider;
 		getTestCaseInterface();
 		getSection().setText("Test data");

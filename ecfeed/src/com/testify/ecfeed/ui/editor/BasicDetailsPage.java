@@ -68,7 +68,7 @@ public abstract class BasicDetailsPage implements IDetailsPage, IModelUpdateList
 	protected class GoToImplementationToolbarAction extends GoToImplementationAction{
 
 		public GoToImplementationToolbarAction() {
-			super(null, fFileInforProvider);
+			super(null, fFileInfoProvider);
 			setToolTipText("Go to node's implementation");
 			setImageDescriptor(getIconDescription("goto_impl.png"));
 		}
@@ -89,20 +89,21 @@ public abstract class BasicDetailsPage implements IDetailsPage, IModelUpdateList
 	private IModelUpdateContext fModelUpdateContext;
 	private AbstractNode fSelectedNode;
 	private IModelImplementer fImplementer;
-	private IFileInfoProvider fFileInforProvider;
+	private IFileInfoProvider fFileInfoProvider;
 	private Button fImplementButton;
 	private ToolBarManager fToolBarManager;
 
 	public BasicDetailsPage(
 			ModelMasterSection masterSection, 
 			IModelUpdateContext updateContext, 
-			IFileInfoProvider fileInforProvider){
+			IFileInfoProvider fileInfoProvider){
+
 		fMasterSection = masterSection;
 		fForms = new ArrayList<IFormPart>();
 		fViewerSections = new ArrayList<ViewerSection>();
 		fModelUpdateContext = updateContext;
-		fImplementer = new EclipseModelImplementer(fileInforProvider);
-		fFileInforProvider = fileInforProvider;
+		fImplementer = new EclipseModelImplementer(fileInfoProvider);
+		fFileInfoProvider = fileInfoProvider;
 	}
 
 	@Override
@@ -128,6 +129,10 @@ public abstract class BasicDetailsPage implements IDetailsPage, IModelUpdateList
 		fMainComposite.setLayout(new GridLayout(1, false));
 		getToolkit().adapt(fMainComposite);
 		getMainSection().setClient(fMainComposite);
+	}
+
+	protected IFileInfoProvider getFileInfoProvider() {
+		return fFileInfoProvider;
 	}
 
 	protected ToolBar createToolBar(Section section) {

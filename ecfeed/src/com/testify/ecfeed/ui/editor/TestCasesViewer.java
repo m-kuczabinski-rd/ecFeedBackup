@@ -44,7 +44,6 @@ public class TestCasesViewer extends CheckboxTreeViewerSection {
 	private final static int STYLE = Section.EXPANDED | Section.TITLE_BAR;
 	private final static int VIEWER_STYLE = SWT.BORDER;
 
-	private IFileInfoProvider fFileInfoProvider;
 	private TestCasesViewerLabelProvider fLabelProvider;
 	private TestCasesViewerContentProvider fContentProvider;
 	private Button fExecuteSelectedButton;
@@ -69,9 +68,9 @@ public class TestCasesViewer extends CheckboxTreeViewerSection {
 	private class ExecuteStaticTestAdapter extends SelectionAdapter{
 		@Override
 		public void widgetSelected(SelectionEvent event){
-			
+
 			try {
-				fMethodIf.executeStaticTests(getCheckedTestCases(), fFileInfoProvider);
+				fMethodIf.executeStaticTests(getCheckedTestCases(), getFileInfoProvider());
 			}
 			catch (Exception e){
 				SystemLogger.logCatch(e.getMessage());
@@ -110,8 +109,7 @@ public class TestCasesViewer extends CheckboxTreeViewerSection {
 			ISectionContext sectionContext, 
 			IModelUpdateContext updateContext,
 			IFileInfoProvider fileInfoProvider) {
-		super(sectionContext, updateContext, STYLE);
-		fFileInfoProvider = fileInfoProvider;
+		super(sectionContext, updateContext, fileInfoProvider, STYLE);
 
 		GridData gd = new GridData(SWT.FILL, SWT.FILL, true, true);
 		gd.minimumHeight = 250;
@@ -193,7 +191,8 @@ public class TestCasesViewer extends CheckboxTreeViewerSection {
 	@Override
 	protected IBaseLabelProvider viewerLabelProvider() {
 		if(fLabelProvider == null){
-			fLabelProvider = new TestCasesViewerLabelProvider(fFileInfoProvider);
+			IFileInfoProvider fileInfoProvider = getFileInfoProvider();
+			fLabelProvider = new TestCasesViewerLabelProvider(fileInfoProvider);
 		}
 		return fLabelProvider;
 	}

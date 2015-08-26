@@ -43,6 +43,7 @@ import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.ui.actions.ActionFactory;
 
 import com.testify.ecfeed.model.AbstractNode;
+import com.testify.ecfeed.ui.common.IFileInfoProvider;
 import com.testify.ecfeed.ui.editor.actions.IActionProvider;
 import com.testify.ecfeed.ui.editor.actions.NamedAction;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
@@ -159,8 +160,12 @@ public abstract class ViewerSection extends ButtonsCompositeSection implements I
 
 	}
 
-	public ViewerSection(ISectionContext sectionContext, IModelUpdateContext updateContext, int style) {
-		super(sectionContext, updateContext, style);
+	public ViewerSection(
+			ISectionContext sectionContext, 
+			IModelUpdateContext updateContext, 
+			IFileInfoProvider fileInfoProvider, 
+			int style) {
+		super(sectionContext, updateContext, fileInfoProvider, style);
 		fSelectedElements = new ArrayList<>();
 		fKeyListsners = new HashSet<KeyListener>();
 	}
@@ -197,35 +202,35 @@ public abstract class ViewerSection extends ButtonsCompositeSection implements I
 		return fViewer;
 	}
 
-    @Override
+	@Override
 	public void addSelectionChangedListener(ISelectionChangedListener listener){
-    	fViewer.addSelectionChangedListener(listener);
-    }
+		fViewer.addSelectionChangedListener(listener);
+	}
 
-    @Override
+	@Override
 	public IStructuredSelection getSelection(){
-    	return (IStructuredSelection)fViewer.getSelection();
-    }
+		return (IStructuredSelection)fViewer.getSelection();
+	}
 
-    public List<AbstractNode> getSelectedNodes(){
-    	List<AbstractNode> result = new ArrayList<>();
+	public List<AbstractNode> getSelectedNodes(){
+		List<AbstractNode> result = new ArrayList<>();
 		for(Object o : getSelection().toList()){
-    		if(o instanceof AbstractNode){
-    			result .add((AbstractNode)o);
-    		}
-    	}
-    	return result;
-    }
+			if(o instanceof AbstractNode){
+				result .add((AbstractNode)o);
+			}
+		}
+		return result;
+	}
 
-    @Override
+	@Override
 	public void removeSelectionChangedListener(ISelectionChangedListener listener){
-    	fViewer.removeSelectionChangedListener(listener);
-    }
+		fViewer.removeSelectionChangedListener(listener);
+	}
 
-    @Override
+	@Override
 	public void setSelection(ISelection selection){
-    	fViewer.setSelection(selection);
-    }
+		fViewer.setSelection(selection);
+	}
 
 	@Override
 	protected Composite createClientComposite() {

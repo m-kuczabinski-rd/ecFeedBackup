@@ -52,7 +52,7 @@ public abstract class AbstractCommentsSection extends TabFolderSection {
 	}
 
 	private IFileInfoProvider fFileInfoProvider;
-	
+
 	private Button fEditButton;
 
 	private AbstractNode fTarget;
@@ -64,7 +64,7 @@ public abstract class AbstractCommentsSection extends TabFolderSection {
 			ISectionContext sectionContext, 
 			IModelUpdateContext updateContext,
 			IFileInfoProvider fileInfoProvider) {
-		super(sectionContext, updateContext, STYLE);
+		super(sectionContext, updateContext, fileInfoProvider, STYLE);
 		fFileInfoProvider = fileInfoProvider;
 
 		if(getTabFolder() != null){

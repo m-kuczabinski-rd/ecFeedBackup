@@ -55,7 +55,7 @@ public class ConstraintDetailsPage extends BasicDetailsPage {
 		super.createContents(parent);
 		createConstraintNameEdit(getMainComposite());
 		addForm(fCommentsSection = new SingleTextCommentsSection(this, this, fFileInfoProvider));
-		addViewerSection(fConstraintViewer = new ConstraintViewer(this, this));
+		addViewerSection(fConstraintViewer = new ConstraintViewer(this, this, fFileInfoProvider));
 	}
 
 	private void createConstraintNameEdit(Composite parent) {

@@ -17,14 +17,19 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Tree;
 
+import com.testify.ecfeed.ui.common.IFileInfoProvider;
 import com.testify.ecfeed.ui.editor.actions.IActionProvider;
 import com.testify.ecfeed.ui.editor.actions.NamedAction;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 
 public abstract class TreeViewerSection extends ViewerSection {
 
-	public TreeViewerSection(ISectionContext sectionContext, IModelUpdateContext updateContext, int style) {
-		super(sectionContext, updateContext, style);
+	public TreeViewerSection(
+			ISectionContext sectionContext, 
+			IModelUpdateContext updateContext,
+			IFileInfoProvider fileInfoProvider,
+			int style) {
+		super(sectionContext, updateContext, fileInfoProvider, style);
 	}
 
 	@Override
@@ -42,15 +47,15 @@ public abstract class TreeViewerSection extends ViewerSection {
 		TreeViewer treeViewer = new TreeViewer(tree);
 		return treeViewer;
 	}
-	
+
 	protected Tree getTree(){
 		return getTreeViewer().getTree();
 	}
-	
+
 	protected TreeViewer getTreeViewer(){
 		return (TreeViewer)getViewer();
 	}
-	
+
 	@Override
 	protected void setActionProvider(IActionProvider provider){
 		super.setActionProvider(provider);

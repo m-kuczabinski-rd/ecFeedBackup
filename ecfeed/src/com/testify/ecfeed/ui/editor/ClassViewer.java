@@ -146,7 +146,7 @@ public class ClassViewer extends TableViewerSection {
 			ISectionContext parent, 
 			IModelUpdateContext updateContext, 
 			IFileInfoProvider fileInfoProvider) {
-		super(parent, updateContext, STYLE);
+		super(parent, updateContext, fileInfoProvider, STYLE);
 
 		fFileInfoProvider = fileInfoProvider; 
 		fNameColumn.setEditingSupport(new LocalNameEditingSupport());

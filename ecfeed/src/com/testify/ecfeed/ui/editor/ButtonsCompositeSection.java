@@ -20,6 +20,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Layout;
 
+import com.testify.ecfeed.ui.common.IFileInfoProvider;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 
 
@@ -38,8 +39,12 @@ public class ButtonsCompositeSection extends BasicSection {
 	private Composite fButtonsComposite;
 	private Composite fMainControlComposite;
 
-	public ButtonsCompositeSection(ISectionContext sectionContext, IModelUpdateContext updateContext, int style) {
-		super(sectionContext, updateContext, style);
+	public ButtonsCompositeSection(
+			ISectionContext sectionContext, 
+			IModelUpdateContext updateContext,
+			IFileInfoProvider fileInfoProvider,
+			int style) {
+		super(sectionContext, updateContext, fileInfoProvider, style);
 	}
 
 	@Override

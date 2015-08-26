@@ -35,7 +35,7 @@ public class GlobalParameterDetailsPage extends AbstractParameterDetailsPage {
 	@Override
 	public void createContents(Composite parent){
 		super.createContents(parent);
-		addForm(fLinkingMethodsViewer = new LinkingMethodsViewer(this, this));
+		addForm(fLinkingMethodsViewer = new LinkingMethodsViewer(this, this, fFileInfoProvider));
 	}
 
 

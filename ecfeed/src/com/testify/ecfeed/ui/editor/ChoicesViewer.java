@@ -220,7 +220,7 @@ public class ChoicesViewer extends TableViewerSection {
 			ISectionContext sectionContext, 
 			IModelUpdateContext updateContext, 
 			IFileInfoProvider fileInfoProvider) {
-		super(sectionContext, updateContext, STYLE);
+		super(sectionContext, updateContext, fileInfoProvider, STYLE);
 
 		fFileInfoProvider = fileInfoProvider;
 

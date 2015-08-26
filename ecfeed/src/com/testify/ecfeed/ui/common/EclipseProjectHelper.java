@@ -34,6 +34,12 @@ public class EclipseProjectHelper {
 		}
 	}
 
+	public static void checkFileInfoProvider(IFileInfoProvider fileInfoProvider, String message) {
+		if (fileInfoProvider == null) {
+			SystemLogger.logInfoWithStack(message + " | " + Messages.EXCEPTION_FILE_INFO_PROVIDER_NOT_NULL);
+		}
+	}	
+
 	public static String getProjectPath(IFileInfoProvider fileInfoProvider) throws EcException {
 		if (fileInfoProvider == null) {
 			EcException.report(Messages.EXCEPTION_FILE_INFO_PROVIDER_NOT_NULL);

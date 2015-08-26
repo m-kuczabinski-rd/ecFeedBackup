@@ -44,7 +44,7 @@ public class OtherMethodsViewer extends CheckboxTableViewerSection {
 			ISectionContext sectionContext, 
 			IModelUpdateContext updateContext, 
 			IFileInfoProvider fileInfoProvider) {
-		super(sectionContext, updateContext, STYLE);
+		super(sectionContext, updateContext, fileInfoProvider, STYLE);
 		fClassIf = new ClassInterface(this, fileInfoProvider);
 		addButton("Add selected", new AddSelectedAdapter());
 	}

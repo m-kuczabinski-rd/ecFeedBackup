@@ -17,26 +17,31 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
 
+import com.testify.ecfeed.ui.common.IFileInfoProvider;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 
 public abstract class CheckboxTableViewerSection extends TableViewerSection {
 
-	public CheckboxTableViewerSection(ISectionContext sectionContext, IModelUpdateContext updateContext, int style) {
-		super(sectionContext, updateContext, style);
+	public CheckboxTableViewerSection(
+			ISectionContext sectionContext, 
+			IModelUpdateContext updateContext, 
+			IFileInfoProvider fileInfoProvider,
+			int style) {
+		super(sectionContext, updateContext, fileInfoProvider, style);
 	}
 
 	@Override
 	protected Table createTable(Composite parent, int style){
 		return new Table(parent, style | SWT.CHECK);
 	}
-	
+
 	@Override
 	protected StructuredViewer createViewer(Composite parent, int style){
 		Table table = createTable(parent, style);
 		table.setLayoutData(viewerLayoutData());
 		return new CheckboxTableViewer(table);
 	}
-	
+
 	protected CheckboxTableViewer getCheckboxViewer(){
 		return (CheckboxTableViewer)getViewer();
 	}

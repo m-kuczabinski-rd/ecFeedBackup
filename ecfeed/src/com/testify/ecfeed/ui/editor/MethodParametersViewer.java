@@ -30,6 +30,7 @@ import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.model.GlobalParameterNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.MethodParameterNode;
+import com.testify.ecfeed.ui.common.EclipseProjectHelper;
 import com.testify.ecfeed.ui.common.IFileInfoProvider;
 import com.testify.ecfeed.ui.common.NodeViewerColumnLabelProvider;
 import com.testify.ecfeed.ui.modelif.AbstractParameterInterface;
@@ -54,7 +55,6 @@ public class MethodParametersViewer extends AbstractParametersViewer {
 	private TableViewerColumn fLinkColumn;
 	private MethodParameterInterface fParameterIf;
 	private MethodInterface fMethodIf;
-	private IFileInfoProvider fFileInfoProvider;
 
 	protected class MethodParameterTypeEditingSupport extends AbstractParametersViewer.ParameterTypeEditingSupport{
 		@Override
@@ -243,9 +243,8 @@ public class MethodParametersViewer extends AbstractParametersViewer {
 			IModelUpdateContext updateContext, 
 			IFileInfoProvider fileInfoProvider) {
 		super(sectionContext, updateContext, fileInfoProvider, STYLE);
-		fFileInfoProvider = fileInfoProvider;
-		fParameterIf = (MethodParameterInterface)getParameterInterface(fileInfoProvider);
 
+		fParameterIf = (MethodParameterInterface)getParameterInterface(fileInfoProvider);
 		getSection().setText("Parameters");
 		fExpectedColumn.setEditingSupport(new ExpectedValueEditingSupport());
 		fDefaultValueColumn.setEditingSupport(new DefaultValueEditingSupport());
@@ -288,10 +287,10 @@ public class MethodParametersViewer extends AbstractParametersViewer {
 		});
 	}
 
-	public void setInput(MethodNode method){
+	public void setInput(MethodNode method, IFileInfoProvider fileInfoProvider){
 		fSelectedMethod = method;
 		showDefaultValueColumn(fSelectedMethod.getParametersNames(true).size() == 0);
-		getMethodIf().setTarget(method);
+		getMethodIf(fileInfoProvider).setTarget(method);
 		super.setInput(method);
 	}
 
@@ -308,12 +307,12 @@ public class MethodParametersViewer extends AbstractParametersViewer {
 
 	@Override
 	protected ParametersParentInterface getParametersParentInterface(IFileInfoProvider fileInfoProvider) {
-		return getMethodIf();
+		return getMethodIf(fileInfoProvider);
 	}
 
-	protected MethodInterface getMethodIf() {
+	protected MethodInterface getMethodIf(IFileInfoProvider fileInfoProvider) {
 		if(fMethodIf == null){
-			fMethodIf = new MethodInterface(this, fFileInfoProvider);
+			fMethodIf = new MethodInterface(this, fileInfoProvider);
 		}
 		return fMethodIf;
 	}
@@ -321,7 +320,7 @@ public class MethodParametersViewer extends AbstractParametersViewer {
 	@Override
 	protected AbstractParameterInterface getParameterInterface(IFileInfoProvider fileInfoProvider) {
 		if(fParameterIf == null){
-			fParameterIf = new MethodParameterInterface(this, fFileInfoProvider);
+			fParameterIf = new MethodParameterInterface(this, fileInfoProvider);
 		}
 		return fParameterIf;
 	}

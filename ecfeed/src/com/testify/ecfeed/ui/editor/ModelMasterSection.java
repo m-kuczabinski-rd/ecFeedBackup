@@ -449,7 +449,7 @@ public class ModelMasterSection extends TreeViewerSection{
 	}
 
 	public ModelMasterSection(ModelMasterDetailsBlock parentBlock, IFileInfoProvider fileInfoProvider) {
-		super(parentBlock.getMasterSectionContext(), parentBlock.getModelUpdateContext(), STYLE);
+		super(parentBlock.getMasterSectionContext(), parentBlock.getModelUpdateContext(), fileInfoProvider, STYLE);
 		fMasterDetailsBlock = parentBlock;
 		fFileInfoProvider = fileInfoProvider;
 

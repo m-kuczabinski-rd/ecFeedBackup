@@ -352,7 +352,7 @@ public class ConstraintViewer extends TreeViewerSection {
 		}
 
 		private class EditorBuilder implements IStatementVisitor{
-			
+
 			public EditorBuilder(IFileInfoProvider fileInfoProvider) {
 				fFileInfoProvider = fileInfoProvider;
 			}
@@ -516,7 +516,7 @@ public class ConstraintViewer extends TreeViewerSection {
 		public void widgetSelected(SelectionEvent e){
 			AbstractStatement statement = fStatementIf.addNewStatement();
 			if(statement != null){
-			//modelUpdated must be called before to refresh viewer before selecting the newly added statement
+				//modelUpdated must be called before to refresh viewer before selecting the newly added statement
 				getTreeViewer().expandToLevel(statement, 1);
 				getTreeViewer().setSelection(new StructuredSelection(statement));
 			}
@@ -563,8 +563,9 @@ public class ConstraintViewer extends TreeViewerSection {
 
 	}
 
-	public ConstraintViewer(ISectionContext sectionContext, IModelUpdateContext updateContext) {
-		super(sectionContext, updateContext, STYLE);
+	public ConstraintViewer(
+			ISectionContext sectionContext, IModelUpdateContext updateContext, IFileInfoProvider fileInfoProvider) {
+		super(sectionContext, updateContext, fileInfoProvider, STYLE);
 		getSection().setText("Constraint editor");
 		fAddStatementButton = addButton("Add statement", new AddStatementAdapter());
 		fRemoveStatementButton = addButton("Remove statement", new ActionSelectionAdapter(new DeleteStatementAction(updateContext)));

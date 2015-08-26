@@ -32,7 +32,6 @@ import com.testify.ecfeed.utils.SystemLogger;
 
 public class MethodDetailsPage extends BasicDetailsPage {
 
-	private IFileInfoProvider fFileInfoProvider;
 	private Text fMethodNameText;
 	private Button fTestOnlineButton;
 	private Button fBrowseButton;
@@ -47,7 +46,7 @@ public class MethodDetailsPage extends BasicDetailsPage {
 		@Override
 		public void widgetSelected(SelectionEvent ev){
 			try {
-				fMethodIf.executeOnlineTests(fFileInfoProvider);
+				fMethodIf.executeOnlineTests(getFileInfoProvider());
 			} catch (EcException e) {
 				SystemLogger.logCatch(e.getMessage());
 			}
@@ -69,21 +68,24 @@ public class MethodDetailsPage extends BasicDetailsPage {
 		}
 	}
 
-	public MethodDetailsPage(ModelMasterSection masterSection, IModelUpdateContext updateContext, IFileInfoProvider fileInfoProvider) {
+	public MethodDetailsPage(
+			ModelMasterSection masterSection, 
+			IModelUpdateContext updateContext, 
+			IFileInfoProvider fileInfoProvider) {
 		super(masterSection, updateContext, fileInfoProvider);
-		fFileInfoProvider = fileInfoProvider;
 		fMethodIf = new MethodInterface(this, fileInfoProvider);
 	}
 
 	@Override
 	public void createContents(Composite parent){
 		super.createContents(parent);
-
 		createNameTextComposite();
-		addForm(fCommentsSection = new JavaDocCommentsSection(this, this, fFileInfoProvider));
-		addViewerSection(fParemetersSection = new MethodParametersViewer(this, this, fFileInfoProvider));
-		addViewerSection(fConstraintsSection = new ConstraintsListViewer(this, this, fFileInfoProvider));
-		addViewerSection(fTestCasesSection = new TestCasesViewer(this, this, fFileInfoProvider));
+
+		IFileInfoProvider fileInfoProvider = getFileInfoProvider();
+		addForm(fCommentsSection = new JavaDocCommentsSection(this, this, fileInfoProvider));
+		addViewerSection(fParemetersSection = new MethodParametersViewer(this, this, fileInfoProvider));
+		addViewerSection(fConstraintsSection = new ConstraintsListViewer(this, this, fileInfoProvider));
+		addViewerSection(fTestCasesSection = new TestCasesViewer(this, this, fileInfoProvider));
 
 		getToolkit().paintBordersFor(getMainComposite());
 	}

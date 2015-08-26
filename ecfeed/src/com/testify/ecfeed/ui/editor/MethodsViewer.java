@@ -110,7 +110,7 @@ public class MethodsViewer extends TableViewerSection {
 			ISectionContext sectionContext, 
 			IModelUpdateContext updateContext, 
 			IFileInfoProvider fileInfoProvider) {
-		super(sectionContext, updateContext, STYLE);
+		super(sectionContext, updateContext, fileInfoProvider, STYLE);
 
 		fClassIf = new ClassInterface(this, fileInfoProvider);
 		fMethodIf = new MethodInterface(this, fileInfoProvider);

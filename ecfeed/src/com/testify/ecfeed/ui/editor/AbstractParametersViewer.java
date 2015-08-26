@@ -161,7 +161,7 @@ public abstract class AbstractParametersViewer extends TableViewerSection {
 			IModelUpdateContext updateContext,
 			IFileInfoProvider fileInfoProvider,
 			int STYLE) {
-		super(sectionContext, updateContext, STYLE);
+		super(sectionContext, updateContext, fileInfoProvider, STYLE);
 		fParentIf = getParametersParentInterface(fileInfoProvider);
 		fFileInfoProvider = fileInfoProvider;
 
