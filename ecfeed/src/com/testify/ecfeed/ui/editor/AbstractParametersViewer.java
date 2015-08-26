@@ -43,9 +43,7 @@ public abstract class AbstractParametersViewer extends TableViewerSection {
 
 	private TableViewerColumn fNameColumn;
 	private TableViewerColumn fTypeColumn;
-
 	private ParametersParentInterface fParentIf;
-	private IFileInfoProvider fFileInfoProvider;
 
 	protected class ParameterTypeEditingSupport extends EditingSupport {
 
@@ -101,12 +99,12 @@ public abstract class AbstractParametersViewer extends TableViewerSection {
 				newType = ((CCombo)fCellEditor.getControl()).getText();
 			}
 			if(newType.equals(BROWSE_PARAMETER_TYPE_STRING)){
-				getParameterInterface(fFileInfoProvider).setTarget(node);
-				getParameterInterface(fFileInfoProvider).importType();
+				getParameterInterface().setTarget(node);
+				getParameterInterface().importType();
 			}
 			else{
-				getParameterInterface(fFileInfoProvider).setTarget(node);
-				getParameterInterface(fFileInfoProvider).setType(newType);
+				getParameterInterface().setTarget(node);
+				getParameterInterface().setType(newType);
 			}
 
 			fCellEditor.setFocus();
@@ -140,8 +138,8 @@ public abstract class AbstractParametersViewer extends TableViewerSection {
 
 		@Override
 		protected void setValue(Object element, Object value) {
-			getParameterInterface(fFileInfoProvider).setTarget((AbstractParameterNode)element);
-			getParameterInterface(fFileInfoProvider).setName((String)value);
+			getParameterInterface().setTarget((AbstractParameterNode)element);
+			getParameterInterface().setName((String)value);
 		}
 	}
 
@@ -162,8 +160,7 @@ public abstract class AbstractParametersViewer extends TableViewerSection {
 			IFileInfoProvider fileInfoProvider,
 			int STYLE) {
 		super(sectionContext, updateContext, fileInfoProvider, STYLE);
-		fParentIf = getParametersParentInterface(fileInfoProvider);
-		fFileInfoProvider = fileInfoProvider;
+		fParentIf = getParametersParentInterface();
 
 		GridData gd = new GridData(SWT.FILL, SWT.FILL, true, true);
 		gd.minimumHeight = 250;
@@ -199,6 +196,6 @@ public abstract class AbstractParametersViewer extends TableViewerSection {
 		return new ParameterTypeEditingSupport();
 	}
 
-	protected abstract ParametersParentInterface getParametersParentInterface(IFileInfoProvider fileInfoProvider);
-	protected abstract AbstractParameterInterface getParameterInterface(IFileInfoProvider fileInfoProvider);
+	protected abstract ParametersParentInterface getParametersParentInterface();
+	protected abstract AbstractParameterInterface getParameterInterface();
 }

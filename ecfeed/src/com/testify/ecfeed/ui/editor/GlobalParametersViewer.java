@@ -41,13 +41,13 @@ public class GlobalParametersViewer extends AbstractParametersViewer {
 	}
 
 	@Override
-	protected ParametersParentInterface getParametersParentInterface(IFileInfoProvider fileInfoProvider) {
-		return getGlobalParametersParentIf(fileInfoProvider);
+	protected ParametersParentInterface getParametersParentInterface() {
+		return getGlobalParametersParentIf();
 	}
 
-	protected ParametersParentInterface getGlobalParametersParentIf(IFileInfoProvider fileInfoProvider) {
+	protected ParametersParentInterface getGlobalParametersParentIf() {
 		if(fParentIf == null){
-			fParentIf = new GlobalParametersParentInterface(this, fileInfoProvider);
+			fParentIf = new GlobalParametersParentInterface(this, getFileInfoProvider());
 		}
 		return fParentIf;
 	}
@@ -58,9 +58,9 @@ public class GlobalParametersViewer extends AbstractParametersViewer {
 	}
 
 	@Override
-	protected AbstractParameterInterface getParameterInterface(IFileInfoProvider fileInfoProvider) {
+	protected AbstractParameterInterface getParameterInterface() {
 		if(fParameterIf == null){
-			fParameterIf = new GlobalParameterInterface(this, fileInfoProvider);
+			fParameterIf = new GlobalParameterInterface(this, getFileInfoProvider());
 		}
 		return fParameterIf;
 	}

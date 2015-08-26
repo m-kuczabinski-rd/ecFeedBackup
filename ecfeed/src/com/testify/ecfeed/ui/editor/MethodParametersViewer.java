@@ -30,7 +30,6 @@ import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.model.GlobalParameterNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.MethodParameterNode;
-import com.testify.ecfeed.ui.common.EclipseProjectHelper;
 import com.testify.ecfeed.ui.common.IFileInfoProvider;
 import com.testify.ecfeed.ui.common.NodeViewerColumnLabelProvider;
 import com.testify.ecfeed.ui.modelif.AbstractParameterInterface;
@@ -244,7 +243,7 @@ public class MethodParametersViewer extends AbstractParametersViewer {
 			IFileInfoProvider fileInfoProvider) {
 		super(sectionContext, updateContext, fileInfoProvider, STYLE);
 
-		fParameterIf = (MethodParameterInterface)getParameterInterface(fileInfoProvider);
+		fParameterIf = (MethodParameterInterface)getParameterInterface();
 		getSection().setText("Parameters");
 		fExpectedColumn.setEditingSupport(new ExpectedValueEditingSupport());
 		fDefaultValueColumn.setEditingSupport(new DefaultValueEditingSupport());
@@ -290,7 +289,7 @@ public class MethodParametersViewer extends AbstractParametersViewer {
 	public void setInput(MethodNode method, IFileInfoProvider fileInfoProvider){
 		fSelectedMethod = method;
 		showDefaultValueColumn(fSelectedMethod.getParametersNames(true).size() == 0);
-		getMethodIf(fileInfoProvider).setTarget(method);
+		getMethodIf().setTarget(method);
 		super.setInput(method);
 	}
 
@@ -306,21 +305,21 @@ public class MethodParametersViewer extends AbstractParametersViewer {
 	}
 
 	@Override
-	protected ParametersParentInterface getParametersParentInterface(IFileInfoProvider fileInfoProvider) {
-		return getMethodIf(fileInfoProvider);
+	protected ParametersParentInterface getParametersParentInterface() {
+		return getMethodIf();
 	}
 
-	protected MethodInterface getMethodIf(IFileInfoProvider fileInfoProvider) {
+	protected MethodInterface getMethodIf() {
 		if(fMethodIf == null){
-			fMethodIf = new MethodInterface(this, fileInfoProvider);
+			fMethodIf = new MethodInterface(this, getFileInfoProvider());
 		}
 		return fMethodIf;
 	}
 
 	@Override
-	protected AbstractParameterInterface getParameterInterface(IFileInfoProvider fileInfoProvider) {
+	protected AbstractParameterInterface getParameterInterface() {
 		if(fParameterIf == null){
-			fParameterIf = new MethodParameterInterface(this, fileInfoProvider);
+			fParameterIf = new MethodParameterInterface(this, getFileInfoProvider());
 		}
 		return fParameterIf;
 	}

@@ -227,7 +227,7 @@ public abstract class BasicSection extends SectionPart implements IModelUpdateCo
 		return this;
 	}
 
-	IFileInfoProvider getFileInfoProvider() {
+	protected IFileInfoProvider getFileInfoProvider() {
 		return fFileInfoProvider;
 	}
 }
