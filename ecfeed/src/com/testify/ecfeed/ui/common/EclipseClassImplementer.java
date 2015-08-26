@@ -14,41 +14,35 @@ import org.eclipse.jdt.core.IPackageFragment;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaModelException;
 
-import com.testify.ecfeed.android.AndroidBaseRunnerHelper;
 import com.testify.ecfeed.generators.api.EcException;
 import com.testify.ecfeed.utils.PackageClassHelper;
 
-public abstract class EclipseSimpleClassImplementer {
+public abstract class EclipseClassImplementer {
 
 	private IFileInfoProvider fFileInfoProvider;
-	private String fTestingAppPackage;
-	private String fTestingAppSourceFilesPackage;
-	private String fTestingAppClass;
+	private String fPackage;
+	private String fClassNameWithoutExtension;
 
-	public EclipseSimpleClassImplementer(
+	public EclipseClassImplementer(
 			IFileInfoProvider fileInfoProvider, 
-			String testingAppPackage, 
-			String testingAppClass) throws EcException {
-
+			String argPackage, 
+			String classNameWithoutExtension) throws EcException {
 		if (fileInfoProvider == null) {
 			EcException.report(Messages.EXCEPTION_FILE_INFO_PROVIDER_NOT_NULL);
 		}
-
 		fFileInfoProvider = fileInfoProvider;
-		fTestingAppPackage = testingAppPackage;
-		fTestingAppSourceFilesPackage = 
-				fTestingAppPackage  + "." + AndroidBaseRunnerHelper.getEcFeedTestRunnerPrefix();
-		fTestingAppClass = testingAppClass;
+		fPackage = argPackage; 
+		fClassNameWithoutExtension = classNameWithoutExtension;
 	}
 
 	abstract protected void createUnitContent(ICompilationUnit unit) throws JavaModelException;
 
 	public void implementContent() throws CoreException, EcException {
-		String unitName = fTestingAppClass + ".java";
+		String unitName = fClassNameWithoutExtension + ".java";
 
 		IPackageFragment packageFragment = 
 				EclipsePackageFragmentGetter.getPackageFragment(
-						fTestingAppSourceFilesPackage, fFileInfoProvider);
+						fPackage, fFileInfoProvider);
 
 		ICompilationUnit unit = packageFragment.getCompilationUnit(unitName);
 		createUnitContent(unit);
@@ -82,7 +76,7 @@ public abstract class EclipseSimpleClassImplementer {
 	private IType getTestingClassType() {
 
 		String classType = 
-				PackageClassHelper.createQualifiedName(fTestingAppSourceFilesPackage, fTestingAppClass); 
+				PackageClassHelper.createQualifiedName(fPackage, fClassNameWithoutExtension); 
 
 		return JavaModelAnalyser.getIType(classType);
 	}	

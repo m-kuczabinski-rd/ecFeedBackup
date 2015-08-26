@@ -14,7 +14,7 @@ import org.eclipse.jdt.core.JavaModelException;
 import com.testify.ecfeed.android.AndroidBaseRunnerHelper;
 import com.testify.ecfeed.generators.api.EcException;
 
-public class EclipseRunnerClassImplementer extends EclipseSimpleClassImplementer {
+public class EclipseRunnerClassImplementer extends EclipseProjectSpecificClassImplementer {
 
 	String fBaseRunner;
 

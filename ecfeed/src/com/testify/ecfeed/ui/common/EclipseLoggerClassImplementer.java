@@ -13,7 +13,7 @@ import org.eclipse.jdt.core.JavaModelException;
 
 import com.testify.ecfeed.generators.api.EcException;
 
-public class EclipseLoggerClassImplementer extends EclipseSimpleClassImplementer {
+public class EclipseLoggerClassImplementer extends EclipseProjectSpecificClassImplementer {
 
 	public EclipseLoggerClassImplementer(IFileInfoProvider fileInfoProvider, String testingAppPackage) throws EcException {
 		super(fileInfoProvider, testingAppPackage, "Logger");

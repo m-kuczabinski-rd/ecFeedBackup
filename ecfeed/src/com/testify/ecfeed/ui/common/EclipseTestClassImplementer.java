@@ -13,7 +13,7 @@ import org.eclipse.jdt.core.JavaModelException;
 
 import com.testify.ecfeed.generators.api.EcException;
 
-public class EclipseTestClassImplementer extends EclipseSimpleClassImplementer {
+public class EclipseTestClassImplementer extends EclipseProjectSpecificClassImplementer {
 
 	String fTestingAppSuperClass;
 	String fTestedAppPackage;
