@@ -8,20 +8,17 @@
 
 package com.testify.ecfeed.ui.common;
 
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.swt.widgets.Display;
-
 import com.testify.ecfeed.android.project.AndroidManifestAccessor;
 import com.testify.ecfeed.generators.api.EcException;
 import com.testify.ecfeed.model.ClassNode;
 
-public class EclipseAndroidImplementerForClassNode {
+public class EclipseAndroidImplementerForClassNode implements IImplementer {
 
-	EclipseLoggerClassImplementer fLoggerClassImplementer;
-	EclipseRunnerClassImplementer fRunnerClassImplementer;
-	EclipseTestClassImplementer fTestClassImplementer;
-	EclipseAndroidManifestImplementer fAndroidManifestImplementer; 
+	private EclipseLoggerClassImplementer fLoggerClassImplementer;
+	private EclipseRunnerClassImplementer fRunnerClassImplementer;
+	private EclipseTestClassImplementer fTestClassImplementer;
+	private EclipseAndroidManifestImplementer fAndroidManifestImplementer;
+	private EclipseAndroidToolsImplementer fAndroidToolsImplementer;
 
 	EclipseAndroidImplementerForClassNode(
 			IFileInfoProvider fileInfoProvider,
@@ -38,6 +35,7 @@ public class EclipseAndroidImplementerForClassNode {
 		createRunnerClassImplementer(fileInfoProvider, testingAppPackage, classNode);
 		createTestClassImplementer(fileInfoProvider, testingAppPackage, classNode, androidManifestReader);
 		createAndroidManifestImplementer(fileInfoProvider);
+		createEclipseAndroidToolsImplementer(fileInfoProvider);
 	}
 
 	private void createAndroidManifestImplementer(IFileInfoProvider fileInfoProvider) throws EcException {
@@ -90,19 +88,11 @@ public class EclipseAndroidImplementerForClassNode {
 						"MainActivity");
 	}
 
-	void implementContent() {
-		try {
-			implementContentIntr();
-		} catch (CoreException | EcException e) {
-			MessageDialog.openError(
-					Display.getDefault().getActiveShell(), 
-					Messages.CAN_NOT_IMPLEMENT_SOURCE_FOR_CLASS, 
-					e.getMessage());			
-
-		}
+	private void createEclipseAndroidToolsImplementer(IFileInfoProvider fileInfoProvider) throws EcException {
+		fAndroidToolsImplementer = new EclipseAndroidToolsImplementer(fileInfoProvider);
 	}
 
-	void implementContentIntr() throws CoreException, EcException {
+	public void implementContent() throws EcException {
 		if (!fLoggerClassImplementer.contentImplemented()) {
 			fLoggerClassImplementer.implementContent();
 		}
@@ -115,9 +105,12 @@ public class EclipseAndroidImplementerForClassNode {
 		if (!fAndroidManifestImplementer.contentImplemented()) {
 			fAndroidManifestImplementer.implementContent();
 		}
+		if (!fAndroidToolsImplementer.contentImplemented()) {
+			fAndroidToolsImplementer.implementContent();
+		}
 	}
 
-	boolean contentImplemented() {
+	public boolean contentImplemented() throws EcException {
 		if (!fLoggerClassImplementer.contentImplemented()) {
 			return false;
 		}
@@ -130,6 +123,9 @@ public class EclipseAndroidImplementerForClassNode {
 		if (!fAndroidManifestImplementer.contentImplemented()) {
 			return false;
 		}		
+		if (!fAndroidToolsImplementer.contentImplemented()) {
+			return false;
+		}
 		return true;
 	}	
 }

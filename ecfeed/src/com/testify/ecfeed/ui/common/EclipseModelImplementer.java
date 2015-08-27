@@ -36,9 +36,7 @@ import org.eclipse.jdt.core.dom.AbstractTypeDeclaration;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.EnumConstantDeclaration;
 import org.eclipse.jdt.core.dom.EnumDeclaration;
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.text.IDocument;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.text.edits.TextEdit;
 
 import com.testify.ecfeed.adapter.AbstractJavaModelImplementer;
@@ -113,15 +111,8 @@ public class EclipseModelImplementer extends AbstractJavaModelImplementer {
 	}
 
 	@Override
-	protected void implementAndroidCode(ClassNode classNode) {
-		try {
-			(new EclipseAndroidImplementerForClassNode(fFileInfoProvider, classNode)).implementContent();
-		} catch (Exception e) {
-			MessageDialog.openError(
-					Display.getDefault().getActiveShell(), 
-					Messages.CAN_NOT_IMPLEMENT_ANDROID_CODE, 
-					e.getMessage());
-		}
+	protected void implementAndroidCode(ClassNode classNode) throws EcException {
+		(new EclipseAndroidImplementerForClassNode(fFileInfoProvider, classNode)).implementContent();
 	}
 
 	@Override

@@ -12,7 +12,7 @@ import com.testify.ecfeed.android.AndroidBaseRunnerHelper;
 import com.testify.ecfeed.android.project.AndroidManifestAccessor;
 import com.testify.ecfeed.generators.api.EcException;
 
-public class EclipseAndroidManifestImplementer {
+public class EclipseAndroidManifestImplementer implements IImplementer{
 
 	AndroidManifestAccessor fManifestAccessor;
 	String fEcFeedTestRunner;

@@ -16,8 +16,9 @@ import org.eclipse.jdt.core.JavaModelException;
 
 import com.testify.ecfeed.generators.api.EcException;
 import com.testify.ecfeed.utils.PackageClassHelper;
+import com.testify.ecfeed.utils.SystemLogger;
 
-public abstract class EclipseClassImplementer {
+public abstract class EclipseClassImplementer implements IImplementer {
 
 	private IFileInfoProvider fFileInfoProvider;
 	private String fPackage;
@@ -37,17 +38,22 @@ public abstract class EclipseClassImplementer {
 
 	abstract protected void createUnitContent(ICompilationUnit unit) throws JavaModelException;
 
-	public void implementContent() throws CoreException, EcException {
-		String unitName = fClassNameWithoutExtension + ".java";
+	public void implementContent() throws EcException {
+		try {
+			String unitName = fClassNameWithoutExtension + ".java";
 
-		IPackageFragment packageFragment = 
-				EclipsePackageFragmentGetter.getPackageFragment(
-						fPackage, fFileInfoProvider);
+			IPackageFragment packageFragment = 
+					EclipsePackageFragmentGetter.getPackageFragment(
+							fPackage, fFileInfoProvider);
 
-		ICompilationUnit unit = packageFragment.getCompilationUnit(unitName);
-		createUnitContent(unit);
-		unit.becomeWorkingCopy(null);
-		unit.commitWorkingCopy(true, null);
+			ICompilationUnit unit = packageFragment.getCompilationUnit(unitName);
+			createUnitContent(unit);
+			unit.becomeWorkingCopy(null);
+			unit.commitWorkingCopy(true, null);
+		} catch (CoreException e) {
+			SystemLogger.logCatch(e.getMessage());
+			EcException.report(e.getMessage());
+		}
 	}
 
 	public boolean contentImplemented() {

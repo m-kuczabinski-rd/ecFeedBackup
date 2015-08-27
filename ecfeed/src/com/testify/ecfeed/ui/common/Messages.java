@@ -147,7 +147,6 @@ public class Messages {
 	//OTHER MESSAGES
 	public static final String EXECUTING_TEST_WITH_PARAMETERS = "Executing test function with generated parameters";
 	public static final String EXECUTING_TEST_WITH_NO_PARAMETERS = "Executing test function";
-	public static final String CAN_NOT_IMPLEMENT_ANDROID_CODE = "Can not implement Android code.";
 	public static final String CAN_NOT_IMPLEMENT_SOURCE_FOR_CLASS = "Can not implement source for the class.";
 	public static final String DEFAULT_PACKAGE_NOT_SET_IN_ANDROID_MANIFEST = "Default package for tested aplication is not set in AndroidManifest.xml.";
 

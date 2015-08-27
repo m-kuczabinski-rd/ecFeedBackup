@@ -20,7 +20,7 @@ public abstract class AbstractJavaModelImplementer extends AbstractModelImplemen
 	}
 
 	protected abstract boolean androidCodeImplemented(ClassNode node) throws EcException;
-	protected abstract void implementAndroidCode(ClassNode node);
+	protected abstract void implementAndroidCode(ClassNode node) throws EcException;
 
 	protected boolean implement(ClassNode node) throws Exception{
 		if(node.getRunOnAndroid() && !androidCodeImplemented(node)) {

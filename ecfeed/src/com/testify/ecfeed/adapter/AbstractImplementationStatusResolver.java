@@ -87,7 +87,10 @@ IImplementationStatusResolver {
 		try{
 			return (EImplementationStatus)node.accept(fStatusResolver);
 		}
-		catch(Exception e){SystemLogger.logCatch(e.getMessage());}
+		catch(Exception e){
+			SystemLogger.logCatch(e.getMessage());
+
+		}
 		return EImplementationStatus.NOT_IMPLEMENTED;
 	}
 
