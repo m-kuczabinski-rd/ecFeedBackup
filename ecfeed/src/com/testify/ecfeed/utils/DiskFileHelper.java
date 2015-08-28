@@ -12,6 +12,8 @@ import java.io.File;
 
 public class DiskFileHelper {
 
+	public static final String JAVA_EXTENSION = "java";
+
 	public static boolean fileExists(String pathWithName) {
 		File file = new File(pathWithName);
 

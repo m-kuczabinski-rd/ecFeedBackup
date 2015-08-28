@@ -8,9 +8,6 @@
 
 package com.testify.ecfeed.ui.common;
 
-import org.eclipse.jdt.core.ICompilationUnit;
-import org.eclipse.jdt.core.JavaModelException;
-
 import com.testify.ecfeed.generators.api.EcException;
 
 public class EclipseLoggerClassImplementer extends EclipseProjectSpecificClassImplementer {
@@ -20,14 +17,13 @@ public class EclipseLoggerClassImplementer extends EclipseProjectSpecificClassIm
 	}
 
 	@ Override
-	protected void createUnitContent(ICompilationUnit unit) throws JavaModelException {
-		unit.createType(getClassContent(), null, false, null);
-		unit.createImport("android.util.Log", null, null);
-		unit.createImport("com.testify.ecfeed.android.junit.tools.ILogger", null, null);
-	}
-
-	private String getClassContent() {
+	protected String createUnitContent() {
 		return
+				"package com.mamlambo.article.simplecalc.test.ecFeed.android;\n" +
+				"\n" +
+				"import android.util.Log;\n" + 
+				"import com.testify.ecfeed.android.junit.tools.ILogger;\n" +
+				"\n" +
 				"public class Logger implements ILogger {\n" +
 				"\n" +
 				"\tfinal String TAG = \"ecFeed\";\n" +

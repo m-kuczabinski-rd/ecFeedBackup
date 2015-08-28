@@ -8,9 +8,6 @@
 
 package com.testify.ecfeed.ui.common;
 
-import org.eclipse.jdt.core.ICompilationUnit;
-import org.eclipse.jdt.core.JavaModelException;
-
 import com.testify.ecfeed.generators.api.EcException;
 
 public class EclipseTestClassImplementer extends EclipseProjectSpecificClassImplementer {
@@ -33,15 +30,14 @@ public class EclipseTestClassImplementer extends EclipseProjectSpecificClassImpl
 	}
 
 	@ Override
-	protected void createUnitContent(ICompilationUnit unit) throws JavaModelException {
-		unit.createType(getClassContent(), null, false, null);
-		unit.createImport("android.test." + fTestingAppSuperClass, null, null);
-		unit.createImport("com.testify.ecfeed.android.junit.tools.TestHelper", null, null);
-		unit.createImport(fTestedAppPackage + "." + fTestedAppMainActivity, null, null);
-	}
-
-	private String getClassContent() {
+	protected String createUnitContent() {
 		return
+				"package com.mamlambo.article.simplecalc.test.ecFeed.android;\n" + 
+				"\n" +
+				"import android.test.ActivityInstrumentationTestCase2;\n" +
+				"import com.testify.ecfeed.android.junit.tools.TestHelper;\n" +
+				"import com.mamlambo.article.simplecalc.MainActivity;\n" +		
+				"\n" +
 				"public class EcFeedTest extends " + superClassName() + " {\n" +
 				"\n" +
 				"\tpublic EcFeedTest() {\n" + 

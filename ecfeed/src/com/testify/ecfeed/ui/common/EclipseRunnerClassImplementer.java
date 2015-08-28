@@ -8,9 +8,6 @@
 
 package com.testify.ecfeed.ui.common;
 
-import org.eclipse.jdt.core.ICompilationUnit;
-import org.eclipse.jdt.core.JavaModelException;
-
 import com.testify.ecfeed.android.AndroidBaseRunnerHelper;
 import com.testify.ecfeed.generators.api.EcException;
 
@@ -28,15 +25,13 @@ public class EclipseRunnerClassImplementer extends EclipseProjectSpecificClassIm
 	}
 
 	@ Override
-	protected void createUnitContent(ICompilationUnit unit) throws JavaModelException {
-
-		unit.createType(getClassContent(), null, false, null);
-		unit.createImport("android.os.Bundle", null, null);
-		unit.createImport("com.testify.ecfeed.android.junit.tools.TestHelper", null, null);
-	}
-
-	private String getClassContent() {
+	protected String createUnitContent() {
 		return
+				"package com.mamlambo.article.simplecalc.test.ecFeed.android;\n" +
+				"\n" +
+				"import android.os.Bundle;\n" + 
+				"import com.testify.ecfeed.android.junit.tools.TestHelper;\n" + 
+				"\n" +
 				"public class "+ AndroidBaseRunnerHelper.getEcFeedTestRunnerName() + " extends " + fBaseRunner + " {\n" + 
 				"\n" +
 				"\t@Override\n" +

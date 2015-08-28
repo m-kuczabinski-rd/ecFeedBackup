@@ -8,15 +8,7 @@
 
 package com.testify.ecfeed.ui.common;
 
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.jdt.core.ICompilationUnit;
-import org.eclipse.jdt.core.IPackageFragment;
-import org.eclipse.jdt.core.IType;
-import org.eclipse.jdt.core.JavaModelException;
-
 import com.testify.ecfeed.generators.api.EcException;
-import com.testify.ecfeed.utils.PackageClassHelper;
-import com.testify.ecfeed.utils.SystemLogger;
 
 public abstract class EclipseClassImplementer implements IImplementer {
 
@@ -36,76 +28,18 @@ public abstract class EclipseClassImplementer implements IImplementer {
 		fClassNameWithoutExtension = classNameWithoutExtension;
 	}
 
-	abstract protected void createUnitContent(ICompilationUnit unit) throws JavaModelException;
+	abstract protected String createUnitContent();
 
 	public void implementContent() throws EcException {
-		try {
-			String unitName = fClassNameWithoutExtension + ".java";
-
-			IPackageFragment packageFragment = 
-					EclipsePackageFragmentGetter.getPackageFragment(
-							fPackage, fFileInfoProvider);
-
-			ICompilationUnit unit = packageFragment.getCompilationUnit(unitName);
-			createUnitContent(unit);
-			unit.becomeWorkingCopy(null);
-			unit.commitWorkingCopy(true, null);
-		} catch (CoreException e) {
-			SystemLogger.logCatch(e.getMessage());
-			EcException.report(e.getMessage());
-		}
+		EclipseClassImplementHelper.implementClass(
+				fPackage, fClassNameWithoutExtension, createUnitContent(), fFileInfoProvider);
 	}
 
 	public boolean contentImplemented() {
-		return classImplemented(null);
+		return EclipseClassImplementHelper.classImplemented(fPackage, fClassNameWithoutExtension);
 	}
 
 	protected boolean classImplemented(String superclassName) {
-		IType type = getTestingClassType();
-
-		if (type == null) {
-			return false;
-		}
-		if (!isClass(type)) {
-			return false;
-		}
-		if (superclassName != null) {
-			String implementedSuperClass = getSuperclassName(type);
-
-			if(!superclassName.endsWith(implementedSuperClass)) {
-				return false;
-			}
-		}
-		return true;
-	}
-
-	private IType getTestingClassType() {
-
-		String classType = 
-				PackageClassHelper.createQualifiedName(fPackage, fClassNameWithoutExtension); 
-
-		return JavaModelAnalyser.getIType(classType);
-	}	
-
-	private boolean isClass(IType type) {
-
-		try {
-			if (type.isClass()) {
-				return true;
-			}
-		} catch (JavaModelException e) {
-			return false;
-		}
-
-		return true;
-	}
-
-	private String getSuperclassName(IType type) {
-
-		try {
-			return type.getSuperclassName();
-		} catch (JavaModelException e) {
-			return null;
-		}
+		return EclipseClassImplementHelper.classImplemented(fPackage, fClassNameWithoutExtension, superclassName);
 	}
 }
