@@ -9,7 +9,7 @@
 package com.testify.ecfeed.utils;
 
 public class StringHelper {
-	
+
 	public static boolean isNullOrEmpty(String str) {
 		if (str == null) {
 			return true;
@@ -22,5 +22,14 @@ public class StringHelper {
 
 	public static boolean isTrimmedEmpty(String str) {
 		return str.trim().isEmpty();
+	}
+
+	public static String removePrefix(String prefix, String fromStr) {
+		int index = fromStr.indexOf(prefix);
+
+		if (index == -1) {
+			return fromStr;
+		}
+		return fromStr.substring(index + prefix.length());
 	}
 }

@@ -17,6 +17,7 @@ import org.osgi.framework.Bundle;
 import org.osgi.framework.FrameworkUtil;
 
 import com.testify.ecfeed.generators.api.EcException;
+import com.testify.ecfeed.utils.StringHelper;
 import com.testify.ecfeed.utils.SystemLogger;
 
 public class EclipseAndroidToolsImplementer implements IImplementer {
@@ -31,12 +32,11 @@ public class EclipseAndroidToolsImplementer implements IImplementer {
 	}
 
 	public boolean contentImplemented() throws EcException {
-		String path = getAndroidToolsPath();
-		System.out.println("androidToolsPath: " + path);
-		return false;
+		return true;
 	}
 
-	private String getAndroidToolsPath() throws EcException {
+	@SuppressWarnings("unused")
+	private String getAndroidToolsJarPath() throws EcException {
 		Bundle bundle = FrameworkUtil.getBundle(this.getClass());
 
 		URL url = FileLocator.find(bundle, new Path(TOOLS_RELATIVE_PATH), null);
@@ -51,6 +51,7 @@ public class EclipseAndroidToolsImplementer implements IImplementer {
 			SystemLogger.logCatch(e.getMessage());
 			EcException.report(e.getMessage());
 		} 
-		return resolvedUrl.toString();
+
+		return StringHelper.removePrefix("file:", resolvedUrl.toString());
 	}
 }
