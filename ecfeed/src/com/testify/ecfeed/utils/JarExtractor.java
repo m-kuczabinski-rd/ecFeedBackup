@@ -27,8 +27,9 @@ public class JarExtractor {
 
 		try {
 			jar = new JarFile(jarFile);
-			fileContents = readFileContents(filePathName, jar);
+			fileContents = readFileFromJar(filePathName, jar);
 		} catch (IOException | EcException e) {
+			SystemLogger.logCatch(e.getMessage());
 			exceptionMessage = e.getMessage();
 		} finally {
 			tryCloseJar(jar);
@@ -41,7 +42,7 @@ public class JarExtractor {
 		return fileContents;
 	}
 
-	private static String readFileContents(String filePathName, JarFile jarFile) throws IOException, EcException {
+	private static String readFileFromJar(String filePathName, JarFile jarFile) throws EcException {
 		Enumeration<JarEntry> jarEntries = jarFile.entries();
 
 		while (jarEntries.hasMoreElements()) {
@@ -49,48 +50,33 @@ public class JarExtractor {
 
 			String jarEntryName = jarEntry.getName(); 
 			if (jarEntryName.equals(filePathName)) {
-				return readJarEntryContents(jarEntry, jarFile);
+				return readJarEntry(jarEntry, jarFile);
 			}
 		}
 
 		return null;
 	}
 
-	private static String readJarEntryContents(JarEntry jarEntry, JarFile jarFile) throws EcException, IOException {
+	private static String readJarEntry(JarEntry jarEntry, JarFile jarFile) throws EcException {
+		String exceptionMessage = null;
 		String contents = null;
+		InputStream inputStream = null;
 
-		InputStream inputStream = jarFile.getInputStream(jarEntry);
-		contents = streamToString(inputStream);
-		tryCloseInputStream(inputStream);
+		try {
+			inputStream = jarFile.getInputStream(jarEntry);
+			contents = StreamHelper.streamToString(inputStream);
+		} catch (EcException | IOException e) {
+			SystemLogger.logCatch(e.getMessage());
+			exceptionMessage = e.getMessage();
+		} finally {
+			tryCloseInputStream(inputStream);
+		}
+
+		if (exceptionMessage != null) {
+			EcException.report(exceptionMessage);
+		}		
 
 		return contents;
-	}
-
-	private static String streamToString(java.io.InputStream is) throws IOException {
-		StringBuilder stringBuilder = new StringBuilder();
-
-		for(;;) {
-			String dataChunk = readDataChunk(is);
-
-			if (dataChunk == null) {
-				break;
-			}
-
-			stringBuilder.append(dataChunk);
-		}
-
-		return stringBuilder.toString();
-	}
-
-	private static String readDataChunk(InputStream is) throws IOException {
-		byte[] arr = new byte[1000];
-
-		int bytesRead = is.read(arr);
-		if (bytesRead <= 0) {
-			return null;
-		}
-
-		return new String(arr);
 	}
 
 	private static void tryCloseJar(JarFile jar) {
