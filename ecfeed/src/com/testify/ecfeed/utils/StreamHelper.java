@@ -8,52 +8,32 @@
 
 package com.testify.ecfeed.utils;
 
-import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-
-import com.testify.ecfeed.generators.api.EcException;
+import java.util.Scanner;
 
 public class StreamHelper {
 
-	public static String streamToString(InputStream is) throws EcException {
-		String exceptionMessage = null;
-		BufferedReader reader = new BufferedReader(new InputStreamReader(is));
-		StringBuilder stringBuilder = null;
+	private final static String UTF_8_CODING = "UTF-8";
+	private final static String REGEX_BEGINNING_OF_TEXT = "\\A"; 
+
+
+	public static String streamToString(InputStream is) {
+		Scanner scanner = new Scanner(is, UTF_8_CODING);
+		String result = null;
 
 		try {
-			stringBuilder = readLines(reader);
-		} catch (IOException e) {
-			exceptionMessage = e.getMessage();
+			result = readFromScanner(scanner);
 		} finally {
-			tryCloseReader(reader);
+			scanner.close();
 		}
-
-		if (exceptionMessage != null) {
-			EcException.report(exceptionMessage);
-		}
-
-		return stringBuilder.toString();
+		return result;
 	}
 
-	private static StringBuilder readLines(BufferedReader reader) throws IOException {
-		StringBuilder out = new StringBuilder();
-		String line;
-
-		while ((line = reader.readLine()) != null) {
-			out.append(line);
-			out.append("\n");
+	private static String readFromScanner(Scanner scanner) {
+		if (!scanner.hasNext()) {
+			return new String();
 		}
-
-		return out;
+		// the entire content will be read 
+		return scanner.useDelimiter(REGEX_BEGINNING_OF_TEXT).next();
 	}
-
-	private static void tryCloseReader(BufferedReader reader) {
-		try {
-			reader.close();
-		} catch (IOException e) {
-			SystemLogger.logCatch(e.getMessage());
-		}
-	}	
 }

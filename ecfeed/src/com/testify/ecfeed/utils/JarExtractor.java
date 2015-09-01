@@ -65,7 +65,7 @@ public class JarExtractor {
 		try {
 			inputStream = jarFile.getInputStream(jarEntry);
 			content = StreamHelper.streamToString(inputStream);
-		} catch (EcException | IOException e) {
+		} catch (IOException e) {
 			SystemLogger.logCatch(e.getMessage());
 			exceptionMessage = e.getMessage();
 		} finally {
