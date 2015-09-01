@@ -19,15 +19,15 @@ import com.testify.ecfeed.generators.api.EcException;
 
 public class JarExtractor {
 
-	public static String getFileContents(String filePathName, String jarPathName) throws EcException {
+	public static String getFileContent(String filePathName, String jarPathName) throws EcException {
 		File jarFile = new File(jarPathName);
 		JarFile jar = null;
-		String fileContents = null;
+		String fileContent = null;
 		String exceptionMessage = null;
 
 		try {
 			jar = new JarFile(jarFile);
-			fileContents = readFileFromJar(filePathName, jar);
+			fileContent = readFileFromJar(filePathName, jar);
 		} catch (IOException | EcException e) {
 			SystemLogger.logCatch(e.getMessage());
 			exceptionMessage = e.getMessage();
@@ -39,7 +39,7 @@ public class JarExtractor {
 			EcException.report(exceptionMessage);
 		}
 
-		return fileContents;
+		return fileContent;
 	}
 
 	private static String readFileFromJar(String filePathName, JarFile jarFile) throws EcException {
@@ -59,12 +59,12 @@ public class JarExtractor {
 
 	private static String readJarEntry(JarEntry jarEntry, JarFile jarFile) throws EcException {
 		String exceptionMessage = null;
-		String contents = null;
+		String content = null;
 		InputStream inputStream = null;
 
 		try {
 			inputStream = jarFile.getInputStream(jarEntry);
-			contents = StreamHelper.streamToString(inputStream);
+			content = StreamHelper.streamToString(inputStream);
 		} catch (EcException | IOException e) {
 			SystemLogger.logCatch(e.getMessage());
 			exceptionMessage = e.getMessage();
@@ -76,7 +76,7 @@ public class JarExtractor {
 			EcException.report(exceptionMessage);
 		}		
 
-		return contents;
+		return content;
 	}
 
 	private static void tryCloseJar(JarFile jar) {

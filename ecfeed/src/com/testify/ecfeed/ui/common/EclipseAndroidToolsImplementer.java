@@ -61,7 +61,7 @@ public class EclipseAndroidToolsImplementer implements IImplementer {
 		}
 
 		String pathAndFileName = RELATIVE_PATH_IN_JAR + fileName + "." + DiskFileHelper.JAVA_EXTENSION;
-		String classContents = JarExtractor.getFileContents(pathAndFileName, fAndroidToolsJarPath);
+		String classContents = JarExtractor.getFileContent(pathAndFileName, fAndroidToolsJarPath);
 
 		EclipseClassImplementHelper.implementClass(PACKAGE, fileName, classContents, fFileInfoProvider);
 	}

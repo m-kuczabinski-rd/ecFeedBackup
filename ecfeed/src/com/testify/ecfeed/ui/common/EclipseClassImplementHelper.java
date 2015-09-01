@@ -72,7 +72,7 @@ public class EclipseClassImplementHelper {
 	public static void implementClass(
 			String thePackage, 
 			String classNameWithoutExtension, 
-			String contents,
+			String content,
 			IFileInfoProvider fileInfoProvider) throws EcException {
 		try {
 			String unitName = classNameWithoutExtension + ".java";
@@ -82,7 +82,7 @@ public class EclipseClassImplementHelper {
 							thePackage, fileInfoProvider);
 
 			ICompilationUnit unit = 
-					packageFragment.createCompilationUnit(unitName, contents, false, null);
+					packageFragment.createCompilationUnit(unitName, content, false, null);
 
 			unit.becomeWorkingCopy(null);
 			unit.commitWorkingCopy(true, null);
