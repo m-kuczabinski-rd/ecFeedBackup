@@ -44,7 +44,7 @@ public class EclipseClassImplementHelper {
 
 	private static IType getTestingClassType(String thePackage, String classNameWithoutExtension) {
 		String classType = 
-				PackageClassHelper.createQualifiedName(thePackage, classNameWithoutExtension); 
+				PackageClassHelper.createPackageWithClass(thePackage, classNameWithoutExtension); 
 
 		return JavaModelAnalyser.getIType(classType);
 	}	

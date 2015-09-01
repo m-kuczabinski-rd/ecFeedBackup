@@ -16,7 +16,6 @@ public class StreamHelper {
 	private final static String UTF_8_CODING = "UTF-8";
 	private final static String REGEX_BEGINNING_OF_TEXT = "\\A"; 
 
-
 	public static String streamToString(InputStream is) {
 		Scanner scanner = new Scanner(is, UTF_8_CODING);
 		String result = null;

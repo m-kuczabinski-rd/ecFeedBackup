@@ -71,8 +71,32 @@ public class StringHelperTest{
 	}	
 
 	@Test
-	public void shouldIgnoreEmptyString(){
-		String result = StringHelper.removePostfix("123", "");
+	public void shouldReturnEmptWhenEmptyString(){
+		String result = StringHelper.removePostfix("abcd", "");
 		assertEquals(result, "");
+	}	
+
+	@Test
+	public void shouldGetLastToken(){
+		String result = StringHelper.getLastToken("1#2#3", "#");
+		assertEquals(result, "3");
+	}
+
+	@Test
+	public void shouldReturnNullWhenNoLastToken(){
+		String result = StringHelper.getLastToken("123", "#");
+		assertEquals(result, null);
+	}
+
+	@Test
+	public void shouldGetAllBeforeLastToken(){
+		String result = StringHelper.getAllBeforeLastToken("1#2#3", "#");
+		assertEquals(result, "1#2");
+	}
+
+	@Test
+	public void shouldReturnNullWhenTokenSeparatorNotFound(){
+		String result = StringHelper.getAllBeforeLastToken("123", "#");
+		assertEquals(result, null);
 	}	
 }

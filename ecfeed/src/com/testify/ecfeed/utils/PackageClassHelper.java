@@ -10,17 +10,17 @@ package com.testify.ecfeed.utils;
 
 public class PackageClassHelper {
 
+	public static final String PACKAGE_CLASS_SEPARATOR = ".";
+
 	public static String getPackage(String packageWithClass) {
-		int separatorPosition = packageWithClass.lastIndexOf(".");
-		return packageWithClass.substring(0, separatorPosition);
+		return StringHelper.getAllBeforeLastToken(packageWithClass, PACKAGE_CLASS_SEPARATOR);		
 	}
 
 	public static String getClass(String packageWithClass) {
-		int separatorPosition = packageWithClass.lastIndexOf(".");
-		return packageWithClass.substring(separatorPosition+1);
+		return StringHelper.getLastToken(packageWithClass, PACKAGE_CLASS_SEPARATOR);
 	}
 
-	public static String createQualifiedName(String thePackage, String name) {
-		return thePackage + "." + name;
+	public static String createPackageWithClass(String thePackage, String className) {
+		return thePackage + PACKAGE_CLASS_SEPARATOR + className;
 	}
 }
