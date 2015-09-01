@@ -13,6 +13,8 @@ import java.io.File;
 public class DiskFileHelper {
 
 	public static final String JAVA_EXTENSION = "java";
+	public static final String FILE_SEPARATOR = File.separator;
+	public static final String CURRENT_DIR = ".";
 
 	public static boolean fileExists(String pathWithName) {
 		File file = new File(pathWithName);
@@ -24,6 +26,8 @@ public class DiskFileHelper {
 	}
 
 	public static String joinPathWithFile(String path, String file) {
-		return path + File.separator + file; 
+		return path + FILE_SEPARATOR + file;
 	}
+
+
 }

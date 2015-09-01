@@ -23,6 +23,14 @@ public class Messages {
 
 	public static final String EXCEPTION_FILE_INFO_PROVIDER_NOT_NULL = "File info provider must not be null.";
 
+	public static final String EXCEPTION_FILE_NOT_FOUND_IN_INSTALLATION_DIR(String relativePath) {
+		return "Can not find: " + relativePath + " in ecFeed installation directory."; 
+	}
+
+	public static final String EXCEPTION_FILE_NOT_FOUND_IN_INSTALLATION_DIR2(String relativePath, String installationDir) {
+		return "Can not find: " + relativePath + " in ecFeed installation directory: " + installationDir; 
+	}	
+
 
 	public static final String DIALOG_TEST_SUITE_NAME_ERROR_MESSAGE = "Name of a test suite must be between 1 and 64 characters long.";
 	public static final String DIALOG_TEST_SUITE_NAME_ERROR_MESSAGE_NO_WHITESPACE = "Name of a test suite cannot consist of whitespace characters only.";

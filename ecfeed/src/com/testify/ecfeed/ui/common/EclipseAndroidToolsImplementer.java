@@ -27,6 +27,7 @@ public class EclipseAndroidToolsImplementer implements IImplementer {
 	private static final String RELATIVE_PATH_TO_JAR = "lib/android_tools.jar";
 	private static final String RELATIVE_PATH_IN_JAR = "com/testify/ecfeed/android/junit/tools/";
 	private static final String PACKAGE = "com.testify.ecfeed.android.junit.tools";
+	private static final String PREFIX_FILE = "file:";
 
 	private static final String[] FILE_NAMES = {
 		"ArgParser", 
@@ -60,9 +61,9 @@ public class EclipseAndroidToolsImplementer implements IImplementer {
 		}
 
 		String pathAndFileName = RELATIVE_PATH_IN_JAR + fileName + "." + DiskFileHelper.JAVA_EXTENSION;
-		String classContent = JarExtractor.getFileContents(pathAndFileName, fAndroidToolsJarPath);
+		String classContents = JarExtractor.getFileContents(pathAndFileName, fAndroidToolsJarPath);
 
-		EclipseClassImplementHelper.implementClass(PACKAGE, fileName, classContent,fFileInfoProvider);
+		EclipseClassImplementHelper.implementClass(PACKAGE, fileName, classContents, fFileInfoProvider);
 	}
 
 	@Override
@@ -76,11 +77,31 @@ public class EclipseAndroidToolsImplementer implements IImplementer {
 	}
 
 	private String getAndroidToolsJarPath() throws EcException {
+		String androidToolsJarUrl = getAbsoluteUrl(RELATIVE_PATH_TO_JAR);
+
+		if (androidToolsJarUrl != null) {
+			return StringHelper.removePrefix(PREFIX_FILE, androidToolsJarUrl);
+		}
+
+		String ecfeedJarUrl = getAbsoluteUrl(DiskFileHelper.CURRENT_DIR);
+		if (null == ecfeedJarUrl) {
+			EcException.report(Messages.EXCEPTION_FILE_NOT_FOUND_IN_INSTALLATION_DIR(RELATIVE_PATH_TO_JAR));
+		}
+
+		String postfix = DiskFileHelper.FILE_SEPARATOR + DiskFileHelper.CURRENT_DIR + DiskFileHelper.FILE_SEPARATOR;
+		String installationDir = StringHelper.removePostfix(postfix, ecfeedJarUrl);
+		EcException.report(
+				Messages.EXCEPTION_FILE_NOT_FOUND_IN_INSTALLATION_DIR2(RELATIVE_PATH_TO_JAR, installationDir));
+
+		return null;
+	}
+
+	private String getAbsoluteUrl(String relativePath) {
 		Bundle bundle = FrameworkUtil.getBundle(this.getClass());
 
-		URL url = FileLocator.find(bundle, new Path(RELATIVE_PATH_TO_JAR), null);
+		URL url = FileLocator.find(bundle, new Path(relativePath), null);
 		if (url == null) {
-			EcException.report("Can not find: " + RELATIVE_PATH_TO_JAR + " in ecFeed installation directory.");
+			return null;
 		}
 
 		URL resolvedUrl = null;
@@ -88,9 +109,9 @@ public class EclipseAndroidToolsImplementer implements IImplementer {
 			resolvedUrl = FileLocator.resolve(url);
 		} catch (IOException e) {
 			SystemLogger.logCatch(e.getMessage());
-			EcException.report(e.getMessage());
+			return null;
 		} 
 
-		return StringHelper.removePrefix("file:", resolvedUrl.toString());
+		return resolvedUrl.toString();
 	}
 }

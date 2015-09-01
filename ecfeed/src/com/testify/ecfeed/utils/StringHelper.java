@@ -32,4 +32,13 @@ public class StringHelper {
 		}
 		return fromStr.substring(index + prefix.length());
 	}
+
+	public static String removePostfix(String postfix, String fromStr) {
+		int index = fromStr.lastIndexOf(postfix);
+
+		if (index == -1) {
+			return fromStr;
+		}
+		return fromStr.substring(0, index);
+	}
 }
