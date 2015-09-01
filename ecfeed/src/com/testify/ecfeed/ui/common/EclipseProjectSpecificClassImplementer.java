@@ -14,11 +14,11 @@ import com.testify.ecfeed.generators.api.EcException;
 public abstract class EclipseProjectSpecificClassImplementer extends EclipseClassImplementer {
 
 	public EclipseProjectSpecificClassImplementer(
-			IFileInfoProvider fileInfoProvider, 
 			String testingAppPackage, 
-			String testingAppClass) throws EcException {
-		super(fileInfoProvider, 
-				testingAppPackage + "." + AndroidBaseRunnerHelper.getEcFeedTestRunnerPrefix(), 
-				testingAppClass);
+			String testingAppClass,
+			IFileInfoProvider fileInfoProvider) throws EcException {
+		super(testingAppPackage + "." + AndroidBaseRunnerHelper.getEcFeedTestRunnerPrefix(), 
+				testingAppClass, 
+				fileInfoProvider);
 	}
 }

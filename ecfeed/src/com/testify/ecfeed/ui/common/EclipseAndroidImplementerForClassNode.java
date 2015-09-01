@@ -21,8 +21,8 @@ public class EclipseAndroidImplementerForClassNode implements IImplementer {
 	private EclipseAndroidToolsImplementer fAndroidToolsImplementer;
 
 	EclipseAndroidImplementerForClassNode(
-			IFileInfoProvider fileInfoProvider,
-			ClassNode classNode) throws EcException {
+			ClassNode classNode,
+			IFileInfoProvider fileInfoProvider) throws EcException {
 
 		String projectPath = EclipseProjectHelper.getProjectPath(fileInfoProvider);
 
@@ -31,9 +31,9 @@ public class EclipseAndroidImplementerForClassNode implements IImplementer {
 
 		String testingAppPackage = androidManifestReader.getTestingAppPackage();
 
-		createLoggerClassImplementer(fileInfoProvider, testingAppPackage);
-		createRunnerClassImplementer(fileInfoProvider, testingAppPackage, classNode);
-		createTestClassImplementer(fileInfoProvider, testingAppPackage, classNode, androidManifestReader);
+		createLoggerClassImplementer(testingAppPackage, fileInfoProvider);
+		createRunnerClassImplementer(testingAppPackage, classNode, fileInfoProvider);
+		createTestClassImplementer(testingAppPackage, classNode, androidManifestReader, fileInfoProvider);
 		createAndroidManifestImplementer(fileInfoProvider);
 		createEclipseAndroidToolsImplementer(fileInfoProvider);
 	}
@@ -44,32 +44,32 @@ public class EclipseAndroidImplementerForClassNode implements IImplementer {
 	}
 
 	private void createLoggerClassImplementer(
-			IFileInfoProvider fileInfoProvider, 
-			String testingAppPackage) throws EcException {
+			String testingAppPackage,
+			IFileInfoProvider fileInfoProvider) throws EcException {
 
 		fLoggerClassImplementer = 
-				new	EclipseLoggerClassImplementer(fileInfoProvider, testingAppPackage);
+				new	EclipseLoggerClassImplementer(testingAppPackage, fileInfoProvider);
 	}
 
 	private void createRunnerClassImplementer(
-			IFileInfoProvider fileInfoProvider,
 			String testingAppPackage,
-			ClassNode classNode) throws EcException {
+			ClassNode classNode,
+			IFileInfoProvider fileInfoProvider) throws EcException {
 
 		String baseRunner = classNode.getAndroidBaseRunner();
 
 		fRunnerClassImplementer = 
 				new EclipseRunnerClassImplementer(
-						fileInfoProvider, 
 						testingAppPackage,
-						baseRunner);
+						baseRunner,
+						fileInfoProvider);
 	}
 
 	private void createTestClassImplementer(
-			IFileInfoProvider fileInfoProvider,
 			String testingAppPackage,
 			ClassNode classNode, 
-			AndroidManifestAccessor androidManifestReader) throws EcException {
+			AndroidManifestAccessor androidManifestReader,
+			IFileInfoProvider fileInfoProvider) throws EcException {
 
 		String testingAppClass = "EcFeedTest";
 		String testedAppPackage = androidManifestReader.getDefaultTestedAppPackage();
@@ -80,12 +80,12 @@ public class EclipseAndroidImplementerForClassNode implements IImplementer {
 
 		fTestClassImplementer = 
 				new	EclipseTestClassImplementer(
-						fileInfoProvider, 
 						testingAppPackage,
 						testingAppClass,
 						"ActivityInstrumentationTestCase2",
 						testedAppPackage,
-						"MainActivity");
+						"MainActivity",
+						fileInfoProvider);
 	}
 
 	private void createEclipseAndroidToolsImplementer(IFileInfoProvider fileInfoProvider) throws EcException {

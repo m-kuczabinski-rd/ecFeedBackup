@@ -17,13 +17,13 @@ public class EclipseTestClassImplementer extends EclipseProjectSpecificClassImpl
 	String fTestedAppMainActivity;
 
 	public EclipseTestClassImplementer(
-			IFileInfoProvider fileInfoProvider, 
 			String testingAppPackage,
 			String testingAppClass,
 			String testingAppSuperClass,
 			String testedAppPackage,
-			String testedAppMainActivity) throws EcException {
-		super(fileInfoProvider, testingAppPackage, testingAppClass);
+			String testedAppMainActivity,
+			IFileInfoProvider fileInfoProvider) throws EcException {
+		super(testingAppPackage, testingAppClass, fileInfoProvider);
 		fTestingAppSuperClass = testingAppSuperClass;
 		fTestedAppPackage = testedAppPackage;
 		fTestedAppMainActivity = testedAppMainActivity;

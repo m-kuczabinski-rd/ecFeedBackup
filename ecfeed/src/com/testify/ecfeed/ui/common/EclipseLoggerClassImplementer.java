@@ -12,8 +12,8 @@ import com.testify.ecfeed.generators.api.EcException;
 
 public class EclipseLoggerClassImplementer extends EclipseProjectSpecificClassImplementer {
 
-	public EclipseLoggerClassImplementer(IFileInfoProvider fileInfoProvider, String testingAppPackage) throws EcException {
-		super(fileInfoProvider, testingAppPackage, "Logger");
+	public EclipseLoggerClassImplementer(String testingAppPackage, IFileInfoProvider fileInfoProvider) throws EcException {
+		super(testingAppPackage, "Logger", fileInfoProvider);
 	}
 
 	@ Override

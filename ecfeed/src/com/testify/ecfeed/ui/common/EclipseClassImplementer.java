@@ -17,9 +17,9 @@ public abstract class EclipseClassImplementer implements IImplementer {
 	private String fClassNameWithoutExtension;
 
 	public EclipseClassImplementer(
-			IFileInfoProvider fileInfoProvider, 
 			String argPackage, 
-			String classNameWithoutExtension) throws EcException {
+			String classNameWithoutExtension,
+			IFileInfoProvider fileInfoProvider) throws EcException {
 		if (fileInfoProvider == null) {
 			EcException.report(Messages.EXCEPTION_FILE_INFO_PROVIDER_NOT_NULL);
 		}

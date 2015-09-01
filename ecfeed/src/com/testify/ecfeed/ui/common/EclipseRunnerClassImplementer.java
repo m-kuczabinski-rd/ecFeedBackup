@@ -16,11 +16,10 @@ public class EclipseRunnerClassImplementer extends EclipseProjectSpecificClassIm
 	String fBaseRunner;
 
 	public EclipseRunnerClassImplementer(
-			IFileInfoProvider fileInfoProvider, 
 			String testingAppPackage,
-			String baseRunner) throws EcException {
-
-		super(fileInfoProvider, testingAppPackage, AndroidBaseRunnerHelper.getEcFeedTestRunnerName());
+			String baseRunner,
+			IFileInfoProvider fileInfoProvider) throws EcException {
+		super(testingAppPackage, AndroidBaseRunnerHelper.getEcFeedTestRunnerName(), fileInfoProvider);
 		fBaseRunner = baseRunner;
 	}
 

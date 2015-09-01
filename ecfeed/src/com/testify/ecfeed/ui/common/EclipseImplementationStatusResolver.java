@@ -33,7 +33,7 @@ public class EclipseImplementationStatusResolver extends AbstractJavaImplementat
 	@Override
 	protected boolean androidCodeImplemented(ClassNode classNode) throws EcException {
 		EclipseAndroidImplementerForClassNode implementer = 
-				new EclipseAndroidImplementerForClassNode(fFileInfoProvider, classNode);
+				new EclipseAndroidImplementerForClassNode(classNode, fFileInfoProvider);
 
 		return implementer.contentImplemented();
 	}
