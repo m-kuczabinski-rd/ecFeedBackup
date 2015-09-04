@@ -64,7 +64,12 @@ public class JavaTestRunner {
 
 		String className = fTestClass.getName();
 		Object[] arguments = getArguments(testData);
-		fTestMethodInvoker.invoke(fTestMethod, className, instance, arguments, testData.toString());
+
+		try {
+			fTestMethodInvoker.invoke(fTestMethod, className, instance, arguments, testData.toString());
+		} catch (Exception e) {
+			RunnerException.report(e.getMessage());
+		}
 	}
 
 	protected Method getTestMethod(Class<?> testClass, MethodNode methodModel) throws RunnerException {

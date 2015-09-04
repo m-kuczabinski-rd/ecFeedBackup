@@ -17,7 +17,7 @@ public class AndroidBaseRunnerHelper {
 		return "ecFeed.android";
 	}
 
-	public static String createFullAndroidBaseRunnerName(String projectPath) throws EcException {
+	public static String createFullAndroidRunnerName(String projectPath) throws EcException {
 		String testingAppPackage = getTestingAppPackage(projectPath);
 
 		if (testingAppPackage == null) {

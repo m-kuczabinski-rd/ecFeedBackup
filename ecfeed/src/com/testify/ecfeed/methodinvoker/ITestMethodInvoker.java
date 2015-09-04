@@ -14,6 +14,8 @@ public interface ITestMethodInvoker {
 
 	boolean isRemote();
 
+	void setRunner(String runner); 
+
 	void invoke(
 			Method testMethod,
 			String className,

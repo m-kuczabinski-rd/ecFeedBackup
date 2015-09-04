@@ -38,6 +38,7 @@ import com.testify.ecfeed.adapter.operations.MethodOperationAddTestCase;
 import com.testify.ecfeed.adapter.operations.MethodOperationAddTestSuite;
 import com.testify.ecfeed.adapter.operations.MethodOperationConvertTo;
 import com.testify.ecfeed.adapter.operations.MethodOperationRenameTestCases;
+import com.testify.ecfeed.android.AndroidBaseRunnerHelper;
 import com.testify.ecfeed.generators.api.EcException;
 import com.testify.ecfeed.methodinvoker.ITestMethodInvoker;
 import com.testify.ecfeed.model.ChoiceNode;
@@ -52,6 +53,7 @@ import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.runner.java.JUnitTestMethodInvoker;
 import com.testify.ecfeed.ui.common.Constants;
 import com.testify.ecfeed.ui.common.EclipseModelBuilder;
+import com.testify.ecfeed.ui.common.EclipseProjectHelper;
 import com.testify.ecfeed.ui.common.EclipseTypeAdapterProvider;
 import com.testify.ecfeed.ui.common.IFileInfoProvider;
 import com.testify.ecfeed.ui.common.JavaModelAnalyser;
@@ -256,16 +258,13 @@ public class MethodInterface extends ParametersParentInterface {
 			return new JUnitTestMethodInvoker();
 		}
 
-		// 		TODO
-		//		String projectPath = EclipseProjectHelper.getProjectPath(fileInfoProvider);
-		//		String androidBaseRunner = AndroidBaseRunnerHelper.createFullAndroidBaseRunnerName(projectPath);
-		//
-		//		return new AndroidTestMethodInvoker(androidBaseRunner);
+		String projectPath = EclipseProjectHelper.getProjectPath(fileInfoProvider);
+		String androidRunner = AndroidBaseRunnerHelper.createFullAndroidRunnerName(projectPath);
 
-		return createRemoteInvokerFromExtension();
+		return createRemoteAndroidInvoker(androidRunner);
 	}
 
-	private ITestMethodInvoker createRemoteInvokerFromExtension() throws EcException {
+	private ITestMethodInvoker createRemoteAndroidInvoker(String androidRunner) throws EcException {
 		IExtensionRegistry registry = Platform.getExtensionRegistry();
 
 		final String IREMOTE_INVOKER_ID = "com.testify.ecfeed.extensionpoint.definition.remoteinvoker";
@@ -277,8 +276,10 @@ public class MethodInterface extends ParametersParentInterface {
 			for (IConfigurationElement element : config) {
 				final Object obj = element.createExecutableExtension("class");
 
-				if (obj instanceof ITestMethodInvoker) {  
-					return (ITestMethodInvoker)obj;
+				if (obj instanceof ITestMethodInvoker) {
+					ITestMethodInvoker invoker = (ITestMethodInvoker)obj;
+					invoker.setRunner(androidRunner);
+					return invoker;
 				}
 			}
 		} catch (CoreException e) {

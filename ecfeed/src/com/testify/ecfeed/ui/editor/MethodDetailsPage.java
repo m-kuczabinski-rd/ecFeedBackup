@@ -22,7 +22,6 @@ import org.eclipse.swt.widgets.Text;
 
 import com.testify.ecfeed.adapter.EImplementationStatus;
 import com.testify.ecfeed.adapter.java.JavaUtils;
-import com.testify.ecfeed.generators.api.EcException;
 import com.testify.ecfeed.model.AbstractNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.ui.common.IFileInfoProvider;
@@ -47,7 +46,7 @@ public class MethodDetailsPage extends BasicDetailsPage {
 		public void widgetSelected(SelectionEvent ev){
 			try {
 				fMethodIf.executeOnlineTests(getFileInfoProvider());
-			} catch (EcException e) {
+			} catch (Exception e) {
 				SystemLogger.logCatch(e.getMessage());
 			}
 		}
