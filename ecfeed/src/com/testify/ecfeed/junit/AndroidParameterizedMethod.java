@@ -13,8 +13,8 @@ import java.util.Collection;
 
 import com.testify.ecfeed.adapter.java.ModelClassLoader;
 import com.testify.ecfeed.generators.api.EcException;
+import com.testify.ecfeed.methodinvoker.ITestMethodInvoker;
 import com.testify.ecfeed.model.TestCaseNode;
-import com.testify.ecfeed.runner.ITestMethodInvoker;
 import com.testify.ecfeed.runner.Messages;
 
 public class AndroidParameterizedMethod extends AbstractFrameworkMethod {

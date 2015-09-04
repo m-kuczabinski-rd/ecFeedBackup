@@ -3,9 +3,9 @@ package com.testify.ecfeed.runner.java;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-import com.testify.ecfeed.runner.ITestMethodInvoker;
+import com.testify.ecfeed.methodinvoker.ITestMethodInvoker;
 import com.testify.ecfeed.runner.Messages;
-import com.testify.ecfeed.runner.RunnerException;
+import com.testify.ecfeed.utils.ExceptionHelper;
 
 public class JUnitTestMethodInvoker implements ITestMethodInvoker {
 
@@ -20,16 +20,15 @@ public class JUnitTestMethodInvoker implements ITestMethodInvoker {
 			String className, 
 			Object instance,
 			Object[] arguments, 
-			String argumentsDescription) throws RunnerException {
+			String argumentsDescription) throws RuntimeException {
 		try {
 			testMethod.invoke(instance, arguments);
 		} catch (InvocationTargetException e) {
-			RunnerException.report(
-					testMethod.getName() + " " + argumentsDescription + ": " + e.getTargetException().toString());
+			String message = testMethod.getName() + " " + argumentsDescription + ": " + e.getTargetException().toString();
+			ExceptionHelper.reportRuntimeException(message);
 		} catch (IllegalAccessException | IllegalArgumentException e) {
-			e.printStackTrace();
-			RunnerException.report(
-					Messages.CANNOT_INVOKE_TEST_METHOD(testMethod.getName(), argumentsDescription, e.getMessage()));
+			String message = Messages.CANNOT_INVOKE_TEST_METHOD(testMethod.getName(), argumentsDescription, e.getMessage());
+			ExceptionHelper.reportRuntimeException(message);			
 		}
 	}
 }

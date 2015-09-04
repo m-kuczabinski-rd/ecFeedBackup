@@ -31,6 +31,9 @@ public class Messages {
 		return "Can not find: " + relativePath + " in ecFeed installation directory: " + installationDir; 
 	}	
 
+	public static final String EXCEPTION_ANDROID_METHOD_INVOKER_NOT_FOUND = 
+			"Android method invoker not found (not installed).";
+
 
 	public static final String DIALOG_TEST_SUITE_NAME_ERROR_MESSAGE = "Name of a test suite must be between 1 and 64 characters long.";
 	public static final String DIALOG_TEST_SUITE_NAME_ERROR_MESSAGE_NO_WHITESPACE = "Name of a test suite cannot consist of whitespace characters only.";

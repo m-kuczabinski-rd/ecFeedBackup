@@ -15,9 +15,10 @@ import java.io.InputStreamReader;
 import java.lang.reflect.Method;
 
 import com.testify.ecfeed.android.AndroidBaseRunnerHelper;
-import com.testify.ecfeed.runner.ITestMethodInvoker;
+import com.testify.ecfeed.methodinvoker.ITestMethodInvoker;
 import com.testify.ecfeed.runner.Messages;
 import com.testify.ecfeed.runner.RunnerException;
+import com.testify.ecfeed.utils.ExceptionHelper;
 
 public class AndroidTestMethodInvoker implements ITestMethodInvoker {
 
@@ -39,15 +40,15 @@ public class AndroidTestMethodInvoker implements ITestMethodInvoker {
 			Object instance,
 			Object[] arguments, 
 			String argumentsDescription)
-					throws RunnerException {
+					throws RuntimeException {
 		try {
 			invokeRemotely(
 					className,
 					testMethod.getName(),
 					createParameters(testMethod, arguments));
 		} catch (RunnerException e) {
-			RunnerException.report(
-					Messages.CANNOT_INVOKE_TEST_METHOD(testMethod.getName(), argumentsDescription, e.getMessage()));
+			String message = Messages.CANNOT_INVOKE_TEST_METHOD(testMethod.getName(), argumentsDescription, e.getMessage());
+			ExceptionHelper.reportRuntimeException(message);
 		}
 	}
 

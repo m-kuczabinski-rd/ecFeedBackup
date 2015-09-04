@@ -16,6 +16,10 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IExtensionRegistry;
+import org.eclipse.core.runtime.IConfigurationElement;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.jdt.core.IMethod;
 import org.eclipse.jdt.ui.JavaUI;
 import org.eclipse.jface.dialogs.IDialogConstants;
@@ -34,8 +38,8 @@ import com.testify.ecfeed.adapter.operations.MethodOperationAddTestCase;
 import com.testify.ecfeed.adapter.operations.MethodOperationAddTestSuite;
 import com.testify.ecfeed.adapter.operations.MethodOperationConvertTo;
 import com.testify.ecfeed.adapter.operations.MethodOperationRenameTestCases;
-import com.testify.ecfeed.android.AndroidBaseRunnerHelper;
 import com.testify.ecfeed.generators.api.EcException;
+import com.testify.ecfeed.methodinvoker.ITestMethodInvoker;
 import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.Constraint;
@@ -45,8 +49,6 @@ import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.MethodParameterNode;
 import com.testify.ecfeed.model.StaticStatement;
 import com.testify.ecfeed.model.TestCaseNode;
-import com.testify.ecfeed.runner.ITestMethodInvoker;
-import com.testify.ecfeed.runner.android.AndroidTestMethodInvoker;
 import com.testify.ecfeed.runner.java.JUnitTestMethodInvoker;
 import com.testify.ecfeed.ui.common.Constants;
 import com.testify.ecfeed.ui.common.EclipseModelBuilder;
@@ -54,7 +56,6 @@ import com.testify.ecfeed.ui.common.EclipseTypeAdapterProvider;
 import com.testify.ecfeed.ui.common.IFileInfoProvider;
 import com.testify.ecfeed.ui.common.JavaModelAnalyser;
 import com.testify.ecfeed.ui.common.Messages;
-import com.testify.ecfeed.ui.common.EclipseProjectHelper;
 import com.testify.ecfeed.ui.dialogs.AddTestCaseDialog;
 import com.testify.ecfeed.ui.dialogs.CalculateCoverageDialog;
 import com.testify.ecfeed.ui.dialogs.RenameTestSuiteDialog;
@@ -255,10 +256,37 @@ public class MethodInterface extends ParametersParentInterface {
 			return new JUnitTestMethodInvoker();
 		}
 
-		String projectPath = EclipseProjectHelper.getProjectPath(fileInfoProvider);
-		String androidBaseRunner = AndroidBaseRunnerHelper.createFullAndroidBaseRunnerName(projectPath);
+		// 		TODO
+		//		String projectPath = EclipseProjectHelper.getProjectPath(fileInfoProvider);
+		//		String androidBaseRunner = AndroidBaseRunnerHelper.createFullAndroidBaseRunnerName(projectPath);
+		//
+		//		return new AndroidTestMethodInvoker(androidBaseRunner);
 
-		return new AndroidTestMethodInvoker(androidBaseRunner);
+		return createRemoteInvokerFromExtension();
+	}
+
+	private ITestMethodInvoker createRemoteInvokerFromExtension() throws EcException {
+		IExtensionRegistry registry = Platform.getExtensionRegistry();
+
+		final String IREMOTE_INVOKER_ID = "com.testify.ecfeed.extensionpoint.definition.remoteinvoker";
+
+		IConfigurationElement[] config =
+				registry.getConfigurationElementsFor(IREMOTE_INVOKER_ID);		
+
+		try {
+			for (IConfigurationElement element : config) {
+				final Object obj = element.createExecutableExtension("class");
+
+				if (obj instanceof ITestMethodInvoker) {  
+					return (ITestMethodInvoker)obj;
+				}
+			}
+		} catch (CoreException e) {
+			SystemLogger.logCatch(e.getMessage());
+		}	
+
+		EcException.report(Messages.EXCEPTION_ANDROID_METHOD_INVOKER_NOT_FOUND);
+		return null;
 	}
 
 	private boolean emptyAndroidBaseRunner(ClassNode classNode) {

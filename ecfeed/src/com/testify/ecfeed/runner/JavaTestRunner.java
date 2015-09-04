@@ -19,6 +19,7 @@ import com.testify.ecfeed.adapter.java.ChoiceValueParser;
 import com.testify.ecfeed.adapter.java.Constants;
 import com.testify.ecfeed.adapter.java.JavaUtils;
 import com.testify.ecfeed.adapter.java.ModelClassLoader;
+import com.testify.ecfeed.methodinvoker.ITestMethodInvoker;
 import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.MethodNode;
@@ -48,7 +49,7 @@ public class JavaTestRunner {
 		validateTestData(testData);
 
 		Object instance = null;
-		
+
 		if (!fTestMethodInvoker.isRemote())	{
 			try {
 				instance = fTestClass.newInstance();
@@ -65,7 +66,7 @@ public class JavaTestRunner {
 		Object[] arguments = getArguments(testData);
 		fTestMethodInvoker.invoke(fTestMethod, className, instance, arguments, testData.toString());
 	}
-	
+
 	protected Method getTestMethod(Class<?> testClass, MethodNode methodModel) throws RunnerException {
 		for(Method method : testClass.getMethods()){
 			if(isModel(method, methodModel)){

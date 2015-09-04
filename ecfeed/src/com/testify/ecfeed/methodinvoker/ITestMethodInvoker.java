@@ -6,19 +6,19 @@
  * http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 
-package com.testify.ecfeed.runner;
+package com.testify.ecfeed.methodinvoker;
 
 import java.lang.reflect.Method;
 
 public interface ITestMethodInvoker {
-	
+
 	boolean isRemote();
-	
+
 	void invoke(
 			Method testMethod,
 			String className,
 			Object instance,
 			Object[] arguments, 
 			String argumentsDescription
-			) throws RunnerException;
+			) throws RuntimeException;
 }

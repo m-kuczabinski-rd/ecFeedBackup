@@ -18,8 +18,8 @@ import java.util.List;
 import com.testify.ecfeed.adapter.java.ModelClassLoader;
 import com.testify.ecfeed.generators.api.GeneratorException;
 import com.testify.ecfeed.generators.api.IGenerator;
+import com.testify.ecfeed.methodinvoker.ITestMethodInvoker;
 import com.testify.ecfeed.model.ChoiceNode;
-import com.testify.ecfeed.runner.ITestMethodInvoker;
 import com.testify.ecfeed.runner.Messages;
 import com.testify.ecfeed.runner.RunnerException;
 

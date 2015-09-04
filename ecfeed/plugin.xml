@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="4.2?>
 <plugin>
+   <extension-point id="com.testify.ecfeed.extensionpoint.definition.remoteinvoker" name="RemoteInvoker" schema="schema/com.testify.ecfeed.extensionpoint.definition.remoteinvoker.exsd"/>
    <extension
          point="org.eclipse.ui.newWizards">
       <category
