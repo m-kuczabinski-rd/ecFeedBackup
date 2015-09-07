@@ -8,9 +8,7 @@
 
 package com.testify.ecfeed.ui.common;
 
-import com.testify.ecfeed.model.ClassNode;
-
 public interface IExternalImplementer extends IImplementer{
 
-	void initialize(ClassNode classNode, IFileInfoProvider fFileInfoProvider) throws RuntimeException;
+	void initialize(String baseRunner, IFileInfoProvider fFileInfoProvider) throws RuntimeException;
 }

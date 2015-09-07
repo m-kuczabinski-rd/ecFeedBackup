@@ -9,7 +9,6 @@
 package com.testify.ecfeed.ui.common;
 
 import com.testify.ecfeed.android.project.AndroidManifestAccessor;
-import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.utils.ExceptionHelper;
 
 public class EclipseAndroidImplementer implements IExternalImplementer {
@@ -38,11 +37,8 @@ public class EclipseAndroidImplementer implements IExternalImplementer {
 
 	private void createRunnerClassImplementer(
 			String testingAppPackage,
-			ClassNode classNode,
+			String baseRunner,
 			IFileInfoProvider fileInfoProvider) {
-
-		String baseRunner = classNode.getAndroidBaseRunner();
-
 		fRunnerClassImplementer = 
 				new EclipseRunnerClassImplementer(
 						testingAppPackage,
@@ -52,7 +48,7 @@ public class EclipseAndroidImplementer implements IExternalImplementer {
 
 	private void createTestClassImplementer(
 			String testingAppPackage,
-			ClassNode classNode, 
+			String baseRunner, 
 			AndroidManifestAccessor androidManifestReader,
 			IFileInfoProvider fileInfoProvider) {
 
@@ -117,18 +113,17 @@ public class EclipseAndroidImplementer implements IExternalImplementer {
 	}
 
 	@Override
-	public void initialize(ClassNode classNode, IFileInfoProvider fileInfoProvider) {
-		
+	public void initialize(String baseRunner, IFileInfoProvider fileInfoProvider) {
 		String projectPath = EclipseProjectHelper.getProjectPath(fileInfoProvider);
 
 		AndroidManifestAccessor androidManifestReader = 
 				new AndroidManifestAccessor(projectPath);
 
 		String testingAppPackage = androidManifestReader.getTestingAppPackage();
-
+		
 		createLoggerClassImplementer(testingAppPackage, fileInfoProvider);
-		createRunnerClassImplementer(testingAppPackage, classNode, fileInfoProvider);
-		createTestClassImplementer(testingAppPackage, classNode, androidManifestReader, fileInfoProvider);
+		createRunnerClassImplementer(testingAppPackage, baseRunner, fileInfoProvider);
+		createTestClassImplementer(testingAppPackage, baseRunner, androidManifestReader, fileInfoProvider);
 		createAndroidManifestImplementer(fileInfoProvider);
 		createEclipseAndroidToolsImplementer(fileInfoProvider);
 	}	

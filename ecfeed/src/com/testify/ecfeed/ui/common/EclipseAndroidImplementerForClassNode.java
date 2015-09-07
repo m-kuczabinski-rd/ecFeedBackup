@@ -14,13 +14,15 @@ public class EclipseAndroidImplementerForClassNode {
 	
 	public boolean contentImplemented(ClassNode classNode, IFileInfoProvider fileInfoProvider) {
 		EclipseAndroidImplementer implementer = new EclipseAndroidImplementer();
-		implementer.initialize(classNode, fileInfoProvider);
+		String baseRunner = classNode.getAndroidBaseRunner();
+		implementer.initialize(baseRunner, fileInfoProvider);
 		return implementer.contentImplemented();
 	}
 
 	public void implementContent(ClassNode classNode, IFileInfoProvider fileInfoProvider) {
 		EclipseAndroidImplementer implementer = new EclipseAndroidImplementer();
-		implementer.initialize(classNode, fileInfoProvider);
+		String baseRunner = classNode.getAndroidBaseRunner();
+		implementer.initialize(baseRunner, fileInfoProvider);
 		implementer.implementContent();
 	}
 }
