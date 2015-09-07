@@ -8,11 +8,9 @@
 
 package com.testify.ecfeed.ui.common;
 
-import com.testify.ecfeed.generators.api.EcException;
-
 public class EclipseLoggerClassImplementer extends EclipseProjectSpecificClassImplementer {
 
-	public EclipseLoggerClassImplementer(String testingAppPackage, IFileInfoProvider fileInfoProvider) throws EcException {
+	public EclipseLoggerClassImplementer(String testingAppPackage, IFileInfoProvider fileInfoProvider) {
 		super(testingAppPackage, "Logger", fileInfoProvider);
 	}
 

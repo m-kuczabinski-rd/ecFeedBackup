@@ -10,14 +10,13 @@ package com.testify.ecfeed.ui.common;
 
 import com.testify.ecfeed.android.AndroidBaseRunnerHelper;
 import com.testify.ecfeed.android.project.AndroidManifestAccessor;
-import com.testify.ecfeed.generators.api.EcException;
 
 public class EclipseAndroidManifestImplementer implements IImplementer{
 
 	AndroidManifestAccessor fManifestAccessor;
 	String fEcFeedTestRunner;
 
-	public EclipseAndroidManifestImplementer(IFileInfoProvider fileInfoProvider) throws EcException {
+	public EclipseAndroidManifestImplementer(IFileInfoProvider fileInfoProvider) {
 		fManifestAccessor =
 				new AndroidManifestAccessor(EclipseProjectHelper.getProjectPath(fileInfoProvider));
 		fEcFeedTestRunner = 
@@ -30,7 +29,7 @@ public class EclipseAndroidManifestImplementer implements IImplementer{
 		return fManifestAccessor.containsRunner(fEcFeedTestRunner);
 	}
 
-	public void implementContent() throws EcException {
+	public void implementContent() {
 		fManifestAccessor.supplementRunner(
 				fEcFeedTestRunner,
 				fManifestAccessor.getDefaultTestedAppPackage());

@@ -8,10 +8,8 @@
 
 package com.testify.ecfeed.ui.common;
 
-import com.testify.ecfeed.generators.api.EcException;
-
 public interface IImplementer {
 
-	void implementContent() throws EcException;
-	boolean contentImplemented() throws EcException;
+	void implementContent();
+	boolean contentImplemented();
 }

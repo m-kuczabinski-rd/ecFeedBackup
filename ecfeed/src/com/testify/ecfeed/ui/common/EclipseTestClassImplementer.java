@@ -8,8 +8,6 @@
 
 package com.testify.ecfeed.ui.common;
 
-import com.testify.ecfeed.generators.api.EcException;
-
 public class EclipseTestClassImplementer extends EclipseProjectSpecificClassImplementer {
 
 	String fTestingAppSuperClass;
@@ -22,7 +20,7 @@ public class EclipseTestClassImplementer extends EclipseProjectSpecificClassImpl
 			String testingAppSuperClass,
 			String testedAppPackage,
 			String testedAppMainActivity,
-			IFileInfoProvider fileInfoProvider) throws EcException {
+			IFileInfoProvider fileInfoProvider) {
 		super(testingAppPackage, testingAppClass, fileInfoProvider);
 		fTestingAppSuperClass = testingAppSuperClass;
 		fTestedAppPackage = testedAppPackage;

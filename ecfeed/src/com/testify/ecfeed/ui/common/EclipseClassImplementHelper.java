@@ -14,7 +14,7 @@ import org.eclipse.jdt.core.IPackageFragment;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaModelException;
 
-import com.testify.ecfeed.generators.api.EcException;
+import com.testify.ecfeed.utils.ExceptionHelper;
 import com.testify.ecfeed.utils.PackageClassHelper;
 
 public class EclipseClassImplementHelper {
@@ -73,7 +73,7 @@ public class EclipseClassImplementHelper {
 			String thePackage, 
 			String classNameWithoutExtension, 
 			String content,
-			IFileInfoProvider fileInfoProvider) throws EcException {
+			IFileInfoProvider fileInfoProvider) {
 		try {
 			String unitName = classNameWithoutExtension + ".java";
 
@@ -87,7 +87,7 @@ public class EclipseClassImplementHelper {
 			unit.becomeWorkingCopy(null);
 			unit.commitWorkingCopy(true, null);
 		} catch (CoreException e) {
-			EcException.report(e.getMessage());
+			ExceptionHelper.reportRuntimeException(e.getMessage());
 		}
 	}
 }

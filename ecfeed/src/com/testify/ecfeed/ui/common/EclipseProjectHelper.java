@@ -16,6 +16,7 @@ import org.eclipse.core.runtime.QualifiedName;
 
 import com.testify.ecfeed.generators.api.EcException;
 import com.testify.ecfeed.utils.DiskFileHelper;
+import com.testify.ecfeed.utils.ExceptionHelper;
 import com.testify.ecfeed.utils.SystemLogger;
 
 public class EclipseProjectHelper {
@@ -40,9 +41,9 @@ public class EclipseProjectHelper {
 		}
 	}	
 
-	public static String getProjectPath(IFileInfoProvider fileInfoProvider) throws EcException {
+	public static String getProjectPath(IFileInfoProvider fileInfoProvider) {
 		if (fileInfoProvider == null) {
-			EcException.report(Messages.EXCEPTION_FILE_INFO_PROVIDER_NOT_NULL);
+			ExceptionHelper.reportRuntimeException(Messages.EXCEPTION_FILE_INFO_PROVIDER_NOT_NULL);
 		}
 
 		return fileInfoProvider.getProject().getLocation().toOSString();

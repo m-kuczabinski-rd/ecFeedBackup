@@ -15,9 +15,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.testify.ecfeed.generators.api.EcException;
 import com.testify.ecfeed.runner.Messages;
 import com.testify.ecfeed.utils.DiskFileHelper;
+import com.testify.ecfeed.utils.ExceptionHelper;
 
 import nu.xom.Attribute;
 import nu.xom.Builder;
@@ -76,7 +76,7 @@ public class AndroidManifestAccessor {
 		return false;
 	}
 
-	public AndroidManifestAccessor(String projectPath) throws EcException {
+	public AndroidManifestAccessor(String projectPath) {
 		Builder builder = new Builder();
 
 		try {
@@ -84,7 +84,7 @@ public class AndroidManifestAccessor {
 
 			fDocument = builder.build(fManifestPath);
 		} catch (ParsingException | IOException e) {
-			EcException.report(e.getMessage());
+			ExceptionHelper.reportRuntimeException(e.getMessage());
 		}
 
 		fRoot = fDocument.getRootElement();
@@ -153,8 +153,7 @@ public class AndroidManifestAccessor {
 		return false;
 	}
 
-	public void supplementRunner(String runnerName, String targetPackage)
-			throws EcException {
+	public void supplementRunner(String runnerName, String targetPackage) {
 		if (containsRunner(runnerName, targetPackage)) {
 			return;
 		}
@@ -202,15 +201,15 @@ public class AndroidManifestAccessor {
 		return lastInstrumentationIndex;
 	}
 
-	private void writeDocument() throws EcException {
+	private void writeDocument() {
 		File file = new File(fManifestPath);
 
 		FileOutputStream stream = null;
 		try {
 			stream = new FileOutputStream(file);
 		} catch (FileNotFoundException e) {
-			EcException.report(Messages
-					.CAN_NOT_OPEN_ANDROID_MANIFEST(fManifestPath));
+			ExceptionHelper.reportRuntimeException(
+					Messages.CAN_NOT_OPEN_ANDROID_MANIFEST(fManifestPath));
 		}
 
 		Serializer serializer = new Serializer(stream);
@@ -218,8 +217,8 @@ public class AndroidManifestAccessor {
 		try {
 			serializer.write(fDocument);
 		} catch (IOException e) {
-			EcException.report(Messages
-					.CAN_NOT_SERIALIZE_TO_ANDROID_MANIFEST(fManifestPath));
+			ExceptionHelper.reportRuntimeException(
+					Messages.CAN_NOT_SERIALIZE_TO_ANDROID_MANIFEST(fManifestPath));
 		}
 	}
 

@@ -16,8 +16,8 @@ import org.eclipse.core.runtime.Path;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.FrameworkUtil;
 
-import com.testify.ecfeed.generators.api.EcException;
 import com.testify.ecfeed.utils.DiskFileHelper;
+import com.testify.ecfeed.utils.ExceptionHelper;
 import com.testify.ecfeed.utils.JarExtractor;
 import com.testify.ecfeed.utils.StringHelper;
 import com.testify.ecfeed.utils.SystemLogger;
@@ -43,19 +43,19 @@ public class EclipseAndroidToolsImplementer implements IImplementer {
 	private IFileInfoProvider fFileInfoProvider;
 
 	public EclipseAndroidToolsImplementer(
-			IFileInfoProvider fileInfoProvider) throws EcException {
+			IFileInfoProvider fileInfoProvider) {
 		fFileInfoProvider = fileInfoProvider;
 		fAndroidToolsJarPath = getAndroidToolsJarPath(); 
 	}
 
 	@Override
-	public void implementContent() throws EcException {
+	public void implementContent() {
 		for (String fileName : FILE_NAMES) {
 			implementClass(fileName);
 		}
 	}
 
-	private void implementClass(String fileName) throws EcException {
+	private void implementClass(String fileName) {
 		if (EclipseClassImplementHelper.classImplemented(PACKAGE, fileName)) {
 			return;
 		}
@@ -67,7 +67,7 @@ public class EclipseAndroidToolsImplementer implements IImplementer {
 	}
 
 	@Override
-	public boolean contentImplemented() throws EcException {
+	public boolean contentImplemented() {
 		for (String fileName : FILE_NAMES) {
 			if (!EclipseClassImplementHelper.classImplemented(PACKAGE, fileName)) {
 				return false;
@@ -76,7 +76,7 @@ public class EclipseAndroidToolsImplementer implements IImplementer {
 		return true;
 	}
 
-	private String getAndroidToolsJarPath() throws EcException {
+	private String getAndroidToolsJarPath() {
 		String androidToolsJarUrl = getAbsoluteUrl(RELATIVE_PATH_TO_JAR);
 
 		if (androidToolsJarUrl != null) {
@@ -85,12 +85,12 @@ public class EclipseAndroidToolsImplementer implements IImplementer {
 
 		String ecfeedJarUrl = getAbsoluteUrl(DiskFileHelper.CURRENT_DIR);
 		if (null == ecfeedJarUrl) {
-			EcException.report(Messages.EXCEPTION_FILE_NOT_FOUND_IN_INSTALLATION_DIR(RELATIVE_PATH_TO_JAR));
+			ExceptionHelper.reportRuntimeException(Messages.EXCEPTION_FILE_NOT_FOUND_IN_INSTALLATION_DIR(RELATIVE_PATH_TO_JAR));
 		}
 
 		String postfix = DiskFileHelper.FILE_SEPARATOR + DiskFileHelper.CURRENT_DIR + DiskFileHelper.FILE_SEPARATOR;
 		String installationDir = StringHelper.removePostfix(postfix, ecfeedJarUrl);
-		EcException.report(
+		ExceptionHelper.reportRuntimeException(
 				Messages.EXCEPTION_FILE_NOT_FOUND_IN_INSTALLATION_DIR2(RELATIVE_PATH_TO_JAR, installationDir));
 
 		return null;

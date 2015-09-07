@@ -8,16 +8,9 @@
 
 package com.testify.ecfeed.ui.common;
 
-import com.testify.ecfeed.android.AndroidBaseRunnerHelper;
+import com.testify.ecfeed.model.ClassNode;
 
-public abstract class EclipseProjectSpecificClassImplementer extends EclipseClassImplementer {
+public interface IExternalImplementer extends IImplementer{
 
-	public EclipseProjectSpecificClassImplementer(
-			String testingAppPackage, 
-			String testingAppClass,
-			IFileInfoProvider fileInfoProvider) {
-		super(testingAppPackage + "." + AndroidBaseRunnerHelper.getEcFeedTestRunnerPrefix(), 
-				testingAppClass, 
-				fileInfoProvider);
-	}
+	void initialize(ClassNode classNode, IFileInfoProvider fFileInfoProvider) throws RuntimeException;
 }

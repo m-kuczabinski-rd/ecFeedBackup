@@ -8,7 +8,7 @@
 
 package com.testify.ecfeed.ui.common;
 
-import com.testify.ecfeed.generators.api.EcException;
+import com.testify.ecfeed.utils.ExceptionHelper;
 
 public abstract class EclipseClassImplementer implements IImplementer {
 
@@ -19,9 +19,9 @@ public abstract class EclipseClassImplementer implements IImplementer {
 	public EclipseClassImplementer(
 			String argPackage, 
 			String classNameWithoutExtension,
-			IFileInfoProvider fileInfoProvider) throws EcException {
+			IFileInfoProvider fileInfoProvider) {
 		if (fileInfoProvider == null) {
-			EcException.report(Messages.EXCEPTION_FILE_INFO_PROVIDER_NOT_NULL);
+			ExceptionHelper.reportRuntimeException(Messages.EXCEPTION_FILE_INFO_PROVIDER_NOT_NULL);
 		}
 		fFileInfoProvider = fileInfoProvider;
 		fPackage = argPackage; 
@@ -30,7 +30,7 @@ public abstract class EclipseClassImplementer implements IImplementer {
 
 	abstract protected String createUnitContent();
 
-	public void implementContent() throws EcException {
+	public void implementContent() {
 		EclipseClassImplementHelper.implementClass(
 				fPackage, fClassNameWithoutExtension, createUnitContent(), fFileInfoProvider);
 	}

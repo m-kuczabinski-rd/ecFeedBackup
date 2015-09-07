@@ -112,7 +112,7 @@ public class EclipseModelImplementer extends AbstractJavaModelImplementer {
 
 	@Override
 	protected void implementAndroidCode(ClassNode classNode) throws EcException {
-		(new EclipseAndroidImplementerForClassNode(classNode, fFileInfoProvider)).implementContent();
+		new EclipseAndroidImplementerForClassNode().implementContent(classNode, fFileInfoProvider);
 	}
 
 	@Override
@@ -295,7 +295,7 @@ public class EclipseModelImplementer extends AbstractJavaModelImplementer {
 		if (!EclipseProjectHelper.isAndroidProject(fFileInfoProvider)) {
 			return true;
 		}
-		return (new EclipseAndroidImplementerForClassNode(classNode, fFileInfoProvider)).contentImplemented();
+		return new EclipseAndroidImplementerForClassNode().contentImplemented(classNode, fFileInfoProvider);
 	}
 
 	@Override

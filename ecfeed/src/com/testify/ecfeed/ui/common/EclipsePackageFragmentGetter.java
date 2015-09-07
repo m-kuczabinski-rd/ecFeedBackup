@@ -9,13 +9,13 @@ import org.eclipse.jdt.core.IPackageFragment;
 import org.eclipse.jdt.core.IPackageFragmentRoot;
 import org.eclipse.jdt.core.JavaCore;
 
-import com.testify.ecfeed.generators.api.EcException;
+import com.testify.ecfeed.utils.ExceptionHelper;
 
 public class EclipsePackageFragmentGetter {
 
 	public static IPackageFragment getPackageFragment(
 			String name, 
-			IFileInfoProvider fileInfoProvider) throws CoreException, EcException {
+			IFileInfoProvider fileInfoProvider) throws CoreException {
 
 		IPackageFragmentRoot packageFragmentRoot = getPackageFragmentRoot(fileInfoProvider);
 		IPackageFragment packageFragment = packageFragmentRoot.getPackageFragment(name);
@@ -27,10 +27,10 @@ public class EclipsePackageFragmentGetter {
 	}
 
 	private static IPackageFragmentRoot getPackageFragmentRoot(
-			IFileInfoProvider fileInfoProvider) throws CoreException, EcException{
+			IFileInfoProvider fileInfoProvider) throws CoreException{
 
 		if (fileInfoProvider == null) {
-			EcException.report(Messages.EXCEPTION_FILE_INFO_PROVIDER_NOT_NULL);
+			ExceptionHelper.reportRuntimeException(Messages.EXCEPTION_FILE_INFO_PROVIDER_NOT_NULL);
 		}
 
 		IPackageFragmentRoot root = fileInfoProvider.getPackageFragmentRoot();

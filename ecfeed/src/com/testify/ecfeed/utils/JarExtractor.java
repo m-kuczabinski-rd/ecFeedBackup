@@ -19,7 +19,7 @@ import com.testify.ecfeed.generators.api.EcException;
 
 public class JarExtractor {
 
-	public static String getFileContent(String filePathName, String jarPathName) throws EcException {
+	public static String getFileContent(String filePathName, String jarPathName) {
 		File jarFile = new File(jarPathName);
 		JarFile jar = null;
 		String fileContent = null;
@@ -36,7 +36,7 @@ public class JarExtractor {
 		}
 
 		if (exceptionMessage != null) {
-			EcException.report(exceptionMessage);
+			ExceptionHelper.reportRuntimeException(exceptionMessage);
 		}
 
 		return fileContent;

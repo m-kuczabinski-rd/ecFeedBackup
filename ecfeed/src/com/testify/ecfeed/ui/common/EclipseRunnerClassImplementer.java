@@ -9,7 +9,6 @@
 package com.testify.ecfeed.ui.common;
 
 import com.testify.ecfeed.android.AndroidBaseRunnerHelper;
-import com.testify.ecfeed.generators.api.EcException;
 
 public class EclipseRunnerClassImplementer extends EclipseProjectSpecificClassImplementer {
 
@@ -18,7 +17,7 @@ public class EclipseRunnerClassImplementer extends EclipseProjectSpecificClassIm
 	public EclipseRunnerClassImplementer(
 			String testingAppPackage,
 			String baseRunner,
-			IFileInfoProvider fileInfoProvider) throws EcException {
+			IFileInfoProvider fileInfoProvider) {
 		super(testingAppPackage, AndroidBaseRunnerHelper.getEcFeedTestRunnerName(), fileInfoProvider);
 		fBaseRunner = baseRunner;
 	}
