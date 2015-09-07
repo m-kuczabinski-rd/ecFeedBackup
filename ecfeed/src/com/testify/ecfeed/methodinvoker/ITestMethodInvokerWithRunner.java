@@ -8,17 +8,7 @@
 
 package com.testify.ecfeed.methodinvoker;
 
-import java.lang.reflect.Method;
+public interface ITestMethodInvokerWithRunner extends ITestMethodInvoker{
 
-public interface ITestMethodInvoker {
-
-	boolean isRemote();
-
-	void invoke(
-			Method testMethod,
-			String className,
-			Object instance,
-			Object[] arguments, 
-			String argumentsDescription
-			) throws RuntimeException;
+	void setRunner(String runner); 
 }

@@ -41,6 +41,7 @@ import com.testify.ecfeed.adapter.operations.MethodOperationRenameTestCases;
 import com.testify.ecfeed.android.AndroidBaseRunnerHelper;
 import com.testify.ecfeed.generators.api.EcException;
 import com.testify.ecfeed.methodinvoker.ITestMethodInvoker;
+import com.testify.ecfeed.methodinvoker.ITestMethodInvokerWithRunner;
 import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.Constraint;
@@ -276,8 +277,8 @@ public class MethodInterface extends ParametersParentInterface {
 			for (IConfigurationElement element : config) {
 				final Object obj = element.createExecutableExtension("class");
 
-				if (obj instanceof ITestMethodInvoker) {
-					ITestMethodInvoker invoker = (ITestMethodInvoker)obj;
+				if (obj instanceof ITestMethodInvokerWithRunner) {
+					ITestMethodInvokerWithRunner invoker = (ITestMethodInvokerWithRunner)obj;
 					invoker.setRunner(androidRunner);
 					return invoker;
 				}

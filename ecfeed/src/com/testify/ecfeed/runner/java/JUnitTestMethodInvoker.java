@@ -31,8 +31,4 @@ public class JUnitTestMethodInvoker implements ITestMethodInvoker {
 			ExceptionHelper.reportRuntimeException(message);			
 		}
 	}
-
-	@Override
-	public void setRunner(String runner) {
-	}
 }
