@@ -9,6 +9,7 @@
 package com.testify.ecfeed.ui.common;
 
 import com.testify.ecfeed.android.project.AndroidManifestAccessor;
+import com.testify.ecfeed.external.IExternalImplementer;
 import com.testify.ecfeed.utils.ExceptionHelper;
 
 public class EclipseAndroidImplementer implements IExternalImplementer {

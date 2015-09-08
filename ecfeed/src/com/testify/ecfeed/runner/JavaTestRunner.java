@@ -19,7 +19,7 @@ import com.testify.ecfeed.adapter.java.ChoiceValueParser;
 import com.testify.ecfeed.adapter.java.Constants;
 import com.testify.ecfeed.adapter.java.JavaUtils;
 import com.testify.ecfeed.adapter.java.ModelClassLoader;
-import com.testify.ecfeed.methodinvoker.ITestMethodInvoker;
+import com.testify.ecfeed.external.ITestMethodInvoker;
 import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.MethodNode;

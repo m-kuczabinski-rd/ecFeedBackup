@@ -26,9 +26,9 @@ import org.eclipse.swt.widgets.Display;
 
 import com.testify.ecfeed.adapter.java.ILoaderProvider;
 import com.testify.ecfeed.adapter.java.ModelClassLoader;
+import com.testify.ecfeed.external.ITestMethodInvoker;
 import com.testify.ecfeed.generators.api.IConstraint;
 import com.testify.ecfeed.generators.api.IGenerator;
-import com.testify.ecfeed.methodinvoker.ITestMethodInvoker;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.runner.JavaTestRunner;

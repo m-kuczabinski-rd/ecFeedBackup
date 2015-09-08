@@ -30,7 +30,7 @@ Import-Package:
  org.eclipse.ui.forms
 Bundle-ClassPath: lib/xom-1.2.10.jar,
  ecfeed.jar
-Export-Package: com.testify.ecfeed.generators,
+Export-Package: com.testify.ecfeed.external,
+ com.testify.ecfeed.generators,
  com.testify.ecfeed.junit,
- com.testify.ecfeed.junit.annotations,
- com.testify.ecfeed.methodinvoker
+ com.testify.ecfeed.junit.annotations

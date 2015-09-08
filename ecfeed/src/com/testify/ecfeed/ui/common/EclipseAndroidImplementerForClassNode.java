@@ -11,7 +11,7 @@ package com.testify.ecfeed.ui.common;
 import com.testify.ecfeed.model.ClassNode;
 
 public class EclipseAndroidImplementerForClassNode {
-	
+
 	public boolean contentImplemented(ClassNode classNode, IFileInfoProvider fileInfoProvider) {
 		EclipseAndroidImplementer implementer = new EclipseAndroidImplementer();
 		String baseRunner = classNode.getAndroidBaseRunner();

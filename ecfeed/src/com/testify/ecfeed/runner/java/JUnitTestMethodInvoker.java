@@ -3,7 +3,7 @@ package com.testify.ecfeed.runner.java;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-import com.testify.ecfeed.methodinvoker.ITestMethodInvoker;
+import com.testify.ecfeed.external.ITestMethodInvoker;
 import com.testify.ecfeed.runner.Messages;
 import com.testify.ecfeed.utils.ExceptionHelper;
 

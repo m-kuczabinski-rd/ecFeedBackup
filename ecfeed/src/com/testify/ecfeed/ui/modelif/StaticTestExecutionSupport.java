@@ -25,7 +25,7 @@ import org.eclipse.swt.widgets.Display;
 
 import com.testify.ecfeed.adapter.java.ILoaderProvider;
 import com.testify.ecfeed.adapter.java.ModelClassLoader;
-import com.testify.ecfeed.methodinvoker.ITestMethodInvoker;
+import com.testify.ecfeed.external.ITestMethodInvoker;
 import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.runner.JavaTestRunner;
 import com.testify.ecfeed.runner.RunnerException;
