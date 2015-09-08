@@ -32,7 +32,10 @@ public class Messages {
 	}	
 
 	public static final String EXCEPTION_ANDROID_METHOD_INVOKER_NOT_FOUND = 
-			"Android method invoker not found (not installed).";
+			"External android method invoker not found (not installed).";
+
+	public static final String EXCEPTION_EXTERNAL_IMPLEMENTER_NOT_FOUND = 
+			"External android implementer not found (not installed).";
 
 
 	public static final String DIALOG_TEST_SUITE_NAME_ERROR_MESSAGE = "Name of a test suite must be between 1 and 64 characters long.";

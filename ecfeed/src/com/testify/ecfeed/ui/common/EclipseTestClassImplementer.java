@@ -8,6 +8,7 @@
 
 package com.testify.ecfeed.ui.common;
 
+
 public class EclipseTestClassImplementer extends EclipseProjectSpecificClassImplementer {
 
 	String fTestingAppSuperClass;

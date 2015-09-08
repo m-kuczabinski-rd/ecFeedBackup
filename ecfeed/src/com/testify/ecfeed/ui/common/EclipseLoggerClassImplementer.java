@@ -8,6 +8,7 @@
 
 package com.testify.ecfeed.ui.common;
 
+
 public class EclipseLoggerClassImplementer extends EclipseProjectSpecificClassImplementer {
 
 	public EclipseLoggerClassImplementer(String testingAppPackage, IFileInfoProvider fileInfoProvider) {
