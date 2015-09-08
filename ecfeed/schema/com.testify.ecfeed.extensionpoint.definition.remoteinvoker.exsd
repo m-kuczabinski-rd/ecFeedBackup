@@ -55,7 +55,7 @@
                   
                </documentation>
                <appinfo>
-                  <meta.attribute kind="java" basedOn=":com.testify.ecfeed.methodinvoker.ITestMethodInvokerWithRunner"/>
+                  <meta.attribute kind="java" basedOn=":com.testify.ecfeed.external.ITestMethodInvokerExt"/>
                </appinfo>
             </annotation>
          </attribute>

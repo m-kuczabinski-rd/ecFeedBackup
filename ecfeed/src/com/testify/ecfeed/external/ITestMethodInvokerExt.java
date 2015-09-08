@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015 Testify AS.
+ * Copyright (c) 2015 Testify AS..
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -8,9 +8,8 @@
 
 package com.testify.ecfeed.external;
 
-import com.testify.ecfeed.ui.common.IFileInfoProvider;
 
-public interface IExternalImplementer extends IImplementer{
+public interface ITestMethodInvokerExt extends ITestMethodInvoker{
 
-	void initialize(String baseRunner, IFileInfoProvider fFileInfoProvider) throws RuntimeException;
+	void initialize(String runner); 
 }
