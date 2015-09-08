@@ -6,10 +6,10 @@
  * http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 
-package com.testify.ecfeed.external;
+package com.testify.ecfeed.ui.common.external;
 
-public interface IImplementer {
 
-	void implementContent();
-	boolean contentImplemented();
+public interface IImplementerExt extends IImplementer{
+
+	void initialize(String baseRunner, IFileInfoProvider fFileInfoProvider) throws RuntimeException;
 }

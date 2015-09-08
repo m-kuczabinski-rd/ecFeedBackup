@@ -13,10 +13,10 @@ import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.Platform;
 
-import com.testify.ecfeed.external.IImplementerExt;
 import com.testify.ecfeed.generators.api.EcException;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.ui.common.external.IFileInfoProvider;
+import com.testify.ecfeed.ui.common.external.IImplementerExt;
 import com.testify.ecfeed.utils.SystemLogger;
 
 public class EclipseAndroidImplementerForClassNode {
