@@ -39,8 +39,6 @@ import com.testify.ecfeed.adapter.operations.MethodOperationAddTestSuite;
 import com.testify.ecfeed.adapter.operations.MethodOperationConvertTo;
 import com.testify.ecfeed.adapter.operations.MethodOperationRenameTestCases;
 import com.testify.ecfeed.android.AndroidBaseRunnerHelper;
-import com.testify.ecfeed.external.ITestMethodInvoker;
-import com.testify.ecfeed.external.ITestMethodInvokerExt;
 import com.testify.ecfeed.generators.api.EcException;
 import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.model.ClassNode;
@@ -63,6 +61,8 @@ import com.testify.ecfeed.ui.dialogs.AddTestCaseDialog;
 import com.testify.ecfeed.ui.dialogs.CalculateCoverageDialog;
 import com.testify.ecfeed.ui.dialogs.RenameTestSuiteDialog;
 import com.testify.ecfeed.ui.dialogs.SelectCompatibleMethodDialog;
+import com.testify.ecfeed.ui.modelif.external.ITestMethodInvoker;
+import com.testify.ecfeed.ui.modelif.external.ITestMethodInvokerExt;
 import com.testify.ecfeed.utils.StringHelper;
 import com.testify.ecfeed.utils.SystemLogger;
 

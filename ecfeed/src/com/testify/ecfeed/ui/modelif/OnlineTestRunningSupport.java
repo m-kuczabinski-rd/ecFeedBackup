@@ -26,7 +26,6 @@ import org.eclipse.swt.widgets.Display;
 
 import com.testify.ecfeed.adapter.java.ILoaderProvider;
 import com.testify.ecfeed.adapter.java.ModelClassLoader;
-import com.testify.ecfeed.external.ITestMethodInvoker;
 import com.testify.ecfeed.generators.api.IConstraint;
 import com.testify.ecfeed.generators.api.IGenerator;
 import com.testify.ecfeed.model.MethodNode;
@@ -38,6 +37,7 @@ import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.common.external.IFileInfoProvider;
 import com.testify.ecfeed.ui.dialogs.ExecuteOnlineSetupDialog;
 import com.testify.ecfeed.ui.dialogs.GeneratorProgressMonitorDialog;
+import com.testify.ecfeed.ui.modelif.external.ITestMethodInvoker;
 
 public class OnlineTestRunningSupport extends TestExecutionSupport{
 

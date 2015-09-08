@@ -6,7 +6,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 
-package com.testify.ecfeed.external;
+package com.testify.ecfeed.ui.modelif.external;
 
 
 public interface ITestMethodInvokerExt extends ITestMethodInvoker{
