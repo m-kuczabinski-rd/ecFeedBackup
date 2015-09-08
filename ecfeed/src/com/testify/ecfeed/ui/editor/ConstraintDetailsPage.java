@@ -21,7 +21,7 @@ import org.eclipse.swt.widgets.Composite;
 
 import com.testify.ecfeed.model.AbstractNode;
 import com.testify.ecfeed.model.ConstraintNode;
-import com.testify.ecfeed.ui.common.IFileInfoProvider;
+import com.testify.ecfeed.ui.common.external.IFileInfoProvider;
 import com.testify.ecfeed.ui.modelif.ConstraintInterface;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 

@@ -29,7 +29,7 @@ import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.GlobalParameterNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.MethodParameterNode;
-import com.testify.ecfeed.ui.common.IFileInfoProvider;
+import com.testify.ecfeed.ui.common.external.IFileInfoProvider;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 
 public class LinkingMethodsViewer extends TreeViewerSection {

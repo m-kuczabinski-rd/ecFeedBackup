@@ -18,7 +18,7 @@ import org.eclipse.jface.viewers.TreeViewer;
 
 import com.testify.ecfeed.adapter.IModelImplementer;
 import com.testify.ecfeed.ui.common.EclipseModelImplementer;
-import com.testify.ecfeed.ui.common.IFileInfoProvider;
+import com.testify.ecfeed.ui.common.external.IFileInfoProvider;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 
 

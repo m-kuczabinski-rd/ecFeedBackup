@@ -9,6 +9,7 @@
 package com.testify.ecfeed.ui.common;
 
 import com.testify.ecfeed.android.AndroidBaseRunnerHelper;
+import com.testify.ecfeed.ui.common.external.IFileInfoProvider;
 
 public abstract class EclipseProjectSpecificClassImplementer extends EclipseClassImplementer {
 

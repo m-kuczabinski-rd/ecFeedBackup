@@ -39,7 +39,7 @@ import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.MethodParameterNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.TestCaseNode;
-import com.testify.ecfeed.ui.common.IFileInfoProvider;
+import com.testify.ecfeed.ui.common.external.IFileInfoProvider;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 import com.testify.ecfeed.ui.modelif.IModelUpdateListener;
 import com.testify.ecfeed.utils.SystemLogger;

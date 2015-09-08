@@ -43,7 +43,7 @@ import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.ui.actions.ActionFactory;
 
 import com.testify.ecfeed.model.AbstractNode;
-import com.testify.ecfeed.ui.common.IFileInfoProvider;
+import com.testify.ecfeed.ui.common.external.IFileInfoProvider;
 import com.testify.ecfeed.ui.editor.actions.IActionProvider;
 import com.testify.ecfeed.ui.editor.actions.NamedAction;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;

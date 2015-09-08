@@ -8,7 +8,7 @@
 
 package com.testify.ecfeed.external;
 
-import com.testify.ecfeed.ui.common.IFileInfoProvider;
+import com.testify.ecfeed.ui.common.external.IFileInfoProvider;
 
 public interface IImplementerExt extends IImplementer{
 

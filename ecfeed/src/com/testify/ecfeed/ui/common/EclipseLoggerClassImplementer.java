@@ -8,6 +8,8 @@
 
 package com.testify.ecfeed.ui.common;
 
+import com.testify.ecfeed.ui.common.external.IFileInfoProvider;
+
 
 public class EclipseLoggerClassImplementer extends EclipseProjectSpecificClassImplementer {
 

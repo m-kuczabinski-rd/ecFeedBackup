@@ -15,8 +15,8 @@ import com.testify.ecfeed.adapter.IModelOperation;
 import com.testify.ecfeed.adapter.operations.ConstraintOperationReplaceStatement;
 import com.testify.ecfeed.model.AbstractStatement;
 import com.testify.ecfeed.model.ConstraintNode;
-import com.testify.ecfeed.ui.common.IFileInfoProvider;
 import com.testify.ecfeed.ui.common.Messages;
+import com.testify.ecfeed.ui.common.external.IFileInfoProvider;
 
 public class ConstraintInterface extends AbstractNodeInterface {
 

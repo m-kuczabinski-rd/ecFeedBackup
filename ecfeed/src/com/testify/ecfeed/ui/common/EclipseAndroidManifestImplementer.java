@@ -11,6 +11,7 @@ package com.testify.ecfeed.ui.common;
 import com.testify.ecfeed.android.AndroidBaseRunnerHelper;
 import com.testify.ecfeed.android.project.AndroidManifestAccessor;
 import com.testify.ecfeed.external.IImplementer;
+import com.testify.ecfeed.ui.common.external.IFileInfoProvider;
 
 public class EclipseAndroidManifestImplementer implements IImplementer{
 

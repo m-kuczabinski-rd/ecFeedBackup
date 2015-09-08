@@ -9,6 +9,7 @@
 package com.testify.ecfeed.ui.common;
 
 import com.testify.ecfeed.external.IImplementer;
+import com.testify.ecfeed.ui.common.external.IFileInfoProvider;
 import com.testify.ecfeed.utils.ExceptionHelper;
 
 public abstract class EclipseClassImplementer implements IImplementer {

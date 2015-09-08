@@ -26,7 +26,7 @@ import org.eclipse.swt.widgets.Text;
 import com.testify.ecfeed.adapter.java.JavaUtils;
 import com.testify.ecfeed.model.AbstractNode;
 import com.testify.ecfeed.model.ChoiceNode;
-import com.testify.ecfeed.ui.common.IFileInfoProvider;
+import com.testify.ecfeed.ui.common.external.IFileInfoProvider;
 import com.testify.ecfeed.ui.modelif.AbstractParameterInterface;
 import com.testify.ecfeed.ui.modelif.ChoiceInterface;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;

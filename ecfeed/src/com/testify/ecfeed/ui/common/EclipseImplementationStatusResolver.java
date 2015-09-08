@@ -19,6 +19,7 @@ import com.testify.ecfeed.adapter.java.JavaPrimitiveTypePredicate;
 import com.testify.ecfeed.generators.api.EcException;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.MethodNode;
+import com.testify.ecfeed.ui.common.external.IFileInfoProvider;
 import com.testify.ecfeed.utils.SystemLogger;
 
 public class EclipseImplementationStatusResolver extends AbstractJavaImplementationStatusResolver{

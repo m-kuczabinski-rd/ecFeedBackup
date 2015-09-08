@@ -21,8 +21,8 @@ import org.eclipse.swt.widgets.TabItem;
 import com.testify.ecfeed.adapter.EImplementationStatus;
 import com.testify.ecfeed.adapter.java.JavaUtils;
 import com.testify.ecfeed.model.MethodParameterNode;
-import com.testify.ecfeed.ui.common.IFileInfoProvider;
 import com.testify.ecfeed.ui.common.JavaDocSupport;
+import com.testify.ecfeed.ui.common.external.IFileInfoProvider;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 import com.testify.ecfeed.ui.modelif.MethodParameterInterface;
 

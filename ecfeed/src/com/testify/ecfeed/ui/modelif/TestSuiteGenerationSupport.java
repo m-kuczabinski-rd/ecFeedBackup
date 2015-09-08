@@ -30,7 +30,7 @@ import com.testify.ecfeed.generators.api.IGenerator;
 import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.MethodParameterNode;
-import com.testify.ecfeed.ui.common.IFileInfoProvider;
+import com.testify.ecfeed.ui.common.external.IFileInfoProvider;
 import com.testify.ecfeed.ui.dialogs.GenerateTestSuiteDialog;
 import com.testify.ecfeed.ui.dialogs.GeneratorProgressMonitorDialog;
 

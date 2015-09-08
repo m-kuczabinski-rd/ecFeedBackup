@@ -63,10 +63,10 @@ import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.MethodParameterNode;
 import com.testify.ecfeed.ui.common.Constants;
 import com.testify.ecfeed.ui.common.EclipseImplementationStatusResolver;
-import com.testify.ecfeed.ui.common.IFileInfoProvider;
 import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.common.NodeNameColumnLabelProvider;
 import com.testify.ecfeed.ui.common.TreeCheckStateListener;
+import com.testify.ecfeed.ui.common.external.IFileInfoProvider;
 
 public class GeneratorSetupDialog extends TitleAreaDialog {
 	private Combo fTestSuiteCombo;

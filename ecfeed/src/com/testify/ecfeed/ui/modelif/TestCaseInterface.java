@@ -21,8 +21,8 @@ import com.testify.ecfeed.generators.api.EcException;
 import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.TestCaseNode;
-import com.testify.ecfeed.ui.common.IFileInfoProvider;
 import com.testify.ecfeed.ui.common.Messages;
+import com.testify.ecfeed.ui.common.external.IFileInfoProvider;
 
 public class TestCaseInterface extends AbstractNodeInterface {
 

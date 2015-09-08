@@ -17,6 +17,7 @@ import org.osgi.framework.Bundle;
 import org.osgi.framework.FrameworkUtil;
 
 import com.testify.ecfeed.external.IImplementer;
+import com.testify.ecfeed.ui.common.external.IFileInfoProvider;
 import com.testify.ecfeed.utils.DiskFileHelper;
 import com.testify.ecfeed.utils.ExceptionHelper;
 import com.testify.ecfeed.utils.JarExtractor;
