@@ -6,7 +6,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 
-package com.testify.ecfeed.android.project;
+package com.testify.ecfeed.android.utils;
 
 import java.io.File;
 import java.io.FileNotFoundException;

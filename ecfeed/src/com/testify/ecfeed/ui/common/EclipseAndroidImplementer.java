@@ -8,9 +8,10 @@
 
 package com.testify.ecfeed.ui.common;
 
-import com.testify.ecfeed.android.project.AndroidManifestAccessor;
+import com.testify.ecfeed.android.utils.AndroidManifestAccessor;
 import com.testify.ecfeed.ui.common.external.IFileInfoProvider;
 import com.testify.ecfeed.ui.common.external.IImplementerExt;
+import com.testify.ecfeed.ui.common.utils.EclipseProjectHelper;
 import com.testify.ecfeed.utils.ExceptionHelper;
 
 public class EclipseAndroidImplementer implements IImplementerExt {
@@ -122,7 +123,7 @@ public class EclipseAndroidImplementer implements IImplementerExt {
 				new AndroidManifestAccessor(projectPath);
 
 		String testingAppPackage = androidManifestReader.getTestingAppPackage();
-		
+
 		createLoggerClassImplementer(testingAppPackage, fileInfoProvider);
 		createRunnerClassImplementer(testingAppPackage, baseRunner, fileInfoProvider);
 		createTestClassImplementer(testingAppPackage, baseRunner, androidManifestReader, fileInfoProvider);

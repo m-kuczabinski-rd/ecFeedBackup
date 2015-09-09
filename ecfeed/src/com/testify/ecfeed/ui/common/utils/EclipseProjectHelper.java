@@ -6,7 +6,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 
-package com.testify.ecfeed.ui.common;
+package com.testify.ecfeed.ui.common.utils;
 
 import java.util.Map;
 
@@ -15,6 +15,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.QualifiedName;
 
 import com.testify.ecfeed.generators.api.EcException;
+import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.common.external.IFileInfoProvider;
 import com.testify.ecfeed.utils.DiskFileHelper;
 import com.testify.ecfeed.utils.ExceptionHelper;

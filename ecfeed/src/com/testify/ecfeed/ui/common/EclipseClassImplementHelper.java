@@ -15,6 +15,7 @@ import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaModelException;
 
 import com.testify.ecfeed.ui.common.external.IFileInfoProvider;
+import com.testify.ecfeed.ui.common.utils.EclipsePackageFragmentGetter;
 import com.testify.ecfeed.utils.ExceptionHelper;
 import com.testify.ecfeed.utils.PackageClassHelper;
 

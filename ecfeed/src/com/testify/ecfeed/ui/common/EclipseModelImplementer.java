@@ -52,6 +52,8 @@ import com.testify.ecfeed.model.GlobalParameterNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.MethodParameterNode;
 import com.testify.ecfeed.ui.common.external.IFileInfoProvider;
+import com.testify.ecfeed.ui.common.utils.EclipsePackageFragmentGetter;
+import com.testify.ecfeed.ui.common.utils.EclipseProjectHelper;
 import com.testify.ecfeed.utils.SystemLogger;
 
 public class EclipseModelImplementer extends AbstractJavaModelImplementer {
