@@ -35,9 +35,9 @@ import com.testify.ecfeed.ui.common.TestCasesViewerContentProvider;
 import com.testify.ecfeed.ui.common.TestCasesViewerLabelProvider;
 import com.testify.ecfeed.ui.common.TreeCheckStateListener;
 import com.testify.ecfeed.ui.common.external.IFileInfoProvider;
+import com.testify.ecfeed.ui.editor.utils.ExceptionCatchDialog;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 import com.testify.ecfeed.ui.modelif.MethodInterface;
-import com.testify.ecfeed.utils.SystemLogger;
 
 public class TestCasesViewer extends CheckboxTreeViewerSection {
 
@@ -51,44 +51,59 @@ public class TestCasesViewer extends CheckboxTreeViewerSection {
 	private MethodInterface fMethodIf;
 	private MethodNode fParentMethod;
 
-	private class AddTestCaseAdapter extends SelectionAdapter{
+	private class AddTestCaseAdapter extends SelectionAdapter {
 		@Override
-		public void widgetSelected(SelectionEvent e){
-			fMethodIf.addTestCase();
+		public void widgetSelected(SelectionEvent ev){
+			try {
+				fMethodIf.addTestCase();
+			} catch (Exception e) {
+				ExceptionCatchDialog.display("Can not add test case.", e.getMessage());
+			}
 		}
 	}
 
 	private class GenerateTestSuiteAdapter extends SelectionAdapter{
 		@Override
-		public void widgetSelected(SelectionEvent e){
-			fMethodIf.generateTestSuite();
+		public void widgetSelected(SelectionEvent ev) {
+			try {
+				fMethodIf.generateTestSuite();
+			} catch (Exception e) {
+				ExceptionCatchDialog.display("Can not generate test suite.", e.getMessage());
+			}
 		}
 	}
 
 	private class ExecuteStaticTestAdapter extends SelectionAdapter{
 		@Override
-		public void widgetSelected(SelectionEvent event){
-
+		public void widgetSelected(SelectionEvent event) {
 			try {
 				fMethodIf.executeStaticTests(getCheckedTestCases(), getFileInfoProvider());
 			}
 			catch (Exception e){
-				SystemLogger.logCatch(e.getMessage());
+				ExceptionCatchDialog.display("Can not execute static tests.", e.getMessage());
 			}
 		}
 	}
 
-	private class RenameSuiteAdapter extends SelectionAdapter{
+	private class RenameSuiteAdapter extends SelectionAdapter {
 		@Override
-		public void widgetSelected(SelectionEvent e){
-			fMethodIf.renameSuite();
+		public void widgetSelected(SelectionEvent ev){
+			try {
+				fMethodIf.renameSuite();
+			} catch (Exception e) {
+				ExceptionCatchDialog.display("Can not rename suite.", e.getMessage());
+			}
 		}
 	}
 
-	private class RemoveSelectedAdapter extends SelectionAdapter{
+	private class RemoveSelectedAdapter extends SelectionAdapter {
 		@Override
-		public void widgetSelected(SelectionEvent e){
-			fMethodIf.removeTestCases(getCheckedTestCases());
+		public void widgetSelected(SelectionEvent ev){
+			try {
+				fMethodIf.removeTestCases(getCheckedTestCases());
+			} catch (Exception e) {
+				ExceptionCatchDialog.display(null, e.getMessage());
+			}
 		}
 	}
 
@@ -100,8 +115,12 @@ public class TestCasesViewer extends CheckboxTreeViewerSection {
 			fFileInfoProvider = fileInfoProvider;
 		}
 		@Override
-		public void widgetSelected(SelectionEvent e) {
-			fMethodIf.openCoverageDialog(getCheckedElements(), getGrayedElements(), fFileInfoProvider);
+		public void widgetSelected(SelectionEvent ev) {
+			try {
+				fMethodIf.openCoverageDialog(getCheckedElements(), getGrayedElements(), fFileInfoProvider);
+			} catch (Exception e) {
+				ExceptionCatchDialog.display("Can not calculate coverage.", e.getMessage());
+			}
 		}
 	}
 

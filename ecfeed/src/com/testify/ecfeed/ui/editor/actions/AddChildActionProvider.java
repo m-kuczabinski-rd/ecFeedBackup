@@ -226,9 +226,11 @@ public class AddChildActionProvider {
 
 			ChoicesParentNode target = (ChoicesParentNode)getSelectedNodes().get(0);
 			AbstractParameterNode parameter = target.getParameter();
-			try{
-			return (boolean)parameter.accept(new EnableVisitor());
-			}catch(Exception e){SystemLogger.logCatch(e.getMessage());}
+			try {
+				return (boolean)parameter.accept(new EnableVisitor());
+			} catch(Exception e) {
+				SystemLogger.logCatch(e.getMessage());
+			}
 			return false;
 		}
 	}
@@ -238,8 +240,8 @@ public class AddChildActionProvider {
 		@Override
 		public Object visit(RootNode node) throws Exception {
 			return Arrays.asList(new AbstractAddChildAction[]{
-				new AddClassAction(),
-				new AddGlobalParameterAction()
+					new AddClassAction(),
+					new AddGlobalParameterAction()
 			});
 		}
 
@@ -305,9 +307,11 @@ public class AddChildActionProvider {
 
 	@SuppressWarnings("unchecked")
 	public List<AbstractAddChildAction> getPossibleActions(AbstractNode parent){
-		try{
+		try {
 			return (List<AbstractAddChildAction>)parent.accept(new AddNewChilActionProvider());
-		}catch(Exception e){}
+		} catch(Exception e) {
+			SystemLogger.logCatch(e.getMessage());
+		}
 		return null;
 	}
 }

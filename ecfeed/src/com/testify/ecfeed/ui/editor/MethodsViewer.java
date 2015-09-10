@@ -32,6 +32,7 @@ import com.testify.ecfeed.ui.common.NodeViewerColumnLabelProvider;
 import com.testify.ecfeed.ui.common.external.IFileInfoProvider;
 import com.testify.ecfeed.ui.editor.actions.DeleteAction;
 import com.testify.ecfeed.ui.editor.actions.ModelViewerActionProvider;
+import com.testify.ecfeed.ui.editor.utils.ExceptionCatchDialog;
 import com.testify.ecfeed.ui.modelif.ClassInterface;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 import com.testify.ecfeed.ui.modelif.MethodInterface;
@@ -80,11 +81,15 @@ public class MethodsViewer extends TableViewerSection {
 
 	private class AddNewMethodAdapter extends SelectionAdapter {
 		@Override
-		public void widgetSelected(SelectionEvent e) {
-			MethodNode newMethod = fClassIf.addNewMethod();
-			if(newMethod != null){
-				selectElement(newMethod);
-				fMethodsColumn.getViewer().editElement(newMethod, 0);
+		public void widgetSelected(SelectionEvent ev) {
+			try {
+				MethodNode newMethod = fClassIf.addNewMethod();
+				if(newMethod != null){
+					selectElement(newMethod);
+					fMethodsColumn.getViewer().editElement(newMethod, 0);
+				}
+			} catch (Exception e) {
+				ExceptionCatchDialog.display("Can not add new method", e.getMessage());
 			}
 		}
 	}

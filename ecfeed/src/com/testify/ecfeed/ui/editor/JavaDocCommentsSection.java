@@ -30,7 +30,7 @@ public class JavaDocCommentsSection extends AbstractCommentsSection {
 
 	private class JavadocEditButtonListener extends AbstractSelectionAdapter{
 		@Override
-		public void widgetSelected(SelectionEvent e) {
+		public void widgetSelected(SelectionEvent ev) {
 			getTargetIf().editComments();
 			getTabFolder().setSelection(getTabFolder().indexOf(getCommentsItem()));
 		}

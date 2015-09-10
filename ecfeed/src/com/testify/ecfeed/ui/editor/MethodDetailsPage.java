@@ -25,9 +25,9 @@ import com.testify.ecfeed.adapter.java.JavaUtils;
 import com.testify.ecfeed.model.AbstractNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.ui.common.external.IFileInfoProvider;
+import com.testify.ecfeed.ui.editor.utils.ExceptionCatchDialog;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 import com.testify.ecfeed.ui.modelif.MethodInterface;
-import com.testify.ecfeed.utils.SystemLogger;
 
 public class MethodDetailsPage extends BasicDetailsPage {
 
@@ -47,7 +47,7 @@ public class MethodDetailsPage extends BasicDetailsPage {
 			try {
 				fMethodIf.executeOnlineTests(getFileInfoProvider());
 			} catch (Exception e) {
-				SystemLogger.logCatch(e.getMessage());
+				ExceptionCatchDialog.display("Can not execute online tests.", e.getMessage());
 			}
 		}
 	}

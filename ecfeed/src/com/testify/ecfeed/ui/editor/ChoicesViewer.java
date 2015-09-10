@@ -40,6 +40,7 @@ import com.testify.ecfeed.ui.common.external.IFileInfoProvider;
 import com.testify.ecfeed.ui.editor.actions.DeleteAction;
 import com.testify.ecfeed.ui.editor.actions.IActionProvider;
 import com.testify.ecfeed.ui.editor.actions.ModelViewerActionProvider;
+import com.testify.ecfeed.ui.editor.utils.ExceptionCatchDialog;
 import com.testify.ecfeed.ui.modelif.AbstractParameterInterface;
 import com.testify.ecfeed.ui.modelif.ChoiceInterface;
 import com.testify.ecfeed.ui.modelif.ChoicesParentInterface;
@@ -195,10 +196,14 @@ public class ChoicesViewer extends TableViewerSection {
 	private class AddChoiceAdapter extends SelectionAdapter{
 
 		@Override
-		public void widgetSelected(SelectionEvent e){
+		public void widgetSelected(SelectionEvent ev){
+			try {
 			ChoiceNode added = fParentIf.addNewChoice();
 			if(added != null){
 				getTable().setSelection(added.getIndex());
+			}
+			} catch (Exception e) {
+				ExceptionCatchDialog.display("Can not add choice.", e.getMessage());
 			}
 		}
 	}
@@ -206,12 +211,16 @@ public class ChoicesViewer extends TableViewerSection {
 	private class ReplaceWithDefaultAdapter extends AbstractSelectionAdapter{
 
 		@Override
-		public void widgetSelected(SelectionEvent e) {
+		public void widgetSelected(SelectionEvent ev) {
+			try {
 			if(fSelectedParent == fSelectedParent.getParameter()){
 				AbstractParameterInterface parameterIf 
 				= (AbstractParameterInterface)NodeInterfaceFactory.getNodeInterface(
 						fSelectedParent, ChoicesViewer.this, fFileInfoProvider);
 				parameterIf.resetChoicesToDefault();
+			}
+			} catch (Exception e) {
+				ExceptionCatchDialog.display("Can not replace with default.", e.getMessage());
 			}
 		}
 	}

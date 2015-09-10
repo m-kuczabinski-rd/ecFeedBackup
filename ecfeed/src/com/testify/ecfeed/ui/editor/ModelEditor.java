@@ -32,8 +32,6 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IPackageFragmentRoot;
 import org.eclipse.jdt.core.JavaCore;
-import org.eclipse.jface.dialogs.ErrorDialog;
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorInput;
@@ -52,6 +50,8 @@ import com.testify.ecfeed.serialization.ParserException;
 import com.testify.ecfeed.serialization.ect.EctParser;
 import com.testify.ecfeed.serialization.ect.EctSerializer;
 import com.testify.ecfeed.ui.common.external.IFileInfoProvider;
+import com.testify.ecfeed.ui.editor.utils.ExceptionCatchDialog;
+import com.testify.ecfeed.utils.SystemLogger;
 
 public class ModelEditor extends FormEditor implements IFileInfoProvider{
 
@@ -65,16 +65,16 @@ public class ModelEditor extends FormEditor implements IFileInfoProvider{
 		@Override
 		public void resourceChanged(IResourceChangeEvent event) {
 			switch (event.getType()) {
-				case IResourceChangeEvent.POST_CHANGE:
-				case IResourceChangeEvent.POST_BUILD:
-					try {
-						event.getDelta().accept(new ResourceDeltaVisitor());
-					} catch (CoreException e) {
-						e.printStackTrace();
-					}
-					break;
-				default:
-					break;
+			case IResourceChangeEvent.POST_CHANGE:
+			case IResourceChangeEvent.POST_BUILD:
+				try {
+					event.getDelta().accept(new ResourceDeltaVisitor());
+				} catch (CoreException e) {
+					SystemLogger.logCatch(e.getMessage());
+				}
+				break;
+			default:
+				break;
 			}
 		}
 	}
@@ -83,26 +83,26 @@ public class ModelEditor extends FormEditor implements IFileInfoProvider{
 		@Override
 		public boolean visit(IResourceDelta delta) throws CoreException {
 			switch (delta.getKind()) {
-				case IResourceDelta.ADDED:
-				case IResourceDelta.REMOVED:
-				case IResourceDelta.CHANGED:
-					if (!Display.getDefault().isDisposed()) {
-						Display.getDefault().asyncExec(new Runnable() {
-							@Override
-							public void run() {
-								CachedImplementationStatusResolver.clearCache();
-								if(fModelPage.getMasterBlock().getMasterSection() != null){
-									fModelPage.getMasterBlock().getMasterSection().refresh();
-								}
-								if(fModelPage.getMasterBlock().getCurrentPage() != null){
-									fModelPage.getMasterBlock().getCurrentPage().refresh();
-								}
+			case IResourceDelta.ADDED:
+			case IResourceDelta.REMOVED:
+			case IResourceDelta.CHANGED:
+				if (!Display.getDefault().isDisposed()) {
+					Display.getDefault().asyncExec(new Runnable() {
+						@Override
+						public void run() {
+							CachedImplementationStatusResolver.clearCache();
+							if(fModelPage.getMasterBlock().getMasterSection() != null){
+								fModelPage.getMasterBlock().getMasterSection().refresh();
 							}
-						});
-					}
-					break;
-				default:
-					break;
+							if(fModelPage.getMasterBlock().getCurrentPage() != null){
+								fModelPage.getMasterBlock().getCurrentPage().refresh();
+							}
+						}
+					});
+				}
+				break;
+			default:
+				break;
 			}
 			return false;
 		}
@@ -134,8 +134,7 @@ public class ModelEditor extends FormEditor implements IFileInfoProvider{
 				iStream = file.getContents();
 				root = parser.parseModel(iStream);
 			} catch (CoreException | ParserException e) {
-				MessageDialog.openError(Display.getCurrent().getActiveShell(), "Error", "Exception: " + e.getMessage());
-				e.printStackTrace();
+				ExceptionCatchDialog.display("Can not parse model.", e.getMessage());
 			}
 		}
 		return root;
@@ -148,9 +147,7 @@ public class ModelEditor extends FormEditor implements IFileInfoProvider{
 			addPage(fModelPage = new ModelPage(this, this));
 
 		} catch (PartInitException e) {
-			ErrorDialog.openError(getSite().getShell(),
-					"Error creating nested text editor",
-					null, e.getStatus());
+			ExceptionCatchDialog.display("Can not add page.", e.getMessage());
 		}
 	}
 
@@ -188,8 +185,7 @@ public class ModelEditor extends FormEditor implements IFileInfoProvider{
 			firePropertyChange(PROP_DIRTY);
 		}
 		catch(Exception e){
-			MessageDialog.openError(Display.getCurrent().getActiveShell(),
-					"Error", "Couldn't write the file:" + e.getMessage());
+			ExceptionCatchDialog.display("Can not save editor file.", e.getMessage());
 		}
 	}
 
@@ -266,6 +262,7 @@ public class ModelEditor extends FormEditor implements IFileInfoProvider{
 				}
 			}
 		} catch (CoreException e) {
+			SystemLogger.logCatch(e.getMessage());
 		}
 		return null;
 	}

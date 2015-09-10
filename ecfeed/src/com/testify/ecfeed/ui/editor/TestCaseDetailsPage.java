@@ -25,9 +25,9 @@ import com.testify.ecfeed.generators.api.EcException;
 import com.testify.ecfeed.model.AbstractNode;
 import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.ui.common.external.IFileInfoProvider;
+import com.testify.ecfeed.ui.editor.utils.ExceptionCatchDialog;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 import com.testify.ecfeed.ui.modelif.TestCaseInterface;
-import com.testify.ecfeed.utils.SystemLogger;
 
 public class TestCaseDetailsPage extends BasicDetailsPage {
 
@@ -102,7 +102,7 @@ public class TestCaseDetailsPage extends BasicDetailsPage {
 				try {
 					fTestCaseIf.executeStaticTest();
 				} catch (EcException e) {
-					SystemLogger.logCatch(e.getMessage());
+					ExceptionCatchDialog.display("Can not execute static tests.", e.getMessage());
 				}
 			}
 		});

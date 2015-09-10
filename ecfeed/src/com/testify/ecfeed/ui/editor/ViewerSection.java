@@ -46,6 +46,7 @@ import com.testify.ecfeed.model.AbstractNode;
 import com.testify.ecfeed.ui.common.external.IFileInfoProvider;
 import com.testify.ecfeed.ui.editor.actions.IActionProvider;
 import com.testify.ecfeed.ui.editor.actions.NamedAction;
+import com.testify.ecfeed.ui.editor.utils.ExceptionCatchDialog;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 
 /**
@@ -91,8 +92,12 @@ public abstract class ViewerSection extends ButtonsCompositeSection implements I
 		}
 
 		@Override
-		public void widgetSelected(SelectionEvent e){
-			fAction.run();
+		public void widgetSelected(SelectionEvent ev){
+			try {
+				fAction.run();
+			} catch (Exception e) {
+				ExceptionCatchDialog.display(null, e.getMessage());
+			}
 		}
 	}
 

@@ -29,6 +29,7 @@ import org.eclipse.ui.forms.widgets.Section;
 import com.testify.ecfeed.model.AbstractNode;
 import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.common.external.IFileInfoProvider;
+import com.testify.ecfeed.ui.editor.utils.ExceptionCatchDialog;
 import com.testify.ecfeed.ui.modelif.AbstractNodeInterface;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 
@@ -46,8 +47,12 @@ public abstract class AbstractCommentsSection extends TabFolderSection {
 
 	private class EditCommentsAdapter extends SelectionAdapter{
 		@Override
-		public void widgetSelected(SelectionEvent e){
-			getTargetIf().editComments();
+		public void widgetSelected(SelectionEvent ev){
+			try {
+				getTargetIf().editComments();
+			} catch (Exception e) {
+				ExceptionCatchDialog.display("Can not edit comments", e.getMessage());
+			}
 		}
 	}
 

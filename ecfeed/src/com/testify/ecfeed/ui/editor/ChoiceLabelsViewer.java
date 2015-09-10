@@ -38,6 +38,7 @@ import com.testify.ecfeed.ui.editor.actions.CutAction;
 import com.testify.ecfeed.ui.editor.actions.ModelModifyingAction;
 import com.testify.ecfeed.ui.editor.actions.NamedAction;
 import com.testify.ecfeed.ui.editor.actions.SelectAllAction;
+import com.testify.ecfeed.ui.editor.utils.ExceptionCatchDialog;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 import com.testify.ecfeed.ui.modelif.ChoiceInterface;
 
@@ -137,10 +138,15 @@ public class ChoiceLabelsViewer extends TableViewerSection {
 
 	private class AddLabelAdapter extends SelectionAdapter{
 		@Override
-		public void widgetSelected(SelectionEvent e){
-			String newLabel = fChoiceIf.addNewLabel();
-			if(newLabel != null){
-				getTableViewer().editElement(newLabel, 0);
+		public void widgetSelected(SelectionEvent ev){
+			try {
+				String newLabel = fChoiceIf.addNewLabel();
+				if(newLabel != null){
+					getTableViewer().editElement(newLabel, 0);
+				}
+			}
+			catch (Exception e) {
+				ExceptionCatchDialog.display("Can not add label.", e.getMessage());
 			}
 		}
 	}

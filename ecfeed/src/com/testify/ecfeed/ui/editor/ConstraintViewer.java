@@ -57,6 +57,7 @@ import com.testify.ecfeed.model.StaticStatement;
 import com.testify.ecfeed.ui.common.ImageManager;
 import com.testify.ecfeed.ui.common.external.IFileInfoProvider;
 import com.testify.ecfeed.ui.editor.actions.ModelModifyingAction;
+import com.testify.ecfeed.ui.editor.utils.ExceptionCatchDialog;
 import com.testify.ecfeed.ui.modelif.AbstractParameterInterface;
 import com.testify.ecfeed.ui.modelif.AbstractStatementInterface;
 import com.testify.ecfeed.ui.modelif.ConstraintInterface;
@@ -451,7 +452,9 @@ public class ConstraintViewer extends TreeViewerSection {
 			fStatementCombo.setText(statement.getLeftOperandName());
 			try{
 				statement.accept(new EditorBuilder(fFileInfoProvider));
-			}catch(Exception e){SystemLogger.logCatch(e.getMessage());}
+			}catch(Exception e){
+				SystemLogger.logCatch(e.getMessage());
+			}
 		}
 
 		public void setConstraint(ConstraintNode constraintNode) {
@@ -468,6 +471,7 @@ public class ConstraintViewer extends TreeViewerSection {
 					fConditionCombo.setText(currentConditionText);
 				}
 			} catch (Exception e) {
+				SystemLogger.logCatch(e.getMessage());
 			}
 		}
 
@@ -475,6 +479,7 @@ public class ConstraintViewer extends TreeViewerSection {
 			try {
 				return (String[]) statement.accept(new AvailableConditionsProvider());
 			} catch (Exception e) {
+				SystemLogger.logCatch(e.getMessage());
 			}
 			return new String[]{};
 		}
@@ -513,12 +518,16 @@ public class ConstraintViewer extends TreeViewerSection {
 
 	private class AddStatementAdapter extends SelectionAdapter{
 		@Override
-		public void widgetSelected(SelectionEvent e){
-			AbstractStatement statement = fStatementIf.addNewStatement();
-			if(statement != null){
-				//modelUpdated must be called before to refresh viewer before selecting the newly added statement
-				getTreeViewer().expandToLevel(statement, 1);
-				getTreeViewer().setSelection(new StructuredSelection(statement));
+		public void widgetSelected(SelectionEvent ev){
+			try {
+				AbstractStatement statement = fStatementIf.addNewStatement();
+				if(statement != null){
+					//modelUpdated must be called before to refresh viewer before selecting the newly added statement
+					getTreeViewer().expandToLevel(statement, 1);
+					getTreeViewer().setSelection(new StructuredSelection(statement));
+				}
+			} catch (Exception e) {
+				ExceptionCatchDialog.display("Can not add statement.", e.getMessage());
 			}
 		}
 	}

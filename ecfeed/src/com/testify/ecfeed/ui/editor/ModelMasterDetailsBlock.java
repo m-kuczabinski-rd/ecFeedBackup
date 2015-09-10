@@ -137,9 +137,11 @@ public class ModelMasterDetailsBlock extends MasterDetailsBlock implements ISele
 
 	public BasicDetailsPage getCurrentPage(){
 		if(detailsPart != null){
-			try{
+			try {
 				return (BasicDetailsPage)detailsPart.getCurrentPage();
-			}catch(SWTException e){SystemLogger.logCatch(e.getMessage());}
+			} catch(SWTException e)	{
+				SystemLogger.logCatch(e.getMessage());
+			}
 		}
 		return null;
 	}

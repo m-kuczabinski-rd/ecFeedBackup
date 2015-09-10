@@ -23,6 +23,7 @@ import com.testify.ecfeed.adapter.java.JavaUtils;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.ui.common.external.IFileInfoProvider;
+import com.testify.ecfeed.ui.editor.utils.ExceptionCatchDialog;
 import com.testify.ecfeed.ui.modelif.ClassInterface;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 
@@ -35,8 +36,12 @@ public class OtherMethodsViewer extends CheckboxTableViewerSection {
 
 	private class AddSelectedAdapter extends SelectionAdapter{
 		@Override
-		public void widgetSelected(SelectionEvent e){
-			fClassIf.addMethods(getSelectedMethods());
+		public void widgetSelected(SelectionEvent ev){
+			try {
+				fClassIf.addMethods(getSelectedMethods());
+			} catch (Exception e) {
+				ExceptionCatchDialog.display("Can not add selected items.", e.getMessage());
+			}
 		}
 	}
 

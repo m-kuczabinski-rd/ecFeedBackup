@@ -248,9 +248,11 @@ public class ModelMasterSection extends TreeViewerSection{
 		@Override
 		public String getText(Object element){
 			if(element instanceof AbstractNode){
-				try{
+				try {
 					return (String)((AbstractNode)element).accept(new TextProvider());
-				}catch(Exception e){SystemLogger.logCatch(e.getMessage());}
+				} catch(Exception e) { 
+					SystemLogger.logCatch(e.getMessage());
+				}
 			}
 			return null;
 		}
@@ -258,9 +260,11 @@ public class ModelMasterSection extends TreeViewerSection{
 		@Override
 		public Image getImage(Object element){
 			if(element instanceof AbstractNode){
-				try{
+				try {
 					return (Image)((AbstractNode)element).accept(new ImageProvider());
-				}catch(Exception e){SystemLogger.logCatch(e.getMessage());}
+				} catch(Exception e) {
+					SystemLogger.logCatch(e.getMessage());
+				}
 			}
 			return getImageFromFile("sample.png");
 		}
@@ -356,7 +360,7 @@ public class ModelMasterSection extends TreeViewerSection{
 		@Override
 		public Image decorateImage(Image image, Object element) {
 			if(element instanceof AbstractNode){
-				try{
+				try {
 					List<Image> decorations = (List<Image>)((AbstractNode)element).accept(
 							new DecorationProvider(fFileInfoProvider));
 					List<Image> all = new ArrayList<Image>(decorations);
@@ -371,7 +375,9 @@ public class ModelMasterSection extends TreeViewerSection{
 						fFusedImages.put(decorations, decorated);
 					}
 					return fFusedImages.get(decorations);
-				}catch(Exception e){SystemLogger.logCatch(e.getMessage());}
+				} catch(Exception e) {
+					SystemLogger.logCatch(e.getMessage());
+				}
 			}
 			return image;
 		}

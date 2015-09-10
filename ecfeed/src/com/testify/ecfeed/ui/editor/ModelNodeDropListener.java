@@ -39,6 +39,7 @@ import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 import com.testify.ecfeed.ui.modelif.NodeDnDBuffer;
 import com.testify.ecfeed.ui.modelif.NodeInterfaceFactory;
 import com.testify.ecfeed.ui.modelif.SelectionInterface;
+import com.testify.ecfeed.utils.SystemLogger;
 
 public class ModelNodeDropListener extends ViewerDropAdapter{
 
@@ -312,6 +313,7 @@ public class ModelNodeDropListener extends ViewerDropAdapter{
 			try{
 				return (boolean)newParent.accept(new CopyHandler(index));
 			}catch(Exception e){
+				SystemLogger.logCatch(e.getMessage());
 				return false;
 			}
 		case DND.DROP_MOVE:
@@ -320,6 +322,7 @@ public class ModelNodeDropListener extends ViewerDropAdapter{
 			try{
 				return (boolean)newParent.accept(new LinkHandler(index, fFileInfoProvider));
 			}catch(Exception e){
+				SystemLogger.logCatch(e.getMessage());
 				return false;
 			}
 		default:
@@ -339,6 +342,7 @@ public class ModelNodeDropListener extends ViewerDropAdapter{
 		try {
 			return (boolean)parent.accept(new DropValidator(operation));
 		} catch (Exception e) {
+			SystemLogger.logCatch(e.getMessage());
 			return false;
 		}
 	}

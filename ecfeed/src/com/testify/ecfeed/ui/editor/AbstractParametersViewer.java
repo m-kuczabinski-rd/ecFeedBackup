@@ -33,6 +33,7 @@ import com.testify.ecfeed.ui.common.NodeViewerColumnLabelProvider;
 import com.testify.ecfeed.ui.common.external.IFileInfoProvider;
 import com.testify.ecfeed.ui.editor.actions.DeleteAction;
 import com.testify.ecfeed.ui.editor.actions.ModelViewerActionProvider;
+import com.testify.ecfeed.ui.editor.utils.ExceptionCatchDialog;
 import com.testify.ecfeed.ui.modelif.AbstractParameterInterface;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 import com.testify.ecfeed.ui.modelif.ParametersParentInterface;
@@ -145,11 +146,15 @@ public abstract class AbstractParametersViewer extends TableViewerSection {
 
 	private class AddNewParameterAdapter extends SelectionAdapter {
 		@Override
-		public void widgetSelected(SelectionEvent e) {
-			AbstractParameterNode addedParameter = fParentIf.addNewParameter();
-			if(addedParameter != null){
-				selectElement(addedParameter);
-				fNameColumn.getViewer().editElement(addedParameter, 0);
+		public void widgetSelected(SelectionEvent ev) {
+			try {
+				AbstractParameterNode addedParameter = fParentIf.addNewParameter();
+				if(addedParameter != null){
+					selectElement(addedParameter);
+					fNameColumn.getViewer().editElement(addedParameter, 0);
+				}
+			} catch (Exception e) {
+				ExceptionCatchDialog.display("Can not create parameter.", e.getMessage());
 			}
 		}
 	}

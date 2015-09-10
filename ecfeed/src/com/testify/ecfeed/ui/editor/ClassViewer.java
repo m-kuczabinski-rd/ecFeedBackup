@@ -32,6 +32,7 @@ import com.testify.ecfeed.ui.common.ColorManager;
 import com.testify.ecfeed.ui.common.external.IFileInfoProvider;
 import com.testify.ecfeed.ui.editor.actions.DeleteAction;
 import com.testify.ecfeed.ui.editor.actions.ModelViewerActionProvider;
+import com.testify.ecfeed.ui.editor.utils.ExceptionCatchDialog;
 import com.testify.ecfeed.ui.modelif.ClassInterface;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 import com.testify.ecfeed.ui.modelif.ModelNodesTransfer;
@@ -110,22 +111,30 @@ public class ClassViewer extends TableViewerSection {
 
 	private class AddImplementedClassAdapter extends SelectionAdapter {
 		@Override
-		public void widgetSelected(SelectionEvent e) {
-			ClassNode addedClass = fRootIf.addImplementedClass();
-			if(addedClass != null){
-				selectElement(addedClass);
-				fNameColumn.getViewer().editElement(addedClass, 0);
+		public void widgetSelected(SelectionEvent ev) {
+			try {
+				ClassNode addedClass = fRootIf.addImplementedClass();
+				if(addedClass != null){
+					selectElement(addedClass);
+					fNameColumn.getViewer().editElement(addedClass, 0);
+				}
+			} catch (Exception e) {
+				ExceptionCatchDialog.display("Can not add implemented class.", e.getMessage());
 			}
 		}
 	}
 
 	private class AddNewClassAdapter extends SelectionAdapter {
 		@Override
-		public void widgetSelected(SelectionEvent e) {
+		public void widgetSelected(SelectionEvent ev) {
+			try {
 			ClassNode addedClass = fRootIf.addNewClass();
 			if(addedClass != null){
 				selectElement(addedClass);
 				fNameColumn.getViewer().editElement(addedClass, 0);
+			}
+			} catch (Exception e) {
+				ExceptionCatchDialog.display("Can not create new test class.", e.getMessage());
 			}
 		}
 	}
@@ -156,7 +165,7 @@ public class ClassViewer extends TableViewerSection {
 		fClassIf = new ClassInterface(this, fileInfoProvider);
 
 		setText("Classes");
-		addButton("Add implemented class", new AddImplementedClassAdapter());
+		addButton("Add implemented class", new AddImplementedClassAdapter());  
 		addButton("New test class", new AddNewClassAdapter());
 		addButton("Remove selected", new ActionSelectionAdapter(new DeleteAction(getViewer(), this)));
 
