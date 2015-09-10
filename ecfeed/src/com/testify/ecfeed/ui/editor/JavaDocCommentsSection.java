@@ -23,7 +23,9 @@ import org.eclipse.swt.widgets.Text;
 
 import com.testify.ecfeed.model.AbstractNode;
 import com.testify.ecfeed.ui.common.JavaDocSupport;
+import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.common.external.IFileInfoProvider;
+import com.testify.ecfeed.ui.editor.utils.ExceptionCatchDialog;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 
 public class JavaDocCommentsSection extends AbstractCommentsSection {
@@ -38,33 +40,49 @@ public class JavaDocCommentsSection extends AbstractCommentsSection {
 
 	protected class JavadocExportSelectionAdapter extends AbstractSelectionAdapter{
 		@Override
-		public void widgetSelected(SelectionEvent e) {
-			getTargetIf().exportCommentsToJavadoc(getTargetIf().getComments());
-			getTabFolder().setSelection(getTabFolder().indexOf(getJavaDocItem()));
+		public void widgetSelected(SelectionEvent ev) {
+			try {
+				getTargetIf().exportCommentsToJavadoc(getTargetIf().getComments());
+				getTabFolder().setSelection(getTabFolder().indexOf(getJavaDocItem()));
+			} catch (Exception e) {
+				ExceptionCatchDialog.display(Messages.EXCEPTION_CAN_NOT_EXPORT, e.getMessage());
+			}
 		}
 	}
 
 	protected class JavadocImportSelectionAdapter extends AbstractSelectionAdapter{
 		@Override
-		public void widgetSelected(SelectionEvent e) {
-			getTargetIf().importJavadocComments();
-			getTabFolder().setSelection(getTabFolder().indexOf(getCommentsItem()));
+		public void widgetSelected(SelectionEvent ev) {
+			try {
+				getTargetIf().importJavadocComments();
+				getTabFolder().setSelection(getTabFolder().indexOf(getCommentsItem()));
+			} catch (Exception e) {
+				ExceptionCatchDialog.display(Messages.EXCEPTION_CAN_NOT_IMPORT, e.getMessage());
+			}
 		}
 	}
 
 	protected class JavadocExportAllSelectionAdapter extends AbstractSelectionAdapter{
 		@Override
-		public void widgetSelected(SelectionEvent e) {
-			getTargetIf().exportAllComments();
-			getTabFolder().setSelection(getTabFolder().indexOf(getJavaDocItem()));
+		public void widgetSelected(SelectionEvent ev) {
+			try {
+				getTargetIf().exportAllComments();
+				getTabFolder().setSelection(getTabFolder().indexOf(getJavaDocItem()));
+			} catch (Exception e) {
+				ExceptionCatchDialog.display(Messages.EXCEPTION_CAN_NOT_EXPORT, e.getMessage());
+			}
 		}
 	}
 
 	protected class JavadocImportAllSelectionAdapter extends AbstractSelectionAdapter{
 		@Override
-		public void widgetSelected(SelectionEvent e) {
-			getTargetIf().importAllJavadocComments();
-			getTabFolder().setSelection(getTabFolder().indexOf(getCommentsItem()));
+		public void widgetSelected(SelectionEvent ev) {
+			try {
+				getTargetIf().importAllJavadocComments();
+				getTabFolder().setSelection(getTabFolder().indexOf(getCommentsItem()));
+			} catch (Exception e) {
+				ExceptionCatchDialog.display(Messages.EXCEPTION_CAN_NOT_IMPORT, e.getMessage());
+			}
 		}
 	}
 

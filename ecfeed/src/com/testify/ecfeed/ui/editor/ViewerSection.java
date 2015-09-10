@@ -116,10 +116,13 @@ public abstract class ViewerSection extends ButtonsCompositeSection implements I
 			}
 
 			@Override
-			public void widgetSelected(SelectionEvent e){
-				fAction.run();
+			public void widgetSelected(SelectionEvent ev){
+				try {
+					fAction.run();
+				} catch (Exception e) {
+					ExceptionCatchDialog.display(null, e.getMessage());
+				}
 			}
-
 		}
 
 		public ViewerMenuListener(Menu menu) {
@@ -162,7 +165,7 @@ public abstract class ViewerSection extends ButtonsCompositeSection implements I
 
 			item.setText(text);
 			item.setEnabled(action.isEnabled());
-			item.addSelectionListener(new MenuItemSelectionAdapter(action));
+			item.addSelectionListener(new MenuItemSelectionAdapter(action)); 
 		}
 
 	}
