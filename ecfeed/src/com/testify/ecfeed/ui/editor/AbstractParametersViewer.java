@@ -28,6 +28,7 @@ import org.eclipse.swt.layout.GridData;
 
 import com.testify.ecfeed.model.AbstractParameterNode;
 import com.testify.ecfeed.model.ParametersParentNode;
+import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.common.NodeNameColumnLabelProvider;
 import com.testify.ecfeed.ui.common.NodeViewerColumnLabelProvider;
 import com.testify.ecfeed.ui.common.external.IFileInfoProvider;
@@ -172,7 +173,7 @@ public abstract class AbstractParametersViewer extends TableViewerSection {
 		getSection().setLayoutData(gd);
 
 		addButton("New parameter", new AddNewParameterAdapter());
-		addButton("Remove selected", new ActionSelectionAdapter(new DeleteAction(getViewer(), this)));
+		addButton("Remove selected", new ActionSelectionAdapter(new DeleteAction(getViewer(), this), Messages.EXCEPTION_CAN_NOT_REMOVE_SELECTED_ITEMS));
 
 		fNameColumn.setEditingSupport(new ParameterNameEditingSupport());
 		fTypeColumn.setEditingSupport(getParameterTypeEditingSupport());

@@ -25,6 +25,7 @@ import org.eclipse.ui.forms.widgets.Section;
 
 import com.testify.ecfeed.model.ConstraintNode;
 import com.testify.ecfeed.model.MethodNode;
+import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.common.NodeNameColumnLabelProvider;
 import com.testify.ecfeed.ui.common.NodeViewerColumnLabelProvider;
 import com.testify.ecfeed.ui.common.external.IFileInfoProvider;
@@ -36,7 +37,7 @@ import com.testify.ecfeed.ui.modelif.MethodInterface;
 import com.testify.ecfeed.ui.modelif.ModelNodesTransfer;
 
 public class ConstraintsListViewer extends TableViewerSection {
-	
+
 	private final static int STYLE = Section.TITLE_BAR | Section.EXPANDED;
 
 	private TableViewerColumn fNameColumn;
@@ -86,7 +87,7 @@ public class ConstraintsListViewer extends TableViewerSection {
 			}
 		}
 	}
-	
+
 	public ConstraintsListViewer(
 			ISectionContext sectionContext, 
 			IModelUpdateContext updateContext, 
@@ -95,22 +96,22 @@ public class ConstraintsListViewer extends TableViewerSection {
 		GridData gd = new GridData(SWT.FILL, SWT.FILL, true, true);
 		gd.minimumHeight = 250;
 		getSection().setLayoutData(gd);
-		
+
 		getSection().setText("Constraints");
-		
+
 		fMethodInterface = new MethodInterface(this, fileInfoProvider);
 		fConstraintIf = new ConstraintInterface(this, fileInfoProvider);
-		
+
 		fNameColumn.setEditingSupport(new ConstraintNameEditingSupport());
 
 		addButton("Add constraint", new AddConstraintAdapter());
-		addButton("Remove selected", new ActionSelectionAdapter(new DeleteAction(getViewer(), this)));
-		
+		addButton("Remove selected", new ActionSelectionAdapter(new DeleteAction(getViewer(), this), Messages.EXCEPTION_CAN_NOT_REMOVE_SELECTED_ITEMS));
+
 		addDoubleClickListener(new SelectNodeDoubleClickListener(sectionContext.getMasterSection()));
 		setActionProvider(new ModelViewerActionProvider(getTableViewer(), updateContext));
 		getViewer().addDragSupport(DND.DROP_COPY|DND.DROP_MOVE, new Transfer[]{ModelNodesTransfer.getInstance()}, new ModelNodeDragListener(getViewer()));
 	}
-	
+
 	public void setInput(MethodNode method){
 		super.setInput(method.getConstraintNodes());
 		fMethodInterface.setTarget(method);
@@ -119,7 +120,7 @@ public class ConstraintsListViewer extends TableViewerSection {
 	@Override
 	protected void createTableColumns() {
 		fNameColumn = addColumn("Name", 150, new NodeNameColumnLabelProvider());
-		
+
 		addColumn("Definition", 150, new NodeViewerColumnLabelProvider(){
 			@Override
 			public String getText(Object element){
@@ -127,5 +128,5 @@ public class ConstraintsListViewer extends TableViewerSection {
 			}
 		});
 	}
-	
+
 }

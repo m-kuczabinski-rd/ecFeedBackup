@@ -29,6 +29,7 @@ import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.ui.common.ColorConstants;
 import com.testify.ecfeed.ui.common.ColorManager;
+import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.common.external.IFileInfoProvider;
 import com.testify.ecfeed.ui.editor.actions.DeleteAction;
 import com.testify.ecfeed.ui.editor.actions.ModelViewerActionProvider;
@@ -128,11 +129,11 @@ public class ClassViewer extends TableViewerSection {
 		@Override
 		public void widgetSelected(SelectionEvent ev) {
 			try {
-			ClassNode addedClass = fRootIf.addNewClass();
-			if(addedClass != null){
-				selectElement(addedClass);
-				fNameColumn.getViewer().editElement(addedClass, 0);
-			}
+				ClassNode addedClass = fRootIf.addNewClass();
+				if(addedClass != null){
+					selectElement(addedClass);
+					fNameColumn.getViewer().editElement(addedClass, 0);
+				}
 			} catch (Exception e) {
 				ExceptionCatchDialog.display("Can not create new test class.", e.getMessage());
 			}
@@ -167,7 +168,9 @@ public class ClassViewer extends TableViewerSection {
 		setText("Classes");
 		addButton("Add implemented class", new AddImplementedClassAdapter());  
 		addButton("New test class", new AddNewClassAdapter());
-		addButton("Remove selected", new ActionSelectionAdapter(new DeleteAction(getViewer(), this)));
+		addButton("Remove selected", 
+				new ActionSelectionAdapter(
+						new DeleteAction(getViewer(), this), Messages.EXCEPTION_CAN_NOT_REMOVE_SELECTED_ITEMS));
 
 		addDoubleClickListener(new SelectNodeDoubleClickListener(parent.getMasterSection()));
 		setActionProvider(new ModelViewerActionProvider(getTableViewer(), this));

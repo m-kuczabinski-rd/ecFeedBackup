@@ -37,6 +37,8 @@ public class Messages {
 	public static final String EXCEPTION_EXTERNAL_IMPLEMENTER_NOT_FOUND = 
 			"External android implementer not found (not installed).";
 
+	public static final String EXCEPTION_CAN_NOT_REMOVE_SELECTED_ITEMS = 
+			"Can not remove selected items.";
 
 	public static final String DIALOG_TEST_SUITE_NAME_ERROR_MESSAGE = "Name of a test suite must be between 1 and 64 characters long.";
 	public static final String DIALOG_TEST_SUITE_NAME_ERROR_MESSAGE_NO_WHITESPACE = "Name of a test suite cannot consist of whitespace characters only.";

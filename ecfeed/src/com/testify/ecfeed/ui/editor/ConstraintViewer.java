@@ -55,6 +55,7 @@ import com.testify.ecfeed.model.MethodParameterNode;
 import com.testify.ecfeed.model.StatementArray;
 import com.testify.ecfeed.model.StaticStatement;
 import com.testify.ecfeed.ui.common.ImageManager;
+import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.common.external.IFileInfoProvider;
 import com.testify.ecfeed.ui.editor.actions.ModelModifyingAction;
 import com.testify.ecfeed.ui.editor.utils.ExceptionCatchDialog;
@@ -577,7 +578,12 @@ public class ConstraintViewer extends TreeViewerSection {
 		super(sectionContext, updateContext, fileInfoProvider, STYLE);
 		getSection().setText("Constraint editor");
 		fAddStatementButton = addButton("Add statement", new AddStatementAdapter());
-		fRemoveStatementButton = addButton("Remove statement", new ActionSelectionAdapter(new DeleteStatementAction(updateContext)));
+		fRemoveStatementButton = 
+				addButton("Remove statement", 
+						new ActionSelectionAdapter(
+								new DeleteStatementAction(updateContext), 
+								Messages.EXCEPTION_CAN_NOT_REMOVE_SELECTED_ITEMS));
+
 		getViewer().addSelectionChangedListener(new StatementSelectionListener());
 
 		fStatementEditor = new StatementEditor(getClientComposite());

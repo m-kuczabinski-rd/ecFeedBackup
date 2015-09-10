@@ -31,6 +31,7 @@ import org.eclipse.ui.forms.widgets.Section;
 import com.testify.ecfeed.adapter.EImplementationStatus;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.TestCaseNode;
+import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.common.TestCasesViewerContentProvider;
 import com.testify.ecfeed.ui.common.TestCasesViewerLabelProvider;
 import com.testify.ecfeed.ui.common.TreeCheckStateListener;
@@ -97,12 +98,20 @@ public class TestCasesViewer extends CheckboxTreeViewerSection {
 	}
 
 	private class RemoveSelectedAdapter extends SelectionAdapter {
+
+		String fDescriptionWhenError;
+
+		RemoveSelectedAdapter(String descriptionWhenError) {
+			fDescriptionWhenError = descriptionWhenError;
+		}
+
+
 		@Override
 		public void widgetSelected(SelectionEvent ev){
 			try {
 				fMethodIf.removeTestCases(getCheckedTestCases());
 			} catch (Exception e) {
-				ExceptionCatchDialog.display(null, e.getMessage());
+				ExceptionCatchDialog.display(fDescriptionWhenError, e.getMessage());
 			}
 		}
 	}
@@ -144,7 +153,7 @@ public class TestCasesViewer extends CheckboxTreeViewerSection {
 		addButton("Rename suite", new RenameSuiteAdapter());
 		fGenerateSuiteButton = addButton("Generate test suite", new GenerateTestSuiteAdapter());
 		addButton("Calculate coverage", new CalculateCoverageAdapter(fileInfoProvider));
-		addButton("Remove selected", new RemoveSelectedAdapter());
+		addButton("Remove selected", new RemoveSelectedAdapter(Messages.EXCEPTION_CAN_NOT_REMOVE_SELECTED_ITEMS));
 		fExecuteSelectedButton = addButton("Execute selected", new ExecuteStaticTestAdapter());
 
 		addDoubleClickListener(new SelectNodeDoubleClickListener(sectionContext.getMasterSection()));

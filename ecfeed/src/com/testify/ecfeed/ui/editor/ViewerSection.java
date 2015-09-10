@@ -86,9 +86,11 @@ public abstract class ViewerSection extends ButtonsCompositeSection implements I
 
 	protected class ActionSelectionAdapter extends SelectionAdapter{
 		private Action fAction;
+		private String fDescriptionWhenError;
 
-		public ActionSelectionAdapter(Action action){
+		public ActionSelectionAdapter(Action action, String descriptionWhenError ){
 			fAction = action;
+			fDescriptionWhenError = descriptionWhenError;
 		}
 
 		@Override
@@ -96,7 +98,7 @@ public abstract class ViewerSection extends ButtonsCompositeSection implements I
 			try {
 				fAction.run();
 			} catch (Exception e) {
-				ExceptionCatchDialog.display(null, e.getMessage());
+				ExceptionCatchDialog.display(fDescriptionWhenError, e.getMessage());
 			}
 		}
 	}

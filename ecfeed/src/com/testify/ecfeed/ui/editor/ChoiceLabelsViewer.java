@@ -32,6 +32,7 @@ import org.eclipse.ui.forms.widgets.Section;
 import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.ui.common.ColorConstants;
 import com.testify.ecfeed.ui.common.ColorManager;
+import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.common.external.IFileInfoProvider;
 import com.testify.ecfeed.ui.editor.actions.ActionGroups;
 import com.testify.ecfeed.ui.editor.actions.CutAction;
@@ -225,7 +226,10 @@ public class ChoiceLabelsViewer extends TableViewerSection {
 		getSection().setText("Labels");
 
 		addButton("Add label", new AddLabelAdapter());
-		addButton("Remove selected", new ActionSelectionAdapter(new LabelDeleteAction(updateContext)));
+		addButton("Remove selected", 
+				new ActionSelectionAdapter(
+						new LabelDeleteAction(updateContext), 
+						Messages.EXCEPTION_CAN_NOT_REMOVE_SELECTED_ITEMS));
 
 		addDoubleClickListener(new SelectNodeDoubleClickListener(sectionContext.getMasterSection()));
 		setActionProvider(new LabelsViewerActionProvider());

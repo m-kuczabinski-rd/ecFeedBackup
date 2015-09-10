@@ -35,6 +35,7 @@ import com.testify.ecfeed.adapter.java.JavaUtils;
 import com.testify.ecfeed.model.AbstractParameterNode;
 import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.model.ChoicesParentNode;
+import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.common.NodeNameColumnLabelProvider;
 import com.testify.ecfeed.ui.common.external.IFileInfoProvider;
 import com.testify.ecfeed.ui.editor.actions.DeleteAction;
@@ -198,10 +199,10 @@ public class ChoicesViewer extends TableViewerSection {
 		@Override
 		public void widgetSelected(SelectionEvent ev){
 			try {
-			ChoiceNode added = fParentIf.addNewChoice();
-			if(added != null){
-				getTable().setSelection(added.getIndex());
-			}
+				ChoiceNode added = fParentIf.addNewChoice();
+				if(added != null){
+					getTable().setSelection(added.getIndex());
+				}
 			} catch (Exception e) {
 				ExceptionCatchDialog.display("Can not add choice.", e.getMessage());
 			}
@@ -213,12 +214,12 @@ public class ChoicesViewer extends TableViewerSection {
 		@Override
 		public void widgetSelected(SelectionEvent ev) {
 			try {
-			if(fSelectedParent == fSelectedParent.getParameter()){
-				AbstractParameterInterface parameterIf 
-				= (AbstractParameterInterface)NodeInterfaceFactory.getNodeInterface(
-						fSelectedParent, ChoicesViewer.this, fFileInfoProvider);
-				parameterIf.resetChoicesToDefault();
-			}
+				if(fSelectedParent == fSelectedParent.getParameter()){
+					AbstractParameterInterface parameterIf 
+					= (AbstractParameterInterface)NodeInterfaceFactory.getNodeInterface(
+							fSelectedParent, ChoicesViewer.this, fFileInfoProvider);
+					parameterIf.resetChoicesToDefault();
+				}
 			} catch (Exception e) {
 				ExceptionCatchDialog.display("Can not replace with default.", e.getMessage());
 			}
@@ -244,7 +245,11 @@ public class ChoicesViewer extends TableViewerSection {
 
 		getSection().setText("Choices");
 		fAddChoicesButton = addButton("Add choice", new AddChoiceAdapter());
-		fRemoveSelectedButton = addButton("Remove selected", new ActionSelectionAdapter(new DeleteAction(getViewer(), this)));
+		fRemoveSelectedButton = 
+				addButton("Remove selected", 
+						new ActionSelectionAdapter(
+								new DeleteAction(getViewer(), this), Messages.EXCEPTION_CAN_NOT_REMOVE_SELECTED_ITEMS));
+
 		fReplaceWithDefaultButton = addButton("Replace with default", new ReplaceWithDefaultAdapter());
 
 		addDoubleClickListener(new SelectNodeDoubleClickListener(sectionContext.getMasterSection()));
