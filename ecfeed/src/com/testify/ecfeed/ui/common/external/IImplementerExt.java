@@ -10,6 +10,9 @@ package com.testify.ecfeed.ui.common.external;
 
 
 public interface IImplementerExt extends IImplementer{
+	
+	public final String INTERFACE_NAME = "IMPLEMENTER";
+	public final String INTERFACE_VERSION = "1.0";
 
 	void initialize(String baseRunner, IFileInfoProvider fFileInfoProvider) throws RuntimeException;
 }

@@ -65,6 +65,8 @@ public class EclipseAndroidImplementerForClassNode {
 			}
 		} catch (CoreException e) {
 			SystemLogger.logCatch(e.getMessage());
+			PluginExceptionReporter.reportEcException(
+					e.getMessage(), IImplementerExt.INTERFACE_NAME, IImplementerExt.INTERFACE_VERSION);
 		}	
 
 		EcException.report(Messages.EXCEPTION_EXTERNAL_IMPLEMENTER_NOT_FOUND);
