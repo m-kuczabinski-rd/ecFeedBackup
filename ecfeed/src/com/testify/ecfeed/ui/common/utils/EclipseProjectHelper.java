@@ -89,6 +89,14 @@ public class EclipseProjectHelper {
 		return false;
 	}
 
+	public static String getApkPathAndName(IFileInfoProvider fileInfoProvider) {
+		String projectPath = EclipseProjectHelper.getProjectPath(fileInfoProvider);
+		String binPath = DiskFileHelper.joinSubdirectory(projectPath, DiskFileHelper.BIN_SUBDIRECTORY);
+		IProject project = fileInfoProvider.getProject();
+		String apkFileName = DiskFileHelper.createFileName(project.getName(), DiskFileHelper.APK_EXTENSION);
+		return DiskFileHelper.joinPathWithFile(binPath, apkFileName);
+	}
+
 	private static boolean calculateFlagIsAndroidProject(IFileInfoProvider fileInfoProvider) throws EcException {
 		checkFileInfoProvider(fileInfoProvider);
 

@@ -30,6 +30,7 @@ import com.testify.ecfeed.runner.JavaTestRunner;
 import com.testify.ecfeed.runner.RunnerException;
 import com.testify.ecfeed.ui.common.EclipseLoaderProvider;
 import com.testify.ecfeed.ui.common.Messages;
+import com.testify.ecfeed.ui.common.external.IFileInfoProvider;
 import com.testify.ecfeed.ui.modelif.external.ITestMethodInvoker;
 
 public class StaticTestExecutionSupport extends TestExecutionSupport{
@@ -37,14 +38,18 @@ public class StaticTestExecutionSupport extends TestExecutionSupport{
 	private Collection<TestCaseNode> fTestCases;
 	private JavaTestRunner fRunner;
 	private List<TestCaseNode> fFailedTests;
+	private IFileInfoProvider fFileInfoProvider;
+	private boolean fRunOnAndroid;
 
 	private class ExecuteRunnable implements IRunnableWithProgress{
 
 		@Override
 		public void run(IProgressMonitor progressMonitor)
 				throws InvocationTargetException, InterruptedException {
+			if (fRunOnAndroid) {
+				ApkInstaller.installApk(fFileInfoProvider);
+			}			setProgressMonitor(progressMonitor);
 
-			setProgressMonitor(progressMonitor);
 			fFailedTests.clear();
 			beginTestExecution(fTestCases.size());
 
@@ -64,20 +69,26 @@ public class StaticTestExecutionSupport extends TestExecutionSupport{
 		}
 	}
 
-	public StaticTestExecutionSupport(Collection<TestCaseNode> testCases, ITestMethodInvoker testMethodInvoker){
+	public StaticTestExecutionSupport(
+			Collection<TestCaseNode> testCases, 
+			ITestMethodInvoker testMethodInvoker, 
+			IFileInfoProvider fileInfoProvider, 
+			boolean runOnAndroid){
 		super();
 		ILoaderProvider loaderProvider = new EclipseLoaderProvider();
 		ModelClassLoader loader = loaderProvider.getLoader(true, null);
 		fRunner = new JavaTestRunner(loader, testMethodInvoker);
 		fTestCases = testCases;
 		fFailedTests = new ArrayList<>();
-
+		fFileInfoProvider = fileInfoProvider;
+		fRunOnAndroid = runOnAndroid;
 	}
 
 	public void proceed(){
 		PrintStream currentOut = System.out;
 		ConsoleManager.displayConsole();
 		ConsoleManager.redirectSystemOutputToStream(ConsoleManager.getOutputStream());
+
 		try{
 			fFailedTests.clear();
 			ProgressMonitorDialog dialog = new ProgressMonitorDialog(Display.getCurrent().getActiveShell());

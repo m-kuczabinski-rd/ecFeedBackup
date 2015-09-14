@@ -44,6 +44,7 @@ public class OnlineTestRunningSupport extends TestExecutionSupport{
 	private MethodNode fTarget;
 	private JavaTestRunner fRunner;
 	private IFileInfoProvider fFileInfoProvider;
+	private boolean fRunOnAndroid;
 
 	private class ExecuteRunnable implements IRunnableWithProgress{
 
@@ -65,7 +66,12 @@ public class OnlineTestRunningSupport extends TestExecutionSupport{
 		@Override
 		public void run(IProgressMonitor progressMonitor)
 				throws InvocationTargetException, InterruptedException {
+
 			try{
+				if (fRunOnAndroid) {
+					ApkInstaller.installApk(fFileInfoProvider);
+				}
+
 				setProgressMonitor(progressMonitor);
 				fRunner.setTarget(fTarget);
 				List<ChoiceNode> next;
@@ -88,16 +94,22 @@ public class OnlineTestRunningSupport extends TestExecutionSupport{
 		}
 	}
 
-	public OnlineTestRunningSupport(MethodNode target, ITestMethodInvoker testMethodInvoker, IFileInfoProvider fileInfoProvider){
-		this(testMethodInvoker, fileInfoProvider);
+	public OnlineTestRunningSupport(
+			MethodNode target, 
+			ITestMethodInvoker testMethodInvoker, 
+			IFileInfoProvider fileInfoProvider, 
+			boolean runOnAndroid){
+		this(testMethodInvoker, fileInfoProvider, runOnAndroid);
 		setTarget(target);
 	}
 
-	public OnlineTestRunningSupport(ITestMethodInvoker testMethodInvoker, IFileInfoProvider fileInfoProvider) {
+	public OnlineTestRunningSupport(
+			ITestMethodInvoker testMethodInvoker, IFileInfoProvider fileInfoProvider, boolean runOnAndroid) {
 		ILoaderProvider loaderProvider = new EclipseLoaderProvider();
 		ModelClassLoader loader = loaderProvider.getLoader(true, null);
 		fRunner = new JavaTestRunner(loader, testMethodInvoker);
 		fFileInfoProvider = fileInfoProvider;
+		fRunOnAndroid = runOnAndroid;
 	}
 
 	public void setTarget(MethodNode target) {
@@ -113,6 +125,7 @@ public class OnlineTestRunningSupport extends TestExecutionSupport{
 		PrintStream currentOut = System.out;
 		ConsoleManager.displayConsole();
 		ConsoleManager.redirectSystemOutputToStream(ConsoleManager.getOutputStream());
+
 		if (fTarget.getParameters().size() > 0) {
 			ExecuteOnlineSetupDialog dialog = 
 					new ExecuteOnlineSetupDialog(Display.getCurrent().getActiveShell(), fTarget, fFileInfoProvider);

@@ -218,29 +218,34 @@ public class MethodInterface extends ParametersParentInterface {
 	}
 
 	public void executeOnlineTests(IFileInfoProvider fileInfoProvider) throws EcException {
-		if (!isValidClassConfiguration())
+		ClassNode classNode = (ClassNode)getTarget().getParent();
+
+		if (!isValidClassConfiguration(classNode))
 			return;
 
 		OnlineTestRunningSupport runner = 
-				new OnlineTestRunningSupport(createTestMethodInvoker(fileInfoProvider), fileInfoProvider);
+				new OnlineTestRunningSupport(
+						createTestMethodInvoker(fileInfoProvider), fileInfoProvider, classNode.getRunOnAndroid());
 		runner.setTarget(getTarget());
 		runner.proceed();
 	}
 
 	public void executeStaticTests(Collection<TestCaseNode> testCases, IFileInfoProvider fileInfoProvider) throws EcException {
+		ClassNode classNode = (ClassNode)getTarget().getParent();
 
-		if (!isValidClassConfiguration())
+		if (!isValidClassConfiguration(classNode))
 			return;
 
 		StaticTestExecutionSupport support = 
-				new StaticTestExecutionSupport(testCases, createTestMethodInvoker(fileInfoProvider));
+				new StaticTestExecutionSupport(
+						testCases, 
+						createTestMethodInvoker(fileInfoProvider), 
+						fileInfoProvider, 
+						classNode.getRunOnAndroid());
 		support.proceed();
 	}
 
-	private boolean isValidClassConfiguration() {
-
-		ClassNode classNode = (ClassNode)getTarget().getParent();
-
+	private boolean isValidClassConfiguration(ClassNode classNode) {
 		if (classNode.getRunOnAndroid() && emptyAndroidBaseRunner(classNode)) {
 			MessageDialog.openError(
 					Display.getDefault().getActiveShell(), 
