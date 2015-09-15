@@ -62,6 +62,10 @@ public class Messages {
 
 	public static final String INSTALLING_TESTED_APP = "Installing tested application...";
 
+	public static final String NO_ANDROID_DEVICES_ATTACHED = "No Android devices attached.";
+
+	public static final String TOO_MANY_ANDROID_DEVICES_FOUND = "Too many Android devices attached (only 1 allowed).";
+
 	public static final String DIALOG_TEST_SUITE_NAME_ERROR_MESSAGE = "Name of a test suite must be between 1 and 64 characters long.";
 	public static final String DIALOG_TEST_SUITE_NAME_ERROR_MESSAGE_NO_WHITESPACE = "Name of a test suite cannot consist of whitespace characters only.";
 	public static final String DIALOG_CHOICE_VALUE_PROBLEM_TITLE = "Wrong choice value";
