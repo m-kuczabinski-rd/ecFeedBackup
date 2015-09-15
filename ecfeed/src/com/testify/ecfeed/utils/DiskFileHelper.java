@@ -44,5 +44,15 @@ public class DiskFileHelper {
 		return item1 + FILE_SEPARATOR + item2;
 	}
 
+	public static long fileModificationTime(String path) {
+		File file = new File(path);
+
+		if (!file.exists()) {
+			return 0;
+		}
+
+		return file.lastModified();
+	}
+
 
 }

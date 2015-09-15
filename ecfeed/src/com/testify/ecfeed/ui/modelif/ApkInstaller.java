@@ -16,22 +16,52 @@ import java.lang.reflect.InvocationTargetException;
 
 import com.testify.ecfeed.ui.common.external.IFileInfoProvider;
 import com.testify.ecfeed.ui.common.utils.EclipseProjectHelper;
+import com.testify.ecfeed.utils.DiskFileHelper;
 import com.testify.ecfeed.utils.ExceptionHelper;
 
 public class ApkInstaller {
 
-	public static void installApk(IFileInfoProvider fileInfoProvider) throws InvocationTargetException {
+	static long fPreviousModificationTime = 0;
+	static String fPreviousApkPathAndName = null;
+
+	public static void installApkIfModified(IFileInfoProvider fileInfoProvider) throws InvocationTargetException {
 		String apkPathAndName = EclipseProjectHelper.getApkPathAndName(fileInfoProvider);
 
 		if (apkPathAndName == null) {
 			ExceptionHelper.reportRuntimeException("Can not install apk file.");
 		}
+		if (!apkWasModified(apkPathAndName)) {
+			return;
+		}
 
+		install(apkPathAndName);
+
+		fPreviousApkPathAndName = apkPathAndName;
+		fPreviousModificationTime = DiskFileHelper.fileModificationTime(apkPathAndName);
+	}
+
+	private static boolean apkWasModified(String apkPathAndName) {
+		if (!apkPathAndName.equals(fPreviousApkPathAndName)) {
+			return true;
+		}
+
+		long currentModificationTime = DiskFileHelper.fileModificationTime(apkPathAndName);
+
+		if (currentModificationTime == 0) {
+			return true;
+		}
+		if (fPreviousModificationTime != currentModificationTime) {
+			return true;
+		}
+		return false;
+	}
+
+	private static void install(String apkPathAndName) {
 		System.out.println("Installing apk...");
 		Process process = startProcess(apkPathAndName);
 		logOutput(process);
 		waitFor(process);
-	}	
+	}
 
 	private static Process startProcess(String apkPathAndName) {
 
