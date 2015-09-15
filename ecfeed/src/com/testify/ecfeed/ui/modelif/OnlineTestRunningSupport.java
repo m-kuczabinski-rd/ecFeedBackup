@@ -69,7 +69,7 @@ public class OnlineTestRunningSupport extends TestExecutionSupport{
 
 			try{
 				if (fRunOnAndroid) {
-					ApkInstaller.installApkIfModified(fFileInfoProvider);
+					ApkInstaller.installApplicationsIfModified(fFileInfoProvider);
 				}
 
 				setProgressMonitor(progressMonitor);

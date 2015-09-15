@@ -42,7 +42,25 @@ public class Messages {
 
 	public static final String EXCEPTION_CAN_NOT_EXPORT = "Can not export.";
 
-	public static final String EXCEPTION_CAN_NOT_IMPORT = "Can not export.";	
+	public static final String EXCEPTION_CAN_NOT_IMPORT = "Can not export.";
+
+	public static final String EXCEPTION_NO_REFERENCED_PROJECTS = "Testing project has no referenced projects.";
+
+	public static final String EXCEPTION_TOO_MANY_REFERENCED_PROJECTS = "Testing project has too many referenced projects (only 1 - tested project is allowed).";
+
+	public static final String EXCEPTION_NO_APK_NAME_PROJECT_NULL = "Can not create apk name. Project is null.";
+
+	public static final String EXCEPTION_CAN_NOT_INSTALL_APK_FILE = "Can not install apk file.";
+
+	public static final String EXCEPTION_APK_MUST_NOT_BE_NULL = "Apk path and name must not be null.";
+
+	public static final String EXCEPTION_CAN_NOT_CREATE_INSTALL_PROCESS = "Can not create install process.";
+
+	public static final String CAN_NOT_LOG_OUTPUT = "Can not log output.";
+
+	public static final String INSTALLING_TESTING_APP = "Installing testing application...";
+
+	public static final String INSTALLING_TESTED_APP = "Installing tested application...";
 
 	public static final String DIALOG_TEST_SUITE_NAME_ERROR_MESSAGE = "Name of a test suite must be between 1 and 64 characters long.";
 	public static final String DIALOG_TEST_SUITE_NAME_ERROR_MESSAGE_NO_WHITESPACE = "Name of a test suite cannot consist of whitespace characters only.";

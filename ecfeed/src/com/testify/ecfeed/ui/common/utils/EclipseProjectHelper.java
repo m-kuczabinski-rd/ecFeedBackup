@@ -51,6 +51,10 @@ public class EclipseProjectHelper {
 		return fileInfoProvider.getProject().getLocation().toOSString();
 	}
 
+	public static String getProjectPath(IProject project) {
+		return project.getLocation().toOSString();
+	}
+
 	public static boolean isAndroidProject(IFileInfoProvider fileInfoProvider) {
 		checkFileInfoProvider(fileInfoProvider); 
 
@@ -90,10 +94,42 @@ public class EclipseProjectHelper {
 	}
 
 	public static String getApkPathAndName(IFileInfoProvider fileInfoProvider) {
-		String projectPath = EclipseProjectHelper.getProjectPath(fileInfoProvider);
-		String binPath = DiskFileHelper.joinSubdirectory(projectPath, DiskFileHelper.BIN_SUBDIRECTORY);
 		IProject project = fileInfoProvider.getProject();
+		return getApkName(project);
+	}
+
+	public static String getReferencedApkPathAndName(IFileInfoProvider fileInfoProvider) {
+		IProject testingProject = fileInfoProvider.getProject();
+		IProject testedProject = getReferencedProject(testingProject);
+		return getApkName(testedProject);
+	}
+
+	static IProject getReferencedProject(IProject project) {
+		IProject[] referencedProjects = null;
+		try {
+			referencedProjects = project.getReferencedProjects();
+		} catch (CoreException e) {
+			ExceptionHelper.reportRuntimeException(e.getMessage());
+		}
+
+		if (referencedProjects == null || referencedProjects.length == 0) {
+			ExceptionHelper.reportRuntimeException(Messages.EXCEPTION_NO_REFERENCED_PROJECTS); 
+		}
+		if (referencedProjects.length > 1) {
+			ExceptionHelper.reportRuntimeException(Messages.EXCEPTION_TOO_MANY_REFERENCED_PROJECTS); 
+		}
+
+		return referencedProjects[0];
+	}
+
+	private static String getApkName(IProject project) {
+		if (project == null) {
+			ExceptionHelper.reportRuntimeException(Messages.EXCEPTION_NO_APK_NAME_PROJECT_NULL);
+		}
+		String projectPath = getProjectPath(project);
+		String binPath = DiskFileHelper.joinSubdirectory(projectPath, DiskFileHelper.BIN_SUBDIRECTORY);
 		String apkFileName = DiskFileHelper.createFileName(project.getName(), DiskFileHelper.APK_EXTENSION);
+
 		return DiskFileHelper.joinPathWithFile(binPath, apkFileName);
 	}
 

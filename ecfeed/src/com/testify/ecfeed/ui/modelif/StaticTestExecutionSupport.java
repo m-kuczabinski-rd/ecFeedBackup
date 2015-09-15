@@ -47,7 +47,7 @@ public class StaticTestExecutionSupport extends TestExecutionSupport{
 		public void run(IProgressMonitor progressMonitor)
 				throws InvocationTargetException, InterruptedException {
 			if (fRunOnAndroid) {
-				ApkInstaller.installApkIfModified(fFileInfoProvider);
+				ApkInstaller.installApplicationsIfModified(fFileInfoProvider);
 			}			setProgressMonitor(progressMonitor);
 
 			fFailedTests.clear();

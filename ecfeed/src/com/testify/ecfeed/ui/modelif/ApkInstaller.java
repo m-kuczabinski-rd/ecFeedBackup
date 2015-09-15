@@ -14,6 +14,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.InvocationTargetException;
 
+import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.common.external.IFileInfoProvider;
 import com.testify.ecfeed.ui.common.utils.EclipseProjectHelper;
 import com.testify.ecfeed.utils.DiskFileHelper;
@@ -21,43 +22,83 @@ import com.testify.ecfeed.utils.ExceptionHelper;
 
 public class ApkInstaller {
 
-	static long fPreviousModificationTime = 0;
-	static String fPreviousApkPathAndName = null;
+	static class FileDescription {
+		String pathAndName = null;
+		long modificationTime = 0;
+	}
 
-	public static void installApkIfModified(IFileInfoProvider fileInfoProvider) throws InvocationTargetException {
-		String apkPathAndName = EclipseProjectHelper.getApkPathAndName(fileInfoProvider);
+	static FileDescription fTestingApkDescription;
+	static FileDescription fTestedApkDescription;
 
-		if (apkPathAndName == null) {
-			ExceptionHelper.reportRuntimeException("Can not install apk file.");
+	static {
+		fTestingApkDescription = new FileDescription();
+		fTestedApkDescription = new FileDescription();
+	}
+
+	public static void installApplicationsIfModified(IFileInfoProvider fileInfoProvider) throws InvocationTargetException {
+		String testingApk = getTestingApkPathAndName(fileInfoProvider);
+		installApkIfModified(testingApk, fTestingApkDescription, Messages.INSTALLING_TESTING_APP);
+
+		String testedApk = getTestedApkPathAndName(fileInfoProvider);
+		installApkIfModified(testedApk, fTestedApkDescription, Messages.INSTALLING_TESTED_APP);
+	}
+
+	private static String getTestingApkPathAndName(IFileInfoProvider fileInfoProvider) {
+		String testingApk = EclipseProjectHelper.getApkPathAndName(fileInfoProvider);
+
+		if (testingApk == null) {
+			ExceptionHelper.reportRuntimeException(Messages.EXCEPTION_CAN_NOT_INSTALL_APK_FILE);
 		}
-		if (!apkWasModified(apkPathAndName)) {
+
+		return testingApk;
+	}
+
+	private static String getTestedApkPathAndName(IFileInfoProvider fileInfoProvider) {
+		String testedApk = EclipseProjectHelper.getReferencedApkPathAndName(fileInfoProvider);
+
+		if (testedApk == null) {
+			ExceptionHelper.reportRuntimeException(Messages.EXCEPTION_CAN_NOT_INSTALL_APK_FILE);
+		}
+
+		return testedApk;
+	}
+
+	private static void installApkIfModified(
+			String apkPathAndName, FileDescription apkDescription, String installMessage) {
+
+		if (!apkWasModified(apkPathAndName, apkDescription)) {
 			return;
 		}
 
-		install(apkPathAndName);
+		installApk(apkPathAndName, installMessage);
 
-		fPreviousApkPathAndName = apkPathAndName;
-		fPreviousModificationTime = DiskFileHelper.fileModificationTime(apkPathAndName);
+		apkDescription.pathAndName = apkPathAndName;
+		apkDescription.modificationTime = DiskFileHelper.fileModificationTime(apkPathAndName);
 	}
 
-	private static boolean apkWasModified(String apkPathAndName) {
-		if (!apkPathAndName.equals(fPreviousApkPathAndName)) {
+	private static boolean apkWasModified(String apkPathAndName, FileDescription fileDescription) {
+		if (apkPathAndName == null) {
+			ExceptionHelper.reportRuntimeException(Messages.EXCEPTION_APK_MUST_NOT_BE_NULL);
+		}
+		if (fileDescription.pathAndName == null) {
+			return true;
+		}
+		if (!apkPathAndName.equals(fileDescription.pathAndName)) {
 			return true;
 		}
 
 		long currentModificationTime = DiskFileHelper.fileModificationTime(apkPathAndName);
-
 		if (currentModificationTime == 0) {
 			return true;
 		}
-		if (fPreviousModificationTime != currentModificationTime) {
+		if (fileDescription.modificationTime != currentModificationTime) {
 			return true;
 		}
 		return false;
 	}
 
-	private static void install(String apkPathAndName) {
-		System.out.println("Installing apk...");
+	private static void installApk(String apkPathAndName, String installMessage) {
+		System.out.println(installMessage);
 		Process process = startProcess(apkPathAndName);
 		logOutput(process);
 		waitFor(process);
@@ -76,7 +117,7 @@ public class ApkInstaller {
 		try {
 			process = pb.start();
 		} catch (IOException e) {
-			ExceptionHelper.reportRuntimeException("Can not create install process.");
+			ExceptionHelper.reportRuntimeException(Messages.EXCEPTION_CAN_NOT_CREATE_INSTALL_PROCESS);
 		}
 		return process;
 	}
@@ -92,7 +133,7 @@ public class ApkInstaller {
 				System.out.println("\t" + line);
 			}
 		} catch (IOException e) {
-			System.out.println("Can not log output.");
+			System.out.println(Messages.CAN_NOT_LOG_OUTPUT);
 		}
 	}
 
