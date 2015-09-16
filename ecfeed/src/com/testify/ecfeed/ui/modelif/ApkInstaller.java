@@ -8,21 +8,19 @@
 
 package com.testify.ecfeed.ui.modelif;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.lang.reflect.InvocationTargetException;
 
 import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.common.external.IFileInfoProvider;
 import com.testify.ecfeed.ui.common.utils.EclipseProjectHelper;
+import com.testify.ecfeed.ui.common.utils.ExternalProcess;
+import com.testify.ecfeed.ui.common.utils.OutputLineProcessor;
 import com.testify.ecfeed.utils.DiskFileHelper;
 import com.testify.ecfeed.utils.ExceptionHelper;
 
 public class ApkInstaller {
 
-	static class FileDescription {
+	private static class FileDescription {
 		String pathAndName = null;
 		long modificationTime = 0;
 	}
@@ -33,6 +31,23 @@ public class ApkInstaller {
 	static {
 		fTestingApkDescription = new FileDescription();
 		fTestedApkDescription = new FileDescription();
+	}
+
+	private static class InstallApkLineProcessor implements OutputLineProcessor {
+
+		private String fErrorLine = null;
+
+		@Override
+		public boolean printLine(String line) {
+			if (fErrorLine == null && line.contains("Error")){
+				fErrorLine = line;
+			}
+			return true;
+		}
+
+		public String getErrorLine() {
+			return fErrorLine;
+		}
 	}
 
 	public static void installApplicationsIfModified(IFileInfoProvider fileInfoProvider) throws InvocationTargetException {
@@ -80,14 +95,28 @@ public class ApkInstaller {
 		if (apkPathAndName == null) {
 			ExceptionHelper.reportRuntimeException(Messages.EXCEPTION_APK_MUST_NOT_BE_NULL);
 		}
+		if (pathNameWasModified(apkPathAndName, fileDescription)) {
+			return true;
+		}
+		if (fileWasModified(apkPathAndName, fileDescription)) {
+			return true;
+		}
+		return false;
+	}
+
+	private static boolean pathNameWasModified(String apkPathAndName, FileDescription fileDescription) {
 		if (fileDescription.pathAndName == null) {
 			return true;
 		}
 		if (!apkPathAndName.equals(fileDescription.pathAndName)) {
 			return true;
 		}
+		return false;
+	}
 
+	private static boolean fileWasModified(String apkPathAndName, FileDescription fileDescription) {
 		long currentModificationTime = DiskFileHelper.fileModificationTime(apkPathAndName);
+
 		if (currentModificationTime == 0) {
 			return true;
 		}
@@ -99,49 +128,20 @@ public class ApkInstaller {
 
 	private static void installApk(String apkPathAndName, String installMessage) {
 		System.out.println(installMessage);
-		Process process = startProcess(apkPathAndName);
-		logOutput(process);
-		waitFor(process);
-	}
 
-	private static Process startProcess(String apkPathAndName) {
+		ExternalProcess externalProcess = 
+				new ExternalProcess(
+						Messages.EXCEPTION_CAN_NOT_CREATE_INSTALL_PROCESS,
+						"adb", "install", "-r", apkPathAndName);
 
-		ProcessBuilder pb
-		= new ProcessBuilder(
-				"adb", 
-				"install",
-				"-r",
-				apkPathAndName);
+		InstallApkLineProcessor lineProcessor = new InstallApkLineProcessor();
+		externalProcess.waitForEnd(lineProcessor);
 
-		Process process = null;
-		try {
-			process = pb.start();
-		} catch (IOException e) {
-			ExceptionHelper.reportRuntimeException(Messages.EXCEPTION_CAN_NOT_CREATE_INSTALL_PROCESS);
+		String errorLine = lineProcessor.getErrorLine();
+		if (errorLine == null) {
+			return;
 		}
-		return process;
+
+		ExceptionHelper.reportRuntimeException("Can not install application. " + errorLine);
 	}
-
-	private static void logOutput(Process process) {
-		InputStream is = process.getInputStream();
-		InputStreamReader isr = new InputStreamReader(is);
-		BufferedReader br = new BufferedReader(isr);
-
-		String line;
-		try {
-			while ((line = br.readLine()) != null) {
-				System.out.println("\t" + line);
-			}
-		} catch (IOException e) {
-			System.out.println(Messages.CAN_NOT_LOG_OUTPUT);
-		}
-	}
-
-	private static void waitFor(Process process) {
-		try {
-			process.waitFor();
-		} catch (InterruptedException e) {
-			ExceptionHelper.reportRuntimeException(e.getMessage());
-		}
-	}	
 }

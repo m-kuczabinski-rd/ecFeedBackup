@@ -15,9 +15,9 @@ import com.testify.ecfeed.utils.ExceptionHelper;
 
 public class DeviceChecker {
 
-	static class CountDevicesLineProcessor implements OutputLineProcessor {
+	private static class CountDevicesLineProcessor implements OutputLineProcessor {
 
-		int fDevices = 0;
+		private int fDevices = 0;
 
 		@Override
 		public boolean printLine(String line) { 
@@ -52,12 +52,12 @@ public class DeviceChecker {
 	}
 
 	public static void checkIfOneDeviceAttached() {
-		CountDevicesLineProcessor lineProcessor = new CountDevicesLineProcessor();
-
 		ExternalProcess externalProcess = 
 				new ExternalProcess(
 						Messages.EXCEPTION_CAN_NOT_CREATE_INSTALL_PROCESS,
 						"adb", "devices" );
+
+		CountDevicesLineProcessor lineProcessor = new CountDevicesLineProcessor();		
 		externalProcess.waitForEnd(lineProcessor);
 
 		int devices = lineProcessor.getDeviceCount();
