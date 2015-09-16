@@ -69,8 +69,9 @@ public abstract class TestExecutionSupport {
 			String msg = Messages.DIALOG_UNSUCCESFUL_TEST_EXECUTION(fExecutedTestCases, fUnsuccesfullExecutionStatuses.size());
 			MultiStatus ms = new MultiStatus(Activator.PLUGIN_ID, IStatus.ERROR, fUnsuccesfullExecutionStatuses.toArray(new Status[]{}), "Open details to see more", new RunnerException("Problematic test cases"));
 			ErrorDialog.openError(null, Messages.DIALOG_TEST_EXECUTION_REPORT_TITLE, msg, ms);
+			return;
 		}
-		else{
+		if (fExecutedTestCases > 0) {
 			String msg = Messages.DIALOG_SUCCESFUL_TEST_EXECUTION(fExecutedTestCases);
 			MessageDialog.openInformation(null, Messages.DIALOG_TEST_EXECUTION_REPORT_TITLE, msg);
 		}
