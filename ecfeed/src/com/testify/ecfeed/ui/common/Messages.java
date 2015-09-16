@@ -62,7 +62,7 @@ public class Messages {
 
 	public static final String INSTALLING_TESTED_APP = "Installing tested application...";
 
-	public static final String NO_ANDROID_DEVICES_ATTACHED = "No Android devices attached.";
+	public static final String NO_ANDROID_DEVICES_ATTACHED = "Can not find any Android devices.";
 
 	public static final String TOO_MANY_ANDROID_DEVICES_FOUND = "Too many Android devices attached (only 1 allowed).";
 
