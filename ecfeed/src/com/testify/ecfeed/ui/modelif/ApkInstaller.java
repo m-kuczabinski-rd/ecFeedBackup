@@ -11,14 +11,15 @@ package com.testify.ecfeed.ui.modelif;
 import java.lang.reflect.InvocationTargetException;
 
 import com.testify.ecfeed.ui.common.Messages;
+import com.testify.ecfeed.ui.common.external.IApkInstallerExt;
 import com.testify.ecfeed.ui.common.external.IFileInfoProvider;
 import com.testify.ecfeed.ui.common.utils.EclipseProjectHelper;
 import com.testify.ecfeed.ui.common.utils.ExternalProcess;
-import com.testify.ecfeed.ui.common.utils.OutputLineProcessor;
+import com.testify.ecfeed.ui.common.utils.IOutputLineProcessor;
 import com.testify.ecfeed.utils.DiskFileHelper;
 import com.testify.ecfeed.utils.ExceptionHelper;
 
-public class ApkInstaller {
+public class ApkInstaller implements IApkInstallerExt {
 
 	private static class FileDescription {
 		String pathAndName = null;
@@ -33,7 +34,7 @@ public class ApkInstaller {
 		fTestedApkDescription = new FileDescription();
 	}
 
-	private static class InstallApkLineProcessor implements OutputLineProcessor {
+	private static class InstallApkLineProcessor implements IOutputLineProcessor {
 
 		private String fErrorLine = null;
 
@@ -50,7 +51,8 @@ public class ApkInstaller {
 		}
 	}
 
-	public static void installApplicationsIfModified(IFileInfoProvider fileInfoProvider) throws InvocationTargetException {
+	@Override
+	public void installApplicationsIfModified(IFileInfoProvider fileInfoProvider) throws InvocationTargetException {
 		String testingApk = getTestingApkPathAndName(fileInfoProvider);
 		installApkIfModified(testingApk, fTestingApkDescription, Messages.INSTALLING_TESTING_APP);
 

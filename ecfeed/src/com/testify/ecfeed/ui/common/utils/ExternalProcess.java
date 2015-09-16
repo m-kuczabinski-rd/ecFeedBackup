@@ -30,12 +30,12 @@ public class ExternalProcess {
 		}
 	}
 
-	public void waitForEnd(OutputLineProcessor lineProcessor) {
+	public void waitForEnd(IOutputLineProcessor lineProcessor) {
 		processOutput(lineProcessor);
 		waitFor();
 	}
 
-	public void processOutput(OutputLineProcessor lineProcessor) {
+	public void processOutput(IOutputLineProcessor lineProcessor) {
 		InputStream is = fProcess.getInputStream();
 		InputStreamReader isr = new InputStreamReader(is);
 		BufferedReader br = new BufferedReader(isr);

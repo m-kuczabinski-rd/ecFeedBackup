@@ -69,8 +69,8 @@ public class OnlineTestRunningSupport extends TestExecutionSupport{
 
 			try{
 				if (fRunOnAndroid) {
-					DeviceChecker.checkIfOneDeviceAttached();
-					ApkInstaller.installApplicationsIfModified(fFileInfoProvider);
+					new DeviceChecker().checkIfOneDeviceAttached();
+					new ApkInstaller().installApplicationsIfModified(fFileInfoProvider);
 				}
 
 				setProgressMonitor(progressMonitor);

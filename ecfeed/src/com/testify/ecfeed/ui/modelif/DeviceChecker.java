@@ -9,13 +9,14 @@
 package com.testify.ecfeed.ui.modelif;
 
 import com.testify.ecfeed.ui.common.Messages;
+import com.testify.ecfeed.ui.common.external.IDeviceCheckerExt;
 import com.testify.ecfeed.ui.common.utils.ExternalProcess;
-import com.testify.ecfeed.ui.common.utils.OutputLineProcessor;
+import com.testify.ecfeed.ui.common.utils.IOutputLineProcessor;
 import com.testify.ecfeed.utils.ExceptionHelper;
 
-public class DeviceChecker {
+public class DeviceChecker implements IDeviceCheckerExt {
 
-	private static class CountDevicesLineProcessor implements OutputLineProcessor {
+	private static class CountDevicesLineProcessor implements IOutputLineProcessor {
 
 		private int fDevices = 0;
 
@@ -51,7 +52,8 @@ public class DeviceChecker {
 		}	
 	}
 
-	public static void checkIfOneDeviceAttached() {
+	@Override
+	public void checkIfOneDeviceAttached() {
 		ExternalProcess externalProcess = 
 				new ExternalProcess(
 						Messages.EXCEPTION_CAN_NOT_CREATE_INSTALL_PROCESS,

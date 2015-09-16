@@ -8,7 +8,7 @@
 
 package com.testify.ecfeed.ui.common.utils;
 
-public interface OutputLineProcessor {
+public interface IOutputLineProcessor {
 
 	boolean printLine(String line);
 }
