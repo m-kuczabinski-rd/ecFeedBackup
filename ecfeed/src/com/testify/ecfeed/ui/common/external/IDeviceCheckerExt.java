@@ -10,5 +10,8 @@ package com.testify.ecfeed.ui.common.external;
 
 public interface IDeviceCheckerExt {
 
+	public final String INTERFACE_NAME = "DEVICE_CHECKER";
+	public final String INTERFACE_VERSION = "1.0";
+
 	public void checkIfOneDeviceAttached();
 }

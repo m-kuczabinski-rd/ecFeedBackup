@@ -15,24 +15,38 @@ import org.eclipse.core.runtime.Platform;
 
 import com.testify.ecfeed.generators.api.EcException;
 import com.testify.ecfeed.ui.common.external.IPluginVersionDistributorExt;
+import com.testify.ecfeed.utils.ExceptionHelper;
 import com.testify.ecfeed.utils.SystemLogger;
 
-public class PluginExceptionReporter {
+public class PluginVersionExceptionReporter {
 
 	public static void reportEcException(
 			String message, String interfaceName, String expectedInterfaceVersion) throws EcException {
+
+		EcException.report(createThrowMessage(message, interfaceName, expectedInterfaceVersion));
+	}
+
+	public static void reportRuntimeException(
+			String message, String interfaceName, String expectedInterfaceVersion) {
+
+		ExceptionHelper.reportRuntimeException(createThrowMessage(message, interfaceName, expectedInterfaceVersion));			
+	}	
+
+	private static String createThrowMessage(
+			String message, String interfaceName, String expectedInterfaceVersion) {
+
 		String pluginVersion = getPluginVersion(interfaceName);
 
 		if (pluginVersion == null) {
-			EcException.report(message);
+			return message;
 		}
 		if (pluginVersion == expectedInterfaceVersion) {
-			EcException.report(message + "  Info.  Plugin version: " + pluginVersion + ",  Expected version: " + expectedInterfaceVersion);
+			return message + "  Info.  Plugin version: " + pluginVersion + ",  Expected version: " + expectedInterfaceVersion;
 		}
-		EcException.report(message + "  Warning!  Plugin version: " + pluginVersion + ",  Expected version: " + expectedInterfaceVersion);
+		return message + "  Warning!  Plugin version: " + pluginVersion + ",  Expected version: " + expectedInterfaceVersion;
 	}
 
-	private static String getPluginVersion(String interfaceName) throws EcException {
+	private static String getPluginVersion(String interfaceName) {
 		IExtensionRegistry registry = Platform.getExtensionRegistry();
 		final String ANDROID_IMPLEMENTER_ID = "com.testify.ecfeed.extensionpoint.definition.versiondistributor";
 

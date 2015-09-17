@@ -55,7 +55,7 @@ import com.testify.ecfeed.ui.common.EclipseModelBuilder;
 import com.testify.ecfeed.ui.common.EclipseTypeAdapterProvider;
 import com.testify.ecfeed.ui.common.JavaModelAnalyser;
 import com.testify.ecfeed.ui.common.Messages;
-import com.testify.ecfeed.ui.common.PluginExceptionReporter;
+import com.testify.ecfeed.ui.common.PluginVersionExceptionReporter;
 import com.testify.ecfeed.ui.common.external.IFileInfoProvider;
 import com.testify.ecfeed.ui.common.utils.EclipseProjectHelper;
 import com.testify.ecfeed.ui.dialogs.AddTestCaseDialog;
@@ -291,7 +291,7 @@ public class MethodInterface extends ParametersParentInterface {
 			}
 		} catch (CoreException e) {
 			SystemLogger.logCatch(e.getMessage());
-			PluginExceptionReporter.reportEcException(
+			PluginVersionExceptionReporter.reportEcException(
 					e.getMessage(), ITestMethodInvokerExt.INTERFACE_NAME, ITestMethodInvokerExt.INTERFACE_VERSION);
 
 		}	

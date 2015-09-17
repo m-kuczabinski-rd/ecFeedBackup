@@ -65,7 +65,7 @@ public class EclipseAndroidImplementerForClassNode {
 			}
 		} catch (CoreException e) {
 			SystemLogger.logCatch(e.getMessage());
-			PluginExceptionReporter.reportEcException(
+			PluginVersionExceptionReporter.reportEcException(
 					e.getMessage(), IImplementerExt.INTERFACE_NAME, IImplementerExt.INTERFACE_VERSION);
 		}	
 

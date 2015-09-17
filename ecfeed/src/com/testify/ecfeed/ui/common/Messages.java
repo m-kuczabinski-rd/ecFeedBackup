@@ -37,6 +37,9 @@ public class Messages {
 	public static final String EXCEPTION_EXTERNAL_IMPLEMENTER_NOT_FOUND = 
 			"External android implementer not found (not installed).";
 
+	public static final String EXCEPTION_EXTERNAL_DEVICE_CHECKER_NOT_FOUND = 
+			"External device checker not found (not installed).";
+
 	public static final String EXCEPTION_CAN_NOT_REMOVE_SELECTED_ITEMS = 
 			"Can not remove selected items.";
 
@@ -44,7 +47,7 @@ public class Messages {
 
 	public static final String EXCEPTION_CAN_NOT_IMPORT = "Can not export.";
 
-	public static final String EXCEPTION_NO_REFERENCED_PROJECTS = "Testing project has no referenced projects.";
+	public static final String EXCEPTION_NO_REFERENCED_PROJECTS = "Testing project has no referenced (tested) projects.";
 
 	public static final String EXCEPTION_TOO_MANY_REFERENCED_PROJECTS = "Testing project has too many referenced projects (only 1 - tested project is allowed).";
 
@@ -61,10 +64,6 @@ public class Messages {
 	public static final String INSTALLING_TESTING_APP = "Installing testing application...";
 
 	public static final String INSTALLING_TESTED_APP = "Installing tested application...";
-
-	public static final String NO_ANDROID_DEVICES_ATTACHED = "Can not find any Android devices.";
-
-	public static final String TOO_MANY_ANDROID_DEVICES_FOUND = "Too many Android devices attached (only 1 allowed).";
 
 	public static final String DIALOG_TEST_SUITE_NAME_ERROR_MESSAGE = "Name of a test suite must be between 1 and 64 characters long.";
 	public static final String DIALOG_TEST_SUITE_NAME_ERROR_MESSAGE_NO_WHITESPACE = "Name of a test suite cannot consist of whitespace characters only.";
