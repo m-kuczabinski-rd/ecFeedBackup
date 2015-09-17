@@ -12,5 +12,8 @@ import java.lang.reflect.InvocationTargetException;
 
 public interface IApkInstallerExt {
 
+	public final String INTERFACE_NAME = "INSTALLER";
+	public final String INTERFACE_VERSION = "1.0";
+
 	public void installApplicationsIfModified(IFileInfoProvider fileInfoProvider) throws InvocationTargetException;
 }

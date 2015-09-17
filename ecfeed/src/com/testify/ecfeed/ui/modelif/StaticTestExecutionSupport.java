@@ -48,9 +48,10 @@ public class StaticTestExecutionSupport extends TestExecutionSupport{
 				throws InvocationTargetException, InterruptedException {
 			if (fRunOnAndroid) {
 				DeviceCheckerExtLauncher.checkIfOneDeviceAttached();
-				new ApkInstaller().installApplicationsIfModified(fFileInfoProvider);
-			}			setProgressMonitor(progressMonitor);
+				ApkInstallerExtLauncher.installApplicationsIfModified(fFileInfoProvider);
+			}			
 
+			setProgressMonitor(progressMonitor);
 			fFailedTests.clear();
 			beginTestExecution(fTestCases.size());
 
