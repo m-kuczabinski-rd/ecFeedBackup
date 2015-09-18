@@ -19,12 +19,17 @@ import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.common.PluginVersionExceptionReporter;
 import com.testify.ecfeed.ui.common.external.IApkInstallerExt;
 import com.testify.ecfeed.ui.common.external.IFileInfoProvider;
+import com.testify.ecfeed.ui.common.utils.EclipseProjectHelper;
 import com.testify.ecfeed.utils.ExceptionHelper;
 import com.testify.ecfeed.utils.SystemLogger;
 
 public class ApkInstallerExtLauncher {
 
 	public static void installApplicationsIfModified(IFileInfoProvider fileInfoProvider) throws InvocationTargetException {
+		
+		if (EclipseProjectHelper.isNoInstallDevelopmentHook(fileInfoProvider)) {
+			return;
+		}
 
 		IExtensionRegistry registry = Platform.getExtensionRegistry();
 		final String APK_INSTALLER_ID = "com.testify.ecfeed.extensionpoint.definition.apkinstaller"; 
@@ -50,4 +55,5 @@ public class ApkInstallerExtLauncher {
 
 		ExceptionHelper.reportRuntimeException(Messages.EXCEPTION_EXTERNAL_APK_INSTALLER_NOT_FOUND);		
 	}
+	
 }

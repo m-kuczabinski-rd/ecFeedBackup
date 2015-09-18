@@ -38,6 +38,7 @@ import com.testify.ecfeed.ui.common.external.IFileInfoProvider;
 import com.testify.ecfeed.ui.dialogs.ExecuteOnlineSetupDialog;
 import com.testify.ecfeed.ui.dialogs.GeneratorProgressMonitorDialog;
 import com.testify.ecfeed.ui.modelif.external.ITestMethodInvoker;
+import com.testify.ecfeed.utils.SystemLogger;
 
 public class OnlineTestRunningSupport extends TestExecutionSupport{
 
@@ -141,6 +142,14 @@ public class OnlineTestRunningSupport extends TestExecutionSupport{
 				displayTestStatusDialog();
 			}
 		} else {
+			if (fRunOnAndroid) {
+				DeviceCheckerExtLauncher.checkIfOneDeviceAttached();
+				try {
+					ApkInstallerExtLauncher.installApplicationsIfModified(fFileInfoProvider);
+				} catch (InvocationTargetException e) {
+					SystemLogger.logCatch(e.getMessage());
+				}
+			} 
 			executeSingleTest();
 		}
 		System.setOut(currentOut);

@@ -24,6 +24,7 @@ import com.testify.ecfeed.utils.SystemLogger;
 public class EclipseProjectHelper {
 
 	private static final String DEV_HOOK_ANDROID = "dvhAndroid";
+	private static final String DEV_HOOK_NO_INSTALL = "dvhNoInstall";
 	private static final String VALUE_ANDROID = "Android";
 	private static final String ANDROID_ECLIPSE_QUALIFIER = "com.android.ide.eclipse.adt";
 	private static final String ANDROID_TARGET_CACHE = "androidTargetCache";
@@ -75,7 +76,15 @@ public class EclipseProjectHelper {
 		return fIsAndroidProject;
 	}
 
-	public static boolean isAndroidProjectDevelopmentHook(IFileInfoProvider fileInfoProvider) throws EcException {
+	public static boolean isAndroidProjectDevelopmentHook(IFileInfoProvider fileInfoProvider) {
+		return isDevelopmentHook(DEV_HOOK_ANDROID, fileInfoProvider);
+	}
+	
+	public static boolean isNoInstallDevelopmentHook(IFileInfoProvider fileInfoProvider) {
+		return isDevelopmentHook(DEV_HOOK_NO_INSTALL, fileInfoProvider);
+	}	
+	
+	private static boolean isDevelopmentHook(String hookName, IFileInfoProvider fileInfoProvider) {
 		checkFileInfoProvider(fileInfoProvider);
 
 		String projectPath = null;
@@ -86,12 +95,12 @@ public class EclipseProjectHelper {
 			return false;
 		}
 
-		String qualifiedName = DiskFileHelper.joinPathWithFile(projectPath, DEV_HOOK_ANDROID);
+		String qualifiedName = DiskFileHelper.joinPathWithFile(projectPath, hookName);
 		if(DiskFileHelper.fileExists(qualifiedName)) {
 			return true;
 		}
 		return false;
-	}
+	}	
 
 	public static String getApkPathAndName(IFileInfoProvider fileInfoProvider) {
 		IProject project = fileInfoProvider.getProject();
