@@ -43,6 +43,7 @@ import com.testify.ecfeed.adapter.AbstractJavaModelImplementer;
 import com.testify.ecfeed.adapter.CachedImplementationStatusResolver;
 import com.testify.ecfeed.adapter.EImplementationStatus;
 import com.testify.ecfeed.adapter.java.JavaUtils;
+import com.testify.ecfeed.android.utils.AndroidManifestAccessor;
 import com.testify.ecfeed.generators.api.EcException;
 import com.testify.ecfeed.model.AbstractNode;
 import com.testify.ecfeed.model.AbstractParameterNode;
@@ -125,8 +126,18 @@ public class EclipseModelImplementer extends AbstractJavaModelImplementer {
 		String unitName = className + ".java";
 		IPackageFragment packageFragment = 
 				EclipsePackageFragmentGetter.getPackageFragment(packageName, fFileInfoProvider);
-		ICompilationUnit unit = packageFragment.getCompilationUnit(unitName);
-		unit.createType(classDefinitionContent(node), null, false, null);
+
+		String projectPath = EclipseProjectHelper.getProjectPath(fFileInfoProvider);
+
+		AndroidManifestAccessor androidManifestAccesor = 
+				new AndroidManifestAccessor(projectPath);
+
+		String testingAppPackage = androidManifestAccesor.getTestingAppPackage();
+
+		ICompilationUnit unit = 
+				packageFragment.createCompilationUnit(
+						unitName, classDefinitionContent(node, packageName, testingAppPackage), false, null);
+
 		unit.becomeWorkingCopy(null);
 		unit.commitWorkingCopy(true, null);
 	}
@@ -337,8 +348,34 @@ public class EclipseModelImplementer extends AbstractJavaModelImplementer {
 		return false;
 	}
 
-	protected String classDefinitionContent(ClassNode node){
-		return "public class " + JavaUtils.getLocalName(node) + "{\n\n}";
+	protected String classDefinitionContent(ClassNode node, String userPackageName, String testingAppPackage){
+
+		String content = 
+				"package " + 
+						userPackageName +  
+						";\n";
+
+		content = content + "\n";
+
+		if (node.getRunOnAndroid()) {
+			content = content + "import " + testingAppPackage + ".ecFeed.android.EcFeedTest;\n\n";
+		}
+
+		content = content + "public class " + JavaUtils.getLocalName(node);
+
+		if (node.getRunOnAndroid()) {
+			content = content + " extends EcFeedTest ";
+		}		
+
+		content = content + "{\n\n";
+
+		if (node.getRunOnAndroid()) {
+			content = content + "\t@Override\n\tprotected void setUp() throws Exception {\n\t\tsuper.setUp();\n\t}\n";
+		}
+
+		content = content + "\n}";
+
+		return content;
 	}
 
 	protected String methodDefinitionContent(MethodNode node){
