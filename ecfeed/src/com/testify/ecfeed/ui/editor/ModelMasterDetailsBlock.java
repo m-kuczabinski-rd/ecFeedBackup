@@ -104,6 +104,10 @@ public class ModelMasterDetailsBlock extends MasterDetailsBlock implements ISele
 
 		@Override
 		public boolean isEnabled(){
+			if (fActionId == null) {
+				return false;
+			}
+				
 			Action action = getFocusedSection().getAction(fActionId);
 			if(action  != null){
 				return action.isEnabled();
