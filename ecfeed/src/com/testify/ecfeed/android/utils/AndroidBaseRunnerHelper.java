@@ -12,8 +12,8 @@ public class AndroidBaseRunnerHelper {
 		return "EcFeedTestRunner";
 	}
 
-	public static String getEcFeedTestRunnerPrefix() {
-		return "ecFeed.android";
+	public static String getEcFeedAndroidPackagePrefix() {
+		return "ecfeed.android";
 	}
 
 	public static String createFullAndroidRunnerName(String projectPath) throws EcException {
@@ -48,7 +48,7 @@ public class AndroidBaseRunnerHelper {
 
 	private static String qualifiedRunnerName(String testingAppPackage) {
 		return testingAppPackage + "." + 
-				getEcFeedTestRunnerPrefix() + "." + 
+				getEcFeedAndroidPackagePrefix() + "." + 
 				getEcFeedTestRunnerName();
 	}
 }

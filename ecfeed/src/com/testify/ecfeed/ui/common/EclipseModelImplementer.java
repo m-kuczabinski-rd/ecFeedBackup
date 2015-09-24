@@ -43,6 +43,7 @@ import com.testify.ecfeed.adapter.AbstractJavaModelImplementer;
 import com.testify.ecfeed.adapter.CachedImplementationStatusResolver;
 import com.testify.ecfeed.adapter.EImplementationStatus;
 import com.testify.ecfeed.adapter.java.JavaUtils;
+import com.testify.ecfeed.android.utils.AndroidBaseRunnerHelper;
 import com.testify.ecfeed.android.utils.AndroidManifestAccessor;
 import com.testify.ecfeed.generators.api.EcException;
 import com.testify.ecfeed.model.AbstractNode;
@@ -350,21 +351,23 @@ public class EclipseModelImplementer extends AbstractJavaModelImplementer {
 
 	protected String classDefinitionContent(ClassNode node, String userPackageName, String testingAppPackage){
 		StringBuilder contentBuilder = new  StringBuilder();
-		
+
 		contentBuilder.append("package " + userPackageName + ";\n\n");
 
 		if (node.getRunOnAndroid()) {
-			contentBuilder.append("import " + testingAppPackage + ".ecFeed.android.EcFeedTest;\n\n");
-	    }
-		
+			contentBuilder.append(
+					"import " + testingAppPackage + "." + 
+							AndroidBaseRunnerHelper.getEcFeedAndroidPackagePrefix() + ".EcFeedTest;\n\n");
+		}
+
 		contentBuilder.append("public class " + JavaUtils.getLocalName(node) + " ");
-		
+
 		if (node.getRunOnAndroid()) {
 			contentBuilder.append("extends EcFeedTest ");
 		}		
 
 		contentBuilder.append("{\n\n");
-		
+
 		if (node.getRunOnAndroid()) {
 			contentBuilder.append("\t@Override\n\tprotected void setUp() throws Exception {\n\t\tsuper.setUp();\n\t}\n");
 		}
