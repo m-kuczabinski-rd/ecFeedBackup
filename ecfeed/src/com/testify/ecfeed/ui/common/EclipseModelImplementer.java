@@ -349,33 +349,29 @@ public class EclipseModelImplementer extends AbstractJavaModelImplementer {
 	}
 
 	protected String classDefinitionContent(ClassNode node, String userPackageName, String testingAppPackage){
-
-		String content = 
-				"package " + 
-						userPackageName +  
-						";\n";
-
-		content = content + "\n";
+		StringBuilder contentBuilder = new  StringBuilder();
+		
+		contentBuilder.append("package " + userPackageName + ";\n\n");
 
 		if (node.getRunOnAndroid()) {
-			content = content + "import " + testingAppPackage + ".ecFeed.android.EcFeedTest;\n\n";
-		}
-
-		content = content + "public class " + JavaUtils.getLocalName(node);
-
+			contentBuilder.append("import " + testingAppPackage + ".ecFeed.android.EcFeedTest;\n\n");
+	    }
+		
+		contentBuilder.append("public class " + JavaUtils.getLocalName(node) + " ");
+		
 		if (node.getRunOnAndroid()) {
-			content = content + " extends EcFeedTest ";
+			contentBuilder.append("extends EcFeedTest ");
 		}		
 
-		content = content + "{\n\n";
-
+		contentBuilder.append("{\n\n");
+		
 		if (node.getRunOnAndroid()) {
-			content = content + "\t@Override\n\tprotected void setUp() throws Exception {\n\t\tsuper.setUp();\n\t}\n";
+			contentBuilder.append("\t@Override\n\tprotected void setUp() throws Exception {\n\t\tsuper.setUp();\n\t}\n");
 		}
 
-		content = content + "\n}";
+		contentBuilder.append("\n}");
 
-		return content;
+		return contentBuilder.toString();
 	}
 
 	protected String methodDefinitionContent(MethodNode node){
