@@ -122,7 +122,7 @@ public class AddTestCaseDialog extends TitleAreaDialog implements ITestDataEdito
 		parameterViewerColumn.setLabelProvider(new ColumnLabelProvider(){
 			@Override
 			public String getText(Object element){
-				return ((ChoiceNode)element).getParent().toString();
+				return ((ChoiceNode)element).getParameter().toString();
 			}
 			@Override
 			public Color getForeground(Object element){
