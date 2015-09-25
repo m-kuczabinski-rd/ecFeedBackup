@@ -8,11 +8,15 @@
 
 package com.testify.ecfeed.ui.common.external;
 
-public interface IAndroidFactoryExt {
+import java.lang.reflect.InvocationTargetException;
 
-	public final String INTERFACE_NAME = "ANDROID_FACTORY";
-	public final String INTERFACE_VERSION = "1.0";
+public class ApkInstallerExt { 
 
-	public IDeviceCheckerExt createDeviceChecker();
-	public IApkInstallerExt createApkInstaller();
+	public static void installApplicationsIfModified(
+			IFileInfoProvider fileInfoProvider) throws InvocationTargetException {
+		
+		IAndroidFactoryExt androidFactory = AndroidFactoryDistributor.getFactory();
+		IApkInstallerExt apkInstaller = androidFactory.createApkInstaller();
+		apkInstaller.installApplicationsIfModified(fileInfoProvider);
+	}
 }
