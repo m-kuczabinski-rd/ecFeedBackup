@@ -1,12 +1,16 @@
 package com.testify.ecfeed.ui.dialogs;
 
+import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.TitleAreaDialog;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
@@ -23,6 +27,14 @@ public class DataExportDialog extends TitleAreaDialog{
 	private Text fTailTemplateText;
 	private Text fTargetFileText;
 	private String fTargetFile;
+	
+	class BrowseAdapter extends SelectionAdapter{
+		@Override
+		public void widgetSelected(SelectionEvent e){
+			FileDialog dialog = new FileDialog(getParentShell());
+			fTargetFileText.setText(dialog.open());
+		}
+	}
 	
 	public DataExportDialog(Shell parentShell) {
 		super(parentShell);
@@ -102,6 +114,7 @@ public class DataExportDialog extends TitleAreaDialog{
 		
 		Button browseButton = new Button(targetFileContainer, SWT.NONE);
 		browseButton.setText("Browse...");
+		browseButton.addSelectionListener(new BrowseAdapter());
 	}
 	
 	@Override
