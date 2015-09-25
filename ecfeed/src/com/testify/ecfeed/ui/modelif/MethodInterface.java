@@ -49,6 +49,7 @@ import com.testify.ecfeed.ui.common.JavaModelAnalyser;
 import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.dialogs.AddTestCaseDialog;
 import com.testify.ecfeed.ui.dialogs.CalculateCoverageDialog;
+import com.testify.ecfeed.ui.dialogs.DataExportDialog;
 import com.testify.ecfeed.ui.dialogs.RenameTestSuiteDialog;
 import com.testify.ecfeed.ui.dialogs.SelectCompatibleMethodDialog;
 
@@ -208,6 +209,16 @@ public class MethodInterface extends ParametersParentInterface {
 	public void executeStaticTests(Collection<TestCaseNode> testCases) {
 		StaticTestExecutionSupport support = new StaticTestExecutionSupport(testCases);
 		support.proceed();
+	}
+
+	public void exportTestCases(Collection<TestCaseNode> checkedTestCases) {
+		DataExportDialog dialog = new DataExportDialog(Display.getDefault().getActiveShell());
+		if(dialog.open() == IDialogConstants.OK_ID){
+			System.out.println("Header:\n" + dialog.getHeaderTemplate());
+			System.out.println("TestCase:\n" + dialog.getTestCaseTemplate());
+			System.out.println("Tail:\n" + dialog.getTailTemplate());
+			System.out.println("File:\n" + dialog.getTargetFile());
+		}
 	}
 
 	public Collection<TestCaseNode> getTestCases(String testSuite){

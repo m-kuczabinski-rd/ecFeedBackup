@@ -49,6 +49,13 @@ public class TestCasesViewer extends CheckboxTreeViewerSection {
 	private MethodInterface fMethodIf;
 	private MethodNode fParentMethod;
 
+	private class ExportTestCasesAdapter extends SelectionAdapter{
+		@Override
+		public void widgetSelected(SelectionEvent e){
+			fMethodIf.exportTestCases(getCheckedTestCases());
+		}
+	}
+	
 	private class AddTestCaseAdapter extends SelectionAdapter{
 		@Override
 		public void widgetSelected(SelectionEvent e){
@@ -109,6 +116,7 @@ public class TestCasesViewer extends CheckboxTreeViewerSection {
 		addButton("Calculate coverage", new CalculateCoverageAdapter());
 		addButton("Remove selected", new RemoveSelectedAdapter());
 		fExecuteSelectedButton = addButton("Execute selected", new ExecuteStaticTestAdapter());
+		addButton("Export test cases", new ExportTestCasesAdapter());
 
 		addDoubleClickListener(new SelectNodeDoubleClickListener(sectionContext.getMasterSection()));
 	}
