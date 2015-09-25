@@ -99,7 +99,6 @@ public class DataExportDialog extends TitleAreaDialog{
 		targetFileContainer.setLayoutData(new GridData(GridData.FILL_BOTH));
 		fTargetFileText = new Text(targetFileContainer, SWT.BORDER);
 		fTargetFileText.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
-		;
 		
 		Button browseButton = new Button(targetFileContainer, SWT.NONE);
 		browseButton.setText("Browse...");
