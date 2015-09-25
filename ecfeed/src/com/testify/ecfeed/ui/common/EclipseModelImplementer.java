@@ -349,26 +349,26 @@ public class EclipseModelImplementer extends AbstractJavaModelImplementer {
 		return false;
 	}
 
-	protected String classDefinitionContent(ClassNode node, String userPackageName, String testingAppPackage){
+	protected String classDefinitionContent(ClassNode classNode, String userPackageName, String testingAppPackage){
 		StringBuilder contentBuilder = new  StringBuilder();
 
 		contentBuilder.append("package " + userPackageName + ";\n\n");
 
-		if (node.getRunOnAndroid()) {
+		if (classNode.getRunOnAndroid()) {
 			contentBuilder.append(
 					"import " + testingAppPackage + "." + 
 							AndroidBaseRunnerHelper.getEcFeedAndroidPackagePrefix() + ".EcFeedTest;\n\n");
 		}
 
-		contentBuilder.append("public class " + JavaUtils.getLocalName(node) + " ");
+		contentBuilder.append("public class " + JavaUtils.getLocalName(classNode) + " ");
 
-		if (node.getRunOnAndroid()) {
+		if (classNode.getRunOnAndroid()) {
 			contentBuilder.append("extends EcFeedTest ");
 		}		
 
 		contentBuilder.append("{\n\n");
 
-		if (node.getRunOnAndroid()) {
+		if (classNode.getRunOnAndroid()) {
 			contentBuilder.append("\t@Override\n\tprotected void setUp() throws Exception {\n\t\tsuper.setUp();\n\t}\n");
 		}
 
@@ -378,28 +378,61 @@ public class EclipseModelImplementer extends AbstractJavaModelImplementer {
 	}
 
 	protected String methodDefinitionContent(MethodNode node){
-		String args = "";
-		String comment = "// TODO Auto-generated method stub";
-		String content = "System.out.println(\"" + node.getName() + "(";
+		String methodSignature = "public void " + node.getName() + "(" + getMethodArgs(node) +")"; 
 
-		if(node.getParameters().size() > 0){
-			content +=  "\" + ";
-			for(int i = 0; i < node.getParameters().size(); ++i){
-				AbstractParameterNode parameter = node.getParameters().get(i);
-				args += JavaUtils.getLocalName(parameter.getType()) + " " + parameter.getName();
-				content += node.getParameters().get(i).getName();
-				if(i != node.getParameters().size() - 1){
-					args += ", ";
-					content += " + \", \"";
-				}
-				content += " + ";
+		String methodBody =	
+				" {\n"+ 
+						"\t" + "// TODO Auto-generated method stub" + "\n" + 
+						"\t" + createLoggingInstruction(node) + "\n"+ 
+						"}";
+
+		return methodSignature + methodBody;
+	}
+
+	private String createLoggingInstruction(MethodNode methodNode) {
+		String result = "";
+
+		if (methodNode.getRunOnAndroid()) {
+			result = "android.util.Log.d(\"ecFeed\", \"" + methodNode.getName() + "(";
+		} else {
+			result = "System.out.println(\"" + methodNode.getName() + "(";
+		}
+
+		List<AbstractParameterNode> parameters = methodNode.getParameters();
+
+		if(parameters.size() == 0) {
+			return result + ")\");";
+		}
+
+		result +=  "\" + ";
+		for(int index = 0; index < parameters.size(); ++index) {
+			result += parameters.get(index).getName();
+			if(index != parameters.size() - 1) {
+				result += " + \", \"";
 			}
-			content += "\")\");";
+			result += " + ";
 		}
-		else{
-			content += ")\");";
+
+		return result + "\")\");"; 
+	}
+
+	private String getMethodArgs(MethodNode node) {
+		List<AbstractParameterNode> parameters = node.getParameters();
+
+		if(parameters.size() == 0) {
+			return new String();
 		}
-		return "public void " + node.getName() + "(" + args + "){\n\t" + comment + "\n\t" + content + "\n}";
+
+		String args = "";
+
+		for(int i = 0; i < parameters.size(); ++i) {
+			AbstractParameterNode param = parameters.get(i);
+			args += JavaUtils.getLocalName(param.getType()) + " " + param.getName();
+			if(i != parameters.size() - 1){
+				args += ", ";
+			}
+		}
+		return args;
 	}
 
 	protected String enumDefinitionContent(AbstractParameterNode node, Set<String> fields){

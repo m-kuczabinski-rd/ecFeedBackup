@@ -6,26 +6,26 @@ import com.testify.ecfeed.model.ClassNode;
 
 public class ClassOperationSetRunOnAndroid extends AbstractModelOperation {
 
-	private ClassNode fTarget;
+	private ClassNode fClassNode;
 	private boolean fNewValue;
 	private boolean fOriginalValue;
 
-	public ClassOperationSetRunOnAndroid(ClassNode target, boolean newValue) {
+	public ClassOperationSetRunOnAndroid(ClassNode classNode, boolean newValue) {
 		super(OperationNames.SET_ANDROID_BASE_RUNNER);
-		fTarget = target;
+		fClassNode = classNode;
 		fNewValue = newValue;
-		fOriginalValue = target.getRunOnAndroid();
+		fOriginalValue = classNode.getRunOnAndroid();
 	}
 
 	@Override
 	public void execute() throws ModelOperationException {
-		fTarget.setRunOnAndroid(fNewValue);
+		fClassNode.setRunOnAndroid(fNewValue);
 		markModelUpdated();
 	}
 
 	@Override
 	public IModelOperation reverseOperation() {
-		return new ClassOperationSetRunOnAndroid(fTarget, fOriginalValue);
+		return new ClassOperationSetRunOnAndroid(fClassNode, fOriginalValue);
 	}
 
 }

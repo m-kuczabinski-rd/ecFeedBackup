@@ -218,7 +218,7 @@ public class MethodInterface extends ParametersParentInterface {
 	}
 
 	public void executeOnlineTests(IFileInfoProvider fileInfoProvider) throws EcException {
-		ClassNode classNode = (ClassNode)getTarget().getParent();
+		ClassNode classNode = getTarget().getClassNode();
 
 		if (!isValidClassConfiguration(classNode))
 			return;
@@ -231,7 +231,7 @@ public class MethodInterface extends ParametersParentInterface {
 	}
 
 	public void executeStaticTests(Collection<TestCaseNode> testCases, IFileInfoProvider fileInfoProvider) throws EcException {
-		ClassNode classNode = (ClassNode)getTarget().getParent();
+		ClassNode classNode = getTarget().getClassNode();
 
 		if (!isValidClassConfiguration(classNode))
 			return;
@@ -259,7 +259,7 @@ public class MethodInterface extends ParametersParentInterface {
 
 	private ITestMethodInvoker createTestMethodInvoker(IFileInfoProvider fileInfoProvider) throws EcException
 	{
-		ClassNode classNode = (ClassNode)getTarget().getParent();
+		ClassNode classNode = getTarget().getClassNode();
 
 		if (!classNode.getRunOnAndroid()) {
 			return new JUnitTestMethodInvoker();
