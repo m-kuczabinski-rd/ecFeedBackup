@@ -160,6 +160,10 @@ public class Messages {
 	public static final String TOOLTIP_EXPORT_CHOICE_COMMENTS_TO_JAVADOC = "Export comments of this choice to file as javadoc";
 	public static final String TOOLTIP_IMPORT_CHOICE_COMMENTS_FROM_JAVADOC = "Import comments from source file";
 
+
+	public static final String DIALOG_EXPORT_TEST_DATA_TITLE = "Export test data";
+	public static final String DIALOG_EXPORT_TEST_DATA_MESSAGE = "Define template for data export and select target file";
+
 	public static String DIALOG_UNSUCCESFUL_TEST_EXECUTION(int totalTestCases, int unsuccesfull) {
 		return String.valueOf(unsuccesfull) + " of " + totalTestCases + " test cases have met problems during execution.";
 	}
