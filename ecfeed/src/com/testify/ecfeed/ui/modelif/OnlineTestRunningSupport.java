@@ -34,6 +34,7 @@ import com.testify.ecfeed.runner.JavaTestRunner;
 import com.testify.ecfeed.runner.RunnerException;
 import com.testify.ecfeed.ui.common.EclipseLoaderProvider;
 import com.testify.ecfeed.ui.common.Messages;
+import com.testify.ecfeed.ui.common.external.DeviceCheckerExt;
 import com.testify.ecfeed.ui.common.external.IFileInfoProvider;
 import com.testify.ecfeed.ui.dialogs.ExecuteOnlineSetupDialog;
 import com.testify.ecfeed.ui.dialogs.GeneratorProgressMonitorDialog;
@@ -70,7 +71,7 @@ public class OnlineTestRunningSupport extends TestExecutionSupport{
 
 			try{
 				if (fRunOnAndroid) {
-					DeviceCheckerExtLauncher.checkIfOneDeviceAttached();
+					DeviceCheckerExt.checkIfOneDeviceAttached();
 					ApkInstallerExtLauncher.installApplicationsIfModified(fFileInfoProvider);
 				}
 
@@ -143,7 +144,8 @@ public class OnlineTestRunningSupport extends TestExecutionSupport{
 			}
 		} else {
 			if (fRunOnAndroid) {
-				DeviceCheckerExtLauncher.checkIfOneDeviceAttached();
+				DeviceCheckerExt.checkIfOneDeviceAttached();
+
 				try {
 					ApkInstallerExtLauncher.installApplicationsIfModified(fFileInfoProvider);
 				} catch (InvocationTargetException e) {

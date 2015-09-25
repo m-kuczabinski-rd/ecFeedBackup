@@ -8,10 +8,12 @@
 
 package com.testify.ecfeed.ui.common.external;
 
-public interface IAndroidFactoryExt {
 
-	public final String INTERFACE_NAME = "ANDROID_FACTORY";
-	public final String INTERFACE_VERSION = "1.0";
+public class DeviceCheckerExt {
 
-	public IDeviceCheckerExt createDeviceChecker(); 
+	public static void checkIfOneDeviceAttached() {
+		IAndroidFactoryExt androidFactory = AndroidFactoryDistributor.getFactory();
+		IDeviceCheckerExt deviceChecker = androidFactory.createDeviceChecker();
+		deviceChecker.checkIfOneDeviceAttached();
+	}
 }
