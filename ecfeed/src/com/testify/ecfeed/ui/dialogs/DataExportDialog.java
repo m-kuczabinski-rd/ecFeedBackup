@@ -60,7 +60,10 @@ public class DataExportDialog extends TitleAreaDialog{
 		label.setText(Messages.EXPORT_TEST_DATA_HEADER_TEMPLATE_LABEL);
 
 		fHeaderTemplateText = new Text(parent, SWT.WRAP|SWT.MULTI|SWT.BORDER|SWT.V_SCROLL);
-		fHeaderTemplateText.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+		GridData gd = new GridData(SWT.FILL, SWT.FILL, true, true);
+		gd.minimumHeight = 150;
+		fHeaderTemplateText.setLayoutData(gd);
+
 	}
 
 	private void createTestCaseTemplateComposite(Composite parent) {
@@ -68,7 +71,9 @@ public class DataExportDialog extends TitleAreaDialog{
 		label.setText(Messages.EXPORT_TEST_DATA_TEST_CASE_TEMPLATE_LABEL);
 		
 		fTestCaseTemplateText = new Text(parent, SWT.WRAP|SWT.MULTI|SWT.BORDER|SWT.V_SCROLL);
-		fTestCaseTemplateText.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+		GridData gd = new GridData(SWT.FILL, SWT.FILL, true, true);
+		gd.minimumHeight = 150;
+		fTestCaseTemplateText.setLayoutData(gd);
 	}
 
 	private void createTemplateTailComposite(Composite parent) {
@@ -76,7 +81,9 @@ public class DataExportDialog extends TitleAreaDialog{
 		label.setText(Messages.EXPORT_TEST_DATA_TAIL_TEMPLATE_LABEL);
 		
 		fTailTemplateText = new Text(parent, SWT.WRAP|SWT.MULTI|SWT.BORDER|SWT.V_SCROLL);
-		fTailTemplateText.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+		GridData gd = new GridData(SWT.FILL, SWT.FILL, true, true);
+		gd.minimumHeight = 150;
+		fTailTemplateText.setLayoutData(gd);
 	}
 
 	private void createTargetFileContainer(Composite parent) {
@@ -91,6 +98,8 @@ public class DataExportDialog extends TitleAreaDialog{
 		targetFileContainer.setLayout(new GridLayout(2, false));
 		targetFileContainer.setLayoutData(new GridData(GridData.FILL_BOTH));
 		fTargetFileText = new Text(targetFileContainer, SWT.BORDER);
+		fTargetFileText.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
+		;
 		
 		Button browseButton = new Button(targetFileContainer, SWT.NONE);
 		browseButton.setText("Browse...");
