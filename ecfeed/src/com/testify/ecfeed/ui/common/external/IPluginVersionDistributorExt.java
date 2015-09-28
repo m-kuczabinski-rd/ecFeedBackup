@@ -9,6 +9,6 @@
 package com.testify.ecfeed.ui.common.external;
 
 public interface IPluginVersionDistributorExt {
-	
+
 	public String getVersionOfInterface(String interfaceName);
 }

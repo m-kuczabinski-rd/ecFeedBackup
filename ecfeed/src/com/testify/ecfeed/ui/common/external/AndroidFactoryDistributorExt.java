@@ -18,7 +18,7 @@ import com.testify.ecfeed.ui.common.PluginVersionExceptionReporter;
 import com.testify.ecfeed.utils.ExceptionHelper;
 import com.testify.ecfeed.utils.SystemLogger;
 
-public class AndroidFactoryDistributor {
+public class AndroidFactoryDistributorExt {
 
 	public static IAndroidFactoryExt getFactory() {
 		IExtensionRegistry registry = Platform.getExtensionRegistry();

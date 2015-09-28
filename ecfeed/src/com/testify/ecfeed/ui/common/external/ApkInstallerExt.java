@@ -14,8 +14,8 @@ public class ApkInstallerExt {
 
 	public static void installApplicationsIfModified(
 			IFileInfoProvider fileInfoProvider) throws InvocationTargetException {
-		
-		IAndroidFactoryExt androidFactory = AndroidFactoryDistributor.getFactory();
+
+		IAndroidFactoryExt androidFactory = AndroidFactoryDistributorExt.getFactory();
 		IApkInstallerExt apkInstaller = androidFactory.createApkInstaller();
 		apkInstaller.installApplicationsIfModified(fileInfoProvider);
 	}

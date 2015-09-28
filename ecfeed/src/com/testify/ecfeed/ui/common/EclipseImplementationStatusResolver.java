@@ -20,6 +20,7 @@ import com.testify.ecfeed.generators.api.EcException;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.ui.common.external.IFileInfoProvider;
+import com.testify.ecfeed.ui.common.external.ImplementerExt;
 import com.testify.ecfeed.ui.common.utils.EclipseProjectHelper;
 import com.testify.ecfeed.utils.SystemLogger;
 
@@ -34,7 +35,8 @@ public class EclipseImplementationStatusResolver extends AbstractJavaImplementat
 
 	@Override
 	protected boolean androidCodeImplemented(ClassNode classNode) throws EcException {
-		return new EclipseAndroidImplementerForClassNode().contentImplemented(classNode, fFileInfoProvider);
+		String baseRunner = classNode.getAndroidBaseRunner();
+		return ImplementerExt.contentImplemented(baseRunner, fFileInfoProvider);
 	}
 
 	@Override

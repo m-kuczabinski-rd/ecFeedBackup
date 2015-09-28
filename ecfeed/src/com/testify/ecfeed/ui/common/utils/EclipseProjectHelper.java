@@ -79,11 +79,11 @@ public class EclipseProjectHelper {
 	public static boolean isAndroidProjectDevelopmentHook(IFileInfoProvider fileInfoProvider) {
 		return isDevelopmentHook(DEV_HOOK_ANDROID, fileInfoProvider);
 	}
-	
+
 	public static boolean isNoInstallDevelopmentHook(IFileInfoProvider fileInfoProvider) {
 		return isDevelopmentHook(DEV_HOOK_NO_INSTALL, fileInfoProvider);
 	}	
-	
+
 	private static boolean isDevelopmentHook(String hookName, IFileInfoProvider fileInfoProvider) {
 		checkFileInfoProvider(fileInfoProvider);
 

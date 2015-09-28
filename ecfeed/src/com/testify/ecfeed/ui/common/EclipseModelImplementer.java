@@ -54,6 +54,7 @@ import com.testify.ecfeed.model.GlobalParameterNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.MethodParameterNode;
 import com.testify.ecfeed.ui.common.external.IFileInfoProvider;
+import com.testify.ecfeed.ui.common.external.ImplementerExt;
 import com.testify.ecfeed.ui.common.utils.EclipsePackageFragmentGetter;
 import com.testify.ecfeed.ui.common.utils.EclipseProjectHelper;
 import com.testify.ecfeed.utils.SystemLogger;
@@ -117,7 +118,8 @@ public class EclipseModelImplementer extends AbstractJavaModelImplementer {
 
 	@Override
 	protected void implementAndroidCode(ClassNode classNode) throws EcException {
-		new EclipseAndroidImplementerForClassNode().implementContent(classNode, fFileInfoProvider);
+		String baseRunner = classNode.getAndroidBaseRunner();
+		ImplementerExt.implementContent(baseRunner, fFileInfoProvider);
 	}
 
 	@Override
@@ -310,7 +312,8 @@ public class EclipseModelImplementer extends AbstractJavaModelImplementer {
 		if (!EclipseProjectHelper.isAndroidProject(fFileInfoProvider)) {
 			return true;
 		}
-		return new EclipseAndroidImplementerForClassNode().contentImplemented(classNode, fFileInfoProvider);
+		String baseRunner = classNode.getAndroidBaseRunner();
+		return ImplementerExt.contentImplemented(baseRunner, fFileInfoProvider);
 	}
 
 	@Override

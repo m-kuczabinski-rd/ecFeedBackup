@@ -12,7 +12,7 @@ package com.testify.ecfeed.ui.common.external;
 public class DeviceCheckerExt {
 
 	public static void checkIfOneDeviceAttached() {
-		IAndroidFactoryExt androidFactory = AndroidFactoryDistributor.getFactory();
+		IAndroidFactoryExt androidFactory = AndroidFactoryDistributorExt.getFactory();
 		IDeviceCheckerExt deviceChecker = androidFactory.createDeviceChecker();
 		deviceChecker.checkIfOneDeviceAttached();
 	}

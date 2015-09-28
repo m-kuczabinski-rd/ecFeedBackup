@@ -15,4 +15,5 @@ public interface IAndroidFactoryExt {
 
 	public IDeviceCheckerExt createDeviceChecker();
 	public IApkInstallerExt createApkInstaller();
+	public IImplementerExt createImplementer(String baseRunner, IFileInfoProvider fileInfoProvider);
 }
