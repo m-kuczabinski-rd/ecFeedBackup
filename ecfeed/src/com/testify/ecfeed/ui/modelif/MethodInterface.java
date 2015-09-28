@@ -11,6 +11,7 @@
 
 package com.testify.ecfeed.ui.modelif;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -42,6 +43,7 @@ import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.MethodParameterNode;
 import com.testify.ecfeed.model.StaticStatement;
 import com.testify.ecfeed.model.TestCaseNode;
+import com.testify.ecfeed.serialization.export.TestDataExporter;
 import com.testify.ecfeed.ui.common.Constants;
 import com.testify.ecfeed.ui.common.EclipseModelBuilder;
 import com.testify.ecfeed.ui.common.EclipseTypeAdapterProvider;
@@ -218,6 +220,16 @@ public class MethodInterface extends ParametersParentInterface {
 			System.out.println("TestCase:\n" + dialog.getTestCaseTemplate());
 			System.out.println("Tail:\n" + dialog.getTailTemplate());
 			System.out.println("File:\n" + dialog.getTargetFile());
+			
+			TestDataExporter exporter = new TestDataExporter();
+			try {
+				exporter.export(getTarget(), checkedTestCases, dialog.getHeaderTemplate(), 
+						dialog.getTestCaseTemplate(), dialog.getTailTemplate(), dialog.getTargetFile());
+			} catch (IOException e) {
+				MessageDialog.openError(Display.getCurrent().getActiveShell(),
+						Messages.DIALOG_EXPORT_TEST_DATA_PROBLEM_TITLE,
+						e.getMessage());
+			}
 		}
 	}
 
