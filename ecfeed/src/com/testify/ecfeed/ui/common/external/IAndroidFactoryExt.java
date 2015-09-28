@@ -8,6 +8,7 @@
 
 package com.testify.ecfeed.ui.common.external;
 
+
 public interface IAndroidFactoryExt {
 
 	public final String INTERFACE_NAME = "ANDROID_FACTORY";
@@ -16,4 +17,5 @@ public interface IAndroidFactoryExt {
 	public IDeviceCheckerExt createDeviceChecker();
 	public IApkInstallerExt createApkInstaller();
 	public IImplementerExt createImplementer(String baseRunner, IFileInfoProvider fileInfoProvider);
+	public ITestMethodInvokerExt createTestMethodInvoker(String androidRunner);
 }

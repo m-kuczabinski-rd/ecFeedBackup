@@ -8,21 +8,12 @@
 
 package com.testify.ecfeed.ui.common.external;
 
-import java.lang.reflect.InvocationTargetException;
+import com.testify.ecfeed.ui.modelif.external.ITestMethodInvoker;
 
-import com.testify.ecfeed.ui.common.utils.EclipseProjectHelper;
+public class TestMethodInvokerExt {
 
-public class ApkInstallerExt { 
-
-	public static void installApplicationsIfModified(
-			IFileInfoProvider fileInfoProvider) throws InvocationTargetException {
-
-		if (EclipseProjectHelper.isNoInstallDevelopmentHook(fileInfoProvider)) {
-			return;
-		}
-			
+	public static ITestMethodInvoker createInvoker(String androidRunner) {
 		IAndroidFactoryExt androidFactory = AndroidFactoryDistributorExt.getFactory();
-		IApkInstallerExt apkInstaller = androidFactory.createApkInstaller();
-		apkInstaller.installApplicationsIfModified(fileInfoProvider);
+		return androidFactory.createTestMethodInvoker(androidRunner);
 	}
 }

@@ -6,13 +6,9 @@
  * http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 
-package com.testify.ecfeed.ui.modelif.external;
+package com.testify.ecfeed.ui.common.external;
 
+import com.testify.ecfeed.ui.modelif.external.ITestMethodInvoker;
 
-public interface ITestMethodInvokerExt extends ITestMethodInvoker{
-
-	public final String INTERFACE_NAME = "IMPLEMENTER";
-	public final String INTERFACE_VERSION = "1.0";
-	
-	void initialize(String runner); 
+public interface ITestMethodInvokerExt extends ITestMethodInvoker{ 
 }

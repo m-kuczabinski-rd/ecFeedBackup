@@ -16,10 +16,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IExtensionRegistry;
-import org.eclipse.core.runtime.IConfigurationElement;
-import org.eclipse.core.runtime.Platform;
 import org.eclipse.jdt.core.IMethod;
 import org.eclipse.jdt.ui.JavaUI;
 import org.eclipse.jface.dialogs.IDialogConstants;
@@ -56,14 +52,13 @@ import com.testify.ecfeed.ui.common.EclipseTypeAdapterProvider;
 import com.testify.ecfeed.ui.common.JavaModelAnalyser;
 import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.common.external.IFileInfoProvider;
+import com.testify.ecfeed.ui.common.external.TestMethodInvokerExt;
 import com.testify.ecfeed.ui.common.utils.EclipseProjectHelper;
 import com.testify.ecfeed.ui.dialogs.AddTestCaseDialog;
 import com.testify.ecfeed.ui.dialogs.CalculateCoverageDialog;
 import com.testify.ecfeed.ui.dialogs.RenameTestSuiteDialog;
 import com.testify.ecfeed.ui.dialogs.SelectCompatibleMethodDialog;
 import com.testify.ecfeed.ui.modelif.external.ITestMethodInvoker;
-import com.testify.ecfeed.ui.modelif.external.ITestMethodInvokerExt;
-import com.testify.ecfeed.utils.ExceptionHelper;
 import com.testify.ecfeed.utils.StringHelper;
 import com.testify.ecfeed.utils.SystemLogger;
 
@@ -268,34 +263,7 @@ public class MethodInterface extends ParametersParentInterface {
 		String projectPath = EclipseProjectHelper.getProjectPath(fileInfoProvider);
 		String androidRunner = AndroidBaseRunnerHelper.createFullAndroidRunnerName(projectPath);
 
-		return createRemoteAndroidInvoker(androidRunner);
-	}
-
-	private ITestMethodInvoker createRemoteAndroidInvoker(String androidRunner) throws EcException {
-		IExtensionRegistry registry = Platform.getExtensionRegistry();
-
-		final String IREMOTE_INVOKER_ID = "com.testify.ecfeed.extensionpoint.definition.remoteinvoker";
-
-		IConfigurationElement[] config =
-				registry.getConfigurationElementsFor(IREMOTE_INVOKER_ID);		
-
-		try {
-			for (IConfigurationElement element : config) {
-				final Object obj = element.createExecutableExtension("class");
-
-				if (obj instanceof ITestMethodInvokerExt) {
-					ITestMethodInvokerExt invoker = (ITestMethodInvokerExt)obj;
-					invoker.initialize(androidRunner);
-					return invoker;
-				}
-			}
-		} catch (CoreException e) {
-			SystemLogger.logCatch(e.getMessage());
-			ExceptionHelper.reportRuntimeException(e.getMessage());
-		}	
-
-		EcException.report(Messages.EXCEPTION_ANDROID_METHOD_INVOKER_NOT_FOUND);
-		return null;
+		return TestMethodInvokerExt.createInvoker(androidRunner);
 	}
 
 	private boolean emptyAndroidBaseRunner(ClassNode classNode) {
