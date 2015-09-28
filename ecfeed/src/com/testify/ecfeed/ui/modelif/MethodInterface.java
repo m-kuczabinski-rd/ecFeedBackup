@@ -55,7 +55,6 @@ import com.testify.ecfeed.ui.common.EclipseModelBuilder;
 import com.testify.ecfeed.ui.common.EclipseTypeAdapterProvider;
 import com.testify.ecfeed.ui.common.JavaModelAnalyser;
 import com.testify.ecfeed.ui.common.Messages;
-import com.testify.ecfeed.ui.common.PluginVersionExceptionReporter;
 import com.testify.ecfeed.ui.common.external.IFileInfoProvider;
 import com.testify.ecfeed.ui.common.utils.EclipseProjectHelper;
 import com.testify.ecfeed.ui.dialogs.AddTestCaseDialog;
@@ -64,6 +63,7 @@ import com.testify.ecfeed.ui.dialogs.RenameTestSuiteDialog;
 import com.testify.ecfeed.ui.dialogs.SelectCompatibleMethodDialog;
 import com.testify.ecfeed.ui.modelif.external.ITestMethodInvoker;
 import com.testify.ecfeed.ui.modelif.external.ITestMethodInvokerExt;
+import com.testify.ecfeed.utils.ExceptionHelper;
 import com.testify.ecfeed.utils.StringHelper;
 import com.testify.ecfeed.utils.SystemLogger;
 
@@ -291,9 +291,7 @@ public class MethodInterface extends ParametersParentInterface {
 			}
 		} catch (CoreException e) {
 			SystemLogger.logCatch(e.getMessage());
-			PluginVersionExceptionReporter.reportEcException(
-					e.getMessage(), ITestMethodInvokerExt.INTERFACE_NAME, ITestMethodInvokerExt.INTERFACE_VERSION);
-
+			ExceptionHelper.reportRuntimeException(e.getMessage());
 		}	
 
 		EcException.report(Messages.EXCEPTION_ANDROID_METHOD_INVOKER_NOT_FOUND);

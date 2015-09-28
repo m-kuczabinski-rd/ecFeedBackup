@@ -2,7 +2,6 @@
 <?eclipse version="4.2?>
 <plugin>
    <extension-point id="com.testify.ecfeed.extensionpoint.definition.remoteinvoker" name="RemoteInvoker" schema="schema/com.testify.ecfeed.extensionpoint.definition.remoteinvoker.exsd"/>
-   <extension-point id="com.testify.ecfeed.extensionpoint.definition.versiondistributor" name="VersionDistributor" schema="schema/com.testify.ecfeed.extensionpoint.definition.versiondistributor.exsd"/>
    <extension-point id="com.testify.ecfeed.extensionpoint.definition.androidfactory" name="AndroidFactory" schema="schema/com.testify.ecfeed.extensionpoint.definition.androidfactory.exsd"/>
    <extension
          point="org.eclipse.ui.newWizards">
