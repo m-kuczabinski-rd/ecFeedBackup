@@ -10,6 +10,7 @@ package com.testify.ecfeed.ui.common.external;
 
 import java.lang.reflect.InvocationTargetException;
 
+import com.testify.ecfeed.ui.common.IFileInfoProvider;
 import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.common.utils.EclipseProjectHelper;
 import com.testify.ecfeed.utils.ExceptionHelper;

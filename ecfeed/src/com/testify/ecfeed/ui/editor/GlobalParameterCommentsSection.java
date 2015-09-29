@@ -13,7 +13,7 @@ package com.testify.ecfeed.ui.editor;
 
 import org.eclipse.swt.events.SelectionListener;
 
-import com.testify.ecfeed.ui.common.external.IFileInfoProvider;
+import com.testify.ecfeed.ui.common.IFileInfoProvider;
 import com.testify.ecfeed.ui.modelif.AbstractParameterInterface;
 import com.testify.ecfeed.ui.modelif.GlobalParameterInterface;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;

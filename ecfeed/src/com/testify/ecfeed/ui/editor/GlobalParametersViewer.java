@@ -16,7 +16,7 @@ import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.ui.forms.widgets.Section;
 
 import com.testify.ecfeed.model.GlobalParametersParentNode;
-import com.testify.ecfeed.ui.common.external.IFileInfoProvider;
+import com.testify.ecfeed.ui.common.IFileInfoProvider;
 import com.testify.ecfeed.ui.modelif.AbstractParameterInterface;
 import com.testify.ecfeed.ui.modelif.GlobalParameterInterface;
 import com.testify.ecfeed.ui.modelif.GlobalParametersParentInterface;

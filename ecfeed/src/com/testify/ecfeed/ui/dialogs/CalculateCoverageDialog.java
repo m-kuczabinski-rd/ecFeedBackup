@@ -59,11 +59,11 @@ import com.testify.ecfeed.adapter.IImplementationStatusResolver;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.ui.common.EclipseImplementationStatusResolver;
+import com.testify.ecfeed.ui.common.IFileInfoProvider;
 import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.common.TestCasesViewerContentProvider;
 import com.testify.ecfeed.ui.common.TestCasesViewerLabelProvider;
 import com.testify.ecfeed.ui.common.TreeCheckStateListener;
-import com.testify.ecfeed.ui.common.external.IFileInfoProvider;
 
 public class CalculateCoverageDialog extends TitleAreaDialog {
 	private Canvas[] fCanvasSet;

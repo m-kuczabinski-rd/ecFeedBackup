@@ -9,7 +9,7 @@
  *     Patryk Chamuczynski (p.chamuczynski(at)radytek.com) - initial implementation
  ******************************************************************************/
 
-package com.testify.ecfeed.ui.common.external;
+package com.testify.ecfeed.ui.common;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;

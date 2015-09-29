@@ -9,6 +9,7 @@
 package com.testify.ecfeed.ui.common.external;
 
 import com.testify.ecfeed.generators.api.EcException;
+import com.testify.ecfeed.ui.common.IFileInfoProvider;
 import com.testify.ecfeed.ui.common.utils.EclipseProjectHelper;
 
 public class ImplementerExt {

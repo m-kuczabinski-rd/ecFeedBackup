@@ -15,7 +15,7 @@ import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.editor.FormPage;
 
 import com.testify.ecfeed.model.RootNode;
-import com.testify.ecfeed.ui.common.external.IFileInfoProvider;
+import com.testify.ecfeed.ui.common.IFileInfoProvider;
 
 public class ModelPage extends FormPage {
 	private static final String ID = "com.testify.ecfeed.pages.refactored";

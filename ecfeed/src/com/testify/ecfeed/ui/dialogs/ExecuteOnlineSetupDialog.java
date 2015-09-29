@@ -21,8 +21,8 @@ import com.testify.ecfeed.generators.api.IGenerator;
 import com.testify.ecfeed.model.Constraint;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.ChoiceNode;
+import com.testify.ecfeed.ui.common.IFileInfoProvider;
 import com.testify.ecfeed.ui.common.Messages;
-import com.testify.ecfeed.ui.common.external.IFileInfoProvider;
 
 public class ExecuteOnlineSetupDialog extends GeneratorSetupDialog {
 	private static final int CONTENT = CONSTRAINTS_COMPOSITE | PARTITIONS_COMPOSITE |
