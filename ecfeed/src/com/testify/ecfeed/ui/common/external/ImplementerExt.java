@@ -9,6 +9,7 @@
 package com.testify.ecfeed.ui.common.external;
 
 import com.testify.ecfeed.generators.api.EcException;
+import com.testify.ecfeed.ui.common.utils.EclipseProjectHelper;
 
 public class ImplementerExt {
 
@@ -24,6 +25,8 @@ public class ImplementerExt {
 
 	private static IImplementerExt createImplementer(String baseRunner, IFileInfoProvider fileInfoProvider) {
 		IAndroidFactoryExt androidFactory = AndroidFactoryDistributorExt.getFactory();
-		return androidFactory.createImplementer(baseRunner, fileInfoProvider);		
+		String projectPath = EclipseProjectHelper.getProjectPath(fileInfoProvider);
+		IClassImplementHelper classImplementHelper = new EclipseClassImplementHelper(fileInfoProvider);
+		return androidFactory.createImplementer(baseRunner, projectPath, classImplementHelper);		
 	}
 }

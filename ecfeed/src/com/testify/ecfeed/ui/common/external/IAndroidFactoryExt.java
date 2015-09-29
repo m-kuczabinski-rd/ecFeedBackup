@@ -16,6 +16,7 @@ public interface IAndroidFactoryExt {
 
 	public IDeviceCheckerExt createDeviceChecker();
 	public IApkInstallerExt createApkInstaller();
-	public IImplementerExt createImplementer(String baseRunner, IFileInfoProvider fileInfoProvider);
+	public IImplementerExt createImplementer(
+			String baseRunner, String projectPath, IClassImplementHelper classImplementHelper);
 	public ITestMethodInvokerExt createTestMethodInvoker(String androidRunner);
 }
