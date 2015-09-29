@@ -11,9 +11,6 @@ package com.testify.ecfeed.ui.common.external;
 
 public interface IAndroidFactoryExt {
 
-	public final String INTERFACE_NAME = "ANDROID_FACTORY";
-	public final String INTERFACE_VERSION = "1.0";
-
 	public IDeviceCheckerExt createDeviceChecker();
 	public IApkInstallerExt createApkInstaller();
 	public IImplementerExt createImplementer(

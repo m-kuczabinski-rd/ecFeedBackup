@@ -13,20 +13,22 @@ import com.testify.ecfeed.ui.common.utils.EclipseProjectHelper;
 
 public class ImplementerExt {
 
-	public static boolean contentImplemented(String baseRunner, IFileInfoProvider fileInfoProvider) throws EcException {
-		IImplementerExt implementer = createImplementer(baseRunner, fileInfoProvider);
+	public static boolean contentImplemented(
+			final String baseRunner, final IFileInfoProvider fileInfoProvider) throws EcException {
+		final IImplementerExt implementer = createImplementer(baseRunner, fileInfoProvider);
 		return implementer.contentImplemented();
 	}
 
-	public static void implementContent(String baseRunner, IFileInfoProvider fileInfoProvider) throws EcException {
+	public static void implementContent(
+			final String baseRunner, final IFileInfoProvider fileInfoProvider) throws EcException {
 		IImplementerExt implementer = createImplementer(baseRunner, fileInfoProvider);
 		implementer.implementContent();
 	}
 
-	private static IImplementerExt createImplementer(String baseRunner, IFileInfoProvider fileInfoProvider) {
-		IAndroidFactoryExt androidFactory = AndroidFactoryDistributorExt.getFactory();
-		String projectPath = EclipseProjectHelper.getProjectPath(fileInfoProvider);
-		IClassImplementHelper classImplementHelper = new EclipseClassImplementHelper(fileInfoProvider);
+	private static IImplementerExt createImplementer(final String baseRunner, final IFileInfoProvider fileInfoProvider) {
+		final IAndroidFactoryExt androidFactory = AndroidFactoryDistributorExt.getFactory();
+		final String projectPath = EclipseProjectHelper.getProjectPath(fileInfoProvider);
+		final IClassImplementHelper classImplementHelper = new EclipseClassImplementHelper(fileInfoProvider);
 		return androidFactory.createImplementer(baseRunner, projectPath, classImplementHelper);		
 	}
 }

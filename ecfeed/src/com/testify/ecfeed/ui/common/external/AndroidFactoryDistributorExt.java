@@ -20,7 +20,7 @@ import com.testify.ecfeed.utils.SystemLogger;
 public class AndroidFactoryDistributorExt {
 
 	public static IAndroidFactoryExt getFactory() {
-		IExtensionRegistry registry = Platform.getExtensionRegistry();
+		final IExtensionRegistry registry = Platform.getExtensionRegistry();
 		final String ID = "com.testify.ecfeed.extensionpoint.definition.androidfactory";
 
 		IConfigurationElement[] config =

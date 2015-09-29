@@ -28,7 +28,7 @@ public class EclipseClassImplementHelper implements IClassImplementHelper {
 
 	public static final String EXCEPTION_FILE_INFO_PROVIDER_NOT_NULL = "File info provider must not be null.";
 
-	IFileInfoProvider fFileInfoProvider;
+	final IFileInfoProvider fFileInfoProvider;
 
 	public EclipseClassImplementHelper(IFileInfoProvider fileInfoProvider) {
 		if (fileInfoProvider == null) { 
@@ -38,8 +38,9 @@ public class EclipseClassImplementHelper implements IClassImplementHelper {
 	}
 
 	@Override
-	public boolean classImplemented(String thePackage, String classNameWithoutExtension, String superclassName) {
-		IType type = getTestingClassType(thePackage, classNameWithoutExtension);
+	public boolean classImplemented(
+			final String thePackage, final String classNameWithoutExtension, final String superclassName) {
+		final IType type = getTestingClassType(thePackage, classNameWithoutExtension);
 
 		if (type == null) {
 			return false;
@@ -58,18 +59,18 @@ public class EclipseClassImplementHelper implements IClassImplementHelper {
 	}
 
 	@Override
-	public boolean classImplemented(String thePackage, String classNameWithoutExtension) {
+	public boolean classImplemented(final String thePackage, final String classNameWithoutExtension) {
 		return classImplemented(thePackage, classNameWithoutExtension, null);
 	}
 
 	private IType getTestingClassType(String thePackage, String classNameWithoutExtension) {
-		String classType = 
+		final String classType = 
 				PackageClassHelper.createPackageWithClass(thePackage, classNameWithoutExtension); 
 
 		return getIType(classType);
 	}	
 
-	private IType getIType(String qualifiedName) {
+	private IType getIType(final String qualifiedName) {
 		try {
 			for(IJavaProject project : JavaCore.create(ResourcesPlugin.getWorkspace().getRoot()).getJavaProjects()){
 				if(project.findType(qualifiedName) != null){
@@ -80,7 +81,7 @@ public class EclipseClassImplementHelper implements IClassImplementHelper {
 		return null;
 	}
 
-	private boolean isClass(IType type) {
+	private boolean isClass(final IType type) {
 		try {
 			if (type.isClass()) {
 				return true;
@@ -92,7 +93,7 @@ public class EclipseClassImplementHelper implements IClassImplementHelper {
 		return true;
 	}
 
-	private String getSuperclassName(IType type) {
+	private String getSuperclassName(final IType type) {
 		try {
 			return type.getSuperclassName();
 		} catch (JavaModelException e) {
@@ -102,17 +103,17 @@ public class EclipseClassImplementHelper implements IClassImplementHelper {
 
 	@Override
 	public void implementClass(
-			String thePackage, 
-			String classNameWithoutExtension, 
-			String content) {
+			final String thePackage, 
+			final String classNameWithoutExtension, 
+			final String content) {
 		try {
 			String unitName = classNameWithoutExtension + ".java";
 
-			IPackageFragment packageFragment = 
+			final IPackageFragment packageFragment = 
 					EclipsePackageFragmentGetter.getPackageFragment(
 							thePackage, fFileInfoProvider);
 
-			ICompilationUnit unit = 
+			final ICompilationUnit unit = 
 					packageFragment.createCompilationUnit(unitName, content, false, null);
 
 			unit.becomeWorkingCopy(null);

@@ -20,9 +20,9 @@ public class ApkInstallerExt {
 		if (EclipseProjectHelper.isNoInstallDevelopmentHook(fileInfoProvider)) {
 			return;
 		}
-			
-		IAndroidFactoryExt androidFactory = AndroidFactoryDistributorExt.getFactory();
-		IApkInstallerExt apkInstaller = androidFactory.createApkInstaller();
+
+		final IAndroidFactoryExt androidFactory = AndroidFactoryDistributorExt.getFactory();
+		final IApkInstallerExt apkInstaller = androidFactory.createApkInstaller();
 		apkInstaller.installApplicationsIfModified(fileInfoProvider);
 	}
 }

@@ -12,8 +12,8 @@ import com.testify.ecfeed.ui.modelif.external.ITestMethodInvoker;
 
 public class TestMethodInvokerExt {
 
-	public static ITestMethodInvoker createInvoker(String androidRunner) {
-		IAndroidFactoryExt androidFactory = AndroidFactoryDistributorExt.getFactory();
+	public static ITestMethodInvoker createInvoker(final String androidRunner) {
+		final IAndroidFactoryExt androidFactory = AndroidFactoryDistributorExt.getFactory();
 		return androidFactory.createTestMethodInvoker(androidRunner);
 	}
 }
