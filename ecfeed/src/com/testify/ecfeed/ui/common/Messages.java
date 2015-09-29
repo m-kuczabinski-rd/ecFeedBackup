@@ -168,6 +168,7 @@ public class Messages {
 	public static final String EXPORT_TEST_DATA_TAIL_TEMPLATE_LABEL = "Define trailer of the generated file";
 	public static final String EXPORT_TEST_DATA_TARGET_FILE_LABEL = "Target file";
 	public static final String DIALOG_EXPORT_TEST_DATA_PROBLEM_TITLE = "Problem with exporting test data";
+	public static final String EXPORT_TEST_DATA_TEMPLATE_LABEL = "Define template for export data.";
 
 	public static String DIALOG_UNSUCCESFUL_TEST_EXECUTION(int totalTestCases, int unsuccesfull) {
 		return String.valueOf(unsuccesfull) + " of " + totalTestCases + " test cases have met problems during execution.";
