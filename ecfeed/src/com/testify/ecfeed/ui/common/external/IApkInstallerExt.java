@@ -12,5 +12,5 @@ import java.lang.reflect.InvocationTargetException;
 
 public interface IApkInstallerExt {
 
-	public void installApplicationsIfModified(IFileInfoProvider fileInfoProvider) throws InvocationTargetException;
+	public void installApplicationsIfModified(String testedApk, String testingApk) throws InvocationTargetException;
 }

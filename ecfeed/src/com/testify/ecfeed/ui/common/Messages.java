@@ -58,6 +58,8 @@ public class Messages {
 
 	public static final String EXCEPTION_CAN_NOT_CREATE_INSTALL_PROCESS = "Can not create install process.";
 
+	public static final String EXCEPTION_CAN_NOT_INSTALL_APK_FILE = "Can not install apk file.";
+
 	public static final String CAN_NOT_LOG_OUTPUT = "Can not log output.";
 
 	public static final String DIALOG_TEST_SUITE_NAME_ERROR_MESSAGE = "Name of a test suite must be between 1 and 64 characters long.";
