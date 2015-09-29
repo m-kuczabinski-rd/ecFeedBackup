@@ -24,19 +24,25 @@ public class TestDataExporter {
 	private static final String CHOICE_COMMAND_SHORT_NAME = "choice";
 	private static final String CHOICE_COMMAND_FULL_NAME = "full_choice";
 	private static final String CHOICE_COMMAND_VALUE = "value";
-	private static final String TEST_PARAMETER_SEQUENCE_GENERIC_PATTERN = "#\\d+\\.(" + CHOICE_COMMAND_SHORT_NAME + "|" + CHOICE_COMMAND_FULL_NAME + "|" + CHOICE_COMMAND_VALUE + ")";
-	private static final String METHOD_PARAMETER_SEQUENCE_GENERIC_PATTERN = "#\\d+\\." + PARAMETER_COMMAND_NAME;
+	private static final String TEST_PARAMETER_SEQUENCE_GENERIC_PATTERN = "\\$\\d+\\.(" + CHOICE_COMMAND_SHORT_NAME + "|" + CHOICE_COMMAND_FULL_NAME + "|" + CHOICE_COMMAND_VALUE + ")";
+	private static final String METHOD_PARAMETER_SEQUENCE_GENERIC_PATTERN = "\\$\\d+\\." + PARAMETER_COMMAND_NAME;
 
 	public void export(MethodNode method, Collection<TestCaseNode> testCases, String headerTemplate, 
 			String testCaseTemplate, String tailTemplate, String file) throws IOException{
 		FileOutputStream os = new FileOutputStream(file);
-		os.write(generateSection(method, headerTemplate).getBytes());
-		Iterator<TestCaseNode> iterator = testCases.iterator();
-		for(int i = 0; i < testCases.size(); ++i){
-			TestCaseNode testCase = iterator.next();
-			os.write(generateTestCaseString(i, testCase, testCaseTemplate).getBytes());
+		if(headerTemplate != null){
+			os.write(generateSection(method, headerTemplate).getBytes());
 		}
-		os.write(generateSection(method, headerTemplate).getBytes());
+		if(testCaseTemplate != null){
+			Iterator<TestCaseNode> iterator = testCases.iterator();
+			for(int i = 0; i < testCases.size(); ++i){
+				TestCaseNode testCase = iterator.next();
+				os.write(generateTestCaseString(i, testCase, testCaseTemplate).getBytes());
+			}
+		}
+		if(tailTemplate != null){
+			os.write(generateSection(method, headerTemplate).getBytes());
+		}
 		os.close();
 	}
 
@@ -88,7 +94,7 @@ public class TestDataExporter {
 	private String generateTestCaseString(int index, TestCaseNode testCase, String template) {
 		MethodNode method = testCase.getMethod();
 		String result = generateSection(method, template);
-		result = replaceTestParameterSequences(testCase, template);
+		result = replaceTestParameterSequences(testCase, result);
 		result = result.replace(TEST_CASE_INDEX_NAME_SEQUENCE, String.valueOf(index));
 		result = result.replace(TEST_SUITE_NAME_SEQUENCE, testCase.getName());
 		return result;
