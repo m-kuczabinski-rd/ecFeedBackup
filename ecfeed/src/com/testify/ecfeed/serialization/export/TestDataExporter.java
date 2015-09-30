@@ -173,7 +173,7 @@ public class TestDataExporter {
 		return result;
 	}
 
-	public void closeOutput() throws IOException {
+	public void close() throws IOException {
 		fOutputStream.close();
 	}
 }
