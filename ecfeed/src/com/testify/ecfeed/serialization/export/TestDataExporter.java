@@ -1,7 +1,9 @@
 package com.testify.ecfeed.serialization.export;
 
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.regex.Matcher;
@@ -26,24 +28,46 @@ public class TestDataExporter {
 	private static final String CHOICE_COMMAND_VALUE = "value";
 	private static final String TEST_PARAMETER_SEQUENCE_GENERIC_PATTERN = "\\$\\d+\\.(" + CHOICE_COMMAND_SHORT_NAME + "|" + CHOICE_COMMAND_FULL_NAME + "|" + CHOICE_COMMAND_VALUE + ")";
 	private static final String METHOD_PARAMETER_SEQUENCE_GENERIC_PATTERN = "\\$\\d+\\." + PARAMETER_COMMAND_NAME;
+	private static final String ARITHMETIC_EXPRESSION_SEQUENCE_GENERIC_PATTERN = "\\$(.*)";
 
+	OutputStream fOutputStream;
+	int fExportedTestCases;
+	
+	public TestDataExporter(String file) throws FileNotFoundException {
+		 fOutputStream = new FileOutputStream(file);
+		 fExportedTestCases = 0;
+	}
+
+	public void export(MethodNode method, String template) throws IOException{
+		if(template != null){
+			fOutputStream.write(generateSection(method, template).getBytes());
+		}
+	}
+
+	public void export(TestCaseNode testCase, String template) throws IOException{
+		if(template != null){
+			fOutputStream.write(generateTestCaseString(fExportedTestCases, testCase, template).getBytes());
+			++fExportedTestCases;
+		}
+	}
+
+	
 	public void export(MethodNode method, Collection<TestCaseNode> testCases, String headerTemplate, 
-			String testCaseTemplate, String tailTemplate, String file) throws IOException{
-		FileOutputStream os = new FileOutputStream(file);
+			String testCaseTemplate, String tailTemplate) throws IOException{
 		if(headerTemplate != null){
-			os.write(generateSection(method, headerTemplate).getBytes());
+			fOutputStream.write(generateSection(method, headerTemplate).getBytes());
 		}
 		if(testCaseTemplate != null){
 			Iterator<TestCaseNode> iterator = testCases.iterator();
 			for(int i = 0; i < testCases.size(); ++i){
 				TestCaseNode testCase = iterator.next();
-				os.write(generateTestCaseString(i, testCase, testCaseTemplate).getBytes());
+				fOutputStream.write(generateTestCaseString(i, testCase, testCaseTemplate).getBytes());
 			}
 		}
 		if(tailTemplate != null){
-			os.write(generateSection(method, headerTemplate).getBytes());
+			fOutputStream.write(generateSection(method, headerTemplate).getBytes());
 		}
-		os.close();
+		fOutputStream.close();
 	}
 
 	private String generateSection(MethodNode method, String template) {
@@ -51,6 +75,7 @@ public class TestDataExporter {
 		result = result.replace(PACKAGE_NAME_SEQUENCE, JavaUtils.getPackageName(method.getClassNode()));
 		result = result.replace(METHOD_NAME_SEQUENCE, method.getName());
 		result = replaceParameterSequences(method, result);
+		result = evaluateExpressions(result);
 
 		return result;
 	}
@@ -97,6 +122,22 @@ public class TestDataExporter {
 		result = replaceTestParameterSequences(testCase, result);
 		result = result.replace(TEST_CASE_INDEX_NAME_SEQUENCE, String.valueOf(index));
 		result = result.replace(TEST_SUITE_NAME_SEQUENCE, testCase.getName());
+		result = evaluateExpressions(result);
+		return result;
+	}
+
+	private String evaluateExpressions(String template) {
+		String result = template;
+		Matcher m = Pattern.compile(ARITHMETIC_EXPRESSION_SEQUENCE_GENERIC_PATTERN).matcher(template);
+		while(m.find()){
+			String expressionSequence = m.group();
+			String expressionString = expressionSequence.substring(2, expressionSequence.length() - 1); //remove initial "$(" and ending ")"
+			try{
+				Expression expression = new Expression(expressionString);
+				String substitute = expression.eval().toPlainString();
+				result = result.replace(expressionSequence, substitute);
+			}catch(RuntimeException e){} //if evaluation failed, do not stop, keep the result as it is
+		}		
 		return result;
 	}
 
