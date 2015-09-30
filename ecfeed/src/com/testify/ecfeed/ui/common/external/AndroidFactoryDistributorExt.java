@@ -19,7 +19,16 @@ import com.testify.ecfeed.utils.SystemLogger;
 
 public class AndroidFactoryDistributorExt {
 
+	private static IAndroidFactoryExt fAndroidFactoryExt = null;
+
 	public static IAndroidFactoryExt getFactory() {
+		if (fAndroidFactoryExt == null) {
+			fAndroidFactoryExt = getFactoryFromRegistry();
+		}
+		return fAndroidFactoryExt;
+	}
+
+	public static IAndroidFactoryExt getFactoryFromRegistry() {
 		final IExtensionRegistry registry = Platform.getExtensionRegistry();
 		final String ID = "com.testify.ecfeed.extensionpoint.definition.androidfactory";
 
