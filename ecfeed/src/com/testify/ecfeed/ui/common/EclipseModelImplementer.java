@@ -43,8 +43,6 @@ import com.testify.ecfeed.adapter.AbstractJavaModelImplementer;
 import com.testify.ecfeed.adapter.CachedImplementationStatusResolver;
 import com.testify.ecfeed.adapter.EImplementationStatus;
 import com.testify.ecfeed.adapter.java.JavaUtils;
-import com.testify.ecfeed.android.utils.AndroidBaseRunnerHelper;
-import com.testify.ecfeed.android.utils.AndroidManifestAccessor;
 import com.testify.ecfeed.generators.api.EcException;
 import com.testify.ecfeed.model.AbstractNode;
 import com.testify.ecfeed.model.AbstractParameterNode;
@@ -54,6 +52,7 @@ import com.testify.ecfeed.model.GlobalParameterNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.MethodParameterNode;
 import com.testify.ecfeed.ui.common.external.EclipseClassImplementHelper;
+import com.testify.ecfeed.ui.common.external.IClassImplementHelper;
 import com.testify.ecfeed.ui.common.external.ImplementerExt;
 import com.testify.ecfeed.ui.common.utils.EclipsePackageFragmentGetter;
 import com.testify.ecfeed.ui.common.utils.EclipseProjectHelper;
@@ -123,20 +122,11 @@ public class EclipseModelImplementer extends AbstractJavaModelImplementer {
 	}
 
 	@Override
-	protected void implementClassDefinition(ClassNode node) throws CoreException, EcException {
-		String packageName = JavaUtils.getPackageName(node.getName());
-		String className = JavaUtils.getLocalName(node.getName());
-
+	protected void implementClassDefinition(ClassNode classNode) throws CoreException, EcException {
 		String projectPath = EclipseProjectHelper.getProjectPath(fFileInfoProvider);
-
-		AndroidManifestAccessor androidManifestAccesor = 
-				new AndroidManifestAccessor(projectPath);
- 
-		String testingAppPackage = androidManifestAccesor.getTestingAppPackage();
-		String classContent = classDefinitionContent(node, packageName, testingAppPackage);
-
-		EclipseClassImplementHelper implementHelper = new EclipseClassImplementHelper(fFileInfoProvider);
-		implementHelper.implementClass(packageName, className, classContent);
+		IClassImplementHelper implementHelper = new EclipseClassImplementHelper(fFileInfoProvider);
+		
+		new TestingClassImplementer().implementClassDefinition(classNode, projectPath, implementHelper);
 	}
 
 	@Override
@@ -344,34 +334,6 @@ public class EclipseModelImplementer extends AbstractJavaModelImplementer {
 			return (type != null) && type.isEnum();
 		}catch(CoreException e){SystemLogger.logCatch(e.getMessage());}
 		return false;
-	}
-
-	protected String classDefinitionContent(ClassNode classNode, String userPackageName, String testingAppPackage){
-		StringBuilder contentBuilder = new  StringBuilder();
-
-		contentBuilder.append("package " + userPackageName + ";\n\n");
-
-		if (classNode.getRunOnAndroid()) {
-			contentBuilder.append(
-					"import " + testingAppPackage + "." + 
-							AndroidBaseRunnerHelper.getEcFeedAndroidPackagePrefix() + ".EcFeedTest;\n\n");
-		}
-
-		contentBuilder.append("public class " + JavaUtils.getLocalName(classNode) + " ");
-
-		if (classNode.getRunOnAndroid()) {
-			contentBuilder.append("extends EcFeedTest ");
-		}		
-
-		contentBuilder.append("{\n\n");
-
-		if (classNode.getRunOnAndroid()) {
-			contentBuilder.append("\t@Override\n\tprotected void setUp() throws Exception {\n\t\tsuper.setUp();\n\t}\n");
-		}
-
-		contentBuilder.append("\n}");
-
-		return contentBuilder.toString();
 	}
 
 	protected String methodDefinitionContent(MethodNode node){
