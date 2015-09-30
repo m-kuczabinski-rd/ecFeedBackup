@@ -223,6 +223,7 @@ public class MethodInterface extends ParametersParentInterface {
 					exporter.export(testCase, dialog.getTestCaseTemplate());
 				}
 				exporter.export(getTarget(), dialog.getTailTemplate());
+				exporter.closeOutput();
 			} catch (IOException e) {
 				MessageDialog.openError(Display.getCurrent().getActiveShell(),
 						Messages.DIALOG_EXPORT_TEST_DATA_PROBLEM_TITLE,

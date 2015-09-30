@@ -172,4 +172,8 @@ public class TestDataExporter {
 		}
 		return result;
 	}
+
+	public void closeOutput() throws IOException {
+		fOutputStream.close();
+	}
 }
