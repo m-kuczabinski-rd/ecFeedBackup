@@ -131,7 +131,7 @@ public class EclipseModelImplementer extends AbstractJavaModelImplementer {
 
 		AndroidManifestAccessor androidManifestAccesor = 
 				new AndroidManifestAccessor(projectPath);
-
+ 
 		String testingAppPackage = androidManifestAccesor.getTestingAppPackage();
 		String classContent = classDefinitionContent(node, packageName, testingAppPackage);
 
