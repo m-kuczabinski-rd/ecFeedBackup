@@ -8,32 +8,40 @@
 
 package com.testify.ecfeed.ui.common;
 
-import org.eclipse.core.runtime.CoreException;
-
 import com.testify.ecfeed.adapter.java.JavaUtils;
 import com.testify.ecfeed.android.utils.AndroidBaseRunnerHelper;
 import com.testify.ecfeed.android.utils.AndroidManifestAccessor;
-import com.testify.ecfeed.generators.api.EcException;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.ui.common.external.IClassImplementHelper;
+import com.testify.ecfeed.ui.common.utils.ClassImplementer;
 
-public class TestingClassImplementer {
+public class TestingClassImplementer extends ClassImplementer {
 
-	public void implementClassDefinition(
-			ClassNode node, String projectPath, IClassImplementHelper implementHelper) 
-			throws CoreException, EcException {
-		String packageName = JavaUtils.getPackageName(node.getName());
-		String className = JavaUtils.getLocalName(node.getName());
+	ClassNode fClassNode;
+	String fUserPackageName;
+	String fTestingAppPackage;
+
+	public TestingClassImplementer(
+			ClassNode classNode,
+			String projectPath,
+			IClassImplementHelper classImplementHelper) {
+		super(JavaUtils.getPackageName(classNode.getName()), 
+				JavaUtils.getLocalName(classNode.getName()), 
+				classImplementHelper);
+		fClassNode = classNode;
+		fUserPackageName = JavaUtils.getPackageName(classNode.getName());
 
 		AndroidManifestAccessor androidManifestAccesor = 
 				new AndroidManifestAccessor(projectPath);
- 
-		String testingAppPackage = androidManifestAccesor.getTestingAppPackage();
-		String classContent = classDefinitionContent(node, packageName, testingAppPackage);
 
-		implementHelper.implementClass(packageName, className, classContent);
+		fTestingAppPackage = androidManifestAccesor.getTestingAppPackage();
 	}
-	
+
+	@Override
+	protected String createUnitContent() {
+		return classDefinitionContent(fClassNode, fUserPackageName, fTestingAppPackage);
+	}
+
 	private String classDefinitionContent(ClassNode classNode, String userPackageName, String testingAppPackage){
 		StringBuilder contentBuilder = new  StringBuilder();
 
@@ -61,5 +69,4 @@ public class TestingClassImplementer {
 
 		return contentBuilder.toString();
 	}
-	
 }

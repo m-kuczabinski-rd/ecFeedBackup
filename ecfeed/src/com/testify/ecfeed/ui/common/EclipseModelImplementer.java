@@ -125,8 +125,11 @@ public class EclipseModelImplementer extends AbstractJavaModelImplementer {
 	protected void implementClassDefinition(ClassNode classNode) throws CoreException, EcException {
 		String projectPath = EclipseProjectHelper.getProjectPath(fFileInfoProvider);
 		IClassImplementHelper implementHelper = new EclipseClassImplementHelper(fFileInfoProvider);
-		
-		new TestingClassImplementer().implementClassDefinition(classNode, projectPath, implementHelper);
+
+		TestingClassImplementer implementer = 
+				new TestingClassImplementer(classNode, projectPath, implementHelper);		
+
+		implementer.implementContent();
 	}
 
 	@Override
