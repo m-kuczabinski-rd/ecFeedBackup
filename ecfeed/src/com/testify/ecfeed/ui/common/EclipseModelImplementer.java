@@ -126,9 +126,14 @@ public class EclipseModelImplementer extends AbstractJavaModelImplementer {
 		String projectPath = EclipseProjectHelper.getProjectPath(fFileInfoProvider);
 		IClassImplementHelper implementHelper = new EclipseClassImplementHelper(fFileInfoProvider);
 
-		TestingClassImplementer implementer = 
-				new TestingClassImplementer(classNode, projectPath, implementHelper);		
-
+		JavaTestingClassImplementer implementer = null;
+		
+		if (classNode.getRunOnAndroid()) {
+			implementer = new AndroidTestingClassImplementer(classNode, projectPath, implementHelper);
+		} else {
+			implementer = new JavaTestingClassImplementer(classNode, projectPath, implementHelper);
+		}
+		
 		implementer.implementContent();
 	}
 

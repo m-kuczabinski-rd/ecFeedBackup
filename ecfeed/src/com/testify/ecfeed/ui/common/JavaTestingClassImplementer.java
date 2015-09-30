@@ -9,19 +9,18 @@
 package com.testify.ecfeed.ui.common;
 
 import com.testify.ecfeed.adapter.java.JavaUtils;
-import com.testify.ecfeed.android.utils.AndroidBaseRunnerHelper;
 import com.testify.ecfeed.android.utils.AndroidManifestAccessor;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.ui.common.external.IClassImplementHelper;
 import com.testify.ecfeed.ui.common.utils.ClassImplementer;
 
-public class TestingClassImplementer extends ClassImplementer {
+public class JavaTestingClassImplementer extends ClassImplementer {
 
 	ClassNode fClassNode;
 	String fUserPackageName;
 	String fTestingAppPackage;
 
-	public TestingClassImplementer(
+	public JavaTestingClassImplementer(
 			ClassNode classNode,
 			String projectPath,
 			IClassImplementHelper classImplementHelper) {
@@ -39,34 +38,35 @@ public class TestingClassImplementer extends ClassImplementer {
 
 	@Override
 	protected String createUnitContent() {
-		return classDefinitionContent(fClassNode, fUserPackageName, fTestingAppPackage);
-	}
-
-	private String classDefinitionContent(ClassNode classNode, String userPackageName, String testingAppPackage){
 		StringBuilder contentBuilder = new  StringBuilder();
 
-		contentBuilder.append("package " + userPackageName + ";\n\n");
+		contentBuilder.append("package " + fUserPackageName + ";\n\n");
 
-		if (classNode.getRunOnAndroid()) {
-			contentBuilder.append(
-					"import " + testingAppPackage + "." + 
-							AndroidBaseRunnerHelper.getEcFeedAndroidPackagePrefix() + ".EcFeedTest;\n\n");
-		}
+		contentBuilder.append(createImportLine());
 
-		contentBuilder.append("public class " + JavaUtils.getLocalName(classNode) + " ");
+		contentBuilder.append("public class " + JavaUtils.getLocalName(fClassNode) + " ");
 
-		if (classNode.getRunOnAndroid()) {
-			contentBuilder.append("extends EcFeedTest ");
-		}		
+		contentBuilder.append(createExtendsClause());
 
 		contentBuilder.append("{\n\n");
 
-		if (classNode.getRunOnAndroid()) {
-			contentBuilder.append("\t@Override\n\tprotected void setUp() throws Exception {\n\t\tsuper.setUp();\n\t}\n");
-		}
+
+		contentBuilder.append(createSetupMethod());
 
 		contentBuilder.append("\n}");
 
 		return contentBuilder.toString();
+	}
+
+	protected String createImportLine() {
+		return "";
+	}
+
+	protected String createExtendsClause() {
+		return "";
+	}
+
+	protected String createSetupMethod() {
+		return "";
 	}
 }
