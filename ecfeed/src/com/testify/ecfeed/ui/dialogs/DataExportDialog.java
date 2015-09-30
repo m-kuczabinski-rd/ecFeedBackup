@@ -1,9 +1,15 @@
 package com.testify.ecfeed.ui.dialogs;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.StringTokenizer;
 
+import org.eclipse.core.runtime.FileLocator;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.dialogs.TitleAreaDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -17,6 +23,8 @@ import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
+import org.osgi.framework.Bundle;
+import org.osgi.framework.FrameworkUtil;
 
 import com.testify.ecfeed.ui.common.Messages;
 
@@ -24,6 +32,7 @@ public class DataExportDialog extends TitleAreaDialog{
 
 	private static final String SECTION_HEADER_REGEX = "\\s*\\[([^]]*)\\]\\s*";
 	private static final String COMMENTED_LINE_REGEX = "^\\s*#.*";
+	private static final String DEFAULT_TEMPLATE_TEXT_FILE = "res/template.txt";
 	private final String HEADER_TEMPLATE_MARKER = "[Header]";
 	private final String TEST_CASE_TEMPLATE_MARKER = "[TestCase]";
 	private final String TAIL_TEMPLATE_MARKER = "[Tail]";
@@ -80,7 +89,26 @@ public class DataExportDialog extends TitleAreaDialog{
 		GridData gd = new GridData(SWT.FILL, SWT.FILL, true, true);
 		gd.minimumHeight = 300;
 		fTemplateText.setLayoutData(gd);
+		
+		fillTemplateText(DEFAULT_TEMPLATE_TEXT_FILE);
 
+	}
+
+	private void fillTemplateText(String templateFilePath) {
+		Bundle bundle = FrameworkUtil.getBundle(this.getClass());
+		URL url = FileLocator.find(bundle, new Path(templateFilePath), null);
+        BufferedReader in;
+        String templateText = "";
+		try {
+			in = new BufferedReader(new InputStreamReader(url.openStream()));
+	        String inputLine;
+	        while ((inputLine = in.readLine()) != null){
+	            templateText += inputLine + "\n";
+	        }
+	        in.close();
+		} catch (IOException e) {
+		}
+		fTemplateText.setText(templateText);
 	}
 
 	private void createTargetFileContainer(Composite parent) {
