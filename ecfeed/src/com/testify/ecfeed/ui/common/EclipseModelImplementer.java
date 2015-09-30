@@ -53,6 +53,7 @@ import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.GlobalParameterNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.MethodParameterNode;
+import com.testify.ecfeed.ui.common.external.EclipseClassImplementHelper;
 import com.testify.ecfeed.ui.common.external.ImplementerExt;
 import com.testify.ecfeed.ui.common.utils.EclipsePackageFragmentGetter;
 import com.testify.ecfeed.ui.common.utils.EclipseProjectHelper;
@@ -125,9 +126,6 @@ public class EclipseModelImplementer extends AbstractJavaModelImplementer {
 	protected void implementClassDefinition(ClassNode node) throws CoreException, EcException {
 		String packageName = JavaUtils.getPackageName(node.getName());
 		String className = JavaUtils.getLocalName(node.getName());
-		String unitName = className + ".java";
-		IPackageFragment packageFragment = 
-				EclipsePackageFragmentGetter.getPackageFragment(packageName, fFileInfoProvider);
 
 		String projectPath = EclipseProjectHelper.getProjectPath(fFileInfoProvider);
 
@@ -135,13 +133,10 @@ public class EclipseModelImplementer extends AbstractJavaModelImplementer {
 				new AndroidManifestAccessor(projectPath);
 
 		String testingAppPackage = androidManifestAccesor.getTestingAppPackage();
+		String classContent = classDefinitionContent(node, packageName, testingAppPackage);
 
-		ICompilationUnit unit = 
-				packageFragment.createCompilationUnit(
-						unitName, classDefinitionContent(node, packageName, testingAppPackage), false, null);
-
-		unit.becomeWorkingCopy(null);
-		unit.commitWorkingCopy(true, null);
+		EclipseClassImplementHelper implementHelper = new EclipseClassImplementHelper(fFileInfoProvider);
+		implementHelper.implementClass(packageName, className, classContent);
 	}
 
 	@Override

@@ -84,7 +84,12 @@ IImplementationStatusResolver {
 
 	@Override
 	public EImplementationStatus getImplementationStatus(AbstractNode node) {
+		if (fStatusResolver == null) {
+			return EImplementationStatus.NOT_IMPLEMENTED;
+		}
+
 		try{
+
 			return (EImplementationStatus)node.accept(fStatusResolver);
 		}
 		catch(Exception e){

@@ -107,11 +107,11 @@ public class EclipseClassImplementHelper implements IClassImplementHelper {
 			final String classNameWithoutExtension, 
 			final String content) {
 		try {
-			String unitName = classNameWithoutExtension + ".java";
-
 			final IPackageFragment packageFragment = 
 					EclipsePackageFragmentGetter.getPackageFragment(
 							thePackage, fFileInfoProvider);
+
+			final String unitName = classNameWithoutExtension + ".java";
 
 			final ICompilationUnit unit = 
 					packageFragment.createCompilationUnit(unitName, content, false, null);
