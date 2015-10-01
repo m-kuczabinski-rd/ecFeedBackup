@@ -130,8 +130,6 @@ public class EclipseModelImplementer extends AbstractJavaModelImplementer {
 		String projectPath = EclipseProjectHelper.getProjectPath(fFileInfoProvider);
 		IClassImplementHelper implementHelper = new EclipseClassImplementHelper(fFileInfoProvider);
 
-		JavaUserClassImplementer implementer = null;
-
 		String thePackage = JavaUtils.getPackageName(classNode.getName());
 		String classNameWithoutExtension = JavaUtils.getLocalName(classNode.getName());
 
@@ -139,7 +137,7 @@ public class EclipseModelImplementer extends AbstractJavaModelImplementer {
 			AndroidUserClassImplementerExt.implementContent(
 					projectPath, thePackage, classNameWithoutExtension, implementHelper);
 		} else {
-			implementer = 
+			JavaUserClassImplementer implementer = 
 					new JavaUserClassImplementer(
 							projectPath, thePackage, classNameWithoutExtension, implementHelper);
 			implementer.implementContent();
@@ -151,7 +149,7 @@ public class EclipseModelImplementer extends AbstractJavaModelImplementer {
 		if(!classDefinitionImplemented(methodNode.getClassNode())){
 			implementClassDefinition(methodNode.getClassNode());
 		}
-		MethodImplementer implementer = createMethodImplementer(methodNode);
+		AbstractMethodImplementer implementer = createMethodImplementer(methodNode);
 		implementer.implementMethodDefinition();
 	}
 
@@ -314,7 +312,7 @@ public class EclipseModelImplementer extends AbstractJavaModelImplementer {
 
 	@Override
 	protected boolean methodDefinitionImplemented(MethodNode methodNode) {
-		MethodImplementer implementer = createMethodImplementer(methodNode);
+		AbstractMethodImplementer implementer = createMethodImplementer(methodNode);
 		return implementer.methodDefinitionImplemented();
 	}
 
@@ -327,13 +325,17 @@ public class EclipseModelImplementer extends AbstractJavaModelImplementer {
 		return false;
 	}
 
-	private MethodImplementer createMethodImplementer(MethodNode methodNode) {
+	private AbstractMethodImplementer createMethodImplementer(MethodNode methodNode) {
 		final String className = JavaUtils.getQualifiedName(methodNode.getClassNode());
 
 		IMethodImplementHelper fMethodImplementHelper = 
 				new EclipseMethodImplementHelper(fFileInfoProvider, className, methodNode);
 
-		return new MethodImplementer(fFileInfoProvider, methodNode, fMethodImplementHelper);
+		if (methodNode.getRunOnAndroid()) {
+			return new AndroidMethodImplementer(fFileInfoProvider, methodNode, fMethodImplementHelper);
+		} else {
+			return new JavaMethodImplementer(fFileInfoProvider, methodNode, fMethodImplementHelper);
+		}
 	}
 
 	protected String methodDefinitionContent(MethodNode node){

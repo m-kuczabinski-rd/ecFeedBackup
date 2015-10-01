@@ -15,12 +15,12 @@ import com.testify.ecfeed.model.AbstractParameterNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.ui.common.external.IMethodImplementHelper;
 
-public class MethodImplementer {
+public abstract class AbstractMethodImplementer {
 
 	private IMethodImplementHelper fMethodImplementHelper = null;
 	private final MethodNode fMethodNode;
 
-	MethodImplementer(
+	AbstractMethodImplementer(
 			final IFileInfoProvider fileInfoProvider,
 			final MethodNode methodNode,
 			IMethodImplementHelper methodImplementHelper) {
@@ -63,13 +63,7 @@ public class MethodImplementer {
 	}
 
 	private String createLoggingInstruction(final MethodNode methodNode) {
-		String result = "";
-
-		if (methodNode.getRunOnAndroid()) {
-			result = "android.util.Log.d(\"ecFeed\", \"" + methodNode.getName() + "(";
-		} else {
-			result = "System.out.println(\"" + methodNode.getName() + "(";
-		}
+		String result = createLoggingInstructionPrefix(methodNode.getName());
 
 		List<AbstractParameterNode> parameters = methodNode.getParameters();
 
@@ -88,6 +82,8 @@ public class MethodImplementer {
 
 		return result + "\")\");"; 
 	}
+	
+	protected abstract String createLoggingInstructionPrefix(String methodName);
 
 	private String getMethodArgs(final MethodNode node) {
 		List<AbstractParameterNode> parameters = node.getParameters();
