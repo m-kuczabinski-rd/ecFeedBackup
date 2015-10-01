@@ -145,26 +145,12 @@ public class EclipseModelImplementer extends AbstractJavaModelImplementer {
 	}
 
 	@Override
-	protected void implementMethodDefinition(MethodNode node) throws CoreException, EcException {
-		if(classDefinitionImplemented(node.getClassNode()) == false){
-			implementClassDefinition(node.getClassNode());
+	protected void implementMethodDefinition(MethodNode methodNode) throws CoreException, EcException {
+		if(!classDefinitionImplemented(methodNode.getClassNode())){
+			implementClassDefinition(methodNode.getClassNode());
 		}
-		IType classType = getJavaProject().findType(JavaUtils.getQualifiedName(node.getClassNode()));
-		if(classType != null){
-			classType.createMethod(methodDefinitionContent(node), null, false, null);
-			for(AbstractParameterNode parameter : node.getParameters()){
-				String type = parameter.getType();
-				if(JavaUtils.isUserType(type)){
-					String packageName = JavaUtils.getPackageName(type);
-					if(packageName.equals(JavaUtils.getPackageName(node.getClassNode())) == false){
-						classType.getCompilationUnit().createImport(type, null, null);
-					}
-				}
-			}
-		}
-		ICompilationUnit unit = classType.getCompilationUnit();
-		unit.becomeWorkingCopy(null);
-		unit.commitWorkingCopy(true, null);
+		EclipseMethodImplementer implementer = new EclipseMethodImplementer(fFileInfoProvider);
+		implementer.implementMethodDefinition(methodNode);
 	}
 
 	@Override
@@ -325,21 +311,9 @@ public class EclipseModelImplementer extends AbstractJavaModelImplementer {
 	}
 
 	@Override
-	protected boolean methodDefinitionImplemented(MethodNode node) {
-		try{
-			IType type = getJavaProject().findType(node.getClassNode().getName());
-			if(type == null){
-				return false;
-			}
-			EclipseModelBuilder builder = new EclipseModelBuilder();
-			for(IMethod method : type.getMethods()){
-				MethodNode model = builder.buildMethodModel(method);
-				if(model != null && model.getName().equals(node.getName()) && model.getParametersTypes().equals(node.getParametersTypes())){
-					return true;
-				}
-			}
-		}catch(CoreException e){SystemLogger.logCatch(e.getMessage());}
-		return false;
+	protected boolean methodDefinitionImplemented(MethodNode methodNode) {
+		EclipseMethodImplementer implementer = new EclipseMethodImplementer(fFileInfoProvider);
+		return implementer.methodDefinitionImplemented(methodNode);
 	}
 
 	@Override
