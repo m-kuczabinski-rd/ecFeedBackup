@@ -11,29 +11,46 @@ package com.testify.ecfeed.ui.common.external;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IJavaProject;
+import org.eclipse.jdt.core.IMethod;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
 
+import com.testify.ecfeed.model.MethodNode;
+import com.testify.ecfeed.ui.common.EclipseModelBuilder;
 import com.testify.ecfeed.ui.common.IFileInfoProvider;
 import com.testify.ecfeed.utils.ExceptionHelper;
+import com.testify.ecfeed.utils.SystemLogger;
 
 public class EclipseMethodImplementHelper implements IMethodImplementHelper {
 
 	public static final String EXCEPTION_FILE_INFO_PROVIDER_NOT_NULL = "File info provider must not be null.";
 	public static final String EXCEPTION_TYPE_IS_NULL = "Can not implement method. Type is null.";
 
+	final IFileInfoProvider fFileInfoProvider;
+	final String fClassQuafiedName;
+	final MethodNode fMethodNode;
 	final IType fClassType;
+
 
 	public EclipseMethodImplementHelper(
 			final IFileInfoProvider fileInfoProvider, 
-			final String classQuafiedName
-			) throws JavaModelException, CoreException {
+			final String classQuafiedName,
+			final MethodNode methodNode) {
 		if (fileInfoProvider == null) { 
 			ExceptionHelper.reportRuntimeException(EXCEPTION_FILE_INFO_PROVIDER_NOT_NULL);
 		}
 
-		final IType classType = getJavaProject(fileInfoProvider).findType(classQuafiedName);
+		fFileInfoProvider = fileInfoProvider;
+		fClassQuafiedName = classQuafiedName;
+		fMethodNode = methodNode;
+
+		IType classType = null;
+		try {
+			classType = getJavaProject(fileInfoProvider).findType(classQuafiedName);
+		} catch (CoreException e) {
+			ExceptionHelper.reportRuntimeException(e.getMessage());
+		}
 		if(classType == null){
 			ExceptionHelper.reportRuntimeException(EXCEPTION_TYPE_IS_NULL);
 		}
@@ -42,20 +59,55 @@ public class EclipseMethodImplementHelper implements IMethodImplementHelper {
 	}
 
 	@Override
-	public void createMethod(final String methodContent) throws JavaModelException {
-		fClassType.createMethod(methodContent, null, false, null);
+	public void createMethod(final String methodContent) {
+		try {
+			fClassType.createMethod(methodContent, null, false, null);
+		} catch (JavaModelException e) {
+			ExceptionHelper.reportRuntimeException(e.getMessage());
+		}
 	}
 
 	@Override
-	public void createImport(final String type) throws JavaModelException {
-		fClassType.getCompilationUnit().createImport(type, null, null);
+	public void createImport(final String type) {
+		try {
+			fClassType.getCompilationUnit().createImport(type, null, null);
+		} catch (JavaModelException e) {
+			ExceptionHelper.reportRuntimeException(e.getMessage());
+		}
 	}
 
 	@Override
-	public void commitChanges() throws JavaModelException {
+	public void commitChanges() {
 		final ICompilationUnit unit = fClassType.getCompilationUnit();
-		unit.becomeWorkingCopy(null);
-		unit.commitWorkingCopy(true, null);
+		try {
+			unit.becomeWorkingCopy(null);
+			unit.commitWorkingCopy(true, null);
+		} catch (JavaModelException e) {
+			ExceptionHelper.reportRuntimeException(e.getMessage());
+		}
+	}
+
+	public boolean methodDefinitionImplemented() {
+		try{
+			final IType type = getJavaProject(fFileInfoProvider).findType(fClassQuafiedName);
+			if(type == null){
+				return false;
+			}
+			final EclipseModelBuilder builder = new EclipseModelBuilder();
+			for(IMethod method : type.getMethods()){
+
+				final MethodNode model = builder.buildMethodModel(method);
+				if (model != null 
+						&& model.getName().equals(fMethodNode.getName()) 
+						&& model.getParametersTypes().equals(fMethodNode.getParametersTypes())){
+					return true;
+				}
+			}
+		}catch(CoreException e) { 
+			SystemLogger.logCatch(e.getMessage());
+		}
+
+		return false;
 	}
 
 	private IJavaProject getJavaProject(final IFileInfoProvider fileInfoProvider) throws CoreException{

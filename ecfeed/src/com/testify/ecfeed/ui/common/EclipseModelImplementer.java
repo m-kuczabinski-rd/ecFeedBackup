@@ -53,7 +53,9 @@ import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.MethodParameterNode;
 import com.testify.ecfeed.ui.common.external.AndroidUserClassImplementerExt;
 import com.testify.ecfeed.ui.common.external.EclipseClassImplementHelper;
+import com.testify.ecfeed.ui.common.external.EclipseMethodImplementHelper;
 import com.testify.ecfeed.ui.common.external.IClassImplementHelper;
+import com.testify.ecfeed.ui.common.external.IMethodImplementHelper;
 import com.testify.ecfeed.ui.common.external.ImplementerExt;
 import com.testify.ecfeed.ui.common.utils.EclipsePackageFragmentGetter;
 import com.testify.ecfeed.ui.common.utils.EclipseProjectHelper;
@@ -149,7 +151,7 @@ public class EclipseModelImplementer extends AbstractJavaModelImplementer {
 		if(!classDefinitionImplemented(methodNode.getClassNode())){
 			implementClassDefinition(methodNode.getClassNode());
 		}
-		EclipseMethodImplementer implementer = new EclipseMethodImplementer(fFileInfoProvider, methodNode);
+		MethodImplementer implementer = createMethodImplementer(methodNode);
 		implementer.implementMethodDefinition();
 	}
 
@@ -312,14 +314,7 @@ public class EclipseModelImplementer extends AbstractJavaModelImplementer {
 
 	@Override
 	protected boolean methodDefinitionImplemented(MethodNode methodNode) {
-		EclipseMethodImplementer implementer = null;
-
-		try {
-			implementer = new EclipseMethodImplementer(fFileInfoProvider, methodNode);
-		} catch (CoreException e) {
-			SystemLogger.logCatch(e.getMessage());
-		}
-
+		MethodImplementer implementer = createMethodImplementer(methodNode);
 		return implementer.methodDefinitionImplemented();
 	}
 
@@ -330,6 +325,15 @@ public class EclipseModelImplementer extends AbstractJavaModelImplementer {
 			return (type != null) && type.isEnum();
 		}catch(CoreException e){SystemLogger.logCatch(e.getMessage());}
 		return false;
+	}
+
+	private MethodImplementer createMethodImplementer(MethodNode methodNode) {
+		final String className = JavaUtils.getQualifiedName(methodNode.getClassNode());
+
+		IMethodImplementHelper fMethodImplementHelper = 
+				new EclipseMethodImplementHelper(fFileInfoProvider, className, methodNode);
+
+		return new MethodImplementer(fFileInfoProvider, methodNode, fMethodImplementHelper);
 	}
 
 	protected String methodDefinitionContent(MethodNode node){

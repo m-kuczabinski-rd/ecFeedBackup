@@ -8,11 +8,10 @@
 
 package com.testify.ecfeed.ui.common.external;
 
-import org.eclipse.jdt.core.JavaModelException;
-
 public interface IMethodImplementHelper {
 
-	void createMethod(final String methodContent) throws JavaModelException;
-	void createImport(final String type) throws JavaModelException;
-	void commitChanges() throws JavaModelException;
+	void createMethod(final String methodContent);
+	void createImport(final String type);
+	void commitChanges();
+	boolean methodDefinitionImplemented();
 }
