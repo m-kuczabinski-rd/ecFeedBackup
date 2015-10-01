@@ -8,12 +8,15 @@
 
 package com.testify.ecfeed.ui.common.external;
 
-
 public interface IAndroidFactoryExt {
 
 	public IDeviceCheckerExt createDeviceChecker();
 	public IApkInstallerExt createApkInstaller();
-	public IImplementerExt createImplementer(
-			String baseRunner, String projectPath, IClassImplementHelper classImplementHelper);
 	public ITestMethodInvokerExt createTestMethodInvoker(String androidRunner);
+
+	public IImplementerExt createCommonImplementer(
+			String baseRunner, String projectPath, IClassImplementHelper classImplementHelper);
+	public IImplementerExt createUserClassImplementer(
+			String projectPath,	String thePackage, 
+			String classNameWithoutExtension, IClassImplementHelper classImplementHelper);
 }

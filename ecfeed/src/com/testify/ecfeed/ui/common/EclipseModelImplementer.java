@@ -51,11 +51,13 @@ import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.GlobalParameterNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.MethodParameterNode;
+import com.testify.ecfeed.ui.common.external.AndroidUserClassImplementerExt;
 import com.testify.ecfeed.ui.common.external.EclipseClassImplementHelper;
 import com.testify.ecfeed.ui.common.external.IClassImplementHelper;
 import com.testify.ecfeed.ui.common.external.ImplementerExt;
 import com.testify.ecfeed.ui.common.utils.EclipsePackageFragmentGetter;
 import com.testify.ecfeed.ui.common.utils.EclipseProjectHelper;
+import com.testify.ecfeed.ui.common.utils.JavaTestingClassImplementer;
 import com.testify.ecfeed.utils.SystemLogger;
 
 public class EclipseModelImplementer extends AbstractJavaModelImplementer {
@@ -127,14 +129,19 @@ public class EclipseModelImplementer extends AbstractJavaModelImplementer {
 		IClassImplementHelper implementHelper = new EclipseClassImplementHelper(fFileInfoProvider);
 
 		JavaTestingClassImplementer implementer = null;
-		
+
+		String thePackage = JavaUtils.getPackageName(classNode.getName());
+		String classNameWithoutExtension = JavaUtils.getLocalName(classNode.getName());
+
 		if (classNode.getRunOnAndroid()) {
-			implementer = new AndroidTestingClassImplementer(classNode, projectPath, implementHelper);
+			AndroidUserClassImplementerExt.implementContent(
+					projectPath, thePackage, classNameWithoutExtension, implementHelper);
 		} else {
-			implementer = new JavaTestingClassImplementer(classNode, projectPath, implementHelper);
+			implementer = 
+					new JavaTestingClassImplementer(
+							projectPath, thePackage, classNameWithoutExtension, implementHelper);
+			implementer.implementContent();
 		}
-		
-		implementer.implementContent();
 	}
 
 	@Override

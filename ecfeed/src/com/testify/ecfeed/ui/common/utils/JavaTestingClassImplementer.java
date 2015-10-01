@@ -6,50 +6,38 @@
  * http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 
-package com.testify.ecfeed.ui.common;
+package com.testify.ecfeed.ui.common.utils;
 
-import com.testify.ecfeed.adapter.java.JavaUtils;
-import com.testify.ecfeed.android.utils.AndroidManifestAccessor;
-import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.ui.common.external.IClassImplementHelper;
-import com.testify.ecfeed.ui.common.utils.ClassImplementer;
 
 public class JavaTestingClassImplementer extends ClassImplementer {
 
-	ClassNode fClassNode;
-	String fUserPackageName;
-	String fTestingAppPackage;
+	private String fPackage;
+	private String fClassNameWithoutExtension;
 
 	public JavaTestingClassImplementer(
-			ClassNode classNode,
 			String projectPath,
+			String thePackage,
+			String classNameWithoutExtension,
 			IClassImplementHelper classImplementHelper) {
-		super(JavaUtils.getPackageName(classNode.getName()), 
-				JavaUtils.getLocalName(classNode.getName()), 
-				classImplementHelper);
-		fClassNode = classNode;
-		fUserPackageName = JavaUtils.getPackageName(classNode.getName());
-
-		AndroidManifestAccessor androidManifestAccesor = 
-				new AndroidManifestAccessor(projectPath);
-
-		fTestingAppPackage = androidManifestAccesor.getTestingAppPackage();
+		super(thePackage, classNameWithoutExtension, classImplementHelper);
+		fPackage = thePackage;
+		fClassNameWithoutExtension = classNameWithoutExtension; 
 	}
 
 	@Override
 	protected String createUnitContent() {
 		StringBuilder contentBuilder = new  StringBuilder();
 
-		contentBuilder.append("package " + fUserPackageName + ";\n\n");
+		contentBuilder.append("package " + fPackage + ";\n\n");
 
 		contentBuilder.append(createImportLine());
 
-		contentBuilder.append("public class " + JavaUtils.getLocalName(fClassNode) + " ");
+		contentBuilder.append("public class " + fClassNameWithoutExtension + " ");
 
 		contentBuilder.append(createExtendsClause());
 
 		contentBuilder.append("{\n\n");
-
 
 		contentBuilder.append(createSetupMethod());
 

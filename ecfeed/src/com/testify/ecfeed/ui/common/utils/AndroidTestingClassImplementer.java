@@ -6,23 +6,27 @@
  * http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 
-package com.testify.ecfeed.ui.common;
+package com.testify.ecfeed.ui.common.utils;
 
 import com.testify.ecfeed.android.utils.AndroidBaseRunnerHelper;
-import com.testify.ecfeed.model.ClassNode;
+import com.testify.ecfeed.android.utils.AndroidManifestAccessor;
 import com.testify.ecfeed.ui.common.external.IClassImplementHelper;
 
 public class AndroidTestingClassImplementer extends JavaTestingClassImplementer {
 
-	ClassNode fClassNode;
-	String fUserPackageName;
-	String fTestingAppPackage;
+	private String fTestingAppPackage;
 
 	public AndroidTestingClassImplementer(
-			ClassNode classNode,
 			String projectPath,
+			String thePackage,
+			String classNameWithoutExtension,
 			IClassImplementHelper classImplementHelper) {
-		super(classNode, projectPath, classImplementHelper);
+		super(projectPath, thePackage, classNameWithoutExtension, classImplementHelper);
+
+		AndroidManifestAccessor androidManifestAccesor =
+				new AndroidManifestAccessor(projectPath);
+
+		fTestingAppPackage = androidManifestAccesor.getTestingAppPackage();
 	}
 
 	@Override
