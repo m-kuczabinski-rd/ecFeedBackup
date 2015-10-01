@@ -10,12 +10,12 @@ package com.testify.ecfeed.ui.common.utils;
 
 import com.testify.ecfeed.ui.common.external.IClassImplementHelper;
 
-public class JavaTestingClassImplementer extends ClassImplementer {
+public class JavaUserClassImplementer extends ClassImplementer {
 
 	private String fPackage;
 	private String fClassNameWithoutExtension;
 
-	public JavaTestingClassImplementer(
+	public JavaUserClassImplementer(
 			String projectPath,
 			String thePackage,
 			String classNameWithoutExtension,

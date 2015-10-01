@@ -12,7 +12,7 @@ import com.testify.ecfeed.android.utils.AndroidBaseRunnerHelper;
 import com.testify.ecfeed.android.utils.AndroidManifestAccessor;
 import com.testify.ecfeed.ui.common.external.IClassImplementHelper;
 
-public class AndroidTestingClassImplementer extends JavaTestingClassImplementer {
+public class AndroidTestingClassImplementer extends JavaUserClassImplementer {
 
 	private String fTestingAppPackage;
 

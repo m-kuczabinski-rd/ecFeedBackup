@@ -57,7 +57,7 @@ import com.testify.ecfeed.ui.common.external.IClassImplementHelper;
 import com.testify.ecfeed.ui.common.external.ImplementerExt;
 import com.testify.ecfeed.ui.common.utils.EclipsePackageFragmentGetter;
 import com.testify.ecfeed.ui.common.utils.EclipseProjectHelper;
-import com.testify.ecfeed.ui.common.utils.JavaTestingClassImplementer;
+import com.testify.ecfeed.ui.common.utils.JavaUserClassImplementer;
 import com.testify.ecfeed.utils.SystemLogger;
 
 public class EclipseModelImplementer extends AbstractJavaModelImplementer {
@@ -128,7 +128,7 @@ public class EclipseModelImplementer extends AbstractJavaModelImplementer {
 		String projectPath = EclipseProjectHelper.getProjectPath(fFileInfoProvider);
 		IClassImplementHelper implementHelper = new EclipseClassImplementHelper(fFileInfoProvider);
 
-		JavaTestingClassImplementer implementer = null;
+		JavaUserClassImplementer implementer = null;
 
 		String thePackage = JavaUtils.getPackageName(classNode.getName());
 		String classNameWithoutExtension = JavaUtils.getLocalName(classNode.getName());
@@ -138,7 +138,7 @@ public class EclipseModelImplementer extends AbstractJavaModelImplementer {
 					projectPath, thePackage, classNameWithoutExtension, implementHelper);
 		} else {
 			implementer = 
-					new JavaTestingClassImplementer(
+					new JavaUserClassImplementer(
 							projectPath, thePackage, classNameWithoutExtension, implementHelper);
 			implementer.implementContent();
 		}
