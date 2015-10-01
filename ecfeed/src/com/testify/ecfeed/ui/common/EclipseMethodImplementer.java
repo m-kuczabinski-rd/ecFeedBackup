@@ -11,55 +11,68 @@ package com.testify.ecfeed.ui.common;
 import java.util.List;
 
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IMethod;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaCore;
+import org.eclipse.jdt.core.JavaModelException;
 
 import com.testify.ecfeed.adapter.java.JavaUtils;
 import com.testify.ecfeed.generators.api.EcException;
 import com.testify.ecfeed.model.AbstractParameterNode;
 import com.testify.ecfeed.model.MethodNode;
+import com.testify.ecfeed.ui.common.external.EclipseMethodImplementHelper;
+import com.testify.ecfeed.ui.common.external.IMethodImplementHelper;
 import com.testify.ecfeed.utils.SystemLogger;
 
 public class EclipseMethodImplementer {
 
 	private final IFileInfoProvider fFileInfoProvider;
+	private final IMethodImplementHelper fMethodImplementHelper;
+	private final MethodNode fMethodNode;
 
-	EclipseMethodImplementer(final IFileInfoProvider fileInfoProvider) {
+	EclipseMethodImplementer(
+			final IFileInfoProvider fileInfoProvider,
+			final MethodNode methodNode
+			) throws JavaModelException, CoreException {
 		fFileInfoProvider = fileInfoProvider;
+		fMethodNode = methodNode;
+
+		final String className = JavaUtils.getQualifiedName(methodNode.getClassNode());
+		fMethodImplementHelper = new EclipseMethodImplementHelper(fileInfoProvider, className);
 	}
 
-	public void implementMethodDefinition(MethodNode node) throws CoreException, EcException {
-		IType classType = getJavaProject().findType(JavaUtils.getQualifiedName(node.getClassNode()));
-		if(classType != null){
-			classType.createMethod(methodDefinitionContent(node), null, false, null);
-			for(AbstractParameterNode parameter : node.getParameters()){
-				String type = parameter.getType();
-				if(JavaUtils.isUserType(type)){
-					String packageName = JavaUtils.getPackageName(type);
-					if(packageName.equals(JavaUtils.getPackageName(node.getClassNode())) == false){
-						classType.getCompilationUnit().createImport(type, null, null);
-					}
+	public void implementMethodDefinition() throws CoreException, EcException {
+		fMethodImplementHelper.createMethod(methodDefinitionContent(fMethodNode));
+		createImportsForUserParams(fMethodNode);
+		fMethodImplementHelper.commitChanges();
+	}
+
+	private void createImportsForUserParams(MethodNode methodNode) throws JavaModelException {
+		for(AbstractParameterNode parameter : methodNode.getParameters()){
+			final String type = parameter.getType();
+			if(JavaUtils.isUserType(type)){
+				final String packageName = JavaUtils.getPackageName(type);
+				if(packageName.equals(JavaUtils.getPackageName(methodNode.getClassNode())) == false){
+					fMethodImplementHelper.createImport(type);
 				}
 			}
 		}
-		ICompilationUnit unit = classType.getCompilationUnit();
-		unit.becomeWorkingCopy(null);
-		unit.commitWorkingCopy(true, null);
 	}
 
-	public boolean methodDefinitionImplemented(MethodNode node) {
+	public boolean methodDefinitionImplemented() {
 		try{
-			IType type = getJavaProject().findType(node.getClassNode().getName());
+			final IType type = getJavaProject().findType(fMethodNode.getClassNode().getName());
 			if(type == null){
 				return false;
 			}
-			EclipseModelBuilder builder = new EclipseModelBuilder();
+			final EclipseModelBuilder builder = new EclipseModelBuilder();
 			for(IMethod method : type.getMethods()){
-				MethodNode model = builder.buildMethodModel(method);
-				if(model != null && model.getName().equals(node.getName()) && model.getParametersTypes().equals(node.getParametersTypes())){
+
+				final MethodNode model = builder.buildMethodModel(method);
+				if (model != null 
+						&& model.getName().equals(fMethodNode.getName()) 
+						&& model.getParametersTypes().equals(fMethodNode.getParametersTypes())){
 					return true;
 				}
 			}
@@ -67,7 +80,7 @@ public class EclipseMethodImplementer {
 		return false;
 	}
 
-	private String methodDefinitionContent(MethodNode node){
+	private String methodDefinitionContent(final MethodNode node){
 		String methodSignature = "public void " + node.getName() + "(" + getMethodArgs(node) +")"; 
 
 		String methodBody =	
@@ -79,7 +92,7 @@ public class EclipseMethodImplementer {
 		return methodSignature + methodBody;
 	}
 
-	private String createLoggingInstruction(MethodNode methodNode) {
+	private String createLoggingInstruction(final MethodNode methodNode) {
 		String result = "";
 
 		if (methodNode.getRunOnAndroid()) {
@@ -106,7 +119,7 @@ public class EclipseMethodImplementer {
 		return result + "\")\");"; 
 	}
 
-	private String getMethodArgs(MethodNode node) {
+	private String getMethodArgs(final MethodNode node) {
 		List<AbstractParameterNode> parameters = node.getParameters();
 
 		if(parameters.size() == 0) {

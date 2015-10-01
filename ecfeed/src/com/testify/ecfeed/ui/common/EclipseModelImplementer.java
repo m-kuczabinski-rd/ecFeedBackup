@@ -149,8 +149,8 @@ public class EclipseModelImplementer extends AbstractJavaModelImplementer {
 		if(!classDefinitionImplemented(methodNode.getClassNode())){
 			implementClassDefinition(methodNode.getClassNode());
 		}
-		EclipseMethodImplementer implementer = new EclipseMethodImplementer(fFileInfoProvider);
-		implementer.implementMethodDefinition(methodNode);
+		EclipseMethodImplementer implementer = new EclipseMethodImplementer(fFileInfoProvider, methodNode);
+		implementer.implementMethodDefinition();
 	}
 
 	@Override
@@ -312,8 +312,15 @@ public class EclipseModelImplementer extends AbstractJavaModelImplementer {
 
 	@Override
 	protected boolean methodDefinitionImplemented(MethodNode methodNode) {
-		EclipseMethodImplementer implementer = new EclipseMethodImplementer(fFileInfoProvider);
-		return implementer.methodDefinitionImplemented(methodNode);
+		EclipseMethodImplementer implementer = null;
+
+		try {
+			implementer = new EclipseMethodImplementer(fFileInfoProvider, methodNode);
+		} catch (CoreException e) {
+			SystemLogger.logCatch(e.getMessage());
+		}
+
+		return implementer.methodDefinitionImplemented();
 	}
 
 	@Override
