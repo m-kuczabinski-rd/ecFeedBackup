@@ -57,6 +57,8 @@ import com.testify.ecfeed.ui.common.external.EclipseMethodImplementHelper;
 import com.testify.ecfeed.ui.common.external.IClassImplementHelper;
 import com.testify.ecfeed.ui.common.external.IMethodImplementHelper;
 import com.testify.ecfeed.ui.common.external.ImplementerExt;
+import com.testify.ecfeed.ui.common.utils.AbstractMethodImplementer;
+import com.testify.ecfeed.ui.common.utils.AndroidMethodImplementer;
 import com.testify.ecfeed.ui.common.utils.EclipsePackageFragmentGetter;
 import com.testify.ecfeed.ui.common.utils.EclipseProjectHelper;
 import com.testify.ecfeed.ui.common.utils.JavaUserClassImplementer;
@@ -332,9 +334,9 @@ public class EclipseModelImplementer extends AbstractJavaModelImplementer {
 				new EclipseMethodImplementHelper(fFileInfoProvider, className, methodNode);
 
 		if (methodNode.getRunOnAndroid()) {
-			return new AndroidMethodImplementer(fFileInfoProvider, methodNode, fMethodImplementHelper);
+			return new AndroidMethodImplementer(methodNode, fMethodImplementHelper);
 		} else {
-			return new JavaMethodImplementer(fFileInfoProvider, methodNode, fMethodImplementHelper);
+			return new JavaMethodImplementer(methodNode, fMethodImplementHelper);
 		}
 	}
 

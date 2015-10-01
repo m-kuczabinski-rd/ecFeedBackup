@@ -6,7 +6,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 
-package com.testify.ecfeed.ui.common;
+package com.testify.ecfeed.ui.common.utils;
 
 import java.util.List;
 
@@ -20,8 +20,7 @@ public abstract class AbstractMethodImplementer {
 	private IMethodImplementHelper fMethodImplementHelper = null;
 	private final MethodNode fMethodNode;
 
-	AbstractMethodImplementer(
-			final IFileInfoProvider fileInfoProvider,
+	public AbstractMethodImplementer(
 			final MethodNode methodNode,
 			IMethodImplementHelper methodImplementHelper) {
 		fMethodNode = methodNode;
@@ -82,7 +81,7 @@ public abstract class AbstractMethodImplementer {
 
 		return result + "\")\");"; 
 	}
-	
+
 	protected abstract String createLoggingInstructionPrefix(String methodName);
 
 	private String getMethodArgs(final MethodNode node) {

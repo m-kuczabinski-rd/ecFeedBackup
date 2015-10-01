@@ -10,12 +10,13 @@ package com.testify.ecfeed.ui.common;
 
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.ui.common.external.IMethodImplementHelper;
+import com.testify.ecfeed.ui.common.utils.AbstractMethodImplementer;
 
 public class JavaMethodImplementer extends AbstractMethodImplementer {
 
-	JavaMethodImplementer(IFileInfoProvider fileInfoProvider,
+	JavaMethodImplementer(
 			MethodNode methodNode, IMethodImplementHelper methodImplementHelper) {
-		super(fileInfoProvider, methodNode, methodImplementHelper);
+		super(methodNode, methodImplementHelper);
 	}
 
 	protected String createLoggingInstructionPrefix(String methodName) {
