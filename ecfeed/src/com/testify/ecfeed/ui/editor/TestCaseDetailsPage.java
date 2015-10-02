@@ -21,13 +21,13 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 
-import com.testify.ecfeed.generators.api.EcException;
 import com.testify.ecfeed.model.AbstractNode;
 import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.ui.common.IFileInfoProvider;
 import com.testify.ecfeed.ui.editor.utils.ExceptionCatchDialog;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 import com.testify.ecfeed.ui.modelif.TestCaseInterface;
+import com.testify.ecfeed.utils.EcException;
 
 public class TestCaseDetailsPage extends BasicDetailsPage {
 

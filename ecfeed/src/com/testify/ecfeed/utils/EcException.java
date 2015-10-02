@@ -6,9 +6,8 @@
  * http://www.eclipse.org/legal/epl-v10.html                                     
  ******************************************************************************/
 
-package com.testify.ecfeed.generators.api;
+package com.testify.ecfeed.utils;
 
-import com.testify.ecfeed.utils.SystemLogger;
 
 public class EcException extends Exception {
 

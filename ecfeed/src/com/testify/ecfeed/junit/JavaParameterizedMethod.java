@@ -15,9 +15,9 @@ import java.lang.reflect.Method;
 import java.util.Collection;
 
 import com.testify.ecfeed.adapter.java.ModelClassLoader;
-import com.testify.ecfeed.generators.api.EcException;
 import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.runner.Messages;
+import com.testify.ecfeed.utils.EcException;
 
 public class JavaParameterizedMethod extends AbstractFrameworkMethod {
 

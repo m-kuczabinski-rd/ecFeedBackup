@@ -50,7 +50,6 @@ import com.testify.ecfeed.external.IImplementerExt;
 import com.testify.ecfeed.external.IMethodImplementHelper;
 import com.testify.ecfeed.external.IProjectHelper;
 import com.testify.ecfeed.external.ImplementerExt;
-import com.testify.ecfeed.generators.api.EcException;
 import com.testify.ecfeed.model.AbstractNode;
 import com.testify.ecfeed.model.AbstractParameterNode;
 import com.testify.ecfeed.model.ChoiceNode;
@@ -61,6 +60,7 @@ import com.testify.ecfeed.model.MethodParameterNode;
 import com.testify.ecfeed.ui.common.utils.EclipsePackageFragmentGetter;
 import com.testify.ecfeed.ui.common.utils.EclipseProjectHelper;
 import com.testify.ecfeed.ui.common.utils.JavaUserClassImplementer;
+import com.testify.ecfeed.utils.EcException;
 import com.testify.ecfeed.utils.SystemLogger;
 
 public class EclipseModelImplementer extends AbstractJavaModelImplementer {

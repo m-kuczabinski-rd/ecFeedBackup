@@ -17,12 +17,12 @@ import java.util.Arrays;
 import com.testify.ecfeed.adapter.EImplementationStatus;
 import com.testify.ecfeed.adapter.IModelOperation;
 import com.testify.ecfeed.adapter.operations.TestCaseOperationUpdateTestData;
-import com.testify.ecfeed.generators.api.EcException;
 import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.ui.common.IFileInfoProvider;
 import com.testify.ecfeed.ui.common.Messages;
+import com.testify.ecfeed.utils.EcException;
 
 public class TestCaseInterface extends AbstractNodeInterface {
 

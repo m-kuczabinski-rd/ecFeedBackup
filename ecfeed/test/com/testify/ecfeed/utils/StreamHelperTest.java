@@ -11,8 +11,6 @@ package com.testify.ecfeed.utils;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 
-import com.testify.ecfeed.generators.api.EcException;
-
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;

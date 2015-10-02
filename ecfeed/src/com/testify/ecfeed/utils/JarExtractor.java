@@ -15,8 +15,6 @@ import java.util.Enumeration;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
-import com.testify.ecfeed.generators.api.EcException;
-
 public class JarExtractor {
 
 	public static String getFileContent(String filePathName, String jarPathName) {

@@ -8,7 +8,7 @@
 
 package com.testify.ecfeed.external;
 
-import com.testify.ecfeed.generators.api.EcException;
+import com.testify.ecfeed.utils.EcException;
 
 public class ImplementerExt {
 

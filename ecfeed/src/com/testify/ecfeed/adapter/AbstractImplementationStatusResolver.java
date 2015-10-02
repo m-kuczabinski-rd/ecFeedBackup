@@ -13,7 +13,6 @@ package com.testify.ecfeed.adapter;
 
 import java.util.List;
 
-import com.testify.ecfeed.generators.api.EcException;
 import com.testify.ecfeed.model.AbstractNode;
 import com.testify.ecfeed.model.AbstractParameterNode;
 import com.testify.ecfeed.model.ChoiceNode;
@@ -26,6 +25,7 @@ import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.MethodParameterNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.TestCaseNode;
+import com.testify.ecfeed.utils.EcException;
 import com.testify.ecfeed.utils.SystemLogger;
 
 public abstract class AbstractImplementationStatusResolver implements

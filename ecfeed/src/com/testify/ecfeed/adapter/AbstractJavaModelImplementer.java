@@ -8,9 +8,9 @@
 
 package com.testify.ecfeed.adapter;
 
-import com.testify.ecfeed.generators.api.EcException;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.MethodNode;
+import com.testify.ecfeed.utils.EcException;
 
 public abstract class AbstractJavaModelImplementer extends AbstractModelImplementer {
 
