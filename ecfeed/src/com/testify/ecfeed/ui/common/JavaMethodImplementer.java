@@ -19,6 +19,7 @@ public class JavaMethodImplementer extends AbstractMethodImplementer {
 		super(methodNode, methodImplementHelper);
 	}
 
+	@Override
 	protected String createLoggingInstructionPrefix(String methodName) {
 		return "System.out.println(\"" + methodName + "(";
 	}

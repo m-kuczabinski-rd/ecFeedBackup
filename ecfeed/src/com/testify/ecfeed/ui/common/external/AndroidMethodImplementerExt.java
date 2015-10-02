@@ -6,19 +6,16 @@
  * http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 
-package com.testify.ecfeed.ui.common.utils;
+package com.testify.ecfeed.ui.common.external;
 
 import com.testify.ecfeed.model.MethodNode;
-import com.testify.ecfeed.ui.common.external.IMethodImplementHelper;
 
-public class AndroidMethodImplementer extends AbstractMethodImplementer {
+public class AndroidMethodImplementerExt { 
 
-	public AndroidMethodImplementer(
-			MethodNode methodNode, IMethodImplementHelper methodImplementHelper) {
-		super(methodNode, methodImplementHelper);
-	}
-
-	protected String createLoggingInstructionPrefix(String methodName) {
-		return "android.util.Log.d(\"ecFeed\", \"" + methodName + "(";
+	public static IImplementerExt createImplementer(
+			final MethodNode methodNode, final IMethodImplementHelper methodImplementHelper) {
+		final IAndroidFactoryExt androidFactory = AndroidFactoryDistributorExt.getFactory();
+		return androidFactory.createAndroidMethodImplementer(methodNode, methodImplementHelper);
 	}
 }
+

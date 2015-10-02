@@ -51,14 +51,14 @@ import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.GlobalParameterNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.MethodParameterNode;
+import com.testify.ecfeed.ui.common.external.AndroidMethodImplementerExt;
 import com.testify.ecfeed.ui.common.external.AndroidUserClassImplementerExt;
 import com.testify.ecfeed.ui.common.external.EclipseClassImplementHelper;
 import com.testify.ecfeed.ui.common.external.EclipseMethodImplementHelper;
 import com.testify.ecfeed.ui.common.external.IClassImplementHelper;
+import com.testify.ecfeed.ui.common.external.IImplementerExt;
 import com.testify.ecfeed.ui.common.external.IMethodImplementHelper;
 import com.testify.ecfeed.ui.common.external.ImplementerExt;
-import com.testify.ecfeed.ui.common.utils.AbstractMethodImplementer;
-import com.testify.ecfeed.ui.common.utils.AndroidMethodImplementer;
 import com.testify.ecfeed.ui.common.utils.EclipsePackageFragmentGetter;
 import com.testify.ecfeed.ui.common.utils.EclipseProjectHelper;
 import com.testify.ecfeed.ui.common.utils.JavaUserClassImplementer;
@@ -151,8 +151,8 @@ public class EclipseModelImplementer extends AbstractJavaModelImplementer {
 		if(!classDefinitionImplemented(methodNode.getClassNode())){
 			implementClassDefinition(methodNode.getClassNode());
 		}
-		AbstractMethodImplementer implementer = createMethodImplementer(methodNode);
-		implementer.implementMethodDefinition();
+		IImplementerExt methodImplementer = createMethodImplementer(methodNode);
+		methodImplementer.implementContent();
 	}
 
 	@Override
@@ -314,8 +314,8 @@ public class EclipseModelImplementer extends AbstractJavaModelImplementer {
 
 	@Override
 	protected boolean methodDefinitionImplemented(MethodNode methodNode) {
-		AbstractMethodImplementer implementer = createMethodImplementer(methodNode);
-		return implementer.methodDefinitionImplemented();
+		IImplementerExt methodImplementer = createMethodImplementer(methodNode);
+		return methodImplementer.contentImplemented();
 	}
 
 	@Override
@@ -327,14 +327,14 @@ public class EclipseModelImplementer extends AbstractJavaModelImplementer {
 		return false;
 	}
 
-	private AbstractMethodImplementer createMethodImplementer(MethodNode methodNode) {
+	private IImplementerExt createMethodImplementer(MethodNode methodNode) {
 		final String className = JavaUtils.getQualifiedName(methodNode.getClassNode());
 
 		IMethodImplementHelper fMethodImplementHelper = 
 				new EclipseMethodImplementHelper(fFileInfoProvider, className, methodNode);
 
 		if (methodNode.getRunOnAndroid()) {
-			return new AndroidMethodImplementer(methodNode, fMethodImplementHelper);
+			return AndroidMethodImplementerExt.createImplementer(methodNode, fMethodImplementHelper);
 		} else {
 			return new JavaMethodImplementer(methodNode, fMethodImplementHelper);
 		}
