@@ -26,6 +26,8 @@ import org.eclipse.swt.widgets.Display;
 
 import com.testify.ecfeed.adapter.java.ILoaderProvider;
 import com.testify.ecfeed.adapter.java.ModelClassLoader;
+import com.testify.ecfeed.external.ApkInstallerExt;
+import com.testify.ecfeed.external.DeviceCheckerExt;
 import com.testify.ecfeed.generators.api.IConstraint;
 import com.testify.ecfeed.generators.api.IGenerator;
 import com.testify.ecfeed.model.MethodNode;
@@ -35,8 +37,6 @@ import com.testify.ecfeed.runner.RunnerException;
 import com.testify.ecfeed.ui.common.EclipseLoaderProvider;
 import com.testify.ecfeed.ui.common.IFileInfoProvider;
 import com.testify.ecfeed.ui.common.Messages;
-import com.testify.ecfeed.ui.common.external.ApkInstallerExt;
-import com.testify.ecfeed.ui.common.external.DeviceCheckerExt;
 import com.testify.ecfeed.ui.dialogs.ExecuteOnlineSetupDialog;
 import com.testify.ecfeed.ui.dialogs.GeneratorProgressMonitorDialog;
 import com.testify.ecfeed.ui.modelif.external.ITestMethodInvoker;

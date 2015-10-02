@@ -6,7 +6,7 @@
  * http://www.eclipse.org/legal/epl-v10.html                                     
  ******************************************************************************/
 
-package com.testify.ecfeed.ui.common.external;
+package com.testify.ecfeed.ui.common;
 
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
@@ -17,8 +17,7 @@ import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
 
-import com.testify.ecfeed.ui.common.IFileInfoProvider;
-import com.testify.ecfeed.ui.common.external.IClassImplementHelper;
+import com.testify.ecfeed.external.IClassImplementHelper;
 import com.testify.ecfeed.ui.common.utils.EclipsePackageFragmentGetter;
 import com.testify.ecfeed.utils.ExceptionHelper;
 import com.testify.ecfeed.utils.PackageClassHelper;

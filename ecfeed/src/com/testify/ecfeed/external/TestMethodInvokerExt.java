@@ -1,15 +1,19 @@
 /*******************************************************************************
- * Copyright (c) 2015 Testify AS.
+ * Copyright (c) 2015 Testify AS..
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 
-package com.testify.ecfeed.ui.common.external;
+package com.testify.ecfeed.external;
 
-public interface IImplementerExt {
+import com.testify.ecfeed.ui.modelif.external.ITestMethodInvoker;
 
-	void implementContent();
-	boolean contentImplemented();
+public class TestMethodInvokerExt {
+
+	public static ITestMethodInvoker createInvoker(final String androidRunner) {
+		final IAndroidFactoryExt androidFactory = AndroidFactoryDistributorExt.getFactory();
+		return androidFactory.createTestMethodInvoker(androidRunner);
+	}
 }

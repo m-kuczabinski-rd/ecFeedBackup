@@ -6,12 +6,14 @@
  * http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 
-package com.testify.ecfeed.ui.common.external;
+package com.testify.ecfeed.external;
 
-public interface IMethodImplementHelper {
 
-	void createMethod(final String methodContent);
-	void createImport(final String type);
-	void commitChanges();
-	boolean methodDefinitionImplemented();
+public class DeviceCheckerExt {
+
+	public static void checkIfOneDeviceAttached() {
+		final IAndroidFactoryExt androidFactory = AndroidFactoryDistributorExt.getFactory();
+		final IDeviceCheckerExt deviceChecker = androidFactory.createDeviceChecker();
+		deviceChecker.checkIfOneDeviceAttached();
+	}
 }

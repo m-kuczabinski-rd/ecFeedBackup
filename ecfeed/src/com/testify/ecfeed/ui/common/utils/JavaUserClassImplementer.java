@@ -8,7 +8,7 @@
 
 package com.testify.ecfeed.ui.common.utils;
 
-import com.testify.ecfeed.ui.common.external.IClassImplementHelper;
+import com.testify.ecfeed.external.IClassImplementHelper;
 
 public class JavaUserClassImplementer extends ClassImplementer {
 

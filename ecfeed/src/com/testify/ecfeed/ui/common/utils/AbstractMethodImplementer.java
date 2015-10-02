@@ -11,10 +11,10 @@ package com.testify.ecfeed.ui.common.utils;
 import java.util.List;
 
 import com.testify.ecfeed.adapter.java.JavaUtils;
+import com.testify.ecfeed.external.IImplementerExt;
+import com.testify.ecfeed.external.IMethodImplementHelper;
 import com.testify.ecfeed.model.AbstractParameterNode;
 import com.testify.ecfeed.model.MethodNode;
-import com.testify.ecfeed.ui.common.external.IImplementerExt;
-import com.testify.ecfeed.ui.common.external.IMethodImplementHelper;
 
 public abstract class AbstractMethodImplementer implements IImplementerExt {
 

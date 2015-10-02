@@ -8,8 +8,8 @@
 
 package com.testify.ecfeed.ui.common;
 
+import com.testify.ecfeed.external.IMethodImplementHelper;
 import com.testify.ecfeed.model.MethodNode;
-import com.testify.ecfeed.ui.common.external.IMethodImplementHelper;
 import com.testify.ecfeed.ui.common.utils.AbstractMethodImplementer;
 
 public class JavaMethodImplementer extends AbstractMethodImplementer {

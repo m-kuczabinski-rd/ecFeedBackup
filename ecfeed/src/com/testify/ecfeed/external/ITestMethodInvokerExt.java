@@ -6,11 +6,9 @@
  * http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 
-package com.testify.ecfeed.ui.common.external;
+package com.testify.ecfeed.external;
 
-public interface IClassImplementHelper {
+import com.testify.ecfeed.ui.modelif.external.ITestMethodInvoker;
 
-	boolean classImplemented(String thePackage, String classNameWithoutExtension);
-	boolean classImplemented(String thePackage, String classNameWithoutExtension, String superclassName);
-	void implementClass(String thePackage,String classNameWithoutExtension,String content);
+public interface ITestMethodInvokerExt extends ITestMethodInvoker{ 
 }

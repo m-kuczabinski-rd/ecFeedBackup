@@ -6,9 +6,10 @@
  * http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 
-package com.testify.ecfeed.ui.common.external;
+package com.testify.ecfeed.external;
 
 import com.testify.ecfeed.generators.api.EcException;
+import com.testify.ecfeed.ui.common.EclipseClassImplementHelper;
 import com.testify.ecfeed.ui.common.IFileInfoProvider;
 import com.testify.ecfeed.ui.common.utils.EclipseProjectHelper;
 

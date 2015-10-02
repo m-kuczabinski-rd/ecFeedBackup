@@ -6,9 +6,11 @@
  * http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 
-package com.testify.ecfeed.ui.common.external;
+package com.testify.ecfeed.external;
 
-import com.testify.ecfeed.ui.modelif.external.ITestMethodInvoker;
+import java.lang.reflect.InvocationTargetException;
 
-public interface ITestMethodInvokerExt extends ITestMethodInvoker{ 
+public interface IApkInstallerExt {
+
+	public void installApplicationsIfModified(String testedApk, String testingApk) throws InvocationTargetException;
 }
