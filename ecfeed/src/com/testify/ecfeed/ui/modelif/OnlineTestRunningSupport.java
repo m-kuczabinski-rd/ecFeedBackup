@@ -37,6 +37,7 @@ import com.testify.ecfeed.runner.RunnerException;
 import com.testify.ecfeed.ui.common.EclipseLoaderProvider;
 import com.testify.ecfeed.ui.common.IFileInfoProvider;
 import com.testify.ecfeed.ui.common.Messages;
+import com.testify.ecfeed.ui.common.utils.EclipseProjectHelper;
 import com.testify.ecfeed.ui.dialogs.ExecuteOnlineSetupDialog;
 import com.testify.ecfeed.ui.dialogs.GeneratorProgressMonitorDialog;
 import com.testify.ecfeed.ui.modelif.external.ITestMethodInvoker;
@@ -73,7 +74,8 @@ public class OnlineTestRunningSupport extends TestExecutionSupport{
 			try{
 				if (fRunOnAndroid) {
 					DeviceCheckerExt.checkIfOneDeviceAttached();
-					ApkInstallerExt.installApplicationsIfModified(fFileInfoProvider);
+					EclipseProjectHelper projectHelper = new EclipseProjectHelper(fFileInfoProvider); 
+					new ApkInstallerExt(projectHelper).installApplicationsIfModified();
 				}
 
 				setProgressMonitor(progressMonitor);
@@ -148,7 +150,8 @@ public class OnlineTestRunningSupport extends TestExecutionSupport{
 				DeviceCheckerExt.checkIfOneDeviceAttached();
 
 				try {
-					ApkInstallerExt.installApplicationsIfModified(fFileInfoProvider);
+					EclipseProjectHelper projectHelper = new EclipseProjectHelper(fFileInfoProvider); 
+					new ApkInstallerExt(projectHelper).installApplicationsIfModified();
 				} catch (InvocationTargetException e) {
 					SystemLogger.logCatch(e.getMessage());
 				}

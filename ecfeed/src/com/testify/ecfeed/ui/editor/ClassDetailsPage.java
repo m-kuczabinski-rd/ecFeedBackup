@@ -122,7 +122,7 @@ public class ClassDetailsPage extends BasicDetailsPage {
 	public ClassDetailsPage(ModelMasterSection masterSection, IModelUpdateContext updateContext, IFileInfoProvider fileInfoProvider) {
 		super(masterSection, updateContext, fileInfoProvider);
 		fFileInfoProvider = fileInfoProvider;
-		fIsAndroidProject = EclipseProjectHelper.isAndroidProject(fFileInfoProvider);
+		fIsAndroidProject = new EclipseProjectHelper(fFileInfoProvider).isAndroidProject();
 		fClassIf = new ClassInterface(this, fFileInfoProvider);
 	}
 
@@ -238,7 +238,7 @@ public class ClassDetailsPage extends BasicDetailsPage {
 	private void fillAndroidBaseRunnerCombo() {
 		String projectPath = null;
 		try {
-			projectPath = EclipseProjectHelper.getProjectPath(fFileInfoProvider);
+			projectPath = new EclipseProjectHelper(fFileInfoProvider).getProjectPath();
 
 			List<String> runners = fClassIf.createRunnerList(projectPath);
 

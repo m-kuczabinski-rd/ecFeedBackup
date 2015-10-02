@@ -10,31 +10,34 @@ package com.testify.ecfeed.external;
 
 import java.lang.reflect.InvocationTargetException;
 
-import com.testify.ecfeed.ui.common.IFileInfoProvider;
 import com.testify.ecfeed.ui.common.Messages;
-import com.testify.ecfeed.ui.common.utils.EclipseProjectHelper;
 import com.testify.ecfeed.utils.ExceptionHelper;
 
 public class ApkInstallerExt { 
 
-	public static void installApplicationsIfModified(
-			IFileInfoProvider fileInfoProvider) throws InvocationTargetException {
+	private IProjectHelper fProjectHelper;
+	
+	public ApkInstallerExt(IProjectHelper projectHelper) {
+		fProjectHelper = projectHelper;
+	}
+	
+	public void installApplicationsIfModified() throws InvocationTargetException {
 
-		if (EclipseProjectHelper.isNoInstallDevelopmentHook(fileInfoProvider)) {
+		if (fProjectHelper.isNoInstallDevelopmentHook()) {
 			return;
 		}
 
 		final IAndroidFactoryExt androidFactory = AndroidFactoryDistributorExt.getFactory();
 		final IApkInstallerExt apkInstaller = androidFactory.createApkInstaller();
 
-		final String testingApk = getTestingApkPathAndName(fileInfoProvider);
-		final String testedApk = getTestedApkPathAndName(fileInfoProvider);
+		final String testingApk = getTestingApkPathAndName();
+		final String testedApk = getTestedApkPathAndName();
 
 		apkInstaller.installApplicationsIfModified(testedApk, testingApk);
 	}
 
-	private static String getTestingApkPathAndName(final IFileInfoProvider fileInfoProvider) {
-		final String testingApk = EclipseProjectHelper.getApkPathAndName(fileInfoProvider);
+	private String getTestingApkPathAndName() {
+		final String testingApk = fProjectHelper.getApkPathAndName();
 
 		if (testingApk == null) {
 			ExceptionHelper.reportRuntimeException(Messages.EXCEPTION_CAN_NOT_INSTALL_APK_FILE);
@@ -43,8 +46,8 @@ public class ApkInstallerExt {
 		return testingApk;
 	}
 
-	private static String getTestedApkPathAndName(final IFileInfoProvider fileInfoProvider) {
-		final String testedApk = EclipseProjectHelper.getReferencedApkPathAndName(fileInfoProvider);
+	private String getTestedApkPathAndName() {
+		final String testedApk = fProjectHelper.getReferencedApkPathAndName();
 
 		if (testedApk == null) {
 			ExceptionHelper.reportRuntimeException(Messages.EXCEPTION_CAN_NOT_INSTALL_APK_FILE);

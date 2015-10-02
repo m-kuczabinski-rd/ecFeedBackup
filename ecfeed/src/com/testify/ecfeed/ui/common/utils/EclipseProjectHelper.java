@@ -14,6 +14,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.QualifiedName;
 
+import com.testify.ecfeed.external.IProjectHelper;
 import com.testify.ecfeed.generators.api.EcException;
 import com.testify.ecfeed.ui.common.IFileInfoProvider;
 import com.testify.ecfeed.ui.common.Messages;
@@ -21,7 +22,7 @@ import com.testify.ecfeed.utils.DiskFileHelper;
 import com.testify.ecfeed.utils.ExceptionHelper;
 import com.testify.ecfeed.utils.SystemLogger;
 
-public class EclipseProjectHelper {
+public class EclipseProjectHelper implements IProjectHelper {
 
 	private static final String DEV_HOOK_ANDROID = "dvhAndroid";
 	private static final String DEV_HOOK_NO_INSTALL = "dvhNoInstall";
@@ -31,41 +32,34 @@ public class EclipseProjectHelper {
 
 	private static boolean fWasCalculated = false;
 	private static boolean fIsAndroidProject = false;
+	private IFileInfoProvider fFileInfoProvider;
 
-	private static void checkFileInfoProvider(IFileInfoProvider fileInfoProvider) {
+	public EclipseProjectHelper(IFileInfoProvider fileInfoProvider) {
 		if (fileInfoProvider == null) {
 			SystemLogger.logInfoWithStack(Messages.EXCEPTION_FILE_INFO_PROVIDER_NOT_NULL);
 		}
+
+		fFileInfoProvider = fileInfoProvider;
 	}
 
-	public static void checkFileInfoProvider(IFileInfoProvider fileInfoProvider, String message) {
-		if (fileInfoProvider == null) {
-			SystemLogger.logInfoWithStack(message + " | " + Messages.EXCEPTION_FILE_INFO_PROVIDER_NOT_NULL);
-		}
-	}	
-
-	public static String getProjectPath(IFileInfoProvider fileInfoProvider) {
-		if (fileInfoProvider == null) {
-			ExceptionHelper.reportRuntimeException(Messages.EXCEPTION_FILE_INFO_PROVIDER_NOT_NULL);
-		}
-
-		return fileInfoProvider.getProject().getLocation().toOSString();
+	@Override
+	public String getProjectPath() {
+		return fFileInfoProvider.getProject().getLocation().toOSString();
 	}
 
-	public static String getProjectPath(IProject project) {
+	public String getProjectPath(IProject project) {
 		return project.getLocation().toOSString();
 	}
 
-	public static boolean isAndroidProject(IFileInfoProvider fileInfoProvider) {
-		checkFileInfoProvider(fileInfoProvider); 
+	@Override
+	public boolean isAndroidProject() {
 
 		if(fWasCalculated) {
 			return fIsAndroidProject;
 		}
 
 		try {
-			if(isAndroidProjectDevelopmentHook(fileInfoProvider)
-					|| calculateFlagIsAndroidProject(fileInfoProvider)) {
+			if(isAndroidProjectDevelopmentHook() || calculateFlagIsAndroidProject()) {
 				fIsAndroidProject = true;
 			}
 		} catch (EcException e) {
@@ -76,20 +70,21 @@ public class EclipseProjectHelper {
 		return fIsAndroidProject;
 	}
 
-	public static boolean isAndroidProjectDevelopmentHook(IFileInfoProvider fileInfoProvider) {
-		return isDevelopmentHook(DEV_HOOK_ANDROID, fileInfoProvider);
+	@Override
+	public boolean isAndroidProjectDevelopmentHook() {
+		return isDevelopmentHook(DEV_HOOK_ANDROID, fFileInfoProvider);
 	}
 
-	public static boolean isNoInstallDevelopmentHook(IFileInfoProvider fileInfoProvider) {
-		return isDevelopmentHook(DEV_HOOK_NO_INSTALL, fileInfoProvider);
-	}	
+	@Override
+	public boolean isNoInstallDevelopmentHook() {
+		return isDevelopmentHook(DEV_HOOK_NO_INSTALL, fFileInfoProvider);
+	}
 
-	private static boolean isDevelopmentHook(String hookName, IFileInfoProvider fileInfoProvider) {
-		checkFileInfoProvider(fileInfoProvider);
 
+	private boolean isDevelopmentHook(String hookName, IFileInfoProvider fileInfoProvider) {
 		String projectPath = null;
 		try {
-			projectPath = EclipseProjectHelper.getProjectPath(fileInfoProvider);
+			projectPath = getProjectPath();
 		} catch (Exception e){
 			SystemLogger.logCatch(e.getMessage());
 			return false;
@@ -102,18 +97,20 @@ public class EclipseProjectHelper {
 		return false;
 	}	
 
-	public static String getApkPathAndName(IFileInfoProvider fileInfoProvider) {
-		IProject project = fileInfoProvider.getProject();
+	@Override
+	public String getApkPathAndName() {
+		IProject project = fFileInfoProvider.getProject();
 		return getApkName(project);
 	}
 
-	public static String getReferencedApkPathAndName(IFileInfoProvider fileInfoProvider) {
-		IProject testingProject = fileInfoProvider.getProject();
+	@Override
+	public String getReferencedApkPathAndName() {
+		IProject testingProject = fFileInfoProvider.getProject();
 		IProject testedProject = getReferencedProject(testingProject);
 		return getApkName(testedProject);
 	}
 
-	static IProject getReferencedProject(IProject project) {
+	private IProject getReferencedProject(IProject project) {
 		IProject[] referencedProjects = null;
 		try {
 			referencedProjects = project.getReferencedProjects();
@@ -131,7 +128,7 @@ public class EclipseProjectHelper {
 		return referencedProjects[0];
 	}
 
-	private static String getApkName(IProject project) {
+	private String getApkName(IProject project) {
 		if (project == null) {
 			ExceptionHelper.reportRuntimeException(Messages.EXCEPTION_NO_APK_NAME_PROJECT_NULL);
 		}
@@ -142,10 +139,8 @@ public class EclipseProjectHelper {
 		return DiskFileHelper.joinPathWithFile(binPath, apkFileName);
 	}
 
-	private static boolean calculateFlagIsAndroidProject(IFileInfoProvider fileInfoProvider) throws EcException {
-		checkFileInfoProvider(fileInfoProvider);
-
-		IProject project = fileInfoProvider.getProject();
+	private boolean calculateFlagIsAndroidProject() throws EcException {
+		IProject project = fFileInfoProvider.getProject();
 
 		Map<QualifiedName, String> properties = null;
 		try {
@@ -176,4 +171,5 @@ public class EclipseProjectHelper {
 		}
 		return true;
 	}
+
 }

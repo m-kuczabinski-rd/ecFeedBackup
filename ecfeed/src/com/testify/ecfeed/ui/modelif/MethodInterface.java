@@ -260,7 +260,7 @@ public class MethodInterface extends ParametersParentInterface {
 			return new JUnitTestMethodInvoker();
 		}
 
-		String projectPath = EclipseProjectHelper.getProjectPath(fileInfoProvider);
+		String projectPath = new EclipseProjectHelper(fileInfoProvider).getProjectPath();
 		String androidRunner = AndroidBaseRunnerHelper.createFullAndroidRunnerName(projectPath);
 
 		return TestMethodInvokerExt.createInvoker(androidRunner);

@@ -16,6 +16,8 @@ import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaModelException;
 
 import com.testify.ecfeed.adapter.java.JavaPrimitiveTypePredicate;
+import com.testify.ecfeed.external.IClassImplementHelper;
+import com.testify.ecfeed.external.IProjectHelper;
 import com.testify.ecfeed.external.ImplementerExt;
 import com.testify.ecfeed.generators.api.EcException;
 import com.testify.ecfeed.model.ClassNode;
@@ -28,14 +30,19 @@ public class EclipseImplementationStatusResolver extends AbstractJavaImplementat
 	IFileInfoProvider fFileInfoProvider;
 
 	public EclipseImplementationStatusResolver(IFileInfoProvider fileInfoProvider){
-		super(new JavaPrimitiveTypePredicate(), EclipseProjectHelper.isAndroidProject(fileInfoProvider));
+		super(new JavaPrimitiveTypePredicate(), new EclipseProjectHelper(fileInfoProvider).isAndroidProject());
 		fFileInfoProvider = fileInfoProvider;
 	}
 
 	@Override
 	protected boolean androidCodeImplemented(ClassNode classNode) throws EcException {
 		String baseRunner = classNode.getAndroidBaseRunner();
-		return ImplementerExt.contentImplemented(baseRunner, fFileInfoProvider);
+
+		IProjectHelper projectHelper = new EclipseProjectHelper(fFileInfoProvider);
+		IClassImplementHelper classImplementHelper = new EclipseClassImplementHelper(fFileInfoProvider);
+
+		ImplementerExt implementer = new ImplementerExt(baseRunner, projectHelper, classImplementHelper); 
+		return implementer.contentImplemented();
 	}
 
 	@Override

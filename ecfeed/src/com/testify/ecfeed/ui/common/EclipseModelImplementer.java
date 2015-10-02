@@ -48,6 +48,7 @@ import com.testify.ecfeed.external.AndroidUserClassImplementerExt;
 import com.testify.ecfeed.external.IClassImplementHelper;
 import com.testify.ecfeed.external.IImplementerExt;
 import com.testify.ecfeed.external.IMethodImplementHelper;
+import com.testify.ecfeed.external.IProjectHelper;
 import com.testify.ecfeed.external.ImplementerExt;
 import com.testify.ecfeed.generators.api.EcException;
 import com.testify.ecfeed.model.AbstractNode;
@@ -121,13 +122,13 @@ public class EclipseModelImplementer extends AbstractJavaModelImplementer {
 
 	@Override
 	protected void implementAndroidCode(ClassNode classNode) throws EcException {
-		String baseRunner = classNode.getAndroidBaseRunner();
-		ImplementerExt.implementContent(baseRunner, fFileInfoProvider);
+		ImplementerExt implementer = createImplementer(classNode);
+		implementer.implementContent();
 	}
 
 	@Override
 	protected void implementClassDefinition(ClassNode classNode) throws CoreException, EcException {
-		String projectPath = EclipseProjectHelper.getProjectPath(fFileInfoProvider);
+		String projectPath = new EclipseProjectHelper(fFileInfoProvider).getProjectPath();
 		IClassImplementHelper implementHelper = new EclipseClassImplementHelper(fFileInfoProvider);
 
 		String thePackage = JavaUtils.getPackageName(classNode.getName());
@@ -294,11 +295,11 @@ public class EclipseModelImplementer extends AbstractJavaModelImplementer {
 
 	@Override
 	protected boolean androidCodeImplemented(ClassNode classNode) throws EcException {
-		if (!EclipseProjectHelper.isAndroidProject(fFileInfoProvider)) {
+		if (!new EclipseProjectHelper(fFileInfoProvider).isAndroidProject()) {
 			return true;
 		}
-		String baseRunner = classNode.getAndroidBaseRunner();
-		return ImplementerExt.contentImplemented(baseRunner, fFileInfoProvider);
+		ImplementerExt implementer = createImplementer(classNode);
+		return implementer.contentImplemented();
 	}
 
 	@Override
@@ -526,5 +527,14 @@ public class EclipseModelImplementer extends AbstractJavaModelImplementer {
 		} catch (CoreException e) {
 			e.printStackTrace();
 		}
+	}
+
+	private ImplementerExt createImplementer(ClassNode classNode) {
+		String baseRunner = classNode.getAndroidBaseRunner(); 
+
+		IProjectHelper projectHelper = new EclipseProjectHelper(fFileInfoProvider);
+		IClassImplementHelper classImplementHelper = new EclipseClassImplementHelper(fFileInfoProvider);
+
+		return new ImplementerExt(baseRunner, projectHelper, classImplementHelper); 
 	}
 }

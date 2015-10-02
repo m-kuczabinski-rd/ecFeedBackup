@@ -9,28 +9,35 @@
 package com.testify.ecfeed.external;
 
 import com.testify.ecfeed.generators.api.EcException;
-import com.testify.ecfeed.ui.common.EclipseClassImplementHelper;
-import com.testify.ecfeed.ui.common.IFileInfoProvider;
-import com.testify.ecfeed.ui.common.utils.EclipseProjectHelper;
 
 public class ImplementerExt {
 
-	public static boolean contentImplemented(
-			final String baseRunner, final IFileInfoProvider fileInfoProvider) throws EcException {
-		final IImplementerExt implementer = createImplementer(baseRunner, fileInfoProvider);
+	final IProjectHelper fProjectHelper;
+	final IClassImplementHelper fClassImplementHelper;
+	final String fBaseRunner;
+
+	public ImplementerExt(
+			final String baseRunner, 
+			final IProjectHelper projectHelper, 
+			final IClassImplementHelper classImplementHelper) {
+		fBaseRunner = baseRunner;
+		fProjectHelper = projectHelper;
+		fClassImplementHelper = classImplementHelper;
+	}
+
+	public boolean contentImplemented() throws EcException {
+		final IImplementerExt implementer = createImplementer();
 		return implementer.contentImplemented();
 	}
 
-	public static void implementContent(
-			final String baseRunner, final IFileInfoProvider fileInfoProvider) throws EcException {
-		IImplementerExt implementer = createImplementer(baseRunner, fileInfoProvider);
+	public void implementContent() throws EcException {
+		IImplementerExt implementer = createImplementer();
 		implementer.implementContent();
 	}
 
-	private static IImplementerExt createImplementer(final String baseRunner, final IFileInfoProvider fileInfoProvider) {
+	private IImplementerExt createImplementer() {
 		final IAndroidFactoryExt androidFactory = AndroidFactoryDistributorExt.getFactory();
-		final String projectPath = EclipseProjectHelper.getProjectPath(fileInfoProvider);
-		final IClassImplementHelper classImplementHelper = new EclipseClassImplementHelper(fileInfoProvider);
-		return androidFactory.createCommonImplementer(baseRunner, projectPath, classImplementHelper);		
+		final String projectPath = fProjectHelper.getProjectPath();
+		return androidFactory.createCommonImplementer(fBaseRunner, projectPath, fClassImplementHelper);		
 	}
 }
