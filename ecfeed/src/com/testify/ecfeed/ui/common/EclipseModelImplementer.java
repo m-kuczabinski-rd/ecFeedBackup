@@ -296,6 +296,9 @@ public class EclipseModelImplementer extends AbstractJavaModelImplementer {
 
 	@Override
 	protected boolean androidCodeImplemented(ClassNode classNode) throws EcException {
+		if (!classNode.getRunOnAndroid()) {
+			return true;
+		}
 		if (!new EclipseProjectHelper(fFileInfoProvider).isAndroidProject()) {
 			return true;
 		}

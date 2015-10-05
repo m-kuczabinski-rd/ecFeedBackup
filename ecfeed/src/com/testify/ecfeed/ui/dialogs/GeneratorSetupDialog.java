@@ -497,6 +497,8 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 			public void modifyText(ModifyEvent e) {
 				try {
 					fSelectedGenerator = generatorFactory.getGenerator(fGeneratorCombo.getText());
+					correctionForMethodWithOneParam(fGeneratorCombo.getText());
+					
 					createParametersComposite(parent, fSelectedGenerator.parameters());
 					fMainContainer.layout();
 				} catch (GeneratorException exception) {
@@ -512,6 +514,24 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 			}
 			fGeneratorCombo.select(0);
 			setOkButton(true);
+		}
+	}
+	
+	private void correctionForMethodWithOneParam(String generatorName) throws GeneratorException {
+		if (fMethod.getParameters().size() != 1) {
+			return;
+		}
+		if (!generatorName.equals(GeneratorFactory.GEN_TYPE_N_WISE)) {
+			return;
+		}
+		
+		for (IGeneratorParameter parameter : fSelectedGenerator.parameters()) {
+			String parameterName = parameter.getName();
+			if (parameterName.equals("N")) {
+				IntegerParameter intParameter = (IntegerParameter)parameter;
+				intParameter.setDefaultValue(1);
+				break;
+			}		
 		}
 	}
 

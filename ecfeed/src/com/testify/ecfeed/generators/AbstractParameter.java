@@ -51,7 +51,7 @@ public class AbstractParameter implements IGeneratorParameter {
 	public Object defaultValue() {
 		return null;
 	}
-
+	
 	@Override
 	public Object[] allowedValues() {
 		return null;

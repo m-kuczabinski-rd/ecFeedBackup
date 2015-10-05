@@ -19,13 +19,15 @@ import com.testify.ecfeed.generators.api.GeneratorException;
 import com.testify.ecfeed.generators.api.IGenerator;
 
 public class GeneratorFactory<E> {
+
+	public static String GEN_TYPE_N_WISE = "N-wise generator";
 	
 	private Map<String, Class<? extends IGenerator<E>>> fAvailableGenerators;
 	
 	@SuppressWarnings("unchecked")
 	public GeneratorFactory(){
 		fAvailableGenerators = new LinkedHashMap<String, Class<? extends IGenerator<E>>>();
-		registerGenerator("N-wise generator", (Class<? extends IGenerator<E>>) NWiseGenerator.class);
+		registerGenerator(GEN_TYPE_N_WISE, (Class<? extends IGenerator<E>>) NWiseGenerator.class);
 		registerGenerator("Cartesian Product generator", (Class<? extends IGenerator<E>>) CartesianProductGenerator.class);
 		registerGenerator("Adaptive random generator", (Class<? extends IGenerator<E>>) AdaptiveRandomGenerator.class);
 		registerGenerator("Random generator", (Class<? extends IGenerator<E>>) RandomGenerator.class);
