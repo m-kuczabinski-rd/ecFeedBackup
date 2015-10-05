@@ -8,7 +8,7 @@
 
 package com.testify.ecfeed.ui.common.utils;
 
-import com.testify.ecfeed.android.utils.AndroidBaseRunnerHelper;
+import com.testify.ecfeed.android.utils.AndroidHelper;
 import com.testify.ecfeed.android.utils.AndroidManifestAccessor;
 import com.testify.ecfeed.external.IClassImplementHelper;
 
@@ -33,7 +33,7 @@ public class AndroidTestingClassImplementer extends JavaUserClassImplementer {
 	protected String createImportLine() {
 		return 
 				"import " + fTestingAppPackage + "." 
-				+ AndroidBaseRunnerHelper.getEcFeedAndroidPackagePrefix() + 
+				+ AndroidHelper.getEcFeedAndroidPackagePrefix() + 
 				".EcFeedTest;\n\n";
 	}
 
