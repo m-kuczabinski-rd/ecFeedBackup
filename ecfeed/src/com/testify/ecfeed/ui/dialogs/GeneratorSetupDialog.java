@@ -50,6 +50,7 @@ import com.testify.ecfeed.adapter.java.JavaUtils;
 import com.testify.ecfeed.generators.DoubleParameter;
 import com.testify.ecfeed.generators.GeneratorFactory;
 import com.testify.ecfeed.generators.IntegerParameter;
+import com.testify.ecfeed.generators.NWiseGenerator;
 import com.testify.ecfeed.generators.api.GeneratorException;
 import com.testify.ecfeed.generators.api.IGenerator;
 import com.testify.ecfeed.generators.api.IGeneratorParameter;
@@ -498,7 +499,7 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 				try {
 					fSelectedGenerator = generatorFactory.getGenerator(fGeneratorCombo.getText());
 					correctionForMethodWithOneParam(fGeneratorCombo.getText());
-					
+
 					createParametersComposite(parent, fSelectedGenerator.parameters());
 					fMainContainer.layout();
 				} catch (GeneratorException exception) {
@@ -516,7 +517,7 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 			setOkButton(true);
 		}
 	}
-	
+
 	private void correctionForMethodWithOneParam(String generatorName) throws GeneratorException {
 		if (fMethod.getParameters().size() != 1) {
 			return;
@@ -524,10 +525,10 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 		if (!generatorName.equals(GeneratorFactory.GEN_TYPE_N_WISE)) {
 			return;
 		}
-		
+
 		for (IGeneratorParameter parameter : fSelectedGenerator.parameters()) {
 			String parameterName = parameter.getName();
-			if (parameterName.equals("N")) {
+			if (parameterName.equals(NWiseGenerator.N_PARAMETER_NAME)) {
 				IntegerParameter intParameter = (IntegerParameter)parameter;
 				intParameter.setDefaultValue(1);
 				break;

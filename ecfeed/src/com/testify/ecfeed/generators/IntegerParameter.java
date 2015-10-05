@@ -21,7 +21,7 @@ public class IntegerParameter extends AbstractParameter {
 	private int fDefaultValue;
 	private int fMinValue = Integer.MIN_VALUE;
 	private int fMaxValue = Integer.MAX_VALUE;
-	
+
 	public IntegerParameter(String name, boolean required, int defaultValue){
 		super(name, TYPE.INTEGER, required);
 		fDefaultValue = defaultValue;
@@ -33,7 +33,7 @@ public class IntegerParameter extends AbstractParameter {
 		fAllowedValues = allowedValues;
 		checkAllowedValues(fDefaultValue, fAllowedValues);
 	}
-	
+
 	private void checkAllowedValues(Integer defaultValue, Integer[] allowedValues) throws GeneratorException {
 		if(!Arrays.asList(allowedValues).contains(defaultValue)){
 			GeneratorException.report("Inconsistent parameter definition");
@@ -47,13 +47,13 @@ public class IntegerParameter extends AbstractParameter {
 		fMaxValue = max;
 		checkRange(fDefaultValue, fMinValue, fMaxValue);
 	}
-	
+
 	private void checkRange(int value, int minValue, int maxValue) throws GeneratorException {
 		if(value < minValue || value > maxValue){
 			GeneratorException.report("Inconsistent parameter definition");
 		}
 	}
-	
+
 	@Override
 	public Object[] allowedValues(){
 		return fAllowedValues;
@@ -63,16 +63,16 @@ public class IntegerParameter extends AbstractParameter {
 	public Object defaultValue() {
 		return fDefaultValue;
 	}
-	
+
 	public void setDefaultValue(Object defaultValue) throws GeneratorException {
 		int tmpDefaultValue = (int)defaultValue;
-		
+
 		checkRange(tmpDefaultValue, fMinValue, fMaxValue);
-		
+
 		if (fAllowedValues != null) {
 			checkAllowedValues(fDefaultValue, fAllowedValues);
 		}
-		
+
 		fDefaultValue = (int)tmpDefaultValue;
 	}	
 
@@ -97,7 +97,7 @@ public class IntegerParameter extends AbstractParameter {
 	public int getMin(){
 		return fMinValue;
 	}
-	
+
 	public int getMax(){
 		return fMaxValue;
 	}

@@ -24,7 +24,7 @@ public class AbstractParameter implements IGeneratorParameter {
 		fType = type;
 		fRequired = required;
 	}
-	
+
 	public AbstractParameter(String name, TYPE type, boolean required,
 			Object defaultValue, Object[] allowedValues){
 		fName = name;
@@ -51,7 +51,7 @@ public class AbstractParameter implements IGeneratorParameter {
 	public Object defaultValue() {
 		return null;
 	}
-	
+
 	@Override
 	public Object[] allowedValues() {
 		return null;
@@ -61,7 +61,7 @@ public class AbstractParameter implements IGeneratorParameter {
 	public boolean test(Object value){
 		return false;
 	}
-	
+
 	@Override
 	public String toString(){
 		return fName + "[" + fType + "]";

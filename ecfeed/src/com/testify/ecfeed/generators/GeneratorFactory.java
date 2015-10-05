@@ -21,9 +21,9 @@ import com.testify.ecfeed.generators.api.IGenerator;
 public class GeneratorFactory<E> {
 
 	public static String GEN_TYPE_N_WISE = "N-wise generator";
-	
+
 	private Map<String, Class<? extends IGenerator<E>>> fAvailableGenerators;
-	
+
 	@SuppressWarnings("unchecked")
 	public GeneratorFactory(){
 		fAvailableGenerators = new LinkedHashMap<String, Class<? extends IGenerator<E>>>();
@@ -36,7 +36,7 @@ public class GeneratorFactory<E> {
 	public Set<String> availableGenerators(){
 		return fAvailableGenerators.keySet();
 	}
-	
+
 	public IGenerator<E> getGenerator(String name) throws GeneratorException{
 		try {
 			return fAvailableGenerators.get(name).newInstance();

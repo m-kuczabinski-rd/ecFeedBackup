@@ -43,7 +43,7 @@ public class StringParameter extends AbstractParameter {
 	public Object defaultValue() {
 		return fDefaultValue;
 	}
-	
+
 	@Override
 	public boolean test(Object value){
 		if (value instanceof String == false){
