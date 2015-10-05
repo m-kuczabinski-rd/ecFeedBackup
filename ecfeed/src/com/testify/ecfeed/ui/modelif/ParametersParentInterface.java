@@ -18,8 +18,8 @@ import com.testify.ecfeed.adapter.operations.GenericOperationAddParameter;
 import com.testify.ecfeed.model.AbstractParameterNode;
 import com.testify.ecfeed.model.ParametersParentNode;
 import com.testify.ecfeed.ui.common.Constants;
-import com.testify.ecfeed.ui.common.IFileInfoProvider;
 import com.testify.ecfeed.ui.common.Messages;
+import com.testify.ecfeed.ui.common.utils.IFileInfoProvider;
 
 public abstract class ParametersParentInterface extends AbstractNodeInterface {
 

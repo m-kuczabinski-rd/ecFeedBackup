@@ -22,7 +22,7 @@ import org.eclipse.ui.forms.IFormPart;
 
 import com.testify.ecfeed.model.AbstractNode;
 import com.testify.ecfeed.model.RootNode;
-import com.testify.ecfeed.ui.common.IFileInfoProvider;
+import com.testify.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 import com.testify.ecfeed.ui.modelif.RootInterface;
 

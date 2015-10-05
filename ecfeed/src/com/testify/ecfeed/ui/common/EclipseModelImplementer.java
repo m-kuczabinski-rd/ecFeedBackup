@@ -59,6 +59,7 @@ import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.MethodParameterNode;
 import com.testify.ecfeed.ui.common.utils.EclipsePackageFragmentGetter;
 import com.testify.ecfeed.ui.common.utils.EclipseProjectHelper;
+import com.testify.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.testify.ecfeed.ui.common.utils.JavaUserClassImplementer;
 import com.testify.ecfeed.utils.EcException;
 import com.testify.ecfeed.utils.SystemLogger;

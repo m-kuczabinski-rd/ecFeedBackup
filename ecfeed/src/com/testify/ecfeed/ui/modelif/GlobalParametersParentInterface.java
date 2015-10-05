@@ -20,8 +20,8 @@ import com.testify.ecfeed.model.GlobalParameterNode;
 import com.testify.ecfeed.model.GlobalParametersParentNode;
 import com.testify.ecfeed.model.MethodParameterNode;
 import com.testify.ecfeed.ui.common.EclipseModelBuilder;
-import com.testify.ecfeed.ui.common.IFileInfoProvider;
 import com.testify.ecfeed.ui.common.Messages;
+import com.testify.ecfeed.ui.common.utils.IFileInfoProvider;
 
 public class GlobalParametersParentInterface extends ParametersParentInterface {
 

@@ -22,6 +22,7 @@ import com.testify.ecfeed.external.ImplementerExt;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.ui.common.utils.EclipseProjectHelper;
+import com.testify.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.testify.ecfeed.utils.EcException;
 import com.testify.ecfeed.utils.SystemLogger;
 

@@ -24,6 +24,7 @@ import com.testify.ecfeed.adapter.IImplementationStatusResolver;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.model.TestCaseNode;
+import com.testify.ecfeed.ui.common.utils.IFileInfoProvider;
 
 public class TestCasesViewerLabelProvider extends LabelProvider implements IColorProvider {
 	private Map<String, Integer> fExecutableTestSuites;

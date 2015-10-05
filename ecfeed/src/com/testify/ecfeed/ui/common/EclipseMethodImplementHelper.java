@@ -18,6 +18,7 @@ import org.eclipse.jdt.core.JavaModelException;
 
 import com.testify.ecfeed.external.IMethodImplementHelper;
 import com.testify.ecfeed.model.MethodNode;
+import com.testify.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.testify.ecfeed.utils.ExceptionHelper;
 import com.testify.ecfeed.utils.SystemLogger;
 

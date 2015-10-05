@@ -19,6 +19,7 @@ import org.eclipse.jdt.core.JavaModelException;
 
 import com.testify.ecfeed.external.IClassImplementHelper;
 import com.testify.ecfeed.ui.common.utils.EclipsePackageFragmentGetter;
+import com.testify.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.testify.ecfeed.utils.ExceptionHelper;
 import com.testify.ecfeed.utils.PackageClassHelper;
 import com.testify.ecfeed.utils.SystemLogger;
