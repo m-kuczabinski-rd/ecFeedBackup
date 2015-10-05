@@ -15,6 +15,7 @@ import java.util.Collection;
 
 import com.testify.ecfeed.adapter.ModelOperationException;
 import com.testify.ecfeed.adapter.java.Constants;
+import com.testify.ecfeed.adapter.java.Messages;
 import com.testify.ecfeed.model.TestCaseNode;
 
 public class MethodOperationRenameTestCases extends BulkOperation {

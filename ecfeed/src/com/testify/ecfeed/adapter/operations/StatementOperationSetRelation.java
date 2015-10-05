@@ -15,6 +15,7 @@ import java.util.Arrays;
 
 import com.testify.ecfeed.adapter.IModelOperation;
 import com.testify.ecfeed.adapter.ModelOperationException;
+import com.testify.ecfeed.adapter.java.Messages;
 import com.testify.ecfeed.model.IRelationalStatement;
 import com.testify.ecfeed.model.EStatementRelation;
 

@@ -9,7 +9,7 @@
  *     Patryk Chamuczynski (p.chamuczynski(at)radytek.com) - initial implementation
  ******************************************************************************/
 
-package com.testify.ecfeed.adapter.operations;
+package com.testify.ecfeed.adapter.java;
 
 public class Messages {
 

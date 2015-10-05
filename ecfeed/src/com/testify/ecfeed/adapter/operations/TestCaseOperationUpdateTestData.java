@@ -13,6 +13,7 @@ package com.testify.ecfeed.adapter.operations;
 
 import com.testify.ecfeed.adapter.IModelOperation;
 import com.testify.ecfeed.adapter.ModelOperationException;
+import com.testify.ecfeed.adapter.java.Messages;
 import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.model.TestCaseNode;
 
