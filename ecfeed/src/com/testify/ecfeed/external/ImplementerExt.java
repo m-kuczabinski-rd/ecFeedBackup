@@ -37,7 +37,6 @@ public class ImplementerExt {
 
 	private IImplementerExt createImplementer() {
 		final IAndroidFactoryExt androidFactory = AndroidFactoryDistributorExt.getFactory();
-		final String projectPath = fProjectHelper.getProjectPath();
-		return androidFactory.createCommonImplementer(fBaseRunner, projectPath, fClassImplementHelper);		
+		return androidFactory.createCommonImplementer(fBaseRunner, fClassImplementHelper, fProjectHelper);		
 	}
 }

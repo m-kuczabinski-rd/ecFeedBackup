@@ -15,10 +15,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.testify.ecfeed.runner.Messages;
-import com.testify.ecfeed.utils.DiskFileHelper;
-import com.testify.ecfeed.utils.ExceptionHelper;
-
 import nu.xom.Attribute;
 import nu.xom.Builder;
 import nu.xom.Document;
@@ -26,6 +22,10 @@ import nu.xom.Element;
 import nu.xom.Elements;
 import nu.xom.ParsingException;
 import nu.xom.Serializer;
+
+import com.testify.ecfeed.runner.Messages;
+import com.testify.ecfeed.utils.DiskFileHelper;
+import com.testify.ecfeed.utils.ExceptionHelper;
 
 public class AndroidManifestAccessor {
 
@@ -61,11 +61,16 @@ public class AndroidManifestAccessor {
 	private static final String ATTRIBUTE_VERSION_NAME = "versionName";
 	private static final String ATTRIBUTE_SEPARATOR = ":";
 	private static final String NODE_NAME_INSTRUMENTATION = "instrumentation";
+	private static final String NODE_NAME_APPLICATION = "application";
+	private static final String NODE_NAME_ACTIVITY = "activity";
+	private static final String NODE_NAME_ACTION = "action";
+	private static final String NODE_NAME_INTENT_FILTER = "intent-filter";
+	private static final String ANDROID_INTENT_ACTION_MAIN = "android.intent.action.MAIN";
 	private static final String ANDROID_MANIFEST_FILE = "AndroidManifest.xml";
 
 	private String fManifestPath;
 	private Document fDocument;
-	private Element fRoot;
+	private Element fRootElement;
 
 	public static boolean androidManifestExists(String projectPath) {
 		String manifestPath = createQualifiedName(projectPath);
@@ -87,7 +92,7 @@ public class AndroidManifestAccessor {
 			ExceptionHelper.reportRuntimeException(e.getMessage());
 		}
 
-		fRoot = fDocument.getRootElement();
+		fRootElement = fDocument.getRootElement();
 	}
 
 	private static String createQualifiedName(String projectPath) {
@@ -95,11 +100,11 @@ public class AndroidManifestAccessor {
 	}
 
 	public String getTestingAppPackage() {
-		return fRoot.getAttributeValue(ATTRIBUTE_PACKAGE);
+		return fRootElement.getAttributeValue(ATTRIBUTE_PACKAGE);
 	}
 
 	public String getDefaultTestedAppPackage() {
-		Elements children = fRoot.getChildElements();
+		Elements children = fRootElement.getChildElements();
 
 		for (int index = 0; index < children.size(); index++) {
 			Element element = children.get(index);
@@ -166,19 +171,19 @@ public class AndroidManifestAccessor {
 		addAttributeTo(newRunnerElement, namespaceURI,
 				ATTRIBUTE_TARGET_PACKAGE, targetPackage);
 
-		fRoot.insertChild(newRunnerElement,
+		fRootElement.insertChild(newRunnerElement,
 				getLastInstrumentationNodeIndex() + 1);
 		writeDocument();
 	}
 
 	private String getNamespaceURI() {
-		String attributeURI = getAttributeURI(fRoot, ATTRIBUTE_ANDROID, ATTRIBUTE_VERSION_CODE);
+		String attributeURI = getAttributeURI(fRootElement, ATTRIBUTE_ANDROID, ATTRIBUTE_VERSION_CODE);
 
 		if (attributeURI != null) {
 			return attributeURI; 
 		}
 
-		return getAttributeURI(fRoot, ATTRIBUTE_ANDROID, ATTRIBUTE_VERSION_NAME);
+		return getAttributeURI(fRootElement, ATTRIBUTE_ANDROID, ATTRIBUTE_VERSION_NAME);
 	}
 
 	private void addAttributeTo(Element element, String namespaceURI,
@@ -189,7 +194,7 @@ public class AndroidManifestAccessor {
 
 	private int getLastInstrumentationNodeIndex() {
 		int lastInstrumentationIndex = -1;
-		Elements children = fRoot.getChildElements();
+		Elements children = fRootElement.getChildElements();
 
 		for (int index = 0; index < children.size(); index++) {
 			Element element = children.get(index);
@@ -223,7 +228,7 @@ public class AndroidManifestAccessor {
 	}
 
 	private void addRunnerNamesFromManifest(List<String> runnerNames) {
-		Elements children = fRoot.getChildElements();
+		Elements children = fRootElement.getChildElements();
 
 		for (int index = 0; index < children.size(); index++) {
 			Element element = children.get(index);
@@ -245,7 +250,7 @@ public class AndroidManifestAccessor {
 	}
 
 	private void addRunnersFromManifest(List<Runner> runners) {
-		Elements children = fRoot.getChildElements();
+		Elements children = fRootElement.getChildElements();
 
 		for (int index = 0; index < children.size(); index++) {
 			Element element = children.get(index);
@@ -277,8 +282,9 @@ public class AndroidManifestAccessor {
 		return false;
 	}
 
-	private String getQualifiedAttribute(Element element, String namespace,
-			String name) {
+	private String getQualifiedAttribute(
+			Element element, String namespace, String name) {
+
 		int attributeCount = element.getAttributeCount();
 
 		for (int index = 0; index < attributeCount; index++) {
@@ -316,4 +322,104 @@ public class AndroidManifestAccessor {
 		}
 		return true;
 	}
+
+	public String getMainActivityClassName() {
+		final Elements children = fRootElement.getChildElements();
+
+		for (int index = 0; index < children.size(); index++) {
+			Element element = children.get(index);
+
+			if(!isApplicationNode(element)) {
+				continue;
+			}
+			return getActivityForApplicationElement(element); 
+		}
+		return null;
+	}
+
+	private String getActivityForApplicationElement(final Element applicationElement) {
+		final Elements children = applicationElement.getChildElements();
+
+		for (int index = 0; index < children.size(); index++) {
+			Element element = children.get(index);
+
+			if(!isActivityNode(element)) {
+				continue;
+			}
+			if (isMainActivity(element)) {
+				return getClassNameForActivity(element);
+			}
+		}
+		return null;
+	}
+
+	private boolean isMainActivity(final Element activityElement) {
+		final Elements children = activityElement.getChildElements();
+
+		for (int index = 0; index < children.size(); index++) {
+			Element element = children.get(index);
+
+			if(!isIntentFilterNode(element)) {
+				continue;
+			}
+			if (hasChildActionMain(element)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private boolean hasChildActionMain(final Element intentFilterElement) {
+		final Elements children = intentFilterElement.getChildElements();
+
+		for (int index = 0; index < children.size(); index++) {
+			Element element = children.get(index);
+
+			if(!isActionNode(element)) {
+				continue;
+			}
+			String attributeValue = getQualifiedAttribute(element, ATTRIBUTE_ANDROID, ATTRIBUTE_NAME);
+
+			if (isActionMainAttribute(attributeValue)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private String getClassNameForActivity(final Element element) {
+		return getQualifiedAttribute(element, ATTRIBUTE_ANDROID, ATTRIBUTE_NAME);
+	}
+
+	private boolean isActionMainAttribute(final String attributeValue) {
+		if (attributeValue.equals(ANDROID_INTENT_ACTION_MAIN)) {
+			return true;
+		}
+		return false;
+	}
+
+	private static boolean isApplicationNode(final Element element) {
+		return isNode(element, NODE_NAME_APPLICATION);
+	}
+
+	private static boolean isActivityNode(final Element element) {
+		return isNode(element, NODE_NAME_ACTIVITY);
+	}	
+
+	private static boolean isActionNode(final Element element) {
+		return isNode(element, NODE_NAME_ACTION);
+	}	
+
+	private static boolean isIntentFilterNode(final Element element) {
+		return isNode(element, NODE_NAME_INTENT_FILTER);
+	}	
+
+	private static boolean isNode(final Element element, final String nodeName) {
+		String currentNodeName = element.getQualifiedName();
+
+		if (currentNodeName.equals(nodeName)) {
+			return true;
+		}
+		return false;
+	}	
 }

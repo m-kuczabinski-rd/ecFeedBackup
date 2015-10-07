@@ -42,13 +42,13 @@ public class StringHelper {
 		return fromStr.substring(0, index);
 	}
 
-	public static String getLastToken(String packageWithClass, String tokenSeparator) {
-		int separatorPosition = packageWithClass.lastIndexOf(tokenSeparator);
+	public static String getLastToken(String tokenizedString, String tokenSeparator) {
+		int separatorPosition = tokenizedString.lastIndexOf(tokenSeparator);
 
 		if (separatorPosition == -1) {
 			return null;
 		}
-		return packageWithClass.substring(separatorPosition+1);
+		return tokenizedString.substring(separatorPosition+1);
 	}
 
 	public static String getAllBeforeLastToken(String packageWithClass, String tokenSeparator) {

@@ -19,7 +19,7 @@ public interface IAndroidFactoryExt {
 	ITestMethodInvokerExt createTestMethodInvoker(String androidRunner);
 
 	IImplementerExt createCommonImplementer(
-			String baseRunner, String projectPath, IClassImplementHelper classImplementHelper);
+			String baseRunner, IClassImplementHelper classImplementHelper, IProjectHelper projectHelper);
 
 	IImplementerExt createUserClassImplementer(
 			String projectPath,	String thePackage, 

@@ -25,6 +25,7 @@ public class EclipseProjectHelper implements IProjectHelper {
 
 	private static final String DEV_HOOK_ANDROID = "dvhAndroid";
 	private static final String DEV_HOOK_NO_INSTALL = "dvhNoInstall";
+	private static final String DEV_HOOK_MAIN_ACTIVITY = "dvhMainActivity";
 	private static final String VALUE_ANDROID = "Android";
 	private static final String ANDROID_ECLIPSE_QUALIFIER = "com.android.ide.eclipse.adt";
 	private static final String ANDROID_TARGET_CACHE = "androidTargetCache";
@@ -45,6 +46,15 @@ public class EclipseProjectHelper implements IProjectHelper {
 	public String getProjectPath() {
 		return fFileInfoProvider.getProject().getLocation().toOSString();
 	}
+
+	@Override
+	public String getReferencedProjectPath() {
+		IProject testingProject = fFileInfoProvider.getProject();
+		IProject testedProject = getReferencedProject(testingProject);
+		String projectPath = getProjectPath(testedProject);
+		return projectPath;
+	}
+
 
 	public String getProjectPath(IProject project) {
 		return project.getLocation().toOSString();
@@ -79,6 +89,10 @@ public class EclipseProjectHelper implements IProjectHelper {
 		return isDevelopmentHook(DEV_HOOK_NO_INSTALL, fFileInfoProvider);
 	}
 
+	@Override
+	public boolean isMainActivityDevelopmentHook() {
+		return isDevelopmentHook(DEV_HOOK_MAIN_ACTIVITY, fFileInfoProvider);
+	}
 
 	private boolean isDevelopmentHook(String hookName, IFileInfoProvider fileInfoProvider) {
 		String projectPath = null;

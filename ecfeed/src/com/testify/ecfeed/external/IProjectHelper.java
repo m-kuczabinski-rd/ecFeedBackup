@@ -13,7 +13,9 @@ public interface IProjectHelper {
 	String getApkPathAndName();
 	String getReferencedApkPathAndName();
 	String getProjectPath();
+	String getReferencedProjectPath();
 	boolean isAndroidProject();
 	boolean isAndroidProjectDevelopmentHook();
 	boolean isNoInstallDevelopmentHook();
+	boolean isMainActivityDevelopmentHook();
 }
