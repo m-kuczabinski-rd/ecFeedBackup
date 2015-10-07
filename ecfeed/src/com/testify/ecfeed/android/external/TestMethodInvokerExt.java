@@ -8,7 +8,7 @@
 
 package com.testify.ecfeed.android.external;
 
-import com.testify.ecfeed.ui.modelif.external.ITestMethodInvoker;
+import com.testify.ecfeed.runner.ITestMethodInvoker;
 
 public class TestMethodInvokerExt {
 

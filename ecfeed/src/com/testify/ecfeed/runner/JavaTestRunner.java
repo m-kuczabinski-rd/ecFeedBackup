@@ -22,7 +22,6 @@ import com.testify.ecfeed.adapter.java.ModelClassLoader;
 import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.MethodNode;
-import com.testify.ecfeed.ui.modelif.external.ITestMethodInvoker;
 
 public class JavaTestRunner {
 
