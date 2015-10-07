@@ -6,19 +6,16 @@
  * http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 
-package com.testify.ecfeed.external;
+package com.testify.ecfeed.android.external;
 
-public class AndroidUserClassImplementerExt {
+import com.testify.ecfeed.model.MethodNode;
 
-	public static void implementContent(String projectPath,	String thePackage, 
-			String classNameWithoutExtension, IClassImplementHelper classImplementHelper) {
+public class AndroidMethodImplementerExt { 
 
+	public static IImplementerExt createImplementer(
+			final MethodNode methodNode, final IMethodImplementHelper methodImplementHelper) {
 		final IAndroidFactoryExt androidFactory = AndroidFactoryDistributorExt.getFactory();
-
-		IImplementerExt implementer = 
-				androidFactory.createUserClassImplementer(
-						projectPath, thePackage, classNameWithoutExtension, classImplementHelper);
-
-		implementer.implementContent();
+		return androidFactory.createAndroidMethodImplementer(methodNode, methodImplementHelper);
 	}
 }
+

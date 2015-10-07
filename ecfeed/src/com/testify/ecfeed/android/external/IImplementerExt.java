@@ -6,16 +6,10 @@
  * http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 
-package com.testify.ecfeed.external;
+package com.testify.ecfeed.android.external;
 
-public interface IProjectHelper {
+public interface IImplementerExt {
 
-	String getApkPathAndName();
-	String getReferencedApkPathAndName();
-	String getProjectPath();
-	String getReferencedProjectPath();
-	boolean isAndroidProject();
-	boolean isAndroidProjectDevelopmentHook();
-	boolean isNoInstallDevelopmentHook();
-	boolean isMainActivityDevelopmentHook();
+	void implementContent();
+	boolean contentImplemented();
 }

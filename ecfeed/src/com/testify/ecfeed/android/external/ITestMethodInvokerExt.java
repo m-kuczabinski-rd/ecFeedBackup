@@ -6,16 +6,9 @@
  * http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 
-package com.testify.ecfeed.external;
+package com.testify.ecfeed.android.external;
 
-import com.testify.ecfeed.model.MethodNode;
+import com.testify.ecfeed.ui.modelif.external.ITestMethodInvoker;
 
-public class AndroidMethodImplementerExt { 
-
-	public static IImplementerExt createImplementer(
-			final MethodNode methodNode, final IMethodImplementHelper methodImplementHelper) {
-		final IAndroidFactoryExt androidFactory = AndroidFactoryDistributorExt.getFactory();
-		return androidFactory.createAndroidMethodImplementer(methodNode, methodImplementHelper);
-	}
+public interface ITestMethodInvokerExt extends ITestMethodInvoker{ 
 }
-

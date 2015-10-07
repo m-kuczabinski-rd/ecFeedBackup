@@ -6,12 +6,11 @@
  * http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 
-package com.testify.ecfeed.external;
+package com.testify.ecfeed.android.external;
 
-public interface IMethodImplementHelper {
+public interface IClassImplementHelper {
 
-	void createMethod(final String methodContent);
-	void createImport(final String type);
-	void commitChanges();
-	boolean methodDefinitionImplemented();
+	boolean classImplemented(String thePackage, String classNameWithoutExtension);
+	boolean classImplemented(String thePackage, String classNameWithoutExtension, String superclassName);
+	void implementClass(String thePackage,String classNameWithoutExtension,String content);
 }

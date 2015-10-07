@@ -6,14 +6,19 @@
  * http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 
-package com.testify.ecfeed.external;
+package com.testify.ecfeed.android.external;
 
-import com.testify.ecfeed.ui.modelif.external.ITestMethodInvoker;
+public class AndroidUserClassImplementerExt {
 
-public class TestMethodInvokerExt {
+	public static void implementContent(String projectPath,	String thePackage, 
+			String classNameWithoutExtension, IClassImplementHelper classImplementHelper) {
 
-	public static ITestMethodInvoker createInvoker(final String androidRunner) {
 		final IAndroidFactoryExt androidFactory = AndroidFactoryDistributorExt.getFactory();
-		return androidFactory.createTestMethodInvoker(androidRunner);
+
+		IImplementerExt implementer = 
+				androidFactory.createUserClassImplementer(
+						projectPath, thePackage, classNameWithoutExtension, classImplementHelper);
+
+		implementer.implementContent();
 	}
 }

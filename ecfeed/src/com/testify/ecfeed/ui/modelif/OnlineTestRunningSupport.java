@@ -26,8 +26,8 @@ import org.eclipse.swt.widgets.Display;
 
 import com.testify.ecfeed.adapter.java.ILoaderProvider;
 import com.testify.ecfeed.adapter.java.ModelClassLoader;
-import com.testify.ecfeed.external.ApkInstallerExt;
-import com.testify.ecfeed.external.DeviceCheckerExt;
+import com.testify.ecfeed.android.external.ApkInstallerExt;
+import com.testify.ecfeed.android.external.DeviceCheckerExt;
 import com.testify.ecfeed.generators.api.IConstraint;
 import com.testify.ecfeed.generators.api.IGenerator;
 import com.testify.ecfeed.model.MethodNode;

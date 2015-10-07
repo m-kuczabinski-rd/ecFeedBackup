@@ -11,8 +11,8 @@ package com.testify.ecfeed.ui.common.utils;
 import java.util.List;
 
 import com.testify.ecfeed.adapter.java.JavaUtils;
-import com.testify.ecfeed.external.IImplementerExt;
-import com.testify.ecfeed.external.IMethodImplementHelper;
+import com.testify.ecfeed.android.external.IImplementerExt;
+import com.testify.ecfeed.android.external.IMethodImplementHelper;
 import com.testify.ecfeed.model.AbstractParameterNode;
 import com.testify.ecfeed.model.MethodNode;
 

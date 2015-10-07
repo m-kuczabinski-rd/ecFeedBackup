@@ -6,11 +6,14 @@
  * http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 
-package com.testify.ecfeed.external;
+package com.testify.ecfeed.android.external;
 
-import java.lang.reflect.InvocationTargetException;
+import com.testify.ecfeed.ui.modelif.external.ITestMethodInvoker;
 
-public interface IApkInstallerExt {
+public class TestMethodInvokerExt {
 
-	public void installApplicationsIfModified(String testedApk, String testingApk) throws InvocationTargetException;
+	public static ITestMethodInvoker createInvoker(final String androidRunner) {
+		final IAndroidFactoryExt androidFactory = AndroidFactoryDistributorExt.getFactory();
+		return androidFactory.createTestMethodInvoker(androidRunner);
+	}
 }
