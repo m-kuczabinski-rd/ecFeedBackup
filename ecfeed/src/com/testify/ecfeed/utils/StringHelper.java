@@ -60,4 +60,10 @@ public class StringHelper {
 		return packageWithClass.substring(0, separatorPosition);
 	}
 
+	public static boolean isCharAt(int index, String strg, String chr) {
+		if (strg.charAt(index) == chr.charAt(0)) {
+			return true;
+		}
+		return false;
+	}
 }
