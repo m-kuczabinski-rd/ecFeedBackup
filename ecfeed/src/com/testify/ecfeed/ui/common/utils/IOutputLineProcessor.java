@@ -10,5 +10,5 @@ package com.testify.ecfeed.ui.common.utils;
 
 public interface IOutputLineProcessor {
 
-	boolean printLine(String line);
+	boolean processLine(String line);
 }

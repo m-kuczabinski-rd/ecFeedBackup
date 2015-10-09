@@ -43,7 +43,7 @@ public class ExternalProcess {
 		String line;
 		try {
 			while ((line = br.readLine()) != null) {
-				if (lineProcessor != null && lineProcessor.printLine(line)) {
+				if (lineProcessor != null && lineProcessor.processLine(line)) {
 					System.out.println("\t" + line);
 				}
 			}
