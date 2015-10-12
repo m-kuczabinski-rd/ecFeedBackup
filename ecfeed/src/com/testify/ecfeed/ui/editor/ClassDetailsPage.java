@@ -62,10 +62,12 @@ public class ClassDetailsPage extends BasicDetailsPage {
 		@Override
 		public void widgetSelected(SelectionEvent e){
 
-			fClassIf.setAndroidBaseRunner(fAndroidBaseRunnerCombo.getText());
+			if (baseRunnerFieldsActive()) {
+				fClassIf.setAndroidBaseRunner(fAndroidBaseRunnerCombo.getText());
 
-			String androidBaseRunner = fClassIf.getAndroidBaseRunner();
-			fAndroidBaseRunnerCombo.setText(androidBaseRunner);
+				String androidBaseRunner = fClassIf.getAndroidBaseRunner();
+				fAndroidBaseRunnerCombo.setText(androidBaseRunner);
+			}
 		}
 	}	
 
@@ -100,22 +102,29 @@ public class ClassDetailsPage extends BasicDetailsPage {
 	private class RunOnAndroidCheckBoxAdapter extends AbstractSelectionAdapter{
 		@Override
 		public void widgetSelected(SelectionEvent e) {
-
-			final String defaultBaseAndroidBaseRunner = 
-					AndroidBaseRunnerHelper.getDefaultAndroidBaseRunnerName();
-
 			boolean selection = fRunOnAndroidCheckbox.getSelection();
 			fClassIf.setRunOnAndroid(selection);
 
 			if (selection) {
-				String androidBaseRunner = fClassIf.getAndroidBaseRunner();
+				adjustAndroidBaseRunner();
+			}
+			refresh();
+		}
 
-				if (androidBaseRunner == null || androidBaseRunner.isEmpty()) {
-					fClassIf.setAndroidBaseRunner(defaultBaseAndroidBaseRunner);
-				}
+		private void adjustAndroidBaseRunner() {
+			final String defaultBaseAndroidBaseRunner = 
+					AndroidBaseRunnerHelper.getDefaultAndroidBaseRunnerName();
+
+			if (!baseRunnerFieldsActive()) {
+				fClassIf.setAndroidBaseRunner(defaultBaseAndroidBaseRunner);
+				return;
 			}
 
-			refresh();
+			String androidBaseRunner = fClassIf.getAndroidBaseRunner();
+			if (androidBaseRunner == null || androidBaseRunner.isEmpty()) {
+
+				fClassIf.setAndroidBaseRunner(defaultBaseAndroidBaseRunner);
+			}
 		}
 	}
 
@@ -213,26 +222,31 @@ public class ClassDetailsPage extends BasicDetailsPage {
 
 		// row 2
 
-		// col 1 - label
-		fAndroidBaseRunnerLabel = getToolkit().createLabel(composite, "Base runner");
 
-		// col 2 - runner combo
-		fAndroidBaseRunnerCombo = new ComboViewer(composite, SWT.NONE).getCombo();
-		fAndroidBaseRunnerCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
-		fAndroidBaseRunnerCombo.addFocusListener(new AndroidBaseRunnerComboFocusListener());
-		fAndroidBaseRunnerCombo.addSelectionListener(new AndroidBaseRunnerComboSelectionListener());
+		if (baseRunnerFieldsActive()) {
+			// col 1 - label
+			fAndroidBaseRunnerLabel = getToolkit().createLabel(composite, "Base runner");
 
-		fillAndroidBaseRunnerCombo();
+			// col 2 - runner combo
+			fAndroidBaseRunnerCombo = new ComboViewer(composite, SWT.NONE).getCombo();
+			fAndroidBaseRunnerCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
+			fAndroidBaseRunnerCombo.addFocusListener(new AndroidBaseRunnerComboFocusListener());
+			fAndroidBaseRunnerCombo.addSelectionListener(new AndroidBaseRunnerComboSelectionListener());
+
+			fillAndroidBaseRunnerCombo();
+		}
 	}
 
 	private void refreshAndroidBaseRunnerCombo() {
 
-		String currentRunner = fAndroidBaseRunnerCombo.getText();
+		if (baseRunnerFieldsActive()) {
+			String currentRunner = fAndroidBaseRunnerCombo.getText();
 
-		fAndroidBaseRunnerCombo.removeAll();
-		fillAndroidBaseRunnerCombo();
+			fAndroidBaseRunnerCombo.removeAll();
+			fillAndroidBaseRunnerCombo();
 
-		fAndroidBaseRunnerCombo.setText(currentRunner);
+			fAndroidBaseRunnerCombo.setText(currentRunner);
+		}
 	}
 
 	private void fillAndroidBaseRunnerCombo() {
@@ -281,16 +295,22 @@ public class ClassDetailsPage extends BasicDetailsPage {
 		boolean runOnAndroid = fClassIf.getRunOnAndroid(); 
 		fRunOnAndroidCheckbox.setSelection(runOnAndroid);
 
-		fAndroidBaseRunnerLabel.setEnabled(runOnAndroid);
-		fAndroidBaseRunnerCombo.setEnabled(runOnAndroid);
+		if (baseRunnerFieldsActive()) {
+			fAndroidBaseRunnerLabel.setEnabled(runOnAndroid);
+			fAndroidBaseRunnerCombo.setEnabled(runOnAndroid);
 
-		String androidBaseRunner = fClassIf.getAndroidBaseRunner();
+			String androidBaseRunner = fClassIf.getAndroidBaseRunner();
 
-		if (androidBaseRunner == null) {
-			androidBaseRunner = "";
+			if (androidBaseRunner == null) {
+				androidBaseRunner = "";
+			}
+
+			fAndroidBaseRunnerCombo.setText(androidBaseRunner);
 		}
+	}
 
-		fAndroidBaseRunnerCombo.setText(androidBaseRunner);
+	private boolean baseRunnerFieldsActive() {
+		return false;
 	}
 
 	@Override
