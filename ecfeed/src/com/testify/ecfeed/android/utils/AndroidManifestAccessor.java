@@ -26,6 +26,7 @@ import nu.xom.Serializer;
 import com.testify.ecfeed.runner.Messages;
 import com.testify.ecfeed.utils.DiskFileHelper;
 import com.testify.ecfeed.utils.ExceptionHelper;
+import com.testify.ecfeed.utils.StringHelper;
 
 public class AndroidManifestAccessor {
 
@@ -324,6 +325,10 @@ public class AndroidManifestAccessor {
 	}
 
 	public String getMainActivityClassName() {
+		return StringHelper.removePrefix(".", getMainActivityValue());
+	}
+	
+	public String getMainActivityValue() {
 		final Elements children = fRootElement.getChildElements();
 
 		for (int index = 0; index < children.size(); index++) {
