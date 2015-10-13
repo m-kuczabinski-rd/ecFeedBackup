@@ -75,7 +75,7 @@ public class AndroidManifestAccessor {
 	private Element fRootElement;
 
 	public AndroidManifestAccessor(String projectPath) {
-		fManifestPath = createQualifiedName(projectPath);
+		fManifestPath = createManifestQualifiedName(projectPath);
 
 		if(!DiskFileHelper.fileExists(fManifestPath)) {
 			ExceptionHelper.reportRuntimeException(ANDROID_MANIFEST_FILE + MSG_NOT_FOUND_IN_PATH + projectPath);
@@ -92,7 +92,7 @@ public class AndroidManifestAccessor {
 		fRootElement = fDocument.getRootElement();
 	}
 
-	private static String createQualifiedName(String projectPath) {
+	private static String createManifestQualifiedName(String projectPath) {
 		return DiskFileHelper.joinPathWithFile(projectPath, ANDROID_MANIFEST_FILE);
 	}
 
