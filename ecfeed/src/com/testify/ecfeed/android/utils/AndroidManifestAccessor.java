@@ -68,26 +68,22 @@ public class AndroidManifestAccessor {
 	private static final String NODE_NAME_INTENT_FILTER = "intent-filter";
 	private static final String ANDROID_INTENT_ACTION_MAIN = "android.intent.action.MAIN";
 	private static final String ANDROID_MANIFEST_FILE = "AndroidManifest.xml";
+	private static final String MSG_NOT_FOUND_IN_PATH = " not found in path: ";
 
 	private String fManifestPath;
 	private Document fDocument;
 	private Element fRootElement;
 
-	public static boolean androidManifestExists(String projectPath) {
-		String manifestPath = createQualifiedName(projectPath);
-
-		if(DiskFileHelper.fileExists(manifestPath)) {
-			return true;
-		}
-		return false;
-	}
-
 	public AndroidManifestAccessor(String projectPath) {
+		fManifestPath = createQualifiedName(projectPath);
+
+		if(!DiskFileHelper.fileExists(fManifestPath)) {
+			ExceptionHelper.reportRuntimeException(ANDROID_MANIFEST_FILE + MSG_NOT_FOUND_IN_PATH + projectPath);
+		}		
+
 		Builder builder = new Builder();
 
 		try {
-			fManifestPath = createQualifiedName(projectPath);
-
 			fDocument = builder.build(fManifestPath);
 		} catch (ParsingException | IOException e) {
 			ExceptionHelper.reportRuntimeException(e.getMessage());
@@ -327,7 +323,7 @@ public class AndroidManifestAccessor {
 	public String getMainActivityClassName() {
 		return StringHelper.removePrefix(".", getMainActivityValue());
 	}
-	
+
 	public String getMainActivityValue() {
 		final Elements children = fRootElement.getChildElements();
 
