@@ -78,11 +78,11 @@ public class EclipseInstallationDirFileHelper implements IInstallationDirFileHel
 		return StringHelper.removePostfix(postfix, ecfeedJarUrl);
 	}
 
-	public static final String EXCEPTION_FILE_NOT_FOUND_IN_INSTALLATION_DIR(final String relativePath) {
+	private static final String EXCEPTION_FILE_NOT_FOUND_IN_INSTALLATION_DIR(final String relativePath) {
 		return "Can not find: " + relativePath + " in ecFeed installation directory."; 
 	}
 
-	public static final String EXCEPTION_FILE_NOT_FOUND_IN_INSTALLATION_DIR2(
+	private static final String EXCEPTION_FILE_NOT_FOUND_IN_INSTALLATION_DIR2(
 			final String relativePath, final String installationDir) {
 		return "Can not find: " + relativePath + " in ecFeed installation directory: " + installationDir; 
 	}	
