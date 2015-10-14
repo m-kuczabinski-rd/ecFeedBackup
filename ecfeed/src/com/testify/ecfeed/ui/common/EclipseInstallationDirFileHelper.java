@@ -68,8 +68,6 @@ public class EclipseInstallationDirFileHelper implements IInstallationDirFileHel
 	}	
 
 	private Class<?> getAnyClassFromAndroidPlugin() {
-		//		return this.getClass(); XYX
-
 		return (AndroidFactoryDistributorExt.getFactory()).getClass();
 	}
 
