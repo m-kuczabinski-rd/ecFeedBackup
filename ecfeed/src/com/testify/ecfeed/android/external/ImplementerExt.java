@@ -14,15 +14,18 @@ public class ImplementerExt {
 
 	final IProjectHelper fProjectHelper;
 	final IClassImplementHelper fClassImplementHelper;
+	final IInstallationDirFileHelper fInstallationDirFileHelper;
 	final String fBaseRunner;
 
 	public ImplementerExt(
 			final String baseRunner, 
 			final IProjectHelper projectHelper, 
-			final IClassImplementHelper classImplementHelper) {
+			final IClassImplementHelper classImplementHelper,
+			final IInstallationDirFileHelper installationDirFileHelper) {
 		fBaseRunner = baseRunner;
 		fProjectHelper = projectHelper;
 		fClassImplementHelper = classImplementHelper;
+		fInstallationDirFileHelper = installationDirFileHelper;
 	}
 
 	public boolean contentImplemented() throws EcException {
@@ -37,6 +40,7 @@ public class ImplementerExt {
 
 	private IImplementerExt createImplementer() {
 		final IAndroidFactoryExt androidFactory = AndroidFactoryDistributorExt.getFactory();
-		return androidFactory.createCommonImplementer(fBaseRunner, fClassImplementHelper, fProjectHelper);		
+		return androidFactory.createCommonImplementer(
+				fBaseRunner, fClassImplementHelper, fProjectHelper, fInstallationDirFileHelper);		
 	}
 }

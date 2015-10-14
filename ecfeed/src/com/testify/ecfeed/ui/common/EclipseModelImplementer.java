@@ -46,6 +46,7 @@ import com.testify.ecfeed.adapter.java.JavaUtils;
 import com.testify.ecfeed.android.external.AndroidMethodImplementerExt;
 import com.testify.ecfeed.android.external.AndroidUserClassImplementerExt;
 import com.testify.ecfeed.android.external.IClassImplementHelper;
+import com.testify.ecfeed.android.external.IInstallationDirFileHelper;
 import com.testify.ecfeed.android.external.IImplementerExt;
 import com.testify.ecfeed.android.external.IMethodImplementHelper;
 import com.testify.ecfeed.android.external.IProjectHelper;
@@ -538,7 +539,8 @@ public class EclipseModelImplementer extends AbstractJavaModelImplementer {
 
 		IProjectHelper projectHelper = new EclipseProjectHelper(fFileInfoProvider);
 		IClassImplementHelper classImplementHelper = new EclipseClassImplementHelper(fFileInfoProvider);
+		IInstallationDirFileHelper installationDirFileHelper = new EclipseInstallationDirFileHelper(); 
 
-		return new ImplementerExt(baseRunner, projectHelper, classImplementHelper); 
+		return new ImplementerExt(baseRunner, projectHelper, classImplementHelper, installationDirFileHelper); 
 	}
 }

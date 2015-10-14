@@ -17,6 +17,7 @@ import org.eclipse.jdt.core.JavaModelException;
 
 import com.testify.ecfeed.adapter.java.JavaPrimitiveTypePredicate;
 import com.testify.ecfeed.android.external.IClassImplementHelper;
+import com.testify.ecfeed.android.external.IInstallationDirFileHelper;
 import com.testify.ecfeed.android.external.IProjectHelper;
 import com.testify.ecfeed.android.external.ImplementerExt;
 import com.testify.ecfeed.model.ClassNode;
@@ -41,8 +42,12 @@ public class EclipseImplementationStatusResolver extends AbstractJavaImplementat
 
 		IProjectHelper projectHelper = new EclipseProjectHelper(fFileInfoProvider);
 		IClassImplementHelper classImplementHelper = new EclipseClassImplementHelper(fFileInfoProvider);
+		IInstallationDirFileHelper installationDirFileHelper = new EclipseInstallationDirFileHelper();
 
-		ImplementerExt implementer = new ImplementerExt(baseRunner, projectHelper, classImplementHelper); 
+		ImplementerExt implementer = 
+				new ImplementerExt(
+						baseRunner, projectHelper, classImplementHelper, installationDirFileHelper);
+
 		return implementer.contentImplemented();
 	}
 
