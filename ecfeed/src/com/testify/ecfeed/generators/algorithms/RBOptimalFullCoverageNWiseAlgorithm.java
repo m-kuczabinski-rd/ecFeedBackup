@@ -15,6 +15,9 @@ public class RBOptimalFullCoverageNWiseAlgorithm<E> extends AbstractNWiseAlgorit
 	protected ArrayList<Parameter> inputs = new ArrayList<>();
 	protected Collection<IConstraint<E>> myConstraints;
 
+	private List<List<E>> all = null;
+	private int next = -1;
+
 	public RBOptimalFullCoverageNWiseAlgorithm(int n) {
 		super(n, 100);
 	}
@@ -36,94 +39,183 @@ public class RBOptimalFullCoverageNWiseAlgorithm<E> extends AbstractNWiseAlgorit
 
 	@Override
 	public List<E> getNext() throws GeneratorException {
-
-		// TODO Auto-generated method stub
-		return null;
+		if (all == null) {
+			all = generateAll();
+			next = 0;
+		}
+		return all.get(next++);
 	}
 
+	/**
+	 * Generates all tuples that together cover all N-Wise combinations of input
+	 * values. The generated set of tuples is intended to be optimal (i.e., the
+	 * returned set contains the minimum number of tuples that can provide the
+	 * required coverage of N-Wise combinations.)
+	 * 
+	 * @return
+	 * @throws GeneratorException
+	 */
 	public List<List<E>> generateAll() throws GeneratorException {
 		List<List<E>> firstNTupels = getFirstNTupels();
 		List<List<E>> originalIn = getInput();
 
 		int cnt = inputs.size();
-		List<List<Integer>> nMinus1prefixes = generateNminus1ParamCombinations();
+		Set<List<Boolean>> nM1paramIndCombs = generateNm1ParamIndexCombinations();
 
-		for (int i = (cnt - 1 - N); i >= 0; i--) {
-			List<List<Integer>> cart = getRelevantTuples(nMinus1prefixes, i);
-			int expected = getExpectedNumberOfTuples(i);
+		nextColumn: for (int i = (cnt - 1 - N); i >= 0; i--) {
+			Set<List<Boolean>> filteredIndCombs = getSubset(nM1paramIndCombs, i);
+			int expected = getExpectedNumberOfTuples(filteredIndCombs, i);
 			Set<List<E>> foundTuples = new HashSet<>();
+			int ind = cnt - i - 1;
 
 			for (int j = 0; j < firstNTupels.size(); j++) {
+				if (firstNTupels.get(j).size() > ind + 1)
+					throw new RuntimeException("Too many elements in the tuple. N: " + N + ", Max expected tuple size: "
+							+ (ind + 1) + ", Actual tuple size: " + firstNTupels.get(j).size());
 
-				if (firstNTupels.get(j).get(i) == null)
+				if (firstNTupels.get(j).get(ind) == null)
 					firstNTupels.get(j).add(originalIn.get(inputs.get(i).index).get(0));
 
-				checkCombs: for (List<Integer> c : cart) {
+				for (List<Boolean> c : filteredIndCombs) {
 					List<E> remainingVals = new ArrayList<>(originalIn.get(inputs.get(i).index));
 
 					for (int l = 0; l < firstNTupels.size(); l++) {
-						if (compareValueTupels(firstNTupels.get(j), firstNTupels.get(l), c)) {
-							if (firstNTupels.get(l).get(i) == null)
+						if (compareValuesAtIndices(firstNTupels.get(j), firstNTupels.get(l), c)) {
+							if (firstNTupels.get(l).get(ind) == null) {
 								firstNTupels.get(l).add(remainingVals.remove(0));
-							else
-								remainingVals.remove(firstNTupels.get(l).get(i));
-							foundTuples.add(newNtuple(firstNTupels.get(l), c, i));
+								foundTuples.addAll(getTuplesAtIndices(firstNTupels.get(l), filteredIndCombs, ind));
+								if (foundTuples.size() >= expected) {
+									// TODO fill the rest of this column with
+									// appropriate values
+									continue nextColumn; // Continue to the next
+															// column
+								}
+							} else
+								remainingVals.remove(firstNTupels.get(l).get(ind));
 							if (remainingVals.size() == 0)
-								break checkCombs;
+								break; // Continue to the next c
 						}
 					}
+					if (remainingVals.size() != 0)
+						createNewFullTuples(firstNTupels, j, c, ind, remainingVals);
 				}
 			}
-			if (foundTuples.size() < expected)
-				createNewFullTuples(firstNTupels);
-
 		}
 
 		return firstNTupels;
 	}
 
-	private void createNewFullTuples(List<List<E>> firstNTupels) {
-		// TODO Auto-generated method stub
-
+	/**
+	 * 
+	 * @param list
+	 * @param indCombs
+	 * @param lastInd
+	 * @return
+	 */
+	private List<List<E>> getTuplesAtIndices(List<E> list, Set<List<Boolean>> indCombs, int lastInd) {
+		List<List<E>> tuples = new ArrayList<>();
+		for (List<Boolean> c : indCombs) {
+			List<E> tuple = new ArrayList<>();
+			for (int ind = 0; ind < c.size(); ind++) {
+				if (!c.get(ind))
+					tuple.add(null);
+				else
+					tuple.add(list.get(ind));
+			}
+			tuple.add(list.get(lastInd));
+			tuples.add(tuple);
+		}
+		return tuples;
 	}
 
-	private List<E> newNtuple(List<E> list, List<Integer> c, int i) {
-		// TODO Auto-generated method stub
+	/**
+	 * Returns a subset of the input set in which only indices greater than i
+	 * are set to true.
+	 * 
+	 * @param set
+	 * @param i
+	 * @return
+	 */
+	/*
+	 * I have intentionally used no access modifier for this method to make it
+	 * (package-)private to make accessible in the test class.
+	 */
+	Set<List<Boolean>> getSubset(Set<List<Boolean>> set, int i) {
+		Set<List<Boolean>> selection = new HashSet<>();
 
-		// Extract the newly generated tuples
-		return null;
+		for (List<Boolean> comb : set) {
+			int indCnt = 0;
+			for (int ind = comb.size() - 1; ind > i; ind--) {
+				if (comb.get(ind))
+					indCnt++;
+			}
+			if (indCnt == N - 1)
+				selection.add(comb);
+		}
+		return selection;
 	}
 
-	protected boolean compareValueTupels(List<E> list, List<E> list2, List<Integer> c) {
-		for (Integer ind : c) {
-			if (ind != 0)
+	/**
+	 * 
+	 * @param indCombs
+	 * @param i
+	 * @return
+	 */
+	/*
+	 * I have intentionally used no access modifier for this method to make it
+	 * (package-)private to make accessible in the test class.
+	 */
+	int getExpectedNumberOfTuples(Set<List<Boolean>> indCombs, int i) {
+		int val = 0;
+		for (List<Boolean> l : indCombs) {
+			int num = inputs.get(i).size;
+			for (int ind = 0; ind < l.size(); ind++) {
+				if (l.get(ind))
+					num *= inputs.get(ind).size;
+			}
+			val += num;
+		}
+		return val;
+	}
+
+	/**
+	 * 
+	 * @param list
+	 * @param list2
+	 * @param c
+	 * @return
+	 */
+	protected boolean compareValuesAtIndices(List<E> list, List<E> list2, List<Boolean> c) {
+		for (int ind = 0; ind < c.size(); ind++) {
+			if (c.get(ind))
 				if (!list.get(ind).equals(list.get(ind)))
 					return false;
 		}
 		return true;
 	}
 
-	private List<List<Integer>> getRelevantTuples(List<List<Integer>> nMinus1prefixes, int i) {
-		// TODO Auto-generated method stub
+	public Set<List<Boolean>> generateNm1ParamIndexCombinations() {
 
-		// gets a subset of nMinus1prefixes, which contains only tuples in which
-		// the lower i parameters don't appear.
-		return null;
-	}
+		List<Integer> tempInput = new ArrayList<>();
+		for (int i = 0; i < inputs.size(); i++)
+			tempInput.add(i);
 
-	private int getExpectedNumberOfTuples(int i) {
-		// TODO Auto-generated method stub
+		Tuples<Integer> tupleGen = new Tuples<>(tempInput, N - 1);
+		Set<List<Integer>> intermediateRes = tupleGen.getAll();
 
-		// Should be reuseable from super classes
-		return 0;
-	}
+		Set<List<Boolean>> res = new HashSet<>();
 
-	private List<List<Integer>> generateNminus1ParamCombinations() {
-		// TODO Auto-generated method stub
-
-		// Should generate all parameter combinations of size N-1
-		// TODO think of the format.
-		return null;
+		for (List<Integer> x : intermediateRes) {
+			List<Boolean> tup = new ArrayList<>();
+			for (int i = 0; i < inputs.size(); i++) {
+				if (x.contains(i))
+					tup.add(true);
+				else
+					tup.add(false);
+			}
+			res.add(tup);
+		}
+		return res;
 	}
 
 	public List<List<E>> getFirstNTupels() throws GeneratorException {
@@ -147,6 +239,12 @@ public class RBOptimalFullCoverageNWiseAlgorithm<E> extends AbstractNWiseAlgorit
 		}
 
 		return allCombs;
+	}
+
+	private void createNewFullTuples(List<List<E>> firstNTupels, int j, List<Boolean> c, int ind,
+			List<E> remainingVals) {
+		// TODO Auto-generated method stub
+
 	}
 
 }
