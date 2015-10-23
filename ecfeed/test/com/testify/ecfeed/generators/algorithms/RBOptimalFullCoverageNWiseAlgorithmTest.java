@@ -83,7 +83,7 @@ public class RBOptimalFullCoverageNWiseAlgorithmTest {
 		}
 
 		Set<List<Boolean>> res = alg.generateNm1ParamIndexCombinations();
-		for (int i = (inputsCount - 1 - N); i >= 0; i--) {
+		for (int i = N; i < inputsCount; i++) {
 			Set<List<Boolean>> selection = alg.getSubset(res, i);
 			assertNotNull(selection);
 			System.out.println("\ni: " + i + ", size: " + selection.size() + ":");
@@ -110,17 +110,39 @@ public class RBOptimalFullCoverageNWiseAlgorithmTest {
 		int[] expected = new int[] {52, 88};
 		int ind = 0;
 		Set<List<Boolean>> res = alg.generateNm1ParamIndexCombinations();
-		for (int i = (inputsCount - 1 - N); i >= 0; i--) {
+		for (int i = N; i <inputsCount; i++) {
 			Set<List<Boolean>> sel = alg.getSubset(res, i);
 			//printList(sel);
 			int cnt = alg.getExpectedNumberOfTuples(sel, i);
 			System.out.println(cnt);
 			assertEquals(expected[ind++], cnt);
 		}
-		
-
 	}
 
+	@Test
+	public void testGenerateAll() {
+		
+		System.out.println("\nTesting generateAll()");
+		List<List<Integer>> input = generateInput(4, 2);
+
+		RBOptimalFullCoverageNWiseAlgorithm<Integer> alg = new RBOptimalFullCoverageNWiseAlgorithm<Integer>(3);
+		try {
+			alg.initialize(input, EMPTY_CONSTRAINTS);
+
+			List<List<Integer>> res = alg.generateAll();
+			printList(res);
+
+			assertNotNull(res);
+			assertEquals(res.size(), 8);
+
+		} catch (GeneratorException e) {
+			fail("Unexpected exception: " + e.getMessage());
+			e.printStackTrace();
+		}
+
+		
+	}
+	
 	private List<List<Integer>> generateInput(int count, int maxSize) {
 		List<List<Integer>> input = new ArrayList<>();
 

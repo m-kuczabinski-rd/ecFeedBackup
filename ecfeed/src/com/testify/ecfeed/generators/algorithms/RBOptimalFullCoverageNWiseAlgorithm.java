@@ -33,8 +33,9 @@ public class RBOptimalFullCoverageNWiseAlgorithm<E> extends AbstractNWiseAlgorit
 			inputs.add(new Parameter(i, item.size()));
 		}
 
-		/* Parameters at higher indices have larger domain sizes. */
 		Collections.sort(inputs);
+		/* Parameters with smaller indices have larger domain sizes. */
+		Collections.reverse(inputs);
 	}
 
 	@Override
@@ -62,42 +63,47 @@ public class RBOptimalFullCoverageNWiseAlgorithm<E> extends AbstractNWiseAlgorit
 		int cnt = inputs.size();
 		Set<List<Boolean>> nM1paramIndCombs = generateNm1ParamIndexCombinations();
 
-		nextColumn: for (int i = (cnt - 1 - N); i >= 0; i--) {
+		nextColumn: for (int i = N; i < cnt; i++) {
 			Set<List<Boolean>> filteredIndCombs = getSubset(nM1paramIndCombs, i);
 			int expected = getExpectedNumberOfTuples(filteredIndCombs, i);
 			Set<List<E>> foundTuples = new HashSet<>();
-			int ind = cnt - i - 1;
-
+			
 			for (int j = 0; j < firstNTupels.size(); j++) {
-				if (firstNTupels.get(j).size() > ind + 1)
-					throw new RuntimeException("Too many elements in the tuple. N: " + N + ", Max expected tuple size: "
-							+ (ind + 1) + ", Actual tuple size: " + firstNTupels.get(j).size());
-
-				if (firstNTupels.get(j).get(ind) == null)
+				if (firstNTupels.get(j).size() == i) {
 					firstNTupels.get(j).add(originalIn.get(inputs.get(i).index).get(0));
+				}
+				else if (firstNTupels.get(j).size() < i || firstNTupels.get(j).size() > i + 1)
+					throw new RuntimeException(
+							"Unexpected number of elements in the tuple. N: " + N + ", Expected tuple size: " + i
+									+ " or " + (i + 1) + ", Actual tuple size: " + firstNTupels.get(j).size());
 
 				for (List<Boolean> c : filteredIndCombs) {
 					List<E> remainingVals = new ArrayList<>(originalIn.get(inputs.get(i).index));
-
+					
 					for (int l = 0; l < firstNTupels.size(); l++) {
 						if (compareValuesAtIndices(firstNTupels.get(j), firstNTupels.get(l), c)) {
-							if (firstNTupels.get(l).get(ind) == null) {
-								firstNTupels.get(l).add(remainingVals.remove(0));
-								foundTuples.addAll(getTuplesAtIndices(firstNTupels.get(l), filteredIndCombs, ind));
+							if (firstNTupels.get(l).size() == i) {
+								E val = remainingVals.remove(0);
+								firstNTupels.get(l).add(val);
+								foundTuples.addAll(getTuplesAtIndices(firstNTupels.get(l), filteredIndCombs, i));
 								if (foundTuples.size() >= expected) {
 									// TODO fill the rest of this column with
 									// appropriate values
 									continue nextColumn; // Continue to the next
 															// column
 								}
-							} else
-								remainingVals.remove(firstNTupels.get(l).get(ind));
+							} else if (firstNTupels.get(l).size() == i + 1)
+								remainingVals.remove(firstNTupels.get(l).get(i));
+							else
+								throw new RuntimeException("Too few elements in the tuple. N: " + N
+										+ ", Expected tuple size: " + i + " or " + (i + 1) + ", Actual tuple size: "
+										+ firstNTupels.get(l).size());
 							if (remainingVals.size() == 0)
 								break; // Continue to the next c
 						}
 					}
 					if (remainingVals.size() != 0)
-						createNewFullTuples(firstNTupels, j, c, ind, remainingVals);
+						createNewFullTuples(firstNTupels, j, c, i, remainingVals);
 				}
 			}
 		}
@@ -129,7 +135,7 @@ public class RBOptimalFullCoverageNWiseAlgorithm<E> extends AbstractNWiseAlgorit
 	}
 
 	/**
-	 * Returns a subset of the input set in which only indices greater than i
+	 * Returns a subset of the input set in which only indices smaller than i
 	 * are set to true.
 	 * 
 	 * @param set
@@ -145,7 +151,7 @@ public class RBOptimalFullCoverageNWiseAlgorithm<E> extends AbstractNWiseAlgorit
 
 		for (List<Boolean> comb : set) {
 			int indCnt = 0;
-			for (int ind = comb.size() - 1; ind > i; ind--) {
+			for (int ind = 0; ind < i; ind++) {
 				if (comb.get(ind))
 					indCnt++;
 			}
@@ -168,14 +174,14 @@ public class RBOptimalFullCoverageNWiseAlgorithm<E> extends AbstractNWiseAlgorit
 	int getExpectedNumberOfTuples(Set<List<Boolean>> indCombs, int i) {
 		int val = 0;
 		for (List<Boolean> l : indCombs) {
-			int num = inputs.get(i).size;
+			int num = 1;
 			for (int ind = 0; ind < l.size(); ind++) {
 				if (l.get(ind))
 					num *= inputs.get(ind).size;
 			}
 			val += num;
 		}
-		return val;
+		return val*inputs.get(i).size;
 	}
 
 	/**
@@ -186,9 +192,10 @@ public class RBOptimalFullCoverageNWiseAlgorithm<E> extends AbstractNWiseAlgorit
 	 * @return
 	 */
 	protected boolean compareValuesAtIndices(List<E> list, List<E> list2, List<Boolean> c) {
+		
 		for (int ind = 0; ind < c.size(); ind++) {
 			if (c.get(ind))
-				if (!list.get(ind).equals(list.get(ind)))
+				if (!(list.get(ind).equals(list2.get(ind))))
 					return false;
 		}
 		return true;
@@ -224,8 +231,8 @@ public class RBOptimalFullCoverageNWiseAlgorithm<E> extends AbstractNWiseAlgorit
 		List<List<E>> inp = getInput();
 
 		for (int i = 0; i < N; i++) {
-			startingList.add(inp.get(inputs.get(inputs.size() - i - 1).index));
-			System.out.println(inp.get(inputs.get(inputs.size() - i - 1).index).size());
+			startingList.add(inp.get(inputs.get(i).index));
+			//System.out.println(inp.get(inputs.get(inputs.size() - i - 1).index).size());
 		}
 
 		CartesianProductAlgorithm<E> alg = new CartesianProductAlgorithm<>();
