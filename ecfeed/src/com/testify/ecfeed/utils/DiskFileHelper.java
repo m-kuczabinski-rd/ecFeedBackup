@@ -18,6 +18,7 @@ public class DiskFileHelper {
 	public static final String EXTENSION_SEPARATOR = ".";
 	public static final String APK_EXTENSION = "apk";
 	public static final String BIN_SUBDIRECTORY = "bin";
+	public static final String ALLOWED_CHARS_FOR_ECT_NAME = "[a-zA-Z0-9_\\.]";
 
 	public static boolean fileExists(String pathWithName) {
 		File file = new File(pathWithName);
@@ -54,5 +55,36 @@ public class DiskFileHelper {
 		return file.lastModified();
 	}
 
+	public static String checkEctFileName(String fileName) {
+		final String ALLOWED_CHARS = "[a-zA-Z0-9_\\.]";
+		final String FILE_NAME_MUST_NOT_START_WITH_SPACE = "Ect file name must not start with space."; 
+		final String FILE_NAME_DOES_NOT_HAVE_ECT_SUFFIX = "Ect file name does not have .ect suffix.";
+		final String FILE_NAME_MUST_NOT_CONTAIN_DOTS = "Ect file name must not contain 'dot' character.";
 
+		final String ECT_FILE_NAME_WITH_INVALID_CHAR_1 = "Ect file name: <";
+		final String ECT_FILE_NAME_WITH_INVALID_CHAR_2 = "> contains invalid character: <";
+		final String ECT_FILE_NAME_WITH_INVALID_CHAR_3 = ">.";
+
+		if (fileName.startsWith(" ")) {
+			return FILE_NAME_MUST_NOT_START_WITH_SPACE;
+		}
+
+		if (!fileName.endsWith(".ect")) {
+			return FILE_NAME_DOES_NOT_HAVE_ECT_SUFFIX;
+		}
+
+		int occurencesOfDot = StringHelper.countOccurencesOfChar(fileName, '.');
+		if (occurencesOfDot > 1) {
+			return FILE_NAME_MUST_NOT_CONTAIN_DOTS;
+		}
+
+		String invalidChar = StringHelper.containsOnlyAllowedChars(fileName, ALLOWED_CHARS);
+		if (invalidChar != null) {
+			return ECT_FILE_NAME_WITH_INVALID_CHAR_1 + fileName + 
+					ECT_FILE_NAME_WITH_INVALID_CHAR_2 + invalidChar + 
+					ECT_FILE_NAME_WITH_INVALID_CHAR_3;
+		}
+
+		return null;
+	}
 }

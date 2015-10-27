@@ -66,4 +66,31 @@ public class StringHelper {
 		}
 		return false;
 	}
+
+	public static String containsOnlyAllowedChars(String str, String allowedCharsRegex) {
+		int len = str.length();
+
+		for (int index = 0; index < len; ++index) {
+			String substr = str.substring(index, index+1);
+			if (!substr.matches(allowedCharsRegex)) {
+				return substr;
+			}
+		}
+		return null;
+	}
+
+	public static int countOccurencesOfChar(String str, char charToCount) {
+		int len = str.length();
+		int occurences = 0;
+		String strgToCount = Character.toString(charToCount);
+
+		for (int index = 0; index < len; ++index) {
+			String substr = str.substring(index, index+1);
+
+			if (strgToCount.equals(substr)) {
+				occurences++;
+			}
+		}
+		return occurences;
+	}
 }
