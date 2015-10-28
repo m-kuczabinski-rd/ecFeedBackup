@@ -20,6 +20,23 @@ public class StringHelper {
 		return false;
 	}
 
+	public static boolean isNullOrBlank(String str) {
+		if (str == null) {
+			return true;
+		}
+		if (isTrimmedEmpty(str)) {
+			return true;
+		}
+		return false;
+	}
+
+	public static boolean hasNonBlankContents(String str) {
+		if (isNullOrBlank(str)) {
+			return false;
+		}
+		return true;
+	}
+
 	public static boolean isTrimmedEmpty(String str) {
 		return str.trim().isEmpty();
 	}

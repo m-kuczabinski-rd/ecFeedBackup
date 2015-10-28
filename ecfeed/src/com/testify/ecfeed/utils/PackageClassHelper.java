@@ -23,4 +23,18 @@ public class PackageClassHelper {
 	public static String createPackageWithClass(String thePackage, String className) {
 		return thePackage + PACKAGE_CLASS_SEPARATOR + className;
 	}
+
+	public static String removeDefaultPackagePrefix(String packageWithClass) {
+		return StringHelper.removePrefix(".", packageWithClass);
+	}
+
+	public static boolean hasPackageName(String packageWithClass) {
+		String trimmedPackageWithClass = packageWithClass.trim();
+
+		if (trimmedPackageWithClass.startsWith(".")) {
+			return false;
+		}
+		return true;
+	}	
+
 }

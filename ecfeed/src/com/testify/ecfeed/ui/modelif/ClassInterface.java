@@ -42,6 +42,7 @@ import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.testify.ecfeed.ui.dialogs.TestClassSelectionDialog;
 import com.testify.ecfeed.utils.EcException;
+import com.testify.ecfeed.utils.PackageClassHelper;
 import com.testify.ecfeed.utils.SystemLogger;
 
 public class ClassInterface extends GlobalParametersParentInterface {
@@ -92,6 +93,13 @@ public class ClassInterface extends GlobalParametersParentInterface {
 	}
 
 	public boolean setQualifiedName(String newName){
+		if (!PackageClassHelper.hasPackageName(newName)){
+			MessageDialog.openError(
+					Display.getDefault().getActiveShell(), 
+					Messages.DIALOG_RENAME_CLASS_TITLE, 
+					Messages.DIALOG_RENAME_CLASS_MESSAGE_PACKAGE_NOT_EMPTY);
+			return false;
+		}
 		if(newName.equals(getQualifiedName())){
 			return false;
 		}

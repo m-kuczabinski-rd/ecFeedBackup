@@ -11,8 +11,10 @@ package com.testify.ecfeed.utils;
 import com.testify.ecfeed.utils.StringHelper;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
@@ -120,5 +122,51 @@ public class StringHelperTest{
 		String result = StringHelper.containsOnlyAllowedChars("M T R.F%", "[A-Z\\. ]");
 		assertNotNull(result);
 		assertEquals("%", result);
+	}
+
+	@Test
+	public void shouldReturnTrueWhenNull(){
+		assertTrue(StringHelper.isNullOrBlank(null));
+	}
+
+	@Test
+	public void shouldReturnTrueWhenBlank(){
+		assertTrue(StringHelper.isNullOrBlank("   "));
 	}	
+
+	@Test
+	public void shouldReturnFalseWhenNotBlank(){
+		assertFalse(StringHelper.isNullOrBlank("abc DEF "));
+	}
+
+	@Test
+	public void shouldReturnTrueWhenNonBlankContents(){
+		assertTrue(StringHelper.hasNonBlankContents(" X "));
+	}	
+
+	@Test
+	public void shouldReturnFalseWhenBlankContentsSpacesOnly(){
+		assertFalse(StringHelper.hasNonBlankContents("    "));
+	}	
+
+	@Test
+	public void shouldReturnFalseWhenBlankContentsNull(){
+		assertFalse(StringHelper.hasNonBlankContents(null));
+	}
+
+	@Test
+	public void shouldReturnNoOccurencesWhenEmpty(){
+		assertEquals(0, StringHelper.countOccurencesOfChar("", 'x'));
+	}
+
+	@Test
+	public void shouldReturnNoOccurencesOfSpace(){
+		assertEquals(0, StringHelper.countOccurencesOfChar("12345", ' '));
+	}	
+
+	@Test
+	public void shouldReturnFourOccurencesOfSpace(){
+		assertEquals(4, StringHelper.countOccurencesOfChar(" 12 3 45 ", ' '));
+	}	
+
 }

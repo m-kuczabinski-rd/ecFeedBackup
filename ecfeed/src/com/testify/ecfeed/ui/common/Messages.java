@@ -154,6 +154,10 @@ public class Messages {
 	public static final String DIALOG_REMOVE_CLASS_MESSAGE = "This operation will remove selected test class from the model.";
 	public static final String DIALOG_RENAME_IMPLEMENTED_CLASS_TITLE = "Renaming implemented class";
 	public static final String DIALOG_RENAME_IMPLEMENTED_CLASS_MESSAGE = "Renaming implemented class may cause the test cases to be not executable.";
+
+	public static final String DIALOG_RENAME_CLASS_TITLE = "Renaming class";
+	public static final String DIALOG_RENAME_CLASS_MESSAGE_PACKAGE_NOT_EMPTY = "Package name must not be empty.";
+
 	public static final String DIALOG_REMOVE_METHOD_TITLE = "Remove method";
 	public static final String DIALOG_REMOVE_METHOD_MESSAGE = "This operation will remove selected test method from the model.";
 	public static final String DIALOG_REMOVE_METHODS_TITLE = "Remove method";
