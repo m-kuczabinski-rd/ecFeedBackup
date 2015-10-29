@@ -18,7 +18,7 @@ import java.util.List;
 import com.testify.ecfeed.generators.api.GeneratorException;
 import com.testify.ecfeed.generators.api.IConstraint;
 
-public class CartesianProductAlgorithm<E> extends AbstractAlgorithm<E> implements IAlgorithm<E>{
+public class CartesianProductAlgorithm<E> extends AbstractAlgorithm<E>{
 	private boolean fInitialized;
 	protected List<Integer> fLastGenerated;
 
