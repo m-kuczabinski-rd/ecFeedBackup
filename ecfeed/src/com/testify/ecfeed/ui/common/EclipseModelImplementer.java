@@ -188,7 +188,6 @@ public class EclipseModelImplementer extends AbstractJavaModelImplementer {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	protected void implementChoicesDefinitions(List<ChoiceNode> nodes) throws CoreException, EcException {
 		refreshWorkspace();
 		AbstractParameterNode parent = getParameter(nodes);
@@ -202,19 +201,42 @@ public class EclipseModelImplementer extends AbstractJavaModelImplementer {
 		IType enumType = getJavaProject().findType(typeName);
 		ICompilationUnit iUnit = enumType.getCompilationUnit();
 		CompilationUnit unit = getCompilationUnit(enumType);
-		EnumDeclaration enumDeclaration = getEnumDeclaration(unit, typeName);
-		if(enumDeclaration != null){
-			for(ChoiceNode node : nodes){
-				EnumConstantDeclaration constant = unit.getAST().newEnumConstantDeclaration();
-				constant.setName(unit.getAST().newSimpleName(node.getValueString()));
-				enumDeclaration.enumConstants().add(constant);
-			}
-			saveChanges(unit, enumType.getResource().getLocation());
-		}
+
+		addEnumItems(unit, typeName, nodes, enumType);
+
 		enumType.getResource().refreshLocal(IResource.DEPTH_ONE, null);
 		iUnit.becomeWorkingCopy(null);
 		iUnit.commitWorkingCopy(true, null);
 		refreshWorkspace();
+	}
+
+	@SuppressWarnings("unchecked")
+	private void addEnumItems(
+			CompilationUnit unit,
+			String typeName, 
+			List<ChoiceNode> nodes,
+			IType enumType) throws CoreException {
+
+		EnumDeclaration enumDeclaration = getEnumDeclaration(unit, typeName);
+		if (enumDeclaration == null){
+			return;
+		}
+
+		List<String> enumItemNames = new ArrayList<String>();
+
+		for (ChoiceNode node : nodes) {
+			EnumConstantDeclaration constant = unit.getAST().newEnumConstantDeclaration();
+			String enumItemName = node.getValueString();
+
+			if (enumItemNames.contains(enumItemName)) {
+				continue;
+			}
+			constant.setName(unit.getAST().newSimpleName(enumItemName));
+			enumDeclaration.enumConstants().add(constant);
+			enumItemNames.add(enumItemName);
+		}
+
+		saveChanges(unit, enumType.getResource().getLocation());
 	}
 
 	@Override
