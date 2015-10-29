@@ -141,8 +141,8 @@ public class MethodsViewer extends TableViewerSection {
 
 	@Override
 	protected void createTableColumns() {
-		fMethodsColumn = addColumn("Methods", 150, new NodeNameColumnLabelProvider());
-		addColumn("Arguments", 450, new MethodsArgsLabelProvider());
+		fMethodsColumn = addColumn("Name", 150, new NodeNameColumnLabelProvider());
+		addColumn("Parameters", 450, new MethodsArgsLabelProvider());
 	}
 
 	@Override
