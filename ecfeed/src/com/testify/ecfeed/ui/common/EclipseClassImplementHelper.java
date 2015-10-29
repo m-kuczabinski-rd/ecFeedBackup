@@ -112,9 +112,10 @@ public class EclipseClassImplementHelper implements IClassImplementHelper {
 							thePackage, fFileInfoProvider);
 
 			final String unitName = classNameWithoutExtension + ".java";
+			final boolean FORCE_CREATION = true;
 
 			final ICompilationUnit unit = 
-					packageFragment.createCompilationUnit(unitName, content, false, null);
+					packageFragment.createCompilationUnit(unitName, content, FORCE_CREATION, null);
 
 			unit.becomeWorkingCopy(null);
 			unit.commitWorkingCopy(true, null);
