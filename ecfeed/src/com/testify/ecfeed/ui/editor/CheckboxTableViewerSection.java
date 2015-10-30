@@ -15,6 +15,8 @@ import org.eclipse.jface.viewers.CheckboxTableViewer;
 import org.eclipse.jface.viewers.StructuredViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Table;
 
 import com.testify.ecfeed.ui.common.utils.IFileInfoProvider;
@@ -32,8 +34,17 @@ public abstract class CheckboxTableViewerSection extends TableViewerSection {
 
 	@Override
 	protected Table createTable(Composite parent, int style){
-		return new Table(parent, style | SWT.CHECK);
+		Table tab = new Table(parent, style | SWT.CHECK);
+
+		tab.addListener (SWT.Selection, new Listener () {
+			public void handleEvent (Event event) {
+				onSelectionChanged();
+			}
+		}); 
+		return tab; 		
 	}
+
+	protected abstract void onSelectionChanged();
 
 	@Override
 	protected StructuredViewer createViewer(Composite parent, int style){
