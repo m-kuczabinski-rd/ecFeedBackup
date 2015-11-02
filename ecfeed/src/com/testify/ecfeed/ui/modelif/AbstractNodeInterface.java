@@ -173,6 +173,10 @@ public class AbstractNodeInterface extends OperationExecuter{
 		return execute(new GenericRemoveNodesOperation(children, fAdapterProvider, true), message);
 	}
 
+	public String canAddChildren(Collection<? extends AbstractNode> children) {
+		return null; // error message if can not
+	}
+
 	public boolean addChildren(Collection<? extends AbstractNode> children){
 		IModelOperation operation = new GenericAddChildrenOperation(fTarget, children, fAdapterProvider, true);
 		return execute(operation, Messages.DIALOG_ADD_CHILDREN_PROBLEM_TITLE);

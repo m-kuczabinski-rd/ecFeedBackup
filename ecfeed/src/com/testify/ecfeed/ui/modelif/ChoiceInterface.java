@@ -11,6 +11,7 @@
 
 package com.testify.ecfeed.ui.modelif;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -28,6 +29,7 @@ import com.testify.ecfeed.adapter.operations.ChoiceOperationAddLabels;
 import com.testify.ecfeed.adapter.operations.ChoiceOperationRemoveLabels;
 import com.testify.ecfeed.adapter.operations.ChoiceOperationRenameLabel;
 import com.testify.ecfeed.adapter.operations.ChoiceOperationSetValue;
+import com.testify.ecfeed.model.AbstractNode;
 import com.testify.ecfeed.model.AbstractParameterNode;
 import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.ui.common.Constants;
@@ -65,7 +67,7 @@ public class ChoiceInterface extends ChoicesParentInterface{
 			}
 		}
 		if(removeMentioningConstraints){
-				if(MessageDialog.openConfirm(Display.getCurrent().getActiveShell(),
+			if(MessageDialog.openConfirm(Display.getCurrent().getActiveShell(),
 					Messages.DIALOG_REMOVE_LABELS_WARNING_TITLE,
 					Messages.DIALOG_REMOVE_LABELS_WARNING_MESSAGE) == false){
 				return false;
@@ -109,7 +111,7 @@ public class ChoiceInterface extends ChoicesParentInterface{
 			MessageDialog.openError(Display.getCurrent().getActiveShell(),
 					Messages.DIALOG_RENAME_LABELS_ERROR_TITLE,
 					Messages.DIALOG_LABEL_IS_ALREADY_INHERITED);
-				return false;
+			return false;
 		}
 		if(getTarget().getLeafLabels().contains(newValue)){
 			if(MessageDialog.openConfirm(Display.getCurrent().getActiveShell(),
@@ -157,5 +159,39 @@ public class ChoiceInterface extends ChoicesParentInterface{
 	@Override
 	public boolean commentsImportExportEnabled(){
 		return super.commentsImportExportEnabled() && getImplementationStatus() != EImplementationStatus.NOT_IMPLEMENTED;
+	}
+
+	@Override
+	public String canAddChildren(Collection<? extends AbstractNode> newChildren) {
+		String existingChoiceName = choiceNameAlreadyExists(newChildren);
+
+		if (existingChoiceName != null) {
+			return Messages.CHOICE_ALREADY_EXISTS(existingChoiceName); 
+		}
+		return null;
+	}
+
+	private String choiceNameAlreadyExists(Collection<? extends AbstractNode> newChildren) {
+		List<String> existingChildrenNames = getListOfChildrenChoiceNames();
+
+		for (AbstractNode newChild : newChildren) {
+			String newChildName = newChild.getName();
+			if (existingChildrenNames.indexOf(newChildName) != -1) {
+				return newChildName;
+			}
+		}
+		return null;
+	}
+
+	List<String> getListOfChildrenChoiceNames() {
+		ChoiceNode choiceNode = getTarget();
+		List<ChoiceNode> existingChoices = choiceNode.getChoices();
+
+		List<String> names = new ArrayList<String>();
+
+		for (ChoiceNode choice : existingChoices) {
+			names.add(choice.getName());
+		}
+		return names;
 	}
 }

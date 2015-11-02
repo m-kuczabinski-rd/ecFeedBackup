@@ -11,10 +11,15 @@
 
 package com.testify.ecfeed.ui.editor.actions;
 
+import java.util.Collection;
+
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.TreeViewer;
+import org.eclipse.swt.widgets.Display;
 
 import com.testify.ecfeed.model.AbstractNode;
+import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.testify.ecfeed.ui.modelif.AbstractNodeInterface;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
@@ -33,7 +38,7 @@ public class PasteAction extends ModelModifyingAction {
 			IFileInfoProvider fileInfoProvider) {
 		this(-1, selectionProvider, updateContext, fileInfoProvider);
 	}
-	
+
 	public PasteAction(
 			int index, 
 			ISelectionProvider selectionProvider, 
@@ -43,7 +48,7 @@ public class PasteAction extends ModelModifyingAction {
 		fIndex = index;
 		fFileInfoProvider = fileInfoProvider;
 	}
-	
+
 	public PasteAction(
 			TreeViewer treeViewer, 
 			IModelUpdateContext updateContext,
@@ -73,13 +78,22 @@ public class PasteAction extends ModelModifyingAction {
 		}
 		return nodeIf.pasteEnabled(NodeClipboard.getContent());
 	}
-	
+
 	@Override
 	public void run(){
 		AbstractNode parent = getSelectedNodes().get(0);
 		AbstractNodeInterface parentIf = 
-				NodeInterfaceFactory.getNodeInterface(parent, getUpdateContext(), fFileInfoProvider); 
-		parentIf.addChildren(NodeClipboard.getContentCopy());
+				NodeInterfaceFactory.getNodeInterface(parent, getUpdateContext(), fFileInfoProvider);
+
+		Collection<AbstractNode> childrenToAdd = NodeClipboard.getContentCopy();
+		String errorMessage = parentIf.canAddChildren(childrenToAdd);
+
+		if (errorMessage != null) {
+			MessageDialog.openError(Display.getDefault().getActiveShell(), Messages.CAN_NOT_PASTE_CHOICES, errorMessage);
+			return;
+		}
+
+		parentIf.addChildren(childrenToAdd);
 		if(fTreeViewer != null){
 			fTreeViewer.expandToLevel(parent, 1);
 		}

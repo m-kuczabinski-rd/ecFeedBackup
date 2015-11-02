@@ -218,4 +218,9 @@ public class Messages {
 	public static String DIALOG_SUCCESFUL_TEST_EXECUTION(int totalTestCases) {
 		return "All of " + totalTestCases + " test cases were succesfully executed.";
 	}
+
+	public static final String CHOICE_ALREADY_EXISTS(String choiceName) {
+		return "Choice with the name: " + choiceName + "  already exists.";
+	}
+	public static final String CAN_NOT_PASTE_CHOICES = "Can not paste choices.";
 }
