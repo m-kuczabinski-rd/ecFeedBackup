@@ -124,6 +124,13 @@ public class ClassInterface extends GlobalParametersParentInterface {
 	}
 
 	public boolean setRunOnAndroid(boolean runOnAndroid) {
+		if(getImplementationStatus(getTarget()) != EImplementationStatus.NOT_IMPLEMENTED){
+			if(MessageDialog.openConfirm(Display.getCurrent().getActiveShell(),
+					Messages.DIALOG_RENAME_RUN_ON_ANDROID_TITLE,
+					Messages.DIALOG_RENAME_RUN_ON_ANDROID_MESSAGE) == false){
+				return false;
+			}
+		}
 		IModelOperation operation = new ClassOperationSetRunOnAndroid(getTarget(), runOnAndroid);
 		return execute(operation, Messages.DIALOG_ANDROID_RUNNER_SET_PROBLEM_TITLE);
 	}
