@@ -15,15 +15,16 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
-
-public class MethodParameterNode extends AbstractParameterNode{
+public class MethodParameterNode extends AbstractParameterNode {
 
 	private boolean fExpected;
 	private String fDefaultValue;
 	private boolean fLinked;
 	private GlobalParameterNode fLink;
+	private List<ChoiceNode> fChoicesCopy;
 
-	public MethodParameterNode(String name, String type, String defaultValue, boolean expected, boolean linked, GlobalParameterNode link) {
+	public MethodParameterNode(String name, String type, String defaultValue,
+			boolean expected, boolean linked, GlobalParameterNode link) {
 		super(name, type);
 		fExpected = expected;
 		fDefaultValue = defaultValue;
@@ -31,34 +32,41 @@ public class MethodParameterNode extends AbstractParameterNode{
 		fLink = link;
 	}
 
-	public MethodParameterNode(String name, String type, String defaultValue, boolean expected) {
+	public MethodParameterNode(String name, String type, String defaultValue,
+			boolean expected) {
 		this(name, type, defaultValue, expected, false, null);
 	}
 
-	public MethodParameterNode(AbstractParameterNode source, String defaultValue, boolean expected, boolean linked, GlobalParameterNode link) {
-		this(source.getName(), source.getType(), defaultValue, expected, linked, link);
+	public MethodParameterNode(AbstractParameterNode source,
+			String defaultValue, boolean expected, boolean linked,
+			GlobalParameterNode link) {
+		this(source.getName(), source.getType(), defaultValue, expected, linked,
+				link);
 		addChoices(source.getChoices());
 	}
 
-	public MethodParameterNode(AbstractParameterNode source, String defaultValue, boolean expected) {
+	public MethodParameterNode(AbstractParameterNode source,
+			String defaultValue, boolean expected) {
 		this(source, defaultValue, expected, false, null);
 	}
 
 	@Override
-	public String toString(){
-		if(fExpected){
-			return super.toString() + "(" + getDefaultValue() + "): " + getType();
+	public String toString() {
+		if (fExpected) {
+			return super.toString() + "(" + getDefaultValue() + "): "
+					+ getType();
 		}
 		return new String(getName() + ": " + getType());
 	}
 
 	@Override
-	public MethodParameterNode getCopy(){
-		MethodParameterNode parameter = new MethodParameterNode(getName(), getType(), getDefaultValue(), isExpected());
+	public MethodParameterNode getCopy() {
+		MethodParameterNode parameter = new MethodParameterNode(getName(),
+				getType(), getDefaultValue(), isExpected());
 		parameter.setParent(this.getParent());
-		if(getDefaultValue() != null)
+		if (getDefaultValue() != null)
 			parameter.setDefaultValueString(getDefaultValue());
-		for(ChoiceNode choice : fChoices){
+		for (ChoiceNode choice : fChoices) {
 			parameter.addChoice(choice.getCopy());
 		}
 		parameter.setParent(getParent());
@@ -66,8 +74,8 @@ public class MethodParameterNode extends AbstractParameterNode{
 	}
 
 	@Override
-	public String getType(){
-		if(isLinked() && fLink != null){
+	public String getType() {
+		if (isLinked() && fLink != null) {
 			return fLink.getType();
 		}
 		return super.getType();
@@ -75,7 +83,7 @@ public class MethodParameterNode extends AbstractParameterNode{
 
 	@Override
 	public String getTypeComments() {
-		if(isLinked() && fLink != null){
+		if (isLinked() && fLink != null) {
 			return fLink.getTypeComments();
 		}
 		return super.getTypeComments();
@@ -86,16 +94,33 @@ public class MethodParameterNode extends AbstractParameterNode{
 	}
 
 	@Override
-	public List<ChoiceNode> getChoices(){
-		if(isLinked() && fLink != null){
-			return fLink.getChoices();
+	public List<ChoiceNode> getChoices() {
+		if (isLinked() && fLink != null) {
+			if (fChoicesCopy == null) {
+				fChoicesCopy = fLink.getCopy().getChoices();
+				return fChoicesCopy;
+			}
+			List<ChoiceNode> temp = fLink.getCopy().getChoices();
+			if(!choiceListsMatch(fChoicesCopy, temp))
+				fChoicesCopy = temp;
+				return fChoicesCopy;
 		}
 		return super.getChoices();
 	}
 
+	private boolean choiceListsMatch(List<ChoiceNode> list1,
+			List<ChoiceNode> list2) {
+		if(list1.size() != list2.size())
+			return false;
+		for(int i=0; i< list1.size(); i++)
+			if(list1.get(i).getName() != list2.get(i).getName() || list1.get(i).getValueString() != list2.get(i).getValueString())
+				return false;
+		return true;
+	}
+
 	@Override
 	public ChoiceNode getChoice(String qualifiedName) {
-		if(isLinked()){
+		if (isLinked()) {
 			return getLink().getChoice(qualifiedName);
 		}
 		return super.getChoice(qualifiedName);
@@ -107,15 +132,15 @@ public class MethodParameterNode extends AbstractParameterNode{
 
 	@Override
 	public List<MethodNode> getMethods() {
-		return Arrays.asList(new MethodNode[]{getMethod()});
+		return Arrays.asList(new MethodNode[] { getMethod() });
 	}
 
-	public List<ChoiceNode> getOwnChoices(){
+	public List<ChoiceNode> getOwnChoices() {
 		return super.getChoices();
 	}
 
 	public MethodNode getMethod() {
-		return (MethodNode)getParent();
+		return (MethodNode) getParent();
 	}
 
 	public String getDefaultValue() {
@@ -126,11 +151,11 @@ public class MethodParameterNode extends AbstractParameterNode{
 		fDefaultValue = value;
 	}
 
-	public boolean isExpected(){
+	public boolean isExpected() {
 		return fExpected;
 	}
 
-	public void setExpected(boolean isexpected){
+	public void setExpected(boolean isexpected) {
 		fExpected = isexpected;
 	}
 
@@ -151,31 +176,33 @@ public class MethodParameterNode extends AbstractParameterNode{
 	}
 
 	@Override
-	public boolean compare(AbstractNode node){
-		if(node instanceof MethodParameterNode == false){
+	public boolean compare(AbstractNode node) {
+		if (node instanceof MethodParameterNode == false) {
 			return false;
 		}
-		MethodParameterNode comparedParameter = (MethodParameterNode)node;
+		MethodParameterNode comparedParameter = (MethodParameterNode) node;
 
-		if(getType().equals(comparedParameter.getType()) == false){
-			return false;
-		}
-
-		if(isExpected() != comparedParameter.isExpected()){
+		if (getType().equals(comparedParameter.getType()) == false) {
 			return false;
 		}
 
-		if(fDefaultValue.equals(comparedParameter.getDefaultValue()) == false){
+		if (isExpected() != comparedParameter.isExpected()) {
+			return false;
+		}
+
+		if (fDefaultValue
+				.equals(comparedParameter.getDefaultValue()) == false) {
 			return false;
 		}
 
 		int choicesCount = fChoices.size();
-		if(choicesCount != comparedParameter.fChoices.size()){
+		if (choicesCount != comparedParameter.fChoices.size()) {
 			return false;
 		}
 
-		for(int i = 0; i < choicesCount; i++){
-			if(getChoices().get(i).compare(comparedParameter.getChoices().get(i)) == false){
+		for (int i = 0; i < choicesCount; i++) {
+			if (getChoices().get(i)
+					.compare(comparedParameter.getChoices().get(i)) == false) {
 				return false;
 			}
 		}
@@ -189,7 +216,7 @@ public class MethodParameterNode extends AbstractParameterNode{
 	}
 
 	@Override
-	public Object accept(IChoicesParentVisitor visitor) throws Exception{
+	public Object accept(IChoicesParentVisitor visitor) throws Exception {
 		return visitor.visit(this);
 	}
 
@@ -199,14 +226,13 @@ public class MethodParameterNode extends AbstractParameterNode{
 	}
 
 	@Override
-	public Set<ConstraintNode> mentioningConstraints(){
+	public Set<ConstraintNode> mentioningConstraints() {
 		return getMethod().mentioningConstraints(this);
 	}
 
 	@Override
-	public Set<ConstraintNode> mentioningConstraints(String label){
+	public Set<ConstraintNode> mentioningConstraints(String label) {
 		return getMethod().mentioningConstraints(this, label);
 	}
-
 
 }
