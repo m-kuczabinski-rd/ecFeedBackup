@@ -23,6 +23,7 @@ import com.testify.ecfeed.model.MethodParameterNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.ChoiceNode;
+import com.testify.ecfeed.utils.SystemLogger;
 
 public class JavaModelBuilder {
 	
@@ -50,7 +51,7 @@ public class JavaModelBuilder {
 			}
 		}
 		catch(Throwable e){
-//			throw new ModelIfException(Messages.EXCEPTION_CLASS_IMPORT(qualifiedName));
+			SystemLogger.logCatch(e.getMessage());
 		}
 		return classNode;
 	}

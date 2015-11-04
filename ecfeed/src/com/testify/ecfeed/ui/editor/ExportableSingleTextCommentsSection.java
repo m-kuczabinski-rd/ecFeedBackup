@@ -15,29 +15,42 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Button;
 
 import com.testify.ecfeed.ui.common.Messages;
+import com.testify.ecfeed.ui.common.utils.IFileInfoProvider;
+import com.testify.ecfeed.ui.editor.utils.ExceptionCatchDialog;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 
 public class ExportableSingleTextCommentsSection extends SingleTextCommentsSection {
 
 	private class ExportAllSelectionAdapter extends AbstractSelectionAdapter{
 		@Override
-		public void widgetSelected(SelectionEvent e) {
-			getTargetIf().exportAllComments();
+		public void widgetSelected(SelectionEvent ev) {
+			try {
+				getTargetIf().exportAllComments();
+			} catch (Exception e) {
+				ExceptionCatchDialog.display("Can not export.", e.getMessage());
+			}
 		}
 	}
 
 	private class ImportAllSelectionAdapter extends AbstractSelectionAdapter{
 		@Override
-		public void widgetSelected(SelectionEvent e) {
-			getTargetIf().importAllJavadocComments();
+		public void widgetSelected(SelectionEvent ev) {
+			try {
+				getTargetIf().importAllJavadocComments();
+			} catch (Exception e) {
+				ExceptionCatchDialog.display("Can not import.", e.getMessage());
+			}
 		}
 	}
 
 	private Button fExportButton;
 	private Button fImportButton;
 
-	public ExportableSingleTextCommentsSection(ISectionContext sectionContext, IModelUpdateContext updateContext) {
-		super(sectionContext, updateContext);
+	public ExportableSingleTextCommentsSection(
+			ISectionContext sectionContext, 
+			IModelUpdateContext updateContext,
+			IFileInfoProvider fileInfoProvider) {
+		super(sectionContext, updateContext, fileInfoProvider);
 	}
 
 	@Override

@@ -13,6 +13,7 @@ package com.testify.ecfeed.adapter.operations;
 
 import com.testify.ecfeed.adapter.IModelOperation;
 import com.testify.ecfeed.adapter.ModelOperationException;
+import com.testify.ecfeed.adapter.java.Messages;
 import com.testify.ecfeed.model.AbstractStatement;
 import com.testify.ecfeed.model.StatementArray;
 
@@ -32,7 +33,7 @@ public class StatementOperationReplaceChild extends AbstractModelOperation {
 	@Override
 	public void execute() throws ModelOperationException {
 		if(fTarget == null){
-			throw new ModelOperationException(Messages.NULL_POINTER_TARGET);
+			ModelOperationException.report(Messages.NULL_POINTER_TARGET);
 		}
 		fTarget.replaceChild(fCurrentChild, fNewChild);
 		markModelUpdated();

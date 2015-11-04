@@ -17,12 +17,13 @@ import java.util.Collection;
 import com.testify.ecfeed.adapter.java.ModelClassLoader;
 import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.runner.Messages;
+import com.testify.ecfeed.utils.EcException;
 
-public class ParameterizedMethod extends AbstractFrameworkMethod {
+public class JavaParameterizedMethod extends AbstractFrameworkMethod {
 
 	private Collection<TestCaseNode> fTestCases;
-	
-	public ParameterizedMethod(Method method, Collection<TestCaseNode> testCases, ModelClassLoader loader) {
+
+	public JavaParameterizedMethod(Method method, Collection<TestCaseNode> testCases, ModelClassLoader loader) {
 		super(method, loader);
 		fTestCases = testCases;
 	}
@@ -33,7 +34,7 @@ public class ParameterizedMethod extends AbstractFrameworkMethod {
 			try{
 				super.invoke(target, testCase.getTestData());
 			}catch (Throwable e){
-				throw new Exception(Messages.RUNNER_EXCEPTION(e.getMessage()), e);
+				EcException.report(Messages.RUNNER_EXCEPTION(e.getMessage()), e);
 			}
 		}
 		return null;

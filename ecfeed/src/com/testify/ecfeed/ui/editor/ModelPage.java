@@ -15,6 +15,7 @@ import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.editor.FormPage;
 
 import com.testify.ecfeed.model.RootNode;
+import com.testify.ecfeed.ui.common.utils.IFileInfoProvider;
 
 public class ModelPage extends FormPage {
 	private static final String ID = "com.testify.ecfeed.pages.refactored";
@@ -23,10 +24,10 @@ public class ModelPage extends FormPage {
 	private ModelMasterDetailsBlock fBlock;
 	private ModelEditor fEditor;
 
-	public ModelPage(ModelEditor editor) {
+	public ModelPage(ModelEditor editor, IFileInfoProvider fileInfoProvider) {
 		super(editor, ID, TITLE);
 		fEditor = editor;
-		fBlock = new ModelMasterDetailsBlock(this);
+		fBlock = new ModelMasterDetailsBlock(this, fileInfoProvider);
 	}
 
 	public void commitMasterPart(boolean onSave){

@@ -11,6 +11,8 @@
 
 package com.testify.ecfeed.serialization;
 
+import com.testify.ecfeed.utils.SystemLogger;
+
 public class ParserException extends Exception {
 
 	/**
@@ -18,7 +20,12 @@ public class ParserException extends Exception {
 	 */
 	private static final long serialVersionUID = 5386419314543963856L;
 
-	public ParserException(String message) {
+	private ParserException(String message) {
 		super(message);
+	}
+	
+	public static void report(String message) throws ParserException {
+		SystemLogger.logThrow(message);
+		throw new ParserException(message);
 	}
 }

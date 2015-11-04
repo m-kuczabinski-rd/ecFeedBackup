@@ -27,12 +27,13 @@ import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.ui.common.Constants;
 import com.testify.ecfeed.ui.common.EclipseModelBuilder;
 import com.testify.ecfeed.ui.common.Messages;
+import com.testify.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.testify.ecfeed.ui.dialogs.TestClassImportDialog;
 
 public class RootInterface extends GlobalParametersParentInterface {
 
-	public RootInterface(IModelUpdateContext updateContext) {
-		super(updateContext);
+	public RootInterface(IModelUpdateContext updateContext, IFileInfoProvider fileInfoProvider) {
+		super(updateContext, fileInfoProvider);
 	}
 
 	@Override

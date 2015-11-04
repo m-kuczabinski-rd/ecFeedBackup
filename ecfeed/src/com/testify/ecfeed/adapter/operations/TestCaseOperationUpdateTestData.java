@@ -13,6 +13,7 @@ package com.testify.ecfeed.adapter.operations;
 
 import com.testify.ecfeed.adapter.IModelOperation;
 import com.testify.ecfeed.adapter.ModelOperationException;
+import com.testify.ecfeed.adapter.java.Messages;
 import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.model.TestCaseNode;
 
@@ -34,7 +35,7 @@ public class TestCaseOperationUpdateTestData extends AbstractModelOperation {
 	@Override
 	public void execute() throws ModelOperationException {
 		if(fNewValue.getParameter() != fTarget.getTestData().get(fIndex).getParameter()){
-			throw new ModelOperationException(Messages.TEST_DATA_CATEGORY_MISMATCH_PROBLEM);
+			ModelOperationException.report(Messages.TEST_DATA_CATEGORY_MISMATCH_PROBLEM);
 		}
 		fTarget.getTestData().set(fIndex, fNewValue);
 		markModelUpdated();

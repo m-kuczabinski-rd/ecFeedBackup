@@ -26,10 +26,10 @@ import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.MethodParameterNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.TestCaseNode;
+import com.testify.ecfeed.utils.SystemLogger;
 
 
-public abstract class CachedImplementationStatusResolver extends
-		AbstractImplementationStatusResolver {
+public abstract class CachedImplementationStatusResolver extends AbstractImplementationStatusResolver {
 
 	private static Map<AbstractNode, EImplementationStatus> fCache = new HashMap<>();
 	private static CacheCleaner fCacheCleaner = new CacheCleaner();
@@ -102,10 +102,12 @@ public abstract class CachedImplementationStatusResolver extends
 	@Override
 	public EImplementationStatus getImplementationStatus(AbstractNode node){
 		EImplementationStatus status = fCache.get(node);
+
 		if(status == null){
 			status = super.getImplementationStatus(node);
 			updateCache(node, status);
 		}
+
 		return status;
 	}
 
@@ -113,7 +115,7 @@ public abstract class CachedImplementationStatusResolver extends
 		if(node != null){
 			try{
 				node.accept(fCacheCleaner);
-			}catch(Exception e){}
+			}catch(Exception e){SystemLogger.logCatch(e.getMessage());}
 			clearCache(node.getParent());
 		}
 	}

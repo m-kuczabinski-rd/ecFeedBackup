@@ -22,11 +22,15 @@ import com.testify.ecfeed.adapter.EImplementationStatus;
 import com.testify.ecfeed.adapter.java.JavaUtils;
 import com.testify.ecfeed.model.MethodParameterNode;
 import com.testify.ecfeed.ui.common.JavaDocSupport;
+import com.testify.ecfeed.ui.common.Messages;
+import com.testify.ecfeed.ui.common.utils.IFileInfoProvider;
+import com.testify.ecfeed.ui.editor.utils.ExceptionCatchDialog;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 import com.testify.ecfeed.ui.modelif.MethodParameterInterface;
 
 public class MethodParameterCommentsSection extends AbstractParameterCommentsSection {
 
+	private IFileInfoProvider fFileInfoProvider;
 	private MethodParameterInterface fTargetIf;
 
 	private TabItem fParameterJavadocTab;
@@ -40,25 +44,37 @@ public class MethodParameterCommentsSection extends AbstractParameterCommentsSec
 
 	protected class ImportParameterCommentsSelectionAdapter extends AbstractSelectionAdapter{
 		@Override
-		public void widgetSelected(SelectionEvent e) {
-			getTargetIf().importJavadocComments();
-			getTabFolder().setSelection(getTabFolder().indexOf(getParameterCommentsTab()));
+		public void widgetSelected(SelectionEvent ev) {
+			try {
+				getTargetIf().importJavadocComments();
+				getTabFolder().setSelection(getTabFolder().indexOf(getParameterCommentsTab()));
+			} catch (Exception e) {
+				ExceptionCatchDialog.display(Messages.EXCEPTION_CAN_NOT_IMPORT, e.getMessage());
+			}
 		}
 	}
 
 	protected class ExportParameterCommentsSelectionAdapter extends AbstractSelectionAdapter{
 		@Override
-		public void widgetSelected(SelectionEvent e) {
-			getTargetIf().exportCommentsToJavadoc(getTarget().getDescription());
-			getTabFolder().setSelection(getTabFolder().indexOf(fParameterJavadocTab));
+		public void widgetSelected(SelectionEvent ev) {
+			try {
+				getTargetIf().exportCommentsToJavadoc(getTarget().getDescription());
+				getTabFolder().setSelection(getTabFolder().indexOf(fParameterJavadocTab));
+			} catch (Exception e) {
+				ExceptionCatchDialog.display(Messages.EXCEPTION_CAN_NOT_REMOVE_SELECTED_ITEMS, e.getMessage());
+			}
 		}
 	}
 
 	protected class ExportAllParameterCommentsSelectionAdapter extends AbstractSelectionAdapter{
 		@Override
-		public void widgetSelected(SelectionEvent e) {
-			getTargetIf().exportAllComments();
-			getTabFolder().setSelection(getTabFolder().indexOf(fParameterJavadocTab));
+		public void widgetSelected(SelectionEvent ev) {
+			try {
+				getTargetIf().exportAllComments();
+				getTabFolder().setSelection(getTabFolder().indexOf(fParameterJavadocTab));
+			} catch (Exception e) {
+				ExceptionCatchDialog.display(Messages.EXCEPTION_CAN_NOT_EXPORT, e.getMessage());
+			}
 		}
 	}
 
@@ -71,9 +87,12 @@ public class MethodParameterCommentsSection extends AbstractParameterCommentsSec
 	}
 
 
-	public MethodParameterCommentsSection(ISectionContext sectionContext,
-			IModelUpdateContext updateContext) {
-		super(sectionContext, updateContext);
+	public MethodParameterCommentsSection(
+			ISectionContext sectionContext,
+			IModelUpdateContext updateContext,
+			IFileInfoProvider fileInfoProvider) {
+		super(sectionContext, updateContext, fileInfoProvider);
+		fFileInfoProvider = fileInfoProvider;
 
 		int typeJavadocTabIndex = Arrays.asList(getTabFolder().getItems()).indexOf(getTypeJavadocTab());
 		fParameterJavadocTab = addTextTab("Parameter javadoc", typeJavadocTabIndex);
@@ -103,7 +122,7 @@ public class MethodParameterCommentsSection extends AbstractParameterCommentsSec
 	@Override
 	protected MethodParameterInterface getTargetIf() {
 		if(fTargetIf == null){
-			fTargetIf = new MethodParameterInterface(getUpdateContext());
+			fTargetIf = new MethodParameterInterface(getUpdateContext(), fFileInfoProvider);
 		}
 		return fTargetIf;
 	}
@@ -112,7 +131,7 @@ public class MethodParameterCommentsSection extends AbstractParameterCommentsSec
 	protected void createExportMenuItems() {
 		fExportAllItem = new MenuItem(getExportButtonMenu(), SWT.NONE, 0);
 		fExportAllItem.setText("Export all");
-		fExportAllItem.addSelectionListener(new ExportAllParameterCommentsSelectionAdapter());
+		fExportAllItem.addSelectionListener(new ExportAllParameterCommentsSelectionAdapter()); 
 		fExportParameterCommentsItem = new MenuItem(getExportButtonMenu(), SWT.NONE, 1);
 		fExportParameterCommentsItem.setText("Export method comments");
 		fExportParameterCommentsItem.addSelectionListener(new ExportParameterCommentsSelectionAdapter());

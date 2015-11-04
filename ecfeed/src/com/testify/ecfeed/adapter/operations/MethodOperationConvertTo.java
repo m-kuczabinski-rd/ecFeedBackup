@@ -13,6 +13,7 @@ package com.testify.ecfeed.adapter.operations;
 
 import com.testify.ecfeed.adapter.IModelOperation;
 import com.testify.ecfeed.adapter.ModelOperationException;
+import com.testify.ecfeed.adapter.java.Messages;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.MethodParameterNode;
 
@@ -32,10 +33,10 @@ public class MethodOperationConvertTo extends AbstractModelOperation {
 		if(fTarget.getClassNode().getMethod(fSource.getName(), fSource.getParametersTypes()) != null){
 			String className = fTarget.getClassNode().getName();
 			String methodName = fSource.getName();
-			throw new ModelOperationException(Messages.METHOD_SIGNATURE_DUPLICATE_PROBLEM(className, methodName));
+			ModelOperationException.report(Messages.METHOD_SIGNATURE_DUPLICATE_PROBLEM(className, methodName));
 		}
 		if(fTarget.getParametersTypes().equals(fSource.getParametersTypes()) == false){
-			throw new ModelOperationException(Messages.METHODS_INCOMPATIBLE_PROBLEM);
+			ModelOperationException.report(Messages.METHODS_INCOMPATIBLE_PROBLEM);
 		}
 
 		fTarget.setName(fSource.getName());

@@ -14,6 +14,7 @@ package com.testify.ecfeed.adapter.operations;
 import com.testify.ecfeed.adapter.IModelOperation;
 import com.testify.ecfeed.adapter.ITypeAdapterProvider;
 import com.testify.ecfeed.adapter.ModelOperationException;
+import com.testify.ecfeed.adapter.java.Messages;
 import com.testify.ecfeed.model.AbstractNode;
 import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.model.ClassNode;
@@ -31,7 +32,7 @@ public class FactoryRemoveOperation {
 	private static class UnsupportedModelOperation implements IModelOperation{
 		@Override
 		public void execute() throws ModelOperationException {
-			throw new ModelOperationException(Messages.OPERATION_NOT_SUPPORTED_PROBLEM);
+			ModelOperationException.report(Messages.OPERATION_NOT_SUPPORTED_PROBLEM);
 		}
 
 		@Override

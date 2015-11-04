@@ -18,14 +18,19 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
 
+import com.testify.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 
 public abstract class TabFolderSection extends ButtonsCompositeSection {
 
 	private TabFolder fTabFolder;
 
-	public TabFolderSection(ISectionContext sectionContext, IModelUpdateContext updateContext, int style) {
-		super(sectionContext, updateContext, style);
+	public TabFolderSection(
+			ISectionContext sectionContext, 
+			IModelUpdateContext updateContext, 
+			IFileInfoProvider fileInfoProvider,
+			int style) {
+		super(sectionContext, updateContext, fileInfoProvider, style);
 		GridData gd = new GridData(SWT.FILL, SWT.FILL, true, false);
 		getSection().setLayoutData(gd);
 	}

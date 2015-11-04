@@ -55,12 +55,16 @@ import com.testify.ecfeed.model.MethodParameterNode;
 import com.testify.ecfeed.model.StatementArray;
 import com.testify.ecfeed.model.StaticStatement;
 import com.testify.ecfeed.ui.common.ImageManager;
+import com.testify.ecfeed.ui.common.Messages;
+import com.testify.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.testify.ecfeed.ui.editor.actions.ModelModifyingAction;
+import com.testify.ecfeed.ui.editor.utils.ExceptionCatchDialog;
 import com.testify.ecfeed.ui.modelif.AbstractParameterInterface;
 import com.testify.ecfeed.ui.modelif.AbstractStatementInterface;
 import com.testify.ecfeed.ui.modelif.ConstraintInterface;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 import com.testify.ecfeed.ui.modelif.StatementInterfaceFactory;
+import com.testify.ecfeed.utils.SystemLogger;
 
 public class ConstraintViewer extends TreeViewerSection {
 
@@ -166,6 +170,7 @@ public class ConstraintViewer extends TreeViewerSection {
 
 		private ConstraintNode fConstraint;
 		private ConstraintInterface fConstraintIf;
+		private IFileInfoProvider fFileInfoProvider;
 
 		private class AvailableConditionsProvider implements IStatementVisitor{
 
@@ -349,6 +354,10 @@ public class ConstraintViewer extends TreeViewerSection {
 		}
 
 		private class EditorBuilder implements IStatementVisitor{
+
+			public EditorBuilder(IFileInfoProvider fileInfoProvider) {
+				fFileInfoProvider = fileInfoProvider;
+			}
 			@Override
 			public Object visit(StaticStatement statement) throws Exception {
 				fRelationCombo.setVisible(false);
@@ -432,7 +441,7 @@ public class ConstraintViewer extends TreeViewerSection {
 			super(parent, SWT.NONE);
 			setLayout(new GridLayout(TOTAL_EDITOR_WIDTH, true));
 			setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 2, 1));
-			fConstraintIf = new ConstraintInterface(ConstraintViewer.this);
+			fConstraintIf = new ConstraintInterface(ConstraintViewer.this, fFileInfoProvider);
 
 			createStatementCombo(this);
 			createRelationCombo(this);
@@ -443,8 +452,10 @@ public class ConstraintViewer extends TreeViewerSection {
 			fStatementCombo.setItems(statementComboItems(statement));
 			fStatementCombo.setText(statement.getLeftOperandName());
 			try{
-				statement.accept(new EditorBuilder());
-			}catch(Exception e){}
+				statement.accept(new EditorBuilder(fFileInfoProvider));
+			}catch(Exception e){
+				SystemLogger.logCatch(e.getMessage());
+			}
 		}
 
 		public void setConstraint(ConstraintNode constraintNode) {
@@ -461,6 +472,7 @@ public class ConstraintViewer extends TreeViewerSection {
 					fConditionCombo.setText(currentConditionText);
 				}
 			} catch (Exception e) {
+				SystemLogger.logCatch(e.getMessage());
 			}
 		}
 
@@ -468,6 +480,7 @@ public class ConstraintViewer extends TreeViewerSection {
 			try {
 				return (String[]) statement.accept(new AvailableConditionsProvider());
 			} catch (Exception e) {
+				SystemLogger.logCatch(e.getMessage());
 			}
 			return new String[]{};
 		}
@@ -506,12 +519,16 @@ public class ConstraintViewer extends TreeViewerSection {
 
 	private class AddStatementAdapter extends SelectionAdapter{
 		@Override
-		public void widgetSelected(SelectionEvent e){
-			AbstractStatement statement = fStatementIf.addNewStatement();
-			if(statement != null){
-			//modelUpdated must be called before to refresh viewer before selecting the newly added statement
-				getTreeViewer().expandToLevel(statement, 1);
-				getTreeViewer().setSelection(new StructuredSelection(statement));
+		public void widgetSelected(SelectionEvent ev){
+			try {
+				AbstractStatement statement = fStatementIf.addNewStatement();
+				if(statement != null){
+					//modelUpdated must be called before to refresh viewer before selecting the newly added statement
+					getTreeViewer().expandToLevel(statement, 1);
+					getTreeViewer().setSelection(new StructuredSelection(statement));
+				}
+			} catch (Exception e) {
+				ExceptionCatchDialog.display("Can not add statement.", e.getMessage());
 			}
 		}
 	}
@@ -556,11 +573,17 @@ public class ConstraintViewer extends TreeViewerSection {
 
 	}
 
-	public ConstraintViewer(ISectionContext sectionContext, IModelUpdateContext updateContext) {
-		super(sectionContext, updateContext, STYLE);
+	public ConstraintViewer(
+			ISectionContext sectionContext, IModelUpdateContext updateContext, IFileInfoProvider fileInfoProvider) {
+		super(sectionContext, updateContext, fileInfoProvider, STYLE);
 		getSection().setText("Constraint editor");
 		fAddStatementButton = addButton("Add statement", new AddStatementAdapter());
-		fRemoveStatementButton = addButton("Remove statement", new ActionSelectionAdapter(new DeleteStatementAction(updateContext)));
+		fRemoveStatementButton = 
+				addButton("Remove statement", 
+						new ActionSelectionAdapter(
+								new DeleteStatementAction(updateContext), 
+								Messages.EXCEPTION_CAN_NOT_REMOVE_SELECTED_ITEMS));
+
 		getViewer().addSelectionChangedListener(new StatementSelectionListener());
 
 		fStatementEditor = new StatementEditor(getClientComposite());

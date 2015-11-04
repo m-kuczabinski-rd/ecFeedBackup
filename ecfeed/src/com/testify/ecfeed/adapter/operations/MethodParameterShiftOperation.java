@@ -16,6 +16,7 @@ import java.util.List;
 
 import com.testify.ecfeed.adapter.IModelOperation;
 import com.testify.ecfeed.adapter.ModelOperationException;
+import com.testify.ecfeed.adapter.java.Messages;
 import com.testify.ecfeed.model.AbstractNode;
 import com.testify.ecfeed.model.AbstractParameterNode;
 import com.testify.ecfeed.model.MethodNode;
@@ -44,7 +45,7 @@ public class MethodParameterShiftOperation extends GenericShiftOperation {
 	public void execute() throws ModelOperationException {
 		MethodNode method = ((MethodParameterNode)fParameters.get(0)).getMethod();
 		if(shiftAllowed(getShiftedElements(), getShift()) == false){
-			throw new ModelOperationException(Messages.METHOD_SIGNATURE_DUPLICATE_PROBLEM(method.getClassNode().getName(), method.getName()));
+			ModelOperationException.report(Messages.METHOD_SIGNATURE_DUPLICATE_PROBLEM(method.getClassNode().getName(), method.getName()));
 		}
 		List<Integer> indices = indices(fParameters, getShiftedElements());
 		shiftElements(fParameters, indices, getShift());

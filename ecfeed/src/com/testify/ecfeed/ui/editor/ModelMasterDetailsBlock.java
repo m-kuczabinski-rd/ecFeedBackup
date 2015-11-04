@@ -39,8 +39,10 @@ import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.MethodParameterNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.TestCaseNode;
+import com.testify.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 import com.testify.ecfeed.ui.modelif.IModelUpdateListener;
+import com.testify.ecfeed.utils.SystemLogger;
 
 public class ModelMasterDetailsBlock extends MasterDetailsBlock implements ISelectionChangedListener, ISectionContext{
 
@@ -49,6 +51,7 @@ public class ModelMasterDetailsBlock extends MasterDetailsBlock implements ISele
 	private ModelPage fPage;
 	private FormToolkit fToolkit;
 	private ModelUpdateContext fUpdateContext;
+	private IFileInfoProvider fFileInfoProvider;
 
 	private class ModelUpdateContext implements IModelUpdateContext{
 
@@ -101,6 +104,10 @@ public class ModelMasterDetailsBlock extends MasterDetailsBlock implements ISele
 
 		@Override
 		public boolean isEnabled(){
+			if (fActionId == null) {
+				return false;
+			}
+				
 			Action action = getFocusedSection().getAction(fActionId);
 			if(action  != null){
 				return action.isEnabled();
@@ -117,9 +124,10 @@ public class ModelMasterDetailsBlock extends MasterDetailsBlock implements ISele
 		}
 	}
 
-	public ModelMasterDetailsBlock(ModelPage modelPage) {
+	public ModelMasterDetailsBlock(ModelPage modelPage, IFileInfoProvider fileInfoProvider) {
 		fPage = modelPage;
 		fUpdateContext = new ModelUpdateContext();
+		fFileInfoProvider = fileInfoProvider;
 	}
 
 	public void selectNode(AbstractNode node){
@@ -133,9 +141,11 @@ public class ModelMasterDetailsBlock extends MasterDetailsBlock implements ISele
 
 	public BasicDetailsPage getCurrentPage(){
 		if(detailsPart != null){
-			try{
+			try {
 				return (BasicDetailsPage)detailsPart.getCurrentPage();
-			}catch(SWTException e){}
+			} catch(SWTException e)	{
+				SystemLogger.logCatch(e.getMessage());
+			}
 		}
 		return null;
 	}
@@ -160,7 +170,7 @@ public class ModelMasterDetailsBlock extends MasterDetailsBlock implements ISele
 	protected void createMasterPart(IManagedForm managedForm, Composite parent) {
 		fToolkit = managedForm.getToolkit();
 
-		fMasterSection = new ModelMasterSection(this);
+		fMasterSection = new ModelMasterSection(this, fFileInfoProvider);
 		fMasterSection.initialize(managedForm);
 		fMasterSection.addSelectionChangedListener(this);
 		fMasterSection.setInput(getModel());

@@ -14,6 +14,7 @@ package com.testify.ecfeed.adapter.operations;
 import com.testify.ecfeed.adapter.IModelOperation;
 import com.testify.ecfeed.adapter.ModelOperationException;
 import com.testify.ecfeed.adapter.java.Constants;
+import com.testify.ecfeed.adapter.java.Messages;
 import com.testify.ecfeed.model.ConstraintNode;
 import com.testify.ecfeed.model.MethodNode;
 
@@ -40,10 +41,10 @@ public class MethodOperationAddConstraint extends AbstractModelOperation {
 			fIndex = fTarget.getConstraintNodes().size();
 		}
 		if(fConstraint.getName().matches(Constants.REGEX_CONSTRAINT_NODE_NAME) == false){
-			throw new ModelOperationException(Messages.CONSTRAINT_NAME_REGEX_PROBLEM);
+			ModelOperationException.report(Messages.CONSTRAINT_NAME_REGEX_PROBLEM);
 		}
 		if(fConstraint.updateReferences(fTarget) == false){
-			throw new ModelOperationException(Messages.INCOMPATIBLE_CONSTRAINT_PROBLEM);
+			ModelOperationException.report(Messages.INCOMPATIBLE_CONSTRAINT_PROBLEM);
 		}
 		fTarget.addConstraint(fConstraint, fIndex);
 		markModelUpdated();

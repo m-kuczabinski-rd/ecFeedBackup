@@ -15,22 +15,48 @@ import org.eclipse.jdt.core.IField;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaModelException;
 
-import com.testify.ecfeed.adapter.CachedImplementationStatusResolver;
 import com.testify.ecfeed.adapter.java.JavaPrimitiveTypePredicate;
+import com.testify.ecfeed.android.external.IClassImplementHelper;
+import com.testify.ecfeed.android.external.IInstallationDirFileHelper;
+import com.testify.ecfeed.android.external.IProjectHelper;
+import com.testify.ecfeed.android.external.ImplementerExt;
+import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.MethodNode;
+import com.testify.ecfeed.ui.common.utils.EclipseProjectHelper;
+import com.testify.ecfeed.ui.common.utils.IFileInfoProvider;
+import com.testify.ecfeed.utils.EcException;
+import com.testify.ecfeed.utils.SystemLogger;
 
-public class EclipseImplementationStatusResolver extends CachedImplementationStatusResolver{
+public class EclipseImplementationStatusResolver extends AbstractJavaImplementationStatusResolver{
 
-	public EclipseImplementationStatusResolver(){
-		super(new JavaPrimitiveTypePredicate());
+	IFileInfoProvider fFileInfoProvider;
+
+	public EclipseImplementationStatusResolver(IFileInfoProvider fileInfoProvider){
+		super(new JavaPrimitiveTypePredicate(), new EclipseProjectHelper(fileInfoProvider).isAndroidProject());
+		fFileInfoProvider = fileInfoProvider;
+	}
+
+	@Override
+	protected boolean androidCodeImplemented(ClassNode classNode) throws EcException {
+		String baseRunner = classNode.getAndroidBaseRunner();
+
+		IProjectHelper projectHelper = new EclipseProjectHelper(fFileInfoProvider);
+		IClassImplementHelper classImplementHelper = new EclipseClassImplementHelper(fFileInfoProvider);
+		IInstallationDirFileHelper installationDirFileHelper = new EclipseInstallationDirFileHelper();
+
+		ImplementerExt implementer = 
+				new ImplementerExt(
+						baseRunner, projectHelper, classImplementHelper, installationDirFileHelper);
+
+		return implementer.contentImplemented();
 	}
 
 	@Override
 	protected boolean classDefinitionImplemented(String qualifiedName) {
 		IType type = JavaModelAnalyser.getIType(qualifiedName);
 		try {
-			return  type != null && type.isClass();
-		} catch (JavaModelException e) {}
+			return type != null && type.isClass();
+		} catch (JavaModelException e) {SystemLogger.logCatch(e.getMessage());}
 		return false;
 	}
 
@@ -44,7 +70,7 @@ public class EclipseImplementationStatusResolver extends CachedImplementationSta
 		IType type = JavaModelAnalyser.getIType(qualifiedName);
 		try {
 			return  type != null && type.isEnum();
-		} catch (JavaModelException e) {}
+		} catch (JavaModelException e) {SystemLogger.logCatch(e.getMessage());}
 		return false;
 	}
 
@@ -60,7 +86,7 @@ public class EclipseImplementationStatusResolver extends CachedImplementationSta
 					return true;
 				}
 			}
-		} catch (JavaModelException e) {}
+		} catch (JavaModelException e) {SystemLogger.logCatch(e.getMessage());}
 		return false;
 	}
 }

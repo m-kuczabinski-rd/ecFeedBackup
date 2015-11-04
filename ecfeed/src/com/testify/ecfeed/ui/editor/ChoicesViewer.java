@@ -35,10 +35,13 @@ import com.testify.ecfeed.adapter.java.JavaUtils;
 import com.testify.ecfeed.model.AbstractParameterNode;
 import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.model.ChoicesParentNode;
+import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.common.NodeNameColumnLabelProvider;
+import com.testify.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.testify.ecfeed.ui.editor.actions.DeleteAction;
 import com.testify.ecfeed.ui.editor.actions.IActionProvider;
 import com.testify.ecfeed.ui.editor.actions.ModelViewerActionProvider;
+import com.testify.ecfeed.ui.editor.utils.ExceptionCatchDialog;
 import com.testify.ecfeed.ui.modelif.AbstractParameterInterface;
 import com.testify.ecfeed.ui.modelif.ChoiceInterface;
 import com.testify.ecfeed.ui.modelif.ChoicesParentInterface;
@@ -49,6 +52,8 @@ import com.testify.ecfeed.ui.modelif.NodeInterfaceFactory;
 public class ChoicesViewer extends TableViewerSection {
 
 	private final static int STYLE = Section.EXPANDED | Section.TITLE_BAR;
+
+	public IFileInfoProvider fFileInfoProvider;
 
 	private ChoicesParentInterface fParentIf;
 	private ChoiceInterface fTableItemIf;
@@ -71,6 +76,7 @@ public class ChoicesViewer extends TableViewerSection {
 	private Button fReplaceWithDefaultButton;
 
 	private ChoicesParentNode fSelectedParent;
+
 
 	private class ChoiceNameEditingSupport extends EditingSupport{
 
@@ -191,29 +197,45 @@ public class ChoicesViewer extends TableViewerSection {
 	private class AddChoiceAdapter extends SelectionAdapter{
 
 		@Override
-		public void widgetSelected(SelectionEvent e){
-			ChoiceNode added = fParentIf.addNewChoice();
-			if(added != null){
-				getTable().setSelection(added.getIndex());
+		public void widgetSelected(SelectionEvent ev){
+			try {
+				ChoiceNode added = fParentIf.addNewChoice();
+				if(added != null){
+					getTable().setSelection(added.getIndex());
+				}
+			} catch (Exception e) {
+				ExceptionCatchDialog.display("Can not add choice.", e.getMessage());
 			}
 		}
 	}
 
 	private class ReplaceWithDefaultAdapter extends AbstractSelectionAdapter{
+
 		@Override
-		public void widgetSelected(SelectionEvent e) {
-			if(fSelectedParent == fSelectedParent.getParameter()){
-				AbstractParameterInterface parameterIf = (AbstractParameterInterface)NodeInterfaceFactory.getNodeInterface(fSelectedParent, ChoicesViewer.this);
-				parameterIf.resetChoicesToDefault();
+		public void widgetSelected(SelectionEvent ev) {
+			try {
+				if(fSelectedParent == fSelectedParent.getParameter()){
+					AbstractParameterInterface parameterIf 
+					= (AbstractParameterInterface)NodeInterfaceFactory.getNodeInterface(
+							fSelectedParent, ChoicesViewer.this, fFileInfoProvider);
+					parameterIf.resetChoicesToDefault();
+				}
+			} catch (Exception e) {
+				ExceptionCatchDialog.display("Can not replace with default.", e.getMessage());
 			}
 		}
 	}
 
-	public ChoicesViewer(ISectionContext sectionContext, IModelUpdateContext updateContext) {
-		super(sectionContext, updateContext, STYLE);
+	public ChoicesViewer(
+			ISectionContext sectionContext, 
+			IModelUpdateContext updateContext, 
+			IFileInfoProvider fileInfoProvider) {
+		super(sectionContext, updateContext, fileInfoProvider, STYLE);
 
-		fParentIf = new ChoicesParentInterface(this);
-		fTableItemIf = new ChoiceInterface(this);
+		fFileInfoProvider = fileInfoProvider;
+
+		fParentIf = new ChoicesParentInterface(this, fileInfoProvider);
+		fTableItemIf = new ChoiceInterface(this, fFileInfoProvider);
 
 		fNameEditingSupport = new ChoiceNameEditingSupport();
 		fValueEditingSupport = new ChoiceValueEditingSupport(this);
@@ -223,14 +245,18 @@ public class ChoicesViewer extends TableViewerSection {
 
 		getSection().setText("Choices");
 		fAddChoicesButton = addButton("Add choice", new AddChoiceAdapter());
-		fRemoveSelectedButton = addButton("Remove selected", new ActionSelectionAdapter(new DeleteAction(getViewer(), this)));
+		fRemoveSelectedButton = 
+				addButton("Remove selected", 
+						new ActionSelectionAdapter(
+								new DeleteAction(getViewer(), this), Messages.EXCEPTION_CAN_NOT_REMOVE_SELECTED_ITEMS));
+
 		fReplaceWithDefaultButton = addButton("Replace with default", new ReplaceWithDefaultAdapter());
 
 		addDoubleClickListener(new SelectNodeDoubleClickListener(sectionContext.getMasterSection()));
 		fActionProvider = new ModelViewerActionProvider(getTableViewer(), this);
 		setActionProvider(fActionProvider);
 		fDragListener = new ModelNodeDragListener(getViewer());
-		fDropListener = new ModelNodeDropListener(getViewer(), this);
+		fDropListener = new ModelNodeDropListener(getViewer(), this, fFileInfoProvider);
 		getViewer().addDragSupport(DND.DROP_COPY|DND.DROP_MOVE, new Transfer[]{ModelNodesTransfer.getInstance()}, fDragListener);
 		getViewer().addDropSupport(DND.DROP_COPY|DND.DROP_MOVE, new Transfer[]{ModelNodesTransfer.getInstance()}, fDropListener);
 	}
@@ -271,7 +297,7 @@ public class ChoicesViewer extends TableViewerSection {
 			setActionProvider(null);
 		}
 	}
-	
+
 	public void setReplaceButtonEnabled(boolean isEnabled){
 		fReplaceWithDefaultButton.setEnabled(isEnabled);
 	}

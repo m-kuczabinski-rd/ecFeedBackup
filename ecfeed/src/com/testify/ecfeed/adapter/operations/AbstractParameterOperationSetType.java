@@ -22,6 +22,7 @@ import com.testify.ecfeed.adapter.ITypeAdapter;
 import com.testify.ecfeed.adapter.ITypeAdapterProvider;
 import com.testify.ecfeed.adapter.ModelOperationException;
 import com.testify.ecfeed.adapter.java.JavaUtils;
+import com.testify.ecfeed.adapter.java.Messages;
 import com.testify.ecfeed.model.AbstractParameterNode;
 import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.model.ChoicesParentNode;
@@ -94,7 +95,7 @@ public class AbstractParameterOperationSetType extends AbstractModelOperation {
 		saveValues(fTarget);
 
 		if(JavaUtils.isValidTypeName(fNewType) == false){
-			throw new ModelOperationException(Messages.CATEGORY_TYPE_REGEX_PROBLEM);
+			ModelOperationException.report(Messages.CATEGORY_TYPE_REGEX_PROBLEM);
 		}
 		// Check for duplicate signatures possibly caused by global parameter type change
 		if(fTarget instanceof GlobalParameterNode){
@@ -141,7 +142,7 @@ public class AbstractParameterOperationSetType extends AbstractModelOperation {
 						method = remainingMethods.get(n);
 						for(int k = n+1; k < remainingMethods.size(); k++){
 							if(methods.get(method).equals(methods.get(remainingMethods.get(k)))){
-								throw new ModelOperationException(Messages.METHOD_GLOBAL_PARAMETER_SIGNATURE_DUPLICATE_PROBLEM(
+								ModelOperationException.report(Messages.METHOD_GLOBAL_PARAMETER_SIGNATURE_DUPLICATE_PROBLEM(
 										method.getClassNode().getName(), method.getName(), method.getParameters().toString(),
 										remainingMethods.get(k).getParameters().toString()));
 							}

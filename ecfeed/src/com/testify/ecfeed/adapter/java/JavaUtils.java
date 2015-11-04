@@ -18,7 +18,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.StringTokenizer;
 
-import com.testify.ecfeed.adapter.operations.Messages;
 import com.testify.ecfeed.model.AbstractParameterNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.MethodNode;
@@ -197,7 +196,7 @@ public class JavaUtils {
 		int lastDotIndex = qualifiedName.lastIndexOf('.');
 		return (lastDotIndex == -1)? "" : qualifiedName.substring(0, lastDotIndex);
 	}
-
+	
 	public static String simplifiedToString(AbstractParameterNode parameter){
 		String result = parameter.toString();
 		String type = parameter.getType();

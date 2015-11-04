@@ -18,11 +18,12 @@ import com.testify.ecfeed.adapter.java.JavaUtils;
 import com.testify.ecfeed.adapter.operations.GlobalParameterOperationSetType;
 import com.testify.ecfeed.model.GlobalParameterNode;
 import com.testify.ecfeed.model.MethodParameterNode;
+import com.testify.ecfeed.ui.common.utils.IFileInfoProvider;
 
 public class GlobalParameterInterface extends AbstractParameterInterface {
 
-	public GlobalParameterInterface(IModelUpdateContext updateContext) {
-		super(updateContext);
+	public GlobalParameterInterface(IModelUpdateContext updateContext, IFileInfoProvider fileInfoProvider) {
+		super(updateContext, fileInfoProvider);
 	}
 
 	public List<MethodParameterNode> getLinkers(){

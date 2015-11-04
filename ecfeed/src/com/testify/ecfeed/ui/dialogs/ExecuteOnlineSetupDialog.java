@@ -22,16 +22,19 @@ import com.testify.ecfeed.model.Constraint;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.ui.common.Messages;
+import com.testify.ecfeed.ui.common.utils.IFileInfoProvider;
 
 public class ExecuteOnlineSetupDialog extends GeneratorSetupDialog {
 	private static final int CONTENT = CONSTRAINTS_COMPOSITE | PARTITIONS_COMPOSITE |
 			GENERATOR_SELECTION_COMPOSITE;
 
-	public ExecuteOnlineSetupDialog(Shell parentShell, MethodNode method) {
-		super(parentShell, method, CONTENT, 
+	public ExecuteOnlineSetupDialog(Shell parentShell, MethodNode method, IFileInfoProvider fileInfoProvider) {
+		super(parentShell, 
+				method, CONTENT, 
 				Messages.DIALOG_EXECUTE_ONLINE_TITLE, 
 				Messages.DIALOG_EXECUTE_ONLINE_MESSAGE,
-				true);
+				true,
+				fileInfoProvider);
 	}
 
 	public IGenerator<ChoiceNode> getSelectedGenerator() {

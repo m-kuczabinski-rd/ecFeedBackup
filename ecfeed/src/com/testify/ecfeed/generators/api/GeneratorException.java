@@ -13,12 +13,20 @@ package com.testify.ecfeed.generators.api;
 
 public class GeneratorException extends Exception {
 
-	public GeneratorException(String message) {
+	private static final long serialVersionUID = 7963877928833442039L;
+	private static final String EC_FEED_ERROR = "ECFEEDERR";
+
+	private GeneratorException(String message) {
 		super(message);
 	}
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 7963877928833442039L;
+	public static void report(String message) throws GeneratorException {
+		logThrowGeneratorException(message);
+		throw new GeneratorException(message);
+	}	
+
+	public static void logThrowGeneratorException(String message) {
+		System.out.println( EC_FEED_ERROR + ": Exception thrown");
+		System.out.println("\t" +"Message: " + message + "\n");
+	}
 }

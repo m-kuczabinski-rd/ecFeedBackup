@@ -50,6 +50,7 @@ import com.testify.ecfeed.adapter.java.JavaUtils;
 import com.testify.ecfeed.generators.DoubleParameter;
 import com.testify.ecfeed.generators.GeneratorFactory;
 import com.testify.ecfeed.generators.IntegerParameter;
+import com.testify.ecfeed.generators.NWiseGenerator;
 import com.testify.ecfeed.generators.api.GeneratorException;
 import com.testify.ecfeed.generators.api.IGenerator;
 import com.testify.ecfeed.generators.api.IGeneratorParameter;
@@ -66,6 +67,7 @@ import com.testify.ecfeed.ui.common.EclipseImplementationStatusResolver;
 import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.common.NodeNameColumnLabelProvider;
 import com.testify.ecfeed.ui.common.TreeCheckStateListener;
+import com.testify.ecfeed.ui.common.utils.IFileInfoProvider;
 
 public class GeneratorSetupDialog extends TitleAreaDialog {
 	private Combo fTestSuiteCombo;
@@ -190,7 +192,14 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 		}
 	}
 
-	public GeneratorSetupDialog(Shell parentShell, MethodNode method, int content, String title, String message, boolean generateExecutables) {
+	public GeneratorSetupDialog(
+			Shell parentShell, 
+			MethodNode method, 
+			int content, 
+			String title, 
+			String message, 
+			boolean generateExecutables,
+			IFileInfoProvider fileInfoProvider) {
 		super(parentShell);
 		setHelpAvailable(false);
 		setShellStyle(SWT.BORDER | SWT.RESIZE | SWT.TITLE | SWT.APPLICATION_MODAL);
@@ -200,7 +209,7 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 		fTitle = title;
 		fMessage = message;
 		fGenerateExecutableContent = generateExecutables;
-		fStatusResolver = new EclipseImplementationStatusResolver();
+		fStatusResolver = new EclipseImplementationStatusResolver(fileInfoProvider);
 	}
 
 	protected  List<List<ChoiceNode>> algorithmInput(){
@@ -489,6 +498,8 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 			public void modifyText(ModifyEvent e) {
 				try {
 					fSelectedGenerator = generatorFactory.getGenerator(fGeneratorCombo.getText());
+					correctionForMethodWithOneParam(fGeneratorCombo.getText());
+
 					createParametersComposite(parent, fSelectedGenerator.parameters());
 					fMainContainer.layout();
 				} catch (GeneratorException exception) {
@@ -504,6 +515,24 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 			}
 			fGeneratorCombo.select(0);
 			setOkButton(true);
+		}
+	}
+
+	private void correctionForMethodWithOneParam(String generatorName) throws GeneratorException {
+		if (fMethod.getParameters().size() != 1) {
+			return;
+		}
+		if (!generatorName.equals(GeneratorFactory.GEN_TYPE_N_WISE)) {
+			return;
+		}
+
+		for (IGeneratorParameter parameter : fSelectedGenerator.parameters()) {
+			String parameterName = parameter.getName();
+			if (parameterName.equals(NWiseGenerator.N_PARAMETER_NAME)) {
+				IntegerParameter intParameter = (IntegerParameter)parameter;
+				intParameter.setDefaultValue(1);
+				break;
+			}		
 		}
 	}
 

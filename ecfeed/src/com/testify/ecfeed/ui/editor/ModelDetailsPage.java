@@ -22,7 +22,7 @@ import org.eclipse.ui.forms.IFormPart;
 
 import com.testify.ecfeed.model.AbstractNode;
 import com.testify.ecfeed.model.RootNode;
-import com.testify.ecfeed.ui.common.IFileInfoProvider;
+import com.testify.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 import com.testify.ecfeed.ui.modelif.RootInterface;
 
@@ -33,6 +33,7 @@ public class ModelDetailsPage extends BasicDetailsPage {
 	private Text fModelNameText;
 	private RootInterface fRootIf;
 	private SingleTextCommentsSection fComments;
+	private IFileInfoProvider fFileInfoProvider;
 
 	private class SetNameAdapter extends AbstractSelectionAdapter{
 		@Override
@@ -42,9 +43,13 @@ public class ModelDetailsPage extends BasicDetailsPage {
 		}
 	}
 
-	public ModelDetailsPage(ModelMasterSection masterSection, IModelUpdateContext updateContext, IFileInfoProvider fileInforProvider) {
+	public ModelDetailsPage(
+			ModelMasterSection masterSection, 
+			IModelUpdateContext updateContext, 
+			IFileInfoProvider fileInforProvider) {
 		super(masterSection, updateContext, fileInforProvider);
-		fRootIf = new RootInterface(this);
+		fFileInfoProvider = fileInforProvider;
+		fRootIf = new RootInterface(this, fFileInfoProvider);
 	}
 
 	@Override
@@ -53,9 +58,11 @@ public class ModelDetailsPage extends BasicDetailsPage {
 		getMainSection().setText("Model details");
 
 		createModelNameEdit(getMainComposite());
-		addForm(fComments = new ExportableSingleTextCommentsSection(this, this));
-		addViewerSection(fClassesSection = new ClassViewer(this, this));
-		addViewerSection(fParametersSection = new GlobalParametersViewer(this, this));
+		addForm(fComments = new ExportableSingleTextCommentsSection(this, this, fFileInfoProvider));
+		addViewerSection(fClassesSection = new ClassViewer(this, this, fFileInfoProvider));
+
+		fParametersSection = new GlobalParametersViewer(this, this, fFileInfoProvider);
+		addViewerSection(fParametersSection);
 
 		getToolkit().paintBordersFor(getMainComposite());
 	}

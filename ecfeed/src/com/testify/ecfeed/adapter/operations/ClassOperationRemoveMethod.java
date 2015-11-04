@@ -13,6 +13,7 @@ package com.testify.ecfeed.adapter.operations;
 
 import com.testify.ecfeed.adapter.IModelOperation;
 import com.testify.ecfeed.adapter.ModelOperationException;
+import com.testify.ecfeed.adapter.java.Messages;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.MethodNode;
 
@@ -33,7 +34,7 @@ public class ClassOperationRemoveMethod extends AbstractModelOperation {
 	public void execute() throws ModelOperationException {
 		fCurrentIndex = fMethod.getIndex();
 		if(fTarget.removeMethod(fMethod) == false){
-			throw new ModelOperationException(Messages.UNEXPECTED_PROBLEM_WHILE_REMOVING_ELEMENT);
+			ModelOperationException.report(Messages.UNEXPECTED_PROBLEM_WHILE_REMOVING_ELEMENT);
 		}
 		markModelUpdated();
 	}

@@ -11,6 +11,8 @@
 
 package com.testify.ecfeed.runner;
 
+import com.testify.ecfeed.utils.SystemLogger;
+
 public class RunnerException extends Exception {
 
 	/**
@@ -21,4 +23,9 @@ public class RunnerException extends Exception {
 	public RunnerException(String message){
 		super(message);
 	}
+	
+	public static void report(String message) throws RunnerException {
+		SystemLogger.logThrow(message);
+		throw new RunnerException(message);
+	}	
 }

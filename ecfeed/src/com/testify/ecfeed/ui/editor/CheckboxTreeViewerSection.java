@@ -17,12 +17,17 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Tree;
 
+import com.testify.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 
 public abstract class CheckboxTreeViewerSection extends TreeViewerSection {
 
-	public CheckboxTreeViewerSection(ISectionContext sectionContext, IModelUpdateContext updateContext, int style) {
-		super(sectionContext, updateContext, style);
+	public CheckboxTreeViewerSection(
+			ISectionContext sectionContext, 
+			IModelUpdateContext updateContext,
+			IFileInfoProvider fileInfoProvider,
+			int style) {
+		super(sectionContext, updateContext, fileInfoProvider, style);
 	}
 
 	@Override

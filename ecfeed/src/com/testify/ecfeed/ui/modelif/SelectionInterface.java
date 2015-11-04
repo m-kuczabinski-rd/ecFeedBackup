@@ -23,6 +23,7 @@ import com.testify.ecfeed.adapter.operations.GenericShiftOperation;
 import com.testify.ecfeed.model.AbstractNode;
 import com.testify.ecfeed.ui.common.EclipseTypeAdapterProvider;
 import com.testify.ecfeed.ui.common.Messages;
+import com.testify.ecfeed.utils.SystemLogger;
 
 public class SelectionInterface extends OperationExecuter {
 
@@ -84,7 +85,7 @@ public class SelectionInterface extends OperationExecuter {
 		try{
 			IModelOperation operation = FactoryShiftOperation.getShiftOperation(fSelected, up);
 			executeMoveOperation(operation);
-		}catch(Exception e){}
+		}catch(Exception e){SystemLogger.logCatch(e.getMessage());}
 		return false;
 	}
 
@@ -95,7 +96,7 @@ public class SelectionInterface extends OperationExecuter {
 			try {
 				GenericShiftOperation operation = FactoryShiftOperation.getShiftOperation(fSelected, up);
 				return operation.getShift() != 0;
-			} catch (Exception e) {}
+			} catch (Exception e) {SystemLogger.logCatch(e.getMessage());}
 		}
 		return false;
 	}

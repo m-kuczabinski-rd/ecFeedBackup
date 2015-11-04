@@ -51,6 +51,7 @@ import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.ui.common.Constants;
 import com.testify.ecfeed.ui.common.ImageManager;
+import com.testify.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.testify.ecfeed.ui.editor.actions.AbstractAddChildAction;
 import com.testify.ecfeed.ui.editor.actions.AddChildActionProvider;
 import com.testify.ecfeed.ui.editor.actions.ModelViewerActionProvider;
@@ -58,6 +59,7 @@ import com.testify.ecfeed.ui.modelif.AbstractNodeInterface;
 import com.testify.ecfeed.ui.modelif.AbstractParameterInterface;
 import com.testify.ecfeed.ui.modelif.IModelUpdateListener;
 import com.testify.ecfeed.ui.modelif.ModelNodesTransfer;
+import com.testify.ecfeed.utils.SystemLogger;
 
 public class ModelMasterSection extends TreeViewerSection{
 	private static final int STYLE = Section.EXPANDED | Section.TITLE_BAR;
@@ -65,6 +67,7 @@ public class ModelMasterSection extends TreeViewerSection{
 
 	private final ModelMasterDetailsBlock fMasterDetailsBlock;
 	private IModelUpdateListener fUpdateListener;
+	private IFileInfoProvider fFileInfoProvider;
 
 	private class ModelWrapper{
 		private final RootNode fModel;
@@ -245,9 +248,11 @@ public class ModelMasterSection extends TreeViewerSection{
 		@Override
 		public String getText(Object element){
 			if(element instanceof AbstractNode){
-				try{
+				try {
 					return (String)((AbstractNode)element).accept(new TextProvider());
-				}catch(Exception e){}
+				} catch(Exception e) { 
+					SystemLogger.logCatch(e.getMessage());
+				}
 			}
 			return null;
 		}
@@ -255,9 +260,11 @@ public class ModelMasterSection extends TreeViewerSection{
 		@Override
 		public Image getImage(Object element){
 			if(element instanceof AbstractNode){
-				try{
+				try {
 					return (Image)((AbstractNode)element).accept(new ImageProvider());
-				}catch(Exception e){}
+				} catch(Exception e) {
+					SystemLogger.logCatch(e.getMessage());
+				}
 			}
 			return getImageFromFile("sample.png");
 		}
@@ -270,8 +277,8 @@ public class ModelMasterSection extends TreeViewerSection{
 		private class DecorationProvider implements IModelVisitor{
 			AbstractNodeInterface fNodeInterface;
 
-			public DecorationProvider(){
-				fNodeInterface = new AbstractNodeInterface(ModelMasterSection.this);
+			public DecorationProvider(IFileInfoProvider fileInfoProvider){
+				fNodeInterface = new AbstractNodeInterface(ModelMasterSection.this, fileInfoProvider);
 			}
 
 			@Override
@@ -353,8 +360,9 @@ public class ModelMasterSection extends TreeViewerSection{
 		@Override
 		public Image decorateImage(Image image, Object element) {
 			if(element instanceof AbstractNode){
-				try{
-					List<Image> decorations = (List<Image>)((AbstractNode)element).accept(new DecorationProvider());
+				try {
+					List<Image> decorations = (List<Image>)((AbstractNode)element).accept(
+							new DecorationProvider(fFileInfoProvider));
 					List<Image> all = new ArrayList<Image>(decorations);
 					all.add(0, image);
 					if(fFusedImages.containsKey(all) == false){
@@ -367,7 +375,9 @@ public class ModelMasterSection extends TreeViewerSection{
 						fFusedImages.put(decorations, decorated);
 					}
 					return fFusedImages.get(decorations);
-				}catch(Exception e){}
+				} catch(Exception e) {
+					SystemLogger.logCatch(e.getMessage());
+				}
 			}
 			return image;
 		}
@@ -432,7 +442,8 @@ public class ModelMasterSection extends TreeViewerSection{
 		protected void populateMenu(){
 			List<AbstractNode> selected = getSelectedNodes();
 			if(selected.size() == 1){
-				AddChildActionProvider actionProvider = new AddChildActionProvider(getTreeViewer(), ModelMasterSection.this);
+				AddChildActionProvider actionProvider = 
+						new AddChildActionProvider(getTreeViewer(), ModelMasterSection.this, fFileInfoProvider);
 				List<AbstractAddChildAction> actions = actionProvider.getPossibleActions(selected.get(0));
 				for(AbstractAddChildAction action : actions){
 					addMenuItem(action.getName(), action);
@@ -443,14 +454,15 @@ public class ModelMasterSection extends TreeViewerSection{
 		}
 	}
 
-	public ModelMasterSection(ModelMasterDetailsBlock parentBlock) {
-		super(parentBlock.getMasterSectionContext(), parentBlock.getModelUpdateContext(), STYLE);
+	public ModelMasterSection(ModelMasterDetailsBlock parentBlock, IFileInfoProvider fileInfoProvider) {
+		super(parentBlock.getMasterSectionContext(), parentBlock.getModelUpdateContext(), fileInfoProvider, STYLE);
 		fMasterDetailsBlock = parentBlock;
+		fFileInfoProvider = fileInfoProvider;
 
 		setActionProvider(new ModelViewerActionProvider(getTreeViewer(), this, parentBlock.getPage().getEditor(), false), false);
 
 		getTreeViewer().addDragSupport(DND.DROP_COPY|DND.DROP_MOVE|DND.DROP_LINK, new Transfer[]{ModelNodesTransfer.getInstance()}, new ModelNodeDragListener(getTreeViewer()));
-		getTreeViewer().addDropSupport(DND.DROP_COPY|DND.DROP_MOVE|DND.DROP_LINK, new Transfer[]{ModelNodesTransfer.getInstance()}, new ModelNodeDropListener(getTreeViewer(), this));
+		getTreeViewer().addDropSupport(DND.DROP_COPY|DND.DROP_MOVE|DND.DROP_LINK, new Transfer[]{ModelNodesTransfer.getInstance()}, new ModelNodeDropListener(getTreeViewer(), this, fFileInfoProvider));
 	}
 
 	public void setInput(RootNode model){

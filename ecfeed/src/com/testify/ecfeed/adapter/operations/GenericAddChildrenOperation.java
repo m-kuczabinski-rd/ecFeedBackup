@@ -16,6 +16,7 @@ import java.util.Collection;
 import com.testify.ecfeed.adapter.IModelOperation;
 import com.testify.ecfeed.adapter.ITypeAdapterProvider;
 import com.testify.ecfeed.model.AbstractNode;
+import com.testify.ecfeed.utils.SystemLogger;
 
 public class GenericAddChildrenOperation extends BulkOperation {
 
@@ -37,7 +38,7 @@ public class GenericAddChildrenOperation extends BulkOperation {
 				if(operation != null){
 					addOperation(operation);
 				}
-			} catch (Exception e) {}
+			} catch (Exception e) {SystemLogger.logCatch(e.getMessage());}
 		}
 	}
 

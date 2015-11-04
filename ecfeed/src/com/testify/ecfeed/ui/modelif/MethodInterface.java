@@ -34,7 +34,10 @@ import com.testify.ecfeed.adapter.operations.MethodOperationAddTestCase;
 import com.testify.ecfeed.adapter.operations.MethodOperationAddTestSuite;
 import com.testify.ecfeed.adapter.operations.MethodOperationConvertTo;
 import com.testify.ecfeed.adapter.operations.MethodOperationRenameTestCases;
+import com.testify.ecfeed.android.external.TestMethodInvokerExt;
+import com.testify.ecfeed.android.utils.AndroidBaseRunnerHelper;
 import com.testify.ecfeed.model.ChoiceNode;
+import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.Constraint;
 import com.testify.ecfeed.model.ConstraintNode;
 import com.testify.ecfeed.model.GlobalParameterNode;
@@ -42,22 +45,31 @@ import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.MethodParameterNode;
 import com.testify.ecfeed.model.StaticStatement;
 import com.testify.ecfeed.model.TestCaseNode;
+import com.testify.ecfeed.runner.ITestMethodInvoker;
+import com.testify.ecfeed.runner.java.JUnitTestMethodInvoker;
 import com.testify.ecfeed.ui.common.Constants;
 import com.testify.ecfeed.ui.common.EclipseModelBuilder;
 import com.testify.ecfeed.ui.common.EclipseTypeAdapterProvider;
 import com.testify.ecfeed.ui.common.JavaModelAnalyser;
 import com.testify.ecfeed.ui.common.Messages;
+import com.testify.ecfeed.ui.common.utils.EclipseProjectHelper;
+import com.testify.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.testify.ecfeed.ui.dialogs.AddTestCaseDialog;
 import com.testify.ecfeed.ui.dialogs.CalculateCoverageDialog;
 import com.testify.ecfeed.ui.dialogs.RenameTestSuiteDialog;
 import com.testify.ecfeed.ui.dialogs.SelectCompatibleMethodDialog;
+import com.testify.ecfeed.utils.EcException;
+import com.testify.ecfeed.utils.StringHelper;
+import com.testify.ecfeed.utils.SystemLogger;
 
 public class MethodInterface extends ParametersParentInterface {
 
+	private IFileInfoProvider fFileInfoProvider;
 	private ITypeAdapterProvider fAdapterProvider;
 
-	public MethodInterface(IModelUpdateContext updateContext) {
-		super(updateContext);
+	public MethodInterface(IModelUpdateContext updateContext, IFileInfoProvider fileInfoProvider) {
+		super(updateContext, fileInfoProvider);
+		fFileInfoProvider = fileInfoProvider;
 		fAdapterProvider = new EclipseTypeAdapterProvider();
 	}
 
@@ -174,7 +186,8 @@ public class MethodInterface extends ParametersParentInterface {
 	}
 
 	public boolean generateTestSuite(){
-		TestSuiteGenerationSupport testGenerationSupport = new TestSuiteGenerationSupport(getTarget());
+		TestSuiteGenerationSupport testGenerationSupport = 
+				new TestSuiteGenerationSupport(getTarget(), fFileInfoProvider);
 		testGenerationSupport.proceed();
 		if(testGenerationSupport.hasData() == false) return false;
 
@@ -184,8 +197,8 @@ public class MethodInterface extends ParametersParentInterface {
 		int dataLength = testData.size();
 		if(dataLength < 0 && (testGenerationSupport.wasCancelled() == false)){
 			MessageDialog.openInformation(Display.getDefault().getActiveShell(),
-			Messages.DIALOG_ADD_TEST_SUITE_PROBLEM_TITLE,
-			Messages.DIALOG_EMPTY_TEST_SUITE_GENERATED_MESSAGE);
+					Messages.DIALOG_ADD_TEST_SUITE_PROBLEM_TITLE,
+					Messages.DIALOG_EMPTY_TEST_SUITE_GENERATED_MESSAGE);
 			return false;
 		}
 		if(testData.size() > Constants.TEST_SUITE_SIZE_WARNING_LIMIT){
@@ -199,15 +212,63 @@ public class MethodInterface extends ParametersParentInterface {
 		return execute(operation, Messages.DIALOG_ADD_TEST_SUITE_PROBLEM_TITLE);
 	}
 
-	public void executeOnlineTests() {
-		OnlineTestRunningSupport runner = new OnlineTestRunningSupport();
+	public void executeOnlineTests(IFileInfoProvider fileInfoProvider) throws EcException {
+		ClassNode classNode = getTarget().getClassNode();
+
+		if (!isValidClassConfiguration(classNode))
+			return;
+
+		OnlineTestRunningSupport runner = 
+				new OnlineTestRunningSupport(
+						createTestMethodInvoker(fileInfoProvider), fileInfoProvider, classNode.getRunOnAndroid());
 		runner.setTarget(getTarget());
 		runner.proceed();
 	}
 
-	public void executeStaticTests(Collection<TestCaseNode> testCases) {
-		StaticTestExecutionSupport support = new StaticTestExecutionSupport(testCases);
+	public void executeStaticTests(Collection<TestCaseNode> testCases, IFileInfoProvider fileInfoProvider) throws EcException {
+		ClassNode classNode = getTarget().getClassNode();
+
+		if (!isValidClassConfiguration(classNode))
+			return;
+
+		StaticTestExecutionSupport support = 
+				new StaticTestExecutionSupport(
+						testCases, 
+						createTestMethodInvoker(fileInfoProvider), 
+						fileInfoProvider, 
+						classNode.getRunOnAndroid());
 		support.proceed();
+	}
+
+	private boolean isValidClassConfiguration(ClassNode classNode) {
+		if (classNode.getRunOnAndroid() && emptyAndroidBaseRunner(classNode)) {
+			MessageDialog.openError(
+					Display.getDefault().getActiveShell(), 
+					Messages.DIALOG_MISSING_ANDROID_RUNNER_TITLE,
+					Messages.DIALOG_MISSING_ANDROID_RUNNER_INFO(classNode.getName()));
+			return false;
+		}
+
+		return true;
+	}
+
+	private ITestMethodInvoker createTestMethodInvoker(IFileInfoProvider fileInfoProvider) throws EcException
+	{
+		ClassNode classNode = getTarget().getClassNode();
+
+		if (!classNode.getRunOnAndroid()) {
+			return new JUnitTestMethodInvoker();
+		}
+
+		String projectPath = new EclipseProjectHelper(fileInfoProvider).getProjectPath();
+		String androidRunner = AndroidBaseRunnerHelper.createFullAndroidRunnerName(projectPath);
+
+		return TestMethodInvokerExt.createInvoker(androidRunner);
+	}
+
+	private boolean emptyAndroidBaseRunner(ClassNode classNode) {
+		String androidBaseRunner = classNode.getAndroidBaseRunner();
+		return StringHelper.isNullOrEmpty(androidBaseRunner);
 	}
 
 	public Collection<TestCaseNode> getTestCases(String testSuite){
@@ -240,9 +301,12 @@ public class MethodInterface extends ParametersParentInterface {
 		return compatibleMethods;
 	}
 
-	public void openCoverageDialog(Object[] checkedElements, Object[] grayedElements) {
+	public void openCoverageDialog(
+			Object[] checkedElements, 
+			Object[] grayedElements, 
+			IFileInfoProvider fileInfoProvider) {
 		Shell activeShell = Display.getDefault().getActiveShell();
-		new CalculateCoverageDialog(activeShell, getTarget(), checkedElements, grayedElements).open();
+		new CalculateCoverageDialog(activeShell, getTarget(), checkedElements, grayedElements, fileInfoProvider).open();
 	}
 
 	public List<GlobalParameterNode> getAvailableGlobalParameters() {
@@ -255,7 +319,7 @@ public class MethodInterface extends ParametersParentInterface {
 		if(method != null){
 			try{
 				JavaUI.openInEditor(method);
-			}catch(Exception e){}
+			}catch(Exception e){SystemLogger.logCatch(e.getMessage());}
 		}
 	}
 

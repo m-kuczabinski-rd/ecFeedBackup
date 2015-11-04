@@ -21,7 +21,7 @@ import org.eclipse.swt.widgets.Composite;
 
 import com.testify.ecfeed.model.AbstractNode;
 import com.testify.ecfeed.model.ConstraintNode;
-import com.testify.ecfeed.ui.common.IFileInfoProvider;
+import com.testify.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.testify.ecfeed.ui.modelif.ConstraintInterface;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 
@@ -31,6 +31,7 @@ public class ConstraintDetailsPage extends BasicDetailsPage {
 	private ConstraintInterface fConstraintIf;
 	private ConstraintViewer fConstraintViewer;
 	private SingleTextCommentsSection fCommentsSection;
+	private IFileInfoProvider fFileInfoProvider;
 
 	private class ConstraintNameListener extends AbstractSelectionAdapter{
 		@Override
@@ -40,17 +41,21 @@ public class ConstraintDetailsPage extends BasicDetailsPage {
 		}
 	}
 
-	public ConstraintDetailsPage(ModelMasterSection masterSection, IModelUpdateContext updateContext, IFileInfoProvider fileInforProvider){
-		super(masterSection, updateContext, fileInforProvider);
-		fConstraintIf = new ConstraintInterface(this);
+	public ConstraintDetailsPage(
+			ModelMasterSection masterSection, 
+			IModelUpdateContext updateContext, 
+			IFileInfoProvider fileInfoProvider){
+		super(masterSection, updateContext, fileInfoProvider);
+		fFileInfoProvider = fileInfoProvider;
+		fConstraintIf = new ConstraintInterface(this, fileInfoProvider);
 	}
 
 	@Override
 	public void createContents(Composite parent){
 		super.createContents(parent);
 		createConstraintNameEdit(getMainComposite());
-		addForm(fCommentsSection = new SingleTextCommentsSection(this, this));
-		addViewerSection(fConstraintViewer = new ConstraintViewer(this, this));
+		addForm(fCommentsSection = new SingleTextCommentsSection(this, this, fFileInfoProvider));
+		addViewerSection(fConstraintViewer = new ConstraintViewer(this, this, fFileInfoProvider));
 	}
 
 	private void createConstraintNameEdit(Composite parent) {

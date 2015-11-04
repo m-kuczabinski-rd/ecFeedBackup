@@ -25,7 +25,7 @@ public class StringParameter extends AbstractParameter {
 		fDefaultValue = defaultValue;
 		fAllowedValues = allowedValues;
 		if(!Arrays.asList(fAllowedValues).contains(fDefaultValue)){
-			throw new GeneratorException("Inconsistent parameter definition");
+			GeneratorException.report("Inconsistent parameter definition");
 		}
 	}
 

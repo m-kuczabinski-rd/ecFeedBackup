@@ -38,6 +38,7 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 import com.testify.ecfeed.adapter.ModelOperationManager;
 import com.testify.ecfeed.model.AbstractNode;
 import com.testify.ecfeed.ui.common.ImageManager;
+import com.testify.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.testify.ecfeed.ui.editor.actions.IActionProvider;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 import com.testify.ecfeed.ui.modelif.IModelUpdateListener;
@@ -47,6 +48,7 @@ public abstract class BasicSection extends SectionPart implements IModelUpdateCo
 	private Control fTextClient;
 	private IActionProvider fActionProvider;
 	private IModelUpdateContext fUpdateContext;
+	private IFileInfoProvider fFileInfoProvider;
 	private ISectionContext fSectionContext;
 	private ToolBarManager fToolBarManager;
 
@@ -69,10 +71,16 @@ public abstract class BasicSection extends SectionPart implements IModelUpdateCo
 		}
 	}
 
-	public BasicSection(ISectionContext sectionContext, IModelUpdateContext updateContext, int style){
+	public BasicSection(
+			ISectionContext sectionContext, 
+			IModelUpdateContext updateContext,
+			IFileInfoProvider fileInfoProvider,
+			int style){
 		super(sectionContext.getSectionComposite(), sectionContext.getToolkit(), style);
 		fSectionContext = sectionContext;
 		fUpdateContext = updateContext;
+		fFileInfoProvider = fileInfoProvider;
+
 		createContent();
 	}
 
@@ -217,5 +225,9 @@ public abstract class BasicSection extends SectionPart implements IModelUpdateCo
 	@Override
 	public AbstractFormPart getSourceForm(){
 		return this;
+	}
+
+	protected IFileInfoProvider getFileInfoProvider() {
+		return fFileInfoProvider;
 	}
 }

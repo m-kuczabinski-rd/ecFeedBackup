@@ -21,6 +21,46 @@ public class Messages {
 	}
 	public static final String EXCEPTION_TYPE_DOES_NOT_EXIST_IN_THE_PROJECT = "The imported type does not exist in the project";
 
+	public static final String EXCEPTION_FILE_INFO_PROVIDER_NOT_NULL = "File info provider must not be null.";
+
+	public static final String EXCEPTION_FILE_NOT_FOUND_IN_INSTALLATION_DIR(String relativePath) {
+		return "Can not find: " + relativePath + " in ecFeed installation directory."; 
+	}
+
+	public static final String EXCEPTION_FILE_NOT_FOUND_IN_INSTALLATION_DIR2(String relativePath, String installationDir) {
+		return "Can not find: " + relativePath + " in ecFeed installation directory: " + installationDir; 
+	}	
+
+	public static final String EXCEPTION_ANDROID_METHOD_INVOKER_NOT_FOUND = 
+			"External android method invoker not found (not installed).";
+
+	public static final String EXCEPTION_EXTERNAL_IMPLEMENTER_NOT_FOUND = 
+			"External android implementer not found (not installed).";
+
+	public static final String EXCEPTION_EXTERNAL_DEVICE_CHECKER_NOT_FOUND = 
+			"External device checker not found (not installed).";
+
+	public static final String EXCEPTION_EXTERNAL_APK_INSTALLER_NOT_FOUND = 
+			"External Android application installer not found (not installed).";	
+
+	public static final String EXCEPTION_CAN_NOT_REMOVE_SELECTED_ITEMS = 
+			"Can not remove selected items.";
+
+	public static final String EXCEPTION_CAN_NOT_EXPORT = "Can not export.";
+
+	public static final String EXCEPTION_CAN_NOT_IMPORT = "Can not export.";
+
+	public static final String EXCEPTION_NO_REFERENCED_PROJECTS = "Testing project has no referenced (tested) projects.";
+
+	public static final String EXCEPTION_TOO_MANY_REFERENCED_PROJECTS = "Testing project has too many referenced projects (only 1 - tested project is allowed).";
+
+	public static final String EXCEPTION_NO_APK_NAME_PROJECT_NULL = "Can not create apk name. Project is null.";
+
+	public static final String EXCEPTION_CAN_NOT_CREATE_INSTALL_PROCESS = "Can not create install process.";
+
+	public static final String EXCEPTION_CAN_NOT_INSTALL_APK_FILE = "Can not install apk file.";
+
+	public static final String CAN_NOT_LOG_OUTPUT = "Can not log output.";
 
 	public static final String DIALOG_TEST_SUITE_NAME_ERROR_MESSAGE = "Name of a test suite must be between 1 and 64 characters long.";
 	public static final String DIALOG_TEST_SUITE_NAME_ERROR_MESSAGE_NO_WHITESPACE = "Name of a test suite cannot consist of whitespace characters only.";
@@ -104,6 +144,8 @@ public class Messages {
 	public static final String DIALOG_RESET_CHOICES_PROBLEM_TITLE = "Couldn't reset choices to default";
 	public static final String DIALOG_SET_COMMENTS_PROBLEM_TITLE = "Cannot set comments";
 	public static final String DIALOG_REPLACE_PARAMETERS_WITH_LINKS_TITLE = "Cannot replace parameters with links";
+	public static final String DIALOG_ANDROID_RUNNER_SET_PROBLEM_TITLE = "Couldn't set Android base runner";
+	public static final String DIALOG_RUN_ON_ANDROID_SET_PROBLEM_TITLE = "Couldn't set run on android flag";
 
 	//CONFIRMATIONS AND WARNINGS
 	public static final String DIALOG_REMOVE_CLASSES_TITLE = "Remove classes";
@@ -112,6 +154,12 @@ public class Messages {
 	public static final String DIALOG_REMOVE_CLASS_MESSAGE = "This operation will remove selected test class from the model.";
 	public static final String DIALOG_RENAME_IMPLEMENTED_CLASS_TITLE = "Renaming implemented class";
 	public static final String DIALOG_RENAME_IMPLEMENTED_CLASS_MESSAGE = "Renaming implemented class may cause the test cases to be not executable.";
+	public static final String DIALOG_RENAME_RUN_ON_ANDROID_TITLE = "Changing flag Run on Android for implemented class";
+	public static final String DIALOG_RENAME_RUN_ON_ANDROID_MESSAGE = "Changing the flag: 'Run on Android' for implemented class will cause the class to be not executable.";	
+
+	public static final String DIALOG_RENAME_CLASS_TITLE = "Renaming class";
+	public static final String DIALOG_RENAME_CLASS_MESSAGE_PACKAGE_NOT_EMPTY = "Package name must not be empty.";
+
 	public static final String DIALOG_REMOVE_METHOD_TITLE = "Remove method";
 	public static final String DIALOG_REMOVE_METHOD_MESSAGE = "This operation will remove selected test method from the model.";
 	public static final String DIALOG_REMOVE_METHODS_TITLE = "Remove method";
@@ -128,6 +176,10 @@ public class Messages {
 				+ " test cases. Adding this amount of data to the model may heavily affect tool's performance"
 				+ " and cause loss of data. Do you want to continue?";
 	}
+	public static final String DIALOG_MISSING_ANDROID_RUNNER_TITLE = "Missing Android base runner";
+	public static final String DIALOG_MISSING_ANDROID_RUNNER_INFO(String className) {
+		return "The class: " + className +  " is configured to run on Android device but Android base runner is not supplied.";
+	}
 	public static final String DIALOG_REMOVE_CHOICE_WARNING_TITLE = "Removing choice";
 	public static final String DIALOG_REMOVE_CHOICE_WARNING_MESSAGE = "Removing choice will cause removing of all test cases and constraints referring to that choice";
 	public static final String DIALOG_REMOVE_LABELS_WARNING_TITLE = "Removing labels";
@@ -139,6 +191,8 @@ public class Messages {
 	//OTHER MESSAGES
 	public static final String EXECUTING_TEST_WITH_PARAMETERS = "Executing test function with generated parameters";
 	public static final String EXECUTING_TEST_WITH_NO_PARAMETERS = "Executing test function";
+	public static final String CAN_NOT_IMPLEMENT_SOURCE_FOR_CLASS = "Can not implement source for the class.";
+	public static final String DEFAULT_PACKAGE_NOT_SET_IN_ANDROID_MANIFEST = "Default package for tested aplication is not set in AndroidManifest.xml.";
 
 	public static final String DIALOG_GENERATOR_INPUT_PROBLEM_MESSAGE = "At least one choice per parameter must be check";
 	public static final String DIALOG_GENERATOR_EXECUTABLE_INPUT_PROBLEM_MESSAGE = "At least one choice per parameter must be check. All checked parameters must be implemented";
@@ -166,4 +220,9 @@ public class Messages {
 	public static String DIALOG_SUCCESFUL_TEST_EXECUTION(int totalTestCases) {
 		return "All of " + totalTestCases + " test cases were succesfully executed.";
 	}
+
+	public static final String CHOICE_ALREADY_EXISTS(String choiceName) {
+		return "Choice with the name: " + choiceName + "  already exists.";
+	}
+	public static final String CAN_NOT_PASTE_CHOICES = "Can not paste choices.";
 }

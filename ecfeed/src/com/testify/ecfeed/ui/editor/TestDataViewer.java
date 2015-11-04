@@ -27,6 +27,7 @@ import com.testify.ecfeed.ui.common.ColorManager;
 import com.testify.ecfeed.ui.common.ITestDataEditorListener;
 import com.testify.ecfeed.ui.common.NodeViewerColumnLabelProvider;
 import com.testify.ecfeed.ui.common.TestDataValueEditingSupport;
+import com.testify.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 import com.testify.ecfeed.ui.modelif.TestCaseInterface;
 
@@ -35,11 +36,16 @@ public class TestDataViewer extends TableViewerSection implements ITestDataEdito
 	private static final int STYLE = Section.EXPANDED | Section.TITLE_BAR;
 	private final static int VIEWER_STYLE = SWT.BORDER;
 
+	private IFileInfoProvider fFileInfoProvider;
 	private TestCaseInterface fTestCaseIf;
 	private TestDataValueEditingSupport fValueEditingSupport;
 
-	public TestDataViewer(ISectionContext sectionContext, IModelUpdateContext updateContext) {
-		super(sectionContext, updateContext, STYLE);
+	public TestDataViewer(
+			ISectionContext sectionContext, 
+			IModelUpdateContext updateContext, 
+			IFileInfoProvider fileInfoProvider) {
+		super(sectionContext, updateContext, fileInfoProvider, STYLE);
+		fFileInfoProvider = fileInfoProvider;
 		getTestCaseInterface();
 		getSection().setText("Test data");
 	}
@@ -81,7 +87,7 @@ public class TestDataViewer extends TableViewerSection implements ITestDataEdito
 
 	protected TestCaseInterface getTestCaseInterface() {
 		if(fTestCaseIf == null){
-			fTestCaseIf = new TestCaseInterface(this);
+			fTestCaseIf = new TestCaseInterface(this, fFileInfoProvider);
 		}
 		return fTestCaseIf;
 	}

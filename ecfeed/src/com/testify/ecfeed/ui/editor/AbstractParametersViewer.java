@@ -28,10 +28,13 @@ import org.eclipse.swt.layout.GridData;
 
 import com.testify.ecfeed.model.AbstractParameterNode;
 import com.testify.ecfeed.model.ParametersParentNode;
+import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.common.NodeNameColumnLabelProvider;
 import com.testify.ecfeed.ui.common.NodeViewerColumnLabelProvider;
+import com.testify.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.testify.ecfeed.ui.editor.actions.DeleteAction;
 import com.testify.ecfeed.ui.editor.actions.ModelViewerActionProvider;
+import com.testify.ecfeed.ui.editor.utils.ExceptionCatchDialog;
 import com.testify.ecfeed.ui.modelif.AbstractParameterInterface;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 import com.testify.ecfeed.ui.modelif.ParametersParentInterface;
@@ -42,7 +45,6 @@ public abstract class AbstractParametersViewer extends TableViewerSection {
 
 	private TableViewerColumn fNameColumn;
 	private TableViewerColumn fTypeColumn;
-
 	private ParametersParentInterface fParentIf;
 
 	protected class ParameterTypeEditingSupport extends EditingSupport {
@@ -145,17 +147,25 @@ public abstract class AbstractParametersViewer extends TableViewerSection {
 
 	private class AddNewParameterAdapter extends SelectionAdapter {
 		@Override
-		public void widgetSelected(SelectionEvent e) {
-			AbstractParameterNode addedParameter = fParentIf.addNewParameter();
-			if(addedParameter != null){
-				selectElement(addedParameter);
-				fNameColumn.getViewer().editElement(addedParameter, 0);
+		public void widgetSelected(SelectionEvent ev) {
+			try {
+				AbstractParameterNode addedParameter = fParentIf.addNewParameter();
+				if(addedParameter != null){
+					selectElement(addedParameter);
+					fNameColumn.getViewer().editElement(addedParameter, 0);
+				}
+			} catch (Exception e) {
+				ExceptionCatchDialog.display("Can not create parameter.", e.getMessage());
 			}
 		}
 	}
 
-	public AbstractParametersViewer(ISectionContext sectionContext, IModelUpdateContext updateContext, int STYLE) {
-		super(sectionContext, updateContext, STYLE);
+	public AbstractParametersViewer(
+			ISectionContext sectionContext, 
+			IModelUpdateContext updateContext,
+			IFileInfoProvider fileInfoProvider,
+			int STYLE) {
+		super(sectionContext, updateContext, fileInfoProvider, STYLE);
 		fParentIf = getParametersParentInterface();
 
 		GridData gd = new GridData(SWT.FILL, SWT.FILL, true, true);
@@ -163,7 +173,7 @@ public abstract class AbstractParametersViewer extends TableViewerSection {
 		getSection().setLayoutData(gd);
 
 		addButton("New parameter", new AddNewParameterAdapter());
-		addButton("Remove selected", new ActionSelectionAdapter(new DeleteAction(getViewer(), this)));
+		addButton("Remove selected", new ActionSelectionAdapter(new DeleteAction(getViewer(), this), Messages.EXCEPTION_CAN_NOT_REMOVE_SELECTED_ITEMS));
 
 		fNameColumn.setEditingSupport(new ParameterNameEditingSupport());
 		fTypeColumn.setEditingSupport(getParameterTypeEditingSupport());

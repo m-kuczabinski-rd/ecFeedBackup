@@ -36,12 +36,18 @@ public class ImplementAction extends ModelModifyingAction {
 
 	@Override
 	public boolean isEnabled(){
-		for(AbstractNode node : getSelectedNodes()){
-			if(fImplementer.implementable(node) == true && (fImplementer.getImplementationStatus(node) != EImplementationStatus.IMPLEMENTED)){
-				return true;
-			}
-		}
-		return false;
+		return !allImplementableNodesImplemented();
 	}
 
+	private boolean allImplementableNodesImplemented() {
+		for(AbstractNode node : getSelectedNodes()){
+			if(!fImplementer.implementable(node)) {
+				continue;
+			}
+			if (fImplementer.getImplementationStatus(node) != EImplementationStatus.IMPLEMENTED){
+				return false;
+			}
+		}
+		return true;
+	}
 }

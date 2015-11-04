@@ -19,11 +19,12 @@ import com.testify.ecfeed.model.AbstractParameterNode;
 import com.testify.ecfeed.model.ParametersParentNode;
 import com.testify.ecfeed.ui.common.Constants;
 import com.testify.ecfeed.ui.common.Messages;
+import com.testify.ecfeed.ui.common.utils.IFileInfoProvider;
 
 public abstract class ParametersParentInterface extends AbstractNodeInterface {
 
-	public ParametersParentInterface(IModelUpdateContext updateContext) {
-		super(updateContext);
+	public ParametersParentInterface(IModelUpdateContext updateContext, IFileInfoProvider fileInfoProvider) {
+		super(updateContext, fileInfoProvider);
 	}
 
 	public abstract AbstractParameterNode addNewParameter();

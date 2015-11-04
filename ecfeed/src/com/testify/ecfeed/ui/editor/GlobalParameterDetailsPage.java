@@ -15,32 +15,34 @@ import org.eclipse.swt.widgets.Composite;
 
 import com.testify.ecfeed.model.AbstractNode;
 import com.testify.ecfeed.model.GlobalParameterNode;
-import com.testify.ecfeed.ui.common.IFileInfoProvider;
+import com.testify.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.testify.ecfeed.ui.modelif.AbstractParameterInterface;
 import com.testify.ecfeed.ui.modelif.GlobalParameterInterface;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 
 public class GlobalParameterDetailsPage extends AbstractParameterDetailsPage {
 
+	private IFileInfoProvider fFileInfoProvider;
 	private GlobalParameterInterface fParameterIf;
 	private LinkingMethodsViewer fLinkingMethodsViewer;
 
-	public GlobalParameterDetailsPage(ModelMasterSection masterSection, IModelUpdateContext updateContext, IFileInfoProvider fileInforProvider) {
-		super(masterSection, updateContext, fileInforProvider);
+	public GlobalParameterDetailsPage(ModelMasterSection masterSection, IModelUpdateContext updateContext, IFileInfoProvider fileInfoProvider) {
+		super(masterSection, updateContext, fileInfoProvider);
+		fFileInfoProvider = fileInfoProvider;
 		getParameterIf();
 	}
 
 	@Override
 	public void createContents(Composite parent){
 		super.createContents(parent);
-		addForm(fLinkingMethodsViewer = new LinkingMethodsViewer(this, this));
+		addForm(fLinkingMethodsViewer = new LinkingMethodsViewer(this, this, fFileInfoProvider));
 	}
 
 
 	@Override
 	protected AbstractParameterInterface getParameterIf() {
 		if(fParameterIf == null){
-			fParameterIf = new GlobalParameterInterface(this);
+			fParameterIf = new GlobalParameterInterface(this, fFileInfoProvider);
 		}
 		return fParameterIf;
 	}
@@ -66,7 +68,9 @@ public class GlobalParameterDetailsPage extends AbstractParameterDetailsPage {
 	}
 
 	@Override
-	protected AbstractParameterCommentsSection getParameterCommentsSection(ISectionContext sectionContext, IModelUpdateContext updateContext) {
-		return new GlobalParameterCommentsSection(sectionContext, updateContext);
+	protected AbstractParameterCommentsSection getParameterCommentsSection(
+			ISectionContext sectionContext, 
+			IModelUpdateContext updateContext) {
+		return new GlobalParameterCommentsSection(sectionContext, updateContext, fFileInfoProvider);
 	}
 }

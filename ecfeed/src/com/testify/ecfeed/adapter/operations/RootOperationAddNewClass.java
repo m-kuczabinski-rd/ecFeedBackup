@@ -14,6 +14,7 @@ package com.testify.ecfeed.adapter.operations;
 import com.testify.ecfeed.adapter.IModelOperation;
 import com.testify.ecfeed.adapter.ModelOperationException;
 import com.testify.ecfeed.adapter.java.Constants;
+import com.testify.ecfeed.adapter.java.Messages;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.RootNode;
 
@@ -41,10 +42,10 @@ public class RootOperationAddNewClass extends AbstractModelOperation {
 			fIndex = fTarget.getClasses().size();
 		}
 		if(name.matches(Constants.REGEX_CLASS_NODE_NAME) == false){
-			throw new ModelOperationException(Messages.CLASS_NAME_REGEX_PROBLEM);
+			ModelOperationException.report(Messages.CLASS_NAME_REGEX_PROBLEM);
 		}
 		if(fTarget.getClassModel(name) != null){
-			throw new ModelOperationException(Messages.CLASS_NAME_DUPLICATE_PROBLEM);
+			ModelOperationException.report(Messages.CLASS_NAME_DUPLICATE_PROBLEM);
 		}
 		fTarget.addClass(fAddedClass, fIndex);
 		markModelUpdated();

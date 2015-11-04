@@ -12,6 +12,7 @@
 package com.testify.ecfeed.junit;
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -38,20 +39,32 @@ public class StaticRunner extends AbstractJUnitRunner {
 
 	@Override
 	protected List<FrameworkMethod> generateTestMethods() throws RunnerException {
-		List<FrameworkMethod> methods = new ArrayList<FrameworkMethod>();
-		for(FrameworkMethod method : getTestClass().getAnnotatedMethods(Test.class)){
-			if(method.getMethod().getParameterTypes().length == 0){
+		List<FrameworkMethod> frameworkMethods = new ArrayList<FrameworkMethod>();
+		for(FrameworkMethod frameworkMethod : getTestClass().getAnnotatedMethods(Test.class)){
+			if(frameworkMethod.getMethod().getParameterTypes().length == 0){
 				//standard jUnit test
-				methods.add(method);
+				frameworkMethods.add(frameworkMethod);
 			} else{
-				MethodNode methodModel = getMethodModel(getModel(), method);
-				if(methodModel == null){
+				MethodNode methodNode = getMethodModel(getModel(), frameworkMethod);
+				if(methodNode == null){
 					continue;
 				}
-				methods.add(new ParameterizedMethod(method.getMethod(), getTestCases(methodModel, getTestSuites(method)), getLoader()));
+
+				addFrameworkMethod(methodNode, frameworkMethod, frameworkMethods);
 			}
 		}
-		return methods;
+
+		return frameworkMethods;
+	}
+
+	private void addFrameworkMethod(MethodNode methodNode,
+			FrameworkMethod frameworkMethod,
+			List<FrameworkMethod> frameworkMethods) throws RunnerException {
+
+		Method method = frameworkMethod.getMethod();
+		Collection<TestCaseNode> testCases = getTestCases(methodNode, getTestSuites(frameworkMethod));
+
+		frameworkMethods.add(new JavaParameterizedMethod(method, testCases, getLoader()));
 	}
 
 	protected Set<String> getTestSuites(FrameworkMethod method) throws RunnerException{

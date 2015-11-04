@@ -24,6 +24,8 @@ import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.MethodParameterNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.TestCaseNode;
+import com.testify.ecfeed.utils.EcException;
+import com.testify.ecfeed.utils.SystemLogger;
 
 public abstract class AbstractModelImplementer implements IModelImplementer {
 
@@ -126,13 +128,13 @@ public abstract class AbstractModelImplementer implements IModelImplementer {
 	@Override
 	public boolean implementable(Class<? extends AbstractNode> type){
 		if(type.equals(RootNode.class) ||
-			(type.equals(ClassNode.class))||
-			(type.equals(MethodNode.class))||
-			(type.equals(MethodParameterNode.class))||
-			(type.equals(GlobalParameterNode.class))||
-			(type.equals(TestCaseNode.class))||
-			(type.equals(ChoiceNode.class))
-		){
+				(type.equals(ClassNode.class))||
+				(type.equals(MethodNode.class))||
+				(type.equals(MethodParameterNode.class))||
+				(type.equals(GlobalParameterNode.class))||
+				(type.equals(TestCaseNode.class))||
+				(type.equals(ChoiceNode.class))
+				){
 			return true;
 		}
 		return false;
@@ -142,7 +144,7 @@ public abstract class AbstractModelImplementer implements IModelImplementer {
 	public boolean implementable(AbstractNode node) {
 		try{
 			return (boolean)node.accept(fImplementableVisitor);
-		}catch(Exception e){}
+		}catch(Exception e){SystemLogger.logCatch(e.getMessage());}
 		return false;
 	}
 
@@ -152,7 +154,7 @@ public abstract class AbstractModelImplementer implements IModelImplementer {
 			if(implementable(node)){
 				return (boolean)node.accept(fNodeImplementerVisitor);
 			}
-		}catch(Exception e){}
+		}catch(Exception e){SystemLogger.logCatch(e.getMessage());}
 		return false;
 	}
 
@@ -258,11 +260,11 @@ public abstract class AbstractModelImplementer implements IModelImplementer {
 		return hasImplementableNode(node.getClasses());
 	}
 
-	protected boolean implementable(ClassNode node){
+	protected boolean implementable(ClassNode node) throws EcException {
 		return hasImplementableNode(node.getMethods());
 	}
 
-	protected boolean implementable(MethodNode node){
+	protected boolean implementable(MethodNode node) throws EcException {
 		return hasImplementableNode(node.getParameters()) || hasImplementableNode(node.getTestCases());
 	}
 

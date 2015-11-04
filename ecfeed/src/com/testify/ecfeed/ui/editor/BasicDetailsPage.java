@@ -40,8 +40,8 @@ import com.testify.ecfeed.adapter.IModelImplementer;
 import com.testify.ecfeed.adapter.ModelOperationManager;
 import com.testify.ecfeed.model.AbstractNode;
 import com.testify.ecfeed.ui.common.EclipseModelImplementer;
-import com.testify.ecfeed.ui.common.IFileInfoProvider;
 import com.testify.ecfeed.ui.common.ImageManager;
+import com.testify.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.testify.ecfeed.ui.editor.actions.GoToImplementationAction;
 import com.testify.ecfeed.ui.editor.actions.ImplementAction;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
@@ -68,7 +68,7 @@ public abstract class BasicDetailsPage implements IDetailsPage, IModelUpdateList
 	protected class GoToImplementationToolbarAction extends GoToImplementationAction{
 
 		public GoToImplementationToolbarAction() {
-			super(null);
+			super(null, fFileInfoProvider);
 			setToolTipText("Go to node's implementation");
 			setImageDescriptor(getIconDescription("goto_impl.png"));
 		}
@@ -89,15 +89,21 @@ public abstract class BasicDetailsPage implements IDetailsPage, IModelUpdateList
 	private IModelUpdateContext fModelUpdateContext;
 	private AbstractNode fSelectedNode;
 	private IModelImplementer fImplementer;
+	private IFileInfoProvider fFileInfoProvider;
 	private Button fImplementButton;
 	private ToolBarManager fToolBarManager;
 
-	public BasicDetailsPage(ModelMasterSection masterSection, IModelUpdateContext updateContext, IFileInfoProvider fileInforProvider){
+	public BasicDetailsPage(
+			ModelMasterSection masterSection, 
+			IModelUpdateContext updateContext, 
+			IFileInfoProvider fileInfoProvider){
+
 		fMasterSection = masterSection;
 		fForms = new ArrayList<IFormPart>();
 		fViewerSections = new ArrayList<ViewerSection>();
 		fModelUpdateContext = updateContext;
-		fImplementer = new EclipseModelImplementer(fileInforProvider);
+		fImplementer = new EclipseModelImplementer(fileInfoProvider);
+		fFileInfoProvider = fileInfoProvider;
 	}
 
 	@Override
@@ -123,6 +129,10 @@ public abstract class BasicDetailsPage implements IDetailsPage, IModelUpdateList
 		fMainComposite.setLayout(new GridLayout(1, false));
 		getToolkit().adapt(fMainComposite);
 		getMainSection().setClient(fMainComposite);
+	}
+
+	protected IFileInfoProvider getFileInfoProvider() {
+		return fFileInfoProvider;
 	}
 
 	protected ToolBar createToolBar(Section section) {

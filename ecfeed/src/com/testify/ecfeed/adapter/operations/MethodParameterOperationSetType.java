@@ -22,6 +22,7 @@ import com.testify.ecfeed.adapter.ITypeAdapter;
 import com.testify.ecfeed.adapter.ITypeAdapterProvider;
 import com.testify.ecfeed.adapter.ModelOperationException;
 import com.testify.ecfeed.adapter.java.JavaUtils;
+import com.testify.ecfeed.adapter.java.Messages;
 import com.testify.ecfeed.model.AbstractStatement;
 import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.model.ChoicesParentNode;
@@ -39,6 +40,7 @@ import com.testify.ecfeed.model.MethodParameterNode;
 import com.testify.ecfeed.model.StatementArray;
 import com.testify.ecfeed.model.StaticStatement;
 import com.testify.ecfeed.model.TestCaseNode;
+import com.testify.ecfeed.utils.SystemLogger;
 
 public class MethodParameterOperationSetType extends BulkOperation {
 
@@ -135,7 +137,7 @@ public class MethodParameterOperationSetType extends BulkOperation {
 					for(AbstractStatement child : statement.getChildren()){
 						try{
 							child.accept(this);
-						}catch(Exception e){}
+						}catch(Exception e){SystemLogger.logCatch(e.getMessage());}
 					}
 					return null;
 				}
@@ -188,7 +190,7 @@ public class MethodParameterOperationSetType extends BulkOperation {
 					try{
 						constraint.getConstraint().getPremise().accept(valueRestorer);
 						constraint.getConstraint().getConsequence().accept(valueRestorer);
-					}catch(Exception e){}
+					}catch(Exception e){SystemLogger.logCatch(e.getMessage());}
 				}
 			}
 
@@ -208,7 +210,7 @@ public class MethodParameterOperationSetType extends BulkOperation {
 			List<String> types = method.getParametersTypes();
 			types.set(fTarget.getIndex(), getNewType());
 			if(method.getClassNode().getMethod(method.getName(), types) != null && method.getClassNode().getMethod(method.getName(), types) != method){
-				throw new ModelOperationException(Messages.METHOD_SIGNATURE_DUPLICATE_PROBLEM(method.getClassNode().getName(), method.getName()));
+				ModelOperationException.report(Messages.METHOD_SIGNATURE_DUPLICATE_PROBLEM(method.getClassNode().getName(), method.getName()));
 			}
 			
 			super.execute();
@@ -233,7 +235,7 @@ public class MethodParameterOperationSetType extends BulkOperation {
 		protected List<ChoiceNode> getChoices(ChoicesParentNode parent){
 			try{
 				return (List<ChoiceNode>)parent.accept(new RealChoicesProvider());
-			}catch(Exception e){}
+			}catch(Exception e){SystemLogger.logCatch(e.getMessage());}
 			return null;
 		}
 

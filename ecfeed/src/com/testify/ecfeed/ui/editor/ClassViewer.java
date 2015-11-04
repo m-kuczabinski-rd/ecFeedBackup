@@ -29,8 +29,11 @@ import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.ui.common.ColorConstants;
 import com.testify.ecfeed.ui.common.ColorManager;
+import com.testify.ecfeed.ui.common.Messages;
+import com.testify.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.testify.ecfeed.ui.editor.actions.DeleteAction;
 import com.testify.ecfeed.ui.editor.actions.ModelViewerActionProvider;
+import com.testify.ecfeed.ui.editor.utils.ExceptionCatchDialog;
 import com.testify.ecfeed.ui.modelif.ClassInterface;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 import com.testify.ecfeed.ui.modelif.ModelNodesTransfer;
@@ -44,6 +47,8 @@ public class ClassViewer extends TableViewerSection {
 	private ClassInterface fClassIf;
 
 	private TableViewerColumn fPackageNameColumn;
+
+	private IFileInfoProvider fFileInfoProvider;
 
 
 	private abstract class ClassNameEditingSupport extends EditingSupport{
@@ -107,22 +112,30 @@ public class ClassViewer extends TableViewerSection {
 
 	private class AddImplementedClassAdapter extends SelectionAdapter {
 		@Override
-		public void widgetSelected(SelectionEvent e) {
-			ClassNode addedClass = fRootIf.addImplementedClass();
-			if(addedClass != null){
-				selectElement(addedClass);
-				fNameColumn.getViewer().editElement(addedClass, 0);
+		public void widgetSelected(SelectionEvent ev) {
+			try {
+				ClassNode addedClass = fRootIf.addImplementedClass();
+				if(addedClass != null){
+					selectElement(addedClass);
+					fNameColumn.getViewer().editElement(addedClass, 0);
+				}
+			} catch (Exception e) {
+				ExceptionCatchDialog.display("Can not add implemented class.", e.getMessage());
 			}
 		}
 	}
 
 	private class AddNewClassAdapter extends SelectionAdapter {
 		@Override
-		public void widgetSelected(SelectionEvent e) {
-			ClassNode addedClass = fRootIf.addNewClass();
-			if(addedClass != null){
-				selectElement(addedClass);
-				fNameColumn.getViewer().editElement(addedClass, 0);
+		public void widgetSelected(SelectionEvent ev) {
+			try {
+				ClassNode addedClass = fRootIf.addNewClass();
+				if(addedClass != null){
+					selectElement(addedClass);
+					fNameColumn.getViewer().editElement(addedClass, 0);
+				}
+			} catch (Exception e) {
+				ExceptionCatchDialog.display("Can not create new test class.", e.getMessage());
 			}
 		}
 	}
@@ -139,19 +152,25 @@ public class ClassViewer extends TableViewerSection {
 		}
 	}
 
-	public ClassViewer(ISectionContext parent, IModelUpdateContext updateContext) {
-		super(parent, updateContext, STYLE);
+	public ClassViewer(
+			ISectionContext parent, 
+			IModelUpdateContext updateContext, 
+			IFileInfoProvider fileInfoProvider) {
+		super(parent, updateContext, fileInfoProvider, STYLE);
 
+		fFileInfoProvider = fileInfoProvider; 
 		fNameColumn.setEditingSupport(new LocalNameEditingSupport());
 		fPackageNameColumn.setEditingSupport(new PackageNameEditingSupport());
 
-		fRootIf = new RootInterface(this);
-		fClassIf = new ClassInterface(this);
+		fRootIf = new RootInterface(this, fileInfoProvider);
+		fClassIf = new ClassInterface(this, fileInfoProvider);
 
 		setText("Classes");
-		addButton("Add implemented class", new AddImplementedClassAdapter());
+		addButton("Add implemented class", new AddImplementedClassAdapter());  
 		addButton("New test class", new AddNewClassAdapter());
-		addButton("Remove selected", new ActionSelectionAdapter(new DeleteAction(getViewer(), this)));
+		addButton("Remove selected", 
+				new ActionSelectionAdapter(
+						new DeleteAction(getViewer(), this), Messages.EXCEPTION_CAN_NOT_REMOVE_SELECTED_ITEMS));
 
 		addDoubleClickListener(new SelectNodeDoubleClickListener(parent.getMasterSection()));
 		setActionProvider(new ModelViewerActionProvider(getTableViewer(), this));
@@ -182,7 +201,7 @@ public class ClassViewer extends TableViewerSection {
 
 	private ClassInterface classIf(){
 		if(fClassIf == null){
-			fClassIf = new ClassInterface(this);
+			fClassIf = new ClassInterface(this, fFileInfoProvider);
 		}
 		return fClassIf;
 	}

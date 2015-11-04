@@ -23,12 +23,15 @@ import org.eclipse.swt.widgets.Composite;
 
 import com.testify.ecfeed.model.AbstractNode;
 import com.testify.ecfeed.model.TestCaseNode;
-import com.testify.ecfeed.ui.common.IFileInfoProvider;
+import com.testify.ecfeed.ui.common.utils.IFileInfoProvider;
+import com.testify.ecfeed.ui.editor.utils.ExceptionCatchDialog;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 import com.testify.ecfeed.ui.modelif.TestCaseInterface;
+import com.testify.ecfeed.utils.EcException;
 
 public class TestCaseDetailsPage extends BasicDetailsPage {
 
+	private IFileInfoProvider fFileInfoProvider;
 	private Combo fTestSuiteNameCombo;
 	private TestDataViewer fTestDataViewer;
 	private Button fExecuteButton;
@@ -43,17 +46,21 @@ public class TestCaseDetailsPage extends BasicDetailsPage {
 			fTestSuiteNameCombo.setText(fTestCaseIf.getName());
 		}
 	}
-	public TestCaseDetailsPage(ModelMasterSection masterSection, IModelUpdateContext updateContext, IFileInfoProvider fileInforProvider) {
-		super(masterSection, updateContext, fileInforProvider);
-		fTestCaseIf = new TestCaseInterface(this);
+	public TestCaseDetailsPage(
+			ModelMasterSection masterSection, 
+			IModelUpdateContext updateContext, 
+			IFileInfoProvider fileInfoProvider) {
+		super(masterSection, updateContext, fileInfoProvider);
+		fFileInfoProvider = fileInfoProvider;
+		fTestCaseIf = new TestCaseInterface(this, fileInfoProvider);
 	}
 
 	@Override
 	public void createContents(Composite parent) {
 		super.createContents(parent);
 		createTestSuiteEdit(getMainComposite());
-		addForm(fCommentsSection = new SingleTextCommentsSection(this, this));
-		addViewerSection(fTestDataViewer = new TestDataViewer(this, this));
+		addForm(fCommentsSection = new SingleTextCommentsSection(this, this, fFileInfoProvider));
+		addViewerSection(fTestDataViewer = new TestDataViewer(this, this, fFileInfoProvider));
 	}
 
 	@Override
@@ -91,8 +98,12 @@ public class TestCaseDetailsPage extends BasicDetailsPage {
 		fExecuteButton = getToolkit().createButton(composite, "Execute", SWT.NONE);
 		fExecuteButton.addSelectionListener(new SelectionAdapter() {
 			@Override
-			public void widgetSelected(SelectionEvent e){
-				fTestCaseIf.execute();
+			public void widgetSelected(SelectionEvent ev){
+				try {
+					fTestCaseIf.executeStaticTest();
+				} catch (EcException e) {
+					ExceptionCatchDialog.display("Can not execute static tests.", e.getMessage());
+				}
 			}
 		});
 		getToolkit().paintBordersFor(fTestSuiteNameCombo);

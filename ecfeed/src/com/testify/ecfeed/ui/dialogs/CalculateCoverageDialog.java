@@ -63,11 +63,13 @@ import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.common.TestCasesViewerContentProvider;
 import com.testify.ecfeed.ui.common.TestCasesViewerLabelProvider;
 import com.testify.ecfeed.ui.common.TreeCheckStateListener;
+import com.testify.ecfeed.ui.common.utils.IFileInfoProvider;
 
 public class CalculateCoverageDialog extends TitleAreaDialog {
 	private Canvas[] fCanvasSet;
 	private CoverageCalculator fCalculator;
 	private MethodNode fMethod;
+	IFileInfoProvider fFileInfoProvider;
 
 	//Initial state of the tree viewer
 	private final Object[] fInitChecked;
@@ -161,14 +163,20 @@ public class CalculateCoverageDialog extends TitleAreaDialog {
 
 	}
 
-	public CalculateCoverageDialog(Shell parentShell, MethodNode method, Object[] checked, Object[] grayed) {
+	public CalculateCoverageDialog(
+			Shell parentShell, 
+			MethodNode method, 
+			Object[] checked, 
+			Object[] grayed,
+			IFileInfoProvider fileInfoProvider) {
 		super(parentShell);
 		setHelpAvailable(false);
 		setShellStyle(SWT.BORDER | SWT.RESIZE | SWT.TITLE | SWT.APPLICATION_MODAL);
+		fFileInfoProvider = fileInfoProvider;
 		fMethod = method;
 		fCalculator = new CoverageCalculator(fMethod.getMethodParameters());
 
-		fStatusResolver = new EclipseImplementationStatusResolver();
+		fStatusResolver = new EclipseImplementationStatusResolver(fileInfoProvider);
 		fInitChecked = checked;
 		fInitGrayed = grayed;
 	}
@@ -200,10 +208,10 @@ public class CalculateCoverageDialog extends TitleAreaDialog {
 
 		//Draw bar graph. Possible change for a timer with slight delay if tests prove current solution insufficient in some cases.
 		Display.getDefault().asyncExec(new Runnable() {
-		    @Override
+			@Override
 			public void run() {
-		    	drawBarGraph();
-		    }
+				drawBarGraph();
+			}
 		});
 
 		return area;
@@ -248,7 +256,8 @@ public class CalculateCoverageDialog extends TitleAreaDialog {
 		tree.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, true, 1, 1));
 		fTestCasesViewer = new CheckboxTreeViewer(tree);
 		fTestCasesViewer.setContentProvider(new TestCasesViewerContentProvider(fMethod));
-		fTestCasesViewer.setLabelProvider(new TestCasesViewerLabelProvider(fStatusResolver, fMethod));
+		fTestCasesViewer.setLabelProvider(
+				new TestCasesViewerLabelProvider(fStatusResolver, fMethod, fFileInfoProvider));
 		fTestCasesViewer.getTree().setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 		fTestCasesViewer.setInput(fMethod);
 

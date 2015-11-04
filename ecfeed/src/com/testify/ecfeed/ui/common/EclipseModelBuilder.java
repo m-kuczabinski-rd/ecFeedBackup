@@ -29,18 +29,20 @@ import com.testify.ecfeed.model.MethodParameterNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.ChoiceNode;
+import com.testify.ecfeed.utils.SystemLogger;
 
 public class EclipseModelBuilder extends JavaModelAnalyser{
-	
+
 	public ClassNode buildClassModel(String qualifiedName, boolean testOnly) throws ModelOperationException{
 		IType type = getIType(qualifiedName);
-		if(type != null){
-			return buildClassModel(type, testOnly);
+		
+		if(type == null) {
+			ModelOperationException.report(Messages.EXCEPTION_TYPE_DOES_NOT_EXIST_IN_THE_PROJECT);
 		}
-		throw new ModelOperationException(Messages.EXCEPTION_TYPE_DOES_NOT_EXIST_IN_THE_PROJECT);
+		return buildClassModel(type, testOnly);
 	}
-	
-	
+
+
 	public ClassNode buildClassModel(IType type, boolean testOnly) throws ModelOperationException{
 		try{
 			String qualifiedName = type.getFullyQualifiedName();
@@ -53,17 +55,18 @@ public class EclipseModelBuilder extends JavaModelAnalyser{
 							if(methodModel != null){
 								classNode.addMethod(methodModel);
 							}
-						} catch(Throwable e){}
+						} catch(Throwable e){SystemLogger.logCatch(e.getMessage());}
 					}
 				}
 			}
 			return classNode;
 		}
 		catch(Throwable e){
-			throw new ModelOperationException(Messages.EXCEPTION_CLASS_IMPORT(type.getElementName()));
+			ModelOperationException.report(Messages.EXCEPTION_CLASS_IMPORT(type.getElementName()));
+			return null;
 		}
 	}
-	
+
 	public MethodNode buildMethodModel(IMethod method) throws JavaModelException {
 		MethodNode methodNode = new MethodNode(method.getElementName());
 		for(ILocalVariable parameter : method.getParameters()){
@@ -73,7 +76,7 @@ public class EclipseModelBuilder extends JavaModelAnalyser{
 		}
 		return methodNode;
 	}
-	
+
 	public MethodParameterNode buildParameterModel(String name, String type, boolean expected){
 		MethodParameterNode parameter = new MethodParameterNode(name, type, getDefaultExpectedValue(type), expected);
 		if(!expected){
@@ -164,10 +167,10 @@ public class EclipseModelBuilder extends JavaModelAnalyser{
 							}
 						}
 					}
-				} catch (JavaModelException e) {}
+				} catch (JavaModelException e) {SystemLogger.logCatch(e.getMessage());}
 				return result;
 			}
-		} catch (JavaModelException e) {}
+		} catch (JavaModelException e) {SystemLogger.logCatch(e.getMessage());}
 		return new ArrayList<String>();
 	}
 
@@ -260,5 +263,5 @@ public class EclipseModelBuilder extends JavaModelAnalyser{
 		}
 		return true;
 	}
-	
+
 }

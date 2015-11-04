@@ -35,10 +35,10 @@ public abstract class AbstractNWiseAlgorithm<E> extends AbstractAlgorithm<E> imp
 			Collection<IConstraint<E>> constraints) throws GeneratorException {
 
 		if(N < 1 || N > input.size()){
-			throw new GeneratorException("Value of N for this input must be between 1 and " + input.size());
+			GeneratorException.report("Value of N for this input must be between 1 and " + input.size());
 		}
 		if (fCoverage > 100 || fCoverage < 0) {
-			throw new GeneratorException("Coverage must be between 1 and 100");
+			GeneratorException.report("Coverage must be between 1 and 100");
 		}
 		fCartesianAlgorithm = new CartesianProductAlgorithm<E>();
 		fCartesianAlgorithm.initialize(input, constraints);

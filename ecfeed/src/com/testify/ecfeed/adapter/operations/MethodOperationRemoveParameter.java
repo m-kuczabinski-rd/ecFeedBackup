@@ -17,6 +17,7 @@ import java.util.List;
 import com.testify.ecfeed.adapter.IModelOperation;
 import com.testify.ecfeed.adapter.ModelOperationException;
 import com.testify.ecfeed.adapter.java.JavaUtils;
+import com.testify.ecfeed.adapter.java.Messages;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.MethodParameterNode;
 import com.testify.ecfeed.model.TestCaseNode;
@@ -61,7 +62,7 @@ public class MethodOperationRemoveParameter extends BulkOperation{
 			if(!fIgnoreDuplicates && validateNewSignature() == false){
 				String className = getTarget().getParent().getName();
 				String methodName = getTarget().getName();
-				throw new ModelOperationException(Messages.METHOD_SIGNATURE_DUPLICATE_PROBLEM(className, methodName));
+				ModelOperationException.report(Messages.METHOD_SIGNATURE_DUPLICATE_PROBLEM(className, methodName));
 			}
 			fOriginalTestCases.clear();
 			for(TestCaseNode tcase : getMethodTarget().getTestCases()){

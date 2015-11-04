@@ -21,80 +21,87 @@ import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.MethodParameterNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.TestCaseNode;
+import com.testify.ecfeed.ui.common.utils.IFileInfoProvider;
+import com.testify.ecfeed.utils.SystemLogger;
 
 public class NodeInterfaceFactory{
 
 	private static class InterfaceProvider  implements IModelVisitor {
 
+		private IFileInfoProvider fFileInfoProvider;
 		private IModelUpdateContext fContext;
 
-		public InterfaceProvider(IModelUpdateContext context) {
+		public InterfaceProvider(IModelUpdateContext context, IFileInfoProvider fileInfoProvider) {
 			fContext = context;
+			fFileInfoProvider = fileInfoProvider;
 		}
 
 		@Override
 		public Object visit(RootNode node) throws Exception {
-			RootInterface nodeIf = new RootInterface(fContext);
+			RootInterface nodeIf = new RootInterface(fContext, fFileInfoProvider);
 			nodeIf.setTarget(node);
 			return nodeIf;
 		}
 
 		@Override
 		public Object visit(ClassNode node) throws Exception {
-			ClassInterface nodeIf = new ClassInterface(fContext);
+			ClassInterface nodeIf = new ClassInterface(fContext, fFileInfoProvider);
 			nodeIf.setTarget(node);
 			return nodeIf;
 		}
 
 		@Override
 		public Object visit(MethodNode node) throws Exception {
-			MethodInterface nodeIf = new MethodInterface(fContext);
+			MethodInterface nodeIf = new MethodInterface(fContext, fFileInfoProvider);
 			nodeIf.setTarget(node);
 			return nodeIf;
 		}
 
 		@Override
 		public Object visit(MethodParameterNode node) throws Exception {
-			AbstractParameterInterface nodeIf = new MethodParameterInterface(fContext);
+			AbstractParameterInterface nodeIf = new MethodParameterInterface(fContext, fFileInfoProvider);
 			nodeIf.setTarget(node);
 			return nodeIf;
 		}
 
 		@Override
 		public Object visit(GlobalParameterNode node) throws Exception {
-			AbstractParameterInterface nodeIf = new GlobalParameterInterface(fContext);
+			AbstractParameterInterface nodeIf = new GlobalParameterInterface(fContext, fFileInfoProvider);
 			nodeIf.setTarget(node);
 			return nodeIf;
 		}
 
 		@Override
 		public Object visit(TestCaseNode node) throws Exception {
-			TestCaseInterface nodeIf = new TestCaseInterface(fContext);
+			TestCaseInterface nodeIf = new TestCaseInterface(fContext, fFileInfoProvider);
 			nodeIf.setTarget(node);
 			return nodeIf;
 		}
 
 		@Override
 		public Object visit(ConstraintNode node) throws Exception {
-			ConstraintInterface nodeIf = new ConstraintInterface(fContext);
+			ConstraintInterface nodeIf = new ConstraintInterface(fContext, fFileInfoProvider);
 			nodeIf.setTarget(node);
 			return nodeIf;
 		}
 
 		@Override
 		public Object visit(ChoiceNode node) throws Exception {
-			ChoiceInterface nodeIf = new ChoiceInterface(fContext);
+			ChoiceInterface nodeIf = new ChoiceInterface(fContext, fFileInfoProvider);
 			nodeIf.setTarget(node);
 			return nodeIf;
 		}
 	}
 
-	public static AbstractNodeInterface getNodeInterface(AbstractNode node, IModelUpdateContext context){
+	public static AbstractNodeInterface getNodeInterface(
+			AbstractNode node, 
+			IModelUpdateContext context, 
+			IFileInfoProvider fileInfoProvider){
 		try{
-			return (AbstractNodeInterface)node.accept(new InterfaceProvider(context));
+			return (AbstractNodeInterface)node.accept(new InterfaceProvider(context, fileInfoProvider));
 		}
-		catch(Exception e){}
-		AbstractNodeInterface nodeIf = new AbstractNodeInterface(context);
+		catch(Exception e){SystemLogger.logCatch(e.getMessage());}
+		AbstractNodeInterface nodeIf = new AbstractNodeInterface(context, fileInfoProvider);
 		nodeIf.setTarget(node);
 		return nodeIf;
 	}

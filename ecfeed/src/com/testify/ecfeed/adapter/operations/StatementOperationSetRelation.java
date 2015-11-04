@@ -15,6 +15,7 @@ import java.util.Arrays;
 
 import com.testify.ecfeed.adapter.IModelOperation;
 import com.testify.ecfeed.adapter.ModelOperationException;
+import com.testify.ecfeed.adapter.java.Messages;
 import com.testify.ecfeed.model.IRelationalStatement;
 import com.testify.ecfeed.model.EStatementRelation;
 
@@ -34,7 +35,7 @@ public class StatementOperationSetRelation extends AbstractModelOperation {
 	@Override
 	public void execute() throws ModelOperationException {
 		if(Arrays.asList(fTarget.getAvailableRelations()).contains(fNewRelation) == false){
-			throw new ModelOperationException(Messages.DIALOG_UNALLOWED_RELATION_MESSAGE);
+			ModelOperationException.report(Messages.DIALOG_UNALLOWED_RELATION_MESSAGE);
 		}
 		fTarget.setRelation(fNewRelation);
 		markModelUpdated();

@@ -18,6 +18,9 @@ import org.eclipse.swt.widgets.TabItem;
 import com.testify.ecfeed.adapter.java.JavaUtils;
 import com.testify.ecfeed.model.AbstractParameterNode;
 import com.testify.ecfeed.ui.common.JavaDocSupport;
+import com.testify.ecfeed.ui.common.Messages;
+import com.testify.ecfeed.ui.common.utils.IFileInfoProvider;
+import com.testify.ecfeed.ui.editor.utils.ExceptionCatchDialog;
 import com.testify.ecfeed.ui.modelif.AbstractParameterInterface;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 
@@ -27,33 +30,49 @@ public abstract class AbstractParameterCommentsSection extends JavaDocCommentsSe
 
 	protected class ImportTypeSelectionAdapter extends AbstractSelectionAdapter{
 		@Override
-		public void widgetSelected(SelectionEvent e) {
-			getTargetIf().importTypeJavadocComments();
-			getTabFolder().setSelection(getTabFolder().indexOf(getTypeCommentsTab()));
+		public void widgetSelected(SelectionEvent ev) {
+			try {
+				getTargetIf().importTypeJavadocComments();
+				getTabFolder().setSelection(getTabFolder().indexOf(getTypeCommentsTab()));
+			} catch (Exception e) {
+				ExceptionCatchDialog.display(Messages.EXCEPTION_CAN_NOT_IMPORT, e.getMessage());
+			}
 		}
 	}
 
 	protected class ImportFullTypeSelectionAdapter extends AbstractSelectionAdapter{
 		@Override
-		public void widgetSelected(SelectionEvent e) {
-			getTargetIf().importFullTypeJavadocComments();
-			getTabFolder().setSelection(getTabFolder().indexOf(getTypeCommentsTab()));
+		public void widgetSelected(SelectionEvent ev) {
+			try {
+				getTargetIf().importFullTypeJavadocComments();
+				getTabFolder().setSelection(getTabFolder().indexOf(getTypeCommentsTab()));
+			} catch (Exception e) {
+				ExceptionCatchDialog.display(Messages.EXCEPTION_CAN_NOT_IMPORT, e.getMessage());
+			}
 		}
 	}
 
 	protected class ExportTypeSelectionAdapter extends AbstractSelectionAdapter{
 		@Override
-		public void widgetSelected(SelectionEvent e) {
-			getTargetIf().exportTypeJavadocComments();
-			getTabFolder().setSelection(getTabFolder().indexOf(getTypeJavadocTab()));
+		public void widgetSelected(SelectionEvent ev) {
+			try {
+				getTargetIf().exportTypeJavadocComments();
+				getTabFolder().setSelection(getTabFolder().indexOf(getTypeJavadocTab()));
+			} catch (Exception e) {
+				ExceptionCatchDialog.display(Messages.EXCEPTION_CAN_NOT_EXPORT, e.getMessage());
+			}
 		}
 	}
 
 	protected class ExportFullTypeSelectionAdapter extends AbstractSelectionAdapter{
 		@Override
-		public void widgetSelected(SelectionEvent e) {
-			getTargetIf().exportFullTypeJavadocComments();
-			getTabFolder().setSelection(getTabFolder().indexOf(getTypeJavadocTab()));
+		public void widgetSelected(SelectionEvent ev) {
+			try {
+				getTargetIf().exportFullTypeJavadocComments();
+				getTabFolder().setSelection(getTabFolder().indexOf(getTypeJavadocTab()));
+			} catch (Exception e) {
+				ExceptionCatchDialog.display(Messages.EXCEPTION_CAN_NOT_EXPORT, e.getMessage());
+			}
 		}
 	}
 
@@ -69,8 +88,11 @@ public abstract class AbstractParameterCommentsSection extends JavaDocCommentsSe
 		}
 	}
 
-	public AbstractParameterCommentsSection(ISectionContext sectionContext, IModelUpdateContext updateContext) {
-		super(sectionContext, updateContext);
+	public AbstractParameterCommentsSection(
+			ISectionContext sectionContext, 
+			IModelUpdateContext updateContext,
+			IFileInfoProvider fileInfoProvider) {
+		super(sectionContext, updateContext, fileInfoProvider);
 
 		fParameterCommentsTab = addTextTab("Parameter", 0);
 		getTypeCommentsTab().setText("Type");

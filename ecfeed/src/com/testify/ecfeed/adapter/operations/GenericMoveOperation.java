@@ -18,6 +18,7 @@ import java.util.Set;
 import com.testify.ecfeed.adapter.IModelOperation;
 import com.testify.ecfeed.adapter.ITypeAdapterProvider;
 import com.testify.ecfeed.adapter.ModelOperationException;
+import com.testify.ecfeed.adapter.java.Messages;
 import com.testify.ecfeed.model.AbstractNode;
 import com.testify.ecfeed.model.ChoicesParentNode;
 import com.testify.ecfeed.model.GlobalParameterNode;
@@ -61,7 +62,7 @@ public class GenericMoveOperation extends BulkOperation {
 				addOperation(operation);
 			}
 		} catch (Exception e) {
-			throw new ModelOperationException(Messages.OPERATION_NOT_SUPPORTED_PROBLEM);
+			ModelOperationException.report(Messages.OPERATION_NOT_SUPPORTED_PROBLEM);
 		}
 	}
 

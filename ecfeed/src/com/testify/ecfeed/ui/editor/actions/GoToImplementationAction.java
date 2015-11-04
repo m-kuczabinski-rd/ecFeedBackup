@@ -14,13 +14,17 @@ package com.testify.ecfeed.ui.editor.actions;
 import org.eclipse.jface.viewers.ISelectionProvider;
 
 import com.testify.ecfeed.model.AbstractNode;
+import com.testify.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.testify.ecfeed.ui.modelif.AbstractNodeInterface;
 import com.testify.ecfeed.ui.modelif.NodeInterfaceFactory;
 
 public class GoToImplementationAction extends ModelSelectionAction {
 
-	public GoToImplementationAction(ISelectionProvider selectionProvider) {
+	private IFileInfoProvider fFileInfoProvider;
+
+	public GoToImplementationAction(ISelectionProvider selectionProvider, IFileInfoProvider fileInfoProvider) {
 		super("goToImpl", "Go to implementation", selectionProvider);
+		fFileInfoProvider = fileInfoProvider;
 	}
 
 	@Override
@@ -29,7 +33,7 @@ public class GoToImplementationAction extends ModelSelectionAction {
 			return;
 		}
 		AbstractNode node = getSelectedNodes().get(0);
-		AbstractNodeInterface nodeIf = NodeInterfaceFactory.getNodeInterface(node, null);
+		AbstractNodeInterface nodeIf = NodeInterfaceFactory.getNodeInterface(node, null, fFileInfoProvider);
 		nodeIf.goToImplementation();
 	}
 
@@ -38,7 +42,7 @@ public class GoToImplementationAction extends ModelSelectionAction {
 		if(getSelectedNodes().size() != 1){
 			return false;
 		}
-		AbstractNodeInterface nodeIf = NodeInterfaceFactory.getNodeInterface(getSelectedNodes().get(0), null);
+		AbstractNodeInterface nodeIf = NodeInterfaceFactory.getNodeInterface(getSelectedNodes().get(0), null, fFileInfoProvider);
 		return nodeIf.goToImplementationEnabled();
 	}
 

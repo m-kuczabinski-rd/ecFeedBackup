@@ -35,13 +35,17 @@ public class AbstractFrameworkMethod extends FrameworkMethod {
 	}
 	
 	protected void invoke(Object target, List<ChoiceNode> args) throws RunnerException, Throwable{
+		super.invokeExplosively(target, choiceListToParamArray(args));
+	}
+
+	protected Object[] choiceListToParamArray(List<ChoiceNode> args) throws RunnerException {
 		List<Object> parameters = new ArrayList<Object>();
 		for(ChoiceNode p : args){
 			parameters.add(parseChoiceValue(p));
 		}
-		super.invokeExplosively(target, parameters.toArray());
+		return parameters.toArray();
 	}
-
+	
 	protected Object parseChoiceValue(ChoiceNode choice) throws RunnerException{
 		String type = choice.getParameter().getType();
 		Object value = fValueParser.parseValue(choice);
@@ -53,7 +57,7 @@ public class AbstractFrameworkMethod extends FrameworkMethod {
 			}
 		}
 		if(value == null){
-			throw new RunnerException(Messages.CANNOT_PARSE_PARAMETER(type, choice.getValueString()));
+			RunnerException.report(Messages.CANNOT_PARSE_PARAMETER(type, choice.getValueString()));
 		}
 		return value;
 	}

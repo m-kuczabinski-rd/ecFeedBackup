@@ -18,6 +18,7 @@ import java.util.Set;
 
 import com.testify.ecfeed.adapter.IModelOperation;
 import com.testify.ecfeed.adapter.ModelOperationException;
+import com.testify.ecfeed.adapter.java.Messages;
 
 public class BulkOperation extends AbstractModelOperation{
 
@@ -82,7 +83,7 @@ public class BulkOperation extends AbstractModelOperation{
 			for(String error : errors){
 				message += "\n" + error;
 			}
-			throw new ModelOperationException(message);
+			ModelOperationException.report(message);
 		}
 	}
 

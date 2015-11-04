@@ -26,13 +26,14 @@ import org.eclipse.swt.widgets.Text;
 import com.testify.ecfeed.adapter.java.JavaUtils;
 import com.testify.ecfeed.model.AbstractNode;
 import com.testify.ecfeed.model.ChoiceNode;
-import com.testify.ecfeed.ui.common.IFileInfoProvider;
+import com.testify.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.testify.ecfeed.ui.modelif.AbstractParameterInterface;
 import com.testify.ecfeed.ui.modelif.ChoiceInterface;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 
 public class ChoiceDetailsPage extends BasicDetailsPage {
 
+	private IFileInfoProvider fFileInfoProvider;	
 	private ChoicesViewer fChildrenViewer;
 	private ChoiceLabelsViewer fLabelsViewer;
 	private Composite fAttributesComposite;
@@ -58,9 +59,13 @@ public class ChoiceDetailsPage extends BasicDetailsPage {
 		}
 	}
 
-	public ChoiceDetailsPage(ModelMasterSection masterSection, IModelUpdateContext updateContext, IFileInfoProvider fileInforProvider) {
-		super(masterSection, updateContext, fileInforProvider);
-		fChoiceIf = new ChoiceInterface(this);
+	public ChoiceDetailsPage(
+			ModelMasterSection masterSection, 
+			IModelUpdateContext updateContext, 
+			IFileInfoProvider fileInfoProvider) {
+		super(masterSection, updateContext, fileInfoProvider);
+		fFileInfoProvider = fileInfoProvider;
+		fChoiceIf = new ChoiceInterface(this, fFileInfoProvider);
 	}
 
 	@Override
@@ -68,9 +73,9 @@ public class ChoiceDetailsPage extends BasicDetailsPage {
 		super.createContents(parent);
 
 		createNameValueEditor(getMainComposite());
-		addForm(fCommentsSection = new ChoiceCommentsSection(this, this));
-		addViewerSection(fChildrenViewer = new ChoicesViewer(this, this));
-		addViewerSection(fLabelsViewer = new ChoiceLabelsViewer(this, this));
+		addForm(fCommentsSection = new ChoiceCommentsSection(this, this, fFileInfoProvider));
+		addViewerSection(fChildrenViewer = new ChoicesViewer(this, this, fFileInfoProvider));
+		addViewerSection(fLabelsViewer = new ChoiceLabelsViewer(this, this, fFileInfoProvider));
 
 		getToolkit().paintBordersFor(getMainComposite());
 	}

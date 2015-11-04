@@ -25,7 +25,7 @@ public class CartesianProductAlgorithm<E> extends AbstractAlgorithm<E>{
 	@Override
 	public List<E> getNext() throws GeneratorException{
 		if(fInitialized == false){
-			throw new GeneratorException("Generator not initialized");
+			GeneratorException.report("Generator not initialized");
 		}
 		if(fCancel){
 			return null;

@@ -14,6 +14,7 @@ package com.testify.ecfeed.ui.modelif;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.MultiStatus;
 import org.eclipse.core.runtime.Status;
@@ -26,10 +27,33 @@ import com.testify.ecfeed.ui.plugin.Activator;
 
 public abstract class TestExecutionSupport {
 
+	IProgressMonitor fProgressMonitor;
+
+	int fTotalWork;
+	private int fExecutedTestCases = 0;
 	private List<Status> fUnsuccesfullExecutionStatuses;
 
 	public TestExecutionSupport(){
 		fUnsuccesfullExecutionStatuses = new ArrayList<>();
+	}
+
+	protected void setProgressMonitor(IProgressMonitor progressMonitor) {
+		fProgressMonitor = progressMonitor;
+	}
+
+	protected void beginTestExecution(int totalWork) {
+		fTotalWork = totalWork;
+		fProgressMonitor.beginTask(Messages.EXECUTING_TEST_WITH_PARAMETERS, totalWork);
+	}
+
+	protected void setTestProgressMessage() {
+		String message = "Total: " + fTotalWork + "  Executed: " + fExecutedTestCases + "  Failed: " + fUnsuccesfullExecutionStatuses.size();
+		fProgressMonitor.subTask(message);
+	}
+
+	protected void addExecutedTest(int worked){
+		fProgressMonitor.worked(worked);
+		fExecutedTestCases++;
 	}
 
 	protected void addFailedTest(RunnerException e){
@@ -39,15 +63,16 @@ public abstract class TestExecutionSupport {
 	protected void clearFailedTests(){
 		fUnsuccesfullExecutionStatuses.clear();
 	}
-	
-	protected void displayTestStatusDialog(int executedTestCases){
+
+	protected void displayTestStatusDialog(){
 		if(fUnsuccesfullExecutionStatuses.size() > 0){
-			String msg = Messages.DIALOG_UNSUCCESFUL_TEST_EXECUTION(executedTestCases, fUnsuccesfullExecutionStatuses.size());
+			String msg = Messages.DIALOG_UNSUCCESFUL_TEST_EXECUTION(fExecutedTestCases, fUnsuccesfullExecutionStatuses.size());
 			MultiStatus ms = new MultiStatus(Activator.PLUGIN_ID, IStatus.ERROR, fUnsuccesfullExecutionStatuses.toArray(new Status[]{}), "Open details to see more", new RunnerException("Problematic test cases"));
 			ErrorDialog.openError(null, Messages.DIALOG_TEST_EXECUTION_REPORT_TITLE, msg, ms);
+			return;
 		}
-		else{
-			String msg = Messages.DIALOG_SUCCESFUL_TEST_EXECUTION(executedTestCases);
+		if (fExecutedTestCases > 0) {
+			String msg = Messages.DIALOG_SUCCESFUL_TEST_EXECUTION(fExecutedTestCases);
 			MessageDialog.openInformation(null, Messages.DIALOG_TEST_EXECUTION_REPORT_TITLE, msg);
 		}
 	}

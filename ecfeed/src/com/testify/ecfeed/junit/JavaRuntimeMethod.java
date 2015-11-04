@@ -21,12 +21,13 @@ import com.testify.ecfeed.generators.api.IGenerator;
 import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.runner.Messages;
 import com.testify.ecfeed.runner.RunnerException;
+import com.testify.ecfeed.utils.EcException;
 
-public class RuntimeMethod extends AbstractFrameworkMethod{
+public class JavaRuntimeMethod extends AbstractFrameworkMethod{
 
 	IGenerator<ChoiceNode> fGenerator;
-	
-	public RuntimeMethod(Method method, IGenerator<ChoiceNode> initializedGenerator, ModelClassLoader loader) throws RunnerException{
+
+	public JavaRuntimeMethod(Method method, IGenerator<ChoiceNode> initializedGenerator, ModelClassLoader loader) throws RunnerException{
 		super(method, loader);
 		fGenerator = initializedGenerator;
 	}
@@ -39,10 +40,10 @@ public class RuntimeMethod extends AbstractFrameworkMethod{
 				super.invoke(target, next);
 			}
 		} catch (GeneratorException e) {
-			throw new RunnerException(Messages.RUNNER_EXCEPTION(e.getMessage()));
+			RunnerException.report(Messages.RUNNER_EXCEPTION(e.getMessage()));
 		} catch (Throwable e){
 			String message = getName() + "(" + next.toString() + "): " + e.getMessage();
-			throw new Exception(message, e);
+			EcException.report(message, e);
 		}
 		return null;
 	}

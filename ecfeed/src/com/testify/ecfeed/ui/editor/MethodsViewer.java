@@ -27,10 +27,13 @@ import com.testify.ecfeed.adapter.java.JavaUtils;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.MethodParameterNode;
+import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.common.NodeNameColumnLabelProvider;
 import com.testify.ecfeed.ui.common.NodeViewerColumnLabelProvider;
+import com.testify.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.testify.ecfeed.ui.editor.actions.DeleteAction;
 import com.testify.ecfeed.ui.editor.actions.ModelViewerActionProvider;
+import com.testify.ecfeed.ui.editor.utils.ExceptionCatchDialog;
 import com.testify.ecfeed.ui.modelif.ClassInterface;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 import com.testify.ecfeed.ui.modelif.MethodInterface;
@@ -79,11 +82,15 @@ public class MethodsViewer extends TableViewerSection {
 
 	private class AddNewMethodAdapter extends SelectionAdapter {
 		@Override
-		public void widgetSelected(SelectionEvent e) {
-			MethodNode newMethod = fClassIf.addNewMethod();
-			if(newMethod != null){
-				selectElement(newMethod);
-				fMethodsColumn.getViewer().editElement(newMethod, 0);
+		public void widgetSelected(SelectionEvent ev) {
+			try {
+				MethodNode newMethod = fClassIf.addNewMethod();
+				if(newMethod != null){
+					selectElement(newMethod);
+					fMethodsColumn.getViewer().editElement(newMethod, 0);
+				}
+			} catch (Exception e) {
+				ExceptionCatchDialog.display("Can not add new method", e.getMessage());
 			}
 		}
 	}
@@ -105,17 +112,23 @@ public class MethodsViewer extends TableViewerSection {
 		}
 	}
 
-	public MethodsViewer(ISectionContext sectionContext, IModelUpdateContext updateContext) {
-		super(sectionContext, updateContext, STYLE);
+	public MethodsViewer(
+			ISectionContext sectionContext, 
+			IModelUpdateContext updateContext, 
+			IFileInfoProvider fileInfoProvider) {
+		super(sectionContext, updateContext, fileInfoProvider, STYLE);
 
-		fClassIf = new ClassInterface(this);
-		fMethodIf = new MethodInterface(this);
+		fClassIf = new ClassInterface(this, fileInfoProvider);
+		fMethodIf = new MethodInterface(this, fileInfoProvider);
 
 		fMethodsColumn.setEditingSupport(new MethodNameEditingSupport());
 
 		setText("Methods");
 		addButton("Add new method", new AddNewMethodAdapter());
-		addButton("Remove selected", new ActionSelectionAdapter(new DeleteAction(getViewer(), this)));
+		addButton("Remove selected", 
+				new ActionSelectionAdapter(
+						new DeleteAction(getViewer(), this), Messages.EXCEPTION_CAN_NOT_REMOVE_SELECTED_ITEMS));
+
 		addDoubleClickListener(new SelectNodeDoubleClickListener(sectionContext.getMasterSection()));
 		setActionProvider(new ModelViewerActionProvider(getTableViewer(), this));
 		getViewer().addDragSupport(DND.DROP_COPY|DND.DROP_MOVE, new Transfer[]{ModelNodesTransfer.getInstance()}, new ModelNodeDragListener(getViewer()));
@@ -128,8 +141,8 @@ public class MethodsViewer extends TableViewerSection {
 
 	@Override
 	protected void createTableColumns() {
-		fMethodsColumn = addColumn("Methods", 150, new NodeNameColumnLabelProvider());
-		addColumn("Arguments", 450, new MethodsArgsLabelProvider());
+		fMethodsColumn = addColumn("Name", 150, new NodeNameColumnLabelProvider());
+		addColumn("Parameters", 450, new MethodsArgsLabelProvider());
 	}
 
 	@Override

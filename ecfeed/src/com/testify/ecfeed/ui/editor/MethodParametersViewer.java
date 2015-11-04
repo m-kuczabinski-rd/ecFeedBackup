@@ -31,6 +31,7 @@ import com.testify.ecfeed.model.GlobalParameterNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.MethodParameterNode;
 import com.testify.ecfeed.ui.common.NodeViewerColumnLabelProvider;
+import com.testify.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.testify.ecfeed.ui.modelif.AbstractParameterInterface;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 import com.testify.ecfeed.ui.modelif.MethodInterface;
@@ -146,7 +147,7 @@ public class MethodParametersViewer extends AbstractParametersViewer {
 			String[] items = fComboCellEditor.getItems();
 			return Arrays.asList(items).indexOf(defaultValue);
 
-//			return ((MethodParameterNode)element).getDefaultValue();
+			//			return ((MethodParameterNode)element).getDefaultValue();
 		}
 
 		@Override
@@ -236,10 +237,13 @@ public class MethodParametersViewer extends AbstractParametersViewer {
 
 	}
 
-	public MethodParametersViewer(ISectionContext sectionContext, IModelUpdateContext updateContext) {
-		super(sectionContext, updateContext, STYLE);
-		fParameterIf = (MethodParameterInterface)getParameterInterface();
+	public MethodParametersViewer(
+			ISectionContext sectionContext, 
+			IModelUpdateContext updateContext, 
+			IFileInfoProvider fileInfoProvider) {
+		super(sectionContext, updateContext, fileInfoProvider, STYLE);
 
+		fParameterIf = (MethodParameterInterface)getParameterInterface();
 		getSection().setText("Parameters");
 		fExpectedColumn.setEditingSupport(new ExpectedValueEditingSupport());
 		fDefaultValueColumn.setEditingSupport(new DefaultValueEditingSupport());
@@ -282,7 +286,7 @@ public class MethodParametersViewer extends AbstractParametersViewer {
 		});
 	}
 
-	public void setInput(MethodNode method){
+	public void setInput(MethodNode method, IFileInfoProvider fileInfoProvider){
 		fSelectedMethod = method;
 		showDefaultValueColumn(fSelectedMethod.getParametersNames(true).size() == 0);
 		getMethodIf().setTarget(method);
@@ -307,7 +311,7 @@ public class MethodParametersViewer extends AbstractParametersViewer {
 
 	protected MethodInterface getMethodIf() {
 		if(fMethodIf == null){
-			fMethodIf = new MethodInterface(this);
+			fMethodIf = new MethodInterface(this, getFileInfoProvider());
 		}
 		return fMethodIf;
 	}
@@ -315,7 +319,7 @@ public class MethodParametersViewer extends AbstractParametersViewer {
 	@Override
 	protected AbstractParameterInterface getParameterInterface() {
 		if(fParameterIf == null){
-			fParameterIf = new MethodParameterInterface(this);
+			fParameterIf = new MethodParameterInterface(this, getFileInfoProvider());
 		}
 		return fParameterIf;
 	}

@@ -28,6 +28,8 @@ import org.eclipse.ui.forms.widgets.Section;
 
 import com.testify.ecfeed.model.AbstractNode;
 import com.testify.ecfeed.ui.common.Messages;
+import com.testify.ecfeed.ui.common.utils.IFileInfoProvider;
+import com.testify.ecfeed.ui.editor.utils.ExceptionCatchDialog;
 import com.testify.ecfeed.ui.modelif.AbstractNodeInterface;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 
@@ -45,10 +47,16 @@ public abstract class AbstractCommentsSection extends TabFolderSection {
 
 	private class EditCommentsAdapter extends SelectionAdapter{
 		@Override
-		public void widgetSelected(SelectionEvent e){
-			getTargetIf().editComments();
+		public void widgetSelected(SelectionEvent ev){
+			try {
+				getTargetIf().editComments();
+			} catch (Exception e) {
+				ExceptionCatchDialog.display("Can not edit comments", e.getMessage());
+			}
 		}
 	}
+
+	private IFileInfoProvider fFileInfoProvider;
 
 	private Button fEditButton;
 
@@ -57,8 +65,12 @@ public abstract class AbstractCommentsSection extends TabFolderSection {
 
 	private Map<TabItem, Text> fTextItems;
 
-	public AbstractCommentsSection(ISectionContext sectionContext, IModelUpdateContext updateContext) {
-		super(sectionContext, updateContext, STYLE);
+	public AbstractCommentsSection(
+			ISectionContext sectionContext, 
+			IModelUpdateContext updateContext,
+			IFileInfoProvider fileInfoProvider) {
+		super(sectionContext, updateContext, fileInfoProvider, STYLE);
+		fFileInfoProvider = fileInfoProvider;
 
 		if(getTabFolder() != null){
 			getTabFolder().addSelectionListener(new TabFolderSelectionListsner());
@@ -119,7 +131,7 @@ public abstract class AbstractCommentsSection extends TabFolderSection {
 
 	protected AbstractNodeInterface getTargetIf(){
 		if(fTargetIf == null){
-			fTargetIf = new AbstractNodeInterface(getUpdateContext());
+			fTargetIf = new AbstractNodeInterface(getUpdateContext(), fFileInfoProvider);
 		}
 		return fTargetIf;
 	}

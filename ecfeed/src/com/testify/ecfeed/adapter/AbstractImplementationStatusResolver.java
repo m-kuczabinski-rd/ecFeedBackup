@@ -25,9 +25,11 @@ import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.MethodParameterNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.TestCaseNode;
+import com.testify.ecfeed.utils.EcException;
+import com.testify.ecfeed.utils.SystemLogger;
 
 public abstract class AbstractImplementationStatusResolver implements
-		IImplementationStatusResolver {
+IImplementationStatusResolver {
 
 	private StatusResolver fStatusResolver;
 	private IPrimitiveTypePredicate fPrimitiveTypeTester;
@@ -82,11 +84,18 @@ public abstract class AbstractImplementationStatusResolver implements
 
 	@Override
 	public EImplementationStatus getImplementationStatus(AbstractNode node) {
-		try{
-			EImplementationStatus status = (EImplementationStatus)node.accept(fStatusResolver);
-			return status;
+		if (fStatusResolver == null) {
+			return EImplementationStatus.NOT_IMPLEMENTED;
 		}
-		catch(Exception e){}
+
+		try{
+
+			return (EImplementationStatus)node.accept(fStatusResolver);
+		}
+		catch(Exception e){
+			SystemLogger.logCatch(e.getMessage());
+
+		}
 		return EImplementationStatus.NOT_IMPLEMENTED;
 	}
 
@@ -101,38 +110,37 @@ public abstract class AbstractImplementationStatusResolver implements
 		return status;
 	}
 
-	protected EImplementationStatus implementationStatus(ClassNode classNode){
-		EImplementationStatus status = EImplementationStatus.IMPLEMENTED;
-		if(classDefinitionImplemented(classNode.getName()) == false){
-			status = EImplementationStatus.NOT_IMPLEMENTED;
+	protected EImplementationStatus implementationStatus(ClassNode classNode) throws EcException {
+		if(!classDefinitionImplemented(classNode.getName())){
+			return EImplementationStatus.NOT_IMPLEMENTED;
 		}
-		else if(classNode.getMethods().size() == 0){
-			status = EImplementationStatus.IMPLEMENTED;
+
+		if(classNode.getMethods().isEmpty()){
+			return EImplementationStatus.IMPLEMENTED;
 		}
-		else{
-			EImplementationStatus childrenStatus = childrenStatus(classNode.getMethods());
-			if(childrenStatus != EImplementationStatus.IMPLEMENTED){
-				status = EImplementationStatus.PARTIALLY_IMPLEMENTED;
-			}
+
+		EImplementationStatus childrenStatus = childrenStatus(classNode.getMethods());
+		if(childrenStatus == EImplementationStatus.IMPLEMENTED){
+			return EImplementationStatus.IMPLEMENTED;
 		}
-		return status;
+
+		return EImplementationStatus.PARTIALLY_IMPLEMENTED;
 	}
 
-	protected EImplementationStatus implementationStatus(MethodNode method){
-		EImplementationStatus status = EImplementationStatus.IMPLEMENTED;
+	protected EImplementationStatus implementationStatus(MethodNode method) throws EcException {
 		if(methodDefinitionImplemented(method) == false){
-			status = EImplementationStatus.NOT_IMPLEMENTED;
+			return EImplementationStatus.NOT_IMPLEMENTED;
 		}
-		else if(method.getParameters().size() == 0){
-			status = EImplementationStatus.IMPLEMENTED;
+		if(method.getParameters().size() == 0){
+			return EImplementationStatus.IMPLEMENTED;
 		}
-		else{
-			EImplementationStatus childrenStatus = childrenStatus(method.getParameters());
-			if(childrenStatus != EImplementationStatus.IMPLEMENTED){
-				status = EImplementationStatus.PARTIALLY_IMPLEMENTED;
-			}
+		EImplementationStatus childrenStatus = childrenStatus(method.getParameters());
+
+		if(childrenStatus != EImplementationStatus.IMPLEMENTED){
+			return EImplementationStatus.PARTIALLY_IMPLEMENTED;
 		}
-		return status;
+
+		return EImplementationStatus.IMPLEMENTED;
 	}
 
 	protected EImplementationStatus implementationStatus(MethodParameterNode parameter){
@@ -212,11 +220,19 @@ public abstract class AbstractImplementationStatusResolver implements
 		int size = children.size();
 		int implementedChildren = 0;
 		int notImplementedChildren = 0;
+
 		for(AbstractNode child : children){
+
 			EImplementationStatus status = getImplementationStatus(child);
-			if(status == EImplementationStatus.IMPLEMENTED) ++implementedChildren;
-			if(status == EImplementationStatus.NOT_IMPLEMENTED) ++notImplementedChildren;
+
+			if(status == EImplementationStatus.IMPLEMENTED) { 
+				++implementedChildren;
+			}
+			if(status == EImplementationStatus.NOT_IMPLEMENTED) {
+				++notImplementedChildren;
+			}
 		}
+
 		if(implementedChildren == size){
 			return EImplementationStatus.IMPLEMENTED;
 		}

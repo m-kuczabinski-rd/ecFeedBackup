@@ -28,19 +28,27 @@ import com.testify.ecfeed.adapter.java.JavaUtils;
 import com.testify.ecfeed.adapter.operations.ClassOperationAddMethod;
 import com.testify.ecfeed.adapter.operations.ClassOperationAddMethods;
 import com.testify.ecfeed.adapter.operations.ClassOperationRemoveMethod;
+import com.testify.ecfeed.adapter.operations.ClassOperationSetAndroidBaseRunner;
+import com.testify.ecfeed.adapter.operations.ClassOperationSetRunOnAndroid;
 import com.testify.ecfeed.adapter.operations.FactoryRenameOperation;
+import com.testify.ecfeed.android.utils.AndroidBaseRunnerHelper;
+import com.testify.ecfeed.android.utils.AndroidManifestAccessor;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.ui.common.Constants;
 import com.testify.ecfeed.ui.common.EclipseModelBuilder;
 import com.testify.ecfeed.ui.common.JavaModelAnalyser;
 import com.testify.ecfeed.ui.common.Messages;
+import com.testify.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.testify.ecfeed.ui.dialogs.TestClassSelectionDialog;
+import com.testify.ecfeed.utils.EcException;
+import com.testify.ecfeed.utils.PackageClassHelper;
+import com.testify.ecfeed.utils.SystemLogger;
 
 public class ClassInterface extends GlobalParametersParentInterface {
 
-	public ClassInterface(IModelUpdateContext updateContext) {
-		super(updateContext);
+	public ClassInterface(IModelUpdateContext updateContext, IFileInfoProvider fileInfoProvider) {
+		super(updateContext, fileInfoProvider);
 	}
 
 	public static String getQualifiedName(ClassNode classNode){
@@ -71,12 +79,27 @@ public class ClassInterface extends GlobalParametersParentInterface {
 		return getPackageName(getTarget());
 	}
 
+	public boolean getRunOnAndroid(){
+		return getTarget().getRunOnAndroid();
+	}
+
+	public String getAndroidBaseRunner(){
+		return getTarget().getAndroidBaseRunner();
+	}
+
 	@Override
 	public boolean setName(String newName) {
 		return setQualifiedName(newName);
 	}
 
 	public boolean setQualifiedName(String newName){
+		if (!PackageClassHelper.hasPackageName(newName)){
+			MessageDialog.openError(
+					Display.getDefault().getActiveShell(), 
+					Messages.DIALOG_RENAME_CLASS_TITLE, 
+					Messages.DIALOG_RENAME_CLASS_MESSAGE_PACKAGE_NOT_EMPTY);
+			return false;
+		}
 		if(newName.equals(getQualifiedName())){
 			return false;
 		}
@@ -98,6 +121,23 @@ public class ClassInterface extends GlobalParametersParentInterface {
 	public boolean setPackageName(String newPackageName){
 		String newQualifiedName = newPackageName + "." + getLocalName();
 		return setQualifiedName(newQualifiedName);
+	}
+
+	public boolean setRunOnAndroid(boolean runOnAndroid) {
+		if(getImplementationStatus(getTarget()) != EImplementationStatus.NOT_IMPLEMENTED){
+			if(MessageDialog.openConfirm(Display.getCurrent().getActiveShell(),
+					Messages.DIALOG_RENAME_RUN_ON_ANDROID_TITLE,
+					Messages.DIALOG_RENAME_RUN_ON_ANDROID_MESSAGE) == false){
+				return false;
+			}
+		}
+		IModelOperation operation = new ClassOperationSetRunOnAndroid(getTarget(), runOnAndroid);
+		return execute(operation, Messages.DIALOG_ANDROID_RUNNER_SET_PROBLEM_TITLE);
+	}
+
+	public boolean setAndroidBaseRunner(String androidBaseRunner) {
+		IModelOperation operation = new ClassOperationSetAndroidBaseRunner(getTarget(), androidBaseRunner);
+		return execute(operation, Messages.DIALOG_ANDROID_RUNNER_SET_PROBLEM_TITLE);
 	}
 
 	public MethodNode addNewMethod(){
@@ -140,8 +180,8 @@ public class ClassInterface extends GlobalParametersParentInterface {
 			return removeMethod(new ArrayList<MethodNode>(methods).get(0));
 		}
 		else if(MessageDialog.openConfirm(Display.getCurrent().getActiveShell(),
-					Messages.DIALOG_REMOVE_METHODS_TITLE,
-					Messages.DIALOG_REMOVE_METHODS_MESSAGE)){
+				Messages.DIALOG_REMOVE_METHODS_TITLE,
+				Messages.DIALOG_REMOVE_METHODS_MESSAGE)){
 			return removeChildren(methods, Messages.DIALOG_REMOVE_METHODS_PROBLEM_TITLE);
 		}
 		return false;
@@ -157,7 +197,7 @@ public class ClassInterface extends GlobalParametersParentInterface {
 					otherMethods.add(method);
 				}
 			}
-		}catch (ModelOperationException e){}
+		}catch (ModelOperationException e){SystemLogger.logCatch(e.getMessage());}
 		return otherMethods;
 	}
 
@@ -176,13 +216,21 @@ public class ClassInterface extends GlobalParametersParentInterface {
 		}
 	}
 
+	public List<String> createRunnerList(String projectPath) throws EcException {
+		List<String> runners = new AndroidManifestAccessor(projectPath).getRunnerNames();
+		String ecFeedTestRunner = AndroidBaseRunnerHelper.createAndroidBaseRunnerName(projectPath);
+
+		runners.remove(ecFeedTestRunner);
+		return runners;
+	}
+
 	@Override
 	public void goToImplementation(){
 		IType type = JavaModelAnalyser.getIType(getQualifiedName());
 		if(type != null){
 			try{
 				JavaUI.openInEditor(type);
-			}catch(Exception e){}
+			}catch(Exception e){SystemLogger.logCatch(e.getMessage());}
 		}
 	}
 

@@ -24,7 +24,8 @@ import com.testify.ecfeed.adapter.EImplementationStatus;
 import com.testify.ecfeed.adapter.java.JavaUtils;
 import com.testify.ecfeed.model.AbstractNode;
 import com.testify.ecfeed.model.MethodNode;
-import com.testify.ecfeed.ui.common.IFileInfoProvider;
+import com.testify.ecfeed.ui.common.utils.IFileInfoProvider;
+import com.testify.ecfeed.ui.editor.utils.ExceptionCatchDialog;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 import com.testify.ecfeed.ui.modelif.MethodInterface;
 
@@ -42,8 +43,12 @@ public class MethodDetailsPage extends BasicDetailsPage {
 
 	private class OnlineTestAdapter extends SelectionAdapter{
 		@Override
-		public void widgetSelected(SelectionEvent e){
-			fMethodIf.executeOnlineTests();
+		public void widgetSelected(SelectionEvent ev){
+			try {
+				fMethodIf.executeOnlineTests(getFileInfoProvider());
+			} catch (Exception e) {
+				ExceptionCatchDialog.display("Can not execute online tests.", e.getMessage());
+			}
 		}
 	}
 
@@ -62,20 +67,24 @@ public class MethodDetailsPage extends BasicDetailsPage {
 		}
 	}
 
-	public MethodDetailsPage(ModelMasterSection masterSection, IModelUpdateContext updateContext, IFileInfoProvider fileInforProvider) {
-		super(masterSection, updateContext, fileInforProvider);
-		fMethodIf = new MethodInterface(this);
+	public MethodDetailsPage(
+			ModelMasterSection masterSection, 
+			IModelUpdateContext updateContext, 
+			IFileInfoProvider fileInfoProvider) {
+		super(masterSection, updateContext, fileInfoProvider);
+		fMethodIf = new MethodInterface(this, fileInfoProvider);
 	}
 
 	@Override
 	public void createContents(Composite parent){
 		super.createContents(parent);
-
 		createNameTextComposite();
-		addForm(fCommentsSection = new JavaDocCommentsSection(this, this));
-		addViewerSection(fParemetersSection = new MethodParametersViewer(this, this));
-		addViewerSection(fConstraintsSection = new ConstraintsListViewer(this, this));
-		addViewerSection(fTestCasesSection = new TestCasesViewer(this, this));
+
+		IFileInfoProvider fileInfoProvider = getFileInfoProvider();
+		addForm(fCommentsSection = new JavaDocCommentsSection(this, this, fileInfoProvider));
+		addViewerSection(fParemetersSection = new MethodParametersViewer(this, this, fileInfoProvider));
+		addViewerSection(fConstraintsSection = new ConstraintsListViewer(this, this, fileInfoProvider));
+		addViewerSection(fTestCasesSection = new TestCasesViewer(this, this, fileInfoProvider));
 
 		getToolkit().paintBordersFor(getMainComposite());
 	}
@@ -110,6 +119,7 @@ public class MethodDetailsPage extends BasicDetailsPage {
 		if(getSelectedElement() instanceof MethodNode){
 			MethodNode selectedMethod = (MethodNode)getSelectedElement();
 			fMethodIf.setTarget(selectedMethod);
+
 			EImplementationStatus methodStatus = fMethodIf.getImplementationStatus();
 			getMainSection().setText(JavaUtils.simplifiedToString(selectedMethod));
 			fTestOnlineButton.setEnabled(methodStatus != EImplementationStatus.NOT_IMPLEMENTED);

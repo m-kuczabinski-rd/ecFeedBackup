@@ -26,27 +26,28 @@ import org.junit.Test;
 import org.junit.runners.model.FrameworkMethod;
 
 import com.testify.ecfeed.adapter.java.ModelClassLoader;
-import com.testify.ecfeed.junit.ParameterizedMethod;
+import com.testify.ecfeed.junit.JavaParameterizedMethod;
 import com.testify.ecfeed.model.MethodParameterNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.model.TestCaseNode;
+import com.testify.ecfeed.runner.java.JUnitTestMethodInvoker;
 
-public class ParameterizedMethodTest {
+public class ParameterizedMethodsTest {
 
 	public enum Enum{
 		VALUE1, VALUE2, VALUE3;
 	}
-	
+
 	private Set<List<Integer>> fExecuted;
 	private List<Enum> fExecutedEnum;
 	private final int MAX_TEST_SUITE_SIZE = 1000;
-	
+
 	private final String CLASS_NAME = this.getClass().getCanonicalName();
 	private final String FUNCTION_UNDER_TEST_NAME = "functionUnderTest";
 	private final String ENUM_FUNCTION_UNDER_TEST_NAME = "enumFunctionUnderTest";
-	
+
 	public void functionUnderTest(int arg1, int arg2){
 		List<Integer> parameters = new ArrayList<Integer>();
 		parameters.add(arg1);
@@ -57,25 +58,32 @@ public class ParameterizedMethodTest {
 	public void enumFunctionUnderTest(Enum e){
 		fExecutedEnum.add(e);
 	}
-	
+
 	@Test
-	public void testExecution(){
+	public void javaMethodTest(){
 		for(int i = 1; i <= MAX_TEST_SUITE_SIZE; i++){
-			test(i);
+			test(false, i);
 		}
 	}
-	
+
+	@Test
+	public void androidMethodTest(){
+		for(int i = 1; i <= MAX_TEST_SUITE_SIZE; i++){
+			test(true, i);
+		}
+	}	
+
 	@Test
 	public void enumExecutionTest(){
 		ModelClassLoader loader = new ModelClassLoader(new URL[]{}, this.getClass().getClassLoader());
-		
+
 		ClassNode classNode = new ClassNode(CLASS_NAME);
 		MethodNode methodNode = new MethodNode(ENUM_FUNCTION_UNDER_TEST_NAME);
 		classNode.addMethod(methodNode);
 		MethodParameterNode c = new MethodParameterNode("c", Enum.class.getCanonicalName(), "0", false);
 		methodNode.addParameter(c);
 		fExecutedEnum = new ArrayList<Enum>();
-		
+
 		for(Enum v : Enum.values()){
 			ChoiceNode p = new ChoiceNode(v.name(), v.name());
 			c.addChoice(p);
@@ -86,7 +94,8 @@ public class ParameterizedMethodTest {
 
 		try{
 			Method methodUnterTest = this.getClass().getMethod(ENUM_FUNCTION_UNDER_TEST_NAME, Enum.class);
-			FrameworkMethod m = new ParameterizedMethod(methodUnterTest, methodNode.getTestCases(), loader);
+
+			FrameworkMethod m = createParametrizedMethod(false, this.getClass().getName(), methodUnterTest, methodNode.getTestCases(), loader);
 			m.invokeExplosively(this, new Object[]{});
 			for(Enum v : Enum.values()){
 				assertTrue(fExecutedEnum.contains(v));
@@ -95,32 +104,46 @@ public class ParameterizedMethodTest {
 			System.out.println("Unexpected exception: " + e);
 		}
 	}
-	
-	public void test(int testSuiteSize) {
+
+	public void test(boolean isAndroidTest, int testSuiteSize) {
 		try {
 			ModelClassLoader loader = new ModelClassLoader(new URL[]{}, this.getClass().getClassLoader());
-			
+
 			ClassNode classNode = new ClassNode(CLASS_NAME);
 			MethodNode methodNode = new MethodNode(FUNCTION_UNDER_TEST_NAME);
 			classNode.addMethod(methodNode);
 			methodNode.addParameter(new MethodParameterNode("c1", "int", "0", false));
 			methodNode.addParameter(new MethodParameterNode("c1", "int", "0", false));
 
-			
+
 			fExecuted = new HashSet<List<Integer>>();
 			Method methodUnterTest = this.getClass().getMethod(FUNCTION_UNDER_TEST_NAME, int.class, int.class);
-			Collection<TestCaseNode> testSuite = generateTestCases(methodNode, testSuiteSize);
-			Set<List<Integer>> referenceResult = generateReferenceResult(testSuite);
-			
-			FrameworkMethod m = new ParameterizedMethod(methodUnterTest, testSuite, loader);
+			Collection<TestCaseNode> testCases = generateTestCases(methodNode, testSuiteSize);
+			Set<List<Integer>> referenceResult = generateReferenceResult(testCases);
+
+			FrameworkMethod m = createParametrizedMethod(isAndroidTest, this.getClass().getName(), methodUnterTest, testCases, loader);
 			m.invokeExplosively(this, new Object[]{});
-			
+
 			assertEquals(referenceResult, fExecuted);
-			
+
 		} catch (NoSuchMethodException e){
 			fail("NoSuchMethodException: " + e.getMessage());
 		} catch (Throwable e) {
 			fail("Unexpected exception from invoked method: " + e.getMessage());
+		}
+	}
+
+	private FrameworkMethod createParametrizedMethod(
+			boolean isAndroidTest,
+			String className,
+			Method methodUnterTest, 
+			Collection<TestCaseNode> testCases, 
+			ModelClassLoader loader) {
+
+		if (isAndroidTest) {
+			return new JavaParameterizedMethod(methodUnterTest, testCases, loader);
+		} else {
+			return new AndroidParameterizedMethod(className, methodUnterTest, testCases, loader, new JUnitTestMethodInvoker());
 		}
 	}
 
@@ -151,6 +174,5 @@ public class ParameterizedMethodTest {
 		}
 		return result;
 	}
-
 
 }

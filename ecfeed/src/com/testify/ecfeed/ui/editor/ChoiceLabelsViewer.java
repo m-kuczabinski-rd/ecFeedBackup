@@ -32,27 +32,30 @@ import org.eclipse.ui.forms.widgets.Section;
 import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.ui.common.ColorConstants;
 import com.testify.ecfeed.ui.common.ColorManager;
+import com.testify.ecfeed.ui.common.Messages;
+import com.testify.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.testify.ecfeed.ui.editor.actions.ActionGroups;
 import com.testify.ecfeed.ui.editor.actions.CutAction;
 import com.testify.ecfeed.ui.editor.actions.ModelModifyingAction;
 import com.testify.ecfeed.ui.editor.actions.NamedAction;
 import com.testify.ecfeed.ui.editor.actions.SelectAllAction;
+import com.testify.ecfeed.ui.editor.utils.ExceptionCatchDialog;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 import com.testify.ecfeed.ui.modelif.ChoiceInterface;
 
 public class ChoiceLabelsViewer extends TableViewerSection {
-	
+
 	private static final int STYLE = Section.TITLE_BAR | Section.EXPANDED;
 
 	private ChoiceInterface fChoiceIf;
 
 	private static class LabelClipboard{
 		private static List<String> fLabels = new ArrayList<>();
-		
+
 		public static List<String> getContent(){
 			return fLabels;
 		}
-	
+
 		public static List<String> getContentCopy(){
 			List<String> copy = new ArrayList<>();
 			for(String label : fLabels){
@@ -60,7 +63,7 @@ public class ChoiceLabelsViewer extends TableViewerSection {
 			}
 			return copy;
 		}
-		
+
 		public static void setContent(List<String> labels){
 			fLabels.clear();
 			for(String label : labels){
@@ -80,17 +83,17 @@ public class ChoiceLabelsViewer extends TableViewerSection {
 			addAction("selection", new SelectAllAction(getTableViewer()));
 		}
 	}
-	
+
 	private class LabelCopyAction extends NamedAction{
 		public LabelCopyAction() {
 			super(GlobalActions.COPY.getId(), GlobalActions.COPY.getName());
 		}
-	
+
 		@Override
 		public boolean isEnabled(){
 			return getSelectedLabels().size() > 0;
 		}
-		
+
 		@Override
 		public void run(){
 			LabelClipboard.setContent(getSelectedLabels());
@@ -101,12 +104,12 @@ public class ChoiceLabelsViewer extends TableViewerSection {
 		public LabelPasteAction(IModelUpdateContext updateContext) {
 			super(GlobalActions.PASTE.getId(), GlobalActions.PASTE.getName(), getViewer(), updateContext);
 		}
-	
+
 		@Override
 		public boolean isEnabled(){
 			return LabelClipboard.getContent().size() > 0;
 		}
-		
+
 		@Override
 		public void run(){
 			fChoiceIf.addLabels(LabelClipboard.getContentCopy());
@@ -117,7 +120,7 @@ public class ChoiceLabelsViewer extends TableViewerSection {
 		public LabelDeleteAction(IModelUpdateContext updateContext) {
 			super(GlobalActions.DELETE.getId(), GlobalActions.DELETE.getName(), getTableViewer(), updateContext);
 		}
-		
+
 		@Override
 		public boolean isEnabled(){
 			for(String label : getSelectedLabels()){
@@ -127,7 +130,7 @@ public class ChoiceLabelsViewer extends TableViewerSection {
 			}
 			return false;
 		}
-		
+
 		@Override
 		public void run(){
 			fChoiceIf.removeLabels(getSelectedLabels());
@@ -136,17 +139,22 @@ public class ChoiceLabelsViewer extends TableViewerSection {
 
 	private class AddLabelAdapter extends SelectionAdapter{
 		@Override
-		public void widgetSelected(SelectionEvent e){
-			String newLabel = fChoiceIf.addNewLabel();
-			if(newLabel != null){
-				getTableViewer().editElement(newLabel, 0);
+		public void widgetSelected(SelectionEvent ev){
+			try {
+				String newLabel = fChoiceIf.addNewLabel();
+				if(newLabel != null){
+					getTableViewer().editElement(newLabel, 0);
+				}
+			}
+			catch (Exception e) {
+				ExceptionCatchDialog.display("Can not add label.", e.getMessage());
 			}
 		}
 	}
-	
+
 	public class LabelEditingSupport extends EditingSupport{
 		private TextCellEditor fLabelCellEditor;
-		
+
 		public LabelEditingSupport(ColumnViewer viewer) {
 			super(viewer);
 			fLabelCellEditor = new TextCellEditor(getTable());
@@ -178,7 +186,7 @@ public class ChoiceLabelsViewer extends TableViewerSection {
 		public String getText(Object element){
 			return (String)element;
 		}
-		
+
 		@Override
 		public Color getForeground(Object element){
 			if(element instanceof String){
@@ -208,14 +216,20 @@ public class ChoiceLabelsViewer extends TableViewerSection {
 		}
 	}
 
-	public ChoiceLabelsViewer(ISectionContext sectionContext, IModelUpdateContext updateContext) {
-		super(sectionContext, updateContext, STYLE);
+	public ChoiceLabelsViewer(
+			ISectionContext sectionContext, 
+			IModelUpdateContext updateContext, 
+			IFileInfoProvider fileInfoProvider) {
+		super(sectionContext, updateContext, fileInfoProvider, STYLE);
 
-		fChoiceIf = new ChoiceInterface(this);
+		fChoiceIf = new ChoiceInterface(this, fileInfoProvider);
 		getSection().setText("Labels");
-		
+
 		addButton("Add label", new AddLabelAdapter());
-		addButton("Remove selected", new ActionSelectionAdapter(new LabelDeleteAction(updateContext)));
+		addButton("Remove selected", 
+				new ActionSelectionAdapter(
+						new LabelDeleteAction(updateContext), 
+						Messages.EXCEPTION_CAN_NOT_REMOVE_SELECTED_ITEMS));
 
 		addDoubleClickListener(new SelectNodeDoubleClickListener(sectionContext.getMasterSection()));
 		setActionProvider(new LabelsViewerActionProvider());
@@ -226,7 +240,7 @@ public class ChoiceLabelsViewer extends TableViewerSection {
 		TableViewerColumn labelColumn = addColumn("Label", 150, new LabelColumnLabelProvider());
 		labelColumn.setEditingSupport(new LabelEditingSupport(getTableViewer()));
 	}
-	
+
 	public void setInput(ChoiceNode	choice){
 		fChoiceIf.setTarget(choice);
 		super.setInput(choice.getAllLabels());

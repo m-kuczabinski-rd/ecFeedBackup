@@ -18,12 +18,14 @@ import com.testify.ecfeed.adapter.ITypeAdapter;
 import com.testify.ecfeed.adapter.ITypeAdapterProvider;
 import com.testify.ecfeed.adapter.ModelOperationException;
 import com.testify.ecfeed.adapter.java.JavaUtils;
+import com.testify.ecfeed.adapter.java.Messages;
 import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.model.ChoicesParentNode;
 import com.testify.ecfeed.model.GlobalParameterNode;
 import com.testify.ecfeed.model.IParameterVisitor;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.MethodParameterNode;
+import com.testify.ecfeed.utils.SystemLogger;
 
 public class GenericOperationRemoveChoice extends BulkOperation {
 
@@ -71,7 +73,7 @@ public class GenericOperationRemoveChoice extends BulkOperation {
 			private void reverseAdaptParameter() {
 				try{
 					fTarget.getParameter().accept(new ReverseParameterAdapter());
-				}catch(Exception e){}
+				}catch(Exception e){SystemLogger.logCatch(e.getMessage());}
 			}
 
 		}
@@ -83,7 +85,7 @@ public class GenericOperationRemoveChoice extends BulkOperation {
 				if(parameter.isExpected() && JavaUtils.isPrimitive(parameter.getType()) == false && parameter.getChoices().size() == 1 && parameter.getChoices().get(0) == fChoice){
 					// We are removing the only choice of expected parameter.
 					// The last parameter must represent the default expected value
-					throw new ModelOperationException(Messages.EXPECTED_USER_TYPE_CATEGORY_LAST_PARTITION_PROBLEM);
+					ModelOperationException.report(Messages.EXPECTED_USER_TYPE_CATEGORY_LAST_PARTITION_PROBLEM);
 				}
 				return null;
 			}
@@ -108,7 +110,7 @@ public class GenericOperationRemoveChoice extends BulkOperation {
 							parameter.setDefaultValueString(leafValues.toArray(new String[]{})[0]);
 						}
 						else{
-							throw new ModelOperationException(Messages.UNEXPECTED_PROBLEM_WHILE_REMOVING_ELEMENT);
+							ModelOperationException.report(Messages.UNEXPECTED_PROBLEM_WHILE_REMOVING_ELEMENT);
 						}
 					}
 				}
@@ -155,7 +157,7 @@ public class GenericOperationRemoveChoice extends BulkOperation {
 		private void adaptParameter() {
 			try{
 				fTarget.getParameter().accept(new ParameterAdapter());
-			}catch(Exception e){}
+			}catch(Exception e){SystemLogger.logCatch(e.getMessage());}
 		}
 
 		private void validateOperation() throws ModelOperationException {

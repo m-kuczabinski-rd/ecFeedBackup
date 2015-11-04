@@ -17,11 +17,14 @@ import java.util.List;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.ui.forms.widgets.Section;
 
 import com.testify.ecfeed.adapter.java.JavaUtils;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.MethodNode;
+import com.testify.ecfeed.ui.common.utils.IFileInfoProvider;
+import com.testify.ecfeed.ui.editor.utils.ExceptionCatchDialog;
 import com.testify.ecfeed.ui.modelif.ClassInterface;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 
@@ -30,19 +33,27 @@ public class OtherMethodsViewer extends CheckboxTableViewerSection {
 	private final static int STYLE = Section.TITLE_BAR | Section.EXPANDED;
 	private final static int VIEWER_STYLE = SWT.BORDER;
 
+	private Button fAddSelectedButton;
 	private ClassInterface fClassIf;
 
 	private class AddSelectedAdapter extends SelectionAdapter{
 		@Override
-		public void widgetSelected(SelectionEvent e){
-			fClassIf.addMethods(getSelectedMethods());
+		public void widgetSelected(SelectionEvent ev){
+			try {
+				fClassIf.addMethods(getSelectedMethods());
+			} catch (Exception e) {
+				ExceptionCatchDialog.display("Can not add selected items.", e.getMessage());
+			}
 		}
 	}
 
-	public OtherMethodsViewer(ISectionContext sectionContext, IModelUpdateContext updateContext) {
-		super(sectionContext, updateContext, STYLE);
-		fClassIf = new ClassInterface(this);
-		addButton("Add selected", new AddSelectedAdapter());
+	public OtherMethodsViewer(
+			ISectionContext sectionContext, 
+			IModelUpdateContext updateContext, 
+			IFileInfoProvider fileInfoProvider) {
+		super(sectionContext, updateContext, fileInfoProvider, STYLE);
+		fClassIf = new ClassInterface(this, fileInfoProvider);
+		fAddSelectedButton = addButton("Add selected", new AddSelectedAdapter());
 	}
 
 	public void setInput(ClassNode classNode){
@@ -55,7 +66,7 @@ public class OtherMethodsViewer extends CheckboxTableViewerSection {
 		return fClassIf.getOtherMethods().size();
 	}
 
-	public List<MethodNode> getSelectedMethods(){
+	public List<MethodNode> getSelectedMethods() {
 		List<MethodNode> methods = new ArrayList<MethodNode>();
 		for(Object object : getCheckboxViewer().getCheckedElements()){
 			if(object instanceof MethodNode){
@@ -73,4 +84,21 @@ public class OtherMethodsViewer extends CheckboxTableViewerSection {
 	protected int viewerStyle(){
 		return VIEWER_STYLE;
 	}
+
+	protected void onSelectionChanged() {
+		refresh();
+	}
+
+	@Override
+	public void refresh() {
+		fAddSelectedButton.setEnabled(isAddSelectedButtonEnabled());
+	}
+
+	private boolean isAddSelectedButtonEnabled(){
+		List<MethodNode> methods = getSelectedMethods();
+		if(methods.isEmpty()) {
+			return false;
+		}
+		return true;
+	}	
 }

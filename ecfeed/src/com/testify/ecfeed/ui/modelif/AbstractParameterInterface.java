@@ -32,14 +32,19 @@ import com.testify.ecfeed.ui.common.EclipseModelBuilder;
 import com.testify.ecfeed.ui.common.JavaDocSupport;
 import com.testify.ecfeed.ui.common.JavaModelAnalyser;
 import com.testify.ecfeed.ui.common.Messages;
+import com.testify.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.testify.ecfeed.ui.dialogs.TestClassSelectionDialog;
 import com.testify.ecfeed.ui.dialogs.TextAreaDialog;
 import com.testify.ecfeed.ui.dialogs.UserTypeSelectionDialog;
+import com.testify.ecfeed.utils.SystemLogger;
 
 public abstract class AbstractParameterInterface extends ChoicesParentInterface {
+	
+	IFileInfoProvider fFileInfoProvider;
 
-	public AbstractParameterInterface(IModelUpdateContext updateContext) {
-		super(updateContext);
+	public AbstractParameterInterface(IModelUpdateContext updateContext, IFileInfoProvider fileInfoProvider) {
+		super(updateContext, fileInfoProvider);
+		fFileInfoProvider = fileInfoProvider;
 	}
 
 	public String getType() {
@@ -128,7 +133,7 @@ public abstract class AbstractParameterInterface extends ChoicesParentInterface 
 			if(type != null){
 				try {
 					JavaUI.openInEditor(type);
-				} catch (Exception e) {}
+				} catch (Exception e) {SystemLogger.logCatch(e.getMessage());}
 			}
 		}
 	}
@@ -163,7 +168,8 @@ public abstract class AbstractParameterInterface extends ChoicesParentInterface 
 		String typeJavadoc = JavaDocSupport.importTypeJavadoc(getTarget());
 		result.add(new ParameterSetTypeCommentsOperation(getTarget(), typeJavadoc));
 		for(ChoiceNode choice : getTarget().getChoices()){
-			AbstractNodeInterface nodeIf = NodeInterfaceFactory.getNodeInterface(choice, getUpdateContext());
+			AbstractNodeInterface nodeIf = 
+					NodeInterfaceFactory.getNodeInterface(choice, getUpdateContext(), fFileInfoProvider);
 			result.addAll(nodeIf.getImportAllJavadocCommentsOperations());
 		}
 		return result;
@@ -176,7 +182,9 @@ public abstract class AbstractParameterInterface extends ChoicesParentInterface 
 	public void exportFullTypeJavadocComments() {
 		exportTypeJavadocComments();
 		for(ChoiceNode choice : getTarget().getChoices()){
-			ChoiceInterface choiceIf = (ChoiceInterface)NodeInterfaceFactory.getNodeInterface(choice, getUpdateContext());
+			ChoiceInterface choiceIf = 
+					(ChoiceInterface)NodeInterfaceFactory.getNodeInterface(
+							choice, getUpdateContext(), fFileInfoProvider);
 			choiceIf.exportAllComments();
 		}
 	}

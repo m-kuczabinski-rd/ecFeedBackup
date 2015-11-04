@@ -13,6 +13,7 @@ package com.testify.ecfeed.adapter.operations;
 
 import com.testify.ecfeed.adapter.IModelOperation;
 import com.testify.ecfeed.adapter.ModelOperationException;
+import com.testify.ecfeed.adapter.java.Messages;
 import com.testify.ecfeed.model.AbstractStatement;
 import com.testify.ecfeed.model.Constraint;
 import com.testify.ecfeed.model.ConstraintNode;
@@ -40,7 +41,7 @@ public class ConstraintOperationReplaceStatement extends AbstractModelOperation{
 			constraint.setConsequence(fNewStatement);
 		}
 		else{
-			throw new ModelOperationException(Messages.TARGET_STATEMENT_NOT_FOUND_PROBLEM);
+			ModelOperationException.report(Messages.TARGET_STATEMENT_NOT_FOUND_PROBLEM);
 		}
 		markModelUpdated();
 	}

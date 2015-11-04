@@ -33,10 +33,33 @@ import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.serialization.ect.EctSerializer;
 import com.testify.ecfeed.ui.common.Constants;
 import com.testify.ecfeed.ui.common.Messages;
+import com.testify.ecfeed.utils.DiskFileHelper;
+import com.testify.ecfeed.utils.StringHelper;
+
+class NewEctFileCreationPage extends WizardNewFileCreationPage {
+
+	public NewEctFileCreationPage(String pageName,
+			IStructuredSelection selection) {
+		super(pageName, selection);
+	}
+
+	@Override
+	protected boolean validatePage() {
+		if (!super.validatePage()) {
+			return false;
+		}
+
+		String errorMessage = DiskFileHelper.checkEctFileName(getFileName());
+		if (!StringHelper.isNullOrEmpty(errorMessage)) {
+			return false;
+		}
+		return true;
+	}
+}
 
 public class NewEcFileWizard extends Wizard implements INewWizard {
-	
-	private WizardNewFileCreationPage fPage;
+
+	private NewEctFileCreationPage fPage;
 	private IStructuredSelection fSelection;
 
 	public NewEcFileWizard() {
@@ -44,9 +67,9 @@ public class NewEcFileWizard extends Wizard implements INewWizard {
 		setNeedsProgressMonitor(false);
 		setHelpAvailable(false);
 	}
-	
+
 	public void addPages() {
-		fPage = new WizardNewFileCreationPage(Messages.WIZARD_NEW_ECT_FILE_TITLE, fSelection);
+		fPage = new NewEctFileCreationPage(Messages.WIZARD_NEW_ECT_FILE_TITLE, fSelection);
 		fPage.setFileName(Constants.DEFAULT_NEW_ECT_FILE_NAME);
 		fPage.setAllowExistingResources(true);
 		fPage.setFileExtension(Constants.EQUIVALENCE_CLASS_FILE_EXTENSION);
@@ -59,7 +82,6 @@ public class NewEcFileWizard extends Wizard implements INewWizard {
 	public boolean performFinish(){
 		IFile file = fPage.createNewFile();
 		try {
-
 			if(file.getContents().read() != -1){
 				MessageDialog dialog = new MessageDialog(getShell(), 
 						Messages.WIZARD_FILE_EXISTS_TITLE, 
@@ -89,7 +111,7 @@ public class NewEcFileWizard extends Wizard implements INewWizard {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+
 		return true;
 	}
 

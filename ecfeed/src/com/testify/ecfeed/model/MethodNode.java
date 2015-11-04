@@ -126,6 +126,11 @@ public class MethodNode extends ParametersParentNode {
 		return (ClassNode)getParent();
 	}
 
+	public boolean getRunOnAndroid() {
+		ClassNode classNode = getClassNode();
+		return classNode.getRunOnAndroid();
+	}
+
 	public MethodParameterNode getMethodParameter(String name){
 		return (MethodParameterNode)getParameter(name);
 	}

@@ -9,9 +9,8 @@
  *     Patryk Chamuczynski (p.chamuczynski(at)radytek.com) - initial implementation
  ******************************************************************************/
 
-package com.testify.ecfeed.runner.java;
+package com.testify.ecfeed.runner;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,8 +22,6 @@ import com.testify.ecfeed.adapter.java.ModelClassLoader;
 import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.MethodNode;
-import com.testify.ecfeed.runner.Messages;
-import com.testify.ecfeed.runner.RunnerException;
 
 public class JavaTestRunner {
 
@@ -32,30 +29,45 @@ public class JavaTestRunner {
 	private MethodNode fTarget;
 	private Class<?> fTestClass;
 	private Method fTestMethod;
+	private ITestMethodInvoker fTestMethodInvoker;
 
-	public JavaTestRunner(ModelClassLoader loader){
+	public JavaTestRunner(ModelClassLoader loader, ITestMethodInvoker testMethodInvoker){
 		fLoader = loader;
+		fTestMethodInvoker = testMethodInvoker; 
 	}
 
 	public void setTarget(MethodNode target) throws RunnerException{
 		fTarget = target;
-		ClassNode testClassModel = fTarget.getClassNode();
-		fTestClass = getTestClass(testClassModel.getName());
+		ClassNode classNode = fTarget.getClassNode();
+		fTestClass = getTestClass(classNode.getName());
 		fTestMethod = getTestMethod(fTestClass, fTarget);
 	}
 
 	public void runTestCase(List<ChoiceNode> testData) throws RunnerException{
+
 		validateTestData(testData);
+
+		Object instance = null;
+
+		if (!fTestMethodInvoker.isRemote())	{
+			try {
+				instance = fTestClass.newInstance();
+			} catch (InstantiationException | IllegalAccessException e) {
+				RunnerException.report(
+						Messages.CANNOT_INVOKE_TEST_METHOD(
+								fTarget.toString(), 
+								testData.toString(), 
+								e.getMessage()));
+			}
+		}
+
+		String className = fTestClass.getName();
+		Object[] arguments = getArguments(testData);
+
 		try {
-			Object instance = fTestClass.newInstance();
-			Object[] arguments = getArguments(testData);
-			fTestMethod.invoke(instance, arguments);
-		}catch(InvocationTargetException e){
-//			throw new RunnerException(Messages.TEST_METHOD_INVOCATION_EXCEPTION(fTarget.toString(), testData.toString(), e.getTargetException().toString()));
-			throw new RunnerException(fTarget.getName() + testData.toString() + ": " + e.getTargetException().toString());
-		} catch (IllegalAccessException | IllegalArgumentException | InstantiationException e) {
-			e.printStackTrace();
-			throw new RunnerException(Messages.CANNOT_INVOKE_TEST_METHOD(fTarget.toString(), testData.toString(), e.getMessage()));
+			fTestMethodInvoker.invoke(fTestMethod, className, instance, arguments, testData.toString());
+		} catch (Exception e) {
+			RunnerException.report(e.getMessage());
 		}
 	}
 
@@ -65,7 +77,8 @@ public class JavaTestRunner {
 				return method;
 			}
 		}
-		throw new RunnerException(Messages.METHOD_NOT_FOUND(methodModel.toString()));
+		RunnerException.report(Messages.METHOD_NOT_FOUND(methodModel.toString()));
+		return null;
 	}
 
 	protected boolean isModel(Method method, MethodNode methodModel) {
@@ -88,7 +101,7 @@ public class JavaTestRunner {
 				//check if null value acceptable
 				if(JavaUtils.isString(type) || JavaUtils.isUserType(type)){
 					if(p.getValueString().equals(Constants.VALUE_REPRESENTATION_NULL) == false){
-						throw new RunnerException(Messages.CANNOT_PARSE_PARAMETER(type, p.getValueString()));
+						RunnerException.report(Messages.CANNOT_PARSE_PARAMETER(type, p.getValueString()));
 					}
 				}
 			}
@@ -104,14 +117,14 @@ public class JavaTestRunner {
 			dataTypes.add(parameter.getParameter().getType());
 		}
 		if(dataTypes.equals(fTarget.getParametersTypes()) == false){
-			throw new RunnerException(Messages.WRONG_TEST_METHOD_SIGNATURE(fTarget.toString()));
+			RunnerException.report(Messages.WRONG_TEST_METHOD_SIGNATURE(fTarget.toString()));
 		}
 	}
 
 	private Class<?> getTestClass(String qualifiedName) throws RunnerException {
 		Class<?> testClass = fLoader.loadClass(qualifiedName);
 		if(testClass == null){
-			throw new RunnerException(Messages.CANNOT_LOAD_CLASS(qualifiedName));
+			RunnerException.report(Messages.CANNOT_LOAD_CLASS(qualifiedName));
 		}
 		return testClass;
 	}

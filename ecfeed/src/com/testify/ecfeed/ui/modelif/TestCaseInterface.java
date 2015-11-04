@@ -18,13 +18,19 @@ import com.testify.ecfeed.adapter.EImplementationStatus;
 import com.testify.ecfeed.adapter.IModelOperation;
 import com.testify.ecfeed.adapter.operations.TestCaseOperationUpdateTestData;
 import com.testify.ecfeed.model.ChoiceNode;
+import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.ui.common.Messages;
+import com.testify.ecfeed.ui.common.utils.IFileInfoProvider;
+import com.testify.ecfeed.utils.EcException;
 
 public class TestCaseInterface extends AbstractNodeInterface {
 
-	public TestCaseInterface(IModelUpdateContext updateContext) {
-		super(updateContext);
+	private IFileInfoProvider fFileInfoProvider;
+
+	public TestCaseInterface(IModelUpdateContext updateContext, IFileInfoProvider fileInfoProvider) {
+		super(updateContext, fileInfoProvider);
+		fFileInfoProvider = fileInfoProvider;
 	}
 
 	@Override
@@ -37,7 +43,7 @@ public class TestCaseInterface extends AbstractNodeInterface {
 	}
 
 	public boolean isExecutable(TestCaseNode tc){
-		MethodInterface mIf = new MethodInterface(getUpdateContext());
+		MethodInterface mIf = new MethodInterface(getUpdateContext(), fFileInfoProvider);
 		if(tc.getMethod() == null) return false;
 		mIf.setTarget(tc.getMethod());
 		EImplementationStatus tcStatus = getImplementationStatus(tc);
@@ -49,9 +55,15 @@ public class TestCaseInterface extends AbstractNodeInterface {
 		return isExecutable(getTarget());
 	}
 
-	public void execute() {
-		MethodInterface methodIf = new MethodInterface(getUpdateContext());
-		methodIf.executeStaticTests(new ArrayList<TestCaseNode>(Arrays.asList(new TestCaseNode[]{getTarget()})));
+	public void executeStaticTest() throws EcException {
+		MethodInterface methodIf = new MethodInterface(getUpdateContext(), fFileInfoProvider);
+
+		TestCaseNode testCaseNode = getTarget();
+		MethodNode methodNode = (MethodNode)testCaseNode.getParent();
+		methodIf.setTarget(methodNode);
+
+		methodIf.executeStaticTests(
+				new ArrayList<TestCaseNode>(Arrays.asList(new TestCaseNode[]{getTarget()})), fFileInfoProvider);
 	}
 
 	public boolean updateTestData(int index, ChoiceNode value) {

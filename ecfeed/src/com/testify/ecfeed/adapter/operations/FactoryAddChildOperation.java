@@ -13,6 +13,7 @@ package com.testify.ecfeed.adapter.operations;
 
 import com.testify.ecfeed.adapter.ITypeAdapterProvider;
 import com.testify.ecfeed.adapter.ModelOperationException;
+import com.testify.ecfeed.adapter.java.Messages;
 import com.testify.ecfeed.model.AbstractNode;
 import com.testify.ecfeed.model.AbstractParameterNode;
 import com.testify.ecfeed.model.ChoiceNode;
@@ -59,7 +60,8 @@ public class FactoryAddChildOperation implements IModelVisitor{
 			}
 			return new GenericOperationAddParameter(node, globalParameter, fIndex);
 		}
-		throw new ModelOperationException(Messages.OPERATION_NOT_SUPPORTED_PROBLEM);
+		ModelOperationException.report(Messages.OPERATION_NOT_SUPPORTED_PROBLEM);
+		return null;
 	}
 
 	@Override
@@ -76,7 +78,8 @@ public class FactoryAddChildOperation implements IModelVisitor{
 			}
 			return new GenericOperationAddParameter(node, globalParameter, fIndex);
 		}
-		throw new ModelOperationException(Messages.OPERATION_NOT_SUPPORTED_PROBLEM);
+		ModelOperationException.report(Messages.OPERATION_NOT_SUPPORTED_PROBLEM);
+		return null;
 	}
 
 	@Override
@@ -109,7 +112,8 @@ public class FactoryAddChildOperation implements IModelVisitor{
 			}
 			return new MethodOperationAddTestCase(node, (TestCaseNode)fChild, fAdapterProvider, fIndex);
 		}
-		throw new ModelOperationException(Messages.OPERATION_NOT_SUPPORTED_PROBLEM);
+		ModelOperationException.report(Messages.OPERATION_NOT_SUPPORTED_PROBLEM);
+		return null;
 	}
 
 	@Override
@@ -120,7 +124,8 @@ public class FactoryAddChildOperation implements IModelVisitor{
 			}
 			return new GenericOperationAddChoice(node, (ChoiceNode)fChild, fAdapterProvider, fIndex, fValidate);
 		}
-		throw new ModelOperationException(Messages.OPERATION_NOT_SUPPORTED_PROBLEM);
+		ModelOperationException.report(Messages.OPERATION_NOT_SUPPORTED_PROBLEM);
+		return null;
 	}
 
 	@Override
@@ -131,17 +136,20 @@ public class FactoryAddChildOperation implements IModelVisitor{
 			}
 			return new GenericOperationAddChoice(node, (ChoiceNode)fChild, fAdapterProvider, fIndex, fValidate);
 		}
-		throw new ModelOperationException(Messages.OPERATION_NOT_SUPPORTED_PROBLEM);
+		ModelOperationException.report(Messages.OPERATION_NOT_SUPPORTED_PROBLEM);
+		return null;
 	}
 
 	@Override
 	public Object visit(TestCaseNode node) throws Exception {
-		throw new ModelOperationException(Messages.OPERATION_NOT_SUPPORTED_PROBLEM);
+		ModelOperationException.report(Messages.OPERATION_NOT_SUPPORTED_PROBLEM);
+		return null;
 	}
 
 	@Override
 	public Object visit(ConstraintNode node) throws Exception {
-		throw new ModelOperationException(Messages.OPERATION_NOT_SUPPORTED_PROBLEM);
+		ModelOperationException.report(Messages.OPERATION_NOT_SUPPORTED_PROBLEM);
+		return null;
 	}
 
 	@Override
@@ -152,7 +160,8 @@ public class FactoryAddChildOperation implements IModelVisitor{
 			}
 			return new GenericOperationAddChoice(node, (ChoiceNode)fChild, fAdapterProvider, fIndex, fValidate);
 		}
-		throw new ModelOperationException(Messages.OPERATION_NOT_SUPPORTED_PROBLEM);
+		ModelOperationException.report(Messages.OPERATION_NOT_SUPPORTED_PROBLEM);
+		return null;
 	}
 
 }

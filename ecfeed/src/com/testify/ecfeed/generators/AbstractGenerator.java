@@ -109,11 +109,11 @@ public class AbstractGenerator<E> implements IGenerator<E> {
 			Object providedValue = parameters.get(definition.getName());
 			if(providedValue == null){
 				if(definition.isRequired()){
-					throw new GeneratorException("Value of required parameret " + definition.getName() + " is not provided");
+					GeneratorException.report("Value of required parameret " + definition.getName() + " is not provided");
 				}
 			}
 			else if(!definition.test(providedValue)){
-				throw new GeneratorException("Value " + providedValue + " is not allowed for parameter " + definition.getName());
+				GeneratorException.report("Value " + providedValue + " is not allowed for parameter " + definition.getName());
 			}
 			
 			if(definition.isRequired()){
@@ -125,12 +125,12 @@ public class AbstractGenerator<E> implements IGenerator<E> {
 			for(String parameterName : parameters.keySet()){
 				IGeneratorParameter definition = getParameterDefinition(parameterName);
 				if(definition == null){
-					throw new GeneratorException("Unknown parameter " + parameterName);
+					GeneratorException.report("Unknown parameter " + parameterName);
 				}
 			}
 		}
 		else if(requiredParameters > 0){
-			throw new GeneratorException("Unexpected null value");
+			GeneratorException.report("Unexpected null value");
 		}
 	}
 	
@@ -163,17 +163,18 @@ public class AbstractGenerator<E> implements IGenerator<E> {
 				return parameter;
 			}
 		}
-		throw new GeneratorException("Parameter " + name + " is not defined for " + this.getClass().getName());
+		GeneratorException.report("Parameter " + name + " is not defined for " + this.getClass().getName());
+		return null;
 	}
 
 
 	protected int getIntParameter(String name) throws GeneratorException {
 		if(!fInitialized){
-			throw new GeneratorException("Parameter values can be obtained after the generator is initialized");
+			GeneratorException.report("Parameter values can be obtained after the generator is initialized");
 		}
 		Object value = getParameterValue(name, fParameterValues);
 		if(value instanceof Integer == false){
-			throw new GeneratorException("Parameter type must be integer: " + name);
+			GeneratorException.report("Parameter type must be integer: " + name);
 		}
 		return (int)value;
 	}
@@ -181,7 +182,7 @@ public class AbstractGenerator<E> implements IGenerator<E> {
 	protected boolean getBooleanParameter(String name) throws GeneratorException {
 		Object value = getParameterValue(name, fParameterValues);
 		if(value instanceof Boolean == false){
-			throw new GeneratorException("Parameter type must be boolean: " + name);
+			GeneratorException.report("Parameter type must be boolean: " + name);
 		}
 		return (boolean)value;
 	}
@@ -189,7 +190,7 @@ public class AbstractGenerator<E> implements IGenerator<E> {
 	protected double getDoubleParameter(String name) throws GeneratorException {
 		Object value = getParameterValue(name, fParameterValues);
 		if(value instanceof Double == false){
-			throw new GeneratorException("Parameter type must be double: " + name);
+			GeneratorException.report("Parameter type must be double: " + name);
 		}
 		return (double)value;
 	}
@@ -197,7 +198,7 @@ public class AbstractGenerator<E> implements IGenerator<E> {
 	protected String getStringParameter(String name) throws GeneratorException {
 		Object value = getParameterValue(name, fParameterValues);
 		if(value instanceof String == false){
-			throw new GeneratorException("Parameter type must be integer: " + name);
+			GeneratorException.report("Parameter type must be integer: " + name);
 		}
 		return (String)value;
 	}
@@ -215,7 +216,7 @@ public class AbstractGenerator<E> implements IGenerator<E> {
 	private void validateInput(List<? extends List<E>> inputDomain) throws GeneratorException {
 		for(List<E> parameter : inputDomain){
 			if(parameter.size() == 0){
-				throw new GeneratorException("Generator input domain cannot contain empty vectors");
+				GeneratorException.report("Generator input domain cannot contain empty vectors");
 			}
 		}
 	}
@@ -228,12 +229,12 @@ public class AbstractGenerator<E> implements IGenerator<E> {
 			}
 		}
 		if(definition == null){
-			throw new GeneratorException("Unknown parameter: " + name);
+			GeneratorException.report("Unknown parameter: " + name);
 		}
 		Object value = values.get(name);
 		if(value == null){
 			if(definition.isRequired()){
-				throw new GeneratorException("Required parameter not defined: " + name);
+				GeneratorException.report("Required parameter not defined: " + name);
 			}
 			else{
 				return definition.defaultValue();
@@ -249,7 +250,7 @@ public class AbstractGenerator<E> implements IGenerator<E> {
 				}
 			}
 			if(!valueAllowed){
-				throw new GeneratorException("Value " + value + " is not allowed for parameter " + name);
+				GeneratorException.report("Value " + value + " is not allowed for parameter " + name);
 			}
 		}
 		return value;

@@ -16,11 +16,13 @@ import com.testify.ecfeed.adapter.ITypeAdapterProvider;
 import com.testify.ecfeed.adapter.ModelOperationException;
 import com.testify.ecfeed.adapter.java.Constants;
 import com.testify.ecfeed.adapter.java.JavaUtils;
+import com.testify.ecfeed.adapter.java.Messages;
 import com.testify.ecfeed.model.AbstractParameterNode;
 import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.model.GlobalParameterNode;
 import com.testify.ecfeed.model.IParameterVisitor;
 import com.testify.ecfeed.model.MethodParameterNode;
+import com.testify.ecfeed.utils.SystemLogger;
 
 public class ChoiceOperationSetValue extends AbstractModelOperation {
 
@@ -82,7 +84,7 @@ public class ChoiceOperationSetValue extends AbstractModelOperation {
 		private void adaptParameter(AbstractParameterNode parameter) {
 			try{
 				parameter.accept(new ReverseParameterAdapter());
-			}catch(Exception e){}
+			}catch(Exception e){SystemLogger.logCatch(e.getMessage());}
 		}
 
 		@Override
@@ -103,7 +105,7 @@ public class ChoiceOperationSetValue extends AbstractModelOperation {
 	public void execute() throws ModelOperationException {
 		String convertedValue = validateChoiceValue(fTarget.getParameter().getType(), fNewValue);
 		if(convertedValue == null){
-			throw new ModelOperationException(Messages.PARTITION_VALUE_PROBLEM(fNewValue));
+			ModelOperationException.report(Messages.PARTITION_VALUE_PROBLEM(fNewValue));
 		}
 		fTarget.setValueString(convertedValue);
 		adaptParameter(fTarget.getParameter());
@@ -113,7 +115,7 @@ public class ChoiceOperationSetValue extends AbstractModelOperation {
 	private void adaptParameter(AbstractParameterNode parameter) {
 		try{
 			parameter.accept(new ParameterAdapter());
-		}catch(Exception e){}
+		}catch(Exception e){SystemLogger.logCatch(e.getMessage());}
 	}
 
 	@Override

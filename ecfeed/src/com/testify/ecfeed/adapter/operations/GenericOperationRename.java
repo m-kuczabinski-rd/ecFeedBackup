@@ -14,6 +14,7 @@ package com.testify.ecfeed.adapter.operations;
 import com.testify.ecfeed.adapter.IModelOperation;
 import com.testify.ecfeed.adapter.ModelOperationException;
 import com.testify.ecfeed.adapter.java.Constants;
+import com.testify.ecfeed.adapter.java.Messages;
 import com.testify.ecfeed.model.AbstractNode;
 import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.model.ClassNode;
@@ -24,6 +25,7 @@ import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.MethodParameterNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.TestCaseNode;
+import com.testify.ecfeed.utils.SystemLogger;
 
 public class GenericOperationRename extends AbstractModelOperation {
 
@@ -156,21 +158,21 @@ public class GenericOperationRename extends AbstractModelOperation {
 
 	protected void verifyNameWithRegex() throws ModelOperationException{
 		if(fNewName.matches(fNameRegex) == false){
-			throw new ModelOperationException(getRegexProblemMessage());
+			ModelOperationException.report(getRegexProblemMessage());
 		}
 	}
 
 	private String getNameRegex(AbstractNode target) {
 		try{
 			return (String)fTarget.accept(new NameRegexProvider());
-		}catch(Exception e){}
+		}catch(Exception e){SystemLogger.logCatch(e.getMessage());}
 		return "*";
 	}
 
 	private String getRegexProblemMessage(){
 		try{
 			return (String)fTarget.accept(new RegexProblemMessageProvider());
-		}catch(Exception e){}
+		}catch(Exception e){SystemLogger.logCatch(e.getMessage());}
 		return "";
 	}
 }

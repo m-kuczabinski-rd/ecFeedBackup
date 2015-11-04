@@ -14,6 +14,7 @@ package com.testify.ecfeed.adapter.operations;
 import com.testify.ecfeed.adapter.IModelOperation;
 import com.testify.ecfeed.adapter.ITypeAdapter;
 import com.testify.ecfeed.adapter.ModelOperationException;
+import com.testify.ecfeed.adapter.java.Messages;
 import com.testify.ecfeed.model.MethodParameterNode;
 
 public class ParameterOperationSetDefaultValue extends AbstractModelOperation {
@@ -35,7 +36,7 @@ public class ParameterOperationSetDefaultValue extends AbstractModelOperation {
 	public void execute() throws ModelOperationException {
 		String convertedValue = fTypeAdapter.convert(fNewValue);
 		if(convertedValue == null){
-			throw new ModelOperationException(Messages.CATEGORY_DEFAULT_VALUE_REGEX_PROBLEM);
+			ModelOperationException.report(Messages.CATEGORY_DEFAULT_VALUE_REGEX_PROBLEM);
 		}
 		fTarget.setDefaultValueString(convertedValue);
 		markModelUpdated();

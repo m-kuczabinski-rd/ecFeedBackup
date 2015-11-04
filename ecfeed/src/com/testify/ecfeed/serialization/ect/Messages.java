@@ -17,7 +17,7 @@ import nu.xom.Element;
 import nu.xom.ParsingException;
 
 public class Messages {
-	
+
 	public static final String WRONG_ROOT_ELEMENT_TAG = 
 			"Parsing error: The XML root element must be " + Constants.ROOT_NODE_NAME;
 
@@ -75,7 +75,7 @@ public class Messages {
 	public static String PARTITION_DOES_NOT_EXIST(String parameterName, String choiceName) {
 		return "Choice " + choiceName + " is not defined for parameter " + parameterName;
 	}
-	
+
 	public static final String MISSING_VALUE_ATTRIBUTE_IN_TEST_CASE_ELEMENT = "The expected test parameter element misses value attribute";
 
 }
