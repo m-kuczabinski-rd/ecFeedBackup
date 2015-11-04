@@ -188,7 +188,7 @@ public class ChoicesViewer extends TableViewerSection {
 		public String getText(Object element){
 			if(element instanceof ChoiceNode){
 				ChoiceNode choice = (ChoiceNode)element;
-				return choice.isAbstract()?"[ABSTRACT]":choice.getValueString();
+				return choice.isAbstract() ? ChoiceNode.ABSTRACT_CHOICE_MARKER : choice.getValueString();
 			}
 			return "";
 		}

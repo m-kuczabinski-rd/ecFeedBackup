@@ -17,6 +17,8 @@ import java.util.Set;
 
 public class ChoiceNode extends ChoicesParentNode{
 
+	public static final String ABSTRACT_CHOICE_MARKER = "[ABSTRACT]";
+
 	private ChoicesParentNode fParent;
 	private String fValueString;
 	private Set<String> fLabels;
@@ -48,7 +50,7 @@ public class ChoiceNode extends ChoicesParentNode{
 	@Override
 	public String toString(){
 		if(isAbstract()){
-			return getQualifiedName() + "[ABSTRACT]";
+			return getQualifiedName() + ABSTRACT_CHOICE_MARKER;
 		}
 		return getQualifiedName() + " [" + getValueString() + "]";
 	}

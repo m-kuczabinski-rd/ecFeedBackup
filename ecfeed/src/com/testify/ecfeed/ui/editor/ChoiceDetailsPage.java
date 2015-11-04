@@ -55,7 +55,11 @@ public class ChoiceDetailsPage extends BasicDetailsPage {
 		@Override
 		public void widgetSelected(SelectionEvent e){
 			fChoiceIf.setValue(fValueCombo.getText());
-			fValueCombo.setText(fChoiceIf.getValue());
+
+			ChoiceNode choiceNode = getSelectedChoice();
+			if (choiceNode != null) {
+				setValueComboText(choiceNode);
+			}
 		}
 	}
 
@@ -100,11 +104,11 @@ public class ChoiceDetailsPage extends BasicDetailsPage {
 			fChildrenViewer.setInput(selectedChoice);
 			fLabelsViewer.setInput(selectedChoice);
 			fNameText.setText(selectedChoice.getName());
-			refreshValueEditor();
+			refreshValueEditor(selectedChoice);
 		}
 	}
 
-	private void refreshValueEditor() {
+	private void refreshValueEditor(ChoiceNode choiceNode) {
 		String type = fChoiceIf.getParameter().getType();
 		if(fValueCombo != null && fValueCombo.isDisposed() == false){
 			fValueCombo.dispose();
@@ -123,9 +127,24 @@ public class ChoiceDetailsPage extends BasicDetailsPage {
 		}
 		items.add(fChoiceIf.getValue());
 		fValueCombo.setItems(items.toArray(new String[]{}));
-		fValueCombo.setText(fChoiceIf.getValue());
+		setValueComboText(choiceNode);
 		fValueCombo.addSelectionListener(new ValueComboListener());
+
+		if (choiceNode.isAbstract()) {
+			fValueCombo.setEnabled(false);
+		} else {
+			fValueCombo.setEnabled(true);
+		}
+
 		fAttributesComposite.layout();
+	}
+
+	private void setValueComboText(ChoiceNode choiceNode) {
+		if (choiceNode.isAbstract()) {
+			fValueCombo.setText(ChoiceNode.ABSTRACT_CHOICE_MARKER);
+		} else {
+			fValueCombo.setText(fChoiceIf.getValue());
+		}
 	}
 
 	private ChoiceNode getSelectedChoice(){
