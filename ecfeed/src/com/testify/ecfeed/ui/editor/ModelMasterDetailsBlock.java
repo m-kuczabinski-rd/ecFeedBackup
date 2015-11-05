@@ -20,6 +20,7 @@ import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.SWTException;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IActionBars;
+import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.forms.AbstractFormPart;
 import org.eclipse.ui.forms.DetailsPart;
@@ -107,7 +108,7 @@ public class ModelMasterDetailsBlock extends MasterDetailsBlock implements ISele
 			if (fActionId == null) {
 				return false;
 			}
-				
+
 			Action action = getFocusedSection().getAction(fActionId);
 			if(action  != null){
 				return action.isEnabled();
@@ -192,15 +193,34 @@ public class ModelMasterDetailsBlock extends MasterDetailsBlock implements ISele
 
 	@Override
 	protected void createToolBarActions(IManagedForm managedForm) {
-		IActionBars actionBars = fPage.getEditorSite().getActionBars();
+		IActionBars actionBars = getActionBars();
 
-		actionBars.setGlobalActionHandler(ActionFactory.UNDO.getId(), new UndoActionHandler(fPage.getEditorSite(), fUpdateContext.getUndoContext()));
-		actionBars.setGlobalActionHandler(ActionFactory.REDO.getId(), new RedoActionHandler(fPage.getEditorSite(), fUpdateContext.getUndoContext()));
+		createUndoRedoActions(actionBars);
 		actionBars.setGlobalActionHandler(ActionFactory.COPY.getId(), new GenericToolbarAction(ActionFactory.COPY.getId()));
 		actionBars.setGlobalActionHandler(ActionFactory.CUT.getId(), new GenericToolbarAction(ActionFactory.CUT.getId()));
 		actionBars.setGlobalActionHandler(ActionFactory.PASTE.getId(), new GenericToolbarAction(ActionFactory.PASTE.getId()));
 		actionBars.setGlobalActionHandler(ActionFactory.DELETE.getId(), new GenericToolbarAction(ActionFactory.DELETE.getId()));
 		actionBars.setGlobalActionHandler(ActionFactory.SELECT_ALL.getId(), new GenericToolbarAction(ActionFactory.SELECT_ALL.getId()));
+
+		actionBars.updateActionBars();
+	}
+
+	public void refreshToolBarActions() {
+		IActionBars actionBars = getActionBars();
+		createUndoRedoActions(actionBars);
+		actionBars.updateActionBars();
+	}
+
+	private void createUndoRedoActions(IActionBars actionBars) {
+		IEditorSite editorSite = fPage.getEditorSite();
+		IUndoContext undoContext = fUpdateContext.getUndoContext();
+
+		actionBars.setGlobalActionHandler(ActionFactory.UNDO.getId(), new UndoActionHandler(editorSite, undoContext));
+		actionBars.setGlobalActionHandler(ActionFactory.REDO.getId(), new RedoActionHandler(editorSite, undoContext));
+	}
+
+	private IActionBars getActionBars() {
+		return fPage.getEditorSite().getActionBars();
 	}
 
 	protected BasicSection getFocusedSection(){

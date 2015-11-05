@@ -213,10 +213,20 @@ public class ModelEditor extends FormEditor implements IFileInfoProvider{
 
 	@Override
 	public void setFocus() {
-		fModelPage.getMasterBlock().getMasterSection().refresh();
-		if(fModelPage.getMasterBlock().getCurrentPage() != null){
-			fModelPage.getMasterBlock().getCurrentPage().refresh();
+		ModelMasterDetailsBlock masterBlock = fModelPage.getMasterBlock();
+		if (masterBlock == null) {
+			return;
 		}
+
+		masterBlock.refreshToolBarActions();
+		masterBlock.getMasterSection().refresh();
+
+		BasicDetailsPage page = masterBlock.getCurrentPage();
+		if (page == null){
+			return;
+		}
+
+		page.refresh();
 	}
 
 	@Override
