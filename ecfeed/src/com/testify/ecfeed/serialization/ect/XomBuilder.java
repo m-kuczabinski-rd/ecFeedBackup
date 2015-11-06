@@ -80,9 +80,12 @@ import com.testify.ecfeed.model.StatementArray;
 import com.testify.ecfeed.model.StaticStatement;
 import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.utils.StringHelper;
+import com.testify.ecfeed.serialization.WhiteCharConverter;
 
 public class XomBuilder implements IModelVisitor, IStatementVisitor {
 
+	private WhiteCharConverter fWhiteCharConverter = new WhiteCharConverter();
+	
 	@Override
 	public Object visit(RootNode node) throws Exception{
 		Element element = createAbstractElement(ROOT_NODE_NAME, node);
@@ -162,13 +165,13 @@ public class XomBuilder implements IModelVisitor, IStatementVisitor {
 
 		appendTypeComments(element, node);
 
-		element.addAttribute(new Attribute(TYPE_NAME_ATTRIBUTE, node.getRealType()));
+		encodeAndAddAttribute(element, new Attribute(TYPE_NAME_ATTRIBUTE, node.getRealType()));
 
-		element.addAttribute(new Attribute(PARAMETER_IS_EXPECTED_ATTRIBUTE_NAME, Boolean.toString(node.isExpected())));
-		element.addAttribute(new Attribute(DEFAULT_EXPECTED_VALUE_ATTRIBUTE_NAME, node.getDefaultValue()));
-		element.addAttribute(new Attribute(PARAMETER_IS_LINKED_ATTRIBUTE_NAME, Boolean.toString(node.isLinked())));
+		encodeAndAddAttribute(element, new Attribute(PARAMETER_IS_EXPECTED_ATTRIBUTE_NAME, Boolean.toString(node.isExpected())));
+		encodeAndAddAttribute(element, new Attribute(DEFAULT_EXPECTED_VALUE_ATTRIBUTE_NAME, node.getDefaultValue()));
+		encodeAndAddAttribute(element, new Attribute(PARAMETER_IS_LINKED_ATTRIBUTE_NAME, Boolean.toString(node.isLinked())));
 		if(node.getLink() != null){
-			element.addAttribute(new Attribute(PARAMETER_LINK_ATTRIBUTE_NAME, node.getLink().getQualifiedName()));
+			encodeAndAddAttribute(element, new Attribute(PARAMETER_LINK_ATTRIBUTE_NAME, node.getLink().getQualifiedName()));
 		}
 
 		for(ChoiceNode child : node.getRealChoices()){
@@ -182,7 +185,7 @@ public class XomBuilder implements IModelVisitor, IStatementVisitor {
 	public Object visit(GlobalParameterNode node) throws Exception {
 		Element element = createAbstractElement(PARAMETER_NODE_NAME, node);
 		appendTypeComments(element, node);
-		element.addAttribute(new Attribute(TYPE_NAME_ATTRIBUTE, node.getType()));
+		encodeAndAddAttribute(element, new Attribute(TYPE_NAME_ATTRIBUTE, node.getType()));
 
 		for(ChoiceNode child : node.getChoices()){
 			element.appendChild((Element)child.accept(this));
@@ -193,19 +196,19 @@ public class XomBuilder implements IModelVisitor, IStatementVisitor {
 	@Override
 	public Object visit(TestCaseNode node) throws Exception {
 		Element element = new Element(TEST_CASE_NODE_NAME);
-		element.addAttribute(new Attribute(TEST_SUITE_NAME_ATTRIBUTE, node.getName()));
+		encodeAndAddAttribute(element, new Attribute(TEST_SUITE_NAME_ATTRIBUTE, node.getName()));
 		appendComments(element, node);
 		for(ChoiceNode testParameter : node.getTestData()){
 			if(testParameter.getParameter() != null && node.getMethodParameter(testParameter).isExpected()){
 				Element expectedParameterElement = new Element(EXPECTED_PARAMETER_NODE_NAME);
 				Attribute expectedValueAttribute = new Attribute(VALUE_ATTRIBUTE_NAME, testParameter.getValueString());
-				expectedParameterElement.addAttribute(expectedValueAttribute);
+				encodeAndAddAttribute(expectedParameterElement, expectedValueAttribute);
 				element.appendChild(expectedParameterElement);
 			}
 			else{
 				Element testParameterElement = new Element(TEST_PARAMETER_NODE_NAME);
 				Attribute choiceNameAttribute = new Attribute(CHOICE_ATTRIBUTE_NAME, testParameter.getQualifiedName());
-				testParameterElement.addAttribute(choiceNameAttribute);
+				encodeAndAddAttribute(testParameterElement, choiceNameAttribute);
 				element.appendChild(testParameterElement);
 			}
 		}
@@ -245,11 +248,11 @@ public class XomBuilder implements IModelVisitor, IStatementVisitor {
 				+ "]";
 		String legalValue = value.replaceAll(xml10pattern, "");
 
-		element.addAttribute(new Attribute(VALUE_ATTRIBUTE, legalValue));
+		encodeAndAddAttribute(element, new Attribute(VALUE_ATTRIBUTE, legalValue));
 
 		for(String label : node.getLabels()){
 			Element labelElement = new Element(LABEL_NODE_NAME);
-			labelElement.addAttribute(new Attribute(LABEL_ATTRIBUTE_NAME, label));
+			encodeAndAddAttribute(labelElement, new Attribute(LABEL_ATTRIBUTE_NAME, label));
 			element.appendChild(labelElement);
 		}
 
@@ -265,9 +268,10 @@ public class XomBuilder implements IModelVisitor, IStatementVisitor {
 		Element statementElement = new Element(CONSTRAINT_STATIC_STATEMENT_NODE_NAME);
 		String attrName = STATEMENT_STATIC_VALUE_ATTRIBUTE_NAME;
 		String attrValue = statement.getValue()?STATIC_STATEMENT_TRUE_VALUE:
-			STATIC_STATEMENT_FALSE_VALUE;
-		statementElement.addAttribute(new Attribute(attrName, attrValue));
-
+			
+		STATIC_STATEMENT_FALSE_VALUE;
+		encodeAndAddAttribute(statementElement, new Attribute(attrName, attrValue));
+		
 		return statementElement;
 	}
 
@@ -285,7 +289,7 @@ public class XomBuilder implements IModelVisitor, IStatementVisitor {
 					STATEMENT_OPERATOR_OR_ATTRIBUTE_VALUE);
 			break;
 		}
-		element.addAttribute(operatorAttribute);
+		encodeAndAddAttribute(element, operatorAttribute);
 
 		for(AbstractStatement child : statement.getChildren()){
 			element.appendChild((Element)child.accept(this));
@@ -303,8 +307,8 @@ public class XomBuilder implements IModelVisitor, IStatementVisitor {
 				new Attribute(STATEMENT_EXPECTED_VALUE_ATTRIBUTE_NAME, condition.getValueString());
 
 		Element statementElement = new Element(CONSTRAINT_EXPECTED_STATEMENT_NODE_NAME);
-		statementElement.addAttribute(parameterAttribute);
-		statementElement.addAttribute(valueAttribute);
+		encodeAndAddAttribute(statementElement, parameterAttribute);
+		encodeAndAddAttribute(statementElement, valueAttribute);
 
 		return statementElement;
 	}
@@ -320,8 +324,8 @@ public class XomBuilder implements IModelVisitor, IStatementVisitor {
 		ICondition condition = statement.getCondition();
 		Element statementElement = (Element)condition.accept(this);
 
-		statementElement.addAttribute(parameterAttribute);
-		statementElement.addAttribute(relationAttribute);
+		encodeAndAddAttribute(statementElement, parameterAttribute);
+		encodeAndAddAttribute(statementElement, relationAttribute);
 
 		return statementElement;
 	}
@@ -329,7 +333,7 @@ public class XomBuilder implements IModelVisitor, IStatementVisitor {
 	@Override
 	public Object visit(LabelCondition condition) throws Exception {
 		Element element = new Element(CONSTRAINT_LABEL_STATEMENT_NODE_NAME);
-		element.addAttribute(new Attribute(STATEMENT_LABEL_ATTRIBUTE_NAME, condition.getLabel()));
+		encodeAndAddAttribute(element, new Attribute(STATEMENT_LABEL_ATTRIBUTE_NAME, condition.getLabel()));
 		return element;
 	}
 
@@ -337,7 +341,7 @@ public class XomBuilder implements IModelVisitor, IStatementVisitor {
 	public Object visit(ChoiceCondition condition) throws Exception {
 		ChoiceNode choice = condition.getChoice();
 		Element element = new Element(CONSTRAINT_CHOICE_STATEMENT_NODE_NAME);
-		element.addAttribute(new Attribute(STATEMENT_CHOICE_ATTRIBUTE_NAME, choice.getQualifiedName()));
+		encodeAndAddAttribute(element, new Attribute(STATEMENT_CHOICE_ATTRIBUTE_NAME, choice.getQualifiedName()));
 
 		return element;
 	}
@@ -345,7 +349,7 @@ public class XomBuilder implements IModelVisitor, IStatementVisitor {
 	private Element createAbstractElement(String nodeTag, AbstractNode node){
 		Element element = new Element(nodeTag);
 		Attribute nameAttr = new Attribute(NODE_NAME_ATTRIBUTE, node.getName());
-		element.addAttribute(nameAttr);
+		encodeAndAddAttribute(element, nameAttr);
 		appendComments(element, node);
 		return element;
 	}
@@ -354,7 +358,8 @@ public class XomBuilder implements IModelVisitor, IStatementVisitor {
 		if(node.getDescription() != null){
 			Element commentsBlock = new Element(COMMENTS_BLOCK_TAG_NAME);
 			Element basicComments = new Element(BASIC_COMMENTS_BLOCK_TAG_NAME);
-			basicComments.appendChild(node.getDescription());
+			
+			basicComments.appendChild(fWhiteCharConverter.encode(node.getDescription()));
 			commentsBlock.appendChild(basicComments);
 			element.appendChild(commentsBlock);
 			return commentsBlock;
@@ -379,8 +384,13 @@ public class XomBuilder implements IModelVisitor, IStatementVisitor {
 		}
 
 		Element typeComments = new Element(TYPE_COMMENTS_BLOCK_TAG_NAME);
-		typeComments.appendChild(node.getTypeComments());
+		
+		typeComments.appendChild(fWhiteCharConverter.encode(node.getTypeComments()));
 		commentElement.appendChild(typeComments);
 	}
-
+	
+	private void encodeAndAddAttribute(Element element, Attribute attribute) {
+		attribute.setValue(fWhiteCharConverter.encode(attribute.getValue()));
+		element.addAttribute(attribute);
+	}
 }

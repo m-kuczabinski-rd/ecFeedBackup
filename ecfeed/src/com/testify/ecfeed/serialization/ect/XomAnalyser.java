@@ -59,8 +59,12 @@ import com.testify.ecfeed.model.StatementArray;
 import com.testify.ecfeed.model.StaticStatement;
 import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.serialization.ParserException;
+import com.testify.ecfeed.serialization.WhiteCharConverter;
 
 public class XomAnalyser {
+	
+	private WhiteCharConverter fWhiteCharConverter = new WhiteCharConverter();
+	
 	public RootNode parseRoot(Element element) throws ParserException{
 		assertNodeTag(element.getQualifiedName(), ROOT_NODE_NAME);
 		String name = getElementName(element);
@@ -437,7 +441,7 @@ public class XomAnalyser {
 
 			}
 			if(child.getLocalName() == Constants.LABEL_NODE_NAME){
-				choice.addLabel(child.getAttributeValue(Constants.LABEL_ATTRIBUTE_NAME));
+				choice.addLabel(fWhiteCharConverter.decode(child.getAttributeValue(Constants.LABEL_ATTRIBUTE_NAME)));
 			}
 		}
 
@@ -478,15 +482,17 @@ public class XomAnalyser {
 		if(name == null){
 			ParserException.report(Messages.MISSING_ATTRIBUTE(element, Constants.NODE_NAME_ATTRIBUTE));
 		}
-		return name;
+		return fWhiteCharConverter.decode(name);
 	}
 
 	protected String getAttributeValue(Element element, String attributeName) throws ParserException{
+		
 		String value = element.getAttributeValue(attributeName);
 		if(value == null){
 			ParserException.report(Messages.MISSING_ATTRIBUTE(element, attributeName));
 		}
-		return value;
+		
+		return fWhiteCharConverter.decode(value);
 	}
 
 	protected EStatementRelation getRelation(String relationName) throws ParserException{
@@ -510,7 +516,7 @@ public class XomAnalyser {
 			Element comments = element.getChildElements(Constants.COMMENTS_BLOCK_TAG_NAME).get(0);
 			if(comments.getChildElements(Constants.BASIC_COMMENTS_BLOCK_TAG_NAME).size() > 0){
 				Element basicComments = comments.getChildElements(Constants.BASIC_COMMENTS_BLOCK_TAG_NAME).get(0);
-				return basicComments.getValue();
+				return fWhiteCharConverter.decode(basicComments.getValue());
 			}
 		}
 		return null;
