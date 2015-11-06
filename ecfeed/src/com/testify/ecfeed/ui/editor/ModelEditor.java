@@ -11,6 +11,7 @@
 
 package com.testify.ecfeed.ui.editor;
 
+import java.io.ByteArrayOutputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 
@@ -32,9 +33,12 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IPackageFragmentRoot;
 import org.eclipse.jdt.core.JavaCore;
+import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorInput;
+import org.eclipse.ui.IPersistableElement;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.dialogs.SaveAsDialog;
 import org.eclipse.ui.forms.editor.FormEditor;
@@ -52,14 +56,51 @@ import com.testify.ecfeed.serialization.ect.EctSerializer;
 import com.testify.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.testify.ecfeed.ui.editor.utils.ExceptionCatchDialog;
 import com.testify.ecfeed.utils.SystemLogger;
+import com.testify.ecfeed.ui.common.Constants;
+import com.testify.ecfeed.ui.common.Messages;
 
 public class ModelEditor extends FormEditor implements IFileInfoProvider{
 
 	private RootNode fModel;
 	private ModelPage fModelPage;
 	private ModelOperationManager fModelManager;
-
 	private ObjectUndoContext fUndoContext;
+	private ModelSourceEditor fSourcePageEditor;
+	private int fSourcePageIndex = -1;
+
+	public class SourceEditorInput implements IEditorInput{
+
+		@Override
+		@SuppressWarnings("rawtypes")
+		public Object getAdapter(Class adapter) {
+			return null;
+		}
+
+		@Override
+		public boolean exists() {
+			return true;
+		}
+
+		@Override
+		public ImageDescriptor getImageDescriptor() {
+			return null;
+		}
+
+		@Override
+		public String getName() {
+			return "XML";
+		}
+
+		@Override
+		public IPersistableElement getPersistable() {
+			return null;
+		}
+
+		@Override
+		public String getToolTipText() {
+			return "XML view of model";
+		}
+	}
 
 	private class ResourceChangeReporter implements IResourceChangeListener {
 		@Override
@@ -146,9 +187,51 @@ public class ModelEditor extends FormEditor implements IFileInfoProvider{
 			setPartName(getEditorInput().getName());
 			addPage(fModelPage = new ModelPage(this, this));
 
+			addSourcePage();
+
 		} catch (PartInitException e) {
 			ExceptionCatchDialog.display("Can not add page.", e.getMessage());
 		}
+	}
+
+	private void addSourcePage() throws PartInitException {
+		IEditorInput editorInput = new SourceEditorInput();
+		setPartName(getEditorInput().getName());
+		fSourcePageEditor = new ModelSourceEditor(getSite().getShell());
+
+		fSourcePageIndex = addPage(fSourcePageEditor, editorInput);
+		setPageText(fSourcePageIndex, fSourcePageEditor.getTitle());
+	}
+
+	@Override
+	protected void pageChange(int newPageIndex) {
+		super.pageChange(newPageIndex);
+
+		if (newPageIndex != fSourcePageIndex)
+			return;
+
+		if (fModel.subtreeSize() <= Constants.SOURCE_VIEWER_MAX_SUBTREE_SIZE) {
+			refreshSourceViewer();
+		}
+		else {
+			fSourcePageEditor.refreshContent(Messages.MODEL_SOURCE_SIZE_EXCEEDED(Constants.SOURCE_VIEWER_MAX_SUBTREE_SIZE));
+		}
+	}
+
+	private void refreshSourceViewer()
+	{
+		ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+		IModelSerializer serializer = new EctSerializer(outputStream);
+
+		try{
+			serializer.serialize(fModel);
+		}
+		catch(Exception e){
+			MessageDialog.openError(Display.getCurrent().getActiveShell(),
+					"Error", "Could not serialize the file:" + e.getMessage());
+		}
+
+		fSourcePageEditor.refreshContent(outputStream.toString());
 	}
 
 	@Override

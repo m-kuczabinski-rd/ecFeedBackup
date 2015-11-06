@@ -13,6 +13,10 @@ package com.testify.ecfeed.ui.common;
 
 
 public class Messages {
+	public static final String MODEL_SOURCE_SIZE_EXCEEDED(int max_size){
+		return "Model exceeds " + max_size + " items. For performance reasons it can not be displayed.";
+	}
+
 	public static final String EXCEPTION_METHOD_IMPORT(String name){
 		return "Unexpected problems with importing method " + name;
 	}

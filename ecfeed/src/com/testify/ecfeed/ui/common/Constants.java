@@ -4,7 +4,7 @@
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
  *     Patryk Chamuczynski (p.chamuczynski(at)radytek.com) - initial implementation
  ******************************************************************************/
@@ -61,6 +61,7 @@ public class Constants {
 	public static final String DEFAULT_EXPECTED_STRING_VALUE = "";
 	public static final String DEFAULT_EXPECTED_ENUM_VALUE = "VALUE";
 
+	public static final int SOURCE_VIEWER_MAX_SUBTREE_SIZE = 10000;
 	public static final int TEST_SUITE_SIZE_WARNING_LIMIT = 1000;
 	public static final int MAX_DISPLAYED_TEST_CASES_PER_SUITE = 500;
 	public static final int MAX_DISPLAYED_CHILDREN_PER_NODE = 1000;
