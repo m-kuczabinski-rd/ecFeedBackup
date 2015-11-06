@@ -53,6 +53,8 @@ public class ModelMasterDetailsBlock extends MasterDetailsBlock implements ISele
 	private FormToolkit fToolkit;
 	private ModelUpdateContext fUpdateContext;
 	private IFileInfoProvider fFileInfoProvider;
+	private UndoActionHandler fUndoActionHandler;
+	private RedoActionHandler fRedoActionHandler;
 
 	private class ModelUpdateContext implements IModelUpdateContext{
 
@@ -194,8 +196,15 @@ public class ModelMasterDetailsBlock extends MasterDetailsBlock implements ISele
 	@Override
 	protected void createToolBarActions(IManagedForm managedForm) {
 		IActionBars actionBars = getActionBars();
+		IEditorSite editorSite = fPage.getEditorSite();
+		IUndoContext undoContext = fUpdateContext.getUndoContext();
 
-		createUndoRedoActions(actionBars);
+		fUndoActionHandler = new UndoActionHandler(editorSite, undoContext);
+		actionBars.setGlobalActionHandler(ActionFactory.UNDO.getId(), fUndoActionHandler);
+
+		fRedoActionHandler = new RedoActionHandler(editorSite, undoContext);
+		actionBars.setGlobalActionHandler(ActionFactory.REDO.getId(), fRedoActionHandler);
+
 		actionBars.setGlobalActionHandler(ActionFactory.COPY.getId(), new GenericToolbarAction(ActionFactory.COPY.getId()));
 		actionBars.setGlobalActionHandler(ActionFactory.CUT.getId(), new GenericToolbarAction(ActionFactory.CUT.getId()));
 		actionBars.setGlobalActionHandler(ActionFactory.PASTE.getId(), new GenericToolbarAction(ActionFactory.PASTE.getId()));
@@ -207,16 +216,11 @@ public class ModelMasterDetailsBlock extends MasterDetailsBlock implements ISele
 
 	public void refreshToolBarActions() {
 		IActionBars actionBars = getActionBars();
-		createUndoRedoActions(actionBars);
+
+		actionBars.setGlobalActionHandler(ActionFactory.UNDO.getId(), fUndoActionHandler);
+		actionBars.setGlobalActionHandler(ActionFactory.REDO.getId(), fRedoActionHandler);
+
 		actionBars.updateActionBars();
-	}
-
-	private void createUndoRedoActions(IActionBars actionBars) {
-		IEditorSite editorSite = fPage.getEditorSite();
-		IUndoContext undoContext = fUpdateContext.getUndoContext();
-
-		actionBars.setGlobalActionHandler(ActionFactory.UNDO.getId(), new UndoActionHandler(editorSite, undoContext));
-		actionBars.setGlobalActionHandler(ActionFactory.REDO.getId(), new RedoActionHandler(editorSite, undoContext));
 	}
 
 	private IActionBars getActionBars() {
