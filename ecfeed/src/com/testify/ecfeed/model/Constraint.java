@@ -112,7 +112,8 @@ public class Constraint implements IConstraint<ChoiceNode> {
 		@Override
 		public Object visit(ChoiceCondition condition) throws Exception {
 			Set<AbstractParameterNode> set = new HashSet<AbstractParameterNode>();
-			AbstractParameterNode parameter = condition.getChoice().getParameter();
+			//AbstractParameterNode parameter = condition.getChoice().getParameter();
+			AbstractParameterNode parameter = condition.getReferencedParameter();
 			if(parameter != null){
 				set.add(parameter);
 			}
