@@ -26,42 +26,31 @@ public class EclipseMethodImplementHelper implements IMethodImplementHelper {
 
 	public static final String EXCEPTION_FILE_INFO_PROVIDER_NOT_NULL = "File info provider must not be null.";
 	public static final String EXCEPTION_TYPE_IS_NULL = "Can not implement method. Type is null.";
+	public static final String EXCEPTION_CLASS_DOES_NOT_EXIST = "Class: %s does not exist.";
+
 
 	final IFileInfoProvider fFileInfoProvider;
-	final String fClassQuafiedName;
+	final String fClassQualifiedName;
 	final MethodNode fMethodNode;
-	final IType fClassType;
-
 
 	public EclipseMethodImplementHelper(
 			final IFileInfoProvider fileInfoProvider, 
-			final String classQuafiedName,
+			final String classQualifiedName,
 			final MethodNode methodNode) {
 		if (fileInfoProvider == null) { 
 			ExceptionHelper.reportRuntimeException(EXCEPTION_FILE_INFO_PROVIDER_NOT_NULL);
 		}
 
 		fFileInfoProvider = fileInfoProvider;
-		fClassQuafiedName = classQuafiedName;
+		fClassQualifiedName = classQualifiedName;
 		fMethodNode = methodNode;
-
-		IType classType = null;
-		try {
-			classType = getJavaProject(fileInfoProvider).findType(classQuafiedName);
-		} catch (CoreException e) {
-			ExceptionHelper.reportRuntimeException(e.getMessage());
-		}
-		if(classType == null){
-			ExceptionHelper.reportRuntimeException(EXCEPTION_TYPE_IS_NULL);
-		}
-
-		fClassType = classType;
 	}
 
 	@Override
 	public void createMethod(final String methodContent) {
+		IType classType = getClassTypeNotNull();
 		try {
-			fClassType.createMethod(methodContent, null, false, null);
+			classType.createMethod(methodContent, null, false, null);
 		} catch (JavaModelException e) {
 			ExceptionHelper.reportRuntimeException(e.getMessage());
 		}
@@ -69,8 +58,9 @@ public class EclipseMethodImplementHelper implements IMethodImplementHelper {
 
 	@Override
 	public void createImport(final String type) {
+		IType classType = getClassTypeNotNull();
 		try {
-			fClassType.getCompilationUnit().createImport(type, null, null);
+			classType.getCompilationUnit().createImport(type, null, null);
 		} catch (JavaModelException e) {
 			ExceptionHelper.reportRuntimeException(e.getMessage());
 		}
@@ -78,7 +68,8 @@ public class EclipseMethodImplementHelper implements IMethodImplementHelper {
 
 	@Override
 	public void commitChanges() {
-		final ICompilationUnit unit = fClassType.getCompilationUnit();
+		IType classType = getClassTypeNotNull();
+		final ICompilationUnit unit = classType.getCompilationUnit();
 		try {
 			unit.becomeWorkingCopy(null);
 			unit.commitWorkingCopy(true, null);
@@ -87,9 +78,28 @@ public class EclipseMethodImplementHelper implements IMethodImplementHelper {
 		}
 	}
 
+	IType getClassTypeNotNull() {
+		IType classType = getClassType();
+		if (classType == null) {
+			ExceptionHelper.reportRuntimeException(
+					String.format(EXCEPTION_CLASS_DOES_NOT_EXIST, fClassQualifiedName));
+		}
+		return classType;
+	}
+
+	IType getClassType() {
+		IType classType = null;
+		try {
+			classType = getJavaProject(fFileInfoProvider).findType(fClassQualifiedName);
+		} catch (CoreException e) {
+			ExceptionHelper.reportRuntimeException(e.getMessage());
+		}
+		return classType;
+	}
+
 	public boolean methodDefinitionImplemented() {
 		try{
-			final IType type = getJavaProject(fFileInfoProvider).findType(fClassQuafiedName);
+			final IType type = getJavaProject(fFileInfoProvider).findType(fClassQualifiedName);
 			if(type == null){
 				return false;
 			}
