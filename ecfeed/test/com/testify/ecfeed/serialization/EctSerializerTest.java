@@ -63,15 +63,18 @@ public class EctSerializerTest {
 		classNode.addParameter(new GlobalParameterNode("parameter2", "float"));
 		classNode.addParameter(new GlobalParameterNode("parameter3", "com.example.UserType"));
 
+		RootNode model = new RootNode("model");
+		model.addClass(classNode);
+
 		OutputStream ostream = new ByteArrayOutputStream();
 		EctSerializer serializer = new EctSerializer(ostream);
 		try {
-			serializer.serialize(classNode);
+			serializer.serialize(model);
 			InputStream istream = new ByteArrayInputStream(((ByteArrayOutputStream)ostream).toByteArray());
 			IModelParser parser = new EctParser();
-			ClassNode parsedClass = parser.parseClass(istream);
+			RootNode parsedModel = parser.parseModel(istream);
 
-			assertElementsEqual(classNode, parsedClass);
+			assertElementsEqual(model, parsedModel);
 		} catch (Exception e) {
 			fail("Unexpected exception: " + e.getMessage());
 		}

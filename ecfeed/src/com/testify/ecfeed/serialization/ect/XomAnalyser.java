@@ -62,9 +62,9 @@ import com.testify.ecfeed.serialization.ParserException;
 import com.testify.ecfeed.serialization.WhiteCharConverter;
 
 public class XomAnalyser {
-	
+
 	private WhiteCharConverter fWhiteCharConverter = new WhiteCharConverter();
-	
+
 	public RootNode parseRoot(Element element) throws ParserException{
 		assertNodeTag(element.getQualifiedName(), ROOT_NODE_NAME);
 		String name = getElementName(element);
@@ -486,12 +486,12 @@ public class XomAnalyser {
 	}
 
 	protected String getAttributeValue(Element element, String attributeName) throws ParserException{
-		
+
 		String value = element.getAttributeValue(attributeName);
 		if(value == null){
 			ParserException.report(Messages.MISSING_ATTRIBUTE(element, attributeName));
 		}
-		
+
 		return fWhiteCharConverter.decode(value);
 	}
 

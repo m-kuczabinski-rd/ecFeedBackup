@@ -16,8 +16,10 @@ public class Constants {
 	public static final String CLASS_NODE_NAME = "Class";
 	public static final String METHOD_NODE_NAME = "Method";
 	public static final String PARAMETER_NODE_NAME = "Category";
+	public static final String PARAMETER_NODE_NAME_VERSION_1 = "Parameter";
 	public static final String EXPECTED_VALUE_PARAMETER_NODE_NAME = "ExpectedValueParameter";
 	public static final String CHOICE_NODE_NAME = "Partition";
+	public static final String CHOICE_NODE_NAME_VERSION_1 = "Choice";
 	public static final String LABEL_NODE_NAME = "Label";
 	public static final String TEST_CASE_NODE_NAME = "TestCase";
 	public static final String TEST_PARAMETER_NODE_NAME = "TestParameter";
@@ -35,6 +37,7 @@ public class Constants {
 	public static final String TYPE_COMMENTS_BLOCK_TAG_NAME = "TypeComments";
 
 	public static final String NODE_NAME_ATTRIBUTE = "name";
+	public static final String VERSION_ATTRIBUTE = "version";
 	public static final String QUALIFIED_NAME_ATTRIBUTE = "qualifiedName";
 	public static final String TYPE_NAME_ATTRIBUTE = "type";
 	public static final String DEFAULT_EXPECTED_VALUE_ATTRIBUTE_NAME = "expected";

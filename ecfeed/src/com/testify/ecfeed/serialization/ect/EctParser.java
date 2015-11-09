@@ -16,6 +16,7 @@ import java.io.InputStream;
 
 import nu.xom.Builder;
 import nu.xom.Document;
+import nu.xom.Element;
 import nu.xom.ParsingException;
 
 import com.testify.ecfeed.model.AbstractStatement;
@@ -37,13 +38,19 @@ import com.testify.ecfeed.serialization.ParserException;
 public class EctParser implements IModelParser {
 
 	Builder fBuilder = new Builder();
-	XomAnalyser fXomParser = new XomAnalyser();
+	XomAnalyser fXomAnalyser = null;
+
 
 	@Override
 	public RootNode parseModel(InputStream istream) throws ParserException {
+
 		try {
 			Document document = fBuilder.build(istream);
-			return fXomParser.parseRoot(document.getRootElement());
+			Element element = document.getRootElement();
+			int version = XomModelVersionDetector.getVersion(element);
+
+			createXomAnalyser(version);
+			return getXomAnalyser().parseRoot(element);
 		} catch (ParsingException e) {
 			ParserException.report(Messages.PARSING_EXCEPTION(e));
 			return null;
@@ -53,11 +60,24 @@ public class EctParser implements IModelParser {
 		}
 	}
 
+	private void createXomAnalyser(int version) throws ParserException {
+		if (fXomAnalyser == null) {
+			fXomAnalyser = new XomAnalyser();
+		}			
+	}
+
+	private XomAnalyser getXomAnalyser() throws ParserException {
+		if (fXomAnalyser == null) {
+			ParserException.report("XomAnalyzer must not be null.");
+		}
+		return fXomAnalyser;
+	}
+
 	@Override
 	public ClassNode parseClass(InputStream istream) throws ParserException {
 		try {
 			Document document = fBuilder.build(istream);
-			return fXomParser.parseClass(document.getRootElement(), null);
+			return getXomAnalyser().parseClass(document.getRootElement(), null);
 		} catch (ParsingException e) {
 			ParserException.report(Messages.PARSING_EXCEPTION(e));
 			return null;
@@ -71,7 +91,7 @@ public class EctParser implements IModelParser {
 	public MethodNode parseMethod(InputStream istream) throws ParserException {
 		try {
 			Document document = fBuilder.build(istream);
-			return fXomParser.parseMethod(document.getRootElement(), null);
+			return getXomAnalyser().parseMethod(document.getRootElement(), null);
 		} catch (ParsingException e) {
 			ParserException.report(Messages.PARSING_EXCEPTION(e));
 			return null;
@@ -85,7 +105,7 @@ public class EctParser implements IModelParser {
 	public GlobalParameterNode parseGlobalParameter(InputStream istream) throws ParserException {
 		try {
 			Document document = fBuilder.build(istream);
-			return fXomParser.parseGlobalParameter(document.getRootElement());
+			return getXomAnalyser().parseGlobalParameter(document.getRootElement());
 		} catch (ParsingException e) {
 			ParserException.report(Messages.PARSING_EXCEPTION(e));
 			return null;
@@ -99,7 +119,7 @@ public class EctParser implements IModelParser {
 	public MethodParameterNode parseMethodParameter(InputStream istream, MethodNode method) throws ParserException {
 		try {
 			Document document = fBuilder.build(istream);
-			return fXomParser.parseMethodParameter(document.getRootElement(), method);
+			return getXomAnalyser().parseMethodParameter(document.getRootElement(), method);
 		} catch (ParsingException e) {
 			ParserException.report(Messages.PARSING_EXCEPTION(e));
 			return null;
@@ -113,7 +133,7 @@ public class EctParser implements IModelParser {
 	public ChoiceNode parseChoice(InputStream istream) throws ParserException {
 		try {
 			Document document = fBuilder.build(istream);
-			return fXomParser.parseChoice(document.getRootElement());
+			return getXomAnalyser().parseChoice(document.getRootElement());
 		} catch (ParsingException e) {
 			ParserException.report(Messages.PARSING_EXCEPTION(e));
 			return null;
@@ -127,7 +147,7 @@ public class EctParser implements IModelParser {
 	public TestCaseNode parseTestCase(InputStream istream, MethodNode method) throws ParserException {
 		try {
 			Document document = fBuilder.build(istream);
-			return fXomParser.parseTestCase(document.getRootElement(), method);
+			return getXomAnalyser().parseTestCase(document.getRootElement(), method);
 		} catch (ParsingException e) {
 			ParserException.report(Messages.PARSING_EXCEPTION(e));
 			return null;
@@ -141,7 +161,7 @@ public class EctParser implements IModelParser {
 	public ConstraintNode parseConstraint(InputStream istream, MethodNode method) throws ParserException {
 		try {
 			Document document = fBuilder.build(istream);
-			return fXomParser.parseConstraint(document.getRootElement(), method);
+			return getXomAnalyser().parseConstraint(document.getRootElement(), method);
 		} catch (ParsingException e) {
 			ParserException.report(Messages.PARSING_EXCEPTION(e));
 			return null;
@@ -155,7 +175,7 @@ public class EctParser implements IModelParser {
 	public AbstractStatement parseStatement(InputStream istream, MethodNode method) throws ParserException {
 		try {
 			Document document = fBuilder.build(istream);
-			return fXomParser.parseStatement(document.getRootElement(), method);
+			return getXomAnalyser().parseStatement(document.getRootElement(), method);
 		} catch (ParsingException e) {
 			ParserException.report(Messages.PARSING_EXCEPTION(e));
 			return null;
@@ -169,7 +189,7 @@ public class EctParser implements IModelParser {
 	public StaticStatement parseStaticStatement(InputStream istream) throws ParserException {
 		try {
 			Document document = fBuilder.build(istream);
-			return fXomParser.parseStaticStatement(document.getRootElement());
+			return getXomAnalyser().parseStaticStatement(document.getRootElement());
 		} catch (ParsingException e) {
 			ParserException.report(Messages.PARSING_EXCEPTION(e));
 			return null;
@@ -183,7 +203,7 @@ public class EctParser implements IModelParser {
 	public ChoicesParentStatement parseChoicesParentStatement(InputStream istream, MethodNode method) throws ParserException {
 		try {
 			Document document = fBuilder.build(istream);
-			return fXomParser.parseChoiceStatement(document.getRootElement(), method);
+			return getXomAnalyser().parseChoiceStatement(document.getRootElement(), method);
 		} catch (ParsingException e) {
 			ParserException.report(Messages.PARSING_EXCEPTION(e));
 			return null;
@@ -197,7 +217,7 @@ public class EctParser implements IModelParser {
 	public ExpectedValueStatement parseExpectedValueStatement(InputStream istream, MethodNode method) throws ParserException {
 		try {
 			Document document = fBuilder.build(istream);
-			return fXomParser.parseExpectedValueStatement(document.getRootElement(), method);
+			return getXomAnalyser().parseExpectedValueStatement(document.getRootElement(), method);
 		} catch (ParsingException e) {
 			ParserException.report(Messages.PARSING_EXCEPTION(e));
 			return new ExpectedValueStatement(null, null, null);
@@ -211,7 +231,7 @@ public class EctParser implements IModelParser {
 	public StatementArray parseStatementArray(InputStream istream, MethodNode method) throws ParserException {
 		try {
 			Document document = fBuilder.build(istream);
-			return fXomParser.parseStatementArray(document.getRootElement(), method);
+			return getXomAnalyser().parseStatementArray(document.getRootElement(), method);
 		} catch (ParsingException e) {
 			ParserException.report(Messages.PARSING_EXCEPTION(e));
 			return new StatementArray(null);
