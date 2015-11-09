@@ -40,6 +40,7 @@ import com.testify.ecfeed.model.StaticStatement;
 import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.serialization.ect.Constants;
 import com.testify.ecfeed.serialization.ect.XomAnalyser;
+import com.testify.ecfeed.serialization.ect.XomAnalyserFactory;
 import com.testify.ecfeed.serialization.ect.XomBuilder;
 import com.testify.ecfeed.testutils.ModelStringifier;
 import com.testify.ecfeed.testutils.RandomModelGenerator;
@@ -50,7 +51,7 @@ public class XomParserTest {
 
 	RandomModelGenerator fModelGenerator = new RandomModelGenerator();
 	XomBuilder fConverter = new XomBuilder();
-	XomAnalyser fParser = new XomAnalyser();
+	XomAnalyser fXomAnalyser = XomAnalyserFactory.createXomAnalyser(0);
 	ModelStringifier fStringifier = new ModelStringifier();
 	Random rand = new Random();
 
@@ -60,7 +61,7 @@ public class XomParserTest {
 			RootNode r = fModelGenerator.generateModel(3);
 			Element rootElement = (Element)r.accept(fConverter);
 			TRACE(rootElement);
-			RootNode parsedR = fParser.parseRoot(rootElement);
+			RootNode parsedR = fXomAnalyser.parseRoot(rootElement);
 			assertElementsEqual(r, parsedR);
 		} catch (Exception e) {
 			fail("Unexpected exception: " + e.getMessage());
@@ -73,7 +74,7 @@ public class XomParserTest {
 			ClassNode _class = fModelGenerator.generateClass(3);
 			Element element = (Element)_class.accept(fConverter);
 			TRACE(element);
-			ClassNode parsedClass = fParser.parseClass(element, null);
+			ClassNode parsedClass = fXomAnalyser.parseClass(element, null);
 			assertElementsEqual(_class, parsedClass);
 		} catch (Exception e) {
 			fail("Unexpected exception: " + e.getMessage());
@@ -87,7 +88,7 @@ public class XomParserTest {
 				MethodNode m = fModelGenerator.generateMethod(5, 5, 5);
 				Element element = (Element)m.accept(fConverter);
 				TRACE(element);
-				MethodNode m1 = fParser.parseMethod(element, null);
+				MethodNode m1 = fXomAnalyser.parseMethod(element, null);
 				assertElementsEqual(m, m1);
 			}
 			catch (Exception e) {
@@ -100,13 +101,13 @@ public class XomParserTest {
 	public void parseParameterTest(){
 		for(String type : SUPPORTED_TYPES){
 			try{
-			for(boolean expected : new Boolean[]{true, false}){
-				MethodNode m = new MethodNode("method");
-				MethodParameterNode c = fModelGenerator.generateParameter(type, expected, 3, 3, 3);
-				m.addParameter(c);
-				Element element = (Element)c.accept(fConverter);
-				TRACE(element);
-					MethodParameterNode c1 = fParser.parseMethodParameter(element, m);
+				for(boolean expected : new Boolean[]{true, false}){
+					MethodNode m = new MethodNode("method");
+					MethodParameterNode c = fModelGenerator.generateParameter(type, expected, 3, 3, 3);
+					m.addParameter(c);
+					Element element = (Element)c.accept(fConverter);
+					TRACE(element);
+					MethodParameterNode c1 = fXomAnalyser.parseMethodParameter(element, m);
 					assertElementsEqual(c, c1);
 				}
 			}
@@ -125,7 +126,7 @@ public class XomParserTest {
 					TestCaseNode tc = fModelGenerator.generateTestCase(m);
 					Element element = (Element)tc.accept(fConverter);
 					TRACE(element);
-					TestCaseNode tc1 = fParser.parseTestCase(element, m);
+					TestCaseNode tc1 = fXomAnalyser.parseTestCase(element, m);
 					assertElementsEqual(tc, tc1);
 				} catch (Exception e) {
 					fail("Unexpected exception: " + e.getMessage());
@@ -143,7 +144,7 @@ public class XomParserTest {
 					ConstraintNode c = fModelGenerator.generateConstraint(m);
 					Element element = (Element)c.accept(fConverter);
 					TRACE(element);
-					ConstraintNode c1 = fParser.parseConstraint(element, m);
+					ConstraintNode c1 = fXomAnalyser.parseConstraint(element, m);
 					assertElementsEqual(c, c1);
 				} catch (Exception e) {
 					fail("Unexpected exception: " + e.getMessage() + "\nMethod\n" + new ModelStringifier().stringify(m, 0));
@@ -159,7 +160,7 @@ public class XomParserTest {
 				ChoiceNode p = fModelGenerator.generateChoice(3, 3, 3, type);
 				Element element = (Element)p.accept(fConverter);
 				TRACE(element);
-				ChoiceNode p1 = fParser.parseChoice(element);
+				ChoiceNode p1 = fXomAnalyser.parseChoice(element);
 				assertElementsEqual(p, p1);
 			} catch (Exception e) {
 				fail("Unexpected exception: " + e.getMessage());
@@ -177,8 +178,8 @@ public class XomParserTest {
 			TRACE(trueElement);
 			TRACE(falseElement);
 
-			StaticStatement parsedTrue = fParser.parseStaticStatement(trueElement);
-			StaticStatement parsedFalse = fParser.parseStaticStatement(falseElement);
+			StaticStatement parsedTrue = fXomAnalyser.parseStaticStatement(trueElement);
+			StaticStatement parsedFalse = fXomAnalyser.parseStaticStatement(falseElement);
 
 			assertStatementsEqual(trueStatement, parsedTrue);
 			assertStatementsEqual(falseStatement, parsedFalse);
@@ -198,10 +199,10 @@ public class XomParserTest {
 				ChoicesParentStatement parsedS = null;
 				switch(element.getLocalName()){
 				case Constants.CONSTRAINT_LABEL_STATEMENT_NODE_NAME:
-					parsedS = fParser.parseLabelStatement(element, m);
+					parsedS = fXomAnalyser.parseLabelStatement(element, m);
 					break;
 				case Constants.CONSTRAINT_CHOICE_STATEMENT_NODE_NAME:
-					parsedS = fParser.parseChoiceStatement(element, m);
+					parsedS = fXomAnalyser.parseChoiceStatement(element, m);
 					break;
 				}
 
@@ -220,7 +221,7 @@ public class XomParserTest {
 				ExpectedValueStatement s = fModelGenerator.generateExpectedValueStatement(m);
 				Element element = (Element)s.accept(fConverter);
 				TRACE(element);
-				ExpectedValueStatement parsedS = fParser.parseExpectedValueStatement(element, m);
+				ExpectedValueStatement parsedS = fXomAnalyser.parseExpectedValueStatement(element, m);
 				assertStatementsEqual(s, parsedS);
 			} catch (Exception e) {
 				fail("Unexpected exception: " + e.getMessage());
@@ -235,7 +236,7 @@ public class XomParserTest {
 			StatementArray s = fModelGenerator.generateStatementArray(m, 4);
 			Element element = (Element)s.accept(fConverter);
 			TRACE(element);
-			StatementArray parsedS = fParser.parseStatementArray(element, m);
+			StatementArray parsedS = fXomAnalyser.parseStatementArray(element, m);
 			assertStatementsEqual(s, parsedS);
 		} catch (Exception e) {
 			fail("Unexpected exception: " + e.getMessage());
@@ -252,22 +253,22 @@ public class XomParserTest {
 			Element rootElement = (Element)root.accept(fConverter);
 			Element classElement = (Element)_class.accept(fConverter);
 
-			fParser.parseRoot(rootElement);
+			fXomAnalyser.parseRoot(rootElement);
 
 			try {
-				fParser.parseClass(classElement, null);
+				fXomAnalyser.parseClass(classElement, null);
 			} catch (Exception e) {
 				fail("Unexpected exception: " + e.getMessage());
 			}
 
 			try {
-				fParser.parseClass(rootElement, null);
+				fXomAnalyser.parseClass(rootElement, null);
 				fail("exception expected");
 			} catch (Exception e) {
 			}
 
 			try {
-				fParser.parseRoot(classElement);
+				fXomAnalyser.parseRoot(classElement);
 				fail("exception expected");
 			} catch (Exception e) {
 			}

@@ -40,7 +40,6 @@ public class EctParser implements IModelParser {
 	Builder fBuilder = new Builder();
 	XomAnalyser fXomAnalyser = null;
 
-
 	@Override
 	public RootNode parseModel(InputStream istream) throws ParserException {
 
@@ -62,7 +61,7 @@ public class EctParser implements IModelParser {
 
 	private void createXomAnalyser(int version) throws ParserException {
 		if (fXomAnalyser == null) {
-			fXomAnalyser = new XomAnalyser();
+			fXomAnalyser = XomAnalyserFactory.createXomAnalyser(version);
 		}			
 	}
 

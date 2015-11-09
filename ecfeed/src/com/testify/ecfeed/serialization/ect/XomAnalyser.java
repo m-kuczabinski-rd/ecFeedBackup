@@ -61,9 +61,12 @@ import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.serialization.ParserException;
 import com.testify.ecfeed.serialization.WhiteCharConverter;
 
-public class XomAnalyser {
+public abstract class XomAnalyser {
 
 	private WhiteCharConverter fWhiteCharConverter = new WhiteCharConverter();
+
+	protected abstract String getChoiceNodeName();
+	protected abstract String getParameterNodeName();
 
 	public RootNode parseRoot(Element element) throws ParserException{
 		assertNodeTag(element.getQualifiedName(), ROOT_NODE_NAME);
@@ -532,5 +535,4 @@ public class XomAnalyser {
 		}
 		return null;
 	}
-
 }
