@@ -33,9 +33,13 @@ public class EctSerializer implements IModelSerializer{
 	private OutputStream fOutputStream;
 	private XomBuilder fConverter;
 
-	public EctSerializer(OutputStream ostream){
+	public EctSerializer(OutputStream ostream, int version){
 		fOutputStream = ostream;
-		fConverter = new XomBuilder();
+		fConverter = XomBuilderFactory.createXomBuilder(version);
+	}
+
+	public EctSerializer(OutputStream ostream){
+		this(ostream, 0);
 	}
 
 	@Override

@@ -42,6 +42,7 @@ import com.testify.ecfeed.serialization.ect.Constants;
 import com.testify.ecfeed.serialization.ect.XomAnalyser;
 import com.testify.ecfeed.serialization.ect.XomAnalyserFactory;
 import com.testify.ecfeed.serialization.ect.XomBuilder;
+import com.testify.ecfeed.serialization.ect.XomBuilderFactory;
 import com.testify.ecfeed.testutils.ModelStringifier;
 import com.testify.ecfeed.testutils.RandomModelGenerator;
 
@@ -50,8 +51,10 @@ public class XomParserTest {
 	private final boolean DEBUG = false;
 
 	RandomModelGenerator fModelGenerator = new RandomModelGenerator();
-	XomBuilder fConverter = new XomBuilder();
-	XomAnalyser fXomAnalyser = XomAnalyserFactory.createXomAnalyser(0);
+
+	int version = 0;
+	XomBuilder fConverter = XomBuilderFactory.createXomBuilder(version);
+	XomAnalyser fXomAnalyser = XomAnalyserFactory.createXomAnalyser(version);
 	ModelStringifier fStringifier = new ModelStringifier();
 	Random rand = new Random();
 

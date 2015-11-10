@@ -16,6 +16,7 @@ import java.util.List;
 
 public class RootNode extends GlobalParametersParentNode {
 	private List<ClassNode> fClasses;
+	private int fVersion;
 
 	@Override
 	public List<? extends AbstractNode> getChildren(){
@@ -34,7 +35,7 @@ public class RootNode extends GlobalParametersParentNode {
 
 	@Override
 	public RootNode getCopy(){
-		RootNode copy = new RootNode(this.getName());
+		RootNode copy = new RootNode(this.getName(), this.fVersion);
 
 		for(GlobalParameterNode parameter : getGlobalParameters()){
 			copy.addParameter(parameter.getCopy());
@@ -50,7 +51,14 @@ public class RootNode extends GlobalParametersParentNode {
 	public RootNode(String name) {
 		super(name);
 		fClasses = new ArrayList<ClassNode>();
+		fVersion = 0;
 	}
+
+	public RootNode(String name, int version) {
+		super(name);
+		fClasses = new ArrayList<ClassNode>();
+		fVersion = version;
+	}	
 
 	public boolean addClass(ClassNode node){
 		return addClass(node, fClasses.size());
@@ -67,6 +75,10 @@ public class RootNode extends GlobalParametersParentNode {
 
 	public List<ClassNode> getClasses() {
 		return fClasses;
+	}
+
+	public int getVersion() {
+		return fVersion;
 	}
 
 	public ClassNode getClassModel(String name) {

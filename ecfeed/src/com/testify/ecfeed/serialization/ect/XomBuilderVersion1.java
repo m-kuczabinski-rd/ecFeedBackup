@@ -8,7 +8,7 @@
 
 package com.testify.ecfeed.serialization.ect;
 
-public class XomAnalyserVersion1 extends XomAnalyser {
+public class XomBuilderVersion1 extends XomBuilder {
 
 	@Override
 	protected String getChoiceNodeName() {

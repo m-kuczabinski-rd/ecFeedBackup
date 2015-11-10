@@ -33,18 +33,18 @@ public class EctSerializerTest {
 
 	RandomModelGenerator fGenerator = new RandomModelGenerator();
 
-	@Test
-	public void modelSerializerTest(){
-		RootNode model = new RootNode("model");
+	public void modelSerializerTest(int version) { 
+		RootNode model = new RootNode("model", version);
 		model.addClass(new ClassNode("com.example.TestClass1"));
 		model.addClass(new ClassNode("com.example.TestClass2"));
 		model.addParameter(new GlobalParameterNode("globalParameter1", "int"));
 		model.addParameter(new GlobalParameterNode("globalParameter2", "com.example.UserType"));
 
 		OutputStream ostream = new ByteArrayOutputStream();
-		EctSerializer serializer = new EctSerializer(ostream);
+		EctSerializer serializer = new EctSerializer(ostream, version);
 		try {
 			serializer.serialize(model);
+
 			InputStream istream = new ByteArrayInputStream(((ByteArrayOutputStream)ostream).toByteArray());
 			IModelParser parser = new EctParser();
 			RootNode parsedModel = parser.parseModel(istream);
@@ -55,7 +55,17 @@ public class EctSerializerTest {
 		}
 	}
 
-	private void classSerializerTest(boolean runOnAndroid, String androidBaseRunner){
+	@Test
+	public void modelSerializerTestVersion0() {
+		modelSerializerTest(0);
+	}
+
+	@Test
+	public void modelSerializerTestVersion1() {
+		modelSerializerTest(1);
+	}	
+
+	private void classSerializerTest(boolean runOnAndroid, String androidBaseRunner, int version){
 		ClassNode classNode = new ClassNode("com.example.TestClass", runOnAndroid, androidBaseRunner);
 		classNode.addMethod(new MethodNode("testMethod1"));
 		classNode.addMethod(new MethodNode("testMethod2"));
@@ -63,11 +73,11 @@ public class EctSerializerTest {
 		classNode.addParameter(new GlobalParameterNode("parameter2", "float"));
 		classNode.addParameter(new GlobalParameterNode("parameter3", "com.example.UserType"));
 
-		RootNode model = new RootNode("model");
+		RootNode model = new RootNode("model", version);
 		model.addClass(classNode);
 
 		OutputStream ostream = new ByteArrayOutputStream();
-		EctSerializer serializer = new EctSerializer(ostream);
+		EctSerializer serializer = new EctSerializer(ostream, version);
 		try {
 			serializer.serialize(model);
 			InputStream istream = new ByteArrayInputStream(((ByteArrayOutputStream)ostream).toByteArray());
@@ -82,12 +92,17 @@ public class EctSerializerTest {
 
 	@Test
 	public void classSerializerTestWithAndroidBaseRunner(){
-		classSerializerTest(true, "com.example.AndroidBaseRunner");
+		classSerializerTest(true, "com.example.AndroidBaseRunner", 0);
 	}
 
 	@Test
 	public void classSerializerTestWithoutAndroidBaseRunner(){
-		classSerializerTest(false, null);
+		classSerializerTest(false, null, 0);
+	}
+
+	@Test
+	public void classSerializerTestVersion1(){
+		classSerializerTest(false, null, 1);
 	}	
 
 	@Test

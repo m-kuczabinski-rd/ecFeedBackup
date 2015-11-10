@@ -54,20 +54,20 @@ import com.testify.ecfeed.serialization.ect.EctSerializer;
 public class XmlParserSerializerTest {
 	private final int TEST_RUNS = 10;
 
-//	private final int MAX_CLASSES = 1;
-//	private final int MAX_METHODS = 1;
-//	private final int MAX_PARAMETERS = 3;
-//	private final int MAX_EXPECTED_PARAMETERS = 3;
-//	private final int MAX_PARTITIONS = 1;
-//	private final int MAX_PARTITION_LEVELS = 1;
-//	private final int MAX_PARTITION_LABELS = 1;
-//	private final int MAX_CONSTRAINTS = 5;
-//	private final int MAX_TEST_CASES = 1;
+	//	private final int MAX_CLASSES = 1;
+	//	private final int MAX_METHODS = 1;
+	//	private final int MAX_PARAMETERS = 3;
+	//	private final int MAX_EXPECTED_PARAMETERS = 3;
+	//	private final int MAX_PARTITIONS = 1;
+	//	private final int MAX_PARTITION_LEVELS = 1;
+	//	private final int MAX_PARTITION_LABELS = 1;
+	//	private final int MAX_CONSTRAINTS = 5;
+	//	private final int MAX_TEST_CASES = 1;
 
 	private final int MAX_CLASSES = 5;
 	private final int MAX_METHODS = 5;
 	private final int MAX_PARAMETERS = 5;
-//	private final int MAX_EXPECTED_PARAMETERS = 3;
+	//	private final int MAX_EXPECTED_PARAMETERS = 3;
 	private final int MAX_PARTITIONS = 10;
 	private final int MAX_PARTITION_LEVELS = 5;
 	private final int MAX_PARTITION_LABELS = 5;
@@ -86,17 +86,17 @@ public class XmlParserSerializerTest {
 	@Test
 	public void test() {
 		try {
-		for(int i = 0; i < TEST_RUNS; ++i){
-			RootNode model = createRootNode(rand.nextInt(MAX_CLASSES) + 1);
-			ByteArrayOutputStream ostream = new ByteArrayOutputStream();
-			IModelSerializer serializer = new EctSerializer(ostream);
-			IModelParser parser = new EctParser();
-			serializer.serialize(model);
-			ByteArrayInputStream istream = new ByteArrayInputStream(ostream.toByteArray());
-			RootNode parsedModel = parser.parseModel(istream);
-			compareModels(model, parsedModel);
+			for(int i = 0; i < TEST_RUNS; ++i){
+				RootNode model = createRootNode(rand.nextInt(MAX_CLASSES) + 1);
+				ByteArrayOutputStream ostream = new ByteArrayOutputStream();
+				IModelSerializer serializer = new EctSerializer(ostream);
+				IModelParser parser = new EctParser();
+				serializer.serialize(model);
+				ByteArrayInputStream istream = new ByteArrayInputStream(ostream.toByteArray());
+				RootNode parsedModel = parser.parseModel(istream);
+				compareModels(model, parsedModel);
 
-		}
+			}
 		} catch (IOException e) {
 			fail("Unexpected exception");
 		} catch (ParserException e) {
@@ -128,6 +128,7 @@ public class XmlParserSerializerTest {
 			IModelSerializer serializer = new EctSerializer(ostream);
 			IModelParser parser = new EctParser();
 			serializer.serialize(root);
+
 			ByteArrayInputStream istream = new ByteArrayInputStream(ostream.toByteArray());
 			RootNode parsedModel = parser.parseModel(istream);
 			compareModels(root, parsedModel);
@@ -183,10 +184,10 @@ public class XmlParserSerializerTest {
 
 			ByteArrayOutputStream ostream = new ByteArrayOutputStream();
 			IModelSerializer serializer = new EctSerializer(ostream);
-			IModelParser parser = new EctParser();
 			serializer.serialize(root);
-//			System.out.println(ostream.toString());
+
 			ByteArrayInputStream istream = new ByteArrayInputStream(ostream.toByteArray());
+			IModelParser parser = new EctParser();
 			RootNode parsedModel = parser.parseModel(istream);
 			compareModels(root, parsedModel);
 		}
@@ -197,12 +198,6 @@ public class XmlParserSerializerTest {
 		} catch (Exception e) {
 			fail("Unexpected exception: " + e.getMessage());
 		}
-	}
-
-
-	@Test
-	public void parseMethodParameterTest(){
-
 	}
 
 	protected RootNode createRootNode(int classes) {
@@ -217,10 +212,10 @@ public class XmlParserSerializerTest {
 		ClassNode classNode = new ClassNode("com.example." + randomName());
 		for(int i = 0; i < methods; ++i){
 			int numOfParameters = rand.nextInt(MAX_PARAMETERS) + 1;
-//			int numOfExpParameters = rand.nextInt(MAX_EXPECTED_PARAMETERS);
-//			if(numOfParameters + numOfExpParameters == 0){
-//				numOfParameters = 1;
-//			}
+			//			int numOfExpParameters = rand.nextInt(MAX_EXPECTED_PARAMETERS);
+			//			if(numOfParameters + numOfExpParameters == 0){
+			//				numOfParameters = 1;
+			//			}
 			int numOfConstraints = rand.nextInt(MAX_CONSTRAINTS) + 1;
 			int numOfTestCases = rand.nextInt(MAX_TEST_CASES);
 			classNode.addMethod(createMethodNode(numOfParameters, 0, numOfConstraints, numOfTestCases));

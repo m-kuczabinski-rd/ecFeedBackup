@@ -8,30 +8,30 @@
 
 package com.testify.ecfeed.serialization.ect;
 
-public class XomAnalyserVersion1 extends XomAnalyser {
+public class XomBuilderVersion0 extends XomBuilder {
 
 	@Override
 	protected String getChoiceNodeName() {
-		return SerializationHelperVersion1.getChoiceNodeName();
+		return SerializationHelperVersion0.getChoiceNodeName();
 	}
 
 	@Override	
 	protected String getChoiceAttributeName() {
-		return SerializationHelperVersion1.getChoiceAttributeName();
+		return SerializationHelperVersion0.getChoiceAttributeName();
 	}
 
 	@Override
 	protected String getStatementChoiceAttributeName() {
-		return SerializationHelperVersion1.getStatementChoiceAttributeName();
+		return SerializationHelperVersion0.getStatementChoiceAttributeName();
 	}
 
 	@Override
 	protected String getParameterNodeName() {
-		return SerializationHelperVersion1.getParameterNodeName();
+		return SerializationHelperVersion0.getParameterNodeName();
 	}
 
 	@Override
 	protected String getStatementParameterAttributeName() {
-		return SerializationHelperVersion1.getStatementParameterAttributeName();
+		return SerializationHelperVersion0.getStatementParameterAttributeName();
 	}
 }

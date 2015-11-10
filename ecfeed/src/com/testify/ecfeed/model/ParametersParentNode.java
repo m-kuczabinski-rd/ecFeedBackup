@@ -82,6 +82,7 @@ public abstract class ParametersParentNode extends AbstractNode {
 			return false;
 		}
 		ParametersParentNode comparedParent = (ParametersParentNode)node;
+
 		if(getParameters().size() != comparedParent.getParameters().size()){
 			return false;
 		}

@@ -12,8 +12,7 @@
 package com.testify.ecfeed.serialization.ect;
 
 import static com.testify.ecfeed.serialization.ect.Constants.BASIC_COMMENTS_BLOCK_TAG_NAME;
-import static com.testify.ecfeed.serialization.ect.Constants.CHOICE_ATTRIBUTE_NAME;
-import static com.testify.ecfeed.serialization.ect.Constants.CHOICE_NODE_NAME;
+import static com.testify.ecfeed.serialization.ect.Constants.VERSION_ATTRIBUTE;
 import static com.testify.ecfeed.serialization.ect.Constants.CLASS_NODE_NAME;
 import static com.testify.ecfeed.serialization.ect.Constants.COMMENTS_BLOCK_TAG_NAME;
 import static com.testify.ecfeed.serialization.ect.Constants.CONSTRAINT_CHOICE_STATEMENT_NODE_NAME;
@@ -33,15 +32,12 @@ import static com.testify.ecfeed.serialization.ect.Constants.NODE_NAME_ATTRIBUTE
 import static com.testify.ecfeed.serialization.ect.Constants.PARAMETER_IS_EXPECTED_ATTRIBUTE_NAME;
 import static com.testify.ecfeed.serialization.ect.Constants.PARAMETER_IS_LINKED_ATTRIBUTE_NAME;
 import static com.testify.ecfeed.serialization.ect.Constants.PARAMETER_LINK_ATTRIBUTE_NAME;
-import static com.testify.ecfeed.serialization.ect.Constants.PARAMETER_NODE_NAME;
 import static com.testify.ecfeed.serialization.ect.Constants.ROOT_NODE_NAME;
-import static com.testify.ecfeed.serialization.ect.Constants.STATEMENT_CHOICE_ATTRIBUTE_NAME;
 import static com.testify.ecfeed.serialization.ect.Constants.STATEMENT_EXPECTED_VALUE_ATTRIBUTE_NAME;
 import static com.testify.ecfeed.serialization.ect.Constants.STATEMENT_LABEL_ATTRIBUTE_NAME;
 import static com.testify.ecfeed.serialization.ect.Constants.STATEMENT_OPERATOR_AND_ATTRIBUTE_VALUE;
 import static com.testify.ecfeed.serialization.ect.Constants.STATEMENT_OPERATOR_ATTRIBUTE_NAME;
 import static com.testify.ecfeed.serialization.ect.Constants.STATEMENT_OPERATOR_OR_ATTRIBUTE_VALUE;
-import static com.testify.ecfeed.serialization.ect.Constants.STATEMENT_PARAMETER_ATTRIBUTE_NAME;
 import static com.testify.ecfeed.serialization.ect.Constants.STATEMENT_RELATION_ATTRIBUTE_NAME;
 import static com.testify.ecfeed.serialization.ect.Constants.STATEMENT_STATIC_VALUE_ATTRIBUTE_NAME;
 import static com.testify.ecfeed.serialization.ect.Constants.STATIC_STATEMENT_FALSE_VALUE;
@@ -82,13 +78,24 @@ import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.utils.StringHelper;
 import com.testify.ecfeed.serialization.WhiteCharConverter;
 
-public class XomBuilder implements IModelVisitor, IStatementVisitor {
+public abstract class XomBuilder implements IModelVisitor, IStatementVisitor {
 
 	private WhiteCharConverter fWhiteCharConverter = new WhiteCharConverter();
-	
+
+	protected abstract String getParameterNodeName();
+	protected abstract String getStatementParameterAttributeName();
+	protected abstract String getChoiceNodeName();
+	protected abstract String getChoiceAttributeName();
+	protected abstract String getStatementChoiceAttributeName();
+
 	@Override
 	public Object visit(RootNode node) throws Exception{
 		Element element = createAbstractElement(ROOT_NODE_NAME, node);
+
+		String versionStr = Integer.toString(node.getVersion());
+		Attribute versionAttr = new Attribute(VERSION_ATTRIBUTE, versionStr);
+		element.addAttribute(versionAttr);
+
 
 		for(ClassNode _class : node.getClasses()){
 			element.appendChild((Element)visit(_class));
@@ -161,7 +168,7 @@ public class XomBuilder implements IModelVisitor, IStatementVisitor {
 
 	@Override
 	public Object visit(MethodParameterNode node)  throws Exception {
-		Element element = createAbstractElement(PARAMETER_NODE_NAME, node);
+		Element element = createAbstractElement(getParameterNodeName(), node);
 
 		appendTypeComments(element, node);
 
@@ -183,7 +190,7 @@ public class XomBuilder implements IModelVisitor, IStatementVisitor {
 
 	@Override
 	public Object visit(GlobalParameterNode node) throws Exception {
-		Element element = createAbstractElement(PARAMETER_NODE_NAME, node);
+		Element element = createAbstractElement(getParameterNodeName(), node);
 		appendTypeComments(element, node);
 		encodeAndAddAttribute(element, new Attribute(TYPE_NAME_ATTRIBUTE, node.getType()));
 
@@ -207,7 +214,7 @@ public class XomBuilder implements IModelVisitor, IStatementVisitor {
 			}
 			else{
 				Element testParameterElement = new Element(TEST_PARAMETER_NODE_NAME);
-				Attribute choiceNameAttribute = new Attribute(CHOICE_ATTRIBUTE_NAME, testParameter.getQualifiedName());
+				Attribute choiceNameAttribute = new Attribute(getChoiceAttributeName(), testParameter.getQualifiedName());
 				encodeAndAddAttribute(testParameterElement, choiceNameAttribute);
 				element.appendChild(testParameterElement);
 			}
@@ -237,7 +244,7 @@ public class XomBuilder implements IModelVisitor, IStatementVisitor {
 
 	@Override
 	public Object visit(ChoiceNode node) throws Exception {
-		Element element = createAbstractElement(CHOICE_NODE_NAME, node);
+		Element element = createAbstractElement(getChoiceNodeName(), node);
 		String value = node.getValueString();
 		//remove disallowed XML characters
 		String xml10pattern = "[^"
@@ -268,10 +275,10 @@ public class XomBuilder implements IModelVisitor, IStatementVisitor {
 		Element statementElement = new Element(CONSTRAINT_STATIC_STATEMENT_NODE_NAME);
 		String attrName = STATEMENT_STATIC_VALUE_ATTRIBUTE_NAME;
 		String attrValue = statement.getValue()?STATIC_STATEMENT_TRUE_VALUE:
-			
-		STATIC_STATEMENT_FALSE_VALUE;
+
+			STATIC_STATEMENT_FALSE_VALUE;
 		encodeAndAddAttribute(statementElement, new Attribute(attrName, attrValue));
-		
+
 		return statementElement;
 	}
 
@@ -302,7 +309,7 @@ public class XomBuilder implements IModelVisitor, IStatementVisitor {
 		String parameterName = statement.getLeftOperandName();
 		ChoiceNode condition = statement.getCondition();
 		Attribute parameterAttribute =
-				new Attribute(STATEMENT_PARAMETER_ATTRIBUTE_NAME, parameterName);
+				new Attribute(getStatementParameterAttributeName(), parameterName);
 		Attribute valueAttribute =
 				new Attribute(STATEMENT_EXPECTED_VALUE_ATTRIBUTE_NAME, condition.getValueString());
 
@@ -318,7 +325,7 @@ public class XomBuilder implements IModelVisitor, IStatementVisitor {
 
 		String parameterName = statement.getParameter().getName();
 		Attribute parameterAttribute =
-				new Attribute(STATEMENT_PARAMETER_ATTRIBUTE_NAME, parameterName);
+				new Attribute(getStatementParameterAttributeName(), parameterName);
 		Attribute relationAttribute =
 				new Attribute(STATEMENT_RELATION_ATTRIBUTE_NAME, statement.getRelation().toString());
 		ICondition condition = statement.getCondition();
@@ -341,7 +348,7 @@ public class XomBuilder implements IModelVisitor, IStatementVisitor {
 	public Object visit(ChoiceCondition condition) throws Exception {
 		ChoiceNode choice = condition.getChoice();
 		Element element = new Element(CONSTRAINT_CHOICE_STATEMENT_NODE_NAME);
-		encodeAndAddAttribute(element, new Attribute(STATEMENT_CHOICE_ATTRIBUTE_NAME, choice.getQualifiedName()));
+		encodeAndAddAttribute(element, new Attribute(getStatementChoiceAttributeName(), choice.getQualifiedName()));
 
 		return element;
 	}
@@ -358,7 +365,7 @@ public class XomBuilder implements IModelVisitor, IStatementVisitor {
 		if(node.getDescription() != null){
 			Element commentsBlock = new Element(COMMENTS_BLOCK_TAG_NAME);
 			Element basicComments = new Element(BASIC_COMMENTS_BLOCK_TAG_NAME);
-			
+
 			basicComments.appendChild(fWhiteCharConverter.encode(node.getDescription()));
 			commentsBlock.appendChild(basicComments);
 			element.appendChild(commentsBlock);
@@ -384,11 +391,11 @@ public class XomBuilder implements IModelVisitor, IStatementVisitor {
 		}
 
 		Element typeComments = new Element(TYPE_COMMENTS_BLOCK_TAG_NAME);
-		
+
 		typeComments.appendChild(fWhiteCharConverter.encode(node.getTypeComments()));
 		commentElement.appendChild(typeComments);
 	}
-	
+
 	private void encodeAndAddAttribute(Element element, Attribute attribute) {
 		attribute.setValue(fWhiteCharConverter.encode(attribute.getValue()));
 		element.addAttribute(attribute);
