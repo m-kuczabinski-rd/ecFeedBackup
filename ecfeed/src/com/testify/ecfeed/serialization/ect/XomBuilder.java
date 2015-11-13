@@ -92,7 +92,7 @@ public abstract class XomBuilder implements IModelVisitor, IStatementVisitor {
 	public Object visit(RootNode node) throws Exception{
 		Element element = createAbstractElement(ROOT_NODE_NAME, node);
 
-		String versionStr = Integer.toString(node.getVersion());
+		String versionStr = Integer.toString(node.getModelVersion());
 		Attribute versionAttr = new Attribute(VERSION_ATTRIBUTE, versionStr);
 		element.addAttribute(versionAttr);
 

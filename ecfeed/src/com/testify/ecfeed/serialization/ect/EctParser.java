@@ -28,12 +28,14 @@ import com.testify.ecfeed.model.ExpectedValueStatement;
 import com.testify.ecfeed.model.GlobalParameterNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.MethodParameterNode;
+import com.testify.ecfeed.model.ModelVersionDistributor;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.StatementArray;
 import com.testify.ecfeed.model.StaticStatement;
 import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.serialization.IModelParser;
 import com.testify.ecfeed.serialization.ParserException;
+import com.testify.ecfeed.utils.ExceptionHelper;
 
 public class EctParser implements IModelParser {
 
@@ -47,6 +49,10 @@ public class EctParser implements IModelParser {
 			Document document = fBuilder.build(istream);
 			Element element = document.getRootElement();
 			int version = XomModelVersionDetector.getVersion(element);
+
+			if (version > ModelVersionDistributor.getCurrentVersion()) {
+				ExceptionHelper.reportRuntimeException("Ect file has an unknown version: " + version); // XYX
+			}
 
 			createXomAnalyser(version);
 			return getXomAnalyser().parseRoot(element);

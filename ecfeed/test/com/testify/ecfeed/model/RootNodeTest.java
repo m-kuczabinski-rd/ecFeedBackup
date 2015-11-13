@@ -23,7 +23,7 @@ public class RootNodeTest{
 
 	@Test
 	public void addClassTest(){
-		RootNode root = new RootNode("name");
+		RootNode root = new RootNode("name", ModelVersionDistributor.getCurrentVersion());
 		ClassNode c1 = new ClassNode("c1");
 		ClassNode c2 = new ClassNode("c2");
 		ClassNode c3 = new ClassNode("c3");
@@ -45,7 +45,7 @@ public class RootNodeTest{
 
 	@Test
 	public void testGetClass(){
-		RootNode root = new RootNode("name");
+		RootNode root = new RootNode("name", ModelVersionDistributor.getCurrentVersion());
 		ClassNode classNode1 = new ClassNode("name");
 		ClassNode classNode2 = new ClassNode("name");
 		assertEquals(0,  root.getClasses().size());
@@ -71,7 +71,7 @@ public class RootNodeTest{
 
 	@Test
 	public void testGetClassModel(){
-		RootNode root = new RootNode("name");
+		RootNode root = new RootNode("name", ModelVersionDistributor.getCurrentVersion());
 		ClassNode class1 = new ClassNode("com.example.class1");
 		ClassNode class2 = new ClassNode("com.example.class2");
 		ClassNode class3 = new ClassNode("class1");
@@ -85,8 +85,8 @@ public class RootNodeTest{
 
 	@Test
 	public void compareTest(){
-		RootNode r1 = new RootNode("r1");
-		RootNode r2 = new RootNode("r2");
+		RootNode r1 = new RootNode("r1", ModelVersionDistributor.getCurrentVersion());
+		RootNode r2 = new RootNode("r2", ModelVersionDistributor.getCurrentVersion());
 
 		assertFalse(r1.compare(r2));
 
@@ -124,7 +124,6 @@ public class RootNodeTest{
 		assertFalse(r1.compare(r2));
 		parameter2.setType("float");
 		assertTrue(r1.compare(r2));
-
 	}
 
 //	@Test

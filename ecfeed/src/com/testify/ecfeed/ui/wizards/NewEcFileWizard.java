@@ -29,6 +29,7 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.WizardNewFileCreationPage;
 import org.eclipse.ui.part.FileEditorInput;
 
+import com.testify.ecfeed.model.ModelVersionDistributor;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.serialization.ect.EctSerializer;
 import com.testify.ecfeed.ui.common.Constants;
@@ -98,9 +99,12 @@ public class NewEcFileWizard extends Wizard implements INewWizard {
 
 			final IPath newFileFullPath = fPage.getContainerFullPath().append(fPage.getFileName()); 
 			String modelName = newFileFullPath.removeFileExtension().lastSegment();
-			RootNode model = new RootNode(modelName != null ? modelName : Constants.DEFAULT_NEW_ECT_MODEL_NAME);
+			RootNode model = new RootNode(
+					modelName != null ? modelName : Constants.DEFAULT_NEW_ECT_MODEL_NAME, 
+							ModelVersionDistributor.getCurrentVersion());
+
 			ByteArrayOutputStream ostream = new ByteArrayOutputStream();
-			new EctSerializer(ostream).serialize(model);
+			new EctSerializer(ostream, ModelVersionDistributor.getCurrentVersion()).serialize(model);
 			ByteArrayInputStream istream = new ByteArrayInputStream(ostream.toByteArray());
 			file.setContents(istream, true, true, null);
 

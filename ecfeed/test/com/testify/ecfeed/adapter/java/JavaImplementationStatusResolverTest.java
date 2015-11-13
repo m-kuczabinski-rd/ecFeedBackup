@@ -23,6 +23,7 @@ import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.ConstraintNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.ChoiceNode;
+import com.testify.ecfeed.model.ModelVersionDistributor;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.testutils.ETypeName;
@@ -36,35 +37,35 @@ import com.testify.ecfeed.ui.common.EclipseModelBuilder;
 @Generator(CartesianProductGenerator.class)
 public class JavaImplementationStatusResolverTest {
 	private JavaImplementationStatusResolver fResolver;
-	
+
 	public enum ImplementedUserType{
 		IMPLEMENTED_VALUE
 	}
-	
+
 	public enum OtherImplementedUserType{
 		IMPLEMENTED_VALUE
 	}
-	
+
 	public class ImplementedClass{
 		public void implementedTestMethod0(){}
 		public void implementedTestMethod1(){}
 		public void implementedTestMethod2(){}
 		public void implementedTestMethod3(){}
 		public void implementedTestMethod4(){}
-		
+
 		public void implementedTestMethod(){}
 		public void implementedOtherTestMethod(boolean arg1){}
 		public void implementedTestMethod(ImplementedUserType arg1, ImplementedUserType arg2, ImplementedUserType arg3){}
 	}
-	
+
 	public enum EParameterType{
 		PRIMITIVE, IMPLEMENTED_USER_TYPE, UNIMPLEMENTED_USER_TYPE
 	}
-	
+
 	public enum EImplementedChildren{
 		NONE, SOME, SOME_PARTLY, ALL
 	}
-	
+
 	public enum EChildrenStatus{
 		NO_CHILDREN,
 		ALL_NOT_IMPLEMENTED,
@@ -75,7 +76,7 @@ public class JavaImplementationStatusResolverTest {
 		ALL_IMPLEMENTED,
 		FULL_MIX
 	}
-	
+
 	public enum EImplementedSignatureElements{
 		PARAMETERS_NOTHING_IMPLEMENTED,
 		PARAMETERS_NAME_IMPLEMENTED,
@@ -84,7 +85,7 @@ public class JavaImplementationStatusResolverTest {
 		NO_PARAMETERS_NAME_IMPLEMENTED,
 		NO_PARAMETERS_NAME_NOT_IMPLEMENTED
 	}
-	
+
 	private class LoaderProvider implements ILoaderProvider{
 		@Override
 		public ModelClassLoader getLoader(boolean create, ClassLoader parent) {
@@ -99,13 +100,13 @@ public class JavaImplementationStatusResolverTest {
 			}
 			return null;
 		}
-		
+
 	}
-	
+
 	public JavaImplementationStatusResolverTest(){
 		fResolver = new JavaImplementationStatusResolver(new LoaderProvider());
 	}
-	
+
 	@Test
 	public void primitiveChoiceStatusTest(ETypeName type){
 		MethodParameterNode parameter = new MethodParameterNode("parameter", type.getTypeName(), "0", false);
@@ -115,13 +116,13 @@ public class JavaImplementationStatusResolverTest {
 			assertEquals(EImplementationStatus.IMPLEMENTED, fResolver.getImplementationStatus(choice));
 		}
 	}
-	
+
 	@Test
 	public void userTypeChoiceStatusTest(boolean abstractChoice, boolean parameterImplemented, EImplementationStatus status){
-//		System.out.println("userTypeChoiceStatusTest(" + abstractChoice + ", " + parameterImplemented + ", " + status + ")");
+		//		System.out.println("userTypeChoiceStatusTest(" + abstractChoice + ", " + parameterImplemented + ", " + status + ")");
 		if(abstractChoice == false && status == EImplementationStatus.PARTIALLY_IMPLEMENTED ||
-			parameterImplemented == false && status != EImplementationStatus.NOT_IMPLEMENTED ||
-			status == EImplementationStatus.IRRELEVANT){
+				parameterImplemented == false && status != EImplementationStatus.NOT_IMPLEMENTED ||
+				status == EImplementationStatus.IRRELEVANT){
 			//invalid combination
 			return;
 		}
@@ -129,25 +130,25 @@ public class JavaImplementationStatusResolverTest {
 
 		assertEquals(status, fResolver.getImplementationStatus(choice));
 	}
-	
+
 	@Test
 	public void parameterStatusTest(EParameterType type, boolean expected, int noOfChildren, EImplementedChildren implementedChoices, EImplementationStatus status){
-//		System.out.println("parameterStatusTest("  + type + ", " + expected + ", " + noOfChildren + ", " + status + ")");
+		//		System.out.println("parameterStatusTest("  + type + ", " + expected + ", " + noOfChildren + ", " + status + ")");
 		MethodParameterNode parameter = createParameter(type, expected, noOfChildren, implementedChoices, status);
 		EImplementationStatus resolvedStatus = fResolver.getImplementationStatus(parameter);
 		assertEquals(status, resolvedStatus);
-		
-//		System.out.println("OK");
+
+		//		System.out.println("OK");
 	}
-	
+
 	@Test
 	public void testCaseStatusTest(int noOfChoices, EImplementedChildren implementedChoices, EImplementationStatus status){
 		TestCaseNode testCase = prepareTestCase(noOfChoices, implementedChoices);
 		EImplementationStatus resolvedStatus = fResolver.getImplementationStatus(testCase);
-//		System.out.println("testCaseStatusTest(" + noOfChoices + ", " + implementedChoices + ", " + status + ") resolved to " + resolvedStatus);
+		//		System.out.println("testCaseStatusTest(" + noOfChoices + ", " + implementedChoices + ", " + status + ") resolved to " + resolvedStatus);
 		assertEquals(status, resolvedStatus);
 	}
-	
+
 	@Test
 	public void constraintStatusTest(){
 		RandomModelGenerator generator = new RandomModelGenerator();
@@ -159,33 +160,33 @@ public class JavaImplementationStatusResolverTest {
 
 	@Test
 	public void methodStatusTest(boolean parentDefinitionInplemented, EImplementedSignatureElements signature, EChildrenStatus childrenStatus, EImplementationStatus status){
-//		System.out.println("methodStatusTest(" + parentDefinitionInplemented + ", " + signature + ", " + childrenStatus + ", " + status + ")");
-//		MethodNode method = prepareMethod(true, EImplementedSignatureElements.PARAMETERS_NOTHING_IMPLEMENTED, EChildrenStatus.ALL_NOT_IMPLEMENTED);
+		//		System.out.println("methodStatusTest(" + parentDefinitionInplemented + ", " + signature + ", " + childrenStatus + ", " + status + ")");
+		//		MethodNode method = prepareMethod(true, EImplementedSignatureElements.PARAMETERS_NOTHING_IMPLEMENTED, EChildrenStatus.ALL_NOT_IMPLEMENTED);
 		MethodNode method = prepareMethod(parentDefinitionInplemented, signature, childrenStatus);
 		EImplementationStatus resolvedStatus = fResolver.getImplementationStatus(method);
-//		System.out.print("Method " + method + " resolved to " + resolvedStatus + "\n");
+		//		System.out.print("Method " + method + " resolved to " + resolvedStatus + "\n");
 		assertEquals(status, resolvedStatus);
 	}
-	
+
 	@Test
-		public void classStatusTest(boolean classDefinitionImplemented, int noOfMethods, EImplementedChildren implementedMethods, @expected EImplementationStatus status){
-	//		System.out.print("classStatusTest(" + classDefinitionImplemented + ", " + noOfMethods + ", " + implementedMethods + ", " + status + ")");
-			ClassNode _class = prepareClass(classDefinitionImplemented, noOfMethods, implementedMethods);
-			EImplementationStatus resolvedStatus = fResolver.getImplementationStatus(_class);
-	//		System.out.print(" resolved to " + resolvedStatus + "\n");
-			assertEquals(status, resolvedStatus);
-		}
+	public void classStatusTest(boolean classDefinitionImplemented, int noOfMethods, EImplementedChildren implementedMethods, @expected EImplementationStatus status){
+		//		System.out.print("classStatusTest(" + classDefinitionImplemented + ", " + noOfMethods + ", " + implementedMethods + ", " + status + ")");
+		ClassNode _class = prepareClass(classDefinitionImplemented, noOfMethods, implementedMethods);
+		EImplementationStatus resolvedStatus = fResolver.getImplementationStatus(_class);
+		//		System.out.print(" resolved to " + resolvedStatus + "\n");
+		assertEquals(status, resolvedStatus);
+	}
 
 	@Test 
 	public void projectStatusTest(EChildrenStatus classes, @expected EImplementationStatus status){
-//		System.out.println("projectStatusTest(" + classes + ", " +  status + ")");
+		//		System.out.println("projectStatusTest(" + classes + ", " +  status + ")");
 		RootNode project = prepareProject(classes);
 		EImplementationStatus resolvedStatus = fResolver.getImplementationStatus(project);
 		assertEquals(status, resolvedStatus);
 	}
-	
+
 	private RootNode prepareProject(EChildrenStatus classes) {
-		RootNode project = new RootNode("project");
+		RootNode project = new RootNode("project", ModelVersionDistributor.getCurrentVersion());
 		if(classes == EChildrenStatus.NO_CHILDREN){
 			return project;
 		}
@@ -232,7 +233,7 @@ public class JavaImplementationStatusResolverTest {
 			class3.addMethod(new MethodNode("unimplementedMethod"));
 			break;
 		}
-		
+
 		project.addClass(class1);
 		project.addClass(class2);
 		project.addClass(class3);
@@ -280,7 +281,7 @@ public class JavaImplementationStatusResolverTest {
 			arg3 = new MethodParameterNode("arg3", ImplementedUserType.class.getCanonicalName(), "", false);
 			break;
 		}
-		
+
 		switch(childrenStatus){
 		case ALL_IMPLEMENTED:
 			arg1.addChoice(new ChoiceNode("choice 1", ImplementedUserType.IMPLEMENTED_VALUE.name()));
@@ -326,7 +327,7 @@ public class JavaImplementationStatusResolverTest {
 
 	private ClassNode prepareClass(boolean classDefinitionImplemented, int noOfMethods, EImplementedChildren implementedMethods) {
 		if((classDefinitionImplemented == false && implementedMethods != EImplementedChildren.NONE)||
-			(noOfMethods == 0 && implementedMethods != EImplementedChildren.NONE)){
+				(noOfMethods == 0 && implementedMethods != EImplementedChildren.NONE)){
 			//invalid combination
 			return null;
 		}
@@ -359,7 +360,7 @@ public class JavaImplementationStatusResolverTest {
 				parameter.addChoice(choice);
 				testData.add(choice);
 			}
-			
+
 		}
 		return new TestCaseNode("dummy", testData);
 	}
@@ -392,12 +393,12 @@ public class JavaImplementationStatusResolverTest {
 
 		return choice;
 	}
-	
+
 	protected MethodParameterNode createEmptyParameter(boolean implemented){
 		String type = implemented ? ImplementedUserType.class.getCanonicalName() : "UnimplementedType";
 		return new MethodParameterNode("parameter", type, "IRRELEVANT", false);
 	}
-	
+
 	protected MethodParameterNode createParameter(EParameterType type, boolean expected, int noOfChildren, EImplementedChildren implementedChoices, EImplementationStatus status){
 		MethodParameterNode parameter = new MethodParameterNode("name", "dummy", "dummy", expected);
 		switch(type){
@@ -422,8 +423,8 @@ public class JavaImplementationStatusResolverTest {
 				parameter.addChoice(new ChoiceNode(String.valueOf(i), ImplementedUserType.IMPLEMENTED_VALUE.name()));
 			}
 		}
-		
+
 		return parameter;
 	}
-	
+
 }

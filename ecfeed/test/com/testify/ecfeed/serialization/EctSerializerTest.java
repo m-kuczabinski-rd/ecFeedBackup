@@ -12,6 +12,7 @@
 package com.testify.ecfeed.serialization;
 
 import static com.testify.ecfeed.testutils.ModelTestUtils.assertElementsEqual;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
 import java.io.ByteArrayInputStream;
@@ -21,9 +22,17 @@ import java.io.OutputStream;
 
 import org.junit.Test;
 
+import com.testify.ecfeed.model.ChoiceNode;
+import com.testify.ecfeed.model.ChoicesParentStatement;
 import com.testify.ecfeed.model.ClassNode;
+import com.testify.ecfeed.model.Constraint;
+import com.testify.ecfeed.model.ConstraintNode;
+import com.testify.ecfeed.model.EStatementRelation;
 import com.testify.ecfeed.model.GlobalParameterNode;
 import com.testify.ecfeed.model.MethodNode;
+import com.testify.ecfeed.model.MethodParameterNode;
+import com.testify.ecfeed.model.ModelConverter;
+import com.testify.ecfeed.model.ModelVersionDistributor;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.serialization.ect.EctParser;
 import com.testify.ecfeed.serialization.ect.EctSerializer;
@@ -107,11 +116,11 @@ public class EctSerializerTest {
 
 	@Test
 	public void wrongTypeStreamTest(){
-		//		RootNode r = fGenerator.generateModel(3);
-		RootNode r = new RootNode("model");
+		int version = ModelVersionDistributor.getCurrentVersion();
+		RootNode r = new RootNode("model", version);
 
 		OutputStream ostream = new ByteArrayOutputStream();
-		EctSerializer serializer = new EctSerializer(ostream);
+		EctSerializer serializer = new EctSerializer(ostream, version);
 		try {
 			serializer.serialize(r);
 			InputStream istream = new ByteArrayInputStream(((ByteArrayOutputStream)ostream).toByteArray());
@@ -159,4 +168,59 @@ public class EctSerializerTest {
 	//			}
 	//		}
 	//	}
+
+	private RootNode createModel(int version) {
+
+		ChoiceNode choice = new ChoiceNode("choice", "0");
+
+		MethodParameterNode parameter = new MethodParameterNode("parameter", "int", "0", false);
+		parameter.addChoice(choice);
+
+		MethodNode methodNode = new MethodNode("testMethod1");
+		methodNode.addParameter(parameter);
+
+		Constraint constraint = new Constraint(
+				new ChoicesParentStatement(parameter, EStatementRelation.EQUAL, choice),
+				new ChoicesParentStatement(parameter, EStatementRelation.EQUAL, choice));
+
+		ConstraintNode constraintNode = new ConstraintNode("name1", constraint);
+		methodNode.addConstraint(constraintNode);
+
+		ClassNode classNode = new ClassNode("com.example.TestClass", false, null);
+		classNode.addMethod(methodNode);
+
+		RootNode model = new RootNode("model", version);
+		model.addClass(classNode);
+		model.setVersion(version);
+
+		return model;
+	}
+
+	private String getSerializedString(RootNode convertedModel) {
+		OutputStream convertedModelStream = new ByteArrayOutputStream();
+		IModelSerializer convertedSerializer = 
+				new EctSerializer(convertedModelStream, ModelVersionDistributor.getCurrentVersion());
+
+		try {
+			convertedSerializer.serialize(convertedModel);
+		} catch (Exception e) {
+			fail("Unexpected exception: " + e.getMessage());
+		}
+
+		return convertedModelStream.toString();
+	}
+
+	@Test
+	public void serializerTestWithModelConversion(){
+		RootNode convertedModel  = ModelConverter.convertToCurrentVersion(createModel(0));
+		String convertedString = getSerializedString(convertedModel);
+
+		RootNode currentModel = createModel(ModelVersionDistributor.getCurrentVersion());
+		String currentString = getSerializedString(currentModel);
+
+		assertEquals(ModelVersionDistributor.getCurrentVersion(), convertedModel.getModelVersion());
+		assertEquals(ModelVersionDistributor.getCurrentVersion(), currentModel.getModelVersion());
+
+		assertEquals(currentString, convertedString);
+	}
 }

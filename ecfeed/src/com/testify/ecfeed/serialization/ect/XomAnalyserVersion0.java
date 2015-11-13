@@ -11,6 +11,11 @@ package com.testify.ecfeed.serialization.ect;
 public class XomAnalyserVersion0 extends XomAnalyser {
 
 	@Override
+	protected int getModelVersion() {
+		return 0;
+	}
+
+	@Override
 	protected String getChoiceNodeName() {
 		return SerializationHelperVersion0.getChoiceNodeName();
 	}
@@ -34,4 +39,6 @@ public class XomAnalyserVersion0 extends XomAnalyser {
 	protected String getStatementParameterAttributeName() {
 		return SerializationHelperVersion0.getStatementParameterAttributeName();
 	}
+
+
 }

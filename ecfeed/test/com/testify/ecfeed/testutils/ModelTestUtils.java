@@ -25,6 +25,7 @@ import com.testify.ecfeed.model.ConstraintNode;
 import com.testify.ecfeed.model.GlobalParameterNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.MethodParameterNode;
+import com.testify.ecfeed.model.ModelVersionDistributor;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.StaticStatement;
 import com.testify.ecfeed.model.TestCaseNode;
@@ -60,7 +61,7 @@ public class ModelTestUtils {
 		case PARAMETER: return new MethodParameterNode(name, "int", "0", false);
 		case METHOD_PARAMETER: return new MethodParameterNode(name, "int", "0", false);
 		case GLOBAL_PARAMETER: return new GlobalParameterNode(name, "int");
-		case PROJECT: return new RootNode(name);
+		case PROJECT: return new RootNode(name, ModelVersionDistributor.getCurrentVersion());
 		case TEST_CASE: return new TestCaseNode(name, new ArrayList<ChoiceNode>());
 		}
 		return null;

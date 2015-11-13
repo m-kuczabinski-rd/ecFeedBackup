@@ -14,7 +14,7 @@ public class SerializationHelperVersion1 {
 	private static final String STATEMENT_PARAMETER_ATTRIBUTE_NAME_VERSION_1 = "parameter";
 	private static final String CHOICE_NODE_NAME_VERSION_1 = "Choice";
 	private static final String CHOICE_ATTRIBUTE_NAME_VERSION_1 = "choice";
-	private static final String STATEMENT_CHOICE_ATTRIBUTE_NAME_VERSION_1 = "partition";
+	private static final String STATEMENT_CHOICE_ATTRIBUTE_NAME_VERSION_1 = "choice";
 
 	public static String getChoiceNodeName() {
 		return CHOICE_NODE_NAME_VERSION_1;

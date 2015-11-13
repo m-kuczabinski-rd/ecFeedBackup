@@ -11,6 +11,7 @@
 
 package com.testify.ecfeed.serialization.ect;
 
+import static com.testify.ecfeed.serialization.ect.Constants.ANDROID_RUNNER_ATTRIBUTE_NAME;
 import static com.testify.ecfeed.serialization.ect.Constants.CLASS_NODE_NAME;
 import static com.testify.ecfeed.serialization.ect.Constants.CONSTRAINT_CHOICE_STATEMENT_NODE_NAME;
 import static com.testify.ecfeed.serialization.ect.Constants.CONSTRAINT_EXPECTED_STATEMENT_NODE_NAME;
@@ -22,14 +23,13 @@ import static com.testify.ecfeed.serialization.ect.Constants.DEFAULT_EXPECTED_VA
 import static com.testify.ecfeed.serialization.ect.Constants.METHOD_NODE_NAME;
 import static com.testify.ecfeed.serialization.ect.Constants.PARAMETER_IS_EXPECTED_ATTRIBUTE_NAME;
 import static com.testify.ecfeed.serialization.ect.Constants.PARAMETER_IS_LINKED_ATTRIBUTE_NAME;
+import static com.testify.ecfeed.serialization.ect.Constants.PARAMETER_IS_RUN_ON_ANDROID_ATTRIBUTE_NAME;
 import static com.testify.ecfeed.serialization.ect.Constants.PARAMETER_LINK_ATTRIBUTE_NAME;
 import static com.testify.ecfeed.serialization.ect.Constants.ROOT_NODE_NAME;
 import static com.testify.ecfeed.serialization.ect.Constants.TEST_CASE_NODE_NAME;
 import static com.testify.ecfeed.serialization.ect.Constants.TEST_SUITE_NAME_ATTRIBUTE;
 import static com.testify.ecfeed.serialization.ect.Constants.TYPE_NAME_ATTRIBUTE;
 import static com.testify.ecfeed.serialization.ect.Constants.VALUE_ATTRIBUTE;
-import static com.testify.ecfeed.serialization.ect.Constants.PARAMETER_IS_RUN_ON_ANDROID_ATTRIBUTE_NAME;
-import static com.testify.ecfeed.serialization.ect.Constants.ANDROID_RUNNER_ATTRIBUTE_NAME;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -63,6 +63,7 @@ public abstract class XomAnalyser {
 
 	private WhiteCharConverter fWhiteCharConverter = new WhiteCharConverter();
 
+	protected abstract int getModelVersion();
 	protected abstract String getChoiceNodeName();
 	protected abstract String getChoiceAttributeName();
 	protected abstract String getStatementChoiceAttributeName();
@@ -73,7 +74,7 @@ public abstract class XomAnalyser {
 		assertNodeTag(element.getQualifiedName(), ROOT_NODE_NAME);
 		String name = getElementName(element);
 
-		RootNode root = new RootNode(name);
+		RootNode root = new RootNode(name, getModelVersion());
 		root.setDescription(parseComments(element));
 
 		//parameters must be parsed before classes

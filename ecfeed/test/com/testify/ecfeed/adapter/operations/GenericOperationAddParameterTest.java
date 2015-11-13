@@ -21,6 +21,7 @@ import com.testify.ecfeed.junit.annotations.Constraints;
 import com.testify.ecfeed.junit.annotations.EcModel;
 import com.testify.ecfeed.junit.annotations.Generator;
 import com.testify.ecfeed.model.MethodParameterNode;
+import com.testify.ecfeed.model.ModelVersionDistributor;
 import com.testify.ecfeed.model.ParametersParentNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.testutils.ENodeType;
@@ -34,11 +35,11 @@ public class GenericOperationAddParameterTest{
 	@Test
 	public void executeTest(ENodeType parentType, EIndexValue indexValue, boolean nameExists, boolean success){
 
-//		parentType = ENodeType.METHOD;
-//		indexValue = EIndexValue.NO_VALUE;
-//		nameExists = false;
-//		success = true;
-//
+		//		parentType = ENodeType.METHOD;
+		//		indexValue = EIndexValue.NO_VALUE;
+		//		nameExists = false;
+		//		success = true;
+		//
 		ParametersParentNode parent = getParent(parentType);
 
 		parent.addParameter(new MethodParameterNode("arg1", "int", "0", false));
@@ -151,9 +152,9 @@ public class GenericOperationAddParameterTest{
 
 	private ParametersParentNode getParent(ENodeType parentType) {
 		switch(parentType){
-		case PROJECT: return new RootNode("Project");
-		case CLASS: return new RootNode("Class");
-		case METHOD: return new RootNode("method");
+		case PROJECT: return new RootNode("Project", ModelVersionDistributor.getCurrentVersion());
+		case CLASS: return new RootNode("Class", ModelVersionDistributor.getCurrentVersion());
+		case METHOD: return new RootNode("method", ModelVersionDistributor.getCurrentVersion());
 		default: return null;
 		}
 	}

@@ -54,6 +54,7 @@ import com.testify.ecfeed.model.EStatementRelation;
 import com.testify.ecfeed.model.ExpectedValueStatement;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.MethodParameterNode;
+import com.testify.ecfeed.model.ModelVersionDistributor;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.StatementArray;
 import com.testify.ecfeed.model.StaticStatement;
@@ -103,7 +104,7 @@ public class RandomModelGenerator {
 	public RootNode generateModel(int classes){
 		String name = generateString(REGEX_ROOT_NODE_NAME);
 
-		RootNode root = new RootNode(name);
+		RootNode root = new RootNode(name, ModelVersionDistributor.getCurrentVersion());
 
 		for(int i = 0; i < classes; i++){
 			root.addClass(generateClass(rand.nextInt(MAX_METHODS)));
@@ -449,8 +450,8 @@ public class RandomModelGenerator {
 	private String generateString(String regex){
 		return "name" + id++;
 
-//		Xeger generator = new Xeger(regex);
-//		return generator.generate();
+		//		Xeger generator = new Xeger(regex);
+		//		return generator.generate();
 	}
 
 	//DEBUG
@@ -461,7 +462,7 @@ public class RandomModelGenerator {
 		System.out.println(fStringifier.stringify(_class, 0));
 	}
 
-//	@Test
+	//	@Test
 	public void testChoiceGeneration(){
 		System.out.println("Childless choices:");
 		for(String type : new String[]{"String"}){
@@ -477,7 +478,7 @@ public class RandomModelGenerator {
 		}
 	}
 
-//	@Test
+	//	@Test
 	public void testParameterGenerator(){
 		for(String type : SUPPORTED_TYPES){
 			for(boolean expected : new Boolean[]{true, false}){
@@ -491,13 +492,13 @@ public class RandomModelGenerator {
 		}
 	}
 
-//	@Test
+	//	@Test
 	public void testMethodGenerator(){
 		MethodNode m = generateMethod(5, 5, 5);
 		System.out.println(fStringifier.stringify(m, 0));
 	}
 
-//	@Test
+	//	@Test
 	public void testTestCaseGenerator(){
 		MethodNode m = generateMethod(5, 0, 0);
 		TestCaseNode tc = generateTestCase(m);
@@ -505,14 +506,14 @@ public class RandomModelGenerator {
 		System.out.println(fStringifier.stringify(tc, 0));
 	}
 
-//	@Test
+	//	@Test
 	public void testGenerateConstraint(){
 		MethodNode m = generateMethod(10, 0, 0);
 		ConstraintNode c = generateConstraint(m);
 		System.out.println(fStringifier.stringify(c, 2));
 	}
 
-//	@Test
+	//	@Test
 	public void testGenerateStaticStatement(){
 		for(int i = 0; i < 10; i++){
 			StaticStatement statement = generateStaticStatement();
@@ -520,7 +521,7 @@ public class RandomModelGenerator {
 		}
 	}
 
-//	@Test
+	//	@Test
 	public void testGenerateChoicesParentStatement(){
 		for(int i = 0; i < 10; i++){
 			MethodNode m = generateMethod(10, 0, 0);
@@ -529,7 +530,7 @@ public class RandomModelGenerator {
 		}
 	}
 
-//	@Test
+	//	@Test
 	public void testGenerateExpectedValueStatement(){
 		for(int i = 0; i < 10; i++){
 			MethodNode m = generateMethod(10, 0, 0);
@@ -538,7 +539,7 @@ public class RandomModelGenerator {
 		}
 	}
 
-//	@Test
+	//	@Test
 	public void testGenerateStatementArray(){
 		for(int i = 0; i < 10; i++){
 			MethodNode m = generateMethod(10, 0, 0);

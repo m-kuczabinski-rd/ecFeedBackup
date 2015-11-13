@@ -47,17 +47,19 @@ import org.eclipse.ui.part.FileEditorInput;
 
 import com.testify.ecfeed.adapter.CachedImplementationStatusResolver;
 import com.testify.ecfeed.adapter.ModelOperationManager;
+import com.testify.ecfeed.model.ModelConverter;
+import com.testify.ecfeed.model.ModelVersionDistributor;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.serialization.IModelParser;
 import com.testify.ecfeed.serialization.IModelSerializer;
 import com.testify.ecfeed.serialization.ParserException;
 import com.testify.ecfeed.serialization.ect.EctParser;
 import com.testify.ecfeed.serialization.ect.EctSerializer;
+import com.testify.ecfeed.ui.common.Constants;
+import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.testify.ecfeed.ui.editor.utils.ExceptionCatchDialog;
 import com.testify.ecfeed.utils.SystemLogger;
-import com.testify.ecfeed.ui.common.Constants;
-import com.testify.ecfeed.ui.common.Messages;
 
 public class ModelEditor extends FormEditor implements IFileInfoProvider{
 
@@ -165,20 +167,21 @@ public class ModelEditor extends FormEditor implements IFileInfoProvider{
 	}
 
 	private RootNode createModel() {
-		RootNode root = null;
 		IEditorInput input = getEditorInput();
-		if(input instanceof FileEditorInput){
-			IFile file = ((FileEditorInput)input).getFile();
-			InputStream iStream;
-			try {
-				IModelParser parser = new EctParser();
-				iStream = file.getContents();
-				root = parser.parseModel(iStream);
-			} catch (CoreException | ParserException e) {
-				ExceptionCatchDialog.display("Can not parse model.", e.getMessage());
-			}
+		if(!(input instanceof FileEditorInput)) {
+			return null;
 		}
-		return root;
+
+		IFile file = ((FileEditorInput)input).getFile();
+		try {
+			IModelParser parser = new EctParser();
+			InputStream iStream = file.getContents();
+			return ModelConverter.convertToCurrentVersion(parser.parseModel(iStream));
+
+		} catch (CoreException | ParserException e) {
+			ExceptionCatchDialog.display("Can not parse model.", e.getMessage());
+			return null;
+		}
 	}
 
 	@Override
@@ -221,8 +224,8 @@ public class ModelEditor extends FormEditor implements IFileInfoProvider{
 	private void refreshSourceViewer()
 	{
 		ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-		IModelSerializer serializer = new EctSerializer(outputStream);
-
+		IModelSerializer serializer = 
+				new EctSerializer(outputStream, ModelVersionDistributor.getCurrentVersion());
 		try{
 			serializer.serialize(fModel);
 		}
@@ -260,8 +263,9 @@ public class ModelEditor extends FormEditor implements IFileInfoProvider{
 
 	private void saveEditor(IFile file, IProgressMonitor monitor){
 		try{
-			FileOutputStream fout = new FileOutputStream(file.getLocation().toOSString());
-			IModelSerializer serializer = new EctSerializer(fout);
+			FileOutputStream outputStream = new FileOutputStream(file.getLocation().toOSString());
+			IModelSerializer serializer = 
+					new EctSerializer(outputStream, ModelVersionDistributor.getCurrentVersion());
 			serializer.serialize(fModel);
 			refreshWorkspace(monitor);
 			commitPages(true);

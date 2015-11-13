@@ -43,6 +43,7 @@ import com.testify.ecfeed.model.EStatementRelation;
 import com.testify.ecfeed.model.ExpectedValueStatement;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.MethodParameterNode;
+import com.testify.ecfeed.model.ModelVersionDistributor;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.model.StatementArray;
 import com.testify.ecfeed.model.StaticStatement;
@@ -89,7 +90,8 @@ public class XmlParserSerializerTest {
 			for(int i = 0; i < TEST_RUNS; ++i){
 				RootNode model = createRootNode(rand.nextInt(MAX_CLASSES) + 1);
 				ByteArrayOutputStream ostream = new ByteArrayOutputStream();
-				IModelSerializer serializer = new EctSerializer(ostream);
+				IModelSerializer serializer = 
+						new EctSerializer(ostream, ModelVersionDistributor.getCurrentVersion());
 				IModelParser parser = new EctParser();
 				serializer.serialize(model);
 				ByteArrayInputStream istream = new ByteArrayInputStream(ostream.toByteArray());
@@ -107,9 +109,18 @@ public class XmlParserSerializerTest {
 	}
 
 	@Test
-	public void parseChoiceTest(){
+	public void parseChoiceTestVersion0() {
+		parseChoiceTest(0);
+	}
+
+	@Test
+	public void parseChoiceTestVersion1() {
+		parseChoiceTest(1);
+	}	
+
+	public void parseChoiceTest(int version) {
 		try{
-			RootNode root = new RootNode("root");
+			RootNode root = new RootNode("root", version);
 			ClassNode classNode = new ClassNode("classNode");
 			MethodNode method = new MethodNode("method");
 			MethodParameterNode parameter = new MethodParameterNode("parameter", com.testify.ecfeed.adapter.java.Constants.TYPE_NAME_STRING, "0", false);
@@ -125,7 +136,7 @@ public class XmlParserSerializerTest {
 			method.addTestCase(testCase);
 
 			ByteArrayOutputStream ostream = new ByteArrayOutputStream();
-			IModelSerializer serializer = new EctSerializer(ostream);
+			IModelSerializer serializer = new EctSerializer(ostream, version);
 			IModelParser parser = new EctParser();
 			serializer.serialize(root);
 
@@ -145,7 +156,8 @@ public class XmlParserSerializerTest {
 	@Test
 	public void parseConditionStatementTest(){
 		try{
-			RootNode root = new RootNode("root");
+			int version = ModelVersionDistributor.getCurrentVersion();
+			RootNode root = new RootNode("root", version);
 			ClassNode classNode = new ClassNode("classNode");
 			MethodNode method = new MethodNode("method");
 			MethodParameterNode choicesParentParameter =
@@ -183,7 +195,7 @@ public class XmlParserSerializerTest {
 			method.addConstraint(expectedConstraintNode);
 
 			ByteArrayOutputStream ostream = new ByteArrayOutputStream();
-			IModelSerializer serializer = new EctSerializer(ostream);
+			IModelSerializer serializer = new EctSerializer(ostream, version);
 			serializer.serialize(root);
 
 			ByteArrayInputStream istream = new ByteArrayInputStream(ostream.toByteArray());
@@ -201,7 +213,7 @@ public class XmlParserSerializerTest {
 	}
 
 	protected RootNode createRootNode(int classes) {
-		RootNode root = new RootNode(randomName());
+		RootNode root = new RootNode(randomName(), ModelVersionDistributor.getCurrentVersion());
 		for(int i = 0; i < classes; ++i){
 			root.addClass(createClassNode(rand.nextInt(MAX_METHODS) + 1));
 		}
