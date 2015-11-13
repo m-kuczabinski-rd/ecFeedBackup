@@ -39,6 +39,8 @@ import com.testify.ecfeed.utils.ExceptionHelper;
 
 public class EctParser implements IModelParser {
 
+	private final static String UNKNOWN_VERSION = "Ect file has unknown version: ";
+	
 	Builder fBuilder = new Builder();
 	XomAnalyser fXomAnalyser = null;
 
@@ -51,7 +53,7 @@ public class EctParser implements IModelParser {
 			int version = XomModelVersionDetector.getVersion(element);
 
 			if (version > ModelVersionDistributor.getCurrentVersion()) {
-				ExceptionHelper.reportRuntimeException("Ect file has an unknown version: " + version); // XYX
+				ExceptionHelper.reportRuntimeException(UNKNOWN_VERSION + version);
 			}
 
 			createXomAnalyser(version);
