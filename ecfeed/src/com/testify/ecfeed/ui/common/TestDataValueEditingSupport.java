@@ -12,7 +12,6 @@
 package com.testify.ecfeed.ui.common;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -37,7 +36,10 @@ public class TestDataValueEditingSupport extends EditingSupport {
 	private ITestDataEditorListener fSetValueListener;
 	private MethodNode fMethod;
 
-	public TestDataValueEditingSupport(MethodNode method, TableViewer viewer, List<ChoiceNode> testData, ITestDataEditorListener setValueListener) {
+	public TestDataValueEditingSupport(
+			MethodNode method, 
+			TableViewer viewer, 
+			ITestDataEditorListener setValueListener) {
 		super(viewer);
 		fViewer = viewer;
 		fSetValueListener = setValueListener;

@@ -81,7 +81,8 @@ public class TestDataViewer extends TableViewerSection implements ITestDataEdito
 				return getColor(element);
 			}
 		});
-		fValueEditingSupport = new TestDataValueEditingSupport(null, getTableViewer(), null, this);
+
+		fValueEditingSupport = new TestDataValueEditingSupport(null, getTableViewer(), this);
 		valueColumn.setEditingSupport(fValueEditingSupport);
 	}
 

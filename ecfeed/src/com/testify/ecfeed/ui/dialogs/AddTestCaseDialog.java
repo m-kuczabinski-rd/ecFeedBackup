@@ -149,7 +149,8 @@ public class AddTestCaseDialog extends TitleAreaDialog implements ITestDataEdito
 				return getColor(element);
 			}
 		});
-		choiceViewerColumn.setEditingSupport(new TestDataValueEditingSupport(fMethod, fTestDataViewer, fTestData, this));
+
+		choiceViewerColumn.setEditingSupport(new TestDataValueEditingSupport(fMethod, fTestDataViewer, this)); 
 
 		fTestDataViewer.setContentProvider(new ArrayContentProvider());
 		fTestDataViewer.setInput(fTestData);
