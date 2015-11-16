@@ -448,6 +448,9 @@ public class ConstraintViewer extends TreeViewerSection {
 		}
 
 		public void setInput(AbstractStatement statement){
+			if (statement == null) {
+				return;
+			}
 			fStatementIf = StatementInterfaceFactory.getInterface(statement, ConstraintViewer.this);
 			fStatementCombo.setItems(statementComboItems(statement));
 			fStatementCombo.setText(statement.getLeftOperandName());
@@ -616,6 +619,7 @@ public class ConstraintViewer extends TreeViewerSection {
 		super.setInput(constraintNode.getConstraint());
 		fStatementEditor.refreshConditionCombo();
 		fStatementEditor.setConstraint(constraintNode);
+		fStatementEditor.setInput(fSelectedStatement);
 
 		getTreeViewer().expandAll();
 		if(getSelectedElement() == null){
