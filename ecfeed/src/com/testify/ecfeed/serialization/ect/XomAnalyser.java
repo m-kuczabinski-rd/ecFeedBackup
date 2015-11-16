@@ -491,12 +491,10 @@ public abstract class XomAnalyser {
 	}
 
 	protected String getAttributeValue(Element element, String attributeName) throws ParserException{
-
 		String value = element.getAttributeValue(attributeName);
 		if(value == null){
 			ParserException.report(Messages.MISSING_ATTRIBUTE(element, attributeName));
 		}
-
 		return fWhiteCharConverter.decode(value);
 	}
 
@@ -532,7 +530,7 @@ public abstract class XomAnalyser {
 			Element comments = element.getChildElements(Constants.COMMENTS_BLOCK_TAG_NAME).get(0);
 			if(comments.getChildElements(Constants.TYPE_COMMENTS_BLOCK_TAG_NAME).size() > 0){
 				Element typeComments = comments.getChildElements(Constants.TYPE_COMMENTS_BLOCK_TAG_NAME).get(0);
-				return typeComments.getValue();
+				return fWhiteCharConverter.decode(typeComments.getValue());
 			}
 		}
 		return null;
