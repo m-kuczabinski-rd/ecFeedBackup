@@ -14,7 +14,7 @@ package com.testify.ecfeed.adapter.java;
 public class Messages {
 
 	public static final String PARTITION_NAME_NOT_UNIQUE_PROBLEM = "Choice name must be unique within a parameter or parent choice";
-	public static final String PARTITION_NAME_REGEX_PROBLEM = "Choice name must contain between 1 and 64 characters. It should contain alphanumeric characters, spaces, or -_ .";
+	public static final String PARTITION_NAME_REGEX_PROBLEM = "Choice name must be 1 to 64 characters long.\nIt should contain alphanumeric characters, spaces, or -_ .\nIt must not start with space.";
 	public static final String PARTITION_VALUE_PROBLEM(String value){
 		return "Value " + value + " is not valid for given parameter.\n\n" +
 				"Choice value must fit to type and range of the represented parameter.\n" +
