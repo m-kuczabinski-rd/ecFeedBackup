@@ -234,13 +234,22 @@ public class TestCasesViewer extends CheckboxTreeViewerSection {
 		return fParentMethod;
 	}
 
-	private boolean executionEnabled(){
-		Collection<TestCaseNode> checked = getCheckedTestCases();
-		if(checked.size() == 0) return false;
-		if(fMethodIf.getImplementationStatus() == EImplementationStatus.NOT_IMPLEMENTED) return false;
-		for(TestCaseNode tc : checked){
-			if(fMethodIf.getImplementationStatus(tc) != EImplementationStatus.IMPLEMENTED) return false;
+	private boolean executionEnabled() {
+		if (fMethodIf.getImplementationStatus() == EImplementationStatus.NOT_IMPLEMENTED) { 
+			return false;
 		}
+
+		Collection<TestCaseNode> checked = getCheckedTestCases();
+		if (checked.size() == 0) {
+			return false;
+		}
+
+		for (TestCaseNode tc : checked) {
+			if (fMethodIf.getImplementationStatus(tc) != EImplementationStatus.IMPLEMENTED) {
+				return false;
+			}
+		}
+
 		return true;
 	}
 

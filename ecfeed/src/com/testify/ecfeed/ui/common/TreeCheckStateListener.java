@@ -19,46 +19,73 @@ import org.eclipse.jface.viewers.TreeNodeContentProvider;
 public class TreeCheckStateListener implements ICheckStateListener{
 	private TreeNodeContentProvider fContentProvider;
 	private CheckboxTreeViewer fViewer;
-	
+
 	public TreeCheckStateListener(CheckboxTreeViewer treeViewer){
 		fViewer = treeViewer;
 		fContentProvider = (TreeNodeContentProvider)treeViewer.getContentProvider();
 	}
-	
+
 	@Override
 	public void checkStateChanged(CheckStateChangedEvent event) {
 		Object element = event.getElement();
 		boolean checked = event.getChecked();
-		
+
+		if (checked) {
+			setAllCheckedState(element);
+		} else {
+			setNotCheckedState(element);
+		}
+
 		fViewer.setSubtreeChecked(element, checked);
-		setParentGreyed(element);
+		setParentState(element);
 	}
-	
+
 	protected CheckboxTreeViewer getViewer(){
 		return fViewer;
 	}
-	
+
 	protected TreeNodeContentProvider getContentProvider(){
 		return fContentProvider;
 	}
-	
-	protected void setParentGreyed(Object element) {
+
+	protected void setParentState(Object element) {
 		Object parent = fContentProvider.getParent(element);
-		if(parent == null) return;
-		Object[] children = fContentProvider.getChildren(parent);
-		int checkedChildrenCount = getCheckedChildrenCount(parent);
-		
-		if(checkedChildrenCount == 0){
-			fViewer.setGrayChecked(parent, false);
+		if(parent == null) {
+			return;
 		}
-		else if(checkedChildrenCount < children.length){
-			fViewer.setGrayChecked(parent, true);
+		setElementState(parent);
+		setParentState(parent);
+	}
+
+	private void setElementState(Object element) {
+		int checkedChildrenCount = getCheckedChildrenCount(element);
+		if (checkedChildrenCount == 0) {
+			setNotCheckedState(element);
+			return;
 		}
-		else{
-			fViewer.setGrayed(parent, false);
-			fViewer.setChecked(parent, true);
+
+		int allChildrenCount = fContentProvider.getChildren(element).length;
+		if (checkedChildrenCount < allChildrenCount) {
+			setPartlyCheckedState(element);
+			return;
 		}
-		setParentGreyed(parent);
+
+		setAllCheckedState(element);
+	}
+
+	private void setNotCheckedState(Object element) {
+		fViewer.setGrayed(element, false);
+		fViewer.setChecked(element, false);
+	}
+
+	private void setAllCheckedState(Object element) {
+		fViewer.setGrayed(element, false);
+		fViewer.setChecked(element, true);
+	}
+
+	private void setPartlyCheckedState(Object element) {
+		fViewer.setGrayed(element, true);
+		fViewer.setChecked(element, true);
 	}
 
 	private int getCheckedChildrenCount(Object parent) {
