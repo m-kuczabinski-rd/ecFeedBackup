@@ -9,6 +9,13 @@
 #     Patryk Chamuczynski (p.chamuczynski(at)radytek.com) - initial implementation
 #-------------------------------------------------------------------------------
 
+Version 1.9.0
+ - Android support for interactive test execution
+ - "source" tab in the editor
+ - Changed XML tag names in source to correspond with model node names
+ - Fixed n-wise generation with global parameters
+ - other bugfixes
+
 Version 1.8.2
  - bugfixes
 
