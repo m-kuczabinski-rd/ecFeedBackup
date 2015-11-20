@@ -90,7 +90,7 @@ public class ModelEditor extends FormEditor implements IFileInfoProvider{
 
 		@Override
 		public String getName() {
-			return "XML";
+			return "source";
 		}
 
 		@Override
