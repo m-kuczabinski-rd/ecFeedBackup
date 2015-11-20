@@ -105,4 +105,12 @@ public class GlobalParameterNode extends AbstractParameterNode {
 		}
 		return result;
 	}
+
+	public List<ChoiceNode> getChoicesCopy() {
+		List<ChoiceNode> copy = new ArrayList<>();
+		for(ChoiceNode choice : getChoices()){
+			copy.add(choice.getCopy());
+		}
+		return copy;
+	}
 }
