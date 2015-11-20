@@ -97,10 +97,10 @@ public class MethodParameterNode extends AbstractParameterNode {
 	public List<ChoiceNode> getChoices() {
 		if (isLinked() && fLink != null) {
 			if (fChoicesCopy == null) {
-				fChoicesCopy = fLink.getCopy().getChoices();
+				fChoicesCopy = fLink.getChoicesCopy();
 				return fChoicesCopy;
 			}
-			List<ChoiceNode> temp = fLink.getCopy().getChoices();
+			List<ChoiceNode> temp = fLink.getChoicesCopy();
 			if(!choiceListsMatch(fChoicesCopy, temp))
 				fChoicesCopy = temp;
 				return fChoicesCopy;

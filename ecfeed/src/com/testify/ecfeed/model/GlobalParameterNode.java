@@ -33,7 +33,6 @@ public class GlobalParameterNode extends AbstractParameterNode {
 	@Override
 	public GlobalParameterNode getCopy() {
 		GlobalParameterNode copy = new GlobalParameterNode(getName(), getType());
-		copy.setParent(getParent());
 		for(ChoiceNode choice : getChoices()){
 			copy.addChoice(choice.getCopy());
 		}
@@ -105,5 +104,13 @@ public class GlobalParameterNode extends AbstractParameterNode {
 			}
 		}
 		return result;
+	}
+
+	public List<ChoiceNode> getChoicesCopy() {
+		List<ChoiceNode> copy = new ArrayList<>();
+		for(ChoiceNode choice : getChoices()){
+			copy.add(choice.getCopy());
+		}
+		return copy;
 	}
 }

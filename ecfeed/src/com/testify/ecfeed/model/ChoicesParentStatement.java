@@ -186,13 +186,6 @@ public class ChoicesParentStatement extends AbstractStatement implements IRelati
 		public Object accept(IStatementVisitor visitor) throws Exception {
 			return visitor.visit(this);
 		}
-		
-		public AbstractParameterNode getReferencedParameter() {
-			if(fParameter.isLinked())
-				return fParameter.getLink();
-			else
-				return fParameter;
-		}
 
 	}
 
