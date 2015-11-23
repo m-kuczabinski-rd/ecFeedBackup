@@ -1,12 +1,88 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
-      id="com.testify.ecfeed.feature"
+      id="com.testify.ecfeed"
       label="ecFeed"
-      version="1.9.0.qualifier">
+      version="1.9.0.qualifier"
+      provider-name="Testify A.S.">
 
    <description url="https://github.com/testify-no/ecFeed">
       Test data generator and jUnit test execution framework based
 on Equivalence Class model.
+
+Changelog:
+
+Version 1.9.0
+ - Android support for interactive test execution
+ - &quot;source&quot; tab in the editor
+ - Changed XML tag names in source to correspond with model node names
+ - Fixed n-wise generation with global parameters
+ - other bugfixes
+
+Version 1.8.2
+ - bugfixes
+
+Version 1.8.0
+ - Global parameters
+ - Model documentation
+ - &quot;Go to implementation&quot; button
+ - &quot;Browse...&quot; button for parameter type
+ - minor fixes and improvements
+
+Version 1.7.0
+ - Automatic stub implementation
+ - Undo/Redo
+ - Drag and drop
+ - Improved copy and paste
+ - Improved context menu
+ - Multiselection in most viewers
+
+Version 1.6.0
+ - Abstract models
+ - Copy&amp;Paste
+ - Introduced context menu for model viewer
+ - Unified partitioned and expected (parameters)
+ - User type parameters (enums)
+ - Expected values constraining
+
+Version 1.5.0
+ - Execute online and static tests from GUI
+ - Calculate coverage dialog
+ - Assertion exceptions point parameter configuration causing exception
+
+Version 1.4.2
+ - Fixed italic font style for inherited labels (Windows)
+
+Version 1.4.1
+ - Labels
+ - Fixed resizing of viewers during resizing for editor part
+ - fixed edit both partition name and value on Partition details page 
+
+Version 1.4.0
+ - Adaptive random generator
+ - hierarchical model 
+ - removed possibility to define relations other than &apos;!=&quot; and &apos;=&apos;
+
+Version 1.3.1
+ - Critical bugfixes
+
+Version 1.3.0
+ - Random test generator
+ - Online test generation and execution
+
+Version 1.2.1
+ - N-Wise test generator
+ - Expected values
+ - handling constraints by generators
+
+Version 1.1.0
+ - Automatic test generation by Cartesian Product generator
+
+
+Version 1.0.0
+ - creating a model from source code
+ - editing the model
+ - manual creation of test cases
+ - Executing test cases defined in the model
    </description>
 
    <copyright>
