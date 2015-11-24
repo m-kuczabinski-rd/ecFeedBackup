@@ -60,6 +60,7 @@ public class RandomizedNWiseAlgorithm<E> extends AbstractNWiseAlgorithm<E> {
 			} else {
 				// GeneratorException.report("Cannot generate test for " +
 				// toString(nTuple));
+				System.out.println("randomTest is nul!!!" + fRemainingTuples.size());
 				fRemainingTuples.add(nTuple);
 			}
 		}
@@ -142,7 +143,7 @@ public class RandomizedNWiseAlgorithm<E> extends AbstractNWiseAlgorithm<E> {
 				// one extra point for the current tuple
 				int cov = getCoverage(candidate) + 1;
 				// System.out.println("[RB] cov: " + cov);
-				if (cov > bestCov) {
+				if (cov >= bestCov) {
 					bestTest = candidate;
 					bestCov = cov;
 				}
