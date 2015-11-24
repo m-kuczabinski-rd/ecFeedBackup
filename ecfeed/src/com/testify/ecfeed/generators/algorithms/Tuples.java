@@ -30,7 +30,7 @@ public class Tuples<E> {
 		fLast = null;
 		fInput = input;
 		/*
-		 * We are mapping values with eunique integers, because otherwise algorithm would have no means to
+		 * We are mapping values with unique integers, because otherwise algorithm would have no means to
 		 * differentiate between exact same value despite it's position, and position is crucial here.
 		 * Introducing Global Parameters brought this problem - two or more parameters linking same target
 		 * were breaking it. Change is transparent - methods used to obtain results are just mapping values back.
