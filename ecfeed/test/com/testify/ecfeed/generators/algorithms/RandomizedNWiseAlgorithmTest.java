@@ -32,6 +32,10 @@ public class RandomizedNWiseAlgorithmTest {
 	public void initialize() {
 		n = 3;
 		inputCount = 4;
+		initialize(EMPTY_CONSTRAINTS);
+	}
+
+	private void initialize(Collection<IConstraint<Integer>> constraints) {
 		alg = new RandomizedNWiseAlgorithm<>(n, 100);
 
 		List<List<Integer>> input = new ArrayList<>();
@@ -43,7 +47,7 @@ public class RandomizedNWiseAlgorithmTest {
 		}
 
 		try {
-			alg.initialize(input, EMPTY_CONSTRAINTS);
+			alg.initialize(input, constraints);
 		} catch (GeneratorException e) {
 			fail("unexpected exception during initialization: " + e.getMessage());
 			e.printStackTrace();
@@ -63,7 +67,7 @@ public class RandomizedNWiseAlgorithmTest {
 			int cnt = 0;
 			do {
 				cnt++;
-				assertNotNull(tuple);
+				assertNotEquals(0, expected.size());
 				ArrayList<String> str = tupleToStringCombinations(tuple, inputCount, n);
 				@SuppressWarnings("unchecked")
 				ArrayList<String> strCopy = (ArrayList<String>) str.clone();
@@ -72,8 +76,78 @@ public class RandomizedNWiseAlgorithmTest {
 				expected.removeAll(strCopy);
 			} while ((tuple = alg.getNext()) != null);
 			System.out.println("Number of tests: " + cnt);
-			assertEquals(0, expected.size());
 			assertNull("still expecting " + expected.size() + " more n-tupels", alg.getNext());
+			assertEquals(0, expected.size());
+		} catch (GeneratorException e) {
+			fail("unexpected exception when calling getNext: " + e.getMessage());
+			e.printStackTrace();
+		}
+	}
+
+	@Test
+	public void getNextTestWithConstraints() {
+
+		IConstraint<Integer> myConstraint = new IConstraint<Integer>() {
+
+			@Override
+			public boolean evaluate(List<Integer> values) {
+				List<Integer> copy = new ArrayList<>(values);
+				adapt(copy);
+				return !(copy.get(0) == 1 && copy.get(1) == 1);
+			}
+
+			@Override
+			public boolean adapt(List<Integer> values) {
+				if(values.get(0) != null && values.get(1) != null)
+					return false;
+				if(values.get(0) == null)
+					values.set(0, 0);
+				if(values.get(1) == null)
+					values.set(1, 0);
+				return true;
+			}
+		};
+
+		Collection<IConstraint<Integer>> constraints = new HashSet<IConstraint<Integer>>();
+		constraints.add(myConstraint);
+		initialize(constraints);
+
+		Method method;
+		try {
+			method = RandomizedNWiseAlgorithm.class.getDeclaredMethod("getAllNTuples");
+			method.setAccessible(true);
+			@SuppressWarnings("unchecked")
+			Set<List<Variable<Integer>>> result = (Set<List<Variable<Integer>>>) method.invoke(alg);
+			assertNotNull(result);
+			assertEquals("The expected number of N-Tuples is 28", 28, result.size());
+
+		} catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException
+				| InvocationTargetException e1) {
+			fail(e1.getMessage());
+			e1.printStackTrace();
+		}
+
+		try {
+			ArrayList<String> expected = new ArrayList<>(Arrays
+					.asList(new String[] { "< 0 0 0 - >", "< 0 0 1 - >", "< 0 1 0 - >", "< 0 1 1 - >", "< 1 0 0 - >",
+							"< 1 0 1 - >", "< 0 0 - 0 >", "< 0 0 - 1 >", "< 0 1 - 0 >", "< 0 1 - 1 >", "< 1 0 - 0 >",
+							"< 1 0 - 1 >", "< 0 - 0 0 >", "< 0 - 0 1 >", "< 0 - 1 0 >", "< 0 - 1 1 >", "< 1 - 0 0 >",
+							"< 1 - 0 1 >", "< 1 - 1 0 >", "< 1 - 1 1 >", "< - 0 0 0 >", "< - 0 0 1 >", "< - 0 1 0 >",
+							"< - 0 1 1 >", "< - 1 0 0 >", "< - 1 0 1 >", "< - 1 1 0 >", "< - 1 1 1 >" }));
+			List<Integer> tuple = alg.getNext();
+			int cnt = 0;
+			do {
+				cnt++;
+				assertNotEquals(0, expected.size());
+				ArrayList<String> str = tupleToStringCombinations(tuple, inputCount, n);
+				@SuppressWarnings("unchecked")
+				ArrayList<String> strCopy = (ArrayList<String>) str.clone();
+				// 'tuple' should cover at least one new N-tuple
+				assertTrue(str.removeAll(expected));
+				expected.removeAll(strCopy);
+			} while ((tuple = alg.getNext()) != null);
+			System.out.println("Number of tests: " + cnt);
+			assertEquals("still expecting " + expected.size() + " more n-tupels", 0, expected.size());
 		} catch (GeneratorException e) {
 			fail("unexpected exception when calling getNext: " + e.getMessage());
 			e.printStackTrace();
@@ -157,6 +231,21 @@ public class RandomizedNWiseAlgorithmTest {
 			Set<List<Variable<Integer>>> result = (Set<List<Variable<Integer>>>) method.invoke(alg);
 			assertNotNull(result);
 			assertEquals("The expected number of N-Tuples is 32", 32, result.size());
+
+			ArrayList<String> expected = new ArrayList<>(Arrays.asList(new String[] { "< 0 0 0 - >", "< 0 0 1 - >",
+					"< 0 1 0 - >", "< 0 1 1 - >", "< 1 0 0 - >", "< 1 0 1 - >", "< 1 1 0 - >", "< 1 1 1 - >",
+					"< 0 0 - 0 >", "< 0 0 - 1 >", "< 0 1 - 0 >", "< 0 1 - 1 >", "< 1 0 - 0 >", "< 1 0 - 1 >",
+					"< 1 1 - 0 >", "< 1 1 - 1 >", "< 0 - 0 0 >", "< 0 - 0 1 >", "< 0 - 1 0 >", "< 0 - 1 1 >",
+					"< 1 - 0 0 >", "< 1 - 0 1 >", "< 1 - 1 0 >", "< 1 - 1 1 >", "< - 0 0 0 >", "< - 0 0 1 >",
+					"< - 0 1 0 >", "< - 0 1 1 >", "< - 1 0 0 >", "< - 1 0 1 >", "< - 1 1 0 >", "< - 1 1 1 >" }));
+
+			ArrayList<String> actual = new ArrayList<>();
+			for (List<Variable<Integer>> ntup : result)
+				actual.add(ntupleToString(ntup, inputCount));
+
+			assertTrue(expected.containsAll(actual));
+			assertTrue(actual.containsAll(expected));
+
 		} catch (NoSuchMethodException | SecurityException e) {
 			fail("Exception happened when looking for method 'getAllNTuples'.");
 			e.printStackTrace();
@@ -166,8 +255,29 @@ public class RandomizedNWiseAlgorithmTest {
 		}
 	}
 
+	private String ntupleToString(List<Variable<Integer>> ntup, int count) {
+		ArrayList<Integer> list = new ArrayList<>();
+		for (int i = 0; i < count; i++)
+			list.add(-1);
+		for (Variable<Integer> v : ntup)
+			list.set(v.dimension, v.selectedFeature);
+
+		String str = "< ";
+		for (Integer v : list)
+			if (v < 0)
+				str += "- ";
+			else
+				str += v + " ";
+		str += ">";
+		return str;
+	}
+
 	@Test
 	public void generateRandomTestTest() {
+		/*
+		 * Because of the randomness in the nature of the algorithm, a
+		 * statistical test is performed.
+		 */
 
 		int n = 3, inputCount = 6;
 		RandomizedNWiseAlgorithm<Integer> alg = new RandomizedNWiseAlgorithm<>(n, 100);
@@ -241,10 +351,11 @@ public class RandomizedNWiseAlgorithmTest {
 					@SuppressWarnings("unchecked")
 					List<Integer> test = (List<Integer>) method.invoke(alg, nTuple);
 					for (Variable<Integer> v : nTuple) {
-						assertEquals(v.selectedFeature, test.get(v.dimention));
-						test.set(v.dimention, -1);
+						assertEquals(v.selectedFeature, test.get(v.dimension));
+						test.set(v.dimension, -1);
 					}
 
+					// assumption: each test represents a binary number
 					int val = 0;
 					for (int k = 0; k < test.size(); k++) {
 						if (test.get(k) >= 0)
