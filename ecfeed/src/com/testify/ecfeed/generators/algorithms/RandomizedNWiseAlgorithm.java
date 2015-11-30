@@ -236,7 +236,7 @@ public class RandomizedNWiseAlgorithm<E> extends AbstractNWiseAlgorithm<E> {
 			}
 
 			CartesianProductAlgorithm<Variable<E>> cartAlg = new CartesianProductAlgorithm<>();
-			cartAlg.initialize(tempIn, new HashSet<>());
+			cartAlg.initialize(tempIn, new HashSet<IConstraint<Variable<E>>>());
 			List<Variable<E>> tuple = null;
 			while ((tuple = cartAlg.getNext()) != null) {
 				// Generate a full tuple from this nTuple to make sure that it is consistent with the constraints
