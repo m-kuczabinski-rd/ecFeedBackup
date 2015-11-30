@@ -5,30 +5,9 @@
 	<classpathentry kind="src" path="test"/>
 	<classpathentry exported="true" kind="lib" path="lib/xom-1.2.10.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7"/>
 	<classpathentry kind="lib" path="lib/xeger-1.0-SNAPSHOT.jar"/>
 	<classpathentry kind="lib" path="lib/automaton.jar"/>
 	<classpathentry kind="lib" path="lib/guava-15.0.jar"/>
-	<classpathentry kind="lib" path="/Applications/Eclipse.app/Contents/Eclipse/plugins/org.eclipse.jface_3.11.0.v20150602-1400.jar"/>
-	<classpathentry kind="lib" path="/Applications/Eclipse.app/Contents/Eclipse/plugins/org.eclipse.swt.cocoa.macosx.x86_64_3.104.0.v20150528-0211.jar"/>
-	<classpathentry kind="lib" path="/Applications/Eclipse.app/Contents/Eclipse/plugins/org.eclipse.core.runtime_3.11.0.v20150405-1723.jar"/>
-	<classpathentry kind="lib" path="/Applications/Eclipse.app/Contents/Eclipse/plugins/org.eclipse.equinox.common_3.7.0.v20150402-1709.jar"/>
-	<classpathentry kind="lib" path="/Applications/Eclipse.app/Contents/Eclipse/plugins/org.eclipse.equinox.registry_3.6.0.v20150318-1503.jar"/>
-	<classpathentry kind="lib" path="/Applications/Eclipse.app/Contents/Eclipse/plugins/org.eclipse.osgi_3.10.100.v20150529-1857.jar"/>
-	<classpathentry kind="lib" path="/Applications/Eclipse.app/Contents/Eclipse/plugins/org.eclipse.core.resources_3.10.0.v20150423-0755.jar"/>
-	<classpathentry kind="lib" path="/Applications/Eclipse.app/Contents/Eclipse/plugins/org.eclipse.core.filebuffers_3.5.500.v20140723-1040.jar"/>
-	<classpathentry kind="lib" path="/Applications/Eclipse.app/Contents/Eclipse/plugins/org.eclipse.jface.text_3.10.0.v20150603-1752.jar"/>
-	<classpathentry kind="lib" path="/Applications/Eclipse.app/Contents/Eclipse/plugins/org.eclipse.text_3.5.400.v20150505-1044.jar"/>
-	<classpathentry kind="lib" path="/Applications/Eclipse.app/Contents/Eclipse/plugins/org.eclipse.core.commands_3.7.0.v20150422-0725.jar"/>
-	<classpathentry kind="lib" path="/Applications/Eclipse.app/Contents/Eclipse/plugins/org.eclipse.ui_3.107.0.v20150507-1945.jar"/>
-	<classpathentry kind="lib" path="/Applications/Eclipse.app/Contents/Eclipse/plugins/org.eclipse.ui.cocoa_1.1.100.v20150315-1253.jar"/>
-	<classpathentry kind="lib" path="/Applications/Eclipse.app/Contents/Eclipse/plugins/org.eclipse.ui.workbench_3.107.0.v20150510-1732.jar"/>
-	<classpathentry kind="lib" path="/Applications/Eclipse.app/Contents/Eclipse/plugins/org.eclipse.ui.console_3.6.0.v20150512-1341.jar"/>
-	<classpathentry kind="lib" path="/Applications/Eclipse.app/Contents/Eclipse/plugins/org.eclipse.ui.editors_3.9.0.v20150213-1939.jar"/>
-	<classpathentry kind="lib" path="/Applications/Eclipse.app/Contents/Eclipse/plugins/org.eclipse.ui.forms_3.6.200.v20150506-2029.jar"/>
-	<classpathentry kind="lib" path="/Applications/Eclipse.app/Contents/Eclipse/plugins/org.eclipse.ui.ide_3.11.0.v20150510-1749.jar"/>
-	<classpathentry kind="lib" path="/Applications/Eclipse.app/Contents/Eclipse/plugins/org.eclipse.jdt.core_3.11.1.v20150902-1521.jar"/>
-	<classpathentry kind="lib" path="/Applications/Eclipse.app/Contents/Eclipse/plugins/org.eclipse.jdt.ui_3.11.1.v20150827-1306.jar"/>
-	<classpathentry kind="lib" path="/Applications/Eclipse.app/Contents/Eclipse/plugins/org.eclipse.core.jobs_3.7.0.v20150330-2103.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
