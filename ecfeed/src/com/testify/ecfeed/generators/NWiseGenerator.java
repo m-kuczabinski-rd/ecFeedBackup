@@ -15,7 +15,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-import com.testify.ecfeed.generators.algorithms.OptimalNWiseAlgorithm;
+import com.testify.ecfeed.generators.algorithms.RandomizedNWiseAlgorithm;
 import com.testify.ecfeed.generators.api.GeneratorException;
 import com.testify.ecfeed.generators.api.IConstraint;
 
@@ -37,6 +37,7 @@ public class NWiseGenerator<E> extends AbstractGenerator<E>{
 		super.initialize(inputDomain, constraints, parameters);
 		int N = getIntParameter(N_PARAMETER_NAME);
 		int coverage = getIntParameter(COVERAGE_PARAMETER_NAME);
-		setAlgorithm(new OptimalNWiseAlgorithm<E>(N, coverage));
+//		setAlgorithm(new OptimalNWiseAlgorithm<E>(N, coverage));
+		setAlgorithm(new RandomizedNWiseAlgorithm<E>(N, coverage));
 	}
 }
