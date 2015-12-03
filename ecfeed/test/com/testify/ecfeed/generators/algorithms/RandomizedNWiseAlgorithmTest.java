@@ -9,6 +9,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 
@@ -91,19 +92,11 @@ public class RandomizedNWiseAlgorithmTest {
 
 			@Override
 			public boolean evaluate(List<Integer> values) {
-				List<Integer> copy = new ArrayList<>(values);
-				adapt(copy);
-				return !(copy.get(0) == 1 && copy.get(1) == 1);
+				return !(values.get(0) == 1 && values.get(1) == 1);
 			}
 
 			@Override
 			public boolean adapt(List<Integer> values) {
-				if(values.get(0) != null && values.get(1) != null)
-					return false;
-				if(values.get(0) == null)
-					values.set(0, 0);
-				if(values.get(1) == null)
-					values.set(1, 0);
 				return true;
 			}
 		};
@@ -117,9 +110,10 @@ public class RandomizedNWiseAlgorithmTest {
 			method = RandomizedNWiseAlgorithm.class.getDeclaredMethod("getAllNTuples");
 			method.setAccessible(true);
 			@SuppressWarnings("unchecked")
-			Set<List<Variable<Integer>>> result = (Set<List<Variable<Integer>>>) method.invoke(alg);
+			Map<Boolean, Set<List<Variable<Integer>>>> result = (Map<Boolean, Set<List<Variable<Integer>>>>) method.invoke(alg);
+			
 			assertNotNull(result);
-			assertEquals("The expected number of N-Tuples is 28", 28, result.size());
+			assertEquals("The expected number of N-Tuples is 28", 28, result.get(true).size() + result.get(null).size());
 
 		} catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException
 				| InvocationTargetException e1) {
@@ -228,9 +222,9 @@ public class RandomizedNWiseAlgorithmTest {
 			Method method = RandomizedNWiseAlgorithm.class.getDeclaredMethod("getAllNTuples");
 			method.setAccessible(true);
 			@SuppressWarnings("unchecked")
-			Set<List<Variable<Integer>>> result = (Set<List<Variable<Integer>>>) method.invoke(alg);
+			Map<Boolean, Set<List<Variable<Integer>>>> result = (Map<Boolean, Set<List<Variable<Integer>>>>) method.invoke(alg);
 			assertNotNull(result);
-			assertEquals("The expected number of N-Tuples is 32", 32, result.size());
+			assertEquals("The expected number of N-Tuples is 32", 32, result.get(true).size());
 
 			ArrayList<String> expected = new ArrayList<>(Arrays.asList(new String[] { "< 0 0 0 - >", "< 0 0 1 - >",
 					"< 0 1 0 - >", "< 0 1 1 - >", "< 1 0 0 - >", "< 1 0 1 - >", "< 1 1 0 - >", "< 1 1 1 - >",
@@ -240,7 +234,7 @@ public class RandomizedNWiseAlgorithmTest {
 					"< - 0 1 0 >", "< - 0 1 1 >", "< - 1 0 0 >", "< - 1 0 1 >", "< - 1 1 0 >", "< - 1 1 1 >" }));
 
 			ArrayList<String> actual = new ArrayList<>();
-			for (List<Variable<Integer>> ntup : result)
+			for (List<Variable<Integer>> ntup : result.get(true))
 				actual.add(ntupleToString(ntup, inputCount));
 
 			assertTrue(expected.containsAll(actual));

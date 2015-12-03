@@ -118,12 +118,19 @@ public class MethodParameterNode extends AbstractParameterNode {
 		return true;
 	}
 
+//	@Override
+//	public ChoiceNode getChoice(String qualifiedName) {
+//		if (isLinked()) {
+//			return getLink().getChoice(qualifiedName);
+//		}
+//		return super.getChoice(qualifiedName);
+//	}
+
 	@Override
-	public ChoiceNode getChoice(String qualifiedName) {
-		if (isLinked()) {
-			return getLink().getChoice(qualifiedName);
-		}
-		return super.getChoice(qualifiedName);
+	public List<? extends AbstractNode> getChildren() {
+		if(isLinked())
+			return getChoices();
+		return super.getChildren();
 	}
 
 	public List<ChoiceNode> getRealChoices() {
