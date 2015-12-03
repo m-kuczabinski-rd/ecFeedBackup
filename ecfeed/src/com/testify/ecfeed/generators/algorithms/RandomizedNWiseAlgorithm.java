@@ -68,12 +68,14 @@ public class RandomizedNWiseAlgorithm<E> extends AbstractNWiseAlgorithm<E> {
 			List<E> randomTest = generateRandomTest(nTuple);
 
 			if (randomTest != null) {
-				if (fRemainingTuples.size() <= ignoreCount)
+				if (fRemainingTuples.size() <= ignoreCount) {
 					// no need for optimization
+					progress(1);
 					return randomTest;
-
+				}
 				List<E> improvedTest = improveCoverageOfTest(randomTest, nTuple);
-				removeCoveredNTuples(improvedTest);
+				int cov = removeCoveredNTuples(improvedTest);
+				progress(cov);
 				return improvedTest;
 			} else {
 				// GeneratorException.report("Cannot generate test for " +
@@ -98,10 +100,12 @@ public class RandomizedNWiseAlgorithm<E> extends AbstractNWiseAlgorithm<E> {
 	 * 
 	 * @param improvedTest
 	 */
-	private void removeCoveredNTuples(List<E> test) {
+	private int removeCoveredNTuples(List<E> test) {
 		Set<List<Variable<E>>> coveredTuples = getCoveredNTuples(test);
+		int cov = coveredTuples.size();
 		fRemainingTuples.removeAll(coveredTuples);
 		fPotentiallyRemainingTuples.removeAll(coveredTuples);
+		return cov;
 	}
 
 	private Set<List<Variable<E>>> getCoveredNTuples(List<E> test) {
