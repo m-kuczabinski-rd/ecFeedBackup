@@ -239,13 +239,14 @@ public class RandomizedNWiseAlgorithm<E> extends AbstractNWiseAlgorithm<E> {
 			cartAlg.initialize(tempIn, new HashSet<IConstraint<Variable<E>>>());
 			List<Variable<E>> tuple = null;
 			while ((tuple = cartAlg.getNext()) != null) {
-				// Generate a full tuple from this nTuple to make sure that it is consistent with the constraints
+				// Generate a full tuple from this nTuple to make sure that it
+				// is consistent with the constraints
 				List<E> fullTuple = new ArrayList<>();
-				for(int i=0; i< getInput().size(); i++)
+				for (int i = 0; i < getInput().size(); i++)
 					fullTuple.add(null);
-				for(Variable<E> var : tuple)
+				for (Variable<E> var : tuple)
 					fullTuple.set(var.dimension, var.selectedFeature);
-				if(checkConstraints(fullTuple))
+				if (checkConstraintsOnExtendedNTuple(fullTuple))
 					allNTuples.add(tuple);
 			}
 		}
@@ -272,7 +273,7 @@ public class RandomizedNWiseAlgorithm<E> extends AbstractNWiseAlgorithm<E> {
 		}
 	}
 
-	public static class Variable<E> {
+	protected static class Variable<E> {
 		// list of features of this variable
 		E selectedFeature;
 		// dimension of this variable
@@ -300,4 +301,21 @@ public class RandomizedNWiseAlgorithm<E> extends AbstractNWiseAlgorithm<E> {
 		return allDimCombs;
 	}
 
+	protected boolean checkConstraintsOnExtendedNTuple(List<E> vector) {
+		if (vector == null)
+			return true;
+		for (IConstraint<E> constraint : getConstraints()) {
+			boolean value = false;
+			try {
+				value = constraint.evaluate(vector);
+			} catch (NullPointerException e) {
+				// TODO - Not sure if it is always correct
+				value = true;
+			}
+			if (value == false) {
+				return false;
+			}
+		}
+		return true;
+	}
 }
