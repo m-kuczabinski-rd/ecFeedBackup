@@ -21,7 +21,15 @@ public class RandomizedNWiseAlgorithm<E> extends AbstractNWiseAlgorithm<E> {
 
 	private Set<List<Integer>> allDimCombs = null;
 
+	private Set<List<Variable<E>>> fPotentiallyRemainingTuples = null;
+
+	// The set of all n-tuples for which none of the constraints fail (this set
+	// includes both the n-tuples for which all the constraints can be evaluated
+	// and pass, as well as the constraints for which at least one of
+	// constraints cannot be evaluated).
 	private Set<List<Variable<E>>> fRemainingTuples = null;
+
+	private int ignoreCount = 0;
 
 	final private int CONSISTENCY_LOOP_LIM = 10;
 
@@ -32,7 +40,13 @@ public class RandomizedNWiseAlgorithm<E> extends AbstractNWiseAlgorithm<E> {
 	@Override
 	public void reset() {
 		try {
-			fRemainingTuples = getAllNTuples();
+			Map<Boolean, Set<List<Variable<E>>>> nTuples = getAllNTuples();
+			fPotentiallyRemainingTuples = nTuples.get(null);
+			fRemainingTuples = nTuples.get(true);
+			fRemainingTuples.addAll(fPotentiallyRemainingTuples);
+
+			ignoreCount = fRemainingTuples.size() * (100 - getCoverage());
+
 		} catch (GeneratorException e) {
 			throw new RuntimeErrorException(new Error(e));
 		}
@@ -42,17 +56,20 @@ public class RandomizedNWiseAlgorithm<E> extends AbstractNWiseAlgorithm<E> {
 	@Override
 	public List<E> getNext() throws GeneratorException {
 
-		if (fRemainingTuples.size() == 0)
-			return null;
-
 		while (true) {
+			
+			if (fRemainingTuples.size() <= ignoreCount)
+				return null;
+
 
 			List<Variable<E>> nTuple = fRemainingTuples.iterator().next();
 			fRemainingTuples.remove(nTuple);
+
 			List<E> randomTest = generateRandomTest(nTuple);
 
 			if (randomTest != null) {
-				if (fRemainingTuples.size() == 0)
+				if (fRemainingTuples.size() <= ignoreCount)
+					// no need for optimization
 					return randomTest;
 
 				List<E> improvedTest = improveCoverageOfTest(randomTest, nTuple);
@@ -61,13 +78,14 @@ public class RandomizedNWiseAlgorithm<E> extends AbstractNWiseAlgorithm<E> {
 			} else {
 				// GeneratorException.report("Cannot generate test for " +
 				// toString(nTuple));
-				System.out.println("randomTest is nul!!!" + fRemainingTuples.size());
-				fRemainingTuples.add(nTuple);
+				System.out.println("Cannot generate test for" + toString(nTuple) + "!!! " + fRemainingTuples.size());
+				if (!fPotentiallyRemainingTuples.contains(nTuple))
+					fRemainingTuples.add(nTuple);
 			}
 		}
 	}
 
-	String toString(List<Variable<E>> nTuple) {
+	private String toString(List<Variable<E>> nTuple) {
 		String str = "< ";
 		for (Variable<E> var : nTuple)
 			str += "(" + var.dimension + ", " + var.selectedFeature + ") ";
@@ -75,19 +93,21 @@ public class RandomizedNWiseAlgorithm<E> extends AbstractNWiseAlgorithm<E> {
 	}
 
 	/*
-	 * Removes from allDesiredTuples all the nTuples that are covered by
-	 * improvedTest
+	 * Removes all the nTuples that are covered by improvedTest from both
+	 * fRemainingTuples and fPotentiallyRemainingTuples
 	 * 
 	 * @param improvedTest
 	 */
 	private void removeCoveredNTuples(List<E> test) {
 		Set<List<Variable<E>>> coveredTuples = getCoveredNTuples(test);
 		fRemainingTuples.removeAll(coveredTuples);
+		fPotentiallyRemainingTuples.removeAll(coveredTuples);
 	}
 
 	private Set<List<Variable<E>>> getCoveredNTuples(List<E> test) {
 		int k = allDimCombs.size();
 		Set<List<Variable<E>>> coveredTuples = new HashSet<>();
+
 		for (List<Variable<E>> nTuple : fRemainingTuples) {
 			if (k == 0)
 				break;
@@ -108,10 +128,10 @@ public class RandomizedNWiseAlgorithm<E> extends AbstractNWiseAlgorithm<E> {
 
 	private List<E> improveCoverageOfTest(List<E> randomTest, List<Variable<E>> nTuple) {
 		/*
-		 * while it is possible to improve coverage make a random ordering of
-		 * modifiable indices for each index in the list check all available
-		 * values for that index and choose the best if the coverage is
-		 * improved, use the newly generated tuple (test)
+		 * while you can improve coverage, make a random ordering of modifiable
+		 * indices for each index in the list, check all available values for
+		 * that index and choose the best. If the coverage is improved, use the
+		 * newly generated tuple (test).
 		 */
 		List<E> improvedTest = randomTest;
 
@@ -193,7 +213,7 @@ public class RandomizedNWiseAlgorithm<E> extends AbstractNWiseAlgorithm<E> {
 			} while (!checkConstraints(candidate) && ++itr < CONSISTENCY_LOOP_LIM);
 
 			if (itr < CONSISTENCY_LOOP_LIM) {
-				if (fRemainingTuples.size() == 0)
+				if (fRemainingTuples.size() <= ignoreCount)
 					return candidate;
 				// one extra point for the current tuple
 				int cov = getCoverage(candidate) + 1;
@@ -221,10 +241,14 @@ public class RandomizedNWiseAlgorithm<E> extends AbstractNWiseAlgorithm<E> {
 		return (new Tuples<Integer>(dimentions, N)).getAll();
 	}
 
-	private Set<List<Variable<E>>> getAllNTuples() throws GeneratorException {
+	private Map<Boolean, Set<List<Variable<E>>>> getAllNTuples() throws GeneratorException {
 
 		Set<List<Integer>> allCombs = getAllDimCombs();
-		Set<List<Variable<E>>> allNTuples = new HashSet<>();
+		Map<Boolean, Set<List<Variable<E>>>> allNTuples = new HashMap<>();
+		Set<List<Variable<E>>> validNTuple = new HashSet<>();
+		Set<List<Variable<E>>> unevaluableNTuples = new HashSet<>();
+		allNTuples.put(true, validNTuple);
+		allNTuples.put(null, unevaluableNTuples);
 
 		for (List<Integer> comb : allCombs) {
 			List<List<Variable<E>>> tempIn = new ArrayList<>();
@@ -246,8 +270,12 @@ public class RandomizedNWiseAlgorithm<E> extends AbstractNWiseAlgorithm<E> {
 					fullTuple.add(null);
 				for (Variable<E> var : tuple)
 					fullTuple.set(var.dimension, var.selectedFeature);
-				if (checkConstraintsOnExtendedNTuple(fullTuple))
-					allNTuples.add(tuple);
+
+				Boolean check = checkConstraintsOnExtendedNTuple(fullTuple);
+				if (check == null)
+					unevaluableNTuples.add(tuple);
+				else if (check)
+					validNTuple.add(tuple);
 			}
 		}
 
@@ -301,21 +329,29 @@ public class RandomizedNWiseAlgorithm<E> extends AbstractNWiseAlgorithm<E> {
 		return allDimCombs;
 	}
 
-	protected boolean checkConstraintsOnExtendedNTuple(List<E> vector) {
+	/*
+	 * If the incomplete tuple (tuple with null values at some of the indices)
+	 * is consistent returns true. If evaluating the constraint requires
+	 * accessing some of the indices with a null value, the constraints cannot
+	 * be evaluated and the method returns null; otherwise it returns false.
+	 */
+	protected Boolean checkConstraintsOnExtendedNTuple(List<E> vector) {
+		boolean hasNull = false;
 		if (vector == null)
 			return true;
 		for (IConstraint<E> constraint : getConstraints()) {
 			boolean value = false;
 			try {
 				value = constraint.evaluate(vector);
+				if (value == false) {
+					return false;
+				}
 			} catch (NullPointerException e) {
-				// TODO - Not sure if it is always correct
-				value = true;
-			}
-			if (value == false) {
-				return false;
+				hasNull = true;
 			}
 		}
+		if (hasNull)
+			return null;
 		return true;
 	}
 }
