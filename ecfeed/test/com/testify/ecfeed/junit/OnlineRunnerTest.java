@@ -30,6 +30,7 @@ import org.junit.runners.model.InitializationError;
 
 import com.testify.ecfeed.generators.CartesianProductGenerator;
 import com.testify.ecfeed.generators.NWiseGenerator;
+import com.testify.ecfeed.generators.algorithms.Tuples;
 import com.testify.ecfeed.generators.api.GeneratorException;
 import com.testify.ecfeed.generators.api.IConstraint;
 import com.testify.ecfeed.generators.api.IGenerator;
@@ -69,6 +70,27 @@ public class OnlineRunnerTest extends StaticRunnerTest{
 			executed.add(arg4);
 			fExecuted.add(executed);
 		}
+	}
+	
+	public static Set<Map<Integer,String>> getCoveredNTuples(Set<List<String>> tests, int n){
+		Set<Map<Integer,String>> nTuples = new HashSet<>();
+		
+		List<Integer> indices = new ArrayList<>();
+		for(int i=0; i< tests.iterator().next().size(); i++)
+			indices.add(i);
+		Tuples<Integer> combinationGenerator = new Tuples<>(indices, n);
+		Set<List<Integer>> allCombs = combinationGenerator.getAll();
+		
+		for(List<String> test : tests) 
+			for(List<Integer> comb : allCombs) {
+				Map<Integer, String> nTuple = new HashMap<>();
+				for(Integer ind : comb)
+					nTuple.put(ind, test.get(ind));
+				nTuples.add(nTuple);
+			}
+			
+		
+		return nTuples;
 	}
 
 	@RunWith(OnlineRunner.class)
@@ -142,7 +164,8 @@ public class OnlineRunnerTest extends StaticRunnerTest{
 				List<List<ChoiceNode>> input = referenceInput(getModel(MODEL_PATH), method);
 				Set<List<String>> referenceResult = computeReferenceResult(referenceNWiseGenerator(input, EMPTY_CONSTRAINTS, 2));
 				method.invokeExplosively(testClass.newInstance(), (Object[])null);
-				assertEquals(referenceResult, fExecuted);
+				// The following assertion assumes that the expected coverage is 100, and we are looking for 2-wise combinations
+				assertEquals(getCoveredNTuples(referenceResult, 2), getCoveredNTuples(fExecuted, 2));
 			}
 		}
 		catch(Throwable e){
@@ -159,7 +182,8 @@ public class OnlineRunnerTest extends StaticRunnerTest{
 				List<List<ChoiceNode>> input = referenceInput(getModel(MODEL_PATH), method);
 				Set<List<String>> referenceResult = computeReferenceResult(referenceNWiseGenerator(input, EMPTY_CONSTRAINTS, 3));
 				method.invokeExplosively(testClass.newInstance(), (Object[])null);
-				assertEquals(referenceResult, fExecuted);
+				// The following assertion assumes that the expected coverage is 100, and we are looking for 3-wise combinations
+				assertEquals(getCoveredNTuples(referenceResult, 3), getCoveredNTuples(fExecuted, 3));
 			}
 		}
 		catch(Throwable e){

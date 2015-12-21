@@ -22,6 +22,7 @@ import java.util.Map;
 import org.junit.Test;
 
 import com.testify.ecfeed.generators.NWiseGenerator;
+import com.testify.ecfeed.generators.algorithms.AbstractNWiseAlgorithm;
 import com.testify.ecfeed.generators.algorithms.IAlgorithm;
 import com.testify.ecfeed.generators.algorithms.OptimalNWiseAlgorithm;
 import com.testify.ecfeed.generators.api.GeneratorException;
@@ -46,8 +47,8 @@ public class NWiseGeneratorTest {
 
 			generator.initialize(inputDomain, constraints, parameters);
 			IAlgorithm<String> algorithm = generator.getAlgorithm();
-			assertTrue(algorithm instanceof OptimalNWiseAlgorithm);
-			assertEquals(2, ((OptimalNWiseAlgorithm<String>) algorithm).getN());
+			assertTrue(algorithm instanceof AbstractNWiseAlgorithm);
+			assertEquals(2, ((AbstractNWiseAlgorithm<String>) algorithm).getN());
 
 			try {
 				parameters.put("N", 5);
@@ -87,9 +88,9 @@ public class NWiseGeneratorTest {
 
 			generator.initialize(inputDomain, constraints, parameters);
 			IAlgorithm<String> algorithm = generator.getAlgorithm();
-			assertTrue(algorithm instanceof OptimalNWiseAlgorithm);
+			assertTrue(algorithm instanceof AbstractNWiseAlgorithm);
 			assertEquals(100,
-					((OptimalNWiseAlgorithm<String>) algorithm).getCoverage());
+					((AbstractNWiseAlgorithm<String>) algorithm).getCoverage());
 
 			try {
 				parameters.put("coverage", 101);
