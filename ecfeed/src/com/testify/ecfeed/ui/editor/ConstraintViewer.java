@@ -437,8 +437,9 @@ public class ConstraintViewer extends TreeViewerSection {
 			}
 		}
 
-		public StatementEditor(Composite parent) {
+		public StatementEditor(Composite parent, IFileInfoProvider fileInfoProvider) {
 			super(parent, SWT.NONE);
+			fFileInfoProvider = fileInfoProvider;
 			setLayout(new GridLayout(TOTAL_EDITOR_WIDTH, true));
 			setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 2, 1));
 			fConstraintIf = new ConstraintInterface(ConstraintViewer.this, fFileInfoProvider);
@@ -589,7 +590,7 @@ public class ConstraintViewer extends TreeViewerSection {
 
 		getViewer().addSelectionChangedListener(new StatementSelectionListener());
 
-		fStatementEditor = new StatementEditor(getClientComposite());
+		fStatementEditor = new StatementEditor(getClientComposite(), fileInfoProvider);
 		addKeyListener(SWT.DEL, SWT.NONE, new DeleteStatementAction(updateContext));
 	}
 
