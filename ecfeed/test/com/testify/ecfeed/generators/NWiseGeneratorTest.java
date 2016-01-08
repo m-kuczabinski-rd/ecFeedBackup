@@ -24,7 +24,6 @@ import org.junit.Test;
 import com.testify.ecfeed.generators.NWiseGenerator;
 import com.testify.ecfeed.generators.algorithms.AbstractNWiseAlgorithm;
 import com.testify.ecfeed.generators.algorithms.IAlgorithm;
-import com.testify.ecfeed.generators.algorithms.OptimalNWiseAlgorithm;
 import com.testify.ecfeed.generators.api.GeneratorException;
 import com.testify.ecfeed.generators.api.IConstraint;
 import com.testify.ecfeed.generators.testutils.GeneratorTestUtils;
