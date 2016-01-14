@@ -13,8 +13,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
+import com.testify.ecfeed.core.utils.ExceptionHelper;
 import com.testify.ecfeed.ui.common.Messages;
-import com.testify.ecfeed.utils.ExceptionHelper;
 
 public class ExternalProcess {
 

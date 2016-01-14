@@ -29,6 +29,7 @@ import com.testify.ecfeed.adapter.operations.ChoiceOperationAddLabels;
 import com.testify.ecfeed.adapter.operations.ChoiceOperationRemoveLabels;
 import com.testify.ecfeed.adapter.operations.ChoiceOperationRenameLabel;
 import com.testify.ecfeed.adapter.operations.ChoiceOperationSetValue;
+import com.testify.ecfeed.core.utils.SystemLogger;
 import com.testify.ecfeed.model.AbstractNode;
 import com.testify.ecfeed.model.AbstractParameterNode;
 import com.testify.ecfeed.model.ChoiceNode;
@@ -37,7 +38,6 @@ import com.testify.ecfeed.ui.common.EclipseTypeAdapterProvider;
 import com.testify.ecfeed.ui.common.JavaModelAnalyser;
 import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.common.utils.IFileInfoProvider;
-import com.testify.ecfeed.utils.SystemLogger;
 
 public class ChoiceInterface extends ChoicesParentInterface{
 

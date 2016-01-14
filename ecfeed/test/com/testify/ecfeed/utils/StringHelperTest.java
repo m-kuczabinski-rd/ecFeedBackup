@@ -8,7 +8,7 @@
 
 package com.testify.ecfeed.utils;
 
-import com.testify.ecfeed.utils.StringHelper;
+import com.testify.ecfeed.core.utils.StringHelper;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;

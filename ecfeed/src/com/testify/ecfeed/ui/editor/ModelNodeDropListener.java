@@ -19,6 +19,7 @@ import org.eclipse.jface.viewers.ViewerDropAdapter;
 import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.TransferData;
 
+import com.testify.ecfeed.core.utils.SystemLogger;
 import com.testify.ecfeed.model.AbstractNode;
 import com.testify.ecfeed.model.AbstractParameterNode;
 import com.testify.ecfeed.model.ChoiceNode;
@@ -39,7 +40,6 @@ import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 import com.testify.ecfeed.ui.modelif.NodeDnDBuffer;
 import com.testify.ecfeed.ui.modelif.NodeInterfaceFactory;
 import com.testify.ecfeed.ui.modelif.SelectionInterface;
-import com.testify.ecfeed.utils.SystemLogger;
 
 public class ModelNodeDropListener extends ViewerDropAdapter{
 

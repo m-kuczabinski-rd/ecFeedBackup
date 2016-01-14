@@ -26,6 +26,7 @@ import com.testify.ecfeed.adapter.operations.AbstractParameterOperationSetType;
 import com.testify.ecfeed.adapter.operations.BulkOperation;
 import com.testify.ecfeed.adapter.operations.ParameterSetTypeCommentsOperation;
 import com.testify.ecfeed.adapter.operations.ReplaceChoicesOperation;
+import com.testify.ecfeed.core.utils.SystemLogger;
 import com.testify.ecfeed.model.AbstractParameterNode;
 import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.ui.common.EclipseModelBuilder;
@@ -36,7 +37,6 @@ import com.testify.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.testify.ecfeed.ui.dialogs.TestClassSelectionDialog;
 import com.testify.ecfeed.ui.dialogs.TextAreaDialog;
 import com.testify.ecfeed.ui.dialogs.UserTypeSelectionDialog;
-import com.testify.ecfeed.utils.SystemLogger;
 
 public abstract class AbstractParameterInterface extends ChoicesParentInterface {
 	

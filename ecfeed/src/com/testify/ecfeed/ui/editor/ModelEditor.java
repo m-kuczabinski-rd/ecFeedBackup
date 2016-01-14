@@ -47,6 +47,7 @@ import org.eclipse.ui.part.FileEditorInput;
 
 import com.testify.ecfeed.adapter.CachedImplementationStatusResolver;
 import com.testify.ecfeed.adapter.ModelOperationManager;
+import com.testify.ecfeed.core.utils.SystemLogger;
 import com.testify.ecfeed.model.ModelConverter;
 import com.testify.ecfeed.model.ModelVersionDistributor;
 import com.testify.ecfeed.model.RootNode;
@@ -59,7 +60,6 @@ import com.testify.ecfeed.ui.common.Constants;
 import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.testify.ecfeed.ui.editor.utils.ExceptionCatchDialog;
-import com.testify.ecfeed.utils.SystemLogger;
 
 public class ModelEditor extends FormEditor implements IFileInfoProvider{
 

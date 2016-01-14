@@ -13,9 +13,9 @@ import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.Platform;
 
+import com.testify.ecfeed.core.utils.ExceptionHelper;
+import com.testify.ecfeed.core.utils.SystemLogger;
 import com.testify.ecfeed.ui.common.Messages;
-import com.testify.ecfeed.utils.ExceptionHelper;
-import com.testify.ecfeed.utils.SystemLogger;
 
 public class AndroidFactoryDistributorExt {
 

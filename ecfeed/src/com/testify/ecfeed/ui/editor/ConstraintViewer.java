@@ -38,6 +38,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.forms.widgets.Section;
 
 import com.testify.ecfeed.adapter.java.JavaPrimitiveTypePredicate;
+import com.testify.ecfeed.core.utils.SystemLogger;
 import com.testify.ecfeed.model.AbstractStatement;
 import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.model.ChoicesParentStatement;
@@ -64,7 +65,6 @@ import com.testify.ecfeed.ui.modelif.AbstractStatementInterface;
 import com.testify.ecfeed.ui.modelif.ConstraintInterface;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 import com.testify.ecfeed.ui.modelif.StatementInterfaceFactory;
-import com.testify.ecfeed.utils.SystemLogger;
 
 public class ConstraintViewer extends TreeViewerSection {
 

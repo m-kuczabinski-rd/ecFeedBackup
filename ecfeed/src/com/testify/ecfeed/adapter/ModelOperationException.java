@@ -11,7 +11,7 @@
 
 package com.testify.ecfeed.adapter;
 
-import com.testify.ecfeed.utils.SystemLogger;
+import com.testify.ecfeed.core.utils.SystemLogger;
 
 public class ModelOperationException extends Exception {
 

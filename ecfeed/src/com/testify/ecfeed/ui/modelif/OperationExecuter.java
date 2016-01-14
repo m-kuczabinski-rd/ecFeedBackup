@@ -29,7 +29,7 @@ import org.eclipse.ui.forms.AbstractFormPart;
 import com.testify.ecfeed.adapter.CachedImplementationStatusResolver;
 import com.testify.ecfeed.adapter.IModelOperation;
 import com.testify.ecfeed.adapter.ModelOperationException;
-import com.testify.ecfeed.utils.SystemLogger;
+import com.testify.ecfeed.core.utils.SystemLogger;
 
 public class OperationExecuter {
 

@@ -17,6 +17,7 @@ import java.util.List;
 import org.eclipse.jface.viewers.StructuredViewer;
 
 import com.testify.ecfeed.adapter.java.JavaUtils;
+import com.testify.ecfeed.core.utils.SystemLogger;
 import com.testify.ecfeed.model.AbstractNode;
 import com.testify.ecfeed.model.AbstractParameterNode;
 import com.testify.ecfeed.model.ChoiceNode;
@@ -38,7 +39,6 @@ import com.testify.ecfeed.ui.modelif.GlobalParametersParentInterface;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 import com.testify.ecfeed.ui.modelif.MethodInterface;
 import com.testify.ecfeed.ui.modelif.RootInterface;
-import com.testify.ecfeed.utils.SystemLogger;
 
 public class AddChildActionProvider {
 

@@ -15,6 +15,9 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
+import com.testify.ecfeed.core.utils.EcException;
+import com.testify.ecfeed.core.utils.StreamHelper;
+
 public class StreamHelperTest{
 
 	private void testConvertDeconvert(String expectedResult) throws EcException {

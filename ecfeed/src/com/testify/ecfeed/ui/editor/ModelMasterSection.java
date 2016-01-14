@@ -39,6 +39,7 @@ import org.eclipse.ui.forms.IDetailsPage;
 import org.eclipse.ui.forms.widgets.Section;
 
 import com.testify.ecfeed.adapter.java.JavaUtils;
+import com.testify.ecfeed.core.utils.SystemLogger;
 import com.testify.ecfeed.model.AbstractNode;
 import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.model.ClassNode;
@@ -59,7 +60,6 @@ import com.testify.ecfeed.ui.modelif.AbstractNodeInterface;
 import com.testify.ecfeed.ui.modelif.AbstractParameterInterface;
 import com.testify.ecfeed.ui.modelif.IModelUpdateListener;
 import com.testify.ecfeed.ui.modelif.ModelNodesTransfer;
-import com.testify.ecfeed.utils.SystemLogger;
 
 public class ModelMasterSection extends TreeViewerSection{
 	private static final int STYLE = Section.EXPANDED | Section.TITLE_BAR;

@@ -29,6 +29,8 @@ import com.testify.ecfeed.adapter.java.ILoaderProvider;
 import com.testify.ecfeed.adapter.java.ModelClassLoader;
 import com.testify.ecfeed.android.external.ApkInstallerExt;
 import com.testify.ecfeed.android.external.DeviceCheckerExt;
+import com.testify.ecfeed.core.utils.ExceptionHelper;
+import com.testify.ecfeed.core.utils.SystemLogger;
 import com.testify.ecfeed.generators.api.IConstraint;
 import com.testify.ecfeed.generators.api.IGenerator;
 import com.testify.ecfeed.model.MethodNode;
@@ -42,8 +44,6 @@ import com.testify.ecfeed.ui.common.utils.EclipseProjectHelper;
 import com.testify.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.testify.ecfeed.ui.dialogs.ExecuteOnlineSetupDialog;
 import com.testify.ecfeed.ui.dialogs.GeneratorProgressMonitorDialog;
-import com.testify.ecfeed.utils.ExceptionHelper;
-import com.testify.ecfeed.utils.SystemLogger;
 
 public class OnlineTestRunningSupport extends TestExecutionSupport{
 

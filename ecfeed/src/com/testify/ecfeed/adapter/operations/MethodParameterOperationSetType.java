@@ -23,6 +23,7 @@ import com.testify.ecfeed.adapter.ITypeAdapterProvider;
 import com.testify.ecfeed.adapter.ModelOperationException;
 import com.testify.ecfeed.adapter.java.JavaUtils;
 import com.testify.ecfeed.adapter.java.Messages;
+import com.testify.ecfeed.core.utils.SystemLogger;
 import com.testify.ecfeed.model.AbstractStatement;
 import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.model.ChoicesParentNode;
@@ -40,7 +41,6 @@ import com.testify.ecfeed.model.MethodParameterNode;
 import com.testify.ecfeed.model.StatementArray;
 import com.testify.ecfeed.model.StaticStatement;
 import com.testify.ecfeed.model.TestCaseNode;
-import com.testify.ecfeed.utils.SystemLogger;
 
 public class MethodParameterOperationSetType extends BulkOperation {
 

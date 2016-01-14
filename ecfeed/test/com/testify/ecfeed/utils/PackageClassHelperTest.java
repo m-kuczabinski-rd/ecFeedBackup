@@ -12,6 +12,8 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
+import com.testify.ecfeed.core.utils.PackageClassHelper;
+
 public class PackageClassHelperTest{
 
 	private static final String PACKAGE = "com.testify.ecfeed.utils";

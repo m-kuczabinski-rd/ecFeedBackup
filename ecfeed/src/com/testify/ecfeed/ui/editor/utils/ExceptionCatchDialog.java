@@ -3,8 +3,8 @@ package com.testify.ecfeed.ui.editor.utils;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
 
-import com.testify.ecfeed.utils.StringHelper;
-import com.testify.ecfeed.utils.SystemLogger;
+import com.testify.ecfeed.core.utils.StringHelper;
+import com.testify.ecfeed.core.utils.SystemLogger;
 
 public class ExceptionCatchDialog {
 

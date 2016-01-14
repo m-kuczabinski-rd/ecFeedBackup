@@ -10,8 +10,8 @@ package com.testify.ecfeed.android.external;
 
 import java.lang.reflect.InvocationTargetException;
 
+import com.testify.ecfeed.core.utils.ExceptionHelper;
 import com.testify.ecfeed.ui.common.Messages;
-import com.testify.ecfeed.utils.ExceptionHelper;
 
 public class ApkInstallerExt { 
 

@@ -33,6 +33,9 @@ import com.testify.ecfeed.adapter.operations.ClassOperationSetRunOnAndroid;
 import com.testify.ecfeed.adapter.operations.FactoryRenameOperation;
 import com.testify.ecfeed.android.utils.AndroidBaseRunnerHelper;
 import com.testify.ecfeed.android.utils.AndroidManifestAccessor;
+import com.testify.ecfeed.core.utils.EcException;
+import com.testify.ecfeed.core.utils.PackageClassHelper;
+import com.testify.ecfeed.core.utils.SystemLogger;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.ui.common.Constants;
@@ -41,9 +44,6 @@ import com.testify.ecfeed.ui.common.JavaModelAnalyser;
 import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.testify.ecfeed.ui.dialogs.TestClassSelectionDialog;
-import com.testify.ecfeed.utils.EcException;
-import com.testify.ecfeed.utils.PackageClassHelper;
-import com.testify.ecfeed.utils.SystemLogger;
 
 public class ClassInterface extends GlobalParametersParentInterface {
 

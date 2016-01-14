@@ -31,6 +31,7 @@ import com.testify.ecfeed.adapter.operations.GenericRemoveNodesOperation;
 import com.testify.ecfeed.adapter.operations.GenericSetCommentsOperation;
 import com.testify.ecfeed.adapter.operations.GenericShiftOperation;
 import com.testify.ecfeed.adapter.operations.OperationNames;
+import com.testify.ecfeed.core.utils.SystemLogger;
 import com.testify.ecfeed.model.AbstractNode;
 import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.model.ClassNode;
@@ -47,7 +48,6 @@ import com.testify.ecfeed.ui.common.JavaDocSupport;
 import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.testify.ecfeed.ui.dialogs.TextAreaDialog;
-import com.testify.ecfeed.utils.SystemLogger;
 
 public class AbstractNodeInterface extends OperationExecuter{
 

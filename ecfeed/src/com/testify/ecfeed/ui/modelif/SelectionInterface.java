@@ -20,10 +20,10 @@ import com.testify.ecfeed.adapter.operations.FactoryShiftOperation;
 import com.testify.ecfeed.adapter.operations.GenericMoveOperation;
 import com.testify.ecfeed.adapter.operations.GenericRemoveNodesOperation;
 import com.testify.ecfeed.adapter.operations.GenericShiftOperation;
+import com.testify.ecfeed.core.utils.SystemLogger;
 import com.testify.ecfeed.model.AbstractNode;
 import com.testify.ecfeed.ui.common.EclipseTypeAdapterProvider;
 import com.testify.ecfeed.ui.common.Messages;
-import com.testify.ecfeed.utils.SystemLogger;
 
 public class SelectionInterface extends OperationExecuter {
 

@@ -8,7 +8,7 @@
 
 package com.testify.ecfeed.model;
 
-import com.testify.ecfeed.utils.ExceptionHelper;
+import com.testify.ecfeed.core.utils.ExceptionHelper;
 
 public class ModelConverter {
 

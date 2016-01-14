@@ -51,6 +51,8 @@ import com.testify.ecfeed.android.external.IImplementerExt;
 import com.testify.ecfeed.android.external.IMethodImplementHelper;
 import com.testify.ecfeed.android.external.IProjectHelper;
 import com.testify.ecfeed.android.external.ImplementerExt;
+import com.testify.ecfeed.core.utils.EcException;
+import com.testify.ecfeed.core.utils.SystemLogger;
 import com.testify.ecfeed.model.AbstractNode;
 import com.testify.ecfeed.model.AbstractParameterNode;
 import com.testify.ecfeed.model.ChoiceNode;
@@ -62,8 +64,6 @@ import com.testify.ecfeed.ui.common.utils.EclipsePackageFragmentGetter;
 import com.testify.ecfeed.ui.common.utils.EclipseProjectHelper;
 import com.testify.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.testify.ecfeed.ui.common.utils.JavaUserClassImplementer;
-import com.testify.ecfeed.utils.EcException;
-import com.testify.ecfeed.utils.SystemLogger;
 
 public class EclipseModelImplementer extends AbstractJavaModelImplementer {
 

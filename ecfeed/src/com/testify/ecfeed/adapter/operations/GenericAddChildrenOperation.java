@@ -15,8 +15,8 @@ import java.util.Collection;
 
 import com.testify.ecfeed.adapter.IModelOperation;
 import com.testify.ecfeed.adapter.ITypeAdapterProvider;
+import com.testify.ecfeed.core.utils.SystemLogger;
 import com.testify.ecfeed.model.AbstractNode;
-import com.testify.ecfeed.utils.SystemLogger;
 
 public class GenericAddChildrenOperation extends BulkOperation {
 
