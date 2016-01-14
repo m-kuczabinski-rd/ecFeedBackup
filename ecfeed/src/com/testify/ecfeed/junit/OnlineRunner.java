@@ -26,10 +26,10 @@ import org.junit.Test;
 import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.InitializationError;
 
-import com.testify.ecfeed.generators.api.GeneratorException;
-import com.testify.ecfeed.generators.api.IConstraint;
-import com.testify.ecfeed.generators.api.IGenerator;
-import com.testify.ecfeed.generators.api.IGeneratorParameter;
+import com.testify.ecfeed.core.generators.api.GeneratorException;
+import com.testify.ecfeed.core.generators.api.IConstraint;
+import com.testify.ecfeed.core.generators.api.IGenerator;
+import com.testify.ecfeed.core.generators.api.IGeneratorParameter;
 import com.testify.ecfeed.junit.annotations.Constraints;
 import com.testify.ecfeed.junit.annotations.Generator;
 import com.testify.ecfeed.junit.annotations.GeneratorParameter;

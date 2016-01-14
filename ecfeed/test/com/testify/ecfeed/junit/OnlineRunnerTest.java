@@ -28,12 +28,12 @@ import org.junit.runner.RunWith;
 import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.InitializationError;
 
-import com.testify.ecfeed.generators.CartesianProductGenerator;
-import com.testify.ecfeed.generators.NWiseGenerator;
-import com.testify.ecfeed.generators.algorithms.Tuples;
-import com.testify.ecfeed.generators.api.GeneratorException;
-import com.testify.ecfeed.generators.api.IConstraint;
-import com.testify.ecfeed.generators.api.IGenerator;
+import com.testify.ecfeed.core.generators.CartesianProductGenerator;
+import com.testify.ecfeed.core.generators.NWiseGenerator;
+import com.testify.ecfeed.core.generators.algorithms.Tuples;
+import com.testify.ecfeed.core.generators.api.GeneratorException;
+import com.testify.ecfeed.core.generators.api.IConstraint;
+import com.testify.ecfeed.core.generators.api.IGenerator;
 import com.testify.ecfeed.junit.annotations.Constraints;
 import com.testify.ecfeed.junit.annotations.EcModel;
 import com.testify.ecfeed.junit.annotations.Generator;

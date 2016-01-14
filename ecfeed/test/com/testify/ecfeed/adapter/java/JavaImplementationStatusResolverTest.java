@@ -12,7 +12,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import com.testify.ecfeed.adapter.EImplementationStatus;
-import com.testify.ecfeed.generators.CartesianProductGenerator;
+import com.testify.ecfeed.core.generators.CartesianProductGenerator;
 import com.testify.ecfeed.junit.OnlineRunner;
 import com.testify.ecfeed.junit.annotations.Constraints;
 import com.testify.ecfeed.junit.annotations.EcModel;

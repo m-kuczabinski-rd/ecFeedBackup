@@ -29,9 +29,9 @@ import java.util.Set;
 import org.junit.Test;
 
 import com.testify.ecfeed.adapter.java.JavaPrimitiveTypePredicate;
-import com.testify.ecfeed.generators.RandomGenerator;
-import com.testify.ecfeed.generators.api.GeneratorException;
-import com.testify.ecfeed.generators.api.IConstraint;
+import com.testify.ecfeed.core.generators.RandomGenerator;
+import com.testify.ecfeed.core.generators.api.GeneratorException;
+import com.testify.ecfeed.core.generators.api.IConstraint;
 import com.testify.ecfeed.model.AbstractStatement;
 import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.model.ChoicesParentStatement;

@@ -15,7 +15,7 @@ import com.testify.ecfeed.adapter.IModelOperation;
 import com.testify.ecfeed.adapter.ITypeAdapterProvider;
 import com.testify.ecfeed.adapter.ModelOperationException;
 import com.testify.ecfeed.adapter.ModelOperationManager;
-import com.testify.ecfeed.generators.CartesianProductGenerator;
+import com.testify.ecfeed.core.generators.CartesianProductGenerator;
 import com.testify.ecfeed.junit.OnlineRunner;
 import com.testify.ecfeed.junit.annotations.Constraints;
 import com.testify.ecfeed.junit.annotations.EcModel;

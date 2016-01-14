@@ -19,7 +19,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import com.testify.ecfeed.generators.api.IConstraint;
+import com.testify.ecfeed.core.generators.api.IConstraint;
 
 public class MethodNode extends ParametersParentNode {
 
