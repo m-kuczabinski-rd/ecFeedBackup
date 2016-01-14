@@ -33,7 +33,6 @@ Bundle-ClassPath: lib/xom-1.2.10.jar,
  ecfeed.jar
 Export-Package: com.testify.ecfeed.android.external,
  com.testify.ecfeed.android.utils,
- com.testify.ecfeed.generators,
  com.testify.ecfeed.junit,
  com.testify.ecfeed.junit.annotations,
  com.testify.ecfeed.model,

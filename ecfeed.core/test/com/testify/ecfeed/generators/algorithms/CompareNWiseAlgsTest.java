@@ -117,7 +117,7 @@ public class CompareNWiseAlgsTest {
 			System.out.println(fast.totalProgress() + " / " + fast.totalWork());
 			System.out.println(optimal.totalProgress() + " / " + optimal.totalWork());
 
-			
+		
 			assertTrue("Time F: " + (mid - start) + ", O: " + (end - mid), (mid - start) <= (end - mid));
 			
 		} catch (GeneratorException e) {
