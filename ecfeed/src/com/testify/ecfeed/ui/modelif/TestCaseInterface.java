@@ -14,9 +14,9 @@ package com.testify.ecfeed.ui.modelif;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import com.testify.ecfeed.adapter.EImplementationStatus;
-import com.testify.ecfeed.adapter.IModelOperation;
-import com.testify.ecfeed.adapter.operations.TestCaseOperationUpdateTestData;
+import com.testify.ecfeed.core.adapter.EImplementationStatus;
+import com.testify.ecfeed.core.adapter.IModelOperation;
+import com.testify.ecfeed.core.adapter.operations.TestCaseOperationUpdateTestData;
 import com.testify.ecfeed.core.utils.EcException;
 import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.model.MethodNode;

@@ -39,7 +39,7 @@ import nu.xom.Element;
 import nu.xom.Elements;
 import nu.xom.Node;
 
-import com.testify.ecfeed.adapter.java.JavaPrimitiveTypePredicate;
+import com.testify.ecfeed.core.adapter.java.JavaPrimitiveTypePredicate;
 import com.testify.ecfeed.model.AbstractStatement;
 import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.model.ChoicesParentStatement;

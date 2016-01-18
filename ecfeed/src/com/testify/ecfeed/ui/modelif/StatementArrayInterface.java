@@ -11,11 +11,11 @@
 
 package com.testify.ecfeed.ui.modelif;
 
-import com.testify.ecfeed.adapter.IModelOperation;
-import com.testify.ecfeed.adapter.operations.StatementOperationAddStatement;
-import com.testify.ecfeed.adapter.operations.StatementOperationChangeOperator;
-import com.testify.ecfeed.adapter.operations.StatementOperationRemoveStatement;
-import com.testify.ecfeed.adapter.operations.StatementOperationReplaceChild;
+import com.testify.ecfeed.core.adapter.IModelOperation;
+import com.testify.ecfeed.core.adapter.operations.StatementOperationAddStatement;
+import com.testify.ecfeed.core.adapter.operations.StatementOperationChangeOperator;
+import com.testify.ecfeed.core.adapter.operations.StatementOperationRemoveStatement;
+import com.testify.ecfeed.core.adapter.operations.StatementOperationReplaceChild;
 import com.testify.ecfeed.model.AbstractStatement;
 import com.testify.ecfeed.model.EStatementOperator;
 import com.testify.ecfeed.model.StatementArray;

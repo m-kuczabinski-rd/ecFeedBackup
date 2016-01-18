@@ -44,9 +44,9 @@ import org.eclipse.swt.widgets.Spinner;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Tree;
 
-import com.testify.ecfeed.adapter.EImplementationStatus;
-import com.testify.ecfeed.adapter.IImplementationStatusResolver;
-import com.testify.ecfeed.adapter.java.JavaUtils;
+import com.testify.ecfeed.core.adapter.EImplementationStatus;
+import com.testify.ecfeed.core.adapter.IImplementationStatusResolver;
+import com.testify.ecfeed.core.adapter.java.JavaUtils;
 import com.testify.ecfeed.core.generators.DoubleParameter;
 import com.testify.ecfeed.core.generators.GeneratorFactory;
 import com.testify.ecfeed.core.generators.IntegerParameter;

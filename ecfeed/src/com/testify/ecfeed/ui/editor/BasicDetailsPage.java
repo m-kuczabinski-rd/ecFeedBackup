@@ -36,8 +36,8 @@ import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Section;
 
-import com.testify.ecfeed.adapter.IModelImplementer;
-import com.testify.ecfeed.adapter.ModelOperationManager;
+import com.testify.ecfeed.core.adapter.IModelImplementer;
+import com.testify.ecfeed.core.adapter.ModelOperationManager;
 import com.testify.ecfeed.model.AbstractNode;
 import com.testify.ecfeed.ui.common.EclipseModelImplementer;
 import com.testify.ecfeed.ui.common.ImageManager;

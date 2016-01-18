@@ -20,12 +20,12 @@ import org.eclipse.jdt.ui.JavaUI;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.swt.widgets.Display;
 
-import com.testify.ecfeed.adapter.IModelOperation;
-import com.testify.ecfeed.adapter.java.JavaUtils;
-import com.testify.ecfeed.adapter.operations.AbstractParameterOperationSetType;
-import com.testify.ecfeed.adapter.operations.BulkOperation;
-import com.testify.ecfeed.adapter.operations.ParameterSetTypeCommentsOperation;
-import com.testify.ecfeed.adapter.operations.ReplaceChoicesOperation;
+import com.testify.ecfeed.core.adapter.IModelOperation;
+import com.testify.ecfeed.core.adapter.java.JavaUtils;
+import com.testify.ecfeed.core.adapter.operations.AbstractParameterOperationSetType;
+import com.testify.ecfeed.core.adapter.operations.BulkOperation;
+import com.testify.ecfeed.core.adapter.operations.ParameterSetTypeCommentsOperation;
+import com.testify.ecfeed.core.adapter.operations.ReplaceChoicesOperation;
 import com.testify.ecfeed.core.utils.SystemLogger;
 import com.testify.ecfeed.model.AbstractParameterNode;
 import com.testify.ecfeed.model.ChoiceNode;

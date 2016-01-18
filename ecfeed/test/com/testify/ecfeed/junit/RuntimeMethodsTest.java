@@ -23,7 +23,7 @@ import java.util.Set;
 
 import org.junit.Test;
 
-import com.testify.ecfeed.adapter.java.ModelClassLoader;
+import com.testify.ecfeed.core.adapter.java.ModelClassLoader;
 import com.testify.ecfeed.core.generators.CartesianProductGenerator;
 import com.testify.ecfeed.core.generators.api.GeneratorException;
 import com.testify.ecfeed.core.generators.api.IConstraint;

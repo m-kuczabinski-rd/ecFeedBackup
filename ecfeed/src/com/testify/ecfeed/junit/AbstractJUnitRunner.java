@@ -26,10 +26,10 @@ import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.InitializationError;
 import org.junit.runners.model.TestClass;
 
-import com.testify.ecfeed.adapter.EImplementationStatus;
-import com.testify.ecfeed.adapter.java.ILoaderProvider;
-import com.testify.ecfeed.adapter.java.JavaImplementationStatusResolver;
-import com.testify.ecfeed.adapter.java.ModelClassLoader;
+import com.testify.ecfeed.core.adapter.EImplementationStatus;
+import com.testify.ecfeed.core.adapter.java.ILoaderProvider;
+import com.testify.ecfeed.core.adapter.java.JavaImplementationStatusResolver;
+import com.testify.ecfeed.core.adapter.java.ModelClassLoader;
 import com.testify.ecfeed.junit.annotations.EcModel;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.AbstractNode;

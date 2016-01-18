@@ -26,9 +26,9 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.forms.AbstractFormPart;
 
-import com.testify.ecfeed.adapter.CachedImplementationStatusResolver;
-import com.testify.ecfeed.adapter.IModelOperation;
-import com.testify.ecfeed.adapter.ModelOperationException;
+import com.testify.ecfeed.core.adapter.CachedImplementationStatusResolver;
+import com.testify.ecfeed.core.adapter.IModelOperation;
+import com.testify.ecfeed.core.adapter.ModelOperationException;
 import com.testify.ecfeed.core.utils.SystemLogger;
 
 public class OperationExecuter {

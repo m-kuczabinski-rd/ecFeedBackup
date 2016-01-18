@@ -45,8 +45,8 @@ import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.part.FileEditorInput;
 
-import com.testify.ecfeed.adapter.CachedImplementationStatusResolver;
-import com.testify.ecfeed.adapter.ModelOperationManager;
+import com.testify.ecfeed.core.adapter.CachedImplementationStatusResolver;
+import com.testify.ecfeed.core.adapter.ModelOperationManager;
 import com.testify.ecfeed.core.utils.SystemLogger;
 import com.testify.ecfeed.model.ModelConverter;
 import com.testify.ecfeed.model.ModelVersionDistributor;

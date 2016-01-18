@@ -25,7 +25,7 @@ import org.junit.Test;
 import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.InitializationError;
 
-import com.testify.ecfeed.adapter.EImplementationStatus;
+import com.testify.ecfeed.core.adapter.EImplementationStatus;
 import com.testify.ecfeed.junit.annotations.TestSuites;
 import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.TestCaseNode;

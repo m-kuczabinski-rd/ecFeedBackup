@@ -1,14 +1,14 @@
 package com.testify.ecfeed.testutils;
 
-import static com.testify.ecfeed.adapter.java.Constants.TYPE_NAME_BOOLEAN;
-import static com.testify.ecfeed.adapter.java.Constants.TYPE_NAME_BYTE;
-import static com.testify.ecfeed.adapter.java.Constants.TYPE_NAME_CHAR;
-import static com.testify.ecfeed.adapter.java.Constants.TYPE_NAME_DOUBLE;
-import static com.testify.ecfeed.adapter.java.Constants.TYPE_NAME_FLOAT;
-import static com.testify.ecfeed.adapter.java.Constants.TYPE_NAME_INT;
-import static com.testify.ecfeed.adapter.java.Constants.TYPE_NAME_LONG;
-import static com.testify.ecfeed.adapter.java.Constants.TYPE_NAME_SHORT;
-import static com.testify.ecfeed.adapter.java.Constants.TYPE_NAME_STRING;
+import static com.testify.ecfeed.core.adapter.java.Constants.TYPE_NAME_BOOLEAN;
+import static com.testify.ecfeed.core.adapter.java.Constants.TYPE_NAME_BYTE;
+import static com.testify.ecfeed.core.adapter.java.Constants.TYPE_NAME_CHAR;
+import static com.testify.ecfeed.core.adapter.java.Constants.TYPE_NAME_DOUBLE;
+import static com.testify.ecfeed.core.adapter.java.Constants.TYPE_NAME_FLOAT;
+import static com.testify.ecfeed.core.adapter.java.Constants.TYPE_NAME_INT;
+import static com.testify.ecfeed.core.adapter.java.Constants.TYPE_NAME_LONG;
+import static com.testify.ecfeed.core.adapter.java.Constants.TYPE_NAME_SHORT;
+import static com.testify.ecfeed.core.adapter.java.Constants.TYPE_NAME_STRING;
 
 public enum ETypeName {
 	BOOLEAN(TYPE_NAME_BOOLEAN), 

@@ -18,7 +18,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.ui.forms.widgets.Section;
 
-import com.testify.ecfeed.adapter.EImplementationStatus;
+import com.testify.ecfeed.core.adapter.EImplementationStatus;
 import com.testify.ecfeed.model.AbstractParameterNode;
 import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.model.TestCaseNode;

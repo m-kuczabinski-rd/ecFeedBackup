@@ -15,11 +15,11 @@ import org.eclipse.jdt.core.IField;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaModelException;
 
-import com.testify.ecfeed.adapter.java.JavaPrimitiveTypePredicate;
 import com.testify.ecfeed.android.external.IClassImplementHelper;
 import com.testify.ecfeed.android.external.IInstallationDirFileHelper;
 import com.testify.ecfeed.android.external.IProjectHelper;
 import com.testify.ecfeed.android.external.ImplementerExt;
+import com.testify.ecfeed.core.adapter.java.JavaPrimitiveTypePredicate;
 import com.testify.ecfeed.core.utils.EcException;
 import com.testify.ecfeed.core.utils.SystemLogger;
 import com.testify.ecfeed.model.ClassNode;

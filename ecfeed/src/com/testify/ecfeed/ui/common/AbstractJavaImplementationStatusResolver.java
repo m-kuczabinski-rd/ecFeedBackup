@@ -8,8 +8,8 @@
 
 package com.testify.ecfeed.ui.common;
 
-import com.testify.ecfeed.adapter.CachedImplementationStatusResolver;
-import com.testify.ecfeed.adapter.EImplementationStatus;
+import com.testify.ecfeed.core.adapter.CachedImplementationStatusResolver;
+import com.testify.ecfeed.core.adapter.EImplementationStatus;
 import com.testify.ecfeed.core.utils.EcException;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.IPrimitiveTypePredicate;

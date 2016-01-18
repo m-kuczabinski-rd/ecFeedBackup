@@ -13,9 +13,9 @@ package com.testify.ecfeed.ui.modelif;
 
 import java.util.List;
 
-import com.testify.ecfeed.adapter.IModelOperation;
-import com.testify.ecfeed.adapter.java.JavaUtils;
-import com.testify.ecfeed.adapter.operations.GlobalParameterOperationSetType;
+import com.testify.ecfeed.core.adapter.IModelOperation;
+import com.testify.ecfeed.core.adapter.java.JavaUtils;
+import com.testify.ecfeed.core.adapter.operations.GlobalParameterOperationSetType;
 import com.testify.ecfeed.model.GlobalParameterNode;
 import com.testify.ecfeed.model.MethodParameterNode;
 import com.testify.ecfeed.ui.common.utils.IFileInfoProvider;

@@ -18,10 +18,10 @@ import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
 
-import com.testify.ecfeed.adapter.IModelOperation;
-import com.testify.ecfeed.adapter.ModelOperationException;
-import com.testify.ecfeed.adapter.operations.RootOperationAddClasses;
-import com.testify.ecfeed.adapter.operations.RootOperationAddNewClass;
+import com.testify.ecfeed.core.adapter.IModelOperation;
+import com.testify.ecfeed.core.adapter.ModelOperationException;
+import com.testify.ecfeed.core.adapter.operations.RootOperationAddClasses;
+import com.testify.ecfeed.core.adapter.operations.RootOperationAddNewClass;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.ui.common.Constants;

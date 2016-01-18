@@ -38,7 +38,7 @@ import org.eclipse.ui.forms.AbstractFormPart;
 import org.eclipse.ui.forms.IDetailsPage;
 import org.eclipse.ui.forms.widgets.Section;
 
-import com.testify.ecfeed.adapter.java.JavaUtils;
+import com.testify.ecfeed.core.adapter.java.JavaUtils;
 import com.testify.ecfeed.core.utils.SystemLogger;
 import com.testify.ecfeed.model.AbstractNode;
 import com.testify.ecfeed.model.ChoiceNode;

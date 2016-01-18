@@ -11,7 +11,10 @@ import java.util.List;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import com.testify.ecfeed.adapter.EImplementationStatus;
+import com.testify.ecfeed.core.adapter.EImplementationStatus;
+import com.testify.ecfeed.core.adapter.java.ILoaderProvider;
+import com.testify.ecfeed.core.adapter.java.JavaImplementationStatusResolver;
+import com.testify.ecfeed.core.adapter.java.ModelClassLoader;
 import com.testify.ecfeed.core.generators.CartesianProductGenerator;
 import com.testify.ecfeed.junit.OnlineRunner;
 import com.testify.ecfeed.junit.annotations.Constraints;

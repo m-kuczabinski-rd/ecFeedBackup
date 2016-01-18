@@ -5,6 +5,8 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
+import com.testify.ecfeed.core.adapter.java.Constants;
+
 public class RegexTest {
 
 	boolean matchTextWithRegex(String text, String regex) {

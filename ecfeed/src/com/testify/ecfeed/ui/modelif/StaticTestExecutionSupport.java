@@ -23,10 +23,10 @@ import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.swt.widgets.Display;
 
-import com.testify.ecfeed.adapter.java.ILoaderProvider;
-import com.testify.ecfeed.adapter.java.ModelClassLoader;
 import com.testify.ecfeed.android.external.ApkInstallerExt;
 import com.testify.ecfeed.android.external.DeviceCheckerExt;
+import com.testify.ecfeed.core.adapter.java.ILoaderProvider;
+import com.testify.ecfeed.core.adapter.java.ModelClassLoader;
 import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.runner.ITestMethodInvoker;
 import com.testify.ecfeed.runner.JavaTestRunner;

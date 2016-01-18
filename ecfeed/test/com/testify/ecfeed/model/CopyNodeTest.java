@@ -17,7 +17,7 @@ import java.util.Arrays;
 
 import org.junit.Test;
 
-import com.testify.ecfeed.adapter.java.JavaPrimitiveTypePredicate;
+import com.testify.ecfeed.core.adapter.java.JavaPrimitiveTypePredicate;
 
 
 public class CopyNodeTest{

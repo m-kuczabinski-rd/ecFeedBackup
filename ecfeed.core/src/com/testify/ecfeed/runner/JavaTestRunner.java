@@ -15,10 +15,10 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.testify.ecfeed.adapter.java.ChoiceValueParser;
-import com.testify.ecfeed.adapter.java.Constants;
-import com.testify.ecfeed.adapter.java.JavaUtils;
-import com.testify.ecfeed.adapter.java.ModelClassLoader;
+import com.testify.ecfeed.core.adapter.java.ChoiceValueParser;
+import com.testify.ecfeed.core.adapter.java.Constants;
+import com.testify.ecfeed.core.adapter.java.JavaUtils;
+import com.testify.ecfeed.core.adapter.java.ModelClassLoader;
 import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.model.MethodNode;

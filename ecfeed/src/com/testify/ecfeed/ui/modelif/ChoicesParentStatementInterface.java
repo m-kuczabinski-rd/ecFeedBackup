@@ -11,9 +11,9 @@
 
 package com.testify.ecfeed.ui.modelif;
 
-import com.testify.ecfeed.adapter.IModelOperation;
-import com.testify.ecfeed.adapter.operations.StatementOperationSetCondition;
-import com.testify.ecfeed.adapter.operations.StatementOperationSetRelation;
+import com.testify.ecfeed.core.adapter.IModelOperation;
+import com.testify.ecfeed.core.adapter.operations.StatementOperationSetCondition;
+import com.testify.ecfeed.core.adapter.operations.StatementOperationSetRelation;
 import com.testify.ecfeed.model.ChoicesParentStatement;
 import com.testify.ecfeed.model.ChoicesParentStatement.ICondition;
 import com.testify.ecfeed.model.EStatementRelation;

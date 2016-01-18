@@ -18,9 +18,9 @@ import java.util.List;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
 
-import com.testify.ecfeed.adapter.IModelOperation;
-import com.testify.ecfeed.adapter.operations.GenericOperationAddChoice;
-import com.testify.ecfeed.adapter.operations.GenericOperationRemoveChoice;
+import com.testify.ecfeed.core.adapter.IModelOperation;
+import com.testify.ecfeed.core.adapter.operations.GenericOperationAddChoice;
+import com.testify.ecfeed.core.adapter.operations.GenericOperationRemoveChoice;
 import com.testify.ecfeed.model.AbstractParameterNode;
 import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.model.ChoicesParentNode;

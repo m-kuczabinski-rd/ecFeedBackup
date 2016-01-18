@@ -28,7 +28,7 @@ import java.util.Set;
 
 import org.junit.Test;
 
-import com.testify.ecfeed.adapter.java.JavaPrimitiveTypePredicate;
+import com.testify.ecfeed.core.adapter.java.JavaPrimitiveTypePredicate;
 import com.testify.ecfeed.core.generators.RandomGenerator;
 import com.testify.ecfeed.core.generators.api.GeneratorException;
 import com.testify.ecfeed.core.generators.api.IConstraint;
@@ -123,7 +123,7 @@ public class XmlParserSerializerTest {
 			RootNode root = new RootNode("root", version);
 			ClassNode classNode = new ClassNode("classNode");
 			MethodNode method = new MethodNode("method");
-			MethodParameterNode parameter = new MethodParameterNode("parameter", com.testify.ecfeed.adapter.java.Constants.TYPE_NAME_STRING, "0", false);
+			MethodParameterNode parameter = new MethodParameterNode("parameter", com.testify.ecfeed.core.adapter.java.Constants.TYPE_NAME_STRING, "0", false);
 			ChoiceNode choice = new ChoiceNode("choice", "A                 B");
 			List<ChoiceNode> testData = new ArrayList<ChoiceNode>();
 			testData.add(choice);
@@ -161,9 +161,9 @@ public class XmlParserSerializerTest {
 			ClassNode classNode = new ClassNode("classNode");
 			MethodNode method = new MethodNode("method");
 			MethodParameterNode choicesParentParameter =
-					new MethodParameterNode("choicesParentParameter", com.testify.ecfeed.adapter.java.Constants.TYPE_NAME_STRING, "0", false);
+					new MethodParameterNode("choicesParentParameter", com.testify.ecfeed.core.adapter.java.Constants.TYPE_NAME_STRING, "0", false);
 			MethodParameterNode expectedParameter =
-					new MethodParameterNode("expectedParameter", com.testify.ecfeed.adapter.java.Constants.TYPE_NAME_CHAR, "0", true);
+					new MethodParameterNode("expectedParameter", com.testify.ecfeed.core.adapter.java.Constants.TYPE_NAME_CHAR, "0", true);
 			expectedParameter.setDefaultValueString("d");
 			ChoiceNode choice1 = new ChoiceNode("choice", "p");
 			choice1.setParent(choicesParentParameter);

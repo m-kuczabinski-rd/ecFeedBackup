@@ -25,7 +25,7 @@ import java.util.Set;
 import org.junit.Test;
 import org.junit.runners.model.FrameworkMethod;
 
-import com.testify.ecfeed.adapter.java.ModelClassLoader;
+import com.testify.ecfeed.core.adapter.java.ModelClassLoader;
 import com.testify.ecfeed.junit.JavaParameterizedMethod;
 import com.testify.ecfeed.model.MethodParameterNode;
 import com.testify.ecfeed.model.ClassNode;

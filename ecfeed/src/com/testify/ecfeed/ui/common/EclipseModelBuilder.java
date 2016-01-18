@@ -23,8 +23,8 @@ import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.core.Signature;
 
-import com.testify.ecfeed.adapter.ModelOperationException;
-import com.testify.ecfeed.adapter.java.JavaUtils;
+import com.testify.ecfeed.core.adapter.ModelOperationException;
+import com.testify.ecfeed.core.adapter.java.JavaUtils;
 import com.testify.ecfeed.core.utils.SystemLogger;
 import com.testify.ecfeed.model.MethodParameterNode;
 import com.testify.ecfeed.model.ClassNode;
@@ -101,23 +101,23 @@ public class EclipseModelBuilder extends JavaModelAnalyser{
 	public List<String> getSpecialValues(String typeName) {
 		List<String> result = new ArrayList<String>();
 		switch(typeName){
-		case com.testify.ecfeed.adapter.java.Constants.TYPE_NAME_BOOLEAN:
+		case com.testify.ecfeed.core.adapter.java.Constants.TYPE_NAME_BOOLEAN:
 			result.addAll(Arrays.asList(Constants.BOOLEAN_SPECIAL_VALUES));
 			break;
-		case com.testify.ecfeed.adapter.java.Constants.TYPE_NAME_CHAR:
+		case com.testify.ecfeed.core.adapter.java.Constants.TYPE_NAME_CHAR:
 			result.addAll(Arrays.asList(Constants.DEFAULT_EXPECTED_CHAR_VALUE));
 			break;
-		case com.testify.ecfeed.adapter.java.Constants.TYPE_NAME_BYTE:
-		case com.testify.ecfeed.adapter.java.Constants.TYPE_NAME_INT:
-		case com.testify.ecfeed.adapter.java.Constants.TYPE_NAME_LONG:
-		case com.testify.ecfeed.adapter.java.Constants.TYPE_NAME_SHORT:
+		case com.testify.ecfeed.core.adapter.java.Constants.TYPE_NAME_BYTE:
+		case com.testify.ecfeed.core.adapter.java.Constants.TYPE_NAME_INT:
+		case com.testify.ecfeed.core.adapter.java.Constants.TYPE_NAME_LONG:
+		case com.testify.ecfeed.core.adapter.java.Constants.TYPE_NAME_SHORT:
 			result.addAll(Arrays.asList(Constants.INTEGER_SPECIAL_VALUES));
 			break;
-		case com.testify.ecfeed.adapter.java.Constants.TYPE_NAME_DOUBLE:
-		case com.testify.ecfeed.adapter.java.Constants.TYPE_NAME_FLOAT:
+		case com.testify.ecfeed.core.adapter.java.Constants.TYPE_NAME_DOUBLE:
+		case com.testify.ecfeed.core.adapter.java.Constants.TYPE_NAME_FLOAT:
 			result.addAll(Arrays.asList(Constants.FLOAT_SPECIAL_VALUES));
 			break;
-		case com.testify.ecfeed.adapter.java.Constants.TYPE_NAME_STRING:
+		case com.testify.ecfeed.core.adapter.java.Constants.TYPE_NAME_STRING:
 			result.addAll(Arrays.asList(Constants.STRING_SPECIAL_VALUES));
 			break;
 		default:
@@ -130,23 +130,23 @@ public class EclipseModelBuilder extends JavaModelAnalyser{
 
 	public String getDefaultExpectedValue(String type) {
 		switch(type){
-		case com.testify.ecfeed.adapter.java.Constants.TYPE_NAME_BYTE:
+		case com.testify.ecfeed.core.adapter.java.Constants.TYPE_NAME_BYTE:
 			return Constants.DEFAULT_EXPECTED_BYTE_VALUE;
-		case com.testify.ecfeed.adapter.java.Constants.TYPE_NAME_BOOLEAN:
+		case com.testify.ecfeed.core.adapter.java.Constants.TYPE_NAME_BOOLEAN:
 			return Constants.DEFAULT_EXPECTED_BOOLEAN_VALUE;
-		case com.testify.ecfeed.adapter.java.Constants.TYPE_NAME_CHAR:
+		case com.testify.ecfeed.core.adapter.java.Constants.TYPE_NAME_CHAR:
 			return Constants.DEFAULT_EXPECTED_CHAR_VALUE;
-		case com.testify.ecfeed.adapter.java.Constants.TYPE_NAME_DOUBLE:
+		case com.testify.ecfeed.core.adapter.java.Constants.TYPE_NAME_DOUBLE:
 			return Constants.DEFAULT_EXPECTED_DOUBLE_VALUE;
-		case com.testify.ecfeed.adapter.java.Constants.TYPE_NAME_FLOAT:
+		case com.testify.ecfeed.core.adapter.java.Constants.TYPE_NAME_FLOAT:
 			return Constants.DEFAULT_EXPECTED_FLOAT_VALUE;
-		case com.testify.ecfeed.adapter.java.Constants.TYPE_NAME_INT:
+		case com.testify.ecfeed.core.adapter.java.Constants.TYPE_NAME_INT:
 			return Constants.DEFAULT_EXPECTED_INT_VALUE;
-		case com.testify.ecfeed.adapter.java.Constants.TYPE_NAME_LONG:
+		case com.testify.ecfeed.core.adapter.java.Constants.TYPE_NAME_LONG:
 			return Constants.DEFAULT_EXPECTED_LONG_VALUE;
-		case com.testify.ecfeed.adapter.java.Constants.TYPE_NAME_SHORT:
+		case com.testify.ecfeed.core.adapter.java.Constants.TYPE_NAME_SHORT:
 			return Constants.DEFAULT_EXPECTED_SHORT_VALUE;
-		case com.testify.ecfeed.adapter.java.Constants.TYPE_NAME_STRING:
+		case com.testify.ecfeed.core.adapter.java.Constants.TYPE_NAME_STRING:
 			return Constants.DEFAULT_EXPECTED_STRING_VALUE;
 		default:
 			return defaultEnumExpectedValue(type);
