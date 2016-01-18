@@ -12,4 +12,6 @@ Export-Package: com.testify.ecfeed.adapter,
  com.testify.ecfeed.core.generators.algorithms,
  com.testify.ecfeed.core.generators.api,
  com.testify.ecfeed.core.utils,
- com.testify.ecfeed.model
+ com.testify.ecfeed.model,
+ com.testify.ecfeed.runner,
+ com.testify.ecfeed.runner.java
