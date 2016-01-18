@@ -6,14 +6,13 @@
  * http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 
-package com.testify.ecfeed.serialization.ect;
+package com.testify.ecfeed.core.serialization.ect;
 
-import static com.testify.ecfeed.serialization.ect.Constants.ROOT_NODE_NAME;
-import static com.testify.ecfeed.serialization.ect.Constants.VERSION_ATTRIBUTE;
-
+import static com.testify.ecfeed.core.serialization.ect.Constants.ROOT_NODE_NAME;
+import static com.testify.ecfeed.core.serialization.ect.Constants.VERSION_ATTRIBUTE;
 import nu.xom.Element;
 
-import com.testify.ecfeed.serialization.ParserException;
+import com.testify.ecfeed.core.serialization.ParserException;
 
 public class XomModelVersionDetector {
 

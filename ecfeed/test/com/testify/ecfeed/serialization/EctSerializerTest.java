@@ -34,8 +34,10 @@ import com.testify.ecfeed.core.model.MethodParameterNode;
 import com.testify.ecfeed.core.model.ModelConverter;
 import com.testify.ecfeed.core.model.ModelVersionDistributor;
 import com.testify.ecfeed.core.model.RootNode;
-import com.testify.ecfeed.serialization.ect.EctParser;
-import com.testify.ecfeed.serialization.ect.EctSerializer;
+import com.testify.ecfeed.core.serialization.IModelParser;
+import com.testify.ecfeed.core.serialization.IModelSerializer;
+import com.testify.ecfeed.core.serialization.ect.EctParser;
+import com.testify.ecfeed.core.serialization.ect.EctSerializer;
 import com.testify.ecfeed.testutils.RandomModelGenerator;
 
 public class EctSerializerTest {

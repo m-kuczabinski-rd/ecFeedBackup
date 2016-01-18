@@ -14,6 +14,6 @@ Export-Package: com.testify.ecfeed.core,
  com.testify.ecfeed.core.model,
  com.testify.ecfeed.core.runner,
  com.testify.ecfeed.core.runner.java,
- com.testify.ecfeed.core.utils,
- com.testify.ecfeed.serialization,
- com.testify.ecfeed.serialization.ect
+ com.testify.ecfeed.core.serialization,
+ com.testify.ecfeed.core.serialization.ect,
+ com.testify.ecfeed.core.utils

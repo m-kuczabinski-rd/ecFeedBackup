@@ -6,33 +6,33 @@
  * http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 
-package com.testify.ecfeed.serialization.ect;
+package com.testify.ecfeed.core.serialization.ect;
 
-public class SerializationHelperVersion0 {
+public class SerializationHelperVersion1 {
 
-	private static final String CHOICE_NODE_NAME_VERSION_0 = "Partition";
-	private static final String CHOICE_ATTRIBUTE_NAME_VERSION_0 = "partition";
-	private static final String STATEMENT_CHOICE_ATTRIBUTE_NAME_VERSION_0 = "partition";
-	private static final String PARAMETER_NODE_NAME_VERSION_0 = "Category";
-	private static final String STATEMENT_PARAMETER_ATTRIBUTE_NAME_VERSION_0 = "category";
+	private static final String PARAMETER_NODE_NAME_VERSION_1 = "Parameter";
+	private static final String STATEMENT_PARAMETER_ATTRIBUTE_NAME_VERSION_1 = "parameter";
+	private static final String CHOICE_NODE_NAME_VERSION_1 = "Choice";
+	private static final String CHOICE_ATTRIBUTE_NAME_VERSION_1 = "choice";
+	private static final String STATEMENT_CHOICE_ATTRIBUTE_NAME_VERSION_1 = "choice";
 
 	public static String getChoiceNodeName() {
-		return CHOICE_NODE_NAME_VERSION_0;
+		return CHOICE_NODE_NAME_VERSION_1;
 	}
 
 	public static String getChoiceAttributeName() {
-		return CHOICE_ATTRIBUTE_NAME_VERSION_0;
+		return CHOICE_ATTRIBUTE_NAME_VERSION_1;
 	}
 
 	public static String getStatementChoiceAttributeName() {
-		return STATEMENT_CHOICE_ATTRIBUTE_NAME_VERSION_0;
+		return STATEMENT_CHOICE_ATTRIBUTE_NAME_VERSION_1;
 	}
 
 	public static String getParameterNodeName() {
-		return PARAMETER_NODE_NAME_VERSION_0;
+		return PARAMETER_NODE_NAME_VERSION_1;
 	}
 
 	public static String getStatementParameterAttributeName() {
-		return STATEMENT_PARAMETER_ATTRIBUTE_NAME_VERSION_0;
+		return STATEMENT_PARAMETER_ATTRIBUTE_NAME_VERSION_1;
 	}
 }

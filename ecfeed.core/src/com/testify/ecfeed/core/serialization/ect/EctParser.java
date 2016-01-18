@@ -9,7 +9,7 @@
  *     Patryk Chamuczynski (p.chamuczynski(at)radytek.com) - initial implementation
  ******************************************************************************/
 
-package com.testify.ecfeed.serialization.ect;
+package com.testify.ecfeed.core.serialization.ect;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -33,9 +33,9 @@ import com.testify.ecfeed.core.model.RootNode;
 import com.testify.ecfeed.core.model.StatementArray;
 import com.testify.ecfeed.core.model.StaticStatement;
 import com.testify.ecfeed.core.model.TestCaseNode;
+import com.testify.ecfeed.core.serialization.IModelParser;
+import com.testify.ecfeed.core.serialization.ParserException;
 import com.testify.ecfeed.core.utils.ExceptionHelper;
-import com.testify.ecfeed.serialization.IModelParser;
-import com.testify.ecfeed.serialization.ParserException;
 
 public class EctParser implements IModelParser {
 

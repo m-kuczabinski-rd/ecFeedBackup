@@ -6,32 +6,32 @@
  * http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 
-package com.testify.ecfeed.serialization.ect;
+package com.testify.ecfeed.core.serialization.ect;
 
-public class XomBuilderVersion0 extends XomBuilder {
+public class XomBuilderVersion1 extends XomBuilder {
 
 	@Override
 	protected String getChoiceNodeName() {
-		return SerializationHelperVersion0.getChoiceNodeName();
+		return SerializationHelperVersion1.getChoiceNodeName();
 	}
 
 	@Override	
 	protected String getChoiceAttributeName() {
-		return SerializationHelperVersion0.getChoiceAttributeName();
+		return SerializationHelperVersion1.getChoiceAttributeName();
 	}
 
 	@Override
 	protected String getStatementChoiceAttributeName() {
-		return SerializationHelperVersion0.getStatementChoiceAttributeName();
+		return SerializationHelperVersion1.getStatementChoiceAttributeName();
 	}
 
 	@Override
 	protected String getParameterNodeName() {
-		return SerializationHelperVersion0.getParameterNodeName();
+		return SerializationHelperVersion1.getParameterNodeName();
 	}
 
 	@Override
 	protected String getStatementParameterAttributeName() {
-		return SerializationHelperVersion0.getStatementParameterAttributeName();
+		return SerializationHelperVersion1.getStatementParameterAttributeName();
 	}
 }

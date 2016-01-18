@@ -38,11 +38,11 @@ import com.testify.ecfeed.core.model.RootNode;
 import com.testify.ecfeed.core.model.StatementArray;
 import com.testify.ecfeed.core.model.StaticStatement;
 import com.testify.ecfeed.core.model.TestCaseNode;
-import com.testify.ecfeed.serialization.ect.Constants;
-import com.testify.ecfeed.serialization.ect.XomAnalyser;
-import com.testify.ecfeed.serialization.ect.XomAnalyserFactory;
-import com.testify.ecfeed.serialization.ect.XomBuilder;
-import com.testify.ecfeed.serialization.ect.XomBuilderFactory;
+import com.testify.ecfeed.core.serialization.ect.Constants;
+import com.testify.ecfeed.core.serialization.ect.XomAnalyser;
+import com.testify.ecfeed.core.serialization.ect.XomAnalyserFactory;
+import com.testify.ecfeed.core.serialization.ect.XomBuilder;
+import com.testify.ecfeed.core.serialization.ect.XomBuilderFactory;
 import com.testify.ecfeed.testutils.ModelStringifier;
 import com.testify.ecfeed.testutils.RandomModelGenerator;
 

@@ -36,11 +36,11 @@ import com.testify.ecfeed.core.model.MethodNode;
 import com.testify.ecfeed.core.model.RootNode;
 import com.testify.ecfeed.core.model.TestCaseNode;
 import com.testify.ecfeed.core.runner.RunnerException;
+import com.testify.ecfeed.core.serialization.IModelParser;
+import com.testify.ecfeed.core.serialization.ParserException;
+import com.testify.ecfeed.core.serialization.ect.EctParser;
 import com.testify.ecfeed.junit.annotations.EcModel;
 import com.testify.ecfeed.junit.annotations.TestSuites;
-import com.testify.ecfeed.serialization.IModelParser;
-import com.testify.ecfeed.serialization.ParserException;
-import com.testify.ecfeed.serialization.ect.EctParser;
 
 public class StaticRunnerTest extends StaticRunner{
 	public StaticRunnerTest() throws InitializationError {

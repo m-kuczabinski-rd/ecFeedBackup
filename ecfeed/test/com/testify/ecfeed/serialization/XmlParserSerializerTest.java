@@ -48,9 +48,12 @@ import com.testify.ecfeed.core.model.RootNode;
 import com.testify.ecfeed.core.model.StatementArray;
 import com.testify.ecfeed.core.model.StaticStatement;
 import com.testify.ecfeed.core.model.TestCaseNode;
-import com.testify.ecfeed.serialization.ect.Constants;
-import com.testify.ecfeed.serialization.ect.EctParser;
-import com.testify.ecfeed.serialization.ect.EctSerializer;
+import com.testify.ecfeed.core.serialization.IModelParser;
+import com.testify.ecfeed.core.serialization.IModelSerializer;
+import com.testify.ecfeed.core.serialization.ParserException;
+import com.testify.ecfeed.core.serialization.ect.Constants;
+import com.testify.ecfeed.core.serialization.ect.EctParser;
+import com.testify.ecfeed.core.serialization.ect.EctSerializer;
 
 public class XmlParserSerializerTest {
 	private final int TEST_RUNS = 10;

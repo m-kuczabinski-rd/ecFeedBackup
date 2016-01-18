@@ -9,27 +9,27 @@
  *     Patryk Chamuczynski (p.chamuczynski(at)radytek.com) - initial implementation
  ******************************************************************************/
 
-package com.testify.ecfeed.serialization.ect;
+package com.testify.ecfeed.core.serialization.ect;
 
-import static com.testify.ecfeed.serialization.ect.Constants.ANDROID_RUNNER_ATTRIBUTE_NAME;
-import static com.testify.ecfeed.serialization.ect.Constants.CLASS_NODE_NAME;
-import static com.testify.ecfeed.serialization.ect.Constants.CONSTRAINT_CHOICE_STATEMENT_NODE_NAME;
-import static com.testify.ecfeed.serialization.ect.Constants.CONSTRAINT_EXPECTED_STATEMENT_NODE_NAME;
-import static com.testify.ecfeed.serialization.ect.Constants.CONSTRAINT_LABEL_STATEMENT_NODE_NAME;
-import static com.testify.ecfeed.serialization.ect.Constants.CONSTRAINT_NODE_NAME;
-import static com.testify.ecfeed.serialization.ect.Constants.CONSTRAINT_STATEMENT_ARRAY_NODE_NAME;
-import static com.testify.ecfeed.serialization.ect.Constants.CONSTRAINT_STATIC_STATEMENT_NODE_NAME;
-import static com.testify.ecfeed.serialization.ect.Constants.DEFAULT_EXPECTED_VALUE_ATTRIBUTE_NAME;
-import static com.testify.ecfeed.serialization.ect.Constants.METHOD_NODE_NAME;
-import static com.testify.ecfeed.serialization.ect.Constants.PARAMETER_IS_EXPECTED_ATTRIBUTE_NAME;
-import static com.testify.ecfeed.serialization.ect.Constants.PARAMETER_IS_LINKED_ATTRIBUTE_NAME;
-import static com.testify.ecfeed.serialization.ect.Constants.PARAMETER_IS_RUN_ON_ANDROID_ATTRIBUTE_NAME;
-import static com.testify.ecfeed.serialization.ect.Constants.PARAMETER_LINK_ATTRIBUTE_NAME;
-import static com.testify.ecfeed.serialization.ect.Constants.ROOT_NODE_NAME;
-import static com.testify.ecfeed.serialization.ect.Constants.TEST_CASE_NODE_NAME;
-import static com.testify.ecfeed.serialization.ect.Constants.TEST_SUITE_NAME_ATTRIBUTE;
-import static com.testify.ecfeed.serialization.ect.Constants.TYPE_NAME_ATTRIBUTE;
-import static com.testify.ecfeed.serialization.ect.Constants.VALUE_ATTRIBUTE;
+import static com.testify.ecfeed.core.serialization.ect.Constants.ANDROID_RUNNER_ATTRIBUTE_NAME;
+import static com.testify.ecfeed.core.serialization.ect.Constants.CLASS_NODE_NAME;
+import static com.testify.ecfeed.core.serialization.ect.Constants.CONSTRAINT_CHOICE_STATEMENT_NODE_NAME;
+import static com.testify.ecfeed.core.serialization.ect.Constants.CONSTRAINT_EXPECTED_STATEMENT_NODE_NAME;
+import static com.testify.ecfeed.core.serialization.ect.Constants.CONSTRAINT_LABEL_STATEMENT_NODE_NAME;
+import static com.testify.ecfeed.core.serialization.ect.Constants.CONSTRAINT_NODE_NAME;
+import static com.testify.ecfeed.core.serialization.ect.Constants.CONSTRAINT_STATEMENT_ARRAY_NODE_NAME;
+import static com.testify.ecfeed.core.serialization.ect.Constants.CONSTRAINT_STATIC_STATEMENT_NODE_NAME;
+import static com.testify.ecfeed.core.serialization.ect.Constants.DEFAULT_EXPECTED_VALUE_ATTRIBUTE_NAME;
+import static com.testify.ecfeed.core.serialization.ect.Constants.METHOD_NODE_NAME;
+import static com.testify.ecfeed.core.serialization.ect.Constants.PARAMETER_IS_EXPECTED_ATTRIBUTE_NAME;
+import static com.testify.ecfeed.core.serialization.ect.Constants.PARAMETER_IS_LINKED_ATTRIBUTE_NAME;
+import static com.testify.ecfeed.core.serialization.ect.Constants.PARAMETER_IS_RUN_ON_ANDROID_ATTRIBUTE_NAME;
+import static com.testify.ecfeed.core.serialization.ect.Constants.PARAMETER_LINK_ATTRIBUTE_NAME;
+import static com.testify.ecfeed.core.serialization.ect.Constants.ROOT_NODE_NAME;
+import static com.testify.ecfeed.core.serialization.ect.Constants.TEST_CASE_NODE_NAME;
+import static com.testify.ecfeed.core.serialization.ect.Constants.TEST_SUITE_NAME_ATTRIBUTE;
+import static com.testify.ecfeed.core.serialization.ect.Constants.TYPE_NAME_ATTRIBUTE;
+import static com.testify.ecfeed.core.serialization.ect.Constants.VALUE_ATTRIBUTE;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -56,8 +56,8 @@ import com.testify.ecfeed.core.model.RootNode;
 import com.testify.ecfeed.core.model.StatementArray;
 import com.testify.ecfeed.core.model.StaticStatement;
 import com.testify.ecfeed.core.model.TestCaseNode;
-import com.testify.ecfeed.serialization.ParserException;
-import com.testify.ecfeed.serialization.WhiteCharConverter;
+import com.testify.ecfeed.core.serialization.ParserException;
+import com.testify.ecfeed.core.serialization.WhiteCharConverter;
 
 public abstract class XomAnalyser {
 
