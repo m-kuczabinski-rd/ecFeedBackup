@@ -35,6 +35,5 @@ Export-Package: com.testify.ecfeed.android.external,
  com.testify.ecfeed.android.utils,
  com.testify.ecfeed.junit,
  com.testify.ecfeed.junit.annotations,
- com.testify.ecfeed.model,
  com.testify.ecfeed.ui.common.utils,
  com.testify.ecfeed.utils

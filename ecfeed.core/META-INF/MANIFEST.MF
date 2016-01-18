@@ -8,4 +8,5 @@ Export-Package: com.testify.ecfeed.core,
  com.testify.ecfeed.core.generators,
  com.testify.ecfeed.core.generators.algorithms,
  com.testify.ecfeed.core.generators.api,
- com.testify.ecfeed.core.utils
+ com.testify.ecfeed.core.utils,
+ com.testify.ecfeed.model
