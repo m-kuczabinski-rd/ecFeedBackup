@@ -9,7 +9,7 @@
  *     Patryk Chamuczynski (p.chamuczynski(at)radytek.com) - initial implementation
  ******************************************************************************/
 
-package com.testify.ecfeed.model;
+package com.testify.ecfeed.core.model;
 
 import static com.testify.ecfeed.testutils.Constants.SUPPORTED_TYPES;
 import static com.testify.ecfeed.testutils.ModelTestUtils.assertElementsEqual;

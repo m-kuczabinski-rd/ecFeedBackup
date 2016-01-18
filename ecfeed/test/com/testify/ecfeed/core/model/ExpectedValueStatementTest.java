@@ -9,7 +9,7 @@
  *     Michal Gluszko (m.gluszko(at)radytek.com) - initial implementation
  ******************************************************************************/
 
-package com.testify.ecfeed.model;
+package com.testify.ecfeed.core.model;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
