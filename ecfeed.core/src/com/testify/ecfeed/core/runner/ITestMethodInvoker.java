@@ -6,7 +6,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 
-package com.testify.ecfeed.runner;
+package com.testify.ecfeed.core.runner;
 
 import java.lang.reflect.Method;
 

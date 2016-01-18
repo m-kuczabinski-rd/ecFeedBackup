@@ -39,11 +39,11 @@ import com.testify.ecfeed.core.model.ConstraintNode;
 import com.testify.ecfeed.core.model.MethodNode;
 import com.testify.ecfeed.core.model.MethodParameterNode;
 import com.testify.ecfeed.core.model.RootNode;
+import com.testify.ecfeed.core.runner.RunnerException;
 import com.testify.ecfeed.junit.annotations.Constraints;
 import com.testify.ecfeed.junit.annotations.EcModel;
 import com.testify.ecfeed.junit.annotations.Generator;
 import com.testify.ecfeed.junit.annotations.GeneratorParameter;
-import com.testify.ecfeed.runner.RunnerException;
 
 public class OnlineRunnerTest extends StaticRunnerTest{
 

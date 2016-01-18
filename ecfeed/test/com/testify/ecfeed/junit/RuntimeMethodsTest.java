@@ -30,8 +30,8 @@ import com.testify.ecfeed.core.generators.api.IConstraint;
 import com.testify.ecfeed.core.generators.api.IGenerator;
 import com.testify.ecfeed.core.model.ChoiceNode;
 import com.testify.ecfeed.core.model.MethodParameterNode;
-import com.testify.ecfeed.runner.RunnerException;
-import com.testify.ecfeed.runner.java.JUnitTestMethodInvoker;
+import com.testify.ecfeed.core.runner.RunnerException;
+import com.testify.ecfeed.core.runner.java.JUnitTestMethodInvoker;
 
 public class RuntimeMethodsTest {
 

@@ -33,13 +33,13 @@ import com.testify.ecfeed.core.generators.api.IGeneratorParameter;
 import com.testify.ecfeed.core.model.ChoiceNode;
 import com.testify.ecfeed.core.model.MethodNode;
 import com.testify.ecfeed.core.model.MethodParameterNode;
+import com.testify.ecfeed.core.runner.Messages;
+import com.testify.ecfeed.core.runner.RunnerException;
 import com.testify.ecfeed.junit.annotations.Constraints;
 import com.testify.ecfeed.junit.annotations.Generator;
 import com.testify.ecfeed.junit.annotations.GeneratorParameter;
 import com.testify.ecfeed.junit.annotations.GeneratorParameterNames;
 import com.testify.ecfeed.junit.annotations.GeneratorParameterValues;
-import com.testify.ecfeed.runner.Messages;
-import com.testify.ecfeed.runner.RunnerException;
 
 public class OnlineRunner extends AbstractJUnitRunner {
 

@@ -19,9 +19,9 @@ import com.testify.ecfeed.core.adapter.java.ModelClassLoader;
 import com.testify.ecfeed.core.generators.api.GeneratorException;
 import com.testify.ecfeed.core.generators.api.IGenerator;
 import com.testify.ecfeed.core.model.ChoiceNode;
+import com.testify.ecfeed.core.runner.Messages;
+import com.testify.ecfeed.core.runner.RunnerException;
 import com.testify.ecfeed.core.utils.EcException;
-import com.testify.ecfeed.runner.Messages;
-import com.testify.ecfeed.runner.RunnerException;
 
 public class JavaRuntimeMethod extends AbstractFrameworkMethod{
 

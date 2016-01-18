@@ -31,8 +31,8 @@ import com.testify.ecfeed.core.model.ClassNode;
 import com.testify.ecfeed.core.model.MethodNode;
 import com.testify.ecfeed.core.model.MethodParameterNode;
 import com.testify.ecfeed.core.model.TestCaseNode;
+import com.testify.ecfeed.core.runner.java.JUnitTestMethodInvoker;
 import com.testify.ecfeed.junit.JavaParameterizedMethod;
-import com.testify.ecfeed.runner.java.JUnitTestMethodInvoker;
 
 public class ParameterizedMethodsTest {
 
