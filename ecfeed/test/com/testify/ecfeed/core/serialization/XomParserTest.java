@@ -9,7 +9,7 @@
  *     Patryk Chamuczynski (p.chamuczynski(at)radytek.com) - initial implementation
  ******************************************************************************/
 
-package com.testify.ecfeed.serialization;
+package com.testify.ecfeed.core.serialization;
 
 import static com.testify.ecfeed.testutils.Constants.SUPPORTED_TYPES;
 import static org.junit.Assert.fail;
