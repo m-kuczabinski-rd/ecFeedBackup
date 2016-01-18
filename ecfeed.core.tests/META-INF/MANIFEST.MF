@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Tests
+Bundle-SymbolicName: ecfeed.core.tests
+Bundle-Version: 1.0.0.qualifier
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Export-Package: com.testify.ecfeed.core.generators,
+ com.testify.ecfeed.core.generators.algorithms,
+ com.testify.ecfeed.core.generators.testutils
+Require-Bundle: ecfeed.core;bundle-version="1.0.0"
