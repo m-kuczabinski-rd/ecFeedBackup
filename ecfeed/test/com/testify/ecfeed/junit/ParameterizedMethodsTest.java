@@ -26,12 +26,12 @@ import org.junit.Test;
 import org.junit.runners.model.FrameworkMethod;
 
 import com.testify.ecfeed.core.adapter.java.ModelClassLoader;
+import com.testify.ecfeed.core.model.ChoiceNode;
+import com.testify.ecfeed.core.model.ClassNode;
+import com.testify.ecfeed.core.model.MethodNode;
+import com.testify.ecfeed.core.model.MethodParameterNode;
+import com.testify.ecfeed.core.model.TestCaseNode;
 import com.testify.ecfeed.junit.JavaParameterizedMethod;
-import com.testify.ecfeed.model.MethodParameterNode;
-import com.testify.ecfeed.model.ClassNode;
-import com.testify.ecfeed.model.MethodNode;
-import com.testify.ecfeed.model.ChoiceNode;
-import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.runner.java.JUnitTestMethodInvoker;
 
 public class ParameterizedMethodsTest {

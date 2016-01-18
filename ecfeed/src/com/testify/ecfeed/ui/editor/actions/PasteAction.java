@@ -18,7 +18,7 @@ import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.widgets.Display;
 
-import com.testify.ecfeed.model.AbstractNode;
+import com.testify.ecfeed.core.model.AbstractNode;
 import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.testify.ecfeed.ui.modelif.AbstractNodeInterface;

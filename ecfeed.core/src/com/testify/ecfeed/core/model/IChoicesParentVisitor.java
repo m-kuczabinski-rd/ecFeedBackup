@@ -9,8 +9,8 @@
  *     Patryk Chamuczynski (p.chamuczynski(at)radytek.com) - initial implementation
  ******************************************************************************/
 
-package com.testify.ecfeed.model;
+package com.testify.ecfeed.core.model;
 
-public interface IPrimitiveTypePredicate {
-	public boolean isPrimitive(String type);
+public interface IChoicesParentVisitor extends IParameterVisitor{
+	public Object visit(ChoiceNode node)throws Exception;
 }

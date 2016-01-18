@@ -23,8 +23,8 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.ui.forms.widgets.Section;
 
-import com.testify.ecfeed.model.ConstraintNode;
-import com.testify.ecfeed.model.MethodNode;
+import com.testify.ecfeed.core.model.ConstraintNode;
+import com.testify.ecfeed.core.model.MethodNode;
 import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.common.NodeNameColumnLabelProvider;
 import com.testify.ecfeed.ui.common.NodeViewerColumnLabelProvider;

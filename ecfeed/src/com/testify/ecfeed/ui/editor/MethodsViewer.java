@@ -24,9 +24,9 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.ui.forms.widgets.Section;
 
 import com.testify.ecfeed.core.adapter.java.JavaUtils;
-import com.testify.ecfeed.model.ClassNode;
-import com.testify.ecfeed.model.MethodNode;
-import com.testify.ecfeed.model.MethodParameterNode;
+import com.testify.ecfeed.core.model.ClassNode;
+import com.testify.ecfeed.core.model.MethodNode;
+import com.testify.ecfeed.core.model.MethodParameterNode;
 import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.common.NodeNameColumnLabelProvider;
 import com.testify.ecfeed.ui.common.NodeViewerColumnLabelProvider;

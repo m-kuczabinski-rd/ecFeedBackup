@@ -13,8 +13,8 @@ import java.util.List;
 import com.testify.ecfeed.android.external.IImplementerExt;
 import com.testify.ecfeed.android.external.IMethodImplementHelper;
 import com.testify.ecfeed.core.adapter.java.JavaUtils;
-import com.testify.ecfeed.model.AbstractParameterNode;
-import com.testify.ecfeed.model.MethodNode;
+import com.testify.ecfeed.core.model.AbstractParameterNode;
+import com.testify.ecfeed.core.model.MethodNode;
 
 public abstract class AbstractMethodImplementer implements IImplementerExt {
 

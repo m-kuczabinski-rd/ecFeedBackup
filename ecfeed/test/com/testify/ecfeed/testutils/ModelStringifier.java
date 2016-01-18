@@ -11,21 +11,21 @@
 
 package com.testify.ecfeed.testutils;
 
-import com.testify.ecfeed.model.AbstractNode;
-import com.testify.ecfeed.model.AbstractStatement;
-import com.testify.ecfeed.model.ChoiceNode;
-import com.testify.ecfeed.model.ChoicesParentStatement;
-import com.testify.ecfeed.model.ChoicesParentStatement.ChoiceCondition;
-import com.testify.ecfeed.model.ChoicesParentStatement.LabelCondition;
-import com.testify.ecfeed.model.ClassNode;
-import com.testify.ecfeed.model.ConstraintNode;
-import com.testify.ecfeed.model.ExpectedValueStatement;
-import com.testify.ecfeed.model.MethodNode;
-import com.testify.ecfeed.model.MethodParameterNode;
-import com.testify.ecfeed.model.RootNode;
-import com.testify.ecfeed.model.StatementArray;
-import com.testify.ecfeed.model.StaticStatement;
-import com.testify.ecfeed.model.TestCaseNode;
+import com.testify.ecfeed.core.model.AbstractNode;
+import com.testify.ecfeed.core.model.AbstractStatement;
+import com.testify.ecfeed.core.model.ChoiceNode;
+import com.testify.ecfeed.core.model.ChoicesParentStatement;
+import com.testify.ecfeed.core.model.ClassNode;
+import com.testify.ecfeed.core.model.ConstraintNode;
+import com.testify.ecfeed.core.model.ExpectedValueStatement;
+import com.testify.ecfeed.core.model.MethodNode;
+import com.testify.ecfeed.core.model.MethodParameterNode;
+import com.testify.ecfeed.core.model.RootNode;
+import com.testify.ecfeed.core.model.StatementArray;
+import com.testify.ecfeed.core.model.StaticStatement;
+import com.testify.ecfeed.core.model.TestCaseNode;
+import com.testify.ecfeed.core.model.ChoicesParentStatement.ChoiceCondition;
+import com.testify.ecfeed.core.model.ChoicesParentStatement.LabelCondition;
 
 public class ModelStringifier {
 	public String stringify(AbstractNode node, int indent){

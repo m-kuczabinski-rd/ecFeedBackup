@@ -27,8 +27,8 @@ import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.core.Signature;
 
+import com.testify.ecfeed.core.model.MethodNode;
 import com.testify.ecfeed.core.utils.SystemLogger;
-import com.testify.ecfeed.model.MethodNode;
 
 public class JavaModelAnalyser {
 

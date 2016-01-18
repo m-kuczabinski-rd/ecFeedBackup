@@ -14,8 +14,8 @@ package com.testify.ecfeed.core.adapter.operations;
 import com.testify.ecfeed.core.adapter.IModelOperation;
 import com.testify.ecfeed.core.adapter.ModelOperationException;
 import com.testify.ecfeed.core.adapter.java.Messages;
-import com.testify.ecfeed.model.MethodNode;
-import com.testify.ecfeed.model.MethodParameterNode;
+import com.testify.ecfeed.core.model.MethodNode;
+import com.testify.ecfeed.core.model.MethodParameterNode;
 
 public class MethodOperationConvertTo extends AbstractModelOperation {
 

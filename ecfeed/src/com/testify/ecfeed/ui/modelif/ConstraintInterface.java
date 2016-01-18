@@ -13,8 +13,8 @@ package com.testify.ecfeed.ui.modelif;
 
 import com.testify.ecfeed.core.adapter.IModelOperation;
 import com.testify.ecfeed.core.adapter.operations.ConstraintOperationReplaceStatement;
-import com.testify.ecfeed.model.AbstractStatement;
-import com.testify.ecfeed.model.ConstraintNode;
+import com.testify.ecfeed.core.model.AbstractStatement;
+import com.testify.ecfeed.core.model.ConstraintNode;
 import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.common.utils.IFileInfoProvider;
 

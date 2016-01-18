@@ -16,7 +16,7 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.TabItem;
 
 import com.testify.ecfeed.core.adapter.java.JavaUtils;
-import com.testify.ecfeed.model.AbstractParameterNode;
+import com.testify.ecfeed.core.model.AbstractParameterNode;
 import com.testify.ecfeed.ui.common.JavaDocSupport;
 import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.common.utils.IFileInfoProvider;

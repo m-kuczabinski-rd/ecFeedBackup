@@ -18,6 +18,22 @@ import java.util.Arrays;
 import org.junit.Test;
 
 import com.testify.ecfeed.core.adapter.java.JavaPrimitiveTypePredicate;
+import com.testify.ecfeed.core.model.ChoiceNode;
+import com.testify.ecfeed.core.model.ChoicesParentStatement;
+import com.testify.ecfeed.core.model.ClassNode;
+import com.testify.ecfeed.core.model.Constraint;
+import com.testify.ecfeed.core.model.ConstraintNode;
+import com.testify.ecfeed.core.model.EStatementOperator;
+import com.testify.ecfeed.core.model.EStatementRelation;
+import com.testify.ecfeed.core.model.ExpectedValueStatement;
+import com.testify.ecfeed.core.model.GlobalParameterNode;
+import com.testify.ecfeed.core.model.MethodNode;
+import com.testify.ecfeed.core.model.MethodParameterNode;
+import com.testify.ecfeed.core.model.ModelVersionDistributor;
+import com.testify.ecfeed.core.model.RootNode;
+import com.testify.ecfeed.core.model.StatementArray;
+import com.testify.ecfeed.core.model.StaticStatement;
+import com.testify.ecfeed.core.model.TestCaseNode;
 
 
 public class CopyNodeTest{

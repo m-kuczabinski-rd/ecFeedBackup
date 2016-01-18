@@ -19,6 +19,9 @@ import java.util.List;
 
 import org.junit.Test;
 
+import com.testify.ecfeed.core.model.ChoiceNode;
+import com.testify.ecfeed.core.model.MethodNode;
+import com.testify.ecfeed.core.model.TestCaseNode;
 import com.testify.ecfeed.testutils.RandomModelGenerator;
 
 public class TestCaseNodeTest {

@@ -11,7 +11,7 @@
 
 package com.testify.ecfeed.core.adapter;
 
-import com.testify.ecfeed.model.AbstractNode;
+import com.testify.ecfeed.core.model.AbstractNode;
 
 public interface IImplementationStatusResolver {
 	public EImplementationStatus getImplementationStatus(AbstractNode node);

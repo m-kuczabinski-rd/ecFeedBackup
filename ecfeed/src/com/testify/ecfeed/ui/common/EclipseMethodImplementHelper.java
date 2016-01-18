@@ -17,9 +17,9 @@ import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
 
 import com.testify.ecfeed.android.external.IMethodImplementHelper;
+import com.testify.ecfeed.core.model.MethodNode;
 import com.testify.ecfeed.core.utils.ExceptionHelper;
 import com.testify.ecfeed.core.utils.SystemLogger;
-import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.ui.common.utils.IFileInfoProvider;
 
 public class EclipseMethodImplementHelper implements IMethodImplementHelper {

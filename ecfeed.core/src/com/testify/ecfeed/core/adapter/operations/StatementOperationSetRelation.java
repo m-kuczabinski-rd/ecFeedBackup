@@ -16,8 +16,8 @@ import java.util.Arrays;
 import com.testify.ecfeed.core.adapter.IModelOperation;
 import com.testify.ecfeed.core.adapter.ModelOperationException;
 import com.testify.ecfeed.core.adapter.java.Messages;
-import com.testify.ecfeed.model.IRelationalStatement;
-import com.testify.ecfeed.model.EStatementRelation;
+import com.testify.ecfeed.core.model.EStatementRelation;
+import com.testify.ecfeed.core.model.IRelationalStatement;
 
 public class StatementOperationSetRelation extends AbstractModelOperation {
 

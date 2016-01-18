@@ -21,7 +21,7 @@ import com.testify.ecfeed.core.adapter.java.ChoiceValueParser;
 import com.testify.ecfeed.core.adapter.java.Constants;
 import com.testify.ecfeed.core.adapter.java.JavaUtils;
 import com.testify.ecfeed.core.adapter.java.ModelClassLoader;
-import com.testify.ecfeed.model.ChoiceNode;
+import com.testify.ecfeed.core.model.ChoiceNode;
 import com.testify.ecfeed.runner.Messages;
 import com.testify.ecfeed.runner.RunnerException;
 

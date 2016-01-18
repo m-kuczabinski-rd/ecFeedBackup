@@ -32,9 +32,9 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.ui.forms.widgets.Section;
 
 import com.testify.ecfeed.core.adapter.java.JavaUtils;
-import com.testify.ecfeed.model.AbstractParameterNode;
-import com.testify.ecfeed.model.ChoiceNode;
-import com.testify.ecfeed.model.ChoicesParentNode;
+import com.testify.ecfeed.core.model.AbstractParameterNode;
+import com.testify.ecfeed.core.model.ChoiceNode;
+import com.testify.ecfeed.core.model.ChoicesParentNode;
 import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.common.NodeNameColumnLabelProvider;
 import com.testify.ecfeed.ui.common.utils.IFileInfoProvider;

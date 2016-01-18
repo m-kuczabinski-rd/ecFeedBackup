@@ -21,8 +21,8 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.ui.forms.widgets.Section;
 
 import com.testify.ecfeed.core.adapter.java.JavaUtils;
-import com.testify.ecfeed.model.ClassNode;
-import com.testify.ecfeed.model.MethodNode;
+import com.testify.ecfeed.core.model.ClassNode;
+import com.testify.ecfeed.core.model.MethodNode;
 import com.testify.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.testify.ecfeed.ui.editor.utils.ExceptionCatchDialog;
 import com.testify.ecfeed.ui.modelif.ClassInterface;

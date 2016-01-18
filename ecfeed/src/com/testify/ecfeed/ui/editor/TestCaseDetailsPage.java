@@ -21,9 +21,9 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 
+import com.testify.ecfeed.core.model.AbstractNode;
+import com.testify.ecfeed.core.model.TestCaseNode;
 import com.testify.ecfeed.core.utils.EcException;
-import com.testify.ecfeed.model.AbstractNode;
-import com.testify.ecfeed.model.TestCaseNode;
 import com.testify.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.testify.ecfeed.ui.editor.utils.ExceptionCatchDialog;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;

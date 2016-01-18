@@ -17,6 +17,10 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
+import com.testify.ecfeed.core.model.ClassNode;
+import com.testify.ecfeed.core.model.GlobalParameterNode;
+import com.testify.ecfeed.core.model.ModelVersionDistributor;
+import com.testify.ecfeed.core.model.RootNode;
 import com.testify.ecfeed.testutils.RandomModelGenerator;
 
 public class RootNodeTest{

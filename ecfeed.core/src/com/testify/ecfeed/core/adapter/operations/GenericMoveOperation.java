@@ -19,11 +19,11 @@ import com.testify.ecfeed.core.adapter.IModelOperation;
 import com.testify.ecfeed.core.adapter.ITypeAdapterProvider;
 import com.testify.ecfeed.core.adapter.ModelOperationException;
 import com.testify.ecfeed.core.adapter.java.Messages;
-import com.testify.ecfeed.model.AbstractNode;
-import com.testify.ecfeed.model.ChoicesParentNode;
-import com.testify.ecfeed.model.GlobalParameterNode;
-import com.testify.ecfeed.model.MethodNode;
-import com.testify.ecfeed.model.MethodParameterNode;
+import com.testify.ecfeed.core.model.AbstractNode;
+import com.testify.ecfeed.core.model.ChoicesParentNode;
+import com.testify.ecfeed.core.model.GlobalParameterNode;
+import com.testify.ecfeed.core.model.MethodNode;
+import com.testify.ecfeed.core.model.MethodParameterNode;
 
 public class GenericMoveOperation extends BulkOperation {
 

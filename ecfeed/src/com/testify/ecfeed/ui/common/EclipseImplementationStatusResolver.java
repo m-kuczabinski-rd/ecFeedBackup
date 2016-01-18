@@ -20,10 +20,10 @@ import com.testify.ecfeed.android.external.IInstallationDirFileHelper;
 import com.testify.ecfeed.android.external.IProjectHelper;
 import com.testify.ecfeed.android.external.ImplementerExt;
 import com.testify.ecfeed.core.adapter.java.JavaPrimitiveTypePredicate;
+import com.testify.ecfeed.core.model.ClassNode;
+import com.testify.ecfeed.core.model.MethodNode;
 import com.testify.ecfeed.core.utils.EcException;
 import com.testify.ecfeed.core.utils.SystemLogger;
-import com.testify.ecfeed.model.ClassNode;
-import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.ui.common.utils.EclipseProjectHelper;
 import com.testify.ecfeed.ui.common.utils.IFileInfoProvider;
 

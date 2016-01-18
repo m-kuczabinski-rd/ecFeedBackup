@@ -11,7 +11,7 @@
 
 package com.testify.ecfeed.ui.common;
 
-import com.testify.ecfeed.model.ChoiceNode;
+import com.testify.ecfeed.core.model.ChoiceNode;
 
 public interface ITestDataEditorListener {
 	public void testDataChanged(int index, ChoiceNode newValue);

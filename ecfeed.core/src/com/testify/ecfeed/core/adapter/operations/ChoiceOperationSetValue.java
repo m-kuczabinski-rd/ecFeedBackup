@@ -17,12 +17,12 @@ import com.testify.ecfeed.core.adapter.ModelOperationException;
 import com.testify.ecfeed.core.adapter.java.Constants;
 import com.testify.ecfeed.core.adapter.java.JavaUtils;
 import com.testify.ecfeed.core.adapter.java.Messages;
+import com.testify.ecfeed.core.model.AbstractParameterNode;
+import com.testify.ecfeed.core.model.ChoiceNode;
+import com.testify.ecfeed.core.model.GlobalParameterNode;
+import com.testify.ecfeed.core.model.IParameterVisitor;
+import com.testify.ecfeed.core.model.MethodParameterNode;
 import com.testify.ecfeed.core.utils.SystemLogger;
-import com.testify.ecfeed.model.AbstractParameterNode;
-import com.testify.ecfeed.model.ChoiceNode;
-import com.testify.ecfeed.model.GlobalParameterNode;
-import com.testify.ecfeed.model.IParameterVisitor;
-import com.testify.ecfeed.model.MethodParameterNode;
 
 public class ChoiceOperationSetValue extends AbstractModelOperation {
 

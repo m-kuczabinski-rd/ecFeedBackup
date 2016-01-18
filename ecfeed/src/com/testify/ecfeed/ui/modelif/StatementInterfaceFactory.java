@@ -11,14 +11,14 @@
 
 package com.testify.ecfeed.ui.modelif;
 
-import com.testify.ecfeed.model.AbstractStatement;
-import com.testify.ecfeed.model.ExpectedValueStatement;
-import com.testify.ecfeed.model.IStatementVisitor;
-import com.testify.ecfeed.model.ChoicesParentStatement;
-import com.testify.ecfeed.model.StatementArray;
-import com.testify.ecfeed.model.StaticStatement;
-import com.testify.ecfeed.model.ChoicesParentStatement.LabelCondition;
-import com.testify.ecfeed.model.ChoicesParentStatement.ChoiceCondition;
+import com.testify.ecfeed.core.model.AbstractStatement;
+import com.testify.ecfeed.core.model.ChoicesParentStatement;
+import com.testify.ecfeed.core.model.ExpectedValueStatement;
+import com.testify.ecfeed.core.model.IStatementVisitor;
+import com.testify.ecfeed.core.model.StatementArray;
+import com.testify.ecfeed.core.model.StaticStatement;
+import com.testify.ecfeed.core.model.ChoicesParentStatement.ChoiceCondition;
+import com.testify.ecfeed.core.model.ChoicesParentStatement.LabelCondition;
 
 public class StatementInterfaceFactory{
 

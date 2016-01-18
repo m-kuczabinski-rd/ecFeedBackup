@@ -18,7 +18,7 @@ import java.util.List;
 
 import com.testify.ecfeed.core.adapter.IModelOperation;
 import com.testify.ecfeed.core.adapter.ModelOperationException;
-import com.testify.ecfeed.model.AbstractNode;
+import com.testify.ecfeed.core.model.AbstractNode;
 
 public class GenericShiftOperation extends AbstractModelOperation {
 

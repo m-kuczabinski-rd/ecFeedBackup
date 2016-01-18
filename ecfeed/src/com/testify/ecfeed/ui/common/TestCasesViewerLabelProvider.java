@@ -21,9 +21,9 @@ import org.eclipse.swt.graphics.Color;
 
 import com.testify.ecfeed.core.adapter.EImplementationStatus;
 import com.testify.ecfeed.core.adapter.IImplementationStatusResolver;
-import com.testify.ecfeed.model.MethodNode;
-import com.testify.ecfeed.model.ChoiceNode;
-import com.testify.ecfeed.model.TestCaseNode;
+import com.testify.ecfeed.core.model.ChoiceNode;
+import com.testify.ecfeed.core.model.MethodNode;
+import com.testify.ecfeed.core.model.TestCaseNode;
 import com.testify.ecfeed.ui.common.utils.IFileInfoProvider;
 
 public class TestCasesViewerLabelProvider extends LabelProvider implements IColorProvider {

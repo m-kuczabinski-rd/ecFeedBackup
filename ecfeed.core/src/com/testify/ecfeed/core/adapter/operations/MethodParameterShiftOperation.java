@@ -17,11 +17,11 @@ import java.util.List;
 import com.testify.ecfeed.core.adapter.IModelOperation;
 import com.testify.ecfeed.core.adapter.ModelOperationException;
 import com.testify.ecfeed.core.adapter.java.Messages;
-import com.testify.ecfeed.model.AbstractNode;
-import com.testify.ecfeed.model.AbstractParameterNode;
-import com.testify.ecfeed.model.MethodNode;
-import com.testify.ecfeed.model.MethodParameterNode;
-import com.testify.ecfeed.model.TestCaseNode;
+import com.testify.ecfeed.core.model.AbstractNode;
+import com.testify.ecfeed.core.model.AbstractParameterNode;
+import com.testify.ecfeed.core.model.MethodNode;
+import com.testify.ecfeed.core.model.MethodParameterNode;
+import com.testify.ecfeed.core.model.TestCaseNode;
 
 public class MethodParameterShiftOperation extends GenericShiftOperation {
 

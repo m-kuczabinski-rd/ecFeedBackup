@@ -11,7 +11,7 @@
 
 package com.testify.ecfeed.core.adapter.java;
 
-import com.testify.ecfeed.model.ChoiceNode;
+import com.testify.ecfeed.core.model.ChoiceNode;
 
 public class ChoiceValueParser {
 	private ModelClassLoader fLoader;

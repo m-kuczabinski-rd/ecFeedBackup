@@ -8,7 +8,7 @@
 
 package com.testify.ecfeed.android.external;
 
-import com.testify.ecfeed.model.MethodNode;
+import com.testify.ecfeed.core.model.MethodNode;
 
 public class AndroidMethodImplementerExt { 
 

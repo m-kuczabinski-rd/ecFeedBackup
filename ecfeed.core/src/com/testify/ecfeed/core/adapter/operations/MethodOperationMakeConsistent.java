@@ -17,9 +17,9 @@ import java.util.List;
 
 import com.testify.ecfeed.core.adapter.IModelOperation;
 import com.testify.ecfeed.core.adapter.ModelOperationException;
-import com.testify.ecfeed.model.ConstraintNode;
-import com.testify.ecfeed.model.MethodNode;
-import com.testify.ecfeed.model.TestCaseNode;
+import com.testify.ecfeed.core.model.ConstraintNode;
+import com.testify.ecfeed.core.model.MethodNode;
+import com.testify.ecfeed.core.model.TestCaseNode;
 
 public class MethodOperationMakeConsistent extends AbstractModelOperation {
 

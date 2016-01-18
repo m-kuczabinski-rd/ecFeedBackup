@@ -17,14 +17,14 @@ import com.testify.ecfeed.core.adapter.ModelOperationException;
 import com.testify.ecfeed.core.adapter.ModelOperationManager;
 import com.testify.ecfeed.core.adapter.operations.GenericOperationAddParameter;
 import com.testify.ecfeed.core.generators.CartesianProductGenerator;
+import com.testify.ecfeed.core.model.MethodParameterNode;
+import com.testify.ecfeed.core.model.ModelVersionDistributor;
+import com.testify.ecfeed.core.model.ParametersParentNode;
+import com.testify.ecfeed.core.model.RootNode;
 import com.testify.ecfeed.junit.OnlineRunner;
 import com.testify.ecfeed.junit.annotations.Constraints;
 import com.testify.ecfeed.junit.annotations.EcModel;
 import com.testify.ecfeed.junit.annotations.Generator;
-import com.testify.ecfeed.model.MethodParameterNode;
-import com.testify.ecfeed.model.ModelVersionDistributor;
-import com.testify.ecfeed.model.ParametersParentNode;
-import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.testutils.ENodeType;
 
 @RunWith(OnlineRunner.class)

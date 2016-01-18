@@ -21,6 +21,11 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.testify.ecfeed.core.adapter.java.JavaPrimitiveTypePredicate;
+import com.testify.ecfeed.core.model.ChoiceNode;
+import com.testify.ecfeed.core.model.ExpectedValueStatement;
+import com.testify.ecfeed.core.model.IPrimitiveTypePredicate;
+import com.testify.ecfeed.core.model.MethodNode;
+import com.testify.ecfeed.core.model.MethodParameterNode;
 
 public class ExpectedValueStatementTest{
 

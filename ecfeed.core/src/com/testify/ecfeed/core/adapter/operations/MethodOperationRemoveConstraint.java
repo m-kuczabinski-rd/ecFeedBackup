@@ -13,8 +13,8 @@ package com.testify.ecfeed.core.adapter.operations;
 
 import com.testify.ecfeed.core.adapter.IModelOperation;
 import com.testify.ecfeed.core.adapter.ModelOperationException;
-import com.testify.ecfeed.model.ConstraintNode;
-import com.testify.ecfeed.model.MethodNode;
+import com.testify.ecfeed.core.model.ConstraintNode;
+import com.testify.ecfeed.core.model.MethodNode;
 
 public class MethodOperationRemoveConstraint extends AbstractModelOperation {
 

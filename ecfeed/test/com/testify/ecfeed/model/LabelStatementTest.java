@@ -19,11 +19,11 @@ import java.util.List;
 
 import org.junit.Test;
 
-import com.testify.ecfeed.model.MethodNode;
-import com.testify.ecfeed.model.ChoiceNode;
-import com.testify.ecfeed.model.MethodParameterNode;
-import com.testify.ecfeed.model.ChoicesParentStatement;
-import com.testify.ecfeed.model.EStatementRelation;
+import com.testify.ecfeed.core.model.ChoiceNode;
+import com.testify.ecfeed.core.model.ChoicesParentStatement;
+import com.testify.ecfeed.core.model.EStatementRelation;
+import com.testify.ecfeed.core.model.MethodNode;
+import com.testify.ecfeed.core.model.MethodParameterNode;
 
 public class LabelStatementTest {
 	

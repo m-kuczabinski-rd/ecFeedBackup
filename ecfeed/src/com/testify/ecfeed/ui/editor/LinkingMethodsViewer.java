@@ -24,11 +24,11 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.ui.forms.widgets.Section;
 
 import com.testify.ecfeed.core.adapter.java.JavaUtils;
-import com.testify.ecfeed.model.AbstractNode;
-import com.testify.ecfeed.model.ClassNode;
-import com.testify.ecfeed.model.GlobalParameterNode;
-import com.testify.ecfeed.model.MethodNode;
-import com.testify.ecfeed.model.MethodParameterNode;
+import com.testify.ecfeed.core.model.AbstractNode;
+import com.testify.ecfeed.core.model.ClassNode;
+import com.testify.ecfeed.core.model.GlobalParameterNode;
+import com.testify.ecfeed.core.model.MethodNode;
+import com.testify.ecfeed.core.model.MethodParameterNode;
 import com.testify.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 

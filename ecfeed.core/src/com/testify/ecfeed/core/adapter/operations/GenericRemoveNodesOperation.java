@@ -20,15 +20,15 @@ import java.util.List;
 import java.util.Set;
 
 import com.testify.ecfeed.core.adapter.ITypeAdapterProvider;
-import com.testify.ecfeed.model.AbstractNode;
-import com.testify.ecfeed.model.AbstractParameterNode;
-import com.testify.ecfeed.model.ChoiceNode;
-import com.testify.ecfeed.model.ClassNode;
-import com.testify.ecfeed.model.ConstraintNode;
-import com.testify.ecfeed.model.GlobalParameterNode;
-import com.testify.ecfeed.model.MethodNode;
-import com.testify.ecfeed.model.MethodParameterNode;
-import com.testify.ecfeed.model.TestCaseNode;
+import com.testify.ecfeed.core.model.AbstractNode;
+import com.testify.ecfeed.core.model.AbstractParameterNode;
+import com.testify.ecfeed.core.model.ChoiceNode;
+import com.testify.ecfeed.core.model.ClassNode;
+import com.testify.ecfeed.core.model.ConstraintNode;
+import com.testify.ecfeed.core.model.GlobalParameterNode;
+import com.testify.ecfeed.core.model.MethodNode;
+import com.testify.ecfeed.core.model.MethodParameterNode;
+import com.testify.ecfeed.core.model.TestCaseNode;
 
 public class GenericRemoveNodesOperation extends BulkOperation {
 

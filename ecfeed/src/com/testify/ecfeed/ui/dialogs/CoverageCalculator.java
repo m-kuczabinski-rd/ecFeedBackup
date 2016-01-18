@@ -25,9 +25,9 @@ import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.swt.widgets.Display;
 
 import com.testify.ecfeed.core.generators.algorithms.Tuples;
-import com.testify.ecfeed.model.MethodParameterNode;
-import com.testify.ecfeed.model.ChoiceNode;
-import com.testify.ecfeed.model.TestCaseNode;
+import com.testify.ecfeed.core.model.ChoiceNode;
+import com.testify.ecfeed.core.model.MethodParameterNode;
+import com.testify.ecfeed.core.model.TestCaseNode;
 
 public class CoverageCalculator {
 

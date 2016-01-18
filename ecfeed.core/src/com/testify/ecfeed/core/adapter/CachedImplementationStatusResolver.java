@@ -15,18 +15,18 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.testify.ecfeed.core.adapter.java.JavaPrimitiveTypePredicate;
+import com.testify.ecfeed.core.model.AbstractNode;
+import com.testify.ecfeed.core.model.ChoiceNode;
+import com.testify.ecfeed.core.model.ClassNode;
+import com.testify.ecfeed.core.model.ConstraintNode;
+import com.testify.ecfeed.core.model.GlobalParameterNode;
+import com.testify.ecfeed.core.model.IModelVisitor;
+import com.testify.ecfeed.core.model.IPrimitiveTypePredicate;
+import com.testify.ecfeed.core.model.MethodNode;
+import com.testify.ecfeed.core.model.MethodParameterNode;
+import com.testify.ecfeed.core.model.RootNode;
+import com.testify.ecfeed.core.model.TestCaseNode;
 import com.testify.ecfeed.core.utils.SystemLogger;
-import com.testify.ecfeed.model.AbstractNode;
-import com.testify.ecfeed.model.ChoiceNode;
-import com.testify.ecfeed.model.ClassNode;
-import com.testify.ecfeed.model.ConstraintNode;
-import com.testify.ecfeed.model.GlobalParameterNode;
-import com.testify.ecfeed.model.IModelVisitor;
-import com.testify.ecfeed.model.IPrimitiveTypePredicate;
-import com.testify.ecfeed.model.MethodNode;
-import com.testify.ecfeed.model.MethodParameterNode;
-import com.testify.ecfeed.model.RootNode;
-import com.testify.ecfeed.model.TestCaseNode;
 
 
 public abstract class CachedImplementationStatusResolver extends AbstractImplementationStatusResolver {

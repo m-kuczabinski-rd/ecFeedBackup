@@ -10,10 +10,10 @@ package com.testify.ecfeed.ui.common;
 
 import com.testify.ecfeed.core.adapter.CachedImplementationStatusResolver;
 import com.testify.ecfeed.core.adapter.EImplementationStatus;
+import com.testify.ecfeed.core.model.ClassNode;
+import com.testify.ecfeed.core.model.IPrimitiveTypePredicate;
+import com.testify.ecfeed.core.model.MethodNode;
 import com.testify.ecfeed.core.utils.EcException;
-import com.testify.ecfeed.model.ClassNode;
-import com.testify.ecfeed.model.IPrimitiveTypePredicate;
-import com.testify.ecfeed.model.MethodNode;
 
 public abstract class AbstractJavaImplementationStatusResolver extends CachedImplementationStatusResolver{
 

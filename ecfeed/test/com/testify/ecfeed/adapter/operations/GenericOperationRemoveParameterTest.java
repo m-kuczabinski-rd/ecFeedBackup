@@ -17,13 +17,13 @@ import com.testify.ecfeed.core.adapter.ModelOperationException;
 import com.testify.ecfeed.core.adapter.ModelOperationManager;
 import com.testify.ecfeed.core.adapter.operations.GenericOperationRemoveParameter;
 import com.testify.ecfeed.core.generators.CartesianProductGenerator;
+import com.testify.ecfeed.core.model.AbstractParameterNode;
+import com.testify.ecfeed.core.model.MethodParameterNode;
+import com.testify.ecfeed.core.model.ParametersParentNode;
 import com.testify.ecfeed.junit.OnlineRunner;
 import com.testify.ecfeed.junit.annotations.Constraints;
 import com.testify.ecfeed.junit.annotations.EcModel;
 import com.testify.ecfeed.junit.annotations.Generator;
-import com.testify.ecfeed.model.AbstractParameterNode;
-import com.testify.ecfeed.model.MethodParameterNode;
-import com.testify.ecfeed.model.ParametersParentNode;
 import com.testify.ecfeed.testutils.ENodeType;
 import com.testify.ecfeed.testutils.ModelTestUtils;
 

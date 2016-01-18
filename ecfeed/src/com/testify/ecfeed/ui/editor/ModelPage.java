@@ -14,7 +14,7 @@ package com.testify.ecfeed.ui.editor;
 import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.editor.FormPage;
 
-import com.testify.ecfeed.model.RootNode;
+import com.testify.ecfeed.core.model.RootNode;
 import com.testify.ecfeed.ui.common.utils.IFileInfoProvider;
 
 public class ModelPage extends FormPage {

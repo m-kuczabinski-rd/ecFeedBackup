@@ -9,16 +9,11 @@
  *     Patryk Chamuczynski (p.chamuczynski(at)radytek.com) - initial implementation
  ******************************************************************************/
 
-package com.testify.ecfeed.model;
+package com.testify.ecfeed.core.model;
 
-import com.testify.ecfeed.model.ChoicesParentStatement.LabelCondition;
-import com.testify.ecfeed.model.ChoicesParentStatement.ChoiceCondition;
 
-public interface IStatementVisitor {
-	public Object visit(StaticStatement statement) throws Exception;
-	public Object visit(StatementArray statement) throws Exception;
-	public Object visit(ExpectedValueStatement statement) throws Exception;
-	public Object visit(ChoicesParentStatement statement) throws Exception;
-	public Object visit(LabelCondition condition) throws Exception;
-	public Object visit(ChoiceCondition condition) throws Exception;
+public interface IRelationalStatement {
+	public EStatementRelation getRelation();
+	public void setRelation(EStatementRelation relation);
+	public EStatementRelation[] getAvailableRelations();
 }

@@ -17,18 +17,18 @@ import com.testify.ecfeed.core.adapter.ModelOperationException;
 import com.testify.ecfeed.core.adapter.ModelOperationManager;
 import com.testify.ecfeed.core.adapter.operations.AbstractParameterOperationSetType;
 import com.testify.ecfeed.core.generators.CartesianProductGenerator;
+import com.testify.ecfeed.core.model.AbstractNode;
+import com.testify.ecfeed.core.model.AbstractParameterNode;
+import com.testify.ecfeed.core.model.ChoiceNode;
+import com.testify.ecfeed.core.model.ConstraintNode;
+import com.testify.ecfeed.core.model.IChoicesParentVisitor;
+import com.testify.ecfeed.core.model.IModelVisitor;
+import com.testify.ecfeed.core.model.IParameterVisitor;
+import com.testify.ecfeed.core.model.MethodNode;
 import com.testify.ecfeed.junit.OnlineRunner;
 import com.testify.ecfeed.junit.annotations.Constraints;
 import com.testify.ecfeed.junit.annotations.EcModel;
 import com.testify.ecfeed.junit.annotations.Generator;
-import com.testify.ecfeed.model.AbstractNode;
-import com.testify.ecfeed.model.AbstractParameterNode;
-import com.testify.ecfeed.model.ChoiceNode;
-import com.testify.ecfeed.model.ConstraintNode;
-import com.testify.ecfeed.model.IChoicesParentVisitor;
-import com.testify.ecfeed.model.IModelVisitor;
-import com.testify.ecfeed.model.IParameterVisitor;
-import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.ui.common.EclipseTypeAdapterProvider;
 
 

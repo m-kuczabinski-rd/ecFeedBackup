@@ -26,9 +26,9 @@ import com.testify.ecfeed.core.adapter.operations.AbstractParameterOperationSetT
 import com.testify.ecfeed.core.adapter.operations.BulkOperation;
 import com.testify.ecfeed.core.adapter.operations.ParameterSetTypeCommentsOperation;
 import com.testify.ecfeed.core.adapter.operations.ReplaceChoicesOperation;
+import com.testify.ecfeed.core.model.AbstractParameterNode;
+import com.testify.ecfeed.core.model.ChoiceNode;
 import com.testify.ecfeed.core.utils.SystemLogger;
-import com.testify.ecfeed.model.AbstractParameterNode;
-import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.ui.common.EclipseModelBuilder;
 import com.testify.ecfeed.ui.common.JavaDocSupport;
 import com.testify.ecfeed.ui.common.JavaModelAnalyser;

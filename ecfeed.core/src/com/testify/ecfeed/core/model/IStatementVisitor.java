@@ -9,13 +9,16 @@
  *     Patryk Chamuczynski (p.chamuczynski(at)radytek.com) - initial implementation
  ******************************************************************************/
 
-package com.testify.ecfeed.model;
+package com.testify.ecfeed.core.model;
 
-import java.util.List;
+import com.testify.ecfeed.core.model.ChoicesParentStatement.ChoiceCondition;
+import com.testify.ecfeed.core.model.ChoicesParentStatement.LabelCondition;
 
-public interface IStatement{
-	public boolean evaluate(List<ChoiceNode> values);
-	public boolean adapt(List<ChoiceNode> values);
-	public boolean compare(IStatement statement);
-	public Object accept(IStatementVisitor visitor) throws Exception;
+public interface IStatementVisitor {
+	public Object visit(StaticStatement statement) throws Exception;
+	public Object visit(StatementArray statement) throws Exception;
+	public Object visit(ExpectedValueStatement statement) throws Exception;
+	public Object visit(ChoicesParentStatement statement) throws Exception;
+	public Object visit(LabelCondition condition) throws Exception;
+	public Object visit(ChoiceCondition condition) throws Exception;
 }

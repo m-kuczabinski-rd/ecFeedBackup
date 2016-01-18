@@ -15,8 +15,8 @@ import java.util.Collection;
 
 import com.testify.ecfeed.core.adapter.java.JavaUtils;
 import com.testify.ecfeed.core.adapter.operations.GenericOperationAddParameter;
-import com.testify.ecfeed.model.AbstractParameterNode;
-import com.testify.ecfeed.model.ParametersParentNode;
+import com.testify.ecfeed.core.model.AbstractParameterNode;
+import com.testify.ecfeed.core.model.ParametersParentNode;
 import com.testify.ecfeed.ui.common.Constants;
 import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.common.utils.IFileInfoProvider;

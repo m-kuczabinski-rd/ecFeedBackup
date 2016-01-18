@@ -18,9 +18,9 @@ import java.util.Map;
 import org.eclipse.swt.widgets.Shell;
 
 import com.testify.ecfeed.core.generators.api.IGenerator;
-import com.testify.ecfeed.model.Constraint;
-import com.testify.ecfeed.model.MethodNode;
-import com.testify.ecfeed.model.ChoiceNode;
+import com.testify.ecfeed.core.model.ChoiceNode;
+import com.testify.ecfeed.core.model.Constraint;
+import com.testify.ecfeed.core.model.MethodNode;
 import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.common.utils.IFileInfoProvider;
 

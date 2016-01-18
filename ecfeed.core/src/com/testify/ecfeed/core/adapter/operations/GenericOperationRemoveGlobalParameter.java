@@ -11,9 +11,9 @@
 
 package com.testify.ecfeed.core.adapter.operations;
 
-import com.testify.ecfeed.model.GlobalParameterNode;
-import com.testify.ecfeed.model.GlobalParametersParentNode;
-import com.testify.ecfeed.model.MethodParameterNode;
+import com.testify.ecfeed.core.model.GlobalParameterNode;
+import com.testify.ecfeed.core.model.GlobalParametersParentNode;
+import com.testify.ecfeed.core.model.MethodParameterNode;
 
 public class GenericOperationRemoveGlobalParameter extends BulkOperation {
 

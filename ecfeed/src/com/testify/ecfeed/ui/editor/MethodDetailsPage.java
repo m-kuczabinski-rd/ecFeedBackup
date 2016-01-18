@@ -22,8 +22,8 @@ import org.eclipse.swt.widgets.Text;
 
 import com.testify.ecfeed.core.adapter.EImplementationStatus;
 import com.testify.ecfeed.core.adapter.java.JavaUtils;
-import com.testify.ecfeed.model.AbstractNode;
-import com.testify.ecfeed.model.MethodNode;
+import com.testify.ecfeed.core.model.AbstractNode;
+import com.testify.ecfeed.core.model.MethodNode;
 import com.testify.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.testify.ecfeed.ui.editor.utils.ExceptionCatchDialog;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;

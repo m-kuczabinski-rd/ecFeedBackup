@@ -34,15 +34,15 @@ import com.testify.ecfeed.core.generators.algorithms.Tuples;
 import com.testify.ecfeed.core.generators.api.GeneratorException;
 import com.testify.ecfeed.core.generators.api.IConstraint;
 import com.testify.ecfeed.core.generators.api.IGenerator;
+import com.testify.ecfeed.core.model.ChoiceNode;
+import com.testify.ecfeed.core.model.ConstraintNode;
+import com.testify.ecfeed.core.model.MethodNode;
+import com.testify.ecfeed.core.model.MethodParameterNode;
+import com.testify.ecfeed.core.model.RootNode;
 import com.testify.ecfeed.junit.annotations.Constraints;
 import com.testify.ecfeed.junit.annotations.EcModel;
 import com.testify.ecfeed.junit.annotations.Generator;
 import com.testify.ecfeed.junit.annotations.GeneratorParameter;
-import com.testify.ecfeed.model.ChoiceNode;
-import com.testify.ecfeed.model.ConstraintNode;
-import com.testify.ecfeed.model.MethodNode;
-import com.testify.ecfeed.model.MethodParameterNode;
-import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.runner.RunnerException;
 
 public class OnlineRunnerTest extends StaticRunnerTest{

@@ -12,9 +12,9 @@ import org.junit.Test;
 
 import com.testify.ecfeed.core.adapter.java.ChoiceValueParser;
 import com.testify.ecfeed.core.adapter.java.ModelClassLoader;
+import com.testify.ecfeed.core.model.ChoiceNode;
+import com.testify.ecfeed.core.model.MethodParameterNode;
 import com.testify.ecfeed.junit.AbstractFrameworkMethod;
-import com.testify.ecfeed.model.MethodParameterNode;
-import com.testify.ecfeed.model.ChoiceNode;
 import com.testify.ecfeed.ui.common.Constants;
 
 public class AbstractFrameworkMethodTest {

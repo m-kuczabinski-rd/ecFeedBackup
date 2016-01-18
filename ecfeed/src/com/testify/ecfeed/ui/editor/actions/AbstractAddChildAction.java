@@ -14,7 +14,7 @@ package com.testify.ecfeed.ui.editor.actions;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.StructuredViewer;
 
-import com.testify.ecfeed.model.AbstractNode;
+import com.testify.ecfeed.core.model.AbstractNode;
 import com.testify.ecfeed.ui.modelif.AbstractNodeInterface;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 

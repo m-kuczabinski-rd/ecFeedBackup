@@ -29,7 +29,7 @@ import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.FontData;
 import org.eclipse.ui.forms.widgets.Section;
 
-import com.testify.ecfeed.model.ChoiceNode;
+import com.testify.ecfeed.core.model.ChoiceNode;
 import com.testify.ecfeed.ui.common.ColorConstants;
 import com.testify.ecfeed.ui.common.ColorManager;
 import com.testify.ecfeed.ui.common.Messages;

@@ -26,9 +26,9 @@ import org.eclipse.swt.widgets.Display;
 
 import com.testify.ecfeed.core.adapter.ITypeAdapter;
 import com.testify.ecfeed.core.adapter.java.JavaUtils;
-import com.testify.ecfeed.model.ChoiceNode;
-import com.testify.ecfeed.model.MethodNode;
-import com.testify.ecfeed.model.MethodParameterNode;
+import com.testify.ecfeed.core.model.ChoiceNode;
+import com.testify.ecfeed.core.model.MethodNode;
+import com.testify.ecfeed.core.model.MethodParameterNode;
 
 public class TestDataValueEditingSupport extends EditingSupport {
 	private final TableViewer fViewer;

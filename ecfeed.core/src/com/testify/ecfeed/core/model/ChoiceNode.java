@@ -9,7 +9,7 @@
  *     Patryk Chamuczynski (p.chamuczynski(at)radytek.com) - initial implementation
  ******************************************************************************/
 
-package com.testify.ecfeed.model;
+package com.testify.ecfeed.core.model;
 
 import java.util.LinkedHashSet;
 import java.util.List;

@@ -21,7 +21,7 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
 
-import com.testify.ecfeed.model.AbstractParameterNode;
+import com.testify.ecfeed.core.model.AbstractParameterNode;
 import com.testify.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.testify.ecfeed.ui.modelif.AbstractParameterInterface;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;

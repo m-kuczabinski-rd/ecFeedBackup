@@ -27,10 +27,10 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
 import com.testify.ecfeed.android.utils.AndroidBaseRunnerHelper;
+import com.testify.ecfeed.core.model.AbstractNode;
+import com.testify.ecfeed.core.model.ClassNode;
 import com.testify.ecfeed.core.utils.EcException;
 import com.testify.ecfeed.core.utils.SystemLogger;
-import com.testify.ecfeed.model.AbstractNode;
-import com.testify.ecfeed.model.ClassNode;
 import com.testify.ecfeed.ui.common.utils.EclipseProjectHelper;
 import com.testify.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.testify.ecfeed.ui.modelif.ClassInterface;

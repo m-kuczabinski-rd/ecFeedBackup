@@ -25,8 +25,8 @@ import org.eclipse.ui.forms.widgets.Section;
 
 import com.testify.ecfeed.core.adapter.EImplementationStatus;
 import com.testify.ecfeed.core.adapter.java.JavaUtils;
-import com.testify.ecfeed.model.ClassNode;
-import com.testify.ecfeed.model.RootNode;
+import com.testify.ecfeed.core.model.ClassNode;
+import com.testify.ecfeed.core.model.RootNode;
 import com.testify.ecfeed.ui.common.ColorConstants;
 import com.testify.ecfeed.ui.common.ColorManager;
 import com.testify.ecfeed.ui.common.Messages;

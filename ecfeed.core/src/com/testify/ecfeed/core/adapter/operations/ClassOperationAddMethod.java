@@ -18,8 +18,8 @@ import com.testify.ecfeed.core.adapter.IModelOperation;
 import com.testify.ecfeed.core.adapter.ModelOperationException;
 import com.testify.ecfeed.core.adapter.java.JavaUtils;
 import com.testify.ecfeed.core.adapter.java.Messages;
-import com.testify.ecfeed.model.ClassNode;
-import com.testify.ecfeed.model.MethodNode;
+import com.testify.ecfeed.core.model.ClassNode;
+import com.testify.ecfeed.core.model.MethodNode;
 
 public class ClassOperationAddMethod extends AbstractModelOperation{
 	

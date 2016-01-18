@@ -15,6 +15,10 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
+import com.testify.ecfeed.core.model.Constraint;
+import com.testify.ecfeed.core.model.ConstraintNode;
+import com.testify.ecfeed.core.model.StaticStatement;
+
 public class ConstraintNodeTest {
 
 	@Test

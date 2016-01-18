@@ -13,7 +13,7 @@ package com.testify.ecfeed.core.adapter.operations;
 
 import com.testify.ecfeed.core.adapter.IModelOperation;
 import com.testify.ecfeed.core.adapter.ModelOperationException;
-import com.testify.ecfeed.model.AbstractParameterNode;
+import com.testify.ecfeed.core.model.AbstractParameterNode;
 
 public class ParameterSetTypeCommentsOperation extends AbstractModelOperation {
 

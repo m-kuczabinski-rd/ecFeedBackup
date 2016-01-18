@@ -20,6 +20,15 @@ import java.util.List;
 
 import org.junit.Test;
 
+import com.testify.ecfeed.core.model.ChoiceNode;
+import com.testify.ecfeed.core.model.ChoicesParentStatement;
+import com.testify.ecfeed.core.model.Constraint;
+import com.testify.ecfeed.core.model.ConstraintNode;
+import com.testify.ecfeed.core.model.EStatementRelation;
+import com.testify.ecfeed.core.model.MethodNode;
+import com.testify.ecfeed.core.model.MethodParameterNode;
+import com.testify.ecfeed.core.model.StaticStatement;
+import com.testify.ecfeed.core.model.TestCaseNode;
 import com.testify.ecfeed.testutils.RandomModelGenerator;
 
 public class MethodNodeTest {

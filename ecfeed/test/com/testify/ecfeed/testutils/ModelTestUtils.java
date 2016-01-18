@@ -17,18 +17,18 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import com.testify.ecfeed.model.AbstractNode;
-import com.testify.ecfeed.model.ChoiceNode;
-import com.testify.ecfeed.model.ClassNode;
-import com.testify.ecfeed.model.Constraint;
-import com.testify.ecfeed.model.ConstraintNode;
-import com.testify.ecfeed.model.GlobalParameterNode;
-import com.testify.ecfeed.model.MethodNode;
-import com.testify.ecfeed.model.MethodParameterNode;
-import com.testify.ecfeed.model.ModelVersionDistributor;
-import com.testify.ecfeed.model.RootNode;
-import com.testify.ecfeed.model.StaticStatement;
-import com.testify.ecfeed.model.TestCaseNode;
+import com.testify.ecfeed.core.model.AbstractNode;
+import com.testify.ecfeed.core.model.ChoiceNode;
+import com.testify.ecfeed.core.model.ClassNode;
+import com.testify.ecfeed.core.model.Constraint;
+import com.testify.ecfeed.core.model.ConstraintNode;
+import com.testify.ecfeed.core.model.GlobalParameterNode;
+import com.testify.ecfeed.core.model.MethodNode;
+import com.testify.ecfeed.core.model.MethodParameterNode;
+import com.testify.ecfeed.core.model.ModelVersionDistributor;
+import com.testify.ecfeed.core.model.RootNode;
+import com.testify.ecfeed.core.model.StaticStatement;
+import com.testify.ecfeed.core.model.TestCaseNode;
 
 public class ModelTestUtils {
 

@@ -11,10 +11,10 @@
 
 package com.testify.ecfeed.ui.modelif;
 
-import com.testify.ecfeed.model.AbstractStatement;
-import com.testify.ecfeed.model.EStatementOperator;
-import com.testify.ecfeed.model.EStatementRelation;
-import com.testify.ecfeed.model.StaticStatement;
+import com.testify.ecfeed.core.model.AbstractStatement;
+import com.testify.ecfeed.core.model.EStatementOperator;
+import com.testify.ecfeed.core.model.EStatementRelation;
+import com.testify.ecfeed.core.model.StaticStatement;
 
 public class AbstractStatementInterface extends OperationExecuter {
 

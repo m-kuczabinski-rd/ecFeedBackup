@@ -15,8 +15,8 @@ import com.testify.ecfeed.core.adapter.IModelOperation;
 import com.testify.ecfeed.core.adapter.ModelOperationException;
 import com.testify.ecfeed.core.adapter.java.Constants;
 import com.testify.ecfeed.core.adapter.java.Messages;
-import com.testify.ecfeed.model.ConstraintNode;
-import com.testify.ecfeed.model.MethodNode;
+import com.testify.ecfeed.core.model.ConstraintNode;
+import com.testify.ecfeed.core.model.MethodNode;
 
 public class MethodOperationAddConstraint extends AbstractModelOperation {
 

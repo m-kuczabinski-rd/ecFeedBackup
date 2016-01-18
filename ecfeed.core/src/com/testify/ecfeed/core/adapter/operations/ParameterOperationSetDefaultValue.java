@@ -15,7 +15,7 @@ import com.testify.ecfeed.core.adapter.IModelOperation;
 import com.testify.ecfeed.core.adapter.ITypeAdapter;
 import com.testify.ecfeed.core.adapter.ModelOperationException;
 import com.testify.ecfeed.core.adapter.java.Messages;
-import com.testify.ecfeed.model.MethodParameterNode;
+import com.testify.ecfeed.core.model.MethodParameterNode;
 
 public class ParameterOperationSetDefaultValue extends AbstractModelOperation {
 

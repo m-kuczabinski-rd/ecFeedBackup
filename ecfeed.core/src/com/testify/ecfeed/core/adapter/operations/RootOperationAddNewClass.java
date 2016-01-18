@@ -15,8 +15,8 @@ import com.testify.ecfeed.core.adapter.IModelOperation;
 import com.testify.ecfeed.core.adapter.ModelOperationException;
 import com.testify.ecfeed.core.adapter.java.Constants;
 import com.testify.ecfeed.core.adapter.java.Messages;
-import com.testify.ecfeed.model.ClassNode;
-import com.testify.ecfeed.model.RootNode;
+import com.testify.ecfeed.core.model.ClassNode;
+import com.testify.ecfeed.core.model.RootNode;
 
 public class RootOperationAddNewClass extends AbstractModelOperation {
 

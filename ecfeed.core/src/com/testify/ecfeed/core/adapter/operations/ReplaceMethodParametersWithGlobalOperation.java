@@ -15,12 +15,12 @@ import java.util.List;
 
 import com.testify.ecfeed.core.adapter.ITypeAdapterProvider;
 import com.testify.ecfeed.core.adapter.ModelOperationException;
-import com.testify.ecfeed.model.ConstraintNode;
-import com.testify.ecfeed.model.GlobalParameterNode;
-import com.testify.ecfeed.model.GlobalParametersParentNode;
-import com.testify.ecfeed.model.MethodNode;
-import com.testify.ecfeed.model.MethodParameterNode;
-import com.testify.ecfeed.model.TestCaseNode;
+import com.testify.ecfeed.core.model.ConstraintNode;
+import com.testify.ecfeed.core.model.GlobalParameterNode;
+import com.testify.ecfeed.core.model.GlobalParametersParentNode;
+import com.testify.ecfeed.core.model.MethodNode;
+import com.testify.ecfeed.core.model.MethodParameterNode;
+import com.testify.ecfeed.core.model.TestCaseNode;
 
 public class ReplaceMethodParametersWithGlobalOperation extends BulkOperation{
 

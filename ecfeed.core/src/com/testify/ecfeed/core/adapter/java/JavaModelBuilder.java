@@ -19,11 +19,11 @@ import java.util.HashMap;
 import java.util.List;
 
 import com.testify.ecfeed.core.adapter.ModelOperationException;
+import com.testify.ecfeed.core.model.ChoiceNode;
+import com.testify.ecfeed.core.model.ClassNode;
+import com.testify.ecfeed.core.model.MethodNode;
+import com.testify.ecfeed.core.model.MethodParameterNode;
 import com.testify.ecfeed.core.utils.SystemLogger;
-import com.testify.ecfeed.model.MethodParameterNode;
-import com.testify.ecfeed.model.ClassNode;
-import com.testify.ecfeed.model.MethodNode;
-import com.testify.ecfeed.model.ChoiceNode;
 
 public class JavaModelBuilder {
 	

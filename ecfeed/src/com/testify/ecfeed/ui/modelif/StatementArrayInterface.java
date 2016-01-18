@@ -16,9 +16,9 @@ import com.testify.ecfeed.core.adapter.operations.StatementOperationAddStatement
 import com.testify.ecfeed.core.adapter.operations.StatementOperationChangeOperator;
 import com.testify.ecfeed.core.adapter.operations.StatementOperationRemoveStatement;
 import com.testify.ecfeed.core.adapter.operations.StatementOperationReplaceChild;
-import com.testify.ecfeed.model.AbstractStatement;
-import com.testify.ecfeed.model.EStatementOperator;
-import com.testify.ecfeed.model.StatementArray;
+import com.testify.ecfeed.core.model.AbstractStatement;
+import com.testify.ecfeed.core.model.EStatementOperator;
+import com.testify.ecfeed.core.model.StatementArray;
 import com.testify.ecfeed.ui.common.Messages;
 
 public class StatementArrayInterface extends AbstractStatementInterface{

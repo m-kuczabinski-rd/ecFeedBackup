@@ -9,7 +9,7 @@
  *     Patryk Chamuczynski (p.chamuczynski(at)radytek.com) - initial implementation
  ******************************************************************************/
 
-package com.testify.ecfeed.model;
+package com.testify.ecfeed.core.model;
 
 import java.util.List;
 
@@ -32,7 +32,7 @@ public abstract class AbstractStatement implements IStatement {
 		return fParent;
 	}
 
-	void setParent(AbstractStatement parent) {
+	public void setParent(AbstractStatement parent) {
 		fParent = parent;
 	}
 

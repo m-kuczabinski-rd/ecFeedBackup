@@ -17,10 +17,10 @@ import com.testify.ecfeed.core.adapter.ITypeAdapterProvider;
 import com.testify.ecfeed.core.adapter.ModelOperationException;
 import com.testify.ecfeed.core.adapter.java.Constants;
 import com.testify.ecfeed.core.adapter.java.Messages;
-import com.testify.ecfeed.model.ChoiceNode;
-import com.testify.ecfeed.model.MethodNode;
-import com.testify.ecfeed.model.MethodParameterNode;
-import com.testify.ecfeed.model.TestCaseNode;
+import com.testify.ecfeed.core.model.ChoiceNode;
+import com.testify.ecfeed.core.model.MethodNode;
+import com.testify.ecfeed.core.model.MethodParameterNode;
+import com.testify.ecfeed.core.model.TestCaseNode;
 
 public class MethodOperationAddTestCase extends AbstractModelOperation {
 

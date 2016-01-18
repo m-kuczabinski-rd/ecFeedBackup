@@ -28,8 +28,8 @@ import com.testify.ecfeed.core.generators.CartesianProductGenerator;
 import com.testify.ecfeed.core.generators.api.GeneratorException;
 import com.testify.ecfeed.core.generators.api.IConstraint;
 import com.testify.ecfeed.core.generators.api.IGenerator;
-import com.testify.ecfeed.model.MethodParameterNode;
-import com.testify.ecfeed.model.ChoiceNode;
+import com.testify.ecfeed.core.model.ChoiceNode;
+import com.testify.ecfeed.core.model.MethodParameterNode;
 import com.testify.ecfeed.runner.RunnerException;
 import com.testify.ecfeed.runner.java.JUnitTestMethodInvoker;
 

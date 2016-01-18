@@ -47,10 +47,10 @@ import org.eclipse.ui.part.FileEditorInput;
 
 import com.testify.ecfeed.core.adapter.CachedImplementationStatusResolver;
 import com.testify.ecfeed.core.adapter.ModelOperationManager;
+import com.testify.ecfeed.core.model.ModelConverter;
+import com.testify.ecfeed.core.model.ModelVersionDistributor;
+import com.testify.ecfeed.core.model.RootNode;
 import com.testify.ecfeed.core.utils.SystemLogger;
-import com.testify.ecfeed.model.ModelConverter;
-import com.testify.ecfeed.model.ModelVersionDistributor;
-import com.testify.ecfeed.model.RootNode;
 import com.testify.ecfeed.serialization.IModelParser;
 import com.testify.ecfeed.serialization.IModelSerializer;
 import com.testify.ecfeed.serialization.ParserException;

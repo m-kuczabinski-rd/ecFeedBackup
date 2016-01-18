@@ -18,9 +18,9 @@ import java.util.Collection;
 import java.util.List;
 import java.util.StringTokenizer;
 
-import com.testify.ecfeed.model.AbstractParameterNode;
-import com.testify.ecfeed.model.ClassNode;
-import com.testify.ecfeed.model.MethodNode;
+import com.testify.ecfeed.core.model.AbstractParameterNode;
+import com.testify.ecfeed.core.model.ClassNode;
+import com.testify.ecfeed.core.model.MethodNode;
 
 public class JavaUtils {
 

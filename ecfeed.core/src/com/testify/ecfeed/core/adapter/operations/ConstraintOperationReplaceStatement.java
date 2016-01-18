@@ -14,9 +14,9 @@ package com.testify.ecfeed.core.adapter.operations;
 import com.testify.ecfeed.core.adapter.IModelOperation;
 import com.testify.ecfeed.core.adapter.ModelOperationException;
 import com.testify.ecfeed.core.adapter.java.Messages;
-import com.testify.ecfeed.model.AbstractStatement;
-import com.testify.ecfeed.model.Constraint;
-import com.testify.ecfeed.model.ConstraintNode;
+import com.testify.ecfeed.core.model.AbstractStatement;
+import com.testify.ecfeed.core.model.Constraint;
+import com.testify.ecfeed.core.model.ConstraintNode;
 
 public class ConstraintOperationReplaceStatement extends AbstractModelOperation{
 

@@ -13,8 +13,8 @@ package com.testify.ecfeed.core.adapter.operations;
 
 import com.testify.ecfeed.core.adapter.IModelOperation;
 import com.testify.ecfeed.core.adapter.ModelOperationException;
-import com.testify.ecfeed.model.ChoiceNode;
-import com.testify.ecfeed.model.MethodNode;
+import com.testify.ecfeed.core.model.ChoiceNode;
+import com.testify.ecfeed.core.model.MethodNode;
 
 public class ChoiceOperationRemoveLabel extends BulkOperation{
 

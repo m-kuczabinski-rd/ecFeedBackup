@@ -14,8 +14,8 @@ package com.testify.ecfeed.core.adapter.operations;
 import com.testify.ecfeed.core.adapter.IModelOperation;
 import com.testify.ecfeed.core.adapter.ModelOperationException;
 import com.testify.ecfeed.core.adapter.java.Messages;
-import com.testify.ecfeed.model.ChoiceNode;
-import com.testify.ecfeed.model.TestCaseNode;
+import com.testify.ecfeed.core.model.ChoiceNode;
+import com.testify.ecfeed.core.model.TestCaseNode;
 
 public class TestCaseOperationUpdateTestData extends AbstractModelOperation {
 	

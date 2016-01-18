@@ -15,10 +15,10 @@ import java.util.Collection;
 import java.util.List;
 
 import com.testify.ecfeed.core.adapter.operations.ReplaceMethodParametersWithGlobalOperation;
-import com.testify.ecfeed.model.AbstractParameterNode;
-import com.testify.ecfeed.model.GlobalParameterNode;
-import com.testify.ecfeed.model.GlobalParametersParentNode;
-import com.testify.ecfeed.model.MethodParameterNode;
+import com.testify.ecfeed.core.model.AbstractParameterNode;
+import com.testify.ecfeed.core.model.GlobalParameterNode;
+import com.testify.ecfeed.core.model.GlobalParametersParentNode;
+import com.testify.ecfeed.core.model.MethodParameterNode;
 import com.testify.ecfeed.ui.common.EclipseModelBuilder;
 import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.common.utils.IFileInfoProvider;

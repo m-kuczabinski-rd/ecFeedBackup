@@ -20,6 +20,19 @@ import java.util.ArrayList;
 
 import org.junit.Test;
 
+import com.testify.ecfeed.core.model.AbstractNode;
+import com.testify.ecfeed.core.model.ChoiceNode;
+import com.testify.ecfeed.core.model.ClassNode;
+import com.testify.ecfeed.core.model.Constraint;
+import com.testify.ecfeed.core.model.ConstraintNode;
+import com.testify.ecfeed.core.model.IModelVisitor;
+import com.testify.ecfeed.core.model.MethodNode;
+import com.testify.ecfeed.core.model.MethodParameterNode;
+import com.testify.ecfeed.core.model.ModelVersionDistributor;
+import com.testify.ecfeed.core.model.RootNode;
+import com.testify.ecfeed.core.model.StaticStatement;
+import com.testify.ecfeed.core.model.TestCaseNode;
+
 public class AbstractNodeTest{
 
 	private class AbstractNodeImpl extends AbstractNode{

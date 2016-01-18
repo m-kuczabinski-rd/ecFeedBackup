@@ -18,8 +18,8 @@ import java.util.List;
 
 import org.junit.Test;
 
-import com.testify.ecfeed.model.ChoiceNode;
-import com.testify.ecfeed.model.StaticStatement;
+import com.testify.ecfeed.core.model.ChoiceNode;
+import com.testify.ecfeed.core.model.StaticStatement;
 
 public class StaticStatementTest {
 

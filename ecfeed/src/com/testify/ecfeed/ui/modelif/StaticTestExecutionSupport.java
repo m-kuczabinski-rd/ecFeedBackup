@@ -27,7 +27,7 @@ import com.testify.ecfeed.android.external.ApkInstallerExt;
 import com.testify.ecfeed.android.external.DeviceCheckerExt;
 import com.testify.ecfeed.core.adapter.java.ILoaderProvider;
 import com.testify.ecfeed.core.adapter.java.ModelClassLoader;
-import com.testify.ecfeed.model.TestCaseNode;
+import com.testify.ecfeed.core.model.TestCaseNode;
 import com.testify.ecfeed.runner.ITestMethodInvoker;
 import com.testify.ecfeed.runner.JavaTestRunner;
 import com.testify.ecfeed.runner.RunnerException;
