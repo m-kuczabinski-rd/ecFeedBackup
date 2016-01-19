@@ -154,7 +154,6 @@ public class ModelEditor extends FormEditor implements IFileInfoProvider{
 	public ModelEditor() {
 		super();
 		
-		com.testify.ecfeed.core.Test.test();
 		ResourceChangeReporter listener = new ResourceChangeReporter();
 		ResourcesPlugin.getWorkspace().addResourceChangeListener(listener, IResourceChangeEvent.POST_CHANGE);
 		fModelManager = new ModelOperationManager();
