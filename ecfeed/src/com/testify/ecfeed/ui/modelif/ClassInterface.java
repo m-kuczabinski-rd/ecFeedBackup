@@ -103,7 +103,9 @@ public class ClassInterface extends GlobalParametersParentInterface {
 		if(newName.equals(getQualifiedName())){
 			return false;
 		}
-		if(getImplementationStatus(getTarget()) != EImplementationStatus.NOT_IMPLEMENTED){
+
+		if(getFileInfoProvider().isProjectAvailable() && 
+				getImplementationStatus(getTarget()) != EImplementationStatus.NOT_IMPLEMENTED){
 			if(MessageDialog.openConfirm(Display.getCurrent().getActiveShell(),
 					Messages.DIALOG_RENAME_IMPLEMENTED_CLASS_TITLE,
 					Messages.DIALOG_RENAME_IMPLEMENTED_CLASS_MESSAGE) == false){

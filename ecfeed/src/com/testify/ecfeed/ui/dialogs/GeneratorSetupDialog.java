@@ -87,6 +87,7 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 	private int fContent;
 	private boolean fGenerateExecutableContent;
 	private IImplementationStatusResolver fStatusResolver;
+	private IFileInfoProvider fFileInfoProvider; 
 
 	private final String fTitle;
 	private final String fMessage;
@@ -210,6 +211,7 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 		fMessage = message;
 		fGenerateExecutableContent = generateExecutables;
 		fStatusResolver = new EclipseImplementationStatusResolver(fileInfoProvider);
+		fFileInfoProvider = fileInfoProvider;
 	}
 
 	protected  List<List<ChoiceNode>> algorithmInput(){
@@ -447,9 +449,12 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 			}
 			for(ChoiceNode leaf : parameter.getLeafChoices()){
 				leafChecked |= fParametersViewer.getChecked(leaf);
-				EImplementationStatus status = fStatusResolver.getImplementationStatus(leaf);
-				if(status != EImplementationStatus.IMPLEMENTED && onlyExecutable){
-					return false;
+
+				if (fFileInfoProvider.isProjectAvailable()) {
+					EImplementationStatus status = fStatusResolver.getImplementationStatus(leaf);
+					if(status != EImplementationStatus.IMPLEMENTED && onlyExecutable){
+						return false;
+					}				
 				}
 			}
 			if(leafChecked == false){

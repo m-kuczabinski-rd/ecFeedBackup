@@ -58,7 +58,10 @@ public class ModelDetailsPage extends BasicDetailsPage {
 		getMainSection().setText("Model details");
 
 		createModelNameEdit(getMainComposite());
-		addForm(fComments = new ExportableSingleTextCommentsSection(this, this, fFileInfoProvider));
+
+		if (fFileInfoProvider.isProjectAvailable()) {
+			addForm(fComments = new ExportableSingleTextCommentsSection(this, this, fFileInfoProvider));
+		}
 		addViewerSection(fClassesSection = new ClassViewer(this, this, fFileInfoProvider));
 
 		fParametersSection = new GlobalParametersViewer(this, this, fFileInfoProvider);
@@ -93,7 +96,10 @@ public class ModelDetailsPage extends BasicDetailsPage {
 			fModelNameText.setText(selectedRoot.getName());
 			fClassesSection.setInput(selectedRoot);
 			fParametersSection.setInput(selectedRoot);
-			fComments.setInput(selectedRoot);
+
+			if (fFileInfoProvider.isProjectAvailable()) {
+				fComments.setInput(selectedRoot);
+			}
 		}
 	}
 

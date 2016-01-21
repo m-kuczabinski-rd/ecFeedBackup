@@ -18,6 +18,7 @@ import org.eclipse.jdt.core.IPackageFragmentRoot;
 
 public interface IFileInfoProvider {
 	public IFile getFile();
+	public boolean isProjectAvailable();
 	public IProject getProject();
 	public IPackageFragmentRoot getPackageFragmentRoot();
 	public IPath getPath();

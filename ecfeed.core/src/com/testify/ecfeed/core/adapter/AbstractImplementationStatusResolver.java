@@ -89,7 +89,6 @@ IImplementationStatusResolver {
 		}
 
 		try{
-
 			return (EImplementationStatus)node.accept(fStatusResolver);
 		}
 		catch(Exception e){

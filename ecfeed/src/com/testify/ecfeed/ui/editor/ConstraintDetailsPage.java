@@ -54,7 +54,10 @@ public class ConstraintDetailsPage extends BasicDetailsPage {
 	public void createContents(Composite parent){
 		super.createContents(parent);
 		createConstraintNameEdit(getMainComposite());
-		addForm(fCommentsSection = new SingleTextCommentsSection(this, this, fFileInfoProvider));
+
+		if (fFileInfoProvider.isProjectAvailable()) {
+			addForm(fCommentsSection = new SingleTextCommentsSection(this, this, fFileInfoProvider));
+		}
 		addViewerSection(fConstraintViewer = new ConstraintViewer(this, this, fFileInfoProvider));
 	}
 
@@ -77,7 +80,10 @@ public class ConstraintDetailsPage extends BasicDetailsPage {
 			fNameCombo.setItems(constraint.getMethod().getConstraintsNames().toArray(new String[]{}));
 			fNameCombo.setText(constraint.getName());
 			fConstraintViewer.setInput(constraint);
-			fCommentsSection.setInput(constraint);
+
+			if (fFileInfoProvider.isProjectAvailable()) {
+				fCommentsSection.setInput(constraint);
+			}
 			fConstraintIf.setTarget(constraint);
 		}
 	}

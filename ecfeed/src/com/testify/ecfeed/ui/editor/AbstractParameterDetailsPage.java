@@ -73,7 +73,10 @@ public abstract class AbstractParameterDetailsPage extends BasicDetailsPage {
 		super.createContents(parent);
 
 		createAttributesComposite();
-		addForm(fCommentsSection = getParameterCommentsSection(this, this));
+
+		if (fFileInfoProvider.isProjectAvailable()) {
+			addForm(fCommentsSection = getParameterCommentsSection(this, this));
+		}
 		addForm(fChoicesViewer = new ChoicesViewer(this, this, fFileInfoProvider));
 
 		getToolkit().paintBordersFor(getMainComposite());
@@ -97,7 +100,10 @@ public abstract class AbstractParameterDetailsPage extends BasicDetailsPage {
 			fTypeCombo.setItems(AbstractParameterInterface.supportedPrimitiveTypes());
 			fTypeCombo.setText(parameter.getType());
 
-			fCommentsSection.setInput(parameter);
+			if (fFileInfoProvider.isProjectAvailable()) {
+				fCommentsSection.setInput(parameter);
+			}
+
 			fChoicesViewer.setInput(parameter);
 		}
 	}
@@ -117,8 +123,11 @@ public abstract class AbstractParameterDetailsPage extends BasicDetailsPage {
 		fTypeCombo = new Combo(fAttributesComposite,SWT.DROP_DOWN);
 		fTypeCombo.setLayoutData(new GridData(SWT.FILL,  SWT.CENTER, true, false));
 		fTypeCombo.addSelectionListener(new SetTypeListener());
-		fBrowseUserTypeButton = getToolkit().createButton(fAttributesComposite, "Import...", SWT.NONE);
-		fBrowseUserTypeButton.addSelectionListener(new BrowseTypeSelectionListener());
+
+		if (fFileInfoProvider.isProjectAvailable()) {
+			fBrowseUserTypeButton = getToolkit().createButton(fAttributesComposite, "Import...", SWT.NONE);
+			fBrowseUserTypeButton.addSelectionListener(new BrowseTypeSelectionListener());
+		}
 
 		getToolkit().paintBordersFor(fAttributesComposite);
 		return fAttributesComposite;
@@ -141,6 +150,9 @@ public abstract class AbstractParameterDetailsPage extends BasicDetailsPage {
 	protected abstract AbstractParameterCommentsSection getParameterCommentsSection(ISectionContext sectionContext, IModelUpdateContext updateContext);
 
 	protected Button getBrowseUserTypeButton() {
+		if (fFileInfoProvider.isProjectAvailable()) {
+			return null;
+		}
 		return fBrowseUserTypeButton;
 	}
 }

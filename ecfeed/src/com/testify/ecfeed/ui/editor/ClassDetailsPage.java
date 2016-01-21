@@ -140,7 +140,10 @@ public class ClassDetailsPage extends BasicDetailsPage {
 		super.createContents(parent);
 
 		createBasicParametersComposite(getMainComposite());
-		addForm(fCommentsSection = new JavaDocCommentsSection(this, this, fFileInfoProvider));
+
+		if (fFileInfoProvider.isProjectAvailable()) {
+			addForm(fCommentsSection = new JavaDocCommentsSection(this, this, fFileInfoProvider));
+		}
 		addViewerSection(fMethodsSection = new MethodsViewer(this, this, fFileInfoProvider));
 		addViewerSection(fGlobalParametersSection = new GlobalParametersViewer(this, this, fFileInfoProvider));
 		addViewerSection(fOtherMethodsSection = new OtherMethodsViewer(this, this, fFileInfoProvider));
@@ -199,9 +202,11 @@ public class ClassDetailsPage extends BasicDetailsPage {
 		fClassNameText.addSelectionListener(new ClassNameSelectionListener());
 
 		// col 3 browse button
-		Button browseButton = getToolkit().createButton(composite, "Browse...", SWT.NONE);
-		browseButton.addSelectionListener(new BrowseClassesSelectionListener());
-		browseButton.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false));		
+		if (fFileInfoProvider.isProjectAvailable()) {
+			Button browseButton = getToolkit().createButton(composite, "Browse...", SWT.NONE);
+			browseButton.addSelectionListener(new BrowseClassesSelectionListener());
+			browseButton.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false));
+		}
 
 		getToolkit().paintBordersFor(composite);
 	}
@@ -285,7 +290,10 @@ public class ClassDetailsPage extends BasicDetailsPage {
 			fGlobalParametersSection.setInput(selectedClass);
 			fOtherMethodsSection.setInput(selectedClass);
 			fOtherMethodsSection.setVisible(fOtherMethodsSection.getItemsCount() > 0);
-			fCommentsSection.setInput(selectedClass);
+
+			if (fFileInfoProvider.isProjectAvailable()) {
+				fCommentsSection.setInput(selectedClass);
+			}
 
 			getMainSection().layout();
 		}

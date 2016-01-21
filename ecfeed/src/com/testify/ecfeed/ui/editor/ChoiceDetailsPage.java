@@ -77,7 +77,10 @@ public class ChoiceDetailsPage extends BasicDetailsPage {
 		super.createContents(parent);
 
 		createNameValueEditor(getMainComposite());
-		addForm(fCommentsSection = new ChoiceCommentsSection(this, this, fFileInfoProvider));
+
+		if (fFileInfoProvider.isProjectAvailable()) {
+			addForm(fCommentsSection = new ChoiceCommentsSection(this, this, fFileInfoProvider));
+		}
 		addViewerSection(fChildrenViewer = new ChoicesViewer(this, this, fFileInfoProvider));
 		addViewerSection(fLabelsViewer = new ChoiceLabelsViewer(this, this, fFileInfoProvider));
 
@@ -100,7 +103,9 @@ public class ChoiceDetailsPage extends BasicDetailsPage {
 			String title = getSelectedChoice().toString();
 			getMainSection().setText(title);
 
-			fCommentsSection.setInput(selectedChoice);
+			if (fFileInfoProvider.isProjectAvailable()) {
+				fCommentsSection.setInput(selectedChoice);
+			}
 			fChildrenViewer.setInput(selectedChoice);
 			fLabelsViewer.setInput(selectedChoice);
 			fNameText.setText(selectedChoice.getName());

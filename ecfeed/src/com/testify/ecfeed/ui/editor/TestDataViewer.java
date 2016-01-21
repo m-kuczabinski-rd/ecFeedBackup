@@ -112,11 +112,15 @@ public class TestDataViewer extends TableViewerSection implements ITestDataEdito
 	}
 
 	private Color getColor(Object element) {
-		if(element instanceof ChoiceNode){
-			ChoiceNode choice = (ChoiceNode)element;
-			if(fTestCaseIf.getImplementationStatus(choice) == EImplementationStatus.IMPLEMENTED){
-				return ColorManager.getColor(ColorConstants.ITEM_IMPLEMENTED);
-			}
+		if (!(element instanceof ChoiceNode)) {
+			return null;
+		}
+		if (!fFileInfoProvider.isProjectAvailable()) {
+			return null;
+		}		
+		ChoiceNode choice = (ChoiceNode)element;
+		if(fTestCaseIf.getImplementationStatus(choice) == EImplementationStatus.IMPLEMENTED){
+			return ColorManager.getColor(ColorConstants.ITEM_IMPLEMENTED);
 		}
 		return null;
 	}

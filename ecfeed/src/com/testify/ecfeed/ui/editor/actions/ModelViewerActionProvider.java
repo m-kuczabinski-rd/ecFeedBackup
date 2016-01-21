@@ -32,11 +32,11 @@ public class ModelViewerActionProvider extends ActionGroups {
 			TreeViewer viewer, 
 			IModelUpdateContext 
 			context, 
-			IFileInfoProvider fileInfoProfider, 
+			IFileInfoProvider fileInfoProvider, 
 			boolean selectRoot) {
-		addEditActions(viewer, context, fileInfoProfider);
-		if(fileInfoProfider != null){
-			addImplementationActions(viewer, context, fileInfoProfider);
+		addEditActions(viewer, context, fileInfoProvider);
+		if(fileInfoProvider != null && fileInfoProvider.isProjectAvailable()){
+			addImplementationActions(viewer, context, fileInfoProvider);
 		}
 		addViewerActions(viewer, context, selectRoot);
 		addMoveActions(viewer, context);
@@ -51,7 +51,7 @@ public class ModelViewerActionProvider extends ActionGroups {
 			IModelUpdateContext context, 
 			IFileInfoProvider fileInfoProvider) {
 		addEditActions(viewer, context, fileInfoProvider);
-		if(fileInfoProvider != null){
+		if(fileInfoProvider != null && fileInfoProvider.isProjectAvailable()){
 			addImplementationActions(viewer, context, fileInfoProvider);
 		}
 		addViewerActions(viewer);

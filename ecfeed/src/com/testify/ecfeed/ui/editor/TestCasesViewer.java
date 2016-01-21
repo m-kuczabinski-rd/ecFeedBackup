@@ -154,7 +154,10 @@ public class TestCasesViewer extends CheckboxTreeViewerSection {
 		fGenerateSuiteButton = addButton("Generate test suite", new GenerateTestSuiteAdapter());
 		addButton("Calculate coverage", new CalculateCoverageAdapter(fileInfoProvider));
 		addButton("Remove selected", new RemoveSelectedAdapter(Messages.EXCEPTION_CAN_NOT_REMOVE_SELECTED_ITEMS));
-		fExecuteSelectedButton = addButton("Execute selected", new ExecuteStaticTestAdapter());
+
+		if (getFileInfoProvider().isProjectAvailable()) {
+			fExecuteSelectedButton = addButton("Execute selected", new ExecuteStaticTestAdapter());
+		}
 
 		addDoubleClickListener(new SelectNodeDoubleClickListener(sectionContext.getMasterSection()));
 	}
@@ -162,7 +165,10 @@ public class TestCasesViewer extends CheckboxTreeViewerSection {
 	@Override
 	public void refresh() {
 		fGenerateSuiteButton.setEnabled(getSelectedMethod().getParameters().size() > 0);
-		fExecuteSelectedButton.setEnabled(executionEnabled());
+
+		if (getFileInfoProvider().isProjectAvailable()) {
+			fExecuteSelectedButton.setEnabled(executionEnabled());
+		}
 		fLabelProvider.refresh();
 	}
 
@@ -194,7 +200,7 @@ public class TestCasesViewer extends CheckboxTreeViewerSection {
 		tree.addListener(SWT.Selection, new Listener() {
 			@Override
 			public void handleEvent(Event event) {
-				if (event.detail == SWT.CHECK) {
+				if (event.detail == SWT.CHECK && getFileInfoProvider().isProjectAvailable()) {
 					fExecuteSelectedButton.setEnabled(executionEnabled());
 				}
 			}

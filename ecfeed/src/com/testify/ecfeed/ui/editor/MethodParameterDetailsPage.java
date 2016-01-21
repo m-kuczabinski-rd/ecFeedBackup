@@ -152,7 +152,9 @@ public class MethodParameterDetailsPage extends AbstractParameterDetailsPage {
 			}
 			fLinkCombo.setEnabled(fParameterIf.isLinked());
 
-			getBrowseUserTypeButton().setEnabled(!fParameterIf.isLinked());
+			if (fFileInfoProvider.isProjectAvailable()) {
+				getBrowseUserTypeButton().setEnabled(!fParameterIf.isLinked());
+			}
 			getChoicesViewer().setReplaceButtonEnabled(!fParameterIf.isLinked());
 
 

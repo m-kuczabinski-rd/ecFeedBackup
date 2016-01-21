@@ -127,6 +127,10 @@ public class AbstractNodeInterface extends OperationExecuter{
 		return fTarget.getName();
 	}
 
+	protected IFileInfoProvider getFileInfoProvider() {
+		return fFileInfoProvider;
+	}
+
 	public boolean setName(String newName){
 		if(newName.equals(getName())){
 			return false;

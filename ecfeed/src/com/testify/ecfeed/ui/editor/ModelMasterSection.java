@@ -359,25 +359,30 @@ public class ModelMasterSection extends TreeViewerSection{
 		@SuppressWarnings("unchecked")
 		@Override
 		public Image decorateImage(Image image, Object element) {
-			if(element instanceof AbstractNode){
-				try {
-					List<Image> decorations = (List<Image>)((AbstractNode)element).accept(
-							new DecorationProvider(fFileInfoProvider));
-					List<Image> all = new ArrayList<Image>(decorations);
-					all.add(0, image);
-					if(fFusedImages.containsKey(all) == false){
-						Image decorated = new Image(Display.getCurrent(), image.getImageData());
-						for(Image decoration : decorations){
-							if(decoration != null){
-								decorated = fuseImages(decorated, decoration, 0, 0);
-							}
+			if(!(element instanceof AbstractNode)){
+				return image;
+			}
+			if (!fFileInfoProvider.isProjectAvailable()) {
+				return image;
+			}
+
+			try {
+				List<Image> decorations = (List<Image>)((AbstractNode)element).accept(
+						new DecorationProvider(fFileInfoProvider));
+				List<Image> all = new ArrayList<Image>(decorations);
+				all.add(0, image);
+				if(fFusedImages.containsKey(all) == false){
+					Image decorated = new Image(Display.getCurrent(), image.getImageData());
+					for(Image decoration : decorations){
+						if(decoration != null){
+							decorated = fuseImages(decorated, decoration, 0, 0);
 						}
-						fFusedImages.put(decorations, decorated);
 					}
-					return fFusedImages.get(decorations);
-				} catch(Exception e) {
-					SystemLogger.logCatch(e.getMessage());
+					fFusedImages.put(decorations, decorated);
 				}
+				return fFusedImages.get(decorations);
+			} catch(Exception e) {
+				SystemLogger.logCatch(e.getMessage());
 			}
 			return image;
 		}

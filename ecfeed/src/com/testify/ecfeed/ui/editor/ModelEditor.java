@@ -153,7 +153,7 @@ public class ModelEditor extends FormEditor implements IFileInfoProvider{
 
 	public ModelEditor() {
 		super();
-		
+
 		ResourceChangeReporter listener = new ResourceChangeReporter();
 		ResourcesPlugin.getWorkspace().addResourceChangeListener(listener, IResourceChangeEvent.POST_CHANGE);
 		fModelManager = new ModelOperationManager();
@@ -327,7 +327,15 @@ public class ModelEditor extends FormEditor implements IFileInfoProvider{
 	}
 
 	@Override
+	public boolean isProjectAvailable() {
+		return true; // false for standalone app, true for IDE plugin
+	}
+
+	@Override
 	public IProject getProject() {
+		if (!isProjectAvailable()) {
+			return null;
+		}
 		IFile file = getFile();
 		if (file != null){
 			return file.getProject();
@@ -347,6 +355,9 @@ public class ModelEditor extends FormEditor implements IFileInfoProvider{
 
 	@Override
 	public IPackageFragmentRoot getPackageFragmentRoot() {
+		if (!isProjectAvailable()) {
+			return null;
+		}		
 		try {
 			if(getProject().hasNature(JavaCore.NATURE_ID)){
 				IJavaProject javaProject = JavaCore.create(getProject());

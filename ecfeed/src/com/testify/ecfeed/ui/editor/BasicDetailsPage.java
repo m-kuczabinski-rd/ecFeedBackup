@@ -155,6 +155,9 @@ public abstract class BasicDetailsPage implements IDetailsPage, IModelUpdateList
 	}
 
 	protected void addToolbarActions(){
+		if (!fFileInfoProvider.isProjectAvailable()) {
+			return;
+		}
 		if(fImplementer.implementable(getNodeType())){
 			getToolBarManager().add(new GoToImplementationToolbarAction());
 			getToolBarManager().add(new ImplementToolbarAction());

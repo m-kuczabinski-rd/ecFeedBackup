@@ -81,7 +81,10 @@ public class MethodDetailsPage extends BasicDetailsPage {
 		createNameTextComposite();
 
 		IFileInfoProvider fileInfoProvider = getFileInfoProvider();
-		addForm(fCommentsSection = new JavaDocCommentsSection(this, this, fileInfoProvider));
+
+		if (fileInfoProvider.isProjectAvailable()) {
+			addForm(fCommentsSection = new JavaDocCommentsSection(this, this, fileInfoProvider));
+		}
 		addViewerSection(fParemetersSection = new MethodParametersViewer(this, this, fileInfoProvider));
 		addViewerSection(fConstraintsSection = new ConstraintsListViewer(this, this, fileInfoProvider));
 		addViewerSection(fTestCasesSection = new TestCasesViewer(this, this, fileInfoProvider));
@@ -104,11 +107,17 @@ public class MethodDetailsPage extends BasicDetailsPage {
 		fMethodNameText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 		fMethodNameText.addSelectionListener(new RenameMethodAdapter());
 
-		fBrowseButton = getToolkit().createButton(composite, "Browse...", SWT.NONE);
-		fBrowseButton.addSelectionListener(new ReassignAdapter());
+		IFileInfoProvider fileInfoProvider = getFileInfoProvider(); 
 
-		fTestOnlineButton = getToolkit().createButton(composite, "Test online", SWT.NONE);
-		fTestOnlineButton.addSelectionListener(new OnlineTestAdapter());
+		if (fileInfoProvider.isProjectAvailable()) {
+			fBrowseButton = getToolkit().createButton(composite, "Browse...", SWT.NONE);
+			fBrowseButton.addSelectionListener(new ReassignAdapter());
+		}
+
+		if (fileInfoProvider.isProjectAvailable()) {
+			fTestOnlineButton = getToolkit().createButton(composite, "Test online", SWT.NONE);
+			fTestOnlineButton.addSelectionListener(new OnlineTestAdapter());
+		}
 
 		getToolkit().paintBordersFor(composite);
 	}
@@ -120,19 +129,32 @@ public class MethodDetailsPage extends BasicDetailsPage {
 			MethodNode selectedMethod = (MethodNode)getSelectedElement();
 			fMethodIf.setTarget(selectedMethod);
 
-			EImplementationStatus methodStatus = fMethodIf.getImplementationStatus();
+			IFileInfoProvider fileInfoProvider = getFileInfoProvider();
+
+			EImplementationStatus methodStatus = null;
+			if (fileInfoProvider.isProjectAvailable()) {
+				methodStatus = fMethodIf.getImplementationStatus();
+			}
 			getMainSection().setText(JavaUtils.simplifiedToString(selectedMethod));
-			fTestOnlineButton.setEnabled(methodStatus != EImplementationStatus.NOT_IMPLEMENTED);
+
+			if (fileInfoProvider.isProjectAvailable()) {
+				fTestOnlineButton.setEnabled(methodStatus != EImplementationStatus.NOT_IMPLEMENTED);
+			}
 			fParemetersSection.setInput(selectedMethod);
 			fConstraintsSection.setInput(selectedMethod);
 			fTestCasesSection.setInput(selectedMethod);
-			fCommentsSection.setInput(selectedMethod);
+
+			if (fileInfoProvider.isProjectAvailable()) {
+				fCommentsSection.setInput(selectedMethod);
+			}
 			fMethodNameText.setText(fMethodIf.getName());
 
-			EImplementationStatus parentStatus = fMethodIf.getImplementationStatus(selectedMethod.getClassNode());
-			fBrowseButton.setEnabled((parentStatus == EImplementationStatus.IMPLEMENTED ||
-					parentStatus == EImplementationStatus.PARTIALLY_IMPLEMENTED) &&
-					fMethodIf.getCompatibleMethods().isEmpty() == false);
+			if (fileInfoProvider.isProjectAvailable()) {
+				EImplementationStatus parentStatus = fMethodIf.getImplementationStatus(selectedMethod.getClassNode());
+				fBrowseButton.setEnabled((parentStatus == EImplementationStatus.IMPLEMENTED ||
+						parentStatus == EImplementationStatus.PARTIALLY_IMPLEMENTED) &&
+						fMethodIf.getCompatibleMethods().isEmpty() == false);
+			}
 		}
 	}
 

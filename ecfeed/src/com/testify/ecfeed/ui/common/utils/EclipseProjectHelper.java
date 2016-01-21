@@ -44,29 +44,35 @@ public class EclipseProjectHelper implements IProjectHelper {
 
 	@Override
 	public String getProjectPath() {
+		if (!fFileInfoProvider.isProjectAvailable()) {
+			return null;
+		}
 		return fFileInfoProvider.getProject().getLocation().toOSString();
 	}
 
 	@Override
 	public String getReferencedProjectPath() {
+		if (!fFileInfoProvider.isProjectAvailable()) {
+			return null;
+		}
 		IProject testingProject = fFileInfoProvider.getProject();
 		IProject testedProject = getReferencedProject(testingProject);
 		String projectPath = getProjectPath(testedProject);
 		return projectPath;
 	}
 
-
 	public String getProjectPath(IProject project) {
+		if (!fFileInfoProvider.isProjectAvailable()) {
+			return null;
+		}
 		return project.getLocation().toOSString();
 	}
 
 	@Override
 	public boolean isAndroidProject() {
-
 		if(fWasCalculated) {
 			return fIsAndroidProject;
 		}
-
 		try {
 			if(isAndroidProjectDevelopmentHook() || calculateFlagIsAndroidProject()) {
 				fIsAndroidProject = true;
@@ -95,6 +101,9 @@ public class EclipseProjectHelper implements IProjectHelper {
 	}
 
 	private boolean isDevelopmentHook(String hookName, IFileInfoProvider fileInfoProvider) {
+		if (!fFileInfoProvider.isProjectAvailable()) {
+			return false;
+		}
 		String projectPath = null;
 		try {
 			projectPath = getProjectPath();
@@ -112,12 +121,18 @@ public class EclipseProjectHelper implements IProjectHelper {
 
 	@Override
 	public String getApkPathAndName() {
+		if (!fFileInfoProvider.isProjectAvailable()) {
+			return null;
+		}
 		IProject project = fFileInfoProvider.getProject();
 		return getApkName(project);
 	}
 
 	@Override
 	public String getReferencedApkPathAndName() {
+		if (!fFileInfoProvider.isProjectAvailable()) {
+			return null;
+		}
 		IProject testingProject = fFileInfoProvider.getProject();
 		IProject testedProject = getReferencedProject(testingProject);
 		return getApkName(testedProject);
@@ -153,6 +168,9 @@ public class EclipseProjectHelper implements IProjectHelper {
 	}
 
 	private boolean calculateFlagIsAndroidProject() throws EcException {
+		if (!fFileInfoProvider.isProjectAvailable()) {
+			return false;
+		}
 		IProject project = fFileInfoProvider.getProject();
 
 		Map<QualifiedName, String> properties = null;

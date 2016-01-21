@@ -27,12 +27,14 @@ import com.testify.ecfeed.core.model.TestCaseNode;
 import com.testify.ecfeed.ui.common.utils.IFileInfoProvider;
 
 public class TestCasesViewerLabelProvider extends LabelProvider implements IColorProvider {
+	private IFileInfoProvider fFileInfoProvider;
 	private Map<String, Integer> fExecutableTestSuites;
 	private Map<TestCaseNode, Boolean> fTestCasesStatusMap;
 	MethodNode fMethod;
 	private IImplementationStatusResolver fStatusResolver;
 
 	public TestCasesViewerLabelProvider(IFileInfoProvider fileInfoProvider){
+		fFileInfoProvider = fileInfoProvider;
 		fExecutableTestSuites = new HashMap<String, Integer>();
 		fTestCasesStatusMap = new HashMap<TestCaseNode, Boolean>();
 		fStatusResolver = new EclipseImplementationStatusResolver(fileInfoProvider);
@@ -96,7 +98,9 @@ public class TestCasesViewerLabelProvider extends LabelProvider implements IColo
 	}
 
 	public void refresh(){
-		updateExecutableTable();
+		if (fFileInfoProvider.isProjectAvailable()) {
+			updateExecutableTable();
+		}
 	}
 
 	private void updateExecutableTable() {

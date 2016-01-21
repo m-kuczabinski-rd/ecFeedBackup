@@ -143,10 +143,14 @@ public class ClassViewer extends TableViewerSection {
 	private class ClassViewerColumnLabelProvider extends ColumnLabelProvider {
 		@Override
 		public Color getForeground(Object element) {
-			if (element instanceof ClassNode) {
-				if(fRootIf.getImplementationStatus((ClassNode)element) == EImplementationStatus.IMPLEMENTED){
-					return ColorManager.getColor(ColorConstants.ITEM_IMPLEMENTED);
-				}
+			if (!(element instanceof ClassNode)) {
+				return null;
+			}
+			if (!fFileInfoProvider.isProjectAvailable()) {
+				return null;
+			}
+			if(fRootIf.getImplementationStatus((ClassNode)element) == EImplementationStatus.IMPLEMENTED){
+				return ColorManager.getColor(ColorConstants.ITEM_IMPLEMENTED);
 			}
 			return null;
 		}

@@ -59,7 +59,10 @@ public class TestCaseDetailsPage extends BasicDetailsPage {
 	public void createContents(Composite parent) {
 		super.createContents(parent);
 		createTestSuiteEdit(getMainComposite());
-		addForm(fCommentsSection = new SingleTextCommentsSection(this, this, fFileInfoProvider));
+
+		if (fFileInfoProvider.isProjectAvailable()) {
+			addForm(fCommentsSection = new SingleTextCommentsSection(this, this, fFileInfoProvider));
+		}
 		addViewerSection(fTestDataViewer = new TestDataViewer(this, this, fFileInfoProvider));
 	}
 
@@ -75,13 +78,19 @@ public class TestCaseDetailsPage extends BasicDetailsPage {
 		if(getSelectedElement() instanceof TestCaseNode){
 			TestCaseNode testCase = (TestCaseNode)getSelectedElement();
 			fTestCaseIf.setTarget(testCase);
-			fCommentsSection.setInput(testCase);
+
+			if (fFileInfoProvider.isProjectAvailable()) {
+				fCommentsSection.setInput(testCase);
+			}
 
 			getMainSection().setText(testCase.toString());
 			fTestSuiteNameCombo.setItems(testCase.getMethod().getTestSuites().toArray(new String[]{}));
 			fTestSuiteNameCombo.setText(testCase.getName());
 			fTestDataViewer.setInput(testCase);
-			fExecuteButton.setEnabled(fTestCaseIf.isExecutable());
+
+			if (fFileInfoProvider.isProjectAvailable()) {
+				fExecuteButton.setEnabled(fTestCaseIf.isExecutable());
+			}
 		}
 	}
 
@@ -95,17 +104,20 @@ public class TestCaseDetailsPage extends BasicDetailsPage {
 		fTestSuiteNameCombo.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		fTestSuiteNameCombo.addSelectionListener(new RenameTestCaseAdapter());
 
-		fExecuteButton = getToolkit().createButton(composite, "Execute", SWT.NONE);
-		fExecuteButton.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent ev){
-				try {
-					fTestCaseIf.executeStaticTest();
-				} catch (EcException e) {
-					ExceptionCatchDialog.display("Can not execute static tests.", e.getMessage());
+		if (fFileInfoProvider.isProjectAvailable()) {
+			fExecuteButton = getToolkit().createButton(composite, "Execute", SWT.NONE);
+			fExecuteButton.addSelectionListener(new SelectionAdapter() {
+				@Override
+				public void widgetSelected(SelectionEvent ev){
+					try {
+						fTestCaseIf.executeStaticTest();
+					} catch (EcException e) {
+						ExceptionCatchDialog.display("Can not execute static tests.", e.getMessage());
+					}
 				}
-			}
-		});
+			});
+		}
+
 		getToolkit().paintBordersFor(fTestSuiteNameCombo);
 	}
 
