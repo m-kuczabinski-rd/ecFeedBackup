@@ -150,7 +150,7 @@ public abstract class AbstractParameterDetailsPage extends BasicDetailsPage {
 	protected abstract AbstractParameterCommentsSection getParameterCommentsSection(ISectionContext sectionContext, IModelUpdateContext updateContext);
 
 	protected Button getBrowseUserTypeButton() {
-		if (fFileInfoProvider.isProjectAvailable()) {
+		if (!fFileInfoProvider.isProjectAvailable()) {
 			return null;
 		}
 		return fBrowseUserTypeButton;
