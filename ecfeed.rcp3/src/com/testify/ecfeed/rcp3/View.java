@@ -1,4 +1,4 @@
-package ecfeed.rcp3;
+package com.testify.ecfeed.rcp3;
 
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.ITableLabelProvider;

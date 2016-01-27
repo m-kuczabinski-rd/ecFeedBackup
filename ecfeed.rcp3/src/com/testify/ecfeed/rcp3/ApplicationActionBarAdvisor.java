@@ -1,4 +1,4 @@
-package ecfeed.rcp3;
+package com.testify.ecfeed.rcp3;
 
 import org.eclipse.ui.application.ActionBarAdvisor;
 import org.eclipse.ui.application.IActionBarConfigurer;

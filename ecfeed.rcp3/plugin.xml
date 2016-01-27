@@ -7,7 +7,7 @@
          point="org.eclipse.core.runtime.applications">
       <application>
          <run
-               class="ecfeed.rcp3.Application">
+               class="com.testify.ecfeed.rcp3.Application">
          </run>
       </application>
    </extension>
@@ -15,7 +15,7 @@
          point="org.eclipse.ui.perspectives">
       <perspective
             name="Perspective"
-            class="ecfeed.rcp3.Perspective"
+            class="com.testify.ecfeed.rcp3.Perspective"
             id="ecfeed.rcp3.perspective">
       </perspective>
    </extension>
@@ -23,7 +23,7 @@
          point="org.eclipse.ui.views">
       <view
             name="View"
-            class="ecfeed.rcp3.View"
+            class="com.testify.ecfeed.rcp3.View"
             id="ecfeed.rcp3.view">
       </view>
    </extension>
