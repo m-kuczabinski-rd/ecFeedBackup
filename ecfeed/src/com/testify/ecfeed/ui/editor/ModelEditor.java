@@ -45,6 +45,7 @@ import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.part.FileEditorInput;
 
+import com.testify.ecfeed.application.ApplicationContext;
 import com.testify.ecfeed.core.adapter.CachedImplementationStatusResolver;
 import com.testify.ecfeed.core.adapter.ModelOperationManager;
 import com.testify.ecfeed.core.model.ModelConverter;
@@ -328,7 +329,10 @@ public class ModelEditor extends FormEditor implements IFileInfoProvider{
 
 	@Override
 	public boolean isProjectAvailable() {
-		return true; // false for standalone app, true for IDE plugin
+		if (ApplicationContext.isStandaloneApplication()) {
+			return false;
+		}
+		return true;
 	}
 
 	@Override
