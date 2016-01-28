@@ -8,5 +8,8 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.ui.forms,
  org.eclipse.ui.ide,
  org.eclipse.ui.workbench,
- org.eclipse.core.filesystem
+ org.eclipse.core.filesystem,
+ com.testify.ecfeed,
+ org.eclipse.jdt.core,
+ org.eclipse.core.resources
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7

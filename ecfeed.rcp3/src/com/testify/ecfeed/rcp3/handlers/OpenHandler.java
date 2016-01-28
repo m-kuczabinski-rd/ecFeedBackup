@@ -18,7 +18,7 @@ public class OpenHandler extends org.eclipse.core.commands.AbstractHandler {
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		System.out.println("OpenHandler.execute");
 		
-		File file = new File("xxx.ect");
+		File file = new File("/home/marekq/Tymczasowy/xxx.ect");
 		
 		if (!file.exists()) {
 			return null;
