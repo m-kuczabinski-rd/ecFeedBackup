@@ -12,11 +12,16 @@
 package com.testify.ecfeed.ui.editor;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.net.URI;
 
 import org.eclipse.core.commands.operations.IUndoContext;
 import org.eclipse.core.commands.operations.ObjectUndoContext;
+//import org.eclipse.core.internal.resources.File;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
@@ -42,6 +47,7 @@ import org.eclipse.ui.IPersistableElement;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.dialogs.SaveAsDialog;
 import org.eclipse.ui.forms.editor.FormEditor;
+import org.eclipse.ui.ide.FileStoreEditorInput;
 import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.part.FileEditorInput;
 
@@ -56,6 +62,8 @@ import com.testify.ecfeed.core.serialization.IModelSerializer;
 import com.testify.ecfeed.core.serialization.ParserException;
 import com.testify.ecfeed.core.serialization.ect.EctParser;
 import com.testify.ecfeed.core.serialization.ect.EctSerializer;
+import com.testify.ecfeed.core.utils.ExceptionHelper;
+import com.testify.ecfeed.core.utils.StringHelper;
 import com.testify.ecfeed.core.utils.SystemLogger;
 import com.testify.ecfeed.ui.common.Constants;
 import com.testify.ecfeed.ui.common.Messages;
@@ -170,20 +178,67 @@ public class ModelEditor extends FormEditor implements IFileInfoProvider{
 
 	private RootNode createModel() {
 		IEditorInput input = getEditorInput();
-		if(!(input instanceof FileEditorInput)) {
-			return null;
-		}
+		InputStream stream = getInputStream(input);
+		return parseModel(stream);
+	}
 
+	private InputStream getInputStream(IEditorInput input) {
+		if (isProjectAvailable()) {
+			return getInputStreamForIDE(input);
+		} else {
+			return getInputStreamForRCP(input);
+		}		
+	}
+
+	private InputStream getInputStreamForIDE(IEditorInput input) {
+		if(!(input instanceof FileEditorInput)) {
+			reportInvalidInputTypeException();
+		}
 		IFile file = ((FileEditorInput)input).getFile();
 		try {
+			return file.getContents();
+		} catch (CoreException e) {
+			ExceptionCatchDialog.display("Can not get input stream for model.", e.getMessage());
+			return null;
+		}
+	}
+
+	private InputStream getInputStreamForRCP(IEditorInput input) {
+		if(!(input instanceof FileStoreEditorInput)) {
+			reportInvalidInputTypeException();
+		}
+
+		FileStoreEditorInput fileStoreInput = (FileStoreEditorInput)input;
+		File file = createFile(fileStoreInput);
+
+		try {
+			return new FileInputStream(file);
+		} catch (FileNotFoundException e) {
+			ExceptionCatchDialog.display("Can not convert file to InputStream.", e.getMessage());
+			return null;
+		}
+	}
+
+	File createFile(FileStoreEditorInput fileStoreInput) {
+		URI uri = fileStoreInput.getURI();
+		String path = uri.toString();
+		path = StringHelper.removePrefix("file:", path);
+		return new File(path);
+	}
+
+	private RootNode parseModel(InputStream iStream) {
+		try {
 			IModelParser parser = new EctParser();
-			InputStream iStream = file.getContents();
 			return ModelConverter.convertToCurrentVersion(parser.parseModel(iStream));
 
-		} catch (CoreException | ParserException e) {
+		} catch (ParserException e) {
 			ExceptionCatchDialog.display("Can not parse model.", e.getMessage());
 			return null;
 		}
+	}	
+
+	private void reportInvalidInputTypeException() {
+		ExceptionHelper.reportRuntimeException("Invalid input type.");
 	}
 
 	@Override
