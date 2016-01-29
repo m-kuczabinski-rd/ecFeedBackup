@@ -23,7 +23,7 @@
          point="org.eclipse.ui.views">
       <view
             name="View"
-            class="com.testify.ecfeed.rcp3.View"
+            class="com.testify.ecfeed.rcp3.InitialView"
             id="ecfeed.rcp3.view">
       </view>
    </extension>
