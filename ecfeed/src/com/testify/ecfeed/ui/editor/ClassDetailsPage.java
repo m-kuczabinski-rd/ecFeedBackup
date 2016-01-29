@@ -146,7 +146,10 @@ public class ClassDetailsPage extends BasicDetailsPage {
 		}
 		addViewerSection(fMethodsSection = new MethodsViewer(this, this, fFileInfoProvider));
 		addViewerSection(fGlobalParametersSection = new GlobalParametersViewer(this, this, fFileInfoProvider));
-		addViewerSection(fOtherMethodsSection = new OtherMethodsViewer(this, this, fFileInfoProvider));
+		
+		if (fFileInfoProvider.isProjectAvailable()) {
+			addViewerSection(fOtherMethodsSection = new OtherMethodsViewer(this, this, fFileInfoProvider));
+		}
 
 		getToolkit().paintBordersFor(getMainComposite());
 	}
@@ -288,8 +291,11 @@ public class ClassDetailsPage extends BasicDetailsPage {
 
 			fMethodsSection.setInput(selectedClass);
 			fGlobalParametersSection.setInput(selectedClass);
-			fOtherMethodsSection.setInput(selectedClass);
-			fOtherMethodsSection.setVisible(fOtherMethodsSection.getItemsCount() > 0);
+			
+			if (fFileInfoProvider.isProjectAvailable()) {
+				fOtherMethodsSection.setInput(selectedClass);
+				fOtherMethodsSection.setVisible(fOtherMethodsSection.getItemsCount() > 0);
+			}
 
 			if (fFileInfoProvider.isProjectAvailable()) {
 				fCommentsSection.setInput(selectedClass);
