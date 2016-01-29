@@ -21,7 +21,6 @@ import java.net.URI;
 
 import org.eclipse.core.commands.operations.IUndoContext;
 import org.eclipse.core.commands.operations.ObjectUndoContext;
-//import org.eclipse.core.internal.resources.File;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
@@ -296,8 +295,34 @@ public class ModelEditor extends FormEditor implements IFileInfoProvider{
 
 	@Override
 	public void doSave(IProgressMonitor monitor) {
+		if (isProjectAvailable()) {
+			doSaveForIDE(monitor);
+		} else {
+			doSaveForRCP(monitor);
+		}
+	}
+	
+	public void doSaveForIDE(IProgressMonitor monitor) {
 		IFile file = ((FileEditorInput)getEditorInput()).getFile();
-		saveEditor(file, monitor);
+		FileOutputStream outputStream = null;
+		try {
+			outputStream = new FileOutputStream(file.getLocation().toOSString());
+		} catch (FileNotFoundException e) {
+			reportOpenForWriteException(e);
+		}
+		saveEditor(outputStream, monitor);
+	}
+	
+	public void doSaveForRCP(IProgressMonitor monitor) {
+		FileStoreEditorInput fileStoreInput = (FileStoreEditorInput)getEditorInput();
+		File file = createFile(fileStoreInput);
+		FileOutputStream outputStream = null;
+		try {
+			outputStream = new FileOutputStream(file);
+		} catch (FileNotFoundException e) {
+			reportOpenForWriteException(e);
+		}
+		saveEditor(outputStream, monitor);
 	}
 
 	@Override
@@ -312,15 +337,24 @@ public class ModelEditor extends FormEditor implements IFileInfoProvider{
 			IPath path = dialog.getResult();
 			IWorkspace workspace= ResourcesPlugin.getWorkspace();
 			IFile file = workspace.getRoot().getFile(path);
-			saveEditor(file, null);
+			FileOutputStream outputStream = null;
+			try {
+				outputStream = new FileOutputStream(file.getLocation().toOSString());
+			} catch (FileNotFoundException e) {
+				reportOpenForWriteException(e);
+			}
+			saveEditor(outputStream, null);
 			setInput(new FileEditorInput(file));
 			setPartName(file.getName());
 		}
 	}
+	
+	private void reportOpenForWriteException(Exception e) {
+		ExceptionCatchDialog.display("Can not open file for writing", e.getMessage());
+	}
 
-	private void saveEditor(IFile file, IProgressMonitor monitor){
+	private void saveEditor(FileOutputStream outputStream, IProgressMonitor monitor){
 		try{
-			FileOutputStream outputStream = new FileOutputStream(file.getLocation().toOSString());
 			IModelSerializer serializer = 
 					new EctSerializer(outputStream, ModelVersionDistributor.getCurrentVersion());
 			serializer.serialize(fModel);
@@ -332,7 +366,7 @@ public class ModelEditor extends FormEditor implements IFileInfoProvider{
 			ExceptionCatchDialog.display("Can not save editor file.", e.getMessage());
 		}
 	}
-
+	
 	private void refreshWorkspace(IProgressMonitor monitor) throws CoreException {
 		for(IResource resource : ResourcesPlugin.getWorkspace().getRoot().getProjects()){
 			resource.refreshLocal(IResource.DEPTH_INFINITE, monitor);
