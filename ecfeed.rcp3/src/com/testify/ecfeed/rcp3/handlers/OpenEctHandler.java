@@ -22,11 +22,15 @@ import org.eclipse.ui.ide.IDE;
 import com.testify.ecfeed.rcp3.dialogs.FileOpenDialog;
 
 
-public class OpenHandler extends org.eclipse.core.commands.AbstractHandler {
+public class OpenEctHandler extends org.eclipse.core.commands.AbstractHandler {
 
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		File file = selectFile();
+		if (file == null) {
+			return null;
+		}
+
 		IFileStore fileStore = EFS.getLocalFileSystem().getStore(file.toURI());
 		IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
 
@@ -42,8 +46,11 @@ public class OpenHandler extends org.eclipse.core.commands.AbstractHandler {
 	private File selectFile() {
 		FileOpenDialog dialog = new FileOpenDialog();
 		String path = dialog.open();
-		File file = new File(path);
+		if (path == null) {
+			return null;
+		}
 
+		File file = new File(path);
 		if (!file.exists()) {
 			return null;
 		}
