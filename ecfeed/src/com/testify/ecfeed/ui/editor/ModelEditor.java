@@ -17,7 +17,6 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.InputStream;
-import java.net.URI;
 
 import org.eclipse.core.commands.operations.IUndoContext;
 import org.eclipse.core.commands.operations.ObjectUndoContext;
@@ -34,6 +33,7 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.IPackageFragmentRoot;
 import org.eclipse.jdt.core.JavaCore;
@@ -62,12 +62,13 @@ import com.testify.ecfeed.core.serialization.ParserException;
 import com.testify.ecfeed.core.serialization.ect.EctParser;
 import com.testify.ecfeed.core.serialization.ect.EctSerializer;
 import com.testify.ecfeed.core.utils.ExceptionHelper;
-import com.testify.ecfeed.core.utils.StringHelper;
 import com.testify.ecfeed.core.utils.SystemLogger;
+import com.testify.ecfeed.core.utils.UriHelper;
 import com.testify.ecfeed.ui.common.Constants;
 import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.testify.ecfeed.ui.editor.utils.ExceptionCatchDialog;
+import com.testify.ecfeed.utils.EclipseHelper;
 
 public class ModelEditor extends FormEditor implements IFileInfoProvider{
 
@@ -190,38 +191,41 @@ public class ModelEditor extends FormEditor implements IFileInfoProvider{
 	}
 
 	private InputStream getInputStreamForIDE(IEditorInput input) {
-		if(!(input instanceof FileEditorInput)) {
+		FileEditorInput fileInput = EclipseHelper.getFileEditorInput(input);
+		if (fileInput == null) {
 			reportInvalidInputTypeException();
 		}
-		IFile file = ((FileEditorInput)input).getFile();
+
+		IFile file = fileInput.getFile();
 		try {
 			return file.getContents();
 		} catch (CoreException e) {
-			ExceptionCatchDialog.display("Can not get input stream for model.", e.getMessage());
+			displayDialogErrInputStream(e);
 			return null;
 		}
 	}
 
 	private InputStream getInputStreamForRCP(IEditorInput input) {
-		if(!(input instanceof FileStoreEditorInput)) {
+		FileStoreEditorInput fileStoreInput = EclipseHelper.getFileStoreEditorInput(input);
+		if (fileStoreInput == null) {
 			reportInvalidInputTypeException();
 		}
 
-		FileStoreEditorInput fileStoreInput = (FileStoreEditorInput)input;
 		File file = createFile(fileStoreInput);
-
 		try {
 			return new FileInputStream(file);
 		} catch (FileNotFoundException e) {
-			ExceptionCatchDialog.display("Can not convert file to InputStream.", e.getMessage());
+			displayDialogErrInputStream(e);
 			return null;
 		}
 	}
 
+	private void displayDialogErrInputStream(Exception e) {
+		ExceptionCatchDialog.display("Can not get input stream for file.", e.getMessage());
+	}
+
 	File createFile(FileStoreEditorInput fileStoreInput) {
-		URI uri = fileStoreInput.getURI();
-		String path = uri.toString();
-		path = StringHelper.removePrefix("file:", path);
+		String path = UriHelper.convertUriToFilePath(fileStoreInput.getURI());
 		return new File(path);
 	}
 
@@ -295,13 +299,21 @@ public class ModelEditor extends FormEditor implements IFileInfoProvider{
 
 	@Override
 	public void doSave(IProgressMonitor monitor) {
+		ModelEditor modelEditor = EclipseHelper.getActiveModelEditor();
+		if (modelEditor == null) {
+			return;
+		}
+		if (!modelEditor.isDirty()) {
+			return;
+		}
+
 		if (isProjectAvailable()) {
 			doSaveForIDE(monitor);
 		} else {
 			doSaveForRCP(monitor);
 		}
 	}
-	
+
 	public void doSaveForIDE(IProgressMonitor monitor) {
 		IFile file = ((FileEditorInput)getEditorInput()).getFile();
 		FileOutputStream outputStream = null;
@@ -310,9 +322,9 @@ public class ModelEditor extends FormEditor implements IFileInfoProvider{
 		} catch (FileNotFoundException e) {
 			reportOpenForWriteException(e);
 		}
-		saveEditor(outputStream, monitor);
+		saveModelToStream(outputStream, monitor);
 	}
-	
+
 	public void doSaveForRCP(IProgressMonitor monitor) {
 		FileStoreEditorInput fileStoreInput = (FileStoreEditorInput)getEditorInput();
 		File file = createFile(fileStoreInput);
@@ -322,38 +334,45 @@ public class ModelEditor extends FormEditor implements IFileInfoProvider{
 		} catch (FileNotFoundException e) {
 			reportOpenForWriteException(e);
 		}
-		saveEditor(outputStream, monitor);
+		saveModelToStream(outputStream, monitor);
 	}
 
 	@Override
-	public void doSaveAs() {
+	public void doSaveAs(){	
+		String fileWithPath = selectFileForSaveAs();
+		if (fileWithPath == null) {
+			return;
+		}
+
+		saveModelToFile(fileWithPath);
+		setEditorFile(fileWithPath);
+	}
+
+	private String selectFileForSaveAs() {
 		SaveAsDialog dialog = new SaveAsDialog(Display.getDefault().getActiveShell());
 
 		IFile original = ((FileEditorInput)getEditorInput()).getFile();
 		dialog.setOriginalFile(original);
 		dialog.create();
-
-		if (dialog.open() != Window.CANCEL) {
-			IPath path = dialog.getResult();
-			IWorkspace workspace= ResourcesPlugin.getWorkspace();
-			IFile file = workspace.getRoot().getFile(path);
-			FileOutputStream outputStream = null;
-			try {
-				outputStream = new FileOutputStream(file.getLocation().toOSString());
-			} catch (FileNotFoundException e) {
-				reportOpenForWriteException(e);
-			}
-			saveEditor(outputStream, null);
-			setInput(new FileEditorInput(file));
-			setPartName(file.getName());
+		if (dialog.open() == Window.CANCEL) {
+			return null;
 		}
-	}
-	
-	private void reportOpenForWriteException(Exception e) {
-		ExceptionCatchDialog.display("Can not open file for writing", e.getMessage());
+
+		IPath path = dialog.getResult();
+		return path.toOSString();
 	}
 
-	private void saveEditor(FileOutputStream outputStream, IProgressMonitor monitor){
+	public void saveModelToFile(String fileWithPath) {
+		FileOutputStream outputStream = null;
+		try {
+			outputStream = new FileOutputStream(fileWithPath);
+		} catch (FileNotFoundException e) {
+			reportOpenForWriteException(e);
+		}
+		saveModelToStream(outputStream, null);
+	}
+
+	private void saveModelToStream(FileOutputStream outputStream, IProgressMonitor monitor){
 		try{
 			IModelSerializer serializer = 
 					new EctSerializer(outputStream, ModelVersionDistributor.getCurrentVersion());
@@ -366,7 +385,20 @@ public class ModelEditor extends FormEditor implements IFileInfoProvider{
 			ExceptionCatchDialog.display("Can not save editor file.", e.getMessage());
 		}
 	}
-	
+
+	public void setEditorFile(String fileWithPath) {
+		IWorkspace workspace = ResourcesPlugin.getWorkspace();
+		IPath path = new Path(fileWithPath);
+		IFile file = workspace.getRoot().getFile(path);
+
+		setInput(new FileEditorInput(file));
+		setPartName(file.getName());
+	}
+
+	private void reportOpenForWriteException(Exception e) {
+		ExceptionCatchDialog.display("Can not open file for writing", e.getMessage());
+	}
+
 	private void refreshWorkspace(IProgressMonitor monitor) throws CoreException {
 		for(IResource resource : ResourcesPlugin.getWorkspace().getRoot().getProjects()){
 			resource.refreshLocal(IResource.DEPTH_INFINITE, monitor);

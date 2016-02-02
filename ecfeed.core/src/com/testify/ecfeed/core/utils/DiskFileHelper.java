@@ -55,6 +55,15 @@ public class DiskFileHelper {
 		return file.lastModified();
 	}
 
+	public static String extractFileName(String pathWithFileName) {
+		return StringHelper.getLastToken(pathWithFileName, FILE_SEPARATOR);
+	}
+
+	public static String extractPath(String pathWithFileName) {
+		String fileName = StringHelper.getLastToken(pathWithFileName, FILE_SEPARATOR);
+		return StringHelper.removePostfix(fileName, pathWithFileName);
+	}	
+
 	public static String checkEctFileName(String fileName) {
 		final String ALLOWED_CHARS = "[a-zA-Z0-9_\\.]";
 		final String FILE_NAME_MUST_NOT_START_WITH_SPACE = "Ect file name must not start with space."; 

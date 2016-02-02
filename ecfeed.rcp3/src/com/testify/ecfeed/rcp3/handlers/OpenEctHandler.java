@@ -19,7 +19,7 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
 
-import com.testify.ecfeed.rcp3.dialogs.FileOpenDialog;
+import com.testify.ecfeed.ui.dialogs.swt.FileOpenEctDialog;
 
 
 public class OpenEctHandler extends org.eclipse.core.commands.AbstractHandler {
@@ -44,7 +44,7 @@ public class OpenEctHandler extends org.eclipse.core.commands.AbstractHandler {
 	}
 
 	private File selectFile() {
-		FileOpenDialog dialog = new FileOpenDialog();
+		FileOpenEctDialog dialog = new FileOpenEctDialog();
 		String path = dialog.open();
 		if (path == null) {
 			return null;

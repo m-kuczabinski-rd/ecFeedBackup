@@ -56,6 +56,11 @@
                   style="push">
             </command>
             <command
+                  commandId="ecfeed.rcp3.saveAs"
+                  label="SaveAs"
+                  style="push">
+            </command>
+            <command
                   commandId="org.eclipse.ui.file.exit"
                   label="Exit">
             </command>
@@ -72,6 +77,10 @@
             id="ecfeed.rcp3.save"
             name="Save">
       </command>
+      <command
+            id="ecfeed.rcp3.saveAs"
+            name="SaveAs">
+      </command>
    </extension>
    <extension
          point="org.eclipse.ui.handlers">
@@ -82,6 +91,10 @@
       <handler
             class="com.testify.ecfeed.rcp3.handlers.SaveEctHandler"
             commandId="ecfeed.rcp3.save">
+      </handler>
+      <handler
+            class="com.testify.ecfeed.rcp3.handlers.SaveAsEctHandler"
+            commandId="ecfeed.rcp3.saveAs">
       </handler>
    </extension>
 
