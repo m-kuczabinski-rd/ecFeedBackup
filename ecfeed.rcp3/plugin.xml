@@ -80,6 +80,15 @@
                   label="Redo"
                   style="push">
             </command>
+            <separator
+                  name="ecfeed.rcp3.separator1"
+                  visible="true">
+            </separator>
+            <command
+                  commandId="ecfeed.rcp3.cut"
+                  label="Cut"
+                  style="push">
+            </command>
          </menu>
          <menu
                label="Help">
@@ -121,6 +130,10 @@
             id="ecfeed.rcp3.redo"
             name="Redo">
       </command>
+      <command
+            id="ecfeed.rcp3.cut"
+            name="Cut">
+      </command>
    </extension>
    <extension
          point="org.eclipse.ui.handlers">
@@ -151,6 +164,10 @@
       <handler
             class="com.testify.ecfeed.rcp3.handlers.RedoHandler"
             commandId="ecfeed.rcp3.redo">
+      </handler>
+      <handler
+            class="com.testify.ecfeed.rcp3.handlers.CutHandler"
+            commandId="ecfeed.rcp3.cut">
       </handler>
    </extension>
 
