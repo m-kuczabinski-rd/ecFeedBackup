@@ -69,6 +69,14 @@
                   label="Exit">
             </command>
          </menu>
+         <menu
+               label="Help">
+            <command
+                  commandId="ecfeed.rcp3.about"
+                  label="About"
+                  style="push">
+            </command>
+         </menu>
       </menuContribution>
    </extension>
    <extension
@@ -89,6 +97,10 @@
             id="ecfeed.rcp3.new"
             name="New">
       </command>
+      <command
+            id="ecfeed.rcp3.about"
+            name="About">
+      </command>
    </extension>
    <extension
          point="org.eclipse.ui.handlers">
@@ -107,6 +119,10 @@
       <handler
             class="com.testify.ecfeed.rcp3.handlers.NewEctHandler"
             commandId="ecfeed.rcp3.new">
+      </handler>
+      <handler
+            class="com.testify.ecfeed.rcp3.handlers.AboutHandler"
+            commandId="ecfeed.rcp3.about">
       </handler>
    </extension>
 
