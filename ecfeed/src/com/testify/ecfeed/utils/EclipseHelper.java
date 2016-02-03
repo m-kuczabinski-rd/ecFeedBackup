@@ -18,6 +18,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.FileStoreEditorInput;
@@ -70,6 +71,10 @@ public class EclipseHelper {
 
 	public static IWorkbenchPage getActiveWorkBenchPage() {
 		return PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+	}
+	
+	public static IWorkbenchWindow getActiveWorkbenchWindow() {
+		return PlatformUI.getWorkbench().getActiveWorkbenchWindow();
 	}
 
 	public static void openEditorOnExistingExtFile(String pathWithFileName) {

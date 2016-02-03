@@ -8,14 +8,19 @@
 
 package com.testify.ecfeed.rcp3;
 
+import org.eclipse.jface.action.IContributionItem;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.ui.IWorkbenchPage;
-import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.application.ActionBarAdvisor;
 import org.eclipse.ui.application.IActionBarConfigurer;
 import org.eclipse.ui.application.IWorkbenchWindowConfigurer;
 import org.eclipse.ui.application.WorkbenchWindowAdvisor;
+import org.eclipse.ui.internal.WorkbenchWindow;
 
+import com.testify.ecfeed.utils.EclipseHelper;
+
+@SuppressWarnings("restriction")
 public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 
 	public ApplicationWorkbenchWindowAdvisor(IWorkbenchWindowConfigurer configurer) {
@@ -26,6 +31,14 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 			IActionBarConfigurer configurer) {
 		return new ApplicationActionBarAdvisor(configurer);
 	}
+	
+	@Override
+	public void postWindowCreate() {
+		IWorkbenchPage page = EclipseHelper.getActiveWorkBenchPage();
+		page.hideView(page.findView("ecfeed.rcp3.view"));
+		
+		hideSearchMenu();
+	}	
 
 	@Override
 	public void preWindowOpen() {
@@ -35,17 +48,23 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 		configurer.setShowStatusLine(false);
 		configurer.setTitle("ecFeed");
 	}
-	
+
 	@Override
 	public void postWindowOpen() {
 		IWorkbenchWindowConfigurer configurer = getWindowConfigurer();
 		configurer.getWindow().getShell().setMaximized(true);
 	}
-	
-	@Override
-	public void postWindowCreate() {
-		IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
-		page.hideView(page.findView("ecfeed.rcp3.view"));		
+
+	private void hideSearchMenu() {
+		IWorkbenchWindow workbenchWindow = EclipseHelper.getActiveWorkbenchWindow();
+		IContributionItem[] items = ((WorkbenchWindow)workbenchWindow).getMenuBarManager().getItems();
+		
+		for (IContributionItem item : items)
+		{
+			if (item.getId().equals("org.eclipse.search.menu")) {
+				item.setVisible(false);
+			}
+		}
 	}
 }
 
