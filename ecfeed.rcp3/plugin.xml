@@ -47,6 +47,10 @@
          <menu
                label="File">
             <command
+                  commandId="ecfeed.rcp3.new"
+                  label="New">
+            </command>
+            <command
                   commandId="ecfeed.rcp3.open"
                   label="Open">
             </command>
@@ -81,6 +85,10 @@
             id="ecfeed.rcp3.saveAs"
             name="SaveAs">
       </command>
+      <command
+            id="ecfeed.rcp3.new"
+            name="New">
+      </command>
    </extension>
    <extension
          point="org.eclipse.ui.handlers">
@@ -95,6 +103,10 @@
       <handler
             class="com.testify.ecfeed.rcp3.handlers.SaveAsEctHandler"
             commandId="ecfeed.rcp3.saveAs">
+      </handler>
+      <handler
+            class="com.testify.ecfeed.rcp3.handlers.NewEctHandler"
+            commandId="ecfeed.rcp3.new">
       </handler>
    </extension>
 

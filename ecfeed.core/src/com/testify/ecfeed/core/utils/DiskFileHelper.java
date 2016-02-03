@@ -9,6 +9,7 @@
 package com.testify.ecfeed.core.utils;
 
 import java.io.File;
+import java.io.IOException;
 
 public class DiskFileHelper {
 
@@ -20,8 +21,8 @@ public class DiskFileHelper {
 	public static final String BIN_SUBDIRECTORY = "bin";
 	public static final String ALLOWED_CHARS_FOR_ECT_NAME = "[a-zA-Z0-9_\\.]";
 
-	public static boolean fileExists(String pathWithName) {
-		File file = new File(pathWithName);
+	public static boolean fileExists(String pathWithFileName) {
+		File file = new File(pathWithFileName);
 
 		if(file.exists() && !file.isDirectory()) {
 			return true;
@@ -62,7 +63,11 @@ public class DiskFileHelper {
 	public static String extractPath(String pathWithFileName) {
 		String fileName = StringHelper.getLastToken(pathWithFileName, FILE_SEPARATOR);
 		return StringHelper.removePostfix(fileName, pathWithFileName);
-	}	
+	}
+
+	public static String extractFileNameWithoutExtension(String fileNameWithExtension) {
+		return StringHelper.getFirstToken(fileNameWithExtension, EXTENSION_SEPARATOR);
+	}
 
 	public static String checkEctFileName(String fileName) {
 		final String ALLOWED_CHARS = "[a-zA-Z0-9_\\.]";
@@ -96,4 +101,30 @@ public class DiskFileHelper {
 
 		return null;
 	}
+
+	public static void createNewFile(String pathWithFileName) {
+		File file = new File(pathWithFileName);
+		if (file.exists()) {
+			ExceptionHelper.reportRuntimeException("File: " + pathWithFileName + " already exists.");
+		}
+
+		boolean fileCreated = false; 
+		try {
+			fileCreated = file.createNewFile();
+		} catch (IOException e) {
+			ExceptionHelper.reportRuntimeException(e.getMessage());
+		}
+
+		if (!fileCreated) {
+			ExceptionHelper.reportRuntimeException("Can not create file: " + pathWithFileName + " .");
+		}
+	}
+	
+	public static void deleteFile(String pathWithFileName) {
+		File file = new File(pathWithFileName);
+		if (!file.delete()) {
+			ExceptionHelper.reportRuntimeException("Can not delete file: " + pathWithFileName + " .");
+		}
+	}
+
 }

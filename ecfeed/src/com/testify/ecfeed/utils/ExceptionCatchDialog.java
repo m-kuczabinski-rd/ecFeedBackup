@@ -1,4 +1,4 @@
-package com.testify.ecfeed.ui.editor.utils;
+package com.testify.ecfeed.utils;
 
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;

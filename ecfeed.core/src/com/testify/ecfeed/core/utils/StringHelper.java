@@ -68,6 +68,15 @@ public class StringHelper {
 		return tokenizedString.substring(separatorPosition+1);
 	}
 
+	public static String getFirstToken(String tokenizedString, String tokenSeparator) {
+		int separatorPosition = tokenizedString.indexOf(tokenSeparator);
+
+		if (separatorPosition == -1) {
+			return null;
+		}
+		return tokenizedString.substring(0, separatorPosition);
+	}	
+
 	public static String getAllBeforeLastToken(String packageWithClass, String tokenSeparator) {
 		int separatorPosition = packageWithClass.lastIndexOf(tokenSeparator);
 

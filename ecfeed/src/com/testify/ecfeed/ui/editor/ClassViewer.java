@@ -33,11 +33,11 @@ import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.testify.ecfeed.ui.editor.actions.DeleteAction;
 import com.testify.ecfeed.ui.editor.actions.ModelViewerActionProvider;
-import com.testify.ecfeed.ui.editor.utils.ExceptionCatchDialog;
 import com.testify.ecfeed.ui.modelif.ClassInterface;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 import com.testify.ecfeed.ui.modelif.ModelNodesTransfer;
 import com.testify.ecfeed.ui.modelif.RootInterface;
+import com.testify.ecfeed.utils.ExceptionCatchDialog;
 
 public class ClassViewer extends TableViewerSection {
 	private static final int STYLE = Section.EXPANDED | Section.TITLE_BAR;

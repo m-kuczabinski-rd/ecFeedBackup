@@ -59,12 +59,12 @@ import com.testify.ecfeed.ui.common.ImageManager;
 import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.testify.ecfeed.ui.editor.actions.ModelModifyingAction;
-import com.testify.ecfeed.ui.editor.utils.ExceptionCatchDialog;
 import com.testify.ecfeed.ui.modelif.AbstractParameterInterface;
 import com.testify.ecfeed.ui.modelif.AbstractStatementInterface;
 import com.testify.ecfeed.ui.modelif.ConstraintInterface;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 import com.testify.ecfeed.ui.modelif.StatementInterfaceFactory;
+import com.testify.ecfeed.utils.ExceptionCatchDialog;
 
 public class ConstraintViewer extends TreeViewerSection {
 

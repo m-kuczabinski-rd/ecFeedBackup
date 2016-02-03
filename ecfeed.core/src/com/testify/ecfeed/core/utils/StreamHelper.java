@@ -8,6 +8,8 @@
 
 package com.testify.ecfeed.core.utils;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.util.Scanner;
 
@@ -35,4 +37,14 @@ public class StreamHelper {
 		// the entire content will be read 
 		return scanner.useDelimiter(REGEX_BEGINNING_OF_TEXT).next();
 	}
+
+	public static FileOutputStream requireCreateOutputStream(String pathWithFileName) {
+		FileOutputStream outputStream = null;
+		try {
+			outputStream = new FileOutputStream(pathWithFileName);
+		} catch (FileNotFoundException e) {
+			ExceptionHelper.reportRuntimeException("Can not create output stream." + e.getMessage());
+		}
+		return outputStream;
+	}	
 }

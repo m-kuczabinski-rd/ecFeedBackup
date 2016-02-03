@@ -6,27 +6,28 @@
  * http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 
-package com.testify.ecfeed.ui.dialogs.swt;
+package com.testify.ecfeed.ui.dialogs.basic;
 
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.widgets.FileDialog;
+import org.eclipse.jface.dialogs.MessageDialog;
 
 import com.testify.ecfeed.utils.EclipseHelper;
 
-public class FileOpenEctDialog {
+public class YesNoDialog {
 
-	private FileDialog fFileDialog;
-
-	public FileOpenEctDialog() {
-		fFileDialog = new FileDialog(EclipseHelper.getActiveShell(), SWT.OPEN);
-		fFileDialog.setText("Open");
-		fFileDialog.setFilterPath(null);
-		String[] filterExt = { "*.ect" };
-		fFileDialog.setFilterExtensions(filterExt);
+	public enum Result {
+		NO,
+		YES,
 	}
 
-	public String open() {
-		return fFileDialog.open();
-	}
+	public static Result open(String question) {
+		MessageDialog fDialog = new MessageDialog(
+				EclipseHelper.getActiveShell(), "Question", null, question, 
+				MessageDialog.QUESTION, new String[] { "No", "Yes" }, 0);
 
+		int result = fDialog.open();
+		if (result == 0) {
+			return Result.NO; 
+		}
+		return Result.YES;
+	}
 }
