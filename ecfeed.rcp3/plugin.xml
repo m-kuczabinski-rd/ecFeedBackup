@@ -75,6 +75,11 @@
                   commandId="ecfeed.rcp3.undo"
                   label="Undo">
             </command>
+            <command
+                  commandId="ecfeed.rcp3.redo"
+                  label="Redo"
+                  style="push">
+            </command>
          </menu>
          <menu
                label="Help">
@@ -112,6 +117,10 @@
             id="ecfeed.rcp3.undo"
             name="Undo">
       </command>
+      <command
+            id="ecfeed.rcp3.redo"
+            name="Redo">
+      </command>
    </extension>
    <extension
          point="org.eclipse.ui.handlers">
@@ -138,6 +147,10 @@
       <handler
             class="com.testify.ecfeed.rcp3.handlers.UndoHandler"
             commandId="ecfeed.rcp3.undo">
+      </handler>
+      <handler
+            class="com.testify.ecfeed.rcp3.handlers.RedoHandler"
+            commandId="ecfeed.rcp3.redo">
       </handler>
    </extension>
 
