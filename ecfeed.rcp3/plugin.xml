@@ -70,6 +70,13 @@
             </command>
          </menu>
          <menu
+               label="Edit">
+            <command
+                  commandId="ecfeed.rcp3.undo"
+                  label="Undo">
+            </command>
+         </menu>
+         <menu
                label="Help">
             <command
                   commandId="ecfeed.rcp3.about"
@@ -101,6 +108,10 @@
             id="ecfeed.rcp3.about"
             name="About">
       </command>
+      <command
+            id="ecfeed.rcp3.undo"
+            name="Undo">
+      </command>
    </extension>
    <extension
          point="org.eclipse.ui.handlers">
@@ -123,6 +134,10 @@
       <handler
             class="com.testify.ecfeed.rcp3.handlers.AboutHandler"
             commandId="ecfeed.rcp3.about">
+      </handler>
+      <handler
+            class="com.testify.ecfeed.rcp3.handlers.UndoHandler"
+            commandId="ecfeed.rcp3.undo">
       </handler>
    </extension>
 
