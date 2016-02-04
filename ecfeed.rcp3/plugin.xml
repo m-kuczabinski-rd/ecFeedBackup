@@ -81,12 +81,31 @@
                   style="push">
             </command>
             <separator
-                  name="ecfeed.rcp3.separator1"
+                  name="ecfeed.rcp3.edit.separator1"
                   visible="true">
             </separator>
             <command
                   commandId="ecfeed.rcp3.cut"
                   label="Cut"
+                  style="push">
+            </command>
+            <command
+                  commandId="ecfeed.rcp3.copy"
+                  label="Copy"
+                  style="push">
+            </command>
+            <command
+                  commandId="ecfeed.rcp3.paste"
+                  label="Paste"
+                  style="push">
+            </command>
+            <separator
+                  name="ecfeed.rcp3.edit.separator2"
+                  visible="true">
+            </separator>
+            <command
+                  commandId="ecfeed.rcp3.delete"
+                  label="Delete"
                   style="push">
             </command>
          </menu>
@@ -134,6 +153,18 @@
             id="ecfeed.rcp3.cut"
             name="Cut">
       </command>
+      <command
+            id="ecfeed.rcp3.copy"
+            name="Copy">
+      </command>
+      <command
+            id="ecfeed.rcp3.paste"
+            name="Paste">
+      </command>
+      <command
+            id="ecfeed.rcp3.delete"
+            name="Delete">
+      </command>
    </extension>
    <extension
          point="org.eclipse.ui.handlers">
@@ -168,6 +199,18 @@
       <handler
             class="com.testify.ecfeed.rcp3.handlers.CutHandler"
             commandId="ecfeed.rcp3.cut">
+      </handler>
+      <handler
+            class="com.testify.ecfeed.rcp3.handlers.CopyHandler"
+            commandId="ecfeed.rcp3.copy">
+      </handler>
+      <handler
+            class="com.testify.ecfeed.rcp3.handlers.PasteHandler"
+            commandId="ecfeed.rcp3.paste">
+      </handler>
+      <handler
+            class="com.testify.ecfeed.rcp3.handlers.DeleteHandler"
+            commandId="ecfeed.rcp3.delete">
       </handler>
    </extension>
 
