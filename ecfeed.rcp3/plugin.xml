@@ -72,11 +72,11 @@
          <menu
                label="Edit">
             <command
-                  commandId="ecfeed.rcp3.undo"
+                  commandId="org.eclipse.ui.edit.undo"
                   label="Undo">
             </command>
             <command
-                  commandId="ecfeed.rcp3.redo"
+                  commandId="org.eclipse.ui.edit.redo"
                   label="Redo"
                   style="push">
             </command>
@@ -142,14 +142,6 @@
             name="About">
       </command>
       <command
-            id="ecfeed.rcp3.undo"
-            name="Undo">
-      </command>
-      <command
-            id="ecfeed.rcp3.redo"
-            name="Redo">
-      </command>
-      <command
             id="ecfeed.rcp3.cut"
             name="Cut">
       </command>
@@ -187,14 +179,6 @@
       <handler
             class="com.testify.ecfeed.rcp3.handlers.AboutHandler"
             commandId="ecfeed.rcp3.about">
-      </handler>
-      <handler
-            class="com.testify.ecfeed.rcp3.handlers.UndoHandler"
-            commandId="ecfeed.rcp3.undo">
-      </handler>
-      <handler
-            class="com.testify.ecfeed.rcp3.handlers.RedoHandler"
-            commandId="ecfeed.rcp3.redo">
       </handler>
       <handler
             class="com.testify.ecfeed.rcp3.handlers.CutHandler"
