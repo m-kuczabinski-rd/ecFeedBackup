@@ -12,11 +12,11 @@ import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 
 import com.testify.ecfeed.core.utils.DiskFileHelper;
+import com.testify.ecfeed.ui.dialogs.basic.ExceptionCatchDialog;
 import com.testify.ecfeed.ui.dialogs.basic.NewFileEctDialog;
 import com.testify.ecfeed.ui.dialogs.basic.ReplaceExistingFileDialog;
 import com.testify.ecfeed.utils.EclipseHelper;
 import com.testify.ecfeed.utils.EctFileHelper;
-import com.testify.ecfeed.utils.ExceptionCatchDialog;
 
 
 public class NewEctHandler extends org.eclipse.core.commands.AbstractHandler {

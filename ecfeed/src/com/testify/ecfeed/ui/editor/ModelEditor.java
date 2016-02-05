@@ -67,8 +67,8 @@ import com.testify.ecfeed.core.utils.UriHelper;
 import com.testify.ecfeed.ui.common.Constants;
 import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.common.utils.IFileInfoProvider;
+import com.testify.ecfeed.ui.dialogs.basic.ExceptionCatchDialog;
 import com.testify.ecfeed.utils.EclipseHelper;
-import com.testify.ecfeed.utils.ExceptionCatchDialog;
 
 public class ModelEditor extends FormEditor implements IFileInfoProvider{
 

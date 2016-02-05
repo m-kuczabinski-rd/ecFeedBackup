@@ -34,6 +34,7 @@ import com.testify.ecfeed.ui.common.ColorConstants;
 import com.testify.ecfeed.ui.common.ColorManager;
 import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.common.utils.IFileInfoProvider;
+import com.testify.ecfeed.ui.dialogs.basic.ExceptionCatchDialog;
 import com.testify.ecfeed.ui.editor.actions.ActionGroups;
 import com.testify.ecfeed.ui.editor.actions.CutAction;
 import com.testify.ecfeed.ui.editor.actions.ModelModifyingAction;
@@ -41,7 +42,6 @@ import com.testify.ecfeed.ui.editor.actions.NamedAction;
 import com.testify.ecfeed.ui.editor.actions.SelectAllAction;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 import com.testify.ecfeed.ui.modelif.ChoiceInterface;
-import com.testify.ecfeed.utils.ExceptionCatchDialog;
 
 public class ChoiceLabelsViewer extends TableViewerSection {
 

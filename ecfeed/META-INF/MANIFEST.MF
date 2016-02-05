@@ -43,4 +43,5 @@ Export-Package: com.testify.ecfeed.android.external,
  com.testify.ecfeed.ui.common.utils,
  com.testify.ecfeed.ui.dialogs.basic,
  com.testify.ecfeed.ui.editor,
+ com.testify.ecfeed.ui.editor.actions,
  com.testify.ecfeed.utils

@@ -20,12 +20,12 @@ public class AboutHandler extends org.eclipse.core.commands.AbstractHandler {
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		System.out.println("About handler executed");
-		
+
 		MessageDialog.openInformation(
 				EclipseHelper.getActiveShell(), 
 				"About ecFeed", 
 				"EcFeed is a tool which allows to design and model tests.");
-		
+
 		return null;
 	}
 }

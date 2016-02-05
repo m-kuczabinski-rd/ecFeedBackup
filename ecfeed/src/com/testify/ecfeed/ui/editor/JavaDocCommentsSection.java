@@ -25,8 +25,8 @@ import com.testify.ecfeed.core.model.AbstractNode;
 import com.testify.ecfeed.ui.common.JavaDocSupport;
 import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.common.utils.IFileInfoProvider;
+import com.testify.ecfeed.ui.dialogs.basic.ExceptionCatchDialog;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
-import com.testify.ecfeed.utils.ExceptionCatchDialog;
 
 public class JavaDocCommentsSection extends AbstractCommentsSection {
 

@@ -13,8 +13,10 @@ import java.net.URI;
 
 import org.eclipse.core.filesystem.EFS;
 import org.eclipse.core.filesystem.IFileStore;
+import org.eclipse.jface.action.IAction;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IWorkbenchPage;
@@ -72,7 +74,7 @@ public class EclipseHelper {
 	public static IWorkbenchPage getActiveWorkBenchPage() {
 		return PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
 	}
-	
+
 	public static IWorkbenchWindow getActiveWorkbenchWindow() {
 		return PlatformUI.getWorkbench().getActiveWorkbenchWindow();
 	}
@@ -111,6 +113,20 @@ public class EclipseHelper {
 		} catch (PartInitException e) {
 			ExceptionHelper.reportRuntimeException(e.getMessage());
 		}
+	}
+
+	public static IAction getGlobalAction(String actionId) {
+		IActionBars actionBars = EclipseHelper.getActionBarsForActiveEditor();
+		return actionBars.getGlobalActionHandler(actionId);
+	}
+
+	public static IActionBars getActionBarsForActiveEditor() {
+		IEditorPart editorPart = EclipseHelper.getActiveEditor();
+
+		if (editorPart == null) {
+			return null;
+		}
+		return editorPart.getEditorSite().getActionBars();
 	}
 
 }

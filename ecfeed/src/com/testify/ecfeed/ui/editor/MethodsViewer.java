@@ -31,13 +31,13 @@ import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.common.NodeNameColumnLabelProvider;
 import com.testify.ecfeed.ui.common.NodeViewerColumnLabelProvider;
 import com.testify.ecfeed.ui.common.utils.IFileInfoProvider;
+import com.testify.ecfeed.ui.dialogs.basic.ExceptionCatchDialog;
 import com.testify.ecfeed.ui.editor.actions.DeleteAction;
 import com.testify.ecfeed.ui.editor.actions.ModelViewerActionProvider;
 import com.testify.ecfeed.ui.modelif.ClassInterface;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 import com.testify.ecfeed.ui.modelif.MethodInterface;
 import com.testify.ecfeed.ui.modelif.ModelNodesTransfer;
-import com.testify.ecfeed.utils.ExceptionCatchDialog;
 
 public class MethodsViewer extends TableViewerSection {
 

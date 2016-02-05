@@ -10,13 +10,14 @@ package com.testify.ecfeed.rcp3.handlers;
 
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.ui.actions.ActionFactory;
 
 
 public class CutHandler extends org.eclipse.core.commands.AbstractHandler {
 
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
-		System.out.println("CutHandler executed");
+		HandlerHelper.executeGlobalAction(ActionFactory.CUT.getId());
 		return null;
 	}
 }

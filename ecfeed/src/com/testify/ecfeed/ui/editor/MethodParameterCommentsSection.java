@@ -24,9 +24,9 @@ import com.testify.ecfeed.core.model.MethodParameterNode;
 import com.testify.ecfeed.ui.common.JavaDocSupport;
 import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.common.utils.IFileInfoProvider;
+import com.testify.ecfeed.ui.dialogs.basic.ExceptionCatchDialog;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 import com.testify.ecfeed.ui.modelif.MethodParameterInterface;
-import com.testify.ecfeed.utils.ExceptionCatchDialog;
 
 public class MethodParameterCommentsSection extends AbstractParameterCommentsSection {
 

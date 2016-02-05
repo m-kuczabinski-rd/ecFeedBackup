@@ -10,13 +10,14 @@ package com.testify.ecfeed.rcp3.handlers;
 
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.ui.actions.ActionFactory;
 
 
 public class DeleteHandler extends org.eclipse.core.commands.AbstractHandler {
 
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
-		System.out.println("Delete handler executed");
+		HandlerHelper.executeGlobalAction(ActionFactory.DELETE.getId());
 		return null;
 	}
 }

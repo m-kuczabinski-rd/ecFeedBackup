@@ -6,18 +6,18 @@
  * http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 
-package com.testify.ecfeed.rcp3.handlers;
+package com.testify.ecfeed.ui.dialogs.basic;
 
-import org.eclipse.core.commands.ExecutionEvent;
-import org.eclipse.core.commands.ExecutionException;
-import org.eclipse.ui.actions.ActionFactory;
+import org.eclipse.jface.dialogs.MessageDialog;
 
+import com.testify.ecfeed.utils.EclipseHelper;
 
-public class CopyHandler extends org.eclipse.core.commands.AbstractHandler {
+public class InfoDialog {
 
-	@Override
-	public Object execute(ExecutionEvent event) throws ExecutionException {
-		HandlerHelper.executeGlobalAction(ActionFactory.COPY.getId());
-		return null;
+	public static void open(String message) {
+		MessageDialog.openInformation(
+				EclipseHelper.getActiveShell(), 
+				"Information", 
+				message);
 	}
 }
