@@ -24,7 +24,11 @@ public class AboutHandler extends org.eclipse.core.commands.AbstractHandler {
 		MessageDialog.openInformation(
 				EclipseHelper.getActiveShell(), 
 				"About ecFeed", 
-				"EcFeed is a tool which allows to design and model tests.");
+				"EcFeed is a tool that allows to design, model and execute tests for Java, Android and Web projects.\n"+
+				"\n" +
+				"Copyright (c) 2016 Testify AS.\n" + 
+				"\n" +
+				"https://github.com/testify-no/ecFeed/wiki");
 
 		return null;
 	}
