@@ -20,6 +20,9 @@ public class OpenEctHandler extends org.eclipse.core.commands.AbstractHandler {
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		String pathWithFileName = FileOpenEctDialog.open();
+		if (pathWithFileName == null) {
+			return null;
+		}
 		EclipseHelper.openEditorOnExistingExtFile(pathWithFileName);
 		return null;
 	}

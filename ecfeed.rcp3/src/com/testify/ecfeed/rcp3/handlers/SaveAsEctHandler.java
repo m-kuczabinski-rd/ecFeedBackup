@@ -35,6 +35,10 @@ public class SaveAsEctHandler extends org.eclipse.core.commands.AbstractHandler 
 		}
 
 		String pathWithFileName = UriHelper.convertUriToFilePath(editorInput.getURI());
+		if (pathWithFileName == null) {
+			return null;
+		}
+		
 		executeSaveAs(pathWithFileName, modelEditor);
 		return null;
 	}
