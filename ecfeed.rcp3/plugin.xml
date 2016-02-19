@@ -169,5 +169,17 @@
             commandId="ecfeed.rcp3.delete">
       </handler>
    </extension>
+   <extension
+         id="product"
+         point="org.eclipse.core.runtime.products">
+      <product
+            application="ecfeed.rcp3.application"
+            name="ecFeed">
+         <property
+               name="appName"
+               value="ecFeed">
+         </property>
+      </product>
+   </extension>
 
 </plugin>
