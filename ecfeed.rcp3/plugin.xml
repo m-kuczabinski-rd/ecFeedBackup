@@ -80,34 +80,6 @@
                   label="Redo"
                   style="push">
             </command>
-            <separator
-                  name="ecfeed.rcp3.edit.separator1"
-                  visible="true">
-            </separator>
-            <command
-                  commandId="ecfeed.rcp3.cut"
-                  label="Cut"
-                  style="push">
-            </command>
-            <command
-                  commandId="ecfeed.rcp3.copy"
-                  label="Copy"
-                  style="push">
-            </command>
-            <command
-                  commandId="ecfeed.rcp3.paste"
-                  label="Paste"
-                  style="push">
-            </command>
-            <separator
-                  name="ecfeed.rcp3.edit.separator2"
-                  visible="true">
-            </separator>
-            <command
-                  commandId="ecfeed.rcp3.delete"
-                  label="Delete"
-                  style="push">
-            </command>
          </menu>
          <menu
                label="Help">
