@@ -34,9 +34,6 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 	
 	@Override
 	public void postWindowCreate() {
-		IWorkbenchPage page = EclipseHelper.getActiveWorkBenchPage();
-		page.hideView(page.findView("ecfeed.rcp3.view"));
-		
 		hideSearchMenu();
 	}	
 
