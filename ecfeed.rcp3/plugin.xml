@@ -160,5 +160,17 @@
          </property>
       </product>
    </extension>
+   <extension
+         point="org.eclipse.ui.bindings">
+      <key
+            commandId="ecfeed.rcp3.open"
+            schemeId="ecFeedScheme"
+            sequence="M1+O">
+      </key>
+      <scheme
+            id="ecFeedScheme"
+            name="ecFeedScheme">
+      </scheme>
+   </extension>
 
 </plugin>
