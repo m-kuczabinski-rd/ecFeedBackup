@@ -27,11 +27,11 @@
                label="File">
             <command
                   commandId="ecfeed.rcp3.new"
-                  label="New">
+                  label="New...">
             </command>
             <command
                   commandId="ecfeed.rcp3.open"
-                  label="Open">
+                  label="Open...">
             </command>
             <command
                   commandId="ecfeed.rcp3.save"
@@ -40,7 +40,7 @@
             </command>
             <command
                   commandId="ecfeed.rcp3.saveAs"
-                  label="SaveAs"
+                  label="SaveAs..."
                   style="push">
             </command>
             <command
