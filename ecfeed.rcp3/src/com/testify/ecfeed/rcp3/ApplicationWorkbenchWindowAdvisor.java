@@ -10,7 +10,6 @@ package com.testify.ecfeed.rcp3;
 
 import org.eclipse.jface.action.IContributionItem;
 import org.eclipse.swt.graphics.Point;
-import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.application.ActionBarAdvisor;
 import org.eclipse.ui.application.IActionBarConfigurer;
@@ -20,7 +19,7 @@ import org.eclipse.ui.internal.WorkbenchWindow;
 
 import com.testify.ecfeed.utils.EclipseHelper;
 
-@SuppressWarnings("restriction")
+@SuppressWarnings("restriction")	
 public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 
 	public ApplicationWorkbenchWindowAdvisor(IWorkbenchWindowConfigurer configurer) {
