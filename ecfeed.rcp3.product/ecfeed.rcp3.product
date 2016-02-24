@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?pde version="3.5"?>
 
-<product name="ecFeed" id="ecfeed.rcp3.product" application="ecfeed.rcp3.application" useFeatures="false" includeLaunchers="true">
+<product name="ecFeed" uid="com.testify.ecfeed.rcp3.product" id="ecfeed.rcp3.product" application="ecfeed.rcp3.application" useFeatures="false" includeLaunchers="true">
 
    <configIni use="default">
    </configIni>
