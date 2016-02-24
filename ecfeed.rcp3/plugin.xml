@@ -42,6 +42,11 @@
                   label="Close"
                   style="push">
             </command>
+            <command
+                  commandId="org.eclipse.ui.file.closeAll"
+                  label="Close All"
+                  style="push">
+            </command>
             <separator
                   name="ecfeed.rcp3.separator2"
                   visible="true">
@@ -210,6 +215,11 @@
             commandId="ecfeed.rcp3.close"
             schemeId="ecFeedScheme"
             sequence="M1+W">
+      </key>
+      <key
+            commandId="org.eclipse.ui.file.closeAll"
+            schemeId="ecFeedScheme"
+            sequence="SHIFT+M1+W">
       </key>
    </extension>
 
