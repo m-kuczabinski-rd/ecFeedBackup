@@ -33,6 +33,19 @@
                   commandId="ecfeed.rcp3.open"
                   label="Open...">
             </command>
+            <separator
+                  name="ecfeed.rcp3.separator1"
+                  visible="true">
+            </separator>
+            <command
+                  commandId="ecfeed.rcp3.close"
+                  label="Close"
+                  style="push">
+            </command>
+            <separator
+                  name="ecfeed.rcp3.separator2"
+                  visible="true">
+            </separator>
             <command
                   commandId="ecfeed.rcp3.save"
                   label="Save"
@@ -43,6 +56,10 @@
                   label="SaveAs..."
                   style="push">
             </command>
+            <separator
+                  name="ecfeed.rcp3.separator3"
+                  visible="true">
+            </separator>
             <command
                   commandId="org.eclipse.ui.file.exit"
                   label="Exit">
@@ -108,6 +125,10 @@
             id="ecfeed.rcp3.delete"
             name="Delete">
       </command>
+      <command
+            id="ecfeed.rcp3.close"
+            name="Close">
+      </command>
    </extension>
    <extension
          point="org.eclipse.ui.handlers">
@@ -147,6 +168,10 @@
             class="com.testify.ecfeed.rcp3.handlers.DeleteHandler"
             commandId="ecfeed.rcp3.delete">
       </handler>
+      <handler
+            class="com.testify.ecfeed.rcp3.handlers.CloseEctHandler"
+            commandId="ecfeed.rcp3.close">
+      </handler>
    </extension>
    <extension
          id="product"
@@ -180,6 +205,11 @@
             commandId="ecfeed.rcp3.save"
             schemeId="ecFeedScheme"
             sequence="M1+S">
+      </key>
+      <key
+            commandId="ecfeed.rcp3.close"
+            schemeId="ecFeedScheme"
+            sequence="M1+W">
       </key>
    </extension>
 
