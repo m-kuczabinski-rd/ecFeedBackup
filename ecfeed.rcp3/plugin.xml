@@ -162,15 +162,25 @@
    </extension>
    <extension
          point="org.eclipse.ui.bindings">
+      <scheme
+            id="ecFeedScheme"
+            name="ecFeedScheme">
+      </scheme>
       <key
             commandId="ecfeed.rcp3.open"
             schemeId="ecFeedScheme"
             sequence="M1+O">
       </key>
-      <scheme
-            id="ecFeedScheme"
-            name="ecFeedScheme">
-      </scheme>
+      <key
+            commandId="ecfeed.rcp3.new"
+            schemeId="ecFeedScheme"
+            sequence="M1+N">
+      </key>
+      <key
+            commandId="ecfeed.rcp3.save"
+            schemeId="ecFeedScheme"
+            sequence="M1+S">
+      </key>
    </extension>
 
 </plugin>
