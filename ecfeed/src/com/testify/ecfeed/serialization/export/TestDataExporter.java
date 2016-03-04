@@ -28,7 +28,7 @@ public class TestDataExporter {
 	private static final String CHOICE_COMMAND_VALUE = "value";
 	private static final String TEST_PARAMETER_SEQUENCE_GENERIC_PATTERN = "\\$\\d+\\.(" + CHOICE_COMMAND_SHORT_NAME + "|" + CHOICE_COMMAND_FULL_NAME + "|" + CHOICE_COMMAND_VALUE + ")";
 	private static final String METHOD_PARAMETER_SEQUENCE_GENERIC_PATTERN = "\\$\\d+\\." + PARAMETER_COMMAND_NAME;
-	private static final String ARITHMETIC_EXPRESSION_SEQUENCE_GENERIC_PATTERN = "\\$(.*)";
+	private static final String ARITHMETIC_EXPRESSION_SEQUENCE_GENERIC_PATTERN = "\\$\\(.*\\)";
 
 	OutputStream fOutputStream;
 	int fExportedTestCases;
