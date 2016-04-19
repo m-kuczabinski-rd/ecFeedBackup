@@ -42,10 +42,6 @@ public class ModelViewerActionProvider extends ActionGroups {
 		addMoveActions(viewer, context);
 	}
 
-	public ModelViewerActionProvider(TableViewer viewer, IModelUpdateContext context) {
-		this(viewer, context, null);
-	}
-
 	public ModelViewerActionProvider(
 			TableViewer viewer, 
 			IModelUpdateContext context, 
