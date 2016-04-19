@@ -170,7 +170,11 @@ public class ClassViewer extends TableViewerSection {
 		fClassIf = new ClassInterface(this, fileInfoProvider);
 
 		setText("Classes");
-		addButton("Add implemented class", new AddImplementedClassAdapter());  
+		
+		if (fFileInfoProvider.isProjectAvailable()) {
+			addButton("Add implemented class", new AddImplementedClassAdapter());
+		}
+		
 		addButton("New test class", new AddNewClassAdapter());
 		addButton("Remove selected", 
 				new ActionSelectionAdapter(
