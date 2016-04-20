@@ -14,7 +14,7 @@ import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.MethodParameterNode;
 import com.testify.ecfeed.model.TestCaseNode;
 
-public class TestDataExporter {
+public class TestCasesExporter {
 	
 	private static final String CLASS_NAME_SEQUENCE = "%class";
 	private static final String PACKAGE_NAME_SEQUENCE = "%package";
@@ -36,7 +36,7 @@ public class TestDataExporter {
 	String fTailTemplate;
 	
 	
-	public TestDataExporter(String file, String headerTemplate, String testCaseTemplate, String tailTemplate) 
+	public TestCasesExporter(String file, String headerTemplate, String testCaseTemplate, String tailTemplate) 
 			throws FileNotFoundException {
 		 fOutputStream = new FileOutputStream(file);
 		 fExportedTestCases = 0;

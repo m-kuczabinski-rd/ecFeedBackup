@@ -43,7 +43,7 @@ import com.testify.ecfeed.model.MethodNode;
 import com.testify.ecfeed.model.MethodParameterNode;
 import com.testify.ecfeed.model.StaticStatement;
 import com.testify.ecfeed.model.TestCaseNode;
-import com.testify.ecfeed.serialization.export.TestDataExporter;
+import com.testify.ecfeed.serialization.export.TestCasesExporter;
 import com.testify.ecfeed.ui.common.Constants;
 import com.testify.ecfeed.ui.common.EclipseModelBuilder;
 import com.testify.ecfeed.ui.common.EclipseTypeAdapterProvider;
@@ -220,8 +220,8 @@ public class MethodInterface extends ParametersParentInterface {
 		}
 		
 		try {
-			TestDataExporter exporter = 
-					new TestDataExporter(
+			TestCasesExporter exporter = 
+					new TestCasesExporter(
 							dialog.getTargetFile(), dialog.getHeaderTemplate(), 
 							dialog.getTestCaseTemplate(), dialog.getTailTemplate());
 			
