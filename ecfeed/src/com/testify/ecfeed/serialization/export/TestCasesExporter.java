@@ -37,30 +37,40 @@ public class TestCasesExporter {
 		fTailTemplate = tailTemplate;
 	}
 
-	public void exportTestCases(
+	public void runExport(
 			MethodNode method, 
 			Collection<TestCaseNode> testCases, 
 			String file) throws IOException {
 
-		fOutputStream = new FileOutputStream(file);
+		FileOutputStream outputStream = new FileOutputStream(file);
 
 		try {
-			exportHeader(method);
-
-			for (TestCaseNode testCase : testCases)	{
-				exportTestCase(testCase);
-			}
-
-			exportTail(method);
+			runExport(method, testCases, outputStream);
 		} finally {
 			fOutputStream.close();
 		}
 	}
 
+	public void runExport(
+			MethodNode method, 
+			Collection<TestCaseNode> testCases, 
+			OutputStream outputStream) throws IOException {
+		
+		fOutputStream = outputStream;
+		
+		exportHeader(method);
+
+		for (TestCaseNode testCase : testCases)	{
+			exportTestCase(testCase);
+		}
+
+		exportTail(method);
+	}
 
 	private void exportHeader(MethodNode method) throws IOException{
 		if (fHeaderTemplate != null) {
-			fOutputStream.write(TestCasesExportHelper.generateSection(method, fHeaderTemplate).getBytes());
+			String section = TestCasesExportHelper.generateSection(method, fHeaderTemplate) + System.lineSeparator();
+			fOutputStream.write(section.getBytes());
 		}
 
 		fExportedTestCases = 0;
@@ -69,7 +79,7 @@ public class TestCasesExporter {
 	private void exportTestCase(TestCaseNode testCase) throws IOException{
 		String testCaseText = 
 				TestCasesExportHelper.generateTestCaseString(
-						fExportedTestCases, testCase, fTestCaseTemplate);
+						fExportedTestCases, testCase, fTestCaseTemplate) + System.lineSeparator();
 
 		fOutputStream.write(testCaseText.getBytes());
 		++fExportedTestCases; 
@@ -77,7 +87,8 @@ public class TestCasesExporter {
 
 	private void exportTail(MethodNode method) throws IOException{
 		if(fTailTemplate != null){
-			fOutputStream.write(TestCasesExportHelper.generateSection(method, fTailTemplate).getBytes());
+			String section = TestCasesExportHelper.generateSection(method, fTailTemplate) + System.lineSeparator();
+			fOutputStream.write(section.getBytes());
 		}
 	}	
 

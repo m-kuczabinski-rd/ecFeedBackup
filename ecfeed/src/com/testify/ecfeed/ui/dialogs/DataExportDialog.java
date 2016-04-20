@@ -134,6 +134,8 @@ public class DataExportDialog extends TitleAreaDialog{
 	protected void okPressed(){
 		String templateText = fTemplateText.getText();
 		Map<String, String> templates = parseTemplate(templateText);
+		
+		// TODO - REMOVE NEWLINES
 		fHeaderTemplate = templates.get(HEADER_TEMPLATE_MARKER.toLowerCase());
 		fTestCaseTemplate = templates.get(TEST_CASE_TEMPLATE_MARKER.toLowerCase());
 		fTailTemplate = templates.get(TAIL_TEMPLATE_MARKER.toLowerCase());
