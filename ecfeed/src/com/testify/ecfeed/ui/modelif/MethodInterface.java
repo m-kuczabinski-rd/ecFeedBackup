@@ -214,6 +214,7 @@ public class MethodInterface extends ParametersParentInterface {
 	}
 
 	public void exportTestCases(Collection<TestCaseNode> checkedTestCases) {
+		
 		DataExportDialog dialog = new DataExportDialog(Display.getDefault().getActiveShell());
 		if(dialog.open() != IDialogConstants.OK_ID){
 			return;
@@ -222,17 +223,11 @@ public class MethodInterface extends ParametersParentInterface {
 		try {
 			TestCasesExporter exporter = 
 					new TestCasesExporter(
-							dialog.getTargetFile(), dialog.getHeaderTemplate(), 
-							dialog.getTestCaseTemplate(), dialog.getTailTemplate());
+							dialog.getHeaderTemplate(), 
+							dialog.getTestCaseTemplate(), 
+							dialog.getTailTemplate());
 			
-			exporter.exportHeader(getTarget());
-			
-			for(TestCaseNode testCase : checkedTestCases){
-				exporter.exportTestCase(testCase);
-			}
-			
-			exporter.exportTail(getTarget());
-			exporter.close();
+			exporter.exportTestCases(getTarget(), checkedTestCases, dialog.getTargetFile());
 			
 		} catch (IOException e) {
 			MessageDialog.openError(Display.getCurrent().getActiveShell(),

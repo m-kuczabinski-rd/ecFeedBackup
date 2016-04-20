@@ -11,23 +11,46 @@ import com.testify.ecfeed.model.TestCaseNode;
 
 public class TestCasesExporter {
 
-	OutputStream fOutputStream;
-	int fExportedTestCases;
 	String fHeaderTemplate;
 	String fTestCaseTemplate;
 	String fTailTemplate;
+	OutputStream fOutputStream;
+	int fExportedTestCases;
+	
 
-	public TestCasesExporter(String file, String headerTemplate, String testCaseTemplate, String tailTemplate) 
+	public TestCasesExporter(String headerTemplate, String testCaseTemplate, String tailTemplate) 
 			throws FileNotFoundException {
-		fOutputStream = new FileOutputStream(file);
-		fExportedTestCases = 0;
-
+		if (testCaseTemplate == null) {
+			throw new RuntimeException("Test case template must not be empty.");
+		}
+		
 		fHeaderTemplate = headerTemplate;
 		fTestCaseTemplate = testCaseTemplate;
 		fTailTemplate = tailTemplate;
 	}
+	
+	public void exportTestCases(
+			MethodNode method, 
+			Collection<TestCaseNode> testCases, 
+			String file) throws IOException {
+		
+		fOutputStream = new FileOutputStream(file);
+		
+		try {
+			exportHeader(method);
+	
+			for (TestCaseNode testCase : testCases)	{
+				exportTestCase(testCase);
+			}
+	
+			exportTail(method);
+		} finally {
+			fOutputStream.close();
+		}
+	}
+	
 
-	public void exportHeader(MethodNode method) throws IOException{
+	private void exportHeader(MethodNode method) throws IOException{
 		if (fHeaderTemplate != null) {
 			fOutputStream.write(TestCasesExportHelper.generateSection(method, fHeaderTemplate).getBytes());
 		}
@@ -35,33 +58,19 @@ public class TestCasesExporter {
 		fExportedTestCases = 0;
 	}
 
-	public void exportTail(MethodNode method) throws IOException{
+	private void exportTestCase(TestCaseNode testCase) throws IOException{
+		String testCaseText = 
+				TestCasesExportHelper.generateTestCaseString(
+						fExportedTestCases, testCase, fTestCaseTemplate);
+		
+		fOutputStream.write(testCaseText.getBytes());
+		++fExportedTestCases; 
+	}
+	
+	private void exportTail(MethodNode method) throws IOException{
 		if(fTailTemplate != null){
 			fOutputStream.write(TestCasesExportHelper.generateSection(method, fTailTemplate).getBytes());
 		}
 	}	
 
-	public void exportTestCase(TestCaseNode testCase) throws IOException{
-		if(fTestCaseTemplate != null){
-			fOutputStream.write(TestCasesExportHelper.generateTestCaseString(fExportedTestCases, testCase, fTestCaseTemplate).getBytes());
-			++fExportedTestCases; 
-		}
-	}
-
-	public void exportTestCases(MethodNode method, Collection<TestCaseNode> testCases) throws IOException{
-		exportHeader(method);
-
-		if (fTestCaseTemplate != null) {
-			for (TestCaseNode testCase : testCases)	{
-				exportTestCase(testCase);
-			}
-		}
-
-		exportTail(method);
-		fOutputStream.close();
-	}
-
-	public void close() throws IOException {
-		fOutputStream.close();
-	}
 }
