@@ -11,7 +11,6 @@
 
 package com.testify.ecfeed.ui.modelif;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -187,8 +186,8 @@ public class MethodInterface extends ParametersParentInterface {
 		int dataLength = testData.size();
 		if(dataLength < 0 && (testGenerationSupport.wasCancelled() == false)){
 			MessageDialog.openInformation(Display.getDefault().getActiveShell(),
-			Messages.DIALOG_ADD_TEST_SUITE_PROBLEM_TITLE,
-			Messages.DIALOG_EMPTY_TEST_SUITE_GENERATED_MESSAGE);
+					Messages.DIALOG_ADD_TEST_SUITE_PROBLEM_TITLE,
+					Messages.DIALOG_EMPTY_TEST_SUITE_GENERATED_MESSAGE);
 			return false;
 		}
 		if(testData.size() > Constants.TEST_SUITE_SIZE_WARNING_LIMIT){
@@ -214,22 +213,22 @@ public class MethodInterface extends ParametersParentInterface {
 	}
 
 	public void exportTestCases(Collection<TestCaseNode> checkedTestCases) {
-		
+
 		DataExportDialog dialog = new DataExportDialog(Display.getDefault().getActiveShell());
 		if(dialog.open() != IDialogConstants.OK_ID){
 			return;
 		}
-		
+
 		try {
 			TestCasesExporter exporter = 
 					new TestCasesExporter(
 							dialog.getHeaderTemplate(), 
 							dialog.getTestCaseTemplate(), 
 							dialog.getTailTemplate());
-			
+
 			exporter.exportTestCases(getTarget(), checkedTestCases, dialog.getTargetFile());
-			
-		} catch (IOException e) {
+
+		} catch (Exception e) {
 			MessageDialog.openError(Display.getCurrent().getActiveShell(),
 					Messages.DIALOG_EXPORT_TEST_DATA_PROBLEM_TITLE,
 					e.getMessage());
