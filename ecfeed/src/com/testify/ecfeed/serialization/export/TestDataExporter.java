@@ -5,7 +5,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -32,41 +31,52 @@ public class TestDataExporter {
 
 	OutputStream fOutputStream;
 	int fExportedTestCases;
+	String fHeaderTemplate;
+	String fTestCaseTemplate;
+	String fTailTemplate;
 	
-	public TestDataExporter(String file) throws FileNotFoundException {
+	
+	public TestDataExporter(String file, String headerTemplate, String testCaseTemplate, String tailTemplate) 
+			throws FileNotFoundException {
 		 fOutputStream = new FileOutputStream(file);
 		 fExportedTestCases = 0;
+		 
+		 fHeaderTemplate = headerTemplate;
+		 fTestCaseTemplate = testCaseTemplate;
+		 fTailTemplate = tailTemplate;
 	}
 
-	public void export(MethodNode method, String template) throws IOException{
-		if(template != null){
-			fOutputStream.write(generateSection(method, template).getBytes());
+	public void exportHeader(MethodNode method) throws IOException{
+		if (fHeaderTemplate != null) {
+			fOutputStream.write(generateSection(method, fHeaderTemplate).getBytes());
 		}
+		
+		fExportedTestCases = 0;
 	}
-
-	public void export(TestCaseNode testCase, String template) throws IOException{
-		if(template != null){
-			fOutputStream.write(generateTestCaseString(fExportedTestCases, testCase, template).getBytes());
-			++fExportedTestCases;
-		}
-	}
-
 	
-	public void export(MethodNode method, Collection<TestCaseNode> testCases, String headerTemplate, 
-			String testCaseTemplate, String tailTemplate) throws IOException{
-		if(headerTemplate != null){
-			fOutputStream.write(generateSection(method, headerTemplate).getBytes());
+	public void exportTail(MethodNode method) throws IOException{
+		if(fTailTemplate != null){
+			fOutputStream.write(generateSection(method, fTailTemplate).getBytes());
 		}
-		if(testCaseTemplate != null){
-			Iterator<TestCaseNode> iterator = testCases.iterator();
-			for(int i = 0; i < testCases.size(); ++i){
-				TestCaseNode testCase = iterator.next();
-				fOutputStream.write(generateTestCaseString(i, testCase, testCaseTemplate).getBytes());
+	}	
+
+	public void exportTestCase(TestCaseNode testCase) throws IOException{
+		if(fTestCaseTemplate != null){
+			fOutputStream.write(generateTestCaseString(fExportedTestCases, testCase, fTestCaseTemplate).getBytes());
+			++fExportedTestCases; 
+		}
+	}
+
+	public void exportTestCases(MethodNode method, Collection<TestCaseNode> testCases) throws IOException{
+		exportHeader(method);
+		
+		if (fTestCaseTemplate != null) {
+			for (TestCaseNode testCase : testCases)	{
+				exportTestCase(testCase);
 			}
 		}
-		if(tailTemplate != null){
-			fOutputStream.write(generateSection(method, headerTemplate).getBytes());
-		}
+
+		exportTail(method);
 		fOutputStream.close();
 	}
 

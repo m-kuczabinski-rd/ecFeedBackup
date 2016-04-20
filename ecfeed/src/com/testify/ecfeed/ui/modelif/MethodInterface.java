@@ -215,20 +215,29 @@ public class MethodInterface extends ParametersParentInterface {
 
 	public void exportTestCases(Collection<TestCaseNode> checkedTestCases) {
 		DataExportDialog dialog = new DataExportDialog(Display.getDefault().getActiveShell());
-		if(dialog.open() == IDialogConstants.OK_ID){
-			try {
-				TestDataExporter exporter = new TestDataExporter(dialog.getTargetFile());
-				exporter.export(getTarget(), dialog.getHeaderTemplate());
-				for(TestCaseNode testCase : checkedTestCases){
-					exporter.export(testCase, dialog.getTestCaseTemplate());
-				}
-				exporter.export(getTarget(), dialog.getTailTemplate());
-				exporter.close();
-			} catch (IOException e) {
-				MessageDialog.openError(Display.getCurrent().getActiveShell(),
-						Messages.DIALOG_EXPORT_TEST_DATA_PROBLEM_TITLE,
-						e.getMessage());
+		if(dialog.open() != IDialogConstants.OK_ID){
+			return;
+		}
+		
+		try {
+			TestDataExporter exporter = 
+					new TestDataExporter(
+							dialog.getTargetFile(), dialog.getHeaderTemplate(), 
+							dialog.getTestCaseTemplate(), dialog.getTailTemplate());
+			
+			exporter.exportHeader(getTarget());
+			
+			for(TestCaseNode testCase : checkedTestCases){
+				exporter.exportTestCase(testCase);
 			}
+			
+			exporter.exportTail(getTarget());
+			exporter.close();
+			
+		} catch (IOException e) {
+			MessageDialog.openError(Display.getCurrent().getActiveShell(),
+					Messages.DIALOG_EXPORT_TEST_DATA_PROBLEM_TITLE,
+					e.getMessage());
 		}
 	}
 
