@@ -25,7 +25,7 @@
 # %index - a number under which this test case was exported (starting from 0). This number 
 #          does not refer to any property of the test case in the model, but can be useful.
 #
-  [Tail]
+  [Footer]
 # The bottom of the exported file. The same expressions as for header can be used here.
 #
 #
@@ -35,6 +35,6 @@
 # $1.name, $2.name, $3.name
 # [TestCase]
 # $1.value, $2.value, $3.value
-# [Tail]
-# #May stay empty - no tail is used for typical csv file
+# [Footer]
+# #May stay empty - no footer is used for typical csv file
 #

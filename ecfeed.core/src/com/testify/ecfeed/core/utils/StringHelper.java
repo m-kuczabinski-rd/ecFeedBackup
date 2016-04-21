@@ -59,6 +59,10 @@ public class StringHelper {
 		return fromStr.substring(0, index);
 	}
 
+	public static String removeLastNewline(String fromString) {
+		return removePostfix(System.lineSeparator(), fromString);
+	}
+
 	public static String getLastToken(String tokenizedString, String tokenSeparator) {
 		int separatorPosition = tokenizedString.lastIndexOf(tokenSeparator);
 

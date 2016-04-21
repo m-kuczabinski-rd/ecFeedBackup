@@ -67,7 +67,7 @@ import com.testify.ecfeed.ui.dialogs.SelectCompatibleMethodDialog;
 public class MethodInterface extends ParametersParentInterface {
 
 	private static String DIALOG_EXPORT_TEST_DATA_PROBLEM_TITLE = "DIALOG_EXPORT_TEST_DATA_PROBLEM_TITLE";
-	
+
 	private IFileInfoProvider fFileInfoProvider;
 	private ITypeAdapterProvider fAdapterProvider;
 
@@ -243,7 +243,7 @@ public class MethodInterface extends ParametersParentInterface {
 						classNode.getRunOnAndroid());
 		support.proceed();
 	}
-	
+
 	public void exportTestCases(Collection<TestCaseNode> checkedTestCases) {
 
 		TestCasesExportDialog dialog = new TestCasesExportDialog(Display.getDefault().getActiveShell());
@@ -256,7 +256,7 @@ public class MethodInterface extends ParametersParentInterface {
 					new TestCasesExporter(
 							dialog.getHeaderTemplate(), 
 							dialog.getTestCaseTemplate(), 
-							dialog.getTailTemplate());
+							dialog.getFooterTemplate());
 
 			exporter.runExport(getTarget(), checkedTestCases, dialog.getTargetFile());
 

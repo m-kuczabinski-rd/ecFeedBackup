@@ -48,6 +48,7 @@ public class TestCasesViewer extends CheckboxTreeViewerSection {
 	private TestCasesViewerLabelProvider fLabelProvider;
 	private TestCasesViewerContentProvider fContentProvider;
 	private Button fExecuteSelectedButton;
+	private Button fExportTestCasesButton;
 	private Button fGenerateSuiteButton;
 	private MethodInterface fMethodIf;
 	private MethodNode fParentMethod;
@@ -58,7 +59,7 @@ public class TestCasesViewer extends CheckboxTreeViewerSection {
 			fMethodIf.exportTestCases(getCheckedTestCases());
 		}
 	}
-	
+
 	private class AddTestCaseAdapter extends SelectionAdapter {
 		@Override
 		public void widgetSelected(SelectionEvent ev){
@@ -164,8 +165,8 @@ public class TestCasesViewer extends CheckboxTreeViewerSection {
 		if (getFileInfoProvider().isProjectAvailable()) {
 			fExecuteSelectedButton = addButton("Execute selected", new ExecuteStaticTestAdapter());
 		}
-		
-		addButton("Export test cases", new ExportTestCasesAdapter());
+
+		fExportTestCasesButton = addButton("Export selected", new ExportTestCasesAdapter());
 
 		addDoubleClickListener(new SelectNodeDoubleClickListener(sectionContext.getMasterSection()));
 	}
@@ -177,6 +178,8 @@ public class TestCasesViewer extends CheckboxTreeViewerSection {
 		if (getFileInfoProvider().isProjectAvailable()) {
 			fExecuteSelectedButton.setEnabled(executionEnabled());
 		}
+
+		fExportTestCasesButton.setEnabled(executionEnabled());
 		fLabelProvider.refresh();
 	}
 
@@ -211,6 +214,7 @@ public class TestCasesViewer extends CheckboxTreeViewerSection {
 				if (event.detail == SWT.CHECK && getFileInfoProvider().isProjectAvailable()) {
 					fExecuteSelectedButton.setEnabled(executionEnabled());
 				}
+				fExportTestCasesButton.setEnabled(executionEnabled());
 			}
 		});
 		return treeViewer;

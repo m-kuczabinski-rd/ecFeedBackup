@@ -26,29 +26,32 @@ import org.eclipse.swt.widgets.Text;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.FrameworkUtil;
 
+import com.testify.ecfeed.core.utils.StringHelper;
+
 public class TestCasesExportDialog extends TitleAreaDialog {
 
 	private static final String SECTION_HEADER_REGEX = "\\s*\\[([^]]*)\\]\\s*";
 	private static final String COMMENTED_LINE_REGEX = "^\\s*#.*";
 	private static final String DEFAULT_TEMPLATE_TEXT_FILE = "res/TestCasesExportTemplate.txt";
-	
-	
+
+
 	private final String HEADER_TEMPLATE_MARKER = "[Header]";
 	private final String TEST_CASE_TEMPLATE_MARKER = "[TestCase]";
-	private final String TAIL_TEMPLATE_MARKER = "[Tail]";
-	
+	private final String FOOTER_TEMPLATE_MARKER = "[Footer]";
+
 	public static final String DIALOG_EXPORT_TEST_DATA_TITLE = "Export test data";
 	public static final String DIALOG_EXPORT_TEST_DATA_MESSAGE = "Define template for data export and select target file";
+	public static final String MSG_SELECT_TARGET = "Select target export file";
 	public static final String EXPORT_TEST_DATA_TEMPLATE_LABEL = "Define template for export data.";
 	public static final String EXPORT_TEST_DATA_TARGET_FILE_LABEL = "Target file";
-	
+
 	private String fHeaderTemplate;
 	private String fTestCaseTemplate;
-	private String fTailTemplate;
+	private String fFooterTemplate;
 	private Text fTemplateText;
 	private Text fTargetFileText;
 	private String fTargetFile;
-	
+
 	class BrowseAdapter extends SelectionAdapter{
 		@Override
 		public void widgetSelected(SelectionEvent e){
@@ -56,7 +59,7 @@ public class TestCasesExportDialog extends TitleAreaDialog {
 			fTargetFileText.setText(dialog.open());
 		}
 	}
-	
+
 	public TestCasesExportDialog(Shell parentShell) {
 		super(parentShell);
 	}
@@ -64,25 +67,36 @@ public class TestCasesExportDialog extends TitleAreaDialog {
 	@Override
 	protected Control createDialogArea(Composite parent) {
 		setTitle(DIALOG_EXPORT_TEST_DATA_TITLE);
-		setMessage(DIALOG_EXPORT_TEST_DATA_MESSAGE);
+		
+		if (isExtendedMode()) {
+			setMessage(DIALOG_EXPORT_TEST_DATA_MESSAGE);
+		} else {
+			setMessage(MSG_SELECT_TARGET);
+		}
+		
 
 		Composite area = (Composite) super.createDialogArea(parent);
 		Composite container = new Composite(area, SWT.NONE);
 		container.setLayout(new GridLayout(1, false));
 		container.setLayoutData(new GridData(GridData.FILL_BOTH));
 
-		createTemplateDefinitionContainer(container);
-		createTargetFileContainer(container);
-		
-		return area;
+		if (isExtendedMode()) {
+			createTemplateDefinitionContainer(container);
+		}
 
+		createTargetFileContainer(container);
+		return area;
+	}
+
+	private boolean isExtendedMode() {
+		return false;
 	}
 
 	private void createTemplateDefinitionContainer(Composite parent) {
 		Composite container = new Composite(parent, SWT.NONE);
 		container.setLayout(new GridLayout(1, false));
 		container.setLayoutData(new GridData(GridData.FILL_BOTH));
-		
+
 		createTemplateComposite(parent);
 	}
 
@@ -94,23 +108,22 @@ public class TestCasesExportDialog extends TitleAreaDialog {
 		GridData gd = new GridData(SWT.FILL, SWT.FILL, true, true);
 		gd.minimumHeight = 300;
 		fTemplateText.setLayoutData(gd);
-		
-		fillTemplateText(DEFAULT_TEMPLATE_TEXT_FILE);
 
+		fillTemplateText(DEFAULT_TEMPLATE_TEXT_FILE);
 	}
 
 	private void fillTemplateText(String templateFilePath) {
 		Bundle bundle = FrameworkUtil.getBundle(this.getClass());
 		URL url = FileLocator.find(bundle, new Path(templateFilePath), null);
-        BufferedReader in;
-        String templateText = "";
+		BufferedReader in;
+		String templateText = "";
 		try {
 			in = new BufferedReader(new InputStreamReader(url.openStream()));
-	        String inputLine;
-	        while ((inputLine = in.readLine()) != null){
-	            templateText += inputLine + "\n";
-	        }
-	        in.close();
+			String inputLine;
+			while ((inputLine = in.readLine()) != null){
+				templateText += inputLine + "\n";
+			}
+			in.close();
 		} catch (IOException e) {
 		}
 		fTemplateText.setText(templateText);
@@ -129,30 +142,49 @@ public class TestCasesExportDialog extends TitleAreaDialog {
 		targetFileContainer.setLayoutData(new GridData(GridData.FILL_BOTH));
 		fTargetFileText = new Text(targetFileContainer, SWT.BORDER);
 		fTargetFileText.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
-		
+
 		Button browseButton = new Button(targetFileContainer, SWT.NONE);
 		browseButton.setText("Browse...");
 		browseButton.addSelectionListener(new BrowseAdapter());
 	}
-	
+
 	@Override
 	protected void okPressed(){
 		String templateText = fTemplateText.getText();
 		Map<String, String> templates = parseTemplate(templateText);
-		
-		// TODO - REMOVE NEWLINES
-		fHeaderTemplate = templates.get(HEADER_TEMPLATE_MARKER.toLowerCase());
-		fTestCaseTemplate = templates.get(TEST_CASE_TEMPLATE_MARKER.toLowerCase());
-		fTailTemplate = templates.get(TAIL_TEMPLATE_MARKER.toLowerCase());
+
+		fHeaderTemplate = prepareHeaderTemplate(templates);
+		fTestCaseTemplate = prepareTestCaseTemplate(templates);
+		fFooterTemplate = prepareFooterTemplate(templates);
 
 		fTargetFile = fTargetFileText.getText();
-		
-		System.out.println("Header:\n" + fHeaderTemplate + "\n");
-		System.out.println("Test Case:\n" + fTestCaseTemplate + "\n");
-		System.out.println("Tail:\n" + fTailTemplate + "\n");
-		
+
 		super.okPressed();
 	}
+
+	private String prepareHeaderTemplate(Map<String, String> templates) {
+		if (isExtendedMode()) {
+			return StringHelper.removeLastNewline(templates.get(HEADER_TEMPLATE_MARKER.toLowerCase()));
+		} else {
+			return new String(); // XYX
+		}
+	}
+
+	private String prepareTestCaseTemplate(Map<String, String> templates) {
+		if (isExtendedMode()) {
+			return StringHelper.removeLastNewline(templates.get(TEST_CASE_TEMPLATE_MARKER.toLowerCase()));
+		} else {
+			return new String(); // XYX
+		}
+	}	
+
+	private String prepareFooterTemplate(Map<String, String> templates) {
+		if (isExtendedMode()) {
+			return StringHelper.removeLastNewline(templates.get(FOOTER_TEMPLATE_MARKER.toLowerCase()));
+		} else {
+			return new String(); // XYX
+		}
+	}	
 
 	private Map<String, String> parseTemplate(String templateText) {
 		Map<String, String> result = new HashMap<String, String>();
@@ -183,8 +215,8 @@ public class TestCasesExportDialog extends TitleAreaDialog {
 		return fTestCaseTemplate;
 	}
 
-	public String getTailTemplate(){
-		return fTailTemplate;
+	public String getFooterTemplate(){
+		return fFooterTemplate;
 	}
 
 	public String getTargetFile(){
