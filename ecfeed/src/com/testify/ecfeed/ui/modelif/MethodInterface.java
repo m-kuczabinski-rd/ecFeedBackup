@@ -47,6 +47,7 @@ import com.testify.ecfeed.core.model.StaticStatement;
 import com.testify.ecfeed.core.model.TestCaseNode;
 import com.testify.ecfeed.core.runner.ITestMethodInvoker;
 import com.testify.ecfeed.core.runner.java.JUnitTestMethodInvoker;
+import com.testify.ecfeed.core.serialization.export.TestCasesExporter;
 import com.testify.ecfeed.core.utils.EcException;
 import com.testify.ecfeed.core.utils.StringHelper;
 import com.testify.ecfeed.core.utils.SystemLogger;
@@ -59,11 +60,14 @@ import com.testify.ecfeed.ui.common.utils.EclipseProjectHelper;
 import com.testify.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.testify.ecfeed.ui.dialogs.AddTestCaseDialog;
 import com.testify.ecfeed.ui.dialogs.CalculateCoverageDialog;
+import com.testify.ecfeed.ui.dialogs.DataExportDialog;
 import com.testify.ecfeed.ui.dialogs.RenameTestSuiteDialog;
 import com.testify.ecfeed.ui.dialogs.SelectCompatibleMethodDialog;
 
 public class MethodInterface extends ParametersParentInterface {
 
+	private static String DIALOG_EXPORT_TEST_DATA_PROBLEM_TITLE = "DIALOG_EXPORT_TEST_DATA_PROBLEM_TITLE";
+	
 	private IFileInfoProvider fFileInfoProvider;
 	private ITypeAdapterProvider fAdapterProvider;
 
@@ -239,6 +243,29 @@ public class MethodInterface extends ParametersParentInterface {
 						classNode.getRunOnAndroid());
 		support.proceed();
 	}
+	
+	public void exportTestCases(Collection<TestCaseNode> checkedTestCases) {
+
+		DataExportDialog dialog = new DataExportDialog(Display.getDefault().getActiveShell());
+		if(dialog.open() != IDialogConstants.OK_ID){
+			return;
+		}
+
+		try {
+			TestCasesExporter exporter = 
+					new TestCasesExporter(
+							dialog.getHeaderTemplate(), 
+							dialog.getTestCaseTemplate(), 
+							dialog.getTailTemplate());
+
+			exporter.runExport(getTarget(), checkedTestCases, dialog.getTargetFile());
+
+		} catch (Exception e) {
+			MessageDialog.openError(Display.getCurrent().getActiveShell(),
+					DIALOG_EXPORT_TEST_DATA_PROBLEM_TITLE,
+					e.getMessage());
+		}
+	}	
 
 	private boolean isValidClassConfiguration(ClassNode classNode) {
 		if (classNode.getRunOnAndroid() && emptyAndroidBaseRunner(classNode)) {

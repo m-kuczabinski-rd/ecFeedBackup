@@ -15,6 +15,7 @@ Export-Package: com.testify.ecfeed.core.adapter,
  com.testify.ecfeed.core.runner.java,
  com.testify.ecfeed.core.serialization,
  com.testify.ecfeed.core.serialization.ect,
+ com.testify.ecfeed.core.serialization.export,
  com.testify.ecfeed.core.utils
 Bundle-ClassPath: lib/xom-1.2.10.jar,
  .

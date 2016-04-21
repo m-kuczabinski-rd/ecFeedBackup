@@ -52,6 +52,13 @@ public class TestCasesViewer extends CheckboxTreeViewerSection {
 	private MethodInterface fMethodIf;
 	private MethodNode fParentMethod;
 
+//	private class ExportTestCasesAdapter extends SelectionAdapter{ XYX
+//		@Override
+//		public void widgetSelected(SelectionEvent e){
+//			fMethodIf.exportTestCases(getCheckedTestCases());
+//		}
+//	}
+	
 	private class AddTestCaseAdapter extends SelectionAdapter {
 		@Override
 		public void widgetSelected(SelectionEvent ev){
@@ -105,7 +112,6 @@ public class TestCasesViewer extends CheckboxTreeViewerSection {
 			fDescriptionWhenError = descriptionWhenError;
 		}
 
-
 		@Override
 		public void widgetSelected(SelectionEvent ev){
 			try {
@@ -158,6 +164,7 @@ public class TestCasesViewer extends CheckboxTreeViewerSection {
 		if (getFileInfoProvider().isProjectAvailable()) {
 			fExecuteSelectedButton = addButton("Execute selected", new ExecuteStaticTestAdapter());
 		}
+		// addButton("Export test cases", new ExportTestCasesAdapter()); XYX
 
 		addDoubleClickListener(new SelectNodeDoubleClickListener(sectionContext.getMasterSection()));
 	}
