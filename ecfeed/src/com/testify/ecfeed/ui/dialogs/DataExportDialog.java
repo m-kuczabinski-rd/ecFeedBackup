@@ -30,15 +30,15 @@ public class DataExportDialog extends TitleAreaDialog{ // XYX rename to TestCase
 
 	private static final String SECTION_HEADER_REGEX = "\\s*\\[([^]]*)\\]\\s*";
 	private static final String COMMENTED_LINE_REGEX = "^\\s*#.*";
-	private static final String DEFAULT_TEMPLATE_TEXT_FILE = "res/template.txt";
+	private static final String DEFAULT_TEMPLATE_TEXT_FILE = "res/template.txt"; // XYX rename
 	private final String HEADER_TEMPLATE_MARKER = "[Header]";
 	private final String TEST_CASE_TEMPLATE_MARKER = "[TestCase]";
 	private final String TAIL_TEMPLATE_MARKER = "[Tail]";
 	
-	private final String DIALOG_EXPORT_TEST_DATA_TITLE = "DIALOG_EXPORT_TEST_DATA_TITLE"; // XYX
-	private final String DIALOG_EXPORT_TEST_DATA_MESSAGE = "DIALOG_EXPORT_TEST_DATA_MESSAGE"; // XYX
-	private final String EXPORT_TEST_DATA_TEMPLATE_LABEL = "EXPORT_TEST_DATA_TEMPLATE_LABEL"; // XYX
-	private final String EXPORT_TEST_DATA_TARGET_FILE_LABEL = "EXPORT_TEST_DATA_TARGET_FILE_LABEL"; // XYX
+	public static final String DIALOG_EXPORT_TEST_DATA_TITLE = "Export test data";
+	public static final String DIALOG_EXPORT_TEST_DATA_MESSAGE = "Define template for data export and select target file";
+	public static final String EXPORT_TEST_DATA_TEMPLATE_LABEL = "Define template for export data.";
+	public static final String EXPORT_TEST_DATA_TARGET_FILE_LABEL = "Target file";
 	
 	private String fHeaderTemplate;
 	private String fTestCaseTemplate;
