@@ -45,6 +45,7 @@ public class TestCasesExportDialog extends TitleAreaDialog {
 	public static final String EXPORT_TEST_DATA_TEMPLATE_LABEL = "Define template for export data.";
 	public static final String EXPORT_TEST_DATA_TARGET_FILE_LABEL = "Target file";
 
+	private int fMethodParametersCount;
 	private String fHeaderTemplate;
 	private String fTestCaseTemplate;
 	private String fFooterTemplate;
@@ -60,20 +61,20 @@ public class TestCasesExportDialog extends TitleAreaDialog {
 		}
 	}
 
-	public TestCasesExportDialog(Shell parentShell) {
+	public TestCasesExportDialog(Shell parentShell, int methodParametersCount) {
 		super(parentShell);
+		fMethodParametersCount = methodParametersCount;
 	}
 
 	@Override
 	protected Control createDialogArea(Composite parent) {
 		setTitle(DIALOG_EXPORT_TEST_DATA_TITLE);
-		
+
 		if (isExtendedMode()) {
 			setMessage(DIALOG_EXPORT_TEST_DATA_MESSAGE);
 		} else {
 			setMessage(MSG_SELECT_TARGET);
 		}
-		
 
 		Composite area = (Composite) super.createDialogArea(parent);
 		Composite container = new Composite(area, SWT.NONE);
@@ -150,41 +151,51 @@ public class TestCasesExportDialog extends TitleAreaDialog {
 
 	@Override
 	protected void okPressed(){
-		String templateText = fTemplateText.getText();
-		Map<String, String> templates = parseTemplate(templateText);
+		if (isExtendedMode()) {
+			String templateText = fTemplateText.getText();
+			Map<String, String> templates = parseTemplate(templateText);
 
-		fHeaderTemplate = prepareHeaderTemplate(templates);
-		fTestCaseTemplate = prepareTestCaseTemplate(templates);
-		fFooterTemplate = prepareFooterTemplate(templates);
+			fHeaderTemplate = StringHelper.removeLastNewline(templates.get(HEADER_TEMPLATE_MARKER.toLowerCase()));
+			fTestCaseTemplate = StringHelper.removeLastNewline(templates.get(TEST_CASE_TEMPLATE_MARKER.toLowerCase()));
+			fFooterTemplate = StringHelper.removeLastNewline(templates.get(FOOTER_TEMPLATE_MARKER.toLowerCase()));
+		} else {
+			fHeaderTemplate = createDefaultHeaderTemplate();
+			fTestCaseTemplate = createDefaultTestCaseTemplate();
+			fFooterTemplate = createDefaultFooterTemplate();
+		}
 
 		fTargetFile = fTargetFileText.getText();
 
 		super.okPressed();
 	}
 
-	private String prepareHeaderTemplate(Map<String, String> templates) {
-		if (isExtendedMode()) {
-			return StringHelper.removeLastNewline(templates.get(HEADER_TEMPLATE_MARKER.toLowerCase()));
-		} else {
-			return new String(); // XYX
-		}
+	private String createDefaultHeaderTemplate() {
+		final String NAME_TAG = "name";
+		return createParameterTemplate(fMethodParametersCount, NAME_TAG);
 	}
 
-	private String prepareTestCaseTemplate(Map<String, String> templates) {
-		if (isExtendedMode()) {
-			return StringHelper.removeLastNewline(templates.get(TEST_CASE_TEMPLATE_MARKER.toLowerCase()));
-		} else {
-			return new String(); // XYX
-		}
-	}	
+	private String createDefaultTestCaseTemplate() {
+		final String VALUE_TAG = "value";
+		return createParameterTemplate(fMethodParametersCount, VALUE_TAG);
+	}
 
-	private String prepareFooterTemplate(Map<String, String> templates) {
-		if (isExtendedMode()) {
-			return StringHelper.removeLastNewline(templates.get(FOOTER_TEMPLATE_MARKER.toLowerCase()));
-		} else {
-			return new String(); // XYX
+	private String createDefaultFooterTemplate() {
+		return new String();
+	}
+
+	private String createParameterTemplate(int parameterCount, String parameterTag) {
+		String template = new String();
+
+		for (int cnt = 1; cnt <= parameterCount; ++cnt) {
+			if (cnt > 1) {
+				template = template + ",";
+			}
+			String paramDescription = "$" + cnt + "." + parameterTag;
+			template = template + paramDescription;
 		}
-	}	
+
+		return template;
+	}
 
 	private Map<String, String> parseTemplate(String templateText) {
 		Map<String, String> result = new HashMap<String, String>();
@@ -222,5 +233,4 @@ public class TestCasesExportDialog extends TitleAreaDialog {
 	public String getTargetFile(){
 		return fTargetFile;
 	}
-
 }

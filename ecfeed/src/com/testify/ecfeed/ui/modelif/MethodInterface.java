@@ -245,8 +245,12 @@ public class MethodInterface extends ParametersParentInterface {
 	}
 
 	public void exportTestCases(Collection<TestCaseNode> checkedTestCases) {
-
-		TestCasesExportDialog dialog = new TestCasesExportDialog(Display.getDefault().getActiveShell());
+		
+		TestCasesExportDialog dialog = 
+				new TestCasesExportDialog(
+						Display.getDefault().getActiveShell(), 
+						getTarget().getParametersCount());
+		
 		if(dialog.open() != IDialogConstants.OK_ID){
 			return;
 		}
