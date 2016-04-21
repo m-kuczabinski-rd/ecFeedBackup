@@ -26,11 +26,13 @@ import org.eclipse.swt.widgets.Text;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.FrameworkUtil;
 
-public class TestCasesExportDialog extends TitleAreaDialog{ // XYX rename to TestCasesExportDialog
+public class TestCasesExportDialog extends TitleAreaDialog {
 
 	private static final String SECTION_HEADER_REGEX = "\\s*\\[([^]]*)\\]\\s*";
 	private static final String COMMENTED_LINE_REGEX = "^\\s*#.*";
-	private static final String DEFAULT_TEMPLATE_TEXT_FILE = "res/template.txt"; // XYX rename
+	private static final String DEFAULT_TEMPLATE_TEXT_FILE = "res/TestCasesExportTemplate.txt";
+	
+	
 	private final String HEADER_TEMPLATE_MARKER = "[Header]";
 	private final String TEST_CASE_TEMPLATE_MARKER = "[TestCase]";
 	private final String TAIL_TEMPLATE_MARKER = "[Tail]";
