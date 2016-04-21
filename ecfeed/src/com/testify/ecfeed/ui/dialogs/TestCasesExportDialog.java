@@ -26,7 +26,7 @@ import org.eclipse.swt.widgets.Text;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.FrameworkUtil;
 
-public class DataExportDialog extends TitleAreaDialog{ // XYX rename to TestCasesExportDialog
+public class TestCasesExportDialog extends TitleAreaDialog{ // XYX rename to TestCasesExportDialog
 
 	private static final String SECTION_HEADER_REGEX = "\\s*\\[([^]]*)\\]\\s*";
 	private static final String COMMENTED_LINE_REGEX = "^\\s*#.*";
@@ -55,7 +55,7 @@ public class DataExportDialog extends TitleAreaDialog{ // XYX rename to TestCase
 		}
 	}
 	
-	public DataExportDialog(Shell parentShell) {
+	public TestCasesExportDialog(Shell parentShell) {
 		super(parentShell);
 	}
 

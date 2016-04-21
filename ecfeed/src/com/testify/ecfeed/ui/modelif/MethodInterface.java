@@ -60,7 +60,7 @@ import com.testify.ecfeed.ui.common.utils.EclipseProjectHelper;
 import com.testify.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.testify.ecfeed.ui.dialogs.AddTestCaseDialog;
 import com.testify.ecfeed.ui.dialogs.CalculateCoverageDialog;
-import com.testify.ecfeed.ui.dialogs.DataExportDialog;
+import com.testify.ecfeed.ui.dialogs.TestCasesExportDialog;
 import com.testify.ecfeed.ui.dialogs.RenameTestSuiteDialog;
 import com.testify.ecfeed.ui.dialogs.SelectCompatibleMethodDialog;
 
@@ -246,7 +246,7 @@ public class MethodInterface extends ParametersParentInterface {
 	
 	public void exportTestCases(Collection<TestCaseNode> checkedTestCases) {
 
-		DataExportDialog dialog = new DataExportDialog(Display.getDefault().getActiveShell());
+		TestCasesExportDialog dialog = new TestCasesExportDialog(Display.getDefault().getActiveShell());
 		if(dialog.open() != IDialogConstants.OK_ID){
 			return;
 		}
