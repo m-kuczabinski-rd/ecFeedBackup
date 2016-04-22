@@ -4,6 +4,7 @@ import org.eclipse.jface.dialogs.TitleAreaDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -42,9 +43,7 @@ public class TestCasesExportDialog extends TitleAreaDialog {
 		setDialogMessage(this);
 
 		Composite area = (Composite) super.createDialogArea(parent);
-		Composite container = new Composite(area, SWT.NONE);
-		container.setLayout(new GridLayout(1, false));
-		container.setLayoutData(new GridData(GridData.FILL_BOTH));
+		Composite container = DialogHelper.createGridContainer(area, 1);
 
 		if (isAdvancedMode()) {
 			createTemplateDefinitionContainer(container);
@@ -70,25 +69,15 @@ public class TestCasesExportDialog extends TitleAreaDialog {
 	}
 
 	private void createTemplateDefinitionContainer(Composite parent) {
-		Composite container = new Composite(parent, SWT.NONE);
-		container.setLayout(new GridLayout(1, false));
-		container.setLayoutData(new GridData(GridData.FILL_BOTH));
-
-		createTemplateComposite(parent);
+		Composite container = DialogHelper.createGridContainer(parent, 1);
+		createTemplateComposite(container);
 	}
 
 	private void createTemplateComposite(Composite parent) {
-		Label label = new Label(parent, SWT.NONE);
+		final String DEFINE_TEMPLATE = "Define template for export data.";
+		DialogHelper.createLabel(parent, DEFINE_TEMPLATE);		
 
-		final String EXPORT_TEST_DATA_TEMPLATE_LABEL = "Define template for export data.";
-		label.setText(EXPORT_TEST_DATA_TEMPLATE_LABEL);
-
-		fTemplateText = new Text(parent, SWT.WRAP|SWT.MULTI|SWT.BORDER|SWT.V_SCROLL);
-		GridData gridData = new GridData(SWT.FILL, SWT.FILL, true, true);
-		gridData.minimumHeight = 300;
-
-		fTemplateText.setLayoutData(gridData);
-		fTemplateText.setText(readTemplateFromResource());
+		fTemplateText = DialogHelper.createText(parent, 300, readTemplateFromResource());		
 	}
 
 	private String readTemplateFromResource() {
@@ -105,24 +94,12 @@ public class TestCasesExportDialog extends TitleAreaDialog {
 	}
 
 	private void createTargetFileContainer(Composite parent) {
-		Composite container = new Composite(parent, SWT.NONE);
-		container.setLayout(new GridLayout(1, false));
-		container.setLayoutData(new GridData(GridData.FILL_BOTH));
+		final String TARGET_FILE = "Target file";
+		DialogHelper.createLabel(parent, TARGET_FILE);		
 
-		Label targetFileLabel = new Label(parent, SWT.NONE);
-
-		final String EXPORT_TEST_DATA_TARGET_FILE_LABEL = "Target file";
-		targetFileLabel.setText(EXPORT_TEST_DATA_TARGET_FILE_LABEL);
-
-		Composite targetFileContainer = new Composite(parent, SWT.NONE);
-		targetFileContainer.setLayout(new GridLayout(2, false));
-		targetFileContainer.setLayoutData(new GridData(GridData.FILL_BOTH));
-		fTargetFileText = new Text(targetFileContainer, SWT.BORDER);
-		fTargetFileText.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
-
-		Button browseButton = new Button(targetFileContainer, SWT.NONE);
-		browseButton.setText("Browse...");
-		browseButton.addSelectionListener(new BrowseAdapter());
+		Composite targetFileContainer = DialogHelper.createGridContainer(parent, 2);
+		fTargetFileText = DialogHelper.createFileSelectionText(targetFileContainer);
+		DialogHelper.createBrowseButton(targetFileContainer, new BrowseAdapter()); 
 	}
 
 	@Override
@@ -162,4 +139,59 @@ public class TestCasesExportDialog extends TitleAreaDialog {
 			fTargetFileText.setText(dialog.open());
 		}
 	}
+}
+
+class DialogHelper {
+
+	public static Composite createGridContainer(Composite parent, int countOfColumns) {
+
+		Composite container = new Composite(parent, SWT.NONE);
+
+		container.setLayout(new GridLayout(countOfColumns, false));
+		container.setLayoutData(new GridData(GridData.FILL_BOTH));
+
+		return container;
+	}
+
+	public static Text createText(Composite parent, int minimumHeight, String initialText) {
+		Text templateText = new Text(parent, SWT.WRAP|SWT.MULTI|SWT.BORDER|SWT.V_SCROLL);
+
+		GridData gridData = new GridData(SWT.FILL, SWT.FILL, true, true);
+		gridData.minimumHeight = minimumHeight;
+		templateText.setLayoutData(gridData);
+
+		if (initialText != null) {
+			templateText.setText(initialText);
+		}
+
+		return templateText;
+	}
+
+	public static Label createLabel(Composite parent, String text) {
+		Label label = new Label(parent, SWT.NONE);
+		label.setText(text);
+		return label;
+	}
+
+	public static Text createFileSelectionText(Composite targetFileContainer) {
+		Text targetFileText = new Text(targetFileContainer, SWT.BORDER);
+		targetFileText.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
+		return targetFileText;
+	}
+
+	public static Button createButton(
+			Composite parent, 
+			String buttonText, 
+			SelectionListener selectionListener) {
+		Button browseButton = new Button(parent, SWT.NONE);
+		browseButton.setText(buttonText);
+		browseButton.addSelectionListener(selectionListener);
+
+		return browseButton;
+	}
+
+	public static Button createBrowseButton(Composite parent, SelectionListener selectionListener) {
+		return createButton(parent, "Browse...", selectionListener);
+	}
+
 }
