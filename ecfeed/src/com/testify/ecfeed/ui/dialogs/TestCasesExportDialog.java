@@ -1,12 +1,5 @@
 package com.testify.ecfeed.ui.dialogs;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.URL;
-
-import org.eclipse.core.runtime.FileLocator;
-import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.dialogs.TitleAreaDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -20,9 +13,8 @@ import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
-import org.osgi.framework.Bundle;
-import org.osgi.framework.FrameworkUtil;
 
+import com.testify.ecfeed.core.resources.ResourceHelper;
 import com.testify.ecfeed.core.serialization.export.TestCasesExportParser;
 import com.testify.ecfeed.ui.dialogs.basic.ExceptionCatchDialog;
 
@@ -92,12 +84,24 @@ public class TestCasesExportDialog extends TitleAreaDialog {
 		label.setText(EXPORT_TEST_DATA_TEMPLATE_LABEL);
 
 		fTemplateText = new Text(parent, SWT.WRAP|SWT.MULTI|SWT.BORDER|SWT.V_SCROLL);
-		GridData gd = new GridData(SWT.FILL, SWT.FILL, true, true);
-		gd.minimumHeight = 300;
-		fTemplateText.setLayoutData(gd);
+		GridData gridData = new GridData(SWT.FILL, SWT.FILL, true, true);
+		gridData.minimumHeight = 300;
 
+		fTemplateText.setLayoutData(gridData);
+		fTemplateText.setText(readTemplateFromResource());
+	}
+
+	private String readTemplateFromResource() {
 		final String DEFAULT_TEMPLATE_TEXT_FILE = "res/TestCasesExportTemplate.txt";
-		fTemplateText.setText(createTemplateText(this.getClass(), DEFAULT_TEMPLATE_TEXT_FILE));
+		String templateText = null;
+
+		try {
+			templateText = ResourceHelper.readTextFromResource(this.getClass(), DEFAULT_TEMPLATE_TEXT_FILE);
+		} catch (Exception e) {
+			ExceptionCatchDialog.display("Can not read template", e.getMessage());
+		}
+
+		return templateText;
 	}
 
 	private void createTargetFileContainer(Composite parent) {
@@ -150,27 +154,6 @@ public class TestCasesExportDialog extends TitleAreaDialog {
 	public String getTargetFile(){
 		return fTargetFile;
 	}
-
-	public static String createTemplateText(
-			@SuppressWarnings("rawtypes") Class theClass, 
-			String templateFilePath) {
-		Bundle bundle = FrameworkUtil.getBundle(theClass);
-		URL url = FileLocator.find(bundle, new Path(templateFilePath), null);
-		BufferedReader in;
-		String templateText = "";
-		try {
-			in = new BufferedReader(new InputStreamReader(url.openStream()));
-			String inputLine;
-			while ((inputLine = in.readLine()) != null){
-				templateText += inputLine + "\n";
-			}
-			in.close();
-		} catch (IOException e) {
-			ExceptionCatchDialog.display("Can not read template", e.getMessage());
-		}
-
-		return templateText;
-	}	
 
 	class BrowseAdapter extends SelectionAdapter{
 		@Override
