@@ -30,7 +30,7 @@ public class TestCasesExportDialog extends TitleAreaDialog {
 		fCompositeFactory = CompositeFactory.getInstance();
 	}
 
-	public static boolean isAdvancedMode() {
+	public boolean isAdvancedMode() {
 		return false;
 	}
 
@@ -96,7 +96,7 @@ public class TestCasesExportDialog extends TitleAreaDialog {
 
 		Composite targetFileContainer = fCompositeFactory.createGridContainer(parent, 2);
 		fTargetFileText = fCompositeFactory.createFileSelectionText(targetFileContainer);
-		fCompositeFactory.createBrowseButton(targetFileContainer, new BrowseAdapter()); 
+		fCompositeFactory.createBrowseButton(targetFileContainer, new BrowseSelectionAdapter()); 
 	}
 
 	@Override
@@ -129,7 +129,7 @@ public class TestCasesExportDialog extends TitleAreaDialog {
 		return fTargetFile;
 	}
 
-	class BrowseAdapter extends SelectionAdapter{
+	class BrowseSelectionAdapter extends SelectionAdapter{
 		@Override
 		public void widgetSelected(SelectionEvent e){
 			FileDialog dialog = new FileDialog(getParentShell());
