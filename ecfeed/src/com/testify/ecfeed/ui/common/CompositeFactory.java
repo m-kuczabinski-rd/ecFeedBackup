@@ -9,6 +9,7 @@
 package com.testify.ecfeed.ui.common;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -60,13 +61,14 @@ public class CompositeFactory {
 		return label;
 	}
 
-	public Text createFileSelectionText(Composite targetFileContainer) {
+	public Text createFileSelectionText(Composite targetFileContainer, ModifyListener modifyListener) {
 		Text targetFileText = new Text(targetFileContainer, SWT.BORDER);
 		targetFileText.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
+		targetFileText.addModifyListener(modifyListener);
 		return targetFileText;
 	}
 
-	public Button createButton(Composite parent, String buttonText,SelectionListener selectionListener) {
+	public Button createButton(Composite parent, String buttonText, SelectionListener selectionListener) {
 		Button browseButton = new Button(parent, SWT.NONE);
 		browseButton.setText(buttonText);
 		browseButton.addSelectionListener(selectionListener);

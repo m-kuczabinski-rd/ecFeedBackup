@@ -63,6 +63,7 @@ import com.testify.ecfeed.ui.dialogs.CalculateCoverageDialog;
 import com.testify.ecfeed.ui.dialogs.TestCasesExportDialog;
 import com.testify.ecfeed.ui.dialogs.RenameTestSuiteDialog;
 import com.testify.ecfeed.ui.dialogs.SelectCompatibleMethodDialog;
+import com.testify.ecfeed.ui.dialogs.basic.InfoDialog;
 
 public class MethodInterface extends ParametersParentInterface {
 
@@ -268,7 +269,11 @@ public class MethodInterface extends ParametersParentInterface {
 			MessageDialog.openError(Display.getCurrent().getActiveShell(),
 					DIALOG_EXPORT_TEST_DATA_PROBLEM_TITLE,
 					e.getMessage());
+			return;
 		}
+		
+		final String EXPORT_FINISHED = "Export finished.";
+		InfoDialog.open(EXPORT_FINISHED);
 	}	
 
 	private boolean isValidClassConfiguration(ClassNode classNode) {

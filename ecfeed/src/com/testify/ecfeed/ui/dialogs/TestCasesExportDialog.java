@@ -8,9 +8,13 @@
 
 package com.testify.ecfeed.ui.dialogs;
 
+import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.TitleAreaDialog;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.FileDialog;
@@ -20,6 +24,7 @@ import org.eclipse.swt.widgets.Text;
 import com.testify.ecfeed.core.resources.ResourceHelper;
 import com.testify.ecfeed.core.serialization.export.TestCasesExportParser;
 import com.testify.ecfeed.ui.common.CompositeFactory;
+import com.testify.ecfeed.ui.dialogs.basic.ErrorDialog;
 import com.testify.ecfeed.ui.dialogs.basic.ExceptionCatchDialog;
 
 public class TestCasesExportDialog extends TitleAreaDialog {
@@ -36,6 +41,13 @@ public class TestCasesExportDialog extends TitleAreaDialog {
 		fMethodParametersCount = methodParametersCount;
 		fExportParser = new TestCasesExportParser();
 		fCompositeFactory = CompositeFactory.getInstance();
+
+	}
+
+	@Override
+	public void create() {
+		super.create();
+		setOkEnabled(false);
 	}
 
 	public boolean isAdvancedMode() {
@@ -68,9 +80,13 @@ public class TestCasesExportDialog extends TitleAreaDialog {
 			final String EXPORT_TEST_DATA_MESSAGE = "Define template for data export and select target file";
 			setMessage(EXPORT_TEST_DATA_MESSAGE);
 		} else {
-			final String SELECT_TARGET = "Select target export file";
-			setMessage(SELECT_TARGET);
+			setDialogMessageSelectFile();
 		}
+	}
+	
+	private void setDialogMessageSelectFile() {
+		final String SELECT_TARGET = "Select target export file";
+		setMessage(SELECT_TARGET);
 	}
 
 	private void createTemplateDefinitionContainer(Composite parent) {
@@ -103,8 +119,10 @@ public class TestCasesExportDialog extends TitleAreaDialog {
 		fCompositeFactory.createLabel(parent, TARGET_FILE);		
 
 		Composite targetFileContainer = fCompositeFactory.createGridContainer(parent, 2);
-		fTargetFileText = fCompositeFactory.createFileSelectionText(targetFileContainer);
-		fCompositeFactory.createBrowseButton(targetFileContainer, new BrowseSelectionAdapter()); 
+		fTargetFileText = 
+				fCompositeFactory.createFileSelectionText(targetFileContainer, new FileTextModifyListener());
+
+		fCompositeFactory.createBrowseButton(targetFileContainer, new BrowseSelectionAdapter());
 	}
 
 	@Override
@@ -137,9 +155,37 @@ public class TestCasesExportDialog extends TitleAreaDialog {
 		return fTargetFile;
 	}
 
+	private void updateStatus() {
+		if (fTargetFileText.getText().isEmpty()) {
+			setDialogMessageSelectFile();
+			setOkEnabled(false);
+		} else {
+			setMessage(null);
+			setOkEnabled(true);
+		}
+	}
+	
+	private void setOkEnabled(boolean enabled) {
+		Button okButton = getButton(IDialogConstants.OK_ID);
+		
+		if (okButton == null) {
+			ErrorDialog.display("Can not find OK button.");
+			return;
+		}
+		
+		okButton.setEnabled(enabled);
+	}
+	
+	class FileTextModifyListener implements ModifyListener {
+		@Override
+		public void modifyText(ModifyEvent e) {
+			updateStatus();
+		}
+	}
+
 	class BrowseSelectionAdapter extends SelectionAdapter{
 		@Override
-		public void widgetSelected(SelectionEvent e){
+		public void widgetSelected(SelectionEvent e) {
 			FileDialog dialog = new FileDialog(getParentShell());
 			fTargetFileText.setText(dialog.open());
 		}
