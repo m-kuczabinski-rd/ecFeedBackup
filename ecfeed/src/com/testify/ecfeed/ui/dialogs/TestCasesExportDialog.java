@@ -21,15 +21,12 @@ import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
-import com.testify.ecfeed.core.resources.ResourceHelper;
 import com.testify.ecfeed.core.serialization.export.TestCasesExportParser;
 import com.testify.ecfeed.ui.common.CompositeFactory;
 import com.testify.ecfeed.ui.dialogs.basic.ErrorDialog;
-import com.testify.ecfeed.ui.dialogs.basic.ExceptionCatchDialog;
 
 public class TestCasesExportDialog extends TitleAreaDialog {
 
-	private int fMethodParametersCount;
 	private Text fTemplateText;
 	private TestCasesExportParser fExportParser;
 	private Text fTargetFileText;
@@ -38,10 +35,8 @@ public class TestCasesExportDialog extends TitleAreaDialog {
 
 	public TestCasesExportDialog(Shell parentShell, int methodParametersCount) {
 		super(parentShell);
-		fMethodParametersCount = methodParametersCount;
-		fExportParser = new TestCasesExportParser();
+		fExportParser = new TestCasesExportParser(methodParametersCount);
 		fCompositeFactory = CompositeFactory.getInstance();
-
 	}
 
 	@Override
@@ -50,21 +45,14 @@ public class TestCasesExportDialog extends TitleAreaDialog {
 		setOkEnabled(false);
 	}
 
-	public boolean isAdvancedMode() {
-		return false;
-	}
-
 	@Override
 	protected Control createDialogArea(Composite parent) {
 		setDialogTitle(this);
 		setDialogMessage(this);
-
 		Composite area = (Composite) super.createDialogArea(parent);
-		Composite container = fCompositeFactory.createGridContainer(area, 1);
 
-		if (isAdvancedMode()) {
-			createTemplateDefinitionContainer(container);
-		}
+		Composite container = fCompositeFactory.createGridContainer(area, 1);
+		createTemplateDefinitionContainer(container);
 
 		createTargetFileContainer(container);
 		return area;
@@ -76,14 +64,10 @@ public class TestCasesExportDialog extends TitleAreaDialog {
 	}
 
 	public void setDialogMessage(TitleAreaDialog dialog)	{
-		if (isAdvancedMode()) {
-			final String EXPORT_TEST_DATA_MESSAGE = "Define template for data export and select target file";
-			setMessage(EXPORT_TEST_DATA_MESSAGE);
-		} else {
-			setDialogMessageSelectFile();
-		}
+		final String EXPORT_TEST_DATA_MESSAGE = "Define template for data export and select target file";
+		setMessage(EXPORT_TEST_DATA_MESSAGE);
 	}
-	
+
 	private void setDialogMessageSelectFile() {
 		final String SELECT_TARGET = "Select target export file";
 		setMessage(SELECT_TARGET);
@@ -95,24 +79,25 @@ public class TestCasesExportDialog extends TitleAreaDialog {
 	}
 
 	private void createTemplateComposite(Composite parent) {
-		final String DEFINE_TEMPLATE = "Define template for export data.";
+		final String DEFINE_TEMPLATE = "Template for data export.";
 		fCompositeFactory.createLabel(parent, DEFINE_TEMPLATE);		
 
-		fTemplateText = fCompositeFactory.createText(parent, 300, readTemplateFromResource());		
+		String initialText = fExportParser.createInitialText();
+		fTemplateText = fCompositeFactory.createText(parent, 150, initialText);		
 	}
 
-	private String readTemplateFromResource() {
-		final String DEFAULT_TEMPLATE_TEXT_FILE = "res/TestCasesExportTemplate.txt";
-		String templateText = null;
-
-		try {
-			templateText = ResourceHelper.readTextFromResource(this.getClass(), DEFAULT_TEMPLATE_TEXT_FILE);
-		} catch (Exception e) {
-			ExceptionCatchDialog.display("Can not read template", e.getMessage());
-		}
-
-		return templateText;
-	}
+	//	private String readTemplateFromResource() {
+	//		final String DEFAULT_TEMPLATE_TEXT_FILE = "res/TestCasesExportTemplate.txt";
+	//		String templateText = null;
+	//
+	//		try {
+	//			templateText = ResourceHelper.readTextFromResource(this.getClass(), DEFAULT_TEMPLATE_TEXT_FILE);
+	//		} catch (Exception e) {
+	//			ExceptionCatchDialog.display("Can not read template", e.getMessage());
+	//		}
+	//
+	//		return templateText;
+	//	}
 
 	private void createTargetFileContainer(Composite parent) {
 		final String TARGET_FILE = "Target file";
@@ -133,7 +118,7 @@ public class TestCasesExportDialog extends TitleAreaDialog {
 			template = fTemplateText.getText();
 		}
 
-		fExportParser.createSubTemplates(isAdvancedMode(), template, fMethodParametersCount);
+		fExportParser.createSubTemplates(template);
 		fTargetFile = fTargetFileText.getText();
 
 		super.okPressed();
@@ -164,18 +149,18 @@ public class TestCasesExportDialog extends TitleAreaDialog {
 			setOkEnabled(true);
 		}
 	}
-	
+
 	private void setOkEnabled(boolean enabled) {
 		Button okButton = getButton(IDialogConstants.OK_ID);
-		
+
 		if (okButton == null) {
 			ErrorDialog.display("Can not find OK button.");
 			return;
 		}
-		
+
 		okButton.setEnabled(enabled);
 	}
-	
+
 	class FileTextModifyListener implements ModifyListener {
 		@Override
 		public void modifyText(ModifyEvent e) {

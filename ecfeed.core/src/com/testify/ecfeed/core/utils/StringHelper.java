@@ -63,6 +63,14 @@ public class StringHelper {
 		return removePostfix(System.lineSeparator(), fromString);
 	}
 
+	public static String appendNewline(String line) {
+		return line + StringHelper.getNewLine();
+	}
+
+	public static String getNewLine() {
+		return System.lineSeparator();
+	}
+
 	public static String getLastToken(String tokenizedString, String tokenSeparator) {
 		int separatorPosition = tokenizedString.lastIndexOf(tokenSeparator);
 

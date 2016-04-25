@@ -23,7 +23,7 @@ public class CompositeFactory {
 
 	protected CompositeFactory() {
 	}
-	
+
 	public static CompositeFactory getInstance() {
 		if (instance == null) {
 			instance = new CompositeFactory();
@@ -41,11 +41,11 @@ public class CompositeFactory {
 		return container;
 	}
 
-	public Text createText(Composite parent, int minimumHeight, String initialText) {
+	public Text createText(Composite parent, int heightHint, String initialText) {
 		Text templateText = new Text(parent, SWT.WRAP|SWT.MULTI|SWT.BORDER|SWT.V_SCROLL);
 
 		GridData gridData = new GridData(SWT.FILL, SWT.FILL, true, true);
-		gridData.minimumHeight = minimumHeight;
+		gridData.heightHint = heightHint;
 		templateText.setLayoutData(gridData);
 
 		if (initialText != null) {

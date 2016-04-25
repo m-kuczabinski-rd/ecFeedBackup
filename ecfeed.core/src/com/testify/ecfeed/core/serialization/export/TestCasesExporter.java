@@ -55,9 +55,9 @@ public class TestCasesExporter {
 			MethodNode method, 
 			Collection<TestCaseNode> testCases, 
 			OutputStream outputStream) throws IOException {
-		
+
 		fOutputStream = outputStream;
-		
+
 		exportHeader(method);
 
 		for (TestCaseNode testCase : testCases)	{

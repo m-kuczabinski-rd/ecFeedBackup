@@ -9,28 +9,40 @@ import com.testify.ecfeed.core.utils.StringHelper;
 
 public class TestCasesExportParser
 {
+	private int fMethodParametersCount;
 	private String fHeaderTemplate;
 	private String fTestCaseTemplate;
 	private String fFooterTemplate;
 
-	public void createSubTemplates(boolean isExtendedMode, String template, int methodParametersCount)
+	private static final String HEADER_TEMPLATE_MARKER = "[Header]";
+	private static final String TEST_CASE_TEMPLATE_MARKER = "[TestCase]";
+	private static final String FOOTER_TEMPLATE_MARKER = "[Footer]";
+
+	public TestCasesExportParser(int methodParametersCount) {
+		fMethodParametersCount = methodParametersCount;
+	}
+
+	public void createSubTemplates(String template)
 	{
-		if (isExtendedMode) {
-			if (template == null) {
-				ExceptionHelper.reportRuntimeException("Template text must not be empty.");
-			}
+		if (template == null) {
+			ExceptionHelper.reportRuntimeException("Template text must not be empty.");
+		}
 
-			Map<String, String> templateMap = parseTemplate(template);
+		Map<String, String> templateMap = parseTemplate(template);
 
-			fHeaderTemplate = createUserHeaderTemplate(templateMap);
-			fTestCaseTemplate = createUserTestCaseTemplate(templateMap);
-			fFooterTemplate = createUserFooterTemplate(templateMap);
-			return;
-		} 
+		fHeaderTemplate = createUserHeaderTemplate(templateMap);
+		fTestCaseTemplate = createUserTestCaseTemplate(templateMap);
+		fFooterTemplate = createUserFooterTemplate(templateMap);
+		return;
+	}
 
-		fHeaderTemplate = createDefaultHeaderTemplate(methodParametersCount);
-		fTestCaseTemplate = createDefaultTestCaseTemplate(methodParametersCount);
-		fFooterTemplate = createDefaultFooterTemplate();
+	public String createInitialText() {
+		return 
+				StringHelper.appendNewline(HEADER_TEMPLATE_MARKER) +
+				StringHelper.appendNewline(createDefaultHeaderTemplate()) +
+				StringHelper.appendNewline(TEST_CASE_TEMPLATE_MARKER) +
+				StringHelper.appendNewline(createDefaultTestCaseTemplate()) +
+				StringHelper.appendNewline(FOOTER_TEMPLATE_MARKER);
 	}
 
 	public String getHeaderTemplate(){
@@ -47,31 +59,28 @@ public class TestCasesExportParser
 
 	public static String createUserHeaderTemplate(Map<String, String> template)
 	{
-		final String HEADER_TEMPLATE_MARKER = "[Header]";
 		return StringHelper.removeLastNewline(template.get(HEADER_TEMPLATE_MARKER.toLowerCase()));
 	}
 
 	public static String createUserTestCaseTemplate(Map<String, String> template) {
-		final String TEST_CASE_TEMPLATE_MARKER = "[TestCase]";
 		return StringHelper.removeLastNewline(template.get(TEST_CASE_TEMPLATE_MARKER.toLowerCase()));
 	}
 
 	public static String createUserFooterTemplate(Map<String, String> template) {
-		final String FOOTER_TEMPLATE_MARKER = "[Footer]";
 		return StringHelper.removeLastNewline(template.get(FOOTER_TEMPLATE_MARKER.toLowerCase()));
 	}
 
-	public static String createDefaultHeaderTemplate(int paramCount) {
+	public String createDefaultHeaderTemplate() {
 		final String NAME_TAG = "name";
-		return createParameterTemplate(paramCount, NAME_TAG);
+		return createParameterTemplate(NAME_TAG);
 	}
 
-	public static String createDefaultTestCaseTemplate(int paramCount) {
+	public String createDefaultTestCaseTemplate() {
 		final String VALUE_TAG = "value";
-		return createParameterTemplate(paramCount, VALUE_TAG);
+		return createParameterTemplate(VALUE_TAG);
 	}
 
-	public static String createDefaultFooterTemplate() {
+	public String createDefaultFooterTemplate() {
 		return new String();
 	}
 
@@ -100,10 +109,10 @@ public class TestCasesExportParser
 		return result;
 	}
 
-	public static String createParameterTemplate(int parameterCount, String parameterTag) {
+	public String createParameterTemplate(String parameterTag) {
 		String template = new String();
 
-		for (int cnt = 1; cnt <= parameterCount; ++cnt) {
+		for (int cnt = 1; cnt <= fMethodParametersCount; ++cnt) {
 			if (cnt > 1) {
 				template = template + ",";
 			}
