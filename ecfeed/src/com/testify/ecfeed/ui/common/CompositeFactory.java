@@ -36,7 +36,8 @@ public class CompositeFactory {
 		Composite container = new Composite(parent, SWT.NONE);
 
 		container.setLayout(new GridLayout(countOfColumns, false));
-		container.setLayoutData(new GridData(GridData.FILL_BOTH));
+		GridData gridData = new GridData(GridData.FILL_BOTH);
+		container.setLayoutData(gridData);
 
 		return container;
 	}
