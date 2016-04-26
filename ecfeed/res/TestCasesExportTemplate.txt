@@ -1,40 +1,32 @@
-# Define the template that will be used to create export file
-# organize the file in three sections, like below. Note that individual sections
-# may be skipped and do not need to be in a particular order. Also, section headers
-# are not case sensitive, so you can use [HEADER] as well as [HeAdEr]  
-  [Header]
-# This section will define the content that will be created in the
-# export file above all the exported test data.
-# Typically it contains some information about the content, like test parameters name
-# test method name etc. You can use following expressions in this section:
-# %package - the name of the package that the class containing test method to which the
-#            test cases belong,
-# %class - short name of the test class containing test method, 
-# %method - name of the method containing exported test cases,
-# $N.name - name of the Nth parameter (counting from 1) in the test method,
-#
+Template consists of three sections:
+  [Header], 
   [TestCase]
-# This section contains a template that will be used to export data of each
-# individual test case. You can use all the expressions that could be used for
-# [Header] section, plus additionally:
-# $N.choice - short name of the choice that will be used in the test case as Nth parameter
-# $N.full_choice - qualified name of the choice used in the test case as Nth parameter, 
-#                  containing all of it's parent choices in the hierarchy.
-# $N.value - value of the Nth parameter of this test case
-# %suite - test suite name of the test case.
-# %index - a number under which this test case was exported (starting from 0). This number 
-#          does not refer to any property of the test case in the model, but can be useful.
-#
-  [Footer]
-# The bottom of the exported file. The same expressions as for header can be used here.
-#
-#
-#
-# An example template for exporting test data of a method testMethod(int year, String Manufacturer, String model):
-# [Header]
-# $1.name, $2.name, $3.name
-# [TestCase]
-# $1.value, $2.value, $3.value
-# [Footer]
-# #May stay empty - no footer is used for typical csv file
-#
+  [Footer].
+Sections [Header] and [Footer] can be ommited.
+
+
+In [Header] section you can define export header.
+You can use the following expressions:
+    %package - name of the package where method is located
+    %class   - name of the test class containing test method
+    %method  - name of the method containing exported test cases
+    $N.name  - name of the Nth parameter (counting from 1) 
+             in the test method.
+
+
+In [TestCase] section you can define fields to export in the test case
+You can use all the expressions used for [Header] section, and also:
+    $N.choice - short name of the choice that will be used 
+                in the test case as Nth parameter
+    $N.full_choice - qualified name of the choice used in the test case 
+                     as Nth parameter, containing all of it's parent
+                     choices in the hierarchy.
+    $N.value - value of the Nth parameter of this test case
+    %suite - test suite name of the test case.
+    %index - a number under which this test case was exported 
+             (starting from 0). 
+
+
+Section [Footer] defines the bottom of the exported file. 
+You can use all the expressions used for [Header] section.
+

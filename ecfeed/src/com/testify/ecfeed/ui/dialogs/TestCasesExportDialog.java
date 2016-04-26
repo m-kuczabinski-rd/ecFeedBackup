@@ -21,9 +21,12 @@ import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
+import com.testify.ecfeed.core.resources.ResourceHelper;
 import com.testify.ecfeed.core.serialization.export.TestCasesExportParser;
 import com.testify.ecfeed.ui.common.CompositeFactory;
 import com.testify.ecfeed.ui.dialogs.basic.ErrorDialog;
+import com.testify.ecfeed.ui.dialogs.basic.ExceptionCatchDialog;
+import com.testify.ecfeed.ui.dialogs.basic.InfoDialog;
 
 public class TestCasesExportDialog extends TitleAreaDialog {
 
@@ -49,12 +52,15 @@ public class TestCasesExportDialog extends TitleAreaDialog {
 	protected Control createDialogArea(Composite parent) {
 		setDialogTitle(this);
 		setDialogMessage(this);
+		
 		Composite area = (Composite) super.createDialogArea(parent);
-
 		Composite container = fCompositeFactory.createGridContainer(area, 1);
-		createTemplateDefinitionContainer(container);
-
-		createTargetFileContainer(container);
+		
+		createTemplateTextWidgets(container);
+		createTargetFileWidgets(container);
+		
+		fTargetFileText.setFocus();
+		
 		return area;
 	}
 
@@ -73,33 +79,37 @@ public class TestCasesExportDialog extends TitleAreaDialog {
 		setMessage(SELECT_TARGET);
 	}
 
-	private void createTemplateDefinitionContainer(Composite parent) {
+	private void createTemplateTextWidgets(Composite parent) {
 		Composite container = fCompositeFactory.createGridContainer(parent, 1);
-		createTemplateComposite(container);
-	}
-
-	private void createTemplateComposite(Composite parent) {
-		final String DEFINE_TEMPLATE = "Template for data export.";
-		fCompositeFactory.createLabel(parent, DEFINE_TEMPLATE);		
+		
+		createLabelWithHelpButton(container);
 
 		String initialText = fExportParser.createInitialText();
-		fTemplateText = fCompositeFactory.createText(parent, 150, initialText);		
+		fTemplateText = fCompositeFactory.createText(container, 150, initialText);		
 	}
 
-	//	private String readTemplateFromResource() {
-	//		final String DEFAULT_TEMPLATE_TEXT_FILE = "res/TestCasesExportTemplate.txt";
-	//		String templateText = null;
-	//
-	//		try {
-	//			templateText = ResourceHelper.readTextFromResource(this.getClass(), DEFAULT_TEMPLATE_TEXT_FILE);
-	//		} catch (Exception e) {
-	//			ExceptionCatchDialog.display("Can not read template", e.getMessage());
-	//		}
-	//
-	//		return templateText;
-	//	}
+	private void createLabelWithHelpButton(Composite parent) {
+		Composite container = fCompositeFactory.createGridContainer(parent, 2);
+		
+		final String DEFINE_TEMPLATE = "Template for data export   ";
+		fCompositeFactory.createLabel(container, DEFINE_TEMPLATE);		
+		fCompositeFactory.createButton(container, "Help", new TestButtonSelectionAdapter());
+	}
+	
+		private String readTemplateFromResource() {
+			final String DEFAULT_TEMPLATE_TEXT_FILE = "res/TestCasesExportTemplate.txt";
+			String templateText = null;
+	
+			try {
+				templateText = ResourceHelper.readTextFromResource(this.getClass(), DEFAULT_TEMPLATE_TEXT_FILE);
+			} catch (Exception e) {
+				ExceptionCatchDialog.display("Can not read template", e.getMessage());
+			}
+	
+			return templateText;
+		}
 
-	private void createTargetFileContainer(Composite parent) {
+	private void createTargetFileWidgets(Composite parent) {
 		final String TARGET_FILE = "Target file";
 		fCompositeFactory.createLabel(parent, TARGET_FILE);		
 
@@ -160,6 +170,13 @@ public class TestCasesExportDialog extends TitleAreaDialog {
 
 		okButton.setEnabled(enabled);
 	}
+	
+	class TestButtonSelectionAdapter extends SelectionAdapter{
+		@Override
+		public void widgetSelected(SelectionEvent e) {
+			InfoDialog.open(readTemplateFromResource());
+		}
+	}	
 
 	class FileTextModifyListener implements ModifyListener {
 		@Override

@@ -71,7 +71,10 @@ public class CompositeFactory {
 	public Button createButton(Composite parent, String buttonText, SelectionListener selectionListener) {
 		Button browseButton = new Button(parent, SWT.NONE);
 		browseButton.setText(buttonText);
-		browseButton.addSelectionListener(selectionListener);
+		
+		if (selectionListener != null) {
+			browseButton.addSelectionListener(selectionListener);
+		}
 
 		return browseButton;
 	}
