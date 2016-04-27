@@ -11,11 +11,8 @@
 
 package com.testify.ecfeed.ui.editor;
 
-import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
@@ -40,7 +37,7 @@ public class MethodDetailsPage extends BasicDetailsPage {
 
 	private MethodInterface fMethodIf;
 	private JavaDocCommentsSection fCommentsSection;
-
+	
 	private class OnlineTestAdapter extends SelectionAdapter{
 		@Override
 		public void widgetSelected(SelectionEvent ev){
@@ -78,9 +75,11 @@ public class MethodDetailsPage extends BasicDetailsPage {
 	@Override
 	public void createContents(Composite parent){
 		super.createContents(parent);
-		createNameTextComposite();
-
+		
 		IFileInfoProvider fileInfoProvider = getFileInfoProvider();
+		
+		createMethodNameWidgets(fileInfoProvider);
+		createTestAndExportButtons(fileInfoProvider);
 
 		if (fileInfoProvider.isProjectAvailable()) {
 			addForm(fCommentsSection = new JavaDocCommentsSection(this, this, fileInfoProvider));
@@ -98,28 +97,36 @@ public class MethodDetailsPage extends BasicDetailsPage {
 		return textClient;
 	}
 
-	private void createNameTextComposite() {
-		Composite composite = getToolkit().createComposite(getMainComposite());
-		composite.setLayout(new GridLayout(4, false));
-		composite.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
-		getToolkit().createLabel(composite, "Method name", SWT.NONE);
-		fMethodNameText = getToolkit().createText(composite, null, SWT.NONE);
-		fMethodNameText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
-		fMethodNameText.addSelectionListener(new RenameMethodAdapter());
-
-		IFileInfoProvider fileInfoProvider = getFileInfoProvider(); 
+	private void createMethodNameWidgets(IFileInfoProvider fileInfoProvider) {
+		int gridColumns = 2;
+		
+		if (fileInfoProvider.isProjectAvailable()) {
+			++gridColumns;
+		}
+		
+		Composite gridComposite = getFormObjectFactory().createGridComposite(getMainComposite(), gridColumns);
+		
+		getFormObjectFactory().createLabel(gridComposite, "Method name ");
+		fMethodNameText = getFormObjectFactory().createGridText(gridComposite, new RenameMethodAdapter());
 
 		if (fileInfoProvider.isProjectAvailable()) {
-			fBrowseButton = getToolkit().createButton(composite, "Browse...", SWT.NONE);
-			fBrowseButton.addSelectionListener(new ReassignAdapter());
+			fBrowseButton 
+				= getFormObjectFactory().createButton(gridComposite, "Browse...", new ReassignAdapter());
 		}
-
+		
+		getFormObjectFactory().paintBorders(gridComposite);
+	}
+	
+	private void createTestAndExportButtons(IFileInfoProvider fileInfoProvider) {
+		Composite childComposite = getFormObjectFactory().createRowComposite(getMainComposite());
+		
 		if (fileInfoProvider.isProjectAvailable()) {
-			fTestOnlineButton = getToolkit().createButton(composite, "Test online", SWT.NONE);
-			fTestOnlineButton.addSelectionListener(new OnlineTestAdapter());
+			fTestOnlineButton 
+				= getFormObjectFactory().createButton(childComposite, "Test online...", new OnlineTestAdapter());
 		}
-
-		getToolkit().paintBordersFor(composite);
+		
+		getFormObjectFactory().createButton(childComposite, "Export online...", new OnlineTestAdapter());
+		getFormObjectFactory().paintBorders(childComposite);
 	}
 
 	@Override

@@ -21,16 +21,16 @@ import org.eclipse.swt.widgets.Text;
 import com.testify.ecfeed.core.utils.StringHelper;
 
 public class DialogObjectFactory {
-	private static DialogObjectFactory instance = null;
+	private static DialogObjectFactory fInstance = null;
 
 	protected DialogObjectFactory() {
 	}
 
 	public static DialogObjectFactory getInstance() {
-		if (instance == null) {
-			instance = new DialogObjectFactory();
+		if (fInstance == null) {
+			fInstance = new DialogObjectFactory();
 		}
-		return instance;
+		return fInstance;
 	}
 
 	public Composite createGridContainer(Composite parent, int countOfColumns) {
@@ -44,8 +44,8 @@ public class DialogObjectFactory {
 		return container;
 	}
 
-	public Text createText(Composite parent, int heightHint, String initialText) {
-		Text templateText = new Text(parent, SWT.WRAP|SWT.MULTI|SWT.BORDER|SWT.V_SCROLL);
+	public Text createGridText(Composite parentGridComposite, int heightHint, String initialText) {
+		Text templateText = new Text(parentGridComposite, SWT.WRAP|SWT.MULTI|SWT.BORDER|SWT.V_SCROLL);
 
 		GridData gridData = new GridData(SWT.FILL, SWT.FILL, true, true);
 		gridData.heightHint = heightHint;

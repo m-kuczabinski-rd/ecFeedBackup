@@ -229,6 +229,10 @@ public abstract class BasicDetailsPage implements IDetailsPage, IModelUpdateList
 	public FormToolkit getToolkit(){
 		return fManagedForm.getToolkit();
 	}
+	
+	public FormObjectToolkit getFormObjectFactory() {
+		return FormObjectToolkit.getInstance(getToolkit());
+	}
 
 	protected Section getMainSection(){
 		return fMainSection;

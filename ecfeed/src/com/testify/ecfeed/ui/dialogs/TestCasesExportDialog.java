@@ -85,7 +85,7 @@ public class TestCasesExportDialog extends TitleAreaDialog {
 		Composite childComposite = fCompositeFactory.createGridContainer(parentComposite, 1);
 
 		createTemplateLabelWithButtons(childComposite);
-		fTemplateText = fCompositeFactory.createText(childComposite, 150, fExportParser.createInitialText());		
+		fTemplateText = fCompositeFactory.createGridText(childComposite, 150, fExportParser.createInitialText());		
 	}
 
 	private void createTemplateLabelWithButtons(Composite parentComposite) {
