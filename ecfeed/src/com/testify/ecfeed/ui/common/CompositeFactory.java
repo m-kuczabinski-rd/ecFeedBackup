@@ -18,6 +18,8 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
+import com.testify.ecfeed.core.utils.StringHelper;
+
 public class CompositeFactory {
 	private static CompositeFactory instance = null;
 
@@ -62,6 +64,10 @@ public class CompositeFactory {
 		return label;
 	}
 
+	public Label createSpacer(Composite parent, int size)
+	{
+		return createLabel(parent, StringHelper.createString(" ", size));
+	}
 	public Text createFileSelectionText(Composite targetFileContainer, ModifyListener modifyListener) {
 		Text targetFileText = new Text(targetFileContainer, SWT.BORDER);
 		targetFileText.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
@@ -72,7 +78,7 @@ public class CompositeFactory {
 	public Button createButton(Composite parent, String buttonText, SelectionListener selectionListener) {
 		Button browseButton = new Button(parent, SWT.NONE);
 		browseButton.setText(buttonText);
-		
+
 		if (selectionListener != null) {
 			browseButton.addSelectionListener(selectionListener);
 		}

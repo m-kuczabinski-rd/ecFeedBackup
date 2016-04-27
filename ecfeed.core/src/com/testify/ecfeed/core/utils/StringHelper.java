@@ -131,4 +131,14 @@ public class StringHelper {
 		}
 		return occurences;
 	}
+
+	public static String createString(String baseString, int repetitions) {
+		StringBuilder builder = new StringBuilder();
+
+		for (int cnt = 0; cnt < repetitions; ++ cnt) {
+			builder.append(baseString);
+		}
+
+		return builder.toString();
+	}
 }

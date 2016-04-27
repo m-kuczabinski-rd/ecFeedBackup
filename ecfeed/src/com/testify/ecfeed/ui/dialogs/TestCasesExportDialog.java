@@ -10,7 +10,6 @@ package com.testify.ecfeed.ui.dialogs;
 
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.TitleAreaDialog;
-import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -24,14 +23,12 @@ import org.eclipse.swt.widgets.Text;
 
 import com.testify.ecfeed.core.resources.ResourceHelper;
 import com.testify.ecfeed.core.serialization.export.TestCasesExportParser;
-import com.testify.ecfeed.core.utils.DiskFileHelper;
 import com.testify.ecfeed.ui.common.CompositeFactory;
 import com.testify.ecfeed.ui.dialogs.basic.ErrorDialog;
 import com.testify.ecfeed.ui.dialogs.basic.ExceptionCatchDialog;
 import com.testify.ecfeed.ui.dialogs.basic.FileOpenAndReadDialog;
 import com.testify.ecfeed.ui.dialogs.basic.FileSaveDialog;
 import com.testify.ecfeed.ui.dialogs.basic.InfoDialog;
-import com.testify.ecfeed.utils.EclipseHelper;
 
 public class TestCasesExportDialog extends TitleAreaDialog {
 
@@ -54,19 +51,19 @@ public class TestCasesExportDialog extends TitleAreaDialog {
 	}
 
 	@Override
-	protected Control createDialogArea(Composite parent) {
+	protected Control createDialogArea(Composite parentComposite) {
 		setDialogTitle(this);
 		setDialogMessage(this);
 
-		Composite area = (Composite) super.createDialogArea(parent);
-		Composite container = fCompositeFactory.createGridContainer(area, 1);
+		Composite dialogAreaComposite = (Composite) super.createDialogArea(parentComposite);
+		Composite childComposite = fCompositeFactory.createGridContainer(dialogAreaComposite, 1);
 
-		createTemplateTextWidgets(container);
-		createTargetFileWidgets(container);
+		createTemplateTextWidgets(childComposite);
+		createTargetFileWidgets(childComposite);
 
 		fTargetFileText.setFocus();
 
-		return area;
+		return dialogAreaComposite;
 	}
 
 	public void setDialogTitle(TitleAreaDialog dialog) {
@@ -84,23 +81,22 @@ public class TestCasesExportDialog extends TitleAreaDialog {
 		setMessage(SELECT_TARGET);
 	}
 
-	private void createTemplateTextWidgets(Composite parent) {
-		Composite container = fCompositeFactory.createGridContainer(parent, 1);
+	private void createTemplateTextWidgets(Composite parentComposite) {
+		Composite childComposite = fCompositeFactory.createGridContainer(parentComposite, 1);
 
-		createTemplateLabelWithButtons(container);
-
-		String initialText = fExportParser.createInitialText();
-		fTemplateText = fCompositeFactory.createText(container, 150, initialText);		
+		createTemplateLabelWithButtons(childComposite);
+		fTemplateText = fCompositeFactory.createText(childComposite, 150, fExportParser.createInitialText());		
 	}
 
-	private void createTemplateLabelWithButtons(Composite parent) {
-		Composite container = fCompositeFactory.createGridContainer(parent, 4);
+	private void createTemplateLabelWithButtons(Composite parentComposite) {
+		Composite childComposite = fCompositeFactory.createGridContainer(parentComposite, 5);
 
-		final String DEFINE_TEMPLATE = "Template for data export   ";
-		fCompositeFactory.createLabel(container, DEFINE_TEMPLATE);		
-		fCompositeFactory.createButton(container, "Help...", new TestButtonSelectionAdapter());
-		fCompositeFactory.createButton(container, "Open...", new OpenButtonSelectionAdapter());
-		fCompositeFactory.createButton(container, "Save As...", new SaveAsButtonSelectionAdapter());
+		final String DEFINE_TEMPLATE = "Template for data export";
+		fCompositeFactory.createLabel(childComposite, DEFINE_TEMPLATE);
+		fCompositeFactory.createSpacer(childComposite, 40);
+		fCompositeFactory.createButton(childComposite, "Help...", new TestButtonSelectionAdapter());
+		fCompositeFactory.createButton(childComposite, "Open...", new OpenButtonSelectionAdapter());
+		fCompositeFactory.createButton(childComposite, "Save As...", new SaveAsButtonSelectionAdapter());
 	}
 
 	private String readTemplateFromResource() {
