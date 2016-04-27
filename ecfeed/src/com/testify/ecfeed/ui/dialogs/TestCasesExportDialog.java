@@ -29,7 +29,7 @@ import com.testify.ecfeed.ui.common.CompositeFactory;
 import com.testify.ecfeed.ui.dialogs.basic.ErrorDialog;
 import com.testify.ecfeed.ui.dialogs.basic.ExceptionCatchDialog;
 import com.testify.ecfeed.ui.dialogs.basic.FileOpenAndReadDialog;
-import com.testify.ecfeed.ui.dialogs.basic.FileOpenAndSaveDialog;
+import com.testify.ecfeed.ui.dialogs.basic.FileSaveDialog;
 import com.testify.ecfeed.ui.dialogs.basic.InfoDialog;
 import com.testify.ecfeed.utils.EclipseHelper;
 
@@ -195,7 +195,7 @@ public class TestCasesExportDialog extends TitleAreaDialog {
 	class SaveAsButtonSelectionAdapter extends SelectionAdapter{
 		@Override
 		public void widgetSelected(SelectionEvent e) {
-			FileOpenAndSaveDialog.display(fTemplateText.getText());
+			FileSaveDialog.display(fTemplateText.getText());
 		}
 	}	
 
