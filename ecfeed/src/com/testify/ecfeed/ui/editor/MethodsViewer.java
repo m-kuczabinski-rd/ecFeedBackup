@@ -90,7 +90,7 @@ public class MethodsViewer extends TableViewerSection {
 					fMethodsColumn.getViewer().editElement(newMethod, 0);
 				}
 			} catch (Exception e) {
-				ExceptionCatchDialog.display("Can not add new method", e.getMessage());
+				ExceptionCatchDialog.open("Can not add new method", e.getMessage());
 			}
 		}
 	}

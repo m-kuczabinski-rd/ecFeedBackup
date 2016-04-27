@@ -110,7 +110,7 @@ public class TestCasesExportDialog extends TitleAreaDialog {
 		try {
 			templateText = ResourceHelper.readTextFromResource(this.getClass(), DEFAULT_TEMPLATE_TEXT_FILE);
 		} catch (Exception e) {
-			ExceptionCatchDialog.display("Can not read template", e.getMessage());
+			ExceptionCatchDialog.open("Can not read template", e.getMessage());
 		}
 
 		return templateText;
@@ -171,7 +171,7 @@ public class TestCasesExportDialog extends TitleAreaDialog {
 		Button okButton = getButton(IDialogConstants.OK_ID);
 
 		if (okButton == null) {
-			ErrorDialog.display("Can not find OK button.");
+			ErrorDialog.open("Can not find OK button.");
 			return;
 		}
 
@@ -188,14 +188,14 @@ public class TestCasesExportDialog extends TitleAreaDialog {
 	class OpenButtonSelectionAdapter extends SelectionAdapter{
 		@Override
 		public void widgetSelected(SelectionEvent e) {
-			fTemplateText.setText(FileOpenAndReadDialog.display());
+			fTemplateText.setText(FileOpenAndReadDialog.open());
 		}
 	}
 
 	class SaveAsButtonSelectionAdapter extends SelectionAdapter{
 		@Override
 		public void widgetSelected(SelectionEvent e) {
-			FileSaveDialog.display(fTemplateText.getText());
+			FileSaveDialog.open(fTemplateText.getText());
 		}
 	}	
 

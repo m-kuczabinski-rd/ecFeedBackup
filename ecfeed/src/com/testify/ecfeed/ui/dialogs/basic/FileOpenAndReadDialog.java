@@ -8,7 +8,7 @@ import com.testify.ecfeed.utils.EclipseHelper;
 
 public class FileOpenAndReadDialog {
 
-	public static String display()  {
+	public static String open()  {
 		FileDialog fileDialog = new FileDialog(EclipseHelper.getActiveShell(), SWT.OPEN);
 		String filename = fileDialog.open();
 

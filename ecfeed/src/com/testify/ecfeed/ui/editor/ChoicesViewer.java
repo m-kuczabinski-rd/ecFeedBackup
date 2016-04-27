@@ -204,7 +204,7 @@ public class ChoicesViewer extends TableViewerSection {
 					getTable().setSelection(added.getIndex());
 				}
 			} catch (Exception e) {
-				ExceptionCatchDialog.display("Can not add choice.", e.getMessage());
+				ExceptionCatchDialog.open("Can not add choice.", e.getMessage());
 			}
 		}
 	}
@@ -221,7 +221,7 @@ public class ChoicesViewer extends TableViewerSection {
 					parameterIf.resetChoicesToDefault();
 				}
 			} catch (Exception e) {
-				ExceptionCatchDialog.display("Can not replace with default.", e.getMessage());
+				ExceptionCatchDialog.open("Can not replace with default.", e.getMessage());
 			}
 		}
 	}

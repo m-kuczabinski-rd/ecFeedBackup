@@ -45,7 +45,7 @@ public class JavaDocCommentsSection extends AbstractCommentsSection {
 				getTargetIf().exportCommentsToJavadoc(getTargetIf().getComments());
 				getTabFolder().setSelection(getTabFolder().indexOf(getJavaDocItem()));
 			} catch (Exception e) {
-				ExceptionCatchDialog.display(Messages.EXCEPTION_CAN_NOT_EXPORT, e.getMessage());
+				ExceptionCatchDialog.open(Messages.EXCEPTION_CAN_NOT_EXPORT, e.getMessage());
 			}
 		}
 	}
@@ -57,7 +57,7 @@ public class JavaDocCommentsSection extends AbstractCommentsSection {
 				getTargetIf().importJavadocComments();
 				getTabFolder().setSelection(getTabFolder().indexOf(getCommentsItem()));
 			} catch (Exception e) {
-				ExceptionCatchDialog.display(Messages.EXCEPTION_CAN_NOT_IMPORT, e.getMessage());
+				ExceptionCatchDialog.open(Messages.EXCEPTION_CAN_NOT_IMPORT, e.getMessage());
 			}
 		}
 	}
@@ -69,7 +69,7 @@ public class JavaDocCommentsSection extends AbstractCommentsSection {
 				getTargetIf().exportAllComments();
 				getTabFolder().setSelection(getTabFolder().indexOf(getJavaDocItem()));
 			} catch (Exception e) {
-				ExceptionCatchDialog.display(Messages.EXCEPTION_CAN_NOT_EXPORT, e.getMessage());
+				ExceptionCatchDialog.open(Messages.EXCEPTION_CAN_NOT_EXPORT, e.getMessage());
 			}
 		}
 	}
@@ -81,7 +81,7 @@ public class JavaDocCommentsSection extends AbstractCommentsSection {
 				getTargetIf().importAllJavadocComments();
 				getTabFolder().setSelection(getTabFolder().indexOf(getCommentsItem()));
 			} catch (Exception e) {
-				ExceptionCatchDialog.display(Messages.EXCEPTION_CAN_NOT_IMPORT, e.getMessage());
+				ExceptionCatchDialog.open(Messages.EXCEPTION_CAN_NOT_IMPORT, e.getMessage());
 			}
 		}
 	}

@@ -47,7 +47,7 @@ public class MethodDetailsPage extends BasicDetailsPage {
 			try {
 				fMethodIf.executeOnlineTests(getFileInfoProvider());
 			} catch (Exception e) {
-				ExceptionCatchDialog.display("Can not execute online tests.", e.getMessage());
+				ExceptionCatchDialog.open("Can not execute online tests.", e.getMessage());
 			}
 		}
 	}

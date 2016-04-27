@@ -7,7 +7,7 @@ public class ErrorDialog {
 
 	private static final String DIALOG_TITLE = "Reported problem";
 
-	public static void display(String message) {
+	public static void open(String message) {
 		MessageDialog.openError(Display.getDefault().getActiveShell(), DIALOG_TITLE, message);		
 	}
 }

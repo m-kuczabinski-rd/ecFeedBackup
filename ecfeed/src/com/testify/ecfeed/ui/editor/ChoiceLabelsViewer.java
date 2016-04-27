@@ -147,7 +147,7 @@ public class ChoiceLabelsViewer extends TableViewerSection {
 				}
 			}
 			catch (Exception e) {
-				ExceptionCatchDialog.display("Can not add label.", e.getMessage());
+				ExceptionCatchDialog.open("Can not add label.", e.getMessage());
 			}
 		}
 	}

@@ -120,7 +120,7 @@ public class ClassViewer extends TableViewerSection {
 					fNameColumn.getViewer().editElement(addedClass, 0);
 				}
 			} catch (Exception e) {
-				ExceptionCatchDialog.display("Can not add implemented class.", e.getMessage());
+				ExceptionCatchDialog.open("Can not add implemented class.", e.getMessage());
 			}
 		}
 	}
@@ -135,7 +135,7 @@ public class ClassViewer extends TableViewerSection {
 					fNameColumn.getViewer().editElement(addedClass, 0);
 				}
 			} catch (Exception e) {
-				ExceptionCatchDialog.display("Can not create new test class.", e.getMessage());
+				ExceptionCatchDialog.open("Can not create new test class.", e.getMessage());
 			}
 		}
 	}

@@ -98,7 +98,7 @@ public abstract class ViewerSection extends ButtonsCompositeSection implements I
 			try {
 				fAction.run();
 			} catch (Exception e) {
-				ExceptionCatchDialog.display(fDescriptionWhenError, e.getMessage());
+				ExceptionCatchDialog.open(fDescriptionWhenError, e.getMessage());
 			}
 		}
 	}
@@ -120,7 +120,7 @@ public abstract class ViewerSection extends ButtonsCompositeSection implements I
 				try {
 					fAction.run();
 				} catch (Exception e) {
-					ExceptionCatchDialog.display(null, e.getMessage());
+					ExceptionCatchDialog.open(null, e.getMessage());
 				}
 			}
 		}

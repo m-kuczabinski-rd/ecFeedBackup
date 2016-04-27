@@ -10,7 +10,7 @@ public class ExceptionCatchDialog {
 
 	private static final String DIALOG_TITLE = "Reported problem";
 
-	public static void display(String whatHappened, String exceptionMessage) {
+	public static void open(String whatHappened, String exceptionMessage) {
 		String message;
 
 		if (StringHelper.isNullOrEmpty(whatHappened)) {

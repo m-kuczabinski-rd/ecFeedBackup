@@ -66,7 +66,7 @@ public class TestCasesViewer extends CheckboxTreeViewerSection {
 			try {
 				fMethodIf.addTestCase();
 			} catch (Exception e) {
-				ExceptionCatchDialog.display("Can not add test case.", e.getMessage());
+				ExceptionCatchDialog.open("Can not add test case.", e.getMessage());
 			}
 		}
 	}
@@ -77,7 +77,7 @@ public class TestCasesViewer extends CheckboxTreeViewerSection {
 			try {
 				fMethodIf.generateTestSuite();
 			} catch (Exception e) {
-				ExceptionCatchDialog.display("Can not generate test suite.", e.getMessage());
+				ExceptionCatchDialog.open("Can not generate test suite.", e.getMessage());
 			}
 		}
 	}
@@ -89,7 +89,7 @@ public class TestCasesViewer extends CheckboxTreeViewerSection {
 				fMethodIf.executeStaticTests(getCheckedTestCases(), getFileInfoProvider());
 			}
 			catch (Exception e){
-				ExceptionCatchDialog.display("Can not execute static tests.", e.getMessage());
+				ExceptionCatchDialog.open("Can not execute static tests.", e.getMessage());
 			}
 		}
 	}
@@ -100,7 +100,7 @@ public class TestCasesViewer extends CheckboxTreeViewerSection {
 			try {
 				fMethodIf.renameSuite();
 			} catch (Exception e) {
-				ExceptionCatchDialog.display("Can not rename suite.", e.getMessage());
+				ExceptionCatchDialog.open("Can not rename suite.", e.getMessage());
 			}
 		}
 	}
@@ -118,7 +118,7 @@ public class TestCasesViewer extends CheckboxTreeViewerSection {
 			try {
 				fMethodIf.removeTestCases(getCheckedTestCases());
 			} catch (Exception e) {
-				ExceptionCatchDialog.display(fDescriptionWhenError, e.getMessage());
+				ExceptionCatchDialog.open(fDescriptionWhenError, e.getMessage());
 			}
 		}
 	}
@@ -135,7 +135,7 @@ public class TestCasesViewer extends CheckboxTreeViewerSection {
 			try {
 				fMethodIf.openCoverageDialog(getCheckedElements(), getGrayedElements(), fFileInfoProvider);
 			} catch (Exception e) {
-				ExceptionCatchDialog.display("Can not calculate coverage.", e.getMessage());
+				ExceptionCatchDialog.open("Can not calculate coverage.", e.getMessage());
 			}
 		}
 	}

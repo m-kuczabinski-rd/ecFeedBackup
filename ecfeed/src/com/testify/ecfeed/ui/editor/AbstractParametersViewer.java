@@ -155,7 +155,7 @@ public abstract class AbstractParametersViewer extends TableViewerSection {
 					fNameColumn.getViewer().editElement(addedParameter, 0);
 				}
 			} catch (Exception e) {
-				ExceptionCatchDialog.display("Can not create parameter.", e.getMessage());
+				ExceptionCatchDialog.open("Can not create parameter.", e.getMessage());
 			}
 		}
 	}

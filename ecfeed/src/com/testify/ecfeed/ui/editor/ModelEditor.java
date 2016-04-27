@@ -221,7 +221,7 @@ public class ModelEditor extends FormEditor implements IFileInfoProvider{
 	}
 
 	private void displayDialogErrInputStream(Exception e) {
-		ExceptionCatchDialog.display("Can not get input stream for file.", e.getMessage());
+		ExceptionCatchDialog.open("Can not get input stream for file.", e.getMessage());
 	}
 
 	File createFile(FileStoreEditorInput fileStoreInput) {
@@ -235,7 +235,7 @@ public class ModelEditor extends FormEditor implements IFileInfoProvider{
 			return ModelConverter.convertToCurrentVersion(parser.parseModel(iStream));
 
 		} catch (ParserException e) {
-			ExceptionCatchDialog.display("Can not parse model.", e.getMessage());
+			ExceptionCatchDialog.open("Can not parse model.", e.getMessage());
 			return null;
 		}
 	}	
@@ -253,7 +253,7 @@ public class ModelEditor extends FormEditor implements IFileInfoProvider{
 			addSourcePage();
 
 		} catch (PartInitException e) {
-			ExceptionCatchDialog.display("Can not add page.", e.getMessage());
+			ExceptionCatchDialog.open("Can not add page.", e.getMessage());
 		}
 	}
 
@@ -382,7 +382,7 @@ public class ModelEditor extends FormEditor implements IFileInfoProvider{
 			firePropertyChange(PROP_DIRTY);
 		}
 		catch(Exception e){
-			ExceptionCatchDialog.display("Can not save editor file.", e.getMessage());
+			ExceptionCatchDialog.open("Can not save editor file.", e.getMessage());
 		}
 	}
 
@@ -396,7 +396,7 @@ public class ModelEditor extends FormEditor implements IFileInfoProvider{
 	}
 
 	private void reportOpenForWriteException(Exception e) {
-		ExceptionCatchDialog.display("Can not open file for writing", e.getMessage());
+		ExceptionCatchDialog.open("Can not open file for writing", e.getMessage());
 	}
 
 	private void refreshWorkspace(IProgressMonitor monitor) throws CoreException {
