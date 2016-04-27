@@ -23,7 +23,7 @@ import org.eclipse.swt.widgets.Text;
 
 import com.testify.ecfeed.core.resources.ResourceHelper;
 import com.testify.ecfeed.core.serialization.export.TestCasesExportParser;
-import com.testify.ecfeed.ui.common.CompositeFactory;
+import com.testify.ecfeed.ui.common.DialogObjectFactory;
 import com.testify.ecfeed.ui.dialogs.basic.ErrorDialog;
 import com.testify.ecfeed.ui.dialogs.basic.ExceptionCatchDialog;
 import com.testify.ecfeed.ui.dialogs.basic.FileOpenAndReadDialog;
@@ -36,12 +36,12 @@ public class TestCasesExportDialog extends TitleAreaDialog {
 	private TestCasesExportParser fExportParser;
 	private Text fTargetFileText;
 	private String fTargetFile;
-	private CompositeFactory fCompositeFactory;
+	private DialogObjectFactory fCompositeFactory;
 
 	public TestCasesExportDialog(Shell parentShell, int methodParametersCount) {
 		super(parentShell);
 		fExportParser = new TestCasesExportParser(methodParametersCount);
-		fCompositeFactory = CompositeFactory.getInstance();
+		fCompositeFactory = DialogObjectFactory.getInstance();
 	}
 
 	@Override

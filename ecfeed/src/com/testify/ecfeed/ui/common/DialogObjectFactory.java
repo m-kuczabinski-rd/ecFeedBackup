@@ -20,15 +20,15 @@ import org.eclipse.swt.widgets.Text;
 
 import com.testify.ecfeed.core.utils.StringHelper;
 
-public class CompositeFactory {
-	private static CompositeFactory instance = null;
+public class DialogObjectFactory {
+	private static DialogObjectFactory instance = null;
 
-	protected CompositeFactory() {
+	protected DialogObjectFactory() {
 	}
 
-	public static CompositeFactory getInstance() {
+	public static DialogObjectFactory getInstance() {
 		if (instance == null) {
-			instance = new CompositeFactory();
+			instance = new DialogObjectFactory();
 		}
 		return instance;
 	}
