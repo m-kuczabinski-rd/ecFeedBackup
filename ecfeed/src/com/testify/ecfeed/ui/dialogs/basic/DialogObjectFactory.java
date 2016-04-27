@@ -6,7 +6,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 
-package com.testify.ecfeed.ui.common;
+package com.testify.ecfeed.ui.dialogs.basic;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyListener;
