@@ -24,7 +24,7 @@ import com.testify.ecfeed.core.model.MethodNode;
 import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.common.utils.IFileInfoProvider;
 
-public class GenerateTestSuiteDialog extends GeneratorSetupDialog {
+public class GenerateTestSuiteDialog extends SetupDialogGenerator {
 	private static final int CONTENT = CONSTRAINTS_COMPOSITE | CHOICES_COMPOSITE |
 			TEST_SUITE_NAME_COMPOSITE | GENERATOR_SELECTION_COMPOSITE;
 

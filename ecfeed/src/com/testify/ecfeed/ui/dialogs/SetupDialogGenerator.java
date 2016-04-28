@@ -70,7 +70,7 @@ import com.testify.ecfeed.ui.common.TreeCheckStateListener;
 import com.testify.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.testify.ecfeed.ui.dialogs.basic.DialogObjectToolkit;
 
-public class GeneratorSetupDialog extends TitleAreaDialog {
+public class SetupDialogGenerator extends TitleAreaDialog {
 	private Combo fTestSuiteCombo;
 	private Combo fGeneratorCombo;
 	private Button fOkButton;
@@ -196,7 +196,7 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 		}
 	}
 
-	public GeneratorSetupDialog(
+	public SetupDialogGenerator(
 			Shell parentShell, 
 			MethodNode method, 
 			int content, 

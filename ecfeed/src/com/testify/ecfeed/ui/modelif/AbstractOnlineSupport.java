@@ -24,6 +24,7 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Shell;
 
 import com.testify.ecfeed.android.external.ApkInstallerExt;
 import com.testify.ecfeed.android.external.DeviceCheckerExt;
@@ -42,10 +43,10 @@ import com.testify.ecfeed.ui.common.EclipseLoaderProvider;
 import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.common.utils.EclipseProjectHelper;
 import com.testify.ecfeed.ui.common.utils.IFileInfoProvider;
-import com.testify.ecfeed.ui.dialogs.ExecuteOnlineSetupDialog;
 import com.testify.ecfeed.ui.dialogs.GeneratorProgressMonitorDialog;
+import com.testify.ecfeed.ui.dialogs.SetupDialogOnline;
 
-public class AbstractOnlineSupport extends TestExecutionSupport{
+public abstract class AbstractOnlineSupport extends TestExecutionSupport{
 
 	private MethodNode fTarget;
 	private JavaTestRunner fRunner;
@@ -200,10 +201,14 @@ public class AbstractOnlineSupport extends TestExecutionSupport{
 		System.setOut(currentOut);
 	}
 
+	protected abstract SetupDialogOnline createSetupDialogOnline(
+			Shell activeShell, MethodNode methodNode, IFileInfoProvider fileInfoProvider);
+	
 	private void executeParametrizedTest() {
-		ExecuteOnlineSetupDialog dialog = 
-				new ExecuteOnlineSetupDialog(Display.getCurrent().getActiveShell(), fTarget, fFileInfoProvider);
-		if(dialog.open() == IDialogConstants.OK_ID){
+		SetupDialogOnline dialog = 
+				createSetupDialogOnline(Display.getCurrent().getActiveShell(), fTarget, fFileInfoProvider);
+		
+		if(dialog.open() == IDialogConstants.OK_ID) {
 			IGenerator<ChoiceNode> selectedGenerator = dialog.getSelectedGenerator();
 			List<List<ChoiceNode>> algorithmInput = dialog.getAlgorithmInput();
 			Collection<IConstraint<ChoiceNode>> constraintList = new ArrayList<IConstraint<ChoiceNode>>();
