@@ -21,7 +21,6 @@ import com.testify.ecfeed.core.generators.api.IGenerator;
 import com.testify.ecfeed.core.model.ChoiceNode;
 import com.testify.ecfeed.core.model.Constraint;
 import com.testify.ecfeed.core.model.MethodNode;
-import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.common.utils.IFileInfoProvider;
 
 public class GenerateTestSuiteDialog extends SetupDialogGenerator {
@@ -29,11 +28,7 @@ public class GenerateTestSuiteDialog extends SetupDialogGenerator {
 			TEST_SUITE_NAME_COMPOSITE | GENERATOR_SELECTION_COMPOSITE;
 
 	public GenerateTestSuiteDialog(Shell parentShell, MethodNode method, IFileInfoProvider fileInfoProvider) {
-		super(parentShell, method, CONTENT, 
-				Messages.DIALOG_GENERATE_TEST_SUITE_TITLE, 
-				Messages.DIALOG_GENERATE_TEST_SUITE_MESSAGE,
-				false,
-				fileInfoProvider);
+		super(parentShell, method, CONTENT, false, fileInfoProvider);
 	}
 
 	public IGenerator<ChoiceNode> getSelectedGenerator() {
@@ -55,4 +50,17 @@ public class GenerateTestSuiteDialog extends SetupDialogGenerator {
 	public Map<String, Object> getGeneratorParameters() {
 		return super.generatorParameters();
 	}
+
+	@Override
+	protected String getDialogTitle() {
+		final String DIALOG_GENERATE_TEST_SUITE_TITLE = "Generate test suite";
+		return DIALOG_GENERATE_TEST_SUITE_TITLE;
+	}
+
+	@Override
+	protected String getDialogMessage() {
+		final String DIALOG_GENERATE_TEST_SUITE_MESSAGE 
+		= "Select test suite name and algorithm for test suite generation";
+		return DIALOG_GENERATE_TEST_SUITE_MESSAGE;
+	}	
 }

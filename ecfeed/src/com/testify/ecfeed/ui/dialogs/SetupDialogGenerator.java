@@ -70,7 +70,7 @@ import com.testify.ecfeed.ui.common.TreeCheckStateListener;
 import com.testify.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.testify.ecfeed.ui.dialogs.basic.DialogObjectToolkit;
 
-public class SetupDialogGenerator extends TitleAreaDialog {
+public abstract class SetupDialogGenerator extends TitleAreaDialog {
 	private Combo fTestSuiteCombo;
 	private Combo fGeneratorCombo;
 	private Button fOkButton;
@@ -90,9 +90,6 @@ public class SetupDialogGenerator extends TitleAreaDialog {
 	private IImplementationStatusResolver fStatusResolver;
 	private IFileInfoProvider fFileInfoProvider;
 	private DialogObjectToolkit fDialogObjectToolkit; 
-
-	private final String fTitle;
-	private final String fMessage;
 
 	public final static int CONSTRAINTS_COMPOSITE = 1;
 	public final static int CHOICES_COMPOSITE = 1 << 1;
@@ -200,8 +197,6 @@ public class SetupDialogGenerator extends TitleAreaDialog {
 			Shell parentShell, 
 			MethodNode method, 
 			int content, 
-			String title, 
-			String message, 
 			boolean generateExecutables,
 			IFileInfoProvider fileInfoProvider) {
 		super(parentShell);
@@ -210,8 +205,6 @@ public class SetupDialogGenerator extends TitleAreaDialog {
 		fMethod = method;
 		fGeneratorFactory = new GeneratorFactory<ChoiceNode>();
 		fContent = content;
-		fTitle = title;
-		fMessage = message;
 		fGenerateExecutableContent = generateExecutables;
 		fStatusResolver = new EclipseImplementationStatusResolver(fileInfoProvider);
 		fFileInfoProvider = fileInfoProvider;
@@ -282,8 +275,8 @@ public class SetupDialogGenerator extends TitleAreaDialog {
 
 	@Override
 	protected Control createDialogArea(Composite parent) {
-		setTitle(fTitle);
-		setMessage(fMessage);
+		setTitle(getDialogTitle());
+		setMessage(getDialogMessage());
 		Composite area = (Composite) super.createDialogArea(parent);
 		fMainContainer = new Composite(area, SWT.NONE);
 		fMainContainer.setLayout(new GridLayout(1, false));
@@ -307,6 +300,10 @@ public class SetupDialogGenerator extends TitleAreaDialog {
 
 		return area;
 	}
+
+	protected abstract String getDialogTitle();
+	protected abstract String getDialogMessage();
+
 
 	private boolean flagIsOn(int flag) {
 		if((fContent & flag) > 0){

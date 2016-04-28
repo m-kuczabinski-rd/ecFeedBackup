@@ -19,7 +19,7 @@ public class SetupDialogExportOnline extends SetupDialogOnline {
 			IFileInfoProvider fileInfoProvider) {
 		super(parentShell, method, fileInfoProvider);
 	}
-	
+
 	@Override
 	protected String getDialogTitle() {
 		final String DIALOG_EXECUTE_ONLINE_TITLE = "Export online";

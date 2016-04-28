@@ -21,24 +21,16 @@ import com.testify.ecfeed.core.generators.api.IGenerator;
 import com.testify.ecfeed.core.model.ChoiceNode;
 import com.testify.ecfeed.core.model.Constraint;
 import com.testify.ecfeed.core.model.MethodNode;
-import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.common.utils.IFileInfoProvider;
 
 public abstract class SetupDialogOnline extends SetupDialogGenerator {
 	private static final int CONTENT 
-		= CONSTRAINTS_COMPOSITE | CHOICES_COMPOSITE | GENERATOR_SELECTION_COMPOSITE;
+	= CONSTRAINTS_COMPOSITE | CHOICES_COMPOSITE | GENERATOR_SELECTION_COMPOSITE;
 
 	public SetupDialogOnline(Shell parentShell, MethodNode method, IFileInfoProvider fileInfoProvider) {
-		super(parentShell, 
-				method, CONTENT, 
-				Messages.DIALOG_EXECUTE_ONLINE_TITLE,
-				Messages.DIALOG_EXECUTE_ONLINE_MESSAGE,
-				true,
-				fileInfoProvider);
+		super(parentShell, method, CONTENT, true, fileInfoProvider);
 	}
 
-	protected abstract String getDialogTitle();
-	
 	public IGenerator<ChoiceNode> getSelectedGenerator() {
 		return super.selectedGenerator();
 	}
@@ -54,4 +46,12 @@ public abstract class SetupDialogOnline extends SetupDialogGenerator {
 	public Map<String, Object> getGeneratorParameters() {
 		return super.generatorParameters();
 	}
+
+	@Override
+	protected String getDialogMessage() {
+		final String DIALOG_EXECUTE_ONLINE_MESSAGE = 
+				"Setup the test data generator and select which constraints and choices shall be considered for generating test cases";
+		return DIALOG_EXECUTE_ONLINE_MESSAGE;
+	}	
+
 }

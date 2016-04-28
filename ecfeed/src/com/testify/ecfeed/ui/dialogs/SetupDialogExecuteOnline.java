@@ -17,7 +17,7 @@ import com.testify.ecfeed.core.model.MethodNode;
 import com.testify.ecfeed.ui.common.utils.IFileInfoProvider;
 
 public class SetupDialogExecuteOnline extends SetupDialogOnline {
-	
+
 	public SetupDialogExecuteOnline(Shell parentShell, MethodNode method,
 			IFileInfoProvider fileInfoProvider) {
 		super(parentShell, method, fileInfoProvider);
@@ -28,5 +28,5 @@ public class SetupDialogExecuteOnline extends SetupDialogOnline {
 		final String DIALOG_EXECUTE_ONLINE_TITLE = "Execute online test";
 		return DIALOG_EXECUTE_ONLINE_TITLE;
 	}
-	
+
 }
