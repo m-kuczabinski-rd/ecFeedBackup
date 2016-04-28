@@ -37,7 +37,7 @@ public class MethodDetailsPage extends BasicDetailsPage {
 
 	private MethodInterface fMethodIf;
 	private JavaDocCommentsSection fCommentsSection;
-	
+
 	private class OnlineTestAdapter extends SelectionAdapter{
 		@Override
 		public void widgetSelected(SelectionEvent ev){
@@ -48,6 +48,17 @@ public class MethodDetailsPage extends BasicDetailsPage {
 			}
 		}
 	}
+
+	private class OnlineExportAdapter extends SelectionAdapter{
+		@Override
+		public void widgetSelected(SelectionEvent ev){
+			try {
+				fMethodIf.executeOnlineExport(getFileInfoProvider());
+			} catch (Exception e) {
+				ExceptionCatchDialog.open("Can not execute online export.", e.getMessage());
+			}
+		}
+	}	
 
 	private class ReassignAdapter extends SelectionAdapter{
 		@Override
@@ -75,9 +86,9 @@ public class MethodDetailsPage extends BasicDetailsPage {
 	@Override
 	public void createContents(Composite parent){
 		super.createContents(parent);
-		
+
 		IFileInfoProvider fileInfoProvider = getFileInfoProvider();
-		
+
 		createMethodNameWidgets(fileInfoProvider);
 		createTestAndExportButtons(fileInfoProvider);
 
@@ -99,33 +110,33 @@ public class MethodDetailsPage extends BasicDetailsPage {
 
 	private void createMethodNameWidgets(IFileInfoProvider fileInfoProvider) {
 		int gridColumns = 2;
-		
+
 		if (fileInfoProvider.isProjectAvailable()) {
 			++gridColumns;
 		}
-		
+
 		Composite gridComposite = getFormObjectFactory().createGridComposite(getMainComposite(), gridColumns);
-		
+
 		getFormObjectFactory().createLabel(gridComposite, "Method name ");
 		fMethodNameText = getFormObjectFactory().createGridText(gridComposite, new RenameMethodAdapter());
 
 		if (fileInfoProvider.isProjectAvailable()) {
 			fBrowseButton 
-				= getFormObjectFactory().createButton(gridComposite, "Browse...", new ReassignAdapter());
+			= getFormObjectFactory().createButton(gridComposite, "Browse...", new ReassignAdapter());
 		}
-		
+
 		getFormObjectFactory().paintBorders(gridComposite);
 	}
-	
+
 	private void createTestAndExportButtons(IFileInfoProvider fileInfoProvider) {
 		Composite childComposite = getFormObjectFactory().createRowComposite(getMainComposite());
-		
+
 		if (fileInfoProvider.isProjectAvailable()) {
 			fTestOnlineButton 
-				= getFormObjectFactory().createButton(childComposite, "Test online...", new OnlineTestAdapter());
+			= getFormObjectFactory().createButton(childComposite, "Test online...", new OnlineTestAdapter());
 		}
-		
-		getFormObjectFactory().createButton(childComposite, "Export online...", new OnlineTestAdapter());
+
+		getFormObjectFactory().createButton(childComposite, "Export online...", new OnlineExportAdapter());
 		getFormObjectFactory().paintBorders(childComposite);
 	}
 

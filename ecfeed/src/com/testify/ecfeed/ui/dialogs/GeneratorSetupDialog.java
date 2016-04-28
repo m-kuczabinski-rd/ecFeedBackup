@@ -68,6 +68,7 @@ import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.common.NodeNameColumnLabelProvider;
 import com.testify.ecfeed.ui.common.TreeCheckStateListener;
 import com.testify.ecfeed.ui.common.utils.IFileInfoProvider;
+import com.testify.ecfeed.ui.dialogs.basic.DialogObjectFactory;
 
 public class GeneratorSetupDialog extends TitleAreaDialog {
 	private Combo fTestSuiteCombo;
@@ -87,15 +88,17 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 	private int fContent;
 	private boolean fGenerateExecutableContent;
 	private IImplementationStatusResolver fStatusResolver;
-	private IFileInfoProvider fFileInfoProvider; 
+	private IFileInfoProvider fFileInfoProvider;
+	private DialogObjectFactory fDialogObjectToolkit; 
 
 	private final String fTitle;
 	private final String fMessage;
 
 	public final static int CONSTRAINTS_COMPOSITE = 1;
-	public final static int PARTITIONS_COMPOSITE = 1 << 1;
+	public final static int CHOICES_COMPOSITE = 1 << 1;
 	public final static int TEST_SUITE_NAME_COMPOSITE = 1 << 2;
 	public final static int GENERATOR_SELECTION_COMPOSITE = 1 << 3;
+	public final static int TEST_CASES_EXPORT_COMPOSITE = 1 << 4;
 
 	private class ChoiceTreeCheckStateListener extends TreeCheckStateListener{
 
@@ -212,6 +215,7 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 		fGenerateExecutableContent = generateExecutables;
 		fStatusResolver = new EclipseImplementationStatusResolver(fileInfoProvider);
 		fFileInfoProvider = fileInfoProvider;
+		fDialogObjectToolkit = DialogObjectFactory.getInstance();
 	}
 
 	protected  List<List<ChoiceNode>> algorithmInput(){
@@ -285,22 +289,30 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 		fMainContainer.setLayout(new GridLayout(1, false));
 		fMainContainer.setLayoutData(new GridData(GridData.FILL_BOTH));
 
-		if((fContent & CONSTRAINTS_COMPOSITE) > 0){
+		if (flagIsOn(CONSTRAINTS_COMPOSITE)) {
 			createConstraintsComposite(fMainContainer);
 		}
-
-		if((fContent & PARTITIONS_COMPOSITE) > 0){
+		if (flagIsOn(CHOICES_COMPOSITE)) {
 			createChoicesComposite(fMainContainer);
 		}
-
-		if((fContent & TEST_SUITE_NAME_COMPOSITE) > 0){
+		if (flagIsOn(TEST_SUITE_NAME_COMPOSITE)) {
 			createTestSuiteComposite(fMainContainer);
 		}
-
-		if((fContent & GENERATOR_SELECTION_COMPOSITE) > 0){
+		if (flagIsOn(GENERATOR_SELECTION_COMPOSITE)) {
 			createGeneratorSelectionComposite(fMainContainer);
 		}
+		if (flagIsOn(TEST_CASES_EXPORT_COMPOSITE)) {
+			createTestCasesExportComposite(fMainContainer);
+		}
+
 		return area;
+	}
+
+	private boolean flagIsOn(int flag) {
+		if((fContent & flag) > 0){
+			return true;
+		}
+		return false;
 	}
 
 	private void createConstraintsComposite(Composite parent) {
@@ -491,6 +503,14 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 		generatorLabel.setText("Generator");
 
 		createGeneratorViewer(generatorComposite);
+	}
+
+	private void createTestCasesExportComposite(Composite parentComposite) {
+		Composite advancedButtonComposite = fDialogObjectToolkit.createRowComposite(parentComposite);
+		fDialogObjectToolkit.createButton(advancedButtonComposite, "Advanced...", null);
+
+		Composite fileSelectionComposite = fDialogObjectToolkit.createGridContainer(parentComposite, 2);
+		fDialogObjectToolkit.createLabel(fileSelectionComposite, "TODO");
 	}
 
 	private void createGeneratorViewer(final Composite parent) {

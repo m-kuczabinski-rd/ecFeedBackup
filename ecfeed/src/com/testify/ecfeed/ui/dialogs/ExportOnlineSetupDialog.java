@@ -4,9 +4,6 @@
  * are made available under the terms of the Eclipse Public License v1.0         
  * which accompanies this distribution, and is available at                      
  * http://www.eclipse.org/legal/epl-v10.html                                     
- *                                                                               
- * Contributors:                                                                 
- *     Patryk Chamuczynski (p.chamuczynski(at)radytek.com) - initial implementation
  ******************************************************************************/
 
 package com.testify.ecfeed.ui.dialogs;
@@ -24,15 +21,18 @@ import com.testify.ecfeed.core.model.MethodNode;
 import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.common.utils.IFileInfoProvider;
 
-public class GenerateTestSuiteDialog extends GeneratorSetupDialog {
+public class ExportOnlineSetupDialog extends GeneratorSetupDialog {
 	private static final int CONTENT = CONSTRAINTS_COMPOSITE | CHOICES_COMPOSITE |
-			TEST_SUITE_NAME_COMPOSITE | GENERATOR_SELECTION_COMPOSITE;
+			GENERATOR_SELECTION_COMPOSITE;
 
-	public GenerateTestSuiteDialog(Shell parentShell, MethodNode method, IFileInfoProvider fileInfoProvider) {
-		super(parentShell, method, CONTENT, 
-				Messages.DIALOG_GENERATE_TEST_SUITE_TITLE, 
-				Messages.DIALOG_GENERATE_TEST_SUITE_MESSAGE,
-				false,
+	public static final String DIALOG_EXPORT_ONLINE_TITLE = "Export testcases online";
+
+	public ExportOnlineSetupDialog(Shell parentShell, MethodNode method, IFileInfoProvider fileInfoProvider) {
+		super(parentShell, 
+				method, CONTENT, 
+				DIALOG_EXPORT_ONLINE_TITLE, 
+				Messages.DIALOG_EXECUTE_ONLINE_MESSAGE,
+				true,
 				fileInfoProvider);
 	}
 
@@ -46,10 +46,6 @@ public class GenerateTestSuiteDialog extends GeneratorSetupDialog {
 
 	public Collection<Constraint> getConstraints() {
 		return super.constraints();
-	}
-
-	public String getTestSuiteName() {
-		return super.testSuiteName();
 	}
 
 	public Map<String, Object> getGeneratorParameters() {

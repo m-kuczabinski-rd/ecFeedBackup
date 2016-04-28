@@ -13,6 +13,7 @@ import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
@@ -33,7 +34,7 @@ public class DialogObjectFactory {
 		return fInstance;
 	}
 
-	public Composite createGridContainer(Composite parent, int countOfColumns) {
+	public Composite createGridContainer(Composite parent, int countOfColumns) { // TODO rename to createGridContainer
 
 		Composite container = new Composite(parent, SWT.NONE);
 
@@ -43,6 +44,16 @@ public class DialogObjectFactory {
 
 		return container;
 	}
+
+	public Composite createRowComposite(Composite parentComposite) {
+		Composite composite = new Composite(parentComposite, SWT.NONE);
+
+		RowLayout rowLayout = new RowLayout();
+		composite.setLayout(rowLayout);
+
+		return composite;
+	}	
+
 
 	public Text createGridText(Composite parentGridComposite, int heightHint, String initialText) {
 		Text templateText = new Text(parentGridComposite, SWT.WRAP|SWT.MULTI|SWT.BORDER|SWT.V_SCROLL);

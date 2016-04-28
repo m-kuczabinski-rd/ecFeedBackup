@@ -226,9 +226,25 @@ public class MethodInterface extends ParametersParentInterface {
 		OnlineTestRunningSupport runner = 
 				new OnlineTestRunningSupport(
 						createTestMethodInvoker(fileInfoProvider), fileInfoProvider, classNode.getRunOnAndroid());
+
 		runner.setTarget(getTarget());
 		runner.proceed();
 	}
+
+	public void executeOnlineExport(IFileInfoProvider fileInfoProvider) throws EcException {
+		ClassNode classNode = getTarget().getClassNode();
+
+		if (!isValidClassConfiguration(classNode))
+			return;
+
+		OnlineExportSupport runner = 
+				new OnlineExportSupport(
+						createTestMethodInvoker(fileInfoProvider), fileInfoProvider, classNode.getRunOnAndroid());
+
+		runner.setTarget(getTarget());
+		runner.proceed();
+	}
+
 
 	public void executeStaticTests(Collection<TestCaseNode> testCases, IFileInfoProvider fileInfoProvider) throws EcException {
 		ClassNode classNode = getTarget().getClassNode();
@@ -246,12 +262,12 @@ public class MethodInterface extends ParametersParentInterface {
 	}
 
 	public void exportTestCases(Collection<TestCaseNode> checkedTestCases) {
-		
+
 		TestCasesExportDialog dialog = 
 				new TestCasesExportDialog(
 						Display.getDefault().getActiveShell(), 
 						getTarget().getParametersCount());
-		
+
 		if(dialog.open() != IDialogConstants.OK_ID){
 			return;
 		}
@@ -271,7 +287,7 @@ public class MethodInterface extends ParametersParentInterface {
 					e.getMessage());
 			return;
 		}
-		
+
 		final String EXPORT_FINISHED = "Export finished.";
 		InfoDialog.open(EXPORT_FINISHED);
 	}	

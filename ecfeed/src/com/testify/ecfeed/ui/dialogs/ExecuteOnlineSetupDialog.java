@@ -25,7 +25,7 @@ import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.common.utils.IFileInfoProvider;
 
 public class ExecuteOnlineSetupDialog extends GeneratorSetupDialog {
-	private static final int CONTENT = CONSTRAINTS_COMPOSITE | PARTITIONS_COMPOSITE |
+	private static final int CONTENT = CONSTRAINTS_COMPOSITE | CHOICES_COMPOSITE |
 			GENERATOR_SELECTION_COMPOSITE;
 
 	public ExecuteOnlineSetupDialog(Shell parentShell, MethodNode method, IFileInfoProvider fileInfoProvider) {
