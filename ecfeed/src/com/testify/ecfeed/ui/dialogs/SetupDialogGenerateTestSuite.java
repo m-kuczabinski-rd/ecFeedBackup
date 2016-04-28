@@ -23,11 +23,11 @@ import com.testify.ecfeed.core.model.Constraint;
 import com.testify.ecfeed.core.model.MethodNode;
 import com.testify.ecfeed.ui.common.utils.IFileInfoProvider;
 
-public class GenerateTestSuiteDialog extends SetupDialogGenerator {
+public class SetupDialogGenerateTestSuite extends SetupDialogGenerator {
 	private static final int CONTENT = CONSTRAINTS_COMPOSITE | CHOICES_COMPOSITE |
 			TEST_SUITE_NAME_COMPOSITE | GENERATOR_SELECTION_COMPOSITE;
 
-	public GenerateTestSuiteDialog(Shell parentShell, MethodNode method, IFileInfoProvider fileInfoProvider) {
+	public SetupDialogGenerateTestSuite(Shell parentShell, MethodNode method, IFileInfoProvider fileInfoProvider) {
 		super(parentShell, method, CONTENT, false, fileInfoProvider);
 	}
 
