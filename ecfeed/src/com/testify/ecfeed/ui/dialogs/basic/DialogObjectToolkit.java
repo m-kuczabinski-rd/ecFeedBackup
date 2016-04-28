@@ -21,28 +21,28 @@ import org.eclipse.swt.widgets.Text;
 
 import com.testify.ecfeed.core.utils.StringHelper;
 
-public class DialogObjectFactory {
-	private static DialogObjectFactory fInstance = null;
+public class DialogObjectToolkit {
+	private static DialogObjectToolkit fInstance = null;
 
-	protected DialogObjectFactory() {
+	protected DialogObjectToolkit() {
 	}
 
-	public static DialogObjectFactory getInstance() {
+	public static DialogObjectToolkit getInstance() {
 		if (fInstance == null) {
-			fInstance = new DialogObjectFactory();
+			fInstance = new DialogObjectToolkit();
 		}
 		return fInstance;
 	}
 
-	public Composite createGridContainer(Composite parent, int countOfColumns) { // TODO rename to createGridContainer
+	public Composite createGridComposite(Composite parent, int countOfColumns) {
 
-		Composite container = new Composite(parent, SWT.NONE);
+		Composite composite = new Composite(parent, SWT.NONE);
 
-		container.setLayout(new GridLayout(countOfColumns, false));
+		composite.setLayout(new GridLayout(countOfColumns, false));
 		GridData gridData = new GridData(GridData.FILL_BOTH);
-		container.setLayoutData(gridData);
+		composite.setLayoutData(gridData);
 
-		return container;
+		return composite;
 	}
 
 	public Composite createRowComposite(Composite parentComposite) {

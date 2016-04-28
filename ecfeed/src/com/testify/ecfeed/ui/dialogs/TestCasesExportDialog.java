@@ -23,7 +23,7 @@ import org.eclipse.swt.widgets.Text;
 
 import com.testify.ecfeed.core.resources.ResourceHelper;
 import com.testify.ecfeed.core.serialization.export.TestCasesExportParser;
-import com.testify.ecfeed.ui.dialogs.basic.DialogObjectFactory;
+import com.testify.ecfeed.ui.dialogs.basic.DialogObjectToolkit;
 import com.testify.ecfeed.ui.dialogs.basic.ErrorDialog;
 import com.testify.ecfeed.ui.dialogs.basic.ExceptionCatchDialog;
 import com.testify.ecfeed.ui.dialogs.basic.FileOpenAndReadDialog;
@@ -36,12 +36,12 @@ public class TestCasesExportDialog extends TitleAreaDialog {
 	private TestCasesExportParser fExportParser;
 	private Text fTargetFileText;
 	private String fTargetFile;
-	private DialogObjectFactory fCompositeFactory;
+	private DialogObjectToolkit fCompositeFactory;
 
 	public TestCasesExportDialog(Shell parentShell, int methodParametersCount) {
 		super(parentShell);
 		fExportParser = new TestCasesExportParser(methodParametersCount);
-		fCompositeFactory = DialogObjectFactory.getInstance();
+		fCompositeFactory = DialogObjectToolkit.getInstance();
 	}
 
 	@Override
@@ -56,7 +56,7 @@ public class TestCasesExportDialog extends TitleAreaDialog {
 		setDialogMessage(this);
 
 		Composite dialogAreaComposite = (Composite) super.createDialogArea(parentComposite);
-		Composite childComposite = fCompositeFactory.createGridContainer(dialogAreaComposite, 1);
+		Composite childComposite = fCompositeFactory.createGridComposite(dialogAreaComposite, 1);
 
 		createTemplateTextWidgets(childComposite);
 		createTargetFileWidgets(childComposite);
@@ -82,14 +82,14 @@ public class TestCasesExportDialog extends TitleAreaDialog {
 	}
 
 	private void createTemplateTextWidgets(Composite parentComposite) {
-		Composite childComposite = fCompositeFactory.createGridContainer(parentComposite, 1);
+		Composite childComposite = fCompositeFactory.createGridComposite(parentComposite, 1);
 
 		createTemplateLabelWithButtons(childComposite);
 		fTemplateText = fCompositeFactory.createGridText(childComposite, 150, fExportParser.createInitialText());		
 	}
 
 	private void createTemplateLabelWithButtons(Composite parentComposite) {
-		Composite childComposite = fCompositeFactory.createGridContainer(parentComposite, 5);
+		Composite childComposite = fCompositeFactory.createGridComposite(parentComposite, 5);
 
 		final String DEFINE_TEMPLATE = "Template for data export";
 		fCompositeFactory.createLabel(childComposite, DEFINE_TEMPLATE);
@@ -116,7 +116,7 @@ public class TestCasesExportDialog extends TitleAreaDialog {
 		final String TARGET_FILE = "Target file";
 		fCompositeFactory.createLabel(parent, TARGET_FILE);		
 
-		Composite targetFileContainer = fCompositeFactory.createGridContainer(parent, 2);
+		Composite targetFileContainer = fCompositeFactory.createGridComposite(parent, 2);
 		fTargetFileText = 
 				fCompositeFactory.createFileSelectionText(targetFileContainer, new FileTextModifyListener());
 

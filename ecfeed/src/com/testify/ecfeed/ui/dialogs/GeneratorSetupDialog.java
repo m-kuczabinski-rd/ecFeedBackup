@@ -68,7 +68,7 @@ import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.common.NodeNameColumnLabelProvider;
 import com.testify.ecfeed.ui.common.TreeCheckStateListener;
 import com.testify.ecfeed.ui.common.utils.IFileInfoProvider;
-import com.testify.ecfeed.ui.dialogs.basic.DialogObjectFactory;
+import com.testify.ecfeed.ui.dialogs.basic.DialogObjectToolkit;
 
 public class GeneratorSetupDialog extends TitleAreaDialog {
 	private Combo fTestSuiteCombo;
@@ -89,7 +89,7 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 	private boolean fGenerateExecutableContent;
 	private IImplementationStatusResolver fStatusResolver;
 	private IFileInfoProvider fFileInfoProvider;
-	private DialogObjectFactory fDialogObjectToolkit; 
+	private DialogObjectToolkit fDialogObjectToolkit; 
 
 	private final String fTitle;
 	private final String fMessage;
@@ -215,7 +215,7 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 		fGenerateExecutableContent = generateExecutables;
 		fStatusResolver = new EclipseImplementationStatusResolver(fileInfoProvider);
 		fFileInfoProvider = fileInfoProvider;
-		fDialogObjectToolkit = DialogObjectFactory.getInstance();
+		fDialogObjectToolkit = DialogObjectToolkit.getInstance();
 	}
 
 	protected  List<List<ChoiceNode>> algorithmInput(){
@@ -509,7 +509,7 @@ public class GeneratorSetupDialog extends TitleAreaDialog {
 		Composite advancedButtonComposite = fDialogObjectToolkit.createRowComposite(parentComposite);
 		fDialogObjectToolkit.createButton(advancedButtonComposite, "Advanced...", null);
 
-		Composite fileSelectionComposite = fDialogObjectToolkit.createGridContainer(parentComposite, 2);
+		Composite fileSelectionComposite = fDialogObjectToolkit.createGridComposite(parentComposite, 2);
 		fDialogObjectToolkit.createLabel(fileSelectionComposite, "TODO");
 	}
 
