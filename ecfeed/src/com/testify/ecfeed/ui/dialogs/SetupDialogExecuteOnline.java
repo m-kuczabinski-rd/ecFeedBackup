@@ -29,4 +29,9 @@ public class SetupDialogExecuteOnline extends SetupDialogOnline {
 		return DIALOG_EXECUTE_ONLINE_TITLE;
 	}
 
+	@Override
+	protected int getContent() {
+		return CONSTRAINTS_COMPOSITE | CHOICES_COMPOSITE | GENERATOR_SELECTION_COMPOSITE;
+	}
+
 }

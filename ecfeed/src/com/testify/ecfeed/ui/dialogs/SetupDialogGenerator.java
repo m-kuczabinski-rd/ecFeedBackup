@@ -85,7 +85,6 @@ public abstract class SetupDialogGenerator extends TitleAreaDialog {
 	private Composite fParametersComposite;
 	private Composite fMainContainer;
 	private GeneratorFactory<ChoiceNode> fGeneratorFactory;
-	private int fContent;
 	private boolean fGenerateExecutableContent;
 	private IImplementationStatusResolver fStatusResolver;
 	private IFileInfoProvider fFileInfoProvider;
@@ -196,7 +195,6 @@ public abstract class SetupDialogGenerator extends TitleAreaDialog {
 	public SetupDialogGenerator(
 			Shell parentShell, 
 			MethodNode method, 
-			int content, 
 			boolean generateExecutables,
 			IFileInfoProvider fileInfoProvider) {
 		super(parentShell);
@@ -204,7 +202,6 @@ public abstract class SetupDialogGenerator extends TitleAreaDialog {
 		setShellStyle(SWT.BORDER | SWT.RESIZE | SWT.TITLE | SWT.APPLICATION_MODAL);
 		fMethod = method;
 		fGeneratorFactory = new GeneratorFactory<ChoiceNode>();
-		fContent = content;
 		fGenerateExecutableContent = generateExecutables;
 		fStatusResolver = new EclipseImplementationStatusResolver(fileInfoProvider);
 		fFileInfoProvider = fileInfoProvider;
@@ -282,31 +279,36 @@ public abstract class SetupDialogGenerator extends TitleAreaDialog {
 		fMainContainer.setLayout(new GridLayout(1, false));
 		fMainContainer.setLayoutData(new GridData(GridData.FILL_BOTH));
 
-		if (flagIsOn(CONSTRAINTS_COMPOSITE)) {
+		createContent();
+		return area;
+	}
+
+	private void createContent() {
+		int content = getContent();
+
+		if (flagIsOn(CONSTRAINTS_COMPOSITE, content)) {
 			createConstraintsComposite(fMainContainer);
 		}
-		if (flagIsOn(CHOICES_COMPOSITE)) {
+		if (flagIsOn(CHOICES_COMPOSITE, content)) {
 			createChoicesComposite(fMainContainer);
 		}
-		if (flagIsOn(TEST_SUITE_NAME_COMPOSITE)) {
+		if (flagIsOn(TEST_SUITE_NAME_COMPOSITE, content)) {
 			createTestSuiteComposite(fMainContainer);
 		}
-		if (flagIsOn(GENERATOR_SELECTION_COMPOSITE)) {
+		if (flagIsOn(GENERATOR_SELECTION_COMPOSITE, content)) {
 			createGeneratorSelectionComposite(fMainContainer);
 		}
-		if (flagIsOn(TEST_CASES_EXPORT_COMPOSITE)) {
+		if (flagIsOn(TEST_CASES_EXPORT_COMPOSITE, content)) {
 			createTestCasesExportComposite(fMainContainer);
 		}
-
-		return area;
 	}
 
 	protected abstract String getDialogTitle();
 	protected abstract String getDialogMessage();
+	protected abstract int getContent();
 
-
-	private boolean flagIsOn(int flag) {
-		if((fContent & flag) > 0){
+	private static boolean flagIsOn(int flag, int content) {
+		if((content & flag) > 0){
 			return true;
 		}
 		return false;

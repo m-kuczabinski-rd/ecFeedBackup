@@ -24,5 +24,11 @@ public class SetupDialogExportOnline extends SetupDialogOnline {
 	protected String getDialogTitle() {
 		final String DIALOG_EXECUTE_ONLINE_TITLE = "Export online";
 		return DIALOG_EXECUTE_ONLINE_TITLE;
-	}	
+	}
+
+	@Override
+	protected int getContent() {
+		return CONSTRAINTS_COMPOSITE | CHOICES_COMPOSITE | GENERATOR_SELECTION_COMPOSITE | TEST_CASES_EXPORT_COMPOSITE;
+	}
+
 }

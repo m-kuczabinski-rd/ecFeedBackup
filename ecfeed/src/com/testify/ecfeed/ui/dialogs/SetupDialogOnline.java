@@ -24,11 +24,9 @@ import com.testify.ecfeed.core.model.MethodNode;
 import com.testify.ecfeed.ui.common.utils.IFileInfoProvider;
 
 public abstract class SetupDialogOnline extends SetupDialogGenerator {
-	private static final int CONTENT 
-	= CONSTRAINTS_COMPOSITE | CHOICES_COMPOSITE | GENERATOR_SELECTION_COMPOSITE;
 
 	public SetupDialogOnline(Shell parentShell, MethodNode method, IFileInfoProvider fileInfoProvider) {
-		super(parentShell, method, CONTENT, true, fileInfoProvider);
+		super(parentShell, method, true, fileInfoProvider);
 	}
 
 	public IGenerator<ChoiceNode> getSelectedGenerator() {

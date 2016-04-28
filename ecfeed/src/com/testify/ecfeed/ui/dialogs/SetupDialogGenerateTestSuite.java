@@ -24,11 +24,9 @@ import com.testify.ecfeed.core.model.MethodNode;
 import com.testify.ecfeed.ui.common.utils.IFileInfoProvider;
 
 public class SetupDialogGenerateTestSuite extends SetupDialogGenerator {
-	private static final int CONTENT = CONSTRAINTS_COMPOSITE | CHOICES_COMPOSITE |
-			TEST_SUITE_NAME_COMPOSITE | GENERATOR_SELECTION_COMPOSITE;
 
 	public SetupDialogGenerateTestSuite(Shell parentShell, MethodNode method, IFileInfoProvider fileInfoProvider) {
-		super(parentShell, method, CONTENT, false, fileInfoProvider);
+		super(parentShell, method, false, fileInfoProvider);
 	}
 
 	public IGenerator<ChoiceNode> getSelectedGenerator() {
@@ -62,5 +60,10 @@ public class SetupDialogGenerateTestSuite extends SetupDialogGenerator {
 		final String DIALOG_GENERATE_TEST_SUITE_MESSAGE 
 		= "Select test suite name and algorithm for test suite generation";
 		return DIALOG_GENERATE_TEST_SUITE_MESSAGE;
+	}
+
+	@Override
+	protected int getContent() {
+		return CONSTRAINTS_COMPOSITE | CHOICES_COMPOSITE | TEST_SUITE_NAME_COMPOSITE | GENERATOR_SELECTION_COMPOSITE;
 	}	
 }
