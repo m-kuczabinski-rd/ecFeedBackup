@@ -37,6 +37,8 @@ public abstract class SetupDialogOnline extends SetupDialogGenerator {
 				fileInfoProvider);
 	}
 
+	protected abstract String getDialogTitle();
+	
 	public IGenerator<ChoiceNode> getSelectedGenerator() {
 		return super.selectedGenerator();
 	}
