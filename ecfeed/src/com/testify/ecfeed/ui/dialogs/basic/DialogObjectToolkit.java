@@ -10,16 +10,20 @@ package com.testify.ecfeed.ui.dialogs.basic;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
 import com.testify.ecfeed.core.utils.StringHelper;
+import com.testify.ecfeed.utils.EclipseHelper;
 
 public class DialogObjectToolkit {
 	private static DialogObjectToolkit fInstance = null;
@@ -75,14 +79,18 @@ public class DialogObjectToolkit {
 		return label;
 	}
 
-	public Label createSpacer(Composite parent, int size)
-	{
+	public Label createSpacer(Composite parent, int size) {
 		return createLabel(parent, StringHelper.createString(" ", size));
 	}
+
 	public Text createFileSelectionText(Composite targetFileContainer, ModifyListener modifyListener) {
 		Text targetFileText = new Text(targetFileContainer, SWT.BORDER);
 		targetFileText.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
-		targetFileText.addModifyListener(modifyListener);
+
+		if (modifyListener != null) {
+			targetFileText.addModifyListener(modifyListener);
+		}
+
 		return targetFileText;
 	}
 
@@ -100,6 +108,37 @@ public class DialogObjectToolkit {
 	public Button createBrowseButton(Composite parent, SelectionListener selectionListener) {
 		final String BROWSE_LABEL = "Browse...";
 		return createButton(parent, BROWSE_LABEL, selectionListener);
+	}
+
+	public Text createFileSelectionComposite(
+			Composite parent, 
+			String labelText, 
+			ModifyListener textModifyListener) {
+		Composite childComposite = createGridComposite(parent, 2);
+		
+		createLabel(childComposite, labelText);
+		
+		createSpacer(childComposite, 1);
+
+		Text targetFileText = createFileSelectionText(childComposite, textModifyListener);
+
+		SelectionListener browseSelectionListener = new BrowseSelectionAdapter(targetFileText); 
+		createBrowseButton(childComposite, browseSelectionListener);
+		return targetFileText;
+	}
+
+	class BrowseSelectionAdapter extends SelectionAdapter{
+		Text fTargetFileText;
+
+		BrowseSelectionAdapter(Text targetFileText) {
+			fTargetFileText = targetFileText;
+		}
+
+		@Override
+		public void widgetSelected(SelectionEvent e) {
+			FileDialog dialog = new FileDialog(EclipseHelper.getActiveShell());
+			fTargetFileText.setText(dialog.open());
+		}
 	}
 
 }

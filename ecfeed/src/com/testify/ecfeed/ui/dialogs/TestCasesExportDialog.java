@@ -36,12 +36,12 @@ public class TestCasesExportDialog extends TitleAreaDialog {
 	private TestCasesExportParser fExportParser;
 	private Text fTargetFileText;
 	private String fTargetFile;
-	private DialogObjectToolkit fCompositeFactory;
+	private DialogObjectToolkit fDialogObjectToolkit;
 
 	public TestCasesExportDialog(Shell parentShell, int methodParametersCount) {
 		super(parentShell);
 		fExportParser = new TestCasesExportParser(methodParametersCount);
-		fCompositeFactory = DialogObjectToolkit.getInstance();
+		fDialogObjectToolkit = DialogObjectToolkit.getInstance();
 	}
 
 	@Override
@@ -56,10 +56,10 @@ public class TestCasesExportDialog extends TitleAreaDialog {
 		setDialogMessage(this);
 
 		Composite dialogAreaComposite = (Composite) super.createDialogArea(parentComposite);
-		Composite childComposite = fCompositeFactory.createGridComposite(dialogAreaComposite, 1);
+		Composite childComposite = fDialogObjectToolkit.createGridComposite(dialogAreaComposite, 1);
 
-		createTemplateTextWidgets(childComposite);
-		createTargetFileWidgets(childComposite);
+		createTemplateTextComposite(childComposite);
+		createTargetFileComposite(childComposite);
 
 		fTargetFileText.setFocus();
 
@@ -81,22 +81,22 @@ public class TestCasesExportDialog extends TitleAreaDialog {
 		setMessage(SELECT_TARGET);
 	}
 
-	private void createTemplateTextWidgets(Composite parentComposite) {
-		Composite childComposite = fCompositeFactory.createGridComposite(parentComposite, 1);
+	private void createTemplateTextComposite(Composite parentComposite) {
+		Composite childComposite = fDialogObjectToolkit.createGridComposite(parentComposite, 1);
 
 		createTemplateLabelWithButtons(childComposite);
-		fTemplateText = fCompositeFactory.createGridText(childComposite, 150, fExportParser.createInitialText());		
+		fTemplateText = fDialogObjectToolkit.createGridText(childComposite, 150, fExportParser.createInitialText());		
 	}
 
 	private void createTemplateLabelWithButtons(Composite parentComposite) {
-		Composite childComposite = fCompositeFactory.createGridComposite(parentComposite, 5);
+		Composite childComposite = fDialogObjectToolkit.createGridComposite(parentComposite, 5);
 
 		final String DEFINE_TEMPLATE = "Template for data export";
-		fCompositeFactory.createLabel(childComposite, DEFINE_TEMPLATE);
-		fCompositeFactory.createSpacer(childComposite, 40);
-		fCompositeFactory.createButton(childComposite, "Help...", new TestButtonSelectionAdapter());
-		fCompositeFactory.createButton(childComposite, "Open...", new OpenButtonSelectionAdapter());
-		fCompositeFactory.createButton(childComposite, "Save As...", new SaveAsButtonSelectionAdapter());
+		fDialogObjectToolkit.createLabel(childComposite, DEFINE_TEMPLATE);
+		fDialogObjectToolkit.createSpacer(childComposite, 40);
+		fDialogObjectToolkit.createButton(childComposite, "Help...", new TestButtonSelectionAdapter());
+		fDialogObjectToolkit.createButton(childComposite, "Open...", new OpenButtonSelectionAdapter());
+		fDialogObjectToolkit.createButton(childComposite, "Save As...", new SaveAsButtonSelectionAdapter());
 	}
 
 	private String readTemplateFromResource() {
@@ -112,15 +112,11 @@ public class TestCasesExportDialog extends TitleAreaDialog {
 		return templateText;
 	}
 
-	private void createTargetFileWidgets(Composite parent) {
+	private void createTargetFileComposite(Composite parent) {
 		final String TARGET_FILE = "Target file";
-		fCompositeFactory.createLabel(parent, TARGET_FILE);		
-
-		Composite targetFileContainer = fCompositeFactory.createGridComposite(parent, 2);
 		fTargetFileText = 
-				fCompositeFactory.createFileSelectionText(targetFileContainer, new FileTextModifyListener());
-
-		fCompositeFactory.createBrowseButton(targetFileContainer, new BrowseSelectionAdapter());
+				fDialogObjectToolkit.createFileSelectionComposite(
+						parent, TARGET_FILE, new FileTextModifyListener());		
 	}
 
 	@Override
@@ -154,7 +150,7 @@ public class TestCasesExportDialog extends TitleAreaDialog {
 	}
 
 	private void updateStatus() {
-		if (fTargetFileText.getText().isEmpty()) {
+		if (fTargetFileText == null || fTargetFileText.getText().isEmpty()) {
 			setDialogMessageSelectFile();
 			setOkEnabled(false);
 		} else {

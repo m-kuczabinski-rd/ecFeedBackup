@@ -88,7 +88,9 @@ public abstract class SetupDialogGenerator extends TitleAreaDialog {
 	private boolean fGenerateExecutableContent;
 	private IImplementationStatusResolver fStatusResolver;
 	private IFileInfoProvider fFileInfoProvider;
-	private DialogObjectToolkit fDialogObjectToolkit; 
+	private DialogObjectToolkit fDialogObjectToolkit;
+	private Text fTargetFileText;
+	private int fContent;
 
 	public final static int CONSTRAINTS_COMPOSITE = 1;
 	public final static int CHOICES_COMPOSITE = 1 << 1;
@@ -253,14 +255,14 @@ public abstract class SetupDialogGenerator extends TitleAreaDialog {
 				EImplementationStatus parameterStatus = fStatusResolver.getImplementationStatus(parameter);
 				if((parameter.getChoices().isEmpty() && (parameter.isExpected() == false || JavaUtils.isUserType(parameter.getType())))||
 						parameterStatus == EImplementationStatus.NOT_IMPLEMENTED){
-					setOkButton(false);
+					setOkButtonStatus(false);
 					break;
 				}
 			}
 		} else {
 			for(MethodParameterNode parameter: fMethod.getMethodParameters() ){
 				if(parameter.getChoices().isEmpty() && (parameter.isExpected() == false || JavaUtils.isUserType(parameter.getType()))){
-					setOkButton(false);
+					setOkButtonStatus(false);
 					break;
 				}
 			}
@@ -268,6 +270,8 @@ public abstract class SetupDialogGenerator extends TitleAreaDialog {
 
 		createButton(parent, IDialogConstants.CANCEL_ID,
 				IDialogConstants.CANCEL_LABEL, false);
+
+		updateOkButton();
 	}
 
 	@Override
@@ -284,21 +288,21 @@ public abstract class SetupDialogGenerator extends TitleAreaDialog {
 	}
 
 	private void createContent() {
-		int content = getContent();
+		fContent = getContent();
 
-		if (flagIsOn(CONSTRAINTS_COMPOSITE, content)) {
+		if (isContentFlagOn(CONSTRAINTS_COMPOSITE)) {
 			createConstraintsComposite(fMainContainer);
 		}
-		if (flagIsOn(CHOICES_COMPOSITE, content)) {
+		if (isContentFlagOn(CHOICES_COMPOSITE)) {
 			createChoicesComposite(fMainContainer);
 		}
-		if (flagIsOn(TEST_SUITE_NAME_COMPOSITE, content)) {
+		if (isContentFlagOn(TEST_SUITE_NAME_COMPOSITE)) {
 			createTestSuiteComposite(fMainContainer);
 		}
-		if (flagIsOn(GENERATOR_SELECTION_COMPOSITE, content)) {
+		if (isContentFlagOn(GENERATOR_SELECTION_COMPOSITE)) {
 			createGeneratorSelectionComposite(fMainContainer);
 		}
-		if (flagIsOn(TEST_CASES_EXPORT_COMPOSITE, content)) {
+		if (isContentFlagOn(TEST_CASES_EXPORT_COMPOSITE)) {
 			createTestCasesExportComposite(fMainContainer);
 		}
 	}
@@ -307,8 +311,9 @@ public abstract class SetupDialogGenerator extends TitleAreaDialog {
 	protected abstract String getDialogMessage();
 	protected abstract int getContent();
 
-	private static boolean flagIsOn(int flag, int content) {
-		if((content & flag) > 0){
+	private boolean isContentFlagOn(int flag) {
+		
+		if((fContent & flag) > 0){
 			return true;
 		}
 		return false;
@@ -443,10 +448,12 @@ public abstract class SetupDialogGenerator extends TitleAreaDialog {
 				setErrorMessage(Messages.DIALOG_GENERATOR_INPUT_PROBLEM_MESSAGE);
 			}
 		}
+		okEnabled &= validateTargetFileText();
+
 		if(okEnabled){
 			setErrorMessage(null);
 		}
-		setOkButton(okEnabled);
+		setOkButtonStatus(okEnabled);
 	}
 
 	private boolean validateGeneratorInput(boolean onlyExecutable) {
@@ -486,7 +493,7 @@ public abstract class SetupDialogGenerator extends TitleAreaDialog {
 		return testSuiteValid;
 	}
 
-	private void setOkButton(boolean enabled) {
+	private void setOkButtonStatus(boolean enabled) {
 		if(fOkButton != null && !fOkButton.isDisposed()){
 			fOkButton.setEnabled(enabled);
 		}
@@ -505,11 +512,33 @@ public abstract class SetupDialogGenerator extends TitleAreaDialog {
 	}
 
 	private void createTestCasesExportComposite(Composite parentComposite) {
+		fDialogObjectToolkit.createRowComposite(parentComposite);
 		Composite advancedButtonComposite = fDialogObjectToolkit.createRowComposite(parentComposite);
-		fDialogObjectToolkit.createButton(advancedButtonComposite, "Advanced...", null);
 
-		Composite fileSelectionComposite = fDialogObjectToolkit.createGridComposite(parentComposite, 2);
-		fDialogObjectToolkit.createLabel(fileSelectionComposite, "TODO");
+		fDialogObjectToolkit.createButton(advancedButtonComposite, "Export definition", null);
+
+		final String TARGET_FILE = "Export target file";
+		fTargetFileText = 
+				fDialogObjectToolkit.createFileSelectionComposite(
+						parentComposite, TARGET_FILE, new ExportFileModifyListener());		
+	}
+
+	class ExportFileModifyListener implements ModifyListener {
+		@Override
+		public void modifyText(ModifyEvent e) {
+			updateOkButton();
+		}
+	}
+
+	private boolean validateTargetFileText() {
+		if (!isContentFlagOn(TEST_CASES_EXPORT_COMPOSITE)) {
+			return true;
+		}
+
+		if (fTargetFileText == null || fTargetFileText.getText().isEmpty()) {
+			return false;
+		}
+		return true;
 	}
 
 	private void createGeneratorViewer(final Composite parent) {
@@ -538,7 +567,7 @@ public abstract class SetupDialogGenerator extends TitleAreaDialog {
 				fGeneratorCombo.add(generator);
 			}
 			fGeneratorCombo.select(0);
-			setOkButton(true);
+			setOkButtonStatus(true);
 		}
 	}
 
