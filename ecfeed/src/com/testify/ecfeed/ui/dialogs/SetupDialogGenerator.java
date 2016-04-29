@@ -68,6 +68,7 @@ import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.common.NodeNameColumnLabelProvider;
 import com.testify.ecfeed.ui.common.TreeCheckStateListener;
 import com.testify.ecfeed.ui.common.utils.IFileInfoProvider;
+import com.testify.ecfeed.ui.dialogs.TestCasesExportDialog.FileCompositeVisibility;
 import com.testify.ecfeed.ui.dialogs.basic.DialogObjectToolkit;
 
 public abstract class SetupDialogGenerator extends TitleAreaDialog {
@@ -515,7 +516,8 @@ public abstract class SetupDialogGenerator extends TitleAreaDialog {
 		fDialogObjectToolkit.createRowComposite(parentComposite);
 		Composite advancedButtonComposite = fDialogObjectToolkit.createRowComposite(parentComposite);
 
-		fDialogObjectToolkit.createButton(advancedButtonComposite, "Export definition", null);
+		fDialogObjectToolkit.createButton(
+				advancedButtonComposite, "Advanced...", new ExportDefinitionSelectionAdapter());
 
 		final String TARGET_FILE = "Export target file";
 		fTargetFileText = 
@@ -523,6 +525,20 @@ public abstract class SetupDialogGenerator extends TitleAreaDialog {
 						parentComposite, TARGET_FILE, new ExportFileModifyListener());		
 	}
 
+	class ExportDefinitionSelectionAdapter extends SelectionAdapter{
+		@Override
+		public void widgetSelected(SelectionEvent e) {
+			TestCasesExportDialog dialog = 
+					new TestCasesExportDialog(
+							fMethod.getParametersCount(),
+							FileCompositeVisibility.NOT_VISIBLE);
+
+			if(dialog.open() != IDialogConstants.OK_ID){
+				return;
+			}
+		}
+	}
+	
 	class ExportFileModifyListener implements ModifyListener {
 		@Override
 		public void modifyText(ModifyEvent e) {

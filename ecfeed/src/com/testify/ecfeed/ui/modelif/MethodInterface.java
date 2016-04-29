@@ -63,6 +63,7 @@ import com.testify.ecfeed.ui.dialogs.CalculateCoverageDialog;
 import com.testify.ecfeed.ui.dialogs.TestCasesExportDialog;
 import com.testify.ecfeed.ui.dialogs.RenameTestSuiteDialog;
 import com.testify.ecfeed.ui.dialogs.SelectCompatibleMethodDialog;
+import com.testify.ecfeed.ui.dialogs.TestCasesExportDialog.FileCompositeVisibility;
 import com.testify.ecfeed.ui.dialogs.basic.InfoDialog;
 
 public class MethodInterface extends ParametersParentInterface {
@@ -265,8 +266,8 @@ public class MethodInterface extends ParametersParentInterface {
 
 		TestCasesExportDialog dialog = 
 				new TestCasesExportDialog(
-						Display.getDefault().getActiveShell(), 
-						getTarget().getParametersCount());
+						getTarget().getParametersCount(),
+						FileCompositeVisibility.VISIBLE);
 
 		if(dialog.open() != IDialogConstants.OK_ID){
 			return;

@@ -18,7 +18,6 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.FileDialog;
-import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
 import com.testify.ecfeed.core.resources.ResourceHelper;
@@ -29,6 +28,7 @@ import com.testify.ecfeed.ui.dialogs.basic.ExceptionCatchDialog;
 import com.testify.ecfeed.ui.dialogs.basic.FileOpenAndReadDialog;
 import com.testify.ecfeed.ui.dialogs.basic.FileSaveDialog;
 import com.testify.ecfeed.ui.dialogs.basic.InfoDialog;
+import com.testify.ecfeed.utils.EclipseHelper;
 
 public class TestCasesExportDialog extends TitleAreaDialog {
 
@@ -37,17 +37,30 @@ public class TestCasesExportDialog extends TitleAreaDialog {
 	private Text fTargetFileText;
 	private String fTargetFile;
 	private DialogObjectToolkit fDialogObjectToolkit;
+	private FileCompositeVisibility fFileCompositeVisibility;
+	
+	public enum FileCompositeVisibility {
+		VISIBLE,
+		NOT_VISIBLE
+	}
 
-	public TestCasesExportDialog(Shell parentShell, int methodParametersCount) {
-		super(parentShell);
+	public TestCasesExportDialog(
+			int methodParametersCount, 
+			FileCompositeVisibility 
+			fileCompositeVisibility) {
+		super(EclipseHelper.getActiveShell());
 		fExportParser = new TestCasesExportParser(methodParametersCount);
 		fDialogObjectToolkit = DialogObjectToolkit.getInstance();
+		fFileCompositeVisibility = fileCompositeVisibility;
 	}
 
 	@Override
 	public void create() {
 		super.create();
-		setOkEnabled(false);
+		
+		if (fFileCompositeVisibility == FileCompositeVisibility.VISIBLE) {
+			setOkEnabled(false);
+		}
 	}
 
 	@Override
@@ -59,9 +72,11 @@ public class TestCasesExportDialog extends TitleAreaDialog {
 		Composite childComposite = fDialogObjectToolkit.createGridComposite(dialogAreaComposite, 1);
 
 		createTemplateTextComposite(childComposite);
-		createTargetFileComposite(childComposite);
-
-		fTargetFileText.setFocus();
+		
+		if (fFileCompositeVisibility == FileCompositeVisibility.VISIBLE) {
+			createTargetFileComposite(childComposite);
+			fTargetFileText.setFocus();
+		}
 
 		return dialogAreaComposite;
 	}
@@ -84,11 +99,11 @@ public class TestCasesExportDialog extends TitleAreaDialog {
 	private void createTemplateTextComposite(Composite parentComposite) {
 		Composite childComposite = fDialogObjectToolkit.createGridComposite(parentComposite, 1);
 
-		createTemplateLabelWithButtons(childComposite);
+		createTemplateLabelAndButtonsComposite(childComposite);
 		fTemplateText = fDialogObjectToolkit.createGridText(childComposite, 150, fExportParser.createInitialText());		
 	}
 
-	private void createTemplateLabelWithButtons(Composite parentComposite) {
+	private void createTemplateLabelAndButtonsComposite(Composite parentComposite) {
 		Composite childComposite = fDialogObjectToolkit.createGridComposite(parentComposite, 5);
 
 		final String DEFINE_TEMPLATE = "Template for data export";
@@ -128,9 +143,20 @@ public class TestCasesExportDialog extends TitleAreaDialog {
 		}
 
 		fExportParser.createSubTemplates(template);
-		fTargetFile = fTargetFileText.getText();
+		
+		if (fFileCompositeVisibility == FileCompositeVisibility.VISIBLE) {
+			fTargetFile = fTargetFileText.getText();
+		} else {
+			fTargetFile = null;
+		}
 
 		super.okPressed();
+	}
+	
+	@Override
+	protected void cancelPressed(){
+		fExportParser.createSubTemplates(fExportParser.createInitialText());
+		super.cancelPressed();
 	}
 
 	public String getHeaderTemplate(){
@@ -152,7 +178,10 @@ public class TestCasesExportDialog extends TitleAreaDialog {
 	private void updateStatus() {
 		if (fTargetFileText == null || fTargetFileText.getText().isEmpty()) {
 			setDialogMessageSelectFile();
-			setOkEnabled(false);
+			
+			if (fFileCompositeVisibility == FileCompositeVisibility.VISIBLE) {
+				setOkEnabled(false);
+			}
 		} else {
 			setMessage(null);
 			setOkEnabled(true);
