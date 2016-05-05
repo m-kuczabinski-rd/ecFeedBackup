@@ -31,19 +31,19 @@ public class JavaTestRunner {
 	private Method fTestMethod;
 	private ITestMethodInvoker fTestMethodInvoker;
 
-	public JavaTestRunner(ModelClassLoader loader, ITestMethodInvoker testMethodInvoker){
+	public JavaTestRunner(ModelClassLoader loader, ITestMethodInvoker testMethodInvoker) {
 		fLoader = loader;
 		fTestMethodInvoker = testMethodInvoker; 
 	}
 
-	public void setTarget(MethodNode target) throws RunnerException{
+	public void setTarget(MethodNode target) throws RunnerException {
 		fTarget = target;
 		ClassNode classNode = fTarget.getClassNode();
 		fTestClass = getTestClass(classNode.getName());
 		fTestMethod = getTestMethod(fTestClass, fTarget);
 	}
 
-	public void setTargetForExport(MethodNode target) throws RunnerException{
+	public void setTargetForExport(MethodNode target) {
 		fTarget = target;
 		fTestClass = null;
 		fTestMethod = null;
