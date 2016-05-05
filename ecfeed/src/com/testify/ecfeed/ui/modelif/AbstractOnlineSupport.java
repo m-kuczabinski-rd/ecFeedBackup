@@ -93,7 +93,13 @@ public abstract class AbstractOnlineSupport extends TestExecutionSupport{
 				}
 
 				setProgressMonitor(progressMonitor);
-				fRunner.setTarget(fTarget);
+
+				if (fRunMode == RunMode.EXPORT) {
+					fRunner.setTargetForExport(fTarget);
+				} else {
+					fRunner.setTarget(fTarget);
+				}
+
 				List<ChoiceNode> next;
 				fGenerator.initialize(fInput, fConstraints, fParameters);
 				beginTestExecution(fGenerator.totalWork());
@@ -101,7 +107,12 @@ public abstract class AbstractOnlineSupport extends TestExecutionSupport{
 				while((next = fGenerator.next()) != null && progressMonitor.isCanceled() == false){
 					try{
 						setTestProgressMessage();
-						fRunner.runTestCase(next);
+
+						if (fRunMode == RunMode.EXPORT) {
+							fRunner.prepareTestCaseForExport(next);
+						} else {
+							fRunner.runTestCase(next);
+						}
 					} catch(RunnerException e){
 						addFailedTest(e);
 					}
@@ -186,6 +197,15 @@ public abstract class AbstractOnlineSupport extends TestExecutionSupport{
 	public void setTarget(MethodNode target) {
 		try {
 			fRunner.setTarget(target);
+			fTarget = target;
+		} catch (RunnerException e) {
+			ErrorDialog.open(Messages.DIALOG_TEST_EXECUTION_PROBLEM_TITLE, e.getMessage());
+		}
+	}
+
+	public void setTargetForExport(MethodNode target) {
+		try {
+			fRunner.setTargetForExport(target);
 			fTarget = target;
 		} catch (RunnerException e) {
 			ErrorDialog.open(Messages.DIALOG_TEST_EXECUTION_PROBLEM_TITLE, e.getMessage());

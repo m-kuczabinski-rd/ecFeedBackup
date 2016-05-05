@@ -43,6 +43,12 @@ public class JavaTestRunner {
 		fTestMethod = getTestMethod(fTestClass, fTarget);
 	}
 
+	public void setTargetForExport(MethodNode target) throws RunnerException{
+		fTarget = target;
+		fTestClass = null;
+		fTestMethod = null;
+	}	
+
 	public void runTestCase(List<ChoiceNode> testData) throws RunnerException{
 
 		validateTestData(testData);
@@ -69,6 +75,12 @@ public class JavaTestRunner {
 		} catch (Exception e) {
 			RunnerException.report(e.getMessage());
 		}
+	}
+
+	public void prepareTestCaseForExport(List<ChoiceNode> testData) throws RunnerException{
+		validateTestData(testData);
+		Object[] arguments = getArguments(testData);
+		fTestMethodInvoker.invoke(null, null, null, arguments, null);
 	}
 
 	protected Method getTestMethod(Class<?> testClass, MethodNode methodModel) throws RunnerException {

@@ -244,7 +244,7 @@ public class MethodInterface extends ParametersParentInterface {
 		OnlineExportSupport exportSupport = 
 				new OnlineExportSupport(methodInvoker, fileInfoProvider);
 
-		exportSupport.setTarget(getTarget());
+		exportSupport.setTargetForExport(getTarget());
 		exportSupport.proceed();
 
 		runExport(
