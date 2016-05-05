@@ -61,9 +61,9 @@ import com.testify.ecfeed.ui.common.utils.EclipseProjectHelper;
 import com.testify.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.testify.ecfeed.ui.dialogs.AddTestCaseDialog;
 import com.testify.ecfeed.ui.dialogs.CalculateCoverageDialog;
-import com.testify.ecfeed.ui.dialogs.TestCasesExportDialog;
 import com.testify.ecfeed.ui.dialogs.RenameTestSuiteDialog;
 import com.testify.ecfeed.ui.dialogs.SelectCompatibleMethodDialog;
+import com.testify.ecfeed.ui.dialogs.TestCasesExportDialog;
 import com.testify.ecfeed.ui.dialogs.TestCasesExportDialog.FileCompositeVisibility;
 import com.testify.ecfeed.ui.dialogs.basic.ErrorDialog;
 import com.testify.ecfeed.ui.dialogs.basic.InfoDialog;
@@ -245,14 +245,18 @@ public class MethodInterface extends ParametersParentInterface {
 				new OnlineExportSupport(methodInvoker, fileInfoProvider);
 
 		exportSupport.setTargetForExport(getTarget());
-		exportSupport.proceed();
-
-		runExport(
-				methodInvoker.getTestCasesToExport(), 
-				exportSupport.getHeaderTemplate(), 
-				exportSupport.getTestCaseTemplate(), 
-				exportSupport.getFooterTemplate(), 
-				exportSupport.getTargetFile());
+		AbstractOnlineSupport.Result result = exportSupport.proceed();
+		
+		if (result == AbstractOnlineSupport.Result.OK &&
+			getTarget().getParametersCount() > 0) {
+			
+			runExport(
+					methodInvoker.getTestCasesToExport(), 
+					exportSupport.getHeaderTemplate(), 
+					exportSupport.getTestCaseTemplate(), 
+					exportSupport.getFooterTemplate(), 
+					exportSupport.getTargetFile());
+		}
 	}
 
 	public void executeStaticTests(Collection<TestCaseNode> testCases, IFileInfoProvider fileInfoProvider) throws EcException {

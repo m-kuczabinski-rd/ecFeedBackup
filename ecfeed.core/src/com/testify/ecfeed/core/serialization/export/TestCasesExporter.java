@@ -15,6 +15,7 @@ import java.util.Collection;
 
 import com.testify.ecfeed.core.model.MethodNode;
 import com.testify.ecfeed.core.model.TestCaseNode;
+import com.testify.ecfeed.core.utils.ExceptionHelper;
 
 public class TestCasesExporter {
 
@@ -24,12 +25,10 @@ public class TestCasesExporter {
 	OutputStream fOutputStream;
 	int fExportedTestCases;
 
-	private static final String MSG_TEST_CASE_NOT_EMPTY = "Test case template must not be empty.";
-
 	public TestCasesExporter(String headerTemplate, String testCaseTemplate, String tailTemplate) {
-
 		if (testCaseTemplate == null) {
-			throw new RuntimeException(MSG_TEST_CASE_NOT_EMPTY);
+			final String MSG_TEST_CASE_NOT_EMPTY = "Test case template must not be empty.";
+			ExceptionHelper.reportRuntimeException(MSG_TEST_CASE_NOT_EMPTY);
 		}
 
 		fHeaderTemplate = headerTemplate;

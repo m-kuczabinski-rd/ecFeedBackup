@@ -54,6 +54,11 @@ public abstract class AbstractOnlineSupport extends TestExecutionSupport{
 		TEST_ON_ANDROID,
 		EXPORT
 	}
+	
+	public enum Result {
+		OK,
+		CANCELED
+	}
 
 	private MethodNode fTarget;
 	private JavaTestRunner fRunner;
@@ -92,27 +97,31 @@ public abstract class AbstractOnlineSupport extends TestExecutionSupport{
 		fTarget = target;
 	}
 
-	public void proceed(){
+	public Result proceed(){
 		PrintStream currentOut = System.out;
 		ConsoleManager.displayConsole();
 		ConsoleManager.redirectSystemOutputToStream(ConsoleManager.getOutputStream());
 
-		if (fTarget.getParameters().size() > 0) {
-			displayParametrizedTestsDialog();
+		Result result = Result.CANCELED;
+		
+		if (fTarget.getParametersCount() > 0) {
+			result = displayParametrizedTestsDialog();
 		} else {
 			if (fRunMode != RunMode.EXPORT) {
 				runNonParametrizedTest();
+				result = Result.OK;
 			}
 		}
 		System.setOut(currentOut);
+		return result;
 	}
 
-	private void displayParametrizedTestsDialog() {
+	private Result displayParametrizedTestsDialog() {
 		SetupDialogOnline dialog = 
 				createSetupDialogOnline(Display.getCurrent().getActiveShell(), fTarget, fFileInfoProvider);
 
 		if(dialog.open() != IDialogConstants.OK_ID) {
-			return;
+			return Result.CANCELED;
 		}
 
 		IGenerator<ChoiceNode> selectedGenerator = dialog.getSelectedGenerator();
@@ -131,6 +140,8 @@ public abstract class AbstractOnlineSupport extends TestExecutionSupport{
 		fTestCaseTemplate = dialog.getTestCaseTemplate();
 		fFooterTemplate = dialog.getFooterTemplate();
 		fTargetFile = dialog.getTargetFile();
+		
+		return Result.OK;
 	}
 
 	private void runParametrizedTests(IGenerator<ChoiceNode> generator,
