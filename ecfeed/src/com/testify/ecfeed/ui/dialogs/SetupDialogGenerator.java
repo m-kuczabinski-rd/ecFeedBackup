@@ -99,108 +99,11 @@ public abstract class SetupDialogGenerator extends TitleAreaDialog {
 	private String fTargetFile;
 	private boolean fAdvancedDialogVisited;
 
-
 	public final static int CONSTRAINTS_COMPOSITE = 1;
 	public final static int CHOICES_COMPOSITE = 1 << 1;
 	public final static int TEST_SUITE_NAME_COMPOSITE = 1 << 2;
 	public final static int GENERATOR_SELECTION_COMPOSITE = 1 << 3;
 	public final static int TEST_CASES_EXPORT_COMPOSITE = 1 << 4;
-
-	private class ChoiceTreeCheckStateListener extends TreeCheckStateListener{
-
-		public ChoiceTreeCheckStateListener(CheckboxTreeViewer treeViewer) {
-			super(treeViewer);
-		}
-
-		@Override
-		public void checkStateChanged(CheckStateChangedEvent event) {
-			super.checkStateChanged(event);
-			if(event.getElement() instanceof MethodParameterNode && ((MethodParameterNode)event.getElement()).isExpected()){
-				fParametersViewer.setChecked(event.getElement(), true);
-			}
-			else{
-				updateOkButton();
-			}
-		}
-	}
-
-	private class ParametersContentProvider extends TreeNodeContentProvider implements ITreeContentProvider{
-		@Override
-		public Object[] getElements(Object input){
-			if(input instanceof MethodNode){
-				return ((MethodNode)input).getParameters().toArray();
-			}
-			return null;
-		}
-
-		@Override
-		public Object[] getChildren(Object element){
-			List<Object> children = new ArrayList<Object>();
-			if(element instanceof MethodParameterNode && ((MethodParameterNode)element).isExpected()){
-			}
-			else if(element instanceof ChoicesParentNode){
-				ChoicesParentNode parent = (ChoicesParentNode)element;
-				if(fGenerateExecutableContent == false){
-					children.addAll(parent.getChoices());
-				}
-				else{
-					for(ChoiceNode child : parent.getChoices()){
-						if(fStatusResolver.getImplementationStatus(child) != EImplementationStatus.NOT_IMPLEMENTED){
-							children.add(child);
-						}
-					}
-				}
-			}
-			return children.toArray();
-		}
-
-		@Override
-		public Object getParent(Object element){
-			if(element instanceof AbstractNode){
-				return ((AbstractNode)element).getParent();
-			}
-			return null;
-		}
-
-		@Override
-		public boolean hasChildren(Object element){
-			return getChildren(element).length > 0;
-		}
-	}
-
-	private class ConstraintsViewerContentProvider extends TreeNodeContentProvider implements ITreeContentProvider{
-		private final Object[] EMPTY_ARRAY = new Object[]{};
-
-		@Override
-		public Object[] getElements(Object input){
-			if(input instanceof MethodNode){
-				return fMethod.getConstraintsNames().toArray();
-			}
-			return EMPTY_ARRAY;
-		}
-
-		@Override
-		public Object[] getChildren(Object element){
-			if(element instanceof String){
-				Object[] result = fMethod.getConstraints((String)element).toArray();
-				return result;
-			}
-			return EMPTY_ARRAY;
-		}
-
-		@Override
-		public Object getParent(Object element){
-			if(element instanceof ConstraintNode){
-				return ((ConstraintNode)element).getName();
-			}
-			return null;
-		}
-
-		@Override
-		public boolean hasChildren(Object element){
-			return getChildren(element).length > 0;
-		}
-	}
 
 	public SetupDialogGenerator(
 			Shell parentShell, 
@@ -223,6 +126,9 @@ public abstract class SetupDialogGenerator extends TitleAreaDialog {
 		fTargetFile = null;
 		fAdvancedDialogVisited = false;
 	}
+
+	protected abstract String getDialogTitle();
+	protected abstract int getContent();
 
 	public List<List<ChoiceNode>> getAlgorithmInput() {
 		return fAlgorithmInput;
@@ -270,10 +176,6 @@ public abstract class SetupDialogGenerator extends TitleAreaDialog {
 		super.okPressed();
 	}
 
-	/**
-	 * Create contents of the button bar.
-	 * @param parent
-	 */
 	@Override
 	protected void createButtonsForButtonBar(Composite parent) {
 		fOkButton = createButton(parent, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL,
@@ -334,9 +236,6 @@ public abstract class SetupDialogGenerator extends TitleAreaDialog {
 			createTestCasesExportComposite(fMainContainer);
 		}
 	}
-
-	protected abstract String getDialogTitle();
-	protected abstract int getContent();
 
 	protected String getDialogMessage() {
 		final String DIALOG_GENERATE_TEST_SUITE_MESSAGE 
@@ -557,25 +456,6 @@ public abstract class SetupDialogGenerator extends TitleAreaDialog {
 						parentComposite, TARGET_FILE, new ExportFileModifyListener());		
 	}
 
-	class ExportDefinitionSelectionAdapter extends SelectionAdapter{
-		@Override
-		public void widgetSelected(SelectionEvent e) {
-			TestCasesExportDialog dialog = 
-					new TestCasesExportDialog(
-							fMethod.getParametersCount(),
-							FileCompositeVisibility.NOT_VISIBLE);
-
-			if(dialog.open() != IDialogConstants.OK_ID){
-				return;
-			}
-
-			fHeaderTemplate = dialog.getHeaderTemplate();
-			fTestCaseTemplate = dialog.getTestCaseTemplate();
-			fFooterTemplate = dialog.getFooterTemplate();
-			fAdvancedDialogVisited = true;
-		}
-	}
-
 	public String getHeaderTemplate() {
 		return fHeaderTemplate;
 	}
@@ -590,13 +470,6 @@ public abstract class SetupDialogGenerator extends TitleAreaDialog {
 
 	public String getTargetFile() {
 		return fTargetFile;
-	}
-
-	class ExportFileModifyListener implements ModifyListener {
-		@Override
-		public void modifyText(ModifyEvent e) {
-			updateOkButton();
-		}
 	}
 
 	private boolean validateTargetFileText() {
@@ -830,4 +703,128 @@ public abstract class SetupDialogGenerator extends TitleAreaDialog {
 		p.setParent(c);
 		return p;
 	}
+
+	private class ChoiceTreeCheckStateListener extends TreeCheckStateListener{
+
+		public ChoiceTreeCheckStateListener(CheckboxTreeViewer treeViewer) {
+			super(treeViewer);
+		}
+
+		@Override
+		public void checkStateChanged(CheckStateChangedEvent event) {
+			super.checkStateChanged(event);
+			if(event.getElement() instanceof MethodParameterNode && ((MethodParameterNode)event.getElement()).isExpected()){
+				fParametersViewer.setChecked(event.getElement(), true);
+			}
+			else{
+				updateOkButton();
+			}
+		}
+	}	
+
+	private class ParametersContentProvider extends TreeNodeContentProvider implements ITreeContentProvider {
+		@Override
+		public Object[] getElements(Object input){
+			if(input instanceof MethodNode){
+				return ((MethodNode)input).getParameters().toArray();
+			}
+			return null;
+		}
+
+		@Override
+		public Object[] getChildren(Object element){
+			List<Object> children = new ArrayList<Object>();
+			if(element instanceof MethodParameterNode && ((MethodParameterNode)element).isExpected()){
+			}
+			else if(element instanceof ChoicesParentNode){
+				ChoicesParentNode parent = (ChoicesParentNode)element;
+				if(fGenerateExecutableContent == false){
+					children.addAll(parent.getChoices());
+				}
+				else{
+					for(ChoiceNode child : parent.getChoices()){
+						if(fStatusResolver.getImplementationStatus(child) != EImplementationStatus.NOT_IMPLEMENTED){
+							children.add(child);
+						}
+					}
+				}
+			}
+			return children.toArray();
+		}
+
+		@Override
+		public Object getParent(Object element){
+			if(element instanceof AbstractNode){
+				return ((AbstractNode)element).getParent();
+			}
+			return null;
+		}
+
+		@Override
+		public boolean hasChildren(Object element){
+			return getChildren(element).length > 0;
+		}
+	}
+
+	private class ConstraintsViewerContentProvider extends TreeNodeContentProvider implements ITreeContentProvider {
+		private final Object[] EMPTY_ARRAY = new Object[]{};
+
+		@Override
+		public Object[] getElements(Object input){
+			if(input instanceof MethodNode){
+				return fMethod.getConstraintsNames().toArray();
+			}
+			return EMPTY_ARRAY;
+		}
+
+		@Override
+		public Object[] getChildren(Object element){
+			if(element instanceof String){
+				Object[] result = fMethod.getConstraints((String)element).toArray();
+				return result;
+			}
+			return EMPTY_ARRAY;
+		}
+
+		@Override
+		public Object getParent(Object element){
+			if(element instanceof ConstraintNode){
+				return ((ConstraintNode)element).getName();
+			}
+			return null;
+		}
+
+		@Override
+		public boolean hasChildren(Object element){
+			return getChildren(element).length > 0;
+		}
+	}
+
+	private class ExportDefinitionSelectionAdapter extends SelectionAdapter{
+		@Override
+		public void widgetSelected(SelectionEvent e) {
+			TestCasesExportDialog dialog = 
+					new TestCasesExportDialog(
+							fMethod.getParametersCount(),
+							FileCompositeVisibility.NOT_VISIBLE);
+
+			if(dialog.open() != IDialogConstants.OK_ID){
+				return;
+			}
+
+			fHeaderTemplate = dialog.getHeaderTemplate();
+			fTestCaseTemplate = dialog.getTestCaseTemplate();
+			fFooterTemplate = dialog.getFooterTemplate();
+			fAdvancedDialogVisited = true;
+		}
+	}
+
+	class ExportFileModifyListener implements ModifyListener {
+		@Override
+		public void modifyText(ModifyEvent e) {
+			updateOkButton();
+		}
+	}
+
+
 }
