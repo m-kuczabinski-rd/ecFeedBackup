@@ -11,15 +11,8 @@
 
 package com.testify.ecfeed.ui.dialogs;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-
 import org.eclipse.swt.widgets.Shell;
 
-import com.testify.ecfeed.core.generators.api.IGenerator;
-import com.testify.ecfeed.core.model.ChoiceNode;
-import com.testify.ecfeed.core.model.Constraint;
 import com.testify.ecfeed.core.model.MethodNode;
 import com.testify.ecfeed.ui.common.utils.IFileInfoProvider;
 
@@ -29,37 +22,10 @@ public class SetupDialogGenerateTestSuite extends SetupDialogGenerator {
 		super(parentShell, method, false, fileInfoProvider);
 	}
 
-	public IGenerator<ChoiceNode> getSelectedGenerator() {
-		return super.selectedGenerator();
-	}
-
-	public List<List<ChoiceNode>> getAlgorithmInput() {
-		return super.algorithmInput();
-	}
-
-	public Collection<Constraint> getConstraints() {
-		return super.constraints();
-	}
-
-	public String getTestSuiteName() {
-		return super.testSuiteName();
-	}
-
-	public Map<String, Object> getGeneratorParameters() {
-		return super.generatorParameters();
-	}
-
 	@Override
 	protected String getDialogTitle() {
 		final String DIALOG_GENERATE_TEST_SUITE_TITLE = "Generate test suite";
 		return DIALOG_GENERATE_TEST_SUITE_TITLE;
-	}
-
-	@Override
-	protected String getDialogMessage() {
-		final String DIALOG_GENERATE_TEST_SUITE_MESSAGE 
-		= "Select test suite name and algorithm for test suite generation";
-		return DIALOG_GENERATE_TEST_SUITE_MESSAGE;
 	}
 
 	@Override

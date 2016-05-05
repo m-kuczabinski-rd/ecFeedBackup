@@ -27,6 +27,12 @@ public class SetupDialogExportOnline extends SetupDialogOnline {
 	}
 
 	@Override
+	protected String getDialogMessage() {
+		final String DIALOG_EXECUTE_ONLINE_MESSAGE = "Configure test data generation and export.";
+		return DIALOG_EXECUTE_ONLINE_MESSAGE;
+	}	
+
+	@Override
 	protected int getContent() {
 		return CONSTRAINTS_COMPOSITE | CHOICES_COMPOSITE | GENERATOR_SELECTION_COMPOSITE | TEST_CASES_EXPORT_COMPOSITE;
 	}

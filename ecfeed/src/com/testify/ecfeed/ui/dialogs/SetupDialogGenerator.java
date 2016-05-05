@@ -224,23 +224,23 @@ public abstract class SetupDialogGenerator extends TitleAreaDialog {
 		fAdvancedDialogVisited = false;
 	}
 
-	protected  List<List<ChoiceNode>> algorithmInput(){
+	public List<List<ChoiceNode>> getAlgorithmInput() {
 		return fAlgorithmInput;
 	}
 
-	protected  Collection<Constraint> constraints(){
+	public Collection<Constraint> getConstraints() {
 		return fConstraints;
 	}
 
-	protected  String testSuiteName(){
+	public String getTestSuiteName() {
 		return fTestSuiteName;
 	}
 
-	protected  IGenerator<ChoiceNode> selectedGenerator() {
+	public IGenerator<ChoiceNode> getSelectedGenerator() {
 		return fSelectedGenerator;
 	}
 
-	protected  Map<String, Object> generatorParameters() {
+	public Map<String, Object> getGeneratorParameters() {
 		return fParameters;
 	}
 
@@ -336,8 +336,13 @@ public abstract class SetupDialogGenerator extends TitleAreaDialog {
 	}
 
 	protected abstract String getDialogTitle();
-	protected abstract String getDialogMessage();
 	protected abstract int getContent();
+
+	protected String getDialogMessage() {
+		final String DIALOG_GENERATE_TEST_SUITE_MESSAGE 
+		= "Configure test data generation.";
+		return DIALOG_GENERATE_TEST_SUITE_MESSAGE;
+	}
 
 	private boolean isContentFlagOn(int flag) {
 

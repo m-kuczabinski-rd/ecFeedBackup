@@ -11,15 +11,8 @@
 
 package com.testify.ecfeed.ui.dialogs;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-
 import org.eclipse.swt.widgets.Shell;
 
-import com.testify.ecfeed.core.generators.api.IGenerator;
-import com.testify.ecfeed.core.model.ChoiceNode;
-import com.testify.ecfeed.core.model.Constraint;
 import com.testify.ecfeed.core.model.MethodNode;
 import com.testify.ecfeed.ui.common.utils.IFileInfoProvider;
 
@@ -28,28 +21,4 @@ public abstract class SetupDialogOnline extends SetupDialogGenerator {
 	public SetupDialogOnline(Shell parentShell, MethodNode method, IFileInfoProvider fileInfoProvider) {
 		super(parentShell, method, true, fileInfoProvider);
 	}
-
-	public IGenerator<ChoiceNode> getSelectedGenerator() {
-		return super.selectedGenerator();
-	}
-
-	public List<List<ChoiceNode>> getAlgorithmInput() {
-		return super.algorithmInput();
-	}
-
-	public Collection<Constraint> getConstraints() {
-		return super.constraints();
-	}
-
-	public Map<String, Object> getGeneratorParameters() {
-		return super.generatorParameters();
-	}
-
-	@Override
-	protected String getDialogMessage() {
-		final String DIALOG_EXECUTE_ONLINE_MESSAGE = 
-				"Setup the test data generator and select which constraints and choices shall be considered for generating test cases";
-		return DIALOG_EXECUTE_ONLINE_MESSAGE;
-	}	
-
 }
