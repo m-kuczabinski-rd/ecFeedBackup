@@ -45,13 +45,24 @@ import com.testify.ecfeed.ui.common.utils.EclipseProjectHelper;
 import com.testify.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.testify.ecfeed.ui.dialogs.GeneratorProgressMonitorDialog;
 import com.testify.ecfeed.ui.dialogs.SetupDialogOnline;
+import com.testify.ecfeed.ui.dialogs.basic.ErrorDialog;
 
 public abstract class AbstractOnlineSupport extends TestExecutionSupport{
+
+	protected enum RunMode {
+		TEST_LOCALLY,
+		TEST_ON_ANDROID,
+		EXPORT
+	}
 
 	private MethodNode fTarget;
 	private JavaTestRunner fRunner;
 	private IFileInfoProvider fFileInfoProvider;
-	private boolean fRunOnAndroid;
+	private RunMode fRunMode;
+	private String fHeaderTemplate;
+	private String fTestCaseTemplate;
+	private String fFooterTemplate;
+	private String fTargetFile;
 
 	private class ParametrizedTestRunnable implements IRunnableWithProgress{
 
@@ -75,7 +86,7 @@ public abstract class AbstractOnlineSupport extends TestExecutionSupport{
 				throws InvocationTargetException, InterruptedException {
 
 			try{
-				if (fRunOnAndroid) {
+				if (fRunMode == RunMode.TEST_ON_ANDROID) {
 					DeviceCheckerExt.checkIfOneDeviceAttached();
 					EclipseProjectHelper projectHelper = new EclipseProjectHelper(fFileInfoProvider); 
 					new ApkInstallerExt(projectHelper).installApplicationsIfModified();
@@ -108,7 +119,7 @@ public abstract class AbstractOnlineSupport extends TestExecutionSupport{
 		@Override
 		public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException
 		{
-			if (fRunOnAndroid) {
+			if (fRunMode == RunMode.TEST_ON_ANDROID) {
 				runAndroidTest(monitor);
 				return;
 			}
@@ -162,21 +173,14 @@ public abstract class AbstractOnlineSupport extends TestExecutionSupport{
 	}
 
 	public AbstractOnlineSupport(
-			MethodNode target, 
 			ITestMethodInvoker testMethodInvoker, 
-			IFileInfoProvider fileInfoProvider, 
-			boolean runOnAndroid){
-		this(testMethodInvoker, fileInfoProvider, runOnAndroid);
-		setTarget(target);
-	}
-
-	public AbstractOnlineSupport(
-			ITestMethodInvoker testMethodInvoker, IFileInfoProvider fileInfoProvider, boolean runOnAndroid) {
+			IFileInfoProvider fileInfoProvider,
+			RunMode runMode) {
 		ILoaderProvider loaderProvider = new EclipseLoaderProvider();
 		ModelClassLoader loader = loaderProvider.getLoader(true, null);
 		fRunner = new JavaTestRunner(loader, testMethodInvoker);
 		fFileInfoProvider = fileInfoProvider;
-		fRunOnAndroid = runOnAndroid;
+		fRunMode = runMode;
 	}
 
 	public void setTarget(MethodNode target) {
@@ -184,7 +188,7 @@ public abstract class AbstractOnlineSupport extends TestExecutionSupport{
 			fRunner.setTarget(target);
 			fTarget = target;
 		} catch (RunnerException e) {
-			MessageDialog.openError(Display.getCurrent().getActiveShell(), Messages.DIALOG_TEST_EXECUTION_PROBLEM_TITLE, e.getMessage());
+			ErrorDialog.open(Messages.DIALOG_TEST_EXECUTION_PROBLEM_TITLE, e.getMessage());
 		}
 	}
 
@@ -196,18 +200,20 @@ public abstract class AbstractOnlineSupport extends TestExecutionSupport{
 		if (fTarget.getParameters().size() > 0) {
 			executeParametrizedTest();
 		} else {
-			executeNonParametrizedTest();
+			if (fRunMode != RunMode.EXPORT) {
+				executeNonParametrizedTest();
+			}
 		}
 		System.setOut(currentOut);
 	}
 
 	protected abstract SetupDialogOnline createSetupDialogOnline(
 			Shell activeShell, MethodNode methodNode, IFileInfoProvider fileInfoProvider);
-	
+
 	private void executeParametrizedTest() {
 		SetupDialogOnline dialog = 
 				createSetupDialogOnline(Display.getCurrent().getActiveShell(), fTarget, fFileInfoProvider);
-		
+
 		if(dialog.open() == IDialogConstants.OK_ID) {
 			IGenerator<ChoiceNode> selectedGenerator = dialog.getSelectedGenerator();
 			List<List<ChoiceNode>> algorithmInput = dialog.getAlgorithmInput();
@@ -216,8 +222,32 @@ public abstract class AbstractOnlineSupport extends TestExecutionSupport{
 			Map<String, Object> parameters = dialog.getGeneratorParameters();
 
 			executeGeneratedTests(selectedGenerator, algorithmInput, constraintList, parameters);
-			displayTestStatusDialog();
+
+			if (fRunMode != RunMode.EXPORT) {
+				displayTestStatusDialog();
+			}
+
+			fHeaderTemplate = dialog.getHeaderTemplate();
+			fTestCaseTemplate = dialog.getTestCaseTemplate();
+			fFooterTemplate = dialog.getFooterTemplate();
+			fTargetFile = dialog.getTargetFile();
 		}
+	}
+
+	public String getHeaderTemplate() {
+		return fHeaderTemplate;
+	}
+
+	public String getTestCaseTemplate() {
+		return fTestCaseTemplate;
+	}
+
+	public String getFooterTemplate() {
+		return fFooterTemplate;
+	}
+
+	public String getTargetFile() {
+		return fTargetFile;
 	}
 
 	private void executeGeneratedTests(IGenerator<ChoiceNode> generator,
@@ -227,6 +257,7 @@ public abstract class AbstractOnlineSupport extends TestExecutionSupport{
 
 		GeneratorProgressMonitorDialog progressDialog = 
 				new GeneratorProgressMonitorDialog(Display.getCurrent().getActiveShell(), generator);
+
 		ParametrizedTestRunnable runnable = new ParametrizedTestRunnable(generator, input, constraints, parameters);
 		progressDialog.open();
 		try {

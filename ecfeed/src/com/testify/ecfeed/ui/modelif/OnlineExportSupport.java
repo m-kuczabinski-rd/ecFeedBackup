@@ -10,15 +10,9 @@ import com.testify.ecfeed.ui.dialogs.SetupDialogOnline;
 
 public class OnlineExportSupport extends AbstractOnlineSupport{
 
-	public OnlineExportSupport(MethodNode target,
-			ITestMethodInvoker testMethodInvoker,
-			IFileInfoProvider fileInfoProvider, boolean runOnAndroid) {
-		super(target, testMethodInvoker, fileInfoProvider, runOnAndroid);
-	}
-
 	public OnlineExportSupport(ITestMethodInvoker testMethodInvoker,
-			IFileInfoProvider fileInfoProvider, boolean runOnAndroid) {
-		super(testMethodInvoker, fileInfoProvider, runOnAndroid);
+			IFileInfoProvider fileInfoProvider) {
+		super(testMethodInvoker, fileInfoProvider, RunMode.EXPORT);
 	}
 
 	@Override

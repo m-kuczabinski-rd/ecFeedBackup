@@ -62,6 +62,7 @@ import com.testify.ecfeed.core.model.Constraint;
 import com.testify.ecfeed.core.model.ConstraintNode;
 import com.testify.ecfeed.core.model.MethodNode;
 import com.testify.ecfeed.core.model.MethodParameterNode;
+import com.testify.ecfeed.core.serialization.export.TestCasesExportParser;
 import com.testify.ecfeed.ui.common.Constants;
 import com.testify.ecfeed.ui.common.EclipseImplementationStatusResolver;
 import com.testify.ecfeed.ui.common.Messages;
@@ -92,6 +93,12 @@ public abstract class SetupDialogGenerator extends TitleAreaDialog {
 	private DialogObjectToolkit fDialogObjectToolkit;
 	private Text fTargetFileText;
 	private int fContent;
+	private String fHeaderTemplate;
+	private String fTestCaseTemplate;
+	private String fFooterTemplate;
+	private String fTargetFile;
+	private boolean fAdvancedDialogVisited;
+
 
 	public final static int CONSTRAINTS_COMPOSITE = 1;
 	public final static int CHOICES_COMPOSITE = 1 << 1;
@@ -209,6 +216,12 @@ public abstract class SetupDialogGenerator extends TitleAreaDialog {
 		fStatusResolver = new EclipseImplementationStatusResolver(fileInfoProvider);
 		fFileInfoProvider = fileInfoProvider;
 		fDialogObjectToolkit = DialogObjectToolkit.getInstance();
+
+		fHeaderTemplate = null;
+		fTestCaseTemplate = null;
+		fFooterTemplate = null;
+		fTargetFile = null;
+		fAdvancedDialogVisited = false;
 	}
 
 	protected  List<List<ChoiceNode>> algorithmInput(){
@@ -238,6 +251,20 @@ public abstract class SetupDialogGenerator extends TitleAreaDialog {
 
 	@Override
 	public void okPressed(){
+		if (fTargetFileText != null) {
+			fTargetFile = fTargetFileText.getText();
+		} else {
+			fTargetFile = null;
+		}
+
+		if (!fAdvancedDialogVisited) {
+			TestCasesExportParser parser = new TestCasesExportParser(fMethod.getParametersCount());
+
+			fHeaderTemplate = parser.createDefaultHeaderTemplate();
+			fTestCaseTemplate = parser.createDefaultTestCaseTemplate();
+			fFooterTemplate = parser.createDefaultFooterTemplate();
+		}
+
 		saveAlgorithmInput();
 		saveConstraints();
 		super.okPressed();
@@ -313,7 +340,7 @@ public abstract class SetupDialogGenerator extends TitleAreaDialog {
 	protected abstract int getContent();
 
 	private boolean isContentFlagOn(int flag) {
-		
+
 		if((fContent & flag) > 0){
 			return true;
 		}
@@ -536,9 +563,30 @@ public abstract class SetupDialogGenerator extends TitleAreaDialog {
 			if(dialog.open() != IDialogConstants.OK_ID){
 				return;
 			}
+
+			fHeaderTemplate = dialog.getHeaderTemplate();
+			fTestCaseTemplate = dialog.getTestCaseTemplate();
+			fFooterTemplate = dialog.getFooterTemplate();
+			fAdvancedDialogVisited = true;
 		}
 	}
-	
+
+	public String getHeaderTemplate() {
+		return fHeaderTemplate;
+	}
+
+	public String getTestCaseTemplate() {
+		return fTestCaseTemplate;
+	}
+
+	public String getFooterTemplate() {
+		return fFooterTemplate;
+	}
+
+	public String getTargetFile() {
+		return fTargetFile;
+	}
+
 	class ExportFileModifyListener implements ModifyListener {
 		@Override
 		public void modifyText(ModifyEvent e) {

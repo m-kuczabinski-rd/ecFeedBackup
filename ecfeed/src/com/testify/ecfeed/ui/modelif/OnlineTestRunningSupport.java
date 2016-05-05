@@ -10,15 +10,17 @@ import com.testify.ecfeed.ui.dialogs.SetupDialogOnline;
 
 public class OnlineTestRunningSupport extends AbstractOnlineSupport{
 
-	public OnlineTestRunningSupport(MethodNode target,
-			ITestMethodInvoker testMethodInvoker,
-			IFileInfoProvider fileInfoProvider, boolean runOnAndroid) {
-		super(target, testMethodInvoker, fileInfoProvider, runOnAndroid);
-	}
-
 	public OnlineTestRunningSupport(ITestMethodInvoker testMethodInvoker,
 			IFileInfoProvider fileInfoProvider, boolean runOnAndroid) {
-		super(testMethodInvoker, fileInfoProvider, runOnAndroid);
+		super(testMethodInvoker, fileInfoProvider, getRunMode(runOnAndroid));
+	}
+
+	private static RunMode getRunMode(boolean runOnAndroid) {
+		if (runOnAndroid) {
+			return RunMode.TEST_ON_ANDROID;
+		}
+
+		return RunMode.TEST_LOCALLY;
 	}
 
 	@Override

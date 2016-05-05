@@ -46,6 +46,7 @@ import com.testify.ecfeed.core.model.MethodParameterNode;
 import com.testify.ecfeed.core.model.StaticStatement;
 import com.testify.ecfeed.core.model.TestCaseNode;
 import com.testify.ecfeed.core.runner.ITestMethodInvoker;
+import com.testify.ecfeed.core.runner.java.ExportTestMethodInvoker;
 import com.testify.ecfeed.core.runner.java.JUnitTestMethodInvoker;
 import com.testify.ecfeed.core.serialization.export.TestCasesExporter;
 import com.testify.ecfeed.core.utils.EcException;
@@ -64,11 +65,10 @@ import com.testify.ecfeed.ui.dialogs.TestCasesExportDialog;
 import com.testify.ecfeed.ui.dialogs.RenameTestSuiteDialog;
 import com.testify.ecfeed.ui.dialogs.SelectCompatibleMethodDialog;
 import com.testify.ecfeed.ui.dialogs.TestCasesExportDialog.FileCompositeVisibility;
+import com.testify.ecfeed.ui.dialogs.basic.ErrorDialog;
 import com.testify.ecfeed.ui.dialogs.basic.InfoDialog;
 
 public class MethodInterface extends ParametersParentInterface {
-
-	private static String DIALOG_EXPORT_TEST_DATA_PROBLEM_TITLE = "DIALOG_EXPORT_TEST_DATA_PROBLEM_TITLE";
 
 	private IFileInfoProvider fFileInfoProvider;
 	private ITypeAdapterProvider fAdapterProvider;
@@ -233,19 +233,27 @@ public class MethodInterface extends ParametersParentInterface {
 	}
 
 	public void executeOnlineExport(IFileInfoProvider fileInfoProvider) throws EcException {
+
 		ClassNode classNode = getTarget().getClassNode();
 
 		if (!isValidClassConfiguration(classNode))
 			return;
 
-		OnlineExportSupport runner = 
-				new OnlineExportSupport(
-						createTestMethodInvoker(fileInfoProvider), fileInfoProvider, classNode.getRunOnAndroid());
+		ExportTestMethodInvoker methodInvoker = new ExportTestMethodInvoker(getTarget());
 
-		runner.setTarget(getTarget());
-		runner.proceed();
+		OnlineExportSupport exportSupport = 
+				new OnlineExportSupport(methodInvoker, fileInfoProvider);
+
+		exportSupport.setTarget(getTarget());
+		exportSupport.proceed();
+
+		runExport(
+				methodInvoker.getTestCasesToExport(), 
+				exportSupport.getHeaderTemplate(), 
+				exportSupport.getTestCaseTemplate(), 
+				exportSupport.getFooterTemplate(), 
+				exportSupport.getTargetFile());
 	}
-
 
 	public void executeStaticTests(Collection<TestCaseNode> testCases, IFileInfoProvider fileInfoProvider) throws EcException {
 		ClassNode classNode = getTarget().getClassNode();
@@ -273,25 +281,31 @@ public class MethodInterface extends ParametersParentInterface {
 			return;
 		}
 
+		runExport(
+				checkedTestCases, 
+				dialog.getHeaderTemplate(), dialog.getTestCaseTemplate(), dialog.getFooterTemplate(), 
+				dialog.getTargetFile());
+	}
+
+	private void runExport(
+			Collection<TestCaseNode> testCases, 
+			String headerTemplate, String testCaseTemplate, String footerTemplate, 
+			String targetFile) {
+
 		try {
 			TestCasesExporter exporter = 
-					new TestCasesExporter(
-							dialog.getHeaderTemplate(), 
-							dialog.getTestCaseTemplate(), 
-							dialog.getFooterTemplate());
+					new TestCasesExporter(headerTemplate, testCaseTemplate, footerTemplate);
 
-			exporter.runExport(getTarget(), checkedTestCases, dialog.getTargetFile());
-
+			exporter.runExport(getTarget(), testCases, targetFile);
 		} catch (Exception e) {
-			MessageDialog.openError(Display.getCurrent().getActiveShell(),
-					DIALOG_EXPORT_TEST_DATA_PROBLEM_TITLE,
-					e.getMessage());
+			ErrorDialog.open(e.getMessage());
 			return;
 		}
 
 		final String EXPORT_FINISHED = "Export finished.";
 		InfoDialog.open(EXPORT_FINISHED);
-	}	
+	}
+
 
 	private boolean isValidClassConfiguration(ClassNode classNode) {
 		if (classNode.getRunOnAndroid() && emptyAndroidBaseRunner(classNode)) {
