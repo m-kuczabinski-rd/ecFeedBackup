@@ -10,6 +10,8 @@ package com.testify.ecfeed.ui.dialogs;
 
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.TitleAreaDialog;
+import org.eclipse.swt.events.HelpEvent;
+import org.eclipse.swt.events.HelpListener;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -46,6 +48,8 @@ public class TestCasesExportDialog extends TitleAreaDialog {
 			FileCompositeVisibility fileCompositeVisibility,
 			String initialTemplate) {
 		super(EclipseHelper.getActiveShell());
+		setHelpAvailable(true);
+		setDialogHelpAvailable(false);
 
 		fFileCompositeVisibility = fileCompositeVisibility;
 		fTemplate = initialTemplate;
@@ -69,6 +73,15 @@ public class TestCasesExportDialog extends TitleAreaDialog {
 
 		Composite dialogAreaComposite = (Composite) super
 				.createDialogArea(parentComposite);
+
+		dialogAreaComposite.addHelpListener(new HelpListener() {
+
+			@Override
+			public void helpRequested(HelpEvent e) {
+				InfoDialog.open(readHelpFromResource());
+			}
+		});
+
 		Composite childComposite = fDialogObjectToolkit.createGridComposite(
 				dialogAreaComposite, 1);
 
@@ -76,10 +89,19 @@ public class TestCasesExportDialog extends TitleAreaDialog {
 
 		if (fFileCompositeVisibility == FileCompositeVisibility.VISIBLE) {
 			createTargetFileComposite(childComposite);
-			fTargetFileText.setFocus();
 		}
 
+		setFocusedControl();
+
 		return dialogAreaComposite;
+	}
+
+	private void setFocusedControl() {
+		if (fFileCompositeVisibility == FileCompositeVisibility.VISIBLE) {
+			fTargetFileText.setFocus();
+		} else {
+			fTemplateText.setFocus();
+		}
 	}
 
 	public void setDialogTitle(TitleAreaDialog dialog) {
@@ -108,28 +130,26 @@ public class TestCasesExportDialog extends TitleAreaDialog {
 
 	private void createTemplateLabelAndButtonsComposite(
 			Composite parentComposite) {
-		Composite gridComposite = fDialogObjectToolkit.createGridComposite(
-				parentComposite, 3);
+		Composite fillComposite = fDialogObjectToolkit
+				.createFillComposite(parentComposite);
 
 		final String DEFINE_TEMPLATE = "Template for data export";
-		fDialogObjectToolkit.createLabel(gridComposite, DEFINE_TEMPLATE);
-		fDialogObjectToolkit.createSpacer(gridComposite, 40);
-		createButtonsComposite(gridComposite);
+		fDialogObjectToolkit.createLabel(fillComposite, DEFINE_TEMPLATE);
+		fDialogObjectToolkit.createSpacer(fillComposite, 40);
+		createButtonsComposite(fillComposite);
 	}
 
 	private void createButtonsComposite(Composite parentComposite) {
 		Composite buttonComposite = fDialogObjectToolkit
 				.createFillComposite(parentComposite);
 
-		fDialogObjectToolkit.createButton(buttonComposite, "Help...",
-				new TestButtonSelectionAdapter());
 		fDialogObjectToolkit.createButton(buttonComposite, "Load...",
 				new OpenButtonSelectionAdapter());
 		fDialogObjectToolkit.createButton(buttonComposite, "Save As...",
 				new SaveAsButtonSelectionAdapter());
 	}
 
-	private String readTemplateFromResource() {
+	private String readHelpFromResource() {
 		final String DEFAULT_TEMPLATE_TEXT_FILE = "res/TestCasesExportTemplate.txt";
 		String templateText = null;
 
@@ -206,17 +226,14 @@ public class TestCasesExportDialog extends TitleAreaDialog {
 		okButton.setEnabled(enabled);
 	}
 
-	class TestButtonSelectionAdapter extends SelectionAdapter {
-		@Override
-		public void widgetSelected(SelectionEvent e) {
-			InfoDialog.open(readTemplateFromResource());
-		}
-	}
-
 	class OpenButtonSelectionAdapter extends SelectionAdapter {
 		@Override
 		public void widgetSelected(SelectionEvent e) {
-			fTemplateText.setText(FileOpenAndReadDialog.open());
+			String text = FileOpenAndReadDialog.open();
+
+			if (text != null) {
+				fTemplateText.setText(text);
+			}
 		}
 	}
 
