@@ -108,17 +108,24 @@ public class TestCasesExportDialog extends TitleAreaDialog {
 
 	private void createTemplateLabelAndButtonsComposite(
 			Composite parentComposite) {
-		Composite childComposite = fDialogObjectToolkit.createGridComposite(
-				parentComposite, 5);
+		Composite gridComposite = fDialogObjectToolkit.createGridComposite(
+				parentComposite, 3);
 
 		final String DEFINE_TEMPLATE = "Template for data export";
-		fDialogObjectToolkit.createLabel(childComposite, DEFINE_TEMPLATE);
-		fDialogObjectToolkit.createSpacer(childComposite, 40);
-		fDialogObjectToolkit.createButton(childComposite, "Help...",
+		fDialogObjectToolkit.createLabel(gridComposite, DEFINE_TEMPLATE);
+		fDialogObjectToolkit.createSpacer(gridComposite, 40);
+		createButtonsComposite(gridComposite);
+	}
+
+	private void createButtonsComposite(Composite parentComposite) {
+		Composite buttonComposite = fDialogObjectToolkit
+				.createFillComposite(parentComposite);
+
+		fDialogObjectToolkit.createButton(buttonComposite, "Help...",
 				new TestButtonSelectionAdapter());
-		fDialogObjectToolkit.createButton(childComposite, "Open...",
+		fDialogObjectToolkit.createButton(buttonComposite, "Load...",
 				new OpenButtonSelectionAdapter());
-		fDialogObjectToolkit.createButton(childComposite, "Save As...",
+		fDialogObjectToolkit.createButton(buttonComposite, "Save As...",
 				new SaveAsButtonSelectionAdapter());
 	}
 
