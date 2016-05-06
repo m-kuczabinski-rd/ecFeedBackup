@@ -8,16 +8,19 @@ import com.testify.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.testify.ecfeed.ui.dialogs.SetupDialogExportOnline;
 import com.testify.ecfeed.ui.dialogs.SetupDialogOnline;
 
-public class OnlineExportSupport extends AbstractOnlineSupport{
+public class OnlineExportSupport extends AbstractOnlineSupport {
 
 	public OnlineExportSupport(ITestMethodInvoker testMethodInvoker,
-			IFileInfoProvider fileInfoProvider) {
-		super(testMethodInvoker, fileInfoProvider, RunMode.EXPORT);
+			IFileInfoProvider fileInfoProvider, String initialExportTemplate) {
+		super(testMethodInvoker, fileInfoProvider, initialExportTemplate,
+				RunMode.EXPORT);
 	}
 
 	@Override
 	protected SetupDialogOnline createSetupDialogOnline(Shell activeShell,
-			MethodNode methodNode, IFileInfoProvider fileInfoProvider) {
-		return new SetupDialogExportOnline(activeShell, methodNode, fileInfoProvider);
+			MethodNode methodNode, IFileInfoProvider fileInfoProvider,
+			String initialExportTemplate) {
+		return new SetupDialogExportOnline(activeShell, methodNode,
+				fileInfoProvider, initialExportTemplate);
 	}
 }

@@ -16,8 +16,8 @@ import com.testify.ecfeed.ui.common.utils.IFileInfoProvider;
 public class SetupDialogExportOnline extends SetupDialogOnline {
 
 	public SetupDialogExportOnline(Shell parentShell, MethodNode method,
-			IFileInfoProvider fileInfoProvider) {
-		super(parentShell, method, fileInfoProvider);
+			IFileInfoProvider fileInfoProvider, String initialExportTemplate) {
+		super(parentShell, method, fileInfoProvider, initialExportTemplate);
 	}
 
 	@Override
@@ -30,11 +30,12 @@ public class SetupDialogExportOnline extends SetupDialogOnline {
 	protected String getDialogMessage() {
 		final String DIALOG_EXECUTE_ONLINE_MESSAGE = "Configure test data generation and export.";
 		return DIALOG_EXECUTE_ONLINE_MESSAGE;
-	}	
+	}
 
 	@Override
 	protected int getContent() {
-		return CONSTRAINTS_COMPOSITE | CHOICES_COMPOSITE | GENERATOR_SELECTION_COMPOSITE | TEST_CASES_EXPORT_COMPOSITE;
+		return CONSTRAINTS_COMPOSITE | CHOICES_COMPOSITE
+				| GENERATOR_SELECTION_COMPOSITE | TEST_CASES_EXPORT_COMPOSITE;
 	}
 
 }

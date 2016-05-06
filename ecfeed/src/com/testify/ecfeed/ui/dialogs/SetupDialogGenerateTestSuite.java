@@ -18,8 +18,9 @@ import com.testify.ecfeed.ui.common.utils.IFileInfoProvider;
 
 public class SetupDialogGenerateTestSuite extends SetupDialogGenerator {
 
-	public SetupDialogGenerateTestSuite(Shell parentShell, MethodNode method, IFileInfoProvider fileInfoProvider) {
-		super(parentShell, method, false, fileInfoProvider);
+	public SetupDialogGenerateTestSuite(Shell parentShell, MethodNode method,
+			IFileInfoProvider fileInfoProvider) {
+		super(parentShell, method, false, fileInfoProvider, null);
 	}
 
 	@Override
@@ -30,6 +31,7 @@ public class SetupDialogGenerateTestSuite extends SetupDialogGenerator {
 
 	@Override
 	protected int getContent() {
-		return CONSTRAINTS_COMPOSITE | CHOICES_COMPOSITE | TEST_SUITE_NAME_COMPOSITE | GENERATOR_SELECTION_COMPOSITE;
-	}	
+		return CONSTRAINTS_COMPOSITE | CHOICES_COMPOSITE
+				| TEST_SUITE_NAME_COMPOSITE | GENERATOR_SELECTION_COMPOSITE;
+	}
 }

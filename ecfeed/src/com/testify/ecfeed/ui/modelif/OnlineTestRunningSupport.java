@@ -8,11 +8,12 @@ import com.testify.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.testify.ecfeed.ui.dialogs.SetupDialogExecuteOnline;
 import com.testify.ecfeed.ui.dialogs.SetupDialogOnline;
 
-public class OnlineTestRunningSupport extends AbstractOnlineSupport{
+public class OnlineTestRunningSupport extends AbstractOnlineSupport {
 
 	public OnlineTestRunningSupport(ITestMethodInvoker testMethodInvoker,
 			IFileInfoProvider fileInfoProvider, boolean runOnAndroid) {
-		super(testMethodInvoker, fileInfoProvider, getRunMode(runOnAndroid));
+		super(testMethodInvoker, fileInfoProvider, null,
+				getRunMode(runOnAndroid));
 	}
 
 	private static RunMode getRunMode(boolean runOnAndroid) {
@@ -25,7 +26,10 @@ public class OnlineTestRunningSupport extends AbstractOnlineSupport{
 
 	@Override
 	protected SetupDialogOnline createSetupDialogOnline(Shell activeShell,
-			MethodNode methodNode, IFileInfoProvider fileInfoProvider) {
-		return new SetupDialogExecuteOnline(activeShell, methodNode, fileInfoProvider);
+			MethodNode methodNode, IFileInfoProvider fileInfoProvider,
+			String initialExportTemplate) {
+		return new SetupDialogExecuteOnline(activeShell, methodNode,
+				fileInfoProvider);
 	}
+
 }

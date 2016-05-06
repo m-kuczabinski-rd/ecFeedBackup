@@ -21,7 +21,6 @@ import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Text;
 
 import com.testify.ecfeed.core.resources.ResourceHelper;
-import com.testify.ecfeed.core.serialization.export.TestCasesExportParser;
 import com.testify.ecfeed.ui.dialogs.basic.DialogObjectToolkit;
 import com.testify.ecfeed.ui.dialogs.basic.ErrorDialog;
 import com.testify.ecfeed.ui.dialogs.basic.ExceptionCatchDialog;
@@ -32,32 +31,32 @@ import com.testify.ecfeed.utils.EclipseHelper;
 
 public class TestCasesExportDialog extends TitleAreaDialog {
 
+	private String fTemplate;
 	private Text fTemplateText;
-	private TestCasesExportParser fExportParser;
 	private Text fTargetFileText;
 	private String fTargetFile;
 	private DialogObjectToolkit fDialogObjectToolkit;
 	private FileCompositeVisibility fFileCompositeVisibility;
-	
+
 	public enum FileCompositeVisibility {
-		VISIBLE,
-		NOT_VISIBLE
+		VISIBLE, NOT_VISIBLE
 	}
 
 	public TestCasesExportDialog(
-			int methodParametersCount, 
-			FileCompositeVisibility 
-			fileCompositeVisibility) {
+			FileCompositeVisibility fileCompositeVisibility,
+			String initialTemplate) {
 		super(EclipseHelper.getActiveShell());
-		fExportParser = new TestCasesExportParser(methodParametersCount);
-		fDialogObjectToolkit = DialogObjectToolkit.getInstance();
+
 		fFileCompositeVisibility = fileCompositeVisibility;
+		fTemplate = initialTemplate;
+
+		fDialogObjectToolkit = DialogObjectToolkit.getInstance();
 	}
 
 	@Override
 	public void create() {
 		super.create();
-		
+
 		if (fFileCompositeVisibility == FileCompositeVisibility.VISIBLE) {
 			setOkEnabled(false);
 		}
@@ -68,11 +67,13 @@ public class TestCasesExportDialog extends TitleAreaDialog {
 		setDialogTitle(this);
 		setDialogMessage(this);
 
-		Composite dialogAreaComposite = (Composite) super.createDialogArea(parentComposite);
-		Composite childComposite = fDialogObjectToolkit.createGridComposite(dialogAreaComposite, 1);
+		Composite dialogAreaComposite = (Composite) super
+				.createDialogArea(parentComposite);
+		Composite childComposite = fDialogObjectToolkit.createGridComposite(
+				dialogAreaComposite, 1);
 
 		createTemplateTextComposite(childComposite);
-		
+
 		if (fFileCompositeVisibility == FileCompositeVisibility.VISIBLE) {
 			createTargetFileComposite(childComposite);
 			fTargetFileText.setFocus();
@@ -86,7 +87,7 @@ public class TestCasesExportDialog extends TitleAreaDialog {
 		setTitle(EXPORT_TEST_DATA_TITLE);
 	}
 
-	public void setDialogMessage(TitleAreaDialog dialog)	{
+	public void setDialogMessage(TitleAreaDialog dialog) {
 		final String EXPORT_TEST_DATA_MESSAGE = "Define template for data export and select target file";
 		setMessage(EXPORT_TEST_DATA_MESSAGE);
 	}
@@ -97,21 +98,28 @@ public class TestCasesExportDialog extends TitleAreaDialog {
 	}
 
 	private void createTemplateTextComposite(Composite parentComposite) {
-		Composite childComposite = fDialogObjectToolkit.createGridComposite(parentComposite, 1);
+		Composite childComposite = fDialogObjectToolkit.createGridComposite(
+				parentComposite, 1);
 
 		createTemplateLabelAndButtonsComposite(childComposite);
-		fTemplateText = fDialogObjectToolkit.createGridText(childComposite, 150, fExportParser.createInitialText());		
+		fTemplateText = fDialogObjectToolkit.createGridText(childComposite,
+				150, fTemplate);
 	}
 
-	private void createTemplateLabelAndButtonsComposite(Composite parentComposite) {
-		Composite childComposite = fDialogObjectToolkit.createGridComposite(parentComposite, 5);
+	private void createTemplateLabelAndButtonsComposite(
+			Composite parentComposite) {
+		Composite childComposite = fDialogObjectToolkit.createGridComposite(
+				parentComposite, 5);
 
 		final String DEFINE_TEMPLATE = "Template for data export";
 		fDialogObjectToolkit.createLabel(childComposite, DEFINE_TEMPLATE);
 		fDialogObjectToolkit.createSpacer(childComposite, 40);
-		fDialogObjectToolkit.createButton(childComposite, "Help...", new TestButtonSelectionAdapter());
-		fDialogObjectToolkit.createButton(childComposite, "Open...", new OpenButtonSelectionAdapter());
-		fDialogObjectToolkit.createButton(childComposite, "Save As...", new SaveAsButtonSelectionAdapter());
+		fDialogObjectToolkit.createButton(childComposite, "Help...",
+				new TestButtonSelectionAdapter());
+		fDialogObjectToolkit.createButton(childComposite, "Open...",
+				new OpenButtonSelectionAdapter());
+		fDialogObjectToolkit.createButton(childComposite, "Save As...",
+				new SaveAsButtonSelectionAdapter());
 	}
 
 	private String readTemplateFromResource() {
@@ -119,7 +127,8 @@ public class TestCasesExportDialog extends TitleAreaDialog {
 		String templateText = null;
 
 		try {
-			templateText = ResourceHelper.readTextFromResource(this.getClass(), DEFAULT_TEMPLATE_TEXT_FILE);
+			templateText = ResourceHelper.readTextFromResource(this.getClass(),
+					DEFAULT_TEMPLATE_TEXT_FILE);
 		} catch (Exception e) {
 			ExceptionCatchDialog.open("Can not read template", e.getMessage());
 		}
@@ -129,21 +138,13 @@ public class TestCasesExportDialog extends TitleAreaDialog {
 
 	private void createTargetFileComposite(Composite parent) {
 		final String TARGET_FILE = "Target file";
-		fTargetFileText = 
-				fDialogObjectToolkit.createFileSelectionComposite(
-						parent, TARGET_FILE, new FileTextModifyListener());		
+		fTargetFileText = fDialogObjectToolkit.createFileSelectionComposite(
+				parent, TARGET_FILE, new FileTextModifyListener());
 	}
 
 	@Override
-	protected void okPressed(){
-		String template = null;
-
-		if (fTemplateText != null) {
-			template = fTemplateText.getText();
-		}
-
-		fExportParser.createSubTemplates(template);
-		
+	protected void okPressed() {
+		createTemplate();
 		if (fFileCompositeVisibility == FileCompositeVisibility.VISIBLE) {
 			fTargetFile = fTargetFileText.getText();
 		} else {
@@ -152,33 +153,32 @@ public class TestCasesExportDialog extends TitleAreaDialog {
 
 		super.okPressed();
 	}
-	
+
+	private void createTemplate() {
+		if (fTemplateText != null) {
+			fTemplate = fTemplateText.getText();
+		} else {
+			fTemplate = null;
+		}
+	}
+
 	@Override
-	protected void cancelPressed(){
-		fExportParser.createSubTemplates(fExportParser.createInitialText());
+	protected void cancelPressed() {
 		super.cancelPressed();
 	}
 
-	public String getHeaderTemplate(){
-		return fExportParser.getHeaderTemplate();
+	public String getTemplate() {
+		return fTemplate;
 	}
 
-	public String getTestCaseTemplate(){
-		return fExportParser.getTestCaseTemplate();
-	}
-
-	public String getFooterTemplate(){
-		return fExportParser.getFooterTemplate();
-	}
-
-	public String getTargetFile(){
+	public String getTargetFile() {
 		return fTargetFile;
 	}
 
 	private void updateStatus() {
 		if (fTargetFileText == null || fTargetFileText.getText().isEmpty()) {
 			setDialogMessageSelectFile();
-			
+
 			if (fFileCompositeVisibility == FileCompositeVisibility.VISIBLE) {
 				setOkEnabled(false);
 			}
@@ -199,26 +199,26 @@ public class TestCasesExportDialog extends TitleAreaDialog {
 		okButton.setEnabled(enabled);
 	}
 
-	class TestButtonSelectionAdapter extends SelectionAdapter{
+	class TestButtonSelectionAdapter extends SelectionAdapter {
 		@Override
 		public void widgetSelected(SelectionEvent e) {
 			InfoDialog.open(readTemplateFromResource());
 		}
-	}	
+	}
 
-	class OpenButtonSelectionAdapter extends SelectionAdapter{
+	class OpenButtonSelectionAdapter extends SelectionAdapter {
 		@Override
 		public void widgetSelected(SelectionEvent e) {
 			fTemplateText.setText(FileOpenAndReadDialog.open());
 		}
 	}
 
-	class SaveAsButtonSelectionAdapter extends SelectionAdapter{
+	class SaveAsButtonSelectionAdapter extends SelectionAdapter {
 		@Override
 		public void widgetSelected(SelectionEvent e) {
 			FileSaveDialog.open(fTemplateText.getText());
 		}
-	}	
+	}
 
 	class FileTextModifyListener implements ModifyListener {
 		@Override
@@ -227,7 +227,7 @@ public class TestCasesExportDialog extends TitleAreaDialog {
 		}
 	}
 
-	class BrowseSelectionAdapter extends SelectionAdapter{
+	class BrowseSelectionAdapter extends SelectionAdapter {
 		@Override
 		public void widgetSelected(SelectionEvent e) {
 			FileDialog dialog = new FileDialog(getParentShell());

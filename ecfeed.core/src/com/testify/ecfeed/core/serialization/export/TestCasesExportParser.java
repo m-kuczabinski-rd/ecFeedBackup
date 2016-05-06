@@ -7,8 +7,7 @@ import java.util.StringTokenizer;
 import com.testify.ecfeed.core.utils.ExceptionHelper;
 import com.testify.ecfeed.core.utils.StringHelper;
 
-public class TestCasesExportParser
-{
+public class TestCasesExportParser {
 	private int fMethodParametersCount;
 	private String fHeaderTemplate;
 	private String fTestCaseTemplate;
@@ -22,10 +21,10 @@ public class TestCasesExportParser
 		fMethodParametersCount = methodParametersCount;
 	}
 
-	public void createSubTemplates(String template)
-	{
+	public void createSubTemplates(String template) {
 		if (template == null) {
-			ExceptionHelper.reportRuntimeException("Template text must not be empty.");
+			ExceptionHelper
+					.reportRuntimeException("Template text must not be empty.");
 		}
 
 		Map<String, String> templateMap = parseTemplate(template);
@@ -36,52 +35,49 @@ public class TestCasesExportParser
 		return;
 	}
 
-	public String createInitialText() {
-		return 
-				StringHelper.appendNewline(HEADER_TEMPLATE_MARKER) +
-				StringHelper.appendNewline(createDefaultHeaderTemplate()) +
-				StringHelper.appendNewline(TEST_CASE_TEMPLATE_MARKER) +
-				StringHelper.appendNewline(createDefaultTestCaseTemplate()) +
-				StringHelper.appendNewline(FOOTER_TEMPLATE_MARKER);
+	public String createInitialTemplate() {
+		return StringHelper.appendNewline(HEADER_TEMPLATE_MARKER)
+				+ StringHelper.appendNewline(createDefaultHeaderTemplate())
+				+ StringHelper.appendNewline(TEST_CASE_TEMPLATE_MARKER)
+				+ StringHelper.appendNewline(createDefaultTestCaseTemplate())
+				+ StringHelper.appendNewline(FOOTER_TEMPLATE_MARKER);
 	}
 
-	public String getHeaderTemplate(){
+	public String getHeaderTemplate() {
 		return fHeaderTemplate;
 	}
 
-	public String getTestCaseTemplate(){
+	public String getTestCaseTemplate() {
 		return fTestCaseTemplate;
 	}
 
-	public String getFooterTemplate(){
+	public String getFooterTemplate() {
 		return fFooterTemplate;
 	}
 
-	public static String createUserHeaderTemplate(Map<String, String> template)
-	{
-		return StringHelper.removeLastNewline(template.get(HEADER_TEMPLATE_MARKER.toLowerCase()));
+	public static String createUserHeaderTemplate(Map<String, String> template) {
+		return StringHelper.removeLastNewline(template
+				.get(HEADER_TEMPLATE_MARKER.toLowerCase()));
 	}
 
 	public static String createUserTestCaseTemplate(Map<String, String> template) {
-		return StringHelper.removeLastNewline(template.get(TEST_CASE_TEMPLATE_MARKER.toLowerCase()));
+		return StringHelper.removeLastNewline(template
+				.get(TEST_CASE_TEMPLATE_MARKER.toLowerCase()));
 	}
 
 	public static String createUserFooterTemplate(Map<String, String> template) {
-		return StringHelper.removeLastNewline(template.get(FOOTER_TEMPLATE_MARKER.toLowerCase()));
+		return StringHelper.removeLastNewline(template
+				.get(FOOTER_TEMPLATE_MARKER.toLowerCase()));
 	}
 
-	public String createDefaultHeaderTemplate() {
+	private String createDefaultHeaderTemplate() {
 		final String NAME_TAG = "name";
 		return createParameterTemplate(NAME_TAG);
 	}
 
-	public String createDefaultTestCaseTemplate() {
+	private String createDefaultTestCaseTemplate() {
 		final String VALUE_TAG = "value";
 		return createParameterTemplate(VALUE_TAG);
-	}
-
-	public String createDefaultFooterTemplate() {
-		return new String();
 	}
 
 	public static Map<String, String> parseTemplate(String templateText) {
@@ -92,18 +88,19 @@ public class TestCasesExportParser
 		Map<String, String> result = new HashMap<String, String>();
 		StringTokenizer tokenizer = new StringTokenizer(templateText, "\n");
 		String currentSection = "";
-		while(tokenizer.hasMoreTokens()){
+		while (tokenizer.hasMoreTokens()) {
 			String line = tokenizer.nextToken();
-			if(line.matches(SECTION_HEADER_REGEX)){
+			if (line.matches(SECTION_HEADER_REGEX)) {
 				int sectionTitleStart = line.indexOf('[');
 				int sectionTitleStop = line.indexOf(']') + 1;
-				currentSection = line.toLowerCase().substring(sectionTitleStart, sectionTitleStop);
-				if(result.containsKey(currentSection) == false){
+				currentSection = line.toLowerCase().substring(
+						sectionTitleStart, sectionTitleStop);
+				if (result.containsKey(currentSection) == false) {
 					result.put(currentSection, "");
 				}
-			}
-			else if(line.matches(COMMENTED_LINE_REGEX) == false){
-				result.put(currentSection, result.get(currentSection).concat(line + "\n"));
+			} else if (line.matches(COMMENTED_LINE_REGEX) == false) {
+				result.put(currentSection,
+						result.get(currentSection).concat(line + "\n"));
 			}
 		}
 		return result;
@@ -121,5 +118,5 @@ public class TestCasesExportParser
 		}
 
 		return template;
-	}	
+	}
 }

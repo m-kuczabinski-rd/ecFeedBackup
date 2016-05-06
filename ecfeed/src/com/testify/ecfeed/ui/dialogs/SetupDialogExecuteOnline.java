@@ -20,7 +20,7 @@ public class SetupDialogExecuteOnline extends SetupDialogOnline {
 
 	public SetupDialogExecuteOnline(Shell parentShell, MethodNode method,
 			IFileInfoProvider fileInfoProvider) {
-		super(parentShell, method, fileInfoProvider);
+		super(parentShell, method, fileInfoProvider, null);
 	}
 
 	@Override
@@ -31,7 +31,8 @@ public class SetupDialogExecuteOnline extends SetupDialogOnline {
 
 	@Override
 	protected int getContent() {
-		return CONSTRAINTS_COMPOSITE | CHOICES_COMPOSITE | GENERATOR_SELECTION_COMPOSITE;
+		return CONSTRAINTS_COMPOSITE | CHOICES_COMPOSITE
+				| GENERATOR_SELECTION_COMPOSITE;
 	}
 
 }

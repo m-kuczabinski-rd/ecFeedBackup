@@ -18,7 +18,9 @@ import com.testify.ecfeed.ui.common.utils.IFileInfoProvider;
 
 public abstract class SetupDialogOnline extends SetupDialogGenerator {
 
-	public SetupDialogOnline(Shell parentShell, MethodNode method, IFileInfoProvider fileInfoProvider) {
-		super(parentShell, method, true, fileInfoProvider);
+	public SetupDialogOnline(Shell parentShell, MethodNode method,
+			IFileInfoProvider fileInfoProvider, String initialExportTemplate) {
+		super(parentShell, method, true, fileInfoProvider,
+				initialExportTemplate);
 	}
 }

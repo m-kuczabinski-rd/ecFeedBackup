@@ -47,48 +47,46 @@ import com.testify.ecfeed.ui.dialogs.GeneratorProgressMonitorDialog;
 import com.testify.ecfeed.ui.dialogs.SetupDialogOnline;
 import com.testify.ecfeed.ui.dialogs.basic.ErrorDialog;
 
-public abstract class AbstractOnlineSupport extends TestExecutionSupport{
+public abstract class AbstractOnlineSupport extends TestExecutionSupport {
 
 	protected enum RunMode {
-		TEST_LOCALLY,
-		TEST_ON_ANDROID,
-		EXPORT
+		TEST_LOCALLY, TEST_ON_ANDROID, EXPORT
 	}
-	
+
 	public enum Result {
-		OK,
-		CANCELED
+		OK, CANCELED
 	}
 
 	private MethodNode fTarget;
 	private JavaTestRunner fRunner;
 	private IFileInfoProvider fFileInfoProvider;
 	private RunMode fRunMode;
-	private String fHeaderTemplate;
-	private String fTestCaseTemplate;
-	private String fFooterTemplate;
 	private String fTargetFile;
+	private String fExportTemplate;
+	String fInitialExportTemplate;
 
-	public AbstractOnlineSupport(
-			ITestMethodInvoker testMethodInvoker, 
-			IFileInfoProvider fileInfoProvider,
+	public AbstractOnlineSupport(ITestMethodInvoker testMethodInvoker,
+			IFileInfoProvider fileInfoProvider, String initialExportTemplate,
 			RunMode runMode) {
 		ILoaderProvider loaderProvider = new EclipseLoaderProvider();
 		ModelClassLoader loader = loaderProvider.getLoader(true, null);
 		fRunner = new JavaTestRunner(loader, testMethodInvoker);
 		fFileInfoProvider = fileInfoProvider;
+		fInitialExportTemplate = initialExportTemplate;
 		fRunMode = runMode;
 	}
 
 	protected abstract SetupDialogOnline createSetupDialogOnline(
-			Shell activeShell, MethodNode methodNode, IFileInfoProvider fileInfoProvider);
+			Shell activeShell, MethodNode methodNode,
+			IFileInfoProvider fileInfoProvider, String initialExportTemplate);
 
 	public void setTarget(MethodNode target) {
 		try {
 			fRunner.setTarget(target);
 			fTarget = target;
 		} catch (RunnerException e) {
-			ErrorDialog.open(Messages.DIALOG_TEST_EXECUTION_PROBLEM_TITLE, e.getMessage());
+			ErrorDialog.open(Messages.DIALOG_TEST_EXECUTION_PROBLEM_TITLE,
+					e.getMessage());
 		}
 	}
 
@@ -97,13 +95,14 @@ public abstract class AbstractOnlineSupport extends TestExecutionSupport{
 		fTarget = target;
 	}
 
-	public Result proceed(){
+	public Result proceed() {
 		PrintStream currentOut = System.out;
 		ConsoleManager.displayConsole();
-		ConsoleManager.redirectSystemOutputToStream(ConsoleManager.getOutputStream());
+		ConsoleManager.redirectSystemOutputToStream(ConsoleManager
+				.getOutputStream());
 
 		Result result = Result.CANCELED;
-		
+
 		if (fTarget.getParametersCount() > 0) {
 			result = displayParametrizedTestsDialog();
 		} else {
@@ -117,30 +116,31 @@ public abstract class AbstractOnlineSupport extends TestExecutionSupport{
 	}
 
 	private Result displayParametrizedTestsDialog() {
-		SetupDialogOnline dialog = 
-				createSetupDialogOnline(Display.getCurrent().getActiveShell(), fTarget, fFileInfoProvider);
+		SetupDialogOnline dialog = createSetupDialogOnline(Display.getCurrent()
+				.getActiveShell(), fTarget, fFileInfoProvider,
+				fInitialExportTemplate);
 
-		if(dialog.open() != IDialogConstants.OK_ID) {
+		if (dialog.open() != IDialogConstants.OK_ID) {
 			return Result.CANCELED;
 		}
 
-		IGenerator<ChoiceNode> selectedGenerator = dialog.getSelectedGenerator();
+		IGenerator<ChoiceNode> selectedGenerator = dialog
+				.getSelectedGenerator();
 		List<List<ChoiceNode>> algorithmInput = dialog.getAlgorithmInput();
 		Collection<IConstraint<ChoiceNode>> constraintList = new ArrayList<IConstraint<ChoiceNode>>();
 		constraintList.addAll(dialog.getConstraints());
 		Map<String, Object> parameters = dialog.getGeneratorParameters();
 
-		runParametrizedTests(selectedGenerator, algorithmInput, constraintList, parameters);
+		runParametrizedTests(selectedGenerator, algorithmInput, constraintList,
+				parameters);
 
 		if (fRunMode != RunMode.EXPORT) {
 			displayTestStatusDialog();
 		}
 
-		fHeaderTemplate = dialog.getHeaderTemplate();
-		fTestCaseTemplate = dialog.getTestCaseTemplate();
-		fFooterTemplate = dialog.getFooterTemplate();
 		fTargetFile = dialog.getTargetFile();
-		
+		fExportTemplate = dialog.getExportTemplate();
+
 		return Result.OK;
 	}
 
@@ -149,43 +149,40 @@ public abstract class AbstractOnlineSupport extends TestExecutionSupport{
 			Collection<IConstraint<ChoiceNode>> constraints,
 			Map<String, Object> parameters) {
 
-		GeneratorProgressMonitorDialog progressDialog = 
-				new GeneratorProgressMonitorDialog(Display.getCurrent().getActiveShell(), generator);
+		GeneratorProgressMonitorDialog progressDialog = new GeneratorProgressMonitorDialog(
+				Display.getCurrent().getActiveShell(), generator);
 
-		ParametrizedTestRunnable runnable = new ParametrizedTestRunnable(generator, input, constraints, parameters);
+		ParametrizedTestRunnable runnable = new ParametrizedTestRunnable(
+				generator, input, constraints, parameters);
 		progressDialog.open();
 		try {
-			progressDialog.run(true,  true, runnable);
+			progressDialog.run(true, true, runnable);
 		} catch (InvocationTargetException | InterruptedException e) {
-			MessageDialog.openError(Display.getDefault().getActiveShell(), 
-					Messages.DIALOG_TEST_EXECUTION_PROBLEM_TITLE, e.getMessage());
+			MessageDialog.openError(Display.getDefault().getActiveShell(),
+					Messages.DIALOG_TEST_EXECUTION_PROBLEM_TITLE,
+					e.getMessage());
 		}
-	}	
+	}
 
 	private void runNonParametrizedTest() {
 		try {
 			IRunnableWithProgress operation = new NonParametrizedTestRunnable();
-			new ProgressMonitorDialog(Display.getCurrent().getActiveShell()).run(true, true, operation);
+			new ProgressMonitorDialog(Display.getCurrent().getActiveShell())
+					.run(true, true, operation);
 
-			MessageDialog.openInformation(null, 
-					"Test case executed correctly", "The execution of " + fTarget.toString() + " has been succesful");
-		} catch (InvocationTargetException | InterruptedException | RuntimeException e) {
-			MessageDialog.openError(
-					Display.getCurrent().getActiveShell(), 
-					Messages.DIALOG_TEST_EXECUTION_PROBLEM_TITLE, e.getMessage());
+			MessageDialog.openInformation(null, "Test case executed correctly",
+					"The execution of " + fTarget.toString()
+							+ " has been succesful");
+		} catch (InvocationTargetException | InterruptedException
+				| RuntimeException e) {
+			MessageDialog.openError(Display.getCurrent().getActiveShell(),
+					Messages.DIALOG_TEST_EXECUTION_PROBLEM_TITLE,
+					e.getMessage());
 		}
 	}
 
-	public String getHeaderTemplate() {
-		return fHeaderTemplate;
-	}
-
-	public String getTestCaseTemplate() {
-		return fTestCaseTemplate;
-	}
-
-	public String getFooterTemplate() {
-		return fFooterTemplate;
+	public String getExportTemplate() {
+		return fExportTemplate;
 	}
 
 	public String getTargetFile() {
@@ -199,10 +196,10 @@ public abstract class AbstractOnlineSupport extends TestExecutionSupport{
 		private Collection<IConstraint<ChoiceNode>> fConstraints;
 		private Map<String, Object> fParameters;
 
-		ParametrizedTestRunnable(IGenerator<ChoiceNode> generator, 
-				List<List<ChoiceNode>> input, 
-				Collection<IConstraint<ChoiceNode>> constraints, 
-				Map<String, Object> parameters){
+		ParametrizedTestRunnable(IGenerator<ChoiceNode> generator,
+				List<List<ChoiceNode>> input,
+				Collection<IConstraint<ChoiceNode>> constraints,
+				Map<String, Object> parameters) {
 			fGenerator = generator;
 			fInput = input;
 			fConstraints = constraints;
@@ -225,11 +222,12 @@ public abstract class AbstractOnlineSupport extends TestExecutionSupport{
 				fGenerator.initialize(fInput, fConstraints, fParameters);
 				beginTestExecution(fGenerator.totalWork());
 
-				while((next = fGenerator.next()) != null && progressMonitor.isCanceled() == false){
-					try{
+				while ((next = fGenerator.next()) != null
+						&& progressMonitor.isCanceled() == false) {
+					try {
 						setTestProgressMessage();
 						processTestCase(next);
-					} catch(RunnerException e){
+					} catch (RunnerException e) {
 						addFailedTest(e);
 					}
 					addExecutedTest(fGenerator.workProgress());
@@ -242,7 +240,8 @@ public abstract class AbstractOnlineSupport extends TestExecutionSupport{
 
 		private void prepareAndroidRun() throws InvocationTargetException {
 			DeviceCheckerExt.checkIfOneDeviceAttached();
-			EclipseProjectHelper projectHelper = new EclipseProjectHelper(fFileInfoProvider); 
+			EclipseProjectHelper projectHelper = new EclipseProjectHelper(
+					fFileInfoProvider);
 			new ApkInstallerExt(projectHelper).installApplicationsIfModified();
 		}
 
@@ -254,7 +253,8 @@ public abstract class AbstractOnlineSupport extends TestExecutionSupport{
 			}
 		}
 
-		private void processTestCase(List<ChoiceNode> testData) throws RunnerException {
+		private void processTestCase(List<ChoiceNode> testData)
+				throws RunnerException {
 			if (fRunMode == RunMode.EXPORT) {
 				fRunner.prepareTestCaseForExport(testData);
 			} else {
@@ -266,8 +266,8 @@ public abstract class AbstractOnlineSupport extends TestExecutionSupport{
 	private class NonParametrizedTestRunnable implements IRunnableWithProgress {
 
 		@Override
-		public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException
-		{
+		public void run(IProgressMonitor monitor)
+				throws InvocationTargetException, InterruptedException {
 			if (fRunMode == RunMode.TEST_ON_ANDROID) {
 				runAndroidTest(monitor);
 				return;
@@ -276,19 +276,21 @@ public abstract class AbstractOnlineSupport extends TestExecutionSupport{
 			runStandardTest(monitor);
 		}
 
-		private void runAndroidTest(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
+		private void runAndroidTest(IProgressMonitor monitor)
+				throws InvocationTargetException, InterruptedException {
 			monitor.beginTask("Installing applications and running test...", 4);
 
 			DeviceCheckerExt.checkIfOneDeviceAttached();
 			monitor.worked(1);
-			if(monitor.isCanceled()) {
+			if (monitor.isCanceled()) {
 				return;
 			}
 
-			EclipseProjectHelper projectHelper = new EclipseProjectHelper(fFileInfoProvider); 
+			EclipseProjectHelper projectHelper = new EclipseProjectHelper(
+					fFileInfoProvider);
 			new ApkInstallerExt(projectHelper).installApplicationsIfModified();
 			monitor.worked(3);
-			if(monitor.isCanceled()) {
+			if (monitor.isCanceled()) {
 				return;
 			}
 
@@ -296,20 +298,21 @@ public abstract class AbstractOnlineSupport extends TestExecutionSupport{
 				executeSingleTest();
 			} catch (RunnerException e) {
 				SystemLogger.logCatch(e.getMessage());
-				ExceptionHelper.reportRuntimeException(e.getMessage()); 
+				ExceptionHelper.reportRuntimeException(e.getMessage());
 			}
 			monitor.worked(4);
 			monitor.done();
 		}
 
-		private void runStandardTest(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
+		private void runStandardTest(IProgressMonitor monitor)
+				throws InvocationTargetException, InterruptedException {
 			monitor.beginTask("Running test...", 1);
 
 			try {
 				executeSingleTest();
 			} catch (RunnerException e) {
 				SystemLogger.logCatch(e.getMessage());
-				ExceptionHelper.reportRuntimeException(e.getMessage()); 
+				ExceptionHelper.reportRuntimeException(e.getMessage());
 			}
 
 			monitor.worked(1);
