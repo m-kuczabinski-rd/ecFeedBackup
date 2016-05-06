@@ -24,11 +24,12 @@ import com.testify.ecfeed.core.model.ClassNode;
 import com.testify.ecfeed.core.model.MethodNode;
 import com.testify.ecfeed.core.model.MethodParameterNode;
 import com.testify.ecfeed.core.model.TestCaseNode;
+import com.testify.ecfeed.serialization.export.TestCasesExporter;
 
 public class TestCasesExporterTest {
 
 	@Test
-	public void methodWithTwoParamsExportTest(){
+	public void methodWithTwoParamsExportTestWithProgress(){
 		ClassNode theClass = new ClassNode("Test");
 
 		MethodNode method = new MethodNode("testMethod");
@@ -60,7 +61,7 @@ public class TestCasesExporterTest {
 		OutputStream stream = new ByteArrayOutputStream();
 
 		try {
-			exporter.runExport(method, testCases, stream);
+			exporter.runExportWithProgress(method, testCases, stream, false);
 		} catch (Exception e) {
 			fail("Exception thrown during export.");
 		}
@@ -74,5 +75,6 @@ public class TestCasesExporterTest {
 
 		assertEquals(expectedResult, result);
 	}
+
 
 }
