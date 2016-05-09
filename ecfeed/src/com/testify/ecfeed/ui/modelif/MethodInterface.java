@@ -48,7 +48,7 @@ import com.testify.ecfeed.core.model.TestCaseNode;
 import com.testify.ecfeed.core.runner.ITestMethodInvoker;
 import com.testify.ecfeed.core.runner.java.ExportTestMethodInvoker;
 import com.testify.ecfeed.core.runner.java.JUnitTestMethodInvoker;
-import com.testify.ecfeed.core.serialization.export.TestCasesExportParser;
+import com.testify.ecfeed.core.serialization.export.ExportTemplateParser;
 import com.testify.ecfeed.core.utils.EcException;
 import com.testify.ecfeed.core.utils.StringHelper;
 import com.testify.ecfeed.core.utils.SystemLogger;
@@ -273,7 +273,7 @@ public class MethodInterface extends ParametersParentInterface {
 		ExportTestMethodInvoker methodInvoker = new ExportTestMethodInvoker(
 				getTarget());
 
-		TestCasesExportParser exportParser = new TestCasesExportParser(
+		ExportTemplateParser exportParser = new ExportTemplateParser(
 				getTarget().getParametersCount());
 
 		OnlineExportSupport exportSupport = new OnlineExportSupport(
@@ -312,7 +312,7 @@ public class MethodInterface extends ParametersParentInterface {
 
 	public void exportTestCases(Collection<TestCaseNode> checkedTestCases) {
 
-		TestCasesExportParser exportParser = new TestCasesExportParser(
+		ExportTemplateParser exportParser = new ExportTemplateParser(
 				getTarget().getParametersCount());
 		String initialTemplate = exportParser.createInitialTemplate();
 

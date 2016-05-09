@@ -17,7 +17,6 @@ import java.util.Collection;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
-import org.eclipse.swt.widgets.Display;
 
 import com.testify.ecfeed.core.model.MethodNode;
 import com.testify.ecfeed.core.model.TestCaseNode;
