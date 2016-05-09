@@ -59,19 +59,34 @@ public class ExportTemplateParser {
 	}
 
 	private static String createUserHeaderTemplate(Map<String, String> template) {
-		return StringHelper.removeLastNewline(template.get(HEADER_MARKER
-				.toLowerCase()));
+		String headerTemplate = template.get(HEADER_MARKER);
+
+		if (headerTemplate == null) {
+			return null;
+		}
+
+		return StringHelper.removeLastNewline(headerTemplate);
 	}
 
 	private static String createUserTestCaseTemplate(
 			Map<String, String> template) {
-		return StringHelper.removeLastNewline(template.get(TEST_CASE_MARKER
-				.toLowerCase()));
+
+		String testCaseTemplate = template.get(TEST_CASE_MARKER);
+
+		if (testCaseTemplate == null) {
+			return null;
+		}
+		return StringHelper.removeLastNewline(testCaseTemplate);
 	}
 
 	private static String createUserFooterTemplate(Map<String, String> template) {
-		return StringHelper.removeLastNewline(template.get(FOOTER_MARKER
-				.toLowerCase()));
+
+		String footerTemplate = template.get(FOOTER_MARKER);
+
+		if (footerTemplate == null) {
+			return null;
+		}
+		return StringHelper.removeLastNewline(footerTemplate);
 	}
 
 	private static String createDefaultHeaderTemplate(int methodParametersCount) {

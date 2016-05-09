@@ -29,18 +29,66 @@ import com.testify.ecfeed.serialization.export.TestCasesExporter;
 public class TestCasesExporterTest {
 
 	@Test
-	public void methodWithTwoParamsExportTestWithProgress(){
+	public void shouldExportAllSections() {
+		String headerTemplate = "$1.name, $2.name";
+		String testCaseTemplate = "$1.value, $2.value";
+		String footerTemplate = "end";
+
+		String expectedResult = "par0, par1" + System.lineSeparator() + "0, 1"
+				+ System.lineSeparator() + "end" + System.lineSeparator();
+
+		performTwoParamsTest(headerTemplate, testCaseTemplate, footerTemplate,
+				expectedResult);
+	}
+
+	public void shouldExportHeaderOnly() {
+		String headerTemplate = "$1.name, $2.name";
+		String testCaseTemplate = null;
+		String footerTemplate = null;
+
+		String expectedResult = "par0, par1";
+
+		performTwoParamsTest(headerTemplate, testCaseTemplate, footerTemplate,
+				expectedResult);
+	}
+
+	public void shouldExportTestCasesOnly() {
+		String headerTemplate = null;
+		String testCaseTemplate = "$1.value, $2.value";
+		String footerTemplate = null;
+
+		String expectedResult = "0, 1";
+		performTwoParamsTest(headerTemplate, testCaseTemplate, footerTemplate,
+				expectedResult);
+	}
+
+	public void shouldExportFooterOnly() {
+		String headerTemplate = null;
+		String testCaseTemplate = null;
+		String footerTemplate = "end";
+
+		String expectedResult = "end";
+
+		performTwoParamsTest(headerTemplate, testCaseTemplate, footerTemplate,
+				expectedResult);
+	}
+
+	private void performTwoParamsTest(String headerTemplate,
+			String testCaseTemplate, String footerTemplate,
+			String expectedResult) {
 		ClassNode theClass = new ClassNode("Test");
 
 		MethodNode method = new MethodNode("testMethod");
 		theClass.addMethod(method);
 
-		MethodParameterNode parameter0 = new MethodParameterNode("par0", "int", "0", false);
+		MethodParameterNode parameter0 = new MethodParameterNode("par0", "int",
+				"0", false);
 		ChoiceNode choiceNode00 = new ChoiceNode("value00", "0");
 		parameter0.addChoice(choiceNode00);
 		method.addParameter(parameter0);
 
-		MethodParameterNode parameter1 = new MethodParameterNode("par1", "int", "0", false);
+		MethodParameterNode parameter1 = new MethodParameterNode("par1", "int",
+				"0", false);
 		ChoiceNode choiceNode11 = new ChoiceNode("value11", "1");
 		parameter1.addChoice(choiceNode11);
 		method.addParameter(parameter1);
@@ -55,8 +103,8 @@ public class TestCasesExporterTest {
 		Collection<TestCaseNode> testCases = new ArrayList<TestCaseNode>();
 		testCases.add(testCase);
 
-		TestCasesExporter exporter = 
-				new TestCasesExporter("$1.name, $2.name", "$1.value, $2.value", "end");
+		TestCasesExporter exporter = new TestCasesExporter(headerTemplate,
+				testCaseTemplate, footerTemplate);
 
 		OutputStream stream = new ByteArrayOutputStream();
 
@@ -68,13 +116,7 @@ public class TestCasesExporterTest {
 
 		String result = stream.toString();
 
-		String expectedResult = 
-				"par0, par1" + System.lineSeparator() + 
-				"0, 1" + System.lineSeparator() +
-				"end" + System.lineSeparator();
-
 		assertEquals(expectedResult, result);
 	}
-
 
 }

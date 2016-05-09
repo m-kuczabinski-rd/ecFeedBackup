@@ -33,11 +33,6 @@ public class TestCasesExporter {
 
 	public TestCasesExporter(String headerTemplate, String testCaseTemplate,
 			String tailTemplate) {
-		if (testCaseTemplate == null) {
-			final String MSG_TEST_CASE_NOT_EMPTY = "Test case template must not be empty.";
-			ExceptionHelper.reportRuntimeException(MSG_TEST_CASE_NOT_EMPTY);
-		}
-
 		fHeaderTemplate = headerTemplate;
 		fTestCaseTemplate = testCaseTemplate;
 		fTailTemplate = tailTemplate;
@@ -129,20 +124,7 @@ public class TestCasesExporter {
 				exportMonitor.setStatus("Exporting header...");
 				exportHeader(fMethod, fOutputStream);
 
-				exportMonitor.setStatus("Exporting test cases...");
-
-				int count = 0;
-				int maxCount = fTestCases.size();
-				for (TestCaseNode testCase : fTestCases) {
-
-					exportTestCase(testCase, fOutputStream);
-					exportMonitor.setStatus("Exported test cases: " + (++count)
-							+ "/" + maxCount);
-
-					if (exportMonitor.isCanceled()) {
-						break;
-					}
-				}
+				exportTestCases(exportMonitor);
 
 				exportMonitor.setStatus("Exporting footer...");
 				exportFooter(fMethod, fOutputStream);
@@ -154,6 +136,25 @@ public class TestCasesExporter {
 			}
 		}
 
+		private void exportTestCases(ExportMonitor exportMonitor)
+				throws IOException {
+			if (fTestCaseTemplate == null) {
+				return;
+			}
+			exportMonitor.setStatus("Exporting test cases...");
+			int count = 0;
+			int maxCount = fTestCases.size();
+			for (TestCaseNode testCase : fTestCases) {
+
+				exportTestCase(testCase, fOutputStream);
+				exportMonitor.setStatus("Exported test cases: " + (++count)
+						+ "/" + maxCount);
+
+				if (exportMonitor.isCanceled()) {
+					break;
+				}
+			}
+		}
 	}
 
 	public class ExportMonitor {
