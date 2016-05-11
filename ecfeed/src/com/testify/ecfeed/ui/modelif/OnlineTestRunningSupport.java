@@ -1,8 +1,15 @@
 package com.testify.ecfeed.ui.modelif;
 
+import java.io.PrintStream;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.dialogs.ProgressMonitorDialog;
+import org.eclipse.jface.operation.IRunnableWithProgress;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 
 import com.testify.ecfeed.android.external.ApkInstallerExt;
@@ -11,6 +18,9 @@ import com.testify.ecfeed.core.model.ChoiceNode;
 import com.testify.ecfeed.core.model.MethodNode;
 import com.testify.ecfeed.core.runner.ITestMethodInvoker;
 import com.testify.ecfeed.core.runner.RunnerException;
+import com.testify.ecfeed.core.utils.ExceptionHelper;
+import com.testify.ecfeed.core.utils.SystemLogger;
+import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.common.utils.EclipseProjectHelper;
 import com.testify.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.testify.ecfeed.ui.dialogs.SetupDialogExecuteOnline;
@@ -23,19 +33,10 @@ public class OnlineTestRunningSupport extends AbstractOnlineSupport {
 
 	public OnlineTestRunningSupport(ITestMethodInvoker testMethodInvoker,
 			IFileInfoProvider fileInfoProvider, boolean runOnAndroid) {
-		super(testMethodInvoker, fileInfoProvider, null,
-				getRunMode(runOnAndroid));
+		super(testMethodInvoker, fileInfoProvider);
 
 		fRunOnAndroid = runOnAndroid;
 		fFileInfoProvider = fileInfoProvider;
-	}
-
-	private static RunMode getRunMode(boolean runOnAndroid) {
-		if (runOnAndroid) {
-			return RunMode.TEST_ON_ANDROID;
-		}
-
-		return RunMode.TEST_LOCALLY;
 	}
 
 	@Override
@@ -47,13 +48,49 @@ public class OnlineTestRunningSupport extends AbstractOnlineSupport {
 	}
 
 	@Override
+	protected Result proceed() {
+		PrintStream currentOut = System.out;
+		ConsoleManager.displayConsole();
+		ConsoleManager.redirectSystemOutputToStream(ConsoleManager.getOutputStream());
+
+		Result result = Result.CANCELED;
+
+		if (getTargetMethod().getParametersCount() > 0) {
+			result = displayDialogAndRunTests();
+		} else {
+			runNonParametrizedTest();
+			result = Result.OK;
+		}
+
+		System.setOut(currentOut);
+		return result;
+	}	
+
+	private void runNonParametrizedTest() {
+		try {
+			IRunnableWithProgress operation = new NonParametrizedTestRunnable();
+			new ProgressMonitorDialog(Display.getCurrent().getActiveShell())
+			.run(true, true, operation);
+
+			MessageDialog.openInformation(null, "Test case executed correctly",
+					"The execution of " + getTargetMethod().toString()
+					+ " has been succesful");
+		} catch (InvocationTargetException | InterruptedException
+				| RuntimeException e) {
+			MessageDialog.openError(Display.getCurrent().getActiveShell(),
+					Messages.DIALOG_TEST_EXECUTION_PROBLEM_TITLE,
+					e.getMessage());
+		}
+	}
+
+	@Override
 	protected void onDisplayTestSummary() {
 		displayTestStatusDialog();
 	}	
 
 	@Override
 	protected void prepareRun() throws InvocationTargetException {
-		if (getRunMode(fRunOnAndroid) != RunMode.TEST_ON_ANDROID) {
+		if (!fRunOnAndroid) {
 			return;
 		}
 		DeviceCheckerExt.checkIfOneDeviceAttached();
@@ -69,6 +106,69 @@ public class OnlineTestRunningSupport extends AbstractOnlineSupport {
 	@Override
 	protected void setTargetMethod() throws RunnerException {
 		getRunner().setTargetForTest(getTargetMethod());
-	}	
+	}
+
+	private class NonParametrizedTestRunnable implements IRunnableWithProgress {
+
+		@Override
+		public void run(IProgressMonitor monitor)
+				throws InvocationTargetException, InterruptedException {
+
+			if (fRunOnAndroid) {
+				runNonParametrizedAndroidTest(monitor);
+				return;
+			}
+
+			runNonParametrizedStandardTest(monitor);
+		}
+
+		private void runNonParametrizedAndroidTest(IProgressMonitor monitor)
+				throws InvocationTargetException, InterruptedException {
+			monitor.beginTask("Installing applications and running test...", 4);
+
+			DeviceCheckerExt.checkIfOneDeviceAttached();
+			monitor.worked(1);
+			if (monitor.isCanceled()) {
+				return;
+			}
+
+			EclipseProjectHelper projectHelper = new EclipseProjectHelper(
+					fFileInfoProvider);
+			new ApkInstallerExt(projectHelper).installApplicationsIfModified();
+			monitor.worked(3);
+			if (monitor.isCanceled()) {
+				return;
+			}
+
+			try {
+				executeSingleTest();
+			} catch (RunnerException e) {
+				SystemLogger.logCatch(e.getMessage());
+				ExceptionHelper.reportRuntimeException(e.getMessage());
+			}
+			monitor.worked(4);
+			monitor.done();
+		}
+
+		private void runNonParametrizedStandardTest(IProgressMonitor monitor)
+				throws InvocationTargetException, InterruptedException {
+			monitor.beginTask("Running test...", 1);
+
+			try {
+				executeSingleTest();
+			} catch (RunnerException e) {
+				SystemLogger.logCatch(e.getMessage());
+				ExceptionHelper.reportRuntimeException(e.getMessage());
+			}
+
+			monitor.worked(1);
+			monitor.done();
+		}
+
+		private void executeSingleTest() throws RunnerException {
+			getRunner().runTestCase(new ArrayList<ChoiceNode>());
+		}
+	}
+
 
 }

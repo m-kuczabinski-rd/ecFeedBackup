@@ -11,7 +11,6 @@
 
 package com.testify.ecfeed.ui.modelif;
 
-import java.io.PrintStream;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -21,13 +20,10 @@ import java.util.Map;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 
-import com.testify.ecfeed.android.external.ApkInstallerExt;
-import com.testify.ecfeed.android.external.DeviceCheckerExt;
 import com.testify.ecfeed.core.adapter.java.ILoaderProvider;
 import com.testify.ecfeed.core.adapter.java.ModelClassLoader;
 import com.testify.ecfeed.core.generators.api.IConstraint;
@@ -37,21 +33,14 @@ import com.testify.ecfeed.core.model.MethodNode;
 import com.testify.ecfeed.core.runner.ITestMethodInvoker;
 import com.testify.ecfeed.core.runner.JavaTestRunner;
 import com.testify.ecfeed.core.runner.RunnerException;
-import com.testify.ecfeed.core.utils.ExceptionHelper;
-import com.testify.ecfeed.core.utils.SystemLogger;
 import com.testify.ecfeed.ui.common.EclipseLoaderProvider;
 import com.testify.ecfeed.ui.common.Messages;
-import com.testify.ecfeed.ui.common.utils.EclipseProjectHelper;
 import com.testify.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.testify.ecfeed.ui.dialogs.GeneratorProgressMonitorDialog;
 import com.testify.ecfeed.ui.dialogs.SetupDialogOnline;
 import com.testify.ecfeed.ui.dialogs.basic.ErrorDialog;
 
 public abstract class AbstractOnlineSupport extends TestExecutionSupport {
-
-	protected enum RunMode {
-		TEST_LOCALLY, TEST_ON_ANDROID, EXPORT
-	}
 
 	public enum Result {
 		OK, CANCELED
@@ -60,20 +49,21 @@ public abstract class AbstractOnlineSupport extends TestExecutionSupport {
 	private MethodNode fTarget;
 	private JavaTestRunner fRunner;
 	private IFileInfoProvider fFileInfoProvider;
-	private RunMode fRunMode;
 	private String fTargetFile;
 	private String fExportTemplate;
 	String fInitialExportTemplate;
 
+	public AbstractOnlineSupport(ITestMethodInvoker testMethodInvoker, IFileInfoProvider fileInfoProvider) {
+		this(testMethodInvoker, fileInfoProvider, null);
+	}
+
 	public AbstractOnlineSupport(ITestMethodInvoker testMethodInvoker,
-			IFileInfoProvider fileInfoProvider, String initialExportTemplate,
-			RunMode runMode) {
+			IFileInfoProvider fileInfoProvider, String initialExportTemplate) {
 		ILoaderProvider loaderProvider = new EclipseLoaderProvider();
 		ModelClassLoader loader = loaderProvider.getLoader(true, null);
 		fRunner = new JavaTestRunner(loader, testMethodInvoker);
 		fFileInfoProvider = fileInfoProvider;
 		fInitialExportTemplate = initialExportTemplate;
-		fRunMode = runMode;
 	}
 
 	protected abstract SetupDialogOnline createSetupDialogOnline(
@@ -103,24 +93,7 @@ public abstract class AbstractOnlineSupport extends TestExecutionSupport {
 		return fRunner;
 	}
 
-	protected Result proceed() {
-		PrintStream currentOut = System.out;
-		ConsoleManager.displayConsole();
-		ConsoleManager.redirectSystemOutputToStream(ConsoleManager
-				.getOutputStream());
-
-		Result result = Result.CANCELED;
-
-		if (fTarget.getParametersCount() > 0) {
-			result = displayDialogAndRunTests();
-		} else {
-			runNonParametrizedTest();
-			result = Result.OK;
-		}
-
-		System.setOut(currentOut);
-		return result;
-	}
+	protected abstract Result proceed();
 
 	protected Result displayDialogAndRunTests() {
 		SetupDialogOnline dialog = createSetupDialogOnline(Display.getCurrent()
@@ -164,23 +137,6 @@ public abstract class AbstractOnlineSupport extends TestExecutionSupport {
 			progressDialog.run(true, true, runnable);
 		} catch (InvocationTargetException | InterruptedException e) {
 			MessageDialog.openError(Display.getDefault().getActiveShell(),
-					Messages.DIALOG_TEST_EXECUTION_PROBLEM_TITLE,
-					e.getMessage());
-		}
-	}
-
-	private void runNonParametrizedTest() {
-		try {
-			IRunnableWithProgress operation = new NonParametrizedTestRunnable();
-			new ProgressMonitorDialog(Display.getCurrent().getActiveShell())
-			.run(true, true, operation);
-
-			MessageDialog.openInformation(null, "Test case executed correctly",
-					"The execution of " + fTarget.toString()
-					+ " has been succesful");
-		} catch (InvocationTargetException | InterruptedException
-				| RuntimeException e) {
-			MessageDialog.openError(Display.getCurrent().getActiveShell(),
 					Messages.DIALOG_TEST_EXECUTION_PROBLEM_TITLE,
 					e.getMessage());
 		}
@@ -249,67 +205,4 @@ public abstract class AbstractOnlineSupport extends TestExecutionSupport {
 		}
 
 	}
-
-	private class NonParametrizedTestRunnable implements IRunnableWithProgress {
-
-		@Override
-		public void run(IProgressMonitor monitor)
-				throws InvocationTargetException, InterruptedException {
-
-			if (fRunMode == RunMode.TEST_ON_ANDROID) {
-				runNonParametrizedAndroidTest(monitor);
-				return;
-			}
-
-			runNonParametrizedStandardTest(monitor);
-		}
-
-		private void runNonParametrizedAndroidTest(IProgressMonitor monitor)
-				throws InvocationTargetException, InterruptedException {
-			monitor.beginTask("Installing applications and running test...", 4);
-
-			DeviceCheckerExt.checkIfOneDeviceAttached();
-			monitor.worked(1);
-			if (monitor.isCanceled()) {
-				return;
-			}
-
-			EclipseProjectHelper projectHelper = new EclipseProjectHelper(
-					fFileInfoProvider);
-			new ApkInstallerExt(projectHelper).installApplicationsIfModified();
-			monitor.worked(3);
-			if (monitor.isCanceled()) {
-				return;
-			}
-
-			try {
-				executeSingleTest();
-			} catch (RunnerException e) {
-				SystemLogger.logCatch(e.getMessage());
-				ExceptionHelper.reportRuntimeException(e.getMessage());
-			}
-			monitor.worked(4);
-			monitor.done();
-		}
-
-		private void runNonParametrizedStandardTest(IProgressMonitor monitor)
-				throws InvocationTargetException, InterruptedException {
-			monitor.beginTask("Running test...", 1);
-
-			try {
-				executeSingleTest();
-			} catch (RunnerException e) {
-				SystemLogger.logCatch(e.getMessage());
-				ExceptionHelper.reportRuntimeException(e.getMessage());
-			}
-
-			monitor.worked(1);
-			monitor.done();
-		}
-
-		private void executeSingleTest() throws RunnerException {
-			fRunner.runTestCase(new ArrayList<ChoiceNode>());
-		}
-	}
-
 }

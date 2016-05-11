@@ -17,8 +17,7 @@ public class OnlineExportSupport extends AbstractOnlineSupport {
 
 	public OnlineExportSupport(ITestMethodInvoker testMethodInvoker,
 			IFileInfoProvider fileInfoProvider, String initialExportTemplate) {
-		super(testMethodInvoker, fileInfoProvider, initialExportTemplate,
-				RunMode.EXPORT);
+		super(testMethodInvoker, fileInfoProvider, initialExportTemplate);
 	}
 
 	@Override
