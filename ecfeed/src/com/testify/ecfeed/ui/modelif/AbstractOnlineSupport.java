@@ -82,7 +82,7 @@ public abstract class AbstractOnlineSupport extends TestExecutionSupport {
 
 	public void setTarget(MethodNode target) {
 		try {
-			fRunner.setTarget(target);
+			fRunner.setTargetForTest(target);
 			fTarget = target;
 		} catch (RunnerException e) {
 			ErrorDialog.open(Messages.DIALOG_TEST_EXECUTION_PROBLEM_TITLE,
@@ -95,16 +95,15 @@ public abstract class AbstractOnlineSupport extends TestExecutionSupport {
 		fTarget = target;
 	}
 
-	public Result proceed() {
-		if (fRunMode == RunMode.EXPORT) {
-			return proceedForExport();
-		}
-		
-		return proceedForTest();
+	protected MethodNode getTargetMethod() {
+		return fTarget;
 	}
-	
-	private Result proceedForTest() {
-		
+
+	protected JavaTestRunner getRunner() {
+		return fRunner;
+	}
+
+	protected Result proceed() {
 		PrintStream currentOut = System.out;
 		ConsoleManager.displayConsole();
 		ConsoleManager.redirectSystemOutputToStream(ConsoleManager
@@ -113,25 +112,17 @@ public abstract class AbstractOnlineSupport extends TestExecutionSupport {
 		Result result = Result.CANCELED;
 
 		if (fTarget.getParametersCount() > 0) {
-			result = displayParametrizedTestsDialog();
+			result = displayDialogAndRunTests();
 		} else {
 			runNonParametrizedTest();
 			result = Result.OK;
 		}
-		
+
 		System.setOut(currentOut);
 		return result;
 	}
-	
-	private Result proceedForExport() {
-		if (fTarget.getParametersCount() == 0) {
-			return Result.CANCELED;
-		}
-			
-		return displayParametrizedTestsDialog();
-	}
 
-	private Result displayParametrizedTestsDialog() {
+	protected Result displayDialogAndRunTests() {
 		SetupDialogOnline dialog = createSetupDialogOnline(Display.getCurrent()
 				.getActiveShell(), fTarget, fFileInfoProvider,
 				fInitialExportTemplate);
@@ -150,9 +141,7 @@ public abstract class AbstractOnlineSupport extends TestExecutionSupport {
 		runParametrizedTests(selectedGenerator, algorithmInput, constraintList,
 				parameters);
 
-		if (fRunMode != RunMode.EXPORT) {
-			displayTestStatusDialog();
-		}
+		onDisplayTestSummary();
 
 		fTargetFile = dialog.getTargetFile();
 		fExportTemplate = dialog.getExportTemplate();
@@ -184,11 +173,11 @@ public abstract class AbstractOnlineSupport extends TestExecutionSupport {
 		try {
 			IRunnableWithProgress operation = new NonParametrizedTestRunnable();
 			new ProgressMonitorDialog(Display.getCurrent().getActiveShell())
-					.run(true, true, operation);
+			.run(true, true, operation);
 
 			MessageDialog.openInformation(null, "Test case executed correctly",
 					"The execution of " + fTarget.toString()
-							+ " has been succesful");
+					+ " has been succesful");
 		} catch (InvocationTargetException | InterruptedException
 				| RuntimeException e) {
 			MessageDialog.openError(Display.getCurrent().getActiveShell(),
@@ -204,6 +193,14 @@ public abstract class AbstractOnlineSupport extends TestExecutionSupport {
 	public String getTargetFile() {
 		return fTargetFile;
 	}
+
+	protected abstract void onDisplayTestSummary();
+
+	protected abstract void prepareRun() throws InvocationTargetException;
+
+	protected abstract void processTestCase(List<ChoiceNode> testData) throws RunnerException;
+
+	protected abstract void setTargetMethod() throws RunnerException;
 
 	private class ParametrizedTestRunnable implements IRunnableWithProgress {
 
@@ -227,12 +224,9 @@ public abstract class AbstractOnlineSupport extends TestExecutionSupport {
 				throws InvocationTargetException, InterruptedException {
 
 			try {
-				if (fRunMode == RunMode.TEST_ON_ANDROID) {
-					prepareAndroidRun();
-				}
-
+				prepareRun();
 				setProgressMonitor(progressMonitor);
-				setTarget();
+				setTargetMethod();
 
 				List<ChoiceNode> next;
 				fGenerator.initialize(fInput, fConstraints, fParameters);
@@ -254,29 +248,6 @@ public abstract class AbstractOnlineSupport extends TestExecutionSupport {
 			}
 		}
 
-		private void prepareAndroidRun() throws InvocationTargetException {
-			DeviceCheckerExt.checkIfOneDeviceAttached();
-			EclipseProjectHelper projectHelper = new EclipseProjectHelper(
-					fFileInfoProvider);
-			new ApkInstallerExt(projectHelper).installApplicationsIfModified();
-		}
-
-		private void setTarget() throws RunnerException {
-			if (fRunMode == RunMode.EXPORT) {
-				fRunner.setTargetForExport(fTarget);
-			} else {
-				fRunner.setTarget(fTarget);
-			}
-		}
-
-		private void processTestCase(List<ChoiceNode> testData)
-				throws RunnerException {
-			if (fRunMode == RunMode.EXPORT) {
-				fRunner.prepareTestCaseForExport(testData);
-			} else {
-				fRunner.runTestCase(testData);
-			}
-		}
 	}
 
 	private class NonParametrizedTestRunnable implements IRunnableWithProgress {
@@ -284,15 +255,16 @@ public abstract class AbstractOnlineSupport extends TestExecutionSupport {
 		@Override
 		public void run(IProgressMonitor monitor)
 				throws InvocationTargetException, InterruptedException {
+
 			if (fRunMode == RunMode.TEST_ON_ANDROID) {
-				runAndroidTest(monitor);
+				runNonParametrizedAndroidTest(monitor);
 				return;
 			}
 
-			runStandardTest(monitor);
+			runNonParametrizedStandardTest(monitor);
 		}
 
-		private void runAndroidTest(IProgressMonitor monitor)
+		private void runNonParametrizedAndroidTest(IProgressMonitor monitor)
 				throws InvocationTargetException, InterruptedException {
 			monitor.beginTask("Installing applications and running test...", 4);
 
@@ -320,7 +292,7 @@ public abstract class AbstractOnlineSupport extends TestExecutionSupport {
 			monitor.done();
 		}
 
-		private void runStandardTest(IProgressMonitor monitor)
+		private void runNonParametrizedStandardTest(IProgressMonitor monitor)
 				throws InvocationTargetException, InterruptedException {
 			monitor.beginTask("Running test...", 1);
 

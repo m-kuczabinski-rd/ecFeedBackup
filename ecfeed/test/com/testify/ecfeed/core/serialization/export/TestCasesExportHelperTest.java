@@ -26,15 +26,15 @@ public class TestCasesExportHelperTest {
 	void performTest(String template, String expectedResult) {
 		performTest("0", "1", template, expectedResult);
 	}
-	
+
 	void performTest(String par0, String par1,  String template, String expectedResult) {
 		performTest(0, par0, par1, template, expectedResult);
 	}
-	
+
 	void performTest(int sequenceIndex, String template, String expectedResult) {
 		performTest(sequenceIndex, "", "",  template, expectedResult);
 	}
-	
+
 	void performTest(int sequenceIndex, String par0, String par1,  String template, String expectedResult) {
 		ClassNode theClass = new ClassNode("package.Test");
 
@@ -59,17 +59,16 @@ public class TestCasesExportHelperTest {
 
 		TestCaseNode testCase = new TestCaseNode("default", choices);
 		testCase.setParent(method);
-	
+
 		String result = TestCasesExportHelper.generateTestCaseString(sequenceIndex, testCase, template);
-		System.out.println("XYX result: " + result);
 		assertEquals(expectedResult, result);
 	}
-	
+
 	@Test
 	public void shouldParseNoParams() {
 		performTest("ABCD", "ABCD");
 	}
-	
+
 	@Test
 	public void shouldParseOneParam() {
 		performTest("$1.value", "0");
@@ -79,17 +78,17 @@ public class TestCasesExportHelperTest {
 	public void shouldParseTwoParams() {
 		performTest("$1.value, $2.value", "0, 1");
 	}
-	
+
 	@Test
 	public void shouldParseThreeParamsTemplate() {
 		performTest("$1.value, $2.value, $3.value", "0, 1, $3.value");
 	}
-	
+
 	@Test
 	public void shouldParseIndex() {
 		performTest(5, "%index", "5");
 	}
-	
+
 	@Test
 	public void shouldParseIndexWithOneParamAndText() {
 		performTest(5, "55", "", "%index, $1.value ABCD", "5, 55 ABCD");
@@ -104,12 +103,12 @@ public class TestCasesExportHelperTest {
 	public void shouldParsePackageClassMethod() { 
 		performTest("%package, %class, %method", "package, Test, testMethod");
 	}
-	
+
 	@Test
 	public void shouldParseChoiceNames() { 
 		performTest("$1.choice, $2.full_choice", "p0, p1");
 	}
-	
+
 	@Test
 	public void shouldParseTestSuite() { 
 		performTest("%suite", "default");

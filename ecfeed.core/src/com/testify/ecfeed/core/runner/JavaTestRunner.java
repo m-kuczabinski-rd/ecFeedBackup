@@ -36,7 +36,7 @@ public class JavaTestRunner {
 		fTestMethodInvoker = testMethodInvoker; 
 	}
 
-	public void setTarget(MethodNode target) throws RunnerException {
+	public void setTargetForTest(MethodNode target) throws RunnerException {
 		fTarget = target;
 		ClassNode classNode = fTarget.getClassNode();
 		fTestClass = getTestClass(classNode.getName());

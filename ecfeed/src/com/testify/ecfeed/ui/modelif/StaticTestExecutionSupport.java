@@ -63,7 +63,7 @@ public class StaticTestExecutionSupport extends TestExecutionSupport{
 				if(progressMonitor.isCanceled() == false){
 					try {
 						setTestProgressMessage();
-						fRunner.setTarget(testCase.getMethod());
+						fRunner.setTargetForTest(testCase.getMethod());
 						fRunner.runTestCase(testCase.getTestData());
 					} catch (RunnerException e) {
 						addFailedTest(e);
