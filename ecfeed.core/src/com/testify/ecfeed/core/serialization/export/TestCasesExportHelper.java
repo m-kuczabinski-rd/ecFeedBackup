@@ -79,11 +79,11 @@ public class TestCasesExportHelper {
 		return Integer.parseInt(parameterNumberString);
 	}
 
-	public static String generateTestCaseString(int index, TestCaseNode testCase, String template) {
+	public static String generateTestCaseString(int sequenceIndex, TestCaseNode testCase, String template) {
 		MethodNode method = testCase.getMethod();
 		String result = generateSection(method, template);
 		result = replaceTestParameterSequences(testCase, result);
-		result = result.replace(TEST_CASE_INDEX_NAME_SEQUENCE, String.valueOf(index));
+		result = result.replace(TEST_CASE_INDEX_NAME_SEQUENCE, String.valueOf(sequenceIndex));
 		result = result.replace(TEST_SUITE_NAME_SEQUENCE, testCase.getName());
 		result = evaluateExpressions(result);
 		return result;
@@ -105,16 +105,22 @@ public class TestCasesExportHelper {
 	}
 
 	private static String replaceTestParameterSequences(TestCaseNode testCase, String template) {
+		
 		String result = replaceParameterSequences(testCase.getMethod(), template);
 		Matcher m = Pattern.compile(TEST_PARAMETER_SEQUENCE_GENERIC_PATTERN).matcher(template);
+		
 		while(m.find()){
 			String parameterCommandSequence = m.group();
 			String command = getParameterCommand(parameterCommandSequence);
 			int parameterNumber = getParameterNumber(parameterCommandSequence) - 1;
-			ChoiceNode choice = testCase.getTestData().get(parameterNumber);
-			String substitute = resolveChoiceCommand(command, choice);
-			result = result.replace(parameterCommandSequence, substitute);
-		}		
+
+			if (parameterNumber < testCase.getTestData().size()) {
+				ChoiceNode choice = testCase.getTestData().get(parameterNumber);
+				String substitute = resolveChoiceCommand(command, choice);
+				result = result.replace(parameterCommandSequence, substitute);
+			}
+		}
+		
 		return result;
 	}
 

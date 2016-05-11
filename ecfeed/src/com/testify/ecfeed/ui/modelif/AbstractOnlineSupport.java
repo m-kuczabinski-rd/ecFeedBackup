@@ -96,6 +96,15 @@ public abstract class AbstractOnlineSupport extends TestExecutionSupport {
 	}
 
 	public Result proceed() {
+		if (fRunMode == RunMode.EXPORT) {
+			return proceedForExport();
+		}
+		
+		return proceedForTest();
+	}
+	
+	private Result proceedForTest() {
+		
 		PrintStream currentOut = System.out;
 		ConsoleManager.displayConsole();
 		ConsoleManager.redirectSystemOutputToStream(ConsoleManager
@@ -106,13 +115,20 @@ public abstract class AbstractOnlineSupport extends TestExecutionSupport {
 		if (fTarget.getParametersCount() > 0) {
 			result = displayParametrizedTestsDialog();
 		} else {
-			if (fRunMode != RunMode.EXPORT) {
-				runNonParametrizedTest();
-				result = Result.OK;
-			}
+			runNonParametrizedTest();
+			result = Result.OK;
 		}
+		
 		System.setOut(currentOut);
 		return result;
+	}
+	
+	private Result proceedForExport() {
+		if (fTarget.getParametersCount() == 0) {
+			return Result.CANCELED;
+		}
+			
+		return displayParametrizedTestsDialog();
 	}
 
 	private Result displayParametrizedTestsDialog() {
