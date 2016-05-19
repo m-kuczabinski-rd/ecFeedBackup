@@ -31,12 +31,19 @@ public class OnlineTestRunningSupport extends AbstractOnlineSupport {
 	boolean fRunOnAndroid;
 	IFileInfoProvider fFileInfoProvider;
 
-	public OnlineTestRunningSupport(ITestMethodInvoker testMethodInvoker,
+	public OnlineTestRunningSupport(
+			MethodNode methodNode,
+			ITestMethodInvoker testMethodInvoker,
 			IFileInfoProvider fileInfoProvider, boolean runOnAndroid) {
-		super(testMethodInvoker, fileInfoProvider);
+		super(methodNode, testMethodInvoker, fileInfoProvider);
 
 		fRunOnAndroid = runOnAndroid;
 		fFileInfoProvider = fileInfoProvider;
+	}
+
+	@Override
+	protected void setRunnerTarget(MethodNode target) throws RunnerException {
+		getRunner().setTargetForTest(target);
 	}
 
 	@Override
@@ -48,7 +55,17 @@ public class OnlineTestRunningSupport extends AbstractOnlineSupport {
 	}
 
 	@Override
-	protected Result proceedInternal() {
+	protected void prepareRun() throws InvocationTargetException {
+		if (!fRunOnAndroid) {
+			return;
+		}
+		DeviceCheckerExt.checkIfOneDeviceAttached();
+		EclipseProjectHelper projectHelper = new EclipseProjectHelper(fFileInfoProvider);
+		new ApkInstallerExt(projectHelper).installApplicationsIfModified();
+	}
+
+	@Override
+	protected Result run() {
 		PrintStream currentOut = System.out;
 		ConsoleManager.displayConsole();
 		ConsoleManager.redirectSystemOutputToStream(ConsoleManager.getOutputStream());
@@ -84,34 +101,14 @@ public class OnlineTestRunningSupport extends AbstractOnlineSupport {
 	}
 
 	@Override
-	protected void onDisplayTestSummary() {
-		displayTestStatusDialog();
-	}	
-
-	@Override
-	protected void prepareRun() throws InvocationTargetException {
-		if (!fRunOnAndroid) {
-			return;
-		}
-		DeviceCheckerExt.checkIfOneDeviceAttached();
-		EclipseProjectHelper projectHelper = new EclipseProjectHelper(fFileInfoProvider);
-		new ApkInstallerExt(projectHelper).installApplicationsIfModified();
-	}
-
-	@Override
 	protected void processTestCase(List<ChoiceNode> testData) throws RunnerException {
 		getRunner().runTestCase(testData);
 	}
 
 	@Override
-	protected void setRunMethod() throws RunnerException {
-		getRunner().setTargetForTest(getTargetMethod());
-	}
-
-	@Override
-	protected void setRunnerTarget(MethodNode target) throws RunnerException {
-		getRunner().setTargetForTest(target);
-	}
+	protected void displayRunSummary() {
+		displayTestStatusDialog();
+	}	
 
 	private class NonParametrizedTestRunnable implements IRunnableWithProgress {
 
@@ -174,6 +171,5 @@ public class OnlineTestRunningSupport extends AbstractOnlineSupport {
 			getRunner().runTestCase(new ArrayList<ChoiceNode>());
 		}
 	}
-
 
 }

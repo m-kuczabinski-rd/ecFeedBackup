@@ -15,9 +15,15 @@ import com.testify.ecfeed.ui.dialogs.SetupDialogOnline;
 
 public class OnlineExportSupport extends AbstractOnlineSupport {
 
-	public OnlineExportSupport(ITestMethodInvoker testMethodInvoker,
+	public OnlineExportSupport(
+			MethodNode methodNode, ITestMethodInvoker testMethodInvoker,
 			IFileInfoProvider fileInfoProvider, String initialExportTemplate) {
-		super(testMethodInvoker, fileInfoProvider, initialExportTemplate);
+		super(methodNode, testMethodInvoker, fileInfoProvider, initialExportTemplate);
+	}
+
+	@Override
+	protected void setRunnerTarget(MethodNode target) throws RunnerException {
+		getRunner().setTargetForExport(target);
 	}
 
 	@Override
@@ -29,20 +35,16 @@ public class OnlineExportSupport extends AbstractOnlineSupport {
 	}
 
 	@Override
-	public Result proceedInternal() {
+	protected void prepareRun() throws InvocationTargetException {
+	}
+
+	@Override
+	public Result run() {
 		if (getTargetMethod().getParametersCount() == 0) {
 			return Result.CANCELED;
 		}
 
 		return displayParametersDialogAndRunTests();
-	}
-
-	@Override
-	protected void onDisplayTestSummary() {
-	}
-
-	@Override
-	protected void prepareRun() throws InvocationTargetException {
 	}
 
 	@Override
@@ -52,12 +54,6 @@ public class OnlineExportSupport extends AbstractOnlineSupport {
 	}
 
 	@Override
-	protected void setRunMethod() throws RunnerException {
-		getRunner().setTargetForExport(getTargetMethod());
-	}	
-
-	@Override
-	protected void setRunnerTarget(MethodNode target) throws RunnerException {
-		getRunner().setTargetForExport(target);
+	protected void displayRunSummary() {
 	}
 }

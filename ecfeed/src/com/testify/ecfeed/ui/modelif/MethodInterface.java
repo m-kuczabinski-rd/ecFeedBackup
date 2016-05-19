@@ -250,12 +250,11 @@ public class MethodInterface extends ParametersParentInterface {
 		if (!isValidClassConfiguration(classNode))
 			return;
 
-		OnlineTestRunningSupport runner = new OnlineTestRunningSupport(
-				createTestMethodInvoker(fileInfoProvider), fileInfoProvider,
-				classNode.getRunOnAndroid());
+		OnlineTestRunningSupport testSupport = new OnlineTestRunningSupport(
+				getTarget(), createTestMethodInvoker(fileInfoProvider), 
+				fileInfoProvider, classNode.getRunOnAndroid());
 
-		runner.setTargetMethod(getTarget());
-		runner.proceed();
+		testSupport.proceed();
 	}
 
 	public void executeOnlineExport(IFileInfoProvider fileInfoProvider)
@@ -276,11 +275,10 @@ public class MethodInterface extends ParametersParentInterface {
 		ExportTemplateParser exportParser = new ExportTemplateParser(
 				getTarget().getParametersCount());
 
-		OnlineExportSupport exportSupport = new OnlineExportSupport(
-				methodInvoker, fileInfoProvider,
-				exportParser.createInitialTemplate());
-
-		exportSupport.setTargetMethod(getTarget());
+		OnlineExportSupport exportSupport = 
+				new OnlineExportSupport(
+						getTarget(), methodInvoker, 
+						fileInfoProvider,exportParser.createInitialTemplate());
 
 		AbstractOnlineSupport.Result result = exportSupport.proceed();
 

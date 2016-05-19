@@ -53,40 +53,43 @@ public abstract class AbstractOnlineSupport extends TestExecutionSupport {
 	private String fExportTemplate;
 	String fInitialExportTemplate;
 
-	public AbstractOnlineSupport(ITestMethodInvoker testMethodInvoker, IFileInfoProvider fileInfoProvider) {
-		this(testMethodInvoker, fileInfoProvider, null);
+	public AbstractOnlineSupport(
+			MethodNode methodNode, ITestMethodInvoker testMethodInvoker, 
+			IFileInfoProvider fileInfoProvider) {
+		this(methodNode, testMethodInvoker, fileInfoProvider, null);
 	}
 
-	public AbstractOnlineSupport(ITestMethodInvoker testMethodInvoker,
+	public AbstractOnlineSupport(
+			MethodNode methodNode, ITestMethodInvoker testMethodInvoker,
 			IFileInfoProvider fileInfoProvider, String initialExportTemplate) {
 		ILoaderProvider loaderProvider = new EclipseLoaderProvider();
 		ModelClassLoader loader = loaderProvider.getLoader(true, null);
 		fRunner = new JavaTestRunner(loader, testMethodInvoker);
 		fFileInfoProvider = fileInfoProvider;
 		fInitialExportTemplate = initialExportTemplate;
+
+		setTargetMethod(methodNode);
 	}
+
+	protected abstract void setRunnerTarget(MethodNode target) throws RunnerException;
 
 	protected abstract SetupDialogOnline createSetupDialog(
 			Shell activeShell, MethodNode methodNode,
 			IFileInfoProvider fileInfoProvider, String initialExportTemplate);
 
-	protected abstract Result proceedInternal();
-
-	protected abstract void onDisplayTestSummary();
-
 	protected abstract void prepareRun() throws InvocationTargetException;
 
-	protected abstract void processTestCase(List<ChoiceNode> testData) throws RunnerException;
+	protected abstract Result run();
 
-	protected abstract void setRunMethod() throws RunnerException;
+	protected abstract void processTestCase(List<ChoiceNode> testData) throws RunnerException;	
 
-	protected abstract void setRunnerTarget(MethodNode target) throws RunnerException;
+	protected abstract void displayRunSummary();
 
 	public Result proceed() {
-		return proceedInternal();
+		return run();
 	}
 
-	public void setTargetMethod(MethodNode target) {
+	private void setTargetMethod(MethodNode target) {
 		try {
 			setRunnerTarget(target);
 			fTarget = target;
@@ -102,6 +105,14 @@ public abstract class AbstractOnlineSupport extends TestExecutionSupport {
 
 	protected JavaTestRunner getRunner() {
 		return fRunner;
+	}
+
+	public String getExportTemplate() {
+		return fExportTemplate;
+	}
+
+	public String getTargetFile() {
+		return fTargetFile;
 	}
 
 	protected Result displayParametersDialogAndRunTests() {
@@ -121,8 +132,7 @@ public abstract class AbstractOnlineSupport extends TestExecutionSupport {
 		Map<String, Object> parameters = dialog.getGeneratorParameters();
 
 		runParametrizedTests(selectedGenerator, algorithmInput, constraintList, parameters);
-
-		onDisplayTestSummary();
+		displayRunSummary();
 
 		fTargetFile = dialog.getTargetFile();
 		fExportTemplate = dialog.getExportTemplate();
@@ -150,14 +160,6 @@ public abstract class AbstractOnlineSupport extends TestExecutionSupport {
 		}
 	}
 
-	public String getExportTemplate() {
-		return fExportTemplate;
-	}
-
-	public String getTargetFile() {
-		return fTargetFile;
-	}
-
 	private class ParametrizedTestRunnable implements IRunnableWithProgress {
 
 		private IGenerator<ChoiceNode> fGenerator;
@@ -182,7 +184,6 @@ public abstract class AbstractOnlineSupport extends TestExecutionSupport {
 			try {
 				prepareRun();
 				setProgressMonitor(progressMonitor);
-				setRunMethod();
 
 				List<ChoiceNode> next;
 				fGenerator.initialize(fInput, fConstraints, fParameters);
