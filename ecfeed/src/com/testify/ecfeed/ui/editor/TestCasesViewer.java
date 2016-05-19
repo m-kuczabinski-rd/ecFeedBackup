@@ -179,8 +179,15 @@ public class TestCasesViewer extends CheckboxTreeViewerSection {
 			fExecuteSelectedButton.setEnabled(executionEnabled());
 		}
 
-		fExportTestCasesButton.setEnabled(executionEnabled());
+		fExportTestCasesButton.setEnabled(anyTestCaseSelected());
 		fLabelProvider.refresh();
+	}
+
+	private boolean anyTestCaseSelected() {
+		if (getCheckedTestCases().isEmpty())
+			return false;
+
+		return true;
 	}
 
 	public void setInput(MethodNode method){
@@ -214,7 +221,7 @@ public class TestCasesViewer extends CheckboxTreeViewerSection {
 				if (event.detail == SWT.CHECK && getFileInfoProvider().isProjectAvailable()) {
 					fExecuteSelectedButton.setEnabled(executionEnabled());
 				}
-				fExportTestCasesButton.setEnabled(executionEnabled());
+				fExportTestCasesButton.setEnabled(anyTestCaseSelected());
 			}
 		});
 		return treeViewer;
@@ -253,6 +260,11 @@ public class TestCasesViewer extends CheckboxTreeViewerSection {
 	}
 
 	private boolean executionEnabled() {
+
+		if (!getFileInfoProvider().isProjectAvailable()) {
+			return false;
+		}
+
 		if (fMethodIf.getImplementationStatus() == EImplementationStatus.NOT_IMPLEMENTED) { 
 			return false;
 		}
