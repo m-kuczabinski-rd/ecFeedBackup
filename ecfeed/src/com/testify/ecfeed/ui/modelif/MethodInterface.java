@@ -144,7 +144,7 @@ public class MethodInterface extends ParametersParentInterface {
 	public boolean addNewConstraint(ConstraintNode constraint) {
 		IModelOperation operation = new MethodOperationAddConstraint(
 				getTarget(), constraint, getTarget().getConstraintNodes()
-						.size());
+				.size());
 		return execute(operation, Messages.DIALOG_ADD_CONSTRAINT_PROBLEM_TITLE);
 	}
 
@@ -254,7 +254,7 @@ public class MethodInterface extends ParametersParentInterface {
 				createTestMethodInvoker(fileInfoProvider), fileInfoProvider,
 				classNode.getRunOnAndroid());
 
-		runner.setTarget(getTarget());
+		runner.setTargetMethod(getTarget());
 		runner.proceed();
 	}
 
@@ -280,7 +280,7 @@ public class MethodInterface extends ParametersParentInterface {
 				methodInvoker, fileInfoProvider,
 				exportParser.createInitialTemplate());
 
-		exportSupport.setTargetForExport(getTarget());
+		exportSupport.setTargetMethod(getTarget());
 
 		AbstractOnlineSupport.Result result = exportSupport.proceed();
 
@@ -352,8 +352,8 @@ public class MethodInterface extends ParametersParentInterface {
 		if (classNode.getRunOnAndroid() && emptyAndroidBaseRunner(classNode)) {
 			MessageDialog.openError(Display.getDefault().getActiveShell(),
 					Messages.DIALOG_MISSING_ANDROID_RUNNER_TITLE, Messages
-							.DIALOG_MISSING_ANDROID_RUNNER_INFO(classNode
-									.getName()));
+					.DIALOG_MISSING_ANDROID_RUNNER_INFO(classNode
+							.getName()));
 			return false;
 		}
 
@@ -369,7 +369,7 @@ public class MethodInterface extends ParametersParentInterface {
 		}
 
 		String projectPath = new EclipseProjectHelper(fileInfoProvider)
-				.getProjectPath();
+		.getProjectPath();
 		String androidRunner = AndroidBaseRunnerHelper
 				.createFullAndroidRunnerName(projectPath);
 

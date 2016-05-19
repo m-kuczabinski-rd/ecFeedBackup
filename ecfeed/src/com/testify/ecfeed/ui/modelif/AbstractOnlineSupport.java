@@ -66,23 +66,34 @@ public abstract class AbstractOnlineSupport extends TestExecutionSupport {
 		fInitialExportTemplate = initialExportTemplate;
 	}
 
-	protected abstract SetupDialogOnline createSetupDialogOnline(
+	protected abstract SetupDialogOnline createSetupDialog(
 			Shell activeShell, MethodNode methodNode,
 			IFileInfoProvider fileInfoProvider, String initialExportTemplate);
 
-	public void setTarget(MethodNode target) {
+	protected abstract Result proceedInternal();
+
+	protected abstract void onDisplayTestSummary();
+
+	protected abstract void prepareRun() throws InvocationTargetException;
+
+	protected abstract void processTestCase(List<ChoiceNode> testData) throws RunnerException;
+
+	protected abstract void setRunMethod() throws RunnerException;
+
+	protected abstract void setRunnerTarget(MethodNode target) throws RunnerException;
+
+	public Result proceed() {
+		return proceedInternal();
+	}
+
+	public void setTargetMethod(MethodNode target) {
 		try {
-			fRunner.setTargetForTest(target);
+			setRunnerTarget(target);
 			fTarget = target;
 		} catch (RunnerException e) {
 			ErrorDialog.open(Messages.DIALOG_TEST_EXECUTION_PROBLEM_TITLE,
 					e.getMessage());
 		}
-	}
-
-	public void setTargetForExport(MethodNode target) {
-		fRunner.setTargetForExport(target);
-		fTarget = target;
 	}
 
 	protected MethodNode getTargetMethod() {
@@ -93,10 +104,8 @@ public abstract class AbstractOnlineSupport extends TestExecutionSupport {
 		return fRunner;
 	}
 
-	protected abstract Result proceed();
-
-	protected Result displayDialogAndRunTests() {
-		SetupDialogOnline dialog = createSetupDialogOnline(Display.getCurrent()
+	protected Result displayParametersDialogAndRunTests() {
+		SetupDialogOnline dialog = createSetupDialog(Display.getCurrent()
 				.getActiveShell(), fTarget, fFileInfoProvider,
 				fInitialExportTemplate);
 
@@ -111,8 +120,7 @@ public abstract class AbstractOnlineSupport extends TestExecutionSupport {
 		constraintList.addAll(dialog.getConstraints());
 		Map<String, Object> parameters = dialog.getGeneratorParameters();
 
-		runParametrizedTests(selectedGenerator, algorithmInput, constraintList,
-				parameters);
+		runParametrizedTests(selectedGenerator, algorithmInput, constraintList, parameters);
 
 		onDisplayTestSummary();
 
@@ -150,14 +158,6 @@ public abstract class AbstractOnlineSupport extends TestExecutionSupport {
 		return fTargetFile;
 	}
 
-	protected abstract void onDisplayTestSummary();
-
-	protected abstract void prepareRun() throws InvocationTargetException;
-
-	protected abstract void processTestCase(List<ChoiceNode> testData) throws RunnerException;
-
-	protected abstract void setTargetMethod() throws RunnerException;
-
 	private class ParametrizedTestRunnable implements IRunnableWithProgress {
 
 		private IGenerator<ChoiceNode> fGenerator;
@@ -182,7 +182,7 @@ public abstract class AbstractOnlineSupport extends TestExecutionSupport {
 			try {
 				prepareRun();
 				setProgressMonitor(progressMonitor);
-				setTargetMethod();
+				setRunMethod();
 
 				List<ChoiceNode> next;
 				fGenerator.initialize(fInput, fConstraints, fParameters);

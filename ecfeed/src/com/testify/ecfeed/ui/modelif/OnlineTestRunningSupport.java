@@ -40,7 +40,7 @@ public class OnlineTestRunningSupport extends AbstractOnlineSupport {
 	}
 
 	@Override
-	protected SetupDialogOnline createSetupDialogOnline(Shell activeShell,
+	protected SetupDialogOnline createSetupDialog(Shell activeShell,
 			MethodNode methodNode, IFileInfoProvider fileInfoProvider,
 			String initialExportTemplate) {
 		return new SetupDialogExecuteOnline(activeShell, methodNode,
@@ -48,7 +48,7 @@ public class OnlineTestRunningSupport extends AbstractOnlineSupport {
 	}
 
 	@Override
-	protected Result proceed() {
+	protected Result proceedInternal() {
 		PrintStream currentOut = System.out;
 		ConsoleManager.displayConsole();
 		ConsoleManager.redirectSystemOutputToStream(ConsoleManager.getOutputStream());
@@ -56,7 +56,7 @@ public class OnlineTestRunningSupport extends AbstractOnlineSupport {
 		Result result = Result.CANCELED;
 
 		if (getTargetMethod().getParametersCount() > 0) {
-			result = displayDialogAndRunTests();
+			result = displayParametersDialogAndRunTests();
 		} else {
 			runNonParametrizedTest();
 			result = Result.OK;
@@ -104,8 +104,13 @@ public class OnlineTestRunningSupport extends AbstractOnlineSupport {
 	}
 
 	@Override
-	protected void setTargetMethod() throws RunnerException {
+	protected void setRunMethod() throws RunnerException {
 		getRunner().setTargetForTest(getTargetMethod());
+	}
+
+	@Override
+	protected void setRunnerTarget(MethodNode target) throws RunnerException {
+		getRunner().setTargetForTest(target);
 	}
 
 	private class NonParametrizedTestRunnable implements IRunnableWithProgress {

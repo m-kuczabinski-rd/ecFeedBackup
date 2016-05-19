@@ -21,7 +21,7 @@ public class OnlineExportSupport extends AbstractOnlineSupport {
 	}
 
 	@Override
-	protected SetupDialogOnline createSetupDialogOnline(Shell activeShell,
+	protected SetupDialogOnline createSetupDialog(Shell activeShell,
 			MethodNode methodNode, IFileInfoProvider fileInfoProvider,
 			String initialExportTemplate) {
 		return new SetupDialogExportOnline(activeShell, methodNode,
@@ -29,12 +29,12 @@ public class OnlineExportSupport extends AbstractOnlineSupport {
 	}
 
 	@Override
-	protected Result proceed() {
+	public Result proceedInternal() {
 		if (getTargetMethod().getParametersCount() == 0) {
 			return Result.CANCELED;
 		}
 
-		return displayDialogAndRunTests();
+		return displayParametersDialogAndRunTests();
 	}
 
 	@Override
@@ -52,8 +52,12 @@ public class OnlineExportSupport extends AbstractOnlineSupport {
 	}
 
 	@Override
-	protected void setTargetMethod() throws RunnerException {
+	protected void setRunMethod() throws RunnerException {
 		getRunner().setTargetForExport(getTargetMethod());
 	}	
 
+	@Override
+	protected void setRunnerTarget(MethodNode target) throws RunnerException {
+		getRunner().setTargetForExport(target);
+	}
 }
