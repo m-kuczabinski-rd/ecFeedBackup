@@ -34,7 +34,8 @@ public class OnlineTestRunningSupport extends AbstractOnlineSupport {
 	public OnlineTestRunningSupport(
 			MethodNode methodNode,
 			ITestMethodInvoker testMethodInvoker,
-			IFileInfoProvider fileInfoProvider, boolean runOnAndroid) {
+			IFileInfoProvider fileInfoProvider, 
+			boolean runOnAndroid) {
 		super(methodNode, testMethodInvoker, fileInfoProvider);
 
 		fRunOnAndroid = runOnAndroid;
@@ -51,7 +52,7 @@ public class OnlineTestRunningSupport extends AbstractOnlineSupport {
 			MethodNode methodNode, IFileInfoProvider fileInfoProvider,
 			String initialExportTemplate) {
 		return new SetupDialogExecuteOnline(activeShell, methodNode,
-				fileInfoProvider);
+				fileInfoProvider, null);
 	}
 
 	@Override

@@ -20,7 +20,7 @@ public class SetupDialogGenerateTestSuite extends SetupDialogGenerator {
 
 	public SetupDialogGenerateTestSuite(Shell parentShell, MethodNode method,
 			IFileInfoProvider fileInfoProvider) {
-		super(parentShell, method, false, fileInfoProvider, null);
+		super(parentShell, method, false, fileInfoProvider, null, null);
 	}
 
 	@Override

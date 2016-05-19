@@ -15,10 +15,14 @@ import com.testify.ecfeed.ui.dialogs.SetupDialogOnline;
 
 public class OnlineExportSupport extends AbstractOnlineSupport {
 
+	String fTargetFile; 
+
 	public OnlineExportSupport(
 			MethodNode methodNode, ITestMethodInvoker testMethodInvoker,
-			IFileInfoProvider fileInfoProvider, String initialExportTemplate) {
+			IFileInfoProvider fileInfoProvider, String initialExportTemplate, String targetFile) {
 		super(methodNode, testMethodInvoker, fileInfoProvider, initialExportTemplate);
+
+		fTargetFile = targetFile;
 	}
 
 	@Override
@@ -31,7 +35,7 @@ public class OnlineExportSupport extends AbstractOnlineSupport {
 			MethodNode methodNode, IFileInfoProvider fileInfoProvider,
 			String initialExportTemplate) {
 		return new SetupDialogExportOnline(activeShell, methodNode,
-				fileInfoProvider, initialExportTemplate);
+				fileInfoProvider, initialExportTemplate, fTargetFile);
 	}
 
 	@Override

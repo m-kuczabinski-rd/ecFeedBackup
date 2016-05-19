@@ -26,6 +26,7 @@ import org.eclipse.swt.widgets.Shell;
 
 import com.testify.ecfeed.android.external.TestMethodInvokerExt;
 import com.testify.ecfeed.android.utils.AndroidBaseRunnerHelper;
+import com.testify.ecfeed.application.ApplicationContext;
 import com.testify.ecfeed.core.adapter.IModelOperation;
 import com.testify.ecfeed.core.adapter.ITypeAdapterProvider;
 import com.testify.ecfeed.core.adapter.ModelOperationException;
@@ -278,7 +279,8 @@ public class MethodInterface extends ParametersParentInterface {
 		OnlineExportSupport exportSupport = 
 				new OnlineExportSupport(
 						getTarget(), methodInvoker, 
-						fileInfoProvider,exportParser.createInitialTemplate());
+						fileInfoProvider, exportParser.createInitialTemplate(), 
+						ApplicationContext.getExportTargetFile());
 
 		AbstractOnlineSupport.Result result = exportSupport.proceed();
 
@@ -286,6 +288,7 @@ public class MethodInterface extends ParametersParentInterface {
 			return;
 		}
 
+		ApplicationContext.setExportTargetFile(exportSupport.getTargetFile());
 		String exportTemplate = exportSupport.getExportTemplate();
 		exportParser.createSubTemplates(exportTemplate);
 
@@ -315,12 +318,13 @@ public class MethodInterface extends ParametersParentInterface {
 		String initialTemplate = exportParser.createInitialTemplate();
 
 		TestCasesExportDialog dialog = new TestCasesExportDialog(
-				FileCompositeVisibility.VISIBLE, initialTemplate);
+				FileCompositeVisibility.VISIBLE, initialTemplate, ApplicationContext.getExportTargetFile());
 
 		if (dialog.open() != IDialogConstants.OK_ID) {
 			return;
 		}
 
+		ApplicationContext.setExportTargetFile(dialog.getTargetFile());
 		exportParser.createSubTemplates(dialog.getTemplate());
 
 		runExport(checkedTestCases, exportParser.getHeaderTemplate(),

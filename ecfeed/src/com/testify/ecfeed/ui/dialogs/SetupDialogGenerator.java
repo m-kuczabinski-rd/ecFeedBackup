@@ -104,7 +104,8 @@ public abstract class SetupDialogGenerator extends TitleAreaDialog {
 
 	public SetupDialogGenerator(Shell parentShell, MethodNode method,
 			boolean generateExecutables, IFileInfoProvider fileInfoProvider,
-			String initialExportTemplate) {
+			String initialExportTemplate,
+			String targetFile) {
 		super(parentShell);
 		setHelpAvailable(false);
 		setShellStyle(SWT.BORDER | SWT.RESIZE | SWT.TITLE
@@ -119,6 +120,7 @@ public abstract class SetupDialogGenerator extends TitleAreaDialog {
 
 		fTargetFile = null;
 		fExportTemplate = initialExportTemplate;
+		fTargetFile = targetFile;
 	}
 
 	protected abstract String getDialogTitle();
@@ -183,7 +185,7 @@ public abstract class SetupDialogGenerator extends TitleAreaDialog {
 			for (MethodParameterNode parameter : fMethod.getMethodParameters()) {
 				if (parameter.getChoices().isEmpty()
 						&& (parameter.isExpected() == false || JavaUtils
-								.isUserType(parameter.getType()))) {
+						.isUserType(parameter.getType()))) {
 					setOkButtonStatus(false);
 					break;
 				}
@@ -249,7 +251,7 @@ public abstract class SetupDialogGenerator extends TitleAreaDialog {
 
 		Label selectConstraintsLabel = new Label(composite, SWT.NONE);
 		selectConstraintsLabel
-				.setText(Messages.DIALOG_GENERATE_TEST_SUITES_SELECT_CONSTRAINTS_LABEL);
+		.setText(Messages.DIALOG_GENERATE_TEST_SUITES_SELECT_CONSTRAINTS_LABEL);
 
 		createConstraintsViewer(composite);
 
@@ -261,7 +263,7 @@ public abstract class SetupDialogGenerator extends TitleAreaDialog {
 		tree.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, true, 1, 1));
 		fConstraintsViewer = new CheckboxTreeViewer(tree);
 		fConstraintsViewer
-				.setContentProvider(new ConstraintsViewerContentProvider());
+		.setContentProvider(new ConstraintsViewerContentProvider());
 		fConstraintsViewer.setLabelProvider(new LabelProvider() {
 			@Override
 			public String getText(Object element) {
@@ -321,7 +323,7 @@ public abstract class SetupDialogGenerator extends TitleAreaDialog {
 		selectChoicesLabel.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER,
 				true, false, 1, 1));
 		selectChoicesLabel
-				.setText(Messages.DIALOG_GENERATE_TEST_SUITES_SELECT_CHOICES_LABEL);
+		.setText(Messages.DIALOG_GENERATE_TEST_SUITES_SELECT_CHOICES_LABEL);
 
 		createChoicesViewer(composite);
 	}
@@ -336,8 +338,8 @@ public abstract class SetupDialogGenerator extends TitleAreaDialog {
 				new GridData(SWT.FILL, SWT.FILL, true, true));
 		fParametersViewer.setInput(fMethod);
 		fParametersViewer
-				.addCheckStateListener(new ChoiceTreeCheckStateListener(
-						fParametersViewer));
+		.addCheckStateListener(new ChoiceTreeCheckStateListener(
+				fParametersViewer));
 		for (MethodParameterNode parameter : fMethod.getMethodParameters()) {
 			fParametersViewer.expandAll();
 			fParametersViewer.setSubtreeChecked(parameter, true);
@@ -462,6 +464,10 @@ public abstract class SetupDialogGenerator extends TitleAreaDialog {
 		final String TARGET_FILE = "Export target file";
 		fTargetFileText = fDialogObjectToolkit.createFileSelectionComposite(
 				parentComposite, TARGET_FILE, new ExportFileModifyListener());
+
+		if (fTargetFile != null) {
+			fTargetFileText.setText(fTargetFile);
+		}
 	}
 
 	public String getExportTemplate() {
@@ -738,7 +744,7 @@ public abstract class SetupDialogGenerator extends TitleAreaDialog {
 	}
 
 	private class ParametersContentProvider extends TreeNodeContentProvider
-			implements ITreeContentProvider {
+	implements ITreeContentProvider {
 		@Override
 		public Object[] getElements(Object input) {
 			if (input instanceof MethodNode) {
@@ -782,7 +788,7 @@ public abstract class SetupDialogGenerator extends TitleAreaDialog {
 	}
 
 	private class ConstraintsViewerContentProvider extends
-			TreeNodeContentProvider implements ITreeContentProvider {
+	TreeNodeContentProvider implements ITreeContentProvider {
 		private final Object[] EMPTY_ARRAY = new Object[] {};
 
 		@Override
@@ -822,7 +828,7 @@ public abstract class SetupDialogGenerator extends TitleAreaDialog {
 		public void widgetSelected(SelectionEvent e) {
 
 			TestCasesExportDialog dialog = new TestCasesExportDialog(
-					FileCompositeVisibility.NOT_VISIBLE, fExportTemplate);
+					FileCompositeVisibility.NOT_VISIBLE, fExportTemplate, fTargetFile);
 
 			if (dialog.open() != IDialogConstants.OK_ID) {
 				return;

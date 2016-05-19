@@ -24,7 +24,6 @@ import org.eclipse.swt.widgets.Text;
 
 import com.testify.ecfeed.core.resources.ResourceHelper;
 import com.testify.ecfeed.ui.dialogs.basic.DialogObjectToolkit;
-import com.testify.ecfeed.ui.dialogs.basic.ErrorDialog;
 import com.testify.ecfeed.ui.dialogs.basic.ExceptionCatchDialog;
 import com.testify.ecfeed.ui.dialogs.basic.FileOpenAndReadDialog;
 import com.testify.ecfeed.ui.dialogs.basic.FileSaveDialog;
@@ -46,13 +45,15 @@ public class TestCasesExportDialog extends TitleAreaDialog {
 
 	public TestCasesExportDialog(
 			FileCompositeVisibility fileCompositeVisibility,
-			String initialTemplate) {
+			String initialTemplate,
+			String targetFile) {
 		super(EclipseHelper.getActiveShell());
 		setHelpAvailable(true);
 		setDialogHelpAvailable(false);
 
 		fFileCompositeVisibility = fileCompositeVisibility;
 		fTemplate = initialTemplate;
+		fTargetFile = targetFile;
 
 		fDialogObjectToolkit = DialogObjectToolkit.getInstance();
 	}
@@ -62,7 +63,12 @@ public class TestCasesExportDialog extends TitleAreaDialog {
 		super.create();
 
 		if (fFileCompositeVisibility == FileCompositeVisibility.VISIBLE) {
-			setOkEnabled(false);
+
+			if (fTargetFile == null) {
+				setOkEnabled(false);
+			} else {
+				setOkEnabled(true);
+			}
 		}
 	}
 
@@ -167,6 +173,10 @@ public class TestCasesExportDialog extends TitleAreaDialog {
 		final String TARGET_FILE = "Target file";
 		fTargetFileText = fDialogObjectToolkit.createFileSelectionComposite(
 				parent, TARGET_FILE, new FileTextModifyListener());
+
+		if (fTargetFile != null) {
+			fTargetFileText.setText(fTargetFile);
+		}
 	}
 
 	@Override
@@ -219,7 +229,6 @@ public class TestCasesExportDialog extends TitleAreaDialog {
 		Button okButton = getButton(IDialogConstants.OK_ID);
 
 		if (okButton == null) {
-			ErrorDialog.open("Can not find OK button.");
 			return;
 		}
 

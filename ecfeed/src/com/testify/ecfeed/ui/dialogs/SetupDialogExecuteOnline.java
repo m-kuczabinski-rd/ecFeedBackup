@@ -19,8 +19,8 @@ import com.testify.ecfeed.ui.common.utils.IFileInfoProvider;
 public class SetupDialogExecuteOnline extends SetupDialogOnline {
 
 	public SetupDialogExecuteOnline(Shell parentShell, MethodNode method,
-			IFileInfoProvider fileInfoProvider) {
-		super(parentShell, method, fileInfoProvider, null);
+			IFileInfoProvider fileInfoProvider, String targetFile) {
+		super(parentShell, method, fileInfoProvider, null, targetFile);
 	}
 
 	@Override
