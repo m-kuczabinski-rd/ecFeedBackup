@@ -144,7 +144,6 @@ public class TestCasesExporter {
 				return;
 			}
 
-
 			exportMonitor.setStatus("Exporting test cases...");
 			int count = 0;
 			int maxCount = fTestCases.size();

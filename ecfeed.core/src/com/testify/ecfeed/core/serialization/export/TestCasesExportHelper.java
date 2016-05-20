@@ -142,7 +142,7 @@ public class TestCasesExportHelper {
 			result = choice.getQualifiedName();
 			break;
 		case CHOICE_COMMAND_VALUE:
-			result = convertValue(choice);
+			result = getValue(choice);
 			break;
 		default:
 			break;
@@ -150,18 +150,30 @@ public class TestCasesExportHelper {
 		return result;
 	}
 
+	private static String getValue(ChoiceNode choice) {
+		String convertedValue = convertValue(choice);
+		if (convertedValue != null) {
+			return convertedValue;
+		}
+		return choice.getValueString();
+	}
 	private static String convertValue(ChoiceNode choice) {
 		AbstractParameterNode parameter = choice.getParameter();
 		if (parameter == null) {
-			return choice.getValueString();
+			return null;
 		}
 
 		String argType = choice.getParameter().getType();
 		if (argType == null) {
-			return choice.getValueString();
+			return null;
 		}
 
-		return ChoiceValueParser.parseValueOfJavaType(choice.getValueString(), argType).toString();
+		Object parsedObject = ChoiceValueParser.parseValueOfJavaType(choice.getValueString(), argType);
+		if (parsedObject == null) {
+			return null;
+		}
+
+		return parsedObject.toString();
 	}
 
 }
