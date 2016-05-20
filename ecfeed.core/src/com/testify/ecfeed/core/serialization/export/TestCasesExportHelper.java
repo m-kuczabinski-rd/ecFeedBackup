@@ -11,7 +11,9 @@ package com.testify.ecfeed.core.serialization.export;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.testify.ecfeed.core.adapter.java.ChoiceValueParser;
 import com.testify.ecfeed.core.adapter.java.JavaUtils;
+import com.testify.ecfeed.core.model.AbstractParameterNode;
 import com.testify.ecfeed.core.model.ChoiceNode;
 import com.testify.ecfeed.core.model.MethodNode;
 import com.testify.ecfeed.core.model.MethodParameterNode;
@@ -80,12 +82,15 @@ public class TestCasesExportHelper {
 	}
 
 	public static String generateTestCaseString(int sequenceIndex, TestCaseNode testCase, String template) {
+
 		MethodNode method = testCase.getMethod();
+
 		String result = generateSection(method, template);
 		result = replaceTestParameterSequences(testCase, result);
 		result = result.replace(TEST_CASE_INDEX_NAME_SEQUENCE, String.valueOf(sequenceIndex));
 		result = result.replace(TEST_SUITE_NAME_SEQUENCE, testCase.getName());
 		result = evaluateExpressions(result);
+
 		return result;
 	}
 
@@ -105,13 +110,16 @@ public class TestCasesExportHelper {
 	}
 
 	private static String replaceTestParameterSequences(TestCaseNode testCase, String template) {
-		
+
 		String result = replaceParameterSequences(testCase.getMethod(), template);
+
 		Matcher m = Pattern.compile(TEST_PARAMETER_SEQUENCE_GENERIC_PATTERN).matcher(template);
-		
+
 		while(m.find()){
 			String parameterCommandSequence = m.group();
+
 			String command = getParameterCommand(parameterCommandSequence);
+
 			int parameterNumber = getParameterNumber(parameterCommandSequence) - 1;
 
 			if (parameterNumber < testCase.getTestData().size()) {
@@ -120,7 +128,7 @@ public class TestCasesExportHelper {
 				result = result.replace(parameterCommandSequence, substitute);
 			}
 		}
-		
+
 		return result;
 	}
 
@@ -134,12 +142,26 @@ public class TestCasesExportHelper {
 			result = choice.getQualifiedName();
 			break;
 		case CHOICE_COMMAND_VALUE:
-			result = choice.getValueString();
+			result = convertValue(choice);
 			break;
 		default:
 			break;
 		}
 		return result;
+	}
+
+	private static String convertValue(ChoiceNode choice) {
+		AbstractParameterNode parameter = choice.getParameter();
+		if (parameter == null) {
+			return choice.getValueString();
+		}
+
+		String argType = choice.getParameter().getType();
+		if (argType == null) {
+			return choice.getValueString();
+		}
+
+		return ChoiceValueParser.parseValueOfJavaType(choice.getValueString(), argType).toString();
 	}
 
 }

@@ -71,6 +71,7 @@ public class StaticTestExecutionSupport extends TestExecutionSupport{
 					addExecutedTest(1);
 				}
 			}
+
 			progressMonitor.done();
 		}
 	}

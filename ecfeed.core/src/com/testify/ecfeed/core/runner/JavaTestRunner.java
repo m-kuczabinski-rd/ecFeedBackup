@@ -106,14 +106,14 @@ public class JavaTestRunner {
 	protected Object[] getArguments(List<ChoiceNode> testData) throws RunnerException {
 		List<Object> args = new ArrayList<Object>();
 		ChoiceValueParser parser = new ChoiceValueParser(fLoader);
-		for(ChoiceNode p : testData){
-			Object value = parser.parseValue(p);
+		for(ChoiceNode choice : testData){
+			Object value = parser.parseValue(choice);
 			if(value == null){
-				String type = p.getParameter().getType();
+				String type = choice.getParameter().getType();
 				//check if null value acceptable
 				if(JavaUtils.isString(type) || JavaUtils.isUserType(type)){
-					if(p.getValueString().equals(Constants.VALUE_REPRESENTATION_NULL) == false){
-						RunnerException.report(Messages.CANNOT_PARSE_PARAMETER(type, p.getValueString()));
+					if(choice.getValueString().equals(Constants.VALUE_REPRESENTATION_NULL) == false){
+						RunnerException.report(Messages.CANNOT_PARSE_PARAMETER(type, choice.getValueString()));
 					}
 				}
 			}

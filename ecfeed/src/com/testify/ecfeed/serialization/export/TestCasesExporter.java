@@ -84,6 +84,7 @@ public class TestCasesExporter {
 
 	private void exportTestCase(TestCaseNode testCase, OutputStream outputStream)
 			throws IOException {
+
 		String testCaseText = TestCasesExportHelper.generateTestCaseString(
 				fExportedTestCases, testCase, fTestCaseTemplate)
 				+ System.lineSeparator();
@@ -138,9 +139,12 @@ public class TestCasesExporter {
 
 		private void exportTestCases(ExportMonitor exportMonitor)
 				throws IOException {
+
 			if (fTestCaseTemplate == null) {
 				return;
 			}
+
+
 			exportMonitor.setStatus("Exporting test cases...");
 			int count = 0;
 			int maxCount = fTestCases.size();

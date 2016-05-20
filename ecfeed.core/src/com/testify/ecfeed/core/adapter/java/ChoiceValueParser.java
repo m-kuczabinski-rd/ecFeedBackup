@@ -20,6 +20,20 @@ public class ChoiceValueParser {
 		fLoader = loader;
 	}
 
+	private Object parseUserTypeValue(String valueString, String typeName) {
+		Object value = null;
+		Class<?> typeClass = fLoader.loadClass(typeName);
+		if (typeClass != null) {
+			for (Object object: typeClass.getEnumConstants()) {
+				if ((((Enum<?>)object).name()).equals(valueString)) {
+					value = object;
+					break;
+				}
+			}
+		}
+		return value;
+	}
+
 	public Object parseValue(ChoiceNode choice){
 		if(choice.getParameter() != null){
 			return parseValue(choice.getValueString(), choice.getParameter().getType());
@@ -55,7 +69,35 @@ public class ChoiceValueParser {
 		}
 	}
 
-	private Object parseBooleanValue(String valueString) {
+	public static Object parseValueOfJavaType(String valueString, String typeName){
+		if(typeName == null || valueString == null){
+			return null;
+		}
+		switch(typeName){
+		case Constants.TYPE_NAME_BOOLEAN:
+			return parseBooleanValue(valueString);
+		case Constants.TYPE_NAME_BYTE:
+			return parseByteValue(valueString);
+		case Constants.TYPE_NAME_CHAR:
+			return parseCharValue(valueString);
+		case Constants.TYPE_NAME_DOUBLE:
+			return parseDoubleValue(valueString);
+		case Constants.TYPE_NAME_FLOAT:
+			return parseFloatValue(valueString);
+		case Constants.TYPE_NAME_INT:
+			return parseIntValue(valueString);
+		case Constants.TYPE_NAME_LONG:
+			return parseLongValue(valueString);
+		case Constants.TYPE_NAME_SHORT:
+			return parseShortValue(valueString);
+		case Constants.TYPE_NAME_STRING:
+			return parseStringValue(valueString);
+		default:
+			return null;
+		}
+	}	
+
+	private static Object parseBooleanValue(String valueString) {
 		if(valueString.toLowerCase().equals(Constants.VALUE_REPRESENTATION_TRUE.toLowerCase())){
 			return true;
 		}
@@ -65,7 +107,7 @@ public class ChoiceValueParser {
 		return null;
 	}
 
-	private Object parseByteValue(String valueString) {
+	private static Object parseByteValue(String valueString) {
 		if(valueString.equals(Constants.VALUE_REPRESENTATION_MAX)){
 			return Byte.MAX_VALUE;
 		}
@@ -80,7 +122,7 @@ public class ChoiceValueParser {
 		}
 	}
 
-	private Object parseCharValue(String valueString) {
+	private static Object parseCharValue(String valueString) {
 		if(valueString.equals(Constants.VALUE_REPRESENTATION_MAX)){
 			return Character.MAX_VALUE;
 		}
@@ -96,7 +138,7 @@ public class ChoiceValueParser {
 
 	}
 
-	private Object parseDoubleValue(String valueString) {
+	private static Object parseDoubleValue(String valueString) {
 		if(valueString.equals(Constants.VALUE_REPRESENTATION_MAX)){
 			return Double.MAX_VALUE;
 		}
@@ -117,7 +159,7 @@ public class ChoiceValueParser {
 		}
 	}
 
-	private Object parseFloatValue(String valueString) {
+	private static Object parseFloatValue(String valueString) {
 		if(valueString.equals(Constants.VALUE_REPRESENTATION_MAX)){
 			return Float.MAX_VALUE;
 		}
@@ -138,7 +180,7 @@ public class ChoiceValueParser {
 		}
 	}
 
-	private Object parseIntValue(String valueString) {
+	private static Object parseIntValue(String valueString) {
 		if(valueString.equals(Constants.VALUE_REPRESENTATION_MAX)){
 			return Integer.MAX_VALUE;
 		}
@@ -153,7 +195,7 @@ public class ChoiceValueParser {
 		}
 	}
 
-	private Object parseLongValue(String valueString) {
+	private static Object parseLongValue(String valueString) {
 		if(valueString.equals(Constants.VALUE_REPRESENTATION_MAX)){
 			return Long.MAX_VALUE;
 		}
@@ -168,7 +210,7 @@ public class ChoiceValueParser {
 		}
 	}
 
-	private Object parseShortValue(String valueString) {
+	private static Object parseShortValue(String valueString) {
 		if(valueString.equals(Constants.VALUE_REPRESENTATION_MAX)){
 			return Short.MAX_VALUE;
 		}
@@ -183,26 +225,13 @@ public class ChoiceValueParser {
 		}
 	}
 
-	private Object parseStringValue(String valueString) {
+	private static Object parseStringValue(String valueString) {
 		if(valueString.equals(Constants.VALUE_REPRESENTATION_NULL)){
 			return null;
 		}
 		return valueString;
 	}
 
-	private Object parseUserTypeValue(String valueString, String typeName) {
-		Object value = null;
-		Class<?> typeClass = fLoader.loadClass(typeName);
-		if (typeClass != null) {
-			for (Object object: typeClass.getEnumConstants()) {
-				if ((((Enum<?>)object).name()).equals(valueString)) {
-					value = object;
-					break;
-				}
-			}
-		}
-		return value;
-	}
 
 
 }
