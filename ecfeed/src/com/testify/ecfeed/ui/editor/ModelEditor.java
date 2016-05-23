@@ -52,6 +52,7 @@ import org.eclipse.ui.part.FileEditorInput;
 
 import com.testify.ecfeed.application.ApplicationContext;
 import com.testify.ecfeed.core.adapter.CachedImplementationStatusResolver;
+import com.testify.ecfeed.core.adapter.ModelOperationException;
 import com.testify.ecfeed.core.adapter.ModelOperationManager;
 import com.testify.ecfeed.core.model.ModelConverter;
 import com.testify.ecfeed.core.model.ModelVersionDistributor;
@@ -169,20 +170,25 @@ public class ModelEditor extends FormEditor implements IFileInfoProvider{
 		fUndoContext = new ObjectUndoContext(fModelManager);
 	}
 
-	public RootNode getModel(){
+	public RootNode getModel() throws ModelOperationException{
 		if (fModel == null){
 			fModel = createModel();
 		}
 		return fModel;
 	}
 
-	private RootNode createModel() {
+	private RootNode createModel() throws ModelOperationException {
 		IEditorInput input = getEditorInput();
 		InputStream stream = getInputStream(input);
+
+		if (stream == null) {
+			return null;
+		}
+
 		return parseModel(stream);
 	}
 
-	private InputStream getInputStream(IEditorInput input) {
+	private InputStream getInputStream(IEditorInput input) throws ModelOperationException {
 		if (isProjectAvailable()) {
 			return getInputStreamForIDE(input);
 		} else {
@@ -190,7 +196,18 @@ public class ModelEditor extends FormEditor implements IFileInfoProvider{
 		}		
 	}
 
-	private InputStream getInputStreamForIDE(IEditorInput input) {
+	private InputStream getInputStreamForIDE(IEditorInput input) throws ModelOperationException {
+		if (input instanceof FileStoreEditorInput) {
+			final String CAN_NOT_OPEN_FILE = "Can not open file: ";
+			final String ERR_MSG_1 = "It is not allowed to open standalone ect files created outside of Java project structure.";
+			final String ERR_MSG_2 = "Please add ect file to the Java project first."; 
+
+			System.out.println("Input.getName()" + input.getName());
+			ModelOperationException.report(
+					CAN_NOT_OPEN_FILE + input.getName() + ". "+ ERR_MSG_1 + " " + ERR_MSG_2);
+			return null;
+		}
+
 		FileEditorInput fileInput = EclipseHelper.getFileEditorInput(input);
 		if (fileInput == null) {
 			reportInvalidInputTypeException();
