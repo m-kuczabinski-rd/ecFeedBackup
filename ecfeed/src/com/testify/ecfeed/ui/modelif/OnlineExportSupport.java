@@ -20,7 +20,7 @@ public class OnlineExportSupport extends AbstractOnlineSupport {
 	public OnlineExportSupport(
 			MethodNode methodNode, ITestMethodInvoker testMethodInvoker,
 			IFileInfoProvider fileInfoProvider, String initialExportTemplate, String targetFile) {
-		super(methodNode, testMethodInvoker, fileInfoProvider, initialExportTemplate);
+		super(methodNode, testMethodInvoker, fileInfoProvider, true, initialExportTemplate);
 
 		fTargetFile = targetFile;
 	}

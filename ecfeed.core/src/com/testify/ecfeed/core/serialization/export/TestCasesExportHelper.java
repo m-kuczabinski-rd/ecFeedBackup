@@ -157,6 +157,7 @@ public class TestCasesExportHelper {
 		}
 		return choice.getValueString();
 	}
+
 	private static String convertValue(ChoiceNode choice) {
 		AbstractParameterNode parameter = choice.getParameter();
 		if (parameter == null) {
@@ -168,7 +169,8 @@ public class TestCasesExportHelper {
 			return null;
 		}
 
-		Object parsedObject = ChoiceValueParser.parseValueOfJavaType(choice.getValueString(), argType);
+		ChoiceValueParser choiceValueParser = new ChoiceValueParser(null, true);
+		Object parsedObject = choiceValueParser.parseValue(choice.getValueString(), argType);
 		if (parsedObject == null) {
 			return null;
 		}

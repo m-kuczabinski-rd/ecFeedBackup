@@ -284,7 +284,12 @@ public class MethodInterface extends ParametersParentInterface {
 
 		AbstractOnlineSupport.Result result = exportSupport.proceed();
 
-		if (result != AbstractOnlineSupport.Result.OK) {
+		if (result == AbstractOnlineSupport.Result.CANCELED) {
+			return;
+		}
+
+		if (exportSupport.anyTestFailed()) {
+			ErrorDialog.open("Export preparation failed.");
 			return;
 		}
 

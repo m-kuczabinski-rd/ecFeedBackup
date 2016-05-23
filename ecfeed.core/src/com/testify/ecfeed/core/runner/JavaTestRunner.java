@@ -26,13 +26,15 @@ import com.testify.ecfeed.core.model.MethodNode;
 public class JavaTestRunner {
 
 	private ModelClassLoader fLoader;
+	private boolean fIsExport;
 	private MethodNode fTarget;
 	private Class<?> fTestClass;
 	private Method fTestMethod;
 	private ITestMethodInvoker fTestMethodInvoker;
 
-	public JavaTestRunner(ModelClassLoader loader, ITestMethodInvoker testMethodInvoker) {
+	public JavaTestRunner(ModelClassLoader loader, boolean isExport, ITestMethodInvoker testMethodInvoker) {
 		fLoader = loader;
+		fIsExport = isExport;
 		fTestMethodInvoker = testMethodInvoker; 
 	}
 
@@ -105,7 +107,7 @@ public class JavaTestRunner {
 
 	protected Object[] getArguments(List<ChoiceNode> testData) throws RunnerException {
 		List<Object> args = new ArrayList<Object>();
-		ChoiceValueParser parser = new ChoiceValueParser(fLoader);
+		ChoiceValueParser parser = new ChoiceValueParser(fLoader, fIsExport);
 		for(ChoiceNode choice : testData){
 			Object value = parser.parseValue(choice);
 			if(value == null){

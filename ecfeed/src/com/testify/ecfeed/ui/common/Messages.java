@@ -196,7 +196,7 @@ public class Messages {
 	public static final String DEFAULT_PACKAGE_NOT_SET_IN_ANDROID_MANIFEST = "Default package for tested aplication is not set in AndroidManifest.xml.";
 
 	public static final String DIALOG_GENERATOR_INPUT_PROBLEM_MESSAGE = "At least one choice per parameter must be check";
-	public static final String DIALOG_GENERATOR_EXECUTABLE_INPUT_PROBLEM_MESSAGE = "At least one choice per parameter must be check. All checked parameters must be implemented";
+	public static final String DIALOG_GENERATOR_EXECUTABLE_INPUT_PROBLEM_MESSAGE = "At least one choice per parameter must be checked. All checked parameters must be implemented";
 	public static final String DIALOG_GENERATE_TEST_SUITES_SELECT_CONSTRAINTS_LABEL = "Select constraints considered when generating test suite";
 	public static final String DIALOG_GENERATE_TEST_SUITES_SELECT_CHOICES_LABEL = "Select which choices will be considered for generating test suite. "
 			+ "Each parameter must be represented by at least one choice.";

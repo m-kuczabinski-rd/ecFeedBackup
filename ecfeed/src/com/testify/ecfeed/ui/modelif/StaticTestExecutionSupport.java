@@ -84,7 +84,7 @@ public class StaticTestExecutionSupport extends TestExecutionSupport{
 		super();
 		ILoaderProvider loaderProvider = new EclipseLoaderProvider();
 		ModelClassLoader loader = loaderProvider.getLoader(true, null);
-		fRunner = new JavaTestRunner(loader, testMethodInvoker);
+		fRunner = new JavaTestRunner(loader, false, testMethodInvoker);
 		fTestCases = testCases;
 		fFailedTests = new ArrayList<>();
 		fFileInfoProvider = fileInfoProvider;

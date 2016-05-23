@@ -56,15 +56,15 @@ public abstract class AbstractOnlineSupport extends TestExecutionSupport {
 	public AbstractOnlineSupport(
 			MethodNode methodNode, ITestMethodInvoker testMethodInvoker, 
 			IFileInfoProvider fileInfoProvider) {
-		this(methodNode, testMethodInvoker, fileInfoProvider, null);
+		this(methodNode, testMethodInvoker, fileInfoProvider, false, null);
 	}
 
 	public AbstractOnlineSupport(
 			MethodNode methodNode, ITestMethodInvoker testMethodInvoker,
-			IFileInfoProvider fileInfoProvider, String initialExportTemplate) {
+			IFileInfoProvider fileInfoProvider, boolean isExport, String initialExportTemplate) {
 		ILoaderProvider loaderProvider = new EclipseLoaderProvider();
 		ModelClassLoader loader = loaderProvider.getLoader(true, null);
-		fRunner = new JavaTestRunner(loader, testMethodInvoker);
+		fRunner = new JavaTestRunner(loader, isExport, testMethodInvoker);
 		fFileInfoProvider = fileInfoProvider;
 		fInitialExportTemplate = initialExportTemplate;
 

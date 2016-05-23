@@ -17,7 +17,7 @@ public class SetupDialogExportOnline extends SetupDialogOnline {
 
 	public SetupDialogExportOnline(Shell parentShell, MethodNode method,
 			IFileInfoProvider fileInfoProvider, String initialExportTemplate, String targetFile) {
-		super(parentShell, method, fileInfoProvider, initialExportTemplate, targetFile);
+		super(parentShell, method, false, fileInfoProvider, initialExportTemplate, targetFile);
 	}
 
 	@Override

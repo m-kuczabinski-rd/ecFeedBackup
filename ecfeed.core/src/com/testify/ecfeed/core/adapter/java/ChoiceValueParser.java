@@ -15,9 +15,11 @@ import com.testify.ecfeed.core.model.ChoiceNode;
 
 public class ChoiceValueParser {
 	private ModelClassLoader fLoader;
+	boolean fIsExport;
 
-	public ChoiceValueParser(ModelClassLoader loader){
+	public ChoiceValueParser(ModelClassLoader loader, boolean isExport){
 		fLoader = loader;
+		fIsExport = isExport;
 	}
 
 	private Object parseUserTypeValue(String valueString, String typeName) {
@@ -41,7 +43,7 @@ public class ChoiceValueParser {
 		return null;
 	}
 
-	public Object parseValue(String valueString, String typeName){
+	public Object parseValue(String valueString, String typeName) { 
 		if(typeName == null || valueString == null){
 			return null;
 		}
@@ -65,37 +67,12 @@ public class ChoiceValueParser {
 		case Constants.TYPE_NAME_STRING:
 			return parseStringValue(valueString);
 		default:
+			if (fIsExport) {
+				return valueString;
+			}
 			return parseUserTypeValue(valueString, typeName);
 		}
 	}
-
-	public static Object parseValueOfJavaType(String valueString, String typeName){
-		if(typeName == null || valueString == null){
-			return null;
-		}
-		switch(typeName){
-		case Constants.TYPE_NAME_BOOLEAN:
-			return parseBooleanValue(valueString);
-		case Constants.TYPE_NAME_BYTE:
-			return parseByteValue(valueString);
-		case Constants.TYPE_NAME_CHAR:
-			return parseCharValue(valueString);
-		case Constants.TYPE_NAME_DOUBLE:
-			return parseDoubleValue(valueString);
-		case Constants.TYPE_NAME_FLOAT:
-			return parseFloatValue(valueString);
-		case Constants.TYPE_NAME_INT:
-			return parseIntValue(valueString);
-		case Constants.TYPE_NAME_LONG:
-			return parseLongValue(valueString);
-		case Constants.TYPE_NAME_SHORT:
-			return parseShortValue(valueString);
-		case Constants.TYPE_NAME_STRING:
-			return parseStringValue(valueString);
-		default:
-			return null;
-		}
-	}	
 
 	private static Object parseBooleanValue(String valueString) {
 		if(valueString.toLowerCase().equals(Constants.VALUE_REPRESENTATION_TRUE.toLowerCase())){

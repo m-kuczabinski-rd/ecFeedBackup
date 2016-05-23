@@ -755,22 +755,46 @@ public abstract class SetupDialogGenerator extends TitleAreaDialog {
 
 		@Override
 		public Object[] getChildren(Object element) {
+			List<Object> noChildren = new ArrayList<Object>();
+
+			if (isExpectedMethodParameter(element)) {
+				return noChildren.toArray();
+			}
+			if (element instanceof ChoicesParentNode) {
+				return getChoices(element).toArray();
+			}
+			return noChildren.toArray();
+		}
+
+		private boolean isExpectedMethodParameter(Object element) {
+			if (!(element instanceof MethodParameterNode)) {
+				return false;
+			}
+			if (!((MethodParameterNode) element).isExpected()) {
+				return false;
+			}
+			return true;
+		}
+
+		private List<Object> getChoices(Object element) {
 			List<Object> children = new ArrayList<Object>();
-			if (element instanceof MethodParameterNode
-					&& ((MethodParameterNode) element).isExpected()) {
-			} else if (element instanceof ChoicesParentNode) {
-				ChoicesParentNode parent = (ChoicesParentNode) element;
-				if (fGenerateExecutableContent == false) {
-					children.addAll(parent.getChoices());
-				} else {
-					for (ChoiceNode child : parent.getChoices()) {
-						if (fStatusResolver.getImplementationStatus(child) != EImplementationStatus.NOT_IMPLEMENTED) {
-							children.add(child);
-						}
-					}
+			ChoicesParentNode parent = (ChoicesParentNode) element;
+
+			if (fGenerateExecutableContent) {
+				addImplementedChoices(parent, children);
+				return children;
+			}
+
+			children.addAll(parent.getChoices());
+			return children;
+		}
+
+		private void addImplementedChoices(ChoicesParentNode parent, List<Object> children) {
+			for (ChoiceNode child : parent.getChoices()) {
+				if (fStatusResolver.getImplementationStatus(child) != EImplementationStatus.NOT_IMPLEMENTED) {
+					children.add(child);
 				}
 			}
-			return children.toArray();
 		}
 
 		@Override

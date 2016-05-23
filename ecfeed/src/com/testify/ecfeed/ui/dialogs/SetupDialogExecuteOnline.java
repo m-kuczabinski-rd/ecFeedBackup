@@ -20,7 +20,7 @@ public class SetupDialogExecuteOnline extends SetupDialogOnline {
 
 	public SetupDialogExecuteOnline(Shell parentShell, MethodNode method,
 			IFileInfoProvider fileInfoProvider, String targetFile) {
-		super(parentShell, method, fileInfoProvider, null, targetFile);
+		super(parentShell, method, true, fileInfoProvider, null, targetFile);
 	}
 
 	@Override
