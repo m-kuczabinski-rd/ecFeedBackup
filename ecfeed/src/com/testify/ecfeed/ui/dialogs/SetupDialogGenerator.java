@@ -62,6 +62,7 @@ import com.testify.ecfeed.core.model.Constraint;
 import com.testify.ecfeed.core.model.ConstraintNode;
 import com.testify.ecfeed.core.model.MethodNode;
 import com.testify.ecfeed.core.model.MethodParameterNode;
+import com.testify.ecfeed.core.utils.StringHolder;
 import com.testify.ecfeed.ui.common.Constants;
 import com.testify.ecfeed.ui.common.EclipseImplementationStatusResolver;
 import com.testify.ecfeed.ui.common.Messages;
@@ -195,7 +196,7 @@ public abstract class SetupDialogGenerator extends TitleAreaDialog {
 		createButton(parent, IDialogConstants.CANCEL_ID,
 				IDialogConstants.CANCEL_LABEL, false);
 
-		updateOkButton();
+		updateOkButtonAndErrorMsg();
 	}
 
 	@Override
@@ -367,70 +368,145 @@ public abstract class SetupDialogGenerator extends TitleAreaDialog {
 		fTestSuiteCombo.addModifyListener(new ModifyListener() {
 			@Override
 			public void modifyText(ModifyEvent e) {
-				updateOkButton();
+				updateOkButtonAndErrorMsg();
 			}
 		});
 		fTestSuiteCombo.setText(Constants.DEFAULT_NEW_TEST_SUITE_NAME);
 	}
 
-	private void updateOkButton() {
-		boolean okEnabled = true;
-		if ((okEnabled = validateTestSuiteName()) == false) {
-			setErrorMessage(Messages.DIALOG_TEST_SUITE_NAME_PROBLEM_MESSAGE);
-		}
-		if ((okEnabled &= validateGeneratorInput(fGenerateExecutableContent)) == false) {
-			if (fGenerateExecutableContent) {
-				setErrorMessage(Messages.DIALOG_GENERATOR_EXECUTABLE_INPUT_PROBLEM_MESSAGE);
-			} else {
-				setErrorMessage(Messages.DIALOG_GENERATOR_INPUT_PROBLEM_MESSAGE);
-			}
-		}
-		okEnabled &= validateTargetFileText();
+	private void updateOkButtonAndErrorMsg() {
+		StringHolder message = new StringHolder();
 
-		if (okEnabled) {
+		if (validateDialogFields(message)) {
+			setOkButtonStatus(true);
 			setErrorMessage(null);
+			return;
 		}
-		setOkButtonStatus(okEnabled);
+		setOkButtonStatus(false);
+		setErrorMessage(message.get());
 	}
 
-	private boolean validateGeneratorInput(boolean onlyExecutable) {
-		for (MethodParameterNode parameter : fMethod.getMethodParameters()) {
-			boolean leafChecked = false;
-			if (parameter.isExpected()) {
-				if (fParametersViewer.getChecked(parameter) == false) {
-					return false;
-				}
-				continue;
-			}
-			for (ChoiceNode leaf : parameter.getLeafChoices()) {
-				leafChecked |= fParametersViewer.getChecked(leaf);
-
-				if (fFileInfoProvider.isProjectAvailable()) {
-					EImplementationStatus status = fStatusResolver
-							.getImplementationStatus(leaf);
-					if (status != EImplementationStatus.IMPLEMENTED
-							&& onlyExecutable) {
-						return false;
-					}
-				}
-			}
-			if (leafChecked == false) {
-				return false;
-			}
+	private boolean validateDialogFields(StringHolder message) {
+		if (!validateTestSuiteName(message)) {
+			return false;
+		}
+		if (!validateMethodParameters(fGenerateExecutableContent, message)) {
+			return false;
+		}
+		if (!validateTargetFileText(message)) {
+			return false;
 		}
 		return true;
 	}
 
-	private boolean validateTestSuiteName() {
+	private boolean validateTestSuiteName(StringHolder message) {
 		boolean testSuiteValid = true;
+
 		if (fTestSuiteCombo != null && fTestSuiteCombo.isDisposed() == false) {
-			testSuiteValid = JavaUtils.isValidTestCaseName(fTestSuiteCombo
-					.getText());
+			testSuiteValid = JavaUtils.isValidTestCaseName(fTestSuiteCombo.getText());
 			if (testSuiteValid) {
 				fTestSuiteName = fTestSuiteCombo.getText();
 			}
 		}
-		return testSuiteValid;
+
+		if (!testSuiteValid) {
+			final String MSG_TEST_SUITE_NAME_INVALID = "Test suite name is invalid.";
+			message.set(MSG_TEST_SUITE_NAME_INVALID);
+			return false;
+		}
+		return true;
+	}
+
+	private boolean validateMethodParameters(boolean onlyExecutable, StringHolder message) {
+
+		for (MethodParameterNode parameter : fMethod.getMethodParameters()) {
+			if (!validateOneParameter(parameter, onlyExecutable, message)) {
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+	private boolean validateOneParameter(
+			MethodParameterNode parameter, boolean onlyExecutable, StringHolder message) {
+
+		if (parameter.isExpected()) {
+			if (!validateExpectedParameter(parameter, message)) {
+				return false;
+			}
+			return true;
+		}
+
+		return validateChoices(parameter, onlyExecutable, message);
+	}
+
+	private boolean validateExpectedParameter(MethodParameterNode parameter, StringHolder message) {
+		if (!fParametersViewer.getChecked(parameter)) {
+			final String MSG_EXPECTED_SHOULD_BE_CHECKED = "Expected parameter: %s should be checked.";
+			message.set(String.format(MSG_EXPECTED_SHOULD_BE_CHECKED, parameter.getName())); 
+			return false;
+		}
+		return true;
+	}
+
+	private boolean validateChoices(
+			MethodParameterNode parameter, boolean onlyExecutable, StringHolder message) {
+		boolean checkedChoiceFound = false;
+		boolean choiceFound = false;
+
+		for (ChoiceNode choice : parameter.getLeafChoices()) {
+			choiceFound = true;
+			checkedChoiceFound |= fParametersViewer.getChecked(choice);
+
+			if (!validateChoiceImplementationStatus(choice, onlyExecutable, message)) {
+				return false;
+			}
+		}
+
+		if (!choiceFound) {
+			final String MSG_NO_CHOICES =  "There are no choices for parameter: %s.";
+			message.set(String.format(MSG_NO_CHOICES, parameter.getName()));
+			return false;
+		}
+
+		if (!checkedChoiceFound) {
+			final String MSG_AT_LEAST_ONE_CHOICE =  "At least one choice for parameter: %s must be checked.";
+			message.set(String.format(MSG_AT_LEAST_ONE_CHOICE, parameter.getName()));
+			return false;
+		}
+
+		return true;		
+	}
+
+	private boolean validateChoiceImplementationStatus(
+			ChoiceNode choice, boolean onlyExecutable, StringHolder message) {
+		if (!onlyExecutable) {
+			return true;
+		}
+		if (!fFileInfoProvider.isProjectAvailable()) {
+			return true;
+		}
+		EImplementationStatus status = fStatusResolver.getImplementationStatus(choice);
+		if (status == EImplementationStatus.IMPLEMENTED) {
+			return true;
+		}
+
+		final String MSG_NOT_IMPLEMENTED = "Choice: %s must be implemented.";
+		message.set(String.format(MSG_NOT_IMPLEMENTED, choice.getName()));
+		return false;
+	}
+
+	private boolean validateTargetFileText(StringHolder message) {
+		if (!isContentFlagOn(TEST_CASES_EXPORT_COMPOSITE)) {
+			return true;
+		}
+		if (fTargetFileText == null || fTargetFileText.getText().isEmpty()) {
+			final String MSG_FILE_EMPTY = "Field: Export target file is empty.";
+			message.set(MSG_FILE_EMPTY);
+			return false;
+		}
+		return true;
 	}
 
 	private void setOkButtonStatus(boolean enabled) {
@@ -476,17 +552,6 @@ public abstract class SetupDialogGenerator extends TitleAreaDialog {
 
 	public String getTargetFile() {
 		return fTargetFile;
-	}
-
-	private boolean validateTargetFileText() {
-		if (!isContentFlagOn(TEST_CASES_EXPORT_COMPOSITE)) {
-			return true;
-		}
-
-		if (fTargetFileText == null || fTargetFileText.getText().isEmpty()) {
-			return false;
-		}
-		return true;
 	}
 
 	private void createGeneratorViewer(final Composite parent) {
@@ -738,7 +803,7 @@ public abstract class SetupDialogGenerator extends TitleAreaDialog {
 					&& ((MethodParameterNode) event.getElement()).isExpected()) {
 				fParametersViewer.setChecked(event.getElement(), true);
 			} else {
-				updateOkButton();
+				updateOkButtonAndErrorMsg();
 			}
 		}
 	}
@@ -865,7 +930,7 @@ public abstract class SetupDialogGenerator extends TitleAreaDialog {
 	class ExportFileModifyListener implements ModifyListener {
 		@Override
 		public void modifyText(ModifyEvent e) {
-			updateOkButton();
+			updateOkButtonAndErrorMsg();
 		}
 	}
 
