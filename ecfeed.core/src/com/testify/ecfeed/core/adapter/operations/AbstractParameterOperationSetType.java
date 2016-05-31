@@ -30,6 +30,7 @@ import com.testify.ecfeed.core.model.ClassNode;
 import com.testify.ecfeed.core.model.GlobalParameterNode;
 import com.testify.ecfeed.core.model.MethodNode;
 import com.testify.ecfeed.core.model.MethodParameterNode;
+import com.testify.ecfeed.core.utils.PackageClassHelper;
 
 public class AbstractParameterOperationSetType extends AbstractModelOperation {
 
@@ -96,6 +97,12 @@ public class AbstractParameterOperationSetType extends AbstractModelOperation {
 
 		if(JavaUtils.isValidTypeName(fNewType) == false){
 			ModelOperationException.report(Messages.CATEGORY_TYPE_REGEX_PROBLEM);
+		}
+		if (JavaUtils.isUserType(fNewType)) {
+			String thePackage = PackageClassHelper.getPackage(fNewType);
+			if (thePackage == null) {
+				ModelOperationException.report(Messages.PACKAGE_NAME_REQUIRED);
+			}
 		}
 		// Check for duplicate signatures possibly caused by global parameter type change
 		if(fTarget instanceof GlobalParameterNode){
