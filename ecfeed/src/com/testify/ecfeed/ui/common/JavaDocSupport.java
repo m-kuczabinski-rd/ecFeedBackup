@@ -56,6 +56,9 @@ public class JavaDocSupport {
 		@Override
 		public Object visit(MethodParameterNode node) throws Exception {
 			String methodDoc = getJavadoc(JavaModelAnalyser.getIMethod(node.getMethod()));
+			if (methodDoc == null) {
+				return null;
+			}
 
 			String searchedTag = "@param " + node.getName();
 			int startIndex = methodDoc.indexOf(searchedTag);
