@@ -25,6 +25,7 @@ import com.testify.ecfeed.core.model.MethodParameterNode;
 import com.testify.ecfeed.core.model.RootNode;
 import com.testify.ecfeed.core.model.TestCaseNode;
 import com.testify.ecfeed.core.utils.EcException;
+import com.testify.ecfeed.core.utils.StrgList;
 import com.testify.ecfeed.core.utils.SystemLogger;
 
 public abstract class AbstractModelImplementer implements IModelImplementer {
@@ -162,17 +163,36 @@ public abstract class AbstractModelImplementer implements IModelImplementer {
 	}
 
 	protected boolean implement(RootNode rootNode) throws Exception{
+		implementRootGlobalParameters(rootNode);
+		implementClasses(rootNode);
+		return true;
+	}
+
+	private void implementRootGlobalParameters(RootNode rootNode) throws Exception {
 		for(GlobalParameterNode parameter : rootNode.getGlobalParameters()){
 			if(implementable(parameter) && getImplementationStatus(parameter) != EImplementationStatus.IMPLEMENTED){
 				implement(parameter);
 			}
 		}
+	}
+
+	private void implementClasses(RootNode rootNode) throws EcException, Exception {
+		StrgList errorMessages = new StrgList();
+
 		for(ClassNode classNode : rootNode.getClasses()){
 			if(implementable(classNode) && getImplementationStatus(classNode) != EImplementationStatus.IMPLEMENTED){
-				implement(classNode);
+
+				try {
+					implement(classNode);
+				} catch (Exception e) {
+					errorMessages.add(e.getMessage());
+				}
 			}
 		}
-		return true;
+
+		if (!errorMessages.isEmpty()) {
+			EcException.report(errorMessages.contentsToMultilineString());
+		}
 	}
 
 	protected boolean implement(ClassNode classNode) throws Exception{
@@ -185,12 +205,27 @@ public abstract class AbstractModelImplementer implements IModelImplementer {
 			implementClassDefinition(classNode);
 		}
 
+		implementMethods(classNode);
+		return true;
+	}
+
+	private void implementMethods(ClassNode classNode) throws EcException {
+		StrgList errorMessages = new StrgList();
+
 		for(MethodNode method : classNode.getMethods()){
 			if(implementable(method) && getImplementationStatus(method) != EImplementationStatus.IMPLEMENTED){
-				implement(method);
+
+				try {
+					implement(method);
+				} catch (Exception e) {
+					errorMessages.add(e.getMessage());
+				}
 			}
 		}
-		return true;
+
+		if (!errorMessages.isEmpty()) {
+			EcException.report(errorMessages.contentsToMultilineString());
+		}
 	}
 
 	protected boolean implement(MethodNode methodNode) throws Exception{

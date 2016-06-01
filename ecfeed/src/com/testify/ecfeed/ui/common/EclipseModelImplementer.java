@@ -114,18 +114,18 @@ public class EclipseModelImplementer extends AbstractJavaModelImplementer {
 
 		AbstractNode parentNode = parameterNode.getParent();
 		if (!(parentNode instanceof MethodNode)) {
-			final String PACKAGE_NAME_REQUIRED_1 = "Package name is required for user type: %s.";
-			EcException.report(String.format(PACKAGE_NAME_REQUIRED_1, type));
+			final String PACKAGE_NAME_REQUIRED_1 = "Package name is required for user type: %s (parameter: %s).";
+			EcException.report(String.format(PACKAGE_NAME_REQUIRED_1, type, parameterNode.getName()));
 		}
 
 		AbstractNode grandParentNode = parentNode.getParent();
 		if (!(grandParentNode instanceof ClassNode)) {
-			final String PACKAGE_NAME_REQUIRED_2 = "Package name is required for user type: %s. Method: %s.";
-			EcException.report(String.format(PACKAGE_NAME_REQUIRED_2, type, parentNode.getName()));
+			final String PACKAGE_NAME_REQUIRED_2 = "Package name is required for user type: %s (method: %s, parameter: %s).";
+			EcException.report(String.format(PACKAGE_NAME_REQUIRED_2, type, parentNode.getName(), parameterNode.getName()));
 		}
 
-		final String PACKAGE_NAME_REQUIRED_3 = "Package name is required for user type: %s. Method: %s. Class: %s.";
-		EcException.report(String.format(PACKAGE_NAME_REQUIRED_3, type, parentNode.getName(), grandParentNode.getName()));
+		final String PACKAGE_NAME_REQUIRED_3 = "Package name is required for user type: %s (class: %s, method: %s, parameter: %s).";
+		EcException.report(String.format(PACKAGE_NAME_REQUIRED_3, type, grandParentNode.getName(), parentNode.getName(), parameterNode.getName()));
 	}
 
 	@Override

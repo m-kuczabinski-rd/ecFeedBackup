@@ -15,11 +15,15 @@ public class StrgList {
 
 	List<String> fStrgs = new ArrayList<String>();
 
+	public boolean isEmpty() {
+		return fStrgs.isEmpty();
+	}
+
 	public void add(String strg) {
 		fStrgs.add(strg);
 	}
 
-	public String getOneString() {
+	public String contentsToMultilineString() {
 		StringBuilder stringBuilder = new StringBuilder();
 
 		boolean firstElement = true;
@@ -37,5 +41,6 @@ public class StrgList {
 
 		return stringBuilder.toString();
 	}
+
 
 }
