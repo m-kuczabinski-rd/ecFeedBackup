@@ -149,12 +149,10 @@ public abstract class AbstractModelImplementer implements IModelImplementer {
 	}
 
 	@Override
-	public boolean implement(AbstractNode node) {
-		try{
-			if(implementable(node)){
-				return (boolean)node.accept(fNodeImplementerVisitor);
-			}
-		}catch(Exception e){SystemLogger.logCatch(e.getMessage());}
+	public boolean implement(AbstractNode node) throws Exception {
+		if(implementable(node)){
+			return (boolean)node.accept(fNodeImplementerVisitor);
+		}
 		return false;
 	}
 
@@ -163,13 +161,13 @@ public abstract class AbstractModelImplementer implements IModelImplementer {
 		return fStatusResolver.getImplementationStatus(node);
 	}
 
-	protected boolean implement(RootNode node) throws Exception{
-		for(GlobalParameterNode parameter : node.getGlobalParameters()){
+	protected boolean implement(RootNode rootNode) throws Exception{
+		for(GlobalParameterNode parameter : rootNode.getGlobalParameters()){
 			if(implementable(parameter) && getImplementationStatus(parameter) != EImplementationStatus.IMPLEMENTED){
 				implement(parameter);
 			}
 		}
-		for(ClassNode classNode : node.getClasses()){
+		for(ClassNode classNode : rootNode.getClasses()){
 			if(implementable(classNode) && getImplementationStatus(classNode) != EImplementationStatus.IMPLEMENTED){
 				implement(classNode);
 			}
@@ -177,16 +175,17 @@ public abstract class AbstractModelImplementer implements IModelImplementer {
 		return true;
 	}
 
-	protected boolean implement(ClassNode node) throws Exception{
-		if(classDefinitionImplemented(node) == false){
-			implementClassDefinition(node);
-		}
-		for(GlobalParameterNode parameter : node.getGlobalParameters()){
+	protected boolean implement(ClassNode classNode) throws Exception{
+		for(GlobalParameterNode parameter : classNode.getGlobalParameters()){
 			if(implementable(parameter) && getImplementationStatus(parameter) != EImplementationStatus.IMPLEMENTED){
 				implement(parameter);
 			}
 		}
-		for(MethodNode method : node.getMethods()){
+		if(classDefinitionImplemented(classNode) == false){
+			implementClassDefinition(classNode);
+		}
+
+		for(MethodNode method : classNode.getMethods()){
 			if(implementable(method) && getImplementationStatus(method) != EImplementationStatus.IMPLEMENTED){
 				implement(method);
 			}
@@ -194,28 +193,28 @@ public abstract class AbstractModelImplementer implements IModelImplementer {
 		return true;
 	}
 
-	protected boolean implement(MethodNode node) throws Exception{
-		if(methodDefinitionImplemented(node) == false){
-			implementMethodDefinition(node);
-		}
-		for(MethodParameterNode parameter : node.getMethodParameters()){
+	protected boolean implement(MethodNode methodNode) throws Exception{
+		for(MethodParameterNode parameter : methodNode.getMethodParameters()){
 			if(implementable(parameter) && getImplementationStatus(parameter) != EImplementationStatus.IMPLEMENTED){
 				implement(parameter);
 			}
 		}
-		for(TestCaseNode testCase : node.getTestCases()){
+		for(TestCaseNode testCase : methodNode.getTestCases()){
 			if(implementable(testCase) && getImplementationStatus(testCase) != EImplementationStatus.IMPLEMENTED){
 				implement(testCase);
 			}
 		}
+		if(methodDefinitionImplemented(methodNode) == false){
+			implementMethodDefinition(methodNode);
+		}		
 		return true;
 	}
 
-	protected boolean implement(AbstractParameterNode node) throws Exception{
-		if(parameterDefinitionImplemented(node) == false){
-			implementParameterDefinition(node);
+	protected boolean implement(AbstractParameterNode parameterNode) throws Exception{
+		if(parameterDefinitionImplemented(parameterNode) == false){
+			implementParameterDefinition(parameterNode);
 		}
-		for(ChoiceNode choice : node.getLeafChoices()){
+		for(ChoiceNode choice : parameterNode.getLeafChoices()){
 			if(implementable(choice) && getImplementationStatus(choice) != EImplementationStatus.IMPLEMENTED){
 				implement(choice);
 				CachedImplementationStatusResolver.clearCache(choice);
@@ -224,8 +223,8 @@ public abstract class AbstractModelImplementer implements IModelImplementer {
 		return true;
 	}
 
-	protected boolean implement(TestCaseNode node) throws Exception{
-		for(ChoiceNode choice : node.getTestData()){
+	protected boolean implement(TestCaseNode testCaseNode) throws Exception{
+		for(ChoiceNode choice : testCaseNode.getTestData()){
 			if(implementable(choice) && getImplementationStatus(choice) != EImplementationStatus.IMPLEMENTED){
 				implement(choice);
 			}
@@ -233,24 +232,24 @@ public abstract class AbstractModelImplementer implements IModelImplementer {
 		return true;
 	}
 
-	protected boolean implement(ConstraintNode node) throws Exception{
+	protected boolean implement(ConstraintNode constraintNode) throws Exception{
 		return false;
 	}
 
-	protected boolean implement(ChoiceNode node) throws Exception{
-		if(parameterDefinitionImplemented(node.getParameter()) == false){
-			implementParameterDefinition(node.getParameter());
+	protected boolean implement(ChoiceNode choiceNode) throws Exception{
+		if(parameterDefinitionImplemented(choiceNode.getParameter()) == false){
+			implementParameterDefinition(choiceNode.getParameter());
 		}
-		if(node.isAbstract()){
-			for(ChoiceNode leaf : node.getLeafChoices()){
+		if(choiceNode.isAbstract()){
+			for(ChoiceNode leaf : choiceNode.getLeafChoices()){
 				if(implementable(leaf) && getImplementationStatus(leaf) != EImplementationStatus.IMPLEMENTED){
 					implement(leaf);
 				}
 			}
 		}
 		else{
-			if(implementable(node) && getImplementationStatus(node) != EImplementationStatus.IMPLEMENTED){
-				implementChoiceDefinition(node);
+			if(implementable(choiceNode) && getImplementationStatus(choiceNode) != EImplementationStatus.IMPLEMENTED){
+				implementChoiceDefinition(choiceNode);
 			}
 		}
 		return true;

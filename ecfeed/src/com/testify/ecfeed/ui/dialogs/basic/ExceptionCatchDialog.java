@@ -16,7 +16,7 @@ public class ExceptionCatchDialog {
 		if (StringHelper.isNullOrEmpty(whatHappened)) {
 			message = exceptionMessage;
 		} else {
-			message = whatHappened + "   " + exceptionMessage;
+			message = whatHappened + "\n" + exceptionMessage;
 		}
 
 		SystemLogger.logCatch(message);

@@ -16,6 +16,7 @@ import org.eclipse.jface.viewers.StructuredViewer;
 import com.testify.ecfeed.core.adapter.EImplementationStatus;
 import com.testify.ecfeed.core.adapter.IModelImplementer;
 import com.testify.ecfeed.core.model.AbstractNode;
+import com.testify.ecfeed.ui.dialogs.basic.ExceptionCatchDialog;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 
 public class ImplementAction extends ModelModifyingAction {
@@ -28,9 +29,14 @@ public class ImplementAction extends ModelModifyingAction {
 	}
 
 	@Override
-	public void run(){
-		for(AbstractNode node : getSelectedNodes()){
-			fImplementer.implement(node);
+	public void run() {
+
+		try {
+			for(AbstractNode node : getSelectedNodes()){
+				fImplementer.implement(node);
+			}
+		} catch (Exception e) {
+			ExceptionCatchDialog.open("Implementation failed.", e.getMessage());
 		}
 	}
 
