@@ -34,6 +34,8 @@ import com.testify.ecfeed.utils.EclipseHelper;
 
 public class TestCasesExportDialog extends TitleAreaDialog {
 
+	private static final String[] templateFileExtension = { "*.eet" };
+	
 	private String fTemplate;
 	private Text fTemplateText;
 	private Text fTargetFileText;
@@ -268,7 +270,8 @@ public class TestCasesExportDialog extends TitleAreaDialog {
 	class OpenButtonSelectionAdapter extends SelectionAdapter {
 		@Override
 		public void widgetSelected(SelectionEvent e) {
-			String text = FileOpenAndReadDialog.open();
+			final String LOAD_DEF_FILE = "Load template definition file"; 
+			String text = FileOpenAndReadDialog.open(LOAD_DEF_FILE, templateFileExtension);
 
 			if (text != null) {
 				fTemplateText.setText(text);
@@ -279,7 +282,8 @@ public class TestCasesExportDialog extends TitleAreaDialog {
 	class SaveAsButtonSelectionAdapter extends SelectionAdapter {
 		@Override
 		public void widgetSelected(SelectionEvent e) {
-			FileSaveDialog.open(fTemplateText.getText());
+			final String SAVE_DEF_FILE = "Save template definition file"; 
+			FileSaveDialog.open(SAVE_DEF_FILE , fTemplateText.getText(), templateFileExtension);
 		}
 	}
 

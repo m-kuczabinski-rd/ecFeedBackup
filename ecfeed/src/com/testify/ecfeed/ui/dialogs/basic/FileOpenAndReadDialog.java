@@ -8,8 +8,11 @@ import com.testify.ecfeed.utils.EclipseHelper;
 
 public class FileOpenAndReadDialog {
 
-	public static String open()  {
+	public static String open(String title, String[] fileExtensions)  {
 		FileDialog fileDialog = new FileDialog(EclipseHelper.getActiveShell(), SWT.OPEN);
+		
+		fileDialog.setText(title);
+		fileDialog.setFilterExtensions(fileExtensions);
 		String filename = fileDialog.open();
 
 		if (filename == null) {
