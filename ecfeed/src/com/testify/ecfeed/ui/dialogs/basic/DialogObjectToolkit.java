@@ -136,23 +136,31 @@ public class DialogObjectToolkit {
 		Text targetFileText = createFileSelectionText(childComposite,
 				textModifyListener);
 
-		SelectionListener browseSelectionListener = new BrowseSelectionAdapter(
-				targetFileText);
+		SelectionListener browseSelectionListener = 
+				new FileDialogSelectionAdapter(SWT.SAVE, targetFileText);
 		createBrowseButton(childComposite, browseSelectionListener);
 		return targetFileText;
 	}
 
-	class BrowseSelectionAdapter extends SelectionAdapter {
+	class FileDialogSelectionAdapter extends SelectionAdapter {
+		int fDialogStyle;
 		Text fTargetFileText;
 
-		BrowseSelectionAdapter(Text targetFileText) {
+		FileDialogSelectionAdapter(int dialogStyle, Text targetFileText) {
+			fDialogStyle = dialogStyle;			
 			fTargetFileText = targetFileText;
 		}
 
 		@Override
 		public void widgetSelected(SelectionEvent e) {
-			FileDialog dialog = new FileDialog(EclipseHelper.getActiveShell());
-			fTargetFileText.setText(dialog.open());
+			FileDialog dialog = new FileDialog(EclipseHelper.getActiveShell(), fDialogStyle);
+
+			String filePath = dialog.open();
+			if (filePath == null) {
+				return;
+			}
+
+			fTargetFileText.setText(filePath);
 		}
 	}
 
