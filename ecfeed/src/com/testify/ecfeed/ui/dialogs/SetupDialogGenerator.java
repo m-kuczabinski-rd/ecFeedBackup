@@ -538,8 +538,12 @@ public abstract class SetupDialogGenerator extends TitleAreaDialog {
 				"Advanced...", new ExportDefinitionSelectionAdapter());
 
 		final String TARGET_FILE = "Export target file";
-		fTargetFileText = fDialogObjectToolkit.createFileSelectionComposite(
-				parentComposite, TARGET_FILE, new ExportFileModifyListener());
+		fTargetFileText = 
+				fDialogObjectToolkit.createFileSelectionComposite(
+						parentComposite, 
+						TARGET_FILE, 
+						TestCasesExportDialog.getExportFileExtensions(), 
+						new ExportFileModifyListener());
 
 		if (fTargetFile != null) {
 			fTargetFileText.setText(fTargetFile);

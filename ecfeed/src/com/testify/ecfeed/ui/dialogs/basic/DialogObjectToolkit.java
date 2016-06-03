@@ -39,6 +39,12 @@ public class DialogObjectToolkit {
 		return fInstance;
 	}
 
+	private static String[] createFileExtensionTab(String fileExtension) {
+		String[] fileExtensions = new String[1];
+		fileExtensions[0] = fileExtension;
+		return fileExtensions;
+	}
+
 	public Composite createGridComposite(Composite parent, int countOfColumns) {
 
 		Composite composite = new Composite(parent, SWT.NONE);
@@ -126,7 +132,7 @@ public class DialogObjectToolkit {
 	}
 
 	public Text createFileSelectionComposite(Composite parent,
-			String labelText, ModifyListener textModifyListener) {
+			String labelText, String[] extensionsFilter, ModifyListener textModifyListener) {
 		Composite childComposite = createGridComposite(parent, 2);
 
 		createLabel(childComposite, labelText);
@@ -137,23 +143,35 @@ public class DialogObjectToolkit {
 				textModifyListener);
 
 		SelectionListener browseSelectionListener = 
-				new FileDialogSelectionAdapter(SWT.SAVE, targetFileText);
+				new FileDialogSelectionAdapter(SWT.SAVE, extensionsFilter, targetFileText);
 		createBrowseButton(childComposite, browseSelectionListener);
 		return targetFileText;
 	}
 
 	class FileDialogSelectionAdapter extends SelectionAdapter {
 		int fDialogStyle;
+		String[] fFileExtensions;
 		Text fTargetFileText;
 
-		FileDialogSelectionAdapter(int dialogStyle, Text targetFileText) {
-			fDialogStyle = dialogStyle;			
+		FileDialogSelectionAdapter(int dialogStyle, String[] fileExtensions, Text targetFileText) {
+			fDialogStyle = dialogStyle;
+			fFileExtensions = fileExtensions;
 			fTargetFileText = targetFileText;
 		}
+
+		FileDialogSelectionAdapter(int dialogStyle, String fileExtension, Text targetFileText) {
+			this(dialogStyle, createFileExtensionTab(fileExtension), targetFileText);
+		}
+
+		FileDialogSelectionAdapter(int dialogStyle, Text targetFileText) {
+			this(dialogStyle, new String(), targetFileText);
+		}		
 
 		@Override
 		public void widgetSelected(SelectionEvent e) {
 			FileDialog dialog = new FileDialog(EclipseHelper.getActiveShell(), fDialogStyle);
+
+			dialog.setFilterExtensions(fFileExtensions);
 
 			String filePath = dialog.open();
 			if (filePath == null) {
