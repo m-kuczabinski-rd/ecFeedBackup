@@ -111,7 +111,7 @@ public class TestCasesExportDialog extends TitleAreaDialog {
 	}
 
 	public void setDialogTitle(TitleAreaDialog dialog) {
-		final String EXPORT_TEST_DATA_TITLE = "Export test data";
+		final String EXPORT_TEST_DATA_TITLE = "Export template definition";
 		setTitle(EXPORT_TEST_DATA_TITLE);
 	}
 
