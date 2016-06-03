@@ -157,6 +157,11 @@ public abstract class SetupDialogGenerator extends TitleAreaDialog {
 	public void okPressed() {
 		if (fTargetFileText != null) {
 			fTargetFile = fTargetFileText.getText();
+			
+			if (!TestCasesExportDialog.canOverwriteFile(fTargetFile)) {
+				return;
+			}
+			
 		} else {
 			fTargetFile = null;
 		}

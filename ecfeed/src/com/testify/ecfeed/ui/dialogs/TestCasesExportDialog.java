@@ -23,6 +23,8 @@ import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Text;
 
 import com.testify.ecfeed.core.resources.ResourceHelper;
+import com.testify.ecfeed.core.utils.DiskFileHelper;
+import com.testify.ecfeed.ui.dialogs.basic.AskIfOverwriteFileDialog;
 import com.testify.ecfeed.ui.dialogs.basic.DialogObjectToolkit;
 import com.testify.ecfeed.ui.dialogs.basic.ExceptionCatchDialog;
 import com.testify.ecfeed.ui.dialogs.basic.FileOpenAndReadDialog;
@@ -189,21 +191,42 @@ public class TestCasesExportDialog extends TitleAreaDialog {
 	@Override
 	protected void okPressed() {
 		createTemplate();
-		if (fFileCompositeVisibility == FileCompositeVisibility.VISIBLE) {
-			fTargetFile = fTargetFileText.getText();
-		} else {
+
+		if (fFileCompositeVisibility != FileCompositeVisibility.VISIBLE) {
 			fTargetFile = null;
+			super.okPressed();
+			return;
+		}
+
+		fTargetFile = fTargetFileText.getText();
+		if (!canOverwriteFile(fTargetFile)) {
+			return;
 		}
 
 		super.okPressed();
 	}
 
-	private void createTemplate() {
-		if (fTemplateText != null) {
-			fTemplate = fTemplateText.getText();
-		} else {
-			fTemplate = null;
+	public static boolean canOverwriteFile(String targetFile) {
+		if (!DiskFileHelper.fileExists(targetFile)) {
+			return true;
 		}
+
+		AskIfOverwriteFileDialog.Result result = AskIfOverwriteFileDialog.open(targetFile);
+
+		if (result == AskIfOverwriteFileDialog.Result.NO) {
+			return false;
+		}		
+
+		return true;
+	}
+
+	private void createTemplate() {
+		if (fTemplateText == null) {
+			fTemplate = null;
+			return;
+		}
+
+		fTemplate = fTemplateText.getText();
 	}
 
 	@Override
