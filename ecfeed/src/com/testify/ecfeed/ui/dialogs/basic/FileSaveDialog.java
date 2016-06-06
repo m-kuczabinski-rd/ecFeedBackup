@@ -8,25 +8,30 @@ import com.testify.ecfeed.utils.EclipseHelper;
 
 public class FileSaveDialog {
 
-	public static void open(String title, String text, String[] fileExtensions) {
+	public enum Result {
+		SAVED,
+		CANCELLED,
+	}	
+
+	public static Result open(String title, String text, String[] fileExtensions) {
 		FileDialog fileDialog = new FileDialog(EclipseHelper.getActiveShell(), SWT.SAVE);
-		
+
 		fileDialog.setText(title);
 		fileDialog.setFilterExtensions(fileExtensions);
-		
+
 		String fileName = fileDialog.open();
 
 		if (fileName == null) {
-			return;
+			return Result.CANCELLED;
 		}
 
 		if (DiskFileHelper.fileExists(fileName) &&
 				ReplaceExistingFileDialog.open(fileName) == ReplaceExistingFileDialog.Result.NO) {
-
-			return;
+			return Result.CANCELLED;
 		}
 
 		DiskFileHelper.saveStringToFile(fileName, text);
+		return Result.SAVED;
 	}
 
 }

@@ -30,12 +30,14 @@ import com.testify.ecfeed.ui.dialogs.basic.ExceptionCatchDialog;
 import com.testify.ecfeed.ui.dialogs.basic.FileOpenAndReadDialog;
 import com.testify.ecfeed.ui.dialogs.basic.FileSaveDialog;
 import com.testify.ecfeed.ui.dialogs.basic.InfoDialog;
+import com.testify.ecfeed.ui.dialogs.basic.YesNoDialog;
 import com.testify.ecfeed.utils.EclipseHelper;
 
 public class TestCasesExportDialog extends TitleAreaDialog {
 
 	private static final String[] templateFileExtension = { "*.eet" };
-	
+
+	private String fInitialTemplate;
 	private String fTemplate;
 	private Text fTemplateText;
 	private Text fTargetFileText;
@@ -56,6 +58,7 @@ public class TestCasesExportDialog extends TitleAreaDialog {
 		setDialogHelpAvailable(false);
 
 		fFileCompositeVisibility = fileCompositeVisibility;
+		fInitialTemplate = initialTemplate;
 		fTemplate = initialTemplate;
 		fTargetFile = targetFile;
 
@@ -154,7 +157,7 @@ public class TestCasesExportDialog extends TitleAreaDialog {
 				.createFillComposite(parentComposite);
 
 		fDialogObjectToolkit.createButton(buttonComposite, "Load...",
-				new OpenButtonSelectionAdapter());
+				new LoadButtonSelectionAdapter());
 		fDialogObjectToolkit.createButton(buttonComposite, "Save As...",
 				new SaveAsButtonSelectionAdapter());
 	}
@@ -192,6 +195,16 @@ public class TestCasesExportDialog extends TitleAreaDialog {
 
 	@Override
 	protected void okPressed() {
+
+		if (isTemplateModified()) {
+			final String CONTINUE_WITHOUT_SAVING = "Current template is modified. Do you want to continue without saving it?";
+			YesNoDialog.Result result = YesNoDialog.open(CONTINUE_WITHOUT_SAVING);
+
+			if (result == YesNoDialog.Result.NO) {
+				return;
+			}
+		}
+
 		createTemplate();
 
 		if (fFileCompositeVisibility != FileCompositeVisibility.VISIBLE) {
@@ -206,6 +219,15 @@ public class TestCasesExportDialog extends TitleAreaDialog {
 		}
 
 		super.okPressed();
+	}
+
+	private boolean isTemplateModified() {
+		String currentTemplate = fTemplateText.getText();
+		if (currentTemplate.equals(fInitialTemplate)) {
+			return false;
+		}
+
+		return true;
 	}
 
 	public static boolean canOverwriteFile(String targetFile) {
@@ -267,23 +289,40 @@ public class TestCasesExportDialog extends TitleAreaDialog {
 		okButton.setEnabled(enabled);
 	}
 
-	class OpenButtonSelectionAdapter extends SelectionAdapter {
+	class LoadButtonSelectionAdapter extends SelectionAdapter {
 		@Override
 		public void widgetSelected(SelectionEvent e) {
+
+			if (isTemplateModified()) {
+				final String LOAD_TEMPLATE = "Current template is modified. Do you want to load a new one?";
+				YesNoDialog.Result result = YesNoDialog.open(LOAD_TEMPLATE);
+
+				if (result == YesNoDialog.Result.NO) {
+					return;
+				}
+			}
+
 			final String LOAD_DEF_FILE = "Load template definition file"; 
 			String text = FileOpenAndReadDialog.open(LOAD_DEF_FILE, templateFileExtension);
 
 			if (text != null) {
 				fTemplateText.setText(text);
+				fInitialTemplate = text;
 			}
+
 		}
+
 	}
 
 	class SaveAsButtonSelectionAdapter extends SelectionAdapter {
 		@Override
 		public void widgetSelected(SelectionEvent e) {
 			final String SAVE_DEF_FILE = "Save template definition file"; 
-			FileSaveDialog.open(SAVE_DEF_FILE , fTemplateText.getText(), templateFileExtension);
+			FileSaveDialog.Result result = FileSaveDialog.open(SAVE_DEF_FILE , fTemplateText.getText(), templateFileExtension);
+
+			if (result == FileSaveDialog.Result.SAVED) {
+				fInitialTemplate = fTemplateText.getText();
+			}
 		}
 	}
 
