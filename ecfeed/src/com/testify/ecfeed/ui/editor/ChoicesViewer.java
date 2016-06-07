@@ -253,7 +253,7 @@ public class ChoicesViewer extends TableViewerSection {
 		fReplaceWithDefaultButton = addButton("Replace with default", new ReplaceWithDefaultAdapter());
 
 		addDoubleClickListener(new SelectNodeDoubleClickListener(sectionContext.getMasterSection()));
-		fActionProvider = new ModelViewerActionProvider(getTableViewer(), this);
+		fActionProvider = new ModelViewerActionProvider(getTableViewer(), this, fileInfoProvider);
 		setActionProvider(fActionProvider);
 		fDragListener = new ModelNodeDragListener(getViewer());
 		fDropListener = new ModelNodeDropListener(getViewer(), this, fFileInfoProvider);
