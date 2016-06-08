@@ -26,22 +26,30 @@ import com.testify.ecfeed.core.model.MethodNode;
 public class JavaTestRunner {
 
 	private ModelClassLoader fLoader;
+	private boolean fIsExport;
 	private MethodNode fTarget;
 	private Class<?> fTestClass;
 	private Method fTestMethod;
 	private ITestMethodInvoker fTestMethodInvoker;
 
-	public JavaTestRunner(ModelClassLoader loader, ITestMethodInvoker testMethodInvoker){
+	public JavaTestRunner(ModelClassLoader loader, boolean isExport, ITestMethodInvoker testMethodInvoker) {
 		fLoader = loader;
+		fIsExport = isExport;
 		fTestMethodInvoker = testMethodInvoker; 
 	}
 
-	public void setTarget(MethodNode target) throws RunnerException{
+	public void setTargetForTest(MethodNode target) throws RunnerException {
 		fTarget = target;
 		ClassNode classNode = fTarget.getClassNode();
 		fTestClass = getTestClass(classNode.getName());
 		fTestMethod = getTestMethod(fTestClass, fTarget);
 	}
+
+	public void setTargetForExport(MethodNode target) {
+		fTarget = target;
+		fTestClass = null;
+		fTestMethod = null;
+	}	
 
 	public void runTestCase(List<ChoiceNode> testData) throws RunnerException{
 
@@ -71,6 +79,12 @@ public class JavaTestRunner {
 		}
 	}
 
+	public void prepareTestCaseForExport(List<ChoiceNode> testData) throws RunnerException{
+		validateTestData(testData);
+		Object[] arguments = getArguments(testData);
+		fTestMethodInvoker.invoke(null, null, null, arguments, null);
+	}
+
 	protected Method getTestMethod(Class<?> testClass, MethodNode methodModel) throws RunnerException {
 		for(Method method : testClass.getMethods()){
 			if(isModel(method, methodModel)){
@@ -93,15 +107,15 @@ public class JavaTestRunner {
 
 	protected Object[] getArguments(List<ChoiceNode> testData) throws RunnerException {
 		List<Object> args = new ArrayList<Object>();
-		ChoiceValueParser parser = new ChoiceValueParser(fLoader);
-		for(ChoiceNode p : testData){
-			Object value = parser.parseValue(p);
+		ChoiceValueParser parser = new ChoiceValueParser(fLoader, fIsExport);
+		for(ChoiceNode choice : testData){
+			Object value = parser.parseValue(choice);
 			if(value == null){
-				String type = p.getParameter().getType();
+				String type = choice.getParameter().getType();
 				//check if null value acceptable
 				if(JavaUtils.isString(type) || JavaUtils.isUserType(type)){
-					if(p.getValueString().equals(Constants.VALUE_REPRESENTATION_NULL) == false){
-						RunnerException.report(Messages.CANNOT_PARSE_PARAMETER(type, p.getValueString()));
+					if(choice.getValueString().equals(Constants.VALUE_REPRESENTATION_NULL) == false){
+						RunnerException.report(Messages.CANNOT_PARSE_PARAMETER(type, choice.getValueString()));
 					}
 				}
 			}

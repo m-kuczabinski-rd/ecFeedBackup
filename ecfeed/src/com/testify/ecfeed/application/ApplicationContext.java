@@ -9,15 +9,24 @@
 package com.testify.ecfeed.application;
 
 public class ApplicationContext {
-	
+
 	static boolean fIsStandaloneApplication = false;
-	
+	static String fExportFileName;
+
 	public static boolean isStandaloneApplication() {
 		return fIsStandaloneApplication;
 	}
-	
+
 	public static void setStandaloneApplication() {
 		fIsStandaloneApplication = true;
 	}
+
+	public static void setExportTargetFile(String exportFileName) {
+		fExportFileName = exportFileName;
+	}
+
+	public static String getExportTargetFile() {
+		return fExportFileName;
+	}	
 
 }

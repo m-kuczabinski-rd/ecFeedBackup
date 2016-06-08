@@ -31,9 +31,9 @@ public class AbstractFrameworkMethod extends FrameworkMethod {
 
 	public AbstractFrameworkMethod(Method method, ModelClassLoader loader) {
 		super(method);
-		fValueParser = new ChoiceValueParser(loader);
+		fValueParser = new ChoiceValueParser(loader, false);
 	}
-	
+
 	protected void invoke(Object target, List<ChoiceNode> args) throws RunnerException, Throwable{
 		super.invokeExplosively(target, choiceListToParamArray(args));
 	}
@@ -45,11 +45,11 @@ public class AbstractFrameworkMethod extends FrameworkMethod {
 		}
 		return parameters.toArray();
 	}
-	
+
 	protected Object parseChoiceValue(ChoiceNode choice) throws RunnerException{
 		String type = choice.getParameter().getType();
 		Object value = fValueParser.parseValue(choice);
-		
+
 		if(JavaUtils.isString(type) || JavaUtils.isUserType(type)){
 			//null value acceptable
 			if(choice.getValueString().equals(Constants.VALUE_REPRESENTATION_NULL)){

@@ -30,6 +30,7 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.operations.RedoActionHandler;
 import org.eclipse.ui.operations.UndoActionHandler;
 
+import com.testify.ecfeed.core.adapter.ModelOperationException;
 import com.testify.ecfeed.core.adapter.ModelOperationManager;
 import com.testify.ecfeed.core.model.AbstractNode;
 import com.testify.ecfeed.core.model.ChoiceNode;
@@ -42,6 +43,7 @@ import com.testify.ecfeed.core.model.RootNode;
 import com.testify.ecfeed.core.model.TestCaseNode;
 import com.testify.ecfeed.core.utils.SystemLogger;
 import com.testify.ecfeed.ui.common.utils.IFileInfoProvider;
+import com.testify.ecfeed.ui.dialogs.basic.ExceptionCatchDialog;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 import com.testify.ecfeed.ui.modelif.IModelUpdateListener;
 
@@ -55,6 +57,7 @@ public class ModelMasterDetailsBlock extends MasterDetailsBlock implements ISele
 	private IFileInfoProvider fFileInfoProvider;
 	private UndoActionHandler fUndoActionHandler;
 	private RedoActionHandler fRedoActionHandler;
+	private RootNode fModel; 
 
 	private class ModelUpdateContext implements IModelUpdateContext{
 
@@ -131,6 +134,7 @@ public class ModelMasterDetailsBlock extends MasterDetailsBlock implements ISele
 		fPage = modelPage;
 		fUpdateContext = new ModelUpdateContext();
 		fFileInfoProvider = fileInfoProvider;
+		fModel = null;
 	}
 
 	public void selectNode(AbstractNode node){
@@ -171,16 +175,26 @@ public class ModelMasterDetailsBlock extends MasterDetailsBlock implements ISele
 
 	@Override
 	protected void createMasterPart(IManagedForm managedForm, Composite parent) {
+		try {
+			fModel = getModel();
+		} catch (ModelOperationException e) {
+			ExceptionCatchDialog.open(null, e.getMessage());
+			return;
+		}
+
 		fToolkit = managedForm.getToolkit();
 
 		fMasterSection = new ModelMasterSection(this, fFileInfoProvider);
 		fMasterSection.initialize(managedForm);
 		fMasterSection.addSelectionChangedListener(this);
-		fMasterSection.setInput(getModel());
+		fMasterSection.setInput(fModel);
 	}
 
 	@Override
 	protected void registerPages(DetailsPart detailsPart) {
+		if (fModel == null) {
+			return;
+		}
 		detailsPart.registerPage(RootNode.class, new ModelDetailsPage(fMasterSection, fUpdateContext, fPage.getEditor()));
 		detailsPart.registerPage(ClassNode.class, new ClassDetailsPage(fMasterSection, fUpdateContext, fPage.getEditor()));
 		detailsPart.registerPage(MethodNode.class, new MethodDetailsPage(fMasterSection, fUpdateContext, fPage.getEditor()));
@@ -190,7 +204,7 @@ public class ModelMasterDetailsBlock extends MasterDetailsBlock implements ISele
 		detailsPart.registerPage(ConstraintNode.class, new ConstraintDetailsPage(fMasterSection, fUpdateContext, fPage.getEditor()));
 		detailsPart.registerPage(ChoiceNode.class, new ChoiceDetailsPage(fMasterSection, fUpdateContext, fPage.getEditor()));
 
-		selectNode(getModel());
+		selectNode(fModel);
 	}
 
 	@Override
@@ -236,7 +250,7 @@ public class ModelMasterDetailsBlock extends MasterDetailsBlock implements ISele
 		}
 	}
 
-	private RootNode getModel() {
+	private RootNode getModel() throws ModelOperationException {
 		return fPage.getModel();
 	}
 

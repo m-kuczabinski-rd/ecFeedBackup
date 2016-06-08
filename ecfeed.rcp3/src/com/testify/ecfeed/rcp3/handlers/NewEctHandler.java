@@ -35,7 +35,7 @@ public class NewEctHandler extends org.eclipse.core.commands.AbstractHandler {
 			EctFileHelper.createNewFile(pathWithFileName);
 			EclipseHelper.openEditorOnExistingExtFile(pathWithFileName);
 		} catch (Exception e) {
-			ExceptionCatchDialog.display("Can not open editor.", e.getMessage());
+			ExceptionCatchDialog.open("Can not open editor.", e.getMessage());
 		}
 
 		return null;

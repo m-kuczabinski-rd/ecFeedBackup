@@ -48,9 +48,17 @@ public class TestCasesViewer extends CheckboxTreeViewerSection {
 	private TestCasesViewerLabelProvider fLabelProvider;
 	private TestCasesViewerContentProvider fContentProvider;
 	private Button fExecuteSelectedButton;
+	private Button fExportTestCasesButton;
 	private Button fGenerateSuiteButton;
 	private MethodInterface fMethodIf;
 	private MethodNode fParentMethod;
+
+	private class ExportTestCasesAdapter extends SelectionAdapter{ 
+		@Override
+		public void widgetSelected(SelectionEvent e){
+			fMethodIf.exportTestCases(getCheckedTestCases());
+		}
+	}
 
 	private class AddTestCaseAdapter extends SelectionAdapter {
 		@Override
@@ -58,7 +66,7 @@ public class TestCasesViewer extends CheckboxTreeViewerSection {
 			try {
 				fMethodIf.addTestCase();
 			} catch (Exception e) {
-				ExceptionCatchDialog.display("Can not add test case.", e.getMessage());
+				ExceptionCatchDialog.open("Can not add test case.", e.getMessage());
 			}
 		}
 	}
@@ -69,7 +77,7 @@ public class TestCasesViewer extends CheckboxTreeViewerSection {
 			try {
 				fMethodIf.generateTestSuite();
 			} catch (Exception e) {
-				ExceptionCatchDialog.display("Can not generate test suite.", e.getMessage());
+				ExceptionCatchDialog.open("Can not generate test suite.", e.getMessage());
 			}
 		}
 	}
@@ -81,7 +89,7 @@ public class TestCasesViewer extends CheckboxTreeViewerSection {
 				fMethodIf.executeStaticTests(getCheckedTestCases(), getFileInfoProvider());
 			}
 			catch (Exception e){
-				ExceptionCatchDialog.display("Can not execute static tests.", e.getMessage());
+				ExceptionCatchDialog.open("Can not execute static tests.", e.getMessage());
 			}
 		}
 	}
@@ -92,7 +100,7 @@ public class TestCasesViewer extends CheckboxTreeViewerSection {
 			try {
 				fMethodIf.renameSuite();
 			} catch (Exception e) {
-				ExceptionCatchDialog.display("Can not rename suite.", e.getMessage());
+				ExceptionCatchDialog.open("Can not rename suite.", e.getMessage());
 			}
 		}
 	}
@@ -105,13 +113,12 @@ public class TestCasesViewer extends CheckboxTreeViewerSection {
 			fDescriptionWhenError = descriptionWhenError;
 		}
 
-
 		@Override
 		public void widgetSelected(SelectionEvent ev){
 			try {
 				fMethodIf.removeTestCases(getCheckedTestCases());
 			} catch (Exception e) {
-				ExceptionCatchDialog.display(fDescriptionWhenError, e.getMessage());
+				ExceptionCatchDialog.open(fDescriptionWhenError, e.getMessage());
 			}
 		}
 	}
@@ -128,7 +135,7 @@ public class TestCasesViewer extends CheckboxTreeViewerSection {
 			try {
 				fMethodIf.openCoverageDialog(getCheckedElements(), getGrayedElements(), fFileInfoProvider);
 			} catch (Exception e) {
-				ExceptionCatchDialog.display("Can not calculate coverage.", e.getMessage());
+				ExceptionCatchDialog.open("Can not calculate coverage.", e.getMessage());
 			}
 		}
 	}
@@ -159,6 +166,8 @@ public class TestCasesViewer extends CheckboxTreeViewerSection {
 			fExecuteSelectedButton = addButton("Execute selected", new ExecuteStaticTestAdapter());
 		}
 
+		fExportTestCasesButton = addButton("Export selected", new ExportTestCasesAdapter());
+
 		addDoubleClickListener(new SelectNodeDoubleClickListener(sectionContext.getMasterSection()));
 	}
 
@@ -169,7 +178,16 @@ public class TestCasesViewer extends CheckboxTreeViewerSection {
 		if (getFileInfoProvider().isProjectAvailable()) {
 			fExecuteSelectedButton.setEnabled(executionEnabled());
 		}
+
+		fExportTestCasesButton.setEnabled(anyTestCaseSelected());
 		fLabelProvider.refresh();
+	}
+
+	private boolean anyTestCaseSelected() {
+		if (getCheckedTestCases().isEmpty())
+			return false;
+
+		return true;
 	}
 
 	public void setInput(MethodNode method){
@@ -203,6 +221,7 @@ public class TestCasesViewer extends CheckboxTreeViewerSection {
 				if (event.detail == SWT.CHECK && getFileInfoProvider().isProjectAvailable()) {
 					fExecuteSelectedButton.setEnabled(executionEnabled());
 				}
+				fExportTestCasesButton.setEnabled(anyTestCaseSelected());
 			}
 		});
 		return treeViewer;
@@ -241,6 +260,11 @@ public class TestCasesViewer extends CheckboxTreeViewerSection {
 	}
 
 	private boolean executionEnabled() {
+
+		if (!getFileInfoProvider().isProjectAvailable()) {
+			return false;
+		}
+
 		if (fMethodIf.getImplementationStatus() == EImplementationStatus.NOT_IMPLEMENTED) { 
 			return false;
 		}

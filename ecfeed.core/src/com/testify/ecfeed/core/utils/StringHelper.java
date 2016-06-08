@@ -59,6 +59,18 @@ public class StringHelper {
 		return fromStr.substring(0, index);
 	}
 
+	public static String removeLastNewline(String fromString) {
+		return removePostfix(System.lineSeparator(), fromString);
+	}
+
+	public static String appendNewline(String line) {
+		return line + StringHelper.getNewLine();
+	}
+
+	public static String getNewLine() {
+		return System.lineSeparator();
+	}
+
 	public static String getLastToken(String tokenizedString, String tokenSeparator) {
 		int separatorPosition = tokenizedString.lastIndexOf(tokenSeparator);
 
@@ -118,5 +130,15 @@ public class StringHelper {
 			}
 		}
 		return occurences;
+	}
+
+	public static String createString(String baseString, int repetitions) {
+		StringBuilder builder = new StringBuilder();
+
+		for (int cnt = 0; cnt < repetitions; ++ cnt) {
+			builder.append(baseString);
+		}
+
+		return builder.toString();
 	}
 }

@@ -14,6 +14,7 @@ package com.testify.ecfeed.ui.editor;
 import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.editor.FormPage;
 
+import com.testify.ecfeed.core.adapter.ModelOperationException;
 import com.testify.ecfeed.core.model.RootNode;
 import com.testify.ecfeed.ui.common.utils.IFileInfoProvider;
 
@@ -40,14 +41,14 @@ public class ModelPage extends FormPage {
 	protected void createFormContent(IManagedForm managedForm) {
 		fBlock.createContent(managedForm);
 	}
-	
+
 	@Override
 	public boolean isDirty(){
 		boolean masterSectionDirty = fBlock.getMasterSection() == null ? false : fBlock.getMasterSection().isDirty();
 		return super.isDirty() || masterSectionDirty;
 	}
-	
-	public RootNode getModel(){
+
+	public RootNode getModel() throws ModelOperationException{
 		return fEditor.getModel();
 	}
 

@@ -16,12 +16,12 @@ import com.testify.ecfeed.utils.EclipseHelper;
 public class SaveAsEctDialog {
 
 	public static String open(String filterPath, String originalFileName) {
-		FileDialog fFileDialog = new FileDialog(EclipseHelper.getActiveShell(), SWT.SAVE);
-		fFileDialog.setFilterNames(new String[] { "Ect Files", "All Files (*.*)" });
-		fFileDialog.setFilterExtensions(new String[] { "*.ect", "*.*" }); 
-		fFileDialog.setFilterPath(filterPath);
-		fFileDialog.setFileName(originalFileName);
-		return fFileDialog.open();
+		FileDialog fileDialog = new FileDialog(EclipseHelper.getActiveShell(), SWT.SAVE);
+		fileDialog.setFilterNames(new String[] { "Ect Files", "All Files (*.*)" });
+		fileDialog.setFilterExtensions(new String[] { "*.ect", "*.*" }); 
+		fileDialog.setFilterPath(filterPath);
+		fileDialog.setFileName(originalFileName);
+		return fileDialog.open();
 	}
 
 }

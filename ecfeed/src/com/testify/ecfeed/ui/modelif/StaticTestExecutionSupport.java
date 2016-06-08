@@ -63,7 +63,7 @@ public class StaticTestExecutionSupport extends TestExecutionSupport{
 				if(progressMonitor.isCanceled() == false){
 					try {
 						setTestProgressMessage();
-						fRunner.setTarget(testCase.getMethod());
+						fRunner.setTargetForTest(testCase.getMethod());
 						fRunner.runTestCase(testCase.getTestData());
 					} catch (RunnerException e) {
 						addFailedTest(e);
@@ -71,6 +71,7 @@ public class StaticTestExecutionSupport extends TestExecutionSupport{
 					addExecutedTest(1);
 				}
 			}
+
 			progressMonitor.done();
 		}
 	}
@@ -83,7 +84,7 @@ public class StaticTestExecutionSupport extends TestExecutionSupport{
 		super();
 		ILoaderProvider loaderProvider = new EclipseLoaderProvider();
 		ModelClassLoader loader = loaderProvider.getLoader(true, null);
-		fRunner = new JavaTestRunner(loader, testMethodInvoker);
+		fRunner = new JavaTestRunner(loader, false, testMethodInvoker);
 		fTestCases = testCases;
 		fFailedTests = new ArrayList<>();
 		fFileInfoProvider = fileInfoProvider;

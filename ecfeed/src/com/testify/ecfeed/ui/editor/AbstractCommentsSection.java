@@ -51,7 +51,7 @@ public abstract class AbstractCommentsSection extends TabFolderSection {
 			try {
 				getTargetIf().editComments();
 			} catch (Exception e) {
-				ExceptionCatchDialog.display("Can not edit comments", e.getMessage());
+				ExceptionCatchDialog.open("Can not edit comments", e.getMessage());
 			}
 		}
 	}

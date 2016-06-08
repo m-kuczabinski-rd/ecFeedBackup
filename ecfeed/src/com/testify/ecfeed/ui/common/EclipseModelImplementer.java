@@ -59,6 +59,7 @@ import com.testify.ecfeed.core.model.GlobalParameterNode;
 import com.testify.ecfeed.core.model.MethodNode;
 import com.testify.ecfeed.core.model.MethodParameterNode;
 import com.testify.ecfeed.core.utils.EcException;
+import com.testify.ecfeed.core.utils.PackageClassHelper;
 import com.testify.ecfeed.core.utils.SystemLogger;
 import com.testify.ecfeed.ui.common.utils.EclipsePackageFragmentGetter;
 import com.testify.ecfeed.ui.common.utils.EclipseProjectHelper;
@@ -75,7 +76,7 @@ public class EclipseModelImplementer extends AbstractJavaModelImplementer {
 	}
 
 	@Override
-	public boolean implement(AbstractNode node){
+	public boolean implement(AbstractNode node) throws Exception{
 		refreshWorkspace();
 		boolean result = super.implement(node);
 		CachedImplementationStatusResolver.clearCache(node);
@@ -84,12 +85,14 @@ public class EclipseModelImplementer extends AbstractJavaModelImplementer {
 	}
 
 	@Override
-	protected boolean implement(AbstractParameterNode node) throws CoreException, EcException{
-		if(parameterDefinitionImplemented(node) == false){
-			implementParameterDefinition(node, node.getLeafChoiceValues());
+	protected boolean implement(AbstractParameterNode parameterNode) throws CoreException, EcException{
+		validateIfUserType(parameterNode);
+
+		if(parameterDefinitionImplemented(parameterNode) == false){
+			implementParameterDefinition(parameterNode, parameterNode.getLeafChoiceValues());
 		}
 		else{
-			List<ChoiceNode> unimplemented = unimplementedChoices(node.getLeafChoices());
+			List<ChoiceNode> unimplemented = unimplementedChoices(parameterNode.getLeafChoices());
 			implementChoicesDefinitions(unimplemented);
 			for(ChoiceNode choice : unimplemented){
 				CachedImplementationStatusResolver.clearCache(choice);
@@ -98,24 +101,51 @@ public class EclipseModelImplementer extends AbstractJavaModelImplementer {
 		return true;
 	}
 
+	private void validateIfUserType(AbstractParameterNode parameterNode) throws EcException {
+		String type = parameterNode.getType();
+		if (!JavaUtils.isUserType(type)) {
+			return;
+		}
+
+		String thePackage = PackageClassHelper.getPackage(type);
+		if (thePackage != null) {
+			return;
+		}
+
+		AbstractNode parentNode = parameterNode.getParent();
+		if (!(parentNode instanceof MethodNode)) {
+			final String PACKAGE_NAME_REQUIRED_1 = "Package name is required for user type: %s (parameter: %s).";
+			EcException.report(String.format(PACKAGE_NAME_REQUIRED_1, type, parameterNode.getName()));
+		}
+
+		AbstractNode grandParentNode = parentNode.getParent();
+		if (!(grandParentNode instanceof ClassNode)) {
+			final String PACKAGE_NAME_REQUIRED_2 = "Package name is required for user type: %s (method: %s, parameter: %s).";
+			EcException.report(String.format(PACKAGE_NAME_REQUIRED_2, type, parentNode.getName(), parameterNode.getName()));
+		}
+
+		final String PACKAGE_NAME_REQUIRED_3 = "Package name is required for user type: %s (class: %s, method: %s, parameter: %s).";
+		EcException.report(String.format(PACKAGE_NAME_REQUIRED_3, type, grandParentNode.getName(), parentNode.getName(), parameterNode.getName()));
+	}
+
 	@Override
-	protected boolean implement(ChoiceNode node) throws CoreException, EcException{
-		AbstractParameterNode parameter = node.getParameter();
+	protected boolean implement(ChoiceNode choiceNode) throws CoreException, EcException{
+		AbstractParameterNode parameter = choiceNode.getParameter();
 		if(parameterDefinitionImplemented(parameter) == false){
 			if(parameterDefinitionImplementable(parameter)){
-				implementParameterDefinition(parameter, new HashSet<String>(Arrays.asList(new String[]{node.getValueString()})));
+				implementParameterDefinition(parameter, new HashSet<String>(Arrays.asList(new String[]{choiceNode.getValueString()})));
 			}
 			else{
 				return false;
 			}
 		}
 		else{
-			if(node.isAbstract()){
-				implementChoicesDefinitions(unimplementedChoices(node.getLeafChoices()));
+			if(choiceNode.isAbstract()){
+				implementChoicesDefinitions(unimplementedChoices(choiceNode.getLeafChoices()));
 			}
 			else{
-				if(implementable(node) && getImplementationStatus(node) != EImplementationStatus.IMPLEMENTED){
-					implementChoicesDefinitions(Arrays.asList(new ChoiceNode[]{node}));
+				if(implementable(choiceNode) && getImplementationStatus(choiceNode) != EImplementationStatus.IMPLEMENTED){
+					implementChoicesDefinitions(Arrays.asList(new ChoiceNode[]{choiceNode}));
 				}
 			}
 		}

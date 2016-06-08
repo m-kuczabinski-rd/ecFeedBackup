@@ -16,6 +16,6 @@ import com.testify.ecfeed.core.model.AbstractNode;
 public interface IModelImplementer {
 	public boolean implementable(Class<? extends AbstractNode> type);
 	public boolean implementable(AbstractNode node);
-	public boolean implement(AbstractNode node);
+	public boolean implement(AbstractNode node) throws Exception;
 	public EImplementationStatus getImplementationStatus(AbstractNode node);
 }

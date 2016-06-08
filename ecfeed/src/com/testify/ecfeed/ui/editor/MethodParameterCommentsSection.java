@@ -49,7 +49,7 @@ public class MethodParameterCommentsSection extends AbstractParameterCommentsSec
 				getTargetIf().importJavadocComments();
 				getTabFolder().setSelection(getTabFolder().indexOf(getParameterCommentsTab()));
 			} catch (Exception e) {
-				ExceptionCatchDialog.display(Messages.EXCEPTION_CAN_NOT_IMPORT, e.getMessage());
+				ExceptionCatchDialog.open(Messages.EXCEPTION_CAN_NOT_IMPORT, e.getMessage());
 			}
 		}
 	}
@@ -61,7 +61,7 @@ public class MethodParameterCommentsSection extends AbstractParameterCommentsSec
 				getTargetIf().exportCommentsToJavadoc(getTarget().getDescription());
 				getTabFolder().setSelection(getTabFolder().indexOf(fParameterJavadocTab));
 			} catch (Exception e) {
-				ExceptionCatchDialog.display(Messages.EXCEPTION_CAN_NOT_REMOVE_SELECTED_ITEMS, e.getMessage());
+				ExceptionCatchDialog.open(Messages.EXCEPTION_CAN_NOT_REMOVE_SELECTED_ITEMS, e.getMessage());
 			}
 		}
 	}
@@ -73,7 +73,7 @@ public class MethodParameterCommentsSection extends AbstractParameterCommentsSec
 				getTargetIf().exportAllComments();
 				getTabFolder().setSelection(getTabFolder().indexOf(fParameterJavadocTab));
 			} catch (Exception e) {
-				ExceptionCatchDialog.display(Messages.EXCEPTION_CAN_NOT_EXPORT, e.getMessage());
+				ExceptionCatchDialog.open(Messages.EXCEPTION_CAN_NOT_EXPORT, e.getMessage());
 			}
 		}
 	}

@@ -29,7 +29,7 @@ public class HandlerHelper {
 		try {
 			action.run();
 		}  catch (Exception e) {
-			ExceptionCatchDialog.display(CAN_NOT_EXECUTE, e.getMessage());
+			ExceptionCatchDialog.open(CAN_NOT_EXECUTE, e.getMessage());
 		}
 	}
 

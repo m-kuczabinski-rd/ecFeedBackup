@@ -11,11 +11,8 @@
 
 package com.testify.ecfeed.ui.editor;
 
-import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
@@ -33,6 +30,7 @@ public class MethodDetailsPage extends BasicDetailsPage {
 
 	private Text fMethodNameText;
 	private Button fTestOnlineButton;
+	private Button fExportOnlineButton;
 	private Button fBrowseButton;
 	private MethodParametersViewer fParemetersSection;
 	private ConstraintsListViewer fConstraintsSection;
@@ -41,25 +39,38 @@ public class MethodDetailsPage extends BasicDetailsPage {
 	private MethodInterface fMethodIf;
 	private JavaDocCommentsSection fCommentsSection;
 
-	private class OnlineTestAdapter extends SelectionAdapter{
+	private class OnlineTestAdapter extends SelectionAdapter {
 		@Override
-		public void widgetSelected(SelectionEvent ev){
+		public void widgetSelected(SelectionEvent ev) {
 			try {
 				fMethodIf.executeOnlineTests(getFileInfoProvider());
 			} catch (Exception e) {
-				ExceptionCatchDialog.display("Can not execute online tests.", e.getMessage());
+				ExceptionCatchDialog.open("Can not execute online tests.",
+						e.getMessage());
 			}
 		}
 	}
 
-	private class ReassignAdapter extends SelectionAdapter{
+	private class OnlineExportAdapter extends SelectionAdapter {
 		@Override
-		public void widgetSelected(SelectionEvent e){
+		public void widgetSelected(SelectionEvent ev) {
+			try {
+				fMethodIf.executeOnlineExport(getFileInfoProvider());
+			} catch (Exception e) {
+				ExceptionCatchDialog.open("Can not execute online export.",
+						e.getMessage());
+			}
+		}
+	}
+
+	private class ReassignAdapter extends SelectionAdapter {
+		@Override
+		public void widgetSelected(SelectionEvent e) {
 			fMethodIf.reassignTarget();
 		}
 	}
 
-	private class RenameMethodAdapter extends AbstractSelectionAdapter{
+	private class RenameMethodAdapter extends AbstractSelectionAdapter {
 		@Override
 		public void widgetSelected(SelectionEvent e) {
 			fMethodIf.setName(fMethodNameText.getText());
@@ -67,94 +78,123 @@ public class MethodDetailsPage extends BasicDetailsPage {
 		}
 	}
 
-	public MethodDetailsPage(
-			ModelMasterSection masterSection, 
-			IModelUpdateContext updateContext, 
+	public MethodDetailsPage(ModelMasterSection masterSection,
+			IModelUpdateContext updateContext,
 			IFileInfoProvider fileInfoProvider) {
 		super(masterSection, updateContext, fileInfoProvider);
 		fMethodIf = new MethodInterface(this, fileInfoProvider);
 	}
 
 	@Override
-	public void createContents(Composite parent){
+	public void createContents(Composite parent) {
 		super.createContents(parent);
-		createNameTextComposite();
 
 		IFileInfoProvider fileInfoProvider = getFileInfoProvider();
 
+		createMethodNameWidgets(fileInfoProvider);
+		createTestAndExportButtons(fileInfoProvider);
+
 		if (fileInfoProvider.isProjectAvailable()) {
-			addForm(fCommentsSection = new JavaDocCommentsSection(this, this, fileInfoProvider));
+			addForm(fCommentsSection = new JavaDocCommentsSection(this, this,
+					fileInfoProvider));
 		}
-		addViewerSection(fParemetersSection = new MethodParametersViewer(this, this, fileInfoProvider));
-		addViewerSection(fConstraintsSection = new ConstraintsListViewer(this, this, fileInfoProvider));
-		addViewerSection(fTestCasesSection = new TestCasesViewer(this, this, fileInfoProvider));
+		addViewerSection(fParemetersSection = new MethodParametersViewer(this,
+				this, fileInfoProvider));
+		addViewerSection(fConstraintsSection = new ConstraintsListViewer(this,
+				this, fileInfoProvider));
+		addViewerSection(fTestCasesSection = new TestCasesViewer(this, this,
+				fileInfoProvider));
 
 		getToolkit().paintBordersFor(getMainComposite());
 	}
 
 	@Override
-	protected Composite createTextClientComposite(){
+	protected Composite createTextClientComposite() {
 		Composite textClient = super.createTextClientComposite();
 		return textClient;
 	}
 
-	private void createNameTextComposite() {
-		Composite composite = getToolkit().createComposite(getMainComposite());
-		composite.setLayout(new GridLayout(4, false));
-		composite.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, false));
-		getToolkit().createLabel(composite, "Method name", SWT.NONE);
-		fMethodNameText = getToolkit().createText(composite, null, SWT.NONE);
-		fMethodNameText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
-		fMethodNameText.addSelectionListener(new RenameMethodAdapter());
-
-		IFileInfoProvider fileInfoProvider = getFileInfoProvider(); 
+	private void createMethodNameWidgets(IFileInfoProvider fileInfoProvider) {
+		int gridColumns = 2;
 
 		if (fileInfoProvider.isProjectAvailable()) {
-			fBrowseButton = getToolkit().createButton(composite, "Browse...", SWT.NONE);
-			fBrowseButton.addSelectionListener(new ReassignAdapter());
+			++gridColumns;
 		}
+
+		Composite gridComposite = getFormObjectFactory().createGridComposite(
+				getMainComposite(), gridColumns);
+
+		getFormObjectFactory().createLabel(gridComposite, "Method name ");
+		fMethodNameText = getFormObjectFactory().createGridText(gridComposite,
+				new RenameMethodAdapter());
 
 		if (fileInfoProvider.isProjectAvailable()) {
-			fTestOnlineButton = getToolkit().createButton(composite, "Test online", SWT.NONE);
-			fTestOnlineButton.addSelectionListener(new OnlineTestAdapter());
+			fBrowseButton = getFormObjectFactory().createButton(gridComposite,
+					"Browse...", new ReassignAdapter());
 		}
 
-		getToolkit().paintBordersFor(composite);
+		getFormObjectFactory().paintBorders(gridComposite);
+	}
+
+	private void createTestAndExportButtons(IFileInfoProvider fileInfoProvider) {
+		Composite childComposite = getFormObjectFactory().createRowComposite(
+				getMainComposite());
+
+		if (fileInfoProvider.isProjectAvailable()) {
+			fTestOnlineButton = getFormObjectFactory().createButton(
+					childComposite, "Test online...", new OnlineTestAdapter());
+		}
+
+		fExportOnlineButton = getFormObjectFactory().createButton(
+				childComposite, "Export online...", new OnlineExportAdapter());
+		getFormObjectFactory().paintBorders(childComposite);
 	}
 
 	@Override
-	public void refresh(){
+	public void refresh() {
 		super.refresh();
-		if(getSelectedElement() instanceof MethodNode){
-			MethodNode selectedMethod = (MethodNode)getSelectedElement();
-			fMethodIf.setTarget(selectedMethod);
 
-			IFileInfoProvider fileInfoProvider = getFileInfoProvider();
+		if (!(getSelectedElement() instanceof MethodNode)) {
+			return;
+		}
 
-			EImplementationStatus methodStatus = null;
-			if (fileInfoProvider.isProjectAvailable()) {
-				methodStatus = fMethodIf.getImplementationStatus();
-			}
-			getMainSection().setText(JavaUtils.simplifiedToString(selectedMethod));
+		MethodNode selectedMethod = (MethodNode) getSelectedElement();
+		fMethodIf.setTarget(selectedMethod);
 
-			if (fileInfoProvider.isProjectAvailable()) {
-				fTestOnlineButton.setEnabled(methodStatus != EImplementationStatus.NOT_IMPLEMENTED);
-			}
-			fParemetersSection.setInput(selectedMethod);
-			fConstraintsSection.setInput(selectedMethod);
-			fTestCasesSection.setInput(selectedMethod);
+		IFileInfoProvider fileInfoProvider = getFileInfoProvider();
 
-			if (fileInfoProvider.isProjectAvailable()) {
-				fCommentsSection.setInput(selectedMethod);
-			}
-			fMethodNameText.setText(fMethodIf.getName());
+		EImplementationStatus methodStatus = null;
+		if (fileInfoProvider.isProjectAvailable()) {
+			methodStatus = fMethodIf.getImplementationStatus();
+		}
+		getMainSection().setText(JavaUtils.simplifiedToString(selectedMethod));
 
-			if (fileInfoProvider.isProjectAvailable()) {
-				EImplementationStatus parentStatus = fMethodIf.getImplementationStatus(selectedMethod.getClassNode());
-				fBrowseButton.setEnabled((parentStatus == EImplementationStatus.IMPLEMENTED ||
-						parentStatus == EImplementationStatus.PARTIALLY_IMPLEMENTED) &&
-						fMethodIf.getCompatibleMethods().isEmpty() == false);
-			}
+		if (fileInfoProvider.isProjectAvailable()) {
+			fTestOnlineButton
+					.setEnabled(methodStatus != EImplementationStatus.NOT_IMPLEMENTED);
+		}
+
+		if (selectedMethod.getParametersCount() > 0) {
+			fExportOnlineButton.setEnabled(true);
+		} else {
+			fExportOnlineButton.setEnabled(false);
+		}
+
+		fParemetersSection.setInput(selectedMethod);
+		fConstraintsSection.setInput(selectedMethod);
+		fTestCasesSection.setInput(selectedMethod);
+
+		if (fileInfoProvider.isProjectAvailable()) {
+			fCommentsSection.setInput(selectedMethod);
+		}
+		fMethodNameText.setText(fMethodIf.getName());
+
+		if (fileInfoProvider.isProjectAvailable()) {
+			EImplementationStatus parentStatus = fMethodIf
+					.getImplementationStatus(selectedMethod.getClassNode());
+			fBrowseButton
+					.setEnabled((parentStatus == EImplementationStatus.IMPLEMENTED || parentStatus == EImplementationStatus.PARTIALLY_IMPLEMENTED)
+							&& fMethodIf.getCompatibleMethods().isEmpty() == false);
 		}
 	}
 

@@ -35,7 +35,7 @@ public abstract class AbstractParameterCommentsSection extends JavaDocCommentsSe
 				getTargetIf().importTypeJavadocComments();
 				getTabFolder().setSelection(getTabFolder().indexOf(getTypeCommentsTab()));
 			} catch (Exception e) {
-				ExceptionCatchDialog.display(Messages.EXCEPTION_CAN_NOT_IMPORT, e.getMessage());
+				ExceptionCatchDialog.open(Messages.EXCEPTION_CAN_NOT_IMPORT, e.getMessage());
 			}
 		}
 	}
@@ -47,7 +47,7 @@ public abstract class AbstractParameterCommentsSection extends JavaDocCommentsSe
 				getTargetIf().importFullTypeJavadocComments();
 				getTabFolder().setSelection(getTabFolder().indexOf(getTypeCommentsTab()));
 			} catch (Exception e) {
-				ExceptionCatchDialog.display(Messages.EXCEPTION_CAN_NOT_IMPORT, e.getMessage());
+				ExceptionCatchDialog.open(Messages.EXCEPTION_CAN_NOT_IMPORT, e.getMessage());
 			}
 		}
 	}
@@ -59,7 +59,7 @@ public abstract class AbstractParameterCommentsSection extends JavaDocCommentsSe
 				getTargetIf().exportTypeJavadocComments();
 				getTabFolder().setSelection(getTabFolder().indexOf(getTypeJavadocTab()));
 			} catch (Exception e) {
-				ExceptionCatchDialog.display(Messages.EXCEPTION_CAN_NOT_EXPORT, e.getMessage());
+				ExceptionCatchDialog.open(Messages.EXCEPTION_CAN_NOT_EXPORT, e.getMessage());
 			}
 		}
 	}
@@ -71,7 +71,7 @@ public abstract class AbstractParameterCommentsSection extends JavaDocCommentsSe
 				getTargetIf().exportFullTypeJavadocComments();
 				getTabFolder().setSelection(getTabFolder().indexOf(getTypeJavadocTab()));
 			} catch (Exception e) {
-				ExceptionCatchDialog.display(Messages.EXCEPTION_CAN_NOT_EXPORT, e.getMessage());
+				ExceptionCatchDialog.open(Messages.EXCEPTION_CAN_NOT_EXPORT, e.getMessage());
 			}
 		}
 	}
