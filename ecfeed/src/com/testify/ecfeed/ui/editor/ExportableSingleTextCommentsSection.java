@@ -27,7 +27,7 @@ public class ExportableSingleTextCommentsSection extends SingleTextCommentsSecti
 			try {
 				getTargetIf().exportAllComments();
 			} catch (Exception e) {
-				ExceptionCatchDialog.display("Can not export.", e.getMessage());
+				ExceptionCatchDialog.open("Can not export.", e.getMessage());
 			}
 		}
 	}
@@ -38,7 +38,7 @@ public class ExportableSingleTextCommentsSection extends SingleTextCommentsSecti
 			try {
 				getTargetIf().importAllJavadocComments();
 			} catch (Exception e) {
-				ExceptionCatchDialog.display("Can not import.", e.getMessage());
+				ExceptionCatchDialog.open("Can not import.", e.getMessage());
 			}
 		}
 	}

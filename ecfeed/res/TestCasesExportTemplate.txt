@@ -1,0 +1,32 @@
+Template consists of three sections:
+  [Header], 
+  [TestCase]
+  [Footer].
+Sections [Header] and [Footer] can be ommited.
+
+
+In [Header] section you can define export header.
+You can use the following expressions:
+    %package - name of the package where method is located
+    %class   - name of the test class containing test method
+    %method  - name of the method containing exported test cases
+    $N.name  - name of the Nth parameter (counting from 1) 
+             in the test method.
+
+
+In [TestCase] section you can define fields to export in the test case
+You can use all the expressions used for [Header] section, and also:
+    $N.choice - short name of the choice that will be used 
+                in the test case as Nth parameter
+    $N.full_choice - qualified name of the choice used in the test case 
+                     as Nth parameter, containing all of it's parent
+                     choices in the hierarchy.
+    $N.value - value of the Nth parameter of this test case
+    %suite - test suite name of the test case.
+    %index - a number under which this test case was exported 
+             (starting from 0). 
+
+
+Section [Footer] defines the bottom of the exported file. 
+You can use all the expressions used for [Header] section.
+

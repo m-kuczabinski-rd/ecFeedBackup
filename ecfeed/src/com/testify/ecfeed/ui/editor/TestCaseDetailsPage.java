@@ -112,7 +112,7 @@ public class TestCaseDetailsPage extends BasicDetailsPage {
 					try {
 						fTestCaseIf.executeStaticTest();
 					} catch (EcException e) {
-						ExceptionCatchDialog.display("Can not execute static tests.", e.getMessage());
+						ExceptionCatchDialog.open("Can not execute static tests.", e.getMessage());
 					}
 				}
 			});

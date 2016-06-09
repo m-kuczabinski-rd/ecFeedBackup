@@ -276,9 +276,11 @@ public class ModelMasterSection extends TreeViewerSection{
 
 		private class DecorationProvider implements IModelVisitor{
 			AbstractNodeInterface fNodeInterface;
+			boolean fIsProjectAvailable;
 
-			public DecorationProvider(IFileInfoProvider fileInfoProvider){
+			public DecorationProvider(IFileInfoProvider fileInfoProvider, boolean isProjectAvailable){
 				fNodeInterface = new AbstractNodeInterface(ModelMasterSection.this, fileInfoProvider);
+				fIsProjectAvailable = isProjectAvailable;
 			}
 
 			@Override
@@ -338,6 +340,10 @@ public class ModelMasterSection extends TreeViewerSection{
 			}
 
 			private Image implementationStatusDecoration(AbstractNode node) {
+				if (!fIsProjectAvailable) {
+					return null;
+				}
+
 				switch (fNodeInterface.getImplementationStatus(node)){
 				case IMPLEMENTED:
 					return getImageFromFile("implemented.png");
@@ -362,13 +368,10 @@ public class ModelMasterSection extends TreeViewerSection{
 			if(!(element instanceof AbstractNode)){
 				return image;
 			}
-			if (!fFileInfoProvider.isProjectAvailable()) {
-				return image;
-			}
 
 			try {
 				List<Image> decorations = (List<Image>)((AbstractNode)element).accept(
-						new DecorationProvider(fFileInfoProvider));
+						new DecorationProvider(fFileInfoProvider, fFileInfoProvider.isProjectAvailable()));
 				List<Image> all = new ArrayList<Image>(decorations);
 				all.add(0, image);
 				if(fFusedImages.containsKey(all) == false){

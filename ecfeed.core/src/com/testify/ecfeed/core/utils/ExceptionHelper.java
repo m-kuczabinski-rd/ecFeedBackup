@@ -13,5 +13,6 @@ public class ExceptionHelper {
 	public static void reportRuntimeException(String message) {
 		SystemLogger.logThrow(message);
 		throw new RuntimeException(message);
-	}	
+	}
+
 }

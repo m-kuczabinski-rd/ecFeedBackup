@@ -42,7 +42,7 @@ public class OtherMethodsViewer extends CheckboxTableViewerSection {
 			try {
 				fClassIf.addMethods(getSelectedMethods());
 			} catch (Exception e) {
-				ExceptionCatchDialog.display("Can not add selected items.", e.getMessage());
+				ExceptionCatchDialog.open("Can not add selected items.", e.getMessage());
 			}
 		}
 	}

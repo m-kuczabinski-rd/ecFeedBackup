@@ -9,7 +9,12 @@
 package com.testify.ecfeed.core.utils;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 public class DiskFileHelper {
 
@@ -62,7 +67,7 @@ public class DiskFileHelper {
 
 	public static String extractPath(String pathWithFileName) {
 		String fileName = StringHelper.getLastToken(pathWithFileName, FILE_SEPARATOR);
-		return StringHelper.removePostfix(fileName, pathWithFileName);
+		return StringHelper.removeFromPostfix(fileName, pathWithFileName);
 	}
 
 	public static String extractFileNameWithoutExtension(String fileNameWithExtension) {
@@ -119,12 +124,37 @@ public class DiskFileHelper {
 			ExceptionHelper.reportRuntimeException("Can not create file: " + pathWithFileName + " .");
 		}
 	}
-	
+
 	public static void deleteFile(String pathWithFileName) {
 		File file = new File(pathWithFileName);
 		if (!file.delete()) {
 			ExceptionHelper.reportRuntimeException("Can not delete file: " + pathWithFileName + " .");
 		}
+	}
+
+	public static void saveStringToFile(String pathWithFileName, String newContents) {
+		PrintWriter writer = null;
+		try {
+			writer = new PrintWriter(pathWithFileName, "UTF-8");
+		} catch (FileNotFoundException | UnsupportedEncodingException e) {
+			ExceptionHelper.reportRuntimeException(
+					"Can not write string to file: " + pathWithFileName + " ,reason: " + e.getMessage());
+		}
+		writer.print(newContents);
+		writer.close();
+	}
+
+	public static String readStringFromFile(String pathWithFileName) {
+		String result = null;
+		byte[] encoded;
+		try {
+			encoded = Files.readAllBytes(Paths.get(pathWithFileName));
+			result = new String(encoded, "UTF-8");
+		} catch (IOException e) {
+			ExceptionHelper.reportRuntimeException(
+					"Can not read string from file: " + pathWithFileName + " ,reason: " + e.getMessage());
+		}
+		return result;
 	}
 
 }

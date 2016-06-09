@@ -532,7 +532,7 @@ public class ConstraintViewer extends TreeViewerSection {
 					getTreeViewer().setSelection(new StructuredSelection(statement));
 				}
 			} catch (Exception e) {
-				ExceptionCatchDialog.display("Can not add statement.", e.getMessage());
+				ExceptionCatchDialog.open("Can not add statement.", e.getMessage());
 			}
 		}
 	}

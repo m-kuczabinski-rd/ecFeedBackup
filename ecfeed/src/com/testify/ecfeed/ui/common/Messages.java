@@ -92,10 +92,6 @@ public class Messages {
 	public static final String WIZARD_FILE_EXISTS_TITLE = "File exists";
 	public static final String WIZARD_FILE_EXISTS_MESSAGE = "File with specified name already exists in this container. "
 			+ "Do you want to overwrite it?";
-	public static final String DIALOG_GENERATE_TEST_SUITE_TITLE = "Generate test suite";
-	public static final String DIALOG_GENERATE_TEST_SUITE_MESSAGE = "Select test suite name and algorithm for test suite generation";
-	public static final String DIALOG_EXECUTE_ONLINE_TITLE = "Execute online test";
-	public static final String DIALOG_EXECUTE_ONLINE_MESSAGE = "Setup the test data generator and select which constraints and choices shall be considered for generating test cases";
 	public static final String DIALOG_EDIT_COMMENTS_TITLE = "Edit element's comments";
 	public static final String DIALOG_EDIT_COMMENTS_MESSAGE = "Enter element's comments in plain text";
 
@@ -199,8 +195,6 @@ public class Messages {
 	public static final String CAN_NOT_IMPLEMENT_SOURCE_FOR_CLASS = "Can not implement source for the class.";
 	public static final String DEFAULT_PACKAGE_NOT_SET_IN_ANDROID_MANIFEST = "Default package for tested aplication is not set in AndroidManifest.xml.";
 
-	public static final String DIALOG_GENERATOR_INPUT_PROBLEM_MESSAGE = "At least one choice per parameter must be check";
-	public static final String DIALOG_GENERATOR_EXECUTABLE_INPUT_PROBLEM_MESSAGE = "At least one choice per parameter must be check. All checked parameters must be implemented";
 	public static final String DIALOG_GENERATE_TEST_SUITES_SELECT_CONSTRAINTS_LABEL = "Select constraints considered when generating test suite";
 	public static final String DIALOG_GENERATE_TEST_SUITES_SELECT_CHOICES_LABEL = "Select which choices will be considered for generating test suite. "
 			+ "Each parameter must be represented by at least one choice.";

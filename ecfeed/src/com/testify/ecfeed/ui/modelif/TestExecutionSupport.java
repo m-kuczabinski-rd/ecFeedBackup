@@ -60,6 +60,13 @@ public abstract class TestExecutionSupport {
 		fUnsuccesfullExecutionStatuses.add(new Status(IStatus.ERROR, Activator.PLUGIN_ID, e.getMessage()));
 	}
 
+	public boolean anyTestFailed() {
+		if (fUnsuccesfullExecutionStatuses.size() > 0 ) {
+			return true;
+		}
+		return false;
+	}
+
 	protected void clearFailedTests(){
 		fUnsuccesfullExecutionStatuses.clear();
 	}

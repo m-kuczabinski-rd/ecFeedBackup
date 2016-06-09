@@ -20,29 +20,29 @@ import com.testify.ecfeed.ui.common.Constants;
 public class AbstractFrameworkMethodTest {
 
 	private final String FUNCTION_UNDER_TEST_NAME = "functionUnderTest";
-	
+
 	private final List<String> INT_ARGS;
 	private final List<String> STRING_ARGS;
 	private final List<String> ENUM_ARGS;
-	
+
 	private Result fResult = new Result();
-	
+
 	public enum Enum{
 		VALUE1, VALUE2, VALUE3, VALUE4
 	}
-	
+
 	public static class Result{
 		int arg1;
 		String arg2;
 		Enum arg3;
-		
+
 		public void reset(){
 			arg1 = 0;
 			arg2 = null;
 			arg3 = null;
 		}
 	}
-	
+
 	public AbstractFrameworkMethodTest(){
 		INT_ARGS = new ArrayList<String>();
 		INT_ARGS.addAll(Arrays.asList(Constants.INTEGER_SPECIAL_VALUES));
@@ -55,15 +55,15 @@ public class AbstractFrameworkMethodTest {
 			ENUM_ARGS.add(e.name());
 		}
 	}
-	
+
 	public void functionUnderTest(int arg1, String arg2, Enum arg3){
 		fResult.reset();
-		
+
 		fResult.arg1 = arg1;
 		fResult.arg2 = arg2;
 		fResult.arg3 = arg3;
 	}
-	
+
 	@Test
 	public void invokeTest() {
 		try {
@@ -71,8 +71,8 @@ public class AbstractFrameworkMethodTest {
 			MethodParameterNode intParameter = new MethodParameterNode("intParameter", "int", "0", false);
 			MethodParameterNode stringParameter = new MethodParameterNode("stringParameter", "String", "0", false);
 			MethodParameterNode enumParameter = new MethodParameterNode("enumParameter", Enum.class.getCanonicalName(), Enum.values()[0].name(), false);
-			ChoiceValueParser parser = new ChoiceValueParser(new ModelClassLoader(new URL[]{}, this.getClass().getClassLoader()));
-			
+			ChoiceValueParser parser = new ChoiceValueParser(new ModelClassLoader(new URL[]{}, this.getClass().getClassLoader()), false);
+
 			ModelClassLoader loader = new ModelClassLoader(new URL[]{}, this.getClass().getClassLoader());
 			AbstractFrameworkMethod frameworkMethod = new AbstractFrameworkMethod(method, loader);
 			for(String intArg : INT_ARGS){
@@ -88,9 +88,9 @@ public class AbstractFrameworkMethodTest {
 						args.add(intChoice);
 						args.add(stringChoice);
 						args.add(enumChoice);
-						
+
 						frameworkMethod.invoke(this, args);
-						
+
 						assertEquals(fResult.arg1, parser.parseValue(intChoice));
 						assertEquals(fResult.arg2, parser.parseValue(stringChoice));
 						assertEquals(fResult.arg3, parser.parseValue(enumChoice));

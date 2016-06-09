@@ -50,13 +50,43 @@ public class StringHelper {
 		return fromStr.substring(index + prefix.length());
 	}
 
-	public static String removePostfix(String postfix, String fromStr) {
+	public static String removeFromPostfix(String postfix, String fromStr) {
 		int index = fromStr.lastIndexOf(postfix);
 
 		if (index == -1) {
 			return fromStr;
 		}
 		return fromStr.substring(0, index);
+	}	
+
+	public static String removeFromLastNewline(String fromString) {
+		return removeFromPostfix(newLine(), fromString);
+	}
+
+	public static String removeStrgAtEnd(String pattern, String strg) {
+		int index = strg.lastIndexOf(pattern);
+
+		if (index == -1) {
+			return strg;
+		}
+
+		if (index != (strg.length() - pattern.length())) {
+			return strg;
+		}
+
+		return strg.substring(0, index);
+	}
+
+	public static String removeNewlineAtEnd(String fromString) {
+		return removeStrgAtEnd(newLine(), fromString);
+	}	
+
+	public static String appendNewline(String line) {
+		return line + StringHelper.newLine();
+	}
+
+	public static String newLine() {
+		return System.lineSeparator();
 	}
 
 	public static String getLastToken(String tokenizedString, String tokenSeparator) {
@@ -118,5 +148,15 @@ public class StringHelper {
 			}
 		}
 		return occurences;
+	}
+
+	public static String createString(String baseString, int repetitions) {
+		StringBuilder builder = new StringBuilder();
+
+		for (int cnt = 0; cnt < repetitions; ++ cnt) {
+			builder.append(baseString);
+		}
+
+		return builder.toString();
 	}
 }

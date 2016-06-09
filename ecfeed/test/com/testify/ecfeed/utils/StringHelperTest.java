@@ -57,26 +57,57 @@ public class StringHelperTest{
 	}	
 
 	@Test
-	public void shouldRemovePostfix(){
-		String result = StringHelper.removePostfix("123", "abc123");
+	public void shouldRemoveFromPostfix(){
+		String result = StringHelper.removeFromPostfix("123", "abc123");
 		assertEquals("abc", result);
 	}
 
 	@Test
+	public void shouldIgnoreRemoveFromPostfix(){
+		String result = StringHelper.removeFromPostfix("123", "abc123XYZ");
+		assertEquals("abc", result);
+	}
+
+	@Test
+	public void shouldRemoveAtEnd(){
+		String result = StringHelper.removeFromPostfix("123", "abc123");
+		assertEquals("abc", result);
+	}
+
+	@Test
+	public void shouldRemoveAtEnd2(){
+		String result = StringHelper.removeStrgAtEnd("123", "abc123X");
+		assertEquals("abc123X", result);
+	}	
+
+	@Test
+	public void shouldRemoveNewlineAtEnd() {
+		String result = StringHelper.removeNewlineAtEnd("abc" + StringHelper.newLine());
+		assertEquals("abc", result);
+	}
+
+	@Test
+	public void shouldIgnoreNewlineAtEnd() {
+		String initialStrg = "abc" + StringHelper.newLine() + "def";
+		String result = StringHelper.removeNewlineAtEnd(initialStrg);
+		assertEquals(initialStrg, result);
+	}	
+
+	@Test
 	public void shouldReturnResultWhenPostfixNotFound(){
-		String result = StringHelper.removePostfix("123", "abcd");
+		String result = StringHelper.removeFromPostfix("123", "abcd");
 		assertEquals("abcd", result);
 	}	
 
 	@Test
 	public void shouldIgnoreEmptyPostfix(){
-		String result = StringHelper.removePostfix("", "abcd");
+		String result = StringHelper.removeFromPostfix("", "abcd");
 		assertEquals("abcd", result);
 	}	
 
 	@Test
 	public void shouldReturnEmptWhenEmptyString(){
-		String result = StringHelper.removePostfix("abcd", "");
+		String result = StringHelper.removeFromPostfix("abcd", "");
 		assertEquals("", result);
 	}	
 
@@ -167,6 +198,6 @@ public class StringHelperTest{
 	@Test
 	public void shouldReturnFourOccurencesOfSpace(){
 		assertEquals(4, StringHelper.countOccurencesOfChar(" 12 3 45 ", ' '));
-	}	
+	}
 
 }
