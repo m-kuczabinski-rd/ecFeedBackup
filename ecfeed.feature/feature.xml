@@ -2,7 +2,7 @@
 <feature
       id="com.testify.ecfeed"
       label="ecFeed"
-      version="1.9.0.qualifier"
+      version="1.10.0.qualifier"
       provider-name="Testify A.S.">
 
    <description url="https://github.com/testify-no/ecFeed">
