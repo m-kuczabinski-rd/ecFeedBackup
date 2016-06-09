@@ -9,6 +9,10 @@
 #     Patryk Chamuczynski (p.chamuczynski(at)radytek.com) - initial implementation
 #-------------------------------------------------------------------------------
 
+Version 1.10.0
+ - Export data to custom text format
+ - minor bugfixes
+
 Version 1.9.0
  - Android support for interactive test execution
  - "source" tab in the editor
