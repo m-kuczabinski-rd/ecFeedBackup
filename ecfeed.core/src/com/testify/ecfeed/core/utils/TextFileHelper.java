@@ -28,4 +28,10 @@ public class TextFileHelper {
 	public static void appendLineToLog(String message) throws IOException {
 		TextFileHelper.appendLine("ecFeedLog.txt", message);
 	}
+
+	public static void appendLineToLogNoThrow(String message) {
+		try {
+			TextFileHelper.appendLine("ecFeedLog.txt", message);
+		} catch (IOException e) {}
+	}	
 }

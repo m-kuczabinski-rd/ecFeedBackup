@@ -24,6 +24,7 @@ import com.testify.ecfeed.core.model.ClassNode;
 import com.testify.ecfeed.core.model.MethodNode;
 import com.testify.ecfeed.core.model.MethodParameterNode;
 import com.testify.ecfeed.core.model.TestCaseNode;
+import com.testify.ecfeed.core.utils.StringHelper;
 import com.testify.ecfeed.serialization.export.TestCasesExporter;
 
 public class TestCasesExporterTest {
@@ -34,8 +35,8 @@ public class TestCasesExporterTest {
 		String testCaseTemplate = "$1.value, $2.value";
 		String footerTemplate = "end";
 
-		String expectedResult = "par0, par1" + System.lineSeparator() + "0, 1"
-				+ System.lineSeparator() + "end" + System.lineSeparator();
+		String expectedResult = "par0, par1" + StringHelper.newLine() + "0, 1"
+				+ StringHelper.newLine() + "end" + StringHelper.newLine();
 
 		performTwoParamsTest(headerTemplate, testCaseTemplate, footerTemplate,
 				expectedResult);

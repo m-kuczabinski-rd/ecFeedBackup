@@ -22,6 +22,7 @@ import com.testify.ecfeed.core.model.MethodNode;
 import com.testify.ecfeed.core.model.TestCaseNode;
 import com.testify.ecfeed.core.serialization.export.TestCasesExportHelper;
 import com.testify.ecfeed.core.utils.ExceptionHelper;
+import com.testify.ecfeed.core.utils.StringHelper;
 import com.testify.ecfeed.utils.EclipseHelper;
 
 public class TestCasesExporter {
@@ -75,7 +76,7 @@ public class TestCasesExporter {
 			throws IOException {
 		if (fHeaderTemplate != null) {
 			String section = TestCasesExportHelper.generateSection(method,
-					fHeaderTemplate) + System.lineSeparator();
+					fHeaderTemplate) + StringHelper.newLine();
 			outputStream.write(section.getBytes());
 		}
 
@@ -87,7 +88,7 @@ public class TestCasesExporter {
 
 		String testCaseText = TestCasesExportHelper.generateTestCaseString(
 				fExportedTestCases, testCase, fTestCaseTemplate)
-				+ System.lineSeparator();
+				+ StringHelper.newLine();
 
 		outputStream.write(testCaseText.getBytes());
 		++fExportedTestCases;
@@ -97,7 +98,7 @@ public class TestCasesExporter {
 			throws IOException {
 		if (fTailTemplate != null) {
 			String section = TestCasesExportHelper.generateSection(method,
-					fTailTemplate) + System.lineSeparator();
+					fTailTemplate) + StringHelper.newLine();
 			outputStream.write(section.getBytes());
 		}
 	}

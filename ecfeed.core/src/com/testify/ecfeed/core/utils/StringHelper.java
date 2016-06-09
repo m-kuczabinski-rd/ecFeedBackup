@@ -60,14 +60,14 @@ public class StringHelper {
 	}
 
 	public static String removeLastNewline(String fromString) {
-		return removePostfix(System.lineSeparator(), fromString);
+		return removePostfix(newLine(), fromString);
 	}
 
 	public static String appendNewline(String line) {
-		return line + StringHelper.getNewLine();
+		return line + StringHelper.newLine();
 	}
 
-	public static String getNewLine() {
+	public static String newLine() {
 		return System.lineSeparator();
 	}
 

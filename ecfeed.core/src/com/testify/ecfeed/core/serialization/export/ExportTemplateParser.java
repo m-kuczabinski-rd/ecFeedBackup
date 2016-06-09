@@ -24,8 +24,7 @@ public class ExportTemplateParser {
 
 	public void createSubTemplates(String template) {
 		if (template == null) {
-			ExceptionHelper
-					.reportRuntimeException("Template text must not be empty.");
+			ExceptionHelper.reportRuntimeException("Template text must not be empty.");
 		}
 
 		Map<String, String> templateMap = parseTemplate(template);
@@ -38,11 +37,9 @@ public class ExportTemplateParser {
 
 	public String createInitialTemplate() {
 		return StringHelper.appendNewline(HEADER_MARKER)
-				+ StringHelper
-						.appendNewline(createDefaultHeaderTemplate(fMethodParametersCount))
+				+ StringHelper.appendNewline(createDefaultHeaderTemplate(fMethodParametersCount))
 				+ StringHelper.appendNewline(TEST_CASE_MARKER)
-				+ StringHelper
-						.appendNewline(createDefaultTestCaseTemplate(fMethodParametersCount))
+				+ StringHelper.appendNewline(createDefaultTestCaseTemplate(fMethodParametersCount))
 				+ StringHelper.appendNewline(FOOTER_MARKER);
 	}
 
@@ -102,7 +99,7 @@ public class ExportTemplateParser {
 
 	public static Map<String, String> parseTemplate(String templateText) {
 		Map<String, String> result = new HashMap<String, String>();
-		StringTokenizer tokenizer = new StringTokenizer(templateText, "\n");
+		StringTokenizer tokenizer = new StringTokenizer(templateText, StringHelper.newLine());
 		StringHolder currentSectionMarker = new StringHolder();
 
 		while (tokenizer.hasMoreTokens()) {
@@ -168,7 +165,7 @@ public class ExportTemplateParser {
 		}
 
 		String oldContents = result.get(marker);
-		String newContents = oldContents.concat(line + "\n");
+		String newContents = oldContents.concat(line + StringHelper.newLine());
 		result.put(marker, newContents);
 	}
 
