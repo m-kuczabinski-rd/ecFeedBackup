@@ -67,7 +67,7 @@ public class DiskFileHelper {
 
 	public static String extractPath(String pathWithFileName) {
 		String fileName = StringHelper.getLastToken(pathWithFileName, FILE_SEPARATOR);
-		return StringHelper.removePostfix(fileName, pathWithFileName);
+		return StringHelper.removeFromPostfix(fileName, pathWithFileName);
 	}
 
 	public static String extractFileNameWithoutExtension(String fileNameWithExtension) {

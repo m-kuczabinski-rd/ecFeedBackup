@@ -16,6 +16,8 @@ import java.util.Map;
 
 import org.junit.Test;
 
+import com.testify.ecfeed.core.utils.StringHelper;
+
 public class ExportTemplateParserTest {
 
 	@Test
@@ -37,10 +39,12 @@ public class ExportTemplateParserTest {
 	@Test
 	public void ShouldParseForTwoParamsTemplate() {
 
-		String templateText = ExportTemplateParser.HEADER_MARKER + "\n"
-				+ "$1.name,$2.name\n" + ExportTemplateParser.TEST_CASE_MARKER
-				+ "\n" + "$1.value,$2.value\n"
-				+ ExportTemplateParser.FOOTER_MARKER;
+		String templateText = 
+				StringHelper.appendNewline(ExportTemplateParser.HEADER_MARKER)
+				+ StringHelper.appendNewline("$1.name,$2.name") 
+				+ StringHelper.appendNewline(ExportTemplateParser.TEST_CASE_MARKER) 
+				+ StringHelper.appendNewline("$1.value,$2.value")
+				+ StringHelper.appendNewline(ExportTemplateParser.FOOTER_MARKER);
 
 		Map<String, String> result = null;
 
@@ -50,11 +54,43 @@ public class ExportTemplateParserTest {
 			fail("Exception thrown during export.");
 		}
 
-		assertEquals("$1.name,$2.name",
-				result.get(ExportTemplateParser.HEADER_MARKER));
-		assertEquals("$1.value,$2.value",
-				result.get(ExportTemplateParser.TEST_CASE_MARKER));
+		assertEquals("$1.name,$2.name", result.get(ExportTemplateParser.HEADER_MARKER));
+		assertEquals("$1.value,$2.value", result.get(ExportTemplateParser.TEST_CASE_MARKER));
 	}
+
+	@Test
+	public void ShouldParseMultiLineSectionsTemplate() {
+
+		String templateText = 
+				StringHelper.appendNewline(ExportTemplateParser.HEADER_MARKER)
+				+ StringHelper.appendNewline("HEADER")
+				+ StringHelper.appendNewline("$1.name,$2.name") 
+
+				+ StringHelper.appendNewline(ExportTemplateParser.TEST_CASE_MARKER)
+				+ StringHelper.appendNewline("TEST CASE")
+				+ StringHelper.appendNewline("$1.value,$2.value")
+
+				+ StringHelper.appendNewline(ExportTemplateParser.FOOTER_MARKER)
+				+ StringHelper.appendNewline("FOOTER 1")
+				+ StringHelper.appendNewline("FOOTER 2");
+
+		Map<String, String> resultMap = null;
+
+		try {
+			resultMap = ExportTemplateParser.parseTemplate(templateText);
+		} catch (Exception e) {
+			fail("Exception thrown during export.");
+		}
+
+		String header = resultMap.get(ExportTemplateParser.HEADER_MARKER);
+		String expectedHeader = "HEADER" + StringHelper.newLine() + "$1.name,$2.name";
+		assertEquals(expectedHeader, header);
+
+		String testCase = resultMap.get(ExportTemplateParser.TEST_CASE_MARKER); 
+		String expectedTestCase = "TEST CASE" + StringHelper.newLine() + "$1.value,$2.value";
+
+		assertEquals(expectedTestCase, testCase);
+	}	
 
 	@Test
 	public void ShouldNotThrowWhenOnlyInvalidMarker() {

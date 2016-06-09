@@ -75,7 +75,7 @@ public class EclipseInstallationDirFileHelper implements IInstallationDirFileHel
 		final String postfix = 
 				DiskFileHelper.FILE_SEPARATOR + DiskFileHelper.CURRENT_DIR + DiskFileHelper.FILE_SEPARATOR;
 
-		return StringHelper.removePostfix(postfix, ecfeedJarUrl);
+		return StringHelper.removeFromPostfix(postfix, ecfeedJarUrl);
 	}
 
 	private static final String EXCEPTION_FILE_NOT_FOUND_IN_INSTALLATION_DIR(final String relativePath) {

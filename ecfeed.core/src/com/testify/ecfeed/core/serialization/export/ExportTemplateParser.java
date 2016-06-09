@@ -62,7 +62,7 @@ public class ExportTemplateParser {
 			return null;
 		}
 
-		return StringHelper.removeLastNewline(headerTemplate);
+		return StringHelper.removeNewlineAtEnd(headerTemplate.trim());
 	}
 
 	private static String createUserTestCaseTemplate(
@@ -73,7 +73,7 @@ public class ExportTemplateParser {
 		if (testCaseTemplate == null) {
 			return null;
 		}
-		return StringHelper.removeLastNewline(testCaseTemplate);
+		return StringHelper.removeNewlineAtEnd(testCaseTemplate.trim());
 	}
 
 	private static String createUserFooterTemplate(Map<String, String> template) {
@@ -83,7 +83,7 @@ public class ExportTemplateParser {
 		if (footerTemplate == null) {
 			return null;
 		}
-		return StringHelper.removeLastNewline(footerTemplate);
+		return StringHelper.removeNewlineAtEnd(footerTemplate.trim());
 	}
 
 	private static String createDefaultHeaderTemplate(int methodParametersCount) {
@@ -98,7 +98,7 @@ public class ExportTemplateParser {
 	}
 
 	public static Map<String, String> parseTemplate(String templateText) {
-		Map<String, String> result = new HashMap<String, String>();
+		Map<String, String> resultMap = new HashMap<String, String>();
 		StringTokenizer tokenizer = new StringTokenizer(templateText, StringHelper.newLine());
 		StringHolder currentSectionMarker = new StringHolder();
 
@@ -117,9 +117,9 @@ public class ExportTemplateParser {
 				continue;
 			}
 
-			updateResultMap(currentSectionMarker.get(), line, result);
+			updateResultMap(currentSectionMarker.get(), line, resultMap);
 		}
-		return result;
+		return resultMap;
 	}
 
 	private static boolean isCommentLine(String line) {
@@ -165,7 +165,7 @@ public class ExportTemplateParser {
 		}
 
 		String oldContents = result.get(marker);
-		String newContents = oldContents.concat(line + StringHelper.newLine());
+		String newContents = oldContents.concat(StringHelper.newLine() + line);
 		result.put(marker, newContents);
 	}
 
