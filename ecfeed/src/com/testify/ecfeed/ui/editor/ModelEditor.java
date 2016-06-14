@@ -223,7 +223,7 @@ public class ModelEditor extends FormEditor implements IFileInfoProvider{
 	}
 
 	private InputStream getInputStreamForRCP(IEditorInput input) {
-		FileStoreEditorInput fileStoreInput = EclipseHelper.getFileStoreEditorInput(input);
+		FileStoreEditorInput fileStoreInput = ModelEditorHelper.getFileStoreEditorInput(input);
 		if (fileStoreInput == null) {
 			reportInvalidInputTypeException();
 		}
@@ -316,7 +316,7 @@ public class ModelEditor extends FormEditor implements IFileInfoProvider{
 
 	@Override
 	public void doSave(IProgressMonitor monitor) {
-		ModelEditor modelEditor = EclipseHelper.getActiveModelEditor();
+		ModelEditor modelEditor = ModelEditorHelper.getActiveModelEditor();
 		if (modelEditor == null) {
 			return;
 		}

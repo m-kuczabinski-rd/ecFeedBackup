@@ -12,14 +12,14 @@ import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 
 import com.testify.ecfeed.ui.editor.ModelEditor;
-import com.testify.ecfeed.utils.EclipseHelper;
+import com.testify.ecfeed.ui.editor.ModelEditorHelper;
 
 
 public class SaveEctHandler extends org.eclipse.core.commands.AbstractHandler {
 
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
-		ModelEditor modelEditor = EclipseHelper.getActiveModelEditor(); 
+		ModelEditor modelEditor = ModelEditorHelper.getActiveModelEditor(); 
 		if (modelEditor == null) {
 			return null;
 		}

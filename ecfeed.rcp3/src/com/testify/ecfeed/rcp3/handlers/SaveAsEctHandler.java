@@ -17,19 +17,19 @@ import com.testify.ecfeed.core.utils.UriHelper;
 import com.testify.ecfeed.ui.dialogs.basic.ReplaceExistingFileDialog;
 import com.testify.ecfeed.ui.dialogs.basic.SaveAsEctDialog;
 import com.testify.ecfeed.ui.editor.ModelEditor;
-import com.testify.ecfeed.utils.EclipseHelper;
+import com.testify.ecfeed.ui.editor.ModelEditorHelper;
 
 
 public class SaveAsEctHandler extends org.eclipse.core.commands.AbstractHandler {
 
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
-		ModelEditor modelEditor = EclipseHelper.getActiveModelEditor();
+		ModelEditor modelEditor = ModelEditorHelper.getActiveModelEditor();
 		if (modelEditor == null) {
 			return null;
 		}
 
-		FileStoreEditorInput editorInput = EclipseHelper.getFileStoreEditorInput(modelEditor);
+		FileStoreEditorInput editorInput = ModelEditorHelper.getFileStoreEditorInput(modelEditor);
 		if (editorInput == null) {
 			return null;
 		}
