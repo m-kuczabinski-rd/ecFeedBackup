@@ -14,8 +14,7 @@ import org.eclipse.ui.ide.FileStoreEditorInput;
 
 import com.testify.ecfeed.core.utils.DiskFileHelper;
 import com.testify.ecfeed.core.utils.UriHelper;
-import com.testify.ecfeed.ui.dialogs.basic.ReplaceExistingFileDialog;
-import com.testify.ecfeed.ui.dialogs.basic.SaveAsEctDialog;
+import com.testify.ecfeed.ui.dialogs.basic.SaveAsEctDialogWithConfirm;
 import com.testify.ecfeed.ui.editor.ModelEditor;
 import com.testify.ecfeed.ui.editor.ModelEditorHelper;
 
@@ -38,7 +37,7 @@ public class SaveAsEctHandler extends org.eclipse.core.commands.AbstractHandler 
 		if (pathWithFileName == null) {
 			return null;
 		}
-		
+
 		executeSaveAs(pathWithFileName, modelEditor);
 		return null;
 	}
@@ -47,27 +46,9 @@ public class SaveAsEctHandler extends org.eclipse.core.commands.AbstractHandler 
 		String fileName = DiskFileHelper.extractFileName(pathWithFileName);
 		String path = DiskFileHelper.extractPath(pathWithFileName);
 
-		String newFile = SaveAsEctDialog.open(path, fileName);
-		if (newFile == null) {
-			return;
-		}
-		if (!writeAllowed(newFile)) {
-			return; 
-		}
+		String newFile = SaveAsEctDialogWithConfirm.open(path, fileName);
 
-		modelEditor.saveModelToFile(newFile);
+		modelEditor.saveModelToFile(newFile); 
 		modelEditor.setEditorFile(newFile);
 	}
-
-	private boolean writeAllowed(String pathWithFileName) {
-		if (!DiskFileHelper.fileExists(pathWithFileName)) {
-			return true;
-		}
-		ReplaceExistingFileDialog.Result result = ReplaceExistingFileDialog.open(pathWithFileName);
-		if (result == ReplaceExistingFileDialog.Result.YES) {
-			return true;
-		}
-		return false;
-	}
-
 }

@@ -26,6 +26,11 @@
          <menu
                label="File">
             <command
+                  commandId="ecfeed.rcp3.newMem"
+                  label="New mem..."
+                  style="push">
+            </command>
+            <command
                   commandId="ecfeed.rcp3.new"
                   label="New...">
             </command>
@@ -102,6 +107,10 @@
             name="SaveAs">
       </command>
       <command
+            id="ecfeed.rcp3.newMem"
+            name="New mem">
+      </command>
+      <command
             id="ecfeed.rcp3.new"
             name="New">
       </command>
@@ -147,6 +156,10 @@
       <handler
             class="com.testify.ecfeed.rcp3.handlers.NewEctHandler"
             commandId="ecfeed.rcp3.new">
+      </handler>
+      <handler
+            class="com.testify.ecfeed.rcp3.handlers.NewInMemEctHandler"
+            commandId="ecfeed.rcp3.newMem">
       </handler>
       <handler
             class="com.testify.ecfeed.rcp3.handlers.AboutHandler"
