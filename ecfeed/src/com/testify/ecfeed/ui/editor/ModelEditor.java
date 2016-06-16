@@ -245,12 +245,7 @@ public class ModelEditor extends FormEditor implements IFileInfoProvider{
 
 	@Override
 	public void doSave(IProgressMonitor monitor) {
-		ModelEditor modelEditor = ModelEditorHelper.getActiveModelEditor();
-		if (modelEditor == null) {
-			return;
-		}
-
-		if (!modelEditor.isDirty()) {
+		if (!isDirty()) {
 			return;
 		}
 
