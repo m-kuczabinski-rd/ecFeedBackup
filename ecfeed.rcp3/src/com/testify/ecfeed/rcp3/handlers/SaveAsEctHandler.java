@@ -48,6 +48,10 @@ public class SaveAsEctHandler extends org.eclipse.core.commands.AbstractHandler 
 
 		String newFile = SaveAsEctDialogWithConfirm.open(path, fileName);
 
+		if (newFile == null) {
+			return;
+		}
+
 		modelEditor.saveModelToFile(newFile); 
 		modelEditor.setEditorFile(newFile);
 	}
