@@ -13,15 +13,18 @@ import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 
 import com.testify.ecfeed.core.utils.DiskFileHelper;
+import com.testify.ecfeed.core.utils.SystemHelper;
 import com.testify.ecfeed.utils.EctFileHelper;
 
 public class EditorInMemFileHelper {
 
-	private static final String TMP_FILE_MEM_DIR = "/$ecFeedTmp/"; 
+	private static final String TMP_FILE_MEM_DIR =
+			DiskFileHelper.joinSubdirectory(SystemHelper.getSystemTemporaryDir(), "ecFeed") + DiskFileHelper.pathSeparator();
+
 	private static int fTmpFileCounter = 1;
 
 	public static String createNewTmpFileName() {
-		String tmpFile = "." + TMP_FILE_MEM_DIR + "Untitled" + fTmpFileCounter + ".ect";
+		String tmpFile = TMP_FILE_MEM_DIR + "Untitled" + fTmpFileCounter + ".ect";
 		fTmpFileCounter++;
 		return tmpFile;
 	}
