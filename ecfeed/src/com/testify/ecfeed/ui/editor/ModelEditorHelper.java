@@ -18,6 +18,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.dialogs.SaveAsDialog;
@@ -151,12 +152,12 @@ public class ModelEditorHelper {
 		}
 	}	
 
-	public static String selectFileForSaveAs(IEditorInput editorInput) {
+	public static String selectFileForSaveAs(IEditorInput editorInput, Shell shell) {
 		if (editorInput instanceof FileEditorInput) {
 			return selectFileForFileEditorInput((FileEditorInput)editorInput);
 		}
 		if (editorInput instanceof FileStoreEditorInput) { 
-			return selectFileForFileStoreEditorInput((FileStoreEditorInput)editorInput);
+			return selectFileForFileStoreEditorInput((FileStoreEditorInput)editorInput, shell);
 		}
 		return null;
 	}
@@ -175,13 +176,13 @@ public class ModelEditorHelper {
 		return path.toOSString();
 	}	
 
-	private static String selectFileForFileStoreEditorInput(FileStoreEditorInput fileStoreEditorInput) {
+	private static String selectFileForFileStoreEditorInput(FileStoreEditorInput fileStoreEditorInput, Shell shell) {
 
 		String pathWithFileName = UriHelper.convertUriToFilePath(fileStoreEditorInput.getURI());
 		String fileName = DiskFileHelper.extractFileName(pathWithFileName);
 		String path = DiskFileHelper.extractPath(pathWithFileName);
 
-		return SaveAsEctDialogWithConfirm.open(path, fileName);
+		return SaveAsEctDialogWithConfirm.open(path, fileName, shell);
 	}
 
 

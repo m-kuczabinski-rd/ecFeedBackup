@@ -10,18 +10,23 @@ package com.testify.ecfeed.ui.dialogs.basic;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.FileDialog;
+import org.eclipse.swt.widgets.Shell;
 
 import com.testify.ecfeed.utils.EclipseHelper;
 
 public class SaveAsEctDialog {
 
 	public static String open(String filterPath, String originalFileName) {
+		return open(filterPath, originalFileName, EclipseHelper.getActiveShell());
+	}
+	
+	public static String open(String filterPath, String originalFileName, Shell shell) {
 		FileDialog fileDialog = new FileDialog(EclipseHelper.getActiveShell(), SWT.SAVE);
 		fileDialog.setFilterNames(new String[] { "Ect Files", "All Files (*.*)" });
 		fileDialog.setFilterExtensions(new String[] { "*.ect", "*.*" }); 
 		fileDialog.setFilterPath(filterPath);
 		fileDialog.setFileName(originalFileName);
 		return fileDialog.open();
-	}
+	}	
 
 }

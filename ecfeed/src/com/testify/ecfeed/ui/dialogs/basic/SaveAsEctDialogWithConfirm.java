@@ -8,12 +8,19 @@
 
 package com.testify.ecfeed.ui.dialogs.basic;
 
+import org.eclipse.swt.widgets.Shell;
+
 import com.testify.ecfeed.core.utils.DiskFileHelper;
+import com.testify.ecfeed.utils.EclipseHelper;
 
 public class SaveAsEctDialogWithConfirm {
 
 	public static String open(String filterPath, String originalFileName) {
-		String newFile = SaveAsEctDialog.open(filterPath, originalFileName);
+		return open(filterPath, originalFileName, EclipseHelper.getActiveShell());
+	}
+	
+	public static String open(String filterPath, String originalFileName, Shell shell) {
+		String newFile = SaveAsEctDialog.open(filterPath, originalFileName, shell);
 		if (newFile == null) {
 			return null;
 		}
