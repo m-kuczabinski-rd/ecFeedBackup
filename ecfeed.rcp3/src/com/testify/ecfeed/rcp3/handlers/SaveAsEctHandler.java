@@ -17,6 +17,7 @@ import com.testify.ecfeed.core.utils.UriHelper;
 import com.testify.ecfeed.ui.dialogs.basic.SaveAsEctDialogWithConfirm;
 import com.testify.ecfeed.ui.editor.ModelEditor;
 import com.testify.ecfeed.ui.editor.ModelEditorHelper;
+import com.testify.ecfeed.utils.EclipseHelper;
 
 
 public class SaveAsEctHandler extends org.eclipse.core.commands.AbstractHandler {
@@ -46,7 +47,7 @@ public class SaveAsEctHandler extends org.eclipse.core.commands.AbstractHandler 
 		String fileName = DiskFileHelper.extractFileName(pathWithFileName);
 		String path = DiskFileHelper.extractPath(pathWithFileName);
 
-		String newFile = SaveAsEctDialogWithConfirm.open(path, fileName);
+		String newFile = SaveAsEctDialogWithConfirm.open(path, fileName, EclipseHelper.getActiveShell());
 
 		if (newFile == null) {
 			return;

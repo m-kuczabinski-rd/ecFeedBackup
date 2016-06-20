@@ -11,31 +11,42 @@ package com.testify.ecfeed.ui.dialogs.basic;
 import org.eclipse.swt.widgets.Shell;
 
 import com.testify.ecfeed.core.utils.DiskFileHelper;
-import com.testify.ecfeed.utils.EclipseHelper;
 
 public class SaveAsEctDialogWithConfirm {
 
-	public static String open(String filterPath, String originalFileName) {
-		return open(filterPath, originalFileName, EclipseHelper.getActiveShell());
+	public static String open(String filterPath, String originalPathWithFileName, Shell shell) {
+		for(;;) {
+			String newFile = openOnce(filterPath, originalPathWithFileName, shell);
+
+			if (newFile != null) {
+				return newFile;
+			}
+
+			YesNoDialog.Result result = YesNoDialog.open("Do you want to cancel saving the file: " + originalPathWithFileName + "?", shell);
+
+			if (result == YesNoDialog.Result.YES) {
+				return null;
+			}
+		}		
 	}
-	
-	public static String open(String filterPath, String originalFileName, Shell shell) {
+
+	public static String openOnce(String filterPath, String originalFileName, Shell shell) {
 		String newFile = SaveAsEctDialog.open(filterPath, originalFileName, shell);
 		if (newFile == null) {
 			return null;
 		}
-		if (!writeAllowed(newFile)) {
+		if (!writeAllowed(newFile, shell)) {
 			return null; 
 		}
 
 		return newFile;		
 	}
 
-	private static boolean writeAllowed(String pathWithFileName) {
+	private static boolean writeAllowed(String pathWithFileName, Shell shell) {
 		if (!DiskFileHelper.fileExists(pathWithFileName)) {
 			return true;
 		}
-		ReplaceExistingFileDialog.Result result = ReplaceExistingFileDialog.open(pathWithFileName);
+		ReplaceExistingFileDialog.Result result = ReplaceExistingFileDialog.open(pathWithFileName, shell);
 		if (result == ReplaceExistingFileDialog.Result.YES) {
 			return true;
 		}

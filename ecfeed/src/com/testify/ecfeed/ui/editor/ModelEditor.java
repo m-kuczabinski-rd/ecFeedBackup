@@ -41,9 +41,7 @@ import org.eclipse.jdt.core.IPackageFragmentRoot;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IPersistableElement;
@@ -67,16 +65,16 @@ import com.testify.ecfeed.ui.common.Constants;
 import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.testify.ecfeed.ui.dialogs.basic.ExceptionCatchDialog;
-import com.testify.ecfeed.ui.dialogs.basic.SaveAsEctDialogWithConfirm;
 import com.testify.ecfeed.utils.EclipseHelper;
 
 public class ModelEditor extends FormEditor implements IFileInfoProvider{
+
+	private static Shell fGlobalShellForDialogs = null;
 
 	private RootNode fModel;
 	private ModelPage fModelPage;
 	private ModelOperationManager fModelManager;
 	private ObjectUndoContext fUndoContext;
-	private Shell fActiveShell;
 	private ModelSourceEditor fSourcePageEditor;
 	private int fSourcePageIndex = -1;
 
@@ -168,7 +166,6 @@ public class ModelEditor extends FormEditor implements IFileInfoProvider{
 		ResourcesPlugin.getWorkspace().addResourceChangeListener(listener, IResourceChangeEvent.POST_CHANGE);
 		fModelManager = new ModelOperationManager();
 		fUndoContext = new ObjectUndoContext(fModelManager);
-		fActiveShell = EclipseHelper.getActiveShell();
 	}
 
 	public RootNode getModel() throws ModelOperationException{
@@ -207,6 +204,14 @@ public class ModelEditor extends FormEditor implements IFileInfoProvider{
 
 		} catch (PartInitException e) {
 			ExceptionCatchDialog.open("Can not add page.", e.getMessage());
+		}
+
+		setGlobalShellForDialogsIfNull();
+	}
+
+	private void setGlobalShellForDialogsIfNull() {
+		if (fGlobalShellForDialogs == null) {
+			fGlobalShellForDialogs = EclipseHelper.getActiveShell();
 		}
 	}
 
@@ -312,7 +317,12 @@ public class ModelEditor extends FormEditor implements IFileInfoProvider{
 
 	@Override
 	public void doSaveAs(){
-		String fileWithPath = ModelEditorHelper.selectFileForSaveAs(getEditorInput(), fActiveShell);
+		setGlobalShellForDialogsIfNull();
+		if (fGlobalShellForDialogs == null) {
+			ExceptionHelper.reportRuntimeException("Invalid model editor shell.");
+		}
+
+		String fileWithPath = ModelEditorHelper.selectFileForSaveAs(getEditorInput(), fGlobalShellForDialogs);
 		if (fileWithPath == null) {
 			return;
 		}

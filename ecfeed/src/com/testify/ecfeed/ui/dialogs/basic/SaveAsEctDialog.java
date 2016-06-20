@@ -19,9 +19,9 @@ public class SaveAsEctDialog {
 	public static String open(String filterPath, String originalFileName) {
 		return open(filterPath, originalFileName, EclipseHelper.getActiveShell());
 	}
-	
+
 	public static String open(String filterPath, String originalFileName, Shell shell) {
-		FileDialog fileDialog = new FileDialog(EclipseHelper.getActiveShell(), SWT.SAVE);
+		FileDialog fileDialog = new FileDialog(shell, SWT.SAVE);
 		fileDialog.setFilterNames(new String[] { "Ect Files", "All Files (*.*)" });
 		fileDialog.setFilterExtensions(new String[] { "*.ect", "*.*" }); 
 		fileDialog.setFilterPath(filterPath);
