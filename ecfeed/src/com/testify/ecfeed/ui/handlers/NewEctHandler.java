@@ -6,9 +6,8 @@
  * http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 
-package com.testify.ecfeed.rcp3.handlers;
+package com.testify.ecfeed.ui.handlers;
 
-import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 
 import com.testify.ecfeed.core.utils.DiskFileHelper;
@@ -19,16 +18,15 @@ import com.testify.ecfeed.utils.EclipseHelper;
 import com.testify.ecfeed.utils.EctFileHelper;
 
 
-public class NewEctHandler extends org.eclipse.core.commands.AbstractHandler {
+public class NewEctHandler {
 
-	@Override
-	public Object execute(ExecutionEvent event) throws ExecutionException {
+	public static void execute() throws ExecutionException {
 		String pathWithFileName = NewFileEctDialog.open();
 		if (pathWithFileName == null) {
-			return null;
+			return;
 		}
 		if (!preparePlaceForNewFile(pathWithFileName)) {
-			return false;
+			return;
 		}
 
 		try {
@@ -38,10 +36,10 @@ public class NewEctHandler extends org.eclipse.core.commands.AbstractHandler {
 			ExceptionCatchDialog.open("Can not open editor.", e.getMessage());
 		}
 
-		return null;
+		return;
 	}
 
-	private boolean preparePlaceForNewFile(String pathWithFileName) {
+	private static boolean preparePlaceForNewFile(String pathWithFileName) {
 		if (!DiskFileHelper.fileExists(pathWithFileName)) {
 			return true;
 		}

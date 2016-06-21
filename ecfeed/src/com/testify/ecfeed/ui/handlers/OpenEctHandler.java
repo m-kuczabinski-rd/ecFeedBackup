@@ -6,25 +6,22 @@
  * http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 
-package com.testify.ecfeed.rcp3.handlers;
+package com.testify.ecfeed.ui.handlers;
 
-import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 
 import com.testify.ecfeed.ui.dialogs.basic.FileOpenEctDialog;
 import com.testify.ecfeed.utils.EclipseHelper;
 
 
-public class OpenEctHandler extends org.eclipse.core.commands.AbstractHandler {
+public class OpenEctHandler {
 
-	@Override
-	public Object execute(ExecutionEvent event) throws ExecutionException {
+	public static void execute() throws ExecutionException {
 		String pathWithFileName = FileOpenEctDialog.open();
 		if (pathWithFileName == null) {
-			return null;
+			return;
 		}
 		EclipseHelper.openEditorOnExistingExtFile(pathWithFileName);
-		return null;
 	}
 
 }

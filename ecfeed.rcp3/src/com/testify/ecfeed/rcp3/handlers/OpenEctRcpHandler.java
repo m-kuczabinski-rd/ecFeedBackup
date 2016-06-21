@@ -10,14 +10,16 @@ package com.testify.ecfeed.rcp3.handlers;
 
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
-import org.eclipse.ui.actions.ActionFactory;
+
+import com.testify.ecfeed.ui.handlers.OpenEctHandler;
 
 
-public class PasteHandler extends org.eclipse.core.commands.AbstractHandler {
+public class OpenEctRcpHandler extends org.eclipse.core.commands.AbstractHandler {
 
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
-		HandlerHelper.executeGlobalAction(ActionFactory.PASTE.getId());
+		OpenEctHandler.execute();
 		return null;
 	}
+
 }

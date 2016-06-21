@@ -11,17 +11,14 @@ package com.testify.ecfeed.rcp3.handlers;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 
-import com.testify.ecfeed.ui.editor.EditorInMemFileHelper;
-import com.testify.ecfeed.utils.EclipseHelper;
+import com.testify.ecfeed.ui.handlers.CutHandler;
 
 
-public class NewInMemEctHandler extends org.eclipse.core.commands.AbstractHandler {
+public class CutRcpHandler extends org.eclipse.core.commands.AbstractHandler {
 
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
-		String tmpFileName = EditorInMemFileHelper.createNewTmpFileName();
-		EclipseHelper.openEditorOnFileInMemory(tmpFileName);
+		CutHandler.execute();
 		return null;
 	}
-
 }
