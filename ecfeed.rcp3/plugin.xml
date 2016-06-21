@@ -27,12 +27,8 @@
                label="File">
             <command
                   commandId="ecfeed.rcp3.newMem"
-                  label="New mem..."
+                  label="New"
                   style="push">
-            </command>
-            <command
-                  commandId="ecfeed.rcp3.new"
-                  label="New...">
             </command>
             <command
                   commandId="ecfeed.rcp3.open"
