@@ -150,7 +150,7 @@
             commandId="ecfeed.rcp3.save">
       </handler>
       <handler
-            class="com.testify.ecfeed.rcp3.handlers.SaveAsEctHandler"
+            class="com.testify.ecfeed.rcp3.handlers.SaveAsEctRcpHandler"
             commandId="ecfeed.rcp3.saveAs">
       </handler>
       <handler
@@ -162,7 +162,7 @@
             commandId="ecfeed.rcp3.newMem">
       </handler>
       <handler
-            class="com.testify.ecfeed.rcp3.handlers.AboutHandler"
+            class="com.testify.ecfeed.rcp3.handlers.AboutRcpHandler"
             commandId="ecfeed.rcp3.about">
       </handler>
       <handler
@@ -182,7 +182,7 @@
             commandId="ecfeed.rcp3.delete">
       </handler>
       <handler
-            class="com.testify.ecfeed.rcp3.handlers.CloseEctHandler"
+            class="com.testify.ecfeed.rcp3.handlers.CloseEctRcpHandler"
             commandId="ecfeed.rcp3.close">
       </handler>
    </extension>

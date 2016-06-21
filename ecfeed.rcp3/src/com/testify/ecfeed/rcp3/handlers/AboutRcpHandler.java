@@ -11,19 +11,14 @@ package com.testify.ecfeed.rcp3.handlers;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 
-import com.testify.ecfeed.ui.editor.ModelEditor;
-import com.testify.ecfeed.ui.editor.ModelEditorHelper;
+import com.testify.ecfeed.ui.handlers.AboutHandler;
 
 
-public class CloseEctHandler extends org.eclipse.core.commands.AbstractHandler {
+public class AboutRcpHandler extends org.eclipse.core.commands.AbstractHandler {
 
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
-		ModelEditor modelEditor = ModelEditorHelper.getActiveModelEditor(); 
-		if (modelEditor == null) {
-			return null;
-		}
-		modelEditor.close(true);
+		AboutHandler.execute();
 		return null;
 	}
 }

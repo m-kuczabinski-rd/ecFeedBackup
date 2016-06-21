@@ -6,28 +6,23 @@
  * http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 
-package com.testify.ecfeed.rcp3.handlers;
+package com.testify.ecfeed.ui.handlers;
 
-import org.eclipse.core.commands.ExecutionEvent;
-import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.jface.dialogs.MessageDialog;
 
 import com.testify.ecfeed.utils.EclipseHelper;
 
 
-public class AboutHandler extends org.eclipse.core.commands.AbstractHandler {
+public class AboutHandler {
 
-	@Override
-	public Object execute(ExecutionEvent event) throws ExecutionException {
+	public static void execute() {
 		MessageDialog.openInformation(
 				EclipseHelper.getActiveShell(), 
 				"About ecFeed", 
 				"EcFeed is a tool that allows to design, model and execute tests for Java, Android and Web projects.\n"+
-				"\n" +
-				"Copyright (c) 2016 Testify AS.\n" + 
-				"\n" +
+						"\n" +
+						"Copyright (c) 2016 Testify AS.\n" + 
+						"\n" +
 				"https://github.com/testify-no/ecFeed/wiki");
-
-		return null;
 	}
 }
