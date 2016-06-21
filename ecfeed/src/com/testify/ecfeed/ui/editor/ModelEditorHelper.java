@@ -21,6 +21,8 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.IEditorReference;
+import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.dialogs.SaveAsDialog;
 import org.eclipse.ui.ide.FileStoreEditorInput;
 import org.eclipse.ui.part.FileEditorInput;
@@ -33,6 +35,7 @@ import com.testify.ecfeed.core.serialization.ParserException;
 import com.testify.ecfeed.core.serialization.ect.EctParser;
 import com.testify.ecfeed.core.utils.DiskFileHelper;
 import com.testify.ecfeed.core.utils.ExceptionHelper;
+import com.testify.ecfeed.core.utils.StringHelper;
 import com.testify.ecfeed.core.utils.UriHelper;
 import com.testify.ecfeed.ui.dialogs.basic.ExceptionCatchDialog;
 import com.testify.ecfeed.ui.dialogs.basic.SaveAsEctDialogWithConfirm;
@@ -185,5 +188,62 @@ public class ModelEditorHelper {
 		return SaveAsEctDialogWithConfirm.open(path, fileName, shell);
 	}
 
+	private interface IModelEditorWorker {
+		void doWork(ModelEditor modelEditor);
+	}
+
+	private static void iterateOverModelEditors(IModelEditorWorker modelEditorWorker) {
+		IWorkbenchPage page = EclipseHelper.getActiveWorkBenchPage();
+
+		IEditorReference editors[] = page.getEditorReferences();
+
+		for (int i = 0; i < editors.length; i++) {
+			IEditorPart editorPart = editors[i].getEditor(true);
+			if (!(editorPart instanceof ModelEditor)) {
+				continue;
+			}
+			ModelEditor modelEditor = (ModelEditor)editorPart;
+			modelEditorWorker.doWork(modelEditor);
+		}		
+	}
+
+	private static class NextFreeNumberFinder implements IModelEditorWorker {
+
+		int fMaxNumber = 0;
+
+		@Override
+		public void doWork(ModelEditor modelEditor) {
+			IEditorInput editorInput = modelEditor.getEditorInput();
+
+			if (!isInMemFileInput(editorInput)) {
+				return;
+			}
+
+			int extractedNumber = extractUntitledDocNumber(editorInput.getToolTipText());
+			if ( extractedNumber == 0) {
+				return;
+			}
+
+			fMaxNumber = Math.max(fMaxNumber, extractedNumber);
+		}
+
+		private int extractUntitledDocNumber(String pathWithFileName) {
+			String fileNameWithExt = DiskFileHelper.extractFileName(pathWithFileName);
+			String fileName = DiskFileHelper.extractFileNameWithoutExtension(fileNameWithExt);
+			String fileNumber = StringHelper.removePrefix(EditorInMemFileHelper.getFilePrefix(), fileName);
+			return Integer.parseInt(fileNumber);
+		}
+
+		public int getNextFreeNumber() {
+			return fMaxNumber + 1;
+		}
+
+	}
+
+	public static int getNextFreeUntitledNumber() {
+		NextFreeNumberFinder nextFreeNumberFinder = new NextFreeNumberFinder();
+		iterateOverModelEditors(nextFreeNumberFinder);
+		return nextFreeNumberFinder.getNextFreeNumber();
+	}
 
 }

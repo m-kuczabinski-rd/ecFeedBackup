@@ -21,12 +21,12 @@ public class EditorInMemFileHelper {
 	private static final String TMP_FILE_MEM_DIR =
 			DiskFileHelper.joinSubdirectory(SystemHelper.getSystemTemporaryDir(), "ecFeed") + DiskFileHelper.pathSeparator();
 
-	private static int fTmpFileCounter = 1;
+	public static String getFilePrefix() {
+		return "Untitled";
+	}
 
 	public static String createNewTmpFileName() {
-		String tmpFile = TMP_FILE_MEM_DIR + "Untitled" + fTmpFileCounter + ".ect";
-		fTmpFileCounter++;
-		return tmpFile;
+		return TMP_FILE_MEM_DIR + getFilePrefix() + ModelEditorHelper.getNextFreeUntitledNumber() + ".ect";
 	}
 
 	public static boolean isInMemFile(String pathWithFileName) {
