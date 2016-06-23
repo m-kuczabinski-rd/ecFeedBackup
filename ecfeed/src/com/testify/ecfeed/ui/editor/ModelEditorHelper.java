@@ -185,11 +185,16 @@ public class ModelEditorHelper {
 		String fileName = DiskFileHelper.extractFileName(pathWithFileName);
 		String path = DiskFileHelper.extractPath(pathWithFileName);
 
-		return SaveAsEctDialogWithConfirm.open(path, fileName, shell);
+		CanAddDocumentChecker checker = new CanAddDocumentChecker();
+		return SaveAsEctDialogWithConfirm.open(path, fileName, checker, shell);
 	}
 
 	private interface IModelEditorWorker {
-		void doWork(ModelEditor modelEditor);
+		public enum WorkStatus {
+			OK,
+			CANCEL_ALL_NEXT
+		}
+		WorkStatus doWork(ModelEditor modelEditor);
 	}
 
 	private static void iterateOverModelEditors(IModelEditorWorker modelEditorWorker) {
@@ -203,7 +208,11 @@ public class ModelEditorHelper {
 				continue;
 			}
 			ModelEditor modelEditor = (ModelEditor)editorPart;
-			modelEditorWorker.doWork(modelEditor);
+			IModelEditorWorker.WorkStatus workStatus = modelEditorWorker.doWork(modelEditor);
+
+			if (workStatus == IModelEditorWorker.WorkStatus.CANCEL_ALL_NEXT) {
+				break;
+			}
 		}		
 	}
 
@@ -212,19 +221,16 @@ public class ModelEditorHelper {
 		int fMaxNumber = 0;
 
 		@Override
-		public void doWork(ModelEditor modelEditor) {
+		public WorkStatus doWork(ModelEditor modelEditor) {
 			IEditorInput editorInput = modelEditor.getEditorInput();
-
-			if (!isInMemFileInput(editorInput)) {
-				return;
-			}
 
 			int extractedNumber = extractUntitledDocNumber(editorInput.getToolTipText());
 			if ( extractedNumber == 0) {
-				return;
+				return IModelEditorWorker.WorkStatus.OK;
 			}
 
 			fMaxNumber = Math.max(fMaxNumber, extractedNumber);
+			return IModelEditorWorker.WorkStatus.OK;
 		}
 
 		private int extractUntitledDocNumber(String pathWithFileName) {
@@ -244,6 +250,41 @@ public class ModelEditorHelper {
 		NextFreeNumberFinder nextFreeNumberFinder = new NextFreeNumberFinder();
 		iterateOverModelEditors(nextFreeNumberFinder);
 		return nextFreeNumberFinder.getNextFreeNumber();
+	}
+
+	private static class FileFinder implements IModelEditorWorker {
+
+		private String fFileToFind;
+		private boolean fFound;
+
+		FileFinder(String fileToFind) {
+			fFileToFind = fileToFind;
+			fFound = false;
+		}
+
+		@Override
+		public WorkStatus doWork(ModelEditor modelEditor) {
+			IEditorInput editorInput = modelEditor.getEditorInput();
+
+			String fileWithPath = editorInput.getToolTipText();
+			if (fileWithPath.equals(fFileToFind)) {
+				fFound = true;
+				return IModelEditorWorker.WorkStatus.CANCEL_ALL_NEXT;
+			}
+
+			return IModelEditorWorker.WorkStatus.OK;
+		}
+
+		public boolean isFileFound() {
+			return fFound;
+		}
+
+	}
+
+	public static boolean isFileAlreadyOpen(String pathWithFileName) {
+		FileFinder fileFinder = new FileFinder(pathWithFileName);
+		iterateOverModelEditors(fileFinder);
+		return fileFinder.isFileFound();
 	}
 
 }

@@ -6,6 +6,7 @@ import org.eclipse.ui.ide.FileStoreEditorInput;
 import com.testify.ecfeed.core.utils.DiskFileHelper;
 import com.testify.ecfeed.core.utils.UriHelper;
 import com.testify.ecfeed.ui.dialogs.basic.SaveAsEctDialogWithConfirm;
+import com.testify.ecfeed.ui.editor.CanAddDocumentChecker;
 import com.testify.ecfeed.ui.editor.ModelEditor;
 import com.testify.ecfeed.ui.editor.ModelEditorHelper;
 import com.testify.ecfeed.utils.EclipseHelper;
@@ -36,7 +37,8 @@ public class SaveAsEctHandler {
 		String fileName = DiskFileHelper.extractFileName(pathWithFileName);
 		String path = DiskFileHelper.extractPath(pathWithFileName);
 
-		String newFile = SaveAsEctDialogWithConfirm.open(path, fileName, EclipseHelper.getActiveShell());
+		CanAddDocumentChecker checker = new CanAddDocumentChecker();
+		String newFile = SaveAsEctDialogWithConfirm.open(path, fileName, checker, EclipseHelper.getActiveShell());
 
 		if (newFile == null) {
 			return;

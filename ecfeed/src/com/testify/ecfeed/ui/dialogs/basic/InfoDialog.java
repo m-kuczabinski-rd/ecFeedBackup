@@ -9,15 +9,17 @@
 package com.testify.ecfeed.ui.dialogs.basic;
 
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.swt.widgets.Shell;
 
 import com.testify.ecfeed.utils.EclipseHelper;
 
 public class InfoDialog {
 
+	public static void open(String message, Shell shell) {
+		MessageDialog.openInformation(shell, "Information", message);
+	}
+
 	public static void open(String message) {
-		MessageDialog.openInformation(
-				EclipseHelper.getActiveShell(), 
-				"Information", 
-				message);
+		open(message, EclipseHelper.getActiveShell());
 	}
 }

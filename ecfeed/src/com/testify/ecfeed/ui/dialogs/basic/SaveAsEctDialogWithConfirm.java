@@ -11,30 +11,39 @@ package com.testify.ecfeed.ui.dialogs.basic;
 import org.eclipse.swt.widgets.Shell;
 
 import com.testify.ecfeed.core.utils.DiskFileHelper;
+import com.testify.ecfeed.utils.IChecker;
 
 public class SaveAsEctDialogWithConfirm {
 
-	public static String open(String filterPath, String originalPathWithFileName, Shell shell) {
+	public static String open(String filterPath, String originalPathWithFileName, IChecker additionalFileChecker, Shell shell) {
 		for(;;) {
-			String newFile = openOnce(filterPath, originalPathWithFileName, shell);
+			String newFile = openOnce(filterPath, originalPathWithFileName, additionalFileChecker, shell);
 
 			if (newFile != null) {
 				return newFile;
 			}
 
-			YesNoDialog.Result result = YesNoDialog.open("Do you want to cancel saving the file: " + originalPathWithFileName + "?", shell);
+			YesNoDialog.Result result = YesNoDialog.open("Do you want to continue saving the file: " + originalPathWithFileName + "?", shell);
 
-			if (result == YesNoDialog.Result.YES) {
+			if (result == YesNoDialog.Result.NO) {
 				return null;
 			}
 		}		
 	}
 
-	public static String openOnce(String filterPath, String originalFileName, Shell shell) {
+	public static String openOnce(String filterPath, String originalFileName, IChecker additionalFileChecker, Shell shell) {
 		String newFile = SaveAsEctDialog.open(filterPath, originalFileName, shell);
 		if (newFile == null) {
 			return null;
 		}
+
+		if (additionalFileChecker != null) {
+			if (!additionalFileChecker.check(newFile)) {
+				InfoDialog.open(additionalFileChecker.getErrorMessage(newFile), shell);
+				return null;
+			}
+		}
+
 		if (!writeAllowed(newFile, shell)) {
 			return null; 
 		}
