@@ -58,6 +58,7 @@ import com.testify.ecfeed.ui.common.ImageManager;
 import com.testify.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.testify.ecfeed.ui.editor.actions.AbstractAddChildAction;
 import com.testify.ecfeed.ui.editor.actions.AddChildActionProvider;
+import com.testify.ecfeed.ui.editor.actions.ExportOnlineAction;
 import com.testify.ecfeed.ui.editor.actions.ModelViewerActionProvider;
 import com.testify.ecfeed.ui.editor.actions.TestOnlineAction;
 import com.testify.ecfeed.ui.modelif.AbstractNodeInterface;
@@ -484,17 +485,31 @@ public class ModelMasterSection extends TreeViewerSection{
 				return;
 			}
 
+			MethodNode methodNode = (MethodNode)abstractNode;
 			MethodInterface methodInterface = getMethodInterface();
-
 			boolean isAction = false;
 
 			if (addTestOnlineAction(methodInterface)) {
+				isAction = true;
+			}
+			if (addExportOnlineAction(methodNode, methodInterface)) {
 				isAction = true;
 			}
 
 			if (isAction) {
 				new MenuItem(getMenu(), SWT.SEPARATOR);
 			}
+		}
+
+		private MethodInterface getMethodInterface() {
+			AbstractNodeInterface nodeIf = NodeInterfaceFactory.getNodeInterface(getSelectedNodes().get(0), null, fFileInfoProvider);
+
+			if (!(nodeIf instanceof MethodInterface)) {
+				final String MSG = "Invalid type of node interface. Method node interface expected"; 
+				ExceptionHelper.reportRuntimeException(MSG);
+			}
+
+			return (MethodInterface)nodeIf; 
 		}
 
 		private boolean addTestOnlineAction(MethodInterface methodInterface) {
@@ -513,15 +528,15 @@ public class ModelMasterSection extends TreeViewerSection{
 			return true;
 		}
 
-		private MethodInterface getMethodInterface() {
-			AbstractNodeInterface nodeIf = NodeInterfaceFactory.getNodeInterface(getSelectedNodes().get(0), null, fFileInfoProvider);
 
-			if (!(nodeIf instanceof MethodInterface)) {
-				final String MSG = "Invalid type of node interface. Method node interface expected"; 
-				ExceptionHelper.reportRuntimeException(MSG);
+		private boolean addExportOnlineAction(MethodNode methodNode, MethodInterface methodInterface) {
+			if (methodNode.getParametersCount() == 0) {
+				return false;
 			}
 
-			return (MethodInterface)nodeIf; 
+			ExportOnlineAction exportOnlineAction = new ExportOnlineAction(fFileInfoProvider, ModelMasterSection.this, methodInterface);
+			addMenuItem(exportOnlineAction.getName(), exportOnlineAction);
+			return true;
 		}
 
 	}

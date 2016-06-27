@@ -15,13 +15,13 @@ import com.testify.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.testify.ecfeed.ui.dialogs.basic.ExceptionCatchDialog;
 import com.testify.ecfeed.ui.modelif.MethodInterface;
 
-public class TestOnlineAction extends ModelSelectionAction {
+public class ExportOnlineAction extends ModelSelectionAction {
 
 	private IFileInfoProvider fFileInfoProvider;
 	private MethodInterface fMethodInterface;
 
-	public TestOnlineAction(IFileInfoProvider fileInfoProvider, ISelectionProvider selectionProvider, MethodInterface methodInterface) {
-		super("testOnline", "Test online", selectionProvider);
+	public ExportOnlineAction(IFileInfoProvider fileInfoProvider, ISelectionProvider selectionProvider, MethodInterface methodInterface) {
+		super("exportOnline", "Export online", selectionProvider);
 		fFileInfoProvider = fileInfoProvider;
 		fMethodInterface = methodInterface;
 	}
@@ -29,9 +29,9 @@ public class TestOnlineAction extends ModelSelectionAction {
 	@Override
 	public void run() {
 		try {
-			fMethodInterface.executeOnlineTests(fFileInfoProvider);
+			fMethodInterface.executeOnlineExport(fFileInfoProvider);
 		} catch (EcException e) {
-			final String MSG = "Can not execute online tests.";
+			final String MSG = "Can not execute online export.";
 			ExceptionCatchDialog.open(MSG, e.getMessage());
 		}
 	}
