@@ -61,7 +61,7 @@ public abstract class ViewerSection extends ButtonsCompositeSection implements I
 	private StructuredViewer fViewer;
 	private Composite fViewerComposite;
 	private Menu fMenu;
-	private Set<KeyListener> fKeyListsners;
+	private Set<KeyListener> fKeyListeners;
 
 	protected class ViewerKeyAdapter extends KeyAdapter{
 		private int fKeyCode;
@@ -177,7 +177,7 @@ public abstract class ViewerSection extends ButtonsCompositeSection implements I
 			int style) {
 		super(sectionContext, updateContext, fileInfoProvider, style);
 		fSelectedElements = new ArrayList<>();
-		fKeyListsners = new HashSet<KeyListener>();
+		fKeyListeners = new HashSet<KeyListener>();
 	}
 
 	@Override
@@ -300,25 +300,41 @@ public abstract class ViewerSection extends ButtonsCompositeSection implements I
 		fViewer.getControl().setMenu(fMenu);
 		fMenu.addMenuListener(getMenuListener());
 
-		if(provider != null){
-			if(addDeleteAction && provider.getAction(ActionFactory.DELETE.getId()) != null){
-				fKeyListsners.add(addKeyListener(SWT.DEL, SWT.NONE, provider.getAction(ActionFactory.DELETE.getId())));
-			}
-
-			if(provider.getAction(NamedAction.MOVE_UP_ACTION_ID) != null){
-				fKeyListsners.add(addKeyListener(SWT.ARROW_UP, SWT.ALT, provider.getAction(NamedAction.MOVE_UP_ACTION_ID)));
-			}
-
-			if(provider.getAction(NamedAction.MOVE_DOWN_ACTION_ID) != null){
-				fKeyListsners.add(addKeyListener(SWT.ARROW_DOWN, SWT.ALT, provider.getAction(NamedAction.MOVE_DOWN_ACTION_ID)));
-			}
+		if(provider != null) {
+			addKeyListenersForActions(provider, addDeleteAction);
+		} else {
+			removeKeyListeners();
 		}
-		else{
-			Iterator<KeyListener> it = fKeyListsners.iterator();
-			while(it.hasNext()){
-				fViewer.getControl().removeKeyListener(it.next());
-				it.remove();
-			}
+	}
+
+	private void addKeyListenersForActions(IActionProvider provider, boolean addDeleteAction) {
+
+		NamedAction insertAction = provider.getAction(NamedAction.INSERT_ACTION_ID);
+		if(insertAction != null){
+			fKeyListeners.add(addKeyListener(SWT.INSERT, SWT.NONE, insertAction));
+		}
+
+		NamedAction deleteAction = provider.getAction(ActionFactory.DELETE.getId());
+		if(addDeleteAction && deleteAction != null){
+			fKeyListeners.add(addKeyListener(SWT.DEL, SWT.NONE, deleteAction));
+		}
+
+		NamedAction arrowUpAction = provider.getAction(NamedAction.MOVE_UP_ACTION_ID); 
+		if(arrowUpAction != null) {
+			fKeyListeners.add(addKeyListener(SWT.ARROW_UP, SWT.ALT, arrowUpAction));
+		}
+
+		NamedAction arrowDownAction = provider.getAction(NamedAction.MOVE_DOWN_ACTION_ID); 
+		if(arrowDownAction != null){
+			fKeyListeners.add(addKeyListener(SWT.ARROW_DOWN, SWT.ALT, arrowDownAction));
+		}
+	}
+
+	private void removeKeyListeners() {
+		Iterator<KeyListener> it = fKeyListeners.iterator();
+		while(it.hasNext()){
+			fViewer.getControl().removeKeyListener(it.next());
+			it.remove();
 		}
 	}
 

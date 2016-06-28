@@ -20,17 +20,17 @@ public abstract class ActionGroups implements IActionProvider {
 
 	private boolean fEnabled;
 
-	private class ActionRecord{
-		public ActionRecord(String group, NamedAction action){
-			GROUP_ID = group;
-			ACTION = action;
+	private class GrouppedAction {
+		public GrouppedAction(String group, NamedAction action){
+			fGroupId = group;
+			fAction = action;
 		}
 
-		public String GROUP_ID;
-		public NamedAction ACTION;
+		private String fGroupId;
+		private NamedAction fAction;
 	}
 
-	private Set<ActionRecord> fActions;
+	private Set<GrouppedAction> fActions;
 
 	public ActionGroups(){
 		fActions = new LinkedHashSet<>();
@@ -38,21 +38,21 @@ public abstract class ActionGroups implements IActionProvider {
 	}
 
 	protected void addAction(String group, NamedAction action){
-		Iterator<ActionRecord> iterator = fActions.iterator();
+		Iterator<GrouppedAction> iterator = fActions.iterator();
 		while(iterator.hasNext()){
-			if(iterator.next().ACTION.getId().equals(action.getId())){
+			if(iterator.next().fAction.getId().equals(action.getId())){
 				iterator.remove();
 			}
 		}
-		fActions.add(new ActionRecord(group, action));
+		fActions.add(new GrouppedAction(group, action));
 	}
 
 	@Override
 	public Set<String> getGroups(){
 		Set<String> result = new LinkedHashSet<>();
 		if(fEnabled){
-			for(ActionRecord record : fActions){
-				result.add(record.GROUP_ID);
+			for(GrouppedAction record : fActions){
+				result.add(record.fGroupId);
 			}
 		}
 		return result;
@@ -61,9 +61,9 @@ public abstract class ActionGroups implements IActionProvider {
 	@Override
 	public Set<NamedAction> getActions(String groupId){
 		Set<NamedAction> result = new LinkedHashSet<>();
-		for(ActionRecord record : fActions){
-			if(record.GROUP_ID.equals(groupId)){
-				result.add(record.ACTION);
+		for(GrouppedAction record : fActions){
+			if(record.fGroupId.equals(groupId)){
+				result.add(record.fAction);
 			}
 		}
 		return result;
@@ -71,9 +71,9 @@ public abstract class ActionGroups implements IActionProvider {
 
 	@Override
 	public NamedAction getAction(String actionId){
-		for(ActionRecord record : fActions){
-			if(record.ACTION.getId().equals(actionId)){
-				return record.ACTION;
+		for(GrouppedAction record : fActions){
+			if(record.fAction.getId().equals(actionId)){
+				return record.fAction;
 			}
 		}
 		return null;
