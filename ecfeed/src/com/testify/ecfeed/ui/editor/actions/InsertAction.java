@@ -8,14 +8,30 @@
 
 package com.testify.ecfeed.ui.editor.actions;
 
-import org.eclipse.jface.viewers.ISelectionProvider;
+import java.util.List;
 
+import org.eclipse.jface.viewers.ISelectionProvider;
+import org.eclipse.jface.viewers.StructuredViewer;
+
+import com.testify.ecfeed.core.model.AbstractNode;
+import com.testify.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 
 public class InsertAction extends ModelModifyingAction {
 
-	public InsertAction(ISelectionProvider selectionProvider, IModelUpdateContext updateContext) {
+	IFileInfoProvider fFileInfoProvider;
+	StructuredViewer fStructuredViewer;
+	IModelUpdateContext fUpdateContext;
+
+	public InsertAction(
+			ISelectionProvider selectionProvider,
+			StructuredViewer structuredViewer,
+			IModelUpdateContext updateContext,
+			IFileInfoProvider fileInfoProvider) {
 		super(GlobalActions.INSERT.getId(), GlobalActions.INSERT.getName(), selectionProvider, updateContext);
+		fFileInfoProvider = fileInfoProvider;
+		fStructuredViewer = structuredViewer;
+		fUpdateContext = updateContext;
 	}
 
 	@Override
@@ -25,7 +41,23 @@ public class InsertAction extends ModelModifyingAction {
 
 	@Override 
 	public void run(){
-		// TODO
+		List<AbstractNode> selectedNodes = getSelectedNodes();
+
+		if (selectedNodes.size() != 1) {
+			return;
+		}
+
+		AbstractNode abstractNode = selectedNodes.get(0);
+
+		AddChildActionProvider actionProvider = 
+				new AddChildActionProvider(fStructuredViewer, fUpdateContext, fFileInfoProvider);
+
+		AbstractAddChildAction insertAction = actionProvider.getMainInsertAction(abstractNode);
+		if (insertAction == null) {
+			return;
+		}
+
+		insertAction.run();
 	}
 
 }

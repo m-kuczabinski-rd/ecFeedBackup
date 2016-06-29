@@ -34,7 +34,7 @@ public class ModelViewerActionProvider extends ActionGroups {
 			context, 
 			IFileInfoProvider fileInfoProvider, 
 			boolean selectRoot) {
-		addEditActions(viewer, context, fileInfoProvider);
+		addEditActions(viewer, viewer, context, fileInfoProvider);
 		if(fileInfoProvider != null && fileInfoProvider.isProjectAvailable()){
 			addImplementationActions(viewer, context, fileInfoProvider);
 		}
@@ -47,7 +47,7 @@ public class ModelViewerActionProvider extends ActionGroups {
 			IModelUpdateContext context, 
 			IFileInfoProvider fileInfoProvider) {
 
-		addEditActions(viewer, context, fileInfoProvider);
+		addEditActions(viewer, viewer, context, fileInfoProvider);
 
 		if(fileInfoProvider != null && fileInfoProvider.isProjectAvailable()){
 			addImplementationActions(viewer, context, fileInfoProvider);
@@ -58,7 +58,8 @@ public class ModelViewerActionProvider extends ActionGroups {
 	}
 
 	private void addEditActions(
-			ISelectionProvider selectionProvider, 
+			ISelectionProvider selectionProvider,
+			StructuredViewer structuredViewer,
 			IModelUpdateContext context,
 			IFileInfoProvider fileInfoProvider) {
 
@@ -66,7 +67,7 @@ public class ModelViewerActionProvider extends ActionGroups {
 		addAction("edit", new CopyAction(selectionProvider));
 		addAction("edit", new CutAction(new CopyAction(selectionProvider), deleteAction));
 		addAction("edit", new PasteAction(selectionProvider, context, fileInfoProvider));
-		addAction("edit", new InsertAction(selectionProvider, context));
+		addAction("edit", new InsertAction(selectionProvider, structuredViewer, context, fileInfoProvider));
 		addAction("edit", deleteAction);
 	}
 
