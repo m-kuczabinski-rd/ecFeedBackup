@@ -19,6 +19,7 @@ public class NamedAction extends Action {
 	public static final String COPY_ACTION_ID = ActionFactory.COPY.getId();
 	public static final String CUT_ACTION_ID = ActionFactory.CUT.getId();
 	public static final String PASTE_ACTION_ID = ActionFactory.PASTE.getId();
+	public static final String INSERT_ACTION_ID = "insert";
 	public static final String DELETE_ACTION_ID = ActionFactory.DELETE.getId();
 	public static final String SELECT_ALL_ACTION_ID = ActionFactory.SELECT_ALL.getId();
 	public static final String UNDO_ACTION_ID = ActionFactory.UNDO.getId();
@@ -36,6 +37,7 @@ public class NamedAction extends Action {
 	public static final String COPY_ACTION_NAME = "Copy\tCtrl+C";
 	public static final String CUT_ACTION_NAME = "Cut\tCtrl+X";
 	public static final String PASTE_ACTION_NAME = "Paste\tCtrl+V";
+	public static final String INSERT_ACTION_NAME = "Insert\tInsert";
 	public static final String DELETE_ACTION_NAME = "Delete\tDEL";
 	public static final String SELECT_ALL_ACTION_NAME = "Select All\tCtrl+A";
 	public static final String UNDO_ACTION_NAME = "Undo\tCtrl+Z";
@@ -54,6 +56,7 @@ public class NamedAction extends Action {
 		COPY(COPY_ACTION_ID, COPY_ACTION_NAME),
 		CUT(CUT_ACTION_ID, CUT_ACTION_NAME),
 		PASTE(PASTE_ACTION_ID, PASTE_ACTION_NAME),
+		INSERT(INSERT_ACTION_ID, INSERT_ACTION_NAME),
 		DELETE(DELETE_ACTION_ID, DELETE_ACTION_NAME),
 		SELECT_ALL(SELECT_ALL_ACTION_ID, SELECT_ALL_ACTION_NAME),
 		UNDO(UNDO_ACTION_ID, UNDO_ACTION_NAME),

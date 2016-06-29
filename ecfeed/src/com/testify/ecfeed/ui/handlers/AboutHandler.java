@@ -6,20 +6,23 @@
  * http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 
-package com.testify.ecfeed.ui.dialogs.basic;
+package com.testify.ecfeed.ui.handlers;
 
 import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.swt.widgets.Shell;
 
 import com.testify.ecfeed.utils.EclipseHelper;
 
-public class InfoDialog {
 
-	public static void open(String message, Shell shell) {
-		MessageDialog.openInformation(shell, "Information", message);
-	}
+public class AboutHandler {
 
-	public static void open(String message) {
-		open(message, EclipseHelper.getActiveShell());
+	public static void execute() {
+		MessageDialog.openInformation(
+				EclipseHelper.getActiveShell(), 
+				"About ecFeed", 
+				"EcFeed is a tool that allows to design, model and execute tests for Java, Android and Web projects.\n"+
+						"\n" +
+						"Copyright (c) 2016 Testify AS.\n" + 
+						"\n" +
+				"https://github.com/testify-no/ecFeed/wiki");
 	}
 }

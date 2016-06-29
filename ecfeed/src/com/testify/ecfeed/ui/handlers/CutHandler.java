@@ -6,20 +6,15 @@
  * http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 
-package com.testify.ecfeed.ui.dialogs.basic;
+package com.testify.ecfeed.ui.handlers;
 
-import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.swt.widgets.Shell;
+import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.ui.actions.ActionFactory;
 
-import com.testify.ecfeed.utils.EclipseHelper;
 
-public class InfoDialog {
+public class CutHandler {
 
-	public static void open(String message, Shell shell) {
-		MessageDialog.openInformation(shell, "Information", message);
-	}
-
-	public static void open(String message) {
-		open(message, EclipseHelper.getActiveShell());
+	public static void execute() throws ExecutionException {
+		HandlerHelper.executeGlobalAction(ActionFactory.CUT.getId());
 	}
 }

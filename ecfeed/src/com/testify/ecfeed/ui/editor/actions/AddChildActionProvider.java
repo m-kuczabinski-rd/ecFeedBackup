@@ -298,7 +298,7 @@ public class AddChildActionProvider {
 	public AddChildActionProvider(
 			StructuredViewer viewer, 
 			IModelUpdateContext context, 
-			IFileInfoProvider fileInfoProvider){
+			IFileInfoProvider fileInfoProvider) {
 		fFileInfoProvider = fileInfoProvider;
 		fContext = context;
 		fViewer = viewer;
@@ -314,4 +314,57 @@ public class AddChildActionProvider {
 		}
 		return null;
 	}
+
+	private class GetMainInsertActionProvider implements IModelVisitor{
+
+		@Override
+		public Object visit(RootNode node) throws Exception {
+			return new AddClassAction();
+		}
+
+		@Override
+		public Object visit(ClassNode node) throws Exception {
+			return new AddMethodAction();
+		}
+
+		@Override
+		public Object visit(MethodNode node) throws Exception {
+			return new AddMethodParameterAction();
+		}
+
+		@Override
+		public Object visit(MethodParameterNode node) throws Exception {
+			return new AddChoiceAction(fFileInfoProvider);
+		}
+
+		@Override
+		public Object visit(GlobalParameterNode node) throws Exception {
+			return new AddChoiceAction(fFileInfoProvider);
+		}
+
+		@Override
+		public Object visit(TestCaseNode node) throws Exception {
+			return null;
+		}
+
+		@Override
+		public Object visit(ConstraintNode node) throws Exception {
+			return null;
+		}
+
+		@Override
+		public Object visit(ChoiceNode node) throws Exception {
+			return new AddChoiceAction(fFileInfoProvider);
+		}
+	}
+
+	public AbstractAddChildAction getMainInsertAction(AbstractNode parent) {
+		try {
+			return (AbstractAddChildAction)parent.accept(new GetMainInsertActionProvider());
+		} catch(Exception e) {
+			SystemLogger.logCatch(e.getMessage());
+		}
+		return null;
+	}
+
 }

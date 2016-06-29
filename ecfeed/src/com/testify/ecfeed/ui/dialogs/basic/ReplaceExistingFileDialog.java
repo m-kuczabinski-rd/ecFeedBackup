@@ -8,6 +8,10 @@
 
 package com.testify.ecfeed.ui.dialogs.basic;
 
+import org.eclipse.swt.widgets.Shell;
+
+import com.testify.ecfeed.utils.EclipseHelper;
+
 public class ReplaceExistingFileDialog {
 
 	public enum Result {
@@ -16,8 +20,12 @@ public class ReplaceExistingFileDialog {
 	}
 
 	public static Result open(String pathWithFileName) {
+		return open(pathWithFileName, EclipseHelper.getActiveShell());
+	}
+
+	public static Result open(String pathWithFileName, Shell shell) {
 		String question = "The file: '" + pathWithFileName + "' already exists. Do you want to replace the existing file?"; 
-		YesNoDialog.Result result = YesNoDialog.open(question);
+		YesNoDialog.Result result = YesNoDialog.open(question, shell);
 
 		if (result == YesNoDialog.Result.YES) {
 			return Result.YES;

@@ -13,13 +13,15 @@ package com.testify.ecfeed.ui.editor;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 
 import org.eclipse.core.commands.operations.IUndoContext;
 import org.eclipse.core.commands.operations.ObjectUndoContext;
+import org.eclipse.core.filesystem.EFS;
+import org.eclipse.core.filesystem.IFileStore;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
@@ -39,12 +41,11 @@ import org.eclipse.jdt.core.IPackageFragmentRoot;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IPersistableElement;
 import org.eclipse.ui.PartInitException;
-import org.eclipse.ui.dialogs.SaveAsDialog;
 import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.ide.FileStoreEditorInput;
 import org.eclipse.ui.ide.IDE;
@@ -54,17 +55,12 @@ import com.testify.ecfeed.application.ApplicationContext;
 import com.testify.ecfeed.core.adapter.CachedImplementationStatusResolver;
 import com.testify.ecfeed.core.adapter.ModelOperationException;
 import com.testify.ecfeed.core.adapter.ModelOperationManager;
-import com.testify.ecfeed.core.model.ModelConverter;
 import com.testify.ecfeed.core.model.ModelVersionDistributor;
 import com.testify.ecfeed.core.model.RootNode;
-import com.testify.ecfeed.core.serialization.IModelParser;
 import com.testify.ecfeed.core.serialization.IModelSerializer;
-import com.testify.ecfeed.core.serialization.ParserException;
-import com.testify.ecfeed.core.serialization.ect.EctParser;
 import com.testify.ecfeed.core.serialization.ect.EctSerializer;
 import com.testify.ecfeed.core.utils.ExceptionHelper;
 import com.testify.ecfeed.core.utils.SystemLogger;
-import com.testify.ecfeed.core.utils.UriHelper;
 import com.testify.ecfeed.ui.common.Constants;
 import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.common.utils.IFileInfoProvider;
@@ -72,6 +68,8 @@ import com.testify.ecfeed.ui.dialogs.basic.ExceptionCatchDialog;
 import com.testify.ecfeed.utils.EclipseHelper;
 
 public class ModelEditor extends FormEditor implements IFileInfoProvider{
+
+	private static Shell fGlobalShellForDialogs = null;
 
 	private RootNode fModel;
 	private ModelPage fModelPage;
@@ -83,7 +81,7 @@ public class ModelEditor extends FormEditor implements IFileInfoProvider{
 	public class SourceEditorInput implements IEditorInput{
 
 		@Override
-		@SuppressWarnings({ "rawtypes", "unchecked" })
+		@SuppressWarnings({ "rawtypes" })
 		public Object getAdapter(Class adapter) {
 			return null;
 		}
@@ -179,86 +177,21 @@ public class ModelEditor extends FormEditor implements IFileInfoProvider{
 
 	private RootNode createModel() throws ModelOperationException {
 		IEditorInput input = getEditorInput();
-		InputStream stream = getInputStream(input);
+		InputStream stream = getInitialInputStream(input);
 
 		if (stream == null) {
 			return null;
 		}
 
-		return parseModel(stream);
+		return ModelEditorHelper.parseModel(stream);
 	}
 
-	private InputStream getInputStream(IEditorInput input) throws ModelOperationException {
+	private InputStream getInitialInputStream(IEditorInput input) throws ModelOperationException {
 		if (isProjectAvailable()) {
-			return getInputStreamForIDE(input);
+			return ModelEditorHelper.getInitialInputStreamForIDE(input);
 		} else {
-			return getInputStreamForRCP(input);
+			return ModelEditorHelper.getInitialInputStreamForRCP(input);
 		}		
-	}
-
-	private InputStream getInputStreamForIDE(IEditorInput input) throws ModelOperationException {
-		if (input instanceof FileStoreEditorInput) {
-			final String CAN_NOT_OPEN_FILE = "Can not open file: ";
-			final String ERR_MSG_1 = "It is not allowed to open standalone ect files created outside of Java project structure.";
-			final String ERR_MSG_2 = "Please add ect file to the Java project first."; 
-
-			System.out.println("Input.getName()" + input.getName());
-			ModelOperationException.report(
-					CAN_NOT_OPEN_FILE + input.getName() + ". "+ ERR_MSG_1 + " " + ERR_MSG_2);
-			return null;
-		}
-
-		FileEditorInput fileInput = EclipseHelper.getFileEditorInput(input);
-		if (fileInput == null) {
-			reportInvalidInputTypeException();
-		}
-
-		IFile file = fileInput.getFile();
-		try {
-			return file.getContents();
-		} catch (CoreException e) {
-			displayDialogErrInputStream(e);
-			return null;
-		}
-	}
-
-	private InputStream getInputStreamForRCP(IEditorInput input) {
-		FileStoreEditorInput fileStoreInput = ModelEditorHelper.getFileStoreEditorInput(input);
-		if (fileStoreInput == null) {
-			reportInvalidInputTypeException();
-		}
-
-		File file = createFile(fileStoreInput);
-		try {
-			return new FileInputStream(file);
-		} catch (FileNotFoundException e) {
-			displayDialogErrInputStream(e);
-			return null;
-		}
-	}
-
-	private void displayDialogErrInputStream(Exception e) {
-		ExceptionCatchDialog.open("Can not get input stream for file.", e.getMessage());
-	}
-
-	File createFile(FileStoreEditorInput fileStoreInput) {
-		String path = UriHelper.convertUriToFilePath(fileStoreInput.getURI());
-		return new File(path);
-	}
-
-	private RootNode parseModel(InputStream iStream) {
-		try {
-			IModelParser parser = new EctParser();
-			return ModelConverter.convertToCurrentVersion(parser.parseModel(iStream));
-
-		} catch (ParserException e) {
-			ExceptionCatchDialog.open("Can not parse model.", e.getMessage());
-			return null;
-		}
-	}	
-
-	private void reportInvalidInputTypeException() {
-		ExceptionHelper.reportRuntimeException("Invalid input type.");
 	}
 
 	@Override
@@ -271,6 +204,14 @@ public class ModelEditor extends FormEditor implements IFileInfoProvider{
 
 		} catch (PartInitException e) {
 			ExceptionCatchDialog.open("Can not add page.", e.getMessage());
+		}
+
+		setGlobalShellForDialogsIfNull();
+	}
+
+	private void setGlobalShellForDialogsIfNull() {
+		if (fGlobalShellForDialogs == null) {
+			fGlobalShellForDialogs = EclipseHelper.getActiveShell();
 		}
 	}
 
@@ -316,22 +257,18 @@ public class ModelEditor extends FormEditor implements IFileInfoProvider{
 
 	@Override
 	public void doSave(IProgressMonitor monitor) {
-		ModelEditor modelEditor = ModelEditorHelper.getActiveModelEditor();
-		if (modelEditor == null) {
-			return;
-		}
-		if (!modelEditor.isDirty()) {
+		if (!isDirty()) {
 			return;
 		}
 
 		if (isProjectAvailable()) {
-			doSaveForIDE(monitor);
+			doSaveForIDE();
 		} else {
-			doSaveForRCP(monitor);
+			doSaveForRCP();
 		}
 	}
 
-	public void doSaveForIDE(IProgressMonitor monitor) {
+	public void doSaveForIDE() {
 		IFile file = ((FileEditorInput)getEditorInput()).getFile();
 		FileOutputStream outputStream = null;
 		try {
@@ -339,44 +276,59 @@ public class ModelEditor extends FormEditor implements IFileInfoProvider{
 		} catch (FileNotFoundException e) {
 			reportOpenForWriteException(e);
 		}
-		saveModelToStream(outputStream, monitor);
+		saveModelToStream(outputStream);
 	}
 
-	public void doSaveForRCP(IProgressMonitor monitor) {
-		FileStoreEditorInput fileStoreInput = (FileStoreEditorInput)getEditorInput();
-		File file = createFile(fileStoreInput);
+	public void doSaveForRCP() {
+		String fileName = ModelEditorHelper.getFileNameFromEditorInput(getEditorInput());
+
+		if (fileName == null) {
+			final String MSG = "Empty file name from editor input.";
+			ExceptionHelper.reportRuntimeException(MSG);
+		}
+
+		if (EditorInMemFileHelper.isInMemFile(fileName)) {
+			saveInMemFile();
+		} else {
+			saveDiskFile(fileName);
+		}
+	}
+
+	private void saveInMemFile() {
+		doSaveAs();
+	}
+
+	private void saveDiskFile(String fileName) {
+		File file = new File(fileName);
 		FileOutputStream outputStream = null;
 		try {
 			outputStream = new FileOutputStream(file);
 		} catch (FileNotFoundException e) {
 			reportOpenForWriteException(e);
 		}
-		saveModelToStream(outputStream, monitor);
+
+		saveModelToStream(outputStream);
+		try {
+			outputStream.close();
+		} catch (IOException e) {
+			ExceptionHelper.reportRuntimeException("Can not close output stream.");
+		}
 	}
 
 	@Override
-	public void doSaveAs(){	
-		String fileWithPath = selectFileForSaveAs();
+	public void doSaveAs(){
+		setGlobalShellForDialogsIfNull();
+		if (fGlobalShellForDialogs == null) {
+			ExceptionHelper.reportRuntimeException("Invalid model editor shell.");
+		}
+
+		String fileWithPath = ModelEditorHelper.selectFileForSaveAs(getEditorInput(), fGlobalShellForDialogs);
 		if (fileWithPath == null) {
 			return;
 		}
 
 		saveModelToFile(fileWithPath);
 		setEditorFile(fileWithPath);
-	}
-
-	private String selectFileForSaveAs() {
-		SaveAsDialog dialog = new SaveAsDialog(Display.getDefault().getActiveShell());
-
-		IFile original = ((FileEditorInput)getEditorInput()).getFile();
-		dialog.setOriginalFile(original);
-		dialog.create();
-		if (dialog.open() == Window.CANCEL) {
-			return null;
-		}
-
-		IPath path = dialog.getResult();
-		return path.toOSString();
 	}
 
 	public void saveModelToFile(String fileWithPath) {
@@ -386,15 +338,15 @@ public class ModelEditor extends FormEditor implements IFileInfoProvider{
 		} catch (FileNotFoundException e) {
 			reportOpenForWriteException(e);
 		}
-		saveModelToStream(outputStream, null);
+		saveModelToStream(outputStream);
 	}
 
-	private void saveModelToStream(FileOutputStream outputStream, IProgressMonitor monitor){
+	private void saveModelToStream(FileOutputStream outputStream){
 		try{
 			IModelSerializer serializer = 
 					new EctSerializer(outputStream, ModelVersionDistributor.getCurrentVersion());
 			serializer.serialize(fModel);
-			refreshWorkspace(monitor);
+			refreshWorkspace(null);
 			commitPages(true);
 			firePropertyChange(PROP_DIRTY);
 		}
@@ -404,6 +356,14 @@ public class ModelEditor extends FormEditor implements IFileInfoProvider{
 	}
 
 	public void setEditorFile(String fileWithPath) {
+		if (isProjectAvailable()) {
+			setEditorFileForIde(fileWithPath);
+		} else {
+			setEditorFileForRcp(fileWithPath);
+		}
+	}
+
+	public void setEditorFileForIde(String fileWithPath) {
 		IWorkspace workspace = ResourcesPlugin.getWorkspace();
 		IPath path = new Path(fileWithPath);
 		IFile file = workspace.getRoot().getFile(path);
@@ -411,6 +371,19 @@ public class ModelEditor extends FormEditor implements IFileInfoProvider{
 		setInput(new FileEditorInput(file));
 		setPartName(file.getName());
 	}
+
+	public void setEditorFileForRcp(String fileWithPath) {
+		File file = new File(fileWithPath);
+		IFileStore fileStore = null;
+		try {
+			fileStore = EFS.getStore(file.toURI());
+		} catch (CoreException e) {
+			final String CAN_NOT_GET_STORE = "Can not get store for file: %s. Message: %s";
+			ExceptionHelper.reportRuntimeException(String.format(CAN_NOT_GET_STORE, fileWithPath, e.getMessage()));
+		}
+		setInput(new FileStoreEditorInput(fileStore));
+		setPartName(file.getName());
+	}	
 
 	private void reportOpenForWriteException(Exception e) {
 		ExceptionCatchDialog.open("Can not open file for writing", e.getMessage());

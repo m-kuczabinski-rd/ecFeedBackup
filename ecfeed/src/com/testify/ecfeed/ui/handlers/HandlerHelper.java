@@ -6,7 +6,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 
-package com.testify.ecfeed.rcp3.handlers;
+package com.testify.ecfeed.ui.handlers;
 
 import org.eclipse.jface.action.IAction;
 

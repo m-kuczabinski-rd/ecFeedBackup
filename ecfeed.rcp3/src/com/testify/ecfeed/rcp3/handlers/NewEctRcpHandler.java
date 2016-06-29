@@ -6,20 +6,20 @@
  * http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 
-package com.testify.ecfeed.ui.dialogs.basic;
+package com.testify.ecfeed.rcp3.handlers;
 
-import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.swt.widgets.Shell;
+import org.eclipse.core.commands.ExecutionEvent;
+import org.eclipse.core.commands.ExecutionException;
 
-import com.testify.ecfeed.utils.EclipseHelper;
+import com.testify.ecfeed.ui.handlers.NewEctHandler;
 
-public class InfoDialog {
 
-	public static void open(String message, Shell shell) {
-		MessageDialog.openInformation(shell, "Information", message);
+public class NewEctRcpHandler extends org.eclipse.core.commands.AbstractHandler {
+
+	@Override
+	public Object execute(ExecutionEvent event) throws ExecutionException {
+		NewEctHandler.execute();
+		return null;
 	}
 
-	public static void open(String message) {
-		open(message, EclipseHelper.getActiveShell());
-	}
 }

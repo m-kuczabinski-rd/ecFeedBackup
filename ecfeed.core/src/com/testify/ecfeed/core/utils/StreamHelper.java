@@ -38,7 +38,7 @@ public class StreamHelper {
 		return scanner.useDelimiter(REGEX_BEGINNING_OF_TEXT).next();
 	}
 
-	public static FileOutputStream requireCreateOutputStream(String pathWithFileName) {
+	public static FileOutputStream requireCreateFileOutputStream(String pathWithFileName) {
 		FileOutputStream outputStream = null;
 		try {
 			outputStream = new FileOutputStream(pathWithFileName);

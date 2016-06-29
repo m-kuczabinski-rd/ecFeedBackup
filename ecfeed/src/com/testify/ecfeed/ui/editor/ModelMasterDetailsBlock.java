@@ -20,6 +20,7 @@ import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.SWTException;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IActionBars;
+import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.forms.AbstractFormPart;
@@ -188,6 +189,20 @@ public class ModelMasterDetailsBlock extends MasterDetailsBlock implements ISele
 		fMasterSection.initialize(managedForm);
 		fMasterSection.addSelectionChangedListener(this);
 		fMasterSection.setInput(fModel);
+
+		if (isInMemFile(fFileInfoProvider)) {
+			fMasterSection.markDirty();
+		}
+	}
+
+	private boolean isInMemFile(IFileInfoProvider fileInfoProvider) {
+		if (!(fileInfoProvider instanceof ModelEditor)) {
+			return false;
+		}
+		ModelEditor modelEditor = (ModelEditor)fileInfoProvider;
+		IEditorInput input = modelEditor.getEditorInput();
+
+		return ModelEditorHelper.isInMemFileInput(input);
 	}
 
 	@Override

@@ -9,6 +9,7 @@
 package com.testify.ecfeed.ui.dialogs.basic;
 
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.swt.widgets.Shell;
 
 import com.testify.ecfeed.utils.EclipseHelper;
 
@@ -20,8 +21,11 @@ public class YesNoDialog {
 	}
 
 	public static Result open(String question) {
+		return open(question, EclipseHelper.getActiveShell());
+	}
+	public static Result open(String question, Shell shell) {
 		MessageDialog fDialog = new MessageDialog(
-				EclipseHelper.getActiveShell(), "Question", null, question, 
+				shell, "Question", null, question, 
 				MessageDialog.QUESTION, new String[] { "No", "Yes" }, 0);
 
 		int result = fDialog.open();

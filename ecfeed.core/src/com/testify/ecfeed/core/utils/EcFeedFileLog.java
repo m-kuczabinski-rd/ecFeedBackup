@@ -8,21 +8,19 @@
 
 package com.testify.ecfeed.core.utils;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
 import java.io.IOException;
 
-public class TextFileHelper {
+public class EcFeedFileLog {
 
-	public static void append(String filename, String message) throws IOException {
-		BufferedWriter writer = new BufferedWriter(new FileWriter(filename, true));
-		writer.write(message);
-		writer.close();
+	private static final String LOG = "ecFeedLog.txt";
+
+	public static void appendLine(String message) throws IOException {
+		TextFileHelper.appendLine(LOG, message);
 	}
 
-	public static void appendLine(String filename, String message) throws IOException {
-		String msg = StringHelper.appendNewline(message);
-		append(filename, msg);
+	public static void appendLineNoThrow(String message) {
+		try {
+			TextFileHelper.appendLine(LOG, message);
+		} catch (IOException e) {}
 	}	
-
 }

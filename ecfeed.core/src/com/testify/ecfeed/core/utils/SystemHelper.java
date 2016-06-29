@@ -8,21 +8,11 @@
 
 package com.testify.ecfeed.core.utils;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
 
-public class TextFileHelper {
+public class SystemHelper {
 
-	public static void append(String filename, String message) throws IOException {
-		BufferedWriter writer = new BufferedWriter(new FileWriter(filename, true));
-		writer.write(message);
-		writer.close();
+	public static String getSystemTemporaryDir() { 
+		return System.getProperty("java.io.tmpdir");
 	}
-
-	public static void appendLine(String filename, String message) throws IOException {
-		String msg = StringHelper.appendNewline(message);
-		append(filename, msg);
-	}	
 
 }

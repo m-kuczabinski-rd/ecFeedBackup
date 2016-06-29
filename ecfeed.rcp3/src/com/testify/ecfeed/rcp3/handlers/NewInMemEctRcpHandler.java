@@ -10,14 +10,16 @@ package com.testify.ecfeed.rcp3.handlers;
 
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
-import org.eclipse.ui.actions.ActionFactory;
+
+import com.testify.ecfeed.ui.handlers.NewInMemEctHandler;
 
 
-public class DeleteHandler extends org.eclipse.core.commands.AbstractHandler {
+public class NewInMemEctRcpHandler extends org.eclipse.core.commands.AbstractHandler {
 
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
-		HandlerHelper.executeGlobalAction(ActionFactory.DELETE.getId());
+		NewInMemEctHandler.execute();
 		return null;
 	}
+
 }

@@ -38,6 +38,8 @@ import org.eclipse.ui.forms.AbstractFormPart;
 import org.eclipse.ui.forms.IDetailsPage;
 import org.eclipse.ui.forms.widgets.Section;
 
+import com.testify.ecfeed.application.ApplicationContext;
+import com.testify.ecfeed.core.adapter.EImplementationStatus;
 import com.testify.ecfeed.core.adapter.java.JavaUtils;
 import com.testify.ecfeed.core.model.AbstractNode;
 import com.testify.ecfeed.core.model.ChoiceNode;
@@ -49,17 +51,22 @@ import com.testify.ecfeed.core.model.MethodNode;
 import com.testify.ecfeed.core.model.MethodParameterNode;
 import com.testify.ecfeed.core.model.RootNode;
 import com.testify.ecfeed.core.model.TestCaseNode;
+import com.testify.ecfeed.core.utils.ExceptionHelper;
 import com.testify.ecfeed.core.utils.SystemLogger;
 import com.testify.ecfeed.ui.common.Constants;
 import com.testify.ecfeed.ui.common.ImageManager;
 import com.testify.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.testify.ecfeed.ui.editor.actions.AbstractAddChildAction;
 import com.testify.ecfeed.ui.editor.actions.AddChildActionProvider;
+import com.testify.ecfeed.ui.editor.actions.ExportOnlineAction;
 import com.testify.ecfeed.ui.editor.actions.ModelViewerActionProvider;
+import com.testify.ecfeed.ui.editor.actions.TestOnlineAction;
 import com.testify.ecfeed.ui.modelif.AbstractNodeInterface;
 import com.testify.ecfeed.ui.modelif.AbstractParameterInterface;
 import com.testify.ecfeed.ui.modelif.IModelUpdateListener;
+import com.testify.ecfeed.ui.modelif.MethodInterface;
 import com.testify.ecfeed.ui.modelif.ModelNodesTransfer;
+import com.testify.ecfeed.ui.modelif.NodeInterfaceFactory;
 
 public class ModelMasterSection extends TreeViewerSection{
 	private static final int STYLE = Section.EXPANDED | Section.TITLE_BAR;
@@ -447,19 +454,91 @@ public class ModelMasterSection extends TreeViewerSection{
 		}
 
 		@Override
-		protected void populateMenu(){
-			List<AbstractNode> selected = getSelectedNodes();
-			if(selected.size() == 1){
-				AddChildActionProvider actionProvider = 
-						new AddChildActionProvider(getTreeViewer(), ModelMasterSection.this, fFileInfoProvider);
-				List<AbstractAddChildAction> actions = actionProvider.getPossibleActions(selected.get(0));
-				for(AbstractAddChildAction action : actions){
-					addMenuItem(action.getName(), action);
-				}
+		protected void populateMenu() {
+			List<AbstractNode> selectedNodes = getSelectedNodes();
+
+			if(selectedNodes.size() != 1) {
+				return;
 			}
-			new MenuItem(getMenu(), SWT.SEPARATOR);
+
+			AbstractNode abstractNode = selectedNodes.get(0);
+
+			addChildAddingActions(abstractNode);
+			addActionsForMethod(abstractNode);
 			super.populateMenu();
 		}
+
+		private void addChildAddingActions(AbstractNode abstractNode) {
+			AddChildActionProvider actionProvider = 
+					new AddChildActionProvider(getTreeViewer(), ModelMasterSection.this, fFileInfoProvider);
+			List<AbstractAddChildAction> actions = actionProvider.getPossibleActions(abstractNode);
+
+			for(AbstractAddChildAction action : actions) {
+				addMenuItem(action.getName(), action);
+			}
+
+			new MenuItem(getMenu(), SWT.SEPARATOR);
+		}
+
+		private void addActionsForMethod(AbstractNode abstractNode) {
+			if (!(abstractNode instanceof MethodNode)) {
+				return;
+			}
+
+			MethodNode methodNode = (MethodNode)abstractNode;
+			MethodInterface methodInterface = getMethodInterface();
+			boolean isAction = false;
+
+			if (addTestOnlineAction(methodInterface)) {
+				isAction = true;
+			}
+			if (addExportOnlineAction(methodNode, methodInterface)) {
+				isAction = true;
+			}
+
+			if (isAction) {
+				new MenuItem(getMenu(), SWT.SEPARATOR);
+			}
+		}
+
+		private MethodInterface getMethodInterface() {
+			AbstractNodeInterface nodeIf = NodeInterfaceFactory.getNodeInterface(getSelectedNodes().get(0), null, fFileInfoProvider);
+
+			if (!(nodeIf instanceof MethodInterface)) {
+				final String MSG = "Invalid type of node interface. Method node interface expected"; 
+				ExceptionHelper.reportRuntimeException(MSG);
+			}
+
+			return (MethodInterface)nodeIf; 
+		}
+
+		private boolean addTestOnlineAction(MethodInterface methodInterface) {
+			if (ApplicationContext.isStandaloneApplication()) {
+				return false;
+			}
+
+			EImplementationStatus methodStatus = methodInterface.getImplementationStatus();
+
+			if (methodStatus != EImplementationStatus.IMPLEMENTED) {
+				return false;
+			}
+
+			TestOnlineAction testOnlineAction = new TestOnlineAction(fFileInfoProvider, ModelMasterSection.this, methodInterface);
+			addMenuItem(testOnlineAction.getName(), testOnlineAction);
+			return true;
+		}
+
+
+		private boolean addExportOnlineAction(MethodNode methodNode, MethodInterface methodInterface) {
+			if (methodNode.getParametersCount() == 0) {
+				return false;
+			}
+
+			ExportOnlineAction exportOnlineAction = new ExportOnlineAction(fFileInfoProvider, ModelMasterSection.this, methodInterface);
+			addMenuItem(exportOnlineAction.getName(), exportOnlineAction);
+			return true;
+		}
+
 	}
 
 	public ModelMasterSection(ModelMasterDetailsBlock parentBlock, IFileInfoProvider fileInfoProvider) {

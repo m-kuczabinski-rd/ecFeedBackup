@@ -26,8 +26,9 @@
          <menu
                label="File">
             <command
-                  commandId="ecfeed.rcp3.new"
-                  label="New...">
+                  commandId="ecfeed.rcp3.newMem"
+                  label="New"
+                  style="push">
             </command>
             <command
                   commandId="ecfeed.rcp3.open"
@@ -102,6 +103,10 @@
             name="SaveAs">
       </command>
       <command
+            id="ecfeed.rcp3.newMem"
+            name="New mem">
+      </command>
+      <command
             id="ecfeed.rcp3.new"
             name="New">
       </command>
@@ -133,43 +138,47 @@
    <extension
          point="org.eclipse.ui.handlers">
       <handler
-            class="com.testify.ecfeed.rcp3.handlers.OpenEctHandler"
+            class="com.testify.ecfeed.rcp3.handlers.OpenEctRcpHandler"
             commandId="ecfeed.rcp3.open">
       </handler>
       <handler
-            class="com.testify.ecfeed.rcp3.handlers.SaveEctHandler"
+            class="com.testify.ecfeed.rcp3.handlers.SaveEctRcpHandler"
             commandId="ecfeed.rcp3.save">
       </handler>
       <handler
-            class="com.testify.ecfeed.rcp3.handlers.SaveAsEctHandler"
+            class="com.testify.ecfeed.rcp3.handlers.SaveAsEctRcpHandler"
             commandId="ecfeed.rcp3.saveAs">
       </handler>
       <handler
-            class="com.testify.ecfeed.rcp3.handlers.NewEctHandler"
+            class="com.testify.ecfeed.rcp3.handlers.NewEctRcpHandler"
             commandId="ecfeed.rcp3.new">
       </handler>
       <handler
-            class="com.testify.ecfeed.rcp3.handlers.AboutHandler"
+            class="com.testify.ecfeed.rcp3.handlers.NewInMemEctRcpHandler"
+            commandId="ecfeed.rcp3.newMem">
+      </handler>
+      <handler
+            class="com.testify.ecfeed.rcp3.handlers.AboutRcpHandler"
             commandId="ecfeed.rcp3.about">
       </handler>
       <handler
-            class="com.testify.ecfeed.rcp3.handlers.CutHandler"
+            class="com.testify.ecfeed.rcp3.handlers.CutRcpHandler"
             commandId="ecfeed.rcp3.cut">
       </handler>
       <handler
-            class="com.testify.ecfeed.rcp3.handlers.CopyHandler"
+            class="com.testify.ecfeed.rcp3.handlers.CopyRcpHandler"
             commandId="ecfeed.rcp3.copy">
       </handler>
       <handler
-            class="com.testify.ecfeed.rcp3.handlers.PasteHandler"
+            class="com.testify.ecfeed.rcp3.handlers.PasteRcpHandler"
             commandId="ecfeed.rcp3.paste">
       </handler>
       <handler
-            class="com.testify.ecfeed.rcp3.handlers.DeleteHandler"
+            class="com.testify.ecfeed.rcp3.handlers.DeleteRcpHandler"
             commandId="ecfeed.rcp3.delete">
       </handler>
       <handler
-            class="com.testify.ecfeed.rcp3.handlers.CloseEctHandler"
+            class="com.testify.ecfeed.rcp3.handlers.CloseEctRcpHandler"
             commandId="ecfeed.rcp3.close">
       </handler>
    </extension>

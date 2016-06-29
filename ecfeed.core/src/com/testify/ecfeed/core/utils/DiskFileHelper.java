@@ -19,12 +19,16 @@ import java.nio.file.Paths;
 public class DiskFileHelper {
 
 	public static final String JAVA_EXTENSION = "java";
-	public static final String FILE_SEPARATOR = File.separator;
+	public static final String FILE_SEPARATOR = File.separator; // platform independent
 	public static final String CURRENT_DIR = ".";
 	public static final String EXTENSION_SEPARATOR = ".";
 	public static final String APK_EXTENSION = "apk";
 	public static final String BIN_SUBDIRECTORY = "bin";
 	public static final String ALLOWED_CHARS_FOR_ECT_NAME = "[a-zA-Z0-9_\\.]";
+
+	public static String pathSeparator() {
+		return FILE_SEPARATOR;
+	}
 
 	public static boolean fileExists(String pathWithFileName) {
 		File file = new File(pathWithFileName);

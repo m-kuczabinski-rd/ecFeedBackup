@@ -13,6 +13,7 @@ import java.net.URI;
 
 import org.eclipse.core.filesystem.EFS;
 import org.eclipse.core.filesystem.IFileStore;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
@@ -25,6 +26,7 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.part.FileEditorInput;
+
 import com.testify.ecfeed.core.utils.ExceptionHelper;
 
 public class EclipseHelper {
@@ -79,6 +81,23 @@ public class EclipseHelper {
 		return EFS.getLocalFileSystem().getStore(uri);
 	}
 
+	public static void openEditorOnFileInMemory(String tmpPathWithFileName) {
+		IWorkbenchPage page = getActiveWorkBenchPage();
+		File file = new File(tmpPathWithFileName);
+		IFileStore fileStore = null;
+		try {
+			fileStore = EFS.getStore(file.toURI());
+		} catch (CoreException e) {
+			ExceptionHelper.reportRuntimeException("Can not get store. Message:" + e.getMessage());
+		}
+
+		if (fileStore == null) {
+			ExceptionHelper.reportRuntimeException("Can not open editor on temporary file.");
+		}
+
+		openEditorOnFileStore(page, fileStore);
+	}		
+
 	private static void openEditorOnFileStore(IWorkbenchPage page, IFileStore fileStore) {
 		try {
 			IDE.openEditorOnFileStore(page, fileStore);
@@ -100,5 +119,6 @@ public class EclipseHelper {
 		}
 		return editorPart.getEditorSite().getActionBars();
 	}
+
 
 }
