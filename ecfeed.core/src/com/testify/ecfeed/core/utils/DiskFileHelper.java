@@ -52,8 +52,12 @@ public class DiskFileHelper {
 	}	
 
 	private static String joinItems(String item1, String item2) {
+		if (item1.endsWith(FILE_SEPARATOR)) {
+			return item1 + item2;
+		}
+
 		return item1 + FILE_SEPARATOR + item2;
-	}
+	}	
 
 	public static long fileModificationTime(String path) {
 		File file = new File(path);
@@ -69,7 +73,7 @@ public class DiskFileHelper {
 		return StringHelper.getLastToken(pathWithFileName, FILE_SEPARATOR);
 	}
 
-	public static String extractPath(String pathWithFileName) {
+	public static String extractPathWithSeparator(String pathWithFileName) {
 		String fileName = StringHelper.getLastToken(pathWithFileName, FILE_SEPARATOR);
 		return StringHelper.removeFromPostfix(fileName, pathWithFileName);
 	}

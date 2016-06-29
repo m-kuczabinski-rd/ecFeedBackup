@@ -30,7 +30,7 @@ public class EditorInMemFileHelper {
 	}
 
 	public static boolean isInMemFile(String pathWithFileName) {
-		String path = DiskFileHelper.extractPath(pathWithFileName);
+		String path = DiskFileHelper.extractPathWithSeparator(pathWithFileName);
 
 		if (path.endsWith(TMP_FILE_MEM_DIR)) {
 			return true;

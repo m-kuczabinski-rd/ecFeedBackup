@@ -183,7 +183,7 @@ public class ModelEditorHelper {
 
 		String pathWithFileName = UriHelper.convertUriToFilePath(fileStoreEditorInput.getURI());
 		String fileName = DiskFileHelper.extractFileName(pathWithFileName);
-		String path = DiskFileHelper.extractPath(pathWithFileName);
+		String path = DiskFileHelper.extractPathWithSeparator(pathWithFileName);
 
 		CanAddDocumentChecker checker = new CanAddDocumentChecker();
 		return SaveAsEctDialogWithConfirm.open(path, fileName, checker, shell);

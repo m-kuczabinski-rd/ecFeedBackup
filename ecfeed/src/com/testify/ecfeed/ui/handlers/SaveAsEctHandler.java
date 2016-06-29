@@ -35,7 +35,7 @@ public class SaveAsEctHandler {
 
 	private static void executeSaveAs(String pathWithFileName, ModelEditor modelEditor) {
 		String fileName = DiskFileHelper.extractFileName(pathWithFileName);
-		String path = DiskFileHelper.extractPath(pathWithFileName);
+		String path = DiskFileHelper.extractPathWithSeparator(pathWithFileName);
 
 		CanAddDocumentChecker checker = new CanAddDocumentChecker();
 		String newFile = SaveAsEctDialogWithConfirm.open(path, fileName, checker, EclipseHelper.getActiveShell());

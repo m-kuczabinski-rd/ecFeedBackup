@@ -8,6 +8,7 @@
 
 package com.testify.ecfeed.utils;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
@@ -46,4 +47,53 @@ public class DiskFileHelperTest{
 		String result = DiskFileHelper.checkEctFileName("abc$.ect");
 		assertNotNull(result);
 	}
+
+	@Test
+	public void shouldCreateFileName() {
+		String result = DiskFileHelper.createFileName("abc", "txt");
+		assertEquals("abc.txt", result);
+	}
+
+	@Test
+	public void shouldJoinPathWithFile1() {
+		String result = DiskFileHelper.joinPathWithFile("c:", "file.txt");
+		String expectedResult = "c:" + DiskFileHelper.pathSeparator() + "file.txt";
+		assertEquals(expectedResult, result);
+	}
+
+	@Test
+	public void shouldJoinPathWithFile2() {
+		String result = DiskFileHelper.joinPathWithFile("c:" + DiskFileHelper.pathSeparator(), "file.txt");
+		String expectedResult = "c:" + DiskFileHelper.pathSeparator() + "file.txt";
+		assertEquals(expectedResult, result);
+	}
+
+	@Test
+	public void shouldJoinSubdirectory() {
+		String result = DiskFileHelper.joinPathWithFile("c:", "subdir");
+		String expectedResult = "c:" + DiskFileHelper.pathSeparator() + "subdir";
+		assertEquals(expectedResult, result);
+	}
+
+	@Test
+	public void shouldExtractFileName() {
+		String result = DiskFileHelper.extractFileName("c:" + DiskFileHelper.pathSeparator() + "file.txt");
+		String expectedResult = "file.txt";
+		assertEquals(expectedResult, result);
+	}
+
+	@Test
+	public void shouldExtractPathWithSeparator() {
+		String result = DiskFileHelper.extractPathWithSeparator("c:" + DiskFileHelper.pathSeparator() + "file.txt");
+		String expectedResult = "c:" + DiskFileHelper.pathSeparator();
+		assertEquals(expectedResult, result);
+	}
+
+	@Test
+	public void shouldExtractFileNameWithoutExtension() {
+		String result = DiskFileHelper.extractFileNameWithoutExtension("file.txt");
+		String expectedResult = "file";
+		assertEquals(expectedResult, result);
+	}
+
 }
