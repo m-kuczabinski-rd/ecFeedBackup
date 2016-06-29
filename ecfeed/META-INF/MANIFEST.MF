@@ -2,9 +2,9 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: ecFeed
 Bundle-SymbolicName: com.testify.ecfeed; singleton:=true
-Bundle-Version: 1.10.0.qualifier
+Bundle-Version: 1.10.1.qualifier
 Bundle-Activator: com.testify.ecfeed.ui.plugin.Activator
-Bundle-Vendor: Testify
+Bundle-Vendor: ecFeed AS
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.eclipse.core.resources,

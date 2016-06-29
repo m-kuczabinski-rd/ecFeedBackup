@@ -9,6 +9,11 @@
 #     Patryk Chamuczynski (p.chamuczynski(at)radytek.com) - initial implementation
 #-------------------------------------------------------------------------------
 
+Version 1.10.1
+ - minor fixes
+ - Insert shortcut key to add new subnode
+ - Simplified opening new file in standalone application
+
 Version 1.10.0
  - Export data to custom text format
  - minor bugfixes

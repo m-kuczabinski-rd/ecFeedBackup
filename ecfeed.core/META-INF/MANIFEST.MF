@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Core
 Bundle-SymbolicName: ecfeed.core
-Bundle-Version: 1.0.0.qualifier
+Bundle-Version: 1.0.1.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Export-Package: com.testify.ecfeed.core.adapter,
  com.testify.ecfeed.core.adapter.java,
@@ -22,3 +22,4 @@ Bundle-ClassPath: lib/xom-1.2.10.jar,
  .
 Import-Package: org.eclipse.core.runtime;version="3.4.0",
  org.osgi.framework
+Bundle-Vendor: ecFeed AS
