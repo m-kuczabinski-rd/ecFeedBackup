@@ -31,8 +31,10 @@ import com.testify.ecfeed.core.model.MethodNode;
 import com.testify.ecfeed.core.model.MethodParameterNode;
 import com.testify.ecfeed.core.model.RootNode;
 import com.testify.ecfeed.core.model.TestCaseNode;
+import com.testify.ecfeed.core.utils.ExceptionHelper;
 import com.testify.ecfeed.core.utils.SystemLogger;
 import com.testify.ecfeed.ui.common.utils.IFileInfoProvider;
+import com.testify.ecfeed.ui.modelif.AbstractNodeInterface;
 import com.testify.ecfeed.ui.modelif.ChoicesParentInterface;
 import com.testify.ecfeed.ui.modelif.ClassInterface;
 import com.testify.ecfeed.ui.modelif.GlobalParametersParentInterface;
@@ -46,6 +48,27 @@ public class AddChildActionProvider {
 	private IModelUpdateContext fContext;
 	private IFileInfoProvider fFileInfoProvider;
 
+	private void reportExceptionInvalidNodeType() {
+		final String MSG = "Invalid type of selected node.";
+		ExceptionHelper.reportRuntimeException(MSG);
+	}
+
+	private AbstractNode getOneNode(List<AbstractNode> nodes) {
+		if(nodes.size() != 1) {
+			final String MSG = "Too many nodes selected for action.";
+			ExceptionHelper.reportRuntimeException(MSG);
+		}
+		return nodes.get(0); 
+	}
+
+	private void setTargetNode(AbstractNode abstractNode, AbstractNodeInterface abstractNodeInterface) {
+		if (abstractNodeInterface == null ) {
+			final String MSG = "Invalid parent interface.";
+			ExceptionHelper.reportRuntimeException(MSG);
+		}
+		abstractNodeInterface.setTarget(abstractNode);
+	}
+
 	private class AddGlobalParameterAction extends AbstractAddChildAction{
 		private GlobalParametersParentInterface fParentIf;
 
@@ -56,17 +79,18 @@ public class AddChildActionProvider {
 
 		@Override
 		public void run() {
-			if(getParentInterface() != null){
-				select(getParentInterface().addNewParameter());
+			AbstractNode selectedNode = getOneNode(getSelectedNodes());
+
+			if (!(selectedNode instanceof GlobalParametersParentNode)) {
+				reportExceptionInvalidNodeType();
 			}
+
+			setTargetNode(selectedNode, fParentIf);
+			select(fParentIf.addNewParameter());
 		}
 
 		@Override
 		protected GlobalParametersParentInterface getParentInterface(){
-			List<AbstractNode> nodes = getSelectedNodes();
-			if(nodes.size() != 1) return null;
-			if(nodes.get(0) instanceof GlobalParametersParentNode == false) return null;
-			fParentIf.setTarget(nodes.get(0));
 			return fParentIf;
 		}
 
@@ -82,18 +106,19 @@ public class AddChildActionProvider {
 
 		@Override
 		protected RootInterface getParentInterface(){
-			List<AbstractNode> nodes = getSelectedNodes();
-			if(nodes.size() != 1) return null;
-			if(nodes.get(0) instanceof RootNode == false) return null;
-			fParentIf.setTarget(nodes.get(0));
 			return fParentIf;
 		}
 
 		@Override
-		public void run(){
-			if(getParentInterface() != null){
-				select(getParentInterface().addNewClass());
+		public void run() {
+			AbstractNode selectedNode = getOneNode(getSelectedNodes());
+
+			if (selectedNode instanceof RootNode == false) {
+				reportExceptionInvalidNodeType();
 			}
+
+			setTargetNode(selectedNode, fParentIf);
+			select(getParentInterface().addNewClass());
 		}
 	}
 
@@ -107,18 +132,19 @@ public class AddChildActionProvider {
 
 		@Override
 		protected ClassInterface getParentInterface(){
-			List<AbstractNode> nodes = getSelectedNodes();
-			if(nodes.size() != 1) return null;
-			if(nodes.get(0) instanceof ClassNode == false) return null;
-			fParentIf.setTarget(nodes.get(0));
 			return fParentIf;
 		}
 
 		@Override
-		public void run(){
-			if(getParentInterface() != null){
-				select(getParentInterface().addNewMethod());
+		public void run() {
+			AbstractNode selectedNode = getOneNode(getSelectedNodes());
+
+			if (!(selectedNode instanceof ClassNode)) {
+				reportExceptionInvalidNodeType();
 			}
+
+			setTargetNode(selectedNode, fParentIf);
+			select(getParentInterface().addNewMethod());
 		}
 	}
 
@@ -132,11 +158,17 @@ public class AddChildActionProvider {
 
 		@Override
 		protected MethodInterface getParentInterface(){
-			List<AbstractNode> nodes = getSelectedNodes();
-			if(nodes.size() != 1) return null;
-			if(nodes.get(0) instanceof MethodNode == false) return null;
-			fParentIf.setTarget(nodes.get(0));
 			return fParentIf;
+		}
+
+		protected void prepareRun() {
+			AbstractNode selectedNode = getOneNode(getSelectedNodes());
+
+			if (!(selectedNode instanceof MethodNode)) {
+				reportExceptionInvalidNodeType();
+			}
+
+			setTargetNode(selectedNode, fParentIf);
 		}
 	}
 
@@ -147,6 +179,7 @@ public class AddChildActionProvider {
 
 		@Override
 		public void run() {
+			prepareRun();
 			select(getParentInterface().addNewParameter());
 		}
 	}
@@ -158,6 +191,7 @@ public class AddChildActionProvider {
 
 		@Override
 		public void run() {
+			prepareRun();
 			select(getParentInterface().addNewConstraint());
 		}
 	}
@@ -169,6 +203,7 @@ public class AddChildActionProvider {
 
 		@Override
 		public void run() {
+			prepareRun();
 			select(getParentInterface().addTestCase());
 		}
 	}
@@ -180,6 +215,7 @@ public class AddChildActionProvider {
 
 		@Override
 		public void run() {
+			prepareRun();
 			getParentInterface().generateTestSuite();
 		}
 	}
@@ -207,24 +243,29 @@ public class AddChildActionProvider {
 		}
 
 		@Override
-		protected ChoicesParentInterface getParentInterface(){
-			List<AbstractNode> nodes = getSelectedNodes();
-			if(nodes.size() != 1) return null;
-			if(nodes.get(0) instanceof ChoicesParentNode == false) return null;
-			fParentIf.setTarget(nodes.get(0));
+		protected ChoicesParentInterface getParentInterface() {
 			return fParentIf;
 		}
 
 		@Override
-		public void run(){
+		public void run() {
+			AbstractNode selectedNode = getOneNode(getSelectedNodes());
+
+			if (!(selectedNode instanceof ChoicesParentNode)) {
+				reportExceptionInvalidNodeType();
+			}
+
+			setTargetNode(selectedNode, fParentIf);
 			select(fParentIf.addNewChoice());
 		}
 
 		@Override
 		public boolean isEnabled(){
-			if(super.isEnabled() == false) return false;
+			if(super.isEnabled() == false) 
+				return false;
 
 			ChoicesParentNode target = (ChoicesParentNode)getSelectedNodes().get(0);
+
 			AbstractParameterNode parameter = target.getParameter();
 			try {
 				return (boolean)parameter.accept(new EnableVisitor());

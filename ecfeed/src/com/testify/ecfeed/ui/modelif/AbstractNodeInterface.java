@@ -170,9 +170,14 @@ public class AbstractNodeInterface extends OperationExecuter{
 	}
 
 	public boolean removeChildren(Collection<? extends AbstractNode> children, String message){
-		if(children == null || children.size() == 0) return false;
+		if(children == null || children.size() == 0) { 
+			return false;
+		}
+
 		for(AbstractNode node : children){
-			if(node.getParent() != fTarget) return false;
+			if(node.getParent() != fTarget) { 
+				return false;
+			}
 		}
 		return execute(new GenericRemoveNodesOperation(children, fAdapterProvider, true), message);
 	}
