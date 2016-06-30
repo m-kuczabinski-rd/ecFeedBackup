@@ -27,6 +27,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
 import com.testify.ecfeed.android.utils.AndroidBaseRunnerHelper;
+import com.testify.ecfeed.core.adapter.EImplementationStatus;
 import com.testify.ecfeed.core.model.AbstractNode;
 import com.testify.ecfeed.core.model.ClassNode;
 import com.testify.ecfeed.core.utils.EcException;
@@ -292,17 +293,28 @@ public class ClassDetailsPage extends BasicDetailsPage {
 			fMethodsSection.setInput(selectedClass);
 			fGlobalParametersSection.setInput(selectedClass);
 			
-			if (fFileInfoProvider.isProjectAvailable()) {
-				fOtherMethodsSection.setInput(selectedClass);
-				fOtherMethodsSection.setVisible(fOtherMethodsSection.getItemsCount() > 0);
-			}
-
+			refreshOtherMethodsSection(selectedClass);
+			
 			if (fFileInfoProvider.isProjectAvailable()) {
 				fCommentsSection.setInput(selectedClass);
 			}
 
 			getMainSection().layout();
 		}
+	}
+	
+	private void refreshOtherMethodsSection(ClassNode classNode) {
+		if (!fFileInfoProvider.isProjectAvailable()) {
+			return;
+		}
+		
+		if (fClassIf.getImplementationStatus() == EImplementationStatus.NOT_IMPLEMENTED) {
+			fOtherMethodsSection.setVisible(false);
+			return;
+		}
+		
+		fOtherMethodsSection.setInput(classNode);
+		fOtherMethodsSection.setVisible(fOtherMethodsSection.getItemsCount() > 0);
 	}
 
 	private void refreshAndroid() {
