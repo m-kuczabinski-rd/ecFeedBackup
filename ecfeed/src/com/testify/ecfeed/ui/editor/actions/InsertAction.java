@@ -13,7 +13,7 @@ import java.util.List;
 import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.StructuredViewer;
 
-import com.testify.ecfeed.core.model.AbstractNode;
+import com.ecfeed.core.model.AbstractNode;
 import com.testify.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 

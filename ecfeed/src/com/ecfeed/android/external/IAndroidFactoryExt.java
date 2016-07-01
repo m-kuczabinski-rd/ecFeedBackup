@@ -8,7 +8,7 @@
 
 package com.ecfeed.android.external;
 
-import com.testify.ecfeed.core.model.MethodNode;
+import com.ecfeed.core.model.MethodNode;
 
 public interface IAndroidFactoryExt {
 

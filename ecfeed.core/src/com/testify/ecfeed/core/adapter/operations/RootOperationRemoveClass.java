@@ -11,10 +11,10 @@
 
 package com.testify.ecfeed.core.adapter.operations;
 
+import com.ecfeed.core.model.ClassNode;
+import com.ecfeed.core.model.RootNode;
 import com.testify.ecfeed.core.adapter.IModelOperation;
 import com.testify.ecfeed.core.adapter.ModelOperationException;
-import com.testify.ecfeed.core.model.ClassNode;
-import com.testify.ecfeed.core.model.RootNode;
 
 public class RootOperationRemoveClass extends AbstractModelOperation {
 

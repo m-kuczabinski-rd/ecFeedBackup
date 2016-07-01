@@ -19,23 +19,23 @@ import nu.xom.Document;
 import nu.xom.Element;
 import nu.xom.ParsingException;
 
+import com.ecfeed.core.model.AbstractStatement;
+import com.ecfeed.core.model.ChoiceNode;
+import com.ecfeed.core.model.ChoicesParentStatement;
+import com.ecfeed.core.model.ClassNode;
+import com.ecfeed.core.model.ConstraintNode;
+import com.ecfeed.core.model.ExpectedValueStatement;
+import com.ecfeed.core.model.GlobalParameterNode;
+import com.ecfeed.core.model.MethodNode;
+import com.ecfeed.core.model.MethodParameterNode;
+import com.ecfeed.core.model.ModelVersionDistributor;
+import com.ecfeed.core.model.RootNode;
+import com.ecfeed.core.model.StatementArray;
+import com.ecfeed.core.model.StaticStatement;
+import com.ecfeed.core.model.TestCaseNode;
 import com.ecfeed.core.serialization.IModelParser;
 import com.ecfeed.core.serialization.ParserException;
 import com.ecfeed.core.utils.ExceptionHelper;
-import com.testify.ecfeed.core.model.AbstractStatement;
-import com.testify.ecfeed.core.model.ChoiceNode;
-import com.testify.ecfeed.core.model.ChoicesParentStatement;
-import com.testify.ecfeed.core.model.ClassNode;
-import com.testify.ecfeed.core.model.ConstraintNode;
-import com.testify.ecfeed.core.model.ExpectedValueStatement;
-import com.testify.ecfeed.core.model.GlobalParameterNode;
-import com.testify.ecfeed.core.model.MethodNode;
-import com.testify.ecfeed.core.model.MethodParameterNode;
-import com.testify.ecfeed.core.model.ModelVersionDistributor;
-import com.testify.ecfeed.core.model.RootNode;
-import com.testify.ecfeed.core.model.StatementArray;
-import com.testify.ecfeed.core.model.StaticStatement;
-import com.testify.ecfeed.core.model.TestCaseNode;
 
 public class EctParser implements IModelParser {
 

@@ -8,9 +8,9 @@
 
 package com.testify.ecfeed.core.adapter;
 
+import com.ecfeed.core.model.ClassNode;
+import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.utils.EcException;
-import com.testify.ecfeed.core.model.ClassNode;
-import com.testify.ecfeed.core.model.MethodNode;
 
 public abstract class AbstractJavaModelImplementer extends AbstractModelImplementer {
 

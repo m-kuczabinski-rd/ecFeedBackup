@@ -29,11 +29,11 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.WizardNewFileCreationPage;
 import org.eclipse.ui.part.FileEditorInput;
 
+import com.ecfeed.core.model.ModelVersionDistributor;
+import com.ecfeed.core.model.RootNode;
 import com.ecfeed.core.serialization.ect.EctSerializer;
 import com.ecfeed.core.utils.DiskFileHelper;
 import com.ecfeed.core.utils.StringHelper;
-import com.testify.ecfeed.core.model.ModelVersionDistributor;
-import com.testify.ecfeed.core.model.RootNode;
 import com.testify.ecfeed.ui.common.Constants;
 import com.testify.ecfeed.ui.common.Messages;
 

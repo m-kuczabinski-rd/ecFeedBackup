@@ -23,6 +23,8 @@ import org.eclipse.swt.widgets.Display;
 
 import com.ecfeed.android.utils.AndroidBaseRunnerHelper;
 import com.ecfeed.android.utils.AndroidManifestAccessor;
+import com.ecfeed.core.model.ClassNode;
+import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.utils.EcException;
 import com.ecfeed.core.utils.PackageClassHelper;
 import com.ecfeed.core.utils.SystemLogger;
@@ -36,8 +38,6 @@ import com.testify.ecfeed.core.adapter.operations.ClassOperationRemoveMethod;
 import com.testify.ecfeed.core.adapter.operations.ClassOperationSetAndroidBaseRunner;
 import com.testify.ecfeed.core.adapter.operations.ClassOperationSetRunOnAndroid;
 import com.testify.ecfeed.core.adapter.operations.FactoryRenameOperation;
-import com.testify.ecfeed.core.model.ClassNode;
-import com.testify.ecfeed.core.model.MethodNode;
 import com.testify.ecfeed.ui.common.Constants;
 import com.testify.ecfeed.ui.common.EclipseModelBuilder;
 import com.testify.ecfeed.ui.common.JavaModelAnalyser;

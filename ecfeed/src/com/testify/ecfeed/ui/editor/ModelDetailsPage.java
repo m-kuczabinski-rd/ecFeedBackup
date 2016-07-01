@@ -20,8 +20,8 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.IFormPart;
 
-import com.testify.ecfeed.core.model.AbstractNode;
-import com.testify.ecfeed.core.model.RootNode;
+import com.ecfeed.core.model.AbstractNode;
+import com.ecfeed.core.model.RootNode;
 import com.testify.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 import com.testify.ecfeed.ui.modelif.RootInterface;

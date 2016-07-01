@@ -15,7 +15,7 @@ import java.util.List;
 
 import org.eclipse.jface.viewers.TreeViewer;
 
-import com.testify.ecfeed.core.model.AbstractNode;
+import com.ecfeed.core.model.AbstractNode;
 
 
 public class CollapseAction extends ModelSelectionAction {

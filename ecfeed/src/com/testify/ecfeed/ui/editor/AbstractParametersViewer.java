@@ -26,8 +26,8 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 
-import com.testify.ecfeed.core.model.AbstractParameterNode;
-import com.testify.ecfeed.core.model.ParametersParentNode;
+import com.ecfeed.core.model.AbstractParameterNode;
+import com.ecfeed.core.model.ParametersParentNode;
 import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.common.NodeNameColumnLabelProvider;
 import com.testify.ecfeed.ui.common.NodeViewerColumnLabelProvider;

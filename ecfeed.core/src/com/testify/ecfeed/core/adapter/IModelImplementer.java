@@ -11,7 +11,7 @@
 
 package com.testify.ecfeed.core.adapter;
 
-import com.testify.ecfeed.core.model.AbstractNode;
+import com.ecfeed.core.model.AbstractNode;
 
 public interface IModelImplementer {
 	public boolean implementable(Class<? extends AbstractNode> type);

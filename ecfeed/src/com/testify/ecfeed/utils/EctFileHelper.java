@@ -11,13 +11,13 @@ package com.testify.ecfeed.utils;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
 
+import com.ecfeed.core.model.ModelVersionDistributor;
+import com.ecfeed.core.model.RootNode;
 import com.ecfeed.core.serialization.IModelSerializer;
 import com.ecfeed.core.serialization.ect.EctSerializer;
 import com.ecfeed.core.utils.DiskFileHelper;
 import com.ecfeed.core.utils.ExceptionHelper;
 import com.ecfeed.core.utils.StreamHelper;
-import com.testify.ecfeed.core.model.ModelVersionDistributor;
-import com.testify.ecfeed.core.model.RootNode;
 
 public class EctFileHelper {
 

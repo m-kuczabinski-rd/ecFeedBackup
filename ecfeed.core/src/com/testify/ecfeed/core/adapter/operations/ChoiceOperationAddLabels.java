@@ -13,7 +13,7 @@ package com.testify.ecfeed.core.adapter.operations;
 
 import java.util.Collection;
 
-import com.testify.ecfeed.core.model.ChoiceNode;
+import com.ecfeed.core.model.ChoiceNode;
 
 public class ChoiceOperationAddLabels extends BulkOperation {
 	public ChoiceOperationAddLabels(ChoiceNode target, Collection<String> labels) {

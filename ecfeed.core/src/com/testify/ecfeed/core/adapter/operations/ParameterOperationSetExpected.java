@@ -16,14 +16,14 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 
+import com.ecfeed.core.model.ChoiceNode;
+import com.ecfeed.core.model.ConstraintNode;
+import com.ecfeed.core.model.MethodNode;
+import com.ecfeed.core.model.MethodParameterNode;
+import com.ecfeed.core.model.TestCaseNode;
 import com.testify.ecfeed.core.adapter.IModelOperation;
 import com.testify.ecfeed.core.adapter.ModelOperationException;
 import com.testify.ecfeed.core.adapter.java.JavaUtils;
-import com.testify.ecfeed.core.model.ChoiceNode;
-import com.testify.ecfeed.core.model.ConstraintNode;
-import com.testify.ecfeed.core.model.MethodNode;
-import com.testify.ecfeed.core.model.MethodParameterNode;
-import com.testify.ecfeed.core.model.TestCaseNode;
 
 public class ParameterOperationSetExpected extends AbstractModelOperation {
 	

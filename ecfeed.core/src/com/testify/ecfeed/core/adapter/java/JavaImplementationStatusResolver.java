@@ -19,19 +19,19 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.ecfeed.core.model.AbstractNode;
+import com.ecfeed.core.model.ChoiceNode;
+import com.ecfeed.core.model.ClassNode;
+import com.ecfeed.core.model.ConstraintNode;
+import com.ecfeed.core.model.GlobalParameterNode;
+import com.ecfeed.core.model.IModelVisitor;
+import com.ecfeed.core.model.MethodNode;
+import com.ecfeed.core.model.MethodParameterNode;
+import com.ecfeed.core.model.RootNode;
+import com.ecfeed.core.model.TestCaseNode;
 import com.ecfeed.core.utils.SystemLogger;
 import com.testify.ecfeed.core.adapter.AbstractImplementationStatusResolver;
 import com.testify.ecfeed.core.adapter.EImplementationStatus;
-import com.testify.ecfeed.core.model.AbstractNode;
-import com.testify.ecfeed.core.model.ChoiceNode;
-import com.testify.ecfeed.core.model.ClassNode;
-import com.testify.ecfeed.core.model.ConstraintNode;
-import com.testify.ecfeed.core.model.GlobalParameterNode;
-import com.testify.ecfeed.core.model.IModelVisitor;
-import com.testify.ecfeed.core.model.MethodNode;
-import com.testify.ecfeed.core.model.MethodParameterNode;
-import com.testify.ecfeed.core.model.RootNode;
-import com.testify.ecfeed.core.model.TestCaseNode;
 
 public class JavaImplementationStatusResolver extends AbstractImplementationStatusResolver{
 	private ModelClassLoader fLoader;

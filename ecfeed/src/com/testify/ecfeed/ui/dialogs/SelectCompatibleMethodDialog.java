@@ -37,7 +37,7 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.Text;
 
-import com.testify.ecfeed.core.model.MethodNode;
+import com.ecfeed.core.model.MethodNode;
 import com.testify.ecfeed.ui.common.Messages;
 
 public class SelectCompatibleMethodDialog extends TitleAreaDialog {

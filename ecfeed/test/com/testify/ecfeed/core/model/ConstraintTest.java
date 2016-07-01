@@ -19,13 +19,13 @@ import java.util.List;
 
 import org.junit.Test;
 
-import com.testify.ecfeed.core.model.AbstractStatement;
-import com.testify.ecfeed.core.model.ChoiceNode;
-import com.testify.ecfeed.core.model.ChoicesParentStatement;
-import com.testify.ecfeed.core.model.Constraint;
-import com.testify.ecfeed.core.model.EStatementRelation;
-import com.testify.ecfeed.core.model.MethodParameterNode;
-import com.testify.ecfeed.core.model.StaticStatement;
+import com.ecfeed.core.model.AbstractStatement;
+import com.ecfeed.core.model.ChoiceNode;
+import com.ecfeed.core.model.ChoicesParentStatement;
+import com.ecfeed.core.model.Constraint;
+import com.ecfeed.core.model.EStatementRelation;
+import com.ecfeed.core.model.MethodParameterNode;
+import com.ecfeed.core.model.StaticStatement;
 
 public class ConstraintTest {
 	@Test

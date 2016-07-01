@@ -24,11 +24,11 @@ import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Display;
 
+import com.ecfeed.core.model.ChoiceNode;
+import com.ecfeed.core.model.MethodNode;
+import com.ecfeed.core.model.MethodParameterNode;
 import com.testify.ecfeed.core.adapter.ITypeAdapter;
 import com.testify.ecfeed.core.adapter.java.JavaUtils;
-import com.testify.ecfeed.core.model.ChoiceNode;
-import com.testify.ecfeed.core.model.MethodNode;
-import com.testify.ecfeed.core.model.MethodParameterNode;
 
 public class TestDataValueEditingSupport extends EditingSupport {
 	private final TableViewer fViewer;

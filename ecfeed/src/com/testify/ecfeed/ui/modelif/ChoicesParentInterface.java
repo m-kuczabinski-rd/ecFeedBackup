@@ -18,13 +18,13 @@ import java.util.List;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
 
+import com.ecfeed.core.model.AbstractParameterNode;
+import com.ecfeed.core.model.ChoiceNode;
+import com.ecfeed.core.model.ChoicesParentNode;
+import com.ecfeed.core.model.MethodNode;
 import com.testify.ecfeed.core.adapter.IModelOperation;
 import com.testify.ecfeed.core.adapter.operations.GenericOperationAddChoice;
 import com.testify.ecfeed.core.adapter.operations.GenericOperationRemoveChoice;
-import com.testify.ecfeed.core.model.AbstractParameterNode;
-import com.testify.ecfeed.core.model.ChoiceNode;
-import com.testify.ecfeed.core.model.ChoicesParentNode;
-import com.testify.ecfeed.core.model.MethodNode;
 import com.testify.ecfeed.ui.common.Constants;
 import com.testify.ecfeed.ui.common.EclipseModelBuilder;
 import com.testify.ecfeed.ui.common.EclipseTypeAdapterProvider;

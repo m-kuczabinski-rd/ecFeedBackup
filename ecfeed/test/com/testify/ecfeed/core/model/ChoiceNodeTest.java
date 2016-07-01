@@ -21,9 +21,9 @@ import java.util.Set;
 
 import org.junit.Test;
 
-import com.testify.ecfeed.core.model.ChoiceNode;
-import com.testify.ecfeed.core.model.MethodNode;
-import com.testify.ecfeed.core.model.MethodParameterNode;
+import com.ecfeed.core.model.ChoiceNode;
+import com.ecfeed.core.model.MethodNode;
+import com.ecfeed.core.model.MethodParameterNode;
 import com.testify.ecfeed.testutils.RandomModelGenerator;
 
 public class ChoiceNodeTest{

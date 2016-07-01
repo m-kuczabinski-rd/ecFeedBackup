@@ -25,10 +25,10 @@ import org.junit.Test;
 import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.InitializationError;
 
+import com.ecfeed.core.model.MethodNode;
+import com.ecfeed.core.model.TestCaseNode;
 import com.ecfeed.core.runner.RunnerException;
 import com.testify.ecfeed.core.adapter.EImplementationStatus;
-import com.testify.ecfeed.core.model.MethodNode;
-import com.testify.ecfeed.core.model.TestCaseNode;
 import com.testify.ecfeed.junit.annotations.TestSuites;
 
 public class StaticRunner extends AbstractJUnitRunner {

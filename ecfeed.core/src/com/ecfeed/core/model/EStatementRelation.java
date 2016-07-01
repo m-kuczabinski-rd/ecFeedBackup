@@ -9,18 +9,20 @@
  *     Patryk Chamuczynski (p.chamuczynski(at)radytek.com) - initial implementation
  ******************************************************************************/
 
-package com.testify.ecfeed.core.model;
+package com.ecfeed.core.model;
 
-public enum EStatementOperator{
-	AND("AND"), 
-	OR("OR");
+public enum EStatementRelation{
 	
-	public static final String OPERATOR_AND = "AND";
-	public static final String OPERATOR_OR = "OR";
-
+	EQUAL("="), 
+	NOT("\u2260");
+	
 	String fValue;
 
-	private EStatementOperator(String value){
+	public static final String RELATION_EQUAL = "=";
+	public static final String RELATION_NOT = "\u2260";
+
+
+	private EStatementRelation(String value){
 		fValue = value;
 	}
 	
@@ -28,14 +30,13 @@ public enum EStatementOperator{
 		return fValue; 
 	}
 	
-	public static EStatementOperator getOperator(String text){
+	public static EStatementRelation getRelation(String text){
 		switch(text){
-		case OPERATOR_AND:
-			return AND;
-		case OPERATOR_OR:
-			return OR;
+		case RELATION_EQUAL:
+			return EQUAL;
+		case RELATION_NOT:
+			return NOT;
 		}
-		return null;
+		return NOT;
 	}
-
 }

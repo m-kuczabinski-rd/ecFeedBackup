@@ -4,7 +4,8 @@ Bundle-Name: Core
 Bundle-SymbolicName: ecfeed.core
 Bundle-Version: 1.0.1.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
-Export-Package: com.ecfeed.core.resources,
+Export-Package: com.ecfeed.core.model,
+ com.ecfeed.core.resources,
  com.ecfeed.core.runner,
  com.ecfeed.core.runner.java,
  com.ecfeed.core.serialization,
@@ -16,8 +17,7 @@ Export-Package: com.ecfeed.core.resources,
  com.testify.ecfeed.core.adapter.operations,
  com.testify.ecfeed.core.generators,
  com.testify.ecfeed.core.generators.algorithms,
- com.testify.ecfeed.core.generators.api,
- com.testify.ecfeed.core.model
+ com.testify.ecfeed.core.generators.api
 Bundle-ClassPath: lib/xom-1.2.10.jar,
  .
 Import-Package: org.eclipse.core.runtime;version="3.4.0",

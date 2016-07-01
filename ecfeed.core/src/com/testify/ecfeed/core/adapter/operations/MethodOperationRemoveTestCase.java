@@ -11,12 +11,12 @@
 
 package com.testify.ecfeed.core.adapter.operations;
 
+import com.ecfeed.core.model.MethodNode;
+import com.ecfeed.core.model.TestCaseNode;
 import com.testify.ecfeed.core.adapter.IModelOperation;
 import com.testify.ecfeed.core.adapter.ITypeAdapter;
 import com.testify.ecfeed.core.adapter.ITypeAdapterProvider;
 import com.testify.ecfeed.core.adapter.ModelOperationException;
-import com.testify.ecfeed.core.model.MethodNode;
-import com.testify.ecfeed.core.model.TestCaseNode;
 
 public class MethodOperationRemoveTestCase extends AbstractModelOperation {
 

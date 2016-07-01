@@ -14,7 +14,7 @@ package com.testify.ecfeed.ui.editor;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 
-import com.testify.ecfeed.core.model.ChoiceNode;
+import com.ecfeed.core.model.ChoiceNode;
 import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;

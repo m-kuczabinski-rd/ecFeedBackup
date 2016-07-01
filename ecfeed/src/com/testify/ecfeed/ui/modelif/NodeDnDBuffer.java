@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import com.testify.ecfeed.core.model.AbstractNode;
+import com.ecfeed.core.model.AbstractNode;
 
 public class NodeDnDBuffer {
 

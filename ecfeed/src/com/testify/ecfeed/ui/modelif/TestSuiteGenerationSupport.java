@@ -24,12 +24,12 @@ import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 
+import com.ecfeed.core.model.ChoiceNode;
+import com.ecfeed.core.model.MethodNode;
+import com.ecfeed.core.model.MethodParameterNode;
 import com.testify.ecfeed.core.generators.api.GeneratorException;
 import com.testify.ecfeed.core.generators.api.IConstraint;
 import com.testify.ecfeed.core.generators.api.IGenerator;
-import com.testify.ecfeed.core.model.ChoiceNode;
-import com.testify.ecfeed.core.model.MethodNode;
-import com.testify.ecfeed.core.model.MethodParameterNode;
 import com.testify.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.testify.ecfeed.ui.dialogs.SetupDialogGenerateTestSuite;
 import com.testify.ecfeed.ui.dialogs.GeneratorProgressMonitorDialog;

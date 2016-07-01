@@ -18,11 +18,11 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 
+import com.ecfeed.core.model.MethodNode;
+import com.ecfeed.core.model.TestCaseNode;
 import com.ecfeed.core.serialization.export.TestCasesExportHelper;
 import com.ecfeed.core.utils.ExceptionHelper;
 import com.ecfeed.core.utils.StringHelper;
-import com.testify.ecfeed.core.model.MethodNode;
-import com.testify.ecfeed.core.model.TestCaseNode;
 import com.testify.ecfeed.utils.EclipseHelper;
 
 public class TestCasesExporter {

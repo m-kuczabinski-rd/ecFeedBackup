@@ -22,22 +22,22 @@ import java.io.OutputStream;
 
 import org.junit.Test;
 
+import com.ecfeed.core.model.ChoiceNode;
+import com.ecfeed.core.model.ChoicesParentStatement;
+import com.ecfeed.core.model.ClassNode;
+import com.ecfeed.core.model.Constraint;
+import com.ecfeed.core.model.ConstraintNode;
+import com.ecfeed.core.model.EStatementRelation;
+import com.ecfeed.core.model.GlobalParameterNode;
+import com.ecfeed.core.model.MethodNode;
+import com.ecfeed.core.model.MethodParameterNode;
+import com.ecfeed.core.model.ModelConverter;
+import com.ecfeed.core.model.ModelVersionDistributor;
+import com.ecfeed.core.model.RootNode;
 import com.ecfeed.core.serialization.IModelParser;
 import com.ecfeed.core.serialization.IModelSerializer;
 import com.ecfeed.core.serialization.ect.EctParser;
 import com.ecfeed.core.serialization.ect.EctSerializer;
-import com.testify.ecfeed.core.model.ChoiceNode;
-import com.testify.ecfeed.core.model.ChoicesParentStatement;
-import com.testify.ecfeed.core.model.ClassNode;
-import com.testify.ecfeed.core.model.Constraint;
-import com.testify.ecfeed.core.model.ConstraintNode;
-import com.testify.ecfeed.core.model.EStatementRelation;
-import com.testify.ecfeed.core.model.GlobalParameterNode;
-import com.testify.ecfeed.core.model.MethodNode;
-import com.testify.ecfeed.core.model.MethodParameterNode;
-import com.testify.ecfeed.core.model.ModelConverter;
-import com.testify.ecfeed.core.model.ModelVersionDistributor;
-import com.testify.ecfeed.core.model.RootNode;
 import com.testify.ecfeed.testutils.RandomModelGenerator;
 
 public class EctSerializerTest {

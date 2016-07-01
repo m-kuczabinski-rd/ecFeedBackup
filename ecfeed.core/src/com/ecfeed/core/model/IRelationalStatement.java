@@ -9,34 +9,11 @@
  *     Patryk Chamuczynski (p.chamuczynski(at)radytek.com) - initial implementation
  ******************************************************************************/
 
-package com.testify.ecfeed.core.model;
-
-public enum EStatementRelation{
-	
-	EQUAL("="), 
-	NOT("\u2260");
-	
-	String fValue;
-
-	public static final String RELATION_EQUAL = "=";
-	public static final String RELATION_NOT = "\u2260";
+package com.ecfeed.core.model;
 
 
-	private EStatementRelation(String value){
-		fValue = value;
-	}
-	
-	public String toString(){
-		return fValue; 
-	}
-	
-	public static EStatementRelation getRelation(String text){
-		switch(text){
-		case RELATION_EQUAL:
-			return EQUAL;
-		case RELATION_NOT:
-			return NOT;
-		}
-		return NOT;
-	}
+public interface IRelationalStatement {
+	public EStatementRelation getRelation();
+	public void setRelation(EStatementRelation relation);
+	public EStatementRelation[] getAvailableRelations();
 }

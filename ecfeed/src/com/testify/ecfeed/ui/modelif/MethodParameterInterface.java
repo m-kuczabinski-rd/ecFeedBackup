@@ -19,6 +19,12 @@ import java.util.Set;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
 
+import com.ecfeed.core.model.ChoiceNode;
+import com.ecfeed.core.model.GlobalParameterNode;
+import com.ecfeed.core.model.GlobalParametersParentNode;
+import com.ecfeed.core.model.MethodNode;
+import com.ecfeed.core.model.MethodParameterNode;
+import com.ecfeed.core.model.RootNode;
 import com.testify.ecfeed.core.adapter.EImplementationStatus;
 import com.testify.ecfeed.core.adapter.IModelOperation;
 import com.testify.ecfeed.core.adapter.java.JavaUtils;
@@ -27,12 +33,6 @@ import com.testify.ecfeed.core.adapter.operations.MethodParameterOperationSetLin
 import com.testify.ecfeed.core.adapter.operations.MethodParameterOperationSetType;
 import com.testify.ecfeed.core.adapter.operations.ParameterOperationSetDefaultValue;
 import com.testify.ecfeed.core.adapter.operations.ParameterOperationSetExpected;
-import com.testify.ecfeed.core.model.ChoiceNode;
-import com.testify.ecfeed.core.model.GlobalParameterNode;
-import com.testify.ecfeed.core.model.GlobalParametersParentNode;
-import com.testify.ecfeed.core.model.MethodNode;
-import com.testify.ecfeed.core.model.MethodParameterNode;
-import com.testify.ecfeed.core.model.RootNode;
 import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.common.utils.IFileInfoProvider;
 

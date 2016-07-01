@@ -14,12 +14,12 @@ package com.testify.ecfeed.core.adapter.operations;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.ecfeed.core.model.ClassNode;
+import com.ecfeed.core.model.MethodNode;
 import com.testify.ecfeed.core.adapter.IModelOperation;
 import com.testify.ecfeed.core.adapter.ModelOperationException;
 import com.testify.ecfeed.core.adapter.java.JavaUtils;
 import com.testify.ecfeed.core.adapter.java.Messages;
-import com.testify.ecfeed.core.model.ClassNode;
-import com.testify.ecfeed.core.model.MethodNode;
 
 public class ClassOperationAddMethod extends AbstractModelOperation{
 	

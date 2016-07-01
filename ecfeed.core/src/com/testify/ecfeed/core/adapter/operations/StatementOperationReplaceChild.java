@@ -11,11 +11,11 @@
 
 package com.testify.ecfeed.core.adapter.operations;
 
+import com.ecfeed.core.model.AbstractStatement;
+import com.ecfeed.core.model.StatementArray;
 import com.testify.ecfeed.core.adapter.IModelOperation;
 import com.testify.ecfeed.core.adapter.ModelOperationException;
 import com.testify.ecfeed.core.adapter.java.Messages;
-import com.testify.ecfeed.core.model.AbstractStatement;
-import com.testify.ecfeed.core.model.StatementArray;
 
 public class StatementOperationReplaceChild extends AbstractModelOperation {
 

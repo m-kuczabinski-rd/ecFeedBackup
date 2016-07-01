@@ -11,10 +11,10 @@
 
 package com.testify.ecfeed.core.adapter.operations;
 
+import com.ecfeed.core.model.ChoicesParentStatement;
+import com.ecfeed.core.model.ChoicesParentStatement.ICondition;
 import com.testify.ecfeed.core.adapter.IModelOperation;
 import com.testify.ecfeed.core.adapter.ModelOperationException;
-import com.testify.ecfeed.core.model.ChoicesParentStatement;
-import com.testify.ecfeed.core.model.ChoicesParentStatement.ICondition;
 
 public class StatementOperationSetCondition extends AbstractModelOperation {
 

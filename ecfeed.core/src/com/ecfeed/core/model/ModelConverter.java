@@ -6,7 +6,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 
-package com.testify.ecfeed.core.model;
+package com.ecfeed.core.model;
 
 import com.ecfeed.core.utils.ExceptionHelper;
 

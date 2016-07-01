@@ -9,7 +9,7 @@
  *     Patryk Chamuczynski (p.chamuczynski(at)radytek.com) - initial implementation
  ******************************************************************************/
 
-package com.testify.ecfeed.core.model;
+package com.ecfeed.core.model;
 
 import java.util.ArrayList;
 import java.util.List;

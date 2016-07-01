@@ -55,9 +55,9 @@ import org.eclipse.swt.widgets.ScrollBar;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Tree;
 
+import com.ecfeed.core.model.MethodNode;
+import com.ecfeed.core.model.TestCaseNode;
 import com.testify.ecfeed.core.adapter.IImplementationStatusResolver;
-import com.testify.ecfeed.core.model.MethodNode;
-import com.testify.ecfeed.core.model.TestCaseNode;
 import com.testify.ecfeed.ui.common.EclipseImplementationStatusResolver;
 import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.common.TestCasesViewerContentProvider;

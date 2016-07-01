@@ -19,8 +19,8 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 
-import com.testify.ecfeed.core.model.AbstractNode;
-import com.testify.ecfeed.core.model.ConstraintNode;
+import com.ecfeed.core.model.AbstractNode;
+import com.ecfeed.core.model.ConstraintNode;
 import com.testify.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.testify.ecfeed.ui.modelif.ConstraintInterface;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;

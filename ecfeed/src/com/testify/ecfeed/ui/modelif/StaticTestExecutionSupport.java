@@ -25,12 +25,12 @@ import org.eclipse.swt.widgets.Display;
 
 import com.ecfeed.android.external.ApkInstallerExt;
 import com.ecfeed.android.external.DeviceCheckerExt;
+import com.ecfeed.core.model.TestCaseNode;
 import com.ecfeed.core.runner.ITestMethodInvoker;
 import com.ecfeed.core.runner.JavaTestRunner;
 import com.ecfeed.core.runner.RunnerException;
 import com.testify.ecfeed.core.adapter.java.ILoaderProvider;
 import com.testify.ecfeed.core.adapter.java.ModelClassLoader;
-import com.testify.ecfeed.core.model.TestCaseNode;
 import com.testify.ecfeed.ui.common.EclipseLoaderProvider;
 import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.common.utils.EclipseProjectHelper;

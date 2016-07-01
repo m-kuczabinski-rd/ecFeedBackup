@@ -22,10 +22,10 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 
+import com.ecfeed.core.model.AbstractNode;
+import com.ecfeed.core.model.GlobalParameterNode;
+import com.ecfeed.core.model.MethodParameterNode;
 import com.testify.ecfeed.core.adapter.java.JavaUtils;
-import com.testify.ecfeed.core.model.AbstractNode;
-import com.testify.ecfeed.core.model.GlobalParameterNode;
-import com.testify.ecfeed.core.model.MethodParameterNode;
 import com.testify.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.testify.ecfeed.ui.modelif.AbstractParameterInterface;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;

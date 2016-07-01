@@ -9,7 +9,7 @@
 package com.testify.ecfeed.ui.common;
 
 import com.ecfeed.android.external.IMethodImplementHelper;
-import com.testify.ecfeed.core.model.MethodNode;
+import com.ecfeed.core.model.MethodNode;
 import com.testify.ecfeed.ui.common.utils.AbstractMethodImplementer;
 
 public class JavaMethodImplementer extends AbstractMethodImplementer {

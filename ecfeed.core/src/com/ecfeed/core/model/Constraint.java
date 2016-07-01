@@ -9,15 +9,15 @@
  *     Patryk Chamuczynski (p.chamuczynski(at)radytek.com) - initial implementation
  ******************************************************************************/
 
-package com.testify.ecfeed.core.model;
+package com.ecfeed.core.model;
 
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.ecfeed.core.model.ChoicesParentStatement.ChoiceCondition;
+import com.ecfeed.core.model.ChoicesParentStatement.LabelCondition;
 import com.testify.ecfeed.core.generators.api.IConstraint;
-import com.testify.ecfeed.core.model.ChoicesParentStatement.ChoiceCondition;
-import com.testify.ecfeed.core.model.ChoicesParentStatement.LabelCondition;
 
 public class Constraint implements IConstraint<ChoiceNode> {
 

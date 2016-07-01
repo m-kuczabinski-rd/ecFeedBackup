@@ -13,9 +13,9 @@ package com.testify.ecfeed.ui.editor.actions;
 
 import org.eclipse.jface.viewers.StructuredViewer;
 
+import com.ecfeed.core.model.AbstractNode;
 import com.testify.ecfeed.core.adapter.EImplementationStatus;
 import com.testify.ecfeed.core.adapter.IModelImplementer;
-import com.testify.ecfeed.core.model.AbstractNode;
 import com.testify.ecfeed.ui.dialogs.basic.ExceptionCatchDialog;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 

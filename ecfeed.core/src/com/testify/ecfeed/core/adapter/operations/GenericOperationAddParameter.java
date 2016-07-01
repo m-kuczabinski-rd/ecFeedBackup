@@ -11,11 +11,11 @@
 
 package com.testify.ecfeed.core.adapter.operations;
 
+import com.ecfeed.core.model.AbstractParameterNode;
+import com.ecfeed.core.model.ParametersParentNode;
 import com.testify.ecfeed.core.adapter.IModelOperation;
 import com.testify.ecfeed.core.adapter.ModelOperationException;
 import com.testify.ecfeed.core.adapter.java.Messages;
-import com.testify.ecfeed.core.model.AbstractParameterNode;
-import com.testify.ecfeed.core.model.ParametersParentNode;
 
 public class GenericOperationAddParameter extends AbstractModelOperation {
 

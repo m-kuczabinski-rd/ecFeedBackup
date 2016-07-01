@@ -14,9 +14,9 @@ package com.testify.ecfeed.core.adapter.operations;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.ecfeed.core.model.AbstractParameterNode;
+import com.ecfeed.core.model.ChoiceNode;
 import com.testify.ecfeed.core.adapter.ITypeAdapterProvider;
-import com.testify.ecfeed.core.model.AbstractParameterNode;
-import com.testify.ecfeed.core.model.ChoiceNode;
 
 public class ReplaceChoicesOperation extends BulkOperation {
 

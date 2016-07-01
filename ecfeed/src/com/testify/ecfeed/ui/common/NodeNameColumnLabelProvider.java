@@ -11,7 +11,7 @@
 
 package com.testify.ecfeed.ui.common;
 
-import com.testify.ecfeed.core.model.AbstractNode;
+import com.ecfeed.core.model.AbstractNode;
 
 public class NodeNameColumnLabelProvider extends NodeViewerColumnLabelProvider {
 

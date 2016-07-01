@@ -13,8 +13,8 @@ package com.testify.ecfeed.core.adapter.operations;
 
 import java.util.Collection;
 
-import com.testify.ecfeed.core.model.ClassNode;
-import com.testify.ecfeed.core.model.MethodNode;
+import com.ecfeed.core.model.ClassNode;
+import com.ecfeed.core.model.MethodNode;
 
 public class ClassOperationAddMethods extends BulkOperation{
 

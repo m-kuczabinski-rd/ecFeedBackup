@@ -19,12 +19,12 @@ import java.util.List;
 
 import org.junit.Test;
 
-import com.testify.ecfeed.core.model.AbstractStatement;
-import com.testify.ecfeed.core.model.EStatementOperator;
-import com.testify.ecfeed.core.model.IStatement;
-import com.testify.ecfeed.core.model.IStatementVisitor;
-import com.testify.ecfeed.core.model.MethodNode;
-import com.testify.ecfeed.core.model.StatementArray;
+import com.ecfeed.core.model.AbstractStatement;
+import com.ecfeed.core.model.EStatementOperator;
+import com.ecfeed.core.model.IStatement;
+import com.ecfeed.core.model.IStatementVisitor;
+import com.ecfeed.core.model.MethodNode;
+import com.ecfeed.core.model.StatementArray;
 
 public class AbstractStatementTest {
 

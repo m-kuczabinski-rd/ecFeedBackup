@@ -20,12 +20,12 @@ import java.util.List;
 
 import org.junit.Test;
 
-import com.testify.ecfeed.core.model.AbstractNode;
-import com.testify.ecfeed.core.model.ClassNode;
-import com.testify.ecfeed.core.model.GlobalParameterNode;
-import com.testify.ecfeed.core.model.MethodNode;
-import com.testify.ecfeed.core.model.MethodParameterNode;
-import com.testify.ecfeed.core.model.TestCaseNode;
+import com.ecfeed.core.model.AbstractNode;
+import com.ecfeed.core.model.ClassNode;
+import com.ecfeed.core.model.GlobalParameterNode;
+import com.ecfeed.core.model.MethodNode;
+import com.ecfeed.core.model.MethodParameterNode;
+import com.ecfeed.core.model.TestCaseNode;
 
 public class ClassNodeTest extends ClassNode {
 	public ClassNodeTest(){

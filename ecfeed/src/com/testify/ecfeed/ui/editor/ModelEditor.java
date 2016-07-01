@@ -52,6 +52,8 @@ import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.part.FileEditorInput;
 
 import com.ecfeed.application.ApplicationContext;
+import com.ecfeed.core.model.ModelVersionDistributor;
+import com.ecfeed.core.model.RootNode;
 import com.ecfeed.core.serialization.IModelSerializer;
 import com.ecfeed.core.serialization.ect.EctSerializer;
 import com.ecfeed.core.utils.ExceptionHelper;
@@ -59,8 +61,6 @@ import com.ecfeed.core.utils.SystemLogger;
 import com.testify.ecfeed.core.adapter.CachedImplementationStatusResolver;
 import com.testify.ecfeed.core.adapter.ModelOperationException;
 import com.testify.ecfeed.core.adapter.ModelOperationManager;
-import com.testify.ecfeed.core.model.ModelVersionDistributor;
-import com.testify.ecfeed.core.model.RootNode;
 import com.testify.ecfeed.ui.common.Constants;
 import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.common.utils.IFileInfoProvider;

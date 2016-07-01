@@ -13,7 +13,7 @@ package com.testify.ecfeed.ui.dialogs;
 
 import org.eclipse.swt.widgets.Shell;
 
-import com.testify.ecfeed.core.model.MethodNode;
+import com.ecfeed.core.model.MethodNode;
 import com.testify.ecfeed.ui.common.utils.IFileInfoProvider;
 
 public abstract class SetupDialogOnline extends SetupDialogGenerator {

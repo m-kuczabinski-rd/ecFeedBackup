@@ -55,28 +55,28 @@ import nu.xom.Attribute;
 import nu.xom.Element;
 import nu.xom.Elements;
 
+import com.ecfeed.core.model.AbstractNode;
+import com.ecfeed.core.model.AbstractParameterNode;
+import com.ecfeed.core.model.AbstractStatement;
+import com.ecfeed.core.model.ChoiceNode;
+import com.ecfeed.core.model.ChoicesParentStatement;
+import com.ecfeed.core.model.ClassNode;
+import com.ecfeed.core.model.ConstraintNode;
+import com.ecfeed.core.model.ExpectedValueStatement;
+import com.ecfeed.core.model.GlobalParameterNode;
+import com.ecfeed.core.model.IModelVisitor;
+import com.ecfeed.core.model.IStatementVisitor;
+import com.ecfeed.core.model.MethodNode;
+import com.ecfeed.core.model.MethodParameterNode;
+import com.ecfeed.core.model.RootNode;
+import com.ecfeed.core.model.StatementArray;
+import com.ecfeed.core.model.StaticStatement;
+import com.ecfeed.core.model.TestCaseNode;
+import com.ecfeed.core.model.ChoicesParentStatement.ChoiceCondition;
+import com.ecfeed.core.model.ChoicesParentStatement.ICondition;
+import com.ecfeed.core.model.ChoicesParentStatement.LabelCondition;
 import com.ecfeed.core.serialization.WhiteCharConverter;
 import com.ecfeed.core.utils.StringHelper;
-import com.testify.ecfeed.core.model.AbstractNode;
-import com.testify.ecfeed.core.model.AbstractParameterNode;
-import com.testify.ecfeed.core.model.AbstractStatement;
-import com.testify.ecfeed.core.model.ChoiceNode;
-import com.testify.ecfeed.core.model.ChoicesParentStatement;
-import com.testify.ecfeed.core.model.ClassNode;
-import com.testify.ecfeed.core.model.ConstraintNode;
-import com.testify.ecfeed.core.model.ExpectedValueStatement;
-import com.testify.ecfeed.core.model.GlobalParameterNode;
-import com.testify.ecfeed.core.model.IModelVisitor;
-import com.testify.ecfeed.core.model.IStatementVisitor;
-import com.testify.ecfeed.core.model.MethodNode;
-import com.testify.ecfeed.core.model.MethodParameterNode;
-import com.testify.ecfeed.core.model.RootNode;
-import com.testify.ecfeed.core.model.StatementArray;
-import com.testify.ecfeed.core.model.StaticStatement;
-import com.testify.ecfeed.core.model.TestCaseNode;
-import com.testify.ecfeed.core.model.ChoicesParentStatement.ChoiceCondition;
-import com.testify.ecfeed.core.model.ChoicesParentStatement.ICondition;
-import com.testify.ecfeed.core.model.ChoicesParentStatement.LabelCondition;
 
 public abstract class XomBuilder implements IModelVisitor, IStatementVisitor {
 

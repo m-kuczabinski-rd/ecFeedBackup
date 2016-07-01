@@ -11,9 +11,9 @@
 
 package com.testify.ecfeed.core.adapter.operations;
 
+import com.ecfeed.core.model.AbstractNode;
 import com.testify.ecfeed.core.adapter.IModelOperation;
 import com.testify.ecfeed.core.adapter.ModelOperationException;
-import com.testify.ecfeed.core.model.AbstractNode;
 
 public class GenericSetCommentsOperation extends AbstractModelOperation {
 
