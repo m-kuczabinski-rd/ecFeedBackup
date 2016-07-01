@@ -9,7 +9,7 @@
  *     Patryk Chamuczynski (p.chamuczynski(at)radytek.com) - initial implementation
  ******************************************************************************/
 
-package com.testify.ecfeed.core.generators.algorithms;
+package com.ecfeed.core.generators.algorithms;
 
 import java.util.HashSet;
 import java.util.List;

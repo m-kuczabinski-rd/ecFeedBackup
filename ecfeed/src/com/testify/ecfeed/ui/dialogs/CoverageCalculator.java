@@ -24,10 +24,10 @@ import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.swt.widgets.Display;
 
+import com.ecfeed.core.generators.algorithms.Tuples;
 import com.ecfeed.core.model.ChoiceNode;
 import com.ecfeed.core.model.MethodParameterNode;
 import com.ecfeed.core.model.TestCaseNode;
-import com.testify.ecfeed.core.generators.algorithms.Tuples;
 
 public class CoverageCalculator {
 

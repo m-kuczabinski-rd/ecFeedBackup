@@ -21,10 +21,10 @@ import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
+import com.ecfeed.core.generators.algorithms.IAlgorithm;
 import com.ecfeed.core.generators.api.GeneratorException;
 import com.ecfeed.core.generators.api.IConstraint;
 import com.ecfeed.core.generators.api.IGenerator;
-import com.testify.ecfeed.core.generators.algorithms.IAlgorithm;
 
 public class GeneratorTestUtils{
 	private static class Constraint implements IConstraint<String>{

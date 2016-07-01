@@ -1,4 +1,4 @@
-package com.testify.ecfeed.core.generators.algorithms;
+package com.ecfeed.core.generators.algorithms;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -10,11 +10,11 @@ import org.junit.Test;
 
 import com.ecfeed.core.generators.AbstractGenerator;
 import com.ecfeed.core.generators.NWiseGenerator;
+import com.ecfeed.core.generators.algorithms.AbstractNWiseAlgorithm;
+import com.ecfeed.core.generators.algorithms.FastNWiseAlgorithm;
+import com.ecfeed.core.generators.algorithms.OptimalNWiseAlgorithm;
 import com.ecfeed.core.generators.api.GeneratorException;
 import com.ecfeed.core.generators.api.IConstraint;
-import com.testify.ecfeed.core.generators.algorithms.AbstractNWiseAlgorithm;
-import com.testify.ecfeed.core.generators.algorithms.FastNWiseAlgorithm;
-import com.testify.ecfeed.core.generators.algorithms.OptimalNWiseAlgorithm;
 
 import static org.junit.Assert.*;
 

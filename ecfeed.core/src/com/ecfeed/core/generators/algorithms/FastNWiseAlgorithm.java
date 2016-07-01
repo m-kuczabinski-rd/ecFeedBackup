@@ -9,23 +9,45 @@
  *     Patryk Chamuczynski (p.chamuczynski(at)radytek.com) - initial implementation
  ******************************************************************************/
 
-package com.ecfeed.core.generators;
+package com.ecfeed.core.generators.algorithms;
 
-import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 
-import com.ecfeed.core.generators.algorithms.CartesianProductAlgorithm;
 import com.ecfeed.core.generators.api.GeneratorException;
-import com.ecfeed.core.generators.api.IConstraint;
 
-public class CartesianProductGenerator<E> extends AbstractGenerator<E> {
+public class FastNWiseAlgorithm<E> extends AbstractNWiseAlgorithm<E> {
+	
+	public FastNWiseAlgorithm(int n, int coverage) {
+		super(n, coverage);
+	}
+
+	private Set<List<E>> fCoveredTuples;
+	
 	@Override
-	public void initialize(List<List<E>> inputDomain,
-			Collection<IConstraint<E>> constraints,
-			Map<String, Object> parameters) throws GeneratorException {
-		
-		super.initialize(inputDomain, constraints, parameters);
-		setAlgorithm(new CartesianProductAlgorithm<E>());
+	public List<E> getNext() throws GeneratorException{
+		List<E> next;
+		while((next = cartesianNext()) != null){
+			Set<List<E>> originalTuples = originalTuples(next);
+			if(originalTuples.size() > 0){
+				fCoveredTuples.addAll(originalTuples);
+				progress(originalTuples.size());
+				return next;
+			}
+		}
+		return null;
+	}
+	
+	@Override
+	public void reset(){
+		fCoveredTuples = new HashSet<List<E>>();
+		super.reset();
+	}
+	
+	protected Set<List<E>> originalTuples(List<E> vector){
+		Set<List<E>> tuples = getTuples(vector);
+		tuples.removeAll(fCoveredTuples);
+		return tuples;
 	}
 }

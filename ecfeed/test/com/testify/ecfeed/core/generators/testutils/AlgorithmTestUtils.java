@@ -4,7 +4,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import com.testify.ecfeed.core.generators.algorithms.Tuples;
+import com.ecfeed.core.generators.algorithms.Tuples;
 
 public class AlgorithmTestUtils {
 

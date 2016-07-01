@@ -1,4 +1,4 @@
-package com.testify.ecfeed.core.generators.algorithms;
+package com.ecfeed.core.generators.algorithms;
 
 import java.util.ArrayList;
 import java.util.Collection;

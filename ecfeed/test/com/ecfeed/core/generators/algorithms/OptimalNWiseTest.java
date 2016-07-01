@@ -9,7 +9,7 @@
  *     Patryk Chamuczynski (p.chamuczynski(at)radytek.com) - initial implementation
  ******************************************************************************/
 
-package com.testify.ecfeed.core.generators.algorithms;
+package com.ecfeed.core.generators.algorithms;
 
 import static org.junit.Assert.*;
 
@@ -20,12 +20,12 @@ import java.util.Set;
 
 import org.junit.Test;
 
+import com.ecfeed.core.generators.algorithms.IAlgorithm;
+import com.ecfeed.core.generators.algorithms.OptimalNWiseAlgorithm;
+import com.ecfeed.core.generators.algorithms.Tuples;
 import com.ecfeed.core.generators.api.GeneratorException;
 import com.ecfeed.core.generators.api.IConstraint;
 import com.google.common.collect.Sets;
-import com.testify.ecfeed.core.generators.algorithms.IAlgorithm;
-import com.testify.ecfeed.core.generators.algorithms.OptimalNWiseAlgorithm;
-import com.testify.ecfeed.core.generators.algorithms.Tuples;
 import com.testify.ecfeed.core.generators.testutils.GeneratorTestUtils;
 
 public class OptimalNWiseTest extends NWiseAlgorithmTest {

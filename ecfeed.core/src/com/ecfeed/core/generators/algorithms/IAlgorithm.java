@@ -9,45 +9,24 @@
  *     Patryk Chamuczynski (p.chamuczynski(at)radytek.com) - initial implementation
  ******************************************************************************/
 
-package com.testify.ecfeed.core.generators.algorithms;
+package com.ecfeed.core.generators.algorithms;
 
-import java.util.HashSet;
+import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 
 import com.ecfeed.core.generators.api.GeneratorException;
+import com.ecfeed.core.generators.api.IConstraint;
 
-public class FastNWiseAlgorithm<E> extends AbstractNWiseAlgorithm<E> {
-	
-	public FastNWiseAlgorithm(int n, int coverage) {
-		super(n, coverage);
-	}
-
-	private Set<List<E>> fCoveredTuples;
-	
-	@Override
-	public List<E> getNext() throws GeneratorException{
-		List<E> next;
-		while((next = cartesianNext()) != null){
-			Set<List<E>> originalTuples = originalTuples(next);
-			if(originalTuples.size() > 0){
-				fCoveredTuples.addAll(originalTuples);
-				progress(originalTuples.size());
-				return next;
-			}
-		}
-		return null;
-	}
-	
-	@Override
-	public void reset(){
-		fCoveredTuples = new HashSet<List<E>>();
-		super.reset();
-	}
-	
-	protected Set<List<E>> originalTuples(List<E> vector){
-		Set<List<E>> tuples = getTuples(vector);
-		tuples.removeAll(fCoveredTuples);
-		return tuples;
-	}
+public interface IAlgorithm<E> {
+	public void initialize(List<List<E>> input, 
+			Collection<IConstraint<E>> constraints) throws GeneratorException;
+	public List<E> getNext() throws GeneratorException;
+	public void reset();
+	public void addConstraint(IConstraint<E> constraint);
+	public void removeConstraint(IConstraint<E> constraint);
+	public Collection<? extends IConstraint<E>> getConstraints();
+	public int totalWork();
+	public int totalProgress();
+	public int workProgress();
+	public void cancel();
 }

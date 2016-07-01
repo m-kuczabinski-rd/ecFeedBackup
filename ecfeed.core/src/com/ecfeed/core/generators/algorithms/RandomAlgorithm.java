@@ -9,24 +9,11 @@
  *     Patryk Chamuczynski (p.chamuczynski(at)radytek.com) - initial implementation
  ******************************************************************************/
 
-package com.testify.ecfeed.core.generators.algorithms;
+package com.ecfeed.core.generators.algorithms;
 
-import java.util.Collection;
-import java.util.List;
-
-import com.ecfeed.core.generators.api.GeneratorException;
-import com.ecfeed.core.generators.api.IConstraint;
-
-public interface IAlgorithm<E> {
-	public void initialize(List<List<E>> input, 
-			Collection<IConstraint<E>> constraints) throws GeneratorException;
-	public List<E> getNext() throws GeneratorException;
-	public void reset();
-	public void addConstraint(IConstraint<E> constraint);
-	public void removeConstraint(IConstraint<E> constraint);
-	public Collection<? extends IConstraint<E>> getConstraints();
-	public int totalWork();
-	public int totalProgress();
-	public int workProgress();
-	public void cancel();
+public class RandomAlgorithm<E> extends AdaptiveRandomAlgorithm<E> {
+	public RandomAlgorithm(int length,
+			boolean duplicates) {
+		super(0, 1, length, duplicates);
+	}
 }

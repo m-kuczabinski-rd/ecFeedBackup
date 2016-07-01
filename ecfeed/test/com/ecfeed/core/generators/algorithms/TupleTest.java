@@ -9,7 +9,7 @@
  *     Patryk Chamuczynski (p.chamuczynski(at)radytek.com) - initial implementation
  ******************************************************************************/
 
-package com.testify.ecfeed.core.generators.algorithms;
+package com.ecfeed.core.generators.algorithms;
 
 import static org.junit.Assert.*;
 
@@ -22,8 +22,8 @@ import java.util.Set;
 
 import org.junit.Test;
 
+import com.ecfeed.core.generators.algorithms.Tuples;
 import com.google.common.collect.Sets;
-import com.testify.ecfeed.core.generators.algorithms.Tuples;
 
 public class TupleTest{
 	private final List<String> fInput = new ArrayList<String>(Arrays.asList(new String[]{"a", "b", "c", "d", "e", "f"}));
