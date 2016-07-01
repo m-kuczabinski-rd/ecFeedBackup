@@ -12,7 +12,7 @@
             name="New Equivalence Class Tree file"
             icon="icons/root_node.png"
             category="com.testify.ecfeed"
-            class="com.testify.ecfeed.ui.wizards.NewEcFileWizard"
+            class="com.ecfeed.ui.wizards.NewEcFileWizard"
             id="com.testify.ecfeed.ui.wizards.NewEcFileWizard">
       </wizard>
    </extension>
