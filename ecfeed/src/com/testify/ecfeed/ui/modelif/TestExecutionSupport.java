@@ -21,7 +21,7 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.jface.dialogs.MessageDialog;
 
-import com.testify.ecfeed.core.runner.RunnerException;
+import com.ecfeed.core.runner.RunnerException;
 import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.plugin.Activator;
 

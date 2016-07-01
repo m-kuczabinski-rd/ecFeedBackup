@@ -9,7 +9,7 @@
  *     Patryk Chamuczynski (p.chamuczynski(at)radytek.com) - initial implementation
  ******************************************************************************/
 
-package com.testify.ecfeed.core.runner;
+package com.ecfeed.core.runner;
 
 import com.ecfeed.core.utils.SystemLogger;
 

@@ -23,10 +23,10 @@ import nu.xom.Elements;
 import nu.xom.ParsingException;
 import nu.xom.Serializer;
 
+import com.ecfeed.core.runner.Messages;
 import com.ecfeed.core.utils.DiskFileHelper;
 import com.ecfeed.core.utils.ExceptionHelper;
 import com.ecfeed.core.utils.StringHelper;
-import com.testify.ecfeed.core.runner.Messages;
 
 public class AndroidManifestAccessor {
 

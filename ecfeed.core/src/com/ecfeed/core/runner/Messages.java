@@ -9,7 +9,7 @@
  *     Patryk Chamuczynski (p.chamuczynski(at)radytek.com) - initial implementation
  ******************************************************************************/
 
-package com.testify.ecfeed.core.runner;
+package com.ecfeed.core.runner;
 
 public class Messages {
 	public final static String CANNOT_FIND_MODEL = 

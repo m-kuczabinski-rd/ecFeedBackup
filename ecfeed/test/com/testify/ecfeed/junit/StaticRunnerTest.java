@@ -31,6 +31,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.InitializationError;
 
+import com.ecfeed.core.runner.RunnerException;
 import com.ecfeed.core.serialization.IModelParser;
 import com.ecfeed.core.serialization.ParserException;
 import com.ecfeed.core.serialization.ect.EctParser;
@@ -38,7 +39,6 @@ import com.testify.ecfeed.core.model.ChoiceNode;
 import com.testify.ecfeed.core.model.MethodNode;
 import com.testify.ecfeed.core.model.RootNode;
 import com.testify.ecfeed.core.model.TestCaseNode;
-import com.testify.ecfeed.core.runner.RunnerException;
 import com.testify.ecfeed.junit.annotations.EcModel;
 import com.testify.ecfeed.junit.annotations.TestSuites;
 

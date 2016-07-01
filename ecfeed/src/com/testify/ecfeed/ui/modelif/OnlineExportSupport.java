@@ -5,10 +5,10 @@ import java.util.List;
 
 import org.eclipse.swt.widgets.Shell;
 
+import com.ecfeed.core.runner.ITestMethodInvoker;
+import com.ecfeed.core.runner.RunnerException;
 import com.testify.ecfeed.core.model.ChoiceNode;
 import com.testify.ecfeed.core.model.MethodNode;
-import com.testify.ecfeed.core.runner.ITestMethodInvoker;
-import com.testify.ecfeed.core.runner.RunnerException;
 import com.testify.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.testify.ecfeed.ui.dialogs.SetupDialogExportOnline;
 import com.testify.ecfeed.ui.dialogs.SetupDialogOnline;
