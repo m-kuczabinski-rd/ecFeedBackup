@@ -10,8 +10,8 @@ import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.runner.ITestMethodInvoker;
 import com.ecfeed.core.runner.RunnerException;
 import com.ecfeed.ui.common.utils.IFileInfoProvider;
-import com.testify.ecfeed.ui.dialogs.SetupDialogExportOnline;
-import com.testify.ecfeed.ui.dialogs.SetupDialogOnline;
+import com.ecfeed.ui.dialogs.SetupDialogExportOnline;
+import com.ecfeed.ui.dialogs.SetupDialogOnline;
 
 public class OnlineExportSupport extends AbstractOnlineSupport {
 

@@ -9,30 +9,29 @@
  *     Patryk Chamuczynski (p.chamuczynski(at)radytek.com) - initial implementation
  ******************************************************************************/
 
-package com.testify.ecfeed.ui.dialogs;
+package com.ecfeed.ui.dialogs;
 
 import org.eclipse.swt.widgets.Shell;
 
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.ui.common.utils.IFileInfoProvider;
 
-public class SetupDialogExecuteOnline extends SetupDialogOnline {
+public class SetupDialogGenerateTestSuite extends SetupDialogGenerator {
 
-	public SetupDialogExecuteOnline(Shell parentShell, MethodNode method,
-			IFileInfoProvider fileInfoProvider, String targetFile) {
-		super(parentShell, method, true, fileInfoProvider, null, targetFile);
+	public SetupDialogGenerateTestSuite(Shell parentShell, MethodNode method,
+			IFileInfoProvider fileInfoProvider) {
+		super(parentShell, method, false, fileInfoProvider, null, null);
 	}
 
 	@Override
 	protected String getDialogTitle() {
-		final String DIALOG_EXECUTE_ONLINE_TITLE = "Execute online test";
-		return DIALOG_EXECUTE_ONLINE_TITLE;
+		final String DIALOG_GENERATE_TEST_SUITE_TITLE = "Generate test suite";
+		return DIALOG_GENERATE_TEST_SUITE_TITLE;
 	}
 
 	@Override
 	protected int getContent() {
 		return CONSTRAINTS_COMPOSITE | CHOICES_COMPOSITE
-				| GENERATOR_SELECTION_COMPOSITE;
+				| TEST_SUITE_NAME_COMPOSITE | GENERATOR_SELECTION_COMPOSITE;
 	}
-
 }

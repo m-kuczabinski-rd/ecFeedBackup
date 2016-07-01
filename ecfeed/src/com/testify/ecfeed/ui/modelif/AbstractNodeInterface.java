@@ -43,11 +43,11 @@ import com.ecfeed.core.model.RootNode;
 import com.ecfeed.core.model.TestCaseNode;
 import com.ecfeed.core.utils.SystemLogger;
 import com.ecfeed.ui.common.utils.IFileInfoProvider;
+import com.ecfeed.ui.dialogs.TextAreaDialog;
 import com.testify.ecfeed.ui.common.EclipseImplementationStatusResolver;
 import com.testify.ecfeed.ui.common.EclipseTypeAdapterProvider;
 import com.testify.ecfeed.ui.common.JavaDocSupport;
 import com.testify.ecfeed.ui.common.Messages;
-import com.testify.ecfeed.ui.dialogs.TextAreaDialog;
 
 public class AbstractNodeInterface extends OperationExecuter{
 

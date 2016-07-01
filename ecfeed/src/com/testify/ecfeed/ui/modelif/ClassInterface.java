@@ -39,11 +39,11 @@ import com.ecfeed.core.utils.EcException;
 import com.ecfeed.core.utils.PackageClassHelper;
 import com.ecfeed.core.utils.SystemLogger;
 import com.ecfeed.ui.common.utils.IFileInfoProvider;
+import com.ecfeed.ui.dialogs.TestClassSelectionDialog;
 import com.testify.ecfeed.ui.common.Constants;
 import com.testify.ecfeed.ui.common.EclipseModelBuilder;
 import com.testify.ecfeed.ui.common.JavaModelAnalyser;
 import com.testify.ecfeed.ui.common.Messages;
-import com.testify.ecfeed.ui.dialogs.TestClassSelectionDialog;
 
 public class ClassInterface extends GlobalParametersParentInterface {
 

@@ -9,7 +9,7 @@
  *     Michal Gluszko (m.gluszko(at)radytek.com) - initial implementation
  ******************************************************************************/
 
-package com.testify.ecfeed.ui.dialogs;
+package com.ecfeed.ui.dialogs;
 
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.swt.widgets.Shell;

@@ -55,6 +55,12 @@ import com.ecfeed.core.utils.StringHelper;
 import com.ecfeed.core.utils.SystemLogger;
 import com.ecfeed.ui.common.utils.EclipseProjectHelper;
 import com.ecfeed.ui.common.utils.IFileInfoProvider;
+import com.ecfeed.ui.dialogs.AddTestCaseDialog;
+import com.ecfeed.ui.dialogs.CalculateCoverageDialog;
+import com.ecfeed.ui.dialogs.RenameTestSuiteDialog;
+import com.ecfeed.ui.dialogs.SelectCompatibleMethodDialog;
+import com.ecfeed.ui.dialogs.TestCasesExportDialog;
+import com.ecfeed.ui.dialogs.TestCasesExportDialog.FileCompositeVisibility;
 import com.ecfeed.ui.dialogs.basic.ErrorDialog;
 import com.ecfeed.ui.dialogs.basic.InfoDialog;
 import com.testify.ecfeed.serialization.export.TestCasesExporter;
@@ -63,12 +69,6 @@ import com.testify.ecfeed.ui.common.EclipseModelBuilder;
 import com.testify.ecfeed.ui.common.EclipseTypeAdapterProvider;
 import com.testify.ecfeed.ui.common.JavaModelAnalyser;
 import com.testify.ecfeed.ui.common.Messages;
-import com.testify.ecfeed.ui.dialogs.AddTestCaseDialog;
-import com.testify.ecfeed.ui.dialogs.CalculateCoverageDialog;
-import com.testify.ecfeed.ui.dialogs.RenameTestSuiteDialog;
-import com.testify.ecfeed.ui.dialogs.SelectCompatibleMethodDialog;
-import com.testify.ecfeed.ui.dialogs.TestCasesExportDialog;
-import com.testify.ecfeed.ui.dialogs.TestCasesExportDialog.FileCompositeVisibility;
 
 public class MethodInterface extends ParametersParentInterface {
 

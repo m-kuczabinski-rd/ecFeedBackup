@@ -9,7 +9,7 @@
  *     Patryk Chamuczynski (p.chamuczynski(at)radytek.com) - initial implementation
  ******************************************************************************/
 
-package com.testify.ecfeed.ui.dialogs;
+package com.ecfeed.ui.dialogs;
 
 import java.util.ArrayList;
 
