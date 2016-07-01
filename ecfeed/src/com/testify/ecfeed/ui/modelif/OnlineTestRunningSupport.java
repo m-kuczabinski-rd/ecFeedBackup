@@ -12,8 +12,8 @@ import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 
-import com.testify.ecfeed.android.external.ApkInstallerExt;
-import com.testify.ecfeed.android.external.DeviceCheckerExt;
+import com.ecfeed.android.external.ApkInstallerExt;
+import com.ecfeed.android.external.DeviceCheckerExt;
 import com.testify.ecfeed.core.model.ChoiceNode;
 import com.testify.ecfeed.core.model.MethodNode;
 import com.testify.ecfeed.core.runner.ITestMethodInvoker;

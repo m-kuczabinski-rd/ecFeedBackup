@@ -24,7 +24,7 @@ import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 
-import com.testify.ecfeed.android.external.TestMethodInvokerExt;
+import com.ecfeed.android.external.TestMethodInvokerExt;
 import com.testify.ecfeed.android.utils.AndroidBaseRunnerHelper;
 import com.testify.ecfeed.application.ApplicationContext;
 import com.testify.ecfeed.core.adapter.IModelOperation;

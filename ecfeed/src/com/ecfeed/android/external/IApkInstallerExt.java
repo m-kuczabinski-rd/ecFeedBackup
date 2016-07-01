@@ -6,11 +6,11 @@
  * http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 
-package com.testify.ecfeed.android.external;
+package com.ecfeed.android.external;
 
-public interface IClassImplementHelper {
+import java.lang.reflect.InvocationTargetException;
 
-	boolean classImplemented(String thePackage, String classNameWithoutExtension);
-	boolean classImplemented(String thePackage, String classNameWithoutExtension, String superclassName);
-	void implementClass(String thePackage,String classNameWithoutExtension,String content);
+public interface IApkInstallerExt {
+
+	public void installApplicationsIfModified(String testedApk, String testingApk) throws InvocationTargetException;
 }

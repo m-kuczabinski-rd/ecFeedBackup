@@ -8,7 +8,7 @@
 
 package com.testify.ecfeed.ui.common.utils;
 
-import com.testify.ecfeed.android.external.IClassImplementHelper;
+import com.ecfeed.android.external.IClassImplementHelper;
 import com.testify.ecfeed.android.utils.AndroidHelper;
 import com.testify.ecfeed.android.utils.AndroidManifestAccessor;
 

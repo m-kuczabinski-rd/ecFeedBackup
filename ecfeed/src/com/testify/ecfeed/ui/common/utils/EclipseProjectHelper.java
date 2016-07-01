@@ -14,7 +14,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.QualifiedName;
 
-import com.testify.ecfeed.android.external.IProjectHelper;
+import com.ecfeed.android.external.IProjectHelper;
 import com.testify.ecfeed.core.utils.DiskFileHelper;
 import com.testify.ecfeed.core.utils.EcException;
 import com.testify.ecfeed.core.utils.ExceptionHelper;

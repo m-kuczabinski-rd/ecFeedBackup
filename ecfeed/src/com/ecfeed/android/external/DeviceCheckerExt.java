@@ -6,9 +6,14 @@
  * http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 
-package com.testify.ecfeed.android.external;
+package com.ecfeed.android.external;
 
-import com.testify.ecfeed.core.runner.ITestMethodInvoker;
 
-public interface ITestMethodInvokerExt extends ITestMethodInvoker{ 
+public class DeviceCheckerExt {
+
+	public static void checkIfOneDeviceAttached() {
+		final IAndroidFactoryExt androidFactory = AndroidFactoryDistributorExt.getFactory();
+		final IDeviceCheckerExt deviceChecker = androidFactory.createDeviceChecker();
+		deviceChecker.checkIfOneDeviceAttached();
+	}
 }

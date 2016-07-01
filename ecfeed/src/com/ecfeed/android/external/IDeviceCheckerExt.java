@@ -6,7 +6,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 
-package com.testify.ecfeed.android.external;
+package com.ecfeed.android.external;
 
 public interface IDeviceCheckerExt {
 

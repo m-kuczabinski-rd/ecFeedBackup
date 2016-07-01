@@ -6,12 +6,9 @@
  * http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 
-package com.testify.ecfeed.android.external;
+package com.ecfeed.android.external;
 
-public interface IMethodImplementHelper {
+import com.testify.ecfeed.core.runner.ITestMethodInvoker;
 
-	void createMethod(final String methodContent);
-	void createImport(final String type);
-	void commitChanges();
-	boolean methodDefinitionImplemented();
+public interface ITestMethodInvokerExt extends ITestMethodInvoker{ 
 }

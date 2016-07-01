@@ -8,8 +8,8 @@
 
 package com.testify.ecfeed.ui.common.utils;
 
-import com.testify.ecfeed.android.external.IClassImplementHelper;
-import com.testify.ecfeed.android.external.IImplementerExt;
+import com.ecfeed.android.external.IClassImplementHelper;
+import com.ecfeed.android.external.IImplementerExt;
 
 public abstract class ClassImplementer implements IImplementerExt {
 

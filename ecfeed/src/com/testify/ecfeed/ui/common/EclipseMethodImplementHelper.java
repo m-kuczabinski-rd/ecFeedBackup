@@ -16,7 +16,7 @@ import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
 
-import com.testify.ecfeed.android.external.IMethodImplementHelper;
+import com.ecfeed.android.external.IMethodImplementHelper;
 import com.testify.ecfeed.core.model.MethodNode;
 import com.testify.ecfeed.core.utils.ExceptionHelper;
 import com.testify.ecfeed.core.utils.SystemLogger;

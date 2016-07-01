@@ -6,14 +6,16 @@
  * http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 
-package com.testify.ecfeed.android.external;
+package com.ecfeed.android.external;
 
+import com.testify.ecfeed.core.model.MethodNode;
 
-public class DeviceCheckerExt {
+public class AndroidMethodImplementerExt { 
 
-	public static void checkIfOneDeviceAttached() {
+	public static IImplementerExt createImplementer(
+			final MethodNode methodNode, final IMethodImplementHelper methodImplementHelper) {
 		final IAndroidFactoryExt androidFactory = AndroidFactoryDistributorExt.getFactory();
-		final IDeviceCheckerExt deviceChecker = androidFactory.createDeviceChecker();
-		deviceChecker.checkIfOneDeviceAttached();
+		return androidFactory.createAndroidMethodImplementer(methodNode, methodImplementHelper);
 	}
 }
+

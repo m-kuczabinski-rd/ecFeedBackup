@@ -16,8 +16,8 @@ import org.eclipse.core.runtime.Path;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.FrameworkUtil;
 
-import com.testify.ecfeed.android.external.AndroidFactoryDistributorExt;
-import com.testify.ecfeed.android.external.IInstallationDirFileHelper;
+import com.ecfeed.android.external.AndroidFactoryDistributorExt;
+import com.ecfeed.android.external.IInstallationDirFileHelper;
 import com.testify.ecfeed.core.utils.DiskFileHelper;
 import com.testify.ecfeed.core.utils.ExceptionHelper;
 import com.testify.ecfeed.core.utils.StringHelper;
