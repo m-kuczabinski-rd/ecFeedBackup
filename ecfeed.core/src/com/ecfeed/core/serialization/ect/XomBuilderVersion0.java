@@ -6,14 +6,9 @@
  * http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 
-package com.testify.ecfeed.core.serialization.ect;
+package com.ecfeed.core.serialization.ect;
 
-public class XomAnalyserVersion0 extends XomAnalyser {
-
-	@Override
-	protected int getModelVersion() {
-		return 0;
-	}
+public class XomBuilderVersion0 extends XomBuilder {
 
 	@Override
 	protected String getChoiceNodeName() {
@@ -39,6 +34,4 @@ public class XomAnalyserVersion0 extends XomAnalyser {
 	protected String getStatementParameterAttributeName() {
 		return SerializationHelperVersion0.getStatementParameterAttributeName();
 	}
-
-
 }

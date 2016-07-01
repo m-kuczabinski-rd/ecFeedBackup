@@ -9,7 +9,7 @@
  *     Patryk Chamuczynski (p.chamuczynski(at)radytek.com) - initial implementation
  ******************************************************************************/
 
-package com.testify.ecfeed.core.serialization.ect;
+package com.ecfeed.core.serialization.ect;
 
 import java.io.IOException;
 import java.io.OutputStream;

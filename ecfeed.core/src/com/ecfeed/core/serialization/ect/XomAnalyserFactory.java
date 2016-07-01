@@ -6,14 +6,14 @@
  * http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 
-package com.testify.ecfeed.core.serialization.ect;
+package com.ecfeed.core.serialization.ect;
 
-public class XomBuilderFactory {
+public class XomAnalyserFactory {
 
-	public static XomBuilder createXomBuilder(int modelVersion) {
-		if (modelVersion == 0) {
-			return new XomBuilderVersion0();
+	public static XomAnalyser createXomAnalyser(int version) {
+		if (version == 0) {
+			return new XomAnalyserVersion0();
 		}
-		return new XomBuilderVersion1();
+		return new XomAnalyserVersion1();
 	}
 }

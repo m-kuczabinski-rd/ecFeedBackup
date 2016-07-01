@@ -6,7 +6,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 
-package com.testify.ecfeed.core.serialization.ect;
+package com.ecfeed.core.serialization.ect;
 
 public class XomAnalyserVersion1 extends XomAnalyser {
 

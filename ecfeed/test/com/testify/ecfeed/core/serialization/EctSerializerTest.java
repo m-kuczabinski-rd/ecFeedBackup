@@ -22,6 +22,8 @@ import java.io.OutputStream;
 
 import org.junit.Test;
 
+import com.ecfeed.core.serialization.ect.EctParser;
+import com.ecfeed.core.serialization.ect.EctSerializer;
 import com.testify.ecfeed.core.model.ChoiceNode;
 import com.testify.ecfeed.core.model.ChoicesParentStatement;
 import com.testify.ecfeed.core.model.ClassNode;
@@ -36,8 +38,6 @@ import com.testify.ecfeed.core.model.ModelVersionDistributor;
 import com.testify.ecfeed.core.model.RootNode;
 import com.testify.ecfeed.core.serialization.IModelParser;
 import com.testify.ecfeed.core.serialization.IModelSerializer;
-import com.testify.ecfeed.core.serialization.ect.EctParser;
-import com.testify.ecfeed.core.serialization.ect.EctSerializer;
 import com.testify.ecfeed.testutils.RandomModelGenerator;
 
 public class EctSerializerTest {

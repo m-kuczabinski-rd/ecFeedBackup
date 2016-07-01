@@ -28,6 +28,9 @@ import java.util.Set;
 
 import org.junit.Test;
 
+import com.ecfeed.core.serialization.ect.Constants;
+import com.ecfeed.core.serialization.ect.EctParser;
+import com.ecfeed.core.serialization.ect.EctSerializer;
 import com.testify.ecfeed.core.adapter.java.JavaPrimitiveTypePredicate;
 import com.testify.ecfeed.core.generators.RandomGenerator;
 import com.testify.ecfeed.core.generators.api.GeneratorException;
@@ -51,9 +54,6 @@ import com.testify.ecfeed.core.model.TestCaseNode;
 import com.testify.ecfeed.core.serialization.IModelParser;
 import com.testify.ecfeed.core.serialization.IModelSerializer;
 import com.testify.ecfeed.core.serialization.ParserException;
-import com.testify.ecfeed.core.serialization.ect.Constants;
-import com.testify.ecfeed.core.serialization.ect.EctParser;
-import com.testify.ecfeed.core.serialization.ect.EctSerializer;
 
 public class XmlParserSerializerTest {
 	private final int TEST_RUNS = 10;
