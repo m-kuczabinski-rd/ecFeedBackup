@@ -206,7 +206,7 @@
             sequence="M1+O">
       </key>
       <key
-            commandId="ecfeed.rcp3.new"
+            commandId="ecfeed.rcp3.newMem"
             schemeId="ecFeedScheme"
             sequence="M1+N">
       </key>
