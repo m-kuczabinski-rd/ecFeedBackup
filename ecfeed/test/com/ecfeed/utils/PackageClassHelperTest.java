@@ -6,7 +6,7 @@
  * http://www.eclipse.org/legal/epl-v10.html                                     
  ******************************************************************************/
 
-package com.testify.ecfeed.utils;
+package com.ecfeed.utils;
 
 import static org.junit.Assert.assertEquals;
 
