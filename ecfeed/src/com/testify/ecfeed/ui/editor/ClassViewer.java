@@ -29,6 +29,8 @@ import com.ecfeed.core.model.ClassNode;
 import com.ecfeed.core.model.RootNode;
 import com.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.ecfeed.ui.dialogs.basic.ExceptionCatchDialog;
+import com.ecfeed.ui.editor.actions.DeleteAction;
+import com.ecfeed.ui.editor.actions.ModelViewerActionProvider;
 import com.ecfeed.ui.modelif.ClassInterface;
 import com.ecfeed.ui.modelif.IModelUpdateContext;
 import com.ecfeed.ui.modelif.ModelNodesTransfer;
@@ -36,8 +38,6 @@ import com.ecfeed.ui.modelif.RootInterface;
 import com.testify.ecfeed.ui.common.ColorConstants;
 import com.testify.ecfeed.ui.common.ColorManager;
 import com.testify.ecfeed.ui.common.Messages;
-import com.testify.ecfeed.ui.editor.actions.DeleteAction;
-import com.testify.ecfeed.ui.editor.actions.ModelViewerActionProvider;
 
 public class ClassViewer extends TableViewerSection {
 	private static final int STYLE = Section.EXPANDED | Section.TITLE_BAR;

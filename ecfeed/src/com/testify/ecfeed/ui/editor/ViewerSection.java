@@ -45,9 +45,9 @@ import org.eclipse.ui.actions.ActionFactory;
 import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.ecfeed.ui.dialogs.basic.ExceptionCatchDialog;
+import com.ecfeed.ui.editor.actions.IActionProvider;
+import com.ecfeed.ui.editor.actions.NamedAction;
 import com.ecfeed.ui.modelif.IModelUpdateContext;
-import com.testify.ecfeed.ui.editor.actions.IActionProvider;
-import com.testify.ecfeed.ui.editor.actions.NamedAction;
 
 /**
  * Section with a main StructuredViewer composite and buttons below or aside

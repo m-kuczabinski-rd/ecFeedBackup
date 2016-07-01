@@ -9,26 +9,27 @@
  *     Patryk Chamuczynski (p.chamuczynski(at)radytek.com) - initial implementation
  ******************************************************************************/
 
-package com.testify.ecfeed.ui.editor.actions;
+package com.ecfeed.ui.editor.actions;
 
 import org.eclipse.jface.viewers.ISelectionProvider;
 
 import com.ecfeed.ui.modelif.IModelUpdateContext;
+import com.ecfeed.ui.modelif.SelectionInterface;
 
-public class DeleteAction extends ModelModifyingAction {
+public class ModelModifyingAction extends ModelSelectionAction {
 
-	public DeleteAction(ISelectionProvider selectionProvider, IModelUpdateContext updateContext) {
-		super(GlobalActions.DELETE.getId(), GlobalActions.DELETE.getName(), selectionProvider, updateContext);
+	private IModelUpdateContext fUPdateContext;
+
+	public ModelModifyingAction(String id, String name, ISelectionProvider selectionProvider, IModelUpdateContext updateContext) {
+		super(id, name, selectionProvider);
+		fUPdateContext = updateContext;
+	}
+
+	protected IModelUpdateContext getUpdateContext(){
+		return fUPdateContext;
 	}
 	
-	@Override
-	public boolean isEnabled(){
-		return getSelectionInterface().deleteEnabled();
+	protected SelectionInterface getSelectionInterface(){
+		return getSelectionUtils().getSelectionInterface(fUPdateContext);
 	}
-
-	@Override
-	public void run(){
-		getSelectionInterface().delete();
-	}
-	
 }

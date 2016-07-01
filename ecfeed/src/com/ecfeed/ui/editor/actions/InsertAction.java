@@ -6,7 +6,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 
-package com.testify.ecfeed.ui.editor.actions;
+package com.ecfeed.ui.editor.actions;
 
 import java.util.List;
 

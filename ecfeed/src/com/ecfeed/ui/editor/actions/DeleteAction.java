@@ -9,25 +9,26 @@
  *     Patryk Chamuczynski (p.chamuczynski(at)radytek.com) - initial implementation
  ******************************************************************************/
 
-package com.testify.ecfeed.ui.editor.actions;
+package com.ecfeed.ui.editor.actions;
 
 import org.eclipse.jface.viewers.ISelectionProvider;
 
-import com.ecfeed.ui.modelif.NodeClipboard;
+import com.ecfeed.ui.modelif.IModelUpdateContext;
 
-public class CopyAction extends ModelSelectionAction {
+public class DeleteAction extends ModelModifyingAction {
 
-	public CopyAction(ISelectionProvider selectionProvider){
-		super(GlobalActions.COPY.getId(), GlobalActions.COPY.getName(), selectionProvider);
+	public DeleteAction(ISelectionProvider selectionProvider, IModelUpdateContext updateContext) {
+		super(GlobalActions.DELETE.getId(), GlobalActions.DELETE.getName(), selectionProvider, updateContext);
 	}
-
-	@Override
-	public void run() {
-		NodeClipboard.setContent(getSelectedNodes());
-	}
-
+	
 	@Override
 	public boolean isEnabled(){
-		return getSelectedNodes().size() > 0 && isSelectionSingleType();
+		return getSelectionInterface().deleteEnabled();
 	}
+
+	@Override
+	public void run(){
+		getSelectionInterface().delete();
+	}
+	
 }

@@ -32,16 +32,16 @@ import org.eclipse.ui.forms.widgets.Section;
 import com.ecfeed.core.model.ChoiceNode;
 import com.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.ecfeed.ui.dialogs.basic.ExceptionCatchDialog;
+import com.ecfeed.ui.editor.actions.ActionGroups;
+import com.ecfeed.ui.editor.actions.CutAction;
+import com.ecfeed.ui.editor.actions.ModelModifyingAction;
+import com.ecfeed.ui.editor.actions.NamedAction;
+import com.ecfeed.ui.editor.actions.SelectAllAction;
 import com.ecfeed.ui.modelif.ChoiceInterface;
 import com.ecfeed.ui.modelif.IModelUpdateContext;
 import com.testify.ecfeed.ui.common.ColorConstants;
 import com.testify.ecfeed.ui.common.ColorManager;
 import com.testify.ecfeed.ui.common.Messages;
-import com.testify.ecfeed.ui.editor.actions.ActionGroups;
-import com.testify.ecfeed.ui.editor.actions.CutAction;
-import com.testify.ecfeed.ui.editor.actions.ModelModifyingAction;
-import com.testify.ecfeed.ui.editor.actions.NamedAction;
-import com.testify.ecfeed.ui.editor.actions.SelectAllAction;
 
 public class ChoiceLabelsViewer extends TableViewerSection {
 

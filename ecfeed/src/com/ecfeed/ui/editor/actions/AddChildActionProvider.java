@@ -9,7 +9,7 @@
  *     Patryk Chamuczynski (p.chamuczynski(at)radytek.com) - initial implementation
  ******************************************************************************/
 
-package com.testify.ecfeed.ui.editor.actions;
+package com.ecfeed.ui.editor.actions;
 
 import java.util.Arrays;
 import java.util.List;
