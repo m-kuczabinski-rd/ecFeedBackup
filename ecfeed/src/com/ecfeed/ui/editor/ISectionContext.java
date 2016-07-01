@@ -4,19 +4,18 @@
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
+ * 
+ * Contributors:
+ *     Patryk Chamuczynski (p.chamuczynski(at)radytek.com) - initial implementation
  ******************************************************************************/
 
-package com.ecfeed.ui.handlers;
+package com.ecfeed.ui.editor;
 
-import com.ecfeed.ui.editor.EditorInMemFileHelper;
-import com.ecfeed.utils.EclipseHelper;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.forms.widgets.FormToolkit;
 
-
-public class NewInMemEctHandler {
-
-	public static void execute() {
-		String tmpFileName = EditorInMemFileHelper.createNewTmpFileName();
-		EclipseHelper.openEditorOnFileInMemory(tmpFileName);
-	}
-
+public interface ISectionContext {
+	public ModelMasterSection getMasterSection();
+	public Composite getSectionComposite();
+	public FormToolkit getToolkit();
 }

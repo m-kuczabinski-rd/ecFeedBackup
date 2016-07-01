@@ -20,7 +20,7 @@
    <extension
          point="org.eclipse.ui.editors">
       <editor
-            class="com.testify.ecfeed.ui.editor.ModelEditor"
+            class="com.ecfeed.ui.editor.ModelEditor"
             extensions="ect"
             icon="icons/root_node.png"
             id="com.testify.ecfeed.ui.EctEditor"

@@ -10,8 +10,8 @@ package com.ecfeed.ui.handlers;
 
 import org.eclipse.core.commands.ExecutionException;
 
-import com.testify.ecfeed.ui.editor.ModelEditor;
-import com.testify.ecfeed.ui.editor.ModelEditorHelper;
+import com.ecfeed.ui.editor.ModelEditor;
+import com.ecfeed.ui.editor.ModelEditorHelper;
 
 
 public class CloseEctHandler {

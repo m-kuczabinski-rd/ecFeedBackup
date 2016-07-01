@@ -40,10 +40,10 @@ Export-Package: com.ecfeed.android.external,
  com.ecfeed.core.generators.algorithms,
  com.ecfeed.ui.common.utils,
  com.ecfeed.ui.dialogs.basic,
+ com.ecfeed.ui.editor,
  com.ecfeed.ui.editor.actions,
  com.ecfeed.ui.handlers,
  com.ecfeed.utils,
  com.testify.ecfeed.core.generators.testutils,
  com.testify.ecfeed.junit,
- com.testify.ecfeed.junit.annotations,
- com.testify.ecfeed.ui.editor
+ com.testify.ecfeed.junit.annotations
