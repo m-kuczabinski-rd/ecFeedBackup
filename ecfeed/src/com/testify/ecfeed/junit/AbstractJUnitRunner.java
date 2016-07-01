@@ -27,6 +27,9 @@ import org.junit.runners.model.InitializationError;
 import org.junit.runners.model.TestClass;
 
 import com.ecfeed.core.adapter.EImplementationStatus;
+import com.ecfeed.core.adapter.java.ILoaderProvider;
+import com.ecfeed.core.adapter.java.JavaImplementationStatusResolver;
+import com.ecfeed.core.adapter.java.ModelClassLoader;
 import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.core.model.ClassNode;
 import com.ecfeed.core.model.MethodNode;
@@ -36,9 +39,6 @@ import com.ecfeed.core.runner.RunnerException;
 import com.ecfeed.core.serialization.IModelParser;
 import com.ecfeed.core.serialization.ParserException;
 import com.ecfeed.core.serialization.ect.EctParser;
-import com.testify.ecfeed.core.adapter.java.ILoaderProvider;
-import com.testify.ecfeed.core.adapter.java.JavaImplementationStatusResolver;
-import com.testify.ecfeed.core.adapter.java.ModelClassLoader;
 import com.testify.ecfeed.junit.annotations.EcModel;
 
 public abstract class AbstractJUnitRunner extends BlockJUnit4ClassRunner {

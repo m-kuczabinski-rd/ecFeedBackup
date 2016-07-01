@@ -11,14 +11,14 @@ package com.ecfeed.core.serialization.export;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.ecfeed.core.adapter.java.ChoiceValueParser;
+import com.ecfeed.core.adapter.java.JavaUtils;
 import com.ecfeed.core.model.AbstractParameterNode;
 import com.ecfeed.core.model.ChoiceNode;
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.MethodParameterNode;
 import com.ecfeed.core.model.TestCaseNode;
 import com.ecfeed.core.serialization.export.Expression;
-import com.testify.ecfeed.core.adapter.java.ChoiceValueParser;
-import com.testify.ecfeed.core.adapter.java.JavaUtils;
 
 public class TestCasesExportHelper {
 

@@ -28,6 +28,7 @@ import java.util.Set;
 
 import org.junit.Test;
 
+import com.ecfeed.core.adapter.java.JavaPrimitiveTypePredicate;
 import com.ecfeed.core.generators.api.GeneratorException;
 import com.ecfeed.core.generators.api.IConstraint;
 import com.ecfeed.core.model.AbstractStatement;
@@ -52,7 +53,6 @@ import com.ecfeed.core.serialization.ParserException;
 import com.ecfeed.core.serialization.ect.Constants;
 import com.ecfeed.core.serialization.ect.EctParser;
 import com.ecfeed.core.serialization.ect.EctSerializer;
-import com.testify.ecfeed.core.adapter.java.JavaPrimitiveTypePredicate;
 import com.testify.ecfeed.core.generators.RandomGenerator;
 
 public class XmlParserSerializerTest {
@@ -126,7 +126,7 @@ public class XmlParserSerializerTest {
 			RootNode root = new RootNode("root", version);
 			ClassNode classNode = new ClassNode("classNode");
 			MethodNode method = new MethodNode("method");
-			MethodParameterNode parameter = new MethodParameterNode("parameter", com.testify.ecfeed.core.adapter.java.Constants.TYPE_NAME_STRING, "0", false);
+			MethodParameterNode parameter = new MethodParameterNode("parameter", com.ecfeed.core.adapter.java.Constants.TYPE_NAME_STRING, "0", false);
 			ChoiceNode choice = new ChoiceNode("choice", "A                 B");
 			List<ChoiceNode> testData = new ArrayList<ChoiceNode>();
 			testData.add(choice);
@@ -164,9 +164,9 @@ public class XmlParserSerializerTest {
 			ClassNode classNode = new ClassNode("classNode");
 			MethodNode method = new MethodNode("method");
 			MethodParameterNode choicesParentParameter =
-					new MethodParameterNode("choicesParentParameter", com.testify.ecfeed.core.adapter.java.Constants.TYPE_NAME_STRING, "0", false);
+					new MethodParameterNode("choicesParentParameter", com.ecfeed.core.adapter.java.Constants.TYPE_NAME_STRING, "0", false);
 			MethodParameterNode expectedParameter =
-					new MethodParameterNode("expectedParameter", com.testify.ecfeed.core.adapter.java.Constants.TYPE_NAME_CHAR, "0", true);
+					new MethodParameterNode("expectedParameter", com.ecfeed.core.adapter.java.Constants.TYPE_NAME_CHAR, "0", true);
 			expectedParameter.setDefaultValueString("d");
 			ChoiceNode choice1 = new ChoiceNode("choice", "p");
 			choice1.setParent(choicesParentParameter);

@@ -9,7 +9,7 @@
  *     Patryk Chamuczynski (p.chamuczynski(at)radytek.com) - initial implementation
  ******************************************************************************/
 
-package com.testify.ecfeed.core.adapter.java;
+package com.ecfeed.core.adapter.java;
 
 import java.net.URL;
 import java.net.URLClassLoader;

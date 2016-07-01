@@ -19,11 +19,11 @@ import com.ecfeed.android.external.IClassImplementHelper;
 import com.ecfeed.android.external.IInstallationDirFileHelper;
 import com.ecfeed.android.external.IProjectHelper;
 import com.ecfeed.android.external.ImplementerExt;
+import com.ecfeed.core.adapter.java.JavaPrimitiveTypePredicate;
 import com.ecfeed.core.model.ClassNode;
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.utils.EcException;
 import com.ecfeed.core.utils.SystemLogger;
-import com.testify.ecfeed.core.adapter.java.JavaPrimitiveTypePredicate;
 import com.testify.ecfeed.ui.common.utils.EclipseProjectHelper;
 import com.testify.ecfeed.ui.common.utils.IFileInfoProvider;
 

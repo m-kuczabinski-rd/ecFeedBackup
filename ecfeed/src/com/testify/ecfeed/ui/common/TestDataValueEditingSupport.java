@@ -25,10 +25,10 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Display;
 
 import com.ecfeed.core.adapter.ITypeAdapter;
+import com.ecfeed.core.adapter.java.JavaUtils;
 import com.ecfeed.core.model.ChoiceNode;
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.MethodParameterNode;
-import com.testify.ecfeed.core.adapter.java.JavaUtils;
 
 public class TestDataValueEditingSupport extends EditingSupport {
 	private final TableViewer fViewer;

@@ -20,12 +20,12 @@ import java.util.List;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import com.ecfeed.core.adapter.java.JavaPrimitiveTypePredicate;
 import com.ecfeed.core.model.ChoiceNode;
 import com.ecfeed.core.model.ExpectedValueStatement;
 import com.ecfeed.core.model.IPrimitiveTypePredicate;
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.MethodParameterNode;
-import com.testify.ecfeed.core.adapter.java.JavaPrimitiveTypePredicate;
 
 public class ExpectedValueStatementTest{
 

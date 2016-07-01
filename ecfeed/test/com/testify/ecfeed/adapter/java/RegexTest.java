@@ -5,7 +5,7 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
-import com.testify.ecfeed.core.adapter.java.Constants;
+import com.ecfeed.core.adapter.java.Constants;
 
 public class RegexTest {
 

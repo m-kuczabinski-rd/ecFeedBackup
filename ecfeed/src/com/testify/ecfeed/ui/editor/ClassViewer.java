@@ -24,9 +24,9 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.ui.forms.widgets.Section;
 
 import com.ecfeed.core.adapter.EImplementationStatus;
+import com.ecfeed.core.adapter.java.JavaUtils;
 import com.ecfeed.core.model.ClassNode;
 import com.ecfeed.core.model.RootNode;
-import com.testify.ecfeed.core.adapter.java.JavaUtils;
 import com.testify.ecfeed.ui.common.ColorConstants;
 import com.testify.ecfeed.ui.common.ColorManager;
 import com.testify.ecfeed.ui.common.Messages;

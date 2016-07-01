@@ -11,27 +11,27 @@
 
 package com.testify.ecfeed.testutils;
 
-import static com.testify.ecfeed.core.adapter.java.Constants.REGEX_CATEGORY_NODE_NAME;
-import static com.testify.ecfeed.core.adapter.java.Constants.REGEX_CATEGORY_TYPE_NAME;
-import static com.testify.ecfeed.core.adapter.java.Constants.REGEX_CHAR_TYPE_VALUE;
-import static com.testify.ecfeed.core.adapter.java.Constants.REGEX_CLASS_NODE_NAME;
-import static com.testify.ecfeed.core.adapter.java.Constants.REGEX_CONSTRAINT_NODE_NAME;
-import static com.testify.ecfeed.core.adapter.java.Constants.REGEX_METHOD_NODE_NAME;
-import static com.testify.ecfeed.core.adapter.java.Constants.REGEX_PARTITION_LABEL;
-import static com.testify.ecfeed.core.adapter.java.Constants.REGEX_PARTITION_NODE_NAME;
-import static com.testify.ecfeed.core.adapter.java.Constants.REGEX_ROOT_NODE_NAME;
-import static com.testify.ecfeed.core.adapter.java.Constants.REGEX_STRING_TYPE_VALUE;
-import static com.testify.ecfeed.core.adapter.java.Constants.REGEX_TEST_CASE_NODE_NAME;
-import static com.testify.ecfeed.core.adapter.java.Constants.REGEX_USER_TYPE_VALUE;
-import static com.testify.ecfeed.core.adapter.java.Constants.TYPE_NAME_BOOLEAN;
-import static com.testify.ecfeed.core.adapter.java.Constants.TYPE_NAME_BYTE;
-import static com.testify.ecfeed.core.adapter.java.Constants.TYPE_NAME_CHAR;
-import static com.testify.ecfeed.core.adapter.java.Constants.TYPE_NAME_DOUBLE;
-import static com.testify.ecfeed.core.adapter.java.Constants.TYPE_NAME_FLOAT;
-import static com.testify.ecfeed.core.adapter.java.Constants.TYPE_NAME_INT;
-import static com.testify.ecfeed.core.adapter.java.Constants.TYPE_NAME_LONG;
-import static com.testify.ecfeed.core.adapter.java.Constants.TYPE_NAME_SHORT;
-import static com.testify.ecfeed.core.adapter.java.Constants.TYPE_NAME_STRING;
+import static com.ecfeed.core.adapter.java.Constants.REGEX_CATEGORY_NODE_NAME;
+import static com.ecfeed.core.adapter.java.Constants.REGEX_CATEGORY_TYPE_NAME;
+import static com.ecfeed.core.adapter.java.Constants.REGEX_CHAR_TYPE_VALUE;
+import static com.ecfeed.core.adapter.java.Constants.REGEX_CLASS_NODE_NAME;
+import static com.ecfeed.core.adapter.java.Constants.REGEX_CONSTRAINT_NODE_NAME;
+import static com.ecfeed.core.adapter.java.Constants.REGEX_METHOD_NODE_NAME;
+import static com.ecfeed.core.adapter.java.Constants.REGEX_PARTITION_LABEL;
+import static com.ecfeed.core.adapter.java.Constants.REGEX_PARTITION_NODE_NAME;
+import static com.ecfeed.core.adapter.java.Constants.REGEX_ROOT_NODE_NAME;
+import static com.ecfeed.core.adapter.java.Constants.REGEX_STRING_TYPE_VALUE;
+import static com.ecfeed.core.adapter.java.Constants.REGEX_TEST_CASE_NODE_NAME;
+import static com.ecfeed.core.adapter.java.Constants.REGEX_USER_TYPE_VALUE;
+import static com.ecfeed.core.adapter.java.Constants.TYPE_NAME_BOOLEAN;
+import static com.ecfeed.core.adapter.java.Constants.TYPE_NAME_BYTE;
+import static com.ecfeed.core.adapter.java.Constants.TYPE_NAME_CHAR;
+import static com.ecfeed.core.adapter.java.Constants.TYPE_NAME_DOUBLE;
+import static com.ecfeed.core.adapter.java.Constants.TYPE_NAME_FLOAT;
+import static com.ecfeed.core.adapter.java.Constants.TYPE_NAME_INT;
+import static com.ecfeed.core.adapter.java.Constants.TYPE_NAME_LONG;
+import static com.ecfeed.core.adapter.java.Constants.TYPE_NAME_SHORT;
+import static com.ecfeed.core.adapter.java.Constants.TYPE_NAME_STRING;
 import static com.testify.ecfeed.testutils.Constants.SUPPORTED_TYPES;
 
 import java.util.ArrayList;
@@ -41,6 +41,7 @@ import java.util.Set;
 
 import org.junit.Test;
 
+import com.ecfeed.core.adapter.java.JavaPrimitiveTypePredicate;
 import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.core.model.AbstractStatement;
 import com.ecfeed.core.model.ChoiceNode;
@@ -58,7 +59,6 @@ import com.ecfeed.core.model.RootNode;
 import com.ecfeed.core.model.StatementArray;
 import com.ecfeed.core.model.StaticStatement;
 import com.ecfeed.core.model.TestCaseNode;
-import com.testify.ecfeed.core.adapter.java.JavaPrimitiveTypePredicate;
 
 public class RandomModelGenerator {
 

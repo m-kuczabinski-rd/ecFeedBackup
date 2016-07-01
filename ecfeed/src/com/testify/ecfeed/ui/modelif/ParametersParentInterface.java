@@ -13,9 +13,9 @@ package com.testify.ecfeed.ui.modelif;
 
 import java.util.Collection;
 
+import com.ecfeed.core.adapter.java.JavaUtils;
 import com.ecfeed.core.model.AbstractParameterNode;
 import com.ecfeed.core.model.ParametersParentNode;
-import com.testify.ecfeed.core.adapter.java.JavaUtils;
 import com.testify.ecfeed.core.adapter.operations.GenericOperationAddParameter;
 import com.testify.ecfeed.ui.common.Constants;
 import com.testify.ecfeed.ui.common.Messages;

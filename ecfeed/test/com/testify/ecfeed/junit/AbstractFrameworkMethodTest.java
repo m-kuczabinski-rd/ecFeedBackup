@@ -10,10 +10,10 @@ import java.util.List;
 
 import org.junit.Test;
 
+import com.ecfeed.core.adapter.java.ChoiceValueParser;
+import com.ecfeed.core.adapter.java.ModelClassLoader;
 import com.ecfeed.core.model.ChoiceNode;
 import com.ecfeed.core.model.MethodParameterNode;
-import com.testify.ecfeed.core.adapter.java.ChoiceValueParser;
-import com.testify.ecfeed.core.adapter.java.ModelClassLoader;
 import com.testify.ecfeed.junit.AbstractFrameworkMethod;
 import com.testify.ecfeed.ui.common.Constants;
 

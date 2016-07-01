@@ -13,10 +13,10 @@ package com.testify.ecfeed.core.adapter.operations;
 
 import com.ecfeed.core.adapter.IModelOperation;
 import com.ecfeed.core.adapter.ModelOperationException;
+import com.ecfeed.core.adapter.java.Messages;
 import com.ecfeed.core.model.AbstractStatement;
 import com.ecfeed.core.model.Constraint;
 import com.ecfeed.core.model.ConstraintNode;
-import com.testify.ecfeed.core.adapter.java.Messages;
 
 public class ConstraintOperationReplaceStatement extends AbstractModelOperation{
 

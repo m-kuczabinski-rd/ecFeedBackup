@@ -16,6 +16,8 @@ import java.util.List;
 
 import com.ecfeed.core.adapter.IModelOperation;
 import com.ecfeed.core.adapter.ModelOperationException;
+import com.ecfeed.core.adapter.java.JavaUtils;
+import com.ecfeed.core.adapter.java.Messages;
 import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.core.model.ChoiceNode;
 import com.ecfeed.core.model.ClassNode;
@@ -27,8 +29,6 @@ import com.ecfeed.core.model.MethodParameterNode;
 import com.ecfeed.core.model.RootNode;
 import com.ecfeed.core.model.TestCaseNode;
 import com.ecfeed.core.utils.SystemLogger;
-import com.testify.ecfeed.core.adapter.java.JavaUtils;
-import com.testify.ecfeed.core.adapter.java.Messages;
 
 public class FactoryRenameOperation {
 

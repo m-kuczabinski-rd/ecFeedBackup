@@ -17,6 +17,7 @@ import java.util.Arrays;
 
 import org.junit.Test;
 
+import com.ecfeed.core.adapter.java.JavaPrimitiveTypePredicate;
 import com.ecfeed.core.model.ChoiceNode;
 import com.ecfeed.core.model.ChoicesParentStatement;
 import com.ecfeed.core.model.ClassNode;
@@ -33,7 +34,6 @@ import com.ecfeed.core.model.RootNode;
 import com.ecfeed.core.model.StatementArray;
 import com.ecfeed.core.model.StaticStatement;
 import com.ecfeed.core.model.TestCaseNode;
-import com.testify.ecfeed.core.adapter.java.JavaPrimitiveTypePredicate;
 
 
 public class CopyNodeTest{

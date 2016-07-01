@@ -11,11 +11,11 @@ package com.testify.ecfeed.junit;
 import java.lang.reflect.Method;
 import java.util.Collection;
 
+import com.ecfeed.core.adapter.java.ModelClassLoader;
 import com.ecfeed.core.model.TestCaseNode;
 import com.ecfeed.core.runner.ITestMethodInvoker;
 import com.ecfeed.core.runner.Messages;
 import com.ecfeed.core.utils.EcException;
-import com.testify.ecfeed.core.adapter.java.ModelClassLoader;
 
 public class AndroidParameterizedMethod extends AbstractFrameworkMethod {
 

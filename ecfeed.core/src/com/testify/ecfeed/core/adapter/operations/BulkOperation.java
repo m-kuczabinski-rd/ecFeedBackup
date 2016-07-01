@@ -18,7 +18,7 @@ import java.util.Set;
 
 import com.ecfeed.core.adapter.IModelOperation;
 import com.ecfeed.core.adapter.ModelOperationException;
-import com.testify.ecfeed.core.adapter.java.Messages;
+import com.ecfeed.core.adapter.java.Messages;
 
 public class BulkOperation extends AbstractModelOperation{
 

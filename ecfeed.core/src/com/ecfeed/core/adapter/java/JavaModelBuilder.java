@@ -9,7 +9,7 @@
  *     Patryk Chamuczynski (p.chamuczynski(at)radytek.com) - initial implementation
  ******************************************************************************/
 
-package com.testify.ecfeed.core.adapter.java;
+package com.ecfeed.core.adapter.java;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
@@ -83,23 +83,23 @@ public class JavaModelBuilder {
 
 	public List<ChoiceNode> getDefaultChoices(String typeSignature) {
 		switch(typeSignature){
-		case com.testify.ecfeed.core.adapter.java.Constants.TYPE_NAME_BOOLEAN:
+		case com.ecfeed.core.adapter.java.Constants.TYPE_NAME_BOOLEAN:
 			return defaultBooleanChoices();
-		case com.testify.ecfeed.core.adapter.java.Constants.TYPE_NAME_BYTE:
+		case com.ecfeed.core.adapter.java.Constants.TYPE_NAME_BYTE:
 			return defaultIntegerChoices();
-		case com.testify.ecfeed.core.adapter.java.Constants.TYPE_NAME_CHAR:
+		case com.ecfeed.core.adapter.java.Constants.TYPE_NAME_CHAR:
 			return defaultIntegerChoices();
-		case com.testify.ecfeed.core.adapter.java.Constants.TYPE_NAME_DOUBLE:
+		case com.ecfeed.core.adapter.java.Constants.TYPE_NAME_DOUBLE:
 			return defaultFloatChoices();
-		case com.testify.ecfeed.core.adapter.java.Constants.TYPE_NAME_FLOAT:
+		case com.ecfeed.core.adapter.java.Constants.TYPE_NAME_FLOAT:
 			return defaultFloatChoices();
-		case com.testify.ecfeed.core.adapter.java.Constants.TYPE_NAME_INT:
+		case com.ecfeed.core.adapter.java.Constants.TYPE_NAME_INT:
 			return defaultIntegerChoices();
-		case com.testify.ecfeed.core.adapter.java.Constants.TYPE_NAME_LONG:
+		case com.ecfeed.core.adapter.java.Constants.TYPE_NAME_LONG:
 			return defaultIntegerChoices();
-		case com.testify.ecfeed.core.adapter.java.Constants.TYPE_NAME_SHORT:
+		case com.ecfeed.core.adapter.java.Constants.TYPE_NAME_SHORT:
 			return defaultIntegerChoices();
-		case com.testify.ecfeed.core.adapter.java.Constants.TYPE_NAME_STRING:
+		case com.ecfeed.core.adapter.java.Constants.TYPE_NAME_STRING:
 			return defaultStringChoices();
 		default:
 			return defaultEnumChoices(typeSignature);

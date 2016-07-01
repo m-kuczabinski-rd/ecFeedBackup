@@ -23,11 +23,11 @@ import org.eclipse.swt.widgets.Display;
 
 import com.ecfeed.core.adapter.EImplementationStatus;
 import com.ecfeed.core.adapter.IModelOperation;
+import com.ecfeed.core.adapter.java.JavaUtils;
 import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.core.model.AbstractParameterNode;
 import com.ecfeed.core.model.ChoiceNode;
 import com.ecfeed.core.utils.SystemLogger;
-import com.testify.ecfeed.core.adapter.java.JavaUtils;
 import com.testify.ecfeed.core.adapter.operations.ChoiceOperationAddLabel;
 import com.testify.ecfeed.core.adapter.operations.ChoiceOperationAddLabels;
 import com.testify.ecfeed.core.adapter.operations.ChoiceOperationRemoveLabels;

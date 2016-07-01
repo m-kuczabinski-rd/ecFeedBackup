@@ -14,6 +14,7 @@ package com.ecfeed.core.adapter;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.ecfeed.core.adapter.java.JavaPrimitiveTypePredicate;
 import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.core.model.ChoiceNode;
 import com.ecfeed.core.model.ClassNode;
@@ -26,7 +27,6 @@ import com.ecfeed.core.model.MethodParameterNode;
 import com.ecfeed.core.model.RootNode;
 import com.ecfeed.core.model.TestCaseNode;
 import com.ecfeed.core.utils.SystemLogger;
-import com.testify.ecfeed.core.adapter.java.JavaPrimitiveTypePredicate;
 
 
 public abstract class CachedImplementationStatusResolver extends AbstractImplementationStatusResolver {

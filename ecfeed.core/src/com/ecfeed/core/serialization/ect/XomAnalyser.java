@@ -39,6 +39,7 @@ import nu.xom.Element;
 import nu.xom.Elements;
 import nu.xom.Node;
 
+import com.ecfeed.core.adapter.java.JavaPrimitiveTypePredicate;
 import com.ecfeed.core.model.AbstractStatement;
 import com.ecfeed.core.model.ChoiceNode;
 import com.ecfeed.core.model.ChoicesParentStatement;
@@ -57,7 +58,6 @@ import com.ecfeed.core.model.StaticStatement;
 import com.ecfeed.core.model.TestCaseNode;
 import com.ecfeed.core.serialization.ParserException;
 import com.ecfeed.core.serialization.WhiteCharConverter;
-import com.testify.ecfeed.core.adapter.java.JavaPrimitiveTypePredicate;
 
 public abstract class XomAnalyser {
 

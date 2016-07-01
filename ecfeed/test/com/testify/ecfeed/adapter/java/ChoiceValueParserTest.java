@@ -8,9 +8,9 @@ import java.net.URL;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import com.testify.ecfeed.core.adapter.java.ChoiceValueParser;
-import com.testify.ecfeed.core.adapter.java.Constants;
-import com.testify.ecfeed.core.adapter.java.ModelClassLoader;
+import com.ecfeed.core.adapter.java.ChoiceValueParser;
+import com.ecfeed.core.adapter.java.Constants;
+import com.ecfeed.core.adapter.java.ModelClassLoader;
 import com.testify.ecfeed.core.generators.CartesianProductGenerator;
 import com.testify.ecfeed.junit.OnlineRunner;
 import com.testify.ecfeed.junit.annotations.Constraints;

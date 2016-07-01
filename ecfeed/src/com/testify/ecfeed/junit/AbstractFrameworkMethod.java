@@ -17,13 +17,13 @@ import java.util.List;
 
 import org.junit.runners.model.FrameworkMethod;
 
+import com.ecfeed.core.adapter.java.ChoiceValueParser;
+import com.ecfeed.core.adapter.java.Constants;
+import com.ecfeed.core.adapter.java.JavaUtils;
+import com.ecfeed.core.adapter.java.ModelClassLoader;
 import com.ecfeed.core.model.ChoiceNode;
 import com.ecfeed.core.runner.Messages;
 import com.ecfeed.core.runner.RunnerException;
-import com.testify.ecfeed.core.adapter.java.ChoiceValueParser;
-import com.testify.ecfeed.core.adapter.java.Constants;
-import com.testify.ecfeed.core.adapter.java.JavaUtils;
-import com.testify.ecfeed.core.adapter.java.ModelClassLoader;
 
 public class AbstractFrameworkMethod extends FrameworkMethod {
 

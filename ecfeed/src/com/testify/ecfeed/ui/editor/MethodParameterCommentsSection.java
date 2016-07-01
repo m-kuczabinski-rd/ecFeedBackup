@@ -19,8 +19,8 @@ import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.TabItem;
 
 import com.ecfeed.core.adapter.EImplementationStatus;
+import com.ecfeed.core.adapter.java.JavaUtils;
 import com.ecfeed.core.model.MethodParameterNode;
-import com.testify.ecfeed.core.adapter.java.JavaUtils;
 import com.testify.ecfeed.ui.common.JavaDocSupport;
 import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.common.utils.IFileInfoProvider;

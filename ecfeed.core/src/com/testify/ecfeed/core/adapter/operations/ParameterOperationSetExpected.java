@@ -18,12 +18,12 @@ import java.util.ListIterator;
 
 import com.ecfeed.core.adapter.IModelOperation;
 import com.ecfeed.core.adapter.ModelOperationException;
+import com.ecfeed.core.adapter.java.JavaUtils;
 import com.ecfeed.core.model.ChoiceNode;
 import com.ecfeed.core.model.ConstraintNode;
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.MethodParameterNode;
 import com.ecfeed.core.model.TestCaseNode;
-import com.testify.ecfeed.core.adapter.java.JavaUtils;
 
 public class ParameterOperationSetExpected extends AbstractModelOperation {
 	

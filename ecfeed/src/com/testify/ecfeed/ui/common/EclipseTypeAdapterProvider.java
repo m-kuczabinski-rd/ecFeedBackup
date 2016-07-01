@@ -11,21 +11,21 @@
 
 package com.testify.ecfeed.ui.common;
 
-import static com.testify.ecfeed.core.adapter.java.Constants.TYPE_NAME_BOOLEAN;
-import static com.testify.ecfeed.core.adapter.java.Constants.TYPE_NAME_BYTE;
-import static com.testify.ecfeed.core.adapter.java.Constants.TYPE_NAME_CHAR;
-import static com.testify.ecfeed.core.adapter.java.Constants.TYPE_NAME_DOUBLE;
-import static com.testify.ecfeed.core.adapter.java.Constants.TYPE_NAME_FLOAT;
-import static com.testify.ecfeed.core.adapter.java.Constants.TYPE_NAME_INT;
-import static com.testify.ecfeed.core.adapter.java.Constants.TYPE_NAME_LONG;
-import static com.testify.ecfeed.core.adapter.java.Constants.TYPE_NAME_SHORT;
-import static com.testify.ecfeed.core.adapter.java.Constants.TYPE_NAME_STRING;
+import static com.ecfeed.core.adapter.java.Constants.TYPE_NAME_BOOLEAN;
+import static com.ecfeed.core.adapter.java.Constants.TYPE_NAME_BYTE;
+import static com.ecfeed.core.adapter.java.Constants.TYPE_NAME_CHAR;
+import static com.ecfeed.core.adapter.java.Constants.TYPE_NAME_DOUBLE;
+import static com.ecfeed.core.adapter.java.Constants.TYPE_NAME_FLOAT;
+import static com.ecfeed.core.adapter.java.Constants.TYPE_NAME_INT;
+import static com.ecfeed.core.adapter.java.Constants.TYPE_NAME_LONG;
+import static com.ecfeed.core.adapter.java.Constants.TYPE_NAME_SHORT;
+import static com.ecfeed.core.adapter.java.Constants.TYPE_NAME_STRING;
 
 import java.util.Arrays;
 
 import com.ecfeed.core.adapter.ITypeAdapter;
 import com.ecfeed.core.adapter.ITypeAdapterProvider;
-import com.testify.ecfeed.core.adapter.java.JavaUtils;
+import com.ecfeed.core.adapter.java.JavaUtils;
 
 public class EclipseTypeAdapterProvider implements ITypeAdapterProvider{
 

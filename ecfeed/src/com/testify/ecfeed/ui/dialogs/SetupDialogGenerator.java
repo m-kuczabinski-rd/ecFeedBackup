@@ -46,6 +46,7 @@ import org.eclipse.swt.widgets.Tree;
 
 import com.ecfeed.core.adapter.EImplementationStatus;
 import com.ecfeed.core.adapter.IImplementationStatusResolver;
+import com.ecfeed.core.adapter.java.JavaUtils;
 import com.ecfeed.core.generators.api.GeneratorException;
 import com.ecfeed.core.generators.api.IGenerator;
 import com.ecfeed.core.generators.api.IGeneratorParameter;
@@ -58,7 +59,6 @@ import com.ecfeed.core.model.ConstraintNode;
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.MethodParameterNode;
 import com.ecfeed.core.utils.StringHolder;
-import com.testify.ecfeed.core.adapter.java.JavaUtils;
 import com.testify.ecfeed.core.generators.DoubleParameter;
 import com.testify.ecfeed.core.generators.GeneratorFactory;
 import com.testify.ecfeed.core.generators.IntegerParameter;
