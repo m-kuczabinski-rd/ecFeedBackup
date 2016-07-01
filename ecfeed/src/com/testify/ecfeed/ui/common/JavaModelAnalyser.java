@@ -78,6 +78,10 @@ public class JavaModelAnalyser {
 	public static IMethod getIMethod(MethodNode method) {
 		IType parentType = getIType(method.getClassNode().getName());
 
+		if (parentType == null) {
+			return null;
+		}
+
 		try {
 			for(IMethod methodDef : parentType.getMethods()){
 				if(methodDef.getElementName().equals(method.getName()) == false ||
@@ -158,11 +162,11 @@ public class JavaModelAnalyser {
 	public static List<IMethod> getConstructors(IType type){
 		List<IMethod> result = new ArrayList<IMethod>();
 		try{
-		for(IMethod method : type.getMethods()){
-			if(method.isConstructor()){
-				result.add(method);
+			for(IMethod method : type.getMethods()){
+				if(method.isConstructor()){
+					result.add(method);
+				}
 			}
-		}
 		}catch(JavaModelException e){SystemLogger.logCatch(e.getMessage());}
 		return result;
 	}

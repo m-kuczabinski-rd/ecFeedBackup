@@ -95,7 +95,12 @@ public class JavaDocSupport {
 
 		@Override
 		public Object visit(MethodNode node) throws Exception {
-			return getJavadoc(JavaModelAnalyser.getIMethod(node));
+			IMethod method = JavaModelAnalyser.getIMethod(node);
+			if (method == null) {
+				return null;
+			}
+
+			return getJavadoc(method);
 		}
 
 		@Override
@@ -188,29 +193,29 @@ public class JavaDocSupport {
 		@Override
 		public Object visit(MethodParameterNode node) throws Exception {
 			exportJavadoc(node.getMethod());
-//			IMethod method = JavaModelAnalyser.getIMethod(node.getMethod());
-//			ICompilationUnit unit = method.getCompilationUnit();
-//			String currentJavadoc = getJavadoc(node);
-//			String newComments = node.getDescription() != null ? node.getDescription() : "";
-//			String newJavadoc = "* @param " + node.getName() + " " + newComments;
-//			String source = unit.getSource();
-//
-//			TextEdit edit = null;
-//			if(currentJavadoc != null){
-//				int offset = source.indexOf("* @param " + node.getName());
-//				int length = currentJavadoc.length();
-//				edit = new ReplaceEdit(offset, length, newJavadoc);
-//			}else {
-//				String methodJavadoc = getJavadoc(node.getMethod());
-//				if(methodJavadoc == null){
-//					exportJavadoc(node.getMethod());
-//				}
-//				int offset = source.indexOf(methodJavadoc) + methodJavadoc.length();
-//				edit = new InsertEdit(offset, newJavadoc);
-//			}
-//			unit.becomeWorkingCopy(null);
-//			unit.applyTextEdit(edit, null);
-//			unit.commitWorkingCopy(false, null);
+			//			IMethod method = JavaModelAnalyser.getIMethod(node.getMethod());
+			//			ICompilationUnit unit = method.getCompilationUnit();
+			//			String currentJavadoc = getJavadoc(node);
+			//			String newComments = node.getDescription() != null ? node.getDescription() : "";
+			//			String newJavadoc = "* @param " + node.getName() + " " + newComments;
+			//			String source = unit.getSource();
+			//
+			//			TextEdit edit = null;
+			//			if(currentJavadoc != null){
+			//				int offset = source.indexOf("* @param " + node.getName());
+			//				int length = currentJavadoc.length();
+			//				edit = new ReplaceEdit(offset, length, newJavadoc);
+			//			}else {
+			//				String methodJavadoc = getJavadoc(node.getMethod());
+			//				if(methodJavadoc == null){
+			//					exportJavadoc(node.getMethod());
+			//				}
+			//				int offset = source.indexOf(methodJavadoc) + methodJavadoc.length();
+			//				edit = new InsertEdit(offset, newJavadoc);
+			//			}
+			//			unit.becomeWorkingCopy(null);
+			//			unit.applyTextEdit(edit, null);
+			//			unit.commitWorkingCopy(false, null);
 			return null;
 		}
 
@@ -303,7 +308,9 @@ public class JavaDocSupport {
 	public static String getJavadoc(AbstractNode node){
 		try{
 			return (String)node.accept(new JavadocReader());
-		}catch (Exception e){SystemLogger.logCatch(e.getMessage());}
+		}catch (Exception e) {
+			SystemLogger.logCatch(e.getMessage());
+		}
 		return null;
 	}
 
