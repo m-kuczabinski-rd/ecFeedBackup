@@ -1,4 +1,4 @@
-package com.testify.ecfeed.core.runner.java;
+package com.ecfeed.core.runner.java;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
