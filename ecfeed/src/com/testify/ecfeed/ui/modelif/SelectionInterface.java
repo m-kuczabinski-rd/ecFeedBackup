@@ -13,11 +13,11 @@ package com.testify.ecfeed.ui.modelif;
 
 import java.util.List;
 
+import com.ecfeed.core.adapter.IModelOperation;
+import com.ecfeed.core.adapter.ITypeAdapterProvider;
+import com.ecfeed.core.adapter.ModelOperationException;
 import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.core.utils.SystemLogger;
-import com.testify.ecfeed.core.adapter.IModelOperation;
-import com.testify.ecfeed.core.adapter.ITypeAdapterProvider;
-import com.testify.ecfeed.core.adapter.ModelOperationException;
 import com.testify.ecfeed.core.adapter.operations.FactoryShiftOperation;
 import com.testify.ecfeed.core.adapter.operations.GenericMoveOperation;
 import com.testify.ecfeed.core.adapter.operations.GenericRemoveNodesOperation;

@@ -11,10 +11,10 @@
 
 package com.testify.ecfeed.core.adapter.operations;
 
+import com.ecfeed.core.adapter.IModelOperation;
+import com.ecfeed.core.adapter.ModelOperationException;
 import com.ecfeed.core.model.EStatementOperator;
 import com.ecfeed.core.model.StatementArray;
-import com.testify.ecfeed.core.adapter.IModelOperation;
-import com.testify.ecfeed.core.adapter.ModelOperationException;
 
 public class StatementOperationChangeOperator extends AbstractModelOperation {
 

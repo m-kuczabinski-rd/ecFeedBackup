@@ -9,13 +9,12 @@
  *     Patryk Chamuczynski (p.chamuczynski(at)radytek.com) - initial implementation
  ******************************************************************************/
 
-package com.testify.ecfeed.core.adapter;
+package com.ecfeed.core.adapter;
 
-import com.ecfeed.core.model.AbstractNode;
-
-public interface IModelImplementer {
-	public boolean implementable(Class<? extends AbstractNode> type);
-	public boolean implementable(AbstractNode node);
-	public boolean implement(AbstractNode node) throws Exception;
-	public EImplementationStatus getImplementationStatus(AbstractNode node);
+public interface ITypeAdapter {
+	public boolean compatible(String type);
+	// returns null if conversion is not possible
+	public String convert(String value);
+	public String defaultValue();
+	public boolean isNullAllowed();
 }

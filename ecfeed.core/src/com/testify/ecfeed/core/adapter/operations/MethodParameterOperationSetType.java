@@ -17,6 +17,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import com.ecfeed.core.adapter.IModelOperation;
+import com.ecfeed.core.adapter.ITypeAdapter;
+import com.ecfeed.core.adapter.ITypeAdapterProvider;
+import com.ecfeed.core.adapter.ModelOperationException;
 import com.ecfeed.core.model.AbstractStatement;
 import com.ecfeed.core.model.ChoiceNode;
 import com.ecfeed.core.model.ChoicesParentNode;
@@ -35,10 +39,6 @@ import com.ecfeed.core.model.TestCaseNode;
 import com.ecfeed.core.model.ChoicesParentStatement.ChoiceCondition;
 import com.ecfeed.core.model.ChoicesParentStatement.LabelCondition;
 import com.ecfeed.core.utils.SystemLogger;
-import com.testify.ecfeed.core.adapter.IModelOperation;
-import com.testify.ecfeed.core.adapter.ITypeAdapter;
-import com.testify.ecfeed.core.adapter.ITypeAdapterProvider;
-import com.testify.ecfeed.core.adapter.ModelOperationException;
 import com.testify.ecfeed.core.adapter.java.JavaUtils;
 import com.testify.ecfeed.core.adapter.java.Messages;
 

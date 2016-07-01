@@ -11,13 +11,13 @@
 
 package com.testify.ecfeed.core.adapter.operations;
 
+import com.ecfeed.core.adapter.IModelOperation;
+import com.ecfeed.core.adapter.ITypeAdapter;
+import com.ecfeed.core.adapter.ITypeAdapterProvider;
+import com.ecfeed.core.adapter.ModelOperationException;
 import com.ecfeed.core.model.ChoiceNode;
 import com.ecfeed.core.model.ChoicesParentNode;
 import com.ecfeed.core.model.MethodNode;
-import com.testify.ecfeed.core.adapter.IModelOperation;
-import com.testify.ecfeed.core.adapter.ITypeAdapter;
-import com.testify.ecfeed.core.adapter.ITypeAdapterProvider;
-import com.testify.ecfeed.core.adapter.ModelOperationException;
 import com.testify.ecfeed.core.adapter.java.Messages;
 
 public class GenericOperationAddChoice extends BulkOperation {

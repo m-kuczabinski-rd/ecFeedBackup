@@ -9,12 +9,8 @@
  *     Patryk Chamuczynski (p.chamuczynski(at)radytek.com) - initial implementation
  ******************************************************************************/
 
-package com.testify.ecfeed.core.adapter;
+package com.ecfeed.core.adapter;
 
-
-public interface IModelOperation {
-	public void execute() throws ModelOperationException;
-	public boolean modelUpdated();
-	public IModelOperation reverseOperation();
-	public String getName();
+public interface ITypeAdapterProvider {
+	public ITypeAdapter getAdapter(String type);
 }

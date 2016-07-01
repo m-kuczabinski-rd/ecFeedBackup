@@ -9,18 +9,23 @@
  *     Patryk Chamuczynski (p.chamuczynski(at)radytek.com) - initial implementation
  ******************************************************************************/
 
-package com.testify.ecfeed.core.adapter;
+package com.ecfeed.core.adapter;
 
-public enum EImplementationStatus {
-	IMPLEMENTED, PARTIALLY_IMPLEMENTED, NOT_IMPLEMENTED, IRRELEVANT;
-	
-	public String toString(){
-		switch(this){
-		case IMPLEMENTED: return "implemented";
-		case PARTIALLY_IMPLEMENTED: return "partially implemented";
-		case NOT_IMPLEMENTED: return "not implemented";
-		case IRRELEVANT: return "irrelevant implementation status";
-		}
-		return "";
+import com.ecfeed.core.utils.SystemLogger;
+
+public class ModelOperationException extends Exception {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -2841889790004375884L;
+
+	private ModelOperationException(String message){
+		super(message);
 	}
+
+	public static void report(String message) throws ModelOperationException {
+		SystemLogger.logThrow(message);
+		throw new ModelOperationException(message);
+	}	
 }

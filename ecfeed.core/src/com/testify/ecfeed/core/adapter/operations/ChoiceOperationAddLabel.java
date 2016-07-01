@@ -13,9 +13,9 @@ package com.testify.ecfeed.core.adapter.operations;
 
 import java.util.Set;
 
+import com.ecfeed.core.adapter.IModelOperation;
+import com.ecfeed.core.adapter.ModelOperationException;
 import com.ecfeed.core.model.ChoiceNode;
-import com.testify.ecfeed.core.adapter.IModelOperation;
-import com.testify.ecfeed.core.adapter.ModelOperationException;
 
 public class ChoiceOperationAddLabel extends AbstractModelOperation {
 

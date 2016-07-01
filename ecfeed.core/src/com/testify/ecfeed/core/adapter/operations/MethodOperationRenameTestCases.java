@@ -13,8 +13,8 @@ package com.testify.ecfeed.core.adapter.operations;
 
 import java.util.Collection;
 
+import com.ecfeed.core.adapter.ModelOperationException;
 import com.ecfeed.core.model.TestCaseNode;
-import com.testify.ecfeed.core.adapter.ModelOperationException;
 import com.testify.ecfeed.core.adapter.java.Constants;
 import com.testify.ecfeed.core.adapter.java.Messages;
 

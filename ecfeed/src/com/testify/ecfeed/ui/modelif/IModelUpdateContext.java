@@ -16,7 +16,7 @@ import java.util.List;
 import org.eclipse.core.commands.operations.IUndoContext;
 import org.eclipse.ui.forms.AbstractFormPart;
 
-import com.testify.ecfeed.core.adapter.ModelOperationManager;
+import com.ecfeed.core.adapter.ModelOperationManager;
 
 public interface IModelUpdateContext {
 	public ModelOperationManager getOperationManager();

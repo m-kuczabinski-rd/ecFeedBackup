@@ -4,7 +4,8 @@ Bundle-Name: Core
 Bundle-SymbolicName: ecfeed.core
 Bundle-Version: 1.0.1.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
-Export-Package: com.ecfeed.core.generators.api,
+Export-Package: com.ecfeed.core.adapter,
+ com.ecfeed.core.generators.api,
  com.ecfeed.core.model,
  com.ecfeed.core.resources,
  com.ecfeed.core.runner,
@@ -13,7 +14,6 @@ Export-Package: com.ecfeed.core.generators.api,
  com.ecfeed.core.serialization.ect,
  com.ecfeed.core.serialization.export,
  com.ecfeed.core.utils,
- com.testify.ecfeed.core.adapter,
  com.testify.ecfeed.core.adapter.java,
  com.testify.ecfeed.core.adapter.operations,
  com.testify.ecfeed.core.generators,

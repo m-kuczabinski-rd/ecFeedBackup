@@ -11,7 +11,7 @@
 
 package com.testify.ecfeed.core.adapter.operations;
 
-import com.testify.ecfeed.core.adapter.IModelOperation;
+import com.ecfeed.core.adapter.IModelOperation;
 
 public abstract class AbstractModelOperation implements IModelOperation {
 

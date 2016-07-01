@@ -4,9 +4,9 @@ import static org.junit.Assert.fail;
 
 import org.junit.Test;
 
-import com.testify.ecfeed.core.adapter.IModelOperation;
-import com.testify.ecfeed.core.adapter.ModelOperationException;
-import com.testify.ecfeed.core.adapter.ModelOperationManager;
+import com.ecfeed.core.adapter.IModelOperation;
+import com.ecfeed.core.adapter.ModelOperationException;
+import com.ecfeed.core.adapter.ModelOperationManager;
 import com.testify.ecfeed.core.adapter.operations.AbstractModelOperation;
 import com.testify.ecfeed.core.adapter.operations.BulkOperation;
 

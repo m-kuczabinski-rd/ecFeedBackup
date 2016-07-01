@@ -9,7 +9,7 @@
  *     Patryk Chamuczynski (p.chamuczynski(at)radytek.com) - initial implementation
  ******************************************************************************/
 
-package com.testify.ecfeed.core.adapter;
+package com.ecfeed.core.adapter;
 
 import com.ecfeed.core.model.AbstractNode;
 

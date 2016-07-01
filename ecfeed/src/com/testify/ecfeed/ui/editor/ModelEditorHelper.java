@@ -27,6 +27,7 @@ import org.eclipse.ui.dialogs.SaveAsDialog;
 import org.eclipse.ui.ide.FileStoreEditorInput;
 import org.eclipse.ui.part.FileEditorInput;
 
+import com.ecfeed.core.adapter.ModelOperationException;
 import com.ecfeed.core.model.ModelConverter;
 import com.ecfeed.core.model.RootNode;
 import com.ecfeed.core.serialization.IModelParser;
@@ -36,7 +37,6 @@ import com.ecfeed.core.utils.DiskFileHelper;
 import com.ecfeed.core.utils.ExceptionHelper;
 import com.ecfeed.core.utils.StringHelper;
 import com.ecfeed.core.utils.UriHelper;
-import com.testify.ecfeed.core.adapter.ModelOperationException;
 import com.testify.ecfeed.ui.dialogs.basic.ExceptionCatchDialog;
 import com.testify.ecfeed.ui.dialogs.basic.SaveAsEctDialogWithConfirm;
 import com.testify.ecfeed.utils.EclipseHelper;

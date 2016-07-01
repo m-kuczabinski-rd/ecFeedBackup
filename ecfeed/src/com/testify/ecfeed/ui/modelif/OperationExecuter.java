@@ -26,10 +26,10 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.forms.AbstractFormPart;
 
+import com.ecfeed.core.adapter.CachedImplementationStatusResolver;
+import com.ecfeed.core.adapter.IModelOperation;
+import com.ecfeed.core.adapter.ModelOperationException;
 import com.ecfeed.core.utils.SystemLogger;
-import com.testify.ecfeed.core.adapter.CachedImplementationStatusResolver;
-import com.testify.ecfeed.core.adapter.IModelOperation;
-import com.testify.ecfeed.core.adapter.ModelOperationException;
 
 public class OperationExecuter {
 

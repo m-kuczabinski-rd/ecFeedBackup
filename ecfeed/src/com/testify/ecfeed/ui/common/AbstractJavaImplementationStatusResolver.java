@@ -8,12 +8,12 @@
 
 package com.testify.ecfeed.ui.common;
 
+import com.ecfeed.core.adapter.CachedImplementationStatusResolver;
+import com.ecfeed.core.adapter.EImplementationStatus;
 import com.ecfeed.core.model.ClassNode;
 import com.ecfeed.core.model.IPrimitiveTypePredicate;
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.utils.EcException;
-import com.testify.ecfeed.core.adapter.CachedImplementationStatusResolver;
-import com.testify.ecfeed.core.adapter.EImplementationStatus;
 
 public abstract class AbstractJavaImplementationStatusResolver extends CachedImplementationStatusResolver{
 

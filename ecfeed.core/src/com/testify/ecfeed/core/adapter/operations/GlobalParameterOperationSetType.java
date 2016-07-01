@@ -11,9 +11,9 @@
 
 package com.testify.ecfeed.core.adapter.operations;
 
+import com.ecfeed.core.adapter.ITypeAdapterProvider;
 import com.ecfeed.core.model.GlobalParameterNode;
 import com.ecfeed.core.model.MethodNode;
-import com.testify.ecfeed.core.adapter.ITypeAdapterProvider;
 
 
 public class GlobalParameterOperationSetType extends BulkOperation {

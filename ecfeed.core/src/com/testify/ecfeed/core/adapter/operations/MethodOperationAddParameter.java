@@ -14,11 +14,11 @@ package com.testify.ecfeed.core.adapter.operations;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.ecfeed.core.adapter.IModelOperation;
+import com.ecfeed.core.adapter.ModelOperationException;
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.MethodParameterNode;
 import com.ecfeed.core.model.TestCaseNode;
-import com.testify.ecfeed.core.adapter.IModelOperation;
-import com.testify.ecfeed.core.adapter.ModelOperationException;
 import com.testify.ecfeed.core.adapter.java.Messages;
 
 public class MethodOperationAddParameter extends GenericOperationAddParameter {

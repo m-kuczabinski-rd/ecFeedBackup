@@ -23,8 +23,8 @@ import static com.testify.ecfeed.core.adapter.java.Constants.TYPE_NAME_STRING;
 
 import java.util.Arrays;
 
-import com.testify.ecfeed.core.adapter.ITypeAdapter;
-import com.testify.ecfeed.core.adapter.ITypeAdapterProvider;
+import com.ecfeed.core.adapter.ITypeAdapter;
+import com.ecfeed.core.adapter.ITypeAdapterProvider;
 import com.testify.ecfeed.core.adapter.java.JavaUtils;
 
 public class EclipseTypeAdapterProvider implements ITypeAdapterProvider{

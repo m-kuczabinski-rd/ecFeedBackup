@@ -9,23 +9,13 @@
  *     Patryk Chamuczynski (p.chamuczynski(at)radytek.com) - initial implementation
  ******************************************************************************/
 
-package com.testify.ecfeed.core.adapter;
+package com.ecfeed.core.adapter;
 
-import com.ecfeed.core.utils.SystemLogger;
+import com.ecfeed.core.model.AbstractNode;
 
-public class ModelOperationException extends Exception {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -2841889790004375884L;
-
-	private ModelOperationException(String message){
-		super(message);
-	}
-
-	public static void report(String message) throws ModelOperationException {
-		SystemLogger.logThrow(message);
-		throw new ModelOperationException(message);
-	}	
+public interface IModelImplementer {
+	public boolean implementable(Class<? extends AbstractNode> type);
+	public boolean implementable(AbstractNode node);
+	public boolean implement(AbstractNode node) throws Exception;
+	public EImplementationStatus getImplementationStatus(AbstractNode node);
 }

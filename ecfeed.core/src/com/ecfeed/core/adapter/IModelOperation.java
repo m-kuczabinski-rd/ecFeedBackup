@@ -9,12 +9,12 @@
  *     Patryk Chamuczynski (p.chamuczynski(at)radytek.com) - initial implementation
  ******************************************************************************/
 
-package com.testify.ecfeed.core.adapter;
+package com.ecfeed.core.adapter;
 
-public interface ITypeAdapter {
-	public boolean compatible(String type);
-	// returns null if conversion is not possible
-	public String convert(String value);
-	public String defaultValue();
-	public boolean isNullAllowed();
+
+public interface IModelOperation {
+	public void execute() throws ModelOperationException;
+	public boolean modelUpdated();
+	public IModelOperation reverseOperation();
+	public String getName();
 }
