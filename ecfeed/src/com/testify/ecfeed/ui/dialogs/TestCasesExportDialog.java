@@ -22,8 +22,8 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Text;
 
+import com.ecfeed.core.resources.ResourceHelper;
 import com.ecfeed.core.utils.DiskFileHelper;
-import com.testify.ecfeed.core.resources.ResourceHelper;
 import com.testify.ecfeed.ui.dialogs.basic.AskIfOverwriteFileDialog;
 import com.testify.ecfeed.ui.dialogs.basic.DialogObjectToolkit;
 import com.testify.ecfeed.ui.dialogs.basic.ExceptionCatchDialog;
