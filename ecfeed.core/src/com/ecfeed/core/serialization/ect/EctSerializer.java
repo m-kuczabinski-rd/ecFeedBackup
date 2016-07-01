@@ -18,6 +18,7 @@ import nu.xom.Document;
 import nu.xom.Element;
 import nu.xom.Serializer;
 
+import com.ecfeed.core.serialization.IModelSerializer;
 import com.testify.ecfeed.core.model.ChoiceNode;
 import com.testify.ecfeed.core.model.ClassNode;
 import com.testify.ecfeed.core.model.ConstraintNode;
@@ -26,7 +27,6 @@ import com.testify.ecfeed.core.model.MethodNode;
 import com.testify.ecfeed.core.model.MethodParameterNode;
 import com.testify.ecfeed.core.model.RootNode;
 import com.testify.ecfeed.core.model.TestCaseNode;
-import com.testify.ecfeed.core.serialization.IModelSerializer;
 
 public class EctSerializer implements IModelSerializer{
 

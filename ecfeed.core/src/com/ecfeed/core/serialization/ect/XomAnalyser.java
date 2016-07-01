@@ -39,6 +39,8 @@ import nu.xom.Element;
 import nu.xom.Elements;
 import nu.xom.Node;
 
+import com.ecfeed.core.serialization.ParserException;
+import com.ecfeed.core.serialization.WhiteCharConverter;
 import com.testify.ecfeed.core.adapter.java.JavaPrimitiveTypePredicate;
 import com.testify.ecfeed.core.model.AbstractStatement;
 import com.testify.ecfeed.core.model.ChoiceNode;
@@ -56,8 +58,6 @@ import com.testify.ecfeed.core.model.RootNode;
 import com.testify.ecfeed.core.model.StatementArray;
 import com.testify.ecfeed.core.model.StaticStatement;
 import com.testify.ecfeed.core.model.TestCaseNode;
-import com.testify.ecfeed.core.serialization.ParserException;
-import com.testify.ecfeed.core.serialization.WhiteCharConverter;
 
 public abstract class XomAnalyser {
 

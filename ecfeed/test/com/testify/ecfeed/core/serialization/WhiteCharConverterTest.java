@@ -4,7 +4,7 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-import com.testify.ecfeed.core.serialization.WhiteCharConverter;
+import com.ecfeed.core.serialization.WhiteCharConverter;
 
 public class WhiteCharConverterTest {
 

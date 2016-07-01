@@ -19,6 +19,8 @@ import nu.xom.Document;
 import nu.xom.Element;
 import nu.xom.ParsingException;
 
+import com.ecfeed.core.serialization.IModelParser;
+import com.ecfeed.core.serialization.ParserException;
 import com.ecfeed.core.utils.ExceptionHelper;
 import com.testify.ecfeed.core.model.AbstractStatement;
 import com.testify.ecfeed.core.model.ChoiceNode;
@@ -34,8 +36,6 @@ import com.testify.ecfeed.core.model.RootNode;
 import com.testify.ecfeed.core.model.StatementArray;
 import com.testify.ecfeed.core.model.StaticStatement;
 import com.testify.ecfeed.core.model.TestCaseNode;
-import com.testify.ecfeed.core.serialization.IModelParser;
-import com.testify.ecfeed.core.serialization.ParserException;
 
 public class EctParser implements IModelParser {
 

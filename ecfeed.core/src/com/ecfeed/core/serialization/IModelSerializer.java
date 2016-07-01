@@ -9,7 +9,7 @@
  *     Patryk Chamuczynski (p.chamuczynski(at)radytek.com) - initial implementation
  ******************************************************************************/
 
-package com.testify.ecfeed.core.serialization;
+package com.ecfeed.core.serialization;
 
 import com.testify.ecfeed.core.model.ChoiceNode;
 import com.testify.ecfeed.core.model.ClassNode;

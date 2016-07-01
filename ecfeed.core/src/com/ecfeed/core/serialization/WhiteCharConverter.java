@@ -1,4 +1,4 @@
-package com.testify.ecfeed.core.serialization;
+package com.ecfeed.core.serialization;
 
 import java.util.ArrayList;
 import java.util.Arrays;

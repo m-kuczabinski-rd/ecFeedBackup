@@ -55,6 +55,7 @@ import nu.xom.Attribute;
 import nu.xom.Element;
 import nu.xom.Elements;
 
+import com.ecfeed.core.serialization.WhiteCharConverter;
 import com.ecfeed.core.utils.StringHelper;
 import com.testify.ecfeed.core.model.AbstractNode;
 import com.testify.ecfeed.core.model.AbstractParameterNode;
@@ -76,7 +77,6 @@ import com.testify.ecfeed.core.model.TestCaseNode;
 import com.testify.ecfeed.core.model.ChoicesParentStatement.ChoiceCondition;
 import com.testify.ecfeed.core.model.ChoicesParentStatement.ICondition;
 import com.testify.ecfeed.core.model.ChoicesParentStatement.LabelCondition;
-import com.testify.ecfeed.core.serialization.WhiteCharConverter;
 
 public abstract class XomBuilder implements IModelVisitor, IStatementVisitor {
 
