@@ -33,11 +33,11 @@ import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.core.model.AbstractParameterNode;
 import com.ecfeed.core.model.ChoiceNode;
 import com.ecfeed.core.utils.SystemLogger;
+import com.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.testify.ecfeed.ui.common.Constants;
 import com.testify.ecfeed.ui.common.EclipseTypeAdapterProvider;
 import com.testify.ecfeed.ui.common.JavaModelAnalyser;
 import com.testify.ecfeed.ui.common.Messages;
-import com.testify.ecfeed.ui.common.utils.IFileInfoProvider;
 
 public class ChoiceInterface extends ChoicesParentInterface{
 

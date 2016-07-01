@@ -24,10 +24,10 @@ import com.ecfeed.core.adapter.operations.RootOperationAddClasses;
 import com.ecfeed.core.adapter.operations.RootOperationAddNewClass;
 import com.ecfeed.core.model.ClassNode;
 import com.ecfeed.core.model.RootNode;
+import com.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.testify.ecfeed.ui.common.Constants;
 import com.testify.ecfeed.ui.common.EclipseModelBuilder;
 import com.testify.ecfeed.ui.common.Messages;
-import com.testify.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.testify.ecfeed.ui.dialogs.TestClassImportDialog;
 
 public class RootInterface extends GlobalParametersParentInterface {

@@ -24,8 +24,8 @@ import com.ecfeed.core.model.ClassNode;
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.utils.EcException;
 import com.ecfeed.core.utils.SystemLogger;
-import com.testify.ecfeed.ui.common.utils.EclipseProjectHelper;
-import com.testify.ecfeed.ui.common.utils.IFileInfoProvider;
+import com.ecfeed.ui.common.utils.EclipseProjectHelper;
+import com.ecfeed.ui.common.utils.IFileInfoProvider;
 
 public class EclipseImplementationStatusResolver extends AbstractJavaImplementationStatusResolver{
 

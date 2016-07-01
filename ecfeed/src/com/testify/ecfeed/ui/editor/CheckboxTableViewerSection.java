@@ -19,7 +19,7 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Table;
 
-import com.testify.ecfeed.ui.common.utils.IFileInfoProvider;
+import com.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 
 public abstract class CheckboxTableViewerSection extends TableViewerSection {

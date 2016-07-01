@@ -24,7 +24,7 @@ import com.ecfeed.core.adapter.IImplementationStatusResolver;
 import com.ecfeed.core.model.ChoiceNode;
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.TestCaseNode;
-import com.testify.ecfeed.ui.common.utils.IFileInfoProvider;
+import com.ecfeed.ui.common.utils.IFileInfoProvider;
 
 public class TestCasesViewerLabelProvider extends LabelProvider implements IColorProvider {
 	private IFileInfoProvider fFileInfoProvider;

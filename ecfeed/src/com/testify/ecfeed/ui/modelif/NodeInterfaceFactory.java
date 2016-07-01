@@ -22,7 +22,7 @@ import com.ecfeed.core.model.MethodParameterNode;
 import com.ecfeed.core.model.RootNode;
 import com.ecfeed.core.model.TestCaseNode;
 import com.ecfeed.core.utils.SystemLogger;
-import com.testify.ecfeed.ui.common.utils.IFileInfoProvider;
+import com.ecfeed.ui.common.utils.IFileInfoProvider;
 
 public class NodeInterfaceFactory{
 

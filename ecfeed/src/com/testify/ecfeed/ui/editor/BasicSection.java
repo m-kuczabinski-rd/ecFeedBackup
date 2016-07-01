@@ -37,8 +37,8 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import com.ecfeed.core.adapter.ModelOperationManager;
 import com.ecfeed.core.model.AbstractNode;
+import com.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.testify.ecfeed.ui.common.ImageManager;
-import com.testify.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.testify.ecfeed.ui.editor.actions.IActionProvider;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 import com.testify.ecfeed.ui.modelif.IModelUpdateListener;

@@ -15,7 +15,7 @@ import org.eclipse.swt.widgets.Composite;
 
 import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.core.model.GlobalParameterNode;
-import com.testify.ecfeed.ui.common.utils.IFileInfoProvider;
+import com.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.testify.ecfeed.ui.modelif.AbstractParameterInterface;
 import com.testify.ecfeed.ui.modelif.GlobalParameterInterface;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;

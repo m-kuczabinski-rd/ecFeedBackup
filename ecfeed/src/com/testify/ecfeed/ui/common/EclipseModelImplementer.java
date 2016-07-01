@@ -61,10 +61,10 @@ import com.ecfeed.core.model.MethodParameterNode;
 import com.ecfeed.core.utils.EcException;
 import com.ecfeed.core.utils.PackageClassHelper;
 import com.ecfeed.core.utils.SystemLogger;
-import com.testify.ecfeed.ui.common.utils.EclipsePackageFragmentGetter;
-import com.testify.ecfeed.ui.common.utils.EclipseProjectHelper;
-import com.testify.ecfeed.ui.common.utils.IFileInfoProvider;
-import com.testify.ecfeed.ui.common.utils.JavaUserClassImplementer;
+import com.ecfeed.ui.common.utils.EclipsePackageFragmentGetter;
+import com.ecfeed.ui.common.utils.EclipseProjectHelper;
+import com.ecfeed.ui.common.utils.IFileInfoProvider;
+import com.ecfeed.ui.common.utils.JavaUserClassImplementer;
 
 public class EclipseModelImplementer extends AbstractJavaModelImplementer {
 

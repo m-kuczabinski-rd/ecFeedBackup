@@ -16,7 +16,7 @@ import org.eclipse.ui.forms.editor.FormPage;
 
 import com.ecfeed.core.adapter.ModelOperationException;
 import com.ecfeed.core.model.RootNode;
-import com.testify.ecfeed.ui.common.utils.IFileInfoProvider;
+import com.ecfeed.ui.common.utils.IFileInfoProvider;
 
 public class ModelPage extends FormPage {
 	private static final String ID = "com.testify.ecfeed.pages.refactored";

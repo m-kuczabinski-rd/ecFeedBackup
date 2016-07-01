@@ -11,7 +11,7 @@ package com.testify.ecfeed.ui.editor.actions;
 import org.eclipse.jface.viewers.ISelectionProvider;
 
 import com.ecfeed.core.utils.EcException;
-import com.testify.ecfeed.ui.common.utils.IFileInfoProvider;
+import com.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.testify.ecfeed.ui.dialogs.basic.ExceptionCatchDialog;
 import com.testify.ecfeed.ui.modelif.MethodInterface;
 

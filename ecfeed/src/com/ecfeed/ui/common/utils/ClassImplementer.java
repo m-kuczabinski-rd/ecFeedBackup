@@ -6,7 +6,7 @@
  * http://www.eclipse.org/legal/epl-v10.html                                     
  ******************************************************************************/
 
-package com.testify.ecfeed.ui.common.utils;
+package com.ecfeed.ui.common.utils;
 
 import com.ecfeed.android.external.IClassImplementHelper;
 import com.ecfeed.android.external.IImplementerExt;

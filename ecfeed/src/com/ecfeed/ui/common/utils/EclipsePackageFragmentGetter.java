@@ -1,4 +1,4 @@
-package com.testify.ecfeed.ui.common.utils;
+package com.ecfeed.ui.common.utils;
 
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;

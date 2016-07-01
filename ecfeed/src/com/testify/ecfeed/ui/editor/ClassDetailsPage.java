@@ -32,8 +32,8 @@ import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.core.model.ClassNode;
 import com.ecfeed.core.utils.EcException;
 import com.ecfeed.core.utils.SystemLogger;
-import com.testify.ecfeed.ui.common.utils.EclipseProjectHelper;
-import com.testify.ecfeed.ui.common.utils.IFileInfoProvider;
+import com.ecfeed.ui.common.utils.EclipseProjectHelper;
+import com.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.testify.ecfeed.ui.modelif.ClassInterface;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 

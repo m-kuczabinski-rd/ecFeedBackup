@@ -20,9 +20,9 @@ import com.ecfeed.core.runner.ITestMethodInvoker;
 import com.ecfeed.core.runner.RunnerException;
 import com.ecfeed.core.utils.ExceptionHelper;
 import com.ecfeed.core.utils.SystemLogger;
+import com.ecfeed.ui.common.utils.EclipseProjectHelper;
+import com.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.testify.ecfeed.ui.common.Messages;
-import com.testify.ecfeed.ui.common.utils.EclipseProjectHelper;
-import com.testify.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.testify.ecfeed.ui.dialogs.SetupDialogExecuteOnline;
 import com.testify.ecfeed.ui.dialogs.SetupDialogOnline;
 

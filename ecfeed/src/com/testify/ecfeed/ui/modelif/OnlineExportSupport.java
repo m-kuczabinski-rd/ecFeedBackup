@@ -9,7 +9,7 @@ import com.ecfeed.core.model.ChoiceNode;
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.runner.ITestMethodInvoker;
 import com.ecfeed.core.runner.RunnerException;
-import com.testify.ecfeed.ui.common.utils.IFileInfoProvider;
+import com.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.testify.ecfeed.ui.dialogs.SetupDialogExportOnline;
 import com.testify.ecfeed.ui.dialogs.SetupDialogOnline;
 
