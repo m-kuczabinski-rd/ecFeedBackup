@@ -40,12 +40,12 @@ import com.ecfeed.core.adapter.IModelImplementer;
 import com.ecfeed.core.adapter.ModelOperationManager;
 import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.ui.common.utils.IFileInfoProvider;
+import com.ecfeed.ui.modelif.IModelUpdateContext;
+import com.ecfeed.ui.modelif.IModelUpdateListener;
 import com.testify.ecfeed.ui.common.EclipseModelImplementer;
 import com.testify.ecfeed.ui.common.ImageManager;
 import com.testify.ecfeed.ui.editor.actions.GoToImplementationAction;
 import com.testify.ecfeed.ui.editor.actions.ImplementAction;
-import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
-import com.testify.ecfeed.ui.modelif.IModelUpdateListener;
 
 public abstract class BasicDetailsPage implements IDetailsPage, IModelUpdateListener, ISectionContext, IModelUpdateContext{
 

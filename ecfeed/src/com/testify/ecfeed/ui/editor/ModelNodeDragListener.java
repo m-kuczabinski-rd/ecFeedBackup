@@ -15,8 +15,8 @@ import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.swt.dnd.DragSourceEvent;
 import org.eclipse.swt.dnd.DragSourceListener;
 
-import com.testify.ecfeed.ui.modelif.NodeDnDBuffer;
-import com.testify.ecfeed.ui.modelif.NodeSelectionUtils;
+import com.ecfeed.ui.modelif.NodeDnDBuffer;
+import com.ecfeed.ui.modelif.NodeSelectionUtils;
 
 public class ModelNodeDragListener implements DragSourceListener {
 

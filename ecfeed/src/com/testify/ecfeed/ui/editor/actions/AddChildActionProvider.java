@@ -34,13 +34,13 @@ import com.ecfeed.core.model.TestCaseNode;
 import com.ecfeed.core.utils.ExceptionHelper;
 import com.ecfeed.core.utils.SystemLogger;
 import com.ecfeed.ui.common.utils.IFileInfoProvider;
-import com.testify.ecfeed.ui.modelif.AbstractNodeInterface;
-import com.testify.ecfeed.ui.modelif.ChoicesParentInterface;
-import com.testify.ecfeed.ui.modelif.ClassInterface;
-import com.testify.ecfeed.ui.modelif.GlobalParametersParentInterface;
-import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
-import com.testify.ecfeed.ui.modelif.MethodInterface;
-import com.testify.ecfeed.ui.modelif.RootInterface;
+import com.ecfeed.ui.modelif.AbstractNodeInterface;
+import com.ecfeed.ui.modelif.ChoicesParentInterface;
+import com.ecfeed.ui.modelif.ClassInterface;
+import com.ecfeed.ui.modelif.GlobalParametersParentInterface;
+import com.ecfeed.ui.modelif.IModelUpdateContext;
+import com.ecfeed.ui.modelif.MethodInterface;
+import com.ecfeed.ui.modelif.RootInterface;
 
 public class AddChildActionProvider {
 

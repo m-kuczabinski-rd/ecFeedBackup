@@ -15,7 +15,7 @@ import org.eclipse.jface.viewers.StructuredViewer;
 
 import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.ui.common.utils.IFileInfoProvider;
-import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
+import com.ecfeed.ui.modelif.IModelUpdateContext;
 
 public class InsertAction extends ModelModifyingAction {
 

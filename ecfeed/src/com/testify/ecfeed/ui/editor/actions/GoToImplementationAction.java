@@ -15,8 +15,8 @@ import org.eclipse.jface.viewers.ISelectionProvider;
 
 import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.ui.common.utils.IFileInfoProvider;
-import com.testify.ecfeed.ui.modelif.AbstractNodeInterface;
-import com.testify.ecfeed.ui.modelif.NodeInterfaceFactory;
+import com.ecfeed.ui.modelif.AbstractNodeInterface;
+import com.ecfeed.ui.modelif.NodeInterfaceFactory;
 
 public class GoToImplementationAction extends ModelSelectionAction {
 

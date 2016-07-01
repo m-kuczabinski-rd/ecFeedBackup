@@ -23,8 +23,8 @@ import org.eclipse.swt.widgets.Text;
 
 import com.ecfeed.core.model.AbstractParameterNode;
 import com.ecfeed.ui.common.utils.IFileInfoProvider;
-import com.testify.ecfeed.ui.modelif.AbstractParameterInterface;
-import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
+import com.ecfeed.ui.modelif.AbstractParameterInterface;
+import com.ecfeed.ui.modelif.IModelUpdateContext;
 
 public abstract class AbstractParameterDetailsPage extends BasicDetailsPage {
 

@@ -32,6 +32,8 @@ import org.eclipse.ui.forms.widgets.Section;
 import com.ecfeed.core.model.ChoiceNode;
 import com.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.ecfeed.ui.dialogs.basic.ExceptionCatchDialog;
+import com.ecfeed.ui.modelif.ChoiceInterface;
+import com.ecfeed.ui.modelif.IModelUpdateContext;
 import com.testify.ecfeed.ui.common.ColorConstants;
 import com.testify.ecfeed.ui.common.ColorManager;
 import com.testify.ecfeed.ui.common.Messages;
@@ -40,8 +42,6 @@ import com.testify.ecfeed.ui.editor.actions.CutAction;
 import com.testify.ecfeed.ui.editor.actions.ModelModifyingAction;
 import com.testify.ecfeed.ui.editor.actions.NamedAction;
 import com.testify.ecfeed.ui.editor.actions.SelectAllAction;
-import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
-import com.testify.ecfeed.ui.modelif.ChoiceInterface;
 
 public class ChoiceLabelsViewer extends TableViewerSection {
 

@@ -18,7 +18,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Text;
 
 import com.ecfeed.ui.common.utils.IFileInfoProvider;
-import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
+import com.ecfeed.ui.modelif.IModelUpdateContext;
 
 public class SingleTextCommentsSection extends AbstractCommentsSection {
 

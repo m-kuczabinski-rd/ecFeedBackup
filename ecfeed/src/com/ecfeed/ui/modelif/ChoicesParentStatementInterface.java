@@ -9,7 +9,7 @@
  *     Patryk Chamuczynski (p.chamuczynski(at)radytek.com) - initial implementation
  ******************************************************************************/
 
-package com.testify.ecfeed.ui.modelif;
+package com.ecfeed.ui.modelif;
 
 import com.ecfeed.core.adapter.IModelOperation;
 import com.ecfeed.core.adapter.operations.StatementOperationSetCondition;

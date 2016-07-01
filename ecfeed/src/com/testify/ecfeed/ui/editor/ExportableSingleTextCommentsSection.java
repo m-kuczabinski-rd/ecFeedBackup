@@ -16,8 +16,8 @@ import org.eclipse.swt.widgets.Button;
 
 import com.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.ecfeed.ui.dialogs.basic.ExceptionCatchDialog;
+import com.ecfeed.ui.modelif.IModelUpdateContext;
 import com.testify.ecfeed.ui.common.Messages;
-import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 
 public class ExportableSingleTextCommentsSection extends SingleTextCommentsSection {
 

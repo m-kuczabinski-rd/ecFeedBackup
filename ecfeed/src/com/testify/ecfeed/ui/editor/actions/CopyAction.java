@@ -13,7 +13,7 @@ package com.testify.ecfeed.ui.editor.actions;
 
 import org.eclipse.jface.viewers.ISelectionProvider;
 
-import com.testify.ecfeed.ui.modelif.NodeClipboard;
+import com.ecfeed.ui.modelif.NodeClipboard;
 
 public class CopyAction extends ModelSelectionAction {
 

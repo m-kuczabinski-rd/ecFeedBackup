@@ -1,4 +1,4 @@
-package com.testify.ecfeed.ui.modelif;
+package com.ecfeed.ui.modelif;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;

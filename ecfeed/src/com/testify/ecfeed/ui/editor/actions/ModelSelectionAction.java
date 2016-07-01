@@ -16,7 +16,7 @@ import java.util.List;
 import org.eclipse.jface.viewers.ISelectionProvider;
 
 import com.ecfeed.core.model.AbstractNode;
-import com.testify.ecfeed.ui.modelif.NodeSelectionUtils;
+import com.ecfeed.ui.modelif.NodeSelectionUtils;
 
 public abstract class ModelSelectionAction extends NamedAction {
 	

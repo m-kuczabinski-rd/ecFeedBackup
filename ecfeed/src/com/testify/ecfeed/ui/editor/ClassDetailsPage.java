@@ -34,8 +34,8 @@ import com.ecfeed.core.utils.EcException;
 import com.ecfeed.core.utils.SystemLogger;
 import com.ecfeed.ui.common.utils.EclipseProjectHelper;
 import com.ecfeed.ui.common.utils.IFileInfoProvider;
-import com.testify.ecfeed.ui.modelif.ClassInterface;
-import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
+import com.ecfeed.ui.modelif.ClassInterface;
+import com.ecfeed.ui.modelif.IModelUpdateContext;
 
 public class ClassDetailsPage extends BasicDetailsPage {
 

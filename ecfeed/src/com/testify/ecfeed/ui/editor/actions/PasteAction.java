@@ -20,11 +20,11 @@ import org.eclipse.swt.widgets.Display;
 
 import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.ui.common.utils.IFileInfoProvider;
+import com.ecfeed.ui.modelif.AbstractNodeInterface;
+import com.ecfeed.ui.modelif.IModelUpdateContext;
+import com.ecfeed.ui.modelif.NodeClipboard;
+import com.ecfeed.ui.modelif.NodeInterfaceFactory;
 import com.testify.ecfeed.ui.common.Messages;
-import com.testify.ecfeed.ui.modelif.AbstractNodeInterface;
-import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
-import com.testify.ecfeed.ui.modelif.NodeClipboard;
-import com.testify.ecfeed.ui.modelif.NodeInterfaceFactory;
 
 public class PasteAction extends ModelModifyingAction {
 

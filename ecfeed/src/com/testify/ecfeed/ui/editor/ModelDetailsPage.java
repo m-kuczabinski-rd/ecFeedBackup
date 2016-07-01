@@ -23,8 +23,8 @@ import org.eclipse.ui.forms.IFormPart;
 import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.core.model.RootNode;
 import com.ecfeed.ui.common.utils.IFileInfoProvider;
-import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
-import com.testify.ecfeed.ui.modelif.RootInterface;
+import com.ecfeed.ui.modelif.IModelUpdateContext;
+import com.ecfeed.ui.modelif.RootInterface;
 
 public class ModelDetailsPage extends BasicDetailsPage {
 

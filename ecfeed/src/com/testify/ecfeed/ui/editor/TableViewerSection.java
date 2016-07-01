@@ -25,7 +25,7 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 
 import com.ecfeed.ui.common.utils.IFileInfoProvider;
-import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
+import com.ecfeed.ui.modelif.IModelUpdateContext;
 
 public abstract class TableViewerSection extends ViewerSection {
 

@@ -14,9 +14,9 @@ package com.testify.ecfeed.ui.editor;
 import org.eclipse.swt.events.SelectionListener;
 
 import com.ecfeed.ui.common.utils.IFileInfoProvider;
-import com.testify.ecfeed.ui.modelif.AbstractParameterInterface;
-import com.testify.ecfeed.ui.modelif.GlobalParameterInterface;
-import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
+import com.ecfeed.ui.modelif.AbstractParameterInterface;
+import com.ecfeed.ui.modelif.GlobalParameterInterface;
+import com.ecfeed.ui.modelif.IModelUpdateContext;
 
 public class GlobalParameterCommentsSection extends AbstractParameterCommentsSection {
 

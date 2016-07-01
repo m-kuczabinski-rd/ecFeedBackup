@@ -16,9 +16,9 @@ import org.eclipse.swt.widgets.Composite;
 import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.core.model.GlobalParameterNode;
 import com.ecfeed.ui.common.utils.IFileInfoProvider;
-import com.testify.ecfeed.ui.modelif.AbstractParameterInterface;
-import com.testify.ecfeed.ui.modelif.GlobalParameterInterface;
-import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
+import com.ecfeed.ui.modelif.AbstractParameterInterface;
+import com.ecfeed.ui.modelif.GlobalParameterInterface;
+import com.ecfeed.ui.modelif.IModelUpdateContext;
 
 public class GlobalParameterDetailsPage extends AbstractParameterDetailsPage {
 

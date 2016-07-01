@@ -13,8 +13,8 @@ package com.testify.ecfeed.ui.editor.actions;
 
 import org.eclipse.jface.viewers.ISelectionProvider;
 
-import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
-import com.testify.ecfeed.ui.modelif.SelectionInterface;
+import com.ecfeed.ui.modelif.IModelUpdateContext;
+import com.ecfeed.ui.modelif.SelectionInterface;
 
 public class ModelModifyingAction extends ModelSelectionAction {
 

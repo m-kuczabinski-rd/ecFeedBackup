@@ -9,7 +9,7 @@
  *     Mariusz Strozynski (m.strozynski(at)radytek.com) - initial implementation
  ******************************************************************************/
 
-package com.testify.ecfeed.ui.modelif;
+package com.ecfeed.ui.modelif;
 
 import java.io.PrintStream;
 

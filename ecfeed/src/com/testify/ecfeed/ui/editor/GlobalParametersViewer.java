@@ -17,12 +17,12 @@ import org.eclipse.ui.forms.widgets.Section;
 
 import com.ecfeed.core.model.GlobalParametersParentNode;
 import com.ecfeed.ui.common.utils.IFileInfoProvider;
-import com.testify.ecfeed.ui.modelif.AbstractParameterInterface;
-import com.testify.ecfeed.ui.modelif.GlobalParameterInterface;
-import com.testify.ecfeed.ui.modelif.GlobalParametersParentInterface;
-import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
-import com.testify.ecfeed.ui.modelif.ModelNodesTransfer;
-import com.testify.ecfeed.ui.modelif.ParametersParentInterface;
+import com.ecfeed.ui.modelif.AbstractParameterInterface;
+import com.ecfeed.ui.modelif.GlobalParameterInterface;
+import com.ecfeed.ui.modelif.GlobalParametersParentInterface;
+import com.ecfeed.ui.modelif.IModelUpdateContext;
+import com.ecfeed.ui.modelif.ModelNodesTransfer;
+import com.ecfeed.ui.modelif.ParametersParentInterface;
 
 public class GlobalParametersViewer extends AbstractParametersViewer {
 

@@ -22,8 +22,8 @@ import org.eclipse.swt.widgets.Composite;
 import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.core.model.ConstraintNode;
 import com.ecfeed.ui.common.utils.IFileInfoProvider;
-import com.testify.ecfeed.ui.modelif.ConstraintInterface;
-import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
+import com.ecfeed.ui.modelif.ConstraintInterface;
+import com.ecfeed.ui.modelif.IModelUpdateContext;
 
 public class ConstraintDetailsPage extends BasicDetailsPage {
 

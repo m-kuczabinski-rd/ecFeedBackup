@@ -15,8 +15,8 @@ import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.StructuredViewer;
 
 import com.ecfeed.core.model.AbstractNode;
-import com.testify.ecfeed.ui.modelif.AbstractNodeInterface;
-import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
+import com.ecfeed.ui.modelif.AbstractNodeInterface;
+import com.ecfeed.ui.modelif.IModelUpdateContext;
 
 public abstract class AbstractAddChildAction extends ModelModifyingAction{
 

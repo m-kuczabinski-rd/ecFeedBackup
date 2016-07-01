@@ -26,8 +26,8 @@ import com.ecfeed.core.model.TestCaseNode;
 import com.ecfeed.core.utils.EcException;
 import com.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.ecfeed.ui.dialogs.basic.ExceptionCatchDialog;
-import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
-import com.testify.ecfeed.ui.modelif.TestCaseInterface;
+import com.ecfeed.ui.modelif.IModelUpdateContext;
+import com.ecfeed.ui.modelif.TestCaseInterface;
 
 public class TestCaseDetailsPage extends BasicDetailsPage {
 

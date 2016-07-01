@@ -33,13 +33,13 @@ import com.ecfeed.core.model.RootNode;
 import com.ecfeed.core.model.TestCaseNode;
 import com.ecfeed.core.utils.SystemLogger;
 import com.ecfeed.ui.common.utils.IFileInfoProvider;
+import com.ecfeed.ui.modelif.AbstractNodeInterface;
+import com.ecfeed.ui.modelif.GlobalParametersParentInterface;
+import com.ecfeed.ui.modelif.IModelUpdateContext;
+import com.ecfeed.ui.modelif.NodeDnDBuffer;
+import com.ecfeed.ui.modelif.NodeInterfaceFactory;
+import com.ecfeed.ui.modelif.SelectionInterface;
 import com.testify.ecfeed.ui.common.EclipseModelBuilder;
-import com.testify.ecfeed.ui.modelif.AbstractNodeInterface;
-import com.testify.ecfeed.ui.modelif.GlobalParametersParentInterface;
-import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
-import com.testify.ecfeed.ui.modelif.NodeDnDBuffer;
-import com.testify.ecfeed.ui.modelif.NodeInterfaceFactory;
-import com.testify.ecfeed.ui.modelif.SelectionInterface;
 
 public class ModelNodeDropListener extends ViewerDropAdapter{
 

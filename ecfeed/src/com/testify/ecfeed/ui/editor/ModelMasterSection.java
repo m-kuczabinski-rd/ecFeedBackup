@@ -54,6 +54,12 @@ import com.ecfeed.core.model.TestCaseNode;
 import com.ecfeed.core.utils.ExceptionHelper;
 import com.ecfeed.core.utils.SystemLogger;
 import com.ecfeed.ui.common.utils.IFileInfoProvider;
+import com.ecfeed.ui.modelif.AbstractNodeInterface;
+import com.ecfeed.ui.modelif.AbstractParameterInterface;
+import com.ecfeed.ui.modelif.IModelUpdateListener;
+import com.ecfeed.ui.modelif.MethodInterface;
+import com.ecfeed.ui.modelif.ModelNodesTransfer;
+import com.ecfeed.ui.modelif.NodeInterfaceFactory;
 import com.testify.ecfeed.ui.common.Constants;
 import com.testify.ecfeed.ui.common.ImageManager;
 import com.testify.ecfeed.ui.editor.actions.AbstractAddChildAction;
@@ -61,12 +67,6 @@ import com.testify.ecfeed.ui.editor.actions.AddChildActionProvider;
 import com.testify.ecfeed.ui.editor.actions.ExportOnlineAction;
 import com.testify.ecfeed.ui.editor.actions.ModelViewerActionProvider;
 import com.testify.ecfeed.ui.editor.actions.TestOnlineAction;
-import com.testify.ecfeed.ui.modelif.AbstractNodeInterface;
-import com.testify.ecfeed.ui.modelif.AbstractParameterInterface;
-import com.testify.ecfeed.ui.modelif.IModelUpdateListener;
-import com.testify.ecfeed.ui.modelif.MethodInterface;
-import com.testify.ecfeed.ui.modelif.ModelNodesTransfer;
-import com.testify.ecfeed.ui.modelif.NodeInterfaceFactory;
 
 public class ModelMasterSection extends TreeViewerSection{
 	private static final int STYLE = Section.EXPANDED | Section.TITLE_BAR;

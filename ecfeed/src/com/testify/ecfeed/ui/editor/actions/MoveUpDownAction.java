@@ -13,7 +13,7 @@ package com.testify.ecfeed.ui.editor.actions;
 
 import org.eclipse.jface.viewers.ISelectionProvider;
 
-import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
+import com.ecfeed.ui.modelif.IModelUpdateContext;
 
 public class MoveUpDownAction extends ModelModifyingAction {
 

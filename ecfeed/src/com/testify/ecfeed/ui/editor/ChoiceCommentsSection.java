@@ -16,8 +16,8 @@ import org.eclipse.swt.events.SelectionListener;
 
 import com.ecfeed.core.model.ChoiceNode;
 import com.ecfeed.ui.common.utils.IFileInfoProvider;
+import com.ecfeed.ui.modelif.IModelUpdateContext;
 import com.testify.ecfeed.ui.common.Messages;
-import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 
 public class ChoiceCommentsSection extends JavaDocCommentsSection {
 
