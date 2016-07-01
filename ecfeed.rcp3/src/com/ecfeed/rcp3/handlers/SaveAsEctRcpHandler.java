@@ -11,7 +11,7 @@ package com.ecfeed.rcp3.handlers;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 
-import com.testify.ecfeed.ui.handlers.SaveAsEctHandler;
+import com.ecfeed.ui.handlers.SaveAsEctHandler;
 
 
 public class SaveAsEctRcpHandler extends org.eclipse.core.commands.AbstractHandler {

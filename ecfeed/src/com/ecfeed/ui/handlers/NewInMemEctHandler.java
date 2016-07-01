@@ -6,7 +6,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 
-package com.testify.ecfeed.ui.handlers;
+package com.ecfeed.ui.handlers;
 
 import com.ecfeed.utils.EclipseHelper;
 import com.testify.ecfeed.ui.editor.EditorInMemFileHelper;

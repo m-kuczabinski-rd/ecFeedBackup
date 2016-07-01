@@ -6,7 +6,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 
-package com.testify.ecfeed.ui.handlers;
+package com.ecfeed.ui.handlers;
 
 import org.eclipse.core.commands.ExecutionException;
 

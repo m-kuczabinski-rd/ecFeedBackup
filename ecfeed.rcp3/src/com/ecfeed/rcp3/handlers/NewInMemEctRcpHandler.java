@@ -11,7 +11,7 @@ package com.ecfeed.rcp3.handlers;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 
-import com.testify.ecfeed.ui.handlers.NewInMemEctHandler;
+import com.ecfeed.ui.handlers.NewInMemEctHandler;
 
 
 public class NewInMemEctRcpHandler extends org.eclipse.core.commands.AbstractHandler {

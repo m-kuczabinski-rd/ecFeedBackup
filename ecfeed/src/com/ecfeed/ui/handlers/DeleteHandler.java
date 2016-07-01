@@ -6,13 +6,14 @@
  * http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 
-package com.testify.ecfeed.ui.handlers;
+package com.ecfeed.ui.handlers;
 
 import org.eclipse.ui.actions.ActionFactory;
 
-public class PasteHandler {
+
+public class DeleteHandler {
 
 	public static void execute() {
-		HandlerHelper.executeGlobalAction(ActionFactory.PASTE.getId());
+		HandlerHelper.executeGlobalAction(ActionFactory.DELETE.getId());
 	}
 }

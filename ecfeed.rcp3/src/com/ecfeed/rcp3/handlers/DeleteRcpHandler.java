@@ -11,7 +11,7 @@ package com.ecfeed.rcp3.handlers;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 
-import com.testify.ecfeed.ui.handlers.DeleteHandler;
+import com.ecfeed.ui.handlers.DeleteHandler;
 
 
 public class DeleteRcpHandler extends org.eclipse.core.commands.AbstractHandler {

@@ -6,14 +6,23 @@
  * http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 
-package com.testify.ecfeed.ui.handlers;
+package com.ecfeed.ui.handlers;
 
-import org.eclipse.ui.actions.ActionFactory;
+import org.eclipse.jface.dialogs.MessageDialog;
+
+import com.ecfeed.utils.EclipseHelper;
 
 
-public class DeleteHandler {
+public class AboutHandler {
 
 	public static void execute() {
-		HandlerHelper.executeGlobalAction(ActionFactory.DELETE.getId());
+		MessageDialog.openInformation(
+				EclipseHelper.getActiveShell(), 
+				"About ecFeed", 
+				"EcFeed is a tool that allows to design, model and execute tests for Java, Android and Web projects.\n"+
+						"\n" +
+						"Copyright (c) 2016 Testify AS.\n" + 
+						"\n" +
+				"https://github.com/testify-no/ecFeed/wiki");
 	}
 }

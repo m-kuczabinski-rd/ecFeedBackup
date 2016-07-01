@@ -6,22 +6,15 @@
  * http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 
-package com.testify.ecfeed.ui.handlers;
+package com.ecfeed.ui.handlers;
 
 import org.eclipse.core.commands.ExecutionException;
-
-import com.testify.ecfeed.ui.editor.ModelEditor;
-import com.testify.ecfeed.ui.editor.ModelEditorHelper;
+import org.eclipse.ui.actions.ActionFactory;
 
 
-public class CloseEctHandler {
+public class CutHandler {
 
-	public static Object execute() throws ExecutionException {
-		ModelEditor modelEditor = ModelEditorHelper.getActiveModelEditor(); 
-		if (modelEditor == null) {
-			return null;
-		}
-		modelEditor.close(true);
-		return null;
+	public static void execute() throws ExecutionException {
+		HandlerHelper.executeGlobalAction(ActionFactory.CUT.getId());
 	}
 }

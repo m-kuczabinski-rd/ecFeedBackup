@@ -11,7 +11,7 @@ package com.ecfeed.rcp3.handlers;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 
-import com.testify.ecfeed.ui.handlers.CloseEctHandler;
+import com.ecfeed.ui.handlers.CloseEctHandler;
 
 
 public class CloseEctRcpHandler extends org.eclipse.core.commands.AbstractHandler {

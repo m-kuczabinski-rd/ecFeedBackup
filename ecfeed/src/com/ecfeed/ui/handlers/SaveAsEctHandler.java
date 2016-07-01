@@ -1,4 +1,4 @@
-package com.testify.ecfeed.ui.handlers;
+package com.ecfeed.ui.handlers;
 
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.ui.ide.FileStoreEditorInput;
