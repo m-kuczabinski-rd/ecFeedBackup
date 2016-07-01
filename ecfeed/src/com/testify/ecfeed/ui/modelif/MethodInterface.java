@@ -26,7 +26,7 @@ import org.eclipse.swt.widgets.Shell;
 
 import com.ecfeed.android.external.TestMethodInvokerExt;
 import com.ecfeed.android.utils.AndroidBaseRunnerHelper;
-import com.testify.ecfeed.application.ApplicationContext;
+import com.ecfeed.application.ApplicationContext;
 import com.testify.ecfeed.core.adapter.IModelOperation;
 import com.testify.ecfeed.core.adapter.ITypeAdapterProvider;
 import com.testify.ecfeed.core.adapter.ModelOperationException;

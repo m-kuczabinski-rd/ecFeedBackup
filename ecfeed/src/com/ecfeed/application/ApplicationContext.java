@@ -6,7 +6,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 
-package com.testify.ecfeed.application;
+package com.ecfeed.application;
 
 public class ApplicationContext {
 
