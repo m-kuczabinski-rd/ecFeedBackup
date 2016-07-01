@@ -1,4 +1,4 @@
-package com.testify.ecfeed.ui.editor.actions;
+package com.ecfeed.ui.editor.actions;
 
 import com.testify.ecfeed.junit.annotations.expected;
 import com.testify.ecfeed.testutils.ENodeType;
