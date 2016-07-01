@@ -26,7 +26,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
-import com.testify.ecfeed.android.utils.AndroidBaseRunnerHelper;
+import com.ecfeed.android.utils.AndroidBaseRunnerHelper;
 import com.testify.ecfeed.core.adapter.EImplementationStatus;
 import com.testify.ecfeed.core.model.AbstractNode;
 import com.testify.ecfeed.core.model.ClassNode;

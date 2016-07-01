@@ -1,4 +1,4 @@
-package com.testify.ecfeed.android.utils;
+package com.ecfeed.android.utils;
 
 import com.testify.ecfeed.core.utils.EcException;
 

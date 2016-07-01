@@ -21,8 +21,8 @@ import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
 
-import com.testify.ecfeed.android.utils.AndroidBaseRunnerHelper;
-import com.testify.ecfeed.android.utils.AndroidManifestAccessor;
+import com.ecfeed.android.utils.AndroidBaseRunnerHelper;
+import com.ecfeed.android.utils.AndroidManifestAccessor;
 import com.testify.ecfeed.core.adapter.EImplementationStatus;
 import com.testify.ecfeed.core.adapter.IModelOperation;
 import com.testify.ecfeed.core.adapter.ModelOperationException;
