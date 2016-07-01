@@ -10,8 +10,8 @@ package com.testify.ecfeed.ui.handlers;
 
 import org.eclipse.core.commands.ExecutionException;
 
+import com.ecfeed.ui.dialogs.basic.FileOpenEctDialog;
 import com.ecfeed.utils.EclipseHelper;
-import com.testify.ecfeed.ui.dialogs.basic.FileOpenEctDialog;
 
 
 public class OpenEctHandler {

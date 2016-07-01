@@ -10,9 +10,9 @@ package com.testify.ecfeed.ui.handlers;
 
 import org.eclipse.jface.action.IAction;
 
+import com.ecfeed.ui.dialogs.basic.ExceptionCatchDialog;
+import com.ecfeed.ui.dialogs.basic.InfoDialog;
 import com.ecfeed.utils.EclipseHelper;
-import com.testify.ecfeed.ui.dialogs.basic.ExceptionCatchDialog;
-import com.testify.ecfeed.ui.dialogs.basic.InfoDialog;
 
 
 public class HandlerHelper {

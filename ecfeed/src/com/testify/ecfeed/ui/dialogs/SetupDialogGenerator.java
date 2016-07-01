@@ -64,13 +64,13 @@ import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.MethodParameterNode;
 import com.ecfeed.core.utils.StringHolder;
 import com.ecfeed.ui.common.utils.IFileInfoProvider;
+import com.ecfeed.ui.dialogs.basic.DialogObjectToolkit;
 import com.testify.ecfeed.ui.common.Constants;
 import com.testify.ecfeed.ui.common.EclipseImplementationStatusResolver;
 import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.common.NodeNameColumnLabelProvider;
 import com.testify.ecfeed.ui.common.TreeCheckStateListener;
 import com.testify.ecfeed.ui.dialogs.TestCasesExportDialog.FileCompositeVisibility;
-import com.testify.ecfeed.ui.dialogs.basic.DialogObjectToolkit;
 
 public abstract class SetupDialogGenerator extends TitleAreaDialog {
 	private Combo fTestSuiteCombo;

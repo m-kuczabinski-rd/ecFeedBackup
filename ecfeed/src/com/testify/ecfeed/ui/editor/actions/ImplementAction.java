@@ -16,7 +16,7 @@ import org.eclipse.jface.viewers.StructuredViewer;
 import com.ecfeed.core.adapter.EImplementationStatus;
 import com.ecfeed.core.adapter.IModelImplementer;
 import com.ecfeed.core.model.AbstractNode;
-import com.testify.ecfeed.ui.dialogs.basic.ExceptionCatchDialog;
+import com.ecfeed.ui.dialogs.basic.ExceptionCatchDialog;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 
 public class ImplementAction extends ModelModifyingAction {

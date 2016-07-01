@@ -31,10 +31,10 @@ import org.eclipse.ui.forms.widgets.Section;
 
 import com.ecfeed.core.model.ChoiceNode;
 import com.ecfeed.ui.common.utils.IFileInfoProvider;
+import com.ecfeed.ui.dialogs.basic.ExceptionCatchDialog;
 import com.testify.ecfeed.ui.common.ColorConstants;
 import com.testify.ecfeed.ui.common.ColorManager;
 import com.testify.ecfeed.ui.common.Messages;
-import com.testify.ecfeed.ui.dialogs.basic.ExceptionCatchDialog;
 import com.testify.ecfeed.ui.editor.actions.ActionGroups;
 import com.testify.ecfeed.ui.editor.actions.CutAction;
 import com.testify.ecfeed.ui.editor.actions.ModelModifyingAction;

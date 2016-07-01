@@ -6,32 +6,30 @@
  * http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 
-package com.testify.ecfeed.ui.dialogs.basic;
+package com.ecfeed.ui.dialogs.basic;
 
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Shell;
 
 import com.ecfeed.utils.EclipseHelper;
 
-public class YesNoDialog {
+public class ReplaceExistingFileDialog {
 
 	public enum Result {
 		NO,
 		YES,
 	}
 
-	public static Result open(String question) {
-		return open(question, EclipseHelper.getActiveShell());
+	public static Result open(String pathWithFileName) {
+		return open(pathWithFileName, EclipseHelper.getActiveShell());
 	}
-	public static Result open(String question, Shell shell) {
-		MessageDialog fDialog = new MessageDialog(
-				shell, "Question", null, question, 
-				MessageDialog.QUESTION, new String[] { "No", "Yes" }, 0);
 
-		int result = fDialog.open();
-		if (result == 0) {
-			return Result.NO; 
+	public static Result open(String pathWithFileName, Shell shell) {
+		String question = "The file: '" + pathWithFileName + "' already exists. Do you want to replace the existing file?"; 
+		YesNoDialog.Result result = YesNoDialog.open(question, shell);
+
+		if (result == YesNoDialog.Result.YES) {
+			return Result.YES;
 		}
-		return Result.YES;
+		return Result.NO;
 	}
 }

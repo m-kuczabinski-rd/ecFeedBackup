@@ -6,20 +6,21 @@
  * http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 
-package com.testify.ecfeed.ui.dialogs.basic;
+package com.ecfeed.ui.dialogs.basic;
 
-import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.FileDialog;
 
 import com.ecfeed.utils.EclipseHelper;
 
-public class InfoDialog {
+public class FileOpenEctDialog {
 
-	public static void open(String message, Shell shell) {
-		MessageDialog.openInformation(shell, "Information", message);
-	}
-
-	public static void open(String message) {
-		open(message, EclipseHelper.getActiveShell());
+	public static String open() {
+		FileDialog fFileDialog = new FileDialog(EclipseHelper.getActiveShell(), SWT.OPEN);
+		fFileDialog.setText("Open");
+		fFileDialog.setFilterPath(null);
+		String[] filterExt = { "*.ect" };
+		fFileDialog.setFilterExtensions(filterExt);
+		return fFileDialog.open();
 	}
 }

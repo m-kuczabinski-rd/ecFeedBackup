@@ -24,14 +24,14 @@ import org.eclipse.swt.widgets.Text;
 
 import com.ecfeed.core.resources.ResourceHelper;
 import com.ecfeed.core.utils.DiskFileHelper;
+import com.ecfeed.ui.dialogs.basic.AskIfOverwriteFileDialog;
+import com.ecfeed.ui.dialogs.basic.DialogObjectToolkit;
+import com.ecfeed.ui.dialogs.basic.ExceptionCatchDialog;
+import com.ecfeed.ui.dialogs.basic.FileOpenAndReadDialog;
+import com.ecfeed.ui.dialogs.basic.FileSaveDialog;
+import com.ecfeed.ui.dialogs.basic.InfoDialog;
+import com.ecfeed.ui.dialogs.basic.YesNoDialog;
 import com.ecfeed.utils.EclipseHelper;
-import com.testify.ecfeed.ui.dialogs.basic.AskIfOverwriteFileDialog;
-import com.testify.ecfeed.ui.dialogs.basic.DialogObjectToolkit;
-import com.testify.ecfeed.ui.dialogs.basic.ExceptionCatchDialog;
-import com.testify.ecfeed.ui.dialogs.basic.FileOpenAndReadDialog;
-import com.testify.ecfeed.ui.dialogs.basic.FileSaveDialog;
-import com.testify.ecfeed.ui.dialogs.basic.InfoDialog;
-import com.testify.ecfeed.ui.dialogs.basic.YesNoDialog;
 
 public class TestCasesExportDialog extends TitleAreaDialog {
 

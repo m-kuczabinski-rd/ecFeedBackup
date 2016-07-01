@@ -22,9 +22,9 @@ import com.ecfeed.core.adapter.EImplementationStatus;
 import com.ecfeed.core.adapter.java.JavaUtils;
 import com.ecfeed.core.model.MethodParameterNode;
 import com.ecfeed.ui.common.utils.IFileInfoProvider;
+import com.ecfeed.ui.dialogs.basic.ExceptionCatchDialog;
 import com.testify.ecfeed.ui.common.JavaDocSupport;
 import com.testify.ecfeed.ui.common.Messages;
-import com.testify.ecfeed.ui.dialogs.basic.ExceptionCatchDialog;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 import com.testify.ecfeed.ui.modelif.MethodParameterInterface;
 

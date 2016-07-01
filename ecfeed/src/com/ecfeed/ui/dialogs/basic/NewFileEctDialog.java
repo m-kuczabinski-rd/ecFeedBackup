@@ -6,7 +6,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 
-package com.testify.ecfeed.ui.dialogs.basic;
+package com.ecfeed.ui.dialogs.basic;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.FileDialog;

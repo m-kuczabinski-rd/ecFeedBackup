@@ -44,7 +44,7 @@ import com.ecfeed.core.model.RootNode;
 import com.ecfeed.core.model.TestCaseNode;
 import com.ecfeed.core.utils.SystemLogger;
 import com.ecfeed.ui.common.utils.IFileInfoProvider;
-import com.testify.ecfeed.ui.dialogs.basic.ExceptionCatchDialog;
+import com.ecfeed.ui.dialogs.basic.ExceptionCatchDialog;
 import com.testify.ecfeed.ui.modelif.IModelUpdateContext;
 import com.testify.ecfeed.ui.modelif.IModelUpdateListener;
 

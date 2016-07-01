@@ -37,9 +37,9 @@ import com.ecfeed.core.utils.DiskFileHelper;
 import com.ecfeed.core.utils.ExceptionHelper;
 import com.ecfeed.core.utils.StringHelper;
 import com.ecfeed.core.utils.UriHelper;
+import com.ecfeed.ui.dialogs.basic.ExceptionCatchDialog;
+import com.ecfeed.ui.dialogs.basic.SaveAsEctDialogWithConfirm;
 import com.ecfeed.utils.EclipseHelper;
-import com.testify.ecfeed.ui.dialogs.basic.ExceptionCatchDialog;
-import com.testify.ecfeed.ui.dialogs.basic.SaveAsEctDialogWithConfirm;
 
 public class ModelEditorHelper {
 
