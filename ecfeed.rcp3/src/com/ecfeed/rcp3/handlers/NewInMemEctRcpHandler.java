@@ -6,17 +6,20 @@
  * http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 
-package com.testify.ecfeed.rcp3;
+package com.ecfeed.rcp3.handlers;
 
-import org.eclipse.ui.IPageLayout;
-import org.eclipse.ui.IPerspectiveFactory;
+import org.eclipse.core.commands.ExecutionEvent;
+import org.eclipse.core.commands.ExecutionException;
 
-public class Perspective implements IPerspectiveFactory {
+import com.testify.ecfeed.ui.handlers.NewInMemEctHandler;
 
-	public void createInitialLayout(IPageLayout layout) {
-		layout.setEditorAreaVisible(true);
-		layout.setFixed(true);
-		
+
+public class NewInMemEctRcpHandler extends org.eclipse.core.commands.AbstractHandler {
+
+	@Override
+	public Object execute(ExecutionEvent event) throws ExecutionException {
+		NewInMemEctHandler.execute();
+		return null;
 	}
 
 }

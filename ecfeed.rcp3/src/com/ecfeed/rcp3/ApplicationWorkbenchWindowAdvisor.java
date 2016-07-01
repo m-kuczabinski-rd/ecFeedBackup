@@ -6,7 +6,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 
-package com.testify.ecfeed.rcp3;
+package com.ecfeed.rcp3;
 
 import org.eclipse.jface.action.IContributionItem;
 import org.eclipse.swt.graphics.Point;

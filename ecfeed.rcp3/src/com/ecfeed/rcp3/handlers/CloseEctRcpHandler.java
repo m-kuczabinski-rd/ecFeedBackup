@@ -6,19 +6,19 @@
  * http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 
-package com.testify.ecfeed.rcp3.handlers;
+package com.ecfeed.rcp3.handlers;
 
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 
-import com.testify.ecfeed.ui.handlers.DeleteHandler;
+import com.testify.ecfeed.ui.handlers.CloseEctHandler;
 
 
-public class DeleteRcpHandler extends org.eclipse.core.commands.AbstractHandler {
+public class CloseEctRcpHandler extends org.eclipse.core.commands.AbstractHandler {
 
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
-		DeleteHandler.execute();
+		CloseEctHandler.execute();
 		return null;
 	}
 }
