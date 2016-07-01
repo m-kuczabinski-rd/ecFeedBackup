@@ -25,7 +25,7 @@ import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.MethodParameterNode;
 import com.ecfeed.core.model.TestCaseNode;
 import com.ecfeed.core.utils.StringHelper;
-import com.testify.ecfeed.serialization.export.TestCasesExporter;
+import com.ecfeed.serialization.export.TestCasesExporter;
 
 public class TestCasesExporterTest {
 

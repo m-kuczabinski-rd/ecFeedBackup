@@ -53,6 +53,7 @@ import com.ecfeed.core.serialization.export.ExportTemplateParser;
 import com.ecfeed.core.utils.EcException;
 import com.ecfeed.core.utils.StringHelper;
 import com.ecfeed.core.utils.SystemLogger;
+import com.ecfeed.serialization.export.TestCasesExporter;
 import com.ecfeed.ui.common.Constants;
 import com.ecfeed.ui.common.EclipseModelBuilder;
 import com.ecfeed.ui.common.EclipseTypeAdapterProvider;
@@ -68,7 +69,6 @@ import com.ecfeed.ui.dialogs.TestCasesExportDialog;
 import com.ecfeed.ui.dialogs.TestCasesExportDialog.FileCompositeVisibility;
 import com.ecfeed.ui.dialogs.basic.ErrorDialog;
 import com.ecfeed.ui.dialogs.basic.InfoDialog;
-import com.testify.ecfeed.serialization.export.TestCasesExporter;
 
 public class MethodInterface extends ParametersParentInterface {
 
