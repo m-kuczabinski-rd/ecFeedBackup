@@ -9,7 +9,7 @@
  *     Patryk Chamuczynski (p.chamuczynski(at)radytek.com) - initial implementation
  ******************************************************************************/
 
-package com.testify.ecfeed.core.generators;
+package com.ecfeed.core.generators;
 
 import static org.junit.Assert.*;
 
@@ -23,13 +23,13 @@ import java.util.Random;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.ecfeed.core.generators.AbstractGenerator;
+import com.ecfeed.core.generators.BooleanParameter;
+import com.ecfeed.core.generators.DoubleParameter;
+import com.ecfeed.core.generators.IntegerParameter;
+import com.ecfeed.core.generators.StringParameter;
 import com.ecfeed.core.generators.api.GeneratorException;
 import com.ecfeed.core.generators.api.IConstraint;
-import com.testify.ecfeed.core.generators.AbstractGenerator;
-import com.testify.ecfeed.core.generators.BooleanParameter;
-import com.testify.ecfeed.core.generators.DoubleParameter;
-import com.testify.ecfeed.core.generators.IntegerParameter;
-import com.testify.ecfeed.core.generators.StringParameter;
 
 public class AbstractGeneratorTest {
 	

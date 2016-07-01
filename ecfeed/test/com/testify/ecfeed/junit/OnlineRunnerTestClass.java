@@ -14,9 +14,9 @@ package com.testify.ecfeed.junit;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import com.testify.ecfeed.core.generators.CartesianProductGenerator;
-import com.testify.ecfeed.core.generators.NWiseGenerator;
-import com.testify.ecfeed.core.generators.RandomGenerator;
+import com.ecfeed.core.generators.CartesianProductGenerator;
+import com.ecfeed.core.generators.NWiseGenerator;
+import com.ecfeed.core.generators.RandomGenerator;
 import com.testify.ecfeed.junit.annotations.Constraints;
 import com.testify.ecfeed.junit.annotations.EcModel;
 import com.testify.ecfeed.junit.annotations.Generator;

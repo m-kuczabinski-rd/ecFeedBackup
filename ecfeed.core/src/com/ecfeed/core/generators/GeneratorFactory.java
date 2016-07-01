@@ -9,7 +9,7 @@
  *     Patryk Chamuczynski (p.chamuczynski(at)radytek.com) - initial implementation
  ******************************************************************************/
 
-package com.testify.ecfeed.core.generators;
+package com.ecfeed.core.generators;
 
 import java.util.LinkedHashMap;
 import java.util.Map;

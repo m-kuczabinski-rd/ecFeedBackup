@@ -7,6 +7,7 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Export-Package: com.ecfeed.core.adapter,
  com.ecfeed.core.adapter.java,
  com.ecfeed.core.adapter.operations,
+ com.ecfeed.core.generators,
  com.ecfeed.core.generators.api,
  com.ecfeed.core.model,
  com.ecfeed.core.resources,
@@ -16,7 +17,6 @@ Export-Package: com.ecfeed.core.adapter,
  com.ecfeed.core.serialization.ect,
  com.ecfeed.core.serialization.export,
  com.ecfeed.core.utils,
- com.testify.ecfeed.core.generators,
  com.testify.ecfeed.core.generators.algorithms
 Bundle-ClassPath: lib/xom-1.2.10.jar,
  .

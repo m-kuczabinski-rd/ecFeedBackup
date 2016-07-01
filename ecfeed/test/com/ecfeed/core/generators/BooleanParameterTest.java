@@ -9,27 +9,22 @@
  *     Patryk Chamuczynski (p.chamuczynski(at)radytek.com) - initial implementation
  ******************************************************************************/
 
-package com.testify.ecfeed.core.generators;
+package com.ecfeed.core.generators;
 
-public class BooleanParameter extends AbstractParameter {
+import static org.junit.Assert.*;
 
-	private boolean fDefaultValue;
+import org.junit.Test;
 
-	public BooleanParameter(String name, boolean required, boolean defaultValue){
-		super(name, TYPE.BOOLEAN, required);
-		fDefaultValue = defaultValue;
+import com.ecfeed.core.generators.BooleanParameter;
+
+public class BooleanParameterTest {
+
+	@Test
+	public void testTest() {
+		BooleanParameter parameter = new BooleanParameter("parameter", true, false);
+		assertTrue(parameter.test(true));
+		assertTrue(parameter.test(false));
+		assertFalse(parameter.test(8));
 	}
 
-	@Override
-	public Object defaultValue() {
-		return fDefaultValue;
-	}
-
-	@Override
-	public boolean test(Object value){
-		if (value instanceof Boolean == false){
-			return false;
-		}
-		return true;
-	}
 }

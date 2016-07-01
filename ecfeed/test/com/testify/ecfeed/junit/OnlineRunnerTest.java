@@ -28,6 +28,8 @@ import org.junit.runner.RunWith;
 import org.junit.runners.model.FrameworkMethod;
 import org.junit.runners.model.InitializationError;
 
+import com.ecfeed.core.generators.CartesianProductGenerator;
+import com.ecfeed.core.generators.NWiseGenerator;
 import com.ecfeed.core.generators.api.GeneratorException;
 import com.ecfeed.core.generators.api.IConstraint;
 import com.ecfeed.core.generators.api.IGenerator;
@@ -37,8 +39,6 @@ import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.MethodParameterNode;
 import com.ecfeed.core.model.RootNode;
 import com.ecfeed.core.runner.RunnerException;
-import com.testify.ecfeed.core.generators.CartesianProductGenerator;
-import com.testify.ecfeed.core.generators.NWiseGenerator;
 import com.testify.ecfeed.core.generators.algorithms.Tuples;
 import com.testify.ecfeed.junit.annotations.Constraints;
 import com.testify.ecfeed.junit.annotations.EcModel;

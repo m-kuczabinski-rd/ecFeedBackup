@@ -6,7 +6,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import com.ecfeed.core.adapter.java.JavaUtils;
-import com.testify.ecfeed.core.generators.CartesianProductGenerator;
+import com.ecfeed.core.generators.CartesianProductGenerator;
 import com.testify.ecfeed.junit.OnlineRunner;
 import com.testify.ecfeed.junit.annotations.Constraints;
 import com.testify.ecfeed.junit.annotations.EcModel;

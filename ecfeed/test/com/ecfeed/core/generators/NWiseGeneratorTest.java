@@ -9,7 +9,7 @@
  *     Patryk Chamuczynski (p.chamuczynski(at)radytek.com) - initial implementation
  ******************************************************************************/
 
-package com.testify.ecfeed.core.generators;
+package com.ecfeed.core.generators;
 
 import static org.junit.Assert.*;
 
@@ -21,9 +21,9 @@ import java.util.Map;
 
 import org.junit.Test;
 
+import com.ecfeed.core.generators.NWiseGenerator;
 import com.ecfeed.core.generators.api.GeneratorException;
 import com.ecfeed.core.generators.api.IConstraint;
-import com.testify.ecfeed.core.generators.NWiseGenerator;
 import com.testify.ecfeed.core.generators.algorithms.AbstractNWiseAlgorithm;
 import com.testify.ecfeed.core.generators.algorithms.IAlgorithm;
 import com.testify.ecfeed.core.generators.testutils.GeneratorTestUtils;

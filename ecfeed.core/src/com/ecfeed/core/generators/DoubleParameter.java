@@ -9,47 +9,39 @@
  *     Patryk Chamuczynski (p.chamuczynski(at)radytek.com) - initial implementation
  ******************************************************************************/
 
-package com.testify.ecfeed.core.generators;
+package com.ecfeed.core.generators;
 
 import java.util.Arrays;
 
 import com.ecfeed.core.generators.api.GeneratorException;
 
-public class IntegerParameter extends AbstractParameter {
+public class DoubleParameter extends AbstractParameter {
 
-	private Integer[] fAllowedValues = null;
-	private int fDefaultValue;
-	private int fMinValue = Integer.MIN_VALUE;
-	private int fMaxValue = Integer.MAX_VALUE;
+	private Double[] fAllowedValues = null;
+	private double fDefaultValue;
+	private double fMinValue = -Double.MAX_VALUE;
+	private double fMaxValue = Double.MAX_VALUE;
 
-	public IntegerParameter(String name, boolean required, int defaultValue){
-		super(name, TYPE.INTEGER, required);
+	public DoubleParameter(String name, boolean required, double defaultValue){
+		super(name, TYPE.DOUBLE, required);
 		fDefaultValue = defaultValue;
 	}
 
-	public IntegerParameter(String name, boolean required, int defaultValue, Integer[] allowedValues) throws GeneratorException {
-		super(name, TYPE.INTEGER, required);
+	public DoubleParameter(String name, boolean required, double defaultValue, Double[] allowedValues) throws GeneratorException {
+		super(name, TYPE.DOUBLE, required);
 		fDefaultValue = defaultValue;
 		fAllowedValues = allowedValues;
-		checkAllowedValues(fDefaultValue, fAllowedValues);
-	}
-
-	private void checkAllowedValues(Integer defaultValue, Integer[] allowedValues) throws GeneratorException {
-		if(!Arrays.asList(allowedValues).contains(defaultValue)){
+		if(!Arrays.asList(fAllowedValues).contains(fDefaultValue)){
 			GeneratorException.report("Inconsistent parameter definition");
 		}
 	}
 
-	public IntegerParameter(String name, boolean required, int defaultValue, int min, int max) throws GeneratorException {
-		super(name, TYPE.INTEGER, required);
+	public DoubleParameter(String name, boolean required, double defaultValue, double min, double max) throws GeneratorException {
+		super(name, TYPE.DOUBLE, required);
 		fDefaultValue = defaultValue;
 		fMinValue = min;
 		fMaxValue = max;
-		checkRange(fDefaultValue, fMinValue, fMaxValue);
-	}
-
-	private void checkRange(int value, int minValue, int maxValue) throws GeneratorException {
-		if(value < minValue || value > maxValue){
+		if(fDefaultValue <= fMinValue || fDefaultValue >= fMaxValue){
 			GeneratorException.report("Inconsistent parameter definition");
 		}
 	}
@@ -64,24 +56,12 @@ public class IntegerParameter extends AbstractParameter {
 		return fDefaultValue;
 	}
 
-	public void setDefaultValue(Object defaultValue) throws GeneratorException {
-		int tmpDefaultValue = (int)defaultValue;
-
-		checkRange(tmpDefaultValue, fMinValue, fMaxValue);
-
-		if (fAllowedValues != null) {
-			checkAllowedValues(fDefaultValue, fAllowedValues);
-		}
-
-		fDefaultValue = (int)tmpDefaultValue;
-	}	
-
 	@Override
 	public boolean test(Object value){
-		if (value instanceof Integer == false){
+		if (value instanceof Double == false){
 			return false;
 		}
-		int intValue = (Integer)value;
+		double intValue = (double)value;
 		if(allowedValues() != null){
 			boolean isAllowed = false;
 			for(Object allowed : allowedValues()){
@@ -94,11 +74,11 @@ public class IntegerParameter extends AbstractParameter {
 		return (intValue >= fMinValue && intValue <= fMaxValue);
 	}
 
-	public int getMin(){
+	public double getMin(){
 		return fMinValue;
 	}
 
-	public int getMax(){
+	public double getMax(){
 		return fMaxValue;
 	}
 }

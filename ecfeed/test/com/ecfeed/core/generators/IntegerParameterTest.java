@@ -9,14 +9,14 @@
  *     Patryk Chamuczynski (p.chamuczynski(at)radytek.com) - initial implementation
  ******************************************************************************/
 
-package com.testify.ecfeed.core.generators;
+package com.ecfeed.core.generators;
 
 import static org.junit.Assert.*;
 
 import org.junit.Test;
 
+import com.ecfeed.core.generators.IntegerParameter;
 import com.ecfeed.core.generators.api.GeneratorException;
-import com.testify.ecfeed.core.generators.IntegerParameter;
 
 public class IntegerParameterTest {
 	@Test
