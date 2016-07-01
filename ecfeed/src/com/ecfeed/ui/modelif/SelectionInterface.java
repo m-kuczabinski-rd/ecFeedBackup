@@ -22,8 +22,8 @@ import com.ecfeed.core.adapter.operations.GenericRemoveNodesOperation;
 import com.ecfeed.core.adapter.operations.GenericShiftOperation;
 import com.ecfeed.core.model.AbstractNode;
 import com.ecfeed.core.utils.SystemLogger;
-import com.testify.ecfeed.ui.common.EclipseTypeAdapterProvider;
-import com.testify.ecfeed.ui.common.Messages;
+import com.ecfeed.ui.common.EclipseTypeAdapterProvider;
+import com.ecfeed.ui.common.Messages;
 
 public class SelectionInterface extends OperationExecuter {
 

@@ -37,11 +37,11 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import com.ecfeed.core.adapter.ModelOperationManager;
 import com.ecfeed.core.model.AbstractNode;
+import com.ecfeed.ui.common.ImageManager;
 import com.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.ecfeed.ui.editor.actions.IActionProvider;
 import com.ecfeed.ui.modelif.IModelUpdateContext;
 import com.ecfeed.ui.modelif.IModelUpdateListener;
-import com.testify.ecfeed.ui.common.ImageManager;
 
 public abstract class BasicSection extends SectionPart implements IModelUpdateContext{
 	private Composite fClientComposite;

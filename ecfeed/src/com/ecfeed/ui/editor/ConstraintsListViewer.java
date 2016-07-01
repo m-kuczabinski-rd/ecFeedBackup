@@ -25,6 +25,9 @@ import org.eclipse.ui.forms.widgets.Section;
 
 import com.ecfeed.core.model.ConstraintNode;
 import com.ecfeed.core.model.MethodNode;
+import com.ecfeed.ui.common.Messages;
+import com.ecfeed.ui.common.NodeNameColumnLabelProvider;
+import com.ecfeed.ui.common.NodeViewerColumnLabelProvider;
 import com.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.ecfeed.ui.editor.actions.DeleteAction;
 import com.ecfeed.ui.editor.actions.ModelViewerActionProvider;
@@ -32,9 +35,6 @@ import com.ecfeed.ui.modelif.ConstraintInterface;
 import com.ecfeed.ui.modelif.IModelUpdateContext;
 import com.ecfeed.ui.modelif.MethodInterface;
 import com.ecfeed.ui.modelif.ModelNodesTransfer;
-import com.testify.ecfeed.ui.common.Messages;
-import com.testify.ecfeed.ui.common.NodeNameColumnLabelProvider;
-import com.testify.ecfeed.ui.common.NodeViewerColumnLabelProvider;
 
 public class ConstraintsListViewer extends TableViewerSection {
 

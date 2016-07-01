@@ -18,8 +18,8 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.dialogs.ISelectionStatusValidator;
 
 import com.ecfeed.core.utils.SystemLogger;
-import com.testify.ecfeed.ui.common.JavaModelAnalyser;
-import com.testify.ecfeed.ui.common.Messages;
+import com.ecfeed.ui.common.JavaModelAnalyser;
+import com.ecfeed.ui.common.Messages;
 
 public class UserTypeSelectionDialog extends TestClassSelectionDialog {
 

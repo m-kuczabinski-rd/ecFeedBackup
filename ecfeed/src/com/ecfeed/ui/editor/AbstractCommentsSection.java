@@ -27,11 +27,11 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.widgets.Section;
 
 import com.ecfeed.core.model.AbstractNode;
+import com.ecfeed.ui.common.Messages;
 import com.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.ecfeed.ui.dialogs.basic.ExceptionCatchDialog;
 import com.ecfeed.ui.modelif.AbstractNodeInterface;
 import com.ecfeed.ui.modelif.IModelUpdateContext;
-import com.testify.ecfeed.ui.common.Messages;
 
 public abstract class AbstractCommentsSection extends TabFolderSection {
 

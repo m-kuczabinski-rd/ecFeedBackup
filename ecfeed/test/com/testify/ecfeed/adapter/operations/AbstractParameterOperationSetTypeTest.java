@@ -25,11 +25,11 @@ import com.ecfeed.core.model.IChoicesParentVisitor;
 import com.ecfeed.core.model.IModelVisitor;
 import com.ecfeed.core.model.IParameterVisitor;
 import com.ecfeed.core.model.MethodNode;
+import com.ecfeed.ui.common.EclipseTypeAdapterProvider;
 import com.testify.ecfeed.junit.OnlineRunner;
 import com.testify.ecfeed.junit.annotations.Constraints;
 import com.testify.ecfeed.junit.annotations.EcModel;
 import com.testify.ecfeed.junit.annotations.Generator;
-import com.testify.ecfeed.ui.common.EclipseTypeAdapterProvider;
 
 
 @RunWith(OnlineRunner.class)

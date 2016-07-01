@@ -6,7 +6,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 
-package com.testify.ecfeed.ui.common;
+package com.ecfeed.ui.common;
 
 import com.ecfeed.core.adapter.CachedImplementationStatusResolver;
 import com.ecfeed.core.adapter.EImplementationStatus;

@@ -24,6 +24,7 @@ import com.ecfeed.core.model.MethodParameterNode;
 import com.ecfeed.core.model.ModelVersionDistributor;
 import com.ecfeed.core.model.RootNode;
 import com.ecfeed.core.model.TestCaseNode;
+import com.ecfeed.ui.common.EclipseModelBuilder;
 import com.testify.ecfeed.junit.OnlineRunner;
 import com.testify.ecfeed.junit.annotations.Constraints;
 import com.testify.ecfeed.junit.annotations.EcModel;
@@ -31,7 +32,6 @@ import com.testify.ecfeed.junit.annotations.Generator;
 import com.testify.ecfeed.junit.annotations.expected;
 import com.testify.ecfeed.testutils.ETypeName;
 import com.testify.ecfeed.testutils.RandomModelGenerator;
-import com.testify.ecfeed.ui.common.EclipseModelBuilder;
 
 
 @RunWith(OnlineRunner.class)

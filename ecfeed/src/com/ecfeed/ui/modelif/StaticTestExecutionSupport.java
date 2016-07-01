@@ -31,10 +31,10 @@ import com.ecfeed.core.model.TestCaseNode;
 import com.ecfeed.core.runner.ITestMethodInvoker;
 import com.ecfeed.core.runner.JavaTestRunner;
 import com.ecfeed.core.runner.RunnerException;
+import com.ecfeed.ui.common.EclipseLoaderProvider;
+import com.ecfeed.ui.common.Messages;
 import com.ecfeed.ui.common.utils.EclipseProjectHelper;
 import com.ecfeed.ui.common.utils.IFileInfoProvider;
-import com.testify.ecfeed.ui.common.EclipseLoaderProvider;
-import com.testify.ecfeed.ui.common.Messages;
 
 public class StaticTestExecutionSupport extends TestExecutionSupport{
 

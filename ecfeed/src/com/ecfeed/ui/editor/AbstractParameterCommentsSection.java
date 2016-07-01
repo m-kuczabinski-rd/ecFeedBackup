@@ -17,12 +17,12 @@ import org.eclipse.swt.widgets.TabItem;
 
 import com.ecfeed.core.adapter.java.JavaUtils;
 import com.ecfeed.core.model.AbstractParameterNode;
+import com.ecfeed.ui.common.JavaDocSupport;
+import com.ecfeed.ui.common.Messages;
 import com.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.ecfeed.ui.dialogs.basic.ExceptionCatchDialog;
 import com.ecfeed.ui.modelif.AbstractParameterInterface;
 import com.ecfeed.ui.modelif.IModelUpdateContext;
-import com.testify.ecfeed.ui.common.JavaDocSupport;
-import com.testify.ecfeed.ui.common.Messages;
 
 public abstract class AbstractParameterCommentsSection extends JavaDocCommentsSection {
 

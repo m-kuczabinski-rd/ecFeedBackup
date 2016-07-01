@@ -24,7 +24,7 @@ import org.eclipse.ui.dialogs.ElementTreeSelectionDialog;
 import org.eclipse.ui.dialogs.ISelectionStatusValidator;
 import org.eclipse.ui.model.WorkbenchLabelProvider;
 
-import com.testify.ecfeed.ui.common.Messages;
+import com.ecfeed.ui.common.Messages;
 
 public class TestClassSelectionDialog extends ElementTreeSelectionDialog {
     protected static final IStatus OK = new Status(IStatus.OK, "com.testify.ecfeed", "");

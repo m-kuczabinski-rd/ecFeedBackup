@@ -33,8 +33,8 @@ import com.ecfeed.core.model.GlobalParametersParentNode;
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.MethodParameterNode;
 import com.ecfeed.core.model.RootNode;
+import com.ecfeed.ui.common.Messages;
 import com.ecfeed.ui.common.utils.IFileInfoProvider;
-import com.testify.ecfeed.ui.common.Messages;
 
 public class MethodParameterInterface extends AbstractParameterInterface {
 

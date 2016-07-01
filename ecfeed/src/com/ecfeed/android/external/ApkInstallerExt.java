@@ -11,7 +11,7 @@ package com.ecfeed.android.external;
 import java.lang.reflect.InvocationTargetException;
 
 import com.ecfeed.core.utils.ExceptionHelper;
-import com.testify.ecfeed.ui.common.Messages;
+import com.ecfeed.ui.common.Messages;
 
 public class ApkInstallerExt { 
 

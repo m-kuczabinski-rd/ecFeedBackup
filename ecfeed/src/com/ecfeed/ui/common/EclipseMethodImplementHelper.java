@@ -6,7 +6,7 @@
  * http://www.eclipse.org/legal/epl-v10.html                                     
  ******************************************************************************/
 
-package com.testify.ecfeed.ui.common;
+package com.ecfeed.ui.common;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jdt.core.ICompilationUnit;

@@ -15,7 +15,7 @@ import org.eclipse.core.runtime.Platform;
 
 import com.ecfeed.core.utils.ExceptionHelper;
 import com.ecfeed.core.utils.SystemLogger;
-import com.testify.ecfeed.ui.common.Messages;
+import com.ecfeed.ui.common.Messages;
 
 public class AndroidFactoryDistributorExt {
 

@@ -19,7 +19,7 @@ import com.ecfeed.core.adapter.operations.StatementOperationReplaceChild;
 import com.ecfeed.core.model.AbstractStatement;
 import com.ecfeed.core.model.EStatementOperator;
 import com.ecfeed.core.model.StatementArray;
-import com.testify.ecfeed.ui.common.Messages;
+import com.ecfeed.ui.common.Messages;
 
 public class StatementArrayInterface extends AbstractStatementInterface{
 

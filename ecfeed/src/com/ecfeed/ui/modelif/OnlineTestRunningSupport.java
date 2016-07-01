@@ -20,11 +20,11 @@ import com.ecfeed.core.runner.ITestMethodInvoker;
 import com.ecfeed.core.runner.RunnerException;
 import com.ecfeed.core.utils.ExceptionHelper;
 import com.ecfeed.core.utils.SystemLogger;
+import com.ecfeed.ui.common.Messages;
 import com.ecfeed.ui.common.utils.EclipseProjectHelper;
 import com.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.ecfeed.ui.dialogs.SetupDialogExecuteOnline;
 import com.ecfeed.ui.dialogs.SetupDialogOnline;
-import com.testify.ecfeed.ui.common.Messages;
 
 public class OnlineTestRunningSupport extends AbstractOnlineSupport {
 

@@ -55,6 +55,8 @@ import com.ecfeed.core.model.ChoicesParentStatement.ChoiceCondition;
 import com.ecfeed.core.model.ChoicesParentStatement.ICondition;
 import com.ecfeed.core.model.ChoicesParentStatement.LabelCondition;
 import com.ecfeed.core.utils.SystemLogger;
+import com.ecfeed.ui.common.ImageManager;
+import com.ecfeed.ui.common.Messages;
 import com.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.ecfeed.ui.dialogs.basic.ExceptionCatchDialog;
 import com.ecfeed.ui.editor.actions.ModelModifyingAction;
@@ -63,8 +65,6 @@ import com.ecfeed.ui.modelif.AbstractStatementInterface;
 import com.ecfeed.ui.modelif.ConstraintInterface;
 import com.ecfeed.ui.modelif.IModelUpdateContext;
 import com.ecfeed.ui.modelif.StatementInterfaceFactory;
-import com.testify.ecfeed.ui.common.ImageManager;
-import com.testify.ecfeed.ui.common.Messages;
 
 public class ConstraintViewer extends TreeViewerSection {
 

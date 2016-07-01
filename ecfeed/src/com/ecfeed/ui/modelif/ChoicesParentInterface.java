@@ -25,11 +25,11 @@ import com.ecfeed.core.model.AbstractParameterNode;
 import com.ecfeed.core.model.ChoiceNode;
 import com.ecfeed.core.model.ChoicesParentNode;
 import com.ecfeed.core.model.MethodNode;
+import com.ecfeed.ui.common.Constants;
+import com.ecfeed.ui.common.EclipseModelBuilder;
+import com.ecfeed.ui.common.EclipseTypeAdapterProvider;
+import com.ecfeed.ui.common.Messages;
 import com.ecfeed.ui.common.utils.IFileInfoProvider;
-import com.testify.ecfeed.ui.common.Constants;
-import com.testify.ecfeed.ui.common.EclipseModelBuilder;
-import com.testify.ecfeed.ui.common.EclipseTypeAdapterProvider;
-import com.testify.ecfeed.ui.common.Messages;
 
 public class ChoicesParentInterface extends AbstractNodeInterface {
 

@@ -34,8 +34,8 @@ import com.ecfeed.core.model.RootNode;
 import com.ecfeed.core.serialization.ect.EctSerializer;
 import com.ecfeed.core.utils.DiskFileHelper;
 import com.ecfeed.core.utils.StringHelper;
-import com.testify.ecfeed.ui.common.Constants;
-import com.testify.ecfeed.ui.common.Messages;
+import com.ecfeed.ui.common.Constants;
+import com.ecfeed.ui.common.Messages;
 
 class NewEctFileCreationPage extends WizardNewFileCreationPage {
 

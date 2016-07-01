@@ -29,14 +29,14 @@ import com.ecfeed.core.adapter.operations.ReplaceChoicesOperation;
 import com.ecfeed.core.model.AbstractParameterNode;
 import com.ecfeed.core.model.ChoiceNode;
 import com.ecfeed.core.utils.SystemLogger;
+import com.ecfeed.ui.common.EclipseModelBuilder;
+import com.ecfeed.ui.common.JavaDocSupport;
+import com.ecfeed.ui.common.JavaModelAnalyser;
+import com.ecfeed.ui.common.Messages;
 import com.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.ecfeed.ui.dialogs.TestClassSelectionDialog;
 import com.ecfeed.ui.dialogs.TextAreaDialog;
 import com.ecfeed.ui.dialogs.UserTypeSelectionDialog;
-import com.testify.ecfeed.ui.common.EclipseModelBuilder;
-import com.testify.ecfeed.ui.common.JavaDocSupport;
-import com.testify.ecfeed.ui.common.JavaModelAnalyser;
-import com.testify.ecfeed.ui.common.Messages;
 
 public abstract class AbstractParameterInterface extends ChoicesParentInterface {
 	

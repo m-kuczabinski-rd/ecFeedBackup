@@ -53,6 +53,8 @@ import com.ecfeed.core.model.RootNode;
 import com.ecfeed.core.model.TestCaseNode;
 import com.ecfeed.core.utils.ExceptionHelper;
 import com.ecfeed.core.utils.SystemLogger;
+import com.ecfeed.ui.common.Constants;
+import com.ecfeed.ui.common.ImageManager;
 import com.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.ecfeed.ui.editor.actions.AbstractAddChildAction;
 import com.ecfeed.ui.editor.actions.AddChildActionProvider;
@@ -65,8 +67,6 @@ import com.ecfeed.ui.modelif.IModelUpdateListener;
 import com.ecfeed.ui.modelif.MethodInterface;
 import com.ecfeed.ui.modelif.ModelNodesTransfer;
 import com.ecfeed.ui.modelif.NodeInterfaceFactory;
-import com.testify.ecfeed.ui.common.Constants;
-import com.testify.ecfeed.ui.common.ImageManager;
 
 public class ModelMasterSection extends TreeViewerSection{
 	private static final int STYLE = Section.EXPANDED | Section.TITLE_BAR;

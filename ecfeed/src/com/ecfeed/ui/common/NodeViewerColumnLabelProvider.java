@@ -9,7 +9,7 @@
  *     Patryk Chamuczynski (p.chamuczynski(at)radytek.com) - initial implementation
  ******************************************************************************/
 
-package com.testify.ecfeed.ui.common;
+package com.ecfeed.ui.common;
 
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 

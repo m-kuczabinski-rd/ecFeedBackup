@@ -18,7 +18,7 @@ import com.ecfeed.core.model.ChoicesParentStatement;
 import com.ecfeed.core.model.EStatementRelation;
 import com.ecfeed.core.model.MethodParameterNode;
 import com.ecfeed.core.model.ChoicesParentStatement.ICondition;
-import com.testify.ecfeed.ui.common.Messages;
+import com.ecfeed.ui.common.Messages;
 
 public class ChoicesParentStatementInterface extends AbstractStatementInterface{
 

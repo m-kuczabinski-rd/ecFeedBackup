@@ -19,9 +19,9 @@ import com.ecfeed.core.model.AbstractParameterNode;
 import com.ecfeed.core.model.GlobalParameterNode;
 import com.ecfeed.core.model.GlobalParametersParentNode;
 import com.ecfeed.core.model.MethodParameterNode;
+import com.ecfeed.ui.common.EclipseModelBuilder;
+import com.ecfeed.ui.common.Messages;
 import com.ecfeed.ui.common.utils.IFileInfoProvider;
-import com.testify.ecfeed.ui.common.EclipseModelBuilder;
-import com.testify.ecfeed.ui.common.Messages;
 
 public class GlobalParametersParentInterface extends ParametersParentInterface {
 

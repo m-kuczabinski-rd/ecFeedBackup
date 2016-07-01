@@ -14,8 +14,8 @@ import com.ecfeed.core.adapter.java.ChoiceValueParser;
 import com.ecfeed.core.adapter.java.ModelClassLoader;
 import com.ecfeed.core.model.ChoiceNode;
 import com.ecfeed.core.model.MethodParameterNode;
+import com.ecfeed.ui.common.Constants;
 import com.testify.ecfeed.junit.AbstractFrameworkMethod;
-import com.testify.ecfeed.ui.common.Constants;
 
 public class AbstractFrameworkMethodTest {
 

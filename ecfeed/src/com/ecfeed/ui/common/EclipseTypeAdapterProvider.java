@@ -9,7 +9,7 @@
  *     Patryk Chamuczynski (p.chamuczynski(at)radytek.com) - initial implementation
  ******************************************************************************/
 
-package com.testify.ecfeed.ui.common;
+package com.ecfeed.ui.common;
 
 import static com.ecfeed.core.adapter.java.Constants.TYPE_NAME_BOOLEAN;
 import static com.ecfeed.core.adapter.java.Constants.TYPE_NAME_BYTE;

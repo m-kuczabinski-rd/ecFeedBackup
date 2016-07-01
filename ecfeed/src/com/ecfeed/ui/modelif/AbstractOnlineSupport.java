@@ -33,12 +33,12 @@ import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.runner.ITestMethodInvoker;
 import com.ecfeed.core.runner.JavaTestRunner;
 import com.ecfeed.core.runner.RunnerException;
+import com.ecfeed.ui.common.EclipseLoaderProvider;
+import com.ecfeed.ui.common.Messages;
 import com.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.ecfeed.ui.dialogs.GeneratorProgressMonitorDialog;
 import com.ecfeed.ui.dialogs.SetupDialogOnline;
 import com.ecfeed.ui.dialogs.basic.ErrorDialog;
-import com.testify.ecfeed.ui.common.EclipseLoaderProvider;
-import com.testify.ecfeed.ui.common.Messages;
 
 public abstract class AbstractOnlineSupport extends TestExecutionSupport {
 

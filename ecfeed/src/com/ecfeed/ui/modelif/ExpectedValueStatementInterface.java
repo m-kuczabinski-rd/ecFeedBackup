@@ -16,8 +16,8 @@ import com.ecfeed.core.adapter.operations.ChoiceOperationSetValue;
 import com.ecfeed.core.adapter.operations.StatementOperationSetRelation;
 import com.ecfeed.core.model.EStatementRelation;
 import com.ecfeed.core.model.ExpectedValueStatement;
-import com.testify.ecfeed.ui.common.EclipseTypeAdapterProvider;
-import com.testify.ecfeed.ui.common.Messages;
+import com.ecfeed.ui.common.EclipseTypeAdapterProvider;
+import com.ecfeed.ui.common.Messages;
 
 public class ExpectedValueStatementInterface extends AbstractStatementInterface{
 

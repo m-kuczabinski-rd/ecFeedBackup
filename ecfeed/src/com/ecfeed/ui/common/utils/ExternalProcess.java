@@ -14,7 +14,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 
 import com.ecfeed.core.utils.ExceptionHelper;
-import com.testify.ecfeed.ui.common.Messages;
+import com.ecfeed.ui.common.Messages;
 
 public class ExternalProcess {
 

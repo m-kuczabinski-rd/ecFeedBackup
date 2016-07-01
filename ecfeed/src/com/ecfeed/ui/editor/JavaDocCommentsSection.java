@@ -22,11 +22,11 @@ import org.eclipse.swt.widgets.TabItem;
 import org.eclipse.swt.widgets.Text;
 
 import com.ecfeed.core.model.AbstractNode;
+import com.ecfeed.ui.common.JavaDocSupport;
+import com.ecfeed.ui.common.Messages;
 import com.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.ecfeed.ui.dialogs.basic.ExceptionCatchDialog;
 import com.ecfeed.ui.modelif.IModelUpdateContext;
-import com.testify.ecfeed.ui.common.JavaDocSupport;
-import com.testify.ecfeed.ui.common.Messages;
 
 public class JavaDocCommentsSection extends AbstractCommentsSection {
 

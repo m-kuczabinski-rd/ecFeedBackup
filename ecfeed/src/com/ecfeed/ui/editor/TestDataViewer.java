@@ -22,14 +22,14 @@ import com.ecfeed.core.adapter.EImplementationStatus;
 import com.ecfeed.core.model.AbstractParameterNode;
 import com.ecfeed.core.model.ChoiceNode;
 import com.ecfeed.core.model.TestCaseNode;
+import com.ecfeed.ui.common.ColorConstants;
+import com.ecfeed.ui.common.ColorManager;
+import com.ecfeed.ui.common.ITestDataEditorListener;
+import com.ecfeed.ui.common.NodeViewerColumnLabelProvider;
+import com.ecfeed.ui.common.TestDataValueEditingSupport;
 import com.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.ecfeed.ui.modelif.IModelUpdateContext;
 import com.ecfeed.ui.modelif.TestCaseInterface;
-import com.testify.ecfeed.ui.common.ColorConstants;
-import com.testify.ecfeed.ui.common.ColorManager;
-import com.testify.ecfeed.ui.common.ITestDataEditorListener;
-import com.testify.ecfeed.ui.common.NodeViewerColumnLabelProvider;
-import com.testify.ecfeed.ui.common.TestDataValueEditingSupport;
 
 public class TestDataViewer extends TableViewerSection implements ITestDataEditorListener{
 

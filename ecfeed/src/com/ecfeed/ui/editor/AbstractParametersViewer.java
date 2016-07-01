@@ -28,6 +28,9 @@ import org.eclipse.swt.layout.GridData;
 
 import com.ecfeed.core.model.AbstractParameterNode;
 import com.ecfeed.core.model.ParametersParentNode;
+import com.ecfeed.ui.common.Messages;
+import com.ecfeed.ui.common.NodeNameColumnLabelProvider;
+import com.ecfeed.ui.common.NodeViewerColumnLabelProvider;
 import com.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.ecfeed.ui.dialogs.basic.ExceptionCatchDialog;
 import com.ecfeed.ui.editor.actions.DeleteAction;
@@ -35,9 +38,6 @@ import com.ecfeed.ui.editor.actions.ModelViewerActionProvider;
 import com.ecfeed.ui.modelif.AbstractParameterInterface;
 import com.ecfeed.ui.modelif.IModelUpdateContext;
 import com.ecfeed.ui.modelif.ParametersParentInterface;
-import com.testify.ecfeed.ui.common.Messages;
-import com.testify.ecfeed.ui.common.NodeNameColumnLabelProvider;
-import com.testify.ecfeed.ui.common.NodeViewerColumnLabelProvider;
 
 public abstract class AbstractParametersViewer extends TableViewerSection {
 

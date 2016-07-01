@@ -22,8 +22,8 @@ import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.jface.dialogs.MessageDialog;
 
 import com.ecfeed.core.runner.RunnerException;
+import com.ecfeed.ui.common.Messages;
 import com.ecfeed.ui.plugin.Activator;
-import com.testify.ecfeed.ui.common.Messages;
 
 public abstract class TestExecutionSupport {
 

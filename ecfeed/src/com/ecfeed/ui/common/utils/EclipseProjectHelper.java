@@ -19,7 +19,7 @@ import com.ecfeed.core.utils.DiskFileHelper;
 import com.ecfeed.core.utils.EcException;
 import com.ecfeed.core.utils.ExceptionHelper;
 import com.ecfeed.core.utils.SystemLogger;
-import com.testify.ecfeed.ui.common.Messages;
+import com.ecfeed.ui.common.Messages;
 
 public class EclipseProjectHelper implements IProjectHelper {
 

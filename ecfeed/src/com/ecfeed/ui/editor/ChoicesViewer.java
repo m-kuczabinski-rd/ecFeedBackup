@@ -35,6 +35,8 @@ import com.ecfeed.core.adapter.java.JavaUtils;
 import com.ecfeed.core.model.AbstractParameterNode;
 import com.ecfeed.core.model.ChoiceNode;
 import com.ecfeed.core.model.ChoicesParentNode;
+import com.ecfeed.ui.common.Messages;
+import com.ecfeed.ui.common.NodeNameColumnLabelProvider;
 import com.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.ecfeed.ui.dialogs.basic.ExceptionCatchDialog;
 import com.ecfeed.ui.editor.actions.DeleteAction;
@@ -46,8 +48,6 @@ import com.ecfeed.ui.modelif.ChoicesParentInterface;
 import com.ecfeed.ui.modelif.IModelUpdateContext;
 import com.ecfeed.ui.modelif.ModelNodesTransfer;
 import com.ecfeed.ui.modelif.NodeInterfaceFactory;
-import com.testify.ecfeed.ui.common.Messages;
-import com.testify.ecfeed.ui.common.NodeNameColumnLabelProvider;
 
 public class ChoicesViewer extends TableViewerSection {
 

@@ -6,7 +6,7 @@
  * http://www.eclipse.org/legal/epl-v10.html                                     
  ******************************************************************************/
 
-package com.testify.ecfeed.ui.common;
+package com.ecfeed.ui.common;
 
 import java.io.IOException;
 import java.net.URL;

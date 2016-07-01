@@ -29,7 +29,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Text;
 
-import com.testify.ecfeed.ui.common.Messages;
+import com.ecfeed.ui.common.Messages;
 
 public class RenameTestSuiteDialog extends TitleAreaDialog {
 	private Text fNewNameText;

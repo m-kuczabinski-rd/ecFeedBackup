@@ -17,9 +17,9 @@ import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TreeViewer;
 
 import com.ecfeed.core.adapter.IModelImplementer;
+import com.ecfeed.ui.common.EclipseModelImplementer;
 import com.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.ecfeed.ui.modelif.IModelUpdateContext;
-import com.testify.ecfeed.ui.common.EclipseModelImplementer;
 
 
 public class ModelViewerActionProvider extends ActionGroups {

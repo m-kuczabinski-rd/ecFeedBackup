@@ -31,14 +31,14 @@ import org.eclipse.ui.forms.widgets.Section;
 import com.ecfeed.core.adapter.EImplementationStatus;
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.TestCaseNode;
+import com.ecfeed.ui.common.Messages;
+import com.ecfeed.ui.common.TestCasesViewerContentProvider;
+import com.ecfeed.ui.common.TestCasesViewerLabelProvider;
+import com.ecfeed.ui.common.TreeCheckStateListener;
 import com.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.ecfeed.ui.dialogs.basic.ExceptionCatchDialog;
 import com.ecfeed.ui.modelif.IModelUpdateContext;
 import com.ecfeed.ui.modelif.MethodInterface;
-import com.testify.ecfeed.ui.common.Messages;
-import com.testify.ecfeed.ui.common.TestCasesViewerContentProvider;
-import com.testify.ecfeed.ui.common.TestCasesViewerLabelProvider;
-import com.testify.ecfeed.ui.common.TreeCheckStateListener;
 
 public class TestCasesViewer extends CheckboxTreeViewerSection {
 

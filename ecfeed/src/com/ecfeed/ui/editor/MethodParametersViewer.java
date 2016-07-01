@@ -30,6 +30,7 @@ import com.ecfeed.core.model.ChoiceNode;
 import com.ecfeed.core.model.GlobalParameterNode;
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.MethodParameterNode;
+import com.ecfeed.ui.common.NodeViewerColumnLabelProvider;
 import com.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.ecfeed.ui.modelif.AbstractParameterInterface;
 import com.ecfeed.ui.modelif.IModelUpdateContext;
@@ -37,7 +38,6 @@ import com.ecfeed.ui.modelif.MethodInterface;
 import com.ecfeed.ui.modelif.MethodParameterInterface;
 import com.ecfeed.ui.modelif.ModelNodesTransfer;
 import com.ecfeed.ui.modelif.ParametersParentInterface;
-import com.testify.ecfeed.ui.common.NodeViewerColumnLabelProvider;
 
 
 public class MethodParametersViewer extends AbstractParametersViewer {

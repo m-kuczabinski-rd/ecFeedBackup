@@ -21,12 +21,12 @@ import org.eclipse.swt.widgets.TabItem;
 import com.ecfeed.core.adapter.EImplementationStatus;
 import com.ecfeed.core.adapter.java.JavaUtils;
 import com.ecfeed.core.model.MethodParameterNode;
+import com.ecfeed.ui.common.JavaDocSupport;
+import com.ecfeed.ui.common.Messages;
 import com.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.ecfeed.ui.dialogs.basic.ExceptionCatchDialog;
 import com.ecfeed.ui.modelif.IModelUpdateContext;
 import com.ecfeed.ui.modelif.MethodParameterInterface;
-import com.testify.ecfeed.ui.common.JavaDocSupport;
-import com.testify.ecfeed.ui.common.Messages;
 
 public class MethodParameterCommentsSection extends AbstractParameterCommentsSection {
 

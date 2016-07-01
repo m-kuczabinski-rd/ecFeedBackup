@@ -10,7 +10,7 @@ import org.eclipse.jdt.core.IPackageFragmentRoot;
 import org.eclipse.jdt.core.JavaCore;
 
 import com.ecfeed.core.utils.ExceptionHelper;
-import com.testify.ecfeed.ui.common.Messages;
+import com.ecfeed.ui.common.Messages;
 
 public class EclipsePackageFragmentGetter {
 

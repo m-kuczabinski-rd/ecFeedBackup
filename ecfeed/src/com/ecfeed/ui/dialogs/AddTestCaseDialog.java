@@ -40,12 +40,12 @@ import com.ecfeed.core.model.ChoiceNode;
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.MethodParameterNode;
 import com.ecfeed.core.model.TestCaseNode;
-import com.testify.ecfeed.ui.common.ColorConstants;
-import com.testify.ecfeed.ui.common.ColorManager;
-import com.testify.ecfeed.ui.common.Constants;
-import com.testify.ecfeed.ui.common.ITestDataEditorListener;
-import com.testify.ecfeed.ui.common.Messages;
-import com.testify.ecfeed.ui.common.TestDataValueEditingSupport;
+import com.ecfeed.ui.common.ColorConstants;
+import com.ecfeed.ui.common.ColorManager;
+import com.ecfeed.ui.common.Constants;
+import com.ecfeed.ui.common.ITestDataEditorListener;
+import com.ecfeed.ui.common.Messages;
+import com.ecfeed.ui.common.TestDataValueEditingSupport;
 
 public class AddTestCaseDialog extends TitleAreaDialog implements ITestDataEditorListener {
 
