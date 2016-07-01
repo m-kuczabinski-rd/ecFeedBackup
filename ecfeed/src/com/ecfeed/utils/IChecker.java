@@ -1,4 +1,4 @@
-package com.testify.ecfeed.utils;
+package com.ecfeed.utils;
 
 public interface IChecker {
 	boolean check(String toCheck);

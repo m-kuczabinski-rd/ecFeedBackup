@@ -5,11 +5,11 @@ import org.eclipse.ui.ide.FileStoreEditorInput;
 
 import com.ecfeed.core.utils.DiskFileHelper;
 import com.ecfeed.core.utils.UriHelper;
+import com.ecfeed.utils.EclipseHelper;
 import com.testify.ecfeed.ui.dialogs.basic.SaveAsEctDialogWithConfirm;
 import com.testify.ecfeed.ui.editor.CanAddDocumentChecker;
 import com.testify.ecfeed.ui.editor.ModelEditor;
 import com.testify.ecfeed.ui.editor.ModelEditorHelper;
-import com.testify.ecfeed.utils.EclipseHelper;
 
 public class SaveAsEctHandler {
 

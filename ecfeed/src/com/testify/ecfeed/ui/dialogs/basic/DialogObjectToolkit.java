@@ -24,7 +24,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
 import com.ecfeed.core.utils.StringHelper;
-import com.testify.ecfeed.utils.EclipseHelper;
+import com.ecfeed.utils.EclipseHelper;
 
 public class DialogObjectToolkit {
 	private static DialogObjectToolkit fInstance = null;

@@ -1,6 +1,6 @@
 package com.testify.ecfeed.ui.editor;
 
-import com.testify.ecfeed.utils.IChecker;
+import com.ecfeed.utils.IChecker;
 
 public class CanAddDocumentChecker implements IChecker { 
 

@@ -8,8 +8,8 @@
 
 package com.testify.ecfeed.ui.handlers;
 
+import com.ecfeed.utils.EclipseHelper;
 import com.testify.ecfeed.ui.editor.EditorInMemFileHelper;
-import com.testify.ecfeed.utils.EclipseHelper;
 
 
 public class NewInMemEctHandler {

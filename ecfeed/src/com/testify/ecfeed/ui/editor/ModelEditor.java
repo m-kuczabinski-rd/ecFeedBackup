@@ -61,11 +61,11 @@ import com.ecfeed.core.serialization.IModelSerializer;
 import com.ecfeed.core.serialization.ect.EctSerializer;
 import com.ecfeed.core.utils.ExceptionHelper;
 import com.ecfeed.core.utils.SystemLogger;
+import com.ecfeed.utils.EclipseHelper;
 import com.testify.ecfeed.ui.common.Constants;
 import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.testify.ecfeed.ui.dialogs.basic.ExceptionCatchDialog;
-import com.testify.ecfeed.utils.EclipseHelper;
 
 public class ModelEditor extends FormEditor implements IFileInfoProvider{
 

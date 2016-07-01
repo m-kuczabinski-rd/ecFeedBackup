@@ -11,7 +11,7 @@ package com.testify.ecfeed.ui.dialogs.basic;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.FileDialog;
 
-import com.testify.ecfeed.utils.EclipseHelper;
+import com.ecfeed.utils.EclipseHelper;
 
 public class NewFileEctDialog {
 

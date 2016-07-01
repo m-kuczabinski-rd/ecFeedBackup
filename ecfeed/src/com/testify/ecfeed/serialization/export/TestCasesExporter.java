@@ -23,7 +23,7 @@ import com.ecfeed.core.model.TestCaseNode;
 import com.ecfeed.core.serialization.export.TestCasesExportHelper;
 import com.ecfeed.core.utils.ExceptionHelper;
 import com.ecfeed.core.utils.StringHelper;
-import com.testify.ecfeed.utils.EclipseHelper;
+import com.ecfeed.utils.EclipseHelper;
 
 public class TestCasesExporter {
 

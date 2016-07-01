@@ -10,7 +10,7 @@ package com.testify.ecfeed.ui.handlers;
 
 import org.eclipse.jface.dialogs.MessageDialog;
 
-import com.testify.ecfeed.utils.EclipseHelper;
+import com.ecfeed.utils.EclipseHelper;
 
 
 public class AboutHandler {

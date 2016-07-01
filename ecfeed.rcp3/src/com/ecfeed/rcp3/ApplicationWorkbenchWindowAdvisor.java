@@ -17,7 +17,7 @@ import org.eclipse.ui.application.IWorkbenchWindowConfigurer;
 import org.eclipse.ui.application.WorkbenchWindowAdvisor;
 import org.eclipse.ui.internal.WorkbenchWindow;
 
-import com.testify.ecfeed.utils.EclipseHelper;
+import com.ecfeed.utils.EclipseHelper;
 
 @SuppressWarnings("restriction")	
 public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {

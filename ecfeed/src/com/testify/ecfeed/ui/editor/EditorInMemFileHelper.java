@@ -14,7 +14,7 @@ import java.io.InputStream;
 
 import com.ecfeed.core.utils.DiskFileHelper;
 import com.ecfeed.core.utils.SystemHelper;
-import com.testify.ecfeed.utils.EctFileHelper;
+import com.ecfeed.utils.EctFileHelper;
 
 public class EditorInMemFileHelper {
 

@@ -10,7 +10,7 @@ package com.testify.ecfeed.ui.dialogs.basic;
 
 import org.eclipse.swt.widgets.Shell;
 
-import com.testify.ecfeed.utils.EclipseHelper;
+import com.ecfeed.utils.EclipseHelper;
 
 public class ReplaceExistingFileDialog {
 
