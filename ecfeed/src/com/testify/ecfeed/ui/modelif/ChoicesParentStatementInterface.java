@@ -12,12 +12,12 @@
 package com.testify.ecfeed.ui.modelif;
 
 import com.ecfeed.core.adapter.IModelOperation;
+import com.ecfeed.core.adapter.operations.StatementOperationSetCondition;
+import com.ecfeed.core.adapter.operations.StatementOperationSetRelation;
 import com.ecfeed.core.model.ChoicesParentStatement;
 import com.ecfeed.core.model.EStatementRelation;
 import com.ecfeed.core.model.MethodParameterNode;
 import com.ecfeed.core.model.ChoicesParentStatement.ICondition;
-import com.testify.ecfeed.core.adapter.operations.StatementOperationSetCondition;
-import com.testify.ecfeed.core.adapter.operations.StatementOperationSetRelation;
 import com.testify.ecfeed.ui.common.Messages;
 
 public class ChoicesParentStatementInterface extends AbstractStatementInterface{

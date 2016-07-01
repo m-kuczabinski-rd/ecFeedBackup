@@ -12,10 +12,10 @@
 package com.testify.ecfeed.ui.modelif;
 
 import com.ecfeed.core.adapter.IModelOperation;
+import com.ecfeed.core.adapter.operations.ChoiceOperationSetValue;
+import com.ecfeed.core.adapter.operations.StatementOperationSetRelation;
 import com.ecfeed.core.model.EStatementRelation;
 import com.ecfeed.core.model.ExpectedValueStatement;
-import com.testify.ecfeed.core.adapter.operations.ChoiceOperationSetValue;
-import com.testify.ecfeed.core.adapter.operations.StatementOperationSetRelation;
 import com.testify.ecfeed.ui.common.EclipseTypeAdapterProvider;
 import com.testify.ecfeed.ui.common.Messages;
 

@@ -16,11 +16,11 @@ import java.util.Arrays;
 
 import com.ecfeed.core.adapter.EImplementationStatus;
 import com.ecfeed.core.adapter.IModelOperation;
+import com.ecfeed.core.adapter.operations.TestCaseOperationUpdateTestData;
 import com.ecfeed.core.model.ChoiceNode;
 import com.ecfeed.core.model.MethodNode;
 import com.ecfeed.core.model.TestCaseNode;
 import com.ecfeed.core.utils.EcException;
-import com.testify.ecfeed.core.adapter.operations.TestCaseOperationUpdateTestData;
 import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.common.utils.IFileInfoProvider;
 

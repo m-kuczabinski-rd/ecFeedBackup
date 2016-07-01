@@ -14,11 +14,11 @@ package com.testify.ecfeed.ui.modelif;
 import java.util.Collection;
 import java.util.List;
 
+import com.ecfeed.core.adapter.operations.ReplaceMethodParametersWithGlobalOperation;
 import com.ecfeed.core.model.AbstractParameterNode;
 import com.ecfeed.core.model.GlobalParameterNode;
 import com.ecfeed.core.model.GlobalParametersParentNode;
 import com.ecfeed.core.model.MethodParameterNode;
-import com.testify.ecfeed.core.adapter.operations.ReplaceMethodParametersWithGlobalOperation;
 import com.testify.ecfeed.ui.common.EclipseModelBuilder;
 import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.common.utils.IFileInfoProvider;

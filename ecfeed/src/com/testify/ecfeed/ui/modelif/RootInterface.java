@@ -20,10 +20,10 @@ import org.eclipse.swt.widgets.Display;
 
 import com.ecfeed.core.adapter.IModelOperation;
 import com.ecfeed.core.adapter.ModelOperationException;
+import com.ecfeed.core.adapter.operations.RootOperationAddClasses;
+import com.ecfeed.core.adapter.operations.RootOperationAddNewClass;
 import com.ecfeed.core.model.ClassNode;
 import com.ecfeed.core.model.RootNode;
-import com.testify.ecfeed.core.adapter.operations.RootOperationAddClasses;
-import com.testify.ecfeed.core.adapter.operations.RootOperationAddNewClass;
 import com.testify.ecfeed.ui.common.Constants;
 import com.testify.ecfeed.ui.common.EclipseModelBuilder;
 import com.testify.ecfeed.ui.common.Messages;

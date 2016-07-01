@@ -15,9 +15,9 @@ import java.util.List;
 
 import com.ecfeed.core.adapter.IModelOperation;
 import com.ecfeed.core.adapter.java.JavaUtils;
+import com.ecfeed.core.adapter.operations.GlobalParameterOperationSetType;
 import com.ecfeed.core.model.GlobalParameterNode;
 import com.ecfeed.core.model.MethodParameterNode;
-import com.testify.ecfeed.core.adapter.operations.GlobalParameterOperationSetType;
 import com.testify.ecfeed.ui.common.utils.IFileInfoProvider;
 
 public class GlobalParameterInterface extends AbstractParameterInterface {
