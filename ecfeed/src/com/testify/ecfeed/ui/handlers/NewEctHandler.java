@@ -10,7 +10,7 @@ package com.testify.ecfeed.ui.handlers;
 
 import org.eclipse.core.commands.ExecutionException;
 
-import com.testify.ecfeed.core.utils.DiskFileHelper;
+import com.ecfeed.core.utils.DiskFileHelper;
 import com.testify.ecfeed.ui.dialogs.basic.ExceptionCatchDialog;
 import com.testify.ecfeed.ui.dialogs.basic.NewFileEctDialog;
 import com.testify.ecfeed.ui.dialogs.basic.ReplaceExistingFileDialog;

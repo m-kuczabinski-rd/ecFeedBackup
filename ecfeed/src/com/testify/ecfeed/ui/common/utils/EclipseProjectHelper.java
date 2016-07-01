@@ -15,10 +15,10 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.QualifiedName;
 
 import com.ecfeed.android.external.IProjectHelper;
-import com.testify.ecfeed.core.utils.DiskFileHelper;
-import com.testify.ecfeed.core.utils.EcException;
-import com.testify.ecfeed.core.utils.ExceptionHelper;
-import com.testify.ecfeed.core.utils.SystemLogger;
+import com.ecfeed.core.utils.DiskFileHelper;
+import com.ecfeed.core.utils.EcException;
+import com.ecfeed.core.utils.ExceptionHelper;
+import com.ecfeed.core.utils.SystemLogger;
 import com.testify.ecfeed.ui.common.Messages;
 
 public class EclipseProjectHelper implements IProjectHelper {

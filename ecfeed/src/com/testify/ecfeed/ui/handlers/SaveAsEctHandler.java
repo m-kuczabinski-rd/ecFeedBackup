@@ -3,8 +3,8 @@ package com.testify.ecfeed.ui.handlers;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.ui.ide.FileStoreEditorInput;
 
-import com.testify.ecfeed.core.utils.DiskFileHelper;
-import com.testify.ecfeed.core.utils.UriHelper;
+import com.ecfeed.core.utils.DiskFileHelper;
+import com.ecfeed.core.utils.UriHelper;
 import com.testify.ecfeed.ui.dialogs.basic.SaveAsEctDialogWithConfirm;
 import com.testify.ecfeed.ui.editor.CanAddDocumentChecker;
 import com.testify.ecfeed.ui.editor.ModelEditor;

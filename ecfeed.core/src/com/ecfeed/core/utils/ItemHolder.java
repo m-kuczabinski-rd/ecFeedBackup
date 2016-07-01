@@ -6,13 +6,27 @@
  * http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 
-package com.testify.ecfeed.core.utils;
+package com.ecfeed.core.utils;
 
+public class ItemHolder<Type> {
+	private Type fItem;
 
-public class SystemHelper {
-
-	public static String getSystemTemporaryDir() { 
-		return System.getProperty("java.io.tmpdir");
+	public ItemHolder() {
+		set(null);
 	}
 
+	public Type get() {
+		return fItem;
+	}
+
+	public void set(Type str) {
+		fItem = str;
+	}
+
+	public boolean isNull() {
+		if (fItem == null) {
+			return true;
+		}
+		return false;
+	}
 }

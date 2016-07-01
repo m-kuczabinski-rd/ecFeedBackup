@@ -37,6 +37,7 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.forms.widgets.Section;
 
+import com.ecfeed.core.utils.SystemLogger;
 import com.testify.ecfeed.core.adapter.java.JavaPrimitiveTypePredicate;
 import com.testify.ecfeed.core.model.AbstractStatement;
 import com.testify.ecfeed.core.model.ChoiceNode;
@@ -54,7 +55,6 @@ import com.testify.ecfeed.core.model.StaticStatement;
 import com.testify.ecfeed.core.model.ChoicesParentStatement.ChoiceCondition;
 import com.testify.ecfeed.core.model.ChoicesParentStatement.ICondition;
 import com.testify.ecfeed.core.model.ChoicesParentStatement.LabelCondition;
-import com.testify.ecfeed.core.utils.SystemLogger;
 import com.testify.ecfeed.ui.common.ImageManager;
 import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.common.utils.IFileInfoProvider;

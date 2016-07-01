@@ -17,6 +17,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import com.ecfeed.core.utils.SystemLogger;
 import com.testify.ecfeed.core.adapter.IModelOperation;
 import com.testify.ecfeed.core.adapter.ITypeAdapter;
 import com.testify.ecfeed.core.adapter.ITypeAdapterProvider;
@@ -40,7 +41,6 @@ import com.testify.ecfeed.core.model.StaticStatement;
 import com.testify.ecfeed.core.model.TestCaseNode;
 import com.testify.ecfeed.core.model.ChoicesParentStatement.ChoiceCondition;
 import com.testify.ecfeed.core.model.ChoicesParentStatement.LabelCondition;
-import com.testify.ecfeed.core.utils.SystemLogger;
 
 public class MethodParameterOperationSetType extends BulkOperation {
 

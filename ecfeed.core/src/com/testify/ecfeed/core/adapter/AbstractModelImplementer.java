@@ -13,6 +13,9 @@ package com.testify.ecfeed.core.adapter;
 
 import java.util.List;
 
+import com.ecfeed.core.utils.EcException;
+import com.ecfeed.core.utils.StrgList;
+import com.ecfeed.core.utils.SystemLogger;
 import com.testify.ecfeed.core.model.AbstractNode;
 import com.testify.ecfeed.core.model.AbstractParameterNode;
 import com.testify.ecfeed.core.model.ChoiceNode;
@@ -24,9 +27,6 @@ import com.testify.ecfeed.core.model.MethodNode;
 import com.testify.ecfeed.core.model.MethodParameterNode;
 import com.testify.ecfeed.core.model.RootNode;
 import com.testify.ecfeed.core.model.TestCaseNode;
-import com.testify.ecfeed.core.utils.EcException;
-import com.testify.ecfeed.core.utils.StrgList;
-import com.testify.ecfeed.core.utils.SystemLogger;
 
 public abstract class AbstractModelImplementer implements IModelImplementer {
 

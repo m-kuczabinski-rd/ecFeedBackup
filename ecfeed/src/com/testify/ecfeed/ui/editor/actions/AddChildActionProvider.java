@@ -16,6 +16,8 @@ import java.util.List;
 
 import org.eclipse.jface.viewers.StructuredViewer;
 
+import com.ecfeed.core.utils.ExceptionHelper;
+import com.ecfeed.core.utils.SystemLogger;
 import com.testify.ecfeed.core.adapter.java.JavaUtils;
 import com.testify.ecfeed.core.model.AbstractNode;
 import com.testify.ecfeed.core.model.AbstractParameterNode;
@@ -31,8 +33,6 @@ import com.testify.ecfeed.core.model.MethodNode;
 import com.testify.ecfeed.core.model.MethodParameterNode;
 import com.testify.ecfeed.core.model.RootNode;
 import com.testify.ecfeed.core.model.TestCaseNode;
-import com.testify.ecfeed.core.utils.ExceptionHelper;
-import com.testify.ecfeed.core.utils.SystemLogger;
 import com.testify.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.testify.ecfeed.ui.modelif.AbstractNodeInterface;
 import com.testify.ecfeed.ui.modelif.ChoicesParentInterface;

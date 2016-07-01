@@ -10,7 +10,7 @@ package com.ecfeed.android.external;
 
 import java.lang.reflect.InvocationTargetException;
 
-import com.testify.ecfeed.core.utils.ExceptionHelper;
+import com.ecfeed.core.utils.ExceptionHelper;
 import com.testify.ecfeed.ui.common.Messages;
 
 public class ApkInstallerExt { 

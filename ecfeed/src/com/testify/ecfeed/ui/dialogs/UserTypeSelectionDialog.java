@@ -17,7 +17,7 @@ import org.eclipse.jdt.core.IType;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.dialogs.ISelectionStatusValidator;
 
-import com.testify.ecfeed.core.utils.SystemLogger;
+import com.ecfeed.core.utils.SystemLogger;
 import com.testify.ecfeed.ui.common.JavaModelAnalyser;
 import com.testify.ecfeed.ui.common.Messages;
 

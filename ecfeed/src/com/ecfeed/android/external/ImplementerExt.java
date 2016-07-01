@@ -8,7 +8,7 @@
 
 package com.ecfeed.android.external;
 
-import com.testify.ecfeed.core.utils.EcException;
+import com.ecfeed.core.utils.EcException;
 
 public class ImplementerExt {
 

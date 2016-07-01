@@ -14,7 +14,7 @@ import static org.junit.Assert.assertNull;
 
 import org.junit.Test;
 
-import com.testify.ecfeed.core.utils.DiskFileHelper;
+import com.ecfeed.core.utils.DiskFileHelper;
 
 public class DiskFileHelperTest{
 

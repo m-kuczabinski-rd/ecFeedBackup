@@ -14,12 +14,12 @@ import org.eclipse.swt.widgets.Shell;
 
 import com.ecfeed.android.external.ApkInstallerExt;
 import com.ecfeed.android.external.DeviceCheckerExt;
+import com.ecfeed.core.utils.ExceptionHelper;
+import com.ecfeed.core.utils.SystemLogger;
 import com.testify.ecfeed.core.model.ChoiceNode;
 import com.testify.ecfeed.core.model.MethodNode;
 import com.testify.ecfeed.core.runner.ITestMethodInvoker;
 import com.testify.ecfeed.core.runner.RunnerException;
-import com.testify.ecfeed.core.utils.ExceptionHelper;
-import com.testify.ecfeed.core.utils.SystemLogger;
 import com.testify.ecfeed.ui.common.Messages;
 import com.testify.ecfeed.ui.common.utils.EclipseProjectHelper;
 import com.testify.ecfeed.ui.common.utils.IFileInfoProvider;

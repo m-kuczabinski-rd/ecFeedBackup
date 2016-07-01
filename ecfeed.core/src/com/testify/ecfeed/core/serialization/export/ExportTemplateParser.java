@@ -4,9 +4,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.StringTokenizer;
 
-import com.testify.ecfeed.core.utils.ExceptionHelper;
-import com.testify.ecfeed.core.utils.StringHelper;
-import com.testify.ecfeed.core.utils.StringHolder;
+import com.ecfeed.core.utils.ExceptionHelper;
+import com.ecfeed.core.utils.StringHelper;
+import com.ecfeed.core.utils.StringHolder;
 
 public class ExportTemplateParser {
 	private int fMethodParametersCount;

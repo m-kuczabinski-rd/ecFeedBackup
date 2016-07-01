@@ -21,6 +21,7 @@ import org.eclipse.jdt.ui.JavaUI;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
 
+import com.ecfeed.core.utils.SystemLogger;
 import com.testify.ecfeed.core.adapter.EImplementationStatus;
 import com.testify.ecfeed.core.adapter.IModelOperation;
 import com.testify.ecfeed.core.adapter.java.JavaUtils;
@@ -32,7 +33,6 @@ import com.testify.ecfeed.core.adapter.operations.ChoiceOperationSetValue;
 import com.testify.ecfeed.core.model.AbstractNode;
 import com.testify.ecfeed.core.model.AbstractParameterNode;
 import com.testify.ecfeed.core.model.ChoiceNode;
-import com.testify.ecfeed.core.utils.SystemLogger;
 import com.testify.ecfeed.ui.common.Constants;
 import com.testify.ecfeed.ui.common.EclipseTypeAdapterProvider;
 import com.testify.ecfeed.ui.common.JavaModelAnalyser;

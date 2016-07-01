@@ -14,10 +14,10 @@ package com.testify.ecfeed.junit;
 import java.lang.reflect.Method;
 import java.util.Collection;
 
+import com.ecfeed.core.utils.EcException;
 import com.testify.ecfeed.core.adapter.java.ModelClassLoader;
 import com.testify.ecfeed.core.model.TestCaseNode;
 import com.testify.ecfeed.core.runner.Messages;
-import com.testify.ecfeed.core.utils.EcException;
 
 public class JavaParameterizedMethod extends AbstractFrameworkMethod {
 

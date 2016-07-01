@@ -18,10 +18,10 @@ import org.osgi.framework.FrameworkUtil;
 
 import com.ecfeed.android.external.AndroidFactoryDistributorExt;
 import com.ecfeed.android.external.IInstallationDirFileHelper;
-import com.testify.ecfeed.core.utils.DiskFileHelper;
-import com.testify.ecfeed.core.utils.ExceptionHelper;
-import com.testify.ecfeed.core.utils.StringHelper;
-import com.testify.ecfeed.core.utils.SystemLogger;
+import com.ecfeed.core.utils.DiskFileHelper;
+import com.ecfeed.core.utils.ExceptionHelper;
+import com.ecfeed.core.utils.StringHelper;
+import com.ecfeed.core.utils.SystemLogger;
 
 public class EclipseInstallationDirFileHelper implements IInstallationDirFileHelper {
 

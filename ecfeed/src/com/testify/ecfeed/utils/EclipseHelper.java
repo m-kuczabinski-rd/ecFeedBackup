@@ -27,7 +27,7 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.part.FileEditorInput;
 
-import com.testify.ecfeed.core.utils.ExceptionHelper;
+import com.ecfeed.core.utils.ExceptionHelper;
 
 public class EclipseHelper {
 	public static IEditorPart getActiveEditor() {

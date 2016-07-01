@@ -6,8 +6,21 @@
  * http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 
-package com.testify.ecfeed.core.utils;
+package com.ecfeed.core.utils;
 
-public class StringHolder extends ItemHolder<String> {
+import java.io.IOException;
 
+public class EcFeedFileLog {
+
+	private static final String LOG = "ecFeedLog.txt";
+
+	public static void appendLine(String message) throws IOException {
+		TextFileHelper.appendLine(LOG, message);
+	}
+
+	public static void appendLineNoThrow(String message) {
+		try {
+			TextFileHelper.appendLine(LOG, message);
+		} catch (IOException e) {}
+	}	
 }

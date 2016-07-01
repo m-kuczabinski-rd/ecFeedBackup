@@ -12,8 +12,8 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 
-import com.testify.ecfeed.core.utils.DiskFileHelper;
-import com.testify.ecfeed.core.utils.SystemHelper;
+import com.ecfeed.core.utils.DiskFileHelper;
+import com.ecfeed.core.utils.SystemHelper;
 import com.testify.ecfeed.utils.EctFileHelper;
 
 public class EditorInMemFileHelper {

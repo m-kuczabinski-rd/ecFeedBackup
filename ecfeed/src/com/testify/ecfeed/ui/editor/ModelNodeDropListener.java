@@ -19,6 +19,7 @@ import org.eclipse.jface.viewers.ViewerDropAdapter;
 import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.TransferData;
 
+import com.ecfeed.core.utils.SystemLogger;
 import com.testify.ecfeed.core.model.AbstractNode;
 import com.testify.ecfeed.core.model.AbstractParameterNode;
 import com.testify.ecfeed.core.model.ChoiceNode;
@@ -31,7 +32,6 @@ import com.testify.ecfeed.core.model.MethodNode;
 import com.testify.ecfeed.core.model.MethodParameterNode;
 import com.testify.ecfeed.core.model.RootNode;
 import com.testify.ecfeed.core.model.TestCaseNode;
-import com.testify.ecfeed.core.utils.SystemLogger;
 import com.testify.ecfeed.ui.common.EclipseModelBuilder;
 import com.testify.ecfeed.ui.common.utils.IFileInfoProvider;
 import com.testify.ecfeed.ui.modelif.AbstractNodeInterface;

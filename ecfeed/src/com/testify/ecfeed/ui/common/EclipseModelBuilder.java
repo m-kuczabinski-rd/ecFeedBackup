@@ -23,13 +23,13 @@ import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.core.Signature;
 
+import com.ecfeed.core.utils.SystemLogger;
 import com.testify.ecfeed.core.adapter.ModelOperationException;
 import com.testify.ecfeed.core.adapter.java.JavaUtils;
 import com.testify.ecfeed.core.model.ChoiceNode;
 import com.testify.ecfeed.core.model.ClassNode;
 import com.testify.ecfeed.core.model.MethodNode;
 import com.testify.ecfeed.core.model.MethodParameterNode;
-import com.testify.ecfeed.core.utils.SystemLogger;
 
 public class EclipseModelBuilder extends JavaModelAnalyser{
 

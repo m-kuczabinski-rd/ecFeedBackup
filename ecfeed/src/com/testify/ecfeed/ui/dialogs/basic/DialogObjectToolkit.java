@@ -23,7 +23,7 @@ import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
-import com.testify.ecfeed.core.utils.StringHelper;
+import com.ecfeed.core.utils.StringHelper;
 import com.testify.ecfeed.utils.EclipseHelper;
 
 public class DialogObjectToolkit {

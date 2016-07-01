@@ -1,6 +1,6 @@
 package com.ecfeed.android.utils;
 
-import com.testify.ecfeed.core.utils.EcException;
+import com.ecfeed.core.utils.EcException;
 
 public class AndroidBaseRunnerHelper {
 

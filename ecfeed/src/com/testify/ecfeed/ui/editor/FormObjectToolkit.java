@@ -11,7 +11,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
-import com.testify.ecfeed.core.utils.StringHelper;
+import com.ecfeed.core.utils.StringHelper;
 	
 public class FormObjectToolkit {
 	

@@ -19,6 +19,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.ecfeed.core.utils.SystemLogger;
 import com.testify.ecfeed.core.adapter.AbstractImplementationStatusResolver;
 import com.testify.ecfeed.core.adapter.EImplementationStatus;
 import com.testify.ecfeed.core.model.AbstractNode;
@@ -31,7 +32,6 @@ import com.testify.ecfeed.core.model.MethodNode;
 import com.testify.ecfeed.core.model.MethodParameterNode;
 import com.testify.ecfeed.core.model.RootNode;
 import com.testify.ecfeed.core.model.TestCaseNode;
-import com.testify.ecfeed.core.utils.SystemLogger;
 
 public class JavaImplementationStatusResolver extends AbstractImplementationStatusResolver{
 	private ModelClassLoader fLoader;

@@ -39,6 +39,8 @@ import org.eclipse.ui.forms.IDetailsPage;
 import org.eclipse.ui.forms.widgets.Section;
 
 import com.ecfeed.application.ApplicationContext;
+import com.ecfeed.core.utils.ExceptionHelper;
+import com.ecfeed.core.utils.SystemLogger;
 import com.testify.ecfeed.core.adapter.EImplementationStatus;
 import com.testify.ecfeed.core.adapter.java.JavaUtils;
 import com.testify.ecfeed.core.model.AbstractNode;
@@ -51,8 +53,6 @@ import com.testify.ecfeed.core.model.MethodNode;
 import com.testify.ecfeed.core.model.MethodParameterNode;
 import com.testify.ecfeed.core.model.RootNode;
 import com.testify.ecfeed.core.model.TestCaseNode;
-import com.testify.ecfeed.core.utils.ExceptionHelper;
-import com.testify.ecfeed.core.utils.SystemLogger;
 import com.testify.ecfeed.ui.common.Constants;
 import com.testify.ecfeed.ui.common.ImageManager;
 import com.testify.ecfeed.ui.common.utils.IFileInfoProvider;

@@ -14,6 +14,7 @@ package com.testify.ecfeed.core.adapter;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.ecfeed.core.utils.SystemLogger;
 import com.testify.ecfeed.core.adapter.java.JavaPrimitiveTypePredicate;
 import com.testify.ecfeed.core.model.AbstractNode;
 import com.testify.ecfeed.core.model.ChoiceNode;
@@ -26,7 +27,6 @@ import com.testify.ecfeed.core.model.MethodNode;
 import com.testify.ecfeed.core.model.MethodParameterNode;
 import com.testify.ecfeed.core.model.RootNode;
 import com.testify.ecfeed.core.model.TestCaseNode;
-import com.testify.ecfeed.core.utils.SystemLogger;
 
 
 public abstract class CachedImplementationStatusResolver extends AbstractImplementationStatusResolver {

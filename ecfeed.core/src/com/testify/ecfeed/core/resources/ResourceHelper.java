@@ -16,7 +16,7 @@ import org.eclipse.core.runtime.Path;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.FrameworkUtil;
 
-import com.testify.ecfeed.core.utils.StreamHelper;
+import com.ecfeed.core.utils.StreamHelper;
 
 public class ResourceHelper {
 

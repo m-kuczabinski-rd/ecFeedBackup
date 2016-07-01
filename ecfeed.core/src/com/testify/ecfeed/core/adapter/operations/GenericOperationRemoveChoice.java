@@ -13,6 +13,7 @@ package com.testify.ecfeed.core.adapter.operations;
 
 import java.util.Set;
 
+import com.ecfeed.core.utils.SystemLogger;
 import com.testify.ecfeed.core.adapter.IModelOperation;
 import com.testify.ecfeed.core.adapter.ITypeAdapter;
 import com.testify.ecfeed.core.adapter.ITypeAdapterProvider;
@@ -25,7 +26,6 @@ import com.testify.ecfeed.core.model.GlobalParameterNode;
 import com.testify.ecfeed.core.model.IParameterVisitor;
 import com.testify.ecfeed.core.model.MethodNode;
 import com.testify.ecfeed.core.model.MethodParameterNode;
-import com.testify.ecfeed.core.utils.SystemLogger;
 
 public class GenericOperationRemoveChoice extends BulkOperation {
 

@@ -13,10 +13,10 @@ package com.testify.ecfeed.core.adapter.operations;
 
 import java.util.Collection;
 
+import com.ecfeed.core.utils.SystemLogger;
 import com.testify.ecfeed.core.adapter.IModelOperation;
 import com.testify.ecfeed.core.adapter.ITypeAdapterProvider;
 import com.testify.ecfeed.core.model.AbstractNode;
-import com.testify.ecfeed.core.utils.SystemLogger;
 
 public class GenericAddChildrenOperation extends BulkOperation {
 

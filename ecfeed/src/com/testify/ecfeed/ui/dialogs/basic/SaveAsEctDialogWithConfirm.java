@@ -10,7 +10,7 @@ package com.testify.ecfeed.ui.dialogs.basic;
 
 import org.eclipse.swt.widgets.Shell;
 
-import com.testify.ecfeed.core.utils.DiskFileHelper;
+import com.ecfeed.core.utils.DiskFileHelper;
 import com.testify.ecfeed.utils.IChecker;
 
 public class SaveAsEctDialogWithConfirm {

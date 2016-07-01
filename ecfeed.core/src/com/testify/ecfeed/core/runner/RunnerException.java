@@ -11,7 +11,7 @@
 
 package com.testify.ecfeed.core.runner;
 
-import com.testify.ecfeed.core.utils.SystemLogger;
+import com.ecfeed.core.utils.SystemLogger;
 
 public class RunnerException extends Exception {
 

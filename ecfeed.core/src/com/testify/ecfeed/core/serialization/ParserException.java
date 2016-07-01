@@ -11,7 +11,7 @@
 
 package com.testify.ecfeed.core.serialization;
 
-import com.testify.ecfeed.core.utils.SystemLogger;
+import com.ecfeed.core.utils.SystemLogger;
 
 public class ParserException extends Exception {
 

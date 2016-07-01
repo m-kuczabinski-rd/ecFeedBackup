@@ -44,6 +44,7 @@ import org.eclipse.swt.widgets.Spinner;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Tree;
 
+import com.ecfeed.core.utils.StringHolder;
 import com.testify.ecfeed.core.adapter.EImplementationStatus;
 import com.testify.ecfeed.core.adapter.IImplementationStatusResolver;
 import com.testify.ecfeed.core.adapter.java.JavaUtils;
@@ -62,7 +63,6 @@ import com.testify.ecfeed.core.model.Constraint;
 import com.testify.ecfeed.core.model.ConstraintNode;
 import com.testify.ecfeed.core.model.MethodNode;
 import com.testify.ecfeed.core.model.MethodParameterNode;
-import com.testify.ecfeed.core.utils.StringHolder;
 import com.testify.ecfeed.ui.common.Constants;
 import com.testify.ecfeed.ui.common.EclipseImplementationStatusResolver;
 import com.testify.ecfeed.ui.common.Messages;

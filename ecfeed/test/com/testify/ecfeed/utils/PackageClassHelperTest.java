@@ -12,7 +12,7 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
-import com.testify.ecfeed.core.utils.PackageClassHelper;
+import com.ecfeed.core.utils.PackageClassHelper;
 
 public class PackageClassHelperTest{
 
