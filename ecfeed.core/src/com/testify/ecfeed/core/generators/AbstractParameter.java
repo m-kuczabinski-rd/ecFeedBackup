@@ -11,7 +11,7 @@
 
 package com.testify.ecfeed.core.generators;
 
-import com.testify.ecfeed.core.generators.api.IGeneratorParameter;
+import com.ecfeed.core.generators.api.IGeneratorParameter;
 
 public class AbstractParameter implements IGeneratorParameter {
 

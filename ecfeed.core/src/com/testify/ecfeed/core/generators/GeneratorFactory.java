@@ -15,8 +15,8 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
-import com.testify.ecfeed.core.generators.api.GeneratorException;
-import com.testify.ecfeed.core.generators.api.IGenerator;
+import com.ecfeed.core.generators.api.GeneratorException;
+import com.ecfeed.core.generators.api.IGenerator;
 
 public class GeneratorFactory<E> {
 

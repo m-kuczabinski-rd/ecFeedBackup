@@ -14,7 +14,7 @@ package com.testify.ecfeed.ui.dialogs;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.swt.widgets.Shell;
 
-import com.testify.ecfeed.core.generators.api.IGenerator;
+import com.ecfeed.core.generators.api.IGenerator;
 
 public class GeneratorProgressMonitorDialog extends ProgressMonitorDialog {
 	

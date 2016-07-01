@@ -16,11 +16,11 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+import com.ecfeed.core.generators.api.GeneratorException;
+import com.ecfeed.core.generators.api.IConstraint;
+import com.ecfeed.core.generators.api.IGenerator;
+import com.ecfeed.core.generators.api.IGeneratorParameter;
 import com.testify.ecfeed.core.generators.algorithms.IAlgorithm;
-import com.testify.ecfeed.core.generators.api.GeneratorException;
-import com.testify.ecfeed.core.generators.api.IConstraint;
-import com.testify.ecfeed.core.generators.api.IGenerator;
-import com.testify.ecfeed.core.generators.api.IGeneratorParameter;
 
 public class AbstractGenerator<E> implements IGenerator<E> {
 

@@ -15,10 +15,10 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+import com.ecfeed.core.generators.api.GeneratorException;
+import com.ecfeed.core.generators.api.IConstraint;
+import com.ecfeed.core.generators.api.IGenerator;
 import com.testify.ecfeed.core.generators.algorithms.RandomAlgorithm;
-import com.testify.ecfeed.core.generators.api.GeneratorException;
-import com.testify.ecfeed.core.generators.api.IConstraint;
-import com.testify.ecfeed.core.generators.api.IGenerator;
 
 public class RandomGenerator<E> extends AbstractGenerator<E> implements
 		IGenerator<E> {

@@ -15,9 +15,9 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+import com.ecfeed.core.generators.api.GeneratorException;
+import com.ecfeed.core.generators.api.IConstraint;
 import com.testify.ecfeed.core.generators.algorithms.CartesianProductAlgorithm;
-import com.testify.ecfeed.core.generators.api.GeneratorException;
-import com.testify.ecfeed.core.generators.api.IConstraint;
 
 public class CartesianProductGenerator<E> extends AbstractGenerator<E> {
 	@Override

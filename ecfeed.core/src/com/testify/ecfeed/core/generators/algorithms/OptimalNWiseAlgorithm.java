@@ -15,7 +15,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import com.testify.ecfeed.core.generators.api.GeneratorException;
+import com.ecfeed.core.generators.api.GeneratorException;
 
 public class OptimalNWiseAlgorithm<E> extends AbstractNWiseAlgorithm<E>{
 

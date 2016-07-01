@@ -15,9 +15,9 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+import com.ecfeed.core.generators.api.GeneratorException;
+import com.ecfeed.core.generators.api.IConstraint;
 import com.testify.ecfeed.core.generators.algorithms.RandomizedNWiseAlgorithm;
-import com.testify.ecfeed.core.generators.api.GeneratorException;
-import com.testify.ecfeed.core.generators.api.IConstraint;
 
 public class NWiseGenerator<E> extends AbstractGenerator<E>{
 	public final static String N_PARAMETER_NAME = "N";

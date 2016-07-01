@@ -15,8 +15,8 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
+import com.ecfeed.core.generators.api.GeneratorException;
 import com.testify.ecfeed.core.generators.StringParameter;
-import com.testify.ecfeed.core.generators.api.GeneratorException;
 
 public class StringParameterTest {
 

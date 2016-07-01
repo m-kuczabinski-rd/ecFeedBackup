@@ -16,11 +16,11 @@ import java.util.Set;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.ecfeed.core.generators.api.GeneratorException;
+import com.ecfeed.core.generators.api.IConstraint;
 import com.testify.ecfeed.core.generators.algorithms.RandomizedNWiseAlgorithm;
 import com.testify.ecfeed.core.generators.algorithms.Tuples;
 import com.testify.ecfeed.core.generators.algorithms.RandomizedNWiseAlgorithm.Variable;
-import com.testify.ecfeed.core.generators.api.GeneratorException;
-import com.testify.ecfeed.core.generators.api.IConstraint;
 
 public class RandomizedNWiseAlgorithmTest {
 	private final Collection<IConstraint<Integer>> EMPTY_CONSTRAINTS = new HashSet<IConstraint<Integer>>();

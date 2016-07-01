@@ -15,13 +15,13 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.ecfeed.core.generators.api.GeneratorException;
+import com.ecfeed.core.generators.api.IGenerator;
 import com.ecfeed.core.model.ChoiceNode;
 import com.ecfeed.core.runner.Messages;
 import com.ecfeed.core.runner.RunnerException;
 import com.ecfeed.core.utils.EcException;
 import com.testify.ecfeed.core.adapter.java.ModelClassLoader;
-import com.testify.ecfeed.core.generators.api.GeneratorException;
-import com.testify.ecfeed.core.generators.api.IGenerator;
 
 public class JavaRuntimeMethod extends AbstractFrameworkMethod{
 

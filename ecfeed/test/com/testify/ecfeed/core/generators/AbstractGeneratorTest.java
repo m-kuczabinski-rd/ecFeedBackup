@@ -23,13 +23,13 @@ import java.util.Random;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.ecfeed.core.generators.api.GeneratorException;
+import com.ecfeed.core.generators.api.IConstraint;
 import com.testify.ecfeed.core.generators.AbstractGenerator;
 import com.testify.ecfeed.core.generators.BooleanParameter;
 import com.testify.ecfeed.core.generators.DoubleParameter;
 import com.testify.ecfeed.core.generators.IntegerParameter;
 import com.testify.ecfeed.core.generators.StringParameter;
-import com.testify.ecfeed.core.generators.api.GeneratorException;
-import com.testify.ecfeed.core.generators.api.IConstraint;
 
 public class AbstractGeneratorTest {
 	

@@ -9,7 +9,7 @@
  *     Patryk Chamuczynski (p.chamuczynski(at)radytek.com) - initial implementation
  ******************************************************************************/
 
-package com.testify.ecfeed.core.generators.api;
+package com.ecfeed.core.generators.api;
 
 public interface IGeneratorParameter {
 	public enum TYPE{

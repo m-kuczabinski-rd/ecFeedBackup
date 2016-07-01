@@ -25,12 +25,12 @@ import java.util.Set;
 
 import org.junit.Test;
 
+import com.ecfeed.core.generators.api.GeneratorException;
+import com.ecfeed.core.generators.api.IConstraint;
 import com.testify.ecfeed.core.generators.CartesianProductGenerator;
 import com.testify.ecfeed.core.generators.algorithms.IAlgorithm;
 import com.testify.ecfeed.core.generators.algorithms.OptimalNWiseAlgorithm;
 import com.testify.ecfeed.core.generators.algorithms.Tuples;
-import com.testify.ecfeed.core.generators.api.GeneratorException;
-import com.testify.ecfeed.core.generators.api.IConstraint;
 import com.testify.ecfeed.core.generators.testutils.GeneratorTestUtils;
 
 public class NWiseAlgorithmTest{

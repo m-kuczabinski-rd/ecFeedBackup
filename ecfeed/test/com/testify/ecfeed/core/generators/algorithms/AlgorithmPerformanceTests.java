@@ -22,11 +22,11 @@ import java.util.List;
 
 import org.junit.Test;
 
+import com.ecfeed.core.generators.api.GeneratorException;
+import com.ecfeed.core.generators.api.IConstraint;
 import com.testify.ecfeed.core.generators.algorithms.AdaptiveRandomAlgorithm;
 import com.testify.ecfeed.core.generators.algorithms.CartesianProductAlgorithm;
 import com.testify.ecfeed.core.generators.algorithms.OptimalNWiseAlgorithm;
-import com.testify.ecfeed.core.generators.api.GeneratorException;
-import com.testify.ecfeed.core.generators.api.IConstraint;
 import com.testify.ecfeed.core.generators.testutils.GeneratorTestUtils;
 
 public class AlgorithmPerformanceTests {

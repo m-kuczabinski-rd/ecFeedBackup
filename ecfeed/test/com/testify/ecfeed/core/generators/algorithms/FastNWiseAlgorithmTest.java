@@ -19,11 +19,11 @@ import java.util.List;
 
 import org.junit.Test;
 
+import com.ecfeed.core.generators.api.GeneratorException;
+import com.ecfeed.core.generators.api.IConstraint;
 import com.testify.ecfeed.core.generators.algorithms.FastNWiseAlgorithm;
 import com.testify.ecfeed.core.generators.algorithms.IAlgorithm;
 import com.testify.ecfeed.core.generators.algorithms.OptimalNWiseAlgorithm;
-import com.testify.ecfeed.core.generators.api.GeneratorException;
-import com.testify.ecfeed.core.generators.api.IConstraint;
 import com.testify.ecfeed.core.generators.testutils.GeneratorTestUtils;
 
 public class FastNWiseAlgorithmTest extends NWiseAlgorithmTest {

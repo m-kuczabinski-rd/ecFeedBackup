@@ -9,22 +9,24 @@
  *     Patryk Chamuczynski (p.chamuczynski(at)radytek.com) - initial implementation
  ******************************************************************************/
 
-package com.testify.ecfeed.core.generators.api;
+package com.ecfeed.core.generators.api;
 
-import java.util.List;
+public class GeneratorException extends Exception {
 
+	private static final long serialVersionUID = 7963877928833442039L;
+	private static final String EC_FEED_ERROR = "ECFEEDERR";
 
-/*
- * Constraints can be adapting or evaluating. The adapting constraints
- * should change the content of 'values' vector, so the constraint is 
- * fulfilled after adaption. The evaluate function should always return 
- * true in this case.
- * 
- * The evaluating constraints should not modify the values (adapt function 
- * should do nothing). The evaluate function shall return information
- * if the vector fulfills the constraint condition.
- */
-public interface IConstraint<E> {
-	public boolean evaluate(List<E> values);
-	public boolean adapt(List<E> values);
+	private GeneratorException(String message) {
+		super(message);
+	}
+
+	public static void report(String message) throws GeneratorException {
+		logThrowGeneratorException(message);
+		throw new GeneratorException(message);
+	}	
+
+	public static void logThrowGeneratorException(String message) {
+		System.out.println( EC_FEED_ERROR + ": Exception thrown");
+		System.out.println("\t" +"Message: " + message + "\n");
+	}
 }

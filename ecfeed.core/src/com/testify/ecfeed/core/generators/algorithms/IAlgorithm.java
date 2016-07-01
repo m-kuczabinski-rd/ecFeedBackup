@@ -14,8 +14,8 @@ package com.testify.ecfeed.core.generators.algorithms;
 import java.util.Collection;
 import java.util.List;
 
-import com.testify.ecfeed.core.generators.api.GeneratorException;
-import com.testify.ecfeed.core.generators.api.IConstraint;
+import com.ecfeed.core.generators.api.GeneratorException;
+import com.ecfeed.core.generators.api.IConstraint;
 
 public interface IAlgorithm<E> {
 	public void initialize(List<List<E>> input, 

@@ -15,9 +15,9 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+import com.ecfeed.core.generators.api.GeneratorException;
+import com.ecfeed.core.generators.api.IConstraint;
 import com.testify.ecfeed.core.generators.algorithms.AdaptiveRandomAlgorithm;
-import com.testify.ecfeed.core.generators.api.GeneratorException;
-import com.testify.ecfeed.core.generators.api.IConstraint;
 
 public class AdaptiveRandomGenerator<E> extends AbstractGenerator<E> {
 	public final String HISTORY_DEPTH_PARAMETER_NAME = "depth";

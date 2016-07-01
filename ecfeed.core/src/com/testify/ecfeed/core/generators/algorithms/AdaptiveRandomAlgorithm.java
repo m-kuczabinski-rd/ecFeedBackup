@@ -18,8 +18,8 @@ import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
-import com.testify.ecfeed.core.generators.api.GeneratorException;
-import com.testify.ecfeed.core.generators.api.IConstraint;
+import com.ecfeed.core.generators.api.GeneratorException;
+import com.ecfeed.core.generators.api.IConstraint;
 
 public class AdaptiveRandomAlgorithm<E> extends AbstractAlgorithm<E> implements IAlgorithm<E> {
 

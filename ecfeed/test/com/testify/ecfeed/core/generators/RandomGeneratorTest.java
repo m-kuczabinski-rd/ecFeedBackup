@@ -23,11 +23,11 @@ import java.util.Map;
 
 import org.junit.Test;
 
+import com.ecfeed.core.generators.api.GeneratorException;
+import com.ecfeed.core.generators.api.IConstraint;
 import com.testify.ecfeed.core.generators.RandomGenerator;
 import com.testify.ecfeed.core.generators.algorithms.IAlgorithm;
 import com.testify.ecfeed.core.generators.algorithms.RandomAlgorithm;
-import com.testify.ecfeed.core.generators.api.GeneratorException;
-import com.testify.ecfeed.core.generators.api.IConstraint;
 import com.testify.ecfeed.core.generators.testutils.GeneratorTestUtils;
 
 public class RandomGeneratorTest {

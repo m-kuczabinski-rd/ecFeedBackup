@@ -13,7 +13,7 @@ package com.testify.ecfeed.core.generators;
 
 import java.util.Arrays;
 
-import com.testify.ecfeed.core.generators.api.GeneratorException;
+import com.ecfeed.core.generators.api.GeneratorException;
 
 public class DoubleParameter extends AbstractParameter {
 

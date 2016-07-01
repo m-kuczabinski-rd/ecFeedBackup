@@ -12,8 +12,8 @@ import java.util.Set;
 
 import javax.management.RuntimeErrorException;
 
-import com.testify.ecfeed.core.generators.api.GeneratorException;
-import com.testify.ecfeed.core.generators.api.IConstraint;
+import com.ecfeed.core.generators.api.GeneratorException;
+import com.ecfeed.core.generators.api.IConstraint;
 
 public class RandomizedNWiseAlgorithm<E> extends AbstractNWiseAlgorithm<E> {
 

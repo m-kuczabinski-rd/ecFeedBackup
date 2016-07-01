@@ -11,9 +11,9 @@ import java.util.Set;
 
 import org.junit.Test;
 
+import com.ecfeed.core.generators.api.GeneratorException;
+import com.ecfeed.core.generators.api.IConstraint;
 import com.testify.ecfeed.core.generators.algorithms.RBOptimalFullCoverageNWiseAlgorithm;
-import com.testify.ecfeed.core.generators.api.GeneratorException;
-import com.testify.ecfeed.core.generators.api.IConstraint;
 
 public class RBOptimalFullCoverageNWiseAlgorithmTest {
 
