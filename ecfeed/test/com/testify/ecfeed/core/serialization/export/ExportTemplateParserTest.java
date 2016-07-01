@@ -16,6 +16,7 @@ import java.util.Map;
 
 import org.junit.Test;
 
+import com.ecfeed.core.serialization.export.ExportTemplateParser;
 import com.ecfeed.core.utils.StringHelper;
 
 public class ExportTemplateParserTest {

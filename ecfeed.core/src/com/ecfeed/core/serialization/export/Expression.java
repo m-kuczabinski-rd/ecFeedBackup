@@ -24,7 +24,7 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  * 
  */
-package com.testify.ecfeed.core.serialization.export;
+package com.ecfeed.core.serialization.export;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;

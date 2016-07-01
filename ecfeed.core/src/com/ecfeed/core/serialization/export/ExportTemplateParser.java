@@ -1,4 +1,4 @@
-package com.testify.ecfeed.core.serialization.export;
+package com.ecfeed.core.serialization.export;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -6,11 +6,12 @@
  * http://www.eclipse.org/legal/epl-v10.html
  ******************************************************************************/
 
-package com.testify.ecfeed.core.serialization.export;
+package com.ecfeed.core.serialization.export;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.ecfeed.core.serialization.export.Expression;
 import com.testify.ecfeed.core.adapter.java.ChoiceValueParser;
 import com.testify.ecfeed.core.adapter.java.JavaUtils;
 import com.testify.ecfeed.core.model.AbstractParameterNode;
@@ -18,7 +19,6 @@ import com.testify.ecfeed.core.model.ChoiceNode;
 import com.testify.ecfeed.core.model.MethodNode;
 import com.testify.ecfeed.core.model.MethodParameterNode;
 import com.testify.ecfeed.core.model.TestCaseNode;
-import com.testify.ecfeed.core.serialization.export.Expression;
 
 public class TestCasesExportHelper {
 

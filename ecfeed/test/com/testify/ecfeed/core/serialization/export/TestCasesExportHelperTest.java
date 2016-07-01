@@ -15,6 +15,7 @@ import java.util.List;
 
 import org.junit.Test;
 
+import com.ecfeed.core.serialization.export.TestCasesExportHelper;
 import com.testify.ecfeed.core.model.ChoiceNode;
 import com.testify.ecfeed.core.model.ClassNode;
 import com.testify.ecfeed.core.model.MethodNode;
