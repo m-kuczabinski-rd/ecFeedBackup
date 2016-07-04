@@ -103,7 +103,7 @@ public class MethodParameterNode extends AbstractParameterNode {
 			List<ChoiceNode> temp = fLink.getChoicesCopy();
 			if(!choiceListsMatch(fChoicesCopy, temp))
 				fChoicesCopy = temp;
-				return fChoicesCopy;
+			return fChoicesCopy;
 		}
 		return super.getChoices();
 	}
@@ -118,13 +118,13 @@ public class MethodParameterNode extends AbstractParameterNode {
 		return true;
 	}
 
-//	@Override
-//	public ChoiceNode getChoice(String qualifiedName) {
-//		if (isLinked()) {
-//			return getLink().getChoice(qualifiedName);
-//		}
-//		return super.getChoice(qualifiedName);
-//	}
+	//	@Override
+	//	public ChoiceNode getChoice(String qualifiedName) {
+	//		if (isLinked()) {
+	//			return getLink().getChoice(qualifiedName);
+	//		}
+	//		return super.getChoice(qualifiedName);
+	//	}
 
 	@Override
 	public List<? extends AbstractNode> getChildren() {
@@ -153,6 +153,13 @@ public class MethodParameterNode extends AbstractParameterNode {
 	public String getDefaultValue() {
 		return fDefaultValue;
 	}
+
+	public String getDefaultValueForSerialization() {
+		if (fDefaultValue == null) {
+			return new String();
+		}
+		return fDefaultValue;
+	}	
 
 	public void setDefaultValueString(String value) {
 		fDefaultValue = value;

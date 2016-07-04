@@ -175,8 +175,10 @@ public abstract class XomBuilder implements IModelVisitor, IStatementVisitor {
 		encodeAndAddAttribute(element, new Attribute(TYPE_NAME_ATTRIBUTE, node.getRealType()));
 
 		encodeAndAddAttribute(element, new Attribute(PARAMETER_IS_EXPECTED_ATTRIBUTE_NAME, Boolean.toString(node.isExpected())));
-		encodeAndAddAttribute(element, new Attribute(DEFAULT_EXPECTED_VALUE_ATTRIBUTE_NAME, node.getDefaultValue()));
+
+		encodeAndAddAttribute(element, new Attribute(DEFAULT_EXPECTED_VALUE_ATTRIBUTE_NAME, node.getDefaultValueForSerialization()));
 		encodeAndAddAttribute(element, new Attribute(PARAMETER_IS_LINKED_ATTRIBUTE_NAME, Boolean.toString(node.isLinked())));
+
 		if(node.getLink() != null){
 			encodeAndAddAttribute(element, new Attribute(PARAMETER_LINK_ATTRIBUTE_NAME, node.getLink().getQualifiedName()));
 		}
