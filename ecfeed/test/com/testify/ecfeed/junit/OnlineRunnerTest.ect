@@ -1,2 +1,366 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Model name="OnlineRunnerTest"><Class name="com.testify.ecfeed.junit.OnlineRunnerTest$GlobalGeneratorTestClass"><Method name="testWithGlobalGenerator"><Category expected="" name="arg1" type="String" isexpected="false"><Partition name="a" value="a"/><Partition name="b" value="b"/><Partition name="c" value="c"/><Partition name="d" value="d"/><Partition name="e" value="e"/><Partition name="f" value="f"/></Category><Category expected="" name="arg2" type="String" isexpected="false"><Partition name="a" value="a"/><Partition name="b" value="b"/><Partition name="c" value="c"/><Partition name="d" value="d"/><Partition name="e" value="e"/><Partition name="f" value="f"/></Category><Category expected="" name="arg3" type="String" isexpected="false"><Partition name="a" value="a"/><Partition name="b" value="b"/><Partition name="c" value="c"/><Partition name="d" value="d"/><Partition name="e" value="e"/><Partition name="f" value="f"/></Category><Category expected="" name="arg4" type="String" isexpected="false"><Partition name="a" value="a"/><Partition name="b" value="b"/><Partition name="c" value="c"/><Partition name="d" value="d"/><Partition name="e" value="e"/><Partition name="f" value="f"/></Category></Method></Class><Class name="com.testify.ecfeed.junit.OnlineRunnerTest$OverridenGeneratorParameterTestClass"><Method name="testWithLocalGeneratorParameter"><Category expected="" name="arg1" type="String" isexpected="false"><Partition name="a" value="a"/><Partition name="b" value="b"/><Partition name="c" value="c"/></Category><Category expected="" name="arg2" type="String" isexpected="false"><Partition name="a" value="a"/><Partition name="b" value="b"/><Partition name="c" value="c"/></Category><Category expected="" name="arg3" type="String" isexpected="false"><Partition name="a" value="a"/><Partition name="b" value="b"/><Partition name="c" value="c"/></Category><Category expected="" name="arg4" type="String" isexpected="false"><Partition name="a" value="a"/><Partition name="b" value="b"/><Partition name="c" value="c"/></Category></Method></Class><Class name="com.testify.ecfeed.junit.OnlineRunnerTest$GlobalConstraintsTestClass"><Method name="testWithConstraints"><Category expected="" name="arg1" type="String" isexpected="false"><Partition name="a" value="a"/></Category><Category expected="" name="arg2" type="String" isexpected="false"><Partition name="a" value="a"/></Category><Category expected="" name="arg3" type="String" isexpected="false"><Partition name="a" value="a"/></Category><Category expected="" name="arg4" type="String" isexpected="false"><Partition name="a" value="a"/></Category><Constraint name="global constraint"><Premise><StatementArray operator="and"><Statement partition="a" category="arg1" relation="="/><Statement partition="a" category="arg2" relation="="/><Statement partition="a" category="arg3" relation="="/><Statement partition="a" category="arg4" relation="="/></StatementArray></Premise><Consequence><StaticStatement value="false"/></Consequence></Constraint></Method></Class><Class name="com.testify.ecfeed.junit.OnlineRunnerTest$OverridenConstraintsTestClass"><Method name="testWithConstraints"><Category expected="" name="arg1" type="String" isexpected="false"><Partition name="a" value="a"/><Partition name="b" value="b"/><Partition name="c" value="c"/></Category><Category expected="" name="arg2" type="String" isexpected="false"><Partition name="a" value="a"/><Partition name="b" value="b"/><Partition name="c" value="c"/></Category><Category expected="" name="arg3" type="String" isexpected="false"><Partition name="a" value="a"/><Partition name="b" value="b"/><Partition name="c" value="c"/></Category><Category expected="" name="arg4" type="String" isexpected="false"><Partition name="a" value="a"/><Partition name="b" value="b"/><Partition name="c" value="c"/></Category><Constraint name="constraint"><Premise><StaticStatement value="true"/></Premise><Consequence><Statement partition="a" category="arg1" relation="="/></Consequence></Constraint><Constraint name="another constraint"><Premise><Statement partition="b" category="arg2" relation="="/></Premise><Consequence><StaticStatement value="false"/></Consequence></Constraint></Method></Class><Class name="com.testify.ecfeed.junit.OnlineRunnerTestClass"><Method name="nWiseTest"><Category expected="" name="a" type="int" isexpected="false"><Partition name="min" value="-2147483648"/><Partition name="negative" value="-1"/><Partition name="zero" value="0"/><Partition name="positive" value="1"/><Partition name="max" value="2147483647"/></Category><Category expected="" name="b" type="int" isexpected="false"><Partition name="min" value="-2147483648"/><Partition name="negative" value="-1"/><Partition name="zero" value="0"/><Partition name="positive" value="1"/><Partition name="max" value="2147483647"/></Category><Category expected="" name="c" type="int" isexpected="false"><Partition name="min" value="-2147483648"/><Partition name="negative" value="-1"/><Partition name="zero" value="0"/><Partition name="positive" value="1"/><Partition name="max" value="2147483647"/></Category><Category expected="" name="d" type="int" isexpected="false"><Partition name="min" value="-2147483648"/><Partition name="negative" value="-1"/><Partition name="zero" value="0"/><Partition name="positive" value="1"/><Partition name="max" value="2147483647"/></Category></Method><Method name="cartesianTest"><Category expected="" name="a" type="int" isexpected="false"><Partition name="min" value="-2147483648"/><Partition name="negative" value="-1"/><Partition name="zero" value="0"/><Partition name="positive" value="1"/><Partition name="max" value="2147483647"/></Category><Category expected="" name="b" type="int" isexpected="false"><Partition name="min" value="-2147483648"/><Partition name="negative" value="-1"/><Partition name="zero" value="0"/><Partition name="positive" value="1"/><Partition name="max" value="2147483647"/></Category><Category expected="" name="c" type="int" isexpected="false"><Partition name="min" value="-2147483648"/><Partition name="negative" value="-1"/><Partition name="zero" value="0"/><Partition name="positive" value="1"/><Partition name="max" value="2147483647"/></Category><Category expected="" name="d" type="int" isexpected="false"><Partition name="min" value="-2147483648"/><Partition name="negative" value="-1"/><Partition name="zero" value="0"/><Partition name="positive" value="1"/><Partition name="max" value="2147483647"/></Category><Constraint name="constraint"><Premise><Statement partition="zero" category="a" relation="≠"/></Premise><Consequence><StaticStatement value="false"/></Consequence></Constraint><Constraint name="other constraint"><Premise><Statement partition="zero" category="b" relation="≠"/></Premise><Consequence><StaticStatement value="false"/></Consequence></Constraint></Method><Method name="randomTest"><Category expected="" name="a" type="int" isexpected="false"><Partition name="min" value="-2147483648"/><Partition name="negative" value="-1"/><Partition name="zero" value="0"/><Partition name="positive" value="1"/><Partition name="max" value="2147483647"/></Category><Category expected="" name="b" type="int" isexpected="false"><Partition name="min" value="-2147483648"/><Partition name="negative" value="-1"/><Partition name="zero" value="0"/><Partition name="positive" value="1"/><Partition name="max" value="2147483647"/></Category><Category expected="" name="c" type="int" isexpected="false"><Partition name="min" value="-2147483648"/><Partition name="negative" value="-1"/><Partition name="zero" value="0"/><Partition name="positive" value="1"/><Partition name="max" value="2147483647"/></Category><Category expected="" name="d" type="int" isexpected="false"><Partition name="min" value="-2147483648"/><Partition name="negative" value="-1"/><Partition name="zero" value="0"/><Partition name="positive" value="1"/><Partition name="max" value="2147483647"/></Category></Method></Class><Class name="com.testify.ecfeed.junit.OnlineRunnerTest$NoConstraintsTestClass"><Method name="testWithNoConstraints"><Category expected="" name="arg1" type="String" isexpected="false"><Partition name="lower case" value="a"/></Category><Category expected="" name="arg2" type="String" isexpected="false"><Partition name="a" value="a"/></Category><Category expected="" name="arg3" type="String" isexpected="false"><Partition name="a" value="a"/><Partition name="b" value="b"/><Partition name="c" value="c"/><Partition name="d" value="d"/></Category><Category expected="" name="arg4" type="String" isexpected="false"><Partition name="a" value="a"/><Partition name="b" value="b"/><Partition name="c" value="c"/><Partition name="d" value="d"/></Category><Constraint name="constraint"><Premise><StaticStatement value="true"/></Premise><Consequence><Statement partition="c" category="arg3" relation="="/></Consequence></Constraint></Method></Class></Model>
+<Model name="OnlineRunnerTest" version="1">
+    <Class name="com.testify.ecfeed.junit.OnlineRunnerTest$GlobalGeneratorTestClass" runOnAndroid="false">
+        <Method name="testWithGlobalGenerator">
+            <Parameter name="arg1" type="String" isExpected="false" expected="" linked="false">
+                <Comments>
+                    <TypeComments/>
+                </Comments>
+                <Choice name="a" value="a"/>
+                <Choice name="b" value="b"/>
+                <Choice name="c" value="c"/>
+                <Choice name="d" value="d"/>
+                <Choice name="e" value="e"/>
+                <Choice name="f" value="f"/>
+            </Parameter>
+            <Parameter name="arg2" type="String" isExpected="false" expected="" linked="false">
+                <Comments>
+                    <TypeComments/>
+                </Comments>
+                <Choice name="a" value="a"/>
+                <Choice name="b" value="b"/>
+                <Choice name="c" value="c"/>
+                <Choice name="d" value="d"/>
+                <Choice name="e" value="e"/>
+                <Choice name="f" value="f"/>
+            </Parameter>
+            <Parameter name="arg3" type="String" isExpected="false" expected="" linked="false">
+                <Comments>
+                    <TypeComments/>
+                </Comments>
+                <Choice name="a" value="a"/>
+                <Choice name="b" value="b"/>
+                <Choice name="c" value="c"/>
+                <Choice name="d" value="d"/>
+                <Choice name="e" value="e"/>
+                <Choice name="f" value="f"/>
+            </Parameter>
+            <Parameter name="arg4" type="String" isExpected="false" expected="" linked="false">
+                <Comments>
+                    <TypeComments/>
+                </Comments>
+                <Choice name="a" value="a"/>
+                <Choice name="b" value="b"/>
+                <Choice name="c" value="c"/>
+                <Choice name="d" value="d"/>
+                <Choice name="e" value="e"/>
+                <Choice name="f" value="f"/>
+            </Parameter>
+        </Method>
+    </Class>
+    <Class name="com.testify.ecfeed.junit.OnlineRunnerTest$OverridenGeneratorParameterTestClass" runOnAndroid="false">
+        <Method name="testWithLocalGeneratorParameter">
+            <Parameter name="arg1" type="String" isExpected="false" expected="" linked="false">
+                <Comments>
+                    <TypeComments/>
+                </Comments>
+                <Choice name="a" value="a"/>
+                <Choice name="b" value="b"/>
+                <Choice name="c" value="c"/>
+            </Parameter>
+            <Parameter name="arg2" type="String" isExpected="false" expected="" linked="false">
+                <Comments>
+                    <TypeComments/>
+                </Comments>
+                <Choice name="a" value="a"/>
+                <Choice name="b" value="b"/>
+                <Choice name="c" value="c"/>
+            </Parameter>
+            <Parameter name="arg3" type="String" isExpected="false" expected="" linked="false">
+                <Comments>
+                    <TypeComments/>
+                </Comments>
+                <Choice name="a" value="a"/>
+                <Choice name="b" value="b"/>
+                <Choice name="c" value="c"/>
+            </Parameter>
+            <Parameter name="arg4" type="String" isExpected="false" expected="" linked="false">
+                <Comments>
+                    <TypeComments/>
+                </Comments>
+                <Choice name="a" value="a"/>
+                <Choice name="b" value="b"/>
+                <Choice name="c" value="c"/>
+            </Parameter>
+        </Method>
+    </Class>
+    <Class name="com.testify.ecfeed.junit.OnlineRunnerTest$GlobalConstraintsTestClass" runOnAndroid="false">
+        <Method name="testWithConstraints">
+            <Parameter name="arg1" type="String" isExpected="false" expected="" linked="false">
+                <Comments>
+                    <TypeComments/>
+                </Comments>
+                <Choice name="a" value="a"/>
+            </Parameter>
+            <Parameter name="arg2" type="String" isExpected="false" expected="" linked="false">
+                <Comments>
+                    <TypeComments/>
+                </Comments>
+                <Choice name="a" value="a"/>
+            </Parameter>
+            <Parameter name="arg3" type="String" isExpected="false" expected="" linked="false">
+                <Comments>
+                    <TypeComments/>
+                </Comments>
+                <Choice name="a" value="a"/>
+            </Parameter>
+            <Parameter name="arg4" type="String" isExpected="false" expected="" linked="false">
+                <Comments>
+                    <TypeComments/>
+                </Comments>
+                <Choice name="a" value="a"/>
+            </Parameter>
+            <Constraint name="global\sconstraint">
+                <Premise>
+                    <StatementArray operator="and">
+                        <Statement choice="a" parameter="arg1" relation="="/>
+                        <Statement choice="a" parameter="arg2" relation="="/>
+                        <Statement choice="a" parameter="arg3" relation="="/>
+                        <Statement choice="a" parameter="arg4" relation="="/>
+                    </StatementArray>
+                </Premise>
+                <Consequence>
+                    <StaticStatement value="false"/>
+                </Consequence>
+            </Constraint>
+        </Method>
+    </Class>
+    <Class name="com.testify.ecfeed.junit.OnlineRunnerTest$OverridenConstraintsTestClass" runOnAndroid="false">
+        <Method name="testWithConstraints">
+            <Parameter name="arg1" type="String" isExpected="false" expected="" linked="false">
+                <Comments>
+                    <TypeComments/>
+                </Comments>
+                <Choice name="a" value="a"/>
+                <Choice name="b" value="b"/>
+                <Choice name="c" value="c"/>
+            </Parameter>
+            <Parameter name="arg2" type="String" isExpected="false" expected="" linked="false">
+                <Comments>
+                    <TypeComments/>
+                </Comments>
+                <Choice name="a" value="a"/>
+                <Choice name="b" value="b"/>
+                <Choice name="c" value="c"/>
+            </Parameter>
+            <Parameter name="arg3" type="String" isExpected="false" expected="" linked="false">
+                <Comments>
+                    <TypeComments/>
+                </Comments>
+                <Choice name="a" value="a"/>
+                <Choice name="b" value="b"/>
+                <Choice name="c" value="c"/>
+            </Parameter>
+            <Parameter name="arg4" type="String" isExpected="false" expected="" linked="false">
+                <Comments>
+                    <TypeComments/>
+                </Comments>
+                <Choice name="a" value="a"/>
+                <Choice name="b" value="b"/>
+                <Choice name="c" value="c"/>
+            </Parameter>
+            <Constraint name="constraint">
+                <Premise>
+                    <StaticStatement value="true"/>
+                </Premise>
+                <Consequence>
+                    <Statement choice="a" parameter="arg1" relation="="/>
+                </Consequence>
+            </Constraint>
+            <Constraint name="another\sconstraint">
+                <Premise>
+                    <Statement choice="b" parameter="arg2" relation="="/>
+                </Premise>
+                <Consequence>
+                    <StaticStatement value="false"/>
+                </Consequence>
+            </Constraint>
+        </Method>
+    </Class>
+    <Class name="com.testify.ecfeed.junit.OnlineRunnerTestClass" runOnAndroid="false">
+        <Method name="nWiseTest">
+            <Parameter name="a" type="int" isExpected="false" expected="" linked="false">
+                <Comments>
+                    <TypeComments/>
+                </Comments>
+                <Choice name="min" value="-2147483648"/>
+                <Choice name="negative" value="-1"/>
+                <Choice name="zero" value="0"/>
+                <Choice name="positive" value="1"/>
+                <Choice name="max" value="2147483647"/>
+            </Parameter>
+            <Parameter name="b" type="int" isExpected="false" expected="" linked="false">
+                <Comments>
+                    <TypeComments/>
+                </Comments>
+                <Choice name="min" value="-2147483648"/>
+                <Choice name="negative" value="-1"/>
+                <Choice name="zero" value="0"/>
+                <Choice name="positive" value="1"/>
+                <Choice name="max" value="2147483647"/>
+            </Parameter>
+            <Parameter name="c" type="int" isExpected="false" expected="" linked="false">
+                <Comments>
+                    <TypeComments/>
+                </Comments>
+                <Choice name="min" value="-2147483648"/>
+                <Choice name="negative" value="-1"/>
+                <Choice name="zero" value="0"/>
+                <Choice name="positive" value="1"/>
+                <Choice name="max" value="2147483647"/>
+            </Parameter>
+            <Parameter name="d" type="int" isExpected="false" expected="" linked="false">
+                <Comments>
+                    <TypeComments/>
+                </Comments>
+                <Choice name="min" value="-2147483648"/>
+                <Choice name="negative" value="-1"/>
+                <Choice name="zero" value="0"/>
+                <Choice name="positive" value="1"/>
+                <Choice name="max" value="2147483647"/>
+            </Parameter>
+        </Method>
+        <Method name="cartesianTest">
+            <Parameter name="a" type="int" isExpected="false" expected="" linked="false">
+                <Comments>
+                    <TypeComments/>
+                </Comments>
+                <Choice name="min" value="-2147483648"/>
+                <Choice name="negative" value="-1"/>
+                <Choice name="zero" value="0"/>
+                <Choice name="positive" value="1"/>
+                <Choice name="max" value="2147483647"/>
+            </Parameter>
+            <Parameter name="b" type="int" isExpected="false" expected="" linked="false">
+                <Comments>
+                    <TypeComments/>
+                </Comments>
+                <Choice name="min" value="-2147483648"/>
+                <Choice name="negative" value="-1"/>
+                <Choice name="zero" value="0"/>
+                <Choice name="positive" value="1"/>
+                <Choice name="max" value="2147483647"/>
+            </Parameter>
+            <Parameter name="c" type="int" isExpected="false" expected="" linked="false">
+                <Comments>
+                    <TypeComments/>
+                </Comments>
+                <Choice name="min" value="-2147483648"/>
+                <Choice name="negative" value="-1"/>
+                <Choice name="zero" value="0"/>
+                <Choice name="positive" value="1"/>
+                <Choice name="max" value="2147483647"/>
+            </Parameter>
+            <Parameter name="d" type="int" isExpected="false" expected="" linked="false">
+                <Comments>
+                    <TypeComments/>
+                </Comments>
+                <Choice name="min" value="-2147483648"/>
+                <Choice name="negative" value="-1"/>
+                <Choice name="zero" value="0"/>
+                <Choice name="positive" value="1"/>
+                <Choice name="max" value="2147483647"/>
+            </Parameter>
+            <Constraint name="constraint">
+                <Premise>
+                    <Statement choice="zero" parameter="a" relation="≠"/>
+                </Premise>
+                <Consequence>
+                    <StaticStatement value="false"/>
+                </Consequence>
+            </Constraint>
+            <Constraint name="other\sconstraint">
+                <Premise>
+                    <Statement choice="zero" parameter="b" relation="≠"/>
+                </Premise>
+                <Consequence>
+                    <StaticStatement value="false"/>
+                </Consequence>
+            </Constraint>
+        </Method>
+        <Method name="randomTest">
+            <Parameter name="a" type="int" isExpected="false" expected="" linked="false">
+                <Comments>
+                    <TypeComments/>
+                </Comments>
+                <Choice name="min" value="-2147483648"/>
+                <Choice name="negative" value="-1"/>
+                <Choice name="zero" value="0"/>
+                <Choice name="positive" value="1"/>
+                <Choice name="max" value="2147483647"/>
+            </Parameter>
+            <Parameter name="b" type="int" isExpected="false" expected="" linked="false">
+                <Comments>
+                    <TypeComments/>
+                </Comments>
+                <Choice name="min" value="-2147483648"/>
+                <Choice name="negative" value="-1"/>
+                <Choice name="zero" value="0"/>
+                <Choice name="positive" value="1"/>
+                <Choice name="max" value="2147483647"/>
+            </Parameter>
+            <Parameter name="c" type="int" isExpected="false" expected="" linked="false">
+                <Comments>
+                    <TypeComments/>
+                </Comments>
+                <Choice name="min" value="-2147483648"/>
+                <Choice name="negative" value="-1"/>
+                <Choice name="zero" value="0"/>
+                <Choice name="positive" value="1"/>
+                <Choice name="max" value="2147483647"/>
+            </Parameter>
+            <Parameter name="d" type="int" isExpected="false" expected="" linked="false">
+                <Comments>
+                    <TypeComments/>
+                </Comments>
+                <Choice name="min" value="-2147483648"/>
+                <Choice name="negative" value="-1"/>
+                <Choice name="zero" value="0"/>
+                <Choice name="positive" value="1"/>
+                <Choice name="max" value="2147483647"/>
+            </Parameter>
+        </Method>
+    </Class>
+    <Class name="com.testify.ecfeed.junit.OnlineRunnerTest$NoConstraintsTestClass" runOnAndroid="false">
+        <Method name="testWithNoConstraints">
+            <Parameter name="arg1" type="String" isExpected="false" expected="" linked="false">
+                <Comments>
+                    <TypeComments/>
+                </Comments>
+                <Choice name="lower\scase" value="a"/>
+            </Parameter>
+            <Parameter name="arg2" type="String" isExpected="false" expected="" linked="false">
+                <Comments>
+                    <TypeComments/>
+                </Comments>
+                <Choice name="a" value="a"/>
+            </Parameter>
+            <Parameter name="arg3" type="String" isExpected="false" expected="" linked="false">
+                <Comments>
+                    <TypeComments/>
+                </Comments>
+                <Choice name="a" value="a"/>
+                <Choice name="b" value="b"/>
+                <Choice name="c" value="c"/>
+                <Choice name="d" value="d"/>
+            </Parameter>
+            <Parameter name="arg4" type="String" isExpected="false" expected="" linked="false">
+                <Comments>
+                    <TypeComments/>
+                </Comments>
+                <Choice name="a" value="a"/>
+                <Choice name="b" value="b"/>
+                <Choice name="c" value="c"/>
+                <Choice name="d" value="d"/>
+            </Parameter>
+            <Constraint name="constraint">
+                <Premise>
+                    <StaticStatement value="true"/>
+                </Premise>
+                <Consequence>
+                    <Statement choice="c" parameter="arg3" relation="="/>
+                </Consequence>
+            </Constraint>
+        </Method>
+    </Class>
+</Model>
