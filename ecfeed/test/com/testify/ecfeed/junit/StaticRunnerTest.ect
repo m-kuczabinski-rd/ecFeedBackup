@@ -1,2 +1,174 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Model name="StaticRunnerTest"><Class name="com.testify.ecfeed.junit.StaticRunnerTest$TestClass"><Method name="noArgsTestFunction"/><Method name="noTestSuitesTestFunction"><Category expected="" name="arg1" type="int" isexpected="false"><Partition name="min" value="-2147483648"/><Partition name="negative" value="-1"/><Partition name="zero" value="0"/><Partition name="positive" value="1"/><Partition name="max" value="2147483647"/></Category><Category expected="" name="arg2" type="int" isexpected="false"><Partition name="min" value="-2147483648"/><Partition name="negative" value="-1"/><Partition name="zero" value="0"/><Partition name="positive" value="1"/><Partition name="max" value="2147483647"/></Category><TestCase testSuite="Test Suite 1"><TestParameter partition="positive"/><TestParameter partition="positive"/></TestCase><TestCase testSuite="Test Suite 2"><TestParameter partition="zero"/><TestParameter partition="zero"/></TestCase><TestCase testSuite="Test Suite 3"><TestParameter partition="negative"/><TestParameter partition="negative"/></TestCase><TestCase testSuite="Cartesian Product"><TestParameter partition="positive"/><TestParameter partition="positive"/></TestCase><TestCase testSuite="Cartesian Product"><TestParameter partition="negative"/><TestParameter partition="positive"/></TestCase><TestCase testSuite="Cartesian Product"><TestParameter partition="positive"/><TestParameter partition="zero"/></TestCase><TestCase testSuite="Cartesian Product"><TestParameter partition="negative"/><TestParameter partition="zero"/></TestCase><TestCase testSuite="Cartesian Product"><TestParameter partition="min"/><TestParameter partition="positive"/></TestCase><TestCase testSuite="Cartesian Product"><TestParameter partition="zero"/><TestParameter partition="negative"/></TestCase><TestCase testSuite="Cartesian Product"><TestParameter partition="max"/><TestParameter partition="max"/></TestCase><TestCase testSuite="Cartesian Product"><TestParameter partition="max"/><TestParameter partition="zero"/></TestCase><TestCase testSuite="Cartesian Product"><TestParameter partition="negative"/><TestParameter partition="negative"/></TestCase><TestCase testSuite="Cartesian Product"><TestParameter partition="zero"/><TestParameter partition="zero"/></TestCase><TestCase testSuite="Cartesian Product"><TestParameter partition="positive"/><TestParameter partition="min"/></TestCase><TestCase testSuite="Cartesian Product"><TestParameter partition="min"/><TestParameter partition="max"/></TestCase><TestCase testSuite="Cartesian Product"><TestParameter partition="max"/><TestParameter partition="positive"/></TestCase><TestCase testSuite="Cartesian Product"><TestParameter partition="positive"/><TestParameter partition="max"/></TestCase><TestCase testSuite="Cartesian Product"><TestParameter partition="max"/><TestParameter partition="negative"/></TestCase><TestCase testSuite="Cartesian Product"><TestParameter partition="zero"/><TestParameter partition="positive"/></TestCase><TestCase testSuite="Cartesian Product"><TestParameter partition="max"/><TestParameter partition="min"/></TestCase><TestCase testSuite="Cartesian Product"><TestParameter partition="positive"/><TestParameter partition="negative"/></TestCase><TestCase testSuite="Cartesian Product"><TestParameter partition="min"/><TestParameter partition="negative"/></TestCase><TestCase testSuite="Cartesian Product"><TestParameter partition="negative"/><TestParameter partition="max"/></TestCase><TestCase testSuite="Cartesian Product"><TestParameter partition="zero"/><TestParameter partition="max"/></TestCase><TestCase testSuite="Cartesian Product"><TestParameter partition="negative"/><TestParameter partition="min"/></TestCase><TestCase testSuite="Cartesian Product"><TestParameter partition="zero"/><TestParameter partition="min"/></TestCase><TestCase testSuite="Cartesian Product"><TestParameter partition="min"/><TestParameter partition="zero"/></TestCase><TestCase testSuite="Cartesian Product"><TestParameter partition="min"/><TestParameter partition="min"/></TestCase></Method><Method name="testSuitesFunction"><Category expected="" name="arg1" type="int" isexpected="false"><Partition name="min" value="-2147483648"/><Partition name="negative" value="-1"/><Partition name="zero" value="0"/><Partition name="positive" value="1"/><Partition name="max" value="2147483647"/></Category><Category expected="" name="arg2" type="int" isexpected="false"><Partition name="min" value="-2147483648"/><Partition name="negative" value="-1"/><Partition name="zero" value="0"/><Partition name="positive" value="1"/><Partition name="max" value="2147483647"/></Category><TestCase testSuite="Test Suite 1"><TestParameter partition="min"/><TestParameter partition="min"/></TestCase><TestCase testSuite="Test Suite 2"><TestParameter partition="min"/><TestParameter partition="min"/></TestCase><TestCase testSuite="Test Suite 3"><TestParameter partition="min"/><TestParameter partition="min"/></TestCase></Method></Class></Model>
+<Model name="StaticRunnerTest" version="1">
+    <Class name="com.testify.ecfeed.junit.StaticRunnerTest$TestClass" runOnAndroid="false">
+        <Method name="noArgsTestFunction"/>
+        <Method name="noTestSuitesTestFunction">
+            <Parameter name="arg1" type="int" isExpected="false" expected="" linked="false">
+                <Comments>
+                    <TypeComments/>
+                </Comments>
+                <Choice name="min" value="-2147483648"/>
+                <Choice name="negative" value="-1"/>
+                <Choice name="zero" value="0"/>
+                <Choice name="positive" value="1"/>
+                <Choice name="max" value="2147483647"/>
+            </Parameter>
+            <Parameter name="arg2" type="int" isExpected="false" expected="" linked="false">
+                <Comments>
+                    <TypeComments/>
+                </Comments>
+                <Choice name="min" value="-2147483648"/>
+                <Choice name="negative" value="-1"/>
+                <Choice name="zero" value="0"/>
+                <Choice name="positive" value="1"/>
+                <Choice name="max" value="2147483647"/>
+            </Parameter>
+            <TestCase testSuite="Test\sSuite\s1">
+                <TestParameter choice="positive"/>
+                <TestParameter choice="positive"/>
+            </TestCase>
+            <TestCase testSuite="Test\sSuite\s2">
+                <TestParameter choice="zero"/>
+                <TestParameter choice="zero"/>
+            </TestCase>
+            <TestCase testSuite="Test\sSuite\s3">
+                <TestParameter choice="negative"/>
+                <TestParameter choice="negative"/>
+            </TestCase>
+            <TestCase testSuite="Cartesian\sProduct">
+                <TestParameter choice="positive"/>
+                <TestParameter choice="positive"/>
+            </TestCase>
+            <TestCase testSuite="Cartesian\sProduct">
+                <TestParameter choice="negative"/>
+                <TestParameter choice="positive"/>
+            </TestCase>
+            <TestCase testSuite="Cartesian\sProduct">
+                <TestParameter choice="positive"/>
+                <TestParameter choice="zero"/>
+            </TestCase>
+            <TestCase testSuite="Cartesian\sProduct">
+                <TestParameter choice="negative"/>
+                <TestParameter choice="zero"/>
+            </TestCase>
+            <TestCase testSuite="Cartesian\sProduct">
+                <TestParameter choice="min"/>
+                <TestParameter choice="positive"/>
+            </TestCase>
+            <TestCase testSuite="Cartesian\sProduct">
+                <TestParameter choice="zero"/>
+                <TestParameter choice="negative"/>
+            </TestCase>
+            <TestCase testSuite="Cartesian\sProduct">
+                <TestParameter choice="max"/>
+                <TestParameter choice="max"/>
+            </TestCase>
+            <TestCase testSuite="Cartesian\sProduct">
+                <TestParameter choice="max"/>
+                <TestParameter choice="zero"/>
+            </TestCase>
+            <TestCase testSuite="Cartesian\sProduct">
+                <TestParameter choice="negative"/>
+                <TestParameter choice="negative"/>
+            </TestCase>
+            <TestCase testSuite="Cartesian\sProduct">
+                <TestParameter choice="zero"/>
+                <TestParameter choice="zero"/>
+            </TestCase>
+            <TestCase testSuite="Cartesian\sProduct">
+                <TestParameter choice="positive"/>
+                <TestParameter choice="min"/>
+            </TestCase>
+            <TestCase testSuite="Cartesian\sProduct">
+                <TestParameter choice="min"/>
+                <TestParameter choice="max"/>
+            </TestCase>
+            <TestCase testSuite="Cartesian\sProduct">
+                <TestParameter choice="max"/>
+                <TestParameter choice="positive"/>
+            </TestCase>
+            <TestCase testSuite="Cartesian\sProduct">
+                <TestParameter choice="positive"/>
+                <TestParameter choice="max"/>
+            </TestCase>
+            <TestCase testSuite="Cartesian\sProduct">
+                <TestParameter choice="max"/>
+                <TestParameter choice="negative"/>
+            </TestCase>
+            <TestCase testSuite="Cartesian\sProduct">
+                <TestParameter choice="zero"/>
+                <TestParameter choice="positive"/>
+            </TestCase>
+            <TestCase testSuite="Cartesian\sProduct">
+                <TestParameter choice="max"/>
+                <TestParameter choice="min"/>
+            </TestCase>
+            <TestCase testSuite="Cartesian\sProduct">
+                <TestParameter choice="positive"/>
+                <TestParameter choice="negative"/>
+            </TestCase>
+            <TestCase testSuite="Cartesian\sProduct">
+                <TestParameter choice="min"/>
+                <TestParameter choice="negative"/>
+            </TestCase>
+            <TestCase testSuite="Cartesian\sProduct">
+                <TestParameter choice="negative"/>
+                <TestParameter choice="max"/>
+            </TestCase>
+            <TestCase testSuite="Cartesian\sProduct">
+                <TestParameter choice="zero"/>
+                <TestParameter choice="max"/>
+            </TestCase>
+            <TestCase testSuite="Cartesian\sProduct">
+                <TestParameter choice="negative"/>
+                <TestParameter choice="min"/>
+            </TestCase>
+            <TestCase testSuite="Cartesian\sProduct">
+                <TestParameter choice="zero"/>
+                <TestParameter choice="min"/>
+            </TestCase>
+            <TestCase testSuite="Cartesian\sProduct">
+                <TestParameter choice="min"/>
+                <TestParameter choice="zero"/>
+            </TestCase>
+            <TestCase testSuite="Cartesian\sProduct">
+                <TestParameter choice="min"/>
+                <TestParameter choice="min"/>
+            </TestCase>
+        </Method>
+        <Method name="testSuitesFunction">
+            <Parameter name="arg1" type="int" isExpected="false" expected="" linked="false">
+                <Comments>
+                    <TypeComments/>
+                </Comments>
+                <Choice name="min" value="-2147483648"/>
+                <Choice name="negative" value="-1"/>
+                <Choice name="zero" value="0"/>
+                <Choice name="positive" value="1"/>
+                <Choice name="max" value="2147483647"/>
+            </Parameter>
+            <Parameter name="arg2" type="int" isExpected="false" expected="" linked="false">
+                <Comments>
+                    <TypeComments/>
+                </Comments>
+                <Choice name="min" value="-2147483648"/>
+                <Choice name="negative" value="-1"/>
+                <Choice name="zero" value="0"/>
+                <Choice name="positive" value="1"/>
+                <Choice name="max" value="2147483647"/>
+            </Parameter>
+            <TestCase testSuite="Test\sSuite\s1">
+                <TestParameter choice="min"/>
+                <TestParameter choice="min"/>
+            </TestCase>
+            <TestCase testSuite="Test\sSuite\s2">
+                <TestParameter choice="min"/>
+                <TestParameter choice="min"/>
+            </TestCase>
+            <TestCase testSuite="Test\sSuite\s3">
+                <TestParameter choice="min"/>
+                <TestParameter choice="min"/>
+            </TestCase>
+        </Method>
+    </Class>
+</Model>
